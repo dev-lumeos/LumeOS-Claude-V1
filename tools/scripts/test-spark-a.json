@@ -1,0 +1,1 @@
+{"model": "qwen3.6-35b-fp8", "messages": [{"role": "user", "content": "You are a TypeScript expert. Write a function that validates if a string is a valid ISO date (YYYY-MM-DD). Return only the function, no explanation."}], "max_tokens": 200}
