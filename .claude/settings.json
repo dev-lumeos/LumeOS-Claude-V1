@@ -1,6 +1,26 @@
 {
   "hooks": {
-    "preToolUse": ".claude/hooks/pre-tool.ps1",
-    "postToolUse": ".claude/hooks/post-tool.ps1"
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -ExecutionPolicy Bypass -File .claude/hooks/pre-tool.ps1"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -ExecutionPolicy Bypass -File .claude/hooks/post-tool.ps1"
+          }
+        ]
+      }
+    ]
   }
 }
