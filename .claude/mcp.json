@@ -10,6 +10,13 @@
       "env": {
         "PROJECT_ROOT": "${workspaceFolder}"
       }
+    },
+    "claude-mem": {
+      "command": "npx",
+      "args": ["claude-mem", "mcp"],
+      "env": {
+        "CMEM_PROJECT": "lumeos-claude-v1"
+      }
     }
   }
 }
