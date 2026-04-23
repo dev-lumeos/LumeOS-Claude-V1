@@ -14,3 +14,9 @@ coverage/
 infra/secrets/
 db/local-dev/
 db/local-main/
+
+# Windows artifacts
+nul
+.claude/settings.local.json
+.claude/hooks/session.log
+.claude/hooks/dangerous-ops.log
