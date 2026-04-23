@@ -1,0 +1,17 @@
+{
+  "name": "@lumeos/tools",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "test:control-plane": "tsx scripts/test-control-plane-e2e.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "@noble/ed25519": "^2.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
