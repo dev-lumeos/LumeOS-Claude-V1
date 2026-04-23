@@ -156,12 +156,14 @@ async function step1_compileGovernanceArtefakt(): Promise<GovernanceArtefaktV3> 
 // ============ STEP 2: SAT-CHECK ============
 
 interface SATCheckResult {
-  pass: boolean
+  result: 'pass' | 'reject'
   checks: {
-    type_availability: { pass: boolean; details: string }
-    scope_reachability: { pass: boolean; details: string }
-    constraint_satisfiability: { pass: boolean; details: string }
+    type_availability: 'pass' | 'reject'
+    scope_reachability: 'pass' | 'reject'
+    constraint_satisfiability: 'pass' | 'reject'
   }
+  failure_code?: string
+  constraint_hint?: string
 }
 
 async function step2_satCheck(artefakt: GovernanceArtefaktV3): Promise<SATCheckResult> {
@@ -175,10 +177,11 @@ async function step2_satCheck(artefakt: GovernanceArtefaktV3): Promise<SATCheckR
     }
   )
 
-  log('STEP 2', `SAT-Check ${response.pass ? 'PASSED' : 'FAILED'}`, response.checks)
+  const passed = response.result === 'pass'
+  log('STEP 2', `SAT-Check ${passed ? 'PASSED' : 'FAILED'}`, response.checks)
 
-  if (!response.pass) {
-    throw new Error('SAT-Check failed')
+  if (!passed) {
+    throw new Error(`SAT-Check failed: ${response.constraint_hint || 'Unknown reason'}`)
   }
 
   return response
@@ -197,20 +200,16 @@ async function step3_createToken(
 ): Promise<TokenResult> {
   log('STEP 3', 'Creating Ed25519 signed Execution Token')
 
+  // Convert SAT-Check result to SATCheckResults format
+  const satResults = {
+    type_availability: satResult.checks.type_availability,
+    scope_reachability: satResult.checks.scope_reachability,
+    constraint_satisfiability: satResult.checks.constraint_satisfiability
+  }
+
   const token = await createExecutionToken(
-    {
-      wo_id: artefakt.meta.wo_id,
-      artefakt_hash: artefakt.meta.artefakt_hash,
-      sat_check_output: {
-        pass: satResult.pass,
-        checked_at: new Date().toISOString(),
-        checks: {
-          type_availability: satResult.checks.type_availability.pass,
-          scope_reachability: satResult.checks.scope_reachability.pass,
-          constraint_satisfiability: satResult.checks.constraint_satisfiability.pass
-        }
-      }
-    },
+    artefakt,
+    satResults,
     CONFIG.keys.privateKey
   )
 
@@ -235,13 +234,17 @@ async function step4_writeToSupabase(
 
   const supabase = createClient(CONFIG.supabase.url, CONFIG.supabase.serviceKey)
 
+  // Delete any existing records for this WO (re-run support)
+  await supabase.from('workorders').delete().eq('wo_id', artefakt.meta.wo_id)
+  await supabase.from('governance_artefacts').delete().eq('wo_id', artefakt.meta.wo_id)
+
   // Write governance artefakt
   const { error: artefaktError } = await supabase
     .from('governance_artefacts')
     .insert({
       wo_id: artefakt.meta.wo_id,
       artefakt_hash: artefakt.meta.artefakt_hash,
-      schema_version: artefakt.meta.schema_version,
+      source_macro: artefakt.meta.source_macro,
       compiled_by: artefakt.meta.compiled_by,
       compiled_at: artefakt.meta.compiled_at,
       artefakt_json: artefakt
@@ -251,16 +254,20 @@ async function step4_writeToSupabase(
     throw new Error(`Failed to write artefakt: ${artefaktError.message}`)
   }
 
-  // Write workorder
+  // Write workorder (matching actual schema)
   const { data: wo, error: woError } = await supabase
     .from('workorders')
     .insert({
       wo_id: artefakt.meta.wo_id,
-      status: 'dispatched',
-      artefakt_hash: artefakt.meta.artefakt_hash,
-      execution_token: token,
+      batch_id: 'e2e-test-batch',
+      wo_type: 'micro',
+      agent_type: 'ts-patch-agent',
+      state: 'dispatched',
+      phase: '1',
+      scope_files: artefakt.execution_context.target_files.map(f => f.path),
+      task: [MACRO_WO.task_description],
       assigned_node: 'spark-b',
-      dispatched_at: new Date().toISOString()
+      started_at: new Date().toISOString()
     })
     .select()
     .single()
@@ -398,17 +405,19 @@ async function step7_saveResult(
 
   const supabase = createClient(CONFIG.supabase.url, CONFIG.supabase.serviceKey)
 
-  const status = tripleHashResult.pass ? 'done' : 'done_with_warning'
+  const state = tripleHashResult.pass ? 'done' : 'failed'
 
   const { error } = await supabase
     .from('workorders')
     .update({
-      status,
+      state,
       completed_at: new Date().toISOString(),
-      result_json: {
-        code_length: executionResult.code.length,
-        triple_hash: tripleHashResult,
-        usage: executionResult.usage
+      retry_context: {
+        e2e_result: {
+          code_length: executionResult.code.length,
+          triple_hash: tripleHashResult,
+          usage: executionResult.usage
+        }
       }
     })
     .eq('wo_id', woId)
@@ -417,7 +426,7 @@ async function step7_saveResult(
     throw new Error(`Failed to update workorder: ${error.message}`)
   }
 
-  log('STEP 7', `Result saved. Status: ${status}`)
+  log('STEP 7', `Result saved. State: ${state}`)
 }
 
 // ============ MAIN ============

@@ -8,6 +8,11 @@ import * as yaml from 'yaml'
 import * as crypto from 'crypto'
 import * as fs from 'fs'
 import * as path from 'path'
+import { fileURLToPath } from 'url'
+
+// Get directory of this file (ESM compatible)
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // Macro-WO Input Schema
 interface MacroWO {
@@ -33,10 +38,33 @@ interface CompileResponse {
 
 export const compileRoutes = new Hono()
 
+// Find workspace root by looking for CLAUDE.md
+function findWorkspaceRoot(): string {
+  if (process.env.WORKSPACE_ROOT) {
+    return process.env.WORKSPACE_ROOT
+  }
+
+  // Start from this file's directory and walk up
+  // __dirname = services/governance-compiler/src/routes
+  let dir = __dirname
+  for (let i = 0; i < 10; i++) {
+    if (fs.existsSync(path.join(dir, 'CLAUDE.md'))) {
+      return dir
+    }
+    const parent = path.dirname(dir)
+    if (parent === dir) break
+    dir = parent
+  }
+
+  // Fallback: assume we're in services/governance-compiler/src/routes
+  return path.resolve(__dirname, '../../../..')
+}
+
 // Load governance compiler prompt
 function loadPrompt(): string {
+  const workspaceRoot = findWorkspaceRoot()
   const promptPath = path.resolve(
-    process.env.WORKSPACE_ROOT || process.cwd(),
+    workspaceRoot,
     'system/prompts/governance/governance_compiler_prompt.md'
   )
   return fs.readFileSync(promptPath, 'utf-8')
@@ -49,7 +77,7 @@ function sha256(content: string): string {
 
 // Calculate file checksum
 function calculateFileChecksum(filePath: string): string {
-  const workspaceRoot = process.env.WORKSPACE_ROOT || process.cwd()
+  const workspaceRoot = findWorkspaceRoot()
   const fullPath = path.resolve(workspaceRoot, filePath)
 
   if (!fs.existsSync(fullPath)) {
@@ -68,15 +96,26 @@ function calculateArtefaktHash(artefakt: GovernanceArtefaktV3): string {
 }
 
 // Parse YAML output to GovernanceArtefaktV3
-function parseArtefakt(rawYaml: string): GovernanceArtefaktV3 {
-  // Extract YAML from potential markdown code blocks
-  let yamlContent = rawYaml
+function parseArtefakt(rawOutput: string): GovernanceArtefaktV3 {
+  let yamlContent = rawOutput
+
+  // Remove <think>...</think> blocks (Qwen reasoning)
+  yamlContent = yamlContent.replace(/<think>[\s\S]*?<\/think>/g, '')
 
   // Remove markdown code block if present
-  const yamlMatch = rawYaml.match(/```ya?ml\n?([\s\S]*?)```/)
+  const yamlMatch = yamlContent.match(/```ya?ml\n?([\s\S]*?)```/)
   if (yamlMatch) {
     yamlContent = yamlMatch[1]
   }
+
+  // Find the start of YAML (should start with 'meta:')
+  const metaIndex = yamlContent.indexOf('meta:')
+  if (metaIndex > 0) {
+    yamlContent = yamlContent.substring(metaIndex)
+  }
+
+  // Trim whitespace
+  yamlContent = yamlContent.trim()
 
   // Parse YAML
   const parsed = yaml.parse(yamlContent)
