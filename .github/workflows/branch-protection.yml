@@ -1,0 +1,29 @@
+name: Branch Protection Check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: PR Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check branch name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if [[ "$BRANCH" != dev ]] && [[ "$BRANCH" != coding/* ]]; then
+            echo "ERROR: PRs to main must come from dev or coding/* branches"
+            echo "Branch: $BRANCH"
+            exit 1
+          fi
+          echo "Branch check passed: $BRANCH"
+
+      - name: Check no secrets in diff
+        run: |
+          git diff origin/main...HEAD -- '*.ts' '*.tsx' '*.js' | \
+            grep -iE "(password|secret|api_key|apikey|token)\s*=\s*['\"][^'\"]{8,}" && \
+            echo "WARNING: Possible secrets found in diff" && exit 1 || \
+            echo "No secrets detected"
