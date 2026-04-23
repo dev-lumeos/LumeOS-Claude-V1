@@ -28,7 +28,9 @@ import * as ed from '@noble/ed25519'
 const SAT_CHECK_URL = 'http://127.0.0.1:9001'
 const SCHEDULER_URL = 'http://127.0.0.1:9002'
 const SUPABASE_URL = 'http://127.0.0.1:54321'
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || 'your-local-supabase-service-role-key'
+// Local Supabase service_role JWT (from `supabase status --output json`)
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU'
 
 // Setup Ed25519 SHA-512
 ed.etc.sha512Sync = (...m: Uint8Array[]) => {
