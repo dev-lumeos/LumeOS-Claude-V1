@@ -1,10 +1,25 @@
 name: CI
+# DISABLED — 23. April 2026
+# Reaktivierung: siehe docs/todos/ci-reaktivierung.md
+# 
+# CI wurde deaktiviert weil:
+# - Projekt ist in aktiver Entwicklungsphase (Phase 1-7)
+# - pnpm typecheck/lint/test sind noch nicht konfiguriert
+# - Lokale Services (Supabase, Spark A/B) nicht in GitHub Actions verfügbar
+#
+# Um CI wieder zu aktivieren:
+# 1. Kommentiere 'on:' Block wieder ein
+# 2. Führe docs/todos/ci-reaktivierung.md Checklist durch
 
 on:
-  push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
+  workflow_dispatch:  # Nur manuell ausführbar — kein auto-trigger
+
+# ORIGINAL on: Block (reaktivieren wenn bereit):
+# on:
+#   push:
+#     branches: [main, dev]
+#   pull_request:
+#     branches: [main, dev]
 
 jobs:
   typecheck:
