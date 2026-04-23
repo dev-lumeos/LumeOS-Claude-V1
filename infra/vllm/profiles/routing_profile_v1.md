@@ -1,41 +1,65 @@
 # vLLM Profiles — LumeOS
+# Stand: 23. April 2026 — nach Governance Architecture V1
 
-## Routing Übersicht
+## Node Übersicht
 
-| Tier | Modell | Node | Port | Max Slots |
-|------|--------|------|------|-----------|
-| fp8_bulk | qwen3.6-35b-fp8 | Spark A | 8001 | 6 |
-| fp4_light | gemma4-4b | Spark A | 8011 | - |
-| fp4_light | phi4-mini | Spark A | 8012 | - |
-| quality | qwen35-122b-quality | Spark B | 8002 | 2 (Slot 3 = Orchestrator) |
-| review | deepseek-r1-8b-review | Spark B | 8013 | - |
+| Node | IP | Rolle | Max Slots |
+|------|-----|-------|-----------|
+| Spark A | 192.168.0.128 | Governance-Compiler (DGX A) | 8 |
+| Spark B | 192.168.0.188 | Micro-Executor (DGX B) | TBD nach Benchmark |
+
+---
+
+## Spark A — Governance-Compiler
+
+| Tier | Modell | Port | Funktion |
+|------|--------|------|---------|
+| `governance` | Qwen3.5-35B-A3B (TBD: 35B oder 122B) | 8001 | Macro-WO → Governance-Artefakt |
+
+---
+
+## Spark B — Micro-Executor
+
+| Tier | Modell | Port | Funktion |
+|------|--------|------|---------|
+| `executor` | Qwen3-Coder-30B-A3B | 8001 | Deterministisch Temp=0.0 Seed=42 |
+
+---
 
 ## Agent → Endpoint Mapping
 
 ```yaml
 agent_endpoints:
-  ts-patch-agent:       http://spark-a:8001
-  api-mapping-agent:    http://spark-a:8001
-  ui-restore-agent:     http://spark-a:8001
-  test-agent:           http://spark-a:8001
-  config-patch-agent:   http://spark-a:8012
-  docs-agent:           http://spark-a:8012
-  i18n-agent:           http://spark-a:8011
-  boilerplate-agent:    http://spark-a:8012
-  db-migration-agent:   http://spark-b:8002
-  review-agent:         http://spark-b:8013
-  context-builder-agent: http://spark-b:8013
-  orchestrator:         http://spark-b:8002
+  # Governance-Compiler (DGX A)
+  governance-compiler: http://192.168.0.128:8001
+
+  # Micro-Executor (DGX B)
+  micro-executor:      http://192.168.0.188:8001
+
+  # Fallback / Escalation (OpenRouter)
+  macro-layer:
+    primary:    claude-opus-4-6
+    secondary:  qwen/qwen3.6-plus-preview
+    tertiary:   moonshot/kimi-k2.6
 ```
 
-## OpenRouter Fallback
+---
 
-```yaml
-openrouter_base_url: https://openrouter.ai/api/v1
-escalation_models:
-  - qwen/qwen3.6-plus-preview
-  - minimax/minimax-m2.5
-  - google/gemini-3.1-pro
-  - anthropic/claude-opus-4-6
-  - moonshot/kimi-k2.6  # Macro Executor
+## Execution Token Flow
+
 ```
+Threadripper (Control Plane)
+  → SAT-Check
+  → Ed25519-signed Token
+  → DGX B (192.168.0.188:8001)
+```
+
+---
+
+## Offen bis Benchmark
+
+- DGX A: Qwen3.5-35B oder 122B? → Test nach Benchmark
+- DGX B Batch-Size: 1/2/4 parallel? → Load-Test
+- KV-Cache Budget → Durchsatz-Messung
+
+*Routing Profile V2 — aktualisiert nach Governance Architecture V1*
