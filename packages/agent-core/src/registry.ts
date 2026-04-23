@@ -17,7 +17,7 @@ export const NODE_PROFILES: Record<string, NodeProfile> = {
     max_slots: 3,
     current_slots: 0,
     reserved_slots: 1, // Slot 3 always reserved for orchestrator
-    endpoint: 'http://spark-b:8002',
+    endpoint: 'http://spark-b:8001',
     tiers: ['quality', 'review']
   }
 }
@@ -26,8 +26,8 @@ export const TIER_ENDPOINTS: Record<string, string> = {
   fp8_bulk:       'http://spark-a:8001',
   fp4_light_gemma: 'http://spark-a:8011',
   fp4_light_phi:   'http://spark-a:8012',
-  quality:         'http://spark-b:8002',
-  review:          'http://spark-b:8013'
+  quality:         'http://spark-b:8001',
+  review:          'http://spark-b:8001'
 }
 
 export const AGENT_REGISTRY: AgentProfile[] = [

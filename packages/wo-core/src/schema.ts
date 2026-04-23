@@ -28,8 +28,8 @@ export interface RetryContext {
 }
 
 export interface RetryPolicy {
-  max_attempts: 3
-  human_review_after: 'attempts_exhausted'
+  max_attempts: number
+  human_review_after: 'attempts_exhausted' | 'immediate'
 }
 
 export interface WorkOrder {
