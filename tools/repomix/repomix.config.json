@@ -1,0 +1,41 @@
+{
+  "output": {
+    "filePath": "tools/repomix/output/lumeos-context.txt",
+    "style": "xml",
+    "headerText": "LumeOS Codebase Context",
+    "instructionFilePath": "tools/repomix/instructions.md",
+    "removeComments": false,
+    "removeEmptyLines": false,
+    "topFilesLength": 20,
+    "showLineNumbers": true
+  },
+  "include": [
+    "packages/**/*.ts",
+    "services/**/*.ts",
+    "apps/web/src/**/*.ts",
+    "apps/web/src/**/*.tsx",
+    "system/**/*.md",
+    "system/**/*.yaml",
+    "CLAUDE.md",
+    ".claude/agents/*.md",
+    ".claude/rules/*.md"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "node_modules/**",
+      "dist/**",
+      ".next/**",
+      "coverage/**",
+      "*.test.ts",
+      "*.spec.ts",
+      "__tests__/**",
+      "pnpm-lock.yaml",
+      "*.log"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

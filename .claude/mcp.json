@@ -17,6 +17,21 @@
       "env": {
         "CMEM_PROJECT": "lumeos-claude-v1"
       }
+    },
+    "paperclip": {
+      "command": "npx",
+      "args": ["paperclip-mcp"],
+      "env": {
+        "PAPERCLIP_BASE_URL": "http://localhost:3100",
+        "PAPERCLIP_API_KEY": "${PAPERCLIP_API_KEY}"
+      }
+    },
+    "lean-ctx": {
+      "command": "lean-ctx",
+      "args": ["mcp"],
+      "env": {
+        "LEAN_CTX_PROJECT": "lumeos"
+      }
     }
   }
 }

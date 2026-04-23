@@ -1,0 +1,86 @@
+# lean-ctx Configuration for LumeOS
+# Token Compression Settings
+
+[project]
+name = "lumeos"
+root = "."
+
+[compression]
+# Default read mode
+default_mode = "map"
+
+# Intent detection
+intent_detection = true
+
+# Adaptive mode selection
+adaptive_mode = true
+
+[cache]
+# Enable caching
+enabled = true
+
+# Cache directory
+dir = ".lean-ctx-cache"
+
+# Cache TTL in seconds (1 hour)
+ttl = 3600
+
+# Cross-session memory
+ccp_enabled = true
+
+[patterns]
+# High-value patterns for caching
+include = [
+  "packages/**/*.ts",
+  "services/**/*.ts",
+  "system/**/*.md"
+]
+
+# Skip compression for these
+exclude = [
+  "node_modules/**",
+  "dist/**",
+  ".next/**"
+]
+
+[modes]
+# Mode settings
+
+[modes.map]
+# Dependencies + API signatures only
+include_imports = true
+include_exports = true
+include_signatures = true
+include_body = false
+
+[modes.signatures]
+# Function/class signatures only
+include_imports = false
+include_exports = true
+include_signatures = true
+include_body = false
+
+[modes.aggressive]
+# Syntax-stripped content
+remove_comments = true
+remove_whitespace = true
+minify = true
+
+[modes.entropy]
+# Shannon entropy filtering
+threshold = 0.3
+preserve_structure = true
+
+[integration]
+# Claude Code integration
+claude_code = true
+
+# Auto-allowed paths
+allowed_paths = [
+  "~/.claude"
+]
+
+[metrics]
+# Session metrics
+enabled = true
+log_file = ".lean-ctx-metrics.json"

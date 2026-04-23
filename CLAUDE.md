@@ -80,6 +80,18 @@ GSD v2 wird **AUTOMATISCH** bei jedem Code-Task angewendet.
 |------|------------|
 | Context7 | `use context7` für aktuelle Library-Dokumentation (Hono, Supabase, Next.js, Zod) |
 | Serena | Symbol-Suche und Code-Navigation via LSP |
+| claude-mem | Session Memory — automatisch aktiv |
+| Paperclip | Agent Orchestration (Port 3100) |
+| lean-ctx | Token Compression (60-99% Reduktion) |
+
+### Codebase Intelligence
+
+| Tool | Verwendung |
+|------|------------|
+| Repomix | Codebase zu LLM Context: `npx repomix` |
+| LightRAG | Knowledge Graph für Code Queries |
+
+Konfiguration: `tools/repomix/`, `tools/lightrag/`
 
 ### Memory Protocol
 
