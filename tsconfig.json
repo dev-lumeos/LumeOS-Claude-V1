@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "paths": {
+      "@lumeos/wo-core": ["./packages/wo-core/src/index.ts"],
+      "@lumeos/graph-core": ["./packages/graph-core/src/index.ts"],
+      "@lumeos/agent-core": ["./packages/agent-core/src/index.ts"],
+      "@lumeos/scheduler-core": ["./packages/scheduler-core/src/index.ts"]
+    }
+  },
+  "include": ["packages/*/src/**/*"],
+  "exclude": ["node_modules", "dist", ".next"]
+}
