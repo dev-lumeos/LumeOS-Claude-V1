@@ -1,0 +1,6 @@
+{
+  "hooks": {
+    "preToolUse": ".claude/hooks/pre-tool.ps1",
+    "postToolUse": ".claude/hooks/post-tool.ps1"
+  }
+}

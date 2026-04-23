@@ -1,0 +1,9 @@
+project_root: .
+languages:
+  - typescript
+  - javascript
+ignore_patterns:
+  - node_modules
+  - dist
+  - .next
+  - pnpm-lock.yaml
