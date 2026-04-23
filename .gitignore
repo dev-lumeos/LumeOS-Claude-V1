@@ -1,0 +1,16 @@
+node_modules/
+.next/
+dist/
+.turbo/
+*.local
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+.cache/
+coverage/
+.vscode/settings.json
+infra/secrets/
+db/local-dev/
+db/local-main/
