@@ -13,7 +13,9 @@
     "@lumeos/wo-core": "workspace:*",
     "@lumeos/graph-core": "workspace:*",
     "@lumeos/agent-core": "workspace:*",
-    "@lumeos/scheduler-core": "workspace:*"
+    "@lumeos/scheduler-core": "workspace:*",
+    "@lumeos/vllm-client": "workspace:*",
+    "@lumeos/supabase-clients": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.0.0",
