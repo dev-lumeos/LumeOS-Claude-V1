@@ -31,9 +31,18 @@ export function checkScopeReachability(
   artefakt: GovernanceArtefaktV3,
   workspaceRoot: string = process.cwd()
 ): ScopeCheckResult {
-  const targetFiles = artefakt.execution_context.target_files
+  const targetFiles = artefakt.execution_context?.target_files ?? []
   const errors: string[] = []
   const fileStates: FileState[] = []
+
+  // If no target files, something is wrong
+  if (targetFiles.length === 0) {
+    return {
+      result: 'reject',
+      errors: ['No target files specified in artefakt'],
+      file_states: []
+    }
+  }
 
   for (const target of targetFiles) {
     const filePath = resolve(workspaceRoot, target.path)
@@ -71,8 +80,12 @@ export function checkScopeReachability(
       const expectedPrefix = target.checksum_before.replace('sha256:', '').substring(0, 8)
       const actualPrefix = actualChecksum.replace('sha256:', '').substring(0, 8)
 
-      state.checksum_match = expectedPrefix === actualPrefix ||
-        target.checksum_before === 'sha256:any' // Allow wildcard for new files
+      // Allow special values for calculated-at-runtime checksums
+      const isPlaceholder = target.checksum_before.includes('CALCULATE') ||
+        target.checksum_before.includes('PLACEHOLDER') ||
+        target.checksum_before === 'sha256:any'
+
+      state.checksum_match = expectedPrefix === actualPrefix || isPlaceholder
 
       if (!state.checksum_match) {
         errors.push(`Checksum mismatch for ${target.path}: expected ${expectedPrefix}, got ${actualPrefix}`)

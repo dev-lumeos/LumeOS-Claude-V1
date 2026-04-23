@@ -26,9 +26,18 @@ export function checkConstraintSatisfiability(
   artefakt: GovernanceArtefaktV3,
   workspaceRoot: string = process.cwd()
 ): ConstraintCheckResult {
-  const { forbidden_patterns } = artefakt.execution_context
-  const targetFiles = artefakt.execution_context.target_files
+  const forbidden_patterns = artefakt.execution_context?.forbidden_patterns ?? {
+    imports: [],
+    functions: [],
+    regex: []
+  }
+  const targetFiles = artefakt.execution_context?.target_files ?? []
   const violations: ConstraintViolation[] = []
+
+  // If no target files, pass (nothing to check)
+  if (targetFiles.length === 0) {
+    return { result: 'pass', violations: [] }
+  }
 
   for (const target of targetFiles) {
     const filePath = resolve(workspaceRoot, target.path)

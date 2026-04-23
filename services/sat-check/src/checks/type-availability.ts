@@ -21,8 +21,17 @@ export function checkTypeAvailability(
   artefakt: GovernanceArtefaktV3,
   workspaceRoot: string = process.cwd()
 ): TypeCheckResult {
-  const requiredTypes = artefakt.execution_context.required_types
-  const targetFiles = artefakt.execution_context.target_files
+  const requiredTypes = artefakt.execution_context?.required_types ?? []
+  const targetFiles = artefakt.execution_context?.target_files ?? []
+
+  // If no required types, automatic pass
+  if (requiredTypes.length === 0) {
+    return {
+      result: 'pass',
+      missing_types: [],
+      found_types: []
+    }
+  }
 
   const missing: string[] = []
   const found: string[] = []

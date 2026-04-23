@@ -11,7 +11,13 @@ export const checkRoutes = new Hono()
 
 // POST /check — Run SAT-Check on GovernanceArtefaktV3
 checkRoutes.post('/', async (c) => {
-  const artefakt = await c.req.json<GovernanceArtefaktV3>()
+  const body = await c.req.json<{ artefakt?: GovernanceArtefaktV3 } | GovernanceArtefaktV3>()
+
+  // Support both {artefakt: {...}} and direct artefakt
+  const artefakt: GovernanceArtefaktV3 = 'artefakt' in body && body.artefakt
+    ? body.artefakt
+    : body as GovernanceArtefaktV3
+
   const workspaceRoot = process.env.WORKSPACE_ROOT || process.cwd()
 
   // Run all three checks
