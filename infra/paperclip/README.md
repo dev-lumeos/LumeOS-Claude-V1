@@ -1,51 +1,33 @@
-# Paperclip Setup
+# Paperclip — WO Visualisierung
 
-Paperclip ist die Orchestrierungsplattform für LumeOS AI Agents.
+Paperclip ist das visuelle Frontend für die LumeOS Work Order Pipeline.
 
-## Installation
+## Zweck
 
-```bash
-# Clone Paperclip
-git clone https://github.com/paperclipai/paperclip.git ~/paperclip
-cd ~/paperclip
-pnpm install
+Paperclip liest aus der lokalen Supabase und zeigt an:
+- Work Orders (Status, History, Timeline)
+- Governance Artefakte
+- Failure Events
+- Execution Tokens / Audit Trail
 
-# Start Paperclip
+## Was Paperclip NICHT ist
+
+- Kein Agent Orchestrator
+- Keine Logik-Schicht
+- Keine Approval Gates
+- Keine Heartbeats
+
+Die gesamte Logik liegt in unserem System:
+SAT-Check (9001) · Scheduler (9002) · Governance Compiler (9003) · Spark A/B
+
+## Starten
+
+```powershell
+cd C:\Users\User\paperclip
 pnpm dev
+# UI: http://localhost:3100
 ```
 
-UI: http://127.0.0.1:3100
+## Bekannte Probleme
 
-## MCP Integration
-
-Bereits konfiguriert in `.claude/mcp.json`:
-```json
-"paperclip": {
-  "command": "npx",
-  "args": ["paperclip-mcp"],
-  "env": {
-    "PAPERCLIP_BASE_URL": "http://localhost:3100",
-    "PAPERCLIP_API_KEY": "${PAPERCLIP_API_KEY}"
-  }
-}
-```
-
-## Agent Konfiguration
-
-Agents werden in `agents/` definiert:
-
-| Agent | Rolle | Heartbeat |
-|-------|-------|-----------|
-| governance-compiler | Governance Artefakte erstellen | 60s |
-| micro-executor | WO Execution | 30s |
-| review-agent | Acceptance Checks | 120s |
-
-## Troubleshooting
-
-- "nested sessions" Error: `unset CLAUDECODE` vor Start
-- Agent antwortet nicht: Check `instructionsFilePath` und `heartbeat enabled: true`
-
-## Referenzen
-
-- [Paperclip GitHub](https://github.com/paperclipai/paperclip)
-- [Paperclip Docs](https://paperclip.ing/)
+- embedded Postgres Startup Timing Bug → siehe docs/todos/paperclip-windows-fix.md

@@ -1,68 +1,20 @@
-# Paperclip Configuration for LumeOS
-# See: https://github.com/paperclipai/paperclip
+# Paperclip — LumeOS WO Visualisierung
+# Paperclip ist reines Frontend zur Darstellung von Work Orders aus Supabase.
+# Keine eigene Logik, keine Agents, keine Heartbeats.
+# Alle Logik läuft in unserem System (SAT-Check, Scheduler, Spark A/B).
 
 server:
   port: 3100
   host: 127.0.0.1
 
-organization:
-  name: LumeOS
-  budget:
-    daily_limit_usd: 50
-    warning_threshold: 0.8
+database:
+  # Verbindet sich mit lokaler Supabase Control Plane DB
+  url: postgresql://postgres:postgres@localhost:54322/postgres
 
-agents:
-  governance-compiler:
-    type: claude-code
-    instructionsFilePath: .claude/agents/governance-compiler.md
-    heartbeat:
-      enabled: true
-      interval_seconds: 60
-    budget:
-      max_tokens_per_task: 50000
-
-  micro-executor:
-    type: claude-code
-    instructionsFilePath: .claude/agents/micro-executor.md
-    heartbeat:
-      enabled: true
-      interval_seconds: 30
-    budget:
-      max_tokens_per_task: 30000
-
-  review-agent:
-    type: claude-code
-    instructionsFilePath: .claude/agents/review-agent.md
-    heartbeat:
-      enabled: true
-      interval_seconds: 120
-    budget:
-      max_tokens_per_task: 20000
-
-  context-builder:
-    type: claude-code
-    instructionsFilePath: .claude/agents/context-builder.md
-    heartbeat:
-      enabled: true
-      interval_seconds: 60
-    budget:
-      max_tokens_per_task: 25000
-
-  security-specialist:
-    type: claude-code
-    instructionsFilePath: .claude/agents/security-specialist.md
-    heartbeat:
-      enabled: true
-      interval_seconds: 120
-    budget:
-      max_tokens_per_task: 15000
-
-governance:
-  require_approval_for:
-    - budget_increase
-    - new_agent
-    - infrastructure_changes
-
-  audit_log:
-    enabled: true
-    retention_days: 90
+display:
+  # Welche Tabellen angezeigt werden
+  tables:
+    - workorders
+    - governance_artefacts
+    - wo_failure_events
+    - execution_tokens
