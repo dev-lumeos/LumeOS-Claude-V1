@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-LumeOS Codebase Indexer für LightRAG
+LumeOS Codebase Indexer für LightRAG (naive / vector-only mode)
+
 - Graph Backend: NetworkX (lokal, kein Neo4j)
 - Embeddings: sentence-transformers all-MiniLM-L6-v2 (dim=384, lokal)
-- LLM: Spark A via OpenAI-kompatible API (qwen3.6-35b-fp8)
+- LLM: STUBBED during indexing — no entity extraction, no Spark A calls.
+  Query-time LLM (see query.py) is separate.
 
 Aufruf:  python tools/lightrag/index_codebase.py
          python tools/lightrag/index_codebase.py --dry-run   # zählt Files, indexiert nicht
@@ -13,13 +15,11 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import os
 import sys
 from pathlib import Path
 
 import numpy as np
 from lightrag import LightRAG
-from lightrag.llm.openai import openai_complete_if_cache
 from lightrag.utils import EmbeddingFunc
 from sentence_transformers import SentenceTransformer
 
@@ -49,9 +49,8 @@ MAX_CONTENT_BYTES = 200_000
 
 EMBEDDING_MODEL_NAME = "all-MiniLM-L6-v2"
 EMBEDDING_DIM = 384
-LLM_MODEL_NAME = "qwen3.6-35b-fp8"
-LLM_BASE_URL = "http://192.168.0.128:8001/v1"
-LLM_API_KEY = os.environ.get("SPARK_A_API_KEY", "not-needed")
+# Dummy name; no LLM is actually called during indexing.
+LLM_MODEL_NAME = "noop-indexer"
 
 
 def build_embedding_func() -> EmbeddingFunc:
@@ -75,21 +74,16 @@ def build_embedding_func() -> EmbeddingFunc:
     )
 
 
-async def llm_model_func(
+async def noop_llm_func(
     prompt: str,
     system_prompt: str | None = None,
     history_messages: list[dict] | None = None,
     **kwargs,
 ) -> str:
-    return await openai_complete_if_cache(
-        model=LLM_MODEL_NAME,
-        prompt=prompt,
-        system_prompt=system_prompt,
-        history_messages=history_messages or [],
-        base_url=LLM_BASE_URL,
-        api_key=LLM_API_KEY,
-        **kwargs,
-    )
+    # Returning empty string makes LightRAG's entity extractor find 0 entities
+    # and 0 relations per chunk, so phases 1/2/3 become no-ops. Chunks are
+    # still embedded and stored in the vector DB.
+    return ""
 
 
 def collect_files() -> list[Path]:
@@ -131,10 +125,11 @@ async def index_codebase(dry_run: bool = False) -> None:
         working_dir=str(STORAGE_DIR),
         graph_storage="NetworkXStorage",
         embedding_func=build_embedding_func(),
-        llm_model_func=llm_model_func,
+        llm_model_func=noop_llm_func,
         llm_model_name=LLM_MODEL_NAME,
         chunk_token_size=1200,
         chunk_overlap_token_size=100,
+        enable_llm_cache_for_entity_extract=False,
     )
 
     await rag.initialize_storages()

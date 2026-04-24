@@ -1,8 +1,14 @@
 # LightRAG Configuration for LumeOS Codebase
-# Knowledge Graph + Vector Search — NetworkX backend (no Neo4j needed)
+# Naive / vector-only mode — no LLM entity extraction on insert.
+# Indexer stubs the LLM so only embeddings are produced. Query-time LLM is
+# still used to synthesize answers from retrieved chunks.
 
 working_dir: tools/lightrag/storage
 graph_backend: networkx
+
+# Default query retrieval mode. `naive` = vector-only (works without KG).
+# `local`/`global`/`hybrid` require entity graph and will return empty here.
+mode: naive
 
 # Embeddings: local via sentence-transformers (no extra service needed).
 # Runs on CUDA if available, else CPU. Spark A has no embedding endpoint.
@@ -10,7 +16,8 @@ embedding_backend: sentence_transformers
 embedding_model: all-MiniLM-L6-v2
 embedding_dim: 384
 
-# LLM: Spark A (OpenAI-compatible vLLM on Threadripper)
+# LLM: Spark A (OpenAI-compatible vLLM on Threadripper).
+# Used only at query time (answer synthesis), NOT during indexing.
 llm_backend: spark_a
 llm_endpoint: http://192.168.0.128:8001/v1
 llm_model: qwen3.6-35b-fp8
