@@ -1,6 +1,7 @@
 # TODO: Paperclip Windows Fix
-# Status: OFFEN
+# Status: 57P03 GEFIXT — Admin-Shell-Blocker bleibt offen
 # Erstellt: 23. April 2026
+# Update: 24. April 2026
 
 ## Problem
 Paperclip schlägt beim Start fehl:
@@ -10,6 +11,25 @@ PostgresError: the database system is starting up (code: 57P03)
 
 Ursache: @embedded-postgres+windows-x64 braucht länger zum Initialisieren
 als Paperclip wartet bevor es die erste DB-Verbindung versucht.
+
+## Status Update 2026-04-24
+
+**Option A implementiert** in `~/paperclip`:
+- `packages/db/src/client.ts` — `waitForPostgresReady(url, opts?)` Helper mit
+  exponential backoff (start 100ms, cap 1s, timeout 30s). Toleriert 57P03,
+  ECONNREFUSED, ECONNRESET, 57P01, 57P02.
+- `packages/db/src/migration-runtime.ts` — Aufruf direkt nach `instance.start()`,
+  vor `ensurePostgresDatabase`.
+- `pnpm --filter @paperclipai/db typecheck` grün.
+
+**Zweiter Blocker (Umgebung, nicht Paperclip):**
+Beim Smoketest `pnpm dev:once` meldete Postgres:
+```
+Execution of PostgreSQL by a user with administrative permissions is not permitted.
+```
+Der Claude-Code-Shell lief elevated. Abhilfe:
+- Claude Code / Paperclip aus einer **nicht-elevierten** PowerShell starten, ODER
+- Option B (externe Postgres via `DATABASE_URL` → lokale Supabase auf Port 54322).
 
 ## Lösung (wenn Zeit ist)
 

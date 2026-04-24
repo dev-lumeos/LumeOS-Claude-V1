@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell -Command:*)",
+      "Bash(set WORKSPACE_ROOT=D:/GitHub/LumeOS-Claude-V1)",
+      "Bash(pnpm --filter @lumeos/sat-check dev:*)",
+      "Bash(pnpm --filter @lumeos/scheduler-api dev:*)",
+      "Bash(pnpm --filter @lumeos/governance-compiler dev:*)",
+      "Bash(curl:*)",
+      "Bash(set NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321:*)",
+      "Bash(npx tsx:*)",
+      "Bash(pnpm install)",
+      "Bash(WORKSPACE_ROOT=D:/GitHub/LumeOS-Claude-V1 pnpm --filter @lumeos/governance-compiler dev:*)",
+      "Bash(netstat:*)",
+      "Bash(tasklist:*)",
+      "Bash(WORKSPACE_ROOT=D:/GitHub/LumeOS-Claude-V1 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 pnpm:*)",
+      "Bash(node -e '\nconst artefakt = require\\(\"\"/tmp/artefakt.json\"\"\\).artefakt;\nfetch\\(\"\"http://localhost:9001/check\"\", {\n  method: \"\"POST\"\",\n  headers: {\"\"Content-Type\"\": \"\"application/json\"\"},\n  body: JSON.stringify\\({artefakt}\\)\n}\\).then\\(r => r.json\\(\\)\\).then\\(console.log\\).catch\\(console.error\\);\n')",
+      "Bash(node:*)",
+      "Bash(WORKSPACE_ROOT=D:/GitHub/LumeOS-Claude-V1 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 ED25519_PRIVATE_KEY=kZ6lFNZ3kBW4qfDmcIsmT4RMUOFK8SrKkWT/Y40xQLY= pnpm:*)",
+      "Bash(npx supabase:*)",
+      "Bash(WORKSPACE_ROOT=D:/GitHub/LumeOS-Claude-V1 NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU ED25519_PRIVATE_KEY=kZ6lFNZ3kBW4qfDmcIsmT4RMUOFK8SrKkWT/Y40xQLY= pnpm --filter @lumeos/tools test:first-real-wo:*)"
+    ]
+  }
+}
