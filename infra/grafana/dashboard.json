@@ -1,0 +1,413 @@
+{
+  "dashboard": {
+    "uid": "lumeos-wo-pipeline",
+    "title": "LumeOS — Work Order Pipeline",
+    "tags": ["lumeos", "workorders", "control-plane"],
+    "timezone": "browser",
+    "schemaVersion": 39,
+    "version": 0,
+    "refresh": "10s",
+    "time": { "from": "now-7d", "to": "now" },
+    "panels": [
+      {
+        "id": 1,
+        "type": "stat",
+        "title": "Total WOs",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none",
+          "orientation": "horizontal"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "text" },
+            "mappings": [],
+            "noValue": "0"
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "type": "stat",
+        "title": "Pending (pre-dispatch)",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "yellow" },
+            "mappings": [],
+            "noValue": "0"
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state IN ('wo_generated','graph_validated','queue_released','blocked','ready','retry_scheduled','graph_repair_pending')"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "type": "stat",
+        "title": "Running",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "blue" },
+            "mappings": [],
+            "noValue": "0"
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state IN ('dispatched','running')"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "type": "stat",
+        "title": "Failed",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "red" },
+            "mappings": [],
+            "noValue": "0"
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state = 'failed'"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "type": "stat",
+        "title": "Completed (done)",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 0, "y": 28, "w": 6, "h": 4 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "green" },
+            "mappings": [],
+            "noValue": "0"
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state = 'done'"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "type": "timeseries",
+        "title": "WO Creation Timeline (per hour)",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 0, "y": 4, "w": 16, "h": 8 },
+        "options": {
+          "legend": { "displayMode": "list", "placement": "bottom" },
+          "tooltip": { "mode": "single" }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "bars",
+              "fillOpacity": 60,
+              "lineWidth": 1
+            },
+            "color": { "mode": "palette-classic" }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "time_series",
+            "rawSql": "SELECT date_trunc('hour', created_at) AS time, COUNT(*)::int AS workorders FROM workorders WHERE $__timeFilter(created_at) GROUP BY 1 ORDER BY 1"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "stat",
+        "title": "Governance Artefakte",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 16, "y": 4, "w": 8, "h": 4 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "purple" },
+            "mappings": [],
+            "noValue": "0"
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COUNT(*)::int AS value FROM governance_artefacts"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "type": "stat",
+        "title": "Execution Tokens",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 16, "y": 8, "w": 8, "h": 4 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "textMode": "auto",
+          "colorMode": "value",
+          "graphMode": "none"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "fixed", "fixedColor": "super-light-purple" },
+            "mappings": [],
+            "noValue": "0"
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COUNT(*)::int AS value FROM execution_tokens"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "type": "piechart",
+        "title": "WO State Distribution",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 0, "y": 12, "w": 8, "h": 8 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "pieType": "donut",
+          "displayLabels": ["name", "value"],
+          "legend": { "displayMode": "list", "placement": "right", "showLegend": true }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": { "mode": "palette-classic" },
+            "mappings": [
+              { "type": "value", "options": { "done":                 { "color": "green",    "text": "done",                 "index": 0  } } },
+              { "type": "value", "options": { "running":              { "color": "blue",     "text": "running",              "index": 1  } } },
+              { "type": "value", "options": { "dispatched":           { "color": "blue",     "text": "dispatched",           "index": 2  } } },
+              { "type": "value", "options": { "failed":               { "color": "red",      "text": "failed",               "index": 3  } } },
+              { "type": "value", "options": { "cancelled":            { "color": "dark-red", "text": "cancelled",            "index": 4  } } },
+              { "type": "value", "options": { "blocked":              { "color": "orange",   "text": "blocked",              "index": 5  } } },
+              { "type": "value", "options": { "ready":                { "color": "yellow",   "text": "ready",                "index": 6  } } },
+              { "type": "value", "options": { "queue_released":       { "color": "yellow",   "text": "queue_released",       "index": 7  } } },
+              { "type": "value", "options": { "graph_validated":      { "color": "yellow",   "text": "graph_validated",      "index": 8  } } },
+              { "type": "value", "options": { "wo_generated":         { "color": "yellow",   "text": "wo_generated",         "index": 9  } } },
+              { "type": "value", "options": { "retry_scheduled":      { "color": "orange",   "text": "retry_scheduled",      "index": 10 } } },
+              { "type": "value", "options": { "graph_repair_pending": { "color": "orange",   "text": "graph_repair_pending", "index": 11 } } },
+              { "type": "value", "options": { "reviewed":             { "color": "green",    "text": "reviewed",             "index": 12 } } },
+              { "type": "value", "options": { "closed":               { "color": "dark-green","text": "closed",              "index": 13 } } }
+            ]
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT state::text AS metric, COUNT(*)::int AS value FROM workorders GROUP BY state ORDER BY value DESC"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "type": "gauge",
+        "title": "Failure Rate %",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 8, "y": 12, "w": 8, "h": 8 },
+        "options": {
+          "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 5 },
+                { "color": "orange", "value": 15 },
+                { "color": "red", "value": 30 }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT COALESCE(ROUND(100.0 * COUNT(*) FILTER (WHERE state = 'failed')::numeric / NULLIF(COUNT(*), 0), 1), 0) AS value FROM workorders"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "type": "table",
+        "title": "Last 20 Failure Events",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 16, "y": 12, "w": 8, "h": 8 },
+        "options": {
+          "showHeader": true,
+          "cellHeight": "sm"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": { "type": "auto" },
+              "filterable": true
+            },
+            "noValue": "No failures yet."
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "failure_class" },
+              "properties": [
+                { "id": "custom.cellOptions", "value": { "type": "color-text" } },
+                {
+                  "id": "mappings",
+                  "value": [
+                    { "type": "value", "options": { "guardrail_violation": { "color": "red", "text": "guardrail_violation", "index": 0 } } },
+                    { "type": "value", "options": { "scope_violation": { "color": "red", "text": "scope_violation", "index": 1 } } },
+                    { "type": "value", "options": { "technical_persistent": { "color": "orange", "text": "technical_persistent", "index": 2 } } },
+                    { "type": "value", "options": { "technical_transient": { "color": "yellow", "text": "technical_transient", "index": 3 } } }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT wo_id, failure_class, attempt_number, node, timestamp FROM wo_failure_events ORDER BY timestamp DESC LIMIT 20"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "type": "table",
+        "title": "Last 10 Work Orders",
+        "datasource": { "type": "grafana-postgresql-datasource", "uid": "afk0u20la5ji8d" },
+        "gridPos": { "x": 0, "y": 20, "w": 24, "h": 8 },
+        "options": {
+          "showHeader": true,
+          "cellHeight": "sm"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": { "type": "auto" },
+              "filterable": true
+            }
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "state" },
+              "properties": [
+                { "id": "custom.cellOptions", "value": { "type": "color-background", "mode": "basic" } },
+                {
+                  "id": "mappings",
+                  "value": [
+                    { "type": "value", "options": { "done":        { "color": "green",  "text": "done",        "index": 0 } } },
+                    { "type": "value", "options": { "running":     { "color": "blue",   "text": "running",     "index": 1 } } },
+                    { "type": "value", "options": { "dispatched":  { "color": "blue",   "text": "dispatched",  "index": 2 } } },
+                    { "type": "value", "options": { "failed":      { "color": "red",    "text": "failed",      "index": 3 } } },
+                    { "type": "value", "options": { "cancelled":   { "color": "dark-red","text": "cancelled",  "index": 4 } } },
+                    { "type": "value", "options": { "blocked":     { "color": "orange", "text": "blocked",     "index": 5 } } },
+                    { "type": "value", "options": { "ready":       { "color": "yellow", "text": "ready",       "index": 6 } } }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "format": "table",
+            "rawSql": "SELECT w.wo_id, w.state::text AS state, w.agent_type, w.phase::text AS phase, w.batch_id, w.created_at, et.artefakt_hash FROM workorders w LEFT JOIN execution_tokens et ON et.id = w.execution_token_id ORDER BY w.created_at DESC LIMIT 10"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true,
+  "message": "Initial import — LumeOS WO Pipeline"
+}

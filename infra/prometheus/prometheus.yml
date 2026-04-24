@@ -1,0 +1,55 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    environment: lumeos-local
+
+scrape_configs:
+  # Prometheus self-scrape
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Spark A (Governance Compiler) — vLLM metrics
+  - job_name: 'spark-a-vllm'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['192.168.0.128:8001']
+        labels:
+          host: 'spark-a'
+          role: 'governance-compiler'
+
+  # Spark B (Micro Executor) — vLLM metrics
+  - job_name: 'spark-b-vllm'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['192.168.0.188:8001']
+        labels:
+          host: 'spark-b'
+          role: 'micro-executor'
+
+  # Spark A — node_exporter (CPU/RAM/Disk/Net) — install required
+  - job_name: 'spark-a-node'
+    static_configs:
+      - targets: ['192.168.0.128:9100']
+        labels:
+          host: 'spark-a'
+
+  # Spark B — node_exporter — install required
+  - job_name: 'spark-b-node'
+    static_configs:
+      - targets: ['192.168.0.188:9100']
+        labels:
+          host: 'spark-b'
+
+  # Threadripper — windows_exporter — install required
+  - job_name: 'threadripper-windows'
+    static_configs:
+      - targets: ['host.docker.internal:9182']
+        labels:
+          host: 'threadripper'
+
+  # NOTE: RTX 5090 GPU metrics flow through windows_exporter's textfile
+  # collector (see tools/scripts/nvidia_metrics.ps1). No separate scrape
+  # target needed — metrics appear under job 'threadripper-windows' with
+  # names nvidia_smi_temperature_gpu / nvidia_smi_utilization_gpu / ...
