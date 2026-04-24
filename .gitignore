@@ -20,3 +20,11 @@ nul
 .claude/settings.local.json
 .claude/hooks/session.log
 .claude/hooks/dangerous-ops.log
+
+# LightRAG index storage (can grow to several GB)
+tools/lightrag/storage/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo

@@ -1,66 +1,20 @@
 # LightRAG Configuration for LumeOS Codebase
-# Knowledge Graph for Code Intelligence
+# Knowledge Graph + Vector Search — NetworkX backend (no Neo4j needed)
 
-working_dir: ./tools/lightrag/workdir
+working_dir: tools/lightrag/storage
+graph_backend: networkx
 
-# LLM Configuration (vLLM)
-llm:
-  endpoint: http://192.168.0.128:8001/v1
-  model: Qwen3.6-35B
-  temperature: 0.1
-  max_tokens: 4096
+# Embeddings: local via sentence-transformers (no extra service needed).
+# Runs on CUDA if available, else CPU. Spark A has no embedding endpoint.
+embedding_backend: sentence_transformers
+embedding_model: all-MiniLM-L6-v2
+embedding_dim: 384
 
-# Embedding Configuration
-embedding:
-  model: text-embedding-3-small
-  endpoint: https://api.openai.com/v1
-  dimensions: 1536
+# LLM: Spark A (OpenAI-compatible vLLM on Threadripper)
+llm_backend: spark_a
+llm_endpoint: http://192.168.0.128:8001/v1
+llm_model: qwen3.6-35b-fp8
 
-# Graph Storage
-storage:
-  type: neo4j  # oder: networkx, qdrant
-  neo4j:
-    uri: bolt://localhost:7687
-    user: neo4j
-    password: ${NEO4J_PASSWORD}
-
-# Indexing
-indexing:
-  chunk_size: 1000
-  chunk_overlap: 200
-  include_patterns:
-    - "packages/**/*.ts"
-    - "services/**/*.ts"
-    - "apps/**/*.ts"
-    - "system/**/*.md"
-    - "docs/**/*.md"
-  exclude_patterns:
-    - "node_modules/**"
-    - "dist/**"
-    - ".next/**"
-    - "*.test.ts"
-    - "*.spec.ts"
-
-# Entity Extraction
-entities:
-  types:
-    - function
-    - class
-    - interface
-    - type
-    - module
-    - service
-    - route
-    - table
-    - policy
-
-# Relationship Types
-relationships:
-  - imports
-  - exports
-  - calls
-  - implements
-  - extends
-  - uses
-  - depends_on
-  - belongs_to
+# Chunking
+chunk_size: 1200
+chunk_overlap: 100

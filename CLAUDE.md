@@ -89,9 +89,47 @@ GSD v2 wird **AUTOMATISCH** bei jedem Code-Task angewendet.
 | Tool | Verwendung |
 |------|------------|
 | Repomix | Codebase zu LLM Context: `npx repomix` |
-| LightRAG | Knowledge Graph für Code Queries |
+| LightRAG | Knowledge Graph + Semantic Search für Code Queries |
 
 Konfiguration: `tools/repomix/`, `tools/lightrag/`
+
+#### LightRAG — Codebase Knowledge Graph
+
+Für Architektur-Fragen und Code-Navigation nutze LightRAG:
+
+```bash
+# CLI Query
+python tools/lightrag/query.py "Wie ist der WO Lifecycle definiert?"
+python tools/lightrag/query.py --mode global "Was ist der Brain Layer?"
+
+# Oder via HTTP (Server auf Port 9004):
+# POST http://127.0.0.1:9004/query  body: {"question": "...", "mode": "hybrid"}
+# GET  http://127.0.0.1:9004/health
+```
+
+Modes:
+- `hybrid` (Default): Kombination KG + Vector, beste Ergebnisse
+- `local`: Spezifische Code-Details, exakte Implementierungen
+- `global`: Übergreifende Architektur-Fragen
+- `naive`: Schnelle Vector-Suche ohne Graph
+- `mix`: KG + Vector integriert (LightRAG-internal default)
+
+Stack:
+- Embeddings: `sentence-transformers` + `all-MiniLM-L6-v2` (lokal, dim=384)
+- LLM: Spark A (`qwen3.6-35b-fp8`, vLLM @ `192.168.0.128:8001`)
+- Graph: NetworkX (lokal, kein Neo4j)
+- Storage: `tools/lightrag/storage/` (gitignored, kann GB-groß werden)
+
+Index neu aufbauen wenn sich die Codebase wesentlich geändert hat:
+```bash
+python tools/lightrag/index_codebase.py            # vollständig
+python tools/lightrag/index_codebase.py --dry-run  # zählen ohne zu indexieren
+```
+
+Server starten:
+```powershell
+pwsh tools/scripts/start-lightrag.ps1
+```
 
 ### Memory Protocol
 
