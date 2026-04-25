@@ -12,6 +12,11 @@
  * 7. Result → Supabase
  */
 
+import { config as loadEnv } from 'dotenv'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+loadEnv({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env') })
+
 import { createClient } from '@supabase/supabase-js'
 import { createExecutionToken, verifyExecutionToken } from '@lumeos/execution-token'
 import { VLLMClient } from '@lumeos/vllm-client'

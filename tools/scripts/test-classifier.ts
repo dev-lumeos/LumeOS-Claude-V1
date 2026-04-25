@@ -5,9 +5,14 @@
 //
 // Usage:
 //   1. Start the service:    pnpm --filter @lumeos/wo-classifier dev
-//   2. Run this script:      WORKSPACE_ROOT=. npx tsx tools/scripts/test-classifier.ts
+//   2. Run this script:      npx tsx tools/scripts/test-classifier.ts
 //
 // Exit code: 0 if all tests pass, 1 otherwise.
+
+import { config as loadEnv } from 'dotenv'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+loadEnv({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env') })
 
 import type {
   WOClassifierInput,

@@ -2,6 +2,11 @@
 // services/sat-check/src/index.ts
 // Port: 9001 (Threadripper Control Plane)
 
+import { config as loadEnv } from 'dotenv'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+loadEnv({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../../.env') })
+
 import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { checkRoutes } from './routes/check'

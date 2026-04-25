@@ -15,7 +15,8 @@
     "@lumeos/agent-core": "workspace:*",
     "@lumeos/scheduler-core": "workspace:*",
     "@lumeos/vllm-client": "workspace:*",
-    "@lumeos/supabase-clients": "workspace:*"
+    "@lumeos/supabase-clients": "workspace:*",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "typescript": "^5.0.0",

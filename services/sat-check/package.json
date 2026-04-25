@@ -11,6 +11,7 @@
     "hono": "^4.0.0",
     "@hono/node-server": "^1.0.0",
     "@lumeos/wo-core": "workspace:*",
+    "dotenv": "^16.4.5",
     "typescript": "^5.0.0"
   },
   "devDependencies": {

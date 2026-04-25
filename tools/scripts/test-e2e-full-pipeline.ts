@@ -27,6 +27,11 @@
  * Exit codes:  0 = all steps passed  |  1 = at least one failure  |  2 = setup error.
  */
 
+import { config as loadEnv } from 'dotenv'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+loadEnv({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../.env') })
+
 import * as crypto from 'crypto'
 import { createClient } from '@supabase/supabase-js'
 import { createExecutionToken, verifyExecutionToken } from '@lumeos/execution-token'

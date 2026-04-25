@@ -7,7 +7,7 @@ Du bist der **Brain** dieses Systems.
 ```
 Brain  = Du (Claude Code) — Planning, Specs, Workorders
 Law    = Deterministisches System — Scheduler, Graph, Retry, Rules
-Muscle = DGX Sparks — Parallele WO Execution
+Muscle = DGX Spark A+B — Parallele WO Execution
 ```
 
 Du denkst. Du entscheidest NICHT über Systemzustände.
@@ -45,39 +45,9 @@ Lies diese Docs bevor du arbeitest:
 - `system/workorders/schemas/wo_factory_spec_v1.md`
 - `system/decomposition/schemas/decomposition_spec_v1.md`
 - `system/file-groups/file_group_registry_v1.md`
-- `system/agent-registry/agent_registry_v2.md`
-- `system/model-tiers/model_registry_v2.md`
-- `system/model-tiers/model_tiers_v2.md`
+- `system/agent-registry/agent_registry_v1.md`
 - `system/policies/gsd-v2/gsd_v2.md`
 - `system/policies/guardrails/guardrails_v1.md`
-
----
-
-## Deployment Phase
-
-```
-Phase 1 (AKTIV):   Spark 1 + Spark 2
-Phase 2 (PENDING): Spark 3 + Spark 4 unterwegs
-```
-
-Aktueller Stack:
-- Spark 1 (192.168.0.128): Qwen3.6-35B FP8 — Review + Governance
-- Spark 2 (192.168.0.188): Qwen3-Coder-Next FP8 — Coding Worker
-- RTX 5090 (localhost): Qwen3-VL 30B FP8 — MealCam Vision
-
----
-
-## Workflow
-
-```
-Tom + Claude → Workorder (Executor definiert)
-             → pre-review-agent  (Qwen3.6: Vollständigkeit prüfen)
-             → orchestrator-agent (Dispatch + Monitor)
-             → Executor Agent
-             → post-review-agent (Qwen3.6: Output validieren)
-             → Approval Gate
-             → Tom
-```
 
 ---
 
@@ -108,13 +78,12 @@ Control-Plane Services (Threadripper, lokal):
 
 | Service | Port | Rolle |
 |---------|------|-------|
-| WO-Classifier | 9000 | Deterministischer Pre-Router |
-| SAT-Check | 9001 | Pre-Execution Gate |
+| WO-Classifier | 9000 | Deterministischer Pre-Router — klassifiziert Macro-WOs vor dem Dispatch |
+| SAT-Check | 9001 | Pre-Execution Gate — Type/Scope/Constraint-Validierung |
 | Scheduler | 9002 | WO Queue + Spark-Dispatch |
 | Governance Compiler | 9003 | Macro-WO → GovernanceArtefaktV3 |
-| LightRAG | 9004 | Codebase Knowledge Graph |
 
-Flow: `Brain → /classify → /compile → /check → /dispatch → Spark → Audit`
+Flow: `Brain → /classify → /compile → /check → /dispatch → Spark A/B → Audit`
 
 ---
 
@@ -124,9 +93,10 @@ Flow: `Brain → /classify → /compile → /check → /dispatch → Spark → A
 
 | Tool | Verwendung |
 |------|------------|
-| Context7 | `use context7` für aktuelle Library-Docs |
+| Context7 | `use context7` für aktuelle Library-Dokumentation (Hono, Supabase, Next.js, Zod) |
 | Serena | Symbol-Suche und Code-Navigation via LSP |
 | claude-mem | Session Memory — automatisch aktiv |
+| Paperclip | Agent Orchestration (Port 3100) |
 | lean-ctx | Token Compression (60-99% Reduktion) |
 
 ### Codebase Intelligence
@@ -134,11 +104,41 @@ Flow: `Brain → /classify → /compile → /check → /dispatch → Spark → A
 | Tool | Verwendung |
 |------|------------|
 | Repomix | Codebase zu LLM Context: `npx repomix` |
-| LightRAG | Knowledge Graph + Semantic Search |
+| LightRAG | Knowledge Graph + Semantic Search für Code Queries |
+
+Konfiguration: `tools/repomix/`, `tools/lightrag/`
+
+#### LightRAG — Codebase Knowledge Graph
+
+Für Architektur-Fragen und Code-Navigation nutze LightRAG:
 
 ```bash
+# CLI Query
 python tools/lightrag/query.py "Wie ist der WO Lifecycle definiert?"
-# POST http://127.0.0.1:9004/query  {"question": "...", "mode": "hybrid"}
+python tools/lightrag/query.py --mode global "Was ist der Brain Layer?"
+
+# Oder via HTTP (Server auf Port 9004):
+# POST http://127.0.0.1:9004/query  body: {"question": "...", "mode": "hybrid"}
+# GET  http://127.0.0.1:9004/health
+```
+
+Modes:
+- `hybrid` (Default): Kombination KG + Vector, beste Ergebnisse
+- `local`: Spezifische Code-Details, exakte Implementierungen
+- `global`: Übergreifende Architektur-Fragen
+- `naive`: Schnelle Vector-Suche ohne Graph
+- `mix`: KG + Vector integriert (LightRAG-internal default)
+
+Stack:
+- Embeddings: `sentence-transformers` + `all-MiniLM-L6-v2` (lokal, dim=384)
+- LLM: Spark A (`qwen3.6-35b-fp8`, vLLM @ `192.168.0.128:8001`)
+- Graph: NetworkX (lokal, kein Neo4j)
+- Storage: `tools/lightrag/storage/` (gitignored, kann GB-groß werden)
+
+Index neu aufbauen wenn sich die Codebase wesentlich geändert hat:
+```bash
+python tools/lightrag/index_codebase.py            # vollständig
+python tools/lightrag/index_codebase.py --dry-run  # zählen ohne zu indexieren
 ```
 
 Server starten:
@@ -155,8 +155,10 @@ Session Start:
 
 Session End:
 1. Update `system/memory/canonical/lumeos_canonical.md`
-2. Erstelle ADR in `docs/decisions/`
+2. Erstelle ADR in `docs/decisions/` für neue Architektur-Entscheidungen
 3. Commit: "memory: update canonical + ADR"
+
+Siehe: `system/memory/canonical/session_protocol.md`
 
 ### Hook Awareness
 
@@ -166,7 +168,11 @@ Pre-Tool Hook schützt kritische Files:
 - `.claude/rules/`
 - `packages/wo-core/src/types.ts`
 
-Bei **SCOPE_GUARD Error**: WO erstellen, nicht umgehen.
+Bei **SCOPE_GUARD Error**:
+- Nicht umgehen
+- WO erstellen für die gewünschte Änderung
+
+Post-Tool Hook loggt alle Änderungen in `.claude/hooks/session.log`
 
 ---
 

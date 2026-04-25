@@ -2,6 +2,11 @@
 // services/governance-compiler/src/index.ts
 // Port: 9003 (Threadripper Control Plane)
 
+import { config as loadEnv } from 'dotenv'
+import { fileURLToPath } from 'node:url'
+import { dirname, resolve } from 'node:path'
+loadEnv({ path: resolve(dirname(fileURLToPath(import.meta.url)), '../../../.env') })
+
 import { Hono } from 'hono'
 import { serve } from '@hono/node-server'
 import { compileRoutes } from './routes/compile'

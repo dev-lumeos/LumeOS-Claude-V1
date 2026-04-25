@@ -11,7 +11,8 @@
     "@noble/ed25519": "^2.0.0",
     "@lumeos/execution-token": "workspace:*",
     "@lumeos/vllm-client": "workspace:*",
-    "@lumeos/wo-core": "workspace:*"
+    "@lumeos/wo-core": "workspace:*",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "tsx": "^4.0.0",
