@@ -1,0 +1,21 @@
+{
+  "name": "@lumeos/wo-classifier",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@hono/node-server": "^1.0.0",
+    "@lumeos/wo-core": "workspace:*",
+    "@supabase/supabase-js": "^2.45.0",
+    "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.0.0",
+    "@types/node": "^20.0.0"
+  }
+}
