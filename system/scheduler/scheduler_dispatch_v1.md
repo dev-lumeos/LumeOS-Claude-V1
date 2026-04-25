@@ -1,4 +1,5 @@
 # Scheduler / Dispatch Spec V1
+# Status: AKTUALISIERT — 25. April 2026
 
 ---
 
@@ -14,7 +15,7 @@ Der Scheduler entscheidet:
 
 ```
 Scheduler    = State Reader + Dispatch Engine
-Orchestrator = Graph Owner + Retry Decider (Qwen3.5-122B lokal)
+Orchestrator = kommt mit Spark C (Qwen3.5-122B NVFP4) — noch nicht verfügbar
 Claude       = Externer Akteur — NICHT Teil des Schedulers
 ```
 
@@ -23,14 +24,18 @@ Scheduler arbeitet ausschließlich mit Execution Agents aus der Agent Registry.
 
 ---
 
-## Node-Profil
+## Node-Profil (aktuell)
 
-| Node | Modell | Tier | Max Slots |
-|------|--------|------|-----------|
-| Spark A | Qwen3.6-35B-A3B FP8 + fp4_light | fp8_bulk + fp4_light | 8 |
-| Spark B | Qwen3.5-122B-A10B NVFP4 + DeepSeek-R1 8B | quality + review | 3 |
+| Node | Modell | Rolle | Max Slots |
+|------|--------|-------|-----------|
+| Spark A | Qwen3.6-35B-A3B-FP8 | Governance Compiler | 4 |
+| Spark B | Qwen3-Coder-30B-A3B-FP8 | Micro-Executor (Temp=0.0) | 10 |
+| Spark C | Qwen3.5-122B NVFP4 (coming) | Orchestrator + Bulk | 8 |
+| Spark D | Qwen3-Coder-Next (coming) | Specialist / QA | 4 |
 
-Spark B Slot 3 ist immer für Orchestrator reserviert.
+Routing via `services/scheduler-api/src/routing.ts` — nutzt `routing.assigned_spark` aus WO Classifier.
+WO Classifier gibt `spark_a` / `spark_b` / `spark_c` / `spark_d` zurück.
+Spark C/D fallen heute auf Spark B zurück (SPARK_C_AVAILABLE = false).
 
 ---
 
@@ -54,8 +59,6 @@ WO ist ready wenn eigene blocked_by Dependencies erfüllt.
 NICHT wenn alle Phase-N-1 WOs global done sind.
 ```
 
-Optional Soft-Gate: phase_soft_gate.enabled: false (default)
-
 ---
 
 ## Dispatch-Algorithmus V1
@@ -63,83 +66,46 @@ Optional Soft-Gate: phase_soft_gate.enabled: false (default)
 ```
 LOOP alle 5s:
   1. Lade alle WOs State: ready
-  2. Sortiere: Phase asc → fp4_light > fp8_bulk > quality > review → FIFO
-  3. Für jede ready WO:
-     a. Bestimme target_node via agent_type → model_tier → node_profile
+  2. classifyIfNeeded(wo) → routing.assigned_spark setzen falls fehlt
+  3. Sortiere: Phase asc → Priority asc → FIFO
+  4. Für jede ready WO:
+     a. resolveNodeFromRouting(wo) → target_node
      b. Prüfe: hat target_node freie Slots?
      c. Ja → dispatch (atomar: check + reserve + set dispatched)
      d. Nein → skip
-  4. Warte 5s, repeat
+  5. Warte 5s, repeat
 ```
 
-**Atomares Dispatch:** check slot → reserve slot → set dispatched — alles in einem Schritt.
-
 ---
-
-## Node-Routing
-
-| Agent Tier | Target Node | Fallback |
-|-----------|-------------|---------|
-| `fp4_light` | Spark A | — |
-| `fp8_bulk` | Spark A | Spark B nur bei node_override |
-| `quality` | Spark B | OpenRouter wenn exhausted |
-| `review` | Spark B | — |
-| `escalation_remote` | OpenRouter | — |
 
 ## Slot Management
 
 ```yaml
-spark_a:
-  max_slots: 8
-  available: max - current - reserved
-
-spark_b:
-  max_slots: 3          # Slot 3 immer für Orchestrator reserviert
-  available: max - current - reserved
+spark_a: max_slots: 4
+spark_b: max_slots: 10
+spark_c: max_slots: 8  (coming)
+spark_d: max_slots: 4  (coming)
 ```
+
+---
 
 ## Priorisierung
 
 1. Phase (asc: 1→2→3)
-2. Tier (fp4_light > fp8_bulk > quality > review)
-3. FIFO
-4. Retry-Versuch (Attempt 1 vor 2 vor 3)
+2. WO Priority (0=CRITICAL, 1=HIGH, 2=NORMAL, 3=LOW)
+3. FIFO (created_at)
 
-## Retry Starvation Prevention
-
-Nach 3 Loops ohne Dispatch → Retry-WO rückt vor normale FIFO.
-
-## Conflicts-With Enforcement
-
-```
-Für jede WO die dispatcht werden soll:
-  Wenn conflicts_with[i].state IN (dispatched, running):
-    → NICHT dispatchen, bleibt ready
-```
-
-## Night Run
-
-```yaml
-night_run:
-  max_spark_a_slots: 8
-  max_spark_b_slots: 2      # 1 Slot für Orchestrator
-  openrouter_budget: $5/night
-  error_thresholds:
-    global: 0.30
-    per_agent: 0.50
-    per_wo_type: 0.50
-```
+---
 
 ## Scheduler States
 
 | State | Bedeutung |
 |-------|-----------|
-| `idle` | Keine WOs in Queue |
-| `running` | Aktiv dispatching |
-| `paused` | Manuell oder error_threshold |
-| `night_run` | Automatischer Nacht-Batch |
-| `draining` | Keine neuen dispatchen |
+| idle | Keine WOs in Queue |
+| running | Aktiv dispatching |
+| paused | Manuell pausiert |
+| draining | Keine neuen dispatchen |
 
 ---
 
-*Scheduler Dispatch V1 — festgezogen*
+*Scheduler Dispatch Spec V1 — aktualisiert 25. April 2026*
