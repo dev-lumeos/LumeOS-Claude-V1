@@ -278,6 +278,31 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  services/wo-classifier:
+    dependencies:
+      '@hono/node-server':
+        specifier: ^1.0.0
+        version: 1.19.14(hono@4.12.14)
+      '@lumeos/wo-core':
+        specifier: workspace:*
+        version: link:../../packages/wo-core
+      '@supabase/supabase-js':
+        specifier: ^2.45.0
+        version: 2.104.0
+      hono:
+        specifier: ^4.0.0
+        version: 4.12.14
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.39
+      tsx:
+        specifier: ^4.0.0
+        version: 4.21.0
+
   tools:
     dependencies:
       '@lumeos/execution-token':

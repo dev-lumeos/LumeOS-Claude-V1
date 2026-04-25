@@ -3,5 +3,6 @@
 export * from './types'
 export * from './schema'
 export * from './classifier'
+export * from './classifier-bridge'
 export * from './governance'
 export * from './execution-token'

@@ -2,7 +2,16 @@
 // packages/wo-core/src/schema.ts
 
 import type { WOType, WOState, WOPhase, FailureClass, ModelTier } from './types'
-import type { WORouting } from './classifier'
+import type {
+  WORouting,
+  WOCategory,
+  WOModule,
+  WOComplexity,
+  WORisk,
+  DBAccess,
+  SparkTarget,
+  WOPriority,
+} from './classifier'
 
 export interface WODependencies {
   phase: WOPhase
@@ -49,6 +58,20 @@ export interface WorkOrder {
   /** Populated by services/wo-classifier (Port 9000). Optional — legacy WOs may
    *  arrive at the scheduler without routing and trigger a classify-on-demand. */
   routing?: WORouting
+  // Classifier-extension fields (migration 20260424_002_wo_classifier_fields).
+  // All optional because pre-classifier WOs have null in these columns.
+  wo_category?: WOCategory
+  wo_module?: WOModule
+  wo_complexity?: WOComplexity
+  wo_risk?: WORisk
+  db_access?: DBAccess
+  files_allowed?: string[]
+  files_blocked?: string[]
+  assigned_spark?: SparkTarget
+  routing_reason?: string
+  needs_db_check?: boolean
+  requires_schema_change?: boolean
+  wo_priority?: WOPriority
   created_at: string
   updated_at: string
 }
