@@ -5,45 +5,28 @@
 ## States
 
 ### Spec Layer
-| State | Bedeutung |
-|-------|-----------|
-| `spec_draft` | Spec existiert, nicht freigegeben |
-| `spec_approved_for_decomposition` | Manuell freigegeben für WO Factory |
-| `spec_cancelled` | Spec zurückgezogen |
+
+StateBedeutung`spec_draft`Spec existiert, nicht freigegeben`spec_approved_for_decomposition`Manuell freigegeben für WO Factory`spec_cancelled`Spec zurückgezogen
 
 ### WO Graph / Queue Layer
-| State | Bedeutung |
-|-------|-----------|
-| `wo_generated` | WO Factory hat WO erzeugt inkl. phase / blocked_by / conflicts_with |
-| `graph_validated` | Orchestrator hat Graph geprüft: Zyklen, Konsistenz, Readiness |
-| `queue_released` | Subgraph freigegeben für Execution |
+
+StateBedeutung`wo_generated`WO Factory hat WO erzeugt inkl. phase / blocked_by / conflicts_with`graph_validated`Orchestrator hat Graph geprüft: Zyklen, Konsistenz, Readiness`queue_released`Subgraph freigegeben für Execution
 
 ### WO Execution Readiness
-| State | Bedeutung |
-|-------|-----------|
-| `blocked` | Logisch nicht ausführbar — offene blocked_by oder conflicts_with |
-| `ready` | Logisch ausführbar — alle Blocker done/closed, keine Konflikte aktiv |
-| `dispatched` | Scheduler hat Slot + Agent/Node zugewiesen |
-| `running` | Worker hat WO begonnen |
+
+StateBedeutung`blocked`Logisch nicht ausführbar — offene blocked_by oder conflicts_with`ready`Logisch ausführbar — alle Blocker done/closed, keine Konflikte aktiv`dispatched`Scheduler hat Slot + Agent/Node zugewiesen`running`Worker hat WO begonnen
 
 ### WO Outcome
-| State | Bedeutung |
-|-------|-----------|
-| `done` | Worker meldet technisch erfolgreich — noch kein operativer Abschluss |
-| `failed` | Worker konnte WO nicht abschließen — Failure Class wird gesetzt |
+
+StateBedeutung`done`Worker meldet technisch erfolgreich — noch kein operativer Abschluss`failed`Worker konnte WO nicht abschließen — Failure Class wird gesetzt
 
 ### WO Decision Layer
-| State | Bedeutung |
-|-------|-----------|
-| `reviewed` | Human/Board/Review Layer hat Ergebnis bewertet |
-| `retry_scheduled` | WO wird neu versucht — mit Retry Context Annotations |
-| `closed` | Operativ abgeschlossen — keine weitere Aktion |
-| `cancelled` | Bewusst abgebrochen — nicht mehr relevant, kein normaler Abschluss |
+
+StateBedeutung`reviewed`Human/Board/Review Layer hat Ergebnis bewertet`retry_scheduled`WO wird neu versucht — mit Retry Context Annotations`closed`Operativ abgeschlossen — keine weitere Aktion`cancelled`Bewusst abgebrochen — nicht mehr relevant, kein normaler Abschluss
 
 ### Special Repair State
-| State | Bedeutung |
-|-------|-----------|
-| `graph_repair_pending` | WO hat ungültigen Graph-Kontext — Orchestrator repariert Einordnung |
+
+StateBedeutung`graph_repair_pending`WO hat ungültigen Graph-Kontext — Orchestrator repariert Einordnung
 
 ---
 

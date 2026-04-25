@@ -1,62 +1,84 @@
-# LumeOS — Canonical Memory
-
-Stand: April 2026
+# LumeOS Canonical Memory
+# Stand: 25. April 2026
 
 ---
 
 ## System
 
 **Architecture:** Brain / Law / Muscle
-- Brain: Claude Code (planning, specs, WOs)
-- Law: Deterministic System (scheduler, graph, retry)
-- Muscle: DGX Spark A+B (parallel execution)
+- Brain: Claude Code Opus 4.6 (planning, specs, WOs, orchestration)
+- Law: Deterministisches System (WO Classifier, Governance Compiler, SAT-Check, Scheduler, Ed25519)
+- Muscle: DGX Spark A+B (vLLM Execution)
 
 **Repo:** https://github.com/dev-lumeos/LumeOS-Claude-V1
+**Stack:** pnpm / Turborepo / Hono / Supabase / vLLM / TypeScript
 
-**Stack:** pnpm / Turborepo / Next.js / Hono / Supabase / vLLM
+---
+
+## Hardware (aktuell)
+
+| Node | IP | Modell | Status |
+|------|----|--------|--------|
+| Spark A | 192.168.0.128:8001 | Qwen3.6-35B-A3B-FP8 | ✅ LIVE |
+| Spark B | 192.168.0.188:8001 | Qwen3-Coder-30B-A3B-FP8 | ✅ LIVE |
+| Spark C | TBD | Qwen3.5-122B NVFP4 | 🔜 Bestellt |
+| Spark D | TBD | Qwen3-Coder-Next | 🔜 Bestellt |
 
 ---
 
 ## Festgezogene Entscheidungen
 
-### Architektur
-- WO Factory: Claude Code primary (wo-writer skill), Qwen Fallback
-- Orchestrator: Qwen3.5-122B lokal (Spark B) — kein Planning
-- Macro Executor: Kimi K2.6 via API
-- Escalation: Claude Opus → OpenRouter Chain
+### Pipeline
+- WO Classifier: deterministisch, regelbasiert, kein LLM (Port 9000)
+- Governance Compiler: Spark A, GovernanceArtefaktV3 YAML
+- SAT-Check: Threadripper, 3 Checks, kein LLM (Port 9001)
+- Scheduler: 5s Loop, SlotManager, Priority Queue (Port 9002)
+- Ed25519 Token: Sign/Verify, Nonce UNIQUE, 5min Expiry
+- triple_hash: 3× identisch = PASS, Temp=0.0, Seed=42
 
 ### Modelle
-- Spark A: Qwen3.6-35B-A3B FP8 (fp8_bulk), Gemma 4 4B + Phi-4 Mini (fp4_light)
-- Spark B: Qwen3.5-122B NVFP4 (quality/orchestrator), DeepSeek-R1 8B (review)
+- Spark A: Qwen3.6-35B-A3B FP8 (Governance)
+- Spark B: Qwen3-Coder-30B-A3B FP8 (Execution, deterministisch)
+- Spark C (coming): Qwen3.5-122B NVFP4 (Orchestrator)
+- Spark D (coming): Qwen3-Coder-Next (Specialist/QA)
 
-### WO System
-- Micro WO: 1-3 Files, ein Layer, DGX Agents
-- Macro WO: 4+ Files, multi-layer, Kimi K2.6
-- Lifecycle: spec_draft → ... → closed (festgezogen)
-- Phase: types=1, service/db=2, ui/tests=3
+### DB
+- Control Plane: Lokal auf Threadripper (Supabase Port 54321)
+- App-Daten: Supabase Cloud (später, wenn Nutrition/Training gebaut)
+- Trennung: Control Plane NIEMALS in Cloud
 
-### DB Environments
-- coding/* ↔ local-dev
-- dev ↔ remote-dev
-- main ↔ remote-main
-
----
-
-## Offene Entscheidungen
-
-- Qwen3.6-35B NVFP4-Quant: warten auf Community-Release
-- Memory Layer Tool: Anthropic nativ vs mcp-memory-service vs yuvalsuede
-- Scheduler Implementation: packages/scheduler-core (noch nicht gebaut)
+### Tools
+- Context7: Library Docs MCP
+- Serena: LSP Code Navigation MCP
+- claude-mem: Session Memory (Port 37777, Bun)
+- LightRAG: Codebase Knowledge Graph (Port 9004, 170 Files)
+- lean-ctx: Token Compression
+- Grafana: WO Pipeline + Hardware Dashboard (Port 3001)
+- Prometheus: Metrics (Port 9090)
 
 ---
 
-## Module Status
+## Services (laufend auf Threadripper)
 
-| Modul | Status |
-|-------|--------|
-| nutrition | In Progress (erster Fokus) |
-| training | Geplant |
-| recovery | Geplant |
-| coach | Geplant |
-| medical | Geplant |
-| marketplace | Geplant |
+```
+Port 9000  wo-classifier       deterministisches Routing
+Port 9001  sat-check           3 deterministische Checks
+Port 9002  scheduler-api       5s Dispatch Loop
+Port 9003  governance-compiler Spark A → GovernanceArtefaktV3
+Port 9004  lightrag            Codebase Knowledge Graph
+Port 9005  orchestrator        TODO — wartet auf Spark C
+Port 37777 claude-mem          Session Memory
+Port 54321 supabase            Control Plane DB
+Port 3001  grafana             Dashboards
+Port 9090  prometheus          Metrics
+```
+
+---
+
+## Offene Punkte
+
+- Spark C+D: Orchestrator, DB Gate, Acceptance Verifier, Eskalationskette
+- Nutrition-API: wartet auf Supabase Cloud
+- CI Pipeline: wartet auf vollständige Tests
+- Memory Layer Policies: wartet auf Orchestrator
+- WO Batches Automatisierung: wartet auf Orchestrator

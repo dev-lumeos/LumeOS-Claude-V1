@@ -4,13 +4,7 @@
 
 ## Lokal (DGX Spark — Open Weights)
 
-| Tier | Modell | Node | Format | tok/s |
-|------|--------|------|--------|-------|
-| `fp8_bulk` | Qwen3.6-35B-A3B | Spark A | FP8 | ~43 |
-| `fp4_light` | Gemma 4 4B | Spark A | NVFP4 | ~85+ |
-| `fp4_light` | Phi-4 Mini | Spark A | NVFP4 | ~100+ |
-| `quality` | Qwen3.5-122B-A10B | Spark B | NVFP4 | ~55 |
-| `review` | DeepSeek-R1 8B distill | Spark B | NVFP4 | ~80+ |
+TierModellNodeFormattok/s`fp8_bulk`Qwen3.6-35B-A3BSpark AFP8\~43`fp4_light`Gemma 4 4BSpark ANVFP4\~85+`fp4_light`Phi-4 MiniSpark ANVFP4\~100+`quality`Qwen3.5-122B-A10BSpark BNVFP4\~55`review`DeepSeek-R1 8B distillSpark BNVFP4\~80+
 
 > fp8_bulk → fp4_bulk sobald NVFP4-Quant für Qwen3.6-35B verfügbar (Community-Quant erwartet)
 
@@ -18,20 +12,14 @@
 
 ## Remote (OpenRouter / API)
 
-| Tier | Modell | Rolle | Kosten |
-|------|--------|-------|--------|
-| `escalation_1` | Claude Code Opus | Primary Escalation | Max Plan |
-| `escalation_2` | Qwen3.6-Plus | API only — kein Open Weight | günstig |
-| `escalation_3` | MiniMax M2.5 | 80.2% SWE-bench | $0.30/$1.20 |
-| `escalation_4` | Gemini 3.1 Pro | 78.8% SWE-bench | $2/$12 |
-| `escalation_5` | Claude Opus 4.6 | Last Resort | $15/$75 |
-| `macro_executor` | Kimi K2.6 | Macro WO + Agent Swarm | $0.60/$2.50 |
+TierModellRolleKosten`escalation_1`Claude Code OpusPrimary EscalationMax Plan`escalation_2`Qwen3.6-PlusAPI only — kein Open Weightgünstig`escalation_3`MiniMax M2.580.2% SWE-bench$0.30/$1.20`escalation_4`Gemini 3.1 Pro78.8% SWE-bench$2/$12`escalation_5`Claude Opus 4.6Last Resort$15/$75`macro_executor`Kimi K2.6Macro WO + Agent Swarm$0.60/$2.50
 
 ---
 
 ## Node Konfiguration
 
 ### Spark A — Throughput (Port 8001)
+
 ```yaml
 node_id: spark-a
 role: bulk_execution
@@ -47,7 +35,6 @@ models:
     tier: fp4_light
     port: 8012
 ```
-
 ### Spark B — Quality (Port 8002)
 ```yaml
 node_id: spark-b

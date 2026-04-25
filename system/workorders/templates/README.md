@@ -1,4 +1,5 @@
 # WO Templates — Index
+
 # Alle verfügbaren Work Order Templates
 
 ---
@@ -15,12 +16,7 @@ type=governance / planning / analysis+high risk    → kein Template — Tom def
 
 ## Templates
 
-| Template | Routing | Komplexität | DB |
-|----------|---------|-------------|-----|
-| [implementation_low](template_implementation_low.md) | Spark C (heute B) | < 50 Zeilen | none |
-| [implementation_medium](template_implementation_medium.md) | Spark B | 50-200 Zeilen | none/read |
-| [migration](template_migration.md) | Spark B + DB-Check | varies | migration |
-| [docs](template_docs.md) | Spark C (heute B) | any | none |
+TemplateRoutingKomplexitätDB[implementation_low](template_implementation_low.md)Spark C (heute B)&lt; 50 Zeilennone[implementation_medium](template_implementation_medium.md)Spark B50-200 Zeilennone/read[migration](template_migration.md)Spark B + DB-Checkvariesmigration[docs](template_docs.md)Spark C (heute B)anynone
 
 ## Schnellstart
 

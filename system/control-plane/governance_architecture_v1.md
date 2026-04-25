@@ -1,4 +1,5 @@
 # Governance Architecture V1 — LumeOS
+
 # Status: FESTGEZOGEN — 23. April 2026
 
 ---
@@ -16,12 +17,7 @@ Micro-Executor (DGX B)      → CPU          (Ausführung, strikt deterministisc
 
 ## Ebenen
 
-| Ebene | Wer | Was | Determinismus |
-|-------|-----|-----|---------------|
-| Macro | Opus 4.6 / Sonnet / Kimi | Architektur, WO-Zerlegung, Governance-Regeln | Nicht deterministisch |
-| Governance-Compiler | DGX A (LLM) | Constraint-Extraktion, Schema-Härtung | Semi-deterministisch |
-| SAT-Check | Threadripper (kein LLM) | Pre-Execution Gate | Vollständig deterministisch |
-| Micro | DGX B (LLM Temp 0.0) | Code-Generierung nach Constraint-Set | Strikt deterministisch |
+EbeneWerWasDeterminismusMacroOpus 4.6 / Sonnet / KimiArchitektur, WO-Zerlegung, Governance-RegelnNicht deterministischGovernance-CompilerDGX A (LLM)Constraint-Extraktion, Schema-HärtungSemi-deterministischSAT-CheckThreadripper (kein LLM)Pre-Execution GateVollständig deterministischMicroDGX B (LLM Temp 0.0)Code-Generierung nach Constraint-SetStrikt deterministisch
 
 ---
 
@@ -70,12 +66,14 @@ Micro-Executor (DGX B)      → CPU          (Ausführung, strikt deterministisc
 ## DGX Rollentrennung (UNVERÄNDERLICH)
 
 ### DGX A — Governance-Compiler
+
 - Funktion: Macro-Workorder → Governance-Artefakt v3.0
 - Modell: Qwen3.5-35B-A3B (Standard) / 122B (Edge-Cases) — TBD nach Benchmark
 - Aufgaben: Constraint-Extraktion, Schema-Validierung, Artefakt-Generierung
 - NICHT: Code ausführen, testen, direkt deployen
 
 ### DGX B — Micro-Executor
+
 - Funktion: Governance-Artefakt + Execution-Token → Code
 - Modell: Qwen3-Coder-30B-A3B (AWQ, 4-bit)
 - Parameter: Temp=0.0, Seed=42, Top-P=1.0, Top-K=1

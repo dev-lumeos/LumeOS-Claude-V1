@@ -21,21 +21,13 @@ Attempt 3: escalated_tier
 
 ## Failure Class Routing
 
-| Class | Pfad |
-|-------|------|
-| `technical_transient` | auto_retry → attempt2 → attempt3 → reviewed |
-| `technical_persistent` | node_override → attempt2 → reviewed |
-| `semantic_output` | attempt2 + extended_context → attempt3 stronger_model → reviewed |
-| `scope_violation` | attempt2 stricter_scope → reviewed |
-| `dependency_invalid` | → graph_repair_pending (kein Model-Retry) |
-| `guardrail_violation` | → sofort reviewed (kein Auto-Retry) |
+ClassPfad`technical_transient`auto_retry → attempt2 → attempt3 → reviewed`technical_persistent`node_override → attempt2 → reviewed`semantic_output`attempt2 + extended_context → attempt3 stronger_model → reviewed`scope_violation`attempt2 stricter_scope → reviewed`dependency_invalid`→ graph_repair_pending (kein Model-Retry)`guardrail_violation`→ sofort reviewed (kein Auto-Retry)
 
 ---
 
 ## Starvation Prevention
 
-Nach 3 Scheduler-Loops ohne Dispatch:
-→ Retry-WO rückt vor normale FIFO desselben Tiers
+Nach 3 Scheduler-Loops ohne Dispatch: → Retry-WO rückt vor normale FIFO desselben Tiers
 
 ---
 
@@ -48,6 +40,7 @@ retry_context:
   node_override: true
   previous_node: spark-a
   next_node: spark-b
+```
   model_tier_override: false
   extended_context: false
   stricter_scope_mode: false
