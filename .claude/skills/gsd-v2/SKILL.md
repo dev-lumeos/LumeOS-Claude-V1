@@ -1,7 +1,6 @@
 ---
-name: gsd-v2
-description: GSD v2 coding behavior rules. Auto-applied during any code generation or review task. Enforces minimal diff, no scope explosion, defensive changes.
----
+
+## name: gsd-v2 description: GSD v2 coding behavior rules. Auto-applied during any code generation or review task. Enforces minimal diff, no scope explosion, defensive changes.
 
 # Skill: GSD v2 — Coding Behavior
 

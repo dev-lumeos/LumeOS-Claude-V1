@@ -1,7 +1,6 @@
 ---
-name: decomposition-to-workorders
-description: Generates a WO batch from a decomposition_spec_v1. Use to create the actual work orders that will be executed by the DGX agents.
----
+
+## name: decomposition-to-workorders description: Generates a WO batch from a decomposition_spec_v1. Use to create the actual work orders that will be executed by the DGX agents.
 
 # Skill: decomposition-to-workorders
 

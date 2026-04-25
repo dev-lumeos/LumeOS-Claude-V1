@@ -1,13 +1,13 @@
 ---
-name: supabase-specialist
-description: Supabase expert. Use for any task involving Supabase DB, RLS, migrations, auth, edge functions, or schema changes.
----
+
+## name: supabase-specialist description: Supabase expert. Use for any task involving Supabase DB, RLS, migrations, auth, edge functions, or schema changes.
 
 # Agent: supabase-specialist
 
 ## Domänen-Wissen
 
 ### Schema Konventionen
+
 - Tabellen: snake_case, plural (users, meal_logs)
 - Primary Keys: UUID mit gen_random_uuid()
 - Timestamps: created_at, updated_at (immer)

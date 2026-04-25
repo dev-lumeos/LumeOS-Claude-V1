@@ -1,4 +1,5 @@
 # LumeOS Canonical Memory
+
 # Stand: 25. April 2026
 
 ---
@@ -6,29 +7,25 @@
 ## System
 
 **Architecture:** Brain / Law / Muscle
+
 - Brain: Claude Code Opus 4.6 (planning, specs, WOs, orchestration)
 - Law: Deterministisches System (WO Classifier, Governance Compiler, SAT-Check, Scheduler, Ed25519)
 - Muscle: DGX Spark A+B (vLLM Execution)
 
-**Repo:** https://github.com/dev-lumeos/LumeOS-Claude-V1
-**Stack:** pnpm / Turborepo / Hono / Supabase / vLLM / TypeScript
+**Repo:** <https://github.com/dev-lumeos/LumeOS-Claude-V1>**Stack:** pnpm / Turborepo / Hono / Supabase / vLLM / TypeScript
 
 ---
 
 ## Hardware (aktuell)
 
-| Node | IP | Modell | Status |
-|------|----|--------|--------|
-| Spark A | 192.168.0.128:8001 | Qwen3.6-35B-A3B-FP8 | ✅ LIVE |
-| Spark B | 192.168.0.188:8001 | Qwen3-Coder-30B-A3B-FP8 | ✅ LIVE |
-| Spark C | TBD | Qwen3.5-122B NVFP4 | 🔜 Bestellt |
-| Spark D | TBD | Qwen3-Coder-Next | 🔜 Bestellt |
+NodeIPModellStatusSpark A192.168.0.128:8001Qwen3.6-35B-A3B-FP8✅ LIVESpark B192.168.0.188:8001Qwen3-Coder-30B-A3B-FP8✅ LIVESpark CTBDQwen3.5-122B NVFP4🔜 BestelltSpark DTBDQwen3-Coder-Next🔜 Bestellt
 
 ---
 
 ## Festgezogene Entscheidungen
 
 ### Pipeline
+
 - WO Classifier: deterministisch, regelbasiert, kein LLM (Port 9000)
 - Governance Compiler: Spark A, GovernanceArtefaktV3 YAML
 - SAT-Check: Threadripper, 3 Checks, kein LLM (Port 9001)
@@ -37,17 +34,20 @@
 - triple_hash: 3× identisch = PASS, Temp=0.0, Seed=42
 
 ### Modelle
+
 - Spark A: Qwen3.6-35B-A3B FP8 (Governance)
 - Spark B: Qwen3-Coder-30B-A3B FP8 (Execution, deterministisch)
 - Spark C (coming): Qwen3.5-122B NVFP4 (Orchestrator)
 - Spark D (coming): Qwen3-Coder-Next (Specialist/QA)
 
 ### DB
+
 - Control Plane: Lokal auf Threadripper (Supabase Port 54321)
 - App-Daten: Supabase Cloud (später, wenn Nutrition/Training gebaut)
 - Trennung: Control Plane NIEMALS in Cloud
 
 ### Tools
+
 - Context7: Library Docs MCP
 - Serena: LSP Code Navigation MCP
 - claude-mem: Session Memory (Port 37777, Bun)

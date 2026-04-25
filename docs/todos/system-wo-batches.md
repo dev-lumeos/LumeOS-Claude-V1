@@ -47,6 +47,7 @@ system/workorders/batches/
 ## Wann wird das automatisch gefüllt?
 
 Wenn Orchestrator Service (Port 9005) aktiv ist:
+
 - Nach jedem erfolgreichen WO automatisch eine .md Datei anlegen
 - Supabase Audit-Trail als Quelle
 
@@ -60,4 +61,4 @@ automatisch eine Batch-Dokumentation in system/workorders/batches/ erstellt wird
 
 Format: system/workorders/batches/WO-<id>.md
 Inhalt: Status, Spark, Hash, geänderte Files, Acceptance Criteria Ergebnis
-``
+```

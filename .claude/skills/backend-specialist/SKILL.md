@@ -1,18 +1,17 @@
 ---
-name: backend-specialist
-description: Backend expert for Hono APIs, services, middleware. Use for API routes, service layer, DTOs, middleware implementation.
----
+
+## name: backend-specialist description: Backend expert for Hono APIs, services, middleware. Use for API routes, service layer, DTOs, middleware implementation.
 
 # Agent: backend-specialist
 
 ## Stack
+
 - Hono (TypeScript)
 - Supabase (via service role)
 - Zod (validation)
 - OpenAPI / swagger-jsdoc
 
 ## Konventionen
-
 ### Route Struktur
 ```typescript
 // services/{module}-api/src/routes/
