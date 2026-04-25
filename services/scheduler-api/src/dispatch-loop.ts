@@ -3,11 +3,13 @@
 // 5-second loop per scheduler_dispatch_v1.md
 
 import { sortByPriority, SlotManager } from '@lumeos/scheduler-core'
-import { getAgentById, NODE_PROFILES } from '@lumeos/agent-core'
-import type { WorkOrder } from '@lumeos/wo-core'
-import type { SlotState, DispatchResult } from '@lumeos/scheduler-core'
+import { getAgentById } from '@lumeos/agent-core'
+import type { WorkOrder, WOClassifierOutput, WOClassifierReject } from '@lumeos/wo-core'
+import { resolveNodeFromRouting, type NodeId } from './routing'
 
 export type SchedulerState = 'idle' | 'running' | 'paused' | 'night_run' | 'draining'
+
+const CLASSIFIER_URL = process.env.WO_CLASSIFIER_URL ?? 'http://localhost:9000'
 
 export interface DispatchLoopConfig {
   intervalMs: number
@@ -88,12 +90,19 @@ export class DispatchLoop {
       // 3. Dispatch loop
       let dispatchedThisTick = 0
 
-      for (const wo of sorted) {
-        // Determine target node from agent_type
-        const targetNode = this.getTargetNode(wo.agent_type)
+      for (const original of sorted) {
+        // 3a. If WO has no routing yet, ask the classifier (best-effort).
+        const wo = await this.classifyIfNeeded(original)
+        if (wo === null) {
+          // Classifier rejected — already logged. Skip this WO.
+          continue
+        }
+
+        // 3b. Determine target node — prefer routing, fall back to legacy heuristic.
+        const targetNode = resolveNodeFromRouting(wo) ?? this.getTargetNode(wo.agent_type)
 
         if (!targetNode) {
-          console.warn(`[Scheduler] No node for agent ${wo.agent_type}`)
+          console.warn(`[Scheduler] No node for ${wo.wo_id} (agent_type=${wo.agent_type})`)
           continue
         }
 
@@ -120,7 +129,10 @@ export class DispatchLoop {
           dispatchedThisTick++
           this.clearStarvation(wo.wo_id)
 
-          console.log(`[Scheduler] Dispatched ${wo.wo_id} to ${targetNode}`)
+          const reasonSuffix = wo.routing
+            ? ` (routing: ${wo.routing.routing_reason})`
+            : ' (legacy: agent_type heuristic)'
+          console.log(`[Scheduler] Dispatched ${wo.wo_id} to ${targetNode}${reasonSuffix}`)
         } catch (err) {
           // Dispatch failed — release slot
           this.slotManager.release(targetNode)
@@ -135,7 +147,47 @@ export class DispatchLoop {
     }
   }
 
-  private getTargetNode(agentType: string): string | null {
+  /**
+   * If a WO arrives without a routing block, call the WO-Classifier service
+   * to populate it. Returns the (possibly augmented) WO, or null when the
+   * classifier explicitly rejects.
+   *
+   * Best-effort: if the classifier is unreachable, returns the WO unchanged
+   * — the caller will fall back to legacy `getTargetNode(agent_type)`.
+   */
+  private async classifyIfNeeded(wo: WorkOrder): Promise<WorkOrder | null> {
+    if (wo.routing?.assigned_spark) return wo
+
+    try {
+      const res = await fetch(`${CLASSIFIER_URL}/classify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(wo),
+      })
+      const result = (await res.json()) as WOClassifierOutput | WOClassifierReject
+
+      if ('routing' in result && result.routing) {
+        return { ...wo, routing: result.routing }
+      }
+
+      if ('status' in result && result.status === 'REJECTED') {
+        const r = result as WOClassifierReject
+        console.warn(`[Scheduler] Classifier REJECTED ${wo.wo_id}: ${r.error} — ${r.reason}`)
+        // Soft-fail: WOs missing classifier-only fields (added by Pipeline-2's
+        // bridge migration) should not block dispatch. Fall back to legacy.
+        if (r.error === 'PREFLIGHT_REJECT') return wo
+        return null
+      }
+
+      return wo
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      console.warn(`[Scheduler] Classifier unreachable for ${wo.wo_id}: ${msg} — falling back to legacy routing`)
+      return wo
+    }
+  }
+
+  private getTargetNode(agentType: string): NodeId | null {
     const agent = getAgentById(agentType)
     if (!agent) return null
 
@@ -154,7 +206,7 @@ export class DispatchLoop {
     }
   }
 
-  private async hasActiveConflict(wo: WorkOrder): Promise<boolean> {
+  private async hasActiveConflict(_wo: WorkOrder): Promise<boolean> {
     // TODO: Check conflicts_with against running/dispatched WOs
     // For now, return false (no conflict checking)
     return false

@@ -2,6 +2,7 @@
 // packages/wo-core/src/schema.ts
 
 import type { WOType, WOState, WOPhase, FailureClass, ModelTier } from './types'
+import type { WORouting } from './classifier'
 
 export interface WODependencies {
   phase: WOPhase
@@ -45,6 +46,9 @@ export interface WorkOrder {
   source_subtask_id: string
   state: WOState
   failure_class?: FailureClass
+  /** Populated by services/wo-classifier (Port 9000). Optional — legacy WOs may
+   *  arrive at the scheduler without routing and trigger a classify-on-demand. */
+  routing?: WORouting
   created_at: string
   updated_at: string
 }

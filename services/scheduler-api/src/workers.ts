@@ -11,8 +11,9 @@ import {
 } from '@lumeos/vllm-client'
 import type { WorkOrder } from '@lumeos/wo-core'
 import { getServiceClient } from '@lumeos/supabase-clients'
+import { resolveNodeFromRouting, type NodeId } from './routing'
 
-export type NodeId = 'spark-a' | 'spark-b'
+export type { NodeId }
 
 export interface WorkerResult {
   success: boolean
@@ -48,6 +49,15 @@ export async function executeWorkOrder(
       error: `Unknown node: ${node}`,
       duration_ms: Date.now() - startTime
     }
+  }
+
+  // Sanity check: if the WO carries routing, the dispatcher should have routed
+  // to the corresponding node. Warn (don't fail) if there's a disagreement.
+  const routedNode = resolveNodeFromRouting(wo)
+  if (routedNode && routedNode !== node) {
+    console.warn(
+      `[Workers] ${wo.wo_id}: routing.assigned_spark=${wo.routing?.assigned_spark} maps to ${routedNode} but dispatching to ${node}`
+    )
   }
 
   try {
