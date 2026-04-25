@@ -62,7 +62,7 @@
           {
             "refId": "A",
             "format": "table",
-            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state IN ('wo_generated','graph_validated','queue_released','blocked','ready','retry_scheduled','graph_repair_pending')"
+            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state IN ('ready', 'wo_generated', 'queue_released', 'graph_validated')"
           }
         ]
       },
@@ -146,7 +146,7 @@
           {
             "refId": "A",
             "format": "table",
-            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state = 'done'"
+            "rawSql": "SELECT COUNT(*)::int AS value FROM workorders WHERE state IN ('done', 'reviewed', 'closed')"
           }
         ]
       },
@@ -175,7 +175,7 @@
           {
             "refId": "A",
             "format": "time_series",
-            "rawSql": "SELECT date_trunc('hour', created_at) AS time, COUNT(*)::int AS workorders FROM workorders WHERE $__timeFilter(created_at) GROUP BY 1 ORDER BY 1"
+            "rawSql": "SELECT date_trunc('hour', created_at) AS time, COUNT(*)::int AS value FROM workorders WHERE created_at >= now() - interval '7 days' GROUP BY 1 ORDER BY 1"
           }
         ]
       },

@@ -134,12 +134,12 @@
               { "color": "orange", "value": 82 },
               { "color": "red", "value": 90 }
             ]},
-            "noValue": "DCGM exporter not installed"
+            "noValue": "nvidia exporter not running"
           }
         },
         "targets": [{
           "refId": "A", "instant": true,
-          "expr": "DCGM_FI_DEV_GPU_TEMP{host=\"spark-a\"}"
+          "expr": "nvidia_gpu_temperature_celsius{job=\"spark-a-node\"}"
         }]
       },
       {
@@ -235,12 +235,12 @@
               { "color": "orange", "value": 82 },
               { "color": "red", "value": 90 }
             ]},
-            "noValue": "DCGM exporter not installed"
+            "noValue": "nvidia exporter not running"
           }
         },
         "targets": [{
           "refId": "A", "instant": true,
-          "expr": "DCGM_FI_DEV_GPU_TEMP{host=\"spark-b\"}"
+          "expr": "nvidia_gpu_temperature_celsius{job=\"spark-b-node\"}"
         }]
       },
       {
@@ -432,11 +432,43 @@
       },
 
       {
+        "id": 18,
+        "type": "timeseries",
+        "title": "Spark GPU Telemetry — Temp / Util / Power",
+        "datasource": { "type": "prometheus", "uid": "bfk0um9jbfi0wd" },
+        "gridPos": { "x": 0, "y": 27, "w": 24, "h": 8 },
+        "options": {
+          "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["mean","max"] },
+          "tooltip": { "mode": "multi" }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 10, "spanNulls": true }
+          },
+          "overrides": [
+            { "matcher": { "id": "byRegexp", "options": "^temp_" },
+              "properties": [{ "id": "unit", "value": "celsius" }, { "id": "custom.axisPlacement", "value": "left" }] },
+            { "matcher": { "id": "byRegexp", "options": "^util_" },
+              "properties": [{ "id": "unit", "value": "percent" }, { "id": "custom.axisPlacement", "value": "right" }, { "id": "max", "value": 100 }] },
+            { "matcher": { "id": "byRegexp", "options": "^power_" },
+              "properties": [{ "id": "unit", "value": "watt" }, { "id": "custom.axisPlacement", "value": "right" }] }
+          ]
+        },
+        "targets": [
+          { "refId": "A", "expr": "nvidia_gpu_temperature_celsius{job=\"spark-a-node\"}", "legendFormat": "temp_spark-a" },
+          { "refId": "B", "expr": "nvidia_gpu_temperature_celsius{job=\"spark-b-node\"}", "legendFormat": "temp_spark-b" },
+          { "refId": "C", "expr": "nvidia_gpu_utilization_percent{job=\"spark-a-node\"}",  "legendFormat": "util_spark-a" },
+          { "refId": "D", "expr": "nvidia_gpu_utilization_percent{job=\"spark-b-node\"}",  "legendFormat": "util_spark-b" },
+          { "refId": "E", "expr": "nvidia_gpu_power_watts{job=\"spark-a-node\"}",          "legendFormat": "power_spark-a" },
+          { "refId": "F", "expr": "nvidia_gpu_power_watts{job=\"spark-b-node\"}",          "legendFormat": "power_spark-b" }
+        ]
+      },
+      {
         "id": 17,
         "type": "table",
         "title": "Prometheus Scrape Target Health",
         "datasource": { "type": "prometheus", "uid": "bfk0um9jbfi0wd" },
-        "gridPos": { "x": 0, "y": 27, "w": 24, "h": 6 },
+        "gridPos": { "x": 0, "y": 35, "w": 24, "h": 6 },
         "options": { "showHeader": true, "cellHeight": "sm" },
         "fieldConfig": {
           "defaults": {
