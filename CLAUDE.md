@@ -72,6 +72,21 @@ GSD v2 wird **AUTOMATISCH** bei jedem Code-Task angewendet.
 
 ---
 
+## Services
+
+Control-Plane Services (Threadripper, lokal):
+
+| Service | Port | Rolle |
+|---------|------|-------|
+| WO-Classifier | 9000 | Deterministischer Pre-Router — klassifiziert Macro-WOs vor dem Dispatch |
+| SAT-Check | 9001 | Pre-Execution Gate — Type/Scope/Constraint-Validierung |
+| Scheduler | 9002 | WO Queue + Spark-Dispatch |
+| Governance Compiler | 9003 | Macro-WO → GovernanceArtefaktV3 |
+
+Flow: `Brain → /classify → /compile → /check → /dispatch → Spark A/B → Audit`
+
+---
+
 ## Tool Usage
 
 ### MCP Tools
