@@ -61,22 +61,34 @@ foreach ($pattern in $WARNING) {
 }
 
 # === SCOPE GUARD: Protected paths ===
+# supabase/migrations/ → db-migration-agent only, always needs Human Approval
+# supabase/config.toml → manual DB admin only
+# system/state/        → runtime-generated, append-only
+# .env*                → credentials, never touch
 $PROTECTED = @(
+    'supabase/migrations/',
+    'supabase\migrations\',
+    'supabase/config.toml',
     'system/control-plane/',
     'system/workorders/lifecycle/',
     'system/policies/',
     'db/migrations/',
-    '.claude/rules/'
+    '.claude/rules/',
+    'system/state/runtime_state',
+    '.env'
 )
 
 if ($ToolName -match 'write|create|edit') {
     foreach ($path in $PROTECTED) {
         if ($ToolInput -like "*$path*") {
             Write-Host ''
-            Write-Host 'SCOPE GUARD: Protected path blocked' -ForegroundColor Magenta
-            Write-Host "Path: $path" -ForegroundColor Magenta
-            Write-Host 'Create a WO for this change.' -ForegroundColor Magenta
+            Write-Host '🔒 SCOPE GUARD: Protected path blocked' -ForegroundColor Magenta
+            Write-Host "Path:    $path" -ForegroundColor Magenta
+            Write-Host "Tool:    $ToolName" -ForegroundColor Magenta
+            Write-Host 'Create a WO and route to db-migration-agent.' -ForegroundColor Magenta
             Write-Host ''
+            $ts = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ'
+            "$ts SCOPE_GUARD $ToolName :: $path" | Add-Content '.claude\hooks\dangerous-ops.log'
             exit 1
         }
     }

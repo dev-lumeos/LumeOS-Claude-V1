@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "lumeos/runtime_state",
+  "title": "LUMEOS Runtime State",
+  "type": "object",
+  "required": ["orchestration_mode", "spark_mode", "active_runs", "active_workorders", "locks", "approvals", "audit_log_path"],
+  "properties": {
+    "orchestration_mode": { "type": "string", "enum": ["claude_code", "nemotron"] },
+    "spark_mode":         { "type": "string", "enum": ["mode1", "mode2", "transitioning"] },
+    "audit_log_path":     { "type": "string", "default": "system/state/audit.jsonl" },
+    "active_runs":        { "type": "array", "items": { "$ref": "#/definitions/Run" } },
+    "active_workorders":  { "type": "array", "items": { "$ref": "#/definitions/ActiveWorkorder" } },
+    "locks":              { "type": "array", "items": { "$ref": "#/definitions/Lock" } },
+    "approvals":          { "type": "array", "items": { "$ref": "#/definitions/ApprovalRef" } }
+  },
+  "definitions": {
+    "Run": {
+      "type": "object",
+      "required": ["run_id", "workorder_id", "agent_id", "status", "started_at"],
+      "properties": {
+        "run_id":         { "type": "string", "pattern": "^RUN-[0-9]{8}-[0-9]+$" },
+        "workorder_id":   { "type": "string" },
+        "agent_id":       { "type": "string" },
+        "status":         { "type": "string", "enum": ["running", "completed", "failed", "blocked", "awaiting_approval"] },
+        "started_at":     { "type": "string", "format": "date-time" },
+        "completed_at":   { "type": "string", "format": "date-time" },
+        "written_files":  { "type": "array", "items": { "type": "string" } },
+        "correlation_id": { "type": "string" }
+      }
+    },
+    "ActiveWorkorder": {
+      "type": "object",
+      "required": ["workorder_id", "agent_id", "status", "dispatched_at"],
+      "properties": {
+        "workorder_id":  { "type": "string" },
+        "agent_id":      { "type": "string" },
+        "run_id":        { "type": "string" },
+        "status":        { "type": "string", "enum": ["queued", "dispatched", "running", "review", "awaiting_approval", "done", "failed"] },
+        "dispatched_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Lock": {
+      "type": "object",
+      "required": ["node", "reason", "locked_at"],
+      "properties": {
+        "node":      { "type": "string" },
+        "reason":    { "type": "string" },
+        "locked_at": { "type": "string", "format": "date-time" },
+        "locked_by": { "type": "string" }
+      }
+    },
+    "ApprovalRef": {
+      "type": "object",
+      "required": ["approval_id", "workorder_id", "status"],
+      "properties": {
+        "approval_id":  { "type": "string" },
+        "workorder_id": { "type": "string" },
+        "run_id":       { "type": "string" },
+        "status":       { "type": "string", "enum": ["pending", "granted", "denied", "expired", "consumed"] }
+      }
+    }
+  }
+}

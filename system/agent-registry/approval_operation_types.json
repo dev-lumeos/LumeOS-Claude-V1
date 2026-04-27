@@ -1,0 +1,90 @@
+{
+  "_comment": "Approval Operation Types. exact_command_required = Token muss exact_command enthalten. Kein Prefix-Matching.",
+
+  "write_migration": {
+    "description": "Neue Migration-Datei schreiben",
+    "allowed_tools": ["write"],
+    "allowed_paths": ["supabase/migrations/**", "db/migrations/**"],
+    "requires_post_review": true,
+    "max_uses": 1,
+    "expires_minutes": 30
+  },
+  "apply_migration_local": {
+    "description": "Migration lokal ausführen — exact_command im Token",
+    "allowed_tools": ["bash"],
+    "exact_command_required": true,
+    "expected_command_hint": "supabase db push --local",
+    "requires_post_review": true,
+    "max_uses": 1,
+    "expires_minutes": 15
+  },
+  "apply_migration_dev": {
+    "description": "Migration auf Dev — exact_command im Token",
+    "allowed_tools": ["bash"],
+    "exact_command_required": true,
+    "requires_post_review": true,
+    "max_uses": 1,
+    "expires_minutes": 15
+  },
+  "apply_migration_prod": {
+    "description": "Migration auf Production — NIEMALS automatisch",
+    "allowed_tools": [],
+    "exact_command_required": true,
+    "requires_post_review": true,
+    "manual_only": true,
+    "max_uses": 1,
+    "expires_minutes": 5
+  },
+  "write_rls_policy": {
+    "description": "RLS Policy schreiben oder ändern",
+    "allowed_tools": ["write"],
+    "allowed_paths": ["supabase/migrations/**"],
+    "requires_post_review": true,
+    "max_uses": 1,
+    "expires_minutes": 30
+  },
+  "delete_file": {
+    "description": "Datei löschen — exact_command + scope + single_use + audit critical",
+    "allowed_tools": ["bash"],
+    "exact_command_required": true,
+    "requires_post_review": false,
+    "audit_severity": "critical",
+    "max_uses": 1,
+    "expires_minutes": 10
+  },
+  "modify_dependency": {
+    "description": "Dependency hinzufügen/entfernen — exact_command im Token (z.B. pnpm add zod@3.23.8)",
+    "allowed_tools": ["bash"],
+    "exact_command_required": true,
+    "expected_command_hint": "pnpm add {package}@{version} OR pnpm remove {package}",
+    "requires_post_review": true,
+    "max_uses": 1,
+    "expires_minutes": 15
+  },
+  "push_git": {
+    "description": "Git Push — exact_command im Token (z.B. git push origin feat/nutrition-v2)",
+    "allowed_tools": ["bash"],
+    "exact_command_required": true,
+    "expected_command_hint": "git push origin {branch}",
+    "requires_post_review": false,
+    "max_uses": 1,
+    "expires_minutes": 10
+  },
+  "merge_branch": {
+    "description": "Branch mergen — exact_command im Token",
+    "allowed_tools": ["bash"],
+    "exact_command_required": true,
+    "requires_post_review": true,
+    "max_uses": 1,
+    "expires_minutes": 15
+  },
+  "mode_switch_to_minimax": {
+    "description": "Spark 3+4 auf MiniMax Mode 2 — Approval nur nötig wenn active_jobs > 0",
+    "allowed_tools": ["bash"],
+    "exact_command_required": true,
+    "conditional": "active_jobs > 0 OR manual_override_required",
+    "requires_post_review": false,
+    "max_uses": 1,
+    "expires_minutes": 5
+  }
+}

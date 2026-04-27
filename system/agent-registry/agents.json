@@ -1,0 +1,125 @@
+{
+  "_comment": "Agent Registry — Source of Truth für alle Agenten. Permissions in permissions.json.",
+
+  "orchestrator-agent": {
+    "type": "orchestrator",
+    "description": "Runtime Dispatch, Monitoring, Agent Coordination. Kein Code ausführen.",
+    "spec_file": ".claude/agents/orchestrator-agent.md",
+    "always_load_skills": [],
+    "skill_token_budget": 2000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "review-agent": {
+    "type": "reviewer",
+    "description": "Pre- und Post-Review von Workorders und Execution Outputs. Read-only.",
+    "spec_file": ".claude/agents/review-agent.md",
+    "always_load_skills": ["gsd-v2"],
+    "skill_token_budget": 3000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "micro-executor": {
+    "type": "executor",
+    "description": "Führt scoped Implementation Workorders aus. Max 3 Files.",
+    "spec_file": ".claude/agents/micro-executor.md",
+    "always_load_skills": ["gsd-v2", "typescript-specialist"],
+    "skill_token_budget": 2000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "senior-coding-agent": {
+    "type": "executor_senior",
+    "description": "Komplexe Multi-File Tasks und Eskalationen von micro-executor.",
+    "spec_file": ".claude/agents/senior-coding-agent.md",
+    "always_load_skills": ["gsd-v2", "typescript-specialist"],
+    "skill_token_budget": 8000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "context-builder": {
+    "type": "context",
+    "description": "File Discovery, Symbol Tracing, Context Assembly für Workorders. Read-only.",
+    "spec_file": ".claude/agents/context-builder.md",
+    "always_load_skills": [],
+    "skill_token_budget": 2000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "governance-compiler": {
+    "type": "governance",
+    "description": "Kompiliert GovernanceArtefaktV3 aus Macro-WOs für SAT-Check.",
+    "spec_file": ".claude/agents/governance-compiler.md",
+    "always_load_skills": [],
+    "skill_token_budget": 3000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "security-specialist": {
+    "type": "reviewer",
+    "description": "Security Review für RLS, Auth Flows, SQL Injection, ENV Handling. Read-only.",
+    "spec_file": ".claude/agents/security-specialist.md",
+    "always_load_skills": ["security-specialist"],
+    "skill_token_budget": 4000,
+    "requires_human_approval": false,
+    "phase": "1+2",
+    "mandatory_after": ["db-migration-agent"]
+  },
+
+  "db-migration-agent": {
+    "type": "db_specialist",
+    "description": "Schreibt Supabase Migrations und RLS Policies. Einziger Agent mit Supabase Write.",
+    "spec_file": ".claude/agents/db-migration-agent.md",
+    "always_load_skills": ["gsd-v2", "supabase-specialist"],
+    "skill_token_budget": 4000,
+    "requires_human_approval": true,
+    "phase": "1+2",
+    "mandatory_post_agents": ["security-specialist"]
+  },
+
+  "test-agent": {
+    "type": "executor",
+    "description": "Generiert Unit Tests und Integration Tests für geänderten Code.",
+    "spec_file": ".claude/agents/test-agent.md",
+    "always_load_skills": ["gsd-v2", "test-specialist"],
+    "skill_token_budget": 3000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "i18n-agent": {
+    "type": "executor",
+    "description": "Verwaltet i18n Übersetzungen für DE/EN/TH Locale Files.",
+    "spec_file": ".claude/agents/i18n-agent.md",
+    "always_load_skills": [],
+    "skill_token_budget": 1000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "docs-agent": {
+    "type": "executor",
+    "description": "Generiert JSDoc, API Docs, Changelogs und README Updates.",
+    "spec_file": ".claude/agents/docs-agent.md",
+    "always_load_skills": [],
+    "skill_token_budget": 1500,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "mealcam-agent": {
+    "type": "vision",
+    "description": "Food Recognition aus Fotos. JSON Output nur. Kein File-Zugriff.",
+    "spec_file": ".claude/agents/mealcam-agent.md",
+    "always_load_skills": [],
+    "skill_token_budget": 1000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  }
+}

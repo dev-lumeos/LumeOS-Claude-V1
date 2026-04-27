@@ -1,3 +1,4 @@
+/// <reference types="node" />
 // Agent Registry V1
 // packages/agent-core/src/registry.ts
 
@@ -9,25 +10,35 @@ export const NODE_PROFILES: Record<string, NodeProfile> = {
     max_slots: 8,
     current_slots: 0,
     reserved_slots: 0,
-    endpoint: 'http://spark-a:8001',
+    endpoint: process.env.SPARK_A_ENDPOINT ?? 'http://192.168.0.128:8001',
     tiers: ['fp8_bulk', 'fp4_light']
   },
   'spark-b': {
     node_id: 'spark-b',
     max_slots: 3,
     current_slots: 0,
-    reserved_slots: 1, // Slot 3 always reserved for orchestrator
-    endpoint: 'http://spark-b:8001',
+    reserved_slots: 1,
+    endpoint: process.env.SPARK_B_ENDPOINT ?? 'http://192.168.0.188:8001',
     tiers: ['quality', 'review']
+  },
+  // Nemotron 3 Super NVFP4 — Orchestrator, Port 8002 on same hardware as spark-a
+  'nemotron': {
+    node_id: 'nemotron',
+    max_slots: 2,
+    current_slots: 0,
+    reserved_slots: 0,
+    endpoint: process.env.NEMOTRON_ENDPOINT ?? 'http://192.168.0.128:8002',
+    tiers: ['orchestration']
   }
 }
 
 export const TIER_ENDPOINTS: Record<string, string> = {
-  fp8_bulk:       'http://spark-a:8001',
-  fp4_light_gemma: 'http://spark-a:8011',
-  fp4_light_phi:   'http://spark-a:8012',
-  quality:         'http://spark-b:8001',
-  review:          'http://spark-b:8001'
+  fp8_bulk:        process.env.SPARK_A_ENDPOINT  ?? 'http://192.168.0.128:8001',
+  fp4_light_gemma: 'http://192.168.0.128:8011',
+  fp4_light_phi:   'http://192.168.0.128:8012',
+  quality:         process.env.SPARK_B_ENDPOINT  ?? 'http://192.168.0.188:8001',
+  review:          process.env.SPARK_B_ENDPOINT  ?? 'http://192.168.0.188:8001',
+  orchestration:   process.env.NEMOTRON_ENDPOINT ?? 'http://192.168.0.128:8002'
 }
 
 export const AGENT_REGISTRY: AgentProfile[] = [

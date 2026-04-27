@@ -1,0 +1,106 @@
+{
+  "_comment": "Central permission registry. Source of Truth für Toolrechte. Agent .md files sind Spec/Prompt only.",
+  "_enforcement": "Jeder Tool Call muss durch authorizeToolCall(). Kein direkter Filesystem/Bash Zugriff für LLMs.",
+
+  "orchestrator-agent": {
+    "read": ["system/workorders/**", "system/agent-registry/**", "system/state/**"],
+    "write": ["system/workorders/batches/**", "system/state/**"],
+    "bash": [],
+    "limits": { "env_access": false, "dependency_changes": false, "migration_changes": false },
+    "mcp": { "filesystem": false, "serena": false, "supabase": false, "context7": true }
+  },
+
+  "review-agent": {
+    "read": ["$WORKORDER.scope_files", "$WORKORDER.acceptance_files", "$RUN.diff", "$RUN.logs"],
+    "write": [],
+    "bash": ["pnpm test", "pnpm tsc --noEmit", "pnpm lint", "git diff", "git status"],
+    "limits": { "env_access": false, "dependency_changes": false, "migration_changes": false },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "micro-executor": {
+    "read": ["$WORKORDER.scope_files", "$WORKORDER.context_files"],
+    "write": ["$WORKORDER.scope_files"],
+    "bash": ["pnpm test", "pnpm tsc --noEmit", "pnpm lint", "pnpm build"],
+    "limits": { "max_write_files": 3, "env_access": false, "dependency_changes": false, "migration_changes": false },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "senior-coding-agent": {
+    "read": ["$WORKORDER.scope_files", "$WORKORDER.context_files"],
+    "write": ["$WORKORDER.scope_files"],
+    "bash": ["pnpm test", "pnpm tsc --noEmit", "pnpm lint", "pnpm build"],
+    "limits": { "max_write_files": 15, "env_access": false, "dependency_changes": false, "migration_changes": false, "requires_post_review": true },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "context-builder": {
+    "read": ["repo_readonly"],
+    "write": [],
+    "bash": ["grep", "find", "git log", "git blame"],
+    "limits": { "env_access": false, "dependency_changes": false, "migration_changes": false },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "governance-compiler": {
+    "read": ["system/**", "docs/**", "packages/**/src/**"],
+    "write": ["system/workorders/batches/**"],
+    "bash": ["pnpm tsc --noEmit"],
+    "limits": { "env_access": false, "dependency_changes": false, "migration_changes": false },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "security-specialist": {
+    "read": ["$WORKORDER.scope_files", "$WORKORDER.acceptance_files", "$RUN.diff", "supabase/**"],
+    "write": [],
+    "bash": ["git diff", "git log"],
+    "limits": { "env_access": false, "dependency_changes": false, "migration_changes": false },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "db-migration-agent": {
+    "read": ["supabase/**", "db/**", "packages/types/**"],
+    "write": ["supabase/migrations/**", "db/migrations/**"],
+    "bash": ["pnpm tsc --noEmit", "supabase db diff", "supabase migration list"],
+    "limits": {
+      "env_access": false,
+      "dependency_changes": false,
+      "requires_human_approval": true,
+      "requires_security_review": true,
+      "destructive_operations_blocked": ["DROP TABLE", "TRUNCATE", "DELETE CASCADE"]
+    },
+    "mcp": { "filesystem": true, "serena": true, "supabase": true, "context7": true }
+  },
+
+  "test-agent": {
+    "read": ["$WORKORDER.scope_files", "**/__tests__/**", "**/test/**"],
+    "write": ["**/__tests__/**", "**/test/**", "**/*.test.ts"],
+    "bash": ["pnpm test", "pnpm tsc --noEmit"],
+    "limits": { "max_write_files": 5, "env_access": false, "dependency_changes": false, "migration_changes": false, "production_code_changes": false },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "i18n-agent": {
+    "read": ["**/i18n/**", "**/locales/**", "**/translations/**"],
+    "write": ["**/i18n/**", "**/locales/**", "**/translations/**"],
+    "bash": [],
+    "limits": { "max_write_files": 10, "env_access": false, "dependency_changes": false, "migration_changes": false, "key_deletion_blocked": true },
+    "mcp": { "filesystem": false, "serena": false, "supabase": false, "context7": false }
+  },
+
+  "docs-agent": {
+    "read": ["$WORKORDER.scope_files", "docs/**", "**/*.md"],
+    "write": ["docs/**", "**/*.md"],
+    "bash": [],
+    "limits": { "max_write_files": 10, "env_access": false, "dependency_changes": false, "migration_changes": false, "system_spec_changes": false },
+    "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
+  },
+
+  "mealcam-agent": {
+    "read": [],
+    "write": [],
+    "bash": [],
+    "limits": { "env_access": false, "output_format": "json_strict", "confidence_threshold": 0.7 },
+    "mcp": { "filesystem": false, "serena": false, "supabase": false, "context7": false }
+  }
+}

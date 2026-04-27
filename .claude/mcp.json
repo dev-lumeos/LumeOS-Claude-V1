@@ -6,31 +6,18 @@
     },
     "serena": {
       "command": "uvx",
-      "args": ["--from", "serena", "serena-mcp-server"],
-      "env": {
-        "PROJECT_ROOT": "${workspaceFolder}"
-      }
+      "args": [
+        "--from", "git+https://github.com/oraios/serena",
+        "serena", "start-mcp-server",
+        "--context", "ide-assistant",
+        "--project", "${workspaceFolder}"
+      ]
     },
     "claude-mem": {
       "command": "npx",
       "args": ["claude-mem", "mcp"],
       "env": {
         "CMEM_PROJECT": "lumeos-claude-v1"
-      }
-    },
-    "paperclip": {
-      "command": "npx",
-      "args": ["paperclip-mcp"],
-      "env": {
-        "PAPERCLIP_BASE_URL": "http://localhost:3100",
-        "PAPERCLIP_API_KEY": "${PAPERCLIP_API_KEY}"
-      }
-    },
-    "lean-ctx": {
-      "command": "lean-ctx",
-      "args": ["mcp"],
-      "env": {
-        "LEAN_CTX_PROJECT": "lumeos"
       }
     }
   }

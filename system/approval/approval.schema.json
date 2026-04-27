@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "lumeos/approval",
+  "title": "LUMEOS Approval Token",
+  "type": "object",
+  "required": ["approval_id", "run_id", "workorder_id", "agent_id", "operation", "approved_by", "approved_at", "expires_at", "single_use", "status"],
+  "properties": {
+    "approval_id":    { "type": "string", "pattern": "^APP-[A-Z0-9-]+$" },
+    "run_id":         { "type": "string" },
+    "workorder_id":   { "type": "string" },
+    "agent_id":       { "type": "string" },
+    "correlation_id": { "type": "string" },
+    "operation": {
+      "type": "string",
+      "enum": ["write_migration", "apply_migration_local", "apply_migration_dev", "apply_migration_prod", "write_rls_policy", "delete_file", "modify_dependency", "push_git", "merge_branch", "mode_switch_to_minimax"]
+    },
+    "scope":          { "type": "array", "items": { "type": "string" } },
+    "exact_command":  { "type": "string" },
+    "approved_by":    { "type": "string" },
+    "approved_at":    { "type": "string", "format": "date-time" },
+    "expires_at":     { "type": "string", "format": "date-time" },
+    "single_use":     { "type": "boolean", "default": true },
+    "use_count":      { "type": "integer", "default": 0 },
+    "max_uses":       { "type": "integer", "default": 1 },
+    "requires_post_review": { "type": "boolean", "default": false },
+    "status": { "type": "string", "enum": ["pending", "granted", "denied", "expired", "consumed"] }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "operation": { "enum": ["write_migration", "write_rls_policy"] } } },
+      "then": { "required": ["scope"] }
+    },
+    {
+      "if": { "properties": { "operation": { "enum": ["apply_migration_local", "apply_migration_dev", "delete_file", "modify_dependency", "push_git", "merge_branch", "mode_switch_to_minimax"] } } },
+      "then": { "required": ["exact_command"] }
+    }
+  ]
+}

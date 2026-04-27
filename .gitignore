@@ -24,6 +24,16 @@ nul
 # LightRAG index storage (can grow to several GB)
 tools/lightrag/storage/
 
+# Runtime State (generiert zur Laufzeit — nicht committen)
+system/state/audit.jsonl
+system/state/audit.error.jsonl
+system/state/runtime_state.json
+system/state/runtime_state.lock
+system/approval/approvals.json
+
+# Temp directory (Antigravity Skills, Downloads, staging)
+temp/
+
 # Python
 __pycache__/
 *.py[cod]

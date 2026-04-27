@@ -1,0 +1,187 @@
+{
+  "_comment": "Model Routing — Stand April 2026",
+
+  "_hardware": {
+    "spark1_port8001": "Qwen3.6-35B-A3B FP8 — Orchestrator + Review (~45-52 tok/s, 107 tok/s parallel)",
+    "spark2_port8001": "Qwen3-Coder-Next FP8 — Coding Worker (~47 tok/s)",
+    "spark1_nano":     "Nemotron Nano NVFP4 (cybermotaz) — aktuell offline, ~17 tok/s",
+    "spark3+4":        "TBD — Qwen3.6 + DeepSeek R1 70B + GLM-4.7-Flash + Qwen3.5 9B"
+  },
+
+  "_qwen3.6_notes": {
+    "enable_thinking": "MUSS false sein bei jedem Request — /no_think funktioniert NICHT",
+    "temperature": "0.0 für Orchestrator-Calls",
+    "paralleltest": "6 parallel calls: 107 tok/s output, 308 tok/s total — Phase 1 tauglich",
+    "stop_conditions": "Dürfen KEINE positiven Zustände enthalten (approved/passed/granted)"
+  },
+
+  "_escalation": "Claude Sonnet/Opus via Claude Code Max 200 Plan — kein API-Kosten",
+
+  "orchestrator-agent": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.0,
+      "max_context": 800
+    }
+  },
+
+  "pre-review-agent": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 65536
+    }
+  },
+
+  "post-review-agent": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 65536
+    }
+  },
+
+  "review-agent": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 65536
+    }
+  },
+
+  "governance-compiler": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.3,
+      "seed": 42,
+      "max_context": 32768
+    }
+  },
+
+  "context-builder": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.0,
+      "max_context": 65536
+    }
+  },
+
+  "micro-executor": {
+    "default": {
+      "node": "spark-b",
+      "port": 8001,
+      "model": "qwen3-coder-next-fp8",
+      "endpoint": "http://192.168.0.188:8001",
+      "temperature": 1.0,
+      "top_p": 0.95,
+      "top_k": 40,
+      "max_context": 131072
+    },
+    "escalation": {
+      "node": "claude_code",
+      "model": "claude-sonnet-4-5",
+      "trigger": "two_failed_reviews_same_wo",
+      "note": "Claude Code Max 200 Plan"
+    }
+  },
+
+  "senior-coding-agent": {
+    "default": {
+      "node": "claude_code",
+      "model": "claude-opus-4-5",
+      "trigger": "explicit_escalation",
+      "note": "Claude Code Max 200 Plan"
+    }
+  },
+
+  "security-specialist": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 32768
+    }
+  },
+
+  "db-migration-agent": {
+    "default": {
+      "node": "spark-a",
+      "port": 8001,
+      "model": "qwen3.6-35b-fp8",
+      "endpoint": "http://192.168.0.128:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 32768
+    }
+  },
+
+  "test-agent": {
+    "default": {
+      "node": "spark-b",
+      "port": 8001,
+      "model": "qwen3-coder-next-fp8",
+      "endpoint": "http://192.168.0.188:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 32768
+    }
+  },
+
+  "i18n-agent": {
+    "default": {
+      "node": "spark-b",
+      "port": 8001,
+      "model": "qwen3-coder-next-fp8",
+      "endpoint": "http://192.168.0.188:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 16384
+    }
+  },
+
+  "docs-agent": {
+    "default": {
+      "node": "spark-b",
+      "port": 8001,
+      "model": "qwen3-coder-next-fp8",
+      "endpoint": "http://192.168.0.188:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 16384
+    }
+  },
+
+  "mealcam-agent": {
+    "default": {
+      "node": "rtx5090",
+      "model": "qwen3-vl-30b-a3b-fp8",
+      "endpoint": "http://localhost:8001",
+      "temperature": 0.2,
+      "max_context": 8192
+    }
+  }
+}

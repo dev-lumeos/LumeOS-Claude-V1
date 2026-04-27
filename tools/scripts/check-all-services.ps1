@@ -15,8 +15,9 @@ foreach ($p in $ports.GetEnumerator()) {
 }
 Write-Host ''
 Write-Host '=== SPARKS ==='
-try { $null = Invoke-WebRequest 'http://192.168.0.128:8001/v1/models' -UseBasicParsing -TimeoutSec 3 -ErrorAction Stop; Write-Host '  Spark A 192.168.0.128:8001: UP' } catch { Write-Host '  Spark A: DOWN' }
-try { $null = Invoke-WebRequest 'http://192.168.0.188:8001/v1/models' -UseBasicParsing -TimeoutSec 3 -ErrorAction Stop; Write-Host '  Spark B 192.168.0.188:8001: UP' } catch { Write-Host '  Spark B: DOWN' }
+try { $null = Invoke-WebRequest 'http://192.168.0.128:8001/v1/models' -UseBasicParsing -TimeoutSec 3 -ErrorAction Stop; Write-Host '  Spark A  192.168.0.128:8001 (Qwen3.6):  UP' } catch { Write-Host '  Spark A  192.168.0.128:8001 (Qwen3.6):  DOWN' }
+try { $null = Invoke-WebRequest 'http://192.168.0.128:8002/v1/models' -UseBasicParsing -TimeoutSec 3 -ErrorAction Stop; Write-Host '  Nemotron 192.168.0.128:8002 (Nemotron): UP' } catch { Write-Host '  Nemotron 192.168.0.128:8002 (Nemotron): DOWN (nicht gestartet)' }
+try { $null = Invoke-WebRequest 'http://192.168.0.188:8001/v1/models' -UseBasicParsing -TimeoutSec 3 -ErrorAction Stop; Write-Host '  Spark B  192.168.0.188:8001 (Coder):    UP' } catch { Write-Host '  Spark B  192.168.0.188:8001 (Coder):    DOWN' }
 Write-Host ''
 Write-Host '=== DOCKER ==='
 docker ps --format '{{.Names}} -- {{.Status}}' 2>&1 | Select-String 'grafana|prometheus|supabase_db'

@@ -1,0 +1,94 @@
+{
+  "_comment": "Base Tool Profiles nach Agent-Typ. permissions.json überschreibt pro Agent.",
+
+  "profiles": {
+    "orchestrator": {
+      "write_allowed": "state_only",
+      "bash_allowed": false,
+      "network_allowed": false,
+      "supabase_allowed": false,
+      "notes": "Orchestrator darf keinen Code ausführen. Nur State-Änderungen."
+    },
+    "reviewer": {
+      "write_allowed": false,
+      "bash_allowed": true,
+      "bash_mode": "readonly_checks_only",
+      "network_allowed": false,
+      "supabase_allowed": false,
+      "notes": "Reviewer ist immer read-only auf Files. Bash nur für Tests und Diffs."
+    },
+    "executor": {
+      "write_allowed": "scope_only",
+      "bash_allowed": true,
+      "bash_mode": "build_test_lint",
+      "network_allowed": false,
+      "supabase_allowed": false,
+      "notes": "Executor schreibt nur in scope_files aus dem Workorder."
+    },
+    "executor_senior": {
+      "write_allowed": "scope_only",
+      "bash_allowed": true,
+      "bash_mode": "build_test_lint",
+      "network_allowed": false,
+      "supabase_allowed": false,
+      "max_write_files": 15,
+      "requires_post_review": true,
+      "notes": "Senior Executor hat grösseren Scope aber gleiche Restriktionen."
+    },
+    "context": {
+      "write_allowed": false,
+      "bash_allowed": true,
+      "bash_mode": "search_only",
+      "network_allowed": false,
+      "supabase_allowed": false,
+      "notes": "Context Builder liest nur. Bash nur für Suche und Git-Analyse."
+    },
+    "governance": {
+      "write_allowed": "state_only",
+      "bash_allowed": true,
+      "bash_mode": "typecheck_only",
+      "network_allowed": false,
+      "supabase_allowed": false,
+      "notes": "Governance Compiler schreibt nur Artefakte in system/workorders/batches."
+    },
+    "db_specialist": {
+      "write_allowed": "migrations_only",
+      "bash_allowed": true,
+      "bash_mode": "supabase_cli_readonly",
+      "network_allowed": false,
+      "supabase_allowed": true,
+      "requires_human_approval": true,
+      "requires_security_review": true,
+      "notes": "DB-Agent ist einziger Agent mit Supabase-Write. Immer Human Approval."
+    },
+    "vision": {
+      "write_allowed": false,
+      "bash_allowed": false,
+      "network_allowed": false,
+      "supabase_allowed": false,
+      "output_format": "json_strict",
+      "notes": "Vision Agent hat keinerlei Filesystem-Zugriff. Nur Input → JSON Output."
+    }
+  },
+
+  "bash_modes": {
+    "readonly_checks_only": ["pnpm test", "pnpm tsc --noEmit", "pnpm lint", "git diff", "git status"],
+    "build_test_lint": ["pnpm test", "pnpm tsc --noEmit", "pnpm lint", "pnpm build"],
+    "search_only": ["grep", "find", "git log", "git blame"],
+    "typecheck_only": ["pnpm tsc --noEmit"],
+    "supabase_cli_readonly": ["pnpm tsc --noEmit", "supabase db diff", "supabase migration list"]
+  },
+
+  "_enforcement_rules": {
+    "bash_exact_match": true,
+    "bash_note": "Command muss EXAKT matchen. Kein Prefix Matching. Verhindert: pnpm test && rm -rf .",
+    "env_file_blocked_globally": true,
+    "env_patterns": [".env", ".env.*", "*.env"],
+    "variable_resolution": {
+      "$WORKORDER.scope_files": "Wird zur Dispatch-Zeit aus dem Workorder aufgelöst",
+      "$WORKORDER.context_files": "Wird zur Dispatch-Zeit aus dem Workorder aufgelöst",
+      "$RUN.diff": "Aktueller git diff zur Dispatch-Zeit",
+      "repo_readonly": "Gesamtes Repo, read-only, keine .env Files"
+    }
+  }
+}

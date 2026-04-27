@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "lumeos/workorder",
+  "title": "LUMEOS Workorder",
+  "type": "object",
+  "required": ["workorder_id", "agent_id", "task", "scope_files", "acceptance_criteria", "negative_constraints"],
+  "properties": {
+    "workorder_id":         { "type": "string", "pattern": "^WO-[a-z]+-[0-9]+$" },
+    "run_id":               { "type": "string", "pattern": "^RUN-[0-9]{8}-[0-9]+$" },
+    "agent_id":             { "type": "string" },
+    "task":                 { "type": "string", "minLength": 10 },
+    "scope_files":          { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "context_files":        { "type": "array", "items": { "type": "string" }, "default": [] },
+    "acceptance_files":     { "type": "array", "items": { "type": "string" }, "default": [] },
+    "acceptance_criteria":  { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "negative_constraints": { "type": "array", "items": { "type": "string" }, "minItems": 3 },
+    "required_skills":      { "type": "array", "items": { "type": "string" }, "default": [] },
+    "optional_skills":      { "type": "array", "items": { "type": "string" }, "default": [] },
+    "blocked_by":           { "type": "array", "items": { "type": "string" }, "default": [] },
+    "phase":                { "type": "integer", "enum": [1, 2, 3] },
+    "requires_approval":    { "type": "boolean", "default": false },
+    "correlation_id":       { "type": "string" },
+    "priority":             { "type": "string", "enum": ["low", "normal", "high", "critical"], "default": "normal" },
+    "quality_critical":     { "type": "boolean", "default": false, "description": "true = Trigger für MiniMax Mode 2" }
+  }
+}

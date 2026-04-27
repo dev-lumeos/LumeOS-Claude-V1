@@ -1,31 +1,50 @@
-# WO Templates — Index
+# Workorder Templates — README
 
-# Alle verfügbaren Work Order Templates
+# Stand: 26. April 2026
 
 ---
 
-## Welches Template wählen?
+## Template-Auswahl
+
+TemplateWannAgent`template_implementation_low.md`&lt; 3 Files, kein DBmicro-executor`template_implementation_medium.md`3-15 Files, komplexsenior-coding-agent`template_migration.md`DB Schema Changesdb-migration-agent`template_test.md`Tests für geänderten Codetest-agent`template_docs.md`Dokumentationdocs-agent
+
+---
+
+## Prompt-Checkliste (pflichtmäßig)
+
+Vor jedem WO-Submit prüfen:
+
+- \[ \] **#1 XML statt Markdown** — `task` verwendet XML-Tags (`<task>`, `<analyze>`, `<constraints>`)
+- \[ \] **#3 Think-before-write** — `<analyze>` Block VOR `<implement>` im task
+- \[ \] **#5 Negative Constraints** — `negative_constraints` Array mit min 3 NIEMALS-Regeln
+- \[ \] **#9 Error Handling** — `<on_error>` Block im task definiert
+
+---
+
+## Pflichtfelder (Dispatcher Interface)
 
 ```
-type=implementation + complexity=low  + risk=low  → template_implementation_low.md
-type=implementation + complexity=med  + risk=*    → template_implementation_medium.md
-type=migration                                     → template_migration.md
-type=docs                                          → template_docs.md
-type=governance / planning / analysis+high risk    → kein Template — Tom definiert manuell → Spark A
+workorder_id:         WO-{module}-{NNN}   — lowercase module, 3-stellig
+agent_id:             aus agents.json
+task:                 XML-strukturiert (siehe Templates)
+scope_files:          konkrete Pfade, kein Glob für single files
+context_files:        read-only Referenz-Files (Types, Interfaces)
+acceptance_criteria:  min 2, immer: "TypeScript kompiliert ohne Fehler"
+negative_constraints: min 3, immer: NIEMALS ENV, NIEMALS außerhalb scope
 ```
 
-## Templates
+---
 
-TemplateRoutingKomplexitätDB[implementation_low](template_implementation_low.md)Spark C (heute B)&lt; 50 Zeilennone[implementation_medium](template_implementation_medium.md)Spark B50-200 Zeilennone/read[migration](template_migration.md)Spark B + DB-Checkvariesmigration[docs](template_docs.md)Spark C (heute B)anynone
+## Workorder ID Konvention
 
-## Schnellstart
+```
+WO-{module}-{NNN}
 
-```bash
-# Template kopieren
-cp system/workorders/templates/template_implementation_low.md \
-   system/workorders/batches/WO-$(date +%Y%m%d)-001.md
+module: nutrition | training | recovery | supplements | medical |
+        coach | auth | infra | scheduler | agent | docs | i18n
 
-# Felder ausfüllen und dann:
-# 1. POST http://localhost:9000/classify (WO Classifier)
-# 2. Oder: npx tsx tools/scripts/test-e2e-full-pipeline.ts
+Beispiele:
+  WO-nutrition-001
+  WO-infra-042
+  WO-agent-007
 ```

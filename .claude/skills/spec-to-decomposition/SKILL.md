@@ -1,7 +1,6 @@
 ---
-name: spec-to-decomposition
-description: Converts a feature spec into a decomposition_spec_v1. Use when ready to break down a spec into implementable subtasks for the WO Factory.
----
+
+## name: spec-to-decomposition description: Converts a feature spec into a decomposition_spec_v1. Use when ready to break down a spec into implementable subtasks for the WO Factory.
 
 # Skill: spec-to-decomposition
 
@@ -13,14 +12,16 @@ Nimm eine Feature Spec und erzeuge eine `decomposition_spec_v1`.
 
 1. Lies: `system/decomposition/schemas/decomposition_spec_v1.md`
 2. Lies: `system/file-groups/file_group_registry_v1.md`
-3. Lies: `system/agent-registry/agent_registry_v1.md`
+3. Lies: `system/agent-registry/agent_registry_v2.md`
+4. Lies: `system/model-tiers/model_tiers_v2.md`
 
 ## Entscheidung: Micro oder Macro?
 
 Prüfe jeden Subtask:
-- Scope > 3 Files → Macro WO kandidat
-- Mehrere Layer → Macro WO kandidat
-- Tight coupling → Macro WO kandidat
+
+- Scope &gt; 3 Files → Macro WO Kandidat
+- Mehrere Layer → Macro WO Kandidat
+- Tight coupling → Macro WO Kandidat
 - Sonst → Micro WO
 
 ## Regeln
@@ -33,8 +34,7 @@ Prüfe jeden Subtask:
 
 ## Output
 
-Validiere gegen Regeln R1-R20 aus der Decomposition Spec.
-Speichere in: `system/decomposition/specs/{feature_id}_decomp.yaml`
+Validiere gegen Regeln R1-R20 aus der Decomposition Spec. Speichere in: `system/decomposition/specs/{feature_id}_decomp.yaml`
 
 ## Wann nutzen
 

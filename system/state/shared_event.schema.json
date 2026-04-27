@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "lumeos/shared_event",
+  "title": "LUMEOS Shared Audit Event",
+  "type": "object",
+  "required": ["ts", "event", "orchestration_mode"],
+  "properties": {
+    "ts":                 { "type": "string", "format": "date-time" },
+    "event": {
+      "type": "string",
+      "enum": [
+        "tool_call_requested", "tool_call_allowed", "tool_call_blocked", "tool_call_executed", "tool_call_failed",
+        "job_started", "job_completed", "job_failed", "job_blocked",
+        "approval_required", "approval_granted", "approval_denied", "approval_expired",
+        "mode_switch_started", "mode_switch_completed", "mode_switch_failed",
+        "lock_acquired", "lock_released", "orchestrator_started", "orchestrator_switched"
+      ]
+    },
+    "orchestration_mode": { "type": "string", "enum": ["claude_code", "nemotron"] },
+    "severity":           { "type": "string", "enum": ["info", "warning", "error", "critical"], "default": "info" },
+    "run_id":             { "type": "string" },
+    "workorder_id":       { "type": "string" },
+    "agent_id":           { "type": "string" },
+    "correlation_id":     { "type": "string" },
+    "tool":               { "type": "string", "enum": ["read", "write", "bash", "mcp"] },
+    "target_path":        { "type": "string" },
+    "command":            { "type": "string" },
+    "mcp_tool":           { "type": "string" },
+    "allowed":            { "type": "boolean" },
+    "blocked_by":         { "type": "string" },
+    "reason":             { "type": "string" },
+    "approval_id":        { "type": "string" },
+    "approved_by":        { "type": "string" },
+    "from_mode":          { "type": "string" },
+    "to_mode":            { "type": "string" },
+    "spark_node":         { "type": "string" },
+    "duration_ms":        { "type": "integer" },
+    "error_code":         { "type": "string" }
+  }
+}

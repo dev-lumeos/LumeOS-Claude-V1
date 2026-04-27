@@ -1,104 +1,190 @@
-# WO Template: Migration (DB Schema Änderung)
+# WO Template: DB Migration
 
-# NUR für human-initiierte WOs (created_by: human)
+# Agent: db-migration-agent
 
-# Routing: → Spark B + DB-Check (Spark D wenn verfügbar)
+# Checklist: #1 XML task ✅ #3 Think-before-write ✅ #5 Negative Constraints ✅ #9 Error Handling ✅
 
-# ACHTUNG: requires_schema_change: true — nur Tom darf das setzen
+# ACHTUNG: requires_approval: true — immer Human Approval + security-specialist Review
 
-```yaml
-id: "WO-<YYYYMMDD>-<NNN>"
-title: "Add <beschreibung> to <tabelle>"
-
-type: migration
-module: <nutrition|training|...>
-complexity: <low|medium|high>
-risk: <low|medium>                  # high → geht zu Spark A für Review
-requires_reasoning: false
-requires_schema_change: true        # NUR human=true erlaubt das
-db_access: migration
-created_by: human                   # PFLICHT bei requires_schema_change
-
-files_allowed:
-  - "supabase/migrations/**"
-  - "<services/die/geändert/werden/**>"
-
-files_blocked:
-  - "supabase/migrations/**/*.sql"  # Block löschen wenn Migration nötig — Classifier erlaubt explizit
-
-acceptance_criteria:
-  - "Migration läuft ohne Fehler: supabase db reset"
-  - "Migration ist reversibel (DOWN migration vorhanden)"
-  - "RLS Policies aktualisiert"
-  - "Bestehende Daten nicht beschädigt"
-  - "TypeScript Types aktualisiert"
-```
+---
 
 ## Wann nutzen?
 
-- Neue Tabellen erstellen
-- Spalten hinzufügen/ändern
+- Neue Tabellen oder Spalten
+- RLS Policy Änderungen
 - Enum-Werte hinzufügen
-- RLS Policies ändern
 - Indexes hinzufügen
 
 ## Wann NICHT nutzen?
 
-- `DROP COLUMN` → Immer Human Review, kein WO
-- `DROP TABLE` → Niemals via WO
-- Produktionsdaten migrieren → Manuell
+- DROP COLUMN → Human Review, kein WO
+- DROP TABLE → Niemals via WO
+- Production Daten migrieren → Manuell
+
+## Template (ausfüllen)
+
+```yaml
+workorder_id: "WO-{module}-{NNN}"       # TODO
+agent_id:     "db-migration-agent"
+phase:        1
+priority:     "normal"
+quality_critical: false
+requires_approval: true                  # PFLICHT — niemals false
+
+task: |
+  <task>
+    <analyze>
+      Lies den bestehenden Schema-Stand in supabase/migrations/.
+      Verstehe welche Tabellen betroffen sind.
+      Prüfe ob RLS Policies aktualisiert werden müssen.
+      Plane die Migration UND den Rollback bevor du schreibst.
+    </analyze>
+
+    <implement>
+      TODO: Migration-Ziel in einem Imperativsatz.
+      Erstelle supabase/migrations/YYYYMMDD_NNN_beschreibung.sql.
+      SQL muss enthalten: UP Migration + DOWN Rollback Kommentar.
+      RLS für neue Tabellen pflichtmäßig aktivieren.
+    </implement>
+
+    <constraints>
+      Jede Migration muss reversibel sein (rollback_plan Pflicht).
+      RLS für alle neuen Tabellen aktivieren.
+      Keine Produktions-Daten löschen oder verändern.
+    </constraints>
+
+    <on_error>
+      Bei fehlendem rollback_plan: {"status": "BLOCKED"}.
+      Bei Destructive SQL ohne Task: {"status": "STOP"}.
+      Bei RLS fehlt: {"status": "FAIL"}.
+      Bei Breaking Schema Change: {"status": "ESCALATE"}.
+    </on_error>
+  </task>
+
+scope_files:
+  - "supabase/migrations/"          # Migration SQL
+  - "TODO: packages/types/src/**"   # TypeScript Types updaten
+
+context_files:
+  - "supabase/migrations/"          # Bestehende Migrations als Referenz
+
+acceptance_criteria:
+  - "Migration YYYYMMDD_NNN_*.sql erstellt"
+  - "Migration läuft durch: supabase db diff zeigt erwarteten Diff"
+  - "DOWN Migration oder rollback_plan dokumentiert"
+  - "RLS aktiviert für alle neuen Tabellen"
+  - "TypeScript Types aktualisiert (packages/types)"
+  - "pnpm tsc --noEmit clean"
+
+negative_constraints:
+  - "NIEMALS supabase db push --linked (nur Tom manuell)"
+  - "NIEMALS supabase db reset (nur Tom manuell)"
+  - "NIEMALS DROP TABLE oder TRUNCATE ohne expliziten Task"
+  - "NIEMALS Migration ohne nachfolgendes security-specialist Review"
+  - "NIEMALS RLS deaktivieren"
+  - "NIEMALS Änderungen außerhalb supabase/ und packages/types/"
+
+required_skills: ["gsd-v2", "supabase-specialist"]
+optional_skills: []
+blocked_by:      []
+```
+
+---
 
 ## Migration Naming Convention
 
 ```
-supabase/migrations/
-  YYYYMMDD_HHMMSS_<beschreibung>.sql
+supabase/migrations/YYYYMMDD_NNN_beschreibung.sql
 
 Beispiele:
-  20260424_120000_add_meal_tags_to_meal_items.sql
-  20260424_130000_add_training_session_notes.sql
+  20260426_001_add_workorder_priority.sql
+  20260426_002_add_diary_table.sql
 ```
 
-## Migration Template (SQL)
+## Migration SQL Template
 
 ```sql
--- Migration: YYYYMMDD_HHMMSS_<beschreibung>
--- Description: <was diese Migration macht>
+-- Migration: YYYYMMDD_NNN_beschreibung
+-- Description: Was diese Migration tut
 -- Reversible: YES
 
 -- UP
-ALTER TABLE <tabelle>
-  ADD COLUMN IF NOT EXISTS <spalte> <typ> <constraints>;
+ALTER TABLE {tabelle}
+  ADD COLUMN IF NOT EXISTS {spalte} {typ} {constraints};
 
--- Index falls nötig
-CREATE INDEX IF NOT EXISTS idx_<tabelle>_<spalte>
-  ON <tabelle>(<spalte>);
+CREATE INDEX IF NOT EXISTS idx_{tabelle}_{spalte}
+  ON {tabelle}({spalte});
 
--- DOWN (für Rollback dokumentieren)
--- ALTER TABLE <tabelle> DROP COLUMN IF EXISTS <spalte>;
+-- RLS (falls neue Tabelle)
+ALTER TABLE {tabelle} ENABLE ROW LEVEL SECURITY;
+
+-- DOWN (Rollback)
+-- ALTER TABLE {tabelle} DROP COLUMN IF EXISTS {spalte};
 ```
 
-## Beispiel
+---
+
+## Ausgefülltes Beispiel
 
 ```yaml
-id: "WO-20260501-001"
-title: "Add meal_tags column to meal_items table"
-type: migration
-module: nutrition
-complexity: low
-risk: low
-requires_reasoning: false
-requires_schema_change: true
-db_access: migration
-created_by: human
-files_allowed:
-  - "supabase/migrations/**"
-  - "packages/types/src/**"
-  - "services/nutrition-api/src/**"
+workorder_id: "WO-nutrition-010"
+agent_id:     "db-migration-agent"
+phase:        1
+priority:     "normal"
+quality_critical: false
+requires_approval: true
+
+task: |
+  <task>
+    <analyze>
+      Lies 20260423120000_control_plane_tables.sql für bestehenden Schema-Stand.
+      Prüfe packages/types/src/ für MealItem Interface.
+      Plane: neue Spalte meal_tags TEXT[] auf meal_items.
+    </analyze>
+
+    <implement>
+      Erstelle Migration: ADD COLUMN meal_tags TEXT[] DEFAULT '{}' auf meal_items.
+      Erstelle GIN Index für meal_tags (Array-Suche).
+      Aktualisiere MealItem Interface in packages/types.
+    </implement>
+
+    <constraints>
+      Keine bestehenden Spalten ändern.
+      RLS muss für meal_items bereits aktiv sein (prüfen).
+      Rollback: DROP COLUMN meal_tags dokumentieren.
+    </constraints>
+
+    <on_error>
+      Bei Schema-Konflikt: FAIL.
+      Bei fehlender RLS: FAIL.
+    </on_error>
+  </task>
+
+scope_files:
+  - "supabase/migrations/"
+  - "packages/types/src/nutrition.ts"
+
+context_files:
+  - "supabase/migrations/20260423120000_control_plane_tables.sql"
+  - "packages/types/src/index.ts"
+
 acceptance_criteria:
-  - "Migration 20260501_*_add_meal_tags.sql erstellt"
-  - "supabase db reset läuft sauber durch"
-  - "meal_items Tabelle hat meal_tags TEXT[] Spalte"
-  - "RLS Policy erlaubt Service-Role Zugriff"
-  - "MealItem TypeScript Interface aktualisiert"
+  - "Migration 20260426_001_add_meal_tags.sql erstellt"
+  - "meal_items.meal_tags TEXT[] DEFAULT '{}' vorhanden"
+  - "GIN Index idx_meal_items_meal_tags erstellt"
+  - "MealItem Interface hat meal_tags?: string[]"
+  - "pnpm tsc --noEmit clean"
+  - "supabase db diff zeigt nur erwartete Änderungen"
+
+negative_constraints:
+  - "NIEMALS supabase db push --linked"
+  - "NIEMALS bestehende Spalten löschen oder umbenennen"
+  - "NIEMALS DROP TABLE oder TRUNCATE"
+  - "NIEMALS Migration ohne security-specialist Review"
+  - "NIEMALS RLS deaktivieren"
+  - "NIEMALS Änderungen außerhalb supabase/ und packages/types/"
+
+required_skills: ["gsd-v2", "supabase-specialist"]
+optional_skills: []
+blocked_by:      []
 ```

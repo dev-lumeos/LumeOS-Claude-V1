@@ -6,6 +6,7 @@ export type ModelTier =
   | 'fp8_bulk'
   | 'quality'
   | 'review'
+  | 'orchestration'
   | 'macro_executor'
   | 'escalation_1'
   | 'escalation_2'
@@ -13,7 +14,7 @@ export type ModelTier =
   | 'escalation_4'
   | 'escalation_5'
 
-export type NodeId = 'spark-a' | 'spark-b' | 'openrouter' | 'external'
+export type NodeId = 'spark-a' | 'spark-b' | 'nemotron' | 'openrouter' | 'external'
 
 export type WOLayer =
   | 'types'
