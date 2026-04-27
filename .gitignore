@@ -38,3 +38,6 @@ temp/
 __pycache__/
 *.py[cod]
 *.pyo
+
+# Zip archives
+*.zip
