@@ -41,3 +41,6 @@ __pycache__/
 
 # Zip archives
 *.zip
+
+# Brainstorm Material (lokal, nicht ins Repo — enthält teils lizenzpflichtige Daten wie BLS)
+docs/BrainstormDocs/
