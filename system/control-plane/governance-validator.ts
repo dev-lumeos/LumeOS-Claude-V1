@@ -290,3 +290,74 @@ export function inferWorkorderType(task: string): ValidationContext['workorderTy
   }
   return 'standard'
 }
+
+// ─── Review Pipeline ──────────────────────────────────────────────────────────
+//
+// NUR im Pipeline-Kontext nutzen — siehe system/control-plane/RULES.md.
+// Bestehender Validator-Flow oben ist davon NICHT betroffen.
+
+export type ReviewState = 'PASS' | 'REWRITE' | 'ESCALATE' | 'FAIL'
+
+const ALLOWED_REVIEW_STATES = new Set<ReviewState>([
+  'PASS',
+  'REWRITE',
+  'ESCALATE',
+  'FAIL',
+])
+
+const ALLOWED_REVIEW_RISK_LEVELS = new Set(['LOW', 'MEDIUM', 'HIGH'])
+
+const HIGH_RISK_CATEGORIES = new Set([
+  'auth',
+  'rls',
+  'migration',
+  'security',
+])
+
+export interface ReviewOutput {
+  status:           ReviewState
+  risk:             'LOW' | 'MEDIUM' | 'HIGH'
+  confidence:       number
+  violations:       string[]
+  recommendations:  string[]
+  summary:          string
+  requires_claude:  boolean
+}
+
+/**
+ * Validiert einen Reviewer-Output (Spark 3 / Spark 4) gegen das Output-Contract.
+ * Wirft bei Schema-Verletzung — Caller entscheidet ob das ESCALATE oder REWRITE auslöst.
+ *
+ * Reviewer-Risk-Casing ist UPPERCASE (LOW/MEDIUM/HIGH) — anders als
+ * Orchestrator-risk_level (lowercase). Bewusst getrennte Domänen.
+ */
+export function validateReviewOutput(output: any): true {
+  if (!output || typeof output !== 'object') {
+    throw new Error('Invalid review output: not an object')
+  }
+
+  const { status, risk, confidence } = output
+
+  if (!ALLOWED_REVIEW_STATES.has(status)) {
+    throw new Error(`Invalid review status: ${status}`)
+  }
+
+  if (!ALLOWED_REVIEW_RISK_LEVELS.has(risk)) {
+    throw new Error(`Invalid risk level: ${risk}`)
+  }
+
+  if (typeof confidence !== 'number' || confidence < 0 || confidence > 1) {
+    throw new Error(`Invalid confidence: ${confidence}`)
+  }
+
+  return true
+}
+
+/**
+ * Prüft ob ein Workorder die Spark-4-Pflicht auslöst (auth/rls/migration/security).
+ * Spark 3 läuft trotzdem (non-blocking, run-and-log) — siehe RULES.md Sektion 3.
+ */
+export function requiresSeniorReview(category?: string): boolean {
+  if (!category) return false
+  return HIGH_RISK_CATEGORIES.has(category.toLowerCase())
+}
