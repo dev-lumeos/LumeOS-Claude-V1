@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>MuscleBodyMap — Alle Modi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+
+  /* ── LUMEOS Light Theme (aus tokens.css) ── */
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: #f1f3f4;
+    color: #374151;
+    padding: 24px;
+    min-height: 100vh;
+  }
+  h1 { font-size:18px; font-weight:700; color:#1a1a2e; margin-bottom:4px; }
+  .section-title {
+    font-size:10px; font-weight:700; color:#6b7280;
+    text-transform:uppercase; letter-spacing:.1em;
+    margin:28px 0 12px;
+  }
+  .cards { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start; }
+  .card {
+    background:#ffffff;
+    border:1px solid #e8eaed;
+    border-radius:12px;
+    padding:18px;
+    min-width:300px;
+    box-shadow:0 1px 3px rgba(0,0,0,.05);
+  }
+  .card-title {
+    font-size:13px; font-weight:600; color:#1a1a2e;
+    margin-bottom:4px; display:flex; align-items:center; gap:6px;
+  }
+  .card-subtitle { font-size:10px; color:#9ca3af; margin-bottom:14px; font-family:monospace; }
+  #detail {
+    margin-top:20px; padding:12px 16px;
+    background:#fff; border:1px solid #e8eaed; border-radius:10px;
+    font-size:12px; display:none; color:#374151;
+    box-shadow:0 1px 3px rgba(0,0,0,.05);
+  }
+  #detail .lbl { font-weight:700; color:#1a1a2e; margin-right:6px; }
+</style>
+</head>
+<body>
+
+<h1>MuscleBodyMap — Universelle Körpervisualisierung</h1>
+<p style="font-size:11px;color:#9ca3af;margin-bottom:4px">Klick auf Punkte/Muskeln für Details</p>
+
+<div class="section-title">1 · Recovery Status (Muskel-Fatigue)</div>
+<div class="cards">
+  <div class="card">
+    <div class="card-title">💪 Heute · PPL-Split Tag 2</div>
+    <div class="card-subtitle">renderFatigue(el, data)</div>
+    <div id="m-fatigue"></div>
+  </div>
+</div>
+
+<div class="section-title">2 · Workout-Aktivierung (Push Day)</div>
+<div class="cards">
+  <div class="card">
+    <div class="card-title">🔥 Heutige Belastung</div>
+    <div class="card-subtitle">renderActivation(el, data)</div>
+    <div id="m-activation"></div>
+  </div>
+</div>
+
+<div class="section-title">3 · Injektionspunkte (Supplements)</div>
+<div class="cards">
+  <div class="card">
+    <div class="card-title">💉 Injektion-Rotation · Testosteron Enanthat</div>
+    <div class="card-subtitle">renderInjection(el, data) — Nächste Stelle: Schulter R (pulsierend)</div>
+    <div id="m-injection"></div>
+  </div>
+</div>
+
+<div class="section-title">4 · Kombiniert (Muskeln + Injektionspunkte)</div>
+<div class="cards">
+  <div class="card">
+    <div class="card-title">🧬 Supplements Enhanced — Fatigue + Injection Sites</div>
+    <div class="card-subtitle">renderCombined(el, muscleData, injectionData)</div>
+    <div id="m-combined"></div>
+  </div>
+</div>
+
+<div class="section-title">5 · Custom Punkte (Schmerz-Tracker)</div>
+<div class="cards">
+  <div class="card">
+    <div class="card-title">🎯 Schmerz-Tracker</div>
+    <div class="card-subtitle">renderPoints(el, data) — xPct/yPct 0–1</div>
+    <div id="m-points"></div>
+  </div>
+</div>
+
+<div id="detail">
+  <span class="lbl" id="detail-label"></span>
+  <span id="detail-info"></span>
+</div>
+
+<script src="MuscleBodyMap.js"></script>
+<script>
+
+const fatigueData = [
+  { id:'chest',      fatigue:78 },
+  { id:'deltoids',   fatigue:70 },
+  { id:'triceps',    fatigue:82 },
+  { id:'trapezius',  fatigue:30 },
+  { id:'upper-back', fatigue:42 },
+  { id:'lower-back', fatigue:18 },
+  { id:'biceps',     fatigue:12 },
+  { id:'forearm',    fatigue:15 },
+  { id:'abs',        fatigue:10 },
+  { id:'obliques',   fatigue:10 },
+  { id:'quadriceps', fatigue:22 },
+  { id:'gluteal',    fatigue:28 },
+  { id:'hamstring',  fatigue:8  },
+  { id:'calves',     fatigue:6  },
+  { id:'adductors',  fatigue:33 },
+  { id:'tibialis',   fatigue:5  },
+];
+
+const activationData = [
+  { id:'chest',    intensity:4 },
+  { id:'deltoids', intensity:3 },
+  { id:'triceps',  intensity:3 },
+  { id:'abs',      intensity:1 },
+];
+
+const injectionData = [
+  { id:'delt_l',   daysSince: 3   },
+  { id:'delt_r',   daysSince: 999, isNext: true },
+  { id:'glute_l',  daysSince: 10  },
+  { id:'glute_r',  daysSince: 21  },
+  { id:'quad_l',   daysSince: 1   },
+  { id:'quad_r',   daysSince: 7   },
+  { id:'vg_l',     daysSince: 14  },
+  { id:'vg_r',     daysSince: 999 },
+];
+
+const painPoints = [
+  { id:'pain_knee_l',    side:'front', xPct:0.38, yPct:0.67, color:'#ef4444', label:'Knie L',  badge:'stark', size:16 },
+  { id:'pain_knee_r',    side:'front', xPct:0.62, yPct:0.67, color:'#f59e0b', label:'Knie R',  badge:'mittel', size:14 },
+  { id:'pain_lower_back',side:'back',  xPct:0.50, yPct:0.44, color:'#fb923c', label:'LWS',     badge:'leicht', size:14 },
+];
+
+MuscleBodyMap.setClickHandler((id, type, data) => {
+  const detail = document.getElementById('detail');
+  detail.style.display = 'block';
+  document.getElementById('detail-label').textContent = id;
+
+  if (type === 'muscle') {
+    const e = fatigueData.find(f => f.id === id);
+    const [color] = MuscleBodyMap.fatigueColor(e?.fatigue ?? 0);
+    document.getElementById('detail-info').innerHTML = e
+      ? `<span style="color:${color}">${e.fatigue<=25?'🟢 Ready':e.fatigue<=60?'🟡 Caution':'🔴 Rest'}</span> · Fatigue: ${e.fatigue}%`
+      : `Typ: ${type}`;
+
+  } else if (type === 'injection') {
+    const color = MuscleBodyMap.injectionColor(data.daysSince ?? 999);
+    const status = data.daysSince >= 999 ? 'Nie benutzt' : `${data.daysSince} Tage her`;
+    document.getElementById('detail-info').innerHTML =
+      `💉 <span style="color:${color}">${status}</span>`
+      + (data.isNext ? ' · <span style="color:#7c3aed">⭐ Empfohlen als Nächstes</span>' : '');
+
+  } else {
+    document.getElementById('detail-info').textContent = `${data.label || ''} · ${data.badge || ''}`;
+  }
+});
+
+MuscleBodyMap.renderFatigue(
+  document.getElementById('m-fatigue'), fatigueData, { width:160 }
+);
+MuscleBodyMap.renderActivation(
+  document.getElementById('m-activation'), activationData, { width:160 }
+);
+MuscleBodyMap.renderInjection(
+  document.getElementById('m-injection'), injectionData, { width:160 }
+);
+MuscleBodyMap.renderCombined(
+  document.getElementById('m-combined'),
+  fatigueData, injectionData,
+  {
+    width: 160,
+    legendItems: [
+      { fill:'#10B981', opacity:0.75, label:'Muskel ready' },
+      { fill:'#EF4444', opacity:0.85, label:'Muskel rest'  },
+      { fill:'#10b981', opacity:0.9,  label:'💉 >14d ✓'  },
+      { fill:'#ef4444', opacity:0.9,  label:'💉 <3d ⚠'   },
+    ],
+  }
+);
+MuscleBodyMap.renderPoints(
+  document.getElementById('m-points'), painPoints, { width:160, showLegend:false }
+);
+
+</script>
+</body>
+</html>
