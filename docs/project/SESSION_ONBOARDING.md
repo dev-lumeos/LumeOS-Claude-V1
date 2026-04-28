@@ -1,17 +1,12 @@
 # LUMEOS — Session Onboarding
+
 # Lies das am Anfang jeder neuen Session
 
 ---
 
 ## Aktueller Stack (Phase 1)
 
-| Was | Wo | Status |
-|---|---|---|
-| Qwen3.6-35B FP8 | 192.168.0.128:8001 | ✅ Orchestrator |
-| Qwen3-Coder-Next FP8 | 192.168.0.188:8001 | ✅ Coding Worker |
-| Governance Validator | system/control-plane/governance-validator.ts | ✅ aktiv |
-| Dispatcher | system/control-plane/dispatcher.ts | ✅ REWRITE_LOOP max 2 |
-| tsc --noEmit | services/scheduler-api | ✅ 0 Fehler |
+WasWoStatusQwen3.6-35B FP8192.168.0.128:8001✅ OrchestratorQwen3-Coder-Next FP8192.168.0.188:8001✅ Coding WorkerGovernance Validatorsystem/control-plane/governance-validator.ts✅ aktivDispatchersystem/control-plane/dispatcher.ts✅ REWRITE_LOOP max 2tsc --noEmitservices/scheduler-api✅ 0 Fehler
 
 ---
 
@@ -19,7 +14,10 @@
 
 1. **Nemotron Super ist zu groß für Spark 1 zusammen mit anderen Modellen** — 69.54 GiB Weights allein
 2. **Qwen3.6-35B ist der Orchestrator** — nicht Nemotron (falscher Use-Case für Orchestration)
-3. **enable_thinking=false ist Pflicht** bei jedem Qwen3.6 Request — /no_think funktioniert nicht
+3. **Qwen3.6 Pflichtregeln** bei jedem Request:
+   - `chat_template_kwargs: { enable_thinking: false }` ist Pflicht — `/no_think` im Prompt funktioniert NICHT
+   - Nur `message.content` auswerten — `reasoning_content` Feld ignorieren
+   - Leerer Content → FAIL
 4. **Governance Validator vor executeTool()** — deterministische Validierung, kein LLM
 5. **Stop-Conditions dürfen keine positiven Zustände enthalten** (approved/passed/granted)
 6. **Escalation = Claude Sonnet/Opus via Claude Code Max 200** — kein OpenRouter, kein MiniMax

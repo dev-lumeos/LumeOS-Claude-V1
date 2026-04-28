@@ -12,6 +12,23 @@
 
 ParameterWertIP192.168.0.128Port8001ModellQwen/Qwen3.6-35B-A3B-FP8served-model-nameqwen3.6-35b-fp8max_model_len131072gpu_memory_utilization0.75RolleGovernance Compiler (Port 9003)Temp0.3 (Governance) / 0.0 Seed=42 (Execution)Status✅ LIVE
 
+### Qwen3.6 Pflichtregeln (Spark A)
+
+JEDER Request an Qwen3.6 muss enthalten:
+
+```json
+{
+  "chat_template_kwargs": { "enable_thinking": false },
+  "temperature": 0.0
+}
+```
+
+- `/no_think` im Prompt funktioniert NICHT — nur das `chat_template_kwargs` Feld wirkt
+- Nur `message.content` auswerten — `reasoning_content` Feld ignorieren
+- Leerer Content → FAIL
+
+Implementiert in: `services/scheduler-api/src/vllm-adapter.ts` → `callQwen36Orchestrator()`
+
 ### Spark B — Execution Layer
 
 ParameterWertIP192.168.0.188Port8001ModellQwen/Qwen3-Coder-30B-A3B-Instruct-FP8served-model-nameqwen3-coder-30bmax_model_len100000gpu_memory_utilization0.55RolleMicro-Executor (Temp=0.0, Seed=42)Status✅ LIVE
