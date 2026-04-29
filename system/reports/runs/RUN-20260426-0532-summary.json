@@ -1,0 +1,18 @@
+{
+  "run_id": "RUN-20260426-0532",
+  "workorder_id": "WO-nutrition-002",
+  "agent_id": "micro-executor",
+  "final_status": "awaiting_approval",
+  "started_at": "2026-04-26T05:31:50.533Z",
+  "completed_at": "2026-04-26T05:31:50.549Z",
+  "duration_ms": 16,
+  "changed_files": [],
+  "bash_commands_executed": [],
+  "review_results": [],
+  "retry_count": 0,
+  "escalation_count": 0,
+  "human_approval_required": false,
+  "errors": [],
+  "next_action": "none",
+  "generated_at": "2026-04-29T12:59:19.390Z"
+}

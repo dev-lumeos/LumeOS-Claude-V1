@@ -1,0 +1,18 @@
+{
+  "run_id": "RUN-20260429-4615",
+  "workorder_id": "WO-realrun-001",
+  "agent_id": "micro-executor",
+  "final_status": "failed",
+  "started_at": "2026-04-29T08:45:34.616Z",
+  "completed_at": "2026-04-29T08:45:34.673Z",
+  "duration_ms": 57,
+  "changed_files": [],
+  "bash_commands_executed": [],
+  "review_results": [],
+  "retry_count": 0,
+  "escalation_count": 1,
+  "human_approval_required": false,
+  "errors": [],
+  "next_action": "investigate_error",
+  "generated_at": "2026-04-29T12:59:19.392Z"
+}
