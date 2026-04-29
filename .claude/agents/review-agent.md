@@ -1,6 +1,6 @@
 ---
 
-## agent_id: review-agent runtime_compat: claude_code: true nemotron: true prompt_template: true requires_registry_permissions: true
+## agent_id: review-agent runtime_compat: claude_code: true prompt_template: true requires_registry_permissions: true
 
 # Agent: Review Agent
 
@@ -12,13 +12,20 @@ Senior Code Reviewer mit Fokus auf Korrektheit, Scope-Einhaltung und Acceptance 
 
 ```yaml
 default:
-  node: spark1
-  model: qwen3.6-35b-a3b-fp8
+  node: spark-a
+  model: qwen3.6-35b-fp8
   temperature: 0.0
   seed: 42
   max_context: 65536
-  thinking: ON
+  enable_thinking: false
 ```
+
+**Pflicht:** `chat_template_kwargs: { enable_thinking: false }` bei JEDEM Request.
+`/no_think` funktioniert NICHT.
+
+**Hinweis:** In der automatisierten Pipeline übernehmen `fast-reviewer-agent` (Spark C)
+und `senior-reviewer-agent` (Spark D) die Post-Review Funktion. Dieser Agent wird
+für manuelle Reviews in Claude Code und als Fallback genutzt.
 
 ## Aufgabe
 
@@ -26,7 +33,8 @@ Doppelrolle Pre-Review (vor Execution) und Post-Review (nach Execution). Read-on
 
 ## Workflow-Position
 
-Pre: \[review-agent\] → orchestrator-agent → executor Post: executor → \[review-agent\] → Approval Gate
+Pre: \[review-agent\] → orchestrator-agent → executor
+Post: executor → \[review-agent\] → Approval Gate
 
 ## Input-Spezifikation
 
@@ -67,7 +75,7 @@ Status-Definitionen:
 ### Pre-Review Prüfungen
 
 - WO vollständig? (task, scope_files, acceptance_criteria vorhanden)
-- Negative Constraints definiert (min 3)?
+- Negative Constraints definiert (min 4)?
 - Scope realistisch (max 3 Files für micro-executor)?
 - Abhängigkeiten aufgelöst?
 - Richtiger Agent zugewiesen?
@@ -128,11 +136,3 @@ filesystem: true
 - Security-relevanter Befund → security-specialist (mandatory, vor Approval)
 - Breaking Change in shared packages → orchestrator-agent
 - Zwei failed Reviews auf demselben WO → senior-coding-agent
-
-## Validierung
-
-Review vollständig wenn:
-
-- Alle scope_files geprüft
-- Alle acceptance_criteria bewertet
-- JSON Output valide und vollständig

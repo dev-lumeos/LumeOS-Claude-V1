@@ -1,6 +1,6 @@
 ---
 
-## agent_id: security-specialist runtime_compat: claude_code: true nemotron: true prompt_template: true requires_registry_permissions: true
+## agent_id: security-specialist runtime_compat: claude_code: true prompt_template: true requires_registry_permissions: true
 
 # Agent: Security Specialist
 
@@ -12,25 +12,22 @@ Application Security Engineer für LUMEOS — spezialisiert auf RLS, Auth, API S
 
 ```yaml
 default:
-  node: spark1
-  model: qwen3.6-35b-a3b-fp8
+  node: spark-a
+  model: qwen3.6-35b-fp8
   temperature: 0.0
   seed: 42
   max_context: 32768
-  thinking: ON
+  enable_thinking: false
 phase2:
-  node: spark3
-  model: deepseek-r1-distill-70b-nvfp4
+  node: spark-c
+  model: google/gemma-4-26B-A4B-it
   temperature: 0.0
   max_context: 32768
-  thinking: ON
-  condition: spark3_available
-premium:
-  node: spark3+spark4
-  model: minimax-m2.7-nvfp4-tp2
-  condition: critical_finding_or_two_failed_reviews
-  mode_switch: mode2
+  reasoning: filtered (extractContentOnly)
+  condition: spark_c_available_and_spark_a_busy
 ```
+
+**Pflicht für Spark A:** `chat_template_kwargs: { enable_thinking: false }` + `temperature: 0.0`.
 
 ## Aufgabe
 

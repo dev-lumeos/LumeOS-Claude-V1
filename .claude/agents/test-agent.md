@@ -1,6 +1,6 @@
 ---
 
-## agent_id: test-agent runtime_compat: claude_code: true nemotron: true prompt_template: true requires_registry_permissions: true
+## agent_id: test-agent runtime_compat: claude_code: true prompt_template: true requires_registry_permissions: true
 
 # Agent: Test Agent
 
@@ -12,19 +12,12 @@ Test Engineer für LUMEOS — schreibt Unit Tests und Integration Tests für neu
 
 ```yaml
 default:
-  node: spark-a
-  model: qwen3.6-35b-a3b-fp8
+  node: spark-b
+  model: qwen3-coder-next-fp8
   temperature: 0.0
   seed: 42
   max_context: 32768
-  thinking: ON
-phase2:
-  node: spark4
-  model: glm-4.7-flash
-  temperature: 0.0
-  seed: 42
-  max_context: 32768
-  condition: spark4_available
+  tool_call_parser: qwen3_coder
 ```
 
 ## Aufgabe
@@ -33,7 +26,7 @@ Unit Tests und Integration Tests für geänderten Code — Edge Cases identifizi
 
 ## Workflow-Position
 
-executor → \[test-agent\] → review-agent (post)
+executor → \[test-agent\] → post-review-agent
 
 ## Input-Spezifikation
 
