@@ -449,6 +449,24 @@ async function test18_spark4_empty_response() {
   console.log('  ✓')
 }
 
+async function test19_high_risk_spark3_invalid_audit_marker() {
+  console.log('\n[19] High-Risk + Spark 3 invalid → audit marks INVALID_OUTPUT, not undefined')
+  stubFetch(asJson(PASS_LOW))
+  const events: PipelineAuditEvent[] = []
+  const deps = makeDeps(mockReviewer('not-json-at-all'), events)
+
+  await runReviewPipeline(WORKER_OUTPUT, HIGH_RISK_WO, deps)
+
+  const nonBlockingEvent = findEvent(events, e => e.tier === 'spark-c-non-blocking')
+  assert.ok(nonBlockingEvent, 'expected spark-c-non-blocking audit event')
+  assert.equal(nonBlockingEvent?.status, 'INVALID_OUTPUT', 'status should fall back to INVALID_OUTPUT')
+  assert.equal(nonBlockingEvent?.risk, 'UNKNOWN', 'risk should fall back to UNKNOWN')
+  assert.equal(nonBlockingEvent?.confidence, 0, 'confidence should fall back to 0')
+  assert.equal(nonBlockingEvent?.reason, 'invalid_json', 'reason should expose failureReason')
+  restoreFetch()
+  console.log('  ✓')
+}
+
 // ─── Runner ───────────────────────────────────────────────────────────────────
 
 async function runAll() {
@@ -477,6 +495,7 @@ async function runAll() {
     { name: 'Spark 3 requires_claude override',        fn: test16_spark3_requires_claude_override },
     { name: 'Spark 3 empty response',                  fn: test17_spark3_empty_response },
     { name: 'Spark 4 empty response',                  fn: test18_spark4_empty_response },
+    { name: 'High-Risk Spark 3 invalid audit marker',  fn: test19_high_risk_spark3_invalid_audit_marker },
   ]
 
   let pass = 0

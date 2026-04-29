@@ -291,14 +291,15 @@ export async function runReviewPipeline(
     })
   } else {
     // High-Risk: Spark 3 wird non-blocking geloggt
+    // Fallbacks für invalid_output Fälle — sonst hätten wir status: undefined im JSONL
     await deps.audit?.({
       event: 'review_completed',
       tier: 'spark-c-non-blocking',
       wo_id: wo.wo_id,
-      status: spark3Outcome.review?.status,
-      risk: spark3Outcome.review?.risk,
-      confidence: spark3Outcome.review?.confidence,
-      reason: 'high-risk-mandatory-spark-d',
+      status: spark3Outcome.review?.status ?? 'INVALID_OUTPUT',
+      risk: spark3Outcome.review?.risk ?? 'UNKNOWN',
+      confidence: spark3Outcome.review?.confidence ?? 0,
+      reason: spark3Outcome.failureReason ?? 'high-risk-mandatory-spark-d',
     })
   }
 

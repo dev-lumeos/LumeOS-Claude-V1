@@ -36,8 +36,17 @@ export interface PipelineAuditEvent {
   wo_id:        string
   ts?:          string  // ISO timestamp, auto-set on write
   reason?:      string
-  status?:      ReviewState
-  risk?:        string
+  /**
+   * Reviewer-Output Status. ReviewState bei valider Antwort,
+   * 'INVALID_OUTPUT' wenn Reviewer kein parsebares JSON / Schema-Verletzung lieferte.
+   * 'INVALID_OUTPUT' ist nur ein Audit-Marker — kein gültiger ReviewState der
+   * in die Pipeline-Logik einfließt.
+   */
+  status?:      ReviewState | 'INVALID_OUTPUT'
+  /**
+   * Risk-Level. UPPERCASE wie im Reviewer-Contract, plus 'UNKNOWN' bei invalid_output.
+   */
+  risk?:        'LOW' | 'MEDIUM' | 'HIGH' | 'UNKNOWN'
   confidence?:  number
   loop_count?:  number
 }
