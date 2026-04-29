@@ -39,6 +39,8 @@ export interface PipelineWorkorder {
 
 export interface PipelineWorkerResult {
   wo_id: string
+  /** V2: run_id für persistierten Rewrite-Counter. Optional für Backward-Compat. */
+  run_id?: string
   output: string  // Worker-Output (z.B. von Spark 2 / micro-executor)
   diff?: string
   metadata?: Record<string, unknown>
@@ -61,6 +63,18 @@ export interface PipelineDeps {
    * Siehe pipeline-audit.ts für File- und Memory-Writer.
    */
   audit?: (event: PipelineAuditEvent) => void | Promise<void>
+
+  /**
+   * V2: Liest persistierten Rewrite-Count für run_id + tier.
+   * Wenn nicht gesetzt → lokaler Counter (V1 Backward-Compat).
+   */
+  getRewriteCount?: (runId: string, tier: PipelineTier) => number
+
+  /**
+   * V2: Inkrementiert persistierten Rewrite-Count für run_id + tier.
+   * Wenn nicht gesetzt → kein persistenter State (V1 Backward-Compat).
+   */
+  incrementRewriteCount?: (runId: string, tier: PipelineTier) => Promise<void>
 }
 
 export type PipelineResult =
@@ -159,9 +173,9 @@ async function runSingleTier(
   wo: PipelineWorkorder,
   result: PipelineWorkerResult,
   deps: PipelineDeps,
+  runId?: string,
   spark3Findings?: ReviewOutput,
 ): Promise<TierOutcome> {
-  let rewriteCount = 0
   const { systemPrompt, userMessage } = buildReviewPrompt(wo, result, tier, spark3Findings)
 
   const callReviewer =
@@ -169,7 +183,25 @@ async function runSingleTier(
 
   await deps.audit?.({ event: 'review_started', tier, wo_id: wo.wo_id })
 
-  while (rewriteCount <= REWRITE_LIMIT) {
+  // V2: Persistierten Counter prüfen — Loop-Erkennung über Worker-Re-Runs hinweg.
+  // Wenn Counter bereits am Limit → sofort ESCALATE, kein Reviewer-Call nötig.
+  if (runId && deps.getRewriteCount) {
+    const persistedCount = deps.getRewriteCount(runId, tier)
+    if (persistedCount >= REWRITE_LIMIT) {
+      await deps.audit?.({
+        event: 'review_rewrite_loop',
+        tier,
+        wo_id: wo.wo_id,
+        loop_count: persistedCount,
+      })
+      return { failureReason: 'rewrite_limit_exceeded' }
+    }
+  }
+
+  // Lokaler Counter als Fallback wenn keine persistenten Counter-Funcs (V1 Compat).
+  let localRewriteCount = 0
+
+  while (localRewriteCount <= REWRITE_LIMIT) {
     let raw: string
     try {
       raw = await callReviewer(systemPrompt, userMessage, 800)
@@ -211,22 +243,31 @@ async function runSingleTier(
     }
 
     if (review.status === 'REWRITE') {
-      rewriteCount++
+      // V2: Persistierten Counter inkrementieren wenn verfügbar.
+      if (runId && deps.incrementRewriteCount) {
+        await deps.incrementRewriteCount(runId, tier)
+      }
+      localRewriteCount++
+
+      // Effektiven Count bestimmen (persistent wenn verfügbar, sonst lokal).
+      const effectiveCount = (runId && deps.getRewriteCount)
+        ? deps.getRewriteCount(runId, tier)
+        : localRewriteCount
+
       await deps.audit?.({
         event: 'review_rewrite_loop',
         tier,
         wo_id: wo.wo_id,
-        loop_count: rewriteCount,
+        loop_count: effectiveCount,
       })
 
-      if (rewriteCount > REWRITE_LIMIT) {
+      if (effectiveCount >= REWRITE_LIMIT) {
         return { review, failureReason: 'rewrite_limit_exceeded' }
       }
 
       // Caller muss Worker neu laufen lassen — Pipeline kann hier nicht
       // re-execute. Wir geben den Hinweis zurück, der äußere Caller
       // entscheidet ob er den Worker erneut anstößt und uns dann nochmal aufruft.
-      // Für V1: Rewrite ist terminal innerhalb der Pipeline.
       return { review, failureReason: 'rewrite_pending' }
     }
   }
@@ -263,11 +304,12 @@ export async function runReviewPipeline(
   deps: PipelineDeps,
 ): Promise<PipelineResult> {
   const highRisk = requiresSeniorReview(wo.category)
+  const runId = result.run_id
 
   // ── Spark 3 (Gemma 4) ──
   // Läuft IMMER, auch bei High-Risk. Bei High-Risk ist sein PASS aber
   // nicht ausschlaggebend — Spark 4 muss trotzdem entscheiden.
-  const spark3Outcome = await runSingleTier('spark-c', wo, result, deps)
+  const spark3Outcome = await runSingleTier('spark-c', wo, result, deps, runId)
 
   if (!highRisk) {
     // Normaler Flow: Spark 3 PASS akzeptiert
@@ -313,6 +355,7 @@ export async function runReviewPipeline(
     wo,
     result,
     deps,
+    runId,
     spark3Findings,
   )
 

@@ -162,10 +162,20 @@ function restoreFetch() {
 function makeDeps(
   spark3Reviewer: PipelineDeps['callFastReviewer'],
   events: PipelineAuditEvent[] = [],
+  counterOverrides?: { counts?: Record<string, number>; incremented?: string[] },
 ): PipelineDeps {
+  const counts: Record<string, number> = counterOverrides?.counts ?? {}
   return {
     callFastReviewer: spark3Reviewer,
     audit: createMemoryAuditWriter(events),
+    // V2 counter functions — only injected when counterOverrides provided
+    ...(counterOverrides !== undefined && {
+      getRewriteCount: (_runId: string, tier: string) => counts[tier] ?? 0,
+      incrementRewriteCount: async (_runId: string, tier: string) => {
+        counts[tier] = (counts[tier] ?? 0) + 1
+        counterOverrides.incremented?.push(tier)
+      },
+    }),
   }
 }
 
@@ -467,11 +477,80 @@ async function test19_high_risk_spark3_invalid_audit_marker() {
   console.log('  ✓')
 }
 
+async function test20_persisted_counter_at_limit_immediate_escalate() {
+  console.log('\n[20] V2: Persisted counter spark-c already at REWRITE_LIMIT → immediate rewrite_limit_exceeded')
+  stubFetch('invalid-json-forces-human-needed')
+  const events: PipelineAuditEvent[] = []
+  // spark-c counter already at 2 (= REWRITE_LIMIT) from previous run
+  const deps = makeDeps(
+    mockReviewer(asJson(PASS_LOW)),  // would PASS — but counter check fires first
+    events,
+    { counts: { 'spark-c': 2 } },
+  )
+  const result = await runReviewPipeline(
+    { ...WORKER_OUTPUT, run_id: 'RUN-test-020' },
+    STANDARD_WO,
+    deps,
+  )
+  assert.equal(result.kind, 'human_needed')
+  // No review_completed event for spark-c (reviewer was never called)
+  const spark3Completed = findEvent(events, e => e.event === 'review_completed' && e.tier === 'spark-c')
+  assert.equal(spark3Completed, undefined, 'spark-c reviewer should not have been called')
+  // rewrite_loop event emitted with persisted count
+  const loopEvent = findEvent(events, e => e.event === 'review_rewrite_loop' && e.tier === 'spark-c')
+  assert.ok(loopEvent, 'rewrite_loop audit event expected')
+  assert.equal(loopEvent?.loop_count, 2)
+  restoreFetch()
+  console.log('  ✓')
+}
+
+async function test21_persisted_counter_incremented_on_rewrite() {
+  console.log('\n[21] V2: REWRITE → incrementRewriteCount called, rewrite_pending returned')
+  const incremented: string[] = []
+  const events: PipelineAuditEvent[] = []
+  const deps = makeDeps(
+    mockReviewer(asJson(REWRITE_LOW)),
+    events,
+    { counts: { 'spark-c': 0 }, incremented },
+  )
+  const result = await runReviewPipeline(
+    { ...WORKER_OUTPUT, run_id: 'RUN-test-021' },
+    STANDARD_WO,
+    deps,
+  )
+  assert.equal(result.kind, 'rewrite')
+  if (result.kind === 'rewrite') assert.equal(result.tier, 'spark-c')
+  assert.ok(incremented.includes('spark-c'), 'incrementRewriteCount should have been called for spark-c')
+  console.log('  ✓')
+}
+
+async function test22_persisted_counter_limit_after_increment() {
+  console.log('\n[22] V2: Counter at 1 → REWRITE → increment → now at REWRITE_LIMIT → rewrite_limit_exceeded')
+  stubFetch('invalid-json-forces-human-needed')
+  const events: PipelineAuditEvent[] = []
+  // Counter starts at 1 (one prior rewrite in a previous run)
+  const deps = makeDeps(
+    mockReviewer(asJson(REWRITE_LOW)),
+    events,
+    { counts: { 'spark-c': 1 } },
+  )
+  const result = await runReviewPipeline(
+    { ...WORKER_OUTPUT, run_id: 'RUN-test-022' },
+    STANDARD_WO,
+    deps,
+  )
+  // After increment, count becomes 2 = REWRITE_LIMIT → rewrite_limit_exceeded → spark-d
+  // spark-d gets invalid JSON stub → human_needed
+  assert.equal(result.kind, 'human_needed')
+  restoreFetch()
+  console.log('  ✓')
+}
+
 // ─── Runner ───────────────────────────────────────────────────────────────────
 
 async function runAll() {
   console.log('══════════════════════════════════════════════')
-  console.log('LUMEOS Review-Pipeline Mock Tests V1.0')
+  console.log('LUMEOS Review-Pipeline Mock Tests V2.0')
   console.log('══════════════════════════════════════════════')
 
   originalFetch = globalThis.fetch
@@ -496,6 +575,9 @@ async function runAll() {
     { name: 'Spark 3 empty response',                  fn: test17_spark3_empty_response },
     { name: 'Spark 4 empty response',                  fn: test18_spark4_empty_response },
     { name: 'High-Risk Spark 3 invalid audit marker',  fn: test19_high_risk_spark3_invalid_audit_marker },
+    { name: 'V2: Persisted counter at limit',           fn: test20_persisted_counter_at_limit_immediate_escalate },
+    { name: 'V2: Counter incremented on REWRITE',       fn: test21_persisted_counter_incremented_on_rewrite },
+    { name: 'V2: Counter at 1 + REWRITE → limit',      fn: test22_persisted_counter_limit_after_increment },
   ]
 
   let pass = 0

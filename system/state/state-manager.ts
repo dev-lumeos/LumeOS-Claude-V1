@@ -54,6 +54,10 @@ export interface RuntimeState {
   locks:              Lock[]
   approvals:          ApprovalRef[]
   audit_log_path:     string
+  /** V2: Persistierter Rewrite-Counter pro run_id + tier.
+   *  Ermöglicht Loop-Erkennung über mehrere Worker-Re-Runs hinweg.
+   *  Key: run_id → tier → count */
+  rewrite_counters?:  Record<string, Record<string, number>>
 }
 
 interface LockMeta {
@@ -81,6 +85,7 @@ const DEFAULT_STATE: RuntimeState = {
   locks:              [],
   approvals:          [],
   audit_log_path:     'system/state/audit.jsonl',
+  rewrite_counters:   {},
 }
 
 // ─── File Lock ────────────────────────────────────────────────────────────────
@@ -192,6 +197,32 @@ export function readApprovalTokens(): Record<string, any> {
   if (!fs.existsSync(getApprovalsPath())) return {}
   try { return JSON.parse(fs.readFileSync(getApprovalsPath(), 'utf8')) }
   catch { return {} }
+}
+
+// ─── Rewrite Counter (V2) ─────────────────────────────────────────────────────
+// Persistierter Counter pro run_id + tier.
+// Ermöglicht Loop-Erkennung über mehrere Worker-Re-Runs hinweg.
+// Sicherer Zugriff via state-manager Lock (mutate).
+
+/** Liest aktuellen Rewrite-Count für einen Run + Tier. Sync. */
+export function getRewriteCount(runId: string, tier: string): number {
+  return readState().rewrite_counters?.[runId]?.[tier] ?? 0
+}
+
+/** Inkrementiert Rewrite-Count für einen Run + Tier. Atomic via Lock. */
+export async function incrementRewriteCount(runId: string, tier: string): Promise<void> {
+  await mutate(s => {
+    if (!s.rewrite_counters) s.rewrite_counters = {}
+    if (!s.rewrite_counters[runId]) s.rewrite_counters[runId] = {}
+    s.rewrite_counters[runId][tier] = (s.rewrite_counters[runId][tier] ?? 0) + 1
+  })
+}
+
+/** Löscht alle Counter für einen Run (z.B. bei run.completed oder run.failed). */
+export async function clearRewriteCounters(runId: string): Promise<void> {
+  await mutate(s => {
+    if (s.rewrite_counters) delete s.rewrite_counters[runId]
+  })
 }
 
 export async function writeApprovalToken(approvalId: string, token: any): Promise<void> {
