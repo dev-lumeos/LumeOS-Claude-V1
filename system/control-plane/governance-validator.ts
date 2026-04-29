@@ -9,7 +9,7 @@
  *   callModel() → parseOrchestratorIntent() → validateOrchestratorIntent() → executeTool()
  */
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { requiresSparkD, inferCategoryFromTask, type RiskCategory } from './risk-categories'
 
 export interface OrchestratorIntent {
   selected_agent:   string
@@ -295,24 +295,13 @@ export function inferWorkorderType(task: string): ValidationContext['workorderTy
 //
 // NUR im Pipeline-Kontext nutzen — siehe system/control-plane/RULES.md.
 // Bestehender Validator-Flow oben ist davon NICHT betroffen.
+//
+// High-Risk-Routing: requiresSparkD() aus risk-categories.ts (Single Source of Truth).
 
 export type ReviewState = 'PASS' | 'REWRITE' | 'ESCALATE' | 'FAIL'
 
-const ALLOWED_REVIEW_STATES = new Set<ReviewState>([
-  'PASS',
-  'REWRITE',
-  'ESCALATE',
-  'FAIL',
-])
-
+const ALLOWED_REVIEW_STATES = new Set<ReviewState>(['PASS', 'REWRITE', 'ESCALATE', 'FAIL'])
 const ALLOWED_REVIEW_RISK_LEVELS = new Set(['LOW', 'MEDIUM', 'HIGH'])
-
-const HIGH_RISK_CATEGORIES = new Set([
-  'auth',
-  'rls',
-  'migration',
-  'security',
-])
 
 export interface ReviewOutput {
   status:           ReviewState
@@ -354,10 +343,10 @@ export function validateReviewOutput(output: any): true {
 }
 
 /**
- * Prüft ob ein Workorder die Spark-4-Pflicht auslöst (auth/rls/migration/security).
+ * Prüft ob ein Workorder die Spark-4-Pflicht auslöst.
+ * Delegiert an requiresSparkD() aus risk-categories.ts (Single Source of Truth).
  * Spark 3 läuft trotzdem (non-blocking, run-and-log) — siehe RULES.md Sektion 3.
  */
 export function requiresSeniorReview(category?: string): boolean {
-  if (!category) return false
-  return HIGH_RISK_CATEGORIES.has(category.toLowerCase())
+  return requiresSparkD(category)
 }

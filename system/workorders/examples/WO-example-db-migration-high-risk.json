@@ -1,0 +1,38 @@
+{
+  "_comment": "Beispiel-WO: DB-Migration high-risk — rollback_hint Pflicht",
+  "workorder_id": "WO-db-007",
+  "agent_id": "db-migration-agent",
+  "task": "Add user_goals table to Supabase: id uuid, user_id uuid references auth.users, goal_type text, target_value numeric, created_at timestamptz. RLS: only owner can read/write.",
+  "risk_category": "db-migration",
+  "scope_files": [
+    "supabase/migrations/20260429_001_add_user_goals.sql"
+  ],
+  "context_files": [
+    "supabase/migrations/",
+    "packages/types/src/database.ts"
+  ],
+  "acceptance_files": [
+    "supabase/migrations/20260429_001_add_user_goals.sql"
+  ],
+  "acceptance_criteria": [
+    "table user_goals created with all specified columns",
+    "RLS enabled on user_goals",
+    "policy: SELECT/INSERT/UPDATE/DELETE only for auth.uid() = user_id",
+    "migration is idempotent (IF NOT EXISTS)",
+    "rollback migration drops table cleanly"
+  ],
+  "negative_constraints": [
+    "NIEMALS bestehende Tabellen oder Spalten ändern",
+    "NIEMALS RLS deaktivieren",
+    "NIEMALS supabase db push --linked aufrufen",
+    "NIEMALS DROP TABLE ohne expliziten Rollback-Plan"
+  ],
+  "rollback_hint": "DROP TABLE IF EXISTS user_goals; — keine abhängigen Tabellen, sicher reversibel",
+  "validation_commands": ["pnpm tsc --noEmit", "supabase db diff", "supabase migration list"],
+  "requires_approval": true,
+  "required_skills": [],
+  "optional_skills": [],
+  "blocked_by": [],
+  "phase": 1,
+  "priority": "high"
+}

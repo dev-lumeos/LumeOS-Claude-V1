@@ -97,7 +97,7 @@ const STANDARD_WO: PipelineWorkorder = {
 
 const HIGH_RISK_WO: PipelineWorkorder = {
   wo_id: 'WO-test-002',
-  category: 'migration',
+  category: 'db-migration',
   task: 'Add migration for users table',
   changed_files: ['supabase/migrations/0042_users.sql'],
   files_allowed: ['supabase/migrations/0042_users.sql'],

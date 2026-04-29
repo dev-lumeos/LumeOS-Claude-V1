@@ -43,6 +43,7 @@ import {
 import { runReviewPipeline } from './review-pipeline'
 import { createFileAuditWriter } from './pipeline-audit'
 import { createFileMetricsWriter } from './pipeline-metrics'
+import { isAutoRetryAllowed, requiresSparkD, inferCategoryFromTask } from './risk-categories'
 import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
@@ -51,8 +52,7 @@ const MAX_REWRITE_LOOPS = 2
 // V2: Auto-Retry — maximale Worker-Neustarts bei Pipeline-REWRITE
 const MAX_WORKER_RETRIES = 2
 
-// V2: High-Risk-Kategorien — kein Auto-Retry, immer manuell eskalieren
-const HIGH_RISK_CATEGORIES = new Set(['migration', 'security', 'auth', 'rls', 'medical'])
+// High-Risk-Kategorien: isAutoRetryAllowed() aus risk-categories.ts (Single Source of Truth)
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -74,6 +74,14 @@ export interface Workorder {
   quality_critical?:     boolean
   priority?:             string
   correlation_id?:       string
+  /** A.1/A.4: explizite Risk-Kategorie — hat Vorrang vor inferCategoryFromTask() */
+  risk_category?:        string
+  /** A.1: Pfade die der Worker explizit NICHT berühren darf */
+  files_blocked?:        string[]
+  /** A.1: Commands die nach Execution laufen müssen */
+  validation_commands?:  string[]
+  /** A.1: Rollback-Hinweis — empfohlen bei db-migration */
+  rollback_hint?:        string
 }
 
 export interface ToolRequest {
@@ -243,6 +251,11 @@ function mapWorkorderTypeToCategory(t: WoType): string {
   if (t === 'db-migration') return 'migration'
   if (t === 'security')     return 'security'
   return 'standard'
+}
+
+/** Bestimmt die effektive Risk-Kategorie: explizites WO-Feld hat Vorrang. */
+function resolveCategory(wo: Workorder): string {
+  return wo.risk_category ?? inferCategoryFromTask(wo.task)
 }
 
 // ─── Haupt-Funktion ───────────────────────────────────────────────────────────
@@ -428,8 +441,7 @@ export async function dispatchWorkorder(
       // Spark 3 + Spark 4 prüfen den Worker-Output bevor State persistiert wird.
       // Bei REWRITE/HUMAN_NEEDED early return — kein consumeApproval, kein addWrittenFile.
       if (toolReq.tool === 'write' && toolReq.targetPath && toolReq.content) {
-        const woType   = inferWorkorderType(wo.task)
-        const category = mapWorkorderTypeToCategory(woType)
+        const category = resolveCategory(wo)
 
         const pipelineAudit = createFileAuditWriter()  // → system/state/pipeline-audit.jsonl
 
@@ -465,7 +477,7 @@ export async function dispatchWorkorder(
 
         if (pipelineResult.kind === 'rewrite') {
           // V2: Auto-Retry — bei erlaubten Kategorien und unter Retry-Limit
-          const canRetry = !HIGH_RISK_CATEGORIES.has(category) && workerRetryCount < MAX_WORKER_RETRIES
+          const canRetry = isAutoRetryAllowed(category) && workerRetryCount < MAX_WORKER_RETRIES
           if (canRetry) {
             workerRetryCount++
             workerTask = `[RETRY ${workerRetryCount}/${MAX_WORKER_RETRIES}] Reviewer-Feedback: ${pipelineResult.reason}\n\nOriginal Task: ${wo.task}`

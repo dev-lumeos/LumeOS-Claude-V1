@@ -1,0 +1,34 @@
+{
+  "_comment": "Beispiel-WO: Standard low-risk (TypeScript helper)",
+  "workorder_id": "WO-nutrition-042",
+  "agent_id": "micro-executor",
+  "task": "Add a TypeScript helper function calculateBMI(weightKg: number, heightM: number): number to services/nutrition-api/src/utils/metrics.ts",
+  "risk_category": "standard",
+  "scope_files": [
+    "services/nutrition-api/src/utils/metrics.ts"
+  ],
+  "context_files": [
+    "services/nutrition-api/src/utils/"
+  ],
+  "acceptance_files": [
+    "services/nutrition-api/src/utils/metrics.ts"
+  ],
+  "acceptance_criteria": [
+    "function calculateBMI exists and is exported",
+    "returns number (kg / m^2)",
+    "JSDoc with @param and @returns",
+    "TypeScript types explicit, no any"
+  ],
+  "negative_constraints": [
+    "NIEMALS außerhalb scope_files schreiben",
+    "NIEMALS Side-Effects oder Logging",
+    "NIEMALS neue Dependencies hinzufügen",
+    "NIEMALS bestehende Exports ändern"
+  ],
+  "validation_commands": ["pnpm tsc --noEmit", "pnpm test"],
+  "required_skills": [],
+  "optional_skills": [],
+  "blocked_by": [],
+  "phase": 1,
+  "priority": "normal"
+}

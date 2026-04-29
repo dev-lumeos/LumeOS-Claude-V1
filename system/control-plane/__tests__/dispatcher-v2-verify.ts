@@ -57,7 +57,7 @@ const STANDARD_WO: PipelineWorkorder = {
 }
 
 const HIGH_RISK_WO: PipelineWorkorder = {
-  wo_id: 'WO-v2-test', category: 'migration', task: 'add migration',
+  wo_id: 'WO-v2-test', category: 'db-migration', task: 'add migration',
 }
 
 function makeDeps(

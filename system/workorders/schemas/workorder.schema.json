@@ -13,7 +13,7 @@
     "context_files":        { "type": "array", "items": { "type": "string" }, "default": [] },
     "acceptance_files":     { "type": "array", "items": { "type": "string" }, "default": [] },
     "acceptance_criteria":  { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-    "negative_constraints": { "type": "array", "items": { "type": "string" }, "minItems": 3 },
+    "negative_constraints": { "type": "array", "items": { "type": "string" }, "minItems": 4 },
     "required_skills":      { "type": "array", "items": { "type": "string" }, "default": [] },
     "optional_skills":      { "type": "array", "items": { "type": "string" }, "default": [] },
     "blocked_by":           { "type": "array", "items": { "type": "string" }, "default": [] },
@@ -21,6 +21,42 @@
     "requires_approval":    { "type": "boolean", "default": false },
     "correlation_id":       { "type": "string" },
     "priority":             { "type": "string", "enum": ["low", "normal", "high", "critical"], "default": "normal" },
-    "quality_critical":     { "type": "boolean", "default": false, "description": "true = Trigger für MiniMax Mode 2" }
+    "quality_critical":     { "type": "boolean", "default": false },
+    "risk_category": {
+      "type": "string",
+      "enum": [
+        "standard", "docs", "i18n", "test",
+        "db-migration", "security", "auth", "rls",
+        "medical", "payments", "shared-core", "architecture", "release"
+      ],
+      "default": "standard",
+      "description": "Explizite Risk-Kategorie. Hat Vorrang vor automatischer Inferenz aus dem Task-Text. Bestimmt Spark-D-Pflicht, Auto-Retry-Erlaubnis und Human-Approval-Anforderung."
+    },
+    "files_blocked": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Pfade die der Worker explizit NICHT berühren darf. Wird von authorize-tool-call.ts gegen jeden Write-Versuch geprüft (A.2)."
+    },
+    "validation_commands": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": ["pnpm tsc --noEmit"],
+      "description": "Commands die nach Execution laufen müssen. Standard: tsc check. Kann erweitert werden z.B. um pnpm test."
+    },
+    "rollback_hint": {
+      "type": "string",
+      "description": "Rollback-Hinweis oder -Befehl. Optional, empfohlen bei risk_category=db-migration."
+    }
+  },
+  "if": {
+    "properties": { "risk_category": { "const": "db-migration" } },
+    "required": ["risk_category"]
+  },
+  "then": {
+    "required": ["rollback_hint"],
+    "properties": {
+      "rollback_hint": { "type": "string", "minLength": 5 }
+    }
   }
 }

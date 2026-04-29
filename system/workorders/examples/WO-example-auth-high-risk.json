@@ -1,0 +1,39 @@
+{
+  "_comment": "Beispiel-WO: Auth high-risk (Spark D mandatory, kein Auto-Retry)",
+  "workorder_id": "WO-auth-003",
+  "agent_id": "micro-executor",
+  "task": "Add JWT expiry check middleware to services/coach-api/src/middleware/auth.ts — verify exp claim and return 401 if expired",
+  "risk_category": "auth",
+  "scope_files": [
+    "services/coach-api/src/middleware/auth.ts"
+  ],
+  "context_files": [
+    "services/coach-api/src/middleware/",
+    "packages/auth/src/"
+  ],
+  "acceptance_files": [
+    "services/coach-api/src/middleware/auth.ts"
+  ],
+  "acceptance_criteria": [
+    "middleware checks JWT exp claim",
+    "returns 401 with error body if expired",
+    "does not modify token content",
+    "existing valid token flow unaffected"
+  ],
+  "negative_constraints": [
+    "NIEMALS Token-Inhalt verändern oder neu signieren",
+    "NIEMALS bestehenden Auth-Flow brechen",
+    "NIEMALS Credentials oder Secrets loggen",
+    "NIEMALS außerhalb scope_files schreiben"
+  ],
+  "files_blocked": [
+    "packages/auth/src/",
+    "services/coach-api/src/routes/"
+  ],
+  "validation_commands": ["pnpm tsc --noEmit", "pnpm test"],
+  "required_skills": [],
+  "optional_skills": [],
+  "blocked_by": [],
+  "phase": 1,
+  "priority": "high"
+}

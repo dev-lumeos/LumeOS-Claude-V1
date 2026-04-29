@@ -1,0 +1,36 @@
+{
+  "_comment": "Beispiel-WO: UI-only (docs/i18n mix — kein Spark D, kein Human Approval)",
+  "workorder_id": "WO-ui-011",
+  "agent_id": "i18n-agent",
+  "task": "Add missing German and Thai translations for the new supplement tracking feature keys in apps/web/src/i18n/",
+  "risk_category": "i18n",
+  "scope_files": [
+    "apps/web/src/i18n/de.json",
+    "apps/web/src/i18n/th.json"
+  ],
+  "context_files": [
+    "apps/web/src/i18n/en.json"
+  ],
+  "acceptance_files": [
+    "apps/web/src/i18n/de.json",
+    "apps/web/src/i18n/th.json"
+  ],
+  "acceptance_criteria": [
+    "all keys present in en.json exist in de.json with German translation",
+    "all keys present in en.json exist in th.json with Thai translation",
+    "no existing keys deleted or renamed",
+    "JSON syntax valid"
+  ],
+  "negative_constraints": [
+    "NIEMALS Keys löschen oder umbenennen",
+    "NIEMALS Code-Dateien anfassen",
+    "NIEMALS en.json verändern",
+    "NIEMALS Freitext außerhalb JSON-Werte einfügen"
+  ],
+  "validation_commands": ["pnpm tsc --noEmit"],
+  "required_skills": [],
+  "optional_skills": [],
+  "blocked_by": [],
+  "phase": 1,
+  "priority": "normal"
+}

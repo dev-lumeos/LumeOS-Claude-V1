@@ -1,0 +1,31 @@
+{
+  "_comment": "Beispiel-WO: Docs-only (kein Code, kein Spark D)",
+  "workorder_id": "WO-docs-004",
+  "agent_id": "docs-agent",
+  "task": "Add JSDoc documentation to all exported functions in services/nutrition-api/src/utils/macros.ts",
+  "risk_category": "docs",
+  "scope_files": [
+    "services/nutrition-api/src/utils/macros.ts"
+  ],
+  "context_files": [],
+  "acceptance_files": [
+    "services/nutrition-api/src/utils/macros.ts"
+  ],
+  "acceptance_criteria": [
+    "every exported function has JSDoc with @param and @returns",
+    "no production logic changed",
+    "TypeScript compiles without errors"
+  ],
+  "negative_constraints": [
+    "NIEMALS Produktionscode ändern",
+    "NIEMALS Imports hinzufügen oder entfernen",
+    "NIEMALS außerhalb scope_files schreiben",
+    "NIEMALS Funktionssignaturen verändern"
+  ],
+  "validation_commands": ["pnpm tsc --noEmit"],
+  "required_skills": [],
+  "optional_skills": [],
+  "blocked_by": [],
+  "phase": 1,
+  "priority": "low"
+}
