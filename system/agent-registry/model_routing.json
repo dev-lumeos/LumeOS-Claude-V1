@@ -2,10 +2,10 @@
   "_comment": "Model Routing — Stand April 2026",
 
   "_hardware": {
-    "spark1_port8001": "Qwen3.6-35B-A3B FP8 — Orchestrator + Review (~45-52 tok/s, 107 tok/s parallel)",
-    "spark2_port8001": "Qwen3-Coder-Next FP8 — Coding Worker (~47 tok/s)",
-    "spark1_nano":     "Nemotron Nano NVFP4 (cybermotaz) — aktuell offline, ~17 tok/s",
-    "spark3+4":        "TBD — Qwen3.6 + DeepSeek R1 70B + GLM-4.7-Flash + Qwen3.5 9B"
+    "spark1_port8001": "192.168.0.128 — Qwen3.6-35B-A3B FP8, gpu_util=0.70 — Orchestrator + WO-Validator (~50 tok/s single, ~116 tok/s @ 4-par)",
+    "spark2_port8001": "192.168.0.188 — Qwen3-Coder-Next FP8, gpu_util=0.88 — Coding Worker (~47 tok/s)",
+    "spark3_port8001": "192.168.0.99  — google/gemma-4-26B-A4B-it FP8 instanttensor, gpu_util=0.70 — Fast Reviewer Tier 1 (~35 tok/s single, ~180 tok/s @ 8-par)",
+    "spark4_port8001": "192.168.0.101 — openai/gpt-oss-120b MXFP4 CUTLASS, gpu_util=0.70 — Senior Reviewer Tier 2 (~59 tok/s single, ~150 tok/s @ 4-par)"
   },
 
   "_qwen3.6_notes": {
