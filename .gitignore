@@ -29,6 +29,8 @@ system/state/audit.jsonl
 system/state/audit.error.jsonl
 system/state/runtime_state.json
 system/state/runtime_state.lock
+system/state/pipeline-audit.jsonl
+system/state/pipeline-audit-live.jsonl
 system/approval/approvals.json
 
 # Temp directory (Antigravity Skills, Downloads, staging)
