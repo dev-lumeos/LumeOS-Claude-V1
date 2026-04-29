@@ -1,0 +1,22 @@
+[Unit]
+Description=Spark C — Gemma-4-26B-A4B-it (LUMEOS Fast Reviewer)
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/admin/spark-vllm-docker
+ExecStart=/home/admin/start-spark-c.sh
+ExecStop=/home/admin/spark-vllm-docker/launch-cluster.sh stop
+Restart=always
+RestartSec=10
+TimeoutStartSec=600
+TimeoutStopSec=60
+
+# Allow plenty of file descriptors for vLLM internal pools
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=multi-user.target

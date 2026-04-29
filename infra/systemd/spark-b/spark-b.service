@@ -1,0 +1,21 @@
+[Unit]
+Description=Spark B — Qwen3-Coder-Next-FP8 (LUMEOS Worker)
+After=docker.service network-online.target
+Requires=docker.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/home/admin/start-spark-b.sh
+ExecStop=/usr/bin/docker stop spark-b-coder
+Restart=always
+RestartSec=5
+TimeoutStartSec=300
+TimeoutStopSec=30
+
+# Allow plenty of file descriptors for vLLM internal pools
+LimitNOFILE=1048576
+
+[Install]
+WantedBy=multi-user.target
