@@ -24,6 +24,7 @@ import {
 } from './governance-validator'
 import { callGPTOSSReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 import type { PipelineAuditEvent } from './pipeline-audit'
+import type { PipelineMetricEvent, MetricOutcome } from './pipeline-metrics'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -75,6 +76,13 @@ export interface PipelineDeps {
    * Wenn nicht gesetzt → kein persistenter State (V1 Backward-Compat).
    */
   incrementRewriteCount?: (runId: string, tier: PipelineTier) => Promise<void>
+
+  /**
+   * V2: Metrics Writer — schreibt einen Metric-Event pro Tier-Abschluss.
+   * Wenn nicht gesetzt → keine Metriken (Backward-Compat).
+   * Siehe pipeline-metrics.ts für File- und Memory-Writer.
+   */
+  writeMetric?: (event: PipelineMetricEvent) => void | Promise<void>
 }
 
 export type PipelineResult =
@@ -183,6 +191,34 @@ async function runSingleTier(
 
   await deps.audit?.({ event: 'review_started', tier, wo_id: wo.wo_id })
 
+  const tierStart = Date.now()
+
+  /** Helper: schreibt Metric-Event und gibt TierOutcome zurück. */
+  const emitMetric = (
+    outcome: TierOutcome,
+    metricOutcome: MetricOutcome,
+    escalated: boolean,
+    confidence?: number,
+  ): TierOutcome => {
+    if (deps.writeMetric) {
+      const rewriteCount = (runId && deps.getRewriteCount)
+        ? deps.getRewriteCount(runId, tier)
+        : 0
+      deps.writeMetric({
+        timestamp:     new Date().toISOString(),
+        run_id:        runId,
+        wo_id:         wo.wo_id,
+        tier,
+        outcome:       metricOutcome,
+        confidence,
+        latency_ms:    Date.now() - tierStart,
+        escalated,
+        rewrite_count: rewriteCount,
+      })
+    }
+    return outcome
+  }
+
   // V2: Persistierten Counter prüfen — Loop-Erkennung über Worker-Re-Runs hinweg.
   // Wenn Counter bereits am Limit → sofort ESCALATE, kein Reviewer-Call nötig.
   if (runId && deps.getRewriteCount) {
@@ -194,7 +230,7 @@ async function runSingleTier(
         wo_id: wo.wo_id,
         loop_count: persistedCount,
       })
-      return { failureReason: 'rewrite_limit_exceeded' }
+      return emitMetric({ failureReason: 'rewrite_limit_exceeded' }, 'rewrite_limit_exceeded', true)
     }
   }
 
@@ -207,7 +243,7 @@ async function runSingleTier(
       raw = await callReviewer(systemPrompt, userMessage, 800)
     } catch (err) {
       // Reviewer-Call selbst fehlgeschlagen → wie schema_violation behandeln
-      return { failureReason: 'invalid_json' }
+      return emitMetric({ failureReason: 'invalid_json' }, 'invalid_json', true)
     }
 
     let review: ReviewOutput
@@ -215,7 +251,7 @@ async function runSingleTier(
       review = parseReviewerJson(raw)
       validateReviewOutput(review)
     } catch {
-      return { failureReason: 'invalid_json' }
+      return emitMetric({ failureReason: 'invalid_json' }, 'invalid_json', true)
     }
 
     review = applyEscalationOverrides(review)
@@ -230,16 +266,16 @@ async function runSingleTier(
     })
 
     if (review.status === 'PASS') {
-      return { review }
+      return emitMetric({ review }, 'PASS', false, review.confidence)
     }
 
     if (review.status === 'ESCALATE') {
-      return { review, failureReason: 'escalate' }
+      return emitMetric({ review, failureReason: 'escalate' }, 'ESCALATE', true, review.confidence)
     }
 
     if (review.status === 'FAIL') {
       // Reviewer sagt FAIL — terminal für diese Tier, nach oben eskalieren
-      return { review, failureReason: 'escalate' }
+      return emitMetric({ review, failureReason: 'escalate' }, 'FAIL', true, review.confidence)
     }
 
     if (review.status === 'REWRITE') {
@@ -262,18 +298,24 @@ async function runSingleTier(
       })
 
       if (effectiveCount >= REWRITE_LIMIT) {
-        return { review, failureReason: 'rewrite_limit_exceeded' }
+        return emitMetric(
+          { review, failureReason: 'rewrite_limit_exceeded' },
+          'rewrite_limit_exceeded', true, review.confidence,
+        )
       }
 
       // Caller muss Worker neu laufen lassen — Pipeline kann hier nicht
       // re-execute. Wir geben den Hinweis zurück, der äußere Caller
       // entscheidet ob er den Worker erneut anstößt und uns dann nochmal aufruft.
-      return { review, failureReason: 'rewrite_pending' }
+      return emitMetric(
+        { review, failureReason: 'rewrite_pending' },
+        'REWRITE', false, review.confidence,
+      )
     }
   }
 
   // Unreachable — alle Status sind oben behandelt
-  return { failureReason: 'invalid_json' }
+  return emitMetric({ failureReason: 'invalid_json' }, 'invalid_json', true)
 }
 
 // ─── Main Pipeline ────────────────────────────────────────────────────────────

@@ -42,6 +42,7 @@ import {
 } from './governance-validator'
 import { runReviewPipeline } from './review-pipeline'
 import { createFileAuditWriter } from './pipeline-audit'
+import { createFileMetricsWriter } from './pipeline-metrics'
 import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
@@ -458,6 +459,7 @@ export async function dispatchWorkorder(
             audit: pipelineAudit,
             getRewriteCount:      (rId, tier) => state.getRewriteCount(rId, tier),
             incrementRewriteCount: (rId, tier) => state.incrementRewriteCount(rId, tier),
+            writeMetric: createFileMetricsWriter(),
           },
         )
 
