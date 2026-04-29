@@ -1,19 +1,33 @@
 # Model Tiers V2 — LumeOS
-
-# Status: AKTUELL — 25. April 2026
-
-# Vorherige Version: model_tiers_v1.md (veraltet)
+# Status: Phase 2 LIVE — 29. April 2026
 
 ---
 
 ## Aktuelle Tier-Zuweisung
 
-TierModellNodeFormatRolle`governance`Qwen3.6-35B-A3BSpark AFP8Governance Compiler`micro_executor`Qwen3-Coder-30B-A3BSpark BFP8Deterministischer Code`orchestrator`Qwen3.5-122B-A10BSpark CNVFP4**COMING**`specialist`Qwen3-Coder-NextSpark DTBD**COMING**
+| Tier | Modell | Node | Format | Rolle |
+|---|---|---|---|---|
+| `orchestrator` | Qwen3.6-35B-A3B | Spark A | FP8 | Orchestrator + WO-Validator |
+| `micro_executor` | Qwen3-Coder-Next | Spark B | FP8 | Coding Worker (TypeScript Patches) |
+| `fast_reviewer` | google/gemma-4-26B-A4B-it | Spark C | FP8 (instanttensor) | Pipeline Tier 1 Reviewer |
+| `senior_reviewer` | openai/gpt-oss-120b | Spark D | MXFP4 | Pipeline Tier 2 Reviewer |
+| `escalation` | Claude Sonnet/Opus | Claude Code Max 200 | — | Senior Coding (Escalation only) |
 
 ---
 
-## Deterministik-Parameter (Spark B)
+## Deterministik-Parameter
 
+### Spark A (Orchestrator)
+```json
+{
+  "chat_template_kwargs": { "enable_thinking": false },
+  "temperature": 0.0
+}
+```
+- `/no_think` funktioniert NICHT — nur `chat_template_kwargs` wirkt
+- Nur `message.content` auswerten — `reasoning_content` strikt ignorieren
+
+### Spark B (Coding Worker)
 ```
 temperature: 0.0
 seed:        42
@@ -21,40 +35,49 @@ top_p:       1.0
 top_k:       1
 ```
 
-Diese Parameter sind UNVERÄNDERLICH für Micro-Executor. triple_hash verifiziert identischen Output bei 3 aufeinanderfolgenden Calls.
+### Spark C + D (Reviewer)
+- Reasoning-Output via `extractContentOnly()` strikt verwerfen
+- Nur `choices[].message.content` auswerten
 
 ---
 
-## Remote Escalation (nur wenn lokal nicht lösbar)
+## Review-Pipeline Routing
 
-TierModellWann`escalation_1`Claude Code Opus 4.6Primäre Eskalation`macro_executor`Kimi K2.6 via OpenRouterKomplexe Macro-WOs
+```
+Worker (Spark B) → Spark C (Gemma 4 Fast)
+  PASS (confidence>=0.75)  → done
+  REWRITE                  → run.failed + WO.review status='failed'
+  ESCALATE / low-confidence → Spark D
+
+Spark D (GPT-OSS Senior)
+  PASS (confidence>=0.75)  → done
+  REWRITE                  → run.failed + WO.review status='failed'
+  ESCALATE / cannot decide  → HUMAN_NEEDED (status='blocked')
+```
+
+High-Risk WOs (auth/rls/migration/security): Spark D läuft mandatory blocking
+auch wenn Spark C PASS gegeben hat.
 
 ---
 
-## Spark C+D Modelle (wenn Hardware da)
+## Adapter-Funktionen (vllm-adapter.ts)
 
-Spark C laden:
+| Funktion | Node | Modell |
+|---|---|---|
+| `callQwen36Orchestrator()` | Spark A | Qwen3.6-35B |
+| `callCoderNext()` | Spark B | Qwen3-Coder-Next |
+| `callGemmaReviewer()` | Spark C | Gemma 4 26B |
+| `callGPTOSSReviewer()` | Spark D | GPT-OSS 120B |
 
-```bash
-vllm serve Qwen/Qwen3.5-122B-A10B-Instruct-NVFP4 \
-  --served-model-name qwen3.5-122b \
-  --max-model-len 65536 \
-  --gpu-memory-utilization 0.85
-```
+Alle gehen durch `extractContentOnly()` — reasoning/reasoning_content wird global gefiltert.
 
-Spark D laden:
+---
 
-```bash
-# Qwen3-Coder-Next sobald verfügbar
-vllm serve Qwen/Qwen3-Coder-Next \
-  --served-model-name qwen3-coder-next \
-  --max-model-len 65536 \
-  --gpu-memory-utilization 0.80
-```
+## Throughput-Referenz (live verifiziert)
 
-Danach in `services/wo-classifier/src/rules/index.ts`:
-
-```typescript
-const SPARK_C_AVAILABLE = true   // war: false
-const SPARK_D_AVAILABLE = true   // war: false
-```
+| Node | Modell | Single tok/s | Parallel tok/s |
+|---|---|---|---|
+| Spark A | Qwen3.6-35B FP8 | ~50 | ~116 @ 4-par |
+| Spark B | Qwen3-Coder-Next FP8 | ~47 | — |
+| Spark C | Gemma 4 26B FP8 | ~35 | ~180 @ 8-par |
+| Spark D | GPT-OSS 120B MXFP4 | ~59 | ~150 @ 4-par |

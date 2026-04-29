@@ -1,99 +1,128 @@
 # Model Registry V2 — LumeOS
-
-# Status: AKTUELL — 25. April 2026
-
-# Vorherige Version: model_registry_v1.md (veraltet, falsche Modell-Zuweisungen)
+# Status: Phase 2 LIVE — 29. April 2026
 
 ---
 
-## Live Stack (aktuell)
+## Live Stack
 
-### Spark A — Governance Layer
+### Spark A — Orchestrator
 
-ParameterWertIP192.168.0.128Port8001ModellQwen/Qwen3.6-35B-A3B-FP8served-model-nameqwen3.6-35b-fp8max_model_len131072gpu_memory_utilization0.75RolleGovernance Compiler (Port 9003)Temp0.3 (Governance) / 0.0 Seed=42 (Execution)Status✅ LIVE
+| Parameter | Wert |
+|---|---|
+| IP | 192.168.0.128 |
+| Port | 8001 |
+| Hostname | edgexpert-1116 |
+| Container | `vllm-qwen` |
+| Image | `vllm/vllm-openai:cu130-nightly` |
+| Modell | `Qwen/Qwen3.6-35B-A3B-FP8` |
+| served-model-name | `qwen3.6-35b-fp8` |
+| gpu_memory_utilization | 0.70 |
+| max_model_len | 65536 |
+| kv-cache-dtype | fp8 |
+| max-num-seqs | 4 |
+| Rolle | Orchestrator + WO-Validator |
+| Status | ✅ LIVE |
 
-### Qwen3.6 Pflichtregeln (Spark A)
-
-JEDER Request an Qwen3.6 muss enthalten:
-
-```json
-{
-  "chat_template_kwargs": { "enable_thinking": false },
-  "temperature": 0.0
-}
-```
-
-- `/no_think` im Prompt funktioniert NICHT — nur das `chat_template_kwargs` Feld wirkt
-- Nur `message.content` auswerten — `reasoning_content` Feld ignorieren
-- Leerer Content → FAIL
-
-Implementiert in: `services/scheduler-api/src/vllm-adapter.ts` → `callQwen36Orchestrator()`
-
-### Spark B — Execution Layer
-
-ParameterWertIP192.168.0.188Port8001ModellQwen/Qwen3-Coder-30B-A3B-Instruct-FP8served-model-nameqwen3-coder-30bmax_model_len100000gpu_memory_utilization0.55RolleMicro-Executor (Temp=0.0, Seed=42)Status✅ LIVE
-
-### Spark C — Orchestrator / Bulk (COMING)
-
-ParameterWertModellQwen3.5-122B-A10B NVFP4RolleOrchestrator (Port 9005) + Bulk ExecutionMax Slots8 parallelStatus🔜 Bestellt
-
-### Spark D — Specialist / QA (COMING)
-
-ParameterWertModellQwen3-Coder-NextRolleDB-Check, Acceptance Verifier, QAMax Slots4 parallelStatus🔜 Bestellt
+**Pflicht:** `chat_template_kwargs: { enable_thinking: false }` + `temperature: 0.0` bei JEDEM Request.
+Adapter: `callQwen36Orchestrator()` in `services/scheduler-api/src/vllm-adapter.ts`.
 
 ---
 
-## vLLM Start Commands
+### Spark B — Coding Worker
 
-### Spark A
+| Parameter | Wert |
+|---|---|
+| IP | 192.168.0.188 |
+| Port | 8001 |
+| Hostname | edgexpert-5862 |
+| Container | `spark-b-coder` |
+| Image | `nvcr.io/nvidia/vllm:26.03-py3` |
+| Modell | `Qwen/Qwen3-Coder-Next-FP8` |
+| served-model-name | `qwen3-coder-next-fp8` |
+| gpu_memory_utilization | 0.88 |
+| max_model_len | 131072 |
+| tool-call-parser | `qwen3_coder` |
+| Rolle | micro-executor + test-agent |
+| Status | ✅ LIVE |
 
-```bash
-docker run -d \
-  --name spark-a-governance \
-  --gpus all --ipc=host \
-  --restart unless-stopped \
-  -p 8001:8000 \
-  -e VLLM_FLASHINFER_MOE_BACKEND=latency \
-  -v ~/hf-cache:/root/.cache/huggingface \
-  nvcr.io/nvidia/vllm:26.03-py3 \
-  vllm serve Qwen/Qwen3.6-35B-A3B-FP8 \
-  --served-model-name qwen3.6-35b \
-  --max-model-len 131072 \
-  --gpu-memory-utilization 0.75 \
-  --enable-prefix-caching
-```
-
-### Spark B
-
-```bash
-docker run -d \
-  --name spark-b-coder \
-  --gpus all --ipc=host \
-  --restart unless-stopped \
-  -p 8001:8000 \
-  -e VLLM_FLASHINFER_MOE_BACKEND=latency \
-  -v ~/hf-cache:/root/.cache/huggingface \
-  nvcr.io/nvidia/vllm:26.03-py3 \
-  vllm serve Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8 \
-  --served-model-name qwen3-coder-30b \
-  --max-model-len 100000 \
-  --gpu-memory-utilization 0.55 \
-  --enable-auto-tool-choice \
-  --tool-call-parser qwen3_coder \
-  --enable-prefix-caching
-```
+Adapter: `callCoderNext()` in `services/scheduler-api/src/vllm-adapter.ts`.
 
 ---
 
-## Performance (gemessen 23. April 2026)
+### Spark C — Fast Reviewer (Pipeline Tier 1)
 
-MetrikSpark ASpark BSingle50.4 tok/s\~32 tok/s4× parallel116 tok/s\~55 tok/s10× paralleln/a101.4 tok/sGPU Temp (Last)68°C\~70°CPrefix Cache Hit65%65%
+| Parameter | Wert |
+|---|---|
+| IP | 192.168.0.99 |
+| Port | 8001 |
+| Hostname | edgexpert-509d |
+| Container | `vllm_node` (launch-cluster.sh) |
+| Image | `vllm-node` (lokal, eugr/spark-vllm-docker) |
+| Modell | `google/gemma-4-26B-A4B-it` |
+| gpu_memory_utilization | 0.70 |
+| max_model_len | 65536 |
+| load-format | `instanttensor` |
+| quantization | `fp8` |
+| tool-call-parser | `gemma4` |
+| reasoning-parser | `gemma4` (Output via extractContentOnly() verworfen) |
+| Throughput | ~35 tok/s single / ~180 tok/s @ 8-par |
+| Rolle | Review-Pipeline Tier 1 |
+| Status | ✅ LIVE |
+
+Adapter: `callGemmaReviewer()` in `services/scheduler-api/src/vllm-adapter.ts`.
 
 ---
 
-## Wichtige vLLM Hinweise
+### Spark D — Senior Reviewer (Pipeline Tier 2)
 
-- `VLLM_FLASHINFER_MOE_BACKEND=latency` IMMER setzen — throughput hat SM120 Bug
-- Warnung "SM 12.1 &gt; max supported 12.0" ist harmlos
-- Spark B: `max_model_len 100000` (nicht 131072) — KV Cache zu knapp bei 131072
-- Nach System-Update auf Spark: **Reboot nötig** damit CUDA Forward Compatibility aktiv wird
+| Parameter | Wert |
+|---|---|
+| IP | 192.168.0.101 |
+| Port | 8001 |
+| Hostname | edgexpert-0dc8 |
+| Container | `vllm_node` (launch-cluster.sh, MXFP4-Build) |
+| Image | `vllm-node` (lokal, eugr/spark-vllm-docker MXFP4) |
+| Modell | `openai/gpt-oss-120b` |
+| quantization | `mxfp4` |
+| mxfp4-backend | `CUTLASS` |
+| mxfp4-layers | `moe,qkv,o,lm_head` |
+| gpu_memory_utilization | 0.70 |
+| attention-backend | `FLASHINFER` |
+| tool-call-parser | `openai` |
+| reasoning-parser | `openai_gptoss` (Output via extractContentOnly() verworfen) |
+| Throughput | ~59 tok/s single / ~150 tok/s @ 4-par |
+| Rolle | Review-Pipeline Tier 2 (High-Risk mandatory) |
+| Status | ✅ LIVE |
+
+Adapter: `callGPTOSSReviewer()` in `services/scheduler-api/src/vllm-adapter.ts`.
+
+---
+
+### Escalation — Claude Sonnet/Opus
+
+| Parameter | Wert |
+|---|---|
+| Zugang | Claude Code Max 200 |
+| Agent | `senior-coding-agent` |
+| Wann | ESCALATE aus Spark D / HUMAN_NEEDED nicht lösbar |
+| Status | ✅ AKTIV |
+
+---
+
+## Reasoning-Filter (global)
+
+`extractContentOnly()` in `services/scheduler-api/src/vllm-adapter.ts` filtert bei allen Modellen:
+- `choices[].message.reasoning` → droppen
+- `choices[].message.reasoning_content` → droppen
+- Nur `choices[].message.content` verwenden
+
+---
+
+## Performance (live verifiziert 29. April 2026)
+
+| Node | Modell | Single tok/s | Par tok/s | GPU-Util |
+|---|---|---|---|---|
+| Spark A | Qwen3.6-35B FP8 | ~50 | ~116 @ 4-par | 0.70 |
+| Spark B | Qwen3-Coder-Next FP8 | ~47 | — | 0.88 |
+| Spark C | Gemma 4 26B FP8 | ~35 | ~180 @ 8-par | 0.70 |
+| Spark D | GPT-OSS 120B MXFP4 | ~59 | ~150 @ 4-par | 0.70 |
