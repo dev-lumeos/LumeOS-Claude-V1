@@ -117,6 +117,83 @@ describe('Permission Gateway — Migration Guard', () => {
   })
 })
 
+describe('Permission Gateway — A.2 FILES_BLOCKED + SCOPE Enforcement', () => {
+
+  it('files_blocked: Write auf gesperrten Pfad → BLOCKED', () => {
+    const result = authorizeToolCall(
+      { agentId: 'micro-executor', workorderId: 'WO-test-001', tool: 'write', targetPath: 'services/auth/middleware.ts' },
+      {
+        scope_files: ['services/auth/middleware.ts'],
+        context_files: [], acceptance_files: [], already_written_files: [],
+        files_blocked: ['services/auth/**'],
+      }
+    )
+    assert.equal(result.allowed, false)
+    assert.equal(result.blockedBy, 'files_blocked_policy')
+  })
+
+  it('files_blocked: Write auf nicht-gesperrten Pfad → PASS', () => {
+    const result = authorizeToolCall(
+      { agentId: 'micro-executor', workorderId: 'WO-test-001', tool: 'write', targetPath: 'services/nutrition-api/src/utils/helper.ts' },
+      {
+        scope_files: ['services/nutrition-api/src/utils/helper.ts'],
+        context_files: [], acceptance_files: [], already_written_files: [],
+        files_blocked: ['services/auth/**'],
+      }
+    )
+    assert.equal(result.allowed, true)
+  })
+
+  it('files_blocked: exakter Pfad-Match → BLOCKED', () => {
+    const result = authorizeToolCall(
+      { agentId: 'micro-executor', workorderId: 'WO-test-001', tool: 'write', targetPath: 'packages/types/src/index.ts' },
+      {
+        scope_files: ['packages/types/src/index.ts'],
+        context_files: [], acceptance_files: [], already_written_files: [],
+        files_blocked: ['packages/types/src/index.ts'],
+      }
+    )
+    assert.equal(result.allowed, false)
+    assert.equal(result.blockedBy, 'files_blocked_policy')
+  })
+
+  it('Write außerhalb scope_files → BLOCKED (permissions.write)', () => {
+    const result = authorizeToolCall(
+      { agentId: 'micro-executor', workorderId: 'WO-test-001', tool: 'write', targetPath: 'services/other/file.ts' },
+      {
+        scope_files: ['services/nutrition-api/src/utils/helper.ts'],
+        context_files: [], acceptance_files: [], already_written_files: [],
+      }
+    )
+    assert.equal(result.allowed, false)
+    assert.equal(result.blockedBy, 'permissions.write')
+  })
+
+  it('Write innerhalb scope_files → PASS', () => {
+    const result = authorizeToolCall(
+      { agentId: 'micro-executor', workorderId: 'WO-test-001', tool: 'write', targetPath: 'services/nutrition-api/src/utils/helper.ts' },
+      {
+        scope_files: ['services/nutrition-api/src/utils/helper.ts'],
+        context_files: [], acceptance_files: [], already_written_files: [],
+      }
+    )
+    assert.equal(result.allowed, true)
+  })
+
+  it('Read-only Agent (review-agent): Write immer BLOCKED', () => {
+    const result = authorizeToolCall(
+      { agentId: 'review-agent', workorderId: 'WO-test-001', tool: 'write', targetPath: 'services/api/routes.ts' },
+      {
+        scope_files: ['services/api/routes.ts'],
+        context_files: [], acceptance_files: [], already_written_files: [],
+        files_blocked: [],
+      }
+    )
+    assert.equal(result.allowed, false)
+    assert.equal(result.blockedBy, 'profile.write_allowed')
+  })
+})
+
 describe('Permission Gateway — MiniMax Mode Guard', () => {
 
   it('senior-coding-agent in mode1 → blockiert', () => {

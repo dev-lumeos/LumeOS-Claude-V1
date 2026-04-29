@@ -15,7 +15,7 @@
  *   - SQL AST Guard statt Regex
  */
 
-export const PERMISSION_GATE_VERSION = '0.2.1'
+export const PERMISSION_GATE_VERSION = '0.3.0'
 
 import fs          from 'node:fs'
 import path        from 'node:path'
@@ -51,6 +51,8 @@ interface WorkorderContext {
   context_files:         string[]
   acceptance_files:      string[]
   already_written_files: string[]
+  /** A.2: Pfade die der Worker explizit nicht berühren darf. */
+  files_blocked?:        string[]
 }
 
 interface RunContext {
@@ -105,6 +107,17 @@ function pathIsAllowed(rawTarget: string, allowedPatterns: string[]): boolean {
     if (pattern === target)             return true
     return micromatch.isMatch(target, pattern)
   })
+}
+
+/**
+ * A.2: Öffentliche Utility für Post-Execution Scope-Check im Dispatcher.
+ * Prüft ob ein Pfad innerhalb der erlaubten scope_files liegt.
+ * Nutzt dieselbe micromatch-Logik wie interne Pfadprüfung.
+ */
+export function isPathInScope(targetPath: string, scopeFiles: string[]): boolean {
+  if (scopeFiles.length === 0) return true  // kein Scope definiert → kein Check
+  try { return pathIsAllowed(targetPath, scopeFiles) }
+  catch { return false }
 }
 
 // ─── ENV-Schutz ──────────────────────────────────────────────────────────────
@@ -260,6 +273,16 @@ export function authorizeToolCall(
 
       try { normalizeRepoPath(req.targetPath) }
       catch (e: any) { return { allowed: false, reason: e.message, blockedBy: 'path_security' } }
+
+      // A.2: files_blocked — explizit verbotene Pfade, höchste Priorität
+      if (ctx.files_blocked && ctx.files_blocked.length > 0) {
+        try {
+          if (pathIsAllowed(req.targetPath, ctx.files_blocked))
+            return { allowed: false, reason: `Datei in files_blocked: ${req.targetPath}`, blockedBy: 'files_blocked_policy' }
+        } catch (e: any) {
+          return { allowed: false, reason: e.message, blockedBy: 'path_security' }
+        }
+      }
 
       // Tool-Profil: write_allowed hart prüfen
       if (profile.write_allowed === false)

@@ -19,6 +19,7 @@ export type EventType =
   | 'review_pipeline_rewrite' | 'review_pipeline_human_needed'
   | 'review_pipeline_retry'
   | 'governance_parse_error'  | 'governance_violation'
+  | 'files_scope_violation'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -69,6 +70,7 @@ const VALID_EVENTS = new Set<string>([
   'review_pipeline_rewrite', 'review_pipeline_human_needed',
   'review_pipeline_retry',
   'governance_parse_error',  'governance_violation',
+  'files_scope_violation',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
@@ -134,3 +136,10 @@ export const auditReviewPipelineHumanNeeded = (p: ReviewBase) =>
 
 export const auditReviewPipelineRetry = (p: ReviewBase & Pick<AuditEvent, 'retry_attempt'>) =>
   writeAuditEvent({ event: 'review_pipeline_retry', severity: 'warning', ...p })
+
+// ─── Files Scope Helpers ──────────────────────────────────────────────────────
+
+type ScopeBase = Pick<AuditEvent, 'run_id' | 'workorder_id' | 'agent_id' | 'orchestration_mode' | 'target_path' | 'reason'>
+
+export const auditFilesScopeViolation = (p: ScopeBase) =>
+  writeAuditEvent({ event: 'files_scope_violation', severity: 'critical', blocked_by: 'files_scope_check', ...p })

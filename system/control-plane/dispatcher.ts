@@ -32,7 +32,7 @@ import Ajv  from 'ajv'
 import * as state  from '../state/state-manager'
 import * as audit  from '../state/audit-writer'
 import { checkApproval, consumeApproval, operationMayRequireApproval } from '../approval/approval-gate'
-import { authorizeToolCall } from '../agent-registry/authorize-tool-call'
+import { authorizeToolCall, isPathInScope } from '../agent-registry/authorize-tool-call'
 import { loadSkills, buildSystemPrompt } from './skill-loader'
 import {
   parseOrchestratorIntent,
@@ -412,7 +412,8 @@ export async function dispatchWorkorder(
 
     // 9. Permission Gateway — mcpTool + mcpOperation weitergeleitet
     const ctx = { scope_files: wo.scope_files, context_files: wo.context_files,
-      acceptance_files: wo.acceptance_files, already_written_files: state.getWrittenFiles(runId) }
+      acceptance_files: wo.acceptance_files, already_written_files: state.getWrittenFiles(runId),
+      files_blocked: wo.files_blocked ?? [] }
     const auth = authorizeToolCall(
       { agentId: wo.agent_id, workorderId: wo.workorder_id, tool: toolReq.tool,
         targetPath: toolReq.targetPath, command: toolReq.command,
@@ -436,6 +437,26 @@ export async function dispatchWorkorder(
 
     // 11. State + Approval NUR bei Erfolg
     if (toolResult.success) {
+
+      // 11a-pre. A.2: Post-Execution Scope-Check (Defense in Depth)
+      // Sekundäre Absicherung: nach executeTool() prüfen ob targetPath in scope_files liegt.
+      // Fängt edge cases ab die durch zu breite Permission-Patterns entweichen könnten.
+      if (toolReq.tool === 'write' && toolReq.targetPath && wo.scope_files.length > 0) {
+        if (!isPathInScope(toolReq.targetPath, wo.scope_files)) {
+          audit.auditFilesScopeViolation({
+            run_id: runId,
+            workorder_id: wo.workorder_id,
+            agent_id: wo.agent_id,
+            orchestration_mode: orchestrationMode,
+            target_path: toolReq.targetPath,
+            reason: `Post-execution scope violation: ${toolReq.targetPath} not in scope_files`,
+          })
+          await state.endRun(runId, 'blocked')
+          await state.updateWorkorderStatus(wo.workorder_id, 'failed')
+          return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
+            error: `FILES_SCOPE_VIOLATION: ${toolReq.targetPath} not in scope_files` }
+        }
+      }
 
       // 11a. Review Pipeline Gate (V1: write-only, see RULES.md)
       // Spark 3 + Spark 4 prüfen den Worker-Output bevor State persistiert wird.
