@@ -17,6 +17,7 @@ export type EventType =
   | 'orchestrator_started' | 'orchestrator_switched'
   | 'review_pipeline_started' | 'review_pipeline_done'
   | 'review_pipeline_rewrite' | 'review_pipeline_human_needed'
+  | 'governance_parse_error'  | 'governance_violation'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -64,6 +65,7 @@ const VALID_EVENTS = new Set<string>([
   'lock_acquired', 'lock_released', 'orchestrator_started', 'orchestrator_switched',
   'review_pipeline_started', 'review_pipeline_done',
   'review_pipeline_rewrite', 'review_pipeline_human_needed',
+  'governance_parse_error',  'governance_violation',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])

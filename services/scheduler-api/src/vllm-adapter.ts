@@ -181,7 +181,7 @@ export function createVllmCallModel(node: NodeId) {
   ): Promise<string> {
 
     // ── Qwen3.6 Orchestrator (Spark 1, Port 8001) ────────────────────────────
-    if (node === 'qwen3.6' || node === 'spark-a') {
+    if (node === 'spark-a') {
       const endpoint = NODE_PROFILES['spark-a']?.endpoint
         ?? process.env.SPARK_A_ENDPOINT
         ?? 'http://192.168.0.128:8001'
