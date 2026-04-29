@@ -20,10 +20,10 @@
 import {
   validateReviewOutput,
   requiresSeniorReview,
-  type ReviewState,
   type ReviewOutput,
 } from './governance-validator'
 import { callGPTOSSReviewer } from '../../services/scheduler-api/src/vllm-adapter'
+import type { PipelineAuditEvent } from './pipeline-audit'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -58,26 +58,9 @@ export interface PipelineDeps {
 
   /**
    * Audit-Logger. Optional — wenn nicht gesetzt, wird gestummt geloggt.
+   * Siehe pipeline-audit.ts für File- und Memory-Writer.
    */
   audit?: (event: PipelineAuditEvent) => void | Promise<void>
-}
-
-export interface PipelineAuditEvent {
-  event:
-    | 'review_started'
-    | 'review_completed'
-    | 'review_escalated'
-    | 'review_rewrite_loop'
-    | 'claude_call_allowed'
-    | 'claude_call_blocked'
-    | 'human_review_required'
-  tier: PipelineTier | 'spark-c-non-blocking'
-  wo_id: string
-  reason?: string
-  status?: ReviewState
-  risk?: string
-  confidence?: number
-  loop_count?: number
 }
 
 export type PipelineResult =
@@ -101,11 +84,17 @@ function parseReviewerJson(content: string): ReviewOutput {
 }
 
 /**
- * Anwender confidence-Trigger. Wenn confidence < 0.75 → ESCALATE,
- * auch wenn status: PASS. Siehe RULES.md Sektion 4.
+ * Override-Trigger anwenden — wenn status=PASS aber Reviewer signalisiert
+ * Unsicherheit (low confidence ODER requires_claude=true), wird PASS zu ESCALATE.
+ *
+ * Siehe RULES.md Sektion 4 (Confidence Routing) und Sektion 7 (Output-Contract).
  */
-function applyConfidenceGate(review: ReviewOutput): ReviewOutput {
-  if (review.confidence < CONFIDENCE_THRESHOLD && review.status === 'PASS') {
+function applyEscalationOverrides(review: ReviewOutput): ReviewOutput {
+  if (review.status !== 'PASS') return review
+  if (review.confidence < CONFIDENCE_THRESHOLD) {
+    return { ...review, status: 'ESCALATE' }
+  }
+  if (review.requires_claude === true) {
     return { ...review, status: 'ESCALATE' }
   }
   return review
@@ -197,7 +186,7 @@ async function runSingleTier(
       return { failureReason: 'invalid_json' }
     }
 
-    review = applyConfidenceGate(review)
+    review = applyEscalationOverrides(review)
 
     await deps.audit?.({
       event: 'review_completed',
