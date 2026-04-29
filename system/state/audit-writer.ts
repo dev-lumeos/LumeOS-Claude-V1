@@ -22,6 +22,7 @@ export type EventType =
   | 'governance_parse_error'  | 'governance_violation'
   | 'files_scope_violation'
   | 'wo_status_invalid_transition'
+  | 'preflight_go' | 'preflight_hold' | 'preflight_reject'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -76,6 +77,7 @@ const VALID_EVENTS = new Set<string>([
   'governance_parse_error',  'governance_violation',
   'files_scope_violation',
   'wo_status_invalid_transition',
+  'preflight_go', 'preflight_hold', 'preflight_reject',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])

@@ -44,6 +44,7 @@ import { runReviewPipeline } from './review-pipeline'
 import { createFileAuditWriter } from './pipeline-audit'
 import { createFileMetricsWriter } from './pipeline-metrics'
 import { isAutoRetryAllowed, requiresSparkD, inferCategoryFromTask } from './risk-categories'
+import { runPreflight } from './scheduler-preflight'
 import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
@@ -272,6 +273,24 @@ export async function dispatchWorkorder(
   const schema = validateWorkorder(wo)
   if (!schema.valid)
     return { status: 'failed', run_id: 'INVALID', workorder_id: wo.workorder_id, error: `Schema: ${schema.errors}` }
+
+  // 1b. D.2: Scheduler Preflight — GO / HOLD / REJECT
+  const preflight = runPreflight(wo)
+  audit.writeAuditEvent({
+    event: preflight.verdict === 'GO'     ? 'preflight_go'
+         : preflight.verdict === 'HOLD'   ? 'preflight_hold'
+         :                                  'preflight_reject',
+    orchestration_mode: orchestrationMode,
+    workorder_id: wo.workorder_id,
+    agent_id: wo.agent_id,
+    reason: preflight.reason,
+  })
+  if (preflight.verdict === 'REJECT')
+    return { status: 'failed',  run_id: 'PREFLIGHT', workorder_id: wo.workorder_id,
+      error: `PREFLIGHT_REJECT: ${preflight.reason}` }
+  if (preflight.verdict === 'HOLD')
+    return { status: 'blocked', run_id: 'PREFLIGHT', workorder_id: wo.workorder_id,
+      error: `PREFLIGHT_HOLD: ${preflight.reason}` }
 
   // 2. Run ID + State
   const runId = generateRunId()
