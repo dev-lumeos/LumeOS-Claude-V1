@@ -175,6 +175,42 @@
     }
   },
 
+  "fast-reviewer-agent": {
+    "default": {
+      "node": "spark-c",
+      "port": 8001,
+      "model": "google/gemma-4-26B-A4B-it",
+      "endpoint": "http://192.168.0.99:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 65536,
+      "note": "Spark 3 — Fast Quality Layer, see RULES.md"
+    },
+    "escalation": {
+      "node": "spark-d",
+      "trigger": "escalate_or_low_confidence_or_invalid_json_or_rewrite_limit",
+      "note": "Forwards to senior-reviewer-agent"
+    }
+  },
+
+  "senior-reviewer-agent": {
+    "default": {
+      "node": "spark-d",
+      "port": 8001,
+      "model": "openai/gpt-oss-120b",
+      "endpoint": "http://192.168.0.101:8001",
+      "temperature": 0.0,
+      "max_context": 8192,
+      "note": "Spark 4 — Senior Review Layer (auth/rls/migration/security mandatory), see RULES.md"
+    },
+    "escalation": {
+      "node": "claude_code",
+      "model": "claude-opus-4-5",
+      "trigger": "escalate_or_low_confidence_or_invalid_json_or_rewrite_limit",
+      "note": "Claude Code Max 200 Plan — last automated decider"
+    }
+  },
+
   "mealcam-agent": {
     "default": {
       "node": "rtx5090",
