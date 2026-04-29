@@ -1,0 +1,2 @@
+{"timestamp":"2026-04-29T11:26:59.215Z","run_id":"RUN-20260429-6298","wo_id":"WO-realrun-001","tier":"spark-c","outcome":"invalid_json","latency_ms":2888,"escalated":true,"rewrite_count":0}
+{"timestamp":"2026-04-29T11:27:02.402Z","run_id":"RUN-20260429-6298","wo_id":"WO-realrun-001","tier":"spark-d","outcome":"PASS","confidence":0.99,"latency_ms":3187,"escalated":false,"rewrite_count":0}
