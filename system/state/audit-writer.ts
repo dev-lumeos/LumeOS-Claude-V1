@@ -17,6 +17,7 @@ export type EventType =
   | 'orchestrator_started' | 'orchestrator_switched'
   | 'review_pipeline_started' | 'review_pipeline_done'
   | 'review_pipeline_rewrite' | 'review_pipeline_human_needed'
+  | 'review_pipeline_retry'
   | 'governance_parse_error'  | 'governance_violation'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
@@ -44,6 +45,7 @@ export interface AuditEvent {
   spark_node?:         string
   duration_ms?:        number
   error_code?:         string
+  retry_attempt?:      number
   // Review pipeline (RULES.md): high-level summary, detail in pipeline-audit.jsonl
   review_tier?:        'spark-c' | 'spark-d' | 'claude'
   review_reason?:      string
@@ -65,6 +67,7 @@ const VALID_EVENTS = new Set<string>([
   'lock_acquired', 'lock_released', 'orchestrator_started', 'orchestrator_switched',
   'review_pipeline_started', 'review_pipeline_done',
   'review_pipeline_rewrite', 'review_pipeline_human_needed',
+  'review_pipeline_retry',
   'governance_parse_error',  'governance_violation',
 ])
 
@@ -128,3 +131,6 @@ export const auditReviewPipelineRewrite     = (p: ReviewBase) =>
 
 export const auditReviewPipelineHumanNeeded = (p: ReviewBase) =>
   writeAuditEvent({ event: 'review_pipeline_human_needed', severity: 'warning', ...p })
+
+export const auditReviewPipelineRetry = (p: ReviewBase & Pick<AuditEvent, 'retry_attempt'>) =>
+  writeAuditEvent({ event: 'review_pipeline_retry', severity: 'warning', ...p })

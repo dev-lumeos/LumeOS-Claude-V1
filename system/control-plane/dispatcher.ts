@@ -47,6 +47,12 @@ import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
 const MAX_REWRITE_LOOPS = 2
 
+// V2: Auto-Retry — maximale Worker-Neustarts bei Pipeline-REWRITE
+const MAX_WORKER_RETRIES = 2
+
+// V2: High-Risk-Kategorien — kein Auto-Retry, immer manuell eskalieren
+const HIGH_RISK_CATEGORIES = new Set(['migration', 'security', 'auth', 'rls', 'medical'])
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface Workorder {
@@ -286,13 +292,20 @@ export async function dispatchWorkorder(
     const systemPrompt = buildSystemPrompt(loadAgentSpec(agentDef.spec_file), skills.loaded)
     const woType = inferWorkorderType(wo.task)
 
+    // V2: Worker-Retry-Loop — bei Pipeline-REWRITE wird der Worker neu gestartet.
+    // Harte Regeln: kein Retry bei High-Risk-Kategorien, max MAX_WORKER_RETRIES.
+    let workerRetryCount = 0
+    let workerTask = wo.task
+
+    workerRetryLoop: while (true) {
+
     let modelOutput = ''
     let intent: OrchestratorIntent | null = null
     let rewriteCount = 0
 
     while (rewriteCount <= MAX_REWRITE_LOOPS) {
       modelOutput = await deps.callModel(activeRoute, systemPrompt, rewriteCount === 0
-        ? wo.task
+        ? workerTask
         : `REWRITE_REQUEST: Vorheriger Output war ungültig. Behebe folgende Verletzung und gib nur valides JSON zurück: ${intent ? JSON.stringify(intent) : modelOutput}`
       )
 
@@ -430,6 +443,7 @@ export async function dispatchWorkorder(
         const pipelineResult = await runReviewPipeline(
           {
             wo_id: wo.workorder_id,
+            run_id: runId,
             output: toolReq.content,
           },
           {
@@ -442,10 +456,29 @@ export async function dispatchWorkorder(
           {
             callFastReviewer: callGemmaReviewer,
             audit: pipelineAudit,
+            getRewriteCount:      (rId, tier) => state.getRewriteCount(rId, tier),
+            incrementRewriteCount: (rId, tier) => state.incrementRewriteCount(rId, tier),
           },
         )
 
         if (pipelineResult.kind === 'rewrite') {
+          // V2: Auto-Retry — bei erlaubten Kategorien und unter Retry-Limit
+          const canRetry = !HIGH_RISK_CATEGORIES.has(category) && workerRetryCount < MAX_WORKER_RETRIES
+          if (canRetry) {
+            workerRetryCount++
+            workerTask = `[RETRY ${workerRetryCount}/${MAX_WORKER_RETRIES}] Reviewer-Feedback: ${pipelineResult.reason}\n\nOriginal Task: ${wo.task}`
+            await state.incrementRewriteCount(runId, pipelineResult.tier)
+            audit.auditReviewPipelineRetry({
+              run_id: runId,
+              workorder_id: wo.workorder_id,
+              agent_id: wo.agent_id,
+              orchestration_mode: orchestrationMode,
+              review_tier: pipelineResult.tier,
+              review_reason: pipelineResult.reason,
+              retry_attempt: workerRetryCount,
+            })
+            continue workerRetryLoop
+          }
           await state.endRun(runId, 'failed')
           await state.updateWorkorderStatus(wo.workorder_id, 'review')
           audit.auditReviewPipelineRewrite({
@@ -505,6 +538,8 @@ export async function dispatchWorkorder(
       : audit.auditJobFailed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: toolResult.error })
 
     return { status: toolResult.success ? 'completed' : 'failed', run_id: runId, workorder_id: wo.workorder_id, error: toolResult.error }
+
+    } // end workerRetryLoop
 
   } catch (err: any) {
     await state.endRun(runId, 'failed')
