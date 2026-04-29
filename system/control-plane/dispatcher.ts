@@ -274,6 +274,18 @@ export async function dispatchWorkorder(
   if (!schema.valid)
     return { status: 'failed', run_id: 'INVALID', workorder_id: wo.workorder_id, error: `Schema: ${schema.errors}` }
 
+  // 1a. C.1: System Stop — globale Notbremse, vor Preflight und vor startRun
+  const stopStatus = state.isSystemStopped()
+  if (stopStatus.stopped) {
+    audit.writeAuditEvent({
+      event: 'preflight_hold', orchestration_mode: orchestrationMode,
+      workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+      reason: `SYSTEM_STOP: ${stopStatus.reason}`,
+    })
+    return { status: 'blocked', run_id: 'SYSTEM_STOP', workorder_id: wo.workorder_id,
+      error: `SYSTEM_STOP: ${stopStatus.reason}` }
+  }
+
   // 1b. D.2: Scheduler Preflight — GO / HOLD / REJECT
   const preflight = runPreflight(wo)
   audit.writeAuditEvent({

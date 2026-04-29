@@ -18,7 +18,7 @@ import path from 'node:path'
 import Ajv  from 'ajv'
 
 import type { Workorder } from './dispatcher'
-import { checkScopeConflict, isDbMigrationLocked } from '../state/state-manager'
+import { checkScopeConflict, isDbMigrationLocked, isSystemStopped } from '../state/state-manager'
 import { inferCategoryFromTask }                   from './risk-categories'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -51,6 +51,8 @@ export interface PreflightDeps {
   isDbMigrationLocked: () => { locked: boolean; run_id?: string }
   /** Lädt agents.json. */
   loadAgents:          () => Record<string, any>
+  /** C.1: Prüft ob System Stop aktiv ist. */
+  isSystemStopped:     () => { stopped: boolean; reason?: string }
 }
 
 function makeDefaultDeps(): PreflightDeps {
@@ -69,6 +71,7 @@ function makeDefaultDeps(): PreflightDeps {
     },
     checkScopeConflict,
     isDbMigrationLocked,
+    isSystemStopped,
     loadAgents,
   }
 }
@@ -91,6 +94,14 @@ function validateWorkorderSchema(wo: unknown): { valid: boolean; errors?: string
 }
 
 // ─── Einzelne Checks ─────────────────────────────────────────────────────────
+
+function checkSystemNotStopped(deps: PreflightDeps): PreflightCheck {
+  const name = 'system_not_stopped'
+  const stop = deps.isSystemStopped()
+  if (stop.stopped)
+    return { name, passed: false, verdict: 'HOLD', reason: `System Stop aktiv: ${stop.reason}` }
+  return { name, passed: true, verdict: 'GO' }
+}
 
 function checkSchema(wo: Workorder): PreflightCheck {
   const name = 'schema_valid'
@@ -205,6 +216,8 @@ export function runPreflight(
   deps: PreflightDeps = makeDefaultDeps(),
 ): PreflightResult {
   const checks: PreflightCheck[] = [
+    // C.1: System Stop — höchste Priorität, vor allen anderen Checks
+    checkSystemNotStopped(deps),
     // REJECT-Checks (permanente Bedingungen)
     checkSchema(wo),
     checkAgentExists(wo, deps),

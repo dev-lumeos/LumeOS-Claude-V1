@@ -32,6 +32,7 @@ function makeDeps(overrides: Partial<PreflightDeps> = {}): PreflightDeps {
     getActiveWorkorders: () => [],
     checkScopeConflict:  () => null,
     isDbMigrationLocked: () => ({ locked: false }),
+    isSystemStopped:     () => ({ stopped: false }),
     loadAgents:          () => ({ 'micro-executor': { type: 'executor' }, 'db-migration-agent': { type: 'db_specialist' } }),
     ...overrides,
   }
@@ -191,8 +192,8 @@ describe('Preflight — Priorität REJECT > HOLD > GO', () => {
     assert.equal(result.verdict, 'REJECT')
   })
 
-  it('checks-Array enthält alle 10 Checks', () => {
+  it('checks-Array enthält alle 11 Checks', () => {
     const result = runPreflight(BASE_WO, makeDeps())
-    assert.equal(result.checks.length, 10)
+    assert.equal(result.checks.length, 11)
   })
 })

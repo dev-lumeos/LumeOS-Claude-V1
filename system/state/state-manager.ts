@@ -1,9 +1,9 @@
 /**
- * LUMEOS State Manager V1.3.0
+ * LUMEOS State Manager V1.4.0
  * Atomic Write + File Lock (pid + created_at + expires_at)
  * Stale Lock Threshold: 90 Sekunden
- * Approval Tokens laufen über state-manager (gemeinsamer Lock)
- * V1.3: Scope-Locks + DB-Migration-Lock für parallele WO-Sicherheit (A.3)
+ * V1.3: Scope-Locks + DB-Migration-Lock (A.3)
+ * V1.4: WO-State-Machine (D.1) + System Stop / Kill-Switch (C.1)
  */
 
 import fs   from 'node:fs'
@@ -62,6 +62,18 @@ export interface DbMigrationLock {
   expires_at: string
 }
 
+/**
+ * C.1: System Stop — globale Notbremse.
+ * Wenn aktiv: Dispatcher + Preflight blockieren alle neuen Runs.
+ * Nur manuell durch Tom oder explizite clearSystemStop() auflösbar.
+ */
+export interface SystemStop {
+  active:     true
+  reason:     string
+  stopped_at: string
+  stopped_by: string   // 'human' | 'auto' | beliebiger String
+}
+
 export interface RuntimeState {
   orchestration_mode: OrchestratorMode
   spark_mode:         SparkMode
@@ -76,6 +88,8 @@ export interface RuntimeState {
   scope_locks?:       ScopeLock[]
   /** A.3: DB-Migration-Lock — globaler Exklusiv-Lock. */
   db_migration_lock?: DbMigrationLock | null
+  /** C.1: System Stop — globale Notbremse. null = kein Stop aktiv. */
+  system_stop?:       SystemStop | null
 }
 
 interface LockMeta {
@@ -108,6 +122,7 @@ const DEFAULT_STATE: RuntimeState = {
   rewrite_counters:   {},
   scope_locks:        [],
   db_migration_lock:  null,
+  system_stop:        null,
 }
 
 // ─── File Lock ────────────────────────────────────────────────────────────────
@@ -453,6 +468,40 @@ export async function releaseDbMigrationLock(runId: string): Promise<void> {
   await mutate(s => {
     if (s.db_migration_lock?.run_id === runId) s.db_migration_lock = null
   })
+}
+
+// ─── System Stop / Kill-Switch (C.1) ─────────────────────────────────────────
+// Globale Notbremse — blockiert alle neuen Runs.
+// Nur durch clearSystemStop() auflösbar.
+// Dispatcher und Preflight prüfen isSystemStopped() vor jedem neuen Run.
+
+/**
+ * Prüft ob System Stop aktiv ist.
+ * Sync — liest direkt, kein Lock nötig (read-only).
+ */
+export function isSystemStopped(): { stopped: false } | { stopped: true; reason: string; stopped_at: string } {
+  const s = readState()
+  const stop = s.system_stop
+  if (!stop?.active) return { stopped: false }
+  return { stopped: true, reason: stop.reason, stopped_at: stop.stopped_at }
+}
+
+/**
+ * Aktiviert den System Stop. Atomic via Lock.
+ * Idempotent — zweites trigger() mit anderem reason überschreibt.
+ */
+export async function triggerSystemStop(reason: string, stoppedBy = 'human'): Promise<void> {
+  await mutate(s => {
+    s.system_stop = { active: true, reason, stopped_at: new Date().toISOString(), stopped_by: stoppedBy }
+  })
+}
+
+/**
+ * Hebt den System Stop auf. Atomic via Lock.
+ * Idempotent — clearSystemStop() wenn kein Stop aktiv: no-op.
+ */
+export async function clearSystemStop(): Promise<void> {
+  await mutate(s => { s.system_stop = null })
 }
 
 export async function writeApprovalToken(approvalId: string, token: any): Promise<void> {

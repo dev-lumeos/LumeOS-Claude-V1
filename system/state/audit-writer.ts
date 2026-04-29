@@ -23,6 +23,7 @@ export type EventType =
   | 'files_scope_violation'
   | 'wo_status_invalid_transition'
   | 'preflight_go' | 'preflight_hold' | 'preflight_reject'
+  | 'system_stop_triggered' | 'system_stop_cleared'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -78,6 +79,7 @@ const VALID_EVENTS = new Set<string>([
   'files_scope_violation',
   'wo_status_invalid_transition',
   'preflight_go', 'preflight_hold', 'preflight_reject',
+  'system_stop_triggered', 'system_stop_cleared',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
@@ -163,3 +165,13 @@ export const auditScopeLockReleased  = (p: LockBase) =>
 
 export const auditScopeLockConflict  = (p: LockBase) =>
   writeAuditEvent({ event: 'scope_lock_conflict', severity: 'warning', ...p })
+
+// ─── System Stop Helpers (C.1) ────────────────────────────────────────────────
+
+type StopBase = Pick<AuditEvent, 'orchestration_mode' | 'reason'>
+
+export const auditSystemStopTriggered = (p: StopBase) =>
+  writeAuditEvent({ event: 'system_stop_triggered', severity: 'critical', ...p })
+
+export const auditSystemStopCleared = (p: StopBase) =>
+  writeAuditEvent({ event: 'system_stop_cleared', severity: 'info', ...p })
