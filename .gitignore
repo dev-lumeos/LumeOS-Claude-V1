@@ -33,8 +33,9 @@ system/state/pipeline-audit.jsonl
 system/state/pipeline-audit-live.jsonl
 system/approval/approvals.json
 
-# Temp directory (Antigravity Skills, Downloads, staging)
+# Temp directory (Antigravity Skills, Downloads, staging, test artifacts)
 temp/
+tmp/
 
 # Python
 __pycache__/

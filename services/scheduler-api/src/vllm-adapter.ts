@@ -18,7 +18,7 @@ import {
 import { NODE_PROFILES } from '@lumeos/agent-core'
 import type { NodeId } from './routing'
 
-interface ModelRoutingEntry {
+export interface ModelRoutingEntry {
   node: string
   model: string
   temperature: number
