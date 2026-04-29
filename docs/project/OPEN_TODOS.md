@@ -48,22 +48,37 @@ Wenn Modell antwortet → Persistenz bewiesen.
 
 ---
 
-## Block 2 — Tooling-Hygiene (vor nächstem Doku-Edit)
+## Block 2 — Markdown-Edit-Regeln für Claude (GELÖST via Regelwerk)
 
-### 2.1 Auto-Format-Quelle finden und für Markdown abschalten
-Während dieser Session hat ein Auto-Formatter (VS Code / Cursor / Antigravity)
-mehrfach Tabellen in `STACK_REFERENCE.md`, `setup.md` etc zerstört.
+**Status: GELÖST.** Siehe `docs/project/CLAUDE_EDIT_RULES.md` für die vollständigen
+Regeln. Pflichtlektüre für jede neue Claude-Session.
 
-**Symptome:** Tabellen-Pipes verschwinden, URLs werden zu `<https://...>` mit
-Brackets, Zeilenumbrüche werden zu Konkatenationen.
+### Was war das Problem
+Tabellen wurden in Markdown-Files mehrfach zerstört (Pipes verschwunden, Zeilen
+zusammengezogen, URLs in `<...>` Brackets). Ursprüngliche Hypothese war IDE-Auto-
+Format — Tom hat verifiziert: keine externen Tools sind involviert. Verursacher
+ist Claude's eigenes Edit-Tooling (`edit_block`, `str_replace`).
 
-**Suchen:**
-- VS Code/Cursor: `editor.formatOnSave` für `[markdown]` Block → `false`
-- Antigravity: ähnliche Setting suchen
-- Globale Prettier-Config / `.editorconfig`
+### Pathologie
+String-Replace-Semantik dieser Tools ist bei Markdown brüchig:
+- Pipes (`|`) sind Tabellen-Syntax aber sehen wie Inline-Zeichen aus
+- Whitespace in Tabellen variiert (`|---|` vs `| --- |`)
+- Wenn `old_string` durch Whitespace-Drift nicht 1:1 matcht, fällt das Tool in
+  einen best-effort-Modus → Pipes/Newlines verloren
 
-Bis das aus ist: keine Doku-Edits mit der Editor-IDE. Nur via desktop-commander
-oder direkt git-edit.
+### Regel ab jetzt
+- **NIEMALS `edit_block` oder `str_replace` auf `.md` Files**
+- Stattdessen: `read_file` → komplette Modifikation in der Antwort vorbereiten →
+  `write_file` (komplette Überschreibung)
+- Nach jedem Markdown-Write: `git diff` zur Verifikation
+- TS, JSON, YAML, Python: `edit_block` weiter ok (deterministisches Whitespace)
+
+### Bekannt fehlerhafte Files (wenn im Block 4 angefasst, NEU schreiben statt fixen)
+- `docs/project/STACK_REFERENCE.md`
+- `docs/reports/benchmark_spark_a_20260423.md`
+- `docs/reports/benchmark_spark_b_20260423.md`
+- `infra/vllm/spark-a/setup.md`
+- `infra/vllm/spark-b/setup.md`
 
 ---
 
@@ -96,7 +111,8 @@ oder der Smoke-Test legt sein Test-Fixture nicht korrekt auf.
 
 ## Block 4 — Doku-Sweep (Phase 2 Cleanup)
 
-Wartet auf abgeschlossene Tooling-Hygiene (Block 2.1) damit Tabellen heil bleiben.
+**Wichtig:** Alle .md Files in diesem Block werden nach den Regeln aus
+`CLAUDE_EDIT_RULES.md` editiert (write_file komplett, kein edit_block).
 
 ### 4.1 `docs/project/STACK_REFERENCE.md`
 - Phase 2 als `LIVE` markieren statt `PENDING`
@@ -140,6 +156,8 @@ für GPT-OSS analog zu Qwen3.6).
 - `_hardware` Notes für Spark 3 + 4 ergänzen
 - `_qwen3.6_notes` ggf. erweitern um GPT-OSS-Reasoning-Filter
 - Pre-existing Notes auf aktuellen Stand bringen
+
+(JSON-Datei → `edit_block` ist hier ok laut CLAUDE_EDIT_RULES.md)
 
 ---
 
@@ -220,6 +238,7 @@ Setzt funktionale Supabase-WO-Tabelle voraus. Phase 3 / nach Permission Gateway 
 ## Was schon FERTIG ist (nicht nochmal anfassen)
 
 - ✅ RULES.md als Single Source of Truth (`system/control-plane/RULES.md`)
+- ✅ CLAUDE_EDIT_RULES.md als Markdown-Edit-Regelwerk
 - ✅ governance-validator.ts Review-Types
 - ✅ vllm-adapter.ts mit `extractContentOnly`, `callGemmaReviewer`, `callGPTOSSReviewer`
 - ✅ model_routing.json mit fast-reviewer-agent + senior-reviewer-agent
