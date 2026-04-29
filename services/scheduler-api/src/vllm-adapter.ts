@@ -26,6 +26,17 @@ interface ModelRoutingEntry {
   port?: number
 }
 
+// ─── Global Output Extractor (HARTE REGEL) ────────────────────────────────────
+// Strikt content only. Kein Fallback auf reasoning oder reasoning_content.
+// Leerer content → leerer String → upstream Fehler.
+// Siehe system/control-plane/RULES.md Sektion 6.
+
+export function extractContentOnly(response: any): string {
+  const msg = response?.choices?.[0]?.message
+  if (!msg) return ''
+  return (msg.content ?? '').trim()
+}
+
 // ─── Qwen3.6 Orchestrator callModel ───────────────────────────────────────────
 // Verwendet fetch() direkt damit chat_template_kwargs korrekt übergeben wird.
 // vllm-client unterstützt dieses Feld nicht nativ.
@@ -59,13 +70,56 @@ async function callQwen36Orchestrator(
   }
 
   const json = (await response.json()) as any
-  const content = json.choices?.[0]?.message?.content?.trim()
+  const content = extractContentOnly(json)
 
   if (!content) {
     throw new Error('QWEN_EMPTY_CONTENT')
   }
 
-  // reasoning-Feld ignorieren — nur content ist Quelle
+  return content
+}
+
+// ─── GPT-OSS Senior Reviewer callModel (Spark 4) ──────────────────────────────
+// Analog zu callQwen36Orchestrator, aber für Spark 4 (192.168.0.101:8001).
+// Reasoning-Output wird via extractContentOnly strikt verworfen.
+// Output ist als JSON erwartet — siehe RULES.md Sektion 7+8.
+//
+// Wird direkt von runReviewPipeline() aufgerufen (Option C — keine Routing-
+// Indirektion über createVllmCallModel, weil Pipeline isoliert ist).
+
+export async function callGPTOSSReviewer(
+  systemPrompt: string,
+  userMessage: string,
+  maxTokens = 800,
+): Promise<string> {
+  const endpoint = process.env.SPARK_D_ENDPOINT ?? 'http://192.168.0.101:8001'
+  const model = process.env.SPARK_D_MODEL ?? 'openai/gpt-oss-120b'
+
+  const response = await fetch(`${endpoint}/v1/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      temperature: 0.0,
+      max_tokens: maxTokens,
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error(`GPT-OSS API Error: ${response.status} ${response.statusText}`)
+  }
+
+  const json = (await response.json()) as any
+  const content = extractContentOnly(json)
+
+  if (!content) {
+    throw new Error('GPT_OSS_EMPTY_CONTENT')
+  }
+
   return content
 }
 
