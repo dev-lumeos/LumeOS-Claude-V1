@@ -14,6 +14,7 @@ export type EventType =
   | 'approval_required' | 'approval_granted' | 'approval_denied' | 'approval_expired'
   | 'mode_switch_started' | 'mode_switch_completed' | 'mode_switch_failed'
   | 'lock_acquired' | 'lock_released'
+  | 'scope_lock_acquired' | 'scope_lock_released' | 'scope_lock_conflict'
   | 'orchestrator_started' | 'orchestrator_switched'
   | 'review_pipeline_started' | 'review_pipeline_done'
   | 'review_pipeline_rewrite' | 'review_pipeline_human_needed'
@@ -65,7 +66,9 @@ const VALID_EVENTS = new Set<string>([
   'job_started', 'job_completed', 'job_failed', 'job_blocked',
   'approval_required', 'approval_granted', 'approval_denied', 'approval_expired',
   'mode_switch_started', 'mode_switch_completed', 'mode_switch_failed',
-  'lock_acquired', 'lock_released', 'orchestrator_started', 'orchestrator_switched',
+  'lock_acquired', 'lock_released',
+  'scope_lock_acquired', 'scope_lock_released', 'scope_lock_conflict',
+  'orchestrator_started', 'orchestrator_switched',
   'review_pipeline_started', 'review_pipeline_done',
   'review_pipeline_rewrite', 'review_pipeline_human_needed',
   'review_pipeline_retry',
@@ -143,3 +146,16 @@ type ScopeBase = Pick<AuditEvent, 'run_id' | 'workorder_id' | 'agent_id' | 'orch
 
 export const auditFilesScopeViolation = (p: ScopeBase) =>
   writeAuditEvent({ event: 'files_scope_violation', severity: 'critical', blocked_by: 'files_scope_check', ...p })
+
+// ─── Scope-Lock Helpers (A.3) ─────────────────────────────────────────────────
+
+type LockBase = Pick<AuditEvent, 'run_id' | 'workorder_id' | 'agent_id' | 'orchestration_mode' | 'reason'>
+
+export const auditScopeLockAcquired  = (p: LockBase) =>
+  writeAuditEvent({ event: 'scope_lock_acquired', ...p })
+
+export const auditScopeLockReleased  = (p: LockBase) =>
+  writeAuditEvent({ event: 'scope_lock_released', ...p })
+
+export const auditScopeLockConflict  = (p: LockBase) =>
+  writeAuditEvent({ event: 'scope_lock_conflict', severity: 'warning', ...p })

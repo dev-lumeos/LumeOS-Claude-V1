@@ -280,6 +280,45 @@ export async function dispatchWorkorder(
   await state.startWorkorder(wo.workorder_id, wo.agent_id, runId)
   audit.auditJobStarted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode })
 
+  // 2a. A.3: Scope-Lock erwerben — verhindert parallele WOs auf denselben Dateien
+  if (wo.scope_files.length > 0) {
+    const scopeResult = await state.acquireScopeLock(runId, wo.scope_files)
+    if (!scopeResult.acquired) {
+      audit.auditScopeLockConflict({
+        run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+        orchestration_mode: orchestrationMode,
+        reason: `scope_conflict: files [${scopeResult.conflict.conflicting_files.join(', ')}] locked by ${scopeResult.conflict.conflicting_run_id}`,
+      })
+      await state.endRun(runId, 'blocked')
+      await state.updateWorkorderStatus(wo.workorder_id, 'failed')
+      return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
+        error: `SCOPE_CONFLICT: files [${scopeResult.conflict.conflicting_files.join(', ')}] locked by run ${scopeResult.conflict.conflicting_run_id}` }
+    }
+    audit.auditScopeLockAcquired({
+      run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+      orchestration_mode: orchestrationMode,
+      reason: `scope locked: ${wo.scope_files.join(', ')}`,
+    })
+  }
+
+  // 2b. A.3: DB-Migration-Lock — globaler Exklusiv-Lock bei db-migration Kategorie
+  const category0 = wo.risk_category ?? inferCategoryFromTask(wo.task)
+  if (category0 === 'db-migration') {
+    const dbResult = await state.acquireDbMigrationLock(runId)
+    if (!dbResult.acquired) {
+      await state.releaseScopeLock(runId)
+      audit.auditScopeLockConflict({
+        run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+        orchestration_mode: orchestrationMode,
+        reason: `db_migration_conflict: locked by ${dbResult.conflicting_run_id}`,
+      })
+      await state.endRun(runId, 'blocked')
+      await state.updateWorkorderStatus(wo.workorder_id, 'failed')
+      return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
+        error: `DB_MIGRATION_CONFLICT: locked by run ${dbResult.conflicting_run_id}` }
+    }
+  }
+
   const jobStart = Date.now()
 
   try {
@@ -568,6 +607,9 @@ export async function dispatchWorkorder(
     const finalStatus = toolResult.success ? 'completed' : 'failed'
     await state.endRun(runId, finalStatus)
     await state.updateWorkorderStatus(wo.workorder_id, toolResult.success ? 'done' : 'failed')
+    await state.releaseScopeLock(runId)
+    await state.releaseDbMigrationLock(runId)
+    audit.auditScopeLockReleased({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: `run ${finalStatus}` })
     toolResult.success
       ? audit.auditJobCompleted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, duration_ms: Date.now() - jobStart })
       : audit.auditJobFailed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: toolResult.error })
@@ -578,6 +620,8 @@ export async function dispatchWorkorder(
 
   } catch (err: any) {
     await state.endRun(runId, 'failed')
+    await state.releaseScopeLock(runId)
+    await state.releaseDbMigrationLock(runId)
     audit.auditJobFailed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: err.message, error_code: 'DISPATCHER_ERROR' })
     return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id, error: err.message }
   }

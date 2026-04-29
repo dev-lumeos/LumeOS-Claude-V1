@@ -1,8 +1,9 @@
 /**
- * LUMEOS State Manager V1.2.3
+ * LUMEOS State Manager V1.3.0
  * Atomic Write + File Lock (pid + created_at + expires_at)
  * Stale Lock Threshold: 90 Sekunden
  * Approval Tokens laufen über state-manager (gemeinsamer Lock)
+ * V1.3: Scope-Locks + DB-Migration-Lock für parallele WO-Sicherheit (A.3)
  */
 
 import fs   from 'node:fs'
@@ -46,6 +47,21 @@ export interface ApprovalRef {
   status:       'pending' | 'granted' | 'denied' | 'expired' | 'consumed'
 }
 
+/** A.3: Scope-Lock — verhindert parallele WOs auf denselben Dateien. */
+export interface ScopeLock {
+  run_id:      string
+  scope_files: string[]
+  locked_at:   string
+  expires_at:  string   // TTL: SCOPE_LOCK_TTL_MS ab locked_at
+}
+
+/** A.3: DB-Migration-Lock — globaler Exklusiv-Lock, max. eine Migration gleichzeitig. */
+export interface DbMigrationLock {
+  run_id:     string
+  locked_at:  string
+  expires_at: string
+}
+
 export interface RuntimeState {
   orchestration_mode: OrchestratorMode
   spark_mode:         SparkMode
@@ -54,10 +70,12 @@ export interface RuntimeState {
   locks:              Lock[]
   approvals:          ApprovalRef[]
   audit_log_path:     string
-  /** V2: Persistierter Rewrite-Counter pro run_id + tier.
-   *  Ermöglicht Loop-Erkennung über mehrere Worker-Re-Runs hinweg.
-   *  Key: run_id → tier → count */
+  /** V2: Persistierter Rewrite-Counter pro run_id + tier. */
   rewrite_counters?:  Record<string, Record<string, number>>
+  /** A.3: Scope-Locks — verhindert parallele WOs auf denselben Dateien. */
+  scope_locks?:       ScopeLock[]
+  /** A.3: DB-Migration-Lock — globaler Exklusiv-Lock. */
+  db_migration_lock?: DbMigrationLock | null
 }
 
 interface LockMeta {
@@ -76,6 +94,8 @@ function getApprovalsPath(): string { return path.resolve(process.cwd(), 'system
 const LOCK_ACQUIRE_MS = 5_000
 const LOCK_STALE_MS   = 90_000
 const LOCK_RETRY_MS   = 50
+/** A.3: TTL für Scope-Locks und DB-Migration-Lock — 10 Minuten. */
+const SCOPE_LOCK_TTL_MS = 600_000
 
 const DEFAULT_STATE: RuntimeState = {
   orchestration_mode: 'claude_code',
@@ -86,6 +106,8 @@ const DEFAULT_STATE: RuntimeState = {
   approvals:          [],
   audit_log_path:     'system/state/audit.jsonl',
   rewrite_counters:   {},
+  scope_locks:        [],
+  db_migration_lock:  null,
 }
 
 // ─── File Lock ────────────────────────────────────────────────────────────────
@@ -222,6 +244,148 @@ export async function incrementRewriteCount(runId: string, tier: string): Promis
 export async function clearRewriteCounters(runId: string): Promise<void> {
   await mutate(s => {
     if (s.rewrite_counters) delete s.rewrite_counters[runId]
+  })
+}
+
+// ─── Scope-Locks (A.3) ───────────────────────────────────────────────────────
+// Verhindert parallele WOs auf denselben Dateien.
+// Scope-Level Lock pro run_id, TTL = SCOPE_LOCK_TTL_MS.
+// Abgelaufene Locks werden vor jedem Konflikt-Check automatisch bereinigt.
+
+export interface ScopeConflict {
+  conflicting_run_id: string
+  conflicting_files:  string[]
+}
+
+/** Bereinigt abgelaufene Scope-Locks (intern, läuft inside mutate). */
+function cleanupStaleScopeLocks(s: RuntimeState): void {
+  const now = Date.now()
+  s.scope_locks = (s.scope_locks ?? []).filter(
+    l => new Date(l.expires_at).getTime() > now
+  )
+}
+
+/**
+ * Prüft ob scope_files mit einem aktiven Scope-Lock überlappen.
+ * Sync — ruft readState() ohne Lock.
+ */
+export function checkScopeConflict(
+  scopeFiles: string[],
+  excludeRunId?: string,
+): ScopeConflict | null {
+  const state = readState()
+  const now   = Date.now()
+  const active = (state.scope_locks ?? []).filter(l =>
+    l.run_id !== excludeRunId &&
+    new Date(l.expires_at).getTime() > now
+  )
+  for (const lock of active) {
+    const overlap = scopeFiles.filter(f => lock.scope_files.includes(f))
+    if (overlap.length > 0) {
+      return { conflicting_run_id: lock.run_id, conflicting_files: overlap }
+    }
+  }
+  return null
+}
+
+/**
+ * Versucht einen Scope-Lock für runId + scopeFiles zu erwerben.
+ * Atomic via state-manager Lock.
+ * Gibt { acquired: true } oder { acquired: false, conflict } zurück.
+ */
+export async function acquireScopeLock(
+  runId: string,
+  scopeFiles: string[],
+): Promise<{ acquired: true } | { acquired: false; conflict: ScopeConflict }> {
+  let result: { acquired: true } | { acquired: false; conflict: ScopeConflict } = { acquired: true }
+
+  await mutate(s => {
+    cleanupStaleScopeLocks(s)
+
+    // Konflikt-Check innerhalb von mutate (atomarer Lese-Schreib-Zyklus)
+    const existing = (s.scope_locks ?? []).filter(l => l.run_id !== runId)
+    for (const lock of existing) {
+      const overlap = scopeFiles.filter(f => lock.scope_files.includes(f))
+      if (overlap.length > 0) {
+        result = { acquired: false, conflict: { conflicting_run_id: lock.run_id, conflicting_files: overlap } }
+        return  // kein Lock setzen
+      }
+    }
+
+    // Kein Konflikt → Lock setzen
+    if (!s.scope_locks) s.scope_locks = []
+    // Bestehenden Lock für denselben Run updaten (Idempotenz)
+    s.scope_locks = s.scope_locks.filter(l => l.run_id !== runId)
+    s.scope_locks.push({
+      run_id:      runId,
+      scope_files: scopeFiles,
+      locked_at:   new Date().toISOString(),
+      expires_at:  new Date(Date.now() + SCOPE_LOCK_TTL_MS).toISOString(),
+    })
+  })
+
+  return result
+}
+
+/** Gibt den Scope-Lock für runId frei. */
+export async function releaseScopeLock(runId: string): Promise<void> {
+  await mutate(s => {
+    s.scope_locks = (s.scope_locks ?? []).filter(l => l.run_id !== runId)
+  })
+}
+
+/** Alle aktiven (nicht-abgelaufenen) Scope-Locks. */
+export function getActiveScopeLocks(): ScopeLock[] {
+  const now = Date.now()
+  return (readState().scope_locks ?? []).filter(
+    l => new Date(l.expires_at).getTime() > now
+  )
+}
+
+// ─── DB-Migration-Lock (A.3) ─────────────────────────────────────────────────
+// Globaler Exklusiv-Lock — max. eine Migration gleichzeitig.
+
+/**
+ * Prüft ob ein aktiver DB-Migration-Lock existiert.
+ * Sync — ruft readState() ohne Lock.
+ */
+export function isDbMigrationLocked(): { locked: false } | { locked: true; run_id: string } {
+  const state = readState()
+  const lock  = state.db_migration_lock
+  if (!lock) return { locked: false }
+  if (new Date(lock.expires_at).getTime() <= Date.now()) return { locked: false }
+  return { locked: true, run_id: lock.run_id }
+}
+
+/**
+ * Versucht den globalen DB-Migration-Lock zu erwerben.
+ * Gibt { acquired: true } oder { acquired: false, conflicting_run_id } zurück.
+ */
+export async function acquireDbMigrationLock(
+  runId: string,
+): Promise<{ acquired: true } | { acquired: false; conflicting_run_id: string }> {
+  let result: { acquired: true } | { acquired: false; conflicting_run_id: string } = { acquired: true }
+
+  await mutate(s => {
+    const existing = s.db_migration_lock
+    if (existing && new Date(existing.expires_at).getTime() > Date.now() && existing.run_id !== runId) {
+      result = { acquired: false, conflicting_run_id: existing.run_id }
+      return
+    }
+    s.db_migration_lock = {
+      run_id:     runId,
+      locked_at:  new Date().toISOString(),
+      expires_at: new Date(Date.now() + SCOPE_LOCK_TTL_MS).toISOString(),
+    }
+  })
+
+  return result
+}
+
+/** Gibt den DB-Migration-Lock für runId frei. */
+export async function releaseDbMigrationLock(runId: string): Promise<void> {
+  await mutate(s => {
+    if (s.db_migration_lock?.run_id === runId) s.db_migration_lock = null
   })
 }
 
