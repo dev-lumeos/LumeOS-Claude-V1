@@ -4,6 +4,11 @@
 # Modell: Qwen/Qwen3-Coder-30B-A3B-Instruct-FP8
 # vLLM: 0.17.1 (nvcr.io/nvidia/vllm:26.03-py3)
 
+> **HISTORISCH — 29. April 2026**
+> Dieser Benchmark misst **Qwen3-Coder-30B-A3B-FP8** — das war der Spark B Stack bis 28. April 2026.
+> Spark B läuft jetzt **Qwen3-Coder-Next-FP8** (GPU-Util 0.88, tool-call-parser qwen3_coder).
+> Die Zahlen hier sind nicht mehr produktionsrelevant. Archiv only.
+
 ---
 
 ## System Info
@@ -57,7 +62,7 @@ Request 10: 200 tok / 18.48s = 10.8 tok/s  Food → Nutrition Conversion
 
 ---
 
-## Vergleich Spark A vs Spark B
+## Vergleich Spark A vs Spark B (zum Zeitpunkt des Tests)
 
 | Metrik | Spark A (Qwen3.6-35B FP8) | Spark B (Coder-30B FP8) |
 |--------|--------------------------|------------------------|
@@ -70,10 +75,7 @@ Request 10: 200 tok / 18.48s = 10.8 tok/s  Food → Nutrition Conversion
 
 ---
 
-## Fazit
+## Fazit (historisch)
 
-Spark B mit Qwen3-Coder-30B-FP8 ist **production-ready**.
-- FP8 statt BF16: ~37GB weniger Speicher → 54GB frei für KV-Cache
-- 101 tok/s aggregiert bei 10 parallelen Coding-Tasks
-- Alle 10 Requests erfolgreich, keine Fehler
-- Qualität: TypeScript, Zod, Hono, SQL, RLS — domänenspezifisch korrekt
+Spark B mit Qwen3-Coder-30B-FP8 war production-ready.
+Abgelöst durch Qwen3-Coder-Next-FP8 am 28. April 2026 wegen besserer Tool-Calling-Latency.
