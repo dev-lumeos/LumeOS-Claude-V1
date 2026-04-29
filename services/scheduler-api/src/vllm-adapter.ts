@@ -79,6 +79,50 @@ async function callQwen36Orchestrator(
   return content
 }
 
+// ─── Gemma 4 Fast Reviewer callModel (Spark 3) ────────────────────────────────
+// Analog zu callGPTOSSReviewer, aber für Spark 3 (192.168.0.99:8001).
+// Reasoning-Output wird via extractContentOnly strikt verworfen.
+// Output ist als JSON erwartet — siehe RULES.md Sektion 7+8.
+//
+// Wird direkt von runReviewPipeline() aufgerufen (Option C — keine Routing-
+// Indirektion). Kann auch direkt aus dispatcher.ts importiert werden.
+
+export async function callGemmaReviewer(
+  systemPrompt: string,
+  userMessage: string,
+  maxTokens = 800,
+): Promise<string> {
+  const endpoint = process.env.SPARK_C_ENDPOINT ?? 'http://192.168.0.99:8001'
+  const model = process.env.SPARK_C_MODEL ?? 'google/gemma-4-26B-A4B-it'
+
+  const response = await fetch(`${endpoint}/v1/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      temperature: 0.0,
+      max_tokens: maxTokens,
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Gemma 4 API Error: ${response.status} ${response.statusText}`)
+  }
+
+  const json = (await response.json()) as any
+  const content = extractContentOnly(json)
+
+  if (!content) {
+    throw new Error('GEMMA_EMPTY_CONTENT')
+  }
+
+  return content
+}
+
 // ─── GPT-OSS Senior Reviewer callModel (Spark 4) ──────────────────────────────
 // Analog zu callQwen36Orchestrator, aber für Spark 4 (192.168.0.101:8001).
 // Reasoning-Output wird via extractContentOnly strikt verworfen.
