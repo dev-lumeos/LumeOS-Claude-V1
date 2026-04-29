@@ -15,6 +15,8 @@ export type EventType =
   | 'mode_switch_started' | 'mode_switch_completed' | 'mode_switch_failed'
   | 'lock_acquired' | 'lock_released'
   | 'orchestrator_started' | 'orchestrator_switched'
+  | 'review_pipeline_started' | 'review_pipeline_done'
+  | 'review_pipeline_rewrite' | 'review_pipeline_human_needed'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -41,6 +43,9 @@ export interface AuditEvent {
   spark_node?:         string
   duration_ms?:        number
   error_code?:         string
+  // Review pipeline (RULES.md): high-level summary, detail in pipeline-audit.jsonl
+  review_tier?:        'spark-c' | 'spark-d' | 'claude'
+  review_reason?:      string
 }
 
 // Lazy path resolution: resolved at call time so tests / harnesses that
@@ -57,6 +62,8 @@ const VALID_EVENTS = new Set<string>([
   'approval_required', 'approval_granted', 'approval_denied', 'approval_expired',
   'mode_switch_started', 'mode_switch_completed', 'mode_switch_failed',
   'lock_acquired', 'lock_released', 'orchestrator_started', 'orchestrator_switched',
+  'review_pipeline_started', 'review_pipeline_done',
+  'review_pipeline_rewrite', 'review_pipeline_human_needed',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
@@ -102,3 +109,20 @@ export const auditToolBlocked   = (p: ToolBase & Pick<AuditEvent, 'blocked_by' |
 export const auditToolExecuted  = (p: ToolBase & Pick<AuditEvent, 'duration_ms'>) => writeAuditEvent({ event: 'tool_call_executed', allowed: true, ...p })
 export const auditToolFailed    = (p: ToolBase & Pick<AuditEvent, 'reason' | 'error_code'>) => writeAuditEvent({ event: 'tool_call_failed', allowed: false, severity: 'error', ...p })
 export const auditApprovalRequired = (p: Base & Pick<AuditEvent, 'approval_id' | 'tool' | 'target_path'>) => writeAuditEvent({ event: 'approval_required', severity: 'warning', ...p })
+
+// ─── Review Pipeline Helpers ──────────────────────────────────────────────────
+// High-level Marker im audit.jsonl — Detail-Audit liegt in pipeline-audit.jsonl
+
+type ReviewBase = Base & Pick<AuditEvent, 'review_tier' | 'review_reason'>
+
+export const auditReviewPipelineStarted     = (p: ReviewBase) =>
+  writeAuditEvent({ event: 'review_pipeline_started', ...p })
+
+export const auditReviewPipelineDone        = (p: ReviewBase & Pick<AuditEvent, 'duration_ms'>) =>
+  writeAuditEvent({ event: 'review_pipeline_done', ...p })
+
+export const auditReviewPipelineRewrite     = (p: ReviewBase) =>
+  writeAuditEvent({ event: 'review_pipeline_rewrite', severity: 'warning', ...p })
+
+export const auditReviewPipelineHumanNeeded = (p: ReviewBase) =>
+  writeAuditEvent({ event: 'review_pipeline_human_needed', severity: 'warning', ...p })
