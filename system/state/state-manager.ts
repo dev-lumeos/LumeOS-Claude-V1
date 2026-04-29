@@ -197,8 +197,74 @@ export async function startWorkorder(workorderId: string, agentId: string, runId
   await mutate(s => { s.active_workorders.push({ workorder_id: workorderId, agent_id: agentId, run_id: runId, status: 'dispatched', dispatched_at: new Date().toISOString() }) })
 }
 
+// ─── WO-State-Machine (D.1) ───────────────────────────────────────────────────
+// Erlaubte Statusübergänge für ActiveWorkorder.status.
+// Terminale Zustände: done, failed — keine weiteren Übergänge erlaubt.
+// Illegal transitions werden blockiert und in audit.error.jsonl protokolliert.
+
+type WoStatus = ActiveWorkorder['status']
+
+export const WO_TRANSITIONS: Record<WoStatus, WoStatus[]> = {
+  queued:            ['dispatched'],
+  dispatched:        ['running', 'done', 'failed', 'review', 'awaiting_approval'],
+  running:           ['done', 'failed', 'review', 'awaiting_approval'],
+  review:            ['dispatched', 'failed'],
+  awaiting_approval: ['dispatched', 'failed'],
+  done:              [],   // terminal
+  failed:            [],   // terminal
+}
+
+export interface WoTransitionResult {
+  valid:   boolean
+  reason?: string
+}
+
+/** Prüft ob ein Statusübergang erlaubt ist. Gibt { valid, reason? } zurück. */
+export function validateWoStatusTransition(from: WoStatus, to: WoStatus): WoTransitionResult {
+  if (from === to) return { valid: true }  // same-state idempotent
+  const allowed = WO_TRANSITIONS[from]
+  if (!allowed) return { valid: false, reason: `Unbekannter Ausgangsstatus: ${from}` }
+  if (!allowed.includes(to)) {
+    return {
+      valid:  false,
+      reason: `Illegaler Übergang: ${from} → ${to}. Erlaubt: [${allowed.join(', ') || 'none'}]`,
+    }
+  }
+  return { valid: true }
+}
+
+/** Protokolliert ungültige Übergänge in audit.error.jsonl. Kein State-Lock nötig (append-only). */
+function appendInvalidTransition(workorderId: string, from: WoStatus, to: WoStatus, reason?: string): void {
+  const errPath = path.resolve(process.cwd(), 'system/state/audit.error.jsonl')
+  const line = JSON.stringify({
+    ts: new Date().toISOString(),
+    event: 'wo_status_invalid_transition',
+    workorder_id: workorderId,
+    from_status: from,
+    to_status: to,
+    reason: reason ?? `Illegaler Übergang: ${from} → ${to}`,
+  })
+  try {
+    const dir = path.dirname(errPath)
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+    fs.appendFileSync(errPath, line + '\n', 'utf8')
+  } catch { /* non-fatal — state update still proceeds */ }
+}
+
 export async function updateWorkorderStatus(workorderId: string, status: ActiveWorkorder['status']): Promise<void> {
-  await mutate(s => { const wo = s.active_workorders.find(w => w.workorder_id === workorderId); if (wo) wo.status = status })
+  await mutate(s => {
+    const wo = s.active_workorders.find(w => w.workorder_id === workorderId)
+    if (!wo) return
+
+    // D.1: State-Machine Enforcement — illegale Übergänge werden blockiert + protokolliert
+    const validation = validateWoStatusTransition(wo.status, status)
+    if (!validation.valid) {
+      appendInvalidTransition(workorderId, wo.status, status, validation.reason)
+      return  // Status NICHT ändern
+    }
+
+    wo.status = status
+  })
 }
 
 export async function lockSpark(node: string, reason: string, lockedBy?: string): Promise<void> {

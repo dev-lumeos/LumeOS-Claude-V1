@@ -21,6 +21,7 @@ export type EventType =
   | 'review_pipeline_retry'
   | 'governance_parse_error'  | 'governance_violation'
   | 'files_scope_violation'
+  | 'wo_status_invalid_transition'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -74,6 +75,7 @@ const VALID_EVENTS = new Set<string>([
   'review_pipeline_retry',
   'governance_parse_error',  'governance_violation',
   'files_scope_violation',
+  'wo_status_invalid_transition',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
