@@ -40,6 +40,9 @@ import {
   inferWorkorderType,
   type OrchestratorIntent,
 } from './governance-validator'
+import { runReviewPipeline } from './review-pipeline'
+import { createFileAuditWriter } from './pipeline-audit'
+import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
 const MAX_REWRITE_LOOPS = 2
@@ -216,6 +219,25 @@ export async function defaultCallModel(
   return ((await resp.json()) as any).choices?.[0]?.message?.content ?? ''
 }
 
+// ─── Review Pipeline Gate ─────────────────────────────────────────────────────
+//
+// V1: write-only, isoliert getestet, Status-Mapping per RULES.md:
+//
+//   PASS         → continue (consumeApproval, addWrittenFile, finalize)
+//   REWRITE      → run = failed, WO = review (Audit: review_pipeline_rewrite)
+//   HUMAN_NEEDED → run = blocked, WO = awaiting_approval (Audit: review_pipeline_human_needed)
+//
+// Reviewer-Input-Format ist minimal (RULES.md Sektion 7 — V1):
+//   { output: toolReq.content, changed_files: [toolReq.targetPath] }
+
+type WoType = ReturnType<typeof inferWorkorderType>
+
+function mapWorkorderTypeToCategory(t: WoType): string {
+  if (t === 'db-migration') return 'migration'
+  if (t === 'security')     return 'security'
+  return 'standard'
+}
+
 // ─── Haupt-Funktion ───────────────────────────────────────────────────────────
 
 export async function dispatchWorkorder(
@@ -387,6 +409,82 @@ export async function dispatchWorkorder(
 
     // 11. State + Approval NUR bei Erfolg
     if (toolResult.success) {
+
+      // 11a. Review Pipeline Gate (V1: write-only, see RULES.md)
+      // Spark 3 + Spark 4 prüfen den Worker-Output bevor State persistiert wird.
+      // Bei REWRITE/HUMAN_NEEDED early return — kein consumeApproval, kein addWrittenFile.
+      if (toolReq.tool === 'write' && toolReq.targetPath && toolReq.content) {
+        const woType   = inferWorkorderType(wo.task)
+        const category = mapWorkorderTypeToCategory(woType)
+
+        const pipelineAudit = createFileAuditWriter()  // → system/state/pipeline-audit.jsonl
+
+        audit.auditReviewPipelineStarted({
+          run_id: runId,
+          workorder_id: wo.workorder_id,
+          agent_id: wo.agent_id,
+          orchestration_mode: orchestrationMode,
+        })
+
+        const pipelineStart = Date.now()
+        const pipelineResult = await runReviewPipeline(
+          {
+            wo_id: wo.workorder_id,
+            output: toolReq.content,
+          },
+          {
+            wo_id: wo.workorder_id,
+            category,
+            task: wo.task,
+            changed_files: [toolReq.targetPath],
+            files_allowed: wo.scope_files,
+          },
+          {
+            callFastReviewer: callGemmaReviewer,
+            audit: pipelineAudit,
+          },
+        )
+
+        if (pipelineResult.kind === 'rewrite') {
+          await state.endRun(runId, 'failed')
+          await state.updateWorkorderStatus(wo.workorder_id, 'review')
+          audit.auditReviewPipelineRewrite({
+            run_id: runId,
+            workorder_id: wo.workorder_id,
+            agent_id: wo.agent_id,
+            orchestration_mode: orchestrationMode,
+            review_tier: pipelineResult.tier,
+            review_reason: pipelineResult.reason,
+          })
+          return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id, error: `REWRITE_REQUIRED: ${pipelineResult.reason}` }
+        }
+
+        if (pipelineResult.kind === 'human_needed') {
+          await state.endRun(runId, 'blocked')
+          await state.updateWorkorderStatus(wo.workorder_id, 'awaiting_approval')
+          audit.auditReviewPipelineHumanNeeded({
+            run_id: runId,
+            workorder_id: wo.workorder_id,
+            agent_id: wo.agent_id,
+            orchestration_mode: orchestrationMode,
+            review_tier: pipelineResult.lastTier,
+            review_reason: pipelineResult.reason,
+          })
+          return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id, error: `HUMAN_NEEDED: ${pipelineResult.reason}` }
+        }
+
+        // pipelineResult.kind === 'done' — weiter
+        audit.auditReviewPipelineDone({
+          run_id: runId,
+          workorder_id: wo.workorder_id,
+          agent_id: wo.agent_id,
+          orchestration_mode: orchestrationMode,
+          review_tier: pipelineResult.finalTier,
+          duration_ms: Date.now() - pipelineStart,
+        })
+      }
+
+      // 11b. Bisherige Logik
       if (toolReq.tool === 'write' && toolReq.targetPath) await state.addWrittenFile(runId, toolReq.targetPath)
       if (toolReq.approvalId) await consumeApproval(toolReq.approvalId)
       audit.auditToolExecuted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
