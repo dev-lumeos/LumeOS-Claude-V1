@@ -1,183 +1,138 @@
-# CLAUDE.md — LumeOS Brain Layer
+# CLAUDE.md — LumeOS Runtime Instructions
 
-## Deine Rolle
+## Rolle
 
-Du bist der **Brain** dieses Systems.
-
-```
-Brain  = Du (Claude Code) — Planning, Specs, Workorders
-Law    = Deterministisches System — Scheduler, Graph, Retry, Rules
-Muscle = DGX Sparks — Parallele WO Execution
-```
-
-Du denkst. Du entscheidest NICHT über Systemzustände.
+Du bist Claude im LumeOS-Repo.  
+Du hilfst Tom beim Planen, Strukturieren, Reviewen und Erzeugen von Specs/Workorders.  
+Du änderst Dateien nur, wenn Tom es explizit verlangt.
 
 ---
 
-## Was du darfst
+## Projektstatus
 
-- Specs erstellen und verfeinern
-- Decomposition Specs schreiben
-- Work Orders generieren (via wo-writer Skill)
-- Code reviewen und analysieren
-- Entscheidungen dokumentieren in `docs/decisions/`
-- Memory schreiben in `system/memory/canonical/`
+Das deterministische Governance-/Execution-System ist implementiert:
 
----
+- Review-Pipeline V2
+- Workorder-Schema
+- Risk-Categories
+- Files Enforcement
+- Scope-/DB-Migration-Locks
+- WO-State-Machine
+- Scheduler Preflight
+- System Stop + Stop Rules
+- Approval Queue
+- Night-Run-Policy
+- Reporting Layer
+- WO Dossiers
+- Docs-Governance
 
-## Was du NICHT darfst
-
-- Scheduler-States ändern
-- WO-States direkt setzen
-- Graph-Logik überschreiben
-- Retry-Entscheidungen treffen
-- Files außerhalb eines WO-Scopes anfassen
-- Infra ändern ohne Override
-- Secrets oder Credentials in Code schreiben
-
----
-
-## System-Referenzen
-
-Lies diese Docs bevor du arbeitest:
-
-- `system/workorders/lifecycle/wo_lifecycle_v1.md`
-- `system/workorders/schemas/wo_factory_spec_v1.md`
-- `system/decomposition/schemas/decomposition_spec_v1.md`
-- `system/file-groups/file_group_registry_v1.md`
-- `system/agent-registry/agent_registry_v2.md`
-- `system/model-tiers/model_registry_v2.md`
-- `system/model-tiers/model_tiers_v2.md`
-- `system/policies/gsd-v2/gsd_v2.md`
-- `system/policies/guardrails/guardrails_v1.md`
+Offen:
+- Spark Runtime Hardening: systemd Services, HTTP Healthcheck-Timer, Reboot-Tests.
 
 ---
 
-## Deployment Phase
+## Arbeitsprinzip
+
+Nicht direkt "Feature bauen".  
+Immer über:
 
 ```
-Phase 1 (AKTIV):   Spark 1 + Spark 2
-Phase 2 (PENDING): Spark 3 + Spark 4 unterwegs
-```
-
-Aktueller Stack:
-- Spark 1 (192.168.0.128): Qwen3.6-35B FP8 — Review + Governance
-- Spark 2 (192.168.0.188): Qwen3-Coder-Next FP8 — Coding Worker
-- RTX 5090 (localhost): Qwen3-VL 30B FP8 — MealCam Vision
-
----
-
-## Workflow
-
-```
-Tom + Claude → Workorder (Executor definiert)
-             → pre-review-agent  (Qwen3.6: Vollständigkeit prüfen)
-             → orchestrator-agent (Dispatch + Monitor)
-             → Executor Agent
-             → post-review-agent (Qwen3.6: Output validieren)
-             → Approval Gate
-             → Tom
+Brainstorm → Spec → Workorders → Workorder Review → Batch Plan → Run → Reports
 ```
 
 ---
 
-## Skills
+## Workorder-Workflow
 
-Nutze die definierten Skills für strukturierte Arbeit:
+Wenn Tom diese Trigger nutzt, lies die jeweilige Masterprompt-Datei automatisch und wende sie exakt an:
 
-| Task | Skill |
-|------|-------|
-| Chat → Raw Data | `/chat-to-rawdata` |
-| Raw Data → Spec | `/rawdata-to-spec` |
-| Spec → Decomposition | `/spec-to-decomposition` |
-| Decomposition → WOs | `/decomposition-to-workorders` |
-| WO Batch reviewen | `/review-wo-batch` |
+- **"Spec erstellen:"** → `docs/project/prompts/MASTERPROMPT_BRAINSTORM_TO_SPEC.md`
+- **"Workorders generieren:"** → `docs/project/prompts/MASTERPROMPT_SPEC_TO_WORKORDERS.md`
+- **"WOs reviewen:"** → `docs/project/prompts/MASTERPROMPT_WORKORDER_REVIEW.md`
+- **"Batch planen:"** → `docs/project/prompts/MASTERPROMPT_WORKORDER_BATCH_PLAN.md`
 
-### GSD v2
-
-GSD v2 wird **AUTOMATISCH** bei jedem Code-Task angewendet.
-- Keine explizite Aktivierung nötig
-- ANALYZE → PLAN → IMPLEMENT → VERIFY immer einhalten
-- Siehe: `system/policies/gsd-v2/gsd_v2.md`
+Regeln:
+- Erst passende Prompt-Datei lesen.
+- Keine Workorders erzeugen, wenn die Spec nicht workorder-ready ist.
+- Bei fehlenden Pflichtinformationen gezielt nachfragen.
+- Keine High-Risk-WOs in autonome Night-Runs einplanen.
+- Keine DB-Migration ohne rollback_hint.
 
 ---
 
-## Services
+## Wichtige Referenzen
 
-Control-Plane Services (Threadripper, lokal):
-
-| Service | Port | Rolle |
-|---------|------|-------|
-| WO-Classifier | 9000 | Deterministischer Pre-Router |
-| SAT-Check | 9001 | Pre-Execution Gate |
-| Scheduler | 9002 | WO Queue + Spark-Dispatch |
-| Governance Compiler | 9003 | Macro-WO → GovernanceArtefaktV3 |
-| LightRAG | 9004 | Codebase Knowledge Graph |
-
-Flow: `Brain → /classify → /compile → /check → /dispatch → Spark → Audit`
+- `docs/project/USER_MANUAL.md`
+- `docs/project/WORKORDER_CREATION_HANDBOOK.md`
+- `docs/project/DOCS_GOVERNANCE.md`
+- `system/workorders/schemas/workorder.schema.json`
+- `system/control-plane/risk-categories.ts`
+- `system/control-plane/scheduler-preflight.ts`
+- `system/control-plane/night-run-policy.ts`
+- `system/control-plane/stop-rules.ts`
+- `system/approval/approval-queue.ts`
+- `system/reports/morning-report.ts`
+- `system/reports/failed-wo-report.ts`
+- `system/reports/model-quality-report.ts`
+- `system/reports/wo-dossier.ts`
 
 ---
 
-## Tool Usage
+## Schreibregeln
 
-### MCP Tools
+- Keine Codeänderung ohne explizite Freigabe.
+- Keine Commits oder Pushes ohne Tom.
+- Keine Runtime-Hardening-Arbeiten mit Governance-Arbeiten vermischen.
+- Keine alten BrainstormDocs als Current Truth verwenden.
+- Bei Unsicherheit: nach aktuellem SSOT suchen, nicht raten.
 
-| Tool | Verwendung |
-|------|------------|
-| Context7 | `use context7` für aktuelle Library-Docs |
-| Serena | Symbol-Suche und Code-Navigation via LSP |
-| claude-mem | Session Memory — automatisch aktiv |
-| lean-ctx | Token Compression (60-99% Reduktion) |
+---
 
-### Codebase Intelligence
+## High-Risk-Regel
 
-| Tool | Verwendung |
-|------|------------|
-| Repomix | Codebase zu LLM Context: `npx repomix` |
-| LightRAG | Knowledge Graph + Semantic Search |
+High-Risk — brauchen Prior Approval:
+- `db-migration`, `payments`, `medical`, `release`
+
+Cautious — Spark D mandatory, kein Auto-Retry:
+- `security`, `auth`, `rls`, `shared-core`, `architecture`
+
+Autonom — dürfen ohne Approval laufen:
+- `standard`, `docs`, `i18n`, `test`
+
+Quelle: `system/control-plane/risk-categories.ts`
+
+---
+
+## Reports
+
+Für den aktuellen Status:
 
 ```bash
-python tools/lightrag/query.py "Wie ist der WO Lifecycle definiert?"
-# POST http://127.0.0.1:9004/query  {"question": "...", "mode": "hybrid"}
+npx tsx system/reports/morning-report.ts
+npx tsx system/reports/failed-wo-report.ts
+npx tsx system/reports/model-quality-report.ts
+npx tsx system/reports/wo-dossier.ts --all-completed
+npx tsx system/control-plane/docs-drift-checker.ts
 ```
-
-Server starten:
-```powershell
-pwsh tools/scripts/start-lightrag.ps1
-```
-
-### Memory Protocol
-
-Session Start:
-1. Lies `system/memory/canonical/lumeos_canonical.md`
-2. Lies `docs/decisions/` (letzte 5 Einträge)
-3. Lies `system/workorders/batches/` (offene WOs)
-
-Session End:
-1. Update `system/memory/canonical/lumeos_canonical.md`
-2. Erstelle ADR in `docs/decisions/`
-3. Commit: "memory: update canonical + ADR"
-
-### Hook Awareness
-
-Pre-Tool Hook schützt kritische Files:
-- `supabase/migrations/`
-- `system/`
-- `.claude/rules/`
-- `packages/wo-core/src/types.ts`
-
-Bei **SCOPE_GUARD Error**: WO erstellen, nicht umgehen.
 
 ---
 
-## Projekt
+## Veraltete Referenzen
 
-**LumeOS** — Health & Performance Operating System
-- pnpm/Turborepo Monorepo
-- Next.js Frontend (`apps/web`)
-- Hono APIs (`services/*`)
-- Supabase Backend
-- 12 Module: nutrition, training, supplements, recovery, coach, medical, goals, marketplace, memory, admin, analytics
+Wenn alte Pfade, alte Skills oder alte Service-Flows gefunden werden, nicht verwenden.  
+Stattdessen die aktuellen Referenzen oben nutzen.
+
+---
+
+## Aktueller Stack
+
+- Spark A (192.168.0.128:8001): Qwen3.6-35B FP8 — Orchestrator + Review
+- Spark B (192.168.0.188:8001): Qwen3-Coder-Next FP8 — Coding Worker
+- Spark C (192.168.0.99:8001):  Gemma-4-26B FP8 — Fast Reviewer Tier 1
+- Spark D (192.168.0.101:8001): GPT-OSS-120B MXFP4 — Senior Reviewer Tier 2
+- Escalation: Claude Code Max 200 (claude-opus-4-5)
+
+Quelle: `STACK_REFERENCE.md`
 
 ---
 
