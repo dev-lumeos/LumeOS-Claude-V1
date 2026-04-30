@@ -45,6 +45,7 @@ import { createFileAuditWriter } from './pipeline-audit'
 import { createFileMetricsWriter } from './pipeline-metrics'
 import { isAutoRetryAllowed, requiresSparkD, inferCategoryFromTask } from './risk-categories'
 import { runPreflight } from './scheduler-preflight'
+import { enqueueApproval } from '../approval/approval-queue'
 import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
@@ -472,12 +473,26 @@ export async function dispatchWorkorder(
         return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id, error: gate.reason }
       }
     } else if (needsApproval && !toolReq.approvalId) {
-      audit.auditApprovalRequired({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
-        orchestration_mode: orchestrationMode, tool: toolReq.tool, target_path: toolReq.targetPath,
-        approval_id: `NEEDED:${approvalOp}` })
+      // C.2: Pending ApprovalItem in runtime_state.approvals[] erstellen
+      const pendingApproval = await state.createPendingApproval({
+        workorder_id:    wo.workorder_id,
+        run_id:          runId,
+        reason:          `${approvalOp ?? toolReq.tool} auf ${toolReq.targetPath ?? toolReq.command ?? 'unbekannt'} erfordert menschliche Genehmigung`,
+        risk_category:   resolveCategory(wo),
+        affected_files:  toolReq.targetPath ? [toolReq.targetPath] : (wo.scope_files ?? []),
+        proposed_action: `${toolReq.tool}:${toolReq.targetPath ?? toolReq.command ?? ''}`,
+        requested_by:    wo.agent_id,
+      })
+      audit.auditApprovalRequested({
+        run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+        orchestration_mode: orchestrationMode,
+        approval_id: pendingApproval.approval_id,
+        reason: pendingApproval.reason,
+      })
       await state.updateWorkorderStatus(wo.workorder_id, 'awaiting_approval')
       await state.endRun(runId, 'awaiting_approval')
-      return { status: 'awaiting_approval', run_id: runId, workorder_id: wo.workorder_id }
+      return { status: 'awaiting_approval', run_id: runId, workorder_id: wo.workorder_id,
+        error: `APPROVAL_REQUIRED: ${pendingApproval.approval_id}` }
     }
 
     // 9. Permission Gateway — mcpTool + mcpOperation weitergeleitet
@@ -598,6 +613,18 @@ export async function dispatchWorkorder(
         }
 
         if (pipelineResult.kind === 'human_needed') {
+          // C.2: Approval-Item in formalisierte Queue einstellen
+          enqueueApproval({
+            workorder_id:    wo.workorder_id,
+            run_id:          runId,
+            agent_id:        wo.agent_id,
+            reason:          pipelineResult.reason ?? 'Review-Pipeline HUMAN_NEEDED',
+            risk_category:   resolveCategory(wo),
+            affected_files:  toolReq.targetPath ? [toolReq.targetPath] : (wo.scope_files ?? []),
+            proposed_action: toolReq.content
+              ? `write ${toolReq.targetPath}: ${String(toolReq.content).slice(0, 120)}...`
+              : `${toolReq.tool} on ${toolReq.targetPath ?? '(unknown)'}`,
+          })
           await state.endRun(runId, 'blocked')
           await state.updateWorkorderStatus(wo.workorder_id, 'awaiting_approval')
           audit.auditReviewPipelineHumanNeeded({

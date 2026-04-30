@@ -11,7 +11,9 @@ export type EventType =
   | 'tool_call_requested' | 'tool_call_allowed' | 'tool_call_blocked'
   | 'tool_call_executed'  | 'tool_call_failed'
   | 'job_started' | 'job_completed' | 'job_failed' | 'job_blocked'
-  | 'approval_required' | 'approval_granted' | 'approval_denied' | 'approval_expired'
+  | 'approval_required' | 'approval_requested'
+  | 'approval_granted' | 'approval_denied' | 'approval_expired'
+  | 'approval_queued'  | 'approval_consumed' | 'approval_invalid_transition'
   | 'mode_switch_started' | 'mode_switch_completed' | 'mode_switch_failed'
   | 'lock_acquired' | 'lock_released'
   | 'scope_lock_acquired' | 'scope_lock_released' | 'scope_lock_conflict'
@@ -24,6 +26,7 @@ export type EventType =
   | 'wo_status_invalid_transition'
   | 'preflight_go' | 'preflight_hold' | 'preflight_reject'
   | 'system_stop_triggered' | 'system_stop_cleared'
+  | 'approval_queue_added' | 'approval_queue_granted' | 'approval_queue_denied' | 'approval_queue_expired'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -67,7 +70,9 @@ const VALID_EVENTS = new Set<string>([
   'tool_call_requested', 'tool_call_allowed', 'tool_call_blocked',
   'tool_call_executed', 'tool_call_failed',
   'job_started', 'job_completed', 'job_failed', 'job_blocked',
-  'approval_required', 'approval_granted', 'approval_denied', 'approval_expired',
+  'approval_required', 'approval_requested',
+  'approval_granted', 'approval_denied', 'approval_expired',
+  'approval_queued', 'approval_consumed', 'approval_invalid_transition',
   'mode_switch_started', 'mode_switch_completed', 'mode_switch_failed',
   'lock_acquired', 'lock_released',
   'scope_lock_acquired', 'scope_lock_released', 'scope_lock_conflict',
@@ -80,6 +85,7 @@ const VALID_EVENTS = new Set<string>([
   'wo_status_invalid_transition',
   'preflight_go', 'preflight_hold', 'preflight_reject',
   'system_stop_triggered', 'system_stop_cleared',
+  'approval_queue_added', 'approval_queue_granted', 'approval_queue_denied', 'approval_queue_expired',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
@@ -175,3 +181,14 @@ export const auditSystemStopTriggered = (p: StopBase) =>
 
 export const auditSystemStopCleared = (p: StopBase) =>
   writeAuditEvent({ event: 'system_stop_cleared', severity: 'info', ...p })
+
+// ─── Approval C.2 Helpers ─────────────────────────────────────────────────────
+
+/** approval_requested — neue pending Approval wurde in runtime_state.approvals[] erstellt. */
+export const auditApprovalRequested = (p: Base & Pick<AuditEvent, 'approval_id' | 'reason'>) =>
+  writeAuditEvent({ event: 'approval_requested', severity: 'warning', ...p })
+
+/** approval_invalid_transition — illegaler Statusübergang blockiert + auditiert. */
+export const auditApprovalInvalidTransition = (
+  p: Pick<AuditEvent, 'orchestration_mode'> & { approval_id?: string; reason?: string }
+) => writeAuditEvent({ event: 'approval_invalid_transition', severity: 'error', ...p })
