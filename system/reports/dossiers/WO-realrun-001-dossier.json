@@ -1,0 +1,156 @@
+{
+  "workorder_id": "WO-realrun-001",
+  "dossier_version": 1,
+  "generated_at": "2026-04-30T02:29:59.972Z",
+  "runs": [
+    {
+      "run_id": "RUN-20260429-4615",
+      "status": "failed",
+      "started_at": "2026-04-29T08:45:34.616Z",
+      "completed_at": "2026-04-29T08:45:34.673Z",
+      "duration_ms": 57,
+      "changed_files": [],
+      "errors": [],
+      "review_results": [],
+      "retry_count": 0,
+      "escalation_count": 1
+    },
+    {
+      "run_id": "RUN-20260429-1066",
+      "status": "completed",
+      "started_at": "2026-04-29T08:46:11.067Z",
+      "completed_at": "2026-04-29T08:46:11.095Z",
+      "duration_ms": 28,
+      "changed_files": [],
+      "errors": [],
+      "review_results": [],
+      "retry_count": 0,
+      "escalation_count": 1
+    },
+    {
+      "run_id": "RUN-20260429-9752",
+      "status": "completed",
+      "started_at": "2026-04-29T08:48:59.753Z",
+      "completed_at": "2026-04-29T08:49:02.113Z",
+      "duration_ms": 2360,
+      "changed_files": [
+        "tmp/review-pipeline-test/add.ts"
+      ],
+      "errors": [],
+      "review_results": [],
+      "retry_count": 0,
+      "escalation_count": 1
+    },
+    {
+      "run_id": "RUN-20260429-6298",
+      "status": "completed",
+      "started_at": "2026-04-29T11:26:56.299Z",
+      "completed_at": "2026-04-29T11:27:02.419Z",
+      "duration_ms": 6120,
+      "changed_files": [
+        "tmp/review-pipeline-test/add.ts"
+      ],
+      "errors": [],
+      "review_results": [
+        {
+          "tier": "spark-c",
+          "outcome": "invalid_json",
+          "latency_ms": 2888,
+          "escalated": true
+        },
+        {
+          "tier": "spark-d",
+          "outcome": "PASS",
+          "confidence": 0.99,
+          "latency_ms": 3187,
+          "escalated": false
+        }
+      ],
+      "retry_count": 0,
+      "escalation_count": 1
+    }
+  ],
+  "stats": {
+    "total_runs": 4,
+    "completed_runs": 3,
+    "failed_runs": 1,
+    "blocked_runs": 0,
+    "total_duration_ms": 8565,
+    "all_changed_files": [
+      "tmp/review-pipeline-test/add.ts"
+    ],
+    "total_escalations": 4,
+    "total_retries": 0
+  },
+  "approvals": [],
+  "key_audit_events": [
+    {
+      "ts": "2026-04-29T08:45:34.637Z",
+      "event": "job_started"
+    },
+    {
+      "ts": "2026-04-29T08:46:11.089Z",
+      "event": "job_started"
+    },
+    {
+      "ts": "2026-04-29T08:46:11.098Z",
+      "event": "job_completed"
+    },
+    {
+      "ts": "2026-04-29T08:48:59.774Z",
+      "event": "job_started"
+    },
+    {
+      "ts": "2026-04-29T08:49:02.126Z",
+      "event": "job_completed"
+    },
+    {
+      "ts": "2026-04-29T11:26:56.319Z",
+      "event": "job_started"
+    },
+    {
+      "ts": "2026-04-29T11:27:02.426Z",
+      "event": "job_completed"
+    }
+  ],
+  "review_events": [
+    {
+      "ts": "2026-04-29T08:48:59.792Z",
+      "tier": "spark-c",
+      "event": "review_started"
+    },
+    {
+      "ts": "2026-04-29T08:49:02.092Z",
+      "tier": "spark-c",
+      "event": "review_completed",
+      "status": "PASS",
+      "confidence": 1
+    },
+    {
+      "ts": "2026-04-29T11:26:56.327Z",
+      "tier": "spark-c",
+      "event": "review_started"
+    },
+    {
+      "ts": "2026-04-29T11:26:59.215Z",
+      "tier": "spark-c",
+      "event": "review_escalated"
+    },
+    {
+      "ts": "2026-04-29T11:26:59.215Z",
+      "tier": "spark-d",
+      "event": "review_started"
+    },
+    {
+      "ts": "2026-04-29T11:27:02.401Z",
+      "tier": "spark-d",
+      "event": "review_completed",
+      "status": "PASS",
+      "confidence": 0.99
+    }
+  ],
+  "follow_up": {
+    "type": "none",
+    "detail": "WO erfolgreich abgeschlossen."
+  }
+}

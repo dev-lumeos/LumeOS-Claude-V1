@@ -1,0 +1,63 @@
+{
+  "workorder_id": "WO-nutrition-001",
+  "dossier_version": 1,
+  "generated_at": "2026-04-30T02:29:59.969Z",
+  "runs": [
+    {
+      "run_id": "RUN-20260426-001",
+      "status": "completed",
+      "started_at": "2026-04-26T05:31:50.426Z",
+      "completed_at": "2026-04-26T05:31:50.440Z",
+      "duration_ms": 14,
+      "changed_files": [
+        "services/nutrition-api/src/routes/diary.ts"
+      ],
+      "errors": [],
+      "review_results": [],
+      "retry_count": 0,
+      "escalation_count": 0
+    },
+    {
+      "run_id": "RUN-20260426-0500",
+      "status": "completed",
+      "started_at": "2026-04-26T05:31:50.501Z",
+      "completed_at": "2026-04-26T05:31:50.521Z",
+      "duration_ms": 20,
+      "changed_files": [
+        "services/nutrition-api/src/routes/diary.ts"
+      ],
+      "errors": [],
+      "review_results": [],
+      "retry_count": 0,
+      "escalation_count": 0
+    }
+  ],
+  "stats": {
+    "total_runs": 2,
+    "completed_runs": 2,
+    "failed_runs": 0,
+    "blocked_runs": 0,
+    "total_duration_ms": 34,
+    "all_changed_files": [
+      "services/nutrition-api/src/routes/diary.ts"
+    ],
+    "total_escalations": 0,
+    "total_retries": 0
+  },
+  "approvals": [],
+  "key_audit_events": [
+    {
+      "ts": "2026-04-26T05:31:50.510Z",
+      "event": "job_started"
+    },
+    {
+      "ts": "2026-04-26T05:31:50.529Z",
+      "event": "job_completed"
+    }
+  ],
+  "review_events": [],
+  "follow_up": {
+    "type": "none",
+    "detail": "WO erfolgreich abgeschlossen."
+  }
+}
