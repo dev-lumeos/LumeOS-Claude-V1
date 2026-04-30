@@ -1,51 +1,72 @@
 # LUMEOS — Session Onboarding
-# Lies das am Anfang jeder neuen Session
+# Stand: April 2026 | Lies das am Anfang jeder neuen Session
 
 ---
 
-## Aktueller Stack (Phase 2 AKTIV)
+## Aktueller Stack (Phase 2 LIVE — alle 4 Sparks aktiv)
 
 | Was | Wo | Status |
 |---|---|---|
-| Qwen3.6-35B FP8 | 192.168.0.128:8001 | ✅ Orchestrator |
-| Qwen3-Coder-Next FP8 | 192.168.0.188:8001 | ✅ Coding Worker |
-| Gemma 4 FP8 | 192.168.0.99:8001 | ✅ Spark C (Fast Reviewer) |
-| GPT-OSS FP8 | 192.168.0.101:8001 | ✅ Spark D (Senior Reviewer) |
-| Governance Validator | system/control-plane/governance-validator.ts | ✅ aktiv |
-| Dispatcher | system/control-plane/dispatcher.ts | ✅ REWRITE_LOOP max 2 |
-| Review Pipeline V2 | system/control-plane/review-pipeline.ts | ✅ Auto-Retry, Metriken |
-| Risk Categories | system/control-plane/risk-categories.ts | ✅ Single Source of Truth |
-| Scheduler Preflight | system/control-plane/scheduler-preflight.ts | ✅ GO/HOLD/REJECT |
-| WO-State-Machine | system/state/state-manager.ts | ✅ D.1 formal |
-| Scope-Locks | system/state/state-manager.ts | ✅ A.3 aktiv |
-| System Stop | system/state/state-manager.ts | ✅ C.1 Kill-Switch |
-| Files Enforcement | system/agent-registry/authorize-tool-call.ts | ✅ v0.3.0 |
-| Run Summary | system/reports/run-summary-generator.ts | ✅ B.1 aktiv |
-| tsc --noEmit | services/scheduler-api | ✅ 0 Fehler |
+| Qwen3.6-35B FP8 | 192.168.0.128:8001 | ✅ Spark A — Orchestrator + Review |
+| Qwen3-Coder-Next FP8 | 192.168.0.188:8001 | ✅ Spark B — Coding Worker |
+| Gemma 4 FP8 | 192.168.0.99:8001 | ✅ Spark C — Fast Reviewer Tier 1 |
+| GPT-OSS MXFP4 | 192.168.0.101:8001 | ✅ Spark D — Senior Reviewer Tier 2 |
+| Escalation | Claude Code Max 200 | ✅ claude-opus-4-5 |
+
+---
+
+## Implementierungsstand (alles done)
+
+| Block | Thema | Status |
+|---|---|---|
+| Block 6 | Review-Pipeline V2 (Auto-Retry, Metriken) | ✅ |
+| A.1 | Workorder-Schema (risk_category, files_blocked, rollback_hint) | ✅ |
+| A.2 | Files Enforcement (files_blocked + Post-Execution Scope Check) | ✅ |
+| A.3 | Module-/File-Locks (Scope-Lock + DB-Migration-Lock, TTL 10min) | ✅ |
+| A.4 | High-Risk-Matrix zentralisiert (risk-categories.ts, 13 Kategorien) | ✅ |
+| B.1 | Run Summary Generator (JSON + Markdown, next_action Logik) | ✅ |
+| B.2 | Morning Report | ✅ |
+| B.3 | Failed WO Report | ✅ |
+| B.4 | Model Quality Report | ✅ |
+| C.1 | Kill-Switch / System Stop | ✅ |
+| C.1b | Automatische Stop-Trigger (5 Regeln, Stop Rules Engine) | ✅ |
+| C.2 | Approval Queue (State Machine, CLI) | ✅ |
+| C.3 | Night-Run-Policy V1 | ✅ |
+| D.1 | WO-State-Machine (WO_TRANSITIONS, formal erzwungen) | ✅ |
+| D.2 | Scheduler Preflight (12 Checks, GO/HOLD/REJECT) | ✅ |
+| E.1 | Completed WO Dossier Generator | ✅ |
+| E.2 | Docs-Governance V1 (SSOT-Matrix, Drift-Checker) | ✅ |
+| F | Spark Runtime Hardening | ⏳ bewusst offen |
 
 ---
 
 ## Letzter Commit
 
 ```
-9532a59  feat(governance): C.1 — Kill-Switch / System Stop
-e4f2712  feat(governance): D.2 — Scheduler Preflight GO/HOLD/REJECT
-fff067a  feat(governance): D.1 — WO-State-Machine formal definiert
-d3d3d28  feat(governance): A.3 — Module-/File-Locks
-1e81e2b  feat(reports): B.1 — Run Summary Generator
-621d930  feat(governance): A.2 — FILES_BLOCKED Enforcement
-57528c2  feat(governance): A.1 + A.4 — WO-Schema + Risk-Categories
+5d3c705  docs: refresh CLAUDE runtime instructions for workorder workflow
+5a02e09  fix: WORKORDER_CREATION_HANDBOOK kleine Korrekturen
+aa00c2f  docs: Workorder Creation Handbook + 4 Masterprompts
+b1b2b58  docs: USER_MANUAL.md - Praxishandbuch fuer Tom
+ed28cfd  fix(docs): E.2 DRIFT_BLOCKING - AGENTS.md aktualisiert
+6eabae5  feat(governance): E.2 — Docs-Governance V1
+157cb11  feat(reports): E.1 — Completed WO Dossier Generator
+3aa7ebc  feat(governance): C.3 — Night-Run-Policy V1
+be953b8  feat(governance): C.1b — Automatische Stop-Trigger
+cb02cb9  feat(reports): B.4 — Model Quality Report
 ```
 
 ---
 
-## Test-Stand (aktuell)
+## Test-Stand
 
 ```
-13/13  Stop-Tests         (system/state/__tests__/stop-rules.test.ts)
 19/19  Preflight-Tests    (system/control-plane/__tests__/scheduler-preflight.test.ts)
+18/18  Night-Run-Tests    (system/control-plane/__tests__/night-run-policy.test.ts)
+15/15  Stop-Rules-Tests   (system/control-plane/__tests__/stop-rules.test.ts)
 30/30  State-Machine      (system/state/__tests__/wo-state-machine.test.ts)
 16/16  Lock-Tests         (system/state/__tests__/scope-locks.test.ts)
+13/13  Stop-Tests         (system/state/__tests__/stop-rules.test.ts)
+24/24  Approval-Tests     (system/approval/__tests__/approval-queue.test.ts)
 22/22  Gateway-Tests      (system/agent-registry/__tests__/gateway.test.ts)
 22/22  Pipeline-Tests     (system/control-plane/__tests__/review-pipeline.test.ts)
  6/6   V2-Verify          (system/control-plane/__tests__/dispatcher-v2-verify.ts)
@@ -54,89 +75,221 @@ tsc:   0 Fehler
 
 ---
 
-## Was in dieser Session implementiert wurde
-
-### Abgeschlossen ✅
-- **A.1** Workorder-Schema finalisiert (risk_category, files_blocked, rollback_hint, validation_commands)
-- **A.4** High-Risk-Matrix zentralisiert (risk-categories.ts, 13 Kategorien)
-- **A.2** FILES_BLOCKED + Post-Execution Scope Enforcement
-- **B.1** Run Summary Generator (JSON + Markdown, next_action Logik)
-- **A.3** Module-/File-Locks (Scope-Lock + DB-Migration-Lock, TTL 10min)
-- **D.1** WO-State-Machine (WO_TRANSITIONS, validateWoStatusTransition, enforcement)
-- **D.2** Scheduler Preflight (11 Checks, GO/HOLD/REJECT)
-- **C.1** Kill-Switch / System Stop (triggerSystemStop, clearSystemStop, isSystemStopped)
-
----
-
-## Wichtigste Entscheidungen
-
-1. **risk-categories.ts ist Single Source of Truth** — governance-validator.ts UND dispatcher.ts importieren daraus, niemals duplizieren
-2. **enable_thinking=false ist Pflicht** bei jedem Qwen3.6 Request
-3. **Stop-Conditions dürfen keine positiven Zustände enthalten** (approved/passed/granted)
-4. **Governance Validator vor executeTool()** — deterministisch, kein LLM
-5. **Preflight läuft vor startRun()** — kein Run startet bei HOLD/REJECT
-6. **System Stop vor Preflight** — globale Notbremse, alle Runs blockiert
-7. **WO-Status done/failed sind terminal** — keine Übergänge möglich
-8. **Scope-Lock atomar** — Konflikt-Check + Setzen in einer Mutex-Operation
-9. **Escalation = Claude Sonnet/Opus via Claude Code Max 200** — kein OpenRouter
-
----
-
-## Nächste Blöcke (Phase 4/5)
+## Dispatcher Flow
 
 ```
-C.2  Approval Queue formalisieren       ← NÄCHSTER
-B.3  Failed WO Report
-B.2  Morning Report
-C.3  Night-Run-Policy V1
-B.4  Model Quality Report
-E.1  Completed WO Dossier
-E.2  Docs-Governance
-F.   Spark Runtime Hardening (Phase 6, später separat)
+Workorder
+  → isSystemStopped()             ← C.1 Kill-Switch (vor allem)
+  → validateWorkorder() Schema
+  → runPreflight() GO/HOLD/REJECT ← D.2 (12 Checks)
+  → acquireScopeLock()            ← A.3
+  → acquireDbMigrationLock()      ← A.3 (bei db-migration)
+  → startRun() + auditJobStarted()
+  → callModel() [Qwen3.6, enable_thinking=false]
+  → validateOrchestratorIntent()  ← Governance Validator
+  → authorizeToolCall()           ← Gateway v0.3.0 (files_blocked)
+  → executeTool()
+  → isPathInScope() Post-Check    ← A.2 Defense in Depth
+  → runReviewPipeline()           ← Spark C → Spark D
+  → enqueueApproval() wenn HUMAN_NEEDED ← C.2
+  → releaseScopeLock() + releaseDbMigrationLock()
+  → auditLog + finalizeRun()
 ```
 
 ---
 
-## Relevante Dateien
+## WO-State-Machine (D.1)
+
+```
+queued            → [dispatched]
+dispatched        → [running, done, failed, review, awaiting_approval]
+running           → [done, failed, review, awaiting_approval]
+review            → [dispatched, failed]
+awaiting_approval → [dispatched, failed]
+done              → []  ← terminal
+failed            → []  ← terminal
+```
+
+---
+
+## Scheduler Preflight (D.2) — 12 Checks
+
+| Check | Verdict bei Fail |
+|---|---|
+| system_not_stopped | HOLD |
+| schema_valid | REJECT |
+| agent_exists | REJECT |
+| scope_files_not_empty | REJECT |
+| rollback_hint_required | REJECT |
+| wo_not_terminal | REJECT |
+| wo_not_running | HOLD |
+| wo_not_awaiting_approval | HOLD |
+| blocked_by_resolved | HOLD |
+| scope_lock_free | HOLD |
+| db_migration_lock_free | HOLD |
+| night_run_policy | HOLD |
+
+Priorität: REJECT > HOLD > GO
+
+---
+
+## Night-Run-Policy (C.3)
+
+| Kategorie | Night-Run |
+|---|---|
+| standard, docs, i18n, test | ✅ AUTONOMOUS |
+| security, auth, rls, shared-core, architecture | ⚠️ CAUTIOUS (Spark D mandatory) |
+| db-migration, payments, medical, release | 🔴 REQUIRES_PRIOR_APPROVAL |
+
+```bash
+npx tsx system/control-plane/night-run-policy.ts status
+npx tsx system/control-plane/night-run-policy.ts check    # Exit 0 = ready
+npx tsx system/control-plane/night-run-policy.ts activate
+```
+
+5 Readiness-Checks: Modus aktiv, System nicht gestoppt, Stop-Rules sauber, keine pending Approvals, keine laufenden Runs.
+
+---
+
+## Stop-Regeln (C.1b)
+
+| Regel | Schwellwert |
+|---|---|
+| FAILED_RUNS_THRESHOLD | ≥ 5 failed Runs |
+| HUMAN_NEEDED_PENDING_MAX | ≥ 3 pending Approvals |
+| INVALID_JSON_SPIKE | ≥ 50% (min. 3 Samples) |
+| FILES_SCOPE_VIOLATIONS | ≥ 2 Events |
+| ESCALATION_RATE_SPIKE | ≥ 80% (min. 5 Reviews) |
+
+```bash
+npx tsx system/control-plane/stop-rules.ts --dry-run
+```
+
+---
+
+## Approval Queue (C.2)
+
+State Machine: `pending → granted | denied | expired`, `granted → consumed`
+
+```bash
+npx tsx system/approval/approval-cli.ts list
+npx tsx system/approval/approval-cli.ts grant <id>
+npx tsx system/approval/approval-cli.ts deny <id> "Grund"
+```
+
+Queue-Datei: `system/approval/queue.json`
+
+---
+
+## Governance Validator
+
+### Erlaubte Enums
+- **selected_agent:** micro-executor | db-migration-agent | security-specialist | review-agent
+- **risk_level:** low | medium | high
+- **gates:** db-migration-gate | rollback-gate | typecheck-gate | test-gate | review-gate | human-approval-gate | files-scope-gate | security-gate
+
+### Stop-Conditions
+NIEMALS positive Zustände: `approved`, `passed`, `granted`, `success`, `completed`
+
+---
+
+## Qwen3.6 Pflichtregeln
+
+```json
+{
+  "chat_template_kwargs": { "enable_thinking": false },
+  "temperature": 0.0
+}
+```
+
+`/no_think` funktioniert NICHT — nur `chat_template_kwargs`.
+
+---
+
+## Risk-Kategorien (Single Source of Truth: risk-categories.ts)
+
+| Kategorie | Spark D | Auto-Retry | Human Approval |
+|---|---|---|---|
+| standard / docs / i18n / test | ✗ | ✓ | ✗ |
+| db-migration | ✓ | ✗ | ✓ |
+| security / auth / rls | ✓ | ✗ | ✗ |
+| medical / payments | ✓ | ✗ | ✓ |
+| shared-core / architecture / release | ✓ | ✗ | ✓ |
+
+---
+
+## Reports
+
+```bash
+npx tsx system/reports/morning-report.ts
+npx tsx system/reports/failed-wo-report.ts
+npx tsx system/reports/model-quality-report.ts
+npx tsx system/reports/run-summary-generator.ts --all
+npx tsx system/reports/wo-dossier.ts --all-completed
+npx tsx system/control-plane/docs-drift-checker.ts
+```
+
+---
+
+## Workorder-Workflow (Masterprompts)
+
+Tom nutzt diese Trigger — ich lese die jeweilige Datei automatisch:
+
+| Trigger | Datei |
+|---|---|
+| `"Spec erstellen:"` | `docs/project/prompts/MASTERPROMPT_BRAINSTORM_TO_SPEC.md` |
+| `"Workorders generieren:"` | `docs/project/prompts/MASTERPROMPT_SPEC_TO_WORKORDERS.md` |
+| `"WOs reviewen:"` | `docs/project/prompts/MASTERPROMPT_WORKORDER_REVIEW.md` |
+| `"Batch planen:"` | `docs/project/prompts/MASTERPROMPT_WORKORDER_BATCH_PLAN.md` |
+
+Handbücher: `docs/project/USER_MANUAL.md` | `docs/project/WORKORDER_CREATION_HANDBOOK.md`
+
+---
+
+## Wichtige Dateien
 
 ```
 system/control-plane/dispatcher.ts           — Haupt-Dispatcher
+system/control-plane/risk-categories.ts      — Risk-Matrix (SSOT)
 system/control-plane/governance-validator.ts — Validator
-system/control-plane/risk-categories.ts      — Risk-Matrix (Single Source of Truth)
-system/control-plane/scheduler-preflight.ts  — D.2 Preflight
+system/control-plane/scheduler-preflight.ts  — 12 Checks
 system/control-plane/review-pipeline.ts      — Review Pipeline V2
+system/control-plane/stop-rules.ts           — Stop-Regeln (C.1b)
+system/control-plane/night-run-policy.ts     — Night-Run (C.3)
+system/control-plane/docs-drift-checker.ts   — Docs-Drift (E.2)
 system/state/state-manager.ts               — V1.4.0 (Locks, Stop, State-Machine)
 system/state/audit-writer.ts                — Alle Audit-Events
 system/agent-registry/authorize-tool-call.ts — Permission Gateway v0.3.0
-system/reports/run-summary-generator.ts     — B.1 Run Summary
-services/scheduler-api/src/vllm-adapter.ts  — callModel() mit enable_thinking
-system/agent-registry/model_routing.json    — Agent → Node Mapping
+system/approval/approval-queue.ts           — Approval Queue (C.2)
+system/approval/approval-cli.ts             — CLI
+system/workorders/schemas/workorder.schema.json — WO-Schema
+system/reports/morning-report.ts            — Morning Report
+system/reports/failed-wo-report.ts          — Failed WO Report
+system/reports/model-quality-report.ts      — Model Quality Report
+system/reports/run-summary-generator.ts     — Run Summary
+system/reports/wo-dossier.ts               — WO Dossier
+docs/project/DOCS_GOVERNANCE.md            — SSOT-Matrix, Drift-Regeln
 ```
 
 ---
 
-## Workorder Format
+## Docs-Governance (E.2)
 
-```xml
-<task>
-  <analyze>Was verstehe ich aus dem Task?</analyze>
-  <implement>Was muss ich konkret tun?</implement>
-  <constraints>
-    <negative_constraints>["NIEMALS X", "NIEMALS Y"]</negative_constraints>
-  </constraints>
-  <on_error>{"status": "FAIL", "reason": "..."}</on_error>
-</task>
+10 SSOT-Dateien, 12 geprüfte Source-Doc-Paare.
+
+```bash
+npx tsx system/control-plane/docs-drift-checker.ts --blocking-only
+# BLOCKING: 0 = sauber
 ```
-
-**Pflichtfelder:** agent_id, scope_files, acceptance_criteria, negative_constraints (min 4)
-**Neue Pflichtfelder (A.1):** risk_category, rollback_hint (bei db-migration)
 
 ---
 
-## Was Claude Desktop hier tut
+## Offene Punkte
 
-- Architektur-Partner für Tom
-- Workorder-Generierung (XML Format)
-- Stack-Entscheidungen dokumentieren
-- Kein direkter Zugriff auf laufende Services
-- Kein Deployment, kein State-Change
+```
+F  Spark Runtime Hardening (bewusst später):
+   - systemd Services
+   - HTTP Healthcheck-Timer
+   - Reboot-Tests pro Spark
+   - Auto-Restart bei hängendem vLLM
+```
