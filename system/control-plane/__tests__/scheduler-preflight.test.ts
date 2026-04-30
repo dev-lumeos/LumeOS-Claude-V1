@@ -192,8 +192,8 @@ describe('Preflight — Priorität REJECT > HOLD > GO', () => {
     assert.equal(result.verdict, 'REJECT')
   })
 
-  it('checks-Array enthält alle 11 Checks', () => {
+  it('checks-Array enthält alle 12 Checks', () => {
     const result = runPreflight(BASE_WO, makeDeps())
-    assert.equal(result.checks.length, 11)
+    assert.equal(result.checks.length, 12)
   })
 })

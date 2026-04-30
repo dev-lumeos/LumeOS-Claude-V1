@@ -157,8 +157,8 @@ describe('Preflight — System Stop Integration', () => {
     assert.equal(result.verdict, 'GO')
   })
 
-  it('checks-Array hat jetzt 11 Checks (system_not_stopped neu)', () => {
+  it('checks-Array hat jetzt 12 Checks (night_run_policy neu)', () => {
     const result = runPreflight(BASE_WO, makeStopDeps(false))
-    assert.equal(result.checks.length, 11)
+    assert.equal(result.checks.length, 12)
   })
 })

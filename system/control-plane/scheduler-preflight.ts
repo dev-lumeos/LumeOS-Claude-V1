@@ -20,6 +20,7 @@ import Ajv  from 'ajv'
 import type { Workorder } from './dispatcher'
 import { checkScopeConflict, isDbMigrationLocked, isSystemStopped } from '../state/state-manager'
 import { inferCategoryFromTask }                   from './risk-categories'
+import { loadPolicy, isAllowedInNightRun }         from './night-run-policy'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -203,6 +204,34 @@ function checkDbMigrationLock(wo: Workorder, deps: PreflightDeps): PreflightChec
   return { name, passed: true, verdict: 'GO' }
 }
 
+/**
+ * C.3: Night-Run-Policy — prüft ob WO im Night-Run erlaubt ist.
+ * Nur aktiv wenn night_run_active = true. Sonst immer GO.
+ */
+function checkNightRunPolicy(wo: Workorder): PreflightCheck {
+  const name   = 'night_run_policy'
+  const policy = loadPolicy()
+
+  // Policy nicht aktiv → kein Check nötig
+  if (!policy.night_run_active)
+    return { name, passed: true, verdict: 'GO' }
+
+  const category = wo.risk_category ?? inferCategoryFromTask(wo.task)
+  const woCheck  = isAllowedInNightRun(category, policy)
+
+  if (woCheck.verdict === 'AUTONOMOUS')
+    return { name, passed: true, verdict: 'GO' }
+
+  if (woCheck.verdict === 'CAUTIOUS')
+    return { name, passed: true, verdict: 'GO' }  // erlaubt, nur Spark D mandatory
+
+  if (woCheck.verdict === 'REQUIRES_APPROVAL')
+    return { name, passed: false, verdict: 'HOLD',
+      reason: woCheck.reason + ' — Approval in queue.json eintragen' }
+
+  return { name, passed: false, verdict: 'HOLD', reason: woCheck.reason }
+}
+
 // ─── Haupt-Funktion ───────────────────────────────────────────────────────────
 
 /**
@@ -230,6 +259,8 @@ export function runPreflight(
     checkBlockedByResolved(wo, deps),
     checkScopeLock(wo, deps),
     checkDbMigrationLock(wo, deps),
+    // C.3: Night-Run-Policy — nur relevant wenn night_run_active
+    checkNightRunPolicy(wo),
   ]
 
   // Gesamtverd: schlechtestes Einzelergebnis
