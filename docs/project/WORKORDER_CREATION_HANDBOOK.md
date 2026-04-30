@@ -160,7 +160,7 @@ Empfohlene Reihenfolge: Schema → API → UI → Tests → Docs
 - hat klare `scope_files`
 - hat sinnvolle `files_blocked` wenn nötig
 - hat eine eindeutige `risk_category`
-- hat messbare `acceptance_criteria`
+- hat mindestens 2 messbare `acceptance_criteria`
 - hat mindestens 4 `negative_constraints`
 - hat konkrete `validation_commands`
 - ist in einem Run prüfbar
@@ -263,6 +263,9 @@ Bei `db-migration` ist `rollback_hint` **Pflicht**:
 }
 ```
 
+**Hinweis zu `requires_approval`:**  
+`requires_approval` ist ein **optionales Feld**. Die primäre Approval-Steuerung erfolgt über `risk_category`. Für `db-migration`, `payments`, `medical` und `release` ist Approval über die Risk-Policy systemseitig verpflichtend — unabhängig davon ob `requires_approval: true` gesetzt ist. Das Feld kann ergänzt werden um Approval explizit zu dokumentieren, ist aber für die Enforcement nicht nötig.
+
 ---
 
 ## 10. Beispiele
@@ -322,7 +325,6 @@ Bei `db-migration` ist `rollback_hint` **Pflicht**:
     "NIEMALS State-Management außerhalb der Komponente ändern"
   ],
   "validation_commands": ["pnpm tsc --noEmit"],
-  "context_files": ["packages/ui/src/components/Spinner.tsx"],
   "blocked_by": []
 }
 ```
@@ -416,10 +418,11 @@ Bei `db-migration` ist `rollback_hint` **Pflicht**:
     "NIEMALS DROP TABLE ohne expliziten Rollback-Plan"
   ],
   "validation_commands": ["pnpm tsc --noEmit"],
-  "requires_approval": true,
   "blocked_by": []
 }
 ```
+
+*Hinweis: `requires_approval` ist hier weggelassen — Approval wird durch `risk_category: db-migration` systemseitig erzwungen.*
 
 ---
 
@@ -470,8 +473,8 @@ Checkliste für jede WO bevor sie dispatcht wird:
 [ ] Ist risk_category korrekt gesetzt?
 [ ] Sind scope_files eng genug gefasst?
 [ ] Sind files_blocked sinnvoll gesetzt?
-[ ] Sind acceptance_criteria messbar (nicht "sieht gut aus")?
-[ ] Sind negative_constraints konkret (nicht "mach nichts kaputt")?
+[ ] Sind acceptance_criteria messbar (mindestens 2, nicht "sieht gut aus")?
+[ ] Sind negative_constraints konkret (mindestens 4, nicht "mach nichts kaputt")?
 [ ] Sind validation_commands vorhanden?
 [ ] Gibt es noch offene Designfragen?
 [ ] Braucht sie Approval? → risk_category prüfen
@@ -491,6 +494,7 @@ Checkliste für jede WO bevor sie dispatcht wird:
 | keine `files_blocked` | Auth/RLS-Dateien könnten angetastet werden | Sensitive Pfade explizit sperren |
 | `negative_constraints` zu weich | "nicht alles kaputt machen" ist nicht deterministisch | Konkret: "NIEMALS X ändern" |
 | `acceptance_criteria` nicht messbar | "funktioniert gut" ist kein Kriterium | "gibt HTTP 200 zurück", "TypeScript 0 Fehler" |
+| weniger als 2 `acceptance_criteria` | Unvollständige Prüfbarkeit | Mindestens 2 messbare Kriterien formulieren |
 | `db-migration` ohne `rollback_hint` | Preflight-REJECT, WO startet nicht | Immer DROP/REVERT-Statement angeben |
 | UI + DB + API in einer WO | Zu groß, schwer zu reviewen, Konflikte | In 3 separate WOs splitten |
 | High-Risk nachts ohne Approval | Night-Run-Policy blockiert, HOLD | Approval vor Night-Run einholen |
