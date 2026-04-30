@@ -1,6 +1,8 @@
 # LumeOS Canonical Memory
 
-# Stand: 25. April 2026 — Stack Update
+> **CURRENT TRUTH** — Stand: April 2026
+> Diese Datei enthält nur aktuelle, belegte Aussagen.
+> Historische Designentscheidungen: `docs/BrainstormDocs/` (ARCHIVE — not current truth)
 
 ---
 
@@ -8,104 +10,112 @@
 
 **Architecture:** Brain / Law / Muscle
 
-- Brain: Claude Code Opus 4.6 (planning, specs, WOs)
-- Law: Deterministisches System (WO Classifier, Governance Compiler, SAT-Check, Scheduler, Ed25519)
-- Muscle: DGX Sparks (vLLM Execution)
+- Brain: Claude Code (planning, specs, WOs)
+- Law: Deterministisches System (Scheduler, Governance, Preflight, Reports)
+- Muscle: DGX Sparks A+B+C+D (vLLM Execution)
 
-**Repo:** <https://github.com/dev-lumeos/LumeOS-Claude-V1>**Stack:** pnpm / Turborepo / Hono / Supabase / vLLM / TypeScript
+**Repo:** https://github.com/dev-lumeos/LumeOS-Claude-V1
+**Stack:** pnpm / Turborepo / Hono / Supabase / vLLM / TypeScript
 
 ---
 
-## Hardware
+## Hardware — Phase 2 LIVE (alle 4 Sparks aktiv)
 
-### Phase 1 (AKTIV — 2 Sparks)
+| Node | IP | Port | Modell | Rolle | Status |
+|---|---|---|---|---|---|
+| Spark A | 192.168.0.128 | 8001 | Qwen3.6-35B-A3B FP8 | Orchestrator + WO-Validator | ✅ LIVE |
+| Spark B | 192.168.0.188 | 8001 | Qwen3-Coder-Next FP8 | Coding Worker | ✅ LIVE |
+| Spark C | 192.168.0.99 | 8001 | Gemma-4-26B-A4B-it FP8 | Fast Reviewer (Pipeline Tier 1) | ✅ LIVE |
+| Spark D | 192.168.0.101 | 8001 | GPT-OSS-120B MXFP4 | Senior Reviewer (Pipeline Tier 2) | ✅ LIVE |
+| RTX 5090 | localhost | 8001 | Qwen3-VL-30B FP8 | MealCam Vision | geplant |
+| Escalation | — | — | Claude Code Max 200 | Senior Coding (selten) | aktiv |
 
-NodeIPModellStatusSpark 1192.168.0.128:8001Qwen3.6-35B-A3B-FP8✅ LIVESpark 2192.168.0.188:8001Qwen3-Coder-Next-FP8✅ LIVERTX 5090localhost:8010Qwen3-VL-30B-A3B-FP8✅ LIVE
+---
 
-### Phase 2 (PENDING — Sparks unterwegs)
+## Governance-System — Implementierungsstand
 
-NodeIPModellStatusSpark 3TBDMiniMax M2.7 NVFP4 ½ + DeepSeek-R1 70B NVFP4🔜 BestelltSpark 4TBDMiniMax M2.7 NVFP4 ½ + GLM-4.7-Flash + Qwen3.5 9B🔜 Bestellt
+Alle Blöcke A–E implementiert und verifiziert:
 
-**Phase 2 Besonderheit:** MiniMax M2.7 läuft als TP=2 über Spark 3+4 gemeinsam. Mode 1 (Standard): DeepSeek + GLM + Qwen9B aktiv. Mode 2 (High Intelligence): MiniMax M2.7 aktiv, andere idle.
+| Block | Thema | Status |
+|---|---|---|
+| Block 6 | Review-Pipeline V2 | ✅ |
+| A.1–A.4 | Workorder-Schema, Risk-Categories, Files Enforcement, Locks | ✅ |
+| B.1–B.4 | Run Summary, Morning Report, Failed WO Report, Model Quality Report | ✅ |
+| C.1–C.3 | Kill-Switch, Stop Rules, Approval Queue, Night-Run-Policy | ✅ |
+| D.1–D.2 | WO-State-Machine, Scheduler Preflight (12 Checks) | ✅ |
+| E.1–E.2 | WO Dossier Generator, Docs-Governance V1 | ✅ |
+| F | Spark Runtime Hardening | ⏳ offen |
+
+---
+
+## Agent Routing (aktueller Stand)
+
+| Agent | Node | Modell | Zweck |
+|---|---|---|---|
+| orchestrator-agent | Spark A | qwen3.6-35b-fp8 | Dispatch + Monitor |
+| pre-review-agent | Spark A | qwen3.6-35b-fp8 | Vollständigkeit prüfen |
+| post-review-agent | Spark A | qwen3.6-35b-fp8 | Output validieren |
+| micro-executor | Spark B | qwen3-coder-next-fp8 | TypeScript Patches |
+| test-agent | Spark B | qwen3-coder-next-fp8 | Tests |
+| fast-reviewer-agent | Spark C | gemma-4-26B-A4B-it | Pipeline Tier 1 |
+| senior-reviewer-agent | Spark D | gpt-oss-120b | Pipeline Tier 2 |
+| senior-coding-agent | Claude Code | claude-opus-4-5 | Escalation only |
+
+---
+
+## Services (laufend auf Threadripper, lokal)
+
+| Port | Service | Status |
+|---|---|---|
+| 9000 | wo-classifier | deterministisches Routing |
+| 9001 | sat-check | 3 deterministische Checks |
+| 9002 | scheduler-api | WO Queue + Spark-Dispatch |
+| 9003 | governance-compiler | Macro-WO → GovernanceArtefaktV3 |
+| 9004 | lightrag | Codebase Knowledge Graph |
+| 54321 | supabase | Control Plane DB (lokal, niemals Cloud) |
 
 ---
 
 ## Festgezogene Entscheidungen
 
-### Pipeline
-
-- WO Classifier: deterministisch, regelbasiert, kein LLM (Port 9000)
-- Governance Compiler: Spark 1, GovernanceArtefaktV3 YAML
-- SAT-Check: Threadripper, 3 Checks, kein LLM (Port 9001)
-- Scheduler: 5s Loop, SlotManager, Priority Queue (Port 9002)
-- Ed25519 Token: Sign/Verify, Nonce UNIQUE, 5min Expiry
-- triple_hash: 3× identisch = PASS, Temp=0.0, Seed=42
-
-### Modelle (Phase 2 Zielstack)
-
-RolleModellNodeOrchestratorNemotron 3 Super NVFP4Spark 1Review / Pre+PostQwen3.6-35B FP8Spark 1Coding WorkerQwen3-Coder-Next FP8Spark 2High IntelligenceMiniMax M2.7 NVFP4 TP=2Spark 3+4Security/ReasoningDeepSeek-R1 Distill 70B NVFP4Spark 3Test/Tool CallingGLM-4.7-FlashSpark 4Fast SidekickQwen3.5 9BSpark 4MealCam VisionQwen3-VL 30B-A3B FP8RTX 5090
-
-### Agent Workflow
-
-```
-Claude + Tom → Workorder
-             → pre-review-agent   (Qwen3.6: Vollständigkeit)
-             → orchestrator-agent (Dispatch + Monitor)
-             → Executor Agent
-             → post-review-agent  (Qwen3.6: Output validieren)
-             → Approval Gate
-             → Tom
-```
-
-### DB
-
-- Control Plane: Lokal auf Threadripper (Supabase Port 54321)
-- App-Daten: Supabase Cloud (später, wenn Nutrition/Training gebaut)
-- Trennung: Control Plane NIEMALS in Cloud
-
-### Tools
-
-- Context7: Library Docs MCP
-- Serena: LSP Code Navigation MCP
-- claude-mem: Session Memory (Port 37777, Bun)
-- LightRAG: Codebase Knowledge Graph (Port 9004, 170 Files)
-- lean-ctx: Token Compression
-- Grafana: WO Pipeline + Hardware Dashboard (Port 3001)
-- Prometheus: Metrics (Port 9090)
+- WO Classifier: deterministisch, regelbasiert, kein LLM
+- Control Plane DB: lokal auf Threadripper — NIEMALS in Cloud
+- Qwen3.6 Pflicht: `enable_thinking: false`, `temperature: 0.0`
+- Reasoning-Filter: `extractContentOnly()` für alle Reasoning-Modelle
+- Scope Enforcement: `scope_files` + `files_blocked` erzwungen
+- Review Pipeline: Spark C → Spark D → ESCALATE → Claude Code
 
 ---
 
-## Services (laufend auf Threadripper)
+## Qwen3.6 Pflichtregeln
 
+```json
+{
+  "chat_template_kwargs": { "enable_thinking": false },
+  "temperature": 0.0
+}
 ```
-Port 9000  wo-classifier       deterministisches Routing
-Port 9001  sat-check           3 deterministische Checks
-Port 9002  scheduler-api       5s Dispatch Loop
-Port 9003  governance-compiler Spark 1 → GovernanceArtefaktV3
-Port 9004  lightrag            Codebase Knowledge Graph
-Port 9005  orchestrator        TODO — wartet auf Phase 2 (Nemotron)
-Port 37777 claude-mem          Session Memory
-Port 54321 supabase            Control Plane DB
-Port 3001  grafana             Dashboards
-Port 9090  prometheus          Metrics
-```
+
+`/no_think` im Prompt funktioniert NICHT — nur `chat_template_kwargs`.
 
 ---
 
-## System Dokumente (V2)
+## Offene Punkte (einzige echte Offene)
 
-- `system/model-tiers/model_registry_v2.md` — aktueller Stack
-- `system/model-tiers/model_tiers_v2.md` — Tier-Definitionen + Mode Switching
-- `system/agent-registry/agent_registry_v2.md` — alle Agenten
+- **F — Spark Runtime Hardening:** systemd Services, HTTP Healthcheck-Timer, Reboot-Tests, Auto-Restart bei hängendem vLLM
+- **Block 3 Tech-Debt:** 3 TS-Fehler + 3 failing Smoke-Tests (pre-existing, nicht durch Governance-Arbeit verursacht)
 
 ---
 
-## Offene Punkte
+## Veraltete / nicht mehr gültige Annahmen (NICHT als Wahrheit lesen)
 
-- Spark 3+4: Lieferung + Konfiguration ausstehend
-- Port 9005 Orchestrator: wartet auf Nemotron Deployment
-- Nutrition-API: wartet auf Supabase Cloud
-- CI Pipeline: wartet auf vollständige Tests
-- Memory Layer Policies: wartet auf Orchestrator
-- WO Batches Automatisierung: wartet auf Orchestrator
-- KV-Cache Spark 3 prüfen nach Inbetriebnahme (\~28GB — falls zu knapp DeepSeek auslagern)
+Die folgenden Punkte waren in früheren Versionen dieser Datei enthalten und
+wurden als veraltet entfernt. Sie stehen nur hier zur Referenz:
+
+- ~~Phase 2 PENDING — Spark 3+4 unterwegs~~ → Phase 2 ist LIVE
+- ~~Nemotron als Orchestrator (Port 9005)~~ → Orchestrator ist Qwen3.6 auf Spark A
+- ~~MiniMax M2.7 als Spark 3+4 Modelle~~ → Spark C = Gemma 4, Spark D = GPT-OSS
+- ~~Nutrition-API wartet auf Supabase Cloud~~ → noch kein aktueller Implementierungsstand
+- ~~Port 9005 Orchestrator wartet auf Nemotron Deployment~~ → Port 9005 nicht aktiv
+- ~~triple_hash Verifikation~~ → nicht Teil des aktuellen Governance-Systems
+- ~~Ed25519 Token~~ → nicht Teil des aktuellen Governance-Systems

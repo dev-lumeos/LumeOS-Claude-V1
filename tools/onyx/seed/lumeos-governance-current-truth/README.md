@@ -26,20 +26,6 @@ Deterministic AI Production Pipeline for LUMEOS.
 | C | 192.168.0.99:8001 | Gemma-4-26B FP8 | Fast Reviewer Tier 1 |
 | D | 192.168.0.101:8001 | GPT-OSS-120B MXFP4 | Senior Reviewer Tier 2 |
 
-## Structure
-
-```
-apps/        # Frontend surfaces
-services/    # Hono API backends
-packages/    # Shared runtime + system core
-db/          # Migrations, schema, seeds
-system/      # Governance system (WO, Scheduler, Agents, Reports, Memory)
-infra/       # vLLM, Supabase, Docker, systemd
-tools/       # Serena, Onyx, scripts
-docs/        # Specs, decisions, architecture, project docs
-.claude/     # Claude Code skills, rules, agents
-```
-
 ## Key Docs
 
 - `docs/project/USER_MANUAL.md` — Operator guide for Tom
