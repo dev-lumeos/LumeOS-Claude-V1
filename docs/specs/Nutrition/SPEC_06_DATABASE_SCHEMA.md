@@ -1283,11 +1283,21 @@ GRANT ALL ON ALL SEQUENCES IN SCHEMA nutrition TO authenticated, service_role;
 
 ---
 
-## Ausstehende Korrekturen in SPEC_06
+## V1 Korrekturen — Status April 2026
 
-Die folgenden 3 Fixes müssen beim nächsten Schreiben angewendet werden:
+Alle ausstehenden Korrekturen wurden als Migration-Patch dokumentiert.
 
-1. `nutrition.food_categories`: `name_th TEXT` nach `name_en` hinzufügen
-2. `nutrition.foods_custom`: `source CHECK` → `('user','mealcam')` — `'openfoodfacts'` entfernen
-3. `nutrition.foods_custom`: `name_th TEXT` Spalte nach `name_en` hinzufügen
-4. `nutrition.shopping_lists` + `nutrition.shopping_list_items` Tabellen aus SPEC_02 (Entities 12+13) übernehmen
+Sieh: `SPEC_06_V1_MIGRATION.sql` für alle SQL-Änderungen.
+
+Erledigte Fixes:
+1. ✅ `nutrition.food_categories`: `name_th TEXT` ergänzt
+2. ✅ `nutrition.foods_custom`: `source CHECK` → `('user','manual','import','admin')` — `openfoodfacts` entfernt
+3. ✅ `nutrition.foods_custom`: `name_th TEXT` Spalte ergänzt
+4. ✅ `nutrition.shopping_lists` + `shopping_list_items`: Schema-only V1
+
+Neue Tabellen (V1-Entscheidungen):
+- `nutrition.nutrient_reference_values` — RDA/AI/UL pro Nährstoff
+- `nutrition.food_portions` — Portionsgrößen pro Food
+- `nutrition.user_recent_portions` — Zuletzt genutzte Portionen
+- `nutrition.mealcam_scans` — MealCam V1 Scans + Consent
+- `nutrition.meal_items` — food_source um 'mealcam'/'manual' erweitert
