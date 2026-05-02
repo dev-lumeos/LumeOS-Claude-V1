@@ -43,6 +43,40 @@ const ALLOWED_AGENTS = new Set([
   'review-agent',
 ])
 
+/**
+ * V1 Hardcoded-Map: workorder.agent_id → validator-target selected_agent.
+ *
+ * Wird ausschließlich von normalizeOrchestratorIntent() konsultiert, wenn das
+ * Modell-Output kein gültiges selected_agent enthält. Validator-Strenge bleibt
+ * unberührt: validateOrchestratorIntent() sieht entweder einen ALLOWED_AGENTS-
+ * Wert (→ PASS) oder einen ungültigen Wert (→ REWRITE).
+ *
+ * Phase 2 (eigene WO): agents.json[validator_target_agent]-Feld oder separate
+ * Mapping-Datei. V1 hält die Map bewusst hier inline.
+ */
+export const AGENT_VALIDATOR_MAP: Record<string, string> = {
+  'docs-agent':          'micro-executor',
+  'test-agent':          'micro-executor',
+  'i18n-agent':          'micro-executor',
+  'mealcam-agent':       'micro-executor',
+  'context-builder':     'micro-executor',
+  'governance-compiler': 'micro-executor',
+  'senior-coding-agent': 'micro-executor',
+  'micro-executor':      'micro-executor',
+  'db-migration-agent':  'db-migration-agent',
+  'security-specialist': 'security-specialist',
+  'review-agent':        'review-agent',
+}
+
+/**
+ * Schlägt einen Validator-Target-Agent für die WO-`agent_id` aus der Hardcoded-Map nach.
+ * Gibt undefined zurück wenn die `agent_id` unbekannt ist — Validator entscheidet dann
+ * deterministisch (REWRITE/FAIL über die bestehenden ALLOWED_AGENTS-Regeln).
+ */
+export function mapAgentToValidatorTarget(workorderAgentId: string): string | undefined {
+  return AGENT_VALIDATOR_MAP[workorderAgentId]
+}
+
 const ALLOWED_GATES = new Set([
   'db-migration-gate',
   'rollback-gate',
@@ -127,6 +161,38 @@ export function parseOrchestratorIntent(content: string): OrchestratorIntent {
   }
 
   throw new Error(`QWEN_NOT_JSON: ${trimmed.slice(0, 100)}`)
+}
+
+// ─── Normalizer ───────────────────────────────────────────────────────────────
+
+/**
+ * Normalisiert intent.selected_agent gegen ALLOWED_AGENTS.
+ *
+ * Ersetzt fehlende oder ungültige selected_agent-Werte durch den Mapping-Eintrag
+ * aus AGENT_VALIDATOR_MAP, basierend auf workorder.agent_id. Wird vom Dispatcher
+ * zwischen parseOrchestratorIntent() und validateOrchestratorIntent() aufgerufen.
+ *
+ * Verhalten:
+ *   - Falls intent.selected_agent in ALLOWED_AGENTS: unverändert (PASS-Kandidat).
+ *   - Falls undefined / leer / nicht in ALLOWED_AGENTS: lookup über AGENT_VALIDATOR_MAP.
+ *   - Falls workorder.agent_id nicht in der Map: intent unverändert zurückgeben —
+ *     Validator entscheidet dann deterministisch (REWRITE → FAIL bei Limit).
+ *
+ * Mutiert intent NICHT — gibt ein neues Objekt zurück, wenn normalisiert wurde.
+ */
+export function normalizeOrchestratorIntent(
+  intent: OrchestratorIntent,
+  workorderAgentId: string,
+): OrchestratorIntent {
+  const current = intent.selected_agent
+  if (typeof current === 'string' && ALLOWED_AGENTS.has(current)) {
+    return intent
+  }
+  const mapped = mapAgentToValidatorTarget(workorderAgentId)
+  if (!mapped) {
+    return intent
+  }
+  return { ...intent, selected_agent: mapped }
 }
 
 // ─── Validator ────────────────────────────────────────────────────────────────

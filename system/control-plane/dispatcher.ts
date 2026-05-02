@@ -36,6 +36,7 @@ import { authorizeToolCall, isPathInScope } from '../agent-registry/authorize-to
 import { loadSkills, buildSystemPrompt } from './skill-loader'
 import {
   parseOrchestratorIntent,
+  normalizeOrchestratorIntent,
   validateOrchestratorIntent,
   inferWorkorderType,
   type OrchestratorIntent,
@@ -408,6 +409,20 @@ export async function dispatchWorkorder(
             error: `Governance: Model-Output nicht parsebar nach ${MAX_REWRITE_LOOPS} Rewrite-Versuchen` }
         }
         continue
+      }
+
+      // Normalisiere intent.selected_agent (V1 Hardcoded-Map). Validator-Strenge bleibt unberührt.
+      const intentBefore = intent
+      intent = normalizeOrchestratorIntent(intent, wo.agent_id)
+      if (intent.selected_agent !== intentBefore.selected_agent) {
+        audit.writeAuditEvent({
+          event: 'orchestrator_intent_normalized',
+          run_id: runId,
+          workorder_id: wo.workorder_id,
+          agent_id: wo.agent_id,
+          orchestration_mode: orchestrationMode,
+          reason: `selected_agent normalized from "${intentBefore.selected_agent ?? 'undefined'}" to "${intent.selected_agent}" via AGENT_VALIDATOR_MAP[${wo.agent_id}]`,
+        })
       }
 
       // Governance validieren
