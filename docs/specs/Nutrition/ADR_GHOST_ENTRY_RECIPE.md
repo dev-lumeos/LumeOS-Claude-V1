@@ -2,6 +2,10 @@
 
 **Datum:** April 2026 | **Status:** Final
 
+**V1-Status:** Aktiv ab V1-nice-to-have (Recipe-Logging) — V1 hat nur Schema vorbereitet.
+Wenn V1 Recipes/Meal Plans nicht über Schema hinausgehen, gilt dieser ADR ab Phase 2.
+Verbindlich: `ADR_RECIPES_SCHEMA_ONLY.md`.
+
 ## Entscheidung
 
 Ghost Entries die aus einem `MealPlanItem.recipe_id` stammen zeigen

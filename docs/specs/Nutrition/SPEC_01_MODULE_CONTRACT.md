@@ -198,7 +198,7 @@ User Custom Foods → nutrition.foods_custom (user-privat)
 | Human-Coach | MealPlan + Rezepte anlegen, User zuweisen | Nur `status: 'assigned'`, nie `status: 'active'` |
 | Human-Coach | Nutrition Preferences **vorschlagen** | Coach schreibt nicht direkt — User muss bestätigen |
 | Marketplace | MealPlan + Rezepte nach Kauf zuweisen | Nur `status: 'assigned'` |
-| Buddy | MealPlan + Rezepte auf explizite User-Anweisung | Nur `status: 'assigned'` |
+| Buddy | MealPlan + Rezepte auf explizite User-Anweisung | **Phase 2** — V1 nur Schema (`source` Enum-Wert vorbereitet) |
 
 **Regel:** Kein Modul darf `status: 'active'` setzen ohne User-Action.
 **Regel:** Coach darf keine Preferences direkt schreiben — nur Suggestions erzeugen, die User bestätigt.
@@ -231,6 +231,8 @@ Recipes
 Meal Plans
 Shopping Lists
 ```
+
+**Eskalationspfad:** Wenn V1-Zeitbudget knapp wird, werden Recipes, Meal Plans und Shopping Lists vollständig auf Phase 2 verschoben (siehe `ADR_RECIPES_SCHEMA_ONLY.md` und `NUTRITION_NEXT_SPEC_DECISIONS.md §15`).
 
 ### Phase 2
 
@@ -439,8 +441,8 @@ http://nutrition:5100/api/nutrition/
   meals/              Meal Logging (Diary)
   water/              Water Tracking
   targets/            Gecachte Tages-Targets (von Goals)
-  recipes/            Rezepte + Einkaufslisten (V1 schema-only wenn Zeit knapp)
-  meal-plans/         Meal Plans (alle Quellen, V1 schema-only wenn Zeit knapp)
+  recipes/            Rezepte + Einkaufslisten — V1 schema-only / API Phase 2 wenn Zeit knapp
+  meal-plans/         Meal Plans — V1 schema-only / API Phase 2 wenn Zeit knapp
   preferences/        Food Preferences (Allergien, Unverträglichkeiten, Likes/Dislikes, Diät)
   summary/            Tages- und Zeitraum-Aggregate
   nutrients/          Nährstoff-Definitionen + Referenzwerte

@@ -16,13 +16,13 @@
 | 06 | `SPEC_06_DATABASE_SCHEMA.md` | Vollständiges SQL — alle Tabellen, Indexes, Triggers, RLS |
 | 06+ | `SPEC_06_V1_MIGRATION.sql` | **Pass 1:** SQL-Migration für alle V1-Fixes und neue Tabellen |
 | 07 | `SPEC_07_API.md` | Alle API Endpoints mit Request/Response-Schemas |
-| 07+ | `SPEC_07_PATCH_APRIL2026.md` | Patches: Top-Foods, Quick-Add, Barcode, Water food_ml |
+| 07+ | `SPEC_07_PATCH_APRIL2026.md` | Patches: Top-Foods, Quick-Add, Water food_ml — **Barcode-Anteil Phase 2** |
 | 07+ | `SPEC_07_PASS2_PATCH.md` | **Pass 2:** Food Portions, Micronutrient Review, MealCam V1, Preferences, Coach |
 | 08 | `SPEC_08_IMPORT_PIPELINE.md` | BLS 4.0 Import: Pipeline, Mapping, Warn-Report, Review Queue |
 | 09 | `SPEC_09_SCORING.md` | Scoring Engine: Pure Functions, Mikro-Review mit UL-Logik |
 | 09+ | `SPEC_09_PATCH_UL_SUPPLEMENTS.md` | **Pass 1:** UL-Logik, Supplements-Integration in calcMicroFlags |
 | 10 | `SPEC_10_COMPONENTS.md` | Frontend: Pages, Components, Hooks, Stores, i18n |
-| 10+ | `SPEC_10_PATCH_APRIL2026.md` | Patches: QuickMacroEntry, BarcodeScanner, nutrientDetails Refactor |
+| 10+ | `SPEC_10_PATCH_APRIL2026.md` | Patches: QuickMacroEntry, nutrientDetails Refactor — **BarcodeScanner Phase 2** |
 | 10+ | `SPEC_10_PASS2_PATCH.md` | **Pass 2:** PortionSelector, MealCam V1, Preferences UI, Coach UI, Thai disabled |
 
 ---
@@ -144,7 +144,7 @@
 | Coach nur Suggestions | ✅ |
 | Custom Foods source: kein openfoodfacts | ✅ |
 | nutrient_reference_values ul=NULL korrekt | ✅ (Seed-Werte pending) |
-| ADRs widersprechen Specs nicht | ✅ |
+| ADRs widersprechen Specs nicht | ✅ Stand 2026-05-02 (nach OPUS_REVIEW_NUTRITION_01_SCOPE_ADR.md Fixes) |
 
 ---
 

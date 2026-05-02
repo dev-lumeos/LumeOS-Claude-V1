@@ -1,5 +1,9 @@
 # ADR: Verbesserungen Nutrition — Paket April 2026
 
+**Status:** Archiviert (Pass-1-Inputs)
+**Hinweis:** Inhalte teilweise in V1 übernommen, teilweise Phase 2.
+Konkret: Punkt #19 (Barcode für Custom Foods) ist Phase 2 — siehe `ADR_MEALCAM_V1.md`.
+
 Alle Entscheidungen aus der Spec-Review-Runde.
 
 ---
@@ -104,6 +108,9 @@ if (userAllergies.includes('allergen_milk')) {
 ---
 
 ## #19 — Barcode: Nur Custom Foods, kein BLS-Lookup
+
+> **Phase 2** — Barcode Scanner ist nicht V1.
+> Verbindlich: `ADR_MEALCAM_V1.md` und `NUTRITION_NEXT_SPEC_DECISIONS.md §1`.
 
 **Klarstellung:** BLS 4.0 hat keine Barcodes.
 Barcode-Scanning ist **ausschliesslich** für Custom Foods.

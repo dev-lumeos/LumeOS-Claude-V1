@@ -14,6 +14,9 @@ source TEXT NOT NULL DEFAULT 'user'
 
 Analog zu `MealPlan.source` wo `buddy` bereits vorhanden ist.
 
+**V1-Status:** `source = 'buddy'` wird in V1 nur als Schema-Wert vorbereitet.
+Aktive Buddy-Recipe-Erzeugung ist Phase 2 (siehe `NUTRITION_NEXT_SPEC_DECISIONS.md §1` "Buddy MealPlan Builder").
+
 ## Begründung
 
 Buddy muss Rezepte erstellen können wenn er Meal Plans erstellt
