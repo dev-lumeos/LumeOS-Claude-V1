@@ -102,22 +102,18 @@ try {
         try {
             if ($null -eq $ToolInput) {
                 $safeInput = ''
-            } elseif ($ToolInput -is [string]) {
-                $safeInput = $ToolInput
             } else {
-                $safeInput = $ToolInput | ConvertTo-Json -Compress -Depth 20
+                $safeInput = [string]$ToolInput
             }
+
+            $safeInput = $safeInput -replace "`r", " "
+            $safeInput = $safeInput -replace "`n", " "
         } catch {
             $safeInput = '<unserializable-tool-input>'
         }
 
         $logPath = Join-Path $PSScriptRoot 'session.log'
-        $line = ('{0} {1} :: {2}' -f $ts, $ToolName, $safeInput)
-        [System.IO.File]::AppendAllText(
-            $logPath,
-            $line + [Environment]::NewLine,
-            (New-Object System.Text.UTF8Encoding -ArgumentList $false)
-        )
+        "$ts $ToolName :: $safeInput" | Out-File -FilePath $logPath -Append -Encoding UTF8
     }
 } catch {
     # Audit logging must never block Claude Code tool execution.
