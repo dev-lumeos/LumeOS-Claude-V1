@@ -258,8 +258,15 @@ INSERT INTO nutrition.nutrient_defs
 
 ### RDA-Update (nach Seed)
 
+> ⚠️ **DEPRECATED** — Diese hardcodierten RDA-Werte in `nutrient_defs` werden durch
+> `nutrition.nutrient_reference_values` abgelöst (SPEC_06_V1_MIGRATION.sql).
+> Die Werte hier sind **Beispielwerte ohne Quellenangabe** und sollen nicht produktiv genutzt werden.
+> Verbindlich: `NUTRIENT_REFERENCE_VALUES_SEED_STRUCTURE.md`.
+
 ```sql
--- RDA-Werte nachträglich setzen (DACH-Referenzwerte, Erwachsene 25-50 Jahre)
+-- DEPRECATED: Diese UPDATEs sind Beispiele ohne Quellenangabe.
+-- Verbindliche Werte kommen in nutrition.nutrient_reference_values.
+-- Seed-Daten erst nach Beschaffung aus geprüften Quellen (DACH/EFSA).
 UPDATE nutrition.nutrient_defs SET rda_male=2800, rda_female=2100, rda_unit='kcal' WHERE code='ENERCC';
 UPDATE nutrition.nutrient_defs SET rda_male=56,   rda_female=46,   rda_unit='g'    WHERE code='PROT625';
 UPDATE nutrition.nutrient_defs SET rda_male=30,   rda_female=30,   rda_unit='g'    WHERE code='FIBT';
@@ -298,6 +305,7 @@ CREATE TABLE nutrition.food_categories (
   slug        TEXT UNIQUE NOT NULL,
   name_de     TEXT NOT NULL,
   name_en     TEXT NOT NULL,
+  name_th     TEXT,           -- Thai-Name, darf NULL sein (V1 Texte ausstehend)
   parent_id   UUID REFERENCES nutrition.food_categories(id),
   level       INTEGER NOT NULL CHECK (level IN (1,2,3,4)),
   icon        TEXT,
@@ -702,7 +710,8 @@ CREATE TABLE nutrition.foods_custom (
   serving_size_g  NUMERIC(8,2) DEFAULT 100,
   serving_name    TEXT,
   source          TEXT DEFAULT 'user'
-    CHECK (source IN ('user','mealcam','openfoodfacts')),
+    CHECK (source IN ('user','manual','import','admin')),
+    -- V1: openfoodfacts und mealcam als source-Werte entfernt (ADR_BLS_ONLY.md)
 
   -- Makros (Pflicht)
   enercc          NUMERIC(8,2) NOT NULL,
@@ -769,7 +778,7 @@ CREATE TABLE nutrition.food_preference_items (
   id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id         UUID NOT NULL,
   preference      TEXT NOT NULL CHECK (preference IN ('liked','disliked')),
-  target_type     TEXT NOT NULL CHECK (target_type IN ('food','category','tag')),
+  target_type     TEXT NOT NULL CHECK (target_type IN ('food','category','tag','cuisine')),
   food_id         UUID REFERENCES nutrition.foods(id),
   custom_food_id  UUID REFERENCES nutrition.foods_custom(id),
   category_id     UUID REFERENCES nutrition.food_categories(id),
@@ -818,7 +827,8 @@ CREATE TABLE nutrition.meal_items (
   -- Food-Referenz (denormalisiert für Robustheit)
   food_id         UUID,
   custom_food_id  UUID REFERENCES nutrition.foods_custom(id),
-  food_source     TEXT NOT NULL CHECK (food_source IN ('bls','custom','mealcam')),
+  food_source     TEXT NOT NULL CHECK (food_source IN ('bls','custom','mealcam','manual')),
+  -- 'manual' = Quick-Add Makros ohne Food-Referenz (ADR_IMPROVEMENTS_PACKAGE.md #14)
   food_name       TEXT NOT NULL,
   amount_g        NUMERIC(8,2) NOT NULL,
 

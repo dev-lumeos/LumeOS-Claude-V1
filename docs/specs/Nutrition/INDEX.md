@@ -14,7 +14,8 @@
 | 04 | `SPEC_04_FEATURES.md` | Features mit Regeln und Implementierungsdetails |
 | 05 | `SPEC_05_FOOD_TAXONOMY.md` | Kategorie-Baum, Food Tags V1, sort_weight, Canonical Names |
 | 06 | `SPEC_06_DATABASE_SCHEMA.md` | Vollständiges SQL — alle Tabellen, Indexes, Triggers, RLS |
-| 06+ | `SPEC_06_V1_MIGRATION.sql` | **Pass 1:** SQL-Migration für alle V1-Fixes und neue Tabellen |
+| 06+ | `SPEC_06_V1_MIGRATION.sql` | **Pass 1:** SQL-Migration für alle V1-Fixes und neue Tabellen inkl. coach_nutrition_suggestions |
+| 06+ | `SPEC_06_RECALCULATE_PATCH.md` | **Pass 2:** Snapshot/Recalculate/Audit-Modell, food_source vs. data_source Klärung |
 | 07 | `SPEC_07_API.md` | Alle API Endpoints mit Request/Response-Schemas |
 | 07+ | `SPEC_07_PATCH_APRIL2026.md` | Patches: Top-Foods, Quick-Add, Water food_ml — **Barcode-Anteil Phase 2** |
 | 07+ | `SPEC_07_PASS2_PATCH.md` | **Pass 2:** Food Portions, Micronutrient Review, MealCam V1, Preferences, Coach |

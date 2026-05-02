@@ -206,6 +206,15 @@ ALTER TABLE nutrition.food_preference_items
   ADD COLUMN IF NOT EXISTS source    TEXT DEFAULT 'settings'
     CHECK (source IN ('onboarding','settings','coach_suggestion','import'));
 
+-- FIX 5b: target_type CHECK um 'cuisine' erweitern
+-- (cuisine war in Entity 27 definiert, aber nicht in Haupt-DDL)
+ALTER TABLE nutrition.food_preference_items
+  DROP CONSTRAINT IF EXISTS food_preference_items_target_type_check;
+
+ALTER TABLE nutrition.food_preference_items
+  ADD CONSTRAINT food_preference_items_target_type_check
+    CHECK (target_type IN ('food','category','tag','cuisine'));
+
 -- Bestehende liked → boost, disliked → soft (soft default)
 UPDATE nutrition.food_preference_items
   SET severity = 'boost'
@@ -288,3 +297,72 @@ GRANT ALL ON
   nutrition.shopping_lists,
   nutrition.shopping_list_items
 TO service_role;
+
+-- --------------------------------------------------------
+-- CRIT-1: coach_nutrition_suggestions
+-- Entity 28 aus SPEC_02_PASS2_ENTITIES.md — DDL war fehlend
+-- --------------------------------------------------------
+-- RLS-Hinweis:
+--   User sieht nur eigene Suggestions (user_id = auth.uid()).
+--   Coach sieht Suggestions die er erstellt hat (coach_id = auth.uid()).
+--   Service Role hat vollen Zugriff.
+--   Read-Zugriff für Coach auf User-Daten erfolgt über separate Coach-Permission-Tabelle,
+--   nicht über direkte RLS-Ausnahme hier.
+CREATE TABLE IF NOT EXISTS nutrition.coach_nutrition_suggestions (
+  id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id         UUID NOT NULL,
+  coach_id        UUID NOT NULL,
+  suggestion_type TEXT NOT NULL
+    CHECK (suggestion_type IN (
+      'nutrition_target','meal_plan','food_alternative','water_goal',
+      'custom_food_correction','micronutrient_comment','mealcam_comment',
+      'diary_flag','preference'
+    )),
+  status          TEXT NOT NULL DEFAULT 'pending'
+    CHECK (status IN ('pending','accepted','rejected','expired')),
+  payload         JSONB NOT NULL DEFAULT '{}',
+  -- payload ist typ-spezifisch, z.B.:
+  -- nutrition_target: { "calorie_target": 2200, "protein_target": 170, "reason": "..." }
+  -- food_alternative: { "replace_food_id": "uuid", "with_food_id": "uuid", "reason": "..." }
+  -- preference:       { "preference": "disliked", "target_type": "tag", "tag_code": "...", "reason": "..." }
+
+  expires_at      TIMESTAMPTZ DEFAULT (now() + INTERVAL '7 days'),
+  accepted_at     TIMESTAMPTZ,
+  rejected_at     TIMESTAMPTZ,
+  decided_at      TIMESTAMPTZ,   -- Alias-Feld: gesetzt bei accepted_at oder rejected_at
+  decision_note   TEXT,          -- Optionale User-Begründung
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_coach_suggestions_user
+  ON nutrition.coach_nutrition_suggestions(user_id, status);
+CREATE INDEX IF NOT EXISTS idx_coach_suggestions_coach
+  ON nutrition.coach_nutrition_suggestions(coach_id);
+
+ALTER TABLE nutrition.coach_nutrition_suggestions ENABLE ROW LEVEL SECURITY;
+
+-- User sieht eigene Suggestions
+CREATE POLICY "coach_suggestions_user_select"
+  ON nutrition.coach_nutrition_suggestions
+  FOR SELECT USING (auth.uid()::text = user_id::text);
+
+-- User kann Status ändern (accept/reject)
+CREATE POLICY "coach_suggestions_user_update"
+  ON nutrition.coach_nutrition_suggestions
+  FOR UPDATE USING (auth.uid()::text = user_id::text);
+
+-- Coach darf eigene Suggestions erstellen
+CREATE POLICY "coach_suggestions_coach_insert"
+  ON nutrition.coach_nutrition_suggestions
+  FOR INSERT WITH CHECK (auth.uid()::text = coach_id::text);
+
+-- Coach darf eigene Suggestions lesen (zur Nachverfolgung)
+CREATE POLICY "coach_suggestions_coach_select"
+  ON nutrition.coach_nutrition_suggestions
+  FOR SELECT USING (auth.uid()::text = coach_id::text);
+
+GRANT SELECT, INSERT ON nutrition.coach_nutrition_suggestions TO authenticated;
+GRANT UPDATE (status, accepted_at, rejected_at, decided_at, decision_note, updated_at)
+  ON nutrition.coach_nutrition_suggestions TO authenticated;
+GRANT ALL ON nutrition.coach_nutrition_suggestions TO service_role;
