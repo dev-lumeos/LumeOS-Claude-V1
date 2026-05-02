@@ -118,6 +118,11 @@ interface ModelRoutingEntry {
 export interface DispatcherDeps {
   callModel:   (routing: ModelRoutingEntry, system: string, user: string) => Promise<string>
   executeTool: (req: ToolRequest) => Promise<ToolResult>
+  // Optional: Spark-C Reviewer-Adapter für Test-Injection.
+  // Default: callGemmaReviewer aus services/scheduler-api/src/vllm-adapter.ts.
+  // Production injiziert dieses Feld nicht — der ?? Fallback an der Aufruf-
+  // Stelle greift auf das hartcodierte callGemmaReviewer.
+  callFastReviewer?: (systemPrompt: string, userMessage: string, maxTokens?: number) => Promise<string>
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -597,7 +602,7 @@ export async function dispatchWorkorder(
             files_allowed: wo.scope_files,
           },
           {
-            callFastReviewer: callGemmaReviewer,
+            callFastReviewer: deps.callFastReviewer ?? callGemmaReviewer,
             audit: pipelineAudit,
             getRewriteCount:      (rId, tier) => state.getRewriteCount(rId, tier),
             incrementRewriteCount: (rId, tier) => state.incrementRewriteCount(rId, tier),

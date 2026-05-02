@@ -110,7 +110,7 @@ function makeWO(overrides: Record<string, any> = {}): any {
     scope_files: ['services/nutrition-api/src/routes/diary.ts'],
     context_files: [], acceptance_files: [],
     acceptance_criteria: ['Types added', 'No compilation errors'],
-    negative_constraints: ['NIEMALS ENV ändern', 'NIEMALS Schema ändern', 'NIEMALS außerhalb scope'],
+    negative_constraints: ['NIEMALS ENV ändern', 'NIEMALS Schema ändern', 'NIEMALS außerhalb scope', 'NIEMALS Tests skippen'],
     required_skills: [], optional_skills: [], blocked_by: [],
     ...overrides,
   }
@@ -193,10 +193,29 @@ async function test5_skill_loader() {
 async function test6_dispatcher_e2e_write() {
   console.log('\n[Test 6] Dispatcher E2E — write → completed')
   const mockCallModel = async () => JSON.stringify({
+    selected_agent:  'micro-executor',
+    risk_level:      'low',
+    risks:           ['type-only changes', 'no migration'],
+    execution_order: ['parse', 'validate', 'write'],
+    required_gates:  ['files-scope-gate', 'review-gate', 'human-approval-gate'],
+    stop_conditions: ['production_execution_without_approval_token'],
     tool: 'write', targetPath: 'services/nutrition-api/src/routes/diary.ts',
     content: '// Updated\nexport type DiaryEntry = { id: string; date: string }',
   })
-  const result = await dispatchWorkorder(makeWO(), { callModel: mockCallModel, executeTool: defaultExecuteTool })
+  const mockFastReviewer = async () => JSON.stringify({
+    status:           'PASS',
+    risk:             'LOW',
+    confidence:       0.9,
+    violations:       [],
+    recommendations: [],
+    summary:          'mock spark-c pass',
+    requires_claude:  false,
+  })
+  const result = await dispatchWorkorder(makeWO(), {
+    callModel: mockCallModel,
+    executeTool: defaultExecuteTool,
+    callFastReviewer: mockFastReviewer,
+  })
   assert.equal(result.status, 'completed', `Erwartet: completed — ${result.error}`)
   const content = fs.readFileSync('services/nutrition-api/src/routes/diary.ts', 'utf8')
   assert.ok(content.includes('DiaryEntry'))
@@ -209,6 +228,12 @@ async function test6_dispatcher_e2e_write() {
 async function test7a_migration_awaiting_approval() {
   console.log('\n[Test 7A] micro-executor Migration ohne Approval → awaiting_approval')
   const mockCallModel = async () => JSON.stringify({
+    selected_agent:  'micro-executor',
+    risk_level:      'high',
+    risks:           ['db migration without approval'],
+    execution_order: ['parse', 'validate', 'await_approval'],
+    required_gates:  ['human-approval-gate', 'review-gate', 'files-scope-gate'],
+    stop_conditions: ['production_execution_without_approval_token'],
     tool: 'write', targetPath: 'supabase/migrations/001_add_diary.sql',
     content: 'CREATE TABLE diary_days (...)',
   })
@@ -231,6 +256,12 @@ async function test7b_migration_blocked_by_gateway() {
     single_use: true, max_uses: 1, requires_post_review: true,
   })
   const mockCallModel = async () => JSON.stringify({
+    selected_agent:  'micro-executor',
+    risk_level:      'high',
+    risks:           ['db migration with approval token'],
+    execution_order: ['parse', 'validate', 'await_approval'],
+    required_gates:  ['human-approval-gate', 'review-gate', 'files-scope-gate'],
+    stop_conditions: ['production_execution_without_approval_token'],
     tool: 'write', targetPath: 'supabase/migrations/001_add_diary.sql',
     content: 'CREATE TABLE diary_days (...)',
     approvalId: 'APP-T7B-001', approval_operation: 'write_migration',
