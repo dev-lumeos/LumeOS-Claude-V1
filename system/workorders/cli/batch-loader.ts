@@ -21,6 +21,7 @@ import Ajv, { type ValidateFunction } from 'ajv'
 import {
   dispatchWorkorder,
   defaultExecuteTool,
+  defaultCallModel,
   type Workorder,
 } from '../../control-plane/dispatcher'
 import { runPreflight } from '../../control-plane/scheduler-preflight'
@@ -597,11 +598,16 @@ export async function runDispatch(
     }
 
     // Library dispatch — no HTTP, no SchedulerAPI.
+    // Both deps must be provided: when a partial deps object is passed, the
+    // dispatcher does NOT fall back to its defaults for missing fields.
     let result: { status?: string; error?: string } | undefined
     try {
       result = (await dispatchWorkorder(
         w.parsed as unknown as Workorder,
-        { executeTool: defaultExecuteTool } as never,
+        {
+          callModel: defaultCallModel,
+          executeTool: defaultExecuteTool,
+        } as never,
       )) as { status?: string; error?: string }
     } catch (e) {
       outcomes.push({
