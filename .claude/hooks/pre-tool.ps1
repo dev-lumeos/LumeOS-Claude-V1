@@ -97,7 +97,14 @@ if ($ToolName -match 'write|create|edit') {
 # === AUDIT LOG ===
 if ($ToolName -match 'write|create|edit') {
     $ts = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ'
-    "$ts $ToolName :: $ToolInput" | Add-Content '.claude\hooks\session.log'
+
+    try {
+        $safeInput = $ToolInput | ConvertTo-Json -Compress -Depth 20
+    } catch {
+        $safeInput = [string]$ToolInput
+    }
+
+    "$ts $ToolName :: $safeInput" | Add-Content -Path '.claude\hooks\session.log' -Encoding UTF8
 }
 
 exit 0
