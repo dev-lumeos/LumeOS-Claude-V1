@@ -1,6 +1,7 @@
 # WO-GOVERNANCE-P1-007 — Smoke-Test Modernize V1
 
-**Status:** draft
+**Status:** closed
+**Completion Note:** Smoke-test modernization completed after WO-008 reviewer injection. smoke-test.ts now 9/9 PASS. *(closed: 2026-05-02)*
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befunde nach `WO-governance-005` (OrchestratorIntent-Contract) und `WO-governance-006` (Dispatcher FAIL-Cleanup); `system/control-plane/__tests__/smoke-test.ts` Test 6/7A/7B verwenden veraltete Mock-Outputs (reines `ToolRequest`-JSON ohne `OrchestratorIntent`-Felder), die durch den heute verschärften Governance-Validator als REWRITE→FAIL klassifiziert werden.
 **Template:** `system/workorders/templates/template_test.md`

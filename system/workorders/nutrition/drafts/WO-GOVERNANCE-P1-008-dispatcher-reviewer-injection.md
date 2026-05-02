@@ -1,6 +1,7 @@
 # WO-GOVERNANCE-P1-008 — Dispatcher Reviewer-Injection V1
 
-**Status:** draft
+**Status:** closed
+**Completion Note:** Implementation reviewed PASS. Production fallback unchanged. smoke-test.ts 9/9 PASS. dispatcher-fail-cleanup.test.ts 9/9 PASS. *(closed: 2026-05-02)*
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befund nach `WO-governance-007` (Smoke-Test Modernize): `pnpm tsc --noEmit` PASS, smoke-test 8/9 PASS, **Test 6 FAIL**. Root-Cause: Test 6 erreicht nach erfolgreichem `executeTool()` die Review-Pipeline; `dispatcher.ts:600` injiziert hardcoded `callFastReviewer: callGemmaReviewer` aus `services/scheduler-api/src/vllm-adapter.ts`; `callGemmaReviewer` macht echten `fetch` zu `process.env.SPARK_C_ENDPOINT ?? 'http://192.168.0.99:8001'`. Im Smoke-Test gibt es keinen Mock-Injection-Point → invalid_json → Spark-D escalation → invalid_json → HUMAN_NEEDED → `result.status === 'blocked'`.
 **Template:** `system/workorders/templates/template_implementation_medium.md`

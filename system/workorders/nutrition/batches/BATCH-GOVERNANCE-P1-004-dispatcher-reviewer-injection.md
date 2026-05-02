@@ -1,7 +1,14 @@
 # BATCH-GOVERNANCE-P1-004-dispatcher-reviewer-injection
 
 ## Status
-ready_for_approval
+completed *(2026-05-02)*
+
+## Validation Result
+- `pnpm tsc --noEmit` → **PASS** (EXIT=0)
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → **9/9 PASS** (Test 6 jetzt `completed` mit Mock-Reviewer)
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → **9/9 PASS** (FAIL-Pfade unverändert grün)
+- Implementation Review (Spark-D Mandatory) → **PASS** (siehe Verdict in `REVIEW-IMPLEMENTATION-WO-GOVERNANCE-P1-008` aus dem Review-Turn vom 2026-05-02; Scope Compliance PASS, Production Behavior UNCHANGED, Mock-Reviewer-Output `ReviewOutput`-konform, Validator nicht umgangen, Review-Pipeline nicht deaktiviert, Test 6 nicht abgeschwächt)
+- Implementation Commit: `1773f8a fix(governance): inject dispatcher reviewer dependency`
 
 ## Purpose
 Add dispatcher review-pipeline dependency injection so smoke tests can mock reviewer behavior without calling Spark C/D, while production defaults remain unchanged.
