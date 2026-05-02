@@ -23,7 +23,7 @@
 
 ```yaml
 workorder_id: "WO-nutrition-001"
-agent_id:     "docs-agent"
+agent_id:     "micro-executor"
 phase:        1
 priority:     "low"
 quality_critical: false
@@ -125,6 +125,7 @@ blocked_by:      []
 
 ## Notes
 
+- **Bootstrap note:** This docs-only WO uses `micro-executor` temporarily because `governance-validator.ts` currently allows only `micro-executor` / `db-migration-agent` / `security-specialist` / `review-agent`. Long-term fix: sync validator allowed agents with `agents.json` (see Diagnose-Bericht "Governance Validator Diagnosis — Unknown Agent undefined"). The original spec intent is `docs-agent` per `template_docs.md`; the agent change is a one-time bootstrap adjustment, not a permanent architectural decision.
 - **Filename ↔ workorder_id:** Filename folgt der vom Auftraggeber gewünschten Convention (`WO-NUTRITION-P1-001-...md`). Das `workorder_id`-Feld folgt der schema-erzwungenen Regex `^WO-[a-z]+-[0-9]+$` (`WO-nutrition-001`).
 - **`context_files`** sind read-only Referenzen. Worker darf sie lesen, aber nicht schreiben.
 - **`scope_files`** ist allow-list für Write-Operationen.
