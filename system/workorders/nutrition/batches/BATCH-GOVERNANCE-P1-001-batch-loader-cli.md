@@ -1,7 +1,7 @@
 # BATCH-GOVERNANCE-P1-001-batch-loader-cli
 
 ## Status
-ready_for_approval
+completed
 
 ## Purpose
 Implement the missing Batch Loader CLI V1 so Markdown workorder batches can enter the existing `dispatchWorkorder` workflow without bypassing approval / preflight / audit.
@@ -81,6 +81,20 @@ Run WO-governance-004 through the normal implementation workflow:
 5. After successful `--dry-run` against the Nutrition batch: Tom can promote `BATCH-NUTRITION-P1-001-db-foundation` from `ready_for_approval` to actual approved execution, knowing the workflow path is operational.
 
 ---
+
+## Validation Result
+
+- `pnpm tsc --noEmit` — **PASS** (Exit 0)
+- `npx tsx system/workorders/cli/run-batch.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md --dry-run` — **PASS** (Exit 0)
+- PreToolUse:Bash hook — **PASS** (no hook errors after pre-tool.ps1 PS-5.1 fix)
+- `git status --short` before/after validation — clean (working tree unchanged)
+- Dry-run output: 3 WOs schema-valide, topologische Order korrekt (001 → 002 → 003), Approval-Bedarf für WO-002/003 korrekt erkannt, kein Dispatch ausgeführt, Summary `overall: READY_TO_RUN`.
+
+## Produced Files
+
+- `system/workorders/cli/run-batch.ts`
+- `system/workorders/cli/batch-loader.ts`
+- `system/workorders/cli/README.md`
 
 ## Run Notes
 

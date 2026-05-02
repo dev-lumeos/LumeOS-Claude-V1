@@ -1,7 +1,16 @@
 # BATCH_LOADER_CLI_V1.md
 
 > Spec für den fehlenden CLI-Entry-Point, der Markdown-Batches in den bestehenden Dispatcher-Workflow einspeist.
-> Stand: 2026-05-02 | Status: draft (Spec — keine Implementation)
+> Stand: 2026-05-02 | Status: **Implemented and validated** (Bootstrap via `WO-governance-004` abgeschlossen, Batch `BATCH-GOVERNANCE-P1-001-batch-loader-cli.md` `completed`)
+
+## Usage
+
+```bash
+npx tsx system/workorders/cli/run-batch.ts <batch-file> --dry-run
+npx tsx system/workorders/cli/run-batch.ts <batch-file> --run
+```
+
+`--dry-run` ist verpflichtender erster Schritt vor jedem `--run`. Ohne erfolgreichen Dry-Run (alle WOs schema-valide, keine Dependency-Zyklen, `overall: READY_TO_RUN`) darf `--run` nicht ausgeführt werden.
 > Quellen: `BATCH-NUTRITION-P1-001-db-foundation.md`, drei Phase-1-WO-Drafts, `workorder.schema.json`, `wo_lifecycle_v1.md`, `dispatcher.ts`, `scheduler-preflight.ts`, `approval-queue.ts`, `approval-cli.ts`, `run-summary-generator.ts`, `test-first-real-wo.ts`
 
 ---

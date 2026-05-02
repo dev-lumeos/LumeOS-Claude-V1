@@ -1,7 +1,8 @@
 # WO-GOVERNANCE-P1-004 — Batch Loader CLI V1
 
-**Status:** draft
+**Status:** closed
 **Phase:** 1 — Governance Tooling
+**Completion Note:** Bootstrap execution completed successfully. This was a one-time bootstrap exception because no official batch-loader entrypoint existed before this WO. Validation: `pnpm tsc --noEmit` clean, dry-run against `BATCH-NUTRITION-P1-001-db-foundation.md` returns Exit 0 with all three Nutrition WOs schema-valide. See `BATCH-GOVERNANCE-P1-001-batch-loader-cli.md` §Validation Result.
 **Source:** `docs/project/BATCH_LOADER_CLI_V1.md` §11 Workorder-Kandidat
 **Template:** `system/workorders/templates/template_implementation_medium.md`
 **Lifecycle:** `wo_generated` → `graph_validated` → `queue_released` → `ready` → `dispatched` → `running` → `done` → `reviewed` → `closed` (per `wo_lifecycle_v1.md`)

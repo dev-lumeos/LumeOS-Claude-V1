@@ -3,6 +3,17 @@
 > Markdown-Batch → Workorder Drafts → Schema Validation → Library Dispatch
 > Spec: `docs/project/BATCH_LOADER_CLI_V1.md`
 > Implementiert per `WO-governance-004` (Bootstrap).
+> **Status: Bootstrap validated** — `pnpm tsc --noEmit` Exit 0, `--dry-run` gegen `BATCH-NUTRITION-P1-001-db-foundation.md` Exit 0 (alle 3 WOs schema-valide), Hook stabil, working tree clean.
+
+## Bootstrap Validation Beispiel
+
+```bash
+npx tsx system/workorders/cli/run-batch.ts \
+  system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md \
+  --dry-run
+```
+
+Erwartetes Ergebnis: 3 Workorders gefunden (`WO-nutrition-001`/`002`/`003`), `schema-valid: YES`, topologische Order `001 → 002 → 003`, Approval-Bedarf für `WO-002` und `WO-003` markiert, `overall: READY_TO_RUN`, Exit 0, kein Dispatch.
 
 Lädt eine Markdown-Batch-Datei, findet die referenzierten Workorder-Drafts, extrahiert ihre YAML-Blöcke, validiert sie gegen `system/workorders/schemas/workorder.schema.json`, sortiert sie topologisch über `blocked_by` und dispatcht sie sequenziell über `dispatchWorkorder()` aus `system/control-plane/dispatcher.ts` — **als Library-Aufruf, ohne `services/scheduler-api/`**.
 
