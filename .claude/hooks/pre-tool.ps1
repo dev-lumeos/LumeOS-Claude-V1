@@ -116,7 +116,7 @@ try {
         [System.IO.File]::AppendAllText(
             $logPath,
             $line + [Environment]::NewLine,
-            [System.Text.UTF8Encoding]::new($false)
+            (New-Object System.Text.UTF8Encoding -ArgumentList $false)
         )
     }
 } catch {
