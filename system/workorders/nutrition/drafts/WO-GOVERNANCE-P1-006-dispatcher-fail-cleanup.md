@@ -10,7 +10,7 @@
 
 ## Out of Scope
 
-- `risk_level`-Normalisierung (eigener Folge-WO, analoges Pattern zu WO-005).
+- `risk_level`-Normalisierung (future OrchestratorIntent field-normalization WO, analoges Pattern zu WO-005).
 - `selected_agent`-Normalisierung (bereits in WO-005 erledigt).
 - Batch Loader CLI Änderungen (`system/workorders/cli/**`).
 - Supabase Migration Execution.
@@ -149,7 +149,7 @@ task: |
       - Idempotenz von releaseScopeLock und releaseDbMigrationLock prüfen und ggf. in
         state-manager.ts dokumentieren (Kommentar) — KEINE Verhaltensänderung dort.
       - Falls audit-writer.ts erweitert werden muss: nur additive Events, keine Signaturänderungen.
-      - Inline-Tests in system/control-plane/__tests__/ die simulieren:
+      - Tests in system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts die simulieren:
           a) Governance-Validator FAIL → Lock am Ende released
           b) Tool-Auth Block → Lock released
           c) Approval-Gate Block → Lock released
@@ -193,6 +193,7 @@ scope_files:
   - "system/control-plane/dispatcher.ts"
   - "system/state/state-manager.ts"
   - "system/state/audit-writer.ts"
+  - "system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts"
 
 context_files:
   - "system/control-plane/scheduler-preflight.ts"
@@ -218,7 +219,7 @@ acceptance_criteria:
   - "Governance-Validator-Aufruf-Stelle unverändert"
   - "pnpm tsc --noEmit clean"
   - "Bestehende Tests in system/control-plane/__tests__/ und system/state/__tests__/ bleiben grün"
-  - "Neue Inline-Tests decken mindestens 5 FAIL-Pfade ab (Validator FAIL, Validator BLOCKED, Tool-Auth Block, Files-Scope-Violation, Approval-Gate Block) und verifizieren Lock-Release"
+  - "Neue Tests in system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts decken mindestens 5 FAIL-Pfade ab (Validator FAIL, Validator BLOCKED, Tool-Auth Block, Files-Scope-Violation, Approval-Gate Block) und verifizieren Lock-Release"
   - "Audit-Trail (system/state/pipeline-audit.jsonl) zeigt Cleanup-Events nach FAIL nachvollziehbar (Verifikation per existierendem audit-writer; kein direkter JSONL-Edit)"
 
 negative_constraints:
@@ -280,6 +281,9 @@ blocked_by:      []
 - **`files_blocked`** schließt explizit die State-/Audit-JSONL- und runtime_state-Dateien aus — die werden indirekt über `state-manager.ts` und `audit-writer.ts` mutiert, nicht direkt.
 - **`files_blocked`** schließt `governance-validator.ts` und `scheduler-preflight.ts` explizit aus — beide sind nur Read-Context, nicht Modifikations-Ziel.
 - **`scope_files` enthält `state-manager.ts`** — aber per `<constraints>` darf dort nur **Kommentar/Doku** ergänzt werden (Idempotenz-Doku der release-Funktionen). Keine Verhaltensänderung. Audit-Writer kann additiv erweitert werden, aber nur ohne Signaturänderung bestehender Events.
+- **Scope-Klarstellung:**
+  - **Primary scope:** `system/control-plane/dispatcher.ts` + `system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` — hier findet die eigentliche Implementierung statt (Cleanup-Logik + Tests).
+  - **Secondary scope:** `system/state/state-manager.ts` und `system/state/audit-writer.ts` — nur falls für die Cleanup-Logik bestehende Helper benötigt werden, die aktuell fehlen oder dokumentiert werden müssen. Keine Verhaltens- oder Signaturänderungen an bestehenden Funktionen.
 - **Lifecycle-Pfad:** Erwartet `done` → `reviewed` (architecture-review + Spark D mandatory) → `closed`. Auto-Retry **deaktiviert** für `architecture` per `CLAUDE.md` High-Risk-Regel.
 - **Bezug zur Geschichte:** Beobachtete stale Locks in unsere Workflow-Tests:
   - `RUN-20260502-3657` (callModel-Bug-FAIL) — manuell bereinigt
