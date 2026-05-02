@@ -95,16 +95,32 @@ if ($ToolName -match 'write|create|edit') {
 }
 
 # === AUDIT LOG ===
-if ($ToolName -match 'write|create|edit') {
-    $ts = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ'
+try {
+    if ($ToolName -match 'write|create|edit') {
+        $ts = Get-Date -Format 'yyyy-MM-ddTHH:mm:ssZ'
 
-    try {
-        $safeInput = $ToolInput | ConvertTo-Json -Compress -Depth 20
-    } catch {
-        $safeInput = [string]$ToolInput
+        try {
+            if ($null -eq $ToolInput) {
+                $safeInput = ''
+            } elseif ($ToolInput -is [string]) {
+                $safeInput = $ToolInput
+            } else {
+                $safeInput = $ToolInput | ConvertTo-Json -Compress -Depth 20
+            }
+        } catch {
+            $safeInput = '<unserializable-tool-input>'
+        }
+
+        $logPath = Join-Path $PSScriptRoot 'session.log'
+        $line = ('{0} {1} :: {2}' -f $ts, $ToolName, $safeInput)
+        [System.IO.File]::AppendAllText(
+            $logPath,
+            $line + [Environment]::NewLine,
+            [System.Text.UTF8Encoding]::new($false)
+        )
     }
-
-    "$ts $ToolName :: $safeInput" | Add-Content -Path '.claude\hooks\session.log' -Encoding UTF8
+} catch {
+    # Audit logging must never block Claude Code tool execution.
 }
 
 exit 0
