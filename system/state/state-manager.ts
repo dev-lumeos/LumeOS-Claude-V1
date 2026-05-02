@@ -40,12 +40,38 @@ export interface Lock {
   locked_by?: string
 }
 
-export interface ApprovalRef {
-  approval_id:  string
-  workorder_id: string
-  run_id?:      string
-  status:       'pending' | 'granted' | 'denied' | 'expired' | 'consumed'
+export type ApprovalStatus = 'pending' | 'granted' | 'denied' | 'expired' | 'consumed'
+
+/**
+ * C.2: ApprovalItem — vollständiges Approval-Objekt im RuntimeState.
+ * Enthält Kontext für pending Requests (reason, risk_category, affected_files, etc.)
+ * Ersetzt ApprovalRef als primäre Storage-Einheit in runtime_state.approvals[].
+ */
+export interface ApprovalItem {
+  approval_id:      string
+  workorder_id:     string
+  run_id?:          string
+  status:           ApprovalStatus
+  /** C.2: Warum menschliche Genehmigung nötig ist */
+  reason?:          string
+  /** C.2: Aus risk-categories.ts */
+  risk_category?:   string
+  /** C.2: Betroffene Dateien */
+  affected_files?:  string[]
+  /** C.2: Was der Agent konkret tun will */
+  proposed_action?: string
+  /** C.2: Welcher Agent die Approval angefordert hat */
+  requested_by?:    string
+  requested_at?:    string
+  /** C.2: TTL — default 24h nach requested_at */
+  expires_at?:      string
+  decided_at?:      string
+  decided_by?:      string
+  deny_reason?:     string
 }
+
+/** @deprecated Verwende ApprovalItem */
+export type ApprovalRef = ApprovalItem
 
 /** A.3: Scope-Lock — verhindert parallele WOs auf denselben Dateien. */
 export interface ScopeLock {
@@ -80,7 +106,7 @@ export interface RuntimeState {
   active_runs:        Run[]
   active_workorders:  ActiveWorkorder[]
   locks:              Lock[]
-  approvals:          ApprovalRef[]
+  approvals:          ApprovalItem[]
   audit_log_path:     string
   /** V2: Persistierter Rewrite-Counter pro run_id + tier. */
   rewrite_counters?:  Record<string, Record<string, number>>
@@ -110,6 +136,8 @@ const LOCK_STALE_MS   = 90_000
 const LOCK_RETRY_MS   = 50
 /** A.3: TTL für Scope-Locks und DB-Migration-Lock — 10 Minuten. */
 const SCOPE_LOCK_TTL_MS = 600_000
+/** C.2: TTL für Approval-Items — 24 Stunden. */
+export const DEFAULT_APPROVAL_TTL_MS = 24 * 60 * 60 * 1_000
 
 const DEFAULT_STATE: RuntimeState = {
   orchestration_mode: 'claude_code',
@@ -289,10 +317,172 @@ export async function lockSpark(node: string, reason: string, lockedBy?: string)
 export async function releaseSpark(node: string): Promise<void> { await mutate(s => { s.locks = s.locks.filter(l => l.node !== node) }) }
 export function isSparkLocked(node: string): boolean { return readState().locks.some(l => l.node === node) }
 
-export async function addApprovalRef(ref: ApprovalRef): Promise<void> { await mutate(s => { s.approvals.push(ref) }) }
+// ─── Approval State Machine (C.2) ─────────────────────────────────────────────
 
-export async function updateApprovalStatus(approvalId: string, status: ApprovalRef['status']): Promise<void> {
-  await mutate(s => { const r = s.approvals.find(a => a.approval_id === approvalId); if (r) r.status = status })
+export const APPROVAL_TRANSITIONS: Record<ApprovalStatus, ApprovalStatus[]> = {
+  pending:  ['granted', 'denied', 'expired'],
+  granted:  ['consumed'],
+  denied:   [],   // terminal
+  expired:  [],   // terminal
+  consumed: [],   // terminal
+}
+
+export interface ApprovalTransitionResult {
+  valid:   boolean
+  reason?: string
+}
+
+/** Prüft ob ein Approval-Statusübergang erlaubt ist. */
+export function validateApprovalTransition(from: ApprovalStatus, to: ApprovalStatus): ApprovalTransitionResult {
+  if (from === to) return { valid: true }
+  const allowed = APPROVAL_TRANSITIONS[from]
+  if (!allowed) return { valid: false, reason: `Unbekannter Status: ${from}` }
+  if (!allowed.includes(to))
+    return { valid: false, reason: `Illegaler Übergang: ${from} → ${to}. Erlaubt: [${allowed.join(', ') || 'none'}]` }
+  return { valid: true }
+}
+
+/** Protokolliert ungültige Approval-Übergänge in audit.error.jsonl. Kein Lock nötig (append-only). */
+function appendInvalidApprovalTransition(approvalId: string, from: ApprovalStatus, to: ApprovalStatus, reason?: string): void {
+  const errPath = path.resolve(process.cwd(), 'system/state/audit.error.jsonl')
+  const line = JSON.stringify({
+    ts: new Date().toISOString(), event: 'approval_invalid_transition',
+    approval_id: approvalId, from_status: from, to_status: to,
+    reason: reason ?? `Illegaler Übergang: ${from} → ${to}`,
+  })
+  try { const dir = path.dirname(errPath); if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true }); fs.appendFileSync(errPath, line + '\n', 'utf8') } catch {}
+}
+
+export async function addApprovalRef(ref: ApprovalItem): Promise<void> { await mutate(s => { s.approvals.push(ref) }) }
+
+/** C.2: updateApprovalStatus mit State-Machine-Enforcement. Illegale Übergänge werden blockiert + auditiert. */
+export async function updateApprovalStatus(approvalId: string, status: ApprovalStatus): Promise<void> {
+  await mutate(s => {
+    const r = s.approvals.find(a => a.approval_id === approvalId)
+    if (!r) return
+    const v = validateApprovalTransition(r.status, status)
+    if (!v.valid) { appendInvalidApprovalTransition(approvalId, r.status, status, v.reason); return }
+    r.status = status
+    if (status === 'granted' || status === 'denied' || status === 'expired' || status === 'consumed')
+      r.decided_at = new Date().toISOString()
+  })
+}
+
+// ─── C.2 Approval Queue Operationen ───────────────────────────────────────────
+
+export interface CreatePendingApprovalParams {
+  workorder_id:    string
+  run_id?:         string
+  reason:          string
+  risk_category:   string
+  affected_files:  string[]
+  proposed_action: string
+  requested_by:    string
+  approval_id?:    string
+}
+
+/** Erzeugt ein neues pending ApprovalItem in runtime_state.approvals[]. TTL = 24h. */
+export async function createPendingApproval(params: CreatePendingApprovalParams): Promise<ApprovalItem> {
+  const now = new Date()
+  const approval_id = params.approval_id
+    ?? `APP-${now.toISOString().slice(0, 10).replace(/-/g, '')}-${String(Date.now()).slice(-6)}`
+  const item: ApprovalItem = {
+    approval_id, workorder_id: params.workorder_id, run_id: params.run_id, status: 'pending',
+    reason: params.reason, risk_category: params.risk_category, affected_files: params.affected_files,
+    proposed_action: params.proposed_action, requested_by: params.requested_by,
+    requested_at: now.toISOString(), expires_at: new Date(now.getTime() + DEFAULT_APPROVAL_TTL_MS).toISOString(),
+  }
+  await mutate(s => { s.approvals.push(item) })
+  return item
+}
+
+/** Alle pending, nicht-abgelaufenen ApprovalItems. */
+export function getPendingApprovals(): ApprovalItem[] {
+  const now = Date.now()
+  return readState().approvals.filter(
+    a => a.status === 'pending' && (!a.expires_at || new Date(a.expires_at).getTime() > now)
+  )
+}
+
+/** Alle ApprovalItems (alle Statuswerte). */
+export function getAllApprovalItems(): ApprovalItem[] {
+  return readState().approvals
+}
+
+/** Einzelnes ApprovalItem per ID. */
+export function getApprovalItem(approvalId: string): ApprovalItem | null {
+  return readState().approvals.find(a => a.approval_id === approvalId) ?? null
+}
+
+/**
+ * Setzt abgelaufene `pending` Items auf `expired`.
+ * Sollte periodisch aufgerufen werden (z.B. vor jedem Preflight-Run).
+ * Gibt Anzahl der expirierten Items zurück.
+ */
+export async function expireStaleApprovals(): Promise<number> {
+  let count = 0
+  await mutate(s => {
+    const now = Date.now()
+    for (const item of s.approvals) {
+      if (item.status === 'pending' && item.expires_at && new Date(item.expires_at).getTime() <= now) {
+        const v = validateApprovalTransition(item.status, 'expired')
+        if (v.valid) { item.status = 'expired'; item.decided_at = new Date().toISOString(); count++ }
+      }
+    }
+  })
+  return count
+}
+
+/** pending → granted. Gibt { ok, item } zurück. Blockiert bei abgelaufenem oder illegalem Übergang. */
+export async function grantApprovalItem(
+  approvalId: string,
+  decidedBy = 'human',
+): Promise<{ ok: true; item: ApprovalItem } | { ok: false; reason: string }> {
+  let result: { ok: true; item: ApprovalItem } | { ok: false; reason: string } =
+    { ok: false, reason: `Approval nicht gefunden: ${approvalId}` }
+  await mutate(s => {
+    const item = s.approvals.find(a => a.approval_id === approvalId)
+    if (!item) return
+    if (item.expires_at && new Date(item.expires_at).getTime() <= Date.now()) {
+      item.status = 'expired'; item.decided_at = new Date().toISOString()
+      result = { ok: false, reason: `Approval abgelaufen: ${approvalId}` }; return
+    }
+    const v = validateApprovalTransition(item.status, 'granted')
+    if (!v.valid) { appendInvalidApprovalTransition(approvalId, item.status, 'granted', v.reason); result = { ok: false, reason: v.reason! }; return }
+    item.status = 'granted'; item.decided_at = new Date().toISOString(); item.decided_by = decidedBy
+    result = { ok: true, item: { ...item } }
+  })
+  return result
+}
+
+/** pending → denied. Gibt { ok, item } zurück. */
+export async function denyApprovalItem(
+  approvalId: string,
+  decidedBy = 'human',
+  denyReason?: string,
+): Promise<{ ok: true; item: ApprovalItem } | { ok: false; reason: string }> {
+  let result: { ok: true; item: ApprovalItem } | { ok: false; reason: string } =
+    { ok: false, reason: `Approval nicht gefunden: ${approvalId}` }
+  await mutate(s => {
+    const item = s.approvals.find(a => a.approval_id === approvalId)
+    if (!item) return
+    const v = validateApprovalTransition(item.status, 'denied')
+    if (!v.valid) { appendInvalidApprovalTransition(approvalId, item.status, 'denied', v.reason); result = { ok: false, reason: v.reason! }; return }
+    item.status = 'denied'; item.decided_at = new Date().toISOString(); item.decided_by = decidedBy; item.deny_reason = denyReason
+    result = { ok: true, item: { ...item } }
+  })
+  return result
+}
+
+/** granted → consumed. Blockiert bei illegalem Übergang. */
+export async function consumeApprovalItem(approvalId: string): Promise<void> {
+  await mutate(s => {
+    const item = s.approvals.find(a => a.approval_id === approvalId)
+    if (!item) return
+    const v = validateApprovalTransition(item.status, 'consumed')
+    if (!v.valid) { appendInvalidApprovalTransition(approvalId, item.status, 'consumed', v.reason); return }
+    item.status = 'consumed'; item.decided_at = new Date().toISOString()
+  })
 }
 
 // Approval Token Store — via state-manager Lock gesichert

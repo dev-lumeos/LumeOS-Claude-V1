@@ -118,6 +118,9 @@ export async function consumeApproval(approvalId: string): Promise<void> {
   const token  = tokens[approvalId] as ApprovalToken | undefined
   if (!token) return
 
+  // C.2: Nur granted Tokens dürfen konsumiert werden.
+  if (token.status !== 'granted') return
+
   token.use_count += 1
   token.status     = token.use_count >= token.max_uses ? 'consumed' : 'granted'
   await state.writeApprovalToken(approvalId, token)

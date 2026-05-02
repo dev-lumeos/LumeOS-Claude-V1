@@ -53,10 +53,20 @@
       "type": "object",
       "required": ["approval_id", "workorder_id", "status"],
       "properties": {
-        "approval_id":  { "type": "string" },
-        "workorder_id": { "type": "string" },
-        "run_id":       { "type": "string" },
-        "status":       { "type": "string", "enum": ["pending", "granted", "denied", "expired", "consumed"] }
+        "approval_id":      { "type": "string" },
+        "workorder_id":     { "type": "string" },
+        "run_id":           { "type": "string" },
+        "status":           { "type": "string", "enum": ["pending", "granted", "denied", "expired", "consumed"] },
+        "reason":           { "type": "string" },
+        "risk_category":    { "type": "string" },
+        "affected_files":   { "type": "array", "items": { "type": "string" } },
+        "proposed_action":  { "type": "string" },
+        "requested_by":     { "type": "string" },
+        "requested_at":     { "type": "string", "format": "date-time" },
+        "expires_at":       { "type": "string", "format": "date-time" },
+        "decided_at":       { "type": "string", "format": "date-time" },
+        "decided_by":       { "type": "string" },
+        "deny_reason":      { "type": "string" }
       }
     }
   }
