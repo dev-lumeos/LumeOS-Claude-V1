@@ -354,6 +354,13 @@ export async function dispatchWorkorder(
 
   const jobStart = Date.now()
 
+  // V1.2.4: Cleanup-Tracking — wird durch Erfolgs- oder Catch-Pfad gesetzt.
+  // Wenn am Ende des Funktions-Body false ist, übernimmt finally den Cleanup
+  // (Lock-Release + WO-Status auf 'failed') als Defense-in-Depth gegen frühe
+  // FAIL-Returns innerhalb des try-Bodys. Sichert dass keine stale scope_locks
+  // oder dispatched-Einträge in runtime_state.json zurückbleiben.
+  let cleanupHandled = false
+
   try {
     // 3. Agent + Routing
     const agents   = loadJson<Record<string, any>>(AGENTS_PATH)
@@ -464,6 +471,7 @@ export async function dispatchWorkorder(
     const toolReq = parseToolRequest(modelOutput)
     if (!toolReq) {
       await state.endRun(runId, 'completed')
+      cleanupHandled = true  // V1.2.4: kein FAIL — finally darf WO-Status nicht auf 'failed' überschreiben
       audit.auditJobCompleted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, duration_ms: Date.now() - jobStart })
       return { status: 'completed', run_id: runId, workorder_id: wo.workorder_id }
     }
@@ -506,6 +514,7 @@ export async function dispatchWorkorder(
       })
       await state.updateWorkorderStatus(wo.workorder_id, 'awaiting_approval')
       await state.endRun(runId, 'awaiting_approval')
+      cleanupHandled = true  // V1.2.4: WO bewusst in awaiting_approval — finally darf nicht auf 'failed' überschreiben
       return { status: 'awaiting_approval', run_id: runId, workorder_id: wo.workorder_id,
         error: `APPROVAL_REQUIRED: ${pendingApproval.approval_id}` }
     }
@@ -616,6 +625,7 @@ export async function dispatchWorkorder(
           }
           await state.endRun(runId, 'failed')
           await state.updateWorkorderStatus(wo.workorder_id, 'review')
+          cleanupHandled = true  // V1.2.4: WO bewusst in 'review' für Re-Dispatch — finally darf nicht überschreiben
           audit.auditReviewPipelineRewrite({
             run_id: runId,
             workorder_id: wo.workorder_id,
@@ -642,6 +652,7 @@ export async function dispatchWorkorder(
           })
           await state.endRun(runId, 'blocked')
           await state.updateWorkorderStatus(wo.workorder_id, 'awaiting_approval')
+          cleanupHandled = true  // V1.2.4: WO bewusst in 'awaiting_approval' — finally darf nicht überschreiben
           audit.auditReviewPipelineHumanNeeded({
             run_id: runId,
             workorder_id: wo.workorder_id,
@@ -682,6 +693,7 @@ export async function dispatchWorkorder(
     await state.updateWorkorderStatus(wo.workorder_id, toolResult.success ? 'done' : 'failed')
     await state.releaseScopeLock(runId)
     await state.releaseDbMigrationLock(runId)
+    cleanupHandled = true
     audit.auditScopeLockReleased({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: `run ${finalStatus}` })
     toolResult.success
       ? audit.auditJobCompleted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, duration_ms: Date.now() - jobStart })
@@ -695,7 +707,32 @@ export async function dispatchWorkorder(
     await state.endRun(runId, 'failed')
     await state.releaseScopeLock(runId)
     await state.releaseDbMigrationLock(runId)
+    cleanupHandled = true
     audit.auditJobFailed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: err.message, error_code: 'DISPATCHER_ERROR' })
     return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id, error: err.message }
+  } finally {
+    // V1.2.4: Defense-in-Depth — falls ein früher FAIL/Block-Return innerhalb des try-Bodys
+    // weder die explizite Erfolgs- noch die Catch-Cleanup-Sequenz durchlaufen hat, übernimmt
+    // dieser Block den Lock-Release und den WO-Status-Update.
+    //
+    // Beide Release-Funktionen sind idempotent (state-manager.ts), daher ist ein doppelter
+    // Aufruf bei cleanupHandled=true sicher; wir guarden trotzdem mit dem Flag um redundante
+    // Audit-Events zu vermeiden.
+    //
+    // Dieser Block gibt ausschließlich die Locks frei und setzt active_workorders.status
+    // auf 'failed', falls es noch in einem nicht-terminalen Status (dispatched/running) ist.
+    // Audit-Events laufen über audit-writer.ts; keine direkte JSONL-Editierung.
+    if (!cleanupHandled) {
+      try { await state.updateWorkorderStatus(wo.workorder_id, 'failed') } catch { /* state-machine validation may reject same-state — non-fatal */ }
+      await state.releaseScopeLock(runId)
+      await state.releaseDbMigrationLock(runId)
+      audit.auditScopeLockReleased({
+        run_id: runId,
+        workorder_id: wo.workorder_id,
+        agent_id: wo.agent_id,
+        orchestration_mode: orchestrationMode,
+        reason: 'finally cleanup on early failure path',
+      })
+    }
   }
 }

@@ -598,7 +598,13 @@ export async function acquireScopeLock(
   return result
 }
 
-/** Gibt den Scope-Lock für runId frei. */
+/**
+ * Gibt den Scope-Lock für runId frei.
+ *
+ * Idempotent: Wenn kein Lock für die runId existiert (bereits released oder
+ * nie acquired), bleibt scope_locks unverändert. Doppelte Aufrufe sind sicher.
+ * Genutzt vom Dispatcher in finally-Cleanup-Pfaden (siehe dispatcher.ts V1.2.4).
+ */
 export async function releaseScopeLock(runId: string): Promise<void> {
   await mutate(s => {
     s.scope_locks = (s.scope_locks ?? []).filter(l => l.run_id !== runId)
@@ -653,7 +659,14 @@ export async function acquireDbMigrationLock(
   return result
 }
 
-/** Gibt den DB-Migration-Lock für runId frei. */
+/**
+ * Gibt den DB-Migration-Lock für runId frei.
+ *
+ * Idempotent: Setzt nur dann null, wenn der aktuelle Lock zur runId gehört.
+ * Wenn bereits released oder ein anderer Run den Lock hält, bleibt der State
+ * unverändert. Doppelte Aufrufe sind sicher. Genutzt vom Dispatcher in
+ * finally-Cleanup-Pfaden (siehe dispatcher.ts V1.2.4).
+ */
 export async function releaseDbMigrationLock(runId: string): Promise<void> {
   await mutate(s => {
     if (s.db_migration_lock?.run_id === runId) s.db_migration_lock = null
