@@ -60,3 +60,6 @@ tools/onyx/install.original.ps1
 
 # Onyx seed package — wird lokal generiert/synchronisiert, nicht ins Hauptrepo
 tools/onyx/seed/
+
+# Temp inventory (lokale Inventur-Skripte und Outputs)
+_tmp_inventory/
