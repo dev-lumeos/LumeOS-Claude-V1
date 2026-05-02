@@ -4,7 +4,7 @@
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befunde nach `WO-governance-005` (OrchestratorIntent-Contract) und `WO-governance-006` (Dispatcher FAIL-Cleanup); `system/control-plane/__tests__/smoke-test.ts` Test 6/7A/7B verwenden veraltete Mock-Outputs (reines `ToolRequest`-JSON ohne `OrchestratorIntent`-Felder), die durch den heute verschärften Governance-Validator als REWRITE→FAIL klassifiziert werden.
 **Template:** `system/workorders/templates/template_test.md`
-**Lifecycle:** `wo_generated` → `graph_validated` → `queue_released` → `ready` → `dispatched` → `running` → `done` → `closed` (autonom — `risk_category: test` erlaubt direktes Close per `CLAUDE.md` High-Risk-Regel)
+**Lifecycle:** `wo_generated` → `graph_validated` → `queue_released` → `ready` → `dispatched` → `running` → `done` → `closed` (autonom — `risk_category: test` erlaubt `done → closed` ohne Spark-D-Review per `CLAUDE.md` Autonom-Regel)
 
 ---
 
@@ -57,7 +57,7 @@ Tests passen sich an die Production-Contracts an, nicht umgekehrt. Konkret:
 
 1. **Combined-JSON-Pattern:** Jeder Mock liefert ein einzelnes JSON-Objekt, das sowohl die `OrchestratorIntent`-Felder (`selected_agent`, `risk_level`, `risks`, `execution_order`, `required_gates`, `stop_conditions`) als auch die `ToolRequest`-Felder (`tool`, `targetPath`, `content` / `command` / `mcpTool` / `mcpOperation` / `approvalId` / `approval_operation`) enthält. Das ist konsistent mit `dispatcher.ts`, der zuerst `parseOrchestratorIntent` und dann `parseToolRequest` auf demselben Content laufen lässt.
 2. **Per-Test-Profil:**
-   - **Test 6 (Dispatcher E2E write):** `selected_agent: 'micro-executor'`, `risk_level: 'low'`, `required_gates` enthält `files-scope-gate` und `review-gate`, `stop_conditions` enthält mindestens eine blockierende Bedingung (z. B. `'production_execution_without_approval_token'`).
+   - **Test 6 (Dispatcher E2E write):** `selected_agent: 'micro-executor'`, `risk_level: 'low'`, `required_gates` enthält `files-scope-gate`, `review-gate` und `human-approval-gate`, `stop_conditions` enthält `'production_execution_without_approval_token'`. **`human-approval-gate` ist Pflicht**, weil der Test ohne Approval-Token läuft (kein `approvalId` im ToolRequest, keine `gate.createApprovalToken`-Vorbereitung) und der Governance-Validator §5 (`governance-validator.ts:272`) das Gate IMMER erzwingt, sobald `approvalTokenPresent=false`. Beleg: `dispatcher-fail-cleanup.test.ts` Zeilen 170/217/259 zeigen das Pattern für validator-PASS-Mocks ohne Token.
    - **Test 7A (Migration ohne Approval → awaiting_approval):** `selected_agent: 'micro-executor'`, `risk_level: 'high'`, `required_gates` enthält `human-approval-gate` und `review-gate` und `files-scope-gate`. Da der Workorder eine Migration schreibt aber `agent_id: micro-executor` hat (nicht `db-migration-agent`), ist der Approval-Pfad korrekt.
    - **Test 7B (Migration mit Approval → blocked durch Gateway):** Analog Test 7A, aber zusätzlich `approvalId` und `approval_operation` im ToolRequest-Teil.
 3. **Validator-PASS verifizieren ohne Validator zu schwächen:** Werte werden so gewählt, dass `validateOrchestratorIntent` PASS gibt. Die einzig erlaubte Anpassung ist im **Mock-Content** — Validator-Source bleibt unverändert.
@@ -125,13 +125,19 @@ task: |
              risk_level:     'low'
              risks:          ['type-only changes', 'no migration']
              execution_order:['parse', 'validate', 'write']
-             required_gates: ['files-scope-gate', 'review-gate']
+             required_gates: ['files-scope-gate', 'review-gate', 'human-approval-gate']
              stop_conditions:['production_execution_without_approval_token']
            ToolRequest-Teil (unverändert wie heute):
              tool:        'write'
              targetPath:  'services/nutrition-api/src/routes/diary.ts'
              content:     '// Updated\nexport type DiaryEntry = { id: string; date: string }'
          Test-Erwartung result.status === 'completed' bleibt unverändert.
+
+         WICHTIG: 'human-approval-gate' MUSS in required_gates stehen, weil Test 6
+         ohne Approval-Token läuft. Governance-Validator §5 (governance-validator.ts:272)
+         erzwingt das Gate immer, wenn approvalTokenPresent=false — sonst REWRITE × 2 → FAIL
+         und result.status === 'completed' wird nie erreicht. Pattern aus
+         dispatcher-fail-cleanup.test.ts (Zeilen 170/217/259) übernehmen.
 
       B) Test 7A (test7a_migration_awaiting_approval): mockCallModel liefert ein
          Combined-JSON:
@@ -208,6 +214,7 @@ acceptance_criteria:
   - "selected_agent ist in jedem Mock auf einen ALLOWED_AGENTS-Wert gesetzt (micro-executor)"
   - "risk_level ist in jedem Mock auf einen ALLOWED_RISK_LEVELS-Wert gesetzt (low|high)"
   - "required_gates enthält in jedem Mock ausschließlich ALLOWED_GATES-Werte"
+  - "Test 6 required_gates enthält 'human-approval-gate' (Validator §5 ohne Approval-Token-Pflicht)"
   - "stop_conditions enthält in jedem Mock mindestens eine blockierende Bedingung (kein POSITIVE_STATE_KEYWORD)"
   - "execution_order enthält keine PRODUCTION_KEYWORDS in Tests 6/7A/7B"
   - "Test 6 result.status === 'completed' bleibt erfüllt"
