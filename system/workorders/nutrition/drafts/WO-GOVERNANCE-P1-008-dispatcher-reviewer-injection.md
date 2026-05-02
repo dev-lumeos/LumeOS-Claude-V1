@@ -67,7 +67,7 @@ Alternativen verworfen:
 
 In allen Varianten:
 - Default-Verhalten ohne Mock ist BIT-IDENTISCH zur heutigen Production-Pipeline (kein neuer Code-Pfad bei Default).
-- Der Test in Test 6 injiziert einen `callFastReviewer`, der ein valides `{ status: 'PASS', confidence: 0.9, risk: 'low', findings: [], requires_claude: false }`-JSON zurückgibt — entspricht dem `ReviewOutput`-Vertrag aus `review-pipeline.ts`.
+- Der Test in Test 6 injiziert einen `callFastReviewer`, der ein valides `{ status: 'PASS', risk: 'LOW', confidence: 0.9, violations: [], recommendations: [], summary: 'mock spark-c pass', requires_claude: false }`-JSON zurückgibt — entspricht dem `ReviewOutput`-Vertrag aus `governance-validator.ts:372-380`. **WICHTIG:** `risk` ist UPPERCASE-Domäne (`'LOW' | 'MEDIUM' | 'HIGH'`) — Reviewer-Risk-Casing ≠ Orchestrator-`risk_level`-Casing (`'low' | 'medium' | 'high'`). Felder `violations`, `recommendations`, `summary` sind Pflicht; `findings` existiert nicht im Contract.
 - `dispatcher-fail-cleanup.test.ts`-Tests bleiben unverändert (sie erreichen die Review-Pipeline nicht, weil sie vor `executeTool()` failen).
 
 ---
@@ -135,8 +135,23 @@ task: |
       Schritt 3 — smoke-test.ts test6_dispatcher_e2e_write: PASS-Reviewer injizieren.
       - In Test 6: dispatchWorkorder(makeWO(), { callModel: mockCallModel, executeTool: defaultExecuteTool, callFastReviewer: mockFastReviewer })
       - mockFastReviewer ist eine async-Funktion, die deterministisch ein valides
-        ReviewOutput-JSON zurückgibt:
-          { status: 'PASS', confidence: 0.9, risk: 'low', findings: [], requires_claude: false }
+        ReviewOutput-JSON zurückgibt (entspricht dem ReviewOutput-Contract aus
+        governance-validator.ts:372-380):
+          {
+            status: 'PASS',
+            risk: 'LOW',                       // UPPERCASE-Pflicht (Reviewer-Domäne)
+            confidence: 0.9,                   // ≥ CONFIDENCE_THRESHOLD (0.75)
+            violations: [],                    // Pflichtfeld
+            recommendations: [],               // Pflichtfeld
+            summary: 'mock spark-c pass',      // Pflichtfeld (string)
+            requires_claude: false             // sonst Override → ESCALATE
+          }
+        WICHTIG:
+          - risk ist UPPERCASE-Domäne (LOW/MEDIUM/HIGH); Reviewer-Risk-Casing
+            ≠ Orchestrator-risk_level-Casing.
+          - findings existiert NICHT im ReviewOutput-Contract — NICHT verwenden.
+          - validateReviewOutput() würde sonst werfen → failureReason='invalid_json'
+            → Spark-D-Eskalation → HUMAN_NEEDED → Test 6 bleibt 'blocked'.
       - Test-Erwartung result.status === 'completed' bleibt unverändert.
       - Audit-Asserts (job_completed, tool_call_allowed) bleiben unverändert.
 
@@ -214,6 +229,7 @@ acceptance_criteria:
   - "runReviewPipeline-Aufruf in dispatcher.ts nutzt deps.callFastReviewer ?? callGemmaReviewer als Default-Fallback"
   - "Production-Default-Verhalten ist BIT-IDENTISCH zur Pre-WO-008-Version, wenn kein callFastReviewer in DispatcherDeps gesetzt wird"
   - "Smoke-Test test6_dispatcher_e2e_write injiziert einen Mock-Reviewer, der valides ReviewOutput-PASS-JSON liefert"
+  - "Mock-Reviewer-JSON in Test 6 erfüllt vollständigen ReviewOutput-Contract (status, risk UPPERCASE LOW/MEDIUM/HIGH, confidence ≥ 0.75, violations, recommendations, summary, requires_claude=false)"
   - "Smoke-Test Test 6 result.status === 'completed' wird erfüllt (nicht mehr 'blocked')"
   - "Smoke-Test reaches 9/9 PASS"
   - "dispatcher-fail-cleanup.test.ts bleibt 9/9 PASS"
@@ -227,7 +243,7 @@ acceptance_criteria:
   - "Keine Direkt-Manipulation von runtime_state.json oder system/state/*.jsonl"
   - "Keine neuen npm-Dependencies in package.json"
   - "pnpm tsc --noEmit clean"
-  - "npx tsx --test system/control-plane/__tests__/smoke-test.ts → 9/9 bestanden"
+  - "npx tsx system/control-plane/__tests__/smoke-test.ts → 9/9 bestanden"
   - "npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts → all PASS"
   - "Audit-Trail (system/state/pipeline-audit.jsonl) zeigt review_completed-Event für Test 6 mit injectedem Reviewer (Verifikation per existierendem audit-writer)"
 
@@ -272,7 +288,7 @@ files_blocked:
 
 validation_commands:
   - "pnpm tsc --noEmit"
-  - "npx tsx --test system/control-plane/__tests__/smoke-test.ts"
+  - "npx tsx system/control-plane/__tests__/smoke-test.ts"
   - "npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts"
 
 required_skills: ["gsd-v2"]
