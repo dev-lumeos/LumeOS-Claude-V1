@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-04-30T02:09:56.085Z",
+  "since": "2026-04-29",
+  "total_runs": 6,
+  "failed_count": 2,
+  "blocked_count": 0,
+  "approval_count": 1,
+  "entries": [
+    {
+      "run_id": "RUN-20260429-1108",
+      "workorder_id": "WO-humanneeded-001",
+      "agent_id": "micro-executor",
+      "status": "blocked",
+      "failure_kind": "BLOCKED_APPROVAL",
+      "started_at": "2026-04-29T08:56:11.108Z",
+      "completed_at": "2026-04-29T08:56:11.136Z",
+      "scope_files": [],
+      "changed_files": [],
+      "errors": [
+        "HUMAN_NEEDED: spark-d ESCALATE → Claude needed"
+      ],
+      "error_summary": "HUMAN_NEEDED: spark-d ESCALATE → Claude needed",
+      "action_required": "npx tsx system/approval/approval-cli.ts list — Approval prüfen und entscheiden"
+    },
+    {
+      "run_id": "RUN-20260429-1032",
+      "workorder_id": "WO-rewrite-001",
+      "agent_id": "micro-executor",
+      "status": "failed",
+      "failure_kind": "FAILED",
+      "started_at": "2026-04-29T08:56:11.033Z",
+      "completed_at": "2026-04-29T08:56:11.091Z",
+      "scope_files": [],
+      "changed_files": [],
+      "errors": [],
+      "error_summary": "Run RUN-20260429-1032 failed (kein Audit-Event gefunden)",
+      "action_required": "Fehler analysieren, WO anpassen, Re-Dispatch — Audit: system/state/audit.jsonl"
+    },
+    {
+      "run_id": "RUN-20260429-4615",
+      "workorder_id": "WO-realrun-001",
+      "agent_id": "micro-executor",
+      "status": "failed",
+      "failure_kind": "FAILED",
+      "started_at": "2026-04-29T08:45:34.616Z",
+      "completed_at": "2026-04-29T08:45:34.673Z",
+      "scope_files": [],
+      "changed_files": [],
+      "errors": [],
+      "error_summary": "Run RUN-20260429-4615 failed (kein Audit-Event gefunden)",
+      "action_required": "Fehler analysieren, WO anpassen, Re-Dispatch — Audit: system/state/audit.jsonl"
+    }
+  ]
+}
