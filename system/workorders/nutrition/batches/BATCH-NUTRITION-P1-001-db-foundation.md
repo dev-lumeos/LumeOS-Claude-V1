@@ -1,7 +1,7 @@
 # BATCH-NUTRITION-P1-001-db-foundation
 
 ## Status
-draft
+ready_for_approval
 
 ## Purpose
 Plan für die ersten drei Nutrition Phase-1 DB-Foundation Workorders.
@@ -19,6 +19,35 @@ Dieser Batch bündelt die Discovery- und Foundation-Schritte des `nutrition-db-f
 | 3 | `WO-NUTRITION-P1-003-food-core-tables.md` | `WO-nutrition-003` | Nutrition Food Core Tables | `db-migration` | erforderlich |
 
 **Filename ↔ ID Mapping:** Die Dateinamen folgen der Auftrags-Convention `WO-NUTRITION-P1-NNN-...md`; das `workorder_id`-Feld folgt der Schema-Regex `^WO-[a-z]+-[0-9]+$` aus `system/workorders/schemas/workorder.schema.json`. Orchestrator/Scheduler nutzen das `workorder_id`-Feld.
+
+---
+
+## Filename ↔ Workorder ID Mapping
+
+| Filename | workorder_id |
+|---|---|
+| WO-NUTRITION-P1-001-audit-existing-state.md | WO-nutrition-001 |
+| WO-NUTRITION-P1-002-core-schema-foundation.md | WO-nutrition-002 |
+| WO-NUTRITION-P1-003-food-core-tables.md | WO-nutrition-003 |
+
+---
+
+## Approval Gate
+
+- WO-nutrition-001: no approval required, docs/read-only.
+- WO-nutrition-002: approval required, risk_category db-migration.
+- WO-nutrition-003: approval required, risk_category db-migration.
+- No execution may happen before explicit approval.
+- `supabase db push --linked` remains manual by Tom.
+
+---
+
+## Execution Guard
+
+- Execute in strict order: WO-nutrition-001 → WO-nutrition-002 → WO-nutrition-003.
+- Stop after WO-nutrition-001 and review the audit report before WO-nutrition-002.
+- Stop after WO-nutrition-002 and review migration diff before WO-nutrition-003.
+- Do not run WO-nutrition-002 or WO-nutrition-003 without approval.
 
 ---
 
@@ -113,6 +142,8 @@ WO-001 als trivialer Discovery-WO darf direkt `done → closed` gehen (per `wo_l
 
 ## Run Notes
 
+- **Batch is ready for approval, not approved.**
+- **This file does not approve execution.**
 - **Batch erzeugt keine Ausführung.** Diese Datei ist ein reines Planungsdokument. Kein Worker, kein Scheduler, kein Dispatch wird durch diese Datei ausgelöst.
 - **Execution erfolgt erst nach explizitem Approval** durch Tom für WO-002 und WO-003 (db-migration). WO-001 darf nach Batch-Freigabe autonom laufen.
 - **DB-Migration-WOs dürfen nur nach Approval laufen** — der Worker hat `requires_approval: true` und wird vom Scheduler vor `dispatched` blockiert, bis Approval erfolgt ist.
