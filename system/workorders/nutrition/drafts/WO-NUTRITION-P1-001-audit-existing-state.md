@@ -48,6 +48,8 @@ task: |
       Erzeuge einen Audit-Report unter:
       docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md
 
+      Lege ggf. das Verzeichnis docs/specs/Nutrition/06_workorder_planning/audit/ an, falls nicht vorhanden.
+
       Inhalt:
       - Liste aller existierenden Nutrition-bezogenen Migrationen unter supabase/migrations/
       - Liste aller existierenden Type-Files unter packages/types/src/nutrition/

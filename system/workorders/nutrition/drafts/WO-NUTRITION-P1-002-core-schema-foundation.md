@@ -92,7 +92,7 @@ acceptance_criteria:
   - "Migration ist idempotent (zweimaliges Apply ohne Fehler)"
   - "DOWN-Rollback im Migration-Header als SQL-Kommentar dokumentiert"
   - "Kein Tabellen-DDL in dieser Migration"
-  - "supabase db diff zeigt nur erwartete Änderungen (Schema + Extensions + Grant)"
+  - "supabase db diff zeigt nur erwartete Änderungen (Schema + Extensions + Grant) — manueller Reviewer/Tom-Check, nicht automatisch via validation_commands"
   - "pnpm tsc --noEmit clean"
 
 negative_constraints:
