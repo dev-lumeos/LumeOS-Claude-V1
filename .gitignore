@@ -52,3 +52,11 @@ docs/BrainstormDocs/
 tools/onyx/onyx_data/
 tools/onyx/.env
 tools/onyx/*.env
+
+# Onyx local install scripts (lokal, nicht ins Repo)
+tools/onyx/.gitignore
+tools/onyx/install.ps1
+tools/onyx/install.original.ps1
+
+# Onyx seed package — wird lokal generiert/synchronisiert, nicht ins Hauptrepo
+tools/onyx/seed/
