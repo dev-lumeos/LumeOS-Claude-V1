@@ -734,6 +734,27 @@ nutrition.food_categories (
 
 ---
 
+## Semantic Tags — V1 vs. Phase 2
+
+> **V1 User-visible Filter-Tags (16):** Verbindlich laut NUTRITION_NEXT_SPEC_DECISIONS.md §5.
+> Nur diese Tags erscheinen in der V1 Such-/Filter-UI. Verbindlich: SPEC_04_FEATURES.md Feature 3.
+>
+> `high_protein, low_carb, low_fat, high_fiber, vegan, vegetarian, gluten_free, lactose_free,
+> nut_free, halal, kosher, spicy, thai_food, mediterranean, processed_food, ultra_processed`
+>
+> **Phase 2 — Profi-/Gym-/Medical-Tags:** Alle nachfolgenden Tag-Kataloge (100+ Tags) sind Phase 2.
+> Sie werden intern beim BLS-Import via Auto-Tagging-Trigger befüllt und stehen für
+> Smart-Search-Ausschluss (allergen_*) bereit, sind aber nicht als UI-Filter sichtbar.
+>
+> **Admin-Tag-Override (manuell):**
+> Manuell annotierte Tags (halal, kosher, spicy, thai_food, mediterranean) werden über einen
+> Admin-Interface-Mechanismus gesetzt. Der Auto-Tag-Trigger überschreibt **keine** manuell
+> gesetzten Tags — er fügt nur fehlende Tags hinzu (ON CONFLICT DO NOTHING).
+> User-Tags für Custom Foods: In V1 auf `custom_allergens[]` beschränkt.
+> Generisches User-Tag-System ist Phase 2.
+
+---
+
 ## Semantic Tags — Vollständiger Profi-Katalog
 
 ---

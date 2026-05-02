@@ -46,6 +46,8 @@ Fortschrittsbalken + Quick-Add Buttons + Tages-Log
 
 ### `nutrition/shopping-lists/page.tsx`
 
+> ⚠️ **Schema-only V1 — Full UI Phase 2 wenn Zeit knapp.** Siehe ADR_RECIPES_SCHEMA_ONLY.md.
+
 Liste aller Einkaufslisten + Detail-Ansicht mit Abhak-Funktion
 
 ---
@@ -325,11 +327,17 @@ interface NutrientDetail {
   benefits: string[];    // Was dieser Nährstoff tut
   deficit_symptoms: string[];
   surplus_symptoms: string[];
-  food_sources: string[];  // Beste Quellen (display-only)
+  food_sources: string[];  // @deprecated — wird durch API-Endpoint ersetzt
+  // DEPRECATED: food_sources[] statisches Array entfernen.
+  // Top Foods kommen aus: GET /api/nutrition/nutrients/:code/top-foods
+  // Siehe SPEC_07_PATCH_APRIL2026.md §TOP_FOODS und ADR_IMPROVEMENTS_PACKAGE.md #20.
 }
 ```
 
 ### `data/mealScheduleDefaults.ts`
+
+> **Name:** `MealSlotEditor` ist der verbindliche Component-Name (nicht MealScheduleEditor).
+> `MealScheduleEditor` ist deprecated — alle Referenzen auf `MealSlotEditor` umstellen.
 
 Standard-Mahlzeiten-Zeitplan der als Settings-Default gilt.
 

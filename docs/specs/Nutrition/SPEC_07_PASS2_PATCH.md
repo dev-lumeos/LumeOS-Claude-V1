@@ -621,3 +621,99 @@ app.route('/api/nutrition/summary/micronutrients',   micronutrientsRouter)
 app.route('/api/nutrition/nutrients/reference-values', nutrientRefRouter)
 app.route('/api/nutrition/foods/:id/portions',       portionsRouter)
 ```
+
+---
+
+## MealCam Consent API Endpoints (FIX-5)
+
+### `GET /api/nutrition/mealcam/consent/summary`
+
+Übersicht des Consent-Status des Users.
+
+**Response:**
+```json
+{
+  "ok": true,
+  "data": {
+    "total_scans": 12,
+    "scans_with_consent": 3,
+    "scans_without_consent": 9,
+    "global_consent": false
+  }
+}
+```
+
+---
+
+### `POST /api/nutrition/mealcam/consent/grant-all`
+
+Erteilt Training-Freigabe für alle gespeicherten Scans.
+
+**Body:** leer
+
+**Response:**
+```json
+{ "ok": true, "data": { "updated_scans": 9 } }
+```
+
+---
+
+### `POST /api/nutrition/mealcam/consent/revoke-all`
+
+Widerruft Training-Freigabe für alle Scans.
+
+**Body:** leer
+
+**Response:**
+```json
+{ "ok": true, "data": { "updated_scans": 12 } }
+```
+
+Nährwert-Snapshots in meal_items bleiben erhalten. Nur `training_consent` wird auf `false` gesetzt.
+
+---
+
+### `GET /api/nutrition/mealcam/scans`
+
+Alle Scans des Users (für MealCamImageList).
+
+**Query:** `limit` (default 20), `offset`, `date_from`, `date_to`
+
+**Response:**
+```json
+{
+  "ok": true,
+  "data": [
+    {
+      "scan_id": "uuid",
+      "created_at": "...",
+      "scan_status": "user_confirmed",
+      "training_consent": false,
+      "image_stored": true,
+      "image_url": "signed-url-or-null",
+      "detected_items_count": 3
+    }
+  ]
+}
+```
+
+---
+
+### `DELETE /api/nutrition/mealcam/scan/:id/image`
+
+Löscht das Bild eines Scans (nicht den Scan-Record selbst).
+Nährwert-Snapshots in meal_items bleiben erhalten.
+
+**Response:**
+```json
+{ "ok": true, "data": { "scan_id": "uuid", "image_deleted": true } }
+```
+
+---
+
+### Routing-Ergänzung Pass 3
+
+```typescript
+app.route('/api/nutrition/mealcam/consent', mealcamConsentRouter)
+```
+

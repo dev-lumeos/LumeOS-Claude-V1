@@ -245,3 +245,138 @@ preferences.ts   NutritionPreferences (erweitert), NutritionPreferenceItem (erwe
 suggestions.ts   CoachNutritionSuggestion
 micronutrients.ts MicronutrientReviewResponse, NutrientWithSources
 ```
+
+---
+
+## Pass 3 Ergänzungen (OPUS Review 03 Fixes)
+
+---
+
+## Recalculate Components (FIX-4)
+
+| Component | Beschreibung |
+|---|---|
+| `RecalculateButton` | Icon-Button auf MealItemCard: "Nährstoffe neu berechnen" |
+| `RecalculateModal` | Modal mit Vorher/Nachher-Vergleich (Kalorien, Protein, Diff) und Bestätigungs-Button |
+| `MealRecalculateAction` | Bulk-Recalculate für ein ganzes Meal aus dem Meal-Kontextmenü |
+| `RecalculateResultToast` | Toast-Meldung nach erfolgreichem Recalculate mit Diff-Anzeige |
+
+**Logik:**
+```
+RecalculateButton sichtbar wenn:
+  - food_source IN ('bls', 'custom', 'mealcam')
+  - NICHT sichtbar wenn food_source = 'manual' (kein Food-Referenz)
+
+RecalculateModal zeigt:
+  - Food-Name + Menge
+  - Aktuell (Version N): enercc, prot625, fat, cho
+  - Neu (aus aktuellen Food-Daten): enercc, prot625, fat, cho
+  - Differenz (grün wenn kleiner, rot wenn größer)
+```
+
+**Hook:** `useRecalculateMealItem(mealItemId)` → `POST /api/nutrition/meal-items/:id/recalculate`
+
+**Referenz:** SPEC_06_RECALCULATE_PATCH.md, SPEC_03_PASS2_PATCH.md Flow 15
+
+---
+
+## MealCam Consent Settings Components (FIX-5)
+
+| Component | Beschreibung |
+|---|---|
+| `MealCamConsentSettings` | Einstellungsseite: Übersicht gespeicherter Bilder, Consent-Status, Aktionen |
+| `MealCamImageList` | Scrollbare Liste aller gespeicherten MealCam-Scans mit Vorschau + Consent-Status |
+| `MealCamImageCard` | Einzelner Scan: Datum, Thumbnail, "Consent erteilt/nicht erteilt", Löschen-Button |
+| `RevokeAllConsentButton` | "Alle Freigaben widerrufen" mit Bestätigungs-Dialog |
+| `GrantAllConsentButton` | "Training-Freigabe erteilen" mit Erklärungstext |
+
+**Hooks:**
+```
+useConsentSummary()     → GET /api/nutrition/mealcam/consent/summary
+useGrantAllConsent()    → POST /api/nutrition/mealcam/consent/grant-all
+useRevokeAllConsent()   → POST /api/nutrition/mealcam/consent/revoke-all
+useMealCamImages()      → GET /api/nutrition/mealcam/scans (alle User-Scans)
+useDeleteScanImage()    → DELETE /api/nutrition/mealcam/scan/:id/image
+```
+
+**Referenz:** ADR_MEALCAM_CONSENT.md, SPEC_03_PASS2_PATCH.md Flow 16
+
+---
+
+## QuickMacroEntry Component (FIX-11)
+
+| Component | Beschreibung |
+|---|---|
+| `QuickMacroEntry` | Modal/Tab für direktes Loggen von Makros ohne Food-Suche. food_source='manual'. |
+
+```typescript
+// QuickMacroEntry Props
+interface QuickMacroEntryProps {
+  mealId: string;
+  onSuccess: () => void;
+}
+
+// Form-State
+interface QuickMacroForm {
+  enercc: number;         // Pflicht
+  prot625?: number;
+  fat?: number;
+  cho?: number;
+  label?: string;         // Default: "Manuelle Eingabe"
+}
+```
+
+**Wichtig:** QuickMacroEntry Items haben `nutrients: {}` — keine Mikronährstoffdaten.
+Das MicroDashboard zeigt solche Items als "Keine Mikro-Daten" an.
+
+**Hook:** `useQuickAddMacros()` → `POST /api/nutrition/meals/:id/items` mit `food_source='manual'`
+
+**UI-Position:** Tab in FoodSearchView neben "BLS-Suche" und "Eigene Foods"
+
+**Referenz:** SPEC_04 Feature 5a, SPEC_03_PASS2_PATCH.md Flow 19
+
+---
+
+## Preferences Settings Components — IntoleranceSelector + ReligiousDietarySelector (FIX-12)
+
+Diese Komponenten sind in Onboarding (SPEC_03_PASS2_PATCH.md Flow 0) UND in
+Nutrition Settings verwendbar (DRY-Prinzip, gleiche Components für beide Kontexte).
+
+| Component | Kontext |
+|---|---|
+| `AllergenSelector` | Onboarding Step 2 + Nutrition Settings Allergien-Tab |
+| `IntoleranceSelector` | Onboarding Step 3 + Nutrition Settings Unverträglichkeiten-Tab |
+| `ReligiousDietarySelector` | Onboarding Step 4 + Nutrition Settings Religiöse Einschränkungen |
+| `DietTypeSelector` | Onboarding Step 1 + Nutrition Settings Diät-Typ |
+| `FoodLikesInput` | Onboarding Step 6 + Nutrition Settings Likes |
+| `FoodDislikesInput` | Onboarding Step 6 + Nutrition Settings Dislikes |
+| `MealSlotEditor` | Onboarding Step 7 + Nutrition Settings Mahlzeiten-Zeitplan |
+| `CuisinePreferenceSelector` | Onboarding Step 7 + Nutrition Settings Küchen |
+
+**Wiederverwendungs-Pattern:**
+```typescript
+// Gleicher Component, unterschiedlicher Kontext via Prop
+<IntoleranceSelector
+  mode="onboarding"    // oder "settings"
+  value={intolerances}
+  onChange={setIntolerances}
+/>
+```
+
+Onboarding nutzt `source: 'onboarding'`, Settings nutzen `source: 'settings'`
+in `food_preference_items.source`.
+
+---
+
+## V1-Status für Recipes/Shopping/MealPlan Components (FIX-7)
+
+| Component-Gruppe | V1-Status |
+|---|---|
+| `RecipeView`, `RecipeForm`, `RecipeDetail` | ⚠️ Schema-only V1 — Phase 2 wenn Zeit knapp. Siehe ADR_RECIPES_SCHEMA_ONLY.md |
+| `ShoppingListView`, `ShoppingListDetail` | ⚠️ Schema-only V1 — Full UI Phase 2 |
+| `MealPlansView`, `MealPlanDetail`, `PlanActivation` | ⚠️ Schema-only V1 — Phase 2 wenn Zeit knapp |
+| `GhostEntryCard` | ⚠️ Abhängig von MealPlan-Flow — Schema-only V1 |
+
+Diese Components werden nicht in V1 gebaut wenn Zeit knapp wird.
+Tabellen und Schemas existieren, APIs und UIs sind Phase 2.
+

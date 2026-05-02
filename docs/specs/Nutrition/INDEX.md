@@ -11,6 +11,7 @@
 | 02 | `SPEC_02_ENTITIES.md` | Core Entities, DB-Schema-Übersicht, Snapshot-Prinzip |
 | 02+ | `SPEC_02_PASS2_ENTITIES.md` | **Pass 2:** nutrient_reference_values, food_portions, mealcam_scans, coach_suggestions, preferences erweitert |
 | 03 | `SPEC_03_USER_FLOWS.md` | User Flows inkl. Food Search, Ghost Entry, MealPlan Lifecycle |
+| 03+ | `SPEC_03_PASS2_PATCH.md` | **Pass 3:** Flow 0 Onboarding, Flows 15–19, MealCam/Barcode/Auto-Accept Korrekturen |
 | 04 | `SPEC_04_FEATURES.md` | Features mit Regeln und Implementierungsdetails |
 | 05 | `SPEC_05_FOOD_TAXONOMY.md` | Kategorie-Baum, Food Tags V1, sort_weight, Canonical Names |
 | 06 | `SPEC_06_DATABASE_SCHEMA.md` | Vollständiges SQL — alle Tabellen, Indexes, Triggers, RLS |

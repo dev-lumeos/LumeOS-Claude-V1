@@ -83,24 +83,61 @@ ORDER BY
 
 ## Feature 3: Semantic Food Tags
 
-Objektive, wartbare Klassifikation. Automatisch generiert, nicht manuell gepflegt.
+Objektive, wartbare Klassifikation. Basis: BLS-Code-Pattern + Makro-Werte.
 
-### Phase 1 Tags (zum Launch)
+### V1 — User-sichtbare Filter-Tags (16 Tags, verbindlich laut NUTRITION_NEXT_SPEC_DECISIONS.md §5)
 
-| Typ | Tags |
-|---|---|
-| ingredient | `pork` `beef` `veal` `poultry` `chicken` `turkey` `lamb` `game_meat` `rabbit` `offal` `liver` `heart` `processed_meat` `fish` `fatty_fish` `lean_fish` `shellfish` `molluscs` `dairy` `cheese` `yogurt` `egg` `soy` `nuts` `peanuts` `seeds` `legumes` `gluten_grain` `whole_grain` `potato` `vegetable` `fruit` `cooking_fat` `sugar` `alcohol` `mushroom` |
-| diet | `vegetarian` `vegan` `pescatarian` `keto_strict` `keto_moderate` `low_carb` `low_fat` `high_fiber` `sugar_free` `paleo` `carnivore` `gluten_free` |
-| allergen | `allergen_gluten` `allergen_crustaceans` `allergen_eggs` `allergen_fish` `allergen_peanuts` `allergen_soy` `allergen_milk` `allergen_nuts` `allergen_celery` `allergen_mustard` `allergen_sesame` `allergen_sulphites` `allergen_lupin` `allergen_molluscs` |
-| fitness | `high_protein` `very_high_protein` `lean_protein` `complete_protein` `leucine_rich` `bcaa_rich` `high_carb` `complex_carbs` `fast_carbs` `high_fiber` `very_high_fiber` `omega3_rich` `epa_dha_source` `low_calorie` `calorie_dense` `high_satiety` `iron_rich` `magnesium_rich` `calcium_rich` `vitamin_d_source` `vitamin_b12_source` `zinc_rich` `potassium_rich` |
-| gym | `pre_workout_carbs` `pre_workout_balanced` `post_workout_protein` `post_workout_recovery` `pre_sleep_protein` `muscle_building` `anti_catabolic` `cutting_phase` `bulking_phase` `lean_bulk` `endurance_fuel` `glycogen_replenishment` `contest_prep` `hormone_support` `recovery_nutrients` `gut_health` `bone_density` `anti_inflammatory` `electrolyte_source` |
-| processing | `raw` `minimally_processed` `fermented` `smoked` `dried` `cooked` `canned` `processed` `ultra_processed` `fortified` |
+Diese 16 Tags sind in V1 für den User als Such-/Filteroptionen sichtbar:
 
-**Auto-generiert via Trigger** bei INSERT/UPDATE von foods. Basis: BLS-Code-Pattern + Makro-Werte.
+| Tag-Code | DE | Typ |
+|---|---|---|
+| `high_protein` | Proteinreich | diet/fitness |
+| `low_carb` | Low-Carb | diet |
+| `low_fat` | Fettarm | diet |
+| `high_fiber` | Ballaststoffreich | diet |
+| `vegan` | Vegan | diet |
+| `vegetarian` | Vegetarisch | diet |
+| `gluten_free` | Glutenfrei | diet |
+| `lactose_free` | Laktosefrei | diet |
+| `nut_free` | Nussfrei | allergen |
+| `halal` | Halal | religiös/kulturell |
+| `kosher` | Koscher | religiös/kulturell |
+| `spicy` | Scharf | Merkmal |
+| `thai_food` | Thai Food | Küche |
+| `mediterranean` | Mediterran | Küche |
+| `processed_food` | Verarbeitet | processing |
+| `ultra_processed` | Hochverarbeitet | processing |
 
-### Phase 2 + 3 Tags (geplant)
-Phase 2: `gluten`, `nuts`, `soy` (Allergen-Detail); `low_fat`, `organic`, `processed`
-Phase 3: `halal`, `kosher`, `seasonal`, `local`
+**`processed_food`** entspricht `processed` in SPEC_05 (Alias/Mapping: processed_food → processed-Kategorie in Tag-System).
+
+Auto-Tagging für V1 user-visible Tags:
+- `high_protein`: PROT625 ≥ 20g/100g
+- `low_carb`: CHO ≤ 10g/100g
+- `low_fat`: FAT ≤ 3g/100g
+- `high_fiber`: FIBT ≥ 6g/100g
+- `vegan` / `vegetarian`: abgeleitet aus ingredient-Tags (kein Fleisch/Fisch/Ei/Milch)
+- `gluten_free`: NOT allergen_gluten
+- `lactose_free`: NOT allergen_milk
+- `nut_free`: NOT allergen_nuts AND NOT peanuts
+- `halal` / `kosher`: manuell annotiert (nicht auto-ableitbar aus BLS)
+- `spicy`: manuell annotiert
+- `thai_food`: manuell annotiert (BLS hat keine Thai-Food-Kennung)
+- `mediterranean`: manuell annotiert (Fisch + Olivenöl + Hülsenfrüchte + Vollkorn)
+- `processed_food`: processing_level = 'processed'
+- `ultra_processed`: processing_level = 'ultra_processed'
+
+### Phase 2 — Profi-/Gym-/Medical-Tags (NICHT V1)
+
+> **Phase 2:** Alle 100+ Ingredient-, Fitness-, Gym-, Medical- und Allergen-Detail-Tags
+> aus SPEC_05 sind Phase 2. Sie existieren intern als Tag-Definitionen und werden
+> beim Import via Auto-Tagging-Trigger befüllt, aber nicht für User-Filter angezeigt.
+>
+> Interne Tags (allergen_*, ingredient-Tags) können für Smart-Search-Ausschluss genutzt werden,
+> sind aber nicht als UI-Filteroptionen sichtbar.
+>
+> Verbindlich: NUTRITION_NEXT_SPEC_DECISIONS.md §5
+
+**Auto-generiert via Trigger** bei INSERT/UPDATE von foods. Der Auto-Tag-Trigger (SPEC_06) befüllt alle internen Tags. V1 user-visible Tags sind ein Subset davon.
 
 ---
 
@@ -123,23 +160,12 @@ Custom Foods brauchen keine Tags — Allergen-Ausschluss läuft über `custom_al
 
 ### Barcode-Scanning (Custom Food Identifier)
 
-> **Wichtig:** BLS 4.0 enthält keine Barcodes. Barcode-Scanning ist ausschliesslich
-> für Custom Foods — als Identifikations-Mechanismus, nicht als Nährstoff-Lookup.
+> ⚠️ **Phase 2** — Barcode Scanner ist nicht V1.
+> Verbindlich: ADR_MEALCAM_V1.md und NUTRITION_NEXT_SPEC_DECISIONS.md §1.
+>
+> Das Konzept (Barcode als Custom-Food-Identifier, kein OpenFoodFacts-Lookup)
+> ist in ADR_IMPROVEMENTS_PACKAGE.md #19 dokumentiert und für Phase 2 vorgesehen.
 
-**Flow:**
-```
-User scannt Barcode eines gekauften Produkts
-  → Suche in nutrition.foods_custom WHERE barcode = $scanned
-
-  TREFFER → Custom Food direkt in Mengen-Eingabe laden
-  KEIN TREFFER → "Produkt noch nicht erfasst"
-               → Custom Food Formular mit Barcode vorausgefüllt
-               → User gibt Nährstoffe manuell ein
-               → Beim nächsten Scan: direkt gefunden
-```
-
-Keine externe Datenbank-Abfrage. Kein automatisches Nährstoff-Befüllen.
-User ist verantwortlich für die eingegebenen Werte.
 
 ### Allergene in Custom Foods
 
@@ -261,16 +287,19 @@ Ziel-Erreichung basiert auf Gesamt-Hydration. Siehe ADR_WATER_TOTAL_HYDRATION.md
 
 ## Feature 9: MealCam (KI-Erkennung)
 
-**Tech:** Claude Vision API
+**Tech:** Vision-Provider TBD (Entscheidung vor Implementierung — siehe ADR_MEALCAM_V1.md)
 **Usage:** Jeder Scan wird in `usage_events` geloggt (event_type: `mealcam_scan`).
-Basis für spätere Wallet-Abrechnung. Siehe ADR_AI_USAGE_WALLET.md.
 
 | Level | Schwelle | Aktion |
 |---|---|---|
-| AUTO_ACCEPT | ≥ 0.85 | Sofort übernehmen |
-| SUGGEST | 0.50–0.84 | Kandidaten zeigen |
-| LOW | 0.30–0.49 | "Meintest du...?" |
-| REJECT | < 0.30 | Manuelle Eingabe |
+| HIGH | ≥ 0.75 | Grün markiert in Confirmation — **User-Klick ist immer erforderlich** |
+| SUGGEST | 0.50–0.74 | Gelb markiert — "Bitte prüfen" Hinweis |
+| LOW | < 0.50 | Rot markiert — "Niedrige Sicherheit — manuell prüfen" — kein Auto-Add |
+
+> **Wichtig:** AUTO_ACCEPT existiert nicht in V1. Auch bei HIGH Confidence wird
+> das Item nicht automatisch ins Diary übernommen. User muss immer auf "Alles
+> hinzufügen" tippen (Schritt in MealCamConfirmation).
+> Verbindlich: ADR_MEALCAM_V1.md
 
 Im MealPlan-Kontext: erkannte Foods werden mit Ghost Entry verglichen (Match, Abweichung, Fehlt, Extra).
 
@@ -307,6 +336,14 @@ score = (
 level_multiplier: beginner 0.75 | intermediate 0.90 | advanced 1.00 | elite 1.10
 thresholds: ok ≥ 80 | warn 50–79 | block < 50
 ```
+
+**user_level — Quelle und Regeln:**
+- `user_level` kommt aus dem **User-Profil / Auth-Modul** (nicht aus Nutrition)
+- Nutrition setzt `user_level` nicht und speichert es nicht selbst
+- V1 Default: `intermediate` (multiplier = 0.90) wenn kein Profil-Wert vorhanden
+- Fallback-Multiplier bei fehlendem Profil: `0.90`
+- Nutrition liest `user_level` beim Score-Aufruf aus dem Auth-Modul
+  (`GET http://auth:4200/api/users/:uid/profile` → `experience_level`)
 
 Deterministisch. Kein AI. Testbar.
 
