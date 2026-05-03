@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -ExecutionPolicy Bypass -File 'D:\\GitHub\\LumeOS-Claude-V1\\.codex\\hooks\\pre-tool.ps1'"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash|bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Users/User/AppData/Roaming/npm/lean-ctx.cmd hook rewrite"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|read|ReadFile|read_file|View|view|Grep|grep|Search|search|ListFiles|list_files|ListDirectory|list_directory",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Users/User/AppData/Roaming/npm/lean-ctx.cmd hook redirect"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -ExecutionPolicy Bypass -File 'D:\\GitHub\\LumeOS-Claude-V1\\.codex\\hooks\\post-tool.ps1'"
+          }
+        ]
+      }
+    ]
+  }
+}
