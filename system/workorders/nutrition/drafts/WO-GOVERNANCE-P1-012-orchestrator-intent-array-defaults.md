@@ -1,6 +1,7 @@
 # WO-GOVERNANCE-P1-012 — OrchestratorIntent Array-Defaults V1
 
-**Status:** draft
+**Status:** closed
+**Completion Note:** Implementation reviewed PASS. OrchestratorIntent array-field defensive validation implemented. Missing/non-array risks, execution_order, required_gates and stop_conditions now produce controlled REWRITE instead of TypeError. smoke-test.ts 9/9 PASS. dispatcher-fail-cleanup.test.ts 24/24 PASS. *(closed: 2026-05-03)*
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befund Nutrition Batch 001 `--run` nach Closure von WO-005/006/007/008/009/010/011 + Cleanup von `RUN-20260502-3836`: `WO-nutrition-001` neuer Run `RUN-20260503-7133` failed mit `Dispatcher status: failed — intent.required_gates is not iterable`. WO-011 wirkt korrekt (neuer Eintrag steht als `failed`, nicht `dispatched`); aber der Validator wirft TypeError statt deterministisches REWRITE/FAIL, weil das Modell-Output-OrchestratorIntent kein Array für `required_gates` liefert.
 **Template:** `system/workorders/templates/template_implementation_medium.md`

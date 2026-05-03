@@ -1,7 +1,16 @@
 # BATCH-GOVERNANCE-P1-008-orchestrator-intent-array-defaults
 
 ## Status
-ready_for_approval
+completed *(2026-05-03)*
+
+## Validation Result
+- `pnpm tsc --noEmit` → **PASS** (EXIT=0)
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → **9/9 PASS** (read-only-Verifikation; valide OrchestratorIntent-Mocks aus WO-007 durchlaufen §0 als NOOP, erreichen §1-§8 unverändert)
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → **24/24 PASS** (17 bestehende WO-006/011-Tests + 7 additive WO-012-Tests inkl. `null`-Wording-Verifikation und WO-011/006-Co-Verifikation)
+- `npx tsx system/workorders/cli/run-batch.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md --dry-run` → **READY_TO_RUN** (EXIT=0)
+- Implementation Review (Spark-D Mandatory) → **PASS** (siehe Verdict in `REVIEW-IMPLEMENTATION-WO-GOVERNANCE-P1-012`: Scope Compliance PASS, Safety Review PASS, §0-Block korrekt vor allen for-of-Zugriffen platziert, alle 4 Array-Pflichtfelder geprüft, `null` sauber benannt, §1-§8 Validator-Logik unverändert, WO-005/009 Normalisierung intakt, `ALLOWED_GATES`/`ALLOWED_RISK_LEVELS`/`MAX_REWRITE_LOOPS` unverändert, kein Validator-Bypass, WO-006 Lock-Release + WO-011 Run-id-Status-Update intakt)
+- Implementation Files: 2 (`system/control-plane/governance-validator.ts` +24 additive Lines mit neuem §0-Block, `system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` +149 additive Test-Lines mit 7 neuen Szenarien)
+- Implementation Commit: `47e633d fix(governance): validate orchestrator intent arrays`
 
 ## Purpose
 Make OrchestratorIntent validation robust against missing or non-array array fields so malformed model output produces deterministic REWRITE/FAIL instead of TypeError crashes.
