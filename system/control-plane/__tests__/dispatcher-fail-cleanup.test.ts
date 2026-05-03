@@ -749,4 +749,127 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     assert.match(retryMessage, /all 6 OrchestratorIntent fields/, `Hint muss alle 6 Felder erwähnen`)
   })
 
+  // ─── WO-014: Lock-Release on Non-Terminal/Completed Paths ─────────────────
+
+  it('WO-014 E-1: no-tool-request completed path releases scope_lock', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo014-401/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo014-401/src/file.ts`, '// fixture')
+    // Mock liefert valides OrchestratorIntent OHNE Tool-Request (kein 'tool'-Feld) → no-tool-request completed path.
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: ['analyze'],
+      required_gates:  ['files-scope-gate', 'review-gate', 'human-approval-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-401',
+      scope_files:  ['services/wo014-401/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'completed', `Erwartet completed, war: ${result.status}: ${result.error}`)
+    assert.equal(lockExistsFor(result.run_id), false, 'WO-014: scope_lock muss freigegeben sein nach completed-no-tool-request')
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-401' && w.run_id === result.run_id,
+    )
+    // WO-006 Test 8 Behavior: WO-Status bleibt 'dispatched' (kein expliziter Status-Update auf 'done').
+    assert.notEqual(woEntry?.status, 'failed', `WO-Status darf NICHT 'failed' sein (WO-006 Test 8), war: ${woEntry?.status}`)
+  })
+
+  it('WO-014 E-2: approval-gate awaiting_approval path releases scope_lock', async () => {
+    fs.mkdirSync(`${TEST_DIR}/supabase/migrations`, { recursive: true })
+    // Mock liefert OrchestratorIntent + write-Tool auf approval-pflichtigen Pfad (supabase/migrations) OHNE approvalId.
+    // → triggert approval-gate Pfad → awaiting_approval.
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'high',
+      risks:           ['db migration without approval'],
+      execution_order: ['await_approval'],
+      required_gates:  ['human-approval-gate', 'review-gate', 'db-migration-gate', 'rollback-gate', 'typecheck-gate', 'test-gate', 'files-scope-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'write',
+      targetPath: 'supabase/migrations/402_test.sql',
+      content: 'CREATE TABLE wo014_402 (id UUID PRIMARY KEY);',
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-402',
+      scope_files:  ['supabase/migrations/402_test.sql'],
+      risk_category: 'db-migration',
+      rollback_hint: 'DROP TABLE IF EXISTS wo014_402;',
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'awaiting_approval', `Erwartet awaiting_approval, war: ${result.status}: ${result.error}`)
+    assert.equal(lockExistsFor(result.run_id), false, 'WO-014: scope_lock muss freigegeben sein nach approval-gate awaiting_approval')
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-402' && w.run_id === result.run_id,
+    )
+    assert.equal(woEntry?.status, 'awaiting_approval', `Status muss awaiting_approval sein, war: ${woEntry?.status}`)
+  })
+
+  it('WO-014 E-3: review-pipeline rewrite path — lock-release verified by code-inspection', () => {
+    // Der review-pipeline rewrite-Pfad (dispatcher.ts ~703-718) ist in dieser Test-Fixture
+    // nicht isoliert ausführbar: Spark-C REWRITE eskaliert zu Spark-D, der NICHT injizierbar
+    // ist (Phase-2-Followup WO-018-Spark-D-Reviewer-Injection). REWRITE löpt deshalb
+    // unweigerlich auf den human-needed-Pfad (durch E-4 abgedeckt).
+    //
+    // Stattdessen statische Verifikation der WO-014-Edit-Stelle per source-inspection:
+    // der review-rewrite-Branch (rund um cleanupHandled = true für Status 'review')
+    // muss releaseScopeLock + releaseDbMigrationLock VOR cleanupHandled aufrufen.
+    const dispatcherSrc = fs.readFileSync(
+      path.resolve(REAL_CWD, 'system/control-plane/dispatcher.ts'), 'utf8',
+    )
+    // Find the review-rewrite block: status 'review' assignment, then check lock-release follows.
+    const rewriteIdx = dispatcherSrc.indexOf("updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'review')")
+    assert.ok(rewriteIdx > 0, 'review-rewrite block must exist in dispatcher.ts')
+    const cleanupIdx = dispatcherSrc.indexOf("cleanupHandled = true", rewriteIdx)
+    assert.ok(cleanupIdx > rewriteIdx, 'cleanupHandled = true must follow review status update')
+    const between = dispatcherSrc.slice(rewriteIdx, cleanupIdx)
+    assert.match(between, /releaseScopeLock\(runId\)/, 'WO-014: releaseScopeLock must be called before cleanupHandled=true on review-rewrite path')
+    assert.match(between, /releaseDbMigrationLock\(runId\)/, 'WO-014: releaseDbMigrationLock must be called before cleanupHandled=true on review-rewrite path')
+    assert.match(between, /review-pipeline rewrite/, 'WO-014: auditScopeLockReleased reason must mention review-pipeline rewrite')
+  })
+
+  it('WO-014 E-4: review-pipeline human-needed path releases scope_lock', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo014-404/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo014-404/src/file.ts`, '// fixture')
+    // Spark-C ESCALATEs (low confidence) → goes to Spark-D. Spark-D returns invalid_json
+    // (no callSeniorReviewer mock) → review-pipeline returns 'human_needed' → awaiting_approval.
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: ['edit_file'],
+      required_gates:  ['files-scope-gate', 'review-gate', 'human-approval-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'write',
+      targetPath: 'services/wo014-404/src/file.ts',
+      content: '// updated by wo014-404',
+    })
+    const mockFastReviewer = async () => JSON.stringify({
+      status:           'ESCALATE',
+      risk:             'HIGH',
+      confidence:       0.5,
+      violations:       ['mock escalate trigger'],
+      recommendations:  ['needs senior review'],
+      summary:          'mock spark-c escalate',
+      requires_claude:  true,
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-404',
+      scope_files:  ['services/wo014-404/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, {
+      callModel: mockCallModel,
+      executeTool: defaultExecuteTool,
+      callFastReviewer: mockFastReviewer,
+    })
+    // Spark-C ESCALATE + Spark-D invalid_json → human-needed path → result.status === 'blocked', WO-Status === 'awaiting_approval'.
+    assert.equal(lockExistsFor(result.run_id), false, 'WO-014: scope_lock muss freigegeben sein nach review-pipeline human-needed')
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-404' && w.run_id === result.run_id,
+    )
+    assert.equal(woEntry?.status, 'awaiting_approval', `Status muss 'awaiting_approval' sein nach human-needed, war: ${woEntry?.status}`)
+  })
+
 })

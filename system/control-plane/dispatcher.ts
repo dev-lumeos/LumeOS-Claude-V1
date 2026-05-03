@@ -530,6 +530,14 @@ export async function dispatchWorkorder(
     const toolReq = parseToolRequest(modelOutput)
     if (!toolReq) {
       await state.endRun(runId, 'completed')
+      // WO-014: explicit lock-release before cleanupHandled=true (release functions are idempotent)
+      await state.releaseScopeLock(runId)
+      await state.releaseDbMigrationLock(runId)
+      audit.auditScopeLockReleased({
+        run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+        orchestration_mode: orchestrationMode,
+        reason: 'no-tool-request completed path',
+      })
       cleanupHandled = true  // V1.2.4: kein FAIL — finally darf WO-Status nicht auf 'failed' überschreiben
       audit.auditJobCompleted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, duration_ms: Date.now() - jobStart })
       return { status: 'completed', run_id: runId, workorder_id: wo.workorder_id }
@@ -574,6 +582,14 @@ export async function dispatchWorkorder(
       })
       await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'awaiting_approval')
       await state.endRun(runId, 'awaiting_approval')
+      // WO-014: explicit lock-release before cleanupHandled=true (release functions are idempotent)
+      await state.releaseScopeLock(runId)
+      await state.releaseDbMigrationLock(runId)
+      audit.auditScopeLockReleased({
+        run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+        orchestration_mode: orchestrationMode,
+        reason: 'approval-gate awaiting_approval',
+      })
       cleanupHandled = true  // V1.2.4: WO bewusst in awaiting_approval — finally darf nicht auf 'failed' überschreiben
       return { status: 'awaiting_approval', run_id: runId, workorder_id: wo.workorder_id,
         error: `APPROVAL_REQUIRED: ${pendingApproval.approval_id}` }
@@ -686,6 +702,14 @@ export async function dispatchWorkorder(
           }
           await state.endRun(runId, 'failed')
           await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'review')
+          // WO-014: explicit lock-release before cleanupHandled=true (release functions are idempotent)
+          await state.releaseScopeLock(runId)
+          await state.releaseDbMigrationLock(runId)
+          audit.auditScopeLockReleased({
+            run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+            orchestration_mode: orchestrationMode,
+            reason: 'review-pipeline rewrite — wo in review',
+          })
           cleanupHandled = true  // V1.2.4: WO bewusst in 'review' für Re-Dispatch — finally darf nicht überschreiben
           audit.auditReviewPipelineRewrite({
             run_id: runId,
@@ -713,6 +737,14 @@ export async function dispatchWorkorder(
           })
           await state.endRun(runId, 'blocked')
           await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'awaiting_approval')
+          // WO-014: explicit lock-release before cleanupHandled=true (release functions are idempotent)
+          await state.releaseScopeLock(runId)
+          await state.releaseDbMigrationLock(runId)
+          audit.auditScopeLockReleased({
+            run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+            orchestration_mode: orchestrationMode,
+            reason: 'review-pipeline human-needed — wo in awaiting_approval',
+          })
           cleanupHandled = true  // V1.2.4: WO bewusst in 'awaiting_approval' — finally darf nicht überschreiben
           audit.auditReviewPipelineHumanNeeded({
             run_id: runId,
