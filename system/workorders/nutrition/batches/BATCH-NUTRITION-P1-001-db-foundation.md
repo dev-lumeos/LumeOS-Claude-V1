@@ -184,3 +184,79 @@ Nach erfolgreichem Abschluss aller drei WOs ist die Foundation gelegt für den n
 ---
 
 *Batch-Plan erzeugt: 2026-05-02 — gemäß `NUTRITION_PHASE1_DB_FOUNDATION_SPLIT.md` §10, Drafts P1-001/002/003 und Review-Pass aus `REVIEW-WO-NUTRITION-P1-BATCH-001.md` (PASS_WITH_FIXES → Fixes umgesetzt).*
+
+---
+
+## Workflow Test Result — 2026-05-03
+
+**Status:** **WORKFLOW TEST SNAPSHOT — pre WO-014**
+
+**Result:**
+- WO-nutrition-001 successfully dispatched.
+- Dispatcher returned `completed`.
+- Validator/model-output contract chain is now working end-to-end.
+- WO-nutrition-002 not yet reached because Preflight HOLD occurred after WO-001.
+
+**Confirmed fixed (Validator/Dispatcher/Model-Output-Vertrag-Kette):**
+- `selected_agent` undefined → eliminiert via WO-005 Mapping.
+- `risk_level` undefined → eliminiert via WO-009 Mapping.
+- `required_gates` TypeError (`is not iterable`) → eliminiert via WO-012 §0 Array-Defensive.
+- Missing array-field TypeErrors (`risks`, `execution_order`, `stop_conditions`) → eliminiert via WO-012 §0.
+- Stale `failed`-Status auf neuen `active_workorders`-Einträgen (Find-Key-Mismatch) → eliminiert via WO-011 `updateActiveWorkorderStatusByRun`.
+- Model output contract missing from prompt → eliminiert via WO-013 statisches Contract-Template + lazy `buildSystemPrompt`-Injection + strukturierter REWRITE-Hint mit Validator-Reason und Field.
+
+**Validation-Snapshot (vor `--run`):**
+- `git status --short` → clean.
+- `pnpm tsc --noEmit` → PASS.
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → 9/9 PASS.
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → 28/28 PASS. *(pre WO-014 snapshot; after WO-014 this suite is 32/32 PASS.)*
+- `npx tsx system/workorders/cli/run-batch.ts ... --dry-run` → READY_TO_RUN.
+
+**`--run`-Ergebnis:**
+- `WO-nutrition-001 [dispatched] Dispatcher status: completed` — erstmals erfolgreicher Dispatch in der Workflow-Test-Sequenz.
+- `WO-nutrition-002 [preflight_blocked] Preflight HOLD` — nicht durch Approval-Pause, sondern durch Preflight.
+- Approval Queue: 0 Pending Approvals.
+- `git status --short` post-run: clean (alle State-Mutationen in gitignored `runtime_state.json`).
+
+**Remaining blocker:**
+
+Lock-/State-Cleanup auf `cleanupHandled = true`-Pfaden im Dispatcher (latentes WO-006-Restdefekt — bekannt, nicht Teil von WO-006/011/012/013-Scope):
+- `no-tool-request completed`-Pfad
+- `awaiting_approval`-Pfad
+- `review`-Pfad
+- `human-needed → awaiting_approval`-Pfad
+
+Diese Pfade setzen `cleanupHandled = true`, womit der finally-Block übersprungen wird. Folge: `releaseScopeLock(runId)` und `releaseDbMigrationLock(runId)` werden auf intentional-non-terminalen Erfolgs-/Approval-/Review-Pfaden NICHT aufgerufen. Nachfolge-Workorders mit überlappenden `scope_files` treffen den stale Scope-Lock und werden vom Preflight ge`HOLD`et.
+
+### Update 2026-05-03 — post WO-014
+
+The lock-release issue on `cleanupHandled = true` paths was addressed by WO-GOVERNANCE-P1-014.
+
+Code commit:
+`b681402` `fix(governance): release locks on non-terminal dispatcher paths`
+
+Meaning:
+- no-tool-request completed path releases locks
+- awaiting_approval path releases locks
+- review path releases locks
+- human-needed awaiting_approval path releases locks
+- WO-002 Preflight HOLD caused by stale lock should no longer occur for new runs
+- empirical re-run of BATCH-NUTRITION-P1-001 after WO-014 is still pending
+
+**Recommended WO at that time — resolved:**
+
+`WO-GOVERNANCE-P1-014-finally-lock-release-on-non-terminal-paths` — Lock-Release explizit VOR `cleanupHandled = true` ergänzen auf den 4 intentional-non-terminalen Pfaden, ohne die WO-006-Garantie zu schwächen oder den Status zu ändern. Risk: `architecture`. Erwartung nach Closure: Re-Run von BATCH-NUTRITION-P1-001 erreicht WO-nutrition-002 → pausiert wie spezifiziert am `db-migration`-Approval-Gate (Tom-Approval erforderlich).
+
+Resolved by WO-GOVERNANCE-P1-014 / commit `b681402`.
+
+**Weitere offene Followup-Kandidaten:**
+- `WO-015-state-history-cleanup` — historische stuck-`dispatched`-Einträge in `active_workorders` bereinigen.
+- `WO-016-stop-rule-cli` — analoge Operator-CLI für `system_stop`.
+- `WO-017-validator-normalize-tests` — dedicated Mapping-/Helper-Tests für WO-005/009/012-Layers.
+- `WO-018-orchestrator-contract-dynamic-generation` — Phase-2 dynamische Generation der ALLOWED_*-Listen aus dem Validator (eliminiert WO-013-LOW-Drift-Risiko).
+- Spark-D-Reviewer-Injection.
+- WO-NUTRITION-P1-001 Bootstrap-Workaround-Cleanup (`agent_id: docs-agent` zurückrollen).
+
+---
+
+*Workflow-Test-Sektion ergänzt: 2026-05-03 — nach WO-005/006/007/008/009/010/011/012/013-Closure-Sequenz und finaler Live-Verifikation des `BATCH-NUTRITION-P1-001 --run`.*
