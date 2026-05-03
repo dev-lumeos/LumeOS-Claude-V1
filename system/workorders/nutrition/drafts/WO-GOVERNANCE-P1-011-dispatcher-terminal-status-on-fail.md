@@ -1,6 +1,7 @@
 # WO-GOVERNANCE-P1-011 — Dispatcher Terminal-Status-on-FAIL V1
 
-**Status:** draft
+**Status:** closed
+**Completion Note:** Implementation reviewed PASS. Dispatcher failure paths now update the correct active_workorders entry by workorder_id + run_id. active_workorders no longer remains falsely dispatched/running for new failed runs. Lock-release behavior remains intact. dispatcher-fail-cleanup.test.ts 17/17 PASS. smoke-test.ts 9/9 PASS. *(closed: 2026-05-03)*
 **Phase:** 1 — Governance Tooling
 **Source:** Read-only Operator-Diagnose nach Closure von WO-005/006/007/008/009/010 mit Terminal-WO-Reset-CLI: `WO-nutrition-001` hat 3 Einträge in `active_workorders` — eine `failed` (`RUN-20260502-3836`) und **zwei `dispatched`** (`RUN-20260502-6627`, `RUN-20260503-8238`), obwohl beide Runs nach Validator-FAIL terminal beendet sind. Terminal-WO-Reset-CLI verweigert korrekt das Cleanup non-terminaler `dispatched`-Einträge — der Defekt liegt im Dispatcher: WO-006 Try/Finally garantiert Lock-Release, aber `active_workorders.status` wird nicht in allen FAIL-Pfaden auf `'failed'` gesetzt.
 **Template:** `system/workorders/templates/template_implementation_medium.md`

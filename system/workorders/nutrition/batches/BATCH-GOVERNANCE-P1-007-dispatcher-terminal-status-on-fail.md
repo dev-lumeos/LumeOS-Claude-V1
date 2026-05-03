@@ -1,7 +1,14 @@
 # BATCH-GOVERNANCE-P1-007-dispatcher-terminal-status-on-fail
 
 ## Status
-ready_for_approval
+completed *(2026-05-03)*
+
+## Validation Result
+- `pnpm tsc --noEmit` → **PASS** (EXIT=0)
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → **17/17 PASS** (9 bestehende WO-006-Tests + 8 additive WO-011-Tests inkl. CRITICAL Multi-Dispatch-Find-Key-Fix-Beweis)
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → **9/9 PASS** (Smoke-Test ungeändert; verifiziert keine Regression im success/awaiting_approval/blocked-Pfad)
+- Implementation Review (Spark-D Mandatory) → **PASS** (siehe Verdict in `REVIEW-IMPLEMENTATION-WO-GOVERNANCE-P1-011`: Scope Compliance PASS, Safety Review PASS, neuer additiver Helper `updateActiveWorkorderStatusByRun` matcht run-spezifisch, alle 11 Post-`startRun` FAIL/Block/Catch/Finally-Pfade umgestellt, bestehende `updateWorkorderStatus`/`validateWoStatusTransition`/`WO_TRANSITIONS`/`ActiveWorkorder.status`-Union BIT-IDENTISCH erhalten, Pre-Dispatch-Pfade Zeilen 331/354 unverändert mit altem Helper, intentional-non-terminale Pfade `awaiting_approval`/`review`/no-tool-request unverändert in Status-Wert, WO-006 Lock-Release intakt, Terminal-WO-Reset-CLI nicht abgeschwächt)
+- Implementation Files: 3 (`system/state/state-manager.ts` +63 additive Lines mit neuem Helper, `system/control-plane/dispatcher.ts` 14 Aufruf-Stellen umgestellt + Catch-Pfad ergänzt, `system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` +8 additive Test-Szenarien)
 
 ## Purpose
 Fix dispatcher failure paths so `active_workorders` are updated by `workorder_id + run_id` and failed runs do not leave newer entries stuck as `dispatched`/`running`.
