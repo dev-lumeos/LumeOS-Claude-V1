@@ -77,6 +77,49 @@ export function mapAgentToValidatorTarget(workorderAgentId: string): string | un
   return AGENT_VALIDATOR_MAP[workorderAgentId]
 }
 
+/**
+ * V1 Hardcoded-Map: workorder.risk_category → OrchestratorIntent.risk_level.
+ *
+ * Wird ausschließlich von normalizeOrchestratorIntent() konsultiert, wenn das
+ * Modell-Output kein gültiges risk_level enthält. Validator-Strenge bleibt
+ * unberührt: validateOrchestratorIntent() sieht entweder einen ALLOWED_RISK_LEVELS-
+ * Wert (→ PASS) oder einen ungültigen Wert (→ REWRITE).
+ *
+ * Mapping deckt alle 13 RiskCategory-Werte aus risk-categories.ts ab und folgt der
+ * CLAUDE.md High-Risk-Regel:
+ *   - Autonom (low):    docs, standard, test, i18n
+ *   - Cautious (medium): architecture, security, auth, rls, shared-core
+ *   - High-Risk (high):  db-migration, payments, medical, release
+ */
+export const RISK_CATEGORY_TO_RISK_LEVEL_MAP: Record<string, 'low' | 'medium' | 'high'> = {
+  'docs':         'low',
+  'standard':     'low',
+  'test':         'low',
+  'i18n':         'low',
+  'architecture': 'medium',
+  'security':     'medium',
+  'auth':         'medium',
+  'rls':          'medium',
+  'shared-core':  'medium',
+  'db-migration': 'high',
+  'payments':     'high',
+  'medical':      'high',
+  'release':      'high',
+}
+
+/**
+ * Schlägt einen risk_level für die WO-`risk_category` aus der Hardcoded-Map nach.
+ * Gibt undefined zurück wenn die `risk_category` undefined/leer/unbekannt ist —
+ * Validator entscheidet dann deterministisch (REWRITE/FAIL über die bestehenden
+ * ALLOWED_RISK_LEVELS-Regeln).
+ */
+export function mapRiskCategoryToRiskLevel(
+  riskCategory: string | undefined,
+): 'low' | 'medium' | 'high' | undefined {
+  if (!riskCategory) return undefined
+  return RISK_CATEGORY_TO_RISK_LEVEL_MAP[riskCategory]
+}
+
 const ALLOWED_GATES = new Set([
   'db-migration-gate',
   'rollback-gate',
@@ -166,33 +209,58 @@ export function parseOrchestratorIntent(content: string): OrchestratorIntent {
 // ─── Normalizer ───────────────────────────────────────────────────────────────
 
 /**
- * Normalisiert intent.selected_agent gegen ALLOWED_AGENTS.
+ * Normalisiert intent.selected_agent (gegen ALLOWED_AGENTS) und intent.risk_level
+ * (gegen ALLOWED_RISK_LEVELS).
  *
- * Ersetzt fehlende oder ungültige selected_agent-Werte durch den Mapping-Eintrag
- * aus AGENT_VALIDATOR_MAP, basierend auf workorder.agent_id. Wird vom Dispatcher
- * zwischen parseOrchestratorIntent() und validateOrchestratorIntent() aufgerufen.
- *
- * Verhalten:
+ * selected_agent (WO-005, funktional unverändert):
  *   - Falls intent.selected_agent in ALLOWED_AGENTS: unverändert (PASS-Kandidat).
- *   - Falls undefined / leer / nicht in ALLOWED_AGENTS: lookup über AGENT_VALIDATOR_MAP.
- *   - Falls workorder.agent_id nicht in der Map: intent unverändert zurückgeben —
+ *   - Falls undefined / leer / nicht in ALLOWED_AGENTS: lookup über AGENT_VALIDATOR_MAP
+ *     (Schlüssel: workorder.agent_id).
+ *   - Falls workorder.agent_id nicht in der Map: selected_agent unverändert lassen —
  *     Validator entscheidet dann deterministisch (REWRITE → FAIL bei Limit).
  *
- * Mutiert intent NICHT — gibt ein neues Objekt zurück, wenn normalisiert wurde.
+ * risk_level (WO-009):
+ *   - Falls intent.risk_level in ALLOWED_RISK_LEVELS: unverändert (Modell-Wert gewinnt).
+ *   - Falls undefined / leer / nicht in ALLOWED_RISK_LEVELS: lookup über
+ *     RISK_CATEGORY_TO_RISK_LEVEL_MAP (Schlüssel: workorder.risk_category).
+ *   - Falls workorder.risk_category undefined oder nicht in der Map: risk_level
+ *     unverändert lassen — Validator entscheidet dann deterministisch
+ *     (REWRITE → FAIL bei Limit).
+ *
+ * Implementierungsmuster: Accumulator (kein early-Return), damit beide
+ * Normalisierungs-Schichten unabhängig voneinander auf demselben Result laufen können.
+ * Wird vom Dispatcher zwischen parseOrchestratorIntent() und validateOrchestratorIntent()
+ * aufgerufen.
+ *
+ * Mutiert intent NICHT — gibt ein neues Objekt zurück, wenn mindestens ein Feld
+ * normalisiert wurde, sonst die ursprüngliche Referenz.
  */
 export function normalizeOrchestratorIntent(
   intent: OrchestratorIntent,
   workorderAgentId: string,
+  workorderRiskCategory?: string,
 ): OrchestratorIntent {
-  const current = intent.selected_agent
-  if (typeof current === 'string' && ALLOWED_AGENTS.has(current)) {
-    return intent
+  let result: OrchestratorIntent = intent
+
+  // ── selected_agent (WO-005) ──────────────────────────────────────────────
+  const currentAgent = result.selected_agent
+  if (typeof currentAgent !== 'string' || !ALLOWED_AGENTS.has(currentAgent)) {
+    const mappedAgent = mapAgentToValidatorTarget(workorderAgentId)
+    if (mappedAgent) {
+      result = { ...result, selected_agent: mappedAgent }
+    }
   }
-  const mapped = mapAgentToValidatorTarget(workorderAgentId)
-  if (!mapped) {
-    return intent
+
+  // ── risk_level (WO-009) ──────────────────────────────────────────────────
+  const currentRiskLevel = result.risk_level
+  if (typeof currentRiskLevel !== 'string' || !ALLOWED_RISK_LEVELS.has(currentRiskLevel)) {
+    const mappedRiskLevel = mapRiskCategoryToRiskLevel(workorderRiskCategory)
+    if (mappedRiskLevel) {
+      result = { ...result, risk_level: mappedRiskLevel }
+    }
   }
-  return { ...intent, selected_agent: mapped }
+
+  return result
 }
 
 // ─── Validator ────────────────────────────────────────────────────────────────

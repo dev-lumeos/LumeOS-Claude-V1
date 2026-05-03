@@ -423,17 +423,28 @@ export async function dispatchWorkorder(
         continue
       }
 
-      // Normalisiere intent.selected_agent (V1 Hardcoded-Map). Validator-Strenge bleibt unberührt.
+      // Normalisiere intent.selected_agent (WO-005) und intent.risk_level (WO-009)
+      // über V1-Hardcoded-Maps. Validator-Strenge bleibt unberührt — der Validator
+      // sieht entweder einen ALLOWED_*-Wert (→ PASS) oder einen ungültigen Wert (→ REWRITE).
       const intentBefore = intent
-      intent = normalizeOrchestratorIntent(intent, wo.agent_id)
-      if (intent.selected_agent !== intentBefore.selected_agent) {
+      intent = normalizeOrchestratorIntent(intent, wo.agent_id, wo.risk_category)
+      const agentChanged = intent.selected_agent !== intentBefore.selected_agent
+      const riskLevelChanged = intent.risk_level !== intentBefore.risk_level
+      if (agentChanged || riskLevelChanged) {
+        const reasons: string[] = []
+        if (agentChanged) {
+          reasons.push(`selected_agent normalized from "${intentBefore.selected_agent ?? 'undefined'}" to "${intent.selected_agent}" via AGENT_VALIDATOR_MAP[${wo.agent_id}]`)
+        }
+        if (riskLevelChanged) {
+          reasons.push(`risk_level normalized from "${intentBefore.risk_level ?? 'undefined'}" to "${intent.risk_level}" via RISK_CATEGORY_TO_RISK_LEVEL_MAP[${wo.risk_category ?? 'undefined'}]`)
+        }
         audit.writeAuditEvent({
           event: 'orchestrator_intent_normalized',
           run_id: runId,
           workorder_id: wo.workorder_id,
           agent_id: wo.agent_id,
           orchestration_mode: orchestrationMode,
-          reason: `selected_agent normalized from "${intentBefore.selected_agent ?? 'undefined'}" to "${intent.selected_agent}" via AGENT_VALIDATOR_MAP[${wo.agent_id}]`,
+          reason: reasons.join('; '),
         })
       }
 
