@@ -530,6 +530,8 @@ export async function dispatchWorkorder(
     const toolReq = parseToolRequest(modelOutput)
     if (!toolReq) {
       await state.endRun(runId, 'completed')
+      // WO-016: mark active_workorders as done so dependents can satisfy blocked_by
+      await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'done')
       // WO-014: explicit lock-release before cleanupHandled=true (release functions are idempotent)
       await state.releaseScopeLock(runId)
       await state.releaseDbMigrationLock(runId)

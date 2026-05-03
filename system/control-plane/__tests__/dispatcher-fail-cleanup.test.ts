@@ -322,11 +322,13 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     assert.equal(dbLock.locked, false, 'db_migration_lock muss freigegeben sein')
   })
 
-  it('Erfolgsfall (no-tool-request) → result.status completed, finally darf WO-Status nicht auf failed überschreiben', async () => {
+  it('Erfolgsfall (no-tool-request) → result.status completed, WO-Status done, finally darf nicht auf failed überschreiben', async () => {
     // Modell liefert gültigen OrchestratorIntent ohne Tool-Request.
-    // Pre-existing dispatcher behavior: result.status = 'completed', WO-status
-    // bleibt 'dispatched' (kein updateWorkorderStatus auf done in dieser Branch — pre-existing,
-    // außerhalb des WO-006-Scopes). Mein finally darf den Status NICHT auf 'failed' überschreiben.
+    // Post-WO-016 behavior: result.status = 'completed', WO-status wird auf
+    // 'done' gesetzt via updateActiveWorkorderStatusByRun (vorher 'dispatched'
+    // per WO-006 Test 8 Behavior; WO-016 hat das symmetrisch zum success-mit-
+    // Tool-Pfad ergänzt). Mein cleanupHandled-Flag verhindert weiterhin, dass
+    // finally den Status auf 'failed' überschreibt.
     const mockCallModel = async () => JSON.stringify({
       selected_agent:  'micro-executor',
       risk_level:      'low',
@@ -343,10 +345,11 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     })
 
     assert.equal(result.status, 'completed', `Erwartet: completed, war: ${result.status}`)
-    // Pre-existing behavior: WO-status bleibt 'dispatched' für no-tool-request completion.
-    // Mein cleanupHandled-Flag verhindert dass finally das auf 'failed' überschreibt.
     const woEntry = findActiveWo('WO-test-009')
-    assert.notEqual(woEntry?.status, 'failed', `Erfolgs-Pfad-Verhalten unverändert: WO-Status darf NICHT 'failed' sein, war: ${woEntry?.status}`)
+    // Defense-in-Depth: 'failed' ist explizit ausgeschlossen (WO-006 finally darf nicht überschreiben).
+    assert.notEqual(woEntry?.status, 'failed', `WO-Status darf NICHT 'failed' sein, war: ${woEntry?.status}`)
+    // WO-016: no-tool-request completed muss active_workorders auf 'done' setzen.
+    assert.equal(woEntry?.status, 'done', `WO-016: WO-Status muss 'done' sein nach no-tool-request completed, war: ${woEntry?.status}`)
   })
 
   it('Erfolgsfall mit Tool-Request (write in scope) → completed, WO-Status done, lock released', async () => {
@@ -773,8 +776,10 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     const woEntry = state.getAllActiveWorkorders().find(
       w => w.workorder_id === 'WO-multidispatch-401' && w.run_id === result.run_id,
     )
-    // WO-006 Test 8 Behavior: WO-Status bleibt 'dispatched' (kein expliziter Status-Update auf 'done').
-    assert.notEqual(woEntry?.status, 'failed', `WO-Status darf NICHT 'failed' sein (WO-006 Test 8), war: ${woEntry?.status}`)
+    // Post-WO-016: WO-Status ist 'done' (vorher 'dispatched' per WO-006 Test 8 Behavior; WO-016 hat
+    // das symmetrisch zum success-mit-Tool-Pfad ergänzt). 'failed' bleibt explizit ausgeschlossen.
+    assert.notEqual(woEntry?.status, 'failed', `WO-Status darf NICHT 'failed' sein, war: ${woEntry?.status}`)
+    assert.equal(woEntry?.status, 'done', `WO-016: WO-Status muss 'done' sein nach no-tool-request completed, war: ${woEntry?.status}`)
   })
 
   it('WO-014 E-2: approval-gate awaiting_approval path releases scope_lock', async () => {
@@ -870,6 +875,65 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
       w => w.workorder_id === 'WO-multidispatch-404' && w.run_id === result.run_id,
     )
     assert.equal(woEntry?.status, 'awaiting_approval', `Status muss 'awaiting_approval' sein nach human-needed, war: ${woEntry?.status}`)
+  })
+
+  // ─── WO-016: No-Tool-Request Active Workorder Status Update ────────────────
+
+  it('WO-016: no-tool-request completed path → status done, scope_lock released, active_runs completed', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo016-501/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo016-501/src/file.ts`, '// fixture')
+    // Mock liefert valides OrchestratorIntent OHNE Tool-Request → no-tool-request completed path.
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: ['analyze'],
+      required_gates:  ['files-scope-gate', 'review-gate', 'human-approval-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-501',
+      scope_files:  ['services/wo016-501/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+
+    assert.equal(result.status, 'completed', `Erwartet completed, war: ${result.status}: ${result.error}`)
+
+    // active_workorders: status muss 'done' sein (WO-016).
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-501' && w.run_id === result.run_id,
+    )
+    assert.equal(woEntry?.status, 'done', `WO-016: active_workorders.status muss 'done' sein, war: ${woEntry?.status}`)
+
+    // WO-014: scope_lock + db_migration_lock weiterhin freigegeben.
+    assert.equal(lockExistsFor(result.run_id), false, 'WO-014: scope_lock muss freigegeben sein')
+    const dbLock = state.isDbMigrationLocked()
+    assert.equal(dbLock.locked, false, 'WO-014: db_migration_lock muss freigegeben sein')
+
+    // active_runs.status muss 'completed' bleiben (endRun-Aufruf vor Status-Update).
+    const run = state.getActiveRunByRunId(result.run_id!)
+    assert.ok(run, 'active_runs Eintrag muss existieren')
+    assert.equal(run?.status, 'completed', `active_runs.status muss 'completed' sein, war: ${run?.status}`)
+  })
+
+  it('WO-016: dispatcher source-inspection — updateActiveWorkorderStatusByRun(...,"done") direkt nach endRun(...,"completed") und vor releaseScopeLock', () => {
+    const dispatcherSrc = fs.readFileSync(
+      path.resolve(REAL_CWD, 'system/control-plane/dispatcher.ts'), 'utf8',
+    )
+    // Locate the no-tool-request branch and verify the WO-016 status-update appears
+    // between endRun(...'completed') and releaseScopeLock — symmetrisch zur WO-014-Reihenfolge.
+    const branchIdx = dispatcherSrc.indexOf('if (!toolReq) {')
+    assert.ok(branchIdx > 0, 'no-tool-request branch must exist in dispatcher.ts')
+    const endRunIdx = dispatcherSrc.indexOf("endRun(runId, 'completed')", branchIdx)
+    assert.ok(endRunIdx > branchIdx, 'endRun(...,"completed") must follow the if (!toolReq) branch')
+    const releaseIdx = dispatcherSrc.indexOf('releaseScopeLock(runId)', endRunIdx)
+    assert.ok(releaseIdx > endRunIdx, 'releaseScopeLock must follow endRun within the branch')
+    const between = dispatcherSrc.slice(endRunIdx, releaseIdx)
+    assert.match(
+      between,
+      /updateActiveWorkorderStatusByRun\(\s*wo\.workorder_id\s*,\s*runId\s*,\s*'done'\s*\)/,
+      'WO-016: updateActiveWorkorderStatusByRun(...,"done") must be called between endRun and releaseScopeLock',
+    )
   })
 
 })
