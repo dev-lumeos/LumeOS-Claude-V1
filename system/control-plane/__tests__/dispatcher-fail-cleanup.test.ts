@@ -522,4 +522,153 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     assert.equal(b?.status, 'dispatched', 'Anderer Eintrag muss unverändert dispatched sein')
   })
 
+  // ─── WO-012: OrchestratorIntent Array-Felder Defensive ─────────────────────
+
+  it('WO-012: missing required_gates → kontrollierter REWRITE/FAIL, kein TypeError', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo012-201/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo012-201/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: [],
+      // required_gates fehlt → §0 returnt REWRITE, kein TypeError
+      stop_conditions: [],
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-201',
+      scope_files:  ['services/wo012-201/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed', `Erwartet failed nach REWRITE-Limit, war: ${result.status}`)
+    assert.match(result.error ?? '', /required_gates.*muss ein Array sein/, `Reason muss §0-Array-Defensive enthalten, war: ${result.error}`)
+    assert.doesNotMatch(result.error ?? '', /is not iterable/, 'KEIN TypeError-Crash')
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-201' && w.run_id === result.run_id,
+    )
+    assert.equal(woEntry?.status, 'failed', 'WO-011 Run-id-Update wirkt auf REWRITE-Limit-FAIL')
+    assert.equal(lockExistsFor(result.run_id), false, 'WO-006 Lock-Release wirkt')
+  })
+
+  it('WO-012: non-array required_gates (String) → kontrollierter REWRITE/FAIL', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo012-202/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo012-202/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: [],
+      required_gates:  'review-gate',  // String statt Array
+      stop_conditions: [],
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-202',
+      scope_files:  ['services/wo012-202/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /required_gates.*muss ein Array sein.*war: string/, `Reason muss typeof string nennen, war: ${result.error}`)
+    assert.doesNotMatch(result.error ?? '', /is not iterable/)
+  })
+
+  it('WO-012: missing stop_conditions → kontrollierter REWRITE/FAIL', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo012-203/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo012-203/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: [],
+      required_gates:  [],
+      // stop_conditions fehlt
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-203',
+      scope_files:  ['services/wo012-203/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /stop_conditions.*muss ein Array sein/, `Reason: ${result.error}`)
+  })
+
+  it('WO-012: non-array stop_conditions (object) → kontrollierter REWRITE/FAIL', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo012-204/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo012-204/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: [],
+      required_gates:  [],
+      stop_conditions: { foo: 'bar' },  // object statt Array
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-204',
+      scope_files:  ['services/wo012-204/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /stop_conditions.*muss ein Array sein.*war: object/, `Reason: ${result.error}`)
+  })
+
+  it('WO-012: missing risks → kontrollierter REWRITE/FAIL', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo012-205/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo012-205/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      // risks fehlt
+      execution_order: [],
+      required_gates:  [],
+      stop_conditions: [],
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-205',
+      scope_files:  ['services/wo012-205/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /risks.*muss ein Array sein/, `Reason: ${result.error}`)
+  })
+
+  it('WO-012: missing execution_order → kontrollierter REWRITE/FAIL', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo012-206/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo012-206/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      // execution_order fehlt
+      required_gates:  [],
+      stop_conditions: [],
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-206',
+      scope_files:  ['services/wo012-206/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /execution_order.*muss ein Array sein/, `Reason: ${result.error}`)
+  })
+
+  it('WO-012: null required_gates → REWRITE/FAIL mit "war: null"', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo012-207/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo012-207/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: [],
+      required_gates:  null,
+      stop_conditions: [],
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-207',
+      scope_files:  ['services/wo012-207/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /required_gates.*muss ein Array sein.*war: null/, `null muss explizit benannt sein, nicht typeof object: ${result.error}`)
+  })
+
 })

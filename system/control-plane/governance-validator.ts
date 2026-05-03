@@ -278,6 +278,30 @@ export function validateOrchestratorIntent(
   context: ValidationContext,
 ): ValidationResult {
 
+  // ── 0. Array-Felder Defensive (WO-012) ──────────────────────────────────
+  // OrchestratorIntent-TypeScript-Type deklariert string[] für die 4 Pflicht-
+  // Array-Felder, aber Modell-Output ist Runtime-Daten ohne Compile-Time-
+  // Garantie. Iteration über non-array (undefined/null/string/object) würde
+  // TypeError werfen ("intent.required_gates is not iterable"). Stattdessen
+  // kontrolliertes REWRITE mit klarer Reason.
+  //
+  // Element-Typen werden NICHT hier geprüft — Validator §3 (ALLOWED_GATES)
+  // und §4-§8 fangen ungültige Element-Werte deterministisch ab.
+  const ARRAY_FIELDS: ReadonlyArray<'risks' | 'execution_order' | 'required_gates' | 'stop_conditions'> = [
+    'risks', 'execution_order', 'required_gates', 'stop_conditions',
+  ]
+  for (const field of ARRAY_FIELDS) {
+    const value = intent[field]
+    if (!Array.isArray(value)) {
+      const typeLabel = value === null ? 'null' : typeof value
+      return {
+        status: 'REWRITE',
+        reason: `Feld "${field}" muss ein Array sein, war: ${typeLabel}`,
+        field,
+      }
+    }
+  }
+
   // ── 1. selected_agent Enum ───────────────────────────────────────────────
   if (!ALLOWED_AGENTS.has(intent.selected_agent)) {
     return {
