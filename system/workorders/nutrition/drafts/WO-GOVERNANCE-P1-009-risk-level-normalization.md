@@ -57,10 +57,10 @@ Erweiterung in `governance-validator.ts`:
    - `architecture`, `security`, `auth`, `rls`, `shared-core` → `'medium'`
    - `db-migration`, `payments`, `medical`, `release` → `'high'`
 2. Neue Helper-Funktion `mapRiskCategoryToRiskLevel(riskCategory: string | undefined): 'low' | 'medium' | 'high' | undefined`.
-3. `normalizeOrchestratorIntent()`-Signatur erweitern um zweiten optionalen Parameter `workorderRiskCategory?: string`. Body-Logik:
+3. `normalizeOrchestratorIntent()`-Signatur erweitern um **dritten** optionalen Parameter `workorderRiskCategory?: string` (zweiter Parameter `workorderAgentId` bleibt unverändert an Position 2). Body-Logik:
    - Wenn `intent.risk_level` ein gültiger `ALLOWED_RISK_LEVELS`-Wert ist → unverändert (Modell-Wert gewinnt).
    - Sonst: Lookup über `mapRiskCategoryToRiskLevel(workorderRiskCategory)`. Falls Mapping liefert → `intent.risk_level` setzen. Sonst: intent unverändert zurückgeben (Validator entscheidet deterministisch REWRITE → FAIL).
-4. Aufruf in `dispatcher.ts:normalizeOrchestratorIntent`-Stelle: `wo.risk_category` als zweiten Parameter mitgeben.
+4. Aufruf in `dispatcher.ts:normalizeOrchestratorIntent`-Stelle: `wo.risk_category` als **dritten** Parameter mitgeben (Position-Reihenfolge: `intent`, `wo.agent_id`, `wo.risk_category`).
 
 Das Pattern ist 1:1 das WO-005-Pattern — gleiche Architektur, gleiche Test-Topologie, gleiches Audit-Verhalten.
 
@@ -75,7 +75,7 @@ In allen Varianten:
 - `normalizeOrchestratorIntent()`-Aufruf-Reihenfolge im Dispatcher bleibt: `parse → normalize → validate`.
 - Kein Validator-Bypass.
 - Modell-gelieferter gültiger Wert hat IMMER Vorrang vor Mapping-Default.
-- Existierende `selected_agent`-Normalisierung aus WO-005 bleibt strukturell unverändert (Body wird minimal erweitert um den zweiten Pfad).
+- Existierende `selected_agent`-Normalisierung aus WO-005 bleibt **funktional unverändert** (gleicher Input → gleicher `selected_agent`-Output, gleiche Pass-Through-Fälle). Eine **interne strukturelle Refaktorierung** des `normalizeOrchestratorIntent`-Body von early-Returns auf ein Accumulator-Pattern (`let result = intent; ... return result`) ist erlaubt und nötig, damit der `risk_level`-Block nach dem `selected_agent`-Block laufen kann. Verhalten der WO-005-Schicht bleibt 1:1 erhalten.
 
 ---
 
@@ -120,9 +120,9 @@ task: |
         - governance-validator.ts: nach AGENT_VALIDATOR_MAP eine zweite Mapping-Konstante
           RISK_CATEGORY_TO_RISK_LEVEL_MAP einfügen.
         - governance-validator.ts: Helper mapRiskCategoryToRiskLevel ergänzen.
-        - governance-validator.ts: normalizeOrchestratorIntent() um zweiten optionalen
-          Parameter workorderRiskCategory erweitern und Body-Logik um
-          risk_level-Fallback erweitern.
+        - governance-validator.ts: normalizeOrchestratorIntent() um dritten optionalen
+          Parameter workorderRiskCategory (Position 3, nach intent und workorderAgentId)
+          erweitern und Body-Logik um risk_level-Fallback erweitern.
         - dispatcher.ts: normalizeOrchestratorIntent-Aufruf um wo.risk_category
           ergänzen.
         - smoke-test.ts: Mocks bereits risk_level-konform aus WO-007 (Test 6: 'low',
@@ -136,7 +136,10 @@ task: |
 
       Schreibe architecture_notes mit gewählter Variante (Variante 1 = Default) und
       bestätige, dass:
-        - selected_agent-Normalisierung-Pfad unverändert bleibt.
+        - selected_agent-Normalisierung FUNKTIONAL unverändert bleibt (gleicher Input
+          → gleicher selected_agent-Output, gleiche Pass-Through-Fälle). Interne
+          strukturelle Refaktorierung des Bodys (z. B. early-Returns → Accumulator)
+          ist erlaubt und im Implement-Schritt notwendig, ohne Verhaltensänderung.
         - Modell-gelieferter gültiger risk_level immer Vorrang behält.
         - Validator §2 Fail-Verhalten bei unbekannter risk_category unverändert (REWRITE → FAIL).
     </analyze>
@@ -174,17 +177,28 @@ task: |
           }
 
       Schritt 3 — governance-validator.ts: normalizeOrchestratorIntent erweitern.
-      - Signatur erweitern: zweiter Parameter workorderAgentId bleibt; dritter
-        optionaler Parameter workorderRiskCategory?: string ergänzen.
+      - Signatur erweitern: erster Parameter intent bleibt; zweiter Parameter
+        workorderAgentId bleibt unverändert auf Position 2; dritter optionaler
+        Parameter workorderRiskCategory?: string an Position 3 ergänzen.
         Beispiel:
           export function normalizeOrchestratorIntent(
             intent: OrchestratorIntent,
             workorderAgentId: string,
             workorderRiskCategory?: string,
           ): OrchestratorIntent
-      - Body-Logik:
-          1. Bestehende selected_agent-Normalisierung bleibt UNVERÄNDERT.
-          2. Nach selected_agent-Block prüfen:
+      - Body-Logik (Accumulator-Pattern statt early-Returns):
+          1. Bestehende selected_agent-Normalisierung bleibt FUNKTIONAL UNVERÄNDERT
+             (gleicher Input → gleicher selected_agent-Output). Strukturell wird
+             der Body von early-Returns auf einen Accumulator umgestellt:
+               let result: OrchestratorIntent = intent
+               // selected_agent-Normalisierung füllt result.selected_agent ggf. auf
+               const currentAgent = result.selected_agent
+               if (typeof currentAgent !== 'string' || !ALLOWED_AGENTS.has(currentAgent)) {
+                 const mappedAgent = mapAgentToValidatorTarget(workorderAgentId)
+                 if (mappedAgent) result = { ...result, selected_agent: mappedAgent }
+               }
+             Es darf keine Verhaltensänderung der WO-005-Schicht resultieren.
+          2. Nach selected_agent-Block (also auf demselben result):
                const currentRiskLevel = result.risk_level
                if (typeof currentRiskLevel === 'string' && ALLOWED_RISK_LEVELS.has(currentRiskLevel)) {
                  // Modell-Wert gewinnt — keine Normalisierung
@@ -251,7 +265,12 @@ task: |
     <on_error>
       Bei TypeScript-Fehler: {"status": "FAIL", "issues": ["tsc: ..."]}.
       Bei Breaking Change in normalizeOrchestratorIntent-Public-API erkannt
-        (zweiter Pflicht-Parameter): {"status": "ESCALATE"}.
+        (z. B. dritter Parameter als Pflicht statt optional, oder
+        Reihenfolge der bisherigen Parameter geändert): {"status": "ESCALATE"}.
+      WICHTIG: Eine interne strukturelle Refaktorierung des Body von early-Returns
+        auf Accumulator-Pattern ist KEIN Breaking Change und KEIN ESCALATE-Trigger,
+        solange das funktionale Input/Output-Verhalten der selected_agent-
+        Normalisierung 1:1 erhalten bleibt.
       Bei nötigem Edit von risk-categories.ts: {"status": "ESCALATE", "issues": ["risk-categories.ts mutation requires separate WO"]}.
       Bei nötigem Edit von services/scheduler-api/**: {"status": "STOP"}.
       Bei nötigem Edit von batch-loader.ts: {"status": "STOP"}.
@@ -288,7 +307,8 @@ acceptance_criteria:
   - "RISK_CATEGORY_TO_RISK_LEVEL_MAP in governance-validator.ts deckt alle 13 RiskCategory-Werte ab (docs, standard, test, i18n → low; architecture, security, auth, rls, shared-core → medium; db-migration, payments, medical, release → high)"
   - "Helper mapRiskCategoryToRiskLevel(riskCategory) gibt für ungültige/leere Eingabe undefined zurück (sicherer Fall-through)"
   - "normalizeOrchestratorIntent akzeptiert dritten optionalen Parameter workorderRiskCategory; bestehende Aufrufer mit zwei Argumenten bleiben backward-compatible"
-  - "selected_agent-Normalisierung aus WO-005 bleibt strukturell und funktional unverändert"
+  - "selected_agent-Normalisierung aus WO-005 bleibt FUNKTIONAL unverändert (gleicher Input → gleicher selected_agent-Output, gleiche Pass-Through-Fälle); interne strukturelle Refaktorierung der early-Returns auf Accumulator-Pattern ist erlaubt, sofern keine Verhaltensänderung resultiert"
+  - "Bestehende governance-validator-normalize.test.ts-Tests aus WO-005 bleiben grün (read-only-Verifikation; falls eine Test-Anpassung zur Wahrung des Verhaltens nötig wäre → ESCALATE pro <on_error>)"
   - "Modell-gelieferter gültiger risk_level (in ALLOWED_RISK_LEVELS) hat Vorrang vor Mapping-Default"
   - "Wenn risk_level undefined/leer/ungültig UND workorderRiskCategory in MAP → risk_level wird auf gemappten Wert gesetzt"
   - "Wenn risk_level undefined/leer/ungültig UND workorderRiskCategory NICHT in MAP → intent unverändert; Validator entscheidet deterministisch REWRITE/FAIL"
@@ -322,7 +342,7 @@ negative_constraints:
   - "NIEMALS Modell-gelieferten gültigen risk_level überschreiben (nur fehlende/ungültige normalisieren)"
   - "NIEMALS RISK_CATEGORY_TO_RISK_LEVEL_MAP-Werte außerhalb 'low'|'medium'|'high'"
   - "NIEMALS ein --force / --skip-validator / --bypass Flag einbauen"
-  - "NIEMALS bestehende selected_agent-Normalisierung umstrukturieren oder entfernen"
+  - "NIEMALS selected_agent-Normalisierungs-Semantik verändern (interne strukturelle Refaktorierung der early-Returns auf Accumulator-Pattern ist erlaubt, solange Input → Output für selected_agent identisch bleibt; Entfernen oder Lockern des selected_agent-Checks oder der ALLOWED_AGENTS-Pflicht ist verboten)"
   - "NIEMALS runtime_state.json oder system/state/*.jsonl direkt editieren"
   - "NIEMALS Approval-Queue-Dateien (system/approval/**) editieren"
   - "NIEMALS Supabase-Befehle ausführen (supabase db push/reset/migration apply)"
