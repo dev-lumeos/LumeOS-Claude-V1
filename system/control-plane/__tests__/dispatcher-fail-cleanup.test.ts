@@ -20,6 +20,7 @@ import path from 'node:path'
 import os   from 'node:os'
 
 import { dispatchWorkorder, defaultExecuteTool } from '../dispatcher'
+import { buildSystemPrompt } from '../skill-loader'
 import * as state from '../../state/state-manager'
 
 // ─── Test Fixture Setup ──────────────────────────────────────────────────────
@@ -669,6 +670,83 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
     assert.equal(result.status, 'failed')
     assert.match(result.error ?? '', /required_gates.*muss ein Array sein.*war: null/, `null muss explizit benannt sein, nicht typeof object: ${result.error}`)
+  })
+
+  // ─── WO-013: OrchestratorIntent System-Prompt Contract ─────────────────────
+
+  it('WO-013: buildSystemPrompt injiziert Contract-Block wenn Datei existiert', () => {
+    const contractDir  = path.resolve(process.cwd(), 'system/prompts/orchestration')
+    const contractFile = path.resolve(contractDir, 'orchestrator_intent_contract.md')
+    fs.mkdirSync(contractDir, { recursive: true })
+    fs.writeFileSync(contractFile, '# CONTRACT_STUB_FOR_TEST\nMUST output JSON\n', 'utf8')
+
+    const prompt = buildSystemPrompt('AGENT_SPEC_X', [])
+    assert.match(prompt, /<orchestrator_intent_contract>/, 'Block-Header muss enthalten sein')
+    assert.match(prompt, /CONTRACT_STUB_FOR_TEST/, 'Contract-Inhalt muss enthalten sein')
+    assert.match(prompt, /AGENT_SPEC_X/, 'agentSpec muss erhalten bleiben')
+
+    fs.unlinkSync(contractFile)  // cleanup für nächsten Test
+  })
+
+  it('WO-013: buildSystemPrompt graceful fallback ohne Contract-Datei', () => {
+    const contractFile = path.resolve(process.cwd(), 'system/prompts/orchestration/orchestrator_intent_contract.md')
+    if (fs.existsSync(contractFile)) fs.unlinkSync(contractFile)
+
+    const prompt = buildSystemPrompt('AGENT_SPEC_Y', [])
+    assert.equal(prompt, 'AGENT_SPEC_Y', 'Ohne Contract-Datei: agentSpec unverändert, kein Block, kein Crash')
+    assert.doesNotMatch(prompt, /<orchestrator_intent_contract>/)
+  })
+
+  it('WO-013: buildSystemPrompt korrekte Reihenfolge agentSpec → contract → loaded_skills', () => {
+    const contractDir  = path.resolve(process.cwd(), 'system/prompts/orchestration')
+    const contractFile = path.resolve(contractDir, 'orchestrator_intent_contract.md')
+    fs.mkdirSync(contractDir, { recursive: true })
+    fs.writeFileSync(contractFile, 'CONTRACT_BODY', 'utf8')
+
+    const prompt = buildSystemPrompt('AGENT_SPEC_Z', [
+      { name: 'gsd-v2', content: 'SKILL_BODY', priority: 'normal', tokenCost: 0 } as any,
+    ])
+    const idxAgent    = prompt.indexOf('AGENT_SPEC_Z')
+    const idxContract = prompt.indexOf('<orchestrator_intent_contract>')
+    const idxSkills   = prompt.indexOf('<loaded_skills>')
+    assert.ok(idxAgent >= 0 && idxContract >= 0 && idxSkills >= 0, 'Alle drei Blöcke müssen enthalten sein')
+    assert.ok(idxAgent < idxContract, 'agentSpec muss VOR contract stehen')
+    assert.ok(idxContract < idxSkills, 'contract muss VOR loaded_skills stehen')
+
+    fs.unlinkSync(contractFile)
+  })
+
+  it('WO-013: REWRITE-Hint enthält Validator-Reason und fordert vollständiges JSON', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo013-301/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo013-301/src/file.ts`, '// fixture')
+    // 1. callModel: liefert Intent ohne required_gates → §0 REWRITE
+    // 2. callModel: muss userMessage mit "Validator reason:" und "Field:" empfangen
+    const userMessages: string[] = []
+    const mockCallModel = async (_routing: any, _system: string, user: string) => {
+      userMessages.push(user)
+      // Beide Aufrufe liefern denselben fehlerhaften Intent — nach 2 REWRITES → FAIL
+      return JSON.stringify({
+        selected_agent:  'micro-executor',
+        risk_level:      'low',
+        risks:           [],
+        execution_order: [],
+        // required_gates fehlt → §0 (WO-012) returnt REWRITE
+        stop_conditions: [],
+      })
+    }
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-301',
+      scope_files:  ['services/wo013-301/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed')
+    assert.ok(userMessages.length >= 2, `Erwartet ≥2 callModel-Aufrufe (initial + ≥1 retry), war: ${userMessages.length}`)
+    const retryMessage = userMessages[1]
+    assert.match(retryMessage, /Validator reason:/, `2. userMessage muss strukturierten "Validator reason:" enthalten, war: ${retryMessage.slice(0, 200)}`)
+    assert.match(retryMessage, /Field:/, `2. userMessage muss "Field:" enthalten`)
+    assert.match(retryMessage, /required_gates/, `Field-Name aus Validator-Result muss durchgereicht werden`)
+    assert.match(retryMessage, /COMPLETE JSON object/, `Anweisung "vollständiges JSON" muss vorhanden sein`)
+    assert.match(retryMessage, /all 6 OrchestratorIntent fields/, `Hint muss alle 6 Felder erwähnen`)
   })
 
 })

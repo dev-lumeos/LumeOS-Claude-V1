@@ -125,10 +125,41 @@ export function loadSkills(input: LoadSkillsInput): LoadSkillsResult {
   return { loaded, errors, blocked: false }
 }
 
+/**
+ * Lädt das statische OrchestratorIntent-Output-Contract-Template (WO-013).
+ *
+ * Lazy Path-Resolution per Aufruf (analog zu loadAgentSpec in dispatcher.ts):
+ * Tests mit process.chdir(TEST_DIR) sehen TEST_DIR-relative Pfade; ohne
+ * Contract-Datei → graceful return null (kein Crash, kein Block-Eintrag).
+ *
+ * Die Sync-Pflege bei Validator-Änderung ist im Template selbst dokumentiert.
+ */
+function loadOrchestratorIntentContract(): string | null {
+  const full = path.resolve(process.cwd(), 'system/prompts/orchestration/orchestrator_intent_contract.md')
+  try {
+    if (!fs.existsSync(full)) return null
+    return fs.readFileSync(full, 'utf8')
+  } catch {
+    return null
+  }
+}
+
 export function buildSystemPrompt(agentSpec: string, skills: LoadedSkill[]): string {
-  if (!skills.length) return agentSpec
-  const blocks = skills.map(s => `<skill name="${s.name}">\n${s.content}\n</skill>`).join('\n\n')
-  return `${agentSpec}\n\n<loaded_skills>\n${blocks}\n</loaded_skills>`
+  const parts: string[] = [agentSpec]
+
+  // WO-013: Inject OrchestratorIntent + ToolRequest output contract block.
+  // Reihenfolge: agentSpec → contract → loaded_skills.
+  const contract = loadOrchestratorIntentContract()
+  if (contract) {
+    parts.push(`<orchestrator_intent_contract>\n${contract}\n</orchestrator_intent_contract>`)
+  }
+
+  if (skills.length) {
+    const blocks = skills.map(s => `<skill name="${s.name}">\n${s.content}\n</skill>`).join('\n\n')
+    parts.push(`<loaded_skills>\n${blocks}\n</loaded_skills>`)
+  }
+
+  return parts.join('\n\n')
 }
 
 export function validateWorkorderSkills(requiredSkills: string[], optionalSkills: string[], agentType: string): { valid: boolean; errors: string[] } {

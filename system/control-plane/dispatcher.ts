@@ -401,18 +401,52 @@ export async function dispatchWorkorder(
     let modelOutput = ''
     let intent: OrchestratorIntent | null = null
     let rewriteCount = 0
+    // WO-013: speichert die letzte Validator-REWRITE-Reason für strukturierten
+    // REWRITE-Hint an das Modell (statt nur den vorherigen JSON durchreichen).
+    let lastValidationReason: string | undefined
+    let lastValidationField:  string | undefined
+    let lastParseError:       string | undefined
 
     while (rewriteCount <= MAX_REWRITE_LOOPS) {
-      modelOutput = await deps.callModel(activeRoute, systemPrompt, rewriteCount === 0
-        ? workerTask
-        : `REWRITE_REQUEST: Vorheriger Output war ungültig. Behebe folgende Verletzung und gib nur valides JSON zurück: ${intent ? JSON.stringify(intent) : modelOutput}`
-      )
+      let userMessage: string
+      if (rewriteCount === 0) {
+        userMessage = workerTask
+      } else {
+        // WO-013: strukturierter REWRITE-Hint mit Validator-Reason + Field.
+        // Truncated previous output (max 500 chars) verhindert Token-Bloat.
+        const previousOutput = (modelOutput ?? '').slice(0, 500)
+        if (lastValidationReason) {
+          userMessage =
+            `REWRITE_REQUEST: Your previous OrchestratorIntent was rejected.\n` +
+            `Validator reason: ${lastValidationReason}\n` +
+            `Field: ${lastValidationField ?? 'unknown'}\n` +
+            `Re-emit a COMPLETE JSON object with all 6 OrchestratorIntent fields ` +
+            `(selected_agent, risk_level, risks, execution_order, required_gates, stop_conditions). ` +
+            `Fix the rejected field, keep the others valid. Output exactly one JSON object, no prose.\n` +
+            `Previous output (truncated): ${previousOutput}`
+        } else if (lastParseError) {
+          userMessage =
+            `REWRITE_REQUEST: Your previous output could not be parsed as JSON.\n` +
+            `Parse error: ${lastParseError}\n` +
+            `Re-emit a COMPLETE JSON object with all 6 OrchestratorIntent fields. ` +
+            `Output exactly one JSON object, no prose, no markdown fences.\n` +
+            `Previous output (truncated): ${previousOutput}`
+        } else {
+          userMessage = `REWRITE_REQUEST: Vorheriger Output war ungültig. Behebe und gib nur valides JSON zurück: ${previousOutput}`
+        }
+      }
+      modelOutput = await deps.callModel(activeRoute, systemPrompt, userMessage)
 
       // Versuche Intent zu parsen
       try {
         intent = parseOrchestratorIntent(modelOutput)
+        lastParseError = undefined  // WO-013: parse erfolgreich, REWRITE-Hint fällt auf validation-Pfad
       } catch (e: any) {
         rewriteCount++
+        // WO-013: Parse-Error für nächste REWRITE-Iteration speichern
+        lastParseError = e.message
+        lastValidationReason = undefined
+        lastValidationField  = undefined
         audit.writeAuditEvent({ event: 'governance_parse_error', run_id: runId,
           workorder_id: wo.workorder_id, agent_id: wo.agent_id,
           orchestration_mode: orchestrationMode, reason: e.message, rewrite_attempt: rewriteCount })
@@ -479,6 +513,10 @@ export async function dispatchWorkorder(
       }
 
       // REWRITE — nächste Iteration
+      // WO-013: Validator-Reason + Field für strukturierten REWRITE-Hint speichern.
+      lastValidationReason = validation.reason
+      lastValidationField  = validation.field
+      lastParseError       = undefined
       rewriteCount++
       if (rewriteCount > MAX_REWRITE_LOOPS) {
         await state.endRun(runId, 'failed')
