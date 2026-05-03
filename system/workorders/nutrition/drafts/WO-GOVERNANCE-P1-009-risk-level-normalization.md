@@ -1,6 +1,7 @@
 # WO-GOVERNANCE-P1-009 — risk_level Normalization V1
 
-**Status:** draft
+**Status:** closed
+**Completion Note:** Implementation reviewed PASS. risk_level normalization implemented. Production behavior unchanged. smoke-test.ts 9/9 PASS. dispatcher-fail-cleanup.test.ts 9/9 PASS. Nutrition Batch 001 no longer fails with 'Ungültiger risk_level: undefined'. *(closed: 2026-05-03)*
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befund Nutrition Batch 001 `--run` nach Closure von WO-005/006/007/008 und nach `clearSystemStop`: `WO-nutrition-001` failed mit "`Governance: REWRITE-Limit (2) erreicht. Letzte Verletzung: Ungültiger risk_level: undefined`" (`RUN-20260503-8238`). Kein stale Lock, kein `selected_agent`-Problem mehr (WO-005 wirkt korrekt). Verbleibender Validator-Gap: `risk_level` wird vom Modell-Output nicht zuverlässig geliefert; Validator §2 (`governance-validator.ts:223`) wirft REWRITE → nach 2 Versuchen FAIL.
 **Template:** `system/workorders/templates/template_implementation_medium.md`

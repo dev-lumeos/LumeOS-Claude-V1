@@ -1,7 +1,16 @@
 # BATCH-GOVERNANCE-P1-005-risk-level-normalization
 
 ## Status
-ready_for_approval
+completed *(2026-05-03)*
+
+## Validation Result
+- `pnpm tsc --noEmit` → **PASS** (EXIT=0)
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → **9/9 PASS**
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → **9/9 PASS**
+- `npx tsx system/workorders/cli/run-batch.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md --dry-run` → **READY_TO_RUN**
+- Pflicht-AC-Verifikation per `--run`: `WO-nutrition-001` zeigt **NICHT mehr** "Ungültiger risk_level: undefined" — das Validator-§2-FAIL-Symptom ist eliminiert. Sekundärer Stop war Preflight-REJECT (terminal-failed state-leftover aus `RUN-20260503-8238`, separater Concern außerhalb WO-009-Scope).
+- Implementation Review (Spark-D Mandatory) → **PASS** (siehe Verdict in `REVIEW-IMPLEMENTATION-WO-GOVERNANCE-P1-009`: Scope Compliance PASS, Production Behavior UNCHANGED, Mapping vollständig + CLAUDE.md-konform, Validator nicht umgangen, MAX_REWRITE_LOOPS unverändert, selected_agent WO-005 funktional intakt, neuer Audit-Event-Wiederverwendung sauber)
+- Implementation Commit: `e8cba9c fix(governance): normalize orchestrator risk level`
 
 ## Purpose
 Fix OrchestratorIntent `risk_level` normalization so dispatch runs cannot fail with `risk_level` undefined.
