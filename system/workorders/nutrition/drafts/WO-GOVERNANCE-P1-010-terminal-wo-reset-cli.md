@@ -1,6 +1,7 @@
 # WO-GOVERNANCE-P1-010 — Terminal Workorder Reset CLI V1
 
-**Status:** draft
+**Status:** closed
+**Completion Note:** Implementation reviewed PASS. Terminal active_workorder reset CLI implemented. Dry-run safe. Confirm requires exact workorder_id and run_id. Only failed/done are clearable. Audit path implemented. *(closed: 2026-05-03)*
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befund Nutrition Batch 001 `--run` nach Closure von WO-005/006/007/008/009: `WO-nutrition-001` ist in `system/state/runtime_state.json` `active_workorders` als `status: failed` aus `RUN-20260503-8238` eingetragen. `scheduler-preflight.ts:144-146` rejectet jeden Re-Run als "WO ist terminal (failed)". Bisher mussten solche stale terminalen Einträge über manuelle State-Cleanup-Ausnahmen oder direkte JSON-Edits entfernt werden — das ist nicht dauerhaft akzeptabel und nicht audit-fähig.
 **Template:** `system/workorders/templates/template_implementation_medium.md`

@@ -1,7 +1,16 @@
 # BATCH-GOVERNANCE-P1-006-terminal-wo-reset-cli
 
 ## Status
-ready_for_approval
+completed *(2026-05-03)*
+
+## Validation Result
+- `pnpm tsc --noEmit` → **PASS** (EXIT=0)
+- `npx tsx --test system/control-plane/__tests__/terminal-wo-reset-cli.test.ts` → **31/31 PASS** (11 State-Manager-Helper-Tests + 20 CLI-Sub-Command-Tests; alle Refusal-Pfade, Audit-Isolation Dry-Run/Confirm, Mutations-Isolation, JSON-Validität abgedeckt)
+- `npx tsx system/control-plane/terminal-wo-reset-cli.ts list` → **PASS** (EXIT=0, 9 Live-Einträge gruppiert nach Status mit `[clearable]`/`[non-terminal — refused]`-Labels)
+- `npx tsx system/control-plane/terminal-wo-reset-cli.ts clear WO-nutrition-001 --run-id RUN-20260503-8238 --dry-run` → **PASS** (EXIT=1, refused: non-terminal status `dispatched` — CLI verhält sich Spec-konform; Live-Eintrag hat `dispatched`-Status, nicht `failed`. Kein false-positive Mutation. Schutz-Funktion bestätigt.)
+- `npx tsx system/workorders/cli/run-batch.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md --dry-run` → **READY_TO_RUN** (EXIT=0)
+- Implementation Review (Spark-D Mandatory) → **PASS** (siehe Verdict in `REVIEW-IMPLEMENTATION-WO-GOVERNANCE-P1-010`: Scope Compliance PASS, Safety Review PASS, keine direkten `runtime_state.json`/`*.jsonl`-Edits, CLI nutzt ausschließlich State-Manager- und Audit-Writer-API, alle 5 non-terminale Refusals + ambiguous + no-match abgedeckt, kein `--force`/`--all`/`--bypass`, `system_stop`/`scope_locks`/`approval queue` unverändert)
+- Implementation Files: 4 (`system/state/state-manager.ts` +68 additive Lines, `system/state/audit-writer.ts` +8 additive Lines, NEU `system/control-plane/terminal-wo-reset-cli.ts`, NEU `system/control-plane/__tests__/terminal-wo-reset-cli.test.ts`)
 
 ## Purpose
 Implement a safe operator CLI for inspecting and clearing explicitly approved stale terminal `active_workorders` entries without manual `runtime_state.json` edits.
