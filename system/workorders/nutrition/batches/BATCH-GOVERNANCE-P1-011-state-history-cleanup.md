@@ -1,7 +1,7 @@
 # BATCH-GOVERNANCE-P1-011-state-history-cleanup
 
 ## Status
-ready_for_approval
+completed
 
 ## Purpose
 Add safe operator tooling for historical stuck-dispatched active_workorders, without weakening normal protection for live dispatched/running workorders.
@@ -124,3 +124,17 @@ Run WO-governance-015 through the normal implementation workflow:
 ---
 
 *Batch-Plan erzeugt: 2026-05-03 — gemäß `WO-GOVERNANCE-P1-015-state-history-cleanup.md` (Draft) und `REVIEW-WO-GOVERNANCE-P1-015-state-history-cleanup.md` (Verdict: PASS, zwei LOW-Findings nicht-blockierend), `BATCH-GOVERNANCE-P1-010-finally-lock-release-on-non-terminal-paths.md` als Pattern-Vorlage.*
+
+---
+
+## Validation Result
+
+- `pnpm tsc --noEmit` → PASS
+- `npx tsx --test system/control-plane/__tests__/terminal-wo-reset-cli.test.ts` → 65/65 PASS (32 bestehende WO-010 + 33 neue WO-015)
+- `npx tsx system/control-plane/terminal-wo-reset-cli.ts show WO-nutrition-001` → PASS (Exit 0, listet die 6 Live-Einträge)
+- `npx tsx system/workorders/cli/run-batch.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md --dry-run` → READY_TO_RUN
+- Implementation Review (Spark-D / Senior-Reviewer) → PASS (Scope Compliance PASS, Safety Review PASS)
+- Code commit: `35f9713` (`feat(governance): add stale dispatched workorder cleanup`)
+- LOW-Finding noted: audit-on-confirm may occur before state-manager refusal in race cases (audit-before-mutation pattern, identisch zur WO-010-Vorlage). Non-blocking; kein Sicherheits- oder Scope-Impact, nur potentielles Forensic-Rauschen bei Race-Refusal. Adressierbar als kleiner Followup-Commit oder gemeinsam mit einer WO-010-Audit-Migration.
+
+*Completed: 2026-05-03.*

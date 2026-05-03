@@ -1,6 +1,6 @@
 # WO-GOVERNANCE-P1-015 — State History Cleanup (Stale Dispatched) V1
 
-**Status:** draft
+**Status:** closed
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befund Nutrition Batch 001 `--run` nach Closure von WO-005/006/007/008/009/010/011/012/013/014: `WO-nutrition-001` läuft erfolgreich durch den `no-tool-request completed`-Pfad, Lock-Release durch WO-014 funktioniert, **aber WO-nutrition-002 trifft weiterhin Preflight HOLD**. Ursache (per `terminal-wo-reset-cli.ts show WO-nutrition-001` verifiziert): 6 historische `active_workorders`-Einträge für WO-nutrition-001 mit Status `dispatched` (4×) und `failed` (2×) — Run-IDs: `RUN-20260502-6627`, `RUN-20260503-8238`, `RUN-20260503-1044`, `RUN-20260503-8969`, `RUN-20260503-7133`, `RUN-20260503-6009`. Die `failed`-Einträge sind via WO-010 clearable; die 4 `dispatched`-Einträge sind nicht clearable (WO-010 erlaubt nur `failed|done` per `TERMINAL_CLEARABLE`-Gate in `state-manager.ts:327-328`) — bewusst so, um laufende Workorders zu schützen. Diese 4 Einträge sind aber **nicht mehr wirklich laufend** (kein zugehöriger `active_runs`-Eintrag in `'running'`-Status, dispatched_at ist > 1 h alt). Sie blockieren `blocked_by`-/Preflight-Resolution für Folge-WOs auf Dauer.
 **Template:** `system/workorders/templates/template_implementation_medium.md`
@@ -704,3 +704,11 @@ blocked_by:      []
 ---
 
 *Draft erzeugt: 2026-05-03 — gemäß `template_implementation_medium.md`, Workflow-Test-Befund Nutrition Batch 001 Final Run nach WO-014-Closure (4× stuck-`dispatched`-Einträge für WO-nutrition-001 in `active_workorders`), und WO-GOVERNANCE-P1-010 + WO-GOVERNANCE-P1-011 + WO-GOVERNANCE-P1-014 als Pattern-Vorlagen für additive State-Manager-/Audit-/CLI-Erweiterungen ohne Signatur-Änderungen an existierenden Funktionen.*
+
+---
+
+## Completion Note
+
+Implementation reviewed PASS. Safe stale-dispatched active_workorder cleanup implemented. Existing terminal reset behavior remains unchanged. clear-stale-dispatched requires exact workorder_id and run_id, dry-run by default, --confirm for mutation, and verified stale evidence. terminal-wo-reset-cli.test.ts 65/65 PASS.
+
+*Closed: 2026-05-03.*
