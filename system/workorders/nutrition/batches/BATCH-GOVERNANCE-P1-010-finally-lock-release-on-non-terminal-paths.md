@@ -1,7 +1,7 @@
 # BATCH-GOVERNANCE-P1-010-finally-lock-release-on-non-terminal-paths
 
 ## Status
-ready_for_approval
+completed
 
 ## Purpose
 Release acquired locks on intentional non-terminal/completed paths so later workorders can pass Preflight without stale lock conflicts.
@@ -244,3 +244,16 @@ Run WO-governance-014 through the normal implementation workflow:
 ---
 
 *Batch-Plan erzeugt: 2026-05-03 — gemäß `WO-GOVERNANCE-P1-014-finally-lock-release-on-non-terminal-paths.md` (Draft, PASS-Review ohne Pflicht-Fixes), `REVIEW-WO-GOVERNANCE-P1-014-finally-lock-release-on-non-terminal-paths.md` (Verdict: PASS, eine LOW-Anmerkung zur indirekten Smoke-Test-7B-Pfad-Verschiebung nicht-blockierend) und `BATCH-GOVERNANCE-P1-009-orchestrator-intent-contract-prompt.md` (Pattern-Vorlage).*
+
+---
+
+## Validation Result
+
+- `pnpm tsc --noEmit` → PASS
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → 9/9 PASS
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → 32/32 PASS (28 vorher + 4 neue WO-014 E-1..E-4)
+- Implementation Review (Spark-D / Senior-Reviewer) → PASS (Scope Compliance PASS, Safety Review PASS)
+- Code commit: `b681402` (`fix(governance): release locks on non-terminal dispatcher paths`)
+- E-3 review-rewrite path: static-source-inspection assertion until Spark-D-reviewer-injection (Phase-2 Followup `WO-018`) ermöglicht Runtime-E2E-Coverage. Akzeptiert als Zwischenlösung; alle anderen 3 Pfade sind Runtime-getestet.
+
+*Completed: 2026-05-03.*
