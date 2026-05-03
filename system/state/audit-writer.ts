@@ -27,6 +27,7 @@ export type EventType =
   | 'preflight_go' | 'preflight_hold' | 'preflight_reject'
   | 'system_stop_triggered' | 'system_stop_cleared'
   | 'approval_queue_added' | 'approval_queue_granted' | 'approval_queue_denied' | 'approval_queue_expired'
+  | 'terminal_workorder_reset'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -86,6 +87,7 @@ const VALID_EVENTS = new Set<string>([
   'preflight_go', 'preflight_hold', 'preflight_reject',
   'system_stop_triggered', 'system_stop_cleared',
   'approval_queue_added', 'approval_queue_granted', 'approval_queue_denied', 'approval_queue_expired',
+  'terminal_workorder_reset',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
@@ -131,6 +133,12 @@ export const auditToolBlocked   = (p: ToolBase & Pick<AuditEvent, 'blocked_by' |
 export const auditToolExecuted  = (p: ToolBase & Pick<AuditEvent, 'duration_ms'>) => writeAuditEvent({ event: 'tool_call_executed', allowed: true, ...p })
 export const auditToolFailed    = (p: ToolBase & Pick<AuditEvent, 'reason' | 'error_code'>) => writeAuditEvent({ event: 'tool_call_failed', allowed: false, severity: 'error', ...p })
 export const auditApprovalRequired = (p: Base & Pick<AuditEvent, 'approval_id' | 'tool' | 'target_path'>) => writeAuditEvent({ event: 'approval_required', severity: 'warning', ...p })
+
+// Operator Tooling — terminal-wo-reset-cli (WO-governance-010).
+// reason encodes previous status + operator (z. B. "previous_status=failed; operator=tom").
+export const auditTerminalWorkorderReset = (
+  p: Base & Pick<AuditEvent, 'reason' | 'approved_by'>,
+) => writeAuditEvent({ event: 'terminal_workorder_reset', severity: 'warning', ...p })
 
 // ─── Review Pipeline Helpers ──────────────────────────────────────────────────
 // High-level Marker im audit.jsonl — Detail-Audit liegt in pipeline-audit.jsonl

@@ -294,6 +294,74 @@ function appendInvalidTransition(workorderId: string, from: WoStatus, to: WoStat
   } catch { /* non-fatal — state update still proceeds */ }
 }
 
+/**
+ * Read-only-Kopie aller active_workorders-Einträge (für Operator-Inspektion via
+ * terminal-wo-reset-cli). Mutiert State NICHT.
+ */
+export function getAllActiveWorkorders(): ActiveWorkorder[] {
+  return [...readState().active_workorders]
+}
+
+/**
+ * Entfernt GENAU einen active_workorders-Eintrag mit exaktem
+ * (workorder_id, run_id)-Match, NUR wenn entry.status ∈ {'failed','done'}.
+ *
+ * 'blocked' ist KEIN gültiger ActiveWorkorder.status-Wert (existiert nur in
+ * Run.status), daher per Type-System aus dieser Funktion ausgeschlossen.
+ *
+ * Refused mit { removed: false, reason: ... } wenn:
+ *   - kein Match gefunden ('no match')
+ *   - mehr als ein Match gefunden ('ambiguous match (N)')
+ *   - status nicht in {'failed','done'} ('non-terminal status: <status>')
+ *
+ * Atomic via mutate()-Lock. Idempotent: zweiter Aufruf nach erfolgreichem
+ * Remove gibt { removed: false, reason: 'no match' } zurück.
+ *
+ * Mutiert NUR active_workorders — keine Berührung von scope_locks,
+ * db_migration_lock, system_stop, approvals, audit_tokens, active_runs.
+ */
+export async function removeTerminalActiveWorkorder(
+  workorderId: string,
+  runId: string,
+): Promise<{ removed: boolean; entry?: ActiveWorkorder; reason?: string }> {
+  const TERMINAL_CLEARABLE: ReadonlySet<ActiveWorkorder['status']> =
+    new Set<ActiveWorkorder['status']>(['failed', 'done'])
+
+  let outcome: { removed: boolean; entry?: ActiveWorkorder; reason?: string } = {
+    removed: false,
+    reason:  'unknown',
+  }
+
+  await mutate(s => {
+    const matches = s.active_workorders.filter(
+      w => w.workorder_id === workorderId && w.run_id === runId,
+    )
+    if (matches.length === 0) {
+      outcome = { removed: false, reason: 'no match' }
+      return
+    }
+    if (matches.length > 1) {
+      outcome = { removed: false, reason: `ambiguous match (${matches.length})` }
+      return
+    }
+    const target = matches[0]
+    if (!TERMINAL_CLEARABLE.has(target.status)) {
+      outcome = {
+        removed: false,
+        entry:   target,
+        reason:  `non-terminal status: ${target.status}`,
+      }
+      return
+    }
+    s.active_workorders = s.active_workorders.filter(
+      w => !(w.workorder_id === workorderId && w.run_id === runId),
+    )
+    outcome = { removed: true, entry: target }
+  })
+
+  return outcome
+}
+
 export async function updateWorkorderStatus(workorderId: string, status: ActiveWorkorder['status']): Promise<void> {
   await mutate(s => {
     const wo = s.active_workorders.find(w => w.workorder_id === workorderId)
