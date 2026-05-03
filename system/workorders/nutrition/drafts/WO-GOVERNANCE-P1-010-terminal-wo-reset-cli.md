@@ -68,16 +68,21 @@ Drei Komponenten:
    - `clear <workorder_id> --run-id <run_id> [--dry-run | --confirm]` — Cleanup-Operation. Default-Modus = `--dry-run` (Read-only-Vorschau). `--confirm` triggert die State-Mutation.
 2. **`system/state/state-manager.ts` (additive Helper, keine Signatur-Änderung an existierenden Funktionen)** — zwei neue exportierte Funktionen:
    - `getAllActiveWorkorders(): ActiveWorkorder[]` — gibt eine read-only-Kopie von `s.active_workorders` zurück.
-   - `removeTerminalActiveWorkorder(workorderId: string, runId: string): { removed: boolean; entry?: ActiveWorkorder; reason?: string }` — entfernt **genau einen** Eintrag mit exaktem `workorder_id`-und-`run_id`-Match, **NUR** wenn `entry.status ∈ {'failed','done','blocked'}`. Refused bei mehrdeutigem Match, bei nicht-terminaler Status, bei keinem Match. Atomic via existierendem `mutate()`-Lock-Pattern.
+   - `removeTerminalActiveWorkorder(workorderId: string, runId: string): { removed: boolean; entry?: ActiveWorkorder; reason?: string }` — entfernt **genau einen** Eintrag mit exaktem `workorder_id`-und-`run_id`-Match, **NUR** wenn `entry.status ∈ {'failed','done'}` (gemäß `ActiveWorkorder.status`-Union aus `state-manager.ts:32`; `'blocked'` existiert dort NICHT, nur in `Run.status`). Refused bei mehrdeutigem Match, bei nicht-terminalem Status (`queued`/`dispatched`/`running`/`review`/`awaiting_approval`), bei keinem Match. Atomic via existierendem `mutate()`-Lock-Pattern.
 3. **`system/state/audit-writer.ts` (additive Helper)** — eine neue exportierte Convenience-Funktion `auditTerminalWorkorderReset(p)` analog zu `auditJobFailed` etc., die `writeAuditEvent({ event: 'terminal_workorder_reset', severity: 'warning', ...p })` aufruft. Kein neues `AuditEvent`-Schema-Feld nötig — `event`-String-Erweiterung reicht.
 
 CLI-Sicherheits-Pflicht-Verhalten:
 - Default ist Read-only. Mutation **nur** bei `clear ... --confirm`.
 - `clear` verlangt **beide** Argumente (`<workorder_id>` + `--run-id <run_id>`) — kein Wildcard, kein Cleanup-aller-failed-WOs.
-- `clear` lehnt nicht-terminale Status (`dispatched`, `running`, `awaiting_approval`, `review`) ab.
+- `clear` lehnt nicht-terminale Status (`queued`, `dispatched`, `running`, `review`, `awaiting_approval`) ab.
 - `clear` lehnt mehrdeutige oder leere Matches ab.
 - `clear` schreibt vor jeder Mutation ein Audit-Event über `auditTerminalWorkorderReset`.
 - Kein `--force`-Flag, kein `--all`-Flag, kein `--bypass`-Flag.
+
+**Einheitliches Exit-Code-Schema (verbindlich für ALLE Sub-Commands und alle Pfade):**
+- **Exit 0** = Erfolg ODER read-only Operation erfolgreich (auch `--dry-run`-Vorschau eines clearbaren Eintrags).
+- **Exit 1** = usage error / refusal / unsafe request (fehlende Argumente, unbekannter Sub-Command, mehrdeutiger Match, nicht-terminaler Status, sonstige Refusals).
+- **Exit 2** = no exact match found (für `show <workorder_id>` und `clear <workorder_id> --run-id <run_id>` wenn kein Eintrag matched).
 
 Alternativen verworfen:
 - **Variante 2: CLI als Sub-Command des `batch-loader`** — `batch-loader.ts` ist explizit out-of-scope (`files_blocked`); separate CLI hält den Operator-Flow klar getrennt von Workorder-Dispatch.
@@ -117,13 +122,18 @@ task: |
         (writeAuditEvent-Signatur, AuditEvent-Type, existierende Convenience-Funktionen
         wie auditJobFailed/auditScopeLockReleased als Pattern-Vorlage)
       - system/control-plane/scheduler-preflight.ts
-        (Zeile 140-148: Terminal-Status-Reject-Logik — verstehen, welche Status
-        Preflight als terminal blockiert: 'done', 'failed' explizit; CLI muss
-        konsistent diese als Clear-Targets erlauben + zusätzlich 'blocked')
+        (Zeile 140-148: Terminal-Status-Reject-Logik — Preflight blockiert
+        ActiveWorkorder mit status 'done' oder 'failed'. CLI erlaubt genau
+        diese zwei als Clear-Targets, konsistent mit Preflight.)
+      - system/state/state-manager.ts ActiveWorkorder.status-Union (Zeile 32):
+        {'queued'|'dispatched'|'running'|'review'|'awaiting_approval'|'done'|'failed'}.
+        'blocked' ist NICHT in dieser Union (nur in Run.status, Zeile 21) —
+        CLI darf 'blocked' NICHT als clearable verwenden, sonst TS-Error.
       - system/workorders/lifecycle/wo_lifecycle_v1.md
         (Terminal-Status-Definition; 'failed', 'done', 'closed', 'cancelled'
-        als terminal; CLI sollte 'failed', 'done', 'blocked' erlauben — 'closed'/
-        'cancelled' bewusst NICHT, da diese operativ abgeschlossene Endzustände sind)
+        als terminal-konzeptionell; CLI clearable nur 'failed' und 'done' —
+        'closed'/'cancelled' bewusst NICHT, da operativ-finale Endzustände;
+        'blocked' nicht zutreffend, da kein ActiveWorkorder.status-Wert.)
       - system/workorders/schemas/workorder.schema.json (read-only Referenz)
       - system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md
         (Test-Anwendungsfall — nach Cleanup soll dry-run weiterhin PASS bleiben)
@@ -180,7 +190,9 @@ task: |
          * workorder_id-und-run_id-Match. Refused wenn:
          *   - kein Match gefunden
          *   - mehr als ein Match gefunden
-         *   - status nicht in {'failed','done','blocked'}
+         *   - status nicht in {'failed','done'}
+         * (gemäß ActiveWorkorder.status-Union; 'blocked' ist KEIN gültiger
+         *  ActiveWorkorder-Status und damit per Type-System ausgeschlossen.)
          * Atomic via mutate()-Lock. Idempotent: zweiter Aufruf nach erfolgreichem
          * Remove gibt { removed: false, reason: 'no match' } zurück.
          */
@@ -189,7 +201,7 @@ task: |
           runId: string,
         ): Promise<{ removed: boolean; entry?: ActiveWorkorder; reason?: string }> {
           const TERMINAL_CLEARABLE: ReadonlySet<ActiveWorkorder['status']> =
-            new Set(['failed', 'done', 'blocked'])
+            new Set(['failed', 'done'])
 
           let outcome: { removed: boolean; entry?: ActiveWorkorder; reason?: string } = {
             removed: false,
@@ -241,32 +253,51 @@ task: |
             ...p,
           })
 
-      Falls AuditEvent.event als Union-Typ enumeriert ist (statt freier String),
-      Union additiv um 'terminal_workorder_reset' erweitern. Wenn AuditEvent als
-      free-form-String typisiert ist, keine Type-Anpassung nötig.
+      AuditEvent.event ist ein closed Union-Typ (siehe audit-writer.ts:10-29
+      `export type EventType = ...`). Pflicht: Ergänze den EventType additiv
+      um 'terminal_workorder_reset'. Bestehende Member bleiben unverändert.
+      Optional: defaultSeverity() (Zeile 93) um den neuen Event mit
+      Standard-Severity 'warning' ergänzen, falls die Funktion explizit
+      einen Eintrag pro Event erwartet.
+
+      Klarstellung:
+        - Audit-Event-EventType-Erweiterung ist Teil dieser WO (audit-writer.ts
+          ist in scope_files).
+        - Audit wird AUSSCHLIESSLICH über audit-writer.ts geschrieben
+          (auditTerminalWorkorderReset → writeAuditEvent → File-Write
+          intern in audit-writer.ts).
+        - Keine direkte JSONL-Editierung der system/state/*.jsonl-Dateien.
 
       Schritt 3 — terminal-wo-reset-cli.ts: neuer Standalone-CLI-Entry-Point.
 
-      CLI-Verhalten (siehe Architekturentscheidung):
+      CLI-Verhalten (siehe Architekturentscheidung-Exit-Code-Schema:
+        Exit 0 = Erfolg/read-only-OK, Exit 1 = usage error/refusal/unsafe,
+        Exit 2 = no exact match found):
+
         - `list` → console.table-formatierte Liste, gruppiert nach Status.
           Exit 0 immer.
         - `show <workorder_id>` → Detail-JSON eines passenden Eintrags
           (oder Hinweis bei mehreren Matches mit Auflistung der run_ids).
-          Exit 0 bei Match, Exit 2 bei keinem Match.
+          Exit 0 bei (mindestens einem) Match, Exit 2 bei keinem Match.
         - `clear <workorder_id> --run-id <run_id> --dry-run`:
             - Lädt Eintrag, zeigt was entfernt würde, mutiert NICHTS, schreibt
               KEIN Audit-Event.
             - Exit 0 bei terminalem Match (würde-cleanup-Vorschau).
-            - Exit 1 bei nicht-terminal / mehrdeutig / kein Match (Refusal mit Reason).
+            - Exit 1 bei nicht-terminalem Match oder mehrdeutigem Match (Refusal).
+            - Exit 2 bei keinem Match.
         - `clear <workorder_id> --run-id <run_id> --confirm`:
             - Schreibt VOR der Mutation ein Audit-Event via
               auditTerminalWorkorderReset (event_id, run_id, workorder_id,
               reason: 'operator-initiated cleanup of terminal active_workorders entry').
             - Ruft removeTerminalActiveWorkorder auf.
             - Bei outcome.removed===true: Exit 0 mit Confirmation.
-            - Bei outcome.removed===false: Exit 1 mit reason.
-        - Ohne Sub-Command: Hilfe-Text + Exit 1.
-        - Ohne --dry-run UND ohne --confirm bei `clear`: Default = --dry-run (sicher).
+            - Bei outcome.removed===false UND outcome.reason==='no match': Exit 2.
+            - Bei outcome.removed===false UND outcome.reason!=='no match'
+              (non-terminal status / ambiguous match): Exit 1.
+        - Ohne Sub-Command oder mit unbekanntem Sub-Command: Hilfe-Text + Exit 1.
+        - `clear` ohne Pflicht-Argumente (`<workorder_id>` und/oder `--run-id`): Exit 1.
+        - `clear` ohne --dry-run UND ohne --confirm: Default = --dry-run-Verhalten
+          (sicher; kein Audit, keine Mutation).
 
       ABSOLUTE VERBOTE im CLI-Implementer-Code:
         - KEIN fs.writeFileSync auf runtime_state.json oder *.jsonl.
@@ -281,10 +312,12 @@ task: |
 
       Test-Setup (Pattern aus dispatcher-fail-cleanup.test.ts):
         - process.chdir auf TEST_DIR mit minimaler runtime_state.json-Struktur.
-        - Pre-populate active_workorders mit 4 Test-Einträgen:
-            (a) WO-test-001 / RUN-001 / status: failed   (terminal — clearable)
-            (b) WO-test-002 / RUN-002 / status: done     (terminal — clearable)
-            (c) WO-test-003 / RUN-003 / status: blocked  (terminal — clearable)
+        - Pre-populate active_workorders mit 4 Test-Einträgen (Statuswerte aus
+          ActiveWorkorder.status-Union — 'blocked' bewusst NICHT verwendet,
+          da kein gültiger ActiveWorkorder-Status):
+            (a) WO-test-001 / RUN-001 / status: failed     (terminal — clearable)
+            (b) WO-test-002 / RUN-002 / status: done       (terminal — clearable)
+            (c) WO-test-003 / RUN-003 / status: review     (non-terminal — refuse)
             (d) WO-test-004 / RUN-004 / status: dispatched (non-terminal — refuse)
 
       Test-Cases (mindestens):
@@ -293,7 +326,9 @@ task: |
         3. Doppelter Aufruf removeTerminalActiveWorkorder('WO-test-001', 'RUN-001')
            → removed:false, reason:'no match' (Idempotenz).
         4. removeTerminalActiveWorkorder('WO-test-004', 'RUN-004')
-           → removed:false, reason enthält 'non-terminal'.
+           → removed:false, reason enthält 'non-terminal' (status: dispatched).
+        4b. removeTerminalActiveWorkorder('WO-test-003', 'RUN-003')
+           → removed:false, reason enthält 'non-terminal' (status: review).
         5. Non-existenter (workorder_id, run_id) → removed:false, reason:'no match'.
         6. Manuelle Pre-population mit zwei Einträgen für gleiches (wo, run) →
            removed:false, reason enthält 'ambiguous'.
@@ -301,9 +336,11 @@ task: |
            → Exit 0, Output enthält alle workorder_ids.
         8. CLI: clear --dry-run mutiert NICHT (active_workorders unverändert).
         9. CLI: clear --confirm mutiert (active_workorders ohne den Eintrag).
-        10. CLI: clear ohne --run-id refused (Exit 1).
-        11. CLI: clear gegen non-terminal status refused (Exit 1).
-        12. Audit-File enthält 'terminal_workorder_reset'-Event nur nach --confirm.
+        10. CLI: clear ohne --run-id refused (Exit 1, usage error).
+        11. CLI: clear gegen non-terminal status (z. B. 'review'/'dispatched') refused (Exit 1).
+        12. CLI: clear gegen unbekannten (workorder_id, run_id) (Exit 2, no match).
+        13. Audit-File enthält 'terminal_workorder_reset'-Event nur nach --confirm
+            (kein Audit-Event nach --dry-run).
 
       Tests verwenden node:test describe/it, kein Vitest, keine neuen Dependencies.
 
@@ -388,7 +425,7 @@ context_files:
 
 acceptance_criteria:
   - "Neue exportierte Funktion getAllActiveWorkorders(): ActiveWorkorder[] in state-manager.ts liefert read-only-Kopie aller active_workorders-Einträge"
-  - "Neue exportierte Funktion removeTerminalActiveWorkorder(workorderId, runId) in state-manager.ts entfernt GENAU einen Eintrag bei exaktem Match und terminalem Status (failed|done|blocked)"
+  - "Neue exportierte Funktion removeTerminalActiveWorkorder(workorderId, runId) in state-manager.ts entfernt GENAU einen Eintrag bei exaktem Match und terminalem Status (failed|done) — 'blocked' ist KEIN gültiger ActiveWorkorder.status-Wert und damit ausgeschlossen"
   - "removeTerminalActiveWorkorder verweigert Mutation und liefert reason bei: kein Match, mehrdeutigem Match (>1), nicht-terminalem Status"
   - "removeTerminalActiveWorkorder mutiert NUR active_workorders — keine Berührung von scope_locks, db_migration_lock, system_stop, approvals, audit_tokens, active_runs"
   - "Bestehende state-manager.ts-Funktionen bleiben in Signatur und Verhalten unverändert"
@@ -401,10 +438,11 @@ acceptance_criteria:
   - "CLI 'clear ... --confirm' schreibt Audit-Event via auditTerminalWorkorderReset VOR der Mutation"
   - "CLI 'clear' ohne --confirm UND ohne --dry-run defaults zu --dry-run-Verhalten (sicher)"
   - "CLI 'clear' verlangt sowohl <workorder_id> als auch --run-id <run_id> als Pflicht-Argumente"
-  - "CLI verweigert clear bei nicht-terminalem Status (dispatched/running/awaiting_approval/review) mit klarem Refusal-Output und Exit 1"
+  - "CLI verweigert clear bei nicht-terminalem Status (queued/dispatched/running/review/awaiting_approval) mit klarem Refusal-Output und Exit 1"
   - "CLI verweigert clear bei mehrdeutigem Match mit Exit 1"
-  - "CLI verweigert clear bei keinem Match mit Exit 2"
+  - "CLI verweigert clear bei keinem Match mit Exit 2 (sowohl --dry-run als auch --confirm)"
   - "CLI verweigert unbekannte Sub-Commands mit Exit 1 und Hilfe-Text"
+  - "CLI Exit-Code-Schema einheitlich angewandt: Exit 0 = Erfolg/read-only-OK; Exit 1 = usage error/refusal/unsafe; Exit 2 = no exact match found"
   - "CLI editiert NIEMALS runtime_state.json direkt per fs.writeFileSync — alle Mutations über state-manager.ts"
   - "CLI editiert NIEMALS system/state/*.jsonl direkt — alle Audit-Events über audit-writer.ts"
   - "CLI berührt NIEMALS approval queue (system/approval/**)"
@@ -415,7 +453,7 @@ acceptance_criteria:
   - "Kein --force / --all / --bypass / --skip-validator Flag eingeführt"
   - "Keine neuen npm-Dependencies; package.json unverändert"
   - "Keine Änderung an dispatcher.ts, governance-validator.ts, scheduler-preflight.ts, review-pipeline.ts, batch-loader.ts, services/scheduler-api/**, workorder.schema.json, risk-categories.ts"
-  - "Tests in system/control-plane/__tests__/terminal-wo-reset-cli.test.ts decken mindestens 12 Szenarien ab (siehe Implement-Block) und sind alle grün"
+  - "Tests in system/control-plane/__tests__/terminal-wo-reset-cli.test.ts decken mindestens 13 Szenarien ab (siehe Implement-Block: 9 Helper-Szenarien inkl. zwei Refusal-Tests gegen non-terminal Status, plus 4 CLI-Sub-Command-Szenarien inkl. Exit-2-Test) und sind alle grün"
   - "pnpm tsc --noEmit clean"
   - "npx tsx --test system/control-plane/__tests__/terminal-wo-reset-cli.test.ts → all PASS"
   - "npx tsx system/control-plane/terminal-wo-reset-cli.ts list → Exit 0 mit korrekter Ausgabe"
@@ -502,7 +540,7 @@ blocked_by:      []
   - WO-006 sorgt für Lock-Release auf FAIL-Pfaden.
   - WO-007/008 modernisieren Smoke-Tests + Reviewer-Injection.
   - **WO-010** schließt den Operator-Workflow-Gap: bietet eine offizielle, audit-fähige CLI für die wiederkehrende Cleanup-Aufgabe nach FAIL-Iterationen — Tom muss nicht mehr ad-hoc `npx tsx -e ...`-Aufrufe machen oder State-Cleanup-Ausnahmen autorisieren.
-- **Architekturentscheidung für `'failed' | 'done' | 'blocked'` als clearable:** Diese drei Status sind in `wo_lifecycle_v1.md` als terminal-aber-nicht-finally definiert (`done` ist technisch fertig aber operativ noch nicht abgeschlossen; `failed` ist Fehlerausgang; `blocked` ist eine Pre-Execution-Refusal). `closed` und `cancelled` sind operativ-finale Endzustände — diese soll die CLI bewusst NICHT clearen, weil das die Audit-Historie verzerren würde. Wenn ein WO in `closed` oder `cancelled` ist, gehört der Eintrag zur Run-History, nicht zur stale-Bereinigung.
+- **Architekturentscheidung für `'failed' | 'done'` als clearable:** Diese zwei Status sind die einzigen Werte in der `ActiveWorkorder.status`-Union (`state-manager.ts:32`), die Preflight (`scheduler-preflight.ts:144-146`) als terminal-blockierend für Re-Runs behandelt. `'blocked'` ist KEIN gültiger `ActiveWorkorder.status`-Wert — es existiert nur in `Run.status` (Zeile 21) für die Run-Tabelle und ist daher per Type-System aus dieser CLI ausgeschlossen. `closed` und `cancelled` sind nicht in der `ActiveWorkorder.status`-Union enthalten (sie sind WO-Lifecycle-Status, keine Active-WO-Status). `queued`/`dispatched`/`running`/`review`/`awaiting_approval` sind nicht-terminal und werden vom CLI explizit als Refusal-Pfad abgelehnt — andernfalls würde laufende oder pending-approval-Arbeit zerstört.
 - **`scope_files` enthält 4 Files** — neue CLI + 2 erweiterte State/Audit-Files + neue Test-Datei. Konsistent mit `template_implementation_medium.md` (3-15 Files erlaubt).
 - **`files_blocked` schließt `runtime_state.json` und `*.jsonl`-Audit-Logs explizit aus** — alle Mutations nur über `state-manager.ts` und `audit-writer.ts`. Das ist die zentrale Sicherheits-Garantie.
 - **`files_blocked` schließt `dispatcher.ts`, `governance-validator.ts`, `scheduler-preflight.ts`, `review-pipeline.ts`, `risk-categories.ts`, `workorder.schema.json`, `services/scheduler-api/**`, `system/workorders/cli/**` aus** — die CLI ist ein neuer, unabhängiger Operator-Touchpoint, nicht eine Erweiterung bestehender Pipelines.
