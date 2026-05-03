@@ -1,6 +1,7 @@
 # WO-GOVERNANCE-P1-013 — OrchestratorIntent System-Prompt Contract V1
 
-**Status:** draft
+**Status:** closed
+**Completion Note:** Implementation reviewed PASS. OrchestratorIntent contract prompt injected via buildSystemPrompt. Contract includes all 6 required fields, allowed values, ToolRequest schema and complete JSON example. REWRITE hints now include validator reason and field. smoke-test.ts 9/9 PASS. dispatcher-fail-cleanup.test.ts 28/28 PASS. *(closed: 2026-05-03)*
 **Phase:** 1 — Governance Tooling
 **Source:** Orchestrator-Prompt-Diagnose nach Closure von WO-005/006/007/008/009/010/011/012: Validator/Dispatcher/State-Layer sind robust (smoke 9/9, fail-cleanup 24/24, tsc PASS), aber Live-Re-Runs von `BATCH-NUTRITION-P1-001` produzieren weiterhin `governance: REWRITE-Limit (2) erreicht. Letzte Verletzung: Feld "<X>" muss ein Array sein, war: undefined`. Diagnose-Befund: **PROMPT_MISSING_REQUIRED_FIELDS** — der `buildSystemPrompt()`-Output enthält weder JSON-Schema noch Pflichtfeld-Liste noch Beispiel des `OrchestratorIntent`-Contracts. Das Modell muss das Format raten.
 **Template:** `system/workorders/templates/template_implementation_medium.md`

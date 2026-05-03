@@ -1,7 +1,16 @@
 # BATCH-GOVERNANCE-P1-009-orchestrator-intent-contract-prompt
 
 ## Status
-ready_for_approval
+completed *(2026-05-03)*
+
+## Validation Result
+- `pnpm tsc --noEmit` → **PASS** (EXIT=0)
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → **9/9 PASS** (read-only-Verifikation; bestehende Mocks aus WO-007 ignorieren den Contract-Block, da sie manuell-konstruierte Combined-JSONs liefern)
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → **28/28 PASS** (24 bestehende WO-006/011/012-Tests + 4 additive WO-013-Tests: Contract-Injection D-1, graceful Fallback D-2, Reihenfolge D-3, REWRITE-Hint-Pattern-Match D-4)
+- `npx tsx system/workorders/cli/run-batch.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md --dry-run` → **READY_TO_RUN** (EXIT=0)
+- Implementation Review (Spark-D Mandatory) → **PASS** (siehe Verdict in `REVIEW-IMPLEMENTATION-WO-GOVERNANCE-P1-013`: Scope Compliance PASS, Prompt Contract Review PASS, Production Behavior UNCHANGED für valide Modell-Outputs, Contract-Block-Injection korrekt, lazy Path-Resolution analog `loadAgentSpec`, graceful Fallback bei missing Datei, Reihenfolge agentSpec → contract → loaded_skills, alle 6 OrchestratorIntent-Pflichtfelder + ALLOWED_AGENTS/ALLOWED_RISK_LEVELS/ALLOWED_GATES + Combined ToolRequest-Schema + vollständiges Beispiel-JSON + Hard-Rules vorhanden, REWRITE-Hint mit `Validator reason:` + `Field:` strukturiert, Validator-Strenge unverändert, `.claude/agents/**` und `services/scheduler-api/**` unangetastet, WO-006/011/012-Garantien intakt)
+- Implementation Files: 4 (`system/prompts/orchestration/orchestrator_intent_contract.md` NEU mit ~91 Lines, `system/control-plane/skill-loader.ts` +37 additive Lines mit `loadOrchestratorIntentContract()` + erweitertem `buildSystemPrompt`, `system/control-plane/dispatcher.ts` +46 Lines mit `lastValidationReason`/`lastValidationField`/`lastParseError`-State-Tracking + 3-Pfad-REWRITE-Hint, `system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` +78 Lines mit 4 additiven Test-Szenarien)
+- Implementation Commit: `700b80c fix(governance): inject orchestrator intent contract prompt`
 
 ## Purpose
 Inject a complete OrchestratorIntent + ToolRequest contract into the system prompt so the model emits complete combined JSON instead of guessing required fields.
