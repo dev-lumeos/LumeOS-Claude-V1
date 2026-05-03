@@ -236,6 +236,20 @@ export function getWrittenFiles(runId: string): string[] {
 
 export function getActiveRuns(): Run[] { return readState().active_runs.filter(r => r.status === 'running') }
 
+/**
+ * WO-governance-015: Read-only Lookup eines active_runs-Eintrags per run_id,
+ * unabhängig vom Run-Status (running/completed/failed/blocked/awaiting_approval).
+ * Wird von removeStaleDispatchedActiveWorkorder + terminal-wo-reset-cli
+ * clear-stale-dispatched für Stale-Evidence-Prüfung benötigt.
+ *
+ * Anders als getActiveRuns() (filtert nur 'running'), gibt diese Funktion
+ * den Eintrag in JEDEM Status zurück bzw. undefined wenn nicht vorhanden.
+ * Mutiert State NICHT.
+ */
+export function getActiveRunByRunId(runId: string): Run | undefined {
+  return readState().active_runs.find(r => r.run_id === runId)
+}
+
 export async function startWorkorder(workorderId: string, agentId: string, runId?: string): Promise<void> {
   await mutate(s => { s.active_workorders.push({ workorder_id: workorderId, agent_id: agentId, run_id: runId, status: 'dispatched', dispatched_at: new Date().toISOString() }) })
 }
@@ -357,6 +371,165 @@ export async function removeTerminalActiveWorkorder(
       w => !(w.workorder_id === workorderId && w.run_id === runId),
     )
     outcome = { removed: true, entry: target }
+  })
+
+  return outcome
+}
+
+/**
+ * WO-governance-015: Stale-Evidence-Modes für removeStaleDispatchedActiveWorkorder.
+ *
+ *  - 'active_run_terminal':
+ *      active_runs hat Eintrag mit gleichem run_id und Status in
+ *      {'completed','failed','blocked'}. Run ist nachweislich beendet,
+ *      aber active_workorders wurde nicht aufgeräumt.
+ *  - 'no_active_run_and_age':
+ *      Kein active_runs-Eintrag mit diesem run_id (Bookkeeping bereits
+ *      aufgeräumt) UND (now - dispatched_at) > ageMinutes (Default 60).
+ *  - 'operator_threshold':
+ *      Operator gibt explizit --older-than-minutes <N> an; akzeptiert nur
+ *      wenn (now - dispatched_at) > ageMinutes UND active_runs zeigt für
+ *      diesen run_id KEINEN 'running'/'awaiting_approval'-Status.
+ */
+export type StaleDispatchedEvidenceKind =
+  | 'active_run_terminal'
+  | 'no_active_run_and_age'
+  | 'operator_threshold'
+
+export interface StaleDispatchedEvidence {
+  kind:        StaleDispatchedEvidenceKind
+  ageMinutes?: number
+}
+
+const STALE_DISPATCHED_DEFAULT_AGE_MIN = 60
+
+/**
+ * WO-governance-015: Entfernt GENAU einen active_workorders-Eintrag mit
+ * Status 'dispatched', wenn nachweislich stale.
+ *
+ * Hard refusal bei:
+ *   - kein Match ('no match')
+ *   - mehrdeutigem Match ('ambiguous match (N)')
+ *   - status !== 'dispatched' ('non-dispatched status: <status>')
+ *   - active_runs zeigt 'running' oder 'awaiting_approval' für run_id
+ *     ('active run still running' bzw. 'active run awaiting approval')
+ *   - Evidence-Bedingungen nicht erfüllt ('evidence insufficient: ...')
+ *
+ * WICHTIG: Die Funktion verifiziert die Evidence eigenständig gegen den
+ * aktuellen State (state-of-the-world-Prüfung), NICHT nur die CLI-Deklaration.
+ * Selbst bei falscher kind-Markierung wird kein wirklich-laufender Run
+ * gelöscht.
+ *
+ * Mutiert NUR active_workorders — keine Berührung von active_runs,
+ * scope_locks, db_migration_lock, system_stop, approvals, audit_tokens.
+ *
+ * Atomic via mutate()-Lock. Idempotent.
+ */
+export async function removeStaleDispatchedActiveWorkorder(
+  workorderId: string,
+  runId: string,
+  evidence: StaleDispatchedEvidence,
+): Promise<{ removed: boolean; entry?: ActiveWorkorder; reason?: string }> {
+  let outcome: { removed: boolean; entry?: ActiveWorkorder; reason?: string } = {
+    removed: false,
+    reason:  'unknown',
+  }
+
+  await mutate(s => {
+    const matches = s.active_workorders.filter(
+      w => w.workorder_id === workorderId && w.run_id === runId,
+    )
+    if (matches.length === 0) {
+      outcome = { removed: false, reason: 'no match' }
+      return
+    }
+    if (matches.length > 1) {
+      outcome = { removed: false, reason: `ambiguous match (${matches.length})` }
+      return
+    }
+
+    const target = matches[0]
+    if (target.status !== 'dispatched') {
+      outcome = {
+        removed: false,
+        entry:   target,
+        reason:  `non-dispatched status: ${target.status}`,
+      }
+      return
+    }
+
+    // Hart-Refusal: aktiver Run blockiert Cleanup unabhängig von der
+    // deklarierten Evidence (state-of-the-world hat Vorrang).
+    const run = s.active_runs.find(r => r.run_id === runId)
+    if (run && run.status === 'running') {
+      outcome = { removed: false, entry: target, reason: 'active run still running' }
+      return
+    }
+    if (run && run.status === 'awaiting_approval') {
+      outcome = { removed: false, entry: target, reason: 'active run awaiting approval' }
+      return
+    }
+
+    // Evidence-Verifikation gegen aktuellen State.
+    const ageMinutes = evidence.ageMinutes ?? STALE_DISPATCHED_DEFAULT_AGE_MIN
+    const dispatchedAtMs = Date.parse(target.dispatched_at)
+    const ageMs          = Date.now() - dispatchedAtMs
+    const ageMsThreshold = ageMinutes * 60 * 1000
+
+    let evidenceOk = false
+    let evidenceDetail = ''
+    switch (evidence.kind) {
+      case 'active_run_terminal': {
+        if (run && (run.status === 'completed' || run.status === 'failed' || run.status === 'blocked')) {
+          evidenceOk     = true
+          evidenceDetail = `active_run_terminal: run.status=${run.status}`
+        } else if (!run) {
+          evidenceDetail = 'active_run_terminal: no active_run for this run_id'
+        } else {
+          evidenceDetail = `active_run_terminal: run.status=${run.status} (not terminal)`
+        }
+        break
+      }
+      case 'no_active_run_and_age': {
+        if (!run && ageMs > ageMsThreshold) {
+          evidenceOk     = true
+          evidenceDetail = `no_active_run_and_age: age=${Math.floor(ageMs / 60000)}min > ${ageMinutes}min`
+        } else if (run) {
+          evidenceDetail = `no_active_run_and_age: active_run exists (status=${run.status})`
+        } else {
+          evidenceDetail = `no_active_run_and_age: age=${Math.floor(ageMs / 60000)}min ≤ ${ageMinutes}min`
+        }
+        break
+      }
+      case 'operator_threshold': {
+        // Operator-Schwelle: ageMinutes muss explizit gesetzt sein und
+        // active_run darf weder 'running' noch 'awaiting_approval' sein
+        // (oben bereits geprüft); zusätzlich Alter > Schwelle.
+        if (evidence.ageMinutes === undefined) {
+          evidenceDetail = 'operator_threshold: ageMinutes not provided'
+        } else if (ageMs > ageMsThreshold) {
+          evidenceOk     = true
+          evidenceDetail = `operator_threshold: age=${Math.floor(ageMs / 60000)}min > ${ageMinutes}min`
+        } else {
+          evidenceDetail = `operator_threshold: age=${Math.floor(ageMs / 60000)}min ≤ ${ageMinutes}min`
+        }
+        break
+      }
+    }
+
+    if (!evidenceOk) {
+      outcome = {
+        removed: false,
+        entry:   target,
+        reason:  `evidence insufficient: ${evidenceDetail}`,
+      }
+      return
+    }
+
+    s.active_workorders = s.active_workorders.filter(
+      w => !(w.workorder_id === workorderId && w.run_id === runId),
+    )
+    outcome = { removed: true, entry: target, reason: evidenceDetail }
   })
 
   return outcome

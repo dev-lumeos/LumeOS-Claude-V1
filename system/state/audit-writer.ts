@@ -28,6 +28,7 @@ export type EventType =
   | 'system_stop_triggered' | 'system_stop_cleared'
   | 'approval_queue_added' | 'approval_queue_granted' | 'approval_queue_denied' | 'approval_queue_expired'
   | 'terminal_workorder_reset'
+  | 'stale_dispatched_workorder_cleanup'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -88,6 +89,7 @@ const VALID_EVENTS = new Set<string>([
   'system_stop_triggered', 'system_stop_cleared',
   'approval_queue_added', 'approval_queue_granted', 'approval_queue_denied', 'approval_queue_expired',
   'terminal_workorder_reset',
+  'stale_dispatched_workorder_cleanup',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
@@ -139,6 +141,15 @@ export const auditApprovalRequired = (p: Base & Pick<AuditEvent, 'approval_id' |
 export const auditTerminalWorkorderReset = (
   p: Base & Pick<AuditEvent, 'reason' | 'approved_by'>,
 ) => writeAuditEvent({ event: 'terminal_workorder_reset', severity: 'warning', ...p })
+
+// Operator Tooling — terminal-wo-reset-cli clear-stale-dispatched (WO-governance-015).
+// Differentiated from terminal_workorder_reset: this event marks cleanup of
+// historically-stuck `dispatched` entries with proven stale evidence (terminal
+// active_run, missing active_run + age threshold, or operator threshold).
+// reason encodes evidence kind, age in minutes and operator.
+export const auditStaleDispatchedWorkorderCleanup = (
+  p: Base & Pick<AuditEvent, 'reason' | 'approved_by'>,
+) => writeAuditEvent({ event: 'stale_dispatched_workorder_cleanup', severity: 'warning', ...p })
 
 // ─── Review Pipeline Helpers ──────────────────────────────────────────────────
 // High-level Marker im audit.jsonl — Detail-Audit liegt in pipeline-audit.jsonl
