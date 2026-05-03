@@ -376,4 +376,150 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     assert.equal(lockExistsFor(result.run_id), false, 'scope_lock muss freigegeben sein')
   })
 
+  // ─── WO-011: Run-id-spezifischer Status-Update + Multi-Dispatch ────────────
+
+  it('WO-011: Validator-FAIL setzt run-id-spezifischen Eintrag auf failed', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo011-101/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo011-101/src/file.ts`, '// fixture')
+    const mockCallModel = async () => 'NOT JSON'
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-101',
+      scope_files:  ['services/wo011-101/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed', `result.status: ${result.status}, run_id: ${result.run_id}, error: ${result.error}`)
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-101' && w.run_id === result.run_id,
+    )
+    assert.ok(woEntry, `entry must exist for run_id=${result.run_id}`)
+    assert.equal(woEntry?.status, 'failed', `Erwartet status='failed', war: ${woEntry?.status}`)
+  })
+
+  it('WO-011: Tool-Auth Block setzt run-id-spezifischen Eintrag auf failed', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo011-102/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo011-102/src/file.ts`, '// fixture')
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'micro-executor',
+      risk_level:      'low',
+      risks:           [],
+      execution_order: ['write outside scope'],
+      required_gates:  ['human-approval-gate', 'review-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'write',
+      targetPath: 'apps/forbidden/file.ts',
+      content: '// out of scope',
+    })
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-102',
+      scope_files:  ['services/wo011-102/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'blocked', `result.status: ${result.status}, error: ${result.error}`)
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-102' && w.run_id === result.run_id,
+    )
+    assert.equal(woEntry?.status, 'failed')
+  })
+
+  it('WO-011: callModel Exception setzt run-id-spezifischen Eintrag auf failed (catch-Pfad)', async () => {
+    fs.mkdirSync(`${TEST_DIR}/services/wo011-103/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo011-103/src/file.ts`, '// fixture')
+    const mockCallModel = async () => { throw new Error('mock_callmodel_throws') }
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-103',
+      scope_files:  ['services/wo011-103/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed', `result.status: ${result.status}, error: ${result.error}`)
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-103' && w.run_id === result.run_id,
+    )
+    assert.equal(woEntry?.status, 'failed')
+  })
+
+  it('WO-011 CRITICAL: Multi-Dispatch derselben WO — nur aktueller run-id-Eintrag wird auf failed gesetzt, alter dispatched-Eintrag bleibt unverändert', async () => {
+    // Reproduziert das Live-State-Szenario: alter dispatched-Eintrag (z. B. aus
+    // einem stuck-dispatched Run vor WO-011) bleibt unverändert; nur der NEUE
+    // run-id-Eintrag wird auf failed gesetzt. Beweist dass updateActiveWorkorderStatusByRun
+    // run-spezifisch trifft und den Find-Key-Mismatch (workorder_id-only) auflöst.
+    //
+    // Hinweis: Setup-Status muss 'dispatched' sein (nicht 'failed'), weil
+    // scheduler-preflight 'failed' als terminal blockt und Re-Dispatch verhindert.
+    // Das ist genau der Live-State, den WO-011 fixt.
+    fs.mkdirSync(`${TEST_DIR}/services/wo011-104/src`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/services/wo011-104/src/file.ts`, '// fixture')
+    const oldRunId = 'RUN-20260101-OLD0'
+    await state.startWorkorder('WO-multidispatch-104', 'micro-executor', oldRunId)
+    // Status bleibt 'dispatched' (default aus startWorkorder).
+    const oldBefore = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === 'WO-multidispatch-104' && w.run_id === oldRunId,
+    )
+    assert.equal(oldBefore?.status, 'dispatched', 'Setup: alter Eintrag ist dispatched (stuck)')
+
+    const mockCallModel = async () => 'NOT JSON'  // FAIL-Mock
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-104',
+      scope_files:  ['services/wo011-104/src/file.ts'],
+    })
+    const result = await dispatchWorkorder(wo as any, { callModel: mockCallModel, executeTool: defaultExecuteTool })
+    assert.equal(result.status, 'failed', `result.status: ${result.status}, error: ${result.error}`)
+    assert.notEqual(result.run_id, oldRunId, 'Neuer Run muss eigene run_id haben')
+
+    // Beweis: 2 Einträge — alter UNVERÄNDERT auf 'dispatched', neuer auf 'failed'.
+    const all = state.getAllActiveWorkorders().filter(w => w.workorder_id === 'WO-multidispatch-104')
+    assert.equal(all.length, 2, `Erwartet 2 Einträge, war: ${all.length}`)
+    const oldEntry = all.find(w => w.run_id === oldRunId)
+    const newEntry = all.find(w => w.run_id === result.run_id)
+    assert.equal(oldEntry?.status, 'dispatched', `Alter Eintrag (run_id=${oldRunId}) muss dispatched bleiben (Find-Key-Schutz), war: ${oldEntry?.status}`)
+    assert.equal(newEntry?.status, 'failed', `Neuer Eintrag (run_id=${result.run_id}) muss failed sein, war: ${newEntry?.status}`)
+  })
+
+  it('WO-011: updateActiveWorkorderStatusByRun no-match → updated:false', async () => {
+    const r = await state.updateActiveWorkorderStatusByRun('WO-does-not-exist', 'RUN-NONE', 'failed')
+    assert.equal(r.updated, false)
+    assert.equal(r.reason, 'no match')
+  })
+
+  it('WO-011: updateActiveWorkorderStatusByRun ambiguous match → updated:false, no mutation', async () => {
+    // Setup: 2 Einträge mit gleicher (workorder_id, run_id) — sollte praktisch nie
+    // passieren, aber wir testen die Schutz-Funktion.
+    const ambiguousRun = 'RUN-AMBI-001'
+    await state.startWorkorder('WO-multidispatch-105', 'micro-executor', ambiguousRun)
+    await state.startWorkorder('WO-multidispatch-105', 'micro-executor', ambiguousRun)
+    const before = state.getAllActiveWorkorders().filter(
+      w => w.workorder_id === 'WO-multidispatch-105' && w.run_id === ambiguousRun,
+    )
+    assert.equal(before.length, 2)
+    const r = await state.updateActiveWorkorderStatusByRun('WO-multidispatch-105', ambiguousRun, 'failed')
+    assert.equal(r.updated, false)
+    assert.match(r.reason ?? '', /ambiguous/)
+    const after = state.getAllActiveWorkorders().filter(
+      w => w.workorder_id === 'WO-multidispatch-105' && w.run_id === ambiguousRun,
+    )
+    assert.equal(after.filter(w => w.status === 'dispatched').length, 2, 'Beide Einträge bleiben dispatched (no mutation)')
+  })
+
+  it('WO-011: updateActiveWorkorderStatusByRun same-state idempotent', async () => {
+    const runId = 'RUN-IDEMP-001'
+    await state.startWorkorder('WO-multidispatch-106', 'micro-executor', runId)
+    const r1 = await state.updateActiveWorkorderStatusByRun('WO-multidispatch-106', runId, 'failed')
+    assert.equal(r1.updated, true)
+    const r2 = await state.updateActiveWorkorderStatusByRun('WO-multidispatch-106', runId, 'failed')
+    assert.equal(r2.updated, true, 'Same-state idempotent: zweiter Aufruf returnt updated:true')
+  })
+
+  it('WO-011: updateActiveWorkorderStatusByRun berührt nur matching Eintrag', async () => {
+    const runIdA = 'RUN-ISO-A'
+    const runIdB = 'RUN-ISO-B'
+    await state.startWorkorder('WO-multidispatch-107', 'micro-executor', runIdA)
+    await state.startWorkorder('WO-multidispatch-107', 'micro-executor', runIdB)
+    const r = await state.updateActiveWorkorderStatusByRun('WO-multidispatch-107', runIdA, 'failed')
+    assert.equal(r.updated, true)
+    const all = state.getAllActiveWorkorders().filter(w => w.workorder_id === 'WO-multidispatch-107')
+    const a = all.find(w => w.run_id === runIdA)
+    const b = all.find(w => w.run_id === runIdB)
+    assert.equal(a?.status, 'failed')
+    assert.equal(b?.status, 'dispatched', 'Anderer Eintrag muss unverändert dispatched sein')
+  })
+
 })

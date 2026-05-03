@@ -382,6 +382,7 @@ export async function dispatchWorkorder(
       alwaysLoad: agentDef.always_load_skills ?? [], tokenBudget: agentDef.skill_token_budget ?? 4000 })
     if (skills.blocked) {
       await state.endRun(runId, 'blocked')
+      await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
       audit.auditJobFailed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: skills.errors.join('; ') })
       return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id, error: skills.errors.join('; ') }
     }
@@ -417,6 +418,7 @@ export async function dispatchWorkorder(
           orchestration_mode: orchestrationMode, reason: e.message, rewrite_attempt: rewriteCount })
         if (rewriteCount > MAX_REWRITE_LOOPS) {
           await state.endRun(runId, 'failed')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
           return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id,
             error: `Governance: Model-Output nicht parsebar nach ${MAX_REWRITE_LOOPS} Rewrite-Versuchen` }
         }
@@ -464,12 +466,14 @@ export async function dispatchWorkorder(
 
       if (validation.status === 'BLOCKED') {
         await state.endRun(runId, 'blocked')
+        await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
         return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
           error: `Governance BLOCKED: ${validation.reason}` }
       }
 
       if (validation.status === 'FAIL') {
         await state.endRun(runId, 'failed')
+        await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
         return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id,
           error: `Governance FAIL: ${validation.reason}` }
       }
@@ -478,6 +482,7 @@ export async function dispatchWorkorder(
       rewriteCount++
       if (rewriteCount > MAX_REWRITE_LOOPS) {
         await state.endRun(runId, 'failed')
+        await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
         return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id,
           error: `Governance: REWRITE-Limit (${MAX_REWRITE_LOOPS}) erreicht. Letzte Verletzung: ${validation.reason}` }
       }
@@ -509,6 +514,7 @@ export async function dispatchWorkorder(
           orchestration_mode: orchestrationMode, tool: toolReq.tool, target_path: toolReq.targetPath,
           command: toolReq.command, blocked_by: gate.blockedBy ?? 'approval_gate', reason: gate.reason })
         await state.endRun(runId, 'blocked')
+        await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
         return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id, error: gate.reason }
       }
     } else if (needsApproval && !toolReq.approvalId) {
@@ -528,7 +534,7 @@ export async function dispatchWorkorder(
         approval_id: pendingApproval.approval_id,
         reason: pendingApproval.reason,
       })
-      await state.updateWorkorderStatus(wo.workorder_id, 'awaiting_approval')
+      await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'awaiting_approval')
       await state.endRun(runId, 'awaiting_approval')
       cleanupHandled = true  // V1.2.4: WO bewusst in awaiting_approval — finally darf nicht auf 'failed' überschreiben
       return { status: 'awaiting_approval', run_id: runId, workorder_id: wo.workorder_id,
@@ -551,6 +557,7 @@ export async function dispatchWorkorder(
         orchestration_mode: orchestrationMode, tool: toolReq.tool, target_path: toolReq.targetPath,
         command: toolReq.command, blocked_by: auth.blockedBy ?? 'permission_gateway', reason: auth.reason })
       await state.endRun(runId, 'blocked')
+      await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
       return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id, error: auth.reason }
     }
     audit.auditToolAllowed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
@@ -577,7 +584,7 @@ export async function dispatchWorkorder(
             reason: `Post-execution scope violation: ${toolReq.targetPath} not in scope_files`,
           })
           await state.endRun(runId, 'blocked')
-          await state.updateWorkorderStatus(wo.workorder_id, 'failed')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
           return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
             error: `FILES_SCOPE_VIOLATION: ${toolReq.targetPath} not in scope_files` }
         }
@@ -640,7 +647,7 @@ export async function dispatchWorkorder(
             continue workerRetryLoop
           }
           await state.endRun(runId, 'failed')
-          await state.updateWorkorderStatus(wo.workorder_id, 'review')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'review')
           cleanupHandled = true  // V1.2.4: WO bewusst in 'review' für Re-Dispatch — finally darf nicht überschreiben
           audit.auditReviewPipelineRewrite({
             run_id: runId,
@@ -667,7 +674,7 @@ export async function dispatchWorkorder(
               : `${toolReq.tool} on ${toolReq.targetPath ?? '(unknown)'}`,
           })
           await state.endRun(runId, 'blocked')
-          await state.updateWorkorderStatus(wo.workorder_id, 'awaiting_approval')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'awaiting_approval')
           cleanupHandled = true  // V1.2.4: WO bewusst in 'awaiting_approval' — finally darf nicht überschreiben
           audit.auditReviewPipelineHumanNeeded({
             run_id: runId,
@@ -706,7 +713,7 @@ export async function dispatchWorkorder(
     // 12. Finalize
     const finalStatus = toolResult.success ? 'completed' : 'failed'
     await state.endRun(runId, finalStatus)
-    await state.updateWorkorderStatus(wo.workorder_id, toolResult.success ? 'done' : 'failed')
+    await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, toolResult.success ? 'done' : 'failed')
     await state.releaseScopeLock(runId)
     await state.releaseDbMigrationLock(runId)
     cleanupHandled = true
@@ -721,6 +728,7 @@ export async function dispatchWorkorder(
 
   } catch (err: any) {
     await state.endRun(runId, 'failed')
+    await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
     await state.releaseScopeLock(runId)
     await state.releaseDbMigrationLock(runId)
     cleanupHandled = true
@@ -739,7 +747,7 @@ export async function dispatchWorkorder(
     // auf 'failed', falls es noch in einem nicht-terminalen Status (dispatched/running) ist.
     // Audit-Events laufen über audit-writer.ts; keine direkte JSONL-Editierung.
     if (!cleanupHandled) {
-      try { await state.updateWorkorderStatus(wo.workorder_id, 'failed') } catch { /* state-machine validation may reject same-state — non-fatal */ }
+      try { await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed') } catch { /* state-machine validation may reject same-state — non-fatal */ }
       await state.releaseScopeLock(runId)
       await state.releaseDbMigrationLock(runId)
       audit.auditScopeLockReleased({

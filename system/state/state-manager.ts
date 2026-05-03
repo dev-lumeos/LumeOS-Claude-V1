@@ -378,6 +378,69 @@ export async function updateWorkorderStatus(workorderId: string, status: ActiveW
   })
 }
 
+/**
+ * Aktualisiert GENAU einen active_workorders-Eintrag mit exaktem
+ * (workorder_id, run_id)-Match (WO-governance-011).
+ *
+ * Im Gegensatz zu updateWorkorderStatus, das per workorder_id-only matcht,
+ * adressiert dieser Helper run-spezifisch — notwendig wenn dieselbe
+ * workorder_id mehrfach dispatched wurde (Re-Run nach FAIL erzeugt jedesmal
+ * neuen Eintrag via startWorkorder).
+ *
+ * Verhalten:
+ *   - Genau 1 Match + valide Transition → mutiert diesen Eintrag,
+ *     returnt { updated: true }.
+ *   - 0 Matches → { updated: false, reason: 'no match' } (no-op, sicher).
+ *   - >1 Matches (sollte praktisch nie passieren, da run_id eindeutig) →
+ *     { updated: false, reason: 'ambiguous match (N)' } (KEINE Mutation).
+ *   - Invalide Transition → appendInvalidTransition + { updated: false,
+ *     reason: 'invalid transition: <from> → <to>' }.
+ *   - Same-state idempotent über validateWoStatusTransition.
+ *
+ * Atomar via existierendem mutate()-Lock.
+ *
+ * Mutiert NUR den passenden active_workorders-Eintrag — keine Berührung
+ * von scope_locks, db_migration_lock, system_stop, approvals, active_runs.
+ *
+ * Bestehender updateWorkorderStatus bleibt unverändert für Pre-Dispatch-Pfade
+ * ohne runId.
+ */
+export async function updateActiveWorkorderStatusByRun(
+  workorderId: string,
+  runId: string,
+  status: ActiveWorkorder['status'],
+): Promise<{ updated: boolean; reason?: string }> {
+  let outcome: { updated: boolean; reason?: string } = {
+    updated: false,
+    reason:  'unknown',
+  }
+
+  await mutate(s => {
+    const matches = s.active_workorders.filter(
+      w => w.workorder_id === workorderId && w.run_id === runId,
+    )
+    if (matches.length === 0) {
+      outcome = { updated: false, reason: 'no match' }
+      return
+    }
+    if (matches.length > 1) {
+      outcome = { updated: false, reason: `ambiguous match (${matches.length})` }
+      return
+    }
+    const target = matches[0]
+    const validation = validateWoStatusTransition(target.status, status)
+    if (!validation.valid) {
+      appendInvalidTransition(workorderId, target.status, status, validation.reason)
+      outcome = { updated: false, reason: `invalid transition: ${target.status} → ${status}` }
+      return
+    }
+    target.status = status
+    outcome = { updated: true }
+  })
+
+  return outcome
+}
+
 export async function lockSpark(node: string, reason: string, lockedBy?: string): Promise<void> {
   await mutate(s => { if (!s.locks.find(l => l.node === node)) s.locks.push({ node, reason, locked_at: new Date().toISOString(), locked_by: lockedBy }) })
 }
