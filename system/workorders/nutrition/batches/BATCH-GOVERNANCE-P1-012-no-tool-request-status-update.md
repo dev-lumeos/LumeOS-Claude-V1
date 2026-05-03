@@ -1,7 +1,7 @@
 # BATCH-GOVERNANCE-P1-012-no-tool-request-status-update
 
 ## Status
-ready_for_approval
+completed
 
 ## Purpose
 Mark no-tool-request completed workorders as `done` in `active_workorders` so `blocked_by` dependencies can progress.
@@ -115,3 +115,17 @@ Run WO-governance-016 through the normal implementation workflow:
 ---
 
 *Batch-Plan erzeugt: 2026-05-03 — gemäß `WO-GOVERNANCE-P1-016-no-tool-request-status-update.md` (Draft) und `REVIEW-WO-GOVERNANCE-P1-016-no-tool-request-status-update.md` (Verdict: PASS, zwei LOW-Findings nicht-blockierend), `BATCH-GOVERNANCE-P1-010-finally-lock-release-on-non-terminal-paths.md` und `BATCH-GOVERNANCE-P1-011-state-history-cleanup.md` als Pattern-Vorlagen.*
+
+---
+
+## Validation Result
+
+- `pnpm tsc --noEmit` → PASS
+- `npx tsx --test system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts` → 34/34 PASS (32 vorher + 2 neue WO-016)
+- `npx tsx system/control-plane/__tests__/smoke-test.ts` → 9/9 PASS
+- `npx tsx --test system/control-plane/__tests__/terminal-wo-reset-cli.test.ts` → 65/65 PASS (Regressions-Check)
+- `npx tsx system/workorders/cli/run-batch.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-001-db-foundation.md --dry-run` → READY_TO_RUN
+- Implementation Review (Spark-D / Senior-Reviewer) → PASS (Scope Compliance PASS, Safety Review PASS)
+- Code commit: `10c3ac6` (`fix(governance): mark no-tool workorders done`)
+
+*Completed: 2026-05-03.*

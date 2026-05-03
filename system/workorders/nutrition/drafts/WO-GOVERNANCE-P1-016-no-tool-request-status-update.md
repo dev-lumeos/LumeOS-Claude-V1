@@ -1,6 +1,6 @@
 # WO-GOVERNANCE-P1-016 — No-Tool-Request Active Workorder Status Update V1
 
-**Status:** draft
+**Status:** closed
 **Phase:** 1 — Governance Tooling
 **Source:** Workflow-Test-Befund Nutrition Batch 001 Final Run nach State Cleanup (alle 6 historischen WO-nutrition-001 active_workorders entfernt via WO-010 + WO-015): `WO-nutrition-001 [dispatched] Dispatcher status: completed` — der Dispatcher liefert weiterhin `'completed'` für den no-tool-request-Pfad, releaset Locks (WO-014) und beendet den Run (`active_runs.status='completed'`), aktualisiert aber NICHT den `active_workorders.status` auf `'done'`. Folge: der frische `RUN-20260503-4291`-Eintrag in `active_workorders` bleibt mit `status: 'dispatched'` zurück, und WO-nutrition-002 trifft Preflight HOLD, weil `blocked_by: ['WO-nutrition-001']` als noch laufend gewertet wird. Das Symptom hat sich von "historische Akkumulation" (WO-015 fix) auf "Live-State pro Run" verschoben — gleiche blocked_by-Resolution-Logik, neuer Trigger.
 **Template:** `system/workorders/templates/template_implementation_medium.md`
@@ -534,3 +534,11 @@ blocked_by:      []
 ---
 
 *Draft erzeugt: 2026-05-03 — gemäß `template_implementation_medium.md`, Workflow-Test-Befund Nutrition Batch 001 Final Run nach WO-015-Closure (frischer dispatched-Eintrag bleibt nach no-tool-request completed liegen, WO-nutrition-002 Preflight HOLD trotz vollständig bereinigtem active_workorders-Stand), und WO-GOVERNANCE-P1-011 + WO-GOVERNANCE-P1-014 als Pattern-Vorlagen für additive Status-Update-Aufrufe ohne Signatur-Änderungen oder neue State-Manager-/Audit-Helper.*
+
+---
+
+## Completion Note
+
+Implementation reviewed PASS. no-tool-request completed path now marks the matching active_workorders entry done via workorder_id + run_id while preserving active_runs completed, lock release, awaiting_approval/review semantics and failure cleanup. Code commit: `10c3ac6`.
+
+*Closed: 2026-05-03.*
