@@ -105,6 +105,10 @@ function pathIsAllowed(rawTarget: string, allowedPatterns: string[]): boolean {
   return allowedPatterns.some(pattern => {
     if (pattern === '__repo_readonly__') return !isRepoReadonlyBlocked(target)
     if (pattern === target)             return true
+    if (pattern.replace(/\\/g, '/').endsWith('/')) {
+      const dir = normalizeRepoPath(pattern)
+      return target.startsWith(dir)
+    }
     return micromatch.isMatch(target, pattern)
   })
 }

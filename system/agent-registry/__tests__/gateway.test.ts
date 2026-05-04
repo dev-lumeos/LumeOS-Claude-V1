@@ -13,7 +13,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import { authorizeToolCall } from '../authorize-tool-call'
+import { authorizeToolCall, isPathInScope } from '../authorize-tool-call'
 import { checkApproval, consumeApproval, createApprovalToken } from '../../approval/approval-gate'
 import { loadSkills } from '../../control-plane/skill-loader'
 import * as state from '../../state/state-manager'
@@ -178,6 +178,48 @@ describe('Permission Gateway — A.2 FILES_BLOCKED + SCOPE Enforcement', () => {
       }
     )
     assert.equal(result.allowed, true)
+  })
+
+  it('Directory-Scope mit trailing slash erlaubt Dateien darunter konsistent', () => {
+    assert.equal(
+      isPathInScope(
+        'supabase/migrations/20240522_001_nutrition_schema_foundation.sql',
+        ['supabase/migrations/'],
+      ),
+      true,
+    )
+  })
+
+  it('Glob-Scope erlaubt Dateien darunter konsistent', () => {
+    assert.equal(
+      isPathInScope(
+        'supabase/migrations/20240522_001_nutrition_schema_foundation.sql',
+        ['supabase/migrations/**'],
+      ),
+      true,
+    )
+  })
+
+  it('Directory-Scope blockiert Geschwister und fremde Pfade', () => {
+    const scope = ['supabase/migrations/']
+    assert.equal(isPathInScope('supabase/seed.sql', scope), false)
+    assert.equal(isPathInScope('services/api/foo.ts', scope), false)
+    assert.equal(isPathInScope('.env', scope), false)
+  })
+
+  it('db-migration-agent: Directory-Scope und Gateway erlauben denselben Migrationspfad', () => {
+    const targetPath = 'supabase/migrations/20240522_001_nutrition_schema_foundation.sql'
+    const result = authorizeToolCall(
+      { agentId: 'db-migration-agent', workorderId: 'WO-nutrition-002', tool: 'write', targetPath },
+      {
+        scope_files: ['supabase/migrations/'],
+        context_files: [],
+        acceptance_files: [],
+        already_written_files: [],
+      },
+    )
+    assert.equal(result.allowed, true, result.reason)
+    assert.equal(isPathInScope(targetPath, ['supabase/migrations/']), true)
   })
 
   it('Read-only Agent (review-agent): Write immer BLOCKED', () => {
