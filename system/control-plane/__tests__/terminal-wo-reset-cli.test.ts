@@ -21,9 +21,11 @@ import os   from 'node:os'
 import {
   getActiveRunByRunId,
   getAllActiveWorkorders,
+  removeExpiredAwaitingApprovalActiveWorkorder,
   removeStaleDispatchedActiveWorkorder,
   removeTerminalActiveWorkorder,
   type ActiveWorkorder,
+  type ApprovalItem,
   type Run,
 } from '../../state/state-manager'
 
@@ -96,6 +98,81 @@ function makeRun(runId: string, woId: string, status: Run['status']): Run {
     status,
     started_at:    isoMinutesAgo(120),
     written_files: [],
+  }
+}
+
+function makeAwaiting(woId: string, runId: string): ActiveWorkorder {
+  return {
+    workorder_id:  woId,
+    run_id:        runId,
+    agent_id:      'micro-executor',
+    status:        'awaiting_approval',
+    dispatched_at: isoMinutesAgo(30),
+  }
+}
+
+function writeApprovalTokens(tokens: Record<string, any>): void {
+  const approvalDir = path.resolve(process.cwd(), 'system/approval')
+  fs.mkdirSync(approvalDir, { recursive: true })
+  fs.writeFileSync(path.join(approvalDir, 'approvals.json'), JSON.stringify(tokens, null, 2), 'utf8')
+}
+
+function writeQueue(queue: Record<string, any>): void {
+  const approvalDir = path.resolve(process.cwd(), 'system/approval')
+  fs.mkdirSync(approvalDir, { recursive: true })
+  fs.writeFileSync(path.join(approvalDir, 'queue.json'), JSON.stringify(queue, null, 2), 'utf8')
+}
+
+function makeToken(
+  approvalId: string,
+  woId: string,
+  runId: string,
+  status: string,
+  expiresAt: string,
+  overrides: Record<string, any> = {},
+): Record<string, any> {
+  return {
+    approval_id: approvalId,
+    run_id: runId,
+    workorder_id: woId,
+    agent_id: 'micro-executor',
+    operation: 'write_docs',
+    scope: ['docs/example.md'],
+    approved_by: 'tom-cli',
+    approved_at: isoMinutesAgo(60),
+    expires_at: expiresAt,
+    single_use: true,
+    use_count: 0,
+    max_uses: 1,
+    requires_post_review: false,
+    status,
+    approval_source: 'queue',
+    approved_tool: 'write',
+    ...overrides,
+  }
+}
+
+function makeApprovalItem(
+  approvalId: string,
+  woId: string,
+  runId: string,
+  status: ApprovalItem['status'],
+  expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+): ApprovalItem {
+  return {
+    approval_id: approvalId,
+    workorder_id: woId,
+    run_id: runId,
+    status,
+    reason: 'test approval',
+    risk_category: 'docs',
+    affected_files: ['docs/example.md'],
+    proposed_action: 'write docs/example.md',
+    requested_by: 'micro-executor',
+    requested_at: isoMinutesAgo(60),
+    expires_at: expiresAt,
+    operation: 'write_docs',
+    tool: 'write',
   }
 }
 
@@ -229,6 +306,265 @@ describe('Terminal-WO-Reset — State-Manager-Helper', () => {
     assert.deepEqual(s.approvals, [])
     assert.deepEqual(s.locks, [])
     assert.deepEqual(s.active_runs, [])
+  })
+})
+
+describe('Expired Approval Cleanup - State-Manager-Helper', () => {
+  before(setupFixture)
+  after(teardownFixture)
+  beforeEach(() => {
+    const auditPath = path.resolve(process.cwd(), 'system/state/audit.jsonl')
+    if (fs.existsSync(auditPath)) fs.unlinkSync(auditPath)
+    const approvalDir = path.resolve(process.cwd(), 'system/approval')
+    if (fs.existsSync(approvalDir)) fs.rmSync(approvalDir, { recursive: true })
+  })
+
+  it('verweigert awaiting_approval mit granted unexpired Token', async () => {
+    writeState([makeAwaiting('WO-exp-001', 'RUN-exp-001')], [
+      makeRun('RUN-exp-001', 'WO-exp-001', 'awaiting_approval'),
+    ])
+    writeApprovalTokens({
+      'APP-exp-001': makeToken(
+        'APP-exp-001',
+        'WO-exp-001',
+        'RUN-exp-001',
+        'granted',
+        new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      ),
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-001', 'RUN-exp-001')
+
+    assert.equal(r.removed, false)
+    assert.match(r.reason ?? '', /usable granted token/)
+    assert.equal(readActiveWorkorders().length, 1, 'state must be unchanged')
+  })
+
+  it('entfernt awaiting_approval mit expired granted Token und laesst active_runs unveraendert', async () => {
+    writeState([makeAwaiting('WO-exp-002', 'RUN-exp-002')], [
+      makeRun('RUN-exp-002', 'WO-exp-002', 'awaiting_approval'),
+    ])
+    writeApprovalTokens({
+      'APP-exp-002': makeToken(
+        'APP-exp-002',
+        'WO-exp-002',
+        'RUN-exp-002',
+        'granted',
+        isoMinutesAgo(5),
+      ),
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-002', 'RUN-exp-002')
+
+    assert.equal(r.removed, true, `expected removal, got ${r.reason}`)
+    assert.equal(r.approvalId, 'APP-exp-002')
+    assert.match(r.reason ?? '', /expired/)
+    assert.equal(readActiveWorkorders().find(w => w.workorder_id === 'WO-exp-002'), undefined)
+    assert.equal(getActiveRunByRunId('RUN-exp-002')?.status, 'awaiting_approval')
+  })
+
+  it('entfernt awaiting_approval mit consumed Token', async () => {
+    writeState([makeAwaiting('WO-exp-003', 'RUN-exp-003')])
+    writeApprovalTokens({
+      'APP-exp-003': makeToken(
+        'APP-exp-003',
+        'WO-exp-003',
+        'RUN-exp-003',
+        'consumed',
+        new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      ),
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-003', 'RUN-exp-003')
+
+    assert.equal(r.removed, true, `expected removal, got ${r.reason}`)
+    assert.equal(readActiveWorkorders().length, 0)
+  })
+
+  it('entfernt awaiting_approval mit denied Token', async () => {
+    writeState([makeAwaiting('WO-exp-004', 'RUN-exp-004')])
+    writeApprovalTokens({
+      'APP-exp-004': makeToken(
+        'APP-exp-004',
+        'WO-exp-004',
+        'RUN-exp-004',
+        'denied',
+        new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      ),
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-004', 'RUN-exp-004')
+
+    assert.equal(r.removed, true, `expected removal, got ${r.reason}`)
+    assert.equal(readActiveWorkorders().length, 0)
+  })
+
+  it('verweigert awaiting_approval mit pending Runtime-Approval', async () => {
+    writeState([makeAwaiting('WO-exp-005', 'RUN-exp-005')])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.approvals = [makeApprovalItem('APP-exp-005', 'WO-exp-005', 'RUN-exp-005', 'pending')]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-005', 'RUN-exp-005')
+
+    assert.equal(r.removed, false)
+    assert.match(r.reason ?? '', /pending approval/)
+    assert.equal(readActiveWorkorders().length, 1, 'state must be unchanged')
+  })
+
+  it('verweigert awaiting_approval mit pending Queue-Approval auch ohne Token', async () => {
+    writeState([makeAwaiting('WO-exp-006', 'RUN-exp-006')])
+    writeQueue({
+      'APP-exp-006': {
+        approval_id: 'APP-exp-006',
+        workorder_id: 'WO-exp-006',
+        run_id: 'RUN-exp-006',
+        agent_id: 'micro-executor',
+        reason: 'test approval',
+        risk_category: 'docs',
+        affected_files: ['docs/example.md'],
+        proposed_action: 'write docs/example.md',
+        status: 'pending',
+        requested_at: isoMinutesAgo(5),
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      },
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-006', 'RUN-exp-006')
+
+    assert.equal(r.removed, false)
+    assert.match(r.reason ?? '', /pending approval/)
+    assert.equal(readActiveWorkorders().length, 1, 'state must be unchanged')
+  })
+
+  it('verweigert running/dispatched/done/failed fuer diesen Cleanup-Pfad', async () => {
+    for (const [status, idx] of (['running', 'dispatched', 'done', 'failed'] as const).map((status, idx) => [status, idx] as const)) {
+      const woId = `WO-exp-status-${idx}`
+      const runId = `RUN-exp-status-${idx}`
+      writeState([
+        { workorder_id: woId, run_id: runId, agent_id: 'micro-executor', status, dispatched_at: isoMinutesAgo(30) },
+      ])
+      writeApprovalTokens({
+        [`APP-exp-status-${idx}`]: makeToken(`APP-exp-status-${idx}`, woId, runId, 'consumed', isoMinutesAgo(5)),
+      })
+
+      const r = await removeExpiredAwaitingApprovalActiveWorkorder(woId, runId)
+
+      assert.equal(r.removed, false, `${status} should be refused`)
+      assert.match(r.reason ?? '', /non-awaiting_approval status/)
+      assert.equal(readActiveWorkorders().length, 1)
+    }
+  })
+
+  it('verweigert awaiting_approval Cleanup wenn Scope-Lock fuer run_id aktiv ist', async () => {
+    writeState([makeAwaiting('WO-exp-007', 'RUN-exp-007')])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.scope_locks = [{
+      run_id: 'RUN-exp-007',
+      scope_files: ['docs/example.md'],
+      locked_at: isoMinutesAgo(1),
+      expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+    }]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+    writeApprovalTokens({
+      'APP-exp-007': makeToken('APP-exp-007', 'WO-exp-007', 'RUN-exp-007', 'consumed', isoMinutesAgo(5)),
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-007', 'RUN-exp-007')
+
+    assert.equal(r.removed, false)
+    assert.match(r.reason ?? '', /scope_lock active/)
+    assert.equal(readActiveWorkorders().length, 1)
+  })
+
+  it('verweigert awaiting_approval Cleanup wenn DB-Migration-Lock fuer run_id aktiv ist', async () => {
+    writeState([makeAwaiting('WO-exp-008', 'RUN-exp-008')])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.db_migration_lock = {
+      run_id: 'RUN-exp-008',
+      locked_at: isoMinutesAgo(1),
+      expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+    }
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+    writeApprovalTokens({
+      'APP-exp-008': makeToken('APP-exp-008', 'WO-exp-008', 'RUN-exp-008', 'consumed', isoMinutesAgo(5)),
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-008', 'RUN-exp-008')
+
+    assert.equal(r.removed, false)
+    assert.match(r.reason ?? '', /db_migration_lock active/)
+    assert.equal(readActiveWorkorders().length, 1)
+  })
+})
+
+describe('Expired Approval Cleanup - CLI clear-expired-approval', () => {
+  before(setupFixture)
+  after(teardownFixture)
+  beforeEach(() => {
+    const auditPath = path.resolve(process.cwd(), 'system/state/audit.jsonl')
+    if (fs.existsSync(auditPath)) fs.unlinkSync(auditPath)
+    const approvalDir = path.resolve(process.cwd(), 'system/approval')
+    if (fs.existsSync(approvalDir)) fs.rmSync(approvalDir, { recursive: true })
+  })
+
+  it('clear-expired-approval --dry-run zeigt exakt einen Eintrag und mutiert nicht', () => {
+    writeState([makeAwaiting('WO-exp-cli-001', 'RUN-exp-cli-001')])
+    writeApprovalTokens({
+      'APP-exp-cli-001': makeToken('APP-exp-cli-001', 'WO-exp-cli-001', 'RUN-exp-cli-001', 'granted', isoMinutesAgo(5)),
+    })
+
+    const before = readActiveWorkorders().length
+    const r = runCli(['clear-expired-approval', 'WO-exp-cli-001', '--run-id', 'RUN-exp-cli-001', '--dry-run'])
+
+    assert.equal(r.code, 0, `stderr=${r.stderr}`)
+    assert.match(r.stdout, /\[DRY-RUN\]/)
+    assert.match(r.stdout, /Would remove 1 expired-approval awaiting_approval entry/)
+    assert.match(r.stdout, /approval_id=APP-exp-cli-001/)
+    assert.equal(readActiveWorkorders().length, before, 'state unchanged after dry-run')
+    assert.equal(readAuditLines().filter(a => a.event === 'expired_approval_workorder_reset').length, 0)
+  })
+
+  it('clear-expired-approval --confirm entfernt Eintrag und schreibt Audit', () => {
+    writeState([makeAwaiting('WO-exp-cli-002', 'RUN-exp-cli-002')])
+    writeApprovalTokens({
+      'APP-exp-cli-002': makeToken('APP-exp-cli-002', 'WO-exp-cli-002', 'RUN-exp-cli-002', 'granted', isoMinutesAgo(5)),
+    })
+
+    const r = runCli(['clear-expired-approval', 'WO-exp-cli-002', '--run-id', 'RUN-exp-cli-002', '--confirm'])
+
+    assert.equal(r.code, 0, `stderr=${r.stderr}`)
+    assert.match(r.stdout, /Removed 1 expired-approval awaiting_approval/)
+    assert.equal(readActiveWorkorders().find(w => w.workorder_id === 'WO-exp-cli-002'), undefined)
+    const audit = readAuditLines().filter(a => a.event === 'expired_approval_workorder_reset')
+    assert.equal(audit.length, 1)
+    assert.equal(audit[0].workorder_id, 'WO-exp-cli-002')
+    assert.equal(audit[0].run_id, 'RUN-exp-cli-002')
+    assert.equal(audit[0].approval_id, 'APP-exp-cli-002')
+    assert.match(audit[0].reason ?? '', /previous_status=awaiting_approval/)
+    assert.equal(audit[0].approved_by, 'test-operator')
+  })
+
+  it('clear-expired-approval verweigert granted unexpired Token', () => {
+    writeState([makeAwaiting('WO-exp-cli-003', 'RUN-exp-cli-003')])
+    writeApprovalTokens({
+      'APP-exp-cli-003': makeToken(
+        'APP-exp-cli-003',
+        'WO-exp-cli-003',
+        'RUN-exp-cli-003',
+        'granted',
+        new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      ),
+    })
+
+    const r = runCli(['clear-expired-approval', 'WO-exp-cli-003', '--run-id', 'RUN-exp-cli-003', '--confirm'])
+
+    assert.equal(r.code, 1)
+    assert.match(r.stderr, /usable granted token/)
+    assert.equal(readActiveWorkorders().length, 1)
   })
 })
 

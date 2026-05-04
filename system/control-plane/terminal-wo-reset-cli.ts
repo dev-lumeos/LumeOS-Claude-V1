@@ -42,12 +42,16 @@ import {
   getActiveRunByRunId,
   getAllActiveWorkorders,
   getOrchestrationMode,
+  evaluateExpiredAwaitingApprovalCleanup,
+  removeExpiredAwaitingApprovalActiveWorkorder,
   removeStaleDispatchedActiveWorkorder,
   removeTerminalActiveWorkorder,
   type ActiveWorkorder,
+  type ExpiredAwaitingApprovalCleanupResult,
   type StaleDispatchedEvidenceKind,
 } from '../state/state-manager'
 import {
+  auditExpiredApprovalWorkorderReset,
   auditStaleDispatchedWorkorderCleanup,
   auditTerminalWorkorderReset,
 } from '../state/audit-writer'
@@ -106,8 +110,9 @@ function printHelp(): void {
   terminal-wo-reset-cli show <workorder_id>
   terminal-wo-reset-cli clear <workorder_id> --run-id <run_id> [--dry-run | --confirm]
   terminal-wo-reset-cli clear-stale-dispatched <workorder_id> --run-id <run_id> [--older-than-minutes <N>] [--dry-run | --confirm]
+  terminal-wo-reset-cli clear-expired-approval <workorder_id> --run-id <run_id> [--dry-run | --confirm]
 
-Default for 'clear' and 'clear-stale-dispatched' without flag is --dry-run (safe).
+Default for mutating commands without flag is --dry-run (safe).
 Mutation requires --confirm.
 
 clear (WO-010):
@@ -124,6 +129,14 @@ clear-stale-dispatched (WO-015):
     3. --older-than-minutes <N> explicitly given AND age > N min AND active_run not running/awaiting.
   Hard refusal if active_run.status is 'running' or 'awaiting_approval'.
   Audit event: 'stale_dispatched_workorder_cleanup' (separate from terminal_workorder_reset).
+
+clear-expired-approval:
+  Clearable status: awaiting_approval (only) with evidence that the dispatcher
+  approval is no longer usable: expired, consumed, denied, or missing while no
+  pending/granted usable runtime/queue approval remains.
+  Hard refusal if a usable granted token exists, a pending approval exists, or
+  scope/db_migration lock for the run is still active.
+  Audit event: 'expired_approval_workorder_reset'.
 
 Exit codes:
   0 = success / read-only OK
@@ -464,6 +477,78 @@ async function cmdClearStaleDispatched(rest: string[]): Promise<number> {
 
 // ─── Main ────────────────────────────────────────────────────────────────────
 
+function describeExpiredApprovalOutcome(outcome: ExpiredAwaitingApprovalCleanupResult): string {
+  const parts = [
+    outcome.approvalId ? `approval_id=${outcome.approvalId}` : 'approval_id=<none>',
+    outcome.tokenStatus ? `token_status=${outcome.tokenStatus}` : undefined,
+    outcome.tokenExpiresAt ? `token_expires_at=${outcome.tokenExpiresAt}` : undefined,
+    outcome.reason ? `reason=${outcome.reason}` : undefined,
+  ].filter(Boolean)
+  return parts.join(', ')
+}
+
+async function cmdClearExpiredApproval(rest: string[]): Promise<number> {
+  const parsed = parseClearArgs(rest)
+  if ('message' in parsed) {
+    console.error(`Error: ${parsed.message}`)
+    printHelp()
+    return 1
+  }
+  const { workorderId, runId, mode } = parsed
+
+  const evaluation = evaluateExpiredAwaitingApprovalCleanup(workorderId, runId)
+  if (!evaluation.entry && evaluation.reason === 'no match') {
+    console.error(`No match for workorder_id=${workorderId} run_id=${runId}`)
+    return 2
+  }
+  if (!evaluation.removed) {
+    console.error(`Refused: ${evaluation.reason ?? 'cleanup not safe'}`)
+    if (evaluation.entry) console.error(formatEntry(evaluation.entry))
+    return 1
+  }
+
+  const target = evaluation.entry
+  if (!target) {
+    console.error(`No match for workorder_id=${workorderId} run_id=${runId}`)
+    return 2
+  }
+
+  if (mode === 'dry-run') {
+    console.log(`[DRY-RUN] Would remove 1 expired-approval awaiting_approval entry:`)
+    console.log(formatEntry(target))
+    console.log(`Evidence: ${describeExpiredApprovalOutcome(evaluation)}`)
+    console.log('No state mutation performed. No audit event written.')
+    console.log('Use --confirm to actually remove this entry.')
+    return 0
+  }
+
+  const operator = process.env.LUMEOS_OPERATOR ?? 'operator'
+  auditExpiredApprovalWorkorderReset({
+    run_id:             runId,
+    workorder_id:       workorderId,
+    agent_id:           target.agent_id,
+    orchestration_mode: getOrchestrationMode(),
+    approval_id:        evaluation.approvalId,
+    reason:             `operator-initiated cleanup of expired/unusable approval awaiting_approval active_workorders entry; previous_status=${target.status}; ${describeExpiredApprovalOutcome(evaluation)}`,
+    approved_by:        operator,
+  })
+
+  const outcome = await removeExpiredAwaitingApprovalActiveWorkorder(workorderId, runId)
+  if (outcome.removed) {
+    console.log(`Removed 1 expired-approval awaiting_approval active_workorders entry:`)
+    console.log(formatEntry(target))
+    console.log(`Evidence: ${describeExpiredApprovalOutcome(outcome)}`)
+    console.log(`Audit event 'expired_approval_workorder_reset' written to system/state/audit.jsonl.`)
+    return 0
+  }
+  if (outcome.reason === 'no match') {
+    console.error(`Race: entry vanished between check and mutation (workorder_id=${workorderId} run_id=${runId})`)
+    return 2
+  }
+  console.error(`Refused by state-manager: ${outcome.reason ?? 'unknown'}`)
+  return 1
+}
+
 async function main(): Promise<number> {
   const argv = process.argv.slice(2)
   const sub  = argv[0]
@@ -479,6 +564,7 @@ async function main(): Promise<number> {
     case 'show':  return cmdShow(rest[0])
     case 'clear': return await cmdClear(rest)
     case 'clear-stale-dispatched': return await cmdClearStaleDispatched(rest)
+    case 'clear-expired-approval': return await cmdClearExpiredApproval(rest)
     case '--help':
     case '-h':
     case 'help':

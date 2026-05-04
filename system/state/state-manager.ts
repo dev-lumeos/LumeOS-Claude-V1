@@ -564,6 +564,205 @@ export async function removeStaleDispatchedActiveWorkorder(
   return outcome
 }
 
+interface ApprovalTokenLike {
+  approval_id: string
+  run_id?: string
+  workorder_id?: string
+  status?: ApprovalStatus
+  expires_at?: string
+  single_use?: boolean
+  use_count?: number
+  max_uses?: number
+}
+
+interface ApprovalQueueLike {
+  approval_id: string
+  run_id?: string
+  workorder_id?: string
+  status?: ApprovalStatus
+  expires_at?: string
+}
+
+export interface ExpiredAwaitingApprovalCleanupResult {
+  removed: boolean
+  entry?: ActiveWorkorder
+  reason?: string
+  approvalId?: string
+  tokenStatus?: string
+  tokenExpiresAt?: string
+}
+
+function readApprovalQueueForCleanup(): Record<string, ApprovalQueueLike> {
+  const queuePath = path.resolve(process.cwd(), 'system/approval/queue.json')
+  if (!fs.existsSync(queuePath)) return {}
+  try { return JSON.parse(fs.readFileSync(queuePath, 'utf8')) }
+  catch { return {} }
+}
+
+function approvalRecordMatches(
+  record: { workorder_id?: string; run_id?: string },
+  workorderId: string,
+  runId: string,
+): boolean {
+  return record.workorder_id === workorderId && record.run_id === runId
+}
+
+function approvalUsable(record: { status?: ApprovalStatus; expires_at?: string; single_use?: boolean; use_count?: number; max_uses?: number }): boolean {
+  if (record.status === 'pending') return !record.expires_at || Date.now() < new Date(record.expires_at).getTime()
+  if (record.status !== 'granted') return false
+  if (record.expires_at && Date.now() > new Date(record.expires_at).getTime()) return false
+  if (record.single_use && (record.use_count ?? 0) >= (record.max_uses ?? 1)) return false
+  return true
+}
+
+function unusableApprovalReason(token: ApprovalTokenLike): string {
+  if (token.status === 'granted' && token.expires_at && Date.now() > new Date(token.expires_at).getTime())
+    return `approval token expired: approval_id=${token.approval_id}, expires_at=${token.expires_at}`
+  if (token.status === 'granted' && token.single_use && (token.use_count ?? 0) >= (token.max_uses ?? 1))
+    return `approval token consumed by use_count: approval_id=${token.approval_id}, use_count=${token.use_count ?? 0}, max_uses=${token.max_uses ?? 1}`
+  return `approval token status unusable: approval_id=${token.approval_id}, status=${token.status ?? 'unknown'}`
+}
+
+function evaluateExpiredAwaitingApprovalCleanupInState(
+  s: RuntimeState,
+  workorderId: string,
+  runId: string,
+): ExpiredAwaitingApprovalCleanupResult {
+  const matches = s.active_workorders.filter(
+    w => w.workorder_id === workorderId && w.run_id === runId,
+  )
+  if (matches.length === 0) return { removed: false, reason: 'no match' }
+  if (matches.length > 1) return { removed: false, reason: `ambiguous match (${matches.length})` }
+
+  const target = matches[0]
+  if (target.status !== 'awaiting_approval') {
+    return {
+      removed: false,
+      entry: target,
+      reason: `non-awaiting_approval status: ${target.status}`,
+    }
+  }
+
+  const now = Date.now()
+  const activeScopeLock = (s.scope_locks ?? []).find(
+    l => l.run_id === runId && new Date(l.expires_at).getTime() > now,
+  )
+  if (activeScopeLock) {
+    return { removed: false, entry: target, reason: `scope_lock active for run_id=${runId}` }
+  }
+
+  const dbLock = s.db_migration_lock
+  if (dbLock?.run_id === runId && new Date(dbLock.expires_at).getTime() > now) {
+    return { removed: false, entry: target, reason: `db_migration_lock active for run_id=${runId}` }
+  }
+
+  const tokens = Object.values(readApprovalTokens()) as ApprovalTokenLike[]
+  const matchingTokens = tokens.filter(t => approvalRecordMatches(t, workorderId, runId))
+  const usableToken = matchingTokens.find(approvalUsable)
+  if (usableToken) {
+    return {
+      removed: false,
+      entry: target,
+      approvalId: usableToken.approval_id,
+      tokenStatus: usableToken.status,
+      tokenExpiresAt: usableToken.expires_at,
+      reason: `usable granted token exists: approval_id=${usableToken.approval_id}`,
+    }
+  }
+
+  const runtimeApproval = s.approvals.find(a => approvalRecordMatches(a, workorderId, runId) && approvalUsable(a))
+  if (runtimeApproval) {
+    const kind = runtimeApproval.status === 'pending' ? 'pending approval' : 'usable runtime approval'
+    return {
+      removed: false,
+      entry: target,
+      approvalId: runtimeApproval.approval_id,
+      tokenStatus: runtimeApproval.status,
+      tokenExpiresAt: runtimeApproval.expires_at,
+      reason: `${kind} exists: approval_id=${runtimeApproval.approval_id}`,
+    }
+  }
+
+  const queueApprovals = Object.values(readApprovalQueueForCleanup())
+  const queueApproval = queueApprovals.find(a => approvalRecordMatches(a, workorderId, runId) && approvalUsable(a))
+  if (queueApproval && matchingTokens.length === 0) {
+    const kind = queueApproval.status === 'pending' ? 'pending approval' : 'usable queue approval'
+    return {
+      removed: false,
+      entry: target,
+      approvalId: queueApproval.approval_id,
+      tokenStatus: queueApproval.status,
+      tokenExpiresAt: queueApproval.expires_at,
+      reason: `${kind} exists: approval_id=${queueApproval.approval_id}`,
+    }
+  }
+
+  const token = matchingTokens[0]
+  if (token) {
+    return {
+      removed: true,
+      entry: target,
+      approvalId: token.approval_id,
+      tokenStatus: token.status,
+      tokenExpiresAt: token.expires_at,
+      reason: unusableApprovalReason(token),
+    }
+  }
+
+  const staleApproval = s.approvals.find(a => approvalRecordMatches(a, workorderId, runId))
+    ?? queueApprovals.find(a => approvalRecordMatches(a, workorderId, runId))
+  if (staleApproval) {
+    return {
+      removed: true,
+      entry: target,
+      approvalId: staleApproval.approval_id,
+      tokenStatus: staleApproval.status,
+      tokenExpiresAt: staleApproval.expires_at,
+      reason: `approval no longer usable: approval_id=${staleApproval.approval_id}, status=${staleApproval.status ?? 'unknown'}`,
+    }
+  }
+
+  return {
+    removed: true,
+    entry: target,
+    reason: 'no usable approval token, runtime approval, or queue approval remains for awaiting_approval entry',
+  }
+}
+
+export function evaluateExpiredAwaitingApprovalCleanup(
+  workorderId: string,
+  runId: string,
+): ExpiredAwaitingApprovalCleanupResult {
+  return evaluateExpiredAwaitingApprovalCleanupInState(readState(), workorderId, runId)
+}
+
+/**
+ * Entfernt GENAU einen active_workorders-Eintrag mit Status awaiting_approval,
+ * wenn die zugehoerige Dispatcher-Approval nicht mehr verwendbar ist.
+ *
+ * Mutiert NUR active_workorders. Keine Beruehrung von active_runs, approvals,
+ * approvals.json, queue.json, locks oder system_stop. Locks werden nur als
+ * aktive Safety-Blocker gelesen.
+ */
+export async function removeExpiredAwaitingApprovalActiveWorkorder(
+  workorderId: string,
+  runId: string,
+): Promise<ExpiredAwaitingApprovalCleanupResult> {
+  let outcome: ExpiredAwaitingApprovalCleanupResult = { removed: false, reason: 'unknown' }
+  await mutate(s => {
+    const evaluation = evaluateExpiredAwaitingApprovalCleanupInState(s, workorderId, runId)
+    if (!evaluation.removed) {
+      outcome = evaluation
+      return
+    }
+    s.active_workorders = s.active_workorders.filter(
+      w => !(w.workorder_id === workorderId && w.run_id === runId),
+    )
+    outcome = evaluation
+  })
+  return outcome
+}
+
 export async function updateWorkorderStatus(workorderId: string, status: ActiveWorkorder['status']): Promise<void> {
   await mutate(s => {
     const wo = s.active_workorders.find(w => w.workorder_id === workorderId)
