@@ -59,7 +59,7 @@
   },
 
   "db-migration-agent": {
-    "read": ["supabase/**", "db/**", "packages/types/**"],
+    "read": ["supabase/**", "db/**", "packages/types/**", "$WORKORDER.context_files"],
     "write": ["supabase/migrations/**", "db/migrations/**"],
     "bash": ["pnpm tsc --noEmit", "supabase db diff", "supabase migration list"],
     "limits": {

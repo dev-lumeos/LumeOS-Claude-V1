@@ -22,7 +22,7 @@ import os   from 'node:os'
 import { dispatchWorkorder, defaultExecuteTool } from '../dispatcher'
 import { buildSystemPrompt } from '../skill-loader'
 import * as state from '../../state/state-manager'
-import { getApproval, grantApprovalForDispatch } from '../../approval/approval-queue'
+import { getApproval, getPendingApprovals, grantApprovalForDispatch } from '../../approval/approval-queue'
 
 // ─── Test Fixture Setup ──────────────────────────────────────────────────────
 
@@ -80,7 +80,7 @@ function setupFixture(): void {
       mcp: { filesystem: true, serena: true, supabase: false, context7: true },
     },
     'db-migration-agent': {
-      read: ['supabase/**', 'db/**'],
+      read: ['supabase/**', 'db/**', '$WORKORDER.context_files'],
       write: ['supabase/migrations/**', 'db/migrations/**'],
       bash: ['pnpm tsc --noEmit'],
       limits: { env_access: false, requires_human_approval: true },
@@ -784,6 +784,41 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
   })
 
   it('WO-014 E-2: approval-gate awaiting_approval path releases scope_lock', async () => {
+    fs.mkdirSync(`${TEST_DIR}/docs/specs/Nutrition/01_current_specs`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md`, '# schema spec')
+
+    const readOnlyOutput = JSON.stringify({
+      selected_agent:  'db-migration-agent',
+      risk_level:      'high',
+      risks:           ['db schema context read'],
+      execution_order: ['read_context'],
+      required_gates:  ['human-approval-gate', 'review-gate', 'db-migration-gate', 'rollback-gate', 'typecheck-gate', 'test-gate', 'files-scope-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'read',
+      targetPath: 'docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md',
+    })
+
+    const readWo = makeWO({
+      workorder_id:  'WO-db-001',
+      agent_id:      'db-migration-agent',
+      scope_files:   ['supabase/migrations/'],
+      context_files: ['docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md'],
+      risk_category: 'db-migration',
+      rollback_hint: 'Rollback required before writes.',
+    })
+
+    const readResult = await dispatchWorkorder(readWo as any, {
+      callModel: async () => readOnlyOutput,
+      executeTool: defaultExecuteTool,
+    })
+
+    assert.equal(readResult.status, 'completed', readResult.error)
+    assert.equal(getPendingApprovals().length, 0)
+    const readWoEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === readWo.workorder_id && w.run_id === readResult.run_id,
+    )
+    assert.equal(readWoEntry?.status, 'done')
+
     fs.mkdirSync(`${TEST_DIR}/supabase/migrations`, { recursive: true })
     // Mock liefert OrchestratorIntent + write-Tool auf approval-pflichtigen Pfad (supabase/migrations) OHNE approvalId.
     // → triggert approval-gate Pfad → awaiting_approval.

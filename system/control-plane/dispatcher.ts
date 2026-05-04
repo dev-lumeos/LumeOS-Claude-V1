@@ -196,6 +196,11 @@ function determineApprovalOperation(_agentId: string, req: ToolRequest): string 
   return null
 }
 
+function agentRequiresHumanApprovalForTool(agentDef: any, req: ToolRequest): boolean {
+  if (!agentDef.requires_human_approval) return false
+  return req.tool !== 'read'
+}
+
 export interface ToolRequestWorkorderValidation {
   status: 'PASS' | 'REWRITE'
   reason?: string
@@ -643,7 +648,7 @@ export async function dispatchWorkorder(
 
     // 8. Approval Gate
     const approvalOp    = determineApprovalOperation(wo.agent_id, toolReq)
-    const needsApproval = agentDef.requires_human_approval || approvalOp !== null
+    const needsApproval = approvalOp !== null || agentRequiresHumanApprovalForTool(agentDef, toolReq)
 
     if (needsApproval && !toolReq.approvalId && approvalOp) {
       const grantedApprovalId = findGrantedApprovalForDispatch({
