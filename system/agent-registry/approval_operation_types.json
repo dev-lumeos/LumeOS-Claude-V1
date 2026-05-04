@@ -43,6 +43,14 @@
     "max_uses": 1,
     "expires_minutes": 30
   },
+  "write_docs": {
+    "description": "Dokumentations- oder Audit-Markdown unter docs/ schreiben",
+    "allowed_tools": ["write"],
+    "allowed_paths": ["docs/**"],
+    "requires_post_review": false,
+    "max_uses": 1,
+    "expires_minutes": 60
+  },
   "delete_file": {
     "description": "Datei löschen — exact_command + scope + single_use + audit critical",
     "allowed_tools": ["bash"],

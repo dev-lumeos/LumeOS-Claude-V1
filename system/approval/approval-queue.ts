@@ -92,6 +92,23 @@ function tokenExpiryFor(item: ApprovalQueueItem, opType: any): string {
   return item.expires_at
 }
 
+function normalizeQueuePath(input: string): string | null {
+  const forward = input.replace(/\\/g, '/')
+  if (/^[A-Za-z]:\//.test(forward) || forward.startsWith('/')) return null
+  const normalized = path.posix.normalize(forward)
+  if (normalized === '..' || normalized.startsWith('../')) return null
+  return normalized
+}
+
+function inferApprovalOperation(item: ApprovalQueueItem): string | null {
+  if (item.operation) return item.operation
+  const affected = item.affected_files.map(normalizeQueuePath)
+  const allDocs = affected.length > 0 && affected.every(p => p !== null && (p === 'docs' || p.startsWith('docs/')))
+  const looksLikeWrite = item.tool === 'write' || /^\s*write\b/i.test(item.proposed_action)
+  if (item.risk_category === 'docs' && looksLikeWrite && allDocs) return 'write_docs'
+  return null
+}
+
 function runtimeItemFromQueue(item: ApprovalQueueItem): state.ApprovalItem {
   return {
     approval_id:     item.approval_id,
@@ -210,7 +227,9 @@ export async function grantApprovalForDispatch(
     await state.upsertApprovalItem(runtimeItemFromQueue(item))
     return { ok: false, reason: `Approval abgelaufen: ${approvalId}` }
   }
-  if (!item.operation) return { ok: false, reason: `Operation fehlt: ${approvalId}` }
+  const operation = inferApprovalOperation(item)
+  if (!operation) return { ok: false, reason: `Operation fehlt: ${approvalId}` }
+  item.operation = operation
 
   const opTypes = loadOpTypes()
   const opType = opTypes[item.operation]

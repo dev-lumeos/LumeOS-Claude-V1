@@ -43,6 +43,13 @@ function setupTmpDir(): void {
       max_uses: 1,
       expires_minutes: 15,
     },
+    write_docs: {
+      allowed_tools: ['write'],
+      allowed_paths: ['docs/**'],
+      requires_post_review: false,
+      max_uses: 1,
+      expires_minutes: 60,
+    },
   }))
   process.chdir(tmpDir)
 }
@@ -70,6 +77,18 @@ const TOOL_BASE = {
   affected_files:  ['supabase/migrations/001_test.sql'],
   proposed_action: 'write:supabase/migrations/001_test.sql',
   operation:       'write_migration',
+  tool:            'write',
+}
+
+const DOCS_REVIEW_BASE = {
+  ...BASE,
+  workorder_id:    'WO-aq-docs',
+  run_id:          'RUN-aq-docs',
+  agent_id:        'micro-executor',
+  reason:          'spark-d invalid_json -> Claude needed',
+  risk_category:   'docs',
+  affected_files:  ['docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'],
+  proposed_action: 'write docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md: # Audit Report',
   tool:            'write',
 }
 
@@ -175,6 +194,73 @@ describe('grantApproval', () => {
 
 describe('grantApprovalForDispatch', () => {
   beforeEach(setupTmpDir)
+
+  it('docs write queue grant ohne operation leitet write_docs ab und erzeugt Dispatcher-Token', async () => {
+    const item = enqueueApproval(DOCS_REVIEW_BASE)
+
+    const r = await grantApprovalForDispatch(item.approval_id, 'tom')
+    assert.equal(r.ok, true)
+    if (!r.ok) return
+    assert.equal(r.item.operation, 'write_docs')
+
+    const queueItem = getApproval(item.approval_id)
+    assert.equal(queueItem?.operation, 'write_docs')
+
+    const runtimeItem = state.getApprovalItem(item.approval_id)
+    assert.equal(runtimeItem?.operation, 'write_docs')
+
+    const token = state.readApprovalTokens()[item.approval_id]
+    assert.equal(token.status, 'granted')
+    assert.equal(token.operation, 'write_docs')
+    assert.equal(token.approved_tool, 'write')
+    assert.deepEqual(token.scope, ['docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'])
+
+    const gate = checkApproval({
+      approvalId: item.approval_id,
+      runId: 'RUN-aq-docs-next',
+      workorderId: 'WO-aq-docs',
+      agentId: 'micro-executor',
+      tool: 'write',
+      targetPath: 'docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md',
+    })
+    assert.equal(gate.allowed, true, gate.reason)
+    cleanupTmpDir()
+  })
+
+  it('docs write queue grant blockiert falschen Scope weiterhin', async () => {
+    const item = enqueueApproval(DOCS_REVIEW_BASE)
+    await grantApprovalForDispatch(item.approval_id, 'tom')
+
+    const gate = checkApproval({
+      approvalId: item.approval_id,
+      runId: 'RUN-aq-docs-next',
+      workorderId: 'WO-aq-docs',
+      agentId: 'micro-executor',
+      tool: 'write',
+      targetPath: 'services/nutrition-api/src/index.ts',
+    })
+    assert.equal(gate.allowed, false)
+    assert.equal(gate.blockedBy, 'approval_gate.scope_mismatch')
+    cleanupTmpDir()
+  })
+
+  it('supabase migration queue grant ohne operation wird nicht als docs write abgeleitet', async () => {
+    const item = enqueueApproval({
+      ...DOCS_REVIEW_BASE,
+      workorder_id:   'WO-aq-missing-op',
+      run_id:         'RUN-aq-missing-op',
+      risk_category:  'db-migration',
+      affected_files: ['supabase/migrations/001_test.sql'],
+      proposed_action:'write supabase/migrations/001_test.sql: -- migration',
+    })
+
+    const r = await grantApprovalForDispatch(item.approval_id, 'tom')
+    assert.equal(r.ok, false)
+    if (!r.ok) assert.match(r.reason, /Operation fehlt/)
+    assert.equal(getApproval(item.approval_id)?.status, 'pending')
+    assert.equal(getApproval(item.approval_id)?.operation, undefined)
+    cleanupTmpDir()
+  })
 
   it('pending queue grant erzeugt granted Dispatcher-Token', async () => {
     const item = enqueueApproval(TOOL_BASE)
