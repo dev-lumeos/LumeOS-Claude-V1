@@ -1,6 +1,7 @@
 ---
-
-## name: mealcam-specialist description: MealCam pipeline expert. Use for any task involving the MealCam feature — photo-to-nutrition flow, vision model integration, food recognition, user review UI.
+name: mealcam-specialist
+description: "MealCam pipeline expert. Use for any task involving the MealCam feature - photo-to-nutrition flow, vision model integration, food recognition, user review UI."
+---
 
 # Agent: mealcam-specialist
 

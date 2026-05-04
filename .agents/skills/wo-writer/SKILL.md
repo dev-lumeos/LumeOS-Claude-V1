@@ -1,6 +1,7 @@
 ---
-
-## name: wo-writer description: Brain agent for WO generation. Use when a decomposition spec is ready and needs to be converted into a WO batch for execution.
+name: wo-writer
+description: "Brain agent for WO generation. Use when a decomposition spec is ready and needs to be converted into a WO batch for execution."
+---
 
 # Agent: wo-writer
 

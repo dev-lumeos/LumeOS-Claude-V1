@@ -1,6 +1,7 @@
 ---
-
-## name: supplements-specialist description: Supplements domain expert. Use for any task in the supplements module — stack tracking, dosing protocols, cycle management, interaction checks.
+name: supplements-specialist
+description: "Supplements domain expert. Use for any task in the supplements module - stack tracking, dosing protocols, cycle management, interaction checks."
+---
 
 # Agent: supplements-specialist
 

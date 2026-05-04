@@ -1,6 +1,7 @@
 ---
-
-## name: spec-to-decomposition description: Converts a feature spec into a decomposition_spec_v1. Use when ready to break down a spec into implementable subtasks for the WO Factory.
+name: spec-to-decomposition
+description: "Converts a feature spec into a decomposition_spec_v1. Use when ready to break down a spec into implementable subtasks for the WO Factory."
+---
 
 # Skill: spec-to-decomposition
 

@@ -1,6 +1,7 @@
 ---
-
-## name: goals-specialist description: Goals domain expert. Use for the goals module — goal setting, progress tracking, milestones, check-ins, achievement logic.
+name: goals-specialist
+description: "Goals domain expert. Use for the goals module - goal setting, progress tracking, milestones, check-ins, achievement logic."
+---
 
 # Agent: goals-specialist
 

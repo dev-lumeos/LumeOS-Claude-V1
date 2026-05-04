@@ -1,6 +1,7 @@
 ---
-
-## name: security-specialist description: Security expert for code review, RLS policies, auth flows, guardrail validation. Always read-only review mode.
+name: security-specialist
+description: "Security expert for code review, RLS policies, auth flows, guardrail validation. Always read-only review mode."
+---
 
 # Agent: security-specialist
 

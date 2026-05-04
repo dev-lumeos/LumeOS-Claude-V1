@@ -1,6 +1,7 @@
 ---
-
-## name: i18n-specialist description: i18n and localization expert. Use for translation tasks, locale file management, adding new keys, maintaining DE/EN/TH coverage.
+name: i18n-specialist
+description: "i18n and localization expert. Use for translation tasks, locale file management, adding new keys, maintaining DE/EN/TH coverage."
+---
 
 # Agent: i18n-specialist
 

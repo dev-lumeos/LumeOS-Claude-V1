@@ -1,6 +1,7 @@
 ---
-
-## name: supabase-specialist description: Supabase expert. Use for any task involving Supabase DB, RLS, migrations, auth, edge functions, or schema changes.
+name: supabase-specialist
+description: "Supabase expert. Use for any task involving Supabase DB, RLS, migrations, auth, edge functions, or schema changes."
+---
 
 # Agent: supabase-specialist
 
