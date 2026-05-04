@@ -133,6 +133,7 @@ describe('db-migration-agent runtime contract', () => {
     const dispatcher = fs.readFileSync(DISPATCHER, 'utf8')
     assert.match(dispatcher, /qwen3\.6/)
     assert.match(dispatcher, /enable_thinking\s*=\s*false/)
+    assert.match(dispatcher, /response_format\s*=\s*\{\s*type:\s*'json_object'\s*\}/)
   })
 
   it('agent spec does not present the example migration path as a usable targetPath', () => {

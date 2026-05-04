@@ -323,7 +323,10 @@ export async function defaultCallModel(
     max_tokens: 4096,
     messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMessage }],
   }
-  if (routing.model.toLowerCase().includes('qwen3.6')) requestBody.enable_thinking = false
+  if (routing.model.toLowerCase().includes('qwen3.6')) {
+    requestBody.enable_thinking = false
+    requestBody.response_format = { type: 'json_object' }
+  }
   const resp = await fetch(endpoint, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(requestBody),
