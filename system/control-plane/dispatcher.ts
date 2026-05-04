@@ -237,10 +237,16 @@ export async function defaultCallModel(
     'rtx5090': '127.0.0.1',
   }
   const endpoint = `http://${nodeIps[routing.node] ?? '127.0.0.1'}:8001/v1/chat/completions`
+  const requestBody: Record<string, unknown> = {
+    model: routing.model,
+    temperature: routing.temperature,
+    max_tokens: 4096,
+    messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMessage }],
+  }
+  if (routing.model.toLowerCase().includes('qwen3.6')) requestBody.enable_thinking = false
   const resp = await fetch(endpoint, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: routing.model, temperature: routing.temperature, max_tokens: 4096,
-      messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMessage }] }),
+    body: JSON.stringify(requestBody),
   })
   if (!resp.ok) throw new Error(`vLLM Error: ${resp.status} ${resp.statusText}`)
   return ((await resp.json()) as any).choices?.[0]?.message?.content ?? ''
