@@ -34,6 +34,7 @@ function makeDeps(overrides: Partial<PreflightDeps> = {}): PreflightDeps {
     isDbMigrationLocked: () => ({ locked: false }),
     isSystemStopped:     () => ({ stopped: false }),
     loadAgents:          () => ({ 'micro-executor': { type: 'executor' }, 'db-migration-agent': { type: 'db_specialist' } }),
+    hasGrantedApprovalForWorkorder: () => false,
     ...overrides,
   }
 }
@@ -133,6 +134,25 @@ describe('Preflight — HOLD (temporäre Bedingungen)', () => {
   it('WO status awaiting_approval → HOLD', () => {
     const result = runPreflight(BASE_WO, makeDeps({
       getActiveWorkorders: () => [{ workorder_id: 'WO-pf-001', status: 'awaiting_approval' }],
+    }))
+    assert.equal(result.verdict, 'HOLD')
+  })
+
+  it('WO status awaiting_approval + granted Approval → GO', () => {
+    const result = runPreflight(BASE_WO, makeDeps({
+      getActiveWorkorders: () => [{ workorder_id: 'WO-pf-001', status: 'awaiting_approval' }],
+      hasGrantedApprovalForWorkorder: ({ workorderId, agentId }) =>
+        workorderId === 'WO-pf-001' && agentId === 'micro-executor',
+    }))
+    assert.equal(result.verdict, 'GO')
+    const check = result.checks.find(c => c.name === 'wo_not_awaiting_approval')
+    assert.equal(check?.passed, true)
+  })
+
+  it('WO status awaiting_approval + consumed/kein granted Approval → HOLD', () => {
+    const result = runPreflight(BASE_WO, makeDeps({
+      getActiveWorkorders: () => [{ workorder_id: 'WO-pf-001', status: 'awaiting_approval' }],
+      hasGrantedApprovalForWorkorder: () => false,
     }))
     assert.equal(result.verdict, 'HOLD')
   })

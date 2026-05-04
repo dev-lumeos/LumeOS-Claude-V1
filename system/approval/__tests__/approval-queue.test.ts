@@ -15,7 +15,10 @@ import {
   grantApproval, denyApproval, consumeQueueItem, expireStaleApprovals,
   grantApprovalForDispatch,
 } from '../approval-queue'
-import { checkApproval, consumeApproval } from '../approval-gate'
+import {
+  checkApproval, consumeApproval,
+  findGrantedApprovalForDispatch, hasGrantedApprovalForWorkorder,
+} from '../approval-gate'
 import * as state from '../../state/state-manager'
 
 let tmpDir = ''
@@ -186,6 +189,17 @@ describe('grantApprovalForDispatch', () => {
     assert.equal(tokens[item.approval_id].approval_source, 'queue')
     const active = state.getAllActiveWorkorders().find(w => w.workorder_id === item.workorder_id && w.run_id === item.run_id)
     assert.equal(active?.status, 'awaiting_approval')
+    assert.equal(hasGrantedApprovalForWorkorder({
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+    }), true)
+    assert.equal(findGrantedApprovalForDispatch({
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+      operation: 'write_migration',
+      tool: 'write',
+      targetPath: 'supabase/migrations/001_test.sql',
+    }), item.approval_id)
 
     const gate = checkApproval({
       approvalId: item.approval_id,
@@ -213,6 +227,13 @@ describe('grantApprovalForDispatch', () => {
     })
     assert.equal(gate.allowed, false)
     assert.equal(gate.blockedBy, 'approval_gate.scope_mismatch')
+    assert.equal(findGrantedApprovalForDispatch({
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+      operation: 'write_migration',
+      tool: 'write',
+      targetPath: 'supabase/migrations/other.sql',
+    }), null)
     cleanupTmpDir()
   })
 
@@ -249,6 +270,10 @@ describe('grantApprovalForDispatch', () => {
     assert.equal(state.readApprovalTokens()[item.approval_id].status, 'consumed')
     assert.equal(getApproval(item.approval_id)?.status, 'consumed')
     assert.equal(state.getApprovalItem(item.approval_id)?.status, 'consumed')
+    assert.equal(hasGrantedApprovalForWorkorder({
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+    }), false)
 
     const gate = checkApproval({
       approvalId: item.approval_id,

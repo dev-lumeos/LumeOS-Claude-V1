@@ -7,6 +7,7 @@
 import { getServiceClient } from '@lumeos/supabase-clients'
 import type { WorkOrder, WOState, WOPhase } from '@lumeos/wo-core'
 import type { DispatchResult } from '../../../system/control-plane/dispatcher'
+import { hasGrantedApprovalForWorkorder } from '../../../system/approval/approval-gate'
 
 // ─── DB Row Type ──────────────────────────────────────────────────────────────
 // Nur die Felder die wir lesen — kein SELECT * um Transfer klein zu halten.
@@ -46,6 +47,18 @@ interface WorkorderRow {
   created_at:              string
   updated_at:              string
 }
+
+const WORKORDER_SELECT = `
+  wo_id, batch_id, wo_type, agent_type, state, phase,
+  scope_files, task, blocked_by, conflicts_with,
+  acceptance_auto_checks, acceptance_review_checks, acceptance_human_checks,
+  retry_max_attempts, retry_attempt_number, retry_context,
+  failure_class, source_subtask_id,
+  wo_category, wo_module, wo_complexity, wo_risk, db_access,
+  files_allowed, files_blocked, assigned_spark, routing_reason,
+  needs_db_check, requires_schema_change, wo_priority,
+  created_at, updated_at
+`
 
 // ─── Row → WorkOrder ──────────────────────────────────────────────────────────
 
@@ -121,17 +134,7 @@ export async function fetchReadyWOs(): Promise<WorkOrder[]> {
 
   const { data, error } = await supabase
     .from('workorders')
-    .select(`
-      wo_id, batch_id, wo_type, agent_type, state, phase,
-      scope_files, task, blocked_by, conflicts_with,
-      acceptance_auto_checks, acceptance_review_checks, acceptance_human_checks,
-      retry_max_attempts, retry_attempt_number, retry_context,
-      failure_class, source_subtask_id,
-      wo_category, wo_module, wo_complexity, wo_risk, db_access,
-      files_allowed, files_blocked, assigned_spark, routing_reason,
-      needs_db_check, requires_schema_change, wo_priority,
-      created_at, updated_at
-    `)
+    .select(WORKORDER_SELECT)
     .eq('state', 'ready')
     .order('phase',       { ascending: true })
     .order('wo_priority', { ascending: true })
@@ -144,6 +147,37 @@ export async function fetchReadyWOs(): Promise<WorkOrder[]> {
   }
 
   return (data as WorkorderRow[]).map(rowToWorkOrder)
+}
+
+export function filterApprovalResumeCandidates<T extends { wo_id: string; agent_type: string; state: WOState }>(
+  workorders: T[],
+  hasGrantedApproval: (params: { workorderId: string; agentId: string }) => boolean = hasGrantedApprovalForWorkorder,
+): T[] {
+  return workorders.filter(wo => {
+    if (wo.state === 'ready') return true
+    if (wo.state !== 'blocked') return false
+    return hasGrantedApproval({ workorderId: wo.wo_id, agentId: wo.agent_type })
+  })
+}
+
+export async function fetchReadyAndApprovalResumeWOs(): Promise<WorkOrder[]> {
+  const supabase = getServiceClient()
+
+  const { data, error } = await supabase
+    .from('workorders')
+    .select(WORKORDER_SELECT)
+    .in('state', ['ready', 'blocked'])
+    .order('phase',       { ascending: true })
+    .order('wo_priority', { ascending: true })
+    .order('created_at',  { ascending: true })
+    .limit(50)
+
+  if (error) {
+    console.error('[WorkorderRepo] fetchReadyAndApprovalResumeWOs failed:', error.message)
+    return []
+  }
+
+  return filterApprovalResumeCandidates(data as WorkorderRow[]).map(rowToWorkOrder)
 }
 
 /**

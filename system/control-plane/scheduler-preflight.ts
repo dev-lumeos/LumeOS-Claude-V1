@@ -21,6 +21,7 @@ import type { Workorder } from './dispatcher'
 import { checkScopeConflict, isDbMigrationLocked, isSystemStopped } from '../state/state-manager'
 import { inferCategoryFromTask }                   from './risk-categories'
 import { loadPolicy, isAllowedInNightRun }         from './night-run-policy'
+import { hasGrantedApprovalForWorkorder as defaultHasGrantedApprovalForWorkorder } from '../approval/approval-gate'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -54,6 +55,8 @@ export interface PreflightDeps {
   loadAgents:          () => Record<string, any>
   /** C.1: Prüft ob System Stop aktiv ist. */
   isSystemStopped:     () => { stopped: boolean; reason?: string }
+  /** P0-E: Prüft, ob eine awaiting_approval-WO durch Human Grant resume-ready ist. */
+  hasGrantedApprovalForWorkorder: (params: { workorderId: string; agentId: string }) => boolean
 }
 
 function makeDefaultDeps(): PreflightDeps {
@@ -74,6 +77,7 @@ function makeDefaultDeps(): PreflightDeps {
     isDbMigrationLocked,
     isSystemStopped,
     loadAgents,
+    hasGrantedApprovalForWorkorder: defaultHasGrantedApprovalForWorkorder,
   }
 }
 
@@ -160,7 +164,10 @@ function checkWoNotAwaitingApproval(wo: Workorder, deps: PreflightDeps): Preflig
   const name = 'wo_not_awaiting_approval'
   const active = deps.getActiveWorkorders()
   const existing = active.find(w => w.workorder_id === wo.workorder_id)
-  if (existing?.status === 'awaiting_approval')
+  if (existing?.status === 'awaiting_approval' && !deps.hasGrantedApprovalForWorkorder({
+    workorderId: wo.workorder_id,
+    agentId: wo.agent_id,
+  }))
     return { name, passed: false, verdict: 'HOLD', reason: `WO wartet auf Human Approval: ${wo.workorder_id}` }
   return { name, passed: true, verdict: 'GO' }
 }

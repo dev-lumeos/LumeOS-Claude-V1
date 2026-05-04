@@ -31,7 +31,11 @@ import Ajv  from 'ajv'
 
 import * as state  from '../state/state-manager'
 import * as audit  from '../state/audit-writer'
-import { checkApproval, consumeApproval, operationMayRequireApproval } from '../approval/approval-gate'
+import {
+  checkApproval, consumeApproval,
+  findGrantedApprovalForDispatch,
+  operationMayRequireApproval,
+} from '../approval/approval-gate'
 import { authorizeToolCall, isPathInScope } from '../agent-registry/authorize-tool-call'
 import { loadSkills, buildSystemPrompt } from './skill-loader'
 import {
@@ -553,6 +557,18 @@ export async function dispatchWorkorder(
     // 8. Approval Gate
     const approvalOp    = determineApprovalOperation(wo.agent_id, toolReq)
     const needsApproval = agentDef.requires_human_approval || approvalOp !== null
+
+    if (needsApproval && !toolReq.approvalId && approvalOp) {
+      const grantedApprovalId = findGrantedApprovalForDispatch({
+        workorderId: wo.workorder_id,
+        agentId: wo.agent_id,
+        operation: approvalOp,
+        tool: toolReq.tool,
+        targetPath: toolReq.targetPath,
+        command: toolReq.command,
+      })
+      if (grantedApprovalId) toolReq.approvalId = grantedApprovalId
+    }
 
     if (needsApproval && toolReq.approvalId) {
       const gate = checkApproval({ approvalId: toolReq.approvalId, runId, workorderId: wo.workorder_id,

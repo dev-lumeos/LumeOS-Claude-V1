@@ -15,7 +15,7 @@ import { dispatchWorkorder, defaultExecuteTool } from '../../../system/control-p
 import { DispatchLoop } from './dispatch-loop'
 import { createVllmCallModel } from './vllm-adapter'
 import { toDispatcherWorkorder } from './wo-adapter'
-import { fetchReadyWOs, markDispatched, markDispatchResult } from './workorder-repository'
+import { fetchReadyAndApprovalResumeWOs, markDispatched, markDispatchResult } from './workorder-repository'
 import type { NodeId } from './routing'
 
 // ─── Slot Manager ─────────────────────────────────────────────────────────────
@@ -34,7 +34,7 @@ const dispatchLoop = new DispatchLoop(slotManager, {
   intervalMs: 5000,
 
   // ── DB-backed: WOs mit state='ready' aus Supabase ─────────────────────────
-  fetchReadyWOs,
+  fetchReadyWOs: fetchReadyAndApprovalResumeWOs,
 
   // ── State-Update: in Supabase persistieren ────────────────────────────────
   onStateChange: async (wo, newState) => {

@@ -36,6 +36,20 @@ export interface GateResult {
   blockedBy?: string
 }
 
+export interface FindGrantedApprovalParams {
+  workorderId: string
+  agentId:     string
+  operation:   string
+  tool:        string
+  targetPath?: string
+  command?:    string
+}
+
+export interface WorkorderApprovalReadinessParams {
+  workorderId: string
+  agentId:     string
+}
+
 interface CheckParams {
   approvalId:   string
   runId:        string
@@ -118,6 +132,46 @@ export function checkApproval(params: CheckParams): GateResult {
 }
 
 // ─── consumeApproval — erst nach erfolgreicher Tool-Ausführung ────────────────
+
+function tokenCanStillBeUsed(token: ApprovalToken): boolean {
+  if (token.status !== 'granted') return false
+  if (new Date() > new Date(token.expires_at)) return false
+  if (token.single_use && token.use_count >= token.max_uses) return false
+  return true
+}
+
+export function hasGrantedApprovalForWorkorder(params: WorkorderApprovalReadinessParams): boolean {
+  const tokens = state.readApprovalTokens()
+  return Object.values(tokens).some(raw => {
+    const token = raw as ApprovalToken
+    return tokenCanStillBeUsed(token)
+      && token.workorder_id === params.workorderId
+      && token.agent_id === params.agentId
+  })
+}
+
+export function findGrantedApprovalForDispatch(params: FindGrantedApprovalParams): string | null {
+  const tokens = state.readApprovalTokens()
+  for (const [approvalId, raw] of Object.entries(tokens)) {
+    const token = raw as ApprovalToken
+    if (!tokenCanStillBeUsed(token)) continue
+    if (token.workorder_id !== params.workorderId) continue
+    if (token.agent_id !== params.agentId) continue
+    if (token.operation !== params.operation) continue
+
+    const gate = checkApproval({
+      approvalId,
+      runId: token.run_id,
+      workorderId: params.workorderId,
+      agentId: params.agentId,
+      tool: params.tool,
+      targetPath: params.targetPath,
+      command: params.command,
+    })
+    if (gate.allowed) return approvalId
+  }
+  return null
+}
 
 export async function consumeApproval(approvalId: string): Promise<void> {
   const tokens = state.readApprovalTokens()

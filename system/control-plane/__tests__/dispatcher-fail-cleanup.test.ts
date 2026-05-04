@@ -813,7 +813,7 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     assert.equal(woEntry?.status, 'awaiting_approval', `Status muss awaiting_approval sein, war: ${woEntry?.status}`)
   })
 
-  it('P0-D: missing tool approval erzeugt QueueItem; Grant erzeugt Token ohne WO-Status auf dispatched zu setzen', async () => {
+  it('P0-E: missing tool approval erzeugt QueueItem; Folge-Dispatch nutzt granted approval deterministisch', async () => {
     fs.mkdirSync(`${TEST_DIR}/supabase/migrations`, { recursive: true })
 
     const approvalRequestOutput = JSON.stringify({
@@ -860,6 +860,20 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
       w => w.workorder_id === wo.workorder_id && w.run_id === first.run_id,
     )
     assert.equal(woEntry?.status, 'awaiting_approval')
+
+    const second = await dispatchWorkorder({ ...wo } as any, {
+      callModel: async () => approvalRequestOutput,
+      executeTool: defaultExecuteTool,
+      callFastReviewer: async () => JSON.stringify({
+        status: 'PASS', risk: 'LOW', confidence: 0.95,
+        violations: [], recommendations: [], summary: 'approved fixture', requires_claude: false,
+      }),
+    })
+
+    assert.equal(second.status, 'completed', second.error)
+    assert.equal(state.readApprovalTokens()[approvalId].status, 'consumed')
+    assert.equal(getApproval(approvalId)?.status, 'consumed')
+    assert.equal(state.getApprovalItem(approvalId)?.status, 'consumed')
   })
 
   it('WO-014 E-3: review-pipeline rewrite path — lock-release verified by code-inspection', () => {
