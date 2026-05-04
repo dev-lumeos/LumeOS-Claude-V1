@@ -795,7 +795,7 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
       required_gates:  ['human-approval-gate', 'review-gate', 'db-migration-gate', 'rollback-gate', 'typecheck-gate', 'test-gate', 'files-scope-gate'],
       stop_conditions: ['production_execution_without_approval_token'],
       tool: 'read',
-      targetPath: 'docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md',
+      targetPath: 'SPEC_06_DATABASE_SCHEMA.md',
     })
 
     const readWo = makeWO({
@@ -1086,7 +1086,7 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     )
     // Locate the no-tool-request branch and verify the WO-016 status-update appears
     // between endRun(...'completed') and releaseScopeLock — symmetrisch zur WO-014-Reihenfolge.
-    const branchIdx = dispatcherSrc.indexOf('if (!toolReq) {')
+    const branchIdx = dispatcherSrc.indexOf('if (!parsedToolReq) {')
     assert.ok(branchIdx > 0, 'no-tool-request branch must exist in dispatcher.ts')
     const endRunIdx = dispatcherSrc.indexOf("endRun(runId, 'completed')", branchIdx)
     assert.ok(endRunIdx > branchIdx, 'endRun(...,"completed") must follow the if (!toolReq) branch')

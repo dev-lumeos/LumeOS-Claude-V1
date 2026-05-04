@@ -211,6 +211,20 @@ function normalizeTargetPath(targetPath: string): string {
   return targetPath.replace(/\\/g, '/')
 }
 
+function resolveReadTargetPathFromWorkorderContext(req: ToolRequest, wo: Workorder): ToolRequest {
+  if (req.tool !== 'read' || !req.targetPath) return req
+
+  const targetPath = normalizeTargetPath(req.targetPath)
+  if (targetPath.includes('/')) return req
+
+  const matches = wo.context_files
+    .map(normalizeTargetPath)
+    .filter(contextPath => path.posix.basename(contextPath) === targetPath)
+
+  if (matches.length !== 1) return req
+  return { ...req, targetPath: matches[0] }
+}
+
 function isMigrationWriteRequest(req: ToolRequest): boolean {
   if (req.tool !== 'write' || !req.targetPath) return false
   const p = normalizeTargetPath(req.targetPath)
@@ -623,8 +637,8 @@ export async function dispatchWorkorder(
     }
 
     // 6. Tool Request parsen
-    const toolReq = parseToolRequest(modelOutput)
-    if (!toolReq) {
+    const parsedToolReq = parseToolRequest(modelOutput)
+    if (!parsedToolReq) {
       await state.endRun(runId, 'completed')
       // WO-016: mark active_workorders as done so dependents can satisfy blocked_by
       await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'done')
@@ -640,6 +654,7 @@ export async function dispatchWorkorder(
       audit.auditJobCompleted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, duration_ms: Date.now() - jobStart })
       return { status: 'completed', run_id: runId, workorder_id: wo.workorder_id }
     }
+    const toolReq = resolveReadTargetPathFromWorkorderContext(parsedToolReq, wo)
 
     // 7. Audit requested
     audit.writeAuditEvent({ event: 'tool_call_requested', orchestration_mode: orchestrationMode,
