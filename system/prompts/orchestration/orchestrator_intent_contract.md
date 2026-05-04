@@ -49,6 +49,16 @@ If the workorder is **not** approved (no approval token present), you MUST:
 
 ---
 
+## DB-migration gate constraint
+
+If `selected_agent` is `"db-migration-agent"` or the workorder risk/category is DB migration, `required_gates` MUST include all of:
+
+`"db-migration-gate"`, `"rollback-gate"`, `"typecheck-gate"`, `"test-gate"`, `"review-gate"`, `"files-scope-gate"`.
+
+If no approval token is present, `"human-approval-gate"` is also mandatory.
+
+---
+
 ## Production-keyword constraint
 
 `execution_order` MUST NOT contain any of these production-related strings unless the workorder has a granted approval token:

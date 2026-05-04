@@ -12,6 +12,7 @@ import { validateOrchestratorIntent, type OrchestratorIntent } from '../governan
 
 const AGENT_SPEC = path.resolve(process.cwd(), '.claude/agents/db-migration-agent.md')
 const DISPATCHER = path.resolve(process.cwd(), 'system/control-plane/dispatcher.ts')
+const ORCHESTRATOR_CONTRACT = path.resolve(process.cwd(), 'system/prompts/orchestration/orchestrator_intent_contract.md')
 const WO_003 = path.resolve(process.cwd(), 'system/workorders/nutrition/drafts/WO-NUTRITION-P1-003-food-core-tables.md')
 
 function dbMigrationIntent(overrides: Partial<OrchestratorIntent> = {}): OrchestratorIntent {
@@ -111,6 +112,21 @@ describe('db-migration-agent runtime contract', () => {
     assert.equal(validation.status, 'REWRITE')
     assert.equal(validation.field, 'required_gates')
     assert.match(validation.reason ?? '', /test-gate/)
+  })
+
+  it('orchestrator contract states the full DB migration gate set', () => {
+    const contract = fs.readFileSync(ORCHESTRATOR_CONTRACT, 'utf8')
+    for (const gate of [
+      'db-migration-gate',
+      'rollback-gate',
+      'typecheck-gate',
+      'test-gate',
+      'review-gate',
+      'files-scope-gate',
+      'human-approval-gate',
+    ]) {
+      assert.match(contract, new RegExp(gate))
+    }
   })
 
   it('default model caller disables thinking for Qwen3.6 routes', () => {
