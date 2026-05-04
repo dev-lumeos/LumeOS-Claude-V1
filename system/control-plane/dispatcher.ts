@@ -59,6 +59,7 @@ const MAX_REWRITE_LOOPS = 2
 
 // V2: Auto-Retry — maximale Worker-Neustarts bei Pipeline-REWRITE
 const MAX_WORKER_RETRIES = 2
+const MAX_READ_TOOL_CONTINUATIONS = 8
 
 // High-Risk-Kategorien: isAutoRetryAllowed() aus risk-categories.ts (Single Source of Truth)
 
@@ -484,6 +485,8 @@ export async function dispatchWorkorder(
     // Harte Regeln: kein Retry bei High-Risk-Kategorien, max MAX_WORKER_RETRIES.
     let workerRetryCount = 0
     let workerTask = wo.task
+    let readContinuationCount = 0
+    const readContinuationTargets = new Set<string>()
 
     workerRetryLoop: while (true) {
 
@@ -767,6 +770,33 @@ export async function dispatchWorkorder(
 
     // 11. State + Approval NUR bei Erfolg
     if (toolResult.success) {
+      if (toolReq.tool === 'read') {
+        const readTarget = toolReq.targetPath ?? '<unknown>'
+        if (readContinuationTargets.has(readTarget)) {
+          await state.endRun(runId, 'blocked')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
+          return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
+            error: `READ_LOOP_BLOCKED: repeated read target ${readTarget}` }
+        }
+        readContinuationTargets.add(readTarget)
+        readContinuationCount++
+        if (readContinuationCount > MAX_READ_TOOL_CONTINUATIONS) {
+          await state.endRun(runId, 'blocked')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
+          return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
+            error: `READ_LOOP_BLOCKED: max read continuations exceeded (${MAX_READ_TOOL_CONTINUATIONS})` }
+        }
+
+        workerTask =
+          `${workerTask}\n\n` +
+          `<tool_result tool="read" targetPath="${readTarget}">\n` +
+          `${String(toolResult.output ?? '').slice(0, 40_000)}\n` +
+          `</tool_result>\n\n` +
+          `Continue the same workorder using the loaded context. ` +
+          `Do not request the same read target again. Emit the next ToolRequest if a write is required, ` +
+          `or emit a complete OrchestratorIntent without a ToolRequest only when the workorder is actually complete.`
+        continue workerRetryLoop
+      }
 
       // 11a-pre. A.2: Post-Execution Scope-Check (Defense in Depth)
       // Sekundäre Absicherung: nach executeTool() prüfen ob targetPath in scope_files liegt.

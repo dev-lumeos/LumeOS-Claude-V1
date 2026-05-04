@@ -797,6 +797,14 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
       tool: 'read',
       targetPath: 'SPEC_06_DATABASE_SCHEMA.md',
     })
+    const afterReadOutput = JSON.stringify({
+      selected_agent:  'db-migration-agent',
+      risk_level:      'high',
+      risks:           ['db schema context read complete'],
+      execution_order: ['context_loaded'],
+      required_gates:  ['human-approval-gate', 'review-gate', 'db-migration-gate', 'rollback-gate', 'typecheck-gate', 'test-gate', 'files-scope-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+    })
 
     const readWo = makeWO({
       workorder_id:  'WO-db-001',
@@ -807,12 +815,17 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
       rollback_hint: 'Rollback required before writes.',
     })
 
+    let readCallCount = 0
     const readResult = await dispatchWorkorder(readWo as any, {
-      callModel: async () => readOnlyOutput,
+      callModel: async () => {
+        readCallCount++
+        return readCallCount === 1 ? readOnlyOutput : afterReadOutput
+      },
       executeTool: defaultExecuteTool,
     })
 
     assert.equal(readResult.status, 'completed', readResult.error)
+    assert.equal(readCallCount, 2)
     assert.equal(getPendingApprovals().length, 0)
     const readWoEntry = state.getAllActiveWorkorders().find(
       w => w.workorder_id === readWo.workorder_id && w.run_id === readResult.run_id,
