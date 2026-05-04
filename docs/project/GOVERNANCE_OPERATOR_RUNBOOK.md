@@ -144,3 +144,5 @@ Commands such as `run-summary-generator --all` can dirty report outputs. Run sta
 - `DONE`: no active batch workorders remain and every expected output inferred from the batch WOs exists.
 
 The operator must distinguish cleared runtime blockers from true batch completion. If no active workorders remain but expected outputs are missing, the batch is not `DONE`; continue mode should select the first incomplete workorder instead of redispatching the whole batch.
+
+When a selected incomplete workorder has `blocked_by` dependencies whose expected outputs already exist, the operator may treat those specific blockers as resolved for that selected dispatch. Unresolved blockers must remain blocking.

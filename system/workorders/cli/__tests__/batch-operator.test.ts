@@ -247,6 +247,18 @@ describe('batch operator status', () => {
     assert.equal(runnable?.workorders[0].parsed.workorder_id, 'WO-test-002')
   })
 
+  it('removes completed blockers from selected incomplete workorder', () => {
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+    const runnable = selectRunnableBatch(batchPath(), status)
+
+    assert.equal(runnable?.workorders.length, 1)
+    assert.equal(runnable?.workorders[0].parsed.workorder_id, 'WO-test-003')
+    assert.deepEqual(runnable?.workorders[0].parsed.blocked_by, [])
+  })
+
   it('reports active approval and exact grant command', () => {
     writeQueue({
       'APP-test-001': {

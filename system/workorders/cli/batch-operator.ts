@@ -680,10 +680,26 @@ export function selectRunnableBatch(batchPathInput: string, status: OperatorStat
   if (!incomplete) return null
   const workorder = batch.workorders.find(w => w.parsed.workorder_id === incomplete.workorderId)
   if (!workorder) return null
+  const completed = new Set(
+    status.workorderCompletions
+      .filter(w => w.complete)
+      .map(w => w.workorderId),
+  )
+  const blockedBy = Array.isArray(workorder.parsed.blocked_by)
+    ? workorder.parsed.blocked_by.filter((blocker): blocker is string => typeof blocker === 'string')
+    : []
+  const unresolvedBlockers = blockedBy.filter(blocker => !completed.has(blocker))
+  const runnableWorkorder: LoadedWorkorder = {
+    ...workorder,
+    parsed: {
+      ...workorder.parsed,
+      blocked_by: unresolvedBlockers,
+    },
+  }
   return {
     ...batch,
     entries: batch.entries.filter(entry => entry.workorder_id === incomplete.workorderId),
-    workorders: [workorder],
+    workorders: [runnableWorkorder],
   }
 }
 
