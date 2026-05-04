@@ -60,6 +60,12 @@ export interface ApprovalItem {
   affected_files?:  string[]
   /** C.2: Was der Agent konkret tun will */
   proposed_action?: string
+  /** P0-D: Approval operation used to mint dispatcher tokens. */
+  operation?:       string
+  /** P0-D: Tool constrained by the human approval. */
+  tool?:            'read' | 'write' | 'bash' | 'mcp' | string
+  /** P0-D: Exact command required for command approvals. */
+  exact_command?:   string
   /** C.2: Welcher Agent die Approval angefordert hat */
   requested_by?:    string
   requested_at?:    string
@@ -659,6 +665,14 @@ function appendInvalidApprovalTransition(approvalId: string, from: ApprovalStatu
 
 export async function addApprovalRef(ref: ApprovalItem): Promise<void> { await mutate(s => { s.approvals.push(ref) }) }
 
+export async function upsertApprovalItem(item: ApprovalItem): Promise<void> {
+  await mutate(s => {
+    const existing = s.approvals.find(a => a.approval_id === item.approval_id)
+    if (existing) Object.assign(existing, item)
+    else s.approvals.push(item)
+  })
+}
+
 /** C.2: updateApprovalStatus mit State-Machine-Enforcement. Illegale Übergänge werden blockiert + auditiert. */
 export async function updateApprovalStatus(approvalId: string, status: ApprovalStatus): Promise<void> {
   await mutate(s => {
@@ -683,6 +697,9 @@ export interface CreatePendingApprovalParams {
   proposed_action: string
   requested_by:    string
   approval_id?:    string
+  operation?:      string
+  tool?:           string
+  exact_command?:  string
 }
 
 /** Erzeugt ein neues pending ApprovalItem in runtime_state.approvals[]. TTL = 24h. */
@@ -694,6 +711,7 @@ export async function createPendingApproval(params: CreatePendingApprovalParams)
     approval_id, workorder_id: params.workorder_id, run_id: params.run_id, status: 'pending',
     reason: params.reason, risk_category: params.risk_category, affected_files: params.affected_files,
     proposed_action: params.proposed_action, requested_by: params.requested_by,
+    operation: params.operation, tool: params.tool, exact_command: params.exact_command,
     requested_at: now.toISOString(), expires_at: new Date(now.getTime() + DEFAULT_APPROVAL_TTL_MS).toISOString(),
   }
   await mutate(s => { s.approvals.push(item) })

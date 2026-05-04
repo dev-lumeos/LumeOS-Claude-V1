@@ -15,6 +15,8 @@
 
 import fs   from 'node:fs'
 import path from 'node:path'
+import * as state from '../state/state-manager'
+import * as audit from '../state/audit-writer'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -33,6 +35,12 @@ export interface ApprovalQueueItem {
   affected_files:  string[]
   /** Was der Agent konkret tun will */
   proposed_action: string
+  /** Approval operation used by approval-gate.ts. */
+  operation?:       string
+  /** Tool constrained by the human grant. */
+  tool?:            'read' | 'write' | 'bash' | 'mcp' | string
+  /** Exact command for command approvals. */
+  exact_command?:   string
   status:          ApprovalStatus
   requested_at:    string
   expires_at:      string   // TTL: APPROVAL_TTL_MS nach requested_at
@@ -66,6 +74,45 @@ export function validateApprovalTransition(from: ApprovalStatus, to: ApprovalSta
 // ─── Config + I/O ─────────────────────────────────────────────────────────────
 
 const APPROVAL_TTL_MS = 24 * 60 * 60 * 1000   // 24 Stunden
+
+function getOpTypesPath(): string {
+  return path.resolve(process.cwd(), 'system/agent-registry/approval_operation_types.json')
+}
+
+function loadOpTypes(): Record<string, any> {
+  const p = getOpTypesPath()
+  if (!fs.existsSync(p)) return {}
+  try { return JSON.parse(fs.readFileSync(p, 'utf8')) }
+  catch { return {} }
+}
+
+function tokenExpiryFor(item: ApprovalQueueItem, opType: any): string {
+  if (typeof opType?.expires_minutes === 'number')
+    return new Date(Date.now() + opType.expires_minutes * 60_000).toISOString()
+  return item.expires_at
+}
+
+function runtimeItemFromQueue(item: ApprovalQueueItem): state.ApprovalItem {
+  return {
+    approval_id:     item.approval_id,
+    workorder_id:    item.workorder_id,
+    run_id:          item.run_id,
+    status:          item.status,
+    reason:          item.reason,
+    risk_category:   item.risk_category,
+    affected_files:  item.affected_files,
+    proposed_action: item.proposed_action,
+    requested_by:    item.agent_id,
+    requested_at:    item.requested_at,
+    expires_at:      item.expires_at,
+    decided_at:      item.decided_at,
+    decided_by:      item.decided_by,
+    deny_reason:     item.deny_reason,
+    operation:       item.operation,
+    tool:            item.tool,
+    exact_command:   item.exact_command,
+  }
+}
 
 function getQueuePath(): string {
   return path.resolve(process.cwd(), 'system/approval/queue.json')
@@ -149,6 +196,67 @@ export function grantApproval(
   if (!v.valid) return { ok: false, reason: v.reason! }
   item.status = 'granted'; item.decided_at = new Date().toISOString(); item.decided_by = decidedBy
   writeQueue(queue)
+  return { ok: true, item }
+}
+
+export async function grantApprovalForDispatch(
+  approvalId: string, decidedBy = 'human'
+): Promise<{ ok: true; item: ApprovalQueueItem } | { ok: false; reason: string }> {
+  const queue = readQueue()
+  const item  = queue[approvalId]
+  if (!item) return { ok: false, reason: `Nicht gefunden: ${approvalId}` }
+  if (new Date(item.expires_at).getTime() <= Date.now()) {
+    item.status = 'expired'; writeQueue(queue)
+    await state.upsertApprovalItem(runtimeItemFromQueue(item))
+    return { ok: false, reason: `Approval abgelaufen: ${approvalId}` }
+  }
+  if (!item.operation) return { ok: false, reason: `Operation fehlt: ${approvalId}` }
+
+  const opTypes = loadOpTypes()
+  const opType = opTypes[item.operation]
+  if (!opType) return { ok: false, reason: `Unbekannte Operation: ${item.operation}` }
+  if (opType.exact_command_required && !item.exact_command)
+    return { ok: false, reason: `exact_command fehlt: ${approvalId}` }
+
+  const v = validateApprovalTransition(item.status, 'granted')
+  if (!v.valid) return { ok: false, reason: v.reason! }
+
+  item.status = 'granted'
+  item.decided_at = new Date().toISOString()
+  item.decided_by = decidedBy
+  writeQueue(queue)
+
+  const maxUses = typeof opType.max_uses === 'number' ? opType.max_uses : 1
+  await state.writeApprovalToken(approvalId, {
+    approval_id:          approvalId,
+    run_id:               item.run_id,
+    workorder_id:         item.workorder_id,
+    agent_id:             item.agent_id,
+    operation:            item.operation,
+    scope:                item.affected_files,
+    exact_command:        item.exact_command,
+    approved_by:          decidedBy,
+    approved_at:          item.decided_at,
+    expires_at:           tokenExpiryFor(item, opType),
+    single_use:           maxUses === 1,
+    use_count:            0,
+    max_uses:             maxUses,
+    requires_post_review: Boolean(opType.requires_post_review),
+    status:               'granted',
+    correlation_id:       item.workorder_id,
+    approval_source:      'queue',
+    approved_tool:        item.tool,
+  })
+  await state.upsertApprovalItem(runtimeItemFromQueue(item))
+  audit.writeAuditEvent({
+    event: 'approval_queue_granted',
+    orchestration_mode: 'claude_code',
+    approval_id: approvalId,
+    workorder_id: item.workorder_id,
+    agent_id: item.agent_id,
+    approved_by: decidedBy,
+    reason: 'queue grant created dispatcher token',
+  })
   return { ok: true, item }
 }
 

@@ -7,6 +7,7 @@
 import path      from 'node:path'
 import micromatch from 'micromatch'
 import * as state from '../state/state-manager'
+import { consumeQueueItem } from './approval-queue'
 
 export interface ApprovalToken {
   approval_id:          string
@@ -25,6 +26,8 @@ export interface ApprovalToken {
   requires_post_review: boolean
   status:               'pending' | 'granted' | 'denied' | 'expired' | 'consumed'
   correlation_id?:      string
+  approval_source?:     'queue' | 'manual'
+  approved_tool?:       string
 }
 
 export interface GateResult {
@@ -77,9 +80,12 @@ export function checkApproval(params: CheckParams): GateResult {
   if (token.status !== 'granted') return { allowed: false, reason: `Token Status: ${token.status}`, blockedBy: 'approval_gate.status' }
   if (new Date() > new Date(token.expires_at)) return { allowed: false, reason: 'Token abgelaufen', blockedBy: 'approval_gate.expired' }
   if (token.single_use && token.use_count >= token.max_uses) return { allowed: false, reason: 'Token verbraucht', blockedBy: 'approval_gate.consumed' }
-  if (token.run_id !== params.runId)             return { allowed: false, reason: 'run_id mismatch', blockedBy: 'approval_gate.run_mismatch' }
+  if (token.approval_source !== 'queue' && token.run_id !== params.runId)
+    return { allowed: false, reason: 'run_id mismatch', blockedBy: 'approval_gate.run_mismatch' }
   if (token.workorder_id !== params.workorderId) return { allowed: false, reason: 'workorder_id mismatch', blockedBy: 'approval_gate.wo_mismatch' }
   if (token.agent_id !== params.agentId)         return { allowed: false, reason: 'agent_id mismatch', blockedBy: 'approval_gate.agent_mismatch' }
+  if (token.approved_tool && token.approved_tool !== params.tool)
+    return { allowed: false, reason: `Tool ${params.tool} nicht im Token`, blockedBy: 'approval_gate.tool_mismatch' }
 
   const opTypes = loadOpTypes()
   const opType  = opTypes[token.operation]
@@ -125,6 +131,7 @@ export async function consumeApproval(approvalId: string): Promise<void> {
   token.status     = token.use_count >= token.max_uses ? 'consumed' : 'granted'
   await state.writeApprovalToken(approvalId, token)
   await state.updateApprovalStatus(approvalId, token.status)
+  if (token.status === 'consumed') consumeQueueItem(approvalId)
 }
 
 // ─── Token erstellen ─────────────────────────────────────────────────────────

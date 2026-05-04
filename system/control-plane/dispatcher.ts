@@ -566,15 +566,34 @@ export async function dispatchWorkorder(
         return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id, error: gate.reason }
       }
     } else if (needsApproval && !toolReq.approvalId) {
-      // C.2: Pending ApprovalItem in runtime_state.approvals[] erstellen
+      const approvalReason = `${approvalOp ?? toolReq.tool} auf ${toolReq.targetPath ?? toolReq.command ?? 'unbekannt'} erfordert menschliche Genehmigung`
+      const affectedFiles = toolReq.targetPath ? [toolReq.targetPath] : (wo.scope_files ?? [])
+      const proposedAction = `${toolReq.tool}:${toolReq.targetPath ?? toolReq.command ?? ''}`
+      const queuedApproval = enqueueApproval({
+        workorder_id:    wo.workorder_id,
+        run_id:          runId,
+        agent_id:        wo.agent_id,
+        reason:          approvalReason,
+        risk_category:   resolveCategory(wo),
+        affected_files:  affectedFiles,
+        proposed_action: proposedAction,
+        operation:       approvalOp ?? undefined,
+        tool:            toolReq.tool,
+        exact_command:   toolReq.command,
+      })
+      // C.2: Runtime-Spiegel mit derselben approval_id wie die Operator-Queue.
       const pendingApproval = await state.createPendingApproval({
         workorder_id:    wo.workorder_id,
         run_id:          runId,
-        reason:          `${approvalOp ?? toolReq.tool} auf ${toolReq.targetPath ?? toolReq.command ?? 'unbekannt'} erfordert menschliche Genehmigung`,
+        reason:          approvalReason,
         risk_category:   resolveCategory(wo),
-        affected_files:  toolReq.targetPath ? [toolReq.targetPath] : (wo.scope_files ?? []),
-        proposed_action: `${toolReq.tool}:${toolReq.targetPath ?? toolReq.command ?? ''}`,
+        affected_files:  affectedFiles,
+        proposed_action: proposedAction,
         requested_by:    wo.agent_id,
+        approval_id:     queuedApproval.approval_id,
+        operation:       approvalOp ?? undefined,
+        tool:            toolReq.tool,
+        exact_command:   toolReq.command,
       })
       audit.auditApprovalRequested({
         run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
@@ -736,6 +755,9 @@ export async function dispatchWorkorder(
             proposed_action: toolReq.content
               ? `write ${toolReq.targetPath}: ${String(toolReq.content).slice(0, 120)}...`
               : `${toolReq.tool} on ${toolReq.targetPath ?? '(unknown)'}`,
+            operation:       approvalOp ?? undefined,
+            tool:            toolReq.tool,
+            exact_command:   toolReq.command,
           })
           await state.endRun(runId, 'blocked')
           await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'awaiting_approval')

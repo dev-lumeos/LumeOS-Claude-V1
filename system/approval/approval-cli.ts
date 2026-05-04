@@ -5,7 +5,7 @@
  */
 import {
   getPendingApprovals, getAllApprovals, getApproval,
-  grantApproval, denyApproval, expireStaleApprovals,
+  grantApprovalForDispatch, denyApproval, expireStaleApprovals,
   type ApprovalQueueItem,
 } from './approval-queue'
 
@@ -54,7 +54,7 @@ if (!cmd || cmd === 'help') {
   if (!item) { console.error(`Nicht gefunden: ${args[1]}`); process.exit(1) }
   console.log('\n' + fmt(item) + '\n')
 } else if (cmd === 'grant') {
-  const r = grantApproval(args[1], 'tom-cli')
+  const r = await grantApprovalForDispatch(args[1], 'tom-cli')
   if (!r.ok) { console.error(`FEHLER: ${r.reason}`); process.exit(1) }
   console.log(`\n✅ Granted: ${args[1]}\n${fmt(r.item)}\n`)
 } else if (cmd === 'deny') {

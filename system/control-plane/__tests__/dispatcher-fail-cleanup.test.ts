@@ -22,6 +22,7 @@ import os   from 'node:os'
 import { dispatchWorkorder, defaultExecuteTool } from '../dispatcher'
 import { buildSystemPrompt } from '../skill-loader'
 import * as state from '../../state/state-manager'
+import { getApproval, grantApprovalForDispatch } from '../../approval/approval-queue'
 
 // ─── Test Fixture Setup ──────────────────────────────────────────────────────
 
@@ -810,6 +811,55 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
       w => w.workorder_id === 'WO-multidispatch-402' && w.run_id === result.run_id,
     )
     assert.equal(woEntry?.status, 'awaiting_approval', `Status muss awaiting_approval sein, war: ${woEntry?.status}`)
+  })
+
+  it('P0-D: missing tool approval erzeugt QueueItem; Grant erzeugt Token ohne WO-Status auf dispatched zu setzen', async () => {
+    fs.mkdirSync(`${TEST_DIR}/supabase/migrations`, { recursive: true })
+
+    const approvalRequestOutput = JSON.stringify({
+      selected_agent:  'db-migration-agent',
+      risk_level:      'high',
+      risks:           ['db migration without approval'],
+      execution_order: ['await_approval'],
+      required_gates:  ['human-approval-gate', 'review-gate', 'db-migration-gate', 'rollback-gate', 'typecheck-gate', 'test-gate', 'files-scope-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'write',
+      targetPath: 'supabase/migrations/p0d_test.sql',
+      content: 'CREATE TABLE p0d_test (id UUID PRIMARY KEY);',
+    })
+
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-405',
+      agent_id:     'db-migration-agent',
+      scope_files:  ['supabase/migrations/p0d_test.sql'],
+      risk_category: 'standard',
+      rollback_hint: 'DROP TABLE IF EXISTS p0d_test;',
+    })
+
+    const first = await dispatchWorkorder(wo as any, {
+      callModel: async () => approvalRequestOutput,
+      executeTool: defaultExecuteTool,
+    })
+    assert.equal(first.status, 'awaiting_approval')
+
+    const approvalId = first.error?.match(/APPROVAL_REQUIRED: (APP-[A-Z0-9-]+)/)?.[1]
+    assert.ok(approvalId, `approval id expected in ${first.error}`)
+    const queueItem = getApproval(approvalId)
+    assert.ok(queueItem, 'missing approval must be visible in system/approval/queue.json')
+    assert.equal(queueItem?.status, 'pending')
+    assert.equal(queueItem?.operation, 'write_migration')
+    assert.equal(queueItem?.tool, 'write')
+
+    const grant = await grantApprovalForDispatch(approvalId, 'tom-test')
+    assert.equal(grant.ok, true)
+
+    assert.equal(state.readApprovalTokens()[approvalId].status, 'granted')
+    assert.equal(getApproval(approvalId)?.status, 'granted')
+    assert.equal(state.getApprovalItem(approvalId)?.status, 'granted')
+    const woEntry = state.getAllActiveWorkorders().find(
+      w => w.workorder_id === wo.workorder_id && w.run_id === first.run_id,
+    )
+    assert.equal(woEntry?.status, 'awaiting_approval')
   })
 
   it('WO-014 E-3: review-pipeline rewrite path — lock-release verified by code-inspection', () => {

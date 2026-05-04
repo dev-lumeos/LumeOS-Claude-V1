@@ -13,13 +13,34 @@ import {
   validateApprovalTransition, APPROVAL_TRANSITIONS,
   enqueueApproval, getPendingApprovals, getAllApprovals, getApproval,
   grantApproval, denyApproval, consumeQueueItem, expireStaleApprovals,
+  grantApprovalForDispatch,
 } from '../approval-queue'
+import { checkApproval, consumeApproval } from '../approval-gate'
+import * as state from '../../state/state-manager'
 
 let tmpDir = ''
 
 function setupTmpDir(): void {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumeos-aq-'))
   fs.mkdirSync(path.join(tmpDir, 'system', 'approval'), { recursive: true })
+  fs.mkdirSync(path.join(tmpDir, 'system', 'agent-registry'), { recursive: true })
+  fs.mkdirSync(path.join(tmpDir, 'system', 'state'), { recursive: true })
+  fs.writeFileSync(path.join(tmpDir, 'system', 'agent-registry', 'approval_operation_types.json'), JSON.stringify({
+    write_migration: {
+      allowed_tools: ['write'],
+      allowed_paths: ['supabase/migrations/**'],
+      requires_post_review: true,
+      max_uses: 1,
+      expires_minutes: 30,
+    },
+    apply_migration_local: {
+      allowed_tools: ['bash'],
+      exact_command_required: true,
+      requires_post_review: true,
+      max_uses: 1,
+      expires_minutes: 15,
+    },
+  }))
   process.chdir(tmpDir)
 }
 function cleanupTmpDir(): void {
@@ -34,6 +55,19 @@ const BASE = {
   risk_category:   'auth',
   affected_files:  ['services/auth/middleware.ts'],
   proposed_action: 'Add JWT expiry check',
+}
+
+const TOOL_BASE = {
+  ...BASE,
+  workorder_id:    'WO-aq-tool',
+  run_id:          'RUN-aq-original',
+  agent_id:        'db-migration-agent',
+  reason:          'write_migration erfordert menschliche Genehmigung',
+  risk_category:   'db-migration',
+  affected_files:  ['supabase/migrations/001_test.sql'],
+  proposed_action: 'write:supabase/migrations/001_test.sql',
+  operation:       'write_migration',
+  tool:            'write',
 }
 
 // ─── State Machine ─────────────────────────────────────────────────────────────
@@ -132,6 +166,100 @@ describe('grantApproval', () => {
   it('unbekannte ID → ok: false', () => {
     const r = grantApproval('APP-UNKNOWN-999')
     assert.equal(r.ok, false)
+    cleanupTmpDir()
+  })
+})
+
+describe('grantApprovalForDispatch', () => {
+  beforeEach(setupTmpDir)
+
+  it('pending queue grant erzeugt granted Dispatcher-Token', async () => {
+    const item = enqueueApproval(TOOL_BASE)
+    await state.startWorkorder(item.workorder_id, item.agent_id, item.run_id)
+    await state.updateActiveWorkorderStatusByRun(item.workorder_id, item.run_id, 'awaiting_approval')
+
+    const r = await grantApprovalForDispatch(item.approval_id, 'tom')
+    assert.equal(r.ok, true)
+
+    const tokens = state.readApprovalTokens()
+    assert.equal(tokens[item.approval_id].status, 'granted')
+    assert.equal(tokens[item.approval_id].approval_source, 'queue')
+    const active = state.getAllActiveWorkorders().find(w => w.workorder_id === item.workorder_id && w.run_id === item.run_id)
+    assert.equal(active?.status, 'awaiting_approval')
+
+    const gate = checkApproval({
+      approvalId: item.approval_id,
+      runId: 'RUN-aq-redisp-new',
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+      tool: 'write',
+      targetPath: 'supabase/migrations/001_test.sql',
+    })
+    assert.equal(gate.allowed, true, gate.reason)
+    cleanupTmpDir()
+  })
+
+  it('falscher Scope bleibt blockiert', async () => {
+    const item = enqueueApproval(TOOL_BASE)
+    await grantApprovalForDispatch(item.approval_id, 'tom')
+
+    const gate = checkApproval({
+      approvalId: item.approval_id,
+      runId: 'RUN-aq-redisp-new',
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+      tool: 'write',
+      targetPath: 'supabase/migrations/other.sql',
+    })
+    assert.equal(gate.allowed, false)
+    assert.equal(gate.blockedBy, 'approval_gate.scope_mismatch')
+    cleanupTmpDir()
+  })
+
+  it('exact_command mismatch bleibt blockiert', async () => {
+    const item = enqueueApproval({
+      ...TOOL_BASE,
+      operation: 'apply_migration_local',
+      tool: 'bash',
+      affected_files: [],
+      proposed_action: 'bash:supabase db push --local',
+      exact_command: 'supabase db push --local',
+    })
+    await grantApprovalForDispatch(item.approval_id, 'tom')
+
+    const gate = checkApproval({
+      approvalId: item.approval_id,
+      runId: 'RUN-aq-redisp-new',
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+      tool: 'bash',
+      command: 'supabase db reset --local',
+    })
+    assert.equal(gate.allowed, false)
+    assert.equal(gate.blockedBy, 'approval_gate.command_mismatch')
+    cleanupTmpDir()
+  })
+
+  it('consumeApproval synchronisiert Token, Queue und Runtime-Referenz', async () => {
+    const item = enqueueApproval(TOOL_BASE)
+    await grantApprovalForDispatch(item.approval_id, 'tom')
+
+    await consumeApproval(item.approval_id)
+
+    assert.equal(state.readApprovalTokens()[item.approval_id].status, 'consumed')
+    assert.equal(getApproval(item.approval_id)?.status, 'consumed')
+    assert.equal(state.getApprovalItem(item.approval_id)?.status, 'consumed')
+
+    const gate = checkApproval({
+      approvalId: item.approval_id,
+      runId: 'RUN-aq-redisp-new',
+      workorderId: 'WO-aq-tool',
+      agentId: 'db-migration-agent',
+      tool: 'write',
+      targetPath: 'supabase/migrations/001_test.sql',
+    })
+    assert.equal(gate.allowed, false)
+    assert.equal(gate.blockedBy, 'approval_gate.status')
     cleanupTmpDir()
   })
 })
