@@ -397,6 +397,46 @@ describe('denyApproval', () => {
 
 // ─── expire ────────────────────────────────────────────────────────────────────
 
+describe('denyApproval runtime sync', () => {
+  beforeEach(setupTmpDir)
+
+  it('synchronisiert denied Queue-Approval in runtime_state.approvals', async () => {
+    const item = enqueueApproval(TOOL_BASE)
+    await state.createPendingApproval({
+      workorder_id:    item.workorder_id,
+      run_id:          item.run_id,
+      reason:          item.reason,
+      risk_category:   item.risk_category,
+      affected_files:  item.affected_files,
+      proposed_action: item.proposed_action,
+      requested_by:    item.agent_id,
+      approval_id:     item.approval_id,
+      operation:       item.operation,
+      tool:            item.tool,
+    })
+
+    const r = denyApproval(item.approval_id, 'tom', 'bad target')
+
+    assert.equal(r.ok, true)
+    assert.equal(getApproval(item.approval_id)?.status, 'denied')
+    const runtimeItem = state.getApprovalItem(item.approval_id)
+    assert.equal(runtimeItem?.status, 'denied')
+    assert.equal(runtimeItem?.decided_by, 'tom')
+    assert.equal(runtimeItem?.deny_reason, 'bad target')
+    cleanupTmpDir()
+  })
+
+  it('deny ohne Runtime-Approval crasht nicht', () => {
+    const item = enqueueApproval(BASE)
+
+    const r = denyApproval(item.approval_id, 'tom')
+
+    assert.equal(r.ok, true)
+    assert.equal(state.getApprovalItem(item.approval_id), null)
+    cleanupTmpDir()
+  })
+})
+
 describe('expireStaleApprovals', () => {
   beforeEach(setupTmpDir)
 

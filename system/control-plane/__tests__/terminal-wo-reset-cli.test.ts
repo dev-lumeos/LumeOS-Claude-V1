@@ -487,6 +487,37 @@ describe('Expired Approval Cleanup - State-Manager-Helper', () => {
     assert.equal(readActiveWorkorders().length, 1, 'state must be unchanged')
   })
 
+  it('entfernt awaiting_approval mit denied Runtime- und Queue-Approval ohne Token', async () => {
+    writeState([makeAwaiting('WO-exp-denied-sync', 'RUN-exp-denied-sync')])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.approvals = [makeApprovalItem('APP-exp-denied-sync', 'WO-exp-denied-sync', 'RUN-exp-denied-sync', 'denied')]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+    writeQueue({
+      'APP-exp-denied-sync': {
+        approval_id: 'APP-exp-denied-sync',
+        workorder_id: 'WO-exp-denied-sync',
+        run_id: 'RUN-exp-denied-sync',
+        agent_id: 'micro-executor',
+        reason: 'test approval',
+        risk_category: 'docs',
+        affected_files: ['docs/example.md'],
+        proposed_action: 'write docs/example.md',
+        status: 'denied',
+        requested_at: isoMinutesAgo(5),
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      },
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-denied-sync', 'RUN-exp-denied-sync')
+
+    assert.equal(r.removed, true, `expected removal, got ${r.reason}`)
+    assert.equal(r.runtimeStatus, 'denied')
+    assert.equal(r.queueStatus, 'denied')
+    assert.match(r.reason ?? '', /not resume-capable/)
+    assert.equal(readActiveWorkorders().length, 0)
+  })
+
   it('erlaubt granted Queue/Runtime ohne Enforcement-Token als nicht resume-faehig', async () => {
     writeState([makeAwaiting('WO-exp-granted-only', 'RUN-exp-granted-only')])
     const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')

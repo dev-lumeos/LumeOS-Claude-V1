@@ -1024,6 +1024,27 @@ export async function denyApprovalItem(
 }
 
 /** granted → consumed. Blockiert bei illegalem Übergang. */
+export function syncDeniedApprovalItem(
+  approvalId: string,
+  decidedBy = 'human',
+  denyReason?: string,
+): { ok: true; item?: ApprovalItem } | { ok: false; reason: string } {
+  const s = readState()
+  const item = s.approvals.find(a => a.approval_id === approvalId)
+  if (!item) return { ok: true }
+  const v = validateApprovalTransition(item.status, 'denied')
+  if (!v.valid) {
+    appendInvalidApprovalTransition(approvalId, item.status, 'denied', v.reason)
+    return { ok: false, reason: v.reason! }
+  }
+  item.status = 'denied'
+  item.decided_at = new Date().toISOString()
+  item.decided_by = decidedBy
+  item.deny_reason = denyReason
+  writeState(s)
+  return { ok: true, item: { ...item } }
+}
+
 export async function consumeApprovalItem(approvalId: string): Promise<void> {
   await mutate(s => {
     const item = s.approvals.find(a => a.approval_id === approvalId)

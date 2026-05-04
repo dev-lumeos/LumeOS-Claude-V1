@@ -291,6 +291,8 @@ export function denyApproval(
   item.status = 'denied'; item.decided_at = new Date().toISOString()
   item.decided_by = decidedBy; item.deny_reason = denyReason
   writeQueue(queue)
+  const runtimeSync = state.syncDeniedApprovalItem(approvalId, decidedBy, denyReason)
+  if (!runtimeSync.ok) return { ok: false, reason: runtimeSync.reason }
   return { ok: true, item }
 }
 
