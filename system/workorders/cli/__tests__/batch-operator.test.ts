@@ -9,6 +9,7 @@ import {
   buildOperatorReport,
   collectOperatorStatus,
   decideEndState,
+  selectRunnableBatch,
   type CommandRunner,
 } from '../batch-operator'
 
@@ -89,18 +90,19 @@ function writeBatch(): void {
     '| Order | File | Workorder ID | Title | Risk | Approval |',
     '|---|---|---|---|---|---|',
     '| 1 | WO-test-001.md | WO-test-001 | Docs | docs | no |',
-    '| 2 | WO-test-002.md | WO-test-002 | Migration | db-migration | yes |',
+    '| 2 | WO-test-002.md | WO-test-002 | Schema Foundation | db-migration | yes |',
+    '| 3 | WO-test-003.md | WO-test-003 | Food Core Tables | db-migration | yes |',
   ].join('\n'), 'utf8')
 
   fs.writeFileSync(path.join(tmpDir, 'system/workorders/nutrition/drafts/WO-test-001.md'), [
     '```yaml',
     'workorder_id: WO-test-001',
     'agent_id: micro-executor',
-    'task: Write docs example',
+    'task: Write audit report at docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md',
     'risk_category: docs',
     'requires_approval: false',
     'blocked_by: []',
-    'scope_files: ["docs/example.md"]',
+    'scope_files: ["docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md"]',
     'acceptance_criteria: ["docs updated"]',
     'negative_constraints: ["no supabase db push", "no supabase db reset", "no approval grant", "no runtime edit"]',
     '```',
@@ -110,16 +112,37 @@ function writeBatch(): void {
     '```yaml',
     'workorder_id: WO-test-002',
     'agent_id: db-migration-agent',
-    'task: Write migration file',
+    'task: Write migration file named YYYYMMDD_NNN_nutrition_schema_foundation.sql',
     'risk_category: db-migration',
     'requires_approval: true',
     'blocked_by: ["WO-test-001"]',
-    'scope_files: ["supabase/migrations/001_test.sql"]',
+    'scope_files: ["supabase/migrations/"]',
     'acceptance_criteria: ["migration file written"]',
     'negative_constraints: ["no supabase db push", "no supabase db reset", "no approval grant", "no runtime edit"]',
     'rollback_hint: revert migration file',
     '```',
   ].join('\n'), 'utf8')
+
+  fs.writeFileSync(path.join(tmpDir, 'system/workorders/nutrition/drafts/WO-test-003.md'), [
+    '```yaml',
+    'workorder_id: WO-test-003',
+    'agent_id: db-migration-agent',
+    'task: Write YYYYMMDD_NNN_nutrition_food_core_tables.sql and packages/types/src/nutrition/foods.ts plus packages/types/src/nutrition/index.ts',
+    'risk_category: db-migration',
+    'requires_approval: true',
+    'blocked_by: ["WO-test-002"]',
+    'scope_files: ["supabase/migrations/", "packages/types/src/nutrition/foods.ts", "packages/types/src/nutrition/index.ts"]',
+    'acceptance_criteria: ["food core migration and type files written"]',
+    'negative_constraints: ["no supabase db push", "no supabase db reset", "no approval grant", "no runtime edit"]',
+    'rollback_hint: revert food core migration',
+    '```',
+  ].join('\n'), 'utf8')
+}
+
+function writeExpectedOutput(relativePath: string, content: string): void {
+  const fullPath = path.join(tmpDir, relativePath)
+  fs.mkdirSync(path.dirname(fullPath), { recursive: true })
+  fs.writeFileSync(fullPath, content, 'utf8')
 }
 
 function writeState(extra: Record<string, unknown> = {}): void {
@@ -187,6 +210,41 @@ describe('batch operator status', () => {
     assert.equal(status.activeRuns.length, 0)
     assert.equal(status.relatedApprovals.length, 0)
     assert.equal(fs.readFileSync(path.join(tmpDir, 'system/state/runtime_state.json'), 'utf8'), before)
+  })
+
+  it('does not treat missing expected workorder outputs as DONE', () => {
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+
+    assert.equal(decideEndState(status), 'READY_TO_RUN')
+    assert.equal(status.workorderCompletions.find(w => w.workorderId === 'WO-test-001')?.complete, true)
+    assert.equal(status.workorderCompletions.find(w => w.workorderId === 'WO-test-002')?.complete, true)
+    assert.equal(status.workorderCompletions.find(w => w.workorderId === 'WO-test-003')?.complete, false)
+  })
+
+  it('reports DONE only when every expected output exists', () => {
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
+    writeExpectedOutput('supabase/migrations/20240522_002_nutrition_food_core_tables.sql', '-- food core')
+    writeExpectedOutput('packages/types/src/nutrition/foods.ts', 'export interface NutritionFood {}')
+    writeExpectedOutput('packages/types/src/nutrition/index.ts', 'export * from "./foods"')
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+
+    assert.equal(decideEndState(status), 'DONE')
+    assert.ok(status.workorderCompletions.every(w => w.complete))
+  })
+
+  it('selects only the first incomplete workorder for dispatch', () => {
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+    const runnable = selectRunnableBatch(batchPath(), status)
+
+    assert.equal(runnable?.workorders.length, 1)
+    assert.equal(runnable?.workorders[0].parsed.workorder_id, 'WO-test-002')
   })
 
   it('reports active approval and exact grant command', () => {

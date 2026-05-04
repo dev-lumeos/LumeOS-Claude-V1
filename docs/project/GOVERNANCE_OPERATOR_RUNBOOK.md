@@ -141,4 +141,6 @@ Commands such as `run-summary-generator --all` can dirty report outputs. Run sta
 - `NEEDS_SAFE_CLEANUP`: operator found a safe cleanup candidate; run with `--apply-safe-cleanups` or inspect manually.
 - `FIX_REQUIRED`: technical issue or unexpected dirty worktree blocks safe continuation.
 - `STOP_RULE_BLOCKED`: system stop or stop-rule dry-run violation blocks continuation.
-- `DONE`: batch-related runtime state indicates no active workorders and completed runs exist.
+- `DONE`: no active batch workorders remain and every expected output inferred from the batch WOs exists.
+
+The operator must distinguish cleared runtime blockers from true batch completion. If no active workorders remain but expected outputs are missing, the batch is not `DONE`; continue mode should select the first incomplete workorder instead of redispatching the whole batch.

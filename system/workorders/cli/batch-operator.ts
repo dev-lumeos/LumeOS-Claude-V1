@@ -6,6 +6,8 @@ import {
   formatDryRunReport,
   loadBatch,
   runDispatch,
+  type LoadedBatch,
+  type LoadedWorkorder,
   type DispatchOutcome,
 } from './batch-loader'
 import { evaluateStopRules } from '../../control-plane/stop-rules'
@@ -69,6 +71,17 @@ export interface ApprovalStop {
   grantCommand: string
 }
 
+export interface ExpectedOutputStatus {
+  path: string
+  exists: boolean
+}
+
+export interface WorkorderCompletion {
+  workorderId: string
+  complete: boolean
+  expectedOutputs: ExpectedOutputStatus[]
+}
+
 export interface OperatorStatus {
   batchPath: string
   batchWorkorderIds: string[]
@@ -86,6 +99,7 @@ export interface OperatorStatus {
   dbMigrationLock: { locked: boolean; detail?: DbMigrationLock }
   activeWorkorders: ActiveWorkorder[]
   activeRuns: Run[]
+  workorderCompletions: WorkorderCompletion[]
   relatedApprovals: Array<ApprovalQueueItem | ApprovalItem>
   approvalStops: ApprovalStop[]
   cleanupSuggestions: CleanupSuggestion[]
@@ -170,9 +184,8 @@ function categorizeArtifact(filePath: string): GitStatusEntry['category'] {
   return 'code_changes'
 }
 
-function batchWorkorderIds(batchPath: string): string[] {
-  return loadBatch(batchPath)
-    .workorders
+function batchWorkorderIds(batch: LoadedBatch): string[] {
+  return batch.workorders
     .map(w => w.parsed.workorder_id)
     .filter((id): id is string => typeof id === 'string')
 }
@@ -352,12 +365,88 @@ function baselineStatus(
   return { status: 'SET', detail: `${baseline.acknowledged_at} by ${baseline.acknowledged_by ?? 'unknown'}` }
 }
 
+function normalizeRepoPath(input: string): string {
+  return input.replace(/\\/g, '/').replace(/^\.\//, '')
+}
+
+function pathExistsWithGlob(pattern: string): boolean {
+  const normalized = normalizeRepoPath(pattern)
+  if (!normalized.includes('*')) return fs.existsSync(path.resolve(process.cwd(), normalized))
+  const slash = normalized.lastIndexOf('/')
+  const dir = slash >= 0 ? normalized.slice(0, slash) : '.'
+  const filePattern = slash >= 0 ? normalized.slice(slash + 1) : normalized
+  const regex = new RegExp(`^${filePattern.split('*').map(escapeRegExp).join('.*')}$`)
+  const absoluteDir = path.resolve(process.cwd(), dir)
+  if (!fs.existsSync(absoluteDir)) return false
+  return fs.readdirSync(absoluteDir).some(name => regex.test(name))
+}
+
+function escapeRegExp(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function collectText(value: unknown): string {
+  if (typeof value === 'string') return value
+  if (Array.isArray(value)) return value.map(collectText).join('\n')
+  if (value && typeof value === 'object') return Object.values(value).map(collectText).join('\n')
+  return ''
+}
+
+function inferExpectedOutputs(workorder: LoadedWorkorder): string[] {
+  const parsed = workorder.parsed as Record<string, unknown>
+  const scopeFiles = Array.isArray(parsed.scope_files)
+    ? parsed.scope_files.filter((item): item is string => typeof item === 'string')
+    : []
+  const text = collectText(parsed)
+  const outputs = new Set<string>()
+
+  for (const scopeFile of scopeFiles) {
+    const normalized = normalizeRepoPath(scopeFile)
+    if (/\.(md|sql|ts)$/.test(normalized)) outputs.add(normalized)
+  }
+
+  const explicitPathPattern = /\b(?:docs|supabase|packages)\/[A-Za-z0-9_./-]+\.(?:md|sql|ts)\b/g
+  for (const match of text.matchAll(explicitPathPattern)) {
+    outputs.add(normalizeRepoPath(match[0]))
+  }
+
+  const hasMigrationScope = scopeFiles.some(scope => normalizeRepoPath(scope).replace(/\/$/, '') === 'supabase/migrations')
+  if (hasMigrationScope) {
+    if (text.includes('nutrition_schema_foundation.sql')) {
+      outputs.add('supabase/migrations/*nutrition_schema_foundation.sql')
+    }
+    if (text.includes('nutrition_food_core_tables.sql')) {
+      outputs.add('supabase/migrations/*nutrition_food_core_tables.sql')
+    }
+  }
+
+  return [...outputs]
+}
+
+export function evaluateWorkorderCompletions(batch: LoadedBatch): WorkorderCompletion[] {
+  return batch.workorders.map(workorder => {
+    const workorderId = typeof workorder.parsed.workorder_id === 'string'
+      ? workorder.parsed.workorder_id
+      : workorder.filename
+    const expectedOutputs = inferExpectedOutputs(workorder).map(outputPath => ({
+      path: outputPath,
+      exists: pathExistsWithGlob(outputPath),
+    }))
+    return {
+      workorderId,
+      expectedOutputs,
+      complete: expectedOutputs.length > 0 && expectedOutputs.every(output => output.exists),
+    }
+  })
+}
+
 export function collectOperatorStatus(
   batchPathInput: string,
   opts: { gitStatus?: GitStatusSummary } = {},
 ): OperatorStatus {
   const absoluteBatchPath = path.resolve(batchPathInput)
-  const ids = new Set(batchWorkorderIds(absoluteBatchPath))
+  const batch = loadBatch(absoluteBatchPath)
+  const ids = new Set(batchWorkorderIds(batch))
   const state = readJson<RuntimeStateFile>('system/state/runtime_state.json', {})
   const queueApprovals = getAllApprovals().filter(a => isRelatedToBatch(a, ids))
   const runtimeApprovals = (state.approvals ?? []).filter(a => isRelatedToBatch(a, ids))
@@ -367,6 +456,8 @@ export function collectOperatorStatus(
 
   const activeWorkorders = (state.active_workorders ?? []).filter(w => ids.has(w.workorder_id))
   const activeRuns = (state.active_runs ?? []).filter(r => ids.has(r.workorder_id))
+  const workorderCompletions = evaluateWorkorderCompletions(batch)
+  const expectedOutputPatterns = workorderCompletions.flatMap(w => w.expectedOutputs.map(o => o.path))
   const cleanupSuggestions = buildCleanupSuggestions(state, ids, relatedApprovals)
 
   return {
@@ -386,12 +477,24 @@ export function collectOperatorStatus(
     dbMigrationLock: state.db_migration_lock ? { locked: true, detail: state.db_migration_lock } : { locked: false },
     activeWorkorders,
     activeRuns,
+    workorderCompletions,
     relatedApprovals,
     approvalStops: buildApprovalStops(relatedApprovals),
     cleanupSuggestions,
     dirtyArtifacts: git.entries,
-    unexpectedDirty: git.entries.filter(e => e.category === 'code_changes' || e.category === 'workorder_outputs'),
+    unexpectedDirty: git.entries.filter(e =>
+      (e.category === 'code_changes' || e.category === 'workorder_outputs') &&
+      !expectedOutputPatterns.some(pattern => matchesOutputPattern(e.path, pattern)),
+    ),
   }
+}
+
+function matchesOutputPattern(filePath: string, pattern: string): boolean {
+  const normalizedPath = normalizeRepoPath(filePath)
+  const normalizedPattern = normalizeRepoPath(pattern)
+  if (!normalizedPattern.includes('*')) return normalizedPath === normalizedPattern
+  const regex = new RegExp(`^${normalizedPattern.split('*').map(escapeRegExp).join('.*')}$`)
+  return regex.test(normalizedPath)
 }
 
 function dedupeApprovals<T extends ApprovalQueueItem | ApprovalItem>(approvals: T[]): T[] {
@@ -411,7 +514,11 @@ export function decideEndState(status: OperatorStatus): OperatorEndState {
   if (status.approvalStops.length > 0) return 'NEEDS_TOM_APPROVAL'
   if (status.cleanupSuggestions.some(s => s.safeToApply)) return 'NEEDS_SAFE_CLEANUP'
   if (status.unexpectedDirty.length > 0) return 'FIX_REQUIRED'
-  if (status.activeWorkorders.length === 0 && status.activeRuns.some(r => r.status === 'completed')) return 'DONE'
+  if (
+    status.activeWorkorders.length === 0 &&
+    status.workorderCompletions.length > 0 &&
+    status.workorderCompletions.every(w => w.complete)
+  ) return 'DONE'
   return 'READY_TO_RUN'
 }
 
@@ -447,6 +554,11 @@ export function buildOperatorReport(status: OperatorStatus): string {
   lines.push(...formatList(status.activeRuns, r => `${r.workorder_id} run=${r.run_id} status=${r.status} agent=${r.agent_id}`))
   lines.push('pending/granted/consumed approvals related to batch:')
   lines.push(...formatList(status.relatedApprovals, a => `${a.approval_id} WO=${a.workorder_id} run=${a.run_id ?? '<none>'} status=${a.status} risk=${a.risk_category ?? '<unknown>'}`))
+  lines.push('workorder output completion:')
+  lines.push(...formatList(status.workorderCompletions, w => {
+    const outputs = w.expectedOutputs.map(o => `${o.path}:${o.exists ? 'yes' : 'no'}`).join(', ')
+    return `${w.workorderId} complete=${w.complete ? 'yes' : 'no'} outputs=[${outputs || 'none'}]`
+  }))
   lines.push('')
   lines.push('## Modified/Untracked Artifacts')
   lines.push(...formatList(status.dirtyArtifacts, e => `${e.code} ${e.path} [${e.category}]`))
@@ -562,6 +674,19 @@ export async function runDryRun(batchPathInput: string): Promise<{ report: strin
   }
 }
 
+export function selectRunnableBatch(batchPathInput: string, status: OperatorStatus): LoadedBatch | null {
+  const batch = loadBatch(batchPathInput)
+  const incomplete = status.workorderCompletions.find(w => !w.complete)
+  if (!incomplete) return null
+  const workorder = batch.workorders.find(w => w.parsed.workorder_id === incomplete.workorderId)
+  if (!workorder) return null
+  return {
+    ...batch,
+    entries: batch.entries.filter(entry => entry.workorder_id === incomplete.workorderId),
+    workorders: [workorder],
+  }
+}
+
 export async function continueBatch(
   batchPathInput: string,
   opts: { applySafeCleanups?: boolean; runner?: CommandRunner } = {},
@@ -585,7 +710,11 @@ export async function continueBatch(
     return { status, report: buildOperatorReport(status), exitCode: endStateToExitCode(endState) }
   }
 
-  const outcomes = await runDispatch(loadBatch(batchPathInput))
+  const runnableBatch = selectRunnableBatch(batchPathInput, status)
+  if (!runnableBatch) {
+    return { status, report: buildOperatorReport(status), exitCode: endStateToExitCode(decideEndState(status)) }
+  }
+  const outcomes = await runDispatch(runnableBatch)
   status = collectOperatorStatus(batchPathInput)
   status.dispatchOutcomes = outcomes
   const paused = outcomes.some(o => o.status === 'paused_for_approval')
