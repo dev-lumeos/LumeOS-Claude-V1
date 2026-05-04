@@ -1065,4 +1065,37 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     )
   })
 
+  it('Docs-WO mit falschem selected_agent endet nicht in DB-Migration-Gate-Kaskade', async () => {
+    fs.mkdirSync(`${TEST_DIR}/docs/specs/Nutrition/06_workorder_planning/audit`, { recursive: true })
+    fs.writeFileSync(`${TEST_DIR}/docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md`, '# fixture\n')
+
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent:  'db-migration-agent',
+      risk_level:      'high',
+      risks:           ['model drifted to migration agent'],
+      execution_order: ['write docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'],
+      required_gates:  ['review-gate', 'files-scope-gate'],
+      stop_conditions: ['scope_violation'],
+    })
+
+    const wo = makeWO({
+      workorder_id: 'WO-multidispatch-302',
+      agent_id: 'micro-executor',
+      risk_category: 'docs',
+      scope_files: ['docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'],
+      task: 'Audit existing Nutrition planning docs and write the audit report',
+      requires_approval: false,
+    })
+
+    const result = await dispatchWorkorder(wo as any, {
+      callModel: mockCallModel,
+      executeTool: defaultExecuteTool,
+    })
+
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /selected_agent mismatch/)
+    assert.doesNotMatch(result.error ?? '', /DB-Migration: Pflicht-Gate fehlt/)
+    assert.equal(lockExistsFor(result.run_id), false, 'scope_lock muss trotz Rewrite-Fail freigegeben sein')
+  })
+
 })

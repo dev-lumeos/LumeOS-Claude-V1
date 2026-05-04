@@ -43,6 +43,7 @@ import {
   normalizeOrchestratorIntent,
   validateOrchestratorIntent,
   inferWorkorderType,
+  mapAgentToValidatorTarget,
   type OrchestratorIntent,
 } from './governance-validator'
 import { runReviewPipeline } from './review-pipeline'
@@ -499,6 +500,7 @@ export async function dispatchWorkorder(
         approvalTokenPresent: wo.requires_approval === false,
         filesAllowed: wo.scope_files ?? [],
         workorderType: woType,
+        expectedAgent: mapAgentToValidatorTarget(wo.agent_id),
       })
 
       if (validation.status === 'PASS') break

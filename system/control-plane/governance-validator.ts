@@ -32,6 +32,7 @@ export interface ValidationContext {
   approvalTokenPresent: boolean
   filesAllowed:         string[]
   workorderType?:       'db-migration' | 'security' | 'standard'
+  expectedAgent?:       string
 }
 
 // ─── Enums ────────────────────────────────────────────────────────────────────
@@ -311,6 +312,14 @@ export function validateOrchestratorIntent(
     }
   }
 
+  if (context.expectedAgent && intent.selected_agent !== context.expectedAgent) {
+    return {
+      status: 'REWRITE',
+      reason: `selected_agent mismatch: expected ${context.expectedAgent}, got ${intent.selected_agent}`,
+      field: 'selected_agent',
+    }
+  }
+
   // ── 2. risk_level Enum ───────────────────────────────────────────────────
   if (!ALLOWED_RISK_LEVELS.has(intent.risk_level)) {
     return {
@@ -380,7 +389,10 @@ export function validateOrchestratorIntent(
   }
 
   // ── 6. DB-Migration: Pflicht-Gates ───────────────────────────────────────
-  if (intent.selected_agent === 'db-migration-agent') {
+  const isDbMigrationWO = context.expectedAgent === 'db-migration-agent'
+    || (!context.expectedAgent && context.workorderType === 'db-migration' && intent.selected_agent === 'db-migration-agent')
+
+  if (isDbMigrationWO) {
     for (const required of DB_MIGRATION_REQUIRED_GATES) {
       if (!intent.required_gates.includes(required)) {
         return {
