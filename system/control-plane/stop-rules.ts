@@ -24,7 +24,12 @@
 
 import fs   from 'node:fs'
 import path from 'node:path'
-import { acknowledgeFailedRunsBaseline, triggerSystemStop, isSystemStopped } from '../state/state-manager'
+import {
+  acknowledgeFailedRunsBaseline,
+  acknowledgeInvalidJsonSpikeBaseline,
+  triggerSystemStop,
+  isSystemStopped,
+} from '../state/state-manager'
 
 // ─── Konfiguration ────────────────────────────────────────────────────────────
 
@@ -65,6 +70,10 @@ export interface StopRuleResult {
   reason?:     string
   total_failed?:              number
   ignored_historical_failed?: number
+  total_samples?:             number
+  total_invalid_json?:        number
+  ignored_historical_samples?: number
+  counted_samples?:           number
   baseline_at?:               string
   baseline_by?:               string
 }
@@ -159,10 +168,26 @@ function checkHumanNeededPending(cfg: StopRulesConfig): StopRuleResult {
 }
 
 function checkInvalidJsonRate(cfg: StopRulesConfig): StopRuleResult {
+  const state = readJson<any>('system/state/runtime_state.json')
+  const baseline = state?.stop_rule_baselines?.invalid_json_spike
   const metrics = readJsonl<any>('system/state/pipeline-metrics.jsonl')
+  const baselineTime = baseline?.acknowledged_at
+    ? new Date(baseline.acknowledged_at).getTime()
+    : undefined
+  const countedMetrics = baselineTime
+    ? metrics.filter((m: any) => {
+      const timestamp = m.timestamp ?? m.ts
+      if (!timestamp) return true
+      const metricTime = new Date(timestamp).getTime()
+      if (!Number.isFinite(metricTime)) return true
+      return metricTime > baselineTime
+    })
+    : metrics
+  const ignored = metrics.length - countedMetrics.length
+  const totalInvalidJson = metrics.filter(m => (m.outcome ?? '').toLowerCase() === 'invalid_json').length
   // Pro Tier auswerten — wenn irgendein Tier über dem Schwellwert
   const tiers: Record<string, { total: number; invalidJson: number }> = {}
-  for (const m of metrics) {
+  for (const m of countedMetrics) {
     if (!m.tier) continue
     if (!tiers[m.tier]) tiers[m.tier] = { total: 0, invalidJson: 0 }
     tiers[m.tier].total++
@@ -187,6 +212,12 @@ function checkInvalidJsonRate(cfg: StopRulesConfig): StopRuleResult {
     reason:    triggered
       ? `${worstTier}: ${Math.round(worstRate * 100)}% invalid_json (${worstCount} Reviews, Schwellwert ${Math.round(cfg.invalid_json_rate_max * 100)}%)`
       : undefined,
+    total_samples:              metrics.length,
+    total_invalid_json:         totalInvalidJson,
+    ignored_historical_samples: ignored,
+    counted_samples:            countedMetrics.length,
+    baseline_at:                baseline?.acknowledged_at,
+    baseline_by:                baseline?.acknowledged_by,
   }
 }
 
@@ -292,6 +323,7 @@ async function main() {
   const args   = process.argv.slice(2)
   const dryRun = args.includes('--dry-run')
   const ackIndex = args.indexOf('--ack-failed-runs')
+  const ackInvalidJsonIndex = args.indexOf('--ack-invalid-json-spike')
   const byIndex = args.indexOf('--by')
 
   if (ackIndex >= 0) {
@@ -303,6 +335,20 @@ async function main() {
       : process.env.LUMEOS_OPERATOR ?? process.env.USERNAME ?? 'operator'
     await acknowledgeFailedRunsBaseline(acknowledgedBy, reason)
     console.log(`FAILED_RUNS_THRESHOLD baseline acknowledged by ${acknowledgedBy}`)
+    if (reason) console.log(`Reason: ${reason}`)
+    console.log('system_stop unchanged; use clearSystemStop separately if needed')
+    return
+  }
+
+  if (ackInvalidJsonIndex >= 0) {
+    const next = args[ackInvalidJsonIndex + 1]
+    const reason = next && !next.startsWith('--') ? next : undefined
+    const byArg = byIndex >= 0 ? args[byIndex + 1] : undefined
+    const acknowledgedBy = byArg && !byArg.startsWith('--')
+      ? byArg
+      : process.env.LUMEOS_OPERATOR ?? process.env.USERNAME ?? 'operator'
+    await acknowledgeInvalidJsonSpikeBaseline(acknowledgedBy, reason)
+    console.log(`INVALID_JSON_SPIKE baseline acknowledged by ${acknowledgedBy}`)
     if (reason) console.log(`Reason: ${reason}`)
     console.log('system_stop unchanged; use clearSystemStop separately if needed')
     return
@@ -324,6 +370,9 @@ async function main() {
     console.log(`${icon} ${rule.rule}: ${val}`)
     if (rule.rule === 'FAILED_RUNS_THRESHOLD' && rule.baseline_at) {
       console.log(`     baseline: ${rule.baseline_at} by ${rule.baseline_by ?? 'unknown'}; total ${rule.total_failed}, ignored ${rule.ignored_historical_failed}, counted ${rule.value}`)
+    }
+    if (rule.rule === 'INVALID_JSON_SPIKE' && rule.baseline_at) {
+      console.log(`     baseline: ${rule.baseline_at} by ${rule.baseline_by ?? 'unknown'}; total samples ${rule.total_samples}, total invalid_json ${rule.total_invalid_json}, ignored ${rule.ignored_historical_samples}, counted ${rule.counted_samples}`)
     }
     if (rule.triggered && rule.reason) console.log(`     → ${rule.reason}`)
   }

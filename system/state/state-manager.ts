@@ -113,8 +113,17 @@ export interface FailedRunsThresholdBaseline {
   reason?:                   string
 }
 
+export interface InvalidJsonSpikeBaseline {
+  acknowledged_at:                   string
+  acknowledged_by:                   string
+  acknowledged_total_samples:        number
+  acknowledged_invalid_json_samples: number
+  reason?:                           string
+}
+
 export interface StopRuleBaselines {
   failed_runs_threshold?: FailedRunsThresholdBaseline
+  invalid_json_spike?:    InvalidJsonSpikeBaseline
 }
 
 export interface RuntimeState {
@@ -1053,6 +1062,36 @@ export async function acknowledgeFailedRunsBaseline(acknowledgedBy: string, reas
       acknowledged_at: new Date().toISOString(),
       acknowledged_by: operator,
       acknowledged_failed_count: failedCount,
+      ...(reason ? { reason } : {}),
+    }
+  })
+}
+
+function readPipelineMetricsForBaseline(): any[] {
+  const metricsPath = path.resolve(process.cwd(), 'system/state/pipeline-metrics.jsonl')
+  if (!fs.existsSync(metricsPath)) return []
+  return fs.readFileSync(metricsPath, 'utf8')
+    .split('\n')
+    .filter(Boolean)
+    .map(line => {
+      try { return JSON.parse(line) }
+      catch { return null }
+    })
+    .filter(Boolean)
+}
+
+export async function acknowledgeInvalidJsonSpikeBaseline(acknowledgedBy: string, reason?: string): Promise<void> {
+  const operator = acknowledgedBy.trim()
+  if (!operator) throw new Error('acknowledgedBy is required')
+  const metrics = readPipelineMetricsForBaseline()
+  const invalidJsonCount = metrics.filter(m => (m.outcome ?? '').toLowerCase() === 'invalid_json').length
+  await mutate(s => {
+    s.stop_rule_baselines = s.stop_rule_baselines ?? {}
+    s.stop_rule_baselines.invalid_json_spike = {
+      acknowledged_at: new Date().toISOString(),
+      acknowledged_by: operator,
+      acknowledged_total_samples: metrics.length,
+      acknowledged_invalid_json_samples: invalidJsonCount,
       ...(reason ? { reason } : {}),
     }
   })

@@ -10,6 +10,7 @@ import os from 'node:os'
 import path from 'node:path'
 
 import { evaluateStopRules, runStopRules, DEFAULT_CONFIG, type StopRulesConfig } from '../stop-rules'
+import { acknowledgeInvalidJsonSpikeBaseline } from '../../state/state-manager'
 
 let tmpDir = ''
 
@@ -395,6 +396,141 @@ describe('runStopRules dry-run', () => {
     )
     assert.equal(evaluation.any_triggered, true)
     assert.equal(stopped, false)  // dry-run: kein echter Stop
+    cleanupTmpDir()
+  })
+})
+
+describe('INVALID_JSON_SPIKE baseline', () => {
+  beforeEach(setupTmpDir)
+
+  it('Baseline ignoriert historische invalid_json Samples vor acknowledged_at', () => {
+    writeState([], {
+      stop_rule_baselines: {
+        invalid_json_spike: {
+          acknowledged_at: '2026-05-04T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_total_samples: 3,
+          acknowledged_invalid_json_samples: 3,
+        },
+      },
+    })
+    writePipelineMetrics([
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:01:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:02:00.000Z' },
+    ])
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, invalid_json_rate_max: 0.5, invalid_json_min_samples: 3 })
+    const rule = r.all_rules.find(x => x.rule === 'INVALID_JSON_SPIKE')!
+    assert.equal(rule.triggered, false)
+    assert.equal(rule.value, 0)
+    assert.equal(rule.total_samples, 3)
+    assert.equal(rule.total_invalid_json, 3)
+    assert.equal(rule.ignored_historical_samples, 3)
+    assert.equal(rule.counted_samples, 0)
+    assert.equal(rule.baseline_at, '2026-05-04T02:00:00.000Z')
+    cleanupTmpDir()
+  })
+
+  it('Baseline triggert nicht bei neuen valid Samples nach acknowledged_at', () => {
+    writeState([], {
+      stop_rule_baselines: {
+        invalid_json_spike: {
+          acknowledged_at: '2026-05-04T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_total_samples: 3,
+          acknowledged_invalid_json_samples: 3,
+        },
+      },
+    })
+    writePipelineMetrics([
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:01:00.000Z' },
+      { tier: 'spark-c', outcome: 'PASS', timestamp: '2026-05-04T03:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'PASS', timestamp: '2026-05-04T03:01:00.000Z' },
+      { tier: 'spark-c', outcome: 'PASS', timestamp: '2026-05-04T03:02:00.000Z' },
+    ])
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, invalid_json_rate_max: 0.5, invalid_json_min_samples: 3 })
+    const rule = r.all_rules.find(x => x.rule === 'INVALID_JSON_SPIKE')!
+    assert.equal(rule.triggered, false)
+    assert.equal(rule.value, 0)
+    assert.equal(rule.counted_samples, 3)
+    assert.equal(rule.ignored_historical_samples, 2)
+    cleanupTmpDir()
+  })
+
+  it('Baseline triggert bei neuer invalid_json Spike nach acknowledged_at', () => {
+    writeState([], {
+      stop_rule_baselines: {
+        invalid_json_spike: {
+          acknowledged_at: '2026-05-04T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_total_samples: 3,
+          acknowledged_invalid_json_samples: 3,
+        },
+      },
+    })
+    writePipelineMetrics([
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T03:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T03:01:00.000Z' },
+      { tier: 'spark-c', outcome: 'PASS', timestamp: '2026-05-04T03:02:00.000Z' },
+    ])
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, invalid_json_rate_max: 0.5, invalid_json_min_samples: 3 })
+    const rule = r.all_rules.find(x => x.rule === 'INVALID_JSON_SPIKE')!
+    assert.equal(rule.triggered, true)
+    assert.equal(rule.value, 67)
+    assert.equal(rule.counted_samples, 3)
+    assert.equal(rule.ignored_historical_samples, 1)
+    cleanupTmpDir()
+  })
+
+  it('Baseline respektiert min_samples nach acknowledged_at', () => {
+    writeState([], {
+      stop_rule_baselines: {
+        invalid_json_spike: {
+          acknowledged_at: '2026-05-04T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_total_samples: 3,
+          acknowledged_invalid_json_samples: 3,
+        },
+      },
+    })
+    writePipelineMetrics([
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T03:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T03:01:00.000Z' },
+    ])
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, invalid_json_rate_max: 0.5, invalid_json_min_samples: 3 })
+    const rule = r.all_rules.find(x => x.rule === 'INVALID_JSON_SPIKE')!
+    assert.equal(rule.triggered, false)
+    assert.equal(rule.value, 0)
+    assert.equal(rule.counted_samples, 2)
+    cleanupTmpDir()
+  })
+
+  it('acknowledge invalid_json baseline setzt Marker und cleared system_stop nicht', async () => {
+    writeState([], {
+      system_stop: {
+        active: true,
+        reason: 'existing stop',
+        stopped_at: '2026-05-04T01:00:00.000Z',
+        stopped_by: 'test',
+      },
+    })
+    writePipelineMetrics([
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:00:00.000Z' },
+      { tier: 'spark-c', outcome: 'invalid_json', timestamp: '2026-05-04T01:01:00.000Z' },
+      { tier: 'spark-d', outcome: 'PASS', timestamp: '2026-05-04T01:02:00.000Z' },
+    ])
+
+    await acknowledgeInvalidJsonSpikeBaseline('tom', 'historical reviewer invalid_json acknowledged')
+
+    const state = JSON.parse(fs.readFileSync(path.join(tmpDir, 'system/state/runtime_state.json'), 'utf8'))
+    assert.equal(state.system_stop?.active, true)
+    assert.equal(state.stop_rule_baselines.invalid_json_spike.acknowledged_by, 'tom')
+    assert.equal(state.stop_rule_baselines.invalid_json_spike.acknowledged_total_samples, 3)
+    assert.equal(state.stop_rule_baselines.invalid_json_spike.acknowledged_invalid_json_samples, 2)
+    assert.equal(state.stop_rule_baselines.invalid_json_spike.reason, 'historical reviewer invalid_json acknowledged')
     cleanupTmpDir()
   })
 })

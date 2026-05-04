@@ -73,7 +73,8 @@
     "StopRuleBaselines": {
       "type": "object",
       "properties": {
-        "failed_runs_threshold": { "$ref": "#/definitions/FailedRunsThresholdBaseline" }
+        "failed_runs_threshold": { "$ref": "#/definitions/FailedRunsThresholdBaseline" },
+        "invalid_json_spike": { "$ref": "#/definitions/InvalidJsonSpikeBaseline" }
       },
       "additionalProperties": false
     },
@@ -85,6 +86,17 @@
         "acknowledged_by":           { "type": "string" },
         "acknowledged_failed_count": { "type": "number" },
         "reason":                    { "type": "string" }
+      }
+    },
+    "InvalidJsonSpikeBaseline": {
+      "type": "object",
+      "required": ["acknowledged_at", "acknowledged_by", "acknowledged_total_samples", "acknowledged_invalid_json_samples"],
+      "properties": {
+        "acknowledged_at":                   { "type": "string", "format": "date-time" },
+        "acknowledged_by":                   { "type": "string" },
+        "acknowledged_total_samples":        { "type": "number" },
+        "acknowledged_invalid_json_samples": { "type": "number" },
+        "reason":                            { "type": "string" }
       }
     }
   }
