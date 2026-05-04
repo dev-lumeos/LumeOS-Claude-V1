@@ -36,7 +36,7 @@ import {
   findGrantedApprovalForDispatch,
   operationMayRequireApproval,
 } from '../approval/approval-gate'
-import { authorizeToolCall, isPathInScope } from '../agent-registry/authorize-tool-call'
+import { authorizeToolCall, guardMigrationContent, isPathInScope } from '../agent-registry/authorize-tool-call'
 import { loadSkills, buildSystemPrompt } from './skill-loader'
 import {
   parseOrchestratorIntent,
@@ -684,6 +684,31 @@ export async function dispatchWorkorder(
           await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
           return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
             error: `FILES_SCOPE_VIOLATION: ${toolReq.targetPath} not in scope_files` }
+        }
+      }
+
+      if (
+        toolReq.tool === 'write'
+        && toolReq.targetPath
+        && toolReq.content
+        && toolReq.targetPath.replace(/\\/g, '/').startsWith('supabase/migrations/')
+      ) {
+        const migrationGuard = guardMigrationContent(toolReq.content, wo.agent_id)
+        if (!migrationGuard.allowed) {
+          audit.auditToolBlocked({
+            run_id: runId,
+            workorder_id: wo.workorder_id,
+            agent_id: wo.agent_id,
+            orchestration_mode: orchestrationMode,
+            tool: toolReq.tool,
+            target_path: toolReq.targetPath,
+            blocked_by: migrationGuard.blockedBy ?? 'migration_guard',
+            reason: migrationGuard.reason,
+          })
+          await state.endRun(runId, 'blocked')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
+          return { status: 'blocked', run_id: runId, workorder_id: wo.workorder_id,
+            error: `MIGRATION_GUARD_VIOLATION: ${migrationGuard.reason}` }
         }
       }
 

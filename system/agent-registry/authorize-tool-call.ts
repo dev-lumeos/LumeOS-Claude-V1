@@ -176,25 +176,110 @@ function resolveAll(rawPaths: string[], ctx: WorkorderContext): string[] {
 
 // ─── SQL Guard ───────────────────────────────────────────────────────────────
 
-const BLOCKED_SQL_OPS = ['DROP TABLE', 'TRUNCATE', 'DELETE CASCADE']
+const ROLLBACK_SECTION_RE = /\b(DOWN|ROLLBACK|REVERT|UNDO)\b/i
 
-function normalizeSql(sql: string): string {
-  return sql
-    .toUpperCase()
-    .replace(/\/\*[\s\S]*?\*\//g, ' ')
-    .replace(/--.*$/gm, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
+function stripSqlComments(sql: string): string {
+  let out = ''
+  let inBlock = false
+  for (let i = 0; i < sql.length; i++) {
+    const ch = sql[i]
+    const next = sql[i + 1]
+    if (inBlock) {
+      if (ch === '*' && next === '/') {
+        inBlock = false
+        i++
+      } else if (ch === '\n') {
+        out += '\n'
+      } else {
+        out += ' '
+      }
+      continue
+    }
+    if (ch === '/' && next === '*') {
+      inBlock = true
+      out += '  '
+      i++
+      continue
+    }
+    if (ch === '-' && next === '-') {
+      while (i < sql.length && sql[i] !== '\n') i++
+      out += '\n'
+      continue
+    }
+    out += ch
+  }
+  return out
+}
+
+function splitSqlStatements(sqlWithoutComments: string): string[] {
+  return sqlWithoutComments
+    .split(';')
+    .map(s => s.replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
+}
+
+function findBlockedSqlStatement(statement: string): string | null {
+  const normalized = statement.toUpperCase()
+  if (/\bDROP\s+SCHEMA\b/.test(normalized)) return 'DROP SCHEMA'
+  if (/\bDROP\s+TABLE\b/.test(normalized)) return 'DROP TABLE'
+  if (/\bTRUNCATE\b/.test(normalized)) return 'TRUNCATE'
+  if (/\bREVOKE\b/.test(normalized)) return 'REVOKE'
+  if (/\bALTER\s+TABLE\b[\s\S]*\bDROP\s+COLUMN\b/.test(normalized)) return 'ALTER TABLE DROP COLUMN'
+  if (/\bDROP\s+POLICY\b/.test(normalized)) return 'DROP POLICY'
+  if (/\bDROP\s+INDEX\b/.test(normalized)) return 'DROP INDEX'
+  if (/\bDELETE\s+FROM\b/.test(normalized) && !/\bWHERE\b/.test(normalized)) return 'DELETE FROM without WHERE'
+  return null
+}
+
+function firstExecutableAfterRollbackSection(sql: string): string | null {
+  let inRollbackSection = false
+  let inBlock = false
+  for (const rawLine of sql.split(/\r?\n/)) {
+    let executable = ''
+    for (let i = 0; i < rawLine.length; i++) {
+      const ch = rawLine[i]
+      const next = rawLine[i + 1]
+      if (inBlock) {
+        if (ch === '*' && next === '/') {
+          inBlock = false
+          i++
+        }
+        continue
+      }
+      if (ch === '/' && next === '*') {
+        inBlock = true
+        i++
+        continue
+      }
+      if (ch === '-' && next === '-') break
+      executable += ch
+    }
+    if (ROLLBACK_SECTION_RE.test(rawLine)) inRollbackSection = true
+    const trimmed = executable.trim()
+    if (inRollbackSection && trimmed) return trimmed
+  }
+  return null
 }
 
 export function guardMigrationContent(sql: string, agentId: string): AuthResult {
   if (agentId !== 'db-migration-agent')
     return { allowed: false, reason: 'Nur db-migration-agent darf Migrations schreiben', blockedBy: 'agent_type' }
 
-  const normalized = normalizeSql(sql)
-  for (const op of BLOCKED_SQL_OPS) {
-    if (normalized.includes(op))
-      return { allowed: false, reason: `Destruktives SQL gesperrt: ${op}`, blockedBy: 'migration_guard' }
+  const rawLower = sql.toLowerCase()
+  for (const command of ['supabase db push --linked', 'supabase db push', 'supabase db reset']) {
+    if (rawLower.includes(command))
+      return { allowed: false, reason: `Supabase command in migration content blocked: ${command}`, blockedBy: 'migration_guard' }
+  }
+
+  const rollbackExecutable = firstExecutableAfterRollbackSection(sql)
+  if (rollbackExecutable) {
+    return { allowed: false, reason: `Executable SQL after rollback section blocked: ${rollbackExecutable}`, blockedBy: 'migration_guard' }
+  }
+
+  for (const statement of splitSqlStatements(stripSqlComments(sql))) {
+    const blocked = findBlockedSqlStatement(statement)
+    if (blocked)
+      return { allowed: false, reason: `Destruktives SQL gesperrt: ${blocked}`, blockedBy: 'migration_guard' }
   }
   return { allowed: true }
 }

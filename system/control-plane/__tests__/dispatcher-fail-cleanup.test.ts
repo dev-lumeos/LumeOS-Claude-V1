@@ -876,6 +876,71 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     assert.equal(state.getApprovalItem(approvalId)?.status, 'consumed')
   })
 
+  it('blockiert gefährliche Supabase-Migration nach Write vor Review-Pipeline', async () => {
+    fs.mkdirSync(`${TEST_DIR}/supabase/migrations`, { recursive: true })
+
+    const safeApprovalRequestOutput = JSON.stringify({
+      selected_agent:  'db-migration-agent',
+      risk_level:      'high',
+      risks:           ['db migration write requires deterministic guard'],
+      execution_order: ['create_migration_file', 'request_review'],
+      required_gates:  ['human-approval-gate', 'review-gate', 'db-migration-gate', 'rollback-gate', 'typecheck-gate', 'test-gate', 'files-scope-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'write',
+      targetPath: 'supabase/migrations/guardrail_danger.sql',
+      content: 'CREATE SCHEMA IF NOT EXISTS nutrition;',
+    })
+
+    const dangerousMigrationOutput = JSON.stringify({
+      selected_agent:  'db-migration-agent',
+      risk_level:      'high',
+      risks:           ['db migration write requires deterministic guard'],
+      execution_order: ['create_migration_file', 'request_review'],
+      required_gates:  ['human-approval-gate', 'review-gate', 'db-migration-gate', 'rollback-gate', 'typecheck-gate', 'test-gate', 'files-scope-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'write',
+      targetPath: 'supabase/migrations/guardrail_danger.sql',
+      content: [
+        'CREATE SCHEMA IF NOT EXISTS nutrition;',
+        '-- DOWN',
+        'DROP SCHEMA IF EXISTS nutrition;',
+      ].join('\n'),
+    })
+
+    const wo = makeWO({
+      workorder_id: 'WO-guardrail-001',
+      agent_id:     'db-migration-agent',
+      scope_files:  ['supabase/migrations/guardrail_danger.sql'],
+      risk_category: 'db-migration',
+      rollback_hint: 'Rollback examples must remain commented in migration headers.',
+    })
+
+    const first = await dispatchWorkorder(wo as any, {
+      callModel: async () => safeApprovalRequestOutput,
+      executeTool: defaultExecuteTool,
+    })
+    assert.equal(first.status, 'awaiting_approval')
+
+    const approvalId = first.error?.match(/APPROVAL_REQUIRED: (APP-[A-Z0-9-]+)/)?.[1]
+    assert.ok(approvalId, `approval id expected in ${first.error}`)
+    const grant = await grantApprovalForDispatch(approvalId, 'tom-test')
+    assert.equal(grant.ok, true)
+
+    const second = await dispatchWorkorder({ ...wo } as any, {
+      callModel: async () => dangerousMigrationOutput,
+      executeTool: defaultExecuteTool,
+      callFastReviewer: async () => JSON.stringify({
+        status: 'PASS', risk: 'LOW', confidence: 0.99,
+        violations: [], recommendations: [], summary: 'would pass without static guard', requires_claude: false,
+      }),
+    })
+
+    assert.equal(second.status, 'blocked')
+    assert.match(second.error ?? '', /MIGRATION_GUARD_VIOLATION/)
+    assert.equal(state.readApprovalTokens()[approvalId].status, 'granted')
+    assert.equal(lockExistsFor(second.run_id), false, 'scope_lock muss bei migration guard block freigegeben sein')
+  })
+
   it('WO-014 E-3: review-pipeline rewrite path — lock-release verified by code-inspection', () => {
     // Der review-pipeline rewrite-Pfad (dispatcher.ts ~703-718) ist in dieser Test-Fixture
     // nicht isoliert ausführbar: Spark-C REWRITE eskaliert zu Spark-D, der NICHT injizierbar

@@ -13,7 +13,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
-import { authorizeToolCall, isPathInScope } from '../authorize-tool-call'
+import { authorizeToolCall, guardMigrationContent, isPathInScope } from '../authorize-tool-call'
 import { checkApproval, consumeApproval, createApprovalToken } from '../../approval/approval-gate'
 import { loadSkills } from '../../control-plane/skill-loader'
 import * as state from '../../state/state-manager'
@@ -233,6 +233,74 @@ describe('Permission Gateway — A.2 FILES_BLOCKED + SCOPE Enforcement', () => {
     )
     assert.equal(result.allowed, false)
     assert.equal(result.blockedBy, 'profile.write_allowed')
+  })
+})
+
+describe('Migration SQL Guardrail', () => {
+  it('erlaubt Schema-Foundation mit kommentiertem Rollback-Beispiel', () => {
+    const sql = `
+      CREATE SCHEMA IF NOT EXISTS nutrition;
+      CREATE EXTENSION IF NOT EXISTS pg_trgm;
+      CREATE EXTENSION IF NOT EXISTS pgcrypto;
+      GRANT USAGE ON SCHEMA nutrition TO authenticated, service_role;
+
+      -- Rollback:
+      -- REVOKE USAGE ON SCHEMA nutrition FROM authenticated, service_role;
+      -- DROP SCHEMA IF EXISTS nutrition;
+    `
+
+    const result = guardMigrationContent(sql, 'db-migration-agent')
+    assert.equal(result.allowed, true, result.reason)
+  })
+
+  it('blockiert ausführbares DROP SCHEMA nach DOWN-Sektion', () => {
+    const sql = `
+      CREATE SCHEMA IF NOT EXISTS nutrition;
+      -- DOWN
+      DROP SCHEMA IF EXISTS nutrition;
+    `
+
+    const result = guardMigrationContent(sql, 'db-migration-agent')
+    assert.equal(result.allowed, false)
+    assert.equal(result.blockedBy, 'migration_guard')
+    assert.match(result.reason ?? '', /DROP SCHEMA/)
+  })
+
+  it('blockiert ausführbares REVOKE nach DOWN-Sektion', () => {
+    const sql = `
+      CREATE SCHEMA IF NOT EXISTS nutrition;
+      -- ROLLBACK
+      REVOKE USAGE ON SCHEMA nutrition FROM authenticated;
+    `
+
+    const result = guardMigrationContent(sql, 'db-migration-agent')
+    assert.equal(result.allowed, false)
+    assert.equal(result.blockedBy, 'migration_guard')
+    assert.match(result.reason ?? '', /REVOKE/)
+  })
+
+  it('blockiert ausführbares DROP TABLE', () => {
+    const result = guardMigrationContent('DROP TABLE nutrition.foods;', 'db-migration-agent')
+    assert.equal(result.allowed, false)
+    assert.match(result.reason ?? '', /DROP TABLE/)
+  })
+
+  it('blockiert DELETE FROM ohne WHERE', () => {
+    const result = guardMigrationContent('DELETE FROM nutrition.foods;', 'db-migration-agent')
+    assert.equal(result.allowed, false)
+    assert.match(result.reason ?? '', /DELETE FROM without WHERE/)
+  })
+
+  it('blockiert ALTER TABLE DROP COLUMN', () => {
+    const result = guardMigrationContent('ALTER TABLE nutrition.foods DROP COLUMN calories;', 'db-migration-agent')
+    assert.equal(result.allowed, false)
+    assert.match(result.reason ?? '', /DROP COLUMN/)
+  })
+
+  it('blockiert Supabase DB Commands im Migrationsinhalt', () => {
+    const result = guardMigrationContent('-- operator note\nsupabase db push --linked', 'db-migration-agent')
+    assert.equal(result.allowed, false)
+    assert.match(result.reason ?? '', /supabase db push/)
   })
 })
 
