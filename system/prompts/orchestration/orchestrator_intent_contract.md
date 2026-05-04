@@ -59,6 +59,10 @@ If the workorder is **not** approved (no approval token present), you MUST:
 
 ## Complete example
 
+This example shows JSON shape only. Never use placeholder or example paths
+literally in a real ToolRequest. `targetPath` must come from the active
+workorder scope, task, or acceptance criteria.
+
 ```json
 {
   "selected_agent": "micro-executor",
@@ -68,7 +72,7 @@ If the workorder is **not** approved (no approval token present), you MUST:
   "required_gates": ["files-scope-gate", "review-gate", "human-approval-gate"],
   "stop_conditions": ["production_execution_without_approval_token"],
   "tool": "write",
-  "targetPath": "services/example/src/types.ts",
+  "targetPath": "<WORKORDER_DERIVED_TARGET_PATH>",
   "content": "export type Foo = { id: string }\n"
 }
 ```

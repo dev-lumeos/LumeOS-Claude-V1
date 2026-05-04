@@ -62,6 +62,16 @@ DB-Migration-Details wie Migration Files, Rollback Plan, RLS Hinweise oder Valid
 
 ### OrchestratorIntent Beispiel fuer DB-Migration
 
+Dieses Beispiel ist nur ein Formatreferenz. Never use placeholders or example
+paths literally. `targetPath` must be derived from the current workorder:
+
+- If the workorder names `YYYYMMDD_NNN_<description>.sql`, emit a concrete
+  timestamped migration filename that preserves `<description>.sql`.
+- If the workorder names expected type output files, write those exact files in
+  separate ToolRequests when that step is requested.
+- Do not invent `example.sql`, `20240101_001_example.sql`, or any other generic
+  migration filename.
+
 ```json
 {
   "selected_agent": "db-migration-agent",
@@ -96,7 +106,7 @@ DB-Migration-Details wie Migration Files, Rollback Plan, RLS Hinweise oder Valid
     "production_execution_without_approval_token"
   ],
   "tool": "write",
-  "targetPath": "supabase/migrations/YYYYMMDD_NNN_example.sql",
+  "targetPath": "<WORKORDER_DERIVED_MIGRATION_PATH>",
   "content": "-- migration SQL here"
 }
 ```

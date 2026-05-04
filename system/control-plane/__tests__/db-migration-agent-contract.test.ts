@@ -3,10 +3,16 @@ import { describe, it } from 'node:test'
 import fs from 'node:fs'
 import path from 'node:path'
 
+import {
+  validateToolRequestAgainstWorkorder,
+  type ToolRequest,
+  type Workorder,
+} from '../dispatcher'
 import { validateOrchestratorIntent, type OrchestratorIntent } from '../governance-validator'
 
 const AGENT_SPEC = path.resolve(process.cwd(), '.claude/agents/db-migration-agent.md')
 const DISPATCHER = path.resolve(process.cwd(), 'system/control-plane/dispatcher.ts')
+const WO_003 = path.resolve(process.cwd(), 'system/workorders/nutrition/drafts/WO-NUTRITION-P1-003-food-core-tables.md')
 
 function dbMigrationIntent(overrides: Partial<OrchestratorIntent> = {}): OrchestratorIntent {
   return {
@@ -32,6 +38,40 @@ function dbMigrationIntent(overrides: Partial<OrchestratorIntent> = {}): Orchest
       'production_execution_without_approval_token',
     ],
     ...overrides,
+  }
+}
+
+function woNutrition003(): Workorder {
+  return {
+    workorder_id: 'WO-nutrition-003',
+    agent_id: 'db-migration-agent',
+    task: fs.readFileSync(WO_003, 'utf8'),
+    scope_files: [
+      'supabase/migrations/',
+      'packages/types/src/nutrition/foods.ts',
+      'packages/types/src/nutrition/index.ts',
+    ],
+    context_files: [],
+    acceptance_files: [],
+    acceptance_criteria: [
+      'Neue Migration unter supabase/migrations/ erstellt (future path to be decided - YYYYMMDD_NNN_nutrition_food_core_tables.sql)',
+      'TypeScript-Types in packages/types/src/nutrition/foods.ts spiegeln DB-Tabellen',
+      'packages/types/src/nutrition/index.ts re-exportiert die neuen Interfaces',
+    ],
+    negative_constraints: [],
+    required_skills: [],
+    optional_skills: [],
+    blocked_by: [],
+    requires_approval: true,
+    risk_category: 'db-migration',
+  }
+}
+
+function migrationWrite(targetPath: string): ToolRequest {
+  return {
+    tool: 'write',
+    targetPath,
+    content: '-- migration SQL here',
   }
 }
 
@@ -77,5 +117,45 @@ describe('db-migration-agent runtime contract', () => {
     const dispatcher = fs.readFileSync(DISPATCHER, 'utf8')
     assert.match(dispatcher, /qwen3\.6/)
     assert.match(dispatcher, /enable_thinking\s*=\s*false/)
+  })
+
+  it('agent spec does not present the example migration path as a usable targetPath', () => {
+    const spec = fs.readFileSync(AGENT_SPEC, 'utf8')
+    assert.doesNotMatch(spec, /"targetPath"\s*:\s*"[^"]*example\.sql"/)
+    assert.match(spec, /WORKORDER_DERIVED_MIGRATION_PATH/)
+    assert.match(spec, /never use/i)
+  })
+
+  it('rewrites real tool requests that leak example migration filenames', () => {
+    const validation = validateToolRequestAgainstWorkorder(
+      woNutrition003(),
+      migrationWrite('supabase/migrations/20240101_001_example.sql'),
+    )
+
+    assert.equal(validation.status, 'REWRITE')
+    assert.equal(validation.field, 'targetPath')
+    assert.match(validation.reason ?? '', /example/i)
+  })
+
+  it('passes WO-003 migration writes only when targetPath matches the workorder output stem', () => {
+    const valid = validateToolRequestAgainstWorkorder(
+      woNutrition003(),
+      migrationWrite('supabase/migrations/20240522_003_nutrition_food_core_tables.sql'),
+    )
+    const wrongStem = validateToolRequestAgainstWorkorder(
+      woNutrition003(),
+      migrationWrite('supabase/migrations/20240522_003_unrelated.sql'),
+    )
+
+    assert.equal(valid.status, 'PASS')
+    assert.equal(wrongStem.status, 'REWRITE')
+    assert.match(wrongStem.reason ?? '', /nutrition_food_core_tables\.sql/)
+  })
+
+  it('WO-003 exposes expected migration and type outputs to the contract', () => {
+    const wo = fs.readFileSync(WO_003, 'utf8')
+    assert.match(wo, /YYYYMMDD_NNN_nutrition_food_core_tables\.sql/)
+    assert.match(wo, /packages\/types\/src\/nutrition\/foods\.ts/)
+    assert.match(wo, /packages\/types\/src\/nutrition\/index\.ts/)
   })
 })

@@ -196,6 +196,65 @@ function determineApprovalOperation(_agentId: string, req: ToolRequest): string 
   return null
 }
 
+export interface ToolRequestWorkorderValidation {
+  status: 'PASS' | 'REWRITE'
+  reason?: string
+  field?: string
+}
+
+function normalizeTargetPath(targetPath: string): string {
+  return targetPath.replace(/\\/g, '/')
+}
+
+function isMigrationWriteRequest(req: ToolRequest): boolean {
+  if (req.tool !== 'write' || !req.targetPath) return false
+  const p = normalizeTargetPath(req.targetPath)
+  return p.startsWith('supabase/migrations/') || p.startsWith('db/migrations/')
+}
+
+function extractExpectedMigrationSuffixes(wo: Workorder): string[] {
+  const haystack = [
+    wo.task,
+    ...(wo.acceptance_criteria ?? []),
+    wo.rollback_hint ?? '',
+  ].join('\n')
+  const suffixes = new Set<string>()
+  const matcher = /YYYYMMDD_NNN_([a-z0-9][a-z0-9_]*\.sql)/gi
+  let match: RegExpExecArray | null
+  while ((match = matcher.exec(haystack)) !== null) suffixes.add(match[1].toLowerCase())
+  return [...suffixes]
+}
+
+export function validateToolRequestAgainstWorkorder(
+  wo: Workorder,
+  req: ToolRequest | null,
+): ToolRequestWorkorderValidation {
+  if (!req || !isMigrationWriteRequest(req)) return { status: 'PASS' }
+
+  const targetPath = normalizeTargetPath(req.targetPath ?? '')
+  const fileName = path.posix.basename(targetPath).toLowerCase()
+  if (/example(?:[._-]|$)/i.test(fileName)) {
+    return {
+      status: 'REWRITE',
+      field: 'targetPath',
+      reason: `Migration targetPath "${targetPath}" looks like an example/template path. Derive the concrete migration filename from the workorder; never use example.sql literally.`,
+    }
+  }
+
+  if (wo.agent_id === 'db-migration-agent' || wo.risk_category === 'db-migration') {
+    const expectedSuffixes = extractExpectedMigrationSuffixes(wo)
+    if (expectedSuffixes.length > 0 && !expectedSuffixes.some((suffix) => fileName.endsWith(suffix))) {
+      return {
+        status: 'REWRITE',
+        field: 'targetPath',
+        reason: `Migration targetPath "${targetPath}" does not match the workorder expected migration suffix: ${expectedSuffixes.join(' or ')}`,
+      }
+    }
+  }
+
+  return { status: 'PASS' }
+}
+
 // ─── Default Tool Executor ────────────────────────────────────────────────────
 // ACHTUNG: Nur hinter Gateway aufrufen — nie direkt
 
@@ -503,7 +562,27 @@ export async function dispatchWorkorder(
         expectedAgent: mapAgentToValidatorTarget(wo.agent_id),
       })
 
-      if (validation.status === 'PASS') break
+      if (validation.status === 'PASS') {
+        const toolValidation = validateToolRequestAgainstWorkorder(wo, parseToolRequest(modelOutput))
+        if (toolValidation.status === 'PASS') break
+
+        audit.writeAuditEvent({ event: 'governance_violation', run_id: runId,
+          workorder_id: wo.workorder_id, agent_id: wo.agent_id,
+          orchestration_mode: orchestrationMode, validation_status: toolValidation.status,
+          reason: toolValidation.reason, field: toolValidation.field, rewrite_attempt: rewriteCount })
+
+        lastValidationReason = toolValidation.reason
+        lastValidationField  = toolValidation.field
+        lastParseError       = undefined
+        rewriteCount++
+        if (rewriteCount > MAX_REWRITE_LOOPS) {
+          await state.endRun(runId, 'failed')
+          await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
+          return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id,
+            error: `Governance: REWRITE-Limit (${MAX_REWRITE_LOOPS}) erreicht. Letzte Verletzung: ${toolValidation.reason}` }
+        }
+        continue
+      }
 
       audit.writeAuditEvent({ event: 'governance_violation', run_id: runId,
         workorder_id: wo.workorder_id, agent_id: wo.agent_id,
