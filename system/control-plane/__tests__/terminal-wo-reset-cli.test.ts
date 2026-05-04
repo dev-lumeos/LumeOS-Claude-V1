@@ -363,8 +363,56 @@ describe('Expired Approval Cleanup - State-Manager-Helper', () => {
     assert.equal(getActiveRunByRunId('RUN-exp-002')?.status, 'awaiting_approval')
   })
 
+  it('erlaubt Split-Brain: enforcement Token expired, Runtime und Queue noch granted', async () => {
+    writeState([makeAwaiting('WO-exp-split', 'RUN-exp-split')], [
+      makeRun('RUN-exp-split', 'WO-exp-split', 'awaiting_approval'),
+    ])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.approvals = [makeApprovalItem('APP-exp-split', 'WO-exp-split', 'RUN-exp-split', 'granted')]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+    writeQueue({
+      'APP-exp-split': {
+        approval_id: 'APP-exp-split',
+        workorder_id: 'WO-exp-split',
+        run_id: 'RUN-exp-split',
+        agent_id: 'micro-executor',
+        reason: 'test approval',
+        risk_category: 'docs',
+        affected_files: ['docs/example.md'],
+        proposed_action: 'write docs/example.md',
+        status: 'granted',
+        requested_at: isoMinutesAgo(60),
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      },
+    })
+    writeApprovalTokens({
+      'APP-exp-split': makeToken(
+        'APP-exp-split',
+        'WO-exp-split',
+        'RUN-exp-split',
+        'granted',
+        isoMinutesAgo(5),
+      ),
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-split', 'RUN-exp-split')
+
+    assert.equal(r.removed, true, `expected removal, got ${r.reason}`)
+    assert.equal(r.tokenStatus, 'granted')
+    assert.equal(r.runtimeStatus, 'granted')
+    assert.equal(r.queueStatus, 'granted')
+    assert.match(r.reason ?? '', /approval token expired/)
+    assert.equal(readActiveWorkorders().find(w => w.workorder_id === 'WO-exp-split'), undefined)
+    assert.equal(getActiveRunByRunId('RUN-exp-split')?.status, 'awaiting_approval')
+  })
+
   it('entfernt awaiting_approval mit consumed Token', async () => {
     writeState([makeAwaiting('WO-exp-003', 'RUN-exp-003')])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.approvals = [makeApprovalItem('APP-exp-003', 'WO-exp-003', 'RUN-exp-003', 'granted')]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
     writeApprovalTokens({
       'APP-exp-003': makeToken(
         'APP-exp-003',
@@ -378,6 +426,7 @@ describe('Expired Approval Cleanup - State-Manager-Helper', () => {
     const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-003', 'RUN-exp-003')
 
     assert.equal(r.removed, true, `expected removal, got ${r.reason}`)
+    assert.equal(r.runtimeStatus, 'granted')
     assert.equal(readActiveWorkorders().length, 0)
   })
 
@@ -436,6 +485,37 @@ describe('Expired Approval Cleanup - State-Manager-Helper', () => {
     assert.equal(r.removed, false)
     assert.match(r.reason ?? '', /pending approval/)
     assert.equal(readActiveWorkorders().length, 1, 'state must be unchanged')
+  })
+
+  it('erlaubt granted Queue/Runtime ohne Enforcement-Token als nicht resume-faehig', async () => {
+    writeState([makeAwaiting('WO-exp-granted-only', 'RUN-exp-granted-only')])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.approvals = [makeApprovalItem('APP-exp-granted-only', 'WO-exp-granted-only', 'RUN-exp-granted-only', 'granted')]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+    writeQueue({
+      'APP-exp-granted-only': {
+        approval_id: 'APP-exp-granted-only',
+        workorder_id: 'WO-exp-granted-only',
+        run_id: 'RUN-exp-granted-only',
+        agent_id: 'micro-executor',
+        reason: 'test approval',
+        risk_category: 'docs',
+        affected_files: ['docs/example.md'],
+        proposed_action: 'write docs/example.md',
+        status: 'granted',
+        requested_at: isoMinutesAgo(60),
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      },
+    })
+
+    const r = await removeExpiredAwaitingApprovalActiveWorkorder('WO-exp-granted-only', 'RUN-exp-granted-only')
+
+    assert.equal(r.removed, true, `expected removal, got ${r.reason}`)
+    assert.equal(r.runtimeStatus, 'granted')
+    assert.equal(r.queueStatus, 'granted')
+    assert.match(r.reason ?? '', /no dispatcher enforcement token/)
+    assert.equal(readActiveWorkorders().length, 0)
   })
 
   it('verweigert running/dispatched/done/failed fuer diesen Cleanup-Pfad', async () => {
@@ -530,6 +610,25 @@ describe('Expired Approval Cleanup - CLI clear-expired-approval', () => {
 
   it('clear-expired-approval --confirm entfernt Eintrag und schreibt Audit', () => {
     writeState([makeAwaiting('WO-exp-cli-002', 'RUN-exp-cli-002')])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.approvals = [makeApprovalItem('APP-exp-cli-002', 'WO-exp-cli-002', 'RUN-exp-cli-002', 'granted')]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+    writeQueue({
+      'APP-exp-cli-002': {
+        approval_id: 'APP-exp-cli-002',
+        workorder_id: 'WO-exp-cli-002',
+        run_id: 'RUN-exp-cli-002',
+        agent_id: 'micro-executor',
+        reason: 'test approval',
+        risk_category: 'docs',
+        affected_files: ['docs/example.md'],
+        proposed_action: 'write docs/example.md',
+        status: 'granted',
+        requested_at: isoMinutesAgo(60),
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      },
+    })
     writeApprovalTokens({
       'APP-exp-cli-002': makeToken('APP-exp-cli-002', 'WO-exp-cli-002', 'RUN-exp-cli-002', 'granted', isoMinutesAgo(5)),
     })
@@ -544,6 +643,9 @@ describe('Expired Approval Cleanup - CLI clear-expired-approval', () => {
     assert.equal(audit[0].workorder_id, 'WO-exp-cli-002')
     assert.equal(audit[0].run_id, 'RUN-exp-cli-002')
     assert.equal(audit[0].approval_id, 'APP-exp-cli-002')
+    assert.equal(audit[0].token_status, 'granted')
+    assert.equal(audit[0].runtime_status, 'granted')
+    assert.equal(audit[0].queue_status, 'granted')
     assert.match(audit[0].reason ?? '', /previous_status=awaiting_approval/)
     assert.equal(audit[0].approved_by, 'test-operator')
   })

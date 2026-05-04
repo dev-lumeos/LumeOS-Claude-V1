@@ -482,6 +482,8 @@ function describeExpiredApprovalOutcome(outcome: ExpiredAwaitingApprovalCleanupR
     outcome.approvalId ? `approval_id=${outcome.approvalId}` : 'approval_id=<none>',
     outcome.tokenStatus ? `token_status=${outcome.tokenStatus}` : undefined,
     outcome.tokenExpiresAt ? `token_expires_at=${outcome.tokenExpiresAt}` : undefined,
+    outcome.runtimeStatus ? `runtime_status=${outcome.runtimeStatus}` : undefined,
+    outcome.queueStatus ? `queue_status=${outcome.queueStatus}` : undefined,
     outcome.reason ? `reason=${outcome.reason}` : undefined,
   ].filter(Boolean)
   return parts.join(', ')
@@ -529,6 +531,10 @@ async function cmdClearExpiredApproval(rest: string[]): Promise<number> {
     agent_id:           target.agent_id,
     orchestration_mode: getOrchestrationMode(),
     approval_id:        evaluation.approvalId,
+    token_status:       evaluation.tokenStatus,
+    token_expires_at:   evaluation.tokenExpiresAt,
+    runtime_status:     evaluation.runtimeStatus,
+    queue_status:       evaluation.queueStatus,
     reason:             `operator-initiated cleanup of expired/unusable approval awaiting_approval active_workorders entry; previous_status=${target.status}; ${describeExpiredApprovalOutcome(evaluation)}`,
     approved_by:        operator,
   })

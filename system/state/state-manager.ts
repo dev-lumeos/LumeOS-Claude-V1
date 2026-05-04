@@ -590,6 +590,8 @@ export interface ExpiredAwaitingApprovalCleanupResult {
   approvalId?: string
   tokenStatus?: string
   tokenExpiresAt?: string
+  runtimeStatus?: string
+  queueStatus?: string
 }
 
 function readApprovalQueueForCleanup(): Record<string, ApprovalQueueLike> {
@@ -658,6 +660,9 @@ function evaluateExpiredAwaitingApprovalCleanupInState(
 
   const tokens = Object.values(readApprovalTokens()) as ApprovalTokenLike[]
   const matchingTokens = tokens.filter(t => approvalRecordMatches(t, workorderId, runId))
+  const runtimeApproval = s.approvals.find(a => approvalRecordMatches(a, workorderId, runId))
+  const queueApprovals = Object.values(readApprovalQueueForCleanup())
+  const queueApproval = queueApprovals.find(a => approvalRecordMatches(a, workorderId, runId))
   const usableToken = matchingTokens.find(approvalUsable)
   if (usableToken) {
     return {
@@ -666,34 +671,9 @@ function evaluateExpiredAwaitingApprovalCleanupInState(
       approvalId: usableToken.approval_id,
       tokenStatus: usableToken.status,
       tokenExpiresAt: usableToken.expires_at,
+      runtimeStatus: runtimeApproval?.status,
+      queueStatus: queueApproval?.status,
       reason: `usable granted token exists: approval_id=${usableToken.approval_id}`,
-    }
-  }
-
-  const runtimeApproval = s.approvals.find(a => approvalRecordMatches(a, workorderId, runId) && approvalUsable(a))
-  if (runtimeApproval) {
-    const kind = runtimeApproval.status === 'pending' ? 'pending approval' : 'usable runtime approval'
-    return {
-      removed: false,
-      entry: target,
-      approvalId: runtimeApproval.approval_id,
-      tokenStatus: runtimeApproval.status,
-      tokenExpiresAt: runtimeApproval.expires_at,
-      reason: `${kind} exists: approval_id=${runtimeApproval.approval_id}`,
-    }
-  }
-
-  const queueApprovals = Object.values(readApprovalQueueForCleanup())
-  const queueApproval = queueApprovals.find(a => approvalRecordMatches(a, workorderId, runId) && approvalUsable(a))
-  if (queueApproval && matchingTokens.length === 0) {
-    const kind = queueApproval.status === 'pending' ? 'pending approval' : 'usable queue approval'
-    return {
-      removed: false,
-      entry: target,
-      approvalId: queueApproval.approval_id,
-      tokenStatus: queueApproval.status,
-      tokenExpiresAt: queueApproval.expires_at,
-      reason: `${kind} exists: approval_id=${queueApproval.approval_id}`,
     }
   }
 
@@ -705,12 +685,35 @@ function evaluateExpiredAwaitingApprovalCleanupInState(
       approvalId: token.approval_id,
       tokenStatus: token.status,
       tokenExpiresAt: token.expires_at,
+      runtimeStatus: runtimeApproval?.status,
+      queueStatus: queueApproval?.status,
       reason: unusableApprovalReason(token),
     }
   }
 
-  const staleApproval = s.approvals.find(a => approvalRecordMatches(a, workorderId, runId))
-    ?? queueApprovals.find(a => approvalRecordMatches(a, workorderId, runId))
+  if (runtimeApproval?.status === 'pending' && approvalUsable(runtimeApproval)) {
+    return {
+      removed: false,
+      entry: target,
+      approvalId: runtimeApproval.approval_id,
+      runtimeStatus: runtimeApproval.status,
+      queueStatus: queueApproval?.status,
+      reason: `pending approval exists: approval_id=${runtimeApproval.approval_id}`,
+    }
+  }
+
+  if (queueApproval?.status === 'pending' && approvalUsable(queueApproval)) {
+    return {
+      removed: false,
+      entry: target,
+      approvalId: queueApproval.approval_id,
+      runtimeStatus: runtimeApproval?.status,
+      queueStatus: queueApproval.status,
+      reason: `pending approval exists: approval_id=${queueApproval.approval_id}`,
+    }
+  }
+
+  const staleApproval = runtimeApproval ?? queueApproval
   if (staleApproval) {
     return {
       removed: true,
@@ -718,7 +721,9 @@ function evaluateExpiredAwaitingApprovalCleanupInState(
       approvalId: staleApproval.approval_id,
       tokenStatus: staleApproval.status,
       tokenExpiresAt: staleApproval.expires_at,
-      reason: `approval no longer usable: approval_id=${staleApproval.approval_id}, status=${staleApproval.status ?? 'unknown'}`,
+      runtimeStatus: runtimeApproval?.status,
+      queueStatus: queueApproval?.status,
+      reason: `no dispatcher enforcement token; approval reference is not resume-capable: approval_id=${staleApproval.approval_id}, status=${staleApproval.status ?? 'unknown'}`,
     }
   }
 

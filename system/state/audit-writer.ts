@@ -57,6 +57,10 @@ export interface AuditEvent {
   duration_ms?:        number
   error_code?:         string
   retry_attempt?:      number
+  token_status?:       string
+  token_expires_at?:   string
+  runtime_status?:     string
+  queue_status?:       string
   // Review pipeline (RULES.md): high-level summary, detail in pipeline-audit.jsonl
   review_tier?:        'spark-c' | 'spark-d' | 'claude'
   review_reason?:      string
@@ -157,7 +161,7 @@ export const auditStaleDispatchedWorkorderCleanup = (
 // Differentiated from terminal_workorder_reset: this event marks cleanup of
 // awaiting_approval entries whose dispatcher approval can no longer be used.
 export const auditExpiredApprovalWorkorderReset = (
-  p: Base & Pick<AuditEvent, 'reason' | 'approved_by' | 'approval_id'>,
+  p: Base & Pick<AuditEvent, 'reason' | 'approved_by' | 'approval_id' | 'token_status' | 'token_expires_at' | 'runtime_status' | 'queue_status'>,
 ) => writeAuditEvent({ event: 'expired_approval_workorder_reset', severity: 'warning', ...p })
 
 // ─── Review Pipeline Helpers ──────────────────────────────────────────────────
