@@ -15,7 +15,7 @@ import { dispatchWorkorder, defaultExecuteTool } from '../../../system/control-p
 import { DispatchLoop } from './dispatch-loop'
 import { createVllmCallModel } from './vllm-adapter'
 import { toDispatcherWorkorder } from './wo-adapter'
-import { fetchReadyWOs, markDispatched, markCompleted } from './workorder-repository'
+import { fetchReadyWOs, markDispatched, markDispatchResult } from './workorder-repository'
 import type { NodeId } from './routing'
 
 // ─── Slot Manager ─────────────────────────────────────────────────────────────
@@ -54,11 +54,10 @@ const dispatchLoop = new DispatchLoop(slotManager, {
       executeTool: defaultExecuteTool,
     })
 
-    const success = result.status === 'completed'
-    await markCompleted(
+    await markDispatchResult(
       wo.wo_id,
-      success,
-      success ? undefined : (result.error ?? 'technical_transient')
+      result,
+      result.status === 'failed' ? (result.error ?? 'technical_transient') : undefined
     )
 
     console.log(`[Scheduler] ${wo.wo_id} → ${result.status} (run: ${result.run_id})`)

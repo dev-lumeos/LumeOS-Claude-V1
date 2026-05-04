@@ -6,6 +6,7 @@
 
 import { getServiceClient } from '@lumeos/supabase-clients'
 import type { WorkOrder, WOState, WOPhase } from '@lumeos/wo-core'
+import type { DispatchResult } from '../../../system/control-plane/dispatcher'
 
 // ─── DB Row Type ──────────────────────────────────────────────────────────────
 // Nur die Felder die wir lesen — kein SELECT * um Transfer klein zu halten.
@@ -187,4 +188,31 @@ export async function markCompleted(woId: string, success: boolean, failureClass
   const extras: Record<string, unknown> = { completed_at: new Date().toISOString() }
   if (!success && failureClass) extras.failure_class = failureClass
   await updateWOState(woId, success ? 'done' : 'failed', extras)
+}
+
+export function mapDispatchStatusToWOState(status: DispatchResult['status']): WOState {
+  switch (status) {
+    case 'completed':         return 'done'
+    case 'failed':            return 'failed'
+    case 'blocked':           return 'blocked'
+    case 'awaiting_approval': return 'blocked'
+  }
+}
+
+export async function markDispatchResult(
+  woId: string,
+  result: DispatchResult,
+  failureClass?: string,
+): Promise<void> {
+  const newState = mapDispatchStatusToWOState(result.status)
+  const extras: Record<string, unknown> = {}
+
+  if (newState === 'done' || newState === 'failed') {
+    extras.completed_at = new Date().toISOString()
+  }
+  if (newState === 'failed' && failureClass) {
+    extras.failure_class = failureClass
+  }
+
+  await updateWOState(woId, newState, extras)
 }
