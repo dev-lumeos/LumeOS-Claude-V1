@@ -24,7 +24,7 @@
 
 import fs   from 'node:fs'
 import path from 'node:path'
-import { triggerSystemStop, isSystemStopped } from '../state/state-manager'
+import { acknowledgeFailedRunsBaseline, triggerSystemStop, isSystemStopped } from '../state/state-manager'
 
 // ─── Konfiguration ────────────────────────────────────────────────────────────
 
@@ -63,6 +63,10 @@ export interface StopRuleResult {
   value:       number
   threshold:   number
   reason?:     string
+  total_failed?:              number
+  ignored_historical_failed?: number
+  baseline_at?:               string
+  baseline_by?:               string
 }
 
 export interface StopRulesEvaluation {
@@ -93,18 +97,50 @@ function readJson<T = any>(filepath: string): T | null {
 
 // ─── Einzelne Regeln ─────────────────────────────────────────────────────────
 
+function runFailureAnchor(run: any): string | undefined {
+  return run.completed_at ?? run.ended_at ?? run.failed_at ?? run.started_at
+}
+
 function checkFailedRuns(cfg: StopRulesConfig): StopRuleResult {
   const state = readJson<any>('system/state/runtime_state.json')
   const runs  = state?.active_runs ?? []
-  const failed = runs.filter((r: any) => r.status === 'failed').length
+  const failedRuns = runs.filter((r: any) => r.status === 'failed')
+  const baseline = state?.stop_rule_baselines?.failed_runs_threshold
+
+  if (!baseline?.acknowledged_at) {
+    const failed = failedRuns.length
+    return {
+      rule:      'FAILED_RUNS_THRESHOLD',
+      triggered: failed >= cfg.failed_runs_threshold,
+      value:     failed,
+      threshold: cfg.failed_runs_threshold,
+      reason:    failed >= cfg.failed_runs_threshold
+        ? `${failed} failed Runs >= Schwellwert ${cfg.failed_runs_threshold}`
+        : undefined,
+    }
+  }
+
+  const baselineTime = new Date(baseline.acknowledged_at).getTime()
+  const counted = failedRuns.filter((r: any) => {
+    const anchor = runFailureAnchor(r)
+    if (!anchor) return true
+    const anchorTime = new Date(anchor).getTime()
+    if (!Number.isFinite(anchorTime)) return true
+    return anchorTime > baselineTime
+  }).length
+  const ignored = failedRuns.length - counted
   return {
     rule:      'FAILED_RUNS_THRESHOLD',
-    triggered: failed >= cfg.failed_runs_threshold,
-    value:     failed,
+    triggered: counted >= cfg.failed_runs_threshold,
+    value:     counted,
     threshold: cfg.failed_runs_threshold,
-    reason:    failed >= cfg.failed_runs_threshold
-      ? `${failed} failed Runs >= Schwellwert ${cfg.failed_runs_threshold}`
+    reason:    counted >= cfg.failed_runs_threshold
+      ? `${counted} failed Runs seit Baseline >= Schwellwert ${cfg.failed_runs_threshold} (${ignored} historisch ignoriert, total ${failedRuns.length})`
       : undefined,
+    total_failed:              failedRuns.length,
+    ignored_historical_failed: ignored,
+    baseline_at:               baseline.acknowledged_at,
+    baseline_by:               baseline.acknowledged_by,
   }
 }
 
@@ -255,6 +291,22 @@ export async function runStopRules(
 async function main() {
   const args   = process.argv.slice(2)
   const dryRun = args.includes('--dry-run')
+  const ackIndex = args.indexOf('--ack-failed-runs')
+  const byIndex = args.indexOf('--by')
+
+  if (ackIndex >= 0) {
+    const next = args[ackIndex + 1]
+    const reason = next && !next.startsWith('--') ? next : undefined
+    const byArg = byIndex >= 0 ? args[byIndex + 1] : undefined
+    const acknowledgedBy = byArg && !byArg.startsWith('--')
+      ? byArg
+      : process.env.LUMEOS_OPERATOR ?? process.env.USERNAME ?? 'operator'
+    await acknowledgeFailedRunsBaseline(acknowledgedBy, reason)
+    console.log(`FAILED_RUNS_THRESHOLD baseline acknowledged by ${acknowledgedBy}`)
+    if (reason) console.log(`Reason: ${reason}`)
+    console.log('system_stop unchanged; use clearSystemStop separately if needed')
+    return
+  }
 
   if (dryRun) console.log('\n🔍 Dry-Run Modus — kein Stop wird ausgelöst\n')
 
@@ -270,6 +322,9 @@ async function main() {
       ? `${rule.value}% (max: ${rule.threshold}%)`
       : `${rule.value} (max: ${rule.threshold})`
     console.log(`${icon} ${rule.rule}: ${val}`)
+    if (rule.rule === 'FAILED_RUNS_THRESHOLD' && rule.baseline_at) {
+      console.log(`     baseline: ${rule.baseline_at} by ${rule.baseline_by ?? 'unknown'}; total ${rule.total_failed}, ignored ${rule.ignored_historical_failed}, counted ${rule.value}`)
+    }
     if (rule.triggered && rule.reason) console.log(`     → ${rule.reason}`)
   }
 
@@ -287,7 +342,7 @@ async function main() {
   console.log()
 }
 
-const isMain = process.argv[1]?.includes('stop-rules')
+const isMain = path.basename(process.argv[1] ?? '') === 'stop-rules.ts'
 if (isMain) {
   main().catch(err => { console.error(err); process.exit(1) })
 }

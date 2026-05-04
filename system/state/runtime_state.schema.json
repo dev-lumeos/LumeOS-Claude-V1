@@ -11,7 +11,8 @@
     "active_runs":        { "type": "array", "items": { "$ref": "#/definitions/Run" } },
     "active_workorders":  { "type": "array", "items": { "$ref": "#/definitions/ActiveWorkorder" } },
     "locks":              { "type": "array", "items": { "$ref": "#/definitions/Lock" } },
-    "approvals":          { "type": "array", "items": { "$ref": "#/definitions/ApprovalRef" } }
+    "approvals":          { "type": "array", "items": { "$ref": "#/definitions/ApprovalRef" } },
+    "stop_rule_baselines": { "$ref": "#/definitions/StopRuleBaselines" }
   },
   "definitions": {
     "Run": {
@@ -67,6 +68,23 @@
         "decided_at":       { "type": "string", "format": "date-time" },
         "decided_by":       { "type": "string" },
         "deny_reason":      { "type": "string" }
+      }
+    },
+    "StopRuleBaselines": {
+      "type": "object",
+      "properties": {
+        "failed_runs_threshold": { "$ref": "#/definitions/FailedRunsThresholdBaseline" }
+      },
+      "additionalProperties": false
+    },
+    "FailedRunsThresholdBaseline": {
+      "type": "object",
+      "required": ["acknowledged_at", "acknowledged_by", "acknowledged_failed_count"],
+      "properties": {
+        "acknowledged_at":           { "type": "string", "format": "date-time" },
+        "acknowledged_by":           { "type": "string" },
+        "acknowledged_failed_count": { "type": "number" },
+        "reason":                    { "type": "string" }
       }
     }
   }

@@ -23,10 +23,10 @@ function cleanupTmpDir(): void {
   try { fs.rmSync(tmpDir, { recursive: true, force: true }) } catch {}
 }
 
-function writeState(runs: Array<{ run_id: string; status: string }>): void {
+function writeState(runs: Array<Record<string, any>>, extra: Record<string, any> = {}): void {
   fs.writeFileSync(
     path.join(tmpDir, 'system/state/runtime_state.json'),
-    JSON.stringify({ active_runs: runs, active_workorders: [], locks: [], approvals: [], scope_locks: [], db_migration_lock: null, system_stop: null }),
+    JSON.stringify({ active_runs: runs, active_workorders: [], locks: [], approvals: [], scope_locks: [], db_migration_lock: null, system_stop: null, ...extra }),
     'utf8',
   )
 }
@@ -88,6 +88,118 @@ describe('FAILED_RUNS_THRESHOLD', () => {
     const rule = r.all_rules.find(x => x.rule === 'FAILED_RUNS_THRESHOLD')!
     assert.equal(rule.triggered, true)
     assert.equal(rule.value, 3)
+    cleanupTmpDir()
+  })
+
+  it('Baseline ignoriert historische failed Runs vor acknowledged_at', () => {
+    writeState(
+      Array.from({ length: 9 }, (_, i) => ({
+        run_id: `R${i + 1}`,
+        status: 'failed',
+        completed_at: '2026-05-04T01:00:00.000Z',
+      })),
+      {
+        stop_rule_baselines: {
+          failed_runs_threshold: {
+            acknowledged_at: '2026-05-04T02:00:00.000Z',
+            acknowledged_by: 'tom',
+            acknowledged_failed_count: 9,
+          },
+        },
+      },
+    )
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, failed_runs_threshold: 5 })
+    const rule = r.all_rules.find(x => x.rule === 'FAILED_RUNS_THRESHOLD')!
+    assert.equal(rule.triggered, false)
+    assert.equal(rule.value, 0)
+    assert.equal(rule.total_failed, 9)
+    assert.equal(rule.ignored_historical_failed, 9)
+    assert.equal(rule.baseline_at, '2026-05-04T02:00:00.000Z')
+    cleanupTmpDir()
+  })
+
+  it('Baseline triggert bei 5 neuen failed Runs nach acknowledged_at', () => {
+    writeState(
+      [
+        ...Array.from({ length: 9 }, (_, i) => ({
+          run_id: `R-old-${i + 1}`,
+          status: 'failed',
+          completed_at: '2026-05-04T01:00:00.000Z',
+        })),
+        ...Array.from({ length: 5 }, (_, i) => ({
+          run_id: `R-new-${i + 1}`,
+          status: 'failed',
+          completed_at: '2026-05-04T03:00:00.000Z',
+        })),
+      ],
+      {
+        stop_rule_baselines: {
+          failed_runs_threshold: {
+            acknowledged_at: '2026-05-04T02:00:00.000Z',
+            acknowledged_by: 'tom',
+            acknowledged_failed_count: 9,
+          },
+        },
+      },
+    )
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, failed_runs_threshold: 5 })
+    const rule = r.all_rules.find(x => x.rule === 'FAILED_RUNS_THRESHOLD')!
+    assert.equal(rule.triggered, true)
+    assert.equal(rule.value, 5)
+    assert.equal(rule.total_failed, 14)
+    assert.equal(rule.ignored_historical_failed, 9)
+    cleanupTmpDir()
+  })
+
+  it('Baseline triggert nicht bei 4 neuen failed Runs nach acknowledged_at', () => {
+    writeState(
+      Array.from({ length: 4 }, (_, i) => ({
+        run_id: `R-new-${i + 1}`,
+        status: 'failed',
+        completed_at: '2026-05-04T03:00:00.000Z',
+      })),
+      {
+        stop_rule_baselines: {
+          failed_runs_threshold: {
+            acknowledged_at: '2026-05-04T02:00:00.000Z',
+            acknowledged_by: 'tom',
+            acknowledged_failed_count: 9,
+          },
+        },
+      },
+    )
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, failed_runs_threshold: 5 })
+    const rule = r.all_rules.find(x => x.rule === 'FAILED_RUNS_THRESHOLD')!
+    assert.equal(rule.triggered, false)
+    assert.equal(rule.value, 4)
+    cleanupTmpDir()
+  })
+
+  it('zaehlt Run als neu, wenn er vor Baseline startete aber nach Baseline fehlschlug', () => {
+    writeState(
+      [
+        {
+          run_id: 'R-crossing',
+          status: 'failed',
+          started_at: '2026-05-04T01:00:00.000Z',
+          completed_at: '2026-05-04T03:00:00.000Z',
+        },
+      ],
+      {
+        stop_rule_baselines: {
+          failed_runs_threshold: {
+            acknowledged_at: '2026-05-04T02:00:00.000Z',
+            acknowledged_by: 'tom',
+            acknowledged_failed_count: 0,
+          },
+        },
+      },
+    )
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, failed_runs_threshold: 2 })
+    const rule = r.all_rules.find(x => x.rule === 'FAILED_RUNS_THRESHOLD')!
+    assert.equal(rule.triggered, false)
+    assert.equal(rule.value, 1)
+    assert.equal(rule.ignored_historical_failed, 0)
     cleanupTmpDir()
   })
 })

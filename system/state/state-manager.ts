@@ -106,6 +106,17 @@ export interface SystemStop {
   stopped_by: string   // 'human' | 'auto' | beliebiger String
 }
 
+export interface FailedRunsThresholdBaseline {
+  acknowledged_at:           string
+  acknowledged_by:           string
+  acknowledged_failed_count: number
+  reason?:                   string
+}
+
+export interface StopRuleBaselines {
+  failed_runs_threshold?: FailedRunsThresholdBaseline
+}
+
 export interface RuntimeState {
   orchestration_mode: OrchestratorMode
   spark_mode:         SparkMode
@@ -120,8 +131,10 @@ export interface RuntimeState {
   scope_locks?:       ScopeLock[]
   /** A.3: DB-Migration-Lock — globaler Exklusiv-Lock. */
   db_migration_lock?: DbMigrationLock | null
-  /** C.1: System Stop — globale Notbremse. null = kein Stop aktiv. */
+  /** C.1: System Stop - globale Notbremse. null = kein Stop aktiv. */
   system_stop?:       SystemStop | null
+  /** Stop-rule operator acknowledgements. Clear system_stop remains separate. */
+  stop_rule_baselines?: StopRuleBaselines
 }
 
 interface LockMeta {
@@ -157,6 +170,7 @@ const DEFAULT_STATE: RuntimeState = {
   scope_locks:        [],
   db_migration_lock:  null,
   system_stop:        null,
+  stop_rule_baselines: {},
 }
 
 // ─── File Lock ────────────────────────────────────────────────────────────────
@@ -1027,6 +1041,21 @@ export async function triggerSystemStop(reason: string, stoppedBy = 'human'): Pr
  */
 export async function clearSystemStop(): Promise<void> {
   await mutate(s => { s.system_stop = null })
+}
+
+export async function acknowledgeFailedRunsBaseline(acknowledgedBy: string, reason?: string): Promise<void> {
+  const operator = acknowledgedBy.trim()
+  if (!operator) throw new Error('acknowledgedBy is required')
+  await mutate(s => {
+    const failedCount = s.active_runs.filter(r => r.status === 'failed').length
+    s.stop_rule_baselines = s.stop_rule_baselines ?? {}
+    s.stop_rule_baselines.failed_runs_threshold = {
+      acknowledged_at: new Date().toISOString(),
+      acknowledged_by: operator,
+      acknowledged_failed_count: failedCount,
+      ...(reason ? { reason } : {}),
+    }
+  })
 }
 
 export async function writeApprovalToken(approvalId: string, token: any): Promise<void> {

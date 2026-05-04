@@ -15,6 +15,7 @@ import {
   triggerSystemStop,
   clearSystemStop,
   isSystemStopped,
+  acknowledgeFailedRunsBaseline,
 } from '../state-manager'
 
 import { runPreflight, type PreflightDeps } from '../../control-plane/scheduler-preflight'
@@ -94,6 +95,39 @@ describe('System Stop — clearSystemStop', () => {
     const s = isSystemStopped()
     assert.equal(s.stopped, true)
     if (s.stopped) assert.equal(s.reason, 'zweiter Stop')
+    cleanupTmpDir()
+  })
+})
+
+describe('System Stop failed-runs baseline acknowledge', () => {
+  beforeEach(setupTmpDir)
+
+  it('acknowledge setzt Baseline und cleared system_stop nicht', async () => {
+    const statePath = path.join(tmpDir, 'system/state/runtime_state.json')
+    fs.writeFileSync(statePath, JSON.stringify({
+      orchestration_mode: 'claude_code',
+      spark_mode: 'mode1',
+      active_runs: [
+        { run_id: 'R1', workorder_id: 'WO-1', agent_id: 'micro-executor', status: 'failed', started_at: '2026-05-04T01:00:00.000Z', written_files: [] },
+        { run_id: 'R2', workorder_id: 'WO-2', agent_id: 'micro-executor', status: 'completed', started_at: '2026-05-04T01:00:00.000Z', written_files: [] },
+      ],
+      active_workorders: [],
+      locks: [],
+      approvals: [],
+      audit_log_path: 'system/state/audit.jsonl',
+      system_stop: { active: true, reason: 'historical failures', stopped_at: '2026-05-04T02:00:00.000Z', stopped_by: 'auto-stop-rules' },
+    }), 'utf8')
+
+    const before = new Date().toISOString()
+    await acknowledgeFailedRunsBaseline('tom', 'historical test failures acknowledged')
+
+    const state = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    const baseline = state.stop_rule_baselines.failed_runs_threshold
+    assert.equal(state.system_stop.active, true)
+    assert.equal(baseline.acknowledged_by, 'tom')
+    assert.equal(baseline.acknowledged_failed_count, 1)
+    assert.equal(baseline.reason, 'historical test failures acknowledged')
+    assert.ok(baseline.acknowledged_at >= before)
     cleanupTmpDir()
   })
 })
