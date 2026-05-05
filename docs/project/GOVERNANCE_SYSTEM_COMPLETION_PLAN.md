@@ -23,7 +23,7 @@ The goal is to make the governance system operable before more product work cont
 | 11. Stop rules / system stop | `system/control-plane/stop-rules.ts`, `system/state/state-manager.ts`, tests | TESTED | Baselines exist for failed runs and invalid JSON; stop lifecycle docs are thin. |
 | 12. Cleanup / state lifecycle | `system/control-plane/terminal-wo-reset-cli.ts`, `system/control-plane/governance-invariant-check.ts`, state manager, tests | TESTED | Official cleanup paths exist and read-only invariant checks summarize runtime drift. |
 | 13. Reporting / dossier | `system/reports/*`, `system/reports/batch-dossier.ts`, reports directories | TESTED | Batch 006 adds a read-only batch dossier reporter with Markdown/JSON output, explicit `--write`, output classification, checker summaries, and operator dossier suggestions. |
-| 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, runbook, tests | TESTED | Operator reached real DONE for Nutrition 001 and P1-004. |
+| 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, `operator-doctor.ts`, runbook, tests | TESTED | Operator reached real DONE for Nutrition 001 and P1-004; Batch 008 adds read-only Doctor mode with one safe next action. |
 | 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 adds read-only checks for JSON-only contracts, selected_agent drift, example path leaks, and db-migration write/review rules. |
 | 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 validates SKILL.md frontmatter/body and reports registry drift. |
 | 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 checks Qwen3.6 thinking-off documentation and dispatcher JSON object response enforcement. |
@@ -59,7 +59,6 @@ The goal is to make the governance system operable before more product work cont
 
 ## 5. Missing Components
 
-- Operator `--doctor` mode for self-diagnosing common blockers.
 - Product work gate that blocks BLS import until required governance batches are done is documented and promotion-aware, but not yet fully integrated into operator doctor.
 
 ## 6. Critical Invariants
@@ -193,13 +192,14 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --continue --apply-safe-cleanups
 ```
 
-Planned:
+Implemented:
 
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --doctor
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --doctor --json
 ```
 
-`--doctor` should explain runtime blockers, invariant violations, memory/learning status, stop-rule baselines, and exact safe next action without dispatching.
+`--doctor` explains runtime blockers, approval stops, cleanup candidates, checker findings, memory/learning status, stop-rule baselines, product-gate status, and exactly one safe next action without dispatching.
 
 ## 16. Memory Layer
 
@@ -311,7 +311,7 @@ Minimum gate before BLS import:
 | 4 | Governance Batch 005 - Spec Source Chain / Workorder Factory | Ensure WOs are derived from specs, not fragments. | completed | Implemented by `system/workorders/cli/spec-source-chain-check.ts`; target product work must pass it. |
 | 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Implemented as read-only batch dossier reporter. |
 | 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Implemented by `system/control-plane/promotion-governance.ts`. |
-| 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Builds on Batches 002 and 003. |
+| 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Implemented as `--doctor` mode on the batch operator. |
 
 ## Gap Register
 
@@ -325,7 +325,7 @@ Minimum gate before BLS import:
 | Skill contract checker | DONE | medium | no | no | Maintain SKILL frontmatter/body validation and registry drift warnings. | Batch 004 | done |
 | Batch dossier | DONE | medium | no | no | Maintain `system/reports/batch-dossier.ts` and wire future promotion gates to it. | Batch 006 | done |
 | Promotion governance | DONE | medium | no | no | Maintain deterministic review/merge/push CLI. | Batch 007 | done |
-| Operator doctor | MISSING | medium | no | partial | Add read-only `--doctor`. | Batch 008 | after Batch 003 |
+| Operator doctor | DONE | medium | no | no | Maintain read-only `--doctor` diagnosis and one-action output. | Batch 008 | done |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
 | Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
 | Merge/product gate | PARTIAL | high | yes | no | Turn documented Product Work Gate into an enforced checklist. | Batch 007 | yes |

@@ -602,6 +602,7 @@ export function buildOperatorReport(status: OperatorStatus): string {
   lines.push('')
   lines.push('## Next')
   lines.push(`Exact next command: ${nextCommand(status, endState)}`)
+  lines.push(`Doctor command: ${commandFor(OPERATOR_CLI, `${status.batchPath} --doctor`)}`)
   lines.push(`Suggested dossier: ${dossierCommand(status.batchPath)}`)
   return lines.join('\n')
 }

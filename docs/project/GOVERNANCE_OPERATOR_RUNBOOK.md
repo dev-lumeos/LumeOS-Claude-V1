@@ -30,6 +30,32 @@ Dry-run mode runs only the batch parser and validator. It does not dispatch work
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --dry-run
 ```
 
+## Doctor Command
+
+Doctor mode is read-only. It does not dispatch workorders, mutate runtime state, apply cleanup, grant approvals, run Supabase commands, or execute migrations.
+
+It inspects operator status, stop rules, runtime blockers, approvals, cleanup suggestions, git status, invariant checker, agent-contract checker, spec-source-chain checker, and memory/learning file presence. It returns exactly one safe next action.
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor --json
+```
+
+Doctor diagnoses:
+
+- `CLEAN_READY`
+- `NEEDS_TOM_APPROVAL`
+- `NEEDS_SAFE_CLEANUP`
+- `STOP_RULE_BLOCKED`
+- `INVARIANT_BLOCKED`
+- `AGENT_CONTRACT_BLOCKED`
+- `SPEC_SOURCE_BLOCKED`
+- `DIRTY_WORKTREE`
+- `RUNTIME_ARTIFACTS_PRESENT`
+- `PRODUCT_GATE_BLOCKED`
+- `FIX_REQUIRED`
+- `UNKNOWN`
+
 ## Continue Command
 
 Continue mode proceeds only until the next safe stop:
@@ -94,6 +120,7 @@ Codex may:
 
 - run `--status`
 - run `--dry-run`
+- run `--doctor`
 - run `--continue`
 - run `--continue --apply-safe-cleanups` when the operator classifies the cleanup as safe
 - inspect reports and runtime state read-only

@@ -3,6 +3,7 @@
  *
  * Safe modes:
  *   --status    read-only state report
+ *   --doctor    read-only diagnosis and one safe next action
  *   --dry-run   batch dry-run only, no dispatch
  *   --continue  proceed until next safe stop
  *   --continue --apply-safe-cleanups  run official cleanup CLIs only
@@ -14,13 +15,15 @@ import {
   continueBatch,
   runDryRun,
 } from './batch-operator'
+import { runOperatorDoctor } from './operator-doctor'
 
 function usage(): string {
   return [
-    'Usage: npx tsx system/workorders/cli/run-batch-operator.ts <batch-file> [--status | --dry-run | --continue] [--apply-safe-cleanups]',
+    'Usage: npx tsx system/workorders/cli/run-batch-operator.ts <batch-file> [--status | --doctor | --dry-run | --continue] [--json] [--apply-safe-cleanups]',
     '',
     'Modes:',
     '  --status                  Read-only operator status. No mutations.',
+    '  --doctor                  Read-only diagnosis with exactly one safe next action.',
     '  --dry-run                 Batch parser/validator dry-run only. No dispatch.',
     '  --continue                Proceed until next safe stop.',
     '  --continue --apply-safe-cleanups',
@@ -36,10 +39,11 @@ async function main(): Promise<number> {
     return batchFile ? 0 : 1
   }
 
-  const modeFlags = args.slice(1).filter(a => a === '--status' || a === '--dry-run' || a === '--continue')
+  const modeFlags = args.slice(1).filter(a => a === '--status' || a === '--doctor' || a === '--dry-run' || a === '--continue')
   const applySafeCleanups = args.includes('--apply-safe-cleanups')
+  const json = args.includes('--json')
   const unknown = args.slice(1).filter(a =>
-    !['--status', '--dry-run', '--continue', '--apply-safe-cleanups'].includes(a),
+    !['--status', '--doctor', '--dry-run', '--continue', '--apply-safe-cleanups', '--json'].includes(a),
   )
   if (unknown.length > 0) {
     console.error(`Unknown flag(s): ${unknown.join(', ')}`)
@@ -56,6 +60,10 @@ async function main(): Promise<number> {
     console.error('--apply-safe-cleanups is only valid with --continue')
     return 1
   }
+  if (json && mode !== '--doctor') {
+    console.error('--json is only supported with --doctor')
+    return 1
+  }
 
   if (mode === '--status') {
     const status = collectOperatorStatus(batchFile)
@@ -65,6 +73,12 @@ async function main(): Promise<number> {
 
   if (mode === '--dry-run') {
     const result = await runDryRun(batchFile)
+    console.log(result.report)
+    return result.exitCode
+  }
+
+  if (mode === '--doctor') {
+    const result = runOperatorDoctor(batchFile, { json })
     console.log(result.report)
     return result.exitCode
   }

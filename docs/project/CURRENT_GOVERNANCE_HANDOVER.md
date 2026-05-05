@@ -4,7 +4,7 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
+`main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
 
 ## Current Truth
 
@@ -24,6 +24,7 @@ Current date: 2026-05-05.
 - Governance Batch 005 adds a read-only Spec Source Chain Checker and Workorder Source Chain Standard.
 - Governance Batch 006 adds a read-only Batch Dossier Reporter and operator dossier suggestions.
 - Governance Batch 007 adds a deterministic Promotion / Merge Governance CLI.
+- Governance Batch 008 adds read-only Operator Doctor mode.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -54,19 +55,20 @@ Reason:
 - Spec source-chain checking is available through `system/workorders/cli/spec-source-chain-check.ts`.
 - Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
+- Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Recent incidents are now being recorded as durable incident learning records.
 - Spec source-chain enforcement is required before BLS import.
 
 ## Safe Next Governance Batch
 
-Governance Batch 008 - Operator Doctor / Autonomy Hardening.
+Workorder Factory / Decomposition Automation.
 
 Goal:
 
-- Add read-only operator diagnostics for common blockers.
-- Explain runtime, approval, stop-rule, checker, memory, and dossier state.
-- Produce the exact safe next action without dispatching.
+- Generate source-linked workorders deterministically from specs and decomposition.
+- Reduce manual prompt stitching for creating future product and governance batches.
+- Ensure factory output passes source-chain, invariant, and contract checks before execution.
 
 ## Do Not Do
 
@@ -173,6 +175,26 @@ Rules:
 - Merge checks out `main`, merges the target branch, stops on conflicts, and runs typecheck.
 - Push requires `main`, clean worktree, and `main` ahead of `origin/main`.
 - Push is explicit; merge does not push automatically.
+
+## Governance Batch 008 Output
+
+- `system/workorders/cli/operator-doctor.ts`
+- `system/workorders/cli/__tests__/operator-doctor.test.ts`
+- `docs/project/governance-learning/2026-05-05-governance-batch-008-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --doctor
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --doctor --json
+```
+
+Rules:
+
+- Doctor is read-only.
+- Doctor does not dispatch, grant approvals, apply cleanup, run Supabase commands, or execute migrations.
+- Doctor returns one diagnosis and exactly one next action.
+- Normal operator reports include a doctor command for safe-stop diagnosis.
 
 ## Recent Incidents To Remember
 

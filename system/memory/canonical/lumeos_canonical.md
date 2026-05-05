@@ -50,6 +50,7 @@ Governance learning records:
 - Workorder source-chain rules live in `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`.
 - Read-only Batch Dossier Reporter exists at `system/reports/batch-dossier.ts` and writes reports only with explicit `--write`.
 - Promotion / Merge Governance CLI exists at `system/control-plane/promotion-governance.ts`.
+- Operator Doctor mode exists at `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 
 ## Current Product Work Gate
 
@@ -114,5 +115,5 @@ Prompt text such as `/no_think` is not sufficient.
 - Governance Batch 005 - Spec Source Chain / Workorder Factory is implemented as a checker and standard; target product work must pass it.
 - Governance Batch 006 - Reporting & Dossier Hardening is implemented as a batch dossier reporter.
 - Governance Batch 007 - Promotion / Merge Governance is implemented as a deterministic review/merge/push CLI.
-- Governance Batch 008 - Operator Doctor / Autonomy Hardening.
+- Governance Batch 008 - Operator Doctor / Autonomy Hardening is implemented as read-only diagnosis with exactly one next action.
 - Spark Runtime Hardening.
