@@ -57,6 +57,7 @@ Governance learning records:
 - Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
+- MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 
 ## Current Product Work Gate
 
@@ -126,6 +127,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Raw BLS files must not override current specs as implementation SSOT.
 - Factory-generated workorders must include `source_refs`, `expected_outputs`, scoped writes, high-risk `files_blocked`, and db-migration `rollback_hint`.
 - Model runtime checks must pass before autonomous operator work; endpoint health checks must be short read-only `/v1/models` checks, not real workorder prompts.
+- Optional runtimes only block when the target batch/workorder explicitly requires them.
 
 ## Open Governance Work
 

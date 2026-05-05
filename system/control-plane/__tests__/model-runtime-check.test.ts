@@ -196,6 +196,76 @@ async function defaultCallModel(routing) {
     assert.match(item?.evidence ?? '', /ECONNREFUSED/)
   })
 
+  it('downgrades optional on-demand runtime endpoint failures when not explicitly targeted', async () => {
+    writeJson('system/agent-registry/agents.json', {
+      'mealcam-agent': {
+        type: 'vision',
+        spec_file: '.claude/agents/mealcam-agent.md',
+        requires_human_approval: false,
+      },
+    })
+    writeJson('system/agent-registry/model_routing.json', {
+      'mealcam-agent': {
+        default: {
+          node: 'rtx5090',
+          endpoint: 'http://localhost:8001',
+          model: 'qwen3-vl-30b-a3b-fp8',
+          optional_runtime: true,
+          runtime_required: 'on_demand',
+        },
+      },
+    })
+    write('.claude/agents/mealcam-agent.md', '# mealcam-agent\n\nJSON output only.\n')
+
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      checkEndpoints: true,
+      fetchImpl: async () => {
+        throw new Error('connect ECONNREFUSED')
+      },
+    })
+
+    const item = finding(result, 'model_runtime.optional_endpoint_offline')
+    assert.equal(result.exitCode, 0)
+    assert.equal(result.summary.high, 0)
+    assert.equal(item?.severity, 'info')
+    assert.equal(item?.blocks_operator, false)
+  })
+
+  it('blocks optional runtime endpoint failure when explicitly targeted', async () => {
+    writeJson('system/agent-registry/agents.json', {
+      'mealcam-agent': {
+        type: 'vision',
+        spec_file: '.claude/agents/mealcam-agent.md',
+      },
+    })
+    writeJson('system/agent-registry/model_routing.json', {
+      'mealcam-agent': {
+        default: {
+          node: 'rtx5090',
+          endpoint: 'http://localhost:8001',
+          model: 'qwen3-vl-30b-a3b-fp8',
+          optional_runtime: true,
+          runtime_required: 'on_demand',
+        },
+      },
+    })
+    write('.claude/agents/mealcam-agent.md', '# mealcam-agent\n\nJSON output only.\n')
+
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      agent: 'mealcam-agent',
+      checkEndpoints: true,
+      fetchImpl: async () => {
+        throw new Error('connect ECONNREFUSED')
+      },
+    })
+
+    const item = finding(result, 'model_runtime.endpoint_unreachable')
+    assert.equal(result.exitCode, 1)
+    assert.equal(item?.severity, 'high')
+  })
+
   it('endpoint timeout does not hang tests', async () => {
     const result = await runModelRuntimeCheck({
       repoRoot: tmpDir,
@@ -243,5 +313,11 @@ async function defaultCallModel(routing) {
     assert.equal(result.summary.critical, 0)
     assert.equal(result.summary.high, 0)
     assert.equal(result.exitCode, 0)
+  })
+
+  it('real repository has no route/agent registry drift findings', () => {
+    const result = runModelRuntimeCheck({ repoRoot: realCwd, checkEndpoints: false })
+
+    assert.equal(result.findings.filter(item => item.id === 'model_runtime.route_unknown_agent').length, 0)
   })
 })

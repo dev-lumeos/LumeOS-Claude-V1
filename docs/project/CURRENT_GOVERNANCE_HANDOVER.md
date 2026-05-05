@@ -95,6 +95,7 @@ Reason:
 - Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
+- MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Raw BLS files remain local-only and ignored.
 
 ## Model Runtime Hardening Output
@@ -119,6 +120,7 @@ Rules:
 - No workorder prompts are sent by the checker.
 - Dispatcher model calls now have bounded timeout and one retry for runtime failures.
 - Operator Doctor includes model-runtime findings and still emits one safe next action.
+- `mealcam-agent` is optional/on-demand. Its endpoint is only blocking when a MealCam/Vision workorder or explicit Tom request requires it.
 
 ## Workorder Factory Output
 

@@ -46,6 +46,8 @@ Expected Spark/vLLM routes currently include:
 
 Missing endpoints are configuration warnings for non-local/external routes such as Claude Code. Missing endpoints for routed local Spark models must be reported.
 
+MealCam/Vision is optional and on-demand. Its endpoint is not expected to be online during normal governance/operator work. An offline `mealcam-agent` endpoint is reported as informational unless a MealCam/Vision workorder, selected batch, or explicit Tom request requires that runtime.
+
 ## Timeout Policy
 
 Dispatcher model calls must have a bounded timeout.
@@ -131,6 +133,7 @@ Autonomous, night, large, or product-execution runs remain blocked until:
 
 - model runtime checker has no critical/high findings
 - endpoint health is proven when runtime execution is needed
+- optional/on-demand runtimes required by the target batch are online
 - invariant checker is clean
 - agent-contract checker is clean
 - spec-source-chain checker passes for the target batch/workorder

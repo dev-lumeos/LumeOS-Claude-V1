@@ -21,6 +21,46 @@
     "phase": "1+2"
   },
 
+  "pre-review-agent": {
+    "type": "reviewer",
+    "description": "Pre-Review von Workorders vor Dispatch. Read-only.",
+    "spec_file": ".claude/agents/pre-review-agent.md",
+    "always_load_skills": ["gsd-v2"],
+    "skill_token_budget": 3000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "post-review-agent": {
+    "type": "reviewer",
+    "description": "Post-Review von Workorder Outputs nach Execution. Read-only.",
+    "spec_file": ".claude/agents/post-review-agent.md",
+    "always_load_skills": ["gsd-v2"],
+    "skill_token_budget": 3000,
+    "requires_human_approval": false,
+    "phase": "1+2"
+  },
+
+  "fast-reviewer-agent": {
+    "type": "reviewer",
+    "description": "Tier 1 Fast Review fuer Review Pipeline. Read-only.",
+    "spec_file": ".claude/agents/fast-reviewer-agent.md",
+    "always_load_skills": ["gsd-v2"],
+    "skill_token_budget": 3000,
+    "requires_human_approval": false,
+    "phase": "2"
+  },
+
+  "senior-reviewer-agent": {
+    "type": "reviewer",
+    "description": "Tier 2 Senior Review fuer Eskalationen aus Fast Review. Read-only.",
+    "spec_file": ".claude/agents/senior-reviewer-agent.md",
+    "always_load_skills": ["gsd-v2", "security-specialist"],
+    "skill_token_budget": 4000,
+    "requires_human_approval": false,
+    "phase": "2"
+  },
+
   "micro-executor": {
     "type": "executor",
     "description": "Führt scoped Implementation Workorders aus. Max 3 Files.",
@@ -115,7 +155,7 @@
 
   "mealcam-agent": {
     "type": "vision",
-    "description": "Food Recognition aus Fotos. JSON Output nur. Kein File-Zugriff.",
+    "description": "Optional/on-demand Food Recognition aus Fotos. JSON Output nur. Kein File-Zugriff.",
     "spec_file": ".claude/agents/mealcam-agent.md",
     "always_load_skills": [],
     "skill_token_budget": 1000,

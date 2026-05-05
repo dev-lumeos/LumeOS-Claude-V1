@@ -32,6 +32,8 @@ export interface ModelRuntimeRoute {
   model?: string
   endpoint?: string
   temperature?: number
+  optional_runtime?: boolean
+  runtime_required?: 'always' | 'on_demand' | string
   json_required: boolean
   qwen_thinking_off_required: boolean
   endpoint_status?: 'not_checked' | 'ok' | 'unreachable'
@@ -128,6 +130,8 @@ function routingEntries(routing: ModelRoutingFile): ModelRuntimeRoute[] {
         model: route.model,
         endpoint: route.endpoint,
         temperature: typeof route.temperature === 'number' ? route.temperature : undefined,
+        optional_runtime: route.optional_runtime === true,
+        runtime_required: route.runtime_required,
         json_required: false,
         qwen_thinking_off_required: false,
         endpoint_status: 'not_checked' as const,
@@ -167,7 +171,39 @@ function endpointModelsUrl(endpoint: string): string {
   return trimmed.endsWith('/v1') ? `${trimmed}/models` : `${trimmed}/v1/models`
 }
 
-async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<ModelRuntimeCheckOptions, 'timeoutMs'>> & Pick<ModelRuntimeCheckOptions, 'fetchImpl'>): Promise<ModelRuntimeFinding | null> {
+function endpointFailureFinding(route: ModelRuntimeRoute, evidence: string, explicitlyTargeted: boolean): ModelRuntimeFinding {
+  if (route.optional_runtime && !explicitlyTargeted) {
+    return finding({
+      id: 'model_runtime.optional_endpoint_offline',
+      severity: 'info',
+      layer: 'model_runtime',
+      agent: route.agent,
+      model: route.model,
+      endpoint: route.endpoint,
+      message: 'Optional runtime offline; not blocking current governance work.',
+      evidence,
+      suggested_action: 'Start or validate this endpoint only when a matching MealCam/Vision workorder or explicit runtime run requires it.',
+      blocks_operator: false,
+      blocks_product_work: false,
+    })
+  }
+
+  return finding({
+    id: 'model_runtime.endpoint_unreachable',
+    severity: 'high',
+    layer: 'model_runtime',
+    agent: route.agent,
+    model: route.model,
+    endpoint: route.endpoint,
+    message: 'Model endpoint health check failed.',
+    evidence,
+    suggested_action: 'Check Spark/vLLM service health and routing before continuing autonomous work.',
+    blocks_operator: true,
+    blocks_product_work: true,
+  })
+}
+
+async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<ModelRuntimeCheckOptions, 'timeoutMs'>> & Pick<ModelRuntimeCheckOptions, 'fetchImpl'> & { explicitlyTargeted: boolean }): Promise<ModelRuntimeFinding | null> {
   if (!route.endpoint) return null
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), options.timeoutMs)
@@ -178,37 +214,13 @@ async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<Mo
     })
     if (!response.ok) {
       route.endpoint_status = 'unreachable'
-      return finding({
-        id: 'model_runtime.endpoint_unreachable',
-        severity: 'high',
-        layer: 'model_runtime',
-        agent: route.agent,
-        model: route.model,
-        endpoint: route.endpoint,
-        message: 'Model endpoint health check returned a non-OK response.',
-        evidence: `HTTP ${response.status} ${response.statusText}`,
-        suggested_action: 'Check the Spark/vLLM endpoint before running autonomous operator work.',
-        blocks_operator: true,
-        blocks_product_work: true,
-      })
+      return endpointFailureFinding(route, `HTTP ${response.status} ${response.statusText}`, options.explicitlyTargeted)
     }
     route.endpoint_status = 'ok'
     return null
   } catch (error) {
     route.endpoint_status = 'unreachable'
-    return finding({
-      id: 'model_runtime.endpoint_unreachable',
-      severity: 'high',
-      layer: 'model_runtime',
-      agent: route.agent,
-      model: route.model,
-      endpoint: route.endpoint,
-      message: 'Model endpoint health check failed.',
-      evidence: error instanceof Error ? error.message : String(error),
-      suggested_action: 'Check Spark/vLLM service health and routing before continuing autonomous work.',
-      blocks_operator: true,
-      blocks_product_work: true,
-    })
+    return endpointFailureFinding(route, error instanceof Error ? error.message : String(error), options.explicitlyTargeted)
   } finally {
     clearTimeout(timeout)
   }
@@ -416,9 +428,10 @@ export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions = {}): Mo
   if (!checkEndpoints) return resultFrom(repoRoot, false, routes, findings)
 
   return Promise.all(routes.map(route => checkEndpoint(route, {
-    timeoutMs: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
-    fetchImpl: options.fetchImpl,
-  }))).then(endpointFindings => resultFrom(repoRoot, true, routes, [
+      timeoutMs: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
+      fetchImpl: options.fetchImpl,
+      explicitlyTargeted: options.agent === route.agent,
+    }))).then(endpointFindings => resultFrom(repoRoot, true, routes, [
     ...findings,
     ...endpointFindings.filter(Boolean) as ModelRuntimeFinding[],
   ]))
