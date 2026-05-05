@@ -143,9 +143,24 @@ export function classifyPromotionPath(filePath: string): PromotionPathCategory {
 
 function isProductWork(filePath: string): boolean {
   const p = toPosix(filePath)
+  if (isGovernanceToolingPath(p)) return false
   if (p.startsWith('services/nutrition-api/') || p.startsWith('apps/') || p.startsWith('packages/')) return true
   if (p.startsWith('docs/specs/Nutrition/') && !p.includes('/06_workorder_planning/')) return true
   return false
+}
+
+function isGovernanceToolingPath(filePath: string): boolean {
+  const p = toPosix(filePath)
+  return (
+    p.startsWith('apps/web/src/app/governance/') ||
+    p.startsWith('apps/web/src/app/api/governance/') ||
+    p.startsWith('apps/web/src/components/governance/') ||
+    p.startsWith('apps/web/src/lib/governance/') ||
+    p === 'apps/web/next.config.js' ||
+    p === 'apps/web/next.config.ts' ||
+    p === 'apps/web/next-env.d.ts' ||
+    p === 'apps/web/tsconfig.json'
+  )
 }
 
 function parseNameStatus(output: string): PromotionChangedFile[] {

@@ -88,6 +88,27 @@ describe('promotion governance review', () => {
     assert.equal(result.findings.some(item => item.requires_tom), true)
   })
 
+  it('does not require Tom waiver for governance UI tooling paths', () => {
+    const outputs = {
+      ...cleanReviewOutputs,
+      'diff --name-status main..goal/test': {
+        code: 0,
+        stdout: [
+          'A\tapps/web/src/app/governance/page.tsx',
+          'A\tapps/web/src/app/api/governance/command/route.ts',
+          'A\tapps/web/src/lib/governance/command-runner.ts',
+          'A\tapps/web/next.config.js',
+        ].join('\n') + '\n',
+        stderr: '',
+      },
+    }
+
+    const result = reviewBranch('goal/test', { runner: runner(outputs), repoRoot: 'D:/repo', runChecks: false })
+
+    assert.equal(result.decision, 'MERGE_READY')
+    assert.equal(result.findings.some(item => item.id === 'product.gate_closed'), false)
+  })
+
   it('reports migration guard requirement for migration diffs', () => {
     const outputs = {
       ...cleanReviewOutputs,
