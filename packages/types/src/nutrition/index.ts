@@ -1,6 +1,8 @@
 // Nutrition Types V1
 // packages/types/src/nutrition/index.ts
 
+export * from './foods'
+
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack'
 
 export interface Food {
