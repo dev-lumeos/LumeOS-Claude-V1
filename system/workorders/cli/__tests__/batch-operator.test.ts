@@ -288,6 +288,25 @@ describe('batch operator status', () => {
     assert.match(report, /grant only allows file write, not db push\/reset/)
   })
 
+  it('does not block DONE on unplanned project output artifacts', () => {
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
+    writeExpectedOutput('supabase/migrations/20240520_001_nutrition_food_core_tables.sql', '-- food core')
+    writeExpectedOutput('packages/types/src/nutrition/foods.ts', 'export interface NutritionFood {}')
+    writeExpectedOutput('packages/types/src/nutrition/index.ts', 'export * from "./foods"')
+
+    const status = collectOperatorStatus(batchPath(), {
+      gitStatus: {
+        branch: 'goal/governance-operator-loop',
+        short: '## goal/governance-operator-loop\n?? docs/specs/Nutrition/00_raw/',
+        entries: [{ code: '??', path: 'docs/specs/Nutrition/00_raw/', category: 'workorder_outputs' }],
+      },
+    })
+
+    assert.equal(status.unexpectedDirty.length, 0)
+    assert.equal(decideEndState(status), 'DONE')
+  })
+
   it('suggests expired approval cleanup with exact commands', () => {
     writeState({
       active_runs: [{ run_id: 'RUN-expired', workorder_id: 'WO-test-001', agent_id: 'micro-executor', status: 'awaiting_approval', started_at: isoMinutesAgo(80), written_files: [] }],

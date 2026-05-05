@@ -483,7 +483,7 @@ export function collectOperatorStatus(
     cleanupSuggestions,
     dirtyArtifacts: git.entries,
     unexpectedDirty: git.entries.filter(e =>
-      (e.category === 'code_changes' || e.category === 'workorder_outputs') &&
+      e.category === 'code_changes' &&
       !expectedOutputPatterns.some(pattern => matchesOutputPattern(e.path, pattern)),
     ),
   }
