@@ -32,6 +32,10 @@ system/state/runtime_state.lock
 system/state/pipeline-audit.jsonl
 system/state/pipeline-audit-live.jsonl
 system/approval/approvals.json
+system/approval/queue.json
+
+# Nutrition raw source data stays local only.
+docs/specs/Nutrition/00_raw/
 
 # Temp directory (Antigravity Skills, Downloads, staging, test artifacts)
 temp/
