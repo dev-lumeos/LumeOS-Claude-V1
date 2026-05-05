@@ -4,9 +4,9 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
+`main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, governance runtime drift cleanup, local Supabase inventory, and local transaction dry-run reports.
 
-The active governance branch is documenting the conditional Product Work Gate decision.
+The active governance branch is implementing Spark Runtime / Model Runtime Hardening.
 
 ## Current Truth
 
@@ -29,6 +29,7 @@ The active governance branch is documenting the conditional Product Work Gate de
 - Governance Batch 008 adds read-only Operator Doctor mode.
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
 - Memory/Learning Automation adds a read-only governance learning checker.
+- Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
@@ -44,6 +45,7 @@ Use these files before starting more governance or product work:
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
 - `docs/project/PRODUCT_WORK_GATE.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
+- `docs/project/MODEL_RUNTIME_HARDENING.md`
 - `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
 - `AGENTS.md`
 - `CLAUDE.md`
@@ -90,9 +92,33 @@ Reason:
 - Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
+- Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
-- Spark Runtime Hardening is still required before autonomous, night, or large product runs.
+- Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
 - Raw BLS files remain local-only and ignored.
+
+## Model Runtime Hardening Output
+
+- `system/control-plane/model-runtime-check.ts`
+- `system/control-plane/__tests__/model-runtime-check.test.ts`
+- `docs/project/MODEL_RUNTIME_HARDENING.md`
+- `docs/project/governance-learning/2026-05-05-spark-runtime-hardening-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --check-endpoints --timeout-ms 1500
+```
+
+Rules:
+
+- Default mode is read-only and does not call endpoints.
+- `--check-endpoints` performs short `/v1/models` health checks only.
+- No workorder prompts are sent by the checker.
+- Dispatcher model calls now have bounded timeout and one retry for runtime failures.
+- Operator Doctor includes model-runtime findings and still emits one safe next action.
 
 ## Workorder Factory Output
 
@@ -141,12 +167,12 @@ Rules:
 
 ## Safe Next Governance Batch
 
-Run the next controlled planning/probe batch or continue with Spark Runtime Hardening.
+Run the next controlled planning/probe batch only after Tom confirms the required local model endpoint health, or continue with deeper observability work.
 
 Goal:
 
 - The conditional gate permits only planning/probe work, not import execution.
-- Spark Runtime Hardening still blocks autonomous, night, and large product runs.
+- Endpoint health still blocks autonomous, night, and large product runs until proven for the required model routes.
 
 ## Do Not Do
 

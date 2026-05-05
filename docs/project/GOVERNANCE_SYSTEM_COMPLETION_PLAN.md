@@ -26,7 +26,7 @@ The goal is to make the governance system operable before more product work cont
 | 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, `operator-doctor.ts`, runbook, tests | TESTED | Operator reached real DONE for Nutrition 001 and P1-004; Batch 008 adds read-only Doctor mode with one safe next action. |
 | 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 adds read-only checks for JSON-only contracts, selected_agent drift, example path leaks, and db-migration write/review rules. |
 | 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 validates SKILL.md frontmatter/body and reports registry drift. |
-| 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 checks Qwen3.6 thinking-off documentation and dispatcher JSON object response enforcement. |
+| 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts`, `system/control-plane/model-runtime-check.ts` | TESTED | Batch 004 checks contract policy; Spark Runtime Hardening adds route parsing, timeout/retry validation, optional endpoint health, and Operator Doctor integration. |
 | 18. Merge / promotion governance | `system/control-plane/promotion-governance.ts`, promotion tests | TESTED | Batch 007 adds deterministic branch review, merge, push, forbidden artifact checks, product-gate detection, and post-merge typecheck. |
 | 19. Memory layer | `system/memory/canonical/*`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/reports/governance-learning-check.ts`, CLAUDE.md, AGENTS.md | TESTED | Memory files exist and the learning checker validates handover/product-gate/canonical consistency. |
 | 20. Learning / feedback-loop | `docs/project/governance-learning/*`, `system/reports/governance-learning-check.ts`, commit history, tests | TESTED | Incident records, schema, checklist, and batch summaries are now machine-checkable. |
@@ -45,6 +45,7 @@ The goal is to make the governance system operable before more product work cont
 - Governance batch operator with `--status`, `--dry-run`, `--continue`, and `--continue --apply-safe-cleanups`.
 - Batch operator tests covering clean status, approvals, cleanup suggestions, stop-rule blocks, no automatic grants, no Supabase commands, ambiguity refusal, and exact next commands.
 - Agent & Skill Contract Checker for runtime-facing agent contracts, SKILL.md frontmatter/body, registry drift, model routing JSON/thinking policy, and approval operation scope.
+- Model Runtime Checker for Spark/vLLM route health, endpoint metadata, Qwen thinking-off policy, JSON response mode, and dispatcher timeout/retry policy.
 - Spec Source Chain Checker for module INDEX resolution, `source_refs`, expected outputs, scope alignment, raw-source policy, and placeholder/example guards.
 - Nutrition Batch 001 output completion and Nutrition P1-004 static schema verification.
 
@@ -320,7 +321,7 @@ Mandatory gates for any product-related workorder:
 - No pending approvals, active locks, or stop-rule triggers.
 - Raw BLS local-only policy remains enforced.
 - Tom approvals remain required.
-- Spark Runtime Hardening is required before autonomous, night, or large product runs.
+- Spark Runtime Hardening is implemented as a read-only checker and dispatcher timeout/retry policy, but endpoint health must be proven before autonomous, night, or large product runs.
 
 ## 21. Required Governance Batches
 
@@ -335,6 +336,7 @@ Mandatory gates for any product-related workorder:
 | 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Implemented as `--doctor` mode on the batch operator. |
 | 8 | Workorder Factory / Decomposition Automation | Generate source-linked workorders and batches from structured plans. | no | Implemented by `system/workorders/cli/wo-factory.ts`; free-form decomposition remains prompt/manual. |
 | 9 | Memory/Learning Automation | Check durable incident/fix/test/rule/memory linkage. | no | Implemented by `system/reports/governance-learning-check.ts`. |
+| 10 | Spark Runtime / Model Runtime Hardening | Detect model routing, endpoint, timeout, JSON-mode, and thinking-policy drift. | autonomous/large runs | Implemented by `system/control-plane/model-runtime-check.ts`; endpoint checks are optional read-only health checks. |
 
 ## Gap Register
 
@@ -351,6 +353,7 @@ Mandatory gates for any product-related workorder:
 | Operator doctor | DONE | medium | no | no | Maintain read-only `--doctor` diagnosis and one-action output. | Batch 008 | done |
 | Workorder factory automation | DONE | high | target must pass | no | Maintain deterministic structured-plan factory and tests. | Workorder Factory Automation | done |
 | Memory/Learning automation | DONE | high | no | no | Maintain learning checker and current learning status summary. | Memory/Learning Automation | done |
+| Model runtime hardening | DONE | high | autonomous/large runs | partial | Maintain model-runtime checker, dispatcher timeout/retry policy, and Doctor integration; prove endpoint health before runtime-heavy work. | Spark Runtime Hardening | done |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
 | Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
 | Merge/product gate | PARTIAL | high | conditional | no | Keep conditional Product Work Gate documented and enforced through checkers, operator, and promotion governance. | Product Gate decision | yes |

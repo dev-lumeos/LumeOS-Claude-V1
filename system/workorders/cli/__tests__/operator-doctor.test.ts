@@ -45,6 +45,7 @@ function cleanCheckers(overrides: Partial<OperatorDoctorCheckers> = {}): Operato
   return {
     invariant: { status: 'pass', critical: 0, high: 0, medium: 0 },
     agent_contract: { status: 'pass', critical: 0, high: 0, medium: 0 },
+    model_runtime: { status: 'pass', critical: 0, high: 0, medium: 0 },
     spec_source_chain: { status: 'pass', critical: 0, high: 0, medium: 0 },
     ...overrides,
   }
@@ -170,6 +171,15 @@ describe('operator doctor diagnosis', () => {
       'schema_version',
       'stop_rules',
     ].sort())
+  })
+
+  it('reports model runtime high findings', () => {
+    const result = diagnose({}, {
+      model_runtime: { status: 'fail', critical: 0, high: 1, medium: 0 },
+    } as Partial<OperatorDoctorCheckers>)
+
+    assert.equal(result.final_diagnosis, 'MODEL_RUNTIME_BLOCKED')
+    assert.match(result.next_action, /model-runtime-check/)
   })
 
   it('doctor performs no mutations to the supplied status object', () => {

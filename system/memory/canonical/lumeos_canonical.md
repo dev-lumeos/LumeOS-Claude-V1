@@ -55,6 +55,8 @@ Governance learning records:
 - The factory accepts a structured JSON plan inside Markdown, dry-runs by default, and writes draft workorders/batches only with `--write`.
 - Governance Learning Checker exists at `system/reports/governance-learning-check.ts`.
 - Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
+- Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
+- Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
 
 ## Current Product Work Gate
 
@@ -70,7 +72,7 @@ Any target workorder or batch must still pass source-chain, invariant, agent-con
 
 Raw BLS files are local-only and ignored.
 
-Spark Runtime Hardening is required before autonomous, night, or large product runs.
+Static Spark Runtime Hardening is implemented. Endpoint health must still be proven before autonomous, night, or large product runs.
 
 Do not run:
 
@@ -123,6 +125,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Workorders must resolve module INDEX -> current specs -> patches -> SQL sources -> ADRs -> reviews -> raw/provenance sources.
 - Raw BLS files must not override current specs as implementation SSOT.
 - Factory-generated workorders must include `source_refs`, `expected_outputs`, scoped writes, high-risk `files_blocked`, and db-migration `rollback_hint`.
+- Model runtime checks must pass before autonomous operator work; endpoint health checks must be short read-only `/v1/models` checks, not real workorder prompts.
 
 ## Open Governance Work
 
@@ -134,4 +137,4 @@ Prompt text such as `/no_think` is not sufficient.
 - Governance Batch 008 - Operator Doctor / Autonomy Hardening is implemented as read-only diagnosis with exactly one next action.
 - Workorder Factory / Decomposition Automation is implemented for structured plans; free-form decomposition remains a prompt/manual Brain step.
 - Memory/Learning Automation is implemented as a read-only checker plus explicit status writer.
-- Spark Runtime Hardening.
+- Spark Runtime Hardening is implemented as a read-only checker; deeper runtime observability remains optional.

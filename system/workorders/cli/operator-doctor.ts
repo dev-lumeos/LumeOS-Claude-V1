@@ -6,6 +6,7 @@ import type { OperatorStatus, ApprovalStop, CleanupSuggestion } from './batch-op
 import { collectOperatorStatus } from './batch-operator'
 import { runGovernanceInvariantCheck } from '../../control-plane/governance-invariant-check'
 import { runAgentContractCheck } from '../../control-plane/agent-contract-check'
+import { runModelRuntimeCheck } from '../../control-plane/model-runtime-check'
 import { runSpecSourceChainCheck } from './spec-source-chain-check'
 
 export type OperatorDoctorDiagnosis =
@@ -15,6 +16,12 @@ export type OperatorDoctorDiagnosis =
   | 'STOP_RULE_BLOCKED'
   | 'INVARIANT_BLOCKED'
   | 'AGENT_CONTRACT_BLOCKED'
+  | 'MODEL_RUNTIME_BLOCKED'
+  | 'MODEL_CONFIG_WARNING'
+  | 'MODEL_ENDPOINT_UNREACHABLE'
+  | 'MODEL_MISSING'
+  | 'JSON_MODE_POLICY_MISSING'
+  | 'QWEN_THINKING_POLICY_MISSING'
   | 'SPEC_SOURCE_BLOCKED'
   | 'DIRTY_WORKTREE'
   | 'RUNTIME_ARTIFACTS_PRESENT'
@@ -33,6 +40,7 @@ export interface OperatorDoctorCheckerSummary {
 export interface OperatorDoctorCheckers {
   invariant: OperatorDoctorCheckerSummary
   agent_contract: OperatorDoctorCheckerSummary
+  model_runtime: OperatorDoctorCheckerSummary
   spec_source_chain: OperatorDoctorCheckerSummary
 }
 
@@ -90,6 +98,7 @@ const TSX = 'cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs'
 const OPERATOR_CLI = 'system\\workorders\\cli\\run-batch-operator.ts'
 const INVARIANT_CLI = 'system\\control-plane\\governance-invariant-check.ts'
 const AGENT_CONTRACT_CLI = 'system\\control-plane\\agent-contract-check.ts'
+const MODEL_RUNTIME_CLI = 'system\\control-plane\\model-runtime-check.ts'
 const SPEC_SOURCE_CLI = 'system\\workorders\\cli\\spec-source-chain-check.ts'
 const APPROVAL_CLI = 'system\\approval\\approval-cli.ts'
 
@@ -119,10 +128,12 @@ export function collectOperatorDoctorCheckers(batchPath: string): OperatorDoctor
   let invariant: OperatorDoctorCheckerSummary
   let agent: OperatorDoctorCheckerSummary
   let spec: OperatorDoctorCheckerSummary
+  let modelRuntime: OperatorDoctorCheckerSummary
   try { invariant = normalizeChecker(runGovernanceInvariantCheck()) } catch (error) { invariant = normalizeChecker(null, error) }
   try { agent = normalizeChecker(runAgentContractCheck()) } catch (error) { agent = normalizeChecker(null, error) }
+  try { modelRuntime = normalizeChecker(runModelRuntimeCheck({ checkEndpoints: false })) } catch (error) { modelRuntime = normalizeChecker(null, error) }
   try { spec = normalizeChecker(runSpecSourceChainCheck({ batchFile: batchPath })) } catch (error) { spec = normalizeChecker(null, error) }
-  return { invariant, agent_contract: agent, spec_source_chain: spec }
+  return { invariant, agent_contract: agent, model_runtime: modelRuntime, spec_source_chain: spec }
 }
 
 export function collectOperatorDoctorMemoryStatus(repoRoot = process.cwd(), batchPath?: string): OperatorDoctorMemoryStatus {
@@ -194,6 +205,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   const checkers = options.checkers ?? {
     invariant: defaultChecker(),
     agent_contract: defaultChecker(),
+    model_runtime: defaultChecker(),
     spec_source_chain: defaultChecker(),
   }
   const memory = options.memory ?? collectOperatorDoctorMemoryStatus(process.cwd(), status.batchPath)
@@ -230,6 +242,10 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     finalDiagnosis = 'AGENT_CONTRACT_BLOCKED'
     addBlock(blockers, finalDiagnosis, 'Agent contract checker has high/critical findings.', JSON.stringify(checkers.agent_contract), 'agent_contract_checker')
     nextAction = commandFor(AGENT_CONTRACT_CLI)
+  } else if (checkerBlocks(checkers.model_runtime)) {
+    finalDiagnosis = 'MODEL_RUNTIME_BLOCKED'
+    addBlock(blockers, finalDiagnosis, 'Model runtime checker has high/critical findings.', JSON.stringify(checkers.model_runtime), 'model_runtime_checker')
+    nextAction = commandFor(MODEL_RUNTIME_CLI)
   } else if (checkerBlocks(checkers.spec_source_chain)) {
     finalDiagnosis = 'SPEC_SOURCE_BLOCKED'
     addBlock(blockers, finalDiagnosis, 'Spec source-chain checker has high/critical findings.', JSON.stringify(checkers.spec_source_chain), 'spec_source_chain_checker')
@@ -301,6 +317,7 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   lines.push('## Checkers')
   lines.push(`invariant: ${result.checkers.invariant.status} critical=${result.checkers.invariant.critical} high=${result.checkers.invariant.high} medium=${result.checkers.invariant.medium}`)
   lines.push(`agent_contract: ${result.checkers.agent_contract.status} critical=${result.checkers.agent_contract.critical} high=${result.checkers.agent_contract.high} medium=${result.checkers.agent_contract.medium}`)
+  lines.push(`model_runtime: ${result.checkers.model_runtime.status} critical=${result.checkers.model_runtime.critical} high=${result.checkers.model_runtime.high} medium=${result.checkers.model_runtime.medium}`)
   lines.push(`spec_source_chain: ${result.checkers.spec_source_chain.status} critical=${result.checkers.spec_source_chain.critical} high=${result.checkers.spec_source_chain.high} medium=${result.checkers.spec_source_chain.medium}`)
   lines.push('')
   lines.push('## Product Gate')

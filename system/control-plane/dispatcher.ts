@@ -57,9 +57,11 @@ import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
 const MAX_REWRITE_LOOPS = 2
 
-// V2: Auto-Retry — maximale Worker-Neustarts bei Pipeline-REWRITE
+// V2: Auto-Retry - maximale Worker-Neustarts bei Pipeline-REWRITE
 const MAX_WORKER_RETRIES = 2
 const MAX_READ_TOOL_CONTINUATIONS = 8
+const MODEL_CALL_TIMEOUT_MS = 30_000
+const MODEL_CALL_MAX_ATTEMPTS = 2
 
 // High-Risk-Kategorien: isAutoRetryAllowed() aus risk-categories.ts (Single Source of Truth)
 
@@ -327,12 +329,33 @@ export async function defaultCallModel(
     requestBody.enable_thinking = false
     requestBody.response_format = { type: 'json_object' }
   }
-  const resp = await fetch(endpoint, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody),
-  })
-  if (!resp.ok) throw new Error(`vLLM Error: ${resp.status} ${resp.statusText}`)
-  return ((await resp.json()) as any).choices?.[0]?.message?.content ?? ''
+  let lastError: unknown
+  for (let attempt = 1; attempt <= MODEL_CALL_MAX_ATTEMPTS; attempt += 1) {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), MODEL_CALL_TIMEOUT_MS)
+    try {
+      const resp = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+        signal: controller.signal,
+      })
+      if (!resp.ok) {
+        const error = new Error(`vLLM Error: ${resp.status} ${resp.statusText}`)
+        if (resp.status < 500 || attempt === MODEL_CALL_MAX_ATTEMPTS) throw error
+        lastError = error
+        continue
+      }
+      return ((await resp.json()) as any).choices?.[0]?.message?.content ?? ''
+    } catch (error) {
+      lastError = error
+      if (attempt === MODEL_CALL_MAX_ATTEMPTS) break
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+  const message = lastError instanceof Error ? lastError.message : String(lastError)
+  throw new Error(`vLLM runtime unavailable after ${MODEL_CALL_MAX_ATTEMPTS} attempt(s): ${message}`)
 }
 
 // ─── Review Pipeline Gate ─────────────────────────────────────────────────────
