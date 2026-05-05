@@ -22,8 +22,8 @@ The goal is to make the governance system operable before more product work cont
 | 10. Review pipeline | `system/control-plane/review-pipeline.ts`, review tests | PARTIAL | Pipeline exists; reviewer invalid JSON learning is not fed into durable rules automatically. |
 | 11. Stop rules / system stop | `system/control-plane/stop-rules.ts`, `system/state/state-manager.ts`, tests | TESTED | Baselines exist for failed runs and invalid JSON; stop lifecycle docs are thin. |
 | 12. Cleanup / state lifecycle | `system/control-plane/terminal-wo-reset-cli.ts`, `system/control-plane/governance-invariant-check.ts`, state manager, tests | TESTED | Official cleanup paths exist and read-only invariant checks summarize runtime drift. |
-| 13. Reporting / dossier | `system/reports/*`, `system/reports/batch-dossier.ts`, reports directories | TESTED | Batch 006 adds a read-only batch dossier reporter with Markdown/JSON output, explicit `--write`, output classification, checker summaries, and operator dossier suggestions. |
-| 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, `operator-doctor.ts`, runbook, tests | TESTED | Operator reached real DONE for Nutrition 001 and P1-004; Batch 008 adds read-only Doctor mode with one safe next action. |
+| 13. Reporting / dossier | `system/reports/*`, `system/reports/batch-dossier.ts`, reports directories, `apps/web/src/app/governance/dossiers` | TESTED | Batch 006 adds a read-only batch dossier reporter; Governance UI V1 displays dossier JSON and output tables through the allowlisted local API. |
+| 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, `operator-doctor.ts`, runbook, tests, `apps/web/src/app/governance/*` | TESTED | Operator reached real DONE for Nutrition 001 and P1-004; Batch 008 adds Doctor mode; Governance UI V1 exposes status, dry-run, doctor, continue, and safe-cleanup continue through explicit command gates. |
 | 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 adds read-only checks for JSON-only contracts, selected_agent drift, example path leaks, and db-migration write/review rules. |
 | 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 validates SKILL.md frontmatter/body and reports registry drift. |
 | 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts`, `system/control-plane/model-runtime-check.ts` | TESTED | Batch 004 checks contract policy; Spark Runtime Hardening adds route parsing, timeout/retry validation, optional endpoint health, and Operator Doctor integration. |
@@ -46,6 +46,7 @@ The goal is to make the governance system operable before more product work cont
 - Batch operator tests covering clean status, approvals, cleanup suggestions, stop-rule blocks, no automatic grants, no Supabase commands, ambiguity refusal, and exact next commands.
 - Agent & Skill Contract Checker for runtime-facing agent contracts, SKILL.md frontmatter/body, registry drift, model routing JSON/thinking policy, and approval operation scope.
 - Model Runtime Checker for Spark/vLLM route health, endpoint metadata, Qwen thinking-off policy, JSON response mode, and dispatcher timeout/retry policy.
+- Governance UI V1 for local dashboard, batch console, doctor, approvals, dossier, workorders, promotion, learning, runtime, and settings views backed by allowlisted CLI execution.
 - Spec Source Chain Checker for module INDEX resolution, `source_refs`, expected outputs, scope alignment, raw-source policy, and placeholder/example guards.
 - Nutrition Batch 001 output completion and Nutrition P1-004 static schema verification.
 
@@ -201,6 +202,8 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 ```
 
 `--doctor` explains runtime blockers, approval stops, cleanup candidates, checker findings, memory/learning status, stop-rule baselines, product-gate status, and exactly one safe next action without dispatching.
+
+Governance UI V1 wraps these commands locally at `/governance/*`. It uses `apps/web/src/lib/governance/command-allowlist.ts` and `command-runner.ts` so the browser can run only approved read-only or explicitly confirmed controlled actions.
 
 ## 16. Memory Layer
 

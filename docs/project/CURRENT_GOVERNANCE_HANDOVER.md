@@ -4,9 +4,9 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, governance runtime drift cleanup, local Supabase inventory, and local transaction dry-run reports.
+`main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, governance runtime drift cleanup, local Supabase inventory, local transaction dry-run reports, Spark/Model Runtime Hardening, and Model Runtime Routing Cleanup.
 
-The active governance branch is implementing Spark Runtime / Model Runtime Hardening.
+The active governance branch is implementing Governance UI V1.
 
 ## Current Truth
 
@@ -30,6 +30,8 @@ The active governance branch is implementing Spark Runtime / Model Runtime Harde
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
 - Memory/Learning Automation adds a read-only governance learning checker.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
+- Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
+- Governance UI V1 adds a local operator console around the existing governance CLIs.
 - Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
@@ -46,6 +48,7 @@ Use these files before starting more governance or product work:
 - `docs/project/PRODUCT_WORK_GATE.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
+- `docs/project/GOVERNANCE_UI_V1.md`
 - `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
 - `AGENTS.md`
 - `CLAUDE.md`
@@ -121,6 +124,35 @@ Rules:
 - Dispatcher model calls now have bounded timeout and one retry for runtime failures.
 - Operator Doctor includes model-runtime findings and still emits one safe next action.
 - `mealcam-agent` is optional/on-demand. Its endpoint is only blocking when a MealCam/Vision workorder or explicit Tom request requires it.
+
+## Governance UI V1 Output
+
+- `apps/web/src/app/governance/*`
+- `apps/web/src/app/api/governance/*`
+- `apps/web/src/components/governance/GovernanceConsole.tsx`
+- `apps/web/src/lib/governance/*`
+- `docs/project/GOVERNANCE_UI_V1.md`
+- `docs/project/governance-learning/2026-05-05-governance-ui-v1-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c pnpm --dir apps\web dev
+```
+
+Open:
+
+```text
+http://localhost:3000/governance
+```
+
+Rules:
+
+- UI commands go through a central allowlist.
+- Read-only commands do not require confirmation.
+- Controlled actions require typing `CONFIRM`.
+- Approval grants are not executable in V1.
+- Supabase reset/push, migration execution, production DB commands, runtime state edits, queue edits, and product batch execution are not exposed.
 
 ## Workorder Factory Output
 

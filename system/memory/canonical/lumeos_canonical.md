@@ -58,6 +58,7 @@ Governance learning records:
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
+- Governance UI V1 exists under `apps/web/src/app/governance` as a local operator console backed by allowlisted CLI execution.
 
 ## Current Product Work Gate
 
@@ -128,6 +129,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Factory-generated workorders must include `source_refs`, `expected_outputs`, scoped writes, high-risk `files_blocked`, and db-migration `rollback_hint`.
 - Model runtime checks must pass before autonomous operator work; endpoint health checks must be short read-only `/v1/models` checks, not real workorder prompts.
 - Optional runtimes only block when the target batch/workorder explicitly requires them.
+- Governance UI commands must stay routed through the allowlist and must not expose Supabase reset/push, migration execution, runtime state edits, queue edits, or approval auto-grants.
 
 ## Open Governance Work
 
@@ -140,3 +142,4 @@ Prompt text such as `/no_think` is not sufficient.
 - Workorder Factory / Decomposition Automation is implemented for structured plans; free-form decomposition remains a prompt/manual Brain step.
 - Memory/Learning Automation is implemented as a read-only checker plus explicit status writer.
 - Spark Runtime Hardening is implemented as a read-only checker; deeper runtime observability remains optional.
+- Governance UI V1 is implemented as local operator console V1; richer graphing and saved dossier views remain optional refinements.
