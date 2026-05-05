@@ -27,7 +27,7 @@ The goal is to make the governance system operable before more product work cont
 | 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 adds read-only checks for JSON-only contracts, selected_agent drift, example path leaks, and db-migration write/review rules. |
 | 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 validates SKILL.md frontmatter/body and reports registry drift. |
 | 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 checks Qwen3.6 thinking-off documentation and dispatcher JSON object response enforcement. |
-| 18. Merge / promotion governance | Manual branch review and push procedure in chat | MISSING | No branch-review CLI or promotion gate exists. |
+| 18. Merge / promotion governance | `system/control-plane/promotion-governance.ts`, promotion tests | TESTED | Batch 007 adds deterministic branch review, merge, push, forbidden artifact checks, product-gate detection, and post-merge typecheck. |
 | 19. Memory layer | `system/memory/canonical/*`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, CLAUDE.md, AGENTS.md | PARTIAL | Batch 002 created current handover and canonical corrections; update enforcement is still manual. |
 | 20. Learning / feedback-loop | `docs/project/governance-learning/*`, commit history, tests | PARTIAL | Batch 002 created incident records and schema; machine-readable operator learning records are still missing. |
 | 21. Incident-to-regression-test | Tests near fixes | PARTIAL | Many recent incidents have tests, but there is no required incident record. |
@@ -59,9 +59,8 @@ The goal is to make the governance system operable before more product work cont
 
 ## 5. Missing Components
 
-- Branch review / merge / push readiness CLI.
 - Operator `--doctor` mode for self-diagnosing common blockers.
-- Product work gate that blocks BLS import until required governance batches are done.
+- Product work gate that blocks BLS import until required governance batches are done is documented and promotion-aware, but not yet fully integrated into operator doctor.
 
 ## 6. Critical Invariants
 
@@ -311,7 +310,7 @@ Minimum gate before BLS import:
 | 3 | Governance Batch 004 - Agent & Skill Contract Validation | Prevent agent/skill contract drift. | completed | Implemented by `system/control-plane/agent-contract-check.ts`. |
 | 4 | Governance Batch 005 - Spec Source Chain / Workorder Factory | Ensure WOs are derived from specs, not fragments. | completed | Implemented by `system/workorders/cli/spec-source-chain-check.ts`; target product work must pass it. |
 | 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Implemented as read-only batch dossier reporter. |
-| 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Reduces manual Git choreography. |
+| 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Implemented by `system/control-plane/promotion-governance.ts`. |
 | 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Builds on Batches 002 and 003. |
 
 ## Gap Register
@@ -325,7 +324,7 @@ Minimum gate before BLS import:
 | Agent contract checker | DONE | high | no | partial | Maintain read-only checks for JSON-only, examples, selected_agent, Qwen policy, and approval operation scope. | Batch 004 | done |
 | Skill contract checker | DONE | medium | no | no | Maintain SKILL frontmatter/body validation and registry drift warnings. | Batch 004 | done |
 | Batch dossier | DONE | medium | no | no | Maintain `system/reports/batch-dossier.ts` and wire future promotion gates to it. | Batch 006 | done |
-| Promotion governance | MISSING | medium | no | no | Branch review, merge, push readiness CLI. | Batch 007 | yes |
+| Promotion governance | DONE | medium | no | no | Maintain deterministic review/merge/push CLI. | Batch 007 | done |
 | Operator doctor | MISSING | medium | no | partial | Add read-only `--doctor`. | Batch 008 | after Batch 003 |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
 | Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
