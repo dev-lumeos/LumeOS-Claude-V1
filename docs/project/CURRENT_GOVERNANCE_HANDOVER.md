@@ -4,7 +4,7 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through Nutrition P1-004 schema verification. The current governance work is on branch `goal/governance-gap-analysis-plan`.
+`main` is pushed through the Governance Gap Analysis Plan and Nutrition P1-004 schema verification. Governance Batch 002 is complete on branch `goal/governance-batch-002-memory-learning` until merged.
 
 ## Current Truth
 
@@ -16,6 +16,8 @@ Current date: 2026-05-05.
   - `--continue --apply-safe-cleanups`
 - Nutrition Batch 001 reached operator `DONE`.
 - Nutrition P1-004 schema verification reached `DONE` and is pushed to `origin/main`.
+- Governance Gap Analysis Plan is pushed to `origin/main`.
+- Governance Batch 002 created durable memory and learning records.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -24,36 +26,37 @@ Current date: 2026-05-05.
 Use these files before starting more governance or product work:
 
 - `docs/project/GOVERNANCE_SYSTEM_COMPLETION_PLAN.md`
-- `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
+- `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`
 - `docs/project/governance-learning/README.md`
 - `docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md`
+- `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
 - `AGENTS.md`
 - `CLAUDE.md`
 - `system/memory/canonical/lumeos_canonical.md`
 
-Treat `system/memory/canonical/lumeos_canonical.md` as stale where it claims all governance blocks are complete. The completion plan is the newer truth for governance gaps.
+The completion plan is the current truth for remaining governance gaps. Canonical memory contains only compact truths and must not replace the completion plan or incident records.
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work are blocked until at least Governance Batch 002 is completed and Governance Batch 003 is completed or explicitly waived by Tom.
+BLS import and Nutrition P1-005 product work are blocked until Governance Batch 003 is completed or explicitly waived by Tom.
 
 Reason:
 
-- Memory and learning are not yet workflow-enforced.
+- Memory and learning foundation exists as of Governance Batch 002.
 - Runtime invariant checking is not yet available as a standalone read-only checker.
-- Recent incidents are fixed in code/tests, but not durably recorded as incident learning records.
+- Recent incidents are now being recorded as durable incident learning records.
 
 ## Safe Next Governance Batch
 
-Governance Batch 002 - Memory & Learning Foundation.
+Governance Batch 003 - Invariant Checker.
 
 Goal:
 
-- Define durable memory locations.
-- Define learning record schema.
-- Create incident-to-regression checklist.
-- Establish Incident -> Fix -> Test -> Rule -> Memory workflow.
-- Require current handover updates after every governance batch.
+- Add a read-only runtime/state consistency checker.
+- Detect active_workorders versus active_runs drift.
+- Detect approval queue/token/runtime divergence.
+- Detect stale locks and stale terminal blockers.
+- Detect tracked runtime artifacts.
 
 ## Do Not Do
 
@@ -64,6 +67,18 @@ Goal:
 - Do not edit `system/state/runtime_state.json` or `system/approval/queue.json` manually.
 - Do not commit runtime artifacts.
 - Do not use raw BLS files as primary schema source when a current spec exists.
+- Do not start product work until the Product Work Gate opens.
+
+## Incident Records Created In Governance Batch 002
+
+- `docs/project/governance-learning/2026-05-05-approval-token-runtime-split-brain.md`
+- `docs/project/governance-learning/2026-05-05-example-migration-path-leak.md`
+- `docs/project/governance-learning/2026-05-05-operator-done-ambiguity.md`
+- `docs/project/governance-learning/2026-05-05-selected-agent-mismatch.md`
+- `docs/project/governance-learning/2026-05-05-executable-rollback-sql.md`
+- `docs/project/governance-learning/2026-05-05-read-only-spec-approval-misclassification.md`
+- `docs/project/governance-learning/2026-05-05-invalid-json-stop-rule-retrigger.md`
+- `docs/project/governance-learning/2026-05-05-scope-trailing-slash-mismatch.md`
 
 ## Recent Incidents To Remember
 
@@ -82,4 +97,3 @@ Goal:
 - Read-only spec access incorrectly required migration approval.
 - Operator `DONE` initially meant "no blockers" rather than "outputs complete".
 - Spec source-chain enforcement is still missing.
-

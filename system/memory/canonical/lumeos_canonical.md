@@ -1,93 +1,80 @@
 # LumeOS Canonical Memory
 
-> **CURRENT TRUTH** — Stand: April 2026
-> Diese Datei enthält nur aktuelle, belegte Aussagen.
-> Historische Designentscheidungen: `docs/BrainstormDocs/` (ARCHIVE — not current truth)
+> CURRENT TRUTH - Stand: 2026-05-05
+> This file contains compact current truths only.
+> Historical design material in `docs/BrainstormDocs/` is archive material, not current truth.
 
 ---
 
 ## System
 
-**Architecture:** Brain / Law / Muscle
+Architecture: Brain / Law / Muscle.
 
-- Brain: Claude Code (planning, specs, WOs)
-- Law: Deterministisches System (Scheduler, Governance, Preflight, Reports)
-- Muscle: DGX Sparks A+B+C+D (vLLM Execution)
+- Brain: Claude Code and Codex for planning, specs, workorders, review, and governance maintenance.
+- Law: deterministic governance system: scheduler, preflight, operator, approval gate, stop rules, reports.
+- Muscle: Spark/vLLM execution agents.
 
-**Repo:** https://github.com/dev-lumeos/LumeOS-Claude-V1
-**Stack:** pnpm / Turborepo / Hono / Supabase / vLLM / TypeScript
+Repo: `https://github.com/dev-lumeos/LumeOS-Claude-V1`
 
----
-
-## Hardware — Phase 2 LIVE (alle 4 Sparks aktiv)
-
-| Node | IP | Port | Modell | Rolle | Status |
-|---|---|---|---|---|---|
-| Spark A | 192.168.0.128 | 8001 | Qwen3.6-35B-A3B FP8 | Orchestrator + WO-Validator | ✅ LIVE |
-| Spark B | 192.168.0.188 | 8001 | Qwen3-Coder-Next FP8 | Coding Worker | ✅ LIVE |
-| Spark C | 192.168.0.99 | 8001 | Gemma-4-26B-A4B-it FP8 | Fast Reviewer (Pipeline Tier 1) | ✅ LIVE |
-| Spark D | 192.168.0.101 | 8001 | GPT-OSS-120B MXFP4 | Senior Reviewer (Pipeline Tier 2) | ✅ LIVE |
-| RTX 5090 | localhost | 8001 | Qwen3-VL-30B FP8 | MealCam Vision | geplant |
-| Escalation | — | — | Claude Code Max 200 | Senior Coding (selten) | aktiv |
+Stack: pnpm / Turborepo / Hono / Supabase / vLLM / TypeScript.
 
 ---
 
-## Governance-System — Implementierungsstand
+## Current Governance Truth
 
-Alle Blöcke A–E implementiert und verifiziert:
+The deterministic governance/execution system is functional and has run real governance and Nutrition batches. It is not complete.
 
-| Block | Thema | Status |
-|---|---|---|
-| Block 6 | Review-Pipeline V2 | ✅ |
-| A.1–A.4 | Workorder-Schema, Risk-Categories, Files Enforcement, Locks | ✅ |
-| B.1–B.4 | Run Summary, Morning Report, Failed WO Report, Model Quality Report | ✅ |
-| C.1–C.3 | Kill-Switch, Stop Rules, Approval Queue, Night-Run-Policy | ✅ |
-| D.1–D.2 | WO-State-Machine, Scheduler Preflight (12 Checks) | ✅ |
-| E.1–E.2 | WO Dossier Generator, Docs-Governance V1 | ✅ |
-| F | Spark Runtime Hardening | ⏳ offen |
+Current gap-analysis truth:
 
----
+- `docs/project/GOVERNANCE_SYSTEM_COMPLETION_PLAN.md`
 
-## Agent Routing (aktueller Stand)
+Current handover:
 
-| Agent | Node | Modell | Zweck |
-|---|---|---|---|
-| orchestrator-agent | Spark A | qwen3.6-35b-fp8 | Dispatch + Monitor |
-| pre-review-agent | Spark A | qwen3.6-35b-fp8 | Vollständigkeit prüfen |
-| post-review-agent | Spark A | qwen3.6-35b-fp8 | Output validieren |
-| micro-executor | Spark B | qwen3-coder-next-fp8 | TypeScript Patches |
-| test-agent | Spark B | qwen3-coder-next-fp8 | Tests |
-| fast-reviewer-agent | Spark C | gemma-4-26B-A4B-it | Pipeline Tier 1 |
-| senior-reviewer-agent | Spark D | gpt-oss-120b | Pipeline Tier 2 |
-| senior-coding-agent | Claude Code | claude-opus-4-5 | Escalation only |
+- `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`
 
----
+Governance learning records:
 
-## Services (laufend auf Threadripper, lokal)
+- `docs/project/governance-learning/`
 
-| Port | Service | Status |
-|---|---|---|
-| 9000 | wo-classifier | deterministisches Routing |
-| 9001 | sat-check | 3 deterministische Checks |
-| 9002 | scheduler-api | WO Queue + Spark-Dispatch |
-| 9003 | governance-compiler | Macro-WO → GovernanceArtefaktV3 |
-| 9004 | lightrag | Codebase Knowledge Graph |
-| 54321 | supabase | Control Plane DB (lokal, niemals Cloud) |
+## Implemented And Preferred
 
----
+- Governance Batch Operator is the preferred way to run workorder batches.
+- Operator modes: `--status`, `--dry-run`, `--continue`, `--continue --apply-safe-cleanups`.
+- Approval queue, dispatcher enforcement tokens, and runtime approval mirrors exist and must stay synchronized.
+- Stop rules exist and must use baselines for historical failed-run and invalid-json incidents.
+- Migration writes must pass static guard and human approval where required.
+- Operator `DONE` means no active batch workorders remain and expected outputs exist.
 
-## Festgezogene Entscheidungen
+## Current Product Work Gate
 
-- WO Classifier: deterministisch, regelbasiert, kein LLM
-- Control Plane DB: lokal auf Threadripper — NIEMALS in Cloud
-- Qwen3.6 Pflicht: `enable_thinking: false`, `temperature: 0.0`
-- Reasoning-Filter: `extractContentOnly()` für alle Reasoning-Modelle
-- Scope Enforcement: `scope_files` + `files_blocked` erzwungen
-- Review Pipeline: Spark C → Spark D → ESCALATE → Claude Code
+BLS import and Nutrition P1-005 product work are blocked until Governance Batch 003 is complete or Tom explicitly waives it.
 
----
+Raw BLS files are local-only and ignored.
 
-## Qwen3.6 Pflichtregeln
+Do not run:
+
+- `supabase db push`
+- `supabase db reset`
+- production DB commands
+- migration execution from worker/operator flow
+
+## Memory And Learning Policy
+
+- Chat history is not durable memory.
+- Every governance incident must become: Incident -> Root Cause -> Fix -> Regression Test -> Durable Rule -> Memory Update.
+- Detailed incidents belong in `docs/project/governance-learning/`.
+- Compact current truths belong in this canonical memory file.
+- Session continuity belongs in `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`.
+
+## Agent Routing
+
+Source of truth:
+
+- `system/agent-registry/agents.json`
+- `system/agent-registry/model_routing.json`
+- `AGENTS.md`
+
+Qwen3.6 rule:
 
 ```json
 {
@@ -96,26 +83,27 @@ Alle Blöcke A–E implementiert und verifiziert:
 }
 ```
 
-`/no_think` im Prompt funktioniert NICHT — nur `chat_template_kwargs`.
+Prompt text such as `/no_think` is not sufficient.
 
----
+## Important Invariants
 
-## Offene Punkte (einzige echte Offene)
+- completed run must not leave active_workorder stuck in dispatched/running/awaiting_approval.
+- blocked/awaiting_approval must not collapse to failed in scheduler state.
+- approval queue, runtime approval item, and enforcement token must stay synchronized.
+- denied approval must sync runtime state.
+- selected_agent must not drift from workorder agent.
+- example/template paths must never become real tool targets.
+- read-only context access must not require db-migration approval.
+- executable rollback/DOWN SQL must be blocked.
+- runtime artifacts must not be committed.
 
-- **F — Spark Runtime Hardening:** systemd Services, HTTP Healthcheck-Timer, Reboot-Tests, Auto-Restart bei hängendem vLLM
-- **Block 3 Tech-Debt:** 3 TS-Fehler + 3 failing Smoke-Tests (pre-existing, nicht durch Governance-Arbeit verursacht)
+## Open Governance Work
 
----
+- Governance Batch 003 - Invariant Checker.
+- Governance Batch 004 - Agent & Skill Contract Validation.
+- Governance Batch 005 - Spec Source Chain / Workorder Factory.
+- Governance Batch 006 - Reporting & Dossier Hardening.
+- Governance Batch 007 - Promotion / Merge Governance.
+- Governance Batch 008 - Operator Doctor / Autonomy Hardening.
+- Spark Runtime Hardening.
 
-## Veraltete / nicht mehr gültige Annahmen (NICHT als Wahrheit lesen)
-
-Die folgenden Punkte waren in früheren Versionen dieser Datei enthalten und
-wurden als veraltet entfernt. Sie stehen nur hier zur Referenz:
-
-- ~~Phase 2 PENDING — Spark 3+4 unterwegs~~ → Phase 2 ist LIVE
-- ~~Nemotron als Orchestrator (Port 9005)~~ → Orchestrator ist Qwen3.6 auf Spark A
-- ~~MiniMax M2.7 als Spark 3+4 Modelle~~ → Spark C = Gemma 4, Spark D = GPT-OSS
-- ~~Nutrition-API wartet auf Supabase Cloud~~ → noch kein aktueller Implementierungsstand
-- ~~Port 9005 Orchestrator wartet auf Nemotron Deployment~~ → Port 9005 nicht aktiv
-- ~~triple_hash Verifikation~~ → nicht Teil des aktuellen Governance-Systems
-- ~~Ed25519 Token~~ → nicht Teil des aktuellen Governance-Systems
