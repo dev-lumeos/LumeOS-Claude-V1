@@ -4,7 +4,7 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through the Governance Gap Analysis Plan and Nutrition P1-004 schema verification. Governance Batch 002 is complete on branch `goal/governance-batch-002-memory-learning` until merged.
+`main` is pushed through Governance Batch 002, the Governance Gap Analysis Plan, and Nutrition P1-004 schema verification. Governance Batch 003 is complete on branch `goal/governance-batch-003-invariant-checker` until merged.
 
 ## Current Truth
 
@@ -18,6 +18,7 @@ Current date: 2026-05-05.
 - Nutrition P1-004 schema verification reached `DONE` and is pushed to `origin/main`.
 - Governance Gap Analysis Plan is pushed to `origin/main`.
 - Governance Batch 002 created durable memory and learning records.
+- Governance Batch 003 added a read-only invariant checker.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -38,25 +39,26 @@ The completion plan is the current truth for remaining governance gaps. Canonica
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work are blocked until Governance Batch 003 is completed or explicitly waived by Tom.
+BLS import and Nutrition P1-005 product work remain blocked until Governance Batch 005 is completed or explicitly waived by Tom.
 
 Reason:
 
 - Memory and learning foundation exists as of Governance Batch 002.
-- Runtime invariant checking is not yet available as a standalone read-only checker.
+- Runtime invariant checking is available through `system/control-plane/governance-invariant-check.ts`.
 - Recent incidents are now being recorded as durable incident learning records.
+- Spec source-chain enforcement is still missing and is required before BLS import.
 
 ## Safe Next Governance Batch
 
-Governance Batch 003 - Invariant Checker.
+Governance Batch 004 - Agent & Skill Contract Validation.
 
 Goal:
 
-- Add a read-only runtime/state consistency checker.
-- Detect active_workorders versus active_runs drift.
-- Detect approval queue/token/runtime divergence.
-- Detect stale locks and stale terminal blockers.
-- Detect tracked runtime artifacts.
+- Prevent agent and skill contract drift.
+- Validate JSON-only output contracts.
+- Detect example path leaks in agent examples.
+- Validate selected_agent/model-routing rules.
+- Validate SKILL.md frontmatter.
 
 ## Do Not Do
 
@@ -79,6 +81,19 @@ Goal:
 - `docs/project/governance-learning/2026-05-05-read-only-spec-approval-misclassification.md`
 - `docs/project/governance-learning/2026-05-05-invalid-json-stop-rule-retrigger.md`
 - `docs/project/governance-learning/2026-05-05-scope-trailing-slash-mismatch.md`
+
+## Governance Batch 003 Output
+
+- `system/control-plane/governance-invariant-check.ts`
+- `system/control-plane/__tests__/governance-invariant-check.test.ts`
+- `docs/project/governance-learning/2026-05-05-governance-batch-003-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json
+```
 
 ## Recent Incidents To Remember
 

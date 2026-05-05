@@ -44,10 +44,11 @@ Governance learning records:
 - Stop rules exist and must use baselines for historical failed-run and invalid-json incidents.
 - Migration writes must pass static guard and human approval where required.
 - Operator `DONE` means no active batch workorders remain and expected outputs exist.
+- Read-only invariant checker exists at `system/control-plane/governance-invariant-check.ts`.
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work are blocked until Governance Batch 003 is complete or Tom explicitly waives it.
+BLS import and Nutrition P1-005 product work are blocked until Governance Batch 005 is complete or Tom explicitly waives it.
 
 Raw BLS files are local-only and ignored.
 
@@ -99,11 +100,10 @@ Prompt text such as `/no_think` is not sufficient.
 
 ## Open Governance Work
 
-- Governance Batch 003 - Invariant Checker.
+- Governance Batch 003 - Invariant Checker is implemented.
 - Governance Batch 004 - Agent & Skill Contract Validation.
 - Governance Batch 005 - Spec Source Chain / Workorder Factory.
 - Governance Batch 006 - Reporting & Dossier Hardening.
 - Governance Batch 007 - Promotion / Merge Governance.
 - Governance Batch 008 - Operator Doctor / Autonomy Hardening.
 - Spark Runtime Hardening.
-

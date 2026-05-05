@@ -18,22 +18,22 @@ The goal is to make the governance system operable before more product work cont
 | 6. Batch graph / dependency | `system/workorders/cli/batch-loader.ts`, `run-batch.ts`, batch operator tests | TESTED | Batch order and `blocked_by` behavior are covered; deeper cross-batch graph checks are missing. |
 | 7. Scheduler / preflight | `system/control-plane/scheduler-preflight.ts`, `services/scheduler-api/`, tests | TESTED | Preflight tests exist; scheduler/runtime mapping bugs have occurred. |
 | 8. Dispatcher / tool-loop | `system/control-plane/dispatcher.ts`, dispatcher tests | PARTIAL | Tool-loop exists; incident history shows fragile model-output handling. |
-| 9. Approval lifecycle | `system/approval/*`, `system/agent-registry/approval_operation_types.json`, approval tests | TESTED | Queue/token/runtime split is improved and tested, but no standalone invariant checker exists. |
+| 9. Approval lifecycle | `system/approval/*`, `system/agent-registry/approval_operation_types.json`, approval tests, `system/control-plane/governance-invariant-check.ts` | TESTED | Queue/token/runtime split is improved and tested; Batch 003 adds read-only invariant detection. |
 | 10. Review pipeline | `system/control-plane/review-pipeline.ts`, review tests | PARTIAL | Pipeline exists; reviewer invalid JSON learning is not fed into durable rules automatically. |
 | 11. Stop rules / system stop | `system/control-plane/stop-rules.ts`, `system/state/state-manager.ts`, tests | TESTED | Baselines exist for failed runs and invalid JSON; stop lifecycle docs are thin. |
-| 12. Cleanup / state lifecycle | `system/control-plane/terminal-wo-reset-cli.ts`, state manager, tests | TESTED | Official cleanup paths exist; no general `doctor` summarizes all invariant drift. |
+| 12. Cleanup / state lifecycle | `system/control-plane/terminal-wo-reset-cli.ts`, `system/control-plane/governance-invariant-check.ts`, state manager, tests | TESTED | Official cleanup paths exist and read-only invariant checks summarize runtime drift. |
 | 13. Reporting / dossier | `system/reports/*`, reports directories | PARTIAL | Reports exist; batch dossier and artifact classification are not unified. |
 | 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, runbook, tests | TESTED | Operator reached real DONE for Nutrition 001 and P1-004. |
 | 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json` | PARTIAL | Contract fixes exist for db migration; no broad contract drift checker exists. |
 | 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json` | PARTIAL | Frontmatter fixes exist; no complete validation tool exists. |
 | 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md | PARTIAL | Qwen JSON/thinking policy is known and partly tested. |
 | 18. Merge / promotion governance | Manual branch review and push procedure in chat | MISSING | No branch-review CLI or promotion gate exists. |
-| 19. Memory layer | `system/memory/canonical/*`, `docs/chatgpt/*`, CLAUDE.md, AGENTS.md | BROKEN | Current memory says all governance blocks are done, which is no longer accurate after recent incidents. |
-| 20. Learning / feedback-loop | Commit history and scattered tests | MISSING | Incidents become fixes/tests manually, not through a durable workflow. |
+| 19. Memory layer | `system/memory/canonical/*`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, CLAUDE.md, AGENTS.md | PARTIAL | Batch 002 created current handover and canonical corrections; update enforcement is still manual. |
+| 20. Learning / feedback-loop | `docs/project/governance-learning/*`, commit history, tests | PARTIAL | Batch 002 created incident records and schema; machine-readable operator learning records are still missing. |
 | 21. Incident-to-regression-test | Tests near fixes | PARTIAL | Many recent incidents have tests, but there is no required incident record. |
-| 22. Knowledge handover / session continuity | `docs/chatgpt/LUMEOS_HANDOVER_CONTEXT*.md` | UNCLEAR | Handover exists but is stale, duplicated, and not operator-maintained. |
-| 23. Runtime artifact policy | `.gitignore`, operator artifact categorization | PARTIAL | Raw BLS and queue artifacts are handled; policy is not audited by a checker. |
-| 24. Product work gate | Operator DONE plus manual judgement | MISSING | No explicit gate says when product work may resume after governance incidents. |
+| 22. Knowledge handover / session continuity | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/*` | PARTIAL | Current handover exists; operator-maintained refresh is still missing. |
+| 23. Runtime artifact policy | `.gitignore`, operator artifact categorization, `system/control-plane/governance-invariant-check.ts` | TESTED | Raw BLS and runtime artifact drift are checked read-only by Batch 003. |
+| 24. Product work gate | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/lumeos_canonical.md` | PARTIAL | Gate is documented; automated enforcement is still missing. |
 
 ## 3. Completed Components
 
@@ -52,16 +52,12 @@ The goal is to make the governance system operable before more product work cont
 - Agent contracts are patched for known db-migration issues, but broad contract drift is unguarded.
 - Skill frontmatter exists but lacks an always-run validator.
 - Reporting exists as run summaries and dossiers, but not as a single merge-ready batch dossier.
-- Runtime artifact policy exists in operator categorization and `.gitignore`, but lacks a read-only repo checker.
+- Runtime artifact policy exists in operator categorization, `.gitignore`, and the Batch 003 invariant checker; automated merge enforcement is still missing.
 - Stop-rule lifecycle has baselines, but acknowledgement policy is still manual.
 - Memory exists, but it is not updated after every governance batch and contains stale claims.
 
 ## 5. Missing Components
 
-- Current governance handover file that future Codex/Claude runs must read.
-- Governance learning log schema and durable incident records.
-- Incident -> Fix -> Test -> Rule -> Memory workflow.
-- Read-only governance invariant checker.
 - Agent and skill contract checker.
 - Spec source-chain checker.
 - Branch review / merge / push readiness CLI.
@@ -109,7 +105,7 @@ Rules:
 
 Gaps:
 
-- Approval state invariants are tested in local scenarios but not audited by a repo/runtime-wide checker.
+- Approval state invariants are tested and audited by the Batch 003 read-only checker, but the checker is not yet part of operator `--doctor`.
 - Approval review reports are chat-local, not saved as durable incident/decision records.
 
 ## 9. Cleanup Lifecycle
@@ -129,7 +125,7 @@ Rules:
 - Refuse active locks.
 - Refuse pending usable approvals.
 
-Gap: cleanup is safe but reactive. A read-only invariant checker and operator `--doctor` should identify these states before Tom has to inspect runtime files.
+Gap: cleanup is safe but reactive. Batch 003 identifies these states read-only; operator `--doctor` still needs to surface the same diagnosis in the operator workflow.
 
 ## 10. Stop Rule Lifecycle
 
@@ -294,14 +290,14 @@ Gap: WO-003 source confusion showed the system needs a generic checker that vali
 
 ## 20. Product Work Gate
 
-BLS import and product feature work should stay blocked until at least Governance Batch 002 is completed and Batch 003 is either completed or explicitly waived by Tom.
+BLS import and Nutrition product feature work should stay blocked until Governance Batch 005 is completed or explicitly waived by Tom. Governance Batch 003 removes the runtime invariant-checker blocker, but BLS import still needs spec source-chain enforcement.
 
 Minimum gate before BLS import:
 
 - Current governance handover exists and is updated.
 - Learning schema exists.
 - Recent incidents have durable records.
-- Runtime invariant checker exists or Tom explicitly accepts manual runtime checks.
+- Runtime invariant checker exists and passes.
 - Operator status for the target batch is clean.
 - No pending approvals, active locks, or stop-rule triggers.
 - Raw BLS local-only policy remains enforced.
@@ -311,7 +307,7 @@ Minimum gate before BLS import:
 | Priority | Batch | Goal | Blocks product work | Notes |
 |---|---|---|---|---|
 | 1 | Governance Batch 002 - Memory & Learning Foundation | Make project knowledge durable and reduce repeated debugging. | yes | Required before BLS import resumes. |
-| 2 | Governance Batch 003 - Invariant Checker | Read-only runtime/state consistency checker. | yes | May be waived only by Tom. |
+| 2 | Governance Batch 003 - Invariant Checker | Read-only runtime/state consistency checker. | completed | Implemented by `system/control-plane/governance-invariant-check.ts`. |
 | 3 | Governance Batch 004 - Agent & Skill Contract Validation | Prevent agent/skill contract drift. | no | Strongly recommended before more db-migration WOs. |
 | 4 | Governance Batch 005 - Spec Source Chain / Workorder Factory | Ensure WOs are derived from specs, not fragments. | yes for BLS import | Needed because BLS source priority matters. |
 | 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Improves merge review and handover. |
@@ -324,7 +320,7 @@ Minimum gate before BLS import:
 |---|---|---|---|---|---|---|---|
 | Memory layer | BROKEN | critical | yes | yes | Create current handover, learning schema, update policy. | Batch 002 | yes |
 | Learning loop | MISSING | critical | yes | yes | Add incident records and required Incident -> Fix -> Test -> Rule -> Memory workflow. | Batch 002 | yes |
-| Invariant checker | MISSING | high | yes | partial | Add read-only checker for runtime, approvals, locks, artifact policy. | Batch 003 | yes |
+| Invariant checker | DONE | high | no | no | Maintain read-only checker for runtime, approvals, locks, stop rules, artifact policy. | Batch 003 | done |
 | Spec source chain | PARTIAL | high | yes for BLS import | no | Add checker for INDEX/spec/patch/ADR/workorder links. | Batch 005 | yes |
 | Agent contract checker | MISSING | high | no | partial | Validate JSON-only, examples, selected_agent, Qwen policy. | Batch 004 | yes |
 | Skill contract checker | MISSING | medium | no | no | Validate SKILL frontmatter and registry drift. | Batch 004 | yes |
@@ -332,8 +328,8 @@ Minimum gate before BLS import:
 | Promotion governance | MISSING | medium | no | no | Branch review, merge, push readiness CLI. | Batch 007 | yes |
 | Operator doctor | MISSING | medium | no | partial | Add read-only `--doctor`. | Batch 008 | after Batch 003 |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
-| Runtime artifact policy checker | PARTIAL | medium | yes for clean merges | no | Add git-tracked runtime/raw detector. | Batch 003 | yes |
-| Merge/product gate | MISSING | high | yes | no | Explicit Product Work Gate checklist. | Batch 002 | yes |
+| Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
+| Merge/product gate | PARTIAL | high | yes | no | Turn documented Product Work Gate into an enforced checklist. | Batch 007 | yes |
 
 ## Recent Incident Review
 
@@ -357,4 +353,3 @@ Minimum gate before BLS import:
 | Operator DONE meaning blockers cleaned, not outputs complete | Operator did not distinguish clean runtime from complete outputs. | `c1c1a2e` plus follow-up tests | yes | runbook | no | medium | Batch dossier and output checker. |
 | Missing spec source-chain enforcement | WO source priority not machine-checked. | none | no | no | no | high | Batch 005. |
 | Raw BLS data source policy unclear | Raw files were untracked and docs linked local artifacts ambiguously. | `49366c9` | no | partial | no | medium | Product work gate and spec source-chain checker. |
-
