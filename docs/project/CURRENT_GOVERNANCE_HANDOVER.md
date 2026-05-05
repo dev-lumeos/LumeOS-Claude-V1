@@ -6,7 +6,7 @@ Current date: 2026-05-05.
 
 `main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
 
-The active governance branch is adding Memory/Learning Automation.
+The active governance branch is documenting the conditional Product Work Gate decision.
 
 ## Current Truth
 
@@ -29,6 +29,7 @@ The active governance branch is adding Memory/Learning Automation.
 - Governance Batch 008 adds read-only Operator Doctor mode.
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
 - Memory/Learning Automation adds a read-only governance learning checker.
+- Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -41,6 +42,7 @@ Use these files before starting more governance or product work:
 - `docs/project/governance-learning/README.md`
 - `docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md`
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
+- `docs/project/PRODUCT_WORK_GATE.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
 - `AGENTS.md`
@@ -51,20 +53,46 @@ The completion plan is the current truth for remaining governance gaps. Canonica
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work remain blocked. Planning-only work may proceed only when it stays inside governance-safe documentation scope. Import execution requires an explicit Tom waiver or a clean governance decision after the remaining governance batches.
+Product work is not freely open.
+
+Tom has conditionally opened the product gate only for the next controlled planning/probe batch.
+
+Allowed:
+
+- Planning-only product work.
+- BLS import planning and preflight.
+- Local read-only raw file inspection.
+- Generation of reports and spec-linked workorders.
+- Static validation.
+- Governance checker runs.
+- Governance Operator dry-run.
+- Governance Operator continue only if no database execution, migration execution, or real bulk import occurs.
+
+Forbidden:
+
+- `supabase db push`
+- `supabase db reset`
+- Production database changes.
+- Migration execution.
+- Real BLS bulk import execution.
+- Committing raw BLS files.
+- Invented BLS, food, nutrient, or category values.
+- Bypassing the Governance Operator or checkers.
+- Auto-granting approvals.
+- Autonomous, night, or large product runs.
 
 Reason:
 
-- Memory and learning foundation exists as of Governance Batch 002.
 - Runtime invariant checking is available through `system/control-plane/governance-invariant-check.ts`.
 - Agent and skill contract checking is available through `system/control-plane/agent-contract-check.ts`.
 - Spec source-chain checking is available through `system/workorders/cli/spec-source-chain-check.ts`.
+- Governance learning checking is available through `system/reports/governance-learning-check.ts`.
 - Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
-- Recent incidents are now being recorded as durable incident learning records.
-- Spec source-chain enforcement is required before BLS import.
+- Spark Runtime Hardening is still required before autonomous, night, or large product runs.
+- Raw BLS files remain local-only and ignored.
 
 ## Workorder Factory Output
 
@@ -113,23 +141,23 @@ Rules:
 
 ## Safe Next Governance Batch
 
-Spark Runtime Hardening or a Tom decision to open the product work gate.
+Run the next controlled planning/probe batch or continue with Spark Runtime Hardening.
 
 Goal:
 
-- Decide whether the remaining runtime hardening work blocks product work.
-- If Tom opens the product gate, use the existing checkers/operator before any Nutrition product batch.
+- The conditional gate permits only planning/probe work, not import execution.
+- Spark Runtime Hardening still blocks autonomous, night, and large product runs.
 
 ## Do Not Do
 
-- Do not start Nutrition P1-005 BLS import.
+- Do not start real Nutrition P1-005 BLS import execution.
 - Do not grant approvals automatically.
 - Do not run Supabase `db push` or `db reset`.
 - Do not execute migrations.
 - Do not edit `system/state/runtime_state.json` or `system/approval/queue.json` manually.
 - Do not commit runtime artifacts.
 - Do not use raw BLS files as primary schema source when a current spec exists.
-- Do not start product work until the Product Work Gate opens.
+- Do not start product work outside the conditional planning/probe gate.
 
 ## Incident Records Created In Governance Batch 002
 

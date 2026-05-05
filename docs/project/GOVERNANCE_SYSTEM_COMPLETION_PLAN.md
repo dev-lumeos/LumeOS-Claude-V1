@@ -33,7 +33,7 @@ The goal is to make the governance system operable before more product work cont
 | 21. Incident-to-regression-test | `system/reports/governance-learning-check.ts`, tests near fixes | TESTED | Fixed incidents must link fix commits, regression tests, durable rules, and recurrence detectors or produce findings. |
 | 22. Knowledge handover / session continuity | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/*` | PARTIAL | Current handover exists; operator-maintained refresh is still missing. |
 | 23. Runtime artifact policy | `.gitignore`, operator artifact categorization, `system/control-plane/governance-invariant-check.ts` | TESTED | Raw BLS and runtime artifact drift are checked read-only by Batch 003. |
-| 24. Product work gate | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/lumeos_canonical.md` | PARTIAL | Gate is documented; automated enforcement is still missing. |
+| 24. Product work gate | `docs/project/PRODUCT_WORK_GATE.md`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/lumeos_canonical.md` | PARTIAL | Gate is conditionally documented for the next controlled planning/probe batch; broad product execution remains blocked. |
 
 ## 3. Completed Components
 
@@ -59,7 +59,7 @@ The goal is to make the governance system operable before more product work cont
 
 ## 5. Missing Components
 
-- Product work gate that blocks BLS import until Tom opens the gate is documented, checker-aware, promotion-aware, surfaced by operator doctor, and validated by the learning checker.
+- Product work gate is conditionally documented for planning/probe work only. BLS import execution, production DB changes, migrations execution, and autonomous/large product runs remain blocked.
 
 ## 6. Critical Invariants
 
@@ -280,18 +280,47 @@ Workorder Factory Automation status: implemented as `system/workorders/cli/wo-fa
 
 ## 20. Product Work Gate
 
-BLS import and Nutrition product feature work may proceed only after Governance Batch 005 is merged/pushed and the target workorder or batch passes source-chain, invariant, and agent-contract checks, unless explicitly waived by Tom.
+Product work is not freely open.
 
-Minimum gate before BLS import:
+Tom has conditionally opened the product gate only for the next controlled planning/probe batch.
+
+Allowed:
+
+- Planning-only product work.
+- BLS import planning and preflight.
+- Local read-only raw file inspection.
+- Generation of reports and spec-linked workorders.
+- Static validation.
+- Governance checker runs.
+- Governance Operator dry-run.
+- Governance Operator continue only if no database execution, migration execution, or real bulk import occurs.
+
+Forbidden:
+
+- `supabase db push`
+- `supabase db reset`
+- Production database changes.
+- Migration execution.
+- Real BLS bulk import execution.
+- Committing raw BLS files.
+- Invented BLS, food, nutrient, or category values.
+- Bypassing the Governance Operator or checkers.
+- Auto-granting approvals.
+- Autonomous, night, or large product runs.
+
+Mandatory gates for any product-related workorder:
 
 - Current governance handover exists and is updated.
-- Learning schema exists.
-- Recent incidents have durable records.
-- Runtime invariant checker exists and passes.
-- Operator status for the target batch is clean.
+- `system/control-plane/governance-invariant-check.ts` passes.
+- `system/control-plane/agent-contract-check.ts` passes.
+- `system/workorders/cli/spec-source-chain-check.ts` passes for the target workorder or batch.
+- `system/reports/governance-learning-check.ts` passes.
+- Governance Operator status/dry-run/doctor is clean for the target batch.
+- Promotion governance passes before merge.
 - No pending approvals, active locks, or stop-rule triggers.
 - Raw BLS local-only policy remains enforced.
-- Source-chain checker passes for the target workorder or batch.
+- Tom approvals remain required.
+- Spark Runtime Hardening is required before autonomous, night, or large product runs.
 
 ## 21. Required Governance Batches
 
@@ -324,7 +353,7 @@ Minimum gate before BLS import:
 | Memory/Learning automation | DONE | high | no | no | Maintain learning checker and current learning status summary. | Memory/Learning Automation | done |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
 | Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
-| Merge/product gate | PARTIAL | high | yes | no | Turn documented Product Work Gate into an enforced checklist. | Batch 007 | yes |
+| Merge/product gate | PARTIAL | high | conditional | no | Keep conditional Product Work Gate documented and enforced through checkers, operator, and promotion governance. | Product Gate decision | yes |
 
 ## Recent Incident Review
 

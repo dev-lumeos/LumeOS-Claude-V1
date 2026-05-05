@@ -58,9 +58,19 @@ Governance learning records:
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work remain blocked. Product work may resume only after the remaining governance gate is explicitly cleared through promotion governance or Tom explicitly waives it. Any target workorder or batch must still pass source-chain, invariant, and agent-contract checks.
+Product work is not freely open.
+
+Tom has conditionally opened the product gate only for the next controlled planning/probe batch.
+
+Allowed: planning-only product work, BLS import planning/preflight, local read-only raw file inspection, report/spec-linked workorder generation, static validation, governance checker runs, and operator dry-run/continue only when no DB execution, migration execution, or real bulk import occurs.
+
+Forbidden: Supabase `db push`, Supabase `db reset`, production DB changes, migration execution, real BLS bulk import execution, committing raw BLS files, invented BLS/nutrient values, checker/operator bypass, approval auto-grants, autonomous/night/large product runs.
+
+Any target workorder or batch must still pass source-chain, invariant, agent-contract, learning, operator, and promotion governance checks.
 
 Raw BLS files are local-only and ignored.
+
+Spark Runtime Hardening is required before autonomous, night, or large product runs.
 
 Do not run:
 
