@@ -22,6 +22,16 @@ http://localhost:3000/governance
 
 If another dev server already uses port 3000, Next.js will offer another local port.
 
+## Styling Requirements
+
+The UI relies on Tailwind through:
+
+- `apps/web/tailwind.config.js`
+- `apps/web/postcss.config.js`
+- `apps/web/src/app/globals.css`
+
+The console uses governance-specific component classes such as `gov-shell`, `gov-sidebar`, `gov-panel`, `gov-card`, `gov-button`, `gov-table`, and `gov-code`. If the page appears as raw/default HTML, first verify that `postcss.config.js` exists and that `globals.css` is imported by `apps/web/src/app/layout.tsx`.
+
 ## Routes
 
 - `/governance` - dashboard cards for product gate, git, checkers, approvals, and next action.
@@ -99,6 +109,18 @@ Governance UI V1 does not expose:
 - The UI is local-only and assumes the repository checkout is trusted.
 - The dashboard snapshot runs several read-only CLIs and can take a few seconds.
 - Controlled cleanup confirm buttons are not exposed directly; use the operator safe cleanup flow.
+
+## Visual Verification
+
+Minimum visual acceptance for V1:
+
+- Dark sidebar navigation is visible.
+- Top status bar is visible.
+- Dashboard cards render with colored status badges.
+- Buttons are styled and separated by read-only vs controlled action.
+- Command output is shown in monospaced code panels.
+- Tables use styled headers and row borders.
+- The product work gate warning is visible.
 
 ## Next UI Phases
 

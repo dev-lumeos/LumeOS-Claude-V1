@@ -153,6 +153,7 @@ Rules:
 - Controlled actions require typing `CONFIRM`.
 - Approval grants are not executable in V1.
 - Supabase reset/push, migration execution, production DB commands, runtime state edits, queue edits, and product batch execution are not exposed.
+- Tailwind styling requires `apps/web/postcss.config.js`; if the page appears unstyled, verify PostCSS and `globals.css` first.
 
 ## Workorder Factory Output
 
