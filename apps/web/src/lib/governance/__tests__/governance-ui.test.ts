@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
+import fs from 'node:fs'
+import path from 'node:path'
 
 import {
   COMMAND_DEFINITIONS,
@@ -89,5 +91,17 @@ describe('governance UI safety helpers', () => {
   it('finds the repository root from the web app subtree', () => {
     const root = findRepoRoot(process.cwd())
     assert.match(root.replace(/\\/g, '/'), /LumeOS-Claude-V1$/)
+  })
+
+  it('has Tailwind/PostCSS styling wired for the governance console', () => {
+    const root = findRepoRoot(process.cwd())
+    assert.equal(fs.existsSync(path.join(root, 'apps/web/postcss.config.js')), true)
+    const globals = fs.readFileSync(path.join(root, 'apps/web/src/app/globals.css'), 'utf8')
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+
+    assert.match(globals, /@tailwind base/)
+    assert.match(globals, /\.gov-shell/)
+    assert.match(consoleComponent, /gov-sidebar/)
+    assert.match(consoleComponent, /Product gate closed/)
   })
 })

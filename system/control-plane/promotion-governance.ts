@@ -158,8 +158,10 @@ function isGovernanceToolingPath(filePath: string): boolean {
     p.startsWith('apps/web/src/lib/governance/') ||
     p === 'apps/web/next.config.js' ||
     p === 'apps/web/next.config.ts' ||
+    p === 'apps/web/postcss.config.js' ||
     p === 'apps/web/next-env.d.ts' ||
-    p === 'apps/web/tsconfig.json'
+    p === 'apps/web/tsconfig.json' ||
+    p === 'apps/web/src/app/globals.css'
   )
 }
 

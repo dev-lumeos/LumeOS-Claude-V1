@@ -59,11 +59,19 @@ const navigation: Array<{ page: PageKind; label: string; href: string }> = [
 ]
 
 const toneClass: Record<string, string> = {
-  pass: 'border-emerald-200 bg-emerald-50 text-emerald-900',
-  attention: 'border-amber-200 bg-amber-50 text-amber-900',
-  blocked: 'border-red-200 bg-red-50 text-red-900',
-  info: 'border-blue-200 bg-blue-50 text-blue-900',
+  pass: 'border-emerald-200 bg-emerald-50 text-emerald-950',
+  attention: 'border-amber-200 bg-amber-50 text-amber-950',
+  blocked: 'border-red-200 bg-red-50 text-red-950',
+  info: 'border-blue-200 bg-blue-50 text-blue-950',
   idle: 'border-slate-200 bg-slate-50 text-slate-700',
+}
+
+const badgeClass: Record<string, string> = {
+  pass: 'bg-emerald-100 text-emerald-800 ring-emerald-200',
+  attention: 'bg-amber-100 text-amber-800 ring-amber-200',
+  blocked: 'bg-red-100 text-red-800 ring-red-200',
+  info: 'bg-blue-100 text-blue-800 ring-blue-200',
+  idle: 'bg-slate-100 text-slate-700 ring-slate-200',
 }
 
 const batchActions: GovernanceAction[] = [
@@ -90,7 +98,7 @@ function summaryLine(value: unknown): string {
 }
 
 function commandBlock(command: string): JSX.Element {
-  return <code className="block overflow-x-auto rounded-md bg-slate-950 px-3 py-2 text-xs text-slate-100">{command}</code>
+  return <code className="gov-code">{command}</code>
 }
 
 export function GovernanceConsole({ page }: Props) {
@@ -162,30 +170,34 @@ export function GovernanceConsole({ page }: Props) {
   const mealcamOptionalOk = useMemo(() => isMealCamOptionalOfflineNonBlocking(runtimeJson), [runtimeJson])
 
   return (
-    <main className="min-h-screen bg-slate-100 text-slate-950">
-      <div className="mx-auto flex max-w-7xl gap-6 px-6 py-6">
-        <aside className="sticky top-6 hidden h-[calc(100vh-3rem)] w-64 shrink-0 rounded-md border border-slate-200 bg-white p-4 shadow-sm lg:block">
-          <div className="mb-5">
-            <div className="text-lg font-semibold">Governance Console</div>
-            <div className="mt-1 text-xs text-slate-500">Local operator UI</div>
+    <main className="gov-shell">
+      <div className="gov-shell-grid">
+        <aside className="gov-sidebar">
+          <div className="border-b border-slate-700/60 p-5">
+            <div className="text-lg font-semibold text-white">Governance Console</div>
+            <div className="mt-1 text-xs text-slate-400">Local operator control plane</div>
+            <div className="mt-4 flex items-center gap-2">
+              <StatusBadge tone="blocked" label="Product gate closed" />
+            </div>
           </div>
-          <nav className="space-y-1">
+          <nav className="space-y-1 p-3">
             {navigation.map(item => (
               <a
                 key={item.page}
                 href={item.href}
-                className={`block rounded-md px-3 py-2 text-sm ${page === item.page ? 'bg-slate-950 text-white' : 'text-slate-700 hover:bg-slate-100'}`}
+                className={`gov-nav-item ${page === item.page ? 'gov-nav-item-active' : ''}`}
               >
-                {item.label}
+                <span>{item.label}</span>
+                {page === item.page ? <span className="text-xs">Active</span> : null}
               </a>
             ))}
           </nav>
-          <div className="mt-6 rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-900">
-            Product work remains blocked unless Tom explicitly opens it.
+          <div className="mx-3 mt-3 rounded-lg border border-red-400/30 bg-red-950/30 p-3 text-xs leading-5 text-red-100">
+            No Supabase push/reset, migrations, approval auto-grants, or product batches are exposed here.
           </div>
         </aside>
 
-        <section className="min-w-0 flex-1">
+        <section className="gov-content">
           <Header page={page} loading={loading} onRefresh={refreshSnapshot} />
           {error ? <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-900">{error}</div> : null}
 
@@ -220,12 +232,15 @@ export function GovernanceConsole({ page }: Props) {
 function Header({ page, loading, onRefresh }: { page: PageKind; loading: boolean; onRefresh: () => void }) {
   const label = navigation.find(item => item.page === page)?.label ?? 'Dashboard'
   return (
-    <header className="mb-5 flex flex-col gap-3 border-b border-slate-200 pb-4 sm:flex-row sm:items-center sm:justify-between">
+    <header className="gov-topbar mb-5 flex-col sm:flex-row">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{label}</h1>
-        <p className="mt-1 text-sm text-slate-600">Inspect and operate governance through existing CLI gates.</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-slate-950">{label}</h1>
+          <StatusBadge tone="info" label="Local only" />
+        </div>
+        <p className="mt-1 text-sm text-slate-600">Inspect governance state and run allowlisted operator commands through existing CLI gates.</p>
       </div>
-      <button onClick={onRefresh} className="w-fit rounded-md bg-slate-950 px-4 py-2 text-sm font-medium text-white disabled:opacity-50" disabled={loading}>
+      <button onClick={onRefresh} className="gov-button gov-button-dark w-fit disabled:opacity-50" disabled={loading}>
         {loading ? 'Running...' : 'Refresh'}
       </button>
     </header>
@@ -237,9 +252,12 @@ function Dashboard({ snapshot }: { snapshot: GovernanceSnapshot | null }) {
     <div className="space-y-5">
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         {(snapshot?.cards ?? []).map(card => (
-          <div key={card.id} className={`rounded-md border p-4 shadow-sm ${toneClass[card.tone] ?? toneClass.idle}`}>
-            <div className="text-xs font-medium uppercase tracking-wide opacity-70">{card.label}</div>
-            <div className="mt-3 text-sm font-semibold">{card.value}</div>
+          <div key={card.id} className={`gov-card ${toneClass[card.tone] ?? toneClass.idle}`}>
+            <div className="flex items-center justify-between gap-2">
+              <div className="text-xs font-bold uppercase tracking-wide opacity-70">{card.label}</div>
+              <StatusBadge tone={card.tone} label={card.tone} />
+            </div>
+            <div className="mt-4 text-sm font-semibold leading-6">{card.value}</div>
           </div>
         ))}
       </div>
@@ -264,21 +282,24 @@ function BatchConsole(props: {
   return (
     <div className="space-y-4">
       <BatchInput value={props.batchPath} onChange={props.setBatchPath} />
-      <Panel title="Operator Actions">
+      <Panel title="Operator Actions" subtitle="Read-only actions are grouped first. Controlled actions require typed confirmation and still use CLI gates.">
         <div className="grid gap-3 md:grid-cols-2">
           {batchActions.map(action => (
             <button
               key={action}
               onClick={() => props.setSelectedAction(action)}
-              className={`rounded-md border p-3 text-left text-sm ${props.selectedAction === action ? 'border-slate-950 bg-slate-950 text-white' : 'border-slate-200 bg-white hover:bg-slate-50'}`}
+              className={`rounded-lg border p-4 text-left text-sm shadow-sm transition ${props.selectedAction === action ? 'border-blue-700 bg-blue-700 text-white shadow-blue-700/20' : COMMAND_DEFINITIONS[action].controlled ? 'border-amber-200 bg-amber-50 text-amber-950 hover:border-amber-300' : 'border-slate-200 bg-white text-slate-900 hover:border-blue-200 hover:bg-blue-50'}`}
             >
-              <div className="font-semibold">{COMMAND_DEFINITIONS[action].label}</div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="font-semibold">{COMMAND_DEFINITIONS[action].label}</div>
+                <StatusBadge tone={COMMAND_DEFINITIONS[action].controlled ? 'attention' : 'info'} label={COMMAND_DEFINITIONS[action].mode} />
+              </div>
               <div className="mt-1 text-xs opacity-75">{COMMAND_DEFINITIONS[action].description}</div>
             </button>
           ))}
         </div>
         <ControlledConfirm required={props.requiresTypedConfirmation} value={props.confirmation} onChange={props.setConfirmation} />
-        <button onClick={props.runAction} className="mt-4 rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white">Run selected action</button>
+        <button onClick={props.runAction} className="gov-button gov-button-primary mt-4">Run selected action</button>
       </Panel>
       <ResultPanel result={props.result} />
     </div>
@@ -290,8 +311,8 @@ function DoctorPanel({ result, runDoctor, batchPath, setBatchPath }: { result: C
   return (
     <div className="space-y-4">
       <BatchInput value={batchPath} onChange={setBatchPath} />
-      <button onClick={runDoctor} className="rounded-md bg-blue-700 px-4 py-2 text-sm font-medium text-white">Run doctor</button>
-      <Panel title="Doctor Diagnosis">
+      <button onClick={runDoctor} className="gov-button gov-button-primary">Run doctor</button>
+      <Panel title="Doctor Diagnosis" subtitle="Doctor is read-only and must produce exactly one safe next action.">
         <div className="grid gap-3 md:grid-cols-3">
           <Info label="Diagnosis" value={String(data.final_diagnosis ?? 'not run')} />
           <Info label="Next Action" value={String(data.next_action ?? 'Run doctor for one safe next action.')} />
@@ -308,8 +329,8 @@ function ApprovalCenter({ result, runAll, runPending }: { result: CommandExecuti
     <div className="space-y-4">
       <Panel title="Approval Controls">
         <div className="flex flex-wrap gap-2">
-          <button onClick={runPending} className="rounded-md bg-slate-950 px-4 py-2 text-sm text-white">List pending</button>
-          <button onClick={runAll} className="rounded-md border border-slate-300 px-4 py-2 text-sm">List all</button>
+          <button onClick={runPending} className="gov-button gov-button-dark">List pending</button>
+          <button onClick={runAll} className="gov-button gov-button-secondary">List all</button>
         </div>
         <p className="mt-3 text-sm text-slate-600">Grant and deny are intentionally not executable in V1. The console may display commands for review, but no approval is auto-granted.</p>
       </Panel>
@@ -322,7 +343,7 @@ function DossierViewer({ result, runDossier, batchPath, setBatchPath }: { result
   return (
     <div className="space-y-4">
       <BatchInput value={batchPath} onChange={setBatchPath} />
-      <button onClick={runDossier} className="rounded-md bg-blue-700 px-4 py-2 text-sm text-white">Generate dossier JSON</button>
+      <button onClick={runDossier} className="gov-button gov-button-primary">Generate dossier JSON</button>
       <ResultPanel result={result} />
     </div>
   )
@@ -334,16 +355,16 @@ function WorkorderView({ result, runDossier }: { result: CommandExecution | null
   return (
     <div className="space-y-4">
       <Panel title="Workorder Table">
-        <button onClick={runDossier} className="mb-3 rounded-md bg-blue-700 px-4 py-2 text-sm text-white">Load from dossier</button>
+        <button onClick={runDossier} className="gov-button gov-button-primary mb-3">Load from dossier</button>
         <div className="overflow-x-auto rounded-md border border-slate-200">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+          <table className="gov-table">
+            <thead>
               <tr><th className="p-3">Workorder</th><th className="p-3">Status</th><th className="p-3">Risk</th><th className="p-3">Outputs</th></tr>
             </thead>
             <tbody>
               {workorders.length === 0 ? <tr><td className="p-3 text-slate-500" colSpan={4}>Run a dossier to populate workorders. Graph rendering is planned after V1 table confidence.</td></tr> : null}
               {workorders.map((wo, index) => (
-                <tr key={index} className="border-t border-slate-100">
+                <tr key={index}>
                   <td className="p-3 font-medium">{String(wo.workorder_id ?? wo.id ?? 'unknown')}</td>
                   <td className="p-3">{String(wo.status ?? 'unknown')}</td>
                   <td className="p-3">{String(wo.risk_category ?? 'unknown')}</td>
@@ -371,11 +392,11 @@ function PromotionCenter(props: {
     <div className="space-y-4">
       <Panel title="Promotion Review">
         <label className="block text-sm font-medium">Branch</label>
-        <input className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm" value={props.branch} onChange={event => props.setBranch(event.target.value)} />
+        <input className="gov-input mt-1" value={props.branch} onChange={event => props.setBranch(event.target.value)} />
         <div className="mt-3 flex flex-wrap gap-2">
-          <button onClick={() => props.runAction('promotion.review')} className="rounded-md bg-slate-950 px-4 py-2 text-sm text-white">Review branch</button>
-          <button onClick={() => props.runAction('promotion.merge')} className="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900">Merge branch</button>
-          <button onClick={() => props.runAction('promotion.pushMain')} className="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900">Push main</button>
+          <button onClick={() => props.runAction('promotion.review')} className="gov-button gov-button-dark">Review branch</button>
+          <button onClick={() => props.runAction('promotion.merge')} className="gov-button gov-button-warning">Merge branch</button>
+          <button onClick={() => props.runAction('promotion.pushMain')} className="gov-button gov-button-warning">Push main</button>
         </div>
         <ControlledConfirm required value={props.confirmation} onChange={props.setConfirmation} />
       </Panel>
@@ -387,7 +408,7 @@ function PromotionCenter(props: {
 function LearningCenter({ snapshot, result, runLearning }: { snapshot: GovernanceSnapshot | null; result: CommandExecution | null; runLearning: () => void }) {
   return (
     <div className="space-y-4">
-      <button onClick={runLearning} className="rounded-md bg-blue-700 px-4 py-2 text-sm text-white">Run learning check</button>
+      <button onClick={runLearning} className="gov-button gov-button-primary">Run learning check</button>
       <Panel title="Current Governance Handover"><MarkdownText text={snapshot?.docs.handover ?? ''} /></Panel>
       <Panel title="Current Learning Status"><MarkdownText text={snapshot?.docs.learningStatus ?? ''} /></Panel>
       <ResultPanel result={result} />
@@ -401,14 +422,14 @@ function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        <button onClick={runStatic} className="rounded-md bg-slate-950 px-4 py-2 text-sm text-white">Run static check</button>
-        <button onClick={runEndpoints} className="rounded-md border border-slate-300 px-4 py-2 text-sm">Check endpoints</button>
+        <button onClick={runStatic} className="gov-button gov-button-dark">Run static check</button>
+        <button onClick={runEndpoints} className="gov-button gov-button-secondary">Check endpoints</button>
       </div>
       {mealcamOptionalOk ? <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">MealCam runtime is optional/on-demand and offline is not a governance blocker.</div> : null}
       <Panel title="Runtime Routes">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs uppercase text-slate-500">
+          <table className="gov-table">
+            <thead>
               <tr><th className="p-3">Agent</th><th className="p-3">Model</th><th className="p-3">Endpoint</th><th className="p-3">Status</th><th className="p-3">Policy</th></tr>
             </thead>
             <tbody>
@@ -418,7 +439,7 @@ function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: {
                   <td className="p-3">{String(route.model ?? '')}</td>
                   <td className="p-3">{String(route.endpoint ?? 'n/a')}</td>
                   <td className="p-3">{String(route.endpoint_status ?? 'not checked')}</td>
-                  <td className="p-3">{route.optional_runtime ? 'optional/on-demand' : 'required'}</td>
+                  <td className="p-3"><StatusBadge tone={route.optional_runtime ? 'info' : 'pass'} label={route.optional_runtime ? 'optional/on-demand' : 'required'} /></td>
                 </tr>
               ))}
             </tbody>
@@ -449,9 +470,9 @@ function Settings({ repoRoot }: { repoRoot: string }) {
       <Panel title="Allowlisted Actions">
         <div className="grid gap-2 md:grid-cols-2">
           {Object.values(COMMAND_DEFINITIONS).map(def => (
-            <div key={def.action} className="rounded-md border border-slate-200 bg-white p-3 text-sm">
+            <div key={def.action} className="rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm">
               <div className="font-semibold">{def.label}</div>
-              <div className="text-xs text-slate-500">{def.action} - {def.mode}</div>
+              <div className="mt-1 flex items-center gap-2 text-xs text-slate-500"><span>{def.action}</span><StatusBadge tone={def.controlled ? 'attention' : 'info'} label={def.mode} /></div>
             </div>
           ))}
         </div>
@@ -463,7 +484,7 @@ function Settings({ repoRoot }: { repoRoot: string }) {
 function BatchInput({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   return (
     <Panel title="Batch File">
-      <input className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" value={value} onChange={event => onChange(event.target.value)} />
+      <input className="gov-input" value={value} onChange={event => onChange(event.target.value)} />
       <p className="mt-2 text-xs text-slate-500">Must be repo-relative and under system/workorders.</p>
     </Panel>
   )
@@ -475,7 +496,7 @@ function ControlledConfirm({ required, value, onChange }: { required: boolean; v
     <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 p-3">
       <label className="block text-sm font-medium text-amber-950">Controlled action confirmation</label>
       <p className="mt-1 text-xs text-amber-900">Type CONFIRM to run this action. This does not allow forbidden commands or auto-approvals.</p>
-      <input className="mt-2 w-full rounded-md border border-amber-300 px-3 py-2 text-sm" value={value} onChange={event => onChange(event.target.value)} />
+      <input className="gov-input mt-2 border-amber-300" value={value} onChange={event => onChange(event.target.value)} />
     </div>
   )
 }
@@ -512,10 +533,13 @@ function ResultPreview({ result }: { result: CommandExecution | null | undefined
   )
 }
 
-function Panel({ title, children }: { title: string; children: React.ReactNode }) {
+function Panel({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-md border border-slate-200 bg-white p-4 shadow-sm">
-      <h2 className="mb-3 text-base font-semibold">{title}</h2>
+    <section className="gov-panel">
+      <div className="mb-3">
+        <h2 className="text-base font-semibold text-slate-950">{title}</h2>
+        {subtitle ? <p className="mt-1 text-sm text-slate-500">{subtitle}</p> : null}
+      </div>
       {children}
     </section>
   )
@@ -523,14 +547,21 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
 
 function Info({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+    <div className="rounded-lg border border-slate-200 bg-slate-50 p-3">
       <div className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</div>
       <div className="mt-2 break-words text-sm font-medium text-slate-900">{value}</div>
     </div>
   )
 }
 
+function StatusBadge({ tone, label }: { tone: string; label: string }) {
+  return (
+    <span className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide ring-1 ${badgeClass[tone] ?? badgeClass.idle}`}>
+      {label}
+    </span>
+  )
+}
+
 function MarkdownText({ text }: { text: string }) {
   return <pre className="max-h-[32rem] overflow-auto whitespace-pre-wrap rounded-md bg-slate-50 p-3 text-sm leading-6 text-slate-800">{text || 'Not loaded.'}</pre>
 }
-
