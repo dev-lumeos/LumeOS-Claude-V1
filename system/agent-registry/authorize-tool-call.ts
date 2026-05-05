@@ -177,6 +177,7 @@ function resolveAll(rawPaths: string[], ctx: WorkorderContext): string[] {
 // ─── SQL Guard ───────────────────────────────────────────────────────────────
 
 const ROLLBACK_SECTION_RE = /\b(DOWN|ROLLBACK|REVERT|UNDO)\b/i
+const ROLLBACK_SECTION_MARKER_RE = /^\s*--\s*(DOWN|ROLLBACK|REVERT|UNDO)\s*:?\s*$/i
 
 function stripSqlComments(sql: string): string {
   let out = ''
@@ -254,7 +255,7 @@ function firstExecutableAfterRollbackSection(sql: string): string | null {
       if (ch === '-' && next === '-') break
       executable += ch
     }
-    if (ROLLBACK_SECTION_RE.test(rawLine)) inRollbackSection = true
+    if (ROLLBACK_SECTION_MARKER_RE.test(rawLine)) inRollbackSection = true
     const trimmed = executable.trim()
     if (inRollbackSection && trimmed) return trimmed
   }

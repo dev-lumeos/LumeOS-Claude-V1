@@ -237,6 +237,19 @@ describe('Permission Gateway — A.2 FILES_BLOCKED + SCOPE Enforcement', () => {
 })
 
 describe('Migration SQL Guardrail', () => {
+  it('erlaubt Rollback-Hinweis im Header vor UP-SQL wenn er vollständig kommentiert ist', () => {
+    const sql = `
+      -- Migration: Nutrition Food Core Tables
+      -- Rollback: DROP TABLE IF EXISTS nutrition.foods CASCADE;
+
+      CREATE SCHEMA IF NOT EXISTS nutrition;
+      CREATE TABLE IF NOT EXISTS nutrition.foods (id UUID PRIMARY KEY);
+    `
+
+    const result = guardMigrationContent(sql, 'db-migration-agent')
+    assert.equal(result.allowed, true, result.reason)
+  })
+
   it('erlaubt Schema-Foundation mit kommentiertem Rollback-Beispiel', () => {
     const sql = `
       CREATE SCHEMA IF NOT EXISTS nutrition;
