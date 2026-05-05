@@ -22,7 +22,7 @@ The goal is to make the governance system operable before more product work cont
 | 10. Review pipeline | `system/control-plane/review-pipeline.ts`, review tests | PARTIAL | Pipeline exists; reviewer invalid JSON learning is not fed into durable rules automatically. |
 | 11. Stop rules / system stop | `system/control-plane/stop-rules.ts`, `system/state/state-manager.ts`, tests | TESTED | Baselines exist for failed runs and invalid JSON; stop lifecycle docs are thin. |
 | 12. Cleanup / state lifecycle | `system/control-plane/terminal-wo-reset-cli.ts`, `system/control-plane/governance-invariant-check.ts`, state manager, tests | TESTED | Official cleanup paths exist and read-only invariant checks summarize runtime drift. |
-| 13. Reporting / dossier | `system/reports/*`, reports directories | PARTIAL | Reports exist; batch dossier and artifact classification are not unified. |
+| 13. Reporting / dossier | `system/reports/*`, `system/reports/batch-dossier.ts`, reports directories | TESTED | Batch 006 adds a read-only batch dossier reporter with Markdown/JSON output, explicit `--write`, output classification, checker summaries, and operator dossier suggestions. |
 | 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, runbook, tests | TESTED | Operator reached real DONE for Nutrition 001 and P1-004. |
 | 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 adds read-only checks for JSON-only contracts, selected_agent drift, example path leaks, and db-migration write/review rules. |
 | 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 validates SKILL.md frontmatter/body and reports registry drift. |
@@ -52,7 +52,7 @@ The goal is to make the governance system operable before more product work cont
 
 - Spec source-chain is now checkable, but Workorder Factory generation of `source_refs` is not yet automated.
 - Agent and skill contract validation exists as a read-only checker, but it is not yet wired into operator preflight or merge promotion gates.
-- Reporting exists as run summaries and dossiers, but not as a single merge-ready batch dossier.
+- Reporting exists as run summaries, WO dossiers, and a Batch 006 batch dossier reporter; merge-readiness promotion is still separate.
 - Runtime artifact policy exists in operator categorization, `.gitignore`, and the Batch 003 invariant checker; automated merge enforcement is still missing.
 - Stop-rule lifecycle has baselines, but acknowledgement policy is still manual.
 - Memory exists, but it is not updated after every governance batch and contains stale claims.
@@ -150,9 +150,9 @@ Required lifecycle:
 
 Gaps:
 
-- No unified batch dossier.
-- Runtime artifact classification is available in the operator but not reused by merge readiness.
-- Report generation can dirty the repo and needs a warning or output policy.
+- Unified batch dossier exists through `system/reports/batch-dossier.ts`.
+- Runtime artifact classification is reused by the dossier, but promotion governance still needs a formal merge gate.
+- Report generation is read-only by default and writes files only with `--write`.
 
 ## 12. Agent Contract Rules
 
@@ -310,7 +310,7 @@ Minimum gate before BLS import:
 | 2 | Governance Batch 003 - Invariant Checker | Read-only runtime/state consistency checker. | completed | Implemented by `system/control-plane/governance-invariant-check.ts`. |
 | 3 | Governance Batch 004 - Agent & Skill Contract Validation | Prevent agent/skill contract drift. | completed | Implemented by `system/control-plane/agent-contract-check.ts`. |
 | 4 | Governance Batch 005 - Spec Source Chain / Workorder Factory | Ensure WOs are derived from specs, not fragments. | completed | Implemented by `system/workorders/cli/spec-source-chain-check.ts`; target product work must pass it. |
-| 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Improves merge review and handover. |
+| 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Implemented as read-only batch dossier reporter. |
 | 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Reduces manual Git choreography. |
 | 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Builds on Batches 002 and 003. |
 
@@ -324,7 +324,7 @@ Minimum gate before BLS import:
 | Spec source chain | DONE | high | target must pass | no | Maintain checker for INDEX/spec/patch/ADR/workorder links and raw-source priority. | Batch 005 | done |
 | Agent contract checker | DONE | high | no | partial | Maintain read-only checks for JSON-only, examples, selected_agent, Qwen policy, and approval operation scope. | Batch 004 | done |
 | Skill contract checker | DONE | medium | no | no | Maintain SKILL frontmatter/body validation and registry drift warnings. | Batch 004 | done |
-| Batch dossier | PARTIAL | medium | no | partial | Unified dossier with output and approval timelines. | Batch 006 | yes |
+| Batch dossier | DONE | medium | no | no | Maintain `system/reports/batch-dossier.ts` and wire future promotion gates to it. | Batch 006 | done |
 | Promotion governance | MISSING | medium | no | no | Branch review, merge, push readiness CLI. | Batch 007 | yes |
 | Operator doctor | MISSING | medium | no | partial | Add read-only `--doctor`. | Batch 008 | after Batch 003 |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
@@ -350,6 +350,6 @@ Minimum gate before BLS import:
 | Approval deny not syncing runtime | Queue deny did not update runtime approval mirror. | `15090ae` | yes | partial | no | high | Approval invariant checker. |
 | Expired approval split-brain token state | Cleanup logic saw inconsistent queue/runtime/token state. | `85edb4d`, `a52ad2e`, `15090ae` | yes | partial | no | high | Runtime invariant checker. |
 | Read-only spec access requiring migration approval | Human approval was applied to reads for db agent. | `e6eb876` | yes | partial | no | medium | Approval operation contract checker. |
-| Operator DONE meaning blockers cleaned, not outputs complete | Operator did not distinguish clean runtime from complete outputs. | `c1c1a2e` plus follow-up tests | yes | runbook | no | medium | Batch dossier and output checker. |
+| Operator DONE meaning blockers cleaned, not outputs complete | Operator did not distinguish clean runtime from complete outputs. | `c1c1a2e` plus follow-up tests and Batch 006 dossier output checks | yes | runbook plus dossier | no | low | Maintain dossier/output checks. |
 | Missing spec source-chain enforcement | WO source priority not machine-checked. | none | no | no | no | high | Batch 005. |
 | Raw BLS data source policy unclear | Raw files were untracked and docs linked local artifacts ambiguously. | `49366c9` | no | partial | no | medium | Product work gate and spec source-chain checker. |

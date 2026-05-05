@@ -134,6 +134,7 @@ const RESET_CLI = 'system\\control-plane\\terminal-wo-reset-cli.ts'
 const APPROVAL_CLI = 'system\\approval\\approval-cli.ts'
 const BATCH_CLI = 'system\\workorders\\cli\\run-batch.ts'
 const OPERATOR_CLI = 'system\\workorders\\cli\\run-batch-operator.ts'
+const DOSSIER_CLI = 'system\\reports\\batch-dossier.ts'
 
 function readJson<T>(relativePath: string, fallback: T): T {
   const absolute = path.resolve(process.cwd(), relativePath)
@@ -601,7 +602,12 @@ export function buildOperatorReport(status: OperatorStatus): string {
   lines.push('')
   lines.push('## Next')
   lines.push(`Exact next command: ${nextCommand(status, endState)}`)
+  lines.push(`Suggested dossier: ${dossierCommand(status.batchPath)}`)
   return lines.join('\n')
+}
+
+function dossierCommand(batchPath: string): string {
+  return commandFor(DOSSIER_CLI, `--batch ${batchPath}`)
 }
 
 function nextCommand(status: OperatorStatus, endState: OperatorEndState): string {

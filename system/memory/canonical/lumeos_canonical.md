@@ -48,10 +48,11 @@ Governance learning records:
 - Read-only Agent & Skill Contract Checker exists at `system/control-plane/agent-contract-check.ts`.
 - Read-only Spec Source Chain Checker exists at `system/workorders/cli/spec-source-chain-check.ts`.
 - Workorder source-chain rules live in `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`.
+- Read-only Batch Dossier Reporter exists at `system/reports/batch-dossier.ts` and writes reports only with explicit `--write`.
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work are allowed only after the target workorder or batch passes source-chain, invariant, and agent-contract checks, or Tom explicitly waives the gate.
+BLS import and Nutrition P1-005 product work remain blocked. Product work may resume only after the remaining governance gate is explicitly cleared through promotion governance or Tom explicitly waives it. Any target workorder or batch must still pass source-chain, invariant, and agent-contract checks.
 
 Raw BLS files are local-only and ignored.
 
@@ -110,7 +111,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Governance Batch 003 - Invariant Checker is implemented.
 - Governance Batch 004 - Agent & Skill Contract Validation is implemented.
 - Governance Batch 005 - Spec Source Chain / Workorder Factory is implemented as a checker and standard; target product work must pass it.
-- Governance Batch 006 - Reporting & Dossier Hardening.
+- Governance Batch 006 - Reporting & Dossier Hardening is implemented as a batch dossier reporter.
 - Governance Batch 007 - Promotion / Merge Governance.
 - Governance Batch 008 - Operator Doctor / Autonomy Hardening.
 - Spark Runtime Hardening.

@@ -4,7 +4,7 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
+`main` is pushed through Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
 
 ## Current Truth
 
@@ -22,6 +22,7 @@ Current date: 2026-05-05.
 - Governance runtime drift cleanup made the invariant checker report zero critical/high findings.
 - Governance Batch 004 adds a read-only Agent & Skill Contract Checker.
 - Governance Batch 005 adds a read-only Spec Source Chain Checker and Workorder Source Chain Standard.
+- Governance Batch 006 adds a read-only Batch Dossier Reporter and operator dossier suggestions.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -42,7 +43,7 @@ The completion plan is the current truth for remaining governance gaps. Canonica
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work remain blocked until Governance Batch 005 is merged/pushed and the target workorder or batch passes source-chain, invariant, and agent-contract checks, unless Tom explicitly waives the gate.
+BLS import and Nutrition P1-005 product work remain blocked. Planning-only work may proceed only when it stays inside governance-safe documentation scope. Import execution requires an explicit Tom waiver or a clean governance decision after the remaining governance batches.
 
 Reason:
 
@@ -50,19 +51,20 @@ Reason:
 - Runtime invariant checking is available through `system/control-plane/governance-invariant-check.ts`.
 - Agent and skill contract checking is available through `system/control-plane/agent-contract-check.ts`.
 - Spec source-chain checking is available through `system/workorders/cli/spec-source-chain-check.ts`.
+- Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Recent incidents are now being recorded as durable incident learning records.
 - Spec source-chain enforcement is required before BLS import.
 
 ## Safe Next Governance Batch
 
-Governance Batch 006 - Reporting & Dossier Hardening.
+Governance Batch 007 - Promotion / Merge Governance.
 
 Goal:
 
-- Make batch results self-explaining.
-- Produce unified run, approval, cleanup, output, and merge-readiness dossiers.
-- Reduce manual final review effort.
+- Formalize branch review, merge, push, and post-merge checks.
+- Reduce manual Git choreography.
+- Turn current review/push patterns into a repeatable promotion gate.
 
 ## Do Not Do
 
@@ -126,6 +128,26 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts --batch <batch-file>
 ```
+
+## Governance Batch 006 Output
+
+- `system/reports/batch-dossier.ts`
+- `system/reports/__tests__/batch-dossier.test.ts`
+- `docs/project/governance-learning/2026-05-05-governance-batch-006-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file>
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --write
+```
+
+Rules:
+
+- Without `--write`, the dossier prints only and must not dirty the repo.
+- With `--write`, Markdown and JSON reports are written under `system/reports/batches/`.
+- The Governance Operator suggests the dossier command when it reaches a safe stop.
 
 ## Recent Incidents To Remember
 

@@ -488,5 +488,7 @@ describe('apply safe cleanups', () => {
 
     assert.match(report, /Exact next command:/)
     assert.match(report, /run-batch-operator\.ts .*--continue/)
+    assert.match(report, /Suggested dossier:/)
+    assert.match(report, /system\\reports\\batch-dossier\.ts --batch/)
   })
 })
