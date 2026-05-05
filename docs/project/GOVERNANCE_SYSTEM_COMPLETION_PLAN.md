@@ -11,9 +11,9 @@ The goal is to make the governance system operable before more product work cont
 | Layer | Current implementation files | Status | Evidence |
 |---|---|---|---|
 | 1. Brainstorm / input capture | `docs/project/prompts/MASTERPROMPT_BRAINSTORM_TO_SPEC.md`, `docs/BrainstormDocs/` | PARTIAL | Prompts exist, but source capture is not tied to operator lifecycle. |
-| 2. Spec source-chain | `docs/specs/*/INDEX.md`, Nutrition `01_current_specs`, `02_patches`, `03_sql`, `04_adrs`, `05_reviews` | PARTIAL | Nutrition has a good chain; generic enforcement is missing. |
+| 2. Spec source-chain | `docs/specs/*/INDEX.md`, Nutrition `01_current_specs`, `02_patches`, `03_sql`, `04_adrs`, `05_reviews`, `system/workorders/cli/spec-source-chain-check.ts` | TESTED | Batch 005 adds read-only source-chain validation and the Workorder Source Chain Standard. |
 | 3. Decomposition | `.agents/skills/spec-to-decomposition`, `docs/project/prompts/MASTERPROMPT_SPEC_TO_WORKORDERS.md` | DOCS_ONLY | Skill and prompt exist; no deterministic checker confirms decomposition completeness. |
-| 4. Workorder factory | `.agents/skills/wo-writer`, `system/workorders/templates/`, `system/workorders/schemas/workorder.schema.json` | PARTIAL | Templates and schema exist; source-chain derivation is not enforced. |
+| 4. Workorder factory | `.agents/skills/wo-writer`, `system/workorders/templates/`, `system/workorders/schemas/workorder.schema.json`, `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md` | PARTIAL | Source-chain requirements are defined and checkable; factory generation is not yet automated/enforced. |
 | 5. Workorder schema / validator | `system/workorders/schemas/workorder.schema.json`, `system/control-plane/governance-validator.ts`, tests | TESTED | Validator tests exist; lifecycle-specific invariants are spread across files. |
 | 6. Batch graph / dependency | `system/workorders/cli/batch-loader.ts`, `run-batch.ts`, batch operator tests | TESTED | Batch order and `blocked_by` behavior are covered; deeper cross-batch graph checks are missing. |
 | 7. Scheduler / preflight | `system/control-plane/scheduler-preflight.ts`, `services/scheduler-api/`, tests | TESTED | Preflight tests exist; scheduler/runtime mapping bugs have occurred. |
@@ -45,11 +45,12 @@ The goal is to make the governance system operable before more product work cont
 - Governance batch operator with `--status`, `--dry-run`, `--continue`, and `--continue --apply-safe-cleanups`.
 - Batch operator tests covering clean status, approvals, cleanup suggestions, stop-rule blocks, no automatic grants, no Supabase commands, ambiguity refusal, and exact next commands.
 - Agent & Skill Contract Checker for runtime-facing agent contracts, SKILL.md frontmatter/body, registry drift, model routing JSON/thinking policy, and approval operation scope.
+- Spec Source Chain Checker for module INDEX resolution, `source_refs`, expected outputs, scope alignment, raw-source policy, and placeholder/example guards.
 - Nutrition Batch 001 output completion and Nutrition P1-004 static schema verification.
 
 ## 4. Partial Components
 
-- Spec source-chain is strong for Nutrition but not generically enforced.
+- Spec source-chain is now checkable, but Workorder Factory generation of `source_refs` is not yet automated.
 - Agent and skill contract validation exists as a read-only checker, but it is not yet wired into operator preflight or merge promotion gates.
 - Reporting exists as run summaries and dossiers, but not as a single merge-ready batch dossier.
 - Runtime artifact policy exists in operator categorization, `.gitignore`, and the Batch 003 invariant checker; automated merge enforcement is still missing.
@@ -58,7 +59,6 @@ The goal is to make the governance system operable before more product work cont
 
 ## 5. Missing Components
 
-- Spec source-chain checker.
 - Branch review / merge / push readiness CLI.
 - Operator `--doctor` mode for self-diagnosing common blockers.
 - Product work gate that blocks BLS import until required governance batches are done.
@@ -285,11 +285,11 @@ Nutrition source priority example:
 2. `docs/specs/Nutrition/03_sql/SPEC_06_V1_MIGRATION.sql`
 3. `docs/specs/Nutrition/00_raw/bls/original/` for validation/provenance only
 
-Gap: WO-003 source confusion showed the system needs a generic checker that validates a workorder names its source chain and does not infer from raw files when a higher-priority SSOT exists.
+Batch 005 status: implemented as `system/workorders/cli/spec-source-chain-check.ts` and documented in `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`. Remaining gap: Workorder Factory prompts/skills still need to generate `source_refs` automatically for every new workorder.
 
 ## 20. Product Work Gate
 
-BLS import and Nutrition product feature work should stay blocked until Governance Batch 005 is completed or explicitly waived by Tom. Governance Batch 003 removes the runtime invariant-checker blocker, but BLS import still needs spec source-chain enforcement.
+BLS import and Nutrition product feature work may proceed only after Governance Batch 005 is merged/pushed and the target workorder or batch passes source-chain, invariant, and agent-contract checks, unless explicitly waived by Tom.
 
 Minimum gate before BLS import:
 
@@ -300,6 +300,7 @@ Minimum gate before BLS import:
 - Operator status for the target batch is clean.
 - No pending approvals, active locks, or stop-rule triggers.
 - Raw BLS local-only policy remains enforced.
+- Source-chain checker passes for the target workorder or batch.
 
 ## 21. Required Governance Batches
 
@@ -308,7 +309,7 @@ Minimum gate before BLS import:
 | 1 | Governance Batch 002 - Memory & Learning Foundation | Make project knowledge durable and reduce repeated debugging. | yes | Required before BLS import resumes. |
 | 2 | Governance Batch 003 - Invariant Checker | Read-only runtime/state consistency checker. | completed | Implemented by `system/control-plane/governance-invariant-check.ts`. |
 | 3 | Governance Batch 004 - Agent & Skill Contract Validation | Prevent agent/skill contract drift. | completed | Implemented by `system/control-plane/agent-contract-check.ts`. |
-| 4 | Governance Batch 005 - Spec Source Chain / Workorder Factory | Ensure WOs are derived from specs, not fragments. | yes for BLS import | Needed because BLS source priority matters. |
+| 4 | Governance Batch 005 - Spec Source Chain / Workorder Factory | Ensure WOs are derived from specs, not fragments. | completed | Implemented by `system/workorders/cli/spec-source-chain-check.ts`; target product work must pass it. |
 | 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Improves merge review and handover. |
 | 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Reduces manual Git choreography. |
 | 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Builds on Batches 002 and 003. |
@@ -320,7 +321,7 @@ Minimum gate before BLS import:
 | Memory layer | BROKEN | critical | yes | yes | Create current handover, learning schema, update policy. | Batch 002 | yes |
 | Learning loop | MISSING | critical | yes | yes | Add incident records and required Incident -> Fix -> Test -> Rule -> Memory workflow. | Batch 002 | yes |
 | Invariant checker | DONE | high | no | no | Maintain read-only checker for runtime, approvals, locks, stop rules, artifact policy. | Batch 003 | done |
-| Spec source chain | PARTIAL | high | yes for BLS import | no | Add checker for INDEX/spec/patch/ADR/workorder links. | Batch 005 | yes |
+| Spec source chain | DONE | high | target must pass | no | Maintain checker for INDEX/spec/patch/ADR/workorder links and raw-source priority. | Batch 005 | done |
 | Agent contract checker | DONE | high | no | partial | Maintain read-only checks for JSON-only, examples, selected_agent, Qwen policy, and approval operation scope. | Batch 004 | done |
 | Skill contract checker | DONE | medium | no | no | Maintain SKILL frontmatter/body validation and registry drift warnings. | Batch 004 | done |
 | Batch dossier | PARTIAL | medium | no | partial | Unified dossier with output and approval timelines. | Batch 006 | yes |

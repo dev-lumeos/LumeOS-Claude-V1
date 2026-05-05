@@ -4,7 +4,7 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup. Governance Batch 004 is the current active branch until merged.
+`main` is pushed through Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
 
 ## Current Truth
 
@@ -21,6 +21,7 @@ Current date: 2026-05-05.
 - Governance Batch 003 added a read-only invariant checker.
 - Governance runtime drift cleanup made the invariant checker report zero critical/high findings.
 - Governance Batch 004 adds a read-only Agent & Skill Contract Checker.
+- Governance Batch 005 adds a read-only Spec Source Chain Checker and Workorder Source Chain Standard.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -41,27 +42,27 @@ The completion plan is the current truth for remaining governance gaps. Canonica
 
 ## Current Product Work Gate
 
-BLS import and Nutrition P1-005 product work remain blocked until Governance Batch 005 is completed or explicitly waived by Tom.
+BLS import and Nutrition P1-005 product work remain blocked until Governance Batch 005 is merged/pushed and the target workorder or batch passes source-chain, invariant, and agent-contract checks, unless Tom explicitly waives the gate.
 
 Reason:
 
 - Memory and learning foundation exists as of Governance Batch 002.
 - Runtime invariant checking is available through `system/control-plane/governance-invariant-check.ts`.
 - Agent and skill contract checking is available through `system/control-plane/agent-contract-check.ts`.
+- Spec source-chain checking is available through `system/workorders/cli/spec-source-chain-check.ts`.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Recent incidents are now being recorded as durable incident learning records.
-- Spec source-chain enforcement is still missing and is required before BLS import.
+- Spec source-chain enforcement is required before BLS import.
 
 ## Safe Next Governance Batch
 
-Governance Batch 005 - Spec Source Chain / Workorder Factory.
+Governance Batch 006 - Reporting & Dossier Hardening.
 
 Goal:
 
-- Ensure workorders are derived from module `INDEX.md`, current specs, patches, ADRs, and review records.
-- Prevent raw source files from overriding higher-priority spec SSOTs.
-- Validate workorder source-chain links before product batches run.
-- Keep Nutrition BLS import blocked until this gate is complete or Tom explicitly waives it.
+- Make batch results self-explaining.
+- Produce unified run, approval, cleanup, output, and merge-readiness dossiers.
+- Reduce manual final review effort.
 
 ## Do Not Do
 
@@ -111,6 +112,21 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\agent-contrac
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\agent-contract-check.ts --json
 ```
 
+## Governance Batch 005 Output
+
+- `system/workorders/cli/spec-source-chain-check.ts`
+- `system/workorders/cli/__tests__/spec-source-chain-check.test.ts`
+- `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`
+- `docs/project/governance-learning/2026-05-05-governance-batch-005-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file>
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts --batch <batch-file>
+```
+
 ## Recent Incidents To Remember
 
 - No-tool success left active workorders open.
@@ -127,4 +143,4 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\agent-contrac
 - Approval deny did not sync runtime mirror.
 - Read-only spec access incorrectly required migration approval.
 - Operator `DONE` initially meant "no blockers" rather than "outputs complete".
-- Spec source-chain enforcement is still missing.
+- Spec source-chain enforcement now exists as a checker; target product work still must pass it before BLS import.
