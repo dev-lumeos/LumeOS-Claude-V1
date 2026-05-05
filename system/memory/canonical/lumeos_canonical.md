@@ -45,6 +45,7 @@ Governance learning records:
 - Migration writes must pass static guard and human approval where required.
 - Operator `DONE` means no active batch workorders remain and expected outputs exist.
 - Read-only invariant checker exists at `system/control-plane/governance-invariant-check.ts`.
+- Read-only Agent & Skill Contract Checker exists at `system/control-plane/agent-contract-check.ts`.
 
 ## Current Product Work Gate
 
@@ -97,11 +98,13 @@ Prompt text such as `/no_think` is not sufficient.
 - read-only context access must not require db-migration approval.
 - executable rollback/DOWN SQL must be blocked.
 - runtime artifacts must not be committed.
+- runtime-facing agent contracts must remain JSON-only and must not leak example paths into real tool targets.
+- SKILL.md files must keep parser-safe frontmatter.
 
 ## Open Governance Work
 
 - Governance Batch 003 - Invariant Checker is implemented.
-- Governance Batch 004 - Agent & Skill Contract Validation.
+- Governance Batch 004 - Agent & Skill Contract Validation is implemented.
 - Governance Batch 005 - Spec Source Chain / Workorder Factory.
 - Governance Batch 006 - Reporting & Dossier Hardening.
 - Governance Batch 007 - Promotion / Merge Governance.

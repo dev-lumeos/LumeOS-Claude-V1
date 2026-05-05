@@ -1,6 +1,6 @@
 # OrchestratorIntent Output Contract
 
-You MUST emit **exactly one JSON object** as your output. **No prose. No markdown fences. No explanatory text** before or after the JSON.
+You MUST emit **exactly one JSON object** as your output. **No prose. No markdown fences. No explanatory text. No visible `<thinking>` or reasoning text** before or after the JSON.
 
 The JSON object combines two parts: the **OrchestratorIntent** (governance metadata, 6 required fields) and an optional **ToolRequest** (the actual tool call, if any).
 

@@ -24,9 +24,9 @@ The goal is to make the governance system operable before more product work cont
 | 12. Cleanup / state lifecycle | `system/control-plane/terminal-wo-reset-cli.ts`, `system/control-plane/governance-invariant-check.ts`, state manager, tests | TESTED | Official cleanup paths exist and read-only invariant checks summarize runtime drift. |
 | 13. Reporting / dossier | `system/reports/*`, reports directories | PARTIAL | Reports exist; batch dossier and artifact classification are not unified. |
 | 14. Operator CLI | `system/workorders/cli/run-batch-operator.ts`, `batch-operator.ts`, runbook, tests | TESTED | Operator reached real DONE for Nutrition 001 and P1-004. |
-| 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json` | PARTIAL | Contract fixes exist for db migration; no broad contract drift checker exists. |
-| 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json` | PARTIAL | Frontmatter fixes exist; no complete validation tool exists. |
-| 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md | PARTIAL | Qwen JSON/thinking policy is known and partly tested. |
+| 15. Agent contract | `.claude/agents/*`, `system/agent-registry/agents.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 adds read-only checks for JSON-only contracts, selected_agent drift, example path leaks, and db-migration write/review rules. |
+| 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 validates SKILL.md frontmatter/body and reports registry drift. |
+| 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 checks Qwen3.6 thinking-off documentation and dispatcher JSON object response enforcement. |
 | 18. Merge / promotion governance | Manual branch review and push procedure in chat | MISSING | No branch-review CLI or promotion gate exists. |
 | 19. Memory layer | `system/memory/canonical/*`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, CLAUDE.md, AGENTS.md | PARTIAL | Batch 002 created current handover and canonical corrections; update enforcement is still manual. |
 | 20. Learning / feedback-loop | `docs/project/governance-learning/*`, commit history, tests | PARTIAL | Batch 002 created incident records and schema; machine-readable operator learning records are still missing. |
@@ -44,13 +44,13 @@ The goal is to make the governance system operable before more product work cont
 - Safe terminal, stale-dispatched, and expired-approval cleanup paths.
 - Governance batch operator with `--status`, `--dry-run`, `--continue`, and `--continue --apply-safe-cleanups`.
 - Batch operator tests covering clean status, approvals, cleanup suggestions, stop-rule blocks, no automatic grants, no Supabase commands, ambiguity refusal, and exact next commands.
+- Agent & Skill Contract Checker for runtime-facing agent contracts, SKILL.md frontmatter/body, registry drift, model routing JSON/thinking policy, and approval operation scope.
 - Nutrition Batch 001 output completion and Nutrition P1-004 static schema verification.
 
 ## 4. Partial Components
 
 - Spec source-chain is strong for Nutrition but not generically enforced.
-- Agent contracts are patched for known db-migration issues, but broad contract drift is unguarded.
-- Skill frontmatter exists but lacks an always-run validator.
+- Agent and skill contract validation exists as a read-only checker, but it is not yet wired into operator preflight or merge promotion gates.
 - Reporting exists as run summaries and dossiers, but not as a single merge-ready batch dossier.
 - Runtime artifact policy exists in operator categorization, `.gitignore`, and the Batch 003 invariant checker; automated merge enforcement is still missing.
 - Stop-rule lifecycle has baselines, but acknowledgement policy is still manual.
@@ -58,7 +58,6 @@ The goal is to make the governance system operable before more product work cont
 
 ## 5. Missing Components
 
-- Agent and skill contract checker.
 - Spec source-chain checker.
 - Branch review / merge / push readiness CLI.
 - Operator `--doctor` mode for self-diagnosing common blockers.
@@ -164,7 +163,7 @@ Gaps:
 - `db-migration-agent` writes require human approval and post-write review; reads do not.
 - `db-migration-agent` must be followed by security-specialist review for SQL/RLS work.
 
-Gap: there is no complete read-only agent-contract checker.
+Batch 004 status: implemented as `system/control-plane/agent-contract-check.ts`. Remaining gap: the checker is not yet wired into operator preflight, merge readiness, or promotion gates.
 
 ## 13. Skill Contract Rules
 
@@ -173,7 +172,7 @@ Gap: there is no complete read-only agent-contract checker.
 - High-risk skills must not authorize unsafe tools by generic wording.
 - Skill registry should match filesystem skills.
 
-Gap: skill contract validation is not enforced before running batches.
+Batch 004 status: implemented as `system/control-plane/agent-contract-check.ts`. Remaining gap: registry drift is reported as non-blocking until a canonical skill registry policy is decided.
 
 ## 14. Model Routing Rules
 
@@ -182,7 +181,7 @@ Gap: skill contract validation is not enforced before running batches.
 - JSON object response format should be requested for JSON-only paths.
 - Fallback behavior must preserve agent identity and risk gates.
 
-Gap: routing contracts are partly tested through dispatcher tests, but not audited comprehensively.
+Batch 004 status: Qwen3.6 thinking-off and JSON object response policy are checked read-only by `system/control-plane/agent-contract-check.ts`.
 
 ## 15. Operator Commands
 
@@ -308,7 +307,7 @@ Minimum gate before BLS import:
 |---|---|---|---|---|
 | 1 | Governance Batch 002 - Memory & Learning Foundation | Make project knowledge durable and reduce repeated debugging. | yes | Required before BLS import resumes. |
 | 2 | Governance Batch 003 - Invariant Checker | Read-only runtime/state consistency checker. | completed | Implemented by `system/control-plane/governance-invariant-check.ts`. |
-| 3 | Governance Batch 004 - Agent & Skill Contract Validation | Prevent agent/skill contract drift. | no | Strongly recommended before more db-migration WOs. |
+| 3 | Governance Batch 004 - Agent & Skill Contract Validation | Prevent agent/skill contract drift. | completed | Implemented by `system/control-plane/agent-contract-check.ts`. |
 | 4 | Governance Batch 005 - Spec Source Chain / Workorder Factory | Ensure WOs are derived from specs, not fragments. | yes for BLS import | Needed because BLS source priority matters. |
 | 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Improves merge review and handover. |
 | 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Reduces manual Git choreography. |
@@ -322,8 +321,8 @@ Minimum gate before BLS import:
 | Learning loop | MISSING | critical | yes | yes | Add incident records and required Incident -> Fix -> Test -> Rule -> Memory workflow. | Batch 002 | yes |
 | Invariant checker | DONE | high | no | no | Maintain read-only checker for runtime, approvals, locks, stop rules, artifact policy. | Batch 003 | done |
 | Spec source chain | PARTIAL | high | yes for BLS import | no | Add checker for INDEX/spec/patch/ADR/workorder links. | Batch 005 | yes |
-| Agent contract checker | MISSING | high | no | partial | Validate JSON-only, examples, selected_agent, Qwen policy. | Batch 004 | yes |
-| Skill contract checker | MISSING | medium | no | no | Validate SKILL frontmatter and registry drift. | Batch 004 | yes |
+| Agent contract checker | DONE | high | no | partial | Maintain read-only checks for JSON-only, examples, selected_agent, Qwen policy, and approval operation scope. | Batch 004 | done |
+| Skill contract checker | DONE | medium | no | no | Maintain SKILL frontmatter/body validation and registry drift warnings. | Batch 004 | done |
 | Batch dossier | PARTIAL | medium | no | partial | Unified dossier with output and approval timelines. | Batch 006 | yes |
 | Promotion governance | MISSING | medium | no | no | Branch review, merge, push readiness CLI. | Batch 007 | yes |
 | Operator doctor | MISSING | medium | no | partial | Add read-only `--doctor`. | Batch 008 | after Batch 003 |
