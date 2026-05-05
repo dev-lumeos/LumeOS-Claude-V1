@@ -34,6 +34,24 @@ Every governance incident must follow:
 4. Update canonical memory only for compact current truths.
 5. If no incident occurred, record that no learning update was needed in the batch final report.
 
+## Automation
+
+Run the learning checker before opening product work or closing a governance batch:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --write-summary
+```
+
+Default mode is read-only. `--write-summary` may create or update:
+
+```text
+docs/project/governance-learning/CURRENT_LEARNING_STATUS.md
+```
+
+The checker validates required memory files, incident schema fields, fix commit references, regression test paths, durable rules, recurrence detectors, canonical memory product-gate wording, and open incidents.
+
 ## File Naming
 
 Use:
@@ -59,4 +77,3 @@ Examples:
 - Is the affected layer listed?
 - Is the recurrence detector or missing detector stated?
 - Is the current handover updated if the lesson changes future behavior?
-

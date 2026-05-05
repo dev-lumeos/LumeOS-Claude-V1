@@ -6,7 +6,7 @@ Current date: 2026-05-05.
 
 `main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
 
-The active governance branch is adding Workorder Factory / Decomposition Automation.
+The active governance branch is adding Memory/Learning Automation.
 
 ## Current Truth
 
@@ -28,6 +28,7 @@ The active governance branch is adding Workorder Factory / Decomposition Automat
 - Governance Batch 007 adds a deterministic Promotion / Merge Governance CLI.
 - Governance Batch 008 adds read-only Operator Doctor mode.
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
+- Memory/Learning Automation adds a read-only governance learning checker.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -41,6 +42,7 @@ Use these files before starting more governance or product work:
 - `docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md`
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
+- `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
 - `AGENTS.md`
 - `CLAUDE.md`
 - `system/memory/canonical/lumeos_canonical.md`
@@ -87,14 +89,36 @@ Rules:
 - Factory does not dispatch, grant approvals, run Supabase commands, execute migrations, or import BLS data.
 - Generated batches must still pass source-chain, invariant, and agent-contract checks before operator execution.
 
+## Memory/Learning Automation Output
+
+- `system/reports/governance-learning-check.ts`
+- `system/reports/__tests__/governance-learning-check.test.ts`
+- `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
+- `docs/project/governance-learning/2026-05-05-memory-learning-automation-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --write-summary
+```
+
+Rules:
+
+- Default mode is read-only.
+- `--write-summary` writes only `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
+- The checker does not edit runtime state, approval state, audit history, or run history.
+- It verifies incident metadata, fix commits, regression tests, durable rules, recurrence detectors, handover state, canonical memory, and product-gate wording.
+
 ## Safe Next Governance Batch
 
-Memory/Learning Automation.
+Spark Runtime Hardening or a Tom decision to open the product work gate.
 
 Goal:
 
-- Make incident records, handover updates, and canonical memory updates less manual.
-- Ensure every governance batch produces durable learning records where needed.
+- Decide whether the remaining runtime hardening work blocks product work.
+- If Tom opens the product gate, use the existing checkers/operator before any Nutrition product batch.
 
 ## Do Not Do
 

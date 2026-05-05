@@ -53,6 +53,8 @@ Governance learning records:
 - Operator Doctor mode exists at `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 - Workorder Factory Automation exists at `system/workorders/cli/wo-factory.ts`.
 - The factory accepts a structured JSON plan inside Markdown, dry-runs by default, and writes draft workorders/batches only with `--write`.
+- Governance Learning Checker exists at `system/reports/governance-learning-check.ts`.
+- Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
 
 ## Current Product Work Gate
 
@@ -71,6 +73,7 @@ Do not run:
 
 - Chat history is not durable memory.
 - Every governance incident must become: Incident -> Root Cause -> Fix -> Regression Test -> Durable Rule -> Memory Update.
+- Governance learning records must pass `system/reports/governance-learning-check.ts` before product work opens.
 - Detailed incidents belong in `docs/project/governance-learning/`.
 - Compact current truths belong in this canonical memory file.
 - Session continuity belongs in `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`.
@@ -120,4 +123,5 @@ Prompt text such as `/no_think` is not sufficient.
 - Governance Batch 007 - Promotion / Merge Governance is implemented as a deterministic review/merge/push CLI.
 - Governance Batch 008 - Operator Doctor / Autonomy Hardening is implemented as read-only diagnosis with exactly one next action.
 - Workorder Factory / Decomposition Automation is implemented for structured plans; free-form decomposition remains a prompt/manual Brain step.
+- Memory/Learning Automation is implemented as a read-only checker plus explicit status writer.
 - Spark Runtime Hardening.

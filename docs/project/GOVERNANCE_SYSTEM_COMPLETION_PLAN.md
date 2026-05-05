@@ -28,9 +28,9 @@ The goal is to make the governance system operable before more product work cont
 | 16. Skill contract | `.agents/skills/*/SKILL.md`, `system/agent-registry/skill_registry.json`, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 validates SKILL.md frontmatter/body and reports registry drift. |
 | 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts` | TESTED | Batch 004 checks Qwen3.6 thinking-off documentation and dispatcher JSON object response enforcement. |
 | 18. Merge / promotion governance | `system/control-plane/promotion-governance.ts`, promotion tests | TESTED | Batch 007 adds deterministic branch review, merge, push, forbidden artifact checks, product-gate detection, and post-merge typecheck. |
-| 19. Memory layer | `system/memory/canonical/*`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, CLAUDE.md, AGENTS.md | PARTIAL | Batch 002 created current handover and canonical corrections; update enforcement is still manual. |
-| 20. Learning / feedback-loop | `docs/project/governance-learning/*`, commit history, tests | PARTIAL | Batch 002 created incident records and schema; machine-readable operator learning records are still missing. |
-| 21. Incident-to-regression-test | Tests near fixes | PARTIAL | Many recent incidents have tests, but there is no required incident record. |
+| 19. Memory layer | `system/memory/canonical/*`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/reports/governance-learning-check.ts`, CLAUDE.md, AGENTS.md | TESTED | Memory files exist and the learning checker validates handover/product-gate/canonical consistency. |
+| 20. Learning / feedback-loop | `docs/project/governance-learning/*`, `system/reports/governance-learning-check.ts`, commit history, tests | TESTED | Incident records, schema, checklist, and batch summaries are now machine-checkable. |
+| 21. Incident-to-regression-test | `system/reports/governance-learning-check.ts`, tests near fixes | TESTED | Fixed incidents must link fix commits, regression tests, durable rules, and recurrence detectors or produce findings. |
 | 22. Knowledge handover / session continuity | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/*` | PARTIAL | Current handover exists; operator-maintained refresh is still missing. |
 | 23. Runtime artifact policy | `.gitignore`, operator artifact categorization, `system/control-plane/governance-invariant-check.ts` | TESTED | Raw BLS and runtime artifact drift are checked read-only by Batch 003. |
 | 24. Product work gate | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/lumeos_canonical.md` | PARTIAL | Gate is documented; automated enforcement is still missing. |
@@ -55,11 +55,11 @@ The goal is to make the governance system operable before more product work cont
 - Reporting exists as run summaries, WO dossiers, and a Batch 006 batch dossier reporter; merge-readiness promotion is still separate.
 - Runtime artifact policy exists in operator categorization, `.gitignore`, and the Batch 003 invariant checker; automated merge enforcement is still missing.
 - Stop-rule lifecycle has baselines, but acknowledgement policy is still manual.
-- Memory exists, but it is not updated after every governance batch and contains stale claims.
+- Memory exists and can now be checked for required handover/canonical/product-gate consistency.
 
 ## 5. Missing Components
 
-- Product work gate that blocks BLS import until Tom opens the gate is documented, checker-aware, promotion-aware, and surfaced by operator doctor; full automation of memory/learning updates remains missing.
+- Product work gate that blocks BLS import until Tom opens the gate is documented, checker-aware, promotion-aware, surfaced by operator doctor, and validated by the learning checker.
 
 ## 6. Critical Invariants
 
@@ -215,16 +215,11 @@ Current locations:
 
 Assessment:
 
-- Durable project decisions exist but are stale.
-- Runtime lessons are mostly in chat, commits, and tests.
-- Agent-specific lessons are scattered across `.claude/agents`, `AGENTS.md`, and tests.
-- Operator lessons are in the runbook and batch-operator tests, not in a single current handover.
-- Incident summaries are not structured.
-- "Do not repeat" rules exist in prompts and docs but are duplicated.
-- There is no authoritative `CURRENT_GOVERNANCE_HANDOVER.md`.
-- Fixes are linked to tests by commit history, not by durable incident records.
-- Future runs cannot reliably retrieve lessons without chat history.
-- Memory updates are manual afterthoughts, not a workflow step.
+- Durable project decisions have a current handover and compact canonical memory.
+- Runtime lessons live in incident records, commits, tests, and durable rules.
+- Operator and agent lessons are recoverable through handover, runbooks, contracts, and learning records.
+- `system/reports/governance-learning-check.ts` validates that fixed incidents link commits, tests, durable rules, recurrence detectors, and memory updates.
+- `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md` summarizes current learning status when written explicitly.
 
 Required policy:
 
@@ -244,14 +239,9 @@ Current state:
 
 Gaps:
 
-- Failed runs are not classified into durable incident categories automatically.
-- Recurring patterns are not detected across runs.
-- Incidents are not required to create regression tests.
-- Reviewer invalid JSON failures are not automatically converted into prompt/contract rules.
-- Approval lifecycle bugs are not recorded in a learning schema.
-- Stop-rule triggers are not converted into baseline/acknowledge policy records.
-- Operator failures do not create machine-readable learning records.
-- The system cannot yet detect repeated bug classes before they recur.
+- Failed runs are not yet automatically converted into incident records.
+- Operator failures do not yet create machine-readable learning records automatically.
+- Recurring patterns are checked through incident records and detectors, but not yet mined automatically from audit logs.
 
 Required workflow:
 
@@ -315,6 +305,7 @@ Minimum gate before BLS import:
 | 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Implemented by `system/control-plane/promotion-governance.ts`. |
 | 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Implemented as `--doctor` mode on the batch operator. |
 | 8 | Workorder Factory / Decomposition Automation | Generate source-linked workorders and batches from structured plans. | no | Implemented by `system/workorders/cli/wo-factory.ts`; free-form decomposition remains prompt/manual. |
+| 9 | Memory/Learning Automation | Check durable incident/fix/test/rule/memory linkage. | no | Implemented by `system/reports/governance-learning-check.ts`. |
 
 ## Gap Register
 
@@ -330,6 +321,7 @@ Minimum gate before BLS import:
 | Promotion governance | DONE | medium | no | no | Maintain deterministic review/merge/push CLI. | Batch 007 | done |
 | Operator doctor | DONE | medium | no | no | Maintain read-only `--doctor` diagnosis and one-action output. | Batch 008 | done |
 | Workorder factory automation | DONE | high | target must pass | no | Maintain deterministic structured-plan factory and tests. | Workorder Factory Automation | done |
+| Memory/Learning automation | DONE | high | no | no | Maintain learning checker and current learning status summary. | Memory/Learning Automation | done |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
 | Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
 | Merge/product gate | PARTIAL | high | yes | no | Turn documented Product Work Gate into an enforced checklist. | Batch 007 | yes |
