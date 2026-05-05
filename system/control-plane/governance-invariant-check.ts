@@ -66,6 +66,8 @@ interface RunItem {
   status: 'running' | 'completed' | 'failed' | 'blocked' | 'awaiting_approval'
   started_at?: string
   completed_at?: string
+  ended_at?: string
+  failed_at?: string
 }
 
 interface ActiveWorkorderItem {
@@ -111,7 +113,7 @@ interface DbMigrationLockItem {
   expires_at: string
 }
 
-const PRODUCT_GATE_REASON = 'BLS import blocked unless Batch 003 is complete or Tom waives it.'
+const PRODUCT_GATE_REASON = 'BLS import blocked until Governance Batch 005 is complete or Tom waives it.'
 const TSX = 'cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs'
 const RESET_CLI = 'system\\control-plane\\terminal-wo-reset-cli.ts'
 
@@ -222,7 +224,9 @@ function checkActiveWorkorders(state: RuntimeStateFile): GovernanceInvariantFind
     if (run && ['dispatched', 'running', 'awaiting_approval', 'review'].includes(wo.status) && isTerminalRun(run)) {
       const safeCleanupCommand = wo.status === 'dispatched'
         ? cleanupCommand('clear-stale-dispatched', wo.workorder_id, wo.run_id ?? '')
-        : undefined
+        : wo.status === 'review'
+          ? cleanupCommand('clear-stale-review', wo.workorder_id, wo.run_id ?? '')
+          : undefined
       findings.push(finding({
         id: 'active_workorder.nonterminal_points_to_terminal_run',
         severity: 'high',
@@ -230,7 +234,7 @@ function checkActiveWorkorders(state: RuntimeStateFile): GovernanceInvariantFind
         message: `active_workorder ${wo.workorder_id} status=${wo.status} points to terminal run status=${run.status}`,
         evidence: `workorder=${wo.workorder_id} run=${wo.run_id}`,
         suggested_action: safeCleanupCommand
-          ? 'Run the official stale dispatched cleanup dry-run and confirm only if it targets exactly one entry.'
+          ? 'Run the official stale cleanup dry-run and confirm only if it targets exactly one entry.'
           : 'Inspect with operator status; no supported cleanup command is advertised for this nonterminal state.',
         safe_cleanup_command: safeCleanupCommand,
         blocks_product_work: true,
@@ -455,6 +459,29 @@ function checkApprovals(
   return findings
 }
 
+function runFailureAnchor(run: RunItem): string | undefined {
+  return run.completed_at ?? run.ended_at ?? run.failed_at ?? run.started_at
+}
+
+function failedRunsSinceBaseline(state: RuntimeStateFile): { counted: number; total: number } {
+  const failedRuns = (state.active_runs ?? []).filter(run => run.status === 'failed')
+  const baselineAt = state.stop_rule_baselines?.failed_runs_threshold?.acknowledged_at
+  if (!baselineAt) return { counted: failedRuns.length, total: failedRuns.length }
+
+  const baselineTime = new Date(baselineAt).getTime()
+  if (!Number.isFinite(baselineTime)) return { counted: failedRuns.length, total: failedRuns.length }
+
+  const counted = failedRuns.filter(run => {
+    const anchor = runFailureAnchor(run)
+    if (!anchor) return true
+    const anchorTime = new Date(anchor).getTime()
+    if (!Number.isFinite(anchorTime)) return true
+    return anchorTime > baselineTime
+  }).length
+
+  return { counted, total: failedRuns.length }
+}
+
 function checkStopRules(state: RuntimeStateFile, repoRoot: string): GovernanceInvariantFinding[] {
   const findings: GovernanceInvariantFinding[] = []
   if (state.system_stop?.active) {
@@ -496,14 +523,14 @@ function checkStopRules(state: RuntimeStateFile, repoRoot: string): GovernanceIn
     }))
   }
 
-  const failedRuns = (state.active_runs ?? []).filter(run => run.status === 'failed').length
-  if (failedRuns >= 5) {
+  const failedRuns = failedRunsSinceBaseline(state)
+  if (failedRuns.counted >= 5) {
     findings.push(finding({
       id: 'stop_rules.failed_runs_would_retrigger',
       severity: 'high',
       layer: 'stop_rules',
       message: 'failed-runs stop rule would retrigger',
-      evidence: `${failedRuns} failed active_runs`,
+      evidence: `${failedRuns.counted} failed active_runs since baseline; total=${failedRuns.total}`,
       suggested_action: 'Run stop-rules dry-run and review baseline; do not raise thresholds blindly.',
       blocks_product_work: true,
       blocks_operator: true,

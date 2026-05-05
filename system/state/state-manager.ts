@@ -564,6 +564,53 @@ export async function removeStaleDispatchedActiveWorkorder(
   return outcome
 }
 
+export async function removeStaleReviewActiveWorkorder(
+  workorderId: string,
+  runId: string,
+): Promise<{ removed: boolean; entry?: ActiveWorkorder; reason?: string }> {
+  let outcome: { removed: boolean; entry?: ActiveWorkorder; reason?: string } = {
+    removed: false,
+    reason:  'unknown',
+  }
+
+  await mutate(s => {
+    const matches = s.active_workorders.filter(
+      w => w.workorder_id === workorderId && w.run_id === runId,
+    )
+    if (matches.length === 0) {
+      outcome = { removed: false, reason: 'no match' }
+      return
+    }
+    if (matches.length > 1) {
+      outcome = { removed: false, reason: `ambiguous match (${matches.length})` }
+      return
+    }
+
+    const target = matches[0]
+    if (target.status !== 'review') {
+      outcome = { removed: false, entry: target, reason: `non-review status: ${target.status}` }
+      return
+    }
+
+    const run = s.active_runs.find(r => r.run_id === runId)
+    if (!run) {
+      outcome = { removed: false, entry: target, reason: 'missing active_run; stale review cleanup requires terminal active_run evidence' }
+      return
+    }
+    if (run.status !== 'completed' && run.status !== 'failed' && run.status !== 'blocked') {
+      outcome = { removed: false, entry: target, reason: `active_run is not terminal: ${run.status}` }
+      return
+    }
+
+    s.active_workorders = s.active_workorders.filter(
+      w => !(w.workorder_id === workorderId && w.run_id === runId),
+    )
+    outcome = { removed: true, entry: target, reason: `active_run_terminal: run.status=${run.status}` }
+  })
+
+  return outcome
+}
+
 interface ApprovalTokenLike {
   approval_id: string
   run_id?: string

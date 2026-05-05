@@ -311,7 +311,39 @@ describe('governance invariant checker', () => {
     const item = finding(result, 'active_workorder.nonterminal_points_to_terminal_run')
 
     assert.equal(item?.severity, 'high')
-    assert.equal(item?.safe_cleanup_command, undefined)
+    assert.match(item?.safe_cleanup_command ?? '', /clear-stale-review WO-test-001 --run-id RUN-review-failed --dry-run/)
+  })
+
+  it('does not report historical failed runs before failed-runs baseline', () => {
+    writeState({
+      active_runs: Array.from({ length: 13 }, (_, index) => ({
+        run_id: `RUN-historical-${index}`,
+        workorder_id: `WO-historical-${index}`,
+        agent_id: 'micro-executor',
+        status: 'failed',
+        started_at: '2026-05-04T01:00:00.000Z',
+        failed_at: '2026-05-04T01:30:00.000Z',
+        written_files: [],
+      })),
+      stop_rule_baselines: {
+        failed_runs_threshold: {
+          acknowledged_at: '2026-05-04T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_failed_count: 13,
+        },
+        invalid_json_spike: {
+          acknowledged_at: '2026-05-04T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_total_samples: 0,
+          acknowledged_invalid_json_samples: 0,
+        },
+      },
+    })
+
+    const result = runCheck()
+
+    assert.equal(finding(result, 'stop_rules.failed_runs_would_retrigger'), undefined)
+    assert.equal(result.exitCode, 0)
   })
 
   it('reports modified runtime artifact from git status', () => {
@@ -344,7 +376,7 @@ describe('governance invariant checker', () => {
     assert.equal(typeof result.generated_at, 'string')
     assert.equal(Array.isArray(result.findings), true)
     assert.equal(result.product_work_gate.status, 'blocked')
-    assert.equal(result.product_work_gate.reason, 'BLS import blocked unless Batch 003 is complete or Tom waives it.')
+    assert.equal(result.product_work_gate.reason, 'BLS import blocked until Governance Batch 005 is complete or Tom waives it.')
   })
 
   it('formats a markdown report', () => {

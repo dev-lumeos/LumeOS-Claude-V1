@@ -4,7 +4,7 @@
 
 Current date: 2026-05-05.
 
-`main` is pushed through Governance Batch 002, the Governance Gap Analysis Plan, and Nutrition P1-004 schema verification. Governance Batch 003 is complete on branch `goal/governance-batch-003-invariant-checker` until merged.
+`main` is pushed through Governance Batch 003, the Governance Gap Analysis Plan, and Nutrition P1-004 schema verification. Governance runtime drift cleanup is complete on branch `goal/governance-runtime-drift-cleanup` until merged.
 
 ## Current Truth
 
@@ -19,6 +19,7 @@ Current date: 2026-05-05.
 - Governance Gap Analysis Plan is pushed to `origin/main`.
 - Governance Batch 002 created durable memory and learning records.
 - Governance Batch 003 added a read-only invariant checker.
+- Governance runtime drift cleanup made the invariant checker report zero critical/high findings.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -45,6 +46,7 @@ Reason:
 
 - Memory and learning foundation exists as of Governance Batch 002.
 - Runtime invariant checking is available through `system/control-plane/governance-invariant-check.ts`.
+- Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Recent incidents are now being recorded as durable incident learning records.
 - Spec source-chain enforcement is still missing and is required before BLS import.
 

@@ -45,6 +45,7 @@ import {
   evaluateExpiredAwaitingApprovalCleanup,
   removeExpiredAwaitingApprovalActiveWorkorder,
   removeStaleDispatchedActiveWorkorder,
+  removeStaleReviewActiveWorkorder,
   removeTerminalActiveWorkorder,
   type ActiveWorkorder,
   type ExpiredAwaitingApprovalCleanupResult,
@@ -53,6 +54,7 @@ import {
 import {
   auditExpiredApprovalWorkorderReset,
   auditStaleDispatchedWorkorderCleanup,
+  auditStaleReviewWorkorderCleanup,
   auditTerminalWorkorderReset,
 } from '../state/audit-writer'
 
@@ -110,6 +112,7 @@ function printHelp(): void {
   terminal-wo-reset-cli show <workorder_id>
   terminal-wo-reset-cli clear <workorder_id> --run-id <run_id> [--dry-run | --confirm]
   terminal-wo-reset-cli clear-stale-dispatched <workorder_id> --run-id <run_id> [--older-than-minutes <N>] [--dry-run | --confirm]
+  terminal-wo-reset-cli clear-stale-review <workorder_id> --run-id <run_id> [--dry-run | --confirm]
   terminal-wo-reset-cli clear-expired-approval <workorder_id> --run-id <run_id> [--dry-run | --confirm]
 
 Default for mutating commands without flag is --dry-run (safe).
@@ -137,6 +140,12 @@ clear-expired-approval:
   Hard refusal if a usable granted token exists, a pending approval exists, or
   scope/db_migration lock for the run is still active.
   Audit event: 'expired_approval_workorder_reset'.
+
+clear-stale-review:
+  Clearable status: review (only) with active_run terminal evidence
+  (completed/failed/blocked). This handles review entries left behind after
+  terminal review/run failure. It does not touch active_runs or run history.
+  Audit event: 'stale_review_workorder_cleanup'.
 
 Exit codes:
   0 = success / read-only OK
@@ -489,6 +498,80 @@ function describeExpiredApprovalOutcome(outcome: ExpiredAwaitingApprovalCleanupR
   return parts.join(', ')
 }
 
+async function cmdClearStaleReview(rest: string[]): Promise<number> {
+  const parsed = parseClearArgs(rest)
+  if ('message' in parsed) {
+    console.error(`Error: ${parsed.message}`)
+    printHelp()
+    return 1
+  }
+  const { workorderId, runId, mode } = parsed
+
+  const matches = getAllActiveWorkorders().filter(
+    w => w.workorder_id === workorderId && w.run_id === runId,
+  )
+
+  if (matches.length === 0) {
+    console.error(`No match for workorder_id=${workorderId} run_id=${runId}`)
+    return 2
+  }
+  if (matches.length > 1) {
+    console.error(`Refused: ambiguous match (${matches.length} entries) for workorder_id=${workorderId} run_id=${runId}`)
+    return 1
+  }
+
+  const target = matches[0]
+  if (target.status !== 'review') {
+    console.error(`Refused: status is '${target.status}', not 'review'.`)
+    return 1
+  }
+
+  const run = getActiveRunByRunId(runId)
+  if (!run) {
+    console.error(`Refused: missing active_run for run_id=${runId}. Stale review cleanup requires terminal active_run evidence.`)
+    return 1
+  }
+  if (run.status !== 'completed' && run.status !== 'failed' && run.status !== 'blocked') {
+    console.error(`Refused: active_run is not terminal for run_id=${runId}; status=${run.status}.`)
+    return 1
+  }
+
+  const evidence = `active_run_terminal: run.status=${run.status}`
+  if (mode === 'dry-run') {
+    console.log(`[DRY-RUN] Would remove 1 stale-review entry:`)
+    console.log(formatEntry(target))
+    console.log(`Evidence: ${evidence}`)
+    console.log('No state mutation performed. No audit event written.')
+    console.log('Use --confirm to actually remove this entry.')
+    return 0
+  }
+
+  const operator = process.env.LUMEOS_OPERATOR ?? 'operator'
+  auditStaleReviewWorkorderCleanup({
+    run_id:             runId,
+    workorder_id:       workorderId,
+    agent_id:           target.agent_id,
+    orchestration_mode: getOrchestrationMode(),
+    reason:             `operator-initiated cleanup of stale review active_workorders entry; ${evidence}`,
+    approved_by:        operator,
+  })
+
+  const outcome = await removeStaleReviewActiveWorkorder(workorderId, runId)
+  if (outcome.removed) {
+    console.log(`Removed 1 stale-review active_workorders entry:`)
+    console.log(formatEntry(target))
+    console.log(`Evidence: ${outcome.reason ?? evidence}`)
+    console.log(`Audit event 'stale_review_workorder_cleanup' written to system/state/audit.jsonl.`)
+    return 0
+  }
+  if (outcome.reason === 'no match') {
+    console.error(`Race: entry vanished between check and mutation (workorder_id=${workorderId} run_id=${runId})`)
+    return 2
+  }
+  console.error(`Refused by state-manager: ${outcome.reason ?? 'unknown'}`)
+  return 1
+}
+
 async function cmdClearExpiredApproval(rest: string[]): Promise<number> {
   const parsed = parseClearArgs(rest)
   if ('message' in parsed) {
@@ -570,6 +653,7 @@ async function main(): Promise<number> {
     case 'show':  return cmdShow(rest[0])
     case 'clear': return await cmdClear(rest)
     case 'clear-stale-dispatched': return await cmdClearStaleDispatched(rest)
+    case 'clear-stale-review': return await cmdClearStaleReview(rest)
     case 'clear-expired-approval': return await cmdClearExpiredApproval(rest)
     case '--help':
     case '-h':

@@ -29,6 +29,7 @@ export type EventType =
   | 'approval_queue_added' | 'approval_queue_granted' | 'approval_queue_denied' | 'approval_queue_expired'
   | 'terminal_workorder_reset'
   | 'stale_dispatched_workorder_cleanup'
+  | 'stale_review_workorder_cleanup'
   | 'expired_approval_workorder_reset'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
@@ -95,6 +96,7 @@ const VALID_EVENTS = new Set<string>([
   'approval_queue_added', 'approval_queue_granted', 'approval_queue_denied', 'approval_queue_expired',
   'terminal_workorder_reset',
   'stale_dispatched_workorder_cleanup',
+  'stale_review_workorder_cleanup',
   'expired_approval_workorder_reset',
 ])
 
@@ -156,6 +158,10 @@ export const auditTerminalWorkorderReset = (
 export const auditStaleDispatchedWorkorderCleanup = (
   p: Base & Pick<AuditEvent, 'reason' | 'approved_by'>,
 ) => writeAuditEvent({ event: 'stale_dispatched_workorder_cleanup', severity: 'warning', ...p })
+
+export const auditStaleReviewWorkorderCleanup = (
+  p: Base & Pick<AuditEvent, 'reason' | 'approved_by'>,
+) => writeAuditEvent({ event: 'stale_review_workorder_cleanup', severity: 'warning', ...p })
 
 // Operator Tooling - terminal-wo-reset-cli clear-expired-approval.
 // Differentiated from terminal_workorder_reset: this event marks cleanup of

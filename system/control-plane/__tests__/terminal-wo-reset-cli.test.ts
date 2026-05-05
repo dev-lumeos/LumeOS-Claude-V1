@@ -23,6 +23,7 @@ import {
   getAllActiveWorkorders,
   removeExpiredAwaitingApprovalActiveWorkorder,
   removeStaleDispatchedActiveWorkorder,
+  removeStaleReviewActiveWorkorder,
   removeTerminalActiveWorkorder,
   type ActiveWorkorder,
   type ApprovalItem,
@@ -1047,7 +1048,7 @@ describe('WO-015 — State-Manager-Helper (stale-dispatched)', () => {
 
 // ─── Suite: WO-015 CLI clear-stale-dispatched ────────────────────────────────
 
-describe('WO-015 — CLI clear-stale-dispatched', () => {
+describe('WO-015 - CLI clear-stale-dispatched', () => {
   before(setupFixture)
   after(teardownFixture)
   beforeEach(() => {
@@ -1231,5 +1232,85 @@ describe('WO-015 — CLI clear-stale-dispatched', () => {
     assert.equal(r.code, 1)
     assert.match(r.stderr, /non-terminal/)
     assert.equal(readActiveWorkorders().length, 1, 'state unchanged on WO-010 dispatched refusal')
+  })
+})
+
+describe('Stale review cleanup', () => {
+  before(setupFixture)
+  after(teardownFixture)
+  beforeEach(() => {
+    const auditPath = path.resolve(process.cwd(), 'system/state/audit.jsonl')
+    if (fs.existsSync(auditPath)) fs.unlinkSync(auditPath)
+  })
+
+  it('removeStaleReviewActiveWorkorder removes review entry when active_run is terminal', async () => {
+    writeState(
+      [{ workorder_id: 'WO-review-stale', run_id: 'RUN-review-stale', agent_id: 'micro-executor', status: 'review', dispatched_at: isoMinutesAgo(120) }],
+      [makeRun('RUN-review-stale', 'WO-review-stale', 'failed')],
+    )
+
+    const result = await removeStaleReviewActiveWorkorder('WO-review-stale', 'RUN-review-stale')
+
+    assert.equal(result.removed, true, `expected removal, got ${result.reason}`)
+    assert.equal(readActiveWorkorders().length, 0)
+    assert.equal(getActiveRunByRunId('RUN-review-stale')?.status, 'failed')
+  })
+
+  it('removeStaleReviewActiveWorkorder refuses non-review status', async () => {
+    writeState(
+      [makeDispatched('WO-review-dispatched', 'RUN-review-dispatched', isoMinutesAgo(120))],
+      [makeRun('RUN-review-dispatched', 'WO-review-dispatched', 'failed')],
+    )
+
+    const result = await removeStaleReviewActiveWorkorder('WO-review-dispatched', 'RUN-review-dispatched')
+
+    assert.equal(result.removed, false)
+    assert.match(result.reason ?? '', /non-review status/)
+    assert.equal(readActiveWorkorders().length, 1)
+  })
+
+  it('removeStaleReviewActiveWorkorder refuses review while active_run is running', async () => {
+    writeState(
+      [{ workorder_id: 'WO-review-running', run_id: 'RUN-review-running', agent_id: 'micro-executor', status: 'review', dispatched_at: isoMinutesAgo(120) }],
+      [makeRun('RUN-review-running', 'WO-review-running', 'running')],
+    )
+
+    const result = await removeStaleReviewActiveWorkorder('WO-review-running', 'RUN-review-running')
+
+    assert.equal(result.removed, false)
+    assert.match(result.reason ?? '', /active_run is not terminal/)
+    assert.equal(readActiveWorkorders().length, 1)
+  })
+
+  it('clear-stale-review dry-run shows exactly one target and does not mutate', () => {
+    writeState(
+      [{ workorder_id: 'WO-review-dry', run_id: 'RUN-review-dry', agent_id: 'micro-executor', status: 'review', dispatched_at: isoMinutesAgo(120) }],
+      [makeRun('RUN-review-dry', 'WO-review-dry', 'failed')],
+    )
+
+    const result = runCli(['clear-stale-review', 'WO-review-dry', '--run-id', 'RUN-review-dry', '--dry-run'])
+
+    assert.equal(result.code, 0, `stderr=${result.stderr}`)
+    assert.match(result.stdout, /\[DRY-RUN\]/)
+    assert.match(result.stdout, /Would remove 1 stale-review entry/)
+    assert.equal(readActiveWorkorders().length, 1)
+    assert.equal(readAuditLines().length, 0)
+  })
+
+  it('clear-stale-review confirm removes exactly one target and writes audit', () => {
+    writeState(
+      [{ workorder_id: 'WO-review-confirm', run_id: 'RUN-review-confirm', agent_id: 'micro-executor', status: 'review', dispatched_at: isoMinutesAgo(120) }],
+      [makeRun('RUN-review-confirm', 'WO-review-confirm', 'failed')],
+    )
+
+    const result = runCli(['clear-stale-review', 'WO-review-confirm', '--run-id', 'RUN-review-confirm', '--confirm'])
+
+    assert.equal(result.code, 0, `stderr=${result.stderr}`)
+    assert.match(result.stdout, /Removed 1 stale-review active_workorders entry/)
+    assert.equal(readActiveWorkorders().length, 0)
+    const audit = readAuditLines().filter(a => a.event === 'stale_review_workorder_cleanup')
+    assert.equal(audit.length, 1)
+    assert.equal(audit[0].workorder_id, 'WO-review-confirm')
+    assert.equal(audit[0].run_id, 'RUN-review-confirm')
   })
 })
