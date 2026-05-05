@@ -51,6 +51,8 @@ Governance learning records:
 - Read-only Batch Dossier Reporter exists at `system/reports/batch-dossier.ts` and writes reports only with explicit `--write`.
 - Promotion / Merge Governance CLI exists at `system/control-plane/promotion-governance.ts`.
 - Operator Doctor mode exists at `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
+- Workorder Factory Automation exists at `system/workorders/cli/wo-factory.ts`.
+- The factory accepts a structured JSON plan inside Markdown, dry-runs by default, and writes draft workorders/batches only with `--write`.
 
 ## Current Product Work Gate
 
@@ -107,6 +109,7 @@ Prompt text such as `/no_think` is not sufficient.
 - SKILL.md files must keep parser-safe frontmatter.
 - Workorders must resolve module INDEX -> current specs -> patches -> SQL sources -> ADRs -> reviews -> raw/provenance sources.
 - Raw BLS files must not override current specs as implementation SSOT.
+- Factory-generated workorders must include `source_refs`, `expected_outputs`, scoped writes, high-risk `files_blocked`, and db-migration `rollback_hint`.
 
 ## Open Governance Work
 
@@ -116,4 +119,5 @@ Prompt text such as `/no_think` is not sufficient.
 - Governance Batch 006 - Reporting & Dossier Hardening is implemented as a batch dossier reporter.
 - Governance Batch 007 - Promotion / Merge Governance is implemented as a deterministic review/merge/push CLI.
 - Governance Batch 008 - Operator Doctor / Autonomy Hardening is implemented as read-only diagnosis with exactly one next action.
+- Workorder Factory / Decomposition Automation is implemented for structured plans; free-form decomposition remains a prompt/manual Brain step.
 - Spark Runtime Hardening.

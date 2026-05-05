@@ -6,6 +6,8 @@ Current date: 2026-05-05.
 
 `main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, and governance runtime drift cleanup.
 
+The active governance branch is adding Workorder Factory / Decomposition Automation.
+
 ## Current Truth
 
 - Governance Batch Operator exists and is the preferred way to run workorder batches.
@@ -25,6 +27,7 @@ Current date: 2026-05-05.
 - Governance Batch 006 adds a read-only Batch Dossier Reporter and operator dossier suggestions.
 - Governance Batch 007 adds a deterministic Promotion / Merge Governance CLI.
 - Governance Batch 008 adds read-only Operator Doctor mode.
+- Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -37,6 +40,7 @@ Use these files before starting more governance or product work:
 - `docs/project/governance-learning/README.md`
 - `docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md`
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
+- `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `AGENTS.md`
 - `CLAUDE.md`
 - `system/memory/canonical/lumeos_canonical.md`
@@ -60,15 +64,37 @@ Reason:
 - Recent incidents are now being recorded as durable incident learning records.
 - Spec source-chain enforcement is required before BLS import.
 
+## Workorder Factory Output
+
+- `system/workorders/cli/wo-factory.ts`
+- `system/workorders/cli/__tests__/wo-factory.test.ts`
+- `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
+- `docs/project/governance-learning/2026-05-05-workorder-factory-automation-summary.md`
+
+Run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --dry-run
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --write
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --validate <workorder-or-batch>
+```
+
+Rules:
+
+- Factory input is a Markdown file with a deterministic JSON plan block.
+- Dry-run writes nothing.
+- `--write` creates draft workorders and a batch only after high/critical factory findings are clear.
+- Factory does not dispatch, grant approvals, run Supabase commands, execute migrations, or import BLS data.
+- Generated batches must still pass source-chain, invariant, and agent-contract checks before operator execution.
+
 ## Safe Next Governance Batch
 
-Workorder Factory / Decomposition Automation.
+Memory/Learning Automation.
 
 Goal:
 
-- Generate source-linked workorders deterministically from specs and decomposition.
-- Reduce manual prompt stitching for creating future product and governance batches.
-- Ensure factory output passes source-chain, invariant, and contract checks before execution.
+- Make incident records, handover updates, and canonical memory updates less manual.
+- Ensure every governance batch produces durable learning records where needed.
 
 ## Do Not Do
 

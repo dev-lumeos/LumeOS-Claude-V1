@@ -12,8 +12,8 @@ The goal is to make the governance system operable before more product work cont
 |---|---|---|---|
 | 1. Brainstorm / input capture | `docs/project/prompts/MASTERPROMPT_BRAINSTORM_TO_SPEC.md`, `docs/BrainstormDocs/` | PARTIAL | Prompts exist, but source capture is not tied to operator lifecycle. |
 | 2. Spec source-chain | `docs/specs/*/INDEX.md`, Nutrition `01_current_specs`, `02_patches`, `03_sql`, `04_adrs`, `05_reviews`, `system/workorders/cli/spec-source-chain-check.ts` | TESTED | Batch 005 adds read-only source-chain validation and the Workorder Source Chain Standard. |
-| 3. Decomposition | `.agents/skills/spec-to-decomposition`, `docs/project/prompts/MASTERPROMPT_SPEC_TO_WORKORDERS.md` | DOCS_ONLY | Skill and prompt exist; no deterministic checker confirms decomposition completeness. |
-| 4. Workorder factory | `.agents/skills/wo-writer`, `system/workorders/templates/`, `system/workorders/schemas/workorder.schema.json`, `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md` | PARTIAL | Source-chain requirements are defined and checkable; factory generation is not yet automated/enforced. |
+| 3. Decomposition | `.agents/skills/spec-to-decomposition`, `docs/project/prompts/MASTERPROMPT_SPEC_TO_WORKORDERS.md`, `system/workorders/cli/wo-factory.ts` | PARTIAL | Prompt skills still handle creative decomposition; deterministic factory now accepts a structured plan and refuses missing source/scope data. |
+| 4. Workorder factory | `.agents/skills/wo-writer`, `system/workorders/templates/`, `system/workorders/schemas/workorder.schema.json`, `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`, `system/workorders/cli/wo-factory.ts` | TESTED | Source-chain requirements are defined/checkable and structured plans can now generate draft workorders and batch files with tests. |
 | 5. Workorder schema / validator | `system/workorders/schemas/workorder.schema.json`, `system/control-plane/governance-validator.ts`, tests | TESTED | Validator tests exist; lifecycle-specific invariants are spread across files. |
 | 6. Batch graph / dependency | `system/workorders/cli/batch-loader.ts`, `run-batch.ts`, batch operator tests | TESTED | Batch order and `blocked_by` behavior are covered; deeper cross-batch graph checks are missing. |
 | 7. Scheduler / preflight | `system/control-plane/scheduler-preflight.ts`, `services/scheduler-api/`, tests | TESTED | Preflight tests exist; scheduler/runtime mapping bugs have occurred. |
@@ -50,7 +50,7 @@ The goal is to make the governance system operable before more product work cont
 
 ## 4. Partial Components
 
-- Spec source-chain is now checkable, but Workorder Factory generation of `source_refs` is not yet automated.
+- Spec source-chain is checkable and deterministic factory generation now requires `source_refs`; creative decomposition from raw/free-form specs remains prompt/manual.
 - Agent and skill contract validation exists as a read-only checker, but it is not yet wired into operator preflight or merge promotion gates.
 - Reporting exists as run summaries, WO dossiers, and a Batch 006 batch dossier reporter; merge-readiness promotion is still separate.
 - Runtime artifact policy exists in operator categorization, `.gitignore`, and the Batch 003 invariant checker; automated merge enforcement is still missing.
@@ -59,7 +59,7 @@ The goal is to make the governance system operable before more product work cont
 
 ## 5. Missing Components
 
-- Product work gate that blocks BLS import until required governance batches are done is documented and promotion-aware, but not yet fully integrated into operator doctor.
+- Product work gate that blocks BLS import until Tom opens the gate is documented, checker-aware, promotion-aware, and surfaced by operator doctor; full automation of memory/learning updates remains missing.
 
 ## 6. Critical Invariants
 
@@ -284,7 +284,9 @@ Nutrition source priority example:
 2. `docs/specs/Nutrition/03_sql/SPEC_06_V1_MIGRATION.sql`
 3. `docs/specs/Nutrition/00_raw/bls/original/` for validation/provenance only
 
-Batch 005 status: implemented as `system/workorders/cli/spec-source-chain-check.ts` and documented in `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`. Remaining gap: Workorder Factory prompts/skills still need to generate `source_refs` automatically for every new workorder.
+Batch 005 status: implemented as `system/workorders/cli/spec-source-chain-check.ts` and documented in `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`.
+
+Workorder Factory Automation status: implemented as `system/workorders/cli/wo-factory.ts` and documented in `docs/project/WORKORDER_FACTORY_AUTOMATION.md`. The factory accepts a structured JSON plan in Markdown, requires source_refs, expected_outputs, scope/files_allowed, files_blocked for high-risk work, and rollback_hint for db-migration work. It is read-only by default and writes only with `--write`. Remaining gap: free-form spec-to-structured-plan decomposition is still prompt/manual.
 
 ## 20. Product Work Gate
 
@@ -312,6 +314,7 @@ Minimum gate before BLS import:
 | 5 | Governance Batch 006 - Reporting & Dossier Hardening | Make results self-explaining and reduce manual review. | no | Implemented as read-only batch dossier reporter. |
 | 6 | Governance Batch 007 - Promotion / Merge Governance | Formalize branch review, merge, push, and post-merge checks. | no | Implemented by `system/control-plane/promotion-governance.ts`. |
 | 7 | Governance Batch 008 - Operator Doctor / Autonomy Hardening | Self-diagnose common blockers. | no | Implemented as `--doctor` mode on the batch operator. |
+| 8 | Workorder Factory / Decomposition Automation | Generate source-linked workorders and batches from structured plans. | no | Implemented by `system/workorders/cli/wo-factory.ts`; free-form decomposition remains prompt/manual. |
 
 ## Gap Register
 
@@ -326,6 +329,7 @@ Minimum gate before BLS import:
 | Batch dossier | DONE | medium | no | no | Maintain `system/reports/batch-dossier.ts` and wire future promotion gates to it. | Batch 006 | done |
 | Promotion governance | DONE | medium | no | no | Maintain deterministic review/merge/push CLI. | Batch 007 | done |
 | Operator doctor | DONE | medium | no | no | Maintain read-only `--doctor` diagnosis and one-action output. | Batch 008 | done |
+| Workorder factory automation | DONE | high | target must pass | no | Maintain deterministic structured-plan factory and tests. | Workorder Factory Automation | done |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
 | Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
 | Merge/product gate | PARTIAL | high | yes | no | Turn documented Product Work Gate into an enforced checklist. | Batch 007 | yes |
