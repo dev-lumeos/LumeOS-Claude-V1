@@ -1,0 +1,93 @@
+import assert from 'node:assert/strict'
+import { describe, it } from 'node:test'
+
+import {
+  COMMAND_DEFINITIONS,
+  assertKnownAction,
+  requiresConfirmation,
+  validateBatchPath,
+} from '../command-allowlist'
+import { commandPlanFor } from '../command-runner'
+import { parseJsonFromStdout, redactSecrets } from '../redact'
+import { findRepoRoot } from '../repo-root'
+import { isMealCamOptionalOfflineNonBlocking, productGateText, toneFromSummary } from '../status'
+
+describe('governance UI safety helpers', () => {
+  it('blocks non-allowlisted command actions', () => {
+    assert.throws(() => assertKnownAction('supabase db reset'), /not allowlisted/)
+  })
+
+  it('does not expose forbidden Supabase commands in the allowlist', () => {
+    const serialized = JSON.stringify(COMMAND_DEFINITIONS)
+    assert.doesNotMatch(serialized, /supabase db reset/)
+    assert.doesNotMatch(serialized, /supabase db push/)
+    assert.doesNotMatch(serialized, /supabase migration up/)
+  })
+
+  it('validates batch paths under system workorders only', () => {
+    assert.equal(
+      validateBatchPath('system/workorders/nutrition/batches/BATCH.md'),
+      'system/workorders/nutrition/batches/BATCH.md',
+    )
+    assert.throws(() => validateBatchPath('supabase/migrations/example.sql'), /system\/workorders/)
+    assert.throws(() => validateBatchPath('system/workorders/../state/runtime_state.json'), /system\/workorders/)
+  })
+
+  it('controlled operator actions require explicit confirmation', () => {
+    assert.equal(requiresConfirmation('operator.continue'), true)
+    assert.equal(requiresConfirmation('operator.continueSafeCleanups'), true)
+    assert.throws(() => commandPlanFor({ action: 'operator.continue' }), /requires explicit confirmation/)
+    const plan = commandPlanFor({ action: 'operator.continue', confirmed: true })
+    assert.deepEqual(plan.args.slice(-1), ['--continue'])
+  })
+
+  it('approval center has no executable grant action', () => {
+    assert.ok(!Object.keys(COMMAND_DEFINITIONS).some(action => action.includes('grant')))
+  })
+
+  it('parses JSON from command stdout and redacts secrets', () => {
+    assert.deepEqual(parseJsonFromStdout('noise\n{"ok":true}\n'), { ok: true })
+    assert.match(redactSecrets('api_key=abc123'), /api_key=\[REDACTED\]/)
+  })
+
+  it('maps product gate and summary status for dashboard cards', () => {
+    assert.equal(toneFromSummary({ critical: 0, high: 0, medium: 0 }), 'pass')
+    assert.equal(toneFromSummary({ critical: 0, high: 1 }), 'blocked')
+    assert.match(productGateText({
+      product_work_gate: { status: 'blocked', reason: 'Tom has not opened product work.' },
+    }), /blocked/)
+  })
+
+  it('treats optional MealCam offline as non-blocking', () => {
+    assert.equal(isMealCamOptionalOfflineNonBlocking({
+      findings: [{
+        id: 'model_runtime.optional_endpoint_offline',
+        agent: 'mealcam-agent',
+        severity: 'info',
+        blocks_operator: false,
+      }],
+    }), true)
+  })
+
+  it('dossier command uses JSON without write by default', () => {
+    const plan = commandPlanFor({
+      action: 'dossier.batch',
+      batchPath: 'system/workorders/nutrition/batches/BATCH.md',
+    })
+    assert.ok(plan.args.includes('--json'))
+    assert.ok(!plan.args.includes('--write'))
+  })
+
+  it('batch console can plan status and doctor commands', () => {
+    const status = commandPlanFor({ action: 'operator.status', batchPath: 'system/workorders/x/BATCH.md' })
+    const doctor = commandPlanFor({ action: 'operator.doctor', batchPath: 'system/workorders/x/BATCH.md' })
+    assert.ok(status.args.includes('--status'))
+    assert.ok(doctor.args.includes('--doctor'))
+    assert.ok(doctor.args.includes('--json'))
+  })
+
+  it('finds the repository root from the web app subtree', () => {
+    const root = findRepoRoot(process.cwd())
+    assert.match(root.replace(/\\/g, '/'), /LumeOS-Claude-V1$/)
+  })
+})
