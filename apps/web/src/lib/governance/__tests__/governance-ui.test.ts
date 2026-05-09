@@ -5,6 +5,7 @@ import path from 'node:path'
 
 import {
   COMMAND_DEFINITIONS,
+  DEFAULT_BATCH_PATH,
   assertKnownAction,
   requiresConfirmation,
   validateBatchPath,
@@ -12,7 +13,7 @@ import {
 import { commandPlanFor } from '../command-runner'
 import { parseJsonFromStdout, redactSecrets } from '../redact'
 import { findRepoRoot } from '../repo-root'
-import { isMealCamOptionalOfflineNonBlocking, productGateText, toneFromSummary } from '../status'
+import { classifyCommandResult, isMealCamOptionalOfflineNonBlocking, productGateText, toneFromSummary } from '../status'
 
 describe('governance UI safety helpers', () => {
   it('blocks non-allowlisted command actions', () => {
@@ -78,6 +79,38 @@ describe('governance UI safety helpers', () => {
     })
     assert.ok(plan.args.includes('--json'))
     assert.ok(!plan.args.includes('--write'))
+  })
+
+  it('defaults to an existing governance batch instead of missing P1-005 product planning', () => {
+    const root = findRepoRoot(process.cwd())
+    assert.equal(DEFAULT_BATCH_PATH.includes('P1-005'), false)
+    assert.equal(fs.existsSync(path.join(root, DEFAULT_BATCH_PATH)), true)
+  })
+
+  it('classifies structured non-zero governance output as governance blocker, not API error', () => {
+    assert.deepEqual(classifyCommandResult({
+      exitCode: 2,
+      stderr: '',
+      parsedJson: {
+        final_diagnosis: 'SPEC_SOURCE_BLOCKED',
+        next_action: 'Run spec source chain check',
+      },
+    }).label, 'NEEDS_FIX')
+  })
+
+  it('classifies unstructured non-zero output as API error', () => {
+    assert.deepEqual(classifyCommandResult({
+      exitCode: 1,
+      stderr: 'Batch file not found',
+      parsedJson: null,
+    }).label, 'API_ERROR')
+  })
+
+  it('documents the main branch promotion helper in the console', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+    assert.match(consoleComponent, /Promotion review is for feature branches/)
+    assert.match(consoleComponent, /main\.\.main/)
   })
 
   it('batch console can plan status and doctor commands', () => {

@@ -36,7 +36,7 @@ export type CommandDefinition = {
   description: string
 }
 
-export const DEFAULT_BATCH_PATH = 'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-bls-import-planning.md'
+export const DEFAULT_BATCH_PATH = 'system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-001-batch-loader-cli.md'
 
 export const COMMAND_DEFINITIONS: Record<GovernanceAction, CommandDefinition> = {
   'git.status': {

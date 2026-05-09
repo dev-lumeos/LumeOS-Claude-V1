@@ -8,7 +8,7 @@ import {
   FORBIDDEN_COMMAND_TEXT,
   type GovernanceAction,
 } from '../../lib/governance/command-allowlist'
-import { isMealCamOptionalOfflineNonBlocking } from '../../lib/governance/status'
+import { classifyCommandResult, isMealCamOptionalOfflineNonBlocking } from '../../lib/governance/status'
 
 type CommandExecution = {
   action: GovernanceAction
@@ -103,7 +103,7 @@ function commandBlock(command: string): JSX.Element {
 
 export function GovernanceConsole({ page }: Props) {
   const [batchPath, setBatchPath] = useState(DEFAULT_BATCH_PATH)
-  const [branch, setBranch] = useState('goal/governance-ui-v1')
+  const [branch, setBranch] = useState('main')
   const [snapshot, setSnapshot] = useState<GovernanceSnapshot | null>(null)
   const [selectedAction, setSelectedAction] = useState<GovernanceAction>('operator.status')
   const [result, setResult] = useState<CommandExecution | null>(null)
@@ -199,7 +199,12 @@ export function GovernanceConsole({ page }: Props) {
 
         <section className="gov-content">
           <Header page={page} loading={loading} onRefresh={refreshSnapshot} />
-          {error ? <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-900">{error}</div> : null}
+          {error ? (
+            <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-900">
+              <div className="mb-1"><StatusBadge tone="blocked" label="API_ERROR" /></div>
+              {error}
+            </div>
+          ) : null}
 
           {page === 'dashboard' && <Dashboard snapshot={snapshot} />}
           {page === 'batches' && (
@@ -393,6 +398,11 @@ function PromotionCenter(props: {
       <Panel title="Promotion Review">
         <label className="block text-sm font-medium">Branch</label>
         <input className="gov-input mt-1" value={props.branch} onChange={event => props.setBranch(event.target.value)} />
+        {props.branch.trim() === 'main' ? (
+          <div className="mt-3 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
+            Promotion review is for feature branches. `main` has no branch diff to review, so a `main..main` NEEDS_FIX result is expected and not an API failure.
+          </div>
+        ) : null}
         <div className="mt-3 flex flex-wrap gap-2">
           <button onClick={() => props.runAction('promotion.review')} className="gov-button gov-button-dark">Review branch</button>
           <button onClick={() => props.runAction('promotion.merge')} className="gov-button gov-button-warning">Merge branch</button>
@@ -485,7 +495,7 @@ function BatchInput({ value, onChange }: { value: string; onChange: (value: stri
   return (
     <Panel title="Batch File">
       <input className="gov-input" value={value} onChange={event => onChange(event.target.value)} />
-      <p className="mt-2 text-xs text-slate-500">Must be repo-relative and under system/workorders.</p>
+      <p className="mt-2 text-xs text-slate-500">Select an existing batch under system/workorders. The default is a safe governance batch, not a product import batch.</p>
     </Panel>
   )
 }
@@ -511,24 +521,46 @@ function ResultPanel({ result }: { result: CommandExecution | null }) {
 
 function ResultPreview({ result }: { result: CommandExecution | null | undefined }) {
   if (!result) return <p className="text-sm text-slate-500">No command run yet.</p>
+  const classification = classifyCommandResult(result)
+  const parsed = jsonRecord(result.parsedJson)
+  const summary = summaryLine(result.parsedJson)
+  const finalState = String(parsed.final_state ?? parsed.final_diagnosis ?? parsed.decision ?? 'n/a')
+  const nextAction = String(parsed.next_action ?? parsed.nextAction ?? 'n/a')
   return (
     <div className="space-y-3">
+      <div className={`rounded-md border p-3 text-sm ${toneClass[classification.tone] ?? toneClass.idle}`}>
+        <div className="flex flex-wrap items-center gap-2">
+          <StatusBadge tone={classification.tone} label={classification.label} />
+          <span className="font-medium">{classification.description}</span>
+        </div>
+      </div>
+      {result.parsedJson ? (
+        <div className="grid gap-3 md:grid-cols-3">
+          <Info label="Governance State" value={finalState} />
+          <Info label="Summary" value={summary} />
+          <Info label="Next Action" value={nextAction} />
+        </div>
+      ) : null}
       <div className="grid gap-3 md:grid-cols-3">
         <Info label="Exit Code" value={String(result.exitCode)} />
         <Info label="Timestamp" value={result.timestamp} />
         <Info label="Action" value={result.action} />
       </div>
       {commandBlock(result.command)}
-      <div className="grid gap-3 lg:grid-cols-2">
-        <pre className="max-h-96 overflow-auto rounded-md bg-white p-3 text-xs text-slate-800">{result.stdout || '(no stdout)'}</pre>
-        <pre className="max-h-96 overflow-auto rounded-md bg-slate-50 p-3 text-xs text-red-900">{result.stderr || '(no stderr)'}</pre>
-      </div>
       {result.parsedJson ? (
         <details className="rounded-md border border-slate-200 bg-white p-3">
           <summary className="cursor-pointer text-sm font-medium">Parsed JSON</summary>
           <pre className="mt-3 max-h-96 overflow-auto text-xs">{JSON.stringify(result.parsedJson, null, 2)}</pre>
         </details>
       ) : null}
+      <details className="rounded-md border border-slate-200 bg-white p-3">
+        <summary className="cursor-pointer text-sm font-medium">Raw CLI output</summary>
+        <p className="mt-2 text-xs text-slate-500">Raw output is retained for audit/debugging. Prefer the parsed summary above when JSON is available.</p>
+        <div className="mt-3 grid gap-3 lg:grid-cols-2">
+          <pre className="max-h-96 overflow-auto rounded-md bg-white p-3 text-xs text-slate-800">{result.stdout || '(no stdout)'}</pre>
+          <pre className="max-h-96 overflow-auto rounded-md bg-slate-50 p-3 text-xs text-red-900">{result.stderr || '(no stderr)'}</pre>
+        </div>
+      </details>
     </div>
   )
 }
