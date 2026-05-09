@@ -1,0 +1,11 @@
+{
+  "codex_worker_enabled": false,
+  "default_mode": "dry-run",
+  "runtime_type": "codex-cli",
+  "model": "gpt-5.5",
+  "agent": "senior-coding-agent",
+  "execution_command": "codex exec",
+  "resume_command": "codex exec resume <session-id>",
+  "report_directory": "system/reports/codex-worker",
+  "dispatcher_integration": "deferred"
+}

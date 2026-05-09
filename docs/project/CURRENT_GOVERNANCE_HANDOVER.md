@@ -2,11 +2,11 @@
 
 ## Status
 
-Current date: 2026-05-05.
+Current date: 2026-05-09.
 
-`main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, governance runtime drift cleanup, local Supabase inventory, local transaction dry-run reports, Spark/Model Runtime Hardening, and Model Runtime Routing Cleanup.
+`main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, governance runtime drift cleanup, local Supabase inventory, local transaction dry-run reports, Spark/Model Runtime Hardening, Model Runtime Routing Cleanup, and Codex Senior Runtime Integration.
 
-The active governance branch is addressing Governance UI V1 smoke-test usability fixes.
+The active governance branch is implementing Governance Batch 009 - Codex Worker Bridge.
 
 ## Current Truth
 
@@ -32,6 +32,7 @@ The active governance branch is addressing Governance UI V1 smoke-test usability
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent` and final escalations.
+- Codex Worker Bridge adds a dry-run-first `codex exec` integration point for future automatic `senior-coding-agent` invocation. Dispatcher auto-dispatch remains disabled by default.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
 - Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
@@ -49,6 +50,7 @@ Use these files before starting more governance or product work:
 - `docs/project/PRODUCT_WORK_GATE.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
+- `docs/project/CODEX_WORKER_BRIDGE.md`
 - `docs/project/GOVERNANCE_UI_V1.md`
 - `docs/project/GOVERNANCE_UI_USAGE_GUIDE.md`
 - `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
@@ -101,6 +103,7 @@ Reason:
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
+- `system/workers/codex-worker.ts` can generate and execute constrained `codex exec` prompts only through explicit dry-run/execute commands. Automatic dispatcher use is deferred.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Raw BLS files remain local-only and ignored.
 
@@ -108,9 +111,13 @@ Reason:
 
 - `system/control-plane/model-runtime-check.ts`
 - `system/control-plane/__tests__/model-runtime-check.test.ts`
+- `system/workers/codex-worker.ts`
+- `system/workers/codex-worker.config.json`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
+- `docs/project/CODEX_WORKER_BRIDGE.md`
 - `docs/project/governance-learning/2026-05-05-spark-runtime-hardening-summary.md`
 - `docs/project/governance-learning/2026-05-05-codex-senior-runtime-integration.md`
+- `docs/project/governance-learning/2026-05-09-codex-worker-bridge.md`
 
 Run:
 
@@ -129,6 +136,8 @@ Rules:
 - Operator Doctor includes model-runtime findings and still emits one safe next action.
 - `mealcam-agent` is optional/on-demand. Its endpoint is only blocking when a MealCam/Vision workorder or explicit Tom request requires it.
 - `senior-coding-agent` is Codex CLI / GPT-5.5. It has no vLLM endpoint and should show as external/config-checked.
+- Codex Worker Bridge is dry-run by default and uses non-interactive `codex exec` only with `--execute`.
+- Generated Codex worker prompts/reports under `system/reports/codex-worker/` are runtime artifacts and should not be committed by default.
 
 ## Governance UI V1 Output
 

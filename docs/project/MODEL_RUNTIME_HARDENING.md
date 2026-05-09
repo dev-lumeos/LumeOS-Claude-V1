@@ -34,6 +34,14 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime
 
 Endpoint checks are short, read-only health checks against `/v1/models`. They must not send workorder prompts or expensive generation requests.
 
+The Codex Worker Bridge is documented separately:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --dry-run
+```
+
+It prepares non-interactive `codex exec` prompts for `senior-coding-agent`. It is dry-run by default and is not yet enabled for automatic dispatcher invocation.
+
 ## Endpoint Health
 
 Expected Spark/vLLM routes currently include:
@@ -53,6 +61,8 @@ Non-HTTP runtimes are represented explicitly:
 | Codex CLI | `gpt-5.5` | config/manual | senior-coding-agent and final repo-aware escalation |
 
 Codex CLI is not a vLLM/OpenAI-compatible HTTP endpoint and must not be checked with `/v1/models`. Missing endpoints are acceptable for `runtime_type: codex-cli` or other external/config-checked runtimes. Missing endpoints for required local Spark/vLLM routes are high findings.
+
+Codex worker execution uses `codex exec` through `system/workers/codex-worker.ts`. The bridge is an integration point, not an automatic dispatcher replacement. `system/workers/codex-worker.config.json` keeps `codex_worker_enabled` set to `false` until Tom explicitly opens that path.
 
 MealCam/Vision is optional and on-demand. Its endpoint is not expected to be online during normal governance/operator work. An offline `mealcam-agent` endpoint is reported as informational unless a MealCam/Vision workorder, selected batch, or explicit Tom request requires that runtime.
 
