@@ -22,6 +22,14 @@ Execute a workorder through Codex CLI:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --execute
 ```
 
+Execution has a hard timeout. The default is 120 seconds:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --execute --timeout-ms 120000
+```
+
+On timeout the worker kills the child process, returns `FIX_REQUIRED`, writes a clear report, and does not retry automatically.
+
 Dry-run an existing prompt file:
 
 ```powershell
@@ -118,6 +126,7 @@ The worker bridge is governance-driven:
 - it runs `codex exec` non-interactively only when explicitly requested
 - it captures stdout, stderr, exit code, duration, prompt path, and report path
 - it parses the final state when possible
+- it enforces a hard execution timeout and reports `FIX_REQUIRED` on timeout
 
 ## Senior Coding Agent Integration
 

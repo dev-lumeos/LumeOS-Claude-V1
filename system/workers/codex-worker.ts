@@ -16,6 +16,7 @@ export type CodexWorkerArgs = {
   dryRun: boolean
   writePrompt: boolean
   json: boolean
+  timeoutMs: number
   resumeSessionId?: string
 }
 
@@ -29,9 +30,10 @@ export type CodexSpawnResult = {
   exitCode: number
   stdout: string
   stderr: string
+  timedOut?: boolean
 }
 
-export type CodexSpawn = (command: string, args: string[], options: { cwd: string }) => Promise<CodexSpawnResult>
+export type CodexSpawn = (command: string, args: string[], options: { cwd: string; timeoutMs: number }) => Promise<CodexSpawnResult>
 
 export type CodexWorkerResult = {
   mode: CodexWorkerMode
@@ -45,6 +47,7 @@ export type CodexWorkerResult = {
   stdout: string
   stderr: string
   finalState: FinalState
+  timedOut?: boolean
 }
 
 type RunOptions = {
@@ -53,6 +56,7 @@ type RunOptions = {
 }
 
 const FINAL_STATES: FinalState[] = ['NEEDS_TOM_APPROVAL', 'FIX_REQUIRED', 'DONE', 'STOP']
+const DEFAULT_TIMEOUT_MS = 120_000
 
 const PROMPT_ALLOWED_ROOTS = [
   'docs/project/',
@@ -123,6 +127,7 @@ export function parseCodexWorkerArgs(args: string[]): CodexWorkerArgs {
     dryRun: true,
     writePrompt: false,
     json: false,
+    timeoutMs: DEFAULT_TIMEOUT_MS,
   }
 
   for (let i = 0; i < args.length; i++) {
@@ -143,6 +148,12 @@ export function parseCodexWorkerArgs(args: string[]): CodexWorkerArgs {
       parsed.json = true
     } else if (arg === '--resume') {
       parsed.resumeSessionId = args[++i]
+    } else if (arg === '--timeout-ms') {
+      const value = Number(args[++i])
+      if (!Number.isFinite(value) || value <= 0) {
+        throw new Error('--timeout-ms must be a positive number')
+      }
+      parsed.timeoutMs = value
     } else {
       throw new Error(`Unknown argument: ${arg}`)
     }
@@ -297,10 +308,32 @@ One action only.
 }
 
 export function buildCodexCommand(prompt: string, resumeSessionId?: string): { command: string; args: string[] } {
+  const codexEntrypoint = resolveCodexEntrypoint()
+  const command = codexEntrypoint.command
+  const prefixArgs = codexEntrypoint.args
   if (resumeSessionId) {
-    return { command: 'codex', args: ['exec', 'resume', resumeSessionId, prompt] }
+    return { command, args: [...prefixArgs, 'exec', 'resume', resumeSessionId, prompt] }
   }
-  return { command: 'codex', args: ['exec', prompt] }
+  return { command, args: [...prefixArgs, 'exec', prompt] }
+}
+
+function resolveCodexEntrypoint(): { command: string; args: string[] } {
+  const explicitJs = process.env.CODEX_CLI_JS
+  if (explicitJs) {
+    return { command: process.execPath, args: [explicitJs] }
+  }
+
+  if (process.platform === 'win32') {
+    const appData = process.env.APPDATA
+    if (appData) {
+      const npmCodexJs = path.join(appData, 'npm', 'node_modules', '@openai', 'codex', 'bin', 'codex.js')
+      if (fs.existsSync(npmCodexJs)) {
+        return { command: process.execPath, args: [npmCodexJs] }
+      }
+    }
+  }
+
+  return { command: 'codex', args: [] }
 }
 
 export function parseFinalState(output: string): FinalState {
@@ -325,7 +358,7 @@ function ensureReportDir(repoRoot: string): string {
   return reportDir
 }
 
-function defaultSpawn(command: string, args: string[], options: { cwd: string }): Promise<CodexSpawnResult> {
+function defaultSpawn(command: string, args: string[], options: { cwd: string; timeoutMs: number }): Promise<CodexSpawnResult> {
   return new Promise((resolve) => {
     const child = spawn(command, args, {
       cwd: options.cwd,
@@ -334,13 +367,29 @@ function defaultSpawn(command: string, args: string[], options: { cwd: string })
     })
     let stdout = ''
     let stderr = ''
+    let settled = false
+    const timeout = setTimeout(() => {
+      if (settled) return
+      settled = true
+      stderr += `Codex worker timed out after ${options.timeoutMs}ms. Child process was killed.`
+      child.kill('SIGKILL')
+      resolve({ exitCode: 1, stdout, stderr, timedOut: true })
+    }, options.timeoutMs)
+
+    function settle(result: CodexSpawnResult): void {
+      if (settled) return
+      settled = true
+      clearTimeout(timeout)
+      resolve(result)
+    }
+
     child.stdout?.on('data', chunk => { stdout += String(chunk) })
     child.stderr?.on('data', chunk => { stderr += String(chunk) })
     child.on('error', error => {
-      resolve({ exitCode: 2, stdout, stderr: `${stderr}${String(error.message)}` })
+      settle({ exitCode: 2, stdout, stderr: `${stderr}${String(error.message)}` })
     })
     child.on('close', code => {
-      resolve({ exitCode: code ?? 2, stdout, stderr })
+      settle({ exitCode: code ?? 2, stdout, stderr })
     })
   })
 }
@@ -422,8 +471,25 @@ export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions 
     }
   }
 
-  const spawned = await spawnImpl(command.command, command.args, { cwd: repoRoot })
-  const finalState = parseFinalState(`${spawned.stdout}\n${spawned.stderr}`)
+  let timeout: NodeJS.Timeout | undefined
+  const timeoutPromise = new Promise<CodexSpawnResult>(resolve => {
+    timeout = setTimeout(() => {
+      resolve({
+        exitCode: 1,
+        stdout: '',
+        stderr: `Codex worker timed out after ${args.timeoutMs}ms. Child process was killed or did not return control.`,
+        timedOut: true,
+      })
+    }, args.timeoutMs)
+  })
+  const spawned = await Promise.race([
+    spawnImpl(command.command, command.args, { cwd: repoRoot, timeoutMs: args.timeoutMs }),
+    timeoutPromise,
+  ])
+  if (timeout) clearTimeout(timeout)
+  const finalState: FinalState = spawned.timedOut
+    ? 'FIX_REQUIRED'
+    : parseFinalState(`${spawned.stdout}\n${spawned.stderr}`)
   const result: CodexWorkerResult = {
     mode: 'execute',
     exitCode: spawned.exitCode,
@@ -435,6 +501,7 @@ export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions 
     stdout: spawned.stdout,
     stderr: spawned.stderr,
     finalState,
+    timedOut: spawned.timedOut,
   }
   reportPath = writeReport(repoRoot, id, result)
   return { ...result, reportPath }

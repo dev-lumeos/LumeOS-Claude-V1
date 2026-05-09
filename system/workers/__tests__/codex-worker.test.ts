@@ -18,6 +18,10 @@ import {
 
 let tmpDir = ''
 const realCwd = process.cwd()
+const expectedCodexJs = path.join(process.env.APPDATA ?? '', 'npm', 'node_modules', '@openai', 'codex', 'bin', 'codex.js')
+const expectedUsesNodeEntrypoint = process.platform === 'win32' && fs.existsSync(expectedCodexJs)
+const expectedCodexCommand = expectedUsesNodeEntrypoint ? process.execPath : 'codex'
+const expectedExecIndex = expectedUsesNodeEntrypoint ? 1 : 0
 
 function setup(): void {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumeos-codex-worker-'))
@@ -135,9 +139,9 @@ describe('codex worker bridge', () => {
 
     assert.equal(result.mode, 'execute')
     assert.equal(calls.length, 1)
-    assert.equal(calls[0].command, 'codex')
-    assert.equal(calls[0].args[0], 'exec')
-    assert.match(calls[0].args[1], /WO-test-001/)
+    assert.equal(calls[0].command, expectedCodexCommand)
+    assert.equal(calls[0].args[expectedExecIndex], 'exec')
+    assert.match(calls[0].args[expectedExecIndex + 1], /WO-test-001/)
     assert.equal(result.finalState, 'DONE')
     assert.ok(result.promptPath?.includes('system/reports/codex-worker'))
     assert.ok(result.reportPath?.includes('system/reports/codex-worker'))
@@ -155,17 +159,43 @@ describe('codex worker bridge', () => {
       { repoRoot: tmpDir, spawn },
     )
 
-    assert.deepEqual(calls[0].args.slice(0, 3), ['exec', 'resume', 'session-123'])
+    assert.deepEqual(calls[0].args.slice(expectedExecIndex, expectedExecIndex + 3), ['exec', 'resume', 'session-123'])
+  })
+
+  it('execute times out a hanging codex process without retrying', async () => {
+    let calls = 0
+    const spawn: CodexSpawn = async () => {
+      calls++
+      return new Promise(() => {
+        // Intentionally never resolves; runCodexWorker must enforce the timeout.
+      })
+    }
+
+    const result = await runCodexWorker(
+      parseCodexWorkerArgs(['--workorder', fixtureWo(), '--execute', '--timeout-ms', '25']),
+      { repoRoot: tmpDir, spawn },
+    )
+
+    assert.equal(calls, 1)
+    assert.equal(result.timedOut, true)
+    assert.equal(result.finalState, 'FIX_REQUIRED')
+    assert.equal(result.exitCode, 1)
+    assert.match(result.stderr, /timed out after 25ms/)
+    assert.ok(result.reportPath?.includes('system/reports/codex-worker'))
   })
 
   it('can build command arrays directly', () => {
     assert.deepEqual(buildCodexCommand('prompt text'), {
-      command: 'codex',
-      args: ['exec', 'prompt text'],
+      command: expectedCodexCommand,
+      args: expectedUsesNodeEntrypoint
+        ? [expectedCodexJs, 'exec', 'prompt text']
+        : ['exec', 'prompt text'],
     })
     assert.deepEqual(buildCodexCommand('prompt text', 'abc'), {
-      command: 'codex',
-      args: ['exec', 'resume', 'abc', 'prompt text'],
+      command: expectedCodexCommand,
+      args: expectedUsesNodeEntrypoint
+        ? [expectedCodexJs, 'exec', 'resume', 'abc', 'prompt text']
+        : ['exec', 'resume', 'abc', 'prompt text'],
     })
   })
 
