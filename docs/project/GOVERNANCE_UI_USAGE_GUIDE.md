@@ -50,7 +50,7 @@ http://127.0.0.1:5001/governance
 1. Open the Dashboard.
 2. Check the Product Gate and status cards.
 3. Go to Batches.
-4. Enter the batch path.
+4. Enter or confirm an existing batch path under `system/workorders/`.
 5. Run Operator doctor first.
 6. Run dry-run.
 7. Only then run continue if the result is safe.
@@ -110,6 +110,8 @@ The Governance UI must not expose or execute:
 
 - If the page does not load, check whether the dev server is running.
 - If a command fails, inspect the command result panel.
+- If a command returns `NEEDS_FIX`, `BLOCKED`, or `NEEDS_APPROVAL` with parsed JSON, treat it as a governance finding, not a UI/API transport failure.
+- If Promotion review is run on `main`, `main..main` has no feature-branch diff to review; use Promotion review on feature branches.
 - If runtime status is empty, run the runtime check.
 - If port 5001 is occupied, use another port and adjust the URL.
 - If Codex asks about branch creation, branch creation is pre-approved when the worktree is clean.

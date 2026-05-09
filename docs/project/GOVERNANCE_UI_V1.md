@@ -11,16 +11,16 @@ This UI is governance/operator tooling. It is not product work.
 From the repository root:
 
 ```powershell
-cmd.exe /c pnpm --dir apps\web dev
+cmd.exe /c pnpm --dir apps\web exec next dev -H 127.0.0.1 -p 5001
 ```
 
 Open:
 
 ```text
-http://localhost:3000/governance
+http://127.0.0.1:5001/governance
 ```
 
-If another dev server already uses port 3000, Next.js will offer another local port.
+If another dev server already uses port 5001, choose another local port and adjust the URL.
 
 ## Styling Requirements
 
@@ -109,6 +109,9 @@ Governance UI V1 does not expose:
 - The UI is local-only and assumes the repository checkout is trusted.
 - The dashboard snapshot runs several read-only CLIs and can take a few seconds.
 - Controlled cleanup confirm buttons are not exposed directly; use the operator safe cleanup flow.
+- Non-zero CLI exits with structured JSON are displayed as governance findings, not API transport failures.
+- Promotion review on `main` is explained as a feature-branch workflow: `main..main` has no diff to review.
+- The default batch path points at an existing governance batch, not a missing Nutrition P1-005 planning batch.
 
 ## Visual Verification
 

@@ -6,7 +6,7 @@ Current date: 2026-05-05.
 
 `main` is pushed through Governance Batch 008, Governance Batch 007, Governance Batch 006, Governance Batch 005, Governance Batch 004, Governance Batch 003, the Governance Gap Analysis Plan, Nutrition P1-004 schema verification, governance runtime drift cleanup, local Supabase inventory, local transaction dry-run reports, Spark/Model Runtime Hardening, and Model Runtime Routing Cleanup.
 
-The active governance branch is implementing Governance UI V1.
+The active governance branch is addressing Governance UI V1 smoke-test usability fixes.
 
 ## Current Truth
 
@@ -49,6 +49,7 @@ Use these files before starting more governance or product work:
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
 - `docs/project/GOVERNANCE_UI_V1.md`
+- `docs/project/GOVERNANCE_UI_USAGE_GUIDE.md`
 - `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
 - `AGENTS.md`
 - `CLAUDE.md`
@@ -132,18 +133,20 @@ Rules:
 - `apps/web/src/components/governance/GovernanceConsole.tsx`
 - `apps/web/src/lib/governance/*`
 - `docs/project/GOVERNANCE_UI_V1.md`
+- `docs/project/GOVERNANCE_UI_USAGE_GUIDE.md`
 - `docs/project/governance-learning/2026-05-05-governance-ui-v1-summary.md`
+- `docs/project/governance-learning/2026-05-05-governance-ui-v1-smoke-fixes-summary.md`
 
 Run:
 
 ```powershell
-cmd.exe /c pnpm --dir apps\web dev
+cmd.exe /c pnpm --dir apps\web exec next dev -H 127.0.0.1 -p 5001
 ```
 
 Open:
 
 ```text
-http://localhost:3000/governance
+http://127.0.0.1:5001/governance
 ```
 
 Rules:
@@ -154,6 +157,8 @@ Rules:
 - Approval grants are not executable in V1.
 - Supabase reset/push, migration execution, production DB commands, runtime state edits, queue edits, and product batch execution are not exposed.
 - Tailwind styling requires `apps/web/postcss.config.js`; if the page appears unstyled, verify PostCSS and `globals.css` first.
+- The default batch path points to an existing governance batch, not missing Nutrition P1-005 product planning.
+- Structured non-zero governance JSON is displayed as a governance finding, not an API transport failure.
 
 ## Workorder Factory Output
 
