@@ -7,6 +7,7 @@ import {
   COMMAND_DEFINITIONS,
   DEFAULT_BATCH_PATH,
   assertKnownAction,
+  getCommandDefinition,
   requiresConfirmation,
   validateBatchPath,
 } from '../command-allowlist'
@@ -18,6 +19,11 @@ import { classifyCommandResult, isMealCamOptionalOfflineNonBlocking, productGate
 describe('governance UI safety helpers', () => {
   it('blocks non-allowlisted command actions', () => {
     assert.throws(() => assertKnownAction('supabase db reset'), /not allowlisted/)
+  })
+
+  it('returns null for unknown or event-shaped UI actions', () => {
+    assert.equal(getCommandDefinition('missing.action'), null)
+    assert.equal(getCommandDefinition({ type: 'click' }), null)
   })
 
   it('does not expose forbidden Supabase commands in the allowlist', () => {
@@ -42,6 +48,11 @@ describe('governance UI safety helpers', () => {
     assert.throws(() => commandPlanFor({ action: 'operator.continue' }), /requires explicit confirmation/)
     const plan = commandPlanFor({ action: 'operator.continue', confirmed: true })
     assert.deepEqual(plan.args.slice(-1), ['--continue'])
+  })
+
+  it('resolves known read-only and controlled action definitions', () => {
+    assert.equal(getCommandDefinition('operator.status')?.controlled, false)
+    assert.equal(getCommandDefinition('operator.continue')?.controlled, true)
   })
 
   it('approval center has no executable grant action', () => {

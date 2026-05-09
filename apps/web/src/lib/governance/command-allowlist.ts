@@ -195,6 +195,11 @@ export function assertKnownAction(action: string): asserts action is GovernanceA
   }
 }
 
+export function getCommandDefinition(action: unknown): CommandDefinition | null {
+  if (typeof action !== 'string') return null
+  return action in COMMAND_DEFINITIONS ? COMMAND_DEFINITIONS[action as GovernanceAction] : null
+}
+
 export function validateBatchPath(batchPath: string): string {
   const normalized = batchPath.replace(/\\/g, '/').replace(/^\/+/, '')
   if (!BATCH_PATH_RE.test(normalized) || normalized.includes('..')) {

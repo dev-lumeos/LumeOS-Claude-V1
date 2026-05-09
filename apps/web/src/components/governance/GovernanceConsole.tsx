@@ -6,6 +6,7 @@ import {
   COMMAND_DEFINITIONS,
   DEFAULT_BATCH_PATH,
   FORBIDDEN_COMMAND_TEXT,
+  getCommandDefinition,
   type GovernanceAction,
 } from '../../lib/governance/command-allowlist'
 import { classifyCommandResult, isMealCamOptionalOfflineNonBlocking } from '../../lib/governance/status'
@@ -111,7 +112,7 @@ export function GovernanceConsole({ page }: Props) {
   const [error, setError] = useState('')
   const [confirmation, setConfirmation] = useState('')
 
-  const selectedDefinition = COMMAND_DEFINITIONS[selectedAction]
+  const selectedDefinition = getCommandDefinition(selectedAction) ?? COMMAND_DEFINITIONS['operator.status']
   const requiresTypedConfirmation = selectedDefinition.controlled
 
   async function refreshSnapshot() {
@@ -129,8 +130,12 @@ export function GovernanceConsole({ page }: Props) {
     }
   }
 
-  async function runAction(action = selectedAction) {
-    const definition = COMMAND_DEFINITIONS[action]
+  async function runAction(action: unknown = selectedAction) {
+    const definition = getCommandDefinition(action)
+    if (!definition) {
+      setError(`Unknown governance action: ${typeof action === 'string' ? action : 'invalid UI event'}. No command was executed.`)
+      return
+    }
     if (definition.controlled && confirmation !== 'CONFIRM') {
       setError('Controlled actions require typing CONFIRM.')
       return
@@ -142,7 +147,7 @@ export function GovernanceConsole({ page }: Props) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action,
+          action: definition.action,
           batchPath,
           branch,
           confirmed: definition.controlled && confirmation === 'CONFIRM',
@@ -304,7 +309,7 @@ function BatchConsole(props: {
           ))}
         </div>
         <ControlledConfirm required={props.requiresTypedConfirmation} value={props.confirmation} onChange={props.setConfirmation} />
-        <button onClick={props.runAction} className="gov-button gov-button-primary mt-4">Run selected action</button>
+        <button onClick={() => props.runAction()} className="gov-button gov-button-primary mt-4">Run selected action</button>
       </Panel>
       <ResultPanel result={props.result} />
     </div>
