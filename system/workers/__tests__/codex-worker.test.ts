@@ -11,6 +11,7 @@ import {
   parseCodexWorkerArgs,
   parseFinalState,
   runCodexWorker,
+  spawnProcessWithTimeout,
   validatePromptPath,
   validateWorkorderPath,
   type CodexSpawn,
@@ -182,6 +183,22 @@ describe('codex worker bridge', () => {
     assert.equal(result.exitCode, 1)
     assert.match(result.stderr, /timed out after 25ms/)
     assert.ok(result.reportPath?.includes('system/reports/codex-worker'))
+  })
+
+  it('spawnProcessWithTimeout closes stdin for non-interactive child processes', async () => {
+    const script = [
+      'process.stdin.resume();',
+      'process.stdin.on("end", () => { console.log("STDIN_CLOSED"); });',
+    ].join('')
+
+    const result = await spawnProcessWithTimeout(process.execPath, ['-e', script], {
+      cwd: tmpDir,
+      timeoutMs: 1000,
+    })
+
+    assert.equal(result.exitCode, 0)
+    assert.equal(result.timedOut, undefined)
+    assert.match(result.stdout, /STDIN_CLOSED/)
   })
 
   it('can build command arrays directly', () => {

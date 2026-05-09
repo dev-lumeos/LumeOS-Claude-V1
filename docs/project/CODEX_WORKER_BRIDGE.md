@@ -30,6 +30,8 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --w
 
 On timeout the worker kills the child process, returns `FIX_REQUIRED`, writes a clear report, and does not retry automatically.
 
+The worker closes child stdin immediately after spawn. Codex CLI prints "Reading additional input from stdin..." during normal `exec`; leaving stdin open makes non-interactive worker calls wait indefinitely.
+
 Dry-run an existing prompt file:
 
 ```powershell
@@ -127,6 +129,7 @@ The worker bridge is governance-driven:
 - it captures stdout, stderr, exit code, duration, prompt path, and report path
 - it parses the final state when possible
 - it enforces a hard execution timeout and reports `FIX_REQUIRED` on timeout
+- it closes stdin immediately so `codex exec` receives EOF instead of waiting for interactive input
 
 ## Senior Coding Agent Integration
 

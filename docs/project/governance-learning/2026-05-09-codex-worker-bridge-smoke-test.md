@@ -37,13 +37,18 @@ Root cause:
 
 - The initial worker had no hard child-process timeout.
 - This allowed `codex exec` to keep running without returning control to the worker.
+- Follow-up diagnosis showed direct minimal `codex exec` prompts complete in 5-8 seconds.
+- Codex CLI reads additional input from stdin in `exec` mode. The worker spawned Codex with stdin open, so the child process waited for stdin EOF.
 
 Fix:
 
 - `codex-worker.ts` now supports `--timeout-ms`.
 - Default timeout is 120 seconds.
 - On timeout, the worker returns `FIX_REQUIRED`, writes a clear report, and does not retry.
+- The worker closes stdin immediately after spawn.
+- Windows timeout cleanup kills the child process tree.
 - Tests cover a mocked hanging child process.
+- Tests cover stdin EOF delivery for non-interactive child processes.
 
 Real execute was not retried after the timeout fix.
 

@@ -1,4 +1,4 @@
-import { spawn } from 'node:child_process'
+import { spawn, spawnSync, type ChildProcessWithoutNullStreams } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { performance } from 'node:perf_hooks'
@@ -358,12 +358,13 @@ function ensureReportDir(repoRoot: string): string {
   return reportDir
 }
 
-function defaultSpawn(command: string, args: string[], options: { cwd: string; timeoutMs: number }): Promise<CodexSpawnResult> {
+export function spawnProcessWithTimeout(command: string, args: string[], options: { cwd: string; timeoutMs: number }): Promise<CodexSpawnResult> {
   return new Promise((resolve) => {
     const child = spawn(command, args, {
       cwd: options.cwd,
       shell: false,
       windowsHide: true,
+      stdio: 'pipe',
     })
     let stdout = ''
     let stderr = ''
@@ -372,7 +373,7 @@ function defaultSpawn(command: string, args: string[], options: { cwd: string; t
       if (settled) return
       settled = true
       stderr += `Codex worker timed out after ${options.timeoutMs}ms. Child process was killed.`
-      child.kill('SIGKILL')
+      killChildProcessTree(child)
       resolve({ exitCode: 1, stdout, stderr, timedOut: true })
     }, options.timeoutMs)
 
@@ -385,6 +386,7 @@ function defaultSpawn(command: string, args: string[], options: { cwd: string; t
 
     child.stdout?.on('data', chunk => { stdout += String(chunk) })
     child.stderr?.on('data', chunk => { stderr += String(chunk) })
+    child.stdin?.end()
     child.on('error', error => {
       settle({ exitCode: 2, stdout, stderr: `${stderr}${String(error.message)}` })
     })
@@ -392,6 +394,17 @@ function defaultSpawn(command: string, args: string[], options: { cwd: string; t
       settle({ exitCode: code ?? 2, stdout, stderr })
     })
   })
+}
+
+function killChildProcessTree(child: ChildProcessWithoutNullStreams): void {
+  if (process.platform === 'win32' && child.pid) {
+    spawnSync('taskkill.exe', ['/PID', String(child.pid), '/T', '/F'], {
+      windowsHide: true,
+      stdio: 'ignore',
+    })
+    return
+  }
+  child.kill('SIGKILL')
 }
 
 function writePrompt(repoRoot: string, id: string, prompt: string): string {
@@ -433,7 +446,7 @@ ${result.stderr}
 
 export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions = {}): Promise<CodexWorkerResult> {
   const repoRoot = path.resolve(options.repoRoot ?? process.cwd())
-  const spawnImpl = options.spawn ?? defaultSpawn
+  const spawnImpl = options.spawn ?? spawnProcessWithTimeout
 
   let prompt = ''
   let id = 'prompt'
