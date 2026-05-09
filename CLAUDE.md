@@ -130,7 +130,7 @@ Stattdessen die aktuellen Referenzen oben nutzen.
 - Spark B (192.168.0.188:8001): Qwen3-Coder-Next FP8 — Coding Worker
 - Spark C (192.168.0.99:8001):  Gemma-4-26B FP8 — Fast Reviewer Tier 1
 - Spark D (192.168.0.101:8001): GPT-OSS-120B MXFP4 — Senior Reviewer Tier 2
-- Escalation: Claude Code Max 200 (claude-opus-4-5)
+- Escalation: Codex CLI with GPT-5.5 as Tom's productive senior engineering/review runtime.
 
 Quelle: `STACK_REFERENCE.md`
 

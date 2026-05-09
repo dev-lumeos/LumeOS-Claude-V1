@@ -31,6 +31,7 @@ The active governance branch is addressing Governance UI V1 smoke-test usability
 - Memory/Learning Automation adds a read-only governance learning checker.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
+- Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent` and final escalations.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
 - Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
@@ -99,6 +100,7 @@ Reason:
 - Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
+- `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Raw BLS files remain local-only and ignored.
 
@@ -108,6 +110,7 @@ Reason:
 - `system/control-plane/__tests__/model-runtime-check.test.ts`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
 - `docs/project/governance-learning/2026-05-05-spark-runtime-hardening-summary.md`
+- `docs/project/governance-learning/2026-05-05-codex-senior-runtime-integration.md`
 
 Run:
 
@@ -125,6 +128,7 @@ Rules:
 - Dispatcher model calls now have bounded timeout and one retry for runtime failures.
 - Operator Doctor includes model-runtime findings and still emits one safe next action.
 - `mealcam-agent` is optional/on-demand. Its endpoint is only blocking when a MealCam/Vision workorder or explicit Tom request requires it.
+- `senior-coding-agent` is Codex CLI / GPT-5.5. It has no vLLM endpoint and should show as external/config-checked.
 
 ## Governance UI V1 Output
 

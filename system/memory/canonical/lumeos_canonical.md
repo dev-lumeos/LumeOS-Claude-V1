@@ -10,7 +10,7 @@
 
 Architecture: Brain / Law / Muscle.
 
-- Brain: Claude Code and Codex for planning, specs, workorders, review, and governance maintenance.
+- Brain: Codex/GPT-5.5 for senior repo-aware engineering and review; Claude/Codex-compatible brain agents for planning, specs, workorders, and governance maintenance.
 - Law: deterministic governance system: scheduler, preflight, operator, approval gate, stop rules, reports.
 - Muscle: Spark/vLLM execution agents.
 
@@ -57,6 +57,7 @@ Governance learning records:
 - Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
+- `senior-coding-agent` uses Codex CLI / GPT-5.5 as the productive senior engineering runtime. It is config/manual checked, not HTTP endpoint checked.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Governance UI V1 exists under `apps/web/src/app/governance` as a local operator console backed by allowlisted CLI execution.
 
@@ -128,6 +129,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Raw BLS files must not override current specs as implementation SSOT.
 - Factory-generated workorders must include `source_refs`, `expected_outputs`, scoped writes, high-risk `files_blocked`, and db-migration `rollback_hint`.
 - Model runtime checks must pass before autonomous operator work; endpoint health checks must be short read-only `/v1/models` checks, not real workorder prompts.
+- Codex CLI runtimes must not be treated as vLLM HTTP endpoints.
 - Optional runtimes only block when the target batch/workorder explicitly requires them.
 - Governance UI commands must stay routed through the allowlist and must not expose Supabase reset/push, migration execution, runtime state edits, queue edits, or approval auto-grants.
 

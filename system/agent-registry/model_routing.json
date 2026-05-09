@@ -15,7 +15,7 @@
     "stop_conditions": "Dürfen KEINE positiven Zustände enthalten (approved/passed/granted)"
   },
 
-  "_escalation": "Claude Sonnet/Opus via Claude Code Max 200 Plan — kein API-Kosten",
+  "_escalation": "Codex CLI with GPT-5.5 is the productive senior engineering/runtime authority; Spark 4/5 remain lab/premium local model experiments.",
 
   "orchestrator-agent": {
     "default": {
@@ -99,19 +99,24 @@
       "max_context": 131072
     },
     "escalation": {
-      "node": "claude_code",
-      "model": "claude-sonnet-4-5",
+      "node": "codex-cli",
+      "runtime_type": "codex-cli",
+      "healthcheck": "config",
+      "model": "gpt-5.5",
       "trigger": "two_failed_reviews_same_wo",
-      "note": "Claude Code Max 200 Plan"
+      "note": "Escalates to senior-coding-agent on Codex/GPT-5.5."
     }
   },
 
   "senior-coding-agent": {
     "default": {
-      "node": "claude_code",
-      "model": "claude-opus-4-5",
+      "node": "codex-cli",
+      "runtime_type": "codex-cli",
+      "healthcheck": "config",
+      "model": "gpt-5.5",
       "trigger": "explicit_escalation",
-      "note": "Claude Code Max 200 Plan"
+      "runtime_required": "always",
+      "note": "Productive senior engineering instance: OpenAI Codex CLI v0.128.0 with GPT-5.5. No HTTP/vLLM endpoint is expected."
     }
   },
 
@@ -204,10 +209,12 @@
       "note": "Spark 4 — Senior Review Layer (auth/rls/migration/security mandatory), see RULES.md"
     },
     "escalation": {
-      "node": "claude_code",
-      "model": "claude-opus-4-5",
+      "node": "codex-cli",
+      "runtime_type": "codex-cli",
+      "healthcheck": "config",
+      "model": "gpt-5.5",
       "trigger": "escalate_or_low_confidence_or_invalid_json_or_rewrite_limit",
-      "note": "Claude Code Max 200 Plan — last automated decider"
+      "note": "Escalates to Codex/GPT-5.5 as Tom's productive senior repo-aware reviewer. Spark D remains the Tier 2 local reviewer route."
     }
   },
 

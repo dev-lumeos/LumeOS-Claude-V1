@@ -18,7 +18,7 @@ Source of Truth: `system/agent-registry/agents.json` + `system/agent-registry/mo
 | Agent | Node | Modell | Typ | Human Approval | Zweck |
 |---|---|---|---|---|---|
 | `micro-executor` | Spark B | qwen3-coder-next-fp8 | executor | nein | TypeScript Patches, max 3 Files |
-| `senior-coding-agent` | Claude Code | claude-opus-4-5 | executor_senior | nein | Komplexe Multi-File Tasks, Eskalation |
+| `senior-coding-agent` | Codex CLI | gpt-5.5 | executor_senior | nein | Komplexe Multi-File Tasks, Eskalation |
 | `db-migration-agent` | Spark A | qwen3.6-35b-fp8 | db_specialist | **ja** | Supabase Migrations + RLS Policies |
 | `test-agent` | Spark B | qwen3-coder-next-fp8 | executor | nein | Unit- und Integration-Tests |
 | `i18n-agent` | Spark B | qwen3-coder-next-fp8 | executor | nein | DE/EN/TH Locale Files |
@@ -53,7 +53,7 @@ Source of Truth: `system/agent-registry/agents.json` + `system/agent-registry/mo
 | Spark C | 192.168.0.99 | 8001 | Gemma-4-26B-A4B-it FP8 |
 | Spark D | 192.168.0.101 | 8001 | GPT-OSS-120B MXFP4 |
 | RTX 5090 | localhost | 8001 | Qwen3-VL-30B FP8 |
-| Claude Code | — | — | claude-opus-4-5 (Escalation) |
+| Codex CLI | — | — | GPT-5.5 (produktive Senior-Engineering-Instanz) |
 
 ### Qwen3.6 Pflichtregeln
 
@@ -66,9 +66,9 @@ Output: reines JSON — kein Reasoning sichtbar
 ### Eskalations-Kette
 
 ```
-micro-executor → (2x failed review) → senior-coding-agent (Claude Code)
+micro-executor → (2x failed review) → senior-coding-agent (Codex/GPT-5.5)
 fast-reviewer-agent → (ESCALATE) → senior-reviewer-agent (Spark D)
-senior-reviewer-agent → (ESCALATE) → Claude Code (Max 200 Plan)
+senior-reviewer-agent → (ESCALATE) → Codex/GPT-5.5
 ```
 
 ### Pflicht-Verkettungen

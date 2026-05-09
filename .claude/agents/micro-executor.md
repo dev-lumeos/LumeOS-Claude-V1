@@ -19,10 +19,12 @@ default:
   max_context: 131072
   tool_call_parser: qwen3_coder
 escalation:
-  node: claude_code
-  model: claude-sonnet-4-6
+  node: codex-cli
+  runtime_type: codex-cli
+  model: gpt-5.5
+  healthcheck: config
   trigger: two_failed_reviews_same_wo
-  note: Claude Code Max 200 Plan
+  note: Escalates to senior-coding-agent on Codex/GPT-5.5.
 ```
 
 ## Aufgabe

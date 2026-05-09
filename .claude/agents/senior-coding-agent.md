@@ -1,6 +1,6 @@
 ---
 
-## agent_id: senior-coding-agent runtime_compat: claude_code: true prompt_template: true requires_registry_permissions: true
+## agent_id: senior-coding-agent runtime_compat: codex_cli: true prompt_template: true requires_registry_permissions: true
 
 # Agent: Senior Coding Agent
 
@@ -12,14 +12,16 @@ Senior TypeScript Architect für komplexe Multi-File Implementierungen und Eskal
 
 ```yaml
 default:
-  node: claude_code
-  model: claude-sonnet-4-6
+  node: codex-cli
+  runtime_type: codex-cli
+  model: gpt-5.5
+  healthcheck: config
   trigger: spark_d_escalate_or_repeated_fail
-  note: Claude Code Max 200 Plan
+  note: OpenAI Codex CLI v0.128.0 with GPT-5.5. No HTTP/vLLM endpoint.
 escalation:
-  model: claude-opus-4-6
+  model: gpt-5.5
   trigger: critical_or_architecture_decision
-  note: Claude Code Max 200 Plan — nur bei wirklich kritischen Tasks
+  note: Codex/GPT-5.5 remains Tom's productive senior engineering runtime.
 ```
 
 ## Aktivierung

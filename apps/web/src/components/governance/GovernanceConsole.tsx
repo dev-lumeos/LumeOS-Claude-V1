@@ -445,13 +445,14 @@ function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: {
         <div className="overflow-x-auto">
           <table className="gov-table">
             <thead>
-              <tr><th className="p-3">Agent</th><th className="p-3">Model</th><th className="p-3">Endpoint</th><th className="p-3">Status</th><th className="p-3">Policy</th></tr>
+              <tr><th className="p-3">Agent</th><th className="p-3">Model</th><th className="p-3">Runtime</th><th className="p-3">Endpoint</th><th className="p-3">Status</th><th className="p-3">Policy</th></tr>
             </thead>
             <tbody>
               {routes.map((route, index) => (
                 <tr key={index} className="border-t border-slate-100">
                   <td className="p-3 font-medium">{String(route.agent ?? '')}</td>
                   <td className="p-3">{String(route.model ?? '')}</td>
+                  <td className="p-3">{String(route.runtime_type ?? 'http/vllm')}</td>
                   <td className="p-3">{String(route.endpoint ?? 'n/a')}</td>
                   <td className="p-3">{String(route.endpoint_status ?? 'not checked')}</td>
                   <td className="p-3"><StatusBadge tone={route.optional_runtime ? 'info' : 'pass'} label={route.optional_runtime ? 'optional/on-demand' : 'required'} /></td>

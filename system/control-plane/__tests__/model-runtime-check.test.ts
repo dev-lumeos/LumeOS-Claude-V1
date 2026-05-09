@@ -56,6 +56,11 @@ function writeValidFixture(): void {
       spec_file: '.claude/agents/docs-agent.md',
       requires_human_approval: false,
     },
+    'senior-coding-agent': {
+      type: 'executor_senior',
+      spec_file: '.claude/agents/senior-coding-agent.md',
+      requires_human_approval: false,
+    },
   })
   writeJson('system/agent-registry/model_routing.json', {
     _qwen3_6_notes: {
@@ -77,6 +82,15 @@ function writeValidFixture(): void {
         temperature: 0,
       },
     },
+    'senior-coding-agent': {
+      default: {
+        node: 'codex-cli',
+        runtime_type: 'codex-cli',
+        healthcheck: 'config',
+        model: 'gpt-5.5',
+        runtime_required: 'always',
+      },
+    },
   })
   write('.claude/agents/db-migration-agent.md', `# db-migration-agent
 
@@ -87,6 +101,10 @@ Dispatcher-Runtime Output Contract:
   write('.claude/agents/docs-agent.md', `# docs-agent
 
 Return concise implementation output.
+`)
+  write('.claude/agents/senior-coding-agent.md', `# senior-coding-agent
+
+Senior repo-aware engineering escalation.
 `)
   write('system/control-plane/dispatcher.ts', `
 const MODEL_CALL_TIMEOUT_MS = 15000
@@ -125,6 +143,37 @@ describe('model runtime checker', () => {
     assert.equal(result.exitCode, 0)
     assert.equal(result.summary.critical, 0)
     assert.equal(result.summary.high, 0)
+  })
+
+  it('senior-coding-agent codex-cli runtime does not require an endpoint', () => {
+    const result = runCheck()
+    const route = result.routes.find(item => item.agent === 'senior-coding-agent')
+
+    assert.equal(route?.model, 'gpt-5.5')
+    assert.equal(route?.runtime_type, 'codex-cli')
+    assert.equal(route?.endpoint, undefined)
+    assert.equal(route?.endpoint_status, 'external_ok')
+    assert.equal(finding(result, 'model_runtime.endpoint_missing'), undefined)
+    assert.equal(result.summary.high, 0)
+  })
+
+  it('required HTTP runtime missing endpoint is high', () => {
+    writeJson('system/agent-registry/model_routing.json', {
+      'docs-agent': {
+        default: {
+          node: 'spark-b',
+          runtime_type: 'vllm',
+          model: 'qwen3-coder-next-fp8',
+        },
+      },
+    })
+
+    const result = runCheck()
+    const item = finding(result, 'model_runtime.endpoint_missing')
+
+    assert.equal(result.exitCode, 1)
+    assert.equal(item?.severity, 'high')
+    assert.equal(item?.blocks_operator, true)
   })
 
   it('reports unknown model reference as high', () => {

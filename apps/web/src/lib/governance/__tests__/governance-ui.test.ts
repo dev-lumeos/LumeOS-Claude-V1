@@ -148,4 +148,12 @@ describe('governance UI safety helpers', () => {
     assert.match(consoleComponent, /gov-sidebar/)
     assert.match(consoleComponent, /Product gate closed/)
   })
+
+  it('runtime page displays runtime type for external Codex routes', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+
+    assert.match(consoleComponent, /Runtime/)
+    assert.match(consoleComponent, /runtime_type/)
+  })
 })

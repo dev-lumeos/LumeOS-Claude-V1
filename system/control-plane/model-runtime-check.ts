@@ -31,12 +31,14 @@ export interface ModelRuntimeRoute {
   node?: string
   model?: string
   endpoint?: string
+  runtime_type?: 'openai-compatible-http' | 'vllm' | 'codex-cli' | 'external' | string
+  healthcheck?: 'http' | 'config' | 'manual' | string
   temperature?: number
   optional_runtime?: boolean
   runtime_required?: 'always' | 'on_demand' | string
   json_required: boolean
   qwen_thinking_off_required: boolean
-  endpoint_status?: 'not_checked' | 'ok' | 'unreachable'
+  endpoint_status?: 'not_checked' | 'ok' | 'unreachable' | 'external_ok'
 }
 
 export interface ModelRuntimeCheckResult {
@@ -129,6 +131,8 @@ function routingEntries(routing: ModelRoutingFile): ModelRuntimeRoute[] {
         node: route.node,
         model: route.model,
         endpoint: route.endpoint,
+        runtime_type: route.runtime_type,
+        healthcheck: route.healthcheck,
         temperature: typeof route.temperature === 'number' ? route.temperature : undefined,
         optional_runtime: route.optional_runtime === true,
         runtime_required: route.runtime_required,
@@ -149,7 +153,21 @@ function isQwen36(model: string | undefined): boolean {
 }
 
 function isExternalNonEndpointNode(node: string | undefined): boolean {
-  return !!node && /claude[_-]?code|external/i.test(node)
+  return !!node && /claude[_-]?code|codex|external/i.test(node)
+}
+
+function isConfigCheckedExternalRuntime(route: ModelRuntimeRoute): boolean {
+  const runtimeType = String(route.runtime_type ?? '').toLowerCase()
+  return runtimeType === 'codex-cli' ||
+    runtimeType === 'external' ||
+    (!route.endpoint && isExternalNonEndpointNode(route.node))
+}
+
+function isEndpointRuntime(route: ModelRuntimeRoute): boolean {
+  const runtimeType = String(route.runtime_type ?? '').toLowerCase()
+  if (runtimeType === 'codex-cli' || runtimeType === 'external') return false
+  if (runtimeType === 'openai-compatible-http' || runtimeType === 'vllm') return true
+  return !!route.endpoint && !isExternalNonEndpointNode(route.node)
 }
 
 function dispatcherPolicy(dispatcher: string): {
@@ -204,6 +222,10 @@ function endpointFailureFinding(route: ModelRuntimeRoute, evidence: string, expl
 }
 
 async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<ModelRuntimeCheckOptions, 'timeoutMs'>> & Pick<ModelRuntimeCheckOptions, 'fetchImpl'> & { explicitlyTargeted: boolean }): Promise<ModelRuntimeFinding | null> {
+  if (!isEndpointRuntime(route)) {
+    route.endpoint_status = 'external_ok'
+    return null
+  }
   if (!route.endpoint) return null
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), options.timeoutMs)
@@ -297,18 +319,22 @@ function staticFindings(repoRoot: string, agentFilter?: string): { routes: Model
       }))
     }
 
-    if (!route.endpoint && !isExternalNonEndpointNode(route.node)) {
+    if (isConfigCheckedExternalRuntime(route)) {
+      route.endpoint_status = 'external_ok'
+    }
+
+    if (!route.endpoint && !isConfigCheckedExternalRuntime(route)) {
       findings.push(finding({
         id: 'model_runtime.endpoint_missing',
-        severity: 'medium',
+        severity: 'high',
         layer: 'model_runtime',
         agent: route.agent,
         model: route.model,
         message: 'Routed local model is missing endpoint metadata.',
         evidence: JSON.stringify(route),
         suggested_action: 'Add the expected OpenAI-compatible endpoint to model_routing.json.',
-        blocks_operator: false,
-        blocks_product_work: false,
+        blocks_operator: true,
+        blocks_product_work: true,
       }))
     }
 

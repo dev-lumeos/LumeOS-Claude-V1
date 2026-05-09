@@ -8,6 +8,8 @@ This document defines the governance rules for Spark/vLLM/model runtime readines
 
 The goal is to detect routing, endpoint, timeout, JSON-mode, and Qwen thinking-policy problems before they turn into approval loops, invalid JSON spikes, or stuck runtime state.
 
+Codex CLI with GPT-5.5 is the productive senior engineering and repo-aware review runtime. Spark 4/5 remain local lab/premium model experiments and do not replace Codex production authority.
+
 ## Runtime Source Of Truth
 
 Routing and agent identity come from:
@@ -44,7 +46,13 @@ Expected Spark/vLLM routes currently include:
 | Spark D | `http://192.168.0.101:8001` | senior reviewer |
 | RTX 5090 | `http://localhost:8001` | MealCam vision |
 
-Missing endpoints are configuration warnings for non-local/external routes such as Claude Code. Missing endpoints for routed local Spark models must be reported.
+Non-HTTP runtimes are represented explicitly:
+
+| Runtime | Model | Healthcheck | Role |
+| --- | --- | --- | --- |
+| Codex CLI | `gpt-5.5` | config/manual | senior-coding-agent and final repo-aware escalation |
+
+Codex CLI is not a vLLM/OpenAI-compatible HTTP endpoint and must not be checked with `/v1/models`. Missing endpoints are acceptable for `runtime_type: codex-cli` or other external/config-checked runtimes. Missing endpoints for required local Spark/vLLM routes are high findings.
 
 MealCam/Vision is optional and on-demand. Its endpoint is not expected to be online during normal governance/operator work. An offline `mealcam-agent` endpoint is reported as informational unless a MealCam/Vision workorder, selected batch, or explicit Tom request requires that runtime.
 
