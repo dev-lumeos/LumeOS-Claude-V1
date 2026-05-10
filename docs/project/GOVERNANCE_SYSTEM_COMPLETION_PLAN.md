@@ -34,7 +34,7 @@ The goal is to make the governance system operable before more product work cont
 | 22. Knowledge handover / session continuity | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/*` | PARTIAL | Current handover exists; operator-maintained refresh is still missing. |
 | 23. Runtime artifact policy | `.gitignore`, operator artifact categorization, `system/control-plane/governance-invariant-check.ts` | TESTED | Raw BLS and runtime artifact drift are checked read-only by Batch 003. |
 | 24. Product work gate | `docs/project/PRODUCT_WORK_GATE.md`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/lumeos_canonical.md` | PARTIAL | Gate is conditionally documented for the next controlled planning/probe batch; broad product execution remains blocked. |
-| 25. Project profiles | `system/project-profiles/*`, `docs/project/PROJECT_PROFILES.md`, profile-aware checker/report CLIs | PARTIAL | LumeOS is now a default project profile for roots, raw paths, forbidden paths, forbidden commands, product gate, promotion policy, and Codex Worker policy. Generic multi-project source-chain semantics remain future work. |
+| 25. Project profiles | `system/project-profiles/*`, `docs/project/PROJECT_PROFILES.md`, profile-aware operator/doctor/worker/checker/report/UI CLIs | PARTIAL | LumeOS is now a default project profile for roots, raw paths, forbidden paths, forbidden commands, product gate, promotion policy, and Codex Worker policy. Operator, Doctor, Codex Worker, dossier, learning, promotion, invariant, source-chain, and UI surfaces use the LumeOS default where supported. Generic multi-project source-chain semantics remain future work. |
 
 ## 3. Completed Components
 
@@ -360,7 +360,7 @@ Mandatory gates for any product-related workorder:
 | Workorder factory automation | DONE | high | target must pass | no | Maintain deterministic structured-plan factory and tests. | Workorder Factory Automation | done |
 | Memory/Learning automation | DONE | high | no | no | Maintain learning checker and current learning status summary. | Memory/Learning Automation | done |
 | Model runtime hardening | DONE | high | autonomous/large runs | partial | Maintain model-runtime checker, dispatcher timeout/retry policy, and Doctor integration; prove endpoint health before runtime-heavy work. | Spark Runtime Hardening | done |
-| Project profiles | PARTIAL | medium | no | no | Keep LumeOS as the default profile and migrate remaining hardcoded project assumptions into profile-aware helpers over time. | Project Profiles | yes |
+| Project profiles | PARTIAL | medium | no | no | Keep LumeOS as the default profile and migrate remaining hardcoded project assumptions, especially deeper source-chain and factory semantics, into profile-aware helpers over time. | Project Profiles | yes |
 | Stop-rule lifecycle docs | PARTIAL | medium | no | partial | Document baselines, acknowledgement, memory records. | Batch 002/003 | yes |
 | Runtime artifact policy checker | DONE | medium | no | no | Maintain git-tracked runtime/raw detector. | Batch 003 | done |
 | Merge/product gate | PARTIAL | high | conditional | no | Keep conditional Product Work Gate documented and enforced through checkers, operator, and promotion governance. | Product Gate decision | yes |

@@ -47,15 +47,15 @@ export function commandPlanFor(request: CommandRequest): CommandPlan {
     case 'git.status':
       return { action: request.action, command: 'git', args: ['status', '--short', '--branch'] }
     case 'operator.status':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--status'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--status', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'operator.dryRun':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--dry-run'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--dry-run', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'operator.doctor':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--doctor', '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--doctor', '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'operator.continue':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--continue'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--continue', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'operator.continueSafeCleanups':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--continue', '--apply-safe-cleanups'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--continue', '--apply-safe-cleanups', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'invariant.check':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/governance-invariant-check.ts', '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'agentContract.check':
@@ -67,7 +67,7 @@ export function commandPlanFor(request: CommandRequest): CommandPlan {
     case 'specSource.checkBatch':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/spec-source-chain-check.ts', '--batch', batchPath, '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'learning.check':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/governance-learning-check.ts', '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/governance-learning-check.ts', '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'dossier.batch':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/batch-dossier.ts', '--batch', batchPath, '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'dossier.write':

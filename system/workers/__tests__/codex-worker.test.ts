@@ -53,6 +53,39 @@ validation_commands:
 \`\`\`
 `)
   write('docs/project/prompt.md', 'Use the repo rules and produce DONE when finished.\n')
+  write('system/project-profiles/profiles/lumeos.json', JSON.stringify({
+    profile_version: 1,
+    project_id: 'lumeos',
+    display_name: 'LumeOS Test',
+    repo_root: tmpDir,
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: ['docs/specs/Nutrition/00_raw/'],
+    ignored_local_paths: ['docs/specs/Nutrition/00_raw/', 'system/reports/codex-worker/'],
+    product_gate: {
+      status: 'closed',
+      reason: 'Test product gate is closed.',
+      conditional_planning_allowed: false,
+    },
+    forbidden_paths: ['.env', '.env.*', 'system/state/runtime_state.json', 'system/approval/queue.json', 'docs/specs/Nutrition/00_raw/**'],
+    forbidden_commands: ['supabase db reset', 'supabase db push'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/test/batches/BATCH-test.md',
+    default_branch_prefix: 'goal/',
+    promotion_policy: {},
+    codex_worker_policy: {
+      enabled: true,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+  }, null, 2))
 }
 
 function cleanup(): void {
@@ -103,6 +136,16 @@ describe('codex worker bridge', () => {
     assert.match(prompt, /STOP conditions/)
   })
 
+  it('project-aware prompt includes profile identity and profile forbidden commands', () => {
+    const result = parseCodexWorkerArgs(['--workorder', fixtureWo(), '--dry-run', '--project', 'lumeos'])
+    return runCodexWorker(result, { repoRoot: tmpDir }).then(output => {
+      assert.match(output.prompt, /project_id: lumeos/)
+      assert.match(output.prompt, /display_name: LumeOS Test/)
+      assert.match(output.prompt, /Test product gate is closed/)
+      assert.match(output.prompt, /No supabase db reset/)
+    })
+  })
+
   it('missing workorder fails before execution', async () => {
     await assert.rejects(
       () => runCodexWorker(parseCodexWorkerArgs(['--workorder', 'system/workorders/missing.md']), { repoRoot: tmpDir }),
@@ -123,6 +166,33 @@ describe('codex worker bridge', () => {
     assert.throws(
       () => validatePromptPath(tmpDir, 'system/state/prompt.md'),
       /Prompt path is blocked/,
+    )
+  })
+
+  it('blocks profile-forbidden workorder output paths', async () => {
+    write('system/workorders/test/drafts/WO-test-002.md', `# Unsafe Workorder
+
+\`\`\`yaml
+workorder_id: WO-test-002
+agent_id: senior-coding-agent
+risk_category: docs
+task: Unsafe raw output.
+scope_files:
+  - docs/specs/Nutrition/00_raw/export.csv
+files_blocked:
+  - system/state/**
+expected_outputs:
+  - docs/specs/Nutrition/00_raw/export.csv
+acceptance_criteria:
+  - none
+source_refs:
+  - docs/project/GOVERNANCE_SYSTEM_COMPLETION_PLAN.md
+\`\`\`
+`)
+
+    await assert.rejects(
+      () => runCodexWorker(parseCodexWorkerArgs(['--workorder', 'system/workorders/test/drafts/WO-test-002.md', '--dry-run', '--project', 'lumeos']), { repoRoot: tmpDir }),
+      /profile-forbidden output\/scope path/,
     )
   })
 

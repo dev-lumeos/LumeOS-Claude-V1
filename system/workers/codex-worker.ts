@@ -4,6 +4,12 @@ import path from 'node:path'
 import { performance } from 'node:perf_hooks'
 
 import { extractFirstYamlBlock, parseSimpleYaml } from '../workorders/cli/batch-loader'
+import {
+  getProjectProfile,
+  isForbiddenPath,
+  isRawLocalPath,
+  type ProjectProfile,
+} from '../project-profiles/project-profile-loader'
 
 export type FinalState = 'DONE' | 'NEEDS_TOM_APPROVAL' | 'FIX_REQUIRED' | 'STOP' | 'UNKNOWN'
 
@@ -17,6 +23,7 @@ export type CodexWorkerArgs = {
   writePrompt: boolean
   json: boolean
   timeoutMs: number
+  projectId?: string
   resumeSessionId?: string
 }
 
@@ -82,7 +89,7 @@ const PROMPT_BLOCKED_ROOTS = [
   'docs/specs/Nutrition/00_raw/',
 ]
 
-const FORBIDDEN_COMMANDS = [
+const CORE_FORBIDDEN_COMMANDS = [
   'No approval grants.',
   'No Supabase db push.',
   'No Supabase db reset.',
@@ -210,6 +217,8 @@ export function parseCodexWorkerArgs(args: string[]): CodexWorkerArgs {
         throw new Error('--timeout-ms must be a positive number')
       }
       parsed.timeoutMs = value
+    } else if (arg === '--project') {
+      parsed.projectId = args[++i]
     } else {
       throw new Error(`Unknown argument: ${arg}`)
     }
@@ -227,10 +236,11 @@ export function parseCodexWorkerArgs(args: string[]): CodexWorkerArgs {
   return parsed
 }
 
-export function validateWorkorderPath(repoRoot: string, workorderFile: string): string {
+export function validateWorkorderPath(repoRoot: string, workorderFile: string, profile?: ProjectProfile): string {
   const normalized = normalizeRelativePath(workorderFile)
-  if (!normalized.startsWith('system/workorders/')) {
-    throw new Error('Workorder path must be under system/workorders/')
+  const workordersRoot = profile?.workorders_root ?? 'system/workorders'
+  if (!normalized.startsWith(`${workordersRoot.replace(/\\/g, '/').replace(/\/$/, '')}/`)) {
+    throw new Error(`Workorder path must be under ${workordersRoot}/`)
   }
   if (!normalized.endsWith('.md')) {
     throw new Error('Workorder path must point to a Markdown file')
@@ -242,16 +252,19 @@ export function validateWorkorderPath(repoRoot: string, workorderFile: string): 
   return fullPath
 }
 
-export function validatePromptPath(repoRoot: string, promptFile: string): string {
+export function validatePromptPath(repoRoot: string, promptFile: string, profile?: ProjectProfile): string {
   const normalized = normalizeRelativePath(promptFile)
   if (!normalized.endsWith('.md') && !normalized.endsWith('.txt')) {
     throw new Error('Prompt path must point to a Markdown or text file')
   }
-  if (PROMPT_BLOCKED_ROOTS.some(root => normalized.startsWith(root))) {
+  if (PROMPT_BLOCKED_ROOTS.some(root => normalized.startsWith(root)) || (profile && (isForbiddenPath(profile, normalized) || isRawLocalPath(profile, normalized)))) {
     throw new Error(`Prompt path is blocked: ${normalized}`)
   }
-  if (!PROMPT_ALLOWED_ROOTS.some(root => normalized.startsWith(root))) {
-    throw new Error(`Prompt path must be under one of: ${PROMPT_ALLOWED_ROOTS.join(', ')}`)
+  const allowedRoots = profile
+    ? [...PROMPT_ALLOWED_ROOTS, `${profile.workorders_root.replace(/\\/g, '/').replace(/\/$/, '')}/`]
+    : PROMPT_ALLOWED_ROOTS
+  if (!allowedRoots.some(root => normalized.startsWith(root))) {
+    throw new Error(`Prompt path must be under one of: ${allowedRoots.join(', ')}`)
   }
   const fullPath = repoPath(repoRoot, normalized)
   if (!fs.existsSync(fullPath)) {
@@ -260,21 +273,43 @@ export function validatePromptPath(repoRoot: string, promptFile: string): string
   return fullPath
 }
 
-export function loadWorkorderInput(repoRoot: string, workorderFile: string): WorkorderInput {
-  const fullPath = validateWorkorderPath(repoRoot, workorderFile)
+export function loadWorkorderInput(repoRoot: string, workorderFile: string, profile?: ProjectProfile): WorkorderInput {
+  const fullPath = validateWorkorderPath(repoRoot, workorderFile, profile)
   const raw = fs.readFileSync(fullPath, 'utf8')
   const yaml = extractFirstYamlBlock(raw)
   if (!yaml) {
     throw new Error(`Workorder has no YAML block: ${workorderFile}`)
   }
-  return {
+  const input = {
     file: normalizeRelativePath(workorderFile),
     raw,
     parsed: parseSimpleYaml(yaml),
   }
+  if (profile) validateWorkorderAgainstProfile(input, profile)
+  return input
 }
 
-export function buildPromptFromWorkorder(input: WorkorderInput, repoRoot = process.cwd()): string {
+function validateWorkorderAgainstProfile(input: WorkorderInput, profile: ProjectProfile): void {
+  const parsed = input.parsed
+  const writeCandidates = [
+    ...asStringArray(parsed.scope_files),
+    ...asStringArray(parsed.files_allowed),
+    ...asStringArray(parsed.expected_outputs),
+    ...asStringArray(parsed.acceptance_files),
+  ]
+  for (const candidate of writeCandidates) {
+    if (isForbiddenPath(profile, candidate) || isRawLocalPath(profile, candidate)) {
+      throw new Error(`Workorder references profile-forbidden output/scope path: ${candidate}`)
+    }
+  }
+}
+
+function forbiddenCommands(profile?: ProjectProfile): string[] {
+  const profileCommands = profile?.forbidden_commands.map(command => `No ${command}.`) ?? []
+  return [...CORE_FORBIDDEN_COMMANDS, ...profileCommands]
+}
+
+export function buildPromptFromWorkorder(input: WorkorderInput, repoRoot = process.cwd(), profile?: ProjectProfile): string {
   const wo = input.parsed
   const workorderId = asString(wo.workorder_id, path.basename(input.file, '.md'))
   const objective = asString(wo.objective) || asString(wo.task) || asString(wo.title, '(not specified)')
@@ -288,12 +323,28 @@ export function buildPromptFromWorkorder(input: WorkorderInput, repoRoot = proce
   const validationCommands = asStringArray(wo.validation_commands)
   const riskCategory = asString(wo.risk_category, 'unknown')
 
+  const projectSection = profile
+    ? `## Project Profile
+- project_id: ${profile.project_id}
+- display_name: ${profile.display_name}
+- repo_root: ${profile.repo_root}
+- workorders_root: ${profile.workorders_root}
+- product_gate: ${profile.product_gate.status} - ${profile.product_gate.reason}
+- raw_local_paths:
+${listBlock(profile.raw_data_paths)}
+- forbidden_paths:
+${listBlock(profile.forbidden_paths)}
+`
+    : ''
+
   return `# Codex Worker Prompt
 
-You are Codex CLI running as the LumeOS senior-coding-agent.
+You are Codex CLI running as the ${profile?.display_name ?? 'LumeOS'} senior-coding-agent.
 
 ## Repository
 ${repoRoot}
+
+${projectSection}
 
 ## Workorder
 - file: ${input.file}
@@ -328,7 +379,7 @@ ${listBlock(negativeConstraints)}
 ${listBlock(validationCommands)}
 
 ## Forbidden Commands And Actions
-${listBlock(FORBIDDEN_COMMANDS)}
+${listBlock(forbiddenCommands(profile))}
 
 ## Safety Rules
 - Do not grant approvals.
@@ -583,15 +634,16 @@ export async function runCodexWorkerPrompt(
 
 export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions = {}): Promise<CodexWorkerResult> {
   const repoRoot = path.resolve(options.repoRoot ?? process.cwd())
+  const profile = args.projectId ? getProjectProfile(args.projectId, { repoRoot }) : undefined
 
   let prompt = ''
   let id = 'prompt'
   if (args.workorderFile) {
-    const input = loadWorkorderInput(repoRoot, args.workorderFile)
+    const input = loadWorkorderInput(repoRoot, args.workorderFile, profile)
     id = asString(input.parsed.workorder_id, path.basename(args.workorderFile, '.md'))
-    prompt = buildPromptFromWorkorder(input, repoRoot)
+    prompt = buildPromptFromWorkorder(input, repoRoot, profile)
   } else if (args.promptFile) {
-    const fullPath = validatePromptPath(repoRoot, args.promptFile)
+    const fullPath = validatePromptPath(repoRoot, args.promptFile, profile)
     id = path.basename(args.promptFile, path.extname(args.promptFile))
     prompt = fs.readFileSync(fullPath, 'utf8')
   }
@@ -630,6 +682,7 @@ ${result.stderr}
 async function main(): Promise<void> {
   try {
     const args = parseCodexWorkerArgs(process.argv.slice(2))
+    args.projectId = args.projectId ?? 'lumeos'
     const result = await runCodexWorker(args)
     if (args.json) {
       process.stdout.write(`${JSON.stringify(result, null, 2)}\n`)

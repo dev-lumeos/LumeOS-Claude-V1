@@ -19,7 +19,7 @@ import { runOperatorDoctor } from './operator-doctor'
 
 function usage(): string {
   return [
-    'Usage: npx tsx system/workorders/cli/run-batch-operator.ts <batch-file> [--status | --doctor | --dry-run | --continue] [--json] [--apply-safe-cleanups]',
+    'Usage: npx tsx system/workorders/cli/run-batch-operator.ts <batch-file> [--status | --doctor | --dry-run | --continue] [--json] [--apply-safe-cleanups] [--project <id>]',
     '',
     'Modes:',
     '  --status                  Read-only operator status. No mutations.',
@@ -42,9 +42,17 @@ async function main(): Promise<number> {
   const modeFlags = args.slice(1).filter(a => a === '--status' || a === '--doctor' || a === '--dry-run' || a === '--continue')
   const applySafeCleanups = args.includes('--apply-safe-cleanups')
   const json = args.includes('--json')
-  const unknown = args.slice(1).filter(a =>
-    !['--status', '--doctor', '--dry-run', '--continue', '--apply-safe-cleanups', '--json'].includes(a),
-  )
+  const projectIndex = args.indexOf('--project')
+  const projectId = projectIndex !== -1 ? args[projectIndex + 1] : 'lumeos'
+  if (projectIndex !== -1 && (!projectId || projectId.startsWith('--'))) {
+    console.error('--project requires an id')
+    return 1
+  }
+  const unknown = args.slice(1).filter((a, index) => {
+    const absoluteIndex = index + 1
+    return !['--status', '--doctor', '--dry-run', '--continue', '--apply-safe-cleanups', '--json', '--project'].includes(a) &&
+      absoluteIndex !== projectIndex + 1
+  })
   if (unknown.length > 0) {
     console.error(`Unknown flag(s): ${unknown.join(', ')}`)
     console.error(usage())
@@ -66,7 +74,7 @@ async function main(): Promise<number> {
   }
 
   if (mode === '--status') {
-    const status = collectOperatorStatus(batchFile)
+    const status = collectOperatorStatus(batchFile, { projectId })
     console.log(buildOperatorReport(status))
     return 0
   }
@@ -78,12 +86,12 @@ async function main(): Promise<number> {
   }
 
   if (mode === '--doctor') {
-    const result = runOperatorDoctor(batchFile, { json })
+    const result = runOperatorDoctor(batchFile, { json, projectId })
     console.log(result.report)
     return result.exitCode
   }
 
-  const result = await continueBatch(batchFile, { applySafeCleanups })
+  const result = await continueBatch(batchFile, { applySafeCleanups, projectId })
   console.log(result.report)
   return result.exitCode
 }

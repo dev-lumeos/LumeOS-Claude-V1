@@ -27,6 +27,18 @@ type GovernanceSnapshot = {
   projectProfile?: {
     project_id: string
     display_name: string
+    repo_root?: string
+    specs_root?: string
+    workorders_root?: string
+    raw_data_paths?: string[]
+    forbidden_commands?: string[]
+    product_gate?: { status: string; reason: string }
+    codex_worker_policy?: {
+      enabled?: boolean
+      allowed_agents?: string[]
+      require_explicit_workorder_flag?: boolean
+      default_timeout_ms?: number
+    }
   }
   batchPath: string
   commands: Partial<Record<GovernanceAction, CommandExecution>>
@@ -471,13 +483,20 @@ function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: {
   )
 }
 
-function Settings({ repoRoot, projectProfile }: { repoRoot: string; projectProfile?: { project_id: string; display_name: string } }) {
+function Settings({ repoRoot, projectProfile }: { repoRoot: string; projectProfile?: GovernanceSnapshot['projectProfile'] }) {
+  const forbiddenCommands = Array.from(new Set([...FORBIDDEN_COMMAND_TEXT, ...(projectProfile?.forbidden_commands ?? [])]))
   return (
     <div className="space-y-4">
       <Panel title="Safety Rules">
         <div className="grid gap-3 md:grid-cols-2">
           <Info label="Project Profile" value={projectProfile ? `${projectProfile.display_name} (${projectProfile.project_id})` : 'LumeOS (lumeos)'} />
           <Info label="Repository" value={repoRoot || 'unknown'} />
+          <Info label="Profile Repo Root" value={projectProfile?.repo_root ?? repoRoot ?? 'unknown'} />
+          <Info label="Specs Root" value={projectProfile?.specs_root ?? 'docs/specs'} />
+          <Info label="Workorders Root" value={projectProfile?.workorders_root ?? 'system/workorders'} />
+          <Info label="Product Gate Profile" value={projectProfile?.product_gate ? `${projectProfile.product_gate.status}: ${projectProfile.product_gate.reason}` : 'closed'} />
+          <Info label="Raw Data Paths" value={(projectProfile?.raw_data_paths ?? ['docs/specs/Nutrition/00_raw/']).join(', ')} />
+          <Info label="Codex Worker Policy" value={projectProfile?.codex_worker_policy ? `enabled=${projectProfile.codex_worker_policy.enabled} agents=${projectProfile.codex_worker_policy.allowed_agents?.join(', ') ?? '(none)'}` : 'LumeOS default'} />
           <Info label="Raw BLS Policy" value="Local-only and ignored." />
           <Info label="DB Reset" value="Forbidden." />
           <Info label="Product Gate" value="Blocked unless Tom explicitly opens it." />
@@ -485,7 +504,7 @@ function Settings({ repoRoot, projectProfile }: { repoRoot: string; projectProfi
       </Panel>
       <Panel title="Forbidden Commands">
         <ul className="grid gap-2 text-sm md:grid-cols-2">
-          {FORBIDDEN_COMMAND_TEXT.map(item => <li key={item} className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-red-900">{item}</li>)}
+          {forbiddenCommands.map(item => <li key={item} className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-red-900">{item}</li>)}
         </ul>
       </Panel>
       <Panel title="Allowlisted Actions">

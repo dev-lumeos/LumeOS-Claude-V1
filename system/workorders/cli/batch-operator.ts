@@ -20,6 +20,12 @@ import type {
   SystemStop,
 } from '../../state/state-manager'
 import { getAllApprovals, type ApprovalQueueItem } from '../../approval/approval-queue'
+import {
+  getProjectProfile,
+  isRawLocalPath,
+  isRuntimeArtifactPath,
+  type ProjectProfile,
+} from '../../project-profiles/project-profile-loader'
 
 export type OperatorEndState =
   | 'READY_TO_RUN'
@@ -83,6 +89,11 @@ export interface WorkorderCompletion {
 }
 
 export interface OperatorStatus {
+  projectProfile?: {
+    project_id: string
+    display_name: string
+    product_gate: ProjectProfile['product_gate']
+  }
   batchPath: string
   batchWorkorderIds: string[]
   git: GitStatusSummary
@@ -162,18 +173,20 @@ export function readGitStatus(): GitStatusSummary {
   const branch = branchLine.replace(/^##\s+/, '').split('...')[0].trim()
   const entries = lines
     .filter(line => !line.startsWith('## '))
-    .map(parseGitEntry)
+    .map(line => parseGitEntry(line))
   return { branch, short: stdout.trim(), entries }
 }
 
-function parseGitEntry(line: string): GitStatusEntry {
+function parseGitEntry(line: string, profile?: ProjectProfile): GitStatusEntry {
   const code = line.slice(0, 2).trim() || '??'
   const filePath = line.slice(3).trim()
-  return { code, path: filePath, category: categorizeArtifact(filePath) }
+  return { code, path: filePath, category: categorizeArtifact(filePath, profile) }
 }
 
-function categorizeArtifact(filePath: string): GitStatusEntry['category'] {
+function categorizeArtifact(filePath: string, profile?: ProjectProfile): GitStatusEntry['category'] {
   const p = filePath.replace(/\\/g, '/')
+  if (profile && isRuntimeArtifactPath(profile, p)) return 'ignored_state_artifacts'
+  if (profile && isRawLocalPath(profile, p)) return 'workorder_outputs'
   if (p.startsWith('system/state/') || p === 'system/approval/queue.json' || p === 'system/approval/approvals.json') {
     return 'ignored_state_artifacts'
   }
@@ -443,8 +456,9 @@ export function evaluateWorkorderCompletions(batch: LoadedBatch): WorkorderCompl
 
 export function collectOperatorStatus(
   batchPathInput: string,
-  opts: { gitStatus?: GitStatusSummary } = {},
+  opts: { gitStatus?: GitStatusSummary; projectId?: string } = {},
 ): OperatorStatus {
+  const profile = opts.projectId ? getProjectProfile(opts.projectId) : undefined
   const absoluteBatchPath = path.resolve(batchPathInput)
   const batch = loadBatch(absoluteBatchPath)
   const ids = new Set(batchWorkorderIds(batch))
@@ -462,6 +476,13 @@ export function collectOperatorStatus(
   const cleanupSuggestions = buildCleanupSuggestions(state, ids, relatedApprovals)
 
   return {
+    ...(profile ? {
+      projectProfile: {
+        project_id: profile.project_id,
+        display_name: profile.display_name,
+        product_gate: profile.product_gate,
+      },
+    } : {}),
     batchPath: absoluteBatchPath,
     batchWorkorderIds: [...ids],
     git,
@@ -535,6 +556,10 @@ export function buildOperatorReport(status: OperatorStatus): string {
   const endState = decideEndState(status)
   const lines: string[] = []
   lines.push('# Governance Batch Operator')
+  if (status.projectProfile) {
+    lines.push(`Project profile: ${status.projectProfile.project_id} (${status.projectProfile.display_name})`)
+    lines.push(`Product gate: ${status.projectProfile.product_gate.status} - ${status.projectProfile.product_gate.reason}`)
+  }
   lines.push(`Batch: ${status.batchPath}`)
   lines.push(`End state: ${endState}`)
   lines.push('')
@@ -602,22 +627,26 @@ export function buildOperatorReport(status: OperatorStatus): string {
   lines.push('')
   lines.push('## Next')
   lines.push(`Exact next command: ${nextCommand(status, endState)}`)
-  lines.push(`Doctor command: ${commandFor(OPERATOR_CLI, `${status.batchPath} --doctor`)}`)
-  lines.push(`Suggested dossier: ${dossierCommand(status.batchPath)}`)
+  lines.push(`Doctor command: ${commandFor(OPERATOR_CLI, `${status.batchPath} --doctor${profileArg(status)}`)}`)
+  lines.push(`Suggested dossier: ${dossierCommand(status.batchPath, status)}`)
   return lines.join('\n')
 }
 
-function dossierCommand(batchPath: string): string {
-  return commandFor(DOSSIER_CLI, `--batch ${batchPath}`)
+function profileArg(status: OperatorStatus): string {
+  return status.projectProfile ? ` --project ${status.projectProfile.project_id}` : ''
+}
+
+function dossierCommand(batchPath: string, status: OperatorStatus): string {
+  return commandFor(DOSSIER_CLI, `--batch ${batchPath}${profileArg(status)}`)
 }
 
 function nextCommand(status: OperatorStatus, endState: OperatorEndState): string {
   if (endState === 'NEEDS_TOM_APPROVAL') return status.approvalStops[0]?.grantCommand ?? commandFor(APPROVAL_CLI, 'list')
-  if (endState === 'NEEDS_SAFE_CLEANUP') return `${commandFor(OPERATOR_CLI, `${status.batchPath} --continue --apply-safe-cleanups`)}`
+  if (endState === 'NEEDS_SAFE_CLEANUP') return `${commandFor(OPERATOR_CLI, `${status.batchPath} --continue --apply-safe-cleanups${profileArg(status)}`)}`
   if (endState === 'STOP_RULE_BLOCKED') return commandFor('system\\control-plane\\stop-rules.ts', '--dry-run')
   if (endState === 'FIX_REQUIRED') return 'git status --short --branch'
-  if (endState === 'DONE') return commandFor(OPERATOR_CLI, `${status.batchPath} --status`)
-  return commandFor(OPERATOR_CLI, `${status.batchPath} --continue`)
+  if (endState === 'DONE') return commandFor(OPERATOR_CLI, `${status.batchPath} --status${profileArg(status)}`)
+  return commandFor(OPERATOR_CLI, `${status.batchPath} --continue${profileArg(status)}`)
 }
 
 function isOfficialCleanupCommand(command: string): boolean {
@@ -712,14 +741,14 @@ export function selectRunnableBatch(batchPathInput: string, status: OperatorStat
 
 export async function continueBatch(
   batchPathInput: string,
-  opts: { applySafeCleanups?: boolean; runner?: CommandRunner } = {},
+  opts: { applySafeCleanups?: boolean; runner?: CommandRunner; projectId?: string } = {},
 ): Promise<{ status: OperatorStatus; report: string; exitCode: number }> {
-  let status = collectOperatorStatus(batchPathInput)
+  let status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId })
   let endState = decideEndState(status)
 
   if (endState === 'NEEDS_SAFE_CLEANUP' && opts.applySafeCleanups) {
     const cleanup = await applySafeCleanups(status, opts.runner)
-    status = collectOperatorStatus(batchPathInput)
+    status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId })
     endState = decideEndState(status)
     const report = [
       `Applied safe cleanups: ${cleanup.applied.length}`,
@@ -738,7 +767,7 @@ export async function continueBatch(
     return { status, report: buildOperatorReport(status), exitCode: endStateToExitCode(decideEndState(status)) }
   }
   const outcomes = await runDispatch(runnableBatch)
-  status = collectOperatorStatus(batchPathInput)
+  status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId })
   status.dispatchOutcomes = outcomes
   const paused = outcomes.some(o => o.status === 'paused_for_approval')
   const failed = outcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped')

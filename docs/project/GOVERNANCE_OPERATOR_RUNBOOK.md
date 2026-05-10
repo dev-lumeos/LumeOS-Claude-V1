@@ -2,7 +2,7 @@
 
 This runbook describes the safe operator workflow for running a workorder batch from status check to the next safe stop.
 
-The active project profile defaults to `lumeos`. Profile-aware governance commands accept `--project lumeos`; the UI uses the same default for invariant, source-chain, dossier, and promotion reads.
+The active project profile defaults to `lumeos`. Profile-aware governance commands accept `--project lumeos`; the UI uses the same default for operator, doctor, invariant, source-chain, learning, dossier, and promotion reads.
 
 The operator CLI is:
 
@@ -14,6 +14,7 @@ For Nutrition batch 001:
 
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --status
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --status --project lumeos
 ```
 
 ## Status Command
@@ -49,6 +50,7 @@ Codex Worker ready status is not a broad product-work opening. It means the narr
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor --json --project lumeos
 ```
 
 Doctor diagnoses:
@@ -168,6 +170,7 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-in
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json --project lumeos
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json --project lumeos
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --dry-run --project lumeos
 ```
 
 Rules:

@@ -62,9 +62,44 @@ function setup(): void {
   }, null, 2), 'utf8')
   process.chdir(tmpDir)
   writeBatch()
+  writeProfile()
   writeState()
   writeQueue({})
   writeTokens({})
+}
+
+function writeProfile(): void {
+  const profilePath = path.join(tmpDir, 'system/project-profiles/profiles/lumeos.json')
+  fs.mkdirSync(path.dirname(profilePath), { recursive: true })
+  fs.writeFileSync(profilePath, JSON.stringify({
+    profile_version: 1,
+    project_id: 'lumeos',
+    display_name: 'LumeOS Test',
+    repo_root: tmpDir,
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: ['docs/specs/Nutrition/00_raw/'],
+    ignored_local_paths: ['docs/specs/Nutrition/00_raw/'],
+    product_gate: { status: 'closed', reason: 'Test product gate closed.', conditional_planning_allowed: false },
+    forbidden_paths: ['system/state/runtime_state.json', 'system/approval/queue.json', 'docs/specs/Nutrition/00_raw/**'],
+    forbidden_commands: ['supabase db reset', 'supabase db push'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/nutrition/batches/BATCH-test.md',
+    default_branch_prefix: 'goal/',
+    promotion_policy: {},
+    codex_worker_policy: {
+      enabled: true,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+  }, null, 2), 'utf8')
 }
 
 function cleanup(): void {
@@ -210,6 +245,16 @@ describe('batch operator status', () => {
     assert.equal(status.activeRuns.length, 0)
     assert.equal(status.relatedApprovals.length, 0)
     assert.equal(fs.readFileSync(path.join(tmpDir, 'system/state/runtime_state.json'), 'utf8'), before)
+  })
+
+  it('includes project profile information when requested', () => {
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit, projectId: 'lumeos' })
+    const report = buildOperatorReport(status)
+
+    assert.equal(status.projectProfile?.project_id, 'lumeos')
+    assert.match(report, /Project profile: lumeos \(LumeOS Test\)/)
+    assert.match(report, /Product gate: closed - Test product gate closed/)
+    assert.match(report, /--project lumeos/)
   })
 
   it('does not treat missing expected workorder outputs as DONE', () => {

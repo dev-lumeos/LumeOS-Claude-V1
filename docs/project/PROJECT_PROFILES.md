@@ -88,9 +88,13 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts --batch <batch-file> --json --project lumeos
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json --project lumeos
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --status --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --doctor --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --dry-run --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --json --project lumeos
 ```
 
-The Governance UI defaults to the LumeOS profile and displays the active profile in Settings.
+The Governance UI defaults to the LumeOS profile, includes `--project lumeos` for supported commands, and displays the active profile details in Settings.
 
 ## Global vs Profile-Specific
 
@@ -130,7 +134,10 @@ This first profile layer does not rewrite every governance tool. It introduces t
 - promotion forbidden/raw/product-gate policy
 - spec-source checker product-gate reason
 - batch dossier metadata and path classification
-- Governance UI Settings profile display
+- batch operator and doctor profile reporting and profile-aware checker commands
+- Codex Worker workorder path, forbidden path, raw local path, forbidden command, and prompt policy
+- Governance UI Settings profile display and profile-aware command defaults
+- governance learning checker project metadata
 
 Remaining LumeOS/Nutrition references should be migrated incrementally when they affect portable governance behavior.
 

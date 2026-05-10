@@ -47,7 +47,8 @@ describe('governance UI safety helpers', () => {
     assert.equal(requiresConfirmation('operator.continueSafeCleanups'), true)
     assert.throws(() => commandPlanFor({ action: 'operator.continue' }), /requires explicit confirmation/)
     const plan = commandPlanFor({ action: 'operator.continue', confirmed: true })
-    assert.deepEqual(plan.args.slice(-1), ['--continue'])
+    assert.ok(plan.args.includes('--continue'))
+    assert.deepEqual(plan.args.slice(-2), ['--project', 'lumeos'])
   })
 
   it('resolves known read-only and controlled action definitions', () => {
@@ -96,9 +97,11 @@ describe('governance UI safety helpers', () => {
 
   it('profile-aware read commands use the default LumeOS profile', () => {
     const invariant = commandPlanFor({ action: 'invariant.check' })
+    const operator = commandPlanFor({ action: 'operator.doctor' })
     const promotion = commandPlanFor({ action: 'promotion.review', branch: 'goal/test' })
 
     assert.deepEqual(invariant.args.slice(-3), ['--json', '--project', 'lumeos'])
+    assert.deepEqual(operator.args.slice(-2), ['--project', 'lumeos'])
     assert.ok(promotion.args.includes('--project'))
     assert.ok(promotion.args.includes('lumeos'))
   })

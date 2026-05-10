@@ -36,7 +36,7 @@ The active governance branch is implementing controlled Codex Worker enablement 
 - Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker.
 - Codex Worker dispatch is controlled-enabled for `senior-coding-agent` only and still requires explicit `codex_worker: true`, complete workorder metadata, and product-gate policy pass.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
-- Project Profiles add the first reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, and profile-aware command defaults. The active default profile is `lumeos`.
+- Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
 - Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
@@ -202,6 +202,7 @@ Rules:
 
 - `lumeos` remains the default profile.
 - The profile defines governance/spec/workorder/report/memory roots, raw local paths, ignored local paths, forbidden paths, forbidden commands, required checkers, product-gate policy, promotion policy, and Codex Worker policy.
+- The batch operator, operator doctor, Codex Worker, batch dossier, learning checker, promotion governance, invariant checker, source-chain checker, and Governance UI are profile-aware for LumeOS defaults.
 - Raw BLS files remain local-only through profile policy.
 - The profile layer does not open product work and does not authorize Supabase reset, push, migration execution, approval grants, or production DB commands.
 - Beauty Club exists only as an inactive example skeleton. No external project path is assumed.

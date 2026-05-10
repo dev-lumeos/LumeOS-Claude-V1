@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
+import { getProjectProfile, type ProjectProfile } from '../project-profiles/project-profile-loader'
 
 export type LearningSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 
@@ -40,6 +41,11 @@ export interface LearningCheckResult {
   schema_version: 1
   generated_at: string
   repo_root: string
+  project_profile?: {
+    project_id: string
+    display_name: string
+    product_gate: ProjectProfile['product_gate']
+  }
   product_work_gate: {
     status: 'blocked' | 'allowed'
     reason: string
@@ -410,8 +416,9 @@ function validateBatchSummaries(batchSummaries: string[]): LearningFinding[] {
   return findings
 }
 
-export function runGovernanceLearningCheck(options: { repoRoot?: string } = {}): LearningCheckResult {
+export function runGovernanceLearningCheck(options: { repoRoot?: string; projectId?: string } = {}): LearningCheckResult {
   const repoRoot = options.repoRoot ?? process.cwd()
+  const profile = options.projectId ? getProjectProfile(options.projectId, { repoRoot }) : undefined
   const files = listLearningFiles(repoRoot)
   const incidents = files
     .filter(isIncidentCandidate)
@@ -431,9 +438,16 @@ export function runGovernanceLearningCheck(options: { repoRoot?: string } = {}):
     schema_version: 1,
     generated_at: now(),
     repo_root: repoRoot,
+    ...(profile ? {
+      project_profile: {
+        project_id: profile.project_id,
+        display_name: profile.display_name,
+        product_gate: profile.product_gate,
+      },
+    } : {}),
     product_work_gate: {
-      status: 'blocked',
-      reason: 'Product work remains blocked until Tom explicitly opens or waives the gate after reviewing governance readiness.',
+      status: profile?.product_gate.status === 'open' ? 'allowed' : 'blocked',
+      reason: profile?.product_gate.reason ?? 'Product work remains blocked until Tom explicitly opens or waives the gate after reviewing governance readiness.',
     },
     summary,
     incidents,
@@ -449,6 +463,7 @@ export function formatGovernanceLearningReport(result: LearningCheckResult): str
     '# Governance Learning Check',
     '',
     `Repo: ${result.repo_root}`,
+    ...(result.project_profile ? [`Project profile: ${result.project_profile.project_id} (${result.project_profile.display_name})`] : []),
     `Generated: ${result.generated_at}`,
     `Product work gate: ${result.product_work_gate.reason}`,
     '',
@@ -522,6 +537,8 @@ function main(): void {
   const args = process.argv.slice(2)
   const json = args.includes('--json')
   const writeSummary = args.includes('--write-summary')
+  const projectIndex = args.indexOf('--project')
+  const projectId = projectIndex !== -1 ? args[projectIndex + 1] : undefined
   const batchIndex = args.indexOf('--batch')
   if (batchIndex !== -1 && !args[batchIndex + 1]) {
     printUsage()
@@ -529,7 +546,7 @@ function main(): void {
   }
 
   try {
-    const result = runGovernanceLearningCheck()
+    const result = runGovernanceLearningCheck({ projectId })
     const written = writeSummary ? writeLearningStatus(result) : ''
     if (json) {
       console.log(JSON.stringify({ ...result, written_summary: written || undefined }, null, 2))

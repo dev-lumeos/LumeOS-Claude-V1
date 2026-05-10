@@ -9,6 +9,7 @@ import { runAgentContractCheck } from '../../control-plane/agent-contract-check'
 import { runModelRuntimeCheck } from '../../control-plane/model-runtime-check'
 import { runSpecSourceChainCheck } from './spec-source-chain-check'
 import { loadCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
+import { getProjectProfile, type ProjectProfile } from '../../project-profiles/project-profile-loader'
 
 export type OperatorDoctorDiagnosis =
   | 'CLEAN_READY'
@@ -56,6 +57,13 @@ export interface OperatorDoctorMemoryStatus {
 export interface OperatorDoctorResult {
   schema_version: 1
   generated_at: string
+  project_profile?: {
+    project_id: string
+    display_name: string
+    repo_root: string
+    workorders_root: string
+    product_gate: ProjectProfile['product_gate']
+  }
   final_diagnosis: OperatorDoctorDiagnosis
   next_action: string
   next_actions: string[]
@@ -97,6 +105,7 @@ export interface OperatorDoctorResult {
 interface DiagnoseOptions {
   checkers?: OperatorDoctorCheckers
   memory?: OperatorDoctorMemoryStatus
+  projectProfile?: ProjectProfile
   productGate?: { status: 'blocked' | 'allowed'; reason: string }
   forceProductGateBlock?: boolean
   generatedAt?: string
@@ -132,15 +141,15 @@ function normalizeChecker(result: { summary?: { critical?: number; high?: number
   }
 }
 
-export function collectOperatorDoctorCheckers(batchPath: string): OperatorDoctorCheckers {
+export function collectOperatorDoctorCheckers(batchPath: string, projectId?: string): OperatorDoctorCheckers {
   let invariant: OperatorDoctorCheckerSummary
   let agent: OperatorDoctorCheckerSummary
   let spec: OperatorDoctorCheckerSummary
   let modelRuntime: OperatorDoctorCheckerSummary
-  try { invariant = normalizeChecker(runGovernanceInvariantCheck()) } catch (error) { invariant = normalizeChecker(null, error) }
+  try { invariant = normalizeChecker(runGovernanceInvariantCheck({ projectId })) } catch (error) { invariant = normalizeChecker(null, error) }
   try { agent = normalizeChecker(runAgentContractCheck()) } catch (error) { agent = normalizeChecker(null, error) }
   try { modelRuntime = normalizeChecker(runModelRuntimeCheck({ checkEndpoints: false })) } catch (error) { modelRuntime = normalizeChecker(null, error) }
-  try { spec = normalizeChecker(runSpecSourceChainCheck({ batchFile: batchPath })) } catch (error) { spec = normalizeChecker(null, error) }
+  try { spec = normalizeChecker(runSpecSourceChainCheck({ batchFile: batchPath, projectId })) } catch (error) { spec = normalizeChecker(null, error) }
   return { invariant, agent_contract: agent, model_runtime: modelRuntime, spec_source_chain: spec }
 }
 
@@ -228,10 +237,11 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     spec_source_chain: defaultChecker(),
   }
   const memory = options.memory ?? collectOperatorDoctorMemoryStatus(process.cwd(), status.batchPath)
-  const productGate = options.productGate ?? {
-    status: 'blocked',
-    reason: 'Product work remains blocked unless Tom explicitly opens it.',
-  }
+  const productGate = options.productGate ?? (
+    options.projectProfile
+      ? { status: options.projectProfile.product_gate.status === 'open' ? 'allowed' : 'blocked', reason: options.projectProfile.product_gate.reason } as const
+      : { status: 'blocked', reason: 'Product work remains blocked unless Tom explicitly opens it.' }
+  )
   const blockers: OperatorDoctorResult['blockers'] = []
   let finalDiagnosis: OperatorDoctorDiagnosis = 'UNKNOWN'
   let nextAction = ''
@@ -289,6 +299,15 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   return {
     schema_version: 1,
     generated_at: options.generatedAt ?? new Date().toISOString(),
+    ...(options.projectProfile ? {
+      project_profile: {
+        project_id: options.projectProfile.project_id,
+        display_name: options.projectProfile.display_name,
+        repo_root: options.projectProfile.repo_root,
+        workorders_root: options.projectProfile.workorders_root,
+        product_gate: options.projectProfile.product_gate,
+      },
+    } : {}),
     final_diagnosis: finalDiagnosis,
     next_action: nextAction,
     next_actions: [nextAction],
@@ -314,6 +333,9 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
 export function formatOperatorDoctorReport(result: OperatorDoctorResult): string {
   const lines: string[] = []
   lines.push('# Governance Operator Doctor')
+  if (result.project_profile) {
+    lines.push(`Project profile: ${result.project_profile.project_id} (${result.project_profile.display_name})`)
+  }
   lines.push(`Diagnosis: ${result.final_diagnosis}`)
   lines.push(`Next action: ${result.next_action}`)
   lines.push('')
@@ -351,11 +373,13 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   return lines.join('\n')
 }
 
-export function runOperatorDoctor(batchPath: string, opts: { json?: boolean } = {}): { result: OperatorDoctorResult; report: string; exitCode: number } {
-  const status = collectOperatorStatus(batchPath)
+export function runOperatorDoctor(batchPath: string, opts: { json?: boolean; projectId?: string } = {}): { result: OperatorDoctorResult; report: string; exitCode: number } {
+  const profile = opts.projectId ? getProjectProfile(opts.projectId) : undefined
+  const status = collectOperatorStatus(batchPath, { projectId: opts.projectId })
   const result = diagnoseOperatorDoctor(status, {
-    checkers: collectOperatorDoctorCheckers(batchPath),
+    checkers: collectOperatorDoctorCheckers(batchPath, opts.projectId),
     memory: collectOperatorDoctorMemoryStatus(process.cwd(), batchPath),
+    projectProfile: profile,
   })
   return {
     result,
@@ -368,11 +392,17 @@ function main(): number {
   const args = process.argv.slice(2)
   const batchFile = args.find(arg => !arg.startsWith('--'))
   const json = args.includes('--json')
-  if (!batchFile) {
-    console.error('Usage: npx tsx system/workorders/cli/operator-doctor.ts <batch-file> [--json]')
+  const projectIndex = args.indexOf('--project')
+  const projectId = projectIndex !== -1 ? args[projectIndex + 1] : 'lumeos'
+  if (projectIndex !== -1 && (!projectId || projectId.startsWith('--'))) {
+    console.error('--project requires an id')
     return 2
   }
-  const result = runOperatorDoctor(batchFile, { json })
+  if (!batchFile) {
+    console.error('Usage: npx tsx system/workorders/cli/operator-doctor.ts <batch-file> [--json] [--project <id>]')
+    return 2
+  }
+  const result = runOperatorDoctor(batchFile, { json, projectId })
   console.log(result.report)
   return result.exitCode
 }

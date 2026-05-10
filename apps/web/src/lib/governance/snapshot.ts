@@ -12,6 +12,21 @@ export type GovernanceSnapshot = {
   projectProfile: {
     project_id: string
     display_name: string
+    repo_root?: string
+    specs_root?: string
+    workorders_root?: string
+    raw_data_paths?: string[]
+    forbidden_commands?: string[]
+    product_gate?: {
+      status: string
+      reason: string
+    }
+    codex_worker_policy?: {
+      enabled?: boolean
+      allowed_agents?: string[]
+      require_explicit_workorder_flag?: boolean
+      default_timeout_ms?: number
+    }
   }
   batchPath: string
   commands: Partial<Record<GovernanceAction, CommandExecution>>
@@ -47,10 +62,17 @@ function readDoc(repoRoot: string, relativePath: string): string {
 function readProjectProfile(repoRoot: string): GovernanceSnapshot['projectProfile'] {
   try {
     const raw = fs.readFileSync(path.join(repoRoot, 'system/project-profiles/profiles/lumeos.json'), 'utf8')
-    const profile = JSON.parse(raw) as { project_id?: string; display_name?: string }
+    const profile = JSON.parse(raw) as GovernanceSnapshot['projectProfile']
     return {
       project_id: profile.project_id ?? 'lumeos',
       display_name: profile.display_name ?? 'LumeOS',
+      repo_root: profile.repo_root,
+      specs_root: profile.specs_root,
+      workorders_root: profile.workorders_root,
+      raw_data_paths: profile.raw_data_paths,
+      forbidden_commands: profile.forbidden_commands,
+      product_gate: profile.product_gate,
+      codex_worker_policy: profile.codex_worker_policy,
     }
   } catch {
     return { project_id: 'lumeos', display_name: 'LumeOS' }

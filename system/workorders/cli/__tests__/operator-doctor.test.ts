@@ -152,6 +152,45 @@ describe('operator doctor diagnosis', () => {
     assert.match(result.next_action, /Do not proceed/)
   })
 
+  it('includes project profile and profile product gate when supplied', () => {
+    const result = diagnoseOperatorDoctor(baseStatus({}), {
+      checkers: cleanCheckers(),
+      projectProfile: {
+        profile_version: 1,
+        project_id: 'lumeos',
+        display_name: 'LumeOS Test',
+        repo_root: 'D:/GitHub/LumeOS-Claude-V1',
+        governance_root: 'system',
+        specs_root: 'docs/specs',
+        workorders_root: 'system/workorders',
+        reports_root: 'system/reports',
+        memory_root: 'system/memory',
+        learning_root: 'docs/project/governance-learning',
+        runtime_state_root: 'system/state',
+        approval_root: 'system/approval',
+        raw_data_paths: ['docs/specs/Nutrition/00_raw/'],
+        ignored_local_paths: [],
+        product_gate: { status: 'closed', reason: 'Profile gate closed.', conditional_planning_allowed: false },
+        forbidden_paths: [],
+        forbidden_commands: [],
+        required_checkers: [],
+        default_operator_batch: 'system/workorders/test/BATCH.md',
+        default_branch_prefix: 'goal/',
+        promotion_policy: {},
+        codex_worker_policy: {
+          enabled: true,
+          allowed_agents: ['senior-coding-agent'],
+          require_explicit_workorder_flag: true,
+          default_timeout_ms: 120000,
+        },
+      },
+    })
+
+    assert.equal(result.project_profile?.project_id, 'lumeos')
+    assert.equal(result.product_gate.status, 'blocked')
+    assert.equal(result.product_gate.reason, 'Profile gate closed.')
+  })
+
   it('keeps JSON output shape stable', () => {
     const result = diagnose({})
 

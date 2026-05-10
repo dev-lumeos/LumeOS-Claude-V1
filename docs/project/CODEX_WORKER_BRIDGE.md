@@ -56,6 +56,12 @@ JSON output:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --dry-run --json
 ```
 
+Profile-aware dry-run:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --dry-run --project lumeos
+```
+
 ## Dry-run First
 
 Default behavior is dry-run.
@@ -91,6 +97,7 @@ These reports are runtime artifacts and should not be committed by default.
 Every generated prompt includes:
 
 - repository path
+- active project profile when `--project` is provided
 - workorder id
 - objective
 - `scope_files`
@@ -117,6 +124,18 @@ The bridge tells Codex:
 - no raw BLS file commits
 - obey `scope_files`, `files_allowed`, and `files_blocked`
 - stop at `DONE`, `NEEDS_TOM_APPROVAL`, `FIX_REQUIRED`, or `STOP`
+
+When `--project lumeos` is active, the worker also reads the LumeOS profile for:
+
+- `repo_root`
+- `workorders_root`
+- `raw_data_paths`
+- `forbidden_paths`
+- `forbidden_commands`
+- `product_gate`
+- `codex_worker_policy`
+
+The profile can add restrictions and context. It cannot weaken global safety rules.
 
 ## Difference From Interactive Codex
 
