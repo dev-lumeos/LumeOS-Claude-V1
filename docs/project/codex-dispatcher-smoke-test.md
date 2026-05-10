@@ -2,10 +2,12 @@
 
 Date: 2026-05-10
 
-This file proves the Codex Worker dispatcher smoke path can update one docs-only file.
+This note proves the Codex Worker dispatcher smoke path can update one docs-only file.
 
 This was a governance/docs-only dispatcher smoke. No product work, Supabase command, migration execution, approval grant, runtime state edit, queue edit, or raw BLS commit was performed.
 
-Dispatcher Codex Worker integration is temporarily enabled only for this smoke. During this approved Codex execution, `codex_worker_enabled=true` and `allow_dispatcher_integration=true` are expected and must not be treated as a failure by themselves.
+Dispatcher Codex Worker integration is controlled-enabled for `senior-coding-agent` only.
 
-The calling operator must restore `codex_worker_enabled=false` and `allow_dispatcher_integration=false` after the smoke and verify that state outside this workorder.
+During this controlled policy, `codex_worker_enabled=true` and `allow_dispatcher_integration=true` are expected and must not be treated as a failure by themselves.
+
+Post-smoke operator verification, outside this workorder, must confirm the policy remains narrow: `senior-coding-agent` only, explicit `codex_worker` opt-in required, and product gate closed.
