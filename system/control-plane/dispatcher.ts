@@ -402,6 +402,16 @@ function hasRequiredCodexWorkerFields(wo: Workorder): boolean {
 }
 
 function isCodexWorkerProductWork(wo: Workorder): boolean {
+  const metadata = wo as Workorder & {
+    product_work?: boolean
+    module?: string
+    domain?: string
+    workorder_type?: string
+    type?: string
+  }
+  if (metadata.product_work === true) return true
+  if (metadata.product_work === false) return false
+
   const paths = [
     ...(wo.scope_files ?? []),
     ...(wo.acceptance_files ?? []),
@@ -410,8 +420,23 @@ function isCodexWorkerProductWork(wo: Workorder): boolean {
   ].map(item => item.replace(/\\/g, '/'))
   if (paths.some(p => p.startsWith('services/nutrition-api/') || p.startsWith('apps/') || p.startsWith('packages/'))) return true
   if (paths.some(p => p.startsWith('docs/specs/Nutrition/') && !p.includes('/06_workorder_planning/'))) return true
-  const text = [wo.task, wo.risk_category, ...paths].join(' ').toLowerCase()
-  return /\b(bls import|nutrition p1-005|product work|mealcam|bulk import)\b/.test(text)
+
+  const fields = [
+    metadata.risk_category,
+    metadata.module,
+    metadata.domain,
+    metadata.workorder_type,
+    metadata.type,
+  ].filter(Boolean).join(' ').toLowerCase()
+  if (/\b(nutrition|mealcam|product)\b/.test(fields) && !/\b(docs|governance|smoke|planning)\b/.test(fields)) {
+    return true
+  }
+
+  const taskText = wo.task.toLowerCase()
+  const hasConcreteProductSignal = /\b(nutrition p1-005|mealcam)\b/.test(taskText)
+    || /\bbls import\b/.test(taskText)
+    || /\bbulk data import\b/.test(taskText)
+  return hasConcreteProductSignal && !/\b(governance|docs-only|smoke|planning)\b/.test(taskText)
 }
 
 function shouldUseCodexWorker(

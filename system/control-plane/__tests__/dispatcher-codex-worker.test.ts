@@ -231,6 +231,28 @@ describe('dispatcher codex worker integration', () => {
     assert.match(result.error ?? '', /product work gate/)
   })
 
+  it('allows governance smoke workorders that mention product gate safety wording', async () => {
+    let codexCalls = 0
+    const result = await dispatchWorkorder(makeWorkorder({
+      task: 'Run a governance Codex dispatcher smoke and document that product work remains blocked.',
+      acceptance_criteria: [
+        'Document that no product work, Supabase command, migration execution, approval grant, runtime state edit, queue edit, or raw BLS commit was performed.',
+        'Confirm the product gate remains closed after the smoke.',
+      ],
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => {
+        codexCalls++
+        return doneResult('DONE')
+      },
+    })
+
+    assert.equal(result.status, 'completed')
+    assert.equal(codexCalls, 1)
+  })
+
   it('uses Codex worker for senior-coding-agent when config and workorder opt-in pass', async () => {
     let codexCalls = 0
     let modelCalls = 0
