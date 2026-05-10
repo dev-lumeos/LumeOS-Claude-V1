@@ -15,7 +15,7 @@ task: |
   Requirements:
   - Write only docs/project/codex-worker-smoke-test.md.
   - State that this is a governance/docs-only smoke test.
-  - State that no product work, Supabase command, migration execution, approval grant, runtime state edit, queue edit, or raw BLS commit was performed.
+  - State that no application feature work, Supabase command, migration execution, approval grant, runtime state edit, queue edit, or raw BLS commit was performed.
   - Include the dry-run and execute commands used by the worker bridge in generic form.
   - Keep the file short and factual.
 
@@ -29,7 +29,7 @@ files_blocked:
   - "packages/**"
   - "system/state/**"
   - "system/approval/**"
-  - "docs/specs/Nutrition/00_raw/**"
+  - "docs/specs/**/00_raw/**"
   - ".env"
   - ".env.*"
   - "system/workers/codex-worker.config.json"
@@ -38,14 +38,14 @@ expected_outputs:
   - "docs/project/codex-worker-smoke-test.md"
 
 acceptance_criteria:
-  - "docs/project/codex-worker-smoke-test.md exists."
+  - "All expected_outputs exist, including docs/project/codex-worker-smoke-test.md."
   - "The note is governance/docs-only."
   - "The note states forbidden actions were not performed."
   - "No files outside scope_files are changed."
 
 negative_constraints:
-  - "Do not start product work."
-  - "Do not run BLS import."
+  - "Do not start application feature work."
+  - "Do not run bulk data import."
   - "Do not run Supabase db push."
   - "Do not run Supabase db reset."
   - "Do not execute migrations."
@@ -57,9 +57,17 @@ negative_constraints:
   - "Do not commit raw BLS files."
 
 source_refs:
-  - "docs/project/CODEX_WORKER_BRIDGE.md"
-  - "docs/project/MODEL_RUNTIME_HARDENING.md"
-  - "docs/project/CURRENT_GOVERNANCE_HANDOVER.md"
+  module_index: "docs/project/GOVERNANCE_SYSTEM_COMPLETION_PLAN.md"
+  current_specs:
+    - "docs/project/CODEX_WORKER_BRIDGE.md"
+    - "docs/project/MODEL_RUNTIME_HARDENING.md"
+  reviews:
+    - "docs/project/CURRENT_GOVERNANCE_HANDOVER.md"
+  raw_sources_allowed: false
+  ssot_priority:
+    - module_index
+    - current_specs
+    - reviews
 
 validation_commands:
   - "cmd.exe /c node node_modules\\typescript\\bin\\tsc --noEmit"
