@@ -1,7 +1,7 @@
-# WO-codex-dispatcher-smoke-001 - Codex Dispatcher Docs Smoke Test
+# WO-codex-001 - Codex Dispatcher Docs Smoke Test
 
 ```yaml
-workorder_id: "WO-codex-dispatcher-smoke-001"
+workorder_id: "WO-codex-001"
 agent_id: "senior-coding-agent"
 phase: 1
 priority: "low"

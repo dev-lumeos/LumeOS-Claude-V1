@@ -71,7 +71,7 @@ The smoke workorder must be docs-only and must include:
 Draft workorder:
 
 ```text
-system/workorders/adhoc/WO-codex-dispatcher-smoke-001.md
+system/workorders/adhoc/WO-codex-001.md
 ```
 
 Expected output:
@@ -88,7 +88,7 @@ Before the smoke:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\agent-contract-check.ts --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder system\workorders\adhoc\WO-codex-dispatcher-smoke-001.md --dry-run --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder system\workorders\adhoc\WO-codex-001.md --dry-run --json
 cmd.exe /c node node_modules\typescript\bin\tsc --noEmit
 ```
 
@@ -134,7 +134,7 @@ git status --short --branch
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\agent-contract-check.ts --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder system\workorders\adhoc\WO-codex-dispatcher-smoke-001.md --dry-run --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder system\workorders\adhoc\WO-codex-001.md --dry-run --json
 ```
 
 4. Dispatch only the smoke workorder through the governed dispatcher path. Use the smallest existing CLI entrypoint that dispatches one workorder or a one-workorder smoke batch. Do not run a product batch.
