@@ -250,6 +250,7 @@ Gaps:
 - Failed runs are not yet automatically converted into incident records.
 - Operator failures produce learning recommendations through the autonomy handoff and `system/reports/governance-learning-suggest.ts`; draft writing still requires an explicit flag.
 - Recurring patterns are checked through incident records and detectors, and Memory/Learning V2 now mines dossier, audit, pipeline metrics, Codex Worker reports, and runtime history for incident candidates.
+- Dispatcher dependencies must be complete at each explicit injection boundary. A partial dispatcher dependency object must not omit required runtime functions such as `callModel`, and this boundary must be covered by a regression test.
 
 Required workflow:
 

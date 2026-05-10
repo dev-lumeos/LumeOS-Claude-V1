@@ -413,3 +413,4 @@ Rules:
 - Read-only spec access incorrectly required migration approval.
 - Operator `DONE` initially meant "no blockers" rather than "outputs complete".
 - Spec source-chain enforcement now exists as a checker; target product work still must pass it before BLS import.
+- Batch-loader dispatcher dependency injection once omitted `callModel`; `runDispatch()` now has direct regression coverage for passing `defaultCallModel` and `defaultExecuteTool`.
