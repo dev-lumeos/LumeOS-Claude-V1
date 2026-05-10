@@ -17,7 +17,8 @@ task: |
   - Write only docs/project/codex-dispatcher-smoke-test.md.
   - State that this is a governance/docs-only dispatcher smoke.
   - State that no product work, Supabase command, migration execution, approval grant, runtime state edit, queue edit, or raw BLS commit was performed.
-  - State that dispatcher Codex Worker integration was temporarily enabled only for this smoke and must be disabled afterward.
+  - State that dispatcher Codex Worker integration is temporarily enabled only for this smoke.
+  - Do not fail solely because `codex_worker_enabled` and `allow_dispatcher_integration` are enabled during Codex execution; the calling operator restores them after the smoke.
   - Keep the file short and factual.
 
 scope_files:
@@ -46,7 +47,8 @@ acceptance_criteria:
   - "The note is governance/docs-only."
   - "The note states forbidden actions were not performed."
   - "No files outside scope_files are changed."
-  - "Codex Worker dispatcher config is disabled after the smoke."
+  - "Temporary Codex Worker dispatcher config is allowed during execution for this approved smoke only."
+  - "The post-smoke operator verification, outside this workorder, must confirm codex_worker_enabled=false and allow_dispatcher_integration=false."
 
 negative_constraints:
   - "Do not start application feature work."

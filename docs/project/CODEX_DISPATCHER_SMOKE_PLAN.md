@@ -176,7 +176,8 @@ The smoke succeeds only if:
 - expected docs-only output exists
 - no files outside `scope_files` changed
 - no forbidden commands ran
-- config is re-disabled
+- Codex does not fail merely because the temporary config flags are enabled during execution
+- the wrapper/operator restores `codex_worker_enabled=false` and `allow_dispatcher_integration=false` after the dispatch attempt
 - no runtime reports are committed
 
 ## 10. Failure Criteria
@@ -188,6 +189,7 @@ Classify as `FIX_REQUIRED` or `STOP` if:
 - any forbidden file changes
 - any Supabase/migration/product command appears
 - config cannot be safely restored
+- config remains enabled after the wrapper/operator restoration step
 - runtime state/approval queue diverges
 - dispatcher routes any non-senior agent to Codex Worker
 
