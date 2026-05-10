@@ -18,7 +18,7 @@ The Memory/Learning V2 suggestion tool found an unrecorded historical `DISPATCHE
 
 ## Root Cause
 
-The likely root cause is a dispatcher dependency injection or test/runtime wiring mismatch where the dispatcher expected a `callModel` dependency but received an object without that function. The exact fix commit is not confirmed from the candidate evidence alone.
+The root cause was a batch-loader dependency injection bug. `system/workorders/cli/batch-loader.ts` called `dispatchWorkorder()` with a partial dependency object that provided `executeTool` but omitted `callModel`. Because `dispatchWorkorder()` received an explicit deps object, it did not fall back to its default dependency object for missing fields, and the dispatcher later called `deps.callModel(...)` on an undefined value.
 
 ## Trigger
 
@@ -36,20 +36,21 @@ Evidence:
 
 ## Fix
 
-- commit: unknown
+- commit: 90403043f937ffdbb52c36c1af2aa5a5e845b5a1 fix(workorders): provide callModel dependency in batch loader
 - files:
-  - `system/control-plane/dispatcher.ts`
-  - `system/workorders/cli/run-batch-operator.ts`
   - `system/workorders/cli/batch-operator.ts`
-- behavior changed: unknown; review git history for the dispatcher dependency wiring fix before promoting this draft.
+  - `system/workorders/cli/batch-loader.ts`
+- behavior changed: `batch-loader.ts` now imports `defaultCallModel` and passes both `callModel: defaultCallModel` and `executeTool: defaultExecuteTool` into `dispatchWorkorder()`.
 
 ## Regression Test
 
-- test_file: system/control-plane/__tests__/dispatcher.test.ts or system/workorders/cli/__tests__/batch-operator.test.ts
-- test_name: dispatcher/operator handles missing or malformed model-call dependency without leaving an ambiguous runtime failure
-- command: cmd.exe /c node node_modules\tsx\dist\cli.mjs --test <confirmed-test-file>
+- test_file: not found
+- test_name: not found
+- command:
 
-This draft remains `status: open` because the exact fix commit and regression test are not confirmed.
+Related coverage exists for dispatcher `callModel` exception cleanup paths in `system/control-plane/__tests__/dispatcher-fail-cleanup.test.ts`, including `callModel Exception -> scope_lock released über catch-Pfad` and `WO-011: callModel Exception setzt run-id-spezifischen Eintrag auf failed (catch-Pfad)`. Those tests verify failure cleanup after a model-call exception, but they do not directly prove that `batch-loader.ts` always injects a valid `callModel` dependency.
+
+This draft remains `status: open` because the exact fix commit is confirmed, but a direct regression test for the missing `callModel` dependency in `batch-loader.ts` was not found.
 
 ## Durable Rule
 
@@ -65,8 +66,8 @@ This draft remains `status: open` because the exact fix commit and regression te
 
 ## Recurrence Detector
 
-`system/reports/governance-learning-suggest.ts` now detects `DISPATCHER_FAILED` candidates from audit output. A promoted final incident should link the concrete dispatcher/operator regression test that prevents `deps.callModel is not a function` from recurring.
+`system/reports/governance-learning-suggest.ts` now detects `DISPATCHER_FAILED` candidates from audit output. A promoted final incident should link a concrete batch-loader/operator regression test that prevents `deps.callModel is not a function` from recurring.
 
 ## Follow-up
 
-Find the fix commit and regression test for `deps.callModel is not a function`; then either promote this draft to a final incident record or mark it duplicate if an existing final record covers it.
+Add or identify a direct regression test proving `runDispatch()`/`batch-loader.ts` passes a valid `callModel` dependency into `dispatchWorkorder()`. Then promote this draft to a final incident record.
