@@ -29,6 +29,7 @@ Current date: 2026-05-10.
 - Memory/Learning Automation adds a read-only governance learning checker.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
+- Runtime history readiness is normalized against current active productive routes. Older failures, including pre-routing-cleanup Spark D/DGX4 records, remain visible as historical failures but do not override a healthy latest active-route state.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent`, `senior-reviewer-agent`, and final escalations.
 - Codex Worker Bridge adds a dry-run-first `codex exec` integration point for `senior-coding-agent`.
@@ -107,6 +108,7 @@ Reason:
 - Operator, Doctor, and Dossier outputs expose `autonomy_handoff` so STOP/FIX/approval states are self-explaining and tied to dossier/learning next steps.
 - Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
 - Runtime history can be recorded explicitly with `system/control-plane/model-runtime-check.ts --check-endpoints --record-history --json --project lumeos`; generated files under `system/reports/model-runtime-history/` are ignored runtime artifacts.
+- Runtime history summaries separate current readiness from historical failures. Active required routes with latest `ok` or `external_ok` status are not blocked by stale removed/lab route records or older failures for the same route.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
 - Spark D / DGX4 endpoint diagnosis is documented in `docs/project/runtime/SPARK_D_RUNTIME_DIAGNOSIS.md`; DGX4 is reachable but port `8001` is not accepting HTTP connections, so it has been removed from productive governance routing and reserved for future DGX4/DGX5 lab work.

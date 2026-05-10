@@ -99,6 +99,8 @@ History summaries report:
 - last ok and last failure timestamps
 - overall readiness: `RUNTIME_HEALTHY`, `RUNTIME_DEGRADED`, `RUNTIME_BLOCKED`, or `UNKNOWN`
 
+History readiness is based on the latest record for active required productive routes. Older failures remain visible as historical failure and timeout counts, but stale records from removed, disabled, or lab-only routes must not keep current governance readiness blocked. A required route that failed earlier and is now healthy should degrade history for observability, not block the operator.
+
 Codex CLI routes record `runtime_type=codex-cli`, `endpoint_status=external_ok`, and `latency_ms=null`.
 
 MealCam optional offline records as informational degraded history, not a high blocker for normal governance work.

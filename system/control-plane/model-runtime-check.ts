@@ -95,6 +95,7 @@ export interface ModelRuntimeHistoryRouteSummary {
   model?: string
   runtime_type: string
   endpoint?: string
+  current_route: boolean
   required: boolean
   optional: boolean
   last_status: string
@@ -577,7 +578,7 @@ export function recordModelRuntimeHistory(result: ModelRuntimeCheckResult, optio
     project_id: projectId,
     check: result,
     records,
-    summary: summarizeModelRuntimeHistory(records, historyPath(repoRoot, options.historyDir)),
+    summary: summarizeModelRuntimeHistory(records, historyPath(repoRoot, options.historyDir), new Set(result.routes.map(route => route.agent))),
   }, null, 2)}\n`, 'utf8')
 }
 
@@ -607,7 +608,15 @@ function isFailureRecord(record: ModelRuntimeHistoryRecord): boolean {
   return severityRank[record.severity] >= severityRank.medium
 }
 
-function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], filePath: string): ModelRuntimeHistorySummary {
+function currentRuntimeRouteIds(repoRoot: string): Set<string> | undefined {
+  try {
+    return new Set(staticFindings(repoRoot).routes.map(route => route.agent))
+  } catch {
+    return undefined
+  }
+}
+
+function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], filePath: string, currentRouteIds?: Set<string>): ModelRuntimeHistorySummary {
   const byRoute = new Map<string, ModelRuntimeHistoryRecord[]>()
   for (const record of records) {
     const bucket = byRoute.get(record.route_id) ?? []
@@ -621,12 +630,14 @@ function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], file
     const failures = sorted.filter(isFailureRecord)
     const latencies = sorted.map(item => item.latency_ms).filter((value): value is number => typeof value === 'number')
     const findingIds = Array.from(new Set(sorted.flatMap(item => item.finding_ids)))
+    const currentRoute = currentRouteIds ? currentRouteIds.has(routeId) : true
     return {
       route_id: routeId,
       agent: latest.agent,
       model: latest.model,
       runtime_type: latest.runtime_type,
       endpoint: latest.endpoint,
+      current_route: currentRoute,
       required: latest.required,
       optional: latest.optional,
       last_status: latest.endpoint_status,
@@ -640,7 +651,20 @@ function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], file
     }
   }).sort((a, b) => a.agent.localeCompare(b.agent))
 
-  const requiredBlocked = routes.some(route => route.required && (route.last_status === 'unreachable' || route.timeout_count > 0 || route.finding_ids.some(id => !id.includes('optional'))))
+  const latestByRoute = new Map<string, ModelRuntimeHistoryRecord>()
+  for (const record of records) {
+    const previous = latestByRoute.get(record.route_id)
+    if (!previous || previous.timestamp.localeCompare(record.timestamp) < 0) latestByRoute.set(record.route_id, record)
+  }
+  const requiredBlocked = routes.some(route => {
+    if (!route.current_route || !route.required) return false
+    const latest = latestByRoute.get(route.route_id)
+    if (!latest) return false
+    return latest.endpoint_status === 'unreachable' ||
+      latest.timed_out ||
+      severityRank[latest.severity] >= severityRank.high ||
+      latest.finding_ids.some(id => !id.includes('optional'))
+  })
   const degraded = routes.some(route => route.failures_count > 0 || route.last_status === 'optional_offline')
   const timestamps = records.map(record => record.timestamp).sort()
   return {
@@ -661,7 +685,11 @@ function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], file
 export function readModelRuntimeHistorySummary(options: { repoRoot?: string; historyDir?: string; maxHistory?: number } = {}): ModelRuntimeHistorySummary {
   const repoRoot = options.repoRoot ?? process.cwd()
   const filePath = historyPath(repoRoot, options.historyDir)
-  return summarizeModelRuntimeHistory(readHistoryRecords(repoRoot, options.historyDir, options.maxHistory), filePath)
+  return summarizeModelRuntimeHistory(
+    readHistoryRecords(repoRoot, options.historyDir, options.maxHistory),
+    filePath,
+    currentRuntimeRouteIds(repoRoot),
+  )
 }
 
 export function runModelRuntimeCheck(options?: ModelRuntimeCheckOptions & { checkEndpoints?: false }): ModelRuntimeCheckResult

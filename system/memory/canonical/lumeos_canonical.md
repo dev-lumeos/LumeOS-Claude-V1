@@ -59,6 +59,7 @@ Governance learning records:
 - Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Runtime monitoring history is explicit and local at `system/reports/model-runtime-history/`; history files are ignored and written only with `--record-history`.
+- Runtime history readiness is based on latest active productive routes. Historical failures remain visible for observability, but removed/lab routes and older failures for now-healthy routes must not keep current governance readiness blocked.
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
 - `senior-coding-agent` and `senior-reviewer-agent` use Codex CLI / GPT-5.5 as the productive senior engineering and senior review runtimes. They are config/manual checked, not HTTP endpoint checked.
 - DGX4/Spark D at `192.168.0.101:8001` is removed from productive governance routing and reserved for future DGX4/DGX5 lab work; it must not block normal governance/operator runtime checks.
@@ -137,6 +138,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Factory-generated workorders must include `source_refs`, `expected_outputs`, scoped writes, high-risk `files_blocked`, and db-migration `rollback_hint`.
 - Model runtime checks must pass before autonomous operator work; endpoint health checks must be short read-only `/v1/models` checks, not real workorder prompts.
 - Runtime history summaries should be reviewed before autonomous/night/large runs; missing history is not a blocker by itself but means endpoint stability has not been trended.
+- Runtime history must distinguish current active-route readiness from historical failure counts.
 - Codex CLI runtimes must not be treated as vLLM HTTP endpoints.
 - Codex worker execution must remain explicit, dry-run first, and scoped by workorder `scope_files`, `files_blocked`, source refs, and forbidden commands.
 - Automatic Codex worker dispatch requires Tom-opened config gates and workorder `codex_worker: true`; arbitrary agents must not route to Codex.

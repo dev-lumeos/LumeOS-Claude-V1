@@ -475,6 +475,92 @@ async function defaultCallModel(routing) {
     assert.match(docs?.last_failure ?? '', /^\d{4}-/)
   })
 
+  it('latest active required route OK keeps older failures historical but non-blocking', () => {
+    const first = runCheck()
+    const failingRoute = first.routes.find(route => route.agent === 'docs-agent')
+    assert.ok(failingRoute)
+    failingRoute.endpoint_status = 'unreachable'
+    failingRoute.latency_ms = 1500
+    failingRoute.timed_out = true
+    first.findings.push({
+      id: 'model_runtime.endpoint_unreachable',
+      severity: 'high',
+      layer: 'model_runtime',
+      agent: 'docs-agent',
+      model: failingRoute.model,
+      endpoint: failingRoute.endpoint,
+      message: 'Model endpoint health check failed.',
+      evidence: 'timeout',
+      suggested_action: 'Check endpoint.',
+      blocks_operator: true,
+      blocks_product_work: true,
+    })
+    recordModelRuntimeHistory(first, { repoRoot: tmpDir, projectId: 'lumeos' })
+
+    const second = runCheck()
+    const docsRoute = second.routes.find(route => route.agent === 'docs-agent')
+    assert.ok(docsRoute)
+    docsRoute.endpoint_status = 'ok'
+    docsRoute.latency_ms = 20
+    docsRoute.timed_out = false
+    recordModelRuntimeHistory(second, { repoRoot: tmpDir, projectId: 'lumeos' })
+
+    const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
+    const docs = summary.routes.find(route => route.agent === 'docs-agent')
+
+    assert.equal(summary.overall_readiness, 'RUNTIME_DEGRADED')
+    assert.equal(docs?.last_status, 'ok')
+    assert.equal(docs?.failures_count, 1)
+    assert.equal(docs?.current_route, true)
+  })
+
+  it('removed route history is retained but does not block current readiness', () => {
+    const first = runCheck()
+    const removedRoute = first.routes.find(route => route.agent === 'docs-agent')
+    assert.ok(removedRoute)
+    removedRoute.endpoint_status = 'unreachable'
+    removedRoute.latency_ms = 1500
+    removedRoute.timed_out = true
+    first.findings.push({
+      id: 'model_runtime.endpoint_unreachable',
+      severity: 'high',
+      layer: 'model_runtime',
+      agent: 'docs-agent',
+      model: removedRoute.model,
+      endpoint: removedRoute.endpoint,
+      message: 'Model endpoint health check failed.',
+      evidence: 'timeout',
+      suggested_action: 'Check endpoint.',
+      blocks_operator: true,
+      blocks_product_work: true,
+    })
+    recordModelRuntimeHistory(first, { repoRoot: tmpDir, projectId: 'lumeos' })
+
+    writeJson('system/agent-registry/agents.json', {
+      'test-agent': {
+        type: 'executor',
+        spec_file: '.claude/agents/test-agent.md',
+      },
+    })
+    writeJson('system/agent-registry/model_routing.json', {
+      'test-agent': {
+        default: {
+          node: 'spark-b',
+          endpoint: 'http://127.0.0.1:8001',
+          model: 'qwen3-coder-next-fp8',
+        },
+      },
+    })
+    write('.claude/agents/test-agent.md', '# test-agent\n')
+
+    const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
+    const docs = summary.routes.find(route => route.agent === 'docs-agent')
+
+    assert.equal(summary.overall_readiness, 'RUNTIME_DEGRADED')
+    assert.equal(docs?.current_route, false)
+    assert.equal(docs?.failures_count, 1)
+  })
+
   it('records optional MealCam offline as info and non-blocking history', async () => {
     writeJson('system/agent-registry/agents.json', {
       'mealcam-agent': {
