@@ -106,6 +106,7 @@ Reason:
 - Runtime history can be recorded explicitly with `system/control-plane/model-runtime-check.ts --check-endpoints --record-history --json --project lumeos`; generated files under `system/reports/model-runtime-history/` are ignored runtime artifacts.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
+- Spark D / `senior-reviewer-agent` endpoint diagnosis is documented in `docs/project/runtime/SPARK_D_RUNTIME_DIAGNOSIS.md`; the host is reachable but port `8001` is not accepting HTTP connections, so autonomous/night/large runs remain blocked until Spark D health is restored.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
 - `system/workers/codex-worker.ts` can generate and execute constrained `codex exec` prompts.
 - Controlled dispatcher use requires `codex_worker_enabled=true`, `allow_dispatcher_integration=true`, `senior-coding-agent`, `runtime_type: codex-cli`, workorder `codex_worker: true`, complete source/scope/output metadata, no approval requirement, and product-gate policy pass.
