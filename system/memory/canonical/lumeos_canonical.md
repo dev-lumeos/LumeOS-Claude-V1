@@ -58,7 +58,8 @@ Governance learning records:
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 as the productive senior engineering runtime. It is config/manual checked, not HTTP endpoint checked.
-- Codex Worker Bridge exists at `system/workers/codex-worker.ts` for dry-run-first non-interactive `codex exec` prompt construction. Automatic dispatcher use is disabled by default.
+- Codex Worker Bridge exists at `system/workers/codex-worker.ts` for dry-run-first non-interactive `codex exec` prompt construction.
+- Codex Worker dispatcher integration exists for `senior-coding-agent` but remains disabled by default through `codex_worker_enabled=false` and `allow_dispatcher_integration=false`.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Governance UI V1 exists under `apps/web/src/app/governance` as a local operator console backed by allowlisted CLI execution.
 
@@ -132,6 +133,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Model runtime checks must pass before autonomous operator work; endpoint health checks must be short read-only `/v1/models` checks, not real workorder prompts.
 - Codex CLI runtimes must not be treated as vLLM HTTP endpoints.
 - Codex worker execution must remain explicit, dry-run first, and scoped by workorder `scope_files`, `files_blocked`, source refs, and forbidden commands.
+- Automatic Codex worker dispatch requires Tom-opened config gates and workorder `codex_worker: true`; arbitrary agents must not route to Codex.
 - Optional runtimes only block when the target batch/workorder explicitly requires them.
 - Governance UI commands must stay routed through the allowlist and must not expose Supabase reset/push, migration execution, runtime state edits, queue edits, or approval auto-grants.
 
@@ -146,5 +148,5 @@ Prompt text such as `/no_think` is not sufficient.
 - Workorder Factory / Decomposition Automation is implemented for structured plans; free-form decomposition remains a prompt/manual Brain step.
 - Memory/Learning Automation is implemented as a read-only checker plus explicit status writer.
 - Spark Runtime Hardening is implemented as a read-only checker; deeper runtime observability remains optional.
-- Codex Worker Bridge is implemented as a manual/controlled bridge; dispatcher integration remains a future governed step.
+- Codex Worker Bridge is implemented as a manual/controlled bridge; dispatcher integration is implemented but config-disabled by default.
 - Governance UI V1 is implemented as local operator console V1; richer graphing and saved dossier views remain optional refinements.

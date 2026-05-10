@@ -1,5 +1,12 @@
 {
   "codex_worker_enabled": false,
+  "allow_dispatcher_integration": false,
+  "allowed_agents": [
+    "senior-coding-agent"
+  ],
+  "require_explicit_workorder_flag": true,
+  "default_timeout_ms": 120000,
+  "max_timeout_ms": 300000,
   "default_mode": "dry-run",
   "runtime_type": "codex-cli",
   "model": "gpt-5.5",

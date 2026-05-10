@@ -36,6 +36,14 @@ Doctor mode is read-only. It does not dispatch workorders, mutate runtime state,
 
 It inspects operator status, stop rules, runtime blockers, approvals, cleanup suggestions, git status, invariant checker, agent-contract checker, spec-source-chain checker, and memory/learning file presence. It returns exactly one safe next action.
 
+Doctor also reports Codex Worker state:
+
+- `CODEX_WORKER_READY`: config permits dispatcher use for the allowlisted senior agent path.
+- `CODEX_WORKER_DISABLED`: bridge exists but automatic dispatcher execution is disabled by config.
+- `CODEX_WORKER_CONFIG_ERROR`: config could not be loaded or normalized.
+
+Disabled Codex Worker status is not a blocker for ordinary governance status checks.
+
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor --json
@@ -173,3 +181,26 @@ Commands such as `run-summary-generator --all` can dirty report outputs. Run sta
 The operator must distinguish cleared runtime blockers from true batch completion. If no active workorders remain but expected outputs are missing, the batch is not `DONE`; continue mode should select the first incomplete workorder instead of redispatching the whole batch.
 
 When a selected incomplete workorder has `blocked_by` dependencies whose expected outputs already exist, the operator may treat those specific blockers as resolved for that selected dispatch. Unresolved blockers must remain blocking.
+
+## Codex Worker Dispatcher Path
+
+The dispatcher has a narrow Codex Worker integration point for `senior-coding-agent`.
+
+It remains disabled by default. Automatic Codex Worker dispatch requires all of:
+
+- `codex_worker_enabled: true`
+- `allow_dispatcher_integration: true`
+- `senior-coding-agent`
+- `runtime_type: codex-cli`
+- workorder `codex_worker: true`
+- complete `source_refs`, `scope_files`, `files_blocked`, and `expected_outputs`
+- no pending human approval requirement
+
+The path keeps the Codex worker hard timeout and maps final states into the normal dispatcher lifecycle:
+
+- `DONE` -> completed
+- `NEEDS_TOM_APPROVAL` -> awaiting approval pause
+- `FIX_REQUIRED` -> failed
+- `STOP` -> blocked
+
+Generated Codex worker prompt/report files under `system/reports/codex-worker/` are runtime artifacts and must not be committed.

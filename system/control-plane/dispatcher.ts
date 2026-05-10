@@ -53,6 +53,13 @@ import { isAutoRetryAllowed, requiresSparkD, inferCategoryFromTask } from './ris
 import { runPreflight } from './scheduler-preflight'
 import { enqueueApproval } from '../approval/approval-queue'
 import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
+import {
+  buildPromptFromWorkorder,
+  loadCodexWorkerConfig,
+  runCodexWorkerPrompt,
+  type CodexWorkerConfig,
+  type CodexWorkerResult,
+} from '../workers/codex-worker'
 
 // Maximale Anzahl Rewrite-Loops bei Governance-Verletzungen
 const MAX_REWRITE_LOOPS = 2
@@ -93,6 +100,9 @@ export interface Workorder {
   validation_commands?:  string[]
   /** A.1: Rollback-Hinweis — empfohlen bei db-migration */
   rollback_hint?:        string
+  source_refs?:          string[]
+  expected_outputs?:     string[]
+  codex_worker?:         boolean
 }
 
 export interface ToolRequest {
@@ -126,6 +136,8 @@ interface ModelRoutingEntry {
 export interface DispatcherDeps {
   callModel:   (routing: ModelRoutingEntry, system: string, user: string) => Promise<string>
   executeTool: (req: ToolRequest) => Promise<ToolResult>
+  runCodexWorker?: (wo: Workorder, options: { timeoutMs: number }) => Promise<CodexWorkerResult>
+  codexWorkerConfig?: CodexWorkerConfig
   // Optional: Spark-C Reviewer-Adapter für Test-Injection.
   // Default: callGemmaReviewer aus services/scheduler-api/src/vllm-adapter.ts.
   // Production injiziert dieses Feld nicht — der ?? Fallback an der Aufruf-
@@ -382,6 +394,139 @@ function resolveCategory(wo: Workorder): string {
   return wo.risk_category ?? inferCategoryFromTask(wo.task)
 }
 
+function hasRequiredCodexWorkerFields(wo: Workorder): boolean {
+  return (wo.source_refs?.length ?? 0) > 0
+    && (wo.scope_files?.length ?? 0) > 0
+    && ((wo.files_blocked?.length ?? 0) > 0)
+    && ((wo.expected_outputs?.length ?? wo.acceptance_files?.length ?? 0) > 0)
+}
+
+function shouldUseCodexWorker(
+  wo: Workorder,
+  activeRoute: ModelRoutingEntry & { runtime_type?: string },
+  config: CodexWorkerConfig,
+): { use: boolean; reason: string; timeoutMs: number } {
+  if (wo.agent_id !== 'senior-coding-agent') return { use: false, reason: 'agent is not senior-coding-agent', timeoutMs: config.default_timeout_ms }
+  if (activeRoute.runtime_type !== 'codex-cli' && activeRoute.node !== 'codex-cli') {
+    return { use: false, reason: 'route is not codex-cli', timeoutMs: config.default_timeout_ms }
+  }
+  if (!config.codex_worker_enabled || !config.allow_dispatcher_integration) {
+    return { use: false, reason: 'codex worker dispatcher integration disabled', timeoutMs: config.default_timeout_ms }
+  }
+  if (!config.allowed_agents.includes(wo.agent_id)) {
+    return { use: false, reason: 'agent not allowlisted for codex worker', timeoutMs: config.default_timeout_ms }
+  }
+  if (config.require_explicit_workorder_flag && wo.codex_worker !== true) {
+    return { use: false, reason: 'workorder lacks codex_worker opt-in', timeoutMs: config.default_timeout_ms }
+  }
+  if (wo.requires_approval === true) {
+    return { use: false, reason: 'workorder has pending approval requirement', timeoutMs: config.default_timeout_ms }
+  }
+  if (!hasRequiredCodexWorkerFields(wo)) {
+    return { use: false, reason: 'workorder missing source_refs/scope/files_blocked/expected_outputs', timeoutMs: config.default_timeout_ms }
+  }
+  return {
+    use: true,
+    reason: 'codex worker enabled for senior-coding-agent',
+    timeoutMs: Math.min(config.default_timeout_ms, config.max_timeout_ms),
+  }
+}
+
+async function defaultRunCodexWorkerForDispatch(wo: Workorder, options: { timeoutMs: number }): Promise<CodexWorkerResult> {
+  const prompt = buildPromptFromWorkorder({
+    file: `${wo.workorder_id}.md`,
+    raw: '',
+    parsed: wo as unknown as Record<string, unknown>,
+  })
+  return runCodexWorkerPrompt(wo.workorder_id, prompt, {
+    execute: true,
+    writePrompt: true,
+    timeoutMs: options.timeoutMs,
+  })
+}
+
+async function finalizeCodexWorkerDispatch(
+  wo: Workorder,
+  runId: string,
+  orchestrationMode: ReturnType<typeof state.getOrchestrationMode>,
+  jobStart: number,
+  result: CodexWorkerResult,
+): Promise<DispatchResult> {
+  audit.writeAuditEvent({
+    event: 'codex_worker_result',
+    run_id: runId,
+    workorder_id: wo.workorder_id,
+    agent_id: wo.agent_id,
+    orchestration_mode: orchestrationMode,
+    final_state: result.finalState,
+    exit_code: result.exitCode,
+    timed_out: result.timedOut === true,
+    duration_ms: Math.round(result.durationMs),
+    prompt_path: result.promptPath,
+    report_path: result.reportPath,
+  })
+
+  await state.releaseScopeLock(runId)
+  await state.releaseDbMigrationLock(runId)
+
+  if (result.finalState === 'DONE' && result.exitCode === 0 && !result.timedOut) {
+    await state.endRun(runId, 'completed')
+    await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'done')
+    audit.auditJobCompleted({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, duration_ms: Date.now() - jobStart })
+    return { status: 'completed', run_id: runId, workorder_id: wo.workorder_id }
+  }
+
+  if (result.finalState === 'NEEDS_TOM_APPROVAL') {
+    const queuedApproval = enqueueApproval({
+      workorder_id: wo.workorder_id,
+      run_id: runId,
+      agent_id: wo.agent_id,
+      reason: 'Codex Worker returned NEEDS_TOM_APPROVAL.',
+      risk_category: resolveCategory(wo),
+      affected_files: wo.scope_files ?? [],
+      proposed_action: 'Review Codex Worker report before continuing.',
+      tool: 'mcp',
+    })
+    await state.createPendingApproval({
+      workorder_id: wo.workorder_id,
+      run_id: runId,
+      reason: 'Codex Worker returned NEEDS_TOM_APPROVAL.',
+      risk_category: resolveCategory(wo),
+      affected_files: wo.scope_files ?? [],
+      proposed_action: 'Review Codex Worker report before continuing.',
+      requested_by: wo.agent_id,
+      approval_id: queuedApproval.approval_id,
+      tool: 'mcp',
+    })
+    await state.endRun(runId, 'awaiting_approval')
+    await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'awaiting_approval')
+    return {
+      status: 'awaiting_approval',
+      run_id: runId,
+      workorder_id: wo.workorder_id,
+      error: 'CODEX_WORKER_NEEDS_TOM_APPROVAL',
+    }
+  }
+
+  const failedState = result.finalState === 'STOP' ? 'CODEX_WORKER_STOP' : 'CODEX_WORKER_FIX_REQUIRED'
+  await state.endRun(runId, result.finalState === 'STOP' ? 'blocked' : 'failed')
+  await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
+  audit.auditJobFailed({
+    run_id: runId,
+    workorder_id: wo.workorder_id,
+    agent_id: wo.agent_id,
+    orchestration_mode: orchestrationMode,
+    reason: `${failedState}: ${result.stderr || result.stdout || 'no worker details'}`.slice(0, 1000),
+    error_code: failedState,
+  })
+  return {
+    status: result.finalState === 'STOP' ? 'blocked' : 'failed',
+    run_id: runId,
+    workorder_id: wo.workorder_id,
+    error: failedState,
+  }
+}
+
 // ─── Haupt-Funktion ───────────────────────────────────────────────────────────
 
 export async function dispatchWorkorder(
@@ -491,6 +636,22 @@ export async function dispatchWorkorder(
     if (!agentDef) throw new Error(`Agent nicht in Registry: ${wo.agent_id}`)
     if (!routing)  throw new Error(`Routing nicht definiert: ${wo.agent_id}`)
     const activeRoute = routing.phase1_fallback ?? routing.default
+    const codexConfig = deps.codexWorkerConfig ?? loadCodexWorkerConfig()
+    const codexDispatch = shouldUseCodexWorker(wo, activeRoute, codexConfig)
+    audit.writeAuditEvent({
+      event: codexDispatch.use ? 'codex_worker_dispatch_enabled' : 'codex_worker_dispatch_skipped',
+      run_id: runId,
+      workorder_id: wo.workorder_id,
+      agent_id: wo.agent_id,
+      orchestration_mode: orchestrationMode,
+      reason: codexDispatch.reason,
+    })
+    if (codexDispatch.use) {
+      const runCodex = deps.runCodexWorker ?? defaultRunCodexWorkerForDispatch
+      const codexResult = await runCodex(wo, { timeoutMs: codexDispatch.timeoutMs })
+      cleanupHandled = true
+      return await finalizeCodexWorkerDispatch(wo, runId, orchestrationMode, jobStart, codexResult)
+    }
 
     // 4. Skills
     const skills = loadSkills({ agentId: wo.agent_id, agentType: agentDef.type,

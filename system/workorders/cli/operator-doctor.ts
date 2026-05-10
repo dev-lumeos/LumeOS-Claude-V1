@@ -8,6 +8,7 @@ import { runGovernanceInvariantCheck } from '../../control-plane/governance-inva
 import { runAgentContractCheck } from '../../control-plane/agent-contract-check'
 import { runModelRuntimeCheck } from '../../control-plane/model-runtime-check'
 import { runSpecSourceChainCheck } from './spec-source-chain-check'
+import { loadCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
 
 export type OperatorDoctorDiagnosis =
   | 'CLEAN_READY'
@@ -79,6 +80,13 @@ export interface OperatorDoctorResult {
     confirm_command: string
   }>
   checkers: OperatorDoctorCheckers
+  codex_worker: {
+    status: 'CODEX_WORKER_READY' | 'CODEX_WORKER_DISABLED' | 'CODEX_WORKER_CONFIG_ERROR'
+    codex_worker_enabled: boolean
+    allow_dispatcher_integration: boolean
+    allowed_agents: string[]
+    default_timeout_ms: number
+  }
   git_status: OperatorStatus['git']
   stop_rules: OperatorStatus['stopRules']
   product_gate: { status: 'blocked' | 'allowed'; reason: string }
@@ -201,6 +209,17 @@ function addBlock(blockers: OperatorDoctorResult['blockers'], category: Operator
   blockers.push({ category, message, evidence, gate })
 }
 
+function summarizeCodexWorker(config: CodexWorkerConfig): OperatorDoctorResult['codex_worker'] {
+  const enabled = config.codex_worker_enabled && config.allow_dispatcher_integration
+  return {
+    status: enabled ? 'CODEX_WORKER_READY' : 'CODEX_WORKER_DISABLED',
+    codex_worker_enabled: config.codex_worker_enabled,
+    allow_dispatcher_integration: config.allow_dispatcher_integration,
+    allowed_agents: config.allowed_agents,
+    default_timeout_ms: config.default_timeout_ms,
+  }
+}
+
 export function diagnoseOperatorDoctor(status: OperatorStatus, options: DiagnoseOptions = {}): OperatorDoctorResult {
   const checkers = options.checkers ?? {
     invariant: defaultChecker(),
@@ -277,6 +296,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     approvals: status.approvalStops.map(approvalSummary),
     cleanups: status.cleanupSuggestions.map(cleanupSummary),
     checkers,
+    codex_worker: summarizeCodexWorker(loadCodexWorkerConfig()),
     git_status: status.git,
     stop_rules: status.stopRules,
     product_gate: productGate,
@@ -319,6 +339,9 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   lines.push(`agent_contract: ${result.checkers.agent_contract.status} critical=${result.checkers.agent_contract.critical} high=${result.checkers.agent_contract.high} medium=${result.checkers.agent_contract.medium}`)
   lines.push(`model_runtime: ${result.checkers.model_runtime.status} critical=${result.checkers.model_runtime.critical} high=${result.checkers.model_runtime.high} medium=${result.checkers.model_runtime.medium}`)
   lines.push(`spec_source_chain: ${result.checkers.spec_source_chain.status} critical=${result.checkers.spec_source_chain.critical} high=${result.checkers.spec_source_chain.high} medium=${result.checkers.spec_source_chain.medium}`)
+  lines.push('')
+  lines.push('## Codex Worker')
+  lines.push(`${result.codex_worker.status}: enabled=${result.codex_worker.codex_worker_enabled} dispatcher=${result.codex_worker.allow_dispatcher_integration} agents=${result.codex_worker.allowed_agents.join(', ')}`)
   lines.push('')
   lines.push('## Product Gate')
   lines.push(`${result.product_gate.status}: ${result.product_gate.reason}`)

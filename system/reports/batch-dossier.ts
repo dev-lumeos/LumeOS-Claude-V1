@@ -98,6 +98,18 @@ export interface BatchDossierCleanup {
   reason?: string
 }
 
+export interface BatchDossierCodexWorkerRun {
+  workorder_id: string
+  report_path: string
+  prompt_path?: string
+  final_state: string
+  exit_code?: number
+  timed_out?: boolean
+  duration_ms?: number
+  stdout_summary?: string
+  stderr_summary?: string
+}
+
 export interface BatchDossierOutput {
   path: string
   expected: boolean
@@ -141,6 +153,7 @@ export interface BatchDossier {
   approvals: BatchDossierApproval[]
   reviews: BatchDossierReview[]
   cleanups: BatchDossierCleanup[]
+  codex_worker_runs: BatchDossierCodexWorkerRun[]
   stop_rules: {
     system_stop_active: boolean
     system_stop?: unknown
@@ -429,6 +442,47 @@ function collectCleanups(repoRoot: string, workorderIds: Set<string>, runIds: Se
     }))
 }
 
+function extractSection(content: string, heading: string): string {
+  const pattern = new RegExp(`## ${heading}\\s*\\n([\\s\\S]*?)(?=\\n## |$)`, 'i')
+  return pattern.exec(content)?.[1]?.trim() ?? ''
+}
+
+function stripFence(content: string): string {
+  return content.replace(/^```[a-zA-Z]*\s*/, '').replace(/```\s*$/, '').trim()
+}
+
+function collectCodexWorkerRuns(repoRoot: string, workorderIds: Set<string>): BatchDossierCodexWorkerRun[] {
+  const reportDir = path.join(repoRoot, 'system/reports/codex-worker')
+  if (!fs.existsSync(reportDir)) return []
+  return fs.readdirSync(reportDir)
+    .filter(name => name.endsWith('-report.md'))
+    .map(name => {
+      const fullPath = path.join(reportDir, name)
+      const relativePath = toPosix(path.relative(repoRoot, fullPath))
+      const content = fs.readFileSync(fullPath, 'utf8')
+      const workorderId = [...workorderIds].find(id => name.includes(id) || content.includes(id)) ?? ''
+      if (!workorderId) return null
+      const finalState = extractSection(content, 'Final State').split(/\s+/)[0] || 'UNKNOWN'
+      const exitCodeText = extractSection(content, 'Exit Code')
+      const durationText = extractSection(content, 'Duration')
+      const stdout = stripFence(extractSection(content, 'Stdout')).slice(0, 500)
+      const stderr = stripFence(extractSection(content, 'Stderr')).slice(0, 500)
+      const promptMatch = content.match(/prompt_path:\s*(\S+)/i)
+      return {
+        workorder_id: workorderId,
+        report_path: relativePath,
+        prompt_path: promptMatch?.[1],
+        final_state: finalState,
+        exit_code: Number.isFinite(Number(exitCodeText)) ? Number(exitCodeText) : undefined,
+        timed_out: /timed out/i.test(content),
+        duration_ms: Number.isFinite(Number.parseInt(durationText, 10)) ? Number.parseInt(durationText, 10) : undefined,
+        stdout_summary: stdout,
+        stderr_summary: stderr,
+      }
+    })
+    .filter((item): item is BatchDossierCodexWorkerRun => item !== null)
+}
+
 function checkerSummary(result: { summary?: Record<string, number>; hasHighOrCriticalFindings?: boolean; findings?: unknown[] } | null, error?: unknown): BatchDossierCheckerSummary {
   if (error) return { status: 'error', detail: (error as Error).message }
   if (!result) return { status: 'not_run' }
@@ -559,6 +613,7 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const approvals = collectApprovals(repoRoot, state, workorderIds, runIds)
   const reviews = collectReviews(repoRoot, workorderIds, runIds)
   const cleanups = collectCleanups(repoRoot, workorderIds, runIds)
+  const codexWorkerRuns = collectCodexWorkerRuns(repoRoot, workorderIds)
   const git = readGitStatus(repoRoot, options.gitStatus)
   git.commits_since_base = readCommitsSinceBase(repoRoot, options.commitsSinceBase)
   const checkers = collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true)
@@ -573,6 +628,7 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     approvals,
     reviews,
     cleanups,
+    codex_worker_runs: codexWorkerRuns,
     stop_rules: {
       system_stop_active: !!state.system_stop?.active,
       system_stop: state.system_stop,
@@ -664,6 +720,18 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
       cleanup.workorder_id ?? '',
       cleanup.run_id ?? '',
       cleanup.reason ?? '',
+    ]),
+  ]))
+  lines.push('')
+  lines.push('## Codex Worker Timeline')
+  lines.push(...table([
+    ['WO-ID', 'Final State', 'Exit Code', 'Timeout', 'Report'],
+    ...dossier.codex_worker_runs.map(run => [
+      run.workorder_id,
+      run.final_state,
+      String(run.exit_code ?? ''),
+      String(run.timed_out ?? false),
+      run.report_path,
     ]),
   ]))
   lines.push('')

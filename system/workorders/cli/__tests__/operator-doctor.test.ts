@@ -160,6 +160,7 @@ describe('operator doctor diagnosis', () => {
       'blockers',
       'checkers',
       'cleanups',
+      'codex_worker',
       'final_diagnosis',
       'generated_at',
       'git_status',
@@ -180,6 +181,14 @@ describe('operator doctor diagnosis', () => {
 
     assert.equal(result.final_diagnosis, 'MODEL_RUNTIME_BLOCKED')
     assert.match(result.next_action, /model-runtime-check/)
+  })
+
+  it('reports Codex worker disabled without blocking clean readiness', () => {
+    const result = diagnose({})
+
+    assert.equal(result.codex_worker.status, 'CODEX_WORKER_DISABLED')
+    assert.equal(result.codex_worker.codex_worker_enabled, false)
+    assert.equal(result.final_diagnosis, 'CLEAN_READY')
   })
 
   it('doctor performs no mutations to the supplied status object', () => {

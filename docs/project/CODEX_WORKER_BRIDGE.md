@@ -143,9 +143,21 @@ Current integration is intentionally conservative:
 
 - `system/workers/codex-worker.config.json` exists
 - `codex_worker_enabled` is `false` by default
-- dispatcher/operator auto-dispatch is deferred
+- `allow_dispatcher_integration` is `false` by default
+- `allowed_agents` is limited to `senior-coding-agent`
+- automatic dispatcher execution also requires `codex_worker: true` on the workorder when `require_explicit_workorder_flag` is enabled
+- the dispatcher integration point exists but remains disabled until Tom explicitly opens it
 
-Future integration may allow the Governance Operator to call the bridge for `senior-coding-agent` workorders after Tom explicitly enables it.
+When enabled, dispatcher use is narrow:
+
+- only `senior-coding-agent`
+- only `runtime_type: codex-cli`
+- only workorders with `source_refs`, `scope_files`, `files_blocked`, and `expected_outputs`
+- no pending human approval requirement
+- hard timeout from config
+- final state mapped to `completed`, `awaiting_approval`, `failed`, or `blocked`
+
+Operator Doctor reports whether the Codex worker is ready or disabled. Batch dossiers include Codex worker report metadata when runtime reports exist.
 
 ## Forbidden Commands
 
@@ -162,14 +174,15 @@ The worker must not be used to run:
 - manual approval-queue edits
 - product batches outside the current gate
 
-## Future Dispatcher Integration
+## Dispatcher Integration
 
-The safe future path is:
+The safe dispatcher path is:
 
 1. Operator selects `senior-coding-agent`.
 2. Operator verifies source-chain, invariant, agent-contract, learning, model-runtime, and product-gate checks.
-3. Operator asks for explicit Tom enablement of Codex worker dispatch.
-4. Dispatcher invokes `codex-worker.ts --workorder <file> --execute`.
-5. Dossier records prompt path, report path, stdout, stderr, exit code, duration, and final state.
+3. Tom explicitly enables the config gate if automatic Codex worker dispatch is desired.
+4. The workorder opts in with `codex_worker: true`.
+5. Dispatcher invokes the Codex worker through the internal bridge, not through a shell command string.
+6. Dossier records prompt path, report path, stdout/stderr summaries, exit code, duration, timeout state, and final state.
 
-Until that integration is built, use the worker manually through dry-run and explicit execute commands.
+Until Tom opens the config gate, use the worker manually through dry-run and explicit execute commands.

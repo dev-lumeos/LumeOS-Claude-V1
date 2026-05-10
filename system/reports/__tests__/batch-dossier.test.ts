@@ -230,6 +230,7 @@ describe('batch dossier reporter', () => {
       'batch_status',
       'checkers',
       'cleanups',
+      'codex_worker_runs',
       'dependency_graph',
       'expected_outputs',
       'final_state',
@@ -274,5 +275,43 @@ describe('batch dossier reporter', () => {
 
   it('does not treat ignored dependency folders as project outputs', () => {
     assert.equal(classifyDossierPath('packages/types/node_modules/'), 'unknown')
+  })
+
+  it('includes Codex worker report metadata when present', () => {
+    writeCleanRuntime()
+    write('system/reports/codex-worker/2026-05-10T00-00-00-000Z-WO-test-001-report.md', [
+      '# Codex Worker Execution Report',
+      '',
+      '## Exit Code',
+      '0',
+      '',
+      '## Final State',
+      'DONE',
+      '',
+      '## Duration',
+      '123 ms',
+      '',
+      '## Stdout',
+      '```',
+      'Final State: DONE',
+      '```',
+      '',
+      '## Stderr',
+      '```',
+      '',
+      '```',
+    ].join('\n'))
+
+    const dossier = buildBatchDossier({
+      batchFile: batchPath(),
+      repoRoot: tmpDir,
+      gitStatus: '## goal/test\n',
+      generatedAt: '2026-05-05T00:00:00.000Z',
+      runCheckers: false,
+    })
+
+    assert.equal(dossier.codex_worker_runs.length, 1)
+    assert.equal(dossier.codex_worker_runs[0]?.workorder_id, 'WO-test-001')
+    assert.equal(dossier.codex_worker_runs[0]?.final_state, 'DONE')
   })
 })

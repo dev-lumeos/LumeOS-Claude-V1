@@ -50,6 +50,15 @@ export type CodexWorkerResult = {
   timedOut?: boolean
 }
 
+export type CodexWorkerConfig = {
+  codex_worker_enabled: boolean
+  allow_dispatcher_integration: boolean
+  allowed_agents: string[]
+  require_explicit_workorder_flag: boolean
+  default_timeout_ms: number
+  max_timeout_ms: number
+}
+
 type RunOptions = {
   repoRoot?: string
   spawn?: CodexSpawn
@@ -57,6 +66,7 @@ type RunOptions = {
 
 const FINAL_STATES: FinalState[] = ['NEEDS_TOM_APPROVAL', 'FIX_REQUIRED', 'DONE', 'STOP']
 const DEFAULT_TIMEOUT_MS = 120_000
+const DEFAULT_MAX_TIMEOUT_MS = 300_000
 
 const PROMPT_ALLOWED_ROOTS = [
   'docs/project/',
@@ -82,6 +92,46 @@ const FORBIDDEN_COMMANDS = [
   'No raw BLS file commits.',
   'Obey FILES_ALLOWED, SCOPE_FILES, and FILES_BLOCKED.',
 ]
+
+export function defaultCodexWorkerConfig(): CodexWorkerConfig {
+  return {
+    codex_worker_enabled: false,
+    allow_dispatcher_integration: false,
+    allowed_agents: ['senior-coding-agent'],
+    require_explicit_workorder_flag: true,
+    default_timeout_ms: DEFAULT_TIMEOUT_MS,
+    max_timeout_ms: DEFAULT_MAX_TIMEOUT_MS,
+  }
+}
+
+export function normalizeCodexWorkerConfig(value: unknown): CodexWorkerConfig {
+  const defaults = defaultCodexWorkerConfig()
+  if (!value || typeof value !== 'object') return defaults
+  const input = value as Record<string, unknown>
+  const allowedAgents = Array.isArray(input.allowed_agents)
+    ? input.allowed_agents.filter((item): item is string => typeof item === 'string')
+    : defaults.allowed_agents
+  const defaultTimeout = typeof input.default_timeout_ms === 'number' && Number.isFinite(input.default_timeout_ms)
+    ? input.default_timeout_ms
+    : defaults.default_timeout_ms
+  const maxTimeout = typeof input.max_timeout_ms === 'number' && Number.isFinite(input.max_timeout_ms)
+    ? input.max_timeout_ms
+    : defaults.max_timeout_ms
+  return {
+    codex_worker_enabled: input.codex_worker_enabled === true,
+    allow_dispatcher_integration: input.allow_dispatcher_integration === true,
+    allowed_agents: allowedAgents,
+    require_explicit_workorder_flag: input.require_explicit_workorder_flag !== false,
+    default_timeout_ms: Math.min(defaultTimeout, maxTimeout),
+    max_timeout_ms: maxTimeout,
+  }
+}
+
+export function loadCodexWorkerConfig(repoRoot = process.cwd()): CodexWorkerConfig {
+  const configPath = path.join(repoRoot, 'system/workers/codex-worker.config.json')
+  if (!fs.existsSync(configPath)) return defaultCodexWorkerConfig()
+  return normalizeCodexWorkerConfig(JSON.parse(fs.readFileSync(configPath, 'utf8')))
+}
 
 function normalizeRelativePath(input: string): string {
   return input.replace(/\\/g, '/').replace(/^\/+/, '')
@@ -459,22 +509,14 @@ ${result.stderr}
   return normalizeRelativePath(reportPath)
 }
 
-export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions = {}): Promise<CodexWorkerResult> {
+export async function runCodexWorkerPrompt(
+  id: string,
+  prompt: string,
+  args: Pick<CodexWorkerArgs, 'execute' | 'writePrompt' | 'timeoutMs' | 'resumeSessionId'>,
+  options: RunOptions = {},
+): Promise<CodexWorkerResult> {
   const repoRoot = path.resolve(options.repoRoot ?? process.cwd())
   const spawnImpl = options.spawn ?? spawnProcessWithTimeout
-
-  let prompt = ''
-  let id = 'prompt'
-  if (args.workorderFile) {
-    const input = loadWorkorderInput(repoRoot, args.workorderFile)
-    id = asString(input.parsed.workorder_id, path.basename(args.workorderFile, '.md'))
-    prompt = buildPromptFromWorkorder(input, repoRoot)
-  } else if (args.promptFile) {
-    const fullPath = validatePromptPath(repoRoot, args.promptFile)
-    id = path.basename(args.promptFile, path.extname(args.promptFile))
-    prompt = fs.readFileSync(fullPath, 'utf8')
-  }
-
   const command = buildCodexCommand(prompt, args.resumeSessionId)
   const start = performance.now()
   let promptPath: string | undefined
@@ -531,6 +573,24 @@ export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions 
   }
   reportPath = writeReport(repoRoot, id, result)
   return { ...result, reportPath }
+}
+
+export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions = {}): Promise<CodexWorkerResult> {
+  const repoRoot = path.resolve(options.repoRoot ?? process.cwd())
+
+  let prompt = ''
+  let id = 'prompt'
+  if (args.workorderFile) {
+    const input = loadWorkorderInput(repoRoot, args.workorderFile)
+    id = asString(input.parsed.workorder_id, path.basename(args.workorderFile, '.md'))
+    prompt = buildPromptFromWorkorder(input, repoRoot)
+  } else if (args.promptFile) {
+    const fullPath = validatePromptPath(repoRoot, args.promptFile)
+    id = path.basename(args.promptFile, path.extname(args.promptFile))
+    prompt = fs.readFileSync(fullPath, 'utf8')
+  }
+
+  return runCodexWorkerPrompt(id, prompt, args, options)
 }
 
 function formatText(result: CodexWorkerResult): string {
