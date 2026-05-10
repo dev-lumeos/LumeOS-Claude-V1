@@ -185,6 +185,36 @@ describe('codex worker bridge', () => {
     assert.ok(result.reportPath?.includes('system/reports/codex-worker'))
   })
 
+  it('prefers stdout final report over echoed prompt text in stderr', async () => {
+    const spawn: CodexSpawn = async () => ({
+      exitCode: 0,
+      stdout: '# Codex Worker Result\n\n## 1. Final State\nDONE\n',
+      stderr: 'user prompt echoed: Return one of DONE / NEEDS_TOM_APPROVAL / FIX_REQUIRED / STOP',
+    })
+
+    const result = await runCodexWorker(
+      parseCodexWorkerArgs(['--workorder', fixtureWo(), '--execute']),
+      { repoRoot: tmpDir, spawn },
+    )
+
+    assert.equal(result.finalState, 'DONE')
+  })
+
+  it('uses stderr diagnostics for failed runs when stdout has no final state', async () => {
+    const spawn: CodexSpawn = async () => ({
+      exitCode: 1,
+      stdout: 'No terminal state emitted.',
+      stderr: 'Error: model runtime failed before final report.',
+    })
+
+    const result = await runCodexWorker(
+      parseCodexWorkerArgs(['--workorder', fixtureWo(), '--execute']),
+      { repoRoot: tmpDir, spawn },
+    )
+
+    assert.equal(result.finalState, 'FIX_REQUIRED')
+  })
+
   it('spawnProcessWithTimeout closes stdin for non-interactive child processes', async () => {
     const script = [
       'process.stdin.resume();',

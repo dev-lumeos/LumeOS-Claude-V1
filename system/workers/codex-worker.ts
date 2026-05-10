@@ -344,6 +344,21 @@ export function parseFinalState(output: string): FinalState {
   return 'UNKNOWN'
 }
 
+export function resolveFinalState(spawned: CodexSpawnResult): FinalState {
+  if (spawned.timedOut) return 'FIX_REQUIRED'
+
+  const stdoutState = parseFinalState(spawned.stdout)
+  if (stdoutState !== 'UNKNOWN') return stdoutState
+
+  if (spawned.exitCode !== 0) {
+    const stderrState = parseFinalState(spawned.stderr)
+    if (stderrState !== 'UNKNOWN') return stderrState
+    return 'FIX_REQUIRED'
+  }
+
+  return 'UNKNOWN'
+}
+
 function timestamp(): string {
   return new Date().toISOString().replace(/[:.]/g, '-')
 }
@@ -500,9 +515,7 @@ export async function runCodexWorker(args: CodexWorkerArgs, options: RunOptions 
     timeoutPromise,
   ])
   if (timeout) clearTimeout(timeout)
-  const finalState: FinalState = spawned.timedOut
-    ? 'FIX_REQUIRED'
-    : parseFinalState(`${spawned.stdout}\n${spawned.stderr}`)
+  const finalState = resolveFinalState(spawned)
   const result: CodexWorkerResult = {
     mode: 'execute',
     exitCode: spawned.exitCode,
