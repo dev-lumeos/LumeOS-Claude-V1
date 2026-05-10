@@ -55,7 +55,7 @@ Governance learning records:
 - Workorder Factory Automation exists at `system/workorders/cli/wo-factory.ts`.
 - The factory accepts a structured JSON plan inside Markdown, dry-runs by default, and writes draft workorders/batches only with `--write`.
 - Governance Learning Checker exists at `system/reports/governance-learning-check.ts`.
-- Governance Learning Suggestion exists at `system/reports/governance-learning-suggest.ts`; it is read-only unless called with `--write-draft`.
+- Governance Learning Suggestion exists at `system/reports/governance-learning-suggest.ts`; it is read-only unless called with `--write-drafts`, which writes only review drafts under `docs/project/governance-learning/drafts/`.
 - Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Runtime monitoring history is explicit and local at `system/reports/model-runtime-history/`; history files are ignored and written only with `--record-history`.
@@ -97,6 +97,7 @@ Do not run:
 - Chat history is not durable memory.
 - Every governance incident must become: Incident -> Root Cause -> Fix -> Regression Test -> Durable Rule -> Memory Update.
 - Governance learning records must pass `system/reports/governance-learning-check.ts` before product work opens.
+- Incident suggestions can be generated from dossier, audit, metric, runtime, and Codex Worker outputs, but final incident records and canonical memory updates still require review.
 - Detailed incidents belong in `docs/project/governance-learning/`.
 - Compact current truths belong in this canonical memory file.
 - Session continuity belongs in `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`.

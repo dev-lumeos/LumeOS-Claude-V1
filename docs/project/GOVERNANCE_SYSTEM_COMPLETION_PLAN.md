@@ -29,7 +29,7 @@ The goal is to make the governance system operable before more product work cont
 | 17. Model routing / JSON / thinking policy | `system/agent-registry/model_routing.json`, dispatcher model caller, AGENTS.md, `system/control-plane/agent-contract-check.ts`, `system/control-plane/model-runtime-check.ts`, `system/workers/codex-worker.ts` | TESTED | Batch 004 checks contract policy; Spark Runtime Hardening adds route parsing, timeout/retry validation, optional endpoint health, Operator Doctor integration, and a dry-run-first Codex worker bridge. Batch 010 enables a controlled dispatcher path for senior-coding-agent only. |
 | 18. Merge / promotion governance | `system/control-plane/promotion-governance.ts`, promotion tests | TESTED | Batch 007 adds deterministic branch review, merge, push, forbidden artifact checks, product-gate detection, and post-merge typecheck. |
 | 19. Memory layer | `system/memory/canonical/*`, `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/reports/governance-learning-check.ts`, CLAUDE.md, AGENTS.md | TESTED | Memory files exist and the learning checker validates handover/product-gate/canonical consistency. |
-| 20. Learning / feedback-loop | `docs/project/governance-learning/*`, `system/reports/governance-learning-check.ts`, commit history, tests | TESTED | Incident records, schema, checklist, and batch summaries are now machine-checkable. |
+| 20. Learning / feedback-loop | `docs/project/governance-learning/*`, `system/reports/governance-learning-check.ts`, `system/reports/governance-learning-suggest.ts`, commit history, tests | TESTED | Incident records, schema, checklist, and batch summaries are machine-checkable; Memory/Learning V2 suggests draft incident candidates from dossier, audit, metrics, runtime, and Codex Worker outputs. |
 | 21. Incident-to-regression-test | `system/reports/governance-learning-check.ts`, tests near fixes | TESTED | Fixed incidents must link fix commits, regression tests, durable rules, and recurrence detectors or produce findings. |
 | 22. Knowledge handover / session continuity | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`, `system/memory/canonical/*` | PARTIAL | Current handover exists; operator-maintained refresh is still missing. |
 | 23. Runtime artifact policy | `.gitignore`, operator artifact categorization, `system/control-plane/governance-invariant-check.ts` | TESTED | Raw BLS and runtime artifact drift are checked read-only by Batch 003. |
@@ -248,8 +248,8 @@ Current state:
 Gaps:
 
 - Failed runs are not yet automatically converted into incident records.
-- Operator failures now produce learning recommendations through the autonomy handoff and `system/reports/governance-learning-suggest.ts`; draft writing still requires an explicit flag.
-- Recurring patterns are checked through incident records and detectors, but not yet mined automatically from audit logs.
+- Operator failures produce learning recommendations through the autonomy handoff and `system/reports/governance-learning-suggest.ts`; draft writing still requires an explicit flag.
+- Recurring patterns are checked through incident records and detectors, and Memory/Learning V2 now mines dossier, audit, pipeline metrics, Codex Worker reports, and runtime history for incident candidates.
 
 Required workflow:
 

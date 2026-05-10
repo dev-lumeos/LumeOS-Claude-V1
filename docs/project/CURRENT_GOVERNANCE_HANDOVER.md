@@ -27,6 +27,7 @@ Current date: 2026-05-10.
 - Governance Batch 008 adds read-only Operator Doctor mode.
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
 - Memory/Learning Automation adds a read-only governance learning checker.
+- Memory/Learning V2 adds read-only incident suggestion from dossier, autonomy, audit, pipeline metrics, runtime history, and Codex Worker outputs. Draft writing is explicit and limited to `docs/project/governance-learning/drafts/`.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
 - Runtime history readiness is normalized against current active productive routes. Older failures, including pre-routing-cleanup Spark D/DGX4 records, remain visible as historical failures but do not override a healthy latest active-route state.
@@ -102,7 +103,7 @@ Reason:
 - Spec source-chain checking is available through `system/workorders/cli/spec-source-chain-check.ts`.
 - Governance learning checking is available through `system/reports/governance-learning-check.ts`.
 - Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
-- Learning suggestions are available through `system/reports/governance-learning-suggest.ts`; it is read-only unless explicitly called with `--write-draft`.
+- Learning suggestions are available through `system/reports/governance-learning-suggest.ts`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/drafts/`.
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 - Operator, Doctor, and Dossier outputs expose `autonomy_handoff` so STOP/FIX/approval states are self-explaining and tied to dossier/learning next steps.

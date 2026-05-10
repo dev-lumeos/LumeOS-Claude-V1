@@ -52,6 +52,25 @@ docs/project/governance-learning/CURRENT_LEARNING_STATUS.md
 
 The checker validates required memory files, incident schema fields, fix commit references, regression test paths, durable rules, recurrence detectors, canonical memory product-gate wording, and open incidents.
 
+Run the learning suggestion tool when operator, dossier, audit, runtime, or Codex Worker output may contain a new incident candidate:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --from-dossier <dossier-json-or-md>
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --write-drafts
+```
+
+Default mode is read-only. `--write-drafts` may create draft review candidates only under:
+
+```text
+docs/project/governance-learning/drafts/
+```
+
+Drafts are not final incident records. They must be reviewed, linked to a fix and regression test, and then promoted manually into this directory. The suggestion tool never writes canonical memory, runtime state, approval state, audit history, queue files, or final incident records.
+
+The suggestion tool detects incident candidates from dossier/autonomy output, recent audit and pipeline metrics, Codex Worker reports, runtime history, and existing incident records. If a candidate matches an existing incident, it is marked as `duplicate_of` and no new draft is suggested by default.
+
 ## File Naming
 
 Use:
