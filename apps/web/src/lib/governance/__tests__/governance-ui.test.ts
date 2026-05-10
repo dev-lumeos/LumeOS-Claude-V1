@@ -164,6 +164,45 @@ describe('governance UI safety helpers', () => {
     assert.match(consoleComponent, /Project Profile/)
   })
 
+  it('includes V2 workorder graph and dossier timeline structure', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+
+    assert.match(consoleComponent, /function WorkorderGraph/)
+    assert.match(consoleComponent, /DependencyChips/)
+    assert.match(consoleComponent, /WorkorderDetails/)
+    assert.match(consoleComponent, /function DossierTimeline/)
+    assert.match(consoleComponent, /TimelineSection/)
+    assert.match(consoleComponent, /Raw command output/)
+  })
+
+  it('keeps raw CLI output secondary behind collapsible details', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+
+    assert.match(consoleComponent, /function RawOutputDetails/)
+    assert.match(consoleComponent, /<summary className="cursor-pointer text-sm font-semibold text-slate-900">Raw command output<\/summary>/)
+  })
+
+  it('approval center remains display-only while showing decision commands for copy', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+
+    assert.match(consoleComponent, /Copy grant/)
+    assert.match(consoleComponent, /Copy deny/)
+    assert.doesNotMatch(consoleComponent, /runAction\('approval\.grant/)
+    assert.doesNotMatch(consoleComponent, /runAction\('approval\.deny/)
+  })
+
+  it('runtime page has card display for optional and external runtimes', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+
+    assert.match(consoleComponent, /function RuntimeRouteCard/)
+    assert.match(consoleComponent, /optional\/on-demand/)
+    assert.match(consoleComponent, /Codex external/)
+  })
+
   it('runtime page displays runtime type for external Codex routes', () => {
     const root = findRepoRoot(process.cwd())
     const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')

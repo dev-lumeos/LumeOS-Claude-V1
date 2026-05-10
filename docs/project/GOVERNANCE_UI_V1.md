@@ -113,6 +113,10 @@ Governance UI V1 does not expose:
 - Promotion review on `main` is explained as a feature-branch workflow: `main..main` has no diff to review.
 - The default batch path points at an existing governance batch, not a missing Nutrition P1-005 planning batch.
 
+## V2 Follow-up
+
+Governance UI V2 is documented in `docs/project/GOVERNANCE_UI_V2.md`. V2 keeps the same safety model and adds a lightweight workorder dependency board, structured dossier timeline, improved doctor/approval/runtime summaries, and copyable next-action command blocks.
+
 ## Visual Verification
 
 Minimum visual acceptance for V1:

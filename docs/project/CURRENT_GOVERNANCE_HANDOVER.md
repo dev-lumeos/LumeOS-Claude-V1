@@ -4,9 +4,7 @@
 
 Current date: 2026-05-10.
 
-`main` is pushed through the controlled Codex dispatcher smoke. The active branch enables Codex Worker as the controlled `senior-coding-agent` runtime path.
-
-The active governance branch is implementing controlled Codex Worker enablement for operator/dispatcher use.
+`main` is pushed through the Operator/Profile Deep Integration work. The active branch is implementing Governance UI V2 workorder graph and dossier timeline improvements.
 
 ## Current Truth
 
@@ -36,8 +34,9 @@ The active governance branch is implementing controlled Codex Worker enablement 
 - Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker.
 - Codex Worker dispatch is controlled-enabled for `senior-coding-agent` only and still requires explicit `codex_worker: true`, complete workorder metadata, and product-gate policy pass.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
+- Governance UI V2 adds a lightweight workorder dependency board, structured dossier timeline, improved doctor/approval/runtime summaries, copyable next-action commands, and collapsible raw output.
 - Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
-- Product work is conditionally open only for the next controlled planning/probe batch.
+- Product work remains closed unless Tom explicitly opens it.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -56,6 +55,7 @@ Use these files before starting more governance or product work:
 - `docs/project/CODEX_WORKER_BRIDGE.md`
 - `docs/project/PROJECT_PROFILES.md`
 - `docs/project/GOVERNANCE_UI_V1.md`
+- `docs/project/GOVERNANCE_UI_V2.md`
 - `docs/project/GOVERNANCE_UI_USAGE_GUIDE.md`
 - `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
 - `AGENTS.md`
@@ -66,11 +66,9 @@ The completion plan is the current truth for remaining governance gaps. Canonica
 
 ## Current Product Work Gate
 
-Product work is not freely open.
+Product work is not freely open and is currently closed unless Tom explicitly opens it.
 
-Tom has conditionally opened the product gate only for the next controlled planning/probe batch.
-
-Allowed:
+Allowed only after Tom explicitly opens the appropriate gate:
 
 - Planning-only product work.
 - BLS import planning and preflight.

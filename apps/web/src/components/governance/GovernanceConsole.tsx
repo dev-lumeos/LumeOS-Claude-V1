@@ -103,9 +103,34 @@ function jsonRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? value as Record<string, unknown> : {}
 }
 
+function arrayRecords(value: unknown): Array<Record<string, unknown>> {
+  return Array.isArray(value)
+    ? value.filter(item => item && typeof item === 'object') as Array<Record<string, unknown>>
+    : []
+}
+
+function stringValue(value: unknown, fallback = ''): string {
+  if (typeof value === 'string') return value
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+  return fallback
+}
+
+function stringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.map(item => stringValue(item)).filter(Boolean) : []
+}
+
+function toneForState(value: unknown): string {
+  const normalized = stringValue(value, 'unknown').toLowerCase()
+  if (/done|complete|completed|pass|ok|ready|granted/.test(normalized)) return 'pass'
+  if (/blocked|fail|fix|required|stop|denied|error/.test(normalized)) return 'blocked'
+  if (/pending|approval|cleanup|warn|partial|medium/.test(normalized)) return 'attention'
+  if (/optional|info|not_checked|not checked/.test(normalized)) return 'info'
+  return 'idle'
+}
+
 function findingsOf(value: unknown): Array<Record<string, unknown>> {
   const findings = jsonRecord(value).findings
-  return Array.isArray(findings) ? findings.filter(item => item && typeof item === 'object') as Array<Record<string, unknown>> : []
+  return arrayRecords(findings)
 }
 
 function summaryLine(value: unknown): string {
@@ -116,6 +141,13 @@ function summaryLine(value: unknown): string {
 
 function commandBlock(command: string): JSX.Element {
   return <code className="gov-code">{command}</code>
+}
+
+async function copyText(value: string) {
+  if (!value) return
+  if (typeof navigator !== 'undefined' && navigator.clipboard) {
+    await navigator.clipboard.writeText(value)
+  }
 }
 
 export function GovernanceConsole({ page }: Props) {
@@ -334,23 +366,44 @@ function BatchConsole(props: {
 
 function DoctorPanel({ result, runDoctor, batchPath, setBatchPath }: { result: CommandExecution | null; runDoctor: () => void; batchPath: string; setBatchPath: (value: string) => void }) {
   const data = jsonRecord(result?.parsedJson)
+  const blockers = arrayRecords(data.blockers)
+  const cleanups = arrayRecords(data.cleanups)
+  const approvals = arrayRecords(data.approvals)
+  const checkers = jsonRecord(data.checkers)
+  const runtime = findingsOf(result?.parsedJson).filter(item => /model|runtime|endpoint/i.test(stringValue(item.layer) + stringValue(item.id) + stringValue(item.message)))
   return (
     <div className="space-y-4">
       <BatchInput value={batchPath} onChange={setBatchPath} />
       <button onClick={runDoctor} className="gov-button gov-button-primary">Run doctor</button>
       <Panel title="Doctor Diagnosis" subtitle="Doctor is read-only and must produce exactly one safe next action.">
         <div className="grid gap-3 md:grid-cols-3">
-          <Info label="Diagnosis" value={String(data.final_diagnosis ?? 'not run')} />
-          <Info label="Next Action" value={String(data.next_action ?? 'Run doctor for one safe next action.')} />
-          <Info label="Blockers" value={String(Array.isArray(data.blockers) ? data.blockers.length : 0)} />
+          <Info label="Diagnosis" value={stringValue(data.final_diagnosis, 'not run')} />
+          <Info label="Blockers" value={String(blockers.length)} />
+          <Info label="Approvals" value={String(approvals.length)} />
         </div>
+        <NextActionCard action={stringValue(data.next_action, 'Run doctor for one safe next action.')} />
+        <CheckerPills checkers={checkers} />
       </Panel>
-      <ResultPanel result={result} />
+      <div className="grid gap-4 xl:grid-cols-3">
+        <ListPanel title="Blockers" items={blockers} empty="No blockers reported." />
+        <ListPanel title="Cleanup Candidates" items={cleanups} empty="No safe cleanup candidates reported." />
+        <ListPanel title="Runtime Findings" items={runtime} empty="No runtime blockers reported." />
+      </div>
+      <RawOutputDetails result={result} />
     </div>
   )
 }
 
 function ApprovalCenter({ result, runAll, runPending }: { result: CommandExecution | null; runAll: () => void; runPending: () => void }) {
+  const approvals = [
+    ...arrayRecords(jsonRecord(result?.parsedJson).approvals),
+    ...arrayRecords(jsonRecord(result?.parsedJson).items),
+    ...arrayRecords(result?.parsedJson),
+  ]
+  const byStatus = ['pending', 'granted', 'denied', 'consumed', 'expired'].map(status => ({
+    status,
+    items: approvals.filter(item => stringValue(item.status, 'pending').toLowerCase() === status),
+  }))
   return (
     <div className="space-y-4">
       <Panel title="Approval Controls">
@@ -360,7 +413,12 @@ function ApprovalCenter({ result, runAll, runPending }: { result: CommandExecuti
         </div>
         <p className="mt-3 text-sm text-slate-600">Grant and deny are intentionally not executable in V1. The console may display commands for review, but no approval is auto-granted.</p>
       </Panel>
-      <ResultPanel result={result} />
+      <div className="grid gap-4 xl:grid-cols-5">
+        {byStatus.map(group => (
+          <ApprovalColumn key={group.status} status={group.status} approvals={group.items} />
+        ))}
+      </div>
+      <RawOutputDetails result={result} />
     </div>
   )
 }
@@ -370,31 +428,36 @@ function DossierViewer({ result, runDossier, batchPath, setBatchPath }: { result
     <div className="space-y-4">
       <BatchInput value={batchPath} onChange={setBatchPath} />
       <button onClick={runDossier} className="gov-button gov-button-primary">Generate dossier JSON</button>
-      <ResultPanel result={result} />
+      <DossierTimeline result={result} />
+      <RawOutputDetails result={result} />
     </div>
   )
 }
 
 function WorkorderView({ result, runDossier }: { result: CommandExecution | null; runDossier: () => void }) {
   const data = jsonRecord(result?.parsedJson)
-  const workorders = Array.isArray(data.workorders) ? data.workorders as Array<Record<string, unknown>> : []
+  const workorders = arrayRecords(data.workorders)
   return (
     <div className="space-y-4">
-      <Panel title="Workorder Table">
+      <Panel title="Workorder Graph" subtitle="A lightweight dependency graph fed by batch dossier JSON. The table remains available for dense review.">
         <button onClick={runDossier} className="gov-button gov-button-primary mb-3">Load from dossier</button>
+        <WorkorderGraph data={data} />
+      </Panel>
+      <Panel title="Workorder Table">
         <div className="overflow-x-auto rounded-md border border-slate-200">
           <table className="gov-table">
             <thead>
-              <tr><th className="p-3">Workorder</th><th className="p-3">Status</th><th className="p-3">Risk</th><th className="p-3">Outputs</th></tr>
+              <tr><th className="p-3">Workorder</th><th className="p-3">Agent</th><th className="p-3">Status</th><th className="p-3">Risk</th><th className="p-3">Outputs</th></tr>
             </thead>
             <tbody>
-              {workorders.length === 0 ? <tr><td className="p-3 text-slate-500" colSpan={4}>Run a dossier to populate workorders. Graph rendering is planned after V1 table confidence.</td></tr> : null}
+              {workorders.length === 0 ? <tr><td className="p-3 text-slate-500" colSpan={5}>Run a dossier to populate workorders and graph data.</td></tr> : null}
               {workorders.map((wo, index) => (
                 <tr key={index}>
-                  <td className="p-3 font-medium">{String(wo.workorder_id ?? wo.id ?? 'unknown')}</td>
-                  <td className="p-3">{String(wo.status ?? 'unknown')}</td>
-                  <td className="p-3">{String(wo.risk_category ?? 'unknown')}</td>
-                  <td className="p-3">{Array.isArray(wo.expected_outputs) ? wo.expected_outputs.length : 'unknown'}</td>
+                  <td className="p-3 font-medium">{stringValue(wo.workorder_id ?? wo.id, 'unknown')}</td>
+                  <td className="p-3">{stringValue(wo.agent_id ?? wo.agent, 'unknown')}</td>
+                  <td className="p-3"><StatusBadge tone={toneForState(wo.status)} label={stringValue(wo.status, 'not run')} /></td>
+                  <td className="p-3">{stringValue(wo.risk_category, 'unknown')}</td>
+                  <td className="p-3">{stringArray(wo.expected_outputs).length}</td>
                 </tr>
               ))}
             </tbody>
@@ -449,7 +512,9 @@ function LearningCenter({ snapshot, result, runLearning }: { snapshot: Governanc
 
 function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: { result: CommandExecution | null; runStatic: () => void; runEndpoints: () => void; mealcamOptionalOk: boolean }) {
   const data = result?.parsedJson
-  const routes = Array.isArray(jsonRecord(data).routes) ? jsonRecord(data).routes as Array<Record<string, unknown>> : []
+  const parsed = jsonRecord(data)
+  const routes = arrayRecords(parsed.routes)
+  const summary = jsonRecord(parsed.summary)
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
@@ -457,28 +522,16 @@ function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: {
         <button onClick={runEndpoints} className="gov-button gov-button-secondary">Check endpoints</button>
       </div>
       {mealcamOptionalOk ? <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">MealCam runtime is optional/on-demand and offline is not a governance blocker.</div> : null}
+      <div className="grid gap-3 md:grid-cols-5">
+        {['critical', 'high', 'medium', 'low', 'info'].map(key => <Info key={key} label={key} value={String(summary[key] ?? 0)} />)}
+      </div>
       <Panel title="Runtime Routes">
-        <div className="overflow-x-auto">
-          <table className="gov-table">
-            <thead>
-              <tr><th className="p-3">Agent</th><th className="p-3">Model</th><th className="p-3">Runtime</th><th className="p-3">Endpoint</th><th className="p-3">Status</th><th className="p-3">Policy</th></tr>
-            </thead>
-            <tbody>
-              {routes.map((route, index) => (
-                <tr key={index} className="border-t border-slate-100">
-                  <td className="p-3 font-medium">{String(route.agent ?? '')}</td>
-                  <td className="p-3">{String(route.model ?? '')}</td>
-                  <td className="p-3">{String(route.runtime_type ?? 'http/vllm')}</td>
-                  <td className="p-3">{String(route.endpoint ?? 'n/a')}</td>
-                  <td className="p-3">{String(route.endpoint_status ?? 'not checked')}</td>
-                  <td className="p-3"><StatusBadge tone={route.optional_runtime ? 'info' : 'pass'} label={route.optional_runtime ? 'optional/on-demand' : 'required'} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid gap-3 xl:grid-cols-2">
+          {routes.length === 0 ? <EmptyState text="Run a runtime check to load routes." /> : null}
+          {routes.map((route, index) => <RuntimeRouteCard key={index} route={route} />)}
         </div>
       </Panel>
-      <ResultPanel result={result} />
+      <RawOutputDetails result={result} />
     </div>
   )
 }
@@ -591,6 +644,315 @@ function ResultPreview({ result }: { result: CommandExecution | null | undefined
           <pre className="max-h-96 overflow-auto rounded-md bg-slate-50 p-3 text-xs text-red-900">{result.stderr || '(no stderr)'}</pre>
         </div>
       </details>
+    </div>
+  )
+}
+
+function RawOutputDetails({ result }: { result: CommandExecution | null }) {
+  if (!result) return null
+  return (
+    <details className="gov-panel">
+      <summary className="cursor-pointer text-sm font-semibold text-slate-900">Raw command output</summary>
+      <p className="mt-2 text-xs text-slate-500">Raw output is retained for audit/debugging. Prefer the structured view when JSON is available.</p>
+      <div className="mt-3 grid gap-3 lg:grid-cols-2">
+        <pre className="max-h-96 overflow-auto rounded-md bg-white p-3 text-xs text-slate-800">{result.stdout || '(no stdout)'}</pre>
+        <pre className="max-h-96 overflow-auto rounded-md bg-slate-50 p-3 text-xs text-red-900">{result.stderr || '(no stderr)'}</pre>
+      </div>
+    </details>
+  )
+}
+
+function CopyButton({ value, label = 'Copy' }: { value: string; label?: string }) {
+  return (
+    <button type="button" onClick={() => copyText(value)} className="gov-button gov-button-secondary px-2 py-1 text-xs">
+      {label}
+    </button>
+  )
+}
+
+function NextActionCard({ action, command }: { action: string; command?: string }) {
+  return (
+    <div className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <StatusBadge tone="info" label="Next action" />
+        <CopyButton value={command ?? action} />
+      </div>
+      <div className="text-sm font-semibold text-blue-950">{action}</div>
+      {command ? <div className="mt-3">{commandBlock(command)}</div> : null}
+    </div>
+  )
+}
+
+function EmptyState({ text }: { text: string }) {
+  return <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-500">{text}</div>
+}
+
+function CheckerPills({ checkers }: { checkers: Record<string, unknown> }) {
+  const entries = Object.entries(checkers)
+  if (entries.length === 0) return null
+  return (
+    <div className="mt-4 flex flex-wrap gap-2">
+      {entries.map(([name, value]) => {
+        const record = jsonRecord(value)
+        const status = stringValue(record.status ?? record.final_diagnosis ?? record.result, 'unknown')
+        return <StatusBadge key={name} tone={toneForState(status)} label={`${name}: ${status}`} />
+      })}
+    </div>
+  )
+}
+
+function ListPanel({ title, items, empty }: { title: string; items: Array<Record<string, unknown>>; empty: string }) {
+  return (
+    <Panel title={title}>
+      <div className="space-y-2">
+        {items.length === 0 ? <EmptyState text={empty} /> : null}
+        {items.map((item, index) => (
+          <div key={index} className="rounded-lg border border-slate-200 bg-white p-3 text-sm">
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <StatusBadge tone={toneForState(item.severity ?? item.status ?? item.type)} label={stringValue(item.severity ?? item.status ?? item.type, 'item')} />
+              <span className="font-semibold">{stringValue(item.id ?? item.workorder_id ?? item.run_id ?? item.message, `item ${index + 1}`)}</span>
+            </div>
+            <p className="text-slate-600">{stringValue(item.message ?? item.reason ?? item.suggested_action, JSON.stringify(item))}</p>
+          </div>
+        ))}
+      </div>
+    </Panel>
+  )
+}
+
+function ApprovalColumn({ status, approvals }: { status: string; approvals: Array<Record<string, unknown>> }) {
+  return (
+    <Panel title={status}>
+      <div className="space-y-2">
+        {approvals.length === 0 ? <EmptyState text={`No ${status} approvals.`} /> : null}
+        {approvals.map((approval, index) => {
+          const grantCommand = stringValue(approval.grant_command)
+          const denyCommand = stringValue(approval.deny_command)
+          return (
+            <div key={index} className="rounded-lg border border-slate-200 bg-white p-3 text-sm">
+              <div className="flex items-center justify-between gap-2">
+                <div className="font-semibold">{stringValue(approval.approval_id ?? approval.id, 'approval')}</div>
+                <StatusBadge tone={toneForState(approval.status ?? status)} label={status} />
+              </div>
+              <div className="mt-2 grid gap-1 text-xs text-slate-600">
+                <span>WO: {stringValue(approval.workorder_id, 'n/a')}</span>
+                <span>Run: {stringValue(approval.run_id, 'n/a')}</span>
+                <span>Agent: {stringValue(approval.agent_id, 'n/a')}</span>
+                <span>Risk: {stringValue(approval.risk_category ?? approval.risk, 'n/a')}</span>
+                <span>Tool: {stringValue(approval.tool ?? approval.operation, 'n/a')}</span>
+              </div>
+              <div className="mt-3 rounded-md bg-slate-50 p-2 text-xs text-slate-700">
+                {stringValue(approval.reason ?? approval.scope ?? approval.suggested_review, 'Tom decision required.')}
+              </div>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {grantCommand ? <CopyButton value={grantCommand} label="Copy grant" /> : null}
+                {denyCommand ? <CopyButton value={denyCommand} label="Copy deny" /> : null}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </Panel>
+  )
+}
+
+function DossierTimeline({ result }: { result: CommandExecution | null }) {
+  const data = jsonRecord(result?.parsedJson)
+  if (!result) return <Panel title="Dossier Timeline"><EmptyState text="Generate a dossier to view the structured timeline." /></Panel>
+  const nextAction = stringValue(data.next_action, 'Review dossier output.')
+  return (
+    <div className="space-y-4">
+      <Panel title="Dossier Summary">
+        <div className="grid gap-3 md:grid-cols-4">
+          <Info label="Final State" value={stringValue(data.final_state, 'unknown')} />
+          <Info label="Batch" value={stringValue(data.batch_id ?? data.batch_file, 'unknown')} />
+          <Info label="Runs" value={String(arrayRecords(data.runs).length)} />
+          <Info label="Approvals" value={String(arrayRecords(data.approvals).length)} />
+        </div>
+        <NextActionCard action={nextAction} command={nextAction.includes('cmd.exe') ? nextAction : undefined} />
+      </Panel>
+      <div className="grid gap-4 xl:grid-cols-2">
+        <TimelineSection title="Runs" items={arrayRecords(data.runs)} />
+        <TimelineSection title="Approvals" items={arrayRecords(data.approvals)} />
+        <TimelineSection title="Reviews" items={arrayRecords(data.reviews)} />
+        <TimelineSection title="Cleanups" items={arrayRecords(data.cleanups)} />
+      </div>
+      <Panel title="Checker Results"><CheckerPills checkers={jsonRecord(data.checkers)} /></Panel>
+      <OutputsTable outputs={arrayRecords(data.outputs)} />
+      <GitStateSummary git={jsonRecord(data.git_status)} />
+    </div>
+  )
+}
+
+function TimelineSection({ title, items }: { title: string; items: Array<Record<string, unknown>> }) {
+  return (
+    <Panel title={title}>
+      <div className="space-y-3">
+        {items.length === 0 ? <EmptyState text={`No ${title.toLowerCase()} recorded.`} /> : null}
+        {items.map((item, index) => (
+          <div key={index} className="border-l-2 border-blue-200 pl-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <StatusBadge tone={toneForState(item.status ?? item.event ?? item.final_state)} label={stringValue(item.status ?? item.event ?? item.final_state, 'event')} />
+              <span className="font-semibold text-sm">{stringValue(item.workorder_id ?? item.run_id ?? item.approval_id ?? item.event, `${title} ${index + 1}`)}</span>
+            </div>
+            <div className="mt-1 text-xs leading-5 text-slate-600">
+              {stringValue(item.agent_id ?? item.tier ?? item.reason ?? item.report_path ?? item.started_at ?? item.ts, JSON.stringify(item))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </Panel>
+  )
+}
+
+function OutputsTable({ outputs }: { outputs: Array<Record<string, unknown>> }) {
+  return (
+    <Panel title="Outputs">
+      <div className="overflow-x-auto rounded-md border border-slate-200">
+        <table className="gov-table">
+          <thead><tr><th>Path</th><th>Expected</th><th>Exists</th><th>Category</th><th>Safe</th></tr></thead>
+          <tbody>
+            {outputs.length === 0 ? <tr><td colSpan={5} className="text-slate-500">No outputs recorded.</td></tr> : null}
+            {outputs.map((output, index) => (
+              <tr key={index}>
+                <td className="font-medium">{stringValue(output.path, 'unknown')}</td>
+                <td><StatusBadge tone={output.expected ? 'info' : 'idle'} label={String(Boolean(output.expected))} /></td>
+                <td><StatusBadge tone={output.exists ? 'pass' : 'attention'} label={String(Boolean(output.exists))} /></td>
+                <td>{stringValue(output.category, 'unknown')}</td>
+                <td><StatusBadge tone={output.safe_to_commit ? 'pass' : 'blocked'} label={String(Boolean(output.safe_to_commit))} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Panel>
+  )
+}
+
+function GitStateSummary({ git }: { git: Record<string, unknown> }) {
+  return (
+    <Panel title="Git State">
+      <div className="grid gap-3 md:grid-cols-3">
+        <Info label="Branch" value={stringValue(git.branch, 'unknown')} />
+        <Info label="Dirty" value={String(Boolean(git.dirty))} />
+        <Info label="Changes" value={String(arrayRecords(git.entries).length)} />
+      </div>
+    </Panel>
+  )
+}
+
+function WorkorderGraph({ data }: { data: Record<string, unknown> }) {
+  const workorders = arrayRecords(data.workorders)
+  const runs = arrayRecords(data.runs)
+  const approvals = arrayRecords(data.approvals)
+  const outputs = arrayRecords(data.outputs)
+  const [selectedId, setSelectedId] = useState('')
+
+  const selected = workorders.find(item => stringValue(item.workorder_id) === selectedId) ?? workorders[0]
+  if (workorders.length === 0) return <EmptyState text="No graph data available. Generate a dossier first." />
+
+  return (
+    <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-slate-50 p-4">
+        <div className="flex min-w-max items-stretch gap-4">
+          {workorders.map((wo, index) => {
+            const id = stringValue(wo.workorder_id, `WO-${index + 1}`)
+            const run = runs.find(item => stringValue(item.workorder_id) === id)
+            const approval = approvals.find(item => stringValue(item.workorder_id) === id)
+            const expected = stringArray(wo.expected_outputs)
+            const complete = expected.length === 0 ? 0 : expected.filter(path => outputs.some(output => stringValue(output.path) === path && output.exists)).length
+            return (
+              <button key={id} type="button" onClick={() => setSelectedId(id)} className={`w-72 rounded-lg border bg-white p-4 text-left shadow-sm transition hover:border-blue-300 ${selectedId === id || (!selectedId && index === 0) ? 'border-blue-600 ring-2 ring-blue-100' : 'border-slate-200'}`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="font-semibold text-slate-950">{id}</div>
+                  <StatusBadge tone={toneForState(run?.status ?? wo.status)} label={stringValue(run?.status ?? wo.status, 'not run')} />
+                </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <StatusBadge tone={toneForState(wo.risk_category)} label={stringValue(wo.risk_category, 'risk n/a')} />
+                  <StatusBadge tone={approval ? toneForState(approval.status) : 'idle'} label={approval ? stringValue(approval.status, 'approval') : 'no approval'} />
+                  <StatusBadge tone={complete === expected.length ? 'pass' : 'attention'} label={`outputs ${complete}/${expected.length}`} />
+                </div>
+                <div className="mt-3 text-xs text-slate-500">Agent: {stringValue(wo.agent_id, 'unknown')}</div>
+                <DependencyChips blockedBy={stringArray(wo.blocked_by)} />
+              </button>
+            )
+          })}
+        </div>
+      </div>
+      <WorkorderDetails workorder={selected} runs={runs} approvals={approvals} />
+    </div>
+  )
+}
+
+function DependencyChips({ blockedBy }: { blockedBy: string[] }) {
+  if (blockedBy.length === 0) return <div className="mt-3 text-xs text-slate-400">No upstream dependencies.</div>
+  return (
+    <div className="mt-3 flex flex-wrap gap-1">
+      {blockedBy.map(item => <span key={item} className="rounded bg-slate-100 px-2 py-1 text-[11px] text-slate-600">depends on {item}</span>)}
+    </div>
+  )
+}
+
+function WorkorderDetails({ workorder, runs, approvals }: { workorder?: Record<string, unknown>; runs: Array<Record<string, unknown>>; approvals: Array<Record<string, unknown>> }) {
+  if (!workorder) return <EmptyState text="Select a workorder to inspect details." />
+  const id = stringValue(workorder.workorder_id)
+  const latestRun = runs.find(item => stringValue(item.workorder_id) === id)
+  const approval = approvals.find(item => stringValue(item.workorder_id) === id)
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-4">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <h3 className="font-semibold">{id || 'Workorder'}</h3>
+        <StatusBadge tone={toneForState(latestRun?.status ?? workorder.status)} label={stringValue(latestRun?.status ?? workorder.status, 'not run')} />
+      </div>
+      <DetailList title="Source refs" items={stringArray(workorder.source_refs)} />
+      <DetailList title="Scope files" items={stringArray(workorder.scope_files)} />
+      <DetailList title="Files blocked" items={stringArray(workorder.files_blocked)} />
+      <DetailList title="Expected outputs" items={stringArray(workorder.expected_outputs)} />
+      <div className="mt-3 grid gap-2 text-xs">
+        <span>Latest run: {stringValue(latestRun?.run_id, 'none')}</span>
+        <span>Approval: {approval ? stringValue(approval.status, 'unknown') : 'none'}</span>
+      </div>
+    </div>
+  )
+}
+
+function DetailList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="mt-3">
+      <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">{title}</div>
+      {items.length === 0 ? <div className="mt-1 text-xs text-slate-400">None recorded.</div> : (
+        <ul className="mt-1 space-y-1 text-xs text-slate-700">
+          {items.slice(0, 8).map(item => <li key={item} className="break-words rounded bg-slate-50 px-2 py-1">{item}</li>)}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+function RuntimeRouteCard({ route }: { route: Record<string, unknown> }) {
+  const optional = Boolean(route.optional_runtime)
+  const runtimeType = stringValue(route.runtime_type, 'http/vllm')
+  const status = stringValue(route.endpoint_status ?? route.status, runtimeType.includes('codex') ? 'external_ok' : 'not checked')
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-4">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div>
+          <div className="font-semibold">{stringValue(route.agent, 'unknown agent')}</div>
+          <div className="mt-1 text-xs text-slate-500">{stringValue(route.model, 'unknown model')}</div>
+        </div>
+        <StatusBadge tone={toneForState(status)} label={status} />
+      </div>
+      <div className="mt-3 grid gap-2 text-xs text-slate-600 md:grid-cols-2">
+        <span>Runtime: {runtimeType}</span>
+        <span>Endpoint: {stringValue(route.endpoint, 'n/a')}</span>
+        <span>JSON mode: {stringValue(route.json_mode ?? route.requires_json, 'n/a')}</span>
+        <span>Thinking: {stringValue(route.enable_thinking ?? route.thinking_policy, 'n/a')}</span>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <StatusBadge tone={optional ? 'info' : 'pass'} label={optional ? 'optional/on-demand' : 'required'} />
+        {stringValue(route.agent) === 'mealcam-agent' ? <StatusBadge tone="info" label="MealCam optional" /> : null}
+        {runtimeType.includes('codex') ? <StatusBadge tone="info" label="Codex external" /> : null}
+      </div>
     </div>
   )
 }

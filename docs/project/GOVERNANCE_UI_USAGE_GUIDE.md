@@ -38,8 +38,8 @@ http://127.0.0.1:5001/governance
 - `/governance/batches` - Batch console for operator status, dry-run, doctor, continue, and continue with safe cleanups.
 - `/governance/doctor` - Read-only diagnosis and one safe next action.
 - `/governance/approvals` - Pending, granted, and denied approval visibility. No auto-grant in V1.
-- `/governance/dossiers` - Generate and view batch dossier JSON/Markdown through the existing CLI.
-- `/governance/workorders` - Workorder table from dossier data. React Flow graph is future work.
+- `/governance/dossiers` - Generate and view a structured dossier timeline with JSON/Markdown/raw output as secondary audit views.
+- `/governance/workorders` - Workorder dependency board plus table from dossier data.
 - `/governance/promotion` - Branch review, merge readiness, and controlled merge/push flow.
 - `/governance/learning` - Current handover and learning status.
 - `/governance/runtime` - Model runtime routes, endpoint health, and optional MealCam route handling.
@@ -99,9 +99,9 @@ The Governance UI must not expose or execute:
 
 ## 10. Known Limitations
 
-- Workorder graph is table-first in V1.
+- Workorder graph is a lightweight dependency board in V2; React Flow is still future work.
 - Approval grant/deny execution is not implemented in V1.
-- Dossier viewer is still command/result oriented.
+- Dossier viewer is structured in V2, but still depends on batch dossier JSON quality.
 - No live polling yet.
 - No screenshot or visual regression tests yet.
 - UI depends on local CLI tools and the repository path.
