@@ -59,7 +59,7 @@ Governance learning records:
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 as the productive senior engineering runtime. It is config/manual checked, not HTTP endpoint checked.
 - Codex Worker Bridge exists at `system/workers/codex-worker.ts` for dry-run-first non-interactive `codex exec` prompt construction.
-- Codex Worker dispatcher integration exists for `senior-coding-agent` but remains disabled by default through `codex_worker_enabled=false` and `allow_dispatcher_integration=false`.
+- Codex Worker dispatcher integration is controlled-enabled for `senior-coding-agent` only. It requires `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product-gate policy pass.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Governance UI V1 exists under `apps/web/src/app/governance` as a local operator console backed by allowlisted CLI execution.
 
@@ -148,5 +148,5 @@ Prompt text such as `/no_think` is not sufficient.
 - Workorder Factory / Decomposition Automation is implemented for structured plans; free-form decomposition remains a prompt/manual Brain step.
 - Memory/Learning Automation is implemented as a read-only checker plus explicit status writer.
 - Spark Runtime Hardening is implemented as a read-only checker; deeper runtime observability remains optional.
-- Codex Worker Bridge is implemented as a manual/controlled bridge; dispatcher integration is implemented but config-disabled by default.
+- Codex Worker Bridge is implemented as a manual/controlled bridge; dispatcher integration is controlled-enabled for the senior-coding-agent path only.
 - Governance UI V1 is implemented as local operator console V1; richer graphing and saved dossier views remain optional refinements.

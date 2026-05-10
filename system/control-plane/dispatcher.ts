@@ -401,32 +401,52 @@ function hasRequiredCodexWorkerFields(wo: Workorder): boolean {
     && ((wo.expected_outputs?.length ?? wo.acceptance_files?.length ?? 0) > 0)
 }
 
+function isCodexWorkerProductWork(wo: Workorder): boolean {
+  const paths = [
+    ...(wo.scope_files ?? []),
+    ...(wo.acceptance_files ?? []),
+    ...(wo.expected_outputs ?? []),
+    ...(wo.source_refs ?? []),
+  ].map(item => item.replace(/\\/g, '/'))
+  if (paths.some(p => p.startsWith('services/nutrition-api/') || p.startsWith('apps/') || p.startsWith('packages/'))) return true
+  if (paths.some(p => p.startsWith('docs/specs/Nutrition/') && !p.includes('/06_workorder_planning/'))) return true
+  const text = [wo.task, wo.risk_category, ...paths].join(' ').toLowerCase()
+  return /\b(bls import|nutrition p1-005|product work|mealcam|bulk import)\b/.test(text)
+}
+
 function shouldUseCodexWorker(
   wo: Workorder,
   activeRoute: ModelRoutingEntry & { runtime_type?: string },
   config: CodexWorkerConfig,
-): { use: boolean; reason: string; timeoutMs: number } {
-  if (wo.agent_id !== 'senior-coding-agent') return { use: false, reason: 'agent is not senior-coding-agent', timeoutMs: config.default_timeout_ms }
+): { use: boolean; block: boolean; reason: string; timeoutMs: number } {
+  const explicitCodex = wo.codex_worker === true
+  if (wo.agent_id !== 'senior-coding-agent') {
+    return { use: false, block: explicitCodex, reason: 'agent is not senior-coding-agent', timeoutMs: config.default_timeout_ms }
+  }
   if (activeRoute.runtime_type !== 'codex-cli' && activeRoute.node !== 'codex-cli') {
-    return { use: false, reason: 'route is not codex-cli', timeoutMs: config.default_timeout_ms }
+    return { use: false, block: explicitCodex, reason: 'route is not codex-cli', timeoutMs: config.default_timeout_ms }
   }
   if (!config.codex_worker_enabled || !config.allow_dispatcher_integration) {
-    return { use: false, reason: 'codex worker dispatcher integration disabled', timeoutMs: config.default_timeout_ms }
+    return { use: false, block: false, reason: 'codex worker dispatcher integration disabled', timeoutMs: config.default_timeout_ms }
   }
   if (!config.allowed_agents.includes(wo.agent_id)) {
-    return { use: false, reason: 'agent not allowlisted for codex worker', timeoutMs: config.default_timeout_ms }
+    return { use: false, block: explicitCodex, reason: 'agent not allowlisted for codex worker', timeoutMs: config.default_timeout_ms }
   }
   if (config.require_explicit_workorder_flag && wo.codex_worker !== true) {
-    return { use: false, reason: 'workorder lacks codex_worker opt-in', timeoutMs: config.default_timeout_ms }
+    return { use: false, block: false, reason: 'workorder lacks codex_worker opt-in', timeoutMs: config.default_timeout_ms }
   }
   if (wo.requires_approval === true) {
-    return { use: false, reason: 'workorder has pending approval requirement', timeoutMs: config.default_timeout_ms }
+    return { use: false, block: explicitCodex, reason: 'workorder has pending approval requirement', timeoutMs: config.default_timeout_ms }
   }
   if (!hasRequiredCodexWorkerFields(wo)) {
-    return { use: false, reason: 'workorder missing source_refs/scope/files_blocked/expected_outputs', timeoutMs: config.default_timeout_ms }
+    return { use: false, block: explicitCodex, reason: 'workorder missing source_refs/scope_files/files_blocked/expected_outputs', timeoutMs: config.default_timeout_ms }
+  }
+  if (config.require_product_gate && !config.product_gate_open && isCodexWorkerProductWork(wo)) {
+    return { use: false, block: explicitCodex, reason: 'product work gate blocks Codex worker dispatch', timeoutMs: config.default_timeout_ms }
   }
   return {
     use: true,
+    block: false,
     reason: 'codex worker enabled for senior-coding-agent',
     timeoutMs: Math.min(config.default_timeout_ms, config.max_timeout_ms),
   }
@@ -646,6 +666,23 @@ export async function dispatchWorkorder(
       orchestration_mode: orchestrationMode,
       reason: codexDispatch.reason,
     })
+    if (codexDispatch.block) {
+      await state.endRun(runId, 'blocked')
+      await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
+      audit.auditJobFailed({
+        run_id: runId,
+        workorder_id: wo.workorder_id,
+        agent_id: wo.agent_id,
+        orchestration_mode: orchestrationMode,
+        reason: `CODEX_WORKER_POLICY_BLOCKED: ${codexDispatch.reason}`,
+      })
+      return {
+        status: 'blocked',
+        run_id: runId,
+        workorder_id: wo.workorder_id,
+        error: `CODEX_WORKER_POLICY_BLOCKED: ${codexDispatch.reason}`,
+      }
+    }
     if (codexDispatch.use) {
       const runCodex = deps.runCodexWorker ?? defaultRunCodexWorkerForDispatch
       const codexResult = await runCodex(wo, { timeoutMs: codexDispatch.timeoutMs })

@@ -4,9 +4,9 @@ Date: 2026-05-10
 
 ## 1. Scope
 
-This plan prepares one future controlled dispatcher smoke for the Codex Worker integration.
+This plan records the controlled dispatcher smoke path for the Codex Worker integration.
 
-It does not enable dispatcher execution, does not run Codex, and does not perform product work.
+It does not permit product work, Supabase commands, migration execution, approvals, or broad Codex Worker use.
 
 ## 2. Current Config State
 
@@ -16,14 +16,16 @@ Current file:
 system/workers/codex-worker.config.json
 ```
 
-Current safe defaults:
+Current controlled defaults:
 
 ```json
 {
-  "codex_worker_enabled": false,
-  "allow_dispatcher_integration": false,
+  "codex_worker_enabled": true,
+  "allow_dispatcher_integration": true,
   "allowed_agents": ["senior-coding-agent"],
   "require_explicit_workorder_flag": true,
+  "require_product_gate": true,
+  "product_gate_open": false,
   "default_timeout_ms": 120000,
   "max_timeout_ms": 300000
 }
@@ -33,13 +35,14 @@ Meaning:
 
 - Manual Codex Worker Bridge is ready.
 - Dispatcher integration code exists.
-- Automatic dispatcher execution is disabled.
+- Automatic dispatcher execution is enabled only for the narrow senior-agent path.
 - Only `senior-coding-agent` is allowlisted.
 - Workorders must explicitly opt in with `codex_worker: true`.
+- Product work is blocked while `product_gate_open=false`.
 
-## 3. Required Temporary Config Change For Smoke
+## 3. Required Config State For Smoke
 
-For one controlled smoke only, Tom may approve this temporary local config change:
+For a controlled smoke, confirm this config state:
 
 ```json
 {
@@ -47,12 +50,14 @@ For one controlled smoke only, Tom may approve this temporary local config chang
   "allow_dispatcher_integration": true,
   "allowed_agents": ["senior-coding-agent"],
   "require_explicit_workorder_flag": true,
+  "require_product_gate": true,
+  "product_gate_open": false,
   "default_timeout_ms": 120000,
   "max_timeout_ms": 300000
 }
 ```
 
-This change must be reverted immediately after the smoke. It should not be treated as a broad product/runtime opening.
+This state is not a broad product/runtime opening. It is constrained by the agent allowlist, explicit workorder opt-in, metadata requirements, and product gate.
 
 ## 4. Test Workorder Requirements
 
@@ -121,11 +126,12 @@ Planned sequence for Tom-approved smoke:
 git status --short --branch
 ```
 
-2. Temporarily enable the two config flags locally:
+2. Confirm the two config flags are enabled and product gate remains closed:
 
 ```json
 "codex_worker_enabled": true,
-"allow_dispatcher_integration": true
+"allow_dispatcher_integration": true,
+"product_gate_open": false
 ```
 
 3. Run read-only gates:
@@ -148,9 +154,9 @@ git status --short --branch
 cmd.exe /c node node_modules\typescript\bin\tsc --noEmit
 ```
 
-## 8. Rollback / Re-disable Procedure
+## 8. Disable Procedure
 
-Immediately restore:
+To pause the controlled senior-agent path, set:
 
 ```json
 "codex_worker_enabled": false,
@@ -176,8 +182,8 @@ The smoke succeeds only if:
 - expected docs-only output exists
 - no files outside `scope_files` changed
 - no forbidden commands ran
-- Codex does not fail merely because the temporary config flags are enabled during execution
-- the wrapper/operator restores `codex_worker_enabled=false` and `allow_dispatcher_integration=false` after the dispatch attempt
+- Codex does not fail merely because the controlled config flags are enabled during execution
+- the operator verifies the policy remains narrow after the dispatch attempt
 - no runtime reports are committed
 
 ## 10. Failure Criteria
@@ -188,8 +194,8 @@ Classify as `FIX_REQUIRED` or `STOP` if:
 - final state is not `DONE`
 - any forbidden file changes
 - any Supabase/migration/product command appears
-- config cannot be safely restored
-- config remains enabled after the wrapper/operator restoration step
+- config opens any agent beyond `senior-coding-agent`
+- `product_gate_open=true` without explicit Tom decision
 - runtime state/approval queue diverges
 - dispatcher routes any non-senior agent to Codex Worker
 
@@ -205,4 +211,4 @@ Codex Worker is powerful enough to modify the repo. Dispatcher integration there
 
 ## 12. Exact Decision Point
 
-Tom must explicitly approve one temporary config-enabled dispatcher smoke before any real dispatcher execution occurs.
+Tom must explicitly approve real product use separately. Controlled senior-agent governance/docs use remains gated by workorder opt-in and checker policy.

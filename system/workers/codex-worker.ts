@@ -55,6 +55,8 @@ export type CodexWorkerConfig = {
   allow_dispatcher_integration: boolean
   allowed_agents: string[]
   require_explicit_workorder_flag: boolean
+  require_product_gate: boolean
+  product_gate_open: boolean
   default_timeout_ms: number
   max_timeout_ms: number
 }
@@ -99,6 +101,8 @@ export function defaultCodexWorkerConfig(): CodexWorkerConfig {
     allow_dispatcher_integration: false,
     allowed_agents: ['senior-coding-agent'],
     require_explicit_workorder_flag: true,
+    require_product_gate: true,
+    product_gate_open: false,
     default_timeout_ms: DEFAULT_TIMEOUT_MS,
     max_timeout_ms: DEFAULT_MAX_TIMEOUT_MS,
   }
@@ -122,6 +126,8 @@ export function normalizeCodexWorkerConfig(value: unknown): CodexWorkerConfig {
     allow_dispatcher_integration: input.allow_dispatcher_integration === true,
     allowed_agents: allowedAgents,
     require_explicit_workorder_flag: input.require_explicit_workorder_flag !== false,
+    require_product_gate: input.require_product_gate !== false,
+    product_gate_open: input.product_gate_open === true,
     default_timeout_ms: Math.min(defaultTimeout, maxTimeout),
     max_timeout_ms: maxTimeout,
   }

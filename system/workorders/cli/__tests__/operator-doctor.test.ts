@@ -183,11 +183,11 @@ describe('operator doctor diagnosis', () => {
     assert.match(result.next_action, /model-runtime-check/)
   })
 
-  it('reports Codex worker disabled without blocking clean readiness', () => {
+  it('reports Codex worker ready without blocking clean readiness', () => {
     const result = diagnose({})
 
-    assert.equal(result.codex_worker.status, 'CODEX_WORKER_DISABLED')
-    assert.equal(result.codex_worker.codex_worker_enabled, false)
+    assert.equal(result.codex_worker.status, 'CODEX_WORKER_READY')
+    assert.equal(result.codex_worker.codex_worker_enabled, true)
     assert.equal(result.final_diagnosis, 'CLEAN_READY')
   })
 

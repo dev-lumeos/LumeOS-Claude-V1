@@ -1,10 +1,12 @@
 {
-  "codex_worker_enabled": false,
-  "allow_dispatcher_integration": false,
+  "codex_worker_enabled": true,
+  "allow_dispatcher_integration": true,
   "allowed_agents": [
     "senior-coding-agent"
   ],
   "require_explicit_workorder_flag": true,
+  "require_product_gate": true,
+  "product_gate_open": false,
   "default_timeout_ms": 120000,
   "max_timeout_ms": 300000,
   "default_mode": "dry-run",

@@ -139,14 +139,15 @@ The worker bridge is governance-driven:
 - model: GPT-5.5
 - healthcheck: config/manual
 
-Current integration is intentionally conservative:
+Current integration is controlled-enabled:
 
 - `system/workers/codex-worker.config.json` exists
-- `codex_worker_enabled` is `false` by default
-- `allow_dispatcher_integration` is `false` by default
+- `codex_worker_enabled` is `true`
+- `allow_dispatcher_integration` is `true`
 - `allowed_agents` is limited to `senior-coding-agent`
 - automatic dispatcher execution also requires `codex_worker: true` on the workorder when `require_explicit_workorder_flag` is enabled
-- the dispatcher integration point exists but remains disabled until Tom explicitly opens it
+- `require_product_gate` is `true`
+- `product_gate_open` is `false`
 
 When enabled, dispatcher use is narrow:
 
@@ -154,6 +155,7 @@ When enabled, dispatcher use is narrow:
 - only `runtime_type: codex-cli`
 - only workorders with `source_refs`, `scope_files`, `files_blocked`, and `expected_outputs`
 - no pending human approval requirement
+- product work remains blocked unless Tom explicitly opens the product gate
 - hard timeout from config
 - final state mapped to `completed`, `awaiting_approval`, `failed`, or `blocked`
 
@@ -176,13 +178,13 @@ The worker must not be used to run:
 
 ## Dispatcher Integration
 
-The safe dispatcher path is:
+The controlled dispatcher path is:
 
 1. Operator selects `senior-coding-agent`.
 2. Operator verifies source-chain, invariant, agent-contract, learning, model-runtime, and product-gate checks.
-3. Tom explicitly enables the config gate if automatic Codex worker dispatch is desired.
-4. The workorder opts in with `codex_worker: true`.
+3. The workorder opts in with `codex_worker: true`.
+4. Dispatcher verifies the senior-agent route, required metadata, approval status, timeout config, and product-gate policy.
 5. Dispatcher invokes the Codex worker through the internal bridge, not through a shell command string.
 6. Dossier records prompt path, report path, stdout/stderr summaries, exit code, duration, timeout state, and final state.
 
-Until Tom opens the config gate, use the worker manually through dry-run and explicit execute commands.
+If Tom needs to pause automatic senior-agent dispatch, set `codex_worker_enabled=false` or `allow_dispatcher_integration=false`.

@@ -40,7 +40,7 @@ The Codex Worker Bridge is documented separately:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --dry-run
 ```
 
-It prepares non-interactive `codex exec` prompts for `senior-coding-agent`. It is dry-run by default. The dispatcher integration point exists, but automatic execution remains config-disabled unless Tom explicitly enables `codex_worker_enabled` and `allow_dispatcher_integration`.
+It prepares non-interactive `codex exec` prompts for `senior-coding-agent`. Manual CLI use remains dry-run by default. Dispatcher execution is controlled-enabled for `senior-coding-agent` only, requires workorder `codex_worker: true`, and remains blocked for product work while `product_gate_open=false`.
 
 ## Endpoint Health
 
@@ -62,7 +62,7 @@ Non-HTTP runtimes are represented explicitly:
 
 Codex CLI is not a vLLM/OpenAI-compatible HTTP endpoint and must not be checked with `/v1/models`. Missing endpoints are acceptable for `runtime_type: codex-cli` or other external/config-checked runtimes. Missing endpoints for required local Spark/vLLM routes are high findings.
 
-Codex worker execution uses `codex exec` through `system/workers/codex-worker.ts`. The bridge is an integration point, not a broad automatic dispatcher replacement. `system/workers/codex-worker.config.json` keeps `codex_worker_enabled` and `allow_dispatcher_integration` set to `false` until Tom explicitly opens that path. Even when enabled, only `senior-coding-agent` workorders with `codex_worker: true` and complete source/scope/output metadata may use it.
+Codex worker execution uses `codex exec` through `system/workers/codex-worker.ts`. The bridge is not a broad automatic dispatcher replacement. `system/workers/codex-worker.config.json` enables the controlled senior-agent path while keeping the policy narrow: only `senior-coding-agent`, explicit `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product work blocked while `product_gate_open=false`.
 
 MealCam/Vision is optional and on-demand. Its endpoint is not expected to be online during normal governance/operator work. An offline `mealcam-agent` endpoint is reported as informational unless a MealCam/Vision workorder, selected batch, or explicit Tom request requires that runtime.
 

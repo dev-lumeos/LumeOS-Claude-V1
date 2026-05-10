@@ -4,9 +4,9 @@
 
 Current date: 2026-05-10.
 
-`main` is pushed through Governance Batch 009 - Codex Worker Bridge and the Codex worker timeout/stdin/final-state parser safety fixes.
+`main` is pushed through the controlled Codex dispatcher smoke. The active branch enables Codex Worker as the controlled `senior-coding-agent` runtime path.
 
-The active governance branch is implementing Governance Batch 010 - Codex Worker Dispatcher Integration.
+The active governance branch is implementing controlled Codex Worker enablement for operator/dispatcher use.
 
 ## Current Truth
 
@@ -33,7 +33,8 @@ The active governance branch is implementing Governance Batch 010 - Codex Worker
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent` and final escalations.
 - Codex Worker Bridge adds a dry-run-first `codex exec` integration point for `senior-coding-agent`.
-- Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker, still disabled by default through config gates.
+- Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker.
+- Codex Worker dispatch is controlled-enabled for `senior-coding-agent` only and still requires explicit `codex_worker: true`, complete workorder metadata, and product-gate policy pass.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
 - Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
@@ -104,8 +105,8 @@ Reason:
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
-- `system/workers/codex-worker.ts` can generate and execute constrained `codex exec` prompts only through explicit dry-run/execute commands unless Tom opens the dispatcher config gate.
-- Automatic dispatcher use requires `codex_worker_enabled=true`, `allow_dispatcher_integration=true`, `senior-coding-agent`, `runtime_type: codex-cli`, and workorder `codex_worker: true`.
+- `system/workers/codex-worker.ts` can generate and execute constrained `codex exec` prompts.
+- Controlled dispatcher use requires `codex_worker_enabled=true`, `allow_dispatcher_integration=true`, `senior-coding-agent`, `runtime_type: codex-cli`, workorder `codex_worker: true`, complete source/scope/output metadata, no approval requirement, and product-gate policy pass.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Raw BLS files remain local-only and ignored.
 

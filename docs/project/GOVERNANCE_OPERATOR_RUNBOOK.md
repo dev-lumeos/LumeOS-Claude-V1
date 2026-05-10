@@ -42,7 +42,7 @@ Doctor also reports Codex Worker state:
 - `CODEX_WORKER_DISABLED`: bridge exists but automatic dispatcher execution is disabled by config.
 - `CODEX_WORKER_CONFIG_ERROR`: config could not be loaded or normalized.
 
-Disabled Codex Worker status is not a blocker for ordinary governance status checks.
+Codex Worker ready status is not a broad product-work opening. It means the narrow senior-agent path is available when a workorder explicitly opts in and passes governance gates.
 
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-001-db-foundation.md --doctor
@@ -186,7 +186,7 @@ When a selected incomplete workorder has `blocked_by` dependencies whose expecte
 
 The dispatcher has a narrow Codex Worker integration point for `senior-coding-agent`.
 
-It remains disabled by default. Automatic Codex Worker dispatch requires all of:
+Codex Worker dispatch is controlled-enabled. Automatic Codex Worker dispatch requires all of:
 
 - `codex_worker_enabled: true`
 - `allow_dispatcher_integration: true`
@@ -195,6 +195,8 @@ It remains disabled by default. Automatic Codex Worker dispatch requires all of:
 - workorder `codex_worker: true`
 - complete `source_refs`, `scope_files`, `files_blocked`, and `expected_outputs`
 - no pending human approval requirement
+- `require_product_gate: true`
+- `product_gate_open: false` blocks product work unless Tom explicitly opens the gate
 
 The path keeps the Codex worker hard timeout and maps final states into the normal dispatcher lifecycle:
 

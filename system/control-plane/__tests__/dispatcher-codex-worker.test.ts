@@ -65,10 +65,12 @@ function setup(): void {
   write('.claude/agents/senior-coding-agent.md', '# senior coding agent')
   write('.claude/agents/micro-executor.md', '# micro executor')
   write('system/workers/codex-worker.config.json', JSON.stringify({
-    codex_worker_enabled: false,
-    allow_dispatcher_integration: false,
+    codex_worker_enabled: true,
+    allow_dispatcher_integration: true,
     allowed_agents: ['senior-coding-agent'],
     require_explicit_workorder_flag: true,
+    require_product_gate: true,
+    product_gate_open: false,
     default_timeout_ms: 120000,
     max_timeout_ms: 300000,
   }))
@@ -118,6 +120,20 @@ function doneResult(finalState: CodexWorkerResult['finalState']): CodexWorkerRes
   }
 }
 
+function enabledCodexConfig(overrides: Record<string, unknown> = {}) {
+  return {
+    codex_worker_enabled: true,
+    allow_dispatcher_integration: true,
+    allowed_agents: ['senior-coding-agent'],
+    require_explicit_workorder_flag: true,
+    require_product_gate: true,
+    product_gate_open: false,
+    default_timeout_ms: 120000,
+    max_timeout_ms: 300000,
+    ...overrides,
+  }
+}
+
 describe('dispatcher codex worker integration', () => {
   it('does not invoke Codex when config is disabled', async () => {
     let codexCalls = 0
@@ -135,6 +151,10 @@ describe('dispatcher codex worker integration', () => {
         })
       },
       executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig({
+        codex_worker_enabled: false,
+        allow_dispatcher_integration: false,
+      }),
       runCodexWorker: async () => {
         codexCalls++
         return doneResult('DONE')
@@ -146,36 +166,69 @@ describe('dispatcher codex worker integration', () => {
     assert.equal(codexCalls, 0)
   })
 
-  it('refuses Codex worker for non-senior agents', async () => {
+  it('refuses explicit Codex worker use for non-senior agents', async () => {
     let codexCalls = 0
+    let modelCalls = 0
     const result = await dispatchWorkorder(makeWorkorder({
       agent_id: 'micro-executor',
     }), {
-      callModel: async () => JSON.stringify({
-        selected_agent: 'micro-executor',
-        risk_level: 'low',
-        risks: [],
-        execution_order: ['complete'],
-        required_gates: ['files-scope-gate', 'review-gate', 'human-approval-gate'],
-        stop_conditions: ['production_execution_without_approval_token'],
-      }),
-      executeTool: async () => ({ success: true }),
-      codexWorkerConfig: {
-        codex_worker_enabled: true,
-        allow_dispatcher_integration: true,
-        allowed_agents: ['senior-coding-agent'],
-        require_explicit_workorder_flag: true,
-        default_timeout_ms: 120000,
-        max_timeout_ms: 300000,
+      callModel: async () => {
+        modelCalls++
+        return JSON.stringify({
+          selected_agent: 'micro-executor',
+          risk_level: 'low',
+          risks: [],
+          execution_order: ['complete'],
+          required_gates: ['files-scope-gate', 'review-gate', 'human-approval-gate'],
+          stop_conditions: ['production_execution_without_approval_token'],
+        })
       },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
       runCodexWorker: async () => {
         codexCalls++
         return doneResult('DONE')
       },
     })
 
-    assert.equal(result.status, 'completed')
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /CODEX_WORKER_POLICY_BLOCKED/)
+    assert.equal(modelCalls, 0)
     assert.equal(codexCalls, 0)
+  })
+
+  it('refuses explicit Codex worker use when required fields are missing', async () => {
+    let codexCalls = 0
+    const result = await dispatchWorkorder(makeWorkorder({ source_refs: [] }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => {
+        codexCalls++
+        return doneResult('DONE')
+      },
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /missing source_refs/)
+    assert.equal(codexCalls, 0)
+  })
+
+  it('refuses explicit Codex worker use for product work while product gate is closed', async () => {
+    const result = await dispatchWorkorder(makeWorkorder({
+      task: 'Implement Nutrition BLS import product work.',
+      scope_files: ['services/nutrition-api/src/import.ts'],
+      acceptance_files: ['services/nutrition-api/src/import.ts'],
+      expected_outputs: ['services/nutrition-api/src/import.ts'],
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => doneResult('DONE'),
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /product work gate/)
   })
 
   it('uses Codex worker for senior-coding-agent when config and workorder opt-in pass', async () => {
@@ -187,14 +240,7 @@ describe('dispatcher codex worker integration', () => {
         throw new Error('model call should not run when Codex worker is enabled')
       },
       executeTool: async () => ({ success: true }),
-      codexWorkerConfig: {
-        codex_worker_enabled: true,
-        allow_dispatcher_integration: true,
-        allowed_agents: ['senior-coding-agent'],
-        require_explicit_workorder_flag: true,
-        default_timeout_ms: 120000,
-        max_timeout_ms: 300000,
-      },
+      codexWorkerConfig: enabledCodexConfig(),
       runCodexWorker: async (workorder, options) => {
         codexCalls++
         assert.equal(workorder.workorder_id, 'WO-codex-001')
@@ -212,14 +258,7 @@ describe('dispatcher codex worker integration', () => {
     const result = await dispatchWorkorder(makeWorkorder(), {
       callModel: async () => { throw new Error('not expected') },
       executeTool: async () => ({ success: true }),
-      codexWorkerConfig: {
-        codex_worker_enabled: true,
-        allow_dispatcher_integration: true,
-        allowed_agents: ['senior-coding-agent'],
-        require_explicit_workorder_flag: true,
-        default_timeout_ms: 120000,
-        max_timeout_ms: 300000,
-      },
+      codexWorkerConfig: enabledCodexConfig(),
       runCodexWorker: async () => ({
         ...doneResult('FIX_REQUIRED'),
         timedOut: true,
@@ -235,14 +274,7 @@ describe('dispatcher codex worker integration', () => {
     const result = await dispatchWorkorder(makeWorkorder(), {
       callModel: async () => { throw new Error('not expected') },
       executeTool: async () => ({ success: true }),
-      codexWorkerConfig: {
-        codex_worker_enabled: true,
-        allow_dispatcher_integration: true,
-        allowed_agents: ['senior-coding-agent'],
-        require_explicit_workorder_flag: true,
-        default_timeout_ms: 120000,
-        max_timeout_ms: 300000,
-      },
+      codexWorkerConfig: enabledCodexConfig(),
       runCodexWorker: async () => doneResult('NEEDS_TOM_APPROVAL'),
     })
 
