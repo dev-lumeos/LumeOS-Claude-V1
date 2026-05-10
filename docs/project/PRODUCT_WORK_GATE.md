@@ -8,6 +8,8 @@ Product work is not freely open.
 
 Tom has conditionally opened the product gate only for the next controlled planning/probe batch.
 
+The LumeOS default project profile records this policy in `system/project-profiles/profiles/lumeos.json`. Profile-aware tools may read that policy, but the profile does not grant approval, execute work, or override Tom's gate decision.
+
 ## Allowed Work
 
 The next product-related step may include only:
@@ -52,6 +54,8 @@ Any product-related workorder or batch must pass:
 Raw BLS files remain local-only and ignored.
 
 Raw files may be inspected read-only for source validation and planning. They must not be committed, modified, or used as the primary source when a higher-priority current spec exists.
+
+The profile raw-data policy includes `docs/specs/Nutrition/00_raw/` so profile-aware artifact checks can classify raw BLS files without hardcoding the path in every checker.
 
 ## Runtime Hardening Requirement
 

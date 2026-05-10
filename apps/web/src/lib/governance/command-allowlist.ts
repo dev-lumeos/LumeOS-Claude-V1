@@ -37,6 +37,7 @@ export type CommandDefinition = {
 }
 
 export const DEFAULT_BATCH_PATH = 'system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-001-batch-loader-cli.md'
+export const DEFAULT_PROJECT_PROFILE = 'lumeos'
 
 export const COMMAND_DEFINITIONS: Record<GovernanceAction, CommandDefinition> = {
   'git.status': {

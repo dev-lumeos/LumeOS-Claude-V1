@@ -2,6 +2,8 @@
 
 This runbook describes the safe operator workflow for running a workorder batch from status check to the next safe stop.
 
+The active project profile defaults to `lumeos`. Profile-aware governance commands accept `--project lumeos`; the UI uses the same default for invariant, source-chain, dossier, and promotion reads.
+
 The operator CLI is:
 
 ```powershell
@@ -154,6 +156,26 @@ supabase db reset
 ```
 
 Do not run production DB commands, automatic approval grants, direct edits to `system/state/runtime_state.json`, direct deletes of audit/run history, threshold raises without review, or anything that bypasses `checkApproval`.
+
+## Project Profile Commands
+
+The first reusable profile layer lives under `system/project-profiles/`.
+
+Use the LumeOS profile explicitly when you need profile-aware raw path, forbidden path, product-gate, or promotion policy checks:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json --project lumeos
+```
+
+Rules:
+
+- The profile does not grant permissions or open product work.
+- LumeOS raw BLS paths remain local-only and forbidden as commit output.
+- Supabase reset, push, migration execution, production DB commands, runtime state edits, queue edits, and approval auto-grants remain forbidden regardless of profile.
+- Beauty Club is represented only as an inactive example skeleton until Tom supplies a real repo path and policy.
 
 ## Dirty Worktree Recovery
 

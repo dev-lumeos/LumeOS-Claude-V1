@@ -80,6 +80,40 @@ function writeTokens(tokens: Record<string, unknown>): void {
   fs.writeFileSync(path.join(tmpDir, 'system/approval/approvals.json'), JSON.stringify(tokens, null, 2), 'utf8')
 }
 
+function writeProjectProfile(): void {
+  const dir = path.join(tmpDir, 'system/project-profiles/profiles')
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(path.join(dir, 'lumeos.json'), JSON.stringify({
+    profile_version: 1,
+    project_id: 'lumeos',
+    display_name: 'LumeOS',
+    repo_root: tmpDir.replace(/\\/g, '/'),
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: ['private/raw/'],
+    ignored_local_paths: ['private/raw/'],
+    product_gate: { status: 'closed', reason: 'Profile gate closed.', conditional_planning_allowed: false },
+    forbidden_paths: ['.env', 'system/state/runtime_state.json', 'private/raw/**'],
+    forbidden_commands: ['supabase db reset'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/batches/BATCH-test.md',
+    default_branch_prefix: 'goal/',
+    promotion_policy: { require_clean_worktree: true },
+    codex_worker_policy: {
+      enabled: true,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+  }), 'utf8')
+}
+
 function runCheck(gitStatus = '') {
   return runGovernanceInvariantCheck({ repoRoot: tmpDir, gitStatus })
 }
@@ -228,6 +262,21 @@ describe('governance invariant checker', () => {
     assert.equal(item?.severity, 'medium')
     assert.match(item?.safe_cleanup_command ?? '', /clear-expired-approval WO-test-001 --run-id RUN-expired --dry-run/)
     assert.equal(result.exitCode, 0)
+  })
+
+  it('uses project profile raw paths for artifact checks', () => {
+    writeProjectProfile()
+
+    const result = runGovernanceInvariantCheck({
+      repoRoot: tmpDir,
+      gitStatus: '## main\nA  private/raw/source.csv\n',
+      projectId: 'lumeos',
+    })
+    const item = finding(result, 'artifact.raw_bls_unignored')
+
+    assert.equal(result.project_profile?.project_id, 'lumeos')
+    assert.equal(item?.severity, 'medium')
+    assert.match(result.product_work_gate.reason, /Profile gate closed/)
   })
 
   it('reports queue denied with pending runtime mirror as high divergence', () => {

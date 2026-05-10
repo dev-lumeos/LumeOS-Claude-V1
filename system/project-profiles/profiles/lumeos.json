@@ -1,0 +1,63 @@
+{
+  "profile_version": 1,
+  "project_id": "lumeos",
+  "display_name": "LumeOS",
+  "repo_root": "D:/GitHub/LumeOS-Claude-V1",
+  "governance_root": "system",
+  "specs_root": "docs/specs",
+  "workorders_root": "system/workorders",
+  "reports_root": "system/reports",
+  "memory_root": "system/memory",
+  "learning_root": "docs/project/governance-learning",
+  "runtime_state_root": "system/state",
+  "approval_root": "system/approval",
+  "raw_data_paths": [
+    "docs/specs/Nutrition/00_raw/"
+  ],
+  "ignored_local_paths": [
+    "docs/specs/Nutrition/00_raw/",
+    "system/reports/codex-worker/"
+  ],
+  "product_gate": {
+    "status": "closed",
+    "reason": "Product work remains blocked unless Tom explicitly opens it. BLS/Nutrition import execution remains blocked.",
+    "conditional_planning_allowed": false
+  },
+  "forbidden_paths": [
+    ".env",
+    ".env.*",
+    "system/state/runtime_state.json",
+    "system/state/*.lock",
+    "system/approval/queue.json",
+    "docs/specs/Nutrition/00_raw/**"
+  ],
+  "forbidden_commands": [
+    "supabase db reset",
+    "supabase db push",
+    "supabase db push --linked",
+    "supabase migration up",
+    "migration execution"
+  ],
+  "required_checkers": [
+    "governance-invariant-check",
+    "agent-contract-check",
+    "model-runtime-check",
+    "governance-learning-check"
+  ],
+  "default_operator_batch": "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-001-batch-loader-cli.md",
+  "default_branch_prefix": "goal/",
+  "promotion_policy": {
+    "require_clean_worktree": true,
+    "block_runtime_artifacts": true,
+    "block_raw_local_data": true,
+    "require_typecheck": true
+  },
+  "codex_worker_policy": {
+    "enabled": true,
+    "allowed_agents": [
+      "senior-coding-agent"
+    ],
+    "require_explicit_workorder_flag": true,
+    "default_timeout_ms": 120000
+  }
+}

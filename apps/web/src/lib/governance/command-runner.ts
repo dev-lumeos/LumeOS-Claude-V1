@@ -3,6 +3,7 @@ import path from 'node:path'
 
 import {
   DEFAULT_BATCH_PATH,
+  DEFAULT_PROJECT_PROFILE,
   assertKnownAction,
   requiresConfirmation,
   validateBatchPath,
@@ -56,7 +57,7 @@ export function commandPlanFor(request: CommandRequest): CommandPlan {
     case 'operator.continueSafeCleanups':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/run-batch-operator.ts', batchPath, '--continue', '--apply-safe-cleanups'] }
     case 'invariant.check':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/governance-invariant-check.ts', '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/governance-invariant-check.ts', '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'agentContract.check':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/agent-contract-check.ts', '--json'] }
     case 'modelRuntime.check':
@@ -64,20 +65,20 @@ export function commandPlanFor(request: CommandRequest): CommandPlan {
     case 'modelRuntime.checkEndpoints':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/model-runtime-check.ts', '--check-endpoints', '--timeout-ms', '1500', '--json'] }
     case 'specSource.checkBatch':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/spec-source-chain-check.ts', '--batch', batchPath, '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/spec-source-chain-check.ts', '--batch', batchPath, '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'learning.check':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/governance-learning-check.ts', '--json'] }
     case 'dossier.batch':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/batch-dossier.ts', '--batch', batchPath, '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/batch-dossier.ts', '--batch', batchPath, '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'dossier.write':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/batch-dossier.ts', '--batch', batchPath, '--write'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/reports/batch-dossier.ts', '--batch', batchPath, '--write', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'promotion.review': {
       const branch = validateBranchName(request.branch ?? 'goal/governance-ui-v1')
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/promotion-governance.ts', '--review-branch', branch, '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/promotion-governance.ts', '--review-branch', branch, '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     }
     case 'promotion.merge': {
       const branch = validateBranchName(request.branch ?? 'goal/governance-ui-v1')
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/promotion-governance.ts', '--merge-branch', branch, '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/promotion-governance.ts', '--merge-branch', branch, '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     }
     case 'promotion.pushMain':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/promotion-governance.ts', '--push-main', '--json'] }

@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
 
 import {
   classifyPromotionPath,
@@ -28,6 +31,40 @@ const cleanReviewOutputs: Record<string, PromotionCommandResult> = {
   'merge-tree main goal/test': { code: 0, stdout: '', stderr: '' },
   'diff --name-status main..goal/test': { code: 0, stdout: 'A\tdocs/project/test.md\nA\tsystem/control-plane/__tests__/test.test.ts\n', stderr: '' },
   'diff --stat main..goal/test': { code: 0, stdout: ' docs/project/test.md | 1 +\n', stderr: '' },
+}
+
+function writeProfile(repoRoot: string): void {
+  const dir = path.join(repoRoot, 'system/project-profiles/profiles')
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(path.join(dir, 'lumeos.json'), JSON.stringify({
+    profile_version: 1,
+    project_id: 'lumeos',
+    display_name: 'LumeOS',
+    repo_root: repoRoot.replace(/\\/g, '/'),
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: ['private/raw/'],
+    ignored_local_paths: ['private/raw/'],
+    product_gate: { status: 'closed', reason: 'Profile gate closed.', conditional_planning_allowed: false },
+    forbidden_paths: ['.env', 'system/state/runtime_state.json', 'private/raw/**'],
+    forbidden_commands: ['supabase db reset'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/batches/BATCH-test.md',
+    default_branch_prefix: 'goal/',
+    promotion_policy: { require_clean_worktree: true },
+    codex_worker_policy: {
+      enabled: true,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+  }), 'utf8')
 }
 
 describe('promotion governance review', () => {
@@ -74,6 +111,25 @@ describe('promotion governance review', () => {
 
     assert.equal(result.decision, 'DO_NOT_MERGE')
     assert.equal(result.findings.some(item => item.id === 'artifact.raw_local_data'), true)
+  })
+
+  it('uses project profile raw local paths when classifying promotion diffs', () => {
+    const repoRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'lumeos-promotion-profile-'))
+    try {
+      writeProfile(repoRoot)
+      const outputs = {
+        ...cleanReviewOutputs,
+        'diff --name-status main..goal/test': { code: 0, stdout: 'A\tprivate/raw/source.csv\n', stderr: '' },
+      }
+
+      const result = reviewBranch('goal/test', { runner: runner(outputs), repoRoot, runChecks: false, projectId: 'lumeos' })
+
+      assert.equal(result.decision, 'DO_NOT_MERGE')
+      assert.equal(result.changed_files[0]?.category, 'raw_local_data')
+      assert.match(result.product_work_gate.reason, /Profile gate closed/)
+    } finally {
+      fs.rmSync(repoRoot, { recursive: true, force: true })
+    }
   })
 
   it('requires Tom waiver for product work while the gate is closed', () => {

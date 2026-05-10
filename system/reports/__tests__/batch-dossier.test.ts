@@ -49,6 +49,38 @@ function writeJson(relativePath: string, value: unknown): void {
   write(relativePath, JSON.stringify(value, null, 2))
 }
 
+function writeProjectProfile(): void {
+  writeJson('system/project-profiles/profiles/lumeos.json', {
+    profile_version: 1,
+    project_id: 'lumeos',
+    display_name: 'LumeOS',
+    repo_root: tmpDir.replace(/\\/g, '/'),
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: ['docs/specs/Nutrition/00_raw/'],
+    ignored_local_paths: ['docs/specs/Nutrition/00_raw/'],
+    product_gate: { status: 'closed', reason: 'Profile gate closed.', conditional_planning_allowed: false },
+    forbidden_paths: ['.env', 'system/state/runtime_state.json', 'docs/specs/Nutrition/00_raw/**'],
+    forbidden_commands: ['supabase db reset'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/nutrition/batches/BATCH-test.md',
+    default_branch_prefix: 'goal/',
+    promotion_policy: { require_clean_worktree: true },
+    codex_worker_policy: {
+      enabled: true,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+  })
+}
+
 function appendJsonl(relativePath: string, value: unknown): void {
   const fullPath = path.join(tmpDir, relativePath)
   fs.mkdirSync(path.dirname(fullPath), { recursive: true })
@@ -244,6 +276,23 @@ describe('batch dossier reporter', () => {
       'stop_rules',
       'workorders',
     ].sort())
+  })
+
+  it('includes project profile metadata when requested', () => {
+    writeCleanRuntime()
+    writeProjectProfile()
+
+    const dossier = buildBatchDossier({
+      batchFile: batchPath(),
+      repoRoot: tmpDir,
+      gitStatus: '## goal/test\n',
+      generatedAt: '2026-05-05T00:00:00.000Z',
+      runCheckers: false,
+      projectId: 'lumeos',
+    })
+
+    assert.equal(dossier.project_profile?.project_id, 'lumeos')
+    assert.match(formatBatchDossierMarkdown(dossier), /Project profile: lumeos \(LumeOS\)/)
   })
 
   it('writes markdown and json only when explicitly requested', () => {

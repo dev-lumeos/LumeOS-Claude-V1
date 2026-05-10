@@ -36,6 +36,7 @@ The active governance branch is implementing controlled Codex Worker enablement 
 - Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker.
 - Codex Worker dispatch is controlled-enabled for `senior-coding-agent` only and still requires explicit `codex_worker: true`, complete workorder metadata, and product-gate policy pass.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
+- Project Profiles add the first reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, and profile-aware command defaults. The active default profile is `lumeos`.
 - Product work is conditionally open only for the next controlled planning/probe batch.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
@@ -53,6 +54,7 @@ Use these files before starting more governance or product work:
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
 - `docs/project/CODEX_WORKER_BRIDGE.md`
+- `docs/project/PROJECT_PROFILES.md`
 - `docs/project/GOVERNANCE_UI_V1.md`
 - `docs/project/GOVERNANCE_UI_USAGE_GUIDE.md`
 - `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
@@ -107,6 +109,7 @@ Reason:
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
 - `system/workers/codex-worker.ts` can generate and execute constrained `codex exec` prompts.
 - Controlled dispatcher use requires `codex_worker_enabled=true`, `allow_dispatcher_integration=true`, `senior-coding-agent`, `runtime_type: codex-cli`, workorder `codex_worker: true`, complete source/scope/output metadata, no approval requirement, and product-gate policy pass.
+- Project profile loading is available through `system/project-profiles/project-profile-loader.ts`; the LumeOS profile is `system/project-profiles/profiles/lumeos.json` and keeps product work closed by default.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Raw BLS files remain local-only and ignored.
 
@@ -176,6 +179,33 @@ Rules:
 - Tailwind styling requires `apps/web/postcss.config.js`; if the page appears unstyled, verify PostCSS and `globals.css` first.
 - The default batch path points to an existing governance batch, not missing Nutrition P1-005 product planning.
 - Structured non-zero governance JSON is displayed as a governance finding, not an API transport failure.
+
+## Project Profiles Output
+
+- `system/project-profiles/project-profile-loader.ts`
+- `system/project-profiles/project-profile.schema.json`
+- `system/project-profiles/profiles/lumeos.json`
+- `system/project-profiles/profiles/example-beauty-club.json.example`
+- `docs/project/PROJECT_PROFILES.md`
+- `docs/project/governance-learning/2026-05-10-project-profiles.md`
+
+Profile-aware commands:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json --project lumeos
+```
+
+Rules:
+
+- `lumeos` remains the default profile.
+- The profile defines governance/spec/workorder/report/memory roots, raw local paths, ignored local paths, forbidden paths, forbidden commands, required checkers, product-gate policy, promotion policy, and Codex Worker policy.
+- Raw BLS files remain local-only through profile policy.
+- The profile layer does not open product work and does not authorize Supabase reset, push, migration execution, approval grants, or production DB commands.
+- Beauty Club exists only as an inactive example skeleton. No external project path is assumed.
+- Spec-source-chain checking remains Nutrition-aware for LumeOS; a fully generic source-chain graph is future profile work.
 
 ## Workorder Factory Output
 

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LumeOS Governance Project Profile",
+  "type": "object",
+  "required": [
+    "profile_version",
+    "project_id",
+    "display_name",
+    "repo_root",
+    "governance_root",
+    "specs_root",
+    "workorders_root",
+    "reports_root",
+    "memory_root",
+    "learning_root",
+    "runtime_state_root",
+    "approval_root",
+    "raw_data_paths",
+    "ignored_local_paths",
+    "product_gate",
+    "forbidden_paths",
+    "forbidden_commands",
+    "required_checkers",
+    "default_operator_batch",
+    "default_branch_prefix",
+    "promotion_policy",
+    "codex_worker_policy"
+  ],
+  "properties": {
+    "profile_version": { "type": "integer", "minimum": 1 },
+    "project_id": { "type": "string", "pattern": "^[a-z][a-z0-9_-]*$" },
+    "display_name": { "type": "string", "minLength": 1 },
+    "repo_root": { "type": "string", "minLength": 1 },
+    "governance_root": { "type": "string" },
+    "specs_root": { "type": "string" },
+    "workorders_root": { "type": "string" },
+    "reports_root": { "type": "string" },
+    "memory_root": { "type": "string" },
+    "learning_root": { "type": "string" },
+    "runtime_state_root": { "type": "string" },
+    "approval_root": { "type": "string" },
+    "raw_data_paths": { "type": "array", "items": { "type": "string" } },
+    "ignored_local_paths": { "type": "array", "items": { "type": "string" } },
+    "product_gate": {
+      "type": "object",
+      "required": ["status", "reason", "conditional_planning_allowed"],
+      "properties": {
+        "status": { "enum": ["closed", "conditional", "open"] },
+        "reason": { "type": "string" },
+        "conditional_planning_allowed": { "type": "boolean" }
+      }
+    },
+    "forbidden_paths": { "type": "array", "items": { "type": "string" } },
+    "forbidden_commands": { "type": "array", "items": { "type": "string" } },
+    "required_checkers": { "type": "array", "items": { "type": "string" } },
+    "default_operator_batch": { "type": "string" },
+    "default_branch_prefix": { "type": "string" },
+    "promotion_policy": { "type": "object" },
+    "codex_worker_policy": {
+      "type": "object",
+      "required": ["enabled", "allowed_agents", "require_explicit_workorder_flag", "default_timeout_ms"],
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "allowed_agents": { "type": "array", "items": { "type": "string" } },
+        "require_explicit_workorder_flag": { "type": "boolean" },
+        "default_timeout_ms": { "type": "integer", "minimum": 1 }
+      }
+    }
+  },
+  "additionalProperties": true
+}

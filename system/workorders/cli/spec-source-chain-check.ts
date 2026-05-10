@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
+import { getProjectProfile, type ProjectProfile } from '../../project-profiles/project-profile-loader'
 
 export type SpecSourceChainSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 
@@ -34,6 +35,10 @@ export interface SpecSourceChainResult {
   schema_version: 1
   generated_at: string
   repo_root: string
+  project_profile?: {
+    project_id: string
+    display_name: string
+  }
   mode: 'workorder' | 'batch'
   product_work_gate: {
     status: 'blocked' | 'allowed_if_clean'
@@ -50,6 +55,7 @@ interface SpecSourceChainOptions {
   repoRoot?: string
   workorderFile?: string
   batchFile?: string
+  projectId?: string
 }
 
 interface SourceRefs {
@@ -570,6 +576,7 @@ function summarize(findings: SpecSourceChainFinding[]): SpecSourceChainSummary {
 
 export function runSpecSourceChainCheck(options: SpecSourceChainOptions = {}): SpecSourceChainResult {
   const repoRoot = options.repoRoot ?? process.cwd()
+  const profile: ProjectProfile | undefined = options.projectId ? getProjectProfile(options.projectId, { repoRoot }) : undefined
   const workorderFiles = options.batchFile
     ? findWorkordersFromBatch(repoRoot, options.batchFile)
     : [options.workorderFile ?? '']
@@ -579,8 +586,9 @@ export function runSpecSourceChainCheck(options: SpecSourceChainOptions = {}): S
       schema_version: 1,
       generated_at: new Date().toISOString(),
       repo_root: repoRoot,
+      ...(profile ? { project_profile: { project_id: profile.project_id, display_name: profile.display_name } } : {}),
       mode: 'workorder',
-      product_work_gate: { status: 'blocked', reason: PRODUCT_GATE_REASON },
+      product_work_gate: { status: 'blocked', reason: profile?.product_gate.reason ?? PRODUCT_GATE_REASON },
       hasHighOrCriticalFindings: true,
       exitCode: 2,
       summary: { critical: 0, high: 1, medium: 0, low: 0, info: 0 },
@@ -613,10 +621,11 @@ export function runSpecSourceChainCheck(options: SpecSourceChainOptions = {}): S
     schema_version: 1,
     generated_at: new Date().toISOString(),
     repo_root: repoRoot,
+    ...(profile ? { project_profile: { project_id: profile.project_id, display_name: profile.display_name } } : {}),
     mode: options.batchFile ? 'batch' : 'workorder',
     product_work_gate: {
       status: 'blocked',
-      reason: PRODUCT_GATE_REASON,
+      reason: profile?.product_gate.reason ?? PRODUCT_GATE_REASON,
     },
     hasHighOrCriticalFindings,
     exitCode: hasHighOrCriticalFindings ? 1 : 0,
@@ -631,6 +640,7 @@ export function formatSpecSourceChainReport(result: SpecSourceChainResult): stri
     '# Spec Source Chain Check',
     '',
     `Repo: ${result.repo_root}`,
+    ...(result.project_profile ? [`Project profile: ${result.project_profile.project_id} (${result.project_profile.display_name})`] : []),
     `Generated: ${result.generated_at}`,
     `Mode: ${result.mode}`,
     `Product work gate: ${result.product_work_gate.reason}`,
@@ -667,7 +677,9 @@ function printUsage(): void {
 function main(): void {
   const args = process.argv.slice(2)
   const json = args.includes('--json')
-  const filtered = args.filter(arg => arg !== '--json')
+  const projectIndex = args.indexOf('--project')
+  const projectId = projectIndex !== -1 ? args[projectIndex + 1] : undefined
+  const filtered = args.filter((arg, index) => arg !== '--json' && arg !== '--project' && index !== projectIndex + 1)
   const batchIndex = filtered.indexOf('--batch')
 
   let result: SpecSourceChainResult
@@ -677,9 +689,9 @@ function main(): void {
       printUsage()
       process.exit(2)
     }
-    result = runSpecSourceChainCheck({ batchFile })
+    result = runSpecSourceChainCheck({ batchFile, projectId })
   } else if (filtered.length === 1) {
-    result = runSpecSourceChainCheck({ workorderFile: filtered[0] })
+    result = runSpecSourceChainCheck({ workorderFile: filtered[0], projectId })
   } else {
     printUsage()
     process.exit(2)

@@ -24,6 +24,10 @@ type CommandExecution = {
 type GovernanceSnapshot = {
   generatedAt: string
   repoRoot: string
+  projectProfile?: {
+    project_id: string
+    display_name: string
+  }
   batchPath: string
   commands: Partial<Record<GovernanceAction, CommandExecution>>
   cards: Array<{ id: string; label: string; value: string; tone: string }>
@@ -232,7 +236,7 @@ export function GovernanceConsole({ page }: Props) {
           {page === 'promotion' && <PromotionCenter branch={branch} setBranch={setBranch} result={result} setAction={setSelectedAction} runAction={runAction} confirmation={confirmation} setConfirmation={setConfirmation} />}
           {page === 'learning' && <LearningCenter snapshot={snapshot} result={result} runLearning={() => runAction('learning.check')} />}
           {page === 'runtime' && <RuntimeCenter result={result} runStatic={() => runAction('modelRuntime.check')} runEndpoints={() => runAction('modelRuntime.checkEndpoints')} mealcamOptionalOk={mealcamOptionalOk} />}
-          {page === 'settings' && <Settings repoRoot={snapshot?.repoRoot ?? ''} />}
+          {page === 'settings' && <Settings repoRoot={snapshot?.repoRoot ?? ''} projectProfile={snapshot?.projectProfile} />}
         </section>
       </div>
     </main>
@@ -467,11 +471,12 @@ function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: {
   )
 }
 
-function Settings({ repoRoot }: { repoRoot: string }) {
+function Settings({ repoRoot, projectProfile }: { repoRoot: string; projectProfile?: { project_id: string; display_name: string } }) {
   return (
     <div className="space-y-4">
       <Panel title="Safety Rules">
         <div className="grid gap-3 md:grid-cols-2">
+          <Info label="Project Profile" value={projectProfile ? `${projectProfile.display_name} (${projectProfile.project_id})` : 'LumeOS (lumeos)'} />
           <Info label="Repository" value={repoRoot || 'unknown'} />
           <Info label="Raw BLS Policy" value="Local-only and ignored." />
           <Info label="DB Reset" value="Forbidden." />

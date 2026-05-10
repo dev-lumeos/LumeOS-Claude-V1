@@ -62,6 +62,7 @@ Governance learning records:
 - Codex Worker dispatcher integration is controlled-enabled for `senior-coding-agent` only. It requires `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product-gate policy pass.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Governance UI V1 exists under `apps/web/src/app/governance` as a local operator console backed by allowlisted CLI execution.
+- Project Profiles exist under `system/project-profiles/`. The default active profile is `lumeos`; it centralizes LumeOS governance roots, raw local paths, forbidden paths, forbidden commands, product-gate policy, promotion policy, and Codex Worker policy.
 
 ## Current Product Work Gate
 
@@ -136,6 +137,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Automatic Codex worker dispatch requires Tom-opened config gates and workorder `codex_worker: true`; arbitrary agents must not route to Codex.
 - Optional runtimes only block when the target batch/workorder explicitly requires them.
 - Governance UI commands must stay routed through the allowlist and must not expose Supabase reset/push, migration execution, runtime state edits, queue edits, or approval auto-grants.
+- Profile-aware tools must preserve the LumeOS product gate and raw BLS local-only policy. A profile can classify paths and policy; it must not grant approvals, run commands, or open product work.
 
 ## Open Governance Work
 
@@ -150,3 +152,4 @@ Prompt text such as `/no_think` is not sufficient.
 - Spark Runtime Hardening is implemented as a read-only checker; deeper runtime observability remains optional.
 - Codex Worker Bridge is implemented as a manual/controlled bridge; dispatcher integration is controlled-enabled for the senior-coding-agent path only.
 - Governance UI V1 is implemented as local operator console V1; richer graphing and saved dossier views remain optional refinements.
+- Project Profiles are implemented as the first portability layer. Remaining work is to migrate deeper Nutrition-specific source-chain semantics and any remaining hardcoded LumeOS defaults into profile-aware helpers where useful.

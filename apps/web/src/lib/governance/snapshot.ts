@@ -9,6 +9,10 @@ import { productGateText, summaryFromJson, toneFromSummary } from './status'
 export type GovernanceSnapshot = {
   generatedAt: string
   repoRoot: string
+  projectProfile: {
+    project_id: string
+    display_name: string
+  }
   batchPath: string
   commands: Partial<Record<GovernanceAction, CommandExecution>>
   cards: Array<{
@@ -37,6 +41,19 @@ function readDoc(repoRoot: string, relativePath: string): string {
     return fs.readFileSync(path.join(repoRoot, relativePath), 'utf8')
   } catch {
     return `${relativePath} not found.`
+  }
+}
+
+function readProjectProfile(repoRoot: string): GovernanceSnapshot['projectProfile'] {
+  try {
+    const raw = fs.readFileSync(path.join(repoRoot, 'system/project-profiles/profiles/lumeos.json'), 'utf8')
+    const profile = JSON.parse(raw) as { project_id?: string; display_name?: string }
+    return {
+      project_id: profile.project_id ?? 'lumeos',
+      display_name: profile.display_name ?? 'LumeOS',
+    }
+  } catch {
+    return { project_id: 'lumeos', display_name: 'LumeOS' }
   }
 }
 
@@ -82,6 +99,7 @@ export async function buildGovernanceSnapshot(batchPath = DEFAULT_BATCH_PATH): P
   return {
     generatedAt: new Date().toISOString(),
     repoRoot,
+    projectProfile: readProjectProfile(repoRoot),
     batchPath,
     commands,
     cards: [

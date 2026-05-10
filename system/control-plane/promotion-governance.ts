@@ -1,5 +1,12 @@
 import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
+import {
+  getProjectProfile,
+  isForbiddenPath,
+  isRawLocalPath,
+  isRuntimeArtifactPath,
+  type ProjectProfile,
+} from '../project-profiles/project-profile-loader'
 
 export type PromotionDecision = 'MERGE_READY' | 'NEEDS_FIX' | 'DO_NOT_MERGE' | 'NEEDS_TOM_WAIVER'
 export type PromotionSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
@@ -88,6 +95,7 @@ interface PromotionOptions {
   runner?: PromotionCommandRunner
   runChecks?: boolean
   generatedAt?: string
+  projectId?: string
 }
 
 const TSX = 'cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs'
@@ -121,8 +129,10 @@ function toPosix(value: string): string {
   return value.replace(/\\/g, '/')
 }
 
-export function classifyPromotionPath(filePath: string): PromotionPathCategory {
+export function classifyPromotionPath(filePath: string, profile?: ProjectProfile): PromotionPathCategory {
   const p = toPosix(filePath)
+  if (profile && isRuntimeArtifactPath(profile, p)) return 'runtime_artifact'
+  if (profile && isRawLocalPath(profile, p)) return 'raw_local_data'
   if (
     p === 'system/state/runtime_state.json' ||
     p === 'system/approval/queue.json' ||
@@ -141,9 +151,10 @@ export function classifyPromotionPath(filePath: string): PromotionPathCategory {
   return 'unknown'
 }
 
-function isProductWork(filePath: string): boolean {
+function isProductWork(filePath: string, profile?: ProjectProfile): boolean {
   const p = toPosix(filePath)
   if (isGovernanceToolingPath(p)) return false
+  if (profile && isForbiddenPath(profile, p) && !isRuntimeArtifactPath(profile, p) && !isRawLocalPath(profile, p)) return true
   if (p.startsWith('services/nutrition-api/') || p.startsWith('apps/') || p.startsWith('packages/')) return true
   if (p.startsWith('docs/specs/Nutrition/') && !p.includes('/06_workorder_planning/')) return true
   return false
@@ -165,13 +176,13 @@ function isGovernanceToolingPath(filePath: string): boolean {
   )
 }
 
-function parseNameStatus(output: string): PromotionChangedFile[] {
+function parseNameStatus(output: string, profile?: ProjectProfile): PromotionChangedFile[] {
   return output.split(/\r?\n/)
     .filter(Boolean)
     .map(line => {
       const [status, ...rest] = line.split(/\t/)
       const filePath = rest[rest.length - 1] ?? ''
-      return { status, path: filePath, category: classifyPromotionPath(filePath) }
+      return { status, path: filePath, category: classifyPromotionPath(filePath, profile) }
     })
 }
 
@@ -267,6 +278,7 @@ function nextAction(decision: PromotionDecision, branch: string): string {
 
 export function reviewBranch(branch: string, options: PromotionOptions = {}): PromotionReviewResult {
   const repoRoot = options.repoRoot ?? process.cwd()
+  const profile = options.projectId ? getProjectProfile(options.projectId, { repoRoot }) : undefined
   const runner = options.runner ?? defaultRunner(repoRoot)
   const findings: PromotionFinding[] = []
 
@@ -344,17 +356,17 @@ export function reviewBranch(branch: string, options: PromotionOptions = {}): Pr
   }
 
   const diffName = runner(['diff', '--name-status', `main..${branch}`])
-  const changedFiles = parseNameStatus(diffName.stdout)
+  const changedFiles = parseNameStatus(diffName.stdout, profile)
   const diffStat = runner(['diff', '--stat', `main..${branch}`]).stdout.trim()
   addForbiddenArtifactFindings(findings, changedFiles)
 
-  if (changedFiles.some(item => isProductWork(item.path))) {
+  if (changedFiles.some(item => isProductWork(item.path, profile))) {
     findings.push(finding({
       id: 'product.gate_closed',
       severity: 'high',
       layer: 'product_work_gate',
       message: 'Branch contains product work while the product work gate is closed.',
-      evidence: changedFiles.filter(item => isProductWork(item.path)).map(item => item.path).join(', '),
+      evidence: changedFiles.filter(item => isProductWork(item.path, profile)).map(item => item.path).join(', '),
       suggested_action: 'Get an explicit Tom waiver or defer product work.',
       blocks_merge: true,
       requires_tom: true,
@@ -371,7 +383,7 @@ export function reviewBranch(branch: string, options: PromotionOptions = {}): Pr
     branch,
     current_branch: currentBranch,
     decision,
-    product_work_gate: { status: 'blocked', reason: PRODUCT_GATE_REASON },
+    product_work_gate: { status: 'blocked', reason: profile?.product_gate.reason ?? PRODUCT_GATE_REASON },
     git: {
       worktree_clean: worktreeClean,
       target_branch_exists: targetExists,
@@ -595,26 +607,28 @@ export function formatPromotionAction(result: PromotionActionResult): string {
   ].join('\n')
 }
 
-function parseArgs(argv: string[]): { mode?: 'review' | 'merge' | 'push'; branch?: string; json: boolean; runChecks: boolean } {
+function parseArgs(argv: string[]): { mode?: 'review' | 'merge' | 'push'; branch?: string; json: boolean; runChecks: boolean; projectId?: string } {
   const json = argv.includes('--json')
   const runChecks = argv.includes('--run-checks')
+  const projectIndex = argv.indexOf('--project')
+  const projectId = projectIndex !== -1 ? argv[projectIndex + 1] : undefined
   const reviewIndex = argv.indexOf('--review-branch')
   const mergeIndex = argv.indexOf('--merge-branch')
-  if (reviewIndex !== -1) return { mode: 'review', branch: argv[reviewIndex + 1], json, runChecks }
-  if (mergeIndex !== -1) return { mode: 'merge', branch: argv[mergeIndex + 1], json, runChecks: false }
-  if (argv.includes('--push-main')) return { mode: 'push', json, runChecks }
-  return { json, runChecks }
+  if (reviewIndex !== -1) return { mode: 'review', branch: argv[reviewIndex + 1], json, runChecks, projectId }
+  if (mergeIndex !== -1) return { mode: 'merge', branch: argv[mergeIndex + 1], json, runChecks: false, projectId }
+  if (argv.includes('--push-main')) return { mode: 'push', json, runChecks, projectId }
+  return { json, runChecks, projectId }
 }
 
 function main(): number {
   const args = parseArgs(process.argv.slice(2))
   if (args.mode === 'review' && args.branch) {
-    const result = reviewBranch(args.branch, { runChecks: args.runChecks })
+    const result = reviewBranch(args.branch, { runChecks: args.runChecks, projectId: args.projectId })
     console.log(args.json ? JSON.stringify(result, null, 2) : formatPromotionReview(result))
     return result.decision === 'MERGE_READY' ? 0 : 1
   }
   if (args.mode === 'merge' && args.branch) {
-    const result = promoteMergeBranch(args.branch, { runChecks: true })
+    const result = promoteMergeBranch(args.branch, { runChecks: true, projectId: args.projectId })
     console.log(args.json ? JSON.stringify(result, null, 2) : formatPromotionAction(result))
     return result.success ? 0 : 1
   }

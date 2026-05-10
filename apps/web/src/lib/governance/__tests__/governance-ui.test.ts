@@ -90,6 +90,17 @@ describe('governance UI safety helpers', () => {
     })
     assert.ok(plan.args.includes('--json'))
     assert.ok(!plan.args.includes('--write'))
+    assert.ok(plan.args.includes('--project'))
+    assert.ok(plan.args.includes('lumeos'))
+  })
+
+  it('profile-aware read commands use the default LumeOS profile', () => {
+    const invariant = commandPlanFor({ action: 'invariant.check' })
+    const promotion = commandPlanFor({ action: 'promotion.review', branch: 'goal/test' })
+
+    assert.deepEqual(invariant.args.slice(-3), ['--json', '--project', 'lumeos'])
+    assert.ok(promotion.args.includes('--project'))
+    assert.ok(promotion.args.includes('lumeos'))
   })
 
   it('defaults to an existing governance batch instead of missing P1-005 product planning', () => {
@@ -147,6 +158,7 @@ describe('governance UI safety helpers', () => {
     assert.match(globals, /\.gov-shell/)
     assert.match(consoleComponent, /gov-sidebar/)
     assert.match(consoleComponent, /Product gate closed/)
+    assert.match(consoleComponent, /Project Profile/)
   })
 
   it('runtime page displays runtime type for external Codex routes', () => {

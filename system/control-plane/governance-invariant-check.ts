@@ -2,6 +2,12 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { spawnSync } from 'node:child_process'
 import { pathToFileURL } from 'node:url'
+import {
+  getProjectProfile,
+  isRawLocalPath,
+  isRuntimeArtifactPath,
+  type ProjectProfile,
+} from '../project-profiles/project-profile-loader'
 
 export type FindingSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 
@@ -34,6 +40,10 @@ export interface GovernanceInvariantResult {
   schema_version: 1
   generated_at: string
   repo_root: string
+  project_profile?: {
+    project_id: string
+    display_name: string
+  }
   hasHighOrCriticalFindings: boolean
   exitCode: 0 | 1 | 2
   summary: GovernanceInvariantSummary
@@ -555,7 +565,7 @@ function checkStopRules(state: RuntimeStateFile, repoRoot: string): GovernanceIn
   return findings
 }
 
-function checkArtifacts(entries: GitStatusEntry[]): GovernanceInvariantFinding[] {
+function checkArtifacts(entries: GitStatusEntry[], profile?: ProjectProfile): GovernanceInvariantFinding[] {
   const findings: GovernanceInvariantFinding[] = []
   const runtimeArtifacts = [
     'system/state/pipeline-metrics.jsonl',
@@ -565,7 +575,10 @@ function checkArtifacts(entries: GitStatusEntry[]): GovernanceInvariantFinding[]
 
   for (const entry of entries) {
     const normalized = entry.path.replace(/\\/g, '/')
-    if (entry.code !== '!!' && (runtimeArtifacts.includes(normalized) || /^system\/state\/.*\.lock$/.test(normalized))) {
+    const runtimeArtifact = profile
+      ? isRuntimeArtifactPath(profile, normalized)
+      : runtimeArtifacts.includes(normalized) || /^system\/state\/.*\.lock$/.test(normalized)
+    if (entry.code !== '!!' && runtimeArtifact) {
       findings.push(finding({
         id: 'artifact.runtime_modified',
         severity: 'medium',
@@ -578,7 +591,8 @@ function checkArtifacts(entries: GitStatusEntry[]): GovernanceInvariantFinding[]
       }))
     }
 
-    if (normalized.startsWith('docs/specs/Nutrition/00_raw/') && entry.code !== '!!') {
+    const rawLocalPath = profile ? isRawLocalPath(profile, normalized) : normalized.startsWith('docs/specs/Nutrition/00_raw/')
+    if (rawLocalPath && entry.code !== '!!') {
       findings.push(finding({
         id: 'artifact.raw_bls_unignored',
         severity: 'medium',
@@ -595,8 +609,9 @@ function checkArtifacts(entries: GitStatusEntry[]): GovernanceInvariantFinding[]
   return findings
 }
 
-export function runGovernanceInvariantCheck(opts: { repoRoot?: string; gitStatus?: string } = {}): GovernanceInvariantResult {
+export function runGovernanceInvariantCheck(opts: { repoRoot?: string; gitStatus?: string; projectId?: string } = {}): GovernanceInvariantResult {
   const repoRoot = opts.repoRoot ?? process.cwd()
+  const profile = opts.projectId ? getProjectProfile(opts.projectId, { repoRoot }) : undefined
   const state = readJson<RuntimeStateFile>(repoRoot, 'system/state/runtime_state.json', {})
   const queue = readJson<Record<string, ApprovalItem>>(repoRoot, 'system/approval/queue.json', {})
   const tokens = readJson<Record<string, ApprovalToken>>(repoRoot, 'system/approval/approvals.json', {})
@@ -607,7 +622,7 @@ export function runGovernanceInvariantCheck(opts: { repoRoot?: string; gitStatus
     ...checkLocks(state),
     ...checkApprovals(state, queue, tokens),
     ...checkStopRules(state, repoRoot),
-    ...checkArtifacts(gitEntries),
+    ...checkArtifacts(gitEntries, profile),
   ]
   const summary = summarize(findings)
   const hasHighOrCriticalFindings = summary.critical > 0 || summary.high > 0
@@ -616,12 +631,16 @@ export function runGovernanceInvariantCheck(opts: { repoRoot?: string; gitStatus
     schema_version: 1,
     generated_at: new Date().toISOString(),
     repo_root: repoRoot,
+    ...(profile ? { project_profile: {
+      project_id: profile.project_id,
+      display_name: profile.display_name,
+    } } : {}),
     hasHighOrCriticalFindings,
     exitCode: hasHighOrCriticalFindings ? 1 : 0,
     summary,
     product_work_gate: {
       status: 'blocked',
-      reason: PRODUCT_GATE_REASON,
+      reason: profile?.product_gate.reason ?? PRODUCT_GATE_REASON,
     },
     findings,
   }
@@ -633,6 +652,7 @@ export function formatInvariantReport(result: GovernanceInvariantResult): string
     '',
     `Generated: ${result.generated_at}`,
     `Repo: ${result.repo_root}`,
+    ...(result.project_profile ? [`Project profile: ${result.project_profile.project_id} (${result.project_profile.display_name})`] : []),
     `Product work gate: ${result.product_work_gate.status}`,
     `Product work gate reason: ${result.product_work_gate.reason}`,
     '',
@@ -670,13 +690,15 @@ export function formatInvariantReport(result: GovernanceInvariantResult): string
 function main(): number {
   const args = process.argv.slice(2)
   const json = args.includes('--json')
-  const unknown = args.filter(arg => arg !== '--json')
+  const projectIndex = args.indexOf('--project')
+  const projectId = projectIndex !== -1 ? args[projectIndex + 1] : undefined
+  const unknown = args.filter((arg, index) => arg !== '--json' && arg !== '--project' && index !== projectIndex + 1)
   if (unknown.length > 0) {
     console.error(`Unknown flag(s): ${unknown.join(', ')}`)
     return 2
   }
 
-  const result = runGovernanceInvariantCheck()
+  const result = runGovernanceInvariantCheck({ projectId })
   if (json) console.log(JSON.stringify(result, null, 2))
   else console.log(formatInvariantReport(result))
   return result.exitCode

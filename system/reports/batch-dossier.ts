@@ -23,6 +23,12 @@ import {
   runSpecSourceChainCheck,
   type SpecSourceChainResult,
 } from '../workorders/cli/spec-source-chain-check'
+import {
+  getProjectProfile,
+  isRawLocalPath,
+  isRuntimeArtifactPath,
+  type ProjectProfile,
+} from '../project-profiles/project-profile-loader'
 
 export type BatchDossierFinalState =
   | 'DONE'
@@ -143,6 +149,10 @@ export interface BatchDossierCheckerSummary {
 export interface BatchDossier {
   schema_version: 1
   generated_at: string
+  project_profile?: {
+    project_id: string
+    display_name: string
+  }
   batch_id: string
   batch_file: string
   batch_status: string
@@ -179,6 +189,7 @@ export interface BuildBatchDossierOptions {
   gitStatus?: string
   commitsSinceBase?: string[]
   runCheckers?: boolean
+  projectId?: string
 }
 
 interface RuntimeStateFile {
@@ -233,9 +244,11 @@ function getString(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback
 }
 
-export function classifyDossierPath(filePath: string): DossierPathCategory {
+export function classifyDossierPath(filePath: string, profile?: ProjectProfile): DossierPathCategory {
   const p = toPosix(filePath)
   if (p.includes('/node_modules/') || p.endsWith('/node_modules/')) return 'unknown'
+  if (profile && isRawLocalPath(profile, p)) return 'raw_local_only'
+  if (profile && isRuntimeArtifactPath(profile, p)) return 'runtime_artifact'
   if (p.startsWith('docs/specs/Nutrition/00_raw/')) return 'raw_local_only'
   if (
     p.startsWith('system/state/') ||
@@ -256,7 +269,7 @@ export function classifyDossierPath(filePath: string): DossierPathCategory {
   return 'unknown'
 }
 
-function parseGitStatus(raw: string): BatchDossierGitStatus {
+function parseGitStatus(raw: string, profile?: ProjectProfile): BatchDossierGitStatus {
   const lines = raw.split(/\r?\n/).filter(Boolean)
   const branchLine = lines.find(line => line.startsWith('## ')) ?? '## (unknown)'
   const branch = branchLine.replace(/^##\s+/, '').split('...')[0].trim()
@@ -265,7 +278,7 @@ function parseGitStatus(raw: string): BatchDossierGitStatus {
     .map(line => {
       const code = line.slice(0, 2).trim() || '??'
       const filePath = line.slice(3).trim()
-      return { code, path: filePath, category: classifyDossierPath(filePath) }
+      return { code, path: filePath, category: classifyDossierPath(filePath, profile) }
     })
   return {
     branch,
@@ -281,14 +294,14 @@ function parseGitStatus(raw: string): BatchDossierGitStatus {
   }
 }
 
-function readGitStatus(repoRoot: string, injected?: string): BatchDossierGitStatus {
-  if (typeof injected === 'string') return parseGitStatus(injected)
+function readGitStatus(repoRoot: string, injected?: string, profile?: ProjectProfile): BatchDossierGitStatus {
+  if (typeof injected === 'string') return parseGitStatus(injected, profile)
   const result = spawnSync('git', ['status', '--short', '--branch', '--ignored=matching'], {
     cwd: repoRoot,
     encoding: 'utf8',
     shell: false,
   })
-  return parseGitStatus(result.stdout ?? '')
+  return parseGitStatus(result.stdout ?? '', profile)
 }
 
 function readCommitsSinceBase(repoRoot: string, injected?: string[]): string[] {
@@ -525,7 +538,7 @@ function collectCheckers(repoRoot: string, batchFile: string, runCheckers: boole
   }
 }
 
-function collectOutputs(repoRoot: string, expectedOutputs: string[], git: BatchDossierGitStatus): BatchDossierOutput[] {
+function collectOutputs(repoRoot: string, expectedOutputs: string[], git: BatchDossierGitStatus, profile?: ProjectProfile): BatchDossierOutput[] {
   const outputPaths = new Set(expectedOutputs)
   for (const entry of git.entries) {
     if (['project_output', 'runtime_artifact', 'raw_local_only', 'report_output'].includes(entry.category)) {
@@ -535,7 +548,7 @@ function collectOutputs(repoRoot: string, expectedOutputs: string[], git: BatchD
 
   return [...outputPaths].sort().map(outputPath => {
     const gitEntry = git.entries.find(entry => toPosix(entry.path) === toPosix(outputPath))
-    const category = classifyDossierPath(outputPath)
+    const category = classifyDossierPath(outputPath, profile)
     return {
       path: outputPath,
       expected: expectedOutputs.includes(outputPath),
@@ -604,6 +617,7 @@ function nextActionFor(finalState: BatchDossierFinalState, batchFile: string): s
 
 export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossier {
   const repoRoot = path.resolve(options.repoRoot ?? process.cwd())
+  const profile = options.projectId ? getProjectProfile(options.projectId, { repoRoot }) : undefined
   const generatedAt = options.generatedAt ?? new Date().toISOString()
   const batch = loadBatchWorkorders(repoRoot, options.batchFile)
   const workorderIds = new Set(batch.workorders.map(item => item.workorder_id).filter(Boolean))
@@ -614,15 +628,19 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const reviews = collectReviews(repoRoot, workorderIds, runIds)
   const cleanups = collectCleanups(repoRoot, workorderIds, runIds)
   const codexWorkerRuns = collectCodexWorkerRuns(repoRoot, workorderIds)
-  const git = readGitStatus(repoRoot, options.gitStatus)
+  const git = readGitStatus(repoRoot, options.gitStatus, profile)
   git.commits_since_base = readCommitsSinceBase(repoRoot, options.commitsSinceBase)
   const checkers = collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true)
-  const outputs = collectOutputs(repoRoot, batch.expected_outputs, git)
+  const outputs = collectOutputs(repoRoot, batch.expected_outputs, git, profile)
   const finalState = classifyFinalState({ state, workorderIds, runs, approvals, outputs, checkers })
 
   return {
     schema_version: 1,
     generated_at: generatedAt,
+    ...(profile ? { project_profile: {
+      project_id: profile.project_id,
+      display_name: profile.display_name,
+    } } : {}),
     ...batch,
     runs,
     approvals,
@@ -658,6 +676,7 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
   lines.push(`# Batch Dossier — ${dossier.batch_id}`)
   lines.push('')
   lines.push(`Generated: ${dossier.generated_at}`)
+  if (dossier.project_profile) lines.push(`Project profile: ${dossier.project_profile.project_id} (${dossier.project_profile.display_name})`)
   lines.push(`Batch file: ${dossier.batch_file}`)
   lines.push(`Batch status: ${dossier.batch_status}`)
   lines.push('')
@@ -802,15 +821,17 @@ function usage(): string {
   ].join('\n')
 }
 
-function parseArgs(argv: string[]): { batch?: string; workorder?: string; json: boolean; write: boolean } {
+function parseArgs(argv: string[]): { batch?: string; workorder?: string; json: boolean; write: boolean; projectId?: string } {
   const args = [...argv]
   const json = args.includes('--json')
   const write = args.includes('--write')
   const batchIndex = args.indexOf('--batch')
   const workorderIndex = args.indexOf('--workorder')
+  const projectIndex = args.indexOf('--project')
   const batch = batchIndex !== -1 ? args[batchIndex + 1] : undefined
   const workorder = workorderIndex !== -1 ? args[workorderIndex + 1] : undefined
-  return { batch, workorder, json, write }
+  const projectId = projectIndex !== -1 ? args[projectIndex + 1] : undefined
+  return { batch, workorder, json, write, projectId }
 }
 
 function main(): number {
@@ -825,7 +846,7 @@ function main(): number {
   }
 
   try {
-    const dossier = buildBatchDossier({ batchFile: args.batch })
+    const dossier = buildBatchDossier({ batchFile: args.batch, projectId: args.projectId })
     if (args.write) {
       const written = writeBatchDossier(dossier)
       if (!args.json) {
