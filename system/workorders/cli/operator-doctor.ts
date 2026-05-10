@@ -6,7 +6,7 @@ import type { OperatorStatus, ApprovalStop, CleanupSuggestion } from './batch-op
 import { collectOperatorStatus } from './batch-operator'
 import { runGovernanceInvariantCheck } from '../../control-plane/governance-invariant-check'
 import { runAgentContractCheck } from '../../control-plane/agent-contract-check'
-import { runModelRuntimeCheck } from '../../control-plane/model-runtime-check'
+import { readModelRuntimeHistorySummary, runModelRuntimeCheck, type ModelRuntimeHistorySummary } from '../../control-plane/model-runtime-check'
 import { runSpecSourceChainCheck } from './spec-source-chain-check'
 import { loadCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
 import { getProjectProfile, type ProjectProfile } from '../../project-profiles/project-profile-loader'
@@ -94,6 +94,10 @@ export interface OperatorDoctorResult {
     allow_dispatcher_integration: boolean
     allowed_agents: string[]
     default_timeout_ms: number
+  }
+  runtime_history: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'total_records' | 'total_checks' | 'routes'> & {
+    status: 'available' | 'missing'
+    message: string
   }
   git_status: OperatorStatus['git']
   stop_rules: OperatorStatus['stopRules']
@@ -243,6 +247,17 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
       : { status: 'blocked', reason: 'Product work remains blocked unless Tom explicitly opens it.' }
   )
   const blockers: OperatorDoctorResult['blockers'] = []
+  const history = readModelRuntimeHistorySummary({ repoRoot: process.cwd() })
+  const runtimeHistory: OperatorDoctorResult['runtime_history'] = {
+    status: history.total_records > 0 ? 'available' : 'missing',
+    message: history.total_records > 0
+      ? `Runtime history readiness is ${history.overall_readiness}.`
+      : 'No runtime history recorded yet.',
+    overall_readiness: history.overall_readiness,
+    total_records: history.total_records,
+    total_checks: history.total_checks,
+    routes: history.routes.slice(0, 12),
+  }
   let finalDiagnosis: OperatorDoctorDiagnosis = 'UNKNOWN'
   let nextAction = ''
 
@@ -316,6 +331,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     cleanups: status.cleanupSuggestions.map(cleanupSummary),
     checkers,
     codex_worker: summarizeCodexWorker(loadCodexWorkerConfig()),
+    runtime_history: runtimeHistory,
     git_status: status.git,
     stop_rules: status.stopRules,
     product_gate: productGate,
@@ -326,6 +342,9 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
       'Doctor does not apply cleanup without the existing operator safe-cleanup flag.',
       'Doctor does not grant approvals.',
       'Doctor does not run Supabase commands or migrations.',
+      runtimeHistory.status === 'missing'
+        ? `No runtime history recorded yet; run ${commandFor(MODEL_RUNTIME_CLI, '--check-endpoints --record-history --json')} when endpoint history is needed.`
+        : runtimeHistory.message,
     ],
   }
 }
@@ -364,6 +383,9 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   lines.push('')
   lines.push('## Codex Worker')
   lines.push(`${result.codex_worker.status}: enabled=${result.codex_worker.codex_worker_enabled} dispatcher=${result.codex_worker.allow_dispatcher_integration} agents=${result.codex_worker.allowed_agents.join(', ')}`)
+  lines.push('')
+  lines.push('## Runtime History')
+  lines.push(`${result.runtime_history.status}: readiness=${result.runtime_history.overall_readiness} records=${result.runtime_history.total_records} checks=${result.runtime_history.total_checks}`)
   lines.push('')
   lines.push('## Product Gate')
   lines.push(`${result.product_gate.status}: ${result.product_gate.reason}`)

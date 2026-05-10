@@ -38,7 +38,9 @@ export interface ModelRuntimeRoute {
   runtime_required?: 'always' | 'on_demand' | string
   json_required: boolean
   qwen_thinking_off_required: boolean
-  endpoint_status?: 'not_checked' | 'ok' | 'unreachable' | 'external_ok'
+  endpoint_status?: 'not_checked' | 'ok' | 'unreachable' | 'optional_offline' | 'external_ok'
+  latency_ms?: number | null
+  timed_out?: boolean
 }
 
 export interface ModelRuntimeCheckResult {
@@ -59,10 +61,61 @@ export interface ModelRuntimeCheckResult {
 
 export interface ModelRuntimeCheckOptions {
   repoRoot?: string
+  projectId?: string
   agent?: string
   checkEndpoints?: boolean
   timeoutMs?: number
   fetchImpl?: typeof fetch
+  recordHistory?: boolean
+  historyDir?: string
+}
+
+export interface ModelRuntimeHistoryRecord {
+  timestamp: string
+  project_id: string
+  route_id: string
+  agent: string
+  model?: string
+  runtime_type: string
+  endpoint?: string
+  required: boolean
+  optional: boolean
+  endpoint_status: string
+  latency_ms: number | null
+  timed_out: boolean
+  severity: ModelRuntimeSeverity
+  finding_ids: string[]
+  product_gate_state: string
+  check_endpoints: boolean
+}
+
+export interface ModelRuntimeHistoryRouteSummary {
+  route_id: string
+  agent: string
+  model?: string
+  runtime_type: string
+  endpoint?: string
+  required: boolean
+  optional: boolean
+  last_status: string
+  failures_count: number
+  timeout_count: number
+  average_latency_ms: number | null
+  max_latency_ms: number | null
+  last_ok?: string
+  last_failure?: string
+  finding_ids: string[]
+}
+
+export interface ModelRuntimeHistorySummary {
+  generated_at: string
+  project_id: string
+  history_path: string
+  total_records: number
+  total_checks: number
+  time_range: { from?: string; to?: string }
+  overall_readiness: 'RUNTIME_HEALTHY' | 'RUNTIME_DEGRADED' | 'RUNTIME_BLOCKED' | 'UNKNOWN'
+  routes: ModelRuntimeHistoryRouteSummary[]
 }
 
 type AgentsRegistry = Record<string, any> & {
@@ -75,6 +128,10 @@ type ModelRoutingFile = Record<string, any> & {
 
 const PRODUCT_GATE_REASON = 'Product work remains blocked unless Tom explicitly opens it; autonomous/night/large runs remain blocked until model runtime health is proven.'
 const DEFAULT_TIMEOUT_MS = 1500
+const DEFAULT_PROJECT_ID = 'lumeos'
+const HISTORY_DIR = 'system/reports/model-runtime-history'
+const HISTORY_FILE = 'history.jsonl'
+const LATEST_FILE = 'latest.json'
 
 function readText(repoRoot: string, relativePath: string): string {
   const fullPath = path.join(repoRoot, relativePath)
@@ -191,6 +248,7 @@ function endpointModelsUrl(endpoint: string): string {
 
 function endpointFailureFinding(route: ModelRuntimeRoute, evidence: string, explicitlyTargeted: boolean): ModelRuntimeFinding {
   if (route.optional_runtime && !explicitlyTargeted) {
+    route.endpoint_status = 'optional_offline'
     return finding({
       id: 'model_runtime.optional_endpoint_offline',
       severity: 'info',
@@ -224,16 +282,21 @@ function endpointFailureFinding(route: ModelRuntimeRoute, evidence: string, expl
 async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<ModelRuntimeCheckOptions, 'timeoutMs'>> & Pick<ModelRuntimeCheckOptions, 'fetchImpl'> & { explicitlyTargeted: boolean }): Promise<ModelRuntimeFinding | null> {
   if (!isEndpointRuntime(route)) {
     route.endpoint_status = 'external_ok'
+    route.latency_ms = null
+    route.timed_out = false
     return null
   }
   if (!route.endpoint) return null
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), options.timeoutMs)
+  const startedAt = Date.now()
   try {
     const response = await (options.fetchImpl ?? fetch)(endpointModelsUrl(route.endpoint), {
       method: 'GET',
       signal: controller.signal,
     })
+    route.latency_ms = Date.now() - startedAt
+    route.timed_out = false
     if (!response.ok) {
       route.endpoint_status = 'unreachable'
       return endpointFailureFinding(route, `HTTP ${response.status} ${response.statusText}`, options.explicitlyTargeted)
@@ -241,6 +304,10 @@ async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<Mo
     route.endpoint_status = 'ok'
     return null
   } catch (error) {
+    route.latency_ms = Date.now() - startedAt
+    route.timed_out = error instanceof Error
+      ? /abort|timeout|timed/i.test(error.name) || /abort|timeout|timed/i.test(error.message)
+      : /abort|timeout|timed/i.test(String(error))
     route.endpoint_status = 'unreachable'
     return endpointFailureFinding(route, error instanceof Error ? error.message : String(error), options.explicitlyTargeted)
   } finally {
@@ -444,6 +511,159 @@ function resultFrom(repoRoot: string, checkEndpoints: boolean, routes: ModelRunt
   }
 }
 
+function historyDirectory(repoRoot: string, override?: string): string {
+  return override ? path.resolve(repoRoot, override) : path.join(repoRoot, HISTORY_DIR)
+}
+
+function historyPath(repoRoot: string, override?: string): string {
+  return path.join(historyDirectory(repoRoot, override), HISTORY_FILE)
+}
+
+function latestPath(repoRoot: string, override?: string): string {
+  return path.join(historyDirectory(repoRoot, override), LATEST_FILE)
+}
+
+const severityRank: Record<ModelRuntimeSeverity, number> = {
+  info: 0,
+  low: 1,
+  medium: 2,
+  high: 3,
+  critical: 4,
+}
+
+function highestSeverity(findings: ModelRuntimeFinding[]): ModelRuntimeSeverity {
+  return findings.reduce<ModelRuntimeSeverity>((highest, item) =>
+    severityRank[item.severity] > severityRank[highest] ? item.severity : highest, 'info')
+}
+
+function routeHistoryRecord(result: ModelRuntimeCheckResult, route: ModelRuntimeRoute, projectId: string): ModelRuntimeHistoryRecord {
+  const routeFindings = result.findings.filter(item => item.agent === route.agent || (!item.agent && item.model === route.model))
+  const runtimeType = route.runtime_type ?? (isEndpointRuntime(route) ? 'openai-compatible-http' : 'external')
+  const required = route.optional_runtime !== true && route.runtime_required !== 'on_demand'
+  return {
+    timestamp: result.generated_at,
+    project_id: projectId,
+    route_id: route.agent,
+    agent: route.agent,
+    model: route.model,
+    runtime_type: runtimeType,
+    endpoint: route.endpoint,
+    required,
+    optional: !required,
+    endpoint_status: route.endpoint_status ?? 'not_checked',
+    latency_ms: typeof route.latency_ms === 'number' ? route.latency_ms : null,
+    timed_out: route.timed_out === true,
+    severity: highestSeverity(routeFindings),
+    finding_ids: routeFindings.map(item => item.id),
+    product_gate_state: result.product_work_gate.status,
+    check_endpoints: result.check_endpoints,
+  }
+}
+
+export function recordsFromModelRuntimeCheck(result: ModelRuntimeCheckResult, projectId = DEFAULT_PROJECT_ID): ModelRuntimeHistoryRecord[] {
+  return result.routes.map(route => routeHistoryRecord(result, route, projectId))
+}
+
+export function recordModelRuntimeHistory(result: ModelRuntimeCheckResult, options: { repoRoot?: string; projectId?: string; historyDir?: string } = {}): void {
+  const repoRoot = options.repoRoot ?? result.repo_root
+  const projectId = options.projectId ?? DEFAULT_PROJECT_ID
+  const dir = historyDirectory(repoRoot, options.historyDir)
+  fs.mkdirSync(dir, { recursive: true })
+  const records = recordsFromModelRuntimeCheck(result, projectId)
+  fs.appendFileSync(historyPath(repoRoot, options.historyDir), records.map(record => JSON.stringify(record)).join('\n') + '\n', 'utf8')
+  fs.writeFileSync(latestPath(repoRoot, options.historyDir), `${JSON.stringify({
+    schema_version: 1,
+    generated_at: new Date().toISOString(),
+    project_id: projectId,
+    check: result,
+    records,
+    summary: summarizeModelRuntimeHistory(records, historyPath(repoRoot, options.historyDir)),
+  }, null, 2)}\n`, 'utf8')
+}
+
+function readHistoryRecords(repoRoot: string, historyDir?: string, maxHistory?: number): ModelRuntimeHistoryRecord[] {
+  const filePath = historyPath(repoRoot, historyDir)
+  if (!fs.existsSync(filePath)) return []
+  const lines = fs.readFileSync(filePath, 'utf8').split(/\r?\n/).filter(Boolean)
+  const selected = typeof maxHistory === 'number' && maxHistory > 0 ? lines.slice(-maxHistory) : lines
+  return selected.flatMap(line => {
+    try {
+      const record = JSON.parse(line) as ModelRuntimeHistoryRecord
+      return record && typeof record === 'object' ? [record] : []
+    } catch {
+      return []
+    }
+  })
+}
+
+function average(values: number[]): number | null {
+  if (values.length === 0) return null
+  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+}
+
+function isFailureRecord(record: ModelRuntimeHistoryRecord): boolean {
+  if (record.endpoint_status === 'optional_offline') return true
+  if (record.endpoint_status === 'unreachable') return true
+  return severityRank[record.severity] >= severityRank.medium
+}
+
+function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], filePath: string): ModelRuntimeHistorySummary {
+  const byRoute = new Map<string, ModelRuntimeHistoryRecord[]>()
+  for (const record of records) {
+    const bucket = byRoute.get(record.route_id) ?? []
+    bucket.push(record)
+    byRoute.set(record.route_id, bucket)
+  }
+
+  const routes = Array.from(byRoute.entries()).map(([routeId, routeRecords]) => {
+    const sorted = [...routeRecords].sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+    const latest = sorted[sorted.length - 1]
+    const failures = sorted.filter(isFailureRecord)
+    const latencies = sorted.map(item => item.latency_ms).filter((value): value is number => typeof value === 'number')
+    const findingIds = Array.from(new Set(sorted.flatMap(item => item.finding_ids)))
+    return {
+      route_id: routeId,
+      agent: latest.agent,
+      model: latest.model,
+      runtime_type: latest.runtime_type,
+      endpoint: latest.endpoint,
+      required: latest.required,
+      optional: latest.optional,
+      last_status: latest.endpoint_status,
+      failures_count: failures.length,
+      timeout_count: sorted.filter(item => item.timed_out).length,
+      average_latency_ms: average(latencies),
+      max_latency_ms: latencies.length > 0 ? Math.max(...latencies) : null,
+      last_ok: [...sorted].reverse().find(item => item.endpoint_status === 'ok' || item.endpoint_status === 'external_ok')?.timestamp,
+      last_failure: failures[failures.length - 1]?.timestamp,
+      finding_ids: findingIds,
+    }
+  }).sort((a, b) => a.agent.localeCompare(b.agent))
+
+  const requiredBlocked = routes.some(route => route.required && (route.last_status === 'unreachable' || route.timeout_count > 0 || route.finding_ids.some(id => !id.includes('optional'))))
+  const degraded = routes.some(route => route.failures_count > 0 || route.last_status === 'optional_offline')
+  const timestamps = records.map(record => record.timestamp).sort()
+  return {
+    generated_at: new Date().toISOString(),
+    project_id: records[0]?.project_id ?? DEFAULT_PROJECT_ID,
+    history_path: filePath,
+    total_records: records.length,
+    total_checks: new Set(records.map(record => record.timestamp)).size,
+    time_range: {
+      from: timestamps[0],
+      to: timestamps[timestamps.length - 1],
+    },
+    overall_readiness: records.length === 0 ? 'UNKNOWN' : requiredBlocked ? 'RUNTIME_BLOCKED' : degraded ? 'RUNTIME_DEGRADED' : 'RUNTIME_HEALTHY',
+    routes,
+  }
+}
+
+export function readModelRuntimeHistorySummary(options: { repoRoot?: string; historyDir?: string; maxHistory?: number } = {}): ModelRuntimeHistorySummary {
+  const repoRoot = options.repoRoot ?? process.cwd()
+  const filePath = historyPath(repoRoot, options.historyDir)
+  return summarizeModelRuntimeHistory(readHistoryRecords(repoRoot, options.historyDir, options.maxHistory), filePath)
+}
+
 export function runModelRuntimeCheck(options?: ModelRuntimeCheckOptions & { checkEndpoints?: false }): ModelRuntimeCheckResult
 export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions & { checkEndpoints: true }): Promise<ModelRuntimeCheckResult>
 export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions = {}): ModelRuntimeCheckResult | Promise<ModelRuntimeCheckResult> {
@@ -451,16 +671,24 @@ export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions = {}): Mo
   const checkEndpoints = options.checkEndpoints === true
   const { routes, findings } = staticFindings(repoRoot, options.agent)
 
-  if (!checkEndpoints) return resultFrom(repoRoot, false, routes, findings)
+  if (!checkEndpoints) {
+    const result = resultFrom(repoRoot, false, routes, findings)
+    if (options.recordHistory) recordModelRuntimeHistory(result, { repoRoot, projectId: options.projectId, historyDir: options.historyDir })
+    return result
+  }
 
   return Promise.all(routes.map(route => checkEndpoint(route, {
       timeoutMs: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
       fetchImpl: options.fetchImpl,
       explicitlyTargeted: options.agent === route.agent,
-    }))).then(endpointFindings => resultFrom(repoRoot, true, routes, [
-    ...findings,
-    ...endpointFindings.filter(Boolean) as ModelRuntimeFinding[],
-  ]))
+    }))).then(endpointFindings => {
+      const result = resultFrom(repoRoot, true, routes, [
+        ...findings,
+        ...endpointFindings.filter(Boolean) as ModelRuntimeFinding[],
+      ])
+      if (options.recordHistory) recordModelRuntimeHistory(result, { repoRoot, projectId: options.projectId, historyDir: options.historyDir })
+      return result
+    })
 }
 
 export function formatModelRuntimeReport(result: ModelRuntimeCheckResult): string {
@@ -501,23 +729,84 @@ export function formatModelRuntimeReport(result: ModelRuntimeCheckResult): strin
   return lines.join('\n')
 }
 
+export function formatModelRuntimeHistorySummary(summary: ModelRuntimeHistorySummary): string {
+  const lines = [
+    '# Model Runtime History Summary',
+    '',
+    `Generated: ${summary.generated_at}`,
+    `Project: ${summary.project_id}`,
+    `History: ${summary.history_path}`,
+    `Readiness: ${summary.overall_readiness}`,
+    `Total records: ${summary.total_records}`,
+    `Total checks: ${summary.total_checks}`,
+    `Time range: ${summary.time_range.from ?? 'n/a'} -> ${summary.time_range.to ?? 'n/a'}`,
+    '',
+    '## Routes',
+  ]
+
+  if (summary.routes.length === 0) {
+    lines.push('(no runtime history recorded yet)')
+  } else {
+    for (const route of summary.routes) {
+      lines.push(`- ${route.agent}: last_status=${route.last_status} required=${route.required} failures=${route.failures_count} timeouts=${route.timeout_count} avg_latency_ms=${route.average_latency_ms ?? 'n/a'} max_latency_ms=${route.max_latency_ms ?? 'n/a'}`)
+      if (route.last_failure) lines.push(`  last_failure=${route.last_failure}`)
+      if (route.last_ok) lines.push(`  last_ok=${route.last_ok}`)
+    }
+  }
+
+  return lines.join('\n')
+}
+
 async function main(): Promise<number> {
   const args = process.argv.slice(2)
   const json = args.includes('--json')
+  const historyJson = args.includes('--history-json')
+  const historySummary = args.includes('--history-summary') || historyJson
+  const recordHistory = args.includes('--record-history')
   const checkEndpoints = args.includes('--check-endpoints')
   const agentIndex = args.indexOf('--agent')
   const agent = agentIndex >= 0 ? args[agentIndex + 1] : undefined
   const timeoutIndex = args.indexOf('--timeout-ms')
   const timeoutMs = timeoutIndex >= 0 ? Number(args[timeoutIndex + 1]) : DEFAULT_TIMEOUT_MS
-  const allowed = new Set(['--json', '--check-endpoints', '--agent', agent ?? '', '--timeout-ms', timeoutIndex >= 0 ? args[timeoutIndex + 1] : ''])
+  const maxHistoryIndex = args.indexOf('--max-history')
+  const maxHistory = maxHistoryIndex >= 0 ? Number(args[maxHistoryIndex + 1]) : undefined
+  const projectIndex = args.indexOf('--project')
+  const projectId = projectIndex >= 0 ? args[projectIndex + 1] : DEFAULT_PROJECT_ID
+  const allowed = new Set([
+    '--json',
+    '--history-json',
+    '--history-summary',
+    '--record-history',
+    '--check-endpoints',
+    '--agent',
+    agent ?? '',
+    '--timeout-ms',
+    timeoutIndex >= 0 ? args[timeoutIndex + 1] : '',
+    '--max-history',
+    maxHistoryIndex >= 0 ? args[maxHistoryIndex + 1] : '',
+    '--project',
+    projectId,
+  ])
   const unknown = args.filter(arg => !allowed.has(arg))
-  if (unknown.length > 0 || (agentIndex >= 0 && !agent) || (timeoutIndex >= 0 && !Number.isFinite(timeoutMs))) {
-    console.error('Usage: npx tsx system/control-plane/model-runtime-check.ts [--json] [--check-endpoints] [--agent <agent-id>] [--timeout-ms <ms>]')
+  if (
+    unknown.length > 0 ||
+    (agentIndex >= 0 && !agent) ||
+    (timeoutIndex >= 0 && !Number.isFinite(timeoutMs)) ||
+    (maxHistoryIndex >= 0 && !Number.isFinite(maxHistory)) ||
+    (projectIndex >= 0 && !projectId)
+  ) {
+    console.error('Usage: npx tsx system/control-plane/model-runtime-check.ts [--json] [--check-endpoints] [--record-history] [--history-summary|--history-json] [--max-history <n>] [--agent <agent-id>] [--timeout-ms <ms>] [--project <id>]')
     return 2
   }
 
   try {
-    const result = await runModelRuntimeCheck({ checkEndpoints, agent, timeoutMs })
+    if (historySummary) {
+      const summary = readModelRuntimeHistorySummary({ maxHistory })
+      console.log(historyJson ? JSON.stringify(summary, null, 2) : formatModelRuntimeHistorySummary(summary))
+      return summary.overall_readiness === 'RUNTIME_BLOCKED' ? 1 : 0
+    }
+
+    const result = await runModelRuntimeCheck({ checkEndpoints, agent, timeoutMs, recordHistory, projectId })
     console.log(json ? JSON.stringify(result, null, 2) : formatModelRuntimeReport(result))
     return result.exitCode
   } catch (error) {

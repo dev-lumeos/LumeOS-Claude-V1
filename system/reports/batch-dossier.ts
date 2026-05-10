@@ -29,6 +29,7 @@ import {
   isRuntimeArtifactPath,
   type ProjectProfile,
 } from '../project-profiles/project-profile-loader'
+import { readModelRuntimeHistorySummary, type ModelRuntimeHistorySummary } from '../control-plane/model-runtime-check'
 
 export type BatchDossierFinalState =
   | 'DONE'
@@ -164,6 +165,7 @@ export interface BatchDossier {
   reviews: BatchDossierReview[]
   cleanups: BatchDossierCleanup[]
   codex_worker_runs: BatchDossierCodexWorkerRun[]
+  runtime_history_summary?: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'total_records' | 'total_checks' | 'routes'>
   stop_rules: {
     system_stop_active: boolean
     system_stop?: unknown
@@ -628,6 +630,7 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const reviews = collectReviews(repoRoot, workorderIds, runIds)
   const cleanups = collectCleanups(repoRoot, workorderIds, runIds)
   const codexWorkerRuns = collectCodexWorkerRuns(repoRoot, workorderIds)
+  const runtimeHistory = readModelRuntimeHistorySummary({ repoRoot })
   const git = readGitStatus(repoRoot, options.gitStatus, profile)
   git.commits_since_base = readCommitsSinceBase(repoRoot, options.commitsSinceBase)
   const checkers = collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true)
@@ -647,6 +650,12 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     reviews,
     cleanups,
     codex_worker_runs: codexWorkerRuns,
+    runtime_history_summary: {
+      overall_readiness: runtimeHistory.overall_readiness,
+      total_records: runtimeHistory.total_records,
+      total_checks: runtimeHistory.total_checks,
+      routes: runtimeHistory.routes.slice(0, 12),
+    },
     stop_rules: {
       system_stop_active: !!state.system_stop?.active,
       system_stop: state.system_stop,
@@ -753,6 +762,25 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
       run.report_path,
     ]),
   ]))
+  lines.push('')
+  lines.push('## Runtime History Summary')
+  if (dossier.runtime_history_summary) {
+    lines.push(`readiness: ${dossier.runtime_history_summary.overall_readiness}`)
+    lines.push(`records: ${dossier.runtime_history_summary.total_records}`)
+    lines.push(`checks: ${dossier.runtime_history_summary.total_checks}`)
+    lines.push(...table([
+      ['Agent', 'Last Status', 'Failures', 'Timeouts', 'Avg Latency'],
+      ...dossier.runtime_history_summary.routes.map(route => [
+        route.agent,
+        route.last_status,
+        String(route.failures_count),
+        String(route.timeout_count),
+        String(route.average_latency_ms ?? ''),
+      ]),
+    ]))
+  } else {
+    lines.push('(no runtime history summary)')
+  }
   lines.push('')
   lines.push('## Stop Rules')
   lines.push(`system_stop: ${dossier.stop_rules.system_stop_active ? 'active' : 'inactive'}`)

@@ -26,9 +26,22 @@ http://127.0.0.1:5001/governance
 - Dossier Timeline: the dossier page now defaults to structured summary and timeline sections for runs, approvals, reviews, cleanups, checker results, outputs, git state, final state, and next action.
 - Doctor Summary: the doctor page now highlights diagnosis, blockers, checkers, cleanup candidates, runtime findings, and one next action before raw output.
 - Approval Center: approvals are grouped by pending, granted, denied, consumed, and expired. Grant/deny commands are display/copy only; no approval execution is implemented.
-- Runtime Center: runtime routes render as cards with required/optional state, endpoint status, runtime type, Codex external runtime labeling, JSON/thinking policy hints, and MealCam optional/on-demand handling.
+- Runtime Center: runtime routes render as cards with required/optional state, endpoint status, runtime type, Codex external runtime labeling, JSON/thinking policy hints, MealCam optional/on-demand handling, and explicit local history summary actions.
 - Next Action UX: next action cards separate action text from copyable command blocks.
 - Raw Output: stdout/stderr remains available in collapsible panels for audit/debugging, but parsed JSON summaries are preferred.
+
+## Runtime History UI
+
+The Runtime page exposes four read-only/operator-safe buttons:
+
+- Run static check
+- Check endpoints
+- Record endpoint check
+- Show history summary
+
+Only **Record endpoint check** writes ignored local runtime history under `system/reports/model-runtime-history/`. It still uses short `/v1/models` endpoint checks and does not send workorder prompts.
+
+The history summary view shows overall readiness, total checks, total records, per-route last status, average/max latency, timeout count, failure count, last OK, and last failure.
 
 ## Safety Model
 
@@ -48,6 +61,7 @@ V2 preserves the V1 safety model:
 - The graph is a lightweight dependency board, not React Flow.
 - Graph details depend on what batch dossier JSON exposes; source refs and scope details may be empty for older workorders.
 - No live polling toggle is implemented yet; refresh is manual.
+- Runtime history is local-only and ignored; another checkout starts with `UNKNOWN` until a recorded check is run.
 - Approval execution remains intentionally absent.
 - Dossier timeline quality depends on structured dossier JSON; raw markdown/stdout remains available for fallback.
 

@@ -6,6 +6,8 @@ import path from 'node:path'
 
 import {
   formatModelRuntimeReport,
+  readModelRuntimeHistorySummary,
+  recordModelRuntimeHistory,
   runModelRuntimeCheck,
   type ModelRuntimeFinding,
 } from '../model-runtime-check'
@@ -354,6 +356,138 @@ async function defaultCallModel(routing) {
     runCheck()
 
     assert.deepEqual(fs.readdirSync(tmpDir, { recursive: true }).sort(), before)
+  })
+
+  it('does not write history unless explicitly requested', () => {
+    runCheck()
+
+    assert.equal(fs.existsSync(path.join(tmpDir, 'system/reports/model-runtime-history/history.jsonl')), false)
+    assert.equal(fs.existsSync(path.join(tmpDir, 'system/reports/model-runtime-history/latest.json')), false)
+  })
+
+  it('record-history writes JSONL records and latest summary', async () => {
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      checkEndpoints: true,
+      recordHistory: true,
+      fetchImpl: async () => new Response('{}', { status: 200 }),
+    })
+    const historyPath = path.join(tmpDir, 'system/reports/model-runtime-history/history.jsonl')
+    const latestPath = path.join(tmpDir, 'system/reports/model-runtime-history/latest.json')
+
+    assert.equal(result.exitCode, 0)
+    assert.equal(fs.existsSync(historyPath), true)
+    assert.equal(fs.existsSync(latestPath), true)
+    const records = fs.readFileSync(historyPath, 'utf8').trim().split('\n').map(line => JSON.parse(line))
+    assert.equal(records.length, result.routes.length)
+    assert.equal(records.some(record => record.agent === 'senior-coding-agent' && record.endpoint_status === 'external_ok'), true)
+  })
+
+  it('history summary handles missing history', () => {
+    const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
+
+    assert.equal(summary.overall_readiness, 'UNKNOWN')
+    assert.equal(summary.total_records, 0)
+    assert.deepEqual(summary.routes, [])
+  })
+
+  it('history summary aggregates latency, failures, and timeouts', () => {
+    const first = runCheck()
+    const docsRoute = first.routes.find(route => route.agent === 'docs-agent')
+    assert.ok(docsRoute)
+    docsRoute.endpoint_status = 'ok'
+    docsRoute.latency_ms = 25
+    recordModelRuntimeHistory(first, { repoRoot: tmpDir, projectId: 'lumeos' })
+
+    const second = runCheck()
+    const failingRoute = second.routes.find(route => route.agent === 'docs-agent')
+    assert.ok(failingRoute)
+    failingRoute.endpoint_status = 'unreachable'
+    failingRoute.latency_ms = 1500
+    failingRoute.timed_out = true
+    second.findings.push({
+      id: 'model_runtime.endpoint_unreachable',
+      severity: 'high',
+      layer: 'model_runtime',
+      agent: 'docs-agent',
+      model: failingRoute.model,
+      endpoint: failingRoute.endpoint,
+      message: 'Model endpoint health check failed.',
+      evidence: 'timeout',
+      suggested_action: 'Check endpoint.',
+      blocks_operator: true,
+      blocks_product_work: true,
+    })
+    recordModelRuntimeHistory(second, { repoRoot: tmpDir, projectId: 'lumeos' })
+
+    const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
+    const docs = summary.routes.find(route => route.agent === 'docs-agent')
+
+    assert.equal(summary.overall_readiness, 'RUNTIME_BLOCKED')
+    assert.equal(docs?.failures_count, 1)
+    assert.equal(docs?.timeout_count, 1)
+    assert.equal(docs?.average_latency_ms, 763)
+    assert.equal(docs?.max_latency_ms, 1500)
+    assert.match(docs?.last_failure ?? '', /^\d{4}-/)
+  })
+
+  it('records optional MealCam offline as info and non-blocking history', async () => {
+    writeJson('system/agent-registry/agents.json', {
+      'mealcam-agent': {
+        type: 'vision',
+        spec_file: '.claude/agents/mealcam-agent.md',
+      },
+    })
+    writeJson('system/agent-registry/model_routing.json', {
+      'mealcam-agent': {
+        default: {
+          node: 'rtx5090',
+          endpoint: 'http://localhost:8001',
+          model: 'qwen3-vl-30b-a3b-fp8',
+          optional_runtime: true,
+          runtime_required: 'on_demand',
+        },
+      },
+    })
+    write('.claude/agents/mealcam-agent.md', '# mealcam-agent\n\nJSON output only.\n')
+
+    await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      checkEndpoints: true,
+      recordHistory: true,
+      fetchImpl: async () => {
+        throw new Error('connect ECONNREFUSED')
+      },
+    })
+
+    const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
+    const mealcam = summary.routes.find(route => route.agent === 'mealcam-agent')
+    assert.equal(summary.overall_readiness, 'RUNTIME_DEGRADED')
+    assert.equal(mealcam?.last_status, 'optional_offline')
+    assert.equal(mealcam?.required, false)
+  })
+
+  it('history summary JSON output shape is stable', () => {
+    const result = runCheck()
+    recordModelRuntimeHistory(result, { repoRoot: tmpDir, projectId: 'lumeos' })
+    const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
+
+    assert.deepEqual(Object.keys(summary).sort(), [
+      'generated_at',
+      'history_path',
+      'overall_readiness',
+      'project_id',
+      'routes',
+      'time_range',
+      'total_checks',
+      'total_records',
+    ].sort())
+  })
+
+  it('runtime history path is ignored by git', () => {
+    const ignore = fs.readFileSync(path.join(realCwd, '.gitignore'), 'utf8')
+
+    assert.match(ignore, /system\/reports\/model-runtime-history\//)
   })
 
   it('real repository has no critical or high static runtime findings', () => {

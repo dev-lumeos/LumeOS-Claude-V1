@@ -207,6 +207,7 @@ describe('operator doctor diagnosis', () => {
       'next_action',
       'next_actions',
       'product_gate',
+      'runtime_history',
       'safety_notes',
       'schema_version',
       'stop_rules',

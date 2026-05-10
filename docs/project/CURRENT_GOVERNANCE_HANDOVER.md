@@ -28,6 +28,7 @@ Current date: 2026-05-10.
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
 - Memory/Learning Automation adds a read-only governance learning checker.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
+- Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent` and final escalations.
 - Codex Worker Bridge adds a dry-run-first `codex exec` integration point for `senior-coding-agent`.
@@ -102,6 +103,7 @@ Reason:
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 - Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
+- Runtime history can be recorded explicitly with `system/control-plane/model-runtime-check.ts --check-endpoints --record-history --json --project lumeos`; generated files under `system/reports/model-runtime-history/` are ignored runtime artifacts.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
 - Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.

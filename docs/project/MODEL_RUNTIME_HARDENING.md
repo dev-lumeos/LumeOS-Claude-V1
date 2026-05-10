@@ -34,6 +34,16 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime
 
 Endpoint checks are short, read-only health checks against `/v1/models`. They must not send workorder prompts or expensive generation requests.
 
+Runtime monitoring history is explicit and local:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --check-endpoints --timeout-ms 1500 --record-history --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --history-summary --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --history-json --project lumeos
+```
+
+Default runtime checks remain read-only and do not write history. `--record-history` appends ignored local JSONL records under `system/reports/model-runtime-history/`.
+
 The Codex Worker Bridge is documented separately:
 
 ```powershell
@@ -65,6 +75,31 @@ Codex CLI is not a vLLM/OpenAI-compatible HTTP endpoint and must not be checked 
 Codex worker execution uses `codex exec` through `system/workers/codex-worker.ts`. The bridge is not a broad automatic dispatcher replacement. `system/workers/codex-worker.config.json` enables the controlled senior-agent path while keeping the policy narrow: only `senior-coding-agent`, explicit `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product work blocked while `product_gate_open=false`.
 
 MealCam/Vision is optional and on-demand. Its endpoint is not expected to be online during normal governance/operator work. An offline `mealcam-agent` endpoint is reported as informational unless a MealCam/Vision workorder, selected batch, or explicit Tom request requires that runtime.
+
+## Runtime History
+
+Runtime history records one local JSONL row per route per explicit recorded check.
+
+Ignored local files:
+
+- `system/reports/model-runtime-history/history.jsonl`
+- `system/reports/model-runtime-history/latest.json`
+
+Record fields include timestamp, project id, route id/agent, model, runtime type, endpoint, required/optional state, endpoint status, latency, timeout flag, severity, finding ids, and product gate state.
+
+History summaries report:
+
+- total records and checks
+- time range
+- last route status
+- failure and timeout counts
+- average and max latency
+- last ok and last failure timestamps
+- overall readiness: `RUNTIME_HEALTHY`, `RUNTIME_DEGRADED`, `RUNTIME_BLOCKED`, or `UNKNOWN`
+
+Codex CLI routes record `runtime_type=codex-cli`, `endpoint_status=external_ok`, and `latency_ms=null`.
+
+MealCam optional offline records as informational degraded history, not a high blocker for normal governance work.
 
 ## Timeout Policy
 

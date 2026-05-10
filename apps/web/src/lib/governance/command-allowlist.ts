@@ -11,6 +11,8 @@ export type GovernanceAction =
   | 'agentContract.check'
   | 'modelRuntime.check'
   | 'modelRuntime.checkEndpoints'
+  | 'modelRuntime.recordEndpoints'
+  | 'modelRuntime.historySummary'
   | 'specSource.checkBatch'
   | 'learning.check'
   | 'dossier.batch'
@@ -109,6 +111,20 @@ export const COMMAND_DEFINITIONS: Record<GovernanceAction, CommandDefinition> = 
     mode: 'read',
     controlled: false,
     description: 'Short endpoint health check without prompts.',
+  },
+  'modelRuntime.recordEndpoints': {
+    action: 'modelRuntime.recordEndpoints',
+    label: 'Record endpoint health',
+    mode: 'read',
+    controlled: false,
+    description: 'Short endpoint health check and append ignored local runtime history.',
+  },
+  'modelRuntime.historySummary': {
+    action: 'modelRuntime.historySummary',
+    label: 'Runtime history summary',
+    mode: 'read',
+    controlled: false,
+    description: 'Read ignored local runtime history summary. No endpoint calls.',
   },
   'specSource.checkBatch': {
     action: 'specSource.checkBatch',

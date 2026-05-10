@@ -272,6 +272,7 @@ describe('batch dossier reporter', () => {
       'outputs',
       'reviews',
       'runs',
+      'runtime_history_summary',
       'schema_version',
       'stop_rules',
       'workorders',

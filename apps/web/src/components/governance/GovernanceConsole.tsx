@@ -279,7 +279,16 @@ export function GovernanceConsole({ page }: Props) {
           {page === 'workorders' && <WorkorderView result={result} runDossier={() => runAction('dossier.batch')} />}
           {page === 'promotion' && <PromotionCenter branch={branch} setBranch={setBranch} result={result} setAction={setSelectedAction} runAction={runAction} confirmation={confirmation} setConfirmation={setConfirmation} />}
           {page === 'learning' && <LearningCenter snapshot={snapshot} result={result} runLearning={() => runAction('learning.check')} />}
-          {page === 'runtime' && <RuntimeCenter result={result} runStatic={() => runAction('modelRuntime.check')} runEndpoints={() => runAction('modelRuntime.checkEndpoints')} mealcamOptionalOk={mealcamOptionalOk} />}
+          {page === 'runtime' && (
+            <RuntimeCenter
+              result={result}
+              runStatic={() => runAction('modelRuntime.check')}
+              runEndpoints={() => runAction('modelRuntime.checkEndpoints')}
+              recordEndpoints={() => runAction('modelRuntime.recordEndpoints')}
+              runHistory={() => runAction('modelRuntime.historySummary')}
+              mealcamOptionalOk={mealcamOptionalOk}
+            />
+          )}
           {page === 'settings' && <Settings repoRoot={snapshot?.repoRoot ?? ''} projectProfile={snapshot?.projectProfile} />}
         </section>
       </div>
@@ -510,25 +519,31 @@ function LearningCenter({ snapshot, result, runLearning }: { snapshot: Governanc
   )
 }
 
-function RuntimeCenter({ result, runStatic, runEndpoints, mealcamOptionalOk }: { result: CommandExecution | null; runStatic: () => void; runEndpoints: () => void; mealcamOptionalOk: boolean }) {
+function RuntimeCenter({ result, runStatic, runEndpoints, recordEndpoints, runHistory, mealcamOptionalOk }: { result: CommandExecution | null; runStatic: () => void; runEndpoints: () => void; recordEndpoints: () => void; runHistory: () => void; mealcamOptionalOk: boolean }) {
   const data = result?.parsedJson
   const parsed = jsonRecord(data)
-  const routes = arrayRecords(parsed.routes)
+  const historyMode = result?.action === 'modelRuntime.historySummary'
+  const routes = historyMode ? arrayRecords(parsed.routes) : arrayRecords(parsed.routes)
   const summary = jsonRecord(parsed.summary)
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
         <button onClick={runStatic} className="gov-button gov-button-dark">Run static check</button>
         <button onClick={runEndpoints} className="gov-button gov-button-secondary">Check endpoints</button>
+        <button onClick={recordEndpoints} className="gov-button gov-button-secondary">Record endpoint check</button>
+        <button onClick={runHistory} className="gov-button gov-button-secondary">Show history summary</button>
       </div>
       {mealcamOptionalOk ? <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">MealCam runtime is optional/on-demand and offline is not a governance blocker.</div> : null}
+      {historyMode ? <RuntimeHistorySummary data={parsed} /> : null}
       <div className="grid gap-3 md:grid-cols-5">
-        {['critical', 'high', 'medium', 'low', 'info'].map(key => <Info key={key} label={key} value={String(summary[key] ?? 0)} />)}
+        {historyMode
+          ? <Info label="Readiness" value={stringValue(parsed.overall_readiness, 'UNKNOWN')} />
+          : ['critical', 'high', 'medium', 'low', 'info'].map(key => <Info key={key} label={key} value={String(summary[key] ?? 0)} />)}
       </div>
       <Panel title="Runtime Routes">
         <div className="grid gap-3 xl:grid-cols-2">
           {routes.length === 0 ? <EmptyState text="Run a runtime check to load routes." /> : null}
-          {routes.map((route, index) => <RuntimeRouteCard key={index} route={route} />)}
+          {routes.map((route, index) => <RuntimeRouteCard key={index} route={route} historyMode={historyMode} />)}
         </div>
       </Panel>
       <RawOutputDetails result={result} />
@@ -929,10 +944,23 @@ function DetailList({ title, items }: { title: string; items: string[] }) {
   )
 }
 
-function RuntimeRouteCard({ route }: { route: Record<string, unknown> }) {
-  const optional = Boolean(route.optional_runtime)
+function RuntimeHistorySummary({ data }: { data: Record<string, unknown> }) {
+  return (
+    <Panel title="Runtime History">
+      <div className="grid gap-3 md:grid-cols-4">
+        <Info label="Readiness" value={stringValue(data.overall_readiness, 'UNKNOWN')} />
+        <Info label="Total Checks" value={String(data.total_checks ?? 0)} />
+        <Info label="Total Records" value={String(data.total_records ?? 0)} />
+        <Info label="History Path" value={stringValue(data.history_path, 'system/reports/model-runtime-history/history.jsonl')} />
+      </div>
+    </Panel>
+  )
+}
+
+function RuntimeRouteCard({ route, historyMode = false }: { route: Record<string, unknown>; historyMode?: boolean }) {
+  const optional = Boolean(route.optional_runtime ?? route.optional)
   const runtimeType = stringValue(route.runtime_type, 'http/vllm')
-  const status = stringValue(route.endpoint_status ?? route.status, runtimeType.includes('codex') ? 'external_ok' : 'not checked')
+  const status = stringValue(route.last_status ?? route.endpoint_status ?? route.status, runtimeType.includes('codex') ? 'external_ok' : 'not checked')
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -945,8 +973,21 @@ function RuntimeRouteCard({ route }: { route: Record<string, unknown> }) {
       <div className="mt-3 grid gap-2 text-xs text-slate-600 md:grid-cols-2">
         <span>Runtime: {runtimeType}</span>
         <span>Endpoint: {stringValue(route.endpoint, 'n/a')}</span>
-        <span>JSON mode: {stringValue(route.json_mode ?? route.requires_json, 'n/a')}</span>
-        <span>Thinking: {stringValue(route.enable_thinking ?? route.thinking_policy, 'n/a')}</span>
+        {historyMode ? (
+          <>
+            <span>Avg latency: {stringValue(route.average_latency_ms, 'n/a')} ms</span>
+            <span>Max latency: {stringValue(route.max_latency_ms, 'n/a')} ms</span>
+            <span>Failures: {String(route.failures_count ?? 0)}</span>
+            <span>Timeouts: {String(route.timeout_count ?? 0)}</span>
+            <span>Last OK: {stringValue(route.last_ok, 'n/a')}</span>
+            <span>Last failure: {stringValue(route.last_failure, 'n/a')}</span>
+          </>
+        ) : (
+          <>
+            <span>JSON mode: {stringValue(route.json_mode ?? route.json_required ?? route.requires_json, 'n/a')}</span>
+            <span>Thinking: {stringValue(route.enable_thinking ?? route.qwen_thinking_off_required ?? route.thinking_policy, 'n/a')}</span>
+          </>
+        )}
       </div>
       <div className="mt-3 flex flex-wrap gap-2">
         <StatusBadge tone={optional ? 'info' : 'pass'} label={optional ? 'optional/on-demand' : 'required'} />

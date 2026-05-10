@@ -203,6 +203,19 @@ describe('governance UI safety helpers', () => {
     assert.match(consoleComponent, /Codex external/)
   })
 
+  it('runtime page exposes explicit history actions without auto-recording', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+    const record = commandPlanFor({ action: 'modelRuntime.recordEndpoints' })
+    const history = commandPlanFor({ action: 'modelRuntime.historySummary' })
+
+    assert.ok(record.args.includes('--record-history'))
+    assert.ok(record.args.includes('--check-endpoints'))
+    assert.ok(history.args.includes('--history-json'))
+    assert.match(consoleComponent, /Record endpoint check/)
+    assert.match(consoleComponent, /Show history summary/)
+  })
+
   it('runtime page displays runtime type for external Codex routes', () => {
     const root = findRepoRoot(process.cwd())
     const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')

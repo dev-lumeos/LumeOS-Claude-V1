@@ -61,9 +61,13 @@ export function commandPlanFor(request: CommandRequest): CommandPlan {
     case 'agentContract.check':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/agent-contract-check.ts', '--json'] }
     case 'modelRuntime.check':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/model-runtime-check.ts', '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/model-runtime-check.ts', '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'modelRuntime.checkEndpoints':
-      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/model-runtime-check.ts', '--check-endpoints', '--timeout-ms', '1500', '--json'] }
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/model-runtime-check.ts', '--check-endpoints', '--timeout-ms', '1500', '--json', '--project', DEFAULT_PROJECT_PROFILE] }
+    case 'modelRuntime.recordEndpoints':
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/model-runtime-check.ts', '--check-endpoints', '--timeout-ms', '1500', '--record-history', '--json', '--project', DEFAULT_PROJECT_PROFILE] }
+    case 'modelRuntime.historySummary':
+      return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/control-plane/model-runtime-check.ts', '--history-json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'specSource.checkBatch':
       return { action: request.action, command: process.execPath, args: [...nodeArgs, 'system/workorders/cli/spec-source-chain-check.ts', '--batch', batchPath, '--json', '--project', DEFAULT_PROJECT_PROFILE] }
     case 'learning.check':

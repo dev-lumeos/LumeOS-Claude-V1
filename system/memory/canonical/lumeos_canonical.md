@@ -56,6 +56,7 @@ Governance learning records:
 - Governance Learning Checker exists at `system/reports/governance-learning-check.ts`.
 - Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
+- Runtime monitoring history is explicit and local at `system/reports/model-runtime-history/`; history files are ignored and written only with `--record-history`.
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 as the productive senior engineering runtime. It is config/manual checked, not HTTP endpoint checked.
 - Codex Worker Bridge exists at `system/workers/codex-worker.ts` for dry-run-first non-interactive `codex exec` prompt construction.
@@ -132,6 +133,7 @@ Prompt text such as `/no_think` is not sufficient.
 - Raw BLS files must not override current specs as implementation SSOT.
 - Factory-generated workorders must include `source_refs`, `expected_outputs`, scoped writes, high-risk `files_blocked`, and db-migration `rollback_hint`.
 - Model runtime checks must pass before autonomous operator work; endpoint health checks must be short read-only `/v1/models` checks, not real workorder prompts.
+- Runtime history summaries should be reviewed before autonomous/night/large runs; missing history is not a blocker by itself but means endpoint stability has not been trended.
 - Codex CLI runtimes must not be treated as vLLM HTTP endpoints.
 - Codex worker execution must remain explicit, dry-run first, and scoped by workorder `scope_files`, `files_blocked`, source refs, and forbidden commands.
 - Automatic Codex worker dispatch requires Tom-opened config gates and workorder `codex_worker: true`; arbitrary agents must not route to Codex.
