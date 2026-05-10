@@ -257,6 +257,7 @@ describe('batch dossier reporter', () => {
 
     assert.deepEqual(Object.keys(dossier).sort(), [
       'approvals',
+      'autonomy_handoff',
       'batch_file',
       'batch_id',
       'batch_status',
@@ -277,6 +278,8 @@ describe('batch dossier reporter', () => {
       'stop_rules',
       'workorders',
     ].sort())
+    assert.equal(dossier.autonomy_handoff.final_state, 'NOT_RUN')
+    assert.equal(dossier.autonomy_handoff.dossier_recommended, true)
   })
 
   it('includes project profile metadata when requested', () => {

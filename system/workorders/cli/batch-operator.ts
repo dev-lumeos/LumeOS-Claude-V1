@@ -26,6 +26,8 @@ import {
   isRuntimeArtifactPath,
   type ProjectProfile,
 } from '../../project-profiles/project-profile-loader'
+import { buildAutonomyHandoffContract, type AutonomyHandoff } from '../../reports/autonomy-handoff'
+import { loadCodexWorkerConfig } from '../../workers/codex-worker'
 
 export type OperatorEndState =
   | 'READY_TO_RUN'
@@ -554,6 +556,7 @@ function formatList<T>(items: T[], mapper: (item: T) => string): string[] {
 
 export function buildOperatorReport(status: OperatorStatus): string {
   const endState = decideEndState(status)
+  const handoff = buildAutonomyHandoff(status, endState)
   const lines: string[] = []
   lines.push('# Governance Batch Operator')
   if (status.projectProfile) {
@@ -629,6 +632,7 @@ export function buildOperatorReport(status: OperatorStatus): string {
   lines.push(`Exact next command: ${nextCommand(status, endState)}`)
   lines.push(`Doctor command: ${commandFor(OPERATOR_CLI, `${status.batchPath} --doctor${profileArg(status)}`)}`)
   lines.push(`Suggested dossier: ${dossierCommand(status.batchPath, status)}`)
+  appendAutonomyHandoff(lines, handoff)
   return lines.join('\n')
 }
 
@@ -640,6 +644,10 @@ function dossierCommand(batchPath: string, status: OperatorStatus): string {
   return commandFor(DOSSIER_CLI, `--batch ${batchPath}${profileArg(status)}`)
 }
 
+function doctorCommand(status: OperatorStatus): string {
+  return commandFor(OPERATOR_CLI, `${status.batchPath} --doctor${profileArg(status)}`)
+}
+
 function nextCommand(status: OperatorStatus, endState: OperatorEndState): string {
   if (endState === 'NEEDS_TOM_APPROVAL') return status.approvalStops[0]?.grantCommand ?? commandFor(APPROVAL_CLI, 'list')
   if (endState === 'NEEDS_SAFE_CLEANUP') return `${commandFor(OPERATOR_CLI, `${status.batchPath} --continue --apply-safe-cleanups${profileArg(status)}`)}`
@@ -647,6 +655,86 @@ function nextCommand(status: OperatorStatus, endState: OperatorEndState): string
   if (endState === 'FIX_REQUIRED') return 'git status --short --branch'
   if (endState === 'DONE') return commandFor(OPERATOR_CLI, `${status.batchPath} --status${profileArg(status)}`)
   return commandFor(OPERATOR_CLI, `${status.batchPath} --continue${profileArg(status)}`)
+}
+
+function cleanupDryRunCommand(status: OperatorStatus): string {
+  return status.cleanupSuggestions.find(item => item.safeToApply)?.dryRunCommand ?? ''
+}
+
+function handoffNextAction(status: OperatorStatus, endState: OperatorEndState): string {
+  if (endState === 'NEEDS_TOM_APPROVAL') {
+    const approval = status.approvalStops[0]
+    return approval
+      ? `Review pending approval ${approval.approvalId} for ${approval.workorderId}; do not grant automatically.`
+      : 'Review pending approvals; do not grant automatically.'
+  }
+  if (endState === 'NEEDS_SAFE_CLEANUP') return cleanupDryRunCommand(status) || 'Run the safe cleanup dry-run first.'
+  return nextCommand(status, endState)
+}
+
+function blockerMessages(status: OperatorStatus, endState: OperatorEndState): string[] {
+  if (endState === 'NEEDS_TOM_APPROVAL') return status.approvalStops.map(item => `${item.approvalId}: ${item.workorderId} requires ${item.classification}`)
+  if (endState === 'NEEDS_SAFE_CLEANUP') return status.cleanupSuggestions.filter(item => item.safeToApply).map(item => `${item.kind}: ${item.workorderId} run=${item.runId}`)
+  if (endState === 'STOP_RULE_BLOCKED') return status.stopRules.triggeredRules.length > 0 ? status.stopRules.triggeredRules : [status.stopRules.dryRunResult]
+  if (endState === 'FIX_REQUIRED') return status.unexpectedDirty.map(item => `${item.code} ${item.path}`)
+  return []
+}
+
+function codexWorkerCandidate(status: OperatorStatus, endState: OperatorEndState): { candidate: boolean; reason: string } {
+  if (endState !== 'READY_TO_RUN') return { candidate: false, reason: `Codex Worker is not a candidate while operator state is ${endState}.` }
+  const config = loadCodexWorkerConfig()
+  if (!config.codex_worker_enabled || !config.allow_dispatcher_integration) {
+    return { candidate: false, reason: 'Codex Worker dispatcher integration is disabled by configuration.' }
+  }
+  const activeSenior = status.activeWorkorders.find(item => item.agent_id === 'senior-coding-agent')
+  if (!activeSenior) return { candidate: false, reason: 'No active senior-coding-agent workorder is ready for Codex Worker dispatch.' }
+  if (!config.allowed_agents.includes('senior-coding-agent')) {
+    return { candidate: false, reason: 'senior-coding-agent is not in Codex Worker allowed_agents.' }
+  }
+  return { candidate: true, reason: 'senior-coding-agent is eligible if the workorder has explicit codex_worker metadata and all governance gates pass.' }
+}
+
+export function buildAutonomyHandoff(status: OperatorStatus, forcedEndState?: OperatorEndState): AutonomyHandoff {
+  const endState = forcedEndState ?? decideEndState(status)
+  const codex = codexWorkerCandidate(status, endState)
+  const productGate = status.projectProfile?.product_gate
+  return buildAutonomyHandoffContract({
+    finalState: endState,
+    batchPath: status.batchPath,
+    diagnosis: endState,
+    blockers: blockerMessages(status, endState),
+    tomActionRequired: endState === 'NEEDS_TOM_APPROVAL',
+    safeCleanupCommand: cleanupDryRunCommand(status),
+    dossierCommand: dossierCommand(status.batchPath, status),
+    doctorCommand: doctorCommand(status),
+    learningRecommended: ['FIX_REQUIRED', 'STOP_RULE_BLOCKED'].includes(endState),
+    codexWorkerCandidate: codex.candidate,
+    codexWorkerReason: codex.reason,
+    productGateStatus: productGate
+      ? { status: productGate.status, reason: productGate.reason }
+      : undefined,
+    nextAction: handoffNextAction(status, endState),
+  })
+}
+
+function appendAutonomyHandoff(lines: string[], handoff: AutonomyHandoff): void {
+  lines.push('')
+  lines.push('## Autonomy Handoff')
+  lines.push(`final_state: ${handoff.final_state}`)
+  lines.push(`diagnosis: ${handoff.diagnosis}`)
+  lines.push(`blocker_type: ${handoff.blocker_type}`)
+  lines.push(`tom_action_required: ${handoff.tom_action_required ? 'yes' : 'no'}`)
+  lines.push(`safe_cleanup_available: ${handoff.safe_cleanup_available ? 'yes' : 'no'}`)
+  lines.push(`safe_cleanup_command: ${handoff.safe_cleanup_command || '(none)'}`)
+  lines.push(`dossier_recommended: ${handoff.dossier_recommended ? 'yes' : 'no'}`)
+  lines.push(`dossier_command: ${handoff.dossier_command}`)
+  lines.push(`doctor_command: ${handoff.doctor_command}`)
+  lines.push(`learning_recommended: ${handoff.learning_recommended ? 'yes' : 'no'}`)
+  lines.push(`learning_record_suggestion: ${handoff.learning_record_suggestion}`)
+  lines.push(`codex_worker_candidate: ${handoff.codex_worker_candidate ? 'yes' : 'no'}`)
+  lines.push(`codex_worker_reason: ${handoff.codex_worker_reason}`)
+  lines.push(`product_gate_status: ${handoff.product_gate_status.status} - ${handoff.product_gate_status.reason}`)
+  lines.push(`next_action: ${handoff.next_action}`)
 }
 
 function isOfficialCleanupCommand(command: string): boolean {

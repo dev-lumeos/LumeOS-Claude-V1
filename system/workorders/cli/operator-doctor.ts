@@ -10,6 +10,7 @@ import { readModelRuntimeHistorySummary, runModelRuntimeCheck, type ModelRuntime
 import { runSpecSourceChainCheck } from './spec-source-chain-check'
 import { loadCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
 import { getProjectProfile, type ProjectProfile } from '../../project-profiles/project-profile-loader'
+import { buildAutonomyHandoffContract, type AutonomyFinalState, type AutonomyHandoff } from '../../reports/autonomy-handoff'
 
 export type OperatorDoctorDiagnosis =
   | 'CLEAN_READY'
@@ -102,6 +103,7 @@ export interface OperatorDoctorResult {
   git_status: OperatorStatus['git']
   stop_rules: OperatorStatus['stopRules']
   product_gate: { status: 'blocked' | 'allowed'; reason: string }
+  autonomy_handoff: AutonomyHandoff
   memory: OperatorDoctorMemoryStatus
   safety_notes: string[]
 }
@@ -233,6 +235,13 @@ function summarizeCodexWorker(config: CodexWorkerConfig): OperatorDoctorResult['
   }
 }
 
+function diagnosisToAutonomyState(diagnosis: OperatorDoctorDiagnosis): AutonomyFinalState {
+  if (diagnosis === 'CLEAN_READY') return 'READY_TO_RUN'
+  if (diagnosis === 'RUNTIME_ARTIFACTS_PRESENT') return 'FIX_REQUIRED'
+  if (diagnosis === 'MODEL_CONFIG_WARNING' || diagnosis === 'MODEL_ENDPOINT_UNREACHABLE' || diagnosis === 'MODEL_MISSING' || diagnosis === 'JSON_MODE_POLICY_MISSING' || diagnosis === 'QWEN_THINKING_POLICY_MISSING') return 'MODEL_RUNTIME_BLOCKED'
+  return diagnosis as AutonomyFinalState
+}
+
 export function diagnoseOperatorDoctor(status: OperatorStatus, options: DiagnoseOptions = {}): OperatorDoctorResult {
   const checkers = options.checkers ?? {
     invariant: defaultChecker(),
@@ -311,6 +320,31 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     nextAction = commandFor(OPERATOR_CLI, `${status.batchPath} --dry-run`)
   }
 
+  const codexWorker = summarizeCodexWorker(loadCodexWorkerConfig())
+  const safeCleanup = status.cleanupSuggestions.find(item => item.safeToApply)?.dryRunCommand ?? ''
+  const profileArg = options.projectProfile ? ` --project ${options.projectProfile.project_id}` : ''
+  const autonomyHandoff = buildAutonomyHandoffContract({
+    finalState: diagnosisToAutonomyState(finalDiagnosis),
+    batchPath: status.batchPath,
+    diagnosis: finalDiagnosis,
+    blockerType: blockers[0]?.gate,
+    blockers: blockers.map(item => `${item.category}: ${item.message}`),
+    tomActionRequired: finalDiagnosis === 'NEEDS_TOM_APPROVAL',
+    safeCleanupCommand: safeCleanup,
+    dossierCommand: commandFor('system\\reports\\batch-dossier.ts', `--batch ${status.batchPath}${profileArg}`),
+    doctorCommand: commandFor(OPERATOR_CLI, `${status.batchPath} --doctor${profileArg}`),
+    learningRecommended: !['CLEAN_READY', 'NEEDS_TOM_APPROVAL', 'NEEDS_SAFE_CLEANUP'].includes(finalDiagnosis),
+    learningReason: finalDiagnosis === 'MODEL_RUNTIME_BLOCKED'
+      ? 'Create or update a learning record if this runtime blocker repeats or changes routing policy.'
+      : undefined,
+    codexWorkerCandidate: codexWorker.status === 'CODEX_WORKER_READY' && finalDiagnosis === 'CLEAN_READY',
+    codexWorkerReason: codexWorker.status === 'CODEX_WORKER_READY'
+      ? 'Codex Worker is available for eligible senior-coding-agent governance workorders.'
+      : 'Codex Worker dispatcher integration is disabled or unavailable.',
+    productGateStatus: productGate,
+    nextAction,
+  })
+
   return {
     schema_version: 1,
     generated_at: options.generatedAt ?? new Date().toISOString(),
@@ -330,11 +364,12 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     approvals: status.approvalStops.map(approvalSummary),
     cleanups: status.cleanupSuggestions.map(cleanupSummary),
     checkers,
-    codex_worker: summarizeCodexWorker(loadCodexWorkerConfig()),
+    codex_worker: codexWorker,
     runtime_history: runtimeHistory,
     git_status: status.git,
     stop_rules: status.stopRules,
     product_gate: productGate,
+    autonomy_handoff: autonomyHandoff,
     memory,
     safety_notes: [
       'Doctor is read-only by default.',
@@ -389,6 +424,14 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   lines.push('')
   lines.push('## Product Gate')
   lines.push(`${result.product_gate.status}: ${result.product_gate.reason}`)
+  lines.push('')
+  lines.push('## Autonomy Handoff')
+  lines.push(`final_state: ${result.autonomy_handoff.final_state}`)
+  lines.push(`blocker_type: ${result.autonomy_handoff.blocker_type}`)
+  lines.push(`dossier_command: ${result.autonomy_handoff.dossier_command}`)
+  lines.push(`learning_recommended: ${result.autonomy_handoff.learning_recommended ? 'yes' : 'no'}`)
+  lines.push(`codex_worker_candidate: ${result.autonomy_handoff.codex_worker_candidate ? 'yes' : 'no'}`)
+  lines.push(`next_action: ${result.autonomy_handoff.next_action}`)
   lines.push('')
   lines.push('## Safety')
   for (const note of result.safety_notes) lines.push(`- ${note}`)

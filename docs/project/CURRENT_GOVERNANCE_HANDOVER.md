@@ -4,7 +4,7 @@
 
 Current date: 2026-05-10.
 
-`main` is pushed through the Operator/Profile Deep Integration work. The active branch is implementing Governance UI V2 workorder graph and dossier timeline improvements.
+`main` is pushed through Runtime Monitoring History and DGX4 productive routing removal. The active branch is implementing Operator Autonomy / Dossier / Learning V2 hardening.
 
 ## Current Truth
 
@@ -37,6 +37,7 @@ Current date: 2026-05-10.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
 - Governance UI V2 adds a lightweight workorder dependency board, structured dossier timeline, improved doctor/approval/runtime summaries, copyable next-action commands, and collapsible raw output.
 - Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
+- Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
 - Product work remains closed unless Tom explicitly opens it.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
@@ -100,8 +101,10 @@ Reason:
 - Spec source-chain checking is available through `system/workorders/cli/spec-source-chain-check.ts`.
 - Governance learning checking is available through `system/reports/governance-learning-check.ts`.
 - Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
+- Learning suggestions are available through `system/reports/governance-learning-suggest.ts`; it is read-only unless explicitly called with `--write-draft`.
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
+- Operator, Doctor, and Dossier outputs expose `autonomy_handoff` so STOP/FIX/approval states are self-explaining and tied to dossier/learning next steps.
 - Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
 - Runtime history can be recorded explicitly with `system/control-plane/model-runtime-check.ts --check-endpoints --record-history --json --project lumeos`; generated files under `system/reports/model-runtime-history/` are ignored runtime artifacts.
 - Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.

@@ -51,9 +51,11 @@ Governance learning records:
 - Read-only Batch Dossier Reporter exists at `system/reports/batch-dossier.ts` and writes reports only with explicit `--write`.
 - Promotion / Merge Governance CLI exists at `system/control-plane/promotion-governance.ts`.
 - Operator Doctor mode exists at `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
+- Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator, doctor, and dossier outputs. It connects final state, blocker classification, dossier command, learning suggestion, safe cleanup dry-run, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
 - Workorder Factory Automation exists at `system/workorders/cli/wo-factory.ts`.
 - The factory accepts a structured JSON plan inside Markdown, dry-runs by default, and writes draft workorders/batches only with `--write`.
 - Governance Learning Checker exists at `system/reports/governance-learning-check.ts`.
+- Governance Learning Suggestion exists at `system/reports/governance-learning-suggest.ts`; it is read-only unless called with `--write-draft`.
 - Current learning status can be written explicitly to `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Runtime monitoring history is explicit and local at `system/reports/model-runtime-history/`; history files are ignored and written only with `--record-history`.

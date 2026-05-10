@@ -6,6 +6,7 @@ import path from 'node:path'
 
 import {
   applySafeCleanups,
+  buildAutonomyHandoff,
   buildOperatorReport,
   collectOperatorStatus,
   decideEndState,
@@ -531,11 +532,81 @@ describe('apply safe cleanups', () => {
     const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
     const report = buildOperatorReport(status)
 
+    assert.match(report, /## Autonomy Handoff/)
+    assert.match(report, /final_state:/)
+    assert.match(report, /blocker_type:/)
+    assert.match(report, /dossier_command:/)
+    assert.match(report, /learning_recommended:/)
+    assert.match(report, /codex_worker_candidate:/)
     assert.match(report, /Exact next command:/)
     assert.match(report, /run-batch-operator\.ts .*--continue/)
     assert.match(report, /Doctor command:/)
     assert.match(report, /run-batch-operator\.ts .*--doctor/)
     assert.match(report, /Suggested dossier:/)
     assert.match(report, /system\\reports\\batch-dossier\.ts --batch/)
+  })
+
+  it('builds stable autonomy handoff for approval stops', () => {
+    writeQueue({
+      'APP-pending': {
+        approval_id: 'APP-pending',
+        workorder_id: 'WO-test-001',
+        run_id: 'RUN-pending',
+        agent_id: 'micro-executor',
+        reason: 'docs write',
+        risk_category: 'docs',
+        affected_files: ['docs/example.md'],
+        proposed_action: 'write docs/example.md',
+        operation: 'write_docs',
+        tool: 'write',
+        status: 'pending',
+        requested_at: isoMinutesAgo(5),
+        expires_at: new Date(Date.now() + 60_000).toISOString(),
+      },
+    })
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit, projectId: 'lumeos' })
+    const handoff = buildAutonomyHandoff(status)
+
+    assert.equal(handoff.final_state, 'NEEDS_TOM_APPROVAL')
+    assert.equal(handoff.tom_action_required, true)
+    assert.equal(handoff.dossier_recommended, true)
+    assert.equal(handoff.learning_recommended, false)
+    assert.match(handoff.next_action, /Review pending approval/)
+    assert.match(handoff.dossier_command, /batch-dossier\.ts --batch/)
+    assert.equal(handoff.product_gate_status.status, 'closed')
+    assert.deepEqual(Object.keys(handoff).sort(), [
+      'blocker_type',
+      'blockers',
+      'codex_worker_candidate',
+      'codex_worker_reason',
+      'diagnosis',
+      'dossier_command',
+      'dossier_recommended',
+      'doctor_command',
+      'final_state',
+      'forbidden_actions',
+      'learning_recommended',
+      'learning_record_suggestion',
+      'next_action',
+      'product_gate_status',
+      'safe_cleanup_available',
+      'safe_cleanup_command',
+      'tom_action_required',
+    ].sort())
+  })
+
+  it('builds safe cleanup handoff with dry-run command first', () => {
+    writeState({
+      active_runs: [{ run_id: 'RUN-failed', workorder_id: 'WO-test-001', agent_id: 'micro-executor', status: 'failed', started_at: isoMinutesAgo(10), completed_at: isoMinutesAgo(5), written_files: [] }],
+      active_workorders: [{ workorder_id: 'WO-test-001', run_id: 'RUN-failed', agent_id: 'micro-executor', status: 'failed', dispatched_at: isoMinutesAgo(10) }],
+    })
+
+    const handoff = buildAutonomyHandoff(collectOperatorStatus(batchPath(), { gitStatus: cleanGit }))
+
+    assert.equal(handoff.final_state, 'NEEDS_SAFE_CLEANUP')
+    assert.equal(handoff.safe_cleanup_available, true)
+    assert.match(handoff.safe_cleanup_command ?? '', /--dry-run/)
+    assert.doesNotMatch(handoff.safe_cleanup_command ?? '', /--confirm/)
   })
 })

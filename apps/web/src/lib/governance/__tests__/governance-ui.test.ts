@@ -184,6 +184,17 @@ describe('governance UI safety helpers', () => {
     assert.match(consoleComponent, /<summary className="cursor-pointer text-sm font-semibold text-slate-900">Raw command output<\/summary>/)
   })
 
+  it('renders operator autonomy handoff panels for doctor and dossier outputs', () => {
+    const root = findRepoRoot(process.cwd())
+    const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')
+
+    assert.match(consoleComponent, /function AutonomyHandoffPanel/)
+    assert.match(consoleComponent, /autonomy_handoff/)
+    assert.match(consoleComponent, /Dossier Command/)
+    assert.match(consoleComponent, /Learning Suggestion/)
+    assert.match(consoleComponent, /Codex Worker/)
+  })
+
   it('approval center remains display-only while showing decision commands for copy', () => {
     const root = findRepoRoot(process.cwd())
     const consoleComponent = fs.readFileSync(path.join(root, 'apps/web/src/components/governance/GovernanceConsole.tsx'), 'utf8')

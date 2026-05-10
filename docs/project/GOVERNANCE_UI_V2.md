@@ -28,6 +28,7 @@ http://127.0.0.1:5001/governance
 - Approval Center: approvals are grouped by pending, granted, denied, consumed, and expired. Grant/deny commands are display/copy only; no approval execution is implemented.
 - Runtime Center: runtime routes render as cards with required/optional state, endpoint status, runtime type, Codex external runtime labeling, JSON/thinking policy hints, MealCam optional/on-demand handling, and explicit local history summary actions.
 - Next Action UX: next action cards separate action text from copyable command blocks.
+- Autonomy Handoff: Doctor and Dossier views surface the `autonomy_handoff` contract with final state, blocker type, dossier command, learning suggestion, safe cleanup dry-run, Codex Worker eligibility, and one next action.
 - Raw Output: stdout/stderr remains available in collapsible panels for audit/debugging, but parsed JSON summaries are preferred.
 
 ## Runtime History UI
@@ -64,6 +65,7 @@ V2 preserves the V1 safety model:
 - Runtime history is local-only and ignored; another checkout starts with `UNKNOWN` until a recorded check is run.
 - Approval execution remains intentionally absent.
 - Dossier timeline quality depends on structured dossier JSON; raw markdown/stdout remains available for fallback.
+- Autonomy handoff detail depends on updated operator/doctor/dossier JSON; older command results may show the empty-state panel.
 
 ## Future V2+ Work
 

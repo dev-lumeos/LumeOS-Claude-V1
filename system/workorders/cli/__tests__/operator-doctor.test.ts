@@ -195,6 +195,7 @@ describe('operator doctor diagnosis', () => {
     const result = diagnose({})
 
     assert.deepEqual(Object.keys(result).sort(), [
+      'autonomy_handoff',
       'approvals',
       'blockers',
       'checkers',
@@ -212,6 +213,8 @@ describe('operator doctor diagnosis', () => {
       'schema_version',
       'stop_rules',
     ].sort())
+    assert.equal(result.autonomy_handoff.final_state, 'READY_TO_RUN')
+    assert.equal(result.autonomy_handoff.dossier_recommended, true)
   })
 
   it('reports model runtime high findings', () => {
@@ -221,6 +224,8 @@ describe('operator doctor diagnosis', () => {
 
     assert.equal(result.final_diagnosis, 'MODEL_RUNTIME_BLOCKED')
     assert.match(result.next_action, /model-runtime-check/)
+    assert.equal(result.autonomy_handoff.learning_recommended, true)
+    assert.match(result.autonomy_handoff.next_action, /model-runtime-check/)
   })
 
   it('reports Codex worker ready without blocking clean readiness', () => {

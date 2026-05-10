@@ -37,7 +37,7 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 
 Doctor mode is read-only. It does not dispatch workorders, mutate runtime state, apply cleanup, grant approvals, run Supabase commands, or execute migrations.
 
-It inspects operator status, stop rules, runtime blockers, approvals, cleanup suggestions, git status, invariant checker, agent-contract checker, spec-source-chain checker, and memory/learning file presence. It returns exactly one safe next action.
+It inspects operator status, stop rules, runtime blockers, approvals, cleanup suggestions, git status, invariant checker, agent-contract checker, spec-source-chain checker, and memory/learning file presence. It returns exactly one safe next action and an `autonomy_handoff` object.
 
 Doctor also reports Codex Worker state:
 
@@ -67,6 +67,44 @@ Doctor diagnoses:
 - `PRODUCT_GATE_BLOCKED`
 - `FIX_REQUIRED`
 - `UNKNOWN`
+
+## Autonomy Handoff Contract
+
+Operator status, Doctor JSON, and Batch Dossier JSON now include a stable autonomy handoff section for STOP/FIX/approval states.
+
+Fields:
+
+- `final_state`
+- `diagnosis`
+- `blocker_type`
+- `blockers`
+- `tom_action_required`
+- `safe_cleanup_available`
+- `safe_cleanup_command`
+- `dossier_recommended`
+- `dossier_command`
+- `doctor_command`
+- `learning_recommended`
+- `learning_record_suggestion`
+- `codex_worker_candidate`
+- `codex_worker_reason`
+- `product_gate_status`
+- `next_action`
+- `forbidden_actions`
+
+Rules:
+
+- `NEEDS_TOM_APPROVAL` points Tom to approval review and never auto-grants.
+- `NEEDS_SAFE_CLEANUP` points first to the official cleanup dry-run, not confirm.
+- `FIX_REQUIRED`, stop-rule, invariant, contract, source-chain, model-runtime, product-gate, and dirty-worktree blockers recommend dossier review and learning review.
+- Product-gate blocked states remain blocked; the handoff must not open product work.
+- Codex Worker is only suggested for eligible governance workorders with explicit `codex_worker` metadata and passing gates.
+
+Learning suggestions are read-only by default:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --final-state FIX_REQUIRED --json
+```
 
 ## Continue Command
 

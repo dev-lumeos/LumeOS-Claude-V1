@@ -30,6 +30,7 @@ import {
   type ProjectProfile,
 } from '../project-profiles/project-profile-loader'
 import { readModelRuntimeHistorySummary, type ModelRuntimeHistorySummary } from '../control-plane/model-runtime-check'
+import { buildAutonomyHandoffContract, type AutonomyHandoff } from './autonomy-handoff'
 
 export type BatchDossierFinalState =
   | 'DONE'
@@ -182,6 +183,7 @@ export interface BatchDossier {
   git_status: BatchDossierGitStatus
   final_state: BatchDossierFinalState
   next_action: string
+  autonomy_handoff: AutonomyHandoff
 }
 
 export interface BuildBatchDossierOptions {
@@ -636,6 +638,26 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const checkers = collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true)
   const outputs = collectOutputs(repoRoot, batch.expected_outputs, git, profile)
   const finalState = classifyFinalState({ state, workorderIds, runs, approvals, outputs, checkers })
+  const nextAction = nextActionFor(finalState, batch.batch_file)
+  const profileArg = options.projectId ? ` --project ${options.projectId}` : ''
+  const autonomyHandoff = buildAutonomyHandoffContract({
+    finalState,
+    batchPath: batch.batch_file,
+    diagnosis: finalState,
+    blockers: finalState === 'FIX_REQUIRED'
+      ? outputs.filter(item => item.expected && !item.exists).map(item => `Missing expected output: ${item.path}`)
+      : [],
+    tomActionRequired: finalState === 'NEEDS_TOM_APPROVAL',
+    dossierCommand: `${TSX} ${DOSSIER_CLI} --batch ${batch.batch_file}${profileArg}`,
+    doctorCommand: `${TSX} system\\workorders\\cli\\run-batch-operator.ts ${batch.batch_file} --doctor${profileArg}`,
+    learningRecommended: ['FIX_REQUIRED', 'STOP_RULE_BLOCKED'].includes(finalState),
+    codexWorkerCandidate: false,
+    codexWorkerReason: 'Dossier is read-only and does not select Codex Worker execution candidates.',
+    productGateStatus: profile
+      ? { status: profile.product_gate.status === 'open' ? 'allowed' : 'blocked', reason: profile.product_gate.reason }
+      : undefined,
+    nextAction,
+  })
 
   return {
     schema_version: 1,
@@ -666,7 +688,8 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     outputs,
     git_status: git,
     final_state: finalState,
-    next_action: nextActionFor(finalState, batch.batch_file),
+    next_action: nextAction,
+    autonomy_handoff: autonomyHandoff,
   }
 }
 
@@ -821,6 +844,14 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
   lines.push('')
   lines.push('## Final Classification')
   lines.push(dossier.final_state)
+  lines.push('')
+  lines.push('## Autonomy Handoff')
+  lines.push(`blocker_type: ${dossier.autonomy_handoff.blocker_type}`)
+  lines.push(`dossier_command: ${dossier.autonomy_handoff.dossier_command}`)
+  lines.push(`learning_recommended: ${dossier.autonomy_handoff.learning_recommended ? 'yes' : 'no'}`)
+  lines.push(`learning_record_suggestion: ${dossier.autonomy_handoff.learning_record_suggestion}`)
+  lines.push(`codex_worker_candidate: ${dossier.autonomy_handoff.codex_worker_candidate ? 'yes' : 'no'}`)
+  lines.push(`next_action: ${dossier.autonomy_handoff.next_action}`)
   lines.push('')
   lines.push('## Exact Next Action')
   lines.push(dossier.next_action)

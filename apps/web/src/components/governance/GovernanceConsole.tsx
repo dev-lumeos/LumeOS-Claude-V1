@@ -393,6 +393,7 @@ function DoctorPanel({ result, runDoctor, batchPath, setBatchPath }: { result: C
         <NextActionCard action={stringValue(data.next_action, 'Run doctor for one safe next action.')} />
         <CheckerPills checkers={checkers} />
       </Panel>
+      <AutonomyHandoffPanel handoff={jsonRecord(data.autonomy_handoff)} />
       <div className="grid gap-4 xl:grid-cols-3">
         <ListPanel title="Blockers" items={blockers} empty="No blockers reported." />
         <ListPanel title="Cleanup Candidates" items={cleanups} empty="No safe cleanup candidates reported." />
@@ -786,6 +787,7 @@ function DossierTimeline({ result }: { result: CommandExecution | null }) {
         </div>
         <NextActionCard action={nextAction} command={nextAction.includes('cmd.exe') ? nextAction : undefined} />
       </Panel>
+      <AutonomyHandoffPanel handoff={jsonRecord(data.autonomy_handoff)} />
       <div className="grid gap-4 xl:grid-cols-2">
         <TimelineSection title="Runs" items={arrayRecords(data.runs)} />
         <TimelineSection title="Approvals" items={arrayRecords(data.approvals)} />
@@ -796,6 +798,42 @@ function DossierTimeline({ result }: { result: CommandExecution | null }) {
       <OutputsTable outputs={arrayRecords(data.outputs)} />
       <GitStateSummary git={jsonRecord(data.git_status)} />
     </div>
+  )
+}
+
+function AutonomyHandoffPanel({ handoff }: { handoff: Record<string, unknown> }) {
+  if (Object.keys(handoff).length === 0) {
+    return (
+      <Panel title="Autonomy Handoff" subtitle="Operator V2 handoff fields appear after running doctor or dossier.">
+        <EmptyState text="No autonomy handoff data yet." />
+      </Panel>
+    )
+  }
+  const nextAction = stringValue(handoff.next_action, 'Review the operator result.')
+  const dossierCommand = stringValue(handoff.dossier_command)
+  const cleanupCommand = stringValue(handoff.safe_cleanup_command)
+  return (
+    <Panel title="Autonomy Handoff" subtitle="Stop-state explanation, dossier and learning guidance, and one next action.">
+      <div className="grid gap-3 md:grid-cols-4">
+        <Info label="Final State" value={stringValue(handoff.final_state, 'unknown')} />
+        <Info label="Blocker" value={stringValue(handoff.blocker_type, 'none')} />
+        <Info label="Tom Required" value={stringValue(handoff.tom_action_required, 'false')} />
+        <Info label="Learning" value={stringValue(handoff.learning_recommended, 'false')} />
+      </div>
+      <div className="mt-3 grid gap-3 xl:grid-cols-2">
+        <NextActionCard action={nextAction} command={nextAction.includes('cmd.exe') ? nextAction : undefined} />
+        <div className="rounded-md border border-slate-200 bg-slate-50 p-3">
+          <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">Dossier Command</div>
+          <div className="mt-2">{dossierCommand ? commandBlock(dossierCommand) : <span className="text-sm text-slate-500">(none)</span>}</div>
+          <div className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-500">Safe Cleanup</div>
+          <div className="mt-2">{cleanupCommand ? commandBlock(cleanupCommand) : <span className="text-sm text-slate-500">No cleanup command suggested.</span>}</div>
+        </div>
+      </div>
+      <div className="mt-3 grid gap-3 md:grid-cols-2">
+        <Info label="Codex Worker" value={stringValue(handoff.codex_worker_reason, 'not evaluated')} />
+        <Info label="Learning Suggestion" value={stringValue(handoff.learning_record_suggestion, 'none')} />
+      </div>
+    </Panel>
   )
 }
 

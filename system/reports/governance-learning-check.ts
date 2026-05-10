@@ -204,7 +204,7 @@ function validateHandoverAndCanonical(repoRoot: string): LearningFinding[] {
   const handover = read(repoRoot, HANDOVER)
   const canonical = read(repoRoot, CANONICAL)
 
-  if (handover && !/Current date:\s*2026-05-05/i.test(handover)) {
+  if (handover && !/Current date:\s*\d{4}-\d{2}-\d{2}/i.test(handover)) {
     findings.push(finding({
       id: 'handover.current_date_missing',
       severity: 'low',
