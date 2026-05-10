@@ -74,7 +74,9 @@ Reason:
 
 ## Gate Impact
 
-Autonomous, night, and large runs remain blocked while Spark D is unavailable, because the senior reviewer route is a required runtime route and the model runtime checker reports a high finding.
+Superseded on 2026-05-10:
+
+DGX4/Spark D is no longer a required productive governance runtime route. It is reserved for later DGX4/DGX5 lab work, and senior review responsibility has moved to Codex/GPT-5.5. Spark D unavailability should not block normal governance/operator runtime checks after the routing update.
 
 Product work remains closed unless Tom explicitly opens it. This diagnosis does not open the product gate.
 

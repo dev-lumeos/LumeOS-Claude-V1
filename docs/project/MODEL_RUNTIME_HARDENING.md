@@ -8,7 +8,7 @@ This document defines the governance rules for Spark/vLLM/model runtime readines
 
 The goal is to detect routing, endpoint, timeout, JSON-mode, and Qwen thinking-policy problems before they turn into approval loops, invalid JSON spikes, or stuck runtime state.
 
-Codex CLI with GPT-5.5 is the productive senior engineering and repo-aware review runtime. Spark 4/5 remain local lab/premium model experiments and do not replace Codex production authority.
+Codex CLI with GPT-5.5 is the productive senior engineering and repo-aware review runtime. DGX4/Spark D is removed from productive governance routing and is reserved for later DGX4/DGX5 lab work. Spark 4/5 remain local lab/premium model experiments and do not replace Codex production authority.
 
 ## Runtime Source Of Truth
 
@@ -61,16 +61,18 @@ Expected Spark/vLLM routes currently include:
 | Spark A | `http://192.168.0.128:8001` | Qwen3.6 orchestration/review/db/security |
 | Spark B | `http://192.168.0.188:8001` | Qwen coder execution/docs/tests/i18n |
 | Spark C | `http://192.168.0.99:8001` | fast reviewer |
-| Spark D | `http://192.168.0.101:8001` | senior reviewer |
+| DGX4 / Spark D | `http://192.168.0.101:8001` | disabled for productive governance; future DGX4/DGX5 MiniMax lab |
 | RTX 5090 | `http://localhost:8001` | MealCam vision |
 
 Non-HTTP runtimes are represented explicitly:
 
 | Runtime | Model | Healthcheck | Role |
 | --- | --- | --- | --- |
-| Codex CLI | `gpt-5.5` | config/manual | senior-coding-agent and final repo-aware escalation |
+| Codex CLI | `gpt-5.5` | config/manual | senior-coding-agent, senior-reviewer-agent, and final repo-aware escalation |
 
 Codex CLI is not a vLLM/OpenAI-compatible HTTP endpoint and must not be checked with `/v1/models`. Missing endpoints are acceptable for `runtime_type: codex-cli` or other external/config-checked runtimes. Missing endpoints for required local Spark/vLLM routes are high findings.
+
+`senior-reviewer-agent` is now a Codex/GPT-5.5 route for productive governance. Any DGX4/Spark D route must be represented only as lab/disabled metadata and must not be included as a required productive runtime route.
 
 Codex worker execution uses `codex exec` through `system/workers/codex-worker.ts`. The bridge is not a broad automatic dispatcher replacement. `system/workers/codex-worker.config.json` enables the controlled senior-agent path while keeping the policy narrow: only `senior-coding-agent`, explicit `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product work blocked while `product_gate_open=false`.
 

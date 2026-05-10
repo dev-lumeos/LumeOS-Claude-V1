@@ -93,7 +93,7 @@ Regeln:
 High-Risk — brauchen Prior Approval:
 - `db-migration`, `payments`, `medical`, `release`
 
-Cautious — Spark D mandatory, kein Auto-Retry:
+Cautious — senior review mandatory through Codex/GPT-5.5, kein Auto-Retry:
 - `security`, `auth`, `rls`, `shared-core`, `architecture`
 
 Autonom — dürfen ohne Approval laufen:
@@ -129,8 +129,8 @@ Stattdessen die aktuellen Referenzen oben nutzen.
 - Spark A (192.168.0.128:8001): Qwen3.6-35B FP8 — Orchestrator + Review
 - Spark B (192.168.0.188:8001): Qwen3-Coder-Next FP8 — Coding Worker
 - Spark C (192.168.0.99:8001):  Gemma-4-26B FP8 — Fast Reviewer Tier 1
-- Spark D (192.168.0.101:8001): GPT-OSS-120B MXFP4 — Senior Reviewer Tier 2
-- Escalation: Codex CLI with GPT-5.5 as Tom's productive senior engineering/review runtime.
+- Spark D / DGX4 (192.168.0.101:8001): disabled for productive governance; reserved for future DGX4/DGX5 MiniMax lab work.
+- Senior review / escalation: Codex CLI with GPT-5.5 as Tom's productive senior engineering/review runtime.
 
 Quelle: `STACK_REFERENCE.md`
 

@@ -5,7 +5,7 @@
     "spark1_port8001": "192.168.0.128 — Qwen3.6-35B-A3B FP8, gpu_util=0.70 — Orchestrator + WO-Validator (~50 tok/s single, ~116 tok/s @ 4-par)",
     "spark2_port8001": "192.168.0.188 — Qwen3-Coder-Next FP8, gpu_util=0.88 — Coding Worker (~47 tok/s)",
     "spark3_port8001": "192.168.0.99  — google/gemma-4-26B-A4B-it FP8 instanttensor, gpu_util=0.70 — Fast Reviewer Tier 1 (~35 tok/s single, ~180 tok/s @ 8-par)",
-    "spark4_port8001": "192.168.0.101 — openai/gpt-oss-120b MXFP4 CUTLASS, gpu_util=0.70 — Senior Reviewer Tier 2 (~59 tok/s single, ~150 tok/s @ 4-par)"
+    "spark4_port8001": "192.168.0.101 - openai/gpt-oss-120b MXFP4 CUTLASS - disabled for productive governance; future DGX4/DGX5 MiniMax lab context"
   },
 
   "_qwen3.6_notes": {
@@ -15,7 +15,7 @@
     "stop_conditions": "Dürfen KEINE positiven Zustände enthalten (approved/passed/granted)"
   },
 
-  "_escalation": "Codex CLI with GPT-5.5 is the productive senior engineering/runtime authority; Spark 4/5 remain lab/premium local model experiments.",
+  "_escalation": "Codex CLI with GPT-5.5 is the productive senior engineering and senior review runtime authority; Spark 4/5 remain lab/premium local model experiments and are not required for normal governance runtime checks.",
 
   "orchestrator-agent": {
     "default": {
@@ -192,29 +192,35 @@
       "note": "Spark 3 — Fast Quality Layer, see RULES.md"
     },
     "escalation": {
-      "node": "spark-d",
-      "trigger": "escalate_or_low_confidence_or_invalid_json_or_rewrite_limit",
-      "note": "Forwards to senior-reviewer-agent"
-    }
-  },
-
-  "senior-reviewer-agent": {
-    "default": {
-      "node": "spark-d",
-      "port": 8001,
-      "model": "openai/gpt-oss-120b",
-      "endpoint": "http://192.168.0.101:8001",
-      "temperature": 0.0,
-      "max_context": 8192,
-      "note": "Spark 4 — Senior Review Layer (auth/rls/migration/security mandatory), see RULES.md"
-    },
-    "escalation": {
       "node": "codex-cli",
       "runtime_type": "codex-cli",
       "healthcheck": "config",
       "model": "gpt-5.5",
       "trigger": "escalate_or_low_confidence_or_invalid_json_or_rewrite_limit",
-      "note": "Escalates to Codex/GPT-5.5 as Tom's productive senior repo-aware reviewer. Spark D remains the Tier 2 local reviewer route."
+      "note": "Forwards to senior-reviewer-agent on Codex/GPT-5.5. Spark D is disabled from productive governance routing."
+    }
+  },
+
+  "senior-reviewer-agent": {
+    "default": {
+      "node": "codex-cli",
+      "runtime_type": "codex-cli",
+      "healthcheck": "config",
+      "model": "gpt-5.5",
+      "runtime_required": "always",
+      "max_context": 8192,
+      "note": "Productive senior governance review and final repo-aware review path: Codex CLI with GPT-5.5. No HTTP/vLLM endpoint is expected."
+    },
+    "lab_disabled": {
+      "node": "spark-d",
+      "port": 8001,
+      "model": "openai/gpt-oss-120b",
+      "endpoint": "http://192.168.0.101:8001",
+      "runtime_type": "vllm",
+      "healthcheck": "manual",
+      "optional_runtime": true,
+      "runtime_required": "lab_only",
+      "note": "DGX4/Spark D is removed from productive governance routing. Reserved for later DGX4/DGX5 MiniMax or lab validation only."
     }
   },
 

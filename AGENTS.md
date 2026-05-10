@@ -42,7 +42,7 @@ Source of Truth: `system/agent-registry/agents.json` + `system/agent-registry/mo
 | Tier | Node | Modell | Rolle | Eskalation bei |
 |---|---|---|---|---|
 | `fast-reviewer-agent` | Spark C | gemma-4-26B-A4B-it | Tier 1 Fast Review | ESCALATE / low confidence / invalid_json / rewrite limit |
-| `senior-reviewer-agent` | Spark D | gpt-oss-120b | Tier 2 Senior Review | ESCALATE → Claude Code |
+| `senior-reviewer-agent` | Codex CLI | gpt-5.5 | Tier 2 Senior Review | Final repo-aware senior review |
 
 ### Hardware-Mapping
 
@@ -51,7 +51,7 @@ Source of Truth: `system/agent-registry/agents.json` + `system/agent-registry/mo
 | Spark A | 192.168.0.128 | 8001 | Qwen3.6-35B-A3B FP8 |
 | Spark B | 192.168.0.188 | 8001 | Qwen3-Coder-Next FP8 |
 | Spark C | 192.168.0.99 | 8001 | Gemma-4-26B-A4B-it FP8 |
-| Spark D | 192.168.0.101 | 8001 | GPT-OSS-120B MXFP4 |
+| Spark D / DGX4 | 192.168.0.101 | 8001 | Disabled for productive governance; future DGX4/DGX5 MiniMax lab |
 | RTX 5090 | localhost | 8001 | Qwen3-VL-30B FP8 |
 | Codex CLI | — | — | GPT-5.5 (produktive Senior-Engineering-Instanz) |
 
@@ -67,8 +67,8 @@ Output: reines JSON — kein Reasoning sichtbar
 
 ```
 micro-executor → (2x failed review) → senior-coding-agent (Codex/GPT-5.5)
-fast-reviewer-agent → (ESCALATE) → senior-reviewer-agent (Spark D)
-senior-reviewer-agent → (ESCALATE) → Codex/GPT-5.5
+fast-reviewer-agent → (ESCALATE) → senior-reviewer-agent (Codex/GPT-5.5)
+DGX4/Spark D → lab-only, not required for normal governance/operator runtime checks
 ```
 
 ### Pflicht-Verkettungen

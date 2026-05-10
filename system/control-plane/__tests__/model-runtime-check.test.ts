@@ -63,6 +63,11 @@ function writeValidFixture(): void {
       spec_file: '.claude/agents/senior-coding-agent.md',
       requires_human_approval: false,
     },
+    'senior-reviewer-agent': {
+      type: 'reviewer',
+      spec_file: '.claude/agents/senior-reviewer-agent.md',
+      requires_human_approval: false,
+    },
   })
   writeJson('system/agent-registry/model_routing.json', {
     _qwen3_6_notes: {
@@ -93,6 +98,22 @@ function writeValidFixture(): void {
         runtime_required: 'always',
       },
     },
+    'senior-reviewer-agent': {
+      default: {
+        node: 'codex-cli',
+        runtime_type: 'codex-cli',
+        healthcheck: 'config',
+        model: 'gpt-5.5',
+        runtime_required: 'always',
+      },
+      lab_disabled: {
+        node: 'spark-d',
+        endpoint: 'http://192.168.0.101:8001',
+        model: 'openai/gpt-oss-120b',
+        optional_runtime: true,
+        runtime_required: 'lab_only',
+      },
+    },
   })
   write('.claude/agents/db-migration-agent.md', `# db-migration-agent
 
@@ -107,6 +128,10 @@ Return concise implementation output.
   write('.claude/agents/senior-coding-agent.md', `# senior-coding-agent
 
 Senior repo-aware engineering escalation.
+`)
+  write('.claude/agents/senior-reviewer-agent.md', `# senior-reviewer-agent
+
+Senior repo-aware governance review.
 `)
   write('system/control-plane/dispatcher.ts', `
 const MODEL_CALL_TIMEOUT_MS = 15000
@@ -156,6 +181,25 @@ describe('model runtime checker', () => {
     assert.equal(route?.endpoint, undefined)
     assert.equal(route?.endpoint_status, 'external_ok')
     assert.equal(finding(result, 'model_runtime.endpoint_missing'), undefined)
+    assert.equal(result.summary.high, 0)
+  })
+
+  it('senior-reviewer-agent uses Codex and lab-disabled Spark D does not block', async () => {
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      checkEndpoints: true,
+      fetchImpl: async url => {
+        assert.notEqual(String(url).includes('192.168.0.101'), true)
+        return new Response('{}', { status: 200 })
+      },
+    })
+    const route = result.routes.find(item => item.agent === 'senior-reviewer-agent')
+
+    assert.equal(route?.model, 'gpt-5.5')
+    assert.equal(route?.runtime_type, 'codex-cli')
+    assert.equal(route?.endpoint, undefined)
+    assert.equal(route?.endpoint_status, 'external_ok')
+    assert.equal(result.findings.some(item => item.endpoint === 'http://192.168.0.101:8001'), false)
     assert.equal(result.summary.high, 0)
   })
 

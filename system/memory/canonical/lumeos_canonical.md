@@ -58,7 +58,8 @@ Governance learning records:
 - Model Runtime Checker exists at `system/control-plane/model-runtime-check.ts`.
 - Runtime monitoring history is explicit and local at `system/reports/model-runtime-history/`; history files are ignored and written only with `--record-history`.
 - Dispatcher model calls have bounded timeout and one retry for model-runtime failures.
-- `senior-coding-agent` uses Codex CLI / GPT-5.5 as the productive senior engineering runtime. It is config/manual checked, not HTTP endpoint checked.
+- `senior-coding-agent` and `senior-reviewer-agent` use Codex CLI / GPT-5.5 as the productive senior engineering and senior review runtimes. They are config/manual checked, not HTTP endpoint checked.
+- DGX4/Spark D at `192.168.0.101:8001` is removed from productive governance routing and reserved for future DGX4/DGX5 lab work; it must not block normal governance/operator runtime checks.
 - Codex Worker Bridge exists at `system/workers/codex-worker.ts` for dry-run-first non-interactive `codex exec` prompt construction.
 - Codex Worker dispatcher integration is controlled-enabled for `senior-coding-agent` only. It requires `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product-gate policy pass.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
