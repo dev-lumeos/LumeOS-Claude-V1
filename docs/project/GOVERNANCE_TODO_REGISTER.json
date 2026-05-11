@@ -153,16 +153,18 @@
       "layer": "reports",
       "severity": "medium",
       "priority": "P2",
-      "status": "open",
-      "evidence": "system/reports/codex-worker is ignored but contains large prompt and command transcripts.",
-      "recommended_action": "Document retention rules and add a metadata summarizer/redactor for local report inspection.",
+      "status": "done",
+      "evidence": "Report retention policy now classifies Codex Worker reports, runtime history, browser smoke artifacts, dossiers, learning drafts, and transient CLI outputs. A read-only summarizer reports metadata, sensitive flags, ignored/tracked policy status, and dry-run cleanup candidates without dumping prompt or transcript bodies.",
+      "recommended_action": "Use report-retention-summarizer.ts --json for local artifact audits and keep generated Codex/runtime/browser-smoke artifacts ignored.",
       "dependencies": [],
       "estimated_effort": "0.5d",
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
-        "system/workers/codex-worker.ts",
+        "system/reports/report-retention-summarizer.ts",
+        "system/reports/__tests__/report-retention-summarizer.test.ts",
         "system/reports/batch-dossier.ts",
+        "docs/project/REPORT_RETENTION_POLICY.md",
         "docs/project/CODEX_WORKER_BRIDGE.md"
       ]
     },

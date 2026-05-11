@@ -31,6 +31,7 @@ Current date: 2026-05-10.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
 - Runtime history readiness is normalized against current active productive routes and now includes V2 freshness/status fields: `overall_status`, `freshness_status`, `last_checked_at`, `age_minutes`, `blocking_impact`, and `next_required_action`. Stale history returns `STALE_HISTORY` and must not be used as proof of current readiness.
+- Report Retention / Redaction Policy adds a read-only metadata summarizer for ignored local Codex/runtime/browser-smoke artifacts. It does not dump prompt/transcript bodies, does not delete files, and does not write canonical memory.
 - Deep analysis on 2026-05-11 found static governance checks clean. Live required Spark A/B/C endpoint checks timed out at both 1500 ms and 5000 ms because all DGX/Spark devices are intentionally powered down for rack installation (`planned_hardware_maintenance`). Do not treat this as a routing defect or perform Spark routing fixes. Codex external routes remain config-healthy and MealCam remains optional/info-only. Night, large, and autonomous runs remain blocked until post-maintenance endpoint health is re-proven.
 - Planned DGX/Spark maintenance is recorded in `system/control-plane/runtime-maintenance.json`; model runtime checks classify affected endpoint downtime as `PLANNED_MAINTENANCE` and require a recheck after maintenance ends.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
@@ -108,6 +109,7 @@ Reason:
 - Governance learning checking is available through `system/reports/governance-learning-check.ts`.
 - Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
 - Learning suggestions are available through `system/reports/governance-learning-suggest.ts`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/drafts/`.
+- Report retention summaries are available through `system/reports/report-retention-summarizer.ts`; it is read-only and reports metadata only for ignored local artifacts.
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 - Operator, Doctor, and Dossier outputs expose `autonomy_handoff` so STOP/FIX/approval states are self-explaining and tied to dossier/learning next steps.
@@ -156,6 +158,7 @@ Rules:
 - `senior-coding-agent` and `senior-reviewer-agent` are Codex CLI / GPT-5.5. They have no vLLM endpoint and should show as external/config-checked.
 - Codex Worker Bridge is dry-run by default and uses non-interactive `codex exec` only with `--execute`.
 - Generated Codex worker prompts/reports under `system/reports/codex-worker/` are runtime artifacts and should not be committed by default.
+- Use `system/reports/report-retention-summarizer.ts --json` to inspect ignored Codex/runtime/browser-smoke artifact metadata without dumping prompt or transcript bodies.
 - Operator Doctor reports Codex Worker as ready or disabled. Batch dossiers include Codex Worker report metadata when ignored runtime reports exist.
 
 ## Governance UI V1 Output

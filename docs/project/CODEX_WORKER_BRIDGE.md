@@ -92,6 +92,14 @@ The bridge writes artifacts only when:
 
 These reports are runtime artifacts and should not be committed by default.
 
+Use the report retention summarizer to inspect local metadata without dumping prompt or transcript bodies:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\report-retention-summarizer.ts --json
+```
+
+Retention and redaction policy is documented in `docs/project/REPORT_RETENTION_POLICY.md`.
+
 ## Safety Boundaries
 
 Every generated prompt includes:
