@@ -6,9 +6,11 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",
+    "governance:ui:smoke": "playwright test -c playwright.governance.config.ts",
     "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
+    "@playwright/test": "1.41.2",
     "@types/micromatch": "^4.0.10",
     "ajv": "^8.20.0",
     "micromatch": "^4.0.8",

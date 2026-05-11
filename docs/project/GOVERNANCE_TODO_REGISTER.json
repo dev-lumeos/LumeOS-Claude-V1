@@ -89,16 +89,17 @@
       "layer": "governance_ui",
       "severity": "medium",
       "priority": "P1",
-      "status": "open",
-      "evidence": "UI typecheck/build/helper tests pass, but no browser screenshot or visual smoke was run.",
-      "recommended_action": "Start local app, visit every /governance route, verify styled shell/cards/tables render, and capture screenshots.",
+      "status": "done",
+      "evidence": "Governance UI browser smoke now visits every /governance route, verifies shell/content, rejects generic Next.js error pages, and captures ignored screenshots under tmp/governance-ui-browser-smoke/.",
+      "recommended_action": "Keep cmd.exe /c pnpm governance:ui:smoke in the governance UI validation path.",
       "dependencies": [],
       "estimated_effort": "0.5-1d",
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
         "apps/web/src/components/governance/GovernanceConsole.tsx",
-        "apps/web/src/lib/governance/__tests__/governance-ui.test.ts",
+        "apps/web/e2e/governance-ui.browser-smoke.spec.ts",
+        "playwright.governance.config.ts",
         "docs/project/GOVERNANCE_UI_V2.md"
       ]
     },

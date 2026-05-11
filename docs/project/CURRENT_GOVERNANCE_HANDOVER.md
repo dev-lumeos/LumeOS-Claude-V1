@@ -40,6 +40,7 @@ Current date: 2026-05-10.
 - Codex Worker dispatch status is `controlled_enabled` for `senior-coding-agent` and `senior-reviewer-agent` only. It still requires explicit `codex_worker: true`, `runtime_type: codex-cli`, complete metadata, narrow scope, blocked files, expected outputs, source refs, no approval-grant/DB/Supabase/migration work, and product-gate policy pass.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
 - Governance UI V2 adds a lightweight workorder dependency board, structured dossier timeline, improved doctor/approval/runtime summaries, copyable next-action commands, and collapsible raw output.
+- Governance UI browser smoke is available through `cmd.exe /c pnpm governance:ui:smoke`; it visits all `/governance` routes, checks the shell/content, and writes ignored screenshots under `tmp/governance-ui-browser-smoke/` without DGX/Spark endpoint checks.
 - Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
 - Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
 - Product work remains closed unless Tom explicitly opens it.
