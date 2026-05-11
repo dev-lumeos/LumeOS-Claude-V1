@@ -77,6 +77,24 @@ tmp/governance-ui-browser-smoke/
 
 This directory is ignored and must not be committed. The smoke does not click endpoint-health buttons, controlled actions, approval actions, or product-work controls. It does not require DGX/Spark hardware.
 
+## Browser Smoke / Visual Verification
+
+Governance UI V2 has a lightweight local browser smoke gate:
+
+```powershell
+cmd.exe /c pnpm governance:ui:smoke
+```
+
+The smoke starts the local Next app on `127.0.0.1:5001`, visits every `/governance` route, verifies the governance shell/navigation and route-specific content, checks that generic Next.js error pages are absent, and captures screenshots.
+
+Screenshot and Playwright artifacts are generated under:
+
+```text
+tmp/governance-ui-browser-smoke/
+```
+
+This directory is ignored and must not be committed. The smoke does not click endpoint-health buttons, controlled actions, approval actions, or product-work controls. It does not require DGX/Spark hardware.
+
 ## Safety Model
 
 V2 preserves the V1 safety model:
