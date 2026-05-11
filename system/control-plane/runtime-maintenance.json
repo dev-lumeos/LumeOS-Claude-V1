@@ -1,8 +1,11 @@
 {
-  "planned_maintenance": true,
+  "planned_maintenance": false,
   "classification": "planned_hardware_maintenance",
-  "reason": "DGX/Spark devices are powered down for rack installation. Endpoint failures during this period are maintenance state, not routing defects.",
+  "reason": "Post-rack required Spark/DGX endpoint proof succeeded on 2026-05-11. Required endpoints are healthy. MealCam remains optional_offline.",
   "started_at": "2026-05-11",
+  "completed_at": "2026-05-11",
+  "completion_reason": "Post-rack required Spark/DGX endpoint proof succeeded on 2026-05-11. Required endpoints are healthy. MealCam remains optional_offline.",
+  "previous_reason": "DGX/Spark devices were powered down for rack installation. Endpoint failures during this period were maintenance state, not routing defects.",
   "affected_nodes": [
     "spark-a",
     "spark-b",
@@ -15,6 +18,6 @@
     "openai-compatible-http",
     "vllm"
   ],
-  "blocks_runtime_dependent_runs": true,
-  "requires_recheck_after": true
+  "blocks_runtime_dependent_runs": false,
+  "requires_recheck_after": false
 }

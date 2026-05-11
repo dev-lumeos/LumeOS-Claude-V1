@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T14:45:00+07:00",
+  "generated_at": "2026-05-11T15:55:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -7,9 +7,9 @@
       "layer": "runtime",
       "severity": "high",
       "priority": "P0",
-      "status": "open",
-      "evidence": "model-runtime-check --check-endpoints returned high=13 at 1500ms and 5000ms; curl to Spark A/B /v1/models timed out. Tom confirmed all DGX/Spark devices are powered down for rack installation.",
-      "recommended_action": "Do not change routing because of this downtime. After hardware maintenance ends, run read-only endpoint health checks and record fresh runtime history.",
+      "status": "done",
+      "evidence": "Post-rack model-runtime-check --check-endpoints --timeout-ms 5000 --record-history --json --project lumeos succeeded on 2026-05-11 with all required Spark/DGX endpoints OK, Codex senior routes external_ok, and only optional MealCam offline as info.",
+      "recommended_action": "Treat required runtime routes as proven healthy until history freshness expires. MealCam remains optional/offline and non-blocking unless a MealCam/Vision workorder is active.",
       "dependencies": [],
       "estimated_effort": "15m after hardware returns",
       "codex_autonomous_possible": false,

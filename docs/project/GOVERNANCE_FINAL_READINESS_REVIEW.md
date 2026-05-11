@@ -6,11 +6,11 @@ Branch reviewed: `goal/governance-hardening-integration`
 
 ## 1. Final State
 
-READY_EXCEPT_HARDWARE
+READY
 
-All completed governance hardening milestones requested for integration are now present on one branch and pass the required read-only validation matrix without endpoint checks. Product work remains closed.
+All completed governance hardening milestones requested for integration are present on one branch and pass the required validation matrix. Post-rack required Spark/DGX endpoint proof succeeded on 2026-05-11, and planned maintenance is cleared. Product work remains closed.
 
-This readiness state excludes DGX/Spark endpoint health because Tom confirmed all DGX/Spark devices are offline for rack installation. Current DGX/Spark downtime is classified as `planned_hardware_maintenance`, not a routing defect. Night, large, autonomous, and runtime-dependent runs remain blocked until hardware is back and endpoint health is re-proven.
+MealCam/RTX5090 remains optional/offline and is non-blocking unless a MealCam/Vision workorder is active.
 
 ## 2. Executive Conclusion
 
@@ -19,7 +19,8 @@ What is solid:
 - TypeScript compile passes.
 - Invariant checker is clean: critical=0, high=0, medium=0.
 - Agent contract checker is clean: critical=0, high=0, medium=0.
-- Static model runtime checker reports `PLANNED_MAINTENANCE` with no high/critical findings and does not treat offline DGX/Spark endpoints as routing defects.
+- Static model runtime checker is no longer maintenance-blocked after clearing `runtime-maintenance.json`.
+- Endpoint model runtime checker reports all required Spark/DGX endpoints OK and Codex routes `external_ok`.
 - Product gate remains closed.
 - Learning checker and learning suggestion are clean.
 - Promotion governance `--status` mode is present and avoids the noisy `main..main` high finding.
@@ -31,7 +32,7 @@ What is solid:
 What is still constrained:
 
 - Product work is not open.
-- DGX/Spark runtime-dependent execution remains blocked until post-rack endpoint checks pass.
+- Runtime-dependent execution is no longer blocked by planned hardware maintenance; it remains subject to governance policy and product-gate controls.
 - Beauty Club remains a fixture only, not an active project.
 - Broad Codex automation remains forbidden.
 - Runtime reports/history remain ignored and uncommitted.
@@ -43,7 +44,8 @@ What is still constrained:
 | `cmd.exe /c node node_modules\typescript\bin\tsc --noEmit` | PASS | exit 0 | none | no action |
 | `governance-invariant-check --json --project lumeos` | PASS | critical=0 high=0 medium=0 low=0 info=0 | none | no action |
 | `agent-contract-check --json` | PASS | critical=0 high=0 medium=0 low=0 info=0 | none | no action |
-| `model-runtime-check --json --project lumeos` | PASS | `overall_status=PLANNED_MAINTENANCE`, high=0, critical=0 | none | recheck endpoints after rack work |
+| `model-runtime-check --json --project lumeos` | PASS | before transition: `PLANNED_MAINTENANCE`; after transition: `UNKNOWN_NOT_CHECKED`, high=0, critical=0 | none | endpoint proof required for runtime-dependent runs |
+| `model-runtime-check --check-endpoints --timeout-ms 5000 --record-history --json --project lumeos` | PASS | `overall_status=DEGRADED_OPTIONAL`, high=0, critical=0, info=1 optional MealCam offline; required Spark/DGX endpoints OK | info only | no action unless MealCam/Vision work is active |
 | `governance-learning-check --json --project lumeos` | PASS | critical=0 high=0 medium=0 low=0 info=0 | none | no action |
 | `governance-learning-suggest --json` | PASS | total_candidates=0, unrecorded_high_or_critical=0, duplicates=5 | none | no action |
 | `promotion-governance --status --json --project lumeos` | WARN | high=0, info=1 `git.upstream_unknown` for integration branch | info | set upstream only if needed |
@@ -72,7 +74,7 @@ What is still constrained:
 | Approval grants | BLOCKED | no approval command run; UI helper tests keep approval center display-only |
 | Runtime state/queue manual edits | BLOCKED | no manual edits performed |
 | Runtime reports/history commits | BLOCKED | ignored runtime artifact paths remain untracked |
-| DGX/Spark endpoint status | PLANNED_MAINTENANCE | endpoint checks intentionally not run; offline state does not trigger routing fixes |
+| DGX/Spark endpoint status | HEALTHY | post-rack endpoint proof succeeded; required routes OK |
 | Codex broad automation | BLOCKED | worker status is `controlled_enabled`; allowed agents are senior coding/reviewer only |
 | Promotion health | AVAILABLE | `--status` mode exists and reports no high findings |
 | Beauty Club fixture | INACTIVE | fixture validates but is not default/active |
@@ -96,7 +98,7 @@ What is still constrained:
 
 | TODO | Title | Classification | Readiness Impact |
 |---|---|---|---|
-| GOV-TODO-001 | Re-prove Spark A/B/C endpoint health after planned rack maintenance | POST_RACK | blocks night/large/autonomous runtime-dependent runs |
+| GOV-TODO-001 | Re-prove Spark A/B/C endpoint health after planned rack maintenance | CLOSE_READY | post-rack endpoint proof succeeded |
 | GOV-TODO-002 | Runtime history freshness and planned-maintenance semantics | CLOSE_READY | integrated and tested |
 | GOV-TODO-003 | Codex Worker config status normalization | CLOSE_READY | integrated and tested |
 | GOV-TODO-004 | Senior-reviewer Codex Worker dispatch policy | CLOSE_READY | integrated and tested |
@@ -109,10 +111,6 @@ What is still constrained:
 | GOV-TODO-011 | Mark old Nutrition bootstrap docs as archival or active | DOCS_CLEANUP | not blocking governance validation |
 
 ## 7. Remaining Blockers
-
-Post-rack blocker:
-
-- Re-run DGX/Spark endpoint checks only after rack installation is complete. Do not route-fix based on planned hardware downtime.
 
 Governance cleanup:
 
@@ -137,13 +135,13 @@ Governance cleanup:
 - Manual edits to `system/state/runtime_state.json`.
 - Manual edits to `system/approval/queue.json`.
 - Runtime report/history commits.
-- DGX/Spark endpoint checks during planned rack installation.
+- DGX/Spark endpoint checks as routing diagnosis without evidence of real drift.
 - Broad Codex automation.
 - Canonical memory writes without review.
 
 ## 10. Exact Next Action After Rack Work
 
-Run read-only runtime endpoint validation and record fresh history only after Tom confirms DGX/Spark hardware is back online:
+If runtime readiness becomes stale, rerun read-only endpoint validation and record fresh history:
 
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --check-endpoints --timeout-ms 5000 --record-history --json --project lumeos

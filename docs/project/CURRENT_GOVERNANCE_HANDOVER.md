@@ -6,7 +6,7 @@ Current date: 2026-05-10.
 
 `main` is pushed through Runtime Monitoring History and DGX4 productive routing removal. The active branch is implementing Operator Autonomy / Dossier / Learning V2 hardening.
 
-Final readiness review note, 2026-05-11: the completed governance hardening sequence is integrated on `goal/governance-hardening-integration`. Static/read-only gates pass and the branch is `READY_EXCEPT_HARDWARE`: DGX/Spark devices are intentionally offline for rack installation, so runtime-dependent night/large/autonomous runs remain blocked until post-rack endpoint health is re-proven. Product work remains closed.
+Final readiness review note, 2026-05-11: the completed governance hardening sequence is integrated on `goal/governance-hardening-integration`. Static/read-only gates pass. Post-rack required Spark/DGX endpoint proof succeeded on 2026-05-11, planned hardware maintenance was cleared, and required runtime routes are healthy. MealCam remains optional/offline and is non-blocking unless a MealCam/Vision workorder is active. Product work remains closed.
 
 ## Current Truth
 
@@ -35,8 +35,8 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
 - Runtime history readiness is normalized against current active productive routes and now includes V2 freshness/status fields: `overall_status`, `freshness_status`, `last_checked_at`, `age_minutes`, `blocking_impact`, and `next_required_action`. Stale history returns `STALE_HISTORY` and must not be used as proof of current readiness.
 - Report Retention / Redaction Policy adds a read-only metadata summarizer for ignored local Codex/runtime/browser-smoke artifacts. It does not dump prompt/transcript bodies, does not delete files, and does not write canonical memory.
-- Deep analysis on 2026-05-11 found static governance checks clean. Live required Spark A/B/C endpoint checks timed out at both 1500 ms and 5000 ms because all DGX/Spark devices are intentionally powered down for rack installation (`planned_hardware_maintenance`). Do not treat this as a routing defect or perform Spark routing fixes. Codex external routes remain config-healthy and MealCam remains optional/info-only. Night, large, and autonomous runs remain blocked until post-maintenance endpoint health is re-proven.
-- Planned DGX/Spark maintenance is recorded in `system/control-plane/runtime-maintenance.json`; model runtime checks classify affected endpoint downtime as `PLANNED_MAINTENANCE` and require a recheck after maintenance ends.
+- Deep analysis on 2026-05-11 found static governance checks clean. Earlier required Spark A/B/C endpoint checks timed out because DGX/Spark devices were intentionally powered down for rack installation (`planned_hardware_maintenance`). Post-rack endpoint proof later succeeded with all required Spark/DGX routes OK and Codex external routes `external_ok`.
+- Planned DGX/Spark maintenance is recorded in `system/control-plane/runtime-maintenance.json` and is now cleared after the successful post-rack endpoint proof. Model runtime checks must not treat optional MealCam offline as blocking unless a MealCam/Vision workorder is active.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent`, `senior-reviewer-agent`, and final escalations.
 - Codex Worker Bridge adds a dry-run-first `codex exec` integration point for controlled senior agents.
