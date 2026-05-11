@@ -1,0 +1,20 @@
+{
+  "planned_maintenance": true,
+  "classification": "planned_hardware_maintenance",
+  "reason": "DGX/Spark devices are powered down for rack installation. Endpoint failures during this period are maintenance state, not routing defects.",
+  "started_at": "2026-05-11",
+  "affected_nodes": [
+    "spark-a",
+    "spark-b",
+    "spark-c",
+    "spark-d",
+    "dgx4",
+    "dgx5"
+  ],
+  "affected_runtime_types": [
+    "openai-compatible-http",
+    "vllm"
+  ],
+  "blocks_runtime_dependent_runs": true,
+  "requires_recheck_after": true
+}

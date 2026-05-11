@@ -166,7 +166,7 @@ export interface BatchDossier {
   reviews: BatchDossierReview[]
   cleanups: BatchDossierCleanup[]
   codex_worker_runs: BatchDossierCodexWorkerRun[]
-  runtime_history_summary?: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'total_records' | 'total_checks' | 'routes'>
+  runtime_history_summary?: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'overall_status' | 'freshness_status' | 'last_checked_at' | 'age_minutes' | 'blocking_impact' | 'next_required_action' | 'planned_maintenance' | 'total_records' | 'total_checks' | 'routes'>
   stop_rules: {
     system_stop_active: boolean
     system_stop?: unknown
@@ -674,6 +674,13 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     codex_worker_runs: codexWorkerRuns,
     runtime_history_summary: {
       overall_readiness: runtimeHistory.overall_readiness,
+      overall_status: runtimeHistory.overall_status,
+      freshness_status: runtimeHistory.freshness_status,
+      last_checked_at: runtimeHistory.last_checked_at,
+      age_minutes: runtimeHistory.age_minutes,
+      blocking_impact: runtimeHistory.blocking_impact,
+      next_required_action: runtimeHistory.next_required_action,
+      planned_maintenance: runtimeHistory.planned_maintenance,
       total_records: runtimeHistory.total_records,
       total_checks: runtimeHistory.total_checks,
       routes: runtimeHistory.routes.slice(0, 12),
@@ -788,7 +795,13 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
   lines.push('')
   lines.push('## Runtime History Summary')
   if (dossier.runtime_history_summary) {
+    lines.push(`status: ${dossier.runtime_history_summary.overall_status}`)
+    lines.push(`freshness: ${dossier.runtime_history_summary.freshness_status}`)
     lines.push(`readiness: ${dossier.runtime_history_summary.overall_readiness}`)
+    lines.push(`last_checked_at: ${dossier.runtime_history_summary.last_checked_at ?? 'n/a'}`)
+    lines.push(`age_minutes: ${dossier.runtime_history_summary.age_minutes ?? 'n/a'}`)
+    lines.push(`blocking_impact: ${dossier.runtime_history_summary.blocking_impact}`)
+    lines.push(`next_required_action: ${dossier.runtime_history_summary.next_required_action}`)
     lines.push(`records: ${dossier.runtime_history_summary.total_records}`)
     lines.push(`checks: ${dossier.runtime_history_summary.total_checks}`)
     lines.push(...table([

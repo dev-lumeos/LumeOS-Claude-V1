@@ -93,13 +93,18 @@ History summaries report:
 
 - total records and checks
 - time range
+- explicit V2 status: `HEALTHY`, `DEGRADED_OPTIONAL`, `BLOCKED_REQUIRED_FAILURE`, `STALE_HISTORY`, `PLANNED_MAINTENANCE`, `RECHECK_REQUIRED`, or `UNKNOWN_NOT_CHECKED`
+- freshness metadata: `last_checked_at`, `age_minutes`, `age_ms`, `freshness_status`, and `stale_after_minutes`
+- blocking impact and next required action
 - last route status
 - failure and timeout counts
 - average and max latency
 - last ok and last failure timestamps
 - overall readiness: `RUNTIME_HEALTHY`, `RUNTIME_DEGRADED`, `RUNTIME_BLOCKED`, or `UNKNOWN`
 
-History readiness is based on the latest record for active required productive routes. Older failures remain visible as historical failure and timeout counts, but stale records from removed, disabled, or lab-only routes must not keep current governance readiness blocked. A required route that failed earlier and is now healthy should degrade history for observability, not block the operator.
+History readiness is based on the latest fresh record for active required productive routes. Older failures remain visible as historical failure and timeout counts, but stale records from removed, disabled, or lab-only routes must not keep current governance readiness blocked. A stale history record must not be interpreted as current health; it returns `STALE_HISTORY` and requires a fresh endpoint check before runtime-dependent autonomous, night, or large runs.
+
+Current planned maintenance is represented by `system/control-plane/runtime-maintenance.json`. On 2026-05-11, all DGX/Spark devices are powered down for rack installation and are classified as `planned_hardware_maintenance`. During this state, Spark/DGX endpoint failures must not trigger routing fixes or service-debug recommendations. Runtime-dependent autonomous, night, and large runs remain blocked until maintenance ends and a fresh endpoint check is recorded.
 
 Codex CLI routes record `runtime_type=codex-cli`, `endpoint_status=external_ok`, and `latency_ms=null`.
 

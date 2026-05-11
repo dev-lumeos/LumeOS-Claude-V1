@@ -3,6 +3,41 @@ import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 export type ModelRuntimeSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
+export type ModelRuntimeOverallStatus =
+  | 'HEALTHY'
+  | 'DEGRADED_OPTIONAL'
+  | 'BLOCKED_REQUIRED_FAILURE'
+  | 'STALE_HISTORY'
+  | 'PLANNED_MAINTENANCE'
+  | 'RECHECK_REQUIRED'
+  | 'UNKNOWN_NOT_CHECKED'
+export type ModelRuntimeFreshnessStatus = 'fresh' | 'stale' | 'not_checked' | 'unknown' | 'maintenance'
+
+export interface ModelRuntimeMaintenanceState {
+  planned_maintenance: boolean
+  classification?: 'planned_hardware_maintenance' | string
+  reason?: string
+  started_at?: string
+  affected_nodes?: string[]
+  affected_runtime_types?: string[]
+  blocks_runtime_dependent_runs?: boolean
+  requires_recheck_after?: boolean
+}
+
+export interface ModelRuntimeReadiness {
+  overall_status: ModelRuntimeOverallStatus
+  readiness: 'ready' | 'degraded' | 'blocked' | 'unknown'
+  reason: string
+  freshness_status: ModelRuntimeFreshnessStatus
+  last_checked_at?: string
+  age_ms: number | null
+  age_minutes: number | null
+  stale_after_minutes: number
+  planned_maintenance: boolean
+  maintenance_classification?: string
+  blocking_impact: string
+  next_required_action: string
+}
 
 export interface ModelRuntimeFinding {
   id: string
@@ -38,7 +73,7 @@ export interface ModelRuntimeRoute {
   runtime_required?: 'always' | 'on_demand' | string
   json_required: boolean
   qwen_thinking_off_required: boolean
-  endpoint_status?: 'not_checked' | 'ok' | 'unreachable' | 'optional_offline' | 'external_ok'
+  endpoint_status?: 'not_checked' | 'ok' | 'unreachable' | 'optional_offline' | 'external_ok' | 'planned_maintenance'
   latency_ms?: number | null
   timed_out?: boolean
 }
@@ -48,6 +83,17 @@ export interface ModelRuntimeCheckResult {
   generated_at: string
   repo_root: string
   check_endpoints: boolean
+  overall_status: ModelRuntimeOverallStatus
+  readiness: ModelRuntimeReadiness
+  freshness_status: ModelRuntimeFreshnessStatus
+  last_checked_at?: string
+  planned_maintenance: {
+    active: boolean
+    classification?: string
+    reason?: string
+  }
+  blocking_impact: string
+  next_required_action: string
   hasHighOrCriticalFindings: boolean
   exitCode: 0 | 1 | 2
   summary: ModelRuntimeSummary
@@ -68,6 +114,9 @@ export interface ModelRuntimeCheckOptions {
   fetchImpl?: typeof fetch
   recordHistory?: boolean
   historyDir?: string
+  plannedMaintenance?: ModelRuntimeMaintenanceState
+  staleAfterMinutes?: number
+  now?: Date
 }
 
 export interface ModelRuntimeHistoryRecord {
@@ -116,6 +165,20 @@ export interface ModelRuntimeHistorySummary {
   total_checks: number
   time_range: { from?: string; to?: string }
   overall_readiness: 'RUNTIME_HEALTHY' | 'RUNTIME_DEGRADED' | 'RUNTIME_BLOCKED' | 'UNKNOWN'
+  overall_status: ModelRuntimeOverallStatus
+  readiness: ModelRuntimeReadiness
+  freshness_status: ModelRuntimeFreshnessStatus
+  last_checked_at?: string
+  age_ms: number | null
+  age_minutes: number | null
+  stale_after_minutes: number
+  planned_maintenance: {
+    active: boolean
+    classification?: string
+    reason?: string
+  }
+  blocking_impact: string
+  next_required_action: string
   routes: ModelRuntimeHistoryRouteSummary[]
 }
 
@@ -129,10 +192,12 @@ type ModelRoutingFile = Record<string, any> & {
 
 const PRODUCT_GATE_REASON = 'Product work remains blocked unless Tom explicitly opens it; autonomous/night/large runs remain blocked until model runtime health is proven.'
 const DEFAULT_TIMEOUT_MS = 1500
+const DEFAULT_STALE_AFTER_MINUTES = 60
 const DEFAULT_PROJECT_ID = 'lumeos'
 const HISTORY_DIR = 'system/reports/model-runtime-history'
 const HISTORY_FILE = 'history.jsonl'
 const LATEST_FILE = 'latest.json'
+const MAINTENANCE_FILE = 'system/control-plane/runtime-maintenance.json'
 
 function readText(repoRoot: string, relativePath: string): string {
   const fullPath = path.join(repoRoot, relativePath)
@@ -146,6 +211,54 @@ function readJson<T>(repoRoot: string, relativePath: string, fallback: T): { val
     return { value: JSON.parse(fs.readFileSync(fullPath, 'utf8')) as T }
   } catch (error) {
     return { value: fallback, error: error instanceof Error ? error.message : String(error) }
+  }
+}
+
+function loadRuntimeMaintenance(repoRoot: string): ModelRuntimeMaintenanceState {
+  const fromFile = readJson<ModelRuntimeMaintenanceState | null>(repoRoot, MAINTENANCE_FILE, null)
+  if (fromFile.value && typeof fromFile.value === 'object') {
+    return {
+      ...fromFile.value,
+      planned_maintenance: fromFile.value.planned_maintenance === true,
+    }
+  }
+
+  const envValue = process.env.LUMEOS_RUNTIME_PLANNED_MAINTENANCE
+  if (envValue && envValue !== '0' && envValue.toLowerCase() !== 'false') {
+    return {
+      planned_maintenance: true,
+      classification: envValue === '1' || envValue.toLowerCase() === 'true' ? 'planned_hardware_maintenance' : envValue,
+      reason: 'Runtime endpoint downtime is marked as planned maintenance by environment.',
+      blocks_runtime_dependent_runs: true,
+      requires_recheck_after: true,
+    }
+  }
+
+  return { planned_maintenance: false }
+}
+
+function activeMaintenance(state?: ModelRuntimeMaintenanceState): ModelRuntimeMaintenanceState {
+  return state?.planned_maintenance === true ? state : { planned_maintenance: false }
+}
+
+function maintenanceAffectsRoute(route: ModelRuntimeRoute, state: ModelRuntimeMaintenanceState): boolean {
+  if (!state.planned_maintenance) return false
+  const node = String(route.node ?? '').toLowerCase()
+  const endpoint = String(route.endpoint ?? '').toLowerCase()
+  const runtimeType = String(route.runtime_type ?? '').toLowerCase()
+  const affectedNodes = (state.affected_nodes ?? []).map(item => item.toLowerCase())
+  const affectedRuntimeTypes = (state.affected_runtime_types ?? []).map(item => item.toLowerCase())
+
+  if (affectedNodes.some(item => node.includes(item))) return true
+  if (affectedRuntimeTypes.includes(runtimeType)) return true
+  return /spark|dgx/.test(node) || /192\.168\.0\./.test(endpoint)
+}
+
+function maintenanceSummary(state: ModelRuntimeMaintenanceState): ModelRuntimeCheckResult['planned_maintenance'] {
+  return {
+    active: state.planned_maintenance === true,
+    classification: state.planned_maintenance ? state.classification ?? 'planned_hardware_maintenance' : undefined,
+    reason: state.planned_maintenance ? state.reason ?? 'Runtime endpoints are under planned hardware maintenance.' : undefined,
   }
 }
 
@@ -247,7 +360,29 @@ function endpointModelsUrl(endpoint: string): string {
   return trimmed.endsWith('/v1') ? `${trimmed}/models` : `${trimmed}/v1/models`
 }
 
-function endpointFailureFinding(route: ModelRuntimeRoute, evidence: string, explicitlyTargeted: boolean): ModelRuntimeFinding {
+function endpointFailureFinding(
+  route: ModelRuntimeRoute,
+  evidence: string,
+  explicitlyTargeted: boolean,
+  maintenance: ModelRuntimeMaintenanceState,
+): ModelRuntimeFinding {
+  if (maintenanceAffectsRoute(route, maintenance)) {
+    route.endpoint_status = 'planned_maintenance'
+    return finding({
+      id: 'model_runtime.planned_hardware_maintenance',
+      severity: 'info',
+      layer: 'model_runtime',
+      agent: route.agent,
+      model: route.model,
+      endpoint: route.endpoint,
+      message: 'Runtime endpoint is unavailable during planned DGX/Spark hardware maintenance.',
+      evidence,
+      suggested_action: 'Do not change routing for this outage; re-run endpoint checks after hardware maintenance ends.',
+      blocks_operator: true,
+      blocks_product_work: true,
+    })
+  }
+
   if (route.optional_runtime && !explicitlyTargeted) {
     route.endpoint_status = 'optional_offline'
     return finding({
@@ -280,7 +415,13 @@ function endpointFailureFinding(route: ModelRuntimeRoute, evidence: string, expl
   })
 }
 
-async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<ModelRuntimeCheckOptions, 'timeoutMs'>> & Pick<ModelRuntimeCheckOptions, 'fetchImpl'> & { explicitlyTargeted: boolean }): Promise<ModelRuntimeFinding | null> {
+async function checkEndpoint(
+  route: ModelRuntimeRoute,
+  options: Required<Pick<ModelRuntimeCheckOptions, 'timeoutMs'>> & Pick<ModelRuntimeCheckOptions, 'fetchImpl'> & {
+    explicitlyTargeted: boolean
+    maintenance: ModelRuntimeMaintenanceState
+  },
+): Promise<ModelRuntimeFinding | null> {
   if (!isEndpointRuntime(route)) {
     route.endpoint_status = 'external_ok'
     route.latency_ms = null
@@ -300,7 +441,7 @@ async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<Mo
     route.timed_out = false
     if (!response.ok) {
       route.endpoint_status = 'unreachable'
-      return endpointFailureFinding(route, `HTTP ${response.status} ${response.statusText}`, options.explicitlyTargeted)
+      return endpointFailureFinding(route, `HTTP ${response.status} ${response.statusText}`, options.explicitlyTargeted, options.maintenance)
     }
     route.endpoint_status = 'ok'
     return null
@@ -310,7 +451,7 @@ async function checkEndpoint(route: ModelRuntimeRoute, options: Required<Pick<Mo
       ? /abort|timeout|timed/i.test(error.name) || /abort|timeout|timed/i.test(error.message)
       : /abort|timeout|timed/i.test(String(error))
     route.endpoint_status = 'unreachable'
-    return endpointFailureFinding(route, error instanceof Error ? error.message : String(error), options.explicitlyTargeted)
+    return endpointFailureFinding(route, error instanceof Error ? error.message : String(error), options.explicitlyTargeted, options.maintenance)
   } finally {
     clearTimeout(timeout)
   }
@@ -492,14 +633,139 @@ function staticFindings(repoRoot: string, agentFilter?: string): { routes: Model
   return { routes: routeList, findings }
 }
 
-function resultFrom(repoRoot: string, checkEndpoints: boolean, routes: ModelRuntimeRoute[], findings: ModelRuntimeFinding[]): ModelRuntimeCheckResult {
+function legacyReadiness(status: ModelRuntimeOverallStatus): ModelRuntimeHistorySummary['overall_readiness'] {
+  if (status === 'HEALTHY') return 'RUNTIME_HEALTHY'
+  if (status === 'BLOCKED_REQUIRED_FAILURE' || status === 'PLANNED_MAINTENANCE') return 'RUNTIME_BLOCKED'
+  if (status === 'UNKNOWN_NOT_CHECKED' || status === 'STALE_HISTORY' || status === 'RECHECK_REQUIRED') return 'UNKNOWN'
+  return 'RUNTIME_DEGRADED'
+}
+
+function computeCheckReadiness(params: {
+  checkEndpoints: boolean
+  routes: ModelRuntimeRoute[]
+  summary: ModelRuntimeSummary
+  generatedAt: string
+  maintenance: ModelRuntimeMaintenanceState
+  staleAfterMinutes: number
+}): ModelRuntimeReadiness {
+  const maintenance = activeMaintenance(params.maintenance)
+  const optionalDegraded = params.routes.some(route => route.endpoint_status === 'optional_offline')
+  const requiredEndpointFailed = params.routes.some(route => {
+    if (route.optional_runtime || route.runtime_required === 'on_demand') return false
+    return route.endpoint_status === 'unreachable' || route.timed_out === true
+  })
+  const hasHighOrCritical = params.summary.critical > 0 || params.summary.high > 0
+
+  if (maintenance.planned_maintenance) {
+    return {
+      overall_status: 'PLANNED_MAINTENANCE',
+      readiness: 'blocked',
+      reason: maintenance.reason ?? 'DGX/Spark endpoints are unavailable because of planned hardware maintenance.',
+      freshness_status: params.checkEndpoints ? 'maintenance' : 'not_checked',
+      last_checked_at: params.checkEndpoints ? params.generatedAt : undefined,
+      age_ms: null,
+      age_minutes: null,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: true,
+      maintenance_classification: maintenance.classification ?? 'planned_hardware_maintenance',
+      blocking_impact: 'Blocks runtime-dependent autonomous/night/large runs; does not indicate a routing defect.',
+      next_required_action: 'After maintenance ends, run model-runtime-check --check-endpoints --record-history before autonomous/night/large runs.',
+    }
+  }
+
+  if (hasHighOrCritical || requiredEndpointFailed) {
+    return {
+      overall_status: 'BLOCKED_REQUIRED_FAILURE',
+      readiness: 'blocked',
+      reason: 'A required runtime route has a high/critical finding or endpoint failure.',
+      freshness_status: params.checkEndpoints ? 'fresh' : 'not_checked',
+      last_checked_at: params.checkEndpoints ? params.generatedAt : undefined,
+      age_ms: null,
+      age_minutes: null,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: false,
+      blocking_impact: 'Blocks runtime-dependent autonomous/night/large runs until fixed or rechecked.',
+      next_required_action: 'Fix the required runtime finding and re-run model-runtime-check --check-endpoints --record-history.',
+    }
+  }
+
+  if (!params.checkEndpoints) {
+    return {
+      overall_status: 'UNKNOWN_NOT_CHECKED',
+      readiness: 'unknown',
+      reason: 'Static runtime routing passed; endpoint health has not been checked in this command.',
+      freshness_status: 'not_checked',
+      age_ms: null,
+      age_minutes: null,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: false,
+      blocking_impact: 'Runtime-dependent autonomous/night/large runs require a fresh endpoint check.',
+      next_required_action: 'Run model-runtime-check --check-endpoints --record-history before runtime-dependent autonomous/night/large runs.',
+    }
+  }
+
+  if (optionalDegraded) {
+    return {
+      overall_status: 'DEGRADED_OPTIONAL',
+      readiness: 'degraded',
+      reason: 'Only optional/on-demand runtime routes are offline.',
+      freshness_status: 'fresh',
+      last_checked_at: params.generatedAt,
+      age_ms: null,
+      age_minutes: null,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: false,
+      blocking_impact: 'Does not block governance unless a matching optional runtime workorder is active.',
+      next_required_action: 'Start or recheck optional runtimes only when a matching workorder requires them.',
+    }
+  }
+
+  return {
+    overall_status: 'HEALTHY',
+    readiness: 'ready',
+    reason: 'Active required runtime routes are healthy for this check.',
+    freshness_status: 'fresh',
+    last_checked_at: params.generatedAt,
+    age_ms: null,
+    age_minutes: null,
+    stale_after_minutes: params.staleAfterMinutes,
+    planned_maintenance: false,
+    blocking_impact: 'No runtime-health blocker from this check.',
+    next_required_action: 'Continue with governance-only work; keep product work closed unless Tom opens it.',
+  }
+}
+
+function resultFrom(
+  repoRoot: string,
+  checkEndpoints: boolean,
+  routes: ModelRuntimeRoute[],
+  findings: ModelRuntimeFinding[],
+  maintenance: ModelRuntimeMaintenanceState,
+  staleAfterMinutes: number,
+): ModelRuntimeCheckResult {
   const summary = summarize(findings)
   const hasHighOrCriticalFindings = summary.critical > 0 || summary.high > 0
+  const generatedAt = new Date().toISOString()
+  const readiness = computeCheckReadiness({
+    checkEndpoints,
+    routes,
+    summary,
+    generatedAt,
+    maintenance,
+    staleAfterMinutes,
+  })
   return {
     schema_version: 1,
-    generated_at: new Date().toISOString(),
+    generated_at: generatedAt,
     repo_root: repoRoot,
     check_endpoints: checkEndpoints,
+    overall_status: readiness.overall_status,
+    readiness,
+    freshness_status: readiness.freshness_status,
+    last_checked_at: readiness.last_checked_at,
+    planned_maintenance: maintenanceSummary(activeMaintenance(maintenance)),
+    blocking_impact: readiness.blocking_impact,
+    next_required_action: readiness.next_required_action,
     hasHighOrCriticalFindings,
     exitCode: hasHighOrCriticalFindings ? 1 : 0,
     summary,
@@ -616,7 +882,133 @@ function currentRuntimeRouteIds(repoRoot: string): Set<string> | undefined {
   }
 }
 
-function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], filePath: string, currentRouteIds?: Set<string>): ModelRuntimeHistorySummary {
+function computeHistoryReadiness(params: {
+  records: ModelRuntimeHistoryRecord[]
+  routes: ModelRuntimeHistoryRouteSummary[]
+  latestByRoute: Map<string, ModelRuntimeHistoryRecord>
+  generatedAt: string
+  staleAfterMinutes: number
+  maintenance: ModelRuntimeMaintenanceState
+  now: Date
+}): ModelRuntimeReadiness {
+  const maintenance = activeMaintenance(params.maintenance)
+  const timestamps = params.records.map(record => record.timestamp).sort()
+  const lastCheckedAt = timestamps[timestamps.length - 1]
+  const ageMs = lastCheckedAt ? Math.max(0, params.now.getTime() - new Date(lastCheckedAt).getTime()) : null
+  const ageMinutes = typeof ageMs === 'number' ? Math.round(ageMs / 60000) : null
+
+  if (maintenance.planned_maintenance) {
+    return {
+      overall_status: 'PLANNED_MAINTENANCE',
+      readiness: 'blocked',
+      reason: maintenance.reason ?? 'DGX/Spark endpoints are unavailable because of planned hardware maintenance.',
+      freshness_status: 'maintenance',
+      last_checked_at: lastCheckedAt,
+      age_ms: ageMs,
+      age_minutes: ageMinutes,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: true,
+      maintenance_classification: maintenance.classification ?? 'planned_hardware_maintenance',
+      blocking_impact: 'Blocks runtime-dependent autonomous/night/large runs; does not indicate a routing defect.',
+      next_required_action: 'After maintenance ends, run model-runtime-check --check-endpoints --record-history before autonomous/night/large runs.',
+    }
+  }
+
+  if (!lastCheckedAt) {
+    return {
+      overall_status: 'UNKNOWN_NOT_CHECKED',
+      readiness: 'unknown',
+      reason: 'No runtime history has been recorded yet.',
+      freshness_status: 'unknown',
+      age_ms: null,
+      age_minutes: null,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: false,
+      blocking_impact: 'Runtime-dependent autonomous/night/large runs require a fresh endpoint check.',
+      next_required_action: 'Run model-runtime-check --check-endpoints --record-history.',
+    }
+  }
+
+  if (typeof ageMinutes === 'number' && ageMinutes > params.staleAfterMinutes) {
+    return {
+      overall_status: 'STALE_HISTORY',
+      readiness: 'unknown',
+      reason: `Latest runtime history is ${ageMinutes} minutes old and exceeds the ${params.staleAfterMinutes} minute freshness threshold.`,
+      freshness_status: 'stale',
+      last_checked_at: lastCheckedAt,
+      age_ms: ageMs,
+      age_minutes: ageMinutes,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: false,
+      blocking_impact: 'Stale history cannot prove current readiness for runtime-dependent autonomous/night/large runs.',
+      next_required_action: 'Record a fresh endpoint check before runtime-dependent autonomous/night/large runs.',
+    }
+  }
+
+  const requiredBlocked = params.routes.some(route => {
+    if (!route.current_route || !route.required) return false
+    const latest = params.latestByRoute.get(route.route_id)
+    if (!latest) return false
+    return latest.endpoint_status === 'unreachable' ||
+      latest.timed_out ||
+      severityRank[latest.severity] >= severityRank.high ||
+      latest.finding_ids.some(id => !id.includes('optional') && !id.includes('planned_hardware_maintenance'))
+  })
+
+  if (requiredBlocked) {
+    return {
+      overall_status: 'BLOCKED_REQUIRED_FAILURE',
+      readiness: 'blocked',
+      reason: 'Latest active required runtime history contains a required route failure.',
+      freshness_status: 'fresh',
+      last_checked_at: lastCheckedAt,
+      age_ms: ageMs,
+      age_minutes: ageMinutes,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: false,
+      blocking_impact: 'Blocks runtime-dependent autonomous/night/large runs until fixed or rechecked.',
+      next_required_action: 'Fix the required runtime failure and record a fresh endpoint check.',
+    }
+  }
+
+  const optionalDegraded = params.routes.some(route => route.current_route && !route.required && route.last_status === 'optional_offline')
+  if (optionalDegraded) {
+    return {
+      overall_status: 'DEGRADED_OPTIONAL',
+      readiness: 'degraded',
+      reason: 'Latest active failures are optional/on-demand runtime routes.',
+      freshness_status: 'fresh',
+      last_checked_at: lastCheckedAt,
+      age_ms: ageMs,
+      age_minutes: ageMinutes,
+      stale_after_minutes: params.staleAfterMinutes,
+      planned_maintenance: false,
+      blocking_impact: 'Does not block governance unless a matching optional runtime workorder is active.',
+      next_required_action: 'Recheck optional runtimes only when matching work requires them.',
+    }
+  }
+
+  return {
+    overall_status: 'HEALTHY',
+    readiness: 'ready',
+    reason: 'Latest active required runtime history is healthy.',
+    freshness_status: 'fresh',
+    last_checked_at: lastCheckedAt,
+    age_ms: ageMs,
+    age_minutes: ageMinutes,
+    stale_after_minutes: params.staleAfterMinutes,
+    planned_maintenance: false,
+    blocking_impact: 'No current runtime-history blocker.',
+    next_required_action: 'Continue governance-only work; keep product work closed unless Tom opens it.',
+  }
+}
+
+function summarizeModelRuntimeHistory(
+  records: ModelRuntimeHistoryRecord[],
+  filePath: string,
+  currentRouteIds?: Set<string>,
+  options: { staleAfterMinutes?: number; maintenance?: ModelRuntimeMaintenanceState; now?: Date } = {},
+): ModelRuntimeHistorySummary {
   const byRoute = new Map<string, ModelRuntimeHistoryRecord[]>()
   for (const record of records) {
     const bucket = byRoute.get(record.route_id) ?? []
@@ -656,19 +1048,19 @@ function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], file
     const previous = latestByRoute.get(record.route_id)
     if (!previous || previous.timestamp.localeCompare(record.timestamp) < 0) latestByRoute.set(record.route_id, record)
   }
-  const requiredBlocked = routes.some(route => {
-    if (!route.current_route || !route.required) return false
-    const latest = latestByRoute.get(route.route_id)
-    if (!latest) return false
-    return latest.endpoint_status === 'unreachable' ||
-      latest.timed_out ||
-      severityRank[latest.severity] >= severityRank.high ||
-      latest.finding_ids.some(id => !id.includes('optional'))
-  })
-  const degraded = routes.some(route => route.failures_count > 0 || route.last_status === 'optional_offline')
   const timestamps = records.map(record => record.timestamp).sort()
+  const generatedAt = new Date().toISOString()
+  const readiness = computeHistoryReadiness({
+    records,
+    routes,
+    latestByRoute,
+    generatedAt,
+    staleAfterMinutes: options.staleAfterMinutes ?? DEFAULT_STALE_AFTER_MINUTES,
+    maintenance: activeMaintenance(options.maintenance),
+    now: options.now ?? new Date(),
+  })
   return {
-    generated_at: new Date().toISOString(),
+    generated_at: generatedAt,
     project_id: records[0]?.project_id ?? DEFAULT_PROJECT_ID,
     history_path: filePath,
     total_records: records.length,
@@ -677,18 +1069,40 @@ function summarizeModelRuntimeHistory(records: ModelRuntimeHistoryRecord[], file
       from: timestamps[0],
       to: timestamps[timestamps.length - 1],
     },
-    overall_readiness: records.length === 0 ? 'UNKNOWN' : requiredBlocked ? 'RUNTIME_BLOCKED' : degraded ? 'RUNTIME_DEGRADED' : 'RUNTIME_HEALTHY',
+    overall_readiness: legacyReadiness(readiness.overall_status),
+    overall_status: readiness.overall_status,
+    readiness,
+    freshness_status: readiness.freshness_status,
+    last_checked_at: readiness.last_checked_at,
+    age_ms: readiness.age_ms,
+    age_minutes: readiness.age_minutes,
+    stale_after_minutes: readiness.stale_after_minutes,
+    planned_maintenance: maintenanceSummary(activeMaintenance(options.maintenance)),
+    blocking_impact: readiness.blocking_impact,
+    next_required_action: readiness.next_required_action,
     routes,
   }
 }
 
-export function readModelRuntimeHistorySummary(options: { repoRoot?: string; historyDir?: string; maxHistory?: number } = {}): ModelRuntimeHistorySummary {
+export function readModelRuntimeHistorySummary(options: {
+  repoRoot?: string
+  historyDir?: string
+  maxHistory?: number
+  staleAfterMinutes?: number
+  plannedMaintenance?: ModelRuntimeMaintenanceState
+  now?: Date
+} = {}): ModelRuntimeHistorySummary {
   const repoRoot = options.repoRoot ?? process.cwd()
   const filePath = historyPath(repoRoot, options.historyDir)
   return summarizeModelRuntimeHistory(
     readHistoryRecords(repoRoot, options.historyDir, options.maxHistory),
     filePath,
     currentRuntimeRouteIds(repoRoot),
+    {
+      staleAfterMinutes: options.staleAfterMinutes,
+      maintenance: options.plannedMaintenance ?? loadRuntimeMaintenance(repoRoot),
+      now: options.now,
+    },
   )
 }
 
@@ -697,10 +1111,12 @@ export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions & { check
 export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions = {}): ModelRuntimeCheckResult | Promise<ModelRuntimeCheckResult> {
   const repoRoot = options.repoRoot ?? process.cwd()
   const checkEndpoints = options.checkEndpoints === true
+  const maintenance = activeMaintenance(options.plannedMaintenance ?? loadRuntimeMaintenance(repoRoot))
+  const staleAfterMinutes = options.staleAfterMinutes ?? DEFAULT_STALE_AFTER_MINUTES
   const { routes, findings } = staticFindings(repoRoot, options.agent)
 
   if (!checkEndpoints) {
-    const result = resultFrom(repoRoot, false, routes, findings)
+    const result = resultFrom(repoRoot, false, routes, findings, maintenance, staleAfterMinutes)
     if (options.recordHistory) recordModelRuntimeHistory(result, { repoRoot, projectId: options.projectId, historyDir: options.historyDir })
     return result
   }
@@ -709,11 +1125,12 @@ export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions = {}): Mo
       timeoutMs: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
       fetchImpl: options.fetchImpl,
       explicitlyTargeted: options.agent === route.agent,
+      maintenance,
     }))).then(endpointFindings => {
       const result = resultFrom(repoRoot, true, routes, [
         ...findings,
         ...endpointFindings.filter(Boolean) as ModelRuntimeFinding[],
-      ])
+      ], maintenance, staleAfterMinutes)
       if (options.recordHistory) recordModelRuntimeHistory(result, { repoRoot, projectId: options.projectId, historyDir: options.historyDir })
       return result
     })
@@ -726,6 +1143,10 @@ export function formatModelRuntimeReport(result: ModelRuntimeCheckResult): strin
     `Repo: ${result.repo_root}`,
     `Generated: ${result.generated_at}`,
     `Endpoint health checked: ${result.check_endpoints}`,
+    `Runtime status: ${result.overall_status}`,
+    `Freshness: ${result.freshness_status}`,
+    `Reason: ${result.readiness.reason}`,
+    `Next action: ${result.next_required_action}`,
     `Product work gate: ${result.product_work_gate.reason}`,
     '',
     `Summary: critical=${result.summary.critical}, high=${result.summary.high}, medium=${result.summary.medium}, low=${result.summary.low}, info=${result.summary.info}`,
@@ -765,6 +1186,12 @@ export function formatModelRuntimeHistorySummary(summary: ModelRuntimeHistorySum
     `Project: ${summary.project_id}`,
     `History: ${summary.history_path}`,
     `Readiness: ${summary.overall_readiness}`,
+    `Status: ${summary.overall_status}`,
+    `Freshness: ${summary.freshness_status}`,
+    `Last checked: ${summary.last_checked_at ?? 'n/a'}`,
+    `Age minutes: ${summary.age_minutes ?? 'n/a'}`,
+    `Reason: ${summary.readiness.reason}`,
+    `Next action: ${summary.next_required_action}`,
     `Total records: ${summary.total_records}`,
     `Total checks: ${summary.total_checks}`,
     `Time range: ${summary.time_range.from ?? 'n/a'} -> ${summary.time_range.to ?? 'n/a'}`,
@@ -798,6 +1225,17 @@ async function main(): Promise<number> {
   const timeoutMs = timeoutIndex >= 0 ? Number(args[timeoutIndex + 1]) : DEFAULT_TIMEOUT_MS
   const maxHistoryIndex = args.indexOf('--max-history')
   const maxHistory = maxHistoryIndex >= 0 ? Number(args[maxHistoryIndex + 1]) : undefined
+  const staleAfterIndex = args.indexOf('--stale-after-minutes')
+  const staleAfterMinutes = staleAfterIndex >= 0 ? Number(args[staleAfterIndex + 1]) : DEFAULT_STALE_AFTER_MINUTES
+  const plannedMaintenance = args.includes('--planned-hardware-maintenance')
+    ? {
+        planned_maintenance: true,
+        classification: 'planned_hardware_maintenance',
+        reason: 'DGX/Spark endpoints are unavailable because of planned hardware maintenance.',
+        blocks_runtime_dependent_runs: true,
+        requires_recheck_after: true,
+      } satisfies ModelRuntimeMaintenanceState
+    : undefined
   const projectIndex = args.indexOf('--project')
   const projectId = projectIndex >= 0 ? args[projectIndex + 1] : DEFAULT_PROJECT_ID
   const allowed = new Set([
@@ -812,6 +1250,9 @@ async function main(): Promise<number> {
     timeoutIndex >= 0 ? args[timeoutIndex + 1] : '',
     '--max-history',
     maxHistoryIndex >= 0 ? args[maxHistoryIndex + 1] : '',
+    '--stale-after-minutes',
+    staleAfterIndex >= 0 ? args[staleAfterIndex + 1] : '',
+    '--planned-hardware-maintenance',
     '--project',
     projectId,
   ])
@@ -821,20 +1262,21 @@ async function main(): Promise<number> {
     (agentIndex >= 0 && !agent) ||
     (timeoutIndex >= 0 && !Number.isFinite(timeoutMs)) ||
     (maxHistoryIndex >= 0 && !Number.isFinite(maxHistory)) ||
+    (staleAfterIndex >= 0 && !Number.isFinite(staleAfterMinutes)) ||
     (projectIndex >= 0 && !projectId)
   ) {
-    console.error('Usage: npx tsx system/control-plane/model-runtime-check.ts [--json] [--check-endpoints] [--record-history] [--history-summary|--history-json] [--max-history <n>] [--agent <agent-id>] [--timeout-ms <ms>] [--project <id>]')
+    console.error('Usage: npx tsx system/control-plane/model-runtime-check.ts [--json] [--check-endpoints] [--record-history] [--history-summary|--history-json] [--max-history <n>] [--stale-after-minutes <n>] [--planned-hardware-maintenance] [--agent <agent-id>] [--timeout-ms <ms>] [--project <id>]')
     return 2
   }
 
   try {
     if (historySummary) {
-      const summary = readModelRuntimeHistorySummary({ maxHistory })
+      const summary = readModelRuntimeHistorySummary({ maxHistory, staleAfterMinutes, plannedMaintenance })
       console.log(historyJson ? JSON.stringify(summary, null, 2) : formatModelRuntimeHistorySummary(summary))
-      return summary.overall_readiness === 'RUNTIME_BLOCKED' ? 1 : 0
+      return summary.overall_status === 'BLOCKED_REQUIRED_FAILURE' ? 1 : 0
     }
 
-    const result = await runModelRuntimeCheck({ checkEndpoints, agent, timeoutMs, recordHistory, projectId })
+    const result = await runModelRuntimeCheck({ checkEndpoints, agent, timeoutMs, recordHistory, projectId, staleAfterMinutes, plannedMaintenance })
     console.log(json ? JSON.stringify(result, null, 2) : formatModelRuntimeReport(result))
     return result.exitCode
   } catch (error) {

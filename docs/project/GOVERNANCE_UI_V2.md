@@ -42,7 +42,9 @@ The Runtime page exposes four read-only/operator-safe buttons:
 
 Only **Record endpoint check** writes ignored local runtime history under `system/reports/model-runtime-history/`. It still uses short `/v1/models` endpoint checks and does not send workorder prompts.
 
-The history summary view shows overall readiness, total checks, total records, per-route last status, average/max latency, timeout count, failure count, last OK, and last failure.
+The history summary view shows runtime V2 status, freshness, last check time, age, overall readiness, total checks, total records, per-route last status, average/max latency, timeout count, failure count, last OK, and last failure.
+
+When `system/control-plane/runtime-maintenance.json` marks DGX/Spark planned maintenance active, the Runtime page shows a planned-maintenance banner instead of scary routing-failure language. This state blocks runtime-dependent autonomous/night/large runs, but it does not ask Tom to fix Spark routing while the hardware is intentionally powered down. After maintenance ends, Tom must record a fresh endpoint check before large or autonomous runtime-dependent work.
 
 ## Safety Model
 

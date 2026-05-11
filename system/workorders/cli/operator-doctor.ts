@@ -96,7 +96,7 @@ export interface OperatorDoctorResult {
     allowed_agents: string[]
     default_timeout_ms: number
   }
-  runtime_history: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'total_records' | 'total_checks' | 'routes'> & {
+  runtime_history: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'overall_status' | 'freshness_status' | 'last_checked_at' | 'age_minutes' | 'blocking_impact' | 'next_required_action' | 'planned_maintenance' | 'total_records' | 'total_checks' | 'routes'> & {
     status: 'available' | 'missing'
     message: string
   }
@@ -260,9 +260,16 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   const runtimeHistory: OperatorDoctorResult['runtime_history'] = {
     status: history.total_records > 0 ? 'available' : 'missing',
     message: history.total_records > 0
-      ? `Runtime history readiness is ${history.overall_readiness}.`
-      : 'No runtime history recorded yet.',
+      ? `Runtime history status is ${history.overall_status}; freshness=${history.freshness_status}.`
+      : history.next_required_action,
     overall_readiness: history.overall_readiness,
+    overall_status: history.overall_status,
+    freshness_status: history.freshness_status,
+    last_checked_at: history.last_checked_at,
+    age_minutes: history.age_minutes,
+    blocking_impact: history.blocking_impact,
+    next_required_action: history.next_required_action,
+    planned_maintenance: history.planned_maintenance,
     total_records: history.total_records,
     total_checks: history.total_checks,
     routes: history.routes.slice(0, 12),
@@ -420,7 +427,8 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   lines.push(`${result.codex_worker.status}: enabled=${result.codex_worker.codex_worker_enabled} dispatcher=${result.codex_worker.allow_dispatcher_integration} agents=${result.codex_worker.allowed_agents.join(', ')}`)
   lines.push('')
   lines.push('## Runtime History')
-  lines.push(`${result.runtime_history.status}: readiness=${result.runtime_history.overall_readiness} records=${result.runtime_history.total_records} checks=${result.runtime_history.total_checks}`)
+  lines.push(`${result.runtime_history.status}: status=${result.runtime_history.overall_status} freshness=${result.runtime_history.freshness_status} readiness=${result.runtime_history.overall_readiness} records=${result.runtime_history.total_records} checks=${result.runtime_history.total_checks}`)
+  lines.push(`next_required_action: ${result.runtime_history.next_required_action}`)
   lines.push('')
   lines.push('## Product Gate')
   lines.push(`${result.product_gate.status}: ${result.product_gate.reason}`)

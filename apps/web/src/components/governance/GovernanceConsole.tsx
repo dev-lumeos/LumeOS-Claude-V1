@@ -123,7 +123,7 @@ function toneForState(value: unknown): string {
   const normalized = stringValue(value, 'unknown').toLowerCase()
   if (/done|complete|completed|pass|ok|ready|granted/.test(normalized)) return 'pass'
   if (/blocked|fail|fix|required|stop|denied|error/.test(normalized)) return 'blocked'
-  if (/pending|approval|cleanup|warn|partial|medium/.test(normalized)) return 'attention'
+  if (/planned|maintenance|stale|recheck|pending|approval|cleanup|warn|partial|medium/.test(normalized)) return 'attention'
   if (/optional|info|not_checked|not checked/.test(normalized)) return 'info'
   return 'idle'
 }
@@ -526,6 +526,11 @@ function RuntimeCenter({ result, runStatic, runEndpoints, recordEndpoints, runHi
   const historyMode = result?.action === 'modelRuntime.historySummary'
   const routes = historyMode ? arrayRecords(parsed.routes) : arrayRecords(parsed.routes)
   const summary = jsonRecord(parsed.summary)
+  const readiness = jsonRecord(parsed.readiness)
+  const plannedMaintenance = jsonRecord(parsed.planned_maintenance)
+  const overallStatus = stringValue(parsed.overall_status ?? parsed.overall_readiness, historyMode ? 'UNKNOWN_NOT_CHECKED' : 'UNKNOWN_NOT_CHECKED')
+  const freshness = stringValue(parsed.freshness_status ?? readiness.freshness_status, 'unknown')
+  const nextRequiredAction = stringValue(parsed.next_required_action ?? readiness.next_required_action, '')
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
@@ -535,12 +540,35 @@ function RuntimeCenter({ result, runStatic, runEndpoints, recordEndpoints, runHi
         <button onClick={runHistory} className="gov-button gov-button-secondary">Show history summary</button>
       </div>
       {mealcamOptionalOk ? <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">MealCam runtime is optional/on-demand and offline is not a governance blocker.</div> : null}
+      {plannedMaintenance.active ? (
+        <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950">
+          <div className="font-semibold">Planned hardware maintenance</div>
+          <div>{stringValue(plannedMaintenance.reason, 'DGX/Spark endpoints are under planned maintenance. This is not a routing defect.')}</div>
+          <div className="mt-1 text-xs">Runtime-dependent autonomous/night/large runs stay blocked until maintenance ends and a fresh endpoint check is recorded.</div>
+        </div>
+      ) : null}
       {historyMode ? <RuntimeHistorySummary data={parsed} /> : null}
       <div className="grid gap-3 md:grid-cols-5">
         {historyMode
-          ? <Info label="Readiness" value={stringValue(parsed.overall_readiness, 'UNKNOWN')} />
+          ? <>
+              <Info label="Runtime Status" value={overallStatus} />
+              <Info label="Freshness" value={freshness} />
+              <Info label="Last Checked" value={stringValue(parsed.last_checked_at, 'n/a')} />
+              <Info label="Age Minutes" value={stringValue(parsed.age_minutes, 'n/a')} />
+              <Info label="Legacy Readiness" value={stringValue(parsed.overall_readiness, 'UNKNOWN')} />
+            </>
           : ['critical', 'high', 'medium', 'low', 'info'].map(key => <Info key={key} label={key} value={String(summary[key] ?? 0)} />)}
       </div>
+      {!historyMode && Object.keys(parsed).length > 0 ? (
+        <Panel title="Runtime Readiness">
+          <div className="grid gap-3 md:grid-cols-4">
+            <Info label="Status" value={overallStatus} />
+            <Info label="Freshness" value={freshness} />
+            <Info label="Blocking Impact" value={stringValue(parsed.blocking_impact ?? readiness.blocking_impact, 'n/a')} />
+            <Info label="Next Required Action" value={nextRequiredAction || 'n/a'} />
+          </div>
+        </Panel>
+      ) : null}
       <Panel title="Runtime Routes">
         <div className="grid gap-3 xl:grid-cols-2">
           {routes.length === 0 ? <EmptyState text="Run a runtime check to load routes." /> : null}
@@ -983,13 +1011,22 @@ function DetailList({ title, items }: { title: string; items: string[] }) {
 }
 
 function RuntimeHistorySummary({ data }: { data: Record<string, unknown> }) {
+  const readiness = jsonRecord(data.readiness)
   return (
     <Panel title="Runtime History">
       <div className="grid gap-3 md:grid-cols-4">
+        <Info label="Status" value={stringValue(data.overall_status, 'UNKNOWN_NOT_CHECKED')} />
+        <Info label="Freshness" value={stringValue(data.freshness_status, 'unknown')} />
+        <Info label="Last Checked" value={stringValue(data.last_checked_at, 'n/a')} />
+        <Info label="Age Minutes" value={stringValue(data.age_minutes, 'n/a')} />
         <Info label="Readiness" value={stringValue(data.overall_readiness, 'UNKNOWN')} />
         <Info label="Total Checks" value={String(data.total_checks ?? 0)} />
         <Info label="Total Records" value={String(data.total_records ?? 0)} />
         <Info label="History Path" value={stringValue(data.history_path, 'system/reports/model-runtime-history/history.jsonl')} />
+      </div>
+      <div className="mt-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+        <div><span className="font-semibold">Reason:</span> {stringValue(readiness.reason, stringValue(data.reason, 'No runtime history reason recorded.'))}</div>
+        <div className="mt-1"><span className="font-semibold">Next:</span> {stringValue(data.next_required_action ?? readiness.next_required_action, 'Record a fresh endpoint check when needed.')}</div>
       </div>
     </Panel>
   )

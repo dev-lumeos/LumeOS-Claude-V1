@@ -287,8 +287,37 @@ async function defaultCallModel(routing) {
 
     const item = finding(result, 'model_runtime.endpoint_unreachable')
     assert.equal(result.exitCode, 1)
+    assert.equal(result.overall_status, 'BLOCKED_REQUIRED_FAILURE')
     assert.equal(item?.severity, 'high')
     assert.match(item?.evidence ?? '', /ECONNREFUSED/)
+  })
+
+  it('classifies planned DGX/Spark maintenance without suggesting routing fixes', async () => {
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      checkEndpoints: true,
+      timeoutMs: 10,
+      plannedMaintenance: {
+        planned_maintenance: true,
+        classification: 'planned_hardware_maintenance',
+        reason: 'Rack installation.',
+        affected_nodes: ['spark-a', 'spark-b'],
+        blocks_runtime_dependent_runs: true,
+        requires_recheck_after: true,
+      },
+      fetchImpl: async () => {
+        throw new Error('connect ETIMEDOUT')
+      },
+    })
+
+    assert.equal(result.exitCode, 0)
+    assert.equal(result.overall_status, 'PLANNED_MAINTENANCE')
+    assert.equal(result.planned_maintenance.active, true)
+    assert.match(result.blocking_impact, /Blocks runtime-dependent autonomous\/night\/large runs/)
+    assert.equal(finding(result, 'model_runtime.endpoint_unreachable'), undefined)
+    const item = finding(result, 'model_runtime.planned_hardware_maintenance')
+    assert.equal(item?.severity, 'info')
+    assert.match(item?.suggested_action ?? '', /Do not change routing/)
   })
 
   it('downgrades optional on-demand runtime endpoint failures when not explicitly targeted', async () => {
@@ -322,6 +351,7 @@ async function defaultCallModel(routing) {
 
     const item = finding(result, 'model_runtime.optional_endpoint_offline')
     assert.equal(result.exitCode, 0)
+    assert.equal(result.overall_status, 'DEGRADED_OPTIONAL')
     assert.equal(result.summary.high, 0)
     assert.equal(item?.severity, 'info')
     assert.equal(item?.blocks_operator, false)
@@ -380,12 +410,19 @@ async function defaultCallModel(routing) {
     const report = formatModelRuntimeReport(result)
 
     assert.deepEqual(Object.keys(result).sort(), [
+      'blocking_impact',
       'check_endpoints',
       'exitCode',
       'findings',
+      'freshness_status',
       'generated_at',
       'hasHighOrCriticalFindings',
+      'last_checked_at',
+      'next_required_action',
+      'overall_status',
+      'planned_maintenance',
       'product_work_gate',
+      'readiness',
       'repo_root',
       'routes',
       'schema_version',
@@ -431,6 +468,8 @@ async function defaultCallModel(routing) {
     const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
 
     assert.equal(summary.overall_readiness, 'UNKNOWN')
+    assert.equal(summary.overall_status, 'UNKNOWN_NOT_CHECKED')
+    assert.equal(summary.freshness_status, 'unknown')
     assert.equal(summary.total_records, 0)
     assert.deepEqual(summary.routes, [])
   })
@@ -508,7 +547,7 @@ async function defaultCallModel(routing) {
     const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
     const docs = summary.routes.find(route => route.agent === 'docs-agent')
 
-    assert.equal(summary.overall_readiness, 'RUNTIME_DEGRADED')
+    assert.equal(summary.overall_status, 'HEALTHY')
     assert.equal(docs?.last_status, 'ok')
     assert.equal(docs?.failures_count, 1)
     assert.equal(docs?.current_route, true)
@@ -556,7 +595,7 @@ async function defaultCallModel(routing) {
     const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
     const docs = summary.routes.find(route => route.agent === 'docs-agent')
 
-    assert.equal(summary.overall_readiness, 'RUNTIME_DEGRADED')
+    assert.equal(summary.overall_status, 'HEALTHY')
     assert.equal(docs?.current_route, false)
     assert.equal(docs?.failures_count, 1)
   })
@@ -592,9 +631,52 @@ async function defaultCallModel(routing) {
 
     const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
     const mealcam = summary.routes.find(route => route.agent === 'mealcam-agent')
-    assert.equal(summary.overall_readiness, 'RUNTIME_DEGRADED')
+    assert.equal(summary.overall_status, 'DEGRADED_OPTIONAL')
     assert.equal(mealcam?.last_status, 'optional_offline')
     assert.equal(mealcam?.required, false)
+  })
+
+  it('stale history requires recheck and does not imply current health', () => {
+    const result = runCheck()
+    result.generated_at = '2026-05-10T00:00:00.000Z'
+    const docsRoute = result.routes.find(route => route.agent === 'docs-agent')
+    assert.ok(docsRoute)
+    docsRoute.endpoint_status = 'ok'
+    recordModelRuntimeHistory(result, { repoRoot: tmpDir, projectId: 'lumeos' })
+
+    const summary = readModelRuntimeHistorySummary({
+      repoRoot: tmpDir,
+      staleAfterMinutes: 60,
+      now: new Date('2026-05-10T03:00:00.000Z'),
+    })
+
+    assert.equal(summary.overall_status, 'STALE_HISTORY')
+    assert.equal(summary.freshness_status, 'stale')
+    assert.equal(summary.age_minutes, 180)
+    assert.match(summary.next_required_action, /Record a fresh endpoint check/)
+  })
+
+  it('planned maintenance history blocks runtime-dependent runs without routing defect', () => {
+    const result = runCheck()
+    const docsRoute = result.routes.find(route => route.agent === 'docs-agent')
+    assert.ok(docsRoute)
+    docsRoute.endpoint_status = 'unreachable'
+    docsRoute.timed_out = true
+    recordModelRuntimeHistory(result, { repoRoot: tmpDir, projectId: 'lumeos' })
+
+    const summary = readModelRuntimeHistorySummary({
+      repoRoot: tmpDir,
+      plannedMaintenance: {
+        planned_maintenance: true,
+        classification: 'planned_hardware_maintenance',
+        reason: 'Rack install.',
+      },
+    })
+
+    assert.equal(summary.overall_status, 'PLANNED_MAINTENANCE')
+    assert.equal(summary.planned_maintenance.active, true)
+    assert.match(summary.blocking_impact, /Blocks runtime-dependent autonomous\/night\/large runs/)
+    assert.match(summary.next_required_action, /After maintenance ends/)
   })
 
   it('history summary JSON output shape is stable', () => {
@@ -603,11 +685,21 @@ async function defaultCallModel(routing) {
     const summary = readModelRuntimeHistorySummary({ repoRoot: tmpDir })
 
     assert.deepEqual(Object.keys(summary).sort(), [
+      'age_minutes',
+      'age_ms',
+      'blocking_impact',
+      'freshness_status',
       'generated_at',
       'history_path',
+      'last_checked_at',
+      'next_required_action',
       'overall_readiness',
+      'overall_status',
+      'planned_maintenance',
       'project_id',
+      'readiness',
       'routes',
+      'stale_after_minutes',
       'time_range',
       'total_checks',
       'total_records',
