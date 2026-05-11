@@ -27,9 +27,14 @@ type GovernanceSnapshot = {
   projectProfile?: {
     project_id: string
     display_name: string
+    profile_kind?: string
+    active?: boolean
     repo_root?: string
     specs_root?: string
     workorders_root?: string
+    default_governance_batch?: string
+    allowed_domain_paths?: string[]
+    docs_entrypoints?: string[]
     raw_data_paths?: string[]
     forbidden_commands?: string[]
     product_gate?: { status: string; reason: string }
@@ -587,12 +592,15 @@ function Settings({ repoRoot, projectProfile }: { repoRoot: string; projectProfi
       <Panel title="Safety Rules">
         <div className="grid gap-3 md:grid-cols-2">
           <Info label="Project Profile" value={projectProfile ? `${projectProfile.display_name} (${projectProfile.project_id})` : 'LumeOS (lumeos)'} />
+          <Info label="Profile Status" value={projectProfile ? `${projectProfile.profile_kind ?? 'active'} / active=${projectProfile.active ?? true}` : 'active / active=true'} />
           <Info label="Repository" value={repoRoot || 'unknown'} />
           <Info label="Profile Repo Root" value={projectProfile?.repo_root ?? repoRoot ?? 'unknown'} />
           <Info label="Specs Root" value={projectProfile?.specs_root ?? 'docs/specs'} />
           <Info label="Workorders Root" value={projectProfile?.workorders_root ?? 'system/workorders'} />
+          <Info label="Default Governance Batch" value={projectProfile?.default_governance_batch ?? 'system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-001-batch-loader-cli.md'} />
           <Info label="Product Gate Profile" value={projectProfile?.product_gate ? `${projectProfile.product_gate.status}: ${projectProfile.product_gate.reason}` : 'closed'} />
           <Info label="Raw Data Paths" value={(projectProfile?.raw_data_paths ?? ['docs/specs/Nutrition/00_raw/']).join(', ')} />
+          <Info label="Allowed Domain Paths" value={(projectProfile?.allowed_domain_paths ?? ['docs/specs/Nutrition/', 'docs/project/', 'system/workorders/']).join(', ')} />
           <Info label="Codex Worker Policy" value={projectProfile?.codex_worker_policy ? `enabled=${projectProfile.codex_worker_policy.enabled} agents=${projectProfile.codex_worker_policy.allowed_agents?.join(', ') ?? '(none)'}` : 'LumeOS default'} />
           <Info label="Raw BLS Policy" value="Local-only and ignored." />
           <Info label="DB Reset" value="Forbidden." />

@@ -5,6 +5,7 @@ import { DEFAULT_BATCH_PATH, type CommandRequest, type GovernanceAction } from '
 import { runGovernanceCommand, type CommandExecution } from './command-runner'
 import { findRepoRoot } from './repo-root'
 import { productGateText, summaryFromJson, toneFromSummary } from './status'
+import { getProjectProfile } from '../../../../../system/project-profiles/project-profile-loader'
 
 export type GovernanceSnapshot = {
   generatedAt: string
@@ -12,9 +13,14 @@ export type GovernanceSnapshot = {
   projectProfile: {
     project_id: string
     display_name: string
+    profile_kind?: string
+    active?: boolean
     repo_root?: string
     specs_root?: string
     workorders_root?: string
+    default_governance_batch?: string
+    allowed_domain_paths?: string[]
+    docs_entrypoints?: string[]
     raw_data_paths?: string[]
     forbidden_commands?: string[]
     product_gate?: {
@@ -59,16 +65,20 @@ function readDoc(repoRoot: string, relativePath: string): string {
   }
 }
 
-function readProjectProfile(repoRoot: string): GovernanceSnapshot['projectProfile'] {
+export function readProjectProfile(repoRoot: string, projectId = 'lumeos'): GovernanceSnapshot['projectProfile'] {
   try {
-    const raw = fs.readFileSync(path.join(repoRoot, 'system/project-profiles/profiles/lumeos.json'), 'utf8')
-    const profile = JSON.parse(raw) as GovernanceSnapshot['projectProfile']
+    const profile = getProjectProfile(projectId, { repoRoot })
     return {
       project_id: profile.project_id ?? 'lumeos',
       display_name: profile.display_name ?? 'LumeOS',
+      profile_kind: profile.profile_kind,
+      active: profile.active,
       repo_root: profile.repo_root,
       specs_root: profile.specs_root,
       workorders_root: profile.workorders_root,
+      default_governance_batch: profile.default_governance_batch ?? profile.default_operator_batch,
+      allowed_domain_paths: profile.allowed_domain_paths,
+      docs_entrypoints: profile.docs_entrypoints,
       raw_data_paths: profile.raw_data_paths,
       forbidden_commands: profile.forbidden_commands,
       product_gate: profile.product_gate,
@@ -91,7 +101,7 @@ function commandValue(result: CommandExecution | undefined): string {
   return `exit ${result.exitCode}`
 }
 
-export async function buildGovernanceSnapshot(batchPath = DEFAULT_BATCH_PATH): Promise<GovernanceSnapshot> {
+export async function buildGovernanceSnapshot(batchPath = DEFAULT_BATCH_PATH, projectId = 'lumeos'): Promise<GovernanceSnapshot> {
   const commands: Partial<Record<GovernanceAction, CommandExecution>> = {}
   const repoRoot = findRepoRoot()
 
@@ -121,7 +131,7 @@ export async function buildGovernanceSnapshot(batchPath = DEFAULT_BATCH_PATH): P
   return {
     generatedAt: new Date().toISOString(),
     repoRoot,
-    projectProfile: readProjectProfile(repoRoot),
+    projectProfile: readProjectProfile(repoRoot, projectId),
     batchPath,
     commands,
     cards: [

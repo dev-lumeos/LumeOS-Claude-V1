@@ -31,6 +31,19 @@ http://127.0.0.1:5001/governance
 - Autonomy Handoff: Doctor and Dossier views surface the `autonomy_handoff` contract with final state, blocker type, dossier command, learning suggestion, safe cleanup dry-run, Codex Worker eligibility, and one next action.
 - Raw Output: stdout/stderr remains available in collapsible panels for audit/debugging, but parsed JSON summaries are preferred.
 
+## Project Profile Display
+
+The Settings page shows the active project profile context:
+
+- project id, display name, profile kind, and active flag
+- repo/spec/workorder roots
+- default governance batch
+- product gate reason
+- raw data paths and allowed domain paths
+- Codex Worker policy
+
+The UI defaults to `lumeos`. The snapshot API can load a selected profile for read-only context, including inactive fixture profiles, but V2 does not expose project activation or mutation controls.
+
 ## Runtime History UI
 
 The Runtime page exposes four read-only/operator-safe buttons:

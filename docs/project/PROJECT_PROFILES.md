@@ -20,13 +20,21 @@ Default profile:
 system/project-profiles/profiles/lumeos.json
 ```
 
+Inactive second-project fixture:
+
+```text
+system/project-profiles/profiles/fixture-beauty-club.json
+```
+
 Future project placeholder:
 
 ```text
 system/project-profiles/profiles/example-beauty-club.json.example
 ```
 
-The Beauty Club file is a skeleton only. It is not active and does not assume a repo path.
+The fixture profile is synthetic, validates against the schema, and is not active by default. It exists only to prove a non-Nutrition project context can be represented without copying governance core. It uses `repo_root: "."` inside this governance repository for testability and does not assume Tom's real Beauty Club repository path.
+
+The `.json.example` file is a skeleton for future onboarding. It is not active and does not assume a repo path.
 
 ## Required Fields
 
@@ -34,6 +42,8 @@ Each profile defines:
 
 - `project_id`
 - `display_name`
+- `profile_kind`
+- `active`
 - `repo_root`
 - `profile_version`
 - `governance_root`
@@ -51,7 +61,13 @@ Each profile defines:
 - `forbidden_commands`
 - `required_checkers`
 - `default_operator_batch`
+- `default_governance_batch`
 - `default_branch_prefix`
+- `source_chain_policy`
+- `allowed_domain_paths`
+- `runtime_policy`
+- `docs_entrypoints`
+- `ui_settings`
 - `promotion_policy`
 - `codex_worker_policy`
 
@@ -78,6 +94,8 @@ The profile owns the product-gate reason and whether conditional planning is all
 - raw BLS files remain local-only
 - Supabase `db push`, `db reset`, and migration execution remain forbidden
 
+The Beauty Club fixture profile also keeps `product_gate.status: closed`. It proves profile portability only; it does not enable Beauty Club product execution, feature work, DB work, or migrations.
+
 ## Profile-Aware Commands
 
 These commands now accept `--project <id>`:
@@ -94,7 +112,7 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --w
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --json --project lumeos
 ```
 
-The Governance UI defaults to the LumeOS profile, includes `--project lumeos` for supported commands, and displays the active profile details in Settings.
+The Governance UI defaults to the LumeOS profile, includes `--project lumeos` for supported commands, and displays the active profile details in Settings. The snapshot/profile reader can load a selected profile internally for read-only profile context, but V2 does not expose activation or mutation controls.
 
 ## Global vs Profile-Specific
 
@@ -119,12 +137,13 @@ Still global for now:
 
 ## Adding A Future Project
 
-1. Copy `example-beauty-club.json.example` to a real profile JSON file.
+1. Start from `example-beauty-club.json.example` or the inactive fixture shape.
 2. Set `repo_root` to the actual repository.
 3. Define project-specific raw data and forbidden paths.
 4. Keep `product_gate.status` closed until Tom explicitly opens it.
-5. Run the profile loader tests and profile-aware invariant/promotion checks.
-6. Only then add UI selection or operator defaults for the new project.
+5. Set `profile_kind: "active"` and `active: true` only after Tom confirms the real repo path and policy.
+6. Run the profile loader tests and profile-aware invariant/promotion checks.
+7. Only then add UI selection or operator defaults for the new project.
 
 ## Migration Path
 
@@ -140,6 +159,14 @@ This first profile layer does not rewrite every governance tool. It introduces t
 - governance learning checker project metadata
 
 Remaining LumeOS/Nutrition references should be migrated incrementally when they affect portable governance behavior.
+
+Project Profiles V2 adds:
+
+- schema-backed `profile_kind` / `active` semantics
+- an inactive `fixture-beauty-club` profile
+- profile path traversal rejection for profile roots and configured path arrays
+- read-only Governance UI snapshot support for selected profile loading
+- non-Nutrition source-chain fixture coverage
 
 ## Safety Rules
 

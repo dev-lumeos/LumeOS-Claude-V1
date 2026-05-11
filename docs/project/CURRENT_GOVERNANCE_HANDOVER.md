@@ -42,6 +42,7 @@ Current date: 2026-05-10.
 - Governance UI V2 adds a lightweight workorder dependency board, structured dossier timeline, improved doctor/approval/runtime summaries, copyable next-action commands, and collapsible raw output.
 - Governance UI browser smoke is available through `cmd.exe /c pnpm governance:ui:smoke`; it visits all `/governance` routes, checks the shell/content, and writes ignored screenshots under `tmp/governance-ui-browser-smoke/` without DGX/Spark endpoint checks.
 - Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
+- Project Profiles V2 adds an inactive `fixture-beauty-club` profile, schema-backed `profile_kind` / `active` metadata, profile path traversal rejection, read-only UI snapshot selected-profile loading, and non-Nutrition source-chain fixture coverage. This does not activate real Beauty Club product work or assume a real Beauty Club repo path.
 - Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
 - Product work remains closed unless Tom explicitly opens it.
 - Raw BLS files are local-only and ignored.
@@ -196,6 +197,7 @@ Rules:
 - `system/project-profiles/project-profile-loader.ts`
 - `system/project-profiles/project-profile.schema.json`
 - `system/project-profiles/profiles/lumeos.json`
+- `system/project-profiles/profiles/fixture-beauty-club.json`
 - `system/project-profiles/profiles/example-beauty-club.json.example`
 - `docs/project/PROJECT_PROFILES.md`
 - `docs/project/governance-learning/2026-05-10-project-profiles.md`
@@ -216,7 +218,7 @@ Rules:
 - The batch operator, operator doctor, Codex Worker, batch dossier, learning checker, promotion governance, invariant checker, source-chain checker, and Governance UI are profile-aware for LumeOS defaults.
 - Raw BLS files remain local-only through profile policy.
 - The profile layer does not open product work and does not authorize Supabase reset, push, migration execution, approval grants, or production DB commands.
-- Beauty Club exists only as an inactive example skeleton. No external project path is assumed.
+- Beauty Club exists only as an inactive fixture/example profile. No external project path is assumed and no Beauty Club product work is active.
 - Spec-source-chain checking remains Nutrition-aware for LumeOS; a fully generic source-chain graph is future profile work.
 
 ## Workorder Factory Output

@@ -8,8 +8,9 @@ export const dynamic = 'force-dynamic'
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const batchPath = url.searchParams.get('batch') ?? DEFAULT_BATCH_PATH
+  const projectId = url.searchParams.get('project') ?? 'lumeos'
   try {
-    const snapshot = await buildGovernanceSnapshot(batchPath)
+    const snapshot = await buildGovernanceSnapshot(batchPath, projectId)
     return NextResponse.json(snapshot)
   } catch (error) {
     return NextResponse.json(

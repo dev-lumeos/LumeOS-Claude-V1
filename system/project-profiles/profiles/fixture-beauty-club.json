@@ -1,10 +1,10 @@
 {
-  "profile_version": 1,
-  "project_id": "lumeos",
-  "display_name": "LumeOS",
-  "profile_kind": "active",
-  "active": true,
-  "repo_root": "D:/GitHub/LumeOS-Claude-V1",
+  "profile_version": 2,
+  "project_id": "fixture-beauty-club",
+  "display_name": "Beauty Club Fixture",
+  "profile_kind": "fixture",
+  "active": false,
+  "repo_root": ".",
   "governance_root": "system",
   "specs_root": "docs/specs",
   "workorders_root": "system/workorders",
@@ -13,16 +13,14 @@
   "learning_root": "docs/project/governance-learning",
   "runtime_state_root": "system/state",
   "approval_root": "system/approval",
-  "raw_data_paths": [
-    "docs/specs/Nutrition/00_raw/"
-  ],
+  "raw_data_paths": [],
   "ignored_local_paths": [
-    "docs/specs/Nutrition/00_raw/",
-    "system/reports/codex-worker/"
+    "system/reports/codex-worker/",
+    "system/reports/model-runtime-history/"
   ],
   "product_gate": {
     "status": "closed",
-    "reason": "Product work remains blocked unless Tom explicitly opens it. BLS/Nutrition import execution remains blocked.",
+    "reason": "Fixture profile only. Beauty Club product work is not active and remains blocked until Tom provides a real repository path and opens the project gate.",
     "conditional_planning_allowed": false
   },
   "forbidden_paths": [
@@ -31,14 +29,15 @@
     "system/state/runtime_state.json",
     "system/state/*.lock",
     "system/approval/queue.json",
-    "docs/specs/Nutrition/00_raw/**"
+    "supabase/**"
   ],
   "forbidden_commands": [
     "supabase db reset",
     "supabase db push",
     "supabase db push --linked",
     "supabase migration up",
-    "migration execution"
+    "migration execution",
+    "approval grant"
   ],
   "required_checkers": [
     "governance-invariant-check",
@@ -46,31 +45,31 @@
     "model-runtime-check",
     "governance-learning-check"
   ],
-  "default_operator_batch": "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-001-batch-loader-cli.md",
-  "default_governance_batch": "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-001-batch-loader-cli.md",
+  "default_operator_batch": "system/workorders/fixture-beauty-club/batches/BATCH-fixture.md",
+  "default_governance_batch": "system/workorders/fixture-beauty-club/batches/BATCH-fixture.md",
   "default_branch_prefix": "goal/",
   "source_chain_policy": {
     "module_index_required": true,
-    "nutrition_priority_required": true,
+    "nutrition_priority_required": false,
     "raw_sources_require_explicit_allow": true
   },
   "allowed_domain_paths": [
-    "docs/specs/Nutrition/",
+    "docs/specs/BeautyClub/",
     "docs/project/",
-    "system/workorders/"
+    "system/workorders/fixture-beauty-club/"
   ],
   "runtime_policy": {
     "require_live_hardware": false,
-    "planned_hardware_maintenance_allowed": true
+    "live_endpoint_checks_required": false
   },
   "docs_entrypoints": [
-    "docs/specs/Nutrition/INDEX.md",
-    "docs/project/CURRENT_GOVERNANCE_HANDOVER.md",
+    "docs/specs/BeautyClub/INDEX.md",
     "docs/project/PROJECT_PROFILES.md"
   ],
   "ui_settings": {
-    "selectable": true,
-    "default_profile": true
+    "selectable": false,
+    "label": "Beauty Club fixture",
+    "notice": "Synthetic inactive fixture for profile portability tests only."
   },
   "promotion_policy": {
     "require_clean_worktree": true,
@@ -79,7 +78,7 @@
     "require_typecheck": true
   },
   "codex_worker_policy": {
-    "enabled": true,
+    "enabled": false,
     "allowed_agents": [
       "senior-coding-agent",
       "senior-reviewer-agent"

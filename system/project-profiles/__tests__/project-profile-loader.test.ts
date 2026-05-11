@@ -3,6 +3,7 @@ import { describe, it, beforeEach, afterEach } from 'node:test'
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
+import Ajv2020 from 'ajv/dist/2020'
 
 import {
   getProjectProfile,
@@ -48,6 +49,21 @@ function writeProfile(projectId: string, overrides: Record<string, unknown> = {}
       allowed_agents: ['senior-coding-agent'],
       require_explicit_workorder_flag: true,
       default_timeout_ms: 120000,
+    },
+    profile_kind: 'active',
+    active: true,
+    default_governance_batch: 'system/workorders/batches/BATCH-test.md',
+    source_chain_policy: {
+      module_index_required: true,
+      nutrition_priority_required: false,
+    },
+    allowed_domain_paths: ['docs/specs/TestProject/'],
+    runtime_policy: {
+      require_live_hardware: false,
+    },
+    docs_entrypoints: ['docs/specs/TestProject/INDEX.md'],
+    ui_settings: {
+      selectable: true,
     },
     ...overrides,
   }
@@ -114,5 +130,51 @@ describe('project profile loader', () => {
     const gate = isProductWorkAllowed(profile, { planningOnly: false })
     assert.equal(gate.allowed, false)
     assert.match(gate.reason, /blocked/i)
+  })
+
+  it('loads an inactive second-project fixture profile', () => {
+    writeProfile('fixture-beauty-club', {
+      display_name: 'Beauty Club Fixture',
+      profile_kind: 'fixture',
+      active: false,
+      default_governance_batch: 'system/workorders/fixture-beauty-club/batches/BATCH-fixture.md',
+      raw_data_paths: [],
+      forbidden_paths: ['.env', '.env.*', 'system/state/runtime_state.json', 'system/approval/queue.json'],
+      allowed_domain_paths: ['docs/specs/BeautyClub/'],
+      source_chain_policy: {
+        module_index_required: true,
+        nutrition_priority_required: false,
+      },
+      docs_entrypoints: ['docs/specs/BeautyClub/INDEX.md'],
+    })
+
+    const profile = loadProjectProfile('fixture-beauty-club', { repoRoot: tmpDir })
+
+    assert.equal(profile.project_id, 'fixture-beauty-club')
+    assert.equal(profile.profile_kind, 'fixture')
+    assert.equal(profile.active, false)
+    assert.deepEqual(profile.allowed_domain_paths, ['docs/specs/BeautyClub/'])
+    assert.equal(profile.product_gate.status, 'closed')
+  })
+
+  it('rejects profile roots that traverse outside the repository', () => {
+    writeProfile('traversal', { specs_root: '../outside-specs' })
+
+    assert.throws(
+      () => loadProjectProfile('traversal', { repoRoot: tmpDir }),
+      /must be repo-relative/,
+    )
+  })
+
+  it('validates the checked-in LumeOS and second-project fixture profiles against the schema', () => {
+    const repoRoot = process.cwd()
+    const schema = JSON.parse(fs.readFileSync(path.join(repoRoot, 'system/project-profiles/project-profile.schema.json'), 'utf8'))
+    const ajv = new Ajv2020()
+    const validate = ajv.compile(schema)
+
+    for (const profileFile of ['lumeos.json', 'fixture-beauty-club.json']) {
+      const profile = JSON.parse(fs.readFileSync(path.join(repoRoot, 'system/project-profiles/profiles', profileFile), 'utf8'))
+      assert.equal(validate(profile), true, `${profileFile}: ${ajv.errorsText(validate.errors)}`)
+    }
   })
 })

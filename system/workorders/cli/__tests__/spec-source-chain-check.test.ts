@@ -130,6 +130,53 @@ function writeBatch(): void {
   ].join('\n'))
 }
 
+function writeFixtureProfile(): void {
+  write('system/project-profiles/profiles/fixture-beauty-club.json', JSON.stringify({
+    profile_version: 2,
+    project_id: 'fixture-beauty-club',
+    display_name: 'Beauty Club Fixture',
+    profile_kind: 'fixture',
+    active: false,
+    repo_root: tmpDir.replace(/\\/g, '/'),
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: [],
+    ignored_local_paths: ['system/reports/codex-worker/'],
+    product_gate: {
+      status: 'closed',
+      reason: 'Fixture product work remains blocked.',
+      conditional_planning_allowed: false,
+    },
+    forbidden_paths: ['.env', '.env.*', 'system/state/runtime_state.json', 'system/approval/queue.json'],
+    forbidden_commands: ['supabase db reset', 'supabase db push', 'supabase migration up'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/fixture-beauty-club/batches/BATCH-fixture.md',
+    default_governance_batch: 'system/workorders/fixture-beauty-club/batches/BATCH-fixture.md',
+    default_branch_prefix: 'goal/',
+    promotion_policy: { require_clean_worktree: true },
+    codex_worker_policy: {
+      enabled: false,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+    source_chain_policy: {
+      module_index_required: true,
+      nutrition_priority_required: false,
+    },
+    allowed_domain_paths: ['docs/specs/BeautyClub/'],
+    runtime_policy: { require_live_hardware: false },
+    docs_entrypoints: ['docs/specs/BeautyClub/INDEX.md'],
+    ui_settings: { selectable: false },
+  }, null, 2))
+}
+
 function runCheck(file = workorderPath()) {
   return runSpecSourceChainCheck({ repoRoot: tmpDir, workorderFile: file })
 }
@@ -268,5 +315,52 @@ describe('spec source chain checker', () => {
     assert.equal(typeof result.summary.info, 'number')
     assert.ok(Array.isArray(result.findings))
     assert.match(report, /Spec Source Chain Check/)
+  })
+
+  it('represents a non-Nutrition fixture source chain with a selected project profile', () => {
+    writeFixtureProfile()
+    write('docs/specs/BeautyClub/INDEX.md', 'Beauty Club fixture index\n')
+    write('docs/specs/BeautyClub/01_current_specs/SPEC_FIXTURE_PROFILE.md', 'Fixture spec\n')
+    write('system/workorders/fixture-beauty-club/drafts/WO-fixture-profile.md', [
+      '# Fixture WO',
+      '',
+      '```yaml',
+      'workorder_id: WO-fixture-001',
+      'agent_id: docs-agent',
+      'risk_category: docs',
+      'task: |',
+      '  Validate fixture source chain representation only.',
+      'source_refs:',
+      '  module_index: "docs/specs/BeautyClub/INDEX.md"',
+      '  current_specs:',
+      '    - "docs/specs/BeautyClub/01_current_specs/SPEC_FIXTURE_PROFILE.md"',
+      '  ssot_priority:',
+      '    - module_index',
+      '    - current_specs',
+      'expected_outputs:',
+      '  - "docs/project/fixture-beauty-club-profile-test.md"',
+      'scope_files:',
+      '  - "docs/project/fixture-beauty-club-profile-test.md"',
+      'files_allowed:',
+      '  - "docs/project/fixture-beauty-club-profile-test.md"',
+      'files_blocked:',
+      '  - "system/state/**"',
+      '  - "system/approval/**"',
+      '  - "supabase/**"',
+      'acceptance_criteria:',
+      '  - "Expected outputs are complete"',
+      '```',
+    ].join('\n'))
+
+    const result = runSpecSourceChainCheck({
+      repoRoot: tmpDir,
+      workorderFile: path.join(tmpDir, 'system/workorders/fixture-beauty-club/drafts/WO-fixture-profile.md'),
+      projectId: 'fixture-beauty-club',
+    })
+
+    assert.equal(result.project_profile?.project_id, 'fixture-beauty-club')
+    assert.equal(result.exitCode, 0)
+    assert.equal(result.summary.high, 0)
+    assert.equal(finding(result, 'source_refs.nutrition_module_index_wrong'), undefined)
   })
 })

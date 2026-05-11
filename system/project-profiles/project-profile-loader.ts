@@ -2,11 +2,14 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 export type ProductGateStatus = 'closed' | 'conditional' | 'open'
+export type ProjectProfileKind = 'active' | 'fixture' | 'example'
 
 export type ProjectProfile = {
   profile_version: number
   project_id: string
   display_name: string
+  profile_kind: ProjectProfileKind
+  active: boolean
   repo_root: string
   governance_root: string
   specs_root: string
@@ -27,7 +30,13 @@ export type ProjectProfile = {
   forbidden_commands: string[]
   required_checkers: string[]
   default_operator_batch: string
+  default_governance_batch?: string
   default_branch_prefix: string
+  source_chain_policy?: Record<string, unknown>
+  allowed_domain_paths?: string[]
+  runtime_policy?: Record<string, unknown>
+  docs_entrypoints?: string[]
+  ui_settings?: Record<string, unknown>
   promotion_policy: Record<string, unknown>
   codex_worker_policy: {
     enabled: boolean
@@ -82,6 +91,13 @@ function normalizeRelativePath(value: string): string {
   return toPosix(value).replace(/^\/+/, '').replace(/\/+$/, value.endsWith('/') ? '/' : '')
 }
 
+function assertRepoRelativePath(value: string, field: string): void {
+  const normalized = toPosix(value)
+  if (path.posix.isAbsolute(normalized) || normalized.split('/').includes('..')) {
+    throw new Error(`Project profile path must be repo-relative for ${field}: ${value}`)
+  }
+}
+
 function validateProjectId(projectId: string): void {
   if (!PROJECT_ID_RE.test(projectId)) {
     throw new Error(`Invalid project profile id: ${projectId}`)
@@ -99,8 +115,35 @@ function assertStringArray(profile: ProjectProfile, field: keyof ProjectProfile)
 }
 
 function normalizeProfile(profile: ProjectProfile, repoRoot: string): ProjectProfile {
+  const rootFields: Array<keyof ProjectProfile> = [
+    'governance_root',
+    'specs_root',
+    'workorders_root',
+    'reports_root',
+    'memory_root',
+    'learning_root',
+    'runtime_state_root',
+    'approval_root',
+  ]
+  for (const field of rootFields) {
+    assertRepoRelativePath(String(profile[field] ?? ''), String(field))
+  }
+  for (const [field, values] of Object.entries({
+    raw_data_paths: profile.raw_data_paths,
+    ignored_local_paths: profile.ignored_local_paths,
+    forbidden_paths: profile.forbidden_paths,
+    allowed_domain_paths: profile.allowed_domain_paths ?? [],
+    docs_entrypoints: profile.docs_entrypoints ?? [],
+  })) {
+    for (const value of values) assertRepoRelativePath(value, field)
+  }
+  if (profile.default_operator_batch) assertRepoRelativePath(profile.default_operator_batch, 'default_operator_batch')
+  if (profile.default_governance_batch) assertRepoRelativePath(profile.default_governance_batch, 'default_governance_batch')
+
   return {
     ...profile,
+    profile_kind: profile.profile_kind ?? 'active',
+    active: profile.active ?? profile.profile_kind !== 'fixture',
     repo_root: path.resolve(profile.repo_root || repoRoot),
     governance_root: normalizeRelativePath(profile.governance_root),
     specs_root: normalizeRelativePath(profile.specs_root),
@@ -113,6 +156,8 @@ function normalizeProfile(profile: ProjectProfile, repoRoot: string): ProjectPro
     raw_data_paths: profile.raw_data_paths.map(normalizeRelativePath),
     ignored_local_paths: profile.ignored_local_paths.map(normalizeRelativePath),
     forbidden_paths: profile.forbidden_paths.map(normalizeRelativePath),
+    allowed_domain_paths: (profile.allowed_domain_paths ?? []).map(normalizeRelativePath),
+    docs_entrypoints: (profile.docs_entrypoints ?? []).map(normalizeRelativePath),
   }
 }
 
@@ -125,11 +170,23 @@ function validateProfile(profile: ProjectProfile): void {
   if (!PROJECT_ID_RE.test(profile.project_id)) {
     throw new Error(`Invalid project profile id: ${profile.project_id}`)
   }
+  if (!['active', 'fixture', 'example'].includes(profile.profile_kind)) {
+    throw new Error(`Project profile ${profile.project_id} has invalid profile_kind.`)
+  }
+  if (profile.profile_kind !== 'active' && profile.active) {
+    throw new Error(`Project profile ${profile.project_id} cannot be active when profile_kind is ${profile.profile_kind}.`)
+  }
   assertStringArray(profile, 'raw_data_paths')
   assertStringArray(profile, 'ignored_local_paths')
   assertStringArray(profile, 'forbidden_paths')
   assertStringArray(profile, 'forbidden_commands')
   assertStringArray(profile, 'required_checkers')
+  if (profile.allowed_domain_paths !== undefined && !Array.isArray(profile.allowed_domain_paths)) {
+    throw new Error(`Project profile ${profile.project_id} allowed_domain_paths must be string[].`)
+  }
+  if (profile.docs_entrypoints !== undefined && !Array.isArray(profile.docs_entrypoints)) {
+    throw new Error(`Project profile ${profile.project_id} docs_entrypoints must be string[].`)
+  }
   if (!['closed', 'conditional', 'open'].includes(profile.product_gate.status)) {
     throw new Error(`Project profile ${profile.project_id} has invalid product gate status.`)
   }

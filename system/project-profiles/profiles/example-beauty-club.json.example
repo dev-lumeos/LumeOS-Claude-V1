@@ -2,6 +2,8 @@
   "profile_version": 1,
   "project_id": "beauty-club",
   "display_name": "Beauty Club",
+  "profile_kind": "example",
+  "active": false,
   "repo_root": "<ABSOLUTE_REPO_PATH>",
   "governance_root": "system",
   "specs_root": "docs/specs",
@@ -41,7 +43,28 @@
     "governance-learning-check"
   ],
   "default_operator_batch": "",
+  "default_governance_batch": "",
   "default_branch_prefix": "goal/",
+  "source_chain_policy": {
+    "module_index_required": true,
+    "nutrition_priority_required": false,
+    "raw_sources_require_explicit_allow": true
+  },
+  "allowed_domain_paths": [
+    "docs/specs/BeautyClub/",
+    "docs/project/",
+    "system/workorders/beauty-club/"
+  ],
+  "runtime_policy": {
+    "require_live_hardware": false
+  },
+  "docs_entrypoints": [
+    "docs/specs/BeautyClub/INDEX.md"
+  ],
+  "ui_settings": {
+    "selectable": false,
+    "notice": "Example only. Do not activate without Tom's real repo path and policy."
+  },
   "promotion_policy": {
     "require_clean_worktree": true,
     "block_runtime_artifacts": true,

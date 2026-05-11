@@ -14,6 +14,7 @@ import {
 import { commandPlanFor } from '../command-runner'
 import { parseJsonFromStdout, redactSecrets } from '../redact'
 import { findRepoRoot } from '../repo-root'
+import { readProjectProfile } from '../snapshot'
 import { classifyCommandResult, isMealCamOptionalOfflineNonBlocking, productGateText, toneFromSummary } from '../status'
 
 describe('governance UI safety helpers', () => {
@@ -104,6 +105,17 @@ describe('governance UI safety helpers', () => {
     assert.deepEqual(operator.args.slice(-2), ['--project', 'lumeos'])
     assert.ok(promotion.args.includes('--project'))
     assert.ok(promotion.args.includes('lumeos'))
+  })
+
+  it('snapshot profile reader supports a selected inactive fixture profile', () => {
+    const root = findRepoRoot(process.cwd())
+    const profile = readProjectProfile(root, 'fixture-beauty-club')
+
+    assert.equal(profile.project_id, 'fixture-beauty-club')
+    assert.equal(profile.display_name, 'Beauty Club Fixture')
+    assert.equal(profile.active, false)
+    assert.equal(profile.profile_kind, 'fixture')
+    assert.ok(profile.allowed_domain_paths?.includes('docs/specs/BeautyClub/'))
   })
 
   it('defaults to an existing governance batch instead of missing P1-005 product planning', () => {
