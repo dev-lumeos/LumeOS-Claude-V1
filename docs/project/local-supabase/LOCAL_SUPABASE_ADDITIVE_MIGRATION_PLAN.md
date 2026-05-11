@@ -1,5 +1,9 @@
 # Local Supabase Additive Migration Validation Plan
 
+STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY
+
+This plan is retained for historical governance context. It is not an active migration runbook and does not authorize Supabase commands, DB writes, migration execution, resets, pushes, or product execution.
+
 Date: 2026-05-05
 
 ## 1. Scope

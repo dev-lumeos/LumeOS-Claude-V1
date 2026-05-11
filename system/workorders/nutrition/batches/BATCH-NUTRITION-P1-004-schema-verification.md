@@ -1,5 +1,9 @@
 # BATCH-NUTRITION-P1-004-schema-verification
 
+STATUS: ARCHIVAL / HISTORICAL / REFERENCE_ONLY
+
+This completed static verification batch is retained as evidence. It is not an active runbook and does not authorize reruns, product execution, Supabase commands, migration execution, or BLS import. Rerun only if a current governance workorder explicitly references it.
+
 ## Status
 ready_for_operator
 

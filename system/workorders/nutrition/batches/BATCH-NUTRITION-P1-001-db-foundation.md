@@ -1,5 +1,9 @@
 # BATCH-NUTRITION-P1-001-db-foundation
 
+STATUS: ARCHIVAL / HISTORICAL / BLOCKED_BY_PRODUCT_GATE
+
+This batch is retained for governance evidence and historical source-chain context. It is not an active runbook. Do not execute commands, dispatch workorders, run Supabase commands, run migrations, or start BLS/Nutrition work from this document unless a current governance workorder explicitly references it and Tom has opened the relevant product gate.
+
 ## Status
 ready_for_approval
 

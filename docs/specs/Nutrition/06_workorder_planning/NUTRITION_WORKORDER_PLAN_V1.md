@@ -1,5 +1,9 @@
 # NUTRITION_WORKORDER_PLAN_V1.md
 
+STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY
+
+This planning document is retained as source-chain evidence for future Nutrition work. It is not an active runbook and does not authorize BLS import, Nutrition implementation, Supabase commands, migration execution, or product batches. Product execution remains closed unless Tom explicitly opens a specific product gate.
+
 > Workorder-Planungsdokument für Nutrition V1
 > Stand: 2026-05-02
 > Author: Opus

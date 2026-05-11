@@ -1,5 +1,9 @@
 # BATCH_LOADER_CLI_V1.md
 
+STATUS: CURRENT GOVERNANCE REFERENCE
+
+This document is current only as governance/bootstrap context for the batch-loader CLI. Historical Nutrition batch examples and commands in this document do not authorize product execution, BLS import, Supabase commands, migrations, or product batches. Use current governance workorders and the product gate policy before running anything that touches product scope.
+
 > Spec für den fehlenden CLI-Entry-Point, der Markdown-Batches in den bestehenden Dispatcher-Workflow einspeist.
 > Stand: 2026-05-02 | Status: **Implemented and validated** (Bootstrap via `WO-governance-004` abgeschlossen, Batch `BATCH-GOVERNANCE-P1-001-batch-loader-cli.md` `completed`)
 

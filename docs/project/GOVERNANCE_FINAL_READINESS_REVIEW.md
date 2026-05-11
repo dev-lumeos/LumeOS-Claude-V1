@@ -108,13 +108,13 @@ What is still constrained:
 | GOV-TODO-008 | Report Retention / Redaction Policy | CLOSE_READY | integrated and tested |
 | GOV-TODO-009 | Promotion Governance status mode | CLOSE_READY | integrated and tested |
 | GOV-TODO-010 | Memory Update Draft Proposal workflow | OPTIONAL_AUTOMATION / CLOSE_READY | integrated and tested |
-| GOV-TODO-011 | Mark old Nutrition bootstrap docs as archival or active | DOCS_CLEANUP | not blocking governance validation |
+| GOV-TODO-011 | Mark old Nutrition bootstrap docs as archival or active | CLOSE_READY | labels and index added |
 
 ## 7. Remaining Blockers
 
 Governance cleanup:
 
-- Archive/label old Nutrition bootstrap docs so operators can distinguish historical run notes from current runbooks.
+- Old Nutrition/BLS/bootstrap entry points are now labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`.
 
 ## 8. What Is Safe Now
 

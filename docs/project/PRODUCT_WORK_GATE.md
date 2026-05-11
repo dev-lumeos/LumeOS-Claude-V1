@@ -1,31 +1,27 @@
 # Product Work Gate
 
-Current date: 2026-05-05.
+STATUS: CURRENT GOVERNANCE REFERENCE
+
+Current date: 2026-05-11.
 
 ## Decision
 
-Product work is not freely open.
+Product work is closed unless Tom explicitly opens a specific product gate.
 
-Tom has conditionally opened the product gate only for the next controlled planning/probe batch.
-
-The LumeOS default project profile records this policy in `system/project-profiles/profiles/lumeos.json`. Profile-aware tools may read that policy, but the profile does not grant approval, execute work, or override Tom's gate decision.
+The LumeOS default project profile records this policy in `system/project-profiles/profiles/lumeos.json`. Profile-aware tools may read that policy, but the profile does not grant approval, execute work, open the product gate, or override Tom's gate decision.
 
 ## Allowed Work
 
-The next product-related step may include only:
+No product execution is currently allowed. Allowed governance-only work may include:
 
-- Planning-only product work.
-- BLS import planning and preflight.
-- Local read-only raw file inspection.
-- Generation of reports and spec-linked workorders.
+- Governance docs and runbook cleanup.
+- Read-only governance checks.
+- Generation of governance reports.
 - Static validation.
-- Governance checker runs.
-- Governance Operator dry-run.
-- Governance Operator continue only if no database execution, migration execution, or real bulk import occurs.
 
 ## Forbidden Work
 
-The conditional gate does not allow:
+The closed product gate does not allow:
 
 - `supabase db push`
 - `supabase db reset`

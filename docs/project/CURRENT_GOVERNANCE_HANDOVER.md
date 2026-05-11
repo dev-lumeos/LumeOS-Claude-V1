@@ -49,6 +49,7 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - Project Profiles V2 adds an inactive `fixture-beauty-club` profile, schema-backed `profile_kind` / `active` metadata, profile path traversal rejection, read-only UI snapshot selected-profile loading, and non-Nutrition source-chain fixture coverage. This does not activate real Beauty Club product work or assume a real Beauty Club repo path.
 - Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
 - Product work remains closed unless Tom explicitly opens it.
+- Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
 
@@ -62,6 +63,7 @@ Use these files before starting more governance or product work:
 - `docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md`
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
 - `docs/project/PRODUCT_WORK_GATE.md`
+- `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
 - `docs/project/CODEX_WORKER_BRIDGE.md`

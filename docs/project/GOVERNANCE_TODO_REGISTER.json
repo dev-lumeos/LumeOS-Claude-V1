@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T15:55:00+07:00",
+  "generated_at": "2026-05-11T16:10:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -213,9 +213,9 @@
       "layer": "docs",
       "severity": "low",
       "priority": "P3",
-      "status": "open",
-      "evidence": "Older docs and batches still contain Nutrition bootstrap run instructions and historical cleanup context.",
-      "recommended_action": "Add archival labels or an active-runbook index so Tom can distinguish current operator flow from historical notes.",
+      "status": "done",
+      "evidence": "Nutrition/BLS/bootstrap entry points now have explicit CURRENT, ARCHIVAL/HISTORICAL, BLOCKED_BY_PRODUCT_GATE, or REFERENCE_ONLY labels, plus `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md` as the operator-facing index.",
+      "recommended_action": "Keep historical commands as evidence only. Operators should use current governance runbooks/workorders and the closed product gate policy before touching product scope.",
       "dependencies": [],
       "estimated_effort": "0.5d",
       "codex_autonomous_possible": true,

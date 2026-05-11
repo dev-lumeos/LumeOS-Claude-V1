@@ -1,5 +1,9 @@
 # NUTRITION_PHASE1_DB_FOUNDATION_SPLIT.md
 
+STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY
+
+This split plan is retained as historical planning evidence. It is not an active runbook and does not authorize DB schema work, Supabase commands, migration execution, BLS import, or Nutrition product work. Product execution remains closed unless Tom explicitly opens a specific product gate.
+
 > Phase-1-Split-Planung für `nutrition-db-foundation-v1`
 > Stand: 2026-05-02
 > Author: Opus

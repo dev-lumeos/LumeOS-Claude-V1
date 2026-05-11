@@ -1,4 +1,8 @@
 # Nutrition Module — Spec Index
+
+STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY
+
+This Nutrition spec index is retained as source-chain evidence and future planning context. It is not an active product runbook and does not authorize BLS import, Supabase commands, migrations, Nutrition implementation, or product batches. Product execution remains closed unless Tom explicitly opens a specific product gate.
 > LumeOS | Stand: Mai 2026
 
 ---

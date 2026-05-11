@@ -1,5 +1,9 @@
 # Local Supabase Transaction Dry-run Report
 
+STATUS: REFERENCE_ONLY
+
+This report is retained as historical dry-run evidence. It is not an active runbook and does not authorize Supabase commands, DB writes, migration execution, resets, pushes, or product execution.
+
 Date: 2026-05-05
 
 ## 1. Scope
