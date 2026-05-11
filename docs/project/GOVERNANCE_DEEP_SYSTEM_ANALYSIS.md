@@ -114,26 +114,30 @@ Recommended fix: Keep product gate closed until hardware maintenance ends, endpo
 
 ### M-001: Codex Worker config has a stale/ambiguous metadata field
 
-Evidence:
+Status: resolved by `goal/codex-worker-config-review-policy`.
+
+Original evidence:
 
 - `system/workers/codex-worker.config.json` has `codex_worker_enabled: true` and `allow_dispatcher_integration: true`.
-- The same file still says `"dispatcher_integration": "deferred"`.
+- The same file still said `"dispatcher_integration": "deferred"`.
 
-Consequence: Humans and UI/reporting can misread Codex Worker as both enabled and deferred.
+Resolution: `system/workers/codex-worker.config.json` now uses `status: controlled_enabled`, and config validation rejects contradictory status/boolean combinations.
 
-Recommended fix: Replace the stale string with a machine-checked enum such as `controlled_enabled`, or remove it and rely on the boolean gates.
+Recommended follow-up: None for V1; broad automation remains forbidden.
 
 ### M-002: Senior review via Codex is conceptually enabled, but worker allowlist is coding-agent only
 
-Evidence:
+Status: resolved by `goal/codex-worker-config-review-policy`.
+
+Original evidence:
 
 - `senior-reviewer-agent` routes to Codex/GPT-5.5 in `model_routing.json`.
-- `codex-worker.config.json` allowlists only `senior-coding-agent`.
+- `codex-worker.config.json` allowlisted only `senior-coding-agent`.
 - Senior review smoke used the existing controlled path, but broad reviewer-agent dispatch is not enabled.
 
-Consequence: The role mapping is correct, but operator behavior can still be confusing: senior review is Codex, yet Codex Worker dispatch only accepts the coding-agent ID.
+Resolution: `senior-reviewer-agent` is now separately allowlisted for the controlled Codex Worker path with metadata, narrow-scope, product-gate, and sensitive-work tests. Broad reviewer automation remains forbidden.
 
-Recommended fix: Either document that senior review workorders must use `senior-coding-agent` with a review objective, or add a separately gated `senior-reviewer-agent` Codex Worker path with tests.
+Recommended follow-up: Use `senior-reviewer-agent` only for governance/docs/system review workorders with `codex_worker: true`.
 
 ### M-003: Project profiles are useful but not truly multi-project yet
 
@@ -391,8 +395,8 @@ Risks:
 | R-001 | Planned DGX/Spark hardware maintenance blocks runtime proof | high | runtime/model routing | Endpoint checks high=13, curl timeouts; Tom confirmed rack-install shutdown | Spark-dependent autonomous/operator work blocked during maintenance | Do not change routing; recheck endpoints after hardware returns | P0 | wait for maintenance, then 15m health check |
 | R-002 | Runtime history lacks maintenance/freshness semantics | high | runtime history/UI/doctor | History says degraded from 2026-05-10, live check unavailable during planned maintenance | False confidence or false routing alarm | Add freshness and planned-maintenance status | P0 | 2-4h |
 | R-003 | Product gate still closed | high | product gate/operator/promotion | Profile product_gate closed; maintenance blocks runtime proof | Product work unsafe | Keep closed until explicit Tom decision and post-maintenance runtime health | P0 | decision |
-| R-004 | Codex config status string is contradictory | medium | Codex Worker config/docs | Booleans enabled; `dispatcher_integration` says deferred | Operator confusion | Normalize config field | P1 | <1h |
-| R-005 | Senior review worker path naming is unclear | medium | Codex Worker/agent routing | `senior-reviewer-agent` Codex route, worker allowlist coding-agent only | Review WOs may choose wrong agent ID | Document or add gated reviewer path | P1 | 2-4h |
+| R-004 | Codex config status string is contradictory | medium | Codex Worker config/docs | Resolved: config now has `status: controlled_enabled`; stale deferred string removed | Operator confusion avoided | Done; keep validation tests | P1 | done |
+| R-005 | Senior review worker path naming is unclear | medium | Codex Worker/agent routing | Resolved: `senior-reviewer-agent` separately allowlisted with controlled gates | Review WOs can use correct reviewer ID | Done; keep narrow policy | P1 | done |
 | R-006 | Project profiles not yet portable enough | medium | project profiles/UI/factory | UI hardcodes `lumeos.json`; Nutrition fixtures | Second project onboarding risky | Add project selector/fixtures/source-chain profile | P1 | 1-2d |
 | R-007 | UI lacks visual regression | medium | Governance UI | Build/tests pass but no browser screenshots | Visual regressions missed | Add local browser smoke/screenshots | P1 | 0.5-1d |
 | R-008 | Runtime reports are locally verbose | medium | Codex/reporting/security hygiene | Ignored reports contain prompts and command transcripts | Local leakage/noisy audits | Add retention/redaction/summarizer | P2 | 0.5d |

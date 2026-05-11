@@ -4,7 +4,7 @@ Date: 2026-05-09
 
 ## Purpose
 
-The Codex Worker Bridge prepares `senior-coding-agent` workorders for non-interactive Codex CLI execution through `codex exec`.
+The Codex Worker Bridge prepares controlled senior-agent workorders for non-interactive Codex CLI execution through `codex exec`.
 
 It removes Tom's manual prompt-copy step without changing the governance gates. The bridge is dry-run by default, does not dispatch workorders by itself, and does not grant approvals.
 
@@ -150,9 +150,9 @@ The worker bridge is governance-driven:
 - it enforces a hard execution timeout and reports `FIX_REQUIRED` on timeout
 - it closes stdin immediately so `codex exec` receives EOF instead of waiting for interactive input
 
-## Senior Coding Agent Integration
+## Senior Agent Integration
 
-`senior-coding-agent` remains represented as:
+`senior-coding-agent` and `senior-reviewer-agent` are represented as:
 
 - runtime: Codex CLI
 - model: GPT-5.5
@@ -161,22 +161,27 @@ The worker bridge is governance-driven:
 Current integration is controlled-enabled:
 
 - `system/workers/codex-worker.config.json` exists
+- `status` is `controlled_enabled`
 - `codex_worker_enabled` is `true`
 - `allow_dispatcher_integration` is `true`
-- `allowed_agents` is limited to `senior-coding-agent`
+- `allowed_agents` is limited to `senior-coding-agent` and `senior-reviewer-agent`
 - automatic dispatcher execution also requires `codex_worker: true` on the workorder when `require_explicit_workorder_flag` is enabled
 - `require_product_gate` is `true`
 - `product_gate_open` is `false`
 
 When enabled, dispatcher use is narrow:
 
-- only `senior-coding-agent`
+- only `senior-coding-agent` and `senior-reviewer-agent`
 - only `runtime_type: codex-cli`
 - only workorders with `source_refs`, `scope_files`, `files_blocked`, and `expected_outputs`
+- only narrow `scope_files`; broad roots and globs are rejected
 - no pending human approval requirement
+- no DB, Supabase, migration, approval-grant, runtime-state, queue-state, or raw BLS work
 - product work remains blocked unless Tom explicitly opens the product gate
 - hard timeout from config
 - final state mapped to `completed`, `awaiting_approval`, `failed`, or `blocked`
+
+`senior-reviewer-agent` is separately gated. It may review governance/docs/system workorders and may make scoped docs/governance file changes only when the workorder explicitly allows them. It must not become a broad implementation or approval-grant path.
 
 Operator Doctor reports whether the Codex worker is ready or disabled. Batch dossiers include Codex worker report metadata when runtime reports exist.
 
@@ -199,7 +204,7 @@ The worker must not be used to run:
 
 The controlled dispatcher path is:
 
-1. Operator selects `senior-coding-agent`.
+1. Operator selects `senior-coding-agent` or `senior-reviewer-agent`.
 2. Operator verifies source-chain, invariant, agent-contract, learning, model-runtime, and product-gate checks.
 3. The workorder opts in with `codex_worker: true`.
 4. Dispatcher verifies the senior-agent route, required metadata, approval status, timeout config, and product-gate policy.

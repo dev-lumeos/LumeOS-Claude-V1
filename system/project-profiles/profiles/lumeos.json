@@ -55,7 +55,8 @@
   "codex_worker_policy": {
     "enabled": true,
     "allowed_agents": [
-      "senior-coding-agent"
+      "senior-coding-agent",
+      "senior-reviewer-agent"
     ],
     "require_explicit_workorder_flag": true,
     "default_timeout_ms": 120000

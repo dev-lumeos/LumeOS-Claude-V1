@@ -57,6 +57,7 @@ import {
   buildPromptFromWorkorder,
   loadCodexWorkerConfig,
   runCodexWorkerPrompt,
+  validateCodexWorkerConfig,
   type CodexWorkerConfig,
   type CodexWorkerResult,
 } from '../workers/codex-worker'
@@ -401,6 +402,31 @@ function hasRequiredCodexWorkerFields(wo: Workorder): boolean {
     && ((wo.expected_outputs?.length ?? wo.acceptance_files?.length ?? 0) > 0)
 }
 
+function hasBroadCodexWorkerScope(wo: Workorder): boolean {
+  const broadPatterns = new Set(['.', './', '/', '*', '**'])
+  return (wo.scope_files ?? []).some(raw => {
+    const scope = raw.replace(/\\/g, '/').replace(/^\/+/, '').replace(/\/$/, '')
+    if (broadPatterns.has(scope)) return true
+    if (/^[^/]+\/\*\*$/.test(scope)) return true
+    return scope === 'docs' || scope === 'system' || scope === 'apps' || scope === 'packages'
+  })
+}
+
+function isCodexWorkerSensitiveForbiddenWork(wo: Workorder): boolean {
+  const paths = [
+    ...(wo.scope_files ?? []),
+    ...(wo.acceptance_files ?? []),
+    ...(wo.expected_outputs ?? []),
+    ...(wo.source_refs ?? []),
+  ].map(item => item.replace(/\\/g, '/').toLowerCase())
+  if (paths.some(p => p.startsWith('supabase/') || p.startsWith('db/') || p.includes('/migrations/') || p.startsWith('.env'))) return true
+  const text = [
+    wo.task,
+    wo.risk_category ?? '',
+  ].join('\n').toLowerCase()
+  return /\b(supabase db|migration execution|approval grant|grant approval|production db|production database)\b/.test(text)
+}
+
 function isCodexWorkerProductWork(wo: Workorder): boolean {
   const metadata = wo as Workorder & {
     product_work?: boolean
@@ -445,17 +471,18 @@ function shouldUseCodexWorker(
   config: CodexWorkerConfig,
 ): { use: boolean; block: boolean; reason: string; timeoutMs: number } {
   const explicitCodex = wo.codex_worker === true
-  if (wo.agent_id !== 'senior-coding-agent') {
-    return { use: false, block: explicitCodex, reason: 'agent is not senior-coding-agent', timeoutMs: config.default_timeout_ms }
+  const configValidation = validateCodexWorkerConfig(config)
+  if (!configValidation.valid) {
+    return { use: false, block: explicitCodex, reason: `invalid codex worker config: ${configValidation.reason}`, timeoutMs: config.default_timeout_ms }
+  }
+  if (!config.allowed_agents.includes(wo.agent_id)) {
+    return { use: false, block: explicitCodex, reason: 'agent not allowlisted for codex worker', timeoutMs: config.default_timeout_ms }
   }
   if (activeRoute.runtime_type !== 'codex-cli' && activeRoute.node !== 'codex-cli') {
     return { use: false, block: explicitCodex, reason: 'route is not codex-cli', timeoutMs: config.default_timeout_ms }
   }
-  if (!config.codex_worker_enabled || !config.allow_dispatcher_integration) {
+  if (config.status !== 'controlled_enabled' || !config.codex_worker_enabled || !config.allow_dispatcher_integration) {
     return { use: false, block: false, reason: 'codex worker dispatcher integration disabled', timeoutMs: config.default_timeout_ms }
-  }
-  if (!config.allowed_agents.includes(wo.agent_id)) {
-    return { use: false, block: explicitCodex, reason: 'agent not allowlisted for codex worker', timeoutMs: config.default_timeout_ms }
   }
   if (config.require_explicit_workorder_flag && wo.codex_worker !== true) {
     return { use: false, block: false, reason: 'workorder lacks codex_worker opt-in', timeoutMs: config.default_timeout_ms }
@@ -466,13 +493,19 @@ function shouldUseCodexWorker(
   if (!hasRequiredCodexWorkerFields(wo)) {
     return { use: false, block: explicitCodex, reason: 'workorder missing source_refs/scope_files/files_blocked/expected_outputs', timeoutMs: config.default_timeout_ms }
   }
+  if (hasBroadCodexWorkerScope(wo)) {
+    return { use: false, block: explicitCodex, reason: 'workorder scope is too broad for Codex worker dispatch', timeoutMs: config.default_timeout_ms }
+  }
+  if (isCodexWorkerSensitiveForbiddenWork(wo)) {
+    return { use: false, block: explicitCodex, reason: 'Codex worker dispatch blocks DB/Supabase/migration/approval-grant work', timeoutMs: config.default_timeout_ms }
+  }
   if (config.require_product_gate && !config.product_gate_open && isCodexWorkerProductWork(wo)) {
     return { use: false, block: explicitCodex, reason: 'product work gate blocks Codex worker dispatch', timeoutMs: config.default_timeout_ms }
   }
   return {
     use: true,
     block: false,
-    reason: 'codex worker enabled for senior-coding-agent',
+    reason: `codex worker controlled-enabled for ${wo.agent_id}`,
     timeoutMs: Math.min(config.default_timeout_ms, config.max_timeout_ms),
   }
 }

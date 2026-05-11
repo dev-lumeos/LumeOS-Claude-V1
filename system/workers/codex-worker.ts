@@ -14,6 +14,7 @@ import {
 export type FinalState = 'DONE' | 'NEEDS_TOM_APPROVAL' | 'FIX_REQUIRED' | 'STOP' | 'UNKNOWN'
 
 export type CodexWorkerMode = 'dry-run' | 'execute'
+export type CodexWorkerStatus = 'disabled' | 'manual_only' | 'controlled_enabled'
 
 export type CodexWorkerArgs = {
   workorderFile?: string
@@ -58,6 +59,7 @@ export type CodexWorkerResult = {
 }
 
 export type CodexWorkerConfig = {
+  status: CodexWorkerStatus | string
   codex_worker_enabled: boolean
   allow_dispatcher_integration: boolean
   allowed_agents: string[]
@@ -104,6 +106,7 @@ const CORE_FORBIDDEN_COMMANDS = [
 
 export function defaultCodexWorkerConfig(): CodexWorkerConfig {
   return {
+    status: 'disabled',
     codex_worker_enabled: false,
     allow_dispatcher_integration: false,
     allowed_agents: ['senior-coding-agent'],
@@ -113,6 +116,16 @@ export function defaultCodexWorkerConfig(): CodexWorkerConfig {
     default_timeout_ms: DEFAULT_TIMEOUT_MS,
     max_timeout_ms: DEFAULT_MAX_TIMEOUT_MS,
   }
+}
+
+function deriveCodexWorkerStatus(input: Record<string, unknown>): CodexWorkerStatus | string {
+  if (input.status === 'disabled' || input.status === 'manual_only' || input.status === 'controlled_enabled') {
+    return input.status
+  }
+  if (typeof input.status === 'string') return input.status
+  if (input.codex_worker_enabled === true && input.allow_dispatcher_integration === true) return 'controlled_enabled'
+  if (input.codex_worker_enabled === true) return 'manual_only'
+  return 'disabled'
 }
 
 export function normalizeCodexWorkerConfig(value: unknown): CodexWorkerConfig {
@@ -129,6 +142,7 @@ export function normalizeCodexWorkerConfig(value: unknown): CodexWorkerConfig {
     ? input.max_timeout_ms
     : defaults.max_timeout_ms
   return {
+    status: deriveCodexWorkerStatus(input),
     codex_worker_enabled: input.codex_worker_enabled === true,
     allow_dispatcher_integration: input.allow_dispatcher_integration === true,
     allowed_agents: allowedAgents,
@@ -138,6 +152,25 @@ export function normalizeCodexWorkerConfig(value: unknown): CodexWorkerConfig {
     default_timeout_ms: Math.min(defaultTimeout, maxTimeout),
     max_timeout_ms: maxTimeout,
   }
+}
+
+export function validateCodexWorkerConfig(config: CodexWorkerConfig): { valid: true } | { valid: false; reason: string } {
+  if (!['disabled', 'manual_only', 'controlled_enabled'].includes(config.status)) {
+    return { valid: false, reason: `unknown codex worker status: ${String(config.status)}` }
+  }
+  if (config.status === 'controlled_enabled' && (!config.codex_worker_enabled || !config.allow_dispatcher_integration)) {
+    return { valid: false, reason: 'status=controlled_enabled requires codex_worker_enabled=true and allow_dispatcher_integration=true' }
+  }
+  if (config.status === 'manual_only' && (!config.codex_worker_enabled || config.allow_dispatcher_integration)) {
+    return { valid: false, reason: 'status=manual_only requires codex_worker_enabled=true and allow_dispatcher_integration=false' }
+  }
+  if (config.status === 'disabled' && (config.codex_worker_enabled || config.allow_dispatcher_integration)) {
+    return { valid: false, reason: 'status=disabled requires codex_worker_enabled=false and allow_dispatcher_integration=false' }
+  }
+  if (config.allowed_agents.some(agent => !['senior-coding-agent', 'senior-reviewer-agent'].includes(agent))) {
+    return { valid: false, reason: 'allowed_agents may only contain senior-coding-agent and senior-reviewer-agent' }
+  }
+  return { valid: true }
 }
 
 export function loadCodexWorkerConfig(repoRoot = process.cwd()): CodexWorkerConfig {
@@ -337,9 +370,15 @@ ${listBlock(profile.forbidden_paths)}
 `
     : ''
 
+  const agentId = asString(wo.agent_id, 'senior-coding-agent')
+  const roleRule = agentId === 'senior-reviewer-agent'
+    ? 'You are operating as a senior reviewer. Prefer read/review conclusions and only make scoped docs/governance edits when the workorder explicitly allows them.'
+    : 'You are operating as a senior coding agent for scoped governance implementation.'
+
   return `# Codex Worker Prompt
 
-You are Codex CLI running as the ${profile?.display_name ?? 'LumeOS'} senior-coding-agent.
+You are Codex CLI running as the ${profile?.display_name ?? 'LumeOS'} ${agentId}.
+${roleRule}
 
 ## Repository
 ${repoRoot}

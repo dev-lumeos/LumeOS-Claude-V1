@@ -1,8 +1,10 @@
 {
+  "status": "controlled_enabled",
   "codex_worker_enabled": true,
   "allow_dispatcher_integration": true,
   "allowed_agents": [
-    "senior-coding-agent"
+    "senior-coding-agent",
+    "senior-reviewer-agent"
   ],
   "require_explicit_workorder_flag": true,
   "require_product_gate": true,
@@ -12,9 +14,11 @@
   "default_mode": "dry-run",
   "runtime_type": "codex-cli",
   "model": "gpt-5.5",
-  "agent": "senior-coding-agent",
+  "agents": [
+    "senior-coding-agent",
+    "senior-reviewer-agent"
+  ],
   "execution_command": "codex exec",
   "resume_command": "codex exec resume <session-id>",
-  "report_directory": "system/reports/codex-worker",
-  "dispatcher_integration": "deferred"
+  "report_directory": "system/reports/codex-worker"
 }

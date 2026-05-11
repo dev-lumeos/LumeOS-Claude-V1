@@ -8,10 +8,12 @@ import {
   buildCodexCommand,
   buildPromptFromWorkorder,
   loadWorkorderInput,
+  normalizeCodexWorkerConfig,
   parseCodexWorkerArgs,
   parseFinalState,
   runCodexWorker,
   spawnProcessWithTimeout,
+  validateCodexWorkerConfig,
   validatePromptPath,
   validateWorkorderPath,
   type CodexSpawn,
@@ -107,6 +109,53 @@ function fixtureWo(): string {
 }
 
 describe('codex worker bridge', () => {
+  it('normalizes controlled-enabled config and rejects contradictory config', () => {
+    const valid = normalizeCodexWorkerConfig({
+      status: 'controlled_enabled',
+      codex_worker_enabled: true,
+      allow_dispatcher_integration: true,
+      allowed_agents: ['senior-coding-agent', 'senior-reviewer-agent'],
+    })
+    assert.equal(validateCodexWorkerConfig(valid).valid, true)
+
+    const stale = normalizeCodexWorkerConfig({
+      codex_worker_enabled: true,
+      allow_dispatcher_integration: true,
+      dispatcher_integration: 'deferred',
+    })
+    assert.equal(stale.status, 'controlled_enabled')
+
+    const unknown = normalizeCodexWorkerConfig({
+      status: 'deferred',
+      codex_worker_enabled: true,
+      allow_dispatcher_integration: true,
+    })
+    const unknownValidation = validateCodexWorkerConfig(unknown)
+    assert.equal(unknownValidation.valid, false)
+
+    const contradictory = normalizeCodexWorkerConfig({
+      status: 'controlled_enabled',
+      codex_worker_enabled: true,
+      allow_dispatcher_integration: false,
+    })
+    const validation = validateCodexWorkerConfig(contradictory)
+    assert.equal(validation.valid, false)
+    if (!validation.valid) assert.match(validation.reason, /controlled_enabled/)
+  })
+
+  it('rejects non-senior agents in Codex worker config validation', () => {
+    const config = normalizeCodexWorkerConfig({
+      status: 'controlled_enabled',
+      codex_worker_enabled: true,
+      allow_dispatcher_integration: true,
+      allowed_agents: ['senior-coding-agent', 'micro-executor'],
+    })
+    const validation = validateCodexWorkerConfig(config)
+
+    assert.equal(validation.valid, false)
+    if (!validation.valid) assert.match(validation.reason, /allowed_agents/)
+  })
+
   it('dry-run does not call codex or write runtime reports', async () => {
     let calls = 0
     const spawn: CodexSpawn = async () => {

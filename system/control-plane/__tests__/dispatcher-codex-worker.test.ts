@@ -31,6 +31,13 @@ function setup(): void {
       skill_token_budget: 2000,
       requires_human_approval: false,
     },
+    'senior-reviewer-agent': {
+      type: 'reviewer',
+      spec_file: '.claude/agents/senior-reviewer-agent.md',
+      always_load_skills: [],
+      skill_token_budget: 2000,
+      requires_human_approval: false,
+    },
     'micro-executor': {
       type: 'executor',
       spec_file: '.claude/agents/micro-executor.md',
@@ -41,6 +48,15 @@ function setup(): void {
   }))
   write('system/agent-registry/model_routing.json', JSON.stringify({
     'senior-coding-agent': {
+      default: {
+        node: 'codex-cli',
+        runtime_type: 'codex-cli',
+        model: 'gpt-5.5',
+        temperature: 0,
+        max_context: 200000,
+      },
+    },
+    'senior-reviewer-agent': {
       default: {
         node: 'codex-cli',
         runtime_type: 'codex-cli',
@@ -63,11 +79,13 @@ function setup(): void {
   write('system/agent-registry/skill_registry.json', JSON.stringify({}))
   write('system/agent-registry/approval_operation_types.json', JSON.stringify({}))
   write('.claude/agents/senior-coding-agent.md', '# senior coding agent')
+  write('.claude/agents/senior-reviewer-agent.md', '# senior reviewer agent')
   write('.claude/agents/micro-executor.md', '# micro executor')
   write('system/workers/codex-worker.config.json', JSON.stringify({
     codex_worker_enabled: true,
     allow_dispatcher_integration: true,
-    allowed_agents: ['senior-coding-agent'],
+    status: 'controlled_enabled',
+    allowed_agents: ['senior-coding-agent', 'senior-reviewer-agent'],
     require_explicit_workorder_flag: true,
     require_product_gate: true,
     product_gate_open: false,
@@ -124,7 +142,8 @@ function enabledCodexConfig(overrides: Record<string, unknown> = {}) {
   return {
     codex_worker_enabled: true,
     allow_dispatcher_integration: true,
-    allowed_agents: ['senior-coding-agent'],
+    status: 'controlled_enabled',
+    allowed_agents: ['senior-coding-agent', 'senior-reviewer-agent'],
     require_explicit_workorder_flag: true,
     require_product_gate: true,
     product_gate_open: false,
@@ -152,6 +171,7 @@ describe('dispatcher codex worker integration', () => {
       },
       executeTool: async () => ({ success: true }),
       codexWorkerConfig: enabledCodexConfig({
+        status: 'disabled',
         codex_worker_enabled: false,
         allow_dispatcher_integration: false,
       }),
@@ -164,6 +184,22 @@ describe('dispatcher codex worker integration', () => {
     assert.equal(result.status, 'completed')
     assert.equal(modelCalls, 1)
     assert.equal(codexCalls, 0)
+  })
+
+  it('rejects contradictory Codex worker config status and booleans', async () => {
+    const result = await dispatchWorkorder(makeWorkorder(), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig({
+        status: 'controlled_enabled',
+        codex_worker_enabled: true,
+        allow_dispatcher_integration: false,
+      }),
+      runCodexWorker: async () => doneResult('DONE'),
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /invalid codex worker config/)
   })
 
   it('refuses explicit Codex worker use for non-senior agents', async () => {
@@ -274,6 +310,97 @@ describe('dispatcher codex worker integration', () => {
     assert.equal(result.status, 'completed')
     assert.equal(codexCalls, 1)
     assert.equal(modelCalls, 0)
+  })
+
+  it('uses Codex worker for senior-reviewer-agent under the controlled review gate', async () => {
+    let codexCalls = 0
+    const result = await dispatchWorkorder(makeWorkorder({
+      workorder_id: 'WO-codex-002',
+      agent_id: 'senior-reviewer-agent',
+      task: 'Review governance dispatcher smoke evidence and write a scoped docs review.',
+      scope_files: ['docs/project/codex-senior-review.md'],
+      acceptance_files: ['docs/project/codex-senior-review.md'],
+      expected_outputs: ['docs/project/codex-senior-review.md'],
+      source_refs: ['docs/project/codex-dispatcher-smoke-test.md'],
+      risk_category: 'docs',
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async (workorder) => {
+        codexCalls++
+        assert.equal(workorder.agent_id, 'senior-reviewer-agent')
+        return doneResult('DONE')
+      },
+    })
+
+    assert.equal(result.status, 'completed')
+    assert.equal(codexCalls, 1)
+  })
+
+  it('rejects senior-reviewer-agent when metadata is incomplete', async () => {
+    const result = await dispatchWorkorder(makeWorkorder({
+      agent_id: 'senior-reviewer-agent',
+      source_refs: [],
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => doneResult('DONE'),
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /missing source_refs/)
+  })
+
+  it('rejects senior-reviewer-agent when scope is broad', async () => {
+    const result = await dispatchWorkorder(makeWorkorder({
+      agent_id: 'senior-reviewer-agent',
+      scope_files: ['docs/**'],
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => doneResult('DONE'),
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /scope is too broad/)
+  })
+
+  it('rejects senior-reviewer-agent product work while product gate is closed', async () => {
+    const result = await dispatchWorkorder(makeWorkorder({
+      agent_id: 'senior-reviewer-agent',
+      task: 'Review and implement Nutrition BLS import product behavior.',
+      scope_files: ['services/nutrition-api/src/import.ts'],
+      acceptance_files: ['services/nutrition-api/src/import.ts'],
+      expected_outputs: ['services/nutrition-api/src/import.ts'],
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => doneResult('DONE'),
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /product work gate/)
+  })
+
+  it('blocks DB Supabase migration and approval-grant work even for senior agents', async () => {
+    const result = await dispatchWorkorder(makeWorkorder({
+      task: 'Run supabase db push and grant approval for migration execution.',
+      scope_files: ['supabase/migrations/20260511_test.sql'],
+      acceptance_files: ['supabase/migrations/20260511_test.sql'],
+      expected_outputs: ['supabase/migrations/20260511_test.sql'],
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => doneResult('DONE'),
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /DB\/Supabase\/migration\/approval-grant/)
   })
 
   it('maps Codex timeout to FIX_REQUIRED failed dispatch result', async () => {

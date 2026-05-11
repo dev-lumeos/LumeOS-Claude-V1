@@ -8,7 +8,7 @@ import { runGovernanceInvariantCheck } from '../../control-plane/governance-inva
 import { runAgentContractCheck } from '../../control-plane/agent-contract-check'
 import { readModelRuntimeHistorySummary, runModelRuntimeCheck, type ModelRuntimeHistorySummary } from '../../control-plane/model-runtime-check'
 import { runSpecSourceChainCheck } from './spec-source-chain-check'
-import { loadCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
+import { loadCodexWorkerConfig, validateCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
 import { getProjectProfile, type ProjectProfile } from '../../project-profiles/project-profile-loader'
 import { buildAutonomyHandoffContract, type AutonomyFinalState, type AutonomyHandoff } from '../../reports/autonomy-handoff'
 
@@ -91,6 +91,9 @@ export interface OperatorDoctorResult {
   checkers: OperatorDoctorCheckers
   codex_worker: {
     status: 'CODEX_WORKER_READY' | 'CODEX_WORKER_DISABLED' | 'CODEX_WORKER_CONFIG_ERROR'
+    config_status: string
+    config_valid: boolean
+    config_error?: string
     codex_worker_enabled: boolean
     allow_dispatcher_integration: boolean
     allowed_agents: string[]
@@ -225,9 +228,13 @@ function addBlock(blockers: OperatorDoctorResult['blockers'], category: Operator
 }
 
 function summarizeCodexWorker(config: CodexWorkerConfig): OperatorDoctorResult['codex_worker'] {
-  const enabled = config.codex_worker_enabled && config.allow_dispatcher_integration
+  const validation = validateCodexWorkerConfig(config)
+  const enabled = validation.valid && config.status === 'controlled_enabled' && config.codex_worker_enabled && config.allow_dispatcher_integration
   return {
-    status: enabled ? 'CODEX_WORKER_READY' : 'CODEX_WORKER_DISABLED',
+    status: validation.valid ? (enabled ? 'CODEX_WORKER_READY' : 'CODEX_WORKER_DISABLED') : 'CODEX_WORKER_CONFIG_ERROR',
+    config_status: config.status,
+    config_valid: validation.valid,
+    config_error: validation.valid ? undefined : validation.reason,
     codex_worker_enabled: config.codex_worker_enabled,
     allow_dispatcher_integration: config.allow_dispatcher_integration,
     allowed_agents: config.allowed_agents,
@@ -346,7 +353,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
       : undefined,
     codexWorkerCandidate: codexWorker.status === 'CODEX_WORKER_READY' && finalDiagnosis === 'CLEAN_READY',
     codexWorkerReason: codexWorker.status === 'CODEX_WORKER_READY'
-      ? 'Codex Worker is available for eligible senior-coding-agent governance workorders.'
+      ? 'Codex Worker is available for eligible senior-coding-agent and senior-reviewer-agent governance workorders.'
       : 'Codex Worker dispatcher integration is disabled or unavailable.',
     productGateStatus: productGate,
     nextAction,
@@ -424,7 +431,8 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   lines.push(`spec_source_chain: ${result.checkers.spec_source_chain.status} critical=${result.checkers.spec_source_chain.critical} high=${result.checkers.spec_source_chain.high} medium=${result.checkers.spec_source_chain.medium}`)
   lines.push('')
   lines.push('## Codex Worker')
-  lines.push(`${result.codex_worker.status}: enabled=${result.codex_worker.codex_worker_enabled} dispatcher=${result.codex_worker.allow_dispatcher_integration} agents=${result.codex_worker.allowed_agents.join(', ')}`)
+  lines.push(`${result.codex_worker.status}: status=${result.codex_worker.config_status} enabled=${result.codex_worker.codex_worker_enabled} dispatcher=${result.codex_worker.allow_dispatcher_integration} agents=${result.codex_worker.allowed_agents.join(', ')}`)
+  if (result.codex_worker.config_error) lines.push(`config_error: ${result.codex_worker.config_error}`)
   lines.push('')
   lines.push('## Runtime History')
   lines.push(`${result.runtime_history.status}: status=${result.runtime_history.overall_status} freshness=${result.runtime_history.freshness_status} readiness=${result.runtime_history.overall_readiness} records=${result.runtime_history.total_records} checks=${result.runtime_history.total_checks}`)

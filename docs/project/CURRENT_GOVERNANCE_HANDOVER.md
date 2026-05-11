@@ -35,9 +35,9 @@ Current date: 2026-05-10.
 - Planned DGX/Spark maintenance is recorded in `system/control-plane/runtime-maintenance.json`; model runtime checks classify affected endpoint downtime as `PLANNED_MAINTENANCE` and require a recheck after maintenance ends.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent`, `senior-reviewer-agent`, and final escalations.
-- Codex Worker Bridge adds a dry-run-first `codex exec` integration point for `senior-coding-agent`.
+- Codex Worker Bridge adds a dry-run-first `codex exec` integration point for controlled senior agents.
 - Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker.
-- Codex Worker dispatch is controlled-enabled for `senior-coding-agent` only and still requires explicit `codex_worker: true`, complete workorder metadata, and product-gate policy pass.
+- Codex Worker dispatch status is `controlled_enabled` for `senior-coding-agent` and `senior-reviewer-agent` only. It still requires explicit `codex_worker: true`, `runtime_type: codex-cli`, complete metadata, narrow scope, blocked files, expected outputs, source refs, no approval-grant/DB/Supabase/migration work, and product-gate policy pass.
 - Governance UI V1 adds a local operator console around the existing governance CLIs.
 - Governance UI V2 adds a lightweight workorder dependency board, structured dossier timeline, improved doctor/approval/runtime summaries, copyable next-action commands, and collapsible raw output.
 - Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
@@ -118,7 +118,7 @@ Reason:
 - `senior-reviewer-agent` now uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
 - `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
 - `system/workers/codex-worker.ts` can generate and execute constrained `codex exec` prompts.
-- Controlled dispatcher use requires `codex_worker_enabled=true`, `allow_dispatcher_integration=true`, `senior-coding-agent`, `runtime_type: codex-cli`, workorder `codex_worker: true`, complete source/scope/output metadata, no approval requirement, and product-gate policy pass.
+- Controlled dispatcher use requires `status=controlled_enabled`, `codex_worker_enabled=true`, `allow_dispatcher_integration=true`, `senior-coding-agent` or `senior-reviewer-agent`, `runtime_type: codex-cli`, workorder `codex_worker: true`, complete source/scope/output metadata, no approval requirement, no broad scope, no DB/Supabase/migration/approval-grant work, and product-gate policy pass.
 - Project profile loading is available through `system/project-profiles/project-profile-loader.ts`; the LumeOS profile is `system/project-profiles/profiles/lumeos.json` and keeps product work closed by default.
 - MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
 - Raw BLS files remain local-only and ignored.
@@ -151,7 +151,7 @@ Rules:
 - Dispatcher model calls now have bounded timeout and one retry for runtime failures.
 - Operator Doctor includes model-runtime findings and still emits one safe next action.
 - `mealcam-agent` is optional/on-demand. Its endpoint is only blocking when a MealCam/Vision workorder or explicit Tom request requires it.
-- `senior-coding-agent` is Codex CLI / GPT-5.5. It has no vLLM endpoint and should show as external/config-checked.
+- `senior-coding-agent` and `senior-reviewer-agent` are Codex CLI / GPT-5.5. They have no vLLM endpoint and should show as external/config-checked.
 - Codex Worker Bridge is dry-run by default and uses non-interactive `codex exec` only with `--execute`.
 - Generated Codex worker prompts/reports under `system/reports/codex-worker/` are runtime artifacts and should not be committed by default.
 - Operator Doctor reports Codex Worker as ready or disabled. Batch dossiers include Codex Worker report metadata when ignored runtime reports exist.
