@@ -28,6 +28,7 @@ Current date: 2026-05-10.
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI. A decomposition-plan validator now blocks unsafe or underspecified structured plans before factory output generation.
 - Memory/Learning Automation adds a read-only governance learning checker.
 - Memory/Learning V2 adds read-only incident suggestion from dossier, autonomy, audit, pipeline metrics, runtime history, and Codex Worker outputs. Draft writing is explicit and limited to `docs/project/governance-learning/drafts/`.
+- Memory Update Draft Proposals add reviewed, draft-only suggestions for handover/canonical memory updates. They write only under `docs/project/governance-learning/memory-update-drafts/` with explicit `--write-drafts` and never write canonical or external memory.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
 - Runtime history readiness is normalized against current active productive routes and now includes V2 freshness/status fields: `overall_status`, `freshness_status`, `last_checked_at`, `age_minutes`, `blocking_impact`, and `next_required_action`. Stale history returns `STALE_HISTORY` and must not be used as proof of current readiness.
@@ -109,6 +110,7 @@ Reason:
 - Governance learning checking is available through `system/reports/governance-learning-check.ts`.
 - Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
 - Learning suggestions are available through `system/reports/governance-learning-suggest.ts`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/drafts/`.
+- Memory update proposals are available through `system/reports/governance-learning-suggest.ts --memory-proposals`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/memory-update-drafts/`.
 - Report retention summaries are available through `system/reports/report-retention-summarizer.ts`; it is read-only and reports metadata only for ignored local artifacts.
 - Promotion governance is available through `system/control-plane/promotion-governance.ts`.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
@@ -265,12 +267,15 @@ Run:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --write-summary
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals --write-drafts
 ```
 
 Rules:
 
 - Default mode is read-only.
 - `--write-summary` writes only `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
+- Memory update proposal mode is draft-only and requires Tom review before any handover/canonical memory update.
 - The checker does not edit runtime state, approval state, audit history, or run history.
 - It verifies incident metadata, fix commits, regression tests, durable rules, recurrence detectors, handover state, canonical memory, and product-gate wording.
 

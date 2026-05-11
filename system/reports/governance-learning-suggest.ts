@@ -95,6 +95,66 @@ export interface GovernanceLearningSuggestOptions {
   generatedAt?: string
 }
 
+export type MemoryProposalCategory =
+  | 'current_truth_update'
+  | 'completed_governance_milestone'
+  | 'forbidden_action_policy'
+  | 'runtime_status_update'
+  | 'codex_worker_policy_update'
+  | 'project_profile_update'
+  | 'ui_governance_update'
+  | 'learning_record_update'
+  | 'archival_note'
+
+export type MemoryProposalConfidence = 'high' | 'medium' | 'low'
+
+export interface MemoryUpdateProposal {
+  proposal_id: string
+  created_at: string
+  source_refs: string[]
+  affected_memory_area: 'current_handover' | 'canonical_memory' | 'governance_learning' | 'agents_docs'
+  category: MemoryProposalCategory
+  suggested_memory_text: string
+  reason: string
+  confidence: MemoryProposalConfidence
+  safety_classification: 'draft_only_review_required'
+  requires_tom_review: true
+  forbidden_actions_confirmed: string[]
+  stale_or_conflicting_memory_notes: string[]
+}
+
+export interface BlockedMemorySuggestion {
+  source_ref: string
+  reason: 'forbidden_action_policy' | 'unsafe_product_gate' | 'fixture_activation_risk' | 'broad_automation_risk'
+  text_excerpt: string
+}
+
+export interface MemoryUpdateProposalResult {
+  schema_version: 1
+  generated_at: string
+  repo_root: string
+  product_gate_status: {
+    status: 'blocked'
+    reason: string
+  }
+  summary: {
+    proposals: number
+    blocked_suggestions: number
+    conflict_notes: number
+  }
+  proposals: MemoryUpdateProposal[]
+  blocked_suggestions: BlockedMemorySuggestion[]
+  conflict_notes: string[]
+  recommended_next_action: string
+  exitCode: 0 | 1 | 2
+}
+
+export interface MemoryUpdateProposalOptions {
+  repoRoot?: string
+  generatedAt?: string
+  fromFile?: string
+}
+
 const INCIDENT_STATES = new Set([
   'FIX_REQUIRED',
   'STOP_RULE_BLOCKED',
@@ -107,6 +167,16 @@ const INCIDENT_STATES = new Set([
 ])
 
 const DRAFTS_DIR = 'docs/project/governance-learning/drafts'
+const MEMORY_DRAFTS_DIR = 'docs/project/governance-learning/memory-update-drafts'
+const FORBIDDEN_ACTIONS_CONFIRMED = [
+  'no product work',
+  'no Supabase commands',
+  'no migration execution',
+  'no approval grants',
+  'no runtime_state edits',
+  'no queue edits',
+  'no canonical memory write',
+]
 
 function now(): string {
   return new Date().toISOString()
@@ -130,6 +200,14 @@ function readJsonIfExists(filePath: string): any | null {
   }
 }
 
+function repoFile(repoRoot: string, relativePath: string): string {
+  return path.join(repoRoot, relativePath)
+}
+
+function relativeSource(repoRoot: string, filePath: string): string {
+  return toPosix(path.relative(repoRoot, filePath))
+}
+
 function readJsonl(filePath: string): any[] {
   const content = readIfExists(filePath)
   if (!content.trim()) return []
@@ -150,6 +228,14 @@ function walkFiles(dir: string, predicate: (name: string) => boolean): string[] 
     else if (predicate(entry.name)) output.push(fullPath)
   }
   return output.sort()
+}
+
+function excerpt(value: string, limit = 240): string {
+  return value.replace(/\s+/g, ' ').trim().slice(0, limit)
+}
+
+function asStringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter(item => typeof item === 'string') : []
 }
 
 export function suggestGovernanceLearning(input: GovernanceLearningSuggestionInput): GovernanceLearningSuggestion {
@@ -441,6 +527,314 @@ export function writeGovernanceLearningDrafts(result: GovernanceLearningSuggestR
   })
 }
 
+function todoItems(repoRoot: string): any[] {
+  const parsed = readJsonIfExists(repoFile(repoRoot, 'docs/project/GOVERNANCE_TODO_REGISTER.json'))
+  return Array.isArray(parsed?.items) ? parsed.items : []
+}
+
+function recentLearningRecords(repoRoot: string): Array<{ file: string; text: string }> {
+  const dir = repoFile(repoRoot, 'docs/project/governance-learning')
+  return walkFiles(dir, name => name.endsWith('.md'))
+    .filter(file => !toPosix(file).includes('/drafts/') && !toPosix(file).includes('/memory-update-drafts/'))
+    .map(file => ({ file: relativeSource(repoRoot, file), text: readIfExists(file) }))
+}
+
+function unsafeMemorySuggestion(text: string): BlockedMemorySuggestion['reason'] | null {
+  if (/\b(product gate|product work)\s+(is\s+)?open\b/i.test(text)) return 'unsafe_product_gate'
+  if (/\b(supabase\s+db\s+(push|reset)|execute\s+migrations?|run\s+migrations?|production\s+db|bls\s+import)\b/i.test(text)) return 'forbidden_action_policy'
+  if (/\b(beauty club|fixture-beauty-club).{0,40}\b(active|productive|enabled)\b/i.test(text)) return 'fixture_activation_risk'
+  if (/\bbroad\s+codex\s+automation\s+(enabled|allowed|on)\b/i.test(text)) return 'broad_automation_risk'
+  return null
+}
+
+function unsafeSourceSuggestion(text: string): BlockedMemorySuggestion['reason'] | null {
+  if (/\b(product gate|product work)\s+(is\s+)?open\b/i.test(text)) return 'unsafe_product_gate'
+  if (/\b(beauty club|fixture-beauty-club).{0,40}\b(active|productive|enabled)\b/i.test(text)) return 'fixture_activation_risk'
+  if (/\bbroad\s+codex\s+automation\s+(enabled|allowed|on)\b/i.test(text)) return 'broad_automation_risk'
+  return null
+}
+
+function makeProposal(params: {
+  generatedAt: string
+  category: MemoryProposalCategory
+  sourceRefs: string[]
+  affectedMemoryArea: MemoryUpdateProposal['affected_memory_area']
+  text: string
+  reason: string
+  confidence?: MemoryProposalConfidence
+  notes?: string[]
+}): MemoryUpdateProposal {
+  const idDate = params.generatedAt.slice(0, 10).replace(/-/g, '')
+  const slug = params.category.replace(/_/g, '-')
+  return {
+    proposal_id: `MEM-${idDate}-${slug}`,
+    created_at: params.generatedAt,
+    source_refs: params.sourceRefs,
+    affected_memory_area: params.affectedMemoryArea,
+    category: params.category,
+    suggested_memory_text: params.text,
+    reason: params.reason,
+    confidence: params.confidence ?? 'medium',
+    safety_classification: 'draft_only_review_required',
+    requires_tom_review: true,
+    forbidden_actions_confirmed: FORBIDDEN_ACTIONS_CONFIRMED,
+    stale_or_conflicting_memory_notes: params.notes ?? [],
+  }
+}
+
+function addProposal(
+  proposals: MemoryUpdateProposal[],
+  blocked: BlockedMemorySuggestion[],
+  proposal: MemoryUpdateProposal,
+): void {
+  const unsafe = unsafeMemorySuggestion(proposal.suggested_memory_text)
+  if (unsafe) {
+    blocked.push({
+      source_ref: proposal.source_refs[0] ?? 'unknown',
+      reason: unsafe,
+      text_excerpt: excerpt(proposal.suggested_memory_text),
+    })
+    return
+  }
+  if (!proposals.some(item => item.proposal_id === proposal.proposal_id)) proposals.push(proposal)
+}
+
+function collectMemoryConflictNotes(sources: string): string[] {
+  const notes: string[] = []
+  if (/\b(product gate|product work)\s+(is\s+)?open\b/i.test(sources) && /product work remains closed|product gate.*closed/i.test(sources)) {
+    notes.push('Product gate status differs across sources; keep closed unless Tom explicitly opens it.')
+  }
+  if (/planned_hardware_maintenance|DGX\/Spark devices are installed|rack/i.test(sources)) {
+    notes.push('Runtime status is maintenance-related; proposals must require recheck after hardware maintenance.')
+  }
+  if (/\b(beauty club|fixture-beauty-club).{0,40}\b(active|productive|enabled)\b/i.test(sources)) {
+    notes.push('Beauty Club fixture appears confused with an active project; keep it fixture-only until Tom supplies a real repo path and policy.')
+  }
+  if (/\bbroad\s+codex\s+automation\s+(enabled|allowed|on)\b/i.test(sources)) {
+    notes.push('Broad Codex automation is implied in a source; keep Codex Worker controlled and gated.')
+  }
+  if (/GOV-TODO-\d+[\s\S]{0,200}"status":\s*"done"[\s\S]{0,200}status.*open/i.test(sources)) {
+    notes.push('A TODO may be marked done in one source and open elsewhere; review TODO/register consistency.')
+  }
+  return notes
+}
+
+export function runMemoryUpdateProposalMode(options: MemoryUpdateProposalOptions = {}): MemoryUpdateProposalResult {
+  const repoRoot = path.resolve(options.repoRoot ?? process.cwd())
+  const generatedAt = options.generatedAt ?? now()
+  const handoverPath = repoFile(repoRoot, 'docs/project/CURRENT_GOVERNANCE_HANDOVER.md')
+  const todoPath = repoFile(repoRoot, 'docs/project/GOVERNANCE_TODO_REGISTER.json')
+  const handover = readIfExists(handoverPath)
+  const todos = todoItems(repoRoot)
+  const learningRecords = recentLearningRecords(repoRoot)
+  const explicitFile = options.fromFile ? (path.isAbsolute(options.fromFile) ? options.fromFile : repoFile(repoRoot, options.fromFile)) : undefined
+  const explicitText = explicitFile ? readIfExists(explicitFile) : ''
+  const sourceText = [
+    handover,
+    JSON.stringify(todos),
+    ...learningRecords.map(item => item.text),
+    explicitText,
+  ].join('\n')
+  const conflictNotes = collectMemoryConflictNotes(sourceText)
+  const proposals: MemoryUpdateProposal[] = []
+  const blocked: BlockedMemorySuggestion[] = []
+  const sourceUnsafe = unsafeSourceSuggestion(sourceText)
+  if (sourceUnsafe) {
+    blocked.push({
+      source_ref: 'docs/project/CURRENT_GOVERNANCE_HANDOVER.md',
+      reason: sourceUnsafe,
+      text_excerpt: excerpt(sourceText),
+    })
+  }
+
+  if (/product work remains closed|product gate.*closed/i.test(sourceText)) {
+    addProposal(proposals, blocked, makeProposal({
+      generatedAt,
+      category: 'current_truth_update',
+      sourceRefs: ['docs/project/CURRENT_GOVERNANCE_HANDOVER.md'],
+      affectedMemoryArea: 'current_handover',
+      text: 'Current governance truth: product work remains closed unless Tom explicitly opens it; no Supabase/db/migration/approval-grant work is authorized by learning or memory proposal tooling.',
+      reason: 'Keep the current truth explicit after recent governance automation work.',
+      confidence: 'high',
+      notes: conflictNotes.filter(item => /Product gate/i.test(item)),
+    }))
+  }
+
+  const doneTodos = todos.filter(item => item?.status === 'done')
+  for (const item of doneTodos.slice(-5)) {
+    addProposal(proposals, blocked, makeProposal({
+      generatedAt,
+      category: 'completed_governance_milestone',
+      sourceRefs: ['docs/project/GOVERNANCE_TODO_REGISTER.json', ...asStringArray(item.source_files).slice(0, 3)],
+      affectedMemoryArea: 'current_handover',
+      text: `Completed governance milestone: ${item.title}. Evidence: ${item.evidence}`,
+      reason: `TODO ${item.id} is marked done and may need a reviewed handover/current-memory note.`,
+      confidence: 'medium',
+    }))
+  }
+
+  if (/planned_hardware_maintenance|DGX\/Spark|rack installation/i.test(sourceText)) {
+    addProposal(proposals, blocked, makeProposal({
+      generatedAt,
+      category: 'runtime_status_update',
+      sourceRefs: ['docs/project/CURRENT_GOVERNANCE_HANDOVER.md'],
+      affectedMemoryArea: 'current_handover',
+      text: 'Runtime status: DGX/Spark endpoint failures during rack installation are planned_hardware_maintenance, not routing defects; runtime-dependent autonomous/night/large runs require fresh recheck after maintenance.',
+      reason: 'Prevent stale runtime history or powered-down hardware from being misclassified as a routing failure.',
+      confidence: 'high',
+      notes: conflictNotes.filter(item => /Runtime status/i.test(item)),
+    }))
+  }
+
+  if (/codex worker|controlled_enabled|senior-reviewer-agent|senior-coding-agent/i.test(sourceText)) {
+    addProposal(proposals, blocked, makeProposal({
+      generatedAt,
+      category: 'codex_worker_policy_update',
+      sourceRefs: ['docs/project/CURRENT_GOVERNANCE_HANDOVER.md', 'docs/project/CODEX_WORKER_BRIDGE.md'],
+      affectedMemoryArea: 'current_handover',
+      text: 'Codex Worker policy: Codex/GPT-5.5 is controlled-enabled only for gated senior governance agents with complete metadata, explicit codex_worker opt-in, closed product gate enforcement, and no broad automation.',
+      reason: 'Codex Worker routing changed from manual bridge to controlled senior governance path and should remain explicit in memory proposals.',
+      confidence: 'high',
+      notes: conflictNotes.filter(item => /Codex/i.test(item)),
+    }))
+  }
+
+  if (/fixture-beauty-club|Project Profiles|second-project fixture/i.test(sourceText)) {
+    addProposal(proposals, blocked, makeProposal({
+      generatedAt,
+      category: 'project_profile_update',
+      sourceRefs: ['docs/project/CURRENT_GOVERNANCE_HANDOVER.md', 'docs/project/PROJECT_PROFILES.md'],
+      affectedMemoryArea: 'current_handover',
+      text: 'Project Profiles status: LumeOS remains the active default profile; fixture-beauty-club is an inactive portability fixture only and must not be treated as active product work.',
+      reason: 'Avoid confusing the second-project fixture with a real Beauty Club project.',
+      confidence: 'high',
+      notes: conflictNotes.filter(item => /Beauty Club/i.test(item)),
+    }))
+  }
+
+  if (/Governance UI|browser smoke|ui:smoke/i.test(sourceText)) {
+    addProposal(proposals, blocked, makeProposal({
+      generatedAt,
+      category: 'ui_governance_update',
+      sourceRefs: ['docs/project/CURRENT_GOVERNANCE_HANDOVER.md', 'docs/project/GOVERNANCE_UI_V2.md'],
+      affectedMemoryArea: 'current_handover',
+      text: 'Governance UI status: browser smoke coverage exists for local /governance routes and must not require DGX/Spark endpoint checks or product gate opening.',
+      reason: 'Keep UI validation expectations recoverable without reading chat history.',
+      confidence: 'medium',
+    }))
+  }
+
+  if (learningRecords.length > 0) {
+    const latest = learningRecords.slice(-1)[0]
+    addProposal(proposals, blocked, makeProposal({
+      generatedAt,
+      category: 'learning_record_update',
+      sourceRefs: [latest.file],
+      affectedMemoryArea: 'governance_learning',
+      text: `Learning status: recent governance learning records exist and memory updates must remain reviewed drafts, not automatic canonical-memory writes. Latest source: ${latest.file}.`,
+      reason: 'Learning records can imply handover/canonical updates, but those updates must stay review-gated.',
+      confidence: 'medium',
+    }))
+  }
+
+  if (explicitText.trim()) {
+    const sourceRef = explicitFile ? relativeSource(repoRoot, explicitFile) : 'explicit-input'
+    const unsafe = unsafeMemorySuggestion(explicitText)
+    if (unsafe) {
+      blocked.push({ source_ref: sourceRef, reason: unsafe, text_excerpt: excerpt(explicitText) })
+    } else {
+      addProposal(proposals, blocked, makeProposal({
+        generatedAt,
+        category: 'archival_note',
+        sourceRefs: [sourceRef],
+        affectedMemoryArea: 'current_handover',
+        text: `Reviewed source may need an archival note: ${excerpt(explicitText, 320)}`,
+        reason: 'Explicit input was supplied for memory proposal review.',
+        confidence: 'low',
+      }))
+    }
+  }
+
+  return {
+    schema_version: 1,
+    generated_at: generatedAt,
+    repo_root: repoRoot,
+    product_gate_status: {
+      status: 'blocked',
+      reason: 'Product work remains blocked unless Tom explicitly opens it.',
+    },
+    summary: {
+      proposals: proposals.length,
+      blocked_suggestions: blocked.length,
+      conflict_notes: conflictNotes.length,
+    },
+    proposals,
+    blocked_suggestions: blocked,
+    conflict_notes: conflictNotes,
+    recommended_next_action: proposals.length > 0
+      ? 'Review memory update proposals and write drafts only for Tom-reviewed handover/canonical updates.'
+      : 'No memory update proposal is required.',
+    exitCode: blocked.length > 0 ? 1 : 0,
+  }
+}
+
+export function writeMemoryUpdateDrafts(result: MemoryUpdateProposalResult, options: { repoRoot?: string } = {}): string[] {
+  const repoRoot = path.resolve(options.repoRoot ?? result.repo_root)
+  const draftsDir = repoFile(repoRoot, MEMORY_DRAFTS_DIR)
+  fs.mkdirSync(draftsDir, { recursive: true })
+  return result.proposals.map((proposal, index) => {
+    const fileName = `${proposal.created_at.slice(0, 10)}-${proposal.category.replace(/_/g, '-')}-${index + 1}.md`
+    const fullPath = path.join(draftsDir, fileName)
+    fs.writeFileSync(fullPath, formatMemoryDraft(proposal), 'utf8')
+    return relativeSource(repoRoot, fullPath)
+  })
+}
+
+function formatMemoryDraft(proposal: MemoryUpdateProposal): string {
+  return [
+    '# DRAFT - Memory Update Proposal',
+    '',
+    'DRAFT - Tom review required before applying to handover, canonical memory, AGENTS.md, CLAUDE.md, or external memory.',
+    '',
+    '## Metadata',
+    '',
+    `- proposal_id: ${proposal.proposal_id}`,
+    `- created_at: ${proposal.created_at}`,
+    `- category: ${proposal.category}`,
+    `- affected_memory_area: ${proposal.affected_memory_area}`,
+    `- confidence: ${proposal.confidence}`,
+    `- safety_classification: ${proposal.safety_classification}`,
+    `- requires_tom_review: ${proposal.requires_tom_review}`,
+    '',
+    '## Source Refs',
+    '',
+    ...proposal.source_refs.map(item => `- ${item}`),
+    '',
+    '## Suggested Memory Text',
+    '',
+    proposal.suggested_memory_text,
+    '',
+    '## Reason',
+    '',
+    proposal.reason,
+    '',
+    '## Safety',
+    '',
+    ...proposal.forbidden_actions_confirmed.map(item => `- ${item}`),
+    '',
+    '## Stale Or Conflicting Memory Notes',
+    '',
+    ...(proposal.stale_or_conflicting_memory_notes.length > 0
+      ? proposal.stale_or_conflicting_memory_notes.map(item => `- ${item}`)
+      : ['- none detected']),
+    '',
+    '## Apply Procedure',
+    '',
+    'Do not apply automatically. Tom or a reviewed governance task must decide whether and where to apply this text.',
+    '',
+  ].join('\n')
+}
+
 function formatDraft(candidate: IncidentCandidate): string {
   return [
     '# DRAFT - Governance Incident Learning Candidate',
@@ -506,12 +900,15 @@ function formatDraft(candidate: IncidentCandidate): string {
   ].join('\n')
 }
 
-function parseArgs(args: string[]): { json: boolean; fromDossier?: string; writeDrafts: boolean } {
+function parseArgs(args: string[]): { json: boolean; fromDossier?: string; fromFile?: string; writeDrafts: boolean; memoryProposals: boolean } {
   const dossierIndex = args.indexOf('--from-dossier')
+  const fileIndex = args.indexOf('--from-file')
   return {
     json: args.includes('--json'),
     fromDossier: dossierIndex !== -1 ? args[dossierIndex + 1] : undefined,
+    fromFile: fileIndex !== -1 ? args[fileIndex + 1] : undefined,
     writeDrafts: args.includes('--write-drafts') || args.includes('--write-draft'),
+    memoryProposals: args.includes('--memory-proposals') || args.includes('--memory-proposal'),
   }
 }
 
@@ -553,6 +950,16 @@ function formatReport(result: GovernanceLearningSuggestResult, written: string[]
 function main(): number {
   const opts = parseArgs(process.argv.slice(2))
   try {
+    if (opts.memoryProposals) {
+      const result = runMemoryUpdateProposalMode({ fromFile: opts.fromFile })
+      const written = opts.writeDrafts ? writeMemoryUpdateDrafts(result) : []
+      if (opts.json) {
+        console.log(JSON.stringify({ ...result, written_drafts: written.length > 0 ? written : undefined }, null, 2))
+      } else {
+        console.log(formatMemoryProposalReport(result, written))
+      }
+      return result.exitCode
+    }
     const result = runGovernanceLearningSuggest({ fromDossier: opts.fromDossier })
     const written = opts.writeDrafts ? writeGovernanceLearningDrafts(result) : []
     if (opts.json) {
@@ -577,6 +984,44 @@ function main(): number {
     }
     return 2
   }
+}
+
+function formatMemoryProposalReport(result: MemoryUpdateProposalResult, written: string[]): string {
+  const lines = [
+    '# Memory Update Proposals',
+    '',
+    `Repo: ${result.repo_root}`,
+    `Generated: ${result.generated_at}`,
+    `Product gate: ${result.product_gate_status.reason}`,
+    '',
+    `Summary: proposals=${result.summary.proposals}, blocked=${result.summary.blocked_suggestions}, conflicts=${result.summary.conflict_notes}`,
+    '',
+  ]
+  if (result.proposals.length === 0) {
+    lines.push('No memory update proposals.')
+  } else {
+    lines.push('## Proposals')
+    for (const proposal of result.proposals) {
+      lines.push(`- [${proposal.confidence}] ${proposal.category} -> ${proposal.affected_memory_area}`)
+      lines.push(`  ${proposal.suggested_memory_text}`)
+    }
+  }
+  if (result.blocked_suggestions.length > 0) {
+    lines.push('', '## Blocked Suggestions')
+    for (const item of result.blocked_suggestions) {
+      lines.push(`- ${item.reason} from ${item.source_ref}: ${item.text_excerpt}`)
+    }
+  }
+  if (result.conflict_notes.length > 0) {
+    lines.push('', '## Conflict Notes')
+    lines.push(...result.conflict_notes.map(item => `- ${item}`))
+  }
+  if (written.length > 0) {
+    lines.push('', '## Drafts Written')
+    lines.push(...written.map(item => `- ${item}`))
+  }
+  lines.push('', '## Recommended Next Action', result.recommended_next_action)
+  return lines.join('\n')
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {

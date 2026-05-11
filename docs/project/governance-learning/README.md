@@ -71,6 +71,25 @@ Drafts are not final incident records. They must be reviewed, linked to a fix an
 
 The suggestion tool detects incident candidates from dossier/autonomy output, recent audit and pipeline metrics, Codex Worker reports, runtime history, and existing incident records. If a candidate matches an existing incident, it is marked as `duplicate_of` and no new draft is suggested by default.
 
+Run memory update proposal mode when recent learning records, TODO register changes, or handover changes may require reviewed memory/handover updates:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals --json
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals --from-file <source-md-or-json>
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals --write-drafts
+```
+
+Memory proposal mode is draft-only. `--write-drafts` writes review candidates only under:
+
+```text
+docs/project/governance-learning/memory-update-drafts/
+```
+
+Memory proposals must be reviewed by Tom before any handover, canonical memory, `AGENTS.md`, `CLAUDE.md`, or external memory update. The tool never writes canonical memory, external ChatGPT memory, runtime state, approval state, queue files, final incident records, or product specs.
+
+Memory proposal mode flags stale/conflicting source material, including product-gate contradictions, planned runtime maintenance notes, fixture Beauty Club activation risk, and broad Codex automation wording.
+
 ## File Naming
 
 Use:

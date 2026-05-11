@@ -192,15 +192,16 @@
       "layer": "memory_learning",
       "severity": "low",
       "priority": "P2",
-      "status": "open",
-      "evidence": "Learning records are checked, but handover/canonical memory updates are still manual.",
-      "recommended_action": "Extend learning suggestion tool to write reviewed draft handover/canonical update proposals only with explicit flag.",
+      "status": "done",
+      "evidence": "governance-learning-suggest now supports --memory-proposals for draft-only handover/canonical memory update proposals. It derives proposals from handover, TODO register, learning records, and optional source files; flags stale/conflicting memory notes; blocks unsafe product/DB/Supabase/migration/BLS/broad-Codex/fixture-activation suggestions; and writes only to memory-update-drafts with explicit --write-drafts.",
+      "recommended_action": "Use governance-learning-suggest.ts --memory-proposals --json for read-only memory update review and --memory-proposals --write-drafts only when Tom wants reviewed draft proposals prepared.",
       "dependencies": [],
       "estimated_effort": "0.5-1d",
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
         "system/reports/governance-learning-suggest.ts",
+        "system/reports/__tests__/governance-learning-suggest.test.ts",
         "docs/project/CURRENT_GOVERNANCE_HANDOVER.md",
         "system/memory/canonical/lumeos_canonical.md"
       ]

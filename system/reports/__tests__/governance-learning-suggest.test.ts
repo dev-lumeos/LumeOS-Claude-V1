@@ -5,8 +5,10 @@ import os from 'node:os'
 import path from 'node:path'
 
 import {
+  runMemoryUpdateProposalMode,
   runGovernanceLearningSuggest,
   suggestGovernanceLearning,
+  writeMemoryUpdateDrafts,
   writeGovernanceLearningDrafts,
 } from '../governance-learning-suggest'
 
@@ -35,6 +37,34 @@ function writeRequiredDocs(): void {
   write('docs/project/governance-learning/README.md', '# Governance Learning\n')
   write('docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md', '# Schema\n')
   write('docs/project/governance-learning/INCIDENT_TO_REGRESSION_CHECKLIST.md', '# Checklist\n')
+  write('docs/project/CURRENT_GOVERNANCE_HANDOVER.md', [
+    '# Current Governance Handover',
+    '',
+    '- Product work remains closed unless Tom explicitly opens it.',
+    '- Runtime hardware downtime is planned_hardware_maintenance while DGX/Spark devices are installed into the rack.',
+    '- Codex Worker dispatch is controlled_enabled for senior governance agents; broad automation remains forbidden.',
+    '- Project Profiles include inactive fixture-beauty-club only.',
+  ].join('\n'))
+  writeJson('docs/project/GOVERNANCE_TODO_REGISTER.json', {
+    generated_at: '2026-05-11T00:00:00Z',
+    items: [
+      {
+        id: 'GOV-TODO-010',
+        title: 'Add draft memory update proposal workflow',
+        layer: 'memory_learning',
+        severity: 'low',
+        priority: 'P2',
+        status: 'done',
+        evidence: 'Memory update proposal workflow is implemented.',
+        recommended_action: 'Use memory proposal draft mode for reviewed handover/canonical suggestions.',
+        dependencies: [],
+        estimated_effort: '0.5d',
+        codex_autonomous_possible: true,
+        blocks_product_work: false,
+        source_files: ['system/reports/governance-learning-suggest.ts'],
+      },
+    ],
+  })
 }
 
 function writeExistingIncident(): void {
@@ -178,5 +208,80 @@ describe('governance learning suggestion helper', () => {
 
     assert.equal(result.candidates[0]?.category, 'INVALID_JSON_SPIKE')
     assert.equal(result.exitCode, 1)
+  })
+
+  it('memory proposal dry-run outputs reviewed proposals and writes nothing', () => {
+    const result = runMemoryUpdateProposalMode({ repoRoot: tmpDir })
+
+    assert.equal(result.exitCode, 0)
+    assert.ok(result.proposals.length >= 3)
+    assert.equal(result.proposals.every(item => item.requires_tom_review), true)
+    assert.equal(result.product_gate_status.status, 'blocked')
+    assert.equal(fs.existsSync(path.join(tmpDir, 'docs/project/governance-learning/memory-update-drafts')), false)
+    assert.equal(fs.existsSync(path.join(tmpDir, 'system/memory/canonical/lumeos_canonical.md')), false)
+  })
+
+  it('memory proposal draft writing only writes review drafts', () => {
+    const result = runMemoryUpdateProposalMode({ repoRoot: tmpDir })
+    const written = writeMemoryUpdateDrafts(result, { repoRoot: tmpDir })
+
+    assert.ok(written.length > 0)
+    assert.equal(written.every(item => item.startsWith('docs/project/governance-learning/memory-update-drafts/')), true)
+    assert.equal(fs.existsSync(path.join(tmpDir, 'docs/project/CURRENT_GOVERNANCE_HANDOVER.md')), true)
+    assert.equal(fs.existsSync(path.join(tmpDir, 'system/memory/canonical/lumeos_canonical.md')), false)
+  })
+
+  it('memory proposals keep product gate closed and runtime maintenance draft-only', () => {
+    const result = runMemoryUpdateProposalMode({ repoRoot: tmpDir })
+
+    const runtime = result.proposals.find(item => item.category === 'runtime_status_update')
+    assert.ok(runtime)
+    assert.match(runtime.suggested_memory_text, /planned_hardware_maintenance/)
+    assert.doesNotMatch(JSON.stringify(result.proposals), /product gate open/i)
+    assert.equal(result.product_gate_status.status, 'blocked')
+  })
+
+  it('memory proposals do not promote Beauty Club fixture to active', () => {
+    write('docs/project/CURRENT_GOVERNANCE_HANDOVER.md', 'fixture-beauty-club active project should not happen\n')
+
+    const result = runMemoryUpdateProposalMode({ repoRoot: tmpDir })
+
+    assert.equal(result.proposals.some(item => /Beauty Club.*active/i.test(item.suggested_memory_text)), false)
+    assert.match(result.conflict_notes.join('\n'), /Beauty Club fixture/i)
+  })
+
+  it('memory proposals flag broad Codex automation and block explicit DB suggestions', () => {
+    write('docs/project/CURRENT_GOVERNANCE_HANDOVER.md', [
+      'Product work remains closed.',
+      'Broad Codex automation enabled.',
+    ].join('\n'))
+    write('unsafe-memory-source.md', 'Run supabase db push and execute migrations.')
+
+    const result = runMemoryUpdateProposalMode({ repoRoot: tmpDir, fromFile: 'unsafe-memory-source.md' })
+
+    assert.match(result.conflict_notes.join('\n'), /broad Codex automation/i)
+    assert.equal(result.blocked_suggestions.some(item => item.reason === 'forbidden_action_policy'), true)
+    assert.equal(result.blocked_suggestions.some(item => item.reason === 'broad_automation_risk'), true)
+    assert.equal(result.proposals.some(item => /supabase db push|execute migrations/i.test(item.suggested_memory_text)), false)
+  })
+
+  it('memory proposal JSON shape is stable and includes source refs', () => {
+    const result = runMemoryUpdateProposalMode({ repoRoot: tmpDir })
+    const proposal = result.proposals[0]
+
+    assert.deepEqual(Object.keys(result).sort(), [
+      'blocked_suggestions',
+      'conflict_notes',
+      'exitCode',
+      'generated_at',
+      'product_gate_status',
+      'proposals',
+      'recommended_next_action',
+      'repo_root',
+      'schema_version',
+      'summary',
+    ].sort())
+    assert.ok(proposal.source_refs.length > 0)
+    assert.equal(proposal.requires_tom_review, true)
   })
 })
