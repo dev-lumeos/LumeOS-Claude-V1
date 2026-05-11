@@ -25,7 +25,7 @@ Current date: 2026-05-10.
 - Governance Batch 006 adds a read-only Batch Dossier Reporter and operator dossier suggestions.
 - Governance Batch 007 adds a deterministic Promotion / Merge Governance CLI.
 - Governance Batch 008 adds read-only Operator Doctor mode.
-- Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI.
+- Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI. A decomposition-plan validator now blocks unsafe or underspecified structured plans before factory output generation.
 - Memory/Learning Automation adds a read-only governance learning checker.
 - Memory/Learning V2 adds read-only incident suggestion from dossier, autonomy, audit, pipeline metrics, runtime history, and Codex Worker outputs. Draft writing is explicit and limited to `docs/project/governance-learning/drafts/`.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
@@ -224,7 +224,9 @@ Rules:
 ## Workorder Factory Output
 
 - `system/workorders/cli/wo-factory.ts`
+- `system/workorders/cli/decomposition-plan-validator.ts`
 - `system/workorders/cli/__tests__/wo-factory.test.ts`
+- `system/workorders/cli/__tests__/decomposition-plan-validator.test.ts`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/governance-learning/2026-05-05-workorder-factory-automation-summary.md`
 
@@ -234,11 +236,14 @@ Run:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --dry-run
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --write
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --validate <workorder-or-batch>
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\decomposition-plan-validator.ts --plan <plan-file> --project lumeos --json
 ```
 
 Rules:
 
 - Factory input is a Markdown file with a deterministic JSON plan block.
+- Decomposition plans must include stable plan/project identity, objective, source_refs, constraints, non_goals, scoped subtasks, expected outputs, and acceptance criteria.
+- The validator is profile-aware and supports the inactive `fixture-beauty-club` profile for non-Nutrition fixture coverage only.
 - Dry-run writes nothing.
 - `--write` creates draft workorders and a batch only after high/critical factory findings are clear.
 - Factory does not dispatch, grant approvals, run Supabase commands, execute migrations, or import BLS data.

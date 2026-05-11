@@ -130,9 +130,9 @@
       "layer": "workorder_factory",
       "severity": "medium",
       "priority": "P2",
-      "status": "open",
-      "evidence": "wo-factory is deterministic after structured plan input, but free-form spec to structured plan remains prompt/skill-driven.",
-      "recommended_action": "Create a schema/checker for decomposition plans before WO generation, including profile-aware source bundles.",
+      "status": "done",
+      "evidence": "A profile-aware decomposition-plan validator now checks plan identity, project/profile id, objective, source_refs, constraints, non_goals, subtask scope, expected outputs, acceptance criteria, forbidden paths, runtime artifacts, raw data outputs, DB/Supabase/migration risk, approval-grant tasks, and closed product gate behavior before WO generation.",
+      "recommended_action": "Run decomposition-plan-validator.ts --plan <plan-file> --project <profile> --json before accepting structured decomposition plans; future work remains deterministic conversion from free-form ideas/specs into validated structured plans.",
       "dependencies": [
         "GOV-TODO-006"
       ],
@@ -140,6 +140,8 @@
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
+        "system/workorders/cli/decomposition-plan-validator.ts",
+        "system/workorders/cli/__tests__/decomposition-plan-validator.test.ts",
         "system/workorders/cli/wo-factory.ts",
         ".agents/skills/spec-to-decomposition",
         ".agents/skills/decomposition-to-workorders"

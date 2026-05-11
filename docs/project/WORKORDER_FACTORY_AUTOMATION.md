@@ -4,7 +4,7 @@
 
 The Workorder Factory is the deterministic bridge from an approved structured plan to scoped, source-linked workorders and a batch file. It does not execute workorders, dispatch agents, grant approvals, run Supabase commands, or make product changes.
 
-This layer exists to reduce manual prompt stitching while preserving governance gates.
+This layer exists to reduce manual prompt stitching while preserving governance gates. A decomposition-plan validator now runs before factory output generation, so structured plans are checked deterministically before any workorder Markdown is rendered or written.
 
 ## Existing Capability Audit
 
@@ -35,6 +35,7 @@ The smallest missing executable layer was a deterministic structured-plan to wor
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --dry-run
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --write
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --validate <workorder-or-batch>
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\decomposition-plan-validator.ts --plan <plan-file> --project lumeos --json
 ```
 
 ## Plan Format
@@ -43,10 +44,15 @@ The CLI expects a Markdown file with a JSON code block. JSON is used intentional
 
 Required top-level fields:
 
+- `plan_id` or `feature_id`
+- `project_id`
 - `module`
+- `objective`
 - `batch_id`
 - `batch_title`
 - `source_refs`
+- `constraints`
+- `non_goals`
 - `workorders`
 
 Each workorder must include:
@@ -75,6 +81,7 @@ Recommended workorder fields:
 
 - Default mode is read-only dry-run.
 - `--write` is required to create workorder and batch files.
+- Decomposition plans are validated before workorders are rendered or written.
 - No dispatch is performed.
 - No approvals are granted.
 - No Supabase commands are run.
@@ -84,6 +91,29 @@ Recommended workorder fields:
 - `db-migration` workorders require `rollback_hint`.
 - Mixed-risk workorders are rejected; split them before writing.
 - Placeholder/example paths such as `example.sql` are rejected.
+- Broad wildcard scopes are rejected unless the subtask is explicit discovery-only.
+- Outputs outside the selected project profile `allowed_domain_paths` are rejected.
+- Product implementation is blocked while the selected profile product gate is closed.
+- DB/Supabase/migration plans are blocked while the product gate is closed or required approval policy is not satisfied.
+
+## Decomposition Plan Validator
+
+The validator is read-only:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\decomposition-plan-validator.ts --plan <plan-file> --project lumeos --json
+```
+
+It returns deterministic JSON:
+
+- `valid`
+- `profile_id`
+- `blocked_by_product_gate`
+- severity counts
+- findings with `id`, `severity`, `path`, `message`, and `recommended_fix`
+- a normalized summary with plan id, objective, subtask count, and expected outputs
+
+The validator is profile-aware. `lumeos` can validate governance/Nutrition planning paths, while the inactive `fixture-beauty-club` profile proves non-Nutrition governance/docs fixture plans without activating real Beauty Club product work.
 
 ## Output
 
@@ -107,7 +137,7 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 
 ## Out Of Scope
 
-- Generating decomposition from free-form specs.
+- Generating decomposition from free-form specs. The validator checks structured decomposition plans; it does not create them.
 - Making architecture decisions.
 - Running product batches.
 - Executing migrations.

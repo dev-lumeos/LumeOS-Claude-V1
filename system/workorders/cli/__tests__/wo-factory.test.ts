@@ -17,6 +17,43 @@ beforeEach(() => {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumeos-wo-factory-'))
   const schema = fs.readFileSync(path.join(realCwd, 'system/workorders/schemas/workorder.schema.json'), 'utf8')
   write('system/workorders/schemas/workorder.schema.json', schema)
+  write('system/project-profiles/profiles/lumeos.json', JSON.stringify({
+    profile_version: 2,
+    project_id: 'lumeos',
+    display_name: 'LumeOS Test',
+    profile_kind: 'active',
+    active: true,
+    repo_root: tmpDir.replace(/\\/g, '/'),
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: ['docs/specs/Nutrition/00_raw/'],
+    ignored_local_paths: ['docs/specs/Nutrition/00_raw/', 'system/reports/codex-worker/'],
+    product_gate: {
+      status: 'closed',
+      reason: 'Product work remains blocked.',
+      conditional_planning_allowed: false,
+    },
+    forbidden_paths: ['.env', '.env.*', 'system/state/runtime_state.json', 'system/approval/queue.json', 'docs/specs/Nutrition/00_raw/**'],
+    forbidden_commands: ['supabase db reset', 'supabase db push', 'supabase migration up'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/nutrition/batches/BATCH-test.md',
+    default_governance_batch: 'system/workorders/nutrition/batches/BATCH-test.md',
+    default_branch_prefix: 'goal/',
+    allowed_domain_paths: ['docs/specs/Nutrition/', 'docs/project/', 'system/workorders/'],
+    promotion_policy: { require_clean_worktree: true },
+    codex_worker_policy: {
+      enabled: true,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+  }, null, 2))
   for (const file of [
     'docs/specs/Nutrition/INDEX.md',
     'docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md',
@@ -43,7 +80,10 @@ function write(relativePath: string, content: string): void {
 
 function validPlan(overrides: Record<string, unknown> = {}, workorderOverrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
+    plan_id: 'PLAN-test-001',
+    project_id: 'lumeos',
     module: 'Nutrition',
+    objective: 'Create governance planning workorders only.',
     batch_id: 'BATCH-TEST-P1-001',
     batch_title: 'Test Planning Batch',
     status: 'draft',
@@ -126,6 +166,18 @@ describe('wo-factory', () => {
 
     assert.equal(result.status, 'FIX_REQUIRED')
     assert.equal(finding(result, 'plan.source_refs_missing')?.severity, 'high')
+  })
+
+  it('refuses invalid decomposition plans before generating workorders', () => {
+    const result = run(validPlan({}, {
+      expected_outputs: ['system/state/runtime_state.json'],
+      scope_files: ['system/state/runtime_state.json'],
+      files_allowed: ['system/state/runtime_state.json'],
+    }))
+
+    assert.equal(result.status, 'FIX_REQUIRED')
+    assert.equal(result.workorders.length, 1)
+    assert.equal(finding(result, 'decomposition.outputs.forbidden_path')?.severity, 'high')
   })
 
   it('fails when expected output is outside scope', () => {

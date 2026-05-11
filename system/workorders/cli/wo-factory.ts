@@ -3,6 +3,7 @@ import path from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import { extractFirstYamlBlock, loadBatch, parseSimpleYaml, validateWo } from './batch-loader'
+import { validateDecompositionPlan, type DecompositionFinding } from './decomposition-plan-validator'
 import { runSpecSourceChainCheck, type SpecSourceChainResult } from './spec-source-chain-check'
 
 type Severity = 'critical' | 'high' | 'medium' | 'low' | 'info'
@@ -620,11 +621,32 @@ function renderBatchMarkdown(plan: FactoryPlan, workorders: GeneratedWorkorder[]
   return lines.join('\n')
 }
 
-export function runFactory(planFile: string, outDir: string, options: { write?: boolean } = {}): FactoryResult {
+function factoryFindingFromDecomposition(item: DecompositionFinding): FactoryFinding {
+  return {
+    id: `decomposition.${item.id}`,
+    severity: item.severity,
+    layer: 'decomposition_plan',
+    message: item.message,
+    evidence: item.path,
+    suggested_action: item.recommended_fix,
+    blocks_write: item.blocks_factory,
+    blocks_operator: item.blocks_factory,
+  }
+}
+
+export function runFactory(planFile: string, outDir: string, options: { write?: boolean; projectId?: string } = {}): FactoryResult {
   const resolvedPlan = path.resolve(planFile)
   const content = fs.readFileSync(resolvedPlan, 'utf8')
   const plan = extractJsonPlan(content)
+  const decompositionValidation = validateDecompositionPlan(plan as unknown as Record<string, unknown>, {
+    projectId: options.projectId,
+    repoRoot: process.cwd(),
+    planFile: toPosix(path.relative(process.cwd(), resolvedPlan)),
+  })
   const findings = [
+    ...decompositionValidation.findings
+      .filter(item => item.severity === 'critical' || item.severity === 'high')
+      .map(factoryFindingFromDecomposition),
     ...validatePlanShape(plan),
     ...(Array.isArray(plan.workorders) ? plan.workorders.flatMap(wo => validateWorkorder(plan, wo)) : []),
   ]
@@ -664,8 +686,8 @@ export function runFactory(planFile: string, outDir: string, options: { write?: 
     findings,
     summary,
     validation_commands: [
-      `cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\spec-source-chain-check.ts --batch ${toPosix(path.relative(process.cwd(), batchFile))}`,
-      'cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\control-plane\\governance-invariant-check.ts',
+      `cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\spec-source-chain-check.ts --batch ${toPosix(path.relative(process.cwd(), batchFile))}${options.projectId ? ` --project ${options.projectId}` : ''}`,
+      `cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\control-plane\\governance-invariant-check.ts${options.projectId ? ` --project ${options.projectId}` : ''}`,
       'cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\control-plane\\agent-contract-check.ts',
       `cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\run-batch-operator.ts ${toPosix(path.relative(process.cwd(), batchFile))} --dry-run`,
     ],
@@ -827,7 +849,7 @@ export function formatValidateReport(result: ValidateResult): string {
 
 function printUsage(): void {
   console.error('Usage:')
-  console.error('  wo-factory.ts --from-plan <plan-file> --out <output-dir> [--dry-run|--write] [--json]')
+  console.error('  wo-factory.ts --from-plan <plan-file> --out <output-dir> [--project lumeos] [--dry-run|--write] [--json]')
   console.error('  wo-factory.ts --validate <workorder-or-batch> [--json]')
 }
 
@@ -849,12 +871,13 @@ function main(): void {
 
     const planFile = argAfter(args, '--from-plan')
     const outDir = argAfter(args, '--out')
+    const projectId = argAfter(args, '--project')
     if (!planFile || !outDir) {
       printUsage()
       process.exit(2)
     }
     const write = args.includes('--write')
-    const result = runFactory(planFile, outDir, { write })
+    const result = runFactory(planFile, outDir, { write, projectId })
     console.log(json ? JSON.stringify(result, null, 2) : formatFactoryReport(result))
     process.exit(hasBlockingFindings(result.findings) ? 1 : 0)
   } catch (error) {
