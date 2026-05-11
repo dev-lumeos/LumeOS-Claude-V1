@@ -49,6 +49,7 @@ export interface PromotionRequiredCheck {
 
 export interface PromotionReviewResult {
   schema_version: 1
+  mode: 'review'
   generated_at: string
   branch: string
   current_branch: string
@@ -70,6 +71,29 @@ export interface PromotionReviewResult {
   summary: Record<PromotionSeverity, number>
   findings: PromotionFinding[]
   next_action: string
+}
+
+export interface PromotionStatusResult {
+  schema_version: 1
+  mode: 'status'
+  generated_at: string
+  branch: string
+  status: 'OK' | 'WARN' | 'BLOCKED'
+  is_main: boolean
+  promotion_applicable: boolean
+  product_work_gate: {
+    status: 'blocked'
+    reason: string
+  }
+  git: {
+    worktree_clean: boolean
+    upstream?: string
+    ahead_of_upstream?: number
+    behind_upstream?: number
+  }
+  summary: Record<PromotionSeverity, number>
+  findings: PromotionFinding[]
+  recommended_next_action: string
 }
 
 export interface PromotionActionResult {
@@ -182,6 +206,16 @@ function parseNameStatus(output: string, profile?: ProjectProfile): PromotionCha
     .map(line => {
       const [status, ...rest] = line.split(/\t/)
       const filePath = rest[rest.length - 1] ?? ''
+      return { status, path: filePath, category: classifyPromotionPath(filePath, profile) }
+    })
+}
+
+function parseShortStatus(output: string, profile?: ProjectProfile): PromotionChangedFile[] {
+  return output.split(/\r?\n/)
+    .filter(Boolean)
+    .map(line => {
+      const status = line.slice(0, 2).trim() || '??'
+      const filePath = line.slice(3).trim()
       return { status, path: filePath, category: classifyPromotionPath(filePath, profile) }
     })
 }
@@ -379,6 +413,7 @@ export function reviewBranch(branch: string, options: PromotionOptions = {}): Pr
 
   return {
     schema_version: 1,
+    mode: 'review',
     generated_at: options.generatedAt ?? new Date().toISOString(),
     branch,
     current_branch: currentBranch,
@@ -397,6 +432,87 @@ export function reviewBranch(branch: string, options: PromotionOptions = {}): Pr
     summary: countBySeverity(findings),
     findings,
     next_action: nextAction(decision, branch),
+  }
+}
+
+function promotionStatusFromFindings(findings: PromotionFinding[]): 'OK' | 'WARN' | 'BLOCKED' {
+  if (findings.some(item => item.blocks_merge && (item.severity === 'critical' || item.severity === 'high'))) return 'BLOCKED'
+  if (findings.length > 0) return 'WARN'
+  return 'OK'
+}
+
+function promotionStatusNextAction(status: 'OK' | 'WARN' | 'BLOCKED', isMain: boolean, branch: string): string {
+  if (status === 'BLOCKED') return 'Fix promotion health findings before running merge/push governance.'
+  if (isMain) return 'No promotion review is needed on main; use --review-branch <feature branch> for a real promotion.'
+  return `${TSX} system\\control-plane\\promotion-governance.ts --review-branch ${branch} --json`
+}
+
+export function statusPromotionGovernance(options: PromotionOptions = {}): PromotionStatusResult {
+  const repoRoot = options.repoRoot ?? process.cwd()
+  const profile = options.projectId ? getProjectProfile(options.projectId, { repoRoot }) : undefined
+  const runner = options.runner ?? defaultRunner(repoRoot)
+  const findings: PromotionFinding[] = []
+
+  const currentBranch = trim(runner(['rev-parse', '--abbrev-ref', 'HEAD']).stdout)
+  const status = runner(['status', '--short'])
+  const worktreeClean = trim(status.stdout) === ''
+  const changedFiles = parseShortStatus(status.stdout, profile)
+
+  if (!worktreeClean) {
+    findings.push(finding({
+      id: 'git.dirty_worktree',
+      severity: 'high',
+      layer: 'git',
+      message: 'Worktree is dirty.',
+      evidence: status.stdout.trim(),
+      suggested_action: 'Commit, stash, or clean intended changes before promotion actions.',
+      blocks_merge: true,
+      requires_tom: false,
+    }))
+  }
+  addForbiddenArtifactFindings(findings, changedFiles)
+
+  const upstreamResult = runner(['rev-parse', '--abbrev-ref', '--symbolic-full-name', '@{u}'])
+  const upstream = upstreamResult.code === 0 ? trim(upstreamResult.stdout) : undefined
+  let aheadOfUpstream: number | undefined
+  let behindUpstream: number | undefined
+  if (upstream) {
+    const counts = trim(runner(['rev-list', '--left-right', '--count', `${currentBranch}...${upstream}`]).stdout).split(/\s+/)
+    aheadOfUpstream = parseInt(counts[0] ?? '0', 10)
+    behindUpstream = parseInt(counts[1] ?? '0', 10)
+  } else {
+    findings.push(finding({
+      id: 'git.upstream_unknown',
+      severity: 'info',
+      layer: 'git',
+      message: 'Current branch has no detectable upstream.',
+      evidence: upstreamResult.stderr.trim() || 'git rev-parse @{u} failed',
+      suggested_action: 'Set upstream if ahead/behind status is needed.',
+      blocks_merge: false,
+      requires_tom: false,
+    }))
+  }
+
+  const isMain = currentBranch === 'main'
+  const health = promotionStatusFromFindings(findings)
+  return {
+    schema_version: 1,
+    mode: 'status',
+    generated_at: options.generatedAt ?? new Date().toISOString(),
+    branch: currentBranch,
+    status: health,
+    is_main: isMain,
+    promotion_applicable: !isMain && health !== 'BLOCKED',
+    product_work_gate: { status: 'blocked', reason: profile?.product_gate.reason ?? PRODUCT_GATE_REASON },
+    git: {
+      worktree_clean: worktreeClean,
+      upstream,
+      ahead_of_upstream: Number.isFinite(aheadOfUpstream) ? aheadOfUpstream : undefined,
+      behind_upstream: Number.isFinite(behindUpstream) ? behindUpstream : undefined,
+    },
+    summary: countBySeverity(findings),
+    findings,
+    recommended_next_action: promotionStatusNextAction(health, isMain, currentBranch),
   }
 }
 
@@ -588,6 +704,28 @@ export function formatPromotionReview(result: PromotionReviewResult): string {
   ].join('\n')
 }
 
+export function formatPromotionStatus(result: PromotionStatusResult): string {
+  return [
+    '# Promotion Governance Status',
+    `Branch: ${result.branch}`,
+    `Status: ${result.status}`,
+    `is_main: ${result.is_main}`,
+    `promotion_applicable: ${result.promotion_applicable}`,
+    '',
+    '## Git',
+    `worktree_clean: ${result.git.worktree_clean}`,
+    `upstream: ${result.git.upstream ?? '(none)'}`,
+    `ahead_of_upstream: ${result.git.ahead_of_upstream ?? '(unknown)'}`,
+    `behind_upstream: ${result.git.behind_upstream ?? '(unknown)'}`,
+    '',
+    '## Findings',
+    ...formatFindings(result.findings),
+    '',
+    '## Exact Next Action',
+    result.recommended_next_action,
+  ].join('\n')
+}
+
 export function formatPromotionAction(result: PromotionActionResult): string {
   return [
     `# Promotion Governance ${result.action === 'merge' ? 'Merge' : 'Push'}`,
@@ -607,13 +745,14 @@ export function formatPromotionAction(result: PromotionActionResult): string {
   ].join('\n')
 }
 
-function parseArgs(argv: string[]): { mode?: 'review' | 'merge' | 'push'; branch?: string; json: boolean; runChecks: boolean; projectId?: string } {
+function parseArgs(argv: string[]): { mode?: 'status' | 'review' | 'merge' | 'push'; branch?: string; json: boolean; runChecks: boolean; projectId?: string } {
   const json = argv.includes('--json')
   const runChecks = argv.includes('--run-checks')
   const projectIndex = argv.indexOf('--project')
   const projectId = projectIndex !== -1 ? argv[projectIndex + 1] : undefined
   const reviewIndex = argv.indexOf('--review-branch')
   const mergeIndex = argv.indexOf('--merge-branch')
+  if (argv.includes('--status')) return { mode: 'status', json, runChecks, projectId }
   if (reviewIndex !== -1) return { mode: 'review', branch: argv[reviewIndex + 1], json, runChecks, projectId }
   if (mergeIndex !== -1) return { mode: 'merge', branch: argv[mergeIndex + 1], json, runChecks: false, projectId }
   if (argv.includes('--push-main')) return { mode: 'push', json, runChecks, projectId }
@@ -622,6 +761,11 @@ function parseArgs(argv: string[]): { mode?: 'review' | 'merge' | 'push'; branch
 
 function main(): number {
   const args = parseArgs(process.argv.slice(2))
+  if (args.mode === 'status') {
+    const result = statusPromotionGovernance({ projectId: args.projectId })
+    console.log(args.json ? JSON.stringify(result, null, 2) : formatPromotionStatus(result))
+    return result.status === 'BLOCKED' ? 1 : 0
+  }
   if (args.mode === 'review' && args.branch) {
     const result = reviewBranch(args.branch, { runChecks: args.runChecks, projectId: args.projectId })
     console.log(args.json ? JSON.stringify(result, null, 2) : formatPromotionReview(result))
@@ -639,6 +783,7 @@ function main(): number {
   }
   console.error([
     'Usage:',
+    `${TSX} system\\control-plane\\promotion-governance.ts --status [--json]`,
     `${TSX} system\\control-plane\\promotion-governance.ts --review-branch <branch> [--json] [--run-checks]`,
     `${TSX} system\\control-plane\\promotion-governance.ts --merge-branch <branch> [--json]`,
     `${TSX} system\\control-plane\\promotion-governance.ts --push-main [--json]`,

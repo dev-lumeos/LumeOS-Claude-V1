@@ -174,15 +174,16 @@
       "layer": "promotion_governance",
       "severity": "medium",
       "priority": "P2",
-      "status": "open",
-      "evidence": "promotion-governance --review-branch main returns NEEDS_FIX with git.branch_not_ahead when used as a health check.",
-      "recommended_action": "Add --status or --review-current mode, or downgrade branch_not_ahead to info for main no-op review.",
+      "status": "done",
+      "evidence": "promotion-governance now has --status mode for current-branch health. On main it reports no promotion review is applicable without emitting a high git.branch_not_ahead finding, while --review-branch remains strict for real promotion reviews.",
+      "recommended_action": "Use promotion-governance --status --json --project lumeos for promotion health checks; keep --review-branch <feature-branch> for strict merge readiness.",
       "dependencies": [],
       "estimated_effort": "1-2h",
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
         "system/control-plane/promotion-governance.ts",
+        "system/control-plane/__tests__/promotion-governance.test.ts",
         "apps/web/src/lib/governance/command-runner.ts"
       ]
     },

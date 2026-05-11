@@ -23,7 +23,7 @@ Current date: 2026-05-10.
 - Governance Batch 004 adds a read-only Agent & Skill Contract Checker.
 - Governance Batch 005 adds a read-only Spec Source Chain Checker and Workorder Source Chain Standard.
 - Governance Batch 006 adds a read-only Batch Dossier Reporter and operator dossier suggestions.
-- Governance Batch 007 adds a deterministic Promotion / Merge Governance CLI.
+- Governance Batch 007 adds a deterministic Promotion / Merge Governance CLI. It also has a `--status` health mode for current-branch promotion readiness without treating `main..main` as a failed feature-branch review.
 - Governance Batch 008 adds read-only Operator Doctor mode.
 - Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI. A decomposition-plan validator now blocks unsafe or underspecified structured plans before factory output generation.
 - Memory/Learning Automation adds a read-only governance learning checker.
@@ -112,7 +112,7 @@ Reason:
 - Learning suggestions are available through `system/reports/governance-learning-suggest.ts`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/drafts/`.
 - Memory update proposals are available through `system/reports/governance-learning-suggest.ts --memory-proposals`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/memory-update-drafts/`.
 - Report retention summaries are available through `system/reports/report-retention-summarizer.ts`; it is read-only and reports metadata only for ignored local artifacts.
-- Promotion governance is available through `system/control-plane/promotion-governance.ts`.
+- Promotion governance is available through `system/control-plane/promotion-governance.ts`; use `--status` for health/no-op status and `--review-branch <branch>` for strict feature-branch promotion review.
 - Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
 - Operator, Doctor, and Dossier outputs expose `autonomy_handoff` so STOP/FIX/approval states are self-explaining and tied to dossier/learning next steps.
 - Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
@@ -211,6 +211,7 @@ Profile-aware commands:
 
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json --project lumeos
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --status --json --project lumeos
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json --project lumeos
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json --project lumeos
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json --project lumeos
@@ -380,6 +381,8 @@ Rules:
 Run:
 
 ```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --status
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --status --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch>
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --merge-branch <branch>
@@ -389,6 +392,8 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-gov
 Rules:
 
 - Review classifies changed files, forbidden artifacts, product-gate impact, and required checks.
+- Status mode reports current branch health and upstream status. On `main`, it does not treat `main..main` no-op state as a high `branch_not_ahead` finding.
+- Strict review mode still reports `git.branch_not_ahead` as high when a real promotion target has no commits ahead of `main`.
 - Merge runs review first and refuses unless the decision is `MERGE_READY`.
 - Merge checks out `main`, merges the target branch, stops on conflicts, and runs typecheck.
 - Push requires `main`, clean worktree, and `main` ahead of `origin/main`.
