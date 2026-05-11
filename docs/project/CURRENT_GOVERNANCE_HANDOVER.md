@@ -31,6 +31,7 @@ Current date: 2026-05-10.
 - Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
 - Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
 - Runtime history readiness is normalized against current active productive routes. Older failures, including pre-routing-cleanup Spark D/DGX4 records, remain visible as historical failures but do not override a healthy latest active-route state.
+- Deep analysis on 2026-05-11 found static governance checks clean. Live required Spark A/B/C endpoint checks timed out at both 1500 ms and 5000 ms because all DGX/Spark devices are intentionally powered down for rack installation (`planned_hardware_maintenance`). Do not treat this as a routing defect or perform Spark routing fixes. Codex external routes remain config-healthy and MealCam remains optional/info-only. Night, large, and autonomous runs remain blocked until post-maintenance endpoint health is re-proven.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent`, `senior-reviewer-agent`, and final escalations.
 - Codex Worker Bridge adds a dry-run-first `codex exec` integration point for `senior-coding-agent`.

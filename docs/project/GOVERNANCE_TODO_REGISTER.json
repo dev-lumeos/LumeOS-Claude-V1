@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-05-11T00:10:00+07:00",
+  "items": [
+    {
+      "id": "GOV-TODO-001",
+      "title": "Re-prove Spark A/B/C endpoint health after planned rack maintenance",
+      "layer": "runtime",
+      "severity": "high",
+      "priority": "P0",
+      "status": "open",
+      "evidence": "model-runtime-check --check-endpoints returned high=13 at 1500ms and 5000ms; curl to Spark A/B /v1/models timed out. Tom confirmed all DGX/Spark devices are powered down for rack installation.",
+      "recommended_action": "Do not change routing because of this downtime. After hardware maintenance ends, run read-only endpoint health checks and record fresh runtime history.",
+      "dependencies": [],
+      "estimated_effort": "15m after hardware returns",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": true,
+      "source_files": [
+        "system/control-plane/model-runtime-check.ts",
+        "system/agent-registry/model_routing.json",
+        "docs/project/MODEL_RUNTIME_HARDENING.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-002",
+      "title": "Add runtime history freshness and planned-maintenance semantics",
+      "layer": "runtime_history",
+      "severity": "high",
+      "priority": "P0",
+      "status": "open",
+      "evidence": "history-json reported RUNTIME_DEGRADED from older records while live endpoint check was unavailable during planned DGX/Spark maintenance.",
+      "recommended_action": "Add freshness thresholds and surface STALE or PLANNED_MAINTENANCE_RECHECK_REQUIRED in CLI, Doctor, Dossier, and UI.",
+      "dependencies": [
+        "GOV-TODO-001"
+      ],
+      "estimated_effort": "2-4h",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": true,
+      "source_files": [
+        "system/control-plane/model-runtime-check.ts",
+        "system/workorders/cli/operator-doctor.ts",
+        "system/reports/batch-dossier.ts",
+        "apps/web/src/components/governance/GovernanceConsole.tsx"
+      ]
+    },
+    {
+      "id": "GOV-TODO-003",
+      "title": "Normalize Codex Worker dispatcher integration config status",
+      "layer": "codex_worker",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "codex_worker_enabled=true and allow_dispatcher_integration=true, but dispatcher_integration is still the string deferred.",
+      "recommended_action": "Replace stale metadata with a single machine-checked controlled_enabled status or remove the redundant field.",
+      "dependencies": [],
+      "estimated_effort": "<1h",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workers/codex-worker.config.json",
+        "system/workers/codex-worker.ts",
+        "docs/project/CODEX_WORKER_BRIDGE.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-004",
+      "title": "Clarify or implement senior-reviewer Codex Worker dispatch policy",
+      "layer": "codex_worker",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "senior-reviewer-agent routes to Codex/GPT-5.5, but Codex Worker allowlist currently includes senior-coding-agent only.",
+      "recommended_action": "Document that review objectives use senior-coding-agent, or add a separately gated senior-reviewer-agent worker path with tests.",
+      "dependencies": [
+        "GOV-TODO-003"
+      ],
+      "estimated_effort": "2-4h",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workers/codex-worker.config.json",
+        "system/control-plane/dispatcher.ts",
+        "system/agent-registry/model_routing.json",
+        "docs/project/MODEL_RUNTIME_HARDENING.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-005",
+      "title": "Add Governance UI browser smoke and visual regression coverage",
+      "layer": "governance_ui",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "UI typecheck/build/helper tests pass, but no browser screenshot or visual smoke was run.",
+      "recommended_action": "Start local app, visit every /governance route, verify styled shell/cards/tables render, and capture screenshots.",
+      "dependencies": [],
+      "estimated_effort": "0.5-1d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "apps/web/src/components/governance/GovernanceConsole.tsx",
+        "apps/web/src/lib/governance/__tests__/governance-ui.test.ts",
+        "docs/project/GOVERNANCE_UI_V2.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-006",
+      "title": "Deepen project profile portability with second-project fixture",
+      "layer": "project_profiles",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "UI snapshot reads lumeos.json directly; default batch and source-chain examples remain Nutrition-specific.",
+      "recommended_action": "Add project profile override in UI/API, second-project fixture tests, and profile-driven source-chain defaults.",
+      "dependencies": [],
+      "estimated_effort": "1-2d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/project-profiles/project-profile-loader.ts",
+        "apps/web/src/lib/governance/snapshot.ts",
+        "system/workorders/cli/spec-source-chain-check.ts",
+        "system/workorders/cli/wo-factory.ts"
+      ]
+    },
+    {
+      "id": "GOV-TODO-007",
+      "title": "Add deterministic decomposition-plan validator",
+      "layer": "workorder_factory",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "wo-factory is deterministic after structured plan input, but free-form spec to structured plan remains prompt/skill-driven.",
+      "recommended_action": "Create a schema/checker for decomposition plans before WO generation, including profile-aware source bundles.",
+      "dependencies": [
+        "GOV-TODO-006"
+      ],
+      "estimated_effort": "1-2d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workorders/cli/wo-factory.ts",
+        ".agents/skills/spec-to-decomposition",
+        ".agents/skills/decomposition-to-workorders"
+      ]
+    },
+    {
+      "id": "GOV-TODO-008",
+      "title": "Add ignored runtime report retention and redaction policy",
+      "layer": "reports",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "system/reports/codex-worker is ignored but contains large prompt and command transcripts.",
+      "recommended_action": "Document retention rules and add a metadata summarizer/redactor for local report inspection.",
+      "dependencies": [],
+      "estimated_effort": "0.5d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workers/codex-worker.ts",
+        "system/reports/batch-dossier.ts",
+        "docs/project/CODEX_WORKER_BRIDGE.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-009",
+      "title": "Add promotion governance health/status mode",
+      "layer": "promotion_governance",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "promotion-governance --review-branch main returns NEEDS_FIX with git.branch_not_ahead when used as a health check.",
+      "recommended_action": "Add --status or --review-current mode, or downgrade branch_not_ahead to info for main no-op review.",
+      "dependencies": [],
+      "estimated_effort": "1-2h",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/control-plane/promotion-governance.ts",
+        "apps/web/src/lib/governance/command-runner.ts"
+      ]
+    },
+    {
+      "id": "GOV-TODO-010",
+      "title": "Add draft memory update proposal workflow",
+      "layer": "memory_learning",
+      "severity": "low",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "Learning records are checked, but handover/canonical memory updates are still manual.",
+      "recommended_action": "Extend learning suggestion tool to write reviewed draft handover/canonical update proposals only with explicit flag.",
+      "dependencies": [],
+      "estimated_effort": "0.5-1d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/reports/governance-learning-suggest.ts",
+        "docs/project/CURRENT_GOVERNANCE_HANDOVER.md",
+        "system/memory/canonical/lumeos_canonical.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-011",
+      "title": "Mark old Nutrition bootstrap docs as archival or active",
+      "layer": "docs",
+      "severity": "low",
+      "priority": "P3",
+      "status": "open",
+      "evidence": "Older docs and batches still contain Nutrition bootstrap run instructions and historical cleanup context.",
+      "recommended_action": "Add archival labels or an active-runbook index so Tom can distinguish current operator flow from historical notes.",
+      "dependencies": [],
+      "estimated_effort": "0.5d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md",
+        "docs/project/BATCH_LOADER_CLI_V1.md",
+        "system/workorders/nutrition/batches"
+      ]
+    }
+  ]
+}
