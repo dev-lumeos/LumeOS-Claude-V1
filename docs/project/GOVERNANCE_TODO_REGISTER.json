@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T00:10:00+07:00",
+  "generated_at": "2026-05-11T14:45:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -7,7 +7,7 @@
       "layer": "runtime",
       "severity": "high",
       "priority": "P0",
-      "status": "done",
+      "status": "open",
       "evidence": "model-runtime-check --check-endpoints returned high=13 at 1500ms and 5000ms; curl to Spark A/B /v1/models timed out. Tom confirmed all DGX/Spark devices are powered down for rack installation.",
       "recommended_action": "Do not change routing because of this downtime. After hardware maintenance ends, run read-only endpoint health checks and record fresh runtime history.",
       "dependencies": [],
@@ -26,9 +26,9 @@
       "layer": "runtime_history",
       "severity": "high",
       "priority": "P0",
-      "status": "open",
-      "evidence": "history-json reported RUNTIME_DEGRADED from older records while live endpoint check was unavailable during planned DGX/Spark maintenance.",
-      "recommended_action": "Add freshness thresholds and surface STALE or PLANNED_MAINTENANCE_RECHECK_REQUIRED in CLI, Doctor, Dossier, and UI.",
+      "status": "done",
+      "evidence": "Runtime History V2 adds explicit freshness/status fields and planned hardware maintenance classification. model-runtime-check --json reports PLANNED_MAINTENANCE during DGX/Spark rack work without treating downtime as a routing defect.",
+      "recommended_action": "After hardware maintenance ends, run read-only endpoint health checks and record fresh runtime history before night/large/autonomous runtime-dependent runs.",
       "dependencies": [
         "GOV-TODO-001"
       ],
@@ -48,8 +48,8 @@
       "layer": "codex_worker",
       "severity": "medium",
       "priority": "P1",
-      "status": "open",
-      "evidence": "codex_worker_enabled=true and allow_dispatcher_integration=true, but dispatcher_integration is still the string deferred.",
+      "status": "done",
+      "evidence": "Codex Worker config now uses status=controlled_enabled, removes stale deferred wording, and validation rejects contradictory boolean/status combinations.",
       "recommended_action": "Done: config now uses status=controlled_enabled and config validation rejects contradictory boolean/status combinations.",
       "dependencies": [],
       "estimated_effort": "<1h",

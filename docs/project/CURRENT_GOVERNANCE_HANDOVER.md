@@ -6,7 +6,7 @@ Current date: 2026-05-10.
 
 `main` is pushed through Runtime Monitoring History and DGX4 productive routing removal. The active branch is implementing Operator Autonomy / Dossier / Learning V2 hardening.
 
-Final readiness review note, 2026-05-11: the core static governance checks are clean, but the latest hardening sequence is not yet integrated into one current branch/main. The review branch contains promotion `--status` mode, while Runtime History V2 maintenance semantics, Codex Worker config/reviewer policy, Governance UI browser smoke, Project Profiles V2 fixture, Decomposition Plan Validator, Report Retention Summarizer, and Memory Update Draft Proposal work exist on separate branches or are absent from the reviewed branch. Product work remains closed.
+Final readiness review note, 2026-05-11: the completed governance hardening sequence is integrated on `goal/governance-hardening-integration`. Static/read-only gates pass and the branch is `READY_EXCEPT_HARDWARE`: DGX/Spark devices are intentionally offline for rack installation, so runtime-dependent night/large/autonomous runs remain blocked until post-rack endpoint health is re-proven. Product work remains closed.
 
 ## Current Truth
 
