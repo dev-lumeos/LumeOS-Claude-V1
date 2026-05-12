@@ -250,13 +250,13 @@
       "layer": "product_gate",
       "severity": "medium",
       "priority": "P0",
-      "status": "stop_and_report_execution_boundary",
-      "evidence": "The first executable non-draft P1-005 path now exists as WO-NUTRITION-P1-005-source-chain-readiness plus BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS. The profile allowlist was narrowed to that exact batch only, so source-chain and doctor checks can pass for one report-only execution path while every other product batch remains blocked.",
-      "recommended_action": "Tom must decide whether to execute BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS, or keep the first executable P1-005 path staged but not run.",
+      "status": "done",
+      "evidence": "The first executable non-draft P1-005 path (WO-NUTRITION-P1-005-source-chain-readiness plus BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS) was allowlisted, executed through the governed workflow, and its dossier now classifies as DONE.",
+      "recommended_action": "Treat source-chain readiness as complete and move to the next plan-around boundary for import / DB / Supabase preparation only.",
       "dependencies": [],
-      "estimated_effort": "15-30m for Tom execution-boundary decision",
+      "estimated_effort": "completed",
       "codex_autonomous_possible": false,
-      "blocks_product_work": true,
+      "blocks_product_work": false,
       "source_files": [
         "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md",
         "docs/project/P1_005_READINESS_CANDIDATE.md",
@@ -269,6 +269,29 @@
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md",
         "docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md",
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-004-schema-verification.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-014",
+      "title": "Tom decision for first post-readiness P1-005 import/DB preparation boundary",
+      "layer": "product_gate",
+      "severity": "medium",
+      "priority": "P0",
+      "status": "stop_and_report_execution_boundary",
+      "evidence": "Source-chain readiness is complete. The next safe step is defined in docs/project/p1-005/P1-005-next-execution-plan.md and the review-only batch candidate system/workorders/nutrition/drafts/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION-DRAFT.md. This next step still avoids BLS import, raw BLS commit, DB changes, Supabase commands, and migration execution.",
+      "recommended_action": "Tom must decide whether to authorize a narrow planning-only execution boundary for the next P1-005 import/DB preparation batch, or keep all post-readiness work blocked.",
+      "dependencies": [
+        "GOV-TODO-013"
+      ],
+      "estimated_effort": "15-30m for Tom execution-boundary decision",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": true,
+      "source_files": [
+        "docs/project/p1-005/P1-005-next-execution-plan.md",
+        "system/workorders/nutrition/drafts/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION-DRAFT.md",
+        "docs/project/p1-005/P1-005-source-chain-readiness-report.md",
+        "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md",
+        "docs/project/PRODUCT_WORK_GATE.md"
       ]
     }
   ]
