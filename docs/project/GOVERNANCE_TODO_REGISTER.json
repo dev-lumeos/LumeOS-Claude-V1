@@ -250,11 +250,11 @@
       "layer": "product_gate",
       "severity": "medium",
       "priority": "P0",
-      "status": "draft_candidate_validated_read_only",
-      "evidence": "Tom approved the narrow Nutrition/BLS/P1-005 preparation gate and separately authorized the minimum Nutrition 01_current_specs SSOT references needed for draft validation only. docs/project/P1_005_DECOMPOSITION_CANDIDATE.md now passes decomposition-plan-validator and wo-factory --dry-run --json. Factory result is READY_TO_WRITE with zero findings and zero written files.",
-      "recommended_action": "Tom must decide whether to authorize generating a non-executable draft workorder artifact from the validated P1-005 candidate, or stop at the validated decomposition stage.",
+      "status": "draft_workorder_created_non_executable",
+      "evidence": "Tom approved the narrow Nutrition/BLS/P1-005 preparation gate and separately authorized the minimum Nutrition 01_current_specs SSOT references needed for draft validation only. docs/project/P1_005_DECOMPOSITION_CANDIDATE.md passes decomposition-plan-validator and wo-factory --dry-run --json. system/workorders/nutrition/drafts/WO-NUTRITION-P1-005-preparation-draft.md now exists as the first generated NON_EXECUTABLE_DRAFT workorder artifact. It remains NOT_QUEUE_RELEASED and NOT_DISPATCHABLE.",
+      "recommended_action": "Tom must decide whether to authorize the next read-only step: generating a draft-only source-chain readiness report for P1-005 from the approved source set, while keeping execution blocked.",
       "dependencies": [],
-      "estimated_effort": "15-30m for Tom review plus any next draft-only artifact step",
+      "estimated_effort": "15-30m for Tom review plus the next draft-only documentation step",
       "codex_autonomous_possible": false,
       "blocks_product_work": true,
       "source_files": [
@@ -262,6 +262,7 @@
         "docs/project/P1_005_READINESS_CANDIDATE.md",
         "docs/project/P1_005_DECOMPOSITION_CANDIDATE.md",
         "docs/project/PRODUCT_WORK_GATE.md",
+        "system/workorders/nutrition/drafts/WO-NUTRITION-P1-005-preparation-draft.md",
         "docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md",
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-004-schema-verification.md"
       ]

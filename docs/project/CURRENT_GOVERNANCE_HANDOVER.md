@@ -55,6 +55,7 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - `docs/project/P1_005_DECOMPOSITION_CANDIDATE.md` now provides the first concrete non-executable decomposition candidate. It is marked `NON_EXECUTABLE_DRAFT`, `NOT_QUEUE_RELEASED`, and `NOT_DISPATCHABLE`, and is suitable only for read-only validator/factory dry-runs.
 - Tom authorized the minimum additional Nutrition `01_current_specs` primary SSOT references required for P1-005 draft validation only: `SPEC_08_IMPORT_PIPELINE.md` as the primary preparation SSOT and `SPEC_06_DATABASE_SCHEMA.md` as supporting schema SSOT.
 - Read-only validation status for the draft candidate is now clean: decomposition-plan validation passes and `wo-factory --dry-run --json` returns `READY_TO_WRITE` with zero findings and zero written files.
+- `system/workorders/nutrition/drafts/WO-NUTRITION-P1-005-preparation-draft.md` now exists as the first generated `NON_EXECUTABLE_DRAFT` workorder artifact from the validated P1-005 candidate. It is still `NOT_QUEUE_RELEASED`, `NOT_DISPATCHABLE`, and does not authorize any execution.
 - Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
