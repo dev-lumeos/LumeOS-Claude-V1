@@ -177,6 +177,54 @@ function writeFixtureProfile(): void {
   }, null, 2))
 }
 
+function writeLumeosProfile(overrides: Record<string, unknown> = {}): void {
+  write('system/project-profiles/profiles/lumeos.json', JSON.stringify({
+    profile_version: 2,
+    project_id: 'lumeos',
+    display_name: 'LumeOS Test',
+    profile_kind: 'active',
+    active: true,
+    repo_root: tmpDir.replace(/\\/g, '/'),
+    governance_root: 'system',
+    specs_root: 'docs/specs',
+    workorders_root: 'system/workorders',
+    reports_root: 'system/reports',
+    memory_root: 'system/memory',
+    learning_root: 'docs/project/governance-learning',
+    runtime_state_root: 'system/state',
+    approval_root: 'system/approval',
+    raw_data_paths: ['docs/specs/Nutrition/00_raw/'],
+    ignored_local_paths: ['system/reports/codex-worker/'],
+    product_gate: {
+      status: 'closed',
+      reason: 'Profile gate closed.',
+      conditional_planning_allowed: false,
+    },
+    forbidden_paths: ['.env', '.env.*', 'system/state/runtime_state.json', 'system/approval/queue.json', 'docs/specs/Nutrition/00_raw/**'],
+    forbidden_commands: ['supabase db reset', 'supabase db push', 'supabase migration up'],
+    required_checkers: ['governance-invariant-check'],
+    default_operator_batch: 'system/workorders/nutrition/batches/BATCH-test.md',
+    default_governance_batch: 'system/workorders/nutrition/batches/BATCH-test.md',
+    default_branch_prefix: 'goal/',
+    promotion_policy: { require_clean_worktree: true },
+    codex_worker_policy: {
+      enabled: true,
+      allowed_agents: ['senior-coding-agent'],
+      require_explicit_workorder_flag: true,
+      default_timeout_ms: 120000,
+    },
+    source_chain_policy: {
+      module_index_required: true,
+      nutrition_priority_required: true,
+    },
+    allowed_domain_paths: ['docs/specs/Nutrition/'],
+    runtime_policy: { require_live_hardware: false },
+    docs_entrypoints: ['docs/specs/Nutrition/INDEX.md'],
+    ui_settings: { selectable: true },
+    ...overrides,
+  }, null, 2))
+}
+
 function runCheck(file = workorderPath()) {
   return runSpecSourceChainCheck({ repoRoot: tmpDir, workorderFile: file })
 }
@@ -304,6 +352,52 @@ describe('spec source chain checker', () => {
     assert.equal(result.workorders.length, 1)
     assert.equal(result.exitCode, 1)
     assert.equal(finding(result, 'content.example_path_phrase')?.severity, 'high')
+  })
+
+  it('allows only the exact allowlisted product batch path', () => {
+    writeLumeosProfile({
+      product_gate: {
+        status: 'closed',
+        reason: 'Profile gate closed.',
+        conditional_planning_allowed: false,
+        execution_batch_allowlist: [
+          'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md',
+        ],
+      },
+    })
+    write('system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md', [
+      '# Batch',
+      '',
+      '## Included Workorders',
+      '| Order | Filename | workorder_id | Title | Risk | Approval |',
+      '|---|---|---|---|---|---|',
+      '| 1 | `WO-test-source-chain.md` | `WO-test-001` | Test | docs | no |',
+    ].join('\n'))
+    write('system/workorders/nutrition/batches/BATCH-NUTRITION-P1-004-schema-verification.md', [
+      '# Batch',
+      '',
+      '## Included Workorders',
+      '| Order | Filename | workorder_id | Title | Risk | Approval |',
+      '|---|---|---|---|---|---|',
+      '| 1 | `WO-test-source-chain.md` | `WO-test-001` | Test | docs | no |',
+    ].join('\n'))
+    writeWorkorder(['Nutrition / BLS / P1-005 preparation only. Do not run product work.'], 'WO-test-source-chain.md')
+
+    const allowed = runSpecSourceChainCheck({
+      repoRoot: tmpDir,
+      batchFile: path.join(tmpDir, 'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md'),
+      projectId: 'lumeos',
+    })
+    const blocked = runSpecSourceChainCheck({
+      repoRoot: tmpDir,
+      batchFile: path.join(tmpDir, 'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-004-schema-verification.md'),
+      projectId: 'lumeos',
+    })
+
+    assert.equal(allowed.product_work_gate.status, 'allowed_if_clean')
+    assert.equal(finding(allowed, 'product_gate.blocked'), undefined)
+    assert.equal(blocked.product_work_gate.status, 'blocked')
+    assert.equal(finding(blocked, 'product_gate.blocked')?.severity, 'high')
   })
 
   it('JSON output shape and human report are stable', () => {

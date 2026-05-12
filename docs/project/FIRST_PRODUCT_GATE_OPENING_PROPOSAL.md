@@ -156,3 +156,22 @@ Prepare a concrete `Nutrition / BLS / P1-005 preparation` workorder or batch can
 Current next action:
 
 Tom must decide whether to open the first real execution boundary for the existing P1-005 draft batch, or keep it blocked.
+
+## Machine Gate Implementation
+
+The first machine-readable scoped execution exception is now implemented as an exact batch allowlist in the LumeOS project profile:
+
+- `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md`
+
+It exists only to let:
+
+- `spec-source-chain-check`
+- `run-batch-operator --doctor`
+
+stop treating that exact batch as blocked only by the global product gate.
+
+It does not:
+
+- open the global product gate
+- allow any other Nutrition batch
+- allow wildcard or directory-based product execution

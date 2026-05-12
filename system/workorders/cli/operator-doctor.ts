@@ -9,7 +9,7 @@ import { runAgentContractCheck } from '../../control-plane/agent-contract-check'
 import { readModelRuntimeHistorySummary, runModelRuntimeCheck, type ModelRuntimeHistorySummary } from '../../control-plane/model-runtime-check'
 import { runSpecSourceChainCheck } from './spec-source-chain-check'
 import { loadCodexWorkerConfig, validateCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
-import { getProjectProfile, type ProjectProfile } from '../../project-profiles/project-profile-loader'
+import { getProjectProfile, isProductWorkAllowed, type ProjectProfile } from '../../project-profiles/project-profile-loader'
 import { buildAutonomyHandoffContract, type AutonomyFinalState, type AutonomyHandoff } from '../../reports/autonomy-handoff'
 
 export type OperatorDoctorDiagnosis =
@@ -259,7 +259,13 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   const memory = options.memory ?? collectOperatorDoctorMemoryStatus(process.cwd(), status.batchPath)
   const productGate = options.productGate ?? (
     options.projectProfile
-      ? { status: options.projectProfile.product_gate.status === 'open' ? 'allowed' : 'blocked', reason: options.projectProfile.product_gate.reason } as const
+      ? (() => {
+          const decision = isProductWorkAllowed(options.projectProfile, {
+            planningOnly: false,
+            batchPath: status.batchPath,
+          })
+          return { status: decision.allowed ? 'allowed' : 'blocked', reason: decision.reason } as const
+        })()
       : { status: 'blocked', reason: 'Product work remains blocked unless Tom explicitly opens it.' }
   )
   const blockers: OperatorDoctorResult['blockers'] = []

@@ -30,6 +30,22 @@ This exception does not allow:
 
 General product work remains closed.
 
+## Machine-Readable Narrow Exception
+
+The LumeOS profile now includes one exact per-batch execution allowlist entry:
+
+- `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md`
+
+Rules:
+
+- exact repo-relative batch path match only
+- no wildcard paths
+- no directory-wide allow
+- no profile-wide `open` or `conditional` widening
+- all other product batches remain blocked
+
+This allowlist exists only so profile-aware source-chain and doctor checks can treat that one draft batch as a scoped exception without opening broader product work.
+
 ## Allowed Work
 
 No product execution is currently allowed. Allowed governance-only work may include:

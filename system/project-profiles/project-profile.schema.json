@@ -49,7 +49,11 @@
       "properties": {
         "status": { "enum": ["closed", "conditional", "open"] },
         "reason": { "type": "string" },
-        "conditional_planning_allowed": { "type": "boolean" }
+        "conditional_planning_allowed": { "type": "boolean" },
+        "execution_batch_allowlist": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
       }
     },
     "forbidden_paths": { "type": "array", "items": { "type": "string" } },

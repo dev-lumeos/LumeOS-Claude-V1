@@ -25,6 +25,7 @@ export type ProjectProfile = {
     status: ProductGateStatus
     reason: string
     conditional_planning_allowed: boolean
+    execution_batch_allowlist?: string[]
   }
   forbidden_paths: string[]
   forbidden_commands: string[]
@@ -53,6 +54,7 @@ type LoadOptions = {
 
 type ProductGateContext = {
   planningOnly?: boolean
+  batchPath?: string
 }
 
 const DEFAULT_PROJECT_ID = 'lumeos'
@@ -134,6 +136,7 @@ function normalizeProfile(profile: ProjectProfile, repoRoot: string): ProjectPro
     forbidden_paths: profile.forbidden_paths,
     allowed_domain_paths: profile.allowed_domain_paths ?? [],
     docs_entrypoints: profile.docs_entrypoints ?? [],
+    execution_batch_allowlist: profile.product_gate.execution_batch_allowlist ?? [],
   })) {
     for (const value of values) assertRepoRelativePath(value, field)
   }
@@ -155,6 +158,10 @@ function normalizeProfile(profile: ProjectProfile, repoRoot: string): ProjectPro
     approval_root: normalizeRelativePath(profile.approval_root),
     raw_data_paths: profile.raw_data_paths.map(normalizeRelativePath),
     ignored_local_paths: profile.ignored_local_paths.map(normalizeRelativePath),
+    product_gate: {
+      ...profile.product_gate,
+      execution_batch_allowlist: (profile.product_gate.execution_batch_allowlist ?? []).map(normalizeRelativePath),
+    },
     forbidden_paths: profile.forbidden_paths.map(normalizeRelativePath),
     allowed_domain_paths: (profile.allowed_domain_paths ?? []).map(normalizeRelativePath),
     docs_entrypoints: (profile.docs_entrypoints ?? []).map(normalizeRelativePath),
@@ -189,6 +196,9 @@ function validateProfile(profile: ProjectProfile): void {
   }
   if (!['closed', 'conditional', 'open'].includes(profile.product_gate.status)) {
     throw new Error(`Project profile ${profile.project_id} has invalid product gate status.`)
+  }
+  if (profile.product_gate.execution_batch_allowlist !== undefined && !Array.isArray(profile.product_gate.execution_batch_allowlist)) {
+    throw new Error(`Project profile ${profile.project_id} execution_batch_allowlist must be string[].`)
   }
   if (!Array.isArray(profile.codex_worker_policy.allowed_agents)) {
     throw new Error(`Project profile ${profile.project_id} codex_worker_policy.allowed_agents must be string[].`)
@@ -252,6 +262,14 @@ function pathMatches(patterns: string[], filePath: string): boolean {
   })
 }
 
+function normalizeBatchContextPath(profile: ProjectProfile, batchPath: string): string {
+  const repoRoot = path.resolve(profile.repo_root)
+  if (path.isAbsolute(batchPath)) {
+    return normalizeRelativePath(toPosix(path.relative(repoRoot, path.resolve(batchPath))))
+  }
+  return normalizeRelativePath(batchPath)
+}
+
 export function isForbiddenPath(profile: ProjectProfile, filePath: string): boolean {
   return pathMatches(profile.forbidden_paths, filePath)
 }
@@ -272,6 +290,16 @@ export function isProductWorkAllowed(profile: ProjectProfile, context: ProductGa
   if (profile.product_gate.status === 'open') return { allowed: true, reason: profile.product_gate.reason }
   if (profile.product_gate.status === 'conditional' && context.planningOnly && profile.product_gate.conditional_planning_allowed) {
     return { allowed: true, reason: profile.product_gate.reason }
+  }
+  const allowlist = profile.product_gate.execution_batch_allowlist ?? []
+  if (context.batchPath) {
+    const normalizedBatchPath = normalizeBatchContextPath(profile, context.batchPath)
+    if (allowlist.includes(normalizedBatchPath)) {
+      return {
+        allowed: true,
+        reason: `${profile.product_gate.reason} Scoped execution exception active for batch ${normalizedBatchPath}.`,
+      }
+    }
   }
   return { allowed: false, reason: profile.product_gate.reason }
 }

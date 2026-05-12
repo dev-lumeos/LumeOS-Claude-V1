@@ -132,6 +132,55 @@ describe('project profile loader', () => {
     assert.match(gate.reason, /blocked/i)
   })
 
+  it('allows only an exact allowlisted batch path while keeping the global gate closed', () => {
+    writeProfile('allowlisted', {
+      product_gate: {
+        status: 'closed',
+        reason: 'Product work remains blocked.',
+        conditional_planning_allowed: false,
+        execution_batch_allowlist: [
+          'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md',
+        ],
+      },
+    })
+
+    const profile = getProjectProfile('allowlisted', { repoRoot: tmpDir })
+    const allowed = isProductWorkAllowed(profile, {
+      planningOnly: false,
+      batchPath: 'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md',
+    })
+    const blocked = isProductWorkAllowed(profile, {
+      planningOnly: false,
+      batchPath: 'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-004-schema-verification.md',
+    })
+
+    assert.equal(allowed.allowed, true)
+    assert.match(allowed.reason, /Scoped execution exception active/)
+    assert.equal(blocked.allowed, false)
+    assert.equal(blocked.reason, 'Product work remains blocked.')
+  })
+
+  it('matches an allowlisted batch when the caller passes an absolute path', () => {
+    writeProfile('allowlisted-absolute', {
+      product_gate: {
+        status: 'closed',
+        reason: 'Product work remains blocked.',
+        conditional_planning_allowed: false,
+        execution_batch_allowlist: [
+          'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md',
+        ],
+      },
+    })
+
+    const profile = getProjectProfile('allowlisted-absolute', { repoRoot: tmpDir })
+    const allowed = isProductWorkAllowed(profile, {
+      planningOnly: false,
+      batchPath: path.join(tmpDir, 'system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md'),
+    })
+
+    assert.equal(allowed.allowed, true)
+  })
+
   it('loads an inactive second-project fixture profile', () => {
     writeProfile('fixture-beauty-club', {
       display_name: 'Beauty Club Fixture',

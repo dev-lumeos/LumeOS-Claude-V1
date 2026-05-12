@@ -23,7 +23,10 @@
   "product_gate": {
     "status": "closed",
     "reason": "Product work remains blocked unless Tom explicitly opens it. BLS/Nutrition import execution remains blocked.",
-    "conditional_planning_allowed": false
+    "conditional_planning_allowed": false,
+    "execution_batch_allowlist": [
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md"
+    ]
   },
   "forbidden_paths": [
     ".env",

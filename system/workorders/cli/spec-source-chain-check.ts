@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
-import { getProjectProfile, type ProjectProfile } from '../../project-profiles/project-profile-loader'
+import { getProjectProfile, isProductWorkAllowed, type ProjectProfile } from '../../project-profiles/project-profile-loader'
 
 export type SpecSourceChainSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 
@@ -296,7 +296,11 @@ function parseWorkorder(repoRoot: string, filePath: string): ParsedWorkorder {
   }
 }
 
-function checkWorkorder(repoRoot: string, parsed: ParsedWorkorder): CheckedWorkorder {
+function checkWorkorder(
+  repoRoot: string,
+  parsed: ParsedWorkorder,
+  options: { productGateAllowed: boolean; productGateReason: string },
+): CheckedWorkorder {
   const findings: SpecSourceChainFinding[] = []
   const workorder = parsed.workorderId
   const sourceRefs = parsed.sourceRefs
@@ -543,15 +547,15 @@ function checkWorkorder(repoRoot: string, parsed: ParsedWorkorder): CheckedWorko
     }))
   }
 
-  if (isProductWork(parsed)) {
+  if (isProductWork(parsed) && !options.productGateAllowed) {
     findings.push(finding({
       id: 'product_gate.blocked',
       severity: 'high',
       layer: 'product_work_gate',
       workorder,
-      message: 'Product work remains blocked until Governance Batch 005 is merged and source-chain checks pass, or Tom waives the gate.',
+      message: 'Product work remains blocked until the scoped product gate opens for this exact batch or Tom waives the gate.',
       evidence: parsed.relativePath,
-      suggested_action: 'Do not run product workorders until the product gate opens.',
+      suggested_action: `Do not run product workorders until the product gate opens for this exact batch. Current gate: ${options.productGateReason}`,
       blocks_product_work: true,
       blocks_operator: false,
     }))
@@ -577,6 +581,10 @@ function summarize(findings: SpecSourceChainFinding[]): SpecSourceChainSummary {
 export function runSpecSourceChainCheck(options: SpecSourceChainOptions = {}): SpecSourceChainResult {
   const repoRoot = options.repoRoot ?? process.cwd()
   const profile: ProjectProfile | undefined = options.projectId ? getProjectProfile(options.projectId, { repoRoot }) : undefined
+  const batchRelativePath = options.batchFile ? normalizeRelative(repoRoot, options.batchFile) : undefined
+  const productGate = profile
+    ? isProductWorkAllowed(profile, { planningOnly: false, batchPath: batchRelativePath })
+    : { allowed: false, reason: PRODUCT_GATE_REASON }
   const workorderFiles = options.batchFile
     ? findWorkordersFromBatch(repoRoot, options.batchFile)
     : [options.workorderFile ?? '']
@@ -588,7 +596,7 @@ export function runSpecSourceChainCheck(options: SpecSourceChainOptions = {}): S
       repo_root: repoRoot,
       ...(profile ? { project_profile: { project_id: profile.project_id, display_name: profile.display_name } } : {}),
       mode: 'workorder',
-      product_work_gate: { status: 'blocked', reason: profile?.product_gate.reason ?? PRODUCT_GATE_REASON },
+      product_work_gate: { status: productGate.allowed ? 'allowed_if_clean' : 'blocked', reason: productGate.reason },
       hasHighOrCriticalFindings: true,
       exitCode: 2,
       summary: { critical: 0, high: 1, medium: 0, low: 0, info: 0 },
@@ -610,7 +618,10 @@ export function runSpecSourceChainCheck(options: SpecSourceChainOptions = {}): S
   const checked: CheckedWorkorder[] = []
   for (const file of workorderFiles) {
     const parsed = parseWorkorder(repoRoot, file)
-    checked.push(checkWorkorder(repoRoot, parsed))
+    checked.push(checkWorkorder(repoRoot, parsed, {
+      productGateAllowed: productGate.allowed,
+      productGateReason: productGate.reason,
+    }))
   }
 
   const findings = checked.flatMap(item => item.findings)
@@ -624,8 +635,8 @@ export function runSpecSourceChainCheck(options: SpecSourceChainOptions = {}): S
     ...(profile ? { project_profile: { project_id: profile.project_id, display_name: profile.display_name } } : {}),
     mode: options.batchFile ? 'batch' : 'workorder',
     product_work_gate: {
-      status: 'blocked',
-      reason: profile?.product_gate.reason ?? PRODUCT_GATE_REASON,
+      status: productGate.allowed ? 'allowed_if_clean' : 'blocked',
+      reason: productGate.reason,
     },
     hasHighOrCriticalFindings,
     exitCode: hasHighOrCriticalFindings ? 1 : 0,
