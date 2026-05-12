@@ -35,10 +35,10 @@ Execution authority: none
 ## Workorder
 
 ```yaml
-workorder_id: "WO-p1-005-preparation-draft-001"
+workorder_id: "WO-nutrition-005"
 agent_id: "docs-agent"
 phase: 1
-priority: "P0"
+priority: "normal"
 quality_critical: true
 requires_approval: false
 risk_category: "docs"
@@ -88,7 +88,11 @@ source_refs:
   ssot_priority:
     - module_index
     - current_specs
+    - patches
+    - sql_sources
+    - adrs
     - reviews
+    - raw_sources
 
 expected_outputs:
   - "docs/project/p1-005/P1-005-source-chain-readiness-report.md"
@@ -124,6 +128,7 @@ acceptance_criteria:
   - "No task content requests import, DB, Supabase, migration, approval, dispatcher, or Codex execution."
   - "Source-chain references stay inside the approved source set."
   - "Only draft documentation or draft workorder artifacts are produced."
+  - "Both expected outputs exist and are complete as draft-only artifacts."
 
 negative_constraints:
   - "Do not run BLS import."
