@@ -243,6 +243,26 @@
         "docs/project/MINIMAX_LAB_RUNTIME.md",
         "system/agent-registry/model_routing.json"
       ]
+    },
+    {
+      "id": "GOV-TODO-013",
+      "title": "Tom decision for first controlled product gate opening",
+      "layer": "product_gate",
+      "severity": "medium",
+      "priority": "P0",
+      "status": "ready_for_tom_approval",
+      "evidence": "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md proposes a narrow Nutrition/BLS/P1-005 preparation gate for planning, source-chain validation, decomposition/workorder readiness, and non-dispatching operator review only.",
+      "recommended_action": "Tom must explicitly approve, deny, or revise the exact Nutrition/BLS/P1-005 preparation scope. Product gate remains closed until that decision.",
+      "dependencies": [],
+      "estimated_effort": "Tom review plus 15-30m read-only follow-up validation",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": true,
+      "source_files": [
+        "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md",
+        "docs/project/PRODUCT_WORK_GATE.md",
+        "docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md",
+        "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-004-schema-verification.md"
+      ]
     }
   ]
 }
