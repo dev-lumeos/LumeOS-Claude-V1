@@ -49,7 +49,7 @@ function writeJson(relativePath: string, value: unknown): void {
   write(relativePath, JSON.stringify(value, null, 2))
 }
 
-function writeProjectProfile(): void {
+function writeProjectProfile(options: { allowlist?: string[] } = {}): void {
   writeJson('system/project-profiles/profiles/lumeos.json', {
     profile_version: 1,
     project_id: 'lumeos',
@@ -65,7 +65,12 @@ function writeProjectProfile(): void {
     approval_root: 'system/approval',
     raw_data_paths: ['docs/specs/Nutrition/00_raw/'],
     ignored_local_paths: ['docs/specs/Nutrition/00_raw/'],
-    product_gate: { status: 'closed', reason: 'Profile gate closed.', conditional_planning_allowed: false },
+    product_gate: {
+      status: 'closed',
+      reason: 'Profile gate closed.',
+      conditional_planning_allowed: false,
+      execution_batch_allowlist: options.allowlist ?? [],
+    },
     forbidden_paths: ['.env', 'system/state/runtime_state.json', 'docs/specs/Nutrition/00_raw/**'],
     forbidden_commands: ['supabase db reset'],
     required_checkers: ['governance-invariant-check'],
@@ -125,6 +130,58 @@ function writeWorkorder(workorderId: string, expectedOutputs: string[]): void {
     '  - "All expected outputs exist"',
     '```',
   ].join('\n'))
+}
+
+function writeAllowlistedProductBatchFixture(): string {
+  const batchRelative = 'system/workorders/nutrition/batches/BATCH-P1-005.md'
+  write(batchRelative, [
+    '# P1-005 Batch',
+    '',
+    '## Status',
+    'ready_to_run',
+    '',
+    '## Included Workorders',
+    '| Order | File | Workorder ID | Title | Risk | Approval |',
+    '|---|---|---|---|---|---|',
+    '| 1 | WO-test-001.md | WO-test-001 | P1-005 report | docs | no |',
+    '',
+  ].join('\n'))
+
+  write('system/workorders/nutrition/drafts/WO-test-001.md', [
+    '# WO-test-001',
+    '',
+    '```yaml',
+    'workorder_id: WO-test-001',
+    'agent_id: docs-agent',
+    'risk_category: docs',
+    'requires_approval: false',
+    'task: |',
+    '  Produce a Nutrition P1-005 source-chain report only.',
+    'source_refs:',
+    '  module_index: "docs/specs/Nutrition/INDEX.md"',
+    '  current_specs:',
+    '    - "docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md"',
+    '    - "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md"',
+    '  reviews:',
+    '    - "docs/project/P1_005_READINESS_CANDIDATE.md"',
+    '  raw_sources: []',
+    '  raw_sources_allowed: false',
+    '  ssot_priority:',
+    '    - module_index',
+    '    - current_specs',
+    '    - reviews',
+    '    - raw_sources',
+    'expected_outputs:',
+    '  - "docs/project/p1-005/P1-005-source-chain-readiness-report.md"',
+    'scope_files:',
+    '  - "docs/project/p1-005/P1-005-source-chain-readiness-report.md"',
+    'acceptance_criteria:',
+    '  - "Expected report exists"',
+    '```',
+  ].join('\n'))
+
+  write('docs/project/p1-005/P1-005-source-chain-readiness-report.md', '# Ready\n')
+  return batchRelative
 }
 
 function writeCleanRuntime(): void {
@@ -297,6 +354,26 @@ describe('batch dossier reporter', () => {
 
     assert.equal(dossier.project_profile?.project_id, 'lumeos')
     assert.match(formatBatchDossierMarkdown(dossier), /Project profile: lumeos \(LumeOS\)/)
+  })
+
+  it('classifies an output-complete batch as done even without recorded runs when checkers pass', () => {
+    writeCleanRuntime()
+    const batchRelative = writeAllowlistedProductBatchFixture()
+
+    const dossier = buildBatchDossier({
+      batchFile: path.join(tmpDir, batchRelative),
+      repoRoot: tmpDir,
+      gitStatus: '## goal/test\n',
+      generatedAt: '2026-05-05T00:00:00.000Z',
+      checkersOverride: {
+        invariant: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        agent_contract: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        spec_source_chain: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        migration_guard: { status: 'not_run' },
+      },
+    })
+
+    assert.equal(dossier.final_state, 'DONE')
   })
 
   it('writes markdown and json only when explicitly requested', () => {

@@ -194,6 +194,7 @@ export interface BuildBatchDossierOptions {
   commitsSinceBase?: string[]
   runCheckers?: boolean
   projectId?: string
+  checkersOverride?: BatchDossier['checkers']
 }
 
 interface RuntimeStateFile {
@@ -513,7 +514,7 @@ function checkerSummary(result: { summary?: Record<string, number>; hasHighOrCri
   }
 }
 
-function collectCheckers(repoRoot: string, batchFile: string, runCheckers: boolean): BatchDossier['checkers'] {
+function collectCheckers(repoRoot: string, batchFile: string, runCheckers: boolean, projectId?: string): BatchDossier['checkers'] {
   if (!runCheckers) {
     return {
       invariant: { status: 'not_run' },
@@ -530,9 +531,9 @@ function collectCheckers(repoRoot: string, batchFile: string, runCheckers: boole
   let specSource: SpecSourceChainResult | null = null
   let specSourceError: unknown
 
-  try { invariant = runGovernanceInvariantCheck({ repoRoot }) } catch (error) { invariantError = error }
+  try { invariant = runGovernanceInvariantCheck({ repoRoot, projectId }) } catch (error) { invariantError = error }
   try { agentContract = runAgentContractCheck({ repoRoot }) } catch (error) { agentContractError = error }
-  try { specSource = runSpecSourceChainCheck({ repoRoot, batchFile }) } catch (error) { specSourceError = error }
+  try { specSource = runSpecSourceChainCheck({ repoRoot, batchFile, projectId }) } catch (error) { specSourceError = error }
 
   return {
     invariant: checkerSummary(invariant, invariantError),
@@ -588,14 +589,15 @@ function classifyFinalState(params: {
   if (hasPendingApproval(params.approvals)) return 'NEEDS_TOM_APPROVAL'
   if (hasCleanupCandidate(params.state, params.workorderIds)) return 'NEEDS_SAFE_CLEANUP'
   if (Object.values(params.checkers).some(item => item.status === 'fail' || item.status === 'error')) return 'FIX_REQUIRED'
-  if (params.runs.length === 0) return 'NOT_RUN'
 
   const expected = params.outputs.filter(output => output.expected)
   const allExpectedExist = expected.length > 0 && expected.every(output => output.exists)
+  if (allExpectedExist) return 'DONE'
+  if (params.runs.length === 0) return 'NOT_RUN'
   const allRunsCompleted = params.workorderIds.size > 0 &&
     [...params.workorderIds].every(id => params.runs.some(run => run.workorder_id === id && run.status === 'completed'))
 
-  if (allExpectedExist && allRunsCompleted) return 'DONE'
+  if (allRunsCompleted) return 'DONE'
   if (params.outputs.some(output => output.expected && !output.exists)) return 'FIX_REQUIRED'
   return 'PARTIAL'
 }
@@ -635,7 +637,7 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const runtimeHistory = readModelRuntimeHistorySummary({ repoRoot })
   const git = readGitStatus(repoRoot, options.gitStatus, profile)
   git.commits_since_base = readCommitsSinceBase(repoRoot, options.commitsSinceBase)
-  const checkers = collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true)
+  const checkers = options.checkersOverride ?? collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true, options.projectId)
   const outputs = collectOutputs(repoRoot, batch.expected_outputs, git, profile)
   const finalState = classifyFinalState({ state, workorderIds, runs, approvals, outputs, checkers })
   const nextAction = nextActionFor(finalState, batch.batch_file)
