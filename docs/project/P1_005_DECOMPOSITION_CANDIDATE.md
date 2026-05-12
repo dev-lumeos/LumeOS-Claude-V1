@@ -27,6 +27,8 @@ It exists only for read-only validation and future draft refinement. It does not
 - `docs/project/PRODUCT_WORK_GATE.md`
 - `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`
 - `docs/specs/Nutrition/INDEX.md`
+- `docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md`
+- `docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md`
 - `docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md`
 - `docs/specs/Nutrition/06_workorder_planning/NUTRITION_PHASE1_DB_FOUNDATION_SPLIT.md`
 - `docs/specs/Nutrition/06_workorder_planning/schema_verification/P1-004-static-schema-verification-report.md`
@@ -39,10 +41,12 @@ It exists only for read-only validation and future draft refinement. It does not
 - `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`
 - `docs/project/GOVERNANCE_TODO_REGISTER.json`
 
-Current source-chain limitation:
+Current source-chain note:
 
-- The currently authorized source set does not include a direct `docs/specs/Nutrition/01_current_specs/*` reference.
-- That is sufficient for a decomposition draft, but insufficient for a factory/source-chain-clean workorder-shaped draft.
+- Tom explicitly authorized adding the minimum required `docs/specs/Nutrition/01_current_specs/*` primary SSOT references only so this draft candidate can pass `wo-factory --dry-run`.
+- The primary P1-005 preparation SSOT is `docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md`.
+- The supporting schema SSOT is `docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md`.
+- This authorization does not widen the product gate and does not authorize import, DB work, Supabase, migration execution, or any product execution.
 
 ## Exact Non-Executable Scope
 
@@ -119,12 +123,12 @@ Read-only only:
 Current observed result:
 
 - Decomposition validator: passes.
-- Factory dry-run: blocked by source-chain rule `source_refs.current_spec_missing` because the currently authorized source set does not include a primary `01_current_specs` SSOT reference.
+- Factory dry-run: passes in `--dry-run --json` mode after the minimum `01_current_specs` SSOT references were added under Tom's narrow authorization. No files were written.
 
 ## Stop Conditions
 
 - Any critical or high validation finding.
-- Any workorder-factory dry-run failure caused by incomplete authorized source refs.
+- Any workorder-factory dry-run failure that persists after the minimum authorized `01_current_specs` SSOT references were added.
 - Any sign that the candidate widens into execution.
 - Any requirement for BLS import, DB work, Supabase, migration execution, or approvals.
 - Any output path outside draft/docs scope.
@@ -149,6 +153,8 @@ Tom must explicitly approve any later step that moves from this draft candidate 
   "source_refs": {
     "module_index": "docs/specs/Nutrition/INDEX.md",
     "current_specs": [
+      "docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md",
+      "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md",
       "docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md",
       "docs/specs/Nutrition/06_workorder_planning/NUTRITION_PHASE1_DB_FOUNDATION_SPLIT.md"
     ],
@@ -247,6 +253,8 @@ Tom must explicitly approve any later step that moves from this draft candidate 
       "context_files": [
         "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md",
         "docs/project/P1_005_READINESS_CANDIDATE.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md",
         "docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md",
         "docs/specs/Nutrition/06_workorder_planning/schema_verification/P1-004-static-schema-verification-report.md"
       ],
@@ -260,6 +268,8 @@ Tom must explicitly approve any later step that moves from this draft candidate 
       "source_refs": {
         "module_index": "docs/specs/Nutrition/INDEX.md",
         "current_specs": [
+          "docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md",
+          "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md",
           "docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md"
         ],
         "reviews": [
