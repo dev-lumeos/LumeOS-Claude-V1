@@ -51,6 +51,7 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
 - Product work remains closed globally. Tom approved one scoped exception only: `Nutrition / BLS / P1-005 preparation` under `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`.
 - The approved scoped exception allows planning, source-chain validation, decomposition/workorder readiness review, and non-dispatching operator/governance checks only. It still forbids BLS import execution, DB/Supabase/migration work, product batches, approvals, raw BLS commits, and product implementation.
+- `docs/project/P1_005_READINESS_CANDIDATE.md` now records the first concrete read-only readiness candidate. Current classification is `NO_ACTIVE_CANDIDATE`: source material exists, but there is still no active P1-005 batch/workorder or validated decomposition input.
 - Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
@@ -66,6 +67,7 @@ Use these files before starting more governance or product work:
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
 - `docs/project/PRODUCT_WORK_GATE.md`
 - `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`
+- `docs/project/P1_005_READINESS_CANDIDATE.md`
 - `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
