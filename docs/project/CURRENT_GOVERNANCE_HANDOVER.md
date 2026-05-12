@@ -39,6 +39,7 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - Planned DGX/Spark maintenance is recorded in `system/control-plane/runtime-maintenance.json` and is now cleared after the successful post-rack endpoint proof. Model runtime checks must not treat optional MealCam offline as blocking unless a MealCam/Vision workorder is active.
 - Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
 - Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent`, `senior-reviewer-agent`, and final escalations.
+- Spark4/Spark5 MiniMax M2.7 NVFP4 is documented as a separate lab runtime in `docs/project/MINIMAX_LAB_RUNTIME.md`. It is not productive governance routing, is not required for product work, and must not be added to `system/agent-registry/model_routing.json` without future benchmark evidence and an explicit governance decision.
 - Codex Worker Bridge adds a dry-run-first `codex exec` integration point for controlled senior agents.
 - Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker.
 - Codex Worker dispatch status is `controlled_enabled` for `senior-coding-agent` and `senior-reviewer-agent` only. It still requires explicit `codex_worker: true`, `runtime_type: codex-cli`, complete metadata, narrow scope, blocked files, expected outputs, source refs, no approval-grant/DB/Supabase/migration work, and product-gate policy pass.
@@ -66,6 +67,7 @@ Use these files before starting more governance or product work:
 - `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`
 - `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
 - `docs/project/MODEL_RUNTIME_HARDENING.md`
+- `docs/project/MINIMAX_LAB_RUNTIME.md`
 - `docs/project/CODEX_WORKER_BRIDGE.md`
 - `docs/project/PROJECT_PROFILES.md`
 - `docs/project/GOVERNANCE_UI_V1.md`

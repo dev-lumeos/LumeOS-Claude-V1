@@ -225,6 +225,24 @@
         "docs/project/BATCH_LOADER_CLI_V1.md",
         "system/workorders/nutrition/batches"
       ]
+    },
+    {
+      "id": "GOV-TODO-012",
+      "title": "Evaluate MiniMax lab runtime before any governance routing decision",
+      "layer": "runtime_lab",
+      "severity": "low",
+      "priority": "P3",
+      "status": "open",
+      "evidence": "Spark4/Spark5 MiniMax M2.7 NVFP4 lab baseline is documented in docs/project/MINIMAX_LAB_RUNTIME.md. It is lab-only and not productive governance routing.",
+      "recommended_action": "Run reproducible governance benchmark/evaluation only after Tom explicitly requests lab evaluation. Do not add MiniMax to model_routing.json before benchmark evidence and a governance decision.",
+      "dependencies": [],
+      "estimated_effort": "0.5-1d evaluation planning plus benchmark runs",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/MINIMAX_LAB_RUNTIME.md",
+        "system/agent-registry/model_routing.json"
+      ]
     }
   ]
 }
