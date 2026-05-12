@@ -10,6 +10,26 @@ Product work is closed unless Tom explicitly opens a specific product gate.
 
 The LumeOS default project profile records this policy in `system/project-profiles/profiles/lumeos.json`. Profile-aware tools may read that policy, but the profile does not grant approval, execute work, open the product gate, or override Tom's gate decision.
 
+## Current Scoped Exception
+
+As of 2026-05-12, Tom approved one narrow scoped exception only:
+
+- `Nutrition / BLS / P1-005 preparation`
+
+This exception allows planning, validation, source-chain review, workorder-readiness review, and non-dispatching governance/operator checks only.
+
+This exception does not allow:
+
+- BLS import execution
+- Supabase commands
+- migration execution
+- DB apply or production DB work
+- product batch execution
+- Nutrition feature implementation
+- approval grants
+
+General product work remains closed.
+
 ## Allowed Work
 
 No product execution is currently allowed. Allowed governance-only work may include:
@@ -18,6 +38,7 @@ No product execution is currently allowed. Allowed governance-only work may incl
 - Read-only governance checks.
 - Generation of governance reports.
 - Static validation.
+- Scoped `Nutrition / BLS / P1-005 preparation` planning/readiness work exactly as approved in `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`.
 
 ## Forbidden Work
 

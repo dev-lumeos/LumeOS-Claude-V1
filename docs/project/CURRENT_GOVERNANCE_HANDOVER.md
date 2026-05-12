@@ -49,8 +49,8 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
 - Project Profiles V2 adds an inactive `fixture-beauty-club` profile, schema-backed `profile_kind` / `active` metadata, profile path traversal rejection, read-only UI snapshot selected-profile loading, and non-Nutrition source-chain fixture coverage. This does not activate real Beauty Club product work or assume a real Beauty Club repo path.
 - Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
-- Product work remains closed unless Tom explicitly opens it.
-- First product-gate opening is proposed, not open: `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md` scopes the first candidate to `Nutrition / BLS / P1-005 preparation` for planning/source-chain/workorder-readiness only. It forbids BLS import execution, DB/Supabase/migration work, product batches, approvals, raw BLS commits, and product implementation until Tom explicitly approves that exact scope.
+- Product work remains closed globally. Tom approved one scoped exception only: `Nutrition / BLS / P1-005 preparation` under `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`.
+- The approved scoped exception allows planning, source-chain validation, decomposition/workorder readiness review, and non-dispatching operator/governance checks only. It still forbids BLS import execution, DB/Supabase/migration work, product batches, approvals, raw BLS commits, and product implementation.
 - Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
@@ -86,6 +86,14 @@ The completion plan is the current truth for remaining governance gaps. Canonica
 
 Product work is not freely open and is currently closed unless Tom explicitly opens it.
 
+One scoped exception is currently active:
+
+- `Nutrition / BLS / P1-005 preparation` only, as defined in `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`
+- No DB execution
+- No Supabase
+- No import
+- No migration
+
 Allowed only after Tom explicitly opens the appropriate gate:
 
 - Planning-only product work.
@@ -96,6 +104,9 @@ Allowed only after Tom explicitly opens the appropriate gate:
 - Governance checker runs.
 - Governance Operator dry-run.
 - Governance Operator continue only if no database execution, migration execution, or real bulk import occurs.
+- Planning, validation, source-chain review, and workorder-readiness review for `Nutrition / BLS / P1-005 preparation`
+- Non-dispatching operator `--status`, `--dry-run`, or `--doctor` for that exact scope
+- Decomposition-plan validation or workorder-factory dry-run for that exact scope if valid source-backed inputs exist
 
 Forbidden:
 
@@ -109,6 +120,7 @@ Forbidden:
 - Bypassing the Governance Operator or checkers.
 - Auto-granting approvals.
 - Autonomous, night, or large product runs.
+- Any widening from `Nutrition / BLS / P1-005 preparation` into real implementation or execution without a new explicit Tom decision.
 
 Reason:
 

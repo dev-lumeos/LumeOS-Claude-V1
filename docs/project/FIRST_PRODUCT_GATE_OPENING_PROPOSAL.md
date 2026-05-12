@@ -1,12 +1,12 @@
 # First Product Gate Opening Proposal
 
-STATUS: READY_FOR_TOM_APPROVAL
+STATUS: APPROVED_SCOPE_ACTIVE
 
-Product work remains closed. This proposal does not open product work by itself. Tom must explicitly approve this exact proposal before any product-adjacent planning action starts.
+Product work remains closed globally. Tom approved one narrow exception on 2026-05-12 for `Nutrition / BLS / P1-005 preparation` only. This does not authorize product execution.
 
-## 1. Decision Requested
+## 1. Approved Decision
 
-Approve a narrow product-gate opening for:
+Approved scope:
 
 `Nutrition / BLS / P1-005 preparation`
 
@@ -35,7 +35,7 @@ Why this is the safest first candidate:
 
 ## 3. Explicit Scope
 
-Allowed scope after Tom approval:
+Allowed scope under the approved gate:
 
 - Review existing Nutrition/BLS source-chain readiness.
 - Validate that P1-005 has complete source references before any workorder generation.
@@ -95,15 +95,18 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\decompositio
 
 If the workorder factory is used later, it must be dry-run/validation only until Tom explicitly approves execution.
 
-## 5. Tom Approval Requirement
+## 5. Approval Record
 
-Tom must explicitly approve one of these decisions:
+Recorded approval:
 
-- `APPROVE PRODUCT GATE: Nutrition/BLS/P1-005 preparation only`
-- `DENY PRODUCT GATE: Nutrition/BLS/P1-005 preparation`
-- `REVISE PRODUCT GATE: <specific narrower scope>`
+- Tom opened the product gate exclusively for `Nutrition / BLS / P1-005 preparation`.
+- Additional constraints confirmed by Tom:
+  - no DB execution
+  - no Supabase
+  - no import
+  - no migration
 
-No other wording opens the product gate. General product work remains closed.
+This approval does not open general product work.
 
 ## 6. Stop Conditions
 
@@ -123,17 +126,16 @@ Stop immediately with `FIX_REQUIRED` or `NEEDS_TOM_APPROVAL` if any of the follo
 
 Because this proposal does not execute product work, rollback is documentation-only:
 
-- Leave the product gate closed.
-- Mark this proposal `DENIED`, `SUPERSEDED`, or `REVISE_REQUIRED`.
+- Revert to globally closed product gate.
+- Mark this proposal `SUPERSEDED`, `REVOKED`, or `REVISE_REQUIRED`.
 - Do not run P1-005 planning, validation, or workorder generation until a revised Tom-approved proposal exists.
 
 ## 8. Current Decision State
 
-Decision state: `READY_FOR_TOM_APPROVAL`
+Decision state: `APPROVED_SCOPE_ACTIVE`
 
-Product gate state: `CLOSED`
+Product gate state: `CLOSED_GLOBALLY_WITH_SCOPED_EXCEPTION`
 
 Exact next action:
 
-Tom must explicitly approve opening the product gate only for `Nutrition / BLS / P1-005 preparation` with the scope in this document.
-
+Prepare a concrete `Nutrition / BLS / P1-005 preparation` workorder or batch candidate and run read-only source-chain/readiness validation only.
