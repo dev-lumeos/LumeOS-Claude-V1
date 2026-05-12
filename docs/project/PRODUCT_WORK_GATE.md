@@ -34,7 +34,7 @@ General product work remains closed.
 
 The LumeOS profile now includes one exact per-batch execution allowlist entry:
 
-- `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md`
+- `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md`
 
 Rules:
 
@@ -44,7 +44,7 @@ Rules:
 - no profile-wide `open` or `conditional` widening
 - all other product batches remain blocked
 
-This allowlist exists only so profile-aware source-chain and doctor checks can treat that one draft batch as a scoped exception without opening broader product work.
+This allowlist exists only so profile-aware source-chain and doctor checks can treat that one executable-scoped batch as a narrow exception without opening broader product work.
 
 ## Allowed Work
 

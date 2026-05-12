@@ -161,7 +161,7 @@ Tom must decide whether to open the first real execution boundary for the existi
 
 The first machine-readable scoped execution exception is now implemented as an exact batch allowlist in the LumeOS project profile:
 
-- `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md`
+- `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md`
 
 It exists only to let:
 

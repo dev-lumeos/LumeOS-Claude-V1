@@ -251,8 +251,8 @@
       "severity": "medium",
       "priority": "P0",
       "status": "stop_and_report_execution_boundary",
-      "evidence": "The full approved read-only P1-005 preparation workflow now exists: decomposition candidate, source-chain readiness report, non-executable draft workorder, and non-executable draft batch wrapper are all complete. A narrow machine-readable per-batch allowlist now lets spec-source-chain-check and operator doctor treat only BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md as allowed_if_clean while the global profile gate remains closed for every other product batch.",
-      "recommended_action": "Tom must decide whether to create/open the first executable non-draft P1-005 path, or keep the scoped exception limited to draft-batch checks only.",
+      "evidence": "The first executable non-draft P1-005 path now exists as WO-NUTRITION-P1-005-source-chain-readiness plus BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS. The profile allowlist was narrowed to that exact batch only, so source-chain and doctor checks can pass for one report-only execution path while every other product batch remains blocked.",
+      "recommended_action": "Tom must decide whether to execute BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS, or keep the first executable P1-005 path staged but not run.",
       "dependencies": [],
       "estimated_effort": "15-30m for Tom execution-boundary decision",
       "codex_autonomous_possible": false,
@@ -264,7 +264,9 @@
         "docs/project/p1-005/P1-005-source-chain-readiness-report.md",
         "docs/project/PRODUCT_WORK_GATE.md",
         "system/workorders/nutrition/drafts/WO-NUTRITION-P1-005-preparation-draft.md",
+        "system/workorders/nutrition/WO-NUTRITION-P1-005-source-chain-readiness.md",
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md",
+        "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md",
         "docs/specs/Nutrition/06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md",
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-004-schema-verification.md"
       ]
