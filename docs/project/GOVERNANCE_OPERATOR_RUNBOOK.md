@@ -100,6 +100,46 @@ Rules:
 - Product-gate blocked states remain blocked; the handoff must not open product work.
 - Codex Worker is only suggested for eligible governance workorders with explicit `codex_worker` metadata and passing gates.
 
+## Non-Interactive Workflow Autonomy
+
+The operator/governance workflow should continue automatically through safe preparation work after Tom has already defined scope and forbidden actions.
+
+Three policy modes apply:
+
+- `AUTO_CONTINUE`
+- `AUTO_PLAN_AROUND`
+- `STOP_AND_REPORT`
+
+### `AUTO_CONTINUE`
+
+Do not ask Tom again when the next useful step is still read-only, draft-only, docs-only, validation-only, or otherwise non-executing inside the approved scope.
+
+### `AUTO_PLAN_AROUND`
+
+If the next likely step touches a risky execution domain, first produce the safest non-executing alternative instead of stopping immediately.
+
+Examples:
+
+- draft SQL instead of DB apply
+- draft migration plus rollback instead of migration execution
+- import plan instead of import execution
+- source inventory instead of raw-data mutation
+- routing proposal instead of production routing change
+
+### `STOP_AND_REPORT`
+
+Stop only when no safe read-only, draft-only, or dry-run path remains and the next step is a true execution boundary.
+
+When stopping:
+
+- report the exact execution boundary
+- report the exact next Tom decision
+- do not wait interactively during already approved safe preparation work
+
+### Current P1-005 application
+
+`Nutrition / BLS / P1-005 preparation` now sits at `STOP_AND_REPORT` because the draft-only workflow is complete and the next step would be the first real execution boundary.
+
 Learning suggestions are read-only by default:
 
 ```powershell

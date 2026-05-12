@@ -136,6 +136,23 @@ Decision state: `APPROVED_SCOPE_ACTIVE`
 
 Product gate state: `CLOSED_GLOBALLY_WITH_SCOPED_EXCEPTION`
 
-Exact next action:
+Autonomy policy inside this approved scope:
+
+- continue automatically through `AUTO_CONTINUE` work
+- create the safest non-executing alternative for `AUTO_PLAN_AROUND` cases
+- stop only at `STOP_AND_REPORT` execution boundaries
+- do not request repeated Tom approvals for draft-only, read-only, or dry-run preparation work inside this already approved narrow scope
+
+Current P1-005 classification:
+
+- `STOP_AND_REPORT` at the first true execution boundary
+- the draft-only preparation workflow is complete
+- no product execution is authorized
+
+Original next action that is now completed:
 
 Prepare a concrete `Nutrition / BLS / P1-005 preparation` workorder or batch candidate and run read-only source-chain/readiness validation only.
+
+Current next action:
+
+Tom must decide whether to open the first real execution boundary for the existing P1-005 draft batch, or keep it blocked.

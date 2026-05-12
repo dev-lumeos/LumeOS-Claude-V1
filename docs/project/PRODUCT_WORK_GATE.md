@@ -83,3 +83,62 @@ Spark Runtime Hardening is required before autonomous, night, or large product r
 Tom approvals remain required. The conditional gate does not permit automatic approval grants.
 
 For migration or SQL-sensitive work, any grant allows only the scoped file write or review action stated by the approval. It does not allow database execution.
+
+## Non-Interactive Autonomy Policy
+
+Governed workflow runs must not repeatedly ask Tom for approval during safe preparation work. After Tom defines goals, scope, and forbidden actions, the workflow continues automatically until it reaches a true execution boundary.
+
+### Mode: `AUTO_CONTINUE`
+
+Proceed without asking Tom again when the next step stays inside already approved safe scope.
+
+Examples:
+
+- read-only analysis
+- docs-only changes
+- draft-only workorders
+- draft-only batches
+- source-chain review
+- readiness reports
+- validators
+- `wo-factory --dry-run`
+- operator `--status`
+- operator `--dry-run`
+- operator `--doctor`
+- non-dispatching reports and dossiers
+- handover / TODO updates
+- safe preparation work inside an already approved narrow scope
+
+### Mode: `AUTO_PLAN_AROUND`
+
+If the next useful step touches a risky domain, do not stop immediately. First create the safest non-executing alternative and continue automatically with that draft/read-only path.
+
+Examples:
+
+- DB needed -> create schema review, SQL draft, rollback plan, no apply
+- Supabase needed -> create command plan, no command execution
+- migration needed -> create migration candidate, rollback, local dry-run plan, no execution
+- BLS import needed -> create source-chain review, sample plan, import plan, no import
+- raw BLS needed -> create source inventory, no raw commit
+- runtime state needed -> create diagnosis report, no manual edit
+- queue state needed -> create queue proposal, no queue edit
+- production routing needed -> create routing proposal or test-profile plan, no production change
+- broad product gate needed -> create narrow proposal only, no broad opening
+
+### Mode: `STOP_AND_REPORT`
+
+Stop only when no safe non-executing path remains and the next step would cross a real execution boundary.
+
+Examples:
+
+- irreversible execution is next
+- all read-only, draft-only, and dry-run options are exhausted
+- the next step requires real DB, Supabase, migration, or import execution
+- the next step requires dispatcher execution
+- the next step requires Codex Worker execute
+- the next step requires approval grant
+- the next step requires queue or runtime-state mutation
+- the next step requires production routing change
+- the next step requires a broad product-gate opening
+
+When stopping, report the exact boundary and next Tom decision. Do not wait interactively during safe preparation work.
