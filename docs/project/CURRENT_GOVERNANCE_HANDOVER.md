@@ -497,3 +497,30 @@ Rules:
 - Operator `DONE` initially meant "no blockers" rather than "outputs complete".
 - Spec source-chain enforcement now exists as a checker; target product work still must pass it before BLS import.
 - Batch-loader dispatcher dependency injection once omitted `callModel`; `runDispatch()` now has direct regression coverage for passing `defaultCallModel` and `defaultExecuteTool`.
+
+## P1-005 Seed Candidate Workflow Probe
+
+- Local-only governed batch:
+  - `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SEED-CANDIDATE.md`
+- Workorder:
+  - `system/workorders/nutrition/WO-NUTRITION-P1-012-nutrient-defs-seed-candidate.md`
+- Goal:
+  - Generate `docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md` through the governed workflow, not by direct Codex authoring.
+
+Current result:
+
+- Product-gate/source-chain/doctor path is clean for this exact batch.
+- The dispatcher path uses `docs-agent` directly.
+- There is no separate runtime dispatch hop to `orchestrator-agent`; orchestration exists only as internal intent validation inside `system/control-plane/dispatcher.ts`.
+- The run stopped at approval `APP-20260513-758015` with classification `SAFE_TO_REVIEW`.
+- The written artifact is only a 4-line stub:
+  - title
+  - status line
+  - `## Purpose`
+  - `This doc`
+
+Governance gap exposed by this probe:
+
+- Review escalation (`spark-d invalid_json -> Claude needed`) can leave a stub artifact behind while still producing a docs-only approval stop.
+- Batch output completion currently treats file existence as sufficient, even when the generated document is obviously incomplete.
+- This is a workflow-quality integration gap, not a product-scope or local DB-scope blocker.
