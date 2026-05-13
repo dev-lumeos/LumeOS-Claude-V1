@@ -136,6 +136,7 @@ interface ModelRoutingEntry {
   node: string; model: string; temperature: number; max_context: number
   timeout_ms?: number
   max_attempts?: number
+  max_tokens?: number
 }
 
 export interface DispatcherDeps {
@@ -347,7 +348,9 @@ export async function defaultCallModel(
   const requestBody: Record<string, unknown> = {
     model: routing.model,
     temperature: routing.temperature,
-    max_tokens: 4096,
+    max_tokens: Number.isFinite(routing.max_tokens) && Number(routing.max_tokens) > 0
+      ? Number(routing.max_tokens)
+      : 4096,
     messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMessage }],
   }
   if (routing.model.toLowerCase().includes('qwen3.6')) {

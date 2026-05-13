@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { buildSystemPrompt } from './skill-loader'
+import { extractFirstJsonObject } from './governance-validator'
 
 interface SmokeCase {
   id: string
@@ -8,6 +9,9 @@ interface SmokeCase {
   system: string
   user: string
   max_tokens: number
+  requireToolWrite?: {
+    targetPath: string
+  }
 }
 
 interface SmokeResult {
@@ -92,6 +96,48 @@ async function runCase(
     } catch {
       content = ''
     }
+    if (item.requireToolWrite) {
+      const candidate = extractFirstJsonObject(content)
+      if (!candidate) {
+        return {
+          id: item.id,
+          description: item.description,
+          ok: false,
+          status: response.status,
+          statusText: response.statusText,
+          latency_ms: latency,
+          content_chars: content.length,
+          evidence: `dispatcher payload did not contain a complete JSON object; tail=${content.slice(-240)}`,
+        }
+      }
+      try {
+        const parsed = JSON.parse(candidate) as Record<string, unknown>
+        const ok = parsed.tool === 'write' && parsed.targetPath === item.requireToolWrite.targetPath && typeof parsed.content === 'string' && parsed.content.trim().length > 0
+        return {
+          id: item.id,
+          description: item.description,
+          ok,
+          status: response.status,
+          statusText: response.statusText,
+          latency_ms: latency,
+          content_chars: content.length,
+          evidence: ok
+            ? `write:${String(parsed.targetPath)} content_chars=${String(parsed.content).length}`
+            : `dispatcher payload missing expected write ToolRequest for ${item.requireToolWrite.targetPath}`,
+        }
+      } catch (error) {
+        return {
+          id: item.id,
+          description: item.description,
+          ok: false,
+          status: response.status,
+          statusText: response.statusText,
+          latency_ms: latency,
+          content_chars: content.length,
+          evidence: error instanceof Error ? `dispatcher payload JSON parse failed: ${error.message}` : 'dispatcher payload JSON parse failed',
+        }
+      }
+    }
     return {
       id: item.id,
       description: item.description,
@@ -160,7 +206,10 @@ export async function runDocsAgentRuntimeSmoke(options: {
       description: 'Dispatcher-shaped WO-nutrition-012 first model call',
       system: dispatcherSystem,
       user: extractTaskFromWorkorder('system/workorders/nutrition/WO-NUTRITION-P1-012-nutrient-defs-seed-candidate.md'),
-      max_tokens: 4096,
+      max_tokens: Number(route.max_tokens ?? 4096),
+      requireToolWrite: {
+        targetPath: 'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md',
+      },
     })
   }
   const results: SmokeResult[] = []

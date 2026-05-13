@@ -36,7 +36,13 @@ task: |
   - Stop conditions
   - Next local-only boundary
 
-  The review-only seed candidate table must include meaningful rows and the columns:
+  The review-only seed candidate table must be bounded for dispatcher reliability.
+  Do not attempt to emit the full 138-row payload in this workorder. Emit exactly 10
+  representative rows that are safely source-derived, and include an explicit gap note
+  that the full 138-row seed payload remains blocked until a separate seed-payload
+  generation boundary is opened.
+
+  The representative review-only seed candidate table must include meaningful rows and the columns:
   - code
   - name_de
   - name_en
@@ -49,11 +55,8 @@ task: |
   - sort_order
   - source_ref
 
-  If the full 138-row payload cannot be safely derived from the approved sources in this run,
-  write a review-only representative candidate plus an explicit gap note that the full 138-row
-  payload remains blocked until source-confirmed seed generation is opened. Do not fabricate
-  nutrient names, units, groups, or row payload. It is acceptable for name_th and group_th to
-  be empty string while no translation seed boundary is open.
+  Do not fabricate nutrient names, units, groups, or row payload. It is acceptable for
+  name_th and group_th to be empty string while no translation seed boundary is open.
 
   The candidate must:
   - stay review-only and non-executable

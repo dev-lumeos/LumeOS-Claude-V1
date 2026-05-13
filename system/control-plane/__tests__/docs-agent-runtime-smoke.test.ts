@@ -54,9 +54,24 @@ describe('docs-agent runtime smoke', () => {
     const seenBodies: any[] = []
     const result = await runDocsAgentRuntimeSmoke({
       fetchImpl: async (_url, init) => {
-        seenBodies.push(JSON.parse(String(init?.body ?? '{}')))
+        const body = JSON.parse(String(init?.body ?? '{}'))
+        seenBodies.push(body)
+        const isDispatcherPayload = String(body.messages?.[1]?.content ?? '').includes('Produce the seed candidate')
+        const content = isDispatcherPayload
+          ? JSON.stringify({
+              selected_agent: 'micro-executor',
+              risk_level: 'low',
+              risks: [],
+              execution_order: [],
+              required_gates: ['review-gate', 'files-scope-gate'],
+              stop_conditions: ['scope_violation'],
+              tool: 'write',
+              targetPath: 'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md',
+              content: '# Seed Candidate\n\n## Purpose\nComplete review artifact.',
+            })
+          : 'OK'
         return new Response(JSON.stringify({
-          choices: [{ message: { content: 'OK' } }],
+          choices: [{ message: { content } }],
         }), { status: 200 })
       },
     })
