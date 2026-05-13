@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
 import {
+  parseOrchestratorIntent,
   validateOrchestratorIntent,
   type OrchestratorIntent,
 } from '../governance-validator'
@@ -19,6 +20,13 @@ function baseIntent(overrides: Partial<OrchestratorIntent> = {}): OrchestratorIn
 }
 
 describe('Governance validator agent binding', () => {
+  it('parses the first balanced JSON object when model output has trailing prose', () => {
+    const parsed = parseOrchestratorIntent(`${JSON.stringify(baseIntent())}\n\nDone.`)
+
+    assert.equal(parsed.selected_agent, 'micro-executor')
+    assert.deepEqual(parsed.required_gates, ['review-gate', 'files-scope-gate'])
+  })
+
   it('rewrites valid-but-wrong selected_agent before DB migration gates can cascade', () => {
     const result = validateOrchestratorIntent(
       baseIntent({

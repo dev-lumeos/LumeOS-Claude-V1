@@ -35,6 +35,39 @@ export interface ValidationContext {
   expectedAgent?:       string
 }
 
+export function extractFirstJsonObject(content: string): string | null {
+  const start = content.indexOf('{')
+  if (start < 0) return null
+
+  let depth = 0
+  let inString = false
+  let escaped = false
+
+  for (let i = start; i < content.length; i += 1) {
+    const char = content[i]
+    if (escaped) {
+      escaped = false
+      continue
+    }
+    if (char === '\\') {
+      escaped = inString
+      continue
+    }
+    if (char === '"') {
+      inString = !inString
+      continue
+    }
+    if (inString) continue
+    if (char === '{') depth += 1
+    if (char === '}') {
+      depth -= 1
+      if (depth === 0) return content.slice(start, i + 1)
+    }
+  }
+
+  return null
+}
+
 // ─── Enums ────────────────────────────────────────────────────────────────────
 
 const ALLOWED_AGENTS = new Set([
@@ -204,6 +237,9 @@ export function parseOrchestratorIntent(content: string): OrchestratorIntent {
     return JSON.parse(trimmed) as OrchestratorIntent
   }
 
+  const embedded = extractFirstJsonObject(trimmed)
+  if (embedded) return JSON.parse(embedded) as OrchestratorIntent
+
   throw new Error(`QWEN_NOT_JSON: ${trimmed.slice(0, 100)}`)
 }
 
@@ -245,11 +281,13 @@ export function normalizeOrchestratorIntent(
 
   // ── selected_agent (WO-005) ──────────────────────────────────────────────
   const currentAgent = result.selected_agent
+  const mappedAgent = mapAgentToValidatorTarget(workorderAgentId)
   if (typeof currentAgent !== 'string' || !ALLOWED_AGENTS.has(currentAgent)) {
-    const mappedAgent = mapAgentToValidatorTarget(workorderAgentId)
     if (mappedAgent) {
       result = { ...result, selected_agent: mappedAgent }
     }
+  } else if (mappedAgent && workorderAgentId !== mappedAgent && currentAgent !== mappedAgent) {
+    result = { ...result, selected_agent: mappedAgent }
   }
 
   // ── risk_level (WO-009) ──────────────────────────────────────────────────

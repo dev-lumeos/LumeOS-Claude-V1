@@ -44,6 +44,7 @@ import {
   validateOrchestratorIntent,
   inferWorkorderType,
   mapAgentToValidatorTarget,
+  extractFirstJsonObject,
   type OrchestratorIntent,
 } from './governance-validator'
 import { runReviewPipeline } from './review-pipeline'
@@ -194,6 +195,14 @@ export function parseToolRequest(modelOutput: string): ToolRequest | null {
   const trimmed = modelOutput.trim()
   if (trimmed.startsWith('{') && trimmed.endsWith('}')) {
     try { const r = JSON.parse(trimmed); if (isToolReq(r)) return r } catch {}
+  }
+
+  // 2b. Some runtimes append prose or whitespace after the object. Consume the
+  // first balanced JSON object so a valid ToolRequest does not fall into the
+  // no-tool completed path.
+  const embedded = extractFirstJsonObject(trimmed)
+  if (embedded) {
+    try { const r = JSON.parse(embedded); if (isToolReq(r)) return r } catch {}
   }
 
   // 3. JSON-Block im Text
