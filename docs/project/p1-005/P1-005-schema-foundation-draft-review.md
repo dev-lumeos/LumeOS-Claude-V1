@@ -1,6 +1,6 @@
 # P1-005 Schema-Only Foundation Draft Review
 
-> **Status**: REVIEW_COMPLETE / READY_IF_PROMOTED_AS_SCHEMA_ONLY_SLICE
+> **Status**: REVIEW_COMPLETE / PROMOTED_AS_SCHEMA_ONLY_MIGRATION_CANDIDATE
 > **Reviewed files**:
 > - `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
 > - `docs/project/p1-005/P1-005-schema-foundation-draft-validation-plan.md`
@@ -8,7 +8,7 @@
 
 ## Decision
 
-The SQL draft is **safe as a non-executable draft artifact** and **is ready to be promoted into a real migration candidate only if it is promoted explicitly as a schema-only slice**.
+The SQL draft was **safe as a non-executable draft artifact** and is now **promoted into a real migration candidate only as a schema-only slice**.
 
 ## What Is Good
 
@@ -19,6 +19,8 @@ The SQL draft is **safe as a non-executable draft artifact** and **is ready to b
    - one additive index
 3. The draft avoids destructive SQL, import logic, credentials, runtime state, and queue state.
 4. The validation plan keeps review in dry-run/read-only governance tooling.
+5. The promoted candidate path is now explicit:
+   - `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql`
 
 ## Promotion Scope Decision
 
@@ -55,7 +57,7 @@ The validation plan is correct for a draft-only review and is now appropriately 
 
 ## Recommendation
 
-Promote this draft **only as a schema-only slice**.
+This draft is now promoted **only as a schema-only slice**.
 
 Do **not** widen it during promotion. In particular, do not add:
 
@@ -74,3 +76,4 @@ The smallest safe follow-up is a narrow promotion review for a schema-only migra
 - **Additive-only safety**: pass
 - **Validation-plan quality**: pass
 - **Ready for migration-candidate promotion**: **yes, only as a schema-only slice**
+- **Promotion status**: **done**

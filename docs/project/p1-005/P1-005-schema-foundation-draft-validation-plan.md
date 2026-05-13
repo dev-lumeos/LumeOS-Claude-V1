@@ -1,13 +1,13 @@
 # P1-005 Schema-Only Foundation Draft Validation Plan
 
-> **Status**: NON_EXECUTABLE_DRAFT
-> **Purpose**: Validate the first additive schema-only SQL candidate for P1-005 without DB execution.
+> **Status**: MIGRATION_CANDIDATE_REVIEW_ONLY
+> **Purpose**: Validate the first additive schema-only migration candidate for P1-005 without DB execution.
 > **Authorization**: No DB work, no Supabase commands, no migration execution, no BLS import.
 
 ## Candidate Under Review
 
-- Draft SQL: `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
-- Intended future migration path only if later approved as a schema-only slice:
+- Source draft SQL: `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
+- Migration candidate path:
   - `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql`
 
 ## Why This Is The First Safe Non-Planning Step
@@ -16,7 +16,7 @@ This candidate is narrower than a full Nutrition foundation migration:
 
 - it converts planning into concrete SQL shape
 - it is explicitly schema-only
-- it stays outside `supabase/migrations/`
+- it is now promoted into a real migration-candidate path
 - it uses only additive schema foundation elements
 - it excludes the nutrient_defs seed payload
 - it excludes RDA updates
@@ -51,7 +51,7 @@ Do not validate by running SQL.
 
 ### Structural checks
 
-- [ ] Draft remains outside `supabase/migrations/`
+- [ ] Migration candidate filename and header clearly mark review-only status
 - [ ] Draft contains additive statements only
 - [ ] No destructive SQL appears
 - [ ] No import logic appears
@@ -68,7 +68,7 @@ Do not validate by running SQL.
 
 ### Promotion checks
 
-- [ ] Candidate future migration filename is only a proposal for a schema-only slice, not an active migration
+- [ ] Migration candidate remains review-only and is not treated as execution authorization
 - [ ] Nutrient seed payload remains deferred to a separate candidate
 - [ ] RDA updates remain deferred to a separate candidate
 - [ ] Rollback remains documentation-only
@@ -90,7 +90,6 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 
 Stop immediately if:
 
-- the candidate needs writing under `supabase/migrations/`
 - the candidate needs nutrient seed data authoring
 - the candidate needs RDA update authoring
 - the candidate needs raw BLS import logic
@@ -101,7 +100,6 @@ Stop immediately if:
 
 Still blocked until a later explicit execution decision:
 
-- promotion into `supabase/migrations/`
 - any SQL execution
 - any Supabase command
 - any DB apply
@@ -111,4 +109,4 @@ Still blocked until a later explicit execution decision:
 
 ## Next Approval Boundary
 
-Tom must explicitly decide whether to open a narrow execution boundary for promoting this reviewed schema-only slice into the first real migration-authoring path, or keep all DB/migration work blocked.
+Tom must explicitly decide whether to open a narrow execution boundary for executing or further authoring this reviewed schema-only migration candidate, or keep all DB/migration work blocked.

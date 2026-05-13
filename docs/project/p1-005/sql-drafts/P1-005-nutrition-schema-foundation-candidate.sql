@@ -20,6 +20,11 @@
 --   This draft moves from prose planning into concrete SQL shape, while staying additive,
 --   reviewable, schema-only, and fully outside the executable migration path.
 
+-- PROMOTION STATUS:
+--   Promoted as source material for the non-executed migration candidate:
+--   supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql
+--   The migration candidate remains review-only until a later explicit execution decision.
+
 -- Candidate future migration name if later promoted as a schema-only slice:
 --   supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql
 
