@@ -96,6 +96,9 @@ negative_constraints:
   - "Do not edit queue.json."
   - "Do not change production routing."
 
+required_skills: []
+optional_skills: []
+
 validation_commands:
   - "cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\spec-source-chain-check.ts --batch system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md --json --project lumeos"
   - "cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\run-batch-operator.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md --dry-run --project lumeos"
