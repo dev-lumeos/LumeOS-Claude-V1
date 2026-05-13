@@ -25,7 +25,8 @@
     "reason": "Product work remains blocked unless Tom explicitly opens it. BLS/Nutrition import execution remains blocked.",
     "conditional_planning_allowed": false,
     "execution_batch_allowlist": [
-      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md"
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md",
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md"
     ]
   },
   "forbidden_paths": [
