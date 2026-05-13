@@ -356,8 +356,8 @@
       "severity": "high",
       "priority": "P0",
       "status": "blocked_pending_tom_decision",
-      "evidence": "The P1-005 schema-only SQL draft is now promoted into a real review-only migration candidate at supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql. It explicitly excludes nutrient_defs seed payload, RDA updates, and BLS import, which remain separate follow-up candidates.",
-      "recommended_action": "Review the schema-only migration candidate and validation plan, then explicitly decide whether to open a narrow execution boundary for real migration authoring or execution, while keeping seed payload, RDA updates, and BLS import in separate follow-up candidates.",
+      "evidence": "The P1-005 schema-only SQL draft is now promoted into a real review-only migration candidate at supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql. Static readiness review says it is safe as a review artifact but not yet ready for execution approval because existing-object drift handling and execution-shaped rollback posture are still unresolved.",
+      "recommended_action": "Before any execution-boundary approval, decide whether this schema-only slice may run only against a confirmed-empty target state or must be rewritten as a drift-aware schema-only migration candidate. Keep nutrient_defs seed payload, RDA updates, and BLS import as separate follow-up candidates.",
       "dependencies": [
         "GOV-TODO-016"
       ],

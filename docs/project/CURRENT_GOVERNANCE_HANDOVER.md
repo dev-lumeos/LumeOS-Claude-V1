@@ -80,6 +80,7 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
   - `docs/project/p1-005/P1-005-schema-foundation-draft-validation-plan.md`
 - This candidate is allowlisted only for exact-batch machine checks. It still does not authorize DB apply, Supabase commands, migration execution, nutrient seed payload, RDA updates, or BLS import.
 - The schema-only draft has now been promoted into a real review-only migration candidate at `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql`. Promotion does not authorize execution; seed payload, RDA updates, and BLS import remain separate follow-up candidates.
+- Static execution-readiness review for `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql` is now recorded in `docs/project/p1-005/P1-005-schema-foundation-migration-readiness-review.md`. Current decision: safe review artifact, but not yet ready for execution approval because existing-object drift handling and execution-shaped rollback posture are still unresolved.
 - Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
