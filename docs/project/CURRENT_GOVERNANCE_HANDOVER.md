@@ -65,6 +65,10 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - The allowlisted source-chain readiness batch has completed successfully and its dossier now classifies as `DONE`.
 - `docs/project/p1-005/P1-005-next-execution-plan.md` now defines the next `AUTO_PLAN_AROUND` step: a non-executing import / DB / Supabase preparation plan only.
 - `system/workorders/nutrition/drafts/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION-DRAFT.md` now exists as a review-only next-batch candidate. It is `NON_EXECUTABLE_DRAFT`, `NOT_QUEUE_RELEASED`, and `NOT_DISPATCHABLE`.
+- The first executable planning-only post-readiness batch, `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md`, reached real governed execution and then failed on `WO-nutrition-006` because `docs-agent` on Spark2 returned `vLLM runtime unavailable after 2 attempt(s): vLLM Error: 500 Internal Server Error`.
+- Root cause for that failure is now documented as a Spark2 / Qwen3-Coder-Next / vLLM EngineCore crash, not a Nutrition workorder logic failure. Spark2 was not powered off or rebooted; Spark2 journal showed an EngineCore crash at `2026-05-13 01:55` with `RuntimeError: Triton Error [CUDA]: operation not permitted` in the `qwen3_next.py -> gdn_attention_core -> chunk_gated_delta_rule` stack.
+- Governed execution now requires a tiny `/v1/chat/completions` health probe for endpoint-backed agents such as `docs-agent` before dispatch. `/v1/models` remains useful for general endpoint reachability but is not sufficient proof of execution readiness for this runtime class.
+- Until Spark2/docs-agent completion health is proven clean again and safe cleanup is run for `WO-nutrition-006` / `RUN-20260513-4168`, `BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md` must not be retried.
 - Under the new autonomy policy, P1-005 preparation is no longer waiting for repeated draft/readiness approvals. It is classified as `STOP_AND_REPORT`: all safe draft/read-only work is complete, and the next Tom decision is only whether to open the first real execution boundary for the existing draft batch.
 - Under the new autonomy policy, the next safe post-readiness step is plan-around only: generate import/DB preparation artifacts without import, DB apply, Supabase, or migration execution. The next true execution boundary is any real raw-source, migration, Supabase, DB, or import step beyond that planning batch.
 - Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
@@ -190,8 +194,9 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime
 Rules:
 
 - Default mode is read-only and does not call endpoints.
-- `--check-endpoints` performs short `/v1/models` health checks only.
-- No workorder prompts are sent by the checker.
+- `--check-endpoints` performs short `/v1/models` health checks by default.
+- For governed execution preflight on `docs-agent` and similar endpoint-backed agents, use `--check-endpoints --probe-mode completion --agent <agent-id>` to prove tiny completion health before retrying execution.
+- Default endpoint checks do not send workorder prompts. Completion probe mode sends only a tiny fixed health prompt and never a real workorder payload.
 - Dispatcher model calls now have bounded timeout and one retry for runtime failures.
 - Operator Doctor includes model-runtime findings and still emits one safe next action.
 - `mealcam-agent` is optional/on-demand. Its endpoint is only blocking when a MealCam/Vision workorder or explicit Tom request requires it.

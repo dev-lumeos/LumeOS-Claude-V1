@@ -44,4 +44,29 @@ describe('batch-loader dispatcher dependency injection', () => {
       'runDispatch must not pass an empty callModel dependency',
     )
   })
+
+  it('runDispatch performs a completion health preflight before dispatch', () => {
+    const source = readBatchLoaderSource()
+
+    assert.match(
+      source,
+      /runModelRuntimeCheck/,
+      'batch-loader must import the runtime checker for execution preflight',
+    )
+    assert.match(
+      source,
+      /checkEndpoints:\s*true/,
+      'runtime preflight must perform an endpoint health check',
+    )
+    assert.match(
+      source,
+      /probeMode:\s*'completion'/,
+      'runtime preflight must use a tiny completion probe, not just /v1/models',
+    )
+    assert.match(
+      source,
+      /RUNTIME_UNHEALTHY:/,
+      'runtime preflight failures must be surfaced as RUNTIME_UNHEALTHY blocks',
+    )
+  })
 })

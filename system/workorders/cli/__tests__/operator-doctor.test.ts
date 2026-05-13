@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
+import fs from 'node:fs'
+import os from 'node:os'
+import path from 'node:path'
 
 import {
   diagnoseOperatorDoctor,
@@ -271,6 +274,58 @@ describe('operator doctor diagnosis', () => {
     assert.match(result.next_action, /model-runtime-check/)
     assert.equal(result.autonomy_handoff.learning_recommended, true)
     assert.match(result.autonomy_handoff.next_action, /model-runtime-check/)
+  })
+
+  it('classifies latest dispatch runtime crash as runtime unhealthy before cleanup-only guidance', () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumeos-operator-doctor-'))
+    const originalCwd = process.cwd()
+    try {
+      process.chdir(tmpDir)
+      fs.mkdirSync(path.join(tmpDir, 'system/state'), { recursive: true })
+      fs.writeFileSync(path.join(tmpDir, 'system/state/audit.jsonl'), [
+        JSON.stringify({
+          ts: '2026-05-13T01:55:18.294Z',
+          severity: 'error',
+          event: 'job_failed',
+          run_id: 'RUN-20260513-4168',
+          workorder_id: 'WO-nutrition-006',
+          agent_id: 'docs-agent',
+          orchestration_mode: 'claude_code',
+          reason: 'vLLM runtime unavailable after 2 attempt(s): vLLM Error: 500 Internal Server Error :: RuntimeError: Triton Error [CUDA]: operation not permitted',
+          error_code: 'MODEL_RUNTIME_UNAVAILABLE',
+        }),
+      ].join('\n'))
+
+      const result = diagnoseOperatorDoctor(baseStatus({
+        batchWorkorderIds: ['WO-nutrition-006'],
+        cleanupSuggestions: [{
+          kind: 'terminal_active_workorder',
+          workorderId: 'WO-nutrition-006',
+          runId: 'RUN-20260513-4168',
+          safeToApply: true,
+          why: 'terminal failed',
+          dryRunCommand: 'cleanup-dry-run',
+          confirmCommand: 'cleanup-confirm',
+        }],
+      }), {
+        checkers: cleanCheckers(),
+        memory: {
+          current_handover: true,
+          learning_readme: true,
+          learning_schema: true,
+          current_batch_summary: true,
+        },
+      })
+
+      assert.equal(result.final_diagnosis, 'RUNTIME_UNHEALTHY')
+      assert.match(result.blockers[0]?.evidence ?? '', /docs-agent/)
+      assert.match(result.next_action, /probe-mode completion/)
+      assert.match(result.next_action, /cleanup-dry-run/)
+      assert.equal(result.autonomy_handoff.final_state, 'MODEL_RUNTIME_BLOCKED')
+    } finally {
+      process.chdir(originalCwd)
+      fs.rmSync(tmpDir, { recursive: true, force: true })
+    }
   })
 
   it('reports Codex worker ready without blocking clean readiness', () => {

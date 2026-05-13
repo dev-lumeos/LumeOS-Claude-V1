@@ -32,7 +32,9 @@ Optional endpoint health:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --check-endpoints --timeout-ms 1500
 ```
 
-Endpoint checks are short, read-only health checks against `/v1/models`. They must not send workorder prompts or expensive generation requests.
+Default endpoint checks are short, read-only health checks against `/v1/models`. They must not send workorder prompts or expensive generation requests.
+
+For governed execution preflight on endpoint-backed agents such as `docs-agent`, `/v1/models` is not sufficient proof of execution health. Governed execution must use a tiny `/v1/chat/completions` completion probe for the targeted agent before dispatch. If the completion probe returns HTTP 500, `EngineDeadError`, Triton/CUDA crash text, or empty assistant output, the batch must stop as `RUNTIME_UNHEALTHY` before the workorder is dispatched.
 
 Runtime monitoring history is explicit and local:
 
@@ -168,6 +170,7 @@ The checker verifies both routing documentation and dispatcher enforcement.
 | endpoint unreachable | model runtime | stop operator cleanly; report endpoint |
 | endpoint timeout | model runtime | retry once, then stop cleanly |
 | 5xx response | model runtime | retry once, then stop cleanly |
+| completion probe 500 / EngineDeadError / Triton CUDA crash | docs-agent or route runtime crash | classify as `RUNTIME_UNHEALTHY`; restart affected Spark/vLLM service, re-check tiny completion probe, run safe cleanup, retry only after health proof |
 | 4xx response | config/request error | stop; do not retry blindly |
 | invalid JSON | model-output/governance | use rewrite/stop-rule path, not runtime retry |
 | selected_agent mismatch | governance validator | rewrite/fail according to validator |
@@ -186,6 +189,8 @@ Operator Doctor includes model-runtime status and can report:
 - `QWEN_THINKING_POLICY_MISSING`
 
 Doctor remains read-only and produces exactly one next action.
+
+If the latest governed execution for a batch failed with a runtime-crash signature such as `vLLM runtime unavailable`, `EngineDeadError`, or `Triton Error [CUDA]: operation not permitted`, Doctor must report `RUNTIME_UNHEALTHY` instead of reducing the issue to a generic product/workorder failure.
 
 ## Product Work Gate
 

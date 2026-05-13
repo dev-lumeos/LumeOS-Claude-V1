@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T16:10:00+07:00",
+  "generated_at": "2026-05-13T03:05:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -277,21 +277,46 @@
       "layer": "product_gate",
       "severity": "medium",
       "priority": "P0",
-      "status": "stop_and_report_execution_boundary",
-      "evidence": "Source-chain readiness is complete. The next safe step is defined in docs/project/p1-005/P1-005-next-execution-plan.md and the review-only batch candidate system/workorders/nutrition/drafts/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION-DRAFT.md. This next step still avoids BLS import, raw BLS commit, DB changes, Supabase commands, and migration execution.",
-      "recommended_action": "Tom must decide whether to authorize a narrow planning-only execution boundary for the next P1-005 import/DB preparation batch, or keep all post-readiness work blocked.",
+      "status": "runtime_blocked_after_opening",
+      "evidence": "Tom opened the narrow planning-only execution boundary and the allowlisted batch system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md entered governed execution. WO-nutrition-006 then failed because docs-agent on Spark2 hit a vLLM EngineCore crash: RuntimeError: Triton Error [CUDA]: operation not permitted, surfaced as HTTP 500 after 2 attempts.",
+      "recommended_action": "Do not retry the import-preparation batch until Spark2/docs-agent vLLM is restarted, a tiny completion probe passes cleanly, and safe cleanup is run for WO-nutrition-006 / RUN-20260513-4168.",
       "dependencies": [
         "GOV-TODO-013"
       ],
-      "estimated_effort": "15-30m for Tom execution-boundary decision",
+      "estimated_effort": "15-30m to recover runtime and prove completion health before retry",
       "codex_autonomous_possible": false,
       "blocks_product_work": true,
       "source_files": [
         "docs/project/p1-005/P1-005-next-execution-plan.md",
         "system/workorders/nutrition/drafts/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION-DRAFT.md",
+        "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md",
         "docs/project/p1-005/P1-005-source-chain-readiness-report.md",
         "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md",
-        "docs/project/PRODUCT_WORK_GATE.md"
+        "docs/project/PRODUCT_WORK_GATE.md",
+        "docs/project/MODEL_RUNTIME_HARDENING.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-015",
+      "title": "Harden docs-agent execution preflight against Spark2/vLLM completion crashes",
+      "layer": "model_runtime",
+      "severity": "high",
+      "priority": "P0",
+      "status": "done",
+      "evidence": "Governed execution now uses a tiny /v1/chat/completions probe for targeted endpoint-backed agents before dispatch. Completion-level 500 / EngineDeadError / Triton CUDA crashes classify as runtime blockers, and Operator Doctor now reports this path as RUNTIME_UNHEALTHY with restart, recheck, cleanup, and retry guidance.",
+      "recommended_action": "Before retrying BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md, restart Spark2/docs-agent vLLM, run model-runtime-check --check-endpoints --probe-mode completion --agent docs-agent --timeout-ms 5000 --json, run terminal-wo-reset-cli clear WO-nutrition-006 --run-id RUN-20260513-4168 --dry-run, then retry only after the probe is clean.",
+      "dependencies": [
+        "GOV-TODO-014"
+      ],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": true,
+      "source_files": [
+        "system/control-plane/model-runtime-check.ts",
+        "system/workorders/cli/batch-loader.ts",
+        "system/workorders/cli/operator-doctor.ts",
+        "system/control-plane/dispatcher.ts",
+        "docs/project/MODEL_RUNTIME_HARDENING.md"
       ]
     }
   ]

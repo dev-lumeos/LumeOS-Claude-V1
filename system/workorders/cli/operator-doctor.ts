@@ -16,6 +16,7 @@ export type OperatorDoctorDiagnosis =
   | 'CLEAN_READY'
   | 'NEEDS_TOM_APPROVAL'
   | 'NEEDS_SAFE_CLEANUP'
+  | 'RUNTIME_UNHEALTHY'
   | 'STOP_RULE_BLOCKED'
   | 'INVARIANT_BLOCKED'
   | 'AGENT_CONTRACT_BLOCKED'
@@ -245,8 +246,40 @@ function summarizeCodexWorker(config: CodexWorkerConfig): OperatorDoctorResult['
 function diagnosisToAutonomyState(diagnosis: OperatorDoctorDiagnosis): AutonomyFinalState {
   if (diagnosis === 'CLEAN_READY') return 'READY_TO_RUN'
   if (diagnosis === 'RUNTIME_ARTIFACTS_PRESENT') return 'FIX_REQUIRED'
-  if (diagnosis === 'MODEL_CONFIG_WARNING' || diagnosis === 'MODEL_ENDPOINT_UNREACHABLE' || diagnosis === 'MODEL_MISSING' || diagnosis === 'JSON_MODE_POLICY_MISSING' || diagnosis === 'QWEN_THINKING_POLICY_MISSING') return 'MODEL_RUNTIME_BLOCKED'
+  if (diagnosis === 'RUNTIME_UNHEALTHY' || diagnosis === 'MODEL_CONFIG_WARNING' || diagnosis === 'MODEL_ENDPOINT_UNREACHABLE' || diagnosis === 'MODEL_MISSING' || diagnosis === 'JSON_MODE_POLICY_MISSING' || diagnosis === 'QWEN_THINKING_POLICY_MISSING') return 'MODEL_RUNTIME_BLOCKED'
   return diagnosis as AutonomyFinalState
+}
+
+interface RuntimeFailureAuditEvent {
+  ts?: string
+  event?: string
+  run_id?: string
+  workorder_id?: string
+  agent_id?: string
+  error_code?: string
+  reason?: string
+}
+
+function readRuntimeFailureAudit(status: OperatorStatus, repoRoot = process.cwd()): RuntimeFailureAuditEvent | null {
+  const auditPath = path.join(repoRoot, 'system/state/audit.jsonl')
+  if (!fs.existsSync(auditPath)) return null
+  const trackedWorkorders = new Set(status.batchWorkorderIds)
+  const lines = fs.readFileSync(auditPath, 'utf8').split(/\r?\n/).filter(Boolean)
+  for (let index = lines.length - 1; index >= 0; index -= 1) {
+    let parsed: RuntimeFailureAuditEvent | null = null
+    try {
+      parsed = JSON.parse(lines[index]) as RuntimeFailureAuditEvent
+    } catch {
+      continue
+    }
+    if (parsed?.event !== 'job_failed') continue
+    if (!parsed.workorder_id || !trackedWorkorders.has(parsed.workorder_id)) continue
+    const reason = String(parsed.reason ?? '')
+    if (/vLLM runtime unavailable|EngineDeadError|Triton Error|CUDA|operation not permitted|500 Internal Server Error/i.test(reason)) {
+      return parsed
+    }
+  }
+  return null
 }
 
 export function diagnoseOperatorDoctor(status: OperatorStatus, options: DiagnoseOptions = {}): OperatorDoctorResult {
@@ -289,6 +322,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   }
   let finalDiagnosis: OperatorDoctorDiagnosis = 'UNKNOWN'
   let nextAction = ''
+  const runtimeFailureAudit = readRuntimeFailureAudit(status)
 
   if (options.forceProductGateBlock) {
     finalDiagnosis = 'PRODUCT_GATE_BLOCKED'
@@ -299,6 +333,22 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     finalDiagnosis = 'NEEDS_TOM_APPROVAL'
     addBlock(blockers, finalDiagnosis, `Approval ${approval.approvalId} requires Tom review.`, approval.action, 'approval_lifecycle')
     nextAction = `Review approval ${approval.approvalId} for ${approval.workorderId}; do not grant automatically.`
+  } else if (runtimeFailureAudit) {
+    finalDiagnosis = 'RUNTIME_UNHEALTHY'
+    addBlock(
+      blockers,
+      finalDiagnosis,
+      'Latest governed execution failed because the routed model runtime crashed before the workorder could complete.',
+      `${runtimeFailureAudit.agent_id ?? 'unknown-agent'} ${runtimeFailureAudit.run_id ?? ''} :: ${runtimeFailureAudit.reason ?? 'no reason recorded'}`.trim(),
+      'model_runtime_checker',
+    )
+    const cleanup = status.cleanupSuggestions.find(item => item.safeToApply)
+    nextAction = [
+      'Restart the affected Spark/vLLM service.',
+      `Re-check completion health with ${commandFor(MODEL_RUNTIME_CLI, `--check-endpoints --probe-mode completion --agent ${runtimeFailureAudit.agent_id ?? 'docs-agent'} --timeout-ms 5000 --json`)}`,
+      cleanup ? `Run safe cleanup dry-run: ${cleanup.dryRunCommand}` : 'Run safe cleanup for the failed workorder/run after runtime health is proven.',
+      'Retry the batch only after the completion probe passes cleanly.',
+    ].join(' ')
   } else if (status.cleanupSuggestions.some(item => item.safeToApply)) {
     finalDiagnosis = 'NEEDS_SAFE_CLEANUP'
     addBlock(blockers, finalDiagnosis, 'Safe cleanup candidates exist.', `${status.cleanupSuggestions.filter(item => item.safeToApply).length} safe cleanup(s)`, 'cleanup_lifecycle')
@@ -354,7 +404,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     dossierCommand: commandFor('system\\reports\\batch-dossier.ts', `--batch ${status.batchPath}${profileArg}`),
     doctorCommand: commandFor(OPERATOR_CLI, `${status.batchPath} --doctor${profileArg}`),
     learningRecommended: !['CLEAN_READY', 'NEEDS_TOM_APPROVAL', 'NEEDS_SAFE_CLEANUP'].includes(finalDiagnosis),
-    learningReason: finalDiagnosis === 'MODEL_RUNTIME_BLOCKED'
+    learningReason: finalDiagnosis === 'MODEL_RUNTIME_BLOCKED' || finalDiagnosis === 'RUNTIME_UNHEALTHY'
       ? 'Create or update a learning record if this runtime blocker repeats or changes routing policy.'
       : undefined,
     codexWorkerCandidate: codexWorker.status === 'CODEX_WORKER_READY' && finalDiagnosis === 'CLEAN_READY',

@@ -24,6 +24,7 @@ import {
   defaultCallModel,
   type Workorder,
 } from '../../control-plane/dispatcher'
+import { runModelRuntimeCheck } from '../../control-plane/model-runtime-check'
 import { runPreflight } from '../../control-plane/scheduler-preflight'
 import { isSystemStopped } from '../../state/state-manager'
 import { getPendingApprovals } from '../../approval/approval-queue'
@@ -80,6 +81,7 @@ const APPROVAL_RISK = new Set<string>([
   'shared-core',
   'architecture',
 ])
+const RUNTIME_PREFLIGHT_TIMEOUT_MS = 5000
 
 // ─────────────────────────────────────────────────────────────────────────
 // Mini YAML parser — handles the limited subset used in our WO drafts:
@@ -593,6 +595,31 @@ export async function runDispatch(
         workorder_id: id,
         status: 'preflight_blocked',
         detail: `Preflight ${preflightVerdict}`,
+      })
+      break
+    }
+
+    try {
+      const runtimeCheck = await runModelRuntimeCheck({
+        agent: String(p.agent_id ?? ''),
+        checkEndpoints: true,
+        probeMode: 'completion',
+        timeoutMs: RUNTIME_PREFLIGHT_TIMEOUT_MS,
+      })
+      if (runtimeCheck.hasHighOrCriticalFindings) {
+        const blocker = runtimeCheck.findings.find(item => item.blocks_operator)
+        outcomes.push({
+          workorder_id: id,
+          status: 'preflight_blocked',
+          detail: `RUNTIME_UNHEALTHY: ${blocker?.message ?? runtimeCheck.readiness.reason} :: ${blocker?.evidence ?? runtimeCheck.next_required_action}`,
+        })
+        break
+      }
+    } catch (e) {
+      outcomes.push({
+        workorder_id: id,
+        status: 'preflight_blocked',
+        detail: `RUNTIME_UNHEALTHY: ${(e as Error).message}`,
       })
       break
     }

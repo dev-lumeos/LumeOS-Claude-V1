@@ -110,6 +110,7 @@ export interface ModelRuntimeCheckOptions {
   projectId?: string
   agent?: string
   checkEndpoints?: boolean
+  probeMode?: 'models' | 'completion'
   timeoutMs?: number
   fetchImpl?: typeof fetch
   recordHistory?: boolean
@@ -198,6 +199,8 @@ const HISTORY_DIR = 'system/reports/model-runtime-history'
 const HISTORY_FILE = 'history.jsonl'
 const LATEST_FILE = 'latest.json'
 const MAINTENANCE_FILE = 'system/control-plane/runtime-maintenance.json'
+const DEFAULT_PROBE_MODE: 'models' | 'completion' = 'models'
+const COMPLETION_PROBE_MAX_TOKENS = 8
 
 function readText(repoRoot: string, relativePath: string): string {
   const fullPath = path.join(repoRoot, relativePath)
@@ -360,6 +363,20 @@ function endpointModelsUrl(endpoint: string): string {
   return trimmed.endsWith('/v1') ? `${trimmed}/models` : `${trimmed}/v1/models`
 }
 
+function endpointChatCompletionsUrl(endpoint: string): string {
+  const trimmed = endpoint.replace(/\/$/, '')
+  return trimmed.endsWith('/v1') ? `${trimmed}/chat/completions` : `${trimmed}/v1/chat/completions`
+}
+
+function truncateEvidence(value: string, maxLength = 240): string {
+  const normalized = value.replace(/\s+/g, ' ').trim()
+  return normalized.length <= maxLength ? normalized : `${normalized.slice(0, maxLength - 3)}...`
+}
+
+function runtimeCrashEvidence(value: string): boolean {
+  return /EngineDeadError|Triton Error|CUDA|operation not permitted|engine core|500 Internal Server Error|qwen3_next|chunk_gated_delta_rule/i.test(value)
+}
+
 function endpointFailureFinding(
   route: ModelRuntimeRoute,
   evidence: string,
@@ -415,11 +432,91 @@ function endpointFailureFinding(
   })
 }
 
+function completionProbeFailureFinding(
+  route: ModelRuntimeRoute,
+  evidence: string,
+  explicitlyTargeted: boolean,
+  maintenance: ModelRuntimeMaintenanceState,
+): ModelRuntimeFinding {
+  if (maintenanceAffectsRoute(route, maintenance)) {
+    route.endpoint_status = 'planned_maintenance'
+    return finding({
+      id: 'model_runtime.planned_hardware_maintenance',
+      severity: 'info',
+      layer: 'model_runtime',
+      agent: route.agent,
+      model: route.model,
+      endpoint: route.endpoint,
+      message: 'Runtime completion probe is unavailable during planned DGX/Spark hardware maintenance.',
+      evidence,
+      suggested_action: 'Do not change routing for this outage; re-run endpoint checks after hardware maintenance ends.',
+      blocks_operator: true,
+      blocks_product_work: true,
+    })
+  }
+
+  if (route.optional_runtime && !explicitlyTargeted) {
+    route.endpoint_status = 'optional_offline'
+    return finding({
+      id: 'model_runtime.optional_endpoint_offline',
+      severity: 'info',
+      layer: 'model_runtime',
+      agent: route.agent,
+      model: route.model,
+      endpoint: route.endpoint,
+      message: 'Optional runtime completion probe failed; not blocking current governance work.',
+      evidence,
+      suggested_action: 'Start or validate this endpoint only when a matching MealCam/Vision workorder or explicit runtime run requires it.',
+      blocks_operator: false,
+      blocks_product_work: false,
+    })
+  }
+
+  route.endpoint_status = 'runtime_unhealthy'
+  return finding({
+    id: runtimeCrashEvidence(evidence) ? 'model_runtime.engine_runtime_crash' : 'model_runtime.completion_probe_failed',
+    severity: 'high',
+    layer: 'model_runtime',
+    agent: route.agent,
+    model: route.model,
+    endpoint: route.endpoint,
+    message: runtimeCrashEvidence(evidence)
+      ? 'Runtime completion probe hit a vLLM engine crash before workorder execution.'
+      : 'Runtime completion probe failed before workorder execution.',
+    evidence,
+    suggested_action: 'Restart the affected Spark/vLLM service, re-run a tiny /v1/chat/completions health probe for this agent, then run safe cleanup before retrying the batch.',
+    blocks_operator: true,
+    blocks_product_work: true,
+  })
+}
+
+function completionProbeRequestBody(route: ModelRuntimeRoute): Record<string, unknown> {
+  const requestBody: Record<string, unknown> = {
+    model: route.model,
+    temperature: 0,
+    max_tokens: COMPLETION_PROBE_MAX_TOKENS,
+    messages: [
+      { role: 'system', content: 'Return exactly OK.' },
+      { role: 'user', content: 'health-check' },
+    ],
+  }
+  if (isQwen36(route.model)) {
+    requestBody.enable_thinking = false
+    requestBody.response_format = { type: 'json_object' }
+    requestBody.messages = [
+      { role: 'system', content: 'Return {"status":"ok"}.' },
+      { role: 'user', content: 'health-check' },
+    ]
+  }
+  return requestBody
+}
+
 async function checkEndpoint(
   route: ModelRuntimeRoute,
   options: Required<Pick<ModelRuntimeCheckOptions, 'timeoutMs'>> & Pick<ModelRuntimeCheckOptions, 'fetchImpl'> & {
     explicitlyTargeted: boolean
     maintenance: ModelRuntimeMaintenanceState
+    probeMode: 'models' | 'completion'
   },
 ): Promise<ModelRuntimeFinding | null> {
   if (!isEndpointRuntime(route)) {
@@ -433,15 +530,57 @@ async function checkEndpoint(
   const timeout = setTimeout(() => controller.abort(), options.timeoutMs)
   const startedAt = Date.now()
   try {
-    const response = await (options.fetchImpl ?? fetch)(endpointModelsUrl(route.endpoint), {
-      method: 'GET',
-      signal: controller.signal,
-    })
+    const response = await (options.fetchImpl ?? fetch)(
+      options.probeMode === 'completion' && route.model
+        ? endpointChatCompletionsUrl(route.endpoint)
+        : endpointModelsUrl(route.endpoint),
+      options.probeMode === 'completion' && route.model
+        ? {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(completionProbeRequestBody(route)),
+            signal: controller.signal,
+          }
+        : {
+            method: 'GET',
+            signal: controller.signal,
+          },
+    )
     route.latency_ms = Date.now() - startedAt
     route.timed_out = false
     if (!response.ok) {
-      route.endpoint_status = 'unreachable'
-      return endpointFailureFinding(route, `HTTP ${response.status} ${response.statusText}`, options.explicitlyTargeted, options.maintenance)
+      const bodyText = truncateEvidence(await response.text())
+      route.endpoint_status = options.probeMode === 'completion' ? 'runtime_unhealthy' : 'unreachable'
+      const evidence = bodyText
+        ? `HTTP ${response.status} ${response.statusText}; body=${bodyText}`
+        : `HTTP ${response.status} ${response.statusText}`
+      return options.probeMode === 'completion'
+        ? completionProbeFailureFinding(route, evidence, options.explicitlyTargeted, options.maintenance)
+        : endpointFailureFinding(route, evidence, options.explicitlyTargeted, options.maintenance)
+    }
+    if (options.probeMode === 'completion' && route.model) {
+      let payload: any
+      try {
+        payload = await response.json()
+      } catch (error) {
+        route.endpoint_status = 'runtime_unhealthy'
+        return completionProbeFailureFinding(
+          route,
+          `Completion probe returned non-JSON payload: ${error instanceof Error ? error.message : String(error)}`,
+          options.explicitlyTargeted,
+          options.maintenance,
+        )
+      }
+      const content = payload?.choices?.[0]?.message?.content
+      if (typeof content !== 'string' || content.trim() === '') {
+        route.endpoint_status = 'runtime_unhealthy'
+        return completionProbeFailureFinding(
+          route,
+          `Completion probe returned no assistant content: ${truncateEvidence(JSON.stringify(payload))}`,
+          options.explicitlyTargeted,
+          options.maintenance,
+        )
+      }
     }
     route.endpoint_status = 'ok'
     return null
@@ -450,8 +589,10 @@ async function checkEndpoint(
     route.timed_out = error instanceof Error
       ? /abort|timeout|timed/i.test(error.name) || /abort|timeout|timed/i.test(error.message)
       : /abort|timeout|timed/i.test(String(error))
-    route.endpoint_status = 'unreachable'
-    return endpointFailureFinding(route, error instanceof Error ? error.message : String(error), options.explicitlyTargeted, options.maintenance)
+    route.endpoint_status = options.probeMode === 'completion' ? 'runtime_unhealthy' : 'unreachable'
+    return options.probeMode === 'completion'
+      ? completionProbeFailureFinding(route, error instanceof Error ? error.message : String(error), options.explicitlyTargeted, options.maintenance)
+      : endpointFailureFinding(route, error instanceof Error ? error.message : String(error), options.explicitlyTargeted, options.maintenance)
   } finally {
     clearTimeout(timeout)
   }
@@ -1111,6 +1252,7 @@ export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions & { check
 export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions = {}): ModelRuntimeCheckResult | Promise<ModelRuntimeCheckResult> {
   const repoRoot = options.repoRoot ?? process.cwd()
   const checkEndpoints = options.checkEndpoints === true
+  const probeMode = options.probeMode ?? DEFAULT_PROBE_MODE
   const maintenance = activeMaintenance(options.plannedMaintenance ?? loadRuntimeMaintenance(repoRoot))
   const staleAfterMinutes = options.staleAfterMinutes ?? DEFAULT_STALE_AFTER_MINUTES
   const { routes, findings } = staticFindings(repoRoot, options.agent)
@@ -1126,6 +1268,7 @@ export function runModelRuntimeCheck(options: ModelRuntimeCheckOptions = {}): Mo
       fetchImpl: options.fetchImpl,
       explicitlyTargeted: options.agent === route.agent,
       maintenance,
+      probeMode,
     }))).then(endpointFindings => {
       const result = resultFrom(repoRoot, true, routes, [
         ...findings,
@@ -1219,6 +1362,8 @@ async function main(): Promise<number> {
   const historySummary = args.includes('--history-summary') || historyJson
   const recordHistory = args.includes('--record-history')
   const checkEndpoints = args.includes('--check-endpoints')
+  const probeModeIndex = args.indexOf('--probe-mode')
+  const probeMode = probeModeIndex >= 0 ? args[probeModeIndex + 1] as 'models' | 'completion' : DEFAULT_PROBE_MODE
   const agentIndex = args.indexOf('--agent')
   const agent = agentIndex >= 0 ? args[agentIndex + 1] : undefined
   const timeoutIndex = args.indexOf('--timeout-ms')
@@ -1244,6 +1389,8 @@ async function main(): Promise<number> {
     '--history-summary',
     '--record-history',
     '--check-endpoints',
+    '--probe-mode',
+    probeModeIndex >= 0 ? args[probeModeIndex + 1] : '',
     '--agent',
     agent ?? '',
     '--timeout-ms',
@@ -1256,16 +1403,18 @@ async function main(): Promise<number> {
     '--project',
     projectId,
   ])
+  const probeModeValid = probeMode === 'models' || probeMode === 'completion'
   const unknown = args.filter(arg => !allowed.has(arg))
   if (
     unknown.length > 0 ||
     (agentIndex >= 0 && !agent) ||
+    (probeModeIndex >= 0 && !probeModeValid) ||
     (timeoutIndex >= 0 && !Number.isFinite(timeoutMs)) ||
     (maxHistoryIndex >= 0 && !Number.isFinite(maxHistory)) ||
     (staleAfterIndex >= 0 && !Number.isFinite(staleAfterMinutes)) ||
     (projectIndex >= 0 && !projectId)
   ) {
-    console.error('Usage: npx tsx system/control-plane/model-runtime-check.ts [--json] [--check-endpoints] [--record-history] [--history-summary|--history-json] [--max-history <n>] [--stale-after-minutes <n>] [--planned-hardware-maintenance] [--agent <agent-id>] [--timeout-ms <ms>] [--project <id>]')
+    console.error('Usage: npx tsx system/control-plane/model-runtime-check.ts [--json] [--check-endpoints] [--probe-mode models|completion] [--record-history] [--history-summary|--history-json] [--max-history <n>] [--stale-after-minutes <n>] [--planned-hardware-maintenance] [--agent <agent-id>] [--timeout-ms <ms>] [--project <id>]')
     return 2
   }
 
@@ -1276,7 +1425,7 @@ async function main(): Promise<number> {
       return summary.overall_status === 'BLOCKED_REQUIRED_FAILURE' ? 1 : 0
     }
 
-    const result = await runModelRuntimeCheck({ checkEndpoints, agent, timeoutMs, recordHistory, projectId, staleAfterMinutes, plannedMaintenance })
+    const result = await runModelRuntimeCheck({ checkEndpoints, probeMode, agent, timeoutMs, recordHistory, projectId, staleAfterMinutes, plannedMaintenance })
     console.log(json ? JSON.stringify(result, null, 2) : formatModelRuntimeReport(result))
     return result.exitCode
   } catch (error) {

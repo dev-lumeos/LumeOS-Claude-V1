@@ -292,6 +292,54 @@ async function defaultCallModel(routing) {
     assert.match(item?.evidence ?? '', /ECONNREFUSED/)
   })
 
+  it('completion probe succeeds for docs-agent when chat completions are healthy', async () => {
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      agent: 'docs-agent',
+      checkEndpoints: true,
+      probeMode: 'completion',
+      fetchImpl: async (url, init) => {
+        assert.match(String(url), /\/v1\/chat\/completions$/)
+        assert.equal(init?.method, 'POST')
+        return new Response(JSON.stringify({
+          choices: [{ message: { content: 'OK' } }],
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      },
+    })
+
+    assert.equal(result.exitCode, 0)
+    assert.equal(result.routes.find(route => route.agent === 'docs-agent')?.endpoint_status, 'ok')
+    assert.equal(finding(result, 'model_runtime.completion_probe_failed'), undefined)
+    assert.equal(finding(result, 'model_runtime.engine_runtime_crash'), undefined)
+  })
+
+  it('completion probe classifies vLLM engine crashes as runtime blockers', async () => {
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      agent: 'docs-agent',
+      checkEndpoints: true,
+      probeMode: 'completion',
+      fetchImpl: async (url) => {
+        assert.match(String(url), /\/v1\/chat\/completions$/)
+        return new Response('RuntimeError: Triton Error [CUDA]: operation not permitted', {
+          status: 500,
+          statusText: 'Internal Server Error',
+        })
+      },
+    })
+
+    const item = finding(result, 'model_runtime.engine_runtime_crash')
+    assert.equal(result.exitCode, 1)
+    assert.equal(result.overall_status, 'BLOCKED_REQUIRED_FAILURE')
+    assert.equal(result.routes.find(route => route.agent === 'docs-agent')?.endpoint_status, 'runtime_unhealthy')
+    assert.equal(item?.severity, 'high')
+    assert.match(item?.suggested_action ?? '', /Restart the affected Spark\/vLLM service/)
+    assert.match(item?.evidence ?? '', /operation not permitted/)
+  })
+
   it('classifies planned DGX/Spark maintenance without suggesting routing fixes', async () => {
     const result = await runModelRuntimeCheck({
       repoRoot: tmpDir,

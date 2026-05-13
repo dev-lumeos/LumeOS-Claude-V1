@@ -354,7 +354,9 @@ export async function defaultCallModel(
         signal: controller.signal,
       })
       if (!resp.ok) {
-        const error = new Error(`vLLM Error: ${resp.status} ${resp.statusText}`)
+        const responseText = await resp.text().catch(() => '')
+        const detail = responseText ? ` :: ${responseText.replace(/\s+/g, ' ').trim().slice(0, 240)}` : ''
+        const error = new Error(`vLLM Error: ${resp.status} ${resp.statusText}${detail}`)
         if (resp.status < 500 || attempt === MODEL_CALL_MAX_ATTEMPTS) throw error
         lastError = error
         continue
@@ -1286,7 +1288,10 @@ export async function dispatchWorkorder(
     await state.releaseScopeLock(runId)
     await state.releaseDbMigrationLock(runId)
     cleanupHandled = true
-    audit.auditJobFailed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: err.message, error_code: 'DISPATCHER_ERROR' })
+    const errorCode = /vLLM runtime unavailable|EngineDeadError|Triton Error|CUDA|operation not permitted|500 Internal Server Error/i.test(String(err?.message ?? ''))
+      ? 'MODEL_RUNTIME_UNAVAILABLE'
+      : 'DISPATCHER_ERROR'
+    audit.auditJobFailed({ run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id, orchestration_mode: orchestrationMode, reason: err.message, error_code: errorCode })
     return { status: 'failed', run_id: runId, workorder_id: wo.workorder_id, error: err.message }
   } finally {
     // V1.2.4: Defense-in-Depth — falls ein früher FAIL/Block-Return innerhalb des try-Bodys
