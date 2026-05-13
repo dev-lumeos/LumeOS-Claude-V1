@@ -13,6 +13,7 @@
 --   - verifies that nutrition.nutrient_defs already exists
 --   - verifies baseline schema compatibility for the existing de/en columns
 --   - adds name_th and group_th when missing
+--   - requires Thai i18n columns to be text not null default ''
 --
 -- WHAT THIS MIGRATION DOES NOT DO:
 --   - no seed rows
@@ -113,6 +114,7 @@ begin
       and column_name = 'name_th'
       and data_type = 'text'
       and is_nullable = 'NO'
+      and column_default = ''''::text
   ) is not true
      and exists (
        select 1
@@ -121,7 +123,7 @@ begin
          and table_name = 'nutrient_defs'
          and column_name = 'name_th'
      ) then
-    drift_issues := array_append(drift_issues, 'column name_th exists but is not text not null');
+    drift_issues := array_append(drift_issues, 'column name_th exists but is not text not null default ''''');
   end if;
 
   if exists (
@@ -132,6 +134,7 @@ begin
       and column_name = 'group_th'
       and data_type = 'text'
       and is_nullable = 'NO'
+      and column_default = ''''::text
   ) is not true
      and exists (
        select 1
@@ -140,7 +143,7 @@ begin
          and table_name = 'nutrient_defs'
          and column_name = 'group_th'
      ) then
-    drift_issues := array_append(drift_issues, 'column group_th exists but is not text not null');
+    drift_issues := array_append(drift_issues, 'column group_th exists but is not text not null default ''''');
   end if;
 
   if array_length(drift_issues, 1) is not null then
@@ -157,7 +160,7 @@ begin
       and table_name = 'nutrient_defs'
       and column_name = 'name_th'
   ) then
-    alter table nutrition.nutrient_defs add column name_th text not null;
+    alter table nutrition.nutrient_defs add column name_th text not null default '';
   end if;
 
   if not exists (
@@ -167,7 +170,7 @@ begin
       and table_name = 'nutrient_defs'
       and column_name = 'group_th'
   ) then
-    alter table nutrition.nutrient_defs add column group_th text not null;
+    alter table nutrition.nutrient_defs add column group_th text not null default '';
   end if;
 end
 $$;

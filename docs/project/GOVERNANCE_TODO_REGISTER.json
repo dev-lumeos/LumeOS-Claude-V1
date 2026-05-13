@@ -383,13 +383,13 @@
       "layer": "product_gate",
       "severity": "medium",
       "priority": "P0",
-      "status": "open",
-      "evidence": "The local schema-only foundation slice was applied successfully, but nutrient_defs still lacks the required Thai i18n columns name_th and group_th. A narrow additive schema-only correction candidate now exists for local review/execution only.",
-      "recommended_action": "Review supabase/migrations/20260513_002_nutrition_nutrient_defs_th_i18n_slice.sql as the next local-only schema correction boundary. Keep DEV/LIVE promotion, seed payload, RDA updates, BLS import, and all broader DB work blocked.",
+      "status": "done",
+      "evidence": "The local-only Thai i18n correction slice was reviewed, patched to require text not null default '' for both Thai columns, and then applied successfully against local Supabase/Test DB only. nutrient_defs now has 16 columns total with name_th and group_th present as text not null default ''.",
+      "recommended_action": "Keep the corrected schema local-only. Use /nutrition/local-schema and docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md for local verification while DEV/LIVE promotion, seed payload, RDA updates, BLS import, and broader DB work remain blocked.",
       "dependencies": [
         "GOV-TODO-017"
       ],
-      "estimated_effort": "one narrow local-only schema correction review/apply cycle",
+      "estimated_effort": "completed",
       "codex_autonomous_possible": false,
       "blocks_product_work": false,
       "source_files": [

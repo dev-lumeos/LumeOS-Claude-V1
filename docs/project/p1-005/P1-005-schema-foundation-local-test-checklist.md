@@ -38,7 +38,7 @@ The following are already confirmed on local Supabase/Test DB for the first appl
 - `display_tier` check exists
 - `nutrient_defs_group_sort_idx` exists
 
-The next target shape for the Thai i18n correction slice is:
+The current local target shape after the Thai i18n correction slice is:
 
 - 16 columns total
 - `name_th` present as `text not null`
@@ -60,7 +60,9 @@ docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select
 
 - [ ] `nutrition.nutrient_defs` resolves through `to_regclass`
 - [ ] exactly the expected structural columns are present for the active local slice under review
-- [ ] if the Thai i18n correction slice is applied later, the target shape becomes 16 columns total
+- [ ] target shape remains 16 columns total
+- [ ] `name_th` is `text not null default ''`
+- [ ] `group_th` is `text not null default ''`
 - [ ] no seed rows were inserted by this migration step
 - [ ] no RDA update step was bundled into the migration
 - [ ] no BLS import logic or staging/import objects were bundled into the migration
