@@ -63,7 +63,7 @@ export default async function LocalNutritionSchemaPage() {
             <div className="rounded-lg border border-slate-800 bg-slate-900 p-4">
               <div className="text-xs uppercase tracking-[0.16em] text-slate-400">Columns</div>
               <div className="mt-3 text-3xl font-semibold text-slate-100">{snapshot.columns.length}</div>
-              <div className="mt-2 text-xs text-slate-400">Expected current shape: 14 columns.</div>
+              <div className="mt-2 text-xs text-slate-400">Expected target shape: 16 columns, including Thai i18n columns.</div>
             </div>
           </section>
 
@@ -71,7 +71,7 @@ export default async function LocalNutritionSchemaPage() {
             <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-lg font-semibold">Column Shape</h2>
-                <StatusBadge tone={snapshot.columns.length === 14 ? 'pass' : 'attention'} label={snapshot.columns.length === 14 ? 'Expected count' : 'Review count'} />
+                <StatusBadge tone={snapshot.columns.length === 16 ? 'pass' : 'attention'} label={snapshot.columns.length === 16 ? 'Expected count' : 'Review count'} />
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full border-collapse text-sm">
@@ -92,6 +92,9 @@ export default async function LocalNutritionSchemaPage() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+              <div className="mt-4 text-xs text-slate-400">
+                Current target i18n columns: <span className="font-mono text-slate-200">name_de</span>, <span className="font-mono text-slate-200">name_en</span>, <span className="font-mono text-slate-200">name_th</span>, <span className="font-mono text-slate-200">group_de</span>, <span className="font-mono text-slate-200">group_en</span>, <span className="font-mono text-slate-200">group_th</span>.
               </div>
             </div>
 

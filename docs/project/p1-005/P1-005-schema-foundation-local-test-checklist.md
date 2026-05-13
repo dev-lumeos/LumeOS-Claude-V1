@@ -30,13 +30,19 @@ Not covered here:
 
 ## Local Facts Already Proven
 
-The following are already confirmed on local Supabase/Test DB:
+The following are already confirmed on local Supabase/Test DB for the first applied schema slice:
 
 - `nutrition.nutrient_defs` exists
-- 14 expected columns exist
+- 14 foundation-slice columns exist
 - primary key on `code` exists
 - `display_tier` check exists
 - `nutrient_defs_group_sort_idx` exists
+
+The next target shape for the Thai i18n correction slice is:
+
+- 16 columns total
+- `name_th` present as `text not null`
+- `group_th` present as `text not null`
 
 ## Local-Only Verification Commands
 
@@ -53,7 +59,8 @@ docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select
 ## Local Review Checklist
 
 - [ ] `nutrition.nutrient_defs` resolves through `to_regclass`
-- [ ] exactly the expected structural columns are present
+- [ ] exactly the expected structural columns are present for the active local slice under review
+- [ ] if the Thai i18n correction slice is applied later, the target shape becomes 16 columns total
 - [ ] no seed rows were inserted by this migration step
 - [ ] no RDA update step was bundled into the migration
 - [ ] no BLS import logic or staging/import objects were bundled into the migration

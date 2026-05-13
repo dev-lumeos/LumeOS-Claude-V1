@@ -15,6 +15,11 @@ describe('parseNutritionSchemaDebug', () => {
       columns: [
         { name: 'code', data_type: 'text', is_nullable: false },
         { name: 'name_de', data_type: 'text', is_nullable: false },
+        { name: 'name_en', data_type: 'text', is_nullable: false },
+        { name: 'name_th', data_type: 'text', is_nullable: false },
+        { name: 'group_de', data_type: 'text', is_nullable: false },
+        { name: 'group_en', data_type: 'text', is_nullable: false },
+        { name: 'group_th', data_type: 'text', is_nullable: false },
       ],
       indexes: [
         { name: 'nutrient_defs_pkey', definition: 'CREATE UNIQUE INDEX nutrient_defs_pkey ON nutrition.nutrient_defs USING btree (code)' },
@@ -28,8 +33,9 @@ describe('parseNutritionSchemaDebug', () => {
     assert.equal(snapshot.schema_exists, true)
     assert.equal(snapshot.table_exists, true)
     assert.equal(snapshot.row_count, 0)
-    assert.equal(snapshot.columns.length, 2)
+    assert.equal(snapshot.columns.length, 7)
     assert.equal(snapshot.columns[0]?.name, 'code')
+    assert.equal(snapshot.columns[3]?.name, 'name_th')
     assert.equal(snapshot.indexes[0]?.name, 'nutrient_defs_pkey')
     assert.equal(snapshot.constraints[0]?.definition, 'PRIMARY KEY (code)')
   })

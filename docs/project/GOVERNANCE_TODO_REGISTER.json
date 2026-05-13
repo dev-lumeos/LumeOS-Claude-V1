@@ -376,6 +376,28 @@
         "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md",
         "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md"
       ]
+    },
+    {
+      "id": "GOV-TODO-018",
+      "title": "Local-only Thai i18n schema correction for nutrient_defs",
+      "layer": "product_gate",
+      "severity": "medium",
+      "priority": "P0",
+      "status": "open",
+      "evidence": "The local schema-only foundation slice was applied successfully, but nutrient_defs still lacks the required Thai i18n columns name_th and group_th. A narrow additive schema-only correction candidate now exists for local review/execution only.",
+      "recommended_action": "Review supabase/migrations/20260513_002_nutrition_nutrient_defs_th_i18n_slice.sql as the next local-only schema correction boundary. Keep DEV/LIVE promotion, seed payload, RDA updates, BLS import, and all broader DB work blocked.",
+      "dependencies": [
+        "GOV-TODO-017"
+      ],
+      "estimated_effort": "one narrow local-only schema correction review/apply cycle",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": false,
+      "source_files": [
+        "supabase/migrations/20260513_002_nutrition_nutrient_defs_th_i18n_slice.sql",
+        "apps/web/src/app/nutrition/local-schema/page.tsx",
+        "apps/web/src/lib/nutrition/local-schema-debug.ts",
+        "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md"
+      ]
     }
   ]
 }
