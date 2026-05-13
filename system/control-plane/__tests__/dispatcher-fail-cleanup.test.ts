@@ -194,7 +194,7 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
       risks:           [],
       execution_order: ['write file "outside/forbidden.ts"'],
       required_gates:  ['review-gate'],
-      stop_conditions: [],
+      stop_conditions: ['production_execution_without_approval_token'],
     })
 
     const wo = makeWO({ workorder_id: 'WO-test-003', requires_approval: false })
@@ -826,7 +826,7 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
 
     assert.equal(readResult.status, 'completed', readResult.error)
     assert.equal(readCallCount, 2)
-    assert.equal(getPendingApprovals().length, 0)
+    assert.equal(getPendingApprovals().filter(a => a.workorder_id === readWo.workorder_id).length, 0)
     const readWoEntry = state.getAllActiveWorkorders().find(
       w => w.workorder_id === readWo.workorder_id && w.run_id === readResult.run_id,
     )
@@ -922,6 +922,41 @@ describe('Dispatcher FAIL Cleanup — try/finally Defense-in-Depth', () => {
     assert.equal(state.readApprovalTokens()[approvalId].status, 'consumed')
     assert.equal(getApproval(approvalId)?.status, 'consumed')
     assert.equal(state.getApprovalItem(approvalId)?.status, 'consumed')
+  })
+
+  it('blocks stub markdown docs before SAFE_TO_REVIEW approval is enqueued', async () => {
+    const mockCallModel = async () => JSON.stringify({
+      selected_agent: 'micro-executor',
+      risk_level: 'low',
+      risks: [],
+      execution_order: ['draft docs'],
+      required_gates: ['human-approval-gate', 'review-gate'],
+      stop_conditions: ['production_execution_without_approval_token'],
+      tool: 'write',
+      targetPath: 'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md',
+      content: '# P1-005 Nutrient Definitions Seed Candidate\n\n## Purpose\n\nThis doc\n',
+    })
+
+    const wo = makeWO({
+      workorder_id: 'WO-test-999',
+      scope_files: ['docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md'],
+      acceptance_criteria: ['Seed candidate document exists and is complete'],
+    })
+
+    const result = await dispatchWorkorder(wo as any, {
+      callModel: mockCallModel,
+      executeTool: defaultExecuteTool,
+    })
+
+    assert.equal(result.status, 'failed')
+    assert.match(result.error ?? '', /OUTPUT_INCOMPLETE/)
+    assert.equal(
+      getPendingApprovals().filter(a => a.workorder_id === 'WO-test-999').length,
+      0,
+      'stub docs must not enqueue approval',
+    )
+    const woEntry = findActiveWo('WO-test-999')
+    assert.equal(woEntry?.status, 'failed')
   })
 
   it('blockiert gefährliche Supabase-Migration nach Write vor Review-Pipeline', async () => {

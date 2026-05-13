@@ -507,7 +507,7 @@ Rules:
 - Goal:
   - Generate `docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md` through the governed workflow, not by direct Codex authoring.
 
-Current result:
+Probe result:
 
 - Product-gate/source-chain/doctor path is clean for this exact batch.
 - The dispatcher path uses `docs-agent` directly.
@@ -519,8 +519,17 @@ Current result:
   - `## Purpose`
   - `This doc`
 
-Governance gap exposed by this probe:
+Governance gap exposed by this probe and fixed:
 
 - Review escalation (`spark-d invalid_json -> Claude needed`) can leave a stub artifact behind while still producing a docs-only approval stop.
 - Batch output completion currently treats file existence as sufficient, even when the generated document is obviously incomplete.
 - This is a workflow-quality integration gap, not a product-scope or local DB-scope blocker.
+- Fix implemented:
+  - Markdown expected outputs now require multiple headings, meaningful body content, and non-stub terminal content before they count as valid outputs.
+  - Dispatcher markdown writes are blocked before approval enqueue when the content is incomplete.
+  - Operator approval classification returns `DO_NOT_GRANT` for stub markdown artifacts instead of `SAFE_TO_REVIEW`.
+  - Batch output completion treats stub markdown as incomplete even if the file exists.
+- Cleanup performed:
+  - `APP-20260513-758015` was denied through `approval-cli`.
+  - `WO-nutrition-012` / `RUN-20260513-0662` stale awaiting-approval state was removed through `terminal-wo-reset-cli clear-expired-approval` after a clean dry-run.
+  - The stub `docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md` was removed.

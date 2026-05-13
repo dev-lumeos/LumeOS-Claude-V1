@@ -181,6 +181,18 @@ function writeExpectedOutput(relativePath: string, content: string): void {
   fs.writeFileSync(fullPath, content, 'utf8')
 }
 
+const meaningfulDoc = [
+  '# Audit Report',
+  '',
+  '## Summary',
+  '',
+  'This audit report captures a meaningful governance output for operator completion checks.',
+  '',
+  '## Details',
+  '',
+  'The body is intentionally long enough to satisfy the markdown quality gate and prove that the output is not a stub artifact.',
+].join('\n')
+
 function writeState(extra: Record<string, unknown> = {}): void {
   fs.writeFileSync(path.join(tmpDir, 'system/state/runtime_state.json'), JSON.stringify({
     orchestration_mode: 'claude_code',
@@ -258,8 +270,39 @@ describe('batch operator status', () => {
     assert.match(report, /--project lumeos/)
   })
 
+  it('classifies stub markdown approvals as DO_NOT_GRANT and incomplete outputs as not complete', () => {
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# Title\n\n## Purpose\n\nThis doc\n')
+    writeState({
+      active_runs: [{ run_id: 'RUN-stub', workorder_id: 'WO-test-001', agent_id: 'micro-executor', status: 'blocked', started_at: isoMinutesAgo(5), completed_at: isoMinutesAgo(4), written_files: ['docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'] }],
+      active_workorders: [{ workorder_id: 'WO-test-001', run_id: 'RUN-stub', agent_id: 'micro-executor', status: 'awaiting_approval', dispatched_at: isoMinutesAgo(5) }],
+    })
+    writeQueue({
+      'APP-stub-001': {
+        approval_id: 'APP-stub-001',
+        workorder_id: 'WO-test-001',
+        run_id: 'RUN-stub',
+        agent_id: 'micro-executor',
+        reason: 'docs write',
+        risk_category: 'docs',
+        affected_files: ['docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'],
+        proposed_action: 'write docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md',
+        status: 'pending',
+        requested_at: isoMinutesAgo(5),
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      },
+    })
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+    const approval = status.approvalStops.find(item => item.approvalId === 'APP-stub-001')
+    const completion = status.workorderCompletions.find(item => item.workorderId === 'WO-test-001')
+
+    assert.equal(approval?.classification, 'DO_NOT_GRANT')
+    assert.equal(completion?.complete, false)
+    assert.match(completion?.expectedOutputs[0]?.reason ?? '', /headings|meaningful body lines|body is too short|stub phrase/)
+  })
+
   it('does not treat missing expected workorder outputs as DONE', () => {
-    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', meaningfulDoc)
     writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
 
     const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
@@ -271,7 +314,7 @@ describe('batch operator status', () => {
   })
 
   it('reports DONE only when every expected output exists', () => {
-    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', meaningfulDoc)
     writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
     writeExpectedOutput('supabase/migrations/20240522_002_nutrition_food_core_tables.sql', '-- food core')
     writeExpectedOutput('packages/types/src/nutrition/foods.ts', 'export interface NutritionFood {}')
@@ -284,7 +327,7 @@ describe('batch operator status', () => {
   })
 
   it('selects only the first incomplete workorder for dispatch', () => {
-    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', meaningfulDoc)
 
     const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
     const runnable = selectRunnableBatch(batchPath(), status)
@@ -294,7 +337,7 @@ describe('batch operator status', () => {
   })
 
   it('removes completed blockers from selected incomplete workorder', () => {
-    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', meaningfulDoc)
     writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
 
     const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
@@ -335,7 +378,7 @@ describe('batch operator status', () => {
   })
 
   it('does not block DONE on unplanned project output artifacts', () => {
-    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# audit')
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', meaningfulDoc)
     writeExpectedOutput('supabase/migrations/20240522_001_nutrition_schema_foundation.sql', '-- schema')
     writeExpectedOutput('supabase/migrations/20240520_001_nutrition_food_core_tables.sql', '-- food core')
     writeExpectedOutput('packages/types/src/nutrition/foods.ts', 'export interface NutritionFood {}')

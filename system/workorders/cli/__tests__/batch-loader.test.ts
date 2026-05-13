@@ -128,8 +128,8 @@ describe('expectedOutputStatusesForWorkorder', () => {
     ]))
 
     assert.deepEqual(statuses, [
-      { path: 'docs/project/p1-005/P1-005-additive-migration-candidate-plan.md', exists: false },
-      { path: 'docs/project/p1-005/P1-005-rollback-and-validation-checklist.md', exists: false },
+      { path: 'docs/project/p1-005/P1-005-additive-migration-candidate-plan.md', exists: false, valid: false, reason: 'missing' },
+      { path: 'docs/project/p1-005/P1-005-rollback-and-validation-checklist.md', exists: false, valid: false, reason: 'missing' },
     ])
   })
 
@@ -143,7 +143,49 @@ describe('expectedOutputStatusesForWorkorder', () => {
     ]))
 
     assert.deepEqual(statuses, [
-      { path: 'docs/project/p1-005/P1-005-additive-migration-candidate-plan.md', exists: true },
+      { path: 'docs/project/p1-005/P1-005-additive-migration-candidate-plan.md', exists: true, valid: false, reason: 'markdown output has fewer than 2 headings' },
+    ])
+  })
+
+  it('flags stub markdown outputs as invalid even when the file exists', () => {
+    const outputPath = path.join(tmpDir, 'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md')
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true })
+    fs.writeFileSync(outputPath, '# Title\n\n## Purpose\n\nThis doc\n', 'utf8')
+
+    const statuses = expectedOutputStatusesForWorkorder(makeLoadedWorkorder([
+      'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md',
+    ]))
+
+    assert.equal(statuses[0]?.exists, true)
+    assert.equal(statuses[0]?.valid, false)
+    assert.match(statuses[0]?.reason ?? '', /headings|meaningful body lines|body is too short|stub phrase/)
+  })
+
+  it('accepts meaningful markdown outputs as valid', () => {
+    const outputPath = path.join(tmpDir, 'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md')
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true })
+    fs.writeFileSync(outputPath, [
+      '# P1-005 Nutrient Definitions Seed Candidate',
+      '',
+      '## Purpose',
+      '',
+      'This document captures a review-only nutrient_defs seed candidate for local planning and later manual verification.',
+      '',
+      '## Expected Row Count',
+      '',
+      'The approved source chain expects 138 nutrient definition rows, while Thai values may remain empty strings during this blocked translation phase.',
+      '',
+      '## Validation Query',
+      '',
+      'Use a later local-only verification query to confirm the candidate row count before any seed execution boundary is opened.',
+    ].join('\n'), 'utf8')
+
+    const statuses = expectedOutputStatusesForWorkorder(makeLoadedWorkorder([
+      'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md',
+    ]))
+
+    assert.deepEqual(statuses, [
+      { path: 'docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md', exists: true, valid: true, reason: undefined },
     ])
   })
 })

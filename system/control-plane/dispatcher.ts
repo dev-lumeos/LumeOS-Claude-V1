@@ -52,6 +52,7 @@ import { createFileMetricsWriter } from './pipeline-metrics'
 import { isAutoRetryAllowed, requiresSparkD, inferCategoryFromTask } from './risk-categories'
 import { runPreflight } from './scheduler-preflight'
 import { enqueueApproval } from '../approval/approval-queue'
+import { assessMarkdownContent, isMarkdownOutputPath } from '../workorders/cli/markdown-output-quality'
 import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 import {
   buildPromptFromWorkorder,
@@ -947,6 +948,30 @@ export async function dispatchWorkorder(
     audit.writeAuditEvent({ event: 'tool_call_requested', orchestration_mode: orchestrationMode,
       run_id: runId, workorder_id: wo.workorder_id, agent_id: wo.agent_id,
       tool: toolReq.tool, target_path: toolReq.targetPath, command: toolReq.command })
+
+    if (toolReq.tool === 'write' && toolReq.targetPath && toolReq.content && isMarkdownOutputPath(toolReq.targetPath)) {
+      const quality = assessMarkdownContent(toolReq.content)
+      if (!quality.valid) {
+        audit.auditToolBlocked({
+          run_id: runId,
+          workorder_id: wo.workorder_id,
+          agent_id: wo.agent_id,
+          orchestration_mode: orchestrationMode,
+          tool: toolReq.tool,
+          target_path: toolReq.targetPath,
+          blocked_by: 'output_quality_gate',
+          reason: `OUTPUT_INCOMPLETE: ${quality.reason ?? 'markdown output appears incomplete'}`,
+        })
+        await state.endRun(runId, 'failed')
+        await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'failed')
+        return {
+          status: 'failed',
+          run_id: runId,
+          workorder_id: wo.workorder_id,
+          error: `OUTPUT_INCOMPLETE: ${quality.reason ?? 'markdown output appears incomplete'}`,
+        }
+      }
+    }
 
     // 8. Approval Gate
     const approvalOp    = determineApprovalOperation(wo.agent_id, toolReq)

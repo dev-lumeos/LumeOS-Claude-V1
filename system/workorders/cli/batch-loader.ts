@@ -28,6 +28,7 @@ import { runModelRuntimeCheck } from '../../control-plane/model-runtime-check'
 import { runPreflight } from '../../control-plane/scheduler-preflight'
 import { isSystemStopped, updateActiveWorkorderStatusByRun } from '../../state/state-manager'
 import { getPendingApprovals } from '../../approval/approval-queue'
+import { assessMarkdownFile, isMarkdownOutputPath } from './markdown-output-quality'
 
 // ─────────────────────────────────────────────────────────────────────────
 // Types
@@ -72,6 +73,8 @@ export interface DispatchOutcome {
 export interface ExpectedOutputStatus {
   path: string
   exists: boolean
+  valid: boolean
+  reason?: string
 }
 
 // Risk categories whose WOs require human approval before/during dispatch.
@@ -113,10 +116,16 @@ export function expectedOutputStatusesForWorkorder(workorder: LoadedWorkorder): 
   const expectedOutputs = Array.isArray(parsed.expected_outputs)
     ? parsed.expected_outputs.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
     : []
-  return expectedOutputs.map(outputPath => ({
-    path: normalizeRepoPath(outputPath),
-    exists: pathExistsWithGlob(outputPath),
-  }))
+  return expectedOutputs.map(outputPath => {
+    const normalizedPath = normalizeRepoPath(outputPath)
+    const exists = pathExistsWithGlob(outputPath)
+    if (!exists) return { path: normalizedPath, exists: false, valid: false, reason: 'missing' }
+    if (isMarkdownOutputPath(normalizedPath)) {
+      const quality = assessMarkdownFile(normalizedPath)
+      return { path: normalizedPath, exists: true, valid: quality.valid, reason: quality.reason }
+    }
+    return { path: normalizedPath, exists: true, valid: true }
+  })
 }
 
 // ─────────────────────────────────────────────────────────────────────────

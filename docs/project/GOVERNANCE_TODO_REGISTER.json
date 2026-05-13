@@ -405,13 +405,13 @@
       "layer": "workflow_quality",
       "severity": "high",
       "priority": "P0",
-      "status": "open",
+      "status": "completed",
       "evidence": "BATCH-NUTRITION-P1-005-SEED-CANDIDATE stopped at APP-20260513-758015 with SAFE_TO_REVIEW classification, but docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md contains only a 4-line stub. The dispatcher path used docs-agent directly; there was no separate orchestrator-agent runtime dispatch. Review escalation reported spark-d invalid_json -> Claude needed.",
-      "recommended_action": "Add a governed quality gate so docs workorders cannot surface SAFE_TO_REVIEW approval or output completion on trivially incomplete stub artifacts. Minimum-content validation must happen before approval classification or output-complete status.",
+      "recommended_action": "Completed: Markdown output quality gate now blocks stub markdown writes before approval enqueue, prevents SAFE_TO_REVIEW classification for incomplete docs, and excludes stub markdown files from output-complete status.",
       "dependencies": [
         "GOV-TODO-018"
       ],
-      "estimated_effort": "One governance fix WO plus regression tests for stub artifact rejection",
+      "estimated_effort": "completed",
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
@@ -419,7 +419,9 @@
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SEED-CANDIDATE.md",
         "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
         "system/control-plane/dispatcher.ts",
-        "system/workorders/cli/batch-operator.ts"
+        "system/workorders/cli/batch-operator.ts",
+        "system/workorders/cli/batch-loader.ts",
+        "system/workorders/cli/markdown-output-quality.ts"
       ]
     }
   ]

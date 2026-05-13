@@ -28,6 +28,7 @@ import {
 } from '../../project-profiles/project-profile-loader'
 import { buildAutonomyHandoffContract, type AutonomyHandoff } from '../../reports/autonomy-handoff'
 import { loadCodexWorkerConfig } from '../../workers/codex-worker'
+import { assessMarkdownFile, isMarkdownOutputPath } from './markdown-output-quality'
 
 export type OperatorEndState =
   | 'READY_TO_RUN'
@@ -82,6 +83,8 @@ export interface ApprovalStop {
 export interface ExpectedOutputStatus {
   path: string
   exists: boolean
+  valid: boolean
+  reason?: string
 }
 
 export interface WorkorderCompletion {
@@ -380,6 +383,13 @@ function classifyApproval(item: ApprovalQueueItem | ApprovalItem): ApprovalClass
   if (!item.proposed_action || item.proposed_action.length > 500) return 'CONTENT_NOT_VISIBLE'
   if (item.risk_category === 'db-migration' || item.operation === 'write_migration') return 'NEEDS_HUMAN_SQL_REVIEW'
   if (item.exact_command && /supabase\s+db\s+(push|reset)/i.test(item.exact_command)) return 'DO_NOT_GRANT'
+  const markdownTarget = (item.affected_files ?? [])
+    .map(normalizeRepoPath)
+    .find(filePath => isMarkdownOutputPath(filePath))
+  if (markdownTarget) {
+    const quality = assessMarkdownFile(markdownTarget)
+    if (!quality.valid) return 'DO_NOT_GRANT'
+  }
   return 'SAFE_TO_REVIEW'
 }
 
@@ -473,11 +483,14 @@ export function evaluateWorkorderCompletions(batch: LoadedBatch): WorkorderCompl
     const expectedOutputs = inferExpectedOutputs(workorder).map(outputPath => ({
       path: outputPath,
       exists: pathExistsWithGlob(outputPath),
+      ...(pathExistsWithGlob(outputPath) && isMarkdownOutputPath(outputPath)
+        ? assessMarkdownFile(outputPath)
+        : { valid: pathExistsWithGlob(outputPath), reason: pathExistsWithGlob(outputPath) ? undefined : 'missing' }),
     }))
     return {
       workorderId,
       expectedOutputs,
-      complete: expectedOutputs.length > 0 && expectedOutputs.every(output => output.exists),
+      complete: expectedOutputs.length > 0 && expectedOutputs.every(output => output.exists && output.valid),
     }
   })
 }
@@ -611,7 +624,9 @@ export function buildOperatorReport(status: OperatorStatus): string {
   lines.push(...formatList(status.relatedApprovals, a => `${a.approval_id} WO=${a.workorder_id} run=${a.run_id ?? '<none>'} status=${a.status} risk=${a.risk_category ?? '<unknown>'}`))
   lines.push('workorder output completion:')
   lines.push(...formatList(status.workorderCompletions, w => {
-    const outputs = w.expectedOutputs.map(o => `${o.path}:${o.exists ? 'yes' : 'no'}`).join(', ')
+    const outputs = w.expectedOutputs
+      .map(o => `${o.path}:${o.exists ? (o.valid ? 'yes' : `incomplete(${o.reason ?? 'invalid'})`) : 'no'}`)
+      .join(', ')
     return `${w.workorderId} complete=${w.complete ? 'yes' : 'no'} outputs=[${outputs || 'none'}]`
   }))
   lines.push('')
