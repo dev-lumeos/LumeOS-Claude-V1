@@ -176,6 +176,8 @@
       "endpoint": "http://192.168.0.188:8001",
       "temperature": 0.0,
       "seed": 42,
+      "timeout_ms": 120000,
+      "completion_probe_timeout_ms": 30000,
       "max_context": 16384
     }
   },

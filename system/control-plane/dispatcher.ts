@@ -133,6 +133,8 @@ export interface DispatchResult {
 
 interface ModelRoutingEntry {
   node: string; model: string; temperature: number; max_context: number
+  timeout_ms?: number
+  max_attempts?: number
 }
 
 export interface DispatcherDeps {
@@ -344,9 +346,15 @@ export async function defaultCallModel(
     requestBody.response_format = { type: 'json_object' }
   }
   let lastError: unknown
-  for (let attempt = 1; attempt <= MODEL_CALL_MAX_ATTEMPTS; attempt += 1) {
+  const timeoutMs = Number.isFinite(routing.timeout_ms) && Number(routing.timeout_ms) > 0
+    ? Number(routing.timeout_ms)
+    : MODEL_CALL_TIMEOUT_MS
+  const maxAttempts = Number.isFinite(routing.max_attempts) && Number(routing.max_attempts) > 0
+    ? Number(routing.max_attempts)
+    : MODEL_CALL_MAX_ATTEMPTS
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), MODEL_CALL_TIMEOUT_MS)
+    const timeout = setTimeout(() => controller.abort(), timeoutMs)
     try {
       const resp = await fetch(endpoint, {
         method: 'POST',
@@ -358,20 +366,20 @@ export async function defaultCallModel(
         const responseText = await resp.text().catch(() => '')
         const detail = responseText ? ` :: ${responseText.replace(/\s+/g, ' ').trim().slice(0, 240)}` : ''
         const error = new Error(`vLLM Error: ${resp.status} ${resp.statusText}${detail}`)
-        if (resp.status < 500 || attempt === MODEL_CALL_MAX_ATTEMPTS) throw error
+        if (resp.status < 500 || attempt === maxAttempts) throw error
         lastError = error
         continue
       }
       return ((await resp.json()) as any).choices?.[0]?.message?.content ?? ''
     } catch (error) {
       lastError = error
-      if (attempt === MODEL_CALL_MAX_ATTEMPTS) break
+      if (attempt === maxAttempts) break
     } finally {
       clearTimeout(timeout)
     }
   }
   const message = lastError instanceof Error ? lastError.message : String(lastError)
-  throw new Error(`vLLM runtime unavailable after ${MODEL_CALL_MAX_ATTEMPTS} attempt(s): ${message}`)
+  throw new Error(`vLLM runtime unavailable after ${maxAttempts} attempt(s): ${message}`)
 }
 
 // ─── Review Pipeline Gate ─────────────────────────────────────────────────────

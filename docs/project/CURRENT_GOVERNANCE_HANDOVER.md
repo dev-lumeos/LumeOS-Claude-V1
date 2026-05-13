@@ -533,3 +533,18 @@ Governance gap exposed by this probe and fixed:
   - `APP-20260513-758015` was denied through `approval-cli`.
   - `WO-nutrition-012` / `RUN-20260513-0662` stale awaiting-approval state was removed through `terminal-wo-reset-cli clear-expired-approval` after a clean dry-run.
   - The stub `docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md` was removed.
+
+## Spark2 docs-agent Runtime Stabilization
+
+- The seed candidate batch later exposed a runtime timeout class, not a product/workorder logic failure.
+- `/v1/models` and tiny `/v1/chat/completions` probes can pass while the real docs-agent dispatcher payload still exceeds the old dispatcher timeout.
+- Reproduction:
+  - tiny completion: healthy
+  - medium docs-style completion: healthy
+  - actual `WO-nutrition-012` dispatcher-shaped payload with docs-agent system prompt and OrchestratorIntent contract: fails at the old `30s x 2` dispatcher timeout, but succeeds with a 120s timeout in about 86s.
+- Stabilization:
+  - `docs-agent` routing now declares `timeout_ms: 120000` and `completion_probe_timeout_ms: 30000`.
+  - Dispatcher model calls honor per-route `timeout_ms` and `max_attempts` when present.
+  - Batch preflight uses the route-specific completion probe timeout.
+  - `system/control-plane/docs-agent-runtime-smoke.ts` adds repeatable tiny, medium docs-style, and dispatcher-shaped smoke probes for docs-agent.
+- This does not bypass docs-agent and does not authorize seed execution, DB work, Supabase, BLS import, migrations, DEV/LIVE, or routing changes.

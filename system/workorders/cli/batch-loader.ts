@@ -91,6 +91,17 @@ const APPROVAL_RISK = new Set<string>([
 ])
 const RUNTIME_PREFLIGHT_TIMEOUT_MS = 5000
 
+function runtimePreflightTimeoutMs(agentId: string): number {
+  try {
+    const routingPath = path.resolve(process.cwd(), 'system/agent-registry/model_routing.json')
+    const routing = JSON.parse(fs.readFileSync(routingPath, 'utf8')) as Record<string, any>
+    const value = routing[agentId]?.default?.completion_probe_timeout_ms
+    return Number.isFinite(value) && Number(value) > 0 ? Number(value) : RUNTIME_PREFLIGHT_TIMEOUT_MS
+  } catch {
+    return RUNTIME_PREFLIGHT_TIMEOUT_MS
+  }
+}
+
 function normalizeRepoPath(input: string): string {
   return input.replace(/\\/g, '/').replace(/^\.\//, '')
 }
@@ -649,7 +660,7 @@ export async function runDispatch(
         agent: String(p.agent_id ?? ''),
         checkEndpoints: true,
         probeMode: 'completion',
-        timeoutMs: RUNTIME_PREFLIGHT_TIMEOUT_MS,
+        timeoutMs: runtimePreflightTimeoutMs(String(p.agent_id ?? '')),
       })
       if (runtimeCheck.hasHighOrCriticalFindings) {
         const blocker = runtimeCheck.findings.find(item => item.blocks_operator)
