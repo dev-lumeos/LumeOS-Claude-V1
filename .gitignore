@@ -33,8 +33,12 @@ system/state/pipeline-audit.jsonl
 system/state/pipeline-audit-live.jsonl
 system/approval/approvals.json
 system/approval/queue.json
+system/state/pipeline-metrics.jsonl
 system/reports/codex-worker/
 system/reports/model-runtime-history/
+system/reports/batches/
+system/reports/runs/
+system/reports/dossiers/
 
 # Nutrition raw source data stays local only.
 docs/specs/Nutrition/00_raw/

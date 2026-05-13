@@ -277,20 +277,24 @@
       "layer": "product_gate",
       "severity": "medium",
       "priority": "P0",
-      "status": "runtime_blocked_after_opening",
-      "evidence": "Tom opened the narrow planning-only execution boundary and the allowlisted batch system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md entered governed execution. WO-nutrition-006 then failed because docs-agent on Spark2 hit a vLLM EngineCore crash: RuntimeError: Triton Error [CUDA]: operation not permitted, surfaced as HTTP 500 after 2 attempts.",
-      "recommended_action": "Do not retry the import-preparation batch until Spark2/docs-agent vLLM is restarted, a tiny completion probe passes cleanly, and safe cleanup is run for WO-nutrition-006 / RUN-20260513-4168.",
+      "status": "done",
+      "evidence": "Tom opened the narrow planning-only execution boundary and the allowlisted batch system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md completed through the governed workflow. It produced the four planning outputs for source inventory, field mapping, additive migration candidate planning, and rollback/validation planning.",
+      "recommended_action": "Treat the planning-only import/DB preparation phase as complete and use its four planning outputs as the source set for any future execution-boundary decision.",
       "dependencies": [
         "GOV-TODO-013"
       ],
-      "estimated_effort": "15-30m to recover runtime and prove completion health before retry",
+      "estimated_effort": "completed",
       "codex_autonomous_possible": false,
-      "blocks_product_work": true,
+      "blocks_product_work": false,
       "source_files": [
         "docs/project/p1-005/P1-005-next-execution-plan.md",
         "system/workorders/nutrition/drafts/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION-DRAFT.md",
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md",
         "docs/project/p1-005/P1-005-source-chain-readiness-report.md",
+        "docs/project/p1-005/P1-005-bls-source-inventory.md",
+        "docs/project/p1-005/P1-005-import-field-mapping.md",
+        "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md",
+        "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md",
         "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md",
         "docs/project/PRODUCT_WORK_GATE.md",
         "docs/project/MODEL_RUNTIME_HARDENING.md"
@@ -317,6 +321,32 @@
         "system/workorders/cli/operator-doctor.ts",
         "system/control-plane/dispatcher.ts",
         "docs/project/MODEL_RUNTIME_HARDENING.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-016",
+      "title": "Tom decision for first non-planning P1-005 execution boundary",
+      "layer": "product_gate",
+      "severity": "high",
+      "priority": "P0",
+      "status": "blocked_pending_tom_decision",
+      "evidence": "The planning-only P1-005 import-preparation batch is complete and all four planning outputs exist. No raw BLS import, DB work, Supabase, or migration execution has been performed.",
+      "recommended_action": "Review the four planning outputs and explicitly decide whether to open the first non-planning P1-005 execution boundary, or keep all real BLS/DB/Supabase/migration execution blocked.",
+      "dependencies": [
+        "GOV-TODO-014",
+        "GOV-TODO-015"
+      ],
+      "estimated_effort": "Tom decision plus follow-up governance batch if execution is opened",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": true,
+      "source_files": [
+        "docs/project/p1-005/P1-005-bls-source-inventory.md",
+        "docs/project/p1-005/P1-005-import-field-mapping.md",
+        "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md",
+        "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md",
+        "docs/project/p1-005/P1-005-next-execution-plan.md",
+        "docs/project/PRODUCT_WORK_GATE.md",
+        "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md"
       ]
     }
   ]
