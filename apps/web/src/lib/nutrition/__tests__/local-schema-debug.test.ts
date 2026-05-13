@@ -27,6 +27,26 @@ describe('parseNutritionSchemaDebug', () => {
       constraints: [
         { name: 'nutrient_defs_pkey', definition: 'PRIMARY KEY (code)' },
       ],
+      group_counts: [
+        { group_de: 'Aminosäuren', group_en: 'Amino acids', row_count: 19 },
+      ],
+      nutrient_preview: [
+        {
+          code: 'AAE9',
+          name_de: 'Aminosäuren, unentbehrlich, gesamt',
+          name_en: 'Amino acids, essential, total',
+          name_th: '',
+          unit: 'g',
+          group_de: 'Aminosäuren',
+          group_en: 'Amino acids',
+          group_th: '',
+        },
+      ],
+      rda_summary: {
+        rda_male_populated: 26,
+        rda_female_populated: 26,
+        rda_unit_populated: 26,
+      },
     }))
 
     assert.equal(snapshot.environment, 'local')
@@ -38,6 +58,12 @@ describe('parseNutritionSchemaDebug', () => {
     assert.equal(snapshot.columns[3]?.name, 'name_th')
     assert.equal(snapshot.indexes[0]?.name, 'nutrient_defs_pkey')
     assert.equal(snapshot.constraints[0]?.definition, 'PRIMARY KEY (code)')
+    assert.equal(snapshot.group_counts[0]?.group_de, 'Aminosäuren')
+    assert.equal(snapshot.group_counts[0]?.row_count, 19)
+    assert.equal(snapshot.nutrient_preview[0]?.code, 'AAE9')
+    assert.equal(snapshot.nutrient_preview[0]?.name_de, 'Aminosäuren, unentbehrlich, gesamt')
+    assert.equal(snapshot.nutrient_preview[0]?.name_th, '')
+    assert.equal(snapshot.rda_summary.rda_male_populated, 26)
   })
 
   it('normalizes missing arrays to empty lists', () => {
@@ -50,6 +76,13 @@ describe('parseNutritionSchemaDebug', () => {
     assert.deepEqual(snapshot.columns, [])
     assert.deepEqual(snapshot.indexes, [])
     assert.deepEqual(snapshot.constraints, [])
+    assert.deepEqual(snapshot.group_counts, [])
+    assert.deepEqual(snapshot.nutrient_preview, [])
+    assert.deepEqual(snapshot.rda_summary, {
+      rda_male_populated: 0,
+      rda_female_populated: 0,
+      rda_unit_populated: 0,
+    })
   })
 
   it('throws for empty output', () => {

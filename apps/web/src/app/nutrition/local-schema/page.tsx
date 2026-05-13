@@ -20,6 +20,7 @@ export default async function LocalNutritionSchemaPage() {
   try {
     const snapshot = await getLocalNutritionSchemaDebug()
     const hasLocalSeedRows = snapshot.table_exists && snapshot.row_count === 138
+    const previewLimit = snapshot.nutrient_preview.length
 
     return (
       <main className="min-h-screen bg-slate-950 text-slate-100">
@@ -100,6 +101,31 @@ export default async function LocalNutritionSchemaPage() {
 
             <div className="space-y-6">
               <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <h2 className="text-lg font-semibold">RDA Fields</h2>
+                  <StatusBadge tone="attention" label="Partial by design" />
+                </div>
+                <dl className="grid grid-cols-3 gap-3 text-sm">
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.16em] text-slate-500">Male</dt>
+                    <dd className="mt-1 font-mono text-slate-100">{snapshot.rda_summary.rda_male_populated}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.16em] text-slate-500">Female</dt>
+                    <dd className="mt-1 font-mono text-slate-100">{snapshot.rda_summary.rda_female_populated}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs uppercase tracking-[0.16em] text-slate-500">Units</dt>
+                    <dd className="mt-1 font-mono text-slate-100">{snapshot.rda_summary.rda_unit_populated}</dd>
+                  </div>
+                </dl>
+                <p className="mt-4 text-xs leading-5 text-slate-400">
+                  Missing RDA/reference values are expected until a separate verified source candidate defines the model,
+                  source priority, sex and age groups, and units.
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
                 <div className="mb-4 flex items-center justify-between">
                   <h2 className="text-lg font-semibold">Indexes</h2>
                   <StatusBadge tone={snapshot.indexes.some((item) => item.name === 'nutrient_defs_group_sort_idx') ? 'pass' : 'attention'} label="Local" />
@@ -128,6 +154,78 @@ export default async function LocalNutritionSchemaPage() {
                   ))}
                 </ul>
               </div>
+            </div>
+          </section>
+
+          <section className="mt-8 rounded-lg border border-slate-800 bg-slate-900 p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold">Grouped Counts</h2>
+                <p className="mt-1 text-xs text-slate-400">Rows grouped by German and English nutrient group labels.</p>
+              </div>
+              <StatusBadge tone={snapshot.group_counts.length > 0 ? 'pass' : 'attention'} label={`${snapshot.group_counts.length} groups`} />
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-slate-800 text-left text-slate-400">
+                    <th className="px-3 py-2 font-medium">group_de</th>
+                    <th className="px-3 py-2 font-medium">group_en</th>
+                    <th className="px-3 py-2 text-right font-medium">Rows</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {snapshot.group_counts.map((group) => (
+                    <tr key={`${group.group_de}:${group.group_en}`} className="border-b border-slate-900/80">
+                      <td className="px-3 py-2 text-slate-100">{group.group_de}</td>
+                      <td className="px-3 py-2 text-slate-300">{group.group_en}</td>
+                      <td className="px-3 py-2 text-right font-mono text-slate-100">{group.row_count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section className="mt-8 rounded-lg border border-slate-800 bg-slate-900 p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold">Nutrient Preview</h2>
+                <p className="mt-1 text-xs text-slate-400">
+                  First {previewLimit} local rows ordered by sort index. Thai fields are intentionally empty at this boundary.
+                </p>
+              </div>
+              <StatusBadge tone={hasLocalSeedRows ? 'pass' : 'attention'} label={hasLocalSeedRows ? 'Seeded locally' : 'Local preview'} />
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-slate-800 text-left text-slate-400">
+                    <th className="px-3 py-2 font-medium">code</th>
+                    <th className="px-3 py-2 font-medium">name_de</th>
+                    <th className="px-3 py-2 font-medium">name_en</th>
+                    <th className="px-3 py-2 font-medium">name_th</th>
+                    <th className="px-3 py-2 font-medium">unit</th>
+                    <th className="px-3 py-2 font-medium">group_de</th>
+                    <th className="px-3 py-2 font-medium">group_en</th>
+                    <th className="px-3 py-2 font-medium">group_th</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {snapshot.nutrient_preview.map((row) => (
+                    <tr key={row.code} className="border-b border-slate-900/80 align-top">
+                      <td className="px-3 py-2 font-mono text-slate-100">{row.code}</td>
+                      <td className="min-w-52 px-3 py-2 text-slate-100">{row.name_de}</td>
+                      <td className="min-w-52 px-3 py-2 text-slate-300">{row.name_en}</td>
+                      <td className="px-3 py-2 font-mono text-slate-500">{row.name_th || "''"}</td>
+                      <td className="px-3 py-2 font-mono text-slate-100">{row.unit}</td>
+                      <td className="min-w-44 px-3 py-2 text-slate-300">{row.group_de}</td>
+                      <td className="min-w-44 px-3 py-2 text-slate-300">{row.group_en}</td>
+                      <td className="px-3 py-2 font-mono text-slate-500">{row.group_th || "''"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </section>
         </div>

@@ -21,6 +21,29 @@ export type NutritionSchemaConstraint = {
   definition: string
 }
 
+export type NutritionGroupCount = {
+  group_de: string
+  group_en: string
+  row_count: number
+}
+
+export type NutritionNutrientPreviewRow = {
+  code: string
+  name_de: string
+  name_en: string
+  name_th: string
+  unit: string
+  group_de: string
+  group_en: string
+  group_th: string
+}
+
+export type NutritionRdaSummary = {
+  rda_male_populated: number
+  rda_female_populated: number
+  rda_unit_populated: number
+}
+
 export type NutritionSchemaDebugSnapshot = {
   checkedAt: string
   environment: 'local'
@@ -31,6 +54,9 @@ export type NutritionSchemaDebugSnapshot = {
   columns: NutritionSchemaColumn[]
   indexes: NutritionSchemaIndex[]
   constraints: NutritionSchemaConstraint[]
+  group_counts: NutritionGroupCount[]
+  nutrient_preview: NutritionNutrientPreviewRow[]
+  rda_summary: NutritionRdaSummary
 }
 
 export class LocalSchemaDebugError extends Error {
@@ -107,6 +133,68 @@ constraints_json AS (
   JOIN pg_namespace n ON n.oid = t.relnamespace
   WHERE n.nspname = 'nutrition'
     AND t.relname = 'nutrient_defs'
+),
+group_counts_json AS (
+  SELECT COALESCE(
+    json_agg(
+      json_build_object(
+        'group_de', group_de,
+        'group_en', group_en,
+        'row_count', row_count
+      )
+      ORDER BY row_count DESC, group_de
+    ),
+    '[]'::json
+  ) AS value
+  FROM (
+    SELECT
+      group_de,
+      group_en,
+      COUNT(*)::int AS row_count
+    FROM nutrition.nutrient_defs
+    GROUP BY group_de, group_en
+  ) grouped
+),
+nutrient_preview_json AS (
+  SELECT COALESCE(
+    json_agg(
+      json_build_object(
+        'code', code,
+        'name_de', name_de,
+        'name_en', name_en,
+        'name_th', name_th,
+        'unit', unit,
+        'group_de', group_de,
+        'group_en', group_en,
+        'group_th', group_th
+      )
+      ORDER BY sort_index, code
+    ),
+    '[]'::json
+  ) AS value
+  FROM (
+    SELECT
+      code,
+      name_de,
+      name_en,
+      name_th,
+      unit,
+      group_de,
+      group_en,
+      group_th,
+      sort_index
+    FROM nutrition.nutrient_defs
+    ORDER BY sort_index, code
+    LIMIT 24
+  ) preview
+),
+rda_summary_json AS (
+  SELECT json_build_object(
+    'rda_male_populated', COUNT(*) FILTER (WHERE rda_male IS NOT NULL)::int,
+    'rda_female_populated', COUNT(*) FILTER (WHERE rda_female IS NOT NULL)::int,
+    'rda_unit_populated', COUNT(*) FILTER (WHERE rda_unit IS NOT NULL AND rda_unit <> '')::int
+  ) AS value
+  FROM nutrition.nutrient_defs
 )
 SELECT json_build_object(
   'schema_exists', (SELECT schema_exists FROM table_state),
@@ -114,7 +202,10 @@ SELECT json_build_object(
   'row_count', (SELECT row_count FROM row_state),
   'columns', (SELECT value FROM columns_json),
   'indexes', (SELECT value FROM indexes_json),
-  'constraints', (SELECT value FROM constraints_json)
+  'constraints', (SELECT value FROM constraints_json),
+  'group_counts', (SELECT value FROM group_counts_json),
+  'nutrient_preview', (SELECT value FROM nutrient_preview_json),
+  'rda_summary', (SELECT value FROM rda_summary_json)
 )::text;
 `.trim()
 
@@ -151,6 +242,53 @@ function normalizeNamedDefinitions<T extends NutritionSchemaIndex | NutritionSch
   })
 }
 
+function normalizeGroupCounts(value: unknown): NutritionGroupCount[] {
+  if (!Array.isArray(value)) return []
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object') return []
+    const record = item as Record<string, unknown>
+    return [{
+      group_de: typeof record.group_de === 'string' ? record.group_de : '',
+      group_en: typeof record.group_en === 'string' ? record.group_en : '',
+      row_count: normalizeNumber(record.row_count),
+    }]
+  })
+}
+
+function normalizeNutrientPreview(value: unknown): NutritionNutrientPreviewRow[] {
+  if (!Array.isArray(value)) return []
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object') return []
+    const record = item as Record<string, unknown>
+    return [{
+      code: typeof record.code === 'string' ? record.code : '',
+      name_de: typeof record.name_de === 'string' ? record.name_de : '',
+      name_en: typeof record.name_en === 'string' ? record.name_en : '',
+      name_th: typeof record.name_th === 'string' ? record.name_th : '',
+      unit: typeof record.unit === 'string' ? record.unit : '',
+      group_de: typeof record.group_de === 'string' ? record.group_de : '',
+      group_en: typeof record.group_en === 'string' ? record.group_en : '',
+      group_th: typeof record.group_th === 'string' ? record.group_th : '',
+    }]
+  })
+}
+
+function normalizeRdaSummary(value: unknown): NutritionRdaSummary {
+  if (!value || typeof value !== 'object') {
+    return {
+      rda_male_populated: 0,
+      rda_female_populated: 0,
+      rda_unit_populated: 0,
+    }
+  }
+  const record = value as Record<string, unknown>
+  return {
+    rda_male_populated: normalizeNumber(record.rda_male_populated),
+    rda_female_populated: normalizeNumber(record.rda_female_populated),
+    rda_unit_populated: normalizeNumber(record.rda_unit_populated),
+  }
+}
+
 export function parseNutritionSchemaDebug(stdout: string): NutritionSchemaDebugSnapshot {
   const raw = stdout.trim()
   if (!raw) {
@@ -182,6 +320,9 @@ export function parseNutritionSchemaDebug(stdout: string): NutritionSchemaDebugS
     columns: normalizeColumns(record.columns),
     indexes: normalizeNamedDefinitions<NutritionSchemaIndex>(record.indexes),
     constraints: normalizeNamedDefinitions<NutritionSchemaConstraint>(record.constraints),
+    group_counts: normalizeGroupCounts(record.group_counts),
+    nutrient_preview: normalizeNutrientPreview(record.nutrient_preview),
+    rda_summary: normalizeRdaSummary(record.rda_summary),
   }
 }
 
