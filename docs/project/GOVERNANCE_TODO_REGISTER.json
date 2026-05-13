@@ -355,21 +355,23 @@
       "layer": "product_gate",
       "severity": "high",
       "priority": "P0",
-      "status": "blocked_pending_tom_decision",
-      "evidence": "The P1-005 schema-only SQL draft is now promoted into a real execution candidate at supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql. Static readiness review and the final execution-readiness package both say it is ready for a narrow schema-only execution approval. The package now includes exact gates, pre-checks, do-not-run execution command plan, rollback posture, validation queries, and stop conditions.",
-      "recommended_action": "If Tom wants to proceed, open only a narrow schema-only execution boundary for supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql. Keep nutrient_defs seed payload, RDA updates, BLS import, and all broader DB work as separate follow-up candidates.",
+      "status": "done",
+      "evidence": "Tom opened the narrow LOCAL-ONLY schema execution boundary for supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql. All required static gates passed, the migration was applied against local Supabase/Test DB only, and post-apply validation confirmed the expected schema objects.",
+      "recommended_action": "Use the local-only result as execution proof for a future DEV promotion decision. Keep nutrient_defs seed payload, RDA updates, BLS import, and all broader DB work as separate follow-up candidates.",
       "dependencies": [
         "GOV-TODO-016"
       ],
-      "estimated_effort": "Tom decision plus follow-up governance batch if draft promotion is opened",
+      "estimated_effort": "completed",
       "codex_autonomous_possible": false,
-      "blocks_product_work": true,
+      "blocks_product_work": false,
       "source_files": [
         "docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql",
         "docs/project/p1-005/P1-005-schema-foundation-draft-validation-plan.md",
         "system/workorders/nutrition/WO-NUTRITION-P1-010-schema-foundation-sql-draft.md",
         "system/workorders/nutrition/WO-NUTRITION-P1-011-schema-foundation-draft-validation-plan.md",
         "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md",
+        "supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql",
+        "docs/project/p1-005/P1-005-schema-foundation-execution-readiness.md",
         "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md",
         "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md"
       ]
