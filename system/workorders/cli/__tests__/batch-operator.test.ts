@@ -516,6 +516,38 @@ describe('batch operator status', () => {
     assert.equal(status.cleanupSuggestions[0].safeToApply, false)
     assert.match(status.cleanupSuggestions[0].why, /ambiguous/)
   })
+
+  it('treats a terminal workorder with missing expected outputs as cleanup-needed, not complete', () => {
+    writeState({
+      active_runs: [{
+        run_id: 'RUN-missing-output',
+        workorder_id: 'WO-test-001',
+        agent_id: 'micro-executor',
+        status: 'completed',
+        started_at: isoMinutesAgo(10),
+        completed_at: isoMinutesAgo(5),
+        written_files: [],
+      }],
+      active_workorders: [{
+        workorder_id: 'WO-test-001',
+        run_id: 'RUN-missing-output',
+        agent_id: 'micro-executor',
+        status: 'failed',
+        dispatched_at: isoMinutesAgo(10),
+      }],
+    })
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+
+    assert.equal(status.workorderCompletions.find(w => w.workorderId === 'WO-test-001')?.complete, false)
+    assert.equal(status.cleanupSuggestions.some(item =>
+      item.kind === 'terminal_active_workorder' &&
+      item.workorderId === 'WO-test-001' &&
+      item.runId === 'RUN-missing-output' &&
+      item.safeToApply,
+    ), true)
+    assert.equal(decideEndState(status), 'NEEDS_SAFE_CLEANUP')
+  })
 })
 
 describe('apply safe cleanups', () => {

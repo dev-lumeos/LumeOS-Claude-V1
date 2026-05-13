@@ -26,7 +26,7 @@ import {
 } from '../../control-plane/dispatcher'
 import { runModelRuntimeCheck } from '../../control-plane/model-runtime-check'
 import { runPreflight } from '../../control-plane/scheduler-preflight'
-import { isSystemStopped } from '../../state/state-manager'
+import { isSystemStopped, updateActiveWorkorderStatusByRun } from '../../state/state-manager'
 import { getPendingApprovals } from '../../approval/approval-queue'
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -69,6 +69,11 @@ export interface DispatchOutcome {
   detail?: string
 }
 
+export interface ExpectedOutputStatus {
+  path: string
+  exists: boolean
+}
+
 // Risk categories whose WOs require human approval before/during dispatch.
 const APPROVAL_RISK = new Set<string>([
   'db-migration',
@@ -82,6 +87,37 @@ const APPROVAL_RISK = new Set<string>([
   'architecture',
 ])
 const RUNTIME_PREFLIGHT_TIMEOUT_MS = 5000
+
+function normalizeRepoPath(input: string): string {
+  return input.replace(/\\/g, '/').replace(/^\.\//, '')
+}
+
+function pathExistsWithGlob(pattern: string): boolean {
+  const normalized = normalizeRepoPath(pattern)
+  if (!normalized.includes('*')) return fs.existsSync(path.resolve(process.cwd(), normalized))
+  const slash = normalized.lastIndexOf('/')
+  const dir = slash >= 0 ? normalized.slice(0, slash) : '.'
+  const filePattern = slash >= 0 ? normalized.slice(slash + 1) : normalized
+  const regex = new RegExp(`^${filePattern.split('*').map(escapeRegExp).join('.*')}$`)
+  const absoluteDir = path.resolve(process.cwd(), dir)
+  if (!fs.existsSync(absoluteDir)) return false
+  return fs.readdirSync(absoluteDir).some(name => regex.test(name))
+}
+
+function escapeRegExp(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+export function expectedOutputStatusesForWorkorder(workorder: LoadedWorkorder): ExpectedOutputStatus[] {
+  const parsed = workorder.parsed as Record<string, unknown>
+  const expectedOutputs = Array.isArray(parsed.expected_outputs)
+    ? parsed.expected_outputs.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+    : []
+  return expectedOutputs.map(outputPath => ({
+    path: normalizeRepoPath(outputPath),
+    exists: pathExistsWithGlob(outputPath),
+  }))
+}
 
 // ─────────────────────────────────────────────────────────────────────────
 // Mini YAML parser — handles the limited subset used in our WO drafts:
@@ -627,7 +663,7 @@ export async function runDispatch(
     // Library dispatch — no HTTP, no SchedulerAPI.
     // Both deps must be provided: when a partial deps object is passed, the
     // dispatcher does NOT fall back to its defaults for missing fields.
-    let result: { status?: string; error?: string } | undefined
+    let result: { status?: string; error?: string; run_id?: string } | undefined
     try {
       result = (await dispatchWorkorder(
         w.parsed as unknown as Workorder,
@@ -655,6 +691,19 @@ export async function runDispatch(
       break
     }
     if (status === 'completed' || status === 'done') {
+      const outputStatuses = expectedOutputStatusesForWorkorder(w)
+      const missingOutputs = outputStatuses.filter(item => !item.exists)
+      if (missingOutputs.length > 0) {
+        if (result?.run_id) {
+          await updateActiveWorkorderStatusByRun(id, result.run_id, 'failed')
+        }
+        outcomes.push({
+          workorder_id: id,
+          status: 'failed',
+          detail: `Dispatcher reported ${status}, but expected outputs are missing: ${missingOutputs.map(item => item.path).join(', ')}`,
+        })
+        break
+      }
       outcomes.push({
         workorder_id: id,
         status: 'dispatched',
