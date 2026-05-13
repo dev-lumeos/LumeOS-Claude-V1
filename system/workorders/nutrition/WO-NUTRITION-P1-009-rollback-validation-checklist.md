@@ -1,4 +1,4 @@
-# WO-NUTRITION-P1-008 - Additive Migration Candidate Plan
+# WO-NUTRITION-P1-009 - Rollback And Validation Checklist
 
 **Status:** ready_to_run
 **Phase:** 1 - Nutrition / BLS / P1-005 preparation
@@ -7,7 +7,7 @@
 **Scope boundary:** planning output only
 
 ```yaml
-workorder_id: "WO-nutrition-008"
+workorder_id: "WO-nutrition-009"
 agent_id: "docs-agent"
 phase: 1
 priority: "normal"
@@ -16,14 +16,14 @@ requires_approval: false
 risk_category: "docs"
 
 task: |
-  Produce the P1-005 additive migration candidate plan only.
+  Produce the P1-005 rollback and validation checklist only.
   Write exactly one output:
-  - docs/project/p1-005/P1-005-additive-migration-candidate-plan.md
+  - docs/project/p1-005/P1-005-rollback-and-validation-checklist.md
 
-  The plan must:
-  - identify the likely additive schema preparation steps implied by the current specs and existing local inventory
-  - define sequencing and validation gates without authoring or executing real migrations
-  - distinguish plan candidates from approved migration files
+  The checklist must:
+  - define rollback thinking for future additive migration work without authoring executable SQL
+  - define validation checkpoints for future import and migration execution
+  - align with the additive migration candidate plan once that prior workorder output exists, without treating it as execution approval
   - state that no DB work, Supabase command, migration execution, or product implementation is authorized
 
 source_refs:
@@ -55,13 +55,13 @@ source_refs:
     - raw_sources
 
 expected_outputs:
-  - "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md"
+  - "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md"
 
 scope_files:
-  - "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md"
+  - "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md"
 
 files_allowed:
-  - "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md"
+  - "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md"
 
 context_files:
   - "docs/project/p1-005/P1-005-source-chain-readiness-report.md"
@@ -85,8 +85,9 @@ files_blocked:
   - ".env.*"
 
 acceptance_criteria:
-  - "The migration candidate plan remains documentation-only."
-  - "The plan distinguishes established facts, assumptions, and still-blocked execution steps."
+  - "The rollback/checklist output remains documentation-only."
+  - "The checklist contains validation and rollback thinking without executable SQL or commands."
+  - "The checklist distinguishes established facts, assumptions, and still-blocked execution steps."
   - "The output does not authorize import, DB work, Supabase, migration execution, or product implementation."
 
 negative_constraints:
@@ -110,6 +111,5 @@ validation_commands:
   - "cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\run-batch-operator.ts system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md --doctor --json --project lumeos"
 
 blocked_by:
-  - "WO-nutrition-006"
-  - "WO-nutrition-007"
+  - "WO-nutrition-008"
 ```
