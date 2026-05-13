@@ -40,6 +40,14 @@ describe('parseNutritionSchemaDebug', () => {
           group_de: 'Aminosäuren',
           group_en: 'Amino acids',
           group_th: '',
+          sort_index: 30,
+          display_tier: 1,
+          is_always_computed: false,
+          is_partly_computed: true,
+          formula: null,
+          rda_male: 12,
+          rda_female: 10,
+          rda_unit: 'g',
         },
       ],
       rda_summary: {
@@ -63,6 +71,13 @@ describe('parseNutritionSchemaDebug', () => {
     assert.equal(snapshot.nutrient_preview[0]?.code, 'AAE9')
     assert.equal(snapshot.nutrient_preview[0]?.name_de, 'Aminosäuren, unentbehrlich, gesamt')
     assert.equal(snapshot.nutrient_preview[0]?.name_th, '')
+    assert.equal(snapshot.nutrient_preview[0]?.sort_index, 30)
+    assert.equal(snapshot.nutrient_preview[0]?.display_tier, 1)
+    assert.equal(snapshot.nutrient_preview[0]?.is_partly_computed, true)
+    assert.equal(snapshot.nutrient_preview[0]?.formula, null)
+    assert.equal(snapshot.nutrient_preview[0]?.rda_male, '12')
+    assert.equal(snapshot.nutrient_preview[0]?.rda_female, '10')
+    assert.equal(snapshot.nutrient_preview[0]?.rda_unit, 'g')
     assert.equal(snapshot.rda_summary.rda_male_populated, 26)
   })
 

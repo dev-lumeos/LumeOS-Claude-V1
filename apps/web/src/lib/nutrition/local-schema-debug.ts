@@ -36,6 +36,14 @@ export type NutritionNutrientPreviewRow = {
   group_de: string
   group_en: string
   group_th: string
+  sort_index: number
+  display_tier: number
+  is_always_computed: boolean
+  is_partly_computed: boolean
+  formula: string | null
+  rda_male: string | null
+  rda_female: string | null
+  rda_unit: string | null
 }
 
 export type NutritionRdaSummary = {
@@ -166,7 +174,15 @@ nutrient_preview_json AS (
         'unit', unit,
         'group_de', group_de,
         'group_en', group_en,
-        'group_th', group_th
+        'group_th', group_th,
+        'sort_index', sort_index,
+        'display_tier', display_tier,
+        'is_always_computed', is_always_computed,
+        'is_partly_computed', is_partly_computed,
+        'formula', formula,
+        'rda_male', rda_male,
+        'rda_female', rda_female,
+        'rda_unit', rda_unit
       )
       ORDER BY sort_index, code
     ),
@@ -182,7 +198,14 @@ nutrient_preview_json AS (
       group_de,
       group_en,
       group_th,
-      sort_index
+      sort_index,
+      display_tier,
+      is_always_computed,
+      is_partly_computed,
+      formula,
+      rda_male,
+      rda_female,
+      rda_unit
     FROM nutrition.nutrient_defs
     ORDER BY sort_index, code
     LIMIT 138
@@ -215,6 +238,14 @@ function normalizeBoolean(value: unknown): boolean {
 
 function normalizeNumber(value: unknown): number {
   return typeof value === 'number' && Number.isFinite(value) ? value : 0
+}
+
+function normalizeNullableText(value: unknown): string | null {
+  if (value === null || value === undefined) return null
+  if (typeof value === 'string') return value
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value)
+  if (typeof value === 'boolean') return value ? 'true' : 'false'
+  return null
 }
 
 function normalizeColumns(value: unknown): NutritionSchemaColumn[] {
@@ -269,6 +300,14 @@ function normalizeNutrientPreview(value: unknown): NutritionNutrientPreviewRow[]
       group_de: typeof record.group_de === 'string' ? record.group_de : '',
       group_en: typeof record.group_en === 'string' ? record.group_en : '',
       group_th: typeof record.group_th === 'string' ? record.group_th : '',
+      sort_index: normalizeNumber(record.sort_index),
+      display_tier: normalizeNumber(record.display_tier),
+      is_always_computed: normalizeBoolean(record.is_always_computed),
+      is_partly_computed: normalizeBoolean(record.is_partly_computed),
+      formula: normalizeNullableText(record.formula),
+      rda_male: normalizeNullableText(record.rda_male),
+      rda_female: normalizeNullableText(record.rda_female),
+      rda_unit: normalizeNullableText(record.rda_unit),
     }]
   })
 }

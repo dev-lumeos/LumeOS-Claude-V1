@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 
 import type { NutritionGroupCount, NutritionNutrientPreviewRow } from '../../../lib/nutrition/local-schema-debug'
 import { filterNutrientPreviewRows } from '../../../lib/nutrition/nutrient-preview-filter'
+import { NutrientDetailPanel } from './nutrient-detail-panel'
 
 type Props = {
   rows: NutritionNutrientPreviewRow[]
@@ -87,6 +88,8 @@ export function NutrientPreviewFilter({ rows, groups, hasLocalSeedRows }: Props)
         Showing <span className="font-mono text-slate-100">{filteredRows.length}</span> of{' '}
         <span className="font-mono text-slate-100">{rows.length}</span> local rows.
       </div>
+
+      <NutrientDetailPanel rows={filteredRows} />
 
       <div className="overflow-x-auto">
         <table className="min-w-full border-collapse text-sm">

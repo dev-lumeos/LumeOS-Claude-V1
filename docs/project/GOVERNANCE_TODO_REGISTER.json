@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T03:05:00+07:00",
+  "generated_at": "2026-05-13T16:57:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -512,6 +512,30 @@
         "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
         "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md",
         "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-024",
+      "title": "Add local nutrient_defs detail panel",
+      "layer": "product_gate",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "done",
+      "evidence": "The local Nutrition schema page now includes a read-only selected nutrient detail panel for the seeded local nutrition.nutrient_defs rows. The slice is governed by exact allowlisted batch system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md and uses the existing local snapshot path only.",
+      "recommended_action": "Continue local-only Nutrition UI progress with read-only affordances. Do not add DB writes, migrations, seed changes, RDA updates, BLS import, DEV/LIVE actions, or production routing.",
+      "dependencies": [
+        "GOV-TODO-021",
+        "GOV-TODO-022"
+      ],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "apps/web/src/app/nutrition/local-schema/nutrient-detail-panel.tsx",
+        "apps/web/src/app/nutrition/local-schema/nutrient-preview-filter.tsx",
+        "apps/web/src/lib/nutrition/local-schema-debug.ts",
+        "apps/web/src/lib/nutrition/nutrient-detail-selection.ts",
+        "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md"
       ]
     }
   ]
