@@ -31,6 +31,7 @@ export type EventType =
   | 'stale_dispatched_workorder_cleanup'
   | 'stale_review_workorder_cleanup'
   | 'expired_approval_workorder_reset'
+  | 'resolved_approval_workorder_reset'
 
 export type Severity         = 'info' | 'warning' | 'error' | 'critical'
 export type OrchestratorMode = 'claude_code' | 'nemotron'
@@ -98,6 +99,7 @@ const VALID_EVENTS = new Set<string>([
   'stale_dispatched_workorder_cleanup',
   'stale_review_workorder_cleanup',
   'expired_approval_workorder_reset',
+  'resolved_approval_workorder_reset',
 ])
 
 const VALID_MODES = new Set(['claude_code', 'nemotron'])
@@ -169,6 +171,15 @@ export const auditStaleReviewWorkorderCleanup = (
 export const auditExpiredApprovalWorkorderReset = (
   p: Base & Pick<AuditEvent, 'reason' | 'approved_by' | 'approval_id' | 'token_status' | 'token_expires_at' | 'runtime_status' | 'queue_status'>,
 ) => writeAuditEvent({ event: 'expired_approval_workorder_reset', severity: 'warning', ...p })
+
+// Operator Tooling - terminal-wo-reset-cli clear-resolved-approval.
+// Differentiated from expired approval cleanup: this event marks cleanup of
+// awaiting_approval entries where a human approval was already granted, the
+// associated run is terminal, and the batch can safely advance with a fresh run
+// or existing completed outputs.
+export const auditResolvedApprovalWorkorderReset = (
+  p: Base & Pick<AuditEvent, 'reason' | 'approved_by' | 'approval_id' | 'token_status' | 'token_expires_at' | 'runtime_status' | 'queue_status'>,
+) => writeAuditEvent({ event: 'resolved_approval_workorder_reset', severity: 'warning', ...p })
 
 // ─── Review Pipeline Helpers ──────────────────────────────────────────────────
 // High-level Marker im audit.jsonl — Detail-Audit liegt in pipeline-audit.jsonl

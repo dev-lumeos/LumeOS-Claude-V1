@@ -56,7 +56,7 @@ export interface GitStatusSummary {
 }
 
 export interface CleanupSuggestion {
-  kind: 'terminal_active_workorder' | 'stale_dispatched' | 'expired_approval'
+  kind: 'terminal_active_workorder' | 'stale_dispatched' | 'expired_approval' | 'resolved_approval'
   workorderId: string
   runId: string
   approvalId?: string
@@ -241,7 +241,9 @@ function cleanupCommands(kind: CleanupSuggestion['kind'], workorderId: string, r
       ? 'clear'
       : kind === 'stale_dispatched'
         ? 'clear-stale-dispatched'
-        : 'clear-expired-approval'
+        : kind === 'resolved_approval'
+          ? 'clear-resolved-approval'
+          : 'clear-expired-approval'
   return {
     dryRunCommand: commandFor(RESET_CLI, `${subcommand} ${workorderId} --run-id ${runId} --dry-run`),
     confirmCommand: commandFor(RESET_CLI, `${subcommand} ${workorderId} --run-id ${runId} --confirm`),
@@ -322,7 +324,31 @@ function buildCleanupSuggestions(
         .find(t => t.workorder_id === w.workorder_id && t.run_id === runId)
       const tokenExpired = token?.expires_at && new Date(token.expires_at).getTime() <= Date.now()
       const tokenUnusable = token && token.status !== 'granted'
+      const tokenGranted = token && token.status === 'granted' && !tokenExpired
+      const runtimeApproval = relatedApprovals.find(a => a.workorder_id === w.workorder_id && a.run_id === runId)
+      const approvalResolved = tokenGranted ||
+        runtimeApproval?.status === 'granted' ||
+        runtimeApproval?.status === 'consumed'
+      const runTerminalBlocked = run && (run.status === 'blocked' || run.status === 'completed' || run.status === 'failed')
       const noTokenButNoUsableApproval = !token && !relatedApprovals.some(a => a.workorder_id === w.workorder_id && a.run_id === runId && isApprovalUsable(a))
+      if (approvalResolved && runTerminalBlocked) {
+        suggestions.push({
+          kind: 'resolved_approval',
+          workorderId: w.workorder_id,
+          runId,
+          approvalId: findApprovalId(relatedApprovals, w.workorder_id, runId) ?? token?.approval_id,
+          safeToApply: baseSafe,
+          why: ambiguous
+            ? `unsafe: ambiguous active_workorders matches for ${w.workorder_id}/${runId}`
+            : pendingApproval
+              ? 'unsafe: pending approval exists'
+              : lockActive
+                ? 'unsafe: active scope/db migration lock exists'
+                : `safe: awaiting_approval entry points to terminal active_run ${run?.status} and approval is already granted/resolved`,
+          ...cleanupCommands('resolved_approval', w.workorder_id, runId),
+        })
+        continue
+      }
       if (tokenExpired || tokenUnusable || noTokenButNoUsableApproval || ambiguous) {
         suggestions.push({
           kind: 'expired_approval',

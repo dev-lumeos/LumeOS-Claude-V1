@@ -700,6 +700,51 @@ describe('Expired Approval Cleanup - CLI clear-expired-approval', () => {
     assert.match(r.stderr, /usable granted token/)
     assert.equal(readActiveWorkorders().length, 1)
   })
+
+  it('clear-resolved-approval --confirm removes awaiting_approval with granted token and terminal blocked run', () => {
+    writeState([makeAwaiting('WO-resolved-cli-001', 'RUN-resolved-cli-001')], [
+      makeRun('RUN-resolved-cli-001', 'WO-resolved-cli-001', 'blocked'),
+    ])
+    const statePath = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const s = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    s.approvals = [makeApprovalItem('APP-resolved-cli-001', 'WO-resolved-cli-001', 'RUN-resolved-cli-001', 'granted')]
+    fs.writeFileSync(statePath, JSON.stringify(s, null, 2), 'utf8')
+    writeQueue({
+      'APP-resolved-cli-001': {
+        approval_id: 'APP-resolved-cli-001',
+        workorder_id: 'WO-resolved-cli-001',
+        run_id: 'RUN-resolved-cli-001',
+        agent_id: 'micro-executor',
+        reason: 'docs write',
+        risk_category: 'docs',
+        affected_files: ['docs/example.md'],
+        proposed_action: 'write docs/example.md',
+        status: 'granted',
+        requested_at: isoMinutesAgo(30),
+        expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      },
+    })
+    writeApprovalTokens({
+      'APP-resolved-cli-001': makeToken(
+        'APP-resolved-cli-001',
+        'WO-resolved-cli-001',
+        'RUN-resolved-cli-001',
+        'granted',
+        new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+      ),
+    })
+
+    const result = runCli(['clear-resolved-approval', 'WO-resolved-cli-001', '--run-id', 'RUN-resolved-cli-001', '--confirm'])
+
+    assert.equal(result.code, 0, `stderr=${result.stderr}`)
+    assert.match(result.stdout, /Removed 1 resolved-approval awaiting_approval/)
+    assert.equal(readActiveWorkorders().find(w => w.workorder_id === 'WO-resolved-cli-001'), undefined)
+    const audit = readAuditLines().filter(a => a.event === 'resolved_approval_workorder_reset')
+    assert.equal(audit.length, 1)
+    assert.equal(audit[0].workorder_id, 'WO-resolved-cli-001')
+    assert.equal(audit[0].run_id, 'RUN-resolved-cli-001')
+    assert.equal(audit[0].approval_id, 'APP-resolved-cli-001')
+  })
 })
 
 // ─── Suite: CLI Sub-Commands ─────────────────────────────────────────────────

@@ -328,6 +328,77 @@ describe('operator doctor diagnosis', () => {
     }
   })
 
+  it('downgrades stale runtime crash evidence after a newer healthy completion probe', () => {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumeos-operator-doctor-history-'))
+    const originalCwd = process.cwd()
+    try {
+      process.chdir(tmpDir)
+      fs.mkdirSync(path.join(tmpDir, 'system/state'), { recursive: true })
+      fs.mkdirSync(path.join(tmpDir, 'system/reports/model-runtime-history'), { recursive: true })
+      fs.writeFileSync(path.join(tmpDir, 'system/state/audit.jsonl'), [
+        JSON.stringify({
+          ts: '2026-05-13T01:55:18.294Z',
+          severity: 'error',
+          event: 'job_failed',
+          run_id: 'RUN-20260513-4168',
+          workorder_id: 'WO-nutrition-006',
+          agent_id: 'docs-agent',
+          orchestration_mode: 'claude_code',
+          reason: 'vLLM runtime unavailable after 2 attempt(s): vLLM Error: 500 Internal Server Error :: RuntimeError: Triton Error [CUDA]: operation not permitted',
+          error_code: 'MODEL_RUNTIME_UNAVAILABLE',
+        }),
+      ].join('\n'))
+      fs.writeFileSync(path.join(tmpDir, 'system/reports/model-runtime-history/history.jsonl'), [
+        JSON.stringify({
+          timestamp: '2026-05-13T02:10:00.000Z',
+          project_id: 'lumeos',
+          route_id: 'docs-agent',
+          agent: 'docs-agent',
+          model: 'qwen3-coder-next-fp8',
+          runtime_type: 'vllm',
+          endpoint: 'http://192.168.0.188:8001',
+          required: true,
+          optional: false,
+          endpoint_status: 'ok',
+          latency_ms: 143,
+          timed_out: false,
+          severity: 'info',
+          finding_ids: [],
+          product_gate_state: 'closed',
+          check_endpoints: true,
+        }),
+      ].join('\n'))
+
+      const result = diagnoseOperatorDoctor(baseStatus({
+        batchWorkorderIds: ['WO-nutrition-006'],
+        cleanupSuggestions: [{
+          kind: 'resolved_approval',
+          workorderId: 'WO-nutrition-006',
+          runId: 'RUN-20260513-3903',
+          safeToApply: true,
+          why: 'granted approval already resolved on terminal blocked run',
+          dryRunCommand: 'cleanup-dry-run',
+          confirmCommand: 'cleanup-confirm',
+        }],
+      }), {
+        checkers: cleanCheckers(),
+        memory: {
+          current_handover: true,
+          learning_readme: true,
+          learning_schema: true,
+          current_batch_summary: true,
+        },
+      })
+
+      assert.equal(result.final_diagnosis, 'NEEDS_SAFE_CLEANUP')
+      assert.equal(result.blockers.some(blocker => blocker.category === 'RUNTIME_UNHEALTHY'), false)
+      assert.match(result.next_action, /apply-safe-cleanups/)
+    } finally {
+      process.chdir(originalCwd)
+      fs.rmSync(tmpDir, { recursive: true, force: true })
+    }
+  })
+
   it('reports Codex worker ready without blocking clean readiness', () => {
     const result = diagnose({})
 

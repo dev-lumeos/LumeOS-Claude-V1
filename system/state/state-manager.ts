@@ -641,6 +641,8 @@ export interface ExpiredAwaitingApprovalCleanupResult {
   queueStatus?: string
 }
 
+export type ResolvedAwaitingApprovalCleanupResult = ExpiredAwaitingApprovalCleanupResult
+
 function readApprovalQueueForCleanup(): Record<string, ApprovalQueueLike> {
   const queuePath = path.resolve(process.cwd(), 'system/approval/queue.json')
   if (!fs.existsSync(queuePath)) return {}
@@ -672,6 +674,21 @@ function unusableApprovalReason(token: ApprovalTokenLike): string {
   return `approval token status unusable: approval_id=${token.approval_id}, status=${token.status ?? 'unknown'}`
 }
 
+function activeLockReason(s: RuntimeState, runId: string): string | null {
+  const now = Date.now()
+  const activeScopeLock = (s.scope_locks ?? []).find(
+    l => l.run_id === runId && new Date(l.expires_at).getTime() > now,
+  )
+  if (activeScopeLock) return `scope_lock active for run_id=${runId}`
+
+  const dbLock = s.db_migration_lock
+  if (dbLock?.run_id === runId && new Date(dbLock.expires_at).getTime() > now) {
+    return `db_migration_lock active for run_id=${runId}`
+  }
+
+  return null
+}
+
 function evaluateExpiredAwaitingApprovalCleanupInState(
   s: RuntimeState,
   workorderId: string,
@@ -692,17 +709,9 @@ function evaluateExpiredAwaitingApprovalCleanupInState(
     }
   }
 
-  const now = Date.now()
-  const activeScopeLock = (s.scope_locks ?? []).find(
-    l => l.run_id === runId && new Date(l.expires_at).getTime() > now,
-  )
-  if (activeScopeLock) {
-    return { removed: false, entry: target, reason: `scope_lock active for run_id=${runId}` }
-  }
-
-  const dbLock = s.db_migration_lock
-  if (dbLock?.run_id === runId && new Date(dbLock.expires_at).getTime() > now) {
-    return { removed: false, entry: target, reason: `db_migration_lock active for run_id=${runId}` }
+  const lockReason = activeLockReason(s, runId)
+  if (lockReason) {
+    return { removed: false, entry: target, reason: lockReason }
   }
 
   const tokens = Object.values(readApprovalTokens()) as ApprovalTokenLike[]
@@ -781,11 +790,128 @@ function evaluateExpiredAwaitingApprovalCleanupInState(
   }
 }
 
+function evaluateResolvedAwaitingApprovalCleanupInState(
+  s: RuntimeState,
+  workorderId: string,
+  runId: string,
+): ResolvedAwaitingApprovalCleanupResult {
+  const matches = s.active_workorders.filter(
+    w => w.workorder_id === workorderId && w.run_id === runId,
+  )
+  if (matches.length === 0) return { removed: false, reason: 'no match' }
+  if (matches.length > 1) return { removed: false, reason: `ambiguous match (${matches.length})` }
+
+  const target = matches[0]
+  if (target.status !== 'awaiting_approval') {
+    return {
+      removed: false,
+      entry: target,
+      reason: `non-awaiting_approval status: ${target.status}`,
+    }
+  }
+
+  const lockReason = activeLockReason(s, runId)
+  if (lockReason) {
+    return { removed: false, entry: target, reason: lockReason }
+  }
+
+  const run = s.active_runs.find(r => r.run_id === runId)
+  if (!run) {
+    return { removed: false, entry: target, reason: `no active_run found for run_id=${runId}` }
+  }
+  if (run.status === 'running' || run.status === 'awaiting_approval') {
+    return { removed: false, entry: target, reason: `active_run is not terminal: ${run.status}` }
+  }
+  if (run.status !== 'blocked' && run.status !== 'completed' && run.status !== 'failed') {
+    return { removed: false, entry: target, reason: `active_run status is not cleanup-safe: ${run.status}` }
+  }
+
+  const tokens = Object.values(readApprovalTokens()) as ApprovalTokenLike[]
+  const matchingTokens = tokens.filter(t => approvalRecordMatches(t, workorderId, runId))
+  const runtimeApproval = s.approvals.find(a => approvalRecordMatches(a, workorderId, runId))
+  const queueApprovals = Object.values(readApprovalQueueForCleanup())
+  const queueApproval = queueApprovals.find(a => approvalRecordMatches(a, workorderId, runId))
+
+  if (runtimeApproval?.status === 'pending' && approvalUsable(runtimeApproval)) {
+    return {
+      removed: false,
+      entry: target,
+      approvalId: runtimeApproval.approval_id,
+      runtimeStatus: runtimeApproval.status,
+      queueStatus: queueApproval?.status,
+      reason: `pending approval exists: approval_id=${runtimeApproval.approval_id}`,
+    }
+  }
+  if (queueApproval?.status === 'pending' && approvalUsable(queueApproval)) {
+    return {
+      removed: false,
+      entry: target,
+      approvalId: queueApproval.approval_id,
+      runtimeStatus: runtimeApproval?.status,
+      queueStatus: queueApproval.status,
+      reason: `pending approval exists: approval_id=${queueApproval.approval_id}`,
+    }
+  }
+
+  const resolvedToken = matchingTokens.find(token =>
+    approvalUsable(token) ||
+    token.status === 'consumed' ||
+    token.status === 'granted',
+  )
+  const approvalRecord =
+    runtimeApproval && (runtimeApproval.status === 'granted' || runtimeApproval.status === 'consumed')
+      ? runtimeApproval
+      : queueApproval && (queueApproval.status === 'granted' || queueApproval.status === 'consumed')
+        ? queueApproval
+        : undefined
+
+  if (!resolvedToken && !approvalRecord) {
+    return {
+      removed: false,
+      entry: target,
+      runtimeStatus: runtimeApproval?.status,
+      queueStatus: queueApproval?.status,
+      reason: 'no granted/consumed approval evidence remains for awaiting_approval entry',
+    }
+  }
+
+  const approvalId = resolvedToken?.approval_id ?? approvalRecord?.approval_id
+  const tokenStatus = resolvedToken?.status
+  const tokenExpiresAt = resolvedToken?.expires_at
+  const runtimeStatus = runtimeApproval?.status
+  const queueStatus = queueApproval?.status
+  const approvalEvidence = resolvedToken
+    ? resolvedToken.status === 'granted'
+      ? `granted dispatcher token exists: approval_id=${resolvedToken.approval_id}`
+      : `dispatcher token already consumed: approval_id=${resolvedToken.approval_id}`
+    : approvalRecord
+      ? `approval record already resolved: approval_id=${approvalRecord.approval_id}, status=${approvalRecord.status}`
+      : 'resolved approval evidence present'
+
+  return {
+    removed: true,
+    entry: target,
+    approvalId,
+    tokenStatus,
+    tokenExpiresAt,
+    runtimeStatus,
+    queueStatus,
+    reason: `active_run terminal (${run.status}); ${approvalEvidence}`,
+  }
+}
+
 export function evaluateExpiredAwaitingApprovalCleanup(
   workorderId: string,
   runId: string,
 ): ExpiredAwaitingApprovalCleanupResult {
   return evaluateExpiredAwaitingApprovalCleanupInState(readState(), workorderId, runId)
+}
+
+export function evaluateResolvedAwaitingApprovalCleanup(
+  workorderId: string,
+  runId: string,
+): ResolvedAwaitingApprovalCleanupResult {
+  return evaluateResolvedAwaitingApprovalCleanupInState(readState(), workorderId, runId)
 }
 
 /**
@@ -803,6 +929,25 @@ export async function removeExpiredAwaitingApprovalActiveWorkorder(
   let outcome: ExpiredAwaitingApprovalCleanupResult = { removed: false, reason: 'unknown' }
   await mutate(s => {
     const evaluation = evaluateExpiredAwaitingApprovalCleanupInState(s, workorderId, runId)
+    if (!evaluation.removed) {
+      outcome = evaluation
+      return
+    }
+    s.active_workorders = s.active_workorders.filter(
+      w => !(w.workorder_id === workorderId && w.run_id === runId),
+    )
+    outcome = evaluation
+  })
+  return outcome
+}
+
+export async function removeResolvedAwaitingApprovalActiveWorkorder(
+  workorderId: string,
+  runId: string,
+): Promise<ResolvedAwaitingApprovalCleanupResult> {
+  let outcome: ResolvedAwaitingApprovalCleanupResult = { removed: false, reason: 'unknown' }
+  await mutate(s => {
+    const evaluation = evaluateResolvedAwaitingApprovalCleanupInState(s, workorderId, runId)
     if (!evaluation.removed) {
       outcome = evaluation
       return

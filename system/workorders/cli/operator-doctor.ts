@@ -260,6 +260,28 @@ interface RuntimeFailureAuditEvent {
   reason?: string
 }
 
+function parseIsoTime(value?: string): number | null {
+  if (!value) return null
+  const millis = Date.parse(value)
+  return Number.isFinite(millis) ? millis : null
+}
+
+function runtimeFailureAuditIsCurrent(
+  audit: RuntimeFailureAuditEvent | null,
+  runtimeHistory: OperatorDoctorResult['runtime_history'],
+): boolean {
+  if (!audit) return false
+  const auditTs = parseIsoTime(audit.ts)
+  const lastHealthyCheck = parseIsoTime(runtimeHistory.last_checked_at)
+  if (runtimeHistory.status !== 'available') return true
+  const runtimeStillBlocking =
+    runtimeHistory.overall_status !== 'HEALTHY' &&
+    runtimeHistory.overall_status !== 'DEGRADED_OPTIONAL'
+  if (runtimeStillBlocking) return true
+  if (auditTs === null || lastHealthyCheck === null) return true
+  return auditTs >= lastHealthyCheck
+}
+
 function readRuntimeFailureAudit(status: OperatorStatus, repoRoot = process.cwd()): RuntimeFailureAuditEvent | null {
   const auditPath = path.join(repoRoot, 'system/state/audit.jsonl')
   if (!fs.existsSync(auditPath)) return null
@@ -323,6 +345,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   let finalDiagnosis: OperatorDoctorDiagnosis = 'UNKNOWN'
   let nextAction = ''
   const runtimeFailureAudit = readRuntimeFailureAudit(status)
+  const runtimeFailureAuditCurrent = runtimeFailureAuditIsCurrent(runtimeFailureAudit, runtimeHistory)
 
   if (options.forceProductGateBlock) {
     finalDiagnosis = 'PRODUCT_GATE_BLOCKED'
@@ -333,7 +356,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     finalDiagnosis = 'NEEDS_TOM_APPROVAL'
     addBlock(blockers, finalDiagnosis, `Approval ${approval.approvalId} requires Tom review.`, approval.action, 'approval_lifecycle')
     nextAction = `Review approval ${approval.approvalId} for ${approval.workorderId}; do not grant automatically.`
-  } else if (runtimeFailureAudit) {
+  } else if (runtimeFailureAudit && runtimeFailureAuditCurrent) {
     finalDiagnosis = 'RUNTIME_UNHEALTHY'
     addBlock(
       blockers,
@@ -391,6 +414,15 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   }
 
   const codexWorker = summarizeCodexWorker(loadCodexWorkerConfig())
+  if (runtimeFailureAudit && !runtimeFailureAuditCurrent) {
+    addBlock(
+      blockers,
+      'RUNTIME_ARTIFACTS_PRESENT',
+      'Historical runtime crash evidence exists, but a newer healthy completion probe supersedes it for current operator diagnosis.',
+      `${runtimeFailureAudit.agent_id ?? 'unknown-agent'} ${runtimeFailureAudit.run_id ?? ''} :: ${runtimeFailureAudit.reason ?? 'no reason recorded'}`.trim(),
+      'runtime_history',
+    )
+  }
   const safeCleanup = status.cleanupSuggestions.find(item => item.safeToApply)?.dryRunCommand ?? ''
   const profileArg = options.projectProfile ? ` --project ${options.projectProfile.project_id}` : ''
   const autonomyHandoff = buildAutonomyHandoffContract({

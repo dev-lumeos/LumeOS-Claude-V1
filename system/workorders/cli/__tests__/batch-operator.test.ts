@@ -394,6 +394,48 @@ describe('batch operator status', () => {
     assert.match(status.cleanupSuggestions[0].confirmCommand, /clear-expired-approval WO-test-001 --run-id RUN-expired --confirm/)
   })
 
+  it('suggests resolved approval cleanup for granted docs approval on terminal blocked run', () => {
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', '# done')
+    writeState({
+      active_runs: [{ run_id: 'RUN-resolved', workorder_id: 'WO-test-001', agent_id: 'micro-executor', status: 'blocked', started_at: isoMinutesAgo(30), completed_at: isoMinutesAgo(25), written_files: ['docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'] }],
+      active_workorders: [{ workorder_id: 'WO-test-001', run_id: 'RUN-resolved', agent_id: 'micro-executor', status: 'awaiting_approval', dispatched_at: isoMinutesAgo(30) }],
+      approvals: [{ approval_id: 'APP-resolved', workorder_id: 'WO-test-001', run_id: 'RUN-resolved', status: 'granted', expires_at: new Date(Date.now() + 60_000).toISOString() }],
+    })
+    writeQueue({
+      'APP-resolved': {
+        approval_id: 'APP-resolved',
+        workorder_id: 'WO-test-001',
+        run_id: 'RUN-resolved',
+        agent_id: 'micro-executor',
+        reason: 'docs write',
+        risk_category: 'docs',
+        affected_files: ['docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md'],
+        proposed_action: 'write docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md',
+        status: 'granted',
+        requested_at: isoMinutesAgo(35),
+        expires_at: new Date(Date.now() + 60_000).toISOString(),
+      },
+    })
+    writeTokens({
+      'APP-resolved': {
+        approval_id: 'APP-resolved',
+        workorder_id: 'WO-test-001',
+        run_id: 'RUN-resolved',
+        agent_id: 'micro-executor',
+        status: 'granted',
+        expires_at: new Date(Date.now() + 60_000).toISOString(),
+      },
+    })
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+
+    assert.equal(status.cleanupSuggestions.length, 1)
+    assert.equal(status.cleanupSuggestions[0].kind, 'resolved_approval')
+    assert.equal(status.cleanupSuggestions[0].safeToApply, true)
+    assert.match(status.cleanupSuggestions[0].dryRunCommand, /clear-resolved-approval WO-test-001 --run-id RUN-resolved --dry-run/)
+    assert.match(status.cleanupSuggestions[0].confirmCommand, /clear-resolved-approval WO-test-001 --run-id RUN-resolved --confirm/)
+  })
+
   it('suggests terminal failed cleanup', () => {
     writeState({
       active_runs: [{ run_id: 'RUN-failed', workorder_id: 'WO-test-001', agent_id: 'micro-executor', status: 'failed', started_at: isoMinutesAgo(10), completed_at: isoMinutesAgo(5), written_files: [] }],
