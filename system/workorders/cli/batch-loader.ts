@@ -30,6 +30,11 @@ import { isSystemStopped, updateActiveWorkorderStatusByRun } from '../../state/s
 import { getPendingApprovals } from '../../approval/approval-queue'
 import { assessMarkdownFile, isMarkdownOutputPath } from './markdown-output-quality'
 import type { OrchestrationModeStatus } from './orchestration-mode'
+import {
+  runSpark1OrchestratorHandoff,
+  type OrchestratorModelCaller,
+  type Spark1OrchestratorHandoffResult,
+} from './spark1-orchestrator-handoff'
 
 // ─────────────────────────────────────────────────────────────────────────
 // Types
@@ -70,6 +75,13 @@ export interface DispatchOutcome {
     | 'paused_for_approval'
     | 'orchestration_blocked'
   detail?: string
+}
+
+export interface RunDispatchOptions {
+  orchestration?: OrchestrationModeStatus
+  spark1Handoff?: (batch: LoadedBatch) => Promise<Spark1OrchestratorHandoffResult>
+  orchestratorCallModel?: OrchestratorModelCaller
+  skipOrchestratorRuntimeCheck?: boolean
 }
 
 export interface ExpectedOutputStatus {
@@ -585,7 +597,7 @@ export function formatPendingApprovalsReport(): string {
 
 export async function runDispatch(
   batch: LoadedBatch,
-  opts: { orchestration?: OrchestrationModeStatus } = {},
+  opts: RunDispatchOptions = {},
 ): Promise<DispatchOutcome[]> {
   const outcomes: DispatchOutcome[] = []
 
@@ -597,6 +609,25 @@ export async function runDispatch(
         detail: opts.orchestration.missing_integration_point,
       },
     ]
+  }
+
+  if (opts.orchestration?.requested_orchestration_mode === 'spark1_orchestrated') {
+    const handoff = opts.spark1Handoff
+      ? await opts.spark1Handoff(batch)
+      : await runSpark1OrchestratorHandoff(batch, {
+          callModel: opts.orchestratorCallModel,
+          skipRuntimeCheck: opts.skipOrchestratorRuntimeCheck,
+        })
+    Object.assign(opts.orchestration, handoff.orchestration)
+    if (!handoff.ok) {
+      return [
+        {
+          workorder_id: '*',
+          status: 'orchestration_blocked',
+          detail: handoff.detail,
+        },
+      ]
+    }
   }
 
   // System-wide stop check.

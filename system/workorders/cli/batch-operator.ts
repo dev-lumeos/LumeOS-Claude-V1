@@ -922,8 +922,10 @@ export async function continueBatch(
   if (!runnableBatch) {
     return { status, report: buildOperatorReport(status), exitCode: endStateToExitCode(decideEndState(status)) }
   }
-  const outcomes = await runDispatch(runnableBatch, { orchestration: status.orchestration })
+  const orchestration = status.orchestration
+  const outcomes = await runDispatch(runnableBatch, { orchestration })
   status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
+  status.orchestration = orchestration
   status.dispatchOutcomes = outcomes
   const paused = outcomes.some(o => o.status === 'paused_for_approval')
   const failed = outcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped' || o.status === 'orchestration_blocked')

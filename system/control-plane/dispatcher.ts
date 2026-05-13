@@ -132,7 +132,7 @@ export interface DispatchResult {
   error?:       string
 }
 
-interface ModelRoutingEntry {
+export interface ModelRoutingEntry {
   node: string; model: string; temperature: number; max_context: number
   timeout_ms?: number
   max_attempts?: number

@@ -9,6 +9,7 @@ export interface OrchestrationModeStatus {
   actual_orchestration_mode: ActualOrchestrationMode
   spark1_orchestrator_used: boolean
   codex_role: CodexRunRole
+  worker_assignment_result: string
   missing_integration_point: string
   reason: string
   blocks_dispatch: boolean
@@ -30,9 +31,10 @@ export function resolveOrchestrationMode(requested: RequestedOrchestrationMode):
       actual_orchestration_mode: 'not_run',
       spark1_orchestrator_used: false,
       codex_role: 'none',
-      missing_integration_point: SPARK1_ORCHESTRATION_MISSING_INTEGRATION,
-      reason: 'Spark1 orchestration was explicitly requested, so Codex bootstrap orchestration is not allowed.',
-      blocks_dispatch: true,
+      worker_assignment_result: 'pending Spark1 pre-dispatch handoff',
+      missing_integration_point: '',
+      reason: 'Spark1 orchestration was explicitly requested; the operator must run orchestrator-agent before worker dispatch.',
+      blocks_dispatch: false,
     }
   }
 
@@ -41,9 +43,10 @@ export function resolveOrchestrationMode(requested: RequestedOrchestrationMode):
     actual_orchestration_mode: 'codex_bootstrap',
     spark1_orchestrator_used: false,
     codex_role: 'orchestrator',
+    worker_assignment_result: 'Codex bootstrap selects the existing workorder agent path.',
     missing_integration_point: '',
     reason: requested === 'auto'
-      ? 'auto selected codex_bootstrap because Spark1 orchestrator handoff is not implemented for batch-operator dispatch.'
+      ? 'auto selected codex_bootstrap because no explicit Spark1 orchestration mode was requested.'
       : 'codex_bootstrap was explicitly requested.',
     blocks_dispatch: false,
   }
@@ -55,6 +58,7 @@ export function formatOrchestrationModeStatus(status: OrchestrationModeStatus): 
     `actual_orchestration_mode: ${status.actual_orchestration_mode}`,
     `spark1_orchestrator_used: ${status.spark1_orchestrator_used ? 'yes' : 'no'}`,
     `codex_role: ${status.codex_role}`,
+    `worker_assignment_result: ${status.worker_assignment_result || '(none)'}`,
     `missing_integration_point: ${status.missing_integration_point || '(none)'}`,
     `orchestration_reason: ${status.reason}`,
   ]

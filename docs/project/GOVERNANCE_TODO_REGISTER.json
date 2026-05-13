@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T17:20:00+07:00",
+  "generated_at": "2026-05-13T17:45:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -544,20 +544,22 @@
       "layer": "operator_orchestration",
       "severity": "medium",
       "priority": "P1",
-      "status": "open",
-      "evidence": "The governed operator now accepts --orchestration-mode auto|codex_bootstrap|spark1_orchestrated and reports requested/actual mode, Spark1 usage, Codex role, and missing integration point. Current spark1_orchestrated requests fail closed because run-batch-operator does not yet implement a pre-dispatch orchestrator-agent handoff for worker assignment.",
-      "recommended_action": "Add a governed Spark1/orchestrator-agent handoff before worker assignment, including tests proving Codex does not silently act as orchestrator when spark1_orchestrated is requested.",
+      "status": "done",
+      "evidence": "The governed operator now accepts --orchestration-mode auto|codex_bootstrap|spark1_orchestrated and reports requested/actual mode, Spark1 usage, Codex role, worker assignment result, and missing integration point. spark1_orchestrated now runs a pre-dispatch Spark1/orchestrator-agent handoff, validates JSON routing intent and worker_assignments, and blocks with ORCHESTRATION_BLOCKED instead of falling back to Codex when Spark1 is unavailable or invalid.",
+      "recommended_action": "Use --orchestration-mode spark1_orchestrated on future local Nutrition workflow tests to exercise the Spark1 handoff. Keep codex_bootstrap available for explicitly requested bootstrap/debug work.",
       "dependencies": [
         "GOV-TODO-024"
       ],
-      "estimated_effort": "0.5-1d",
+      "estimated_effort": "completed",
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
         "system/workorders/cli/run-batch-operator.ts",
         "system/workorders/cli/batch-operator.ts",
+        "system/workorders/cli/batch-loader.ts",
         "system/workorders/cli/operator-doctor.ts",
         "system/workorders/cli/orchestration-mode.ts",
+        "system/workorders/cli/spark1-orchestrator-handoff.ts",
         "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"
       ]
     }

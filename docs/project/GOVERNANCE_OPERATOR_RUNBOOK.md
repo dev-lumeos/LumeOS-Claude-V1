@@ -26,17 +26,21 @@ Every operator, doctor, and batch dossier report must include:
 - `actual_orchestration_mode`
 - `spark1_orchestrator_used`
 - `codex_role`
+- `worker_assignment_result`
 - `missing_integration_point`
 
 Supported requested modes:
 
 - `codex_bootstrap`: Codex may act as orchestrator/bootstrapper while still obeying all governance gates, product gates, stop rules, approval rules, and forbidden actions.
-- `spark1_orchestrated`: the run must route through Spark1 / `orchestrator-agent` before worker assignment. Codex must not silently act as orchestrator. If the Spark1 handoff is unavailable, the operator returns `STOP_AND_REPORT` / `ORCHESTRATION_BLOCKED` with the missing integration point.
-- `auto`: the operator may choose the orchestration path based on policy and must report the chosen path and reason. Current policy chooses `codex_bootstrap` because the batch operator does not yet implement Spark1 pre-dispatch orchestration.
+- `spark1_orchestrated`: the run routes through Spark1 / `orchestrator-agent` before worker assignment. Codex must not silently act as orchestrator. The handoff validates Spark1 routing intent and worker assignments before the existing dispatcher path runs. If Spark1 is unavailable, or if the intent/assignment is invalid, the operator returns `STOP_AND_REPORT` / `ORCHESTRATION_BLOCKED`.
+- `auto`: the operator may choose the orchestration path based on policy and must report the chosen path and reason. Current policy chooses `codex_bootstrap` unless `spark1_orchestrated` is explicitly requested.
 
-Current missing Spark1 integration point:
+Spark1 handoff behavior:
 
-`run-batch-operator does not yet implement a pre-dispatch orchestrator-agent handoff for worker assignment.`
+- Runs `orchestrator-agent` completion health before dispatch.
+- Sends the batch/workorder summary to Spark1 and requires JSON routing intent.
+- Requires `worker_assignments` entries to match the governed workorder route before dispatch.
+- Blocks with `ORCHESTRATION_BLOCKED` instead of falling back to Codex when Spark1 is requested but unavailable or invalid.
 
 Example Spark1-gated local Nutrition test:
 
@@ -44,7 +48,11 @@ Example Spark1-gated local Nutrition test:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\<BATCH>.md --doctor --json --project lumeos --orchestration-mode spark1_orchestrated
 ```
 
-Until the Spark1 handoff exists, this must stop and report instead of falling back to Codex bootstrap.
+To execute a ready governed batch through Spark1 handoff:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\<BATCH>.md --continue --project lumeos --orchestration-mode spark1_orchestrated
+```
 
 For Nutrition batch 001:
 

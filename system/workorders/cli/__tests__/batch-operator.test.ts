@@ -271,16 +271,17 @@ describe('batch operator status', () => {
     assert.match(report, /actual_orchestration_mode: codex_bootstrap/)
   })
 
-  it('fails closed when Spark1 orchestration is requested but not implemented', () => {
+  it('marks Spark1 orchestration as pending pre-dispatch handoff during status collection', () => {
     const status = collectOperatorStatus(batchPath(), {
       gitStatus: cleanGit,
       orchestrationMode: 'spark1_orchestrated',
     })
 
-    assert.equal(decideEndState(status), 'STOP_AND_REPORT')
+    assert.equal(decideEndState(status), 'READY_TO_RUN')
     assert.equal(status.orchestration.actual_orchestration_mode, 'not_run')
     assert.equal(status.orchestration.spark1_orchestrator_used, false)
-    assert.match(buildOperatorReport(status), /pre-dispatch orchestrator-agent handoff/)
+    assert.match(status.orchestration.worker_assignment_result, /pending Spark1/)
+    assert.match(buildOperatorReport(status), /operator must run orchestrator-agent before worker dispatch/)
   })
 
   it('includes project profile information when requested', () => {

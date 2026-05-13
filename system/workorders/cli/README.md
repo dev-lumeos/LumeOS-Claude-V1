@@ -31,11 +31,11 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 
 Modes:
 
-- `auto`: report the selected path and reason. Current policy chooses `codex_bootstrap` because Spark1 pre-dispatch orchestration is not implemented in the batch operator.
+- `auto`: report the selected path and reason. Current policy chooses `codex_bootstrap` unless Spark1 orchestration is explicitly requested.
 - `codex_bootstrap`: Codex may bootstrap/orchestrate while all governance gates and forbidden actions still apply.
-- `spark1_orchestrated`: require Spark1 / `orchestrator-agent` before worker assignment. The current operator fails closed with `STOP_AND_REPORT` and the missing integration point instead of silently falling back to Codex.
+- `spark1_orchestrated`: require Spark1 / `orchestrator-agent` before worker assignment. The operator checks orchestrator-agent completion health, validates JSON routing intent plus `worker_assignments`, and only then continues on the assigned governed worker path. It fails closed with `ORCHESTRATION_BLOCKED` instead of silently falling back to Codex.
 
-Required report fields: `requested_orchestration_mode`, `actual_orchestration_mode`, `spark1_orchestrator_used`, `codex_role`, and `missing_integration_point`.
+Required report fields: `requested_orchestration_mode`, `actual_orchestration_mode`, `spark1_orchestrator_used`, `codex_role`, `worker_assignment_result`, and `missing_integration_point`.
 
 ---
 
