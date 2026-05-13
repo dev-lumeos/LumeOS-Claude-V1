@@ -1,12 +1,12 @@
 # P1-005 Schema-Only Migration Readiness Review
 
-> **Status**: REVIEW_COMPLETE / NOT_READY_FOR_EXECUTION_APPROVAL
+> **Status**: REVIEW_COMPLETE / READY_FOR_NARROW_EXECUTION_APPROVAL
 > **Reviewed file**: `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql`
 > **Review mode**: Static only. No Supabase command, no DB apply, no migration execution, no import activity.
 
 ## Decision
 
-The promoted schema-only migration candidate is **safe as a review artifact** but **not yet ready for a future execution-boundary approval**.
+The promoted schema-only migration candidate is **safe as a review artifact** and is now **ready for a future narrow execution-boundary approval**, provided the existing human and DB-migration gates remain in force.
 
 ## What Passes
 
@@ -28,11 +28,11 @@ The promoted schema-only migration candidate is **safe as a review artifact** bu
    - The file contains no executable rollback section.
    - The file contains no Supabase CLI instructions.
 
-## Execution-Readiness Blockers
+## Drift / Execution Notes
 
-### Blocker 1: Existing-object drift is not handled strongly enough
+### Existing-object drift is now handled explicitly
 
-`create table if not exists nutrition.nutrient_defs (...)` is safe for first creation, but it does **not** reconcile partial or drifted existing state.
+The candidate now detects incompatible existing-object drift and fails explicitly before proceeding.
 
 If `nutrition.nutrient_defs` already exists with:
 - missing columns
@@ -40,44 +40,40 @@ If `nutrition.nutrient_defs` already exists with:
 - different defaults
 - different check constraints
 
-then execution could succeed without producing the intended structural result.
+then execution will now stop with a clear drift exception instead of silently succeeding.
 
-For a real execution boundary, the candidate needs one explicit decision:
+This is the correct narrow posture for a schema-only slice because it:
 
-1. either execution is allowed **only against a confirmed-empty/no-table state**, or
-2. the candidate must be expanded into a drift-aware schema authoring step with explicit `alter table` reconciliation rules.
+- allows first creation safely
+- allows exact-shape reapplication safely
+- refuses partial or incompatible state without widening into seed, RDA, or import work
 
-### Blocker 2: The file is still review-only, not execution-shaped
+### The file is now execution-shaped
 
-The candidate intentionally contains:
-- review-only header text
-- `begin;`
-- `rollback;`
+The candidate no longer uses review-only transaction framing such as `begin; ... rollback;`.
 
-That is correct for static review safety, but it is not the final shape for a migration that is actually meant to run.
+It now has:
+- explicit scope/do-not-do comments
+- explicit drift assumptions
+- explicit post-apply validation queries
+- explicit rollback posture comments
 
-Before any execution-boundary approval, the repo needs one explicit follow-up change:
-
-- convert the review-only candidate into an execution-shaped migration file, while keeping the same schema-only scope
-
-### Blocker 3: Rollback is documentation-level, not execution-level
+### Rollback posture
 
 The current rollback posture is acceptable for planning and static review:
 - rollback notes are kept in documentation
 - executable down migration is intentionally absent
 
-But a real execution boundary still needs:
-- a concrete rollback hint for this exact migration step
-- an explicit statement of the allowed execution precondition
-- a concrete validation sequence for post-apply verification
+That remains acceptable for a future narrow execution approval because the candidate now carries:
+- explicit rollback posture comments
+- explicit post-apply validation query references
+- explicit drift-stop behavior
 
 ## Belongs In `supabase/migrations`?
 
-Yes, **as a review-only migration candidate**.
+Yes.
 
-No, **not yet as an executable migration artifact**.
-
-The path is appropriate because the repo is now reviewing the exact future migration shape. The blocker is not the path; the blocker is that execution-shaping and drift policy are still unresolved.
+The path is appropriate because the repo is now reviewing the exact future migration shape under the normal db-migration governance gates.
 
 ## Coupling Review
 
@@ -108,11 +104,9 @@ If Tom later considers execution approval, this candidate should require at leas
 - **Additive-only safety**: pass
 - **Schema-only boundary**: pass
 - **Migration guard posture**: pass
-- **Ready for future execution approval**: **no**
+- **Drift handling**: pass
+- **Ready for future execution approval**: **yes, under a narrow schema-only execution boundary**
 
 ## Smallest Safe Next Step
 
-Keep this file review-only and prepare one narrow follow-up refinement:
-
-1. define whether execution assumes a clean/no-table target state, or
-2. author a drift-aware schema-only execution candidate that explicitly reconciles existing-object state without widening into seed, RDA, or import work
+Open only a narrow schema-only execution boundary if Tom wants to proceed. Seed payload, RDA updates, BLS import, Supabase commands, and any broader Nutrition migration work must remain separate follow-up boundaries.

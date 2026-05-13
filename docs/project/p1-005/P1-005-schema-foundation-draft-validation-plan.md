@@ -1,7 +1,7 @@
 # P1-005 Schema-Only Foundation Draft Validation Plan
 
-> **Status**: MIGRATION_CANDIDATE_REVIEW_ONLY
-> **Purpose**: Validate the first additive schema-only migration candidate for P1-005 without DB execution.
+> **Status**: EXECUTION_CANDIDATE_REVIEW_ONLY
+> **Purpose**: Validate the first additive drift-aware schema-only migration candidate for P1-005 without DB execution.
 > **Authorization**: No DB work, no Supabase commands, no migration execution, no BLS import.
 
 ## Candidate Under Review
@@ -40,10 +40,10 @@ That makes it the smallest technically meaningful step beyond documentation-only
 
 Validate only:
 
-1. SQL draft coherence against the approved schema spec
+1. SQL/migration coherence against the approved schema spec
 2. Additive-only behavior
 3. Path safety
-4. Promotion readiness for a later schema-only execution-boundary decision
+4. Execution readiness for a later schema-only execution-boundary decision
 
 Do not validate by running SQL.
 
@@ -52,11 +52,12 @@ Do not validate by running SQL.
 ### Structural checks
 
 - [ ] Migration candidate filename and header clearly mark review-only status
-- [ ] Draft contains additive statements only
+- [ ] Migration candidate contains additive statements only
 - [ ] No destructive SQL appears
 - [ ] No import logic appears
 - [ ] No nutrient_defs seed payload appears
 - [ ] No RDA update statements appear
+- [ ] Existing-object drift is checked and fails clearly if incompatible
 - [ ] No production credentials, endpoints, or environment assumptions appear
 
 ### Source-chain checks
@@ -68,10 +69,11 @@ Do not validate by running SQL.
 
 ### Promotion checks
 
-- [ ] Migration candidate remains review-only and is not treated as execution authorization
+- [ ] Migration candidate remains gated by human/db-migration approval and is not treated as autonomous execution authorization
 - [ ] Nutrient seed payload remains deferred to a separate candidate
 - [ ] RDA updates remain deferred to a separate candidate
-- [ ] Rollback remains documentation-only
+- [ ] Rollback posture is explicit and comment-only
+- [ ] Post-apply validation queries are documented
 - [ ] Local validation remains limited to dry-run/read-only governance tooling
 
 ## Required Dry-Run Commands
