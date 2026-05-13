@@ -305,16 +305,48 @@ export function consumeQueueItem(approvalId: string): void {
   if (v.valid) { item.status = 'consumed'; writeQueue(queue) }
 }
 
-/** Setzt abgelaufene pending Items auf expired. Gibt Anzahl zurück. */
-export function expireStaleApprovals(): number {
+/** Setzt abgelaufene pending Items auf expired und normalisiert aufgelöste granted-Token-Artefakte. */
+export async function expireStaleApprovals(): Promise<number> {
   const queue = readQueue()
   const now   = Date.now()
+  const tokens = state.readApprovalTokens()
+  const activeWorkorders = state.getAllActiveWorkorders()
   let count   = 0
+
   for (const item of Object.values(queue)) {
     if (item.status === 'pending' && new Date(item.expires_at).getTime() <= now) {
-      item.status = 'expired'; count++
+      item.status = 'expired'
+      await state.updateApprovalStatus(item.approval_id, 'expired')
+      count++
+      continue
     }
+
+    if (item.status !== 'granted') continue
+
+    const token = tokens[item.approval_id]
+    if (!token) continue
+
+    const tokenExpired = !!token.expires_at && new Date(token.expires_at).getTime() <= now
+    const tokenConsumed = token.status === 'consumed' || (token.single_use && (token.use_count ?? 0) >= (token.max_uses ?? 1))
+    const hasAwaitingApproval = activeWorkorders.some(wo =>
+      wo.workorder_id === item.workorder_id &&
+      wo.run_id === item.run_id &&
+      wo.status === 'awaiting_approval',
+    )
+
+    if (!tokenExpired && !tokenConsumed) continue
+    if (hasAwaitingApproval) continue
+
+    item.status = 'consumed'
+    if (token.status === 'granted') {
+      token.use_count = Math.max(token.use_count ?? 0, token.max_uses ?? 1)
+      token.status = 'consumed'
+      await state.writeApprovalToken(item.approval_id, token)
+    }
+    await state.consumeApprovalItem(item.approval_id)
+    count++
   }
+
   if (count > 0) writeQueue(queue)
   return count
 }

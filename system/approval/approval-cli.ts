@@ -67,7 +67,7 @@ async function main(): Promise<void> {
     if (!r.ok) { console.error(`FEHLER: ${r.reason}`); process.exit(1) }
     console.log(`\nDenied: ${args[1]}\n${fmt(r.item)}\n`)
   } else if (cmd === 'expire') {
-    const n = expireStaleApprovals()
+    const n = await expireStaleApprovals()
     console.log(`\n${n} abgelaufene Approvals bereinigt.\n`)
   } else {
     console.error(`Unbekannter Command: ${cmd}`)

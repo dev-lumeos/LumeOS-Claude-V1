@@ -118,10 +118,20 @@ function writeApprovalTokens(tokens: Record<string, any>): void {
   fs.writeFileSync(path.join(approvalDir, 'approvals.json'), JSON.stringify(tokens, null, 2), 'utf8')
 }
 
+function readApprovalTokens(): Record<string, any> {
+  const approvalPath = path.resolve(process.cwd(), 'system/approval/approvals.json')
+  return JSON.parse(fs.readFileSync(approvalPath, 'utf8'))
+}
+
 function writeQueue(queue: Record<string, any>): void {
   const approvalDir = path.resolve(process.cwd(), 'system/approval')
   fs.mkdirSync(approvalDir, { recursive: true })
   fs.writeFileSync(path.join(approvalDir, 'queue.json'), JSON.stringify(queue, null, 2), 'utf8')
+}
+
+function readQueue(): Record<string, any> {
+  const queuePath = path.resolve(process.cwd(), 'system/approval/queue.json')
+  return JSON.parse(fs.readFileSync(queuePath, 'utf8'))
 }
 
 function makeToken(
@@ -744,6 +754,13 @@ describe('Expired Approval Cleanup - CLI clear-expired-approval', () => {
     assert.equal(audit[0].workorder_id, 'WO-resolved-cli-001')
     assert.equal(audit[0].run_id, 'RUN-resolved-cli-001')
     assert.equal(audit[0].approval_id, 'APP-resolved-cli-001')
+    const token = readApprovalTokens()['APP-resolved-cli-001']
+    assert.equal(token?.status, 'consumed')
+    const queue = readQueue()['APP-resolved-cli-001']
+    assert.equal(queue?.status, 'consumed')
+    const statePathAfter = path.resolve(process.cwd(), 'system/state/runtime_state.json')
+    const sAfter = JSON.parse(fs.readFileSync(statePathAfter, 'utf8'))
+    assert.equal(sAfter.approvals.find((a: any) => a.approval_id === 'APP-resolved-cli-001')?.status, 'consumed')
   })
 })
 

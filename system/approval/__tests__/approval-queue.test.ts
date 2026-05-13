@@ -440,9 +440,26 @@ describe('denyApproval runtime sync', () => {
 describe('expireStaleApprovals', () => {
   beforeEach(setupTmpDir)
 
-  it('nicht-abgelaufene Items bleiben pending', () => {
+  it('nicht-abgelaufene Items bleiben pending', async () => {
     enqueueApproval(BASE)
-    assert.equal(expireStaleApprovals(), 0)
+    assert.equal(await expireStaleApprovals(), 0)
+    cleanupTmpDir()
+  })
+
+  it('normalisiert granted queue items mit abgelaufenem token ohne awaiting_approval zu consumed', async () => {
+    const item = enqueueApproval(DOCS_REVIEW_BASE)
+    const granted = await grantApprovalForDispatch(item.approval_id, 'tom')
+    assert.equal(granted.ok, true)
+    const token = state.readApprovalTokens()[item.approval_id]
+    token.expires_at = new Date(Date.now() - 60_000).toISOString()
+    await state.writeApprovalToken(item.approval_id, token)
+
+    const reconciled = await expireStaleApprovals()
+
+    assert.equal(reconciled, 1)
+    assert.equal(getApproval(item.approval_id)?.status, 'consumed')
+    assert.equal(state.getApprovalItem(item.approval_id)?.status, 'consumed')
+    assert.equal(state.readApprovalTokens()[item.approval_id]?.status, 'consumed')
     cleanupTmpDir()
   })
 })

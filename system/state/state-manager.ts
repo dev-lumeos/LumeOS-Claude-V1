@@ -650,6 +650,13 @@ function readApprovalQueueForCleanup(): Record<string, ApprovalQueueLike> {
   catch { return {} }
 }
 
+function writeApprovalQueueForCleanup(queue: Record<string, ApprovalQueueLike>): void {
+  const queuePath = path.resolve(process.cwd(), 'system/approval/queue.json')
+  const dir = path.dirname(queuePath)
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2), 'utf8')
+}
+
 function approvalRecordMatches(
   record: { workorder_id?: string; run_id?: string },
   workorderId: string,
@@ -957,6 +964,27 @@ export async function removeResolvedAwaitingApprovalActiveWorkorder(
     )
     outcome = evaluation
   })
+
+  if (outcome.removed && outcome.approvalId) {
+    const approvalId = outcome.approvalId
+    const tokens = readApprovalTokens()
+    const token = tokens[approvalId]
+    if (token?.status === 'granted') {
+      token.use_count = Math.max(token.use_count ?? 0, token.max_uses ?? 1)
+      token.status = 'consumed'
+      await writeApprovalToken(approvalId, token)
+    }
+
+    const queue = readApprovalQueueForCleanup()
+    const queueItem = queue[approvalId]
+    if (queueItem?.status === 'granted') {
+      queueItem.status = 'consumed'
+      writeApprovalQueueForCleanup(queue)
+    }
+
+    await consumeApprovalItem(approvalId)
+  }
+
   return outcome
 }
 
