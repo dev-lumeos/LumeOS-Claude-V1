@@ -423,6 +423,30 @@
         "system/workorders/cli/batch-loader.ts",
         "system/workorders/cli/markdown-output-quality.ts"
       ]
+    },
+    {
+      "id": "GOV-TODO-020",
+      "title": "Use deterministic extraction for P1-005 nutrient_defs seed candidate",
+      "layer": "workflow_quality",
+      "severity": "high",
+      "priority": "P0",
+      "status": "completed",
+      "evidence": "docs-agent runtime is stable but previous seed candidate attempts were denied because generated seed rows included unsupported or fabricated facts. A deterministic helper now parses SPEC_06_DATABASE_SCHEMA.md directly and writes docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md with 138 source-derived rows, exactly 16 columns, empty Thai fields, and RDA fields only from explicit source UPDATE examples.",
+      "recommended_action": "Use system/workorders/cli/nutrient-defs-seed-extract.ts for the seed candidate path. Do not allow free-form LLM-authored seed rows; any seed execution remains blocked until Tom opens a separate local-only execution boundary.",
+      "dependencies": [
+        "GOV-TODO-018",
+        "GOV-TODO-019"
+      ],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md",
+        "system/workorders/cli/nutrient-defs-seed-extract.ts",
+        "system/workorders/cli/__tests__/nutrient-defs-seed-extract.test.ts",
+        "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
+        "system/workorders/nutrition/WO-NUTRITION-P1-012-nutrient-defs-seed-candidate.md"
+      ]
     }
   ]
 }

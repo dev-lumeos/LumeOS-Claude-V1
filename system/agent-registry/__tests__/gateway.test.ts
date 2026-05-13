@@ -73,6 +73,27 @@ describe('Permission Gateway — Bash Exact Match', () => {
     assert.equal(result.allowed, false)
     assert.equal(result.blockedBy, 'bash_exact_match')
   })
+
+  it('allows the exact deterministic nutrient_defs seed extraction helper command', () => {
+    const result = authorizeToolCall({
+      agentId: 'micro-executor',
+      workorderId: 'WO-nutrition-012',
+      tool: 'bash',
+      command: 'cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\nutrient-defs-seed-extract.ts --write --json',
+    })
+    assert.equal(result.allowed, true)
+  })
+
+  it('blocks modified nutrient_defs seed extraction helper commands', () => {
+    const result = authorizeToolCall({
+      agentId: 'micro-executor',
+      workorderId: 'WO-nutrition-012',
+      tool: 'bash',
+      command: 'cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\nutrient-defs-seed-extract.ts --write --json && echo unsafe',
+    })
+    assert.equal(result.allowed, false)
+    assert.equal(result.blockedBy, 'bash_exact_match')
+  })
 })
 
 describe('Permission Gateway — Agent Type Enforcement', () => {
