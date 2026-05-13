@@ -39,6 +39,7 @@ system/reports/model-runtime-history/
 system/reports/batches/
 system/reports/runs/
 system/reports/dossiers/
+supabase/snippets/
 
 # Nutrition raw source data stays local only.
 docs/specs/Nutrition/00_raw/

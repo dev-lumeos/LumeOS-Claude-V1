@@ -27,7 +27,8 @@
     "execution_batch_allowlist": [
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md",
-      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md"
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md",
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SEED-CANDIDATE.md"
     ]
   },
   "forbidden_paths": [
