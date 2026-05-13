@@ -469,6 +469,28 @@
         "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md",
         "apps/web/src/app/nutrition/local-schema/page.tsx"
       ]
+    },
+    {
+      "id": "GOV-TODO-022",
+      "title": "Correct local nutrient_defs UTF-8 seed encoding",
+      "layer": "product_gate",
+      "severity": "high",
+      "priority": "P0",
+      "status": "done",
+      "evidence": "The first local-only nutrient_defs seed application corrupted German umlauts in the local DB through a PowerShell text pipeline into docker exec. The deterministic helper now blocks corrupted text markers such as ??, replacement characters, and common mojibake sequences; it generated a local-only UTF-8 correction SQL file that was copied into the local DB container and executed with psql -f. Validation confirmed corrupted_text_rows=0 and sample values render as Aminosäuren, Essigsäure, Kohlenhydrate, verfügbar, and Fettlösliche Vitamine.",
+      "recommended_action": "For future local SQL files containing non-ASCII text, copy the UTF-8 file into the database container and run psql -f rather than piping PowerShell strings into docker exec.",
+      "dependencies": [
+        "GOV-TODO-021"
+      ],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workorders/cli/nutrient-defs-seed-extract.ts",
+        "system/workorders/cli/__tests__/nutrient-defs-seed-extract.test.ts",
+        "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
+        "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md"
+      ]
     }
   ]
 }

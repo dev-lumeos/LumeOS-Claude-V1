@@ -49,6 +49,9 @@ The local-only nutrient_defs seed boundary has now also been applied to local Su
 - `nutrition.nutrient_defs` row count is 138
 - all 138 rows have `name_th = ''`
 - all 138 rows have `group_th = ''`
+- UTF-8 correction has been applied locally after the first seed pipe corrupted German text through `??` replacement sequences
+- local validation now confirms zero rows where `name_de`, `group_de`, or `unit` contains `??`
+- sample checks now preserve `Aminosäuren`, `Essigsäure`, `Kohlenhydrate, verfügbar`, and `Fettlösliche Vitamine`
 - no DEV/LIVE action, BLS import, raw BLS commit, migration execution outside local, or broader DB work was performed
 
 ## Local-Only Verification Commands
@@ -63,6 +66,10 @@ docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select
 docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select conname, pg_get_constraintdef(c.oid) as definition from pg_constraint c join pg_class t on t.oid = c.conrelid join pg_namespace n on n.oid = t.relnamespace where n.nspname='nutrition' and t.relname='nutrient_defs' order by conname;"
 
 docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select count(*) as row_count, count(*) filter (where name_th = '') as empty_name_th, count(*) filter (where group_th = '') as empty_group_th from nutrition.nutrient_defs;"
+
+docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select count(*) as corrupted_text_rows from nutrition.nutrient_defs where name_de like '%??%' or group_de like '%??%' or unit like '%??%';"
+
+docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select code, name_de, group_de from nutrition.nutrient_defs where code in ('AAE9','ACEAC','CHO','VITA') order by code;"
 ```
 
 ## Local Review Checklist
@@ -76,6 +83,8 @@ docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select
 - [ ] `row_count = 138`
 - [ ] `empty_name_th = 138`
 - [ ] `empty_group_th = 138`
+- [ ] `corrupted_text_rows = 0`
+- [ ] German UTF-8 samples render as `Aminosäuren`, `Essigsäure`, `Kohlenhydrate, verfügbar`, and `Fettlösliche Vitamine`
 - [ ] no RDA update step was bundled into the migration
 - [ ] no BLS import logic or staging/import objects were bundled into the migration
 - [ ] index and constraint names match the reviewed candidate

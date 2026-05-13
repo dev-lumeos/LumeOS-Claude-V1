@@ -5,6 +5,7 @@ import fs from 'node:fs'
 import {
   NUTRIENT_DEFS_SEED_COLUMNS,
   buildSeedCandidateMarkdown,
+  buildSeedCorrectionSql,
   buildSeedInsertSql,
   extractNutrientDefsSeedCandidate,
   validateNutrientDefsSeedCandidate,
@@ -56,6 +57,23 @@ describe('nutrient_defs seed extraction', () => {
     assert.equal(nt.code, 'NT')
   })
 
+  it('preserves required UTF-8 German source text and blocks corrupted marker patterns', () => {
+    const source = fs.readFileSync(SPEC_PATH, 'utf8')
+    const candidate = extractNutrientDefsSeedCandidate(source, SPEC_PATH)
+    const markdown = buildSeedCandidateMarkdown(candidate)
+
+    assert.match(markdown, /Aminosäuren/)
+    assert.match(markdown, /Essigsäure/)
+    assert.match(markdown, /Kohlenhydrate, verfügbar/)
+    assert.match(markdown, /Fettlösliche Vitamine/)
+    assert.doesNotMatch(markdown, /\?\?|�|Ã.|Âµ|â€|â€“|â€™|ð/i)
+
+    const corruptedMarkdown = markdown.replace('Aminosäuren', 'Aminos??uren')
+    const validation = validateNutrientDefsSeedCandidate(corruptedMarkdown, candidate)
+    assert.equal(validation.valid, false)
+    assert.match(validation.errors.join('\n'), /corrupted text markers/)
+  })
+
   it('validates the generated markdown as a 16-column review-only candidate', () => {
     const source = fs.readFileSync(SPEC_PATH, 'utf8')
     const candidate = extractNutrientDefsSeedCandidate(source, SPEC_PATH)
@@ -84,5 +102,22 @@ describe('nutrient_defs seed extraction', () => {
     assert.match(sql, /\('ENERCJ', 'Energie \(Kilojoule\)', 'Energy \(kilojoule\)', '', 'kJ'/)
     assert.match(sql, /\('ENERCC', 'Energie \(Kilokalorien\)', 'Energy \(kilocalorie\)', '', 'kcal'.*'2800', '2100', 'kcal'\)/)
     assert.doesNotMatch(sql, /BLS2023-v2\.1|BLS-2024-09|LUMEOS-nutrition-v1\.2/)
+  })
+
+  it('builds guarded local-only UTF-8 correction SQL for an already seeded local DB', () => {
+    const source = fs.readFileSync(SPEC_PATH, 'utf8')
+    const candidate = extractNutrientDefsSeedCandidate(source, SPEC_PATH)
+    const sql = buildSeedCorrectionSql(candidate)
+
+    assert.match(sql, /P1-005 LOCAL-ONLY nutrient_defs UTF-8 correction SQL/)
+    assert.match(sql, /row_count=138/)
+    assert.match(sql, /name_de like '%\?\?%'/)
+    assert.match(sql, /group_de = 'Aminosäuren'/)
+    assert.match(sql, /name_de = 'Essigsäure'/)
+    assert.match(sql, /name_de = 'Kohlenhydrate, verfügbar'/)
+    assert.match(sql, /group_de = 'Fettlösliche Vitamine'/)
+    assert.match(sql, /update nutrition\.nutrient_defs as target/)
+    assert.match(sql, /rda_male = source_rows\.rda_male::numeric/)
+    assert.doesNotMatch(sql, /insert into nutrition\.nutrient_defs/)
   })
 })

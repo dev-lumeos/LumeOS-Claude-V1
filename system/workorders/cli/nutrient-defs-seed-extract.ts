@@ -62,6 +62,15 @@ export interface ValidationResult {
   errors: string[]
 }
 
+const CORRUPTED_TEXT_RE = /\?\?|�|Ã.|Âµ|â€|â€“|â€™|ð/i
+
+const REQUIRED_UTF8_SAMPLES = [
+  'Aminosäuren',
+  'Essigsäure',
+  'Kohlenhydrate, verfügbar',
+  'Fettlösliche Vitamine',
+] as const
+
 interface SourceRange {
   startLine: number
   endLine: number
@@ -258,6 +267,27 @@ function seedSqlLiteral(column: NutrientDefsSeedColumn, value: string | number |
   return sqlLiteral(value)
 }
 
+function validateTextIntegrity(markdown: string, candidate: NutrientDefsSeedCandidate): string[] {
+  const errors: string[] = []
+  if (CORRUPTED_TEXT_RE.test(markdown)) {
+    errors.push('generated markdown contains corrupted text markers')
+  }
+  for (const sample of REQUIRED_UTF8_SAMPLES) {
+    if (!markdown.includes(sample)) {
+      errors.push(`generated markdown missing UTF-8 sample: ${sample}`)
+    }
+  }
+  for (const row of candidate.rows) {
+    for (const column of candidate.columns) {
+      const value = row[column]
+      if (typeof value === 'string' && CORRUPTED_TEXT_RE.test(value)) {
+        errors.push(`row ${row.code} column ${column} contains corrupted text marker`)
+      }
+    }
+  }
+  return errors
+}
+
 export function extractNutrientDefsSeedCandidate(source: string, sourcePath = DEFAULT_SOURCE_PATH): NutrientDefsSeedCandidate {
   const seedRange = findSeedRange(source)
   const rdaRange = findRdaRange(source)
@@ -451,6 +481,108 @@ export function buildSeedInsertSql(candidate: NutrientDefsSeedCandidate): string
   ].join('\n')
 }
 
+export function buildSeedCorrectionSql(candidate: NutrientDefsSeedCandidate): string {
+  const validation = validateNutrientDefsSeedCandidate(buildSeedCandidateMarkdown(candidate), candidate)
+  if (!validation.valid) {
+    throw new Error(`cannot build seed correction SQL from invalid candidate: ${validation.errors.join('; ')}`)
+  }
+
+  const dataRows = candidate.rows.map(row => {
+    const values = candidate.columns.map(column => seedSqlLiteral(column, row[column]))
+    return `    (${values.join(', ')})`
+  })
+
+  return [
+    '-- P1-005 LOCAL-ONLY nutrient_defs UTF-8 correction SQL.',
+    '-- Generated deterministically from docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md.',
+    '-- Scope: local Supabase/Test DB only. No DEV/LIVE, BLS import, raw BLS commit, migration execution, or broader DB work.',
+    'begin;',
+    '',
+    'do $$',
+    'declare',
+    '  existing_count integer;',
+    'begin',
+    "  if to_regclass('nutrition.nutrient_defs') is null then",
+    "    raise exception 'nutrition.nutrient_defs is missing; apply schema foundation before local correction';",
+    '  end if;',
+    '',
+    '  select count(*)::int into existing_count from nutrition.nutrient_defs;',
+    '  if existing_count <> 138 then',
+    "    raise exception 'nutrition.nutrient_defs local correction requires existing row_count=138; current row_count=%', existing_count;",
+    '  end if;',
+    'end $$;',
+    '',
+    `with source_rows (${candidate.columns.join(', ')}) as (`,
+    '  values',
+    `${dataRows.join(',\n')}`,
+    ')',
+    'update nutrition.nutrient_defs as target',
+    'set',
+    '  name_de = source_rows.name_de,',
+    '  name_en = source_rows.name_en,',
+    '  name_th = source_rows.name_th,',
+    '  unit = source_rows.unit,',
+    '  group_de = source_rows.group_de,',
+    '  group_en = source_rows.group_en,',
+    '  group_th = source_rows.group_th,',
+    '  sort_index = source_rows.sort_index::integer,',
+    '  display_tier = source_rows.display_tier::integer,',
+    '  is_always_computed = source_rows.is_always_computed::boolean,',
+    '  is_partly_computed = source_rows.is_partly_computed::boolean,',
+    '  formula = source_rows.formula,',
+    '  rda_male = source_rows.rda_male::numeric,',
+    '  rda_female = source_rows.rda_female::numeric,',
+    '  rda_unit = source_rows.rda_unit',
+    'from source_rows',
+    'where target.code = source_rows.code;',
+    '',
+    'do $$',
+    'declare',
+    '  row_count integer;',
+    '  corrupted_count integer;',
+    '  empty_name_th integer;',
+    '  empty_group_th integer;',
+    'begin',
+    '  select count(*)::int into row_count from nutrition.nutrient_defs;',
+    '  if row_count <> 138 then',
+    "    raise exception 'nutrient_defs local correction row_count mismatch: %', row_count;",
+    '  end if;',
+    '',
+    '  select count(*)::int into corrupted_count',
+    '  from nutrition.nutrient_defs',
+    "  where name_de like '%??%' or group_de like '%??%' or unit like '%??%'",
+    "     or name_de like '%�%' or group_de like '%�%' or unit like '%�%';",
+    '  if corrupted_count <> 0 then',
+    "    raise exception 'nutrient_defs local correction still has corrupted text rows: %', corrupted_count;",
+    '  end if;',
+    '',
+    '  select',
+    "    count(*) filter (where name_th = '')::int,",
+    "    count(*) filter (where group_th = '')::int",
+    '  into empty_name_th, empty_group_th',
+    '  from nutrition.nutrient_defs;',
+    '  if empty_name_th <> 138 then',
+    "    raise exception 'nutrient_defs local correction name_th empty count mismatch: %', empty_name_th;",
+    '  end if;',
+    '  if empty_group_th <> 138 then',
+    "    raise exception 'nutrient_defs local correction group_th empty count mismatch: %', empty_group_th;",
+    '  end if;',
+    '',
+    "  perform 1 from nutrition.nutrient_defs where code = 'AAE9' and group_de = 'Aminosäuren';",
+    "  if not found then raise exception 'sample validation failed: Aminosäuren'; end if;",
+    "  perform 1 from nutrition.nutrient_defs where code = 'ACEAC' and name_de = 'Essigsäure';",
+    "  if not found then raise exception 'sample validation failed: Essigsäure'; end if;",
+    "  perform 1 from nutrition.nutrient_defs where code = 'CHO' and name_de = 'Kohlenhydrate, verfügbar';",
+    "  if not found then raise exception 'sample validation failed: Kohlenhydrate, verfügbar'; end if;",
+    "  perform 1 from nutrition.nutrient_defs where code = 'VITA' and group_de = 'Fettlösliche Vitamine';",
+    "  if not found then raise exception 'sample validation failed: Fettlösliche Vitamine'; end if;",
+    'end $$;',
+    '',
+    'commit;',
+    '',
+  ].join('\n')
+}
+
 export function validateNutrientDefsSeedCandidate(markdown: string, candidate: NutrientDefsSeedCandidate): ValidationResult {
   const errors: string[] = []
   if (candidate.rows.length !== candidate.expectedRowCount) {
@@ -477,6 +609,7 @@ export function validateNutrientDefsSeedCandidate(markdown: string, candidate: N
   if (!markdown.includes(`Expected row count: ${candidate.expectedRowCount}`)) errors.push('missing expected row count')
   if (!markdown.includes('No seed execution is authorized')) errors.push('missing seed execution exclusion')
   if (!markdown.includes(candidate.seedSourceRef)) errors.push('missing seed source ref')
+  errors.push(...validateTextIntegrity(markdown, candidate))
   return { valid: errors.length === 0, errors }
 }
 
@@ -502,7 +635,7 @@ export function writeSeedCandidate(options: {
 }
 
 function printUsage(): void {
-  console.error('Usage: nutrient-defs-seed-extract.ts [--write] [--json] [--source <path>] [--output <path>] [--sql-output <path>]')
+  console.error('Usage: nutrient-defs-seed-extract.ts [--write] [--json] [--source <path>] [--output <path>] [--sql-output <path>] [--correction-sql-output <path>]')
 }
 
 function argValue(args: string[], flag: string): string | undefined {
@@ -519,6 +652,7 @@ function main(): void {
   const sourcePath = argValue(args, '--source') ?? DEFAULT_SOURCE_PATH
   const outputPath = argValue(args, '--output') ?? DEFAULT_OUTPUT_PATH
   const sqlOutputPath = argValue(args, '--sql-output')
+  const correctionSqlOutputPath = argValue(args, '--correction-sql-output')
   const source = fs.readFileSync(path.resolve(process.cwd(), sourcePath), 'utf8')
   const candidate = extractNutrientDefsSeedCandidate(source, sourcePath)
   const markdown = buildSeedCandidateMarkdown(candidate)
@@ -537,13 +671,20 @@ function main(): void {
     fs.mkdirSync(path.dirname(absoluteSqlOutput), { recursive: true })
     fs.writeFileSync(absoluteSqlOutput, buildSeedInsertSql(candidate), 'utf8')
   }
+  if (correctionSqlOutputPath) {
+    const absoluteCorrectionSqlOutput = path.resolve(process.cwd(), correctionSqlOutputPath)
+    fs.mkdirSync(path.dirname(absoluteCorrectionSqlOutput), { recursive: true })
+    fs.writeFileSync(absoluteCorrectionSqlOutput, buildSeedCorrectionSql(candidate), 'utf8')
+  }
   const result = {
     ok: true,
     sourcePath,
     outputPath,
     sqlOutputPath: sqlOutputPath ?? null,
+    correctionSqlOutputPath: correctionSqlOutputPath ?? null,
     wrote: args.includes('--write'),
     wroteSql: Boolean(sqlOutputPath),
+    wroteCorrectionSql: Boolean(correctionSqlOutputPath),
     columns: candidate.columns,
     rowCount: candidate.rows.length,
     expectedRowCount: candidate.expectedRowCount,
