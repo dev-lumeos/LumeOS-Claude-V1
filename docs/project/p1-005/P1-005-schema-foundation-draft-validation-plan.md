@@ -1,23 +1,27 @@
-# P1-005 Schema Foundation Draft Validation Plan
+# P1-005 Schema-Only Foundation Draft Validation Plan
 
 > **Status**: NON_EXECUTABLE_DRAFT
-> **Purpose**: Validate the first additive SQL candidate for P1-005 without DB execution.
+> **Purpose**: Validate the first additive schema-only SQL candidate for P1-005 without DB execution.
 > **Authorization**: No DB work, no Supabase commands, no migration execution, no BLS import.
 
 ## Candidate Under Review
 
 - Draft SQL: `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
-- Intended future migration path only if later approved:
-  - `supabase/migrations/20260513_001_nutrition_schema_foundation.sql`
+- Intended future migration path only if later approved as a schema-only slice:
+  - `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql`
 
 ## Why This Is The First Safe Non-Planning Step
 
-This candidate is narrower than a full Nutrition migration set:
+This candidate is narrower than a full Nutrition foundation migration:
 
 - it converts planning into concrete SQL shape
+- it is explicitly schema-only
 - it stays outside `supabase/migrations/`
 - it uses only additive schema foundation elements
-- it excludes seeds, import logic, RLS, grants, DB apply, and migration execution
+- it excludes the nutrient_defs seed payload
+- it excludes RDA updates
+- it excludes BLS import logic
+- it excludes RLS, grants, DB apply, and migration execution
 
 That makes it the smallest technically meaningful step beyond documentation-only planning.
 
@@ -39,7 +43,7 @@ Validate only:
 1. SQL draft coherence against the approved schema spec
 2. Additive-only behavior
 3. Path safety
-4. Promotion readiness for a later execution-boundary decision
+4. Promotion readiness for a later schema-only execution-boundary decision
 
 Do not validate by running SQL.
 
@@ -51,7 +55,8 @@ Do not validate by running SQL.
 - [ ] Draft contains additive statements only
 - [ ] No destructive SQL appears
 - [ ] No import logic appears
-- [ ] No seed inserts appear
+- [ ] No nutrient_defs seed payload appears
+- [ ] No RDA update statements appear
 - [ ] No production credentials, endpoints, or environment assumptions appear
 
 ### Source-chain checks
@@ -59,10 +64,13 @@ Do not validate by running SQL.
 - [ ] Every table/column in the draft is explicitly supported by `SPEC_06_DATABASE_SCHEMA.md`
 - [ ] The draft does not claim raw-source facts beyond the completed planning outputs
 - [ ] The draft matches the staged ordering described in `P1-005-additive-migration-candidate-plan.md`
+- [ ] The draft is clearly framed as a schema-only slice rather than a full foundation migration
 
 ### Promotion checks
 
-- [ ] Candidate future migration filename is only a proposal, not an active migration
+- [ ] Candidate future migration filename is only a proposal for a schema-only slice, not an active migration
+- [ ] Nutrient seed payload remains deferred to a separate candidate
+- [ ] RDA updates remain deferred to a separate candidate
 - [ ] Rollback remains documentation-only
 - [ ] Local validation remains limited to dry-run/read-only governance tooling
 
@@ -83,7 +91,8 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 Stop immediately if:
 
 - the candidate needs writing under `supabase/migrations/`
-- the candidate needs seed data authoring
+- the candidate needs nutrient seed data authoring
+- the candidate needs RDA update authoring
 - the candidate needs raw BLS import logic
 - the candidate requires Supabase CLI use
 - the candidate expands into RLS, grants, or bulk table creation beyond this foundation-only scope
@@ -96,8 +105,10 @@ Still blocked until a later explicit execution decision:
 - any SQL execution
 - any Supabase command
 - any DB apply
+- any nutrient_defs seed payload
+- any RDA updates
 - any BLS import or raw-data commit
 
 ## Next Approval Boundary
 
-Tom must explicitly decide whether to open a narrow execution boundary for promoting this reviewed draft into the first real migration-authoring path, or keep all DB/migration work blocked.
+Tom must explicitly decide whether to open a narrow execution boundary for promoting this reviewed schema-only slice into the first real migration-authoring path, or keep all DB/migration work blocked.

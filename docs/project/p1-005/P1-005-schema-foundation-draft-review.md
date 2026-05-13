@@ -1,6 +1,6 @@
-# P1-005 Schema Foundation Draft Review
+# P1-005 Schema-Only Foundation Draft Review
 
-> **Status**: REVIEW_COMPLETE / NOT_READY_FOR_PROMOTION
+> **Status**: REVIEW_COMPLETE / READY_IF_PROMOTED_AS_SCHEMA_ONLY_SLICE
 > **Reviewed files**:
 > - `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
 > - `docs/project/p1-005/P1-005-schema-foundation-draft-validation-plan.md`
@@ -8,7 +8,7 @@
 
 ## Decision
 
-The SQL draft is **safe as a non-executable draft artifact** but **not yet ready to be promoted into a real migration candidate**.
+The SQL draft is **safe as a non-executable draft artifact** and **is ready to be promoted into a real migration candidate only if it is promoted explicitly as a schema-only slice**.
 
 ## What Is Good
 
@@ -20,81 +20,57 @@ The SQL draft is **safe as a non-executable draft artifact** but **not yet ready
 3. The draft avoids destructive SQL, import logic, credentials, runtime state, and queue state.
 4. The validation plan keeps review in dry-run/read-only governance tooling.
 
-## Promotion Blockers
+## Promotion Scope Decision
 
-### Blocker 1: Foundation scope is incomplete relative to the approved schema source
+The prior ambiguity is now resolved:
 
-`SPEC_06_DATABASE_SCHEMA.md` defines `nutrition.nutrient_defs` as both:
+- this candidate is **not** a full foundation migration
+- this candidate is **not** a seed payload candidate
+- this candidate is **not** an RDA update candidate
+- this candidate is **not** a BLS import candidate
+- this candidate is **only** a schema-only slice candidate for structural objects
 
-- table structure
-- seed payload for 138 nutrient definitions
-- follow-up RDA update statements
+## What This Candidate Includes
 
-The current SQL draft includes only the table definition and one index:
+- `create schema if not exists nutrition`
+- `create table if not exists nutrition.nutrient_defs`
+- one additive index on `nutrition.nutrient_defs`
 
-- draft table scope: `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
-- approved source scope: `docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md`
+## What This Candidate Explicitly Excludes
 
-That means the draft is not yet a complete candidate for the first real migration-authoring boundary if the intended target is the schema-foundation migration described in the spec/history.
+`SPEC_06_DATABASE_SCHEMA.md` also contains follow-up material that remains intentionally out of scope for this slice:
 
-### Blocker 2: Promotion target is ambiguous
+- nutrient_defs seed payload
+- RDA update statements
+- BLS import logic
+- Supabase apply / migration execution
 
-The draft names a future migration path:
+## Rollback / Validation Posture
 
-- `supabase/migrations/20260513_001_nutrition_schema_foundation.sql`
+The validation plan is correct for a draft-only review and is now appropriately aligned to the chosen promotion target:
 
-But its actual content is narrower than the historically referenced foundation migration scope in:
-
-- `docs/project/local-supabase/LOCAL_SUPABASE_ADDITIVE_MIGRATION_PLAN.md`
-
-That historical reference expects the foundation migration to create foundational Nutrition schema objects, while the draft currently covers only:
-
-- schema creation
-- one table
-- one index
-
-Before promotion, the repo needs one explicit decision:
-
-1. either this remains a **foundation slice** candidate with a renamed target
-2. or it is expanded to match the intended first real migration scope
-
-### Blocker 3: Rollback posture is review-safe but not promotion-complete
-
-The validation plan is correct for a draft-only review, but a real migration candidate needs a stronger pairing:
-
-- exact promotion scope
-- exact seed inclusion/exclusion decision
-- exact rollback strategy for that promoted scope
-
-Right now the rollback material is still deliberately generic, which is appropriate for planning but not sufficient for promotion to an actual migration candidate.
+- exact promotion scope: `schema-only slice`
+- exact separation of follow-up seed/RDA candidates
+- exact rollback strategy for the schema-only promoted scope
 
 ## Recommendation
 
-Do **not** promote this draft yet.
+Promote this draft **only as a schema-only slice**.
 
-Recommended next change before any execution-boundary approval:
+Do **not** widen it during promotion. In particular, do not add:
 
-1. Decide whether the first real migration candidate is:
-   - `schema_only_slice`, or
-   - `full_foundation_with_nutrient_defs_seed`
-2. Align the SQL draft and validation plan to that exact target.
-3. Only then ask for promotion approval.
+- nutrient_defs seed payload
+- RDA updates
+- BLS import logic
+- Supabase apply / migration execution
 
 ## Smallest Safe Follow-Up
 
-The smallest safe follow-up is **not** DB execution.
-
-It is one of these two documentation-level refinements:
-
-- **Option A — recommended**
-  Rename/reframe the artifact as a `schema-only slice` candidate and keep seeds explicitly out of scope.
-
-- **Option B**
-  Expand the draft into a fuller foundation candidate by adding only the documented `nutrient_defs` seed and RDA update section, still outside `supabase/migrations/` and still non-executable.
+The smallest safe follow-up is a narrow promotion review for a schema-only migration candidate path. Seed payload and RDA updates should be prepared as separate follow-up candidates.
 
 ## Final Review Result
 
 - **Static safety**: pass
 - **Additive-only safety**: pass
 - **Validation-plan quality**: pass
-- **Ready for migration-candidate promotion**: **no**
+- **Ready for migration-candidate promotion**: **yes, only as a schema-only slice**

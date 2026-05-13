@@ -74,11 +74,11 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - Approval lifecycle cleanup for the completed P1-005 planning batch is now normalized through official tooling. Resolved docs-only approvals are consumed end-to-end across queue, runtime approval mirror, and enforcement token state.
 - Under the new autonomy policy, P1-005 preparation is no longer waiting for repeated draft/readiness approvals. It is classified as `STOP_AND_REPORT`: all safe draft/read-only work is complete, and the next Tom decision is only whether to open the first real execution boundary for the existing draft batch.
 - Under the new autonomy policy, the planning-only import/DB preparation step is complete. The next true execution boundary is any real raw-source, migration, Supabase, DB, or import step beyond these four planning documents.
-- The first tightly scoped non-planning P1-005 execution candidate now exists as `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md`. Its scope is intentionally narrower than a real migration path: one SQL draft outside `supabase/migrations/` plus one validation-plan document.
+- The first tightly scoped non-planning P1-005 execution candidate now exists as `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md`. Its scope is intentionally narrower than a real migration path: one schema-only SQL slice outside `supabase/migrations/` plus one validation-plan document.
 - The corresponding draft outputs are:
   - `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
   - `docs/project/p1-005/P1-005-schema-foundation-draft-validation-plan.md`
-- This candidate is allowlisted only for exact-batch machine checks. It still does not authorize DB apply, Supabase commands, migration execution, or BLS import.
+- This candidate is allowlisted only for exact-batch machine checks. It still does not authorize DB apply, Supabase commands, migration execution, nutrient seed payload, RDA updates, or BLS import.
 - Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
 - Raw BLS files are local-only and ignored.
 - Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
