@@ -348,6 +348,31 @@
         "docs/project/PRODUCT_WORK_GATE.md",
         "docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md"
       ]
+    },
+    {
+      "id": "GOV-TODO-017",
+      "title": "Tom decision for first schema-foundation SQL draft execution candidate",
+      "layer": "product_gate",
+      "severity": "high",
+      "priority": "P0",
+      "status": "blocked_pending_tom_decision",
+      "evidence": "A narrower post-planning execution candidate now exists for P1-005: one foundation-only SQL draft outside supabase/migrations plus a paired non-executing validation plan. The exact candidate batch is allowlisted only for machine checks, not execution.",
+      "recommended_action": "Review the schema-foundation SQL draft and validation plan, then explicitly decide whether to open a narrow boundary for promoting this draft toward real migration authoring, or keep all DB/migration work blocked.",
+      "dependencies": [
+        "GOV-TODO-016"
+      ],
+      "estimated_effort": "Tom decision plus follow-up governance batch if draft promotion is opened",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": true,
+      "source_files": [
+        "docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql",
+        "docs/project/p1-005/P1-005-schema-foundation-draft-validation-plan.md",
+        "system/workorders/nutrition/WO-NUTRITION-P1-010-schema-foundation-sql-draft.md",
+        "system/workorders/nutrition/WO-NUTRITION-P1-011-schema-foundation-draft-validation-plan.md",
+        "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md",
+        "docs/project/p1-005/P1-005-additive-migration-candidate-plan.md",
+        "docs/project/p1-005/P1-005-rollback-and-validation-checklist.md"
+      ]
     }
   ]
 }

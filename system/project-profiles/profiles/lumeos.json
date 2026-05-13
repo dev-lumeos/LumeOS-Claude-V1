@@ -26,7 +26,8 @@
     "conditional_planning_allowed": false,
     "execution_batch_allowlist": [
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md",
-      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md"
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md",
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md"
     ]
   },
   "forbidden_paths": [
