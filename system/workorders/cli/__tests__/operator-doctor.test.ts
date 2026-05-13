@@ -255,6 +255,7 @@ describe('operator doctor diagnosis', () => {
       'memory',
       'next_action',
       'next_actions',
+      'orchestration',
       'product_gate',
       'runtime_history',
       'safety_notes',
@@ -263,6 +264,26 @@ describe('operator doctor diagnosis', () => {
     ].sort())
     assert.equal(result.autonomy_handoff.final_state, 'READY_TO_RUN')
     assert.equal(result.autonomy_handoff.dossier_recommended, true)
+  })
+
+  it('stops and reports when Spark1 orchestration is requested but unavailable', () => {
+    const result = diagnose({
+      orchestration: {
+        requested_orchestration_mode: 'spark1_orchestrated',
+        actual_orchestration_mode: 'not_run',
+        spark1_orchestrator_used: false,
+        codex_role: 'none',
+        missing_integration_point: 'missing Spark1 handoff',
+        reason: 'Spark1 requested',
+        blocks_dispatch: true,
+      },
+    })
+
+    assert.equal(result.final_diagnosis, 'ORCHESTRATION_BLOCKED')
+    assert.equal(result.autonomy_handoff.final_state, 'STOP_AND_REPORT')
+    assert.equal(result.orchestration.requested_orchestration_mode, 'spark1_orchestrated')
+    assert.equal(result.orchestration.spark1_orchestrator_used, false)
+    assert.match(result.next_action, /Spark1\/orchestrator-agent/)
   })
 
   it('reports model runtime high findings', () => {
@@ -350,7 +371,7 @@ describe('operator doctor diagnosis', () => {
       ].join('\n'))
       fs.writeFileSync(path.join(tmpDir, 'system/reports/model-runtime-history/history.jsonl'), [
         JSON.stringify({
-          timestamp: '2026-05-13T02:10:00.000Z',
+          timestamp: new Date().toISOString(),
           project_id: 'lumeos',
           route_id: 'docs-agent',
           agent: 'docs-agent',

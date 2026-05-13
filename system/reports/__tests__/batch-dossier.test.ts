@@ -327,6 +327,7 @@ describe('batch dossier reporter', () => {
       'generated_at',
       'git_status',
       'next_action',
+      'orchestration',
       'outputs',
       'reviews',
       'runs',
@@ -337,6 +338,25 @@ describe('batch dossier reporter', () => {
     ].sort())
     assert.equal(dossier.autonomy_handoff.final_state, 'NOT_RUN')
     assert.equal(dossier.autonomy_handoff.dossier_recommended, true)
+  })
+
+  it('reports requested orchestration mode in JSON and Markdown', () => {
+    writeCleanRuntime()
+    const dossier = buildBatchDossier({
+      batchFile: batchPath(),
+      repoRoot: tmpDir,
+      gitStatus: '## goal/test\n',
+      generatedAt: '2026-05-05T00:00:00.000Z',
+      runCheckers: false,
+      orchestrationMode: 'spark1_orchestrated',
+    })
+    const markdown = formatBatchDossierMarkdown(dossier)
+
+    assert.equal(dossier.orchestration.requested_orchestration_mode, 'spark1_orchestrated')
+    assert.equal(dossier.orchestration.actual_orchestration_mode, 'not_run')
+    assert.equal(dossier.orchestration.spark1_orchestrator_used, false)
+    assert.match(markdown, /requested_orchestration_mode: spark1_orchestrated/)
+    assert.match(markdown, /missing_integration_point:/)
   })
 
   it('includes project profile metadata when requested', () => {

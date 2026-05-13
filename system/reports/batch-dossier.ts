@@ -31,6 +31,13 @@ import {
 } from '../project-profiles/project-profile-loader'
 import { readModelRuntimeHistorySummary, type ModelRuntimeHistorySummary } from '../control-plane/model-runtime-check'
 import { buildAutonomyHandoffContract, type AutonomyHandoff } from './autonomy-handoff'
+import {
+  formatOrchestrationModeStatus,
+  parseRequestedOrchestrationMode,
+  resolveOrchestrationMode,
+  type OrchestrationModeStatus,
+  type RequestedOrchestrationMode,
+} from '../workorders/cli/orchestration-mode'
 
 export type BatchDossierFinalState =
   | 'DONE'
@@ -181,6 +188,7 @@ export interface BatchDossier {
   }
   outputs: BatchDossierOutput[]
   git_status: BatchDossierGitStatus
+  orchestration: OrchestrationModeStatus
   final_state: BatchDossierFinalState
   next_action: string
   autonomy_handoff: AutonomyHandoff
@@ -194,6 +202,7 @@ export interface BuildBatchDossierOptions {
   commitsSinceBase?: string[]
   runCheckers?: boolean
   projectId?: string
+  orchestrationMode?: RequestedOrchestrationMode
   checkersOverride?: BatchDossier['checkers']
 }
 
@@ -637,6 +646,7 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const runtimeHistory = readModelRuntimeHistorySummary({ repoRoot })
   const git = readGitStatus(repoRoot, options.gitStatus, profile)
   git.commits_since_base = readCommitsSinceBase(repoRoot, options.commitsSinceBase)
+  const orchestration = resolveOrchestrationMode(options.orchestrationMode ?? 'auto')
   const checkers = options.checkersOverride ?? collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true, options.projectId)
   const outputs = collectOutputs(repoRoot, batch.expected_outputs, git, profile)
   const finalState = classifyFinalState({ state, workorderIds, runs, approvals, outputs, checkers })
@@ -696,6 +706,7 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     checkers,
     outputs,
     git_status: git,
+    orchestration,
     final_state: finalState,
     next_action: nextAction,
     autonomy_handoff: autonomyHandoff,
@@ -720,6 +731,9 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
   if (dossier.project_profile) lines.push(`Project profile: ${dossier.project_profile.project_id} (${dossier.project_profile.display_name})`)
   lines.push(`Batch file: ${dossier.batch_file}`)
   lines.push(`Batch status: ${dossier.batch_status}`)
+  lines.push('')
+  lines.push('## Orchestration Mode')
+  lines.push(...formatOrchestrationModeStatus(dossier.orchestration))
   lines.push('')
   lines.push('## Batch Identity')
   lines.push(...table([
@@ -890,22 +904,24 @@ export function writeBatchDossier(dossier: BatchDossier, options: { repoRoot?: s
 function usage(): string {
   return [
     'Usage:',
-    `  ${TSX} ${DOSSIER_CLI} --batch <batch-file> [--json] [--write]`,
+    `  ${TSX} ${DOSSIER_CLI} --batch <batch-file> [--json] [--write] [--orchestration-mode <auto|codex_bootstrap|spark1_orchestrated>]`,
     `  ${TSX} ${DOSSIER_CLI} --workorder <WO-ID> [--json]`,
   ].join('\n')
 }
 
-function parseArgs(argv: string[]): { batch?: string; workorder?: string; json: boolean; write: boolean; projectId?: string } {
+function parseArgs(argv: string[]): { batch?: string; workorder?: string; json: boolean; write: boolean; projectId?: string; orchestrationMode: RequestedOrchestrationMode } {
   const args = [...argv]
   const json = args.includes('--json')
   const write = args.includes('--write')
   const batchIndex = args.indexOf('--batch')
   const workorderIndex = args.indexOf('--workorder')
   const projectIndex = args.indexOf('--project')
+  const orchestrationIndex = args.indexOf('--orchestration-mode')
   const batch = batchIndex !== -1 ? args[batchIndex + 1] : undefined
   const workorder = workorderIndex !== -1 ? args[workorderIndex + 1] : undefined
   const projectId = projectIndex !== -1 ? args[projectIndex + 1] : undefined
-  return { batch, workorder, json, write, projectId }
+  const orchestrationMode = parseRequestedOrchestrationMode(orchestrationIndex !== -1 ? args[orchestrationIndex + 1] : 'auto')
+  return { batch, workorder, json, write, projectId, orchestrationMode }
 }
 
 function main(): number {
@@ -920,7 +936,7 @@ function main(): number {
   }
 
   try {
-    const dossier = buildBatchDossier({ batchFile: args.batch, projectId: args.projectId })
+    const dossier = buildBatchDossier({ batchFile: args.batch, projectId: args.projectId, orchestrationMode: args.orchestrationMode })
     if (args.write) {
       const written = writeBatchDossier(dossier)
       if (!args.json) {

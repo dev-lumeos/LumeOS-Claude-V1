@@ -29,6 +29,7 @@ import { runPreflight } from '../../control-plane/scheduler-preflight'
 import { isSystemStopped, updateActiveWorkorderStatusByRun } from '../../state/state-manager'
 import { getPendingApprovals } from '../../approval/approval-queue'
 import { assessMarkdownFile, isMarkdownOutputPath } from './markdown-output-quality'
+import type { OrchestrationModeStatus } from './orchestration-mode'
 
 // ─────────────────────────────────────────────────────────────────────────
 // Types
@@ -67,6 +68,7 @@ export interface DispatchOutcome {
     | 'preflight_blocked'
     | 'system_stopped'
     | 'paused_for_approval'
+    | 'orchestration_blocked'
   detail?: string
 }
 
@@ -583,8 +585,19 @@ export function formatPendingApprovalsReport(): string {
 
 export async function runDispatch(
   batch: LoadedBatch,
+  opts: { orchestration?: OrchestrationModeStatus } = {},
 ): Promise<DispatchOutcome[]> {
   const outcomes: DispatchOutcome[] = []
+
+  if (opts.orchestration?.blocks_dispatch) {
+    return [
+      {
+        workorder_id: '*',
+        status: 'orchestration_blocked',
+        detail: opts.orchestration.missing_integration_point,
+      },
+    ]
+  }
 
   // System-wide stop check.
   let stop: { stopped: boolean; reason?: string } = { stopped: false }

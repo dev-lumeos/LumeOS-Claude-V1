@@ -260,6 +260,29 @@ describe('batch operator status', () => {
     assert.equal(fs.readFileSync(path.join(tmpDir, 'system/state/runtime_state.json'), 'utf8'), before)
   })
 
+  it('defaults to auto orchestration and reports codex bootstrap as actual path', () => {
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+    const report = buildOperatorReport(status)
+
+    assert.equal(status.orchestration.requested_orchestration_mode, 'auto')
+    assert.equal(status.orchestration.actual_orchestration_mode, 'codex_bootstrap')
+    assert.equal(status.orchestration.codex_role, 'orchestrator')
+    assert.match(report, /requested_orchestration_mode: auto/)
+    assert.match(report, /actual_orchestration_mode: codex_bootstrap/)
+  })
+
+  it('fails closed when Spark1 orchestration is requested but not implemented', () => {
+    const status = collectOperatorStatus(batchPath(), {
+      gitStatus: cleanGit,
+      orchestrationMode: 'spark1_orchestrated',
+    })
+
+    assert.equal(decideEndState(status), 'STOP_AND_REPORT')
+    assert.equal(status.orchestration.actual_orchestration_mode, 'not_run')
+    assert.equal(status.orchestration.spark1_orchestrator_used, false)
+    assert.match(buildOperatorReport(status), /pre-dispatch orchestrator-agent handoff/)
+  })
+
   it('includes project profile information when requested', () => {
     const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit, projectId: 'lumeos' })
     const report = buildOperatorReport(status)

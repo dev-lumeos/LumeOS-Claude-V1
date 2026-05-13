@@ -29,6 +29,12 @@ import {
 import { buildAutonomyHandoffContract, type AutonomyHandoff } from '../../reports/autonomy-handoff'
 import { loadCodexWorkerConfig } from '../../workers/codex-worker'
 import { assessMarkdownFile, isMarkdownOutputPath } from './markdown-output-quality'
+import {
+  formatOrchestrationModeStatus,
+  resolveOrchestrationMode,
+  type OrchestrationModeStatus,
+  type RequestedOrchestrationMode,
+} from './orchestration-mode'
 
 export type OperatorEndState =
   | 'READY_TO_RUN'
@@ -36,6 +42,7 @@ export type OperatorEndState =
   | 'NEEDS_SAFE_CLEANUP'
   | 'FIX_REQUIRED'
   | 'STOP_RULE_BLOCKED'
+  | 'STOP_AND_REPORT'
   | 'DONE'
 
 export type ApprovalClassification =
@@ -122,6 +129,7 @@ export interface OperatorStatus {
   dirtyArtifacts: GitStatusEntry[]
   unexpectedDirty: GitStatusEntry[]
   dispatchOutcomes?: DispatchOutcome[]
+  orchestration: OrchestrationModeStatus
 }
 
 export interface CommandResult {
@@ -497,7 +505,7 @@ export function evaluateWorkorderCompletions(batch: LoadedBatch): WorkorderCompl
 
 export function collectOperatorStatus(
   batchPathInput: string,
-  opts: { gitStatus?: GitStatusSummary; projectId?: string } = {},
+  opts: { gitStatus?: GitStatusSummary; projectId?: string; orchestrationMode?: RequestedOrchestrationMode } = {},
 ): OperatorStatus {
   const profile = opts.projectId ? getProjectProfile(opts.projectId) : undefined
   const absoluteBatchPath = path.resolve(batchPathInput)
@@ -509,6 +517,7 @@ export function collectOperatorStatus(
   const relatedApprovals = dedupeApprovals([...queueApprovals, ...runtimeApprovals])
   const stopRules = evaluateStopRules()
   const git = opts.gitStatus ?? readGitStatus()
+  const orchestration = resolveOrchestrationMode(opts.orchestrationMode ?? 'auto')
 
   const activeWorkorders = (state.active_workorders ?? []).filter(w => ids.has(w.workorder_id))
   const activeRuns = (state.active_runs ?? []).filter(r => ids.has(r.workorder_id))
@@ -549,6 +558,7 @@ export function collectOperatorStatus(
       e.category === 'code_changes' &&
       !expectedOutputPatterns.some(pattern => matchesOutputPattern(e.path, pattern)),
     ),
+    orchestration,
   }
 }
 
@@ -573,6 +583,7 @@ function dedupeApprovals<T extends ApprovalQueueItem | ApprovalItem>(approvals: 
 }
 
 export function decideEndState(status: OperatorStatus): OperatorEndState {
+  if (status.orchestration.blocks_dispatch) return 'STOP_AND_REPORT'
   if (status.systemStop.active || status.stopRules.anyTriggered) return 'STOP_RULE_BLOCKED'
   if (status.approvalStops.length > 0) return 'NEEDS_TOM_APPROVAL'
   if (status.cleanupSuggestions.some(s => s.safeToApply)) return 'NEEDS_SAFE_CLEANUP'
@@ -604,6 +615,9 @@ export function buildOperatorReport(status: OperatorStatus): string {
   }
   lines.push(`Batch: ${status.batchPath}`)
   lines.push(`End state: ${endState}`)
+  lines.push('')
+  lines.push('## Orchestration Mode')
+  lines.push(...formatOrchestrationModeStatus(status.orchestration))
   lines.push('')
   lines.push('## Status')
   lines.push(`current_branch: ${status.git.branch}`)
@@ -693,6 +707,7 @@ function nextCommand(status: OperatorStatus, endState: OperatorEndState): string
   if (endState === 'NEEDS_TOM_APPROVAL') return status.approvalStops[0]?.grantCommand ?? commandFor(APPROVAL_CLI, 'list')
   if (endState === 'NEEDS_SAFE_CLEANUP') return `${commandFor(OPERATOR_CLI, `${status.batchPath} --continue --apply-safe-cleanups${profileArg(status)}`)}`
   if (endState === 'STOP_RULE_BLOCKED') return commandFor('system\\control-plane\\stop-rules.ts', '--dry-run')
+  if (endState === 'STOP_AND_REPORT') return 'Implement Spark1/orchestrator-agent pre-dispatch handoff or rerun with --orchestration-mode codex_bootstrap.'
   if (endState === 'FIX_REQUIRED') return 'git status --short --branch'
   if (endState === 'DONE') return commandFor(OPERATOR_CLI, `${status.batchPath} --status${profileArg(status)}`)
   return commandFor(OPERATOR_CLI, `${status.batchPath} --continue${profileArg(status)}`)
@@ -710,6 +725,7 @@ function handoffNextAction(status: OperatorStatus, endState: OperatorEndState): 
       : 'Review pending approvals; do not grant automatically.'
   }
   if (endState === 'NEEDS_SAFE_CLEANUP') return cleanupDryRunCommand(status) || 'Run the safe cleanup dry-run first.'
+  if (endState === 'STOP_AND_REPORT') return nextCommand(status, endState)
   return nextCommand(status, endState)
 }
 
@@ -717,6 +733,7 @@ function blockerMessages(status: OperatorStatus, endState: OperatorEndState): st
   if (endState === 'NEEDS_TOM_APPROVAL') return status.approvalStops.map(item => `${item.approvalId}: ${item.workorderId} requires ${item.classification}`)
   if (endState === 'NEEDS_SAFE_CLEANUP') return status.cleanupSuggestions.filter(item => item.safeToApply).map(item => `${item.kind}: ${item.workorderId} run=${item.runId}`)
   if (endState === 'STOP_RULE_BLOCKED') return status.stopRules.triggeredRules.length > 0 ? status.stopRules.triggeredRules : [status.stopRules.dryRunResult]
+  if (endState === 'STOP_AND_REPORT') return [status.orchestration.missing_integration_point || status.orchestration.reason]
   if (endState === 'FIX_REQUIRED') return status.unexpectedDirty.map(item => `${item.code} ${item.path}`)
   return []
 }
@@ -743,12 +760,13 @@ export function buildAutonomyHandoff(status: OperatorStatus, forcedEndState?: Op
     finalState: endState,
     batchPath: status.batchPath,
     diagnosis: endState,
+    blockerType: endState === 'STOP_AND_REPORT' ? 'orchestration' : undefined,
     blockers: blockerMessages(status, endState),
     tomActionRequired: endState === 'NEEDS_TOM_APPROVAL',
     safeCleanupCommand: cleanupDryRunCommand(status),
     dossierCommand: dossierCommand(status.batchPath, status),
     doctorCommand: doctorCommand(status),
-    learningRecommended: ['FIX_REQUIRED', 'STOP_RULE_BLOCKED'].includes(endState),
+    learningRecommended: ['FIX_REQUIRED', 'STOP_RULE_BLOCKED', 'STOP_AND_REPORT'].includes(endState),
     codexWorkerCandidate: codex.candidate,
     codexWorkerReason: codex.reason,
     productGateStatus: productGate
@@ -830,11 +848,20 @@ export function runShellCommand(command: string): CommandResult {
   }
 }
 
-export async function runDryRun(batchPathInput: string): Promise<{ report: string; exitCode: number }> {
+export async function runDryRun(
+  batchPathInput: string,
+  opts: { orchestrationMode?: RequestedOrchestrationMode } = {},
+): Promise<{ report: string; exitCode: number }> {
   const batch = loadBatch(batchPathInput)
   const hasSchemaErrors = batch.workorders.some(w => w.validationErrors.length > 0)
+  const orchestration = resolveOrchestrationMode(opts.orchestrationMode ?? 'auto')
   return {
-    report: formatDryRunReport(batch),
+    report: [
+      '## Orchestration Mode',
+      ...formatOrchestrationModeStatus(orchestration),
+      '',
+      formatDryRunReport(batch),
+    ].join('\n'),
     exitCode: hasSchemaErrors ? 1 : 0,
   }
 }
@@ -870,14 +897,14 @@ export function selectRunnableBatch(batchPathInput: string, status: OperatorStat
 
 export async function continueBatch(
   batchPathInput: string,
-  opts: { applySafeCleanups?: boolean; runner?: CommandRunner; projectId?: string } = {},
+  opts: { applySafeCleanups?: boolean; runner?: CommandRunner; projectId?: string; orchestrationMode?: RequestedOrchestrationMode } = {},
 ): Promise<{ status: OperatorStatus; report: string; exitCode: number }> {
-  let status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId })
+  let status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
   let endState = decideEndState(status)
 
   if (endState === 'NEEDS_SAFE_CLEANUP' && opts.applySafeCleanups) {
     const cleanup = await applySafeCleanups(status, opts.runner)
-    status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId })
+    status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
     endState = decideEndState(status)
     const report = [
       `Applied safe cleanups: ${cleanup.applied.length}`,
@@ -895,11 +922,11 @@ export async function continueBatch(
   if (!runnableBatch) {
     return { status, report: buildOperatorReport(status), exitCode: endStateToExitCode(decideEndState(status)) }
   }
-  const outcomes = await runDispatch(runnableBatch)
-  status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId })
+  const outcomes = await runDispatch(runnableBatch, { orchestration: status.orchestration })
+  status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
   status.dispatchOutcomes = outcomes
   const paused = outcomes.some(o => o.status === 'paused_for_approval')
-  const failed = outcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped')
+  const failed = outcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped' || o.status === 'orchestration_blocked')
   const report = [
     buildOperatorReport(status),
     '',
@@ -917,6 +944,7 @@ function endStateToExitCode(endState: OperatorEndState): number {
     case 'NEEDS_TOM_APPROVAL':
       return 3
     case 'STOP_RULE_BLOCKED':
+    case 'STOP_AND_REPORT':
     case 'NEEDS_SAFE_CLEANUP':
     case 'FIX_REQUIRED':
       return 2

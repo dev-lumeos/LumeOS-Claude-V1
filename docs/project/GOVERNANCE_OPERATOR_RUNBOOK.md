@@ -10,6 +10,42 @@ The operator CLI is:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --status
 ```
 
+All operator modes accept an explicit orchestration selector:
+
+```powershell
+--orchestration-mode auto
+--orchestration-mode codex_bootstrap
+--orchestration-mode spark1_orchestrated
+```
+
+## Orchestration Modes
+
+Every operator, doctor, and batch dossier report must include:
+
+- `requested_orchestration_mode`
+- `actual_orchestration_mode`
+- `spark1_orchestrator_used`
+- `codex_role`
+- `missing_integration_point`
+
+Supported requested modes:
+
+- `codex_bootstrap`: Codex may act as orchestrator/bootstrapper while still obeying all governance gates, product gates, stop rules, approval rules, and forbidden actions.
+- `spark1_orchestrated`: the run must route through Spark1 / `orchestrator-agent` before worker assignment. Codex must not silently act as orchestrator. If the Spark1 handoff is unavailable, the operator returns `STOP_AND_REPORT` / `ORCHESTRATION_BLOCKED` with the missing integration point.
+- `auto`: the operator may choose the orchestration path based on policy and must report the chosen path and reason. Current policy chooses `codex_bootstrap` because the batch operator does not yet implement Spark1 pre-dispatch orchestration.
+
+Current missing Spark1 integration point:
+
+`run-batch-operator does not yet implement a pre-dispatch orchestrator-agent handoff for worker assignment.`
+
+Example Spark1-gated local Nutrition test:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\<BATCH>.md --doctor --json --project lumeos --orchestration-mode spark1_orchestrated
+```
+
+Until the Spark1 handoff exists, this must stop and report instead of falling back to Codex bootstrap.
+
 For Nutrition batch 001:
 
 ```powershell

@@ -11,6 +11,7 @@ export type AutonomyFinalState =
   | 'MODEL_RUNTIME_BLOCKED'
   | 'PRODUCT_GATE_BLOCKED'
   | 'DIRTY_WORKTREE'
+  | 'STOP_AND_REPORT'
   | 'NOT_RUN'
   | 'PARTIAL'
   | 'UNKNOWN'
@@ -76,6 +77,7 @@ function defaultBlockerType(finalState: AutonomyFinalState): string {
   if (finalState === 'SPEC_SOURCE_BLOCKED') return 'spec_source_chain'
   if (finalState === 'MODEL_RUNTIME_BLOCKED') return 'model_runtime'
   if (finalState === 'PRODUCT_GATE_BLOCKED') return 'product_gate'
+  if (finalState === 'STOP_AND_REPORT') return 'orchestration'
   if (finalState === 'DIRTY_WORKTREE' || finalState === 'FIX_REQUIRED') return 'fix_required'
   return 'none'
 }

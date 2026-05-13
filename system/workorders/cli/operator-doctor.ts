@@ -11,6 +11,13 @@ import { runSpecSourceChainCheck } from './spec-source-chain-check'
 import { loadCodexWorkerConfig, validateCodexWorkerConfig, type CodexWorkerConfig } from '../../workers/codex-worker'
 import { getProjectProfile, isProductWorkAllowed, type ProjectProfile } from '../../project-profiles/project-profile-loader'
 import { buildAutonomyHandoffContract, type AutonomyFinalState, type AutonomyHandoff } from '../../reports/autonomy-handoff'
+import {
+  formatOrchestrationModeStatus,
+  parseRequestedOrchestrationMode,
+  resolveOrchestrationMode,
+  type OrchestrationModeStatus,
+  type RequestedOrchestrationMode,
+} from './orchestration-mode'
 
 export type OperatorDoctorDiagnosis =
   | 'CLEAN_READY'
@@ -30,6 +37,7 @@ export type OperatorDoctorDiagnosis =
   | 'DIRTY_WORKTREE'
   | 'RUNTIME_ARTIFACTS_PRESENT'
   | 'PRODUCT_GATE_BLOCKED'
+  | 'ORCHESTRATION_BLOCKED'
   | 'FIX_REQUIRED'
   | 'UNKNOWN'
 
@@ -106,6 +114,7 @@ export interface OperatorDoctorResult {
   }
   git_status: OperatorStatus['git']
   stop_rules: OperatorStatus['stopRules']
+  orchestration: OrchestrationModeStatus
   product_gate: { status: 'blocked' | 'allowed'; reason: string }
   autonomy_handoff: AutonomyHandoff
   memory: OperatorDoctorMemoryStatus
@@ -245,6 +254,7 @@ function summarizeCodexWorker(config: CodexWorkerConfig): OperatorDoctorResult['
 
 function diagnosisToAutonomyState(diagnosis: OperatorDoctorDiagnosis): AutonomyFinalState {
   if (diagnosis === 'CLEAN_READY') return 'READY_TO_RUN'
+  if (diagnosis === 'ORCHESTRATION_BLOCKED') return 'STOP_AND_REPORT'
   if (diagnosis === 'RUNTIME_ARTIFACTS_PRESENT') return 'FIX_REQUIRED'
   if (diagnosis === 'RUNTIME_UNHEALTHY' || diagnosis === 'MODEL_CONFIG_WARNING' || diagnosis === 'MODEL_ENDPOINT_UNREACHABLE' || diagnosis === 'MODEL_MISSING' || diagnosis === 'JSON_MODE_POLICY_MISSING' || diagnosis === 'QWEN_THINKING_POLICY_MISSING') return 'MODEL_RUNTIME_BLOCKED'
   return diagnosis as AutonomyFinalState
@@ -305,6 +315,7 @@ function readRuntimeFailureAudit(status: OperatorStatus, repoRoot = process.cwd(
 }
 
 export function diagnoseOperatorDoctor(status: OperatorStatus, options: DiagnoseOptions = {}): OperatorDoctorResult {
+  const orchestration = status.orchestration ?? resolveOrchestrationMode('auto')
   const checkers = options.checkers ?? {
     invariant: defaultChecker(),
     agent_contract: defaultChecker(),
@@ -347,7 +358,17 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
   const runtimeFailureAudit = readRuntimeFailureAudit(status)
   const runtimeFailureAuditCurrent = runtimeFailureAuditIsCurrent(runtimeFailureAudit, runtimeHistory)
 
-  if (options.forceProductGateBlock) {
+  if (orchestration.blocks_dispatch) {
+    finalDiagnosis = 'ORCHESTRATION_BLOCKED'
+    addBlock(
+      blockers,
+      finalDiagnosis,
+      'Requested orchestration mode cannot be honored by the current operator path.',
+      orchestration.missing_integration_point,
+      'orchestration',
+    )
+    nextAction = 'Implement Spark1/orchestrator-agent pre-dispatch handoff or rerun with --orchestration-mode codex_bootstrap.'
+  } else if (options.forceProductGateBlock) {
     finalDiagnosis = 'PRODUCT_GATE_BLOCKED'
     addBlock(blockers, finalDiagnosis, 'Product work gate is closed.', productGate.reason, 'product_gate')
     nextAction = 'Do not proceed: product gate blocked until Tom explicitly opens or waives it.'
@@ -470,6 +491,7 @@ export function diagnoseOperatorDoctor(status: OperatorStatus, options: Diagnose
     runtime_history: runtimeHistory,
     git_status: status.git,
     stop_rules: status.stopRules,
+    orchestration,
     product_gate: productGate,
     autonomy_handoff: autonomyHandoff,
     memory,
@@ -494,6 +516,9 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   }
   lines.push(`Diagnosis: ${result.final_diagnosis}`)
   lines.push(`Next action: ${result.next_action}`)
+  lines.push('')
+  lines.push('## Orchestration Mode')
+  lines.push(...formatOrchestrationModeStatus(result.orchestration))
   lines.push('')
   lines.push('## Blockers')
   if (result.blockers.length === 0) {
@@ -542,9 +567,9 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
   return lines.join('\n')
 }
 
-export function runOperatorDoctor(batchPath: string, opts: { json?: boolean; projectId?: string } = {}): { result: OperatorDoctorResult; report: string; exitCode: number } {
+export function runOperatorDoctor(batchPath: string, opts: { json?: boolean; projectId?: string; orchestrationMode?: RequestedOrchestrationMode } = {}): { result: OperatorDoctorResult; report: string; exitCode: number } {
   const profile = opts.projectId ? getProjectProfile(opts.projectId) : undefined
-  const status = collectOperatorStatus(batchPath, { projectId: opts.projectId })
+  const status = collectOperatorStatus(batchPath, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
   const result = diagnoseOperatorDoctor(status, {
     checkers: collectOperatorDoctorCheckers(batchPath, opts.projectId),
     memory: collectOperatorDoctorMemoryStatus(process.cwd(), batchPath),
@@ -563,15 +588,18 @@ function main(): number {
   const json = args.includes('--json')
   const projectIndex = args.indexOf('--project')
   const projectId = projectIndex !== -1 ? args[projectIndex + 1] : 'lumeos'
+  const orchestrationIndex = args.indexOf('--orchestration-mode')
+  const orchestrationValue = orchestrationIndex !== -1 ? args[orchestrationIndex + 1] : 'auto'
+  const orchestrationMode = parseRequestedOrchestrationMode(orchestrationValue)
   if (projectIndex !== -1 && (!projectId || projectId.startsWith('--'))) {
     console.error('--project requires an id')
     return 2
   }
   if (!batchFile) {
-    console.error('Usage: npx tsx system/workorders/cli/operator-doctor.ts <batch-file> [--json] [--project <id>]')
+    console.error('Usage: npx tsx system/workorders/cli/operator-doctor.ts <batch-file> [--json] [--project <id>] [--orchestration-mode <auto|codex_bootstrap|spark1_orchestrated>]')
     return 2
   }
-  const result = runOperatorDoctor(batchFile, { json, projectId })
+  const result = runOperatorDoctor(batchFile, { json, projectId, orchestrationMode })
   console.log(result.report)
   return result.exitCode
 }
