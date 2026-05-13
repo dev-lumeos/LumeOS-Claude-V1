@@ -173,6 +173,19 @@ RDA update rows merged: 26
 - No nutrient code, label, unit, group, sort order, display tier, computation flag, formula, or RDA value was authored by an LLM.
 - Rows missing explicit RDA update examples retain empty `rda_male`, `rda_female`, and `rda_unit` fields.
 
+## Open RDA / Reference-Values Boundary
+
+The current `rda_male`, `rda_female`, and `rda_unit` fields are partial by design.
+
+- RDA values are populated only where explicitly declared by the current source/spec.
+- Missing RDA values are not seed errors.
+- `NULL` or empty candidate fields are correct when no verified value exists in the current source.
+- Missing values must not be inferred from nutrient names, units, adjacent rows, or male/female symmetry.
+- Missing values must not be backfilled from internet sources, DGE, EFSA, NIH, or other authorities unless a future explicit source-candidate validates that source set.
+- Male/female values must not be copied from each other unless the source explicitly declares both values.
+
+Future work must create a separate `nutrient_reference_values` / RDA source candidate before adding reference values beyond the current explicit examples. That future candidate must decide the RDA/AI/UL model, sex and age-group dimensions, units, region/source priority, source references, validation rules, and rollback posture. It is separate from BLS import and separate from the `nutrient_defs` schema/seed boundary.
+
 ## Validation query
 
 DO NOT RUN until a later seed-execution boundary is explicitly opened.
@@ -194,12 +207,14 @@ from nutrition.nutrient_defs;
 - No BLS import is authorized.
 - No raw BLS commit is authorized.
 - No migration execution is authorized.
+- No RDA/reference-values completion or backfill is authorized.
 
 ## Stop conditions
 
 - Stop if the source row count is not exactly 138.
 - Stop if any candidate row cannot be traced to the SPEC_06 seed block.
 - Stop if any row requires a value not present in the source text.
+- Stop if any missing RDA value would need inference, internet lookup, external source reuse, or male/female copying.
 - Stop if seed execution, DB apply, Supabase, BLS import, raw BLS commit, or migration execution is requested before a new execution boundary is opened.
 
 ## Next local-only boundary

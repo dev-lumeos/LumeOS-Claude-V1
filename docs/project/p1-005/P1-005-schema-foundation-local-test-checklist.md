@@ -17,6 +17,7 @@ Covered here:
 - local verification of `nutrition.nutrient_defs`
 - local inspection of schema shape
 - local confirmation that the approved local-only `nutrient_defs` seed boundary contains exactly 138 rows
+- local confirmation that partial RDA/reference fields remain source-bound
 - local preparation for future non-local decisions
 
 Not covered here:
@@ -25,6 +26,7 @@ Not covered here:
 - LIVE/prod promotion
 - seed payload
 - RDA updates
+- RDA/reference-values backfill
 - BLS import
 - any broader DB work
 
@@ -52,7 +54,22 @@ The local-only nutrient_defs seed boundary has now also been applied to local Su
 - UTF-8 correction has been applied locally after the first seed pipe corrupted German text through `??` replacement sequences
 - local validation now confirms zero rows where `name_de`, `group_de`, or `unit` contains `??`
 - sample checks now preserve `Aminosäuren`, `Essigsäure`, `Kohlenhydrate, verfügbar`, and `Fettlösliche Vitamine`
+- `rda_male` and `rda_female` remain partial by design; values exist only where explicitly declared in the current source/spec
+- missing RDA values are not local test failures and must remain `NULL` unless a verified future source candidate authorizes them
 - no DEV/LIVE action, BLS import, raw BLS commit, migration execution outside local, or broader DB work was performed
+
+## Open RDA / Reference-Values Boundary
+
+The current local `nutrition.nutrient_defs` seed does not complete the RDA/reference-values model.
+
+- Current RDA fields are partial by design.
+- Missing RDA values are not errors.
+- Do not infer missing values from nutrient name, unit, group, neighboring rows, or male/female symmetry.
+- Do not backfill from internet sources.
+- Do not use DGE, EFSA, NIH, or other authority values unless a future explicit source-candidate validates those sources.
+- Do not copy male/female values unless both are explicitly sourced.
+- A future `nutrient_reference_values` / RDA source candidate must decide RDA/AI/UL modeling, sex and age groups, units, region/source priority, source references, validation rules, and rollback posture.
+- That future reference-values candidate is separate from BLS import and separate from the `nutrient_defs` schema/seed boundary.
 
 ## Local-Only Verification Commands
 
@@ -86,6 +103,8 @@ docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select
 - [ ] `corrupted_text_rows = 0`
 - [ ] German UTF-8 samples render as `Aminosäuren`, `Essigsäure`, `Kohlenhydrate, verfügbar`, and `Fettlösliche Vitamine`
 - [ ] no RDA update step was bundled into the migration
+- [ ] missing RDA/reference values remain accepted as source-bound gaps, not defects
+- [ ] no inferred, internet-sourced, or copied male/female RDA values were added
 - [ ] no BLS import logic or staging/import objects were bundled into the migration
 - [ ] index and constraint names match the reviewed candidate
 - [ ] no unexpected extra Nutrition tables were introduced by this local-only step
@@ -97,6 +116,7 @@ Stop and do not widen scope if any of the following is true:
 - local schema shape differs from the reviewed candidate
 - unexpected Nutrition tables appear
 - any test attempt requires seed payload, RDA updates, or BLS import to continue
+- any test attempt requires inferred/backfilled RDA/reference values to continue
 - any next step would require DEV or LIVE promotion
 
 ## Next Local-Only Step
@@ -114,4 +134,5 @@ This checklist does not authorize:
 - migration execution outside local
 - seed payload
 - RDA updates
+- RDA/reference-values backfill
 - BLS import

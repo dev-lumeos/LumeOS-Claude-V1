@@ -491,6 +491,28 @@
         "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
         "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md"
       ]
+    },
+    {
+      "id": "GOV-TODO-023",
+      "title": "Create separate nutrient reference-values / RDA source candidate",
+      "layer": "product_gate",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "The local nutrient_defs seed is applied and UTF-8 corrected, but rda_male and rda_female remain partial by design. The current source/spec explicitly declares only a subset of RDA values. Missing values are not defects and must remain NULL unless a future verified source candidate authorizes them.",
+      "recommended_action": "Create a separate nutrient_reference_values / RDA source candidate before adding any additional reference values. The candidate must use verified source references, decide RDA/AI/UL modeling, sex and age groups, units, region/source priority, validation rules, and rollback posture. Do not infer, internet-backfill, use DGE/EFSA/NIH values, or copy male/female values without explicit source validation.",
+      "dependencies": [
+        "GOV-TODO-021",
+        "GOV-TODO-022"
+      ],
+      "estimated_effort": "0.5-1d planning plus source review",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
+        "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md"
+      ]
     }
   ]
 }
