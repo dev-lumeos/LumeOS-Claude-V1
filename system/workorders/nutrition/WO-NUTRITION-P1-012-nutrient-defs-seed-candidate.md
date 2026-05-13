@@ -55,8 +55,16 @@ task: |
   - sort_order
   - source_ref
 
-  Do not fabricate nutrient names, units, groups, or row payload. It is acceptable for
-  name_th and group_th to be empty string while no translation seed boundary is open.
+  Source discipline:
+  - Use only repo source paths from source_refs/context_files below.
+  - Derive representative rows from `docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md`,
+    section `### Seed-Daten: nutrient_defs (138 Codes)`.
+  - The `source_ref` table column must cite the repo source path/section, for example:
+    `docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md:67-257`.
+  - Do not cite invented external versions such as `BLS2023-v2.1`, `BLS-2024-09`, or
+    `LUMEOS-nutrition-v1.2` unless that exact string appears in the repo source files.
+  - Do not fabricate nutrient names, units, groups, or row payload.
+  - It is acceptable for name_th and group_th to be empty string while no translation seed boundary is open.
 
   The candidate must:
   - stay review-only and non-executable
