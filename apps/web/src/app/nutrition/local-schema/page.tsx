@@ -1,4 +1,5 @@
 import { LocalSchemaDebugError, getLocalNutritionSchemaDebug } from '../../../lib/nutrition/local-schema-debug'
+import { NutrientPreviewFilter } from './nutrient-preview-filter'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,7 +21,6 @@ export default async function LocalNutritionSchemaPage() {
   try {
     const snapshot = await getLocalNutritionSchemaDebug()
     const hasLocalSeedRows = snapshot.table_exists && snapshot.row_count === 138
-    const previewLimit = snapshot.nutrient_preview.length
 
     return (
       <main className="min-h-screen bg-slate-950 text-slate-100">
@@ -187,47 +187,11 @@ export default async function LocalNutritionSchemaPage() {
             </div>
           </section>
 
-          <section className="mt-8 rounded-lg border border-slate-800 bg-slate-900 p-5">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="text-lg font-semibold">Nutrient Preview</h2>
-                <p className="mt-1 text-xs text-slate-400">
-                  First {previewLimit} local rows ordered by sort index. Thai fields are intentionally empty at this boundary.
-                </p>
-              </div>
-              <StatusBadge tone={hasLocalSeedRows ? 'pass' : 'attention'} label={hasLocalSeedRows ? 'Seeded locally' : 'Local preview'} />
-            </div>
-            <div className="overflow-x-auto">
-              <table className="min-w-full border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-slate-800 text-left text-slate-400">
-                    <th className="px-3 py-2 font-medium">code</th>
-                    <th className="px-3 py-2 font-medium">name_de</th>
-                    <th className="px-3 py-2 font-medium">name_en</th>
-                    <th className="px-3 py-2 font-medium">name_th</th>
-                    <th className="px-3 py-2 font-medium">unit</th>
-                    <th className="px-3 py-2 font-medium">group_de</th>
-                    <th className="px-3 py-2 font-medium">group_en</th>
-                    <th className="px-3 py-2 font-medium">group_th</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {snapshot.nutrient_preview.map((row) => (
-                    <tr key={row.code} className="border-b border-slate-900/80 align-top">
-                      <td className="px-3 py-2 font-mono text-slate-100">{row.code}</td>
-                      <td className="min-w-52 px-3 py-2 text-slate-100">{row.name_de}</td>
-                      <td className="min-w-52 px-3 py-2 text-slate-300">{row.name_en}</td>
-                      <td className="px-3 py-2 font-mono text-slate-500">{row.name_th || "''"}</td>
-                      <td className="px-3 py-2 font-mono text-slate-100">{row.unit}</td>
-                      <td className="min-w-44 px-3 py-2 text-slate-300">{row.group_de}</td>
-                      <td className="min-w-44 px-3 py-2 text-slate-300">{row.group_en}</td>
-                      <td className="px-3 py-2 font-mono text-slate-500">{row.group_th || "''"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+          <NutrientPreviewFilter
+            groups={snapshot.group_counts}
+            hasLocalSeedRows={hasLocalSeedRows}
+            rows={snapshot.nutrient_preview}
+          />
         </div>
       </main>
     )

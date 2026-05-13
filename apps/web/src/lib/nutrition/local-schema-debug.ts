@@ -185,7 +185,7 @@ nutrient_preview_json AS (
       sort_index
     FROM nutrition.nutrient_defs
     ORDER BY sort_index, code
-    LIMIT 24
+    LIMIT 138
   ) preview
 ),
 rda_summary_json AS (
