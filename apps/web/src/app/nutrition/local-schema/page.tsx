@@ -19,7 +19,7 @@ function StatusBadge({ tone, label }: { tone: 'pass' | 'attention' | 'blocked'; 
 export default async function LocalNutritionSchemaPage() {
   try {
     const snapshot = await getLocalNutritionSchemaDebug()
-    const isExpectedEmpty = snapshot.table_exists && snapshot.row_count === 0
+    const hasLocalSeedRows = snapshot.table_exists && snapshot.row_count === 138
 
     return (
       <main className="min-h-screen bg-slate-950 text-slate-100">
@@ -57,7 +57,7 @@ export default async function LocalNutritionSchemaPage() {
               <div className="text-xs uppercase tracking-[0.16em] text-slate-400">Rows</div>
               <div className="mt-3 text-3xl font-semibold text-slate-100">{snapshot.row_count}</div>
               <div className="mt-2 text-xs text-slate-400">
-                {isExpectedEmpty ? 'Expected while seed payload remains blocked.' : 'Local row count only.'}
+                {hasLocalSeedRows ? 'Expected after local-only nutrient_defs seed apply.' : 'Local row count only.'}
               </div>
             </div>
             <div className="rounded-lg border border-slate-800 bg-slate-900 p-4">

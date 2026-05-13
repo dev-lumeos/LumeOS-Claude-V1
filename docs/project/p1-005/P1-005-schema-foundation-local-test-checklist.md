@@ -1,6 +1,6 @@
 # P1-005 Schema Foundation Local Test Checklist
 
-> **Status**: LOCAL_ONLY_TESTING
+> **Status**: LOCAL_ONLY_SEED_APPLIED
 > **Migration already applied locally**: `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql`
 > **Environment**: local Supabase/Test DB only
 
@@ -16,7 +16,7 @@ Covered here:
 
 - local verification of `nutrition.nutrient_defs`
 - local inspection of schema shape
-- local confirmation that no seed/import side effects occurred
+- local confirmation that the approved local-only `nutrient_defs` seed boundary contains exactly 138 rows
 - local preparation for future non-local decisions
 
 Not covered here:
@@ -44,6 +44,13 @@ The current local target shape after the Thai i18n correction slice is:
 - `name_th` present as `text not null`
 - `group_th` present as `text not null`
 
+The local-only nutrient_defs seed boundary has now also been applied to local Supabase/Test DB only:
+
+- `nutrition.nutrient_defs` row count is 138
+- all 138 rows have `name_th = ''`
+- all 138 rows have `group_th = ''`
+- no DEV/LIVE action, BLS import, raw BLS commit, migration execution outside local, or broader DB work was performed
+
 ## Local-Only Verification Commands
 
 ```powershell
@@ -54,6 +61,8 @@ docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select
 docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select indexname, indexdef from pg_indexes where schemaname='nutrition' and tablename='nutrient_defs' order by indexname;"
 
 docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select conname, pg_get_constraintdef(c.oid) as definition from pg_constraint c join pg_class t on t.oid = c.conrelid join pg_namespace n on n.oid = t.relnamespace where n.nspname='nutrition' and t.relname='nutrient_defs' order by conname;"
+
+docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select count(*) as row_count, count(*) filter (where name_th = '') as empty_name_th, count(*) filter (where group_th = '') as empty_group_th from nutrition.nutrient_defs;"
 ```
 
 ## Local Review Checklist
@@ -63,7 +72,10 @@ docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -c "select
 - [ ] target shape remains 16 columns total
 - [ ] `name_th` is `text not null default ''`
 - [ ] `group_th` is `text not null default ''`
-- [ ] no seed rows were inserted by this migration step
+- [ ] local-only seed rows are present only after the explicit seed boundary
+- [ ] `row_count = 138`
+- [ ] `empty_name_th = 138`
+- [ ] `empty_group_th = 138`
 - [ ] no RDA update step was bundled into the migration
 - [ ] no BLS import logic or staging/import objects were bundled into the migration
 - [ ] index and constraint names match the reviewed candidate

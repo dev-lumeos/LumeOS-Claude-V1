@@ -5,6 +5,7 @@ import fs from 'node:fs'
 import {
   NUTRIENT_DEFS_SEED_COLUMNS,
   buildSeedCandidateMarkdown,
+  buildSeedInsertSql,
   extractNutrientDefsSeedCandidate,
   validateNutrientDefsSeedCandidate,
 } from '../nutrient-defs-seed-extract'
@@ -68,5 +69,20 @@ describe('nutrient_defs seed extraction', () => {
     assert.match(markdown, /name_th/)
     assert.match(markdown, /group_th/)
     assert.match(markdown, /No seed execution is authorized/)
+  })
+
+  it('builds guarded local-only seed SQL from the deterministic candidate', () => {
+    const source = fs.readFileSync(SPEC_PATH, 'utf8')
+    const candidate = extractNutrientDefsSeedCandidate(source, SPEC_PATH)
+    const sql = buildSeedInsertSql(candidate)
+
+    assert.match(sql, /P1-005 LOCAL-ONLY nutrient_defs seed execution SQL/)
+    assert.match(sql, /insert into nutrition\.nutrient_defs \(code, name_de, name_en, name_th, unit, group_de, group_en, group_th, sort_index, display_tier, is_always_computed, is_partly_computed, formula, rda_male, rda_female, rda_unit\) values/)
+    assert.match(sql, /row_count <> 138/)
+    assert.match(sql, /empty_name_th <> 138/)
+    assert.match(sql, /empty_group_th <> 138/)
+    assert.match(sql, /\('ENERCJ', 'Energie \(Kilojoule\)', 'Energy \(kilojoule\)', '', 'kJ'/)
+    assert.match(sql, /\('ENERCC', 'Energie \(Kilokalorien\)', 'Energy \(kilocalorie\)', '', 'kcal'.*'2800', '2100', 'kcal'\)/)
+    assert.doesNotMatch(sql, /BLS2023-v2\.1|BLS-2024-09|LUMEOS-nutrition-v1\.2/)
   })
 })

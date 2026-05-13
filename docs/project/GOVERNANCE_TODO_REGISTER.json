@@ -447,6 +447,28 @@
         "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
         "system/workorders/nutrition/WO-NUTRITION-P1-012-nutrient-defs-seed-candidate.md"
       ]
+    },
+    {
+      "id": "GOV-TODO-021",
+      "title": "Local-only nutrient_defs seed execution boundary",
+      "layer": "product_gate",
+      "severity": "medium",
+      "priority": "P0",
+      "status": "done",
+      "evidence": "Tom opened the local-only seed execution boundary. The deterministic local seed SQL generated from system/workorders/cli/nutrient-defs-seed-extract.ts was applied only to local Supabase/Test DB. Validation confirmed row_count=138, empty_name_th=138, empty_group_th=138, and non_empty_th_fields=0.",
+      "recommended_action": "Keep DEV/LIVE promotion, BLS import, raw BLS commit, migration execution outside local, and broader DB work blocked. Use the local debug page /nutrition/local-schema for row_count visibility.",
+      "dependencies": [
+        "GOV-TODO-020"
+      ],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workorders/cli/nutrient-defs-seed-extract.ts",
+        "docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md",
+        "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md",
+        "apps/web/src/app/nutrition/local-schema/page.tsx"
+      ]
     }
   ]
 }

@@ -244,6 +244,20 @@ function markdownValue(value: string | number | boolean | null): string {
   return String(value).replace(/\|/g, '\\|').replace(/\r?\n/g, ' ')
 }
 
+function sqlLiteral(value: string | number | boolean | null): string {
+  if (value === null) return 'NULL'
+  if (typeof value === 'number') return String(value)
+  if (typeof value === 'boolean') return value ? 'true' : 'false'
+  return `'${value.replace(/'/g, "''")}'`
+}
+
+function seedSqlLiteral(column: NutrientDefsSeedColumn, value: string | number | boolean | null): string {
+  if ((column === 'rda_male' || column === 'rda_female' || column === 'rda_unit') && value === '') {
+    return 'NULL'
+  }
+  return sqlLiteral(value)
+}
+
 export function extractNutrientDefsSeedCandidate(source: string, sourcePath = DEFAULT_SOURCE_PATH): NutrientDefsSeedCandidate {
   const seedRange = findSeedRange(source)
   const rdaRange = findRdaRange(source)
@@ -374,6 +388,69 @@ export function buildSeedCandidateMarkdown(candidate: NutrientDefsSeedCandidate)
   ].join('\n')
 }
 
+export function buildSeedInsertSql(candidate: NutrientDefsSeedCandidate): string {
+  const validation = validateNutrientDefsSeedCandidate(buildSeedCandidateMarkdown(candidate), candidate)
+  if (!validation.valid) {
+    throw new Error(`cannot build seed SQL from invalid candidate: ${validation.errors.join('; ')}`)
+  }
+
+  const rowSql = candidate.rows.map(row => {
+    const values = candidate.columns.map(column => seedSqlLiteral(column, row[column]))
+    return `  (${values.join(', ')})`
+  })
+
+  return [
+    '-- P1-005 LOCAL-ONLY nutrient_defs seed execution SQL.',
+    '-- Generated deterministically from docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md.',
+    '-- Scope: local Supabase/Test DB only. No DEV/LIVE, BLS import, raw BLS commit, or broader DB work.',
+    'begin;',
+    '',
+    'do $$',
+    'declare',
+    '  existing_count integer;',
+    'begin',
+    "  if to_regclass('nutrition.nutrient_defs') is null then",
+    "    raise exception 'nutrition.nutrient_defs is missing; apply schema foundation before local seed execution';",
+    '  end if;',
+    '',
+    '  select count(*)::int into existing_count from nutrition.nutrient_defs;',
+    '  if existing_count <> 0 then',
+    "    raise exception 'nutrition.nutrient_defs must be empty before first local seed execution; current row_count=%', existing_count;",
+    '  end if;',
+    'end $$;',
+    '',
+    `insert into nutrition.nutrient_defs (${candidate.columns.join(', ')}) values`,
+    `${rowSql.join(',\n')};`,
+    '',
+    'do $$',
+    'declare',
+    '  row_count integer;',
+    '  empty_name_th integer;',
+    '  empty_group_th integer;',
+    'begin',
+    '  select',
+    '    count(*)::int,',
+    "    count(*) filter (where name_th = '')::int,",
+    "    count(*) filter (where group_th = '')::int",
+    '  into row_count, empty_name_th, empty_group_th',
+    '  from nutrition.nutrient_defs;',
+    '',
+    '  if row_count <> 138 then',
+    "    raise exception 'nutrient_defs local seed row_count mismatch: %', row_count;",
+    '  end if;',
+    '  if empty_name_th <> 138 then',
+    "    raise exception 'nutrient_defs local seed name_th empty count mismatch: %', empty_name_th;",
+    '  end if;',
+    '  if empty_group_th <> 138 then',
+    "    raise exception 'nutrient_defs local seed group_th empty count mismatch: %', empty_group_th;",
+    '  end if;',
+    'end $$;',
+    '',
+    'commit;',
+    '',
+  ].join('\n')
+}
+
 export function validateNutrientDefsSeedCandidate(markdown: string, candidate: NutrientDefsSeedCandidate): ValidationResult {
   const errors: string[] = []
   if (candidate.rows.length !== candidate.expectedRowCount) {
@@ -425,7 +502,7 @@ export function writeSeedCandidate(options: {
 }
 
 function printUsage(): void {
-  console.error('Usage: nutrient-defs-seed-extract.ts [--write] [--json] [--source <path>] [--output <path>]')
+  console.error('Usage: nutrient-defs-seed-extract.ts [--write] [--json] [--source <path>] [--output <path>] [--sql-output <path>]')
 }
 
 function argValue(args: string[], flag: string): string | undefined {
@@ -441,6 +518,7 @@ function main(): void {
   }
   const sourcePath = argValue(args, '--source') ?? DEFAULT_SOURCE_PATH
   const outputPath = argValue(args, '--output') ?? DEFAULT_OUTPUT_PATH
+  const sqlOutputPath = argValue(args, '--sql-output')
   const source = fs.readFileSync(path.resolve(process.cwd(), sourcePath), 'utf8')
   const candidate = extractNutrientDefsSeedCandidate(source, sourcePath)
   const markdown = buildSeedCandidateMarkdown(candidate)
@@ -454,11 +532,18 @@ function main(): void {
     fs.mkdirSync(path.dirname(absoluteOutput), { recursive: true })
     fs.writeFileSync(absoluteOutput, markdown, 'utf8')
   }
+  if (sqlOutputPath) {
+    const absoluteSqlOutput = path.resolve(process.cwd(), sqlOutputPath)
+    fs.mkdirSync(path.dirname(absoluteSqlOutput), { recursive: true })
+    fs.writeFileSync(absoluteSqlOutput, buildSeedInsertSql(candidate), 'utf8')
+  }
   const result = {
     ok: true,
     sourcePath,
     outputPath,
+    sqlOutputPath: sqlOutputPath ?? null,
     wrote: args.includes('--write'),
+    wroteSql: Boolean(sqlOutputPath),
     columns: candidate.columns,
     rowCount: candidate.rows.length,
     expectedRowCount: candidate.expectedRowCount,
