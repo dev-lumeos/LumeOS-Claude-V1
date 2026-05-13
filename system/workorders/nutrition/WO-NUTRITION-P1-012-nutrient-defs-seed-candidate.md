@@ -20,6 +20,10 @@ task: |
   Write exactly one output:
   - docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md
 
+  Completion without writing this file is invalid. The dispatcher must receive a write tool
+  request for the exact output path above. Do not return a completed/no-tool response unless
+  the file has already been written and satisfies all acceptance criteria.
+
   The candidate must be a complete markdown review artifact, not a stub. It must include these sections:
   - Title and status
   - Purpose
