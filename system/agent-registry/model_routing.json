@@ -217,7 +217,7 @@
       "temperature": 0.0,
       "seed": 42,
       "max_context": 65536,
-      "max_tokens": 1200,
+      "max_tokens": 4096,
       "optional_runtime": true,
       "runtime_required": "on_demand",
       "controlled_route": true,

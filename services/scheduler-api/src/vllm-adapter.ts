@@ -126,7 +126,7 @@ export async function callGemmaReviewer(
 export async function callNemotronReviewer(
   systemPrompt: string,
   userMessage: string,
-  maxTokens = 1200,
+  maxTokens = 4096,
 ): Promise<string> {
   const endpoint = process.env.NEMOTRON_REVIEW_ENDPOINT ?? 'http://192.168.0.99:8001'
   const model = process.env.NEMOTRON_REVIEW_MODEL
@@ -142,7 +142,7 @@ export async function callNemotronReviewer(
         { role: 'user', content: userMessage },
       ],
       temperature: 0.0,
-      max_tokens: Math.max(maxTokens, 1200),
+      max_tokens: Math.max(maxTokens, 4096),
       response_format: { type: 'json_object' },
     }),
   })

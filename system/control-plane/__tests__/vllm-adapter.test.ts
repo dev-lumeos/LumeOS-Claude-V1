@@ -89,7 +89,7 @@ describe('vLLM adapter content normalization', () => {
 
       assert.equal(result, '{"status":"PASS","summary":"ok","findings":[],"confidence":0.9,"reviewer":"nemotron-review-agent"}')
       assert.deepEqual(requestBody.response_format, { type: 'json_object' })
-      assert.equal(requestBody.max_tokens, 1200)
+      assert.equal(requestBody.max_tokens, 4096)
     } finally {
       if (oldEndpoint === undefined) delete process.env.NEMOTRON_REVIEW_ENDPOINT
       else process.env.NEMOTRON_REVIEW_ENDPOINT = oldEndpoint

@@ -36,7 +36,7 @@ Wrapper rule for normal workflow output:
 - Trim `message.content`.
 - Ignore `reasoning` for normal workflow output.
 - Treat empty trimmed content as invalid.
-- Reserve enough `max_tokens` for long-context prompts because reasoning can consume output budget even when normal workflow output ignores the `reasoning` field.
+- Reserve enough `max_tokens` for governed review prompts because reasoning can consume output budget even when normal workflow output ignores the `reasoning` field. Current controlled reviewer floor is 4096 tokens; the health probe uses a 512-token floor.
 
 ## Observed Performance
 

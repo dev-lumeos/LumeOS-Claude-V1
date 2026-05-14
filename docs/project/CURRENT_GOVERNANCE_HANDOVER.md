@@ -25,6 +25,7 @@ evidence only and must not override the current SSOT files listed below.
   - Service/container: `vllm.service` / `vllm_node`
   - Model: `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
   - Role: controlled `nemotron-review-agent`, specialist / multimodal / visual-review / OCR / FoodCam candidate.
+  - Governed review calls require enough output budget because Nemotron may emit separate reasoning before content; current controlled reviewer floor is 4096 tokens and completion health probe floor is 512 tokens.
   - Not orchestrator, not coding worker, not production routing by default.
   - Gemma4 on DGX3 is retired and must not be used.
 - DGX4/5 MiniMax is a verified lab-only runtime path, not production routing.

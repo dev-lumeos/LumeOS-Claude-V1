@@ -201,7 +201,7 @@ const LATEST_FILE = 'latest.json'
 const MAINTENANCE_FILE = 'system/control-plane/runtime-maintenance.json'
 const DEFAULT_PROBE_MODE: 'models' | 'completion' = 'models'
 const COMPLETION_PROBE_MAX_TOKENS = 8
-const NEMOTRON_COMPLETION_PROBE_MAX_TOKENS = 64
+const NEMOTRON_COMPLETION_PROBE_MAX_TOKENS = 512
 
 function readText(repoRoot: string, relativePath: string): string {
   const fullPath = path.join(repoRoot, relativePath)

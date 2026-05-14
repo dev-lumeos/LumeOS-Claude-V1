@@ -358,7 +358,7 @@ async function defaultCallModel(routing) {
 
     assert.equal(result.exitCode, 0)
     assert.equal(requestBody.model, 'nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4')
-    assert.equal(requestBody.max_tokens, 64)
+    assert.equal(requestBody.max_tokens, 512)
     assert.match(requestBody.messages[0].content, /JSON object/)
     assert.equal(result.routes.find(route => route.agent === 'nemotron-review-agent')?.endpoint_status, 'ok')
   })
