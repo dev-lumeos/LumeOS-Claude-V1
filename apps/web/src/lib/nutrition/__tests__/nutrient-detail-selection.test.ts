@@ -2,7 +2,12 @@ import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 
 import type { NutritionNutrientPreviewRow } from '../local-schema-debug'
-import { formatNutrientDetailValue, selectNutrientDetailRow } from '../nutrient-detail-selection'
+import {
+  buildNutrientDetailUrl,
+  formatNutrientDetailValue,
+  resolveNutrientDetailCode,
+  selectNutrientDetailRow,
+} from '../nutrient-detail-selection'
 
 const rows: NutritionNutrientPreviewRow[] = [
   {
@@ -54,6 +59,36 @@ describe('selectNutrientDetailRow', () => {
 
   it('returns null for an empty row set', () => {
     assert.equal(selectNutrientDetailRow([], 'CHO'), null)
+  })
+})
+
+describe('resolveNutrientDetailCode', () => {
+  it('uses a valid requested code', () => {
+    assert.equal(resolveNutrientDetailCode(rows, 'CHO'), 'CHO')
+  })
+
+  it('falls back to the first row for invalid codes', () => {
+    assert.equal(resolveNutrientDetailCode(rows, 'MISSING'), 'ENERCJ')
+  })
+
+  it('falls back to an empty string when no rows exist', () => {
+    assert.equal(resolveNutrientDetailCode([], 'CHO'), '')
+  })
+})
+
+describe('buildNutrientDetailUrl', () => {
+  it('sets the nutrient query parameter while preserving other query state', () => {
+    assert.equal(
+      buildNutrientDetailUrl('/nutrition/local-schema', 'group=macro', 'CHO'),
+      '/nutrition/local-schema?group=macro&nutrient=CHO',
+    )
+  })
+
+  it('replaces an existing nutrient query parameter', () => {
+    assert.equal(
+      buildNutrientDetailUrl('/nutrition/local-schema', 'nutrient=ENERCJ&group=macro', 'CHO'),
+      '/nutrition/local-schema?nutrient=CHO&group=macro',
+    )
   })
 })
 

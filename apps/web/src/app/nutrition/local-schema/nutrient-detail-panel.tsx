@@ -1,9 +1,15 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import type { NutritionNutrientPreviewRow } from '../../../lib/nutrition/local-schema-debug'
-import { formatNutrientDetailValue, selectNutrientDetailRow } from '../../../lib/nutrition/nutrient-detail-selection'
+import {
+  buildNutrientDetailUrl,
+  formatNutrientDetailValue,
+  resolveNutrientDetailCode,
+  selectNutrientDetailRow,
+} from '../../../lib/nutrition/nutrient-detail-selection'
 
 type Props = {
   rows: NutritionNutrientPreviewRow[]
@@ -15,7 +21,10 @@ type DetailItem = {
 }
 
 export function NutrientDetailPanel({ rows }: Props) {
-  const [selectedCode, setSelectedCode] = useState(rows[0]?.code ?? '')
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const selectedCode = resolveNutrientDetailCode(rows, searchParams.get('nutrient'))
   const selectedRow = useMemo(
     () => selectNutrientDetailRow(rows, selectedCode),
     [rows, selectedCode],
@@ -62,7 +71,9 @@ export function NutrientDetailPanel({ rows }: Props) {
           <select
             className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none ring-0 focus:border-blue-400"
             value={selectedRow.code}
-            onChange={(event) => setSelectedCode(event.target.value)}
+            onChange={(event) => {
+              router.replace(buildNutrientDetailUrl(pathname, searchParams.toString(), event.target.value), { scroll: false })
+            }}
           >
             {rows.map((row) => (
               <option key={row.code} value={row.code}>
