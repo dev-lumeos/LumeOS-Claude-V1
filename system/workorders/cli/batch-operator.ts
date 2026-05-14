@@ -3,6 +3,7 @@ import path from 'node:path'
 import { spawnSync } from 'node:child_process'
 
 import {
+  expectedOutputStatusesForWorkorder,
   formatDryRunReport,
   loadBatch,
   runDispatch,
@@ -10,7 +11,11 @@ import {
   type LoadedWorkorder,
   type DispatchOutcome,
 } from './batch-loader'
+import { runReviewPipeline } from '../../control-plane/review-pipeline'
+import { createFileAuditWriter } from '../../control-plane/pipeline-audit'
+import { createFileMetricsWriter } from '../../control-plane/pipeline-metrics'
 import { evaluateStopRules } from '../../control-plane/stop-rules'
+import { callGemmaReviewer, callNemotronReviewer } from '../../../services/scheduler-api/src/vllm-adapter'
 import type {
   ActiveWorkorder,
   ApprovalItem,
@@ -37,6 +42,9 @@ import {
 } from './orchestration-mode'
 import { runSpark1OrchestratorHandoff } from './spark1-orchestrator-handoff'
 import type { Spark1OrchestratorHandoffResult } from './spark1-orchestrator-handoff'
+import { getRewriteCount, incrementRewriteCount } from '../../state/state-manager'
+
+const NEMOTRON_REVIEW_ROUTE_ID = 'nemotron-review-agent'
 
 export type OperatorEndState =
   | 'READY_TO_RUN'
@@ -901,6 +909,110 @@ export function selectRunnableBatch(batchPathInput: string, status: OperatorStat
   }
 }
 
+function fastReviewerRouteConfigured(): boolean {
+  return typeof process.env.LUMEOS_FAST_REVIEWER_ROUTE === 'string'
+    && process.env.LUMEOS_FAST_REVIEWER_ROUTE.trim().length > 0
+}
+
+function defaultFastReviewerCall(): (systemPrompt: string, userMessage: string, maxTokens?: number) => Promise<string> {
+  return process.env.LUMEOS_FAST_REVIEWER_ROUTE === NEMOTRON_REVIEW_ROUTE_ID
+    ? callNemotronReviewer
+    : callGemmaReviewer
+}
+
+function readWorkorderExpectedOutputs(workorder: LoadedWorkorder): { path: string; content: string }[] {
+  const parsed = workorder.parsed as Record<string, unknown>
+  const expectedOutputs = Array.isArray(parsed.expected_outputs)
+    ? parsed.expected_outputs.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+    : []
+  return expectedOutputs.flatMap(outputPath => {
+    const normalized = normalizeRepoPath(outputPath)
+    const absolute = path.resolve(process.cwd(), normalized)
+    if (!fs.existsSync(absolute) || !fs.statSync(absolute).isFile()) return []
+    return [{ path: normalized, content: fs.readFileSync(absolute, 'utf8') }]
+  })
+}
+
+export async function runConfiguredOutputReview(
+  batch: LoadedBatch,
+  opts: {
+    callFastReviewer?: (systemPrompt: string, userMessage: string, maxTokens?: number) => Promise<string>
+    force?: boolean
+  } = {},
+): Promise<DispatchOutcome[]> {
+  if (!opts.force && !fastReviewerRouteConfigured()) return []
+
+  const outcomes: DispatchOutcome[] = []
+  for (const workorder of batch.workorders) {
+    const id = typeof workorder.parsed.workorder_id === 'string' ? workorder.parsed.workorder_id : '(unknown)'
+    const outputStatuses = expectedOutputStatusesForWorkorder(workorder)
+    const incomplete = outputStatuses.find(item => !item.exists || !item.valid)
+    if (incomplete) {
+      outcomes.push({
+        workorder_id: id,
+        status: 'failed',
+        detail: `REVIEW_BLOCKED: expected output is not reviewable: ${incomplete.path} (${incomplete.reason ?? 'invalid'})`,
+      })
+      break
+    }
+
+    const outputs = readWorkorderExpectedOutputs(workorder)
+    if (outputs.length === 0) {
+      outcomes.push({
+        workorder_id: id,
+        status: 'failed',
+        detail: 'REVIEW_BLOCKED: configured reviewer route requires expected output content',
+      })
+      break
+    }
+
+    const syntheticRunId = `REVIEW-${new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)}-${id}`
+    const result = await runReviewPipeline(
+      {
+        wo_id: id,
+        run_id: syntheticRunId,
+        output: outputs.map(item => `# ${item.path}\n\n${item.content}`).join('\n\n---\n\n'),
+      },
+      {
+        wo_id: id,
+        category: typeof workorder.parsed.risk_category === 'string' ? workorder.parsed.risk_category : 'standard',
+        task: typeof workorder.parsed.task === 'string' ? workorder.parsed.task : '',
+        changed_files: outputs.map(item => item.path),
+        files_allowed: Array.isArray(workorder.parsed.scope_files)
+          ? workorder.parsed.scope_files.filter((item): item is string => typeof item === 'string')
+          : [],
+      },
+      {
+        callFastReviewer: opts.callFastReviewer ?? defaultFastReviewerCall(),
+        audit: createFileAuditWriter(),
+        getRewriteCount,
+        incrementRewriteCount,
+        writeMetric: createFileMetricsWriter(),
+        requireFastReviewerPass: true,
+      },
+    )
+
+    if (result.kind === 'done') {
+      outcomes.push({
+        workorder_id: id,
+        status: 'dispatched',
+        detail: `Configured reviewer passed via ${result.finalTier}`,
+      })
+      continue
+    }
+
+    outcomes.push({
+      workorder_id: id,
+      status: 'failed',
+      detail: result.kind === 'rewrite'
+        ? `FIX_REQUIRED: ${result.reason}`
+        : `REVIEW_BLOCKED: ${result.reason}`,
+    })
+    break
+  }
+  return outcomes
+}
+
 export async function continueBatch(
   batchPathInput: string,
   opts: { applySafeCleanups?: boolean; runner?: CommandRunner; projectId?: string; orchestrationMode?: RequestedOrchestrationMode } = {},
@@ -921,6 +1033,20 @@ export async function continueBatch(
   }
 
   if (endState !== 'READY_TO_RUN') {
+    if (endState === 'DONE' && fastReviewerRouteConfigured()) {
+      const reviewBatch = loadBatch(batchPathInput)
+      const reviewOutcomes = await runConfiguredOutputReview(reviewBatch)
+      status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
+      status.dispatchOutcomes = reviewOutcomes
+      const failed = reviewOutcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped' || o.status === 'orchestration_blocked')
+      const report = [
+        buildOperatorReport(status),
+        '',
+        '## Dispatch Outcomes',
+        ...reviewOutcomes.map(o => `  ${o.workorder_id} [${o.status}] ${o.detail ?? ''}`),
+      ].join('\n')
+      return { status, report, exitCode: failed ? 2 : 0 }
+    }
     return { status, report: buildOperatorReport(status), exitCode: endStateToExitCode(endState) }
   }
 

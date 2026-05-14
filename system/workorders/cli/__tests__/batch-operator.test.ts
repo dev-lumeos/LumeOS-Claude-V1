@@ -10,9 +10,11 @@ import {
   buildOperatorReport,
   collectOperatorStatus,
   decideEndState,
+  runConfiguredOutputReview,
   selectRunnableBatch,
   type CommandRunner,
 } from '../batch-operator'
+import type { LoadedBatch } from '../batch-loader'
 
 let tmpDir = ''
 const realCwd = process.cwd()
@@ -749,5 +751,67 @@ describe('apply safe cleanups', () => {
     assert.equal(handoff.safe_cleanup_available, true)
     assert.match(handoff.safe_cleanup_command ?? '', /--dry-run/)
     assert.doesNotMatch(handoff.safe_cleanup_command ?? '', /--confirm/)
+  })
+
+  it('runs configured reviewer for already output-complete workorders', async () => {
+    writeExpectedOutput('docs/project/reviewed-output.md', [
+      '# Reviewed Output',
+      '',
+      '## Summary',
+      '',
+      'This output is complete enough for configured reviewer handoff validation.',
+      '',
+      '## Details',
+      '',
+      'The operator must not silently skip review just because the workorder output already exists.',
+    ].join('\n'))
+
+    const batch: LoadedBatch = {
+      batchPath: batchPath(),
+      status: 'ready_to_run',
+      entries: [],
+      workorders: [{
+        filename: 'WO-review.md',
+        filepath: path.join(tmpDir, 'WO-review.md'),
+        validationErrors: [],
+        needsApproval: false,
+        parsed: {
+          workorder_id: 'WO-review',
+          agent_id: 'senior-coding-agent',
+          task: 'Review existing local-only UI output.',
+          risk_category: 'standard',
+          scope_files: ['docs/project/reviewed-output.md'],
+          expected_outputs: ['docs/project/reviewed-output.md'],
+        },
+      }],
+    }
+
+    let reviewCalls = 0
+    const outcomes = await runConfiguredOutputReview(batch, {
+      force: true,
+      callFastReviewer: async () => {
+        reviewCalls++
+        return JSON.stringify({
+          status: 'PASS',
+          risk: 'LOW',
+          confidence: 0.99,
+          violations: [],
+          recommendations: [],
+          summary: 'review ok',
+          requires_claude: false,
+        })
+      },
+    })
+
+    assert.equal(reviewCalls, 1)
+    assert.deepEqual(outcomes, [{
+      workorder_id: 'WO-review',
+      status: 'dispatched',
+      detail: 'Configured reviewer passed via spark-c',
+    }])
+    const audit = fs.readFileSync(path.join(tmpDir, 'system/state/pipeline-audit.jsonl'), 'utf8')
+    assert.match(audit, /"wo_id":"WO-review"/)
+    assert.match(audit, /"event":"review_completed"/)
+    assert.match(audit, /"run_id":"REVIEW-/)
   })
 })
