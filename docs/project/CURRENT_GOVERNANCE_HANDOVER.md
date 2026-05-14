@@ -1,571 +1,126 @@
 # Current Governance Handover
 
-## Status
-
 Current date: 2026-05-14.
 
-`main` is pushed through Runtime Monitoring History and DGX4 productive routing removal. The active branch is implementing Operator Autonomy / Dossier / Learning V2 hardening.
+This file is the concise active handover. Older session details are historical
+evidence only and must not override the current SSOT files listed below.
 
-Final readiness review note, 2026-05-11: the completed governance hardening sequence is integrated on `goal/governance-hardening-integration`. Static/read-only gates pass. Post-rack required Spark/DGX endpoint proof succeeded on 2026-05-11, planned hardware maintenance was cleared, and required runtime routes are healthy. MealCam remains optional/offline and is non-blocking unless a MealCam/Vision workorder is active. Product work remains closed.
+## Current Runtime Truth
 
-## Current Truth
+- DGX1 / Spark1 is the workflow-ready `orchestrator-agent` runtime.
+  - Host: `edgexpert-1116`
+  - IP: `192.168.0.128`
+  - Service/container: `vllm.service` / `vllm-qwen`
+  - Model: `qwen3.6-35b-fp8`
+  - Spark1 handoff is proven for `spark1_orchestrated` operator dry-run/doctor.
+- DGX2 / Spark2 is the workflow-ready coding/docs worker runtime.
+  - Host: `edgexpert-5862`
+  - IP: `192.168.0.188`
+  - Service/container: `vllm.service` / `spark-b-coder`
+  - Model: `qwen3-coder-next-fp8`
+  - Completion health is required before governed docs-agent dispatch.
+- DGX3 / Spark3 runs Nemotron Omni NVFP4 as a controlled reviewer/specialist candidate.
+  - Host: `edgexpert-509d`
+  - IP: `192.168.0.99`
+  - Service/container: `vllm.service` / `vllm_node`
+  - Model: `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
+  - Role: controlled `nemotron-review-agent`, specialist / multimodal / visual-review / OCR / FoodCam candidate.
+  - Not orchestrator, not coding worker, not production routing by default.
+  - Gemma4 on DGX3 is retired and must not be used.
+- DGX4/5 MiniMax is a verified lab-only runtime path, not production routing.
+  - DGX4 host/IP: `edgexpert-0dc8` / `192.168.0.101`
+  - DGX4 container/image/model: `vllm_node` / `vllm-node-minimax` / `nvidia-MiniMax-M2.7-NVFP4`
+  - DGX4 `/v1/models` showed `max_model_len=65536`.
+  - DGX4 completions produced `content.trim() = ok` and valid JSON after trim.
+  - DGX4 and DGX5 both showed `RayWorkerProc` with about `98006 MiB` reserved and about `50C` idle.
+  - DGX5 host: `edgexpert-e5e3`; role: MiniMax worker/lab node, not standalone production route.
+  - Still UNKLAR: exact DGX4/DGX5 service file, autostart state, remote startup wrapper parity, and complete Hermes 65k evidence.
+- Codex remains bootstrap/senior/fallback. It is not the default orchestrator when `spark1_orchestrated` is requested.
 
-- Governance Batch Operator exists and is the preferred way to run workorder batches.
-- Operator modes:
-  - `--status`
-  - `--dry-run`
-  - `--continue`
-  - `--continue --apply-safe-cleanups`
-- Nutrition Batch 001 reached operator `DONE`.
-- Nutrition P1-004 schema verification reached `DONE` and is pushed to `origin/main`.
-- Governance Gap Analysis Plan is pushed to `origin/main`.
-- Governance Batch 002 created durable memory and learning records.
-- Governance Batch 003 added a read-only invariant checker.
-- Governance runtime drift cleanup made the invariant checker report zero critical/high findings.
-- Governance Batch 004 adds a read-only Agent & Skill Contract Checker.
-- Governance Batch 005 adds a read-only Spec Source Chain Checker and Workorder Source Chain Standard.
-- Governance Batch 006 adds a read-only Batch Dossier Reporter and operator dossier suggestions.
-- Governance Batch 007 adds a deterministic Promotion / Merge Governance CLI. It also has a `--status` health mode for current-branch promotion readiness without treating `main..main` as a failed feature-branch review.
-- Governance Batch 008 adds read-only Operator Doctor mode.
-- Workorder Factory / Decomposition Automation adds a deterministic structured-plan to workorder/batch CLI. A decomposition-plan validator now blocks unsafe or underspecified structured plans before factory output generation.
-- Memory/Learning Automation adds a read-only governance learning checker.
-- Memory/Learning V2 adds read-only incident suggestion from dossier, autonomy, audit, pipeline metrics, runtime history, and Codex Worker outputs. Draft writing is explicit and limited to `docs/project/governance-learning/drafts/`.
-- Memory Update Draft Proposals add reviewed, draft-only suggestions for handover/canonical memory updates. They write only under `docs/project/governance-learning/memory-update-drafts/` with explicit `--write-drafts` and never write canonical or external memory.
-- Spark Runtime / Model Runtime Hardening adds a read-only model-runtime checker and dispatcher timeout/retry policy.
-- Runtime Monitoring History adds explicit ignored local history for model/Spark/Codex endpoint checks, latency, timeouts, and route readiness trends.
-- Runtime history readiness is normalized against current active productive routes and now includes V2 freshness/status fields: `overall_status`, `freshness_status`, `last_checked_at`, `age_minutes`, `blocking_impact`, and `next_required_action`. Stale history returns `STALE_HISTORY` and must not be used as proof of current readiness.
-- Report Retention / Redaction Policy adds a read-only metadata summarizer for ignored local Codex/runtime/browser-smoke artifacts. It does not dump prompt/transcript bodies, does not delete files, and does not write canonical memory.
-- Deep analysis on 2026-05-11 found static governance checks clean. Earlier required Spark A/B/C endpoint checks timed out because DGX/Spark devices were intentionally powered down for rack installation (`planned_hardware_maintenance`). Post-rack endpoint proof later succeeded with all required Spark/DGX routes OK and Codex external routes `external_ok`.
-- Planned DGX/Spark maintenance is recorded in `system/control-plane/runtime-maintenance.json` and is now cleared after the successful post-rack endpoint proof. Model runtime checks must not treat optional MealCam offline as blocking unless a MealCam/Vision workorder is active.
-- Model Runtime Routing Cleanup marks MealCam/Vision runtime optional/on-demand and resolves reviewer route registry drift.
-- Codex/GPT-5.5 is the productive senior engineering and repo-aware review runtime for `senior-coding-agent`, `senior-reviewer-agent`, and final escalations.
-- Spark4/Spark5 MiniMax M2.7 NVFP4 is documented as a separate lab runtime in `docs/project/MINIMAX_LAB_RUNTIME.md`. It is not productive governance routing, is not required for product work, and must not be added to `system/agent-registry/model_routing.json` without future benchmark evidence and an explicit governance decision.
-- Codex Worker Bridge adds a dry-run-first `codex exec` integration point for controlled senior agents.
-- Governance Batch 010 adds the dispatcher/operator/dossier integration point for Codex Worker.
-- Codex Worker dispatch status is `controlled_enabled` for `senior-coding-agent` and `senior-reviewer-agent` only. It still requires explicit `codex_worker: true`, `runtime_type: codex-cli`, complete metadata, narrow scope, blocked files, expected outputs, source refs, no approval-grant/DB/Supabase/migration work, and product-gate policy pass.
-- Governance UI V1 adds a local operator console around the existing governance CLIs.
-- Governance UI V2 adds a lightweight workorder dependency board, structured dossier timeline, improved doctor/approval/runtime summaries, copyable next-action commands, and collapsible raw output.
-- Governance UI browser smoke is available through `cmd.exe /c pnpm governance:ui:smoke`; it visits all `/governance` routes, checks the shell/content, and writes ignored screenshots under `tmp/governance-ui-browser-smoke/` without DGX/Spark endpoint checks.
-- Project Profiles add the reusable project configuration layer for governance paths, forbidden artifacts, raw local data, product-gate policy, operator/doctor context, Codex Worker prompt safety, and profile-aware command defaults. The active default profile is `lumeos`.
-- Project Profiles V2 adds an inactive `fixture-beauty-club` profile, schema-backed `profile_kind` / `active` metadata, profile path traversal rejection, read-only UI snapshot selected-profile loading, and non-Nutrition source-chain fixture coverage. This does not activate real Beauty Club product work or assume a real Beauty Club repo path.
-- Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
-- Governed operator runs now expose explicit orchestration mode selection: `auto`, `codex_bootstrap`, and `spark1_orchestrated`. Reports include requested mode, actual mode, whether Spark1 / `orchestrator-agent` was used, Codex role, worker assignment result, and missing integration point. `spark1_orchestrated` now runs a pre-dispatch Spark1/orchestrator-agent handoff and fails closed with `ORCHESTRATION_BLOCKED` if the endpoint, routing intent, or worker assignment is invalid.
-- DGX1 / Spark1 is corrected and verified as the active `orchestrator-agent` and governance/reasoning runtime. Current runtime: host `edgexpert-1116`, IP `192.168.0.128`, container `vllm-qwen`, service `vllm.service`, image `vllm/vllm-openai:cu130-nightly`, model `Qwen/Qwen3.6-35B-A3B-FP8`, served model `qwen3.6-35b-fp8`, endpoint `http://192.168.0.128:8001`, local endpoint `http://127.0.0.1:8001`, and `max_model_len=65536`.
-- DGX1 startup crash root cause was `block_size 2096 > max_num_batched_tokens 2048`; corrected service flags include `--max-num-batched-tokens 8192`, `--enable-prefix-caching`, `--reasoning-parser qwen3`, `--default-chat-template-kwargs '{"enable_thinking": false}'`, `--enable-auto-tool-choice`, and `--tool-call-parser qwen3_xml`.
-- Spark1 smoke results now pass: reply-only `ok -> ok`, JSON-only `{"status":"ok"}`, and `orchestrator-agent` model-runtime-check reports `HEALTHY`. Commit `a0b3a20` proves Spark1 handoff in operator probes. The live doctor probe for `BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md` returned `actual_orchestration_mode: spark1_orchestrated`, `spark1_orchestrator_used: true`, `codex_role: none`, `worker_assignment_result: WO-nutrition-013->senior-coding-agent`, and `final_diagnosis: CLEAN_READY`.
-- Spark1 run example: `cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md --continue --project lumeos --orchestration-mode spark1_orchestrated`.
-- DGX3 / Spark3 has been migrated from Gemma4 to Nemotron Omni NVFP4 and is documented in `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`. Current verified state: host `edgexpert-509d`, IP `192.168.0.99`, service `vllm.service` with autostart enabled, container `vllm_node`, image `vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404`, model `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`, endpoint `http://192.168.0.99:8001`, local endpoint `http://127.0.0.1:8001`, and `max_model_len=65536`.
-- DGX3 / Nemotron smoke results now pass: `/v1/models` OK, reply-only `ok -> content.trim() = ok`, JSON-only `content.trim() = {"status":"ok"}`, and a `46k` long-context prompt completed with `prompt_tokens=46858`, `completion_tokens=160`, `duration_sec=8.12`, `finish_reason=stop`, `content={"status":"ok","context":"long"}`, and `reasoning_len=694`. Wrapper rule: trim content, ignore reasoning for normal workflow output, and treat empty content as invalid. Long-context prompts need enough `max_tokens` because reasoning can consume budget. Observed performance is about `57.99` to `58.37` completion tok/s single request and about `162.64` aggregate completion tok/s with four parallel requests.
-- DGX3 / Nemotron role is now configured as controlled on-demand `nemotron-review-agent` for explicit workflow tests only. It remains specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator, not coding worker, and not production routing by default. Gemma4 on DGX3 is not workflow-ready and must not be used in routing. MiniMax remains lab-only; Codex remains bootstrap/senior/fallback and is not the default orchestrator when Spark1 mode is requested.
-- Controlled full-workflow test toggle: set `$env:LUMEOS_FAST_REVIEWER_ROUTE='nemotron-review-agent'` before a harmless governed Spark1-orchestrated local Nutrition batch, then clear the variable after the run. Acceptance gates are documented in `docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md`.
-- Full Spark1 -> worker -> Nemotron reviewer workflow proof is now complete for `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md`. Evidence: Spark1 dry-run assigned `WO-nutrition-016->senior-coding-agent`; continue ran with `LUMEOS_FAST_REVIEWER_ROUTE=nemotron-review-agent`; `system/state/pipeline-audit.jsonl` contains `review_started` and `review_completed` for `WO-nutrition-016` / `RUN-20260514-7680`; review status was `PASS` with confidence `0.95`; dossier was written under `system/reports/batches/`.
-- Codex Worker timeout/reporting mismatch is fixed in dossier reporting. A raw subprocess timeout remains visible as `worker_runtime_status`, but if scoped expected outputs exist and the configured reviewer passes, the dossier reports it as `observed_non_terminal` and keeps final classification `DONE`. Missing outputs or failed review still keep the timeout blocking.
-- `SSOT_SYNC_CHECK` is implemented and wired into `governance-invariant-check`. Runtime/model routing, workflow/operator/governance, product-gate, infra/systemd, infra/vLLM, and completed-TODO changes must update mapped SSOT docs/TODOs or carry a structured `SSOT_SYNC_CHECK: N/A (...)` marker with a specific reason.
-- Runtime documentation sweep on 2026-05-14 makes `docs/project/STACK_REFERENCE.md`, `docs/project/OPEN_TODOS.md`, `infra/vllm/*`, `infra/systemd/*`, and `system/model-tiers/*` align with the verified runtime map. Historical DGX3/Gemma4 and Spark D/GPT-OSS paths are archived / do-not-use. DGX4/5 MiniMax lab details remain `UNKLAR` until a verified lab runtime report is written.
-- Product work remains closed globally. Tom approved one scoped exception only: `Nutrition / BLS / P1-005 preparation` under `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`.
-- The approved scoped exception allows planning, source-chain validation, decomposition/workorder readiness review, and non-dispatching operator/governance checks only. It still forbids BLS import execution, DB/Supabase/migration work, product batches, approvals, raw BLS commits, and product implementation.
-- Governed workflows now follow a non-interactive autonomy policy across all runs, not only night runs: `AUTO_CONTINUE` for safe preparation work, `AUTO_PLAN_AROUND` for risky domains where a non-executing alternative exists, and `STOP_AND_REPORT` only at true execution boundaries.
-- `docs/project/P1_005_READINESS_CANDIDATE.md` now records the first concrete read-only readiness candidate. Current classification is `NO_ACTIVE_CANDIDATE`: source material exists, but there is still no active P1-005 batch/workorder or validated decomposition input.
-- `docs/project/P1_005_DECOMPOSITION_CANDIDATE.md` now provides the first concrete non-executable decomposition candidate. It is marked `NON_EXECUTABLE_DRAFT`, `NOT_QUEUE_RELEASED`, and `NOT_DISPATCHABLE`, and is suitable only for read-only validator/factory dry-runs.
-- Tom authorized the minimum additional Nutrition `01_current_specs` primary SSOT references required for P1-005 draft validation only: `SPEC_08_IMPORT_PIPELINE.md` as the primary preparation SSOT and `SPEC_06_DATABASE_SCHEMA.md` as supporting schema SSOT.
-- Read-only validation status for the draft candidate is now clean: decomposition-plan validation passes and `wo-factory --dry-run --json` returns `READY_TO_WRITE` with zero findings and zero written files.
-- `system/workorders/nutrition/drafts/WO-NUTRITION-P1-005-preparation-draft.md` now exists as the first generated `NON_EXECUTABLE_DRAFT` workorder artifact from the validated P1-005 candidate. It is still `NOT_QUEUE_RELEASED`, `NOT_DISPATCHABLE`, and does not authorize any execution.
-- `docs/project/p1-005/P1-005-source-chain-readiness-report.md` now exists as the draft-only source-chain readiness report for the approved P1-005 source set.
-- `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-PREPARATION-DRAFT.md` now exists only as a read-only operator wrapper around that draft workorder. Operator `--status`, `--dry-run`, and `--doctor` can target it without dispatching anything.
-- The remaining high finding in `spec-source-chain-check` and operator doctor is the expected machine-level product gate block from the still-closed profile gate. That block is intentional and is the next real execution boundary.
-- The LumeOS profile now contains one exact machine-readable per-batch product-gate execution exception for `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md`. It is an exact repo-relative allowlist entry only, with no wildcard widening, and exists only so source-chain and doctor checks can pass for that one batch while the global product gate remains closed.
-- The first executable non-draft P1-005 artifacts now exist for one output only: `system/workorders/nutrition/WO-NUTRITION-P1-005-source-chain-readiness.md` and `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SOURCE-CHAIN-READINESS.md`. Their scope is limited to generating `docs/project/p1-005/P1-005-source-chain-readiness-report.md`.
-- The allowlisted source-chain readiness batch has completed successfully and its dossier now classifies as `DONE`.
-- `docs/project/p1-005/P1-005-next-execution-plan.md` now defines the next `AUTO_PLAN_AROUND` step: a non-executing import / DB / Supabase preparation plan only.
-- `system/workorders/nutrition/drafts/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION-DRAFT.md` now exists as a review-only next-batch candidate. It is `NON_EXECUTABLE_DRAFT`, `NOT_QUEUE_RELEASED`, and `NOT_DISPATCHABLE`.
-- The first executable planning-only post-readiness batch, `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-IMPORT-PREPARATION.md`, is now functionally complete. It produced all four approved planning outputs:
-  - `docs/project/p1-005/P1-005-bls-source-inventory.md`
-  - `docs/project/p1-005/P1-005-import-field-mapping.md`
-  - `docs/project/p1-005/P1-005-additive-migration-candidate-plan.md`
-  - `docs/project/p1-005/P1-005-rollback-and-validation-checklist.md`
-- The earlier Spark2 / Qwen3-Coder-Next / vLLM EngineCore crash during `WO-nutrition-006` was resolved as a runtime-hardening issue, not a Nutrition workorder logic failure. Governed execution now requires a tiny `/v1/chat/completions` health probe for endpoint-backed agents such as `docs-agent` before dispatch. `/v1/models` remains useful for general endpoint reachability but is not sufficient proof of execution readiness for this runtime class.
-- Approval lifecycle cleanup for the completed P1-005 planning batch is now normalized through official tooling. Resolved docs-only approvals are consumed end-to-end across queue, runtime approval mirror, and enforcement token state.
-- Under the new autonomy policy, P1-005 preparation is no longer waiting for repeated draft/readiness approvals. It is classified as `STOP_AND_REPORT`: all safe draft/read-only work is complete, and the next Tom decision is only whether to open the first real execution boundary for the existing draft batch.
-- Under the new autonomy policy, the planning-only import/DB preparation step is complete. The next true execution boundary is any real raw-source, migration, Supabase, DB, or import step beyond these four planning documents.
-- The first tightly scoped non-planning P1-005 execution candidate now exists as `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SCHEMA-FOUNDATION-DRAFT.md`. Its scope is intentionally narrower than a real migration path: one schema-only SQL slice outside `supabase/migrations/` plus one validation-plan document.
-- The corresponding draft outputs are:
-  - `docs/project/p1-005/sql-drafts/P1-005-nutrition-schema-foundation-candidate.sql`
-  - `docs/project/p1-005/P1-005-schema-foundation-draft-validation-plan.md`
-- This candidate is allowlisted only for exact-batch machine checks. It still does not authorize DB apply, Supabase commands, migration execution, nutrient seed payload, RDA updates, or BLS import.
-- The schema-only draft has now been promoted into a real review-only migration candidate at `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql`. Promotion does not authorize execution; seed payload, RDA updates, and BLS import remain separate follow-up candidates.
-- Static execution-readiness review for `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql` is now recorded in `docs/project/p1-005/P1-005-schema-foundation-migration-readiness-review.md`. Current decision: ready for a narrow schema-only execution approval because the candidate is now drift-aware, execution-shaped, and still excludes nutrient seed payload, RDA updates, and BLS import.
-- Final pre-execution packaging for that candidate is now recorded in `docs/project/p1-005/P1-005-schema-foundation-execution-readiness.md`. It includes the exact migration file, required gates, do-not-run execution command plan, rollback posture, post-apply validation queries, stop conditions, and the final Tom decision sentence.
-- Tom has now opened the narrow schema-only execution boundary for `supabase/migrations/20260513_001_nutrition_schema_foundation_slice.sql` against LOCAL Supabase/Test DB only. The migration was applied locally via direct `psql` execution against `supabase_db_LumeOS-Claude-V1`, and post-apply validation confirmed that `nutrition.nutrient_defs` now exists with the expected columns, primary key, check constraint, and `nutrient_defs_group_sort_idx` index.
-- Tom has explicitly decided: no DEV promotion and no LIVE promotion. This schema-only slice stays local for now, and Tom will test locally.
-- Local-only post-apply guidance is now recorded in `docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md`. It covers the exact local verification commands, the expected local schema facts, and the stop conditions that keep seed payload, RDA updates, BLS import, and all broader DB work blocked.
-- A schema gap was found in the local foundation slice: `nutrition.nutrient_defs` currently includes `name_de`, `name_en`, `group_de`, and `group_en`, but LumeOS requires DB-level i18n support for `de`, `en`, and `th`. A new additive schema-only correction candidate now exists at `supabase/migrations/20260513_002_nutrition_nutrient_defs_th_i18n_slice.sql` to add `name_th` and `group_th` without seed payload, RDA updates, BLS import, or broader DB work.
-- The Thai i18n correction slice has now been applied successfully against LOCAL Supabase/Test DB only. `nutrition.nutrient_defs` now contains 16 columns total, with `name_th` and `group_th` present as `text not null default ''`, and the table remains empty as expected because seed payload is still blocked.
-- The local debug surface at `/nutrition/local-schema` now shows the corrected 16-column shape as the expected local state.
-- The P1-005 nutrient_defs seed candidate path now has a deterministic source-extraction helper at `system/workorders/cli/nutrient-defs-seed-extract.ts`. It parses `docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md`, generates `docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md` with 138 source-derived rows and exactly 16 columns, keeps Thai fields empty, and merges RDA fields only from explicit source UPDATE examples. `WO-nutrition-012` now uses `micro-executor` plus an exact allowlisted helper command instead of free-form LLM seed-row authoring.
-- Tom opened the local-only nutrient_defs seed execution boundary. The deterministic seed SQL was generated from `system/workorders/cli/nutrient-defs-seed-extract.ts` and applied only to local Supabase/Test DB (`supabase_db_LumeOS-Claude-V1`). Local validation confirmed `row_count = 138`, `name_th = ''` for all 138 rows, and `group_th = ''` for all 138 rows. DEV/LIVE promotion, BLS import, raw BLS commit, and broader DB work remain blocked.
-- A follow-up local-only UTF-8 correction was required because the first local seed application used a PowerShell text pipeline into `docker exec`, which corrupted German umlauts into `??` replacement sequences in local DB rows. The extractor now blocks corrupted text markers and can generate a local-only correction SQL file. The correction was copied into the local DB container and executed with `psql -f`, preserving UTF-8 bytes. Local validation now confirms `corrupted_text_rows = 0` and sample values render as `Aminosäuren`, `Essigsäure`, `Kohlenhydrate, verfügbar`, and `Fettlösliche Vitamine`.
-- The `nutrient_defs` RDA/reference-values boundary remains open. Current `rda_male` and `rda_female` fields are partial by design and are populated only where explicitly declared in the current source/spec. Missing RDA values are not defects and must stay `NULL` unless a future explicit source-candidate validates them. Do not infer values, copy male/female values, backfill from the internet, or use DGE/EFSA/NIH values without a separate verified `nutrient_reference_values` / RDA candidate that decides RDA/AI/UL modeling, sex/age groups, units, and region/source priority.
-- The local debug surface at `/nutrition/local-schema` now includes a read-only selected nutrient detail panel for `nutrition.nutrient_defs`. It displays code, DE/EN/TH names and groups, unit, sort/display metadata, computed flags, formula, and partial RDA fields from the existing local snapshot path. The governed wrapper batch is `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md`; it is exact-allowlisted only for this local UI slice.
-- Older Nutrition/BLS/bootstrap docs are labeled as current, archival, blocked by product gate, or reference-only in `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`. Historical commands in those docs are evidence, not active instructions.
-- Raw BLS files are local-only and ignored.
-- Supabase `db push`, `db reset`, production DB commands, and migration execution remain forbidden unless Tom explicitly runs them outside the worker/operator flow.
+## Current Workflow Truth
+
+- Governed operator runs support `auto`, `codex_bootstrap`, and `spark1_orchestrated` orchestration modes.
+- `spark1_orchestrated` must run the Spark1/orchestrator-agent handoff before worker dispatch and must not silently fall back to Codex orchestration.
+- Full Spark1 -> worker -> Nemotron reviewer workflow proof is complete for `BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md`.
+  - Spark1 assigned `WO-nutrition-016->senior-coding-agent`.
+  - `LUMEOS_FAST_REVIEWER_ROUTE=nemotron-review-agent` was used.
+  - Audit contains `review_started` and `review_completed`.
+  - Nemotron review status was `PASS` with confidence `0.95`.
+  - Dossier was written.
+- Codex Worker timeout/reporting mismatch is fixed in dossier reporting.
+  - Raw timeout remains visible as `worker_runtime_status`.
+  - If scoped outputs exist and configured review passes, the timeout is `observed_non_terminal` and final classification remains `DONE`.
+  - Missing outputs or failed review still make the timeout blocking.
+- `SSOT_SYNC_CHECK` is implemented and wired into `governance-invariant-check`.
+  - It checks mapped SSOT updates for runtime/model, workflow/governance, product-gate, infra runtime, and TODO changes.
+  - It now also checks `OPEN_TODOS.md` open IDs against `GOVERNANCE_TODO_REGISTER.json`, and core runtime-role consistency across `STACK_REFERENCE.md` and model-tier docs.
+
+## Current Product / Nutrition Truth
+
+- P1-005 import preparation is complete.
+- Local-only schema foundation was applied to the local Supabase/Test DB only.
+- Local Thai i18n correction was applied locally only.
+- Local deterministic `nutrient_defs` seed was applied locally only.
+- Current local `nutrition.nutrient_defs` state:
+  - 138 rows.
+  - 16 columns.
+  - `name_th` and `group_th` exist and are empty strings by design.
+  - UTF-8 German text is corrected.
+  - RDA fields are partial by design.
+- Local Nutrition UI has progressed through read-only schema/debug, preview, search/filter, detail panel, deep-link, pin/compare, and copy-link affordances.
+- The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
+
+## Current Gates / Forbidden Actions
+
+Global product work remains closed unless Tom explicitly opens a narrow boundary.
+
+Still forbidden without explicit future authorization:
+
+- DB/Supabase/migration execution beyond already completed local-only boundaries.
+- DEV or LIVE promotion.
+- BLS import execution.
+- Raw BLS commit.
+- Seed execution beyond the already completed local-only `nutrient_defs` seed.
+- RDA value changes.
+- Production routing changes.
+- MiniMax production routing.
+- Service restart.
+- Manual `runtime_state.json` edit.
+- Manual approval queue edit.
+
+## Open TODOs
+
+The active open TODO set is tracked in both `docs/project/OPEN_TODOS.md` and
+`docs/project/GOVERNANCE_TODO_REGISTER.json`.
+
+- `GOV-TODO-012`: Evaluate MiniMax lab runtime before any governance routing decision.
+- `GOV-TODO-023`: Create separate nutrient reference-values / RDA source candidate.
+- `GOV-TODO-029`: Decide DGX3/Nemotron default route acceptance policy.
+- `GOV-TODO-031`: Complete MiniMax Hermes 65k / service-autostart lab documentation.
+- `GOV-TODO-032`: Verify and clean infra/vLLM startup wrappers against remote runtime state.
+
+## Archived / Historical Notes
+
+- The older first non-planning P1-005 boundary blocker is superseded. Local
+  schema, local i18n correction, local seed, and local read-only UI slices have
+  since completed under explicit local-only boundaries. DEV/LIVE and broader
+  product execution remain blocked.
+- Historical DGX3/Gemma4 and DGX4/GPT-OSS paths are archived / do-not-use.
+- Older long-form governance history remains in git history, learning records,
+  dossiers, and runtime-specific docs. Do not re-promote old session notes into
+  current truth without re-verification.
 
 ## Read First
 
-Use these files before starting more governance or product work:
-
-- `docs/project/GOVERNANCE_SYSTEM_COMPLETION_PLAN.md`
-- `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`
-- `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`
-- `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`
-- `docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md`
-- `docs/project/governance-learning/README.md`
-- `docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md`
+- `docs/project/STACK_REFERENCE.md`
+- `docs/project/OPEN_TODOS.md`
+- `docs/project/GOVERNANCE_TODO_REGISTER.json`
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
 - `docs/project/PRODUCT_WORK_GATE.md`
 - `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`
-- `docs/project/P1_005_READINESS_CANDIDATE.md`
-- `docs/project/P1_005_DECOMPOSITION_CANDIDATE.md`
-- `docs/project/NUTRITION_BOOTSTRAP_DOC_STATUS.md`
-- `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
-- `docs/project/MODEL_RUNTIME_HARDENING.md`
 - `docs/project/MINIMAX_LAB_RUNTIME.md`
-- `docs/project/CODEX_WORKER_BRIDGE.md`
-- `docs/project/PROJECT_PROFILES.md`
-- `docs/project/GOVERNANCE_UI_V1.md`
-- `docs/project/GOVERNANCE_UI_V2.md`
-- `docs/project/GOVERNANCE_UI_USAGE_GUIDE.md`
-- `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
-- `AGENTS.md`
-- `CLAUDE.md`
-- `system/memory/canonical/lumeos_canonical.md`
-
-The completion plan is the current truth for remaining governance gaps. Canonical memory contains only compact truths and must not replace the completion plan or incident records.
-
-## Current Product Work Gate
-
-Product work is not freely open and is currently closed unless Tom explicitly opens it.
-
-One scoped exception is currently active:
-
-- `Nutrition / BLS / P1-005 preparation` only, as defined in `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`
-- No DB execution
-- No Supabase
-- No import
-- No migration
-
-Allowed only after Tom explicitly opens the appropriate gate:
-
-- Planning-only product work.
-- BLS import planning and preflight.
-- Local read-only raw file inspection.
-- Generation of reports and spec-linked workorders.
-- Static validation.
-- Governance checker runs.
-- Governance Operator dry-run.
-- Governance Operator continue only if no database execution, migration execution, or real bulk import occurs.
-- Planning, validation, source-chain review, and workorder-readiness review for `Nutrition / BLS / P1-005 preparation`
-- Non-dispatching operator `--status`, `--dry-run`, or `--doctor` for that exact scope
-- Decomposition-plan validation or workorder-factory dry-run for that exact scope if valid source-backed inputs exist
-
-Forbidden:
-
-- `supabase db push`
-- `supabase db reset`
-- Production database changes.
-- Migration execution.
-- Real BLS bulk import execution.
-- Committing raw BLS files.
-- Invented BLS, food, nutrient, or category values.
-- Bypassing the Governance Operator or checkers.
-- Auto-granting approvals.
-- Autonomous, night, or large product runs.
-- Any widening from `Nutrition / BLS / P1-005 preparation` into real implementation or execution without a new explicit Tom decision.
-
-Reason:
-
-- Runtime invariant checking is available through `system/control-plane/governance-invariant-check.ts`.
-- Agent and skill contract checking is available through `system/control-plane/agent-contract-check.ts`.
-- Spec source-chain checking is available through `system/workorders/cli/spec-source-chain-check.ts`.
-- Governance learning checking is available through `system/reports/governance-learning-check.ts`.
-- Batch dossier reporting is available through `system/reports/batch-dossier.ts`.
-- Learning suggestions are available through `system/reports/governance-learning-suggest.ts`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/drafts/`.
-- Memory update proposals are available through `system/reports/governance-learning-suggest.ts --memory-proposals`; it is read-only unless explicitly called with `--write-drafts`, which writes review drafts only under `docs/project/governance-learning/memory-update-drafts/`.
-- Report retention summaries are available through `system/reports/report-retention-summarizer.ts`; it is read-only and reports metadata only for ignored local artifacts.
-- Promotion governance is available through `system/control-plane/promotion-governance.ts`; use `--status` for health/no-op status and `--review-branch <branch>` for strict feature-branch promotion review.
-- Operator Doctor is available through `system/workorders/cli/run-batch-operator.ts <batch-file> --doctor`.
-- Operator, Doctor, and Dossier outputs expose `autonomy_handoff` so STOP/FIX/approval states are self-explaining and tied to dossier/learning next steps.
-- Model runtime checking is available through `system/control-plane/model-runtime-check.ts`.
-- Runtime history can be recorded explicitly with `system/control-plane/model-runtime-check.ts --check-endpoints --record-history --json --project lumeos`; generated files under `system/reports/model-runtime-history/` are ignored runtime artifacts.
-- Runtime history summaries separate current readiness from historical failures. Active required routes with latest `ok` or `external_ok` status are not blocked by stale removed/lab route records or older failures for the same route.
-- Current invariant checker result after cleanup: `critical=0`, `high=0`, `medium=0`.
-- Static model-runtime checker result after hardening: `critical=0`, `high=0`; endpoint health must still be proven for autonomous, night, or large product runs.
-- Spark D / DGX4 endpoint diagnosis is documented in `docs/project/runtime/SPARK_D_RUNTIME_DIAGNOSIS.md`; DGX4 is reachable but port `8001` is not accepting HTTP connections, so it has been removed from productive governance routing and reserved for future DGX4/DGX5 lab work.
-- `senior-reviewer-agent` now uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
-- `senior-coding-agent` uses Codex CLI / GPT-5.5 and is config/manual checked, not HTTP endpoint checked.
-- `system/workers/codex-worker.ts` can generate and execute constrained `codex exec` prompts.
-- Controlled dispatcher use requires `status=controlled_enabled`, `codex_worker_enabled=true`, `allow_dispatcher_integration=true`, `senior-coding-agent` or `senior-reviewer-agent`, `runtime_type: codex-cli`, workorder `codex_worker: true`, complete source/scope/output metadata, no approval requirement, no broad scope, no DB/Supabase/migration/approval-grant work, and product-gate policy pass.
-- Project profile loading is available through `system/project-profiles/project-profile-loader.ts`; the LumeOS profile is `system/project-profiles/profiles/lumeos.json` and keeps product work closed by default.
-- MealCam/Vision runtime is optional/on-demand and may be offline during normal governance work.
-- Raw BLS files remain local-only and ignored.
-
-## Model Runtime Hardening Output
-
-- `system/control-plane/model-runtime-check.ts`
-- `system/control-plane/__tests__/model-runtime-check.test.ts`
-- `system/workers/codex-worker.ts`
-- `system/workers/codex-worker.config.json`
-- `docs/project/MODEL_RUNTIME_HARDENING.md`
-- `docs/project/CODEX_WORKER_BRIDGE.md`
-- `docs/project/governance-learning/2026-05-05-spark-runtime-hardening-summary.md`
-- `docs/project/governance-learning/2026-05-05-codex-senior-runtime-integration.md`
-- `docs/project/governance-learning/2026-05-09-codex-worker-bridge.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --check-endpoints --timeout-ms 1500
-```
-
-Rules:
-
-- Default mode is read-only and does not call endpoints.
-- `--check-endpoints` performs short `/v1/models` health checks by default.
-- For governed execution preflight on `docs-agent` and similar endpoint-backed agents, use `--check-endpoints --probe-mode completion --agent <agent-id>` to prove tiny completion health before retrying execution.
-- Default endpoint checks do not send workorder prompts. Completion probe mode sends only a tiny fixed health prompt and never a real workorder payload.
-- Dispatcher model calls now have bounded timeout and one retry for runtime failures.
-- Operator Doctor includes model-runtime findings and still emits one safe next action.
-- `mealcam-agent` is optional/on-demand. Its endpoint is only blocking when a MealCam/Vision workorder or explicit Tom request requires it.
-- `senior-coding-agent` and `senior-reviewer-agent` are Codex CLI / GPT-5.5. They have no vLLM endpoint and should show as external/config-checked.
-- Codex Worker Bridge is dry-run by default and uses non-interactive `codex exec` only with `--execute`.
-- Generated Codex worker prompts/reports under `system/reports/codex-worker/` are runtime artifacts and should not be committed by default.
-- Use `system/reports/report-retention-summarizer.ts --json` to inspect ignored Codex/runtime/browser-smoke artifact metadata without dumping prompt or transcript bodies.
-- Operator Doctor reports Codex Worker as ready or disabled. Batch dossiers include Codex Worker report metadata when ignored runtime reports exist.
-
-## Governance UI V1 Output
-
-- `apps/web/src/app/governance/*`
-- `apps/web/src/app/api/governance/*`
-- `apps/web/src/components/governance/GovernanceConsole.tsx`
-- `apps/web/src/lib/governance/*`
-- `docs/project/GOVERNANCE_UI_V1.md`
-- `docs/project/GOVERNANCE_UI_USAGE_GUIDE.md`
-- `docs/project/governance-learning/2026-05-05-governance-ui-v1-summary.md`
-- `docs/project/governance-learning/2026-05-05-governance-ui-v1-smoke-fixes-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c pnpm --dir apps\web exec next dev -H 127.0.0.1 -p 5001
-```
-
-Open:
-
-```text
-http://127.0.0.1:5001/governance
-```
-
-Rules:
-
-- UI commands go through a central allowlist.
-- Read-only commands do not require confirmation.
-- Controlled actions require typing `CONFIRM`.
-- Approval grants are not executable in V1.
-- Supabase reset/push, migration execution, production DB commands, runtime state edits, queue edits, and product batch execution are not exposed.
-- Tailwind styling requires `apps/web/postcss.config.js`; if the page appears unstyled, verify PostCSS and `globals.css` first.
-- The default batch path points to an existing governance batch, not missing Nutrition P1-005 product planning.
-- Structured non-zero governance JSON is displayed as a governance finding, not an API transport failure.
-
-## Project Profiles Output
-
-- `system/project-profiles/project-profile-loader.ts`
-- `system/project-profiles/project-profile.schema.json`
-- `system/project-profiles/profiles/lumeos.json`
-- `system/project-profiles/profiles/fixture-beauty-club.json`
-- `system/project-profiles/profiles/example-beauty-club.json.example`
-- `docs/project/PROJECT_PROFILES.md`
-- `docs/project/governance-learning/2026-05-10-project-profiles.md`
-
-Profile-aware commands:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json --project lumeos
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --status --json --project lumeos
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json --project lumeos
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json --project lumeos
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json --project lumeos
-```
-
-Rules:
-
-- `lumeos` remains the default profile.
-- The profile defines governance/spec/workorder/report/memory roots, raw local paths, ignored local paths, forbidden paths, forbidden commands, required checkers, product-gate policy, promotion policy, and Codex Worker policy.
-- The batch operator, operator doctor, Codex Worker, batch dossier, learning checker, promotion governance, invariant checker, source-chain checker, and Governance UI are profile-aware for LumeOS defaults.
-- Raw BLS files remain local-only through profile policy.
-- The profile layer does not open product work and does not authorize Supabase reset, push, migration execution, approval grants, or production DB commands.
-- Beauty Club exists only as an inactive fixture/example profile. No external project path is assumed and no Beauty Club product work is active.
-- Spec-source-chain checking remains Nutrition-aware for LumeOS; a fully generic source-chain graph is future profile work.
-
-## Workorder Factory Output
-
-- `system/workorders/cli/wo-factory.ts`
-- `system/workorders/cli/decomposition-plan-validator.ts`
-- `system/workorders/cli/__tests__/wo-factory.test.ts`
-- `system/workorders/cli/__tests__/decomposition-plan-validator.test.ts`
-- `docs/project/WORKORDER_FACTORY_AUTOMATION.md`
-- `docs/project/governance-learning/2026-05-05-workorder-factory-automation-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --dry-run
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --from-plan <plan-file> --out <output-dir> --write
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\wo-factory.ts --validate <workorder-or-batch>
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\decomposition-plan-validator.ts --plan <plan-file> --project lumeos --json
-```
-
-Rules:
-
-- Factory input is a Markdown file with a deterministic JSON plan block.
-- Decomposition plans must include stable plan/project identity, objective, source_refs, constraints, non_goals, scoped subtasks, expected outputs, and acceptance criteria.
-- The validator is profile-aware and supports the inactive `fixture-beauty-club` profile for non-Nutrition fixture coverage only.
-- Dry-run writes nothing.
-- `--write` creates draft workorders and a batch only after high/critical factory findings are clear.
-- Factory does not dispatch, grant approvals, run Supabase commands, execute migrations, or import BLS data.
-- Generated batches must still pass source-chain, invariant, and agent-contract checks before operator execution.
-
-## Memory/Learning Automation Output
-
-- `system/reports/governance-learning-check.ts`
-- `system/reports/__tests__/governance-learning-check.test.ts`
-- `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`
-- `docs/project/governance-learning/2026-05-05-memory-learning-automation-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-check.ts --write-summary
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\governance-learning-suggest.ts --memory-proposals --write-drafts
-```
-
-Rules:
-
-- Default mode is read-only.
-- `--write-summary` writes only `docs/project/governance-learning/CURRENT_LEARNING_STATUS.md`.
-- Memory update proposal mode is draft-only and requires Tom review before any handover/canonical memory update.
-- The checker does not edit runtime state, approval state, audit history, or run history.
-- It verifies incident metadata, fix commits, regression tests, durable rules, recurrence detectors, handover state, canonical memory, and product-gate wording.
-
-## Safe Next Governance Batch
-
-Run the next controlled planning/probe batch only after Tom confirms the required local model endpoint health, or continue with deeper observability work.
-
-Goal:
-
-- The conditional gate permits only planning/probe work, not import execution.
-- Endpoint health still blocks autonomous, night, and large product runs until proven for the required model routes.
-
-## Do Not Do
-
-- Do not start real Nutrition P1-005 BLS import execution.
-- Do not grant approvals automatically.
-- Do not run Supabase `db push` or `db reset`.
-- Do not execute migrations.
-- Do not edit `system/state/runtime_state.json` or `system/approval/queue.json` manually.
-- Do not commit runtime artifacts.
-- Do not use raw BLS files as primary schema source when a current spec exists.
-- Do not start product work outside the conditional planning/probe gate.
-
-## Incident Records Created In Governance Batch 002
-
-- `docs/project/governance-learning/2026-05-05-approval-token-runtime-split-brain.md`
-- `docs/project/governance-learning/2026-05-05-example-migration-path-leak.md`
-- `docs/project/governance-learning/2026-05-05-operator-done-ambiguity.md`
-- `docs/project/governance-learning/2026-05-05-selected-agent-mismatch.md`
-- `docs/project/governance-learning/2026-05-05-executable-rollback-sql.md`
-- `docs/project/governance-learning/2026-05-05-read-only-spec-approval-misclassification.md`
-- `docs/project/governance-learning/2026-05-05-invalid-json-stop-rule-retrigger.md`
-- `docs/project/governance-learning/2026-05-05-scope-trailing-slash-mismatch.md`
-
-## Governance Batch 003 Output
-
-- `system/control-plane/governance-invariant-check.ts`
-- `system/control-plane/__tests__/governance-invariant-check.test.ts`
-- `docs/project/governance-learning/2026-05-05-governance-batch-003-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\governance-invariant-check.ts --json
-```
-
-## Governance Batch 004 Output
-
-- `system/control-plane/agent-contract-check.ts`
-- `system/control-plane/__tests__/agent-contract-check.test.ts`
-- `docs/project/governance-learning/2026-05-05-governance-batch-004-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\agent-contract-check.ts
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\agent-contract-check.ts --json
-```
-
-## Governance Batch 005 Output
-
-- `system/workorders/cli/spec-source-chain-check.ts`
-- `system/workorders/cli/__tests__/spec-source-chain-check.test.ts`
-- `docs/project/WORKORDER_SOURCE_CHAIN_STANDARD.md`
-- `docs/project/governance-learning/2026-05-05-governance-batch-005-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file>
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts <workorder-file> --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\spec-source-chain-check.ts --batch <batch-file>
-```
-
-## Governance Batch 006 Output
-
-- `system/reports/batch-dossier.ts`
-- `system/reports/__tests__/batch-dossier.test.ts`
-- `docs/project/governance-learning/2026-05-05-governance-batch-006-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file>
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\reports\batch-dossier.ts --batch <batch-file> --write
-```
-
-Rules:
-
-- Without `--write`, the dossier prints only and must not dirty the repo.
-- With `--write`, Markdown and JSON reports are written under `system/reports/batches/`.
-- The Governance Operator suggests the dossier command when it reaches a safe stop.
-
-## Governance Batch 007 Output
-
-- `system/control-plane/promotion-governance.ts`
-- `system/control-plane/__tests__/promotion-governance.test.ts`
-- `docs/project/governance-learning/2026-05-05-governance-batch-007-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --status
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --status --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch>
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --review-branch <branch> --json
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --merge-branch <branch>
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\promotion-governance.ts --push-main
-```
-
-Rules:
-
-- Review classifies changed files, forbidden artifacts, product-gate impact, and required checks.
-- Status mode reports current branch health and upstream status. On `main`, it does not treat `main..main` no-op state as a high `branch_not_ahead` finding.
-- Strict review mode still reports `git.branch_not_ahead` as high when a real promotion target has no commits ahead of `main`.
-- Merge runs review first and refuses unless the decision is `MERGE_READY`.
-- Merge checks out `main`, merges the target branch, stops on conflicts, and runs typecheck.
-- Push requires `main`, clean worktree, and `main` ahead of `origin/main`.
-- Push is explicit; merge does not push automatically.
-
-## Governance Batch 008 Output
-
-- `system/workorders/cli/operator-doctor.ts`
-- `system/workorders/cli/__tests__/operator-doctor.test.ts`
-- `docs/project/governance-learning/2026-05-05-governance-batch-008-summary.md`
-
-Run:
-
-```powershell
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --doctor
-cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts <batch-file> --doctor --json
-```
-
-Rules:
-
-- Doctor is read-only.
-- Doctor does not dispatch, grant approvals, apply cleanup, run Supabase commands, or execute migrations.
-- Doctor returns one diagnosis and exactly one next action.
-- Normal operator reports include a doctor command for safe-stop diagnosis.
-
-## Recent Incidents To Remember
-
-- No-tool success left active workorders open.
-- Scheduler collapsed blocked/awaiting approval into failed.
-- Approval queue, runtime approval item, and token state diverged.
-- Granted approvals were not redispatchable until token logic was fixed.
-- Historical failed run and invalid JSON stop rules retriggered.
-- db-migration-agent output contract conflicted with dispatcher expectations.
-- Qwen returned thinking/prose instead of JSON until API options were fixed.
-- Directory scope trailing slash mismatch caused false violations.
-- Executable rollback/DOWN SQL had to be blocked.
-- selected_agent mismatch could bypass correct gates.
-- Example migration path leaked into real tool request.
-- Approval deny did not sync runtime mirror.
-- Read-only spec access incorrectly required migration approval.
-- Operator `DONE` initially meant "no blockers" rather than "outputs complete".
-- Spec source-chain enforcement now exists as a checker; target product work still must pass it before BLS import.
-- Batch-loader dispatcher dependency injection once omitted `callModel`; `runDispatch()` now has direct regression coverage for passing `defaultCallModel` and `defaultExecuteTool`.
-
-## P1-005 Seed Candidate Workflow Probe
-
-- Local-only governed batch:
-  - `system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-SEED-CANDIDATE.md`
-- Workorder:
-  - `system/workorders/nutrition/WO-NUTRITION-P1-012-nutrient-defs-seed-candidate.md`
-- Goal:
-  - Generate `docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md` through the governed workflow, not by direct Codex authoring.
-
-Probe result:
-
-- Product-gate/source-chain/doctor path is clean for this exact batch.
-- The dispatcher path uses `docs-agent` directly.
-- There is no separate runtime dispatch hop to `orchestrator-agent`; orchestration exists only as internal intent validation inside `system/control-plane/dispatcher.ts`.
-- The run stopped at approval `APP-20260513-758015` with classification `SAFE_TO_REVIEW`.
-- The written artifact is only a 4-line stub:
-  - title
-  - status line
-  - `## Purpose`
-  - `This doc`
-
-Governance gap exposed by this probe and fixed:
-
-- Review escalation (`spark-d invalid_json -> Claude needed`) can leave a stub artifact behind while still producing a docs-only approval stop.
-- Batch output completion currently treats file existence as sufficient, even when the generated document is obviously incomplete.
-- This is a workflow-quality integration gap, not a product-scope or local DB-scope blocker.
-- Fix implemented:
-  - Markdown expected outputs now require multiple headings, meaningful body content, and non-stub terminal content before they count as valid outputs.
-  - Dispatcher markdown writes are blocked before approval enqueue when the content is incomplete.
-  - Operator approval classification returns `DO_NOT_GRANT` for stub markdown artifacts instead of `SAFE_TO_REVIEW`.
-  - Batch output completion treats stub markdown as incomplete even if the file exists.
-- Cleanup performed:
-  - `APP-20260513-758015` was denied through `approval-cli`.
-  - `WO-nutrition-012` / `RUN-20260513-0662` stale awaiting-approval state was removed through `terminal-wo-reset-cli clear-expired-approval` after a clean dry-run.
-  - The stub `docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md` was removed.
-
-## Spark2 docs-agent Runtime Stabilization
-
-- The seed candidate batch later exposed a runtime timeout class, not a product/workorder logic failure.
-- `/v1/models` and tiny `/v1/chat/completions` probes can pass while the real docs-agent dispatcher payload still exceeds the old dispatcher timeout.
-- Reproduction:
-  - tiny completion: healthy
-  - medium docs-style completion: healthy
-  - actual `WO-nutrition-012` dispatcher-shaped payload with docs-agent system prompt and OrchestratorIntent contract: fails at the old `30s x 2` dispatcher timeout, but succeeds with a 120s timeout in about 86s.
-- Stabilization:
-  - `docs-agent` routing now declares `timeout_ms: 120000` and `completion_probe_timeout_ms: 30000`.
-  - Dispatcher model calls honor per-route `timeout_ms` and `max_attempts` when present.
-  - Batch preflight uses the route-specific completion probe timeout.
-  - `system/control-plane/docs-agent-runtime-smoke.ts` adds repeatable tiny, medium docs-style, and dispatcher-shaped smoke probes for docs-agent.
-- This does not bypass docs-agent and does not authorize seed execution, DB work, Supabase, BLS import, migrations, DEV/LIVE, or routing changes.
+- `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`
+- `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`
+- `docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md`
+- `system/model-tiers/model_registry_v2.md`
+- `system/model-tiers/model_tiers_v2.md`

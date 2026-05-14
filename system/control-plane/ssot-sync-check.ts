@@ -240,6 +240,161 @@ function todoCompletionFinding(): SsotSyncFinding {
   }
 }
 
+function readRepoFile(repoRoot: string, relativePath: string): string | null {
+  const fullPath = path.join(repoRoot, relativePath)
+  if (!fs.existsSync(fullPath) || fs.statSync(fullPath).isDirectory()) return null
+  try {
+    return fs.readFileSync(fullPath, 'utf8')
+  } catch {
+    return null
+  }
+}
+
+function normalizeStatus(value: unknown): string {
+  return typeof value === 'string' ? value.trim().toLowerCase() : ''
+}
+
+function isOpenTodoStatus(status: unknown): boolean {
+  const normalized = normalizeStatus(status)
+  return !!normalized && !['done', 'completed', 'fixed', 'closed', 'cancelled', 'canceled'].includes(normalized)
+}
+
+function checkOpenTodoConsistency(repoRoot: string): SsotSyncFinding[] {
+  const openTodos = readRepoFile(repoRoot, 'docs/project/OPEN_TODOS.md')
+  const registerRaw = readRepoFile(repoRoot, 'docs/project/GOVERNANCE_TODO_REGISTER.json')
+  if (openTodos === null || registerRaw === null) return []
+
+  let register: { items?: Array<{ id?: string; status?: string }> }
+  try {
+    register = JSON.parse(registerRaw) as { items?: Array<{ id?: string; status?: string }> }
+  } catch {
+    return []
+  }
+
+  const markdownIds = [...new Set([...openTodos.matchAll(/\bGOV-TODO-\d+\b/g)].map(match => match[0]))].sort()
+  const registerIds = [...new Set((register.items ?? [])
+    .filter(item => isOpenTodoStatus(item.status))
+    .map(item => item.id)
+    .filter((id): id is string => typeof id === 'string' && /^GOV-TODO-\d+$/.test(id)))]
+    .sort()
+
+  const missingInMarkdown = registerIds.filter(id => !markdownIds.includes(id))
+  const missingInRegister = markdownIds.filter(id => !registerIds.includes(id))
+  if (missingInMarkdown.length === 0 && missingInRegister.length === 0) return []
+
+  return [{
+    id: 'ssot_sync.open_todos.register_mismatch',
+    severity: 'medium',
+    layer: 'ssot_sync',
+    message: 'OPEN_TODOS open GOV-TODO IDs do not match GOVERNANCE_TODO_REGISTER open items',
+    evidence: `missing_in_open_todos=${missingInMarkdown.join(',') || '<none>'}; missing_or_not_open_in_register=${missingInRegister.join(',') || '<none>'}`,
+    suggested_action: 'Make OPEN_TODOS.md list the same open GOV-TODO IDs as GOVERNANCE_TODO_REGISTER.json, or close/reframe stale register items.',
+    blocks_product_work: false,
+    blocks_operator: true,
+  }]
+}
+
+interface RuntimeRoleExpectation {
+  id: string
+  label: string
+  patterns: RegExp[]
+}
+
+const RUNTIME_ROLE_FILES = [
+  'docs/project/STACK_REFERENCE.md',
+  'system/model-tiers/model_registry_v2.md',
+  'system/model-tiers/model_tiers_v2.md',
+]
+
+const RUNTIME_ROLE_EXPECTATIONS: RuntimeRoleExpectation[] = [
+  {
+    id: 'spark1_orchestrator',
+    label: 'DGX1/Spark1 workflow-ready orchestrator',
+    patterns: [/DGX1\s*\/\s*Spark1/i, /orchestrator-agent|orchestrator/i, /workflow-ready|handoff proven/i],
+  },
+  {
+    id: 'spark2_worker',
+    label: 'DGX2/Spark2 workflow-ready coding/docs worker',
+    patterns: [/DGX2\s*\/\s*Spark2/i, /coding\/docs|coding\/docs\/test|worker/i, /workflow-ready/i],
+  },
+  {
+    id: 'spark3_nemotron_reviewer',
+    label: 'DGX3/Spark3 Nemotron controlled reviewer/specialist candidate',
+    patterns: [/DGX3\s*\/\s*Spark3/i, /Nemotron/i, /controlled reviewer|controlled_reviewer|specialist candidate|reviewer\/specialist/i, /not default|not production|controlled only|explicit workflow tests/i],
+  },
+  {
+    id: 'dgx45_minimax_lab',
+    label: 'DGX4/5 MiniMax lab-only runtime',
+    patterns: [/DGX4\/5|DGX4|Spark4/i, /MiniMax/i, /lab-only|lab runtime|Hermes-test/i, /not production routing|not productive governance/i],
+  },
+]
+
+function checkRuntimeRoleConsistency(repoRoot: string): SsotSyncFinding[] {
+  const loaded = RUNTIME_ROLE_FILES
+    .map(file => ({ file, content: readRepoFile(repoRoot, file) }))
+    .filter((item): item is { file: string; content: string } => item.content !== null)
+  if (loaded.length === 0) return []
+
+  const mismatches: string[] = []
+  for (const doc of loaded) {
+    for (const expectation of RUNTIME_ROLE_EXPECTATIONS) {
+      if (!expectation.patterns.every(pattern => pattern.test(doc.content))) {
+        mismatches.push(`${doc.file}:${expectation.id}`)
+      }
+    }
+  }
+  if (mismatches.length === 0) return []
+
+  return [{
+    id: 'ssot_sync.runtime_roles.cross_file_mismatch',
+    severity: 'medium',
+    layer: 'ssot_sync',
+    message: 'Runtime role SSOT files do not agree on current Spark/DGX role assignments',
+    evidence: mismatches.join(', '),
+    suggested_action: 'Align STACK_REFERENCE.md, model_registry_v2.md, and model_tiers_v2.md on DGX1/Spark1, DGX2/Spark2, DGX3/Nemotron, and DGX4/5 MiniMax lab roles.',
+    blocks_product_work: false,
+    blocks_operator: true,
+  }]
+}
+
+function checkHandoverTodoConsistency(repoRoot: string): SsotSyncFinding[] {
+  const handover = readRepoFile(repoRoot, 'docs/project/CURRENT_GOVERNANCE_HANDOVER.md')
+  const registerRaw = readRepoFile(repoRoot, 'docs/project/GOVERNANCE_TODO_REGISTER.json')
+  if (handover === null || registerRaw === null) return []
+
+  let register: { items?: Array<{ id?: string; status?: string }> }
+  try {
+    register = JSON.parse(registerRaw) as { items?: Array<{ id?: string; status?: string }> }
+  } catch {
+    return []
+  }
+
+  const staleClaims: string[] = []
+  for (const item of register.items ?? []) {
+    if (typeof item.id !== 'string') continue
+    const status = normalizeStatus(item.status)
+    if (!['done', 'completed', 'fixed', 'closed'].includes(status)) continue
+    const idIndex = handover.indexOf(item.id)
+    if (idIndex === -1) continue
+    const window = handover.slice(Math.max(0, idIndex - 160), idIndex + 280)
+    const claimsBlocked = /blocked_pending_tom_decision|\b(blocked|pending|waiting|requires Tom)\b/i.test(window)
+    const explainedHistorical = /\b(superseded|historical|archived|closed|done|completed)\b/i.test(window)
+    if (claimsBlocked && !explainedHistorical) staleClaims.push(item.id)
+  }
+
+  if (staleClaims.length === 0) return []
+  return [{
+    id: 'ssot_sync.handover.done_todo_claimed_blocked',
+    severity: 'medium',
+    layer: 'ssot_sync',
+    message: 'Active handover claims a done TODO is still blocked or pending',
+    evidence: `todo_ids=${staleClaims.join(',')}`,
+    suggested_action: 'Move the old blocker into Archived/Historical Notes or explain that it is superseded/done.',
+    blocks_product_work: false,
+    blocks_operator: true,
+  }]
+}
+
 export function runSsotSyncCheck(opts: { repoRoot?: string; gitStatus?: string } = {}): SsotSyncResult {
   const repoRoot = path.resolve(opts.repoRoot ?? process.cwd())
   const entries = parseGitStatus(opts.gitStatus ?? gitStatus(repoRoot))
@@ -262,6 +417,9 @@ export function runSsotSyncCheck(opts: { repoRoot?: string; gitStatus?: string }
   if (openTodosChanged !== registerChanged && !hasNaForDomain(declarations, 'completed_todo')) {
     findings.push(todoCompletionFinding())
   }
+  findings.push(...checkOpenTodoConsistency(repoRoot))
+  findings.push(...checkRuntimeRoleConsistency(repoRoot))
+  findings.push(...checkHandoverTodoConsistency(repoRoot))
 
   const summary = summarize(findings)
   const hasHighOrCriticalFindings = summary.critical > 0 || summary.high > 0

@@ -19,10 +19,10 @@ MiniMax is lab-only until reproducible benchmark evidence and a separate governa
 
 ## Hardware And Network
 
-| Node | Role | LAN IP |
-|---|---|---|
-| Spark4 / DGX4 | MiniMax lab node | `192.168.0.101` |
-| Spark5 / DGX5 | MiniMax lab node | `192.168.0.167` |
+| Node | Host | Role | LAN IP |
+|---|---|---|---|
+| Spark4 / DGX4 | `edgexpert-0dc8` | MiniMax lab node | `192.168.0.101` |
+| Spark5 / DGX5 | `edgexpert-e5e3` | MiniMax worker/lab node, not standalone production route | UNKLAR current LAN IP |
 
 Lab interconnect:
 
@@ -50,16 +50,17 @@ Persistent NetworkManager connection names observed/expected for the 200G links:
 
 | Field | Value |
 |---|---|
+| DGX4 container | `vllm_node` |
 | Image | `vllm-node-minimax` |
 | Recipe | `/home/admin/spark-vllm-docker/recipes/minimax-m2.7-nvidia-nvfp4-cutlass-local.yaml` |
-| Model | `nvidia/MiniMax-M2.7-NVFP4` |
+| Model | `nvidia-MiniMax-M2.7-NVFP4` |
 | Host model source | `/home/admin/models/nvidia-MiniMax-M2.7-NVFP4-gitlfs` |
 | Container-visible model path | `/root/.cache/huggingface/local-models/nvidia-MiniMax-M2.7-NVFP4` |
 | Port | `8011` |
 | Nodes | `10.201.0.4,10.201.0.5` |
 | Backend | Ray |
 | Tensor parallelism | `TP=2` |
-| Max context | `max_model_len=16384` |
+| Max context | `max_model_len=65536` observed in DGX4 `/v1/models`; older recipe value `16384` is historical |
 | GPU memory utilization | `0.62` |
 | Max sequences | `max_num_seqs=1` |
 | Local endpoint on Spark4 | `http://127.0.0.1:8011` |
@@ -90,7 +91,17 @@ Known stable proof:
 - `/v1/models` local OK.
 - `/v1/models` remote OK.
 - `/v1/chat/completions` OK.
+- DGX4 `/v1/models` showed `max_model_len=65536`.
+- DGX4 completion produced `content.trim() = ok` and valid JSON after trim.
+- DGX4 and DGX5 both showed `RayWorkerProc` with about `98006 MiB` reserved
+  and about `50C` idle.
 - Speed sample: `446` completion tokens in `16.95` seconds, about `26.32 tok/s`, `finish_reason: stop`.
+
+Still UNKLAR:
+
+- Exact DGX4/DGX5 service files and autostart state.
+- Repository startup wrapper parity with the remote hosts.
+- Complete Hermes 65k evidence.
 
 ## Start Command
 
@@ -126,7 +137,7 @@ Simple chat completion:
 curl http://127.0.0.1:8011/v1/chat/completions \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "nvidia/MiniMax-M2.7-NVFP4",
+    "model": "nvidia-MiniMax-M2.7-NVFP4",
     "messages": [
       { "role": "user", "content": "Summarize the lab runtime boundary in one sentence." }
     ],
@@ -165,7 +176,9 @@ git lfs pull
 - Image transfer through `/tmp` failed due disk space. Use streaming transfer or verify enough disk first.
 - On Spark4, `/tmp`, `/home`, and `/` share the same partition.
 - Spark4 disk cleanup freed space by deleting old broken `saricles` and AWQ attempts.
-- KV-cache constraints led to the current stable context setting: `max_model_len=16384`.
+- Older KV-cache constraints led to the historical recipe context setting
+  `max_model_len=16384`; current DGX4 `/v1/models` evidence showed
+  `max_model_len=65536`.
 - Output can contain reasoning in `content`; client postprocessing should strip text through `</think>` for downstream comparison.
 
 ## Future Evaluation Plan

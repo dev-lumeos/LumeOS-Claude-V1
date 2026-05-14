@@ -15,14 +15,35 @@ machine-readable register.
 | DGX1 / Spark1 | `edgexpert-1116`, `192.168.0.128`, `vllm.service`, container `vllm-qwen`, model `qwen3.6-35b-fp8`, role `orchestrator-agent`, workflow-ready. Spark1 handoff is proven. |
 | DGX2 / Spark2 | `edgexpert-5862`, `192.168.0.188`, `vllm.service`, container `spark-b-coder`, model `qwen3-coder-next-fp8`, role coding/docs worker, workflow-ready. |
 | DGX3 / Spark3 | `edgexpert-509d`, `192.168.0.99`, `vllm.service`, container `vllm_node`, image `vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404`, model `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`, controlled reviewer/specialist candidate only. Gemma4 is retired and must not be used. |
-| DGX4/5 | MiniMax M2.7 NVFP4 lab/runtime only. Hermes-test/lab work is not production routing. Do not document GPT-OSS as active unless it is re-verified and explicitly re-accepted. |
+| DGX4/5 | MiniMax M2.7 NVFP4 lab/runtime only. DGX4 is partially verified as `edgexpert-0dc8` / `192.168.0.101`, container `vllm_node`, image `vllm-node-minimax`, model `nvidia-MiniMax-M2.7-NVFP4`, `max_model_len=65536`, with completion `ok` and JSON after trim. DGX5 host is `edgexpert-e5e3` and is a MiniMax worker/lab node. Hermes-test/lab work is not production routing. |
 | Codex | Bootstrap/senior/fallback. Codex is not the default orchestrator when `spark1_orchestrated` is requested. |
 
 ---
 
 ## Open Items
 
-### TODO-1: DGX3 / Nemotron route-role acceptance policy
+### GOV-TODO-012: MiniMax lab evaluation before routing decision
+
+Status: open.
+
+MiniMax is partially verified as a lab runtime, but it remains outside
+productive governance routing. A benchmark/evaluation decision is still required
+before any governance route can use MiniMax.
+
+Required next step: define and run an explicitly authorized lab evaluation plan
+before adding any MiniMax route.
+
+### GOV-TODO-023: Nutrient reference-values / RDA source candidate
+
+Status: open.
+
+The local `nutrient_defs` seed is applied and UTF-8 corrected, but RDA fields
+remain partial by design. Missing RDA values are not defects.
+
+Required next step: create a separate verified source candidate for
+`nutrient_reference_values` / RDA modeling before adding any additional values.
+
+### GOV-TODO-029: DGX3 / Nemotron route-role acceptance policy
 
 Status: open.
 
@@ -34,18 +55,18 @@ specialist multimodal / OCR / FoodCam work.
 Required next step: write the acceptance policy with pass/fail criteria, route
 scope, fallback behavior, output contract, and explicit non-goals.
 
-### TODO-2: MiniMax lab / Hermes 65k test documentation
+### GOV-TODO-031: MiniMax Hermes 65k / service-autostart documentation
 
 Status: open.
 
-MiniMax remains lab-only. Documentation should describe current DGX4/5 lab
-runtime facts, Hermes-test status, known command(s), and verification commands.
-Do not add MiniMax to production routing.
+MiniMax remains lab-only. DGX4 lab runtime facts are partially verified, but
+complete Hermes 65k evidence, service file state, and autostart state are still
+open.
 
-Required next step: update `docs/project/MINIMAX_LAB_RUNTIME.md` and related
-runtime docs after the lab state is explicitly verified.
+Required next step: document Hermes 65k evidence and exact DGX4/DGX5 service /
+autostart facts after explicit verification.
 
-### TODO-3: infra/vLLM and systemd cleanup
+### GOV-TODO-032: infra/vLLM and systemd cleanup
 
 Status: open.
 

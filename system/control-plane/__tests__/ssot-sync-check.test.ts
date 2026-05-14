@@ -26,6 +26,70 @@ function write(relativePath: string, content = 'content\n'): void {
 }
 
 describe('SSOT sync checker', () => {
+  it('reports OPEN_TODOS and TODO register open item drift', () => {
+    write('docs/project/OPEN_TODOS.md', [
+      '# Open',
+      '',
+      '### GOV-TODO-001: Runtime policy',
+      '',
+    ].join('\n'))
+    write('docs/project/GOVERNANCE_TODO_REGISTER.json', JSON.stringify({
+      items: [
+        { id: 'GOV-TODO-001', status: 'open', title: 'Runtime policy' },
+        { id: 'GOV-TODO-002', status: 'open', title: 'Missing from markdown' },
+      ],
+    }))
+
+    const result = runSsotSyncCheck({ repoRoot: tmpDir, gitStatus: '' })
+
+    assert.equal(result.summary.medium, 1)
+    assert.equal(result.findings[0]?.id, 'ssot_sync.open_todos.register_mismatch')
+  })
+
+  it('allows OPEN_TODOS and TODO register when open IDs match', () => {
+    write('docs/project/OPEN_TODOS.md', [
+      '# Open',
+      '',
+      '### GOV-TODO-001: Runtime policy',
+      '### GOV-TODO-002: MiniMax lab',
+      '',
+    ].join('\n'))
+    write('docs/project/GOVERNANCE_TODO_REGISTER.json', JSON.stringify({
+      items: [
+        { id: 'GOV-TODO-001', status: 'open', title: 'Runtime policy' },
+        { id: 'GOV-TODO-002', status: 'open', title: 'MiniMax lab' },
+        { id: 'GOV-TODO-003', status: 'done', title: 'Closed' },
+      ],
+    }))
+
+    const result = runSsotSyncCheck({ repoRoot: tmpDir, gitStatus: '' })
+
+    assert.equal(result.findings.some(item => item.id === 'ssot_sync.open_todos.register_mismatch'), false)
+  })
+
+  it('reports runtime role drift across stack reference and model tier docs', () => {
+    write('docs/project/STACK_REFERENCE.md', 'DGX1 / Spark1 orchestrator-agent\nDGX2 / Spark2 coding/docs worker\nDGX3 / Spark3 controlled reviewer/specialist candidate\nDGX4/5 MiniMax M2.7 NVFP4 lab-only\n')
+    write('system/model-tiers/model_registry_v2.md', 'DGX1 / Spark1 orchestrator-agent\nDGX2 / Spark2 coding/docs worker\nDGX3 / Spark3 coding worker\nDGX4/5 MiniMax M2.7 NVFP4 lab-only\n')
+    write('system/model-tiers/model_tiers_v2.md', 'DGX1 / Spark1 orchestrator-agent\nDGX2 / Spark2 coding/docs worker\nDGX3 / Spark3 controlled reviewer/specialist candidate\nDGX4/5 MiniMax M2.7 NVFP4 lab-only\n')
+
+    const result = runSsotSyncCheck({ repoRoot: tmpDir, gitStatus: '' })
+
+    assert.equal(result.findings.some(item => item.id === 'ssot_sync.runtime_roles.cross_file_mismatch'), true)
+  })
+
+  it('reports active handover claiming a done TODO remains blocked', () => {
+    write('docs/project/CURRENT_GOVERNANCE_HANDOVER.md', 'GOV-TODO-001 remains blocked_pending_tom_decision for current work.\n')
+    write('docs/project/GOVERNANCE_TODO_REGISTER.json', JSON.stringify({
+      items: [
+        { id: 'GOV-TODO-001', status: 'done', title: 'Closed boundary' },
+      ],
+    }))
+
+    const result = runSsotSyncCheck({ repoRoot: tmpDir, gitStatus: '' })
+
+    assert.equal(result.findings.some(item => item.id === 'ssot_sync.handover.done_todo_claimed_blocked'), true)
+  })
+
   it('reports runtime/model routing changes without mapped SSOT docs', () => {
     write('system/agent-registry/model_routing.json', '{}\n')
 
@@ -50,7 +114,7 @@ describe('SSOT sync checker', () => {
       ].join('\n'),
     })
 
-    assert.equal(result.findings.length, 0)
+    assert.equal(result.findings.some(item => item.id === 'ssot_sync.runtime_model.missing_ssot_update'), false)
   })
 
   it('reports workflow/operator changes without runbook handover or TODO SSOT docs', () => {

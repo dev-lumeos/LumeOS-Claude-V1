@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T14:35:00+07:00",
+  "generated_at": "2026-05-14T15:10:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -233,7 +233,7 @@
       "severity": "low",
       "priority": "P3",
       "status": "open",
-      "evidence": "Spark4/Spark5 MiniMax M2.7 NVFP4 lab baseline is documented in docs/project/MINIMAX_LAB_RUNTIME.md. It is lab-only and not productive governance routing.",
+      "evidence": "MiniMax is partially verified as a lab-only runtime. DGX4 is edgexpert-0dc8 / 192.168.0.101 with container vllm_node, image vllm-node-minimax, model nvidia-MiniMax-M2.7-NVFP4, max_model_len=65536, completion ok, and JSON after trim. DGX5 is edgexpert-e5e3 and is a MiniMax worker/lab node. No production routing is authorized.",
       "recommended_action": "Run reproducible governance benchmark/evaluation only after Tom explicitly requests lab evaluation. Do not add MiniMax to model_routing.json before benchmark evidence and a governance decision.",
       "dependencies": [],
       "estimated_effort": "0.5-1d evaluation planning plus benchmark runs",
@@ -325,20 +325,20 @@
     },
     {
       "id": "GOV-TODO-016",
-      "title": "Tom decision for first non-planning P1-005 execution boundary",
+      "title": "Superseded first non-planning P1-005 local execution boundary",
       "layer": "product_gate",
       "severity": "high",
       "priority": "P0",
-      "status": "blocked_pending_tom_decision",
-      "evidence": "The planning-only P1-005 import-preparation batch is complete and all four planning outputs exist. No raw BLS import, DB work, Supabase, or migration execution has been performed.",
-      "recommended_action": "Review the four planning outputs and explicitly decide whether to open the first non-planning P1-005 execution boundary, or keep all real BLS/DB/Supabase/migration execution blocked.",
+      "status": "done",
+      "evidence": "This blocker was superseded by later explicit local-only boundaries. The schema-only foundation, Thai i18n correction, deterministic nutrient_defs seed, and local read-only Nutrition UI slices have completed locally. DEV/LIVE promotion, BLS import, raw BLS commits, broader DB work, RDA updates, and production routing remain blocked.",
+      "recommended_action": "Treat the old first non-planning boundary decision as closed for local-only work. Use current open TODOs for remaining boundaries: RDA/reference-values candidate, MiniMax lab evaluation, Nemotron acceptance policy, and infra wrapper verification.",
       "dependencies": [
         "GOV-TODO-014",
         "GOV-TODO-015"
       ],
-      "estimated_effort": "Tom decision plus follow-up governance batch if execution is opened",
+      "estimated_effort": "completed/superseded",
       "codex_autonomous_possible": false,
-      "blocks_product_work": true,
+      "blocks_product_work": false,
       "source_files": [
         "docs/project/p1-005/P1-005-bls-source-inventory.md",
         "docs/project/p1-005/P1-005-import-field-mapping.md",
@@ -405,7 +405,7 @@
       "layer": "workflow_quality",
       "severity": "high",
       "priority": "P0",
-      "status": "completed",
+      "status": "done",
       "evidence": "BATCH-NUTRITION-P1-005-SEED-CANDIDATE stopped at APP-20260513-758015 with SAFE_TO_REVIEW classification, but docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md contains only a 4-line stub. The dispatcher path used docs-agent directly; there was no separate orchestrator-agent runtime dispatch. Review escalation reported spark-d invalid_json -> Claude needed.",
       "recommended_action": "Completed: Markdown output quality gate now blocks stub markdown writes before approval enqueue, prevents SAFE_TO_REVIEW classification for incomplete docs, and excludes stub markdown files from output-complete status.",
       "dependencies": [
@@ -430,7 +430,7 @@
       "layer": "workflow_quality",
       "severity": "high",
       "priority": "P0",
-      "status": "completed",
+      "status": "done",
       "evidence": "docs-agent runtime is stable but previous seed candidate attempts were denied because generated seed rows included unsupported or fabricated facts. A deterministic helper now parses SPEC_06_DATABASE_SCHEMA.md directly and writes docs/project/p1-005/P1-005-nutrient-defs-seed-candidate.md with 138 source-derived rows, exactly 16 columns, empty Thai fields, and RDA fields only from explicit source UPDATE examples.",
       "recommended_action": "Use system/workorders/cli/nutrient-defs-seed-extract.ts for the seed candidate path. Do not allow free-form LLM-authored seed rows; any seed execution remains blocked until Tom opens a separate local-only execution boundary.",
       "dependencies": [
@@ -678,13 +678,13 @@
     },
     {
       "id": "GOV-TODO-031",
-      "title": "Document MiniMax lab / Hermes 65k runtime state",
+      "title": "Complete MiniMax Hermes 65k and service-autostart lab documentation",
       "layer": "runtime_lab",
       "severity": "low",
       "priority": "P2",
       "status": "open",
-      "evidence": "DGX4/5 is described as MiniMax M2.7 NVFP4 lab/runtime only, but exact host/service/container/startup and Hermes 65k evidence are UNKLAR in the repository. GPT-OSS must not be documented as active.",
-      "recommended_action": "After explicit authorization, verify the MiniMax lab runtime and update docs/project/MINIMAX_LAB_RUNTIME.md plus infra runtime docs. Keep MiniMax lab-only and out of production routing.",
+      "evidence": "DGX4 MiniMax lab runtime is partially verified: host edgexpert-0dc8, IP 192.168.0.101, container vllm_node, image vllm-node-minimax, model nvidia-MiniMax-M2.7-NVFP4, max_model_len=65536, completion ok, and JSON after trim. DGX5 host edgexpert-e5e3 is a MiniMax worker/lab node. Exact service/autostart state, repository wrapper parity, and complete Hermes 65k evidence remain UNKLAR.",
+      "recommended_action": "After explicit authorization, verify and document Hermes 65k evidence plus exact DGX4/DGX5 service/autostart facts. Keep MiniMax lab-only and out of production routing.",
       "dependencies": [],
       "estimated_effort": "0.5d documentation plus authorized read-only checks",
       "codex_autonomous_possible": true,

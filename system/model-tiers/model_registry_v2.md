@@ -53,8 +53,21 @@ Gemma4 on DGX3 is retired and must not be used.
 ## DGX4/5 Lab
 
 MiniMax M2.7 NVFP4 is lab-only / Hermes-test only and not production routing.
-Exact active host/service/container/start command is UNKLAR in this repository
-until a verified lab report is written.
+
+Verified lab facts:
+
+- DGX4 host/IP: `edgexpert-0dc8` / `192.168.0.101`.
+- DGX4 container/image/model: `vllm_node` / `vllm-node-minimax` /
+  `nvidia-MiniMax-M2.7-NVFP4`.
+- DGX4 `/v1/models` showed `max_model_len=65536`.
+- DGX4 completion produced `content.trim() = ok` and JSON after trim.
+- DGX4 and DGX5 both showed `RayWorkerProc` with about `98006 MiB` reserved
+  and about `50C` idle.
+- DGX5 host: `edgexpert-e5e3`; role is MiniMax worker/lab node, not standalone
+  production route.
+
+Still UNKLAR: exact service/autostart state, repository wrapper parity, and
+complete Hermes 65k evidence.
 
 GPT-OSS / Spark D is historical only and must not be documented as active.
 

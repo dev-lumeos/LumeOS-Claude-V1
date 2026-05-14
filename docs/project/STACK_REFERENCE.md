@@ -15,10 +15,11 @@ or service changes.
 | DGX1 / Spark1 | `edgexpert-1116` | `192.168.0.128` | `vllm.service` | `vllm-qwen` | `qwen3.6-35b-fp8` | `orchestrator-agent`, governance/reasoning | workflow-ready; Spark1 handoff proven |
 | DGX2 / Spark2 | `edgexpert-5862` | `192.168.0.188` | `vllm.service` | `spark-b-coder` | `qwen3-coder-next-fp8` | coding/docs worker | workflow-ready |
 | DGX3 / Spark3 | `edgexpert-509d` | `192.168.0.99` | `vllm.service` | `vllm_node` | `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4` | controlled reviewer/specialist candidate | verified; not default production routing |
-| DGX4/5 | UNKLAR | UNKLAR | UNKLAR | UNKLAR | MiniMax M2.7 NVFP4 lab/runtime | lab-only / Hermes-test | not production routing |
+| DGX4 | `edgexpert-0dc8` | `192.168.0.101` | UNKLAR service/autostart | `vllm_node` | `nvidia-MiniMax-M2.7-NVFP4` | MiniMax lab / Hermes-test | verified lab-only; not production routing |
+| DGX5 | `edgexpert-e5e3` | UNKLAR current LAN IP | UNKLAR service/autostart | UNKLAR | MiniMax worker/lab node | MiniMax lab worker only | not standalone production route |
 | Codex | local/API | n/a | n/a | n/a | GPT-5.x / Claude Code bridge as configured | bootstrap/senior/fallback | not default orchestrator in Spark1 mode |
 
-UNKLAR verification command for DGX4/5 lab state:
+UNKLAR verification command for DGX4/5 service/autostart and full lab state:
 
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\model-runtime-check.ts --check-endpoints --json --project lumeos
@@ -129,6 +130,23 @@ Gemma4 on DGX3 is retired and must not be used.
 
 MiniMax M2.7 NVFP4 is lab-only / Hermes-test only. It is not production routing,
 not a Spark1 orchestrator replacement, and not a default reviewer route.
+
+Verified lab facts:
+
+- DGX4 host/IP: `edgexpert-0dc8` / `192.168.0.101`.
+- DGX4 container/image/model: `vllm_node` / `vllm-node-minimax` /
+  `nvidia-MiniMax-M2.7-NVFP4`.
+- DGX4 `/v1/models` showed `max_model_len=65536`.
+- DGX4 completion produced `content.trim() = ok` and JSON after trim.
+- DGX4 and DGX5 both showed `RayWorkerProc` with about `98006 MiB` reserved
+  and about `50C` idle.
+- DGX5 host: `edgexpert-e5e3`; role is MiniMax worker/lab node, not standalone
+  production route.
+
+Still UNKLAR:
+
+- DGX4/DGX5 exact service file, autostart state, and repository wrapper parity.
+- Complete Hermes 65k evidence.
 
 Do not document GPT-OSS as active unless it is re-verified and explicitly
 accepted again. Historical GPT-OSS/Spark D files are archive references only.
