@@ -212,8 +212,58 @@ export function parseSimpleYaml(text: string): Record<string, unknown> {
     }
 
     if (valuePart === '') {
-      // Block array (or empty).
+      // Block array, nested map, or empty.
       i++
+      let lookahead = i
+      while (lookahead < lines.length && (!lines[lookahead].trim() || lines[lookahead].trimStart().startsWith('#'))) {
+        lookahead++
+      }
+      if (lookahead < lines.length) {
+        const firstNested = lines[lookahead]
+        const firstIndent = firstNested.length - firstNested.trimStart().length
+        const firstTrimmed = firstNested.trimStart()
+        if (firstIndent > 0 && !firstTrimmed.startsWith('- ')) {
+          const obj: Record<string, unknown> = {}
+          const baseIndent = firstIndent
+          while (i < lines.length) {
+            const l = lines[i]
+            if (!l.trim() || l.trimStart().startsWith('#')) {
+              i++
+              continue
+            }
+            const indent = l.length - l.trimStart().length
+            if (indent === 0 || indent < baseIndent) break
+            if (indent > baseIndent) break
+            const nested = l.slice(baseIndent).match(KEY_RE)
+            if (!nested) break
+            const nestedKey = nested[1]
+            const nestedValuePart = nested[2].trim()
+            if (nestedValuePart !== '') {
+              obj[nestedKey] = parseScalar(nestedValuePart)
+              i++
+              continue
+            }
+            i++
+            const arr: unknown[] = []
+            while (i < lines.length) {
+              const child = lines[i]
+              if (!child.trim() || child.trimStart().startsWith('#')) {
+                i++
+                continue
+              }
+              const childIndent = child.length - child.trimStart().length
+              if (childIndent <= baseIndent) break
+              const childTrimmed = child.trimStart()
+              if (!childTrimmed.startsWith('- ')) break
+              arr.push(parseScalar(childTrimmed.slice(2).trim()))
+              i++
+            }
+            obj[nestedKey] = arr
+          }
+          result[key] = obj
+          continue
+        }
+      }
       const arr: unknown[] = []
       while (i < lines.length) {
         const l = lines[i]

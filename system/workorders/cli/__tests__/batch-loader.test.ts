@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
-import { expectedOutputStatusesForWorkorder, type LoadedWorkorder } from '../batch-loader'
+import { expectedOutputStatusesForWorkorder, parseSimpleYaml, type LoadedWorkorder } from '../batch-loader'
 
 const batchLoaderSourcePath = path.resolve(
   process.cwd(),
@@ -104,6 +104,31 @@ describe('batch-loader dispatcher dependency injection', () => {
       /Dispatcher reported .*expected outputs are missing/,
       'runDispatch must surface a specific missing-output failure detail',
     )
+  })
+})
+
+describe('parseSimpleYaml', () => {
+  it('preserves nested source_refs maps used by source-chain workorders', () => {
+    const parsed = parseSimpleYaml([
+      'workorder_id: "WO-test"',
+      'source_refs:',
+      '  module_index: "docs/specs/Nutrition/INDEX.md"',
+      '  current_specs:',
+      '    - "docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md"',
+      '  reviews:',
+      '    - "docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md"',
+      '  raw_sources_allowed: false',
+      'expected_outputs:',
+      '  - "docs/project/test.md"',
+    ].join('\n'))
+
+    assert.deepEqual(parsed.source_refs, {
+      module_index: 'docs/specs/Nutrition/INDEX.md',
+      current_specs: ['docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md'],
+      reviews: ['docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md'],
+      raw_sources_allowed: false,
+    })
+    assert.deepEqual(parsed.expected_outputs, ['docs/project/test.md'])
   })
 })
 
