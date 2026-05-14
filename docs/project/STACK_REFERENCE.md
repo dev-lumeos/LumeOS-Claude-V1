@@ -3,14 +3,29 @@
 
 ---
 
+## Current Runtime Correction, 2026-05-14
+
+The current DGX1 / Spark1 runtime source of truth is `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`.
+
+- DGX1 / Spark1 is the verified `orchestrator-agent` and governance/reasoning runtime at `http://192.168.0.128:8001`.
+- Host: `edgexpert-1116`; container: `vllm-qwen`; service: `vllm.service`; image: `vllm/vllm-openai:cu130-nightly`; model: `Qwen/Qwen3.6-35B-A3B-FP8`; served model: `qwen3.6-35b-fp8`.
+- Correct Spark1 service flags include `--max-num-batched-tokens 8192`, `--reasoning-parser qwen3`, `--default-chat-template-kwargs '{"enable_thinking": false}'`, `--enable-auto-tool-choice`, and `--tool-call-parser qwen3_xml`.
+- The previous startup crash was caused by `block_size 2096 > max_num_batched_tokens 2048`; the fix is `--max-num-batched-tokens 8192`.
+- Spark1 handoff is proven by commit `a0b3a20`: `spark1_orchestrated` doctor/dry-run uses Spark1, validates worker assignments, and does not fall back to Codex as orchestrator.
+- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- MiniMax remains lab-only.
+- Codex remains bootstrap, senior worker/reviewer, and fallback, not the default orchestrator when Spark1 mode is requested.
+
+---
+
 ## Hardware
 
 | Node | IP | Port | Modell | Rolle | Throughput | Status |
 |---|---|---|---|---|---|---|
 | Spark 1 (A) | 192.168.0.128 | 8001 | Qwen3.6-35B-A3B FP8 | Orchestrator + WO-Validator | ~50 single / 116 par-4 tok/s | LIVE |
 | Spark 2 (B) | 192.168.0.188 | 8001 | Qwen3-Coder-Next FP8 | Coding Worker | ~47 tok/s | LIVE |
-| Spark 3 (C) | 192.168.0.99 | 8001 | google/gemma-4-26B-A4B-it | Fast Reviewer (Pipeline-Tier 1) | ~35 single / 180 par-8 tok/s | LIVE |
-| Spark 4 (D) | 192.168.0.101 | 8001 | openai/gpt-oss-120b MXFP4 | Senior Reviewer (Pipeline-Tier 2) | ~59 single / 150 par-4 tok/s | LIVE |
+| Spark 3 (C) | 192.168.0.99 | 8001 | google/gemma-4-26B-A4B-it | Fast Reviewer candidate | ~35 single / 180 par-8 tok/s | not workflow-ready until clean output tests pass |
+| Spark 4 (D) | 192.168.0.101 | 8001 | MiniMax / lab runtimes | Lab only | TBD | lab-only / not productive routing |
 | RTX 5090 | localhost | 8001 | Qwen3-VL 30B FP8 | MealCam Vision | TBD | geplant |
 | Escalation | — | — | Claude Sonnet/Opus (Max 200) | Senior Coding (selten) | — | aktiv |
 
@@ -56,7 +71,14 @@ docker run -d --name vllm-qwen \
   --gpu-memory-utilization 0.70 \
   --max-model-len 65536 \
   --trust-remote-code \
-  --enable-chunked-prefill --max-num-seqs 4
+  --enable-chunked-prefill \
+  --enable-prefix-caching \
+  --max-num-seqs 4 \
+  --max-num-batched-tokens 8192 \
+  --reasoning-parser qwen3 \
+  --default-chat-template-kwargs '{"enable_thinking": false}' \
+  --enable-auto-tool-choice \
+  --tool-call-parser qwen3_xml
 ```
 
 ### Spark 2 (Spark B) — Docker Start

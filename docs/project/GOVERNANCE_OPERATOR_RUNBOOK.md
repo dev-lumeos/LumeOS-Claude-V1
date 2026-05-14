@@ -42,6 +42,13 @@ Spark1 handoff behavior:
 - Requires `worker_assignments` entries to match the governed workorder route before dispatch.
 - Blocks with `ORCHESTRATION_BLOCKED` instead of falling back to Codex when Spark1 is requested but unavailable or invalid.
 
+Current proof:
+
+- Commit `a0b3a20` proves Spark1 handoff in operator probes.
+- `--doctor` and `--dry-run` now invoke Spark1 / `orchestrator-agent` handoff for `spark1_orchestrated`.
+- The live doctor probe for `BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md` returned `actual_orchestration_mode: spark1_orchestrated`, `spark1_orchestrator_used: true`, `codex_role: none`, `worker_assignment_result: WO-nutrition-013->senior-coding-agent`, and `final_diagnosis: CLEAN_READY`.
+- DGX1 / Spark1 runtime details and corrected `vllm.service` flags are recorded in `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`.
+
 Example Spark1-gated local Nutrition test:
 
 ```powershell
@@ -52,6 +59,12 @@ To execute a ready governed batch through Spark1 handoff:
 
 ```powershell
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\<BATCH>.md --continue --project lumeos --orchestration-mode spark1_orchestrated
+```
+
+Concrete P1-005 local detail-panel command:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md --continue --project lumeos --orchestration-mode spark1_orchestrated
 ```
 
 For Nutrition batch 001:

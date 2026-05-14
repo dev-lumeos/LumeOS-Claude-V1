@@ -37,6 +37,19 @@ Modes:
 
 Required report fields: `requested_orchestration_mode`, `actual_orchestration_mode`, `spark1_orchestrator_used`, `codex_role`, `worker_assignment_result`, and `missing_integration_point`.
 
+Current Spark1 proof:
+
+- DGX1 / Spark1 runtime details are documented in `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`.
+- Commit `a0b3a20` proves Spark1 handoff in operator probes.
+- `--doctor` and `--dry-run` now invoke Spark1 / `orchestrator-agent` for `spark1_orchestrated`.
+- The verified local Nutrition detail-panel doctor probe returned `actual_orchestration_mode: spark1_orchestrated`, `spark1_orchestrator_used: true`, `codex_role: none`, `worker_assignment_result: WO-nutrition-013->senior-coding-agent`, and `final_diagnosis: CLEAN_READY`.
+
+Concrete Spark1 command:
+
+```bash
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md --continue --project lumeos --orchestration-mode spark1_orchestrated
+```
+
 ---
 
 ## Synopsis

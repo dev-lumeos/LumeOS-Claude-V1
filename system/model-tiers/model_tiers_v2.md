@@ -3,6 +3,20 @@
 
 ---
 
+## Current Runtime Correction, 2026-05-14
+
+DGX1 / Spark1 is the verified `orchestrator-agent` and governance/reasoning runtime. The current runtime details and corrected `vllm.service` flags are recorded in `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`.
+
+Current orchestration truth:
+
+- `spark1_orchestrated` operator mode uses Spark1 / `orchestrator-agent` for pre-dispatch worker assignment.
+- Commit `a0b3a20` proves doctor/dry-run handoff with `spark1_orchestrator_used: true`, `codex_role: none`, and `worker_assignment_result: WO-nutrition-013->senior-coding-agent`.
+- Codex remains bootstrap, senior worker/reviewer, and fallback. It is not the default orchestrator when Spark1 mode is requested.
+- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- MiniMax remains lab-only and not productive governance routing.
+
+---
+
 ## Aktuelle Tier-Zuweisung
 
 | Tier | Modell | Node | Format | Rolle |

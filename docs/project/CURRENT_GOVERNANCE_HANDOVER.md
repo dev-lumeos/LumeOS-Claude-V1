@@ -2,7 +2,7 @@
 
 ## Status
 
-Current date: 2026-05-10.
+Current date: 2026-05-14.
 
 `main` is pushed through Runtime Monitoring History and DGX4 productive routing removal. The active branch is implementing Operator Autonomy / Dossier / Learning V2 hardening.
 
@@ -50,6 +50,11 @@ Final readiness review note, 2026-05-11: the completed governance hardening sequ
 - Project Profiles V2 adds an inactive `fixture-beauty-club` profile, schema-backed `profile_kind` / `active` metadata, profile path traversal rejection, read-only UI snapshot selected-profile loading, and non-Nutrition source-chain fixture coverage. This does not activate real Beauty Club product work or assume a real Beauty Club repo path.
 - Operator Autonomy V2 adds a stable `autonomy_handoff` object to operator/doctor/dossier JSON and report output. It includes final state, blocker type, dossier command, learning suggestion, cleanup dry-run when safe, Codex Worker eligibility, product-gate status, forbidden actions, and one exact next action.
 - Governed operator runs now expose explicit orchestration mode selection: `auto`, `codex_bootstrap`, and `spark1_orchestrated`. Reports include requested mode, actual mode, whether Spark1 / `orchestrator-agent` was used, Codex role, worker assignment result, and missing integration point. `spark1_orchestrated` now runs a pre-dispatch Spark1/orchestrator-agent handoff and fails closed with `ORCHESTRATION_BLOCKED` if the endpoint, routing intent, or worker assignment is invalid.
+- DGX1 / Spark1 is corrected and verified as the active `orchestrator-agent` and governance/reasoning runtime. Current runtime: host `edgexpert-1116`, IP `192.168.0.128`, container `vllm-qwen`, service `vllm.service`, image `vllm/vllm-openai:cu130-nightly`, model `Qwen/Qwen3.6-35B-A3B-FP8`, served model `qwen3.6-35b-fp8`, endpoint `http://192.168.0.128:8001`, local endpoint `http://127.0.0.1:8001`, and `max_model_len=65536`.
+- DGX1 startup crash root cause was `block_size 2096 > max_num_batched_tokens 2048`; corrected service flags include `--max-num-batched-tokens 8192`, `--enable-prefix-caching`, `--reasoning-parser qwen3`, `--default-chat-template-kwargs '{"enable_thinking": false}'`, `--enable-auto-tool-choice`, and `--tool-call-parser qwen3_xml`.
+- Spark1 smoke results now pass: reply-only `ok -> ok`, JSON-only `{"status":"ok"}`, and `orchestrator-agent` model-runtime-check reports `HEALTHY`. Commit `a0b3a20` proves Spark1 handoff in operator probes. The live doctor probe for `BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md` returned `actual_orchestration_mode: spark1_orchestrated`, `spark1_orchestrator_used: true`, `codex_role: none`, `worker_assignment_result: WO-nutrition-013->senior-coding-agent`, and `final_diagnosis: CLEAN_READY`.
+- Spark1 run example: `cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md --continue --project lumeos --orchestration-mode spark1_orchestrated`.
+- Remaining runtime gaps: DGX3 / Spark3 Gemma4 is not workflow-ready until clean output tests pass; MiniMax remains lab-only; Codex remains bootstrap/senior/fallback and is not the default orchestrator when Spark1 mode is requested.
 - Product work remains closed globally. Tom approved one scoped exception only: `Nutrition / BLS / P1-005 preparation` under `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`.
 - The approved scoped exception allows planning, source-chain validation, decomposition/workorder readiness review, and non-dispatching operator/governance checks only. It still forbids BLS import execution, DB/Supabase/migration work, product batches, approvals, raw BLS commits, and product implementation.
 - Governed workflows now follow a non-interactive autonomy policy across all runs, not only night runs: `AUTO_CONTINUE` for safe preparation work, `AUTO_PLAN_AROUND` for risky domains where a non-executing alternative exists, and `STOP_AND_REPORT` only at true execution boundaries.
@@ -104,6 +109,7 @@ Use these files before starting more governance or product work:
 
 - `docs/project/GOVERNANCE_SYSTEM_COMPLETION_PLAN.md`
 - `docs/project/CURRENT_GOVERNANCE_HANDOVER.md`
+- `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`
 - `docs/project/governance-learning/README.md`
 - `docs/project/governance-learning/INCIDENT_LEARNING_SCHEMA.md`
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`

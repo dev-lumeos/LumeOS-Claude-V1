@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-13T17:45:00+07:00",
+  "generated_at": "2026-05-14T08:30:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -545,8 +545,8 @@
       "severity": "medium",
       "priority": "P1",
       "status": "done",
-      "evidence": "The governed operator now accepts --orchestration-mode auto|codex_bootstrap|spark1_orchestrated and reports requested/actual mode, Spark1 usage, Codex role, worker assignment result, and missing integration point. spark1_orchestrated now runs a pre-dispatch Spark1/orchestrator-agent handoff, validates JSON routing intent and worker_assignments, and blocks with ORCHESTRATION_BLOCKED instead of falling back to Codex when Spark1 is unavailable or invalid.",
-      "recommended_action": "Use --orchestration-mode spark1_orchestrated on future local Nutrition workflow tests to exercise the Spark1 handoff. Keep codex_bootstrap available for explicitly requested bootstrap/debug work.",
+      "evidence": "The governed operator now accepts --orchestration-mode auto|codex_bootstrap|spark1_orchestrated and reports requested/actual mode, Spark1 usage, Codex role, worker assignment result, and missing integration point. spark1_orchestrated now runs a pre-dispatch Spark1/orchestrator-agent handoff, validates JSON routing intent and worker_assignments, and blocks with ORCHESTRATION_BLOCKED instead of falling back to Codex when Spark1 is unavailable or invalid. Commit a0b3a20 proves the live doctor/dry-run handoff: actual_orchestration_mode=spark1_orchestrated, spark1_orchestrator_used=true, codex_role=none, worker_assignment_result=WO-nutrition-013->senior-coding-agent, final_diagnosis=CLEAN_READY.",
+      "recommended_action": "Use --orchestration-mode spark1_orchestrated on future local Nutrition workflow tests to exercise the Spark1 handoff. Keep codex_bootstrap available for explicitly requested bootstrap/debug work. DGX1 runtime details are documented in docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md.",
       "dependencies": [
         "GOV-TODO-024"
       ],
@@ -560,7 +560,30 @@
         "system/workorders/cli/operator-doctor.ts",
         "system/workorders/cli/orchestration-mode.ts",
         "system/workorders/cli/spark1-orchestrator-handoff.ts",
-        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"
+        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md",
+        "docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-026",
+      "title": "Prove DGX3/Gemma4 clean workflow output readiness",
+      "layer": "runtime",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "DGX1/Spark1 is corrected and Spark1 handoff is proven, but DGX3/Spark3 Gemma4 remains not workflow-ready until clean output tests pass.",
+      "recommended_action": "Before treating DGX3/Spark3 as workflow-ready, run clean output tests for the Gemma4 review path and document pass/fail evidence. Do not route required governed workflow work through DGX3 as ready until that proof exists.",
+      "dependencies": [
+        "GOV-TODO-025"
+      ],
+      "estimated_effort": "0.5d validation and documentation",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/MODEL_RUNTIME_HARDENING.md",
+        "docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md",
+        "system/model-tiers/model_registry_v2.md",
+        "system/model-tiers/model_tiers_v2.md"
       ]
     }
   ]

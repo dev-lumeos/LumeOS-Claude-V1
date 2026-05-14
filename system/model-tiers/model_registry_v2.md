@@ -3,6 +3,33 @@
 
 ---
 
+## Current Runtime Correction, 2026-05-14
+
+DGX1 / Spark1 is now the verified `orchestrator-agent` and governance/reasoning runtime. See `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md` for the current runtime proof and service flags.
+
+Current Spark1 facts:
+
+- Host: `edgexpert-1116`
+- IP / endpoint: `192.168.0.128:8001` / `http://192.168.0.128:8001`
+- Local endpoint on DGX1: `http://127.0.0.1:8001`
+- Container/service: `vllm-qwen` / `vllm.service`
+- Image: `vllm/vllm-openai:cu130-nightly`
+- Model: `Qwen/Qwen3.6-35B-A3B-FP8`
+- Served model: `qwen3.6-35b-fp8`
+- Corrected flags: `--max-num-batched-tokens 8192`, `--reasoning-parser qwen3`, `--default-chat-template-kwargs '{"enable_thinking": false}'`, `--enable-auto-tool-choice`, `--tool-call-parser qwen3_xml`
+- Startup fix: `block_size 2096 > max_num_batched_tokens 2048` is resolved by `--max-num-batched-tokens 8192`.
+- Thinking-output fix: `enable_thinking=false` is enforced by the runtime chat-template configuration.
+
+Commit `a0b3a20` proves `spark1_orchestrated` operator handoff in doctor/dry-run probes. No Codex fallback is used when Spark1 orchestration is requested.
+
+Remaining gaps:
+
+- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- MiniMax remains lab-only and is not productive governance routing.
+- Codex remains bootstrap, senior worker/reviewer, and fallback, not the default orchestrator in `spark1_orchestrated` mode.
+
+---
+
 ## Live Stack
 
 ### Spark A — Orchestrator

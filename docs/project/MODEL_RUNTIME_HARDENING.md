@@ -10,6 +10,8 @@ The goal is to detect routing, endpoint, timeout, JSON-mode, and Qwen thinking-p
 
 Codex CLI with GPT-5.5 is the productive senior engineering and repo-aware review runtime. DGX4/Spark D is removed from productive governance routing and is reserved for later DGX4/DGX5 lab work. Spark 4/5 remain local lab/premium model experiments and do not replace Codex production authority.
 
+Current DGX1 / Spark1 correction, 2026-05-14: Spark1 is verified as the active `orchestrator-agent` and governance/reasoning runtime. The corrected runtime is documented in `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`.
+
 ## Runtime Source Of Truth
 
 Routing and agent identity come from:
@@ -60,9 +62,9 @@ Expected Spark/vLLM routes currently include:
 
 | Node | Endpoint | Role |
 | --- | --- | --- |
-| Spark A | `http://192.168.0.128:8001` | Qwen3.6 orchestration/review/db/security |
+| DGX1 / Spark1 / Spark A | `http://192.168.0.128:8001` | Qwen3.6 `orchestrator-agent` and governance/reasoning runtime |
 | Spark B | `http://192.168.0.188:8001` | Qwen coder execution/docs/tests/i18n |
-| Spark C | `http://192.168.0.99:8001` | fast reviewer |
+| Spark C | `http://192.168.0.99:8001` | fast reviewer route present; not workflow-ready until clean output tests pass |
 | DGX4 / Spark D | `http://192.168.0.101:8001` | disabled for productive governance; future DGX4/DGX5 MiniMax lab |
 | RTX 5090 | `http://localhost:8001` | MealCam vision |
 
@@ -79,6 +81,69 @@ Codex CLI is not a vLLM/OpenAI-compatible HTTP endpoint and must not be checked 
 Codex worker execution uses `codex exec` through `system/workers/codex-worker.ts`. The bridge is not a broad automatic dispatcher replacement. `system/workers/codex-worker.config.json` enables the controlled senior-agent path while keeping the policy narrow: only `senior-coding-agent`, explicit `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product work blocked while `product_gate_open=false`.
 
 MealCam/Vision is optional and on-demand. Its endpoint is not expected to be online during normal governance/operator work. An offline `mealcam-agent` endpoint is reported as informational unless a MealCam/Vision workorder, selected batch, or explicit Tom request requires that runtime.
+
+## DGX1 / Spark1 Corrected Runtime
+
+Verified DGX1 state:
+
+- Host: `edgexpert-1116`
+- IP: `192.168.0.128`
+- Container: `vllm-qwen`
+- Service: `vllm.service`
+- Image: `vllm/vllm-openai:cu130-nightly`
+- Model: `Qwen/Qwen3.6-35B-A3B-FP8`
+- Served model name: `qwen3.6-35b-fp8`
+- Endpoint: `http://192.168.0.128:8001`
+- Local endpoint: `http://127.0.0.1:8001`
+- `max_model_len: 65536`
+- Role: Spark1 / DGX1 `orchestrator-agent` and governance/reasoning runtime
+
+The corrected `vllm.service` flags are:
+
+```text
+--kv-cache-dtype fp8
+--gpu-memory-utilization 0.70
+--max-model-len 65536
+--enable-chunked-prefill
+--enable-prefix-caching
+--max-num-seqs 4
+--max-num-batched-tokens 8192
+--reasoning-parser qwen3
+--default-chat-template-kwargs '{"enable_thinking": false}'
+--enable-auto-tool-choice
+--tool-call-parser qwen3_xml
+```
+
+Known fixes:
+
+- Startup crash root cause was `block_size 2096 > max_num_batched_tokens 2048`; the corrected service uses `--max-num-batched-tokens 8192`.
+- Visible thinking output is fixed by the Qwen3 reasoning setup and `enable_thinking=false` at the chat-template layer.
+- Acceptance smoke results now pass: reply-only `ok -> ok`, JSON-only `{"status":"ok"}`, and `orchestrator-agent` model-runtime-check reports `HEALTHY`.
+
+## Spark1 Orchestrated Handoff
+
+Commit `a0b3a20` proves the Spark1 pre-dispatch handoff in operator probes.
+
+For `--orchestration-mode spark1_orchestrated`:
+
+- `--doctor` and `--dry-run` invoke Spark1 / `orchestrator-agent` handoff.
+- The operator validates Spark1 routing intent and worker assignments deterministically.
+- No Codex fallback is used when Spark1 is requested.
+- Codex role must report `none` unless Spark1 explicitly assigns Codex as worker/reviewer/fallback.
+
+The verified live doctor probe for `BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md` returned:
+
+- `actual_orchestration_mode: spark1_orchestrated`
+- `spark1_orchestrator_used: true`
+- `codex_role: none`
+- `worker_assignment_result: WO-nutrition-013->senior-coding-agent`
+- `final_diagnosis: CLEAN_READY`
+
+Example:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md --continue --project lumeos --orchestration-mode spark1_orchestrated
+```
 
 ## Runtime History
 
@@ -106,7 +171,7 @@ History summaries report:
 
 History readiness is based on the latest fresh record for active required productive routes. Older failures remain visible as historical failure and timeout counts, but stale records from removed, disabled, or lab-only routes must not keep current governance readiness blocked. A stale history record must not be interpreted as current health; it returns `STALE_HISTORY` and requires a fresh endpoint check before runtime-dependent autonomous, night, or large runs.
 
-Current planned maintenance is represented by `system/control-plane/runtime-maintenance.json`. On 2026-05-11, all DGX/Spark devices are powered down for rack installation and are classified as `planned_hardware_maintenance`. During this state, Spark/DGX endpoint failures must not trigger routing fixes or service-debug recommendations. Runtime-dependent autonomous, night, and large runs remain blocked until maintenance ends and a fresh endpoint check is recorded.
+Current planned maintenance is represented by `system/control-plane/runtime-maintenance.json`. The 2026-05-11 rack-installation maintenance window is historical and was cleared by later runtime proof. New endpoint failures must be classified against current route readiness, not against stale planned-maintenance state.
 
 Codex CLI routes record `runtime_type=codex-cli`, `endpoint_status=external_ok`, and `latency_ms=null`.
 
@@ -210,3 +275,9 @@ Autonomous, night, large, or product-execution runs remain blocked until:
 ## No Product Execution
 
 This hardening layer does not run product batches, execute migrations, import BLS data, grant approvals, or run Supabase `db push`/`db reset`.
+
+## Remaining Runtime Gaps
+
+- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- MiniMax remains lab-only and is not productive governance routing.
+- Codex remains bootstrap, senior worker/reviewer, and fallback. Codex is not the default orchestrator when `spark1_orchestrated` is requested.
