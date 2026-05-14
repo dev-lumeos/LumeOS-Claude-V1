@@ -8,9 +8,11 @@ export const runtime = 'nodejs'
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get('q') ?? ''
   const foodId = request.nextUrl.searchParams.get('food') ?? undefined
+  const category = request.nextUrl.searchParams.get('category') ?? ''
+  const tag = request.nextUrl.searchParams.get('tag') ?? ''
 
   try {
-    const payload = await getLocalFoodSearch(query, foodId)
+    const payload = await getLocalFoodSearch(query, foodId, { category, tag })
     return NextResponse.json(payload)
   } catch (error) {
     if (error instanceof LocalFoodSearchError) {

@@ -1,6 +1,11 @@
 import Link from 'next/link'
 
-import { LocalFoodSearchError, getLocalFoodSearch, normalizeFoodSearchText } from '../../lib/nutrition/food-search'
+import {
+  LocalFoodSearchError,
+  buildFoodSearchFilterHref,
+  getLocalFoodSearch,
+  normalizeFoodSearchText,
+} from '../../lib/nutrition/food-search'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,16 +13,15 @@ type NutritionPageProps = {
   searchParams?: {
     q?: string
     food?: string
+    category?: string
+    tag?: string
   }
 }
 
-const COMMON_NUTRIENTS = new Set(['ENERCJ', 'ENERCC', 'PROT625', 'FAT', 'CHO', 'FIBC', 'SUGAR', 'NA'])
+const COMMON_NUTRIENTS = new Set(['ENERCJ', 'ENERCC', 'PROT625', 'FAT', 'CHO', 'FIBT', 'SUGAR', 'NA'])
 
-function buildFoodHref(query: string, foodId: string): string {
-  const params = new URLSearchParams()
-  if (query.trim()) params.set('q', query.trim())
-  params.set('food', foodId)
-  return `/nutrition?${params.toString()}`
+function buildFoodHref(query: string, category: string, tag: string, foodId: string): string {
+  return buildFoodSearchFilterHref({ query, category, tag, food: foodId })
 }
 
 function FoodSearchErrorView({ message }: { message: string }) {
@@ -34,12 +38,56 @@ function FoodSearchErrorView({ message }: { message: string }) {
   )
 }
 
+type FacetItem = {
+  key: string
+  label: string
+  count: number
+  href: string
+}
+
+function FacetSection({ active, clearHref, items, title }: { active: string; clearHref: string; items: FacetItem[]; title: string }) {
+  if (items.length === 0) return null
+
+  return (
+    <div className="mt-5">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{title}</h3>
+        {active ? (
+          <Link className="text-xs text-emerald-300 hover:text-emerald-200" href={clearHref}>
+            Clear
+          </Link>
+        ) : null}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {items.slice(0, 18).map(item => {
+          const selected = active === item.key
+          return (
+            <Link
+              className={`rounded-full border px-2.5 py-1 text-xs transition ${
+                selected
+                  ? 'border-emerald-400 bg-emerald-400 text-emerald-950'
+                  : 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500'
+              }`}
+              href={item.href}
+              key={item.key}
+            >
+              {item.label} <span className={selected ? 'text-emerald-950/70' : 'text-slate-500'}>{item.count}</span>
+            </Link>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export default async function NutritionPage({ searchParams }: NutritionPageProps) {
   const query = searchParams?.q ?? ''
   const selectedFoodId = searchParams?.food
+  const category = searchParams?.category ?? ''
+  const tag = searchParams?.tag ?? ''
 
   try {
-    const payload = await getLocalFoodSearch(query, selectedFoodId)
+    const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag })
     const commonNutrients = payload.nutrients.filter(item => COMMON_NUTRIENTS.has(item.nutrient_code))
     const otherNutrients = payload.nutrients.filter(item => !COMMON_NUTRIENTS.has(item.nutrient_code))
 
@@ -65,8 +113,9 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
           <section className="mb-6 rounded-lg border border-amber-700/50 bg-amber-950/30 p-4 text-sm text-amber-100">
             <div className="font-semibold">Source label from BLS.</div>
             <p className="mt-1 leading-6">
-              Human-friendly names, aliases, categories, and search normalization are future work. This page does not invent
-              display names, aliases, categories, or nutrient values.
+              Human-friendly names remain future work. Category and tag filters are local Human Layer foundations seeded
+              from current specs and deterministic BLS-backed rules. This page does not invent display names, aliases,
+              categories, or nutrient values.
             </p>
           </section>
 
@@ -77,8 +126,10 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   className="min-w-0 flex-1 rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none focus:border-emerald-400"
                   defaultValue={query}
                   name="q"
-                  placeholder="Search BLS source labels, e.g. kuerbis, öl, brot"
+                  placeholder="Search BLS source labels, e.g. kuerbis, oel, brot"
                 />
+                {payload.category ? <input name="category" type="hidden" value={payload.category} /> : null}
+                {payload.tag ? <input name="tag" type="hidden" value={payload.tag} /> : null}
                 <button
                   className="rounded-md border border-emerald-400 bg-emerald-400 px-4 py-2 text-sm font-semibold text-emerald-950 hover:bg-emerald-300"
                   type="submit"
@@ -89,6 +140,30 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
               <div className="mt-3 text-xs text-slate-400">
                 Normalized query: <span className="font-mono text-slate-200">{normalizeFoodSearchText(query) || '(all local foods)'}</span>
               </div>
+
+              <FacetSection
+                active={payload.category}
+                clearHref={buildFoodSearchFilterHref({ query, tag })}
+                items={payload.categories.map(item => ({
+                  key: item.slug,
+                  label: item.name_de || item.slug,
+                  count: item.count,
+                  href: buildFoodSearchFilterHref({ query, tag }, { category: item.slug, food: null }),
+                }))}
+                title="Category filters"
+              />
+
+              <FacetSection
+                active={payload.tag}
+                clearHref={buildFoodSearchFilterHref({ query, category })}
+                items={payload.tags.map(item => ({
+                  key: item.code,
+                  label: item.name_de || item.code,
+                  count: item.count,
+                  href: buildFoodSearchFilterHref({ query, category }, { tag: item.code, food: null }),
+                }))}
+                title="V1 tag filters"
+              />
 
               <div className="mt-5 flex items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold">Matches</h2>
@@ -112,11 +187,14 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                             ? 'border-emerald-400 bg-emerald-950/40'
                             : 'border-slate-800 bg-slate-950/70 hover:border-slate-600'
                         }`}
-                        href={buildFoodHref(query, food.id)}
+                        href={buildFoodHref(query, payload.category, payload.tag, food.id)}
                         key={food.id}
                       >
                         <div className="font-mono text-xs text-slate-400">{food.bls_code}</div>
                         <div className="mt-1 font-medium text-slate-100">{food.source_label}</div>
+                        {food.category_name_de ? (
+                          <div className="mt-1 text-xs text-emerald-200/80">{food.category_name_de}</div>
+                        ) : null}
                         <div className="mt-1 text-xs text-slate-500">BLS source label, not final product copy</div>
                       </Link>
                     )
@@ -148,6 +226,11 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                     <div className="text-xs uppercase tracking-[0.16em] text-slate-500">Source label</div>
                     <div className="mt-2 text-xl font-semibold text-slate-100">{payload.selected_food.source_label}</div>
                     <div className="mt-2 text-sm text-slate-400">{payload.selected_food.name_en || 'No English source label available.'}</div>
+                    {payload.selected_food.category_name_de ? (
+                      <div className="mt-3 inline-flex rounded-full border border-emerald-700/70 px-2.5 py-1 text-xs text-emerald-100">
+                        Category: {payload.selected_food.category_name_de}
+                      </div>
+                    ) : null}
                     <div className="mt-3 text-xs text-amber-200">
                       This is the BLS technical source label. Human-friendly naming and aliases are intentionally not present yet.
                     </div>

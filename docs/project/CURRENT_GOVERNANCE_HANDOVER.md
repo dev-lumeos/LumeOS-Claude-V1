@@ -102,6 +102,16 @@ evidence only and must not override the current SSOT files listed below.
   - BLS food names are shown as source-backed technical labels, not final human-friendly product copy.
   - Human-friendly names, aliases, categories, and richer search normalization remain future work; no invented aliases, display names, nutrient values, or food labels were added.
   - The slice is read-only and performs no DB writes, schema changes, seed/import changes, RDA changes, DEV/LIVE action, or Supabase Cloud action.
+- The local-only Food Taxonomy / Human Layer foundation is completed for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-HUMAN-LAYER.md`.
+  - Applied local-only SQL: `docs/project/p1-005/P1-005-local-food-human-layer.sql`.
+  - Created local `nutrition.food_categories`, `nutrition.tag_definitions`, `nutrition.food_tags`, and `nutrition.food_aliases`.
+  - Added missing local Human Layer columns on `nutrition.foods`: `category_id`, `name_display_en`, `name_display_th`, `processing_level`, and `is_prepared_dish`.
+  - Seeded 88 source-backed categories from `SPEC_05_FOOD_TAXONOMY.md`: 13 Level 1 and 75 Level 2 categories. Level 3/4 bullet hierarchy extraction remains deferred.
+  - Deterministically categorized 4388 foods; 2752 remain intentionally unassigned until explicit deterministic mapping rules exist.
+  - Inserted 16 V1 visible tag definitions and 9265 deterministic macro-derived `food_tags`; manual/cuisine/religious and ingredient-derived tags remain deferred.
+  - Inserted 21420 source-backed aliases from exact BLS labels, exact source EN labels, and deterministic normalized variants only.
+  - `/nutrition` now shows category and V1 tag filter chips when Human Layer data exists, while preserving the source-label warning and read-only behavior.
+  - This boundary remains local-only: no DEV/LIVE, no Supabase Cloud, no production DB, no invented categories, no invented aliases, no invented display names, no invented food/nutrient values, no RDA changes, and no diary/MealItem flow.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions
