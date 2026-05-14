@@ -907,4 +907,59 @@ describe('apply safe cleanups', () => {
     assert.match(audit, /"event":"review_completed"/)
     assert.match(audit, /"run_id":"REVIEW-/)
   })
+
+  it('uses bounded review payloads for large expected output files', async () => {
+    writeExpectedOutput('docs/project/large-reviewed-output.md', [
+      '# Large Reviewed Output',
+      '',
+      '## Summary',
+      '',
+      'A'.repeat(9000),
+      '',
+      '## Tail',
+      '',
+      'The end of the file remains visible to the reviewer.',
+    ].join('\n'))
+
+    const batch: LoadedBatch = {
+      batchPath: batchPath(),
+      status: 'ready_to_run',
+      entries: [],
+      workorders: [{
+        filename: 'WO-large-review.md',
+        filepath: path.join(tmpDir, 'WO-large-review.md'),
+        validationErrors: [],
+        needsApproval: false,
+        parsed: {
+          workorder_id: 'WO-large-review',
+          agent_id: 'senior-coding-agent',
+          task: 'Review large output without overloading reviewer context.',
+          risk_category: 'standard',
+          scope_files: ['docs/project/large-reviewed-output.md'],
+          expected_outputs: ['docs/project/large-reviewed-output.md'],
+        },
+      }],
+    }
+
+    let capturedUserMessage = ''
+    const outcomes = await runConfiguredOutputReview(batch, {
+      force: true,
+      callFastReviewer: async (_systemPrompt, userMessage) => {
+        capturedUserMessage = userMessage
+        return JSON.stringify({
+          status: 'PASS',
+          risk: 'LOW',
+          confidence: 0.99,
+          violations: [],
+          recommendations: [],
+          summary: 'review ok',
+          requires_claude: false,
+        })
+      },
+    })
+
+    assert.equal(outcomes[0]?.status, 'dispatched')
+    assert.match(capturedUserMessage, /review-payload-truncated/)
+    assert.match(capturedUserMessage, /The end of the file remains visible/)
+  })
 })

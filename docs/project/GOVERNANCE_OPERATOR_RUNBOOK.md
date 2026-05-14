@@ -420,6 +420,8 @@ If a Codex Worker subprocess times out but all scoped expected outputs exist and
 
 Nemotron reviewer prompts must keep the reviewer itself read-only while allowing PASS for authorized scoped workorder changes, including local-only data/schema/product steps, when outputs are complete and validations are clean. Reviewer policy must not imply that only read-only worker outputs can pass.
 
+Configured output review uses bounded per-file payloads for large expected outputs. The reviewer receives file identity plus deterministic head/tail excerpts and a truncation marker; full files remain on disk and are still covered by output validation, tests, and SSOT checks.
+
 Generated Codex worker prompt/report files under `system/reports/codex-worker/` are runtime artifacts and must not be committed.
 
 ## SSOT Sync Check

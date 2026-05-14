@@ -972,6 +972,26 @@ function readWorkorderExpectedOutputs(workorder: LoadedWorkorder): { path: strin
   })
 }
 
+const REVIEW_OUTPUT_CONTENT_LIMIT = 8000
+const REVIEW_OUTPUT_HEAD_LIMIT = 5000
+const REVIEW_OUTPUT_TAIL_LIMIT = 2000
+
+function formatOutputForReview(item: { path: string; content: string }): string {
+  if (item.content.length <= REVIEW_OUTPUT_CONTENT_LIMIT) {
+    return `# ${item.path}\n\n${item.content}`
+  }
+  const omitted = item.content.length - REVIEW_OUTPUT_HEAD_LIMIT - REVIEW_OUTPUT_TAIL_LIMIT
+  return [
+    `# ${item.path}`,
+    '',
+    item.content.slice(0, REVIEW_OUTPUT_HEAD_LIMIT),
+    '',
+    `[review-payload-truncated: omitted ${omitted} chars from ${item.path}; full file remains on disk for deterministic checks]`,
+    '',
+    item.content.slice(-REVIEW_OUTPUT_TAIL_LIMIT),
+  ].join('\n')
+}
+
 export async function runConfiguredOutputReview(
   batch: LoadedBatch,
   opts: {
@@ -1010,7 +1030,7 @@ export async function runConfiguredOutputReview(
       {
         wo_id: id,
         run_id: syntheticRunId,
-        output: outputs.map(item => `# ${item.path}\n\n${item.content}`).join('\n\n---\n\n'),
+        output: outputs.map(formatOutputForReview).join('\n\n---\n\n'),
       },
       {
         wo_id: id,
