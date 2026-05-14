@@ -87,6 +87,11 @@ evidence only and must not override the current SSOT files listed below.
   - Local validation confirmed 10 `nutrition.foods` rows, 927 `nutrition.food_nutrients` rows, and 0 missing nutrient FK targets.
   - The local schema/debug page reports the staged food row counts.
   - This remains local-only sample staging, not broad/full BLS import, not raw BLS commit, not food search UI, and not DEV/LIVE promotion.
+- The local-only deterministic BLS import expansion boundary is open for `BATCH-NUTRITION-P1-005-LOCAL-BLS-IMPORT-EXPANSION.md`.
+  - Source file: `docs/specs/Nutrition/00_raw/bls/original/BLS_4_0_Daten_2025_DE.xlsx`.
+  - Generated bulk CSV artifacts live under `tmp/nutrition/p1-005-bls-local-import` and are local runtime artifacts, not committed BLS data.
+  - Candidate extraction is full local scope: 7140 foods and 698092 food nutrient values, with 0 unsupported nutrient header mappings.
+  - The boundary remains local-only: no DEV/LIVE, no Supabase Cloud, no production DB, no source workbook commit, no unsupported values, and no RDA changes.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions

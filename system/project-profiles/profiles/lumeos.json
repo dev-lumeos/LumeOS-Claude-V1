@@ -35,7 +35,8 @@
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-RDA-FILTER.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-FOUNDATION.md",
-      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-SAMPLE-STAGING.md"
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-SAMPLE-STAGING.md",
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-BLS-IMPORT-EXPANSION.md"
     ]
   },
   "forbidden_paths": [
