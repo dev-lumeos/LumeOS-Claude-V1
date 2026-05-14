@@ -262,6 +262,7 @@ interface TierOutcome {
     | 'low_confidence'
     | 'escalate'
     | 'rewrite_pending'
+    | 'reviewer_unavailable'
 }
 
 async function runSingleTier(
@@ -332,8 +333,7 @@ async function runSingleTier(
     try {
       raw = await callReviewer(systemPrompt, userMessage, 800)
     } catch (err) {
-      // Reviewer-Call selbst fehlgeschlagen → wie schema_violation behandeln
-      return emitMetric({ failureReason: 'invalid_json' }, 'invalid_json', true)
+      return emitMetric({ failureReason: 'reviewer_unavailable' }, 'reviewer_unavailable', true)
     }
 
     let review: ReviewOutput
@@ -521,7 +521,9 @@ export async function runReviewPipeline(
       ? 'spark-d rewrite_limit_exceeded → Claude needed'
       : spark4Outcome.failureReason === 'invalid_json'
         ? 'spark-d invalid_json → Claude needed'
-        : 'spark-d ESCALATE → Claude needed'
+        : spark4Outcome.failureReason === 'reviewer_unavailable'
+          ? 'spark-d reviewer_unavailable → Claude needed'
+          : 'spark-d ESCALATE → Claude needed'
 
   await deps.audit?.({
     event: 'review_escalated',

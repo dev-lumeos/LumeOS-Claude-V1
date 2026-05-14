@@ -452,7 +452,7 @@ async function test17_spark3_empty_response() {
 }
 
 async function test18_spark4_empty_response() {
-  console.log('\n[18] Spark 4 empty content → human_needed')
+  console.log('\n[18] Spark 4 empty content → reviewer_unavailable human_needed')
   stubFetch('')  // empty content from GPT-OSS → callGPTOSSReviewer throws
   const events: PipelineAuditEvent[] = []
   const deps = makeDeps(mockReviewer(asJson(ESCALATE_HIGH)), events)
@@ -461,7 +461,7 @@ async function test18_spark4_empty_response() {
 
   assert.equal(result.kind, 'human_needed')
   if (result.kind === 'human_needed') {
-    assert.match(result.reason, /invalid_json/)
+    assert.match(result.reason, /reviewer_unavailable/)
   }
   restoreFetch()
   console.log('  ✓')
@@ -580,6 +580,37 @@ async function test23_nemotron_minimal_review_contract() {
   console.log('  ✓')
 }
 
+async function test24_fast_reviewer_call_failure_is_unavailable() {
+  console.log('\n[24] Required fast reviewer call failure → reviewer_unavailable')
+  const events: PipelineAuditEvent[] = []
+  const metrics: Array<{ outcome: string }> = []
+  const deps: PipelineDeps = {
+    callFastReviewer: async () => {
+      throw new Error('Nemotron Reviewer API Error: 404 Not Found')
+    },
+    audit: createMemoryAuditWriter(events),
+    writeMetric: event => metrics.push(event),
+    requireFastReviewerPass: true,
+    fastReviewerContract: 'nemotron',
+  }
+
+  const result = await runReviewPipeline(
+    { ...WORKER_OUTPUT, run_id: 'REVIEW-test-024' },
+    STANDARD_WO,
+    deps,
+  )
+
+  assert.equal(result.kind, 'human_needed')
+  if (result.kind === 'human_needed') {
+    assert.match(result.reason, /reviewer_unavailable/)
+    assert.equal(result.lastTier, 'spark-c')
+  }
+  assert.equal(metrics[0]?.outcome, 'reviewer_unavailable')
+  assert.ok(findEvent(events, e =>
+    e.event === 'review_escalated' && e.tier === 'spark-c' && e.reason === 'reviewer_unavailable'))
+  console.log('  ✓')
+}
+
 // ─── Runner ───────────────────────────────────────────────────────────────────
 
 async function runAll() {
@@ -613,6 +644,7 @@ async function runAll() {
     { name: 'V2: Counter incremented on REWRITE',       fn: test21_persisted_counter_incremented_on_rewrite },
     { name: 'V2: Counter at 1 + REWRITE → limit',      fn: test22_persisted_counter_limit_after_increment },
     { name: 'Nemotron minimal review contract',          fn: test23_nemotron_minimal_review_contract },
+    { name: 'Fast reviewer call failure unavailable',    fn: test24_fast_reviewer_call_failure_is_unavailable },
   ]
 
   let pass = 0

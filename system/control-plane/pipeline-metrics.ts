@@ -27,6 +27,7 @@ export type MetricOutcome =
   | 'ESCALATE'
   | 'FAIL'
   | 'invalid_json'
+  | 'reviewer_unavailable'
   | 'rewrite_limit_exceeded'
 
 export interface PipelineMetricEvent {
