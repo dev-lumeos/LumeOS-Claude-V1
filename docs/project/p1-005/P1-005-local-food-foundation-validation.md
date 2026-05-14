@@ -1,6 +1,6 @@
 # P1-005 Local Food Foundation Validation
 
-Status: `PRE_APPLY_VALIDATION_READY`
+Status: `LOCAL_APPLY_VALIDATED`
 
 ## Scope
 
@@ -42,25 +42,43 @@ The slice is expected to pass:
 
 ## Local Apply Status
 
-Local apply has not been recorded in this report yet.
+Local apply completed successfully on 2026-05-14 against the local
+Supabase/Test DB container only.
 
-After gates pass, apply only this exact SQL file to the local Supabase/Test DB
-container and update this section with:
+Exact local command used:
 
-- exact command used
-- table existence result
-- row-count validation result
-- FK validation result
+```powershell
+docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f /tmp/20260514_001_nutrition_food_foundation_slice.sql
+```
+
+The SQL file was copied into the local DB container before execution:
+
+```powershell
+docker cp supabase/migrations/20260514_001_nutrition_food_foundation_slice.sql supabase_db_LumeOS-Claude-V1:/tmp/20260514_001_nutrition_food_foundation_slice.sql
+```
+
+Validation query result:
+
+```text
+foods_exists|food_nutrients_exists|foods_rows|food_nutrients_rows|nutrient_fk_exists
+t|t|0|0|t
+```
+
+Local debug helper result:
+
+```json
+{"foods_table_exists":true,"food_nutrients_table_exists":true,"foods_row_count":0,"food_nutrients_row_count":0,"food_nutrients_nutrient_fk_exists":true}
+```
 
 ## Expected Post-Apply Result
 
 | Check | Expected |
 |---|---|
-| `nutrition.foods` exists | yes |
-| `nutrition.food_nutrients` exists | yes |
-| `nutrition.foods` row count | `0` |
-| `nutrition.food_nutrients` row count | `0` |
-| `food_nutrients.nutrient_code -> nutrient_defs(code)` FK exists | yes |
+| `nutrition.foods` exists | yes, validated |
+| `nutrition.food_nutrients` exists | yes, validated |
+| `nutrition.foods` row count | `0`, validated |
+| `nutrition.food_nutrients` row count | `0`, validated |
+| `food_nutrients.nutrient_code -> nutrient_defs(code)` FK exists | yes, validated |
 
 ## Stop Conditions
 

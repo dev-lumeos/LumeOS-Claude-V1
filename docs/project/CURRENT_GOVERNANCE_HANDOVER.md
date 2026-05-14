@@ -76,9 +76,9 @@ evidence only and must not override the current SSOT files listed below.
   - RDA fields are partial by design.
 - Local Nutrition UI has progressed through read-only schema/debug, preview, search/filter, RDA availability filter, detail panel, deep-link, pin/compare, and copy-link affordances.
 - The local `nutrition.nutrient_defs` preview includes a read-only RDA availability filter with All nutrients, Nutrients with any RDA value, and Nutrients without RDA values modes. Availability is based only on non-empty `rda_male` or `rda_female` values and combines with existing search/group filters.
-- The current local-only food foundation boundary is scoped to `BATCH-NUTRITION-P1-005-LOCAL-FOOD-FOUNDATION.md`.
+- The local-only food foundation boundary is completed for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-FOUNDATION.md`.
   - Target tables: `nutrition.foods` and `nutrition.food_nutrients`.
-  - `nutrition.food_nutrients.nutrient_code` must reference `nutrition.nutrient_defs(code)`.
+  - Local validation confirmed both tables exist, both row counts are `0`, and `nutrition.food_nutrients.nutrient_code` references `nutrition.nutrient_defs(code)`.
   - The slice remains schema-only: no food search, no food UI, no BLS import, no raw BLS commit, no seed/import rows, and no invented food values.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
