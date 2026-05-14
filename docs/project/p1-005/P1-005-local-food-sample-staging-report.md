@@ -45,6 +45,34 @@ import.
 - No invented food values.
 - No RDA value changes.
 
+## Local apply result
+
+Status: LOCAL_APPLIED_TO_SUPABASE_TEST_DB
+
+Applied locally on 2026-05-14 with:
+
+```powershell
+docker cp docs/project/p1-005/P1-005-local-food-sample-staging.sql supabase_db_LumeOS-Claude-V1:/tmp/P1-005-local-food-sample-staging.sql
+docker exec supabase_db_LumeOS-Claude-V1 psql -U postgres -d postgres -v ON_ERROR_STOP=1 -f /tmp/P1-005-local-food-sample-staging.sql
+```
+
+Result:
+
+- `INSERT 0 10` into `nutrition.foods`
+- `INSERT 0 927` into `nutrition.food_nutrients`
+- `ANALYZE` completed for both local tables
+
+Local validation:
+
+| Check | Result |
+|---|---:|
+| `nutrition.foods` row count | 10 |
+| `nutrition.food_nutrients` row count | 927 |
+| Missing `nutrition.nutrient_defs(code)` FK targets | 0 |
+
+The local debug page now reports `food_foundation.foods_row_count=10` and
+`food_foundation.food_nutrients_row_count=927`.
+
 ## Validation queries
 
 ```sql
