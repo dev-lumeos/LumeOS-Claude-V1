@@ -557,8 +557,12 @@ async function test22_persisted_counter_limit_after_increment() {
 async function test23_nemotron_minimal_review_contract() {
   console.log('\n[23] Nemotron minimal review contract → done@spark-c')
   const events: PipelineAuditEvent[] = []
+  let capturedSystemPrompt = ''
   const deps = {
-    ...makeDeps(mockReviewer(JSON.stringify(NEMOTRON_PASS_REVIEW)), events),
+    ...makeDeps(async (systemPrompt: string) => {
+      capturedSystemPrompt = systemPrompt
+      return JSON.stringify(NEMOTRON_PASS_REVIEW)
+    }, events),
     requireFastReviewerPass: true,
     fastReviewerContract: 'nemotron' as const,
   }
@@ -577,6 +581,8 @@ async function test23_nemotron_minimal_review_contract() {
   }
   assert.ok(findEvent(events, e =>
     e.event === 'review_completed' && e.tier === 'spark-c' && e.run_id === 'REVIEW-test-023'))
+  assert.match(capturedSystemPrompt, /worker output may include authorized scoped changes/)
+  assert.doesNotMatch(capturedSystemPrompt, /output is scoped, complete, and read-only/)
   console.log('  ✓')
 }
 

@@ -418,6 +418,8 @@ Batch dossier reporting separates Codex Worker subprocess status from the govern
 
 If a Codex Worker subprocess times out but all scoped expected outputs exist and the configured reviewer passes, the timeout remains visible as `observed_non_terminal` and is reported as superseded by validated outputs. If outputs are missing or review fails, the timeout remains blocking and the dossier must classify the batch as `FIX_REQUIRED`.
 
+Nemotron reviewer prompts must keep the reviewer itself read-only while allowing PASS for authorized scoped workorder changes, including local-only data/schema/product steps, when outputs are complete and validations are clean. Reviewer policy must not imply that only read-only worker outputs can pass.
+
 Generated Codex worker prompt/report files under `system/reports/codex-worker/` are runtime artifacts and must not be committed.
 
 ## SSOT Sync Check

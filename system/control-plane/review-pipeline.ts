@@ -219,7 +219,8 @@ function buildReviewPrompt(
       '  "confidence": 0.0,',
       '  "reviewer": "nemotron-review-agent"',
       '}',
-      'Use PASS only when the output is scoped, complete, and read-only. Use FAIL for fixable quality/scope problems. Use BLOCKED for unsafe or unverifiable output.',
+      'You as reviewer are read-only, but the worker output may include authorized scoped changes from the workorder.',
+      'Use PASS only when the output is within the authorized workorder scope, complete, validated, and not unsafe. Use FAIL for fixable quality/scope problems. Use BLOCKED for unsafe or unverifiable output.',
     ].join('\n')
     : [
     `You are the ${tierLabel} for LUMEOS workorders.`,
