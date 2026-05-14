@@ -18,9 +18,11 @@ Food Search while preserving BLS as the scientific/source layer.
 - Enhance read-only local Food Search to use category/tag/alias data if present.
 - Update documentation/SSOT.
 
-## Workorders
+## Included Workorders
 
-1. `../WO-NUTRITION-P1-022-local-food-human-layer.md`
+| Order | Filename | workorder_id | Title | Risk | Approval |
+|---|---|---|---|---|---|
+| 1 | `../WO-NUTRITION-P1-022-local-food-human-layer.md` | `WO-nutrition-022` | `local-food-human-layer` | `standard` | not required for Tom-authorized local-only boundary |
 
 ## Explicit Non-Goals
 

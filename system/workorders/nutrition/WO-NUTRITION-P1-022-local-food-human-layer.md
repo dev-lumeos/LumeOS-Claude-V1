@@ -38,8 +38,8 @@ task: |
   - Keep the UI read-only and preserve the source-label warning.
 
   Do not run DEV/LIVE, Supabase Cloud, production DB, BLS import expansion, raw
-  BLS commit, invented categories, source-unbacked aliases, source-unbacked
-  display names, invented food values, invented nutrient values, RDA changes,
+  BLS commit, unsourced categories, source-unbacked aliases, source-unbacked
+  display names, unsourced food values, unsourced nutrient values, RDA changes,
   diary write flow, MealItem creation, production routing, MiniMax routing,
   service restart, manual runtime_state edits, or manual queue edits.
 
@@ -134,6 +134,7 @@ files_blocked:
   - ".env.*"
 
 acceptance_criteria:
+  - "All expected_outputs files exist and are complete for the governed Human Layer boundary."
   - "Local food_categories exists and has 13 L1 and at least 75 L2 source-backed categories."
   - "Local tag_definitions has the 16 V1 visible tags."
   - "Local food_tags contains only deterministic macro-derived assignments for this slice."
@@ -150,9 +151,9 @@ negative_constraints:
   - "No Supabase Cloud action."
   - "No production DB action."
   - "No raw BLS commit."
-  - "No invented food values."
-  - "No invented nutrient values."
-  - "No invented categories."
+  - "No unsourced food values."
+  - "No unsourced nutrient values."
+  - "No unsourced categories."
   - "No source-unbacked aliases or synonyms."
   - "No source-unbacked display names."
   - "No RDA value change."
