@@ -54,6 +54,11 @@ evidence only and must not override the current SSOT files listed below.
 - `SSOT_SYNC_CHECK` is implemented and wired into `governance-invariant-check`.
   - It checks mapped SSOT updates for runtime/model, workflow/governance, product-gate, infra runtime, and TODO changes.
   - It now also checks `OPEN_TODOS.md` open IDs against `GOVERNANCE_TODO_REGISTER.json`, and core runtime-role consistency across `STACK_REFERENCE.md` and model-tier docs.
+- Documentation / SSOT handling is now a hard governed workorder lifecycle gate.
+  - Every active/new workorder must declare `documentation_impact`.
+  - Required documentation impact must run the documentation phase and emit `documentation_started` / `documentation_completed` before DONE.
+  - Explicit N/A must be structured and auditable; generic `none` / `not applicable` reasons are invalid.
+  - Dossiers report documentation impact, documentation-agent usage, SSOT files, SSOT sync status, and final SSOT classification.
 
 ## Current Product / Nutrition Truth
 

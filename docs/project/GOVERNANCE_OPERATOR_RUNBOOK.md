@@ -67,6 +67,50 @@ Concrete P1-005 local detail-panel command:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-005-LOCAL-DETAIL-PANEL.md --continue --project lumeos --orchestration-mode spark1_orchestrated
 ```
 
+## Documentation / SSOT Lifecycle Gate
+
+SSOT handling is a required phase of every governed workorder lifecycle:
+
+```text
+workorder -> worker execution -> configured review -> documentation impact handling -> SSOT_SYNC_CHECK -> dossier -> DONE
+```
+
+Every new or active workorder YAML must declare `documentation_impact`:
+
+```yaml
+documentation_impact:
+  required: true
+  domains:
+    - "workflow"
+  ssot_files:
+    - "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"
+  documentation_agent_required: true
+  na_reason: null
+```
+
+If documentation impact is not applicable, the workorder must still declare a structured auditable N/A:
+
+```yaml
+documentation_impact:
+  required: false
+  domains:
+    - "none"
+  ssot_files: []
+  documentation_agent_required: false
+  na_reason: "Local-only UI affordance does not alter accepted behavior, SSOT runtime docs, gates, or TODO state."
+```
+
+Rules:
+
+- Missing `documentation_impact` is a schema/preflight blocker.
+- `none` requires `required=false`, `documentation_agent_required=false`, and a specific non-generic `na_reason`.
+- Runtime, model-routing, workflow, governance, product-gate, infra-runtime, and TODO-state domains require `documentation_agent_required=true` unless a structured exemption is explicitly declared.
+- Historical workorders may be grandfathered only with `domain=historical_workorder` and the exact reason `pre-existing archived workorder before documentation-impact gate`.
+- If `documentation_impact.required=true`, the operator must emit `documentation_started` and `documentation_completed` before DONE.
+- If documentation is skipped with a valid N/A, the operator emits `documentation_skipped_with_na`.
+- If declared SSOT files are missing or `SSOT_SYNC_CHECK` fails, the operator emits `documentation_blocked` and the batch remains `FIX_REQUIRED`.
+- Batch dossiers must report documentation impact, documentation agent usage, SSOT files, N/A reason when present, SSOT sync status, and final SSOT classification.
+
 For Nutrition batch 001:
 
 ```powershell

@@ -395,6 +395,46 @@ function checkHandoverTodoConsistency(repoRoot: string): SsotSyncFinding[] {
   }]
 }
 
+function checkChangedWorkorderDocumentationImpact(repoRoot: string, changedPaths: string[]): SsotSyncFinding[] {
+  const findings: SsotSyncFinding[] = []
+  const workorderPaths = changedPaths.filter(p =>
+    /^system\/workorders\/.+\/drafts\/.+\.md$/.test(p) ||
+    /^system\/workorders\/.+\/batches\/.+\.md$/.test(p),
+  )
+  for (const file of workorderPaths) {
+    const content = readRepoFile(repoRoot, file)
+    if (!content) continue
+    if (file.includes('/drafts/') && !/documentation_impact:\s*\n/i.test(content)) {
+      findings.push({
+        id: 'ssot_sync.workorder.documentation_impact_missing',
+        severity: 'high',
+        layer: 'ssot_sync',
+        message: 'Changed governed workorder is missing documentation_impact metadata',
+        evidence: file,
+        suggested_action: 'Declare documentation_impact or mark the workorder historical with the structured N/A reason before it can be DONE.',
+        blocks_product_work: false,
+        blocks_operator: true,
+      })
+    }
+    if (/documentation_impact:\s*\n[\s\S]*?domains:\s*\n\s*-\s*"?none"?/i.test(content)) {
+      const reason = /na_reason:\s*"?([^"\n]+)"?/i.exec(content)?.[1]?.trim() ?? ''
+      if (reason.length < 24 || /^(n\/a|na|none|not applicable|no docs?|no impact)$/i.test(reason)) {
+        findings.push({
+          id: 'ssot_sync.workorder.documentation_na_generic',
+          severity: 'high',
+          layer: 'ssot_sync',
+          message: 'Changed workorder uses documentation_impact none without a specific auditable N/A reason',
+          evidence: file,
+          suggested_action: 'Replace the generic N/A with a concrete reason that can be audited in the dossier.',
+          blocks_product_work: false,
+          blocks_operator: true,
+        })
+      }
+    }
+  }
+  return findings
+}
+
 export function runSsotSyncCheck(opts: { repoRoot?: string; gitStatus?: string } = {}): SsotSyncResult {
   const repoRoot = path.resolve(opts.repoRoot ?? process.cwd())
   const entries = parseGitStatus(opts.gitStatus ?? gitStatus(repoRoot))
@@ -420,6 +460,7 @@ export function runSsotSyncCheck(opts: { repoRoot?: string; gitStatus?: string }
   findings.push(...checkOpenTodoConsistency(repoRoot))
   findings.push(...checkRuntimeRoleConsistency(repoRoot))
   findings.push(...checkHandoverTodoConsistency(repoRoot))
+  findings.push(...checkChangedWorkorderDocumentationImpact(repoRoot, changedPaths))
 
   const summary = summarize(findings)
   const hasHighOrCriticalFindings = summary.critical > 0 || summary.high > 0

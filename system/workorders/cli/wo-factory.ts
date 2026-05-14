@@ -56,6 +56,13 @@ interface PlanWorkorder {
   priority?: string
   quality_critical?: boolean
   source_refs?: SourceRefs
+  documentation_impact?: {
+    required?: boolean
+    domains?: string[]
+    ssot_files?: string[]
+    documentation_agent_required?: boolean
+    na_reason?: string | null
+  }
   mixed_risk?: boolean
 }
 
@@ -495,10 +502,96 @@ function yamlScalar(value: string | number | boolean): string {
 }
 
 function yamlArray(key: string, values: string[] | undefined): string[] {
+  if (!values || values.length === 0) return [`${key}: []`]
   const lines = [`${key}:`]
   for (const value of values ?? []) lines.push(`  - ${yamlScalar(value)}`)
-  if (!values || values.length === 0) lines.push('  []')
   return lines
+}
+
+function inferDocumentationImpact(plan: FactoryPlan, wo: PlanWorkorder): Required<NonNullable<PlanWorkorder['documentation_impact']>> {
+  const explicit = wo.documentation_impact
+  if (explicit) {
+    return {
+      required: explicit.required === true,
+      domains: explicit.domains ?? ['governance'],
+      ssot_files: explicit.ssot_files ?? [],
+      documentation_agent_required: explicit.documentation_agent_required === true,
+      na_reason: explicit.na_reason ?? null,
+    }
+  }
+
+  const touched = [
+    ...(wo.expected_outputs ?? []),
+    ...(wo.scope_files ?? []),
+    ...(wo.files_allowed ?? []),
+  ].map(toPosix)
+  const domains = new Set<string>()
+  const ssotFiles = new Set<string>()
+
+  for (const file of touched) {
+    if (file === 'docs/project/STACK_REFERENCE.md' || file.startsWith('docs/project/runtime/') || file.startsWith('system/model-tiers/')) {
+      domains.add('runtime')
+      ssotFiles.add(file)
+    }
+    if (file.includes('model_routing') || file.startsWith('system/model-tiers/')) {
+      domains.add('model_routing')
+      ssotFiles.add(file)
+    }
+    if (file.startsWith('system/workorders/') || file.startsWith('system/control-plane/') || file.startsWith('system/reports/')) {
+      domains.add('workflow')
+      ssotFiles.add('docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md')
+    }
+    if (file.includes('PRODUCT_WORK_GATE') || file.includes('FIRST_PRODUCT_GATE_OPENING_PROPOSAL')) {
+      domains.add('product_gate')
+      ssotFiles.add(file)
+    }
+    if (file.startsWith('infra/systemd/') || file.startsWith('infra/vllm/')) {
+      domains.add('infra_runtime')
+      ssotFiles.add(file)
+    }
+    if (file === 'docs/project/OPEN_TODOS.md' || file === 'docs/project/GOVERNANCE_TODO_REGISTER.json') {
+      domains.add('todo_state')
+      ssotFiles.add(file)
+    }
+    if (file.startsWith('docs/project/') || file.startsWith('docs/specs/')) {
+      domains.add('governance')
+      ssotFiles.add(file)
+    }
+  }
+
+  if (domains.size === 0) {
+    return {
+      required: false,
+      domains: ['none'],
+      ssot_files: [],
+      documentation_agent_required: false,
+      na_reason: 'Factory inferred no SSOT documentation impact from this narrowly scoped product/code workorder.',
+    }
+  }
+
+  ssotFiles.add('docs/project/CURRENT_GOVERNANCE_HANDOVER.md')
+  ssotFiles.add('docs/project/GOVERNANCE_TODO_REGISTER.json')
+  return {
+    required: true,
+    domains: [...domains],
+    ssot_files: [...ssotFiles],
+    documentation_agent_required: true,
+    na_reason: null,
+  }
+}
+
+function renderDocumentationImpact(impact: Required<NonNullable<PlanWorkorder['documentation_impact']>>): string[] {
+  return [
+    'documentation_impact:',
+    `  required: ${impact.required ? 'true' : 'false'}`,
+    '  domains:',
+    ...impact.domains.map(domain => `    - ${yamlScalar(domain)}`),
+    ...(impact.ssot_files.length > 0
+      ? ['  ssot_files:', ...impact.ssot_files.map(file => `    - ${yamlScalar(file)}`)]
+      : ['  ssot_files: []']),
+    `  documentation_agent_required: ${impact.documentation_agent_required ? 'true' : 'false'}`,
+    `  na_reason: ${impact.na_reason === null ? 'null' : yamlScalar(impact.na_reason)}`,
+  ]
 }
 
 function renderSourceRefs(refs: SourceRefs): string[] {
@@ -519,6 +612,7 @@ function renderWorkorderMarkdown(plan: FactoryPlan, wo: PlanWorkorder): Generate
   const requiresApproval = defaultApproval(risk, wo.requires_approval)
   const filename = `${wo.id}-${slug(wo.title)}.md`
   const sourceRefs = sourceRefsFor(plan, wo) ?? {}
+  const documentationImpact = inferDocumentationImpact(plan, wo)
   const yamlLines = [
     `workorder_id: ${wo.id}`,
     `agent_id: ${wo.agent_id}`,
@@ -530,6 +624,7 @@ function renderWorkorderMarkdown(plan: FactoryPlan, wo: PlanWorkorder): Generate
     'task: |',
     ...wo.task.split(/\r?\n/).map(line => `  ${line}`),
     ...renderSourceRefs(sourceRefs),
+    ...renderDocumentationImpact(documentationImpact),
     ...yamlArray('expected_outputs', wo.expected_outputs),
     ...yamlArray('scope_files', wo.scope_files),
     ...yamlArray('files_allowed', wo.files_allowed ?? wo.scope_files),

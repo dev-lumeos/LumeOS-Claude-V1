@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
-import { expectedOutputStatusesForWorkorder, parseSimpleYaml, type LoadedWorkorder } from '../batch-loader'
+import { expectedOutputStatusesForWorkorder, parseSimpleYaml, validateWo, type LoadedWorkorder } from '../batch-loader'
 
 const batchLoaderSourcePath = path.resolve(
   process.cwd(),
@@ -21,6 +21,13 @@ const realCwd = process.cwd()
 beforeEach(() => {
   tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'lumeos-batch-loader-'))
   process.chdir(tmpDir)
+  const schemaDir = path.join(tmpDir, 'system/workorders/schemas')
+  fs.mkdirSync(schemaDir, { recursive: true })
+  fs.writeFileSync(
+    path.join(schemaDir, 'workorder.schema.json'),
+    fs.readFileSync(path.join(realCwd, 'system/workorders/schemas/workorder.schema.json'), 'utf8'),
+    'utf8',
+  )
 })
 
 afterEach(() => {
@@ -129,6 +136,74 @@ describe('parseSimpleYaml', () => {
       raw_sources_allowed: false,
     })
     assert.deepEqual(parsed.expected_outputs, ['docs/project/test.md'])
+  })
+
+  it('preserves nested documentation_impact maps used by governed workorders', () => {
+    const parsed = parseSimpleYaml([
+      'workorder_id: "WO-test"',
+      'documentation_impact:',
+      '  required: true',
+      '  domains:',
+      '    - "workflow"',
+      '  ssot_files:',
+      '    - "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"',
+      '  documentation_agent_required: true',
+      '  na_reason: null',
+    ].join('\n'))
+
+    assert.deepEqual(parsed.documentation_impact, {
+      required: true,
+      domains: ['workflow'],
+      ssot_files: ['docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md'],
+      documentation_agent_required: true,
+      na_reason: null,
+    })
+  })
+})
+
+describe('validateWo documentation impact gate', () => {
+  const baseWo = {
+    workorder_id: 'WO-test-001',
+    agent_id: 'docs-agent',
+    task: 'Write a governed documentation output for the test workorder.',
+    scope_files: ['docs/project/test.md'],
+    acceptance_criteria: ['test output exists'],
+    negative_constraints: ['no db', 'no supabase', 'no queue edit', 'no runtime edit'],
+  }
+
+  it('blocks workorders without documentation_impact', () => {
+    const result = validateWo(baseWo)
+    assert.equal(result.valid, false)
+    assert.match(result.errors.join('\n'), /documentation_impact\.missing/)
+  })
+
+  it('allows product UI workorders with documentation_impact none and a specific N/A reason', () => {
+    const result = validateWo({
+      ...baseWo,
+      documentation_impact: {
+        required: false,
+        domains: ['none'],
+        ssot_files: [],
+        documentation_agent_required: false,
+        na_reason: 'Local-only UI affordance does not alter accepted behavior, SSOT runtime docs, gates, or TODO state.',
+      },
+    })
+    assert.equal(result.valid, true, result.errors.join('\n'))
+  })
+
+  it('blocks runtime/governance domains when documentation agent is not configured', () => {
+    const result = validateWo({
+      ...baseWo,
+      documentation_impact: {
+        required: true,
+        domains: ['runtime'],
+        ssot_files: ['docs/project/STACK_REFERENCE.md'],
+        documentation_agent_required: false,
+        na_reason: null,
+      },
+    })
+    assert.equal(result.valid, false)
+    assert.match(result.errors.join('\n'), /documentation_agent\.required_not_configured/)
   })
 })
 

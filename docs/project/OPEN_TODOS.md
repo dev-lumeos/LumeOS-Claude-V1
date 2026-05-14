@@ -95,6 +95,9 @@ startup scripts for service changes.
   runtime/model routing, workflow/operator/governance, product-gate, infra, and
   completed-TODO changes must update mapped SSOT docs or declare a structured
   auditable N/A reason.
+- Governed workorders now require `documentation_impact`; operator DONE is
+  blocked until required documentation handling and SSOT sync pass, and dossiers
+  report the documentation/SSOT lifecycle state.
 - Review Pipeline V2, workorder schema, scope enforcement, approval queue,
   stop rules, governance dossiers, runtime history semantics, and project
   profiles are implemented.

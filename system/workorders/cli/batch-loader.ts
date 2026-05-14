@@ -35,6 +35,7 @@ import {
   type OrchestratorModelCaller,
   type Spark1OrchestratorHandoffResult,
 } from './spark1-orchestrator-handoff'
+import { validateDocumentationImpact } from './documentation-impact'
 
 // ─────────────────────────────────────────────────────────────────────────
 // Types
@@ -417,10 +418,14 @@ export function validateWo(wo: unknown): {
 } {
   const validate = getValidator()
   const ok = validate(wo) as boolean
-  if (ok) return { valid: true, errors: [] }
+  const documentation = wo && typeof wo === 'object'
+    ? validateDocumentationImpact(wo as Record<string, unknown>)
+    : { valid: false, errors: ['documentation_impact.missing: every governed workorder must declare documentation impact'] }
+  if (ok && documentation.valid) return { valid: true, errors: [] }
   const errs = (validate.errors ?? []).map(
     (e) => `${e.instancePath || '/'} ${e.message ?? 'invalid'}`,
   )
+  errs.push(...documentation.errors)
   return { valid: false, errors: errs }
 }
 

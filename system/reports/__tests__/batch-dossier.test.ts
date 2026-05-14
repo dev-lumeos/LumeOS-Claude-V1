@@ -126,6 +126,13 @@ function writeWorkorder(workorderId: string, expectedOutputs: string[]): void {
     ...expectedOutputs.map(item => `  - "${item}"`),
     'scope_files:',
     ...expectedOutputs.map(item => `  - "${item}"`),
+    'documentation_impact:',
+    '  required: false',
+    '  domains:',
+    '    - "none"',
+    '  ssot_files: []',
+    '  documentation_agent_required: false',
+    '  na_reason: "Batch dossier fixture does not change SSOT docs or accepted behavior."',
     'acceptance_criteria:',
     '  - "All expected outputs exist"',
     '```',
@@ -175,6 +182,13 @@ function writeAllowlistedProductBatchFixture(): string {
     '  - "docs/project/p1-005/P1-005-source-chain-readiness-report.md"',
     'scope_files:',
     '  - "docs/project/p1-005/P1-005-source-chain-readiness-report.md"',
+    'documentation_impact:',
+    '  required: false',
+    '  domains:',
+    '    - "none"',
+    '  ssot_files: []',
+    '  documentation_agent_required: false',
+    '  na_reason: "Allowlisted dossier fixture does not change active SSOT documentation."',
     'acceptance_criteria:',
     '  - "Expected report exists"',
     '```',
@@ -217,6 +231,23 @@ describe('batch dossier reporter', () => {
     assert.equal(dossier.runs.length, 0)
     assert.equal(dossier.workorders[0]?.workorder_id, 'WO-test-001')
     assert.equal(fs.existsSync(path.join(tmpDir, 'system/reports/batches')), before)
+  })
+
+  it('reports documentation impact and SSOT status in the dossier', () => {
+    writeCleanRuntime()
+    const dossier = buildBatchDossier({
+      batchFile: batchPath(),
+      repoRoot: tmpDir,
+      gitStatus: '## goal/test\n',
+      generatedAt: '2026-05-05T00:00:00.000Z',
+      runCheckers: false,
+    })
+    const markdown = formatBatchDossierMarkdown(dossier)
+
+    assert.equal(dossier.documentation_status.status, 'pass')
+    assert.equal(dossier.documentation_handling[0]?.status, 'skipped_na')
+    assert.match(markdown, /Documentation \/ SSOT Timeline/)
+    assert.match(markdown, /final_ssot_classification/)
   })
 
   it('classifies a completed workorder as done when outputs exist', () => {
@@ -322,7 +353,10 @@ describe('batch dossier reporter', () => {
       'cleanups',
       'codex_worker_runs',
       'dependency_graph',
+      'documentation_handling',
+      'documentation_status',
       'expected_outputs',
+      'final_ssot_classification',
       'final_state',
       'generated_at',
       'git_status',

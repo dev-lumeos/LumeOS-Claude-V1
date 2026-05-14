@@ -43,6 +43,13 @@ import {
 import { runSpark1OrchestratorHandoff } from './spark1-orchestrator-handoff'
 import type { Spark1OrchestratorHandoffResult } from './spark1-orchestrator-handoff'
 import { getRewriteCount, incrementRewriteCount } from '../../state/state-manager'
+import {
+  evaluateDocumentationHandling,
+  validateDocumentationImpact,
+  writeDocumentationAuditEvent,
+  type DocumentationHandlingStatus,
+} from './documentation-impact'
+import { runSsotSyncCheck } from '../../control-plane/ssot-sync-check'
 
 const NEMOTRON_REVIEW_ROUTE_ID = 'nemotron-review-agent'
 
@@ -132,7 +139,9 @@ export interface OperatorStatus {
   dbMigrationLock: { locked: boolean; detail?: DbMigrationLock }
   activeWorkorders: ActiveWorkorder[]
   activeRuns: Run[]
+  workorderValidationErrors: Array<{ workorderId: string; errors: string[] }>
   workorderCompletions: WorkorderCompletion[]
+  documentationHandling: DocumentationHandlingStatus[]
   relatedApprovals: Array<ApprovalQueueItem | ApprovalItem>
   approvalStops: ApprovalStop[]
   cleanupSuggestions: CleanupSuggestion[]
@@ -467,7 +476,8 @@ function inferExpectedOutputs(workorder: LoadedWorkorder): string[] {
   const scopeFiles = Array.isArray(parsed.scope_files)
     ? parsed.scope_files.filter((item): item is string => typeof item === 'string')
     : []
-  const text = collectText(parsed)
+  const { documentation_impact: _documentationImpact, ...completionRelevant } = parsed
+  const text = collectText(completionRelevant)
   const outputs = new Set<string>()
 
   for (const scopeFile of scopeFiles) {
@@ -532,6 +542,13 @@ export function collectOperatorStatus(
   const activeWorkorders = (state.active_workorders ?? []).filter(w => ids.has(w.workorder_id))
   const activeRuns = (state.active_runs ?? []).filter(r => ids.has(r.workorder_id))
   const workorderCompletions = evaluateWorkorderCompletions(batch)
+  const workorderValidationErrors = batch.workorders
+    .filter(w => w.validationErrors.length > 0)
+    .map(w => ({
+      workorderId: typeof w.parsed.workorder_id === 'string' ? w.parsed.workorder_id : w.filename,
+      errors: w.validationErrors,
+    }))
+  const documentationHandling = batch.workorders.map(w => evaluateDocumentationHandling(w.parsed))
   const expectedOutputPatterns = workorderCompletions.flatMap(w => w.expectedOutputs.map(o => o.path))
   const cleanupSuggestions = buildCleanupSuggestions(state, ids, relatedApprovals)
 
@@ -559,7 +576,9 @@ export function collectOperatorStatus(
     dbMigrationLock: state.db_migration_lock ? { locked: true, detail: state.db_migration_lock } : { locked: false },
     activeWorkorders,
     activeRuns,
+    workorderValidationErrors,
     workorderCompletions,
+    documentationHandling,
     relatedApprovals,
     approvalStops: buildApprovalStops(relatedApprovals),
     cleanupSuggestions,
@@ -594,6 +613,7 @@ function dedupeApprovals<T extends ApprovalQueueItem | ApprovalItem>(approvals: 
 
 export function decideEndState(status: OperatorStatus): OperatorEndState {
   if (status.orchestration.blocks_dispatch) return 'STOP_AND_REPORT'
+  if (status.workorderValidationErrors.length > 0) return 'FIX_REQUIRED'
   if (status.systemStop.active || status.stopRules.anyTriggered) return 'STOP_RULE_BLOCKED'
   if (status.approvalStops.length > 0) return 'NEEDS_TOM_APPROVAL'
   if (status.cleanupSuggestions.some(s => s.safeToApply)) return 'NEEDS_SAFE_CLEANUP'
@@ -602,7 +622,10 @@ export function decideEndState(status: OperatorStatus): OperatorEndState {
     status.activeWorkorders.length === 0 &&
     status.workorderCompletions.length > 0 &&
     status.workorderCompletions.every(w => w.complete)
-  ) return 'DONE'
+  ) {
+    if (status.documentationHandling.some(item => item.status === 'blocked' || item.status === 'invalid')) return 'FIX_REQUIRED'
+    return 'DONE'
+  }
   return 'READY_TO_RUN'
 }
 
@@ -653,6 +676,12 @@ export function buildOperatorReport(status: OperatorStatus): string {
       .join(', ')
     return `${w.workorderId} complete=${w.complete ? 'yes' : 'no'} outputs=[${outputs || 'none'}]`
   }))
+  lines.push('workorder validation errors:')
+  lines.push(...formatList(status.workorderValidationErrors, item => `${item.workorderId}: ${item.errors.join('; ')}`))
+  lines.push('documentation/SSOT handling:')
+  lines.push(...formatList(status.documentationHandling, item =>
+    `${item.workorderId} status=${item.status} required=${item.required ? 'yes' : 'no'} agent_used=${item.documentationAgentUsed ? 'yes' : 'no'} ssot=${item.ssotSyncStatus} domains=[${item.domains.join(',') || 'none'}] detail=${item.detail}`,
+  ))
   lines.push('')
   lines.push('## Modified/Untracked Artifacts')
   lines.push(...formatList(status.dirtyArtifacts, e => `${e.code} ${e.path} [${e.category}]`))
@@ -744,7 +773,13 @@ function blockerMessages(status: OperatorStatus, endState: OperatorEndState): st
   if (endState === 'NEEDS_SAFE_CLEANUP') return status.cleanupSuggestions.filter(item => item.safeToApply).map(item => `${item.kind}: ${item.workorderId} run=${item.runId}`)
   if (endState === 'STOP_RULE_BLOCKED') return status.stopRules.triggeredRules.length > 0 ? status.stopRules.triggeredRules : [status.stopRules.dryRunResult]
   if (endState === 'STOP_AND_REPORT') return [status.orchestration.missing_integration_point || status.orchestration.reason]
-  if (endState === 'FIX_REQUIRED') return status.unexpectedDirty.map(item => `${item.code} ${item.path}`)
+  if (endState === 'FIX_REQUIRED') return [
+    ...status.unexpectedDirty.map(item => `${item.code} ${item.path}`),
+    ...status.workorderValidationErrors.map(item => `${item.workorderId}: ${item.errors.join('; ')}`),
+    ...status.documentationHandling
+      .filter(item => item.status === 'blocked' || item.status === 'invalid')
+      .map(item => `${item.workorderId}: ${item.detail}`),
+  ]
   return []
 }
 
@@ -1018,6 +1053,115 @@ export async function runConfiguredOutputReview(
   return outcomes
 }
 
+function allOutputsComplete(status: OperatorStatus): boolean {
+  return status.activeWorkorders.length === 0 &&
+    status.workorderCompletions.length > 0 &&
+    status.workorderCompletions.every(item => item.complete)
+}
+
+function hasPendingDocumentation(status: OperatorStatus): boolean {
+  return allOutputsComplete(status) &&
+    status.documentationHandling.some(item =>
+      item.required && (item.status === 'blocked' || item.status === 'invalid') &&
+      /documentation_completed audit event is missing|documentation_impact|documentation_agent/i.test(item.detail),
+    )
+}
+
+export async function runDocumentationImpactStep(batch: LoadedBatch): Promise<DispatchOutcome[]> {
+  const outcomes: DispatchOutcome[] = []
+  const syntheticRunId = `DOC-${new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)}`
+
+  for (const workorder of batch.workorders) {
+    const id = typeof workorder.parsed.workorder_id === 'string' ? workorder.parsed.workorder_id : workorder.filename
+    const validation = validateDocumentationImpact(workorder.parsed)
+    if (!validation.valid || !validation.impact) {
+      writeDocumentationAuditEvent({
+        event: 'documentation_blocked',
+        workorder_id: id,
+        wo_id: id,
+        run_id: syntheticRunId,
+        status: 'invalid',
+        reason: validation.errors.join('; '),
+      })
+      outcomes.push({ workorder_id: id, status: 'failed', detail: `DOCUMENTATION_BLOCKED: ${validation.errors.join('; ')}` })
+      break
+    }
+
+    const impact = validation.impact
+    if (!impact.required) {
+      writeDocumentationAuditEvent({
+        event: 'documentation_skipped_with_na',
+        workorder_id: id,
+        wo_id: id,
+        run_id: syntheticRunId,
+        domains: impact.domains,
+        ssot_files: impact.ssot_files,
+        status: 'skipped',
+        reason: impact.na_reason ?? 'Documentation impact declared not applicable.',
+      })
+      outcomes.push({ workorder_id: id, status: 'dispatched', detail: `Documentation skipped with structured N/A: ${impact.na_reason}` })
+      continue
+    }
+
+    writeDocumentationAuditEvent({
+      event: 'documentation_started',
+      workorder_id: id,
+      wo_id: id,
+      run_id: syntheticRunId,
+      domains: impact.domains,
+      ssot_files: impact.ssot_files,
+      status: 'started',
+    })
+
+    const missingSsot = impact.ssot_files.filter(file => !fs.existsSync(path.resolve(process.cwd(), file)))
+    if (missingSsot.length > 0) {
+      const reason = `Declared SSOT file(s) missing: ${missingSsot.join(', ')}`
+      writeDocumentationAuditEvent({
+        event: 'documentation_blocked',
+        workorder_id: id,
+        wo_id: id,
+        run_id: syntheticRunId,
+        domains: impact.domains,
+        ssot_files: impact.ssot_files,
+        status: 'blocked',
+        reason,
+      })
+      outcomes.push({ workorder_id: id, status: 'failed', detail: `DOCUMENTATION_BLOCKED: ${reason}` })
+      break
+    }
+
+    const ssot = runSsotSyncCheck()
+    if (ssot.hasHighOrCriticalFindings) {
+      const reason = `SSOT_SYNC_CHECK failed: critical=${ssot.summary.critical}, high=${ssot.summary.high}`
+      writeDocumentationAuditEvent({
+        event: 'documentation_blocked',
+        workorder_id: id,
+        wo_id: id,
+        run_id: syntheticRunId,
+        domains: impact.domains,
+        ssot_files: impact.ssot_files,
+        status: 'blocked',
+        reason,
+      })
+      outcomes.push({ workorder_id: id, status: 'failed', detail: `DOCUMENTATION_BLOCKED: ${reason}` })
+      break
+    }
+
+    writeDocumentationAuditEvent({
+      event: 'documentation_completed',
+      workorder_id: id,
+      wo_id: id,
+      run_id: syntheticRunId,
+      domains: impact.domains,
+      ssot_files: impact.ssot_files,
+      status: 'pass',
+    })
+    outcomes.push({ workorder_id: id, status: 'dispatched', detail: 'Documentation impact handled and SSOT_SYNC_CHECK passed.' })
+  }
+
+  return outcomes
+}
+
 export async function continueBatch(
   batchPathInput: string,
   opts: { applySafeCleanups?: boolean; runner?: CommandRunner; projectId?: string; orchestrationMode?: RequestedOrchestrationMode } = {},
@@ -1038,19 +1182,37 @@ export async function continueBatch(
   }
 
   if (endState !== 'READY_TO_RUN') {
-    if (endState === 'DONE' && fastReviewerRouteConfigured()) {
+    if (allOutputsComplete(status) && fastReviewerRouteConfigured()) {
       const reviewBatch = loadBatch(batchPathInput)
       const reviewOutcomes = await runConfiguredOutputReview(reviewBatch)
       status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
       status.dispatchOutcomes = reviewOutcomes
       const failed = reviewOutcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped' || o.status === 'orchestration_blocked')
+      if (failed) {
+        const report = [
+          buildOperatorReport(status),
+          '',
+          '## Dispatch Outcomes',
+          ...reviewOutcomes.map(o => `  ${o.workorder_id} [${o.status}] ${o.detail ?? ''}`),
+        ].join('\n')
+        return { status, report, exitCode: 2 }
+      }
+      endState = decideEndState(status)
+    }
+    if (hasPendingDocumentation(status)) {
+      const documentationBatch = loadBatch(batchPathInput)
+      const previousOutcomes = status.dispatchOutcomes ?? []
+      const documentationOutcomes = await runDocumentationImpactStep(documentationBatch)
+      status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
+      status.dispatchOutcomes = [...previousOutcomes, ...documentationOutcomes]
+      const failed = documentationOutcomes.some(o => o.status === 'failed')
       const report = [
         buildOperatorReport(status),
         '',
-        '## Dispatch Outcomes',
-        ...reviewOutcomes.map(o => `  ${o.workorder_id} [${o.status}] ${o.detail ?? ''}`),
+        '## Documentation Outcomes',
+        ...documentationOutcomes.map(o => `  ${o.workorder_id} [${o.status}] ${o.detail ?? ''}`),
       ].join('\n')
-      return { status, report, exitCode: failed ? 2 : 0 }
+      return { status, report, exitCode: failed ? 2 : endStateToExitCode(decideEndState(status)) }
     }
     return { status, report: buildOperatorReport(status), exitCode: endStateToExitCode(endState) }
   }
@@ -1064,13 +1226,21 @@ export async function continueBatch(
   status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
   status.orchestration = orchestration
   status.dispatchOutcomes = outcomes
+  if (!outcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped' || o.status === 'orchestration_blocked' || o.status === 'paused_for_approval') && hasPendingDocumentation(status)) {
+    const documentationBatch = loadBatch(batchPathInput)
+    const documentationOutcomes = await runDocumentationImpactStep(documentationBatch)
+    status = collectOperatorStatus(batchPathInput, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
+    status.orchestration = orchestration
+    status.dispatchOutcomes = [...outcomes, ...documentationOutcomes]
+  }
   const paused = outcomes.some(o => o.status === 'paused_for_approval')
-  const failed = outcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped' || o.status === 'orchestration_blocked')
+  const allOutcomes = status.dispatchOutcomes ?? outcomes
+  const failed = allOutcomes.some(o => o.status === 'failed' || o.status === 'preflight_blocked' || o.status === 'system_stopped' || o.status === 'orchestration_blocked')
   const report = [
     buildOperatorReport(status),
     '',
     '## Dispatch Outcomes',
-    ...outcomes.map(o => `  ${o.workorder_id} [${o.status}] ${o.detail ?? ''}`),
+    ...allOutcomes.map(o => `  ${o.workorder_id} [${o.status}] ${o.detail ?? ''}`),
   ].join('\n')
   return { status, report, exitCode: paused ? 3 : failed ? 2 : 0 }
 }

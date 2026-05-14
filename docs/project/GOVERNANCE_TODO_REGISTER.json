@@ -715,6 +715,30 @@
         "infra/vllm/",
         "docs/project/STACK_REFERENCE.md"
       ]
+    },
+    {
+      "id": "GOV-TODO-033",
+      "title": "Make documentation impact handling mandatory in governed workorder lifecycle",
+      "layer": "workflow_governance",
+      "severity": "high",
+      "priority": "P0",
+      "status": "done",
+      "evidence": "Workorder validation now requires documentation_impact metadata, the operator runs a documentation/SSOT phase before DONE, SSOT_SYNC_CHECK flags changed workorder drafts without documentation impact, the factory emits documentation_impact, and dossiers report documentation/SSOT status explicitly.",
+      "recommended_action": "Done: keep future workorders compliant and reject missing or generic documentation-impact declarations during preflight.",
+      "dependencies": [],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workorders/schemas/workorder.schema.json",
+        "system/workorders/cli/documentation-impact.ts",
+        "system/workorders/cli/batch-loader.ts",
+        "system/workorders/cli/batch-operator.ts",
+        "system/workorders/cli/wo-factory.ts",
+        "system/control-plane/ssot-sync-check.ts",
+        "system/reports/batch-dossier.ts",
+        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"
+      ]
     }
   ]
 }

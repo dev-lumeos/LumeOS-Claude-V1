@@ -11,10 +11,11 @@ import {
   collectOperatorStatus,
   decideEndState,
   runConfiguredOutputReview,
+  runDocumentationImpactStep,
   selectRunnableBatch,
   type CommandRunner,
 } from '../batch-operator'
-import type { LoadedBatch } from '../batch-loader'
+import { loadBatch, type LoadedBatch } from '../batch-loader'
 
 let tmpDir = ''
 const realCwd = process.cwd()
@@ -61,6 +62,7 @@ function setup(): void {
       requires_approval: { type: 'boolean' },
       blocked_by: { type: 'array', items: { type: 'string' } },
       rollback_hint: { type: 'string' },
+      documentation_impact: { type: 'object' },
     },
   }, null, 2), 'utf8')
   process.chdir(tmpDir)
@@ -141,6 +143,13 @@ function writeBatch(): void {
     'requires_approval: false',
     'blocked_by: []',
     'scope_files: ["docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md"]',
+    'documentation_impact:',
+    '  required: false',
+    '  domains:',
+    '    - "none"',
+    '  ssot_files: []',
+    '  documentation_agent_required: false',
+    '  na_reason: "Test fixture has no SSOT documentation impact beyond its expected output assertion."',
     'acceptance_criteria: ["docs updated"]',
     'negative_constraints: ["no supabase db push", "no supabase db reset", "no approval grant", "no runtime edit"]',
     '```',
@@ -155,6 +164,13 @@ function writeBatch(): void {
     'requires_approval: true',
     'blocked_by: ["WO-test-001"]',
     'scope_files: ["supabase/migrations/"]',
+    'documentation_impact:',
+    '  required: false',
+    '  domains:',
+    '    - "historical_workorder"',
+    '  ssot_files: []',
+    '  documentation_agent_required: false',
+    '  na_reason: "pre-existing archived workorder before documentation-impact gate"',
     'acceptance_criteria: ["migration file written"]',
     'negative_constraints: ["no supabase db push", "no supabase db reset", "no approval grant", "no runtime edit"]',
     'rollback_hint: revert migration file',
@@ -170,6 +186,13 @@ function writeBatch(): void {
     'requires_approval: true',
     'blocked_by: ["WO-test-002"]',
     'scope_files: ["supabase/migrations/", "packages/types/src/nutrition/foods.ts", "packages/types/src/nutrition/index.ts"]',
+    'documentation_impact:',
+    '  required: false',
+    '  domains:',
+    '    - "historical_workorder"',
+    '  ssot_files: []',
+    '  documentation_agent_required: false',
+    '  na_reason: "pre-existing archived workorder before documentation-impact gate"',
     'acceptance_criteria: ["food core migration and type files written"]',
     'negative_constraints: ["no supabase db push", "no supabase db reset", "no approval grant", "no runtime edit"]',
     'rollback_hint: revert food core migration',
@@ -181,6 +204,47 @@ function writeExpectedOutput(relativePath: string, content: string): void {
   const fullPath = path.join(tmpDir, relativePath)
   fs.mkdirSync(path.dirname(fullPath), { recursive: true })
   fs.writeFileSync(fullPath, content, 'utf8')
+}
+
+function rewriteWo001DocumentationImpact(required: boolean): void {
+  const filePath = path.join(tmpDir, 'system/workorders/nutrition/drafts/WO-test-001.md')
+  const content = fs.readFileSync(filePath, 'utf8')
+  const replacement = required
+    ? [
+      'documentation_impact:',
+      '  required: true',
+      '  domains:',
+      '    - "workflow"',
+      '  ssot_files:',
+      '    - "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"',
+      '  documentation_agent_required: true',
+      '  na_reason: null',
+    ].join('\n')
+    : [
+      'documentation_impact:',
+      '  required: false',
+      '  domains:',
+      '    - "none"',
+      '  ssot_files: []',
+      '  documentation_agent_required: false',
+      '  na_reason: "Test fixture has no SSOT documentation impact beyond its expected output assertion."',
+    ].join('\n')
+  const updated = content.replace(/documentation_impact:\n[\s\S]*?(?=acceptance_criteria:)/, replacement + '\n')
+  fs.writeFileSync(filePath, updated, 'utf8')
+}
+
+function writeSingleWoBatch(): void {
+  fs.writeFileSync(batchPath(), [
+    '# Batch',
+    '',
+    '## Status',
+    'approved',
+    '',
+    '## Included Workorders',
+    '| Order | File | Workorder ID | Title | Risk | Approval |',
+    '|---|---|---|---|---|---|',
+    '| 1 | WO-test-001.md | WO-test-001 | Docs | docs | no |',
+  ].join('\n'), 'utf8')
 }
 
 const meaningfulDoc = [
@@ -350,6 +414,35 @@ describe('batch operator status', () => {
 
     assert.equal(decideEndState(status), 'DONE')
     assert.ok(status.workorderCompletions.every(w => w.complete))
+  })
+
+  it('blocks DONE when required documentation handling has not run', () => {
+    writeSingleWoBatch()
+    rewriteWo001DocumentationImpact(true)
+    fs.mkdirSync(path.join(tmpDir, 'docs/project'), { recursive: true })
+    fs.writeFileSync(path.join(tmpDir, 'docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md'), '# Runbook\n', 'utf8')
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', meaningfulDoc)
+
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+
+    assert.equal(status.workorderCompletions.every(w => w.complete), true)
+    assert.equal(decideEndState(status), 'FIX_REQUIRED')
+    assert.match(status.documentationHandling[0]?.detail ?? '', /documentation_completed audit event is missing/)
+  })
+
+  it('allows DONE after required documentation step and SSOT_SYNC_CHECK pass', async () => {
+    writeSingleWoBatch()
+    rewriteWo001DocumentationImpact(true)
+    fs.mkdirSync(path.join(tmpDir, 'docs/project'), { recursive: true })
+    fs.writeFileSync(path.join(tmpDir, 'docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md'), '# Runbook\n', 'utf8')
+    writeExpectedOutput('docs/specs/Nutrition/06_workorder_planning/audit/audit-report.md', meaningfulDoc)
+
+    const outcomes = await runDocumentationImpactStep(loadBatch(batchPath()))
+    assert.equal(outcomes.some(item => item.status === 'failed'), false)
+    const status = collectOperatorStatus(batchPath(), { gitStatus: cleanGit })
+
+    assert.equal(status.documentationHandling[0]?.status, 'pass')
+    assert.equal(decideEndState(status), 'DONE')
   })
 
   it('selects only the first incomplete workorder for dispatch', () => {

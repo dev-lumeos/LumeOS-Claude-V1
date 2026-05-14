@@ -38,6 +38,11 @@ import {
   type OrchestrationModeStatus,
   type RequestedOrchestrationMode,
 } from '../workorders/cli/orchestration-mode'
+import {
+  evaluateDocumentationHandling,
+  normalizeDocumentationImpact,
+  type DocumentationHandlingStatus,
+} from '../workorders/cli/documentation-impact'
 
 export type BatchDossierFinalState =
   | 'DONE'
@@ -65,6 +70,13 @@ export interface BatchDossierWorkorder {
   expected_outputs: string[]
   blocked_by: string[]
   validation_errors: string[]
+  documentation_impact?: {
+    required: boolean
+    domains: string[]
+    ssot_files: string[]
+    documentation_agent_required: boolean
+    na_reason: string | null
+  }
 }
 
 export interface BatchDossierRun {
@@ -181,6 +193,9 @@ export interface BatchDossier {
   worker_runtime_status: BatchDossierStatusSummary
   output_validation_status: BatchDossierStatusSummary
   review_status: BatchDossierStatusSummary
+  documentation_status: BatchDossierStatusSummary
+  documentation_handling: DocumentationHandlingStatus[]
+  final_ssot_classification: BatchDossierStatusSummary
   runtime_history_summary?: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'overall_status' | 'freshness_status' | 'last_checked_at' | 'age_minutes' | 'blocking_impact' | 'next_required_action' | 'planned_maintenance' | 'total_records' | 'total_checks' | 'routes'>
   stop_rules: {
     system_stop_active: boolean
@@ -372,6 +387,9 @@ function loadBatchWorkorders(repoRoot: string, batchFile: string): Pick<BatchDos
       expected_outputs: woExpected,
       blocked_by: asStringArray(parsed.blocked_by),
       validation_errors: validationErrors,
+      ...(normalizeDocumentationImpact(parsed.documentation_impact)
+        ? { documentation_impact: normalizeDocumentationImpact(parsed.documentation_impact)! }
+        : {}),
     })
   }
 
@@ -625,6 +643,24 @@ function summarizeReviewStatus(reviews: BatchDossierReview[]): BatchDossierStatu
   return { status: 'not_run', detail: 'No configured review completion was recorded for this batch.' }
 }
 
+function summarizeDocumentationStatus(statuses: DocumentationHandlingStatus[]): BatchDossierStatusSummary {
+  if (statuses.length === 0) {
+    return { status: 'not_applicable', detail: 'No workorders were available for documentation impact evaluation.' }
+  }
+  const blocking = statuses.filter(item => item.status === 'blocked' || item.status === 'invalid')
+  if (blocking.length > 0) {
+    return {
+      status: 'fail',
+      detail: blocking.map(item => `${item.workorderId}: ${item.detail}`).join('; '),
+    }
+  }
+  const required = statuses.filter(item => item.required)
+  if (required.length > 0 && required.every(item => item.status === 'pass' && item.ssotSyncStatus === 'pass')) {
+    return { status: 'pass', detail: `Documentation phase passed for ${required.length} required workorder(s).` }
+  }
+  return { status: 'pass', detail: 'Documentation impact is explicitly N/A or historical for all workorders.' }
+}
+
 function summarizeWorkerRuntimeStatus(
   codexWorkerRuns: BatchDossierCodexWorkerRun[],
   outputStatus: BatchDossierStatusSummary,
@@ -661,6 +697,7 @@ function classifyFinalState(params: {
   workerRuntimeStatus: BatchDossierStatusSummary
   outputValidationStatus: BatchDossierStatusSummary
   reviewStatus: BatchDossierStatusSummary
+  documentationStatus: BatchDossierStatusSummary
   checkers: BatchDossier['checkers']
 }): BatchDossierFinalState {
   if (params.state.system_stop?.active) return 'STOP_RULE_BLOCKED'
@@ -668,6 +705,7 @@ function classifyFinalState(params: {
   if (hasCleanupCandidate(params.state, params.workorderIds)) return 'NEEDS_SAFE_CLEANUP'
   if (Object.values(params.checkers).some(item => item.status === 'fail' || item.status === 'error')) return 'FIX_REQUIRED'
   if (params.reviewStatus.status === 'fail') return 'FIX_REQUIRED'
+  if (params.documentationStatus.status === 'fail') return 'FIX_REQUIRED'
   if (params.workerRuntimeStatus.status === 'fail') return 'FIX_REQUIRED'
 
   const expected = params.outputs.filter(output => output.expected)
@@ -724,6 +762,11 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const outputValidationStatus = summarizeOutputValidation(outputs)
   const reviewStatus = summarizeReviewStatus(reviews)
   const workerRuntimeStatus = summarizeWorkerRuntimeStatus(codexWorkerRuns, outputValidationStatus, reviewStatus)
+  const documentationHandling = batch.workorders.map(wo => evaluateDocumentationHandling({
+    workorder_id: wo.workorder_id,
+    documentation_impact: wo.documentation_impact,
+  }, repoRoot))
+  const documentationStatus = summarizeDocumentationStatus(documentationHandling)
   const finalState = classifyFinalState({
     state,
     workorderIds,
@@ -733,6 +776,7 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     workerRuntimeStatus,
     outputValidationStatus,
     reviewStatus,
+    documentationStatus,
     checkers,
   })
   const nextAction = nextActionFor(finalState, batch.batch_file)
@@ -772,6 +816,9 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     worker_runtime_status: workerRuntimeStatus,
     output_validation_status: outputValidationStatus,
     review_status: reviewStatus,
+    documentation_status: documentationStatus,
+    documentation_handling: documentationHandling,
+    final_ssot_classification: documentationStatus,
     runtime_history_summary: {
       overall_readiness: runtimeHistory.overall_readiness,
       overall_status: runtimeHistory.overall_status,
@@ -825,12 +872,15 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
   lines.push('')
   lines.push('## Batch Identity')
   lines.push(...table([
-    ['WO-ID', 'Agent', 'Risk', 'Expected Outputs', 'Blocked By'],
+    ['WO-ID', 'Agent', 'Risk', 'Expected Outputs', 'Doc Impact', 'Blocked By'],
     ...dossier.workorders.map(wo => [
       wo.workorder_id,
       wo.agent_id,
       wo.risk_category,
       String(wo.expected_outputs.length),
+      wo.documentation_impact
+        ? `${wo.documentation_impact.required ? 'required' : 'n/a'}:${wo.documentation_impact.domains.join(',')}`
+        : 'missing',
       wo.blocked_by.join(', '),
     ]),
   ]))
@@ -873,6 +923,20 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
     ]),
   ]))
   lines.push('')
+  lines.push('## Documentation / SSOT Timeline')
+  lines.push(...table([
+    ['WO-ID', 'Required', 'Domains', 'Agent Used', 'Status', 'SSOT', 'SSOT Files / N-A Reason'],
+    ...dossier.documentation_handling.map(item => [
+      item.workorderId,
+      item.required ? 'yes' : 'no',
+      item.domains.join(', '),
+      item.documentationAgentUsed ? 'yes' : 'no',
+      item.status,
+      item.ssotSyncStatus,
+      item.required ? item.ssotFiles.join(', ') : (item.naReason ?? item.detail),
+    ]),
+  ]))
+  lines.push('')
   lines.push('## Cleanup Timeline')
   lines.push(...table([
     ['Time', 'Event', 'WO-ID', 'Run-ID', 'Reason'],
@@ -903,6 +967,8 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
     ['worker_runtime_status', dossier.worker_runtime_status.status, dossier.worker_runtime_status.detail],
     ['output_validation_status', dossier.output_validation_status.status, dossier.output_validation_status.detail],
     ['review_status', dossier.review_status.status, dossier.review_status.detail],
+    ['documentation_status', dossier.documentation_status.status, dossier.documentation_status.detail],
+    ['final_ssot_classification', dossier.final_ssot_classification.status, dossier.final_ssot_classification.detail],
     ['final_classification', dossier.final_state, dossier.next_action],
   ]))
   lines.push('')

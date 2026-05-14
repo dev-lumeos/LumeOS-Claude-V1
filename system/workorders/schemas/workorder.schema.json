@@ -47,6 +47,37 @@
     "rollback_hint": {
       "type": "string",
       "description": "Rollback-Hinweis oder -Befehl. Optional, empfohlen bei risk_category=db-migration."
+    },
+    "documentation_impact": {
+      "type": "object",
+      "description": "Mandatory SSOT/documentation lifecycle declaration for governed workorders. Preflight validation enforces the policy in addition to this shape.",
+      "required": ["required", "domains", "ssot_files", "documentation_agent_required", "na_reason"],
+      "properties": {
+        "required": { "type": "boolean" },
+        "domains": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "runtime",
+              "model_routing",
+              "workflow",
+              "governance",
+              "product_gate",
+              "infra_runtime",
+              "todo_state",
+              "product",
+              "none",
+              "historical_workorder"
+            ]
+          }
+        },
+        "ssot_files": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "documentation_agent_required": { "type": "boolean" },
+        "na_reason": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
     }
   },
   "if": {

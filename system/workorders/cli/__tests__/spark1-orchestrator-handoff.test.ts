@@ -63,6 +63,7 @@ function writeFixture(): void {
       risk_category: { type: 'string' },
       requires_approval: { type: 'boolean' },
       blocked_by: { type: 'array', items: { type: 'string' } },
+      documentation_impact: { type: 'object' },
     },
   }, null, 2))
   write('system/workorders/nutrition/batches/BATCH-test.md', [
@@ -85,8 +86,15 @@ function writeFixture(): void {
     'requires_approval: false',
     'blocked_by: []',
     'scope_files: ["docs/project/test.md"]',
+    'documentation_impact:',
+    '  required: false',
+    '  domains:',
+    '    - "none"',
+    '  ssot_files: []',
+    '  documentation_agent_required: false',
+    '  na_reason: "Spark1 handoff fixture does not change SSOT docs or accepted behavior."',
     'acceptance_criteria: ["docs updated"]',
-    'negative_constraints: ["no db work"]',
+    'negative_constraints: ["no db work", "no supabase", "no queue edit", "no runtime edit"]',
     '```',
   ].join('\n'))
 }

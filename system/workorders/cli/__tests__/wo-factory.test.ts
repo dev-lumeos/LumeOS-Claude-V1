@@ -155,6 +155,7 @@ describe('wo-factory', () => {
     assert.equal(result.summary.high, 0)
     assert.equal(result.workorders.length, 1)
     assert.match(result.workorders[0].markdown, /source_refs:/)
+    assert.match(result.workorders[0].markdown, /documentation_impact:/)
     assert.match(result.workorders[0].markdown, /expected_outputs:/)
   })
 
@@ -281,6 +282,6 @@ describe('wo-factory', () => {
     assert.equal(Array.isArray(result.validation_commands), true)
     assert.equal(validation.schema_version, 1)
     assert.equal(validation.mode, 'batch')
-    assert.equal(validation.exitCode, 0)
+    assert.equal(validation.exitCode, 0, JSON.stringify(validation.findings, null, 2))
   })
 })
