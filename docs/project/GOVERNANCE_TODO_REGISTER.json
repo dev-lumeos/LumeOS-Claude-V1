@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T13:47:00+07:00",
+  "generated_at": "2026-05-14T14:35:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -660,9 +660,9 @@
       "layer": "codex_worker",
       "severity": "medium",
       "priority": "P1",
-      "status": "open",
-      "evidence": "BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md completed with expected outputs and Nemotron PASS review, but the Codex Worker timeline still reported timeout/FIX_REQUIRED. This is misleading lifecycle/reporting state, not a blocker for the workflow proof.",
-      "recommended_action": "Tighten Codex Worker result reporting so completed scoped outputs plus successful configured review cannot leave a stale timeout/FIX_REQUIRED entry in dossiers.",
+      "status": "done",
+      "evidence": "Batch dossier reporting now separates worker_runtime_status, output_validation_status, review_status, and final_classification. A Codex Worker timeout is reported as observed_non_terminal and superseded only when scoped expected outputs exist and configured review passes; otherwise it remains blocking. Regression coverage was added in system/reports/__tests__/batch-dossier.test.ts.",
+      "recommended_action": "Done: keep raw Codex Worker timeout evidence visible, but use output validation and configured review status to determine final governed dossier classification.",
       "dependencies": [
         "GOV-TODO-028"
       ],

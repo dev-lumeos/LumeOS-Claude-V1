@@ -8,6 +8,7 @@ import {
   isRuntimeArtifactPath,
   type ProjectProfile,
 } from '../project-profiles/project-profile-loader'
+import { runSsotSyncCheck } from './ssot-sync-check'
 
 export type FindingSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info'
 
@@ -623,6 +624,7 @@ export function runGovernanceInvariantCheck(opts: { repoRoot?: string; gitStatus
     ...checkApprovals(state, queue, tokens),
     ...checkStopRules(state, repoRoot),
     ...checkArtifacts(gitEntries, profile),
+    ...runSsotSyncCheck({ repoRoot, gitStatus: opts.gitStatus }).findings,
   ]
   const summary = summarize(findings)
   const hasHighOrCriticalFindings = summary.critical > 0 || summary.high > 0

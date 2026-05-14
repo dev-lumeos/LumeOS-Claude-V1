@@ -365,4 +365,31 @@ The path keeps the Codex worker hard timeout and maps final states into the norm
 - `FIX_REQUIRED` -> failed
 - `STOP` -> blocked
 
+Batch dossier reporting separates Codex Worker subprocess status from the governed final classification:
+
+- `worker_runtime_status`: raw Codex Worker timeout/FIX/STOP evidence.
+- `output_validation_status`: whether declared expected outputs exist.
+- `review_status`: configured review result, including Nemotron reviewer PASS/FAIL/BLOCKED.
+- `final_classification`: the governed batch result after output and review validation.
+
+If a Codex Worker subprocess times out but all scoped expected outputs exist and the configured reviewer passes, the timeout remains visible as `observed_non_terminal` and is reported as superseded by validated outputs. If outputs are missing or review fails, the timeout remains blocking and the dossier must classify the batch as `FIX_REQUIRED`.
+
 Generated Codex worker prompt/report files under `system/reports/codex-worker/` are runtime artifacts and must not be committed.
+
+## SSOT Sync Check
+
+`SSOT_SYNC_CHECK` is part of `DONE`. Runtime/model routing, workflow/operator/governance, product-gate, infra/systemd, infra/vLLM, and completed-TODO changes must update their mapped SSOT docs/TODO files in the same change.
+
+Run directly when needed:
+
+```powershell
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\control-plane\ssot-sync-check.ts --json
+```
+
+The governance invariant checker also runs the SSOT sync check. If a mapped SSOT update is genuinely not applicable, add an auditable structured marker in the relevant changed file:
+
+```text
+SSOT_SYNC_CHECK: N/A (domain=<domain>; reason=<specific reason>)
+```
+
+Accepted domains include `runtime_model`, `workflow_governance`, `product_gate`, `infra_runtime`, and `completed_todo`.

@@ -28,7 +28,7 @@ Execution has a hard timeout. The default is 120 seconds:
 cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workers\codex-worker.ts --workorder <workorder-file> --execute --timeout-ms 120000
 ```
 
-On timeout the worker kills the child process, returns `FIX_REQUIRED`, writes a clear report, and does not retry automatically.
+On timeout the worker kills the child process, returns `FIX_REQUIRED`, writes a clear report, and does not retry automatically. Downstream dossier reporting must not hide this timeout. If scoped expected outputs already exist and the configured reviewer passes, the dossier reports the timeout as observed/non-terminal and superseded by validated outputs; if outputs are missing or review fails, the timeout remains blocking.
 
 The worker closes child stdin immediately after spawn. Codex CLI prints "Reading additional input from stdin..." during normal `exec`; leaving stdin open makes non-interactive worker calls wait indefinitely.
 
@@ -157,6 +157,7 @@ The worker bridge is governance-driven:
 - it parses the final state when possible
 - it enforces a hard execution timeout and reports `FIX_REQUIRED` on timeout
 - it closes stdin immediately so `codex exec` receives EOF instead of waiting for interactive input
+- batch dossiers distinguish `worker_runtime_status`, `output_validation_status`, `review_status`, and `final_classification` so a raw worker timeout cannot override validated output plus review success silently
 
 ## Senior Agent Integration
 
@@ -217,6 +218,6 @@ The controlled dispatcher path is:
 3. The workorder opts in with `codex_worker: true`.
 4. Dispatcher verifies the senior-agent route, required metadata, approval status, timeout config, and product-gate policy.
 5. Dispatcher invokes the Codex worker through the internal bridge, not through a shell command string.
-6. Dossier records prompt path, report path, stdout/stderr summaries, exit code, duration, timeout state, and final state.
+6. Dossier records prompt path, report path, stdout/stderr summaries, exit code, duration, timeout state, raw worker final state, output validation status, review status, and governed final classification.
 
 If Tom needs to pause automatic senior-agent dispatch, set `codex_worker_enabled=false` or `allow_dispatcher_integration=false`.

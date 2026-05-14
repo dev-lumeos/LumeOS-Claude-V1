@@ -125,6 +125,11 @@ export interface BatchDossierCodexWorkerRun {
   stderr_summary?: string
 }
 
+export interface BatchDossierStatusSummary {
+  status: 'pass' | 'fail' | 'warn' | 'not_run' | 'not_applicable' | 'observed_non_terminal'
+  detail: string
+}
+
 export interface BatchDossierOutput {
   path: string
   expected: boolean
@@ -173,6 +178,9 @@ export interface BatchDossier {
   reviews: BatchDossierReview[]
   cleanups: BatchDossierCleanup[]
   codex_worker_runs: BatchDossierCodexWorkerRun[]
+  worker_runtime_status: BatchDossierStatusSummary
+  output_validation_status: BatchDossierStatusSummary
+  review_status: BatchDossierStatusSummary
   runtime_history_summary?: Pick<ModelRuntimeHistorySummary, 'overall_readiness' | 'overall_status' | 'freshness_status' | 'last_checked_at' | 'age_minutes' | 'blocking_impact' | 'next_required_action' | 'planned_maintenance' | 'total_records' | 'total_checks' | 'routes'>
   stop_rules: {
     system_stop_active: boolean
@@ -586,23 +594,87 @@ function hasCleanupCandidate(state: RuntimeStateFile, workorderIds: Set<string>)
   )
 }
 
+function summarizeOutputValidation(outputs: BatchDossierOutput[]): BatchDossierStatusSummary {
+  const expected = outputs.filter(output => output.expected)
+  if (expected.length === 0) {
+    return { status: 'not_applicable', detail: 'No expected outputs are declared for this batch.' }
+  }
+  const missing = expected.filter(output => !output.exists)
+  if (missing.length > 0) {
+    return { status: 'fail', detail: `Missing expected output(s): ${missing.map(item => item.path).join(', ')}` }
+  }
+  return { status: 'pass', detail: `All ${expected.length} expected output(s) exist.` }
+}
+
+function summarizeReviewStatus(reviews: BatchDossierReview[]): BatchDossierStatusSummary {
+  const completed = reviews.filter(review => /review_completed/i.test(review.event))
+  const failing = completed.find(review => /FAIL|BLOCKED|invalid_json/i.test(String(review.status ?? '')))
+  if (failing) {
+    return { status: 'fail', detail: `Configured review failed or blocked: ${failing.status ?? failing.event}` }
+  }
+  const passing = completed.find(review => /^PASS$/i.test(String(review.status ?? '')))
+  if (passing) {
+    return {
+      status: 'pass',
+      detail: `Configured review passed${typeof passing.confidence === 'number' ? ` with confidence ${passing.confidence}` : ''}.`,
+    }
+  }
+  if (reviews.some(review => /invalid_json|review_blocked|human_needed/i.test(`${review.event} ${review.status ?? ''}`))) {
+    return { status: 'fail', detail: 'Review timeline contains a blocking review event.' }
+  }
+  return { status: 'not_run', detail: 'No configured review completion was recorded for this batch.' }
+}
+
+function summarizeWorkerRuntimeStatus(
+  codexWorkerRuns: BatchDossierCodexWorkerRun[],
+  outputStatus: BatchDossierStatusSummary,
+  reviewStatus: BatchDossierStatusSummary,
+): BatchDossierStatusSummary {
+  if (codexWorkerRuns.length === 0) {
+    return { status: 'not_run', detail: 'No Codex Worker report was recorded for this batch.' }
+  }
+
+  const blockingRuns = codexWorkerRuns.filter(run => run.timed_out || /FIX_REQUIRED|STOP/i.test(run.final_state))
+  if (blockingRuns.length === 0) {
+    return { status: 'pass', detail: 'Codex Worker reports are terminal-success or non-blocking.' }
+  }
+
+  if (outputStatus.status === 'pass' && reviewStatus.status === 'pass') {
+    return {
+      status: 'observed_non_terminal',
+      detail: 'worker subprocess timeout: observed / non-terminal / superseded by validated outputs and configured review PASS.',
+    }
+  }
+
+  return {
+    status: 'fail',
+    detail: `Codex Worker timeout/FIX_REQUIRED remains blocking because output validation is ${outputStatus.status} and review status is ${reviewStatus.status}.`,
+  }
+}
+
 function classifyFinalState(params: {
   state: RuntimeStateFile
   workorderIds: Set<string>
   runs: BatchDossierRun[]
   approvals: BatchDossierApproval[]
   outputs: BatchDossierOutput[]
+  workerRuntimeStatus: BatchDossierStatusSummary
+  outputValidationStatus: BatchDossierStatusSummary
+  reviewStatus: BatchDossierStatusSummary
   checkers: BatchDossier['checkers']
 }): BatchDossierFinalState {
   if (params.state.system_stop?.active) return 'STOP_RULE_BLOCKED'
   if (hasPendingApproval(params.approvals)) return 'NEEDS_TOM_APPROVAL'
   if (hasCleanupCandidate(params.state, params.workorderIds)) return 'NEEDS_SAFE_CLEANUP'
   if (Object.values(params.checkers).some(item => item.status === 'fail' || item.status === 'error')) return 'FIX_REQUIRED'
+  if (params.reviewStatus.status === 'fail') return 'FIX_REQUIRED'
+  if (params.workerRuntimeStatus.status === 'fail') return 'FIX_REQUIRED'
 
   const expected = params.outputs.filter(output => output.expected)
   const allExpectedExist = expected.length > 0 && expected.every(output => output.exists)
   if (allExpectedExist) return 'DONE'
   if (params.runs.length === 0) return 'NOT_RUN'
+  if (params.outputValidationStatus.status === 'fail') return 'FIX_REQUIRED'
   const allRunsCompleted = params.workorderIds.size > 0 &&
     [...params.workorderIds].every(id => params.runs.some(run => run.workorder_id === id && run.status === 'completed'))
 
@@ -649,7 +721,20 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
   const orchestration = resolveOrchestrationMode(options.orchestrationMode ?? 'auto')
   const checkers = options.checkersOverride ?? collectCheckers(repoRoot, batch.batch_file, options.runCheckers ?? true, options.projectId)
   const outputs = collectOutputs(repoRoot, batch.expected_outputs, git, profile)
-  const finalState = classifyFinalState({ state, workorderIds, runs, approvals, outputs, checkers })
+  const outputValidationStatus = summarizeOutputValidation(outputs)
+  const reviewStatus = summarizeReviewStatus(reviews)
+  const workerRuntimeStatus = summarizeWorkerRuntimeStatus(codexWorkerRuns, outputValidationStatus, reviewStatus)
+  const finalState = classifyFinalState({
+    state,
+    workorderIds,
+    runs,
+    approvals,
+    outputs,
+    workerRuntimeStatus,
+    outputValidationStatus,
+    reviewStatus,
+    checkers,
+  })
   const nextAction = nextActionFor(finalState, batch.batch_file)
   const profileArg = options.projectId ? ` --project ${options.projectId}` : ''
   const autonomyHandoff = buildAutonomyHandoffContract({
@@ -684,6 +769,9 @@ export function buildBatchDossier(options: BuildBatchDossierOptions): BatchDossi
     reviews,
     cleanups,
     codex_worker_runs: codexWorkerRuns,
+    worker_runtime_status: workerRuntimeStatus,
+    output_validation_status: outputValidationStatus,
+    review_status: reviewStatus,
     runtime_history_summary: {
       overall_readiness: runtimeHistory.overall_readiness,
       overall_status: runtimeHistory.overall_status,
@@ -807,6 +895,15 @@ export function formatBatchDossierMarkdown(dossier: BatchDossier): string {
       String(run.timed_out ?? false),
       run.report_path,
     ]),
+  ]))
+  lines.push('')
+  lines.push('## Validation Status')
+  lines.push(...table([
+    ['Layer', 'Status', 'Detail'],
+    ['worker_runtime_status', dossier.worker_runtime_status.status, dossier.worker_runtime_status.detail],
+    ['output_validation_status', dossier.output_validation_status.status, dossier.output_validation_status.detail],
+    ['review_status', dossier.review_status.status, dossier.review_status.detail],
+    ['final_classification', dossier.final_state, dossier.next_action],
   ]))
   lines.push('')
   lines.push('## Runtime History Summary')

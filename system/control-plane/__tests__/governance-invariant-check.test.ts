@@ -132,6 +132,14 @@ describe('governance invariant checker', () => {
     assert.equal(result.summary.high, 0)
   })
 
+  it('includes SSOT sync findings for workflow changes without mapped docs', () => {
+    const result = runCheck(' M system/workorders/cli/run-batch-operator.ts\n')
+    const item = finding(result, 'ssot_sync.workflow_governance.missing_ssot_update')
+
+    assert.equal(item?.severity, 'medium')
+    assert.equal(item?.blocks_operator, true)
+  })
+
   it('reports active_workorder with missing run as critical', () => {
     writeState({
       active_workorders: [{

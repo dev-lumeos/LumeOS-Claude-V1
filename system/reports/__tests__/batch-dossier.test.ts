@@ -328,12 +328,15 @@ describe('batch dossier reporter', () => {
       'git_status',
       'next_action',
       'orchestration',
+      'output_validation_status',
       'outputs',
       'reviews',
+      'review_status',
       'runs',
       'runtime_history_summary',
       'schema_version',
       'stop_rules',
+      'worker_runtime_status',
       'workorders',
     ].sort())
     assert.equal(dossier.autonomy_handoff.final_state, 'NOT_RUN')
@@ -463,5 +466,56 @@ describe('batch dossier reporter', () => {
     assert.equal(dossier.codex_worker_runs.length, 1)
     assert.equal(dossier.codex_worker_runs[0]?.workorder_id, 'WO-test-001')
     assert.equal(dossier.codex_worker_runs[0]?.final_state, 'DONE')
+  })
+
+  it('treats a timed-out Codex worker report as non-terminal when outputs exist and review passed', () => {
+    writeCleanRuntime()
+    write('docs/specs/Nutrition/06_workorder_planning/test-report.md', 'done\n')
+    write('system/reports/codex-worker/2026-05-10T00-00-00-000Z-WO-test-001-report.md', [
+      '# Codex Worker Execution Report',
+      '',
+      '## Exit Code',
+      '124',
+      '',
+      '## Final State',
+      'FIX_REQUIRED',
+      '',
+      '## Duration',
+      '120000 ms',
+      '',
+      '## Stderr',
+      '```',
+      'Codex Worker timed out after 120000 ms',
+      '```',
+    ].join('\n'))
+    appendJsonl('system/state/pipeline-audit.jsonl', {
+      ts: '2026-05-05T00:00:00.000Z',
+      event: 'review_completed',
+      workorder_id: 'WO-test-001',
+      run_id: 'RUN-1',
+      tier: 'spark-c',
+      status: 'PASS',
+      confidence: 0.95,
+    })
+
+    const dossier = buildBatchDossier({
+      batchFile: batchPath(),
+      repoRoot: tmpDir,
+      gitStatus: '## goal/test\n',
+      generatedAt: '2026-05-05T00:00:00.000Z',
+      checkersOverride: {
+        invariant: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        agent_contract: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        spec_source_chain: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        migration_guard: { status: 'not_run' },
+      },
+    })
+    const markdown = formatBatchDossierMarkdown(dossier)
+
+    assert.equal(dossier.final_state, 'DONE')
+    assert.equal(dossier.worker_runtime_status.status, 'observed_non_terminal')
+    assert.equal(dossier.output_validation_status.status, 'pass')
+    assert.equal(dossier.review_status.status, 'pass')
+    assert.match(markdown, /worker subprocess timeout: observed \/ non-terminal \/ superseded by validated outputs/)
   })
 })

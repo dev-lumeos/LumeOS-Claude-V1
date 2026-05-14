@@ -34,19 +34,7 @@ specialist multimodal / OCR / FoodCam work.
 Required next step: write the acceptance policy with pass/fail criteria, route
 scope, fallback behavior, output contract, and explicit non-goals.
 
-### TODO-2: Codex Worker timeout/reporting mismatch
-
-Status: open.
-
-The full Spark1 -> worker -> Nemotron proof completed and the dossier is DONE,
-but the Codex Worker subprocess timeline still reported a timeout/FIX_REQUIRED
-while scoped outputs and review passed. This is a reporting/lifecycle mismatch,
-not a blocker for the proof.
-
-Required next step: tighten Codex Worker result reporting so successful scoped
-output completion plus review cannot leave a misleading timeout result.
-
-### TODO-3: MiniMax lab / Hermes 65k test documentation
+### TODO-2: MiniMax lab / Hermes 65k test documentation
 
 Status: open.
 
@@ -57,7 +45,7 @@ Do not add MiniMax to production routing.
 Required next step: update `docs/project/MINIMAX_LAB_RUNTIME.md` and related
 runtime docs after the lab state is explicitly verified.
 
-### TODO-4: infra/vLLM and systemd cleanup
+### TODO-3: infra/vLLM and systemd cleanup
 
 Status: open.
 
@@ -78,6 +66,14 @@ startup scripts for service changes.
 - DGX3 Gemma4 route is retired; DGX3 now runs Nemotron Omni NVFP4.
 - Full Spark1 -> worker -> Nemotron reviewer workflow proof completed with
   `review_started`, `review_completed`, `PASS`, confidence `0.95`, and a dossier.
+- Codex Worker timeout/reporting mismatch is fixed in dossier reporting:
+  raw subprocess timeout remains visible as `worker_runtime_status`, but a
+  completed scoped output plus configured reviewer PASS classifies the batch as
+  `DONE` instead of misleading `FIX_REQUIRED`.
+- `SSOT_SYNC_CHECK` is implemented and wired into governance invariants so
+  runtime/model routing, workflow/operator/governance, product-gate, infra, and
+  completed-TODO changes must update mapped SSOT docs or declare a structured
+  auditable N/A reason.
 - Review Pipeline V2, workorder schema, scope enforcement, approval queue,
   stop rules, governance dossiers, runtime history semantics, and project
   profiles are implemented.
