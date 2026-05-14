@@ -9,7 +9,7 @@
 |---|---|---|
 | Qwen3.6-35B FP8 | 192.168.0.128:8001 | ✅ Spark A — Orchestrator + Review |
 | Qwen3-Coder-Next FP8 | 192.168.0.188:8001 | ✅ Spark B — Coding Worker |
-| Gemma 4 FP8 | 192.168.0.99:8001 | ✅ Spark C — Fast Reviewer Tier 1 |
+| Nemotron Omni NVFP4 | 192.168.0.99:8001 | Spark C / DGX3 — specialist / multimodal / visual-review / OCR / FoodCam candidate; not orchestrator and not production routing |
 | GPT-OSS MXFP4 | 192.168.0.101:8001 | ✅ Spark D — Senior Reviewer Tier 2 |
 | Escalation | Claude Code Max 200 | ✅ claude-opus-4-5 |
 

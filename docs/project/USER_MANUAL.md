@@ -18,7 +18,7 @@ So funktioniert es:
 3. **Dispatcher führt aus** — der Agent macht die Arbeit
 4. **Files Enforcement blockiert** — kein Schreiben außerhalb erlaubter Dateien
 5. **Locks verhindern Konflikte** — keine zwei WOs auf denselben Dateien gleichzeitig
-6. **Review-Pipeline prüft** — Spark C bewertet das Ergebnis, eskaliert zu Spark D wenn nötig
+6. **Review-Pipeline prüft** — historische Spark-C/Gemma4-Routen sind deaktiviert; neue Spark-C/Nemotron-Routen brauchen erst eine explizite Acceptance Policy
 7. **Approval Queue sammelt** — alles was menschliche Entscheidung braucht, landet dort
 8. **Reports zeigen** — was passiert ist, was offen ist, was entschieden werden muss
 
@@ -82,7 +82,7 @@ Nach dem Report entscheidest du:
 ```bash
 curl http://192.168.0.128:8001/v1/models    # Spark A — Orchestrator
 curl http://192.168.0.188:8001/v1/models    # Spark B — Coding Worker
-curl http://192.168.0.99:8001/v1/models     # Spark C — Fast Reviewer
+curl http://192.168.0.99:8001/v1/models     # Spark C / DGX3 — Nemotron specialist candidate, not production routing
 curl http://192.168.0.101:8001/v1/models    # Spark D — Senior Reviewer
 ```
 
@@ -347,7 +347,7 @@ npx tsx system/reports/model-quality-report.ts
 
 Wo gespeichert: `system/reports/model-quality-report.md`
 
-Zeigt: Pass-Rate, invalid_json-Rate, Latenz und Escalation-Rate pro Tier (Spark C, Spark D). Nützlich nach Night-Runs oder wenn Reviews ungewöhnlich oft eskalieren.
+Zeigt: Pass-Rate, invalid_json-Rate, Latenz und Escalation-Rate pro Tier. Historische Spark-C/Gemma4-Werte sind nur noch Altlasten; DGX3/Nemotron darf erst nach einer Acceptance Policy in Routing aufgenommen werden.
 
 ---
 
@@ -377,7 +377,7 @@ Zeigt: Vollständige Archivierung einer WO — alle Runs, Fehler, Reviews, Appro
 | `BLOCKED_SCOPE` | Scope-Lock-Konflikt mit anderer WO | Warten bis andere WO fertig, oder Scope prüfen |
 | `BLOCKED_SYSTEM_STOP` | System Stop aktiv | `stop-rules.ts --dry-run` → Ursache beheben, dann Stop aufheben |
 | `FAILED` | Run ist failed | Run Summary lesen: `run-summary-generator.ts <run_id>` |
-| `invalid_json` | Spark C hat ungültige Antwort geliefert | Model Quality Report prüfen — Spark C Health checken |
+| `invalid_json` | Ein Modell hat ungültige Antwort geliefert | Model Quality Report prüfen; bei DGX3/Nemotron Content trimmen, reasoning ignorieren, leeren Content als invalid behandeln |
 | `rewrite_limit_exceeded` | Review-Pipeline hat 2x REWRITE ergebt | WO-Task klarer formulieren, WO neu starten |
 | `scope_lock_conflict` | Zwei WOs wollen dieselben Dateien | Warten bis erste WO fertig |
 | `files_scope_violation` | Agent hat versucht, Datei außerhalb scope_files zu schreiben | Scope-Fehler im Agent oder zu breite Permission — Run Summary lesen |
@@ -404,9 +404,9 @@ Zeigt was verletzt ist, ohne selbst einen Stop auszulösen.
 |---|---|---|
 | Zu viele failed Runs | ≥ 5 | Etwas ist grundlegend falsch |
 | Zu viele pending Approvals | ≥ 3 | Entscheidungen aufgelaufen |
-| invalid_json Rate zu hoch | ≥ 50% (min. 3 Samples) | Spark C antwortet kaputt |
+| invalid_json Rate zu hoch | ≥ 50% (min. 3 Samples) | Modell-/Wrapper-Ausgabe ist nicht workflow-tauglich |
 | Scope-Verletzungen | ≥ 2 | Scope-Enforcement greift falsch |
-| Spark C Escalation Rate | ≥ 80% (min. 5 Reviews) | Spark C zu schwach für aktuelle Aufgaben |
+| Legacy Spark C Escalation Rate | ≥ 80% (min. 5 Reviews) | Historische Spark-C/Gemma4-Route nicht wieder aktivieren; DGX3/Nemotron erst nach Acceptance Policy routen |
 
 ### Stop manuell triggern oder aufheben
 
@@ -472,7 +472,7 @@ Erst wenn alle 5 OK → Night-Run starten.
 # 1. Sparks prüfen
 curl http://192.168.0.128:8001/v1/models
 curl http://192.168.0.188:8001/v1/models
-curl http://192.168.0.99:8001/v1/models
+curl http://192.168.0.99:8001/v1/models     # Spark C / DGX3 — Nemotron specialist candidate, not production routing
 curl http://192.168.0.101:8001/v1/models
 
 # 2. Readiness prüfen
@@ -566,7 +566,7 @@ Wenn BLOCKING > 0: der Report zeigt genau welche Datei aktualisiert werden muss.
 ```bash
 curl http://192.168.0.128:8001/v1/models    # Spark A — Orchestrator
 curl http://192.168.0.188:8001/v1/models    # Spark B — Coding Worker
-curl http://192.168.0.99:8001/v1/models     # Spark C — Fast Reviewer
+curl http://192.168.0.99:8001/v1/models     # Spark C / DGX3 — Nemotron specialist candidate, not production routing
 curl http://192.168.0.101:8001/v1/models    # Spark D — Senior Reviewer
 ```
 

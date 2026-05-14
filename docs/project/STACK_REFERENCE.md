@@ -12,7 +12,8 @@ The current DGX1 / Spark1 runtime source of truth is `docs/project/runtime/DGX1_
 - Correct Spark1 service flags include `--max-num-batched-tokens 8192`, `--reasoning-parser qwen3`, `--default-chat-template-kwargs '{"enable_thinking": false}'`, `--enable-auto-tool-choice`, and `--tool-call-parser qwen3_xml`.
 - The previous startup crash was caused by `block_size 2096 > max_num_batched_tokens 2048`; the fix is `--max-num-batched-tokens 8192`.
 - Spark1 handoff is proven by commit `a0b3a20`: `spark1_orchestrated` doctor/dry-run uses Spark1, validates worker assignments, and does not fall back to Codex as orchestrator.
-- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- DGX3 / Spark3 has migrated from Gemma4 to Nemotron Omni NVFP4; see `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`.
+- DGX3 / Nemotron is verified as a specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator and not production routing by default.
 - MiniMax remains lab-only.
 - Codex remains bootstrap, senior worker/reviewer, and fallback, not the default orchestrator when Spark1 mode is requested.
 
@@ -24,7 +25,7 @@ The current DGX1 / Spark1 runtime source of truth is `docs/project/runtime/DGX1_
 |---|---|---|---|---|---|---|
 | Spark 1 (A) | 192.168.0.128 | 8001 | Qwen3.6-35B-A3B FP8 | Orchestrator + WO-Validator | ~50 single / 116 par-4 tok/s | LIVE |
 | Spark 2 (B) | 192.168.0.188 | 8001 | Qwen3-Coder-Next FP8 | Coding Worker | ~47 tok/s | LIVE |
-| Spark 3 (C) | 192.168.0.99 | 8001 | google/gemma-4-26B-A4B-it | Fast Reviewer candidate | ~35 single / 180 par-8 tok/s | not workflow-ready until clean output tests pass |
+| Spark 3 (C) | 192.168.0.99 | 8001 | Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4 | Specialist / multimodal / visual-review / OCR / FoodCam candidate | ~58 single / 162 par-4 completion tok/s | verified, not production routing by default |
 | Spark 4 (D) | 192.168.0.101 | 8001 | MiniMax / lab runtimes | Lab only | TBD | lab-only / not productive routing |
 | RTX 5090 | localhost | 8001 | Qwen3-VL 30B FP8 | MealCam Vision | TBD | geplant |
 | Escalation | — | — | Claude Sonnet/Opus (Max 200) | Senior Coding (selten) | — | aktiv |
@@ -37,7 +38,7 @@ The current DGX1 / Spark1 runtime source of truth is `docs/project/runtime/DGX1_
 |---|---|---|---|
 | Spark 1 | `vllm/vllm-openai:cu130-nightly` | Community Nightly | Stable für Qwen3.6 |
 | Spark 2 | `nvcr.io/nvidia/vllm:26.03-py3` | NVIDIA NGC | Stable, qwen3_coder Tool-Parser |
-| Spark 3 | `vllm-node` (lokal) | eugr/spark-vllm-docker Custom Build | `--load-format instanttensor` |
+| Spark 3 | `vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404` | vLLM OpenAI image | Nemotron Omni NVFP4 local model |
 | Spark 4 | `vllm-node` (lokal, MXFP4-Build) | eugr/spark-vllm-docker Custom Build | MXFP4 + FlashInfer + CUTLASS |
 
 ---
@@ -48,7 +49,7 @@ The current DGX1 / Spark1 runtime source of truth is `docs/project/runtime/DGX1_
 |---|---|---|---|
 | Spark 1 (Qwen3.6) | NEIN | Aus (`enable_thinking: false` Pflicht) | Reines Output-Parsing |
 | Spark 2 (Coder-Next) | JA | — | `--tool-call-parser qwen3_coder` |
-| Spark 3 (Gemma 4) | JA | Aktiv aber gefiltert | `--tool-call-parser gemma4 --reasoning-parser gemma4` |
+| Spark 3 (Nemotron Omni) | TBD by acceptance policy | Separate `reasoning` field | Trim content, ignore reasoning for normal workflow output, empty content is invalid |
 | Spark 4 (GPT-OSS) | JA | Aktiv aber gefiltert | `--tool-call-parser openai --reasoning-parser openai_gptoss` |
 
 ---
@@ -121,6 +122,8 @@ cd /home/admin/spark-vllm-docker
   --reasoning-parser gemma4
 ```
 
+> Current note: the Spark 3 Gemma4 launch block above is historical/retired. DGX3 now runs Nemotron Omni via `vllm.service`; see `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`. Do not use the old Gemma4 route for workflow routing.
+
 ### Spark 4 (Spark D) — launch-cluster.sh
 
 Wie Spark 3, aber MXFP4-Build (`vllm-node-mxfp4` getagged zu `vllm-node`).
@@ -159,7 +162,7 @@ cd /home/admin/spark-vllm-docker
 | db-migration-agent | spark-a | qwen3.6-35b-fp8 | Schema Changes |
 | micro-executor | spark-b | qwen3-coder-next-fp8 | TypeScript Patches |
 | test-agent | spark-b | qwen3-coder-next-fp8 | Tests |
-| fast-reviewer-agent | spark-c | google/gemma-4-26B-A4B-it | Pipeline-Tier 1 (Quality) |
+| fast-reviewer-agent | spark-c | retired Gemma4 route | Do not use until routing is redesigned for Nemotron |
 | senior-reviewer-agent | spark-d | openai/gpt-oss-120b | Pipeline-Tier 2 (Senior) |
 | senior-coding-agent | claude_code | claude-opus-4-5 / claude-sonnet | Escalation only (selten) |
 | mealcam-agent | rtx5090 | qwen3-vl-30b-a3b-fp8 | Vision (geplant) |
@@ -184,9 +187,9 @@ Implementiert in: `services/scheduler-api/src/vllm-adapter.ts` → `callQwen36Or
 
 ---
 
-## GPT-OSS / Gemma 4 / Qwen3.6 — Reasoning-Filter (HARTE REGEL)
+## GPT-OSS / legacy Gemma4 / Qwen3.6 / Nemotron — Reasoning-Filter (HARTE REGEL)
 
-Alle Reasoning-fähigen Modelle (Qwen3.6, Gemma 4, GPT-OSS) werden via globalem
+Alle Reasoning-fähigen Modelle (Qwen3.6, legacy Gemma4, GPT-OSS, Nemotron) werden via globalem
 `extractContentOnly()` gefiltert:
 
 ```ts
@@ -269,7 +272,7 @@ Workorder
   → ─────────────────────────────────────────────────────────────
     │  Review Pipeline Gate  (NUR bei tool=write && success)     │
     │  → runReviewPipeline()                                      │
-    │      Spark 3 (Gemma 4):                                     │
+    │      Spark 3 legacy Gemma4 route (retired; do not use):      │
     │        PASS         → done                                  │
     │        REWRITE      → run.failed + WO.review                │
     │        ESCALATE     → Spark 4                               │

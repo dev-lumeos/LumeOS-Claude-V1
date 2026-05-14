@@ -64,7 +64,7 @@ Expected Spark/vLLM routes currently include:
 | --- | --- | --- |
 | DGX1 / Spark1 / Spark A | `http://192.168.0.128:8001` | Qwen3.6 `orchestrator-agent` and governance/reasoning runtime |
 | Spark B | `http://192.168.0.188:8001` | Qwen coder execution/docs/tests/i18n |
-| Spark C | `http://192.168.0.99:8001` | fast reviewer route present; not workflow-ready until clean output tests pass |
+| DGX3 / Spark3 | `http://192.168.0.99:8001` | Nemotron specialist / multimodal / visual-review / OCR / FoodCam candidate; not orchestrator and not production routing by default |
 | DGX4 / Spark D | `http://192.168.0.101:8001` | disabled for productive governance; future DGX4/DGX5 MiniMax lab |
 | RTX 5090 | `http://localhost:8001` | MealCam vision |
 
@@ -81,6 +81,49 @@ Codex CLI is not a vLLM/OpenAI-compatible HTTP endpoint and must not be checked 
 Codex worker execution uses `codex exec` through `system/workers/codex-worker.ts`. The bridge is not a broad automatic dispatcher replacement. `system/workers/codex-worker.config.json` enables the controlled senior-agent path while keeping the policy narrow: only `senior-coding-agent`, explicit `codex_worker: true`, complete source/scope/output metadata, no pending approval requirement, hard timeout, and product work blocked while `product_gate_open=false`.
 
 MealCam/Vision is optional and on-demand. Its endpoint is not expected to be online during normal governance/operator work. An offline `mealcam-agent` endpoint is reported as informational unless a MealCam/Vision workorder, selected batch, or explicit Tom request requires that runtime.
+
+## DGX3 / Spark3 Nemotron Runtime
+
+DGX3 / Spark3 has been migrated from Gemma4 to Nemotron Omni NVFP4. Full runtime details are recorded in `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`.
+
+Verified DGX3 state:
+
+- Host: `edgexpert-509d`
+- IP: `192.168.0.99`
+- Service: `vllm.service`
+- Autostart: enabled
+- Container: `vllm_node`
+- Image: `vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404`
+- Model: `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
+- Local model path: `/root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
+- Endpoint: `http://192.168.0.99:8001`
+- Local endpoint: `http://127.0.0.1:8001`
+- `max_model_len: 65536`
+- Role: specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator
+
+Verified smoke:
+
+- `/v1/models` OK
+- Reply-only: `ok -> content.trim() = ok`
+- JSON-only: `content.trim() = {"status":"ok"}`
+- Reasoning is separate in the `reasoning` field.
+
+Normal workflow wrapper rule:
+
+- Trim content.
+- Ignore `reasoning` for normal workflow output.
+- Empty trimmed content is invalid.
+
+Observed performance:
+
+- About `58` completion tok/s single request.
+- About `162` aggregate completion tok/s with four parallel requests.
+
+Routing status:
+
+- Gemma4 on DGX3 is not workflow-ready and must not be used in routing.
+- DGX3 / Nemotron is not production routing by default.
+- Add a model-runtime route only after an acceptance policy decides its role and output contract.
 
 ## DGX1 / Spark1 Corrected Runtime
 
@@ -278,6 +321,6 @@ This hardening layer does not run product batches, execute migrations, import BL
 
 ## Remaining Runtime Gaps
 
-- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- DGX3 / Spark3 Nemotron is verified as a specialist runtime but is not production routing by default; Gemma4 on DGX3 is retired/not workflow-ready.
 - MiniMax remains lab-only and is not productive governance routing.
 - Codex remains bootstrap, senior worker/reviewer, and fallback. Codex is not the default orchestrator when `spark1_orchestrated` is requested.

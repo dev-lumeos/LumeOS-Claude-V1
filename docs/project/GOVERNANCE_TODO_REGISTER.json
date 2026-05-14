@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T08:30:00+07:00",
+  "generated_at": "2026-05-14T09:05:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -566,13 +566,13 @@
     },
     {
       "id": "GOV-TODO-026",
-      "title": "Prove DGX3/Gemma4 clean workflow output readiness",
+      "title": "Retire DGX3/Gemma4 workflow route",
       "layer": "runtime",
       "severity": "medium",
       "priority": "P1",
-      "status": "open",
-      "evidence": "DGX1/Spark1 is corrected and Spark1 handoff is proven, but DGX3/Spark3 Gemma4 remains not workflow-ready until clean output tests pass.",
-      "recommended_action": "Before treating DGX3/Spark3 as workflow-ready, run clean output tests for the Gemma4 review path and document pass/fail evidence. Do not route required governed workflow work through DGX3 as ready until that proof exists.",
+      "status": "done",
+      "evidence": "DGX3/Spark3 has been migrated from Gemma4 to Nemotron Omni NVFP4. Gemma4 on DGX3 is not workflow-ready and must not be used in routing.",
+      "recommended_action": "Do not use the old DGX3 Gemma4 route. Treat DGX3/Nemotron as a verified specialist candidate only until a separate acceptance policy decides its role and output contract.",
       "dependencies": [
         "GOV-TODO-025"
       ],
@@ -582,8 +582,32 @@
       "source_files": [
         "docs/project/MODEL_RUNTIME_HARDENING.md",
         "docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md",
+        "docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md",
         "system/model-tiers/model_registry_v2.md",
         "system/model-tiers/model_tiers_v2.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-027",
+      "title": "Decide DGX3/Nemotron model-runtime route role",
+      "layer": "runtime",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "DGX3/Spark3 Nemotron Omni NVFP4 is verified with /v1/models, reply-only, and JSON-only smoke tests. Reasoning is separate in the reasoning field. Observed performance is about 58 completion tok/s single request and about 162 aggregate completion tok/s with four parallel requests.",
+      "recommended_action": "Create an acceptance policy for whether DGX3/Nemotron should become a specialist, multimodal, visual-review, OCR, or FoodCam runtime route. Add model-runtime routing only after that role, output contract, and wrapper behavior are approved.",
+      "dependencies": [
+        "GOV-TODO-026"
+      ],
+      "estimated_effort": "0.5d acceptance policy and routing review",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md",
+        "docs/project/MODEL_RUNTIME_HARDENING.md",
+        "system/model-tiers/model_registry_v2.md",
+        "system/model-tiers/model_tiers_v2.md",
+        "system/agent-registry/model_routing.json"
       ]
     }
   ]

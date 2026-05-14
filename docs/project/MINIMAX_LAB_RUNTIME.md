@@ -12,7 +12,7 @@ Current productive governance runtime remains:
 
 - DGX1 / Spark A: `192.168.0.128:8001` / `qwen3.6-35b-fp8`
 - DGX2 / Spark B: `192.168.0.188:8001` / `qwen3-coder-next-fp8`
-- DGX3 / Spark C: `192.168.0.99:8001` / `google/gemma-4-26B-A4B-it`
+- DGX3 / Spark C: `192.168.0.99:8001` / `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4` as a verified specialist / multimodal / visual-review / OCR / FoodCam candidate, not production routing by default
 - Codex/GPT-5.5: productive senior-coding-agent and senior-reviewer-agent path
 
 MiniMax is lab-only until reproducible benchmark evidence and a separate governance decision say otherwise.
@@ -172,7 +172,7 @@ git lfs pull
 
 MiniMax Lab evaluation remains non-production. Candidate experiments:
 
-- Compare MiniMax against Codex/GPT-5.5, Qwen3.6, Qwen Coder, and Gemma4 on real governance tasks.
+- Compare MiniMax against Codex/GPT-5.5, Qwen3.6, Qwen Coder, and DGX3/Nemotron on real governance tasks.
 - Review batch dossiers.
 - Review decomposition plans before workorder generation.
 - Analyze old-repo salvage candidates.
@@ -186,4 +186,3 @@ MiniMax Lab evaluation remains non-production. Candidate experiments:
 - Do not use MiniMax for product work.
 - Do not make MiniMax required for operator, doctor, runtime, promotion, or product gates.
 - Treat Spark4/Spark5 MiniMax as lab runtime only.
-

@@ -24,7 +24,7 @@ Commit `a0b3a20` proves `spark1_orchestrated` operator handoff in doctor/dry-run
 
 Remaining gaps:
 
-- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- DGX3 / Spark3 has migrated from Gemma4 to Nemotron Omni NVFP4. It is verified as a specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator and not production routing by default.
 - MiniMax remains lab-only and is not productive governance routing.
 - Codex remains bootstrap, senior worker/reviewer, and fallback, not the default orchestrator in `spark1_orchestrated` mode.
 
@@ -76,13 +76,15 @@ Adapter: `callCoderNext()` in `services/scheduler-api/src/vllm-adapter.ts`.
 
 ---
 
-### Spark C — Fast Reviewer (Pipeline Tier 1)
+### Spark C - DGX3 Nemotron Specialist Candidate
 
 | Parameter | Wert |
 |---|---|
 | IP | 192.168.0.99 |
 | Port | 8001 |
 | Hostname | edgexpert-509d |
+| Service | `vllm.service` |
+| Autostart | enabled |
 | Container | `vllm_node` (launch-cluster.sh) |
 | Image | `vllm-node` (lokal, eugr/spark-vllm-docker) |
 | Modell | `google/gemma-4-26B-A4B-it` |
@@ -96,7 +98,19 @@ Adapter: `callCoderNext()` in `services/scheduler-api/src/vllm-adapter.ts`.
 | Rolle | Review-Pipeline Tier 1 |
 | Status | ✅ LIVE |
 
-Adapter: `callGemmaReviewer()` in `services/scheduler-api/src/vllm-adapter.ts`.
+Current correction: the Gemma4 values above are historical/retired for workflow routing. DGX3 now runs:
+
+- Image: `vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404`
+- Model: `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
+- Local model path: `/root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
+- Endpoint: `http://192.168.0.99:8001`
+- Local endpoint: `http://127.0.0.1:8001`
+- `max_model_len: 65536`
+- Smoke: `/v1/models` OK, reply-only `ok`, JSON-only `{"status":"ok"}`
+- Wrapper rule: trim content, ignore separate `reasoning`, empty content invalid
+- Observed throughput: about `58` completion tok/s single and about `162` aggregate completion tok/s at four parallel requests
+
+Role: specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator. Gemma4 on DGX3 is not workflow-ready and must not be used in routing. Add a model-runtime route for Nemotron only after acceptance policy decides the exact role and output contract.
 
 ---
 
@@ -151,5 +165,5 @@ Adapter: `callGPTOSSReviewer()` in `services/scheduler-api/src/vllm-adapter.ts`.
 |---|---|---|---|---|
 | Spark A | Qwen3.6-35B FP8 | ~50 | ~116 @ 4-par | 0.70 |
 | Spark B | Qwen3-Coder-Next FP8 | ~47 | — | 0.88 |
-| Spark C | Gemma 4 26B FP8 | ~35 | ~180 @ 8-par | 0.70 |
+| Spark C | Nemotron Omni NVFP4 | ~58 | ~162 @ 4-par | TBD |
 | Spark D | GPT-OSS 120B MXFP4 | ~59 | ~150 @ 4-par | 0.70 |

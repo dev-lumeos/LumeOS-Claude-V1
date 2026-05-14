@@ -79,7 +79,6 @@ cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-op
 
 ## Remaining Runtime Gaps
 
-- DGX3 / Spark3 Gemma4 remains not workflow-ready until clean output tests pass.
+- DGX3 / Spark3 has migrated from Gemma4 to Nemotron Omni NVFP4. It is verified as a specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator and not production routing by default.
 - MiniMax remains lab-only and must not be added to productive routing without future benchmark evidence and an explicit governance decision.
 - Codex remains bootstrap, senior worker/reviewer, and fallback. Codex is not the default orchestrator when `spark1_orchestrated` is requested.
-

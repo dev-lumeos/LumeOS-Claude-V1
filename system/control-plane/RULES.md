@@ -3,6 +3,8 @@
 **Single Source of Truth** für Review-State-Machine, Routing und Reasoning-Filter.
 Stand: April 2026 — Phase 2 (alle 4 Sparks live).
 
+Current runtime note, 2026-05-14: DGX3 / Spark3 has migrated from Gemma4 to Nemotron Omni NVFP4. Gemma4 on DGX3 is not workflow-ready and must not be used in routing. DGX3 / Nemotron is a verified specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator and not production routing by default. Add a model-runtime route only after acceptance policy decides the exact role and output contract.
+
 Diese Regeln gelten für die Review-Pipeline (Spark 3 → Spark 4 → Claude).
 Sie sind **orthogonal** zu den bestehenden Governance-Regeln in `governance-validator.ts`,
 die weiterhin den Orchestrator-Output (Spark 1 / Qwen3.6) validieren.
@@ -38,7 +40,7 @@ markiert. `PASS` als Output-State ist eine andere Domäne und nicht betroffen.
 Worker (Spark 2) produziert Output
        │
        ▼
-  Spark 3 (Fast Quality, Gemma 4 26B)
+  Spark 3 legacy fast-quality route (Gemma4 retired; do not use until rerouted)
        │
        ├── PASS     → done
        ├── REWRITE  → Spark 2 (max 2×)
@@ -203,7 +205,7 @@ function extractContentOnly(response: any): string {
 - Spark 1 (Qwen3.6) — bereits via `chat_template_kwargs.enable_thinking=false` neutralisiert
 - Spark 4 (GPT-OSS 120B) — Reasoning bleibt aktiv, wird aber gedroppt
 - Spark 2 (Coder-Next) — kein Reasoning
-- Spark 3 (Gemma 4) — Reasoning-Parser aktiv, aber Output via `content`
+- Spark 3 (Nemotron Omni) — reasoning appears separately in the `reasoning` field; normal workflow wrappers trim content, ignore reasoning, and reject empty content
 
 ---
 
@@ -283,7 +285,7 @@ Ergänzung für `model_routing.json`:
 
 | Agent-ID | Node | Modell | Endpoint |
 |---|---|---|---|
-| `fast-reviewer-agent` | spark-c | google/gemma-4-26B-A4B-it | http://192.168.0.99:8001 |
+| `fast-reviewer-agent` | spark-c | legacy Gemma4 route retired; DGX3 now runs Nemotron Omni | http://192.168.0.99:8001 |
 | `senior-reviewer-agent` | spark-d | openai/gpt-oss-120b | http://192.168.0.101:8001 |
 | `senior-coding-agent` | claude_code | claude-opus / claude-sonnet | Max 200 Plan |
 
