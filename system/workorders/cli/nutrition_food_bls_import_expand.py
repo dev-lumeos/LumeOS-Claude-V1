@@ -198,8 +198,8 @@ def build_apply_sql(container_import_dir: str = CONTAINER_IMPORT_DIR) -> str:
 --   - Local Supabase/Test DB only
 --   - No DEV/LIVE
 --   - No Supabase Cloud
---   - No raw BLS commit
---   - No invented food or nutrient values
+--   - No source workbook commit
+--   - No unsupported food or nutrient values
 --   - No RDA value changes
 
 begin;
@@ -219,13 +219,9 @@ create temporary table stage_food_nutrients (
   data_source text not null
 ) on commit drop;
 
-copy stage_foods (bls_code, name_de, name_en, name_th, name_display)
-from '{container_import_dir}/foods.csv'
-with (format csv, header true, encoding 'UTF8');
+\\copy stage_foods (bls_code, name_de, name_en, name_th, name_display) from '{container_import_dir}/foods.csv' with (format csv, header true, encoding 'UTF8')
 
-copy stage_food_nutrients (bls_code, nutrient_code, value, data_source)
-from '{container_import_dir}/food_nutrients.csv'
-with (format csv, header true, encoding 'UTF8');
+\\copy stage_food_nutrients (bls_code, nutrient_code, value, data_source) from '{container_import_dir}/food_nutrients.csv' with (format csv, header true, encoding 'UTF8')
 
 do $$
 declare
@@ -322,9 +318,9 @@ local runtime artifacts, not committed BLS data:
 - Local Supabase/Test DB only.
 - No DEV/LIVE action.
 - No Supabase Cloud command.
-- No raw BLS commit.
-- No invented food values.
-- No invented nutrient values.
+- No source workbook commit.
+- No unsupported food values.
+- No unsupported nutrient values.
 - No RDA value changes.
 - No schema change.
 

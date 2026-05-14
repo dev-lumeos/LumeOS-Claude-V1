@@ -10,9 +10,9 @@ Search.
 
 ## Source
 
-- Source workbook: `C:/Users/User/AppData/Local/Temp/tmpo_o0nihj/sample.xlsx`
+- Source workbook: `C:/Users/User/AppData/Local/Temp/tmpzjx31r93/sample.xlsx`
 - Sheet: `BLS_4_0_Daten_2025_DE`
-- Nutrient code allowlist: `C:/Users/User/AppData/Local/Temp/tmpo_o0nihj/nutrient-defs.md`
+- Nutrient code allowlist: `C:/Users/User/AppData/Local/Temp/tmpzjx31r93/nutrient-defs.md`
 - Extraction scope: `subset`
 - Food rows extracted: 2
 - Food nutrient rows extracted: 3
@@ -24,7 +24,7 @@ Search.
 
 ## Local artifacts
 
-The UTF-8 CSV files are generated under `C:/Users/User/AppData/Local/Temp/tmpo_o0nihj/out` and are
+The UTF-8 CSV files are generated under `C:/Users/User/AppData/Local/Temp/tmpzjx31r93/out` and are
 local runtime artifacts, not committed BLS data:
 
 - `foods.csv`
