@@ -59,6 +59,7 @@ evidence only and must not override the current SSOT files listed below.
   - Required documentation impact must run the documentation phase and emit `documentation_started` / `documentation_completed` before DONE.
   - Explicit N/A must be structured and auditable; generic `none` / `not applicable` reasons are invalid.
   - Dossiers report documentation impact, documentation-agent usage, SSOT files, SSOT sync status, and final SSOT classification.
+- Configured reviewer handoff for already output-complete workorders passes the correct workorder context and expected-output content into the review pipeline. A configured reviewer failure still blocks DONE.
 
 ## Current Product / Nutrition Truth
 
@@ -72,8 +73,8 @@ evidence only and must not override the current SSOT files listed below.
   - `name_th` and `group_th` exist and are empty strings by design.
   - UTF-8 German text is corrected.
   - RDA fields are partial by design.
-- Local Nutrition UI has progressed through read-only schema/debug, preview, search/filter, detail panel, deep-link, pin/compare, and copy-link affordances.
-- `BATCH-NUTRITION-P1-005-LOCAL-RDA-FILTER.md` is the next exact allowlisted local-only UI batch. Its scope is limited to adding a read-only RDA availability filter on the local nutrient preview, with documentation-impact handling required before DONE.
+- Local Nutrition UI has progressed through read-only schema/debug, preview, search/filter, RDA availability filter, detail panel, deep-link, pin/compare, and copy-link affordances.
+- The local `nutrition.nutrient_defs` preview includes a read-only RDA availability filter with All nutrients, Nutrients with any RDA value, and Nutrients without RDA values modes. Availability is based only on non-empty `rda_male` or `rda_female` values and combines with existing search/group filters.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions

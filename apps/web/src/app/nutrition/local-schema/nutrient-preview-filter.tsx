@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 
 import type { NutritionGroupCount, NutritionNutrientPreviewRow } from '../../../lib/nutrition/local-schema-debug'
+import type { NutrientRdaAvailabilityFilter } from '../../../lib/nutrition/nutrient-preview-filter'
 import { filterNutrientPreviewRows } from '../../../lib/nutrition/nutrient-preview-filter'
 import { NutrientDetailPanel } from './nutrient-detail-panel'
 
@@ -27,9 +28,10 @@ function PreviewBadge({ label, tone }: { label: string; tone: 'pass' | 'attentio
 export function NutrientPreviewFilter({ rows, groups, hasLocalSeedRows }: Props) {
   const [query, setQuery] = useState('')
   const [group, setGroup] = useState('')
+  const [rdaAvailability, setRdaAvailability] = useState<NutrientRdaAvailabilityFilter>('all')
   const filteredRows = useMemo(
-    () => filterNutrientPreviewRows(rows, { query, group }),
-    [group, query, rows],
+    () => filterNutrientPreviewRows(rows, { query, group, rdaAvailability }),
+    [group, query, rdaAvailability, rows],
   )
 
   return (
@@ -44,7 +46,7 @@ export function NutrientPreviewFilter({ rows, groups, hasLocalSeedRows }: Props)
         <PreviewBadge tone={hasLocalSeedRows ? 'pass' : 'attention'} label={hasLocalSeedRows ? 'Seeded locally' : 'Local preview'} />
       </div>
 
-      <div className="mb-4 grid gap-3 lg:grid-cols-[1fr_18rem_auto]">
+      <div className="mb-4 grid gap-3 lg:grid-cols-[1fr_18rem_18rem_auto]">
         <label className="block">
           <span className="text-xs uppercase tracking-[0.16em] text-slate-500">Search</span>
           <input
@@ -70,6 +72,18 @@ export function NutrientPreviewFilter({ rows, groups, hasLocalSeedRows }: Props)
             ))}
           </select>
         </label>
+        <label className="block">
+          <span className="text-xs uppercase tracking-[0.16em] text-slate-500">RDA Availability</span>
+          <select
+            className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none ring-0 focus:border-blue-400"
+            value={rdaAvailability}
+            onChange={(event) => setRdaAvailability(event.target.value as NutrientRdaAvailabilityFilter)}
+          >
+            <option value="all">All nutrients</option>
+            <option value="with-rda">Nutrients with any RDA value</option>
+            <option value="without-rda">Nutrients without RDA values</option>
+          </select>
+        </label>
         <div className="flex items-end">
           <button
             className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm font-medium text-slate-200 hover:border-slate-500"
@@ -77,6 +91,7 @@ export function NutrientPreviewFilter({ rows, groups, hasLocalSeedRows }: Props)
             onClick={() => {
               setQuery('')
               setGroup('')
+              setRdaAvailability('all')
             }}
           >
             Clear
