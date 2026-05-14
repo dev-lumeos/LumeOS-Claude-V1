@@ -426,10 +426,21 @@ function resolveCategory(wo: Workorder): string {
 }
 
 function hasRequiredCodexWorkerFields(wo: Workorder): boolean {
-  return (wo.source_refs?.length ?? 0) > 0
+  return collectCodexWorkerSourceRefs(wo).length > 0
     && (wo.scope_files?.length ?? 0) > 0
     && ((wo.files_blocked?.length ?? 0) > 0)
     && ((wo.expected_outputs?.length ?? wo.acceptance_files?.length ?? 0) > 0)
+}
+
+function collectStringLeaves(value: unknown): string[] {
+  if (typeof value === 'string') return value.trim().length > 0 ? [value] : []
+  if (Array.isArray(value)) return value.flatMap(collectStringLeaves)
+  if (value && typeof value === 'object') return Object.values(value).flatMap(collectStringLeaves)
+  return []
+}
+
+function collectCodexWorkerSourceRefs(wo: Workorder): string[] {
+  return collectStringLeaves((wo as Workorder & { source_refs?: unknown }).source_refs)
 }
 
 function hasBroadCodexWorkerScope(wo: Workorder): boolean {
@@ -447,7 +458,7 @@ function isCodexWorkerSensitiveForbiddenWork(wo: Workorder): boolean {
     ...(wo.scope_files ?? []),
     ...(wo.acceptance_files ?? []),
     ...(wo.expected_outputs ?? []),
-    ...(wo.source_refs ?? []),
+    ...collectCodexWorkerSourceRefs(wo),
   ].map(item => item.replace(/\\/g, '/').toLowerCase())
   if (paths.some(p => p.startsWith('supabase/') || p.startsWith('db/') || p.includes('/migrations/') || p.startsWith('.env'))) return true
   const text = [
@@ -472,7 +483,7 @@ function isCodexWorkerProductWork(wo: Workorder): boolean {
     ...(wo.scope_files ?? []),
     ...(wo.acceptance_files ?? []),
     ...(wo.expected_outputs ?? []),
-    ...(wo.source_refs ?? []),
+    ...collectCodexWorkerSourceRefs(wo),
   ].map(item => item.replace(/\\/g, '/'))
   if (paths.some(p => p.startsWith('services/nutrition-api/') || p.startsWith('apps/') || p.startsWith('packages/'))) return true
   if (paths.some(p => p.startsWith('docs/specs/Nutrition/') && !p.includes('/06_workorder_planning/'))) return true

@@ -312,6 +312,29 @@ describe('dispatcher codex worker integration', () => {
     assert.equal(modelCalls, 0)
   })
 
+  it('accepts structured source_refs for Codex worker provenance', async () => {
+    let codexCalls = 0
+    const result = await dispatchWorkorder(makeWorkorder({
+      source_refs: {
+        module_index: 'docs/specs/Nutrition/INDEX.md',
+        current_specs: ['docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md'],
+        reviews: ['docs/project/p1-005/P1-005-schema-foundation-local-test-checklist.md'],
+      },
+      product_work: false,
+    }), {
+      callModel: async () => { throw new Error('model call should not run') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      runCodexWorker: async () => {
+        codexCalls++
+        return doneResult('DONE')
+      },
+    })
+
+    assert.equal(result.status, 'completed')
+    assert.equal(codexCalls, 1)
+  })
+
   it('uses Codex worker for senior-reviewer-agent under the controlled review gate', async () => {
     let codexCalls = 0
     const result = await dispatchWorkorder(makeWorkorder({
