@@ -208,7 +208,7 @@ create temporary table stage_foods (
   bls_code text not null,
   name_de text not null,
   name_en text,
-  name_th text not null,
+  name_th text,
   name_display text
 ) on commit drop;
 
@@ -240,7 +240,7 @@ end
 $$;
 
 insert into nutrition.foods (bls_code, name_de, name_en, name_th, name_display)
-select bls_code, name_de, name_en, name_th, name_display
+select bls_code, name_de, name_en, coalesce(name_th, ''), name_display
 from stage_foods
 on conflict (bls_code) do update set
   name_de = excluded.name_de,
