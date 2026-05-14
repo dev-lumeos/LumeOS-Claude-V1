@@ -6,6 +6,7 @@ from pathlib import Path
 
 from openpyxl import Workbook
 
+# SSOT_SYNC_CHECK: N/A (domain=workflow_governance; reason=test-only fixture isolation for deterministic BLS import report output; no workflow behavior or SSOT policy change)
 
 MODULE_PATH = Path(__file__).resolve().parents[1] / "nutrition_food_bls_import_expand.py"
 
@@ -23,6 +24,7 @@ class NutritionFoodBlsImportExpandTests(unittest.TestCase):
             workbook_path = tmp / "sample.xlsx"
             nutrient_defs_path = tmp / "nutrient-defs.md"
             output_dir = tmp / "out"
+            report_path = tmp / "report.md"
 
             workbook = Workbook()
             sheet = workbook.active
@@ -59,7 +61,7 @@ class NutritionFoodBlsImportExpandTests(unittest.TestCase):
                 output_dir=output_dir,
                 limit=None,
             )
-            nutrition_food_bls_import_expand.write_import_artifacts(result)
+            nutrition_food_bls_import_expand.write_import_artifacts(result, report_path=report_path)
 
             foods_csv = (output_dir / "foods.csv").read_text(encoding="utf-8")
             nutrients_csv = (output_dir / "food_nutrients.csv").read_text(encoding="utf-8")
