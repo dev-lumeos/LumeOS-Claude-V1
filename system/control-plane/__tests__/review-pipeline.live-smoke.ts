@@ -4,7 +4,7 @@
 // Manuell zu starten — NICHT in CI.
 //
 // Voraussetzungen:
-//   - Spark 3 (Gemma 4) läuft auf 192.168.0.99:8001
+//   - Spark 3 (Nemotron) läuft auf 192.168.0.99:8001
 //   - Spark 4 (GPT-OSS) läuft auf 192.168.0.101:8001
 //   - Beide via Healthcheck erreichbar
 //
@@ -15,7 +15,7 @@
 // Optional ENV:
 //   SPARK_C_ENDPOINT=http://192.168.0.99:8001  (default)
 //   SPARK_D_ENDPOINT=http://192.168.0.101:8001 (default)
-//   SPARK_C_MODEL=google/gemma-4-26B-A4B-it    (default)
+//   SPARK_C_MODEL=nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4 (default)
 //   SPARK_D_MODEL=openai/gpt-oss-120b          (default)
 
 import {
@@ -31,9 +31,9 @@ import {
 import { extractContentOnly } from '../../../services/scheduler-api/src/vllm-adapter'
 
 const SPARK_C_ENDPOINT = process.env.SPARK_C_ENDPOINT ?? 'http://192.168.0.99:8001'
-const SPARK_C_MODEL    = process.env.SPARK_C_MODEL    ?? 'google/gemma-4-26B-A4B-it'
+const SPARK_C_MODEL    = process.env.SPARK_C_MODEL    ?? 'nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4'
 
-// ─── Real Spark 3 (Gemma 4) caller ────────────────────────────────────────────
+// ─── Real Spark 3 (Nemotron) caller ───────────────────────────────────────────
 
 async function callSpark3(
   systemPrompt: string,
@@ -50,7 +50,7 @@ async function callSpark3(
         { role: 'user', content: userMessage },
       ],
       temperature: 0.0,
-      max_tokens: maxTokens,
+      max_tokens: Math.max(maxTokens, 1200),
     }),
   })
 
@@ -169,7 +169,7 @@ async function main() {
 
   console.log('\nHealthchecks:')
   const sparkD = process.env.SPARK_D_ENDPOINT ?? 'http://192.168.0.101:8001'
-  const okC = await ping('Spark 3 (Gemma 4)', SPARK_C_ENDPOINT)
+  const okC = await ping('Spark 3 (Nemotron)', SPARK_C_ENDPOINT)
   const okD = await ping('Spark 4 (GPT-OSS)', sparkD)
 
   if (!okC || !okD) {

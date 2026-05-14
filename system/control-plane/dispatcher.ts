@@ -54,7 +54,7 @@ import { isAutoRetryAllowed, requiresSparkD, inferCategoryFromTask } from './ris
 import { runPreflight } from './scheduler-preflight'
 import { enqueueApproval } from '../approval/approval-queue'
 import { assessMarkdownContent, isMarkdownOutputPath } from '../workorders/cli/markdown-output-quality'
-import { callGemmaReviewer } from '../../services/scheduler-api/src/vllm-adapter'
+import { callGemmaReviewer, callNemotronReviewer } from '../../services/scheduler-api/src/vllm-adapter'
 import {
   buildPromptFromWorkorder,
   loadCodexWorkerConfig,
@@ -72,6 +72,7 @@ const MAX_WORKER_RETRIES = 2
 const MAX_READ_TOOL_CONTINUATIONS = 8
 const MODEL_CALL_TIMEOUT_MS = 30_000
 const MODEL_CALL_MAX_ATTEMPTS = 2
+const NEMOTRON_REVIEW_ROUTE_ID = 'nemotron-review-agent'
 
 // High-Risk-Kategorien: isAutoRetryAllowed() aus risk-categories.ts (Single Source of Truth)
 
@@ -149,6 +150,12 @@ export interface DispatcherDeps {
   // Production injiziert dieses Feld nicht — der ?? Fallback an der Aufruf-
   // Stelle greift auf das hartcodierte callGemmaReviewer.
   callFastReviewer?: (systemPrompt: string, userMessage: string, maxTokens?: number) => Promise<string>
+}
+
+function defaultFastReviewerCall(): (systemPrompt: string, userMessage: string, maxTokens?: number) => Promise<string> {
+  return process.env.LUMEOS_FAST_REVIEWER_ROUTE === NEMOTRON_REVIEW_ROUTE_ID
+    ? callNemotronReviewer
+    : callGemmaReviewer
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -1202,7 +1209,7 @@ export async function dispatchWorkorder(
             files_allowed: wo.scope_files,
           },
           {
-            callFastReviewer: deps.callFastReviewer ?? callGemmaReviewer,
+            callFastReviewer: deps.callFastReviewer ?? defaultFastReviewerCall(),
             audit: pipelineAudit,
             getRewriteCount:      (rId, tier) => state.getRewriteCount(rId, tier),
             incrementRewriteCount: (rId, tier) => state.incrementRewriteCount(rId, tier),

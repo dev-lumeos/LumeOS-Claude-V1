@@ -106,6 +106,7 @@ Verified smoke:
 - `/v1/models` OK
 - Reply-only: `ok -> content.trim() = ok`
 - JSON-only: `content.trim() = {"status":"ok"}`
+- Long-context: `46858` prompt tokens and `160` completion tokens completed in `8.12` seconds with `finish_reason=stop`, `content={"status":"ok","context":"long"}`, and `reasoning_len=694`.
 - Reasoning is separate in the `reasoning` field.
 
 Normal workflow wrapper rule:
@@ -113,17 +114,20 @@ Normal workflow wrapper rule:
 - Trim content.
 - Ignore `reasoning` for normal workflow output.
 - Empty trimmed content is invalid.
+- Reserve enough `max_tokens` for long-context prompts because reasoning can consume output budget.
 
 Observed performance:
 
-- About `58` completion tok/s single request.
-- About `162` aggregate completion tok/s with four parallel requests.
+- About `57.99` completion tok/s in the 500-token single request.
+- About `58.37` completion tok/s in the 1322-token single request.
+- About `162.64` aggregate completion tok/s with four parallel requests.
 
 Routing status:
 
 - Gemma4 on DGX3 is not workflow-ready and must not be used in routing.
+- DGX3 / Nemotron is configured as controlled on-demand `nemotron-review-agent` for explicit workflow tests.
 - DGX3 / Nemotron is not production routing by default.
-- Add a model-runtime route only after an acceptance policy decides its role and output contract.
+- Full workflow tests must use the explicit route toggle and acceptance gates in `docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md`.
 
 ## DGX1 / Spark1 Corrected Runtime
 

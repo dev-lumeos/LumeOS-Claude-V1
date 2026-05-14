@@ -49,7 +49,7 @@ export interface PipelineWorkerResult {
 
 export interface PipelineDeps {
   /**
-   * Spark 3 (Gemma 4) Reviewer Call.
+   * Spark 3 reviewer call.
    * Caller injects this — Pipeline kennt keine konkrete Implementierung.
    * Erwartete Signatur analog callGPTOSSReviewer.
    */

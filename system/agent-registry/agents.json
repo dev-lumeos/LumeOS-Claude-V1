@@ -43,12 +43,22 @@
 
   "fast-reviewer-agent": {
     "type": "reviewer",
-    "description": "Tier 1 Fast Review fuer Review Pipeline. Read-only.",
+    "description": "Legacy Tier 1 Fast Review fuer Review Pipeline. Gemma4 route is retired; do not use for DGX3/Nemotron.",
     "spec_file": ".claude/agents/fast-reviewer-agent.md",
     "always_load_skills": ["gsd-v2"],
     "skill_token_budget": 3000,
     "requires_human_approval": false,
     "phase": "2"
+  },
+
+  "nemotron-review-agent": {
+    "type": "reviewer",
+    "description": "Controlled DGX3/Nemotron reviewer and specialist candidate for scoped workflow tests. Read-only; not orchestrator, not coding worker, not production routing by default.",
+    "spec_file": ".claude/agents/nemotron-review-agent.md",
+    "always_load_skills": ["gsd-v2"],
+    "skill_token_budget": 3000,
+    "requires_human_approval": false,
+    "phase": "2-controlled"
   },
 
   "senior-reviewer-agent": {

@@ -27,7 +27,7 @@ Tier 2 der automatisierten Review-Pipeline — behandelt Eskalationen von fast-r
 
 Details:
 
-- Eskalationen von Spark C (Gemma 4) entgegennehmen
+- Eskalationen von Spark C reviewer routes entgegennehmen
 - Tiefere Analyse: Architektur, Security, Auth-Flows, RLS
 - PASS, REWRITE oder ESCALATE → bei ESCALATE: HUMAN_NEEDED
 - High-risk WOs (auth/rls/migration/security): mandatory blocking — läuft auch wenn Spark C PASS gegeben hat

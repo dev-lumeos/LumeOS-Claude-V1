@@ -26,6 +26,7 @@ DGX3 / Spark3 has been migrated from Gemma4 to Nemotron Omni NVFP4.
 - `/v1/models`: OK
 - Reply-only smoke: `ok -> content.trim() = ok`
 - JSON-only smoke: `content.trim() = {"status":"ok"}`
+- Long-context smoke: `46858` prompt tokens and `160` completion tokens completed in `8.12` seconds with `finish_reason=stop`, `content={"status":"ok","context":"long"}`, and `reasoning_len=694`.
 - Reasoning is emitted separately in the `reasoning` field.
 
 Wrapper rule for normal workflow output:
@@ -33,18 +34,41 @@ Wrapper rule for normal workflow output:
 - Trim `message.content`.
 - Ignore `reasoning` for normal workflow output.
 - Treat empty trimmed content as invalid.
+- Reserve enough `max_tokens` for long-context prompts because reasoning can consume output budget even when normal workflow output ignores the `reasoning` field.
 
 ## Observed Performance
 
-- Single request: about `58` completion tokens/sec.
-- Four parallel requests: about `162` aggregate completion tokens/sec.
+- 500-token single request: about `57.99` completion tokens/sec.
+- 1322-token single request: about `58.37` completion tokens/sec.
+- Four parallel requests: about `162.64` aggregate completion tokens/sec.
 
 ## Routing Status
 
 - Gemma4 on DGX3 is not workflow-ready and must not be used in routing.
-- DGX3 / Nemotron is verified as a runtime, but is not production routing by default.
-- Add a model-runtime route only after an acceptance policy decides the exact role and required output contract.
+- DGX3 / Nemotron is integrated as `nemotron-review-agent`, a controlled on-demand reviewer/specialist candidate for explicit workflow tests.
+- It is not production routing by default.
+- Use it only after the acceptance gates pass for the exact run.
 - DGX1 remains the orchestrator runtime.
 - DGX2 remains the coding/docs worker runtime.
 - MiniMax remains lab-only.
 
+## Controlled Reviewer Acceptance Policy
+
+Before a governed workflow may route a review step through `nemotron-review-agent`, the run owner must prove:
+
+- `/v1/models` returns OK for `http://192.168.0.99:8001`.
+- A tiny completion probe returns non-empty `content.trim()`.
+- A JSON-only completion probe returns parseable JSON after `content.trim()`.
+- The workflow wrapper ignores `reasoning` and `reasoning_content` for normal output.
+- Empty trimmed content is treated as invalid / `OUTPUT_INCOMPLETE`.
+- The batch is harmless and governed, such as local UI/docs/read-only Nutrition work.
+
+Controlled workflow route:
+
+```powershell
+$env:LUMEOS_FAST_REVIEWER_ROUTE='nemotron-review-agent'
+cmd.exe /c node node_modules\tsx\dist\cli.mjs system\workorders\cli\run-batch-operator.ts system\workorders\nutrition\batches\BATCH-NUTRITION-P1-005-LOCAL-DETAIL-DEEPLINK.md --continue --project lumeos --orchestration-mode spark1_orchestrated
+Remove-Item Env:\LUMEOS_FAST_REVIEWER_ROUTE
+```
+
+This route tests: Spark1 orchestrator -> assigned worker -> DGX3/Nemotron review step -> checks -> dossier. It does not authorize DB, Supabase, migration, BLS, seed, DEV, LIVE, or production routing work.

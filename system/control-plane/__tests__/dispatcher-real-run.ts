@@ -19,7 +19,7 @@
 //   npx tsx system/control-plane/__tests__/dispatcher-real-run.ts
 //
 // Voraussetzungen:
-//   - Spark 3 (Gemma 4)  läuft auf 192.168.0.99:8001
+//   - Spark 3 reviewer endpoint runs on 192.168.0.99:8001
 //   - Spark 4 (GPT-OSS)  läuft auf 192.168.0.101:8001
 //
 // Output:
@@ -216,7 +216,7 @@ async function main() {
   console.log('\nHealthchecks:')
   const sparkC = process.env.SPARK_C_ENDPOINT ?? 'http://192.168.0.99:8001'
   const sparkD = process.env.SPARK_D_ENDPOINT ?? 'http://192.168.0.101:8001'
-  const okC = await ping('Spark 3 (Gemma 4)',  sparkC)
+  const okC = await ping('Spark 3 reviewer',  sparkC)
   const okD = await ping('Spark 4 (GPT-OSS)',  sparkD)
   if (!okC || !okD) {
     console.log('\n✗ Healthcheck failed — Pipeline-Reviewer unreachable.')

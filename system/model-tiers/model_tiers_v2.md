@@ -53,7 +53,8 @@ top_k:       1
 - Reasoning appears separately in the `reasoning` field.
 - Normal workflow wrappers must trim `choices[].message.content`, ignore `reasoning`, and treat empty content as invalid.
 - Gemma4 on DGX3 is retired/not workflow-ready and must not be used in routing.
-- Nemotron is not production routing by default; add a route only after acceptance policy decides the role.
+- Nemotron is configured as controlled on-demand `nemotron-review-agent` for explicit workflow tests only. It is not production routing by default.
+- Acceptance policy: `/v1/models` OK, completion probe OK, JSON probe OK after `content.trim()`, content non-empty, reasoning ignored.
 
 ### Spark D / Lab Review
 - Productive senior review remains Codex/GPT-5.5 unless a future governance decision changes routing.

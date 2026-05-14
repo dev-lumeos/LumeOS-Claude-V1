@@ -316,6 +316,53 @@ async function defaultCallModel(routing) {
     assert.equal(finding(result, 'model_runtime.engine_runtime_crash'), undefined)
   })
 
+  it('Nemotron reviewer completion probe asks for JSON content with enough output budget', async () => {
+    writeJson('system/agent-registry/agents.json', {
+      'nemotron-review-agent': {
+        type: 'reviewer',
+        spec_file: '.claude/agents/nemotron-review-agent.md',
+        requires_human_approval: false,
+      },
+    })
+    writeJson('system/agent-registry/model_routing.json', {
+      'nemotron-review-agent': {
+        default: {
+          node: 'spark-c',
+          runtime_type: 'vllm',
+          endpoint: 'http://192.168.0.99:8001',
+          model: 'nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4',
+          temperature: 0,
+          optional_runtime: true,
+          runtime_required: 'on_demand',
+        },
+      },
+    })
+    write('.claude/agents/nemotron-review-agent.md', '# nemotron-review-agent\n\nReturn valid JSON only.\n')
+    let requestBody: any
+
+    const result = await runModelRuntimeCheck({
+      repoRoot: tmpDir,
+      agent: 'nemotron-review-agent',
+      checkEndpoints: true,
+      probeMode: 'completion',
+      fetchImpl: async (_url, init) => {
+        requestBody = JSON.parse(String(init?.body ?? '{}'))
+        return new Response(JSON.stringify({
+          choices: [{ message: { content: '{"status":"ok"}', reasoning: 'ignored' } }],
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      },
+    })
+
+    assert.equal(result.exitCode, 0)
+    assert.equal(requestBody.model, 'nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4')
+    assert.equal(requestBody.max_tokens, 64)
+    assert.match(requestBody.messages[0].content, /JSON object/)
+    assert.equal(result.routes.find(route => route.agent === 'nemotron-review-agent')?.endpoint_status, 'ok')
+  })
+
   it('completion probe classifies vLLM engine crashes as runtime blockers', async () => {
     const result = await runModelRuntimeCheck({
       repoRoot: tmpDir,

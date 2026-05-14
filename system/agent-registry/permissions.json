@@ -102,6 +102,14 @@
     "mcp": { "filesystem": true, "serena": true, "supabase": false, "context7": true }
   },
 
+  "nemotron-review-agent": {
+    "read": ["$WORKORDER.scope_files", "$WORKORDER.acceptance_files", "$RUN.diff", "$RUN.logs"],
+    "write": [],
+    "bash": [],
+    "limits": { "env_access": false, "dependency_changes": false, "migration_changes": false, "read_only": true, "production_routing": false },
+    "mcp": { "filesystem": false, "serena": false, "supabase": false, "context7": false }
+  },
+
   "mealcam-agent": {
     "read": [],
     "write": [],

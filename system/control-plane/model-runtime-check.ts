@@ -201,6 +201,7 @@ const LATEST_FILE = 'latest.json'
 const MAINTENANCE_FILE = 'system/control-plane/runtime-maintenance.json'
 const DEFAULT_PROBE_MODE: 'models' | 'completion' = 'models'
 const COMPLETION_PROBE_MAX_TOKENS = 8
+const NEMOTRON_COMPLETION_PROBE_MAX_TOKENS = 64
 
 function readText(repoRoot: string, relativePath: string): string {
   const fullPath = path.join(repoRoot, relativePath)
@@ -324,6 +325,11 @@ function agentSpecRequiresJson(spec: string): boolean {
 
 function isQwen36(model: string | undefined): boolean {
   return !!model && /qwen3\.6|qwen3-?6/i.test(model)
+}
+
+function isNemotronReviewerRoute(route: ModelRuntimeRoute): boolean {
+  return route.agent === 'nemotron-review-agent' ||
+    /Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4/i.test(route.model ?? '')
 }
 
 function isExternalNonEndpointNode(node: string | undefined): boolean {
@@ -494,11 +500,17 @@ function completionProbeRequestBody(route: ModelRuntimeRoute): Record<string, un
   const requestBody: Record<string, unknown> = {
     model: route.model,
     temperature: 0,
-    max_tokens: COMPLETION_PROBE_MAX_TOKENS,
+    max_tokens: isNemotronReviewerRoute(route) ? NEMOTRON_COMPLETION_PROBE_MAX_TOKENS : COMPLETION_PROBE_MAX_TOKENS,
     messages: [
       { role: 'system', content: 'Return exactly OK.' },
       { role: 'user', content: 'health-check' },
     ],
+  }
+  if (isNemotronReviewerRoute(route)) {
+    requestBody.messages = [
+      { role: 'system', content: 'Return only this JSON object in message.content: {"status":"ok"}' },
+      { role: 'user', content: 'health-check' },
+    ]
   }
   if (isQwen36(route.model)) {
     requestBody.enable_thinking = false

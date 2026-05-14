@@ -123,6 +123,42 @@ export async function callGemmaReviewer(
   return content
 }
 
+export async function callNemotronReviewer(
+  systemPrompt: string,
+  userMessage: string,
+  maxTokens = 1200,
+): Promise<string> {
+  const endpoint = process.env.NEMOTRON_REVIEW_ENDPOINT ?? 'http://192.168.0.99:8001'
+  const model = process.env.NEMOTRON_REVIEW_MODEL ?? 'nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4'
+
+  const response = await fetch(`${endpoint}/v1/chat/completions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+      temperature: 0.0,
+      max_tokens: Math.max(maxTokens, 1200),
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Nemotron Reviewer API Error: ${response.status} ${response.statusText}`)
+  }
+
+  const json = (await response.json()) as any
+  const content = extractContentOnly(json)
+
+  if (!content) {
+    throw new Error('NEMOTRON_EMPTY_CONTENT')
+  }
+
+  return content
+}
+
 // ─── GPT-OSS Senior Reviewer callModel (Spark 4) ──────────────────────────────
 // Analog zu callQwen36Orchestrator, aber für Spark 4 (192.168.0.101:8001).
 // Reasoning-Output wird via extractContentOnly strikt verworfen.

@@ -3,7 +3,7 @@
 **Single Source of Truth** für Review-State-Machine, Routing und Reasoning-Filter.
 Stand: April 2026 — Phase 2 (alle 4 Sparks live).
 
-Current runtime note, 2026-05-14: DGX3 / Spark3 has migrated from Gemma4 to Nemotron Omni NVFP4. Gemma4 on DGX3 is not workflow-ready and must not be used in routing. DGX3 / Nemotron is a verified specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator and not production routing by default. Add a model-runtime route only after acceptance policy decides the exact role and output contract.
+Current runtime note, 2026-05-14: DGX3 / Spark3 has migrated from Gemma4 to Nemotron Omni NVFP4. Gemma4 on DGX3 is not workflow-ready and must not be used in routing. DGX3 / Nemotron is configured as controlled on-demand `nemotron-review-agent` for explicit workflow tests only. It is a reviewer / specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator, not coding worker, and not production routing by default.
 
 Diese Regeln gelten für die Review-Pipeline (Spark 3 → Spark 4 → Claude).
 Sie sind **orthogonal** zu den bestehenden Governance-Regeln in `governance-validator.ts`,

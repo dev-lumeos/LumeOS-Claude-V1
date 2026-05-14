@@ -110,7 +110,9 @@ Current correction: the Gemma4 values above are historical/retired for workflow 
 - Wrapper rule: trim content, ignore separate `reasoning`, empty content invalid
 - Observed throughput: about `58` completion tok/s single and about `162` aggregate completion tok/s at four parallel requests
 
-Role: specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator. Gemma4 on DGX3 is not workflow-ready and must not be used in routing. Add a model-runtime route for Nemotron only after acceptance policy decides the exact role and output contract.
+Role: controlled on-demand `nemotron-review-agent` for explicit workflow tests, plus specialist / multimodal / visual-review / OCR / FoodCam candidate. It is not orchestrator, not coding worker, and not production routing by default. Gemma4 on DGX3 is not workflow-ready and must not be used in routing.
+
+Acceptance policy: `/v1/models` OK, completion probe OK, JSON probe OK after `content.trim()`, non-empty content, reasoning ignored. Long-context prompts need enough `max_tokens` because reasoning can consume output budget.
 
 ---
 

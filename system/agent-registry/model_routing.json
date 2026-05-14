@@ -4,7 +4,7 @@
   "_hardware": {
     "spark1_port8001": "192.168.0.128 — Qwen3.6-35B-A3B FP8, gpu_util=0.70 — Orchestrator + WO-Validator (~50 tok/s single, ~116 tok/s @ 4-par)",
     "spark2_port8001": "192.168.0.188 — Qwen3-Coder-Next FP8, gpu_util=0.88 — Coding Worker (~47 tok/s)",
-    "spark3_port8001": "192.168.0.99  — google/gemma-4-26B-A4B-it FP8 instanttensor, gpu_util=0.70 — Fast Reviewer Tier 1 (~35 tok/s single, ~180 tok/s @ 8-par)",
+    "spark3_port8001": "192.168.0.99 - nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4 NVFP4, max_model_len=65536 - controlled reviewer/specialist candidate (~58 tok/s single, ~162 tok/s @ 4-par); Gemma4 retired",
     "spark4_port8001": "192.168.0.101 - openai/gpt-oss-120b MXFP4 CUTLASS - disabled for productive governance; future DGX4/DGX5 MiniMax lab context"
   },
 
@@ -192,7 +192,9 @@
       "temperature": 0.0,
       "seed": 42,
       "max_context": 65536,
-      "note": "Spark 3 — Fast Quality Layer, see RULES.md"
+      "optional_runtime": true,
+      "runtime_required": "retired",
+      "note": "Retired DGX3/Gemma4 fast-review route. Do not use for workflow routing; use nemotron-review-agent only for scoped tests."
     },
     "escalation": {
       "node": "codex-cli",
@@ -201,6 +203,33 @@
       "model": "gpt-5.5",
       "trigger": "escalate_or_low_confidence_or_invalid_json_or_rewrite_limit",
       "note": "Forwards to senior-reviewer-agent on Codex/GPT-5.5. Spark D is disabled from productive governance routing."
+    }
+  },
+
+  "nemotron-review-agent": {
+    "default": {
+      "node": "spark-c",
+      "port": 8001,
+      "runtime_type": "vllm",
+      "healthcheck": "http",
+      "model": "nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4",
+      "endpoint": "http://192.168.0.99:8001",
+      "temperature": 0.0,
+      "seed": 42,
+      "max_context": 65536,
+      "max_tokens": 1200,
+      "optional_runtime": true,
+      "runtime_required": "on_demand",
+      "controlled_route": true,
+      "production_routing": false,
+      "acceptance_required": [
+        "models_probe_ok",
+        "completion_probe_ok",
+        "json_probe_ok_after_content_trim",
+        "content_not_empty",
+        "reasoning_ignored"
+      ],
+      "note": "Controlled DGX3/Nemotron reviewer/specialist candidate for explicit workflow tests only. Not orchestrator, not coding worker, not production routing by default."
     }
   },
 

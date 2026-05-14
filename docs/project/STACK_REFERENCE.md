@@ -13,7 +13,8 @@ The current DGX1 / Spark1 runtime source of truth is `docs/project/runtime/DGX1_
 - The previous startup crash was caused by `block_size 2096 > max_num_batched_tokens 2048`; the fix is `--max-num-batched-tokens 8192`.
 - Spark1 handoff is proven by commit `a0b3a20`: `spark1_orchestrated` doctor/dry-run uses Spark1, validates worker assignments, and does not fall back to Codex as orchestrator.
 - DGX3 / Spark3 has migrated from Gemma4 to Nemotron Omni NVFP4; see `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`.
-- DGX3 / Nemotron is verified as a specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator and not production routing by default.
+- DGX3 / Nemotron is configured as controlled on-demand `nemotron-review-agent` for explicit workflow tests only; see `docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md`.
+- DGX3 / Nemotron is verified as a reviewer / specialist / multimodal / visual-review / OCR / FoodCam candidate, not orchestrator, not coding worker, and not production routing by default.
 - MiniMax remains lab-only.
 - Codex remains bootstrap, senior worker/reviewer, and fallback, not the default orchestrator when Spark1 mode is requested.
 
@@ -49,7 +50,7 @@ The current DGX1 / Spark1 runtime source of truth is `docs/project/runtime/DGX1_
 |---|---|---|---|
 | Spark 1 (Qwen3.6) | NEIN | Aus (`enable_thinking: false` Pflicht) | Reines Output-Parsing |
 | Spark 2 (Coder-Next) | JA | — | `--tool-call-parser qwen3_coder` |
-| Spark 3 (Nemotron Omni) | TBD by acceptance policy | Separate `reasoning` field | Trim content, ignore reasoning for normal workflow output, empty content is invalid |
+| Spark 3 (Nemotron Omni) | Controlled `nemotron-review-agent` only | Separate `reasoning` field | Trim content, ignore reasoning for normal workflow output, empty content is invalid; long-context prompts need enough `max_tokens` |
 | Spark 4 (GPT-OSS) | JA | Aktiv aber gefiltert | `--tool-call-parser openai --reasoning-parser openai_gptoss` |
 
 ---
@@ -163,6 +164,7 @@ cd /home/admin/spark-vllm-docker
 | micro-executor | spark-b | qwen3-coder-next-fp8 | TypeScript Patches |
 | test-agent | spark-b | qwen3-coder-next-fp8 | Tests |
 | fast-reviewer-agent | spark-c | retired Gemma4 route | Do not use until routing is redesigned for Nemotron |
+| nemotron-review-agent | spark-c | nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4 | Controlled reviewer/specialist candidate for explicit workflow tests only |
 | senior-reviewer-agent | spark-d | openai/gpt-oss-120b | Pipeline-Tier 2 (Senior) |
 | senior-coding-agent | claude_code | claude-opus-4-5 / claude-sonnet | Escalation only (selten) |
 | mealcam-agent | rtx5090 | qwen3-vl-30b-a3b-fp8 | Vision (geplant) |
