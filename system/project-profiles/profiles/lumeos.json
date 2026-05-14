@@ -33,7 +33,8 @@
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-DETAIL-DEEPLINK.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-PIN-COMPARE.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md",
-      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-RDA-FILTER.md"
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-RDA-FILTER.md",
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-FOUNDATION.md"
     ]
   },
   "forbidden_paths": [

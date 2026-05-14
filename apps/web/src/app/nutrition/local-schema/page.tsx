@@ -21,6 +21,10 @@ export default async function LocalNutritionSchemaPage() {
   try {
     const snapshot = await getLocalNutritionSchemaDebug()
     const hasLocalSeedRows = snapshot.table_exists && snapshot.row_count === 138
+    const foodFoundation = snapshot.food_foundation
+    const foodFoundationReady = foodFoundation.foods_table_exists
+      && foodFoundation.food_nutrients_table_exists
+      && foodFoundation.food_nutrients_nutrient_fk_exists
 
     return (
       <main className="min-h-screen bg-slate-950 text-slate-100">
@@ -66,6 +70,50 @@ export default async function LocalNutritionSchemaPage() {
               <div className="mt-3 text-3xl font-semibold text-slate-100">{snapshot.columns.length}</div>
               <div className="mt-2 text-xs text-slate-400">Expected target shape: 16 columns, including Thai i18n columns.</div>
             </div>
+          </section>
+
+          <section className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-5">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold">Food Foundation</h2>
+                <p className="mt-1 text-xs text-slate-400">
+                  Local schema-only status for future food data. This view does not provide food search, food UI,
+                  BLS import, or seed execution.
+                </p>
+              </div>
+              <StatusBadge tone={foodFoundationReady ? 'pass' : 'attention'} label={foodFoundationReady ? 'Schema ready' : 'Schema pending'} />
+            </div>
+            <div className="grid gap-3 md:grid-cols-5">
+              <div className="rounded-md border border-slate-800 bg-slate-950/70 p-3">
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">foods</div>
+                <div className="mt-2">
+                  <StatusBadge tone={foodFoundation.foods_table_exists ? 'pass' : 'attention'} label={foodFoundation.foods_table_exists ? 'Present' : 'Missing'} />
+                </div>
+              </div>
+              <div className="rounded-md border border-slate-800 bg-slate-950/70 p-3">
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">food_nutrients</div>
+                <div className="mt-2">
+                  <StatusBadge tone={foodFoundation.food_nutrients_table_exists ? 'pass' : 'attention'} label={foodFoundation.food_nutrients_table_exists ? 'Present' : 'Missing'} />
+                </div>
+              </div>
+              <div className="rounded-md border border-slate-800 bg-slate-950/70 p-3">
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">food rows</div>
+                <div className="mt-2 font-mono text-2xl text-slate-100">{foodFoundation.foods_row_count}</div>
+              </div>
+              <div className="rounded-md border border-slate-800 bg-slate-950/70 p-3">
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">nutrient rows</div>
+                <div className="mt-2 font-mono text-2xl text-slate-100">{foodFoundation.food_nutrients_row_count}</div>
+              </div>
+              <div className="rounded-md border border-slate-800 bg-slate-950/70 p-3">
+                <div className="text-xs uppercase tracking-[0.16em] text-slate-500">nutrient FK</div>
+                <div className="mt-2">
+                  <StatusBadge tone={foodFoundation.food_nutrients_nutrient_fk_exists ? 'pass' : 'blocked'} label={foodFoundation.food_nutrients_nutrient_fk_exists ? 'Present' : 'Missing'} />
+                </div>
+              </div>
+            </div>
+            <p className="mt-4 text-xs leading-5 text-slate-400">
+              Row counts are expected to remain zero until a separate governed seed/import boundary is approved.
+            </p>
           </section>
 
           <section className="mt-8 grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">

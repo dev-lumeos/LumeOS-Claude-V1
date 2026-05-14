@@ -55,6 +55,13 @@ describe('parseNutritionSchemaDebug', () => {
         rda_female_populated: 26,
         rda_unit_populated: 26,
       },
+      food_foundation: {
+        foods_table_exists: true,
+        food_nutrients_table_exists: true,
+        foods_row_count: 0,
+        food_nutrients_row_count: 0,
+        food_nutrients_nutrient_fk_exists: true,
+      },
     }))
 
     assert.equal(snapshot.environment, 'local')
@@ -79,6 +86,11 @@ describe('parseNutritionSchemaDebug', () => {
     assert.equal(snapshot.nutrient_preview[0]?.rda_female, '10')
     assert.equal(snapshot.nutrient_preview[0]?.rda_unit, 'g')
     assert.equal(snapshot.rda_summary.rda_male_populated, 26)
+    assert.equal(snapshot.food_foundation.foods_table_exists, true)
+    assert.equal(snapshot.food_foundation.food_nutrients_table_exists, true)
+    assert.equal(snapshot.food_foundation.foods_row_count, 0)
+    assert.equal(snapshot.food_foundation.food_nutrients_row_count, 0)
+    assert.equal(snapshot.food_foundation.food_nutrients_nutrient_fk_exists, true)
   })
 
   it('normalizes missing arrays to empty lists', () => {
@@ -97,6 +109,13 @@ describe('parseNutritionSchemaDebug', () => {
       rda_male_populated: 0,
       rda_female_populated: 0,
       rda_unit_populated: 0,
+    })
+    assert.deepEqual(snapshot.food_foundation, {
+      foods_table_exists: false,
+      food_nutrients_table_exists: false,
+      foods_row_count: 0,
+      food_nutrients_row_count: 0,
+      food_nutrients_nutrient_fk_exists: false,
     })
   })
 

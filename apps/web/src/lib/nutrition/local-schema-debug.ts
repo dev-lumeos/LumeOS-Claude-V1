@@ -52,6 +52,14 @@ export type NutritionRdaSummary = {
   rda_unit_populated: number
 }
 
+export type NutritionFoodFoundationStatus = {
+  foods_table_exists: boolean
+  food_nutrients_table_exists: boolean
+  foods_row_count: number
+  food_nutrients_row_count: number
+  food_nutrients_nutrient_fk_exists: boolean
+}
+
 export type NutritionSchemaDebugSnapshot = {
   checkedAt: string
   environment: 'local'
@@ -65,6 +73,7 @@ export type NutritionSchemaDebugSnapshot = {
   group_counts: NutritionGroupCount[]
   nutrient_preview: NutritionNutrientPreviewRow[]
   rda_summary: NutritionRdaSummary
+  food_foundation: NutritionFoodFoundationStatus
 }
 
 export class LocalSchemaDebugError extends Error {
@@ -218,6 +227,44 @@ rda_summary_json AS (
     'rda_unit_populated', COUNT(*) FILTER (WHERE rda_unit IS NOT NULL AND rda_unit <> '')::int
   ) AS value
   FROM nutrition.nutrient_defs
+),
+food_foundation_json AS (
+  SELECT json_build_object(
+    'foods_table_exists', to_regclass('nutrition.foods') IS NOT NULL,
+    'food_nutrients_table_exists', to_regclass('nutrition.food_nutrients') IS NOT NULL,
+    'foods_row_count', CASE
+      WHEN to_regclass('nutrition.foods') IS NULL THEN 0
+      ELSE (SELECT GREATEST(c.reltuples::int, 0) FROM pg_class c WHERE c.oid = to_regclass('nutrition.foods'))
+    END,
+    'food_nutrients_row_count', CASE
+      WHEN to_regclass('nutrition.food_nutrients') IS NULL THEN 0
+      ELSE (SELECT GREATEST(c.reltuples::int, 0) FROM pg_class c WHERE c.oid = to_regclass('nutrition.food_nutrients'))
+    END,
+    'food_nutrients_nutrient_fk_exists', EXISTS (
+      SELECT 1
+      FROM pg_constraint c
+      JOIN pg_class source_table ON source_table.oid = c.conrelid
+      JOIN pg_namespace source_ns ON source_ns.oid = source_table.relnamespace
+      JOIN pg_class target_table ON target_table.oid = c.confrelid
+      JOIN pg_namespace target_ns ON target_ns.oid = target_table.relnamespace
+      JOIN unnest(c.conkey) WITH ORDINALITY source_key(attnum, ordinality) ON true
+      JOIN pg_attribute source_attribute
+        ON source_attribute.attrelid = source_table.oid
+       AND source_attribute.attnum = source_key.attnum
+      JOIN unnest(c.confkey) WITH ORDINALITY target_key(attnum, ordinality)
+        ON target_key.ordinality = source_key.ordinality
+      JOIN pg_attribute target_attribute
+        ON target_attribute.attrelid = target_table.oid
+       AND target_attribute.attnum = target_key.attnum
+      WHERE c.contype = 'f'
+        AND source_ns.nspname = 'nutrition'
+        AND source_table.relname = 'food_nutrients'
+        AND source_attribute.attname = 'nutrient_code'
+        AND target_ns.nspname = 'nutrition'
+        AND target_table.relname = 'nutrient_defs'
+        AND target_attribute.attname = 'code'
+    )
+  ) AS value
 )
 SELECT json_build_object(
   'schema_exists', (SELECT schema_exists FROM table_state),
@@ -228,7 +275,8 @@ SELECT json_build_object(
   'constraints', (SELECT value FROM constraints_json),
   'group_counts', (SELECT value FROM group_counts_json),
   'nutrient_preview', (SELECT value FROM nutrient_preview_json),
-  'rda_summary', (SELECT value FROM rda_summary_json)
+  'rda_summary', (SELECT value FROM rda_summary_json),
+  'food_foundation', (SELECT value FROM food_foundation_json)
 )::text;
 `.trim()
 
@@ -328,6 +376,26 @@ function normalizeRdaSummary(value: unknown): NutritionRdaSummary {
   }
 }
 
+function normalizeFoodFoundationStatus(value: unknown): NutritionFoodFoundationStatus {
+  if (!value || typeof value !== 'object') {
+    return {
+      foods_table_exists: false,
+      food_nutrients_table_exists: false,
+      foods_row_count: 0,
+      food_nutrients_row_count: 0,
+      food_nutrients_nutrient_fk_exists: false,
+    }
+  }
+  const record = value as Record<string, unknown>
+  return {
+    foods_table_exists: normalizeBoolean(record.foods_table_exists),
+    food_nutrients_table_exists: normalizeBoolean(record.food_nutrients_table_exists),
+    foods_row_count: normalizeNumber(record.foods_row_count),
+    food_nutrients_row_count: normalizeNumber(record.food_nutrients_row_count),
+    food_nutrients_nutrient_fk_exists: normalizeBoolean(record.food_nutrients_nutrient_fk_exists),
+  }
+}
+
 export function parseNutritionSchemaDebug(stdout: string): NutritionSchemaDebugSnapshot {
   const raw = stdout.trim()
   if (!raw) {
@@ -362,6 +430,7 @@ export function parseNutritionSchemaDebug(stdout: string): NutritionSchemaDebugS
     group_counts: normalizeGroupCounts(record.group_counts),
     nutrient_preview: normalizeNutrientPreview(record.nutrient_preview),
     rda_summary: normalizeRdaSummary(record.rda_summary),
+    food_foundation: normalizeFoodFoundationStatus(record.food_foundation),
   }
 }
 
