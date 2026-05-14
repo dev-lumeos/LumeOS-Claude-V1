@@ -101,6 +101,9 @@ function cleanup(): void {
 
 beforeEach(setup)
 afterEach(cleanup)
+afterEach(() => {
+  delete process.env.LUMEOS_FAST_REVIEWER_ROUTE
+})
 
 function makeWorkorder(overrides: Partial<Workorder> & Record<string, unknown> = {}): Workorder & Record<string, unknown> {
   return {
@@ -440,6 +443,60 @@ describe('dispatcher codex worker integration', () => {
 
     assert.equal(result.status, 'failed')
     assert.match(result.error ?? '', /CODEX_WORKER_FIX_REQUIRED/)
+  })
+
+  it('runs configured reviewer handoff for Codex worker outputs before completion', async () => {
+    process.env.LUMEOS_FAST_REVIEWER_ROUTE = 'nemotron-review-agent'
+    let reviewCalls = 0
+    const result = await dispatchWorkorder(makeWorkorder(), {
+      callModel: async () => { throw new Error('not expected') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      callFastReviewer: async () => {
+        reviewCalls++
+        return JSON.stringify({
+          status: 'PASS',
+          risk: 'LOW',
+          confidence: 0.99,
+          violations: [],
+          recommendations: [],
+          summary: 'review ok',
+          requires_claude: false,
+        })
+      },
+      runCodexWorker: async () => {
+        write('docs/project/test.md', '# Reviewed output\n\nCodex worker produced scoped content.')
+        return {
+          ...doneResult('FIX_REQUIRED'),
+          timedOut: true,
+          stderr: 'Codex worker timed out after output write.',
+        }
+      },
+    })
+
+    assert.equal(result.status, 'completed')
+    assert.equal(reviewCalls, 1)
+    const pipelineAudit = fs.readFileSync(path.join(tmpDir, 'system/state/pipeline-audit.jsonl'), 'utf8')
+    assert.match(pipelineAudit, /"event":"review_started"/)
+    assert.match(pipelineAudit, /"tier":"spark-c"/)
+    assert.match(pipelineAudit, /"run_id":"RUN-/)
+  })
+
+  it('blocks Codex worker completion when configured reviewer output is invalid', async () => {
+    process.env.LUMEOS_FAST_REVIEWER_ROUTE = 'nemotron-review-agent'
+    const result = await dispatchWorkorder(makeWorkorder(), {
+      callModel: async () => { throw new Error('not expected') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      callFastReviewer: async () => '',
+      runCodexWorker: async () => {
+        write('docs/project/test.md', '# Reviewed output\n\nCodex worker produced scoped content.')
+        return doneResult('DONE')
+      },
+    })
+
+    assert.equal(result.status, 'blocked')
+    assert.match(result.error ?? '', /REVIEW_BLOCKED/)
   })
 
   it('maps NEEDS_TOM_APPROVAL to paused awaiting approval result', async () => {

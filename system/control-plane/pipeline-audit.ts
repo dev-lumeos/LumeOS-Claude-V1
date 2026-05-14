@@ -34,6 +34,7 @@ export interface PipelineAuditEvent {
   event:        PipelineAuditEventName
   tier:         PipelineAuditTier
   wo_id:        string
+  run_id?:      string
   ts?:          string  // ISO timestamp, auto-set on write
   reason?:      string
   /**

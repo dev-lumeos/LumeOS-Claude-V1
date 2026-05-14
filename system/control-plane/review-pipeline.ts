@@ -83,6 +83,12 @@ export interface PipelineDeps {
    * Siehe pipeline-metrics.ts für File- und Memory-Writer.
    */
   writeMetric?: (event: PipelineMetricEvent) => void | Promise<void>
+
+  /**
+   * When true, the configured fast reviewer is mandatory. Invalid/unavailable
+   * fast-reviewer output blocks instead of silently escalating to Spark D.
+   */
+  requireFastReviewerPass?: boolean
 }
 
 export type PipelineResult =
@@ -189,7 +195,7 @@ async function runSingleTier(
   const callReviewer =
     tier === 'spark-c' ? deps.callFastReviewer : callGPTOSSReviewer
 
-  await deps.audit?.({ event: 'review_started', tier, wo_id: wo.wo_id })
+  await deps.audit?.({ event: 'review_started', tier, wo_id: wo.wo_id, run_id: runId })
 
   const tierStart = Date.now()
 
@@ -228,6 +234,7 @@ async function runSingleTier(
         event: 'review_rewrite_loop',
         tier,
         wo_id: wo.wo_id,
+        run_id: runId,
         loop_count: persistedCount,
       })
       return emitMetric({ failureReason: 'rewrite_limit_exceeded' }, 'rewrite_limit_exceeded', true)
@@ -260,6 +267,7 @@ async function runSingleTier(
       event: 'review_completed',
       tier,
       wo_id: wo.wo_id,
+      run_id: runId,
       status: review.status,
       risk: review.risk,
       confidence: review.confidence,
@@ -294,6 +302,7 @@ async function runSingleTier(
         event: 'review_rewrite_loop',
         tier,
         wo_id: wo.wo_id,
+        run_id: runId,
         loop_count: effectiveCount,
       })
 
@@ -371,8 +380,16 @@ export async function runReviewPipeline(
       event: 'review_escalated',
       tier: 'spark-c',
       wo_id: wo.wo_id,
+      run_id: runId,
       reason: spark3Outcome.failureReason ?? 'unknown',
     })
+    if (deps.requireFastReviewerPass) {
+      return {
+        kind: 'human_needed',
+        reason: `fast reviewer required but did not pass: ${spark3Outcome.failureReason ?? 'unknown'}`,
+        lastTier: 'spark-c',
+      }
+    }
   } else {
     // High-Risk: Spark 3 wird non-blocking geloggt
     // Fallbacks für invalid_output Fälle — sonst hätten wir status: undefined im JSONL
@@ -380,6 +397,7 @@ export async function runReviewPipeline(
       event: 'review_completed',
       tier: 'spark-c-non-blocking',
       wo_id: wo.wo_id,
+      run_id: runId,
       status: spark3Outcome.review?.status ?? 'INVALID_OUTPUT',
       risk: spark3Outcome.review?.risk ?? 'UNKNOWN',
       confidence: spark3Outcome.review?.confidence ?? 0,
@@ -426,6 +444,7 @@ export async function runReviewPipeline(
     event: 'review_escalated',
     tier: 'spark-d',
     wo_id: wo.wo_id,
+    run_id: runId,
     reason,
   })
 
@@ -433,6 +452,7 @@ export async function runReviewPipeline(
     event: 'human_review_required',
     tier: 'claude',
     wo_id: wo.wo_id,
+    run_id: runId,
     reason: 'spark-d escalated, Claude not auto-invoked in V1',
   })
 

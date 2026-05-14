@@ -158,6 +158,11 @@ function defaultFastReviewerCall(): (systemPrompt: string, userMessage: string, 
     : callGemmaReviewer
 }
 
+function fastReviewerRouteConfigured(): boolean {
+  return typeof process.env.LUMEOS_FAST_REVIEWER_ROUTE === 'string'
+    && process.env.LUMEOS_FAST_REVIEWER_ROUTE.trim().length > 0
+}
+
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const AGENTS_PATH    = path.resolve(process.cwd(), 'system/agent-registry/agents.json')
@@ -443,6 +448,92 @@ function collectCodexWorkerSourceRefs(wo: Workorder): string[] {
   return collectStringLeaves((wo as Workorder & { source_refs?: unknown }).source_refs)
 }
 
+function expectedOutputContents(wo: Workorder): { path: string; content: string }[] {
+  const paths = [...(wo.expected_outputs ?? []), ...(wo.acceptance_files ?? [])]
+  const uniquePaths = [...new Set(paths)]
+  return uniquePaths.flatMap(outputPath => {
+    const normalized = outputPath.replace(/\\/g, '/')
+    const absolute = path.resolve(process.cwd(), normalized)
+    if (!fs.existsSync(absolute) || !fs.statSync(absolute).isFile()) return []
+    return [{ path: normalized, content: fs.readFileSync(absolute, 'utf8') }]
+  })
+}
+
+async function runConfiguredPostWorkerReview(
+  wo: Workorder,
+  runId: string,
+  orchestrationMode: ReturnType<typeof state.getOrchestrationMode>,
+  deps: DispatcherDeps,
+): Promise<{ ok: true } | { ok: false; status: 'failed' | 'blocked'; reason: string }> {
+  if (!fastReviewerRouteConfigured()) return { ok: true }
+
+  const outputs = expectedOutputContents(wo)
+  if (outputs.length === 0) {
+    return {
+      ok: false,
+      status: 'failed',
+      reason: 'REVIEW_BLOCKED: configured reviewer route requires existing expected output content',
+    }
+  }
+
+  const pipelineAudit = createFileAuditWriter()
+  audit.auditReviewPipelineStarted({
+    run_id: runId,
+    workorder_id: wo.workorder_id,
+    agent_id: wo.agent_id,
+    orchestration_mode: orchestrationMode,
+  })
+
+  const pipelineResult = await runReviewPipeline(
+    {
+      wo_id: wo.workorder_id,
+      run_id: runId,
+      output: outputs.map(item => `# ${item.path}\n\n${item.content}`).join('\n\n---\n\n'),
+    },
+    {
+      wo_id: wo.workorder_id,
+      category: resolveCategory(wo),
+      task: wo.task,
+      changed_files: outputs.map(item => item.path),
+      files_allowed: wo.scope_files,
+    },
+    {
+      callFastReviewer: deps.callFastReviewer ?? defaultFastReviewerCall(),
+      audit: pipelineAudit,
+      getRewriteCount:      (rId, tier) => state.getRewriteCount(rId, tier),
+      incrementRewriteCount: (rId, tier) => state.incrementRewriteCount(rId, tier),
+      writeMetric: createFileMetricsWriter(),
+      requireFastReviewerPass: true,
+    },
+  )
+
+  if (pipelineResult.kind === 'done') {
+    audit.auditReviewPipelineDone({
+      run_id: runId,
+      workorder_id: wo.workorder_id,
+      agent_id: wo.agent_id,
+      orchestration_mode: orchestrationMode,
+      review_tier: pipelineResult.finalTier,
+      duration_ms: 0,
+    })
+    return { ok: true }
+  }
+
+  if (pipelineResult.kind === 'rewrite') {
+    return {
+      ok: false,
+      status: 'failed',
+      reason: `FIX_REQUIRED: ${pipelineResult.reason}`,
+    }
+  }
+
+  return {
+    ok: false,
+    status: 'blocked',
+    reason: `REVIEW_BLOCKED: ${pipelineResult.reason}`,
+  }
+}
+
 function hasBroadCodexWorkerScope(wo: Workorder): boolean {
   const broadPatterns = new Set(['.', './', '/', '*', '**'])
   return (wo.scope_files ?? []).some(raw => {
@@ -570,6 +661,7 @@ async function finalizeCodexWorkerDispatch(
   orchestrationMode: ReturnType<typeof state.getOrchestrationMode>,
   jobStart: number,
   result: CodexWorkerResult,
+  deps: DispatcherDeps,
 ): Promise<DispatchResult> {
   audit.writeAuditEvent({
     event: 'codex_worker_result',
@@ -587,6 +679,39 @@ async function finalizeCodexWorkerDispatch(
 
   await state.releaseScopeLock(runId)
   await state.releaseDbMigrationLock(runId)
+
+  const review = await runConfiguredPostWorkerReview(wo, runId, orchestrationMode, deps)
+  if (!review.ok) {
+    await state.endRun(runId, review.status === 'blocked' ? 'blocked' : 'failed')
+    await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, review.status === 'blocked' ? 'awaiting_approval' : 'failed')
+    audit.auditJobFailed({
+      run_id: runId,
+      workorder_id: wo.workorder_id,
+      agent_id: wo.agent_id,
+      orchestration_mode: orchestrationMode,
+      reason: review.reason,
+      error_code: review.reason.startsWith('REVIEW_BLOCKED') ? 'REVIEW_BLOCKED' : 'FIX_REQUIRED',
+    })
+    return {
+      status: review.status,
+      run_id: runId,
+      workorder_id: wo.workorder_id,
+      error: review.reason,
+    }
+  }
+
+  if (fastReviewerRouteConfigured() && result.finalState === 'FIX_REQUIRED' && expectedOutputContents(wo).length > 0) {
+    await state.endRun(runId, 'completed')
+    await state.updateActiveWorkorderStatusByRun(wo.workorder_id, runId, 'done')
+    audit.auditJobCompleted({
+      run_id: runId,
+      workorder_id: wo.workorder_id,
+      agent_id: wo.agent_id,
+      orchestration_mode: orchestrationMode,
+      duration_ms: Date.now() - jobStart,
+    })
+    return { status: 'completed', run_id: runId, workorder_id: wo.workorder_id }
+  }
 
   if (result.finalState === 'DONE' && result.exitCode === 0 && !result.timedOut) {
     await state.endRun(runId, 'completed')
@@ -786,7 +911,7 @@ export async function dispatchWorkorder(
       const runCodex = deps.runCodexWorker ?? defaultRunCodexWorkerForDispatch
       const codexResult = await runCodex(wo, { timeoutMs: codexDispatch.timeoutMs })
       cleanupHandled = true
-      return await finalizeCodexWorkerDispatch(wo, runId, orchestrationMode, jobStart, codexResult)
+      return await finalizeCodexWorkerDispatch(wo, runId, orchestrationMode, jobStart, codexResult, deps)
     }
 
     // 4. Skills
