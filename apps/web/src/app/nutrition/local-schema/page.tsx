@@ -77,8 +77,8 @@ export default async function LocalNutritionSchemaPage() {
               <div>
                 <h2 className="text-lg font-semibold">Food Foundation</h2>
                 <p className="mt-1 text-xs text-slate-400">
-                  Local schema-only status for future food data. This view does not provide food search, food UI,
-                  BLS import, or seed execution.
+                  Local food foundation status for future food search. This view does not provide food search,
+                  broad BLS import, raw BLS storage, or editable food data.
                 </p>
               </div>
               <StatusBadge tone={foodFoundationReady ? 'pass' : 'attention'} label={foodFoundationReady ? 'Schema ready' : 'Schema pending'} />
@@ -112,7 +112,8 @@ export default async function LocalNutritionSchemaPage() {
               </div>
             </div>
             <p className="mt-4 text-xs leading-5 text-slate-400">
-              Row counts are expected to remain zero until a separate governed seed/import boundary is approved.
+              Row counts reflect local-only governed staging boundaries. They are source-backed local samples only,
+              not a broad BLS import or production dataset.
             </p>
           </section>
 

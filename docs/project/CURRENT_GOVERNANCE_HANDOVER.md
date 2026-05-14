@@ -80,6 +80,12 @@ evidence only and must not override the current SSOT files listed below.
   - Target tables: `nutrition.foods` and `nutrition.food_nutrients`.
   - Local validation confirmed both tables exist, both row counts are `0`, and `nutrition.food_nutrients.nutrient_code` references `nutrition.nutrient_defs(code)`.
   - The slice remains schema-only: no food search, no food UI, no BLS import, no raw BLS commit, no seed/import rows, and no invented food values.
+- The local-only deterministic food sample staging boundary is open for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-SAMPLE-STAGING.md`.
+  - Source file: `docs/specs/Nutrition/00_raw/bls/original/BLS_4_0_Daten_2025_DE.xlsx`.
+  - Selection rule: first 10 source-backed BLS rows with non-empty BLS code and German food name.
+  - Candidate output: `docs/project/p1-005/P1-005-local-food-sample-staging.sql`.
+  - Expected local rows after apply: 10 `nutrition.foods` rows and 927 `nutrition.food_nutrients` rows.
+  - This remains local-only sample staging, not broad/full BLS import, not raw BLS commit, not food search UI, and not DEV/LIVE promotion.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions
