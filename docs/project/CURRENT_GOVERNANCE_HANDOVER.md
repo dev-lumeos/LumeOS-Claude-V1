@@ -95,6 +95,13 @@ evidence only and must not override the current SSOT files listed below.
   - Local validation confirmed 0 missing nutrient FK targets, 0 orphan food nutrient rows, and UTF-8 food names render correctly.
   - The local schema/debug page reports `nutrition.foods=7140` and `nutrition.food_nutrients=698092`.
   - The boundary remains local-only: no DEV/LIVE, no Supabase Cloud, no production DB, no source workbook commit, no unsupported values, and no RDA changes.
+- The local read-only Food Search / Food Detail slice is completed for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-SEARCH.md`.
+  - Visible page: `http://127.0.0.1:5001/nutrition`.
+  - API route: `/api/nutrition/foods`.
+  - It searches local `nutrition.foods`, opens one selected food, and shows linked nutrients from `nutrition.food_nutrients` resolved through `nutrition.nutrient_defs`.
+  - BLS food names are shown as source-backed technical labels, not final human-friendly product copy.
+  - Human-friendly names, aliases, categories, and richer search normalization remain future work; no invented aliases, display names, nutrient values, or food labels were added.
+  - The slice is read-only and performs no DB writes, schema changes, seed/import changes, RDA changes, DEV/LIVE action, or Supabase Cloud action.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions
