@@ -95,6 +95,8 @@ function buildSystemPrompt(): string {
     'The JSON object must include the 6 OrchestratorIntent fields plus worker_assignments.',
     'worker_assignments must be an array of { "workorder_id": string, "assigned_agent": string, "rationale": string }.',
     'assigned_agent must match the current_agent_id when the existing workorder routing is already appropriate.',
+    'Required exact JSON shape:',
+    '{"selected_agent":"micro-executor","risk_level":"low","risks":[],"execution_order":["inspect batch","assign governed worker"],"required_gates":["files-scope-gate","review-gate"],"stop_conditions":[],"worker_assignments":[{"workorder_id":"WO-example-001","assigned_agent":"docs-agent","rationale":"existing governed route is appropriate"}]}',
   ].join('\n')
 }
 
@@ -206,24 +208,6 @@ export async function runSpark1OrchestratorHandoff(
     }
   }
 
-  let intent: Spark1Intent
-  try {
-    const output = await (opts.callModel ?? defaultCallModel)(route, buildSystemPrompt(), buildUserPrompt(batch))
-    intent = parseSpark1Intent(output)
-  } catch (error) {
-    const detail = error instanceof Error ? error.message : String(error)
-    return {
-      ok: false,
-      orchestration: {
-        ...base,
-        missing_integration_point: detail,
-        reason: 'Spark1/orchestrator-agent handoff failed before a valid intent was available.',
-      },
-      assignments: [],
-      detail,
-    }
-  }
-
   const firstWorkorder = batch.workorders[0]?.parsed as Workorder | undefined
   if (!firstWorkorder) {
     return {
@@ -238,58 +222,79 @@ export async function runSpark1OrchestratorHandoff(
     }
   }
 
-  const normalized = normalizeOrchestratorIntent(intent, firstWorkorder.agent_id, firstWorkorder.risk_category)
-  const validation = validateOrchestratorIntent(normalized, {
-    approvalTokenPresent: firstWorkorder.requires_approval === false,
-    filesAllowed: firstWorkorder.scope_files ?? [],
-    workorderType: inferWorkorderType(firstWorkorder.task),
-    expectedAgent: mapAgentToValidatorTarget(firstWorkorder.agent_id),
-  })
-  if (validation.status !== 'PASS') {
-    const detail = `Invalid Spark1 orchestrator intent: ${validation.status}${validation.field ? ` field=${validation.field}` : ''}${validation.reason ? ` reason=${validation.reason}` : ''}`
-    return {
-      ok: false,
-      orchestration: {
-        ...base,
-        missing_integration_point: detail,
-        reason: 'Spark1/orchestrator-agent returned invalid routing intent.',
-      },
-      assignments: [],
-      detail,
+  const callModel = opts.callModel ?? defaultCallModel
+  let lastInvalidDetail = ''
+  let lastOutput = ''
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    let intent: Spark1Intent
+    try {
+      const userPrompt = attempt === 0
+        ? buildUserPrompt(batch)
+        : [
+            'REWRITE_REQUEST: Your previous Spark1 routing intent was invalid.',
+            `Invalid detail: ${lastInvalidDetail}`,
+            'Return exactly one JSON object with all required fields:',
+            'selected_agent, risk_level, risks, execution_order, required_gates, stop_conditions, worker_assignments.',
+            'All array fields must be arrays, even when empty. Do not include prose or markdown fences.',
+            `Previous output (truncated): ${lastOutput.slice(0, 500)}`,
+            '',
+            buildUserPrompt(batch),
+          ].join('\n')
+      lastOutput = await callModel(route, buildSystemPrompt(), userPrompt)
+      intent = parseSpark1Intent(lastOutput)
+    } catch (error) {
+      lastInvalidDetail = error instanceof Error ? error.message : String(error)
+      continue
     }
-  }
 
-  const assignmentValidation = validateAssignments(batch, intent)
-  if (!assignmentValidation.ok) {
+    const normalized = normalizeOrchestratorIntent(intent, firstWorkorder.agent_id, firstWorkorder.risk_category)
+    const validation = validateOrchestratorIntent(normalized, {
+      approvalTokenPresent: firstWorkorder.requires_approval === false,
+      filesAllowed: firstWorkorder.scope_files ?? [],
+      workorderType: inferWorkorderType(firstWorkorder.task),
+      expectedAgent: mapAgentToValidatorTarget(firstWorkorder.agent_id),
+    })
+    if (validation.status !== 'PASS') {
+      lastInvalidDetail = `Invalid Spark1 orchestrator intent: ${validation.status}${validation.field ? ` field=${validation.field}` : ''}${validation.reason ? ` reason=${validation.reason}` : ''}`
+      continue
+    }
+
+    const assignmentValidation = validateAssignments(batch, intent)
+    if (!assignmentValidation.ok) {
+      lastInvalidDetail = assignmentValidation.detail
+      continue
+    }
+
+    const assignmentText = assignmentValidation.assignments
+      .map(assignment => `${assignment.workorder_id}->${assignment.assigned_agent}`)
+      .join(', ')
+
     return {
-      ok: false,
+      ok: true,
       orchestration: {
-        ...base,
-        missing_integration_point: assignmentValidation.detail,
-        reason: 'Spark1/orchestrator-agent returned invalid worker assignment intent.',
+        requested_orchestration_mode: 'spark1_orchestrated',
+        actual_orchestration_mode: 'spark1_orchestrated',
+        spark1_orchestrator_used: true,
+        codex_role: 'none',
+        worker_assignment_result: assignmentText,
+        missing_integration_point: '',
+        reason: assignmentValidation.detail,
+        blocks_dispatch: false,
       },
       assignments: assignmentValidation.assignments,
       detail: assignmentValidation.detail,
     }
   }
 
-  const assignmentText = assignmentValidation.assignments
-    .map(assignment => `${assignment.workorder_id}->${assignment.assigned_agent}`)
-    .join(', ')
-
+  const detail = lastInvalidDetail || 'Spark1/orchestrator-agent did not return a valid routing intent.'
   return {
-    ok: true,
+    ok: false,
     orchestration: {
-      requested_orchestration_mode: 'spark1_orchestrated',
-      actual_orchestration_mode: 'spark1_orchestrated',
-      spark1_orchestrator_used: true,
-      codex_role: 'none',
-      worker_assignment_result: assignmentText,
-      missing_integration_point: '',
-      reason: assignmentValidation.detail,
-      blocks_dispatch: false,
+      ...base,
+      missing_integration_point: detail,
+      reason: 'Spark1/orchestrator-agent returned invalid routing intent.',
     },
-    assignments: assignmentValidation.assignments,
-    detail: assignmentValidation.detail,
+    assignments: [],
+    detail,
   }
 }

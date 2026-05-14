@@ -35,6 +35,8 @@ import {
   type OrchestrationModeStatus,
   type RequestedOrchestrationMode,
 } from './orchestration-mode'
+import { runSpark1OrchestratorHandoff } from './spark1-orchestrator-handoff'
+import type { Spark1OrchestratorHandoffResult } from './spark1-orchestrator-handoff'
 
 export type OperatorEndState =
   | 'READY_TO_RUN'
@@ -850,11 +852,15 @@ export function runShellCommand(command: string): CommandResult {
 
 export async function runDryRun(
   batchPathInput: string,
-  opts: { orchestrationMode?: RequestedOrchestrationMode } = {},
+  opts: { orchestrationMode?: RequestedOrchestrationMode; spark1Handoff?: (batch: LoadedBatch) => Promise<Spark1OrchestratorHandoffResult> } = {},
 ): Promise<{ report: string; exitCode: number }> {
   const batch = loadBatch(batchPathInput)
   const hasSchemaErrors = batch.workorders.some(w => w.validationErrors.length > 0)
   const orchestration = resolveOrchestrationMode(opts.orchestrationMode ?? 'auto')
+  if (orchestration.requested_orchestration_mode === 'spark1_orchestrated') {
+    const handoff = opts.spark1Handoff ? await opts.spark1Handoff(batch) : await runSpark1OrchestratorHandoff(batch)
+    Object.assign(orchestration, handoff.orchestration)
+  }
   return {
     report: [
       '## Orchestration Mode',
@@ -862,7 +868,7 @@ export async function runDryRun(
       '',
       formatDryRunReport(batch),
     ].join('\n'),
-    exitCode: hasSchemaErrors ? 1 : 0,
+    exitCode: orchestration.blocks_dispatch ? 2 : hasSchemaErrors ? 1 : 0,
   }
 }
 

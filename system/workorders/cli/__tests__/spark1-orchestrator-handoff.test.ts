@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
+import { runDryRun } from '../batch-operator'
 import { loadBatch, runDispatch } from '../batch-loader'
 import { runSpark1OrchestratorHandoff } from '../spark1-orchestrator-handoff'
 import { resolveOrchestrationMode } from '../orchestration-mode'
@@ -156,5 +157,21 @@ describe('Spark1 orchestrator handoff', () => {
     assert.equal(outcomes[0]?.status, 'orchestration_blocked')
     assert.equal(orchestration.blocks_dispatch, true)
     assert.match(orchestration.missing_integration_point, /Spark1 endpoint unavailable/)
+  })
+
+  it('dry-run invokes Spark1 handoff when spark1_orchestrated is requested', async () => {
+    const handoff = await runSpark1OrchestratorHandoff(loadBatch(batchPath()), {
+      skipRuntimeCheck: true,
+      callModel: async () => validSpark1Intent(),
+    })
+    const result = await runDryRun(batchPath(), {
+      orchestrationMode: 'spark1_orchestrated',
+      spark1Handoff: async () => handoff,
+    })
+
+    assert.equal(result.exitCode, 0)
+    assert.match(result.report, /actual_orchestration_mode: spark1_orchestrated/)
+    assert.match(result.report, /spark1_orchestrator_used: yes/)
+    assert.match(result.report, /worker_assignment_result: WO-test-001->docs-agent/)
   })
 })

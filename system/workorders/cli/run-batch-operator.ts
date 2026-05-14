@@ -15,7 +15,7 @@ import {
   continueBatch,
   runDryRun,
 } from './batch-operator'
-import { runOperatorDoctor } from './operator-doctor'
+import { runOperatorDoctorWithHandoff } from './operator-doctor'
 import { parseRequestedOrchestrationMode } from './orchestration-mode'
 
 function usage(): string {
@@ -106,7 +106,7 @@ async function main(): Promise<number> {
   }
 
   if (mode === '--doctor') {
-    const result = runOperatorDoctor(batchFile, { json, projectId, orchestrationMode })
+    const result = await runOperatorDoctorWithHandoff(batchFile, { json, projectId, orchestrationMode })
     console.log(result.report)
     return result.exitCode
   }

@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url'
 
 import type { OperatorStatus, ApprovalStop, CleanupSuggestion } from './batch-operator'
 import { collectOperatorStatus } from './batch-operator'
+import { loadBatch } from './batch-loader'
 import { runGovernanceInvariantCheck } from '../../control-plane/governance-invariant-check'
 import { runAgentContractCheck } from '../../control-plane/agent-contract-check'
 import { readModelRuntimeHistorySummary, runModelRuntimeCheck, type ModelRuntimeHistorySummary } from '../../control-plane/model-runtime-check'
@@ -18,6 +19,8 @@ import {
   type OrchestrationModeStatus,
   type RequestedOrchestrationMode,
 } from './orchestration-mode'
+import { runSpark1OrchestratorHandoff } from './spark1-orchestrator-handoff'
+import type { Spark1OrchestratorHandoffResult } from './spark1-orchestrator-handoff'
 
 export type OperatorDoctorDiagnosis =
   | 'CLEAN_READY'
@@ -570,6 +573,15 @@ export function formatOperatorDoctorReport(result: OperatorDoctorResult): string
 export function runOperatorDoctor(batchPath: string, opts: { json?: boolean; projectId?: string; orchestrationMode?: RequestedOrchestrationMode } = {}): { result: OperatorDoctorResult; report: string; exitCode: number } {
   const profile = opts.projectId ? getProjectProfile(opts.projectId) : undefined
   const status = collectOperatorStatus(batchPath, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
+  return buildOperatorDoctorResponse(batchPath, status, profile, opts)
+}
+
+function buildOperatorDoctorResponse(
+  batchPath: string,
+  status: OperatorStatus,
+  profile: ProjectProfile | undefined,
+  opts: { json?: boolean; projectId?: string },
+): { result: OperatorDoctorResult; report: string; exitCode: number } {
   const result = diagnoseOperatorDoctor(status, {
     checkers: collectOperatorDoctorCheckers(batchPath, opts.projectId),
     memory: collectOperatorDoctorMemoryStatus(process.cwd(), batchPath),
@@ -582,7 +594,26 @@ export function runOperatorDoctor(batchPath: string, opts: { json?: boolean; pro
   }
 }
 
-function main(): number {
+export async function runOperatorDoctorWithHandoff(
+  batchPath: string,
+  opts: {
+    json?: boolean
+    projectId?: string
+    orchestrationMode?: RequestedOrchestrationMode
+    spark1Handoff?: (batch: ReturnType<typeof loadBatch>) => Promise<Spark1OrchestratorHandoffResult>
+  } = {},
+): Promise<{ result: OperatorDoctorResult; report: string; exitCode: number }> {
+  const profile = opts.projectId ? getProjectProfile(opts.projectId) : undefined
+  const status = collectOperatorStatus(batchPath, { projectId: opts.projectId, orchestrationMode: opts.orchestrationMode })
+  if (status.orchestration.requested_orchestration_mode === 'spark1_orchestrated') {
+    const batch = loadBatch(batchPath)
+    const handoff = opts.spark1Handoff ? await opts.spark1Handoff(batch) : await runSpark1OrchestratorHandoff(batch)
+    status.orchestration = handoff.orchestration
+  }
+  return buildOperatorDoctorResponse(batchPath, status, profile, opts)
+}
+
+async function main(): Promise<number> {
   const args = process.argv.slice(2)
   const batchFile = args.find(arg => !arg.startsWith('--'))
   const json = args.includes('--json')
@@ -599,11 +630,16 @@ function main(): number {
     console.error('Usage: npx tsx system/workorders/cli/operator-doctor.ts <batch-file> [--json] [--project <id>] [--orchestration-mode <auto|codex_bootstrap|spark1_orchestrated>]')
     return 2
   }
-  const result = runOperatorDoctor(batchFile, { json, projectId, orchestrationMode })
+  const result = await runOperatorDoctorWithHandoff(batchFile, { json, projectId, orchestrationMode })
   console.log(result.report)
   return result.exitCode
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
-  process.exitCode = main()
+  main()
+    .then(code => { process.exitCode = code })
+    .catch(error => {
+      console.error(`operator-doctor failed: ${error instanceof Error ? error.message : String(error)}`)
+      process.exitCode = 1
+    })
 }
