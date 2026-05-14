@@ -73,6 +73,7 @@ evidence only and must not override the current SSOT files listed below.
   - UTF-8 German text is corrected.
   - RDA fields are partial by design.
 - Local Nutrition UI has progressed through read-only schema/debug, preview, search/filter, detail panel, deep-link, pin/compare, and copy-link affordances.
+- `BATCH-NUTRITION-P1-005-LOCAL-RDA-FILTER.md` is the next exact allowlisted local-only UI batch. Its scope is limited to adding a read-only RDA availability filter on the local nutrient preview, with documentation-impact handling required before DONE.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions
