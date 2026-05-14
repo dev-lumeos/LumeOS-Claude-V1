@@ -1,9 +1,10 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import type { NutritionNutrientPreviewRow } from '../../../lib/nutrition/local-schema-debug'
+import { buildNutrientDetailLink } from '../../../lib/nutrition/nutrient-detail-link'
 import {
   buildNutrientDetailUrl,
   formatNutrientDetailValue,
@@ -30,6 +31,7 @@ export function NutrientDetailPanel({ rows }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [copyStatus, setCopyStatus] = useState<string | null>(null)
   const selectedCode = resolveNutrientDetailCode(rows, searchParams.get('nutrient'))
   const selectedRow = useMemo(
     () => selectNutrientDetailRow(rows, selectedCode),
@@ -43,6 +45,13 @@ export function NutrientDetailPanel({ rows }: Props) {
     () => buildNutrientPinCompareRows(selectedRow, pinnedRow),
     [selectedRow, pinnedRow],
   )
+  const nutrientLink = selectedRow
+    ? buildNutrientDetailLink(searchParams.toString(), selectedRow.code, pinnedRow?.code ?? null)
+    : ''
+
+  useEffect(() => {
+    setCopyStatus(null)
+  }, [nutrientLink])
 
   if (rows.length === 0 || !selectedRow) {
     return (
@@ -118,6 +127,42 @@ export function NutrientDetailPanel({ rows }: Props) {
             </button>
           ) : null}
         </div>
+      </div>
+
+      <div className="mb-4 rounded-md border border-slate-800 bg-slate-900/70 p-3">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h4 className="text-sm font-semibold text-slate-100">Nutrient Link</h4>
+            <p className="mt-1 text-xs text-slate-400">Read-only local deep link for the selected nutrient.</p>
+          </div>
+          <button
+            className="rounded-md border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 hover:border-slate-500"
+            type="button"
+            onClick={async () => {
+              if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
+                setCopyStatus('Clipboard unavailable. Copy the exposed link manually.')
+                return
+              }
+
+              try {
+                await navigator.clipboard.writeText(nutrientLink)
+                setCopyStatus('Copied.')
+              } catch {
+                setCopyStatus('Clipboard unavailable. Copy the exposed link manually.')
+              }
+            }}
+          >
+            Copy nutrient link
+          </button>
+        </div>
+        <input
+          className="w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-slate-100 outline-none"
+          readOnly
+          type="text"
+          value={nutrientLink}
+          onFocus={(event) => event.currentTarget.select()}
+        />
+        {copyStatus ? <p className="mt-2 text-xs text-slate-400">{copyStatus}</p> : null}
       </div>
 
       {pinnedRow ? (
