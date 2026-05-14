@@ -60,6 +60,7 @@ evidence only and must not override the current SSOT files listed below.
   - Explicit N/A must be structured and auditable; generic `none` / `not applicable` reasons are invalid.
   - Dossiers report documentation impact, documentation-agent usage, SSOT files, SSOT sync status, and final SSOT classification.
 - Configured reviewer handoff for already output-complete workorders passes the correct workorder context and expected-output content into the review pipeline. A configured reviewer failure still blocks DONE.
+- Stop-rule baselines are governed acknowledgements, not manual state edits. `ESCALATION_RATE_SPIKE` now supports the same baseline mechanism as failed-run and invalid-json spike handling so resolved reviewer/runtime stabilization history can be acknowledged without weakening future stop-rule enforcement.
 
 ## Current Product / Nutrition Truth
 

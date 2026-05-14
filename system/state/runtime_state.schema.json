@@ -74,7 +74,8 @@
       "type": "object",
       "properties": {
         "failed_runs_threshold": { "$ref": "#/definitions/FailedRunsThresholdBaseline" },
-        "invalid_json_spike": { "$ref": "#/definitions/InvalidJsonSpikeBaseline" }
+        "invalid_json_spike": { "$ref": "#/definitions/InvalidJsonSpikeBaseline" },
+        "escalation_rate_spike": { "$ref": "#/definitions/EscalationRateSpikeBaseline" }
       },
       "additionalProperties": false
     },
@@ -97,6 +98,17 @@
         "acknowledged_total_samples":        { "type": "number" },
         "acknowledged_invalid_json_samples": { "type": "number" },
         "reason":                            { "type": "string" }
+      }
+    },
+    "EscalationRateSpikeBaseline": {
+      "type": "object",
+      "required": ["acknowledged_at", "acknowledged_by", "acknowledged_completed_reviews", "acknowledged_escalated_reviews"],
+      "properties": {
+        "acknowledged_at":                { "type": "string", "format": "date-time" },
+        "acknowledged_by":                { "type": "string" },
+        "acknowledged_completed_reviews": { "type": "number" },
+        "acknowledged_escalated_reviews": { "type": "number" },
+        "reason":                         { "type": "string" }
       }
     }
   }

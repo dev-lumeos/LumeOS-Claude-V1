@@ -10,7 +10,10 @@ import os from 'node:os'
 import path from 'node:path'
 
 import { evaluateStopRules, runStopRules, DEFAULT_CONFIG, type StopRulesConfig } from '../stop-rules'
-import { acknowledgeInvalidJsonSpikeBaseline } from '../../state/state-manager'
+import {
+  acknowledgeEscalationRateSpikeBaseline,
+  acknowledgeInvalidJsonSpikeBaseline,
+} from '../../state/state-manager'
 
 let tmpDir = ''
 
@@ -352,6 +355,92 @@ describe('ESCALATION_RATE_SPIKE', () => {
     const r = evaluateStopRules({ ...DEFAULT_CONFIG, escalation_rate_max: 0.8, escalation_min_samples: 5 })
     const rule = r.all_rules.find(x => x.rule === 'ESCALATION_RATE_SPIKE')!
     assert.equal(rule.triggered, true)   // 100% > 80%
+    cleanupTmpDir()
+  })
+
+  it('Baseline ignoriert historische Escalations vor acknowledged_at', () => {
+    writeState([], {
+      stop_rule_baselines: {
+        escalation_rate_spike: {
+          acknowledged_at: '2026-05-14T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_completed_reviews: 5,
+          acknowledged_escalated_reviews: 5,
+        },
+      },
+    })
+    writePipelineAudit([
+      ...Array.from({ length: 5 }, (_, i) => ({
+        event: 'review_completed', tier: 'spark-c', ts: `2026-05-14T01:0${i}:00.000Z`,
+      })),
+      ...Array.from({ length: 5 }, (_, i) => ({
+        event: 'review_escalated', tier: 'spark-c', ts: `2026-05-14T01:1${i}:00.000Z`,
+      })),
+    ])
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, escalation_rate_max: 0.8, escalation_min_samples: 5 })
+    const rule = r.all_rules.find(x => x.rule === 'ESCALATION_RATE_SPIKE')!
+    assert.equal(rule.triggered, false)
+    assert.equal(rule.value, 0)
+    assert.equal(rule.total_reviews, 5)
+    assert.equal(rule.total_escalations, 5)
+    assert.equal(rule.counted_samples, 0)
+    assert.equal(rule.baseline_at, '2026-05-14T02:00:00.000Z')
+    cleanupTmpDir()
+  })
+
+  it('Baseline triggert bei neuer Escalation Spike nach acknowledged_at', () => {
+    writeState([], {
+      stop_rule_baselines: {
+        escalation_rate_spike: {
+          acknowledged_at: '2026-05-14T02:00:00.000Z',
+          acknowledged_by: 'tom',
+          acknowledged_completed_reviews: 5,
+          acknowledged_escalated_reviews: 5,
+        },
+      },
+    })
+    writePipelineAudit([
+      { event: 'review_completed', tier: 'spark-c', ts: '2026-05-14T01:00:00.000Z' },
+      ...Array.from({ length: 5 }, (_, i) => ({
+        event: 'review_completed', tier: 'spark-c', ts: `2026-05-14T03:0${i}:00.000Z`,
+      })),
+      ...Array.from({ length: 5 }, (_, i) => ({
+        event: 'review_escalated', tier: 'spark-c', ts: `2026-05-14T03:1${i}:00.000Z`,
+      })),
+    ])
+    const r = evaluateStopRules({ ...DEFAULT_CONFIG, escalation_rate_max: 0.8, escalation_min_samples: 5 })
+    const rule = r.all_rules.find(x => x.rule === 'ESCALATION_RATE_SPIKE')!
+    assert.equal(rule.triggered, true)
+    assert.equal(rule.value, 100)
+    assert.equal(rule.total_reviews, 6)
+    assert.equal(rule.total_escalations, 5)
+    assert.equal(rule.ignored_historical_samples, 1)
+    cleanupTmpDir()
+  })
+
+  it('acknowledge escalation baseline setzt Marker und cleared system_stop nicht', async () => {
+    writeState([], {
+      system_stop: {
+        active: true,
+        reason: 'existing stop',
+        stopped_at: '2026-05-14T01:00:00.000Z',
+        stopped_by: 'test',
+      },
+    })
+    writePipelineAudit([
+      { event: 'review_completed', tier: 'spark-c', ts: '2026-05-14T01:00:00.000Z' },
+      { event: 'review_escalated', tier: 'spark-c', ts: '2026-05-14T01:01:00.000Z' },
+      { event: 'review_escalated', tier: 'spark-c', ts: '2026-05-14T01:02:00.000Z' },
+    ])
+
+    await acknowledgeEscalationRateSpikeBaseline('tom', 'historical reviewer escalations acknowledged')
+
+    const state = JSON.parse(fs.readFileSync(path.join(tmpDir, 'system/state/runtime_state.json'), 'utf8'))
+    assert.equal(state.system_stop?.active, true)
+    assert.equal(state.stop_rule_baselines.escalation_rate_spike.acknowledged_by, 'tom')
+    assert.equal(state.stop_rule_baselines.escalation_rate_spike.acknowledged_completed_reviews, 1)
+    assert.equal(state.stop_rule_baselines.escalation_rate_spike.acknowledged_escalated_reviews, 2)
+    assert.equal(state.stop_rule_baselines.escalation_rate_spike.reason, 'historical reviewer escalations acknowledged')
     cleanupTmpDir()
   })
 })

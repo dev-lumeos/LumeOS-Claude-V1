@@ -25,6 +25,7 @@
 import fs   from 'node:fs'
 import path from 'node:path'
 import {
+  acknowledgeEscalationRateSpikeBaseline,
   acknowledgeFailedRunsBaseline,
   acknowledgeInvalidJsonSpikeBaseline,
   triggerSystemStop,
@@ -72,6 +73,8 @@ export interface StopRuleResult {
   ignored_historical_failed?: number
   total_samples?:             number
   total_invalid_json?:        number
+  total_reviews?:             number
+  total_escalations?:         number
   ignored_historical_samples?: number
   counted_samples?:           number
   baseline_at?:               string
@@ -264,6 +267,60 @@ function checkEscalationRate(cfg: StopRulesConfig): StopRuleResult {
   }
 }
 
+function checkEscalationRateWithBaseline(cfg: StopRulesConfig): StopRuleResult {
+  const state = readJson<any>('system/state/runtime_state.json')
+  const baseline = state?.stop_rule_baselines?.escalation_rate_spike
+  const audit = readJsonl<any>('system/state/pipeline-audit.jsonl')
+  const baselineTime = baseline?.acknowledged_at
+    ? new Date(baseline.acknowledged_at).getTime()
+    : undefined
+  const countedAudit = baselineTime
+    ? audit.filter((e: any) => {
+      const timestamp = e.ts ?? e.timestamp
+      if (!timestamp) return true
+      const eventTime = new Date(timestamp).getTime()
+      if (!Number.isFinite(eventTime)) return true
+      return eventTime > baselineTime
+    })
+    : audit
+  const ignored = audit.length - countedAudit.length
+  const totalCompleted = audit.filter(e => e.event === 'review_completed' && e.tier === 'spark-c').length
+  const totalEscalated = audit.filter(e => e.event === 'review_escalated' && e.tier === 'spark-c').length
+  const completed = countedAudit.filter(e => e.event === 'review_completed' && e.tier === 'spark-c').length
+  const escalated = countedAudit.filter(e => e.event === 'review_escalated' && e.tier === 'spark-c').length
+
+  const common = {
+    total_reviews: totalCompleted,
+    total_escalations: totalEscalated,
+    ignored_historical_samples: ignored,
+    counted_samples: countedAudit.length,
+    baseline_at: baseline?.acknowledged_at,
+    baseline_by: baseline?.acknowledged_by,
+  }
+
+  if (completed < cfg.escalation_min_samples) {
+    return {
+      rule: 'ESCALATION_RATE_SPIKE', triggered: false,
+      value: 0, threshold: Math.round(cfg.escalation_rate_max * 100),
+      reason: undefined,
+      ...common,
+    }
+  }
+
+  const rate = escalated / completed
+  const triggered = rate >= cfg.escalation_rate_max
+  return {
+    rule: 'ESCALATION_RATE_SPIKE',
+    triggered,
+    value: Math.round(rate * 100),
+    threshold: Math.round(cfg.escalation_rate_max * 100),
+    reason: triggered
+      ? `spark-c Eskalationsrate ${Math.round(rate * 100)}% >= Schwellwert ${Math.round(cfg.escalation_rate_max * 100)}% (${completed} Reviews seit Baseline)`
+      : undefined,
+    ...common,
+  }
+}
+
 // ─── Haupt-Evaluierung ────────────────────────────────────────────────────────
 
 export function evaluateStopRules(
@@ -276,7 +333,7 @@ export function evaluateStopRules(
     checkHumanNeededPending(config),
     checkInvalidJsonRate(config),
     checkScopeViolations(config),
-    checkEscalationRate(config),
+    checkEscalationRateWithBaseline(config),
   ]
 
   const triggered = allRules.filter(r => r.triggered)
@@ -324,6 +381,7 @@ async function main() {
   const dryRun = args.includes('--dry-run')
   const ackIndex = args.indexOf('--ack-failed-runs')
   const ackInvalidJsonIndex = args.indexOf('--ack-invalid-json-spike')
+  const ackEscalationIndex = args.indexOf('--ack-escalation-rate-spike')
   const byIndex = args.indexOf('--by')
 
   if (ackIndex >= 0) {
@@ -355,6 +413,20 @@ async function main() {
   }
 
   if (dryRun) console.log('\n🔍 Dry-Run Modus — kein Stop wird ausgelöst\n')
+
+  if (ackEscalationIndex >= 0) {
+    const next = args[ackEscalationIndex + 1]
+    const reason = next && !next.startsWith('--') ? next : undefined
+    const byArg = byIndex >= 0 ? args[byIndex + 1] : undefined
+    const acknowledgedBy = byArg && !byArg.startsWith('--')
+      ? byArg
+      : process.env.LUMEOS_OPERATOR ?? process.env.USERNAME ?? 'operator'
+    await acknowledgeEscalationRateSpikeBaseline(acknowledgedBy, reason)
+    console.log(`ESCALATION_RATE_SPIKE baseline acknowledged by ${acknowledgedBy}`)
+    if (reason) console.log(`Reason: ${reason}`)
+    console.log('system_stop unchanged; use clearSystemStop separately if needed')
+    return
+  }
 
   const { evaluation, stopped } = await runStopRules(DEFAULT_CONFIG, dryRun)
 

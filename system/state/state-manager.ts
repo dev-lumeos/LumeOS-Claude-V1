@@ -121,9 +121,18 @@ export interface InvalidJsonSpikeBaseline {
   reason?:                           string
 }
 
+export interface EscalationRateSpikeBaseline {
+  acknowledged_at:                 string
+  acknowledged_by:                 string
+  acknowledged_completed_reviews:  number
+  acknowledged_escalated_reviews:  number
+  reason?:                         string
+}
+
 export interface StopRuleBaselines {
-  failed_runs_threshold?: FailedRunsThresholdBaseline
-  invalid_json_spike?:    InvalidJsonSpikeBaseline
+  failed_runs_threshold?:  FailedRunsThresholdBaseline
+  invalid_json_spike?:     InvalidJsonSpikeBaseline
+  escalation_rate_spike?:  EscalationRateSpikeBaseline
 }
 
 export interface RuntimeState {
@@ -1525,6 +1534,19 @@ function readPipelineMetricsForBaseline(): any[] {
     .filter(Boolean)
 }
 
+function readPipelineAuditForBaseline(): any[] {
+  const auditPath = path.resolve(process.cwd(), 'system/state/pipeline-audit.jsonl')
+  if (!fs.existsSync(auditPath)) return []
+  return fs.readFileSync(auditPath, 'utf8')
+    .split('\n')
+    .filter(Boolean)
+    .map(line => {
+      try { return JSON.parse(line) }
+      catch { return null }
+    })
+    .filter(Boolean)
+}
+
 export async function acknowledgeInvalidJsonSpikeBaseline(acknowledgedBy: string, reason?: string): Promise<void> {
   const operator = acknowledgedBy.trim()
   if (!operator) throw new Error('acknowledgedBy is required')
@@ -1537,6 +1559,24 @@ export async function acknowledgeInvalidJsonSpikeBaseline(acknowledgedBy: string
       acknowledged_by: operator,
       acknowledged_total_samples: metrics.length,
       acknowledged_invalid_json_samples: invalidJsonCount,
+      ...(reason ? { reason } : {}),
+    }
+  })
+}
+
+export async function acknowledgeEscalationRateSpikeBaseline(acknowledgedBy: string, reason?: string): Promise<void> {
+  const operator = acknowledgedBy.trim()
+  if (!operator) throw new Error('acknowledgedBy is required')
+  const audit = readPipelineAuditForBaseline()
+  const completed = audit.filter(e => e.event === 'review_completed' && e.tier === 'spark-c').length
+  const escalated = audit.filter(e => e.event === 'review_escalated' && e.tier === 'spark-c').length
+  await mutate(s => {
+    s.stop_rule_baselines = s.stop_rule_baselines ?? {}
+    s.stop_rule_baselines.escalation_rate_spike = {
+      acknowledged_at: new Date().toISOString(),
+      acknowledged_by: operator,
+      acknowledged_completed_reviews: completed,
+      acknowledged_escalated_reviews: escalated,
       ...(reason ? { reason } : {}),
     }
   })
