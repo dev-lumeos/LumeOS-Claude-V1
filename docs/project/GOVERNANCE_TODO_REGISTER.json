@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T09:38:00+07:00",
+  "generated_at": "2026-05-14T13:47:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -617,9 +617,9 @@
       "layer": "runtime",
       "severity": "medium",
       "priority": "P1",
-      "status": "open",
-      "evidence": "Controlled nemotron-review-agent route is configured, but the full governed path Spark1 orchestrator -> assigned worker -> DGX3/Nemotron review step -> checks -> dossier still needs a harmless local Nutrition workflow proof.",
-      "recommended_action": "Run BATCH-NUTRITION-P1-005-LOCAL-DETAIL-DEEPLINK.md with --orchestration-mode spark1_orchestrated and LUMEOS_FAST_REVIEWER_ROUTE=nemotron-review-agent after acceptance probes pass.",
+      "status": "done",
+      "evidence": "The full governed path was proven with BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md. Spark1 dry-run assigned WO-nutrition-016->senior-coding-agent, continue ran with LUMEOS_FAST_REVIEWER_ROUTE=nemotron-review-agent, pipeline audit contains review_started and review_completed for RUN-20260514-7680, review status was PASS with confidence 0.95, and a batch dossier was written.",
+      "recommended_action": "Treat the controlled Spark1 -> worker -> Nemotron workflow proof as complete. Keep Nemotron controlled/on-demand only until a separate production/default route decision is made.",
       "dependencies": [
         "GOV-TODO-027"
       ],
@@ -628,8 +628,92 @@
       "blocks_product_work": false,
       "source_files": [
         "docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md",
-        "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-DETAIL-DEEPLINK.md",
+        "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md",
         "system/agent-registry/model_routing.json"
+      ]
+    },
+    {
+      "id": "GOV-TODO-029",
+      "title": "Decide DGX3/Nemotron default route acceptance policy",
+      "layer": "runtime",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "DGX3/Nemotron is verified as a controlled reviewer/specialist candidate and has passed a full governed workflow proof, but it remains explicitly non-default and non-production routing.",
+      "recommended_action": "Create a route-role acceptance policy before making Nemotron any default reviewer or specialist route. The policy must define allowed task classes, output contract, health gates, fallback behavior, confidence thresholds, and rollback conditions.",
+      "dependencies": [
+        "GOV-TODO-027",
+        "GOV-TODO-028"
+      ],
+      "estimated_effort": "0.5d policy plus one harmless workflow confirmation",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md",
+        "docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md",
+        "system/agent-registry/model_routing.json"
+      ]
+    },
+    {
+      "id": "GOV-TODO-030",
+      "title": "Fix Codex Worker timeout/reporting mismatch after successful scoped outputs",
+      "layer": "codex_worker",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md completed with expected outputs and Nemotron PASS review, but the Codex Worker timeline still reported timeout/FIX_REQUIRED. This is misleading lifecycle/reporting state, not a blocker for the workflow proof.",
+      "recommended_action": "Tighten Codex Worker result reporting so completed scoped outputs plus successful configured review cannot leave a stale timeout/FIX_REQUIRED entry in dossiers.",
+      "dependencies": [
+        "GOV-TODO-028"
+      ],
+      "estimated_effort": "0.5-1d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/workers/codex-worker.ts",
+        "system/control-plane/dispatcher.ts",
+        "system/reports/batch-dossier.ts",
+        "system/reports/codex-worker/"
+      ]
+    },
+    {
+      "id": "GOV-TODO-031",
+      "title": "Document MiniMax lab / Hermes 65k runtime state",
+      "layer": "runtime_lab",
+      "severity": "low",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "DGX4/5 is described as MiniMax M2.7 NVFP4 lab/runtime only, but exact host/service/container/startup and Hermes 65k evidence are UNKLAR in the repository. GPT-OSS must not be documented as active.",
+      "recommended_action": "After explicit authorization, verify the MiniMax lab runtime and update docs/project/MINIMAX_LAB_RUNTIME.md plus infra runtime docs. Keep MiniMax lab-only and out of production routing.",
+      "dependencies": [],
+      "estimated_effort": "0.5d documentation plus authorized read-only checks",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/MINIMAX_LAB_RUNTIME.md",
+        "infra/vllm/spark-d/setup.md",
+        "infra/systemd/README.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-032",
+      "title": "Verify and clean infra/vLLM startup wrappers against remote runtime state",
+      "layer": "runtime_docs",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "Repository infra docs now mark retired Gemma4/GPT-OSS paths as archived and align Spark C with Nemotron, but remote service files were not inspected during this documentation-only sweep.",
+      "recommended_action": "In a separate runtime maintenance task, compare repository wrappers with remote /etc/systemd/system and /home/admin startup files before any deployment or restart. Keep unverified items marked UNKLAR.",
+      "dependencies": [
+        "GOV-TODO-031"
+      ],
+      "estimated_effort": "0.5d",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": false,
+      "source_files": [
+        "infra/systemd/",
+        "infra/vllm/",
+        "docs/project/STACK_REFERENCE.md"
       ]
     }
   ]

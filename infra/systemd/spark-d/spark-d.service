@@ -1,5 +1,5 @@
 [Unit]
-Description=Spark D — GPT-OSS-120B (LUMEOS Senior Reviewer)
+Description=ARCHIVED Spark D / DGX4 GPT-OSS service - do not use
 After=docker.service network-online.target
 Requires=docker.service
 Wants=network-online.target
@@ -7,15 +7,11 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=root
-WorkingDirectory=/home/admin/spark-vllm-docker
+WorkingDirectory=/home/admin
 ExecStart=/home/admin/start-spark-d.sh
-ExecStop=/home/admin/spark-vllm-docker/launch-cluster.sh stop
-Restart=always
-RestartSec=10
-TimeoutStartSec=600
+Restart=no
+TimeoutStartSec=60
 TimeoutStopSec=60
-
-# Allow plenty of file descriptors for vLLM internal pools
 LimitNOFILE=1048576
 
 [Install]

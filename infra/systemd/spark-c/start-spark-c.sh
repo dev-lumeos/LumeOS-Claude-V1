@@ -1,34 +1,35 @@
 #!/bin/bash
 #
-# Spark C (192.168.0.99) — google/gemma-4-26B-A4B-it Fast Reviewer
-# Container: vllm_node (managed by launch-cluster.sh)
-# Image: vllm-node (lokal gebaut aus eugr/spark-vllm-docker)
+# Spark C / DGX3 (192.168.0.99) - Nemotron reviewer/specialist candidate
+# Host: edgexpert-509d
+# Container: vllm_node
+# Image: vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404
+# Model: nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4
 #
-# Wird vom systemd-Service spark-c aufgerufen. Pre-cleanup + foreground exec.
-# launch-cluster.sh exec blockt solange vLLM läuft.
+# WARNING:
+# This repository copy is a reference wrapper. Verify the remote
+# /etc/systemd/system/vllm.service and actual container before deploying.
+# Do not use the retired Gemma4 launch path.
 
 set -e
 
-REPO_DIR="/home/admin/spark-vllm-docker"
+MODEL_PATH="/root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4"
+IMAGE="vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404"
+CONTAINER_NAME="vllm_node"
 
-cd "$REPO_DIR"
+docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
 
-# Cleanup any prior instance — idempotent
-./launch-cluster.sh stop 2>/dev/null || true
-
-# Foreground exec — systemd attached an stdout/stderr → journalctl
-# Wenn vLLM crashes, exec returnt → systemd Restart=always greift
-exec ./launch-cluster.sh --solo exec \
-  vllm serve google/gemma-4-26B-A4B-it \
-  --port 8001 \
+exec docker run --rm \
+  --name "$CONTAINER_NAME" \
+  --gpus all \
+  --ipc=host \
+  --network host \
+  -v /root/.cache/huggingface:/root/.cache/huggingface \
+  "$IMAGE" \
+  --model "$MODEL_PATH" \
   --host 0.0.0.0 \
-  --gpu-memory-utilization 0.7 \
-  --load-format instanttensor \
-  --quantization fp8 \
-  --kv-cache-dtype fp8 \
+  --port 8001 \
   --max-model-len 65536 \
-  --max-num-batched-tokens 8192 \
+  --gpu-memory-utilization 0.70 \
   --enable-prefix-caching \
-  --enable-auto-tool-choice \
-  --tool-call-parser gemma4 \
-  --reasoning-parser gemma4
+  --trust-remote-code

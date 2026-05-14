@@ -1,126 +1,83 @@
-# LUMEOS — Open TODOs
+# LUMEOS - Open TODOs
 
-Stand: April 2026 (aktualisiert nach Governance-Implementierung)
+Stand: 14 May 2026
 
----
-
-## Block 1 — Persistenz (KRITISCH, blockiert bei Reboot)
-
-**Status: offen — entspricht Block F in SESSION_ONBOARDING.md**
-
-### 1.1 systemd-Services auf allen 4 Sparks deployen
-Files liegen unter `infra/systemd/spark-{a,b,c,d}/` mit README.md.
-
-**Pro Spark zu tun:**
-```bash
-# Vom Threadripper aus
-scp infra/systemd/spark-X/start-spark-X.sh  admin@<IP>:/home/admin/
-scp infra/systemd/spark-X/spark-X.service   admin@<IP>:/tmp/
-
-# Auf dem Spark via SSH
-chmod +x /home/admin/start-spark-X.sh
-sudo mv /tmp/spark-X.service /etc/systemd/system/
-sudo systemctl daemon-reload
-
-sudo systemctl enable spark-X
-sudo systemctl start  spark-X
-```
-
-**IPs + Container-Namen zur Referenz:**
-- Spark A: 192.168.0.128, Container `vllm-qwen`
-- Spark B: 192.168.0.188, Container `spark-b-coder`
-- Spark C: 192.168.0.99,  Container `vllm_node` (managed by launch-cluster.sh)
-- Spark D: 192.168.0.101, Container `vllm_node` (managed by launch-cluster.sh)
-
-### 1.2 Reboot-Test pro Spark
-Nach Setup einmalig pro Spark `sudo reboot`. Nach ~2min healthcheck:
-```bash
-curl http://<IP>:8001/v1/models
-```
+This file lists only operationally open items. Completed historical blocks are not
+kept as active work. Use `docs/project/GOVERNANCE_TODO_REGISTER.json` for the
+machine-readable register.
 
 ---
 
-## Block 2 — Markdown-Edit-Regeln für Claude
+## Current Runtime Baseline
 
-**Status: ✅ GELÖST.** Regeln in `docs/project/CLAUDE_EDIT_RULES.md`.
-Regel: NIEMALS `edit_block` oder `str_replace` auf `.md` Files.
-Stattdessen: `read_file` → vollständige Modifikation → `write_file`.
-
----
-
-## Block 3 — Pre-existing Tech-Debt (während Session entdeckt)
-
-### 3.1 `services/scheduler-api/src/vllm-adapter.ts:184`
-Toter Code: `node === 'qwen3.6'` kann nie true sein weil
-`NodeId = 'spark-a' | 'spark-b' | 'nemotron'`. Branch entfernen ODER NodeId
-aktualisieren (nemotron ist nicht mehr aktuell → Workorder nötig).
-
-### 3.2 `system/control-plane/dispatcher.ts:304+324`
-Event-Types `'governance_parse_error'` und `'governance_violation'` sind nicht in
-`audit-writer.ts` `EventType` registriert. TS-Fehler.
-
-### 3.3 `system/control-plane/__tests__/smoke-test.ts` — 3/9 failing
-Tests 6, 7A, 7B scheitern mit `Unbekannter Agent: undefined`. Pre-existing.
+| Node | Current state |
+|---|---|
+| DGX1 / Spark1 | `edgexpert-1116`, `192.168.0.128`, `vllm.service`, container `vllm-qwen`, model `qwen3.6-35b-fp8`, role `orchestrator-agent`, workflow-ready. Spark1 handoff is proven. |
+| DGX2 / Spark2 | `edgexpert-5862`, `192.168.0.188`, `vllm.service`, container `spark-b-coder`, model `qwen3-coder-next-fp8`, role coding/docs worker, workflow-ready. |
+| DGX3 / Spark3 | `edgexpert-509d`, `192.168.0.99`, `vllm.service`, container `vllm_node`, image `vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404`, model `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`, controlled reviewer/specialist candidate only. Gemma4 is retired and must not be used. |
+| DGX4/5 | MiniMax M2.7 NVFP4 lab/runtime only. Hermes-test/lab work is not production routing. Do not document GPT-OSS as active unless it is re-verified and explicitly re-accepted. |
+| Codex | Bootstrap/senior/fallback. Codex is not the default orchestrator when `spark1_orchestrated` is requested. |
 
 ---
 
-## Block 4 — Doku-Sweep
+## Open Items
 
-### 4.1 ✅ `STACK_REFERENCE.md` — Phase 2 als LIVE, alle 4 Sparks dokumentiert.
-### 4.2 `infra/vllm/spark-a/setup.md` — Gemma-4-4B-Block streichen (nicht aktiv).
-### 4.3 `infra/vllm/spark-b/setup.md` — komplett neu (beschreibt alten Stack).
-### 4.4 `infra/vllm/spark-b/spark-b-start.sh` — veraltet, nach systemd-Deploy entfernen.
-### 4.5 `infra/vllm/spark-c/`, `infra/vllm/spark-d/` — Setup-Doku anlegen.
-### 4.6 `docs/reports/benchmark_spark_b_20260423.md` — als historisch markieren.
-### 4.7 `system/model-tiers/model_tiers_v2.md` — Spark 3+4 ergänzen (veraltet).
-### 4.8 `system/model-tiers/model_registry_v2.md` — Spark C+D Sektionen ergänzen.
+### TODO-1: DGX3 / Nemotron route-role acceptance policy
+
+Status: open.
+
+The controlled `nemotron-review-agent` route works for explicit workflow tests.
+It is not production routing by default. A separate acceptance decision is still
+needed before DGX3/Nemotron can replace any default reviewer route or be used for
+specialist multimodal / OCR / FoodCam work.
+
+Required next step: write the acceptance policy with pass/fail criteria, route
+scope, fallback behavior, output contract, and explicit non-goals.
+
+### TODO-2: Codex Worker timeout/reporting mismatch
+
+Status: open.
+
+The full Spark1 -> worker -> Nemotron proof completed and the dossier is DONE,
+but the Codex Worker subprocess timeline still reported a timeout/FIX_REQUIRED
+while scoped outputs and review passed. This is a reporting/lifecycle mismatch,
+not a blocker for the proof.
+
+Required next step: tighten Codex Worker result reporting so successful scoped
+output completion plus review cannot leave a misleading timeout result.
+
+### TODO-3: MiniMax lab / Hermes 65k test documentation
+
+Status: open.
+
+MiniMax remains lab-only. Documentation should describe current DGX4/5 lab
+runtime facts, Hermes-test status, known command(s), and verification commands.
+Do not add MiniMax to production routing.
+
+Required next step: update `docs/project/MINIMAX_LAB_RUNTIME.md` and related
+runtime docs after the lab state is explicitly verified.
+
+### TODO-4: infra/vLLM and systemd cleanup
+
+Status: open.
+
+The active Spark C/D runtime state has changed. Legacy Gemma4 and GPT-OSS launch
+blocks must remain archived / do-not-use only. Any executable startup scripts
+that are no longer verified should be either updated from verified runtime facts
+or marked `UNKLAR` with the exact verification command required.
+
+Required next step: verify remote files on DGX3/DGX4/5 before using repository
+startup scripts for service changes.
 
 ---
 
-## Block 5 — Agent-Updates
+## Recently Completed, Not Open
 
-### 5.1 `.claude/agents/fast-reviewer-agent.md` + `senior-reviewer-agent.md` anlegen.
-### 5.2 `.claude/agents/senior-coding-agent.md` updaten.
-### 5.3 `.claude/agents/pre-review-agent.md` / `post-review-agent.md` entscheiden.
-
----
-
-## Block 6 — Review-Pipeline V2
-
-**Status: ✅ ERLEDIGT** (Review-Pipeline V2 implementiert und verifiziert).
-
-Alle Sub-Tasks (6.1–6.4) sind Teil der implementierten Review-Pipeline V2.
-Details: `system/control-plane/review-pipeline.ts`
-
----
-
-## Block 7 — Open Brainstorm-Items (kein klarer Action-Owner)
-
-### 7.1 DeepSeek V4 Pro Eval via OpenRouter — nicht akut, Spark D füllt die Lücke.
-### 7.2 End-to-End Real Run mit echtem Spark 1 Orchestrator — wartet auf systemd.
-### 7.3 Pipeline-Run via dispatch-loop / Hono `/dispatch` — wartet auf WO-Tabelle.
-
----
-
-## Was schon FERTIG ist (nicht nochmal anfassen)
-
-- ✅ Review-Pipeline V2 (Auto-Retry, Metriken, Spark C/D Integration)
-- ✅ Workorder-Schema (risk_category, files_blocked, rollback_hint)
-- ✅ Risk-Categories zentralisiert (risk-categories.ts, 13 Kategorien)
-- ✅ Files Enforcement (Post-Execution Scope Check)
-- ✅ Scope-/DB-Migration-Locks
-- ✅ WO-State-Machine (WO_TRANSITIONS formal erzwungen)
-- ✅ Scheduler Preflight (12 Checks, GO/HOLD/REJECT)
-- ✅ Kill-Switch / System Stop
-- ✅ Automatische Stop-Trigger (5 Regeln)
-- ✅ Approval Queue (State Machine + CLI)
-- ✅ Night-Run-Policy V1
-- ✅ Run Summary Generator
-- ✅ Morning Report
-- ✅ Failed WO Report
-- ✅ Model Quality Report
-- ✅ Completed WO Dossier Generator
-- ✅ Docs-Governance V1 (SSOT-Matrix, Drift-Checker)
-- ✅ USER_MANUAL.md, WORKORDER_CREATION_HANDBOOK.md, Masterprompts
-- ✅ CLAUDE.md bereinigt (aktuelle Runtime-Anweisungen)
-- ✅ SESSION_ONBOARDING.md auf aktuellem Stand
+- Spark1 systemd/runtime is workflow-ready and Spark1 handoff is proven.
+- Spark2 docs/coding worker is workflow-ready after completion-health hardening.
+- DGX3 Gemma4 route is retired; DGX3 now runs Nemotron Omni NVFP4.
+- Full Spark1 -> worker -> Nemotron reviewer workflow proof completed with
+  `review_started`, `review_completed`, `PASS`, confidence `0.95`, and a dossier.
+- Review Pipeline V2, workorder schema, scope enforcement, approval queue,
+  stop rules, governance dossiers, runtime history semantics, and project
+  profiles are implemented.
