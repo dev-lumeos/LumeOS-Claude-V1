@@ -77,6 +77,14 @@ const FAIL_HIGH: ReviewOutput = {
   requires_claude: false,
 }
 
+const NEMOTRON_PASS_REVIEW = {
+  status: 'PASS',
+  summary: 'Local UI pin compare output is scoped and read-only.',
+  findings: [],
+  confidence: 0.91,
+  reviewer: 'nemotron-review-agent',
+}
+
 const SCHEMA_VIOLATION_LOWERCASE_RISK = {
   status: 'PASS',
   risk: 'low',  // lowercase — schema violation
@@ -546,6 +554,32 @@ async function test22_persisted_counter_limit_after_increment() {
   console.log('  ✓')
 }
 
+async function test23_nemotron_minimal_review_contract() {
+  console.log('\n[23] Nemotron minimal review contract → done@spark-c')
+  const events: PipelineAuditEvent[] = []
+  const deps = {
+    ...makeDeps(mockReviewer(JSON.stringify(NEMOTRON_PASS_REVIEW)), events),
+    requireFastReviewerPass: true,
+    fastReviewerContract: 'nemotron' as const,
+  }
+
+  const result = await runReviewPipeline(
+    { ...WORKER_OUTPUT, run_id: 'REVIEW-test-023' },
+    STANDARD_WO,
+    deps,
+  )
+
+  assert.equal(result.kind, 'done')
+  if (result.kind === 'done') {
+    assert.equal(result.finalTier, 'spark-c')
+    assert.equal(result.review.status, 'PASS')
+    assert.equal(result.review.summary, NEMOTRON_PASS_REVIEW.summary)
+  }
+  assert.ok(findEvent(events, e =>
+    e.event === 'review_completed' && e.tier === 'spark-c' && e.run_id === 'REVIEW-test-023'))
+  console.log('  ✓')
+}
+
 // ─── Runner ───────────────────────────────────────────────────────────────────
 
 async function runAll() {
@@ -578,6 +612,7 @@ async function runAll() {
     { name: 'V2: Persisted counter at limit',           fn: test20_persisted_counter_at_limit_immediate_escalate },
     { name: 'V2: Counter incremented on REWRITE',       fn: test21_persisted_counter_incremented_on_rewrite },
     { name: 'V2: Counter at 1 + REWRITE → limit',      fn: test22_persisted_counter_limit_after_increment },
+    { name: 'Nemotron minimal review contract',          fn: test23_nemotron_minimal_review_contract },
   ]
 
   let pass = 0

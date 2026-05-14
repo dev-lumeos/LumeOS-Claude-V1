@@ -18,6 +18,7 @@
 //   - Reviewer-Risk-Casing: UPPERCASE (LOW/MEDIUM/HIGH).
 
 import {
+  extractFirstJsonObject,
   validateReviewOutput,
   requiresSeniorReview,
   type ReviewOutput,
@@ -89,6 +90,13 @@ export interface PipelineDeps {
    * fast-reviewer output blocks instead of silently escalating to Spark D.
    */
   requireFastReviewerPass?: boolean
+
+  /**
+   * Output contract expected from the fast reviewer route. The controlled
+   * Nemotron route returns a compact JSON object that is normalized into the
+   * internal ReviewOutput contract before validation.
+   */
+  fastReviewerContract?: 'legacy' | 'nemotron'
 }
 
 export type PipelineResult =
@@ -101,14 +109,71 @@ const CONFIDENCE_THRESHOLD = 0.75
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+function normalizeNemotronReviewOutput(output: any): ReviewOutput {
+  if (!output || typeof output !== 'object') {
+    throw new Error('Invalid Nemotron review output: not an object')
+  }
+
+  const status = typeof output.status === 'string'
+    ? output.status.trim().toUpperCase()
+    : ''
+  if (!['PASS', 'FAIL', 'BLOCKED'].includes(status)) {
+    throw new Error(`Invalid Nemotron review status: ${String(output.status)}`)
+  }
+  if (typeof output.summary !== 'string' || output.summary.trim().length === 0) {
+    throw new Error('Invalid Nemotron review summary')
+  }
+  if (typeof output.confidence !== 'number' || output.confidence < 0 || output.confidence > 1) {
+    throw new Error(`Invalid Nemotron review confidence: ${String(output.confidence)}`)
+  }
+  if (output.reviewer !== 'nemotron-review-agent') {
+    throw new Error(`Invalid Nemotron reviewer id: ${String(output.reviewer)}`)
+  }
+  if (!Array.isArray(output.findings)) {
+    throw new Error('Invalid Nemotron findings: expected array')
+  }
+
+  const findings = output.findings.map((finding: unknown) => {
+    if (typeof finding === 'string') return finding
+    if (finding && typeof finding === 'object') return JSON.stringify(finding)
+    return String(finding)
+  })
+
+  return {
+    status: status === 'BLOCKED' ? 'ESCALATE' : status,
+    risk: status === 'PASS' ? 'LOW' : 'HIGH',
+    confidence: output.confidence,
+    violations: status === 'PASS' ? [] : findings,
+    recommendations: [],
+    summary: output.summary.trim(),
+    requires_claude: status !== 'PASS',
+    findings,
+    reviewer: 'nemotron-review-agent',
+  }
+}
+
 /**
- * Strict JSON parse — kein silent fallback (RULES.md Sektion 8).
+ * Strict JSON parse by default. The controlled Nemotron route gets one bounded
+ * extraction of the first JSON object, then deterministic schema validation.
  */
-function parseReviewerJson(content: string): ReviewOutput {
-  if (!content) {
+function parseReviewerJson(
+  content: string,
+  contract: PipelineDeps['fastReviewerContract'] = 'legacy',
+): ReviewOutput {
+  const trimmed = content.trim()
+  if (!trimmed) {
     throw new Error('EMPTY_REVIEWER_CONTENT')
   }
-  return JSON.parse(content) as ReviewOutput
+  const jsonText = trimmed.startsWith('{') && trimmed.endsWith('}')
+    ? trimmed
+    : extractFirstJsonObject(trimmed)
+  if (!jsonText) {
+    throw new Error('REVIEWER_NOT_JSON')
+  }
+  const parsed = JSON.parse(jsonText)
+  return contract === 'nemotron'
+    ? normalizeNemotronReviewOutput(parsed)
+    : parsed as ReviewOutput
 }
 
 /**
@@ -135,11 +200,28 @@ function buildReviewPrompt(
   wo: PipelineWorkorder,
   result: PipelineWorkerResult,
   tier: 'spark-c' | 'spark-d',
+  contract: PipelineDeps['fastReviewerContract'] = 'legacy',
   spark3Findings?: ReviewOutput,
 ): { systemPrompt: string; userMessage: string } {
   const tierLabel = tier === 'spark-c' ? 'fast-reviewer' : 'senior-reviewer'
 
-  const systemPrompt = [
+  const systemPrompt = tier === 'spark-c' && contract === 'nemotron'
+    ? [
+      'You are nemotron-review-agent, the controlled DGX3 reviewer for LUMEOS governed workflow tests.',
+      'You are read-only. Review only the worker output against the workorder scope and acceptance criteria.',
+      'Return ONLY one valid JSON object in message content. No markdown. No prose. No code fences.',
+      'Do not put the answer in reasoning. The workflow ignores reasoning and reads content.trim() only.',
+      'JSON schema:',
+      '{',
+      '  "status": "PASS | FAIL | BLOCKED",',
+      '  "summary": "short review summary",',
+      '  "findings": ["string"],',
+      '  "confidence": 0.0,',
+      '  "reviewer": "nemotron-review-agent"',
+      '}',
+      'Use PASS only when the output is scoped, complete, and read-only. Use FAIL for fixable quality/scope problems. Use BLOCKED for unsafe or unverifiable output.',
+    ].join('\n')
+    : [
     `You are the ${tierLabel} for LUMEOS workorders.`,
     'Return ONLY valid JSON matching this schema, no other text:',
     '{',
@@ -190,7 +272,8 @@ async function runSingleTier(
   runId?: string,
   spark3Findings?: ReviewOutput,
 ): Promise<TierOutcome> {
-  const { systemPrompt, userMessage } = buildReviewPrompt(wo, result, tier, spark3Findings)
+  const contract = tier === 'spark-c' ? deps.fastReviewerContract : 'legacy'
+  const { systemPrompt, userMessage } = buildReviewPrompt(wo, result, tier, contract, spark3Findings)
 
   const callReviewer =
     tier === 'spark-c' ? deps.callFastReviewer : callGPTOSSReviewer
@@ -255,7 +338,7 @@ async function runSingleTier(
 
     let review: ReviewOutput
     try {
-      review = parseReviewerJson(raw)
+      review = parseReviewerJson(raw, contract)
       validateReviewOutput(review)
     } catch {
       return emitMetric({ failureReason: 'invalid_json' }, 'invalid_json', true)

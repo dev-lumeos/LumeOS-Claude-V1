@@ -129,7 +129,8 @@ export async function callNemotronReviewer(
   maxTokens = 1200,
 ): Promise<string> {
   const endpoint = process.env.NEMOTRON_REVIEW_ENDPOINT ?? 'http://192.168.0.99:8001'
-  const model = process.env.NEMOTRON_REVIEW_MODEL ?? 'nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4'
+  const model = process.env.NEMOTRON_REVIEW_MODEL
+    ?? '/root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4'
 
   const response = await fetch(`${endpoint}/v1/chat/completions`, {
     method: 'POST',
@@ -142,6 +143,7 @@ export async function callNemotronReviewer(
       ],
       temperature: 0.0,
       max_tokens: Math.max(maxTokens, 1200),
+      response_format: { type: 'json_object' },
     }),
   })
 

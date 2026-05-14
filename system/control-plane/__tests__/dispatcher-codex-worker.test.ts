@@ -456,12 +456,10 @@ describe('dispatcher codex worker integration', () => {
         reviewCalls++
         return JSON.stringify({
           status: 'PASS',
-          risk: 'LOW',
-          confidence: 0.99,
-          violations: [],
-          recommendations: [],
           summary: 'review ok',
-          requires_claude: false,
+          findings: [],
+          confidence: 0.99,
+          reviewer: 'nemotron-review-agent',
         })
       },
       runCodexWorker: async () => {

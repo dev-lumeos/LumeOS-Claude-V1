@@ -163,6 +163,10 @@ function fastReviewerRouteConfigured(): boolean {
     && process.env.LUMEOS_FAST_REVIEWER_ROUTE.trim().length > 0
 }
 
+function isNemotronReviewerConfigured(): boolean {
+  return process.env.LUMEOS_FAST_REVIEWER_ROUTE === NEMOTRON_REVIEW_ROUTE_ID
+}
+
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const AGENTS_PATH    = path.resolve(process.cwd(), 'system/agent-registry/agents.json')
@@ -504,6 +508,7 @@ async function runConfiguredPostWorkerReview(
       incrementRewriteCount: (rId, tier) => state.incrementRewriteCount(rId, tier),
       writeMetric: createFileMetricsWriter(),
       requireFastReviewerPass: true,
+      fastReviewerContract: isNemotronReviewerConfigured() ? 'nemotron' : 'legacy',
     },
   )
 
@@ -1350,6 +1355,7 @@ export async function dispatchWorkorder(
             getRewriteCount:      (rId, tier) => state.getRewriteCount(rId, tier),
             incrementRewriteCount: (rId, tier) => state.incrementRewriteCount(rId, tier),
             writeMetric: createFileMetricsWriter(),
+            fastReviewerContract: isNemotronReviewerConfigured() ? 'nemotron' : 'legacy',
           },
         )
 

@@ -519,6 +519,8 @@ export interface ReviewOutput {
   recommendations:  string[]
   summary:          string
   requires_claude:  boolean
+  findings?:         string[]
+  reviewer?:         string
 }
 
 /**

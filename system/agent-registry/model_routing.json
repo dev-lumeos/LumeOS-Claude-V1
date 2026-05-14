@@ -212,7 +212,7 @@
       "port": 8001,
       "runtime_type": "vllm",
       "healthcheck": "http",
-      "model": "nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4",
+      "model": "/root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4",
       "endpoint": "http://192.168.0.99:8001",
       "temperature": 0.0,
       "seed": 42,

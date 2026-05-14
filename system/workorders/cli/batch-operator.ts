@@ -914,6 +914,10 @@ function fastReviewerRouteConfigured(): boolean {
     && process.env.LUMEOS_FAST_REVIEWER_ROUTE.trim().length > 0
 }
 
+function isNemotronReviewerConfigured(): boolean {
+  return process.env.LUMEOS_FAST_REVIEWER_ROUTE === NEMOTRON_REVIEW_ROUTE_ID
+}
+
 function defaultFastReviewerCall(): (systemPrompt: string, userMessage: string, maxTokens?: number) => Promise<string> {
   return process.env.LUMEOS_FAST_REVIEWER_ROUTE === NEMOTRON_REVIEW_ROUTE_ID
     ? callNemotronReviewer
@@ -989,6 +993,7 @@ export async function runConfiguredOutputReview(
         incrementRewriteCount,
         writeMetric: createFileMetricsWriter(),
         requireFastReviewerPass: true,
+        fastReviewerContract: isNemotronReviewerConfigured() ? 'nemotron' : 'legacy',
       },
     )
 

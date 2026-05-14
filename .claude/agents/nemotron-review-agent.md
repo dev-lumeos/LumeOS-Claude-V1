@@ -19,7 +19,7 @@ This agent is read-only. It may review worker output, diffs, acceptance criteria
 node: spark-c
 host: edgexpert-509d
 endpoint: http://192.168.0.99:8001
-model: nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4
+model: /root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4
 temperature: 0.0
 max_context: 65536
 ```
@@ -35,19 +35,26 @@ max_context: 65536
 
 ## Output Contract
 
-Return only valid JSON matching the review pipeline contract:
+Return only valid JSON in `message.content`. The workflow uses
+`content.trim()`, ignores the runtime `reasoning` field, and treats empty
+content as invalid.
 
 ```json
 {
-  "status": "PASS|REWRITE|ESCALATE",
-  "risk": "LOW|MEDIUM|HIGH",
-  "confidence": 0.85,
-  "violations": [],
-  "recommendations": [],
+  "status": "PASS|FAIL|BLOCKED",
   "summary": "short review summary",
-  "requires_claude": false
+  "findings": [],
+  "confidence": 0.85,
+  "reviewer": "nemotron-review-agent"
 }
 ```
+
+Rules:
+- Return no markdown, no prose, and no code fence around the JSON.
+- Use `PASS` only when the output is scoped, complete, and read-only.
+- Use `FAIL` for fixable quality, completeness, or scope problems.
+- Use `BLOCKED` for unsafe, unverifiable, or governance-blocking output.
+- `findings` must be an array; use `[]` when there are no findings.
 
 ## Boundaries
 

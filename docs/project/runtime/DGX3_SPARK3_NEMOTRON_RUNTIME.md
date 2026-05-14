@@ -15,6 +15,7 @@ DGX3 / Spark3 has been migrated from Gemma4 to Nemotron Omni NVFP4.
 | Container | `vllm_node` |
 | Image | `vllm/vllm-openai:v0.20.0-aarch64-cu130-ubuntu2404` |
 | Model | `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4` |
+| Served model id | `/root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4` |
 | Local model path | `/root/.cache/huggingface/local-models/nvidia-Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4` |
 | Endpoint | `http://192.168.0.99:8001` |
 | Local endpoint | `http://127.0.0.1:8001` |
@@ -24,6 +25,7 @@ DGX3 / Spark3 has been migrated from Gemma4 to Nemotron Omni NVFP4.
 ## Verified Smoke
 
 - `/v1/models`: OK
+- The OpenAI-compatible `model` field must use the served model id above, not the Hugging Face repo id.
 - Reply-only smoke: `ok -> content.trim() = ok`
 - JSON-only smoke: `content.trim() = {"status":"ok"}`
 - Long-context smoke: `46858` prompt tokens and `160` completion tokens completed in `8.12` seconds with `finish_reason=stop`, `content={"status":"ok","context":"long"}`, and `reasoning_len=694`.
