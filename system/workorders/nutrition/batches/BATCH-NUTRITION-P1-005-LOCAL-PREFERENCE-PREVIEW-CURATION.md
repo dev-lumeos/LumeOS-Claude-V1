@@ -55,4 +55,5 @@ documentation impact handling -> SSOT_SYNC_CHECK -> dossier.
 | `WO-nutrition-025` | `apps/web/src/app/nutrition/curation/page.tsx` |
 | `WO-nutrition-025` | `apps/web/src/app/nutrition/page.tsx` |
 | `WO-nutrition-025` | `docs/project/p1-005/P1-005-local-preference-preview-curation-report.md` |
+| `WO-nutrition-025` | `docs/project/p1-005/P1-005-local-preference-preview-curation-validation.md` |
 | `WO-nutrition-025` | `docs/project/CURRENT_GOVERNANCE_HANDOVER.md` |

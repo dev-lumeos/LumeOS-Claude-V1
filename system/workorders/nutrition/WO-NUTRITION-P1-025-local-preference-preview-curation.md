@@ -92,6 +92,7 @@ expected_outputs:
   - "apps/web/src/app/nutrition/curation/page.tsx"
   - "apps/web/src/app/nutrition/page.tsx"
   - "docs/project/p1-005/P1-005-local-preference-preview-curation-report.md"
+  - "docs/project/p1-005/P1-005-local-preference-preview-curation-validation.md"
   - "docs/project/CURRENT_GOVERNANCE_HANDOVER.md"
 
 scope_files:
@@ -104,6 +105,7 @@ scope_files:
   - "apps/web/src/app/nutrition/curation/page.tsx"
   - "apps/web/src/app/nutrition/page.tsx"
   - "docs/project/p1-005/P1-005-local-preference-preview-curation-report.md"
+  - "docs/project/p1-005/P1-005-local-preference-preview-curation-validation.md"
   - "docs/project/CURRENT_GOVERNANCE_HANDOVER.md"
 
 files_allowed:
@@ -116,6 +118,7 @@ files_allowed:
   - "apps/web/src/app/nutrition/curation/page.tsx"
   - "apps/web/src/app/nutrition/page.tsx"
   - "docs/project/p1-005/P1-005-local-preference-preview-curation-report.md"
+  - "docs/project/p1-005/P1-005-local-preference-preview-curation-validation.md"
   - "docs/project/CURRENT_GOVERNANCE_HANDOVER.md"
 
 context_files:
@@ -149,6 +152,7 @@ acceptance_criteria:
   - "/nutrition/curation exposes unassigned foods, category coverage, V1 tag coverage, and unresolved preference mapping gaps."
   - "/nutrition still loads and remains read-only."
   - "Documentation impact is handled and SSOT_SYNC_CHECK passes."
+  - "Validation report records the local API/page probes and confirms read-only behavior."
 
 negative_constraints:
   - "No DEV/LIVE action."
