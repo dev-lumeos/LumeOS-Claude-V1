@@ -7,6 +7,8 @@
 **Scope boundary:** read-only verification plus planning docs and SSOT pointers only; no extraction, copies, moves, deletes, runtime behavior changes, product code changes, or state edits
 **Routing note:** docs-only planning task. Use the existing `docs-agent` worker route. This is not a security-specialist workorder.
 
+## YAML Contract
+
 ```yaml
 workorder_id: "WO-governance-019"
 agent_id: "docs-agent"
@@ -196,3 +198,9 @@ validation_commands:
   - "cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\run-batch-operator.ts system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-019-governance-core-phase-0.md --dry-run --project lumeos --orchestration-mode spark1_orchestrated"
   - "cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs system\\workorders\\cli\\run-batch-operator.ts system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-019-governance-core-phase-0.md --doctor --json --project lumeos --orchestration-mode spark1_orchestrated"
 ```
+
+## Notes
+
+This workorder exists to make the Phase-0 planning work auditable through the
+governed lifecycle. It does not authorize extraction, copying, cleanup, runtime
+changes, product changes, DB work, or queue/state edits.
