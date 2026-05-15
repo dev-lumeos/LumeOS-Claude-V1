@@ -950,13 +950,13 @@
     },
     {
       "id": "GOV-TODO-044",
-      "title": "Draft project onboarding and repo separation blueprint",
+      "title": "AI-Governance-Core extraction and LumeOS reattach follow-through",
       "layer": "project_profiles",
       "severity": "medium",
       "priority": "P2",
       "status": "open",
-      "evidence": "Future projects need a clear onboarding and repository separation blueprint so LumeOS-specific paths, gates, and source-chain assumptions do not leak into other products.",
-      "recommended_action": "Draft blueprint using current project-profile, source-chain, and governance gate constraints.",
+      "evidence": "The extraction blueprint now exists under docs/project/governance-core-extraction/. It defines the split where AI-Governance-Core owns reusable workflow mechanics and LumeOS remains the owner of project truth. The extraction itself has not been performed.",
+      "recommended_action": "Tom reviews the blueprint and explicitly approves Phase 0/1 before creating D:\\GitHub\\AI-Governance-Core or copying reusable governance code.",
       "dependencies": [
         "GOV-TODO-006",
         "GOV-TODO-042"
@@ -966,7 +966,13 @@
       "blocks_product_work": false,
       "source_files": [
         "system/project-profiles/",
-        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"
+        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md",
+        "docs/project/governance-core-extraction/GOVERNANCE_CORE_EXTRACTION_BLUEPRINT.md",
+        "docs/project/governance-core-extraction/GOVERNANCE_CORE_MIGRATION_MAP.md",
+        "docs/project/governance-core-extraction/GOVERNANCE_CORE_TARGET_STRUCTURE.md",
+        "docs/project/governance-core-extraction/LUMEOS_PROJECT_REATTACH_PLAN.md",
+        "docs/project/governance-core-extraction/EXTRACTION_PHASE_PLAN.md",
+        "docs/project/governance-core-extraction/FRONTDOOR_AND_PROJECT_SEPARATION_NOTES.md"
       ]
     },
     {

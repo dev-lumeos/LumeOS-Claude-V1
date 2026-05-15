@@ -155,7 +155,7 @@ Completed product work:
 
 - `GOV-TODO-042`: Governance Frontdoor workflow.
 - `GOV-TODO-043`: Project/topic archive structure.
-- `GOV-TODO-044`: Project onboarding / repo separation blueprint.
+- `GOV-TODO-044`: AI-Governance-Core extraction / project reattach follow-through.
 - `GOV-TODO-045`: Structure cleanup blueprint.
 
 ## Open Runtime TODOs
@@ -199,6 +199,14 @@ Phase 1 navigation READMEs now exist for `system/`, `system/memory/`,
 `system/reports/`, `system/state/`, `system/workorders/`, and key Nutrition
 workorder subfolders. They explain active vs generated vs placeholder vs
 historical areas without moving or deleting files.
+
+The reusable governance extraction blueprint now exists under
+`docs/project/governance-core-extraction/`. It defines the planned split where
+AI-Governance-Core controls reusable workflow mechanics and LumeOS remains the
+owner of project truth. No extraction, file moves, runtime behavior changes, or
+product changes have been performed. The next extraction step is Tom review and
+approval for Phase 0/1 in
+`docs/project/governance-core-extraction/EXTRACTION_PHASE_PLAN.md`.
 
 Then build the Governance Frontdoor workflow:
 

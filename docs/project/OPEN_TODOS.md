@@ -129,15 +129,23 @@ subdirectories, conversation notes, and TODO linkage.
 Required next step: define the archive layout and migration rules without
 rewriting historical evidence.
 
-### GOV-TODO-044: Project onboarding / repo separation blueprint
+### GOV-TODO-044: AI-Governance-Core extraction / project reattach follow-through
 
 Status: open.
 
-Future projects need a clear onboarding and repository separation blueprint so
-LumeOS-specific assumptions do not leak into other products.
+The extraction blueprint now exists:
 
-Required next step: draft the blueprint using current project-profile and
-source-chain constraints.
+- `docs/project/governance-core-extraction/GOVERNANCE_CORE_EXTRACTION_BLUEPRINT.md`
+- `docs/project/governance-core-extraction/GOVERNANCE_CORE_MIGRATION_MAP.md`
+- `docs/project/governance-core-extraction/GOVERNANCE_CORE_TARGET_STRUCTURE.md`
+- `docs/project/governance-core-extraction/LUMEOS_PROJECT_REATTACH_PLAN.md`
+- `docs/project/governance-core-extraction/EXTRACTION_PHASE_PLAN.md`
+- `docs/project/governance-core-extraction/FRONTDOOR_AND_PROJECT_SEPARATION_NOTES.md`
+
+Required next step: Tom reviews the blueprint, then explicitly approves Phase
+0/1 before creating `D:\GitHub\AI-Governance-Core` or copying any reusable
+governance code. LumeOS remains the working source of truth until that separate
+phase is approved.
 
 ### GOV-TODO-045: Structure cleanup blueprint
 
