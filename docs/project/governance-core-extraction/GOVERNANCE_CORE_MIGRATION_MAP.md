@@ -84,13 +84,13 @@ No files should be moved, deleted, or copied by this document.
 | `packages/vllm-client/` | COPY_TO_CORE | Reusable VLLM client wrapper. | `packages/vllm-client/` | Runtime endpoint config must be external. | Model runtime checks. |
 | `packages/execution-token/` | COPY_TO_CORE | Reusable execution token package. | `packages/execution-token/` | Package namespace and key policy need review. | wo-core. |
 | `packages/scheduler-core/` | COPY_TO_CORE | Reusable scheduler core. | `packages/scheduler-core/` | Embedded path assumptions need tests. | wo-core. |
-| `packages/graph-core/` | COPY_TO_CORE / UNKNOWN | Looks reusable, but exact active use needs import graph check. | `packages/graph-core/` | May be unused or partial. | UNKLAR: run `rg "@lumeos/graph-core|graph-core" .`. |
-| `packages/shared/` | STAY_IN_LUMEOS / UNKNOWN | Depends on Supabase and may include product shared code. | n/a until audited | Risk of product coupling. | UNKLAR: inspect exports/imports. |
+| `packages/graph-core/` | COPY_TO_CORE | Generic graph validation/readiness package; Phase-0 inspection found active imports by `services/orchestrator-api` and `services/scheduler-api`. | `packages/graph-core/` | Namespace rename impact remains open. | wo-core-adjacent graph consumers. |
+| `packages/shared/` | STAY_IN_LUMEOS | Phase-0 inspection found it exports Supabase browser/server helpers only. | n/a | Violates file-backed-by-default core policy if copied as required dependency. | Supabase env/project apps. |
 | `packages/supabase-clients/` | STAY_IN_LUMEOS / UNKNOWN | Supabase client package likely project app support. | n/a unless core needs test fixture only | Core should not depend on LumeOS DB clients. | Supabase env. |
 | `packages/types/` | STAY_IN_LUMEOS | Product/domain types. | n/a | Could leak LumeOS domain model. | App/services. |
-| `services/governance-compiler/` | UNKNOWN | Name suggests reusable, but service ownership was not audited deeply. | TBD | Could contain embedded project assumptions. | UNKLAR: inspect imports and runtime use. |
-| `services/orchestrator-api/` | UNKNOWN | May be reusable orchestration service or LumeOS deployment wrapper. | TBD | Runtime deployment assumptions. | UNKLAR: inspect service package and routes. |
-| `services/wo-classifier/` | UNKNOWN | May be reusable classifier service. | TBD | Could be experimental. | UNKLAR: inspect service package and tests. |
+| `services/governance-compiler/` | TEMPLATE_TO_CORE | Phase-0 inspection found reusable concept but embedded prompt path, workspace root detection, and Spark A endpoint defaults. | `templates/services/governance-compiler/` first; later `src/services/governance-compiler/` after abstraction. | Hardcoded route/workspace assumptions. | wo-core, vllm-client, prompt templates. |
+| `services/orchestrator-api/` | TEMPLATE_TO_CORE | Phase-0 inspection found reusable graph/scheduler/retry route concepts, but hardcoded Spark A/B status samples. | `templates/services/orchestrator-api/` first. | Runtime status defaults can become stale. | wo-core, graph-core, agent-core, scheduler-core. |
+| `services/wo-classifier/` | TEMPLATE_TO_CORE | Phase-0 inspection found deterministic classifier logic plus optional Supabase duplicate check. | `templates/services/wo-classifier/` first; optional storage adapter later. | Must not make Supabase required by core. | wo-core, optional DB adapter. |
 | `services/*-api` product services | STAY_IN_LUMEOS | Product/domain APIs. | n/a | Not core governance source. | Product code. |
 | `apps/*` | STAY_IN_LUMEOS | Product/admin/web/mobile apps. | n/a | Not governance core. | Product services/packages. |
 | `docs/project/*` | STAY_IN_LUMEOS | LumeOS SSOT, handover, TODOs, product milestones. | n/a | Core must not own project truth. | SSOT sync. |
@@ -136,10 +136,6 @@ Likely first-copy reusable source:
 
 These need verification before extraction:
 
-- `packages/graph-core/`: run `rg "@lumeos/graph-core|graph-core" .`.
-- `packages/shared/`: run `rg "@lumeos/shared|packages/shared" .` and inspect exports.
-- `services/governance-compiler/`: inspect package, imports, and runtime docs.
-- `services/orchestrator-api/`: inspect whether it is active reusable governance or project-local service.
-- `services/wo-classifier/`: inspect active usage and tests.
+- package namespace rename impact: run `rg "@lumeos/" system packages services apps tools`.
+- final LumeOS external project profile location: run `rg "system/project-profiles/profiles/lumeos.json|project.profile" .`.
 - root archive files: run `git ls-files backup_system.zip system.zip services.zip` and inspect provenance before any cleanup.
-

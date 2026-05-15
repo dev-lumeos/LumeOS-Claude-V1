@@ -42,6 +42,27 @@ project-specific decisions.
 The split must make it impossible for reusable governance code to silently carry
 LumeOS product truth into a different project.
 
+## Storage Policy
+
+AI-Governance-Core must be file-backed by default.
+
+Supabase/Postgres may exist later only as optional storage adapters. No core
+governance command may require Supabase/Postgres unless the active project
+profile explicitly enables a DB-backed adapter for that command.
+
+Default core behavior must use project-local files for:
+
+- runtime state
+- approval state
+- audit logs
+- metrics
+- reports
+- dossiers
+- SSOT docs
+
+Project repos own those files. Core commands must receive paths through a
+project profile or explicit CLI arguments.
+
 ## Why Split
 
 The current `system/` tree contains both reusable governance engine code and
@@ -222,10 +243,10 @@ This blueprint does not:
 Each extraction phase must preserve these rules:
 
 - Current LumeOS repo remains the active source of truth until cutover.
+- Phase 1 requires Tom approval of the Phase-1 copy manifest before copying.
 - No embedded governance cleanup happens during copy phases.
 - The first external attachment is read-only.
 - The first governed test is harmless and local-only.
 - Any mismatch between core and LumeOS profile stops the phase.
 - All generated evidence remains in the project repo unless the run is a core
   fixture test.
-

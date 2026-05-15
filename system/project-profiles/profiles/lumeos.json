@@ -46,7 +46,8 @@
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-HUMAN-LAYER-GAP-ANALYSIS.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-HUMAN-LAYER-V2-WILD-APPLY.md",
       "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-017-system-tree-audit.md",
-      "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-018-system-tree-readmes.md"
+      "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-018-system-tree-readmes.md",
+      "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-019-governance-core-phase-0.md"
     ]
   },
   "forbidden_paths": [

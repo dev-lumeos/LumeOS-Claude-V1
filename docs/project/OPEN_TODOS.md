@@ -141,11 +141,14 @@ The extraction blueprint now exists:
 - `docs/project/governance-core-extraction/LUMEOS_PROJECT_REATTACH_PLAN.md`
 - `docs/project/governance-core-extraction/EXTRACTION_PHASE_PLAN.md`
 - `docs/project/governance-core-extraction/FRONTDOOR_AND_PROJECT_SEPARATION_NOTES.md`
+- `docs/project/governance-core-extraction/PHASE_0_SOURCE_VERIFICATION_REPORT.md`
+- `docs/project/governance-core-extraction/PHASE_1_COPY_MANIFEST.md`
 
 Required next step: Tom reviews the blueprint, then explicitly approves Phase
-0/1 before creating `D:\GitHub\AI-Governance-Core` or copying any reusable
-governance code. LumeOS remains the working source of truth until that separate
-phase is approved.
+1 before creating `D:\GitHub\AI-Governance-Core` or copying any reusable
+governance code. Phase 0 produced the read-only source verification and copy
+manifest only. LumeOS remains the working source of truth until a separate
+cutover is approved.
 
 ### GOV-TODO-045: Structure cleanup blueprint
 

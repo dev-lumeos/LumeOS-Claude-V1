@@ -208,6 +208,13 @@ product changes have been performed. The next extraction step is Tom review and
 approval for Phase 0/1 in
 `docs/project/governance-core-extraction/EXTRACTION_PHASE_PLAN.md`.
 
+Phase 0 source verification is now prepared under
+`docs/project/governance-core-extraction/PHASE_0_SOURCE_VERIFICATION_REPORT.md`
+and `docs/project/governance-core-extraction/PHASE_1_COPY_MANIFEST.md`.
+The manifest keeps Phase 1 narrow, file-backed by default, and explicitly
+excludes LumeOS product truth, Nutrition helpers, generated reports, runtime
+state, approval queue state, BLS handling, and live DGX facts as core defaults.
+
 Then build the Governance Frontdoor workflow:
 
 Brainstorm -> Summary -> Product Intent -> Spec -> Workorder Drafts -> Drift

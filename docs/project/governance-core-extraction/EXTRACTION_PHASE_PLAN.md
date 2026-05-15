@@ -33,10 +33,11 @@ Validation:
 - clean or intentionally documented worktree
 - source commit recorded
 - migration map reviewed
+- file-backed default storage policy documented
 
 Exit criteria:
 
-- Tom approves the source snapshot and copy manifest.
+- Tom approves the source snapshot and copy manifest before Phase 1 begins.
 
 Rollback/stop rule:
 
@@ -48,6 +49,10 @@ Rollback/stop rule:
 Goal:
 
 - Create `D:\GitHub\AI-Governance-Core` and copy only approved reusable files.
+
+Prerequisite:
+
+- Tom has explicitly approved `PHASE_1_COPY_MANIFEST.md`.
 
 Allowed:
 
@@ -63,6 +68,7 @@ Forbidden:
 - copying LumeOS product specs or dossiers as core source
 - copying runtime state or approval queue as defaults
 - changing LumeOS behavior
+- requiring Supabase/Postgres for core commands
 
 Validation:
 
@@ -299,4 +305,3 @@ Exit criteria:
 Rollback/stop rule:
 
 - Stop if any project run needs embedded code not available in core.
-

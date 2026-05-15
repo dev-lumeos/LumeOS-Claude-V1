@@ -22,6 +22,19 @@ LumeOS remains responsible for:
 
 Governance-Core reads those locations through a project profile.
 
+## Storage Adapter Policy
+
+Initial LumeOS attachment must use file-backed storage only:
+
+- `system/state` for runtime/audit/metrics
+- `system/approval` for approval state
+- `system/reports` for reports and dossiers
+- `docs/project` for SSOT docs and TODOs
+
+No AI-Governance-Core command may require Supabase/Postgres during LumeOS
+reattach unless the LumeOS project profile explicitly enables a DB-backed
+adapter in a later approved phase.
+
 ## Project Profile Location
 
 Current embedded profile:
@@ -90,7 +103,11 @@ The external project profile should include at least:
   ],
   "ignored_local_paths": [
     "docs/specs/Nutrition/00_raw/**"
-  ]
+  ],
+  "storage": {
+    "default_adapter": "file",
+    "db_adapters_enabled": false
+  }
 }
 ```
 
@@ -227,4 +244,3 @@ Stop immediately if:
 - a project path resolves outside the LumeOS repo
 - model routing falls back silently when `spark1_orchestrated` is requested
 - documentation impact is missing or skipped without structured N/A
-

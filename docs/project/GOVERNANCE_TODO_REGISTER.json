@@ -955,8 +955,8 @@
       "severity": "medium",
       "priority": "P2",
       "status": "open",
-      "evidence": "The extraction blueprint now exists under docs/project/governance-core-extraction/. It defines the split where AI-Governance-Core owns reusable workflow mechanics and LumeOS remains the owner of project truth. The extraction itself has not been performed.",
-      "recommended_action": "Tom reviews the blueprint and explicitly approves Phase 0/1 before creating D:\\GitHub\\AI-Governance-Core or copying reusable governance code.",
+      "evidence": "The extraction blueprint and Phase-0 source verification now exist under docs/project/governance-core-extraction/. They define the split where AI-Governance-Core owns reusable workflow mechanics and LumeOS remains the owner of project truth. Phase 0 produced a copy manifest only; extraction itself has not been performed.",
+      "recommended_action": "Tom reviews PHASE_1_COPY_MANIFEST.md and explicitly approves Phase 1 before creating D:\\GitHub\\AI-Governance-Core or copying reusable governance code.",
       "dependencies": [
         "GOV-TODO-006",
         "GOV-TODO-042"
@@ -972,7 +972,9 @@
         "docs/project/governance-core-extraction/GOVERNANCE_CORE_TARGET_STRUCTURE.md",
         "docs/project/governance-core-extraction/LUMEOS_PROJECT_REATTACH_PLAN.md",
         "docs/project/governance-core-extraction/EXTRACTION_PHASE_PLAN.md",
-        "docs/project/governance-core-extraction/FRONTDOOR_AND_PROJECT_SEPARATION_NOTES.md"
+        "docs/project/governance-core-extraction/FRONTDOOR_AND_PROJECT_SEPARATION_NOTES.md",
+        "docs/project/governance-core-extraction/PHASE_0_SOURCE_VERIFICATION_REPORT.md",
+        "docs/project/governance-core-extraction/PHASE_1_COPY_MANIFEST.md"
       ]
     },
     {

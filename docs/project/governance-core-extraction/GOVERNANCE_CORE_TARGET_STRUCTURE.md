@@ -8,6 +8,15 @@ The target repo should contain reusable governance engine code, schemas,
 templates, policies, tests, and fixtures. It should not contain LumeOS product
 truth or generated LumeOS evidence.
 
+## Default Storage Model
+
+AI-Governance-Core is file-backed by default. Runtime state, approval queues,
+audit logs, metrics, reports, dossiers, and SSOT files live in the active
+project repo unless a project profile explicitly enables another adapter.
+
+Supabase/Postgres support may be added later only as optional adapters. A core
+command must not require Supabase/Postgres for normal operation.
+
 ## Proposed Root Layout
 
 ```text
@@ -56,6 +65,7 @@ AI-Governance-Core/
     ssot-sync/
     documentation-impact/
     stop-rules/
+    storage-adapters/
   packages/
     wo-core/
     agent-core/
@@ -269,4 +279,3 @@ and `--profile` handling wherever current code assumes `process.cwd()` is both
 operator root and project root.
 
 The first LumeOS connection should be read-only doctor/check mode.
-
