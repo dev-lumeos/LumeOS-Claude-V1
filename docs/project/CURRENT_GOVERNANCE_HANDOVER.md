@@ -52,6 +52,7 @@ evidence only and must not override the current SSOT files listed below.
   - Raw timeout remains visible as `worker_runtime_status`.
   - If scoped outputs exist and configured review passes, the timeout is `observed_non_terminal` and final classification remains `DONE`.
   - Missing outputs or failed review still make the timeout blocking.
+  - If a stale failed review is superseded by a later `review_completed PASS` for the same workorder after missing outputs are fixed, dossier review classification uses the latest completed review instead of the older failed review.
 - `SSOT_SYNC_CHECK` is implemented and wired into `governance-invariant-check`.
   - It checks mapped SSOT updates for runtime/model, workflow/governance, product-gate, infra runtime, and TODO changes.
   - It now also checks `OPEN_TODOS.md` open IDs against `GOVERNANCE_TODO_REGISTER.json`, and core runtime-role consistency across `STACK_REFERENCE.md` and model-tier docs.

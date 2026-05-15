@@ -552,4 +552,59 @@ describe('batch dossier reporter', () => {
     assert.equal(dossier.review_status.status, 'pass')
     assert.match(markdown, /worker subprocess timeout: observed \/ non-terminal \/ superseded by validated outputs/)
   })
+
+  it('uses the latest completed review when a stale failed review was superseded', () => {
+    writeCleanRuntime()
+    write('docs/specs/Nutrition/06_workorder_planning/test-report.md', 'done\n')
+    write('system/reports/codex-worker/2026-05-10T00-00-00-000Z-WO-test-001-report.md', [
+      '# Codex Worker Execution Report',
+      '',
+      '## Exit Code',
+      '124',
+      '',
+      '## Final State',
+      'FIX_REQUIRED',
+      '',
+      '## Stderr',
+      '```',
+      'Codex Worker timed out after 120000 ms',
+      '```',
+    ].join('\n'))
+    appendJsonl('system/state/pipeline-audit.jsonl', {
+      ts: '2026-05-05T00:00:00.000Z',
+      event: 'review_completed',
+      workorder_id: 'WO-test-001',
+      run_id: 'RUN-1',
+      tier: 'spark-c',
+      status: 'FAIL',
+      confidence: 0.4,
+    })
+    appendJsonl('system/state/pipeline-audit.jsonl', {
+      ts: '2026-05-05T01:00:00.000Z',
+      event: 'review_completed',
+      workorder_id: 'WO-test-001',
+      run_id: 'REVIEW-2',
+      tier: 'spark-c',
+      status: 'PASS',
+      confidence: 0.97,
+    })
+
+    const dossier = buildBatchDossier({
+      batchFile: batchPath(),
+      repoRoot: tmpDir,
+      gitStatus: '## goal/test\n',
+      generatedAt: '2026-05-05T01:00:00.000Z',
+      checkersOverride: {
+        invariant: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        agent_contract: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        spec_source_chain: { status: 'pass', summary: { critical: 0, high: 0, medium: 0, low: 0, info: 0 } },
+        migration_guard: { status: 'not_run' },
+      },
+    })
+
+    assert.equal(dossier.review_status.status, 'pass')
+    assert.match(dossier.review_status.detail, /confidence 0\.97/)
+    assert.equal(dossier.worker_runtime_status.status, 'observed_non_terminal')
+    assert.equal(dossier.final_state, 'DONE')
+  })
 })

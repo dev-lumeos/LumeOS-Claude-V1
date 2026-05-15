@@ -625,16 +625,23 @@ function summarizeOutputValidation(outputs: BatchDossierOutput[]): BatchDossierS
 }
 
 function summarizeReviewStatus(reviews: BatchDossierReview[]): BatchDossierStatusSummary {
-  const completed = reviews.filter(review => /review_completed/i.test(review.event))
-  const failing = completed.find(review => /FAIL|BLOCKED|invalid_json/i.test(String(review.status ?? '')))
-  if (failing) {
-    return { status: 'fail', detail: `Configured review failed or blocked: ${failing.status ?? failing.event}` }
+  const completed = reviews
+    .map((review, index) => ({ review, index }))
+    .filter(item => /review_completed/i.test(item.review.event))
+    .sort((a, b) => {
+      const aMs = a.review.ts ? Date.parse(a.review.ts) : NaN
+      const bMs = b.review.ts ? Date.parse(b.review.ts) : NaN
+      if (Number.isFinite(aMs) && Number.isFinite(bMs) && aMs !== bMs) return bMs - aMs
+      return b.index - a.index
+    })
+  const latest = completed[0]?.review
+  if (latest && /FAIL|BLOCKED|invalid_json/i.test(String(latest.status ?? ''))) {
+    return { status: 'fail', detail: `Configured review failed or blocked: ${latest.status ?? latest.event}` }
   }
-  const passing = completed.find(review => /^PASS$/i.test(String(review.status ?? '')))
-  if (passing) {
+  if (latest && /^PASS$/i.test(String(latest.status ?? ''))) {
     return {
       status: 'pass',
-      detail: `Configured review passed${typeof passing.confidence === 'number' ? ` with confidence ${passing.confidence}` : ''}.`,
+      detail: `Configured review passed${typeof latest.confidence === 'number' ? ` with confidence ${latest.confidence}` : ''}.`,
     }
   }
   if (reviews.some(review => /invalid_json|review_blocked|human_needed/i.test(`${review.event} ${review.status ?? ''}`))) {
