@@ -6,6 +6,7 @@ import {
   getLocalFoodSearch,
   normalizeFoodSearchText,
 } from '../../lib/nutrition/food-search'
+import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '../../lib/nutrition/preferences-catalog'
 
 export const dynamic = 'force-dynamic'
 
@@ -92,6 +93,8 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
 
   try {
     const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag, sort, offset })
+    const preferenceCatalog = getNutritionPreferenceCatalog()
+    const preferenceSummary = summarizePreferenceCatalog(preferenceCatalog)
     const commonNutrients = payload.nutrients.filter(item => COMMON_NUTRIENTS.has(item.nutrient_code))
     const otherNutrients = payload.nutrients.filter(item => !COMMON_NUTRIENTS.has(item.nutrient_code))
     const nextOffset = payload.offset + payload.limit
@@ -123,6 +126,41 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
               from current specs and deterministic BLS-backed rules. This page does not invent display names, aliases,
               categories, or nutrient values.
             </p>
+          </section>
+
+          <section className="mb-6 rounded-lg border border-slate-800 bg-slate-900/70 p-4 text-sm text-slate-300">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Preferences foundation</div>
+                <p className="mt-2 max-w-3xl leading-6">
+                  Read-only local catalog for diet type, allergies, exclusions, cuisines, cooking constraints, and
+                  like/dislike curation. User persistence and Smart Search application remain a separate governed step.
+                </p>
+              </div>
+              <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/api/nutrition/preferences/catalog">
+                Catalog API
+              </Link>
+            </div>
+            <div className="mt-4 grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Diet types</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">{preferenceSummary.diet_types}</div>
+              </div>
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Allergies / intolerances</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">{preferenceSummary.allergies_intolerances}</div>
+              </div>
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Food preference items</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">{preferenceSummary.food_preference_items}</div>
+              </div>
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Mapped exclusions</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">
+                  {preferenceSummary.mapped_general_exclusions}/{preferenceSummary.general_exclusions}
+                </div>
+              </div>
+            </div>
           </section>
 
           <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">

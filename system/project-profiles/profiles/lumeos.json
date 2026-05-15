@@ -39,7 +39,8 @@
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-BLS-IMPORT-EXPANSION.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-SEARCH.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-HUMAN-LAYER.md",
-      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-SEARCH-HARDENING.md"
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-FOOD-SEARCH-HARDENING.md",
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-PREFERENCES-CURATION.md"
     ]
   },
   "forbidden_paths": [

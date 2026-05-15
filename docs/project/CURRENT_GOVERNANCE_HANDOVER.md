@@ -1,6 +1,6 @@
 # Current Governance Handover
 
-Current date: 2026-05-14.
+Current date: 2026-05-15.
 
 This file is the concise active handover. Older session details are historical
 evidence only and must not override the current SSOT files listed below.
@@ -115,6 +115,14 @@ evidence only and must not override the current SSOT files listed below.
   - Added read-only category tree endpoint: `/api/nutrition/foods/categories`.
   - `/nutrition` now shows category and V1 tag filter chips, sort selector, pagination controls, macro badges, selected food detail, and source-label warning while remaining read-only.
   - This boundary remains local-only: no DEV/LIVE, no Supabase Cloud, no production DB, no invented categories, no invented aliases, no invented display names, no invented food/nutrient values, no RDA changes, and no diary/MealItem flow.
+- The local-only Nutrition Preferences + Human Layer Curation foundation is completed for `BATCH-NUTRITION-P1-005-LOCAL-PREFERENCES-CURATION.md`.
+  - Applied local-only SQL: `docs/project/p1-005/P1-005-local-preferences-foundation.sql`.
+  - Created local `nutrition.food_preferences` and `nutrition.food_preference_items` schema support for diet type, allergies, intolerances, general exclusions, preferred cuisines, meal/snack counts, cooking skill, prep time, budget, meal prep, planner notes, and preference items.
+  - Added read-only catalog API: `/api/nutrition/preferences/catalog`.
+  - `/nutrition` shows a read-only Preferences foundation preview and links the catalog API.
+  - Catalogued old-platform Preference screen options: 8 diet types, 20 allergy/intolerance chips, 8 general exclusion presets, 27 cuisines, 18 food preference groups, and 230 food preference items.
+  - Six general exclusions have deterministic category mappings; `no_raw_fish` and `no_gluten` remain unresolved until preparation/allergen metadata exists.
+  - The slice enables no user preference writes, no Smart Search default filtering, no diary logging, no MealItem creation, no invented food/nutrient values, no invented aliases/display names, and no DEV/LIVE action.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions
