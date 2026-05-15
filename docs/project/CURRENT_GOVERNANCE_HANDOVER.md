@@ -195,6 +195,11 @@ stale:
 - `docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json`
 - `docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md`
 
+Phase 1 navigation READMEs now exist for `system/`, `system/memory/`,
+`system/reports/`, `system/state/`, `system/workorders/`, and key Nutrition
+workorder subfolders. They explain active vs generated vs placeholder vs
+historical areas without moving or deleting files.
+
 Then build the Governance Frontdoor workflow:
 
 Brainstorm -> Summary -> Product Intent -> Spec -> Workorder Drafts -> Drift
@@ -207,6 +212,7 @@ gate, Spark1 orchestration, Nemotron review, SSOT sync, and dossier reporting.
 
 - `docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md`
 - `docs/project/system-structure/SYSTEM_TREE_AUDIT.md`
+- `system/README.md`
 - `docs/project/OPEN_TODOS.md`
 - `docs/project/GOVERNANCE_TODO_REGISTER.json`
 - `docs/project/STACK_REFERENCE.md`

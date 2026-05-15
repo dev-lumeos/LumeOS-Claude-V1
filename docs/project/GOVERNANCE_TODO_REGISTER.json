@@ -976,8 +976,8 @@
       "severity": "low",
       "priority": "P2",
       "status": "open",
-      "evidence": "A system tree audit now exists at docs/project/system-structure/SYSTEM_TREE_AUDIT.md with machine-readable classification in docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json and a phased cleanup proposal in docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md. No cleanup, move, delete, runtime behavior change, or state edit has been performed.",
-      "recommended_action": "Run Phase 1 only: add indexes/readmes for active vs generated vs historical areas. Do not move or delete files until Tom approves an exact move list.",
+      "evidence": "System tree audit exists and Phase 1 navigation READMEs now exist for system/, system/memory/, system/reports/, system/state/, system/workorders/, system/workorders/nutrition/, system/workorders/nutrition/batches/, and system/workorders/nutrition/drafts/. No cleanup, move, delete, runtime behavior change, or state edit has been performed.",
+      "recommended_action": "Run Phase 2 only: mark stale, placeholder, and archive/reference areas explicitly without moving or deleting files. Do not move or delete files until Tom approves an exact move list.",
       "dependencies": [
         "GOV-TODO-043"
       ],
@@ -988,6 +988,14 @@
         "docs/project/system-structure/SYSTEM_TREE_AUDIT.md",
         "docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json",
         "docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md",
+        "system/README.md",
+        "system/memory/README.md",
+        "system/reports/README.md",
+        "system/state/README.md",
+        "system/workorders/README.md",
+        "system/workorders/nutrition/README.md",
+        "system/workorders/nutrition/batches/README.md",
+        "system/workorders/nutrition/drafts/README.md",
         "docs/project/CURRENT_GOVERNANCE_HANDOVER.md",
         "docs/project/OPEN_TODOS.md"
       ]

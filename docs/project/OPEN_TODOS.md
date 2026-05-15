@@ -152,9 +152,20 @@ Current audit baseline:
 - `docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json`
 - `docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md`
 
-Required next step: run Phase 1 only: add indexes/readmes for active vs
-generated vs historical areas. Do not move or delete files until Tom approves an
-exact move list.
+Phase 1 index/readme baseline:
+
+- `system/README.md`
+- `system/memory/README.md`
+- `system/reports/README.md`
+- `system/state/README.md`
+- `system/workorders/README.md`
+- `system/workorders/nutrition/README.md`
+- `system/workorders/nutrition/batches/README.md`
+- `system/workorders/nutrition/drafts/README.md`
+
+Required next step: Phase 2 only: mark stale, placeholder, and archive/reference
+areas explicitly without moving or deleting files. Do not move or delete files
+until Tom approves an exact move list.
 
 ## Runtime TODOs
 

@@ -45,7 +45,8 @@
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-CURATION-PREFERENCE-HARDENING.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-HUMAN-LAYER-GAP-ANALYSIS.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-HUMAN-LAYER-V2-WILD-APPLY.md",
-      "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-017-system-tree-audit.md"
+      "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-017-system-tree-audit.md",
+      "system/workorders/nutrition/batches/BATCH-GOVERNANCE-P1-018-system-tree-readmes.md"
     ]
   },
   "forbidden_paths": [
