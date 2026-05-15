@@ -17,6 +17,8 @@ quality_critical: true
 requires_approval: false
 risk_category: "standard"
 rollback_hint: "Code/docs-only rollback by reverting this workorder outputs. No DB rollback is required because this slice performs no DB writes."
+required_skills: []
+optional_skills: []
 
 task: |
   Build a local-only read-only preference-aware Food Search preview and a
