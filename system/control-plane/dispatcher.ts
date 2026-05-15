@@ -25,9 +25,10 @@
  *   15. finalizeRun()
  */
 
-import fs   from 'node:fs'
-import path from 'node:path'
-import Ajv  from 'ajv'
+import crypto from 'node:crypto'
+import fs     from 'node:fs'
+import path   from 'node:path'
+import Ajv    from 'ajv'
 
 import * as state  from '../state/state-manager'
 import * as audit  from '../state/audit-writer'
@@ -73,6 +74,8 @@ const MAX_READ_TOOL_CONTINUATIONS = 8
 const MODEL_CALL_TIMEOUT_MS = 30_000
 const MODEL_CALL_MAX_ATTEMPTS = 2
 const NEMOTRON_REVIEW_ROUTE_ID = 'nemotron-review-agent'
+const POST_WORKER_REVIEW_FILE_CHAR_LIMIT = 3000
+const POST_WORKER_REVIEW_TOTAL_CHAR_LIMIT = 30000
 
 // High-Risk-Kategorien: isAutoRetryAllowed() aus risk-categories.ts (Single Source of Truth)
 
@@ -463,6 +466,32 @@ function expectedOutputContents(wo: Workorder): { path: string; content: string 
   })
 }
 
+function summarizeExpectedOutputForReview(outputs: { path: string; content: string }[]): string {
+  let remaining = POST_WORKER_REVIEW_TOTAL_CHAR_LIMIT
+  const sections: string[] = []
+
+  for (const item of outputs) {
+    if (remaining <= 0) break
+
+    const hash = crypto.createHash('sha256').update(item.content, 'utf8').digest('hex')
+    const content = item.content.length <= POST_WORKER_REVIEW_FILE_CHAR_LIMIT
+      ? item.content
+      : `${item.content.slice(0, POST_WORKER_REVIEW_FILE_CHAR_LIMIT)}\n\n[TRUNCATED_FOR_REVIEW: ${item.content.length - POST_WORKER_REVIEW_FILE_CHAR_LIMIT} chars omitted; sha256=${hash}]`
+    const section = `# ${item.path}\nsize_chars=${item.content.length}\nsha256=${hash}\n\n${content}`
+    const boundedSection = section.length <= remaining
+      ? section
+      : `${section.slice(0, Math.max(0, remaining - 120))}\n\n[TRUNCATED_FOR_REVIEW_TOTAL_LIMIT]`
+    sections.push(boundedSection)
+    remaining -= boundedSection.length
+  }
+
+  if (outputs.length > sections.length) {
+    sections.push(`[TRUNCATED_FOR_REVIEW_FILE_COUNT: ${outputs.length - sections.length} files omitted by total limit]`)
+  }
+
+  return sections.join('\n\n---\n\n')
+}
+
 async function runConfiguredPostWorkerReview(
   wo: Workorder,
   runId: string,
@@ -492,7 +521,7 @@ async function runConfiguredPostWorkerReview(
     {
       wo_id: wo.workorder_id,
       run_id: runId,
-      output: outputs.map(item => `# ${item.path}\n\n${item.content}`).join('\n\n---\n\n'),
+      output: summarizeExpectedOutputForReview(outputs),
     },
     {
       wo_id: wo.workorder_id,

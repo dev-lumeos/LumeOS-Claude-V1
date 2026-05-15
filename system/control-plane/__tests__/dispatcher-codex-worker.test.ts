@@ -480,6 +480,37 @@ describe('dispatcher codex worker integration', () => {
     assert.match(pipelineAudit, /"run_id":"RUN-/)
   })
 
+  it('bounds configured reviewer handoff payload for large expected outputs', async () => {
+    process.env.LUMEOS_FAST_REVIEWER_ROUTE = 'nemotron-review-agent'
+    let reviewUserMessage = ''
+    const largeContent = `# Large reviewed output\n\n${'review evidence\n'.repeat(9000)}`
+
+    const result = await dispatchWorkorder(makeWorkorder(), {
+      callModel: async () => { throw new Error('not expected') },
+      executeTool: async () => ({ success: true }),
+      codexWorkerConfig: enabledCodexConfig(),
+      callFastReviewer: async (_system, user) => {
+        reviewUserMessage = user
+        return JSON.stringify({
+          status: 'PASS',
+          summary: 'review ok',
+          findings: [],
+          confidence: 0.99,
+          reviewer: 'nemotron-review-agent',
+        })
+      },
+      runCodexWorker: async () => {
+        write('docs/project/test.md', largeContent)
+        return doneResult('DONE')
+      },
+    })
+
+    assert.equal(result.status, 'completed')
+    assert.ok(reviewUserMessage.length < largeContent.length)
+    assert.match(reviewUserMessage, /TRUNCATED_FOR_REVIEW/)
+    assert.match(reviewUserMessage, /sha256=/)
+  })
+
   it('blocks Codex worker completion when configured reviewer output is invalid', async () => {
     process.env.LUMEOS_FAST_REVIEWER_ROUTE = 'nemotron-review-agent'
     const result = await dispatchWorkorder(makeWorkorder(), {
