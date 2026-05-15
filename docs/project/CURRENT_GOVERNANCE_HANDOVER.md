@@ -143,6 +143,13 @@ evidence only and must not override the current SSOT files listed below.
   - `V2xxxx` game meat is a candidate for a narrow future mapping batch after exact target category verification.
   - Alias coverage report confirms 21420 source-backed aliases, 0 foods with zero aliases, and 0 foods with only one alias.
   - No category mappings, aliases, display names, tags, food values, or nutrient values are changed by this analysis slice.
+- The local-only V2 Wild category apply slice is completed for `BATCH-NUTRITION-P1-005-HUMAN-LAYER-V2-WILD-APPLY.md`.
+  - SPEC_05 evidence: `game_meat | Wild | V2xxxx (Hirsch, Wildschwein, Reh)`.
+  - Local target category: `wild`, level 2, parent path `FLEISCH & GEFLÜGEL > Wild`.
+  - Applied only to currently unassigned `V2%` foods.
+  - Affected rows: 49.
+  - Categorized foods moved from 4854 to 4903; unassigned foods moved from 2286 to 2237.
+  - No other category mappings, aliases, display names, tags, food values, nutrient values, RDA changes, or remote DB actions were performed.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions

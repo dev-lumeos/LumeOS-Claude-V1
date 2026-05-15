@@ -17,15 +17,17 @@ Scope: local Nutrition Human Layer gap analysis only
 | Metric | Count |
 |---|---:|
 | Foods | 7140 |
-| Categorized foods | 4854 |
-| Unassigned foods | 2286 |
+| Categorized foods | 4903 |
+| Unassigned foods | 2237 |
 | Category rows | 518 |
 | L1 categories | 13 |
 | L2 categories | 75 |
 | L3 categories | 385 |
 | L4 categories | 45 |
 
-No category mappings were applied by this analysis batch.
+Follow-up apply batch `BATCH-NUTRITION-P1-005-HUMAN-LAYER-V2-WILD-APPLY.md`
+applied the deterministic `V2xxxx -> Wild` rule locally only. No other category
+mapping rule was applied.
 
 ## Unassigned Foods By First BLS Prefix
 
@@ -34,7 +36,7 @@ No category mappings were applied by this analysis batch.
 | X | 1165 |
 | Y | 885 |
 | N | 114 |
-| V | 105 |
+| V | 56 |
 | U | 17 |
 
 ## Top Unassigned Two-Character Prefixes
@@ -54,24 +56,20 @@ No category mappings were applied by this analysis batch.
 | X8 | 59 | prepared mixed foods |
 | Y5 | 59 | prepared mixed foods |
 | Y2 | 57 | prepared meat dishes |
-| V2 | 49 | game meat / wild |
 
 ## Top Source-Label Patterns
 
 | Pattern | Count |
 |---|---:|
 | kaffee | 17 |
-| eier-frischteigwaren | 16 |
+| eier-frischteigwaren | 13 |
 | ruehrei / rührei | 16 |
 | eierteigwaren | 15 |
 | milchreis | 15 |
 | fleischbruehe / fleischbrühe | 13 |
-| reh | 13 |
-| hirsch | 12 |
-| pfannkuchen / eierkuchen | 12 |
 | pizza | 12 |
 | reis | 12 |
-| wildschwein | 12 |
+| pfannkuchen / eierkuchen | 11 |
 | gruene / grüne | 11 |
 | eier | 10 |
 | kaffeeersatz | 10 |
@@ -84,7 +82,7 @@ These are candidates for a future governed mapping batch. They were not applied 
 
 | Rule | Estimated coverage | Evidence | Current decision |
 |---|---:|---|---|
-| `V2xxxx` -> Wild / game meat category | 49 | `SPEC_05_FOOD_TAXONOMY.md` describes game meat under the meat hierarchy and associates Wild with V2 BLS code patterns. | Candidate for a narrow future apply after exact target slug/parent verification. |
+| `V2xxxx` -> Wild / game meat category | 49 | `SPEC_05_FOOD_TAXONOMY.md` describes game meat under the meat hierarchy and associates Wild with V2 BLS code patterns. | Applied locally in `P1-005-human-layer-v2-wild-category-apply-report.md`. |
 | Prepared dish X/Y sub-prefix review | about 2050 | SPEC_05 includes prepared-dish Human Layer categories, but prepared rows require BLS name, code, and category context. | Report only. Do not auto-assign from broad X/Y prefix alone. |
 
 ## Unsafe Or Deferred Patterns
@@ -98,4 +96,4 @@ These are candidates for a future governed mapping batch. They were not applied 
 
 ## Recommendation
 
-Create a narrow follow-up mapping batch for one verified prefix or rule at a time. Start with `V2xxxx` only if the target Human Layer category slug and parent can be proven from SPEC_05 and local category rows. Keep prepared-dish X/Y mapping as review-only until deterministic sub-prefix rules are documented.
+Create future mapping batches for one verified prefix or rule at a time. Keep prepared-dish X/Y mapping as review-only until deterministic sub-prefix rules are documented.

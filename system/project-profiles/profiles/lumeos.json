@@ -43,7 +43,8 @@
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-PREFERENCES-CURATION.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-PREFERENCE-PREVIEW-CURATION.md",
       "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-LOCAL-CURATION-PREFERENCE-HARDENING.md",
-      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-HUMAN-LAYER-GAP-ANALYSIS.md"
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-HUMAN-LAYER-GAP-ANALYSIS.md",
+      "system/workorders/nutrition/batches/BATCH-NUTRITION-P1-005-HUMAN-LAYER-V2-WILD-APPLY.md"
     ]
   },
   "forbidden_paths": [
