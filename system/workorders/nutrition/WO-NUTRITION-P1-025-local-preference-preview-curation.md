@@ -4,45 +4,40 @@
 **Phase:** 1 - Nutrition / P1-005 local-only preference-aware search preview and curation dashboard
 **Source:** Current Nutrition specs, P1-005 Human Layer outputs, and Preferences foundation outputs
 **Execution authority:** scoped product-gate exception for one exact local-only batch only
-**Scope boundary:** local-only read-only API/UI/helper/report/docs changes
+**Scope boundary:** local-only read-only API/UI/helper/report/docs validation
 
 ```yaml
 workorder_id: "WO-nutrition-025"
-agent_id: "docs-agent"
-codex_worker: false
+agent_id: "senior-coding-agent"
+codex_worker: true
 product_work: false
 phase: 1
 priority: "normal"
 quality_critical: true
 requires_approval: false
 risk_category: "standard"
-rollback_hint: "Code/docs-only rollback by reverting this workorder outputs. No DB rollback is required because this slice performs no DB writes."
+rollback_hint: "Code/docs-only rollback by reverting this workorder outputs. No data-store rollback is required because this slice performs no writes."
 required_skills: []
 optional_skills: []
 
 task: |
-  Build a local-only read-only preference-aware Food Search preview and a
-  read-only Human Layer curation dashboard.
+  Create the missing validation report for the already-built local-only
+  read-only preference-aware Food Search preview and Human Layer curation
+  dashboard.
 
   Required behavior:
-  - Validate the already-created local preference preview and curation outputs.
-  - Verify the existing local Food Search and Preferences foundation baseline.
-  - Add a local-only preference preview API that transparently applies only
-    deterministic category/tag preference effects.
-  - Apply hard exclusions only where the existing Preferences catalog has
-    deterministic Human Layer category mappings.
-  - Keep no_raw_fish and no_gluten unresolved unless deterministic metadata
-    exists.
-  - Add a read-only curation dashboard/API that exposes unassigned foods,
-    category coverage, source-backed alias state, V1 tag coverage, and
-    unresolved preference mapping gaps.
-  - Keep /nutrition source-label honest and add visible access to the preview
-    and curation surfaces.
-  - Do not enable persisted user preferences, production Smart Search, diary
-    logging, MealItem creation, source-unbacked labels, DEV/LIVE, Supabase
-    Cloud, production DB, raw BLS commit, RDA changes, production routing,
-    MiniMax routing, service restart, manual runtime_state edit, or manual
-    queue edit.
+  - Write docs/project/p1-005/P1-005-local-preference-preview-curation-validation.md.
+  - Record the local baseline counts already used by this slice.
+  - Record the local API/page probes for /nutrition, /nutrition/curation,
+    /api/nutrition/foods, /api/nutrition/foods/smart-preview,
+    /api/nutrition/curation, and /api/nutrition/preferences/catalog.
+  - Confirm the preview remains read-only, local-only, and transparent about
+    unresolved no_raw_fish and no_gluten exclusions.
+  - Confirm category/tag likes and dislikes are preview ranking adjustments
+    only.
+  - Confirm the curation page has no write controls.
+  - Do not change application code in this validation run unless a validation
+    defect is discovered.
 
 source_refs:
   module_index: "docs/specs/Nutrition/INDEX.md"
@@ -146,7 +141,7 @@ files_blocked:
 
 acceptance_criteria:
   - "All expected output files exist and are complete."
-  - "No DB schema or data changes are made by this slice."
+  - "No data-store schema or data changes are made by this slice."
   - "GET /api/nutrition/foods/smart-preview returns local-only preference preview metadata."
   - "Hard exclusions are applied only for deterministic category-mapped presets."
   - "no_raw_fish and no_gluten remain unresolved and visible."
@@ -158,11 +153,11 @@ acceptance_criteria:
   - "Validation report records the local API/page probes and confirms read-only behavior."
 
 negative_constraints:
-  - "No DEV/LIVE action."
-  - "No Supabase Cloud action."
-  - "No production DB action."
-  - "No DB schema change."
-  - "No DB data write."
+  - "No remote environment action."
+  - "No remote cloud action."
+  - "No production data-store action."
+  - "No data-store schema change."
+  - "No data-store write."
   - "No raw BLS commit."
   - "No source-unbacked food values."
   - "No source-unbacked nutrient values."
@@ -173,8 +168,8 @@ negative_constraints:
   - "No production routing change."
   - "No MiniMax routing change."
   - "No service restart."
-  - "No manual runtime_state edit."
-  - "No manual queue edit."
+  - "No manual governed-runtime state edit."
+  - "No manual governed queue edit."
 
 validation_commands:
   - "cmd.exe /c node node_modules\\tsx\\dist\\cli.mjs --test apps\\web\\src\\lib\\nutrition\\__tests__\\preference-search-preview.test.ts apps\\web\\src\\lib\\nutrition\\__tests__\\curation.test.ts apps\\web\\src\\lib\\nutrition\\__tests__\\preferences-catalog.test.ts apps\\web\\src\\lib\\nutrition\\__tests__\\food-search.test.ts"
