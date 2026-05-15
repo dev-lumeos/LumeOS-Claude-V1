@@ -47,6 +47,13 @@ export type NutritionCurationPayload = {
   category_levels: Array<{ level: number; count: number }>
   tag_coverage: Array<{ code: string; name_de: string; food_count: number }>
   low_coverage_tags: Array<{ code: string; name_de: string; food_count: number }>
+  alias_coverage: {
+    zero_alias_foods: number
+    one_alias_foods: number
+    multi_alias_foods: number
+    german_umlaut_foods: number
+    foods_with_en_source_label: number
+  }
   unassigned_examples: CurationUnassignedFood[]
   candidate_tables: {
     candidates_table_exists: boolean
@@ -213,6 +220,12 @@ tag_coverage AS (
   GROUP BY td.code, td.name_de
   ORDER BY food_count DESC, td.code
 ),
+alias_counts AS (
+  SELECT f.id, COUNT(fa.alias)::int AS alias_count
+  FROM nutrition.foods f
+  LEFT JOIN nutrition.food_aliases fa ON fa.food_id = f.id
+  GROUP BY f.id
+),
 unassigned AS (
   SELECT
     f.id,
@@ -260,6 +273,13 @@ SELECT json_build_object(
   'category_levels', COALESCE((SELECT json_agg(json_build_object('level', level, 'count', count)) FROM category_levels), '[]'::json),
   'tag_coverage', COALESCE((SELECT json_agg(json_build_object('code', code, 'name_de', name_de, 'food_count', food_count)) FROM tag_coverage), '[]'::json),
   'low_coverage_tags', COALESCE((SELECT json_agg(json_build_object('code', code, 'name_de', name_de, 'food_count', food_count)) FROM tag_coverage WHERE food_count <= 5), '[]'::json),
+  'alias_coverage', json_build_object(
+    'zero_alias_foods', (SELECT COUNT(*)::int FROM alias_counts WHERE alias_count = 0),
+    'one_alias_foods', (SELECT COUNT(*)::int FROM alias_counts WHERE alias_count = 1),
+    'multi_alias_foods', (SELECT COUNT(*)::int FROM alias_counts WHERE alias_count > 1),
+    'german_umlaut_foods', (SELECT COUNT(*)::int FROM nutrition.foods WHERE name_de ~ '[äöüÄÖÜß]'),
+    'foods_with_en_source_label', (SELECT COUNT(*)::int FROM nutrition.foods WHERE COALESCE(NULLIF(name_en, ''), '') <> '')
+  ),
   'candidate_tables', json_build_object(
     'candidates_table_exists', to_regclass('nutrition.food_curation_candidates') IS NOT NULL,
     'decisions_table_exists', to_regclass('nutrition.food_curation_decisions') IS NOT NULL,
@@ -339,6 +359,13 @@ export async function getNutritionCurationData(options: NutritionCurationOptions
     low_coverage_tags: Array.isArray(parsed.low_coverage_tags)
       ? parsed.low_coverage_tags.map(item => item as { code: string; name_de: string; food_count: number })
       : [],
+    alias_coverage: {
+      zero_alias_foods: parseNumber((parsed.alias_coverage as Record<string, unknown> | undefined)?.zero_alias_foods),
+      one_alias_foods: parseNumber((parsed.alias_coverage as Record<string, unknown> | undefined)?.one_alias_foods),
+      multi_alias_foods: parseNumber((parsed.alias_coverage as Record<string, unknown> | undefined)?.multi_alias_foods),
+      german_umlaut_foods: parseNumber((parsed.alias_coverage as Record<string, unknown> | undefined)?.german_umlaut_foods),
+      foods_with_en_source_label: parseNumber((parsed.alias_coverage as Record<string, unknown> | undefined)?.foods_with_en_source_label),
+    },
     unassigned_examples: Array.isArray(parsed.unassigned_examples)
       ? parsed.unassigned_examples.flatMap(item => parseUnassignedFood(item) ?? [])
       : [],

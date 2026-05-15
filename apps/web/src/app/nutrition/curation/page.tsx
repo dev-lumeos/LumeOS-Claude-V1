@@ -111,6 +111,21 @@ export default async function NutritionCurationPage({ searchParams }: NutritionC
           </div>
 
           <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
+            <h2 className="text-lg font-semibold">Alias Coverage</h2>
+            <p className="mt-1 text-sm text-slate-400">
+              Source-backed aliases only: exact source labels, normalized variants, and sourced EN labels.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <Metric label="Zero aliases" value={payload.alias_coverage.zero_alias_foods} />
+              <Metric label="One alias" value={payload.alias_coverage.one_alias_foods} />
+              <Metric label="Multi alias" value={payload.alias_coverage.multi_alias_foods} />
+              <Metric label="Umlaut labels" value={payload.alias_coverage.german_umlaut_foods} />
+              <Metric label="EN source labels" value={payload.alias_coverage.foods_with_en_source_label} />
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-5">
             <h2 className="text-lg font-semibold">Preference Mapping Status</h2>
             <div className="mt-4 grid gap-3 sm:grid-cols-3">
               <Metric label="Mapped exclusions" value={payload.preference_mapping.general_exclusions.mapped} />
@@ -125,7 +140,6 @@ export default async function NutritionCurationPage({ searchParams }: NutritionC
                 ))}
               </div>
             </div>
-          </div>
         </section>
 
         <section className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-5">

@@ -132,11 +132,17 @@ evidence only and must not override the current SSOT files listed below.
   - Category/tag likes and dislikes are supported as transparent ranking adjustments only when explicit category/tag codes are supplied.
   - The curation dashboard exposes unassigned foods, category coverage, V1 tag coverage, and unresolved preference mapping gaps without any write UI.
   - No DB schema/data changes, no preference persistence, no production Smart Search, no diary logging, no MealItem creation, no source-unbacked labels, and no DEV/LIVE action were added by this slice.
-- The local-only Curation Persistence + Preference Preview Hardening slice is in progress for `BATCH-NUTRITION-P1-005-LOCAL-CURATION-PREFERENCE-HARDENING.md`.
+- The local-only Curation Persistence + Preference Preview Hardening slice is completed for `BATCH-NUTRITION-P1-005-LOCAL-CURATION-PREFERENCE-HARDENING.md`.
   - Adds local-only curation candidate/decision table foundation for future audited category, display-name, alias, and preference-item mapping decisions.
   - `/nutrition/curation` remains read-only and now exposes curation table status, filter/sort controls, alias counts, curation status/reason, and preference group mapping status.
   - `/api/nutrition/foods/smart-preview` now reports per-result `preference_reasons` alongside applied/unresolved preference metadata and counts.
   - P5 category coverage improvements and P6 alias expansion remain deferred until additional deterministic source rules are reviewed; no guessing or invented labels/mappings are allowed.
+- The local-only Human Layer Gap Analysis slice is in progress for `BATCH-NUTRITION-P1-005-HUMAN-LAYER-GAP-ANALYSIS.md`.
+  - Category coverage report confirms 7140 foods, 4854 categorized foods, and 2286 intentionally unassigned foods.
+  - Most unassigned rows are prepared-dish `X`/`Y` prefixes and require subcategory-specific deterministic rules before any category update.
+  - `V2xxxx` game meat is a candidate for a narrow future mapping batch after exact target category verification.
+  - Alias coverage report confirms 21420 source-backed aliases, 0 foods with zero aliases, and 0 foods with only one alias.
+  - No category mappings, aliases, display names, tags, food values, or nutrient values are changed by this analysis slice.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions

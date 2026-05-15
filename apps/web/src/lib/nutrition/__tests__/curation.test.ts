@@ -9,6 +9,8 @@ test('builds a read-only local curation SQL query', () => {
   assert.match(sql, /nutrition\.food_categories/)
   assert.match(sql, /nutrition\.tag_definitions/)
   assert.match(sql, /nutrition\.food_aliases/)
+  assert.match(sql, /alias_coverage/)
+  assert.match(sql, /zero_alias_foods/)
   assert.match(sql, /WHERE f\.category_id IS NULL/)
   assert.doesNotMatch(sql, /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE)\b/i)
 })
