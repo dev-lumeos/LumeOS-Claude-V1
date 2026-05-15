@@ -22,6 +22,7 @@ export type PreferencePreviewFood = {
   tags: string[]
   preference_score: number
   preference_notes: string[]
+  preference_reasons: string[]
 }
 
 export type PreferencePreviewPayload = {
@@ -187,7 +188,13 @@ base AS (
       CASE WHEN dc.id IS NOT NULL THEN 'disliked_category' END,
       CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(likedTags)} THEN 'liked_tag' END,
       CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(dislikedTags)} THEN 'disliked_tag' END
-    ], NULL) AS preference_notes
+    ], NULL) AS preference_notes,
+    ARRAY_REMOVE(ARRAY[
+      CASE WHEN lc.id IS NOT NULL THEN 'boosted because selected liked category includes this food category' END,
+      CASE WHEN dc.id IS NOT NULL THEN 'suppressed because selected disliked category includes this food category' END,
+      CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(likedTags)} THEN 'boosted because food has a selected liked tag' END,
+      CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(dislikedTags)} THEN 'suppressed because food has a selected disliked tag' END
+    ], NULL) AS preference_reasons
   FROM nutrition.foods f
   LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
   LEFT JOIN excluded_categories ec ON ec.id = f.category_id
@@ -236,7 +243,8 @@ SELECT json_build_object(
     'cho', cho::text,
     'tags', tags,
     'preference_score', preference_score,
-    'preference_notes', preference_notes
+    'preference_notes', preference_notes,
+    'preference_reasons', preference_reasons
   )) FROM ranked), '[]'::json)
 )::text AS payload;
 `
@@ -264,6 +272,9 @@ function parseFood(value: unknown): PreferencePreviewFood | null {
     preference_score: typeof record.preference_score === 'number' ? record.preference_score : 0,
     preference_notes: Array.isArray(record.preference_notes)
       ? record.preference_notes.filter((item): item is string => typeof item === 'string')
+      : [],
+    preference_reasons: Array.isArray(record.preference_reasons)
+      ? record.preference_reasons.filter((item): item is string => typeof item === 'string')
       : [],
   }
 }

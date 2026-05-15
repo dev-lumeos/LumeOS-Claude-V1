@@ -30,6 +30,7 @@ test('builds a read-only preference preview SQL query', () => {
   assert.match(sql, /nutrition\.food_nutrients/)
   assert.match(sql, /nutrition\.food_tags/)
   assert.match(sql, /'high_fiber'/)
+  assert.match(sql, /preference_reasons/)
   assert.doesNotMatch(sql, /'high-fiber'/)
   assert.doesNotMatch(sql, /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE)\b/i)
 })

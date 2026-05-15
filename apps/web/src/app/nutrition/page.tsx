@@ -21,7 +21,9 @@ type NutritionPageProps = {
     offset?: string
     exclusions?: string
     liked_categories?: string
+    disliked_categories?: string
     liked_tags?: string
+    disliked_tags?: string
   }
 }
 
@@ -96,7 +98,9 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
   const offset = Number.parseInt(searchParams?.offset ?? '0', 10)
   const exclusions = searchParams?.exclusions ?? ''
   const likedCategories = searchParams?.liked_categories ?? ''
+  const dislikedCategories = searchParams?.disliked_categories ?? ''
   const likedTags = searchParams?.liked_tags ?? ''
+  const dislikedTags = searchParams?.disliked_tags ?? ''
 
   try {
     const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag, sort, offset })
@@ -104,7 +108,9 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
       query,
       exclusions,
       likedCategories,
+      dislikedCategories,
       likedTags,
+      dislikedTags,
       limit: 5,
       sort,
     })
@@ -188,14 +194,14 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Preference-aware preview</div>
-                <p className="mt-2 max-w-3xl leading-6">
+                  <p className="mt-2 max-w-3xl leading-6">
                   Local-only preview mode. Deterministic hard exclusions remove matching categories; category/tag likes
-                  boost ranking. Unsupported exclusions stay unresolved and are not applied.
+                  boost ranking; category/tag dislikes suppress ranking. Unsupported exclusions stay unresolved and are not applied.
                 </p>
               </div>
               <Link
                 className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500"
-                href={`/api/nutrition/foods/smart-preview?q=${encodeURIComponent(query)}&exclusions=${encodeURIComponent(exclusions)}&liked_categories=${encodeURIComponent(likedCategories)}&liked_tags=${encodeURIComponent(likedTags)}`}
+                href={`/api/nutrition/foods/smart-preview?q=${encodeURIComponent(query)}&exclusions=${encodeURIComponent(exclusions)}&liked_categories=${encodeURIComponent(likedCategories)}&disliked_categories=${encodeURIComponent(dislikedCategories)}&liked_tags=${encodeURIComponent(likedTags)}&disliked_tags=${encodeURIComponent(dislikedTags)}`}
               >
                 Preview API
               </Link>
@@ -241,6 +247,41 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                 <div className="mt-1 text-lg font-semibold text-slate-100">{preferencePreview.unresolved_preferences.length}</div>
               </div>
             </div>
+            <div className="mt-4 grid gap-3 lg:grid-cols-2">
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Applied preferences</div>
+                <div className="mt-2 space-y-1 text-xs text-slate-300">
+                  {preferencePreview.applied_preferences.length ? preferencePreview.applied_preferences.map(item => (
+                    <div key={`${item.code}-${item.effect}-${item.target}`}>
+                      <span className="font-mono text-slate-100">{item.code}</span> {item.effect} {item.target}
+                    </div>
+                  )) : <div>None selected.</div>}
+                </div>
+              </div>
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Unresolved preferences</div>
+                <div className="mt-2 space-y-1 text-xs text-slate-300">
+                  {preferencePreview.unresolved_preferences.length ? preferencePreview.unresolved_preferences.map(item => (
+                    <div key={item.code}>
+                      <span className="font-mono text-amber-200">{item.code}</span> {item.reason}
+                    </div>
+                  )) : <div>No unresolved selected preferences.</div>}
+                </div>
+              </div>
+            </div>
+            {preferencePreview.foods.length ? (
+              <div className="mt-4 rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">Preview result reasons</div>
+                <div className="mt-2 space-y-2 text-xs text-slate-300">
+                  {preferencePreview.foods.slice(0, 3).map(food => (
+                    <div key={food.id}>
+                      <span className="font-mono text-slate-100">{food.bls_code}</span> score {food.preference_score}
+                      {food.preference_reasons.length ? ` - ${food.preference_reasons.join('; ')}` : ' - base text/source ranking only'}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </section>
 
           <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
