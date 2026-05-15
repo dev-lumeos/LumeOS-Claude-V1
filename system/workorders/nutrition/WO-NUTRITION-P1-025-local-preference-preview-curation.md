@@ -8,8 +8,8 @@
 
 ```yaml
 workorder_id: "WO-nutrition-025"
-agent_id: "senior-coding-agent"
-codex_worker: true
+agent_id: "docs-agent"
+codex_worker: false
 product_work: false
 phase: 1
 priority: "normal"
@@ -23,6 +23,7 @@ task: |
   read-only Human Layer curation dashboard.
 
   Required behavior:
+  - Validate the already-created local preference preview and curation outputs.
   - Verify the existing local Food Search and Preferences foundation baseline.
   - Add a local-only preference preview API that transparently applies only
     deterministic category/tag preference effects.
