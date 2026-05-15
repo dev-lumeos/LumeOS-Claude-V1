@@ -20,6 +20,15 @@ test('extracts all spec-backed L1 categories and enough L2 categories without in
   assert.ok(categories.some(row => row.slug === 'kartoffeln' && row.parent_slug === 'gemuese'))
 })
 
+test('extracts deterministic L3 and L4 category rows from nested spec bullets', () => {
+  const categories = extractCategorySeeds(spec)
+  assert.ok(categories.filter(row => row.level === 3).length >= 150)
+  assert.ok(categories.filter(row => row.level === 4).length >= 20)
+  assert.ok(categories.some(row => row.slug === 'gefluegel-haehnchen' && row.parent_slug === 'gefluegel'))
+  assert.ok(categories.some(row => row.slug === 'gefluegel-haehnchen-haehnchenbrust-filet' && row.parent_slug === 'gefluegel-haehnchen'))
+  assert.ok(categories.every(row => row.slug === row.slug.toLowerCase() && !/[^\x00-\x7F]/.test(row.slug)))
+})
+
 test('defines exactly the V1 visible tags requested by the specs', () => {
   assert.deepEqual(V1_TAG_DEFINITIONS.map(row => row.code), [
     'high_protein',
@@ -57,6 +66,9 @@ test('generated SQL is local-only and includes deterministic schema, mapping, ta
   assert.match(sql, /INSERT INTO nutrition\.food_tags/)
   assert.match(sql, /INSERT INTO nutrition\.food_aliases/)
   assert.match(sql, /slug='fetter-seefisch'/)
+  assert.match(sql, /slug='gefluegel-haehnchen'/)
+  assert.match(sql, /bls_code LIKE 'D%'/)
+  assert.match(sql, /sort_weight = LEAST\(1000, GREATEST\(0,/)
   assert.doesNotMatch(sql, /DEV\/LIVE apply/)
 })
 

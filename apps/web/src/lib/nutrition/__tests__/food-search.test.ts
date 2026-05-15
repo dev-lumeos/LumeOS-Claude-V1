@@ -3,7 +3,9 @@ import { describe, it } from 'node:test'
 
 import {
   buildFoodSearchFilterHref,
+  clampFoodSearchLimit,
   buildFoodSearchWhereClause,
+  normalizeFoodSearchSort,
   normalizeFoodSearchText,
   parseFoodSearchPayload,
   type NutritionFoodSearchPayload,
@@ -29,13 +31,21 @@ describe('local Nutrition food search helpers', () => {
 
   it('builds stable filter hrefs for category and tag chips', () => {
     assert.equal(
-      buildFoodSearchFilterHref({ query: 'kuerbis', category: 'brot', tag: 'high_fiber' }),
-      '/nutrition?q=kuerbis&category=brot&tag=high_fiber',
+      buildFoodSearchFilterHref({ query: 'kuerbis', category: 'brot', tag: 'high_fiber', sort: 'protein_desc' }),
+      '/nutrition?q=kuerbis&category=brot&tag=high_fiber&sort=protein_desc',
     )
     assert.equal(
       buildFoodSearchFilterHref({ query: 'kuerbis', category: 'brot', tag: 'high_fiber' }, { tag: null }),
       '/nutrition?q=kuerbis&category=brot',
     )
+  })
+
+  it('normalizes pagination and sort inputs to the SPEC_07 local subset', () => {
+    assert.equal(normalizeFoodSearchSort('protein_desc'), 'protein_desc')
+    assert.equal(normalizeFoodSearchSort('kcal_asc'), 'kcal_asc')
+    assert.equal(normalizeFoodSearchSort('unknown'), 'relevance')
+    assert.equal(clampFoodSearchLimit(200), 100)
+    assert.equal(clampFoodSearchLimit(-1), 1)
   })
 
   it('parses food search payload with technical BLS label and Human Layer metadata', () => {
@@ -44,6 +54,10 @@ describe('local Nutrition food search helpers', () => {
       normalized_query: 'brot',
       category: 'brot',
       tag: 'high_fiber',
+      sort: 'protein_desc',
+      limit: 20,
+      offset: 40,
+      total: 99,
       result_count: 1,
       foods: [{
         id: 'food-1',
@@ -54,6 +68,12 @@ describe('local Nutrition food search helpers', () => {
         name_th: '',
         category_slug: 'brot',
         category_name_de: 'Brot',
+        sort_weight: 720,
+        enercc: '250.00000',
+        prot625: '9.10000',
+        fat: '4.20000',
+        cho: '38.00000',
+        tags: ['high_fiber'],
       }],
       selected_food: {
         id: 'food-1',
@@ -64,6 +84,12 @@ describe('local Nutrition food search helpers', () => {
         name_th: '',
         category_slug: 'brot',
         category_name_de: 'Brot',
+        sort_weight: 720,
+        enercc: '250.00000',
+        prot625: '9.10000',
+        fat: '4.20000',
+        cho: '38.00000',
+        tags: ['high_fiber'],
       },
       nutrients: [{
         nutrient_code: 'ENERCJ',
@@ -87,6 +113,12 @@ describe('local Nutrition food search helpers', () => {
 
     assert.equal(payload.foods[0]?.source_label, 'Vollkornbrot mit Kürbiskernen')
     assert.equal(payload.label_policy, 'bls_source_label_not_final_display_name')
+    assert.equal(payload.sort, 'protein_desc')
+    assert.equal(payload.limit, 20)
+    assert.equal(payload.offset, 40)
+    assert.equal(payload.total, 99)
+    assert.equal(payload.foods[0]?.tags[0], 'high_fiber')
+    assert.equal(payload.foods[0]?.prot625, '9.10000')
     assert.equal(payload.nutrients[0]?.nutrient_code, 'ENERCJ')
     assert.equal(payload.nutrients[0]?.value, '1089.00000')
     assert.equal(payload.selected_food?.category_slug, 'brot')

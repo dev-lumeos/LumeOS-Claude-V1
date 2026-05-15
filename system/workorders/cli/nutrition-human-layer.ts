@@ -7,7 +7,7 @@ export type FoodCategorySeed = {
   name_en: string
   name_th: string
   parent_slug: string | null
-  level: 1 | 2
+  level: 1 | 2 | 3 | 4
   icon: string
   sort_order: number
   bls_hint: string
@@ -102,6 +102,8 @@ export function extractCategorySeeds(markdown: string): FoodCategorySeed[] {
   let inTree = false
   let sort = 0
   let currentParent: FoodCategorySeed | null = null
+  let currentLevel2: FoodCategorySeed | null = null
+  let currentLevel3: FoodCategorySeed | null = null
 
   for (const line of lines) {
     if (line.startsWith('## Category Tree')) {
@@ -127,13 +129,15 @@ export function extractCategorySeeds(markdown: string): FoodCategorySeed[] {
         bls_hint: L1_BLS_HINTS[slug] ?? '',
       }
       rows.push(currentParent)
+      currentLevel2 = null
+      currentLevel3 = null
       continue
     }
 
     const l2 = line.match(/^####\s+(.+)$/)
     if (l2 && currentParent) {
       const title = l2[1] ?? ''
-      rows.push({
+      currentLevel2 = {
         slug: slugifyCategoryName(title),
         name_de: title,
         name_en: '',
@@ -143,7 +147,46 @@ export function extractCategorySeeds(markdown: string): FoodCategorySeed[] {
         icon: '',
         sort_order: sort += 10,
         bls_hint: '',
+      }
+      currentLevel3 = null
+      rows.push(currentLevel2)
+      continue
+    }
+
+    const level4 = line.match(/^\s{2,}-\s+(.+)$/)
+    if (level4 && currentLevel3) {
+      const title = cleanBulletTitle(level4[1] ?? '')
+      const slug = `${currentLevel3.slug}-${slugifyCategoryName(title)}`
+      rows.push({
+        slug,
+        name_de: title,
+        name_en: '',
+        name_th: '',
+        parent_slug: currentLevel3.slug,
+        level: 4,
+        icon: '',
+        sort_order: sort += 10,
+        bls_hint: '',
       })
+      continue
+    }
+
+    const level3 = line.match(/^-\s+(.+)$/)
+    if (level3 && currentLevel2) {
+      const title = cleanBulletTitle(level3[1] ?? '')
+      const slug = `${currentLevel2.slug}-${slugifyCategoryName(title)}`
+      currentLevel3 = {
+        slug,
+        name_de: title,
+        name_en: '',
+        name_th: '',
+        parent_slug: currentLevel2.slug,
+        level: 3,
+        icon: '',
+        sort_order: sort += 10,
+        bls_hint: '',
+      }
+      rows.push(currentLevel3)
     }
   }
 
@@ -153,6 +196,13 @@ export function extractCategorySeeds(markdown: string): FoodCategorySeed[] {
     seen.add(row.slug)
     return true
   })
+}
+
+function cleanBulletTitle(value: string): string {
+  return value
+    .replace(/\s+â†’.+$/u, '')
+    .replace(/\s+→.+$/u, '')
+    .trim()
 }
 
 function sql(value: string): string {
@@ -193,6 +243,8 @@ ON CONFLICT (code) DO UPDATE SET
 export function buildHumanLayerSql(categories: FoodCategorySeed[]): string {
   const l1 = categories.filter(row => row.level === 1)
   const l2 = categories.filter(row => row.level === 2)
+  const l3 = categories.filter(row => row.level === 3)
+  const l4 = categories.filter(row => row.level === 4)
 
   return `-- P1-005 Local Food Taxonomy / Human Layer Foundation
 -- LOCAL ONLY. Do not apply to DEV/LIVE.
@@ -201,7 +253,7 @@ export function buildHumanLayerSql(categories: FoodCategorySeed[]): string {
 -- - docs/specs/Nutrition/01_current_specs/SPEC_06_DATABASE_SCHEMA.md
 -- - docs/specs/Nutrition/01_current_specs/SPEC_04_FEATURES.md
 -- - docs/specs/Nutrition/01_current_specs/SPEC_08_IMPORT_PIPELINE.md
--- Boundary: deterministic schema/category/tag/alias foundation. No invented foods, nutrient values, aliases, or display names.
+-- Boundary: deterministic schema/category/tag/alias foundation. No unsourced foods, nutrient values, aliases, or display names.
 
 BEGIN;
 
@@ -271,9 +323,11 @@ CREATE TABLE IF NOT EXISTS nutrition.food_aliases (
 );
 CREATE INDEX IF NOT EXISTS idx_food_aliases_food ON nutrition.food_aliases(food_id);
 
--- Category seed: all Level 1 and Level 2 categories extracted from SPEC_05.
+-- Category seed: Level 1 through Level 4 categories extracted from SPEC_05 headings and nested bullets.
 ${l1.map(categoryInsertSql).join('\n')}
 ${l2.map(categoryInsertSql).join('\n')}
+${l3.map(categoryInsertSql).join('\n')}
+${l4.map(categoryInsertSql).join('\n')}
 
 -- Deterministic V1 tag definitions from SPEC_04/SPEC_05.
 ${V1_TAG_DEFINITIONS.map(tagInsertSql).join('\n')}
@@ -293,11 +347,15 @@ SET category_id = CASE
   WHEN bls_code LIKE 'T73%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='schalentiere')
   WHEN bls_code LIKE 'T78%' OR bls_code LIKE 'T79%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='weichtiere-andere')
   WHEN bls_code LIKE 'T%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='magerer-seefisch')
+  WHEN bls_code LIKE 'U0%' AND (lower(name_de) LIKE '%hack%' OR lower(name_de) LIKE '%hackfleisch%') THEN (SELECT id FROM nutrition.food_categories WHERE slug='rindfleisch-rinderhackfleisch-u0xxxx-rind')
+  WHEN (bls_code LIKE 'U0%' OR bls_code LIKE 'U1%' OR bls_code LIKE 'U2%') AND (lower(name_de) LIKE '%filet%' OR lower(name_de) LIKE '%lende%' OR lower(name_de) LIKE '%steak%') THEN (SELECT id FROM nutrition.food_categories WHERE slug='rindfleisch-rindersteaks-braten')
   WHEN bls_code LIKE 'U0%' OR bls_code LIKE 'U1%' OR bls_code LIKE 'U2%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='rindfleisch')
   WHEN bls_code LIKE 'U3%' OR bls_code LIKE 'U4%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='kalbfleisch')
   WHEN bls_code LIKE 'U5%' OR bls_code LIKE 'U6%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='schweinefleisch')
   WHEN bls_code LIKE 'U7%' OR bls_code LIKE 'U8%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='lamm-schaf')
-  WHEN bls_code LIKE 'V4%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='gefluegel')
+  WHEN bls_code LIKE 'V4%' AND lower(name_de) LIKE '%brust%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='gefluegel-haehnchen-haehnchenbrust-filet')
+  WHEN bls_code LIKE 'V4%' AND lower(name_de) LIKE '%pute%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='gefluegel-pute-truthahn')
+  WHEN bls_code LIKE 'V4%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='gefluegel-haehnchen')
   WHEN bls_code LIKE 'V5%' OR bls_code LIKE 'V6%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='innereien')
   WHEN bls_code LIKE 'W%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='wurstwaren-aufschnitt')
   WHEN bls_code LIKE 'M%' AND lower(name_de) LIKE '%joghurt%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='joghurt-quark')
@@ -305,6 +363,7 @@ SET category_id = CASE
   WHEN bls_code LIKE 'M%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='trinkmilch-sahne')
   WHEN bls_code LIKE 'E%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='eier')
   WHEN bls_code LIKE 'B%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='brot')
+  WHEN bls_code LIKE 'D%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='backwaren-gebaeck-snack-kategorie')
   WHEN bls_code LIKE 'C%' AND lower(name_de) LIKE '%pasta%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='pasta-teigwaren')
   WHEN bls_code LIKE 'C%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='rohe-koerner-flocken-pseudogetreide')
   WHEN bls_code LIKE 'G%' THEN (SELECT id FROM nutrition.food_categories WHERE slug='gemuese')
@@ -318,6 +377,51 @@ SET category_id = CASE
   ELSE category_id
 END
 WHERE category_id IS NULL;
+
+-- Deterministic local sort_weight refresh based on SPEC_08 scoring rules.
+UPDATE nutrition.foods f
+SET sort_weight = LEAST(1000, GREATEST(0,
+  CASE substring(f.bls_code from 1 for 1)
+    WHEN 'C' THEN 700
+    WHEN 'E' THEN 680
+    WHEN 'F' THEN 660
+    WHEN 'G' THEN 660
+    WHEN 'H' THEN 650
+    WHEN 'K' THEN 550
+    WHEN 'M' THEN 660
+    WHEN 'T' THEN 700
+    WHEN 'B' THEN 520
+    WHEN 'D' THEN 340
+    WHEN 'Q' THEN 460
+    WHEN 'R' THEN 360
+    WHEN 'S' THEN 240
+    WHEN 'N' THEN 400
+    WHEN 'P' THEN 180
+    WHEN 'X' THEN 200
+    WHEN 'Y' THEN 240
+    WHEN 'W' THEN 440
+    ELSE 400
+  END
+  + CASE
+      WHEN f.bls_code IN ('V416100','V486100','U010100','U211100','C133000','C352000','E111100','E113100')
+        OR f.bls_code LIKE 'T102%' OR f.bls_code LIKE 'T103%' OR f.bls_code LIKE 'T302%' OR f.bls_code LIKE 'T306%' THEN 200
+      ELSE 0
+    END
+  + CASE
+      WHEN COALESCE(protein.value, 0) >= 30 THEN 120
+      WHEN COALESCE(protein.value, 0) >= 20 THEN 80
+      ELSE 0
+    END
+  + CASE WHEN COALESCE(protein.value, 0) >= 20 AND COALESCE(fat.value, 999) <= 5 THEN 50 ELSE 0 END
+  + CASE WHEN substring(f.bls_code from 1 for 1) IN ('X','Y') THEN -300 ELSE 0 END
+  + CASE WHEN lower(f.name_de) LIKE '%gesüßt%' OR lower(f.name_de) LIKE '%gezuckert%' OR lower(f.name_de) LIKE '%instant%' THEN -100 ELSE 0 END
+  + CASE WHEN lower(f.name_de) LIKE '%konserve%' OR lower(f.name_de) LIKE '%dose%' THEN -80 ELSE 0 END
+  + CASE WHEN lower(f.name_de) LIKE '%gekocht%' OR lower(f.name_de) LIKE '%gebraten%' THEN -150 ELSE 0 END
+))
+FROM nutrition.foods source_food
+LEFT JOIN nutrition.food_nutrients protein ON protein.food_id = source_food.id AND protein.nutrient_code = 'PROT625'
+LEFT JOIN nutrition.food_nutrients fat ON fat.food_id = source_food.id AND fat.nutrient_code = 'FAT'
+WHERE f.id = source_food.id;
 
 -- Deterministic macro-derived V1 food tags only. Manual/cuisine/religious tags stay deferred.
 INSERT INTO nutrition.food_tags (food_id, tag_code, confidence)
@@ -377,12 +481,16 @@ UNION ALL SELECT 'food_nutrients_total', COUNT(*)::text FROM nutrition.food_nutr
 UNION ALL SELECT 'food_categories_total', COUNT(*)::text FROM nutrition.food_categories
 UNION ALL SELECT 'food_categories_level_1', COUNT(*)::text FROM nutrition.food_categories WHERE level=1
 UNION ALL SELECT 'food_categories_level_2', COUNT(*)::text FROM nutrition.food_categories WHERE level=2
+UNION ALL SELECT 'food_categories_level_3', COUNT(*)::text FROM nutrition.food_categories WHERE level=3
+UNION ALL SELECT 'food_categories_level_4', COUNT(*)::text FROM nutrition.food_categories WHERE level=4
 UNION ALL SELECT 'orphan_category_parents', COUNT(*)::text FROM nutrition.food_categories c WHERE c.parent_id IS NOT NULL AND NOT EXISTS (SELECT 1 FROM nutrition.food_categories p WHERE p.id=c.parent_id)
 UNION ALL SELECT 'tag_definitions_total', COUNT(*)::text FROM nutrition.tag_definitions
 UNION ALL SELECT 'food_tags_total', COUNT(*)::text FROM nutrition.food_tags
 UNION ALL SELECT 'food_aliases_total', COUNT(*)::text FROM nutrition.food_aliases
 UNION ALL SELECT 'foods_categorized', COUNT(*)::text FROM nutrition.foods WHERE category_id IS NOT NULL
 UNION ALL SELECT 'foods_uncategorized', COUNT(*)::text FROM nutrition.foods WHERE category_id IS NULL
+UNION ALL SELECT 'sort_weight_populated', COUNT(*)::text FROM nutrition.foods WHERE sort_weight IS NOT NULL
+UNION ALL SELECT 'sort_weight_missing', COUNT(*)::text FROM nutrition.foods WHERE sort_weight IS NULL
 UNION ALL SELECT 'missing_nutrient_fk', COUNT(*)::text FROM nutrition.food_nutrients fn WHERE NOT EXISTS (SELECT 1 FROM nutrition.nutrient_defs nd WHERE nd.code=fn.nutrient_code)
 UNION ALL SELECT 'orphan_food_nutrients', COUNT(*)::text FROM nutrition.food_nutrients fn WHERE NOT EXISTS (SELECT 1 FROM nutrition.foods f WHERE f.id=fn.food_id)
 UNION ALL SELECT 'utf8_suspect_foods', COUNT(*)::text FROM nutrition.foods WHERE name_de LIKE '%??%' OR name_de LIKE '%�%'
@@ -406,6 +514,8 @@ function main(): void {
     category_rows: categories.length,
     category_level_1: categories.filter(row => row.level === 1).length,
     category_level_2: categories.filter(row => row.level === 2).length,
+    category_level_3: categories.filter(row => row.level === 3).length,
+    category_level_4: categories.filter(row => row.level === 4).length,
     tag_definitions: V1_TAG_DEFINITIONS.length,
   }, null, 2))
 }

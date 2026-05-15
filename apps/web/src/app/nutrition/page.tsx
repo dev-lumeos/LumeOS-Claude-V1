@@ -15,13 +15,15 @@ type NutritionPageProps = {
     food?: string
     category?: string
     tag?: string
+    sort?: string
+    offset?: string
   }
 }
 
 const COMMON_NUTRIENTS = new Set(['ENERCJ', 'ENERCC', 'PROT625', 'FAT', 'CHO', 'FIBT', 'SUGAR', 'NA'])
 
-function buildFoodHref(query: string, category: string, tag: string, foodId: string): string {
-  return buildFoodSearchFilterHref({ query, category, tag, food: foodId })
+function buildFoodHref(query: string, category: string, tag: string, sort: string, offset: number, foodId: string): string {
+  return buildFoodSearchFilterHref({ query, category, tag, sort, offset, food: foodId })
 }
 
 function FoodSearchErrorView({ message }: { message: string }) {
@@ -85,11 +87,15 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
   const selectedFoodId = searchParams?.food
   const category = searchParams?.category ?? ''
   const tag = searchParams?.tag ?? ''
+  const sort = searchParams?.sort ?? 'relevance'
+  const offset = Number.parseInt(searchParams?.offset ?? '0', 10)
 
   try {
-    const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag })
+    const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag, sort, offset })
     const commonNutrients = payload.nutrients.filter(item => COMMON_NUTRIENTS.has(item.nutrient_code))
     const otherNutrients = payload.nutrients.filter(item => !COMMON_NUTRIENTS.has(item.nutrient_code))
+    const nextOffset = payload.offset + payload.limit
+    const hasMore = nextOffset < payload.total
 
     return (
       <main className="min-h-screen bg-slate-950 text-slate-100">
@@ -130,6 +136,7 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                 />
                 {payload.category ? <input name="category" type="hidden" value={payload.category} /> : null}
                 {payload.tag ? <input name="tag" type="hidden" value={payload.tag} /> : null}
+                {payload.sort !== 'relevance' ? <input name="sort" type="hidden" value={payload.sort} /> : null}
                 <button
                   className="rounded-md border border-emerald-400 bg-emerald-400 px-4 py-2 text-sm font-semibold text-emerald-950 hover:bg-emerald-300"
                   type="submit"
@@ -141,26 +148,52 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                 Normalized query: <span className="font-mono text-slate-200">{normalizeFoodSearchText(query) || '(all local foods)'}</span>
               </div>
 
+              <div className="mt-5">
+                <label className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400" htmlFor="nutrition-sort">
+                  Sort
+                </label>
+                <select
+                  className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100"
+                  defaultValue={payload.sort}
+                  id="nutrition-sort"
+                  name="sort"
+                  form="sort-form"
+                >
+                  <option value="relevance">Relevance</option>
+                  <option value="protein_desc">Protein</option>
+                  <option value="kcal_asc">Calories</option>
+                  <option value="name_asc">Name</option>
+                </select>
+                <form action="/nutrition" className="mt-2 flex gap-2" id="sort-form">
+                  <input name="q" type="hidden" value={query} />
+                  {payload.category ? <input name="category" type="hidden" value={payload.category} /> : null}
+                  {payload.tag ? <input name="tag" type="hidden" value={payload.tag} /> : null}
+                  <button className="rounded-md border border-slate-700 px-3 py-1.5 text-xs text-slate-200 hover:border-slate-500" type="submit">
+                    Apply sort
+                  </button>
+                </form>
+              </div>
+
               <FacetSection
                 active={payload.category}
-                clearHref={buildFoodSearchFilterHref({ query, tag })}
+                clearHref={buildFoodSearchFilterHref({ query, tag, sort: payload.sort })}
                 items={payload.categories.map(item => ({
                   key: item.slug,
                   label: item.name_de || item.slug,
                   count: item.count,
-                  href: buildFoodSearchFilterHref({ query, tag }, { category: item.slug, food: null }),
+                  href: buildFoodSearchFilterHref({ query, tag, sort: payload.sort }, { category: item.slug, food: null, offset: 0 }),
                 }))}
                 title="Category filters"
               />
 
               <FacetSection
                 active={payload.tag}
-                clearHref={buildFoodSearchFilterHref({ query, category })}
+                clearHref={buildFoodSearchFilterHref({ query, category, sort: payload.sort })}
                 items={payload.tags.map(item => ({
                   key: item.code,
                   label: item.name_de || item.code,
                   count: item.count,
-                  href: buildFoodSearchFilterHref({ query, category }, { tag: item.code, food: null }),
+                  href: buildFoodSearchFilterHref({ query, category, sort: payload.sort }, { tag: item.code, food: null, offset: 0 }),
                 }))}
                 title="V1 tag filters"
               />
@@ -168,7 +201,7 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
               <div className="mt-5 flex items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold">Matches</h2>
                 <span className="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-300">
-                  {payload.result_count} shown
+                  {payload.total} total
                 </span>
               </div>
 
@@ -187,13 +220,26 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                             ? 'border-emerald-400 bg-emerald-950/40'
                             : 'border-slate-800 bg-slate-950/70 hover:border-slate-600'
                         }`}
-                        href={buildFoodHref(query, payload.category, payload.tag, food.id)}
+                        href={buildFoodHref(query, payload.category, payload.tag, payload.sort, payload.offset, food.id)}
                         key={food.id}
                       >
                         <div className="font-mono text-xs text-slate-400">{food.bls_code}</div>
                         <div className="mt-1 font-medium text-slate-100">{food.source_label}</div>
+                        <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+                          {food.enercc ? <span className="rounded border border-slate-700 px-1.5 py-0.5">{Number(food.enercc).toFixed(0)} kcal</span> : null}
+                          {food.prot625 ? <span className="rounded border border-slate-700 px-1.5 py-0.5">{Number(food.prot625).toFixed(1)} g protein</span> : null}
+                          {food.fat ? <span className="rounded border border-slate-700 px-1.5 py-0.5">{Number(food.fat).toFixed(1)} g fat</span> : null}
+                          {food.cho ? <span className="rounded border border-slate-700 px-1.5 py-0.5">{Number(food.cho).toFixed(1)} g carbs</span> : null}
+                        </div>
                         {food.category_name_de ? (
                           <div className="mt-1 text-xs text-emerald-200/80">{food.category_name_de}</div>
+                        ) : null}
+                        {food.tags.length > 0 ? (
+                          <div className="mt-2 flex flex-wrap gap-1">
+                            {food.tags.slice(0, 4).map(tagCode => (
+                              <span className="rounded-full border border-slate-700 px-1.5 py-0.5 text-[11px] text-slate-400" key={tagCode}>{tagCode}</span>
+                            ))}
+                          </div>
                         ) : null}
                         <div className="mt-1 text-xs text-slate-500">BLS source label, not final product copy</div>
                       </Link>
@@ -201,6 +247,31 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   })}
                 </div>
               )}
+              {payload.foods.length > 0 ? (
+                <div className="mt-4 flex items-center justify-between gap-3 text-xs text-slate-400">
+                  <span>
+                    Showing {payload.offset + 1}-{payload.offset + payload.foods.length} of {payload.total}
+                  </span>
+                  <div className="flex gap-2">
+                    {payload.offset > 0 ? (
+                      <Link
+                        className="rounded-md border border-slate-700 px-3 py-1.5 text-slate-200 hover:border-slate-500"
+                        href={buildFoodSearchFilterHref({ query, category: payload.category, tag: payload.tag, sort: payload.sort }, { offset: Math.max(0, payload.offset - payload.limit), food: null })}
+                      >
+                        Previous
+                      </Link>
+                    ) : null}
+                    {hasMore ? (
+                      <Link
+                        className="rounded-md border border-slate-700 px-3 py-1.5 text-slate-200 hover:border-slate-500"
+                        href={buildFoodSearchFilterHref({ query, category: payload.category, tag: payload.tag, sort: payload.sort }, { offset: nextOffset, food: null })}
+                      >
+                        Load more
+                      </Link>
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
             </div>
 
             <div className="rounded-lg border border-slate-800 bg-slate-900 p-5">
