@@ -6,6 +6,7 @@ import {
   getLocalFoodSearch,
   normalizeFoodSearchText,
 } from '../../lib/nutrition/food-search'
+import { deterministicExclusionOptions, getPreferenceSearchPreview } from '../../lib/nutrition/preference-search-preview'
 import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '../../lib/nutrition/preferences-catalog'
 
 export const dynamic = 'force-dynamic'
@@ -18,6 +19,9 @@ type NutritionPageProps = {
     tag?: string
     sort?: string
     offset?: string
+    exclusions?: string
+    liked_categories?: string
+    liked_tags?: string
   }
 }
 
@@ -90,9 +94,21 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
   const tag = searchParams?.tag ?? ''
   const sort = searchParams?.sort ?? 'relevance'
   const offset = Number.parseInt(searchParams?.offset ?? '0', 10)
+  const exclusions = searchParams?.exclusions ?? ''
+  const likedCategories = searchParams?.liked_categories ?? ''
+  const likedTags = searchParams?.liked_tags ?? ''
 
   try {
     const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag, sort, offset })
+    const preferencePreview = await getPreferenceSearchPreview({
+      query,
+      exclusions,
+      likedCategories,
+      likedTags,
+      limit: 5,
+      sort,
+    })
+    const exclusionOptions = deterministicExclusionOptions()
     const preferenceCatalog = getNutritionPreferenceCatalog()
     const preferenceSummary = summarizePreferenceCatalog(preferenceCatalog)
     const commonNutrients = payload.nutrients.filter(item => COMMON_NUTRIENTS.has(item.nutrient_code))
@@ -137,9 +153,14 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   like/dislike curation. User persistence and Smart Search application remain a separate governed step.
                 </p>
               </div>
-              <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/api/nutrition/preferences/catalog">
-                Catalog API
-              </Link>
+              <div className="flex flex-wrap gap-2">
+                <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/api/nutrition/preferences/catalog">
+                  Catalog API
+                </Link>
+                <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/nutrition/curation">
+                  Curation
+                </Link>
+              </div>
             </div>
             <div className="mt-4 grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-4">
               <div className="rounded border border-slate-800 bg-slate-950 p-3">
@@ -159,6 +180,65 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                 <div className="mt-1 text-lg font-semibold text-slate-100">
                   {preferenceSummary.mapped_general_exclusions}/{preferenceSummary.general_exclusions}
                 </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-6 rounded-lg border border-slate-800 bg-slate-900/70 p-4 text-sm text-slate-300">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Preference-aware preview</div>
+                <p className="mt-2 max-w-3xl leading-6">
+                  Local-only preview mode. Deterministic hard exclusions remove matching categories; category/tag likes
+                  boost ranking. Unsupported exclusions stay unresolved and are not applied.
+                </p>
+              </div>
+              <Link
+                className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500"
+                href={`/api/nutrition/foods/smart-preview?q=${encodeURIComponent(query)}&exclusions=${encodeURIComponent(exclusions)}&liked_categories=${encodeURIComponent(likedCategories)}&liked_tags=${encodeURIComponent(likedTags)}`}
+              >
+                Preview API
+              </Link>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {exclusionOptions.map(option => {
+                const selected = exclusions.split(',').includes(option.code)
+                const href = selected
+                  ? buildFoodSearchFilterHref({ query, category, tag, sort, offset }, { food: null })
+                  : `${buildFoodSearchFilterHref({ query, category, tag, sort, offset }, { food: null })}&exclusions=${encodeURIComponent(option.code)}`
+                return (
+                  <Link
+                    className={`rounded-full border px-2.5 py-1 text-xs ${
+                      selected
+                        ? 'border-amber-300 bg-amber-300 text-amber-950'
+                        : option.mapping_status === 'mapped'
+                          ? 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500'
+                          : 'border-slate-800 bg-slate-950 text-slate-500'
+                    }`}
+                    href={href}
+                    key={option.code}
+                  >
+                    {option.label_de} {option.mapping_status !== 'mapped' ? '(unresolved)' : null}
+                  </Link>
+                )
+              })}
+            </div>
+            <div className="mt-4 grid gap-2 text-xs sm:grid-cols-4">
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Preview matches</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">{preferencePreview.total}</div>
+              </div>
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Excluded</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">{preferencePreview.excluded_count}</div>
+              </div>
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Boosted</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">{preferencePreview.boosted_count}</div>
+              </div>
+              <div className="rounded border border-slate-800 bg-slate-950 p-3">
+                <div className="text-slate-500">Unresolved</div>
+                <div className="mt-1 text-lg font-semibold text-slate-100">{preferencePreview.unresolved_preferences.length}</div>
               </div>
             </div>
           </section>

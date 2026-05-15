@@ -123,6 +123,14 @@ evidence only and must not override the current SSOT files listed below.
   - Catalogued old-platform Preference screen options: 8 diet types, 20 allergy/intolerance chips, 8 general exclusion presets, 27 cuisines, 18 food preference groups, and 230 food preference items.
   - Six general exclusions have deterministic category mappings; `no_raw_fish` and `no_gluten` remain unresolved until preparation/allergen metadata exists.
   - The slice enables no user preference writes, no Smart Search default filtering, no diary logging, no MealItem creation, no invented food/nutrient values, no invented aliases/display names, and no DEV/LIVE action.
+- The local-only Preference-Aware Search Preview and Human Layer Curation dashboard is completed for `BATCH-NUTRITION-P1-005-LOCAL-PREFERENCE-PREVIEW-CURATION.md`.
+  - New local-only preview API: `/api/nutrition/foods/smart-preview`.
+  - New read-only curation API/page: `/api/nutrition/curation` and `http://127.0.0.1:5001/nutrition/curation`.
+  - Deterministic hard exclusions are applied only for mapped category presets: `no_offal`, `no_processed_meat`, `no_shellfish`, `no_pork`, `no_red_meat`, and `no_dairy`.
+  - `no_raw_fish` remains unresolved until preparation/raw-state metadata exists; `no_gluten` remains unresolved until ingredient or allergen metadata exists.
+  - Category/tag likes and dislikes are supported as transparent ranking adjustments only when explicit category/tag codes are supplied.
+  - The curation dashboard exposes unassigned foods, category coverage, V1 tag coverage, and unresolved preference mapping gaps without any write UI.
+  - No DB schema/data changes, no preference persistence, no production Smart Search, no diary logging, no MealItem creation, no source-unbacked labels, and no DEV/LIVE action were added by this slice.
 - The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
 
 ## Current Gates / Forbidden Actions
