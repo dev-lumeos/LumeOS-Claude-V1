@@ -2,207 +2,208 @@
 
 Current date: 2026-05-15.
 
-This file is the concise active handover. Older session details are historical
-evidence only and must not override the current SSOT files listed below.
+This is the concise active handover. Historical session details remain in git,
+dossiers, reports, and project docs, but this file is the current operator
+orientation layer.
+
+## Current Milestone
+
+Milestone cut:
+`LumeOS Nutrition Local Foundation V1 + Governance Workflow Baseline`
+
+Milestone document:
+`docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md`
+
+Status:
+
+- Product Work Gate: product work is blocked unless Tom explicitly opens a
+  narrow governed boundary.
+- Local Nutrition Foundation V1 is usable for further local product development.
+- It is not complete and not DEV/LIVE-ready.
+- No Supabase Cloud, DEV, LIVE, production DB, raw BLS commit, RDA value change,
+  diary write flow, MealItem creation, production routing, or MiniMax routing is
+  authorized by the milestone.
 
 ## Current Runtime Truth
 
-- DGX1 / Spark1 is the workflow-ready `orchestrator-agent` runtime.
-  - Host: `edgexpert-1116`
-  - IP: `192.168.0.128`
+- DGX1 / Spark1 is the workflow-ready `orchestrator-agent`.
+  - Host/IP: `edgexpert-1116` / `192.168.0.128`
   - Service/container: `vllm.service` / `vllm-qwen`
   - Model: `qwen3.6-35b-fp8`
-  - Spark1 handoff is proven for `spark1_orchestrated` operator dry-run/doctor.
-- DGX2 / Spark2 is the workflow-ready coding/docs worker runtime.
-  - Host: `edgexpert-5862`
-  - IP: `192.168.0.188`
+  - Spark1 handoff is proven for `spark1_orchestrated` runs.
+- DGX2 / Spark2 is the workflow-ready coding/docs worker.
+  - Host/IP: `edgexpert-5862` / `192.168.0.188`
   - Service/container: `vllm.service` / `spark-b-coder`
   - Model: `qwen3-coder-next-fp8`
-  - Completion health is required before governed docs-agent dispatch.
-- DGX3 / Spark3 runs Nemotron Omni NVFP4 as a controlled reviewer/specialist candidate.
-  - Host: `edgexpert-509d`
-  - IP: `192.168.0.99`
+- DGX3 / Spark3 runs Nemotron Omni NVFP4 as a controlled reviewer/specialist
+  candidate.
+  - Host/IP: `edgexpert-509d` / `192.168.0.99`
   - Service/container: `vllm.service` / `vllm_node`
   - Model: `nvidia/Nemotron-3-Nano-Omni-30B-A3B-Reasoning-NVFP4`
-  - Role: controlled `nemotron-review-agent`, specialist / multimodal / visual-review / OCR / FoodCam candidate.
-  - Governed review calls require enough output budget because Nemotron may emit separate reasoning before content; current controlled reviewer floor is 4096 tokens and completion health probe floor is 512 tokens.
-  - Not orchestrator, not coding worker, not production routing by default.
+  - Controlled `nemotron-review-agent` is proven for explicit workflow tests.
+  - It is not orchestrator, not coding worker, and not production/default routing.
   - Gemma4 on DGX3 is retired and must not be used.
-- DGX4/5 MiniMax is a verified lab-only runtime path, not production routing.
-  - DGX4 host/IP: `edgexpert-0dc8` / `192.168.0.101`
-  - DGX4 container/image/model: `vllm_node` / `vllm-node-minimax` / `nvidia-MiniMax-M2.7-NVFP4`
-  - DGX4 `/v1/models` showed `max_model_len=65536`.
-  - DGX4 completions produced `content.trim() = ok` and valid JSON after trim.
-  - DGX4 and DGX5 both showed `RayWorkerProc` with about `98006 MiB` reserved and about `50C` idle.
-  - DGX5 host: `edgexpert-e5e3`; role: MiniMax worker/lab node, not standalone production route.
-  - Still UNKLAR: exact DGX4/DGX5 service file, autostart state, remote startup wrapper parity, and complete Hermes 65k evidence.
-- Codex remains bootstrap/senior/fallback. It is not the default orchestrator when `spark1_orchestrated` is requested.
+- DGX4/5 MiniMax is lab-only.
+  - DGX4 verified facts: `edgexpert-0dc8`, `192.168.0.101`, container
+    `vllm_node`, image `vllm-node-minimax`, model `nvidia-MiniMax-M2.7-NVFP4`,
+    `max_model_len=65536`, simple completion OK, JSON after trim OK.
+  - DGX5 host: `edgexpert-e5e3`; MiniMax worker/lab node.
+  - Still UNKLAR: exact service/autostart state, repository wrapper parity, and
+    complete Hermes 65k evidence.
+  - Future verification commands, only after Tom opens a runtime verification
+    boundary:
+    - `ssh edgexpert-0dc8 "systemctl is-enabled vllm.service; systemctl status vllm.service --no-pager; docker ps --format '{{.Names}}\t{{.Image}}\t{{.Status}}'"`
+    - `ssh edgexpert-e5e3 "systemctl is-enabled vllm.service; systemctl status vllm.service --no-pager; docker ps --format '{{.Names}}\t{{.Image}}\t{{.Status}}'"`
+    - `curl http://192.168.0.101:8001/v1/models`
+- Codex remains bootstrap/senior/fallback and is not default orchestrator when
+  `spark1_orchestrated` is requested.
 
 ## Current Workflow Truth
 
-- Governed operator runs support `auto`, `codex_bootstrap`, and `spark1_orchestrated` orchestration modes.
-- `spark1_orchestrated` must run the Spark1/orchestrator-agent handoff before worker dispatch and must not silently fall back to Codex orchestration.
-- Full Spark1 -> worker -> Nemotron reviewer workflow proof is complete for `BATCH-NUTRITION-P1-005-LOCAL-COPY-LINK.md`.
-  - Spark1 assigned `WO-nutrition-016->senior-coding-agent`.
-  - `LUMEOS_FAST_REVIEWER_ROUTE=nemotron-review-agent` was used.
-  - Audit contains `review_started` and `review_completed`.
-  - Nemotron review status was `PASS` with confidence `0.95`.
-  - Dossier was written.
-- Codex Worker timeout/reporting mismatch is fixed in dossier reporting.
-  - Raw timeout remains visible as `worker_runtime_status`.
-  - If scoped outputs exist and configured review passes, the timeout is `observed_non_terminal` and final classification remains `DONE`.
-  - Missing outputs or failed review still make the timeout blocking.
-  - If a stale failed review is superseded by a later `review_completed PASS` for the same workorder after missing outputs are fixed, dossier review classification uses the latest completed review instead of the older failed review.
-- `SSOT_SYNC_CHECK` is implemented and wired into `governance-invariant-check`.
-  - It checks mapped SSOT updates for runtime/model, workflow/governance, product-gate, infra runtime, and TODO changes.
-  - It now also checks `OPEN_TODOS.md` open IDs against `GOVERNANCE_TODO_REGISTER.json`, and core runtime-role consistency across `STACK_REFERENCE.md` and model-tier docs.
-- Documentation / SSOT handling is now a hard governed workorder lifecycle gate.
-  - Every active/new workorder must declare `documentation_impact`.
-  - Required documentation impact must run the documentation phase and emit `documentation_started` / `documentation_completed` before DONE.
-  - Explicit N/A must be structured and auditable; generic `none` / `not applicable` reasons are invalid.
-  - Dossiers report documentation impact, documentation-agent usage, SSOT files, SSOT sync status, and final SSOT classification.
-- Configured reviewer handoff for already output-complete workorders passes the correct workorder context and expected-output content into the review pipeline. A configured reviewer failure still blocks DONE.
-- Stop-rule baselines are governed acknowledgements, not manual state edits. `ESCALATION_RATE_SPIKE` now supports the same baseline mechanism as failed-run and invalid-json spike handling so resolved reviewer/runtime stabilization history can be acknowledged without weakening future stop-rule enforcement.
+- Governed operator modes: `auto`, `codex_bootstrap`, `spark1_orchestrated`.
+- `spark1_orchestrated` must run Spark1/orchestrator-agent before worker
+  dispatch and must not silently fall back to Codex orchestration.
+- DGX3/Nemotron review is proven for explicit controlled review via
+  `LUMEOS_FAST_REVIEWER_ROUTE=nemotron-review-agent`.
+- Mandatory lifecycle for active/new workorders:
+  worker -> review if required -> documentation impact handling ->
+  `SSOT_SYNC_CHECK` -> dossier -> DONE.
+- `documentation_impact` is required. Documentation phases emit
+  `documentation_started` and `documentation_completed`, or a structured
+  auditable N/A.
+- `SSOT_SYNC_CHECK` is active and wired into governance invariants. It checks
+  mapped SSOT docs, open TODO/register consistency, and runtime-role consistency.
+- Dossiers report worker runtime status, output validation, review status,
+  documentation/SSOT status, and final classification.
+- Stop-rule baselines are governed acknowledgements, not manual state edits.
+- Codex Worker timeout/reporting mismatch is fixed: a timeout remains visible,
+  but it is non-terminal when scoped outputs exist and configured review passes.
 
-## Current Product / Nutrition Truth
+## Current Product Truth
 
-- P1-005 import preparation is complete.
-- Local-only schema foundation was applied to the local Supabase/Test DB only.
-- Local Thai i18n correction was applied locally only.
-- Local deterministic `nutrient_defs` seed was applied locally only.
-- Current local `nutrition.nutrient_defs` state:
-  - 138 rows.
-  - 16 columns.
-  - `name_th` and `group_th` exist and are empty strings by design.
-  - UTF-8 German text is corrected.
-  - RDA fields are partial by design.
-- Local Nutrition UI has progressed through read-only schema/debug, preview, search/filter, RDA availability filter, detail panel, deep-link, pin/compare, and copy-link affordances.
-- The local `nutrition.nutrient_defs` preview includes a read-only RDA availability filter with All nutrients, Nutrients with any RDA value, and Nutrients without RDA values modes. Availability is based only on non-empty `rda_male` or `rda_female` values and combines with existing search/group filters.
-- The local-only food foundation boundary is completed for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-FOUNDATION.md`.
-  - Target tables: `nutrition.foods` and `nutrition.food_nutrients`.
-  - Local validation confirmed both tables exist, both row counts are `0`, and `nutrition.food_nutrients.nutrient_code` references `nutrition.nutrient_defs(code)`.
-  - The slice remains schema-only: no food search, no food UI, no BLS import, no raw BLS commit, no seed/import rows, and no invented food values.
-- The local-only deterministic food sample staging boundary is completed for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-SAMPLE-STAGING.md`.
-  - Source file: `docs/specs/Nutrition/00_raw/bls/original/BLS_4_0_Daten_2025_DE.xlsx`.
-  - Selection rule: first 10 source-backed BLS rows with non-empty BLS code and German food name.
-  - Applied output: `docs/project/p1-005/P1-005-local-food-sample-staging.sql`.
-  - Local validation confirmed 10 `nutrition.foods` rows, 927 `nutrition.food_nutrients` rows, and 0 missing nutrient FK targets.
-  - The local schema/debug page reports the staged food row counts.
-  - This remains local-only sample staging, not broad/full BLS import, not raw BLS commit, not food search UI, and not DEV/LIVE promotion.
-- The local-only deterministic BLS import expansion boundary is completed for `BATCH-NUTRITION-P1-005-LOCAL-BLS-IMPORT-EXPANSION.md`.
-  - Source file: `docs/specs/Nutrition/00_raw/bls/original/BLS_4_0_Daten_2025_DE.xlsx`.
-  - Generated bulk CSV artifacts live under `tmp/nutrition/p1-005-bls-local-import` and are local runtime artifacts, not committed BLS data.
-  - Applied import scope is full local scope: 7140 foods and 698092 food nutrient values, with 0 unsupported nutrient header mappings.
-  - Local validation confirmed 0 missing nutrient FK targets, 0 orphan food nutrient rows, and UTF-8 food names render correctly.
-  - The local schema/debug page reports `nutrition.foods=7140` and `nutrition.food_nutrients=698092`.
-  - The boundary remains local-only: no DEV/LIVE, no Supabase Cloud, no production DB, no source workbook commit, no unsupported values, and no RDA changes.
-- The local read-only Food Search / Food Detail slice is completed for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-SEARCH.md`.
-  - Visible page: `http://127.0.0.1:5001/nutrition`.
-  - API route: `/api/nutrition/foods`.
-  - It searches local `nutrition.foods`, opens one selected food, and shows linked nutrients from `nutrition.food_nutrients` resolved through `nutrition.nutrient_defs`.
-  - BLS food names are shown as source-backed technical labels, not final human-friendly product copy.
-  - Human-friendly names, aliases, categories, and richer search normalization remain future work; no invented aliases, display names, nutrient values, or food labels were added.
-  - The slice is read-only and performs no DB writes, schema changes, seed/import changes, RDA changes, DEV/LIVE action, or Supabase Cloud action.
-- The local-only Food Taxonomy / Human Layer foundation is completed for `BATCH-NUTRITION-P1-005-LOCAL-FOOD-HUMAN-LAYER.md`.
-  - Applied local-only SQL: `docs/project/p1-005/P1-005-local-food-human-layer.sql`.
-  - Created local `nutrition.food_categories`, `nutrition.tag_definitions`, `nutrition.food_tags`, and `nutrition.food_aliases`.
-  - Added missing local Human Layer columns on `nutrition.foods`: `category_id`, `name_display_en`, `name_display_th`, `processing_level`, and `is_prepared_dish`.
-  - Seeded 518 source-backed categories from `SPEC_05_FOOD_TAXONOMY.md`: 13 Level 1, 75 Level 2, 385 Level 3, and 45 Level 4 categories. L3/L4 rows come only from deterministic nested bullet extraction.
-  - Deterministically categorized 4854 foods; 2286 remain intentionally unassigned until explicit deterministic mapping rules exist.
-  - Inserted 16 V1 visible tag definitions and 9265 deterministic macro-derived `food_tags`; manual/cuisine/religious and ingredient-derived tags remain deferred.
-  - Inserted 21420 source-backed aliases from exact BLS labels, exact source EN labels, and deterministic normalized variants only.
-  - Refreshed local `sort_weight` for all 7140 foods from deterministic `SPEC_08_IMPORT_PIPELINE.md` rules; `sort_weight_missing=0`.
-  - `/api/nutrition/foods` now supports `q`, `category`, `category_id`, `tag`, `limit`, `offset`, and `sort` (`relevance`, `protein_desc`, `kcal_asc`, `name_asc`), with category subtree filtering.
-  - Added read-only category tree endpoint: `/api/nutrition/foods/categories`.
-  - `/nutrition` now shows category and V1 tag filter chips, sort selector, pagination controls, macro badges, selected food detail, and source-label warning while remaining read-only.
-  - This boundary remains local-only: no DEV/LIVE, no Supabase Cloud, no production DB, no invented categories, no invented aliases, no invented display names, no invented food/nutrient values, no RDA changes, and no diary/MealItem flow.
-- The local-only Nutrition Preferences + Human Layer Curation foundation is completed for `BATCH-NUTRITION-P1-005-LOCAL-PREFERENCES-CURATION.md`.
-  - Applied local-only SQL: `docs/project/p1-005/P1-005-local-preferences-foundation.sql`.
-  - Created local `nutrition.food_preferences` and `nutrition.food_preference_items` schema support for diet type, allergies, intolerances, general exclusions, preferred cuisines, meal/snack counts, cooking skill, prep time, budget, meal prep, planner notes, and preference items.
-  - Added read-only catalog API: `/api/nutrition/preferences/catalog`.
-  - `/nutrition` shows a read-only Preferences foundation preview and links the catalog API.
-  - Catalogued old-platform Preference screen options: 8 diet types, 20 allergy/intolerance chips, 8 general exclusion presets, 27 cuisines, 18 food preference groups, and 230 food preference items.
-  - Six general exclusions have deterministic category mappings; `no_raw_fish` and `no_gluten` remain unresolved until preparation/allergen metadata exists.
-  - The slice enables no user preference writes, no Smart Search default filtering, no diary logging, no MealItem creation, no invented food/nutrient values, no invented aliases/display names, and no DEV/LIVE action.
-- The local-only Preference-Aware Search Preview and Human Layer Curation dashboard is completed for `BATCH-NUTRITION-P1-005-LOCAL-PREFERENCE-PREVIEW-CURATION.md`.
-  - New local-only preview API: `/api/nutrition/foods/smart-preview`.
-  - New read-only curation API/page: `/api/nutrition/curation` and `http://127.0.0.1:5001/nutrition/curation`.
-  - Deterministic hard exclusions are applied only for mapped category presets: `no_offal`, `no_processed_meat`, `no_shellfish`, `no_pork`, `no_red_meat`, and `no_dairy`.
-  - `no_raw_fish` remains unresolved until preparation/raw-state metadata exists; `no_gluten` remains unresolved until ingredient or allergen metadata exists.
-  - Category/tag likes and dislikes are supported as transparent ranking adjustments only when explicit category/tag codes are supplied.
-  - The curation dashboard exposes unassigned foods, category coverage, V1 tag coverage, and unresolved preference mapping gaps without any write UI.
-  - No DB schema/data changes, no preference persistence, no production Smart Search, no diary logging, no MealItem creation, no source-unbacked labels, and no DEV/LIVE action were added by this slice.
-- The local-only Curation Persistence + Preference Preview Hardening slice is completed for `BATCH-NUTRITION-P1-005-LOCAL-CURATION-PREFERENCE-HARDENING.md`.
-  - Adds local-only curation candidate/decision table foundation for future audited category, display-name, alias, and preference-item mapping decisions.
-  - `/nutrition/curation` remains read-only and now exposes curation table status, filter/sort controls, alias counts, curation status/reason, and preference group mapping status.
-  - `/api/nutrition/foods/smart-preview` now reports per-result `preference_reasons` alongside applied/unresolved preference metadata and counts.
-  - P5 category coverage improvements and P6 alias expansion remain deferred until additional deterministic source rules are reviewed; no guessing or invented labels/mappings are allowed.
-- The local-only Human Layer Gap Analysis slice is in progress for `BATCH-NUTRITION-P1-005-HUMAN-LAYER-GAP-ANALYSIS.md`.
-  - Category coverage report confirms 7140 foods, 4854 categorized foods, and 2286 intentionally unassigned foods.
-  - Most unassigned rows are prepared-dish `X`/`Y` prefixes and require subcategory-specific deterministic rules before any category update.
-  - `V2xxxx` game meat is a candidate for a narrow future mapping batch after exact target category verification.
-  - Alias coverage report confirms 21420 source-backed aliases, 0 foods with zero aliases, and 0 foods with only one alias.
-  - No category mappings, aliases, display names, tags, food values, or nutrient values are changed by this analysis slice.
-- The local-only V2 Wild category apply slice is completed for `BATCH-NUTRITION-P1-005-HUMAN-LAYER-V2-WILD-APPLY.md`.
+Local Nutrition Foundation V1 current database state:
+
+- `nutrition.nutrient_defs`: 138 rows.
+- `nutrition.foods`: 7140 rows.
+- `nutrition.food_nutrients`: 698092 rows.
+- `nutrition.food_categories`: 518 rows.
+  - L1: 13
+  - L2: 75
+  - L3: 385
+  - L4: 45
+- Categorized foods: 4903.
+- Unassigned foods: 2237.
+- `sort_weight`: populated for all 7140 foods.
+- `nutrition.tag_definitions`: 16 rows.
+- `nutrition.food_tags`: 9265 rows.
+- `nutrition.food_aliases`: 21420 rows.
+- `nutrition.food_preferences`: table exists, 0 rows.
+- `nutrition.food_preference_items`: table exists, 0 rows.
+- `nutrition.food_curation_candidates`: table exists, 0 rows.
+- `nutrition.food_curation_decisions`: table exists, 0 rows.
+
+Visible local surfaces:
+
+- `http://127.0.0.1:5001/nutrition`
+- `http://127.0.0.1:5001/nutrition/curation`
+- `GET /api/nutrition/foods`
+- `GET /api/nutrition/foods/categories`
+- `GET /api/nutrition/foods/smart-preview`
+- `GET /api/nutrition/curation`
+- `GET /api/nutrition/preferences/catalog`
+
+Completed product work:
+
+- Local BLS `nutrient_defs` foundation, Thai i18n fields, deterministic seed,
+  UTF-8 correction, and partial-by-design RDA boundary.
+- Full deterministic local BLS food import into `foods` and `food_nutrients`.
+- Local Food Search V1, Food Detail, source-label warning, search normalization,
+  category/tag filters, sort modes, pagination/load-more, macro badges, and
+  nutrient table.
+- Human Layer foundation with L1-L4 categories where deterministic, V1 tags,
+  source-backed aliases, and `sort_weight`.
+- Preferences catalog foundation from old platform screenshots.
+- Read-only Preferences catalog API and preview.
+- Preference-aware Smart Preview with deterministic supported exclusions:
+  `no_offal`, `no_processed_meat`, `no_shellfish`, `no_pork`, `no_red_meat`,
+  and `no_dairy`.
+- Read-only curation UI, preference mapping workbench, curation persistence
+  tables, Human Layer gap analysis, and alias coverage analysis.
+- V2 Wild/game meat mapping completed:
   - SPEC_05 evidence: `game_meat | Wild | V2xxxx (Hirsch, Wildschwein, Reh)`.
-  - Local target category: `wild`, level 2, parent path `FLEISCH & GEFLÜGEL > Wild`.
-  - Applied only to currently unassigned `V2%` foods.
+  - Local target: `wild`, id `86faea12-9082-456b-9528-34359ad065ba`, level 2.
   - Affected rows: 49.
-  - Categorized foods moved from 4854 to 4903; unassigned foods moved from 2286 to 2237.
-  - No other category mappings, aliases, display names, tags, food values, nutrient values, RDA changes, or remote DB actions were performed.
-- The RDA/reference-values boundary remains open as a separate future candidate. Missing RDA values are not defects and must not be inferred or internet-backfilled.
+  - Categorized foods moved 4854 -> 4903.
+  - Unassigned foods moved 2286 -> 2237.
 
-## Current Gates / Forbidden Actions
+## Open Product TODOs
 
-Global product work remains closed unless Tom explicitly opens a narrow boundary.
+- `GOV-TODO-036`: Remaining 2237 unassigned foods need separate deterministic
+  category evidence and one-rule governed apply batches.
+- `GOV-TODO-037`: Curated display names and curated aliases are not implemented.
+- `GOV-TODO-038`: `no_raw_fish` and `no_gluten` require deterministic metadata
+  before they can affect search.
+- `GOV-TODO-039`: Preference persistence UI and persisted Smart Search are not
+  implemented.
+- `GOV-TODO-040`: Diary, MealItem, serving/portion, amount input, and meal
+  schedule foundations are not implemented.
+- `GOV-TODO-041`: Daily nutrition summary and macro dashboard are not implemented.
+- `GOV-TODO-023`: RDA / nutrient reference-values source candidate remains open.
+- `GOV-TODO-046`: DEV/LIVE and Supabase Cloud promotion require Tom decision.
 
-Still forbidden without explicit future authorization:
+## Open Governance TODOs
 
-- DB/Supabase/migration execution beyond already completed local-only boundaries.
+- `GOV-TODO-042`: Governance Frontdoor workflow.
+- `GOV-TODO-043`: Project/topic archive structure.
+- `GOV-TODO-044`: Project onboarding / repo separation blueprint.
+- `GOV-TODO-045`: Structure cleanup blueprint.
+
+## Open Runtime TODOs
+
+- `GOV-TODO-012`: MiniMax lab evaluation before routing decision.
+- `GOV-TODO-029`: DGX3/Nemotron default route-role acceptance policy.
+- `GOV-TODO-031`: MiniMax Hermes 65k / service-autostart documentation.
+- `GOV-TODO-032`: infra/vLLM and systemd cleanup.
+
+## Forbidden Actions
+
+Still forbidden without a new explicit boundary:
+
 - DEV or LIVE promotion.
-- BLS import execution.
+- Supabase Cloud use.
+- Production DB work.
+- DB/Supabase/migration execution outside already completed local-only
+  boundaries.
 - Raw BLS commit.
-- Seed execution beyond the already completed local-only `nutrient_defs` seed.
 - RDA value changes.
+- Invented food values, nutrient values, aliases, display names, or category
+  mappings.
+- Diary write flow or MealItem creation.
 - Production routing changes.
 - MiniMax production routing.
 - Service restart.
 - Manual `runtime_state.json` edit.
 - Manual approval queue edit.
 
-## Open TODOs
+## Recommended Next Governance Workstream
 
-The active open TODO set is tracked in both `docs/project/OPEN_TODOS.md` and
-`docs/project/GOVERNANCE_TODO_REGISTER.json`.
+Build the Governance Frontdoor workflow:
 
-- `GOV-TODO-012`: Evaluate MiniMax lab runtime before any governance routing decision.
-- `GOV-TODO-023`: Create separate nutrient reference-values / RDA source candidate.
-- `GOV-TODO-029`: Decide DGX3/Nemotron default route acceptance policy.
-- `GOV-TODO-031`: Complete MiniMax Hermes 65k / service-autostart lab documentation.
-- `GOV-TODO-032`: Verify and clean infra/vLLM startup wrappers against remote runtime state.
+Brainstorm -> Summary -> Product Intent -> Spec -> Workorder Drafts -> Drift
+Checker -> Approval -> Queue.
 
-## Archived / Historical Notes
-
-- The older first non-planning P1-005 boundary blocker is superseded. Local
-  schema, local i18n correction, local seed, and local read-only UI slices have
-  since completed under explicit local-only boundaries. DEV/LIVE and broader
-  product execution remain blocked.
-- Historical DGX3/Gemma4 and DGX4/GPT-OSS paths are archived / do-not-use.
-- Older long-form governance history remains in git history, learning records,
-  dossiers, and runtime-specific docs. Do not re-promote old session notes into
-  current truth without re-verification.
+This should build on the now-proven workorder lifecycle, `documentation_impact`
+gate, Spark1 orchestration, Nemotron review, SSOT sync, and dossier reporting.
 
 ## Read First
 
-- `docs/project/STACK_REFERENCE.md`
+- `docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md`
 - `docs/project/OPEN_TODOS.md`
 - `docs/project/GOVERNANCE_TODO_REGISTER.json`
+- `docs/project/STACK_REFERENCE.md`
 - `docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md`
 - `docs/project/PRODUCT_WORK_GATE.md`
-- `docs/project/FIRST_PRODUCT_GATE_OPENING_PROPOSAL.md`
-- `docs/project/MINIMAX_LAB_RUNTIME.md`
 - `docs/project/runtime/DGX1_SPARK1_ORCHESTRATOR_RUNTIME.md`
 - `docs/project/runtime/DGX3_SPARK3_NEMOTRON_RUNTIME.md`
-- `docs/project/runtime/DGX3_NEMOTRON_REVIEWER_INTEGRATION_PLAN.md`
 - `system/model-tiers/model_registry_v2.md`
 - `system/model-tiers/model_tiers_v2.md`

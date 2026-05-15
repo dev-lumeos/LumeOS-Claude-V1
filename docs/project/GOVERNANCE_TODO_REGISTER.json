@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-14T15:10:00+07:00",
+  "generated_at": "2026-05-15T12:00:00+07:00",
   "items": [
     {
       "id": "GOV-TODO-001",
@@ -684,7 +684,7 @@
       "priority": "P2",
       "status": "open",
       "evidence": "DGX4 MiniMax lab runtime is partially verified: host edgexpert-0dc8, IP 192.168.0.101, container vllm_node, image vllm-node-minimax, model nvidia-MiniMax-M2.7-NVFP4, max_model_len=65536, completion ok, and JSON after trim. DGX5 host edgexpert-e5e3 is a MiniMax worker/lab node. Exact service/autostart state, repository wrapper parity, and complete Hermes 65k evidence remain UNKLAR.",
-      "recommended_action": "After explicit authorization, verify and document Hermes 65k evidence plus exact DGX4/DGX5 service/autostart facts. Keep MiniMax lab-only and out of production routing.",
+      "recommended_action": "After explicit authorization, verify and document Hermes 65k evidence plus exact DGX4/DGX5 service/autostart facts. Do not run until Tom opens a runtime verification boundary. Candidate commands: ssh edgexpert-0dc8 \"systemctl is-enabled vllm.service; systemctl status vllm.service --no-pager; docker ps --format '{{.Names}}\\t{{.Image}}\\t{{.Status}}'\"; ssh edgexpert-e5e3 \"systemctl is-enabled vllm.service; systemctl status vllm.service --no-pager; docker ps --format '{{.Names}}\\t{{.Image}}\\t{{.Status}}'\"; curl http://192.168.0.101:8001/v1/models.",
       "dependencies": [],
       "estimated_effort": "0.5d documentation plus authorized read-only checks",
       "codex_autonomous_possible": true,
@@ -738,6 +738,276 @@
         "system/control-plane/ssot-sync-check.ts",
         "system/reports/batch-dossier.ts",
         "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-034",
+      "title": "Complete Nutrition Local Foundation V1 milestone cut",
+      "layer": "product_milestone",
+      "severity": "medium",
+      "priority": "P0",
+      "status": "done",
+      "evidence": "Local Nutrition Foundation V1 is documented in docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md. Current local state includes nutrient_defs=138, foods=7140, food_nutrients=698092, food_categories=518, categorized foods=4903, unassigned foods=2237, V1 tags, source-backed aliases, local Food Search, Preferences catalog, Smart Preview, curation UI, and governed workflow baseline evidence.",
+      "recommended_action": "Use the milestone cut as the product SSOT before switching back to governance work. Do not treat local foundation as DEV/LIVE-ready.",
+      "dependencies": [
+        "GOV-TODO-021",
+        "GOV-TODO-022",
+        "GOV-TODO-025",
+        "GOV-TODO-028",
+        "GOV-TODO-033"
+      ],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md",
+        "docs/project/CURRENT_GOVERNANCE_HANDOVER.md",
+        "docs/project/OPEN_TODOS.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-035",
+      "title": "Apply deterministic V2 Wild/game meat category mapping locally",
+      "layer": "product_human_layer",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "done",
+      "evidence": "Commit c705165 applied the deterministic SPEC_05 rule game_meat | Wild | V2xxxx to 49 currently unassigned local foods where bls_code LIKE V2%. Target category slug wild, id 86faea12-9082-456b-9528-34359ad065ba, level 2, parent path FLEISCH & GEFLUEGEL > Wild. Categorized foods moved 4854 -> 4903 and unassigned foods moved 2286 -> 2237. Validation found no orphan category parents, no missing nutrient FK targets, no orphan food nutrients, and no UTF-8 suspects.",
+      "recommended_action": "Treat V2 Wild/game meat as complete. Remaining category mappings require separate deterministic evidence and governed apply batches.",
+      "dependencies": [
+        "GOV-TODO-034"
+      ],
+      "estimated_effort": "completed",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-human-layer-v2-wild-category-apply-report.md",
+        "docs/project/p1-005/P1-005-human-layer-category-coverage-analysis.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-036",
+      "title": "Resolve remaining Human Layer category coverage deterministically",
+      "layer": "product_human_layer",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "After the V2 Wild apply slice, 2237 local foods remain unassigned. Most remaining mappings require separate deterministic evidence from SPEC_05, BLS code prefixes, explicit hints, or exact source-backed rules.",
+      "recommended_action": "Run governed analysis/apply batches one deterministic rule at a time. Do not guess, fuzzy-match ambiguous names, or invent categories.",
+      "dependencies": [
+        "GOV-TODO-035"
+      ],
+      "estimated_effort": "iterative",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-human-layer-category-coverage-analysis.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-037",
+      "title": "Create curated display-name and alias governance",
+      "layer": "product_human_layer",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "Human-friendly display names and curated aliases are not implemented. Existing food_aliases are source-backed deterministic aliases only.",
+      "recommended_action": "Design a governed curation workflow for accepted display names and curated aliases. No invented synonyms, marketing names, or human-friendly rewrites may be added without source/review evidence.",
+      "dependencies": [
+        "GOV-TODO-034"
+      ],
+      "estimated_effort": "1-2d design plus implementation slices",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-human-layer-alias-coverage-analysis.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-038",
+      "title": "Add deterministic metadata path for no_raw_fish and no_gluten",
+      "layer": "product_preferences",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "Preference-aware Smart Preview supports deterministic hard exclusions for no_offal, no_processed_meat, no_shellfish, no_pork, no_red_meat, and no_dairy. no_raw_fish remains unresolved without preparation/raw-state metadata. no_gluten remains unresolved without deterministic ingredient/allergen tagging.",
+      "recommended_action": "Create a source-backed local metadata candidate before applying no_raw_fish or no_gluten to search behavior.",
+      "dependencies": [
+        "GOV-TODO-034"
+      ],
+      "estimated_effort": "1d planning/source review plus implementation",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-local-preference-preview-curation-report.md",
+        "docs/project/p1-005/P1-005-local-preferences-foundation-report.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-039",
+      "title": "Build local preference persistence UI and persisted Smart Search",
+      "layer": "product_preferences",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "food_preferences and food_preference_items exist locally with 0 rows. Preferences catalog and Smart Preview are read-only; no persisted user preference UI exists.",
+      "recommended_action": "Design a local-only write path and UI under a separate governed boundary. Resolve auth/user-state prerequisites before any non-local persistence.",
+      "dependencies": [
+        "GOV-TODO-034",
+        "GOV-TODO-038"
+      ],
+      "estimated_effort": "1-3d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-local-preferences-foundation-report.md",
+        "docs/project/p1-005/P1-005-local-curation-preference-hardening-report.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-040",
+      "title": "Plan diary, MealItem, serving, amount, and meal schedule foundations",
+      "layer": "product_diary",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "Diary logging, MealItem creation, serving/portion model, food amount input, and meal schedule persistence are not implemented in the local foundation cut.",
+      "recommended_action": "Create a separate local-only foundation plan after Food Search, Human Layer, and Preferences prerequisites are stable. Do not add write flows without a governed boundary.",
+      "dependencies": [
+        "GOV-TODO-039"
+      ],
+      "estimated_effort": "planning plus multiple implementation slices",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/specs/Nutrition/01_current_specs/SPEC_02_ENTITIES.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_03_USER_FLOWS.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_07_API.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-041",
+      "title": "Build daily nutrition summary and macro dashboard after diary foundations",
+      "layer": "product_dashboard",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "Daily nutrition summary and macro dashboard are not implemented. They require diary/MealItem/amount foundations before truthful local product behavior exists.",
+      "recommended_action": "After diary foundations exist, build read-only summary queries and local UI under a governed batch.",
+      "dependencies": [
+        "GOV-TODO-040"
+      ],
+      "estimated_effort": "1-2d after prerequisites",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/specs/Nutrition/01_current_specs/SPEC_04_FEATURES.md",
+        "docs/specs/Nutrition/01_current_specs/SPEC_10_COMPONENTS.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-042",
+      "title": "Implement Governance Frontdoor workflow",
+      "layer": "governance_workflow",
+      "severity": "medium",
+      "priority": "P1",
+      "status": "open",
+      "evidence": "The desired Frontdoor flow is Brainstorm -> Summary -> Product Intent -> Spec -> Workorder Drafts -> Drift Checker -> Approval -> Queue. Existing components exist, but the unified frontdoor workflow is not implemented.",
+      "recommended_action": "Design and implement the frontdoor workflow without bypassing product gates, approval gates, documentation impact, SSOT_SYNC_CHECK, or queue safety.",
+      "dependencies": [
+        "GOV-TODO-033"
+      ],
+      "estimated_effort": "2-4d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md",
+        "system/workorders/cli/",
+        "system/control-plane/"
+      ]
+    },
+    {
+      "id": "GOV-TODO-043",
+      "title": "Create project/topic archive structure",
+      "layer": "governance_docs",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "The project needs durable index files, project/topic subdirectories, conversation notes, and TODO linkage. Current docs retain evidence but do not yet provide the desired archive structure.",
+      "recommended_action": "Define archive layout and migration rules. Move or archive only through a governed documentation batch and do not rewrite historical evidence.",
+      "dependencies": [
+        "GOV-TODO-034"
+      ],
+      "estimated_effort": "1-2d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/",
+        "docs/specs/"
+      ]
+    },
+    {
+      "id": "GOV-TODO-044",
+      "title": "Draft project onboarding and repo separation blueprint",
+      "layer": "project_profiles",
+      "severity": "medium",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "Future projects need a clear onboarding and repository separation blueprint so LumeOS-specific paths, gates, and source-chain assumptions do not leak into other products.",
+      "recommended_action": "Draft blueprint using current project-profile, source-chain, and governance gate constraints.",
+      "dependencies": [
+        "GOV-TODO-006",
+        "GOV-TODO-042"
+      ],
+      "estimated_effort": "1-2d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "system/project-profiles/",
+        "docs/project/GOVERNANCE_OPERATOR_RUNBOOK.md"
+      ]
+    },
+    {
+      "id": "GOV-TODO-045",
+      "title": "Create repository structure cleanup blueprint",
+      "layer": "governance_docs",
+      "severity": "low",
+      "priority": "P2",
+      "status": "open",
+      "evidence": "Historical docs, generated artifacts, runtime reports, and active SSOT files need clearer structure. Cleanup must be planned before moving or archiving files.",
+      "recommended_action": "Produce a non-destructive cleanup blueprint that separates active SSOT, historical evidence, generated reports, and ignored runtime artifacts.",
+      "dependencies": [
+        "GOV-TODO-043"
+      ],
+      "estimated_effort": "1d",
+      "codex_autonomous_possible": true,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/",
+        "system/reports/",
+        "tmp/"
+      ]
+    },
+    {
+      "id": "GOV-TODO-046",
+      "title": "Decide local-to-DEV/LIVE Nutrition promotion boundary",
+      "layer": "product_gate",
+      "severity": "high",
+      "priority": "P0",
+      "status": "blocked_pending_tom_decision",
+      "evidence": "Local Nutrition Foundation V1 is not DEV/LIVE-ready. DEV/LIVE are not set up for this foundation, Supabase Cloud is not used, and no promotion boundary is open.",
+      "recommended_action": "Tom must explicitly open a promotion-planning boundary before any DEV/LIVE or Supabase Cloud work is designed or executed.",
+      "dependencies": [
+        "GOV-TODO-034"
+      ],
+      "estimated_effort": "requires Tom decision before planning",
+      "codex_autonomous_possible": false,
+      "blocks_product_work": false,
+      "source_files": [
+        "docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md",
+        "docs/project/PRODUCT_WORK_GATE.md"
       ]
     }
   ]
