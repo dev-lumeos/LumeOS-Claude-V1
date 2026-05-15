@@ -146,8 +146,15 @@ Status: open.
 The repo needs a cleanup plan for historical docs, generated artifacts, runtime
 reports, and active SSOT files.
 
-Required next step: produce a non-destructive structure cleanup blueprint before
-moving or archiving files.
+Current audit baseline:
+
+- `docs/project/system-structure/SYSTEM_TREE_AUDIT.md`
+- `docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json`
+- `docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md`
+
+Required next step: run Phase 1 only: add indexes/readmes for active vs
+generated vs historical areas. Do not move or delete files until Tom approves an
+exact move list.
 
 ## Runtime TODOs
 

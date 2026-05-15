@@ -1,0 +1,353 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-05-15",
+  "scope": "system/",
+  "classification_values": [
+    "ACTIVE_CORE",
+    "ACTIVE_SUPPORT",
+    "GENERATED_EVIDENCE",
+    "ARCHIVE_REFERENCE",
+    "PLACEHOLDER",
+    "STALE",
+    "UNKNOWN"
+  ],
+  "default_safe_to_move_delete": "no",
+  "items": [
+    {
+      "path": "system/agent-registry",
+      "classification": "ACTIVE_CORE",
+      "evidence": "Dispatcher, permission gateway, model routing, agent contract checks, and tests reference agents.json, model_routing.json, permissions.json, authorize-tool-call.ts, and related registries.",
+      "recommended_action": "Keep. Add an index later if Tom wants a navigable system tree.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/approval",
+      "classification": "ACTIVE_CORE",
+      "evidence": "approval-cli.ts, approval-queue.ts, approval-gate.ts, approval-viewer.ts, queue storage, and approval tests are used by governed approval lifecycle and invariants.",
+      "recommended_action": "Keep. Do not manually edit queue.json.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/architecture",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "Contains scheduler/classifier architecture markdown. No active TypeScript imports found; documents are referenced as design context.",
+      "recommended_action": "Keep as reference; mark with README/index before any move.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/branch-policy",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "Contains branch_policy_v1.md plus .gitkeep. Active promotion logic lives in system/control-plane/promotion-governance.ts.",
+      "recommended_action": "Keep as historical/policy reference; consider index note.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/control-plane",
+      "classification": "ACTIVE_CORE",
+      "evidence": "Contains dispatcher, governance validator, runtime checks, stop rules, SSOT_SYNC_CHECK, promotion governance, review pipeline, and operator support tests. These are invoked by required validation commands and governed runs.",
+      "recommended_action": "Keep. This is core runtime/governance code.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/db-environments",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "Contains db_environments_v1.md plus .gitkeep. No active imports found in code; Supabase/DB execution is gated elsewhere.",
+      "recommended_action": "Keep as reference; mark stale/archival if superseded by future DB environment docs.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/decomposition",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "decomposition_spec_v1.md is referenced by docs and workorder factory planning. specs/ and validators/ are placeholder-only.",
+      "recommended_action": "Keep schema; mark empty specs/validators as placeholders.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/decomposition/specs",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep.",
+      "recommended_action": "Keep until decomposition frontdoor design decides whether it is needed.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/decomposition/validators",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep; active validator is system/workorders/cli/decomposition-plan-validator.ts.",
+      "recommended_action": "Keep placeholder or consolidate after Tom approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/file-groups",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "file_group_registry_v1.md lists governance file groups. No active TypeScript imports found.",
+      "recommended_action": "Keep as reference; compare to project-profile roots during cleanup planning.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/graph",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep.",
+      "recommended_action": "Do not delete yet; decide during structure cleanup blueprint.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "Project profiles point memory_root to system/memory. governance-learning-check reads system/memory/canonical/lumeos_canonical.md. report-retention-summarizer classifies canonical memory. Other memory subfolders are placeholder-only.",
+      "recommended_action": "Keep canonical and schemas. Treat non-canonical empty subfolders as planned placeholders pending memory/archive design.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory/canonical",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "Contains lumeos_canonical.md, adr_index.md, session_protocol.md. governance-learning-check validates canonical/product-gate wording; docs and tests reference it.",
+      "recommended_action": "Keep. It is not the only SSOT; CURRENT_GOVERNANCE_HANDOVER.md is the active handover, and canonical memory is compact continuity context.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory/events",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. Referenced by old memory policy TODOs and file-group docs, but no active code reads/writes it.",
+      "recommended_action": "Keep as placeholder or archive after memory subsystem decision.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory/execution",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. No active code reads/writes it.",
+      "recommended_action": "Keep as placeholder until memory subsystem decision.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory/learning",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. Actual learning records live under docs/project/governance-learning.",
+      "recommended_action": "Keep placeholder or consolidate with governance-learning after Tom approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory/promotions",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. No active code reads/writes it.",
+      "recommended_action": "Keep placeholder until memory promotion rules are designed or archive it later.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory/retrieval",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. No active retrieval code found.",
+      "recommended_action": "Keep placeholder until retrieval design exists; do not present as active.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/memory/schemas",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "Contains memory_schemas_v1.md. Referenced by onboarding/prompt docs; no runtime validator imports found.",
+      "recommended_action": "Keep as schema reference; clarify status in future memory README.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/model-tiers",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "model_registry_v2.md and model_tiers_v2.md are checked by SSOT_SYNC_CHECK runtime role consistency. v1 docs remain older references.",
+      "recommended_action": "Keep v2 active. Mark v1 files archival in future index.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/policies",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "Guardrails and retry policies are referenced by docs, hooks, and governance standards. Some subdirectories are placeholder-only.",
+      "recommended_action": "Keep active policy docs; index placeholder subdirs.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/policies/promotion",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. Active promotion code is system/control-plane/promotion-governance.ts.",
+      "recommended_action": "Keep placeholder or archive after cleanup approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/policies/review",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. Active review code is system/control-plane/review-pipeline.ts.",
+      "recommended_action": "Keep placeholder or archive after cleanup approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/project-profiles",
+      "classification": "ACTIVE_CORE",
+      "evidence": "project-profile-loader.ts is imported by control-plane, workorder CLI, reports, workers, and tests. profiles/lumeos.json defines roots, allowlists, forbidden paths, and product gate.",
+      "recommended_action": "Keep. This is core profile/policy configuration.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/prompts",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "Prompt contracts for governance, orchestration, and workorder factory are referenced by docs and used as operator/LLM prompt source material. Some subfolders are placeholder-only.",
+      "recommended_action": "Keep active prompt docs. Mark empty review/gstack dirs as placeholders.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/prompts/gstack",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep.",
+      "recommended_action": "Keep placeholder or archive after cleanup approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/prompts/review",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep. Active review contract logic lives in system/control-plane/review-pipeline.ts and model routing.",
+      "recommended_action": "Keep placeholder or replace with explicit review prompt docs later.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/reports",
+      "classification": "ACTIVE_CORE",
+      "evidence": "Contains report generators used by governance UI/CLI: batch-dossier.ts, governance-learning-check.ts, governance-learning-suggest.ts, report-retention-summarizer.ts. Also contains generated historical reports.",
+      "recommended_action": "Keep generators. Separate generated evidence via retention/index policy before any moves.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/reports/batches",
+      "classification": "GENERATED_EVIDENCE",
+      "evidence": "Batch dossiers are written here by batch-dossier.ts with --write; ignored/untracked in normal operation.",
+      "recommended_action": "Do not commit by default. Index only durable/redacted dossiers intentionally.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/reports/codex-worker",
+      "classification": "GENERATED_EVIDENCE",
+      "evidence": "codex-worker.ts writes prompts/reports here. Project profile ignored_local_paths and REPORT_RETENTION_POLICY say these are local runtime artifacts.",
+      "recommended_action": "Do not commit. Summarize or delete only through retention policy after review.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/reports/model-runtime-history",
+      "classification": "GENERATED_EVIDENCE",
+      "evidence": "model-runtime-check writes history only with --record-history. REPORT_RETENTION_POLICY says it is ignored local runtime history.",
+      "recommended_action": "Do not commit generated history; summarize important runtime facts in docs/project/runtime.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/reports/dossiers",
+      "classification": "GENERATED_EVIDENCE",
+      "evidence": "wo-dossier.ts writes WO dossiers here; currently has tracked historical dossier examples.",
+      "recommended_action": "Keep tracked examples as historical evidence; future generated dossiers should be committed only if intentionally durable/redacted.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/reports/runs",
+      "classification": "GENERATED_EVIDENCE",
+      "evidence": "run-summary-generator.ts writes run summaries. Several April summaries are tracked historical evidence.",
+      "recommended_action": "Keep for now; later index/archive tracked generated evidence.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/scheduler",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "scheduler_dispatch_v1.md exists; active preflight logic is in system/control-plane/scheduler-preflight.ts.",
+      "recommended_action": "Keep as design reference; mark if superseded by current operator flow.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/state",
+      "classification": "ACTIVE_CORE",
+      "evidence": "state-manager.ts and audit-writer.ts are active. runtime_state.json, audit JSONL, pipeline audit, and metrics are read by operator, reports, stop rules, and learning tools. runtime_state.json and queue are forbidden manual edit paths.",
+      "recommended_action": "Keep code/schemas/tests. Do not manually edit runtime_state.json, locks, queue, or JSONL audit logs.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workers",
+      "classification": "ACTIVE_CORE",
+      "evidence": "codex-worker.ts and config are used by dispatcher/worker path and tests. Writes runtime artifacts under system/reports/codex-worker.",
+      "recommended_action": "Keep. Maintain forbidden path protections.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders",
+      "classification": "ACTIVE_CORE",
+      "evidence": "Contains schemas, templates, CLI, active Nutrition/Governance workorders, batches, drafts, and tests. Operator, worker, reports, governance UI, and project profiles reference this root.",
+      "recommended_action": "Keep. Add indexes/readmes before any archival move.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/adhoc",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "Contains older ad hoc Codex workorders and smoke tasks; not part of current batch queue.",
+      "recommended_action": "Index as historical/ad hoc; do not delete without approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/batches",
+      "classification": "PLACEHOLDER",
+      "evidence": "Top-level batches directory contains only .gitkeep; active batches are under system/workorders/nutrition/batches.",
+      "recommended_action": "Clarify whether future cross-project batches go here or under project/domain folders.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/examples",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "Example workorders are used as schema/policy examples and by documentation; not executable queue items.",
+      "recommended_action": "Keep as examples; label clearly in index.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/nutrition",
+      "classification": "ACTIVE_CORE",
+      "evidence": "Contains current P1-005 local Nutrition workorders and batches. Project profile allowlist points at many batches here.",
+      "recommended_action": "Keep active. Separate completed current batches from older drafts with indexes before moving anything.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/nutrition/approved",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep.",
+      "recommended_action": "Define meaning or remove in a future cleanup after approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/nutrition/archive",
+      "classification": "PLACEHOLDER",
+      "evidence": "Directory contains only .gitkeep; older drafts have not been moved here.",
+      "recommended_action": "Use only after an approved archive phase.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/nutrition/drafts",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "Contains many historical governance and Nutrition draft WOs/reviews. Current completed batches generally live outside drafts.",
+      "recommended_action": "Index as historical drafts; move only after Tom approval.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/schemas",
+      "classification": "ACTIVE_CORE",
+      "evidence": "workorder.schema.json is loaded by dispatcher, scheduler preflight, batch loader, Codex Worker, tests, and docs.",
+      "recommended_action": "Keep. This is execution contract source.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/workorders/templates",
+      "classification": "ACTIVE_SUPPORT",
+      "evidence": "Templates are referenced by workorder factory prompts and docs. They guide authoring but are not executed directly.",
+      "recommended_action": "Keep and index.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/*.md root standards",
+      "classification": "ARCHIVE_REFERENCE",
+      "evidence": "Root system standards such as LUMEOS_ORCHESTRATION_ARCHITECTURE_V2.md, RUNTIME_EXECUTION_STANDARD_V1.md, and shared contracts are referenced by docs and historical context; active implementations live in subdirectories.",
+      "recommended_action": "Keep until a system root index marks active vs historical standards.",
+      "safe_to_move_delete": "no"
+    },
+    {
+      "path": "system/OPEN_TODOS.md",
+      "classification": "STALE",
+      "evidence": "Active TODO SSOT is docs/project/OPEN_TODOS.md plus docs/project/GOVERNANCE_TODO_REGISTER.json. system/OPEN_TODOS.md is an older root-level TODO doc and is not used by SSOT_SYNC_CHECK.",
+      "recommended_action": "Mark as archived/stale in Phase 2; do not delete yet.",
+      "safe_to_move_delete": "no"
+    }
+  ]
+}

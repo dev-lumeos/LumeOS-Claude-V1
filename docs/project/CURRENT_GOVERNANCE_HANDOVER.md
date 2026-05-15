@@ -187,7 +187,15 @@ Still forbidden without a new explicit boundary:
 
 ## Recommended Next Governance Workstream
 
-Build the Governance Frontdoor workflow:
+Before implementing new governance behavior, use the system tree audit to align
+Tom and the operator on what is active, historical, generated, placeholder, or
+stale:
+
+- `docs/project/system-structure/SYSTEM_TREE_AUDIT.md`
+- `docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json`
+- `docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md`
+
+Then build the Governance Frontdoor workflow:
 
 Brainstorm -> Summary -> Product Intent -> Spec -> Workorder Drafts -> Drift
 Checker -> Approval -> Queue.
@@ -198,6 +206,7 @@ gate, Spark1 orchestration, Nemotron review, SSOT sync, and dossier reporting.
 ## Read First
 
 - `docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md`
+- `docs/project/system-structure/SYSTEM_TREE_AUDIT.md`
 - `docs/project/OPEN_TODOS.md`
 - `docs/project/GOVERNANCE_TODO_REGISTER.json`
 - `docs/project/STACK_REFERENCE.md`

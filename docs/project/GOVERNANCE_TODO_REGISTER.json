@@ -976,8 +976,8 @@
       "severity": "low",
       "priority": "P2",
       "status": "open",
-      "evidence": "Historical docs, generated artifacts, runtime reports, and active SSOT files need clearer structure. Cleanup must be planned before moving or archiving files.",
-      "recommended_action": "Produce a non-destructive cleanup blueprint that separates active SSOT, historical evidence, generated reports, and ignored runtime artifacts.",
+      "evidence": "A system tree audit now exists at docs/project/system-structure/SYSTEM_TREE_AUDIT.md with machine-readable classification in docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json and a phased cleanup proposal in docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md. No cleanup, move, delete, runtime behavior change, or state edit has been performed.",
+      "recommended_action": "Run Phase 1 only: add indexes/readmes for active vs generated vs historical areas. Do not move or delete files until Tom approves an exact move list.",
       "dependencies": [
         "GOV-TODO-043"
       ],
@@ -985,9 +985,11 @@
       "codex_autonomous_possible": true,
       "blocks_product_work": false,
       "source_files": [
-        "docs/project/",
-        "system/reports/",
-        "tmp/"
+        "docs/project/system-structure/SYSTEM_TREE_AUDIT.md",
+        "docs/project/system-structure/SYSTEM_DIRECTORY_CLASSIFICATION.json",
+        "docs/project/system-structure/SYSTEM_CLEANUP_PROPOSAL.md",
+        "docs/project/CURRENT_GOVERNANCE_HANDOVER.md",
+        "docs/project/OPEN_TODOS.md"
       ]
     },
     {
