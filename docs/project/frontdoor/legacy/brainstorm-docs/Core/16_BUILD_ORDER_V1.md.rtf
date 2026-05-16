@@ -1,0 +1,552 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 16_BUILD_ORDER_V1\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **exakte Bau-Reihenfolge f\'fcr LumeOS V1 Foundation**.\
+\
+Es beantwortet die Frage:\
+\
+# In welcher Reihenfolge muss das System gebaut werden, damit es stabil, logisch und ohne erneutes Chaos entsteht?\
+\
+Dieses Dokument ist entscheidend.\
+\
+Denn auch wenn klar ist, **was** gebaut werden soll, scheitern gro\'dfe Systeme oft daran, dass in der falschen Reihenfolge gebaut wird.\
+\
+Dann entstehen wieder:\
+\
+- halbe Module\
+- zu fr\'fche APIs\
+- zu fr\'fche UI\
+- Buddy ohne Kern\
+- Daten ohne Kontext\
+- Architektur ohne Produktlogik\
+- viele Baustellen, kein Fortschritt\
+\
+---\
+\
+## Kernthese\
+\
+# Nicht nur der Scope entscheidet \'fcber Erfolg.\
+# Die Reihenfolge entscheidet genauso.\
+\
+---\
+\
+# 1. DIE OBERSTE BAUREGEL\
+\
+# LumeOS V1 Foundation wird von innen nach au\'dfen gebaut.\
+\
+Nicht:\
+\
+- zuerst UI\
+- zuerst Dashboards\
+- zuerst Buddy\
+- zuerst API-Wildwuchs\
+- zuerst \'84coole Features\'93\
+\
+Sondern:\
+\
+- zuerst Daten- und Fachfundament\
+- dann Nutzungsfl\'fcsse\
+- dann Systemzugriff\
+- dann erste Darstellung\
+- dann sp\'e4tere Intelligence-Vorbereitung\
+\
+---\
+\
+# 2. DIE 8 BAUSTUFEN VON V1 FOUNDATION\
+\
+LumeOS V1 Foundation soll in acht klar getrennten Baustufen aufgebaut werden.\
+\
+Diese Reihenfolge ist absichtlich streng.\
+\
+---\
+\
+# BAUSTUFE 1 \'97 IDENTITY & USER FOUNDATION\
+\
+## Ziel\
+\
+Ein echter Nutzerkontext muss zuerst existieren.\
+\
+---\
+\
+## Muss zuerst stehen\
+\
+### Pflichtbestandteile\
+- Auth\
+- OAuth\
+- User\
+- UserProfile\
+- Preferences\
+- Goal-Grundlage\
+\
+### Warum zuerst\
+Ohne Nutzerkontext ist jede sp\'e4tere Dom\'e4ne generisch und instabil.\
+\
+### Was danach erstmals m\'f6glich wird\
+- echter User-Flow\
+- personalisierbarer Kontext\
+- Zielbezug\
+- sp\'e4ter dom\'e4nenspezifische Datenzuordnung\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- Buddy\
+- Recommendations\
+- Coach\
+- tiefe Daily Logic\
+\
+---\
+\
+# BAUSTUFE 2 \'97 NUTRITION DATA FOUNDATION\
+\
+## Ziel\
+\
+Die erste echte State-Dom\'e4ne wird sauber aufgebaut.\
+\
+---\
+\
+## Pflichtbestandteile\
+- Foods\
+- Canonical Foods\
+- Portions\
+- Nutrients\
+- Food Search Basis\
+- Meal-Struktur\
+- Meal Components\
+\
+### Warum jetzt\
+Nutrition ist bereits gestartet und eine der h\'e4rtesten Datendom\'e4nen.\
+\
+Wenn diese Schicht unsauber ist, wird alles dar\'fcber sp\'e4ter instabil.\
+\
+### Was danach erstmals m\'f6glich wird\
+- logische Meal-Erfassung\
+- Makro-/Mikro-Basis\
+- alltagstaugliche Food-Struktur\
+- Nutrition als echter Produktkern\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- Buddy-Food-Coaching\
+- AI-Food-Interpretation\
+- Vision\
+- perfekte Smart Search\
+\
+---\
+\
+# BAUSTUFE 3 \'97 NUTRITION LOGGING & CALCULATION\
+\
+## Ziel\
+\
+Nutrition wird von \'84Datenbasis\'93 zu \'84nutzbarer Dom\'e4ne\'93.\
+\
+---\
+\
+## Pflichtbestandteile\
+- Meal Logging\
+- Portion-basierte Nutzung\
+- Tagesberechnung\
+- Meal-Auswertung\
+- Historie\
+- Such-/Logging-Flow\
+\
+### Warum direkt nach Nutrition Foundation\
+Weil reine Datenbasis ohne nutzbaren Flow keinen Produktwert erzeugt.\
+\
+### Was danach erstmals m\'f6glich wird\
+- echte t\'e4gliche Ern\'e4hrungserfassung\
+- nutzbare Makro-/Mikro-Auswertung\
+- erste echte User Journey im Alltag\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- Recommendation Layer\
+- Buddy-Nutrition-Guidance\
+- adaptive Ern\'e4hrungslogik\
+\
+---\
+\
+# BAUSTUFE 4 \'97 TRAINING FOUNDATION\
+\
+## Ziel\
+\
+Die zweite gro\'dfe State-Dom\'e4ne wird aufgebaut.\
+\
+---\
+\
+## Pflichtbestandteile\
+- Exercises\
+- Kategorien\
+- Muskelgruppen\
+- Equipment\
+- Workout / WorkoutTemplate Basis\
+- Session-Struktur\
+- Set-Struktur\
+\
+### Warum jetzt\
+Training ist gleichwertig zum Produktkern und darf nicht sp\'e4ter \'84drangeh\'e4ngt\'93 werden.\
+\
+### Was danach erstmals m\'f6glich wird\
+- logische Workout-Struktur\
+- gym-taugliche Trainingsbasis\
+- sp\'e4tere Trainingshistorie\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- Auto-Progression\
+- AI-Coaching\
+- Form-Feedback\
+- Kamera / Vision\
+\
+---\
+\
+# BAUSTUFE 5 \'97 TRAINING LOGGING & HISTORY\
+\
+## Ziel\
+\
+Training wird von \'84Struktur\'93 zu \'84nutzbarer Alltagsdom\'e4ne\'93.\
+\
+---\
+\
+## Pflichtbestandteile\
+- Workout Logging\
+- Set Logging\
+- Session Save\
+- letzte Leistung\
+- Trainingshistorie\
+- Baseline-Verlauf\
+\
+### Warum jetzt\
+Erst hier wird Training produktiv nutzbar.\
+\
+### Was danach erstmals m\'f6glich wird\
+- echte Gym-Nutzung\
+- Verlauf\
+- erste Progressionssicht\
+- sp\'e4ter Buddy-/Guidance-Vorbereitung\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- intelligente Periodisierung\
+- Decision Layer\
+- Coach Training Logic\
+\
+---\
+\
+# BAUSTUFE 6 \'97 RECOVERY FOUNDATION\
+\
+## Ziel\
+\
+Die dritte zentrale Zustandsdom\'e4ne wird erg\'e4nzt.\
+\
+---\
+\
+## Pflichtbestandteile\
+- Schlaf\
+- Energie\
+- Stress\
+- Soreness\
+- Tagesform\
+- Check-in Basis\
+- RecoveryState\
+\
+### Warum jetzt\
+Ohne Recovery bleibt das Produkt sp\'e4ter eindimensional und falsch priorisiert.\
+\
+### Was danach erstmals m\'f6glich wird\
+- echter Daily State\
+- Zustandskontext\
+- sp\'e4tere Tagesorientierung\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- komplexe Scores\
+- Wearables\
+- Recovery AI\
+- tiefe Pattern-Logik\
+\
+---\
+\
+# BAUSTUFE 7 \'97 TIMELINE & STATE ACCESS LAYER\
+\
+## Ziel\
+\
+Die Dom\'e4nen werden endlich systemisch zusammen nutzbar.\
+\
+---\
+\
+## Pflichtbestandteile\
+- saubere Zeitbez\'fcge\
+- verlaufsf\'e4higer Zugriff\
+- Tageszustands-Zugriff\
+- dom\'e4nen\'fcbergreifende State-Zusammenf\'fchrung\
+- Goal + State + History in gemeinsamer Lesbarkeit\
+\
+### Warum jetzt\
+Bis hierhin wurden Bausteine gebaut.\
+Ab jetzt wird daraus ein nutzbares System.\
+\
+### Was danach erstmals m\'f6glich wird\
+- heutiger Gesamtzustand\
+- verlaufsf\'e4hige Kontextabfragen\
+- Daily Orientation Vorbereitung\
+- Buddy-ready Basis\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- Recommendation Engine\
+- Memory Engine\
+- Buddy Full Experience\
+\
+---\
+\
+# BAUSTUFE 8 \'97 BASIC V1 EXPERIENCE LAYER\
+\
+## Ziel\
+\
+Das Fundament wird erstmals in einfache nutzbare Produktoberfl\'e4chen \'fcbersetzt.\
+\
+---\
+\
+## Pflichtbestandteile\
+- User Setup Flow\
+- Meal Logging Flow\
+- Workout Logging Flow\
+- Recovery Check-in Flow\
+- Basic Daily State Access\
+- einfache \'dcbersichts- und Verlaufszug\'e4nge\
+\
+### Warum erst jetzt\
+Weil UI vorher nur Fassade w\'e4re.\
+\
+### Was danach erstmals m\'f6glich wird\
+- echte V1 Foundation Nutzung\
+- erste sinnvolle Alltagsinteraktion\
+- Buddy- und Decision-Layer k\'f6nnen sp\'e4ter sinnvoll andocken\
+\
+---\
+\
+## Noch nicht n\'f6tig in dieser Stufe\
+- tiefer Buddy\
+- Recommendation Core\
+- proaktive Guidance\
+- Coach Layer\
+- Supplements / Medical / Marketplace / Voice / Vision\
+\
+---\
+\
+# 3. DIE RICHTIGE ABH\'c4NGIGKEITSLOGIK\
+\
+Diese Baustufen sind nicht beliebig.\
+\
+Sie h\'e4ngen logisch voneinander ab.\
+\
+---\
+\
+## Abh\'e4ngigkeitskette\
+\
+### 1\
+Identity & User Foundation\
+\
+\uc0\u8595 \
+\
+### 2\
+Nutrition Foundation\
+\
+\uc0\u8595 \
+\
+### 3\
+Nutrition Logging & Calculation\
+\
+\uc0\u8595 \
+\
+### 4\
+Training Foundation\
+\
+\uc0\u8595 \
+\
+### 5\
+Training Logging & History\
+\
+\uc0\u8595 \
+\
+### 6\
+Recovery Foundation\
+\
+\uc0\u8595 \
+\
+### 7\
+Timeline & State Access Layer\
+\
+\uc0\u8595 \
+\
+### 8\
+Basic V1 Experience Layer\
+\
+---\
+\
+# 4. WAS TEILWEISE PARALLEL LAUFEN DARF\
+\
+Nicht alles muss strikt seriell entwickelt werden.\
+\
+Aber nur, wenn die logische Reihenfolge nicht verletzt wird.\
+\
+---\
+\
+## Teilweise parallel denkbar\
+\
+### Parallel m\'f6glich\
+- Nutrition Data Foundation und vorbereitende Training Data Foundation\
+- User Setup Flow parallel zu sp\'e4terem State Access Denken\
+- Recovery Input-Struktur parallel zu Timeline-Konzepten\
+\
+---\
+\
+## Nicht parallel sinnvoll\
+\
+### Nicht sinnvoll parallel\
+- Buddy bauen, bevor State Access sauber ist\
+- Daily Orientation bauen, bevor State-Zusammenf\'fchrung existiert\
+- Recommendation-Logik bauen, bevor Kernzust\'e4nde stabil sind\
+- UI-Screens bauen, bevor die Kernobjekte sauber tragf\'e4hig sind\
+\
+---\
+\
+# 5. WAS W\'c4HREND V1 FOUNDATION AUSDR\'dcCKLICH NICHT ANGEFASST WERDEN SOLL\
+\
+Das ist extrem wichtig.\
+\
+Denn hier kippt man sonst wieder in Scope-Zerfall.\
+\
+---\
+\
+## Nicht anfassen w\'e4hrend V1 Foundation\
+\
+### Nicht priorisieren\
+- Buddy Personality Layer\
+- Recommendation Engine in Tiefe\
+- Memory System in Tiefe\
+- Supplement Foundation\
+- Medical Awareness Foundation\
+- Coach Layer\
+- Human Escalation Layer\
+- Voice\
+- Vision\
+- Wearables\
+- Marketplace\
+- Programme / Commerce\
+- tiefe AI-/Agentenlogik im Produkt\
+\
+---\
+\
+## Warum nicht\
+Weil diese Dinge auf V1 Foundation aufbauen sollen.\
+\
+Nicht parallel das Fundament zerrei\'dfen sollen.\
+\
+---\
+\
+# 6. DIE PRAKTISCHE BAUREGEL F\'dcR JEDE BAUSTUFE\
+\
+Jede Baustufe ist erst dann abgeschlossen, wenn diese f\'fcnf Fragen mit \'84ja\'93 beantwortet werden k\'f6nnen:\
+\
+---\
+\
+## Frage 1\
+Ist die fachliche Struktur sauber?\
+\
+## Frage 2\
+Ist der Kernflow dieser Stufe nutzbar?\
+\
+## Frage 3\
+Ist der Output logisch und verst\'e4ndlich?\
+\
+## Frage 4\
+Ist das Ganze sp\'e4ter buddy-/intelligence-f\'e4hig?\
+\
+## Frage 5\
+Wird durch diese Stufe eine echte neue Produktf\'e4higkeit freigeschaltet?\
+\
+Wenn nicht, ist die Stufe nicht fertig.\
+\
+---\
+\
+# 7. WIE MAN ERKENNT, DASS DIE REIHENFOLGE VERLASSEN WIRD\
+\
+Warnsignale f\'fcr falsche Reihenfolge:\
+\
+---\
+\
+## Red Flags\
+\
+- \'84Lass uns schnell schon mal Buddy bauen\'93\
+- \'84Wir machen erstmal Screens, dann die Logik sp\'e4ter\'93\
+- \'84Wir k\'f6nnen die Datenbank sp\'e4ter noch sauberziehen\'93\
+- \'84Wir brauchen erstmal etwas, das cool aussieht\'93\
+- \'84Das Recommendation-System bauen wir einfach promptbasiert rein\'93\
+- \'84Die Struktur fixen wir sp\'e4ter\'93\
+\
+Wenn diese S\'e4tze auftauchen, driftet das Projekt wieder ab.\
+\
+---\
+\
+# 8. DIE RICHTIGE DENKWEISE F\'dcR DIE UMSETZUNG\
+\
+LumeOS V1 Foundation ist nicht:\
+\
+- ein Designprojekt\
+- ein UI-Projekt\
+- ein AI-Demo-Projekt\
+- ein Dashboard-Projekt\
+\
+Es ist zuerst:\
+\
+# ein sauber aufgebautes stateful Kernsystem\
+\
+Das muss mental immer vor allem anderen stehen.\
+\
+---\
+\
+# 9. WANN V1 FOUNDATION WIRKLICH STEHT\
+\
+V1 Foundation steht dann, wenn:\
+\
+- ein Nutzer sauber onboarded werden kann\
+- Ern\'e4hrung nutzbar geloggt und ausgewertet werden kann\
+- Training nutzbar geloggt und historisiert werden kann\
+- Recovery sinnvoll erfasst werden kann\
+- diese Dom\'e4nen zeitlich zusammenh\'e4ngen\
+- der aktuelle Zustand logisch abfragbar ist\
+- daraus eine einfache, aber echte Alltagsnutzung m\'f6glich ist\
+\
+Dann erst ist der Boden stabil.\
+\
+---\
+\
+# 10. EIN-SATZ-DEFINITION\
+\
+# LumeOS V1 Foundation wird in einer festen Reihenfolge gebaut: erst Nutzerkontext, dann State-Dom\'e4nen, dann Verlauf und Zugriff, dann erste echte Nutzung.\
+\
+---\
+\
+# 11. SCHLUSSREGEL\
+\
+Wenn k\'fcnftig unklar ist, ob etwas jetzt gebaut werden sollte, gilt immer zuerst diese Frage:\
+\
+# Ist das ein notwendiger n\'e4chster Schritt in der festgelegten V1 Build Order \'96 oder nur eine verf\'fchrerische Ablenkung?\
+\
+Wenn es nur Ablenkung ist, geh\'f6rt es nicht in den aktuellen Bau.}

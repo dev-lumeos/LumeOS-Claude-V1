@@ -1,0 +1,860 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 02_DOMAIN_MAP\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **produktlogischen Dom\'e4nen** von LumeOS.\
+\
+Es beantwortet nicht die Frage, wie etwas technisch gebaut wird.\
+\
+Es beantwortet die Frage:\
+\
+# Welche fachlichen Bereiche geh\'f6ren wirklich zu LumeOS?\
+\
+Diese Dom\'e4nen bilden die Grundlage f\'fcr:\
+\
+- Produktarchitektur\
+- Feature-Zuordnung\
+- sp\'e4tere Datenmodelle\
+- sp\'e4tere APIs\
+- sp\'e4tere UI-Flows\
+- sp\'e4tere Build-Phasen\
+\
+---\
+\
+## Grundregel\
+\
+Eine Dom\'e4ne ist in LumeOS nur dann legitim, wenn sie mindestens eine dieser Bedingungen erf\'fcllt:\
+\
+- sie ist zentral f\'fcr den eigentlichen Produktkern\
+- sie taucht wiederkehrend und konsistent in der Vision auf\
+- sie tr\'e4gt direkt zur Entscheidungsqualit\'e4t von Buddy bei\
+- sie ist notwendig, um den Nutzer sinnvoll zu begleiten\
+- sie schafft einen echten Mehrwert \'fcber reine Datenspeicherung hinaus\
+\
+---\
+\
+# Gesamt\'fcbersicht der Dom\'e4nen\
+\
+LumeOS besteht aus f\'fcnf Ebenen:\
+\
+## Ebene 1 \'97 Foundation\
+Grundlage des Systems\
+\
+- Identity & Access\
+- User Profile\
+- Preferences & Settings\
+- Goals & Strategy\
+\
+## Ebene 2 \'97 Core State Domains\
+Bereiche, die den Zustand des Nutzers beschreiben\
+\
+- Nutrition\
+- Training\
+- Recovery\
+- Supplements\
+- Medical Awareness\
+\
+## Ebene 3 \'97 Intelligence Domains\
+Bereiche, die den Zustand interpretieren und daraus Logik ableiten\
+\
+- Memory & Context\
+- Recommendation Engine\
+- Decision Engine\
+- Safety & Guardrails\
+- Insight & Prioritization\
+\
+## Ebene 4 \'97 Interaction Domains\
+Bereiche, \'fcber die der Nutzer das System erlebt\
+\
+- Buddy / Companion\
+- Daily Guidance\
+- Check-ins\
+- Explanations & Education\
+- Notifications / Nudges\
+- Voice (sp\'e4ter)\
+\
+## Ebene 5 \'97 Human / Business / Expansion Domains\
+Bereiche, die das System erweitern oder kommerziell nutzbar machen\
+\
+- Coach Layer\
+- Human Escalation\
+- Programs & Plans\
+- Marketplace / Commerce\
+- Content / Education Library\
+- Wearables & Integrations\
+- Visual / Vision Layer\
+\
+---\
+\
+# DETAILLIERTE DOM\'c4NEN\
+\
+---\
+\
+# 1. FOUNDATION DOMAINS\
+\
+Diese Dom\'e4nen bilden die strukturelle Grundlage f\'fcr das gesamte System.\
+\
+Sie sind keine \'84Features\'93, sondern Basisschichten.\
+\
+---\
+\
+## 1.1 Identity & Access\
+\
+### Zweck\
+Verwaltet Identit\'e4t, Zugang und Benutzerzuordnung.\
+\
+### Inhalt\
+- Registrierung\
+- Login\
+- OAuth\
+- Sessions\
+- Rollen / Rechte\
+- Zugriffskontrolle\
+- Ger\'e4te-/Session-Kontext\
+- Multi-Account-Strukturen sp\'e4ter\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Ohne Identit\'e4t gibt es kein personalisiertes System.\
+\
+### Bedeutung f\'fcr LumeOS\
+Diese Dom\'e4ne ist rein funktional, aber absolut notwendig.\
+\
+### Einstufung\
+# Core Foundation\
+\
+---\
+\
+## 1.2 User Profile\
+\
+### Zweck\
+Beschreibt die Person, auf die sich alle Empfehlungen und Bewertungen beziehen.\
+\
+### Inhalt\
+- Basisprofil\
+- Geschlecht / Alter / Ma\'dfe\
+- Trainingserfahrung\
+- Ern\'e4hrungspr\'e4ferenzen\
+- Aktivit\'e4tsniveau\
+- Lebensstil\
+- Sprache / Region\
+- relevante Kontexte\
+- sp\'e4tere Zielgruppen-/Persona-Einordnung\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Ohne Nutzerkontext sind Entscheidungen unpr\'e4zise oder generisch.\
+\
+### Einstufung\
+# Core Foundation\
+\
+---\
+\
+## 1.3 Preferences & Settings\
+\
+### Zweck\
+Steuert, wie LumeOS sich f\'fcr den Nutzer verh\'e4lt.\
+\
+### Inhalt\
+- Units\
+- Sprache\
+- Reminder-Stil\
+- Buddy-Tonalit\'e4t sp\'e4ter\
+- Datenquellen\
+- Sichtbarkeit\
+- Benachrichtigungslogik\
+- Coach-/Privacy-Einstellungen sp\'e4ter\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Personalisierung endet nicht bei Daten. Auch Verhalten und Darstellung m\'fcssen anpassbar sein.\
+\
+### Einstufung\
+# Core Foundation\
+\
+---\
+\
+## 1.4 Goals & Strategy\
+\
+### Zweck\
+Definiert, worauf das System hinarbeitet.\
+\
+### Inhalt\
+- Hauptziele\
+- Unterziele\
+- Phasen\
+- Priorit\'e4ten\
+- Zielkonflikte\
+- kurzfristige vs langfristige Ziele\
+- strategische Schwerpunktlogik\
+\
+### Beispiele\
+- Fettverlust\
+- Muskelaufbau\
+- Performance\
+- Gesundheit stabilisieren\
+- Energie verbessern\
+- Erholung priorisieren\
+- Blutwerte verbessern\
+- Routine aufbauen\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Ohne Zielkontext kann das System keine sinnvollen Entscheidungen priorisieren.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+# 2. CORE STATE DOMAINS\
+\
+Diese Dom\'e4nen beschreiben den tats\'e4chlichen Zustand des Nutzers.\
+\
+Sie liefern die Rohbasis f\'fcr fast alle sp\'e4teren Empfehlungen.\
+\
+---\
+\
+## 2.1 Nutrition\
+\
+### Zweck\
+Erfasst und interpretiert Ern\'e4hrung, N\'e4hrstoffversorgung und Essverhalten.\
+\
+### Inhalt\
+- Foods\
+- Portions\
+- Meals\
+- Recipes\
+- Meal Logging\
+- Makros\
+- Mikron\'e4hrstoffe\
+- Targets\
+- Meal Timing\
+- Ern\'e4hrungsmuster\
+- Ern\'e4hrungsqualit\'e4t\
+- sp\'e4ter:\
+  - Barcode-Mapping\
+  - FoodCam\
+  - regionale Foods\
+  - intelligente Meal Suggestions\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Nutrition ist eine der h\'e4rtesten und relevantesten Input-Dom\'e4nen des gesamten Systems.\
+\
+### Produktbedeutung\
+Nicht nur Tracking, sondern Bewertung und Handlung.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 2.2 Training\
+\
+### Zweck\
+Erfasst und interpretiert Trainingsverhalten, Belastung und Leistungsentwicklung.\
+\
+### Inhalt\
+- Exercises\
+- Workouts\
+- Sessions\
+- Sets\
+- Reps\
+- Load\
+- Tempo sp\'e4ter\
+- RIR / RPE sp\'e4ter\
+- Progressive Overload\
+- Trainingsfrequenz\
+- Trainingsmuster\
+- Trainingsleistung\
+- Trainingshistorie\
+- sp\'e4ter:\
+  - Gym Flow\
+  - Set Tracking\
+  - Auto-Progression\
+  - Exercise Intelligence\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Training ist ein zentrales Entscheidungsfeld und ein Kernbereich des Produkts.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 2.3 Recovery\
+\
+### Zweck\
+Erfasst und interpretiert Erholung, Belastbarkeit und Regenerationszustand.\
+\
+### Inhalt\
+- Schlaf\
+- M\'fcdigkeit\
+- Stress\
+- Soreness\
+- Ersch\'f6pfung\
+- Readiness\
+- subjektive Recovery\
+- sp\'e4ter:\
+  - HRV\
+  - Ruhepuls\
+  - Wearables\
+  - Recovery Trends\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Ohne Recovery-Kontext werden Training, Ern\'e4hrung und Empfehlungen schnell dumm oder zu aggressiv.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 2.4 Supplements\
+\
+### Zweck\
+Erfasst und interpretiert Supplemente, Inhaltsstoffe, Einnahme und logische Verwendung.\
+\
+### Inhalt\
+- Supplement-Produkte\
+- Canonical Supplements\
+- Inhaltsstoffe\
+- Dosierungen\
+- Timing\
+- Protokolle\
+- Ziele\
+- Stack-Logik\
+- Interaktionen\
+- Sicherheitslogik\
+- Compliance\
+- sp\'e4ter:\
+  - Produktempfehlungen\
+  - Coach-/Marktplatz-Anbindung\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Supplements sind in LumeOS kein Nebenmodul, sondern eine echte Entscheidungsdom\'e4ne.\
+\
+### Einstufung\
+# Core\
+\
+---\
+\
+## 2.5 Medical Awareness\
+\
+### Zweck\
+Erfasst und interpretiert gesundheitsrelevante Signale, ohne selbst als medizinisches Diagnoseprodukt aufzutreten.\
+\
+### Inhalt\
+- Blutwerte\
+- Marker\
+- Verlauf\
+- Referenzbereiche\
+- Auff\'e4lligkeiten\
+- Risiko-Flags\
+- Eskalationshinweise\
+- Verlaufskontext\
+- Gesundheitskontext\
+\
+### Klare Grenze\
+Diese Dom\'e4ne ist **kein Diagnose- oder Therapie-System**.\
+\
+Sie dient dazu:\
+\
+- relevante Auff\'e4lligkeiten sichtbar zu machen\
+- Verlauf einzuordnen\
+- Kontext f\'fcr Entscheidungen zu liefern\
+- bei Bedarf zur Abkl\'e4rung zu eskalieren\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Sie ist f\'fcr Differenzierung, Sicherheit und Kontext extrem wertvoll.\
+\
+### Einstufung\
+# Sensitive Core\
+\
+---\
+\
+# 3. INTELLIGENCE DOMAINS\
+\
+Diese Dom\'e4nen machen aus Daten ein echtes System.\
+\
+Ohne sie w\'e4re LumeOS nur eine Sammlung von Trackern.\
+\
+---\
+\
+## 3.1 Memory & Context\
+\
+### Zweck\
+Sichert Verlauf, Pr\'e4ferenzen, Muster und relevante Kontexte \'fcber Zeit.\
+\
+### Inhalt\
+- Nutzerhistorie\
+- Ereignisse\
+- Muster\
+- Gewohnheiten\
+- fr\'fchere Probleme\
+- fr\'fchere Reaktionen\
+- wiederkehrende Themen\
+- Pr\'e4ferenzlernen\
+- Buddy-Kontext\
+- Entscheidungsverlauf\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Das ist einer der gr\'f6\'dften Hebel f\'fcr echte Personalisierung und Kontinuit\'e4t.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 3.2 Recommendation Engine\
+\
+### Zweck\
+Erzeugt sinnvolle Empfehlungen aus Zustand, Kontext und Zielen.\
+\
+### Inhalt\
+- Handlungsempfehlungen\
+- Priorisierung\
+- Tagesfokus\
+- Anpassungsvorschl\'e4ge\
+- Interventionen\
+- Vorschl\'e4ge f\'fcr Training, Ern\'e4hrung, Recovery, Supplemente\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Ohne Recommendation Layer bleibt LumeOS passiv.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 3.3 Decision Engine\
+\
+### Zweck\
+Bestimmt, **wann**, **warum** und **wie stark** eine Empfehlung \'fcberhaupt entsteht.\
+\
+### Inhalt\
+- Entscheidungslogik\
+- Trigger\
+- Tradeoff-Logik\
+- Priorisierungsregeln\
+- Confidence\
+- Kontextgewichtung\
+- Zielgewichtung\
+- Konfliktlogik\
+- Eskalationslogik\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Sie ist der Unterschied zwischen \'84Feature-App\'93 und \'84intelligentem System\'93.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 3.4 Safety & Guardrails\
+\
+### Zweck\
+Verhindert unsaubere, riskante oder unangemessene Empfehlungen.\
+\
+### Inhalt\
+- Sicherheitsgrenzen\
+- Kontraindikationslogik\
+- sensible Bereiche\
+- Eskalation\
+- Unsicherheitsbehandlung\
+- rote Linien\
+- medizinische Abgrenzung\
+- Confidence-basierte Einschr\'e4nkungen\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Sicherheit ist nicht nur Compliance, sondern Produktqualit\'e4t.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 3.5 Insight & Prioritization\
+\
+### Zweck\
+Verdichtet komplexe Informationen zu wenigen wirklich relevanten Erkenntnissen.\
+\
+### Inhalt\
+- Insights\
+- Zusammenfassungen\
+- Priorit\'e4ten\
+- Mustererkennung\
+- Weekly / Daily synthesis\
+- What changed?\
+- What matters now?\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Das ist genau der Teil, den Nutzer im Alltag wirklich brauchen.\
+\
+### Einstufung\
+# Core\
+\
+---\
+\
+# 4. INTERACTION DOMAINS\
+\
+Diese Dom\'e4nen bestimmen, wie der Nutzer LumeOS tats\'e4chlich erlebt.\
+\
+---\
+\
+## 4.1 Buddy / Companion\
+\
+### Zweck\
+Buddy ist die prim\'e4re Nutzeroberfl\'e4che des Systems.\
+\
+### Inhalt\
+- Konversation\
+- Fragen & Antworten\
+- Guidance\
+- Kontextbezug\
+- Erinnerungsf\'e4higkeit\
+- t\'e4gliche Begleitung\
+- nat\'fcrliches Interface\
+- sp\'e4ter:\
+  - Voice\
+  - Ambient interaction\
+  - proaktive Begleitung\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Buddy ist das Gesicht des Produkts.\
+\
+### Einstufung\
+# Absolute Core\
+\
+---\
+\
+## 4.2 Daily Guidance\
+\
+### Zweck\
+\'dcbersetzt das System in konkrete t\'e4gliche Nutzbarkeit.\
+\
+### Inhalt\
+- Tagesfokus\
+- heute relevant\
+- kleine n\'e4chste Schritte\
+- Checkpoints\
+- Reminder\
+- \'84Was heute z\'e4hlt\'93\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Ohne Daily Guidance bleibt das System abstrakt.\
+\
+### Einstufung\
+# Core\
+\
+---\
+\
+## 4.3 Check-ins\
+\
+### Zweck\
+Erm\'f6glicht schnelle Zustandsupdates ohne Reibung.\
+\
+### Inhalt\
+- Energy\
+- Mood\
+- Sleep quality\
+- soreness\
+- adherence\
+- subjective state\
+- readiness\
+- symptom notes\
+- daily status\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Check-ins sind ein zentrales Bindeglied zwischen Daten und Alltag.\
+\
+### Einstufung\
+# Core\
+\
+---\
+\
+## 4.4 Explanations & Education\
+\
+### Zweck\
+Erkl\'e4rt Entscheidungen, Empfehlungen und Zusammenh\'e4nge verst\'e4ndlich.\
+\
+### Inhalt\
+- Warum diese Empfehlung?\
+- Was bedeutet dieser Wert?\
+- Was ist der Tradeoff?\
+- kurze Education\
+- kontextbezogene Erkl\'e4rungen\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Vertrauen entsteht nur, wenn Empfehlungen nachvollziehbar sind.\
+\
+### Einstufung\
+# Core\
+\
+---\
+\
+## 4.5 Notifications / Nudges\
+\
+### Zweck\
+Bringt das System proaktiv in den Alltag.\
+\
+### Inhalt\
+- Reminder\
+- sanfte Nudges\
+- wichtige Hinweise\
+- Timing\
+- adaptive Frequenz\
+- Kontext-Signale\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Ohne gute Reaktivierungslogik verliert selbst ein gutes System schnell Relevanz.\
+\
+### Einstufung\
+# Core\
+\
+---\
+\
+## 4.6 Voice\
+\
+### Zweck\
+Erm\'f6glicht nat\'fcrlichere, schnellere und alltagstauglichere Interaktion.\
+\
+### Inhalt\
+- Spracheingabe\
+- Sprachausgabe\
+- Gym Commands\
+- Hands-free interaction\
+- mobile voice flows\
+- Buddy Voice Presence\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Sehr starker Differenzierungshebel, aber nicht zwingend Startvoraussetzung.\
+\
+### Einstufung\
+# Strategic Expansion\
+\
+---\
+\
+# 5. HUMAN / BUSINESS / EXPANSION DOMAINS\
+\
+Diese Dom\'e4nen erweitern LumeOS strategisch, kommerziell oder in Richtung Zusammenarbeit.\
+\
+---\
+\
+## 5.1 Coach Layer\
+\
+### Zweck\
+Erm\'f6glicht Coaches, Klienten effizienter und intelligenter zu betreuen.\
+\
+### Inhalt\
+- Coach Dashboard\
+- Client Overview\
+- Check-in Review\
+- Priorit\'e4ten\
+- Vorschl\'e4ge\
+- Verlauf\
+- Coach Workflows\
+- Betreuungshilfe\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Wichtiger B2B-/B2B2C-Hebel.\
+\
+### Einstufung\
+# Strategic Core Expansion\
+\
+---\
+\
+## 5.2 Human Escalation\
+\
+### Zweck\
+Erm\'f6glicht \'dcbergabe an echte Menschen, wenn AI oder Regeln nicht ausreichen.\
+\
+### Inhalt\
+- Eskalation an Coach\
+- Eskalation an Fachperson\
+- Review Flows\
+- Human approval\
+- Boundary handling\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Wichtig f\'fcr Sicherheit, Vertrauen und sp\'e4tere Produktreife.\
+\
+### Einstufung\
+# Strategic Expansion\
+\
+---\
+\
+## 5.3 Programs & Plans\
+\
+### Zweck\
+Strukturiert l\'e4ngerfristige Pl\'e4ne und Strategien.\
+\
+### Inhalt\
+- Trainingspl\'e4ne\
+- Ern\'e4hrungspl\'e4ne\
+- Supplement-Protokolle\
+- Recovery-Pl\'e4ne\
+- adaptive Programme\
+- Phase-based structures\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Hoher Nutzwert, aber sekund\'e4r gegen\'fcber dem eigentlichen Companion-System.\
+\
+### Einstufung\
+# Important Expansion\
+\
+---\
+\
+## 5.4 Marketplace / Commerce\
+\
+### Zweck\
+Erm\'f6glicht Produktempfehlung, Monetarisierung und \'d6kosystem-Aufbau.\
+\
+### Inhalt\
+- Supplement-Produkte\
+- Partnerprodukte\
+- Empfehlungen\
+- K\'e4ufe\
+- Angebote\
+- Provision / Revenue sp\'e4ter\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Strategisch wichtig, aber nicht Teil des eigentlichen Produktkerns.\
+\
+### Einstufung\
+# Commercial Expansion\
+\
+---\
+\
+## 5.5 Content / Education Library\
+\
+### Zweck\
+Stellt tiefergehendes Wissen und strukturierte Inhalte bereit.\
+\
+### Inhalt\
+- Wissensartikel\
+- Lernmodule\
+- How-tos\
+- thematische Erkl\'e4rungen\
+- Coach-/User-spezifischer Content\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Kann Vertrauen und Retention erh\'f6hen, ist aber nicht der Kern.\
+\
+### Einstufung\
+# Support Expansion\
+\
+---\
+\
+## 5.6 Wearables & Integrations\
+\
+### Zweck\
+Erweitert den Dateninput des Systems.\
+\
+### Inhalt\
+- Apple Health\
+- Garmin\
+- Oura\
+- Whoop\
+- Smart Scales\
+- weitere Datenquellen\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Sehr sinnvoll, aber nicht Voraussetzung f\'fcr den Produktkern.\
+\
+### Einstufung\
+# Strategic Expansion\
+\
+---\
+\
+## 5.7 Visual / Vision Layer\
+\
+### Zweck\
+Erweitert LumeOS um Bild- und visuelle Analyse.\
+\
+### Inhalt\
+- Food Recognition\
+- Meal Analysis\
+- Progress Photos\
+- Body Analysis\
+- Form Review\
+- sp\'e4ter weitere visuelle Inputs\
+\
+### Warum diese Dom\'e4ne legitim ist\
+Gro\'dfes Potenzial, aber nicht Startvoraussetzung.\
+\
+### Einstufung\
+# Strategic Expansion\
+\
+---\
+\
+# DOM\'c4NEN-PRIORIT\'c4T AUF PRODUKTEBENE\
+\
+## Absolute Core\
+Diese Dom\'e4nen definieren LumeOS im Kern:\
+\
+- Goals & Strategy\
+- Nutrition\
+- Training\
+- Recovery\
+- Memory & Context\
+- Recommendation Engine\
+- Decision Engine\
+- Safety & Guardrails\
+- Buddy / Companion\
+\
+---\
+\
+## Core\
+Diese Dom\'e4nen sind stark legitim und wichtig:\
+\
+- Identity & Access\
+- User Profile\
+- Preferences & Settings\
+- Supplements\
+- Medical Awareness\
+- Insight & Prioritization\
+- Daily Guidance\
+- Check-ins\
+- Explanations & Education\
+- Notifications / Nudges\
+\
+---\
+\
+## Strategic Expansion\
+Diese Dom\'e4nen sind sinnvoll, aber nicht zwingend Teil des ersten echten Kerns:\
+\
+- Voice\
+- Coach Layer\
+- Human Escalation\
+- Programs & Plans\
+- Marketplace / Commerce\
+- Content / Education Library\
+- Wearables & Integrations\
+- Visual / Vision Layer\
+\
+---\
+\
+# Arbeitsregel f\'fcr sp\'e4tere Features\
+\
+Jedes zuk\'fcnftige Feature muss zuerst einer dieser Dom\'e4nen zugeordnet werden.\
+\
+Wenn es zu keiner legitimen Dom\'e4ne passt, geh\'f6rt es nicht in den Produktkern.\
+\
+---\
+\
+# Wichtig\
+\
+Dieses Dokument definiert nur:\
+\
+# Was fachlich zu LumeOS geh\'f6rt.\
+\
+Es definiert **nicht**:\
+\
+- wann etwas gebaut wird\
+- wie etwas technisch gebaut wird\
+- welche API oder Datenstruktur sp\'e4ter genutzt wird\
+\
+Diese Entscheidungen kommen erst in sp\'e4teren Dokumenten.}

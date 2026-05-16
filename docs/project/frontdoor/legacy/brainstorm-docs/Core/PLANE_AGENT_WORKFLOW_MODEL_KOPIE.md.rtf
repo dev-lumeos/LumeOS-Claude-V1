@@ -1,0 +1,838 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 .SFNS-Semibold;\f1\fswiss\fcharset0 Helvetica;\f2\fmodern\fcharset0 Courier-Oblique;
+\f3\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red14\green14\blue14;\red74\green80\blue93;\red155\green162\blue177;
+\red136\green185\blue102;\red197\green136\blue83;\red81\green156\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c6700\c6700\c6700;\cssrgb\c36078\c38824\c43922;\cssrgb\c67059\c69804\c74902;
+\cssrgb\c59608\c76471\c47451;\cssrgb\c81961\c60392\c40000;\cssrgb\c38039\c68235\c93333;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Datei \'97 PLANE_MINIMAL_V1_SETUP.md
+\f1\b0\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\i\fs28 \cf3 # PLANE_MINIMAL_V1_SETUP
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\
+\cf5 Dieses\cf4  \cf5 Dokument\cf4  \cf5 definiert\cf4  \cf5 die\cf4  \cf5 **kleinste\cf4  \cf5 sinnvolle\cf4  \cf5 Startversion**\cf4  \cf5 von\cf4  \cf5 Plane\cf4  \cf5 f\'fcr\cf4  \cf5 den\cf4  \cf5 kontrollierten\cf4  \cf5 LumeOS-Rebuild.\cf4 \
+\
+\cf6 Es beantwortet die Frage:\cf4 \
+\
+
+\f2\i \cf3 # Wie nutzen wir Plane ab jetzt sofort praktisch, ohne in Tool-Spielerei, Overengineering oder k\'fcnstliche Komplexit\'e4t abzurutschen?
+\f3\i0 \cf4 \
+\
+\cf5 Dieses\cf4  \cf5 Dokument\cf4  \cf5 ist\cf4  \cf5 absichtlich\cf4  \cf5 minimal.\cf4 \
+\
+\cf5 Es\cf4  \cf5 ist\cf4  \cf5 nicht\cf4  \cf5 der\cf4  \cf5 Endausbau.\cf4 \
+\
+\cf5 Es\cf4  \cf5 ist\cf4  \cf5 der\cf4  \cf5 **kleinste\cf4  \cf5 brauchbare\cf4  \cf5 operative\cf4  \cf5 Start**.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 1. DIE OBERSTE REGEL
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 # Plane wird in V1 NICHT als \'84voller AI-Agenten-Kosmos\'93 aufgesetzt.
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Plane wird als kontrollierte visuelle Arbeitswelt gestartet.
+\f3\i0 \cf4 \
+\
+\cf5 Wenn\cf4  \cf5 du\cf4  \cf5 zu\cf4  \cf5 fr\'fch\cf4  \cf5 zu\cf4  \cf5 viel\cf4  \cf5 aktivierst,\cf4  \cf6 passiert fast sicher:\cf4 \
+\
+\cf7 -\cf4  \cf5 Tool-Chaos\cf4 \
+\cf7 -\cf4  \cf5 zu\cf4  \cf5 viele\cf4  \cf5 Felder\cf4 \
+\cf7 -\cf4  \cf5 zu\cf4  \cf5 viele\cf4  \cf5 States\cf4 \
+\cf7 -\cf4  \cf5 falsche\cf4  \cf5 Automatisierung\cf4 \
+\cf7 -\cf4  \cf5 zu\cf4  \cf5 viel\cf4  \cf5 Meta\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 echte\cf4  \cf5 Delivery\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 2. ZIEL F\'dcR DIE ERSTE VERSION
+\f3\i0 \cf4 \
+\
+\cf6 Plane V1 soll nur diese 5 Dinge leisten:\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 1. Sichtbarkeit
+\f3\i0 \cf4 \
+\cf6 Du siehst:\cf4 \
+\cf7 -\cf4  \cf5 woran\cf4  \cf5 du\cf4  \cf5 arbeitest\cf4 \
+\cf7 -\cf4  \cf5 was\cf4  \cf5 blockiert\cf4 \
+\cf7 -\cf4  \cf5 was\cf4  \cf5 als\cf4  \cf5 N\'e4chstes\cf4  \cf5 dran\cf4  \cf5 ist\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 2. Decision Control
+\f3\i0 \cf4 \
+\cf5 Offene\cf4  \cf5 Entscheidungen\cf4  \cf5 gehen\cf4  \cf5 nicht\cf4  \cf5 verloren.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 3. Artifact Separation
+\f3\i0 \cf4 \
+\cf5 PRDs,\cf4  \cf5 Specs\cf4  \cf5 und\cf4  \cf5 Work\cf4  \cf5 Orders\cf4  \cf5 werden\cf4  \cf5 nicht\cf4  \cf5 vermischt.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 4. Build Readiness
+\f3\i0 \cf4 \
+\cf5 Nur\cf4  \cf5 saubere,\cf4  \cf5 kleine\cf4  \cf5 Dinge\cf4  \cf5 gehen\cf4  \cf5 an\cf4  \cf5 Claude\cf4  \cf5 Code.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 5. Governance Awareness
+\f3\i0 \cf4 \
+\cf5 Du\cf4  \cf5 siehst\cf4  \cf5 Drift,\cf4  \cf5 Risiken\cf4  \cf5 und\cf4  \cf5 unsaubere\cf4  \cf5 Arbeit\cf4  \cf5 fr\'fch.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 3. WAS IN V1 EXPLIZIT NOCH NICHT GEMACHT WIRD
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 extrem\cf4  \cf5 wichtig.\cf4 \
+\
+\cf5 In\cf4  \cf5 Plane\cf4  \cf5 V1\cf4  \cf5 NICHT\cf4  \cf5 aktiv\cf4  \cf5 \'fcberbauen:\cf4 \
+\
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 komplexen\cf4  \cf5 Agentenketten\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 Vollautomatisierung\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 wilden\cf4  \cf5 Workflows\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 dutzenden\cf4  \cf5 Properties\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 \'84smarten\'93\cf4  \cf5 Auto-Actions\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf6 100\cf5 +\cf4  \cf5 Items\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 k\'fcnstliche\cf4  \cf5 Hierarchie-Explosion\cf4 \
+\
+
+\f2\i \cf3 ### Regel:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Erst sichtbar und sauber.
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Dann sp\'e4ter clever.
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 4. DIE EINZIGE SINNVOLLE STARTSTRUKTUR
+\f3\i0 \cf4 \
+\
+\cf5 F\'fcr\cf4  \cf6 deinen Start reicht:\cf4 \
+\
+
+\f2\i \cf3 # 1 Workspace
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # 3 Projects
+\f3\i0 \cf4 \
+\
+\cf5 Nicht\cf4  \cf6 10\cf5 .\cf4 \
+\
+\cf5 Nicht\cf4  \cf6 20\cf5 .\cf4 \
+\
+\cf5 Nicht\cf4  \cf5 Enterprise-Theater.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 5. DIE 3 START-PROJEKTE
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # PROJEKT 1 \'97 `LUMEOS_DECISIONS`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\cf5 Alle\cf4  \cf5 offenen\cf4  \cf5 und\cf4  \cf5 entschiedenen\cf4  \cf5 Kernentscheidungen\cf4 \
+\
+
+\f2\i \cf3 ## Enth\'e4lt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 die\cf4  \cf6 12\cf4  \cf5 Kernentscheidungen\cf4  \cf5 aus\cf4  \cf5 `22_V1_DECISION_SHEET.md`\cf4 \
+\
+
+\f2\i \cf3 ## Warum das zuerst?
+\f3\i0 \cf4 \
+\cf5 Weil\cf4  \cf5 genau\cf4  \cf5 hier\cf4  \cf5 deine\cf4  \cf5 n\'e4chste\cf4  \cf5 echte\cf4  \cf5 Arbeit\cf4  \cf5 stattfindet.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # PROJEKT 2 \'97 `LUMEOS_ARTIFACTS`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\cf5 Alle\cf4  \cf5 PRDs\cf4  \cf5 und\cf4  \cf5 Specs\cf4 \
+\
+
+\f2\i \cf3 ## Enth\'e4lt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 PRDs\cf4 \
+\cf7 -\cf4  \cf5 Specs\cf4 \
+\cf7 -\cf4  \cf5 sp\'e4tere\cf4  \cf5 strukturierte\cf4  \cf5 Artefakte\cf4 \
+\
+
+\f2\i \cf3 ## Warum zusammen in V1?
+\f3\i0 \cf4 \
+\cf5 Weil\cf4  \cf5 du\cf4  \cf5 am\cf4  \cf5 Anfang\cf4  \cf5 noch\cf4  \cf5 nicht\cf4  \cf5 genug\cf4  \cf5 Volumen\cf4  \cf5 brauchst,\cf4  \cf5 um\cf4  \cf5 PRDs\cf4  \cf5 und\cf4  \cf5 Specs\cf4  \cf5 sofort\cf4  \cf5 komplett\cf4  \cf5 zu\cf4  \cf5 trennen.\cf4 \
+\
+
+\f2\i \cf3 ### Wichtig:
+\f3\i0 \cf4 \
+\cf5 Sie\cf4  \cf5 werden\cf4  \cf5 \'fcber\cf4  \cf5 `artifact_level`\cf4  \cf5 getrennt.\cf4 \
+\
+\cf5 Nicht\cf4  \cf5 \'fcber\cf4  \cf6 100\cf4  \cf5 Projekte.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # PROJEKT 3 \'97 `LUMEOS_EXECUTION`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\cf5 Alle\cf4  \cf5 Work\cf4  \cf5 Orders,\cf4  \cf5 Reviews\cf4  \cf5 und\cf4  \cf5 Build-Ready-Arbeit\cf4 \
+\
+
+\f2\i \cf3 ## Enth\'e4lt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Work\cf4  \cf5 Orders\cf4 \
+\cf7 -\cf4  \cf5 Reviews\cf4 \
+\cf7 -\cf4  \cf5 operative\cf4  \cf5 Umsetzungsarbeit\cf4 \
+\
+
+\f2\i \cf3 ## Warum separat?
+\f3\i0 \cf4 \
+\cf5 Weil\cf4  \cf5 Execution\cf4  \cf5 nicht\cf4  \cf5 mit\cf4  \cf5 Produktdenken\cf4  \cf5 vermischt\cf4  \cf5 werden\cf4  \cf5 darf.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 6. DIE EINZIGEN CUSTOM FIELDS, DIE DU AM ANFANG BRAUCHST
+\f3\i0 \cf4 \
+\
+\cf5 Nicht\cf4  \cf5 mehr.\cf4 \
+\
+\cf5 Diese\cf4  \cf6 6\cf4  \cf5 reichen\cf4  \cf5 f\'fcr\cf4  \cf5 den\cf4  \cf5 Start.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # FELD 1 \'97 `artifact_level`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Typ
+\f3\i0 \cf4 \
+\cf5 Single\cf4  \cf5 Select\cf4 \
+\
+
+\f2\i \cf3 ## Werte
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 decision\cf4 \
+\cf7 -\cf4  \cf5 prd\cf4 \
+\cf7 -\cf4  \cf5 spec\cf4 \
+\cf7 -\cf4  \cf5 work_order\cf4 \
+\cf7 -\cf4  \cf5 review\cf4 \
+\cf7 -\cf4  \cf5 risk\cf4 \
+\
+
+\f2\i \cf3 ## Pflicht
+\f3\i0 \cf4 \
+\cf5 Ja\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # FELD 2 \'97 `workstream`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Typ
+\f3\i0 \cf4 \
+\cf5 Single\cf4  \cf5 Select\cf4 \
+\
+
+\f2\i \cf3 ## Werte
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 A_identity_user\cf4 \
+\cf7 -\cf4  \cf5 B_nutrition_data\cf4 \
+\cf7 -\cf4  \cf5 C_nutrition_logging\cf4 \
+\cf7 -\cf4  \cf5 D_training\cf4 \
+\cf7 -\cf4  \cf5 E_recovery\cf4 \
+\cf7 -\cf4  \cf5 F_state_access\cf4 \
+\cf7 -\cf4  \cf5 G_v1_experience\cf4 \
+\cf7 -\cf4  \cf5 cross_foundation\cf4 \
+\
+
+\f2\i \cf3 ## Pflicht
+\f3\i0 \cf4 \
+\cf5 Ja\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # FELD 3 \'97 `decision_state`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Typ
+\f3\i0 \cf4 \
+\cf5 Single\cf4  \cf5 Select\cf4 \
+\
+
+\f2\i \cf3 ## Werte
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 not_needed\cf4 \
+\cf7 -\cf4  \cf5 open\cf4 \
+\cf7 -\cf4  \cf5 directionally_clear\cf4 \
+\cf7 -\cf4  \cf5 decided\cf4 \
+\cf7 -\cf4  \cf5 blocked_by_decision\cf4 \
+\
+
+\f2\i \cf3 ## Pflicht
+\f3\i0 \cf4 \
+\cf5 Ja\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # FELD 4 \'97 `artifact_status`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Typ
+\f3\i0 \cf4 \
+\cf5 Single\cf4  \cf5 Select\cf4 \
+\
+
+\f2\i \cf3 ## Werte
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 draft\cf4 \
+\cf7 -\cf4  \cf5 in_review\cf4 \
+\cf7 -\cf4  \cf5 approved\cf4 \
+\cf7 -\cf4  \cf5 blocked\cf4 \
+\cf7 -\cf4  \cf5 obsolete\cf4 \
+\cf7 -\cf4  \cf5 accepted\cf4 \
+\
+
+\f2\i \cf3 ## Pflicht
+\f3\i0 \cf4 \
+\cf5 Ja\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # FELD 5 \'97 `build_readiness`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Typ
+\f3\i0 \cf4 \
+\cf5 Single\cf4  \cf5 Select\cf4 \
+\
+
+\f2\i \cf3 ## Werte
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 not_buildable\cf4 \
+\cf7 -\cf4  \cf5 needs_prd\cf4 \
+\cf7 -\cf4  \cf5 needs_spec\cf4 \
+\cf7 -\cf4  \cf5 needs_split\cf4 \
+\cf7 -\cf4  \cf5 worker_ready\cf4 \
+\cf7 -\cf4  \cf5 under_build\cf4 \
+\cf7 -\cf4  \cf5 built\cf4 \
+\cf7 -\cf4  \cf5 reviewed\cf4 \
+\
+
+\f2\i \cf3 ## Pflicht
+\f3\i0 \cf4 \
+\cf5 Ja\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # FELD 6 \'97 `source_of_truth_doc`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Typ
+\f3\i0 \cf4 \
+\cf5 Text\cf4 \
+\
+
+\f2\i \cf3 ## Beispiele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `22_V1_DECISION_SHEET.md`\cf4 \
+\cf7 -\cf4  \cf5 `23_DECISION_AUTH_USER_GOAL.md`\cf4 \
+\cf7 -\cf4  \cf5 `15_V1_SYSTEM_CONTRACT.md`\cf4 \
+\
+
+\f2\i \cf3 ## Pflicht
+\f3\i0 \cf4 \
+\cf5 Ja\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 7. DIE EINZIGEN STATES, DIE DU F\'dcR DEN START BRAUCHST
+\f3\i0 \cf4 \
+\
+\cf5 Nicht\cf4  \cf6 15\cf5 .\cf4 \
+\cf5 Nicht\cf4  \cf5 fancy.\cf4 \
+\cf5 Nur\cf4  \cf5 die,\cf4  \cf5 die\cf4  \cf5 wirklich\cf4  \cf5 helfen.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## START-STATES
+\f3\i0 \cf4 \
+\
+\cf7 -\cf4  \cf5 `OPEN`\cf4 \
+\cf7 -\cf4  \cf5 `ANALYZING`\cf4 \
+\cf7 -\cf4  \cf5 `IN_DEFINITION`\cf4 \
+\cf7 -\cf4  \cf5 `READY_FOR_REVIEW`\cf4 \
+\cf7 -\cf4  \cf5 `APPROVED`\cf4 \
+\cf7 -\cf4  \cf5 `READY_FOR_BUILD`\cf4 \
+\cf7 -\cf4  \cf5 `BLOCKED`\cf4 \
+\cf7 -\cf4  \cf5 `ACCEPTED`\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 8. WAS DU F\'dcR DEN START BEWUSST IGNORIEREN SOLLST
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 wichtig,\cf4  \cf5 damit\cf4  \cf5 du\cf4  \cf5 nicht\cf4  \cf5 abs\'e4ufst.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## JETZT NOCH IGNORIEREN
+\f3\i0 \cf4 \
+\
+\cf7 -\cf4  \cf5 Sub-Issue-Orgien\cf4 \
+\cf7 -\cf4  \cf5 Cycles\cf4 \
+\cf7 -\cf4  \cf5 Automationen\cf4 \
+\cf7 -\cf4  \cf5 Agent\cf4  \cf5 Assignment\cf4 \
+\cf7 -\cf4  \cf5 AI\cf4  \cf5 Auto-Actions\cf4 \
+\cf7 -\cf4  \cf5 komplexe\cf4  \cf5 Permissions\cf4 \
+\cf7 -\cf4  \cf5 Deep\cf4  \cf5 Approval\cf4  \cf5 Chains\cf4 \
+\cf7 -\cf4  \cf5 Advanced\cf4  \cf5 Workflow\cf4  \cf5 Builder\cf4 \
+\cf7 -\cf4  \cf5 Webhooks\cf4 \
+\cf7 -\cf4  \cf5 API-Syncs\cf4 \
+\cf7 -\cf4  \cf5 Multi-Agent-Flows\cf4 \
+\
+
+\f2\i \cf3 ### Regel:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Erst Systemlogik.
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Dann Tool-Magie.
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 9. DIE 3 WICHTIGSTEN VIEWS F\'dcR DEN START
+\f3\i0 \cf4 \
+\
+\cf5 Mehr\cf4  \cf5 brauchst\cf4  \cf5 du\cf4  \cf5 am\cf4  \cf5 Anfang\cf4  \cf5 nicht.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # VIEW 1 \'97 `DECISION BOARD`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Projekt
+\f3\i0 \cf4 \
+\cf5 `LUMEOS_DECISIONS`\cf4 \
+\
+
+\f2\i \cf3 ## Gruppierung
+\f3\i0 \cf4 \
+\cf5 nach\cf4  \cf5 `decision_state`\cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\cf6 Zeigt:\cf4 \
+\cf7 -\cf4  \cf5 was\cf4  \cf5 offen\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 was\cf4  \cf5 blockiert\cf4 \
+\cf7 -\cf4  \cf5 was\cf4  \cf5 entschieden\cf4  \cf5 ist\cf4 \
+\
+
+\f2\i \cf3 ### Das ist dein:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # t\'e4glicher Steuerbildschirm
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # VIEW 2 \'97 `ARTIFACT BOARD`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Projekt
+\f3\i0 \cf4 \
+\cf5 `LUMEOS_ARTIFACTS`\cf4 \
+\
+
+\f2\i \cf3 ## Gruppierung
+\f3\i0 \cf4 \
+\cf5 nach\cf4  \cf5 `artifact_level`\cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\cf6 Zeigt:\cf4 \
+\cf7 -\cf4  \cf5 PRDs\cf4 \
+\cf7 -\cf4  \cf5 Specs\cf4 \
+\cf7 -\cf4  \cf5 Status\cf4 \
+\
+
+\f2\i \cf3 ### Das ist dein:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Produkt-/System-Artefaktboard
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # VIEW 3 \'97 `BUILD READY QUEUE`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Projekt
+\f3\i0 \cf4 \
+\cf5 `LUMEOS_EXECUTION`\cf4 \
+\
+
+\f2\i \cf3 ## Filter
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `build_readiness\cf4  \cf5 =\cf4  \cf5 worker_ready`\cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\cf6 Zeigt nur:\cf4 \
+
+\f2\i \cf3 # was wirklich an Claude Code gehen darf
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 extrem\cf4  \cf5 wichtig.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 10. WAS DU DIREKT ALS ERSTES IN PLANE ANLEGEN SOLLST
+\f3\i0 \cf4 \
+\
+\cf5 Nur\cf4  \cf5 diese\cf4  \cf5 Dinge.\cf4 \
+\
+\cf5 Nicht\cf4  \cf5 mehr.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # ZUERST ANLEGEN
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## IM PROJEKT `LUMEOS_DECISIONS`
+\f3\i0 \cf4 \
+\
+\cf6 Lege diese 12 Items an:\cf4 \
+\
+\cf6 1\cf5 .\cf4  \cf5 Finaler\cf4  \cf5 Auth-Ansatz\cf4 \
+\cf6 2\cf5 .\cf4  \cf5 Minimaler\cf4  \cf5 User\cf4  \cf5 Profile\cf4  \cf5 Scope\cf4 \
+\cf6 3\cf5 .\cf4  \cf5 Minimaler\cf4  \cf5 Goal\cf4  \cf5 Model\cf4  \cf5 Scope\cf4 \
+\cf6 4\cf5 .\cf4  \cf5 Food\cf4  \cf5 Search\cf4  \cf5 V1\cf4  \cf5 Standard\cf4 \
+\cf6 5\cf5 .\cf4  \cf5 Portion\cf4  \cf5 Scope\cf4  \cf5 V1\cf4 \
+\cf6 6\cf5 .\cf4  \cf5 Saved\cf4  \cf5 Meals\cf4  \cf5 V1\cf4  \cf5 oder\cf4  \cf5 sp\'e4ter?\cf4 \
+\cf6 7\cf5 .\cf4  \cf5 Exercise\cf4  \cf5 Normalization\cf4  \cf5 Depth\cf4 \
+\cf6 8\cf5 .\cf4  \cf5 Workout\cf4  \cf5 Templates\cf4  \cf5 in\cf4  \cf5 V1?\cf4 \
+\cf6 9\cf5 .\cf4  \cf5 Minimaler\cf4  \cf5 Recovery\cf4  \cf5 Check-in\cf4 \
+\cf6 10\cf5 .\cf4  \cf5 Recovery\cf4  \cf5 Score\cf4  \cf5 ja\cf4  \cf5 /\cf4  \cf5 nein\cf4 \
+\cf6 11\cf5 .\cf4  \cf5 Current\cf4  \cf5 State\cf4  \cf5 Definition\cf4 \
+\cf6 12\cf5 .\cf4  \cf5 Basic\cf4  \cf5 V1\cf4  \cf5 Experience\cf4  \cf5 Level\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # WICHTIGE REGEL F\'dcR DIESE 12 ITEMS
+\f3\i0 \cf4 \
+\
+\cf6 Alle 12 starten mit:\cf4 \
+\
+
+\f2\i \cf3 ## State
+\f3\i0 \cf4 \
+\cf5 `OPEN`\cf4 \
+\
+
+\f2\i \cf3 ## artifact_level
+\f3\i0 \cf4 \
+\cf5 `decision`\cf4 \
+\
+
+\f2\i \cf3 ## decision_state
+\f3\i0 \cf4 \
+\cf5 `open`\cf4 \
+\
+
+\f2\i \cf3 ## artifact_status
+\f3\i0 \cf4 \
+\cf5 `draft`\cf4 \
+\
+
+\f2\i \cf3 ## build_readiness
+\f3\i0 \cf4 \
+\cf5 `not_buildable`\cf4 \
+\
+
+\f2\i \cf3 ## source_of_truth_doc
+\f3\i0 \cf4 \
+\cf5 `22_V1_DECISION_SHEET.md`\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 11. WIE DU AB MORGEN DAMIT ARBEITEST
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 der\cf4  \cf5 operative\cf4  \cf5 Alltag.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # MORGEN-ARBEITSWEISE
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Schritt 1
+\f3\i0 \cf4 \
+\cf5 Du\cf4  \cf5 \'f6ffnest\cf4  \cf5 `LUMEOS_DECISIONS`\cf4 \
+\
+
+\f2\i \cf3 ## Schritt 2
+\f3\i0 \cf4 \
+\cf5 Du\cf4  \cf5 nimmst\cf4  \cf5 immer\cf4  \cf5 nur\cf4  \cf5 **eine\cf4  \cf5 Entscheidung\cf4  \cf5 nach\cf4  \cf5 der\cf4  \cf5 anderen**\cf4 \
+\
+
+\f2\i \cf3 ### Startreihenfolge:
+\f3\i0 \cf4 \
+\cf6 1\cf5 .\cf4  \cf5 Finaler\cf4  \cf5 Auth-Ansatz\cf4 \
+\cf6 2\cf5 .\cf4  \cf5 Minimaler\cf4  \cf5 User\cf4  \cf5 Profile\cf4  \cf5 Scope\cf4 \
+\cf6 3\cf5 .\cf4  \cf5 Minimaler\cf4  \cf5 Goal\cf4  \cf5 Model\cf4  \cf5 Scope\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## Schritt 3
+\f3\i0 \cf4 \
+\cf5 F\'fcr\cf4  \cf6 jede Entscheidung machst du mit mir / Claude:\cf4 \
+\
+\cf7 -\cf4  \cf5 saubere\cf4  \cf5 Analyse\cf4 \
+\cf7 -\cf4  \cf5 Empfehlung\cf4 \
+\cf7 -\cf4  \cf5 klare\cf4  \cf5 V1-Entscheidung\cf4 \
+\cf7 -\cf4  \cf5 danach\cf4  \cf5 erzeugen\cf4  \cf5 wir\cf4  \cf5 eine\cf4  \cf5 echte\cf4  \cf5 Decision-Datei\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## Schritt 4
+\f3\i0 \cf4 \
+\cf6 Sobald entschieden:\cf4 \
+\
+
+\f2\i \cf3 ### In Plane:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `decision_state\cf4  \cf5 =\cf4  \cf5 decided`\cf4 \
+\cf7 -\cf4  \cf5 `artifact_status\cf4  \cf5 =\cf4  \cf5 approved`\cf4 \
+\cf7 -\cf4  \cf5 State\cf4  \cf5 \uc0\u8594 \cf4  \cf5 `APPROVED`\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## Schritt 5
+\f3\i0 \cf4 \
+\cf6 Danach erst:\cf4 \
+\cf5 PRD\cf4  \cf5 /\cf4  \cf5 Spec\cf4  \cf5 /\cf4  \cf5 WO\cf4  \cf5 ableiten\cf4 \
+\
+\cf5 Nicht\cf4  \cf5 vorher.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 12. WANN CLAUDE / CLAUDE CODE \'dcBERHAUPT EINGESETZT WERDEN SOLL
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 extrem\cf4  \cf5 wichtig.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## CLAUDE DESKTOP / CLAUDE
+\f3\i0 \cf4 \
+\cf5 Sinnvoll\cf4  \cf5 f\'fcr:\cf4 \
+\
+\cf7 -\cf4  \cf5 Decision\cf4  \cf5 Analyse\cf4 \
+\cf7 -\cf4  \cf5 PRD\cf4  \cf5 Drafting\cf4 \
+\cf7 -\cf4  \cf5 Spec\cf4  \cf5 Drafting\cf4 \
+\cf7 -\cf4  \cf5 Review\cf4 \
+\cf7 -\cf4  \cf5 Zerlegung\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## CLAUDE CODE
+\f3\i0 \cf4 \
+\cf5 Erst\cf4  \cf5 sinnvoll\cf4  \cf5 f\'fcr:\cf4 \
+\
+\cf7 -\cf4  \cf5 kleine\cf4  \cf5 Work\cf4  \cf5 Orders\cf4 \
+\cf7 -\cf4  \cf5 definierte\cf4  \cf5 Spezifikationsarbeit\cf4 \
+\cf7 -\cf4  \cf5 kleine\cf4  \cf5 operative\cf4  \cf5 Aufgaben\cf4 \
+\
+
+\f2\i \cf3 ### Nicht sinnvoll f\'fcr:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 offene\cf4  \cf5 Decisions\cf4 \
+\cf7 -\cf4  \cf5 diffuse\cf4  \cf5 Produktarbeit\cf4 \
+\cf7 -\cf4  \cf5 strategische\cf4  \cf5 Kernfragen\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 13. DIE EINFACHE GOVERNANCE-REGEL F\'dcR V1
+\f3\i0 \cf4 \
+\
+\cf5 F\'fcr\cf4  \cf6 Plane V1 reicht erstmal diese einfache harte Regel:\cf4 \
+\
+
+\f2\i \cf3 # Kein Item darf an Claude Code gehen, wenn:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 die\cf4  \cf5 Entscheidung\cf4  \cf5 offen\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 kein\cf4  \cf5 Source\cf4  \cf5 of\cf4  \cf5 Truth\cf4  \cf5 gesetzt\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 kein\cf4  \cf5 klarer\cf4  \cf5 Workstream\cf4  \cf5 gesetzt\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 build_readiness\cf4  \cf5 nicht\cf4  \cf5 `worker_ready`\cf4  \cf5 ist\cf4 \
+\
+\cf6 Wenn einer dieser Punkte fehlt:\cf4 \
+
+\f2\i \cf3 # Item bleibt drau\'dfen
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 allein\cf4  \cf5 verhindert\cf4  \cf5 schon\cf4  \cf5 sehr\cf4  \cf5 viel\cf4  \cf5 Mist.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 14. WANN DU DAS SYSTEM SP\'c4TER ERWEITERN SOLLST
+\f3\i0 \cf4 \
+\
+\cf5 Nicht\cf4  \cf5 sofort.\cf4 \
+\
+\cf5 Erweitern\cf4  \cf5 erst\cf4  \cf5 dann,\cf4  \cf6 wenn du real merkst:\cf4 \
+\
+\cf7 -\cf4  \cf5 du\cf4  \cf5 hast\cf4  \cf5 genug\cf4  \cf5 Items\cf4 \
+\cf7 -\cf4  \cf5 du\cf4  \cf5 hast\cf4  \cf5 genug\cf4  \cf5 wiederkehrende\cf4  \cf5 Muster\cf4 \
+\cf7 -\cf4  \cf5 du\cf4  \cf5 brauchst\cf4  \cf5 weniger\cf4  \cf5 manuelle\cf4  \cf5 \'dcbergaben\cf4 \
+\cf7 -\cf4  \cf5 du\cf4  \cf5 willst\cf4  \cf5 gezielte\cf4  \cf5 Automatisierung\cf4 \
+\
+\cf5 Dann\cf4  \cf5 sp\'e4ter\cf4  \cf5 erg\'e4nzen:\cf4 \
+\
+\cf7 -\cf4  \cf5 Agent\cf4  \cf5 Assignment\cf4 \
+\cf7 -\cf4  \cf5 MCP-Flows\cf4 \
+\cf7 -\cf4  \cf5 Webhooks\cf4 \
+\cf7 -\cf4  \cf5 API-Automation\cf4 \
+\cf7 -\cf4  \cf5 n8n-Bridges\cf4 \
+\cf7 -\cf4  \cf5 komplexere\cf4  \cf5 Workflow-States\cf4 \
+\
+\cf5 Aber\cf4  \cf5 NICHT\cf4  \cf5 vorher.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 15. DIE WICHTIGSTE STARTREGEL
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 # Plane soll dir in V1 helfen, klarer zu arbeiten.
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Es soll nicht selbst zum neuen Chaos-System werden.
+\f3\i0 \cf4 \
+\
+\cf5 Wenn\cf4  \cf5 du\cf4  \cf5 merkst,\cf4  \cf6 dass du mehr Zeit in:\cf4 \
+\cf7 -\cf4  \cf5 Felder\cf4 \
+\cf7 -\cf4  \cf5 Labels\cf4 \
+\cf7 -\cf4  \cf5 Views\cf4 \
+\cf7 -\cf4  \cf5 Struktur\cf4 \
+\cf7 -\cf4  \cf5 h\'fcbsche\cf4  \cf5 Ordnung\cf4 \
+\
+\cf6 steckst als in:\cf4 \
+\cf7 -\cf4  \cf5 echte\cf4  \cf5 Decisions\cf4 \
+\cf7 -\cf4  \cf5 echte\cf4  \cf5 PRDs\cf4 \
+\cf7 -\cf4  \cf5 echte\cf4  \cf5 Specs\cf4 \
+\cf7 -\cf4  \cf5 echte\cf4  \cf5 Work\cf4  \cf5 Orders\cf4 \
+\
+\cf5 dann\cf4  \cf5 bist\cf4  \cf5 du\cf4  \cf5 bereits\cf4  \cf5 falsch\cf4  \cf5 abgebogen.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 16. EIN-SATZ-DEFINITION
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 # Plane V1 ist f\'fcr LumeOS die kleinste sinnvolle visuelle Arbeits- und Kontrollschicht, um Entscheidungen, Artefakte und Build-Bereitschaft sauber zu steuern, ohne das Projekt in Tool-Overhead zu ertr\'e4nken.
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 17. SCHLUSSREGEL
+\f3\i0 \cf4 \
+\
+\cf5 Wenn\cf4  \cf5 du\cf4  \cf5 unsicher\cf4  \cf5 bist,\cf4  \cf5 ob\cf4  \cf5 etwas\cf4  \cf5 jetzt\cf4  \cf5 schon\cf4  \cf5 in\cf4  \cf5 Plane\cf4  \cf5 modelliert\cf4  \cf5 werden\cf4  \cf5 muss,\cf4  \cf6 gilt immer zuerst diese Frage:\cf4 \
+\
+
+\f2\i \cf3 # Hilft das direkt beim kontrollierten Weiterbauen von LumeOS \'96 oder f\'fchlt es sich nur organisiert an?
+\f3\i0 \cf4 \
+\
+\cf5 Wenn\cf4  \cf5 es\cf4  \cf5 sich\cf4  \cf5 nur\cf4  \cf5 organisiert\cf4  \cf5 anf\'fchlt,\cf4  \cf5 dann\cf4  \cf5 weglassen.
+\f1\fs24 \cf0 \
+\
+}

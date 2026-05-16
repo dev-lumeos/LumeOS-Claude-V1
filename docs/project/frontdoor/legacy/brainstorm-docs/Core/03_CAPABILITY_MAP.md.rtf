@@ -1,0 +1,1097 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 03_CAPABILITY_MAP\
+\
+## Zweck\
+\
+Dieses Dokument beschreibt die **vollst\'e4ndige F\'e4higkeits- und Feature-Landkarte** von LumeOS.\
+\
+Es beantwortet nicht:\
+\
+- was zuerst gebaut wird\
+- was technisch bereits existiert\
+- welche API oder UI schon vorhanden ist\
+\
+Es beantwortet ausschlie\'dflich:\
+\
+# Was LumeOS als System grunds\'e4tzlich k\'f6nnen soll oder sinnvollerweise sp\'e4ter k\'f6nnen darf.\
+\
+---\
+\
+## Grundregel\
+\
+In diesem Dokument darf **alles legitime Produktpotenzial** enthalten sein.\
+\
+Das hei\'dft:\
+\
+- Core-F\'e4higkeiten\
+- sp\'e4tere Ausbau-F\'e4higkeiten\
+- High-End-Ideen\
+- Assistenz-Features\
+- Analyse-Features\
+- Coach-Features\
+- Companion-Features\
+- Automations-Features\
+- Vision-/Voice-/Wearable-Erweiterungen\
+\
+Wichtig:\
+\
+# Aufnahme in diese Datei bedeutet NICHT automatische Umsetzung.\
+\
+Dieses Dokument ist die **vollst\'e4ndige Produktlandkarte**, nicht der Build-Scope.\
+\
+---\
+\
+# SYSTEMISCHE HAUPTF\'c4HIGKEITEN\
+\
+LumeOS soll langfristig in der Lage sein zu:\
+\
+- verstehen\
+- erinnern\
+- bewerten\
+- priorisieren\
+- empfehlen\
+- erkl\'e4ren\
+- begleiten\
+- anpassen\
+- \'fcberwachen\
+- eskalieren\
+- personalisieren\
+- automatisieren\
+\
+Diese F\'e4higkeiten werden in konkrete Capability-Bereiche \'fcbersetzt.\
+\
+---\
+\
+# 1. IDENTITY, ACCOUNT & PERSONAL FOUNDATION\
+\
+---\
+\
+## 1.1 Account & Access\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Nutzer registrieren\
+- Nutzer anmelden\
+- OAuth-Login unterst\'fctzen\
+- Sessions verwalten\
+- Ger\'e4te-/Login-Kontext verwalten\
+- Rollen und Berechtigungen verwalten\
+- sp\'e4ter mehrere Rollen pro Nutzer unterst\'fctzen\
+- sp\'e4ter Family / Team / Coach-Zuordnungen unterst\'fctzen\
+\
+---\
+\
+## 1.2 Personal Profile\
+\
+LumeOS soll k\'f6nnen:\
+\
+- pers\'f6nliche Basisdaten speichern\
+- K\'f6rperdaten speichern\
+- Aktivit\'e4tsniveau erfassen\
+- Trainingslevel erfassen\
+- Ern\'e4hrungspr\'e4ferenzen erfassen\
+- Einschr\'e4nkungen / Abneigungen erfassen\
+- Region / Land / Sprache speichern\
+- Lebensstil-Kontext erfassen\
+- Kontext f\'fcr Empfehlungen personalisieren\
+\
+---\
+\
+## 1.3 Preferences & Personalization\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Einheiten umstellen\
+- Sprache verwalten\
+- Reminder-Stil anpassen\
+- Buddy-Kommunikationsstil sp\'e4ter anpassen\
+- Interaktionsintensit\'e4t anpassen\
+- Sichtbarkeit / Priorit\'e4ten anpassen\
+- Datenquellen konfigurieren\
+- individuelle Assistenz-Profile unterst\'fctzen\
+\
+---\
+\
+# 2. GOALS, PHASES & STRATEGY\
+\
+---\
+\
+## 2.1 Goal Management\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Hauptziele definieren\
+- Unterziele definieren\
+- Zielhierarchien abbilden\
+- Zielkonflikte erkennen\
+- kurzfristige und langfristige Ziele trennen\
+- Ziele priorisieren\
+- Ziele zeitlich strukturieren\
+- Zielphasen abbilden\
+\
+### Beispiele\
+- Fettverlust\
+- Muskelaufbau\
+- Performance\
+- Erholung\
+- Blutwerte verbessern\
+- Routinen stabilisieren\
+- Schlaf verbessern\
+- Verdauung verbessern\
+- Gesundheitsstabilit\'e4t\
+\
+---\
+\
+## 2.2 Strategy Layer\
+\
+LumeOS soll k\'f6nnen:\
+\
+- eine Zielstrategie ableiten\
+- Ziele in konkrete Priorit\'e4ten \'fcbersetzen\
+- Zielkonflikte logisch gewichten\
+- erkennen, wenn ein Ziel aktuell nicht sinnvoll priorisiert ist\
+- den Fokus je nach Zustand verschieben\
+- Phasen-Logik unterst\'fctzen\
+- den Nutzer durch unterschiedliche Phasen f\'fchren\
+\
+---\
+\
+# 3. NUTRITION CAPABILITIES\
+\
+---\
+\
+## 3.1 Food Database & Food Intelligence\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Foods verwalten\
+- Canonical Foods verwalten\
+- Portions verwalten\
+- Makros verwalten\
+- Mikron\'e4hrstoffe verwalten\
+- Lebensmittel logisch kategorisieren\
+- Foods suchbar und menschenverst\'e4ndlich machen\
+- \'e4hnliche Foods gruppieren\
+- regionale Foods abbilden\
+- Marken-/Produktfoods sp\'e4ter unterst\'fctzen\
+- Datenqualit\'e4t und Mapping-Qualit\'e4t bewerten\
+\
+---\
+\
+## 3.2 Food Search & Input\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Foods suchen\
+- Foods intelligent matchen\
+- nat\'fcrliche Sprache in Foods \'fcbersetzen\
+- Portionsangaben interpretieren\
+- ungenaue Food-Eingaben sinnvoll zuordnen\
+- Meals aus mehreren Komponenten verstehen\
+- wiederkehrende Mahlzeiten erkennen\
+- Meal Templates unterst\'fctzen\
+- Lieblingsmahlzeiten erkennen\
+\
+---\
+\
+## 3.3 Meal Logging\
+\
+LumeOS soll k\'f6nnen:\
+\
+- einzelne Foods loggen\
+- komplette Mahlzeiten loggen\
+- Rezepte loggen\
+- Snacks loggen\
+- Getr\'e4nke loggen\
+- Uhrzeit und Kontext speichern\
+- wiederkehrende Essmuster erkennen\
+- Meal-Historie verwalten\
+- schnelle Logging-Flows unterst\'fctzen\
+- Buddy-gest\'fctztes Logging erm\'f6glichen\
+\
+---\
+\
+## 3.4 Nutrient Analysis\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Makros berechnen\
+- Mikros berechnen\
+- N\'e4hrstoffl\'fccken erkennen\
+- \'dcberversorgung erkennen\
+- Tages-, Wochen- und Verlaufsauswertungen liefern\
+- N\'e4hrstoffqualit\'e4t interpretieren\
+- Ern\'e4hrung nicht nur quantitativ, sondern qualitativ bewerten\
+- Ern\'e4hrungsmuster erkennen\
+\
+---\
+\
+## 3.5 Meal Planning & Food Guidance\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Mahlzeiten empfehlen\
+- Mahlzeiten nach Ziel und Kontext vorschlagen\
+- Tagesstrukturen empfehlen\
+- Lebensmittel-Alternativen vorschlagen\
+- flexible Meal Guidance geben\
+- Meal Prep-Logik unterst\'fctzen\
+- einfache Einkaufsorientierung geben\
+- Ern\'e4hrung in den Alltag \'fcbersetzen\
+\
+---\
+\
+## 3.6 Advanced Nutrition Extensions\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Barcode-Scanning unterst\'fctzen\
+- FoodCam / Bildanalyse f\'fcr Mahlzeiten nutzen\
+- Restaurant-/Travel-Kontext ber\'fccksichtigen\
+- lokale Lebensmittelverf\'fcgbarkeit einbeziehen\
+- Preis-/Budget-Kontext ber\'fccksichtigen\
+- Meal Suggestions an Verdauung / Vertr\'e4glichkeit koppeln\
+- Ern\'e4hrungs-Compliance bewerten\
+- adaptive Ern\'e4hrungsstrategien ableiten\
+\
+---\
+\
+# 4. TRAINING CAPABILITIES\
+\
+---\
+\
+## 4.1 Exercise Database & Exercise Intelligence\
+\
+LumeOS soll k\'f6nnen:\
+\
+- \'dcbungen verwalten\
+- \'dcbungskategorien verwalten\
+- Muskelgruppen verwalten\
+- Equipment verwalten\
+- \'dcbungsvarianten abbilden\
+- \'dcbungen logisch verkn\'fcpfen\
+- \'dcbungen nach Ziel und Kontext bewerten\
+- Trainingskontext f\'fcr \'dcbungen speichern\
+\
+---\
+\
+## 4.2 Workout Structure\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Workouts erstellen\
+- Workout Templates speichern\
+- Splits abbilden\
+- \'dcbungsreihenfolgen definieren\
+- Satz-/Wiederholungsstrukturen verwalten\
+- Trainingsphasen abbilden\
+- Programme sp\'e4ter unterst\'fctzen\
+\
+---\
+\
+## 4.3 Workout Logging\
+\
+LumeOS soll k\'f6nnen:\
+\
+- S\'e4tze loggen\
+- Gewicht loggen\
+- Wiederholungen loggen\
+- Notizen speichern\
+- Session-Verl\'e4ufe speichern\
+- vergangene Leistungen anzeigen\
+- schnelle Gym-Flows unterst\'fctzen\
+- Workout-Historie sauber verwalten\
+\
+---\
+\
+## 4.4 Performance & Progression\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Progression erkennen\
+- Plateaus erkennen\
+- Leistungsentwicklung bewerten\
+- progressive overload unterst\'fctzen\
+- sinnvolle Steigerungsvorschl\'e4ge machen\
+- Volumen- und Intensit\'e4tsmuster erkennen\
+- Trainings-Compliance bewerten\
+- Leistungsr\'fcckg\'e4nge erkennen\
+\
+---\
+\
+## 4.5 Adaptive Training Support\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Training an Recovery und Tagesform anpassen\
+- \'dcbungsalternativen vorschlagen\
+- Deloads logisch unterst\'fctzen\
+- Belastung intelligent steuern\
+- Buddy-gest\'fctzte Trainingsentscheidungen unterst\'fctzen\
+- kontextbezogene Trainingshinweise geben\
+\
+---\
+\
+## 4.6 Advanced Training Extensions\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Auto-Warmup-Logik\
+- RIR / RPE-Logik\
+- Set-Timer\
+- Gym Voice Commands\
+- Set-/Rep-Erkennung per Kamera\
+- \'dcbungsform-Feedback per Vision\
+- Ger\'e4te-/Maschinenlogik\
+- Equipment-basierte Trainingsanpassung\
+- automatisierte Satzvorschl\'e4ge\
+- Coach-spezifische Trainingsfreigaben\
+\
+---\
+\
+# 5. RECOVERY CAPABILITIES\
+\
+---\
+\
+## 5.1 Recovery State Tracking\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Schlaf erfassen\
+- Schlafqualit\'e4t erfassen\
+- M\'fcdigkeit erfassen\
+- Stress erfassen\
+- Soreness erfassen\
+- subjektive Recovery erfassen\
+- Tagesform erfassen\
+- Belastbarkeit einsch\'e4tzen\
+\
+---\
+\
+## 5.2 Recovery Interpretation\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Recovery bewerten\
+- Readiness interpretieren\
+- Erholungstrends erkennen\
+- \'dcberlastungsmuster erkennen\
+- schlechte Regeneration sichtbar machen\
+- Training und Recovery zusammen interpretieren\
+- Recovery in Empfehlungen einflie\'dfen lassen\
+\
+---\
+\
+## 5.3 Recovery Guidance\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Recovery-Empfehlungen geben\
+- Erholung priorisieren\
+- Training / Alltag an Recovery koppeln\
+- Erholungsma\'dfnahmen empfehlen\
+- Schlaf- und Stresskontext in Guidance integrieren\
+\
+---\
+\
+## 5.4 Advanced Recovery Extensions\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- HRV integrieren\
+- Ruhepuls integrieren\
+- Wearables anbinden\
+- Schlaftracker integrieren\
+- Recovery-Risiko-Scores berechnen\
+- Tagesbelastung intelligenter modellieren\
+\
+---\
+\
+# 6. SUPPLEMENT CAPABILITIES\
+\
+---\
+\
+## 6.1 Supplement Database\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Supplement-Produkte verwalten\
+- Canonical Supplements verwalten\
+- Inhaltsstoffe standardisieren\
+- Dosierungen speichern\
+- Einnahmeformen verwalten\
+- Supplement-Komponenten als strukturierte Einheiten abbilden\
+- Produkte logisch auf Wirkstoffe mappen\
+\
+---\
+\
+## 6.2 Supplement Logging\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Supplemente loggen\
+- Einnahmezeiten speichern\
+- Dosierungen erfassen\
+- Compliance bewerten\
+- wiederkehrende Einnahmemuster erkennen\
+- Supplement-Historie verwalten\
+\
+---\
+\
+## 6.3 Supplement Intelligence\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Wirkstoffe interpretieren\
+- Dosierungslogik abbilden\
+- Zielbezug erkennen\
+- Einnahmezeitpunkte bewerten\
+- \'dcberschneidungen erkennen\
+- potenzielle Interaktionen markieren\
+- unklare Produkte sauber behandeln\
+- Unsicherheit sichtbar machen\
+\
+---\
+\
+## 6.4 Supplement Guidance\
+\
+LumeOS soll k\'f6nnen:\
+\
+- zielbezogene Supplement-Empfehlungen geben\
+- Timing-Empfehlungen geben\
+- Stack-Vorschl\'e4ge machen\
+- unn\'f6tige Supplemente entlarven\
+- Einnahme vereinfachen\
+- Protokolle logisch strukturieren\
+\
+---\
+\
+## 6.5 Advanced Supplement Extensions\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Produkt-zu-Canonical-Mapping automatisieren\
+- Barcode-basierte Produkterkennung\
+- Trainer-/Coach-spezifische Produktwelten\
+- Marketplace-Anbindung\
+- Supplement-Kostenlogik\
+- personalisierte Produktvorschl\'e4ge\
+\
+---\
+\
+# 7. MEDICAL AWARENESS CAPABILITIES\
+\
+---\
+\
+## 7.1 Bloodwork & Marker Input\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Blutwerte erfassen\
+- Marker speichern\
+- Zeitverl\'e4ufe speichern\
+- Referenzbereiche abbilden\
+- Werte historisch vergleichen\
+- Labor-Inputs strukturieren\
+- manuelle oder sp\'e4tere Upload-Eingaben unterst\'fctzen\
+\
+---\
+\
+## 7.2 Marker Interpretation\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Marker einordnen\
+- Ver\'e4nderungen erkennen\
+- Verlauf sichtbar machen\
+- relevante Auff\'e4lligkeiten markieren\
+- Zusammenh\'e4nge mit Verhalten und Kontext erkennen\
+- Risikosignale hervorheben\
+\
+---\
+\
+## 7.3 Safety-Aware Health Guidance\
+\
+LumeOS soll k\'f6nnen:\
+\
+- relevante Auff\'e4lligkeiten priorisieren\
+- Nutzer auf sinnvolle Abkl\'e4rung hinweisen\
+- Kontext f\'fcr Buddy und Recommendation Engine liefern\
+- Gesundheitskontext in Entscheidungen integrieren\
+\
+---\
+\
+## 7.4 Klare Grenzen\
+\
+LumeOS soll NICHT:\
+\
+- Diagnosen behaupten\
+- Ursachen frei erfinden\
+- Therapien vort\'e4uschen\
+- \'e4rztliche Entscheidungen ersetzen\
+\
+---\
+\
+## 7.5 Advanced Medical Awareness Extensions\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Verlaufsmuster intelligenter clustern\
+- Labor-Feedback-Loops f\'fcr Personalisierung nutzen\
+- Marker-Konstellationen st\'e4rker kontextualisieren\
+- relevante Marker f\'fcr Folge-Checks vorschlagen\
+- medizinische Watchlists unterst\'fctzen\
+\
+---\
+\
+# 8. MEMORY & CONTEXT CAPABILITIES\
+\
+---\
+\
+## 8.1 Persistent Memory\
+\
+LumeOS soll k\'f6nnen:\
+\
+- wichtige Nutzersignale \'fcber Zeit behalten\
+- Muster erkennen\
+- Pr\'e4ferenzen merken\
+- wiederkehrende Probleme erkennen\
+- fr\'fchere Entscheidungen einordnen\
+- relevante Kontexte speichern\
+\
+---\
+\
+## 8.2 Context Synthesis\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Informationen aus mehreren Dom\'e4nen zusammenf\'fchren\
+- Widerspr\'fcche erkennen\
+- Zustandsbilder bilden\
+- aus Verlauf und Gegenwart sinnvolle Einordnung erzeugen\
+- Buddy mit echtem Kontext versorgen\
+\
+---\
+\
+## 8.3 Adaptive Personalization\
+\
+LumeOS soll k\'f6nnen:\
+\
+- aus Verhalten lernen\
+- aus Adherence lernen\
+- aus Reaktionen lernen\
+- aus Verlaufsmustern lernen\
+- Priorit\'e4ten mit der Zeit pr\'e4ziser setzen\
+\
+---\
+\
+## 8.4 Memory-Driven Guidance\
+\
+LumeOS soll k\'f6nnen:\
+\
+- fr\'fchere Probleme in aktuelle Guidance einbeziehen\
+- wiederkehrende Trigger erkennen\
+- bekannte Hindernisse ber\'fccksichtigen\
+- bekannte Pr\'e4ferenzen in Empfehlungen nutzen\
+\
+---\
+\
+# 9. RECOMMENDATION & DECISION CAPABILITIES\
+\
+---\
+\
+## 9.1 Recommendation Generation\
+\
+LumeOS soll k\'f6nnen:\
+\
+- konkrete Empfehlungen erzeugen\
+- kleine n\'e4chste Schritte vorschlagen\
+- Tagesfokus definieren\
+- Interventionen priorisieren\
+- kontextabh\'e4ngige Handlungsvorschl\'e4ge liefern\
+\
+---\
+\
+## 9.2 Decision Logic\
+\
+LumeOS soll k\'f6nnen:\
+\
+- entscheiden, wann \'fcberhaupt eine Empfehlung entsteht\
+- Zielkonflikte aufl\'f6sen\
+- Priorit\'e4ten setzen\
+- Tradeoffs gewichten\
+- Unsicherheit ber\'fccksichtigen\
+- Empfehlungsh\'e4rte steuern\
+\
+---\
+\
+## 9.3 Cross-Domain Reasoning\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Training, Ern\'e4hrung, Recovery, Supplemente und Gesundheitskontext gemeinsam bewerten\
+- Wechselwirkungen ber\'fccksichtigen\
+- Empfehlungen dom\'e4nen\'fcbergreifend logisch machen\
+\
+---\
+\
+## 9.4 Confidence Handling\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Unsicherheit intern bewerten\
+- schwache Datenlagen anders behandeln\
+- Empfehlungen vorsichtiger oder klarer formulieren\
+- Grenzen sichtbar machen\
+\
+---\
+\
+## 9.5 Escalation Logic\
+\
+LumeOS soll k\'f6nnen:\
+\
+- erkennen, wann Buddy nicht ausreicht\
+- an Coach / Mensch / Fachperson eskalieren\
+- rote Linien respektieren\
+- riskante Bereiche anders behandeln\
+\
+---\
+\
+# 10. BUDDY / COMPANION CAPABILITIES\
+\
+---\
+\
+## 10.1 Conversational Interface\
+\
+Buddy soll k\'f6nnen:\
+\
+- nat\'fcrlich mit dem Nutzer interagieren\
+- Fragen beantworten\
+- R\'fcckfragen stellen\
+- Kontext halten\
+- Verlauf ber\'fccksichtigen\
+- nicht nur chatten, sondern f\'fchren\
+\
+---\
+\
+## 10.2 Daily Companion Function\
+\
+Buddy soll k\'f6nnen:\
+\
+- den Nutzer t\'e4glich begleiten\
+- Fokus setzen\
+- Orientierung geben\
+- kleine Entscheidungen vereinfachen\
+- Gewohnheiten unterst\'fctzen\
+- wieder in die Spur bringen\
+\
+---\
+\
+## 10.3 Proactive Buddy Behavior\
+\
+Buddy soll k\'f6nnen:\
+\
+- sich proaktiv melden\
+- sinnvolle Check-ins ausl\'f6sen\
+- Ver\'e4nderungen ansprechen\
+- Muster hervorheben\
+- rechtzeitig erinnern\
+- nicht nervig, sondern hilfreich sein\
+\
+---\
+\
+## 10.4 Buddy as Decision Translator\
+\
+Buddy soll k\'f6nnen:\
+\
+- komplexe Systemlogik in einfache Sprache \'fcbersetzen\
+- Empfehlungen verst\'e4ndlich erkl\'e4ren\
+- Tradeoffs erkl\'e4ren\
+- Priorit\'e4ten verst\'e4ndlich machen\
+\
+---\
+\
+## 10.5 Advanced Buddy Extensions\
+\
+Buddy soll sp\'e4ter k\'f6nnen:\
+\
+- st\'e4rker personalisierte Kommunikationsstile\
+- situationsabh\'e4ngige Buddy-Modi\
+- Coach-/User-spezifische Buddy-Perspektiven\
+- tieferes Verhaltens-Coaching\
+- st\'e4rkere emotionale Kontextsensibilit\'e4t\
+\
+---\
+\
+# 11. DAILY UX, CHECK-INS & ADHERENCE CAPABILITIES\
+\
+---\
+\
+## 11.1 Daily State Input\
+\
+LumeOS soll k\'f6nnen:\
+\
+- schnelle Check-ins erm\'f6glichen\
+- Energie, Schlaf, Stress, Stimmung, Soreness etc. erfassen\
+- Eingaben niedrigschwellig machen\
+- Buddy-gest\'fctzte State-Updates erm\'f6glichen\
+\
+---\
+\
+## 11.2 Adherence Tracking\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Adherence bei Ern\'e4hrung erkennen\
+- Adherence bei Training erkennen\
+- Adherence bei Supplementen erkennen\
+- Adherence bei Routinen erkennen\
+- Muster von \'84gut gestartet, dann abgebrochen\'93 erkennen\
+\
+---\
+\
+## 11.3 Friction Reduction\
+\
+LumeOS soll k\'f6nnen:\
+\
+- m\'f6glichst wenig Eingabereibung erzeugen\
+- Shortcuts bieten\
+- Wiederverwendung erm\'f6glichen\
+- schnelle Alltagsflows unterst\'fctzen\
+- \'84einfach weitermachen\'93 erleichtern\
+\
+---\
+\
+# 12. INSIGHTS, REPORTS & EXPLANATIONS\
+\
+---\
+\
+## 12.1 Insight Generation\
+\
+LumeOS soll k\'f6nnen:\
+\
+- relevante Insights erzeugen\
+- Muster sichtbar machen\
+- erkl\'e4ren, was sich ver\'e4ndert hat\
+- erkl\'e4ren, warum etwas relevant ist\
+\
+---\
+\
+## 12.2 Daily / Weekly / Trend Summaries\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Tageszusammenfassungen erzeugen\
+- Wochenr\'fcckblicke erzeugen\
+- Trends darstellen\
+- Fortschritt sinnvoll verdichten\
+- R\'fcckschritte sinnvoll einordnen\
+\
+---\
+\
+## 12.3 Explainability Layer\
+\
+LumeOS soll k\'f6nnen:\
+\
+- erkl\'e4ren, warum etwas empfohlen wird\
+- erkl\'e4ren, welche Daten relevant waren\
+- erkl\'e4ren, was Priorit\'e4t hat\
+- erkl\'e4ren, wo Unsicherheit besteht\
+\
+---\
+\
+# 13. COACH CAPABILITIES\
+\
+---\
+\
+## 13.1 Coach Dashboard & Client Oversight\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Coaches Klienten verwalten lassen\
+- relevante Zust\'e4nde pro Klient sichtbar machen\
+- Priorit\'e4ten f\'fcr Coaches sichtbar machen\
+- Risiko-/Problemf\'e4lle hervorheben\
+- Verlauf kompakt zusammenfassen\
+\
+---\
+\
+## 13.2 Coach Assistance\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Coaches mit AI-Zusammenfassungen unterst\'fctzen\
+- Handlungsvorschl\'e4ge vorbereiten\
+- Client-Kontext verdichten\
+- Routinearbeit reduzieren\
+\
+---\
+\
+## 13.3 Coach Personalization\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- coach-spezifische Logik unterst\'fctzen\
+- coach-eigene Regeln sp\'e4ter zulassen\
+- coach-eigene Produktwelten unterst\'fctzen\
+- coach-spezifische Programme und Inhalte integrieren\
+\
+---\
+\
+# 14. HUMAN ESCALATION CAPABILITIES\
+\
+---\
+\
+## 14.1 Human Review Paths\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- F\'e4lle zur menschlichen Pr\'fcfung markieren\
+- an Coaches eskalieren\
+- an Fachpersonen eskalieren\
+- Grenzen sauber \'fcbergeben\
+\
+---\
+\
+## 14.2 Shared Visibility\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Buddy- und Human-Kontext sinnvoll verbinden\
+- relevante F\'e4lle strukturiert weitergeben\
+- menschliche Intervention sauber dokumentieren\
+\
+---\
+\
+# 15. CONTENT & EDUCATION CAPABILITIES\
+\
+---\
+\
+## 15.1 Contextual Education\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Erkl\'e4rungen kontextbezogen liefern\
+- Wissen im richtigen Moment liefern\
+- nicht nur Content ausspielen, sondern situativ helfen\
+\
+---\
+\
+## 15.2 Structured Knowledge Layer\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- strukturierte Wissensbausteine verwalten\
+- Themen- und Modulwissen verkn\'fcpfen\
+- Buddy mit qualit\'e4tsgesichertem Wissenskontext versorgen\
+\
+---\
+\
+# 16. MARKETPLACE & COMMERCE CAPABILITIES\
+\
+---\
+\
+## 16.1 Product Recommendation\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- passende Produkte empfehlen\
+- Empfehlungen an Ziel und Kontext koppeln\
+- unn\'f6tige Produkte filtern\
+- relevante Produkte priorisieren\
+\
+---\
+\
+## 16.2 Commerce Layer\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Produkte verlinken\
+- K\'e4ufe unterst\'fctzen\
+- Partner-/Trainer-/B2B-Strukturen abbilden\
+- Monetarisierungslogik integrieren\
+\
+---\
+\
+# 17. WEARABLES & EXTERNAL INTEGRATIONS\
+\
+---\
+\
+## 17.1 Data Integrations\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Wearables anbinden\
+- Health-Plattformen anbinden\
+- externe Datenquellen integrieren\
+- Drittdaten in die Logik einbeziehen\
+\
+---\
+\
+## 17.2 Context Enrichment\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- externe Daten zur besseren Einordnung nutzen\
+- den manuellen Input des Nutzers reduzieren\
+\
+---\
+\
+# 18. VISUAL / VISION CAPABILITIES\
+\
+---\
+\
+## 18.1 Food Vision\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Mahlzeiten visuell analysieren\
+- Foods und Portionsannahmen unterst\'fctzen\
+- Meal Logging vereinfachen\
+\
+---\
+\
+## 18.2 Body / Progress Vision\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Fortschrittsbilder strukturieren\
+- K\'f6rperentwicklung unterst\'fctzen\
+- sp\'e4tere visuelle Auswertungen erm\'f6glichen\
+\
+---\
+\
+## 18.3 Exercise / Form Vision\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- \'dcbungsform unterst\'fctzen\
+- Trainingskontext per Bild/Video erg\'e4nzen\
+- Coach-/Buddy-Feedback sp\'e4ter verbessern\
+\
+---\
+\
+# 19. VOICE CAPABILITIES\
+\
+---\
+\
+## 19.1 Voice Input\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Spracheingaben verarbeiten\
+- Buddy sprachbasiert nutzbar machen\
+- mobile Voice-Flows erm\'f6glichen\
+- Gym-Handsfree-Usecases unterst\'fctzen\
+\
+---\
+\
+## 19.2 Voice Output\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Buddy-Antworten als Audio ausgeben\
+- Alltag und Training sprachlich begleiten\
+- nat\'fcrliche Interaktion erm\'f6glichen\
+\
+---\
+\
+## 19.3 Ambient / Future Voice Layer\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- tiefer integrierte Voice-Begleitung\
+- Assistenz im Alltag ohne klassische UI\
+- st\'e4rkere Companion-Pr\'e4senz\
+\
+---\
+\
+# 20. AUTOMATION CAPABILITIES\
+\
+---\
+\
+## 20.1 Automated Reminders & Routines\
+\
+LumeOS soll k\'f6nnen:\
+\
+- Routinen unterst\'fctzen\
+- intelligente Reminder ausl\'f6sen\
+- adaptive Frequenz nutzen\
+- Reibung im Alltag reduzieren\
+\
+---\
+\
+## 20.2 Automated Detection\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- Probleme oder Muster automatisch erkennen\
+- Ver\'e4nderungen automatisch markieren\
+- relevante Zust\'e4nde automatisch hervorheben\
+\
+---\
+\
+## 20.3 Automated Support Flows\
+\
+LumeOS soll sp\'e4ter k\'f6nnen:\
+\
+- kleine Interventions-Flows ausl\'f6sen\
+- Check-in-Sequenzen ausl\'f6sen\
+- R\'fcckkehr- und Re-Engagement-Flows unterst\'fctzen\
+\
+---\
+\
+# 21. META-F\'c4HIGKEITEN DES GESAMTSYSTEMS\
+\
+LumeOS soll als Gesamtsystem langfristig in der Lage sein:\
+\
+- sich pers\'f6nlich anzuf\'fchlen\
+- mit dem Nutzer mitzulernen\
+- verschiedene Lebensphasen zu begleiten\
+- Daten in echte Orientierung zu \'fcbersetzen\
+- den Nutzer nicht zu \'fcberfordern\
+- Reibung zu reduzieren\
+- Alltagstauglichkeit zu erh\'f6hen\
+- \'fcber l\'e4ngere Zeit relevant zu bleiben\
+\
+---\
+\
+# WICHTIGE ARBEITSREGEL\
+\
+Dieses Dokument ist bewusst **maximal vollst\'e4ndig**.\
+\
+Das ist gewollt.\
+\
+Denn:\
+\
+# Planung darf gro\'df sein.\
+# Umsetzung muss sp\'e4ter brutal fokussiert sein.\
+\
+Deshalb gilt:\
+\
+- Alles hier darf prinzipiell Teil von LumeOS sein\
+- Nichts hier ist automatisch V1\
+- Nichts hier ist automatisch \'84muss sofort gebaut werden\'93\
+\
+---\
+\
+# Zweck dieses Dokuments im Gesamtprojekt\
+\
+Dieses Dokument dient sp\'e4ter als Basis f\'fcr:\
+\
+- Priorisierung\
+- Scope-Cuts\
+- Phasenplanung\
+- Feature-Gruppierung\
+- Datenmodell-Entwurf\
+- API-Entwurf\
+- UI-Planung\
+- Buddy-Logik\
+- Agenten-/Prompt-Arbeit\
+- PRD-/Spec-Ableitung}

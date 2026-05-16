@@ -1,0 +1,191 @@
+{
+  "version": "1.0.0",
+  "module": "supplements",
+  "rule_groups": [
+    {
+      "id": "interactions",
+      "title": "Interactions",
+      "rules": [
+        {
+          "id": "interaction_block_any",
+          "scope": "supplement",
+          "enabled": true,
+          "severity": "block",
+          "triggers": [
+            {
+              "kind": "presence",
+              "entity": "supplement",
+              "field": "interaction_blocks",
+              "operator": "contains",
+              "value": "any"
+            }
+          ],
+          "outputs": {
+            "title_key": "supplements.alert.interaction_block.title",
+            "message_key": "supplements.alert.interaction_block.message",
+            "datapoints": [
+              { "label": "conflicts", "value": "interaction_blocks" }
+            ],
+            "links": [
+              { "module": "supplements", "path": "/supplements/interactions" }
+            ],
+            "action_proposals": []
+          },
+          "metadata": {
+            "tags": ["interaction", "block"],
+            "references": ["projects/supplements/RISKS.md"]
+          }
+        },
+        {
+          "id": "enhanced_interaction_block_any",
+          "scope": "enhanced",
+          "enabled": true,
+          "severity": "block",
+          "triggers": [
+            {
+              "kind": "presence",
+              "entity": "enhanced",
+              "field": "interaction_blocks",
+              "operator": "contains",
+              "value": "any"
+            }
+          ],
+          "outputs": {
+            "title_key": "supplements.alert.enhanced_interaction_block.title",
+            "message_key": "supplements.alert.enhanced_interaction_block.message",
+            "datapoints": [
+              { "label": "conflicts", "value": "interaction_blocks" }
+            ],
+            "links": [
+              { "module": "supplements", "path": "/supplements/interactions?mode=enhanced" }
+            ],
+            "action_proposals": []
+          },
+          "metadata": {
+            "tags": ["enhanced", "interaction", "block"],
+            "references": ["projects/supplements/RISKS.md"]
+          }
+        },
+        {
+          "id": "medication_cross_warn_any",
+          "scope": "cross",
+          "enabled": true,
+          "severity": "warn",
+          "triggers": [
+            {
+              "kind": "presence",
+              "entity": "supplement",
+              "field": "medication_conflicts",
+              "operator": "contains",
+              "value": "any"
+            }
+          ],
+          "outputs": {
+            "title_key": "supplements.alert.medication_conflict.title",
+            "message_key": "supplements.alert.medication_conflict.message",
+            "datapoints": [
+              { "label": "conflicts", "value": "medication_conflicts" }
+            ],
+            "links": [
+              { "module": "supplements", "path": "/supplements/interactions?tab=meds" }
+            ],
+            "action_proposals": []
+          },
+          "metadata": {
+            "tags": ["cross", "medication"],
+            "references": ["projects/medical/PROTOCOLS.md"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "inventory",
+      "title": "Inventory",
+      "rules": [
+        {
+          "id": "low_stock_any",
+          "scope": "supplement",
+          "enabled": true,
+          "severity": "warn",
+          "triggers": [
+            {
+              "kind": "presence",
+              "entity": "inventory",
+              "field": "low_stock_items",
+              "operator": "contains",
+              "value": "any"
+            }
+          ],
+          "outputs": {
+            "title_key": "supplements.alert.low_stock.title",
+            "message_key": "supplements.alert.low_stock.message",
+            "datapoints": [
+              { "label": "items", "value": "low_stock_items" }
+            ],
+            "links": [
+              { "module": "supplements", "path": "/supplements/inventory" }
+            ],
+            "action_proposals": []
+          },
+          "metadata": {
+            "tags": ["inventory"],
+            "references": ["projects/supplements/PROTOCOLS.md"]
+          }
+        }
+      ]
+    },
+    {
+      "id": "compliance",
+      "title": "Compliance",
+      "rules": [
+        {
+          "id": "missed_intake_any",
+          "scope": "supplement",
+          "enabled": true,
+          "severity": "info",
+          "triggers": [
+            {
+              "kind": "schedule_miss",
+              "entity": "schedule",
+              "field": "missed_doses",
+              "operator": "contains",
+              "value": "any",
+              "window": "24h"
+            }
+          ],
+          "outputs": {
+            "title_key": "supplements.alert.missed_intake.title",
+            "message_key": "supplements.alert.missed_intake.message",
+            "datapoints": [
+              { "label": "missed", "value": "missed_doses" }
+            ],
+            "links": [
+              { "module": "supplements", "path": "/supplements/today" }
+            ],
+            "action_proposals": []
+          },
+          "metadata": {
+            "tags": ["compliance"],
+            "references": ["projects/supplements/PROTOCOLS.md"]
+          }
+        }
+      ]
+    }
+  ],
+  "protocols": [
+    {
+      "id": "supplements_block_first",
+      "title": "Block First",
+      "inputs": ["interaction_blocks", "enhanced_mode"],
+      "decision_order": ["interaction_block_any", "enhanced_interaction_block_any"],
+      "outputs": [
+        {
+          "key": "supplements_safety",
+          "status": "block",
+          "message_key": "supplements.protocol.block_first",
+          "action_proposals": []
+        }
+      ]
+    }
+  ]
+}

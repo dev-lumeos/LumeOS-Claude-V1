@@ -1,0 +1,453 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 11_SYSTEM_BOUNDARIES\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **klaren Grenzen von LumeOS**.\
+\
+Es beantwortet die Frage:\
+\
+# Was darf LumeOS leisten \'96 und was darf LumeOS ausdr\'fccklich nicht behaupten, simulieren oder \'fcbernehmen?\
+\
+Dieses Dokument ist entscheidend f\'fcr:\
+\
+- Produktklarheit\
+- Vertrauensw\'fcrdigkeit\
+- Sicherheitslogik\
+- Buddy-Verhalten\
+- sp\'e4tere Recommendation- und Escalation-Logik\
+- Vermeidung von Produktillusionen\
+\
+Ein starkes Produkt braucht nicht nur F\'e4higkeiten.\
+\
+Ein starkes Produkt braucht auch **klare Grenzen**.\
+\
+---\
+\
+## Kernthese\
+\
+# LumeOS soll hilfreich, intelligent und n\'fctzlich sein.\
+# Aber es darf niemals so tun, als w\'e4re es mehr, als es tats\'e4chlich ist.\
+\
+Das gilt fachlich, kommunikativ und produktlogisch.\
+\
+---\
+\
+# 1. WARUM SYSTEMGRENZEN SO WICHTIG SIND\
+\
+Ohne klare Grenzen entstehen fast automatisch diese Probleme:\
+\
+- Buddy wirkt schlauer als das System wirklich ist\
+- AI simuliert Sicherheit, die intern nicht abgesichert ist\
+- das Produkt verspricht implizit Dinge, die es nicht leisten kann\
+- Nutzervertrauen wird kurzfristig gewonnen, aber langfristig zerst\'f6rt\
+- sensible Bereiche werden unsauber behandelt\
+- das Produkt driftet in Richtungen, die nicht mehr sauber kontrollierbar sind\
+\
+---\
+\
+# 2. DIE OBERSTE GRENZREGEL\
+\
+# LumeOS darf nur dort stark und klar auftreten, wo es auf echter Systemsubstanz steht.\
+\
+Das bedeutet:\
+\
+Wenn intern keine belastbare Daten-, Kontext-, Regel- oder Entscheidungsbasis vorhanden ist, darf das Produkt nicht so tun, als w\'e4re sie vorhanden.\
+\
+---\
+\
+# 3. WAS LUMEOS IM KERN DARF\
+\
+LumeOS darf im Kern:\
+\
+- strukturieren\
+- einordnen\
+- priorisieren\
+- Empfehlungen geben\
+- Verhalten unterst\'fctzen\
+- Muster sichtbar machen\
+- Verlauf verst\'e4ndlich machen\
+- Orientierung geben\
+- proaktiv begleiten\
+- Reibung reduzieren\
+- relevante Warnsignale hervorheben\
+- zur sinnvollen Abkl\'e4rung oder menschlichen Unterst\'fctzung raten\
+\
+Das ist die legitime Produktrolle.\
+\
+---\
+\
+# 4. WAS LUMEOS AUSDR\'dcCKLICH NICHT DARF\
+\
+---\
+\
+## 4.1 LumeOS ist kein Arzt\
+\
+LumeOS darf nicht:\
+\
+- Diagnosen stellen\
+- Krankheiten behaupten\
+- medizinische Sicherheit vort\'e4uschen\
+- \'e4rztliche Entscheidungen ersetzen\
+- klinische Autorit\'e4t simulieren\
+\
+LumeOS darf:\
+\
+- relevante Marker einordnen\
+- auff\'e4llige Entwicklungen markieren\
+- Kontext sichtbar machen\
+- zur Abkl\'e4rung raten\
+\
+Aber:\
+\
+# medizinische Deutungshoheit liegt nicht bei LumeOS\
+\
+---\
+\
+## 4.2 LumeOS ist kein Therapeut\
+\
+LumeOS darf nicht:\
+\
+- psychologische oder therapeutische Autorit\'e4t simulieren\
+- psychische Probleme \'84behandeln\'93\
+- emotionale Tiefenarbeit vort\'e4uschen\
+- sensible psychische Zust\'e4nde mit Pseudo-Sicherheit f\'fchren\
+\
+LumeOS darf:\
+\
+- Alltagsbelastung, Stress oder \'dcberforderung als Kontext ber\'fccksichtigen\
+- sanfte, alltagstaugliche Unterst\'fctzung liefern\
+- bei Bedarf auf menschliche Hilfe verweisen\
+\
+---\
+\
+## 4.3 LumeOS ist kein Ersatz f\'fcr menschliche Grenzf\'e4lle\
+\
+LumeOS darf nicht so gebaut oder kommuniziert werden, als k\'f6nne es jeden Fall alleine tragen.\
+\
+Es darf nicht implizieren:\
+\
+- \'84Du brauchst keinen Coach mehr\'93\
+- \'84Du brauchst keine Abkl\'e4rung mehr\'93\
+- \'84Das System wei\'df es besser als alle anderen\'93\
+- \'84Buddy kann alles alleine entscheiden\'93\
+\
+LumeOS darf viel.\
+\
+Aber es braucht definierte \'dcbergabepunkte.\
+\
+---\
+\
+## 4.4 LumeOS ist kein generischer Lebensguru\
+\
+LumeOS darf nicht zu einem unscharfen Allzweck-\'84Frag alles\'93-System verkommen.\
+\
+Nicht Kern von LumeOS:\
+\
+- beliebiger Smalltalk\
+- generische Lebensberatung\
+- pseudo-philosophische Motivation\
+- alles-f\'fcr-jeden-Assistent ohne Produktkern\
+\
+LumeOS muss produktzentriert bleiben.\
+\
+---\
+\
+## 4.5 LumeOS darf keine falsche Pr\'e4zision simulieren\
+\
+Wenn Datenlage oder Modellqualit\'e4t schwach sind, darf das System nicht:\
+\
+- so tun, als sei etwas sicher\
+- harte Schl\'fcsse aus d\'fcnnen Signalen ziehen\
+- konkrete Sicherheit vort\'e4uschen\
+- klare Kausalit\'e4t behaupten, wo nur schwache Korrelation vorliegt\
+\
+### Regel\
+Schwache Basis = vorsichtiger Output.\
+\
+---\
+\
+# 5. DIE DREI BOUNDARY-ZONEN VON LUMEOS\
+\
+LumeOS arbeitet nicht in nur \'84erlaubt\'93 oder \'84verboten\'93.\
+\
+Es gibt drei Zonen.\
+\
+---\
+\
+# ZONE A \'97 SICHERER PRODUKTKERN\
+\
+Hier darf LumeOS stark, klar und proaktiv sein.\
+\
+### Beispiele\
+- Tagesfokus\
+- Trainingseinordnung\
+- Nutrition Guidance\
+- Recovery-Einordnung\
+- Adherence-Hinweise\
+- Supplement-Logik im klaren Rahmen\
+- einfache Verlaufserkenntnisse\
+- Buddy-Guidance im Alltag\
+- Priorisierung\
+- Routinehilfe\
+\
+### Verhalten\
+Hier darf das System:\
+\
+- klar formulieren\
+- Empfehlungen geben\
+- konkrete Guidance liefern\
+- aktiv helfen\
+\
+---\
+\
+# ZONE B \'97 VORSICHTIGER KONTEXTBEREICH\
+\
+Hier darf LumeOS unterst\'fctzen, aber nur mit sauberer Zur\'fcckhaltung.\
+\
+### Beispiele\
+- auff\'e4llige Gesundheitsmuster\
+- potenzielle Interaktionen\
+- ungew\'f6hnliche Verl\'e4ufe\
+- unsichere Signallagen\
+- unvollst\'e4ndige Datenlage\
+- sensible Kontextthemen\
+- m\'f6gliche \'dcberlastung\
+- auff\'e4llige Marker ohne klare Einordnung\
+\
+### Verhalten\
+Hier darf das System:\
+\
+- aufmerksam machen\
+- vorsichtig formulieren\
+- Kontext liefern\
+- Beobachtung empfehlen\
+- zur Abkl\'e4rung oder menschlichen Pr\'fcfung raten\
+\
+Hier darf das System **nicht** \'fcbergriffig oder zu sicher auftreten.\
+\
+---\
+\
+# ZONE C \'97 EXPLIZITE AUSSERHALB-GRENZE\
+\
+Hier darf LumeOS nicht eigenst\'e4ndig als scheinbar kompetente Instanz auftreten.\
+\
+### Beispiele\
+- Diagnosen\
+- Therapieanweisungen\
+- medizinische Ursachenbehauptungen\
+- psychologische Behandlungsf\'fchrung\
+- harte Sicherheitszusagen\
+- klinische Entscheidungen\
+- hochsensible Grenzf\'e4lle mit fehlender Datensicherheit\
+\
+### Verhalten\
+Hier muss das System:\
+\
+- klar begrenzen\
+- nicht spekulieren\
+- nicht \'84AI-selbstbewusst\'93 improvisieren\
+- sauber an menschliche Stellen oder Abkl\'e4rung verweisen\
+\
+---\
+\
+# 6. WIE LUMEOS MIT UNSICHERHEIT UMGEHEN MUSS\
+\
+Unsicherheit ist kein Randfall.\
+\
+Unsicherheit ist ein Kernbestandteil eines ehrlichen Systems.\
+\
+---\
+\
+## Grundregel\
+\
+# Unsicherheit muss sichtbar oder intern wirksam sein.\
+\
+Das bedeutet:\
+\
+Wenn LumeOS sich auf d\'fcnne, unvollst\'e4ndige oder sensible Signale st\'fctzt, muss sich das im Verhalten des Systems zeigen.\
+\
+---\
+\
+## Korrektes Verhalten bei Unsicherheit\
+\
+LumeOS darf dann:\
+\
+- vorsichtiger formulieren\
+- kleinere statt gro\'dfe Empfehlungen geben\
+- eher beobachten als steuern\
+- gezielt nachfragen\
+- eskalieren statt behaupten\
+\
+---\
+\
+## Falsches Verhalten bei Unsicherheit\
+\
+LumeOS darf dann nicht:\
+\
+- hart behaupten\
+- falsche Sicherheit vermitteln\
+- unn\'f6tig dramatisieren\
+- mit \'84AI-Selbstvertrauen\'93 Unsicherheit \'fcberspielen\
+\
+---\
+\
+# 7. WIE LUMEOS MIT SENSIBLEN THEMEN UMGEHEN MUSS\
+\
+Bestimmte Themen sind nicht verboten, aber besonders grenzsensibel.\
+\
+---\
+\
+## Sensible Bereiche\
+\
+### 1. Medizinische Auff\'e4lligkeiten\
+### 2. ungew\'f6hnliche Marker oder Verl\'e4ufe\
+### 3. potenzielle Risiko-/Nebenwirkungszusammenh\'e4nge\
+### 4. starke Ersch\'f6pfung oder Warnsignale\
+### 5. sensible psychische oder emotionale Kontexte\
+### 6. hochindividuelle Grenzf\'e4lle\
+### 7. Themen mit echter Sicherheitsrelevanz\
+\
+---\
+\
+## Regel\
+\
+Je sensibler das Thema, desto mehr m\'fcssen gelten:\
+\
+- Kontext\
+- Vorsicht\
+- Klarheit\
+- Begrenzung\
+- Eskalationsf\'e4higkeit\
+\
+Nicht:\
+\
+- Mut\
+- Improvisation\
+- Halluzination\
+- Schein-Kompetenz\
+\
+---\
+\
+# 8. WIE BUDDY INNERHALB DIESER GRENZEN ARBEITEN MUSS\
+\
+Buddy ist die sichtbarste Oberfl\'e4che des Systems.\
+\
+Deshalb ist Buddy besonders boundary-kritisch.\
+\
+---\
+\
+## Buddy darf\
+\
+- einordnen\
+- begleiten\
+- priorisieren\
+- erkl\'e4ren\
+- Orientierung geben\
+- auf relevante Dinge hinweisen\
+- Unsicherheit sauber kommunizieren\
+- bei Bedarf zur Abkl\'e4rung oder menschlichen Hilfe f\'fchren\
+\
+---\
+\
+## Buddy darf nicht\
+\
+- Arzt spielen\
+- Coach-Allmacht simulieren\
+- absolute Sicherheit vort\'e4uschen\
+- aus schwacher Datenlage harte Wahrheiten formulieren\
+- mehr Kompetenz darstellen als das System intern abgesichert hat\
+\
+---\
+\
+# 9. WANN LUMEOS ESKALIEREN MUSS\
+\
+LumeOS braucht nicht nur Grenzen, sondern auch definierte \'dcbergabepunkte.\
+\
+Eskalation ist kein Fehler.\
+\
+Eskalation ist ein Qualit\'e4tsmerkmal.\
+\
+---\
+\
+## LumeOS sollte eskalieren, wenn:\
+\
+- Sicherheit vor Optimierung gehen muss\
+- Datenlage zu unsicher ist\
+- ein sensibles Thema menschliche Bewertung verlangt\
+- Buddy an eine sinnvolle Grenze kommt\
+- ein auff\'e4lliger Verlauf ernst genug ist\
+- menschliche Betreuung oder Review klar sinnvoller w\'e4re\
+\
+---\
+\
+## Eskalation kann bedeuten:\
+\
+- Buddy sagt: beobachten / abkl\'e4ren\
+- Buddy verweist auf Coach / Review / Support\
+- Buddy priorisiert ein Thema statt es \'84wegzuerkl\'e4ren\'93\
+- das System markiert einen Fall intern f\'fcr sp\'e4tere Human-Logik\
+\
+---\
+\
+# 10. PRODUKTWAHRHEIT VOR PRODUKTILLUSION\
+\
+LumeOS darf nur das Produktgef\'fchl erzeugen, das intern auch wirklich getragen werden kann.\
+\
+Das bedeutet:\
+\
+---\
+\
+## Erlaubt\
+- starkes, intelligentes, hilfreiches Produktgef\'fchl\
+\
+## Nicht erlaubt\
+- Magie simulieren, wo intern nur d\'fcnne Heuristik steckt\
+\
+---\
+\
+## Regel\
+\
+Wenn etwas intern noch nicht stabil gedacht, modelliert oder abgesichert ist, darf Buddy oder UI es nicht so darstellen, als w\'e4re es bereits ein ausgereifter Kernbaustein.\
+\
+---\
+\
+# 11. WIE DIESE GRENZEN DIE PRODUKTENTWICKLUNG STEUERN\
+\
+Dieses Dokument ist nicht nur f\'fcr Kommunikation da.\
+\
+Es steuert auch Build-Entscheidungen.\
+\
+---\
+\
+## Wenn ein neues Feature geplant wird, muss gepr\'fcft werden:\
+\
+### 1. In welcher Boundary-Zone liegt es?\
+### 2. Welche reale Systemsubstanz br\'e4uchte es?\
+### 3. Welche Risiken oder Fehlinterpretationen entstehen?\
+### 4. Braucht es Eskalationslogik?\
+### 5. Ist es Core, vorsichtiger Kontext oder explizit au\'dferhalb?\
+\
+Wenn das nicht klar beantwortet werden kann, ist das Feature noch nicht sauber genug gedacht.\
+\
+---\
+\
+# 12. EIN-SATZ-DEFINITION DER SYSTEMGRENZE\
+\
+# LumeOS darf intelligent, hilfreich und klar sein \'96 aber niemals sicherer, kompetenter oder vollst\'e4ndiger wirken, als seine echte Systemsubstanz es tr\'e4gt.\
+\
+---\
+\
+# 13. SCHLUSSREGEL\
+\
+Jede zuk\'fcnftige Funktion, Empfehlung, Buddy-Antwort oder Produktbotschaft muss diese Frage bestehen:\
+\
+# Bewegt sich das noch innerhalb der ehrlichen, sauberen und verantwortbaren Rolle von LumeOS?\
+\
+Wenn nein, geh\'f6rt es nicht in den Kern des Systems.}

@@ -1,0 +1,1808 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 .SFNS-Semibold;\f1\fswiss\fcharset0 Helvetica;\f2\fmodern\fcharset0 Courier-Oblique;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 .SFNS-Regular;\f5\fnil\fcharset0 HelveticaNeue-Bold;
+\f6\fnil\fcharset0 .AppleSystemUIFontMonospaced-Regular;}
+{\colortbl;\red255\green255\blue255;\red14\green14\blue14;\red74\green80\blue93;\red155\green162\blue177;
+\red136\green185\blue102;\red197\green136\blue83;\red81\green156\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c6700\c6700\c6700;\cssrgb\c36078\c38824\c43922;\cssrgb\c67059\c69804\c74902;
+\cssrgb\c59608\c76471\c47451;\cssrgb\c81961\c60392\c40000;\cssrgb\c38039\c68235\c93333;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Datei \'97 PLANE_AS_LUMEOS_PRODUCT_OS.md
+\f1\b0\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\i\fs28 \cf3 # PLANE_AS_LUMEOS_PRODUCT_OS
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\
+\cf5 Dieses\cf4  \cf5 Dokument\cf4  \cf5 definiert,\cf4  \cf5 wie\cf4  \cf5 **Plane**\cf4  \cf5 als\cf4  \cf5 visuelle\cf4  \cf5 Produkt-,\cf4  \cf5 Governance-\cf4  \cf5 und\cf4  \cf5 Delivery-Welt\cf4  \cf5 f\'fcr\cf4  \cf5 den\cf4  \cf5 kontrollierten\cf4  \cf5 LumeOS-Rebuild\cf4  \cf5 verwendet\cf4  \cf5 wird.\cf4 \
+\
+\cf6 Es beantwortet die Frage:\cf4 \
+\
+
+\f2\i \cf3 # Wie wird Plane so modelliert, dass es nicht einfach ein Task-Tool ist, sondern als kontrolliertes Product Operating System f\'fcr LumeOS funktioniert?
+\f3\i0 \cf4 \
+\
+\cf5 Dieses\cf4  \cf5 Dokument\cf4  \cf5 ist\cf4  \cf5 **nicht\cf4  \cf5 generisch**.\cf4 \
+\
+\cf5 Es\cf4  \cf5 ist\cf4  \cf5 spezifisch\cf4  \cf5 f\'fcr:\cf4 \
+\
+\cf7 -\cf4  \cf5 LumeOS\cf4  \cf5 Controlled\cf4  \cf5 Reconstruction\cf4 \
+\cf7 -\cf4  \cf5 V1-first\cf4  \cf5 Aufbau\cf4 \
+\cf7 -\cf4  \cf5 Decisions\cf4  \cf5 \uc0\u8594 \cf4  \cf5 PRDs\cf4  \cf5 \uc0\u8594 \cf4  \cf5 Specs\cf4  \cf5 \uc0\u8594 \cf4  \cf5 Work\cf4  \cf5 Orders\cf4  \cf5 \uc0\u8594 \cf4  \cf5 Build\cf4  \cf5 \uc0\u8594 \cf4  \cf5 Review\cf4 \
+\cf7 -\cf4  \cf5 Governance\cf4  \cf5 &\cf4  \cf5 Deterministik\cf4 \
+\cf7 -\cf4  \cf5 Claude\cf4  \cf5 Desktop\cf4  \cf5 als\cf4  \cf5 Denk-/Schreibmaschine\cf4 \
+\cf7 -\cf4  \cf5 Repo/Markdown\cf4  \cf5 als\cf4  \cf5 Artefaktwahrheit\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 1. DIE OBERSTE REGEL
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 # Plane ist in diesem Setup NICHT die Wahrheit.
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Plane ist die visuelle Steuer- und Arbeitswelt.
+\f3\i0 \cf4 \
+\
+\cf6 Die eigentliche Wahrheit liegt in:\cf4 \
+\
+\cf7 -\cf4  \cf5 den\cf4  \cf5 kontrollierten\cf4  \cf5 Kern-Dokumenten\cf4 \
+\cf7 -\cf4  \cf5 den\cf4  \cf5 Decisions\cf4 \
+\cf7 -\cf4  \cf5 den\cf4  \cf5 PRDs\cf4 \
+\cf7 -\cf4  \cf5 den\cf4  \cf5 Specs\cf4 \
+\cf7 -\cf4  \cf5 den\cf4  \cf5 Work\cf4  \cf5 Orders\cf4 \
+\cf7 -\cf4  \cf5 dem\cf4  \cf5 Git/Repo-Zustand\cf4 \
+\
+
+\f2\i \cf3 ### Daher:
+\f3\i0 \cf4 \
+\cf5 Plane\cf4  \cf5 ist\cf4  \cf5 **Control\cf4  \cf5 Plane**,\cf4  \cf5 nicht\cf4  \cf5 Source\cf4  \cf5 of\cf4  \cf5 Truth.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 2. WAS PLANE IN DIESEM SETUP SEIN SOLL
+\f3\i0 \cf4 \
+\
+\cf5 Plane\cf4  \cf5 soll\cf4  \cf5 f\'fcr\cf4  \cf6 LumeOS 5 Dinge leisten:\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 1. VISUELLE PRODUKTWELT
+\f3\i0 \cf4 \
+\cf6 Damit du jederzeit siehst:\cf4 \
+\cf7 -\cf4  \cf5 wo\cf4  \cf5 das\cf4  \cf5 Projekt\cf4  \cf5 steht\cf4 \
+\cf7 -\cf4  \cf5 welche\cf4  \cf5 Phase\cf4  \cf5 aktiv\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 welche\cf4  \cf5 Workstreams\cf4  \cf5 existieren\cf4 \
+\cf7 -\cf4  \cf5 welche\cf4  \cf5 Dinge\cf4  \cf5 blockiert\cf4  \cf5 sind\cf4 \
+\cf7 -\cf4  \cf5 was\cf4  \cf5 als\cf4  \cf5 N\'e4chstes\cf4  \cf5 dran\cf4  \cf5 ist\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 2. DECISION CONTROL
+\f3\i0 \cf4 \
+\cf5 Damit\cf4  \cf5 keine\cf4  \cf5 Kernfragen\cf4  \cf5 vergessen,\cf4  \cf5 \'fcbersprungen\cf4  \cf5 oder\cf4  \cf5 implizit\cf4  \cf5 entschieden\cf4  \cf5 werden.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 3. ARTIFACT PIPELINE MANAGEMENT
+\f3\i0 \cf4 \
+\cf5 Damit\cf4  \cf5 klar\cf4  \cf5 ist,\cf4  \cf6 in welcher Phase sich ein Artefakt befindet:\cf4 \
+\cf7 -\cf4  \cf5 Decision\cf4 \
+\cf7 -\cf4  \cf5 PRD\cf4 \
+\cf7 -\cf4  \cf5 Spec\cf4 \
+\cf7 -\cf4  \cf5 WO\cf4 \
+\cf7 -\cf4  \cf5 Build\cf4 \
+\cf7 -\cf4  \cf5 Review\cf4 \
+\cf7 -\cf4  \cf5 Accept\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 4. GOVERNANCE VISIBILITY
+\f3\i0 \cf4 \
+\cf5 Damit\cf4  \cf5 Scope\cf4  \cf5 Drift,\cf4  \cf5 Rework-Risiken\cf4  \cf5 und\cf4  \cf5 Pipeline-Verst\'f6\'dfe\cf4  \cf5 sichtbar\cf4  \cf5 werden.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## 5. EXECUTION READINESS
+\f3\i0 \cf4 \
+\cf5 Damit\cf4  \cf5 du\cf4  \cf5 aus\cf4  \cf5 Plane\cf4  \cf5 jederzeit\cf4  \cf5 operative,\cf4  \cf5 kleine,\cf4  \cf5 ausf\'fchrbare\cf4  \cf5 Arbeitseinheiten\cf4  \cf5 erzeugen\cf4  \cf5 kannst.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 3. WAS PLANE AUSDR\'dcCKLICH NICHT SEIN SOLL
+\f3\i0 \cf4 \
+\
+\cf6 Plane soll NICHT sein:\cf4 \
+\
+\cf7 -\cf4  \cf5 der\cf4  \cf5 Ort\cf4  \cf5 f\'fcr\cf4  \cf5 lose\cf4  \cf5 Brainstorming-Chaos-Ideen\cf4 \
+\cf7 -\cf4  \cf5 ein\cf4  \cf5 \'84lass\cf4  \cf5 mal\cf4  \cf5 schnell\cf4  \cf5 Tickets\cf4  \cf5 bauen\'93-Spielplatz\cf4 \
+\cf7 -\cf4  \cf5 ein\cf4  \cf5 Ersatz\cf4  \cf5 f\'fcr\cf4  \cf5 echte\cf4  \cf5 Produktdokumente\cf4 \
+\cf7 -\cf4  \cf5 ein\cf4  \cf5 Ort,\cf4  \cf5 an\cf4  \cf5 dem\cf4  \cf5 Wahrheit\cf4  \cf5 ohne\cf4  \cf5 Artefakte\cf4  \cf5 ge\'e4ndert\cf4  \cf5 wird\cf4 \
+\cf7 -\cf4  \cf5 ein\cf4  \cf5 Ort,\cf4  \cf5 an\cf4  \cf5 dem\cf4  \cf5 Claude\cf4  \cf5 \'84einfach\cf4  \cf5 mal\cf4  \cf5 loslegt\'93\cf4 \
+\
+
+\f2\i \cf3 ### Regel:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Plane organisiert Arbeit.
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Plane ersetzt keine Wahrheit.
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 4. DIE KERNLOGIK DES SYSTEMS
+\f3\i0 \cf4 \
+\
+\cf6 Das gesamte System soll in Plane auf dieser harten Produktionslogik basieren:\cf4 \
+\
+\cf5 ```txt\cf4  \cf5 id="6u4f2d"\cf4 \
+\cf5 Decision\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 PRD\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Spec\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Work\cf4  \cf5 Order\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Build\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Review\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Accept
+\f1\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 Nichts soll diese Reihenfolge stillschweigend \'fcberspringen.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 5. EMPFOHLENE HIGH-LEVEL STRUKTUR IN PLANE
+\f4\b0\fs28 \
+\
+Die sauberste L\'f6sung f\'fcr LumeOS ist:\
+\
+
+\f0\b\fs44 EIN Workspace
+\f4\b0\fs28 \
+\
+
+\f0\b\fs44 MEHRERE Projects
+\f4\b0\fs28 \
+\
+
+\f0\b\fs44 HARTE Typisierung \'fcber Labels / Properties / States
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 6. EMPFOHLENE PLANE-PROJEKTE
+\f4\b0\fs28 \
+\
+F\'fcr den Anfang empfehle ich 
+\f5\b nicht zu viele Projekte
+\f4\b0 .\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Richtig f\'fcr V1:
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 5 Hauptprojekte
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 PROJEKT 1 \'97 LUMEOS_CORE_FOUNDATION
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Die kontrollierte Rekonstruktion und V1 Foundation\
+\
+
+\f0\b\fs30 Enth\'e4lt
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Product Truth\
+	\'95	V1 Scope\
+	\'95	Workstreams\
+	\'95	Core Struktur\
+	\'95	aktive Kernarbeit\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Das ist dein Hauptprojekt.
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 PROJEKT 2 \'97 LUMEOS_DECISIONS
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Alle produkt- und systemkritischen Entscheidungen\
+\
+
+\f0\b\fs30 Enth\'e4lt
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	offene Decisions\
+	\'95	blockierende Decisions\
+	\'95	entschiedene Kernfragen\
+	\'95	Decision Review\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 PROJEKT 3 \'97 LUMEOS_PRDS
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Alle freigegebenen oder in Arbeit befindlichen PRDs\
+\
+
+\f0\b\fs30 Enth\'e4lt
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Workstream-PRDs\
+	\'95	Modul-PRDs\
+	\'95	Produktteil-PRDs\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 PROJEKT 4 \'97 LUMEOS_SPECS
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Alle konkreten technischen / fachlichen Spezifikationen\
+\
+
+\f0\b\fs30 Enth\'e4lt
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	DB Specs\
+	\'95	API Specs\
+	\'95	State Specs\
+	\'95	Entity Specs\
+	\'95	Flow Specs\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 PROJEKT 5 \'97 LUMEOS_WORKORDERS
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Kleine, ausf\'fchrbare Arbeitspakete\
+\
+
+\f0\b\fs30 Enth\'e4lt
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	worker-ready Tasks\
+	\'95	konkrete Umsetzungsauftr\'e4ge\
+	\'95	Review-/Build-f\'e4hige Units\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 7. WARUM NICHT NUR EIN EINZIGES PROJEKT?
+\f4\b0\fs28 \
+\
+Weil du sonst sehr schnell wieder einen M\'fcllcontainer baust.\
+\
+Ein einziges Projekt mit allem drin f\'fchrt bei deinem Scope fast sicher zu:\
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Vermischung von Ebenen\
+	\'95	unklarem Status\
+	\'95	PRD/Spec/WO-Chaos\
+	\'95	schlechter Sichtbarkeit\
+	\'95	Governance-Verlust\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Regel:
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Die Artefaktebenen m\'fcssen sichtbar getrennt bleiben.
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 8. DIE 6 WICHTIGSTEN ISSUE-TYPEN
+\f4\b0\fs28 \
+\
+Plane muss f\'fcr dich 
+\f5\b nicht nur Aufgaben
+\f4\b0  enthalten.\
+\
+Es muss 
+\f5\b verschiedene Arten von Wahrheit / Arbeit
+\f4\b0  abbilden.\
+\
+Darum brauchst du klare Typisierung.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 ISSUE TYPE 1 \'97 DECISION
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Bedeutung
+\f4\b0\fs28 \
+\
+Eine noch zu kl\'e4rende oder freizugebende Kernfrage\
+\
+
+\f0\b\fs30 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Finaler Auth-Ansatz\
+	\'95	Portion Scope V1\
+	\'95	Workout Templates ja/nein\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 ISSUE TYPE 2 \'97 PRD
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Bedeutung
+\f4\b0\fs28 \
+\
+Ein definierter Produkt-/Workstream- oder Modulvertrag\
+\
+
+\f0\b\fs30 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	PRD Identity / User Foundation\
+	\'95	PRD Nutrition Logging\
+	\'95	PRD Recovery Foundation\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 ISSUE TYPE 3 \'97 SPEC
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Bedeutung
+\f4\b0\fs28 \
+\
+Eine konkrete fachliche oder technische Spezifikation\
+\
+
+\f0\b\fs30 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Goal Entity Spec\
+	\'95	Meal Logging Flow Spec\
+	\'95	Current State Definition Spec\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 ISSUE TYPE 4 \'97 WORK_ORDER
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Bedeutung
+\f4\b0\fs28 \
+\
+Ein kleines, ausf\'fchrbares Arbeitspaket\
+\
+
+\f0\b\fs30 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Define minimal goal object schema\
+	\'95	Draft meal logging state transitions\
+	\'95	Write V1 recovery input contract\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 ISSUE TYPE 5 \'97 REVIEW
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Bedeutung
+\f4\b0\fs28 \
+\
+Eine dedizierte Pr\'fcf-/Abnahme-/Korrekturrunde\
+\
+
+\f0\b\fs30 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Review PRD Nutrition Foundation\
+	\'95	Review State Access Spec\
+	\'95	Review WO batch for V1 logging\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 ISSUE TYPE 6 \'97 RISK
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Bedeutung
+\f4\b0\fs28 \
+\
+Ein identifiziertes Risiko oder Governance-Problem\
+\
+
+\f0\b\fs30 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Scope Drift risk in training module\
+	\'95	Legacy contamination in nutrition assumptions\
+	\'95	Undefined state risk in current-state layer\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 9. DIE WICHTIGSTEN CUSTOM FIELDS, DIE DU BRAUCHST
+\f4\b0\fs28 \
+\
+Das ist extrem wichtig.\
+\
+Ohne diese Felder ist Plane nur h\'fcbsch.\
+\
+Mit diesen Feldern wird es brauchbar.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 1 \'97 artifact_level
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Single Select\
+\
+
+\f0\b\fs30 Werte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	decision\
+	\'95	prd\
+	\'95	spec\
+	\'95	work_order\
+	\'95	review\
+	\'95	risk\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Klare Trennung der Artefaktebene\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 2 \'97 workstream
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Single Select\
+\
+
+\f0\b\fs30 Werte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	A_identity_user\
+	\'95	B_nutrition_data\
+	\'95	C_nutrition_logging\
+	\'95	D_training\
+	\'95	E_recovery\
+	\'95	F_state_access\
+	\'95	G_v1_experience\
+	\'95	cross_foundation\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Jede Arbeit muss einem Workstream zugeordnet sein.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 3 \'97 v1_scope_status
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Single Select\
+\
+
+\f0\b\fs30 Werte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	in_v1_now\
+	\'95	later_planned\
+	\'95	delayed_by_design\
+	\'95	parking_only\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Scope-Kontrolle direkt sichtbar machen\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 4 \'97 decision_state
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Single Select\
+\
+
+\f0\b\fs30 Werte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	not_needed\
+	\'95	open\
+	\'95	directionally_clear\
+	\'95	decided\
+	\'95	blocked_by_decision\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Sichtbar machen, ob eine Sache entscheidungsstabil ist\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 5 \'97 source_of_truth_doc
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Text / URL / Short Text\
+\
+
+\f0\b\fs30 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	07_V1_FOUNDATION_SCOPE.md\
+	\'95	15_V1_SYSTEM_CONTRACT.md\
+	\'95	23_DECISION_AUTH_USER_GOAL.md\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Jede Arbeit muss an echte Wahrheit gekoppelt sein\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 6 \'97 artifact_status
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Single Select\
+\
+
+\f0\b\fs30 Werte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	draft\
+	\'95	in_review\
+	\'95	approved\
+	\'95	blocked\
+	\'95	obsolete\
+	\'95	accepted\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Nicht nur Task-Status, sondern Artefaktreife sichtbar machen\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 7 \'97 build_readiness
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Single Select\
+\
+
+\f0\b\fs30 Werte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	not_buildable\
+	\'95	needs_prd\
+	\'95	needs_spec\
+	\'95	needs_split\
+	\'95	worker_ready\
+	\'95	under_build\
+	\'95	built\
+	\'95	reviewed\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Zeigt, ob etwas wirklich in die Umsetzung darf\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PFLICHTFELD 8 \'97 governance_flag
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Typ
+\f4\b0\fs28 \
+\
+Multi Select\
+\
+
+\f0\b\fs30 Werte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	scope_drift\
+	\'95	legacy_contamination\
+	\'95	undefined_state\
+	\'95	weak_acceptance\
+	\'95	missing_decision\
+	\'95	too_large\
+	\'95	invalid_sequence\
+	\'95	duplicate_logic\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Governance sichtbar machen\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 10. DIE RICHTIGEN STATES IN PLANE
+\f4\b0\fs28 \
+\
+Normale Todo/Doing/Done-States reichen nicht.\
+\
+Du brauchst 
+\f5\b zustandslogik passend zu deinem Artefaktfluss
+\f4\b0 .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 EMPFOHLENE STATES
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 1. OPEN
+\f4\b0\fs28 \
+\
+Noch nicht aktiv bearbeitet\
+\
+
+\f0\b\fs30 2. ANALYZING
+\f4\b0\fs28 \
+\
+Wird gerade zerlegt / gepr\'fcft / gedacht\
+\
+
+\f0\b\fs30 3. DECISION_NEEDED
+\f4\b0\fs28 \
+\
+Kann nicht sauber weiterlaufen ohne Entscheidung\
+\
+
+\f0\b\fs30 4. IN_DEFINITION
+\f4\b0\fs28 \
+\
+Wird als PRD / Spec / WO konkretisiert\
+\
+
+\f0\b\fs30 5. READY_FOR_REVIEW
+\f4\b0\fs28 \
+\
+Definition oder Artefakt ist pr\'fcfbar\
+\
+
+\f0\b\fs30 6. APPROVED
+\f4\b0\fs28 \
+\
+Artefakt ist fachlich freigegeben\
+\
+
+\f0\b\fs30 7. READY_FOR_BUILD
+\f4\b0\fs28 \
+\
+Kann als WO oder Umsetzung verwendet werden\
+\
+
+\f0\b\fs30 8. IN_BUILD
+\f4\b0\fs28 \
+\
+Wird aktiv umgesetzt\
+\
+
+\f0\b\fs30 9. UNDER_REVIEW
+\f4\b0\fs28 \
+\
+Wird fachlich / technisch gepr\'fcft\
+\
+
+\f0\b\fs30 10. ACCEPTED
+\f4\b0\fs28 \
+\
+Sauber abgeschlossen\
+\
+
+\f0\b\fs30 11. BLOCKED
+\f4\b0\fs28 \
+\
+Kann aktuell nicht sauber weiterlaufen\
+\
+
+\f0\b\fs30 12. REJECTED
+\f4\b0\fs28 \
+\
+War unbrauchbar / falsch / nicht sauber\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 11. DIE WICHTIGSTE REGEL F\'dcR ALLE ITEMS
+\f4\b0\fs28 \
+\
+
+\f0\b\fs44 Kein Item darf \'84frei schweben\'93.
+\f4\b0\fs28 \
+\
+Jedes Item in Plane muss mindestens diese Dinge haben:\
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	artifact_level\
+	\'95	workstream\
+	\'95	source_of_truth_doc\
+	\'95	artifact_status\
+	\'95	v1_scope_status\
+\
+Wenn das fehlt:\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 ist das Item nicht sauber genug.
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 12. WIE DU DECISIONS IN PLANE ABBILDEST
+\f4\b0\fs28 \
+\
+Das ist einer der wichtigsten Teile \'fcberhaupt.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Jede V1-Entscheidung bekommt ein eigenes DECISION-Item
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Finaler Auth-Ansatz\
+	\'95	Minimaler User Profile Scope\
+	\'95	Minimaler Goal Model Scope\
+	\'95	Food Search V1 Standard\
+	\'95	Portion Scope V1\
+	\'95	Saved Meals V1?\
+	\'95	Workout Templates V1?\
+	\'95	Recovery Score ja/nein\
+	\'95	Current State Definition\
+	\'95	Basic V1 Experience Level\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Empfohlene Struktur pro Decision-Item
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Titel
+\f4\b0\fs28 \
+\
+Kurz und hart\
+\
+
+\f0\b\fs30 Beschreibung enth\'e4lt:
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	die eigentliche Entscheidungsfrage\
+	\'95	warum sie wichtig ist\
+	\'95	was sie blockiert\
+	\'95	welche Optionen es gibt\
+	\'95	Empfehlung\
+	\'95	finaler Beschluss\
+	\'95	Auswirkungen auf Folgeartefakte\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Wichtige Regel
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Erst wenn decision_state = decided, d\'fcrfen abh\'e4ngige PRDs/SPECS auf \'84approved / ready for build\'93 gehen.
+\f4\b0\fs28 \
+\
+Das ist einer deiner wichtigsten Determinismus-Hebel.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 13. WIE DU PRDS IN PLANE ABBILDEST
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Jedes PRD bekommt ein eigenes PRD-Item
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	PRD Identity / User Foundation\
+	\'95	PRD Nutrition Data Foundation\
+	\'95	PRD Nutrition Logging & Calculation\
+	\'95	PRD Training Foundation & Logging\
+	\'95	PRD Recovery Foundation\
+	\'95	PRD Timeline / State Access\
+	\'95	PRD V1 Experience Layer\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Ein PRD-Item muss enthalten
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Problem\
+	\'95	Ziel\
+	\'95	Scope\
+	\'95	Non-Scope\
+	\'95	Core Flow\
+	\'95	Entities\
+	\'95	State / Inputs / Outputs\
+	\'95	Acceptance\
+	\'95	Abh\'e4ngigkeiten\
+	\'95	relevante Decisions\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Regel
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Kein PRD darf freigegeben werden, wenn relevante Decisions noch offen sind.
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 14. WIE DU SPECS IN PLANE ABBILDEST
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Jedes konkrete definierte Systemteil bekommt ein SPEC-Item
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Goal Entity Spec\
+	\'95	User Profile Spec\
+	\'95	Food Search Spec\
+	\'95	Portion System Spec\
+	\'95	Workout Logging Flow Spec\
+	\'95	Recovery Check-in Spec\
+	\'95	Current State Access Spec\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Regel
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Jede Spec muss genau EINEM PRD oder einem klaren PRD-Bereich zuordenbar sein.
+\f4\b0\fs28 \
+\
+Nicht:\
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	freie Spezifikation\
+	\'95	spontane technische Detailliebe\
+	\'95	\'84war doch logisch\'93\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 15. WIE DU WORK ORDERS IN PLANE ABBILDEST
+\f4\b0\fs28 \
+\
+Das ist sp\'e4ter deine operative Goldschicht.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Jedes kleine ausf\'fchrbare Arbeitspaket bekommt ein WORK_ORDER-Item
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Gute Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Define minimal V1 goal object\
+	\'95	Write recovery input enum proposal\
+	\'95	Draft state transition rules for meal logging\
+	\'95	Split nutrition search spec into contracts and ranking rules\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Schlechte Beispiele
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Build nutrition module\
+	\'95	Create training system\
+	\'95	Implement user foundation\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Regel
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Wenn ein Work Order in einem Satz zu gro\'df klingt, ist er zu gro\'df.
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Ein guter WO muss enthalten
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	exakte Aufgabe\
+	\'95	erlaubter Scope\
+	\'95	Input-Artefakte\
+	\'95	Output-Artefakte\
+	\'95	Stop-Regeln\
+	\'95	Acceptance\
+	\'95	wenn n\'f6tig: betroffene Dateien / betroffene Specs\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 16. DIE 5 WICHTIGSTEN VIEWS, DIE DU IN PLANE ANLEGEN SOLLTEST
+\f4\b0\fs28 \
+\
+Das ist der Teil, der es wirklich nutzbar macht.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 VIEW 1 \'97 V1 DECISION BOARD
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Alle offenen / blockierenden / entschiedenen V1-Entscheidungen\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Gruppierung
+\f4\b0\fs28 \
+\
+nach 
+\f6 decision_state
+\f4 \
+\
+
+\f0\b\fs30 Filter
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	artifact_level = decision\
+	\'95	v1_scope_status = in_v1_now\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Das ist dein:
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 t\'e4gliches Decision-Cockpit
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 VIEW 2 \'97 WORKSTREAM CONTROL
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Zeigt alle Artefakte pro Workstream\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Gruppierung
+\f4\b0\fs28 \
+\
+nach 
+\f6 workstream
+\f4 \
+\
+
+\f0\b\fs30 Filter
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	v1_scope_status = in_v1_now\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Das ist dein:
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 V1-Landkarten-View
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 VIEW 3 \'97 ARTIFACT PIPELINE
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Zeigt, in welcher Artefaktstufe sich Arbeit befindet\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Gruppierung
+\f4\b0\fs28 \
+\
+nach 
+\f6 artifact_level
+\f4 \
+\
+
+\f0\b\fs30 Sortierung
+\f4\b0\fs28 \
+\
+nach 
+\f6 artifact_status
+\f4 \
+\
+
+\f0\b\fs30 Das ist dein:
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Produktionsband-View
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 VIEW 4 \'97 BUILD READY QUEUE
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Zeigt nur Dinge, die wirklich umsetzbar sind\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Filter
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	build_readiness = worker_ready\
+	\'95	artifact_level = work_order\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Das ist dein:
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 echte Execution Queue
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 VIEW 5 \'97 GOVERNANCE RISK VIEW
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Zweck
+\f4\b0\fs28 \
+\
+Zeigt alle potenziellen Strukturprobleme\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Filter
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	governance_flag is not empty\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Das ist dein:
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Drift- und Fehlerwarnsystem
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 17. WIE CLAUDE MIT PLANE ZUSAMMENSPIELEN SOLL
+\f4\b0\fs28 \
+\
+Claude soll Plane 
+\f5\b nicht ersetzen
+\f4\b0 .\
+\
+Claude soll Plane 
+\f5\b bedienen und bef\'fcllen helfen
+\f4\b0 .\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Claude soll helfen bei:
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Decision-Vorlagen\
+	\'95	PRD-Drafts\
+	\'95	Spec-Drafts\
+	\'95	WO-Zerlegung\
+	\'95	Review / Gap Detection\
+	\'95	Governance-Pr\'fcfung\
+	\'95	Missing-Artifact-Erkennung\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Claude soll NICHT tun:
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	Wahrheit direkt in Plane \'84erfinden\'93\
+	\'95	Entscheidungen stillschweigend treffen\
+	\'95	unklare Dinge direkt operationalisieren\
+	\'95	Governance ignorieren\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 18. DIE RICHTIGE ARBEITSLOGIK MIT PLANE
+\f4\b0\fs28 \
+\
+Die saubere Arbeitsweise ist:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 Schritt 1
+\f4\b0\fs28 \
+\
+Offene Entscheidung identifizieren\
+\
+
+\f0\b\fs34 Schritt 2
+\f4\b0\fs28 \
+\
+Decision in Plane sichtbar machen\
+\
+
+\f0\b\fs34 Schritt 3
+\f4\b0\fs28 \
+\
+Decision sauber kl\'e4ren\
+\
+
+\f0\b\fs34 Schritt 4
+\f4\b0\fs28 \
+\
+PRD daraus ableiten\
+\
+
+\f0\b\fs34 Schritt 5
+\f4\b0\fs28 \
+\
+PRD in Specs zerlegen\
+\
+
+\f0\b\fs34 Schritt 6
+\f4\b0\fs28 \
+\
+Specs in kleine WOs zerlegen\
+\
+
+\f0\b\fs34 Schritt 7
+\f4\b0\fs28 \
+\
+nur worker_ready WOs bauen\
+\
+
+\f0\b\fs34 Schritt 8
+\f4\b0\fs28 \
+\
+Review und Acceptance\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 19. WAS DU NICHT TUN SOLLTEST
+\f4\b0\fs28 \
+\
+Nicht tun:\
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	sofort 500 Items anlegen\
+	\'95	jedes Brainstorming in Plane kippen\
+	\'95	Plane als Gedankenm\'fcllhalde verwenden\
+	\'95	zu viele Labels / Felder / Spielzeugstrukturen bauen\
+	\'95	Entscheidungen in Kommentaren verlieren\
+	\'95	Specs und WOs vermischen\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 20. DER RICHTIGE START F\'dcR DIE ERSTE WOCHE
+\f4\b0\fs28 \
+\
+Du brauchst NICHT sofort alles.\
+\
+F\'fcr einen sauberen Start reicht:\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs34 \cf2 ZUERST ANLEGEN
+\f4\b0\fs28 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Projekte
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	LUMEOS_CORE_FOUNDATION\
+	\'95	LUMEOS_DECISIONS\
+	\'95	LUMEOS_PRDS\
+	\'95	LUMEOS_SPECS\
+	\'95	LUMEOS_WORKORDERS\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Custom Fields
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	artifact_level\
+	\'95	workstream\
+	\'95	v1_scope_status\
+	\'95	decision_state\
+	\'95	source_of_truth_doc\
+	\'95	artifact_status\
+	\'95	build_readiness\
+	\'95	governance_flag\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Views
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	V1 DECISION BOARD\
+	\'95	WORKSTREAM CONTROL\
+	\'95	ARTIFACT PIPELINE\
+	\'95	BUILD READY QUEUE\
+	\'95	GOVERNANCE RISK VIEW\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs30 \cf2 Erste Items
+\f4\b0\fs28 \
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	die 12 Kernentscheidungen aus 
+\f6 22_V1_DECISION_SHEET.md
+\f4 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 21. EIN-SATZ-DEFINITION
+\f4\b0\fs28 \
+\
+
+\f0\b\fs44 Plane wird f\'fcr LumeOS nicht als gew\'f6hnliches Task-Tool genutzt, sondern als visuelle Control Plane f\'fcr Decisions, Artefakte, Governance, Delivery und operative Build-Bereitschaft.
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 22. SCHLUSSREGEL
+\f4\b0\fs28 \
+\
+Wenn k\'fcnftig unklar ist, ob etwas in Plane angelegt werden soll, gilt immer zuerst diese Frage:\
+\
+
+\f0\b\fs44 Ist das ein echtes steuerbares Artefakt im kontrollierten LumeOS-System \'96 oder nur lose Aktivit\'e4t?
+\f4\b0\fs28 \
+\
+Wenn es nur lose Aktivit\'e4t ist, geh\'f6rt es nicht in Plane.
+\f1\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3\fs28 \cf4 ---\
+\
+# Meine klare Einsch\'e4tzung\
+\
+Das ist jetzt **der erste wirklich brauchbare pragmatische Weg**.\
+\
+Nicht perfekt.  \
+Aber **realistisch, schnell testbar und kontrollierbar**.\
+\
+Und das ist wichtiger.\
+\
+---\
+\
+# Wenn du es richtig effizient machen willst, sind jetzt die **zwei sinnvollsten n\'e4chsten Schritte**:\
+\
+## \cf6 1.\cf4 \
+Ich generiere dir direkt:\
+\
+# `PLANE_SETUP_CHECKLIST.md`\
+\
+Damit du Plane **ohne Nachdenken sauber aufsetzt**\
+\
+und direkt danach:\
+\
+## \cf6 2.\cf4 \
+Ich generiere dir:\
+\
+# `PLANE_INITIAL_ITEMS_SEED.md`\
+\
+Das w\'e4ren dann direkt die **ersten konkreten Items**, die du in Plane anlegen sollst:\
+\
+- die \cf6 12\cf4  Decisions\
+- erste PRD-Platzhalter\
+- erste Governance-Risiken\
+- erste Workstream-Struktur\
+\
+---\
+\
+## Das w\'e4re jetzt wirklich n\'fctzlich.\
+Nicht Theorie.  \
+Sondern direkt einsatzbereit.\
+\
+Wenn du willst, mache ich dir jetzt genau diese beiden.}

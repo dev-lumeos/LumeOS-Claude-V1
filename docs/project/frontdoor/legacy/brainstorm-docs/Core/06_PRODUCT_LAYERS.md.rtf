@@ -1,0 +1,713 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 06_PRODUCT_LAYERS\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **Schichtenlogik** von LumeOS.\
+\
+Es beantwortet die Frage:\
+\
+# Aus welchen funktionalen Ebenen besteht LumeOS, und wie greifen diese Ebenen logisch ineinander?\
+\
+Dieses Dokument ist wichtig, weil LumeOS nicht als lose Sammlung von Modulen gedacht werden darf.\
+\
+LumeOS ist ein **mehrschichtiges System**.\
+\
+Wenn diese Schichten nicht sauber getrennt und richtig angeordnet sind, entstehen fast automatisch:\
+\
+- Modulchaos\
+- doppelte Logik\
+- unklare Zust\'e4ndigkeiten\
+- unsaubere Datenfl\'fcsse\
+- falsche API-Schnitte\
+- Buddy ohne echten Kern\
+- UI vor Systemlogik\
+\
+---\
+\
+## Grundregel\
+\
+LumeOS wird **von innen nach au\'dfen** gebaut.\
+\
+Nicht von au\'dfen nach innen.\
+\
+Das bedeutet:\
+\
+- nicht zuerst UI\
+- nicht zuerst Screens\
+- nicht zuerst API-Silos\
+- nicht zuerst Infrastruktur\
+- nicht zuerst Business-Layer\
+\
+Sondern:\
+\
+- zuerst Fundament\
+- dann Zustandsdom\'e4nen\
+- dann Intelligenz\
+- dann Interaktion\
+- dann menschliche und kommerzielle Erweiterung\
+\
+---\
+\
+# Gesamtmodell der Schichten\
+\
+LumeOS besteht aus f\'fcnf Hauptschichten:\
+\
+## Layer 1 \'97 Foundation Layer\
+Grundlage f\'fcr Identit\'e4t, Profil, Pr\'e4ferenzen und Ziele\
+\
+## Layer 2 \'97 State Layer\
+Dom\'e4nen, die den Zustand des Nutzers erfassen und beschreiben\
+\
+## Layer 3 \'97 Intelligence Layer\
+Dom\'e4nen, die Zustand interpretieren, priorisieren und in Entscheidungen \'fcbersetzen\
+\
+## Layer 4 \'97 Interaction Layer\
+Dom\'e4nen, \'fcber die der Nutzer LumeOS erlebt\
+\
+## Layer 5 \'97 Human & Expansion Layer\
+Dom\'e4nen f\'fcr Zusammenarbeit, Programme, Commerce und sp\'e4tere Erweiterungen\
+\
+---\
+\
+# 1. FOUNDATION LAYER\
+\
+## Zweck\
+\
+Der Foundation Layer legt fest:\
+\
+- wer der Nutzer ist\
+- in welchem Kontext er sich befindet\
+- welche Ziele er hat\
+- welche Pr\'e4ferenzen gelten\
+- welche Einschr\'e4nkungen relevant sind\
+\
+Ohne diesen Layer w\'e4re alles dar\'fcber unpr\'e4zise, generisch oder falsch priorisiert.\
+\
+---\
+\
+## Bestandteile\
+\
+### 1. Identity & Access\
+- Account\
+- Login\
+- OAuth\
+- Rollen\
+- Sessions\
+- Zugriffskontrolle\
+\
+### 2. User Profile\
+- Basisdaten\
+- K\'f6rperdaten\
+- Erfahrungslevel\
+- Lebensstil\
+- Region / Sprache\
+\
+### 3. Preferences\
+- Einheiten\
+- Sprache\
+- Reminder-Logik\
+- Interaktionspr\'e4ferenzen\
+- Konfiguration\
+\
+### 4. Goals & Strategy\
+- Hauptziele\
+- Unterziele\
+- Priorit\'e4ten\
+- Zielphasen\
+- Zielkonflikte\
+- strategische Ausrichtung\
+\
+### 5. Constraints\
+- Restriktionen\
+- Unvertr\'e4glichkeiten\
+- Limitierungen\
+- sensible Grenzen\
+\
+---\
+\
+## Aufgabe des Layers\
+\
+Der Foundation Layer beantwortet im Kern:\
+\
+- F\'fcr wen arbeitet das System?\
+- Unter welchen Bedingungen?\
+- Mit welchen Zielen?\
+- Mit welchen Grenzen?\
+\
+---\
+\
+## Typische Outputs dieses Layers\
+\
+- Nutzerkontext\
+- Zielkontext\
+- Pr\'e4ferenzkontext\
+- Rollen-/Zugriffskontext\
+- Constraint-Kontext\
+\
+Diese Outputs flie\'dfen in fast alle h\'f6heren Schichten.\
+\
+---\
+\
+## Wichtige Regel\
+\
+Der Foundation Layer enth\'e4lt **keine Guidance**, **keine Buddy-Oberfl\'e4che** und **keine eigentliche Entscheidungslogik**.\
+\
+Er liefert nur den notwendigen Grundkontext.\
+\
+---\
+\
+# 2. STATE LAYER\
+\
+## Zweck\
+\
+Der State Layer beschreibt den **realen Zustand des Nutzers**.\
+\
+Hier liegen die Dom\'e4nen, die erfassen, was beim Nutzer fachlich gerade passiert oder \'fcber Zeit passiert ist.\
+\
+Diese Schicht ist das Rohmaterial f\'fcr sp\'e4tere Interpretation.\
+\
+---\
+\
+## Bestandteile\
+\
+### 1. Nutrition\
+- Foods\
+- Portions\
+- Meals\
+- Nutrients\
+- Meal Logging\
+- Ern\'e4hrungsverlauf\
+\
+### 2. Training\
+- Exercises\
+- Workouts\
+- Sessions\
+- Set Logs\
+- Training History\
+- Progressionsdaten\
+\
+### 3. Recovery\
+- Schlaf\
+- M\'fcdigkeit\
+- Stress\
+- Soreness\
+- Energy\
+- subjektive Tagesform\
+\
+### 4. Supplements\
+- Supplemente\
+- Produkte\
+- Inhaltsstoffe\
+- Protokolle\
+- Einnahme\
+- Timing\
+\
+### 5. Medical Awareness\
+- Biomarker\
+- Marker-Messungen\
+- Referenzbereiche\
+- Verlauf\
+- Auff\'e4lligkeiten\
+- Gesundheitskontext\
+\
+### 6. State-Nahe Events\
+- Check-ins\
+- Adherence\
+- Symptom Logs\
+- Habit Events\
+- Timeline Events\
+\
+---\
+\
+## Aufgabe des Layers\
+\
+Der State Layer beantwortet im Kern:\
+\
+- Wie sieht der Nutzerzustand aktuell aus?\
+- Was ist historisch passiert?\
+- Welche Signale liegen vor?\
+- Welche Daten beschreiben Alltag, K\'f6rper, Verhalten und Verlauf?\
+\
+---\
+\
+## Typische Outputs dieses Layers\
+\
+- aktueller Nutrition-Zustand\
+- aktueller Training-Zustand\
+- aktueller Recovery-Zustand\
+- aktueller Supplement-Zustand\
+- aktueller Health-Kontext\
+- Verlaufssignale\
+- Adherence-Signale\
+- Tagesstatus\
+\
+---\
+\
+## Wichtige Regel\
+\
+Der State Layer speichert und strukturiert Realit\'e4t.\
+\
+Er entscheidet noch nicht, **was daraus zu tun ist**.\
+\
+Das ist Aufgabe des n\'e4chsten Layers.\
+\
+---\
+\
+# 3. INTELLIGENCE LAYER\
+\
+## Zweck\
+\
+Der Intelligence Layer ist der eigentliche Kern von LumeOS.\
+\
+Hier wird aus Daten und Zustand:\
+\
+- Kontext\
+- Priorit\'e4t\
+- Bewertung\
+- Entscheidung\
+- Recommendation\
+- Guidance-F\'e4higkeit\
+\
+Ohne diesen Layer w\'e4re LumeOS nur ein komplexer Tracker.\
+\
+---\
+\
+## Bestandteile\
+\
+### 1. Memory & Context\
+- persistente Memory Items\
+- Muster\
+- Timeline-Kontext\
+- Pr\'e4ferenzlernen\
+- Wiedererkennungslogik\
+- Verlaufswissen\
+\
+### 2. Context Synthesis\
+- Zusammenf\'fchrung mehrerer Dom\'e4nen\
+- Bildung eines Zustandsbildes\
+- Aufl\'f6sung von Widerspr\'fcchen\
+- Einordnung von Verlauf und Gegenwart\
+\
+### 3. Decision Engine\
+- Entscheidungsregeln\
+- Trigger\
+- Zielgewichtung\
+- Tradeoff-Logik\
+- Priorisierungslogik\
+- Konfliktbehandlung\
+\
+### 4. Recommendation Engine\
+- Handlungsvorschl\'e4ge\
+- Daily Focus\
+- Interventionen\
+- Vorschl\'e4ge f\'fcr Training, Ern\'e4hrung, Recovery, Supplemente\
+- situationsabh\'e4ngige Guidance\
+\
+### 5. Safety & Guardrails\
+- Unsicherheitsbehandlung\
+- rote Linien\
+- sensible Bereiche\
+- Eskalation\
+- Begrenzung von Empfehlungen\
+- Sicherheitslogik\
+\
+### 6. Insight & Prioritization\
+- relevante Insights\
+- What matters now\
+- Trendverdichtung\
+- Zusammenfassungen\
+- Priorit\'e4tensignale\
+\
+---\
+\
+## Aufgabe des Layers\
+\
+Der Intelligence Layer beantwortet im Kern:\
+\
+- Was bedeutet der aktuelle Zustand?\
+- Was ist wirklich relevant?\
+- Was hat Priorit\'e4t?\
+- Was sollte empfohlen werden?\
+- Was sollte gerade besser nicht empfohlen werden?\
+- Wo ist Vorsicht n\'f6tig?\
+- Wo braucht es Eskalation?\
+\
+---\
+\
+## Typische Outputs dieses Layers\
+\
+- Recommendation\
+- Recommendation Reason\
+- Priority Signal\
+- Risk Flag\
+- Insight\
+- Daily Focus\
+- Escalation Case\
+- Explanation-Bausteine\
+- Buddy-konformer Kontext\
+\
+---\
+\
+## Wichtige Regel\
+\
+Dieser Layer ist **der Motor** von LumeOS.\
+\
+Buddy, Screens und UI d\'fcrfen **nie** ihre eigene parallele Logik neben diesem Layer aufbauen.\
+\
+Sonst zerf\'e4llt das System.\
+\
+---\
+\
+# 4. INTERACTION LAYER\
+\
+## Zweck\
+\
+Der Interaction Layer ist die Ebene, \'fcber die der Nutzer LumeOS erlebt.\
+\
+Hier werden die Ergebnisse des Systems in nutzbare Interaktion \'fcbersetzt.\
+\
+Dieser Layer ist wichtig, aber nicht der Kernmotor.\
+\
+Er ist die **Ausgabe- und Dialogoberfl\'e4che** des Systems.\
+\
+---\
+\
+## Bestandteile\
+\
+### 1. Buddy / Companion\
+- Konversation\
+- Fragen & Antworten\
+- Guidance-Ausgabe\
+- Dialogf\'fchrung\
+- Kontextnutzung\
+- proaktive Begleitung\
+\
+### 2. Daily Guidance\
+- Tagesfokus\
+- konkrete n\'e4chste Schritte\
+- Priorit\'e4ten f\'fcr heute\
+- kleine Umsetzungsimpulse\
+\
+### 3. Check-ins\
+- Zustandsabfragen\
+- schnelle Eingabe\
+- subjektive Updates\
+- Tagesstatus-Einholung\
+\
+### 4. Explanations\
+- Warum wird etwas empfohlen?\
+- Welche Daten waren relevant?\
+- Welche Unsicherheit besteht?\
+- Wie ist ein Wert zu verstehen?\
+\
+### 5. Summaries\
+- Tageszusammenfassungen\
+- Wochenr\'fcckblicke\
+- Trend\'fcbersichten\
+- Verdichtung f\'fcr den Nutzer\
+\
+### 6. Reminders & Nudges\
+- adaptive Reminder\
+- proaktive Hinweise\
+- Re-Engagement\
+- kleine Verhaltensimpulse\
+\
+### 7. Voice\
+- Spracheingabe\
+- Sprachausgabe\
+- Hands-free Usecases\
+- Buddy Voice Presence\
+- sp\'e4tere Companion-Erweiterung\
+\
+---\
+\
+## Aufgabe des Layers\
+\
+Der Interaction Layer beantwortet im Kern:\
+\
+- Wie erlebt der Nutzer das System?\
+- Wie kommen Guidance und Priorit\'e4ten beim Nutzer an?\
+- Wie interagiert Buddy mit dem Nutzer?\
+- Wie wird aus Logik ein nutzbares t\'e4gliches Erlebnis?\
+\
+---\
+\
+## Typische Inputs dieses Layers\
+\
+- Recommendations\
+- Insights\
+- Priority Signals\
+- Risk Flags\
+- Memory-Kontext\
+- Goal-Kontext\
+- aktuelle State-Signale\
+\
+---\
+\
+## Typische Outputs dieses Layers\
+\
+- Buddy-Antworten\
+- Guidance Items\
+- Daily Focus\
+- Erkl\'e4rungen\
+- Zusammenfassungen\
+- Check-in-Daten\
+- Reminder- und Nudge-Events\
+\
+---\
+\
+## Wichtige Regel\
+\
+Der Interaction Layer darf nicht zum heimlichen Entscheidungsmotor werden.\
+\
+Er darf Dinge erkl\'e4ren, \'fcbersetzen, b\'fcndeln und kommunizieren.\
+\
+Er darf aber nicht parallel eigene Produktlogik erfinden.\
+\
+---\
+\
+# 5. HUMAN & EXPANSION LAYER\
+\
+## Zweck\
+\
+Dieser Layer erweitert LumeOS um:\
+\
+- menschliche Zusammenarbeit\
+- Betreuung\
+- Programme\
+- Bildung\
+- Commerce\
+- Integrationen\
+- Komfortfunktionen\
+- zuk\'fcnftige Ausbaupfade\
+\
+Er ist strategisch wichtig, aber nicht Fundament des Produkts.\
+\
+---\
+\
+## Bestandteile\
+\
+### 1. Coach Layer\
+- Coach Profile\
+- Client Relationships\
+- Coach Dashboard\
+- Coach Notes\
+- Coach Assistance\
+- Coach Recommendations\
+\
+### 2. Human Escalation\
+- Human Review\
+- Escalation Cases\
+- \'dcbergabe an Menschen\
+- Boundary Handling\
+\
+### 3. Programs & Plans\
+- Trainingsprogramme\
+- Ern\'e4hrungspl\'e4ne\
+- Recovery-Pl\'e4ne\
+- Supplement-Protokolle\
+- Phasen-Programme\
+\
+### 4. Content & Education\
+- strukturierte Wissensbausteine\
+- Education Layer\
+- kontextbezogener Lern-Content\
+\
+### 5. Marketplace & Commerce\
+- Produkte\
+- Angebote\
+- Empfehlungen mit Commerce-Bezug\
+- sp\'e4tere Monetarisierung\
+\
+### 6. Wearables & Integrations\
+- externe Datenquellen\
+- Health-Plattformen\
+- Tracker\
+- Ger\'e4te\
+\
+### 7. Visual / Vision\
+- Mahlzeitfotos\
+- Progress-Bilder\
+- Form-Feedback\
+- visuelle Erweiterungen\
+\
+### 8. Advanced Automation\
+- weitergehende Assistenz-Flows\
+- komplexe Re-Engagement-Logik\
+- sp\'e4tere Betriebsautomationen\
+\
+---\
+\
+## Aufgabe des Layers\
+\
+Der Human & Expansion Layer beantwortet im Kern:\
+\
+- Wie wird das System mit Menschen erg\'e4nzt?\
+- Wie wird es wirtschaftlich oder organisatorisch erweitert?\
+- Wie wird es bequemer, reichhaltiger oder leistungsf\'e4higer?\
+\
+---\
+\
+## Wichtige Regel\
+\
+Dieser Layer darf den Produktkern st\'e4rken.\
+\
+Er darf ihn aber nicht definieren.\
+\
+Wenn Foundation, State, Intelligence und Interaction noch nicht sauber stehen, darf dieser Layer nicht dominieren.\
+\
+---\
+\
+# 6. LOGISCHE FLUSSRICHTUNG ZWISCHEN DEN LAYERN\
+\
+Die Hauptflussrichtung in LumeOS ist:\
+\
+## Foundation \uc0\u8594  State \u8594  Intelligence \u8594  Interaction \u8594  Human/Expansion\
+\
+Das bedeutet:\
+\
+### Foundation\
+liefert Kontext\
+\
+### State\
+liefert Zustand und Verlauf\
+\
+### Intelligence\
+liefert Bewertung, Priorit\'e4t, Entscheidung und Guidance-Logik\
+\
+### Interaction\
+liefert Nutzererlebnis und Kommunikation\
+\
+### Human/Expansion\
+liefert Zusammenarbeit, Zusatzwert, Reichweite und Erweiterung\
+\
+---\
+\
+# 7. WICHTIGE ABH\'c4NGIGKEITEN ZWISCHEN DEN LAYERN\
+\
+---\
+\
+## Foundation ist Voraussetzung f\'fcr alles\
+Ohne Nutzer-, Ziel- und Pr\'e4ferenzkontext wird alles unpr\'e4zise.\
+\
+---\
+\
+## State ist Voraussetzung f\'fcr echte Intelligenz\
+Ohne gute Datendom\'e4nen hat die Intelligence-Schicht nichts Belastbares, womit sie arbeiten kann.\
+\
+---\
+\
+## Intelligence ist Voraussetzung f\'fcr Buddy\
+Ohne Recommendation, Prioritization und Context Synthesis w\'e4re Buddy nur ein sch\'f6ner Chat.\
+\
+---\
+\
+## Interaction ist Voraussetzung f\'fcr Alltagstauglichkeit\
+Auch gute interne Logik bringt wenig, wenn sie nicht sauber beim Nutzer ankommt.\
+\
+---\
+\
+## Human/Expansion ist Verst\'e4rkung, nicht Fundament\
+Diese Schicht macht das Produkt st\'e4rker, aber sie rettet keinen schwachen Kern.\
+\
+---\
+\
+# 8. WAS DAS KONKRET F\'dcR DEN BAU BEDEUTET\
+\
+---\
+\
+## Nicht zul\'e4ssig\
+- Buddy bauen, bevor Recommendation Core existiert\
+- Coach-Layer bauen, bevor User- und State-Grundlagen sauber stehen\
+- Marketplace bauen, bevor Produktnutzen steht\
+- Voice priorisieren, bevor Daily Guidance sauber ist\
+- Screens bauen, die Logik simulieren, die intern noch gar nicht existiert\
+\
+---\
+\
+## Zul\'e4ssig\
+- Foundation stabilisieren\
+- Nutrition Foundation aufbauen\
+- Training und Recovery als echte Zustandsdom\'e4nen erg\'e4nzen\
+- fr\'fchzeitig Intelligence-Struktur mitdenken\
+- Buddy erst dann als echte Oberfl\'e4che nutzen, wenn echte Guidance dahinter steht\
+\
+---\
+\
+# 9. LAYER-PERSPEKTIVE AUF DEN PRODUKTKERN\
+\
+Der eigentliche Kern von LumeOS liegt nicht in allen Schichten gleicherma\'dfen.\
+\
+---\
+\
+## H\'e4rtester Kern\
+- Goals & Strategy\
+- Nutrition\
+- Training\
+- Recovery\
+- Memory & Context\
+- Decision Engine\
+- Recommendation Engine\
+- Safety & Guardrails\
+- Buddy / Companion\
+\
+---\
+\
+## Unterst\'fctzender Kern\
+- Identity & Access\
+- User Profile\
+- Preferences\
+- Supplements\
+- Medical Awareness\
+- Daily Guidance\
+- Check-ins\
+- Explanations\
+- Summaries\
+- Reminders / Nudges\
+\
+---\
+\
+## Ausbau-Schichten\
+- Coach Layer\
+- Programs\
+- Content\
+- Marketplace\
+- Wearables\
+- Visual Layer\
+- Voice\
+- Human Escalation\
+- Advanced Automation\
+\
+---\
+\
+# 10. WICHTIGSTE STRATEGISCHE ERKENNTNIS\
+\
+LumeOS darf nie wieder als \'84viele Module nebeneinander\'93 gedacht werden.\
+\
+Richtig ist:\
+\
+# LumeOS ist ein geschichtetes Entscheidungs- und Begleitsystem.\
+\
+Die Module existieren nicht isoliert.\
+\
+Sie sind Schichten innerhalb eines zusammenh\'e4ngenden Systems.\
+\
+---\
+\
+# 11. SCHLUSSREGEL\
+\
+Wenn k\'fcnftig eine neue Funktion, ein neues Modul oder eine technische Struktur diskutiert wird, muss immer zuerst gekl\'e4rt werden:\
+\
+- In welchem Layer geh\'f6rt es?\
+- Von welchen unteren Layern h\'e4ngt es ab?\
+- Welche oberen Layer w\'fcrden davon profitieren?\
+- St\'e4rkt es den Kern oder nur eine sp\'e4tere Erweiterung?\
+\
+Wenn diese Einordnung nicht klar ist, ist die Funktion noch nicht sauber gedacht.}

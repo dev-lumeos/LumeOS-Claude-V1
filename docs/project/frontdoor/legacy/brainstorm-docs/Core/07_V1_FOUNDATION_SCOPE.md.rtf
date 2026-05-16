@@ -1,0 +1,488 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 07_V1_FOUNDATION_SCOPE\
+\
+## Zweck\
+\
+Dieses Dokument definiert den **ersten echten Build-Scope** f\'fcr den sauberen Neustart von LumeOS.\
+\
+Es beantwortet nicht:\
+\
+- was LumeOS langfristig alles k\'f6nnen darf\
+- welche Features sp\'e4ter spannend sind\
+- welche Ausbaupfade existieren\
+\
+Es beantwortet ausschlie\'dflich:\
+\
+# Was jetzt zuerst gebaut werden muss, damit LumeOS auf einem stabilen Fundament steht.\
+\
+---\
+\
+## Grundregel\
+\
+Dieses Dokument ist bewusst **nicht maximal vollst\'e4ndig**.\
+\
+Es ist bewusst **hart reduziert**.\
+\
+Das ist Absicht.\
+\
+Denn:\
+\
+# Ein gro\'dfes Produkt scheitert fast nie an zu wenig Vision.\
+# Es scheitert fast immer an falscher Reihenfolge.\
+\
+---\
+\
+# 1. AUSGANGSPUNKT\
+\
+Der reale Neustart-Stand ist aktuell:\
+\
+- die Produktrekonstruktion l\'e4uft\
+- alte technische Strukturen gelten nicht als bindend\
+- Nutrition Foundation wurde begonnen\
+- OAuth / Identity Foundation wurde begonnen\
+- alles andere gilt praktisch als **nicht stabil vorhanden**\
+\
+Das ist der tats\'e4chliche Startpunkt.\
+\
+---\
+\
+# 2. ZIEL DIESES ERSTEN BUILD-SCOPES\
+\
+Der erste echte Build-Scope hat nur ein Ziel:\
+\
+# Ein belastbares Fundament schaffen, auf dem Buddy sp\'e4ter wirklich sinnvoll arbeiten kann.\
+\
+Das bedeutet:\
+\
+- noch nicht \'84das ganze Produkt\'93\
+- noch nicht \'84alle Features\'93\
+- noch nicht \'84alle Dom\'e4nen\'93\
+- noch nicht \'84alles, was geil w\'e4re\'93\
+\
+Sondern:\
+\
+- die kleinste saubere Produktbasis, die logisch richtig ist\
+\
+---\
+\
+# 3. WAS V1 FOUNDATION LEISTEN MUSS\
+\
+Am Ende dieses Scopes muss LumeOS in der Lage sein:\
+\
+- einen Nutzer sauber zu verwalten\
+- dessen Profil und Ziele zu kennen\
+- Ern\'e4hrung strukturiert abzubilden\
+- Training strukturiert abzubilden\
+- Recovery strukturiert abzubilden\
+- erste relevante Zust\'e4nde zu speichern\
+- diese Zust\'e4nde sauber zusammenzuf\'fchren\
+- Buddy sp\'e4ter mit echten, sinnvollen Grundlagen zu versorgen\
+\
+Noch nicht n\'f6tig ist, dass das System bereits \'84magisch\'93 wirkt.\
+\
+Wichtig ist zuerst:\
+\
+# Das Fundament muss echt und belastbar sein.\
+\
+---\
+\
+# 4. WAS V1 FOUNDATION NOCH NICHT SEIN MUSS\
+\
+V1 Foundation ist **noch nicht**:\
+\
+- der vollst\'e4ndige Buddy\
+- das fertige AI-Produkt\
+- das Coach-System\
+- das Medical-System in Tiefe\
+- der Marketplace\
+- Voice\
+- Vision\
+- Wearables\
+- High-End-Automation\
+- vollautomatische Intelligenz\
+\
+Diese Dinge sind legitim.\
+\
+Aber sie geh\'f6ren **nicht** in den ersten harten Kern-Bau.\
+\
+---\
+\
+# 5. V1 FOUNDATION \'97 PFLICHTBEREICHE\
+\
+Diese Bereiche sind Teil des ersten echten Baukerns.\
+\
+---\
+\
+# A. IDENTITY & USER FOUNDATION\
+\
+## Muss enthalten\
+\
+### 1. Auth / Access\
+- Login\
+- OAuth\
+- Session-Grundlage\
+- Zugriffsbasis\
+\
+### 2. User\
+- Nutzerobjekt\
+- Profilbezug\
+- Grundidentit\'e4t\
+\
+### 3. User Profile\
+- Basisdaten\
+- K\'f6rperdaten\
+- Erfahrungsniveau\
+- relevante Personalisierungsdaten\
+\
+### 4. Preferences\
+- Einheiten\
+- Sprache\
+- Basispr\'e4ferenzen\
+\
+### 5. Goals\
+- Hauptziel\
+- ggf. erste Unterziele\
+- einfache Zielpriorisierung\
+\
+---\
+\
+## Warum Pflicht\
+Ohne Nutzer-, Profil- und Zielkontext wird alles danach generisch und schlecht.\
+\
+---\
+\
+# B. NUTRITION FOUNDATION\
+\
+## Muss enthalten\
+\
+### 1. Food Base\
+- Foods\
+- Canonical Food Layer\
+- Portions\
+- Makros\
+- Mikron\'e4hrstoffe\
+- Suchbarkeit\
+\
+### 2. Meal Structure\
+- Meal\
+- Meal-Komponenten\
+- Meal Logging\
+- Tagesbezug\
+\
+### 3. Nutrition Logging\
+- Food hinzuf\'fcgen\
+- Portionen nutzen\
+- Meals speichern\
+- Historie verwalten\
+\
+### 4. Nutrition Calculation\
+- Makros berechnen\
+- Mikros berechnen\
+- Tages-/Meal-Auswertung\
+- einfache Summenlogik\
+\
+### 5. Nutrition Usability\
+- menschenverst\'e4ndliche Suche\
+- sinnvolle Portionsebene\
+- praktikabler Logging-Flow\
+\
+---\
+\
+## Warum Pflicht\
+Nutrition ist bereits gestartet und eine der wichtigsten Core-Dom\'e4nen.\
+\
+---\
+\
+# C. TRAINING FOUNDATION\
+\
+## Muss enthalten\
+\
+### 1. Exercise Base\
+- \'dcbungen\
+- Kategorien\
+- Muskelgruppen\
+- Equipment\
+- Varianten-Grundlage\
+\
+### 2. Workout Base\
+- Workouts / Templates\
+- \'dcbungslisten\
+- Satz-/Rep-Struktur\
+\
+### 3. Workout Logging\
+- Sessions\
+- Sets\
+- Gewicht\
+- Reps\
+- Notizen\
+\
+### 4. History & Baseline Progression\
+- vergangene Workouts\
+- letzte Leistungen\
+- Basis-Historie\
+- erste einfache Progressionssicht\
+\
+---\
+\
+## Warum Pflicht\
+Training ist f\'fcr LumeOS genauso legitim wie Nutrition und muss fr\'fch sauber aufgebaut werden.\
+\
+---\
+\
+# D. RECOVERY FOUNDATION\
+\
+## Muss enthalten\
+\
+### 1. Recovery Inputs\
+- Schlaf\
+- Energie\
+- Stress\
+- Soreness\
+- subjektive Tagesform\
+\
+### 2. Recovery State\
+- tagesbezogener Recovery-Zustand\
+- Verlauf\
+- einfache Verdichtung\
+\
+### 3. Check-in Basis\
+- schneller Daily Check-in\
+- manuelle Eingabe\
+- sp\'e4tere Buddy-Nutzung vorbereiten\
+\
+---\
+\
+## Warum Pflicht\
+Recovery ist n\'f6tig, damit das System sp\'e4ter nicht eindimensional wird.\
+\
+---\
+\
+# E. CORE EVENT / TIMELINE FOUNDATION\
+\
+## Muss enthalten\
+\
+### 1. Zeitliche Zuordnung\
+- Logs und States m\'fcssen sauber zeitlich zuordenbar sein\
+\
+### 2. Verlauf\
+- Nutrition-Verlauf\
+- Training-Verlauf\
+- Recovery-Verlauf\
+- Goal-Kontext \'fcber Zeit\
+\
+### 3. Timeline-Grundlage\
+- wichtige Ereignisse m\'fcssen sp\'e4ter zusammenf\'fchrbar sein\
+\
+---\
+\
+## Warum Pflicht\
+Ohne Verlauf ist LumeOS nur ein Momentaufnahme-System.\
+\
+---\
+\
+# F. MINIMALE INTELLIGENCE-VORBEREITUNG\
+\
+Wichtig:\
+\
+In V1 Foundation wird **noch nicht der volle Intelligence Layer gebaut**.\
+\
+Aber gewisse Dinge m\'fcssen so angelegt werden, dass der sp\'e4tere Recommendation-/Buddy-Kern nicht blockiert wird.\
+\
+---\
+\
+## Muss enthalten\
+\
+### 1. Saubere State-Zusammenf\'fchrung\
+Das System muss sp\'e4ter mehrere Dom\'e4nen zusammen betrachten k\'f6nnen.\
+\
+### 2. Erste Kontextf\'e4higkeit\
+Profile, Goals und States m\'fcssen logisch verkn\'fcpfbar sein.\
+\
+### 3. Erste Bewertbarkeit\
+Die Daten m\'fcssen so vorliegen, dass sp\'e4ter Regeln und Guidance darauf aufsetzen k\'f6nnen.\
+\
+### 4. Erkl\'e4rbare Struktur\
+Datenmodelle d\'fcrfen nicht nur technisch, sondern auch logisch verst\'e4ndlich sein.\
+\
+---\
+\
+## Warum Pflicht\
+Wenn das Fundament nicht intelligence-f\'e4hig gebaut wird, muss sp\'e4ter alles wieder umgebaut werden.\
+\
+---\
+\
+# 6. WAS BEWUSST NICHT TEIL VON V1 FOUNDATION IST\
+\
+Diese Dinge sind legitim, aber **bewusst nicht Teil** des ersten harten Scopes.\
+\
+---\
+\
+## Nicht Teil\
+\
+### Buddy als vollst\'e4ndige Experience\
+- keine vollwertige Companion Experience\
+- kein ausgepr\'e4gtes proaktives Verhalten\
+- keine tiefe Buddy-Personality\
+- keine komplexe Konversationslogik\
+\
+### Recommendation Engine\
+- keine vollwertige Recommendation-Logik\
+- keine ausgepr\'e4gte Priorisierungs-Engine\
+- keine tiefen Cross-Domain-Empfehlungen\
+\
+### Memory Layer in Tiefe\
+- keine ausgepr\'e4gte Memory-Architektur\
+- keine Pattern-Layer in Tiefe\
+- keine adaptive Lernlogik\
+\
+### Supplement-System\
+- nicht Teil des ersten harten Scope\
+\
+### Medical Awareness in Tiefe\
+- nicht Teil des ersten harten Scope\
+\
+### Coach Layer\
+- nicht Teil des ersten harten Scope\
+\
+### Marketplace / Commerce\
+- nicht Teil des ersten harten Scope\
+\
+### Voice\
+- nicht Teil des ersten harten Scope\
+\
+### Vision / Bilderkennung\
+- nicht Teil des ersten harten Scope\
+\
+### Wearables / Integrationen\
+- nicht Teil des ersten harten Scope\
+\
+### Programme / Plans in Tiefe\
+- nicht Teil des ersten harten Scope\
+\
+---\
+\
+# 7. KLARE PRODUKTLOGIK F\'dcR V1 FOUNDATION\
+\
+Wenn man V1 Foundation in einem Satz beschreiben m\'fcsste, dann w\'e4re es:\
+\
+# LumeOS V1 Foundation ist ein sauberes, stateful Fundament f\'fcr User, Ziele, Ern\'e4hrung, Training und Recovery.\
+\
+Das ist die richtige erste Baustufe.\
+\
+Nicht mehr.\
+\
+Aber auch nicht weniger.\
+\
+---\
+\
+# 8. ERFOLGSKRITERIEN F\'dcR V1 FOUNDATION\
+\
+V1 Foundation ist dann erfolgreich, wenn folgende Aussagen wahr sind:\
+\
+---\
+\
+## Nutzerbasis\
+\
+- Ein Nutzer kann sich sauber authentifizieren\
+- Ein Nutzer hat ein verwertbares Profil\
+- Ein Nutzer hat definierbare Ziele\
+- Pr\'e4ferenzen sind speicherbar und nutzbar\
+\
+---\
+\
+## Nutrition\
+\
+- Foods sind sauber suchbar und nutzbar\
+- Portionen sind alltagstauglich\
+- Meals sind loggbar\
+- Makros und Mikros sind berechenbar\
+- Nutrition-Historie ist sinnvoll nutzbar\
+\
+---\
+\
+## Training\
+\
+- \'dcbungen sind sauber modelliert\
+- Workouts sind strukturiert nutzbar\
+- Sessions sind loggbar\
+- Sets sind sauber speicherbar\
+- Training-Historie ist vorhanden\
+\
+---\
+\
+## Recovery\
+\
+- Recovery-Inputs sind erfassbar\
+- Daily Check-ins sind m\'f6glich\
+- Recovery-Verlauf ist sichtbar\
+\
+---\
+\
+## Gesamtlogik\
+\
+- Zust\'e4nde sind zeitlich sauber verkn\'fcpfbar\
+- Daten sind sp\'e4ter intelligence-f\'e4hig nutzbar\
+- Buddy k\'f6nnte sp\'e4ter auf diesem Fundament sinnvoll aufbauen\
+\
+---\
+\
+# 9. WAS ALS N\'c4CHSTES NACH V1 FOUNDATION KOMMT\
+\
+Wenn V1 Foundation stabil steht, folgt nicht sofort \'84alles\'93.\
+\
+Die logische Reihenfolge danach ist:\
+\
+---\
+\
+## N\'e4chste echte Schicht\
+\
+### 1. Supplement Foundation\
+### 2. Medical Awareness Foundation\
+### 3. Memory & Context Foundation\
+### 4. Recommendation & Decision Core\
+### 5. Buddy Core Experience\
+\
+Erst dann beginnt LumeOS wirklich, wie das sp\'e4tere Endprodukt auszusehen.\
+\
+---\
+\
+# 10. WICHTIGE ARBEITSREGEL F\'dcR DIE N\'c4CHSTEN SCHRITTE\
+\
+Ab jetzt darf nichts mehr \'84einfach gebaut\'93 werden.\
+\
+Jeder n\'e4chste konkrete Bauabschnitt muss ab jetzt folgende Dinge klar definieren:\
+\
+- welches Problem er l\'f6st\
+- welche Entities betroffen sind\
+- welche Dom\'e4nen betroffen sind\
+- welche Inputs und Outputs entstehen\
+- was danach erstmals m\'f6glich wird\
+- was bewusst noch nicht enthalten ist\
+\
+Wenn das nicht klar ist, ist der Scope zu unscharf.\
+\
+---\
+\
+# 11. STRATEGISCHE KERNREGEL\
+\
+V1 Foundation darf unspektakul\'e4r wirken.\
+\
+Das ist v\'f6llig in Ordnung.\
+\
+Denn:\
+\
+# Ein unspektakul\'e4res, stabiles Fundament ist wertvoller als ein beeindruckendes, instabiles Pseudo-Produkt.\
+\
+Das ist genau die Stelle, an der LumeOS diesmal richtig gebaut werden muss.\
+\
+---\
+\
+# Schlussdefinition\
+\
+# V1 Foundation = belastbare Nutzer-, Ziel-, Nutrition-, Training- und Recovery-Basis f\'fcr das sp\'e4tere echte Companion-System.}

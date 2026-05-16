@@ -1,0 +1,631 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 14_SYSTEM_OUTPUT_TYPES\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **systemischen Output-Typen** von LumeOS.\
+\
+Es beantwortet die Frage:\
+\
+# Welche Arten von Outputs darf LumeOS \'fcberhaupt erzeugen, und wof\'fcr ist jeder Output-Typ fachlich gedacht?\
+\
+Dieses Dokument ist extrem wichtig.\
+\
+Denn ohne klare Output-Typen wird sp\'e4ter fast alles unsauber vermischt:\
+\
+- Buddy-Antworten\
+- Recommendations\
+- Warnings\
+- Insights\
+- UI-Karten\
+- Reminder\
+- Summaries\
+- Erkl\'e4rungen\
+- Eskalationen\
+\
+Dann entsteht wieder genau das, was vermieden werden muss:\
+\
+- unklare Systemlogik\
+- doppelte Verantwortung\
+- AI-Text statt Produktstruktur\
+- Buddy als Mischmasch aus allem\
+- kein sauberer Recommendation-Kern\
+\
+---\
+\
+## Kernthese\
+\
+# Nicht jede sinnvolle Systemausgabe ist eine \'84Empfehlung\'93.\
+\
+LumeOS braucht mehrere klar getrennte Output-Klassen.\
+\
+Nur so bleiben:\
+\
+- Buddy sauber\
+- Decision Engine sauber\
+- UI sauber\
+- Trigger sauber\
+- Priorisierung sauber\
+\
+---\
+\
+# 1. DIE 9 KERN-OUTPUT-TYPEN VON LUMEOS\
+\
+LumeOS soll im Kern diese Output-Typen erzeugen:\
+\
+1. Focus Output\
+2. Recommendation Output\
+3. Insight Output\
+4. Explanation Output\
+5. Warning / Risk Output\
+6. Reminder / Nudge Output\
+7. Summary Output\
+8. Check-in Prompt Output\
+9. Escalation Output\
+\
+Diese Typen d\'fcrfen sp\'e4ter UI-, Buddy- und Trigger-seitig unterschiedlich dargestellt werden.\
+\
+Aber fachlich m\'fcssen sie klar getrennt bleiben.\
+\
+---\
+\
+# 2. FOCUS OUTPUT\
+\
+## Zweck\
+\
+Der Focus Output definiert:\
+\
+# Was jetzt gerade die wichtigste Sache ist.\
+\
+Das ist einer der wertvollsten Output-Typen \'fcberhaupt.\
+\
+Denn Nutzer brauchen nicht st\'e4ndig 20 Hinweise.\
+\
+Sie brauchen oft vor allem:\
+\
+- Hauptfokus\
+- Engpass\
+- Priorit\'e4t\
+- Richtung\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Heute Recovery priorisieren.\'93\
+- \'84Dein wichtigster Hebel heute ist Protein.\'93\
+- \'84Diese Woche z\'e4hlt vor allem Trainingskonsistenz.\'93\
+- \'84Im Moment ist Schlaf dein gr\'f6\'dfter Bottleneck.\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- Daily Orientation\
+- Tagesstart\
+- Wochenfokus\
+- \'dcberlastete Signallagen\
+- wenn mehrere Dinge gleichzeitig relevant sind\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Ein Focus Output ist **keine komplette Handlungsliste**.\
+\
+Er ist:\
+\
+- Verdichtung\
+- Priorisierung\
+- Orientierung\
+\
+---\
+\
+# 3. RECOMMENDATION OUTPUT\
+\
+## Zweck\
+\
+Der Recommendation Output liefert:\
+\
+# Einen konkreten sinnvollen n\'e4chsten Schritt oder eine konkrete Anpassung.\
+\
+Das ist der klassischste Handlungsausgabe-Typ.\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Reduziere heute das Trainingsvolumen.\'93\
+- \'84Plane heute noch eine proteinreiche Mahlzeit ein.\'93\
+- \'84Nutze heute nur das Basis-Workout.\'93\
+- \'84Schiebe Koffein heute nicht zu sp\'e4t.\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- wenn eine konkrete Handlung sinnvoll ist\
+- wenn Relevanz ausreichend klar ist\
+- wenn Guidance nicht nur abstrakt, sondern umsetzbar sein soll\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Keine blo\'dfe Beobachtung.\
+\
+Keine reine Analyse.\
+\
+Keine diffuse Motivation.\
+\
+Eine Recommendation muss **konkret handlungsf\'e4hig** sein.\
+\
+---\
+\
+# 4. INSIGHT OUTPUT\
+\
+## Zweck\
+\
+Der Insight Output liefert:\
+\
+# Eine relevante Erkenntnis oder Musterverdichtung.\
+\
+Insights sind nicht prim\'e4r Handlungsanweisungen.\
+\
+Sie sind:\
+\
+- Verst\'e4ndnis\
+- Kontext\
+- Mustererkennung\
+- Einordnung\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Deine Energie f\'e4llt wiederholt nach N\'e4chten mit wenig Schlaf.\'93\
+- \'84Du h\'e4ltst dein Training aktuell stabiler ein als deine Ern\'e4hrung.\'93\
+- \'84Am Wochenende bricht deine Routine h\'e4ufiger weg.\'93\
+- \'84Protein ist in den letzten 10 Tagen dein wiederkehrender Engpass.\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- Verlauf sichtbar machen\
+- Muster erkl\'e4ren\
+- Buddy-Fragen beantworten\
+- Nutzerverst\'e4ndnis erh\'f6hen\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Ein Insight ist nicht automatisch eine Handlung.\
+\
+Ein Insight kann aber sp\'e4ter zu einer Recommendation f\'fchren.\
+\
+---\
+\
+# 5. EXPLANATION OUTPUT\
+\
+## Zweck\
+\
+Der Explanation Output erkl\'e4rt:\
+\
+# Warum etwas relevant ist, warum etwas empfohlen wird oder wie etwas zu verstehen ist.\
+\
+Das ist entscheidend f\'fcr Vertrauen und Nachvollziehbarkeit.\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Das ist relevant, weil dein Schlaf diese Woche unter deinem \'fcblichen Niveau liegt.\'93\
+- \'84Diese Empfehlung kommt vor allem aus deinem Recovery- und Trainingskontext.\'93\
+- \'84Dein Wert liegt nicht isoliert kritisch, f\'e4llt aber im Verlauf auf.\'93\
+- \'84Der Fokus liegt heute auf Recovery, weil dein Zustand klar schlechter ist als sonst.\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- Buddy-Antworten\
+- Recommendation-Erkl\'e4rung\
+- Summary-Kontext\
+- sensible oder \'fcberraschende Outputs\
+- Nutzerfragen wie \'84Warum?\'93\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Keine neue Recommendation.\
+\
+Keine neue Priorit\'e4t.\
+\
+Sondern **Erkl\'e4rung eines bestehenden Outputs**.\
+\
+---\
+\
+# 6. WARNING / RISK OUTPUT\
+\
+## Zweck\
+\
+Dieser Output markiert:\
+\
+# Etwas, das besondere Aufmerksamkeit, Vorsicht oder Beobachtung verdient.\
+\
+Nicht jede Auff\'e4lligkeit ist ein \'84Problem\'93.\
+\
+Aber manche Dinge brauchen klar erh\'f6hte Aufmerksamkeit.\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Dein aktueller Erholungszustand wirkt klar niedriger als \'fcblich.\'93\
+- \'84Diese Kombination k\'f6nnte potenziell problematisch sein.\'93\
+- \'84Dieser Verlauf sollte beobachtet werden.\'93\
+- \'84Hier besteht aktuell ein erh\'f6htes \'dcberlastungsrisiko.\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- sensible Kontexte\
+- auff\'e4llige Muster\
+- potenzielle Interaktionen\
+- \'dcberlastung\
+- auff\'e4llige Marker oder Verl\'e4ufe\
+- relevante Grenzf\'e4lle\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Ein Warning ist nicht automatisch:\
+\
+- Diagnose\
+- Drama\
+- Eskalation\
+- Alarmismus\
+\
+Es ist ein **erh\'f6hter Aufmerksamkeitsmarker**.\
+\
+---\
+\
+# 7. REMINDER / NUDGE OUTPUT\
+\
+## Zweck\
+\
+Dieser Output dient dazu:\
+\
+# Verhalten niedrigschwellig zu unterst\'fctzen oder Reibung zu reduzieren.\
+\
+Das ist nicht dieselbe Klasse wie Recommendation.\
+\
+Eine Recommendation ist inhaltlich relevant.\
+\
+Ein Reminder / Nudge ist verhaltensbezogen unterst\'fctzend.\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Denk heute noch an deine letzte Mahlzeit.\'93\
+- \'84Kurzer Check-in f\'fcr deinen heutigen Zustand?\'93\
+- \'84Wenn du trainierst: heute Basis statt Zusatzvolumen.\'93\
+- \'84Kleine Erinnerung: Schlaf heute nicht unn\'f6tig verspielen.\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- Routineunterst\'fctzung\
+- Re-Engagement\
+- Daily Flows\
+- sanfte Hilfen\
+- niedrige Reibung\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Keine harte inhaltliche Priorit\'e4t.\
+\
+Kein gro\'dfes Insight.\
+\
+Kein Risiko-Output.\
+\
+Es ist ein **leichter operativer Assistenz-Output**.\
+\
+---\
+\
+# 8. SUMMARY OUTPUT\
+\
+## Zweck\
+\
+Der Summary Output verdichtet:\
+\
+# Mehrere Daten, Ereignisse oder Signale in eine kompakte, nutzbare \'dcbersicht.\
+\
+Summaries sind wichtig f\'fcr:\
+\
+- Orientierung\
+- Verlauf\
+- R\'fcckblick\
+- Verdichtung\
+\
+---\
+\
+## Typische Beispiele\
+\
+- Tageszusammenfassung\
+- Wochenr\'fcckblick\
+- Trainingswoche\
+- Ern\'e4hrungszusammenfassung\
+- Buddy-R\'fcckblick\
+\
+---\
+\
+## Typische Inhalte\
+\
+Ein Summary kann enthalten:\
+\
+- wichtigste Entwicklungen\
+- relevante Muster\
+- Highlights\
+- Engp\'e4sse\
+- Priorit\'e4ten\
+- ggf. n\'e4chste sinnvolle Richtung\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Ein Summary ist nicht einfach nur ein Dump aus Rohdaten.\
+\
+Es ist eine **strukturierte Verdichtung**.\
+\
+---\
+\
+# 9. CHECK-IN PROMPT OUTPUT\
+\
+## Zweck\
+\
+Dieser Output dient dazu:\
+\
+# Gezielt und niedrigschwellig fehlende oder n\'fctzliche Zustandsinformationen einzuholen.\
+\
+Das ist ein sehr wichtiger eigener Typ.\
+\
+Denn Check-ins sind nicht einfach Reminder.\
+\
+Und sie sind auch nicht Recommendations.\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Wie war dein Schlaf letzte Nacht?\'93\
+- \'84Wie platt f\'fchlst du dich heute?\'93\
+- \'84Wie lief dein Training gestern?\'93\
+- \'84War dein Tag eher entspannt oder stressig?\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- Daily Orientation\
+- Recovery-Update\
+- Kontextl\'fccken\
+- Buddy-Gespr\'e4che\
+- Re-Engagement\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Kein Verh\'f6r.\
+\
+Kein Formularersatz.\
+\
+Kein Datensammelzwang.\
+\
+Der Zweck ist immer:\
+\
+- Reibung niedrig halten\
+- Relevanz erh\'f6hen\
+- Guidance verbessern\
+\
+---\
+\
+# 10. ESCALATION OUTPUT\
+\
+## Zweck\
+\
+Dieser Output markiert:\
+\
+# Hier sollte Buddy oder Standard-Guidance nicht allein stehen bleiben.\
+\
+Escalation ist ein eigener Output-Typ, nicht nur ein \'84Warning+\'93.\
+\
+---\
+\
+## Typische Beispiele\
+\
+- \'84Das solltest du nicht einfach ignorieren.\'93\
+- \'84Hier w\'e4re menschliche R\'fccksprache sinnvoll.\'93\
+- \'84Dieser Verlauf sollte sinnvoll abgekl\'e4rt werden.\'93\
+- \'84Das ist kein Fall f\'fcr blo\'dfe Alltagsoptimierung.\'93\
+\
+---\
+\
+## Wann dieser Output sinnvoll ist\
+\
+- Boundary-sensitive Themen\
+- Sicherheitskonflikte\
+- auff\'e4llige Verl\'e4ufe\
+- sensible Health-/Coach-/Human-Themen\
+- klare Produktgrenzen\
+\
+---\
+\
+## Was dieser Output NICHT ist\
+\
+Keine Panik.\
+\
+Keine Diagnose.\
+\
+Keine k\'fcnstliche Dramatik.\
+\
+Sondern:\
+\
+- definierte Grenzmarkierung\
+- saubere \'dcbergabe\
+- ehrliche Begrenzung\
+\
+---\
+\
+# 11. WICHTIGE TRENNUNG: OUTPUT-TYP VS DARSTELLUNGSFORM\
+\
+Das ist extrem wichtig.\
+\
+Ein Output-Typ ist **nicht dasselbe** wie seine Darstellung.\
+\
+---\
+\
+## Beispiel\
+\
+Ein Recommendation Output kann dargestellt werden als:\
+\
+- Buddy-Nachricht\
+- UI-Karte\
+- Daily Focus Block\
+- Push-Nachricht\
+- Wochenr\'fcckblick-Element\
+\
+Die fachliche Klasse bleibt trotzdem:\
+\
+# Recommendation Output\
+\
+---\
+\
+## Gleiches gilt f\'fcr alle Typen\
+\
+Ein Insight bleibt ein Insight, egal ob er erscheint als:\
+\
+- Chat-Antwort\
+- Weekly Summary\
+- Dashboard-Block\
+- Trend-Hinweis\
+\
+---\
+\
+## Regel\
+\
+# Fachliche Output-Typen d\'fcrfen nicht mit UI-Komponenten verwechselt werden.\
+\
+Das verhindert sp\'e4ter massive Systemverwirrung.\
+\
+---\
+\
+# 12. WIE DIE OUTPUT-TYPEN IM SYSTEMFLUSS ENTSTEHEN\
+\
+Die grobe Entstehungslogik ist:\
+\
+---\
+\
+## Inputs\
+- Goals\
+- Preferences\
+- State\
+- Verlauf\
+- Memory\
+- Constraints\
+- Confidence\
+- Risk / Safety-Kontext\
+\
+\uc0\u8595 \
+\
+## Intelligence Layer\
+- Priorisierung\
+- Regeln\
+- Synthese\
+- Muster\
+- Recommendation-Logik\
+\
+\uc0\u8595 \
+\
+## Output-Typen\
+- Focus\
+- Recommendation\
+- Insight\
+- Explanation\
+- Warning\
+- Reminder / Nudge\
+- Summary\
+- Check-in Prompt\
+- Escalation\
+\
+\uc0\u8595 \
+\
+## Interaction Layer\
+- Buddy\
+- UI\
+- Cards\
+- Daily Flows\
+- Notifications\
+- Voice\
+\
+---\
+\
+# 13. WELCHE OUTPUT-TYPEN F\'dcR V1 SP\'c4TER BESONDERS WICHTIG SIND\
+\
+Nicht alle Output-Typen m\'fcssen sofort gleich tief gebaut werden.\
+\
+Die fr\'fch wichtigsten sind:\
+\
+---\
+\
+## Erste Priorit\'e4t\
+- Focus Output\
+- Recommendation Output\
+- Check-in Prompt Output\
+- Summary Output (einfach)\
+- Explanation Output (einfach)\
+\
+---\
+\
+## Zweite Priorit\'e4t\
+- Insight Output\
+- Reminder / Nudge Output\
+- Warning / Risk Output\
+\
+---\
+\
+## Dritte Priorit\'e4t\
+- Escalation Output (strukturiert tiefer)\
+\
+---\
+\
+# 14. EIN-SATZ-DEFINITION\
+\
+# LumeOS erzeugt nicht einfach \'84Antworten\'93, sondern klar definierte fachliche Output-Typen, die jeweils eine andere Rolle in Priorisierung, Guidance, Erkl\'e4rung und Begleitung haben.\
+\
+---\
+\
+# 15. SCHLUSSREGEL\
+\
+Jede neue Buddy-Funktion, Recommendation-Logik, UI-Karte oder Trigger-Mechanik muss zuerst diese Frage beantworten:\
+\
+# Welcher fachliche Output-Typ ist das eigentlich?\
+\
+Wenn das nicht klar ist, ist die Funktion noch nicht sauber gedacht.}

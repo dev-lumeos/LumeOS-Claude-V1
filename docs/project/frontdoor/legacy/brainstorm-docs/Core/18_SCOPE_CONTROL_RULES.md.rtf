@@ -1,0 +1,406 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 18_SCOPE_CONTROL_RULES\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **harten Regeln zur Scope-Kontrolle** f\'fcr LumeOS.\
+\
+Es beantwortet die Frage:\
+\
+# Wie verhindern wir, dass LumeOS erneut in unkontrolliertes Wachstum, parallele Baustellen und verw\'e4sserte Umsetzung kippt?\
+\
+Dieses Dokument ist nicht optional.\
+\
+Es ist ein Schutzmechanismus.\
+\
+Denn LumeOS ist genau die Art von Produkt, die sehr schnell wieder in Folgendes abrutschen kann:\
+\
+- zu viele Ideen gleichzeitig\
+- zu viele Systeme gleichzeitig\
+- zu viele Module gleichzeitig\
+- zu fr\'fche \'84smarte\'93 Layer\
+- zu viele Sonderf\'e4lle\
+- zu viel theoretischer Umfang\
+- zu wenig real fertige Kernsubstanz\
+\
+Genau das muss diesmal aktiv verhindert werden.\
+\
+---\
+\
+## Kernthese\
+\
+# Gute Produktentwicklung bedeutet nicht, m\'f6glichst viel gleichzeitig zu bauen.\
+# Gute Produktentwicklung bedeutet, das Richtige in der richtigen Tiefe zur richtigen Zeit zu bauen.\
+\
+---\
+\
+# 1. DIE OBERSTE SCOPE-REGEL\
+\
+# Alles, was nicht klar zur aktuellen Baustufe geh\'f6rt, wird nicht \'84noch schnell mitgebaut\'93, sondern bewusst geparkt.\
+\
+Das ist eine der wichtigsten Regeln des gesamten Projekts.\
+\
+---\
+\
+# 2. DIE DREI SCOPE-KATEGORIEN\
+\
+Jede neue Idee, jedes neue Feature, jede neue Logik und jede neue Erweiterung muss immer zuerst in genau eine dieser drei Kategorien eingeordnet werden.\
+\
+---\
+\
+# KATEGORIE A \'97 CURRENT BUILD SCOPE\
+\
+Das geh\'f6rt in die **aktuelle Bauphase**.\
+\
+### Kriterien\
+- direkt n\'f6tig f\'fcr den aktuellen Contract\
+- direkt n\'f6tig f\'fcr einen aktiven Kernflow\
+- direkt n\'f6tig f\'fcr Systemstabilit\'e4t\
+- direkt n\'f6tig f\'fcr Abnahmef\'e4higkeit\
+- direkt n\'f6tig, damit eine definierte Baustufe abgeschlossen werden kann\
+\
+### Beispiel\
+- Portionen im Meal Logging\
+- Set Logging im Workout Flow\
+- Goal Persistence im User Setup\
+- Tagesbezug im Recovery Check-in\
+\
+---\
+\
+# KATEGORIE B \'97 LATER PLANNED SCOPE\
+\
+Das ist legitim und wichtig, aber **nicht jetzt dran**.\
+\
+### Kriterien\
+- geh\'f6rt klar zum Produkt\
+- soll sp\'e4ter kommen\
+- baut logisch auf aktuellem Scope auf\
+- ist jetzt aber noch nicht notwendig, um die aktuelle Stufe sauber fertigzustellen\
+\
+### Beispiel\
+- Buddy Guidance\
+- Recommendation Core\
+- Supplements\
+- Medical Awareness\
+- Voice\
+- Vision\
+- Coach Layer\
+\
+---\
+\
+# KATEGORIE C \'97 PARKING / IDEA RESERVOIR\
+\
+Das sind Ideen, die interessant sein k\'f6nnen, aber aktuell **nicht einmal sauber scopebar** sind.\
+\
+### Kriterien\
+- spannend\
+- potenziell wertvoll\
+- aber noch zu unscharf, zu weit weg oder nicht sauber produktrelevant genug\
+\
+### Beispiel\
+- futuristische Interaktionsideen\
+- experimentelle AI-Layer\
+- spekulative Sensorik\
+- zu fr\'fche Automatisierungsfantasien\
+- langfristige Nice-to-have-Komfortfunktionen\
+\
+---\
+\
+# 3. DIE REGEL F\'dcR NEUE IDEEN W\'c4HREND DES BAUS\
+\
+Neue Ideen werden **nicht** sofort in aktive Umsetzung gezogen.\
+\
+Stattdessen gilt immer dieser Ablauf:\
+\
+---\
+\
+## Schritt 1\
+Ist das f\'fcr die aktuelle Baustufe zwingend n\'f6tig?\
+\
+## Schritt 2\
+Wenn nein:\
+geh\'f6rt es logisch zu einem sp\'e4teren geplanten Layer?\
+\
+## Schritt 3\
+Wenn auch das nicht sauber klar ist:\
+ab ins Parking.\
+\
+---\
+\
+## Harte Regel\
+\
+# Eine gute Idee ist kein Grund, den aktuellen Scope zu verletzen.\
+\
+---\
+\
+# 4. DIE REGEL \'84NOT NOW\'93 IST KEINE ABLEHNUNG\
+\
+Das ist psychologisch wichtig.\
+\
+Wenn etwas aus dem aktuellen Scope rausgehalten wird, bedeutet das nicht:\
+\
+- dass es schlecht ist\
+- dass es unwichtig ist\
+- dass es nie gebaut wird\
+\
+Es bedeutet nur:\
+\
+# Es geh\'f6rt nicht in die aktuelle Bauverantwortung.\
+\
+Das ist ein massiver Unterschied.\
+\
+---\
+\
+# 5. DIE 5 H\'c4UFIGSTEN SCOPE-FALLEN\
+\
+Diese f\'fcnf Muster m\'fcssen aktiv erkannt und gestoppt werden.\
+\
+---\
+\
+# FALLE 1 \'97 \'84Wenn wir schon dabei sind\'85\'93\
+\
+Das ist einer der gef\'e4hrlichsten S\'e4tze \'fcberhaupt.\
+\
+### Typische Form\
+- \'84Wenn wir das Meal-System schon bauen, k\'f6nnen wir ja auch gleich\'85\'93\
+- \'84Wenn wir Training schon drin haben, k\'f6nnen wir ja auch direkt\'85\'93\
+- \'84Wenn wir Buddy sp\'e4ter brauchen, k\'f6nnen wir ja jetzt schon mal\'85\'93\
+\
+### Regel\
+# Nein.\
+\
+Wenn etwas nicht Teil des aktiven Contracts ist, geh\'f6rt es nicht automatisch in denselben Build-Schritt.\
+\
+---\
+\
+# FALLE 2 \'97 \'84Das brauchen wir sp\'e4ter sowieso\'93\
+\
+Das ist oft sachlich richtig.\
+\
+Aber trotzdem scope-gef\'e4hrlich.\
+\
+### Problem\
+Etwas sp\'e4ter zu brauchen hei\'dft nicht, dass es **jetzt** gebaut werden muss.\
+\
+### Regel\
+# \'84Sp\'e4ter wichtig\'93 ist nicht gleich \'84jetzt dran\'93.\
+\
+---\
+\
+# FALLE 3 \'97 \'84Nur schnell vorbereiten\'93\
+\
+Das klingt harmlos, f\'fchrt aber oft zu Scope-Leck.\
+\
+### Typische Form\
+- \'84Wir legen nur schnell schon mal die Struktur f\'fcr\'85\'93\
+- \'84Wir machen nur schnell schon mal das Grundger\'fcst f\'fcr\'85\'93\
+\
+### Problem\
+Aus \'84nur vorbereiten\'93 wird sehr schnell:\
+\
+- halbfertige Architektur\
+- halbfertige Entities\
+- halbfertige APIs\
+- halbfertige Screens\
+- halbfertige Komplexit\'e4t\
+\
+### Regel\
+# Nur vorbereiten ist nur erlaubt, wenn es echte sp\'e4tere Sackgassen verhindert und den aktuellen Scope nicht aufbl\'e4ht.\
+\
+---\
+\
+# FALLE 4 \'97 \'84Das ist doch nur ein kleines Extra\'93\
+\
+Fast nie ist es nur ein kleines Extra.\
+\
+Denn jedes Extra erzeugt fast immer:\
+\
+- UI-Folgen\
+- Datenmodell-Folgen\
+- Edge Cases\
+- Tests\
+- State-Komplexit\'e4t\
+- k\'fcnftige Pflege\
+\
+### Regel\
+# Kleine Extras sind oft versteckte Scope-Multiplikatoren.\
+\
+---\
+\
+# FALLE 5 \'97 \'84Das macht es gleich intelligenter\'93\
+\
+Das ist bei LumeOS besonders gef\'e4hrlich.\
+\
+### Typische Form\
+- \'84Dann wirkt Buddy schon schlauer\'93\
+- \'84Dann haben wir gleich mehr AI drin\'93\
+- \'84Dann k\'f6nnen wir schon Empfehlungen machen\'93\
+\
+### Problem\
+Zu fr\'fche Intelligenz auf instabiler Basis erzeugt:\
+\
+- Pseudo-Produktwert\
+- falsches Vertrauen\
+- technische Schuld\
+- inkonsistente Outputs\
+\
+### Regel\
+# Intelligenz kommt auf Substanz. Nicht davor.\
+\
+---\
+\
+# 6. DIE REGEL F\'dcR V1 FOUNDATION\
+\
+W\'e4hrend V1 Foundation gilt eine besonders harte Scope-Regel:\
+\
+# Alles, was nicht direkt hilft, User, Nutrition, Training, Recovery und Timeline sauber nutzbar zu machen, ist nicht Teil des aktiven Kerns.\
+\
+Das ist die operative Kurzform f\'fcr V1.\
+\
+---\
+\
+# 7. WIE MAN FEATURES RICHTIG PR\'dcFT\
+\
+Jedes neue Feature oder jede neue Idee muss diese Pr\'fcffolge bestehen.\
+\
+---\
+\
+## PR\'dcFFRAGE 1\
+Welches konkrete Problem l\'f6st es?\
+\
+## PR\'dcFFRAGE 2\
+Welche Core Journey verbessert es?\
+\
+## PR\'dcFFRAGE 3\
+Ist es f\'fcr die aktuelle Baustufe zwingend n\'f6tig?\
+\
+## PR\'dcFFRAGE 4\
+Wenn nein: zu welchem sp\'e4teren Layer geh\'f6rt es sauber?\
+\
+## PR\'dcFFRAGE 5\
+Welche zus\'e4tzliche Komplexit\'e4t erzeugt es?\
+\
+## PR\'dcFFRAGE 6\
+W\'fcrde der aktuelle Scope stabiler oder instabiler, wenn wir es jetzt aufnehmen?\
+\
+---\
+\
+## Regel\
+Wenn diese Fragen nicht sauber beantwortet werden k\'f6nnen, geh\'f6rt es nicht in den aktiven Build.\
+\
+---\
+\
+# 8. DIE REGEL F\'dcR PARALLELBAUSTELLEN\
+\
+Parallele Arbeit ist nur dann erlaubt, wenn sie:\
+\
+- logisch unabh\'e4ngig ist\
+- den aktiven Kern nicht verw\'e4ssert\
+- den Review-Aufwand nicht explodieren l\'e4sst\
+- keine halbfertigen Seitensysteme erzeugt\
+\
+---\
+\
+## Nicht erlaubt\
+- f\'fcnf halb gebaute Module gleichzeitig\
+- parallele \'84coole\'93 Side Systems\
+- Buddy neben DB neben Coach neben Supplements neben Medical\
+\
+---\
+\
+## Erlaubt\
+- sauber abgegrenzte Teilbaustellen innerhalb derselben Stufe\
+- klar definierte vorbereitende Datenarbeit\
+- begrenzte parallele Foundation-Arbeit\
+\
+---\
+\
+# 9. DIE REGEL F\'dcR \'84SP\'c4TER\'93-LISTEN\
+\
+Sp\'e4tere Features d\'fcrfen nicht im Kopf oder chaotisch in Chats h\'e4ngen bleiben.\
+\
+Sie brauchen eine saubere Parklogik.\
+\
+---\
+\
+## Deshalb gilt\
+\
+Alles, was bewusst nicht jetzt gebaut wird, muss sauber in eine dieser Formen \'fcberf\'fchrt werden:\
+\
+### 1. Later Planned Layer\
+oder\
+\
+### 2. Parking / Idea Reservoir\
+\
+---\
+\
+## Ziel\
+Ideen gehen nicht verloren.\
+\
+Aber sie sabotieren auch nicht den aktuellen Build.\
+\
+---\
+\
+# 10. DIE REGEL F\'dcR \'84ECHTEN FORTSCHRITT\'93 VS \'84AKTIVIT\'c4T\'93\
+\
+Das ist eine der wichtigsten Produktregeln \'fcberhaupt.\
+\
+---\
+\
+## Echter Fortschritt ist:\
+- eine abgeschlossene Kernf\'e4higkeit\
+- ein belastbarer Flow\
+- ein stabiler Objektbereich\
+- eine neue reale Produktnutzbarkeit\
+- eine abgeschlossene Baustufe\
+\
+---\
+\
+## Blo\'dfe Aktivit\'e4t ist:\
+- viele halbe Dinge\
+- viele angefangene Strukturen\
+- viele neue Files\
+- viele neue Tabellen ohne Produktnutzen\
+- viele Screens ohne Kernfluss\
+- viele AI-Ideen ohne Fundament\
+\
+---\
+\
+## Regel\
+# Aktivit\'e4t ist kein Fortschritt.\
+\
+Nur abgeschlossene Kernf\'e4higkeit z\'e4hlt.\
+\
+---\
+\
+# 11. DIE REGEL F\'dcR DISZIPLIN IN DER WEITERENTWICKLUNG\
+\
+LumeOS wird nur dann wirklich stark, wenn das Team oder die Agenten bereit sind, h\'e4ufig zu sagen:\
+\
+# \'84Ja, gute Idee \'96 aber nicht jetzt.\'93\
+\
+Das ist kein Bremsen.\
+\
+Das ist professionelles Produktmanagement.\
+\
+---\
+\
+# 12. EIN-SATZ-DEFINITION\
+\
+# Scope-Kontrolle in LumeOS bedeutet, jede neue Idee bewusst gegen aktuelle Bauverantwortung, Produktrelevanz und Komplexit\'e4tskosten zu pr\'fcfen \'96 und alles Nicht-Notwendige konsequent aus dem aktiven Kernbau herauszuhalten.\
+\
+---\
+\
+# 13. SCHLUSSREGEL\
+\
+Wenn k\'fcnftig Unklarheit entsteht, ob etwas \'84jetzt schon mitgebaut\'93 werden sollte, gilt immer zuerst diese Frage:\
+\
+# Macht das den aktuellen Kern wirklich fertiger \'96 oder nur den Scope wieder gr\'f6\'dfer?\
+\
+Wenn es nur den Scope gr\'f6\'dfer macht, geh\'f6rt es nicht in den aktuellen Build.}

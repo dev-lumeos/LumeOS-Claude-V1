@@ -1,0 +1,697 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 05_BUILD_STRATEGY\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **strategische Bau- und Entscheidungslogik** f\'fcr LumeOS.\
+\
+Es beantwortet nicht nur:\
+\
+- was gebaut werden k\'f6nnte\
+- welche Features existieren d\'fcrfen\
+- welche Dom\'e4nen legitim sind\
+\
+Es beantwortet vor allem:\
+\
+# Wie ein so gro\'dfes Produkt sauber aufgebaut werden muss, ohne wieder in Chaos, Overengineering oder Blindflug zu kippen.\
+\
+---\
+\
+## Ausgangslage\
+\
+LumeOS ist aus Visionen, Ideen, Modulen, Feature-Clustern und gewachsenen Konzepten entstanden.\
+\
+Die Produktvision ist stark.\
+\
+Die historische Struktur ist es nicht.\
+\
+Deshalb gilt ab jetzt:\
+\
+- alte technische Annahmen sind nicht bindend\
+- alte API-Strukturen sind nicht bindend\
+- alte Port-/Service-Modelle sind nicht bindend\
+- alte Fortschrittsangaben sind nicht bindend\
+- alte \'84fertig\'93-Claims sind nicht bindend\
+\
+Bindend ist nur:\
+\
+- die rekonstruierte Produktwahrheit\
+- die legitimen Dom\'e4nen\
+- die vollst\'e4ndige Capability Map\
+- die fachlichen System-Entities\
+- der reale Fortschritt ab dem Neustart\
+\
+---\
+\
+# 1. ZENTRALE BAUREGEL\
+\
+## Planung darf maximal vollst\'e4ndig sein.\
+## Umsetzung muss maximal selektiv sein.\
+\
+Das ist die wichtigste Regel im gesamten Projekt.\
+\
+### Bedeutung\
+\
+In der Planung d\'fcrfen enthalten sein:\
+\
+- alle legitimen Dom\'e4nen\
+- alle sinnvollen Features\
+- alle strategischen Erweiterungen\
+- alle High-End-Ideen\
+- alle Companion-, Coach-, Vision-, Voice- und Commerce-Potenziale\
+\
+In der Umsetzung darf zu jedem Zeitpunkt aber nur gebaut werden, was:\
+\
+- aktuell notwendig ist\
+- logisch vorbereitet ist\
+- auf dem vorhandenen Fundament sauber aufbaut\
+- einen echten Produktfortschritt erzeugt\
+\
+---\
+\
+# 2. ZWEI EBENEN, DIE NIE WIEDER VERMISCHT WERDEN D\'dcRFEN\
+\
+---\
+\
+## Ebene A \'97 Produktlandkarte\
+\
+Diese Ebene enth\'e4lt:\
+\
+- Vision\
+- Domain Map\
+- Capability Map\
+- System Entities\
+- langfristige Produktf\'e4higkeit\
+- sp\'e4tere Ausbaupfade\
+\
+Diese Ebene darf gro\'df, vollst\'e4ndig und ambitioniert sein.\
+\
+---\
+\
+## Ebene B \'97 Build Scope\
+\
+Diese Ebene enth\'e4lt immer nur:\
+\
+- was jetzt wirklich gebaut wird\
+- warum genau jetzt\
+- welche Abh\'e4ngigkeiten vorher erf\'fcllt sein m\'fcssen\
+- was bewusst noch nicht gebaut wird\
+\
+Diese Ebene muss brutal fokussiert bleiben.\
+\
+---\
+\
+# 3. WAS NICHT WIEDER PASSIEREN DARF\
+\
+Folgende Fehler d\'fcrfen sich im Projekt nicht wiederholen:\
+\
+---\
+\
+## 3.1 Vision und Realit\'e4t vermischen\
+\
+Nicht zul\'e4ssig:\
+\
+- Vision als technischen Ist-Zustand behandeln\
+- Wunschstruktur als bestehende Architektur ausgeben\
+- \'84sp\'e4ter\'93 und \'84bereits vorhanden\'93 vermischen\
+\
+---\
+\
+## 3.2 Module zu fr\'fch technisch zementieren\
+\
+Nicht zul\'e4ssig:\
+\
+- zu fr\'fch APIs oder Service-Grenzen endg\'fcltig festlegen\
+- aus Ideen sofort technische Silos machen\
+- Infrastruktur vor Produktlogik priorisieren\
+\
+---\
+\
+## 3.3 Zu fr\'fch in UI denken\
+\
+Nicht zul\'e4ssig:\
+\
+- Screens vor Systemlogik bauen\
+- Flows vor Entity- und Entscheidungsmodell bauen\
+- Dashboard-Denke statt Companion-System-Denke\
+\
+---\
+\
+## 3.4 Zu fr\'fch in Feature-Masse kippen\
+\
+Nicht zul\'e4ssig:\
+\
+- alles gleichzeitig anfangen\
+- Core und Expansion parallel gleich behandeln\
+- Features ohne Fundament bauen\
+\
+---\
+\
+## 3.5 Buddy als Add-on behandeln\
+\
+Nicht zul\'e4ssig:\
+\
+- Buddy erst \'84sp\'e4ter mal oben drauf\'93 zu denken\
+- Companion vom Kernsystem zu trennen\
+- Intelligence Layer nachrangig zu behandeln\
+\
+Buddy ist nicht Deko.\
+\
+Buddy ist das zentrale Nutzergesicht des Systems.\
+\
+---\
+\
+# 4. PRODUKTBAU IN DER RICHTIGEN REIHENFOLGE\
+\
+LumeOS darf nicht von au\'dfen nach innen gebaut werden.\
+\
+Also nicht:\
+\
+- zuerst UI\
+- dann APIs\
+- dann DB\
+- dann irgendwann Logik\
+- dann vielleicht Buddy\
+\
+Sondern von innen nach au\'dfen.\
+\
+---\
+\
+## Richtige Reihenfolge\
+\
+### 1. Produktwahrheit\
+Was ist LumeOS wirklich?\
+\
+### 2. Dom\'e4nenklarheit\
+Welche Bereiche geh\'f6ren legitim dazu?\
+\
+### 3. F\'e4higkeitskarte\
+Was soll das System grunds\'e4tzlich k\'f6nnen?\
+\
+### 4. Entity-Klarheit\
+Welche fachlichen Objekte existieren \'fcberhaupt?\
+\
+### 5. Entscheidungslogik\
+Wie entstehen Guidance, Priorit\'e4ten und Empfehlungen?\
+\
+### 6. Datenfundament\
+Welche Daten m\'fcssen sauber und stabil vorliegen?\
+\
+### 7. Interaktionsschicht\
+Wie erlebt der Nutzer das System?\
+\
+### 8. Ausbau- und Business-Layer\
+Coach, Marketplace, Vision, Voice, Integrationen\
+\
+---\
+\
+# 5. DIE LOGISCHE KERNAUFBAU-REIHENFOLGE F\'dcR LUMEOS\
+\
+Aus heutiger Sicht sollte der echte Aufbau in dieser Reihenfolge gedacht werden:\
+\
+---\
+\
+## Phase 0 \'97 Rekonstruktion & Fundament\
+\
+### Ziel\
+Saubere Produktgrundlage schaffen.\
+\
+### Inhalt\
+- Core Product Truth\
+- Domain Map\
+- Capability Map\
+- System Entities\
+- Build Strategy\
+- klare Produktgrenzen\
+- klare Sprachregelung\
+- klare Trennung Planung vs Umsetzung\
+\
+### Ergebnis\
+Ab jetzt gibt es eine saubere Source of Truth.\
+\
+---\
+\
+## Phase 1 \'97 Identity & Foundation\
+\
+### Ziel\
+Das System bekommt eine stabile Nutzer- und Account-Basis.\
+\
+### Inhalt\
+- Auth\
+- OAuth\
+- User\
+- Profile\
+- Preferences\
+- Goal-Grundlage\
+- Basiszugriff\
+- Grundstruktur f\'fcr Personalisierung\
+\
+### Warum zuerst\
+Ohne User-, Profil- und Zielkontext ist alles andere generisch oder instabil.\
+\
+### Status\
+Der Einstieg in diese Phase l\'e4uft bereits.\
+\
+---\
+\
+## Phase 2 \'97 Nutrition Foundation\
+\
+### Ziel\
+Die erste echte Core-State-Dom\'e4ne stabil aufbauen.\
+\
+### Inhalt\
+- Foods\
+- Portions\
+- Nutrients\
+- Meal-Struktur\
+- Logging-Grundlage\
+- Suchlogik\
+- N\'e4hrstoffberechnung\
+- menschenverst\'e4ndliche Food-Ebene\
+\
+### Warum fr\'fch\
+Nutrition ist eine der h\'e4rtesten und systemrelevantesten Datendom\'e4nen.\
+\
+### Status\
+Der Einstieg in diese Phase l\'e4uft bereits.\
+\
+---\
+\
+## Phase 3 \'97 Training Foundation\
+\
+### Ziel\
+Zweite zentrale State-Dom\'e4ne aufbauen.\
+\
+### Inhalt\
+- Exercises\
+- Workout Templates\
+- Workout Sessions\
+- Set Logs\
+- History\
+- Basis-Progression\
+- Trainingskontext\
+\
+### Warum jetzt\
+Training ist f\'fcr das Produkt gleichwertig zu Nutrition und zentral f\'fcr Buddy.\
+\
+---\
+\
+## Phase 4 \'97 Recovery Foundation\
+\
+### Ziel\
+Dritte zentrale State-Dom\'e4ne aufbauen.\
+\
+### Inhalt\
+- Sleep\
+- Stress\
+- Soreness\
+- Energy\
+- Recovery State\
+- Check-ins\
+- Tagesform\
+\
+### Warum jetzt\
+Ohne Recovery werden Empfehlungen dumm, zu aggressiv oder eindimensional.\
+\
+---\
+\
+## Phase 5 \'97 Supplement Foundation\
+\
+### Ziel\
+Supplement-Dom\'e4ne aufbauen.\
+\
+### Inhalt\
+- Supplements\
+- Supplement-Produkte\
+- Inhaltsstoffe\
+- Dosierungen\
+- Logging\
+- Timing-Basis\
+- erste Guidance-Strukturen\
+\
+### Warum jetzt\
+Wichtige Dom\'e4ne, aber sinnvoll nach den drei Kern-State-Dom\'e4nen.\
+\
+---\
+\
+## Phase 6 \'97 Medical Awareness Foundation\
+\
+### Ziel\
+Health-Kontext und Marker-Ebene strukturiert einf\'fchren.\
+\
+### Inhalt\
+- Biomarker\
+- Readings\
+- Referenzlogik\
+- Verlauf\
+- Auff\'e4lligkeitslogik\
+- Kontext-Einbindung\
+- Eskalationshinweise\
+\
+### Warum nicht fr\'fcher\
+Sensible Dom\'e4ne. Muss auf solider User-, Goal- und State-Grundlage aufsetzen.\
+\
+---\
+\
+## Phase 7 \'97 Memory & Context Foundation\
+\
+### Ziel\
+Den persistenten Kontextlayer des Systems etablieren.\
+\
+### Inhalt\
+- relevante Memory-Typen\
+- Timeline-Logik\
+- Musterobjekte\
+- Kontextverdichtung\
+- Buddy-relevanter Verlauf\
+- Pr\'e4ferenzlernen\
+- wiederkehrende Probleme\
+\
+### Warum jetzt\
+Erst wenn gen\'fcgend echte Nutzersignale da sind, lohnt sauberer Memory-Aufbau.\
+\
+---\
+\
+## Phase 8 \'97 Recommendation & Decision Core\
+\
+### Ziel\
+Das Produkt wird wirklich intelligent.\
+\
+### Inhalt\
+- Recommendation-Objekte\
+- Priorisierung\
+- Trigger\
+- Decision Context\
+- deterministische Regeln\
+- Safety & Guardrails\
+- Recommendation Reason\
+- einfache Cross-Domain-Entscheidungen\
+\
+### Warum hier\
+Vorher gibt es zwar Daten. Aber noch kein echtes intelligentes System.\
+\
+---\
+\
+## Phase 9 \'97 Buddy Core Experience\
+\
+### Ziel\
+Buddy wird zur echten Nutzeroberfl\'e4che von LumeOS.\
+\
+### Inhalt\
+- Buddy Conversation Layer\
+- Guidance Items\
+- Daily Focus\
+- Explanations\
+- einfache proactive Flows\
+- Check-in-Verarbeitung\
+- kontextbezogene Antworten\
+\
+### Warum erst jetzt\
+Buddy ohne sauberen Kontext und ohne Recommendation Core w\'e4re nur ein Chat-Wrapper.\
+\
+---\
+\
+## Phase 10 \'97 Daily System Experience\
+\
+### Ziel\
+LumeOS wird alltagstauglich und persistent relevant.\
+\
+### Inhalt\
+- Daily Guidance\
+- Daily Check-ins\
+- Summary-Logik\
+- Reminder\
+- Nudges\
+- Adherence-Logik\
+- Weekly Insights\
+- Return-to-track-Flows\
+\
+### Warum jetzt\
+Hier beginnt aus dem System ein echter t\'e4glicher Begleiter zu werden.\
+\
+---\
+\
+## Phase 11 \'97 Coach Layer\
+\
+### Ziel\
+Menschliche Betreuung und B2B-/B2B2C-Layer erg\'e4nzen.\
+\
+### Inhalt\
+- Coach Profile\
+- Client Relationship\
+- Coach Dashboard\
+- Coach Notes\
+- Human Review\
+- Coach Assistance\
+\
+### Warum sp\'e4ter\
+Coach ist wichtig, aber nicht der erste Produktkern.\
+\
+---\
+\
+## Phase 12 \'97 Programs, Content, Commerce & Expansion\
+\
+### Ziel\
+Strukturierter Ausbau.\
+\
+### Inhalt\
+- Programme\
+- strukturierte Wissensschicht\
+- Marketplace\
+- Produktwelten\
+- Integrationen\
+- Wearables\
+- Vision\
+- Voice\
+- weitere Business-Layer\
+\
+### Warum am Ende\
+Diese Bereiche k\'f6nnen stark sein, aber sie sind nicht das Fundament.\
+\
+---\
+\
+# 6. WICHTIGER UNTERSCHIED: FUNDAMENT VS ERWEITERUNG\
+\
+---\
+\
+## Fundament ist alles, was n\'f6tig ist, damit Buddy sinnvolle Entscheidungen treffen kann\
+\
+Dazu geh\'f6ren vor allem:\
+\
+- Identity\
+- User Profile\
+- Goals\
+- Nutrition\
+- Training\
+- Recovery\
+- Supplements\
+- Medical Awareness\
+- Memory\
+- Recommendation Logic\
+- Decision Logic\
+- Safety\
+- Buddy Core\
+\
+---\
+\
+## Erweiterung ist alles, was das System st\'e4rker, bequemer oder wirtschaftlich interessanter macht\
+\
+Dazu geh\'f6ren vor allem:\
+\
+- Coach Layer\
+- Human Review\
+- Programs\
+- Education Library\
+- Marketplace\
+- Wearables\
+- Vision\
+- Voice\
+- Automations h\'f6herer Ordnung\
+\
+---\
+\
+# 7. SO WIRD IN ZUKUNFT ENTSCHEIDEN, WAS ALS N\'c4CHSTES GEBAUT WIRD\
+\
+Jede gr\'f6\'dfere Umsetzungsentscheidung muss k\'fcnftig diese f\'fcnf Fragen bestehen:\
+\
+---\
+\
+## Frage 1\
+Tr\'e4gt es direkt zum Produktkern bei?\
+\
+## Frage 2\
+Baut es auf bereits stabilem Fundament auf?\
+\
+## Frage 3\
+Erh\'f6ht es echte Nutzbarkeit, nicht nur theoretische Feature-Masse?\
+\
+## Frage 4\
+Erzeugt es neue Klarheit oder nur neue Komplexit\'e4t?\
+\
+## Frage 5\
+W\'e4re Buddy ohne diese Sache wirklich schlechter, oder ist es nur \'84auch nett\'93?\
+\
+---\
+\
+# 8. REGEL F\'dcR FEATURE-AUFNAHME\
+\
+Ein Feature darf in die Planung aufgenommen werden, wenn es:\
+\
+- zu einer legitimen Dom\'e4ne geh\'f6rt\
+- dem Core Product Truth nicht widerspricht\
+- auf der Capability Map sinnvoll verortbar ist\
+- sich als Entity, Regel oder Guidance logisch denken l\'e4sst\
+\
+Ein Feature darf **nicht automatisch** gebaut werden, nur weil es legitim ist.\
+\
+---\
+\
+# 9. REGEL F\'dcR TECHNISCHE UMSETZUNG\
+\
+Technik folgt Produktlogik.\
+\
+Nie umgekehrt.\
+\
+Das bedeutet:\
+\
+- keine technische Struktur ohne fachliche Begr\'fcndung\
+- keine API-Struktur ohne Entity- und Flow-Klarheit\
+- keine UI ohne Entscheidungs- und Guidance-Logik\
+- keine Expansion ohne Kernnutzen\
+\
+---\
+\
+# 10. REGEL F\'dcR DOKUMENTATION AB JETZT\
+\
+Ab jetzt gibt es drei klar getrennte Arten von Dokumenten:\
+\
+---\
+\
+## A. Produkt-Source-of-Truth\
+Beispiel:\
+- Core Product Truth\
+- Domain Map\
+- Capability Map\
+- System Entities\
+- Build Strategy\
+\
+Diese Dokumente definieren Produktrealit\'e4t.\
+\
+---\
+\
+## B. Build-Dokumente\
+Beispiel:\
+- aktuelle Phase\
+- n\'e4chster Scope\
+- PRDs\
+- Specs\
+- Akzeptanzkriterien\
+- Umsetzungsreihenfolge\
+\
+Diese Dokumente definieren den konkreten aktuellen Bauzustand.\
+\
+---\
+\
+## C. Historie / Archiv / Rohmaterial\
+Beispiel:\
+- alte Visionen\
+- alte Docs\
+- alte Entw\'fcrfe\
+- alte Modulideen\
+- verworfene Ans\'e4tze\
+\
+Diese Dokumente sind Referenzmaterial, aber nicht bindend.\
+\
+---\
+\
+# 11. REGEL F\'dcR SCOPE-CONTROL\
+\
+LumeOS darf in der Planung gro\'df sein.\
+\
+Aber jede konkrete Build-Phase muss:\
+\
+- klein genug sein\
+- klar genug sein\
+- testbar genug sein\
+- fachlich geschlossen genug sein\
+- ohne Wildwuchs lieferbar sein\
+\
+---\
+\
+## Praktische Regel\
+\
+Ein Build-Schritt ist nur dann gut geschnitten, wenn man klar sagen kann:\
+\
+- welches Problem er l\'f6st\
+- welche Entities betroffen sind\
+- welche Dom\'e4ne betroffen ist\
+- welche Inputs und Outputs entstehen\
+- was danach besser m\'f6glich ist\
+\
+Wenn das nicht klar ist, ist der Scope schlecht geschnitten.\
+\
+---\
+\
+# 12. DIE EIGENTLICHE BAUPHILOSOPHIE VON LUMEOS\
+\
+LumeOS wird nicht gebaut, indem man \'84alles einmal scaffoldet\'93.\
+\
+LumeOS wird gebaut, indem man:\
+\
+- das System fachlich sauber denkt\
+- Fundament vor Ausbau priorisiert\
+- Entscheidungen vor UI priorisiert\
+- Kontext vor Oberfl\'e4chen priorisiert\
+- Buddy vom Kern her aufbaut\
+- aus vielen Signalen ein klares System macht\
+\
+---\
+\
+# 13. AKTUELLE ARBEITSANNAHME\
+\
+Der reale Neustart-Status lautet aktuell:\
+\
+- Planung wird vollst\'e4ndig rekonstruiert\
+- technische Altlasten gelten nicht als bindend\
+- produktlogische Wahrheit wird neu definiert\
+- Umsetzung startet praktisch neu\
+- Nutrition Foundation wurde begonnen\
+- OAuth / Identity Foundation wurde begonnen\
+\
+Das ist der tats\'e4chliche Ausgangspunkt.\
+\
+---\
+\
+# 14. DIREKTE STRATEGISCHE KONSEQUENZ\
+\
+Die n\'e4chsten Entscheidungen d\'fcrfen sich nicht mehr an alten Modulbehauptungen orientieren.\
+\
+Sie m\'fcssen sich ab jetzt orientieren an:\
+\
+- Core Product Truth\
+- Domain Map\
+- Capability Map\
+- System Entities\
+- sauber geschnittenem aktuellem Build Scope\
+\
+---\
+\
+# 15. EIN-SATZ-STRATEGIE\
+\
+# LumeOS wird von innen nach au\'dfen gebaut: erst Produktwahrheit und Entscheidungslogik, dann Datenfundament, dann Buddy-Erlebnis, dann Erweiterung.\
+\
+---\
+\
+# Schlussregel\
+\
+Wenn k\'fcnftig eine Idee, ein Feature, ein Modul oder eine technische Entscheidung bewertet wird, gilt immer zuerst diese Frage:\
+\
+# Macht das LumeOS zu einem besseren pers\'f6nlichen Entscheidungs- und Begleitsystem?\
+\
+Wenn nein, ist es kein Kernbaustein.}

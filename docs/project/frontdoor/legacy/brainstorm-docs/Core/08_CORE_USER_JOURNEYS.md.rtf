@@ -1,0 +1,710 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 08_CORE_USER_JOURNEYS\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **zentralen Nutzer-Journeys** von LumeOS.\
+\
+Es beantwortet nicht:\
+\
+- wie etwas technisch implementiert wird\
+- wie die Datenbank aufgebaut ist\
+- welche API sp\'e4ter welche Route bekommt\
+\
+Es beantwortet die eigentliche Produktfrage:\
+\
+# Wie benutzt ein echter Nutzer LumeOS im Alltag, und wie muss sich das System dabei verhalten?\
+\
+Das ist entscheidend.\
+\
+Denn LumeOS ist kein Datencontainer.\
+\
+Es ist ein **Begleit- und Entscheidungssystem**.\
+\
+Wenn die Journeys nicht sauber gedacht sind, entsteht sp\'e4ter nur:\
+\
+- Tracking ohne Nutzen\
+- Features ohne Zusammenhang\
+- Buddy ohne Rolle\
+- UI ohne Richtung\
+- viel Oberfl\'e4che, wenig Produkt\
+\
+---\
+\
+## Grundregel\
+\
+Die Journeys m\'fcssen immer aus Sicht eines echten Nutzers gedacht werden.\
+\
+Nicht aus Sicht von:\
+\
+- Tabellen\
+- APIs\
+- Modulen\
+- Entwicklerlogik\
+- internen Architekturschichten\
+\
+Die Frage ist immer:\
+\
+# Was will oder braucht der Nutzer in diesem Moment wirklich?\
+\
+---\
+\
+# DIE 8 KERN-JOURNEYS VON LUMEOS\
+\
+Diese Journeys bilden den eigentlichen Produktkern.\
+\
+Wenn diese Journeys sp\'e4ter gut funktionieren, f\'fchlt sich LumeOS wie ein echtes System an.\
+\
+Wenn nicht, bleibt es St\'fcckwerk.\
+\
+---\
+\
+# JOURNEY 1 \'97 ONBOARDING & GRUNDLAGE\
+\
+## Ziel\
+\
+Der Nutzer richtet LumeOS so ein, dass das System ihn sinnvoll verstehen und personalisieren kann.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Ich will, dass das System mich kennt, ohne dass ich 100 Dinge manuell konfigurieren muss.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Wer ist der Nutzer?\
+- Was ist sein Ziel?\
+- In welchem Kontext lebt/trainiert/isst er?\
+- Welche Rahmenbedingungen gelten?\
+- Welche Grunddaten braucht LumeOS wirklich?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Einstieg\
+Der Nutzer registriert sich oder loggt sich ein.\
+\
+### 2. Basisprofil\
+Der Nutzer gibt zentrale pers\'f6nliche Daten an.\
+\
+### 3. Zieldefinition\
+Der Nutzer legt Hauptziel und ggf. Priorit\'e4ten fest.\
+\
+### 4. Basispr\'e4ferenzen\
+Der Nutzer w\'e4hlt Einheiten, Sprache und relevante Pr\'e4ferenzen.\
+\
+### 5. Minimaler Startzustand\
+LumeOS erzeugt eine erste nutzbare Ausgangslage.\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- wenig Reibung\
+- keine unn\'f6tigen Fragen\
+- schnelle Relevanz\
+- das Gef\'fchl: \'84Das System versteht grob, worum es bei mir geht.\'93\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- einfacher Einstieg\
+- klare Datenerfassung\
+- sinnvolle Zielabfrage\
+- erste Personalisierungsbasis\
+- keine \'dcberforderung\
+\
+---\
+\
+## Wichtig\
+\
+Onboarding darf nicht wirken wie:\
+\
+- Formularh\'f6lle\
+- medizinischer Intake\
+- Coach-Fragebogen mit 80 Feldern\
+\
+Es muss schnell genug sein, damit der Nutzer fr\'fch Wert sp\'fcrt.\
+\
+---\
+\
+# JOURNEY 2 \'97 T\'c4GLICHER START / DAILY ORIENTATION\
+\
+## Ziel\
+\
+Der Nutzer bekommt Orientierung f\'fcr den aktuellen Tag.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Sag mir, was heute wichtig ist.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Wie ist mein heutiger Zustand?\
+- Was sollte ich heute priorisieren?\
+- Muss ich heute etwas anpassen?\
+- Was z\'e4hlt heute wirklich?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Einstieg in den Tag\
+Der Nutzer \'f6ffnet LumeOS oder Buddy.\
+\
+### 2. Kurzer Status\
+Optional:\
+- Schlaf\
+- Energie\
+- Stress\
+- Soreness\
+- Tagesgef\'fchl\
+\
+### 3. Tageseinordnung\
+LumeOS verdichtet vorhandene Informationen.\
+\
+### 4. Daily Focus\
+Das System zeigt:\
+- wichtigste Priorit\'e4t\
+- relevante Hinweise\
+- kleine n\'e4chste Schritte\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- keine Datenflut\
+- keine Dashboard-\'dcberforderung\
+- klare Priorit\'e4t\
+- praktische Relevanz\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- Tagesfokus setzen\
+- relevante Zust\'e4nde einordnen\
+- unn\'f6tige Komplexit\'e4t ausblenden\
+- Buddy sinnvoll als t\'e4gliche Startoberfl\'e4che nutzbar machen\
+\
+---\
+\
+## Wichtig\
+\
+Diese Journey ist einer der st\'e4rksten sp\'e4teren Produktanker.\
+\
+Wenn Daily Orientation schwach ist, wird LumeOS schnell zu \'84noch einer App\'93.\
+\
+---\
+\
+# JOURNEY 3 \'97 ERN\'c4HRUNG IM ALLTAG\
+\
+## Ziel\
+\
+Der Nutzer kann Ern\'e4hrung schnell, realistisch und alltagstauglich erfassen und verstehen.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Ich will Essen einfach eintragen, ohne dass es nervt.\'93\
+\
+Und sp\'e4ter:\
+\
+\'84Ich will verstehen, was meine Ern\'e4hrung gerade wirklich bedeutet.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Was habe ich gegessen?\
+- Wie logge ich das schnell?\
+- Wie pr\'e4zise muss ich sein?\
+- Was bedeutet das f\'fcr mein Ziel?\
+- Wo liege ich gut oder schlecht?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Food-/Meal-Eingabe\
+Der Nutzer loggt Food oder komplette Mahlzeit.\
+\
+### 2. Portionen\
+Das System hilft bei alltagstauglichen Mengen.\
+\
+### 3. Meal-Verst\'e4ndnis\
+Das System speichert nicht nur Zahlen, sondern echte Mahlzeiten.\
+\
+### 4. Tages-/Meal-Auswertung\
+LumeOS zeigt:\
+- Makros\
+- Mikros\
+- Einordnung\
+- ggf. einfache Hinweise\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- schnell\
+- verst\'e4ndlich\
+- nicht zu nerdig\
+- nicht zu ungenau\
+- alltagstauglich\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- gute Suche\
+- gute Portionslogik\
+- einfache Logging-Flows\
+- sinnvolle Ern\'e4hrungsauswertung\
+- Wiederverwendung erleichtern\
+\
+---\
+\
+## Wichtig\
+\
+Wenn diese Journey zu aufwendig ist, verliert der Nutzer schnell die Lust.\
+\
+---\
+\
+# JOURNEY 4 \'97 TRAINING IM ALLTAG\
+\
+## Ziel\
+\
+Der Nutzer kann Training einfach planen, durchf\'fchren, loggen und einordnen.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Ich will im Gym nicht k\'e4mpfen m\'fcssen, sondern schnell durch mein Training kommen.\'93\
+\
+Und sp\'e4ter:\
+\
+\'84Ich will wissen, ob ich Fortschritt mache oder mich falsch belaste.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Was trainiere ich heute?\
+- Wie logge ich das schnell?\
+- Wie sehe ich meine letzte Leistung?\
+- Wie entwickelt sich mein Training?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Workout ausw\'e4hlen oder \'f6ffnen\
+Der Nutzer startet ein Workout.\
+\
+### 2. Session Logging\
+Er loggt:\
+- \'dcbungen\
+- Sets\
+- Reps\
+- Gewicht\
+- Notizen\
+\
+### 3. Verlaufskontext\
+Das System zeigt letzte Leistungen oder Verlauf.\
+\
+### 4. Nach der Session\
+LumeOS speichert Training, Historie und sp\'e4ter Einordnung.\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- schnell\
+- nicht frickelig\
+- gym-tauglich\
+- motivierend\
+- nicht \'fcberladen\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- saubere Workout-Struktur\
+- schnelles Set-Logging\
+- Verlauf sichtbar machen\
+- sp\'e4ter Progressionsbasis vorbereiten\
+\
+---\
+\
+## Wichtig\
+\
+Training muss sich wie ein Werkzeug anf\'fchlen, nicht wie B\'fcroarbeit.\
+\
+---\
+\
+# JOURNEY 5 \'97 RECOVERY & ZUSTANDSREFLEXION\
+\
+## Ziel\
+\
+Der Nutzer kann seinen Zustand mit wenig Reibung sichtbar machen und daraus Nutzen ziehen.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Ich will nicht alles messen, aber ich will wissen, wie ich gerade dastehe.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Wie f\'fchle ich mich?\
+- Wie erholt bin ich?\
+- Wie belastbar bin ich?\
+- Was bedeutet das f\'fcr Training, Ern\'e4hrung und Tagesfokus?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Kurzer Check-in\
+Der Nutzer gibt wenige Zustandswerte ein.\
+\
+### 2. Recovery-Zustand\
+LumeOS speichert und verdichtet diese Informationen.\
+\
+### 3. Kontext\
+Der Zustand wird mit Training, Ern\'e4hrung und Zielen verkn\'fcpft.\
+\
+### 4. sp\'e4tere Guidance\
+Diese Journey liefert sp\'e4ter Input f\'fcr Buddy und Decision Engine.\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- schnell\
+- unkompliziert\
+- sinnvoll\
+- nicht medizinisch\
+- nicht wie ein Testlabor\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- niedrige Eingabereibung\
+- sinnvolle Verdichtung\
+- Verlauf \'fcber Zeit\
+- klare Nutzbarkeit im Alltag\
+\
+---\
+\
+## Wichtig\
+\
+Recovery darf nicht nur \'84nice to have\'93 sein.\
+\
+Es ist ein zentrales Steuerungssignal f\'fcr das gesamte Produkt.\
+\
+---\
+\
+# JOURNEY 6 \'97 VERSTEHEN & EINORDNEN\
+\
+## Ziel\
+\
+Der Nutzer versteht, was seine Daten und Muster bedeuten.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Ich will nicht nur Zahlen sehen. Ich will kapieren, was das hei\'dft.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Was l\'e4uft gut?\
+- Was l\'e4uft schlecht?\
+- Was hat sich ver\'e4ndert?\
+- Was ist wirklich relevant?\
+- Warum empfiehlt LumeOS etwas Bestimmtes?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Der Nutzer schaut auf:\
+- Tageswerte\
+- Verlauf\
+- Zusammenfassungen\
+- Buddy-Erkl\'e4rungen\
+- Insights\
+\
+### 2. Das System liefert Einordnung\
+Nicht nur Rohdaten, sondern Bedeutung.\
+\
+### 3. Der Nutzer versteht Zusammenh\'e4nge\
+Zum Beispiel:\
+- schlechter Schlaf \uc0\u8594  schlechteres Training\
+- Protein stabil \uc0\u8594  gute Adherence\
+- Recovery f\'e4llt ab \uc0\u8594  Anpassung sinnvoll\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- Klarheit\
+- Relevanz\
+- kein Datenm\'fcll\
+- keine leeren Floskeln\
+- nachvollziehbare Erkl\'e4rungen\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- Insights erzeugen\
+- Trends sichtbar machen\
+- Priorit\'e4ten benennen\
+- Empfehlungen erkl\'e4ren\
+- Buddy als \'dcbersetzer nutzen\
+\
+---\
+\
+## Wichtig\
+\
+Das ist einer der st\'e4rksten Unterschiede zwischen LumeOS und gew\'f6hnlichen Trackern.\
+\
+---\
+\
+# JOURNEY 7 \'97 BUDDY ALS T\'c4GLICHER BEGLEITER\
+\
+## Ziel\
+\
+Der Nutzer nutzt Buddy als nat\'fcrliche und zentrale Oberfl\'e4che des Systems.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Ich will nicht immer selbst \'fcberlegen m\'fcssen, wo ich hinschauen oder was ich eingeben soll.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Wie kann Buddy mir wirklich helfen?\
+- Wann ist Buddy n\'fctzlich?\
+- Wie wird Buddy mehr als nur ein Chatfenster?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Nutzer fragt Buddy etwas\
+Zum Beispiel:\
+- Was ist heute wichtig?\
+- War mein Training diese Woche ok?\
+- Wie liege ich mit Protein?\
+- Warum bin ich gerade so platt?\
+\
+### 2. Buddy greift auf Systemkontext zu\
+Nicht nur auf einzelne Zahlen.\
+\
+### 3. Buddy antwortet sinnvoll\
+Mit:\
+- Kontext\
+- Priorisierung\
+- Erkl\'e4rung\
+- Guidance\
+\
+### 4. Buddy wird sp\'e4ter proaktiv\
+Nicht nur auf Nachfrage.\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- hilfreich\
+- kontextbezogen\
+- nicht generisch\
+- nicht nur \'84motivationsm\'e4\'dfig nett\'93\
+- wirklich n\'fctzlich\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- Buddy an echten Kontext anbinden\
+- Antworten mit Verlauf und Zielen verkn\'fcpfen\
+- Guidance statt blo\'dfer Unterhaltung liefern\
+- echte Companion-Qualit\'e4t vorbereiten\
+\
+---\
+\
+## Wichtig\
+\
+Buddy ist nicht nur eine Chat-Eingabe.\
+\
+Buddy ist die wichtigste zuk\'fcnftige Produktoberfl\'e4che.\
+\
+---\
+\
+# JOURNEY 8 \'97 LANGFRISTIGE ENTWICKLUNG & KONTINUIT\'c4T\
+\
+## Ziel\
+\
+Der Nutzer erlebt LumeOS nicht als Tages-Tool, sondern als langfristig sinnvolles Begleitsystem.\
+\
+---\
+\
+## Nutzerbed\'fcrfnis\
+\
+\'84Ich will nicht jeden Monat wieder bei null anfangen.\'93\
+\
+---\
+\
+## Kernfragen dieser Journey\
+\
+- Erkennt das System meine Muster \'fcber Zeit?\
+- Sieht es, was sich ver\'e4ndert?\
+- Hilft es mir auch \'fcber Wochen und Monate?\
+- Baut es auf meinem Verlauf auf?\
+\
+---\
+\
+## Typischer Ablauf\
+\
+### 1. Verlauf w\'e4chst\
+Mehr Meals, Workouts, Recovery-Signale, Ziele, Gewohnheiten, Muster.\
+\
+### 2. LumeOS erkennt Trends\
+Das System beginnt, Entwicklung zu sehen.\
+\
+### 3. Guidance wird besser\
+Empfehlungen werden mit der Zeit pr\'e4ziser.\
+\
+### 4. Buddy wird relevanter\
+Nicht nur \'84smart\'93, sondern vertraut und n\'fctzlich.\
+\
+---\
+\
+## Erwartung des Nutzers\
+\
+- Kontinuit\'e4t\
+- kein Reset-Gef\'fchl\
+- Fortschritt sichtbar\
+- Personalisierung mit der Zeit\
+- echtes \'84Das kennt mich\'93\
+\
+---\
+\
+## Was LumeOS in dieser Journey leisten muss\
+\
+- Verlauf sauber speichern\
+- Muster sp\'e4ter nutzbar machen\
+- Konsistenz im Produktgef\'fchl schaffen\
+- echte Langzeitrelevanz aufbauen\
+\
+---\
+\
+## Wichtig\
+\
+Das ist einer der gr\'f6\'dften langfristigen Produkthebel.\
+\
+Viele Systeme sind am ersten Tag interessant.\
+\
+Wenige bleiben nach 6 Monaten wertvoll.\
+\
+LumeOS muss zu den wenigen geh\'f6ren.\
+\
+---\
+\
+# ZUSAMMENHANG DER JOURNEYS\
+\
+Diese Journeys stehen nicht isoliert nebeneinander.\
+\
+Sie greifen ineinander.\
+\
+---\
+\
+## Typische nat\'fcrliche Produktlogik\
+\
+### Onboarding\
+\uc0\u8594  schafft Basis\
+\
+### Daily Orientation\
+\uc0\u8594  gibt t\'e4glichen Einstieg\
+\
+### Ern\'e4hrung, Training, Recovery\
+\uc0\u8594  liefern State und Verhalten\
+\
+### Verstehen & Einordnen\
+\uc0\u8594  erzeugt echten Nutzen\
+\
+### Buddy\
+\uc0\u8594  macht das Ganze nat\'fcrlich zug\'e4nglich\
+\
+### Langfristige Kontinuit\'e4t\
+\uc0\u8594  macht aus dem Produkt einen echten Begleiter\
+\
+---\
+\
+# WICHTIGE PRODUKTREGEL\
+\
+Wenn k\'fcnftig neue Features diskutiert werden, m\'fcssen sie mindestens einer dieser Fragen dienen:\
+\
+- Verbessert es eine bestehende Core Journey?\
+- Schlie\'dft es eine echte L\'fccke in einer Core Journey?\
+- Macht es eine Core Journey leichter, klarer oder wertvoller?\
+- Oder ist es nur \'84noch ein Feature\'93?\
+\
+Wenn es keine Journey verbessert, geh\'f6rt es wahrscheinlich nicht in den Kern.\
+\
+---\
+\
+# PRIORIT\'c4T DER JOURNEYS F\'dcR DEN ECHTEN BAU\
+\
+Nicht alle Journeys sind sofort gleich tief zu bauen.\
+\
+Die erste echte Baupriorit\'e4t liegt auf:\
+\
+## Erste Priorit\'e4t\
+- Journey 1 \'97 Onboarding & Grundlage\
+- Journey 2 \'97 Daily Orientation\
+- Journey 3 \'97 Ern\'e4hrung im Alltag\
+- Journey 4 \'97 Training im Alltag\
+- Journey 5 \'97 Recovery & Zustandsreflexion\
+\
+## Zweite Priorit\'e4t\
+- Journey 6 \'97 Verstehen & Einordnen\
+- Journey 7 \'97 Buddy als t\'e4glicher Begleiter\
+\
+## Dritte Priorit\'e4t\
+- Journey 8 \'97 Langfristige Entwicklung & Kontinuit\'e4t\
+\
+---\
+\
+# Schlussregel\
+\
+Wenn LumeOS sp\'e4ter gut sein soll, muss sich jede wichtige Funktion in mindestens eine echte Nutzer-Journey sauber einf\'fcgen.\
+\
+Wenn etwas nur intern logisch wirkt, aber keine echte Journey st\'e4rkt, ist es sehr wahrscheinlich nicht produktrelevant genug.}

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "_meta": {
+    "source": ["apps/app/app/globals.css", "apps/app/modules/**/*.tsx", "src/modules/**/*.tsx"],
+    "system": "Tailwind CSS default 4px-base scale — no custom spacing tokens defined",
+    "generated": "2026-04-27"
+  },
+
+  "base": "4px",
+
+  "scale": {
+    "0.5": "2px", "1": "4px", "1.5": "6px", "2": "8px", "2.5": "10px",
+    "3": "12px", "3.5": "14px", "4": "16px", "5": "20px", "6": "24px",
+    "8": "32px", "10": "40px", "12": "48px", "16": "64px"
+  },
+
+  "componentSpacing": {
+    "_comment": "Most-used spacing patterns from 534 TSX files, ranked by frequency",
+
+    "gap": {
+      "gap-1": { "value": "4px",  "usage": "tight icon+label, badge icon pairs" },
+      "gap-2": { "value": "8px",  "usage": "flex rows — button icon+text, list items (286 matches)" },
+      "gap-3": { "value": "12px", "usage": "card content rows, nav items (158 matches)" },
+      "gap-4": { "value": "16px", "usage": "form fields, modal content rows" },
+      "gap-6": { "value": "24px", "usage": "section spacing, major layout gaps" }
+    },
+
+    "space-y": {
+      "space-y-1": { "value": "4px",  "usage": "tight stacked items (55 matches)" },
+      "space-y-2": { "value": "8px",  "usage": "compact card content (234 matches)" },
+      "space-y-3": { "value": "12px", "usage": "default list/form spacing (178 matches)" },
+      "space-y-4": { "value": "16px", "usage": "standard card section spacing (235 matches)" },
+      "space-y-6": { "value": "24px", "usage": "major content sections (83 matches)" }
+    },
+
+    "padding": {
+      "p-2":          { "value": "8px",    "usage": "icon buttons (logout, close)" },
+      "p-3":          { "value": "12px",   "usage": "compact card padding, Button sm" },
+      "p-4":          { "value": "16px",   "usage": "default card padding (packages/ui Card default)" },
+      "p-5":          { "value": "20px",   "usage": "module card padding — bg-white rounded-xl border border-gray-200 p-5" },
+      "p-6":          { "value": "24px",   "usage": "ModuleHeader, Modal, Card lg variant" },
+      "px-3":         { "value": "12px h", "usage": "nav item horizontal, Button sm" },
+      "px-4":         { "value": "16px h", "usage": "Button md, tab button horizontal" },
+      "px-5":         { "value": "20px h", "usage": "Sidebar header horizontal" },
+      "px-6":         { "value": "24px h", "usage": "Button lg" },
+      "py-2":         { "value": "8px v",  "usage": "external app links, compact buttons" },
+      "py-2.5":       { "value": "10px v", "usage": "nav items, Button md override" },
+      "py-3":         { "value": "12px v", "usage": "tab nav buttons, input fields" },
+      "py-4":         { "value": "16px v", "usage": "sidebar user section" },
+      "px-2.5 py-0.5":{ "usage": "Badge pill" }
+    },
+
+    "margin": {
+      "mb-2":  { "value": "8px",  "usage": "form label bottom (tight)" },
+      "mb-3":  { "value": "12px", "usage": "section heading bottom, card sub-header" },
+      "mb-4":  { "value": "16px", "usage": "standard card header margin (66 matches)" },
+      "mb-6":  { "value": "24px", "usage": "major section bottom margin (47 matches)" },
+      "mt-0.5":{ "value": "2px",  "usage": "ModuleHeader subtitle top offset" },
+      "mt-1":  { "value": "4px",  "usage": "helper text below inputs/fields" },
+      "mt-4":  { "value": "16px", "usage": "KPI grid top margin in ModuleHeader" },
+      "mr-2":  { "value": "8px",  "usage": "Button loading spinner right margin" },
+      "ml-2":  { "value": "8px",  "usage": "logout button left push" },
+      "ml-auto":{ "usage": "right-align elements in flex row" }
+    }
+  },
+
+  "borderRadius": {
+    "rounded":     { "value": "4px",    "usage": "subtle rounding" },
+    "rounded-lg":  { "value": "8px",    "usage": "buttons, inputs, nav items — primary interactive shape" },
+    "rounded-xl":  { "value": "12px",   "usage": "cards, modals, sidebar icons — primary card shape" },
+    "rounded-2xl": { "value": "16px",   "usage": "ModuleHeader gradient container" },
+    "rounded-full":{ "value": "9999px", "usage": "badge pills, spinner border, KPI dots" }
+  },
+
+  "layout": {
+    "sidebarWidth": { "value": "256px", "tailwind": "w-64" },
+    "mobileHeader": { "value": "fixed bottom, full-width" },
+
+    "dashboardGrid": {
+      "_comment": "Custom .dashboard-grid CSS class in globals.css",
+      "mobile":    "1 column, gap: 1rem (16px)",
+      "desktop":   "2 columns (lg: 1024px+), gap: 1.5rem (24px)",
+      "wide":      "3 columns (2xl: 1536px+)",
+      "fullWidth": "grid-column: 1 / -1 (.full-width child)",
+      "span2":     "grid-column: span 2 on desktop (.span-2 child)"
+    },
+
+    "maxWidths": {
+      "modal":      { "tailwind": "max-w-lg",     "value": "512px" },
+      "actionCard": { "tailwind": "max-w-[75%]",  "usage": "buddy chat bubble max width" }
+    },
+
+    "zIndex": {
+      "modal":   { "value": "50", "tailwind": "z-50" },
+      "overlay": { "value": "10", "tailwind": "z-10 (relative within modal)" }
+    }
+  },
+
+  "effects": {
+    "cardHover": {
+      "classes": "transition: transform 0.15s ease, box-shadow 0.15s ease",
+      "hover": "translateY(-1px), box-shadow: 0 4px 12px rgba(0,0,0,0.08)",
+      "cssClass": ".card-hover (desktop ≥1024px only)",
+      "tailwindEquivalent": "hover:-translate-y-px hover:shadow-md transition-all"
+    },
+    "transitionColors":  { "tailwind": "transition-colors",       "usage": "nav items, buttons, interactive elements — most frequent transition" },
+    "transitionAll":     { "tailwind": "transition-all duration-200", "usage": "ActionCard buttons" },
+    "sidebarActiveBar":  { "description": "3px left border indicator on active sidebar item", "css": "position:absolute; left:0; width:3px; height:60%; border-radius:0 4px 4px 0; background:#16a34a", "cssClass": ".sidebar-item-active::before" }
+  },
+
+  "scrollbar": {
+    "hide":   { "cssClass": ".scrollbar-hide",   "css": "-ms-overflow-style:none; scrollbar-width:none; ::-webkit-scrollbar{display:none}" },
+    "custom": { "cssClass": ".custom-scrollbar (desktop ≥1024px only)", "width": "6px", "thumb": "rgba(0,0,0,0.1) → hover rgba(0,0,0,0.2)", "track": "transparent" }
+  },
+
+  "safeArea": {
+    "pbSafe": { "cssClass": ".pb-safe", "css": "padding-bottom: env(safe-area-inset-bottom)", "usage": "Bottom nav on iPhone with home indicator" }
+  }
+}

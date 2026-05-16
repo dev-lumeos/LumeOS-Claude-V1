@@ -1,0 +1,486 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 17_V1_ACCEPTANCE_CRITERIA\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **Abnahmekriterien f\'fcr LumeOS V1 Foundation**.\
+\
+Es beantwortet die Frage:\
+\
+# Wann gilt V1 Foundation fachlich wirklich als fertig, belastbar und als echte Basis f\'fcr die n\'e4chste Schicht?\
+\
+Dieses Dokument ist wichtig, weil gro\'dfe Systeme sonst zu fr\'fch als \'84fertig\'93 gelten, obwohl in Wahrheit nur Folgendes passiert ist:\
+\
+- etwas sieht gut aus\
+- einzelne Screens existieren\
+- ein paar APIs laufen\
+- Demo-Flows funktionieren halb\
+- intern ist aber noch keine saubere Produktbasis vorhanden\
+\
+Genau das darf bei LumeOS nicht passieren.\
+\
+---\
+\
+## Kernregel\
+\
+# V1 Foundation gilt nur dann als fertig, wenn die Kernf\'e4higkeit des Systems real, stabil und wiederholbar nutzbar ist.\
+\
+Nicht:\
+\
+- theoretisch\
+- in einer Demo\
+- nur auf Happy Path\
+- nur mit manueller Nacharbeit\
+- nur mit internem Wissen\
+- nur mit AI-Improvisation\
+\
+---\
+\
+# 1. DIE OBERSTE ABNAHMEREGEL\
+\
+LumeOS V1 Foundation ist erst dann akzeptiert, wenn folgende Aussage stimmt:\
+\
+# Ein echter Nutzer kann mit stabiler Nutzerbasis, klaren Zielen und alltagstauglichen Flows Ern\'e4hrung, Training und Recovery nutzen, und das System h\'e4lt diese Zust\'e4nde sauber \'fcber Zeit zusammen.\
+\
+Wenn diese Aussage nicht wahr ist, ist V1 Foundation nicht abgeschlossen.\
+\
+---\
+\
+# 2. DIE 6 ABNAHMEBEREICHE\
+\
+V1 Foundation wird in sechs Bereichen abgenommen:\
+\
+1. User Foundation\
+2. Nutrition Foundation\
+3. Training Foundation\
+4. Recovery Foundation\
+5. Timeline & State Integrity\
+6. V1 Product Usability\
+\
+Erst wenn alle sechs Bereiche tragf\'e4hig sind, gilt V1 Foundation als erf\'fcllt.\
+\
+---\
+\
+# 3. ABNAHMEKRITERIEN \'97 USER FOUNDATION\
+\
+V1 Foundation ist im Bereich User Foundation nur dann erf\'fcllt, wenn alle folgenden Punkte erf\'fcllt sind.\
+\
+---\
+\
+## 3.1 Auth funktioniert stabil\
+\
+### Muss erf\'fcllt sein\
+- Nutzer kann sich registrieren oder einloggen\
+- OAuth-Flow ist stabil, falls Teil des Scopes\
+- Session-Kontext funktioniert sauber\
+- Zugriff ist nicht zuf\'e4llig oder fragil\
+\
+### Nicht akzeptabel\
+- Login geht nur manchmal\
+- Session bricht unklar weg\
+- User ist intern da, aber Flow ist nicht sauber nutzbar\
+\
+---\
+\
+## 3.2 Nutzerprofil ist strukturiert nutzbar\
+\
+### Muss erf\'fcllt sein\
+- Nutzerprofil kann angelegt werden\
+- relevante Basisdaten sind speicherbar\
+- Profil ist sp\'e4ter wieder lesbar und nutzbar\
+- Profil wird nicht nur \'84irgendwo abgelegt\'93, sondern systemisch nutzbar\
+\
+### Nicht akzeptabel\
+- Profilfelder existieren nur formal\
+- Daten sind gespeichert, aber nicht sauber integrierbar\
+- Profil ist nur UI, aber nicht systemisch verwertbar\
+\
+---\
+\
+## 3.3 Ziele sind wirklich nutzbar\
+\
+### Muss erf\'fcllt sein\
+- Hauptziel ist setzbar\
+- Ziel bleibt persistent erhalten\
+- Ziel ist systemisch lesbar\
+- Ziel kann sp\'e4ter zur Zustandsbewertung verwendet werden\
+\
+### Nicht akzeptabel\
+- Ziel ist nur Onboarding-Dekoration\
+- Ziel ist nicht sauber an Nutzerkontext gebunden\
+- Ziel ist nicht sp\'e4ter nutzbar\
+\
+---\
+\
+## 3.4 Pr\'e4ferenzen sind nicht nur Kosmetik\
+\
+### Muss erf\'fcllt sein\
+- Basispr\'e4ferenzen sind speicherbar\
+- Sprache / Einheiten / relevante Defaults sind nutzbar\
+- Pr\'e4ferenzen k\'f6nnen systemisch gelesen werden\
+\
+### Nicht akzeptabel\
+- Pr\'e4ferenzen existieren nur im UI\
+- Pr\'e4ferenzen werden intern ignoriert\
+\
+---\
+\
+# 4. ABNAHMEKRITERIEN \'97 NUTRITION FOUNDATION\
+\
+---\
+\
+## 4.1 Foods sind real nutzbar\
+\
+### Muss erf\'fcllt sein\
+- Foods sind suchbar\
+- Foods sind verst\'e4ndlich benannt\
+- Foods sind logisch nutzbar\
+- Foods haben nutzbare Portionsebene\
+- Food-Auswahl funktioniert in echten Logging-Flows\
+\
+### Nicht akzeptabel\
+- Daten sind da, aber Suche ist unbrauchbar\
+- Food-Layer ist technisch vorhanden, aber alltagsuntauglich\
+- Portionslogik ist unklar oder real nicht nutzbar\
+\
+---\
+\
+## 4.2 Meal Logging funktioniert alltagstauglich\
+\
+### Muss erf\'fcllt sein\
+- Nutzer kann Meal oder Food loggen\
+- Portionsauswahl ist sinnvoll\
+- Meal wird sauber gespeichert\
+- Meal ist sp\'e4ter wieder sichtbar\
+- Logging funktioniert ohne unn\'f6tige Reibung\
+\
+### Nicht akzeptabel\
+- Logging nur auf Demo-Level\
+- Meal-Struktur kaputt oder unklar\
+- Eingabe nervt so stark, dass der Flow praktisch unbrauchbar ist\
+\
+---\
+\
+## 4.3 Nutrition Calculation ist belastbar\
+\
+### Muss erf\'fcllt sein\
+- Makros sind berechenbar\
+- Mikros sind berechenbar\
+- Tagessummen sind konsistent\
+- Meal-Summen sind konsistent\
+- wiederholte Berechnung liefert stabile Resultate\
+\
+### Nicht akzeptabel\
+- Ergebnisse schwanken unklar\
+- Rechenlogik ist inkonsistent\
+- Nutrition-Werte wirken zuf\'e4llig oder unklar\
+\
+---\
+\
+## 4.4 Nutrition History ist vorhanden\
+\
+### Muss erf\'fcllt sein\
+- fr\'fchere Meals sind auffindbar\
+- Verlauf ist zeitlich korrekt\
+- Tages- oder Historienzugriff ist m\'f6glich\
+- Daten sind nicht nur \'84gespeichert\'93, sondern historisch lesbar\
+\
+### Nicht akzeptabel\
+- Logging geht, aber Verlauf ist unbrauchbar\
+- alte Meals sind nicht sauber auffindbar\
+- Zeitbezug ist unsauber\
+\
+---\
+\
+# 5. ABNAHMEKRITERIEN \'97 TRAINING FOUNDATION\
+\
+---\
+\
+## 5.1 \'dcbungen und Workouts sind nutzbar modelliert\
+\
+### Muss erf\'fcllt sein\
+- \'dcbungen sind logisch vorhanden\
+- Workout-Struktur ist nutzbar\
+- \'dcbungsauswahl ist alltagstauglich\
+- Trainingsbasis ist nicht nur Datenbank, sondern nutzbarer Kernflow\
+\
+### Nicht akzeptabel\
+- \'dcbungen existieren, aber sind im Flow nicht praktikabel\
+- Workout-Struktur ist unklar oder zerf\'e4llt im Logging\
+\
+---\
+\
+## 5.2 Workout Logging funktioniert real\
+\
+### Muss erf\'fcllt sein\
+- Session kann gestartet / genutzt / gespeichert werden\
+- Sets k\'f6nnen geloggt werden\
+- Gewicht und Reps k\'f6nnen stabil gespeichert werden\
+- Session ist sp\'e4ter wieder sichtbar\
+\
+### Nicht akzeptabel\
+- Training-Flow funktioniert nur teilweise\
+- Set Logging ist instabil oder frickelig\
+- Session Save ist unzuverl\'e4ssig\
+\
+---\
+\
+## 5.3 Training History ist brauchbar\
+\
+### Muss erf\'fcllt sein\
+- vergangene Sessions sind lesbar\
+- letzte Leistung ist grunds\'e4tzlich verf\'fcgbar\
+- Verlauf ist zeitlich korrekt\
+- Trainingsdaten sind nicht nur Input, sondern Verlauf\
+\
+### Nicht akzeptabel\
+- Daten gehen rein, aber Verlauf ist kaum nutzbar\
+- Historie ist nicht sauber zug\'e4nglich\
+\
+---\
+\
+# 6. ABNAHMEKRITERIEN \'97 RECOVERY FOUNDATION\
+\
+---\
+\
+## 6.1 Recovery Inputs sind niedrigschwellig nutzbar\
+\
+### Muss erf\'fcllt sein\
+- Schlaf / Energie / Stress / Soreness / Tagesform k\'f6nnen erfasst werden\
+- Check-in ist schnell genug\
+- Recovery-Eingabe ist kein unn\'f6tiger Reibungspunkt\
+\
+### Nicht akzeptabel\
+- Check-in ist zu schwerf\'e4llig\
+- Tageszustand ist formal m\'f6glich, aber praktisch unerquicklich\
+\
+---\
+\
+## 6.2 Recovery State ist persistent und lesbar\
+\
+### Muss erf\'fcllt sein\
+- Recovery-Daten bleiben erhalten\
+- Tagesbezug ist klar\
+- sp\'e4tere Abfrage ist m\'f6glich\
+- Verlauf kann aufgebaut werden\
+\
+### Nicht akzeptabel\
+- Recovery-Daten verschwinden\
+- Daten sind nur einmal sichtbar\
+- keine saubere Verlaufsebene\
+\
+---\
+\
+# 7. ABNAHMEKRITERIEN \'97 TIMELINE & STATE INTEGRITY\
+\
+Das ist einer der wichtigsten Bereiche \'fcberhaupt.\
+\
+---\
+\
+## 7.1 Alle relevanten Eingaben haben sauberen Zeitbezug\
+\
+### Muss erf\'fcllt sein\
+- Meals haben Zeitbezug\
+- Workouts haben Zeitbezug\
+- Recovery hat Zeitbezug\
+- Ziele / Profilkontext sind logisch zeitlich einordbar\
+\
+### Nicht akzeptabel\
+- Daten existieren, aber Zeit ist unzuverl\'e4ssig\
+- Verlauf wird dadurch unklar oder kaputt\
+\
+---\
+\
+## 7.2 Verlauf ist systemisch lesbar\
+\
+### Muss erf\'fcllt sein\
+- pro Dom\'e4ne ist Verlauf lesbar\
+- Verlauf kann sp\'e4ter zusammengef\'fchrt werden\
+- Vergangenheit ist nicht blo\'df Archiv, sondern nutzbare Historie\
+\
+### Nicht akzeptabel\
+- Daten liegen isoliert nebeneinander\
+- Verlauf ist technisch vorhanden, aber fachlich tot\
+\
+---\
+\
+## 7.3 Current State ist logisch ableitbar\
+\
+### Muss erf\'fcllt sein\
+- aktueller Nutrition-Stand ist ableitbar\
+- aktueller Training-Stand ist ableitbar\
+- aktueller Recovery-Kontext ist ableitbar\
+- Goal-Kontext ist lesbar\
+- diese Dinge k\'f6nnen sp\'e4ter gemeinsam genutzt werden\
+\
+### Nicht akzeptabel\
+- State ist nur dom\'e4nenweise isoliert\
+- kein sinnvoller Zugriff auf \'84heute / aktuell\'93\
+\
+---\
+\
+## 7.4 Rohdaten und Interpretation sind nicht vermischt\
+\
+### Muss erf\'fcllt sein\
+- Rohdaten bleiben Rohdaten\
+- Berechnungen bleiben ableitbar\
+- keine versteckte Vermischung von Fakt und Meinung\
+\
+### Nicht akzeptabel\
+- Systemmeinung \'fcberschreibt Input-Wahrheit\
+- Datenbasis ist sp\'e4ter nicht mehr nachvollziehbar\
+\
+---\
+\
+# 8. ABNAHMEKRITERIEN \'97 V1 PRODUCT USABILITY\
+\
+Das ist die Realit\'e4tsebene.\
+\
+Nicht nur \'84technisch geht was\'93.\
+\
+Sondern:\
+\
+# Kann ein echter Nutzer das Ding sinnvoll verwenden?\
+\
+---\
+\
+## 8.1 Onboarding erzeugt einen echten Startzustand\
+\
+### Muss erf\'fcllt sein\
+- nach Onboarding ist ein sinnvoller Nutzerkontext vorhanden\
+- Nutzer hat Profil\
+- Nutzer hat Ziel\
+- Nutzer kann weitermachen\
+\
+### Nicht akzeptabel\
+- Onboarding endet, aber das System ist danach nicht wirklich nutzbar\
+\
+---\
+\
+## 8.2 Meal Logging ist real verwendbar\
+\
+### Muss erf\'fcllt sein\
+- echter Nutzer kann mehrere Meals anlegen\
+- Flow ist ausreichend fl\'fcssig\
+- Ergebnis ist sichtbar und sinnvoll\
+\
+### Nicht akzeptabel\
+- Meal Logging funktioniert nur mit Spezialwissen oder Workarounds\
+\
+---\
+\
+## 8.3 Workout Logging ist real verwendbar\
+\
+### Muss erf\'fcllt sein\
+- echter Nutzer kann ein Workout loggen\
+- Sets und Verlauf sind sinnvoll nutzbar\
+\
+### Nicht akzeptabel\
+- Training ist formell m\'f6glich, praktisch aber unerquicklich\
+\
+---\
+\
+## 8.4 Recovery Check-in ist real verwendbar\
+\
+### Muss erf\'fcllt sein\
+- ein Daily Check-in ist schnell und verst\'e4ndlich m\'f6glich\
+- Daten sind danach sinnvoll vorhanden\
+\
+### Nicht akzeptabel\
+- Recovery ist theoretisch, aber kein echter Nutzungsflow\
+\
+---\
+\
+## 8.5 Basic Daily State ist abrufbar\
+\
+### Muss erf\'fcllt sein\
+- es gibt einen sinnvollen Zugriff auf:\
+  - aktuelles Ziel\
+  - heutige / aktuelle Ern\'e4hrung\
+  - aktuelles / letztes Training\
+  - aktuellen Recovery-Zustand\
+\
+### Nicht akzeptabel\
+- Daten sind zwar da, aber nicht in nutzbarer Form zug\'e4nglich\
+\
+---\
+\
+# 9. RED FLAGS \'97 WAS EXPLIZIT NICHT ALS \'84FERTIG\'93 GELTEN DARF\
+\
+Folgende Dinge d\'fcrfen niemals als Abnahmeersatz gelten:\
+\
+---\
+\
+## Nicht ausreichend\
+\
+- sch\'f6ne Screens\
+- Demo-Videos\
+- halb funktionierende Flows\
+- \'84Backend steht schon irgendwie\'93\
+- \'84die Daten sind in der DB\'93\
+- \'84Claude kann das im Zweifel schon erkl\'e4ren\'93\
+- \'84wir bauen den Rest sp\'e4ter schnell dazu\'93\
+- k\'fcnstlich aufgeblasene Erfolgsmeldungen\
+\
+---\
+\
+## Warum nicht\
+Weil das alles genau die Arten von Fake-Fortschritt sind, die sp\'e4ter extrem teuer werden.\
+\
+---\
+\
+# 10. MINDESTSTANDARD F\'dcR \'84READY FOR NEXT LAYER\'93\
+\
+V1 Foundation ist nur dann bereit f\'fcr:\
+\
+- Supplement Foundation\
+- Medical Awareness\
+- Memory Layer\
+- Recommendation Core\
+- Buddy Core\
+\
+wenn alle folgenden Aussagen stimmen:\
+\
+---\
+\
+## Muss stimmen\
+- User Foundation ist belastbar\
+- Nutrition ist real nutzbar\
+- Training ist real nutzbar\
+- Recovery ist real nutzbar\
+- Timeline / State Integrity ist sauber\
+- Basic Product Usability ist gegeben\
+\
+Wenn eines davon schwach ist, ist der n\'e4chste Layer zu fr\'fch.\
+\
+---\
+\
+# 11. DIE WICHTIGSTE ABNAHMEFRAGE\
+\
+Wenn man V1 Foundation ehrlich pr\'fcft, gibt es eine zentrale Hauptfrage:\
+\
+# Kann ein echter Nutzer dieses System bereits als stabiles pers\'f6nliches Fundament f\'fcr Ern\'e4hrung, Training und Recovery verwenden?\
+\
+Wenn nein, ist V1 Foundation nicht fertig.\
+\
+---\
+\
+# 12. EIN-SATZ-DEFINITION\
+\
+# V1 Foundation ist erst dann akzeptiert, wenn User, Nutrition, Training, Recovery und Verlauf nicht nur existieren, sondern als zusammenh\'e4ngendes, alltagstaugliches Kernsystem real funktionieren.\
+\
+---\
+\
+# 13. SCHLUSSREGEL\
+\
+Jeder Review, jede Agenten-Arbeit, jede Spec und jede Umsetzungsentscheidung muss am Ende diese Frage beantworten:\
+\
+# Ist hier gerade echter, belastbarer Systemfortschritt entstanden \'96 oder nur die Illusion von Fortschritt?\
+\
+Wenn es nur Illusion ist, gilt es nicht als Abnahme.}

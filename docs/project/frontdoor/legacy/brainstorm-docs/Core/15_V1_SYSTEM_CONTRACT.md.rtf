@@ -1,0 +1,593 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 15_V1_SYSTEM_CONTRACT\
+\
+## Zweck\
+\
+Dieses Dokument definiert den **harten fachlichen Mindestvertrag** f\'fcr die erste reale Systembasis von LumeOS.\
+\
+Es beantwortet die Frage:\
+\
+# Was muss LumeOS V1 Foundation als System tats\'e4chlich k\'f6nnen, verarbeiten, speichern und ausgeben \'96 unabh\'e4ngig davon, wie die Technik sp\'e4ter konkret umgesetzt wird?\
+\
+Dieses Dokument ist die Br\'fccke zwischen:\
+\
+- Produktrekonstruktion\
+- strategischer Planung\
+- Systemarchitektur\
+- Datenmodell\
+- API-Schnitt\
+- sp\'e4teren Specs\
+- echter Buildbarkeit\
+\
+Wichtig:\
+\
+# Dieses Dokument ist kein PRD.\
+# Es ist kein Marketing.\
+# Es ist kein Visionstext.\
+\
+Es ist der erste **produktlogische Mindestvertrag**.\
+\
+---\
+\
+## Grundregel\
+\
+Wenn etwas nicht in diesem Vertrag sauber beschrieben werden kann, ist es h\'f6chstwahrscheinlich noch nicht bereit f\'fcr saubere Umsetzung.\
+\
+---\
+\
+# 1. ZIEL DIESES SYSTEM CONTRACTS\
+\
+Der erste reale LumeOS-Systemkern soll Folgendes erm\'f6glichen:\
+\
+- einen Nutzer mit Kontext zu verwalten\
+- dessen Ziele und Pr\'e4ferenzen zu kennen\
+- Ern\'e4hrung strukturiert zu erfassen und auszuwerten\
+- Training strukturiert zu erfassen und auszuwerten\
+- Recovery strukturiert zu erfassen\
+- Verlauf sauber zu speichern\
+- erste alltagstaugliche Orientierung und Kontextnutzung zu erm\'f6glichen\
+- sp\'e4tere Buddy-, Recommendation- und Intelligence-Schichten vorzubereiten\
+\
+Das ist der V1 Foundation Contract.\
+\
+Nicht mehr.\
+\
+Aber auch nicht weniger.\
+\
+---\
+\
+# 2. DIE 5 PFLICHT-EINGABEWELTEN DES SYSTEMS\
+\
+LumeOS V1 Foundation muss mindestens mit diesen f\'fcnf Input-Welten umgehen k\'f6nnen.\
+\
+---\
+\
+# INPUT-WELT 1 \'97 USER CONTEXT INPUTS\
+\
+Das System muss Nutzerkontext erfassen und verwalten k\'f6nnen.\
+\
+## Pflichtinputs\
+- Nutzeridentit\'e4t\
+- Auth-/Login-Kontext\
+- Basisprofil\
+- K\'f6rperdaten\
+- Erfahrungsniveau\
+- Pr\'e4ferenzen\
+- Sprache / Einheiten\
+- Grundkontext f\'fcr Personalisierung\
+\
+## Ergebnis\
+LumeOS muss wissen:\
+\
+- wer der Nutzer ist\
+- in welchem Grundkontext er sich bewegt\
+- welche Basiseinstellungen gelten\
+\
+---\
+\
+# INPUT-WELT 2 \'97 GOAL CONTEXT INPUTS\
+\
+Das System muss Zielkontext erfassen und verwalten k\'f6nnen.\
+\
+## Pflichtinputs\
+- Hauptziel\
+- optionale Unterziele\
+- grobe Priorit\'e4t\
+- Zielphase oder Fokusrichtung (einfach)\
+\
+## Ergebnis\
+LumeOS muss wissen:\
+\
+- worauf der Nutzer aktuell hinaus will\
+- wonach Zust\'e4nde sp\'e4ter bewertet werden sollen\
+\
+---\
+\
+# INPUT-WELT 3 \'97 NUTRITION INPUTS\
+\
+Das System muss Ern\'e4hrungsinputs verarbeiten k\'f6nnen.\
+\
+## Pflichtinputs\
+- Food-Auswahl\
+- Portion\
+- Meal-Struktur\
+- Meal-Zeitpunkt\
+- manuelles Meal Logging\
+- wiederholbare Meals / alltagstaugliche Nutzung\
+\
+## Ergebnis\
+LumeOS muss Ern\'e4hrung so erfassen k\'f6nnen, dass daraus sinnvolle Tages- und Verlaufsdaten entstehen.\
+\
+---\
+\
+# INPUT-WELT 4 \'97 TRAINING INPUTS\
+\
+Das System muss Trainingsinputs verarbeiten k\'f6nnen.\
+\
+## Pflichtinputs\
+- Workout oder \'dcbung\
+- Satzdaten\
+- Gewicht\
+- Wiederholungen\
+- Session-Zeitpunkt\
+- Trainingshistorie\
+\
+## Ergebnis\
+LumeOS muss Trainingsverhalten so erfassen k\'f6nnen, dass daraus Verlauf, Historie und Baseline-Progression ableitbar sind.\
+\
+---\
+\
+# INPUT-WELT 5 \'97 RECOVERY INPUTS\
+\
+Das System muss Recovery-/Tageszustandsinputs verarbeiten k\'f6nnen.\
+\
+## Pflichtinputs\
+- Schlaf\
+- Energie\
+- Stress\
+- Soreness\
+- Tagesform / subjektiver Zustand\
+\
+## Ergebnis\
+LumeOS muss einen einfachen tagesbezogenen Recovery-Kontext speichern k\'f6nnen.\
+\
+---\
+\
+# 3. DIE 6 PFLICHT-KERNOBJEKTE DES V1 SYSTEMS\
+\
+LumeOS V1 Foundation muss mindestens diese sechs fachlichen Objektgruppen sauber tragen k\'f6nnen.\
+\
+---\
+\
+# KERNOBJEKT 1 \'97 USER FOUNDATION OBJECTS\
+\
+Pflichtobjekte:\
+\
+- User\
+- Account / Auth-Bezug\
+- UserProfile\
+- Preference\
+- Goal\
+\
+Diese Objekte bilden die Personalisierungsbasis.\
+\
+---\
+\
+# KERNOBJEKT 2 \'97 NUTRITION OBJECTS\
+\
+Pflichtobjekte:\
+\
+- Food\
+- FoodPortion\
+- Meal\
+- MealLog / Meal Components\
+- Nutrient\
+\
+Diese Objekte bilden die Nutrition-Basis.\
+\
+---\
+\
+# KERNOBJEKT 3 \'97 TRAINING OBJECTS\
+\
+Pflichtobjekte:\
+\
+- Exercise\
+- Workout / WorkoutTemplate\
+- WorkoutSession\
+- SetLog\
+\
+Diese Objekte bilden die Training-Basis.\
+\
+---\
+\
+# KERNOBJEKT 4 \'97 RECOVERY OBJECTS\
+\
+Pflichtobjekte:\
+\
+- RecoveryState\
+- CheckIn\
+- SleepRecord (einfach oder logisch enthalten)\
+- subjektive Tageszust\'e4nde\
+\
+Diese Objekte bilden die Recovery-Basis.\
+\
+---\
+\
+# KERNOBJEKT 5 \'97 TIMELINE / HISTORY OBJECTS\
+\
+Pflichtobjekte:\
+\
+- zeitliche Zuordnung aller relevanten Inputs\
+- Verlauf pro Dom\'e4ne\
+- zusammenf\'fchrbare Historie\
+\
+Diese Objekte bilden die Verlaufsebene.\
+\
+---\
+\
+# KERNOBJEKT 6 \'97 EARLY CONTEXT OBJECTS\
+\
+Pflichtobjekte:\
+\
+- Goal-Kontext\
+- State-Zusammenf\'fchrung\
+- einfache Tages-/Verlaufskontextf\'e4higkeit\
+\
+Diese Objekte sind n\'f6tig, damit sp\'e4ter Buddy / Recommendation nicht auf einem toten Datensilo aufbauen.\
+\
+---\
+\
+# 4. DIE 7 PFLICHT-F\'c4HIGKEITEN DES V1 SYSTEMS\
+\
+LumeOS V1 Foundation ist dann systemisch sinnvoll, wenn es mindestens diese sieben Dinge kann.\
+\
+---\
+\
+# F\'c4HIGKEIT 1 \'97 USER BASIS VERWALTEN\
+\
+Das System muss:\
+\
+- Nutzer anlegen\
+- Nutzer authentifizieren\
+- Nutzerprofil speichern\
+- Pr\'e4ferenzen speichern\
+- Ziele speichern\
+\
+---\
+\
+# F\'c4HIGKEIT 2 \'97 ERN\'c4HRUNG STRUKTURIERT ERFASSEN\
+\
+Das System muss:\
+\
+- Foods suchbar machen\
+- Portions nutzen\
+- Meals speichern\
+- Meals historisieren\
+- Meals alltagstauglich loggbar machen\
+\
+---\
+\
+# F\'c4HIGKEIT 3 \'97 ERN\'c4HRUNG AUSWERTEN\
+\
+Das System muss:\
+\
+- Makros berechnen\
+- Mikros berechnen\
+- Tageswerte bilden\
+- Meal-Werte bilden\
+- Verlaufswerte sp\'e4ter nutzbar halten\
+\
+---\
+\
+# F\'c4HIGKEIT 4 \'97 TRAINING STRUKTURIERT ERFASSEN\
+\
+Das System muss:\
+\
+- \'dcbungen modellieren\
+- Workouts strukturieren\
+- Sessions loggen\
+- Sets loggen\
+- Training historisieren\
+\
+---\
+\
+# F\'c4HIGKEIT 5 \'97 TRAINING BASAL EINORDNEN\
+\
+Das System muss mindestens eine Basisebene von Trainingskontext erm\'f6glichen:\
+\
+- letzte Leistung sichtbar\
+- vergangene Sessions nutzbar\
+- Verlauf nicht verloren\
+- erste Vergleichbarkeit m\'f6glich\
+\
+Noch keine tiefe AI-Progressionslogik.\
+\
+Aber eine belastbare Trainingsbasis.\
+\
+---\
+\
+# F\'c4HIGKEIT 6 \'97 RECOVERY ERFASSEN\
+\
+Das System muss:\
+\
+- Daily Recovery Inputs speichern\
+- Tageszustand erfassen\
+- Recovery-Verlauf erm\'f6glichen\
+- Check-ins nutzbar machen\
+\
+---\
+\
+# F\'c4HIGKEIT 7 \'97 ZEIT UND VERLAUF ZUSAMMENHALTEN\
+\
+Das System muss:\
+\
+- Inputs zeitlich verorten\
+- Verlauf je Dom\'e4ne abbilden\
+- sp\'e4tere Cross-Domain-Kontextbildung erm\'f6glichen\
+\
+Ohne diese F\'e4higkeit ist LumeOS nur ein Haufen Einzelzust\'e4nde.\
+\
+---\
+\
+# 5. DIE 5 PFLICHT-OUTPUTS DES V1 SYSTEMS\
+\
+LumeOS V1 Foundation braucht noch keinen vollen Intelligence Layer.\
+\
+Aber es muss bereits bestimmte n\'fctzliche Outputs liefern k\'f6nnen.\
+\
+---\
+\
+# OUTPUT 1 \'97 BASIC STATE VIEW\
+\
+Das System muss pro Dom\'e4ne einen einfachen, sinnvollen aktuellen Zustand liefern k\'f6nnen.\
+\
+## Beispiele\
+- heutige Ern\'e4hrung\
+- heutige Makros\
+- heutige Trainingssession\
+- aktueller Recovery-Zustand\
+- aktuelles Zielprofil\
+\
+---\
+\
+# OUTPUT 2 \'97 BASIC HISTORY VIEW\
+\
+Das System muss Verlauf sichtbar machen k\'f6nnen.\
+\
+## Beispiele\
+- vergangene Meals\
+- vergangene Workouts\
+- vergangene Recovery-Inputs\
+- zeitlicher Verlauf pro Dom\'e4ne\
+\
+---\
+\
+# OUTPUT 3 \'97 BASIC DAILY ORIENTATION BASIS\
+\
+Das System muss mindestens die Grundlage liefern, aus der sp\'e4ter Daily Orientation entstehen kann.\
+\
+## Beispiele\
+- heutige Datenlage\
+- heutiger Recovery-Kontext\
+- Zielkontext\
+- heutiger Ern\'e4hrungsstand\
+- heutige Trainingsrelevanz\
+\
+Noch nicht voll als Buddy-System.\
+\
+Aber als systemisch nutzbare Grundlage.\
+\
+---\
+\
+# OUTPUT 4 \'97 BASIC EXPLANATORY DATA\
+\
+Das System muss Daten so strukturiert liefern k\'f6nnen, dass sp\'e4tere Einordnung und Erkl\'e4rung m\'f6glich sind.\
+\
+## Beispiele\
+- warum Makros so aussehen\
+- was geloggt wurde\
+- welche Session stattgefunden hat\
+- welcher Check-in vorliegt\
+\
+Nicht nur Zahlen, sondern nachvollziehbare Struktur.\
+\
+---\
+\
+# OUTPUT 5 \'97 BUDDY-READY CONTEXT BASIS\
+\
+Das System muss so gebaut sein, dass Buddy sp\'e4ter darauf sinnvoll aufsetzen kann.\
+\
+Das bedeutet:\
+\
+- Kontext ist nicht zerst\'fcckelt\
+- Ziele sind verkn\'fcpfbar\
+- Tageszust\'e4nde sind logisch nutzbar\
+- Verlauf ist sp\'e4ter abfragbar\
+- keine Sackgassenarchitektur\
+\
+---\
+\
+# 6. DIE 5 PFLICHT-FLOWS DES V1 SYSTEMS\
+\
+LumeOS V1 Foundation muss mindestens diese f\'fcnf Grundfl\'fcsse sauber erm\'f6glichen.\
+\
+---\
+\
+# FLOW 1 \'97 USER SETUP FLOW\
+\
+Ein Nutzer muss:\
+\
+- sich anmelden / registrieren\
+- Profil anlegen\
+- Pr\'e4ferenzen setzen\
+- Ziele definieren\
+\
+Ergebnis:\
+nutzbarer Startzustand\
+\
+---\
+\
+# FLOW 2 \'97 FOOD / MEAL LOGGING FLOW\
+\
+Ein Nutzer muss:\
+\
+- Food oder Meal finden\
+- Portion w\'e4hlen\
+- Meal loggen\
+- Historie sp\'e4ter wiederfinden\
+\
+Ergebnis:\
+nutzbare Nutrition-Daten\
+\
+---\
+\
+# FLOW 3 \'97 WORKOUT LOGGING FLOW\
+\
+Ein Nutzer muss:\
+\
+- Workout / \'dcbungen nutzen\
+- S\'e4tze loggen\
+- Session speichern\
+- Verlauf sp\'e4ter sehen\
+\
+Ergebnis:\
+nutzbare Training-Daten\
+\
+---\
+\
+# FLOW 4 \'97 DAILY RECOVERY / CHECK-IN FLOW\
+\
+Ein Nutzer muss:\
+\
+- Tageszustand eingeben k\'f6nnen\
+- Recovery-/Check-in-Signale speichern\
+- Verlauf aufbauen\
+\
+Ergebnis:\
+nutzbarer Tageskontext\
+\
+---\
+\
+# FLOW 5 \'97 BASIC DAILY STATE ACCESS FLOW\
+\
+Ein Nutzer oder Buddy muss sp\'e4ter zugreifen k\'f6nnen auf:\
+\
+- aktuelles Ziel\
+- heutige Ern\'e4hrung\
+- heutiges Training\
+- aktuellen Recovery-Kontext\
+- relevanten Verlauf\
+\
+Ergebnis:\
+erste echte Systemnutzbarkeit\
+\
+---\
+\
+# 7. WAS V1 FOUNDATION EXPLIZIT NOCH NICHT VERTRAGLICH SCHULDET\
+\
+Das ist wichtig.\
+\
+V1 Foundation schuldet **nicht**:\
+\
+---\
+\
+## Nicht geschuldet\
+\
+### Tiefe Recommendation Engine\
+- keine ausgefeilte Priorisierungslogik\
+- keine Cross-Domain-Optimierungsintelligenz\
+\
+### Tiefer Buddy\
+- kein vollwertiger Companion\
+- keine tiefe Konversationsintelligenz\
+\
+### Memory-Layer in Tiefe\
+- keine starke Pattern-Engine\
+- keine adaptive Langzeitlogik\
+\
+### Supplement-System\
+- nicht Pflicht in V1 Foundation\
+\
+### Medical Awareness in Tiefe\
+- nicht Pflicht in V1 Foundation\
+\
+### Coach Layer\
+- nicht Pflicht in V1 Foundation\
+\
+### Voice / Vision / Wearables\
+- nicht Pflicht in V1 Foundation\
+\
+### Marketplace / Programme / Commerce\
+- nicht Pflicht in V1 Foundation\
+\
+---\
+\
+# 8. SYSTEMISCHE NICHT-FUNKTIONSREGELN\
+\
+Auch ohne technische Architekturdefinition gelten bereits systemische Qualit\'e4tsanforderungen.\
+\
+---\
+\
+## Regel 1 \'97 Datenklarheit\
+Rohdaten und Interpretation d\'fcrfen nicht vermischt werden.\
+\
+## Regel 2 \'97 Zeitlichkeit\
+Verlauf und Zeitbezug m\'fcssen sauber erhalten bleiben.\
+\
+## Regel 3 \'97 Canonical Readiness\
+Systemlogik muss sp\'e4ter auf stabilen Canonicals aufbauen k\'f6nnen.\
+\
+## Regel 4 \'97 Erweiterbarkeit\
+V1 Foundation darf sp\'e4tere Kernschichten nicht blockieren.\
+\
+## Regel 5 \'97 Buddy Readiness\
+V1 Foundation muss sp\'e4ter Buddy sinnvoll tragen k\'f6nnen.\
+\
+---\
+\
+# 9. WANN DIESER SYSTEM CONTRACT ERF\'dcLLT IST\
+\
+Der V1 Foundation Contract ist erf\'fcllt, wenn diese Aussagen wahr sind:\
+\
+---\
+\
+## Nutzer\
+- Nutzerbasis funktioniert\
+- Profil- und Zielkontext sind vorhanden\
+\
+## Nutrition\
+- Ern\'e4hrung ist loggbar, berechenbar und historisierbar\
+\
+## Training\
+- Training ist loggbar, strukturiert und historisierbar\
+\
+## Recovery\
+- Tageszustand ist erfassbar und historisierbar\
+\
+## Verlauf\
+- Dom\'e4nen sind zeitlich sauber nutzbar\
+\
+## Kontextf\'e4higkeit\
+- sp\'e4tere Buddy- und Recommendation-Nutzung ist logisch vorbereitet\
+\
+---\
+\
+# 10. EIN-SATZ-DEFINITION\
+\
+# LumeOS V1 Foundation ist ein stateful, zielbezogenes und buddy-ready Kernsystem f\'fcr User, Nutrition, Training, Recovery und Verlauf.\
+\
+---\
+\
+# 11. SCHLUSSREGEL\
+\
+Jede technische Entscheidung, jede DB-Struktur, jede API-Idee und jeder Build-Schritt muss diese Frage bestehen:\
+\
+# Hilft das direkt dabei, diesen V1 System Contract sauber und belastbar zu erf\'fcllen?\
+\
+Wenn nein, geh\'f6rt es nicht in den aktuellen Kernbau.}

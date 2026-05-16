@@ -1,0 +1,1207 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 04_SYSTEM_ENTITIES\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **zentralen fachlichen Objekte** von LumeOS.\
+\
+Es ist die Br\'fccke zwischen:\
+\
+- Produktlogik\
+- Capability Map\
+- sp\'e4terem Datenmodell\
+- sp\'e4teren APIs\
+- sp\'e4teren UI-Flows\
+- sp\'e4terer Buddy-Logik\
+\
+Dieses Dokument beschreibt **keine technische Datenbankstruktur**.\
+\
+Es beschreibt:\
+\
+# Welche Dinge im System \'fcberhaupt existieren m\'fcssen, damit LumeOS logisch funktionieren kann.\
+\
+---\
+\
+## Grundregel\
+\
+Eine Entity geh\'f6rt nur dann in dieses Dokument, wenn sie mindestens eine dieser Bedingungen erf\'fcllt:\
+\
+- sie repr\'e4sentiert einen echten Teil des Nutzers oder seines Zustands\
+- sie ist notwendig f\'fcr Entscheidungen oder Empfehlungen\
+- sie ist notwendig f\'fcr Verlauf, Kontext oder Erinnerung\
+- sie ist notwendig f\'fcr Interaktion, Coaching oder Guidance\
+- sie ist stabil genug, um als wiederverwendbares Systemobjekt zu gelten\
+\
+---\
+\
+# SYSTEMISCHE HAUPTKLASSEN VON ENTITIES\
+\
+Die Entities von LumeOS lassen sich in acht Hauptgruppen einteilen:\
+\
+## 1. Identity & Foundation Entities\
+Grundlegende Nutzer- und Systemobjekte\
+\
+## 2. Goal & Strategy Entities\
+Ziele, Priorit\'e4ten und Fokuslogik\
+\
+## 3. State Input Entities\
+Objekte, die den Zustand des Nutzers beschreiben\
+\
+## 4. Logging & Event Entities\
+Objekte, die Verhalten, Handlungen und Verlauf erfassen\
+\
+## 5. Intelligence Entities\
+Objekte, die Interpretation, Entscheidungen und Empfehlungen tragen\
+\
+## 6. Companion & Interaction Entities\
+Objekte f\'fcr Buddy, Check-ins und Guidance\
+\
+## 7. Human & Collaboration Entities\
+Objekte f\'fcr Coach, Review und menschliche Intervention\
+\
+## 8. Commerce, Content & Expansion Entities\
+Objekte f\'fcr sp\'e4tere Ausbauschichten\
+\
+---\
+\
+# 1. IDENTITY & FOUNDATION ENTITIES\
+\
+---\
+\
+## 1.1 User\
+\
+### Beschreibung\
+Repr\'e4sentiert die Person, f\'fcr die das System arbeitet.\
+\
+### Zweck\
+Zentrale Haupt-Entity des gesamten Systems.\
+\
+### Typische Inhalte\
+- eindeutige Nutzeridentit\'e4t\
+- Account-Zuordnung\
+- Basisstatus\
+- aktive Rollen\
+- Systembezug\
+\
+### Warum zentral\
+Fast alle anderen Entities h\'e4ngen direkt oder indirekt an einem User.\
+\
+---\
+\
+## 1.2 Account\
+\
+### Beschreibung\
+Repr\'e4sentiert Zugang, Login und Kontoverwaltung.\
+\
+### Zweck\
+Trennung von Personenobjekt und Zugangsobjekt.\
+\
+### Typische Inhalte\
+- Login-Identit\'e4t\
+- Provider\
+- OAuth-Bezug\
+- Session-Kontext\
+- Security-Status\
+\
+### Hinweis\
+User und Account d\'fcrfen logisch getrennt gedacht werden.\
+\
+---\
+\
+## 1.3 Session\
+\
+### Beschreibung\
+Repr\'e4sentiert eine aktive oder vergangene Nutzungssitzung.\
+\
+### Zweck\
+Kontext f\'fcr Zugriff, Ger\'e4tebezug und sp\'e4tere Interaktionslogik.\
+\
+### Typische Inhalte\
+- Start / Ende\
+- Ger\'e4t\
+- Kanal\
+- Auth-Kontext\
+- Aktivit\'e4tskontext\
+\
+---\
+\
+## 1.4 Role\
+\
+### Beschreibung\
+Repr\'e4sentiert die Rolle eines Nutzers im System.\
+\
+### Beispiele\
+- User\
+- Coach\
+- Admin\
+- Reviewer\
+- sp\'e4ter Team-/Business-Rollen\
+\
+### Zweck\
+Steuert Zugriff, Perspektive und sp\'e4tere Interaktionsfl\'e4chen.\
+\
+---\
+\
+## 1.5 UserProfile\
+\
+### Beschreibung\
+Repr\'e4sentiert das personenspezifische Profil.\
+\
+### Typische Inhalte\
+- Alter\
+- Geschlecht\
+- Gr\'f6\'dfe\
+- Gewicht\
+- Aktivit\'e4tsniveau\
+- Erfahrungslevel\
+- Lebensstil\
+- Region\
+- Sprache\
+- relevante Profileigenschaften\
+\
+### Zweck\
+Grundlage f\'fcr Personalisierung.\
+\
+---\
+\
+## 1.6 Preference\
+\
+### Beschreibung\
+Repr\'e4sentiert individuelle Einstellungen des Nutzers.\
+\
+### Typische Inhalte\
+- Einheiten\
+- Sprache\
+- Reminder-Pr\'e4ferenzen\
+- Assistenzintensit\'e4t\
+- Sichtbarkeit\
+- Kommunikationspr\'e4ferenzen\
+- Datenquellenpr\'e4ferenzen\
+\
+### Zweck\
+Steuert, wie LumeOS sich f\'fcr den Nutzer verh\'e4lt.\
+\
+---\
+\
+## 1.7 Constraint\
+\
+### Beschreibung\
+Repr\'e4sentiert eine relevante Einschr\'e4nkung.\
+\
+### Beispiele\
+- Ern\'e4hrungsrestriktion\
+- Unvertr\'e4glichkeit\
+- Trainingslimitierung\
+- zeitliche Einschr\'e4nkung\
+- medizinisch relevante Grenze\
+- Alltagsrestriktion\
+\
+### Zweck\
+Verhindert unpassende Empfehlungen.\
+\
+---\
+\
+# 2. GOAL & STRATEGY ENTITIES\
+\
+---\
+\
+## 2.1 Goal\
+\
+### Beschreibung\
+Repr\'e4sentiert ein Ziel des Nutzers.\
+\
+### Beispiele\
+- Fettverlust\
+- Muskelaufbau\
+- Schlaf verbessern\
+- Recovery verbessern\
+- Blutwerte stabilisieren\
+- Routine aufbauen\
+\
+### Zweck\
+Ziele sind die Bewertungsbasis f\'fcr viele Entscheidungen.\
+\
+---\
+\
+## 2.2 GoalHierarchy\
+\
+### Beschreibung\
+Repr\'e4sentiert die Beziehung zwischen Hauptziel und Unterzielen.\
+\
+### Zweck\
+Erlaubt komplexe Zielsysteme statt nur einer simplen Zielauswahl.\
+\
+---\
+\
+## 2.3 GoalPriority\
+\
+### Beschreibung\
+Repr\'e4sentiert die aktuelle Gewichtung von Zielen.\
+\
+### Zweck\
+Erlaubt, dass das System nicht nur wei\'df, was wichtig ist, sondern wie wichtig es aktuell ist.\
+\
+---\
+\
+## 2.4 GoalPhase\
+\
+### Beschreibung\
+Repr\'e4sentiert eine Phase innerhalb einer Zielstrategie.\
+\
+### Beispiele\
+- Cut\
+- Aufbau\
+- Maintenance\
+- Recovery-Fokus\
+- Gesundheitsstabilisierung\
+- Deload-Phase\
+\
+### Zweck\
+Macht Ziele zeitlich und strategisch steuerbar.\
+\
+---\
+\
+## 2.5 Strategy\
+\
+### Beschreibung\
+Repr\'e4sentiert die \'fcbergeordnete Herangehensweise an ein oder mehrere Ziele.\
+\
+### Zweck\
+Verbindet Ziele mit Priorit\'e4ten, Regeln und konkreter Guidance.\
+\
+---\
+\
+## 2.6 Tradeoff\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Ziel- oder Entscheidungs-Konflikt.\
+\
+### Beispiele\
+- Performance vs Recovery\
+- Fettverlust vs Muskelaufbau\
+- Di\'e4t-Compliance vs sozialer Alltag\
+- Progression vs Regeneration\
+\
+### Zweck\
+Erlaubt explizite Konfliktbehandlung statt implizitem Chaos.\
+\
+---\
+\
+# 3. STATE INPUT ENTITIES\
+\
+Diese Entities beschreiben, wie der Nutzer aktuell oder \'fcber Zeit dasteht.\
+\
+---\
+\
+## 3.1 Food\
+\
+### Beschreibung\
+Repr\'e4sentiert ein einzelnes Lebensmittel in kanonischer Form.\
+\
+### Zweck\
+Grundobjekt f\'fcr Nutrition.\
+\
+### Typische Inhalte\
+- Name\
+- Kategorie\
+- Portionen\
+- Makros\
+- Mikros\
+- Suchvarianten\
+- Qualit\'e4tsstatus\
+\
+---\
+\
+## 3.2 FoodPortion\
+\
+### Beschreibung\
+Repr\'e4sentiert eine nutzbare Portionsdefinition eines Foods.\
+\
+### Beispiele\
+- 100 g\
+- 1 St\'fcck\
+- 1 Tasse\
+- 1 EL\
+- 1 Banane\
+\
+### Zweck\
+Macht Foods alltagstauglich nutzbar.\
+\
+---\
+\
+## 3.3 Recipe\
+\
+### Beschreibung\
+Repr\'e4sentiert eine strukturierte Kombination mehrerer Foods.\
+\
+### Zweck\
+Erlaubt alltagstaugliche Meals jenseits einzelner Lebensmittel.\
+\
+---\
+\
+## 3.4 Meal\
+\
+### Beschreibung\
+Repr\'e4sentiert eine verzehrte oder geplante Mahlzeit.\
+\
+### Zweck\
+Zentrale alltagsnahe Nutrition-Entity.\
+\
+### Typische Inhalte\
+- Komponenten\
+- Zeitpunkt\
+- Kontext\
+- Portionsmengen\
+- Meal-Type\
+- optional Zielbezug\
+\
+---\
+\
+## 3.5 Nutrient\
+\
+### Beschreibung\
+Repr\'e4sentiert einen N\'e4hrstoff.\
+\
+### Beispiele\
+- Protein\
+- Fett\
+- Kohlenhydrate\
+- Kalorien\
+- Vitamin D\
+- Magnesium\
+- Eisen\
+\
+### Zweck\
+Basiseinheit f\'fcr Nutrition-Auswertung.\
+\
+---\
+\
+## 3.6 NutrientTarget\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Zielbereich oder Sollwert f\'fcr einen N\'e4hrstoff.\
+\
+### Zweck\
+Erlaubt Soll-Ist-Vergleiche und Guidance.\
+\
+---\
+\
+## 3.7 Exercise\
+\
+### Beschreibung\
+Repr\'e4sentiert eine \'dcbung.\
+\
+### Zweck\
+Grundobjekt f\'fcr Training.\
+\
+### Typische Inhalte\
+- Name\
+- Kategorie\
+- Muskelgruppen\
+- Equipment\
+- Varianten\
+- Bewegungsmuster\
+\
+---\
+\
+## 3.8 ExerciseVariant\
+\
+### Beschreibung\
+Repr\'e4sentiert eine Variante oder Modifikation einer \'dcbung.\
+\
+### Beispiele\
+- Incline DB Press vs Flat DB Press\
+- Supported Row vs Bent-over Row\
+\
+### Zweck\
+Erlaubt flexible Trainingslogik.\
+\
+---\
+\
+## 3.9 Workout\
+\
+### Beschreibung\
+Repr\'e4sentiert eine strukturierte Trainingseinheit oder Vorlage.\
+\
+### Zweck\
+Trainingsobjekt auf Session-/Template-Ebene.\
+\
+---\
+\
+## 3.10 WorkoutBlock\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Teil eines Workouts.\
+\
+### Beispiele\
+- Haupt\'fcbung\
+- Volumenblock\
+- Warmupblock\
+- Finisher\
+\
+### Zweck\
+Hilfreich f\'fcr sp\'e4tere Trainingslogik und UI.\
+\
+---\
+\
+## 3.11 RecoveryState\
+\
+### Beschreibung\
+Repr\'e4sentiert den aktuellen oder zusammengefassten Erholungszustand.\
+\
+### Typische Inhalte\
+- Schlaf\
+- M\'fcdigkeit\
+- Stress\
+- Soreness\
+- subjektive Readiness\
+\
+### Zweck\
+Wichtige State-Entity f\'fcr t\'e4gliche Entscheidungen.\
+\
+---\
+\
+## 3.12 SleepRecord\
+\
+### Beschreibung\
+Repr\'e4sentiert einen einzelnen Schlafdatensatz.\
+\
+### Zweck\
+Teilbereich von Recovery mit eigenem Analysewert.\
+\
+---\
+\
+## 3.13 StressSignal\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Stresshinweis oder Stresszustand.\
+\
+### Zweck\
+Erlaubt Einbindung subjektiver und sp\'e4ter externer Stressdaten.\
+\
+---\
+\
+## 3.14 SorenessSignal\
+\
+### Beschreibung\
+Repr\'e4sentiert Muskelkater oder lokale Ersch\'f6pfung.\
+\
+### Zweck\
+Hilfreich f\'fcr Training- und Recovery-Entscheidungen.\
+\
+---\
+\
+## 3.15 Supplement\
+\
+### Beschreibung\
+Repr\'e4sentiert ein kanonisches Supplement oder einen Wirkstoff.\
+\
+### Zweck\
+Grundobjekt der Supplement-Dom\'e4ne.\
+\
+---\
+\
+## 3.16 SupplementProduct\
+\
+### Beschreibung\
+Repr\'e4sentiert ein reales Produkt.\
+\
+### Zweck\
+Trennt Marktrealit\'e4t von kanonischer Wirkstofflogik.\
+\
+---\
+\
+## 3.17 SupplementIngredient\
+\
+### Beschreibung\
+Repr\'e4sentiert einen enthaltenen Wirkstoff oder Inhaltsstoff.\
+\
+### Zweck\
+Erlaubt Produkt-zu-Wirkstoff-Zerlegung.\
+\
+---\
+\
+## 3.18 SupplementProtocol\
+\
+### Beschreibung\
+Repr\'e4sentiert eine strukturierte Supplement-Strategie.\
+\
+### Beispiele\
+- morgens X\
+- pre workout Y\
+- abends Z\
+- zielbezogenes Protokoll\
+\
+### Zweck\
+Erlaubt echte Guidance statt blo\'dfer Produktlisten.\
+\
+---\
+\
+## 3.19 Biomarker\
+\
+### Beschreibung\
+Repr\'e4sentiert einen einzelnen medizinisch relevanten Marker.\
+\
+### Beispiele\
+- HbA1c\
+- LDL\
+- Ferritin\
+- ALT\
+- TSH\
+\
+### Zweck\
+Basiseinheit der Medical-Awareness-Dom\'e4ne.\
+\
+---\
+\
+## 3.20 BiomarkerReading\
+\
+### Beschreibung\
+Repr\'e4sentiert eine konkrete Messung eines Biomarkers zu einem Zeitpunkt.\
+\
+### Zweck\
+Verlaufs- und Vergleichsgrundlage.\
+\
+---\
+\
+## 3.21 ReferenceRange\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Referenz- oder Zielbereich.\
+\
+### Zweck\
+Erlaubt Einordnung ohne medizinische \'dcberdehnung.\
+\
+---\
+\
+## 3.22 HealthContext\
+\
+### Beschreibung\
+Repr\'e4sentiert den relevanten gesundheitlichen Rahmen des Nutzers.\
+\
+### Zweck\
+Versorgt das System mit sensiblem, kontextrelevantem Hintergrund.\
+\
+---\
+\
+# 4. LOGGING & EVENT ENTITIES\
+\
+Diese Entities beschreiben, was der Nutzer tut und was im Verlauf passiert.\
+\
+---\
+\
+## 4.1 MealLog\
+\
+### Beschreibung\
+Repr\'e4sentiert einen konkreten Logging-Vorgang einer Mahlzeit.\
+\
+### Zweck\
+Verlauf und tats\'e4chliches Verhalten festhalten.\
+\
+---\
+\
+## 4.2 FoodLogItem\
+\
+### Beschreibung\
+Repr\'e4sentiert einen einzelnen Food-Baustein innerhalb eines Loggings.\
+\
+### Zweck\
+Feingranulare Nutrition-Verl\'e4ufe.\
+\
+---\
+\
+## 4.3 WorkoutSession\
+\
+### Beschreibung\
+Repr\'e4sentiert eine tats\'e4chlich absolvierte Trainingseinheit.\
+\
+### Zweck\
+Trennung zwischen geplantem Workout und realer Session.\
+\
+---\
+\
+## 4.4 SetLog\
+\
+### Beschreibung\
+Repr\'e4sentiert einen einzelnen geloggten Satz.\
+\
+### Typische Inhalte\
+- Gewicht\
+- Reps\
+- Notizen\
+- Zeit\
+- RPE/RIR sp\'e4ter\
+\
+### Zweck\
+Feinste operative Trainingseinheit.\
+\
+---\
+\
+## 4.5 CheckIn\
+\
+### Beschreibung\
+Repr\'e4sentiert eine schnelle Nutzer-R\'fcckmeldung zum aktuellen Zustand.\
+\
+### Beispiele\
+- Energie niedrig\
+- Schlaf ok\
+- Stress hoch\
+- Motivation niedrig\
+\
+### Zweck\
+Hoher Alltagswert f\'fcr Guidance und Buddy.\
+\
+---\
+\
+## 4.6 SupplementLog\
+\
+### Beschreibung\
+Repr\'e4sentiert eine konkrete Einnahme eines Supplements.\
+\
+### Zweck\
+Verhaltens- und Compliance-Grundlage.\
+\
+---\
+\
+## 4.7 SymptomLog\
+\
+### Beschreibung\
+Repr\'e4sentiert ein protokolliertes Symptom oder Problem.\
+\
+### Zweck\
+Wichtig f\'fcr Verlauf, Eskalation und Health-Kontext.\
+\
+---\
+\
+## 4.8 HabitEvent\
+\
+### Beschreibung\
+Repr\'e4sentiert ein relevantes Verhaltensereignis.\
+\
+### Beispiele\
+- Routine eingehalten\
+- Training ausgelassen\
+- Ziel verfehlt\
+- Schlafroutine durchgezogen\
+\
+### Zweck\
+Hilfreich f\'fcr Adherence und Musterlogik.\
+\
+---\
+\
+## 4.9 AdherenceRecord\
+\
+### Beschreibung\
+Repr\'e4sentiert, wie gut ein Nutzer einer vorgesehenen Handlung gefolgt ist.\
+\
+### Zweck\
+Sehr wichtig f\'fcr Personalisierung und realistische Guidance.\
+\
+---\
+\
+## 4.10 TimelineEvent\
+\
+### Beschreibung\
+Repr\'e4sentiert ein wichtiges Ereignis im Nutzerverlauf.\
+\
+### Beispiele\
+- Zielwechsel\
+- Gesundheitsereignis\
+- Trainingsphase gestartet\
+- Supplement-Protokoll ge\'e4ndert\
+\
+### Zweck\
+Chronologische Struktur des Nutzerverlaufs.\
+\
+---\
+\
+# 5. INTELLIGENCE ENTITIES\
+\
+Diese Entities machen aus LumeOS ein echtes intelligentes System.\
+\
+---\
+\
+## 5.1 MemoryItem\
+\
+### Beschreibung\
+Repr\'e4sentiert eine gespeicherte relevante Information \'fcber den Nutzer.\
+\
+### Beispiele\
+- reagiert schlecht auf sp\'e4te Mahlzeiten\
+- bricht Routinen nach 5 Tagen ab\
+- bevorzugt kurze Guidance\
+- Schlaf f\'e4llt vor Reisetagen ab\
+\
+### Zweck\
+Persistente Personalisierung.\
+\
+---\
+\
+## 5.2 Pattern\
+\
+### Beschreibung\
+Repr\'e4sentiert ein erkanntes wiederkehrendes Muster.\
+\
+### Beispiele\
+- Energieabfall bei schlechtem Schlaf\
+- schlechte Adherence an Wochenenden\
+- Recovery-Probleme nach hohem Volumen\
+\
+### Zweck\
+Macht Verlauf in Entscheidungen nutzbar.\
+\
+---\
+\
+## 5.3 Insight\
+\
+### Beschreibung\
+Repr\'e4sentiert eine verdichtete relevante Erkenntnis.\
+\
+### Beispiele\
+- \'84Deine Energie sinkt meist nach zwei N\'e4chten mit wenig Schlaf.\'93\
+- \'84Dein Protein ist stabil, Magnesium bleibt wiederholt zu niedrig.\'93\
+\
+### Zweck\
+Nutzerrelevante Verdichtung.\
+\
+---\
+\
+## 5.4 Recommendation\
+\
+### Beschreibung\
+Repr\'e4sentiert eine konkrete Handlungsempfehlung.\
+\
+### Beispiele\
+- Heute Trainingsvolumen reduzieren\
+- Abendmahlzeit fr\'fcher legen\
+- Supplement-Zeitpunkt anpassen\
+- Schlaf priorisieren\
+\
+### Zweck\
+Einer der wichtigsten Output-Objekte des Systems.\
+\
+---\
+\
+## 5.5 RecommendationReason\
+\
+### Beschreibung\
+Repr\'e4sentiert die Begr\'fcndungsbasis einer Empfehlung.\
+\
+### Zweck\
+Erkl\'e4rbarkeit und Transparenz.\
+\
+---\
+\
+## 5.6 DecisionContext\
+\
+### Beschreibung\
+Repr\'e4sentiert die Daten- und Kontextlage, auf deren Basis eine Entscheidung entsteht.\
+\
+### Zweck\
+Verbindet Input, Regeln und Output.\
+\
+---\
+\
+## 5.7 DecisionRule\
+\
+### Beschreibung\
+Repr\'e4sentiert eine strukturierte Regel innerhalb der Entscheidungslogik.\
+\
+### Beispiele\
+- Wenn Recovery niedrig und Volumen hoch, dann Intensit\'e4t runter\
+- Wenn N\'e4hrstoff wiederholt zu niedrig, dann priorisierte Nutrition Guidance\
+\
+### Zweck\
+Deterministische Entscheidungsbasis.\
+\
+---\
+\
+## 5.8 Trigger\
+\
+### Beschreibung\
+Repr\'e4sentiert den Ausl\'f6ser einer Empfehlung, eines Insights oder einer Eskalation.\
+\
+### Zweck\
+Hilft bei Steuerbarkeit und Proaktivit\'e4t.\
+\
+---\
+\
+## 5.9 PrioritySignal\
+\
+### Beschreibung\
+Repr\'e4sentiert, wie wichtig etwas aktuell ist.\
+\
+### Zweck\
+Steuert, was Buddy hervorhebt und was im Hintergrund bleibt.\
+\
+---\
+\
+## 5.10 ConfidenceState\
+\
+### Beschreibung\
+Repr\'e4sentiert die Sicherheit oder Unsicherheit einer Einsch\'e4tzung.\
+\
+### Zweck\
+Verhindert \'fcberzogene oder unpr\'e4zise Guidance.\
+\
+---\
+\
+## 5.11 RiskFlag\
+\
+### Beschreibung\
+Repr\'e4sentiert ein relevantes Risiko- oder Warnsignal.\
+\
+### Beispiele\
+- \'dcberlastungsrisiko\
+- wiederkehrende Adherence-Probleme\
+- auff\'e4lliger Marker\
+- potenzielle Interaktion\
+\
+### Zweck\
+Sicherheits- und Priorit\'e4tssteuerung.\
+\
+---\
+\
+## 5.12 EscalationCase\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Fall, der an Mensch, Coach oder Fachperson weitergegeben werden sollte.\
+\
+### Zweck\
+Saubere Grenzbehandlung.\
+\
+---\
+\
+# 6. COMPANION & INTERACTION ENTITIES\
+\
+---\
+\
+## 6.1 BuddyMessage\
+\
+### Beschreibung\
+Repr\'e4sentiert eine einzelne Buddy-Nachricht.\
+\
+### Zweck\
+Grundobjekt der Buddy-Interaktion.\
+\
+---\
+\
+## 6.2 Conversation\
+\
+### Beschreibung\
+Repr\'e4sentiert einen zusammenh\'e4ngenden Buddy-Dialog.\
+\
+### Zweck\
+Kontext- und Verlaufseinheit.\
+\
+---\
+\
+## 6.3 ConversationTurn\
+\
+### Beschreibung\
+Repr\'e4sentiert einen einzelnen Turn innerhalb einer Unterhaltung.\
+\
+### Zweck\
+Feinere Verlaufsebene f\'fcr Interaktion und Memory.\
+\
+---\
+\
+## 6.4 GuidanceItem\
+\
+### Beschreibung\
+Repr\'e4sentiert einen konkreten, nutzergerichteten Guidance-Baustein.\
+\
+### Beispiele\
+- Heute Priorit\'e4t: Recovery\
+- Heute auf ausreichend Protein achten\
+- Lass heute den optionalen Finisher weg\
+\
+### Zweck\
+Br\'fccke zwischen Recommendation und Nutzererlebnis.\
+\
+---\
+\
+## 6.5 DailyFocus\
+\
+### Beschreibung\
+Repr\'e4sentiert den wichtigsten Fokuspunkt eines Tages.\
+\
+### Zweck\
+Reduziert Komplexit\'e4t.\
+\
+---\
+\
+## 6.6 Reminder\
+\
+### Beschreibung\
+Repr\'e4sentiert einen geplanten oder adaptiven Erinnerungsimpuls.\
+\
+### Zweck\
+St\'fctzt Routinen und Adherence.\
+\
+---\
+\
+## 6.7 Nudge\
+\
+### Beschreibung\
+Repr\'e4sentiert einen leichten proaktiven Ansto\'df.\
+\
+### Zweck\
+Hilfreiche Reaktivierung ohne H\'e4rte.\
+\
+---\
+\
+## 6.8 Explanation\
+\
+### Beschreibung\
+Repr\'e4sentiert eine Erkl\'e4rung f\'fcr eine Empfehlung, einen Wert oder eine Priorit\'e4t.\
+\
+### Zweck\
+Transparenz und Vertrauen.\
+\
+---\
+\
+## 6.9 Summary\
+\
+### Beschreibung\
+Repr\'e4sentiert eine verdichtete Zusammenfassung.\
+\
+### Beispiele\
+- Tageszusammenfassung\
+- Wochenr\'fcckblick\
+- Trainingssummary\
+- Nutrition Summary\
+\
+### Zweck\
+Hoher Nutzwert f\'fcr \'dcbersicht und Verlauf.\
+\
+---\
+\
+# 7. HUMAN & COLLABORATION ENTITIES\
+\
+---\
+\
+## 7.1 CoachProfile\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Coach im System.\
+\
+### Zweck\
+Grundobjekt f\'fcr Coach-Layer.\
+\
+---\
+\
+## 7.2 ClientRelationship\
+\
+### Beschreibung\
+Repr\'e4sentiert die Beziehung zwischen Coach und Nutzer.\
+\
+### Zweck\
+Erlaubt Coach-spezifische Betreuungskontexte.\
+\
+---\
+\
+## 7.3 CoachNote\
+\
+### Beschreibung\
+Repr\'e4sentiert eine vom Coach gesetzte Notiz oder Einsch\'e4tzung.\
+\
+### Zweck\
+Verbindet menschliche Betreuung mit Systemkontext.\
+\
+---\
+\
+## 7.4 CoachRecommendation\
+\
+### Beschreibung\
+Repr\'e4sentiert eine Empfehlung aus Coach-Perspektive.\
+\
+### Zweck\
+Trennung von Buddy- und Human-Guidance.\
+\
+---\
+\
+## 7.5 HumanReview\
+\
+### Beschreibung\
+Repr\'e4sentiert eine menschliche Pr\'fcfung oder Entscheidung.\
+\
+### Zweck\
+Grenzf\'e4lle und sensible Themen sauber behandeln.\
+\
+---\
+\
+## 7.6 EscalationTarget\
+\
+### Beschreibung\
+Repr\'e4sentiert die Stelle oder Person, an die eskaliert wird.\
+\
+### Beispiele\
+- Coach\
+- Support\
+- Fachperson\
+- sp\'e4ter medizinische Review-Struktur\
+\
+### Zweck\
+Klare \'dcbergabepfade.\
+\
+---\
+\
+# 8. COMMERCE, CONTENT & EXPANSION ENTITIES\
+\
+---\
+\
+## 8.1 Program\
+\
+### Beschreibung\
+Repr\'e4sentiert ein strukturiertes Programm oder einen Plan.\
+\
+### Beispiele\
+- Trainingsprogramm\
+- Ern\'e4hrungsphase\
+- Recovery-Plan\
+- Supplement-Protokoll\
+\
+### Zweck\
+Sp\'e4tere strukturierte Guidance.\
+\
+---\
+\
+## 8.2 ContentItem\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Wissens- oder Lernbaustein.\
+\
+### Zweck\
+Bildung und kontextbezogene Hilfe.\
+\
+---\
+\
+## 8.3 KnowledgeNode\
+\
+### Beschreibung\
+Repr\'e4sentiert einen strukturierten Wissensbaustein f\'fcr Buddy oder Education.\
+\
+### Zweck\
+Qualit\'e4tsgesicherte Wissensverwendung.\
+\
+---\
+\
+## 8.4 Product\
+\
+### Beschreibung\
+Repr\'e4sentiert ein reales kommerzielles Produkt.\
+\
+### Beispiele\
+- Supplement-Produkt\
+- sp\'e4ter Ger\'e4te oder andere passende Produkte\
+\
+### Zweck\
+Marketplace- und Commerce-Layer.\
+\
+---\
+\
+## 8.5 Offer\
+\
+### Beschreibung\
+Repr\'e4sentiert ein Angebot oder eine kommerzielle Empfehlung.\
+\
+### Zweck\
+Sp\'e4tere Monetarisierung.\
+\
+---\
+\
+## 8.6 IntegrationSource\
+\
+### Beschreibung\
+Repr\'e4sentiert eine externe Datenquelle.\
+\
+### Beispiele\
+- Apple Health\
+- Garmin\
+- Oura\
+- Smart Scale\
+- Barcode-Quelle\
+\
+### Zweck\
+Externe Systemanbindung.\
+\
+---\
+\
+## 8.7 VisionInput\
+\
+### Beschreibung\
+Repr\'e4sentiert einen Bild- oder Video-Input.\
+\
+### Beispiele\
+- Mahlzeitfoto\
+- Progress-Foto\
+- \'dcbungsvideo\
+\
+### Zweck\
+Visuelle Erweiterungen.\
+\
+---\
+\
+## 8.8 VoiceInteraction\
+\
+### Beschreibung\
+Repr\'e4sentiert eine Sprachinteraktion.\
+\
+### Zweck\
+Sp\'e4tere Voice-Schicht.\
+\
+---\
+\
+# ZWISCHENFAZIT\
+\
+LumeOS besteht fachlich nicht aus \'84Screens\'93 oder \'84APIs\'93, sondern aus:\
+\
+- Personenobjekten\
+- Zustandsobjekten\
+- Verlaufsobjekten\
+- Regelobjekten\
+- Entscheidungsobjekten\
+- Begleitungsobjekten\
+- Kooperationsobjekten\
+- Erweiterungsobjekten\
+\
+Genau diese Denke ist sp\'e4ter entscheidend, damit das System nicht wieder in lose Module zerf\'e4llt.\
+\
+---\
+\
+# WICHTIGE ARBEITSREGEL\
+\
+Dieses Dokument definiert **fachliche Existenz**, nicht technische Umsetzung.\
+\
+Das hei\'dft:\
+\
+- Nicht jede Entity braucht sofort eine eigene Tabelle\
+- Nicht jede Entity braucht sofort eine eigene API\
+- Nicht jede Entity braucht sofort eine eigene UI\
+\
+Aber:\
+\
+# Jede wichtige Entity muss als fachliches Objekt klar gedacht sein, bevor sauber gebaut werden kann.\
+\
+---\
+\
+# Zweck dieses Dokuments im Gesamtprojekt\
+\
+Dieses Dokument dient sp\'e4ter als Basis f\'fcr:\
+\
+- Datenmodell-Entwurf\
+- API-Schnitt\
+- Event-Modeling\
+- Buddy-Kontextmodell\
+- Recommendation-System\
+- Memory-Struktur\
+- UI-Struktur\
+- Coach-Layer\
+- Expansion-Layer}

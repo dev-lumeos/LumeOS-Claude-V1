@@ -1,0 +1,506 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 13_DATA_TRUTH_PRINCIPLES\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **Datenwahrheits- und Datenintegrit\'e4tsprinzipien** von LumeOS.\
+\
+Es beantwortet die Frage:\
+\
+# Was gilt im System als \'84wahr\'93, wie werden Daten behandelt, und was darf niemals unsauber geraten, vermischt oder halluziniert werden?\
+\
+Dieses Dokument ist kritisch.\
+\
+Denn LumeOS wird nur dann langfristig stark, wenn das System intern sauber mit Daten umgeht.\
+\
+Wenn die Datenbasis unsauber ist, werden fr\'fcher oder sp\'e4ter auch unsauber:\
+\
+- Recommendations\
+- Buddy-Antworten\
+- Auswertungen\
+- Personalisierung\
+- Vertrauen\
+- Produktintegrit\'e4t\
+\
+---\
+\
+## Kernthese\
+\
+# Ein intelligentes Produkt ist nur so gut wie seine Datenwahrheit.\
+\
+Nicht nur Datenmenge z\'e4hlt.\
+\
+Entscheidend ist:\
+\
+- Datenklarheit\
+- Datenherkunft\
+- Datenbedeutung\
+- Datenzuverl\'e4ssigkeit\
+- Datenbegrenzung\
+\
+---\
+\
+# 1. DIE OBERSTE DATENREGEL\
+\
+# LumeOS darf intern niemals so tun, als w\'fcsste das System etwas sicher, das es nicht sicher wei\'df.\
+\
+Das ist die wichtigste Regel.\
+\
+Diese Regel gilt f\'fcr:\
+\
+- Nutrition\
+- Training\
+- Recovery\
+- Supplements\
+- Biomarker\
+- Buddy\
+- Recommendations\
+- Insights\
+- jegliche Personalisierung\
+\
+---\
+\
+# 2. DIE DREI KLASSEN VON DATENWAHRHEIT\
+\
+Nicht alle Daten sind gleich.\
+\
+LumeOS muss intern klar unterscheiden zwischen drei Ebenen.\
+\
+---\
+\
+# KLASSE A \'97 DIREKTE WAHRHEIT\
+\
+Das sind Daten, die als direkte Eingabe oder belastbare Quelle vorliegen.\
+\
+### Beispiele\
+- Nutzerprofil\
+- explizit geloggte Mahlzeit\
+- geloggtes Workout\
+- eingegebener Check-in\
+- echter Biomarker-Wert\
+- definierte Food-Portion\
+- definierte Supplement-Dosierung\
+- explizit gesetztes Ziel\
+\
+### Regel\
+Diese Daten gelten als \'84direkt wahr\'93, solange sie nicht \'fcberschrieben oder korrigiert wurden.\
+\
+---\
+\
+# KLASSE B \'97 ABGELEITETE WAHRHEIT\
+\
+Das sind Daten, die aus anderen Daten logisch berechnet oder strukturiert abgeleitet werden.\
+\
+### Beispiele\
+- Tagesprotein aus geloggten Meals\
+- Weekly Training Volume aus Set Logs\
+- Recovery Score aus Schlaf + Stress + Energy\
+- Trendverlauf eines Biomarkers\
+- N\'e4hrstoffsummen\
+- Adherence-Rate\
+- Zielfortschritt\
+\
+### Regel\
+Diese Daten sind legitim, aber nur so gut wie ihre Inputs.\
+\
+Abgeleitete Wahrheit ist **nicht gleichwertig** zu direkter Rohwahrheit.\
+\
+---\
+\
+# KLASSE C \'97 INTERPRETATIVE WAHRHEIT\
+\
+Das sind Daten oder Aussagen, die aus Regeln, Kontext oder Mustern interpretiert werden.\
+\
+### Beispiele\
+- \'84Protein aktuell wahrscheinlich zu niedrig\'93\
+- \'84Recovery scheint diese Woche unter deinem Normalniveau zu liegen\'93\
+- \'84Deine Adherence bricht am Wochenende h\'e4ufiger ein\'93\
+- \'84Das wirkt aktuell wie ein relevanter Engpass\'93\
+\
+### Regel\
+Diese Ebene ist wertvoll, aber sie ist **nie roh-faktisch**, sondern immer eine kontextabh\'e4ngige Interpretation.\
+\
+Deshalb braucht sie:\
+\
+- Regeln\
+- Kontext\
+- Confidence\
+- Vorsicht\
+- Erkl\'e4rbarkeit\
+\
+---\
+\
+# 3. WAS NIEMALS PASSIEREN DARF\
+\
+LumeOS darf niemals:\
+\
+- Sch\'e4tzungen als Fakten speichern\
+- Interpretationen als Rohdaten behandeln\
+- unklare Mappings als sichere Wahrheit ausgeben\
+- \'84ungef\'e4hr passend\'93 mit \'84korrekt\'93 verwechseln\
+- abgeleitete Annahmen ungekennzeichnet in den Kernzustand mischen\
+\
+Das ist einer der gef\'e4hrlichsten Fehler in datengetriebenen Produkten.\
+\
+---\
+\
+# 4. DIE REGEL VON ROHDATEN VS SYSTEMMEINUNG\
+\
+LumeOS muss intern sauber trennen zwischen:\
+\
+---\
+\
+## Rohdaten\
+Was wirklich eingegeben, gemessen oder strukturiert hinterlegt wurde\
+\
+und\
+\
+## Systemmeinung\
+Was das System daraus ableitet, interpretiert oder empfiehlt\
+\
+---\
+\
+## Beispiel\
+\
+### Rohdaten\
+- 127 g Protein\
+- 6h 12m Schlaf\
+- 3 Trainingseinheiten\
+- LDL-Wert X\
+- Ziel: Fettverlust\
+\
+### Systemmeinung\
+- Protein aktuell eher zu niedrig f\'fcr Zielkontext\
+- Schlaftrend limitiert Recovery\
+- Training ist konsistenter als Ern\'e4hrung\
+- Fettverluststrategie k\'f6nnte aktuell an Recovery reiben\
+\
+---\
+\
+## Regel\
+\
+# Rohdaten d\'fcrfen nie von Systemmeinungen \'fcberschrieben werden.\
+\
+Die Interpretation darf auf den Rohdaten aufbauen.\
+\
+Sie darf sie aber nicht \'84ersetzen\'93.\
+\
+---\
+\
+# 5. DIE REGEL VON CANONICAL VS USER-REALIT\'c4T\
+\
+Das ist f\'fcr LumeOS extrem wichtig.\
+\
+Viele Systembereiche brauchen zwei Ebenen:\
+\
+---\
+\
+## 1. Canonical Layer\
+Die standardisierte, systemlogische Wahrheit\
+\
+## 2. User Reality Layer\
+Die konkrete alltagsnahe Nutzereingabe oder Produktrealit\'e4t\
+\
+---\
+\
+## Beispiele\
+\
+### Nutrition\
+- Canonical Food\
+- User-Food-Input / Meal-Text / Produktname\
+\
+### Supplements\
+- Canonical Ingredient / Canonical Supplement\
+- reales Produkt / Markenprodukt / Nutzer-Input\
+\
+### Training\
+- Canonical Exercise\
+- Nutzerbezeichnung / Gym-Variante / Ger\'e4tetext\
+\
+### Biomarker\
+- Canonical Marker\
+- Laborbezeichnung / abweichende Schreibweise / Upload-Text\
+\
+---\
+\
+## Regel\
+\
+# Das System rechnet und entscheidet idealerweise auf Canonicals.\
+# Der Nutzer interagiert aber oft mit seiner echten Alltagsrealit\'e4t.\
+\
+Deshalb muss LumeOS beide Ebenen sauber beherrschen.\
+\
+---\
+\
+# 6. DIE REGEL F\'dcR MAPPING\
+\
+Mapping ist ein kritischer Bestandteil von LumeOS.\
+\
+Das gilt f\'fcr:\
+\
+- Foods\
+- Portions\
+- Supplements\
+- \'dcbungen\
+- Biomarker\
+- externe Daten\
+- Vision-Inputs\
+- freie Texteingaben\
+\
+---\
+\
+## Grundregel\
+\
+# Ein Mapping darf nur dann als sicher gelten, wenn es wirklich hinreichend eindeutig ist.\
+\
+---\
+\
+## Wenn Mapping sicher ist\
+\uc0\u8594  normal nutzbar\
+\
+## Wenn Mapping plausibel, aber nicht sicher ist\
+\uc0\u8594  intern als unsicher markieren\
+\
+## Wenn Mapping zu schwach ist\
+\uc0\u8594  nicht als Wahrheit \'fcbernehmen\
+\
+---\
+\
+## Falsches Verhalten\
+- \'84wird schon ungef\'e4hr passen\'93\
+- aggressive Auto-Zuordnung\
+- falsche Sicherheit\
+\
+## Richtiges Verhalten\
+- Confidence\
+- Fallbacks\
+- Sichtbarkeit von Unsicherheit\
+- ggf. Human-/User-Korrekturpfad\
+\
+---\
+\
+# 7. DIE REGEL F\'dcR FEHLENDE DATEN\
+\
+LumeOS muss fehlende Daten sauber behandeln.\
+\
+Nicht alles muss immer vorhanden sein.\
+\
+Aber fehlende Daten d\'fcrfen nicht unsauber \'84gef\'fcllt\'93 werden.\
+\
+---\
+\
+## Erlaubt\
+- Unknown\
+- Missing\
+- Not enough data\
+- optional keine Aussage\
+- vorsichtige Guidance\
+\
+## Nicht erlaubt\
+- Werte erfinden\
+- Kausalit\'e4t erfinden\
+- Standardannahmen als Nutzerwahrheit speichern\
+- L\'fccken stillschweigend mit Halluzination schlie\'dfen\
+\
+---\
+\
+# 8. DIE REGEL F\'dcR CONFIDENCE\
+\
+LumeOS braucht intern ein klares Konzept von Sicherheit / Unsicherheit.\
+\
+Nicht jedes Systemelement braucht sofort eine perfekte mathematische Confidence.\
+\
+Aber logisch muss klar sein:\
+\
+- wie sicher ist ein Mapping?\
+- wie sicher ist eine Interpretation?\
+- wie stabil ist ein Muster?\
+- wie belastbar ist eine Recommendation?\
+\
+---\
+\
+## Confidence beeinflusst mindestens:\
+\
+- Buddy-Formulierung\
+- Recommendation-H\'e4rte\
+- Nachfragen\
+- Eskalation\
+- Priorisierung\
+- Sichtbarkeit von Unsicherheit\
+\
+---\
+\
+# 9. DIE REGEL F\'dcR HISTORIE\
+\
+Historie darf in LumeOS nicht nur als Datenablage existieren.\
+\
+Aber Historie darf auch nicht unsauber umgeschrieben werden.\
+\
+---\
+\
+## Grundregel\
+\
+# Historische Rohdaten bleiben historische Rohdaten.\
+\
+Auch wenn sich sp\'e4ter:\
+\
+- Mappings verbessern\
+- Canonicals \'e4ndern\
+- Klassifikationen \'e4ndern\
+- Interpretationen \'e4ndern\
+\
+muss klar bleiben:\
+\
+- was damals tats\'e4chlich erfasst wurde\
+- was sp\'e4ter neu interpretiert wurde\
+\
+---\
+\
+## Deshalb wichtig\
+\
+LumeOS braucht konzeptionell Trennung zwischen:\
+\
+- historischem Event\
+- sp\'e4terer Interpretation\
+- sp\'e4terem Mapping\
+- sp\'e4terem Insight\
+\
+---\
+\
+# 10. DIE REGEL F\'dcR BERECHNUNGEN\
+\
+Berechnungen sind in LumeOS wichtig.\
+\
+Aber auch hier gilt:\
+\
+# Jede Berechnung ist nur so belastbar wie ihre Inputs und ihr Modell.\
+\
+---\
+\
+## Gute Berechnungen\
+- nachvollziehbar\
+- input-gebunden\
+- stabil\
+- reproduzierbar\
+- fachlich sinnvoll\
+\
+## Schlechte Berechnungen\
+- pseudo-exakt\
+- intransparent\
+- input-schwach\
+- nicht reproduzierbar\
+- Buddy-magisch\
+\
+---\
+\
+# 11. DIE REGEL F\'dcR INSIGHTS UND PATTERNS\
+\
+Insights und Muster sind wertvoll.\
+\
+Aber sie d\'fcrfen nicht zu fr\'fch oder zu aggressiv entstehen.\
+\
+---\
+\
+## Pattern / Insight nur dann stark behandeln, wenn:\
+- gen\'fcgend Signal vorhanden ist\
+- Verlauf ausreichend ist\
+- Relevanz gegeben ist\
+- die Aussage praktisch n\'fctzlich ist\
+\
+---\
+\
+## Nicht sinnvoll\
+- aus 2 Events \'84Pers\'f6nlichkeitsmuster\'93 ableiten\
+- aus d\'fcnner Datenlage Verhaltenswahrheiten bauen\
+- schwache Korrelation als starke Regel behandeln\
+\
+---\
+\
+# 12. DIE REGEL F\'dcR BUDDY UND DATENWAHRHEIT\
+\
+Buddy darf niemals eine weichere Datenwahrheit verwenden als das System intern tr\'e4gt.\
+\
+Das bedeutet:\
+\
+Buddy darf:\
+\
+- verst\'e4ndlicher formulieren\
+- nat\'fcrlicher formulieren\
+- alltagstauglicher formulieren\
+\
+Buddy darf nicht:\
+\
+- h\'e4rter behaupten als die Datenbasis erlaubt\
+- Unsicherheit unsichtbar machen\
+- Mappings oder Annahmen als sichere Fakten verkaufen\
+- interpretative Wahrheit als harte Rohwahrheit ausgeben\
+\
+---\
+\
+# 13. DIE REGEL F\'dcR \'84UNKNOWN\'93 ALS LEGITIMEN ZUSTAND\
+\
+Ein sauberes System muss \'84ich wei\'df es nicht sicher\'93 aushalten k\'f6nnen.\
+\
+Deshalb ist in LumeOS \'84unknown\'93 ein legitimer Zustand.\
+\
+Nicht nur technisch.\
+\
+Sondern produktlogisch.\
+\
+---\
+\
+## Unknown ist legitim bei:\
+- Mapping\
+- Interpretation\
+- Kontext\
+- Vollst\'e4ndigkeit\
+- Mustern\
+- Recommendations\
+- Confidence\
+- Userdaten\
+\
+---\
+\
+## Wichtige Regel\
+\
+# Unknown ist besser als falsch-sicher.\
+\
+Das muss ein Grundprinzip des gesamten Systems bleiben.\
+\
+---\
+\
+# 14. DIE REGEL F\'dcR DATENKORREKTUR\
+\
+LumeOS muss grunds\'e4tzlich damit leben k\'f6nnen, dass Daten sp\'e4ter:\
+\
+- erg\'e4nzt\
+- korrigiert\
+- remapped\
+- pr\'e4zisiert\
+- neu interpretiert\
+\
+werden.\
+\
+Deshalb d\'fcrfen Datenmodelle und Produktlogik nicht so gebaut sein, dass alles sofort \'84endg\'fcltig\'93 zementiert wird.\
+\
+---\
+\
+# 15. EIN-SATZ-DEFINITION DER DATENWAHRHEIT\
+\
+# In LumeOS gilt nur das als wahr, was direkt erfasst, belastbar abgeleitet oder sauber als Interpretation mit passender Unsicherheit behandelt wird.\
+\
+---\
+\
+# 16. SCHLUSSREGEL\
+\
+Jede neue Datenstruktur, jedes Mapping, jede Berechnung, jede Insight-Logik und jede Buddy-Aussage muss diese Frage bestehen:\
+\
+# Ist klar, was hier Rohwahrheit ist, was abgeleitete Wahrheit ist und was nur Interpretation ist?\
+\
+Wenn nein, ist das System an dieser Stelle noch nicht sauber genug.}

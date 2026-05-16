@@ -1,0 +1,117 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "_meta": {
+    "source": ["apps/app/tailwind.config.ts", "apps/app/app/globals.css", "packages/ui/src/*.tsx"],
+    "theme": "dual — Light (modules/pages) + Dark (packages/ui primitives)",
+    "generated": "2026-04-27"
+  },
+
+  "brand": {
+    "_comment": "Tailwind custom extension — brand.* maps to green-500/600/700 family",
+    "50":  { "value": "#f0fdf4", "usage": "active nav background, badge success bg" },
+    "100": { "value": "#dcfce7", "usage": "hover tints" },
+    "500": { "value": "#22c55e", "usage": "focus rings, spinner border-t, primary accent" },
+    "600": { "value": "#16a34a", "usage": "primary button bg, sidebar active indicator, link text" },
+    "700": { "value": "#15803d", "usage": "primary button hover" },
+    "900": { "value": "#14532d", "usage": "deepest green tint" }
+  },
+
+  "semantic": {
+    "_comment": "Derived from packages/ui/src/badge.tsx — applied across all modules",
+    "success": {
+      "bg":     { "value": "rgba(20,83,45,0.50)",  "tailwind": "green-900/50" },
+      "text":   { "value": "#4ade80",               "tailwind": "green-400" },
+      "border": { "value": "#166534",               "tailwind": "green-800" }
+    },
+    "warning": {
+      "bg":     { "value": "rgba(113,63,18,0.50)",  "tailwind": "yellow-900/50" },
+      "text":   { "value": "#facc15",               "tailwind": "yellow-400" },
+      "border": { "value": "#854d0e",               "tailwind": "yellow-800" }
+    },
+    "danger": {
+      "bg":     { "value": "rgba(127,29,29,0.50)",  "tailwind": "red-900/50" },
+      "text":   { "value": "#f87171",               "tailwind": "red-400" },
+      "border": { "value": "#991b1b",               "tailwind": "red-800" }
+    },
+    "info": {
+      "bg":     { "value": "rgba(23,37,84,0.50)",   "tailwind": "blue-900/50" },
+      "text":   { "value": "#60a5fa",               "tailwind": "blue-400" },
+      "border": { "value": "#1e40af",               "tailwind": "blue-800" }
+    }
+  },
+
+  "cssVariables": {
+    "_comment": "From :root in apps/app/app/globals.css — shared across all app routes",
+    "--background": { "value": "#f9fafb", "tailwind": "gray-50", "usage": "page background" },
+    "--foreground":  { "value": "#111827", "tailwind": "gray-900", "usage": "default body text" }
+  },
+
+  "lightTheme": {
+    "_comment": "Used in module components (apps/app/modules, src/modules) — light/white surface",
+    "surface": {
+      "page":    { "value": "#f9fafb", "tailwind": "gray-50" },
+      "card":    { "value": "#ffffff", "tailwind": "white" },
+      "hover":   { "value": "#f3f4f6", "tailwind": "gray-100" },
+      "border":  { "value": "#e5e7eb", "tailwind": "gray-200" }
+    },
+    "text": {
+      "primary":   { "value": "#111827", "tailwind": "gray-900" },
+      "secondary": { "value": "#374151", "tailwind": "gray-700" },
+      "tertiary":  { "value": "#4b5563", "tailwind": "gray-600" },
+      "muted":     { "value": "#6b7280", "tailwind": "gray-500" },
+      "subtle":    { "value": "#9ca3af", "tailwind": "gray-400" },
+      "meta":      { "value": "#d1d5db", "tailwind": "gray-300" }
+    },
+    "interactive": {
+      "navActive":    { "value": "#f0fdf4 / #15803d", "tailwind": "bg-green-50 text-green-700" },
+      "navInactive":  { "value": "#4b5563",            "tailwind": "text-gray-600" },
+      "navHover":     { "value": "#f3f4f6",            "tailwind": "hover:bg-gray-100" },
+      "tabActive":    { "value": "#dcfce7 / #15803d",  "tailwind": "bg-green-100 text-green-700 border-green-500" }
+    }
+  },
+
+  "darkTheme": {
+    "_comment": "Used in packages/ui primitives — zinc-based dark surfaces",
+    "surface": {
+      "base":    { "value": "#18181b", "tailwind": "zinc-900", "usage": "Card, Input, Modal bg" },
+      "overlay": { "value": "rgba(0,0,0,0.60)", "usage": "Modal backdrop" },
+      "border":  { "value": "#27272a", "tailwind": "zinc-800", "usage": "Card, Input border default" },
+      "subtle":  { "value": "#3f3f46", "tailwind": "zinc-700", "usage": "Input focused border" }
+    },
+    "text": {
+      "primary":   { "value": "#f4f4f5", "tailwind": "zinc-100" },
+      "secondary": { "value": "#d4d4d8", "tailwind": "zinc-300" },
+      "muted":     { "value": "#a1a1aa", "tailwind": "zinc-400" },
+      "placeholder": { "value": "#71717a", "tailwind": "zinc-500" }
+    }
+  },
+
+  "moduleAccents": {
+    "_comment": "Per-module accent color for ResponsiveTabNav — driven by accentColor prop",
+    "nutrition":   { "color": "green",  "active": "bg-green-100 text-green-700 border-green-500" },
+    "training":    { "color": "orange", "active": "bg-orange-100 text-orange-700 border-orange-500" },
+    "coach":       { "color": "blue",   "active": "bg-blue-100 text-blue-700 border-blue-500" },
+    "goals":       { "color": "purple", "active": "bg-purple-100 text-purple-700 border-purple-500" },
+    "supplements": { "color": "teal",   "active": "bg-teal-100 text-teal-700 border-teal-500" },
+    "recovery":    { "color": "blue",   "active": "bg-blue-100 text-blue-700 border-blue-500" }
+  },
+
+  "gradients": {
+    "_comment": "ModuleHeader gradient prop — passed as Tailwind gradient classes",
+    "nutrition":   "from-green-500 to-teal-400",
+    "training":    "from-orange-500 to-red-500",
+    "coach":       "from-blue-600 to-indigo-600",
+    "goals":       "from-purple-500 to-pink-500",
+    "supplements": "from-teal-500 to-cyan-500",
+    "recovery":    "from-blue-500 to-cyan-500",
+    "medical":     "from-rose-500 to-pink-500",
+    "buddy_card":  "from-blue-50 to-indigo-50"
+  },
+
+  "effects": {
+    "cardHoverShadow":  { "value": "0 4px 12px rgba(0,0,0,0.08)" },
+    "modalShadow":      { "tailwind": "shadow-2xl" },
+    "moduleShadow":     { "tailwind": "shadow-lg" },
+    "sidebarIndicator": { "value": "#16a34a", "usage": "3px left-border on active sidebar item" }
+  }
+}

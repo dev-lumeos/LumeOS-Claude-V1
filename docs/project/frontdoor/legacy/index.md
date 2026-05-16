@@ -26,8 +26,20 @@ This root-level source area stores old platform material and historical inputs, 
 - old-visions
 - old-platform
 - brainstorm-docs
+- design-system
+- specs-snapshot
 - imports
 - analysis
+
+## Imported Discussion Material
+
+The following copied folders are discussion material only:
+
+- brainstorm-docs
+- design-system
+- specs-snapshot
+
+Even if copied material contains current truths, within this legacy area it remains discussion material only. It is not SSOT, not current product truth in this context, not executable, and not queue-released.
 
 ## OpenClaw Rule
 

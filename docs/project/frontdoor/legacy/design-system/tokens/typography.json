@@ -1,0 +1,102 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "_meta": {
+    "source": ["src/index.css", "apps/app/app/globals.css", "packages/ui/src/*.tsx", "apps/app/modules/**/*.tsx"],
+    "generated": "2026-04-27"
+  },
+
+  "fontFamily": {
+    "sans": {
+      "value": "system-ui, -apple-system, 'Segoe UI', sans-serif",
+      "usage": "body — set on <body> in globals.css",
+      "smoothing": "-webkit-font-smoothing: antialiased"
+    }
+  },
+
+  "scale": {
+    "_comment": "Tailwind default type scale — custom additions noted",
+    "micro": {
+      "size": "10px",
+      "tailwind": "text-[10px]",
+      "usage": "sidebar section labels, nav meta text — 'Apps' header, external app labels"
+    },
+    "xs": {
+      "size": "0.75rem / 12px",
+      "tailwind": "text-xs",
+      "usage": "badge text, secondary labels, section-heading utility class, KPI sub-labels, form helper text"
+    },
+    "sm": {
+      "size": "0.875rem / 14px",
+      "tailwind": "text-sm",
+      "usage": "default body/paragraph text, nav items, button default, form labels, table cells — most-used size"
+    },
+    "base": {
+      "size": "1rem / 16px",
+      "tailwind": "text-base",
+      "usage": "large button variant, general body (inherited from browser)"
+    },
+    "lg": {
+      "size": "1.125rem / 18px",
+      "tailwind": "text-lg",
+      "usage": "card titles, modal headings (text-lg font-semibold), KPI values in ModuleHeader"
+    },
+    "xl": {
+      "size": "1.25rem / 20px",
+      "tailwind": "text-xl",
+      "usage": "app brand name in Sidebar, section H2"
+    },
+    "2xl": {
+      "size": "1.5rem / 24px",
+      "tailwind": "text-2xl",
+      "usage": "ModuleHeader title (h1), emoji icon sizes in Sidebar"
+    },
+    "3xl": {
+      "size": "1.875rem / 30px",
+      "tailwind": "text-3xl",
+      "usage": "emoji/icon decorative display, macro summary numbers"
+    },
+    "4xl": {
+      "size": "2.25rem / 36px",
+      "tailwind": "text-4xl",
+      "usage": "ModuleHeader icon (text-4xl emoji)"
+    }
+  },
+
+  "weight": {
+    "normal":    { "value": "400", "tailwind": "font-normal" },
+    "medium":    { "value": "500", "tailwind": "font-medium", "usage": "nav active items, button text, emphasis" },
+    "semibold":  { "value": "600", "tailwind": "font-semibold", "usage": "card titles, modal headings, section labels" },
+    "bold":      { "value": "700", "tailwind": "font-bold", "usage": "H1/H2 headings, key metrics, brand name" }
+  },
+
+  "patterns": {
+    "_comment": "Recurring className combinations extracted from 534 TSX files",
+    "h1_module":        { "classes": "text-2xl font-bold",                                    "context": "ModuleHeader title — always white text over gradient" },
+    "h2_card":          { "classes": "text-lg font-semibold text-gray-900",                   "context": "Card section titles, modal headings", "frequency": "high" },
+    "h3_card":          { "classes": "text-lg font-bold text-gray-900",                       "context": "Metric card primary values", "frequency": "high (77 matches)" },
+    "body_primary":     { "classes": "text-sm text-gray-700",                                 "context": "Default paragraph / description text" },
+    "body_secondary":   { "classes": "text-sm text-gray-500",                                 "context": "Supporting text, descriptions", "frequency": "high (137 matches)" },
+    "label_form":       { "classes": "block text-sm font-medium text-gray-700 mb-2",          "context": "Form field labels", "frequency": "high (81 matches)" },
+    "label_form_tight": { "classes": "block text-sm font-medium text-gray-700 mb-1",          "context": "Tight form labels", "frequency": "high (58 matches)" },
+    "caption":          { "classes": "text-xs text-gray-500",                                 "context": "Meta information, helper text below fields", "frequency": "highest (361 matches)" },
+    "caption_muted":    { "classes": "text-xs text-gray-400",                                 "context": "Dimmer caption / timestamps", "frequency": "high (119 matches)" },
+    "section_heading":  { "classes": "text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3", "context": "Group dividers in nav, card sections", "cssClass": ".section-heading" },
+    "nav_section_label":{ "classes": "text-[10px] font-semibold uppercase tracking-wider text-gray-400", "context": "Sidebar group labels", "frequency": "medium (150 matches)" },
+    "kpi_value":        { "classes": "text-lg font-bold",                                     "context": "KPI/metric display in ModuleHeader glass cards" },
+    "kpi_label":        { "classes": "text-xs text-white/70",                                 "context": "KPI sub-label on gradient backgrounds" },
+    "module_description":{ "classes": "text-white/80 text-sm mt-0.5",                         "context": "ModuleHeader subtitle on gradient bg" }
+  },
+
+  "letterSpacing": {
+    "wider": { "tailwind": "tracking-wider", "usage": "Always paired with uppercase + text-xs in section-heading pattern" }
+  },
+
+  "animations": {
+    "_comment": "Custom keyframes defined in globals.css and tailwind.config.js",
+    "fadeIn":      { "duration": "0.2s (globals.css) / 0.3s (tailwind.config.js)", "easing": "ease-out", "utility": ".animate-fade-in",       "usage": "Page transitions, modal opens, list items" },
+    "slideUp":     { "keyframe": "translateY(8px→0) + opacity 0→1",                "duration": "0.25s",   "utility": ".animate-slide-up",      "usage": "Cards appearing, bottom sheets" },
+    "blink":       { "keyframe": "opacity 1→0 step-like at 50%",                   "duration": "0.8s infinite", "utility": ".animate-blink",  "usage": "AI Coach typing cursor indicator" },
+    "pulseSubtle": { "keyframe": "opacity 1→0.85→1",                               "duration": "1.5s ease-in-out infinite", "utility": ".animate-pulse-subtle", "usage": "Live data loading indicators" },
+    "spin":        { "source": "Tailwind built-in animate-spin",                                                                                "usage": "Button loading spinner (border-2 border-t-brand-500)" }
+  }
+}

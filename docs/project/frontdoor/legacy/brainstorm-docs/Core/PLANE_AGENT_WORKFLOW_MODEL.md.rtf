@@ -1,0 +1,1004 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 .SFNS-Semibold;\f1\fswiss\fcharset0 Helvetica;\f2\fmodern\fcharset0 Courier-Oblique;
+\f3\fmodern\fcharset0 Courier;\f4\fnil\fcharset0 .SFNS-Regular;}
+{\colortbl;\red255\green255\blue255;\red14\green14\blue14;\red74\green80\blue93;\red155\green162\blue177;
+\red136\green185\blue102;\red197\green136\blue83;\red81\green156\blue233;}
+{\*\expandedcolortbl;;\cssrgb\c6700\c6700\c6700;\cssrgb\c36078\c38824\c43922;\cssrgb\c67059\c69804\c74902;
+\cssrgb\c59608\c76471\c47451;\cssrgb\c81961\c60392\c40000;\cssrgb\c38039\c68235\c93333;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 Datei \'97 PLANE_AGENT_WORKFLOW_MODEL.md
+\f1\b0\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f2\i\fs28 \cf3 # PLANE_AGENT_WORKFLOW_MODEL
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Zweck
+\f3\i0 \cf4 \
+\
+\cf5 Dieses\cf4  \cf5 Dokument\cf4  \cf5 definiert\cf4  \cf5 das\cf4  \cf5 operative\cf4  \cf5 Zielmodell\cf4  \cf5 f\'fcr\cf4  \cf5 den\cf4  \cf5 Einsatz\cf4  \cf5 von\cf4  \cf5 **AI-Agents\cf4  \cf5 innerhalb\cf4  \cf5 von\cf4  \cf5 Plane**\cf4  \cf5 f\'fcr\cf4  \cf5 den\cf4  \cf5 kontrollierten\cf4  \cf5 LumeOS-Rebuild.\cf4 \
+\
+\cf6 Es beantwortet die Frage:\cf4 \
+\
+
+\f2\i \cf3 # Wie werden Plane, Claude, Claude Code und sp\'e4ter weitere Agents so eingebunden, dass daraus ein kontrollierter, n\'fctzlicher und governance-f\'e4higer Delivery-Workflow entsteht?
+\f3\i0 \cf4 \
+\
+\cf5 Dieses\cf4  \cf5 Dokument\cf4  \cf5 ist\cf4  \cf5 **kein\cf4  \cf5 AI-Hype-Dokument**.\cf4 \
+\
+\cf5 Es\cf4  \cf5 ist\cf4  \cf5 eine\cf4  \cf5 operative\cf4  \cf5 Modellierung\cf4  \cf5 f\'fcr:\cf4 \
+\
+\cf7 -\cf4  \cf5 Product\cf4  \cf5 Management\cf4 \
+\cf7 -\cf4  \cf5 Decisions\cf4 \
+\cf7 -\cf4  \cf5 PRDs\cf4 \
+\cf7 -\cf4  \cf5 Specs\cf4 \
+\cf7 -\cf4  \cf5 Work\cf4  \cf5 Orders\cf4 \
+\cf7 -\cf4  \cf5 Reviews\cf4 \
+\cf7 -\cf4  \cf5 Governance\cf4 \
+\cf7 -\cf4  \cf5 Deterministische\cf4  \cf5 Delivery\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 1. OBERSTE REGEL
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 # Agents sind in diesem System keine autonomen Produktmanager.
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Agents sind kontrollierte Systemarbeiter.
+\f3\i0 \cf4 \
+\
+\cf6 Das bedeutet:\cf4 \
+\
+\cf7 -\cf4  \cf5 Agents\cf4  \cf5 d\'fcrfen\cf4  \cf5 Arbeit\cf4  \cf5 ausf\'fchren\cf4 \
+\cf7 -\cf4  \cf5 Agents\cf4  \cf5 d\'fcrfen\cf4  \cf5 helfen\cf4  \cf5 zu\cf4  \cf5 zerlegen,\cf4  \cf5 schreiben,\cf4  \cf5 pr\'fcfen,\cf4  \cf5 klassifizieren\cf4 \
+\cf7 -\cf4  \cf5 Agents\cf4  \cf5 d\'fcrfen\cf4  \cf5 NICHT\cf4  \cf5 frei\cf4  \cf5 Wahrheit\cf4  \cf5 ver\'e4ndern\cf4 \
+\cf7 -\cf4  \cf5 Agents\cf4  \cf5 d\'fcrfen\cf4  \cf5 NICHT\cf4  \cf5 frei\cf4  \cf5 Scope\cf4  \cf5 erweitern\cf4 \
+\cf7 -\cf4  \cf5 Agents\cf4  \cf5 d\'fcrfen\cf4  \cf5 NICHT\cf4  \cf5 frei\cf4  \cf5 Entscheidungen\cf4  \cf5 treffen\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 2. ZIELBILD
+\f3\i0 \cf4 \
+\
+\cf5 Plane\cf4  \cf5 soll\cf4  \cf5 in\cf4  \cf5 LumeOS\cf4  \cf5 als\cf4  \cf5 **visuelle\cf4  \cf5 Control\cf4  \cf5 Plane**\cf4  \cf5 dienen.\cf4 \
+\
+\cf5 Innerhalb\cf4  \cf5 dieser\cf4  \cf5 Control\cf4  \cf5 Plane\cf4  \cf5 sollen\cf4  \cf5 Agents\cf4  \cf5 gezielt\cf4  \cf5 an\cf4  \cf5 genau\cf4  \cf5 definierten\cf4  \cf5 Stellen\cf4  \cf5 helfen.\cf4 \
+\
+\cf6 Das Ziel ist NICHT:\cf4 \
+\
+\cf7 -\cf4  \cf5 alles\cf4  \cf5 zu\cf4  \cf5 automatisieren\cf4 \
+\cf7 -\cf4  \cf5 Menschen\cf4  \cf5 komplett\cf4  \cf5 zu\cf4  \cf5 ersetzen\cf4 \
+\cf7 -\cf4  \cf5 unkontrollierte\cf4  \cf5 Agentenschw\'e4rme\cf4  \cf5 zu\cf4  \cf5 bauen\cf4 \
+\
+\cf6 Das Ziel ist:\cf4 \
+\
+
+\f2\i \cf3 # mehr Struktur
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # weniger Copy-Paste
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # mehr Konsistenz
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # bessere operative Geschwindigkeit
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # ohne Kontrollverlust
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 3. DIE 4 SYSTEMROLLEN
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 System\cf4  \cf5 besteht\cf4  \cf5 aus\cf4  \cf6 4\cf4  \cf5 klar\cf4  \cf5 getrennten\cf4  \cf5 Rollen.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # ROLLE 1 \'97 HUMAN CONTROL
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Wer
+\f3\i0 \cf4 \
+\cf5 Du\cf4  \cf5 /\cf4  \cf5 sp\'e4ter\cf4  \cf5 evtl.\cf4  \cf5 ausgew\'e4hlte\cf4  \cf5 Menschen\cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 finale\cf4  \cf5 Entscheidungen\cf4 \
+\cf7 -\cf4  \cf5 Freigaben\cf4 \
+\cf7 -\cf4  \cf5 Scope-Kontrolle\cf4 \
+\cf7 -\cf4  \cf5 Richtungsentscheidungen\cf4 \
+\cf7 -\cf4  \cf5 Abnahmen\cf4 \
+\
+
+\f2\i \cf3 ## Diese Rolle darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Decisions\cf4  \cf5 final\cf4  \cf5 entscheiden\cf4 \
+\cf7 -\cf4  \cf5 Artefakte\cf4  \cf5 freigeben\cf4 \
+\cf7 -\cf4  \cf5 Priorit\'e4ten\cf4  \cf5 setzen\cf4 \
+\cf7 -\cf4  \cf5 Workflows\cf4  \cf5 \'e4ndern\cf4 \
+\
+
+\f2\i \cf3 ## Diese Rolle darf NICHT delegiert werden.
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # ROLLE 2 \'97 PLANE CONTROL LAYER
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Wer
+\f3\i0 \cf4 \
+\cf5 Plane\cf4  \cf5 selbst\cf4  \cf5 als\cf4  \cf5 visuelle\cf4  \cf5 und\cf4  \cf5 workflow-gesteuerte\cf4  \cf5 Steuerwelt\cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Status\cf4 \
+\cf7 -\cf4  \cf5 Zustandswechsel\cf4 \
+\cf7 -\cf4  \cf5 Zuordnung\cf4 \
+\cf7 -\cf4  \cf5 Priorisierung\cf4 \
+\cf7 -\cf4  \cf5 Genehmigungen\cf4 \
+\cf7 -\cf4  \cf5 Sichtbarkeit\cf4 \
+\cf7 -\cf4  \cf5 Triggerpunkte\cf4 \
+\
+
+\f2\i \cf3 ## Plane ist:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # die Steueroberfl\'e4che
+\f3\i0 \cf4 \
+\cf5 nicht\cf4  \cf5 die\cf4  \cf5 Intelligenz\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # ROLLE 3 \'97 THINKING AGENTS
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Beispiele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Claude\cf4  \cf5 Desktop\cf4 \
+\cf7 -\cf4  \cf5 Claude\cf4  \cf5 via\cf4  \cf5 MCP\cf4 \
+\cf7 -\cf4  \cf5 ChatGPT\cf4  \cf5 (optional\cf4  \cf5 sp\'e4ter)\cf4 \
+\cf7 -\cf4  \cf5 andere\cf4  \cf5 Analyse-/Review-Agents\cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 analysieren\cf4 \
+\cf7 -\cf4  \cf5 strukturieren\cf4 \
+\cf7 -\cf4  \cf5 schreiben\cf4 \
+\cf7 -\cf4  \cf5 reviewen\cf4 \
+\cf7 -\cf4  \cf5 zerlegen\cf4 \
+\cf7 -\cf4  \cf5 Widerspr\'fcche\cf4  \cf5 erkennen\cf4 \
+\cf7 -\cf4  \cf5 Artefakte\cf4  \cf5 vorbereiten\cf4 \
+\
+
+\f2\i \cf3 ## Diese Rolle ist:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Denkschicht / Wissensarbeitsschicht
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # ROLLE 4 \'97 EXECUTION AGENTS
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Beispiele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Claude\cf4  \cf5 Code\cf4 \
+\cf7 -\cf4  \cf5 Cursor\cf4  \cf5 (optional)\cf4 \
+\cf7 -\cf4  \cf5 Codex\cf4  \cf5 /\cf4  \cf5 lokale\cf4  \cf5 Worker\cf4  \cf5 (sp\'e4ter)\cf4 \
+\cf7 -\cf4  \cf5 andere\cf4  \cf5 technische\cf4  \cf5 Ausf\'fchrungsagents\cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 konkrete\cf4  \cf5 Work\cf4  \cf5 Orders\cf4  \cf5 bearbeiten\cf4 \
+\cf7 -\cf4  \cf5 kleine\cf4  \cf5 technische\cf4  \cf5 oder\cf4  \cf5 strukturelle\cf4  \cf5 Artefakte\cf4  \cf5 erzeugen\cf4 \
+\cf7 -\cf4  \cf5 definierte\cf4  \cf5 Outputs\cf4  \cf5 liefern\cf4 \
+\
+
+\f2\i \cf3 ## Diese Rolle ist:
+\f3\i0 \cf4 \
+
+\f2\i \cf3 # Ausf\'fchrungsschicht
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 4. DIE WICHTIGSTE DESIGNREGEL
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 # Nicht jeder Agent darf alles.
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 die\cf4  \cf5 wichtigste\cf4  \cf5 Governance-Regel\cf4  \cf5 \'fcberhaupt.\cf4 \
+\
+\cf5 Agents\cf4  \cf5 m\'fcssen\cf4  \cf5 nach\cf4  \cf5 **Funktion\cf4  \cf5 und\cf4  \cf5 Autorit\'e4t**\cf4  \cf5 getrennt\cf4  \cf5 werden.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 5. DIE 5 AGENTENKLASSEN F\'dcR LUMEOS
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 die\cf4  \cf5 saubere\cf4  \cf5 Zielstruktur.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # AGENT CLASS 1 \'97 `DECISION_SUPPORT_AGENT`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf5 Hilft\cf4  \cf5 bei\cf4  \cf5 noch\cf4  \cf5 offenen\cf4  \cf5 Entscheidungen.\cf4 \
+\
+
+\f2\i \cf3 ### Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Optionen\cf4  \cf5 strukturieren\cf4 \
+\cf7 -\cf4  \cf5 Vor-/Nachteile\cf4  \cf5 ausarbeiten\cf4 \
+\cf7 -\cf4  \cf5 Risiken\cf4  \cf5 benennen\cf4 \
+\cf7 -\cf4  \cf5 Empfehlung\cf4  \cf5 formulieren\cf4 \
+\
+
+\f2\i \cf3 ### Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 final\cf4  \cf5 entscheiden\cf4 \
+\cf7 -\cf4  \cf5 stillschweigend\cf4  \cf5 Annahmen\cf4  \cf5 setzen\cf4 \
+\cf7 -\cf4  \cf5 Folgeartefakte\cf4  \cf5 freigeben\cf4 \
+\
+
+\f2\i \cf3 ## Typische Plane-Ziele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `DECISION`-Items\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # AGENT CLASS 2 \'97 `PRD_AGENT`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf5 Erzeugt\cf4  \cf5 oder\cf4  \cf5 verfeinert\cf4  \cf5 PRDs\cf4  \cf5 auf\cf4  \cf5 Basis\cf4  \cf5 entschiedener\cf4  \cf5 Inputs.\cf4 \
+\
+
+\f2\i \cf3 ### Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 PRD-Entw\'fcrfe\cf4  \cf5 schreiben\cf4 \
+\cf7 -\cf4  \cf5 Scope\cf4  \cf5 /\cf4  \cf5 Non-Scope\cf4  \cf5 sch\'e4rfen\cf4 \
+\cf7 -\cf4  \cf5 Flows\cf4  \cf5 strukturieren\cf4 \
+\cf7 -\cf4  \cf5 fehlende\cf4  \cf5 Felder\cf4  \cf5 markieren\cf4 \
+\
+
+\f2\i \cf3 ### Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 offene\cf4  \cf5 Entscheidungen\cf4  \cf5 \'fcberbauen\cf4 \
+\cf7 -\cf4  \cf5 technische\cf4  \cf5 Spezifikation\cf4  \cf5 vorgreifen\cf4 \
+\cf7 -\cf4  \cf5 neue\cf4  \cf5 Produktlogik\cf4  \cf5 erfinden\cf4 \
+\
+
+\f2\i \cf3 ## Typische Plane-Ziele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `PRD`-Items\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # AGENT CLASS 3 \'97 `SPEC_AGENT`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf5 Erzeugt\cf4  \cf5 oder\cf4  \cf5 zerlegt\cf4  \cf5 fachliche\cf4  \cf5 /\cf4  \cf5 technische\cf4  \cf5 Spezifikationen.\cf4 \
+\
+
+\f2\i \cf3 ### Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Entities\cf4  \cf5 strukturieren\cf4 \
+\cf7 -\cf4  \cf5 Inputs\cf4  \cf5 /\cf4  \cf5 Outputs\cf4  \cf5 definieren\cf4 \
+\cf7 -\cf4  \cf5 Constraints\cf4  \cf5 formulieren\cf4 \
+\cf7 -\cf4  \cf5 State-Logik\cf4  \cf5 sch\'e4rfen\cf4 \
+\cf7 -\cf4  \cf5 Schnittstellen\cf4  \cf5 sauber\cf4  \cf5 beschreiben\cf4 \
+\
+
+\f2\i \cf3 ### Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 PRD-Scope\cf4  \cf5 ver\'e4ndern\cf4 \
+\cf7 -\cf4  \cf5 V1\cf4  \cf5 erweitern\cf4 \
+\cf7 -\cf4  \cf5 unentschiedene\cf4  \cf5 Dinge\cf4  \cf5 voraussetzen\cf4 \
+\
+
+\f2\i \cf3 ## Typische Plane-Ziele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `SPEC`-Items\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # AGENT CLASS 4 \'97 `WO_AGENT`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf5 Zerlegt\cf4  \cf5 und\cf4  \cf5 bearbeitet\cf4  \cf5 kleine\cf4  \cf5 ausf\'fchrbare\cf4  \cf5 Work\cf4  \cf5 Orders.\cf4 \
+\
+
+\f2\i \cf3 ### Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 kleine\cf4  \cf5 operative\cf4  \cf5 Aufgaben\cf4  \cf5 ausf\'fchren\cf4 \
+\cf7 -\cf4  \cf5 kleine\cf4  \cf5 Artefakte\cf4  \cf5 schreiben\cf4 \
+\cf7 -\cf4  \cf5 vorhandene\cf4  \cf5 Specs\cf4  \cf5 in\cf4  \cf5 umsetzbare\cf4  \cf5 Einheiten\cf4  \cf5 \'fcbersetzen\cf4 \
+\
+
+\f2\i \cf3 ### Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 ganze\cf4  \cf5 Module\cf4  \cf5 \'84bauen\'93\cf4 \
+\cf7 -\cf4  \cf5 Architektur\cf4  \cf5 frei\cf4  \cf5 ver\'e4ndern\cf4 \
+\cf7 -\cf4  \cf5 neue\cf4  \cf5 Produktlogik\cf4  \cf5 einf\'fchren\cf4 \
+\
+
+\f2\i \cf3 ## Typische Plane-Ziele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `WORK_ORDER`-Items\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # AGENT CLASS 5 \'97 `REVIEW_AGENT`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Aufgabe
+\f3\i0 \cf4 \
+\cf5 Pr\'fcft\cf4  \cf5 Artefakte\cf4  \cf5 auf\cf4  \cf5 Qualit\'e4t,\cf4  \cf5 Konsistenz\cf4  \cf5 und\cf4  \cf5 Governance-Konformit\'e4t.\cf4 \
+\
+
+\f2\i \cf3 ### Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 L\'fccken\cf4  \cf5 markieren\cf4 \
+\cf7 -\cf4  \cf5 Widerspr\'fcche\cf4  \cf5 finden\cf4 \
+\cf7 -\cf4  \cf5 Drift\cf4  \cf5 erkennen\cf4 \
+\cf7 -\cf4  \cf5 Freigabeempfehlungen\cf4  \cf5 geben\cf4 \
+\
+
+\f2\i \cf3 ### Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Wahrheit\cf4  \cf5 \'fcberschreiben\cf4 \
+\cf7 -\cf4  \cf5 stillschweigend\cf4  \cf5 korrigieren,\cf4  \cf5 ohne\cf4  \cf5 es\cf4  \cf5 sichtbar\cf4  \cf5 zu\cf4  \cf5 machen\cf4 \
+\
+
+\f2\i \cf3 ## Typische Plane-Ziele
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 `REVIEW`-Items\cf4 \
+\cf7 -\cf4  \cf5 oder\cf4  \cf5 Review-Phase\cf4  \cf5 anderer\cf4  \cf5 Artefakte\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 6. WELCHE AGENTENKLASSEN WELCHE PLANE-ITEMS BEARBEITEN D\'dcRFEN
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## `DECISION` Items
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 DECISION_SUPPORT_AGENT\cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\
+
+\f2\i \cf3 ### Nicht erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 WO_AGENT\cf4 \
+\cf7 -\cf4  \cf5 technische\cf4  \cf5 Execution\cf4  \cf5 Agents\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## `PRD` Items
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 PRD_AGENT\cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\
+
+\f2\i \cf3 ### Nicht erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 WO_AGENT\cf4  \cf5 direkt\cf4 \
+\cf7 -\cf4  \cf5 technische\cf4  \cf5 Execution\cf4  \cf5 Agents\cf4  \cf5 direkt\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## `SPEC` Items
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 SPEC_AGENT\cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\
+
+\f2\i \cf3 ### Optional
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 PRD_AGENT\cf4  \cf5 nur\cf4  \cf5 unterst\'fctzend\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## `WORK_ORDER` Items
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 WO_AGENT\cf4 \
+\cf7 -\cf4  \cf5 EXECUTION\cf4  \cf5 AGENTS\cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## `REVIEW` Items
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## `RISK` Items
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\cf7 -\cf4  \cf5 DECISION_SUPPORT_AGENT\cf4 \
+\
+
+\f2\i \cf3 ### Nicht erlaubt
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 direkte\cf4  \cf5 Execution\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 7. WANN EIN AGENT \'dcBERHAUPT AUF EIN ITEM LOSGELASSEN WERDEN DARF
+\f3\i0 \cf4 \
+\
+\cf5 Ein\cf4  \cf5 Agent\cf4  \cf5 darf\cf4  \cf5 nur\cf4  \cf5 dann\cf4  \cf5 auf\cf4  \cf5 ein\cf4  \cf5 Plane-Item\cf4  \cf5 angesetzt\cf4  \cf5 werden,\cf4  \cf5 wenn\cf4  \cf5 das\cf4  \cf5 Item\cf4  \cf5 **agent-ready**\cf4  \cf5 ist.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # AGENT-READY CHECK
+\f3\i0 \cf4 \
+\
+\cf5 Ein\cf4  \cf5 Item\cf4  \cf5 ist\cf4  \cf5 nur\cf4  \cf5 agent-ready,\cf4  \cf6 wenn:\cf4 \
+\
+\cf7 -\cf4  \cf5 artifact_level\cf4  \cf5 gesetzt\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 workstream\cf4  \cf5 gesetzt\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 source_of_truth_doc\cf4  \cf5 vorhanden\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 v1_scope_status\cf4  \cf5 gesetzt\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 artifact_status\cf4  \cf5 sinnvoll\cf4  \cf5 ist\cf4 \
+\cf7 -\cf4  \cf5 keine\cf4  \cf5 harte\cf4  \cf5 fehlende\cf4  \cf5 Entscheidung\cf4  \cf5 blockiert\cf4 \
+\cf7 -\cf4  \cf5 der\cf4  \cf5 Auftrag\cf4  \cf5 klein\cf4  \cf5 genug\cf4  \cf5 ist\cf4 \
+\
+\cf5 Wenn\cf4  \cf5 das\cf4  \cf5 nicht\cf4  \cf5 erf\'fcllt\cf4  \cf6 ist:\cf4 \
+
+\f2\i \cf3 # Agent nicht ansetzen
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 8. WELCHE STATES IN PLANE AGENTEN TRIGGERN SOLLTEN
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 extrem\cf4  \cf5 wichtig.\cf4 \
+\
+\cf5 Nicht\cf4  \cf5 jeder\cf4  \cf5 Statuswechsel\cf4  \cf5 darf\cf4  \cf5 automatisch\cf4  \cf5 Agenten\cf4  \cf5 ausl\'f6sen.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # EMPFOHLENE AGENT-TRIGGER-STATES
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## STATE: `ANALYZING`
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Sinnvoll f\'fcr
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Decision\cf4  \cf5 Support\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 PRD\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 Spec\cf4  \cf5 Agent\cf4 \
+\
+
+\f2\i \cf3 ### Zweck
+\f3\i0 \cf4 \
+\cf5 Ein\cf4  \cf5 Artefakt\cf4  \cf5 wird\cf4  \cf5 analysiert\cf4  \cf5 /\cf4  \cf5 vorbereitet\cf4  \cf5 /\cf4  \cf5 zerlegt\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## STATE: `IN_DEFINITION`
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Sinnvoll f\'fcr
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 PRD\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 Spec\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 WO\cf4  \cf5 Agent\cf4 \
+\
+
+\f2\i \cf3 ### Zweck
+\f3\i0 \cf4 \
+\cf5 Es\cf4  \cf5 wird\cf4  \cf5 aktiv\cf4  \cf5 inhaltlich\cf4  \cf5 konkretisiert\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## STATE: `READY_FOR_REVIEW`
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Sinnvoll f\'fcr
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Review\cf4  \cf5 Agent\cf4 \
+\
+
+\f2\i \cf3 ### Zweck
+\f3\i0 \cf4 \
+\cf5 Artefakt\cf4  \cf5 soll\cf4  \cf5 gepr\'fcft\cf4  \cf5 werden\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## STATE: `READY_FOR_BUILD`
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Sinnvoll f\'fcr
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 WO\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 Claude\cf4  \cf5 Code\cf4 \
+\cf7 -\cf4  \cf5 technische\cf4  \cf5 Execution\cf4  \cf5 Agents\cf4 \
+\
+
+\f2\i \cf3 ### Zweck
+\f3\i0 \cf4 \
+\cf5 Ein\cf4  \cf5 Work\cf4  \cf5 Order\cf4  \cf5 ist\cf4  \cf5 sauber\cf4  \cf5 genug\cf4  \cf5 zur\cf4  \cf5 Ausf\'fchrung\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## STATE: `UNDER_REVIEW`
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Sinnvoll f\'fcr
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Review\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 Human\cf4  \cf5 Review\cf4 \
+\
+
+\f2\i \cf3 ### Zweck
+\f3\i0 \cf4 \
+\cf5 Pr\'fcfung\cf4  \cf5 /\cf4  \cf5 Freigabephase\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # STATES, DIE NICHT AUTOMATISCH AGENTEN TRIGGERN SOLLTEN
+\f3\i0 \cf4 \
+\
+\cf6 Nicht automatisch triggern:\cf4 \
+\
+\cf7 -\cf4  \cf5 `OPEN`\cf4 \
+\cf7 -\cf4  \cf5 `BLOCKED`\cf4 \
+\cf7 -\cf4  \cf5 `REJECTED`\cf4 \
+\cf7 -\cf4  \cf5 `DECISION_NEEDED`\cf4 \
+\
+\cf6 Warum:\cf4 \
+\cf5 Diese\cf4  \cf5 Zust\'e4nde\cf4  \cf5 brauchen\cf4  \cf5 meist\cf4  \cf5 zuerst\cf4  \cf5 Klarheit\cf4  \cf5 oder\cf4  \cf5 menschliche\cf4  \cf5 Intervention.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 9. DIE SICHERSTE EINSATZFORM AM ANFANG
+\f3\i0 \cf4 \
+\
+\cf5 F\'fcr\cf4  \cf5 deinen\cf4  \cf5 Start\cf4  \cf5 ist\cf4  \cf5 die\cf4  \cf5 sicherste\cf4  \cf5 Form\cf4  \cf5 NICHT\cf4  \cf5 Vollautomatik.\cf4 \
+\
+\cf6 Sondern:\cf4 \
+\
+
+\f2\i \cf3 # HUMAN-IN-THE-LOOP AGENT ASSIGNMENT
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 hei\'dft:\cf4 \
+\
+\cf7 -\cf4  \cf5 du\cf4  \cf5 weist\cf4  \cf5 ein\cf4  \cf5 Item\cf4  \cf5 bewusst\cf4  \cf5 einem\cf4  \cf5 Agenten\cf4  \cf5 zu\cf4 \
+\cf7 -\cf4  \cf5 oder\cf4  \cf5 du\cf4  \cf5 @mentionst\cf4  \cf5 den\cf4  \cf5 Agenten\cf4  \cf5 gezielt\cf4 \
+\cf7 -\cf4  \cf5 der\cf4  \cf5 Agent\cf4  \cf5 bearbeitet\cf4  \cf5 nur\cf4  \cf5 dieses\cf4  \cf5 klar\cf4  \cf5 definierte\cf4  \cf5 Item\cf4 \
+\cf7 -\cf4  \cf5 danach\cf4  \cf5 folgt\cf4  \cf5 Review\cf4 \
+\
+
+\f2\i \cf3 ### Das ist dein sicherster Startmodus.
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 10. DIE 3 BETRIEBSMODI F\'dcR AGENTEN
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 sehr\cf4  \cf5 wichtig\cf4  \cf5 f\'fcr\cf4  \cf5 Governance.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # MODUS 1 \'97 `READ_ONLY`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 lesen\cf4 \
+\cf7 -\cf4  \cf5 analysieren\cf4 \
+\cf7 -\cf4  \cf5 zusammenfassen\cf4 \
+\cf7 -\cf4  \cf5 pr\'fcfen\cf4 \
+\cf7 -\cf4  \cf5 Empfehlungen\cf4  \cf5 geben\cf4 \
+\
+
+\f2\i \cf3 ## Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 schreiben\cf4 \
+\cf7 -\cf4  \cf5 Status\cf4  \cf5 \'e4ndern\cf4 \
+\cf7 -\cf4  \cf5 Items\cf4  \cf5 schlie\'dfen\cf4 \
+\
+
+\f2\i \cf3 ## Ideal f\'fcr:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Decision\cf4  \cf5 Support\cf4 \
+\cf7 -\cf4  \cf5 Reviews\cf4 \
+\cf7 -\cf4  \cf5 Risikoanalyse\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # MODUS 2 \'97 `DRAFT_WRITE`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Drafts\cf4  \cf5 erzeugen\cf4 \
+\cf7 -\cf4  \cf5 Text\cf4  \cf5 /\cf4  \cf5 Struktur\cf4  \cf5 vorschlagen\cf4 \
+\cf7 -\cf4  \cf5 Artefakte\cf4  \cf5 vorbereiten\cf4 \
+\
+
+\f2\i \cf3 ## Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 final\cf4  \cf5 freigeben\cf4 \
+\cf7 -\cf4  \cf5 Entscheidungen\cf4  \cf5 \'fcberschreiben\cf4 \
+\cf7 -\cf4  \cf5 stillschweigend\cf4  \cf5 produktive\cf4  \cf5 Wahrheit\cf4  \cf5 ver\'e4ndern\cf4 \
+\
+
+\f2\i \cf3 ## Ideal f\'fcr:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 PRD\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 Spec\cf4  \cf5 Agent\cf4 \
+\cf7 -\cf4  \cf5 WO\cf4  \cf5 Agent\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # MODUS 3 \'97 `CONTROLLED_EXECUTION`
+\f3\i0 \cf4 \
+\
+
+\f2\i \cf3 ## Darf:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 definierte\cf4  \cf5 kleine\cf4  \cf5 Arbeitsauftr\'e4ge\cf4  \cf5 ausf\'fchren\cf4 \
+\cf7 -\cf4  \cf5 klar\cf4  \cf5 begrenzte\cf4  \cf5 Artefakte\cf4  \cf5 erzeugen\cf4 \
+\cf7 -\cf4  \cf5 technische\cf4  \cf5 Outputs\cf4  \cf5 liefern\cf4 \
+\
+
+\f2\i \cf3 ## Darf NICHT:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 au\'dferhalb\cf4  \cf5 des\cf4  \cf5 Work\cf4  \cf5 Orders\cf4  \cf5 arbeiten\cf4 \
+\cf7 -\cf4  \cf5 neue\cf4  \cf5 Scope-Ebenen\cf4  \cf5 er\'f6ffnen\cf4 \
+\cf7 -\cf4  \cf5 selbstst\'e4ndig\cf4  \cf5 Produktlogik\cf4  \cf5 \'e4ndern\cf4 \
+\
+
+\f2\i \cf3 ## Ideal f\'fcr:
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Claude\cf4  \cf5 Code\cf4 \
+\cf7 -\cf4  \cf5 technische\cf4  \cf5 Worker\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 11. EMPFOHLENE START-ZUORDNUNG F\'dcR DEIN SYSTEM
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 die\cf4  \cf5 pragmatische\cf4  \cf5 erste\cf4  \cf5 Version.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## Claude Desktop
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Rolle
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 DECISION_SUPPORT_AGENT\cf4 \
+\cf7 -\cf4  \cf5 PRD_AGENT\cf4 \
+\cf7 -\cf4  \cf5 SPEC_AGENT\cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\
+
+\f2\i \cf3 ### Einsatz
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 Denken\cf4 \
+\cf7 -\cf4  \cf5 Strukturieren\cf4 \
+\cf7 -\cf4  \cf5 Schreiben\cf4 \
+\cf7 -\cf4  \cf5 Review\cf4 \
+\cf7 -\cf4  \cf5 Zerlegung\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## Claude Code
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Rolle
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 WO_AGENT\cf4 \
+\cf7 -\cf4  \cf5 SPEC_AGENT\cf4  \cf5 (nur\cf4  \cf5 begrenzt)\cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4  \cf5 (nur\cf4  \cf5 auf\cf4  \cf5 Auftrag)\cf4 \
+\
+
+\f2\i \cf3 ### Einsatz
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 kleine\cf4  \cf5 operative\cf4  \cf5 Ausf\'fchrung\cf4 \
+\cf7 -\cf4  \cf5 klar\cf4  \cf5 begrenzte\cf4  \cf5 technische\cf4  \cf5 /\cf4  \cf5 strukturierte\cf4  \cf5 Outputs\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## Sp\'e4tere lokale Worker / andere Agents
+\f3\i0 \cf4 \
+
+\f2\i \cf3 ### Rolle
+\f3\i0 \cf4 \
+\cf7 -\cf4  \cf5 WO_AGENT\cf4 \
+\cf7 -\cf4  \cf5 REVIEW_AGENT\cf4 \
+\cf7 -\cf4  \cf5 Spezial-Agents\cf4 \
+\
+
+\f2\i \cf3 ### Noch nicht n\'f6tig f\'fcr Start
+\f3\i0 \cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 12. WAS AGENTEN IN DIESEM SYSTEM NIEMALS D\'dcRFEN
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 deine\cf4  \cf5 rote\cf4  \cf5 Linie.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 ## VERBOTEN 1
+\f3\i0 \cf4 \
+\cf5 Finale\cf4  \cf5 Decisions\cf4  \cf5 setzen\cf4 \
+\
+
+\f2\i \cf3 ## VERBOTEN 2
+\f3\i0 \cf4 \
+\cf5 Scope\cf4  \cf5 erweitern\cf4 \
+\
+
+\f2\i \cf3 ## VERBOTEN 3
+\f3\i0 \cf4 \
+\cf5 Unklare\cf4  \cf5 Punkte\cf4  \cf5 stillschweigend\cf4  \cf5 l\'f6sen\cf4 \
+\
+
+\f2\i \cf3 ## VERBOTEN 4
+\f3\i0 \cf4 \
+\cf5 PRD\cf4  \cf5 /\cf4  \cf5 Spec\cf4  \cf5 /\cf4  \cf5 WO\cf4  \cf5 Reihenfolge\cf4  \cf5 \'fcberspringen\cf4 \
+\
+
+\f2\i \cf3 ## VERBOTEN 5
+\f3\i0 \cf4 \
+\cf5 Items\cf4  \cf5 als\cf4  \cf5 \'84fertig\'93\cf4  \cf5 behandeln,\cf4  \cf5 obwohl\cf4  \cf5 Acceptance\cf4  \cf5 fehlt\cf4 \
+\
+
+\f2\i \cf3 ## VERBOTEN 6
+\f3\i0 \cf4 \
+\cf5 Legacy-Wahrheit\cf4  \cf5 unbemerkt\cf4  \cf5 einschleusen\cf4 \
+\
+
+\f2\i \cf3 ## VERBOTEN 7
+\f3\i0 \cf4 \
+\cf5 Mehrere\cf4  \cf5 Artefaktebenen\cf4  \cf5 in\cf4  \cf5 einem\cf4  \cf5 Auftrag\cf4  \cf5 vermischen\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # 13. EMPFOHLENE PLANE-WORKFLOW-LOGIK MIT AGENTEN
+\f3\i0 \cf4 \
+\
+\cf5 Das\cf4  \cf5 ist\cf4  \cf5 das\cf4  \cf5 sinnvolle\cf4  \cf5 Zielbild.\cf4 \
+\
+\cf7 ---\
+\cf4 \
+
+\f2\i \cf3 # DECISION FLOW
+\f3\i0 \cf4 \
+\
+\cf5 ```txt\cf4 \
+\cf5 Decision\cf4  \cf5 created\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Human\cf4  \cf5 marks\cf4  \cf5 for\cf4  \cf5 analysis\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Decision\cf4  \cf5 Support\cf4  \cf5 Agent\cf4  \cf5 analyzes\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Human\cf4  \cf5 decides\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 Decision\cf4  \cf5 marked\cf4  \cf5 decided\cf4 \
+\cf5 \uc0\u8594 \cf4  \cf5 dependent\cf4  \cf5 PRDs\cf4  \cf5 unblocked
+\f1\fs24 \cf0 \
+\
+\
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 PRD FLOW
+\f1\b0\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3\fs28 \cf4 Decision decided\
+\uc0\u8594  PRD item enters IN_DEFINITION\
+\uc0\u8594  PRD Agent drafts PRD\
+\uc0\u8594  Review Agent checks PRD\
+\uc0\u8594  Human approves\
+\uc0\u8594  PRD becomes APPROVED
+\f1\fs24 \cf0 \
+\
+\
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 SPEC FLOW
+\f1\b0\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3\fs28 \cf4 PRD approved\
+\uc0\u8594  Spec item enters IN_DEFINITION\
+\uc0\u8594  Spec Agent drafts spec\
+\uc0\u8594  Review Agent checks spec\
+\uc0\u8594  Human approves\
+\uc0\u8594  Spec becomes APPROVED
+\f1\fs24 \cf0 \
+\
+\
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 WORK ORDER FLOW
+\f1\b0\fs24 \cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f3\fs28 \cf4 Spec approved\
+\uc0\u8594  WO item created\
+\uc0\u8594  WO item marked READY_FOR_BUILD\
+\uc0\u8594  Claude Code / WO Agent executes\
+\uc0\u8594  Output returned\
+\uc0\u8594  Review Agent checks\
+\uc0\u8594  Human accepts
+\f1\fs24 \cf0 \
+\
+\
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 14. DIE WICHTIGSTE GOVERNANCE-REGEL
+\f4\b0\fs28 \
+\
+
+\f0\b\fs44 Kein Agent darf in diesem System \'84freie Produktarbeit\'93 machen.
+\f4\b0\fs28 \
+\
+Agenten d\'fcrfen nur:\
+\pard\tqr\tx100\tx260\li260\fi-260\sl324\slmult1\sb240\partightenfactor0
+\cf2 	\'95	klar definierte Items\
+	\'95	in klar definierten Zust\'e4nden\
+	\'95	mit klar definierter Rolle\
+	\'95	unter klaren Regeln\
+\
+bearbeiten.\
+\
+Wenn du das aufweichst, f\'e4llt das System wieder auseinander.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 15. EIN-SATZ-DEFINITION
+\f4\b0\fs28 \
+\
+
+\f0\b\fs44 In LumeOS werden Agents in Plane nicht als autonome Denker oder Entscheider eingesetzt, sondern als kontrollierte, rollenbasierte Systemarbeiter innerhalb eines klaren Governance- und Artefakt-Workflows.
+\f4\b0\fs28 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\fs24 \cf0 \
+\uc0\u11835 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f4\fs28 \cf2 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\b\fs44 \cf2 16. SCHLUSSREGEL
+\f4\b0\fs28 \
+\
+Bevor ein Agent auf ein Plane-Item angesetzt wird, muss immer zuerst diese Frage beantwortet werden:\
+\
+}

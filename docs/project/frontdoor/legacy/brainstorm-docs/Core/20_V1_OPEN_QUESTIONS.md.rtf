@@ -1,0 +1,462 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 .SFNS-Regular;}
+{\colortbl;\red255\green255\blue255;\red14\green14\blue14;}
+{\*\expandedcolortbl;;\cssrgb\c6700\c6700\c6700;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\sl324\slmult1\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf2 # 20_V1_OPEN_QUESTIONS\
+\
+## Zweck\
+\
+Dieses Dokument h\'e4lt die **offenen, bewusst noch nicht final entschiedenen Fragen** f\'fcr LumeOS V1 Foundation fest.\
+\
+Es beantwortet nicht Dinge endg\'fcltig.\
+\
+Es dokumentiert:\
+\
+# Welche Punkte noch offen, unklar oder bewusst zur\'fcckgestellt sind \'96 damit sp\'e4ter keine falsche Sicherheit entsteht.\
+\
+Das ist extrem wichtig.\
+\
+Denn gro\'dfe Projekte scheitern oft nicht nur an schlechten Entscheidungen.\
+\
+Sie scheitern auch daran, dass man **so tut, als w\'e4ren Dinge bereits entschieden**, obwohl sie in Wahrheit noch offen sind.\
+\
+Dann entstehen:\
+\
+- falsche Specs\
+- falsche Architektur\
+- falsche Annahmen\
+- falsche Agentenarbeit\
+- Scope-Leaks\
+- unn\'f6tige Rebuilds\
+\
+Genau das soll dieses Dokument verhindern.\
+\
+---\
+\
+## Kernregel\
+\
+# Unklarheit ist erlaubt.\
+# Versteckte Unklarheit ist nicht erlaubt.\
+\
+---\
+\
+# 1. WIE DIESES DOKUMENT ZU LESEN IST\
+\
+Jede offene Frage in diesem Dokument ist einer von drei Zust\'e4nden zugeordnet:\
+\
+---\
+\
+## STATUS A \'97 OPEN\
+Noch nicht entschieden, noch nicht finalisiert.\
+\
+## STATUS B \'97 DIRECTIONALLY CLEAR\
+Grobe Richtung ist klar, Details aber noch offen.\
+\
+## STATUS C \'97 DELAYED BY DESIGN\
+Bewusst nicht jetzt entschieden, weil nicht Teil des aktuellen V1-Kerns.\
+\
+---\
+\
+# 2. DIE OFFENEN V1-FRAGEN NACH THEMENBEREICHEN\
+\
+---\
+\
+# A. USER / IDENTITY / ACCESS\
+\
+---\
+\
+## A1 \'97 Exakter Auth-Ansatz\
+### Status\
+DIRECTIONALLY CLEAR\
+\
+### Was grob klar ist\
+- Auth / OAuth ist Teil von V1 Foundation\
+- Nutzeridentit\'e4t und Session-Basis m\'fcssen sauber stehen\
+\
+### Was noch offen ist\
+- exakter finaler Auth-Stack\
+- endg\'fcltige Session-/Token-Logik\
+- exakte Rechte-/Access-Struktur f\'fcr sp\'e4tere Layer\
+\
+### Warum noch offen\
+F\'fcr V1 reicht erst die funktionierende Foundation.\
+Nicht alle sp\'e4teren Rollen-/Access-Themen m\'fcssen jetzt final sein.\
+\
+---\
+\
+## A2 \'97 Umfang des User Profiles in V1\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Basisprofil ist Pflicht\
+- Ziel- und Personalisierungsdaten sind Pflicht\
+\
+### Was noch offen ist\
+- welche Felder exakt Pflicht sind\
+- welche Felder nur optional sein sollten\
+- wie tief der Profilumfang in V1 wirklich gehen soll\
+\
+### Warum relevant\
+Zu wenig Profil = schwache Personalisierung.\
+Zu viel Profil = unn\'f6tige Reibung.\
+\
+---\
+\
+## A3 \'97 Goal-Modellierung in V1\
+### Status\
+DIRECTIONALLY CLEAR\
+\
+### Was grob klar ist\
+- Hauptziel muss existieren\
+- Zielkontext muss systemisch nutzbar sein\
+\
+### Was noch offen ist\
+- ob V1 schon Subgoals braucht\
+- ob V1 schon Zielphasen / Priorit\'e4tsgewichtung explizit braucht\
+- wie granular Goals in V1 wirklich sein m\'fcssen\
+\
+---\
+\
+# B. NUTRITION FOUNDATION\
+\
+---\
+\
+## B1 \'97 Exakte Food-Search-Strategie in V1\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Food Search muss alltagstauglich sein\
+- Foods m\'fcssen nutzbar auffindbar sein\
+\
+### Was noch offen ist\
+- exakte Search UX\
+- Search Ranking Logik\
+- Synonym-/Alias-Handling\
+- wie viel Intelligenz Search in V1 schon haben muss\
+\
+### Warum relevant\
+Search ist einer der wichtigsten realen Produkthebel im gesamten Nutrition-Flow.\
+\
+---\
+\
+## B2 \'97 Umfang des Canonical Food Layers in V1\
+### Status\
+DIRECTIONALLY CLEAR\
+\
+### Was grob klar ist\
+- Canonical Readiness ist wichtig\
+- saubere Food-Struktur ist Pflicht\
+\
+### Was noch offen ist\
+- wie tief Canonical Foods schon in V1 finalisiert werden\
+- wie viel Mapping-/Alias-Logik schon in V1 n\'f6tig ist\
+- wie streng User-Input vs Canonical schon gekoppelt wird\
+\
+---\
+\
+## B3 \'97 Wiederverwendbare Meals / Saved Meals in V1\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Meal Logging muss alltagstauglich sein\
+- Wiederverwendung ist potenziell sehr wichtig\
+\
+### Was noch offen ist\
+- ob Saved Meals bereits in V1 Pflicht sind\
+- ob sie V1.1 oder sp\'e4ter werden\
+- wie tief Meal-Reuse strukturiert sein soll\
+\
+---\
+\
+## B4 \'97 Exakte Mikron\'e4hrstoff-Tiefe in V1\
+### Status\
+DIRECTIONALLY CLEAR\
+\
+### Was grob klar ist\
+- Mikros sollen systemisch vorhanden sein\
+- Calculation Readiness ist Pflicht\
+\
+### Was noch offen ist\
+- wie tief Mikros schon in UI / State / Access sichtbar werden\
+- welche Mikros f\'fcr V1 praktisch relevant sind\
+- was in Foundation vorhanden sein darf, aber UI-seitig noch nicht priorisiert wird\
+\
+---\
+\
+# C. TRAINING FOUNDATION\
+\
+---\
+\
+## C1 \'97 Umfang der Exercise-Normalisierung in V1\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Exercises m\'fcssen sauber strukturiert sein\
+- Kategorien / Muskelgruppen / Equipment sind Pflicht\
+\
+### Was noch offen ist\
+- wie tief Varianten und Alias-Normalisierung schon in V1 gehen\
+- wie strikt Canonical Exercise Mapping bereits sein muss\
+\
+---\
+\
+## C2 \'97 Workout Templates in V1\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Workout-Struktur ist wichtig\
+- Templates sind wahrscheinlich sehr n\'fctzlich\
+\
+### Was noch offen ist\
+- ob Templates zwingend Teil von V1 Foundation sind\
+- oder ob Session Logging zuerst wichtiger ist\
+\
+---\
+\
+## C3 \'97 Minimaler Progressionskontext in V1\
+### Status\
+DIRECTIONALLY CLEAR\
+\
+### Was grob klar ist\
+- letzte Leistung und Verlauf sind Pflicht\
+- tiefe Trainingsintelligenz ist nicht V1\
+\
+### Was noch offen ist\
+- wie viel \'84letzte Leistung\'93 / Vergleich bereits im V1 Experience Layer sichtbar wird\
+- welche minimale Progressionssicht wirklich Pflicht ist\
+\
+---\
+\
+# D. RECOVERY FOUNDATION\
+\
+---\
+\
+## D1 \'97 Welche Recovery Inputs in V1 wirklich Pflicht sind\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Schlaf\
+- Energie\
+- Stress\
+- Soreness\
+- Tagesform\
+\
+### Was noch offen ist\
+- ob alle gleich wichtig sind\
+- ob einige nur optional sein sollten\
+- wie kurz der ideale Daily Check-in in V1 wirklich sein muss\
+\
+### Warum relevant\
+Recovery muss n\'fctzlich sein, aber darf keine Reibungsfalle werden.\
+\
+---\
+\
+## D2 \'97 Braucht V1 schon einen Recovery Score?\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Recovery-Kontext ist Pflicht\
+- komplexe Scoring-Logik ist nicht Pflicht\
+\
+### Was noch offen ist\
+- ob ein einfacher interner oder sichtbarer Score sinnvoll w\'e4re\
+- oder ob V1 besser ohne formalen Score bleibt\
+\
+---\
+\
+# E. TIMELINE / STATE ACCESS\
+\
+---\
+\
+## E1 \'97 Wie der \'84Current State\'93 exakt modelliert wird\
+### Status\
+DIRECTIONALLY CLEAR\
+\
+### Was grob klar ist\
+- Current State ist Pflicht\
+- Buddy-/Daily-Readiness braucht gemeinsamen Zugriff\
+\
+### Was noch offen ist\
+- exakte Modellierungsform\
+- wie \'84heute\'93, \'84aktuell\'93, \'84letzte Session\'93, \'84aktuelle Ern\'e4hrung\'93 sauber zusammengef\'fchrt werden\
+- welche Aggregationslogik direkt im State Layer lebt\
+\
+---\
+\
+## E2 \'97 Welche Verlaufsfenster V1 explizit unterst\'fctzt\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Verlauf ist Pflicht\
+- History Access ist Pflicht\
+\
+### Was noch offen ist\
+- welche Zeitfenster standardm\'e4\'dfig wichtig sind\
+- Tag / Woche / letzter Eintrag / letzte Session / 7 Tage / 30 Tage etc.\
+\
+---\
+\
+# F. V1 EXPERIENCE\
+\
+---\
+\
+## F1 \'97 Wie \'84viel UI\'93 V1 Foundation wirklich braucht\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- V1 braucht echte Nutzbarkeit\
+- V1 ist kein UI-Showcase\
+\
+### Was noch offen ist\
+- wie minimal oder wie \'84produktnah\'93 die erste Experience sein soll\
+- wie stark Flows vs Dashboards priorisiert werden\
+- wie viel Visualisierung schon sinnvoll ist\
+\
+---\
+\
+## F2 \'97 Daily Orientation in V1: nur vorbereitet oder schon minimal sichtbar?\
+### Status\
+OPEN\
+\
+### Was grob klar ist\
+- Daily Orientation ist eine Core Journey\
+- volle Guidance ist noch nicht V1\
+\
+### Was noch offen ist\
+- ob es bereits eine sehr einfache Tagesansicht / Daily State Summary geben soll\
+- oder ob das erst nach Foundation kommt\
+\
+---\
+\
+# G. BUDDY / INTELLIGENCE READINESS\
+\
+---\
+\
+## G1 \'97 Wie stark Buddy in V1 \'fcberhaupt sichtbar sein soll\
+### Status\
+DELAYED BY DESIGN\
+\
+### Was grob klar ist\
+- Buddy ist zentral f\'fcr das Endprodukt\
+- Buddy Full Experience ist nicht Teil von V1 Foundation\
+\
+### Was noch offen ist\
+- ob Buddy in V1 nur implizit vorbereitet wird\
+- oder ob bereits minimale Buddy-Zug\'e4nge existieren sollen\
+\
+### Warum verz\'f6gert\
+Weil Buddy ohne saubere Foundation wieder zum Pseudo-Produkt werden w\'fcrde.\
+\
+---\
+\
+## G2 \'97 Was genau \'84Buddy-ready\'93 technisch/fachlich bedeutet\
+### Status\
+DIRECTIONALLY CLEAR\
+\
+### Was grob klar ist\
+- State Access\
+- Goal Access\
+- Verlauf\
+- Kontext\
+- Erkl\'e4rbarkeit\
+\
+### Was noch offen ist\
+- welche minimale Buddy-Schnitt sp\'e4ter als erster echter Buddy-Core definiert wird\
+\
+---\
+\
+# H. NICHT-V1, ABER SP\'c4TER KRITISCH\
+\
+Diese Fragen sind bewusst **nicht jetzt zu entscheiden**, aber m\'fcssen sp\'e4ter sauber behandelt werden.\
+\
+---\
+\
+## H1 \'97 Supplements Foundation\
+### Status\
+DELAYED BY DESIGN\
+\
+## H2 \'97 Medical Awareness Layer\
+### Status\
+DELAYED BY DESIGN\
+\
+## H3 \'97 Recommendation Core\
+### Status\
+DELAYED BY DESIGN\
+\
+## H4 \'97 Memory / Pattern Layer\
+### Status\
+DELAYED BY DESIGN\
+\
+## H5 \'97 Buddy Core Experience\
+### Status\
+DELAYED BY DESIGN\
+\
+## H6 \'97 Coach / Human Layer\
+### Status\
+DELAYED BY DESIGN\
+\
+## H7 \'97 Voice / Vision / Wearables\
+### Status\
+DELAYED BY DESIGN\
+\
+## H8 \'97 Marketplace / Commerce / Program Layer\
+### Status\
+DELAYED BY DESIGN\
+\
+---\
+\
+# 3. WIE MIT DIESEN OFFENEN FRAGEN UMGEGANGEN WIRD\
+\
+Nicht jede offene Frage muss sofort beantwortet werden.\
+\
+Aber jede offene Frage muss **sichtbar** bleiben.\
+\
+---\
+\
+## Richtige Arbeitsweise\
+\
+### Wenn eine Frage f\'fcr die aktuelle Baustufe kritisch wird\
+\uc0\u8594  explizit entscheiden\
+\
+### Wenn sie f\'fcr sp\'e4ter relevant, aber jetzt nicht n\'f6tig ist\
+\uc0\u8594  offen lassen, nicht k\'fcnstlich fr\'fch entscheiden\
+\
+### Wenn sie bewusst sp\'e4ter kommt\
+\uc0\u8594  sauber als delayed markieren\
+\
+---\
+\
+# 4. DIE WICHTIGSTE REGEL\
+\
+# Offene Fragen sind kein Problem.\
+# Unsichtbare offene Fragen sind ein Problem.\
+\
+Das ist die Kernlogik dieses Dokuments.\
+\
+---\
+\
+# 5. EIN-SATZ-DEFINITION\
+\
+# Dieses Dokument h\'e4lt alle relevanten, noch nicht final gekl\'e4rten Produkt-, Daten-, Flow- und Architekturfragen sichtbar, damit LumeOS nicht auf falscher Sicherheit aufgebaut wird.\
+\
+---\
+\
+# 6. SCHLUSSREGEL\
+\
+Wenn k\'fcnftig eine Entscheidung getroffen wird, muss immer zuerst gepr\'fcft werden:\
+\
+# War diese Frage bereits bewusst offen \'96 oder tun wir gerade nur so, als w\'e4re sie schon l\'e4ngst entschieden?\
+\
+Wenn sie offen war, muss sie sauber entschieden oder bewusst weiter offen gelassen werden.}

@@ -1,0 +1,602 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 # 10_DECISION_SYSTEM_PRINCIPLES\
+\
+## Zweck\
+\
+Dieses Dokument definiert die **Grundprinzipien des Entscheidungs- und Empfehlungssystems** von LumeOS.\
+\
+Es beantwortet nicht:\
+\
+- wie Regeln technisch implementiert werden\
+- welche Engine sp\'e4ter welchen Code enth\'e4lt\
+- welches Modell oder welcher Prompt sp\'e4ter verwendet wird\
+\
+Es beantwortet die Kernfrage:\
+\
+# Nach welchen Prinzipien entscheidet LumeOS, was relevant ist, was empfohlen wird und was Priorit\'e4t hat?\
+\
+Das ist der eigentliche Produktkern.\
+\
+Denn LumeOS ist nicht wertvoll, weil es viele Daten speichern kann.\
+\
+LumeOS ist wertvoll, wenn es aus Daten **gute Entscheidungen und verst\'e4ndliche Guidance** ableiten kann.\
+\
+---\
+\
+## Kernthese\
+\
+# Daten allein haben keinen Produktwert.\
+# Produktwert entsteht erst durch sinnvolle Priorisierung, Kontext und Handlungsempfehlung.\
+\
+---\
+\
+# 1. GRUNDLOGIK DES ENTSCHEIDUNGSSYSTEMS\
+\
+Das Entscheidungssystem von LumeOS muss aus vier Dingen sinnvolle Outputs erzeugen:\
+\
+- Nutzerkontext\
+- Zielkontext\
+- aktueller Zustand\
+- relevanter Verlauf\
+\
+Daraus entstehen:\
+\
+- Priorit\'e4ten\
+- Empfehlungen\
+- Erkl\'e4rungen\
+- Warnsignale\
+- Eskalationen\
+- Guidance f\'fcr Buddy\
+\
+---\
+\
+# 2. HAUPTZIEL DES ENTSCHEIDUNGSSYSTEMS\
+\
+Das Ziel des Systems ist nicht, m\'f6glichst viel zu sagen.\
+\
+Das Ziel ist:\
+\
+# Zur richtigen Zeit die richtige Priorit\'e4t und die richtige n\'e4chste Handlung sichtbar zu machen.\
+\
+Nicht mehr.\
+\
+Nicht weniger.\
+\
+---\
+\
+# 3. DIE 10 KERNPRINZIPIEN DES ENTSCHEIDUNGSSYSTEMS\
+\
+---\
+\
+## Prinzip 1 \'97 Priorit\'e4t vor Vollst\'e4ndigkeit\
+\
+LumeOS soll nicht alles gleichzeitig kommentieren.\
+\
+Es soll zuerst zeigen:\
+\
+- was gerade am wichtigsten ist\
+- was den gr\'f6\'dften Hebel hat\
+- was das gr\'f6\'dfte Problem ist\
+- was den n\'e4chsten sinnvollen Schritt darstellt\
+\
+### Bedeutung\
+Ein Nutzer braucht selten 12 Hinweise.\
+\
+Er braucht meist 1 bis 3 gute.\
+\
+---\
+\
+## Prinzip 2 \'97 Kontext vor Einzelwert\
+\
+Ein einzelner Wert ist fast nie ausreichend.\
+\
+Jede sinnvolle Entscheidung muss, soweit m\'f6glich, Kontext ber\'fccksichtigen:\
+\
+- Ziel\
+- Verlauf\
+- aktueller Zustand\
+- andere relevante Dom\'e4nen\
+- Pr\'e4ferenzen\
+- Einschr\'e4nkungen\
+\
+### Beispiel\
+Protein niedrig ist nicht automatisch gleich wichtig.\
+\
+Es wird erst relevant im Kontext von:\
+\
+- Ziel\
+- Tagesverlauf\
+- Adherence\
+- Meal-Struktur\
+- Priorit\'e4ten\
+\
+---\
+\
+## Prinzip 3 \'97 Verlauf vor Momentaufnahme\
+\
+LumeOS darf sich nicht zu stark von Einzeltagen oder Einzeleingaben treiben lassen.\
+\
+Ein guter Entscheidungsoutput ber\'fccksichtigt:\
+\
+- Trends\
+- Wiederholungen\
+- Muster\
+- Entwicklung\
+- Abweichungen vom Normalzustand\
+\
+### Bedeutung\
+Ein schlechter Tag ist nicht automatisch ein Problem.\
+\
+Ein wiederkehrendes Muster dagegen schon.\
+\
+---\
+\
+## Prinzip 4 \'97 Handlung vor Analyse-Schmuck\
+\
+Eine Empfehlung muss nutzbar sein.\
+\
+Das System soll nicht prim\'e4r analytisch beeindrucken.\
+\
+Es soll helfen, dass der Nutzer wei\'df:\
+\
+- was tun\
+- was lassen\
+- was beobachten\
+- was priorisieren\
+\
+### Schlechter Output\
+\'84Deine multifaktorielle Regenerationslage weist eine komplexe Dysbalance auf.\'93\
+\
+### Guter Output\
+\'84Du bist heute deutlich weniger erholt als \'fcblich. Trainingsvolumen runter, Recovery priorisieren.\'93\
+\
+---\
+\
+## Prinzip 5 \'97 Kleine n\'e4chste Schritte vor theoretischer Perfektion\
+\
+Empfehlungen m\'fcssen alltagstauglich sein.\
+\
+Das System soll bevorzugen:\
+\
+- einfache n\'e4chste Schritte\
+- realistische Anpassungen\
+- umsetzbare Guidance\
+- niedrige Reibung\
+\
+Nicht hilfreich sind:\
+\
+- theoretisch perfekte, aber alltagsfremde L\'f6sungen\
+- \'fcberkomplexe Optimierungen\
+- guidance ohne Umsetzbarkeit\
+\
+---\
+\
+## Prinzip 6 \'97 Zielgewichtung steuert Relevanz\
+\
+Eine Empfehlung ist nur dann gut, wenn sie an den aktuellen Zielen gemessen sinnvoll ist.\
+\
+Das bedeutet:\
+\
+- nicht jede \'84gute Sache\'93 ist aktuell wichtig\
+- nicht jede Abweichung ist gleich problematisch\
+- ein Zielkonflikt muss explizit behandelt werden\
+\
+### Beispiel\
+Mehr Trainingsvolumen ist nicht automatisch sinnvoll, wenn:\
+- Recovery schlecht ist\
+- Gesundheitsstabilit\'e4t Vorrang hat\
+- Schlaf kippt\
+- anderes Ziel h\'f6her priorisiert ist\
+\
+---\
+\
+## Prinzip 7 \'97 Unsicherheit muss das Verhalten des Systems ver\'e4ndern\
+\
+Wenn Datenlage oder Kontext unsicher sind, muss das System anders reagieren.\
+\
+Das bedeutet:\
+\
+- vorsichtiger formulieren\
+- weniger aggressiv empfehlen\
+- ggf. nachfragen\
+- ggf. nicht eskalieren\
+- ggf. nur beobachten statt handeln\
+\
+### Wichtig\
+Unsicherheit ist kein Fehler.\
+\
+Unsicherheit, die ignoriert wird, ist ein Fehler.\
+\
+---\
+\
+## Prinzip 8 \'97 Sicherheit schl\'e4gt Optimierung\
+\
+Wenn Optimierung und Sicherheit kollidieren, hat Sicherheit Vorrang.\
+\
+Das gilt besonders bei:\
+\
+- Health-Kontext\
+- auff\'e4lligen Markern\
+- potenziell riskanten Kombinationen\
+- Ersch\'f6pfungszust\'e4nden\
+- sensiblen Grenzf\'e4llen\
+\
+### Bedeutung\
+Das System darf nie \'84mutig\'93 sein, wenn Vorsicht korrekt ist.\
+\
+---\
+\
+## Prinzip 9 \'97 Buddy kommuniziert, aber versteckt nicht die Logik\
+\
+Entscheidungslogik darf nicht nur als diffuse Buddy-Intuition existieren.\
+\
+Die Kernlogik muss unabh\'e4ngig von Buddy sauber denkbar sein.\
+\
+Buddy darf:\
+\
+- erkl\'e4ren\
+- \'fcbersetzen\
+- kontextualisieren\
+- priorisieren helfen\
+\
+Buddy darf nicht die einzige unsichtbare Quelle der Produktlogik sein.\
+\
+---\
+\
+## Prinzip 10 \'97 Weniger, aber relevanter\
+\
+Ein guter Entscheidungsoutput ist oft k\'fcrzer als ein schlechter.\
+\
+Das System soll vermeiden:\
+\
+- zu viele Hinweise gleichzeitig\
+- \'fcbererkl\'e4rte Antworten\
+- Motivationsgelaber\
+- Datenwiederholung ohne Mehrwert\
+\
+Der Standardfall soll sein:\
+\
+- klar\
+- fokussiert\
+- relevant\
+- umsetzbar\
+\
+---\
+\
+# 4. WELCHE FRAGEN DAS ENTSCHEIDUNGSSYSTEM IMMER STELLEN MUSS\
+\
+Bevor eine Priorit\'e4t, Empfehlung oder Guidance entsteht, muss das System implizit folgende Fragen beantworten:\
+\
+---\
+\
+## Frage 1\
+Was ist das aktuelle Ziel des Nutzers?\
+\
+## Frage 2\
+Wie sieht der aktuelle Zustand des Nutzers aus?\
+\
+## Frage 3\
+Was hat sich im Verlauf ver\'e4ndert?\
+\
+## Frage 4\
+Welche Probleme oder Chancen sind gerade wirklich relevant?\
+\
+## Frage 5\
+Was ist davon jetzt am wichtigsten?\
+\
+## Frage 6\
+Welche Handlung h\'e4tte den gr\'f6\'dften sinnvollen Hebel?\
+\
+## Frage 7\
+Gibt es Unsicherheit, Grenzen oder Sicherheitsgr\'fcnde f\'fcr Zur\'fcckhaltung?\
+\
+---\
+\
+# 5. DIE HAUPTBAUSTEINE EINER GUTEN EMPFEHLUNG\
+\
+Eine gute Empfehlung in LumeOS besteht fachlich aus mindestens vier Teilen:\
+\
+---\
+\
+## 1. Anlass\
+Warum wird \'fcberhaupt etwas empfohlen?\
+\
+### Beispiele\
+- Recovery niedriger als \'fcblich\
+- Protein deutlich zu niedrig\
+- Schlaftrend kippt\
+- Trainingsbelastung steigt bei sinkender Erholung\
+\
+---\
+\
+## 2. Relevanz\
+Warum ist das gerade wichtig?\
+\
+### Beispiele\
+- Ziel wird beeinflusst\
+- Risiko steigt\
+- Tagesleistung sinkt\
+- Muster wiederholt sich\
+\
+---\
+\
+## 3. Handlung\
+Was ist der konkrete n\'e4chste sinnvolle Schritt?\
+\
+### Beispiele\
+- Volumen reduzieren\
+- Protein priorisieren\
+- Check-in erg\'e4nzen\
+- heute Recovery vor Intensit\'e4t setzen\
+\
+---\
+\
+## 4. Einordnung\
+Wie sicher oder wie dringend ist das?\
+\
+### Beispiele\
+- beobachten\
+- wichtig, aber nicht kritisch\
+- heute priorisieren\
+- vorsichtig formulieren\
+- bei Wiederholung st\'e4rker beachten\
+\
+---\
+\
+# 6. WELCHE ARTEN VON OUTPUTS DAS ENTSCHEIDUNGSSYSTEM ERZEUGEN SOLL\
+\
+Das Entscheidungssystem erzeugt nicht nur \'84Empfehlungen\'93.\
+\
+Es erzeugt mehrere Output-Klassen.\
+\
+---\
+\
+## 6.1 Priority Output\
+\
+### Zweck\
+Definiert, was gerade zuerst sichtbar sein soll.\
+\
+### Beispiele\
+- heutiger Hauptfokus\
+- wichtigste Baustelle\
+- relevanter Engpass\
+\
+---\
+\
+## 6.2 Recommendation Output\
+\
+### Zweck\
+Liefert konkrete Handlungsanweisung oder Anpassung.\
+\
+### Beispiele\
+- Protein heute priorisieren\
+- Trainingsvolumen heute runter\
+- Schlafroutine heute sch\'fctzen\
+\
+---\
+\
+## 6.3 Insight Output\
+\
+### Zweck\
+Liefert verdichtete Erkenntnis.\
+\
+### Beispiele\
+- \'84Deine Energie f\'e4llt wiederholt nach N\'e4chten mit wenig Schlaf.\'93\
+- \'84Du h\'e4ltst Training aktuell stabiler ein als Ern\'e4hrung.\'93\
+\
+---\
+\
+## 6.4 Explanation Output\
+\
+### Zweck\
+Macht Entscheidung oder Empfehlung nachvollziehbar.\
+\
+### Beispiele\
+- warum relevant\
+- welche Daten relevant waren\
+- was den Ausschlag gegeben hat\
+\
+---\
+\
+## 6.5 Risk Output\
+\
+### Zweck\
+Markiert etwas, das mehr Vorsicht oder Beobachtung verlangt.\
+\
+### Beispiele\
+- \'dcberlastungsrisiko\
+- auff\'e4lliger Verlauf\
+- potenzielle Interaktion\
+- sensible Health-Auff\'e4lligkeit\
+\
+---\
+\
+## 6.6 Escalation Output\
+\
+### Zweck\
+Markiert F\'e4lle, in denen Buddy oder Standard-Guidance nicht ausreicht.\
+\
+### Beispiele\
+- Coach sinnvoll\
+- menschliche Pr\'fcfung sinnvoll\
+- \'e4rztliche Abkl\'e4rung sinnvoll\
+\
+---\
+\
+# 7. WIE DAS SYSTEM MIT KONFLIKTEN UMGEHEN MUSS\
+\
+Ein gutes Produkt scheitert oft nicht an einfachen F\'e4llen, sondern an Konflikten.\
+\
+LumeOS muss Ziel- und Kontextkonflikte explizit behandeln.\
+\
+---\
+\
+## Typische Konflikte\
+\
+- Performance vs Recovery\
+- Fettverlust vs Adherence\
+- Progression vs Ersch\'f6pfung\
+- Optimierung vs Sicherheit\
+- Pr\'e4zision vs niedrige Reibung\
+- kurzfristiges Ziel vs langfristige Stabilit\'e4t\
+\
+---\
+\
+## Regel\
+\
+Das System darf Konflikte nicht verstecken.\
+\
+Es muss sie entweder:\
+\
+- intern gewichten\
+- explizit benennen\
+- oder bei Unsicherheit vorsichtig behandeln\
+\
+---\
+\
+# 8. WIE DAS SYSTEM MIT FEHLENDEN DATEN UMGEHEN MUSS\
+\
+LumeOS darf nicht so tun, als w\'fcsste es mehr, als es wei\'df.\
+\
+Bei fehlenden Daten gilt:\
+\
+---\
+\
+## Wenn der Kernkontext reicht\
+\uc0\u8594  sinnvolle, aber vorsichtige Guidance ist erlaubt\
+\
+## Wenn zu wenig Kontext vorliegt\
+\uc0\u8594  Buddy darf gezielt nachfragen\
+\
+## Wenn nur schwache Signale vorliegen\
+\uc0\u8594  eher Beobachtung als harte Empfehlung\
+\
+## Wenn sensible Bereiche betroffen sind\
+\uc0\u8594  Zur\'fcckhaltung und ggf. Eskalation\
+\
+---\
+\
+# 9. WIE DAS SYSTEM MIT REIBUNG UMGEHEN MUSS\
+\
+Eine theoretisch perfekte Empfehlung ist wertlos, wenn der Nutzer sie nicht umsetzt.\
+\
+Deshalb muss LumeOS immer mitdenken:\
+\
+- Wie aufwendig ist die Handlung?\
+- Wie realistisch ist sie?\
+- Wie gut passt sie in den Alltag?\
+- Ist sie klein genug?\
+- Reduziert sie Reibung oder erzeugt sie neue?\
+\
+### Regel\
+Niedrige Reibung schl\'e4gt theoretische Eleganz.\
+\
+---\
+\
+# 10. DIE RICHTIGE GRANULARIT\'c4T VON GUIDANCE\
+\
+LumeOS soll in der Regel lieber Guidance auf dieser Ebene geben:\
+\
+- heute Fokus auf X\
+- heute Y anpassen\
+- beobachte Z\
+- n\'e4chster sinnvoller Schritt ist A\
+\
+Und nicht standardm\'e4\'dfig auf dieser Ebene:\
+\
+- komplette Lebensoptimierungsabhandlung\
+- 20-Punkte-Plan\
+- maximaler Detailzwang\
+- Speziallogik ohne akuten Nutzen\
+\
+---\
+\
+# 11. DIE ROLLE VON BUDDY IM ENTSCHEIDUNGSSYSTEM\
+\
+Buddy ist nicht die Quelle der Produktwahrheit.\
+\
+Buddy ist die kommunikative Oberfl\'e4che der Wahrheit, die aus folgenden Dingen kommt:\
+\
+- State\
+- Goals\
+- Context\
+- Verlauf\
+- Recommendation Logic\
+- Decision Logic\
+- Safety Rules\
+- Insight Layer\
+\
+Buddy darf diese Dinge:\
+\
+- verst\'e4ndlich machen\
+- b\'fcndeln\
+- personalisieren\
+- nat\'fcrlich kommunizieren\
+\
+Buddy darf sie nicht unsauber ersetzen.\
+\
+---\
+\
+# 12. DIE WICHTIGSTE REGEL F\'dcR PRIORISIERUNG\
+\
+Wenn mehrere Dinge gleichzeitig auff\'e4llig sind, muss das System bevorzugt priorisieren nach:\
+\
+## 1. Sicherheit / Risiko\
+## 2. gr\'f6\'dfter Einfluss auf Ziel oder Zustand\
+## 3. gr\'f6\'dfte unmittelbare Relevanz\
+## 4. beste Umsetzbarkeit\
+## 5. unterst\'fctzende Hinweise\
+\
+Das verhindert chaotische oder irrelevante Output-Fluten.\
+\
+---\
+\
+# 13. WAS EIN SCHLECHTER ENTSCHEIDUNGSOUTPUT W\'c4RE\
+\
+Schlecht ist ein Output, wenn er:\
+\
+- generisch ist\
+- zu viel auf einmal sagt\
+- keine klare Priorit\'e4t hat\
+- keine Handlung enth\'e4lt\
+- nicht zum Ziel passt\
+- Unsicherheit ignoriert\
+- wie AI-Geschw\'e4tz klingt\
+- mehr Verwirrung als Nutzen erzeugt\
+\
+---\
+\
+# 14. WAS EIN GUTER ENTSCHEIDUNGSOUTPUT W\'c4RE\
+\
+Gut ist ein Output, wenn er:\
+\
+- klar priorisiert\
+- im Kontext sinnvoll ist\
+- auf echter Lage basiert\
+- handlungsf\'e4hig macht\
+- alltagstauglich ist\
+- nicht \'fcberfrachtet ist\
+- Unsicherheit korrekt behandelt\
+- durch Buddy verst\'e4ndlich vermittelt werden kann\
+\
+---\
+\
+# 15. EIN-SATZ-DEFINITION\
+\
+# Das Entscheidungssystem von LumeOS ist daf\'fcr da, aus Nutzerkontext, Zustand und Verlauf die relevanteste, sicherste und alltagstauglichste n\'e4chste Handlung abzuleiten.\
+\
+---\
+\
+# 16. SCHLUSSREGEL\
+\
+Jede zuk\'fcnftige Entscheidungsregel, Recommendation-Logik oder Buddy-Guidance muss diese Frage bestehen:\
+\
+# Hilft sie dem Nutzer, klarer zu sehen, besser zu priorisieren und sinnvoller zu handeln?\
+\
+Wenn nein, geh\'f6rt sie nicht in den Kern des Systems.}
