@@ -58,3 +58,18 @@ Frontdoor drafts may reference those files, but do not replace them.
 ## Status
 
 INITIALIZED_EMPTY.
+## Legacy Source Area
+
+Path: docs/project/frontdoor/legacy/
+
+The legacy source area is a broad untrusted source dump and research area. OpenClaw may later research it, search it, summarize it, and deconstruct it.
+
+Legacy is not SSOT, not current product truth, not executable, and not queue-released. Legacy material requires analysis, source refs, drift check, documentation_impact, and approval before reuse.
+
+## Topic Structure
+
+Path: docs/project/frontdoor/topics/
+
+Current working areas are grouped by product, platform, data, business, ops, and governance.
+
+Topics are not raw legacy dumps. Topic outputs require drift check, documentation_impact, and approval before promotion.
