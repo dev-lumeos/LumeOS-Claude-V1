@@ -223,6 +223,13 @@ Checker -> Approval -> Queue.
 This should build on the now-proven workorder lifecycle, `documentation_impact`
 gate, Spark1 orchestration, Nemotron review, SSOT sync, and dossier reporting.
 
+
+## Frontdoor Layout Initialization
+
+- docs/project/frontdoor/ has been initialized as a draft-only Governance Frontdoor workspace.
+- The Frontdoor area is not SSOT, not executable, and not queue-released.
+- Current project truth remains in this handover, docs/project/OPEN_TODOS.md, and docs/project/GOVERNANCE_TODO_REGISTER.json until any draft is promoted through drift check, source-chain check, documentation_impact, and approval.
+
 ## Read First
 
 - `docs/project/p1-005/P1-005-local-nutrition-foundation-v1-cut.md`
