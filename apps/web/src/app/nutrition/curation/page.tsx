@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import type { Route } from 'next'
 
 import { getNutritionCurationData } from '../../../lib/nutrition/curation'
 
@@ -21,6 +22,10 @@ function curationHref(params: Record<string, string | undefined>): string {
   }
   const query = search.toString()
   return query ? `/nutrition/curation?${query}` : '/nutrition/curation'
+}
+
+function curationRoute(params: Record<string, string | undefined>): Route {
+  return curationHref(params) as Route
 }
 
 export default async function NutritionCurationPage({ searchParams }: NutritionCurationPageProps) {
@@ -153,25 +158,25 @@ export default async function NutritionCurationPage({ searchParams }: NutritionC
             </span>
           </div>
           <div className="mt-4 flex flex-wrap gap-2 text-xs">
-            <Link className={`rounded-full border px-2.5 py-1 ${unassigned !== 'false' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationHref({ unassigned: 'true', sort })}>
+            <Link className={`rounded-full border px-2.5 py-1 ${unassigned !== 'false' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationRoute({ unassigned: 'true', sort })}>
               Unassigned only
             </Link>
-            <Link className={`rounded-full border px-2.5 py-1 ${unassigned === 'false' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationHref({ unassigned: 'false', sort })}>
+            <Link className={`rounded-full border px-2.5 py-1 ${unassigned === 'false' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationRoute({ unassigned: 'false', sort })}>
               Include categorized
             </Link>
-            <Link className={`rounded-full border px-2.5 py-1 ${alias === 'has' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationHref({ unassigned, alias: 'has', sort })}>
+            <Link className={`rounded-full border px-2.5 py-1 ${alias === 'has' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationRoute({ unassigned, alias: 'has', sort })}>
               Has aliases
             </Link>
-            <Link className={`rounded-full border px-2.5 py-1 ${alias === 'missing' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationHref({ unassigned, alias: 'missing', sort })}>
+            <Link className={`rounded-full border px-2.5 py-1 ${alias === 'missing' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationRoute({ unassigned, alias: 'missing', sort })}>
               Missing aliases
             </Link>
-            <Link className={`rounded-full border px-2.5 py-1 ${sort === 'sort_weight_desc' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationHref({ unassigned, alias, sort: 'sort_weight_desc' })}>
+            <Link className={`rounded-full border px-2.5 py-1 ${sort === 'sort_weight_desc' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationRoute({ unassigned, alias, sort: 'sort_weight_desc' })}>
               Sort weight
             </Link>
-            <Link className={`rounded-full border px-2.5 py-1 ${sort === 'macro_relevance' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationHref({ unassigned, alias, sort: 'macro_relevance' })}>
+            <Link className={`rounded-full border px-2.5 py-1 ${sort === 'macro_relevance' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationRoute({ unassigned, alias, sort: 'macro_relevance' })}>
               Macro relevance
             </Link>
-            <Link className={`rounded-full border px-2.5 py-1 ${sort === 'name_asc' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationHref({ unassigned, alias, sort: 'name_asc' })}>
+            <Link className={`rounded-full border px-2.5 py-1 ${sort === 'name_asc' ? 'border-emerald-400 bg-emerald-400 text-emerald-950' : 'border-slate-700 text-slate-300'}`} href={curationRoute({ unassigned, alias, sort: 'name_asc' })}>
               Name
             </Link>
           </div>

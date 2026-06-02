@@ -59,7 +59,7 @@ function normalize(value: string): string {
     .replace(/ö/g, 'oe')
     .replace(/ü/g, 'ue')
     .replace(/ß/g, 'ss')
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .replace(/[^a-z0-9]+/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim()
 }
@@ -105,7 +105,7 @@ export function resolveDeterministicExclusions(codes: string[]) {
     applied.push({ code, effect: 'hard_exclude', target: `category:${preset.mapped_codes.join('|')}` })
   }
 
-  return { applied, unresolved, categorySlugs: [...new Set(categorySlugs)] }
+  return { applied, unresolved, categorySlugs: Array.from(new Set(categorySlugs)) }
 }
 
 function buildTextPredicate(query: string): string {

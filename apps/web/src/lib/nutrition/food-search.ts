@@ -121,7 +121,7 @@ export function normalizeFoodSearchText(value: string): string {
     .replace(/ö/g, 'oe')
     .replace(/ü/g, 'ue')
     .replace(/ß/g, 'ss')
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .replace(/[^a-z0-9]+/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim()
 }
@@ -155,7 +155,18 @@ export function buildFoodSearchFilterHref(
     if (value === null) {
       delete merged[key]
     } else if (value !== undefined) {
-      merged[key] = value
+      switch (key) {
+        case 'query':
+        case 'category':
+        case 'tag':
+        case 'food':
+        case 'sort':
+          merged[key] = value
+          break
+        case 'offset':
+          merged.offset = Number(value)
+          break
+      }
     }
   }
 

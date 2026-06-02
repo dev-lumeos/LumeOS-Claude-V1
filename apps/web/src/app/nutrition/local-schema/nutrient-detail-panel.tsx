@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
+import type { Route } from 'next'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import type { NutritionNutrientPreviewRow } from '../../../lib/nutrition/local-schema-debug'
@@ -96,7 +97,7 @@ export function NutrientDetailPanel({ rows }: Props) {
               className="mt-2 w-full rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-100 outline-none ring-0 focus:border-blue-400"
               value={selectedRow.code}
               onChange={(event) => {
-                router.replace(buildNutrientDetailUrl(pathname, searchParams.toString(), event.target.value), { scroll: false })
+                router.replace(buildNutrientDetailUrl(pathname, searchParams.toString(), event.target.value) as Route, { scroll: false })
               }}
             >
               {rows.map((row) => (
@@ -110,7 +111,7 @@ export function NutrientDetailPanel({ rows }: Props) {
             className="rounded-md border border-blue-500/60 bg-blue-500/10 px-3 py-2 text-sm font-medium text-blue-100 hover:bg-blue-500/20"
             type="button"
             onClick={() => {
-              router.replace(buildNutrientPinUrl(pathname, searchParams.toString(), selectedRow.code), { scroll: false })
+              router.replace(buildNutrientPinUrl(pathname, searchParams.toString(), selectedRow.code) as Route, { scroll: false })
             }}
           >
             Pin selected
@@ -120,7 +121,7 @@ export function NutrientDetailPanel({ rows }: Props) {
               className="rounded-md border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 hover:border-slate-500"
               type="button"
               onClick={() => {
-                router.replace(clearNutrientPinUrl(pathname, searchParams.toString()), { scroll: false })
+                router.replace(clearNutrientPinUrl(pathname, searchParams.toString()) as Route, { scroll: false })
               }}
             >
               Clear pin
