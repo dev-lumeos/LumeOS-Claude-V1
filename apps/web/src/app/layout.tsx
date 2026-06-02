@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { AppShell } from '../components/shell/app-shell'
 
 export const metadata: Metadata = {
   title: 'LumeOS',
@@ -12,8 +13,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="de">
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   )
 }
