@@ -99,6 +99,7 @@ export default function NutritionEntryPage() {
         <Card title="Sichere Einstiegspunkte" sub="Bestehende UI erhalten">
           <div className="grid gap-3">
             <ModuleCard
+              accent="var(--acc-nutri)"
               description="Erhaltene BLS Food Search mit Preference-aware Preview und Food Detail."
               href="/nutrition/foods"
               meta="Foods Tab"
@@ -107,6 +108,7 @@ export default function NutritionEntryPage() {
               tone="readonly"
             />
             <ModuleCard
+              accent="var(--acc-nutri)"
               description="Redirect auf Food Search, weil dort die Preference Preview sichtbar bleibt."
               href="/nutrition/preferences"
               meta="Preferences"

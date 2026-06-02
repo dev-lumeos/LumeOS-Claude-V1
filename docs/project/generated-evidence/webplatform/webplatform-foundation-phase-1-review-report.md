@@ -585,3 +585,412 @@ Boundary:
 - It is not an approved spec.
 - It is not a Workorder, Queue, Approval, Governance Sync candidate, or Execution state.
 - It includes no DB/Supabase commands, no migrations, no secrets access, and no push.
+
+## Phase 2A Shell / Design-System Foundation - 2026-06-02
+
+Purpose: align the WebPlatform implementation draft more strictly with `SPEC_01_APP_SHELL.md` and `SPEC_02_DESIGN_SYSTEM.md` as a visual/platform foundation for future browser-inspectable UI work.
+
+Source specs used:
+
+- `docs/specs/WebPlatform/INDEX.md`
+- `docs/specs/WebPlatform/SPEC_01_APP_SHELL.md`
+- `docs/specs/WebPlatform/SPEC_02_DESIGN_SYSTEM.md`
+
+Changes made:
+
+- AppShell now uses a fixed 3-column spec grid: `240px` sidebar, fluid content, `340px` context panel.
+- AppShell supports hidden context panel via `data-right-panel`.
+- AppShell supports density variants via `data-density`.
+- Theme toggle now sets `data-theme` on `<html>` and persists local UI preference.
+- Sidebar includes Brand, Search/Command trigger, Modules, Workspaces, System, and User/Profile placeholder.
+- Core module navigation matches SPEC_01 order and shortcuts `1` through `7`.
+- Keyboard shortcuts `1` through `7` navigate core modules when focus is outside form controls.
+- Topbar includes module tag, breadcrumb, sync mock, notification placeholder, theme toggle, context toggle, density control, and commands placeholder.
+- Context panel now includes Buddy placeholder, insight cards, quick actions, module details, and next safe action.
+- CSS uses SPEC_02 OKLCH tokens, module accents, status colors, dark/light theme tokens, density padding, radius tokens, and numeric mono/tabular class.
+- Badge primitive now supports SPEC_02-style variants while preserving earlier draft statuses.
+- Placeholder primitives for Tabs, Modal, and Drawer were added without new dependencies.
+
+Intentional phase cuts:
+
+- Command Palette remains placeholder-only.
+- Profile Settings modal remains placeholder-only.
+- Sync and notification states are not live.
+- Workspace SSO, role gates, and badge counts are not implemented.
+- No package/ui migration, shadcn install, lucide install, charts, DB, Supabase, or backend work was done.
+
+Validation note:
+
+- Typecheck was run because AppShell contracts changed materially. It still fails only on known existing Nutrition blockers outside Phase 2A.
+- Final route smoke and validation are recorded in the current task result.
+
+Browser review readiness:
+
+- Ready for browser review as an implementation draft at `http://localhost:9501/`.
+- Not ready to classify as Product Truth or fully source-spec-compliant.
+
+## Phase 2A Visual Serving Verification - 2026-06-02
+
+Purpose: verify that the running dev server is serving the Phase 2A AppShell and design-system changes after Tom reported no visible browser difference.
+
+File verification:
+
+- `apps/web/src/components/shell/app-shell.tsx` contains Phase 2A markers: `data-right-panel`, `data-density`, Medical core module, workspace group, topbar controls, and context panel.
+- `apps/web/src/app/globals.css` contains Phase 2A markers: `grid-template-columns: 240px minmax(0, 1fr) 340px`, density variants, module accent tokens, light tokens, and context panel styles.
+- `apps/web/src/components/ui/cards.tsx` contains `ModalPlaceholder` and `DrawerPlaceholder`.
+- `apps/web/src/components/ui/status-badge.tsx` contains SPEC_02-style pill variants including `accent`.
+
+Server restart:
+
+- Previous known LumeOS 9501 dev-server process tree was stopped only for the repo/port 9501 server.
+- Restart command used from `apps/web`: `pnpm exec next dev -H 127.0.0.1 -p 9501`.
+- New wrapper PID: `8940`.
+- New listening Next server PID: `99332`.
+- Server left running for browser inspection.
+
+Rendered marker verification after restart:
+
+- Checked `http://localhost:9501/`, `/nutrition`, and `/goals`.
+- Confirmed markers in rendered HTML: `Commands ⌘K`, `Medical`, `Workspace`, `Offline`, `data-right-panel`, `lume-context-panel`, and `Search or jump`.
+- Exact strings `Context On` and `Density default` were not found as contiguous HTML text, likely because React SSR/hydration can split adjacent text nodes. The underlying `data-right-panel`, `data-density`, topbar controls, and AppShell source are present.
+
+Route probe after restart:
+
+| Route | Status | Result |
+|---|---:|---|
+| `/` | 200 | OK |
+| `/dashboard` | 200 | OK |
+| `/nutrition` | 200 | OK |
+| `/nutrition/foods` | 200 | OK |
+| `/nutrition/preferences` | 200 | OK |
+| `/goals` | 200 | OK |
+| `/training` | 200 | OK |
+| `/recovery` | 200 | OK |
+| `/supplements` | 200 | OK |
+| `/coach` | 200 | OK |
+| `/medical` | 200 | OK |
+| `/settings` | 200 | OK |
+
+Conclusion:
+
+- Phase 2A changes are being served after restart.
+- If Tom still sees no visible change, likely causes are browser cache, looking at an already-open stale tab, or the fact that many Phase 2A changes are shell/control/token refinements rather than module-content changes.
+
+## SPEC_02 Hard Compliance Fix - Module Accent Colors - 2026-06-02
+
+Purpose: close the hard SPEC_02 gate for visible module-specific accent colors and design tokens.
+
+Authoritative sources used:
+
+- `docs/specs/WebPlatform/SPEC_02_DESIGN_SYSTEM.md`
+- `docs/specs/WebPlatform/SPEC_01_APP_SHELL.md`
+
+Why the previous attempt was insufficient:
+
+- SPEC_02 tokens existed, but the visible shell still did not make every module distinguishable.
+- Inactive module and workspace navigation items did not expose their own module accent strongly enough.
+- Several dashboard cards inherited the current global accent instead of rendering their own module accent.
+- There was no visible draft-only proof surface showing all required accent tokens.
+
+Changes made:
+
+- `globals.css` now defaults `--acc` to `--acc-dash` and keeps the exact SPEC_02 module tokens.
+- `AppShell` uses one route-to-module accent map for Dashboard, Nutrition, Training, Recovery, Supplements, Goals, Medical, Coach, Buddy, Marketplace, Admin, and Settings.
+- Sidebar active items use the required 2px accent bar and inactive module/workspace items show their own accent dot.
+- Topbar tag, topbar line, page eyebrow, context panel markers, Buddy orb, and module cards use the active or module-specific accent token.
+- `ModuleCard` accepts an explicit module accent so dashboard cards can show Nutrition, Goals, Medical, and Workspace colors independently.
+- `/settings` includes the visible draft-only `Design System / Module Accent Proof` block for all SPEC_02 accent tokens.
+
+Visible proof route:
+
+- `http://localhost:9501/settings`
+- Section: `Design System / Module Accent Proof`
+- Tokens shown: `--acc-dash`, `--acc-nutri`, `--acc-train`, `--acc-recov`, `--acc-suppl`, `--acc-goals`, `--acc-medic`, `--acc-coach`, `--acc-buddy`, `--acc-mkt`, `--acc-admin`.
+
+Route probe:
+
+| Route | Expected Token | HTTP | Rendered Shell/Token Marker |
+| --- | --- | ---: | --- |
+| `/` | `--acc-dash` | 200 | pass |
+| `/dashboard` | `--acc-dash` | 200 | pass |
+| `/nutrition` | `--acc-nutri` | 200 | pass |
+| `/goals` | `--acc-goals` | 200 | pass |
+| `/training` | `--acc-train` | 200 | pass |
+| `/recovery` | `--acc-recov` | 200 | pass |
+| `/supplements` | `--acc-suppl` | 200 | pass |
+| `/medical` | `--acc-medic` | 200 | pass |
+| `/coach` | `--acc-coach` | 200 | pass |
+| `/settings` | `--acc-dash` plus proof tokens | 200 | pass |
+
+Remaining SPEC_02 gaps:
+
+- Visual inspection in a browser is still required for subjective strength of accent contrast.
+- Governance UI CSS still has its own legacy styling and remains outside this product AppShell scope.
+- This pass did not implement new feature surfaces, backend state, live sync, or command palette behavior.
+
+Gate result:
+
+- SPEC_02 module color gate: pass for this implementation draft.
+- No commit, no push, no DB/Supabase, no governance state actions.
+
+## Phase 2A.2 App Shell Layout / Navigation UX Hard Fix - 2026-06-02
+
+Purpose: fix the structural shell/navigation issues reported after the SPEC_02 color pass: clipped topbar controls, unwanted horizontal scroll, cluttered sidebar navigation, and context panel overflow risk.
+
+Authoritative sources used:
+
+- `docs/specs/WebPlatform/SPEC_01_APP_SHELL.md`
+- `docs/specs/WebPlatform/SPEC_02_DESIGN_SYSTEM.md`
+
+Changes made:
+
+- Shell overflow hardening:
+  - `.lume-shell` remains `100vw`, `100dvh`, `240px minmax(0, 1fr) 340px`, `overflow: hidden`.
+  - `.lume-main` and `.lume-content` are constrained with `min-width: 0`.
+  - `.lume-content` now scrolls vertically only and hides horizontal overflow.
+  - Cards, page headers, module cards, empty states, meal cards, and flow items were constrained to avoid forcing shell width.
+
+- Topbar clipping fix:
+  - Topbar left area now flexes and truncates safely.
+  - Breadcrumb/meta are grouped in a truncation-safe copy block.
+  - Right-side controls are compact, non-shrinking, and measured inside the topbar.
+  - Secondary controls were shortened: notification is compact, density is compact, while Sync, Theme, Context, and Commands remain visible.
+
+- Sidebar navigation cleanup:
+  - Module navigation keeps product labels, shortcuts, accent dots, and active 2px accent bar.
+  - Workspace rows keep labels and external markers but no longer show noisy `SSO später` / role-check sublines.
+  - Main groups remain `MODULE`, `WORKSPACES`, and `SYSTEM`.
+
+- Context panel containment:
+  - Context panel is fixed at `340px`.
+  - Context panel owns vertical overflow and hides horizontal overflow.
+  - Context cards/text now wrap inside the panel instead of forcing layout width.
+
+Route visual smoke:
+
+Measured with a temporary headless Edge/CDP session at `1440x900` against `http://localhost:9501/`.
+
+| Route | No Horizontal Scroll | Topbar Controls Visible | Active Accent Visible | Context Fits | Result |
+| --- | --- | --- | --- | --- | --- |
+| `/dashboard` | pass | pass | pass | pass | pass |
+| `/nutrition` | pass | pass | pass | pass | pass |
+| `/goals` | pass | pass | pass | pass | pass |
+| `/training` | pass | pass | pass | pass | pass |
+| `/recovery` | pass | pass | pass | pass | pass |
+| `/supplements` | pass | pass | pass | pass | pass |
+| `/medical` | pass | pass | pass | pass | pass |
+| `/settings` | pass | pass | pass | pass | pass |
+
+Remaining layout gaps:
+
+- Browser-level human visual review is still required for final taste and perceived density.
+- Below 1280px the shell uses the existing icon-only/responsive fallback; this pass focused the hard gate on the desktop foundation specified by SPEC_01.
+- Command palette, profile modal, and live sync behavior remain placeholders by scope.
+
+Gate result:
+
+- Phase 2A.2 shell/layout/navigation gate: pass for the implementation draft.
+- No commit, no push, no DB/Supabase, no governance state actions.
+
+## Phase 2A.3 SPEC_01 AppShell Rebuild Pass - 2026-06-02
+
+Purpose: refine the shell from technically compliant layout into a more visibly SPEC_01-like product shell. This pass is limited to Shell, Sidebar navigation, Topbar, and Context Panel. It does not add Dashboard, Nutrition, Goals, or other module feature depth.
+
+Authoritative sources used:
+
+- `docs/specs/WebPlatform/SPEC_01_APP_SHELL.md`
+- `docs/specs/WebPlatform/SPEC_02_DESIGN_SYSTEM.md`
+
+Sidebar improvements:
+
+- Brand area now reads as product chrome: `LumeOS`, version tag, `Athlete OS`.
+- Search trigger remains prominent as a command entry point with `⌘K`.
+- Core module rows now use compact icon slots, product labels, subtle metadata, shortcut hints `1` through `7`, module accent orientation, and active 2px bar.
+- Workspace links now read as secondary external destinations with small icon slots and `↗`; noisy SSO/role-check debug sublabels are removed from the visible sidebar.
+- User footer now has avatar, Tom, Athlete/Draft Tier, and a small more affordance.
+
+Topbar improvements:
+
+- Left side follows SPEC_01: active MOD-TAG plus `Workspace / {ModuleLabel}` breadcrumb.
+- Right side now uses compact shell controls: `Offline · 0 queued`, `Bell 0`, `Theme`, `Context`, `Commands ⌘K`.
+- The topbar accent line remains tied to the active module accent.
+- Controls were checked for clipping at `1440x900`.
+
+Context Panel improvements:
+
+- Header now presents `Context · {ModuleLabel}` and active module title/status.
+- Buddy widget is visually separated and uses the active accent as a small orb marker.
+- Insights are grouped under `Insights` with 2-3 cards per checked route.
+- Quick actions are grouped under `Quick Actions` with read-only action rows.
+- Module details now include details, boundary, and next safe action in one structured block.
+- Panel remains fixed at `340px` and does not force horizontal overflow.
+
+Route check:
+
+Measured with temporary headless Edge/CDP at `1440x900` against `http://localhost:9501/`.
+
+| Route | MOD-TAG | Breadcrumb | Context Title | Insights | Quick Actions | No Overflow/Clipping | Result |
+| --- | --- | --- | --- | ---: | ---: | --- | --- |
+| `/dashboard` | `DASH` | `Workspace / Dashboard` | `Dashboard` | 3 | 3 | pass | pass |
+| `/nutrition` | `NUTRI` | `Workspace / Nutrition` | `Nutrition` | 3 | 3 | pass | pass |
+| `/goals` | `GOALS` | `Workspace / Goals & Body` | `Goals & Body` | 2 | 2 | pass | pass |
+| `/training` | `TRAIN` | `Workspace / Training` | `Training` | 2 | 2 | pass | pass |
+| `/recovery` | `RECOV` | `Workspace / Recovery` | `Recovery` | 2 | 2 | pass | pass |
+| `/supplements` | `SUPPL` | `Workspace / Supplements` | `Supplements` | 2 | 2 | pass | pass |
+| `/medical` | `MEDIC` | `Workspace / Medical` | `Medical` | 2 | 2 | pass | pass |
+| `/settings` | `SETTINGS` | `Workspace / Settings` | `Settings` | 2 | 3 | pass | pass |
+
+Remaining SPEC_01 gaps:
+
+- Command palette remains placeholder-only.
+- Profile Settings modal remains placeholder-only.
+- Notification behavior and live sync are not implemented.
+- Buddy animation states are not implemented because no animation dependency is available and this pass does not add dependencies.
+- Human browser taste review is still needed, but the shell structure now maps visibly to SPEC_01.
+
+Validation:
+
+- Typecheck was run after AppShell changes. New Shell type issue was fixed; remaining type errors are the known existing Nutrition blockers.
+- `git diff --check` and `pnpm --filter @lumeos/web test` are recorded in the task result.
+
+Gate result:
+
+- Phase 2A.3 AppShell foundation gate: pass for this implementation draft.
+- No commit, no push, no DB/Supabase, no governance state actions.
+
+## WebPlatform AppShell + Design System Spec Reset - 2026-06-02
+
+Purpose: hard reset the visible WebPlatform shell/design-system foundation against the authoritative WebPlatform source specs. This pass does not continue Dashboard, Nutrition, Goals, or other feature depth.
+
+Authoritative specs read:
+
+- `docs/specs/WebPlatform/INDEX.md`
+- `docs/specs/WebPlatform/SPEC_01_APP_SHELL.md`
+- `docs/specs/WebPlatform/SPEC_02_DESIGN_SYSTEM.md`
+
+Additional context not used as primary implementation source:
+
+- `docs/specs/WebPlatform/SPEC_03_DASHBOARD.md`
+- `docs/specs/WebPlatform/SPEC_04_NUTRITION_UI.md`
+- `docs/specs/WebPlatform/SPEC_08_GOALS_UI.md`
+- `docs/specs/WebPlatform/SPEC_09_MEDICAL_UI.md`
+- `docs/specs/WebPlatform/SPEC_10_WORKSPACE_LINKS.md`
+
+What was wrong before this reset:
+
+- Product shell still exposed a non-spec System item (`Governance`) in the product navigation.
+- Existing `/nutrition/foods` and `/nutrition/preferences` content could force horizontal overflow inside the shell.
+- Topbar height was not explicitly protected, causing vertical clipping on nutrition subroutes.
+- The prior shell was close in structure but still needed a hard pass/fail check against every required route and token requirement.
+
+What changed:
+
+- Product AppShell System group now renders `Settings` only, matching this reset's SPEC_01 requirement. The Governance route itself is untouched and still bypasses AppShell when opened directly.
+- Topbar now has explicit minimum height and fixed-height controls to prevent clipping.
+- Content containment was hardened:
+  - `.lume-content` descendants use `min-width: 0` and `max-width: 100%`.
+  - tables inside content use `width: 100%` and `table-layout: fixed`.
+  - this preserved `/nutrition/foods` while preventing shell-level horizontal overflow.
+- Route-to-module accent resolution remains a single source in `AppShell`.
+- Reports now include explicit SPEC_01/SPEC_02 hard reset compliance tables.
+
+Hard route check:
+
+Measured against `http://localhost:9501/` with temporary headless Edge/CDP at `1440x900`.
+
+| Route | HTTP | Module | Accent | Shell Overflow | Sidebar | Context Panel | Topbar | Status |
+| --- | ---: | --- | --- | --- | --- | --- | --- | --- |
+| `/` | 200 | Dashboard | `--acc-dash` | pass | pass | pass | pass | pass |
+| `/dashboard` | 200 | Dashboard | `--acc-dash` | pass | pass | pass | pass | pass |
+| `/nutrition` | 200 | Nutrition | `--acc-nutri` | pass | pass | pass | pass | pass |
+| `/nutrition/foods` | 200 | Nutrition | `--acc-nutri` | pass | pass | pass | pass | pass |
+| `/nutrition/preferences` | 200 | Nutrition | `--acc-nutri` | pass | pass | pass | pass | pass |
+| `/goals` | 200 | Goals & Body | `--acc-goals` | pass | pass | pass | pass | pass |
+| `/training` | 200 | Training | `--acc-train` | pass | pass | pass | pass | pass |
+| `/recovery` | 200 | Recovery | `--acc-recov` | pass | pass | pass | pass | pass |
+| `/supplements` | 200 | Supplements | `--acc-suppl` | pass | pass | pass | pass | pass |
+| `/medical` | 200 | Medical | `--acc-medic` | pass | pass | pass | pass | pass |
+| `/coach` | 200 | Coach | `--acc-coach` | pass | pass | pass | pass | pass |
+| `/settings` | 200 | Settings/System | `--acc-dash` | pass | pass | pass | pass | pass |
+
+Remaining SPEC_01/SPEC_02 gaps:
+
+- `lucide-react` is specified by SPEC_02, but it is not currently installed and this task forbids adding dependencies. The shell therefore uses dependency-free icon slots instead of lucide icons.
+- Command palette remains a placeholder button, not a `cmdk` implementation.
+- Profile Settings modal remains a placeholder affordance.
+- Buddy animation states are not implemented because no animation dependency is available and this task forbids adding dependencies.
+- Workspace auth handoff, SSO, role gates, notification behavior, and sync behavior remain non-live by scope.
+
+Gate results:
+
+- SPEC_01 Shell Gate: pass.
+- SPEC_02 Design Token Gate: pass.
+- Route Visual Compliance: pass for all required routes.
+
+Boundary:
+
+- No commit, no push.
+- No DB/Supabase commands.
+- No migrations.
+- No secrets read.
+- No governance_brain or AI-Governance-Core writes.
+- No Governance Sync candidates, Workorders, Queues, Approvals, or Execution state.
+
+## Scoped Draft Commit
+
+Purpose: local scoped draft commit for the WebPlatform AppShell + Design System Foundation.
+
+Commit scope:
+
+- Draft only.
+- Not Product Truth.
+- Not an approved spec.
+- Not a governed Workorder result.
+- Not Queue, Approval, Execution, or Governance Sync state.
+- No push.
+
+Gate status included:
+
+- SPEC_01 Shell Gate: pass.
+- SPEC_02 Design Token Gate: pass.
+- Route Visual Compliance: pass for all required routes.
+
+Routes checked before commit:
+
+- `/` - 200
+- `/dashboard` - 200
+- `/nutrition` - 200
+- `/nutrition/foods` - 200
+- `/nutrition/preferences` - 200
+- `/goals` - 200
+- `/training` - 200
+- `/recovery` - 200
+- `/supplements` - 200
+- `/coach` - 200
+- `/medical` - 200
+- `/settings` - 200
+
+Known typecheck blockers:
+
+- `src/app/nutrition/curation/page.tsx`
+- `src/app/nutrition/local-schema/nutrient-detail-panel.tsx`
+- `src/lib/nutrition/food-search.ts`
+- `src/lib/nutrition/preference-search-preview.ts`
+
+Excluded from staging/commit:
+
+- `.serena/project.yml`
+- `docs/Screenshots/`
+- `docs/project/frontdoor/`
+- `docs/project/generated-evidence/smoke/`
+- unrelated `docs/specs/*`
+- unrelated generated evidence outside `docs/project/generated-evidence/webplatform/`
+
+Boundary confirmation:
+
+- No DB/Supabase commands.
+- No migrations.
+- No `.env` or secrets access.
+- No governance_brain or AI-Governance-Core writes.
+- No Workorder, Queue, Approval, Execution state, or Governance Sync candidate.
+- No push.

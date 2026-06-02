@@ -66,6 +66,7 @@ export default function DashboardPage() {
         <Card title="Module Status" sub="Phase 1">
           <div className="grid gap-3 sm:grid-cols-2">
             <ModuleCard
+              accent="var(--acc-nutri)"
               description="Foundation DB Schema, BLS-only Boundary und Broad-Backlog-Trennung prüfen."
               href="/nutrition"
               meta="BLS / Foods"
@@ -74,6 +75,7 @@ export default function DashboardPage() {
               tone="ready"
             />
             <ModuleCard
+              accent="var(--acc-goals)"
               description="Ziele, Körperdaten und downstream Beziehungen sichtbar machen, ohne Live-Ziele zu behaupten."
               href="/goals"
               meta="Goals / Body"
@@ -82,6 +84,7 @@ export default function DashboardPage() {
               tone="mock"
             />
             <ModuleCard
+              accent="var(--acc-medic)"
               description="Sensible Monitoring-Fläche ohne Diagnose, Therapie oder Live-Daten."
               href="/medical"
               meta="Medical"
@@ -90,6 +93,7 @@ export default function DashboardPage() {
               tone="blocked"
             />
             <ModuleCard
+              accent="var(--acc-coach)"
               description="Coach, Buddy, Marketplace und Admin sind externe Apps, kein Embed."
               href="/settings"
               meta="Workspaces"

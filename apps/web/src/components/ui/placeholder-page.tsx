@@ -30,6 +30,20 @@ const moduleNotes: Record<string, { accent: string; coming: string[]; relation: 
   },
 }
 
+const accentProof = [
+  { label: 'Dashboard', token: '--acc-dash', color: 'var(--acc-dash)', note: 'Shell landing, status, neutral steel orientation.' },
+  { label: 'Nutrition', token: '--acc-nutri', color: 'var(--acc-nutri)', note: 'Diary, BLS Food Search, nutrition boundaries.' },
+  { label: 'Training', token: '--acc-train', color: 'var(--acc-train)', note: 'Training plan, today, history, library.' },
+  { label: 'Recovery', token: '--acc-recov', color: 'var(--acc-recov)', note: 'Readiness, sleep, HRV, recovery signals.' },
+  { label: 'Supplements', token: '--acc-suppl', color: 'var(--acc-suppl)', note: 'Stack tracking, compliance, interactions.' },
+  { label: 'Goals & Body', token: '--acc-goals', color: 'var(--acc-goals)', note: 'Goals, body metrics, timeline, composition.' },
+  { label: 'Medical', token: '--acc-medic', color: 'var(--acc-medic)', note: 'Sensitive monitoring only, no diagnosis.' },
+  { label: 'Coach', token: '--acc-coach', color: 'var(--acc-coach)', note: 'Coach workspace handoff and local draft route.' },
+  { label: 'Buddy', token: '--acc-buddy', color: 'var(--acc-buddy)', note: 'Buddy workspace accent, external app link.' },
+  { label: 'Marketplace', token: '--acc-mkt', color: 'var(--acc-mkt)', note: 'Marketplace workspace accent, external app link.' },
+  { label: 'Admin', token: '--acc-admin', color: 'var(--acc-admin)', note: 'Admin workspace accent, role-gated external app.' },
+]
+
 export function PlaceholderPage({ moduleName }: { moduleName: string }) {
   const note = moduleNotes[moduleName] ?? moduleNotes.Settings
 
@@ -75,19 +89,47 @@ export function PlaceholderPage({ moduleName }: { moduleName: string }) {
       </section>
 
       {moduleName === 'Settings' ? (
-        <section>
-          <SectionHeader kicker="Workspaces" title="Externe Apps laut Source-Spec" />
-          <Card title="Workspace Links" sub="Neuer Tab / SSO später">
-            <div className="space-y-2">
-              {['Coach Portal · coach.lumeos.app', 'Buddy · buddy.lumeos.app', 'Marketplace · marketplace.lumeos.app', 'Admin · admin.lumeos.app'].map((item) => (
-                <div className="lume-status-row" key={item}>
-                  <span>{item}</span>
-                  <StatusBadge tone="mock">Link Mock</StatusBadge>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </section>
+        <>
+          <section>
+            <SectionHeader kicker="Workspaces" title="Externe Apps laut Source-Spec" />
+            <Card title="Workspace Links" sub="Neuer Tab / SSO später">
+              <div className="space-y-2">
+                {[
+                  { label: 'Coach Portal · coach.lumeos.app', accent: 'var(--acc-coach)' },
+                  { label: 'Buddy · buddy.lumeos.app', accent: 'var(--acc-buddy)' },
+                  { label: 'Marketplace · marketplace.lumeos.app', accent: 'var(--acc-mkt)' },
+                  { label: 'Admin · admin.lumeos.app', accent: 'var(--acc-admin)' },
+                ].map((item) => (
+                  <div className="lume-status-row" key={item.label}>
+                    <span className="inline-flex items-center gap-2">
+                      <span className="lume-proof-swatch" style={{ background: item.accent }} />
+                      {item.label}
+                    </span>
+                    <StatusBadge tone="mock">Link Mock</StatusBadge>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </section>
+
+          <section>
+            <SectionHeader kicker="Design System" title="Module Accent Proof" />
+            <Card title="SPEC_02 Accent Tokens" sub="Draft-only compliance proof">
+              <div className="lume-accent-proof-grid">
+                {accentProof.map((item) => (
+                  <div className="lume-accent-proof-row" key={item.token} style={{ '--proof-acc': item.color } as React.CSSProperties}>
+                    <span className="lume-proof-swatch" />
+                    <div>
+                      <div className="font-semibold text-[var(--fg)]">{item.label}</div>
+                      <div className="num mt-1 text-[12px] text-[var(--proof-acc)]">{item.token}</div>
+                    </div>
+                    <p>{item.note}</p>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </section>
+        </>
       ) : null}
     </div>
   )
