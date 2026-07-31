@@ -76,3 +76,11 @@ DGX4/Spark D → lab-only, not required for normal governance/operator runtime c
 ```
 db-migration-agent → MUSS danach: security-specialist
 ```
+
+<!-- IJFW-MEMORY-START -->
+Project memory at .ijfw/memory/. Call `ijfw_memory_prelude` for full context.
+<!-- IJFW-MEMORY-END -->
+
+<!-- IJFW-AGENTS-START -->
+No project agents yet. Run `ijfw team` to set them up.
+<!-- IJFW-AGENTS-END -->

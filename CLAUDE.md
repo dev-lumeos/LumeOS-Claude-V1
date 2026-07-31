@@ -10,79 +10,20 @@ Du änderst Dateien nur, wenn Tom es explizit verlangt.
 
 ## Projektstatus
 
-Das deterministische Governance-/Execution-System ist implementiert:
-
-- Review-Pipeline V2
-- Workorder-Schema
-- Risk-Categories
-- Files Enforcement
-- Scope-/DB-Migration-Locks
-- WO-State-Machine
-- Scheduler Preflight
-- System Stop + Stop Rules
-- Approval Queue
-- Night-Run-Policy
-- Reporting Layer
-- WO Dossiers
-- Docs-Governance
-
-Offen:
-- Spark Runtime Hardening: systemd Services, HTTP Healthcheck-Timer, Reboot-Tests.
-
----
 
 ## Arbeitsprinzip
 
-Nicht direkt "Feature bauen".  
-Immer über:
-
-```
-Brainstorm → Spec → Workorders → Workorder Review → Batch Plan → Run → Reports
-```
-
----
 
 ## Workorder-Workflow
 
-Wenn Tom diese Trigger nutzt, lies die jeweilige Masterprompt-Datei automatisch und wende sie exakt an:
-
-- **"Spec erstellen:"** → `docs/project/prompts/MASTERPROMPT_BRAINSTORM_TO_SPEC.md`
-- **"Workorders generieren:"** → `docs/project/prompts/MASTERPROMPT_SPEC_TO_WORKORDERS.md`
-- **"WOs reviewen:"** → `docs/project/prompts/MASTERPROMPT_WORKORDER_REVIEW.md`
-- **"Batch planen:"** → `docs/project/prompts/MASTERPROMPT_WORKORDER_BATCH_PLAN.md`
-
-Regeln:
-- Erst passende Prompt-Datei lesen.
-- Keine Workorders erzeugen, wenn die Spec nicht workorder-ready ist.
-- Bei fehlenden Pflichtinformationen gezielt nachfragen.
-- Keine High-Risk-WOs in autonome Night-Runs einplanen.
-- Keine DB-Migration ohne rollback_hint.
-
----
 
 ## Wichtige Referenzen
-
-- `docs/project/USER_MANUAL.md`
-- `docs/project/WORKORDER_CREATION_HANDBOOK.md`
-- `docs/project/DOCS_GOVERNANCE.md`
-- `system/workorders/schemas/workorder.schema.json`
-- `system/control-plane/risk-categories.ts`
-- `system/control-plane/scheduler-preflight.ts`
-- `system/control-plane/night-run-policy.ts`
-- `system/control-plane/stop-rules.ts`
-- `system/approval/approval-queue.ts`
-- `system/reports/morning-report.ts`
-- `system/reports/failed-wo-report.ts`
-- `system/reports/model-quality-report.ts`
-- `system/reports/wo-dossier.ts`
-
----
 
 ## Schreibregeln
 
 - Keine Codeänderung ohne explizite Freigabe.
 - Keine Commits oder Pushes ohne Tom.
-- Keine Runtime-Hardening-Arbeiten mit Governance-Arbeiten vermischen.
+- Keine Runtime-Hardening-Arbeiten
 - Keine alten BrainstormDocs als Current Truth verwenden.
 - Bei Unsicherheit: nach aktuellem SSOT suchen, nicht raten.
 
@@ -126,14 +67,41 @@ Stattdessen die aktuellen Referenzen oben nutzen.
 
 ## Aktueller Stack
 
-- Spark A (192.168.0.128:8001): Qwen3.6-35B FP8 — Orchestrator + Review
-- Spark B (192.168.0.188:8001): Qwen3-Coder-Next FP8 — Coding Worker
-- Spark C (192.168.0.99:8001):  Gemma-4-26B FP8 — Fast Reviewer Tier 1
-- Spark D / DGX4 (192.168.0.101:8001): disabled for productive governance; reserved for future DGX4/DGX5 MiniMax lab work.
-- Senior review / escalation: Codex CLI with GPT-5.5 as Tom's productive senior engineering/review runtime.
-
-Quelle: `STACK_REFERENCE.md`
+*Brain only. System macht den Rest.*
 
 ---
 
-*Brain only. System macht den Rest.*
+## gstack
+
+Installed: v1.60.1.0 at `~/.claude/skills/gstack`.
+Telemetry hard-disabled via `~/.gstack/config.yaml` (telemetry, update_check, auto_upgrade, artifacts_sync all off).
+No SessionStart / PostToolUse / PreToolUse hooks installed (setup ran without `--team`).
+
+### Browsing
+
+For any web browsing / scraping / headless-browser task, use the gstack `/browse` skill.
+Do **not** use `mcp__claude-in-chrome__*` tools.
+
+### Available skills
+
+Planning & review:
+`/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/plan-devex-review`, `/autoplan`
+
+Design:
+`/design-consultation`, `/design-shotgun`, `/design-html`, `/design-review`, `/devex-review`
+
+Ship & QA:
+`/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/qa`, `/qa-only`
+
+Browser & scrape:
+`/browse`, `/connect-chrome`, `/setup-browser-cookies`, `/setup-deploy`, `/setup-gbrain`
+
+Meta & docs:
+`/retro`, `/investigate`, `/document-release`, `/document-generate`, `/codex`, `/cso`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`, `/learn`
+
+**Governance note:** gstack skills that auto-commit or auto-push (`/ship`, `/land-and-deploy`) still require explicit Tom-approval per `Schreibregeln` above. gstack does not override LumeOS workflow rules.
+
+---
+
+<!-- IJFW-MEMORY-START (managed -- do not edit manually) -->
+<!-- IJFW-MEMORY-END -->
