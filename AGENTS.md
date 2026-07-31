@@ -1,4 +1,4 @@
-# Agent Instructions
+# Agent Instructions — LumeOS
 
 <!-- lean-ctx -->
 ## lean-ctx
@@ -9,73 +9,82 @@ Full rules: @LEAN-CTX.md
 
 ---
 
-## Agent Registry — Stand April 2026
+## Kontext
 
-Source of Truth: `system/agent-registry/agents.json` + `system/agent-registry/model_routing.json`
+Produkt-Repo für LumeOS. Tom arbeitet hier **direkt** mit Claude, Claude Code
+und Codex. Kein Workorder-Workflow, keine Governance-Pipeline, keine
+Spark-Agent-Registry.
 
-### Execution Agents
+Ausführliche Runtime-Instructions: `CLAUDE.md`
 
-| Agent | Node | Modell | Typ | Human Approval | Zweck |
-|---|---|---|---|---|---|
-| `micro-executor` | Spark B | qwen3-coder-next-fp8 | executor | nein | TypeScript Patches, max 3 Files |
-| `senior-coding-agent` | Codex CLI | gpt-5.5 | executor_senior | nein | Komplexe Multi-File Tasks, Eskalation |
-| `db-migration-agent` | Spark A | qwen3.6-35b-fp8 | db_specialist | **ja** | Supabase Migrations + RLS Policies |
-| `test-agent` | Spark B | qwen3-coder-next-fp8 | executor | nein | Unit- und Integration-Tests |
-| `i18n-agent` | Spark B | qwen3-coder-next-fp8 | executor | nein | DE/EN/TH Locale Files |
-| `docs-agent` | Spark B | qwen3-coder-next-fp8 | executor | nein | JSDoc, API Docs, README |
-| `mealcam-agent` | RTX 5090 | qwen3-vl-30b-a3b-fp8 | vision | nein | Food Recognition, JSON Output only |
+---
 
-### Orchestration + Review Agents
+## Repo-Struktur
 
-| Agent | Node | Modell | Typ | Zweck |
-|---|---|---|---|---|
-| `orchestrator-agent` | Spark A | qwen3.6-35b-fp8 | orchestrator | Dispatch, Monitoring, Coordination |
-| `review-agent` | Spark A | qwen3.6-35b-fp8 | reviewer | Pre/Post-Review WOs + Outputs |
-| `pre-review-agent` | Spark A | qwen3.6-35b-fp8 | reviewer | Vollständigkeit prüfen vor Dispatch |
-| `post-review-agent` | Spark A | qwen3.6-35b-fp8 | reviewer | Output validieren nach Execution |
-| `governance-compiler` | Spark A | qwen3.6-35b-fp8 | governance | Macro-WO → GovernanceArtefaktV3 |
-| `context-builder` | Spark A | qwen3.6-35b-fp8 | context | File Discovery, Symbol Tracing |
-| `security-specialist` | Spark A | qwen3.6-35b-fp8 | reviewer | Security Review: RLS, Auth, SQL |
+Monorepo (Turborepo + pnpm 9, Node >= 20).
 
-### Review Pipeline Tiers (Phase 2)
+**Real Code enthält nur `apps/web`.** `services/` und `packages/` sind im
+`pnpm-workspace.yaml` deklariert, aber leer oder nicht vorhanden. Keine Pfade
+dort erfinden — vorher prüfen, ob sie existieren.
 
-| Tier | Node | Modell | Rolle | Eskalation bei |
-|---|---|---|---|---|
-| `fast-reviewer-agent` | Spark C | gemma-4-26B-A4B-it | Tier 1 Fast Review | ESCALATE / low confidence / invalid_json / rewrite limit |
-| `senior-reviewer-agent` | Codex CLI | gpt-5.5 | Tier 2 Senior Review | Final repo-aware senior review |
+### apps/web
 
-### Hardware-Mapping
+Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS,
+`@supabase/supabase-js` als Dependency deklariert.
 
-| Node | IP | Port | Modell |
-|---|---|---|---|
-| Spark A | 192.168.0.128 | 8001 | Qwen3.6-35B-A3B FP8 |
-| Spark B | 192.168.0.188 | 8001 | Qwen3-Coder-Next FP8 |
-| Spark C | 192.168.0.99 | 8001 | Gemma-4-26B-A4B-it FP8 |
-| Spark D / DGX4 | 192.168.0.101 | 8001 | Disabled for productive governance; future DGX4/DGX5 MiniMax lab |
-| RTX 5090 | localhost | 8001 | Qwen3-VL-30B FP8 |
-| Codex CLI | — | — | GPT-5.5 (produktive Senior-Engineering-Instanz) |
+**Phase 1B:** Shell sichtbar, Nutrition read-only gegen lokale DB.
+Keine Writes, kein Auth, keine Live-Userdaten.
 
-### Qwen3.6 Pflichtregeln
+### Datenbank
 
-```
-enable_thinking: false  (MUSS bei jedem Request — /no_think funktioniert NICHT)
-temperature: 0.0
-Output: reines JSON — kein Reasoning sichtbar
-```
+Live-Schema in `supabase/migrations/` (EAV-Core, Aliase, Kategorie-Hierarchie).
+`db/schema/nutrition.sql` ist ein **nicht verdrahteter** Diary-Entwurf — nicht
+als aktuellen Stand behandeln.
 
-### Eskalations-Kette
+---
 
-```
-micro-executor → (2x failed review) → senior-coding-agent (Codex/GPT-5.5)
-fast-reviewer-agent → (ESCALATE) → senior-reviewer-agent (Codex/GPT-5.5)
-DGX4/Spark D → lab-only, not required for normal governance/operator runtime checks
-```
+## Referenzen
 
-### Pflicht-Verkettungen
+`docs/ist-zustand/` — Read-only Repo-Inventar (Stand 2026-07-30), verlässlichste
+Beschreibung des Repos.
+
+Bei Widerspruch gilt: **Code > `docs/ist-zustand/` > alles andere.**
+
+---
+
+## Schreibregeln
+
+- Keine Codeänderung ohne explizite Freigabe von Tom.
+- Keine Commits oder Pushes ohne Tom.
+- Markdown-Dateien nur mit vollständigem Inhalt neu schreiben — partielle
+  String-Edits zerstören Tabellen.
+- Ein logischer Change pro Commit.
+- Bei Unsicherheit: im Repo nachsehen, nicht raten.
+
+---
+
+## Altlasten — nicht verwenden
+
+Governance ist in ein **eigenes Repo** umgezogen. Was hier noch liegt, ist Rest:
 
 ```
-db-migration-agent → MUSS danach: security-specialist
+system/                          — Dispatcher, Control-Plane, State, Approval, Reports
+SESSION_ONBOARDING.md
+STACK_REFERENCE.md
+docs/project/USER_MANUAL.md
+docs/project/WORKORDER_CREATION_HANDBOOK.md
+docs/project/DOCS_GOVERNANCE.md
+docs/project/prompts/MASTERPROMPT_*.md
 ```
+
+Diese Dateien beschreiben Workorders, Risk-Categories, Spark-Routing (A–D),
+Approval-Queue und Review-Pipeline. **Nichts davon gilt in diesem Repo.**
+Nicht als Referenz lesen, nicht darauf verweisen, keine Workorders erzeugen.
+
+Die frühere Agent-Registry (`agents.json`, `model_routing.json`, Spark-Hardware-
+Tabellen) stand an dieser Stelle und gehört jetzt ins Governance-Repo.
+
+---
 
 <!-- IJFW-MEMORY-START -->
 Project memory at .ijfw/memory/. Call `ijfw_memory_prelude` for full context.
