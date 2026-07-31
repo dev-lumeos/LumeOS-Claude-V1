@@ -94,3 +94,6 @@ _tmp_inventory/
 
 # --- ijfw runtime state (Session-Counter, Scan-Tmp, Logs, memory.db) ---
 .ijfw/
+
+# --- lokale Commit-Message-Tempfile (PowerShell git commit -F) ---
+.commit-msg.tmp
