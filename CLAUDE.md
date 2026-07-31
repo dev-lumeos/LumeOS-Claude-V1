@@ -2,79 +2,93 @@
 
 ## Rolle
 
-Du bist Claude im LumeOS-Repo.  
-Du hilfst Tom beim Planen, Strukturieren, Reviewen und Erzeugen von Specs/Workorders.  
+Du bist Claude im LumeOS-Repo (`D:\GitHub\LumeOS-Claude-V1`).
+Du arbeitest hier **direkt** mit Tom — kein Workorder-Workflow, keine Governance-Pipeline.
 Du änderst Dateien nur, wenn Tom es explizit verlangt.
 
 ---
 
-## Projektstatus
+## Was dieses Repo ist
 
+Produkt-Repo für LumeOS. Monorepo (Turborepo + pnpm 9, Node >= 20).
 
-## Arbeitsprinzip
+**Real Code enthält nur `apps/web`.** `services/` und `packages/` sind im
+`pnpm-workspace.yaml` deklariert, aber leer oder nicht vorhanden. Erfinde keine
+Pfade unter `services/` oder `packages/` — prüfe vorher, ob sie existieren.
 
+### apps/web
 
-## Workorder-Workflow
+Next.js 14 (App Router), React 18, TypeScript, Tailwind CSS,
+`@supabase/supabase-js` als Dependency deklariert.
 
+**Phase 1B:** Shell sichtbar, Nutrition read-only gegen lokale DB.
+Keine Writes, kein Auth, keine Live-Userdaten.
 
-## Wichtige Referenzen
+### Datenbank
+
+Live-Schema liegt in `supabase/migrations/` (EAV-Core, Aliase, Kategorie-Hierarchie).
+`db/schema/nutrition.sql` ist ein **nicht verdrahteter** Diary-Entwurf — nicht als
+aktuellen Stand behandeln.
+
+---
+
+## Aktueller Ist-Zustand
+
+`docs/ist-zustand/` — Read-only Repo-Inventar (Stand 2026-07-30):
+
+| Datei | Inhalt |
+|---|---|
+| `00-overview.md` | Repo-Grundgerüst, Routen, Stack |
+| `01-nutrition.md` | Nutrition-Modul Ist-Zustand |
+| `02-nutrition-spec-code-abgleich.md` | Spec vs. Code Abgleich |
+| `03-todo.md` | Offene Punkte |
+| `04-adr-liste.md` | ADR-Übersicht |
+
+Das ist die verlässlichste Beschreibung des Repos. Bei Widerspruch zu älteren
+Docs gilt: Code > `docs/ist-zustand/` > alles andere.
+
+---
 
 ## Schreibregeln
 
 - Keine Codeänderung ohne explizite Freigabe.
 - Keine Commits oder Pushes ohne Tom.
-- Keine Runtime-Hardening-Arbeiten
+- Markdown-Dateien nur per `write_file` mit vollständigem Inhalt schreiben —
+  `edit_block` zerstört Tabellen.
+- Ein logischer Change pro Commit.
 - Keine alten BrainstormDocs als Current Truth verwenden.
-- Bei Unsicherheit: nach aktuellem SSOT suchen, nicht raten.
+- Bei Unsicherheit: im Repo nachsehen, nicht raten.
 
 ---
 
-## High-Risk-Regel
+## Altlasten — nicht verwenden
 
-High-Risk — brauchen Prior Approval:
-- `db-migration`, `payments`, `medical`, `release`
+Governance ist in ein **eigenes Repo** umgezogen. Was hier noch liegt, ist Rest:
 
-Cautious — senior review mandatory through Codex/GPT-5.5, kein Auto-Retry:
-- `security`, `auth`, `rls`, `shared-core`, `architecture`
-
-Autonom — dürfen ohne Approval laufen:
-- `standard`, `docs`, `i18n`, `test`
-
-Quelle: `system/control-plane/risk-categories.ts`
-
----
-
-## Reports
-
-Für den aktuellen Status:
-
-```bash
-npx tsx system/reports/morning-report.ts
-npx tsx system/reports/failed-wo-report.ts
-npx tsx system/reports/model-quality-report.ts
-npx tsx system/reports/wo-dossier.ts --all-completed
-npx tsx system/control-plane/docs-drift-checker.ts
+```
+system/                          — Dispatcher, Control-Plane, State, Approval, Reports
+AGENTS.md                        — Agent-Registry (Sparks, Routing)
+docs/project/USER_MANUAL.md
+docs/project/WORKORDER_CREATION_HANDBOOK.md
+docs/project/DOCS_GOVERNANCE.md
+docs/project/prompts/MASTERPROMPT_*.md
+SESSION_ONBOARDING.md
+STACK_REFERENCE.md
 ```
 
----
+Diese Dateien beschreiben Workorders, Risk-Categories, Spark-Routing und
+Review-Pipeline. **Nichts davon gilt in diesem Repo.** Nicht als Referenz lesen,
+nicht darauf verweisen, keine Workorders erzeugen.
 
-## Veraltete Referenzen
-
-Wenn alte Pfade, alte Skills oder alte Service-Flows gefunden werden, nicht verwenden.  
-Stattdessen die aktuellen Referenzen oben nutzen.
-
----
-
-## Aktueller Stack
-
-*Brain only. System macht den Rest.*
+Wenn Tom nach Governance fragt: das gehört ins Governance-Repo, nicht hierher.
 
 ---
 
 ## gstack
 
 Installed: v1.60.1.0 at `~/.claude/skills/gstack`.
-Telemetry hard-disabled via `~/.gstack/config.yaml` (telemetry, update_check, auto_upgrade, artifacts_sync all off).
+Telemetry hard-disabled via `~/.gstack/config.yaml` (telemetry, update_check,
+auto_upgrade, artifacts_sync all off).
 No SessionStart / PostToolUse / PreToolUse hooks installed (setup ran without `--team`).
 
 ### Browsing
@@ -99,7 +113,8 @@ Browser & scrape:
 Meta & docs:
 `/retro`, `/investigate`, `/document-release`, `/document-generate`, `/codex`, `/cso`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`, `/learn`
 
-**Governance note:** gstack skills that auto-commit or auto-push (`/ship`, `/land-and-deploy`) still require explicit Tom-approval per `Schreibregeln` above. gstack does not override LumeOS workflow rules.
+**Hinweis:** gstack-Skills die auto-committen oder auto-pushen (`/ship`,
+`/land-and-deploy`) brauchen weiterhin explizite Tom-Freigabe per `Schreibregeln`.
 
 ---
 
