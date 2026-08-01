@@ -1,26 +1,44 @@
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell.exe -ExecutionPolicy Bypass -File .claude/hooks/pre-tool.ps1"
-          }
-        ]
-      }
+  "permissions": {
+    "deny": [
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean:*)",
+      "Bash(supabase db reset:*)",
+      "Bash(supabase db push:*)",
+      "Bash(npx supabase db reset:*)",
+      "Bash(npx supabase db push:*)",
+      "Bash(powershell:*)",
+      "Bash(pwsh:*)",
+      "Bash(rm:*)",
+      "Bash(sudo:*)",
+      "Bash(chmod:*)",
+      "Read(./.env)",
+      "Read(./.env.*)"
     ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "powershell.exe -ExecutionPolicy Bypass -File .claude/hooks/post-tool.ps1"
-          }
-        ]
-      }
+    "ask": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git rebase:*)",
+      "Bash(pnpm install:*)",
+      "Bash(npx supabase:*)"
+    ],
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(git status:*)",
+      "Bash(git --no-pager diff:*)",
+      "Bash(git --no-pager log:*)",
+      "Bash(git branch:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm typecheck:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(npx --no-install tsc --noEmit:*)"
     ]
   }
 }
