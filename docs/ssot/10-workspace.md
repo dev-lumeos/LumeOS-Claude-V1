@@ -25,8 +25,16 @@ Seine Abhängigkeiten sind ausschliesslich `next`, `react`, `react-dom`,
 
 Der gesamte `packages/`- und `services/`-Baum hängt damit nicht am Produkt.
 13 der 17 lebenden Packages bilden einen geschlossenen Governance-Cluster,
-alle an `@lumeos/wo-core` verwurzelt. Sie könnten entfernt werden, ohne dass
-`apps/web` es bemerkt.
+alle an `@lumeos/wo-core` verwurzelt.
+
+**Zur Entfernbarkeit — präzisiert am 2026-08-01:** Die Packages und Services
+des Clusters könnten entfernt werden, ohne dass `apps/web` es bemerkt.
+**Für `system/` gilt das nicht:** `[read]` `apps/web/src/lib/governance/snapshot.ts:8`
+importiert statisch aus `system/project-profiles/`, `command-runner.ts` spawnt
+`system/`-Skripte, und `services/scheduler-api` hat `[cmd]` vier direkte
+`system/`-Importe. `system/`, `scheduler-api` und die Governance-Konsole in
+`apps/web` bilden einen Verbund, der nur gemeinsam entfernbar ist —
+Details und Kosten: `50-governance-rest.md`.
 
 ---
 
@@ -46,7 +54,7 @@ alle an `@lumeos/wo-core` verwurzelt. Sie könnten entfernt werden, ohne dass
 | `packages/vllm-client` | `@lumeos/vllm-client` | 3 | wo-core | Governance | `[cmd]` |
 | `packages/supabase-clients` | `@lumeos/supabase-clients` | 1 | keine | Governance (Control Plane) | `[read]` |
 | `services/wo-classifier` | `@lumeos/wo-classifier` | 10 | wo-core | Governance | `[cmd]` |
-| `services/scheduler-api` | `@lumeos/scheduler-api` | 8 | 6 Pakete | Governance | `[cmd]` |
+| `services/scheduler-api` | `@lumeos/scheduler-api` | 8 | 6 Pakete | Governance, importiert zusätzlich direkt aus `system/` | `[cmd]` |
 | `services/sat-check` | `@lumeos/sat-check` | 5 | wo-core | Governance | `[cmd]` |
 | `services/orchestrator-api` | `@lumeos/orchestrator-api` | 4 | 4 Pakete | Governance | `[cmd]` |
 | `services/governance-compiler` | `@lumeos/governance-compiler` | 2 | wo-core, vllm-client | Governance | `[cmd]` |
