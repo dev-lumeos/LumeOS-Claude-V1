@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-01 (zweite Aktualisierung — SSOT-Ordner vervollständigt)
+**Stand:** 2026-08-01 (dritte Aktualisierung — DB-Verifikation und Backup)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -22,6 +22,7 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **A-02: `CLAUDE.md` ausdünnen** — nur Schreibregeln plus Verweis auf
   `docs/ssot/00-INDEX.md`. Alle Fakten raus. *Grund: der Satz „services/ ist leer"
   stand als Regel drin und war falsch.*
+  *Vorher B-10 klären — das ijfw-Plugin schreibt selbsttätig hinein.*
 
 - [ ] **A-03: Altlast archivieren** nach `docs/_archive/`:
   `docs/todos/` (11 Dateien, alle Spark/System), `docs/governance/`,
@@ -82,6 +83,14 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   enthält Mojibake (`?"` statt Gedankenstrich). Repo-weit nach beschädigten
   UTF-8-Sequenzen suchen und beheben.
 
+- [ ] **B-10: ijfw-Plugin entscheiden** (neu 2026-08-01) — `[cmd]` das Plugin
+  (`"ijfw@ijfw": true` in `~/.claude/settings.json`) schreibt selbsttätig in
+  `CLAUDE.md` (3 Zeilen) und `AGENTS.md` (104 Zeilen), Block
+  `IJFW-MEMORY-START (managed -- do not edit manually)`.
+  *Blockiert A-02: eine ausgedünnte `CLAUDE.md` würde wieder befüllt, mit
+  ungeprüftem Inhalt. Genau der Mechanismus, der am 2026-07-30 einen falschen
+  Satz zur Regel gemacht hat.*
+
 ---
 
 ## C — Produkt: apps/web
@@ -95,8 +104,12 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   *Entscheidung nötig: alles auf einmal oder je Feature nachziehen.*
 
 - [ ] **C-02: WP-01 Preferences-Schreibpfad** (übernommen aus 2026-07-30)
-  1. [ ] Migration `nutrition.food_preferences` (+ `food_preference_items`)
-     — *blockiert durch ADR-002 (Tabellendesign)*
+  1. [x] ~~Migration `nutrition.food_preferences` (+ `food_preference_items`)~~
+     → **korrigiert 2026-08-01:** `[cmd]` beide Tabellen existieren bereits in der
+     Live-DB (14 bzw. 13 Spalten, 0 Zeilen) — aber in **keiner** Migrationsdatei.
+     ADR-002 (Tabellendesign) wurde faktisch in der Datenbank entschieden und
+     nirgends dokumentiert. Neue Aufgabe: Design nachdokumentieren und als
+     Migration nachziehen → siehe D-12.
   2. [ ] `src/lib/nutrition/preferences-write.ts`
   3. [ ] `preference-search-preview.ts` liest echte DB-Preferences
   4. [ ] API `POST/DELETE /api/nutrition/preferences`
@@ -104,7 +117,7 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   6. [ ] Unit-Tests
   7. [ ] Abnahme: Favorit gewichtet Suche, Ausschluss entfernt Treffer,
      Zustand überlebt Container-Neustart
-  *Zusätzlich blockiert durch das Nutrition Product Gate
+  *Blockiert durch das Nutrition Product Gate
   (`docs/ssot/40-spec-code-matrix.md`) — Tom muss es explizit öffnen.*
 
 - [ ] **C-03: WP-02 Diary-Verdrahtung** — `db/schema/nutrition.sql` anschliessen
@@ -123,97 +136,116 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 - [ ] **C-08: `services/nutrition-api` einordnen** — Hono-Service, 4 Dateien,
   von niemandem importiert, während `apps/web` direkt per SQL gegen Docker geht.
-  Zielbild oder verwaister Versuch? *Antwort Tom: Teil des Endausbaus.*
+  *Antwort Tom: Teil des Endausbaus.*
 
-- [ ] **C-09: Test-Runner einrichten** (neu 2026-08-01) — `[cmd]` 12 Unit-Test-
-  Dateien in `apps/web`, aber kein vitest/jest im Repo, kein `test`-Script in
-  `apps/web`; `turbo run test` läuft ins Leere. Die Tests sind derzeit nicht
-  ausführbar. Runner wählen (vitest naheliegend), Script + Config anlegen.
+- [ ] **C-09: Test-Runner einrichten** — `[cmd]` 12 Unit-Test-Dateien in
+  `apps/web`, aber kein vitest/jest im Repo, kein `test`-Script; `turbo run test`
+  läuft ins Leere. Die Tests sind derzeit nicht ausführbar.
   *Neue Dependency → braucht expliziten Task laut `code-quality.md`.*
+
+- [ ] **C-10: UI-Zahlen gegen DB prüfen** (neu 2026-08-01) — die App-Shell zeigt
+  „117 Nährstoffe · BLS 10.840" als Literale. `[cmd]` Tatsächlich in der DB:
+  138 `nutrient_defs`, 7.140 `foods`. Zahlen korrigieren oder aus der DB lesen.
 
 ---
 
 ## D — Datenbank & Specs
 
-- [~] **D-01: Quelle der Curation-Tabellen** — 2026-08-01 teilgeklärt `[cmd]`/`[read]`:
-  Das DDL liegt doppelt vor — `docs/project/p1-005/P1-005-local-curation-persistence-foundation.sql`
-  und inline in `curation.ts:156` (`buildNutritionCurationPersistenceSql`, wird
-  nur vom Unit-Test aufgerufen, nicht von der App). Offen bleibt: wurden die
-  Tabellen tatsächlich per p1-005-SQL manuell angelegt? `[annahme]` ja.
-  *Prüfen, sobald Docker läuft: Tabellenliste im Container ziehen.*
+### Dringend: die DB ist nicht reproduzierbar
 
-- [x] **D-02: Slice-Migrationen dokumentieren** — erledigt 2026-08-01, Befund
-  korrigiert: `[cmd]` `20260513_001` und `20260514_001` enthalten sehr wohl
-  `CREATE TABLE` (kleingeschrieben, in `do $$`-Blöcken hinter `to_regclass`-Guards);
-  nur `20260513_002` ist reines `ALTER TABLE`. Alle drei sind Review-Kandidaten
-  („DO NOT EXECUTE"). Dokumentiert in `docs/ssot/30-datenbank.md`.
+- [ ] **D-12: Migrationen rückbauen** (neu 2026-08-01, **höchste Priorität**) —
+  `[cmd]` `supabase_migrations.schema_migrations` enthält **genau einen Eintrag**
+  (`20260423120000_control_plane_tables`), während 11 Nutrition-Tabellen mit
+  rund 727.000 Zeilen existieren. Das gesamte Live-Schema ist ausserhalb der
+  Migrationspipeline entstanden.
+  Vier Tabellen stehen in **keiner** Migrationsdatei: `food_preferences`,
+  `food_preference_items`, `food_curation_candidates`, `food_curation_decisions`.
+  DDL gesichert unter `backup/rescue/2026-08-01_verwaiste_tabellen.sql`.
+  **Ziel:** Migrationsdateien so ergänzen, dass `supabase db reset` denselben
+  Zustand herstellt. *Voraussetzung für jede lokal→dev→main-Pipeline.*
+
+- [ ] **D-11: Restore-Test** (neu 2026-08-01) — `backup/data/2026-08-01_nutrition_full.dump`
+  (5,8 MB) ist `[cmd]` per `pg_restore --list` lesbar, aber **nie zurückgespielt**.
+  In eine leere Datenbank restaurieren, Zeilenzahlen vergleichen, Dauer messen.
+  *Ein Dump ohne Restore-Test ist eine Datei, kein Backup.*
+
+- [ ] **D-13: Warum liefen die „DO NOT EXECUTE"-Slices?** (neu 2026-08-01) —
+  `[cmd]` `name_th` existiert in `food_categories`, `foods` (plus `name_display_th`)
+  und `nutrient_defs` (plus `group_th`) — genau der Inhalt von `20260513_002`,
+  das im Kopf `EXECUTION_CANDIDATE_REVIEW_ONLY / DO NOT EXECUTE` trägt.
+  Klären, wie es angewendet wurde, und den Statuskopf korrigieren.
+
+### Übrige DB-Punkte
+
+- [x] **D-01: Quelle der Curation-Tabellen** — geklärt 2026-08-01.
+  `[cmd]` `food_curation_candidates` (12 Spalten) und `food_curation_decisions`
+  (6 Spalten) existieren in der DB, beide leer. DDL-Quelle:
+  `docs/project/p1-005/P1-005-local-curation-persistence-foundation.sql`;
+  die Inline-Kopie in `curation.ts:156` wird nur vom Unit-Test aufgerufen.
+  Der genaue Anlageweg bleibt `[annahme]` (manuell ausgeführt). → geht in D-12 auf.
+
+- [x] **D-02: Slice-Migrationen dokumentieren** — erledigt, Befund korrigiert:
+  `[cmd]` `20260513_001` und `20260514_001` enthalten sehr wohl `CREATE TABLE`
+  (kleingeschrieben, in `do $$`-Blöcken hinter `to_regclass`-Guards);
+  nur `20260513_002` ist reines `ALTER TABLE`.
+
+- [x] **D-09: Migrationsstand des Containers verifizieren** — erledigt 2026-08-01.
+  `[cmd]` Container `supabase_db_LumeOS-Claude-V1` läuft (healthy).
+  Bestand: 7.140 `foods`, 698.092 `food_nutrients`, 21.420 `food_aliases`,
+  518 `food_categories`, 138 `nutrient_defs`; `food_preferences`,
+  `food_preference_items`, `food_curation_*` je 0 Zeilen; 4 `workorders` in `public`.
+  Ergebnis führte zu D-11, D-12, D-13 und zur Korrektur von C-02.1.
 
 - [ ] **D-03: `supabase/snippets/`** — `[cmd]` 3 Dateien, `[read]` reine
   Introspektions-Queries über `nutrient_defs` (Studio-Reste vom 2026-05-13).
   Löschen oder behalten entscheiden.
 
-- [ ] **D-04: E2E- und Testbasis klären** (korrigiert 2026-08-01) — die alte
-  Formulierung („`playwright.config.ts` existiert, kein Testverzeichnis") war
-  doppelt falsch: `[cmd]` es gibt keine Root-`playwright.config.ts` (nur
-  `playwright.governance.config.ts`), und `apps/web/e2e/` existiert — enthält
-  aber nur den Governance-Smoke. Offen: E2E für Produktrouten (Nutrition),
-  hängt mit C-09 zusammen.
+- [ ] **D-04: E2E- und Testbasis klären** — `[cmd]` keine Root-`playwright.config.ts`
+  (nur `playwright.governance.config.ts`), `apps/web/e2e/` enthält nur den
+  Governance-Smoke. Offen: E2E für Produktrouten. Hängt mit C-09 zusammen.
 
 - [ ] **D-05: Spec-Audit starten** — `docs/specs/` (13 Module) auseinandernehmen,
-  Diskrepanzen suchen, pro Modul offizielle Spec deklarieren. *Eigene Sitzung, Fable 5.*
-  Vorbefunde 2026-08-01 in `docs/ssot/40-spec-code-matrix.md` und
-  `11-zielarchitektur.md`: tote `CONSOLIDATED_KNOWLEDGE`-Verweise in 7 INDEX-
-  Dateien; Buddy-INDEX zeigt auf nicht existente `spec/`-Pfade und README/STRATEGY;
-  Modulzählung 10 vs. 11 vs. 7 vs. 13 unversöhnt; Next.js 14+ vs. 15;
-  Goals/Admin-Specs deklarieren Vorgänger-Code als „implementiert";
-  `apps/mobile`/`apps/staff` und 4 Service-Gerüste (auth, analytics, memory,
-  retrieval) ohne Spec; Specs referenzieren `packages/scoring`, wofür kein
-  Gerüst existiert; `apps/marketplace` in Specs, aber ohne Gerüst.
+  Diskrepanzen suchen, pro Modul offizielle Spec deklarieren. *Eigene Sitzung.*
+  Vorbefunde in `docs/ssot/40-spec-code-matrix.md` und `11-zielarchitektur.md`:
+  tote `CONSOLIDATED_KNOWLEDGE`-Verweise in 7 INDEX-Dateien; Buddy-INDEX zeigt
+  auf nicht existente `spec/`-Pfade; Modulzählung 10 vs. 11 vs. 7 vs. 13
+  unversöhnt; Next.js 14+ vs. 15; Goals/Admin-Specs deklarieren Vorgänger-Code
+  als „implementiert"; `apps/mobile`/`apps/staff` und 4 Service-Gerüste ohne Spec;
+  Specs referenzieren `packages/scoring`, wofür kein Gerüst existiert;
+  `apps/marketplace` in Specs, aber ohne Gerüst.
 
-- [ ] **D-06: ADRs nach `docs/decisions/` überführen** — `docs/decisions/` ist
-  `[cmd]` leer (nur `.gitkeep`). Register liegt in
-  `docs/_archive/ist-zustand/04-adr-liste.md` (nach A-03; bis dahin
-  `docs/ist-zustand/04-adr-liste.md`), Nutrition-ADRs `[cmd]` in
+- [ ] **D-06: ADRs nach `docs/decisions/` überführen** — `[cmd]` leer (nur `.gitkeep`).
+  Register in `docs/ist-zustand/04-adr-liste.md`, Nutrition-ADRs `[cmd]` in
   `docs/specs/Nutrition/04_adrs/` (12 Stück).
+  *Neu dazu: ADR-002 nachdokumentieren (siehe C-02.1).*
 
 - [ ] **D-07: README „Phase 1B"** nach C-02 aktualisieren.
 
 - [ ] **D-08: supabase-js vs. Docker-SQL klären** — `apps/web` deklariert
   `@supabase/supabase-js`, nutzt es aber nicht (`[cmd]` 0 Importe);
   4 lib-Dateien gehen per `docker exec … psql` gegen den lokalen Container
-  (Containername hartkodiert). Der Diary-Entwurf zeigt dagegen RLS + `auth.uid()`.
-  *Architekturentscheidung von Tom nötig — hängt mit C-08 zusammen.*
+  (Containername hartkodiert). *Architekturentscheidung von Tom nötig.*
 
-- [ ] **D-09: Migrationsstand des lokalen Containers verifizieren** (neu
-  2026-08-01) — `[cmd]` Docker war in der Sitzung nicht erreichbar. Sobald er
-  läuft: Tabellenliste ziehen; prüfen ob `name_th`/`group_th` existieren
-  (Slice 20260513_002 gelaufen?), ob `food_curation_*` existieren (D-01) und
-  ob die Kategorie-Hierarchie gefüllt ist.
-
-- [ ] **D-10: Port-Kollision im Governance-Rest** (neu 2026-08-01, nur relevant
-  falls der Cluster je wieder läuft) — `[cmd]` `orchestrator-api` und
-  `wo-classifier` haben beide Default-Port 9000 (`process.env.PORT` vs.
-  `WO_CLASSIFIER_PORT`). Bei Entfernung des Clusters hinfällig.
+- [ ] **D-10: Port-Kollision im Governance-Rest** — `[cmd]` `orchestrator-api`
+  und `wo-classifier` haben beide Default-Port 9000. Bei Entfernung hinfällig.
 
 ---
 
 ## Erledigt am 2026-08-01
 
-- [x] SSOT-Ordner vervollständigt: `11-zielarchitektur.md`, `20-apps-web-ist.md`,
-  `30-datenbank.md`, `40-spec-code-matrix.md`, `50-governance-rest.md` (A-01)
+- [x] Permission-Schicht gebaut und verifiziert (B-01)
+- [x] `settings.local.json` bereinigt: 47 Allow-Regeln auf 0 (B-02)
+- [x] Secret-Prüfung: `.env*` nie committed, `.gitignore` deckt ab
+- [x] SSOT-Ordner vollständig: `00-INDEX`, `10-workspace`, `11-zielarchitektur`,
+  `20-apps-web-ist`, `30-datenbank`, `40-spec-code-matrix`, `50-governance-rest` (A-01)
 - [x] `10-workspace.md` präzisiert: Governance-Entfernbarkeit gilt nur für
-  Packages/Services, nicht für `system/` (Verbund mit `apps/web` und
-  `scheduler-api`, siehe `50-governance-rest.md`)
-- [x] D-02 geklärt und korrigiert (siehe oben)
-- [x] D-01 teilgeklärt: DDL-Quelle gefunden (p1-005 + Inline-Kopie)
+  Packages/Services, nicht für `system/` (Verbund mit `apps/web` und `scheduler-api`)
+- [x] **`backup/` angelegt und befüllt** — Schema-, Daten- und Rescue-Dumps,
+  Integrität per `pg_restore --list` geprüft. Siehe `backup/README.md`.
+- [x] D-01 geklärt, D-02 geklärt und korrigiert, D-09 erledigt
 - [x] `services/` und `packages/` sind deklariert, aber leer
   → **widerlegt.** `[cmd]` 17 Packages mit Code, 42 leere Gerüste als Endausbau deklariert.
-- [x] Build-/Test-Verifikation nachholen, sobald Shell antwortet
-  → **erledigt.** `[cmd]` `pnpm typecheck` 17/17 grün, 3,9 s.
-- [x] Permission-Schicht gebaut und verifiziert (B-01)
-- [x] `settings.local.json` bereinigt (B-02)
-- [x] Secret-Prüfung: `.env*` nie committed, `.gitignore` deckt ab
-- [x] SSOT-Ordner begonnen: `00-INDEX.md`, `10-workspace.md`
+- [x] Build-Verifikation nachgeholt: `[cmd]` `pnpm typecheck` 17/17 grün, 3,9 s
 
 ## Erledigt am 2026-07-30
 

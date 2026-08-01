@@ -1,0 +1,4 @@
+# Datendumps nicht versionieren - zu gross, wachsen mit jedem Lauf.
+# Schema-, Rescue- und Rollen-Dumps bleiben getrackt.
+data/*
+!data/.gitkeep
