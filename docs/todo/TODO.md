@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-01 (dritte Aktualisierung — DB-Verifikation und Backup)
+**Stand:** 2026-08-01 (vierte Aktualisierung — RLS-Befund und Restore-Test)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -15,7 +15,7 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
      (2026-08-01 präzisiert: Entfernbarkeits-These um `system/`-Verbund eingeschränkt)
   3. [x] `11-zielarchitektur.md` — 5 Apps + Services aus den Specs abgeleitet
   4. [x] `20-apps-web-ist.md` — Routen, Fachlogik, Stack-Lücke
-  5. [x] `30-datenbank.md` — Live-Schema vs. Diary-Entwurf
+  5. [x] `30-datenbank.md` — zweite Fassung mit verifiziertem Container-Zustand
   6. [x] `40-spec-code-matrix.md` — je Modul Spec/Code/Delta + Bau-Reihenfolge
   7. [x] `50-governance-rest.md` — was physisch bleibt und was Entfernung kostet
 
@@ -27,8 +27,8 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **A-03: Altlast archivieren** nach `docs/_archive/`:
   `docs/todos/` (11 Dateien, alle Spark/System), `docs/governance/`,
   Governance-Teil von `docs/project/`, `docs/ist-zustand/`.
-  Hinweis 2026-08-01: `docs/ist-zustand/` liegt `[cmd]` noch am alten Ort,
-  `docs/_archive/` ist leer; die Detailfehler der alten Bestandsaufnahme sind
+  Hinweis: `docs/ist-zustand/` liegt `[cmd]` noch am alten Ort,
+  `docs/_archive/` ist leer; Detailfehler der alten Bestandsaufnahme sind
   in `docs/ssot/20-apps-web-ist.md` dokumentiert.
 
 - [ ] **A-04: `BrainstormDocs/_ARCHIVE_NOTICE.md` korrigieren** — verweist auf
@@ -80,16 +80,23 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   mit hartkodiertem Pfad auf dieses Repo. Gehört in die Projekt-Settings oder weg.
 
 - [ ] **B-09: Encoding-Schäden suchen** — `packages/shared/src/supabase/client.ts`
-  enthält Mojibake (`?"` statt Gedankenstrich). Repo-weit nach beschädigten
-  UTF-8-Sequenzen suchen und beheben.
+  enthält Mojibake. Repo-weit nach beschädigten UTF-8-Sequenzen suchen und beheben.
 
-- [ ] **B-10: ijfw-Plugin entscheiden** (neu 2026-08-01) — `[cmd]` das Plugin
+- [ ] **B-10: ijfw-Plugin entscheiden** — `[cmd]` das Plugin
   (`"ijfw@ijfw": true` in `~/.claude/settings.json`) schreibt selbsttätig in
   `CLAUDE.md` (3 Zeilen) und `AGENTS.md` (104 Zeilen), Block
   `IJFW-MEMORY-START (managed -- do not edit manually)`.
   *Blockiert A-02: eine ausgedünnte `CLAUDE.md` würde wieder befüllt, mit
-  ungeprüftem Inhalt. Genau der Mechanismus, der am 2026-07-30 einen falschen
-  Satz zur Regel gemacht hat.*
+  ungeprüftem Inhalt.*
+
+- [ ] **B-11: Worktree-Regel für parallele Agenten** (neu 2026-08-01) —
+  `[cmd]` Prozessliste zeigte gleichzeitig einen Codex-Prozess (seit 09:19),
+  eine zweite Claude-Instanz (seit 10:58) und diese Sitzung, alle auf demselben
+  Working Tree. *Die Permission-Schicht prüft einzelne Aufrufe, nicht
+  Gleichzeitigkeit — genau die Konstellation, aus der der Big Bang entstand.*
+  Regel festlegen: `claude --worktree` oder getrennte Branches je Agent.
+  Zusatz: `desktop-commander` umgeht die Permission-Schicht vollständig;
+  risikoreiche Schritte gehören in eine Claude-Code-Session.
 
 ---
 
@@ -100,16 +107,16 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Vorhanden: Next.js 14, React 18, Tailwind, Supabase SSR (deklariert, ungenutzt).
   Fehlt: shadcn/ui, lucide-react, Recharts, @dnd-kit, Zustand, TanStack Query,
   react-hook-form, zod, date-fns, idb/next-pwa, Framer Motion.
-  Nebenfund 2026-08-01: `@types/react-dom` fehlt trotz `react-dom`.
+  Nebenfund: `@types/react-dom` fehlt trotz `react-dom`.
   *Entscheidung nötig: alles auf einmal oder je Feature nachziehen.*
 
 - [ ] **C-02: WP-01 Preferences-Schreibpfad** (übernommen aus 2026-07-30)
   1. [x] ~~Migration `nutrition.food_preferences` (+ `food_preference_items`)~~
      → **korrigiert 2026-08-01:** `[cmd]` beide Tabellen existieren bereits in der
      Live-DB (14 bzw. 13 Spalten, 0 Zeilen) — aber in **keiner** Migrationsdatei.
-     ADR-002 (Tabellendesign) wurde faktisch in der Datenbank entschieden und
-     nirgends dokumentiert. Neue Aufgabe: Design nachdokumentieren und als
-     Migration nachziehen → siehe D-12.
+     Beide tragen `auth.uid()`-RLS. ADR-002 wurde faktisch in der Datenbank
+     entschieden und nirgends dokumentiert. Neue Aufgabe: Design nachdokumentieren
+     und als Migration nachziehen → siehe D-12.
   2. [ ] `src/lib/nutrition/preferences-write.ts`
   3. [ ] `preference-search-preview.ts` liest echte DB-Preferences
   4. [ ] API `POST/DELETE /api/nutrition/preferences`
@@ -119,10 +126,12 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
      Zustand überlebt Container-Neustart
   *Blockiert durch das Nutrition Product Gate
   (`docs/ssot/40-spec-code-matrix.md`) — Tom muss es explizit öffnen.*
+  *Zusätzlich blockiert durch D-08: die Tabellen erwarten `auth.uid()`,
+  `apps/web` greift ohne Auth per `docker exec psql` zu.*
 
 - [ ] **C-03: WP-02 Diary-Verdrahtung** — `db/schema/nutrition.sql` anschliessen
   oder verwerfen. *Blockiert durch ADR-003 (Modellkonflikt EAV vs. flach).*
-  Nebenfund 2026-08-01 `[read]`: im Entwurf hat `meal_items` RLS ohne Policy —
+  Nebenfund `[read]`: im Entwurf hat `meal_items` RLS ohne Policy —
   wäre für authenticated gesperrt; bei Übernahme korrigieren.
 - [ ] **C-04: WP-03 Daily Summary** — hängt an C-03
 - [ ] **C-05: WP-04 Water Tracking** — `water_logs` fehlt komplett
@@ -139,11 +148,10 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   *Antwort Tom: Teil des Endausbaus.*
 
 - [ ] **C-09: Test-Runner einrichten** — `[cmd]` 12 Unit-Test-Dateien in
-  `apps/web`, aber kein vitest/jest im Repo, kein `test`-Script; `turbo run test`
-  läuft ins Leere. Die Tests sind derzeit nicht ausführbar.
-  *Neue Dependency → braucht expliziten Task laut `code-quality.md`.*
+  `apps/web`, aber kein vitest/jest im Repo, kein `test`-Script;
+  `turbo run test` läuft ins Leere. Die Tests sind derzeit nicht ausführbar.
 
-- [ ] **C-10: UI-Zahlen gegen DB prüfen** (neu 2026-08-01) — die App-Shell zeigt
+- [ ] **C-10: UI-Zahlen gegen DB prüfen** — die App-Shell zeigt
   „117 Nährstoffe · BLS 10.840" als Literale. `[cmd]` Tatsächlich in der DB:
   138 `nutrient_defs`, 7.140 `foods`. Zahlen korrigieren oder aus der DB lesen.
 
@@ -153,7 +161,7 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 ### Dringend: die DB ist nicht reproduzierbar
 
-- [ ] **D-12: Migrationen rückbauen** (neu 2026-08-01, **höchste Priorität**) —
+- [ ] **D-12: Migrationen rückbauen** (**höchste Priorität**) —
   `[cmd]` `supabase_migrations.schema_migrations` enthält **genau einen Eintrag**
   (`20260423120000_control_plane_tables`), während 11 Nutrition-Tabellen mit
   rund 727.000 Zeilen existieren. Das gesamte Live-Schema ist ausserhalb der
@@ -164,25 +172,42 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   **Ziel:** Migrationsdateien so ergänzen, dass `supabase db reset` denselben
   Zustand herstellt. *Voraussetzung für jede lokal→dev→main-Pipeline.*
 
-- [ ] **D-11: Restore-Test** (neu 2026-08-01) — `backup/data/2026-08-01_nutrition_full.dump`
-  (5,8 MB) ist `[cmd]` per `pg_restore --list` lesbar, aber **nie zurückgespielt**.
-  In eine leere Datenbank restaurieren, Zeilenzahlen vergleichen, Dauer messen.
-  *Ein Dump ohne Restore-Test ist eine Datei, kein Backup.*
-
-- [ ] **D-13: Warum liefen die „DO NOT EXECUTE"-Slices?** (neu 2026-08-01) —
+- [ ] **D-13: Warum liefen die „DO NOT EXECUTE"-Slices?** —
   `[cmd]` `name_th` existiert in `food_categories`, `foods` (plus `name_display_th`)
   und `nutrient_defs` (plus `group_th`) — genau der Inhalt von `20260513_002`,
   das im Kopf `EXECUTION_CANDIDATE_REVIEW_ONLY / DO NOT EXECUTE` trägt.
   Klären, wie es angewendet wurde, und den Statuskopf korrigieren.
 
+- [ ] **D-14: RLS im Container prüfen und entscheiden** (neu 2026-08-01) —
+  `[cmd]` Ist-Zustand weicht von der Migration ab:
+
+  | Tabelle | RLS an | Policies |
+  |---|---|---|
+  | `food_preferences` | ja | 1 (`auth.uid()`) |
+  | `food_preference_items` | ja | 1 (`auth.uid()`) |
+  | alle übrigen 9 | **nein** | 0 |
+
+  Die Migration `20240522_002` beschreibt RLS auf allen 7 EAV-Tabellen
+  (`FOR SELECT TO authenticated`). Im Container ist davon nichts vorhanden.
+  *Zwei Fragen: Ist der offene Zugriff auf die EAV-Tabellen gewollt (Stammdaten)
+  oder ein Versehen? Und: die einzigen zwei Policies nutzen `auth.uid()` —
+  damit ist ADR-003 faktisch schon in Richtung Supabase-Auth entschieden,
+  ohne Dokumentation. Hängt an D-08 und C-03.*
+
+- [x] **D-11: Restore-Test** — erledigt 2026-08-01.
+  `[cmd]` Restore von `backup/data/2026-08-01_nutrition_full.dump` in eine leere
+  Datenbank: **4,7 s**, alle 11 Tabellen, alle Zeilenzahlen exakt identisch.
+  **Aber:** 2 von 2 RLS-Policies gingen verloren (`ERROR: schema "auth" does not
+  exist`); `pg_restore` meldet das nur als Warnung. Der Dump ist damit nur in
+  eine echte Supabase-Instanz vollständig zurückspielbar. Testdatenbank verworfen.
+
 ### Übrige DB-Punkte
 
 - [x] **D-01: Quelle der Curation-Tabellen** — geklärt 2026-08-01.
-  `[cmd]` `food_curation_candidates` (12 Spalten) und `food_curation_decisions`
-  (6 Spalten) existieren in der DB, beide leer. DDL-Quelle:
+  `[cmd]` Beide Tabellen existieren im Container, leer. DDL-Quelle:
   `docs/project/p1-005/P1-005-local-curation-persistence-foundation.sql`;
   die Inline-Kopie in `curation.ts:156` wird nur vom Unit-Test aufgerufen.
-  Der genaue Anlageweg bleibt `[annahme]` (manuell ausgeführt). → geht in D-12 auf.
+  Der genaue Anlageweg bleibt `[annahme]`. → geht in D-12 auf.
 
 - [x] **D-02: Slice-Migrationen dokumentieren** — erledigt, Befund korrigiert:
   `[cmd]` `20260513_001` und `20260514_001` enthalten sehr wohl `CREATE TABLE`
@@ -190,11 +215,11 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   nur `20260513_002` ist reines `ALTER TABLE`.
 
 - [x] **D-09: Migrationsstand des Containers verifizieren** — erledigt 2026-08-01.
-  `[cmd]` Container `supabase_db_LumeOS-Claude-V1` läuft (healthy).
-  Bestand: 7.140 `foods`, 698.092 `food_nutrients`, 21.420 `food_aliases`,
-  518 `food_categories`, 138 `nutrient_defs`; `food_preferences`,
-  `food_preference_items`, `food_curation_*` je 0 Zeilen; 4 `workorders` in `public`.
-  Ergebnis führte zu D-11, D-12, D-13 und zur Korrektur von C-02.1.
+  `[cmd]` Bestand: 7.140 `foods`, 698.092 `food_nutrients`, 21.420 `food_aliases`,
+  9.265 `food_tags`, 518 `food_categories`, 138 `nutrient_defs`,
+  16 `tag_definitions`; `food_preferences`, `food_preference_items`,
+  `food_curation_*` je 0 Zeilen; 4 `workorders` in `public`.
+  Ergebnis führte zu D-11 bis D-14 und zur Korrektur von C-02.1.
 
 - [ ] **D-03: `supabase/snippets/`** — `[cmd]` 3 Dateien, `[read]` reine
   Introspektions-Queries über `nutrient_defs` (Studio-Reste vom 2026-05-13).
@@ -217,14 +242,16 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **D-06: ADRs nach `docs/decisions/` überführen** — `[cmd]` leer (nur `.gitkeep`).
   Register in `docs/ist-zustand/04-adr-liste.md`, Nutrition-ADRs `[cmd]` in
   `docs/specs/Nutrition/04_adrs/` (12 Stück).
-  *Neu dazu: ADR-002 nachdokumentieren (siehe C-02.1).*
+  *Neu dazu: ADR-002 nachdokumentieren (C-02.1), ADR-003 im Licht von D-14.*
 
 - [ ] **D-07: README „Phase 1B"** nach C-02 aktualisieren.
 
 - [ ] **D-08: supabase-js vs. Docker-SQL klären** — `apps/web` deklariert
   `@supabase/supabase-js`, nutzt es aber nicht (`[cmd]` 0 Importe);
   4 lib-Dateien gehen per `docker exec … psql` gegen den lokalen Container
-  (Containername hartkodiert). *Architekturentscheidung von Tom nötig.*
+  (Containername hartkodiert). *Architekturentscheidung von Tom nötig —
+  neues Argument aus D-14: der Container trägt bereits `auth.uid()`-Policies,
+  die ohne Supabase-Auth nie greifen können.*
 
 - [ ] **D-10: Port-Kollision im Governance-Rest** — `[cmd]` `orchestrator-api`
   und `wo-classifier` haben beide Default-Port 9000. Bei Entfernung hinfällig.
@@ -239,10 +266,12 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [x] SSOT-Ordner vollständig: `00-INDEX`, `10-workspace`, `11-zielarchitektur`,
   `20-apps-web-ist`, `30-datenbank`, `40-spec-code-matrix`, `50-governance-rest` (A-01)
 - [x] `10-workspace.md` präzisiert: Governance-Entfernbarkeit gilt nur für
-  Packages/Services, nicht für `system/` (Verbund mit `apps/web` und `scheduler-api`)
+  Packages/Services, nicht für `system/`
+- [x] `30-datenbank.md` zweite Fassung: Container-Ist-Zustand ergänzt,
+  RLS-Behauptung korrigiert (Datei sagte RLS auf 7 Tabellen, Container hat 2)
 - [x] **`backup/` angelegt und befüllt** — Schema-, Daten- und Rescue-Dumps,
-  Integrität per `pg_restore --list` geprüft. Siehe `backup/README.md`.
-- [x] D-01 geklärt, D-02 geklärt und korrigiert, D-09 erledigt
+  Integrität per `pg_restore --list` geprüft, Restore getestet (D-11)
+- [x] D-01, D-02, D-09, D-11 erledigt
 - [x] `services/` und `packages/` sind deklariert, aber leer
   → **widerlegt.** `[cmd]` 17 Packages mit Code, 42 leere Gerüste als Endausbau deklariert.
 - [x] Build-Verifikation nachgeholt: `[cmd]` `pnpm typecheck` 17/17 grün, 3,9 s
