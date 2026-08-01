@@ -11,16 +11,16 @@
 
 Ein Framework aus ~55 Skills für Claude Code — Fokus auf Planning-Review-Cycles, Design-Iteration, QA, Ship-Workflow, headless-Browser (`/browse` via Playwright/Chromium-Daemon). Optional dazu ein Update-/Telemetrie-System und `--team`-Modus mit SessionStart-Hooks.
 
-**Nicht Teil des LumeOS-Governance-Systems.** gstack ersetzt weder WO-State-Machine noch Risk-Categories noch die Masterprompt-Kette. Es ist ein zusätzlicher Skill-Pool für Design-, Browse-, und Review-Aufgaben.
+**Zusätzlicher Skill-Pool für Claude Code**, kein Prozess-Framework. Governance/Workorders sind in dieses Repo nicht mehr relevant (liegen im separaten Governance-Repo).
 
-## Governance-Kompatibilität
+## Kompatibilität mit den LumeOS-Schreibregeln
 
-Kompatibel mit LumeOS-`Schreibregeln`, **wenn** so installiert wie unten beschrieben (ohne `--team`, mit Telemetrie hart aus).
+Kompatibel mit den `Schreibregeln` aus CLAUDE.md (keine Codeänderung ohne Freigabe, keine Commits/Pushes ohne Tom, ein logischer Change pro Commit), **wenn** so installiert wie unten beschrieben (ohne `--team`, mit Telemetrie hart aus).
 
 Konflikte, wenn falsch installiert:
-- `--team` → SessionStart-Hook macht `git pull` in gstack-Repo bei jedem Session-Start (kein Konflikt mit LumeOS-Code, aber ungeplantes Auto-Verhalten).
-- `checkpoint_mode: continuous` → würde Skill-Aufrufe zu Auto-Commit-Aufforderungen machen, umgeht WO-State-Machine.
-- gstack-Skills `/ship` und `/land-and-deploy` machen Git-Operations (commit, push, PR). **Diese brauchen weiterhin explizite Tom-Approval** — gstack override die LumeOS-Regel „Keine Commits oder Pushes ohne Tom" nicht automatisch.
+- `--team` → SessionStart-Hook macht `git pull` auf gstack bei jedem Session-Start (ungeplantes Auto-Verhalten).
+- `checkpoint_mode: continuous` → würde Skills zu `WIP:`-Auto-Commits auffordern, verletzt „Keine Commits ohne Tom" und „Ein logischer Change pro Commit".
+- gstack-Skills `/ship`, `/land-and-deploy`, `/qa`, `/design-review` machen Git-Operations (commit, push, PR). **Brauchen weiterhin explizite Tom-Freigabe** — gstack override die Schreibregeln nicht.
 
 ## Install-Anleitung für Teammates
 
@@ -73,10 +73,10 @@ rm -rf ~/.claude/skills/gstack ~/.gstack
 ## Was NICHT tun
 
 - **Nicht** `./setup --team` verwenden — installiert SessionStart-Hook den wir nicht wollen.
-- **Nicht** `gstack-config set checkpoint_mode continuous` — verletzt LumeOS-WO-State-Machine.
+- **Nicht** `gstack-config set checkpoint_mode continuous` — verletzt „Keine Commits ohne Tom" und „Ein logischer Change pro Commit".
 - **Nicht** `gstack-config set auto_upgrade true` — auto-git-pull ist ungewollt.
 - **Nicht** `gstack-config set telemetry community` oder `anonymous` — Skill-Nutzung an Supabase-Endpoint.
-- **Nicht** `/ship` oder `/land-and-deploy` ohne Tom-Approval — bleibt LumeOS-Governance-Regel.
+- **Nicht** `/ship` oder `/land-and-deploy` ohne Tom-Freigabe — bleibt Schreibregel aus CLAUDE.md.
 
 ## Skill-Referenz (Auszug)
 
@@ -84,7 +84,7 @@ Browsing → `/browse` (Playwright-Daemon, das eigentliche USP)
 Design → `/design-consultation`, `/design-shotgun`, `/design-html`, `/design-review`
 Planning → `/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/autoplan`
 QA → `/qa`, `/qa-only`, `/investigate`
-Ship (mit Approval-Regel) → `/ship`, `/land-and-deploy`, `/canary`, `/document-release`
+Ship (Tom-Freigabe erforderlich) → `/ship`, `/land-and-deploy`, `/canary`, `/document-release`
 Meta → `/retro`, `/learn`, `/gstack-upgrade`
 
 Vollständige Liste: `~/.claude/skills/gstack/SKILL.md`.
