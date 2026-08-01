@@ -1,6 +1,6 @@
-# TODO — LumeOS
+﻿# TODO — LumeOS
 
-**Stand:** 2026-08-01 (vierte Aktualisierung — RLS-Befund und Restore-Test)
+**Stand:** 2026-08-01 (fünfte Aktualisierung — Sektion E Legacy-Cloud-Instanz)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -258,6 +258,129 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 ---
 
+## E — Legacy-Cloud-Instanz (LumeOS-V2)
+
+*Keine Priorität. Erst nach D-12.*
+*Nächster Schritt: read-only Prüfung und Vorgehen definieren.*
+
+**Ausgangslage:** Supabase-Cloud-Instanz `LumeOS-V2` (Org `dev-lumeos`, **Pro-Plan,
+wird bezahlt**, Branch `main` = Production, erreichbar). Testprojekt mit Dummydaten
+aus einer früheren LumeOS-Version. Entweder wir nutzen sie oder sie wird gelöscht —
+Entscheidung Tom: nutzen und passend konfigurieren.
+
+**Bestand, `[cmd]` gemessen 2026-08-01:**
+
+| Posten | Wert |
+|---|---|
+| Storage-Bucket `exercises` | 10.776 Objekte, **15 GB**, `public: true` |
+| `public.exercises` | 1.448 Zeilen |
+| `public.exercise_muscles` | 6.398 Zuordnungen über 1.362 Übungen, 149 Muskelgruppen |
+| `public.equipment` | 61 Einträge, **kein** `equipment_id` NULL |
+
+**Medienabdeckung je Übung:**
+
+| Feld | Vorhanden | Anteil |
+|---|---|---|
+| `instructions` | 1.448 | **100 %** |
+| `tips` | 1.444 | 99,7 % |
+| `image_male_start` | 1.370 | 95 % |
+| `video_url` | 1.274 | 88 % |
+| `image_male_end` | 737 | 51 % |
+| `image_female_start` / `_end` | 186 | **13 %** |
+| ganz ohne Medien | 40 | 2,8 % |
+| ohne Muskelzuordnung | 86 | 5,9 % |
+
+**Der eigentliche Wert sind die Texte, nicht die Dateien.** `instructions` und
+`tips` sind ausformulierte, mehrschrittige Anleitungen mit 100 % Abdeckung —
+der Posten, der bei Neuerzeugung am teuersten wäre. Danach kommen die 6.398
+Muskelzuordnungen (Fachwissen, normalisiert) und erst dann die 15 GB Medien.
+
+`[read]` Medien-URLs sind absolut und öffentlich:
+`https://<ref>.supabase.co/storage/v1/object/public/exercises/videos/<Kategorie>/<datei>.mp4`
+
+`[read]` Die Muskelzuordnung ist normalisiert in `public.exercise_muscles`
+(`exercise_id`, `muscle_group_id` UUID-FK, `role` primary/secondary).
+Die `text[]`-Spalten `primary_muscles`/`secondary_muscles` in `exercises` sind
+ein veraltetes Duplikat mit uneinheitlichen Strings — **nicht als Quelle nutzen.**
+
+### Was Supabase-Branching nicht kann
+
+`[read]` Offizielle Doku, geprüft 2026-08-01. Drei Punkte, die das Vorgehen bestimmen:
+
+1. **`main` bleibt Produktion, unwiderruflich.** Welcher Branch als
+   Produktions-Branch dient, lässt sich nicht ändern — das Basis-Projekt bleibt
+   immer Produktion. „Dev bauen und daraus `main` generieren" ist nicht möglich.
+   Die Richtung ist fest: Branch → Merge → Migrationen laufen auf `main`.
+2. **Branches enthalten keine Daten.** Ein Branch ist eine Kopie des Projekts
+   abzüglich der Daten; befüllt wird über `seed.sql`.
+3. **Branches haben eigenen Storage.** Jede Branch-Instanz enthält alle
+   Supabase-Dienste isoliert — **ein Dev-Branch hätte kein `exercises`-Bucket.**
+   Gegen die 15 GB liesse sich dort nicht testen.
+
+**Kosten:** Preview-Branches werden auf Pro stundenweise abgerechnet. Ein
+dauerhaft laufender Dev-Branch kostet laufend; ein Branch je Pull Request,
+der wieder verschwindet, kostet fast nichts.
+
+### Vorgehen
+
+`main` wird **umgebaut, nicht ersetzt** — die 15 GB und die 1.448 Übungen sind
+der Grund, das Projekt zu behalten. Was „dev neu bauen" wäre, passiert lokal:
+dort gibt es `supabase db reset`, kostenlos und beliebig oft.
+
+- [ ] **E-01: Read-only Prüfung der Instanz** — vollständige Tabellenliste in
+  `public` mit Zeilenzahlen, Storage-Policies, `auth.users`-Anzahl,
+  Postgres-Version, Branch-Konfiguration. Ergebnis nach
+  `docs/ssot/60-legacy-cloud.md`. *Nichts schreiben, kein `supabase link`,
+  kein `db push`/`db pull`.*
+
+- [ ] **E-02: Tote Verweise verifizieren** — erste Messung ergab 27/27/9/9/28
+  tote Verweise je Medienfeld (2–4,8 %). Die Konstanz deutet auf ein
+  Kodierungsartefakt der Prüfquery hin (URLs sind prozentkodiert, Dateinamen
+  enthalten Leerzeichen vor der Endung). `[annahme]` Vor Eintrag als Datenverlust
+  eine betroffene URL im Browser öffnen.
+
+- [ ] **E-03: Abhängigkeiten prüfen, bevor `public` angefasst wird** —
+  Fremdschlüssel oder Trigger nach `storage.objects`; Storage-Policies, die auf
+  `public`-Tabellen verweisen; Views und Funktionen auf `public.<tabelle>`.
+  *`ALTER TABLE … SET SCHEMA` ist billig und reversibel, kann aber genau diese
+  brechen. Vorher Dump ziehen.*
+
+- [ ] **E-04: Alte `public`-Tabellen nach `legacy` verschieben** — nicht löschen.
+  Kostet nichts, macht `public` frei für unsere Schemas, und die Daten bleiben
+  greifbar. Bucket und `auth` bleiben unangetastet.
+
+- [ ] **E-05: Übernahmekandidaten exportieren und mappen** — sicher:
+  `exercises`, `exercise_muscles`, `equipment`, Muskelgruppen-Katalog.
+  Als JSON-Dump (wenige MB), dann Mapping gegen
+  `docs/specs/Training/SPEC_02_ENTITIES.md` und `SPEC_06_DATABASE_SCHEMA.md`,
+  Einspielung in ein sauberes `training.`-Schema.
+  *Inhalt vor Struktur: die Daten werden übernommen, die alte Struktur ist
+  verhandelbar.*
+
+- [ ] **E-06: Medienpfade relativ speichern** — Zielstruktur hält Bucket +
+  relativen Objektpfad, nicht die absolute URL. Basis-URL kommt aus der
+  Konfiguration. *Sonst steckt die Projekt-Ref in jeder Zeile.*
+
+- [ ] **E-07: Lücke weibliche Darstellungen entscheiden** — 186 von 1.448
+  Übungen (13 %). Bewusster Verzicht oder Produktionsauftrag über 1.262 Übungen?
+  *Gehört in die Produktentscheidung, nicht in eine Fussnote.*
+
+- [ ] **E-08: Deployment nach `main`** — erst wenn D-12 abgeschlossen ist.
+  *Vor einem `supabase link` müssen die Migrationsdateien den lokalen Zustand
+  abbilden, sonst entsteht ein dritter Drift-Zustand — diesmal in einer
+  Instanz, für die bezahlt wird.*
+
+- [ ] **E-09: Preview-Branches erst danach** — und dann als das, wofür sie
+  gedacht sind: kurzlebige Testumgebungen je Änderung, kein dauerhaftes Dev.
+
+- [ ] **E-10: RLS neu bewerten, sobald `main` produktiv wird** — viele
+  Legacy-Tabellen sind `UNRESTRICTED`. Bei Dummydaten unkritisch (Entscheidung
+  Tom), bei echten Nutzerdaten nicht. *Vgl. D-14 — derselbe Befund lokal:
+  9 von 11 `nutrition`-Tabellen ohne RLS, obwohl die Migration es beschreibt.
+  Das Muster wiederholt sich über zwei unabhängige Instanzen.*
+
+---
+
 ## Erledigt am 2026-08-01
 
 - [x] Permission-Schicht gebaut und verifiziert (B-01)
@@ -269,9 +392,11 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Packages/Services, nicht für `system/`
 - [x] `30-datenbank.md` zweite Fassung: Container-Ist-Zustand ergänzt,
   RLS-Behauptung korrigiert (Datei sagte RLS auf 7 Tabellen, Container hat 2)
-- [x] **`backup/` angelegt und befüllt** — Schema-, Daten- und Rescue-Dumps,
+- [x] `backup/` angelegt und befüllt — Schema-, Daten- und Rescue-Dumps,
   Integrität per `pg_restore --list` geprüft, Restore getestet (D-11)
 - [x] D-01, D-02, D-09, D-11 erledigt
+- [x] Legacy-Cloud-Instanz `LumeOS-V2` vermessen — Bestand, Medienabdeckung,
+  Storage-Volumen, Branching-Grenzen geklärt (Sektion E)
 - [x] `services/` und `packages/` sind deklariert, aber leer
   → **widerlegt.** `[cmd]` 17 Packages mit Code, 42 leere Gerüste als Endausbau deklariert.
 - [x] Build-Verifikation nachgeholt: `[cmd]` `pnpm typecheck` 17/17 grün, 3,9 s
