@@ -153,3 +153,62 @@ Was fehlte, war nie die Substanz, sondern die Ordnung und ein Nachweis.
 4. **Die 6 Dateien in `supabase/migrations-draft/`** sind durch diesen Lauf
    überholt. Sie bilden den Container ab, aber die Kette tut das ebenfalls und
    ist die reale Quelle. Verwerfen oder als Referenz behalten.
+
+---
+
+## Nachtrag 2026-08-02: O-6 erledigt, zweiter Lauf nach Archivierung
+
+Vier Dateien nach `supabase/_archive/` verschoben (`git mv`):
+
+| Datei | Grund |
+|---|---|
+| `20240522_001_nutrition_schema_foundation.sql` | Nie angewendet; durch `20260513_001` ersetzt |
+| `20240522_002_nutrition_food_core_tables.sql` | Nur der `nutrient_defs`-Seed war real, extrahiert nach `_pipeline/015_kataloge/`. Makro-Spalten, Funktionen und die 7 SELECT-Policies existieren im Ist-Zustand nicht |
+| `20260423120000_control_plane_tables.sql` | Governance, in diesem Repo tot (Entscheidung Tom, 2026-08-02) |
+| `20260424_002_wo_classifier_fields.sql` | dito |
+
+`supabase/migrations/` enthält jetzt ausschliesslich die drei Slice-Dateien.
+
+### Zweiter Verifikationslauf
+
+`[cmd]` Frische Datenbank `reset_test`, `supabase/migrations/` in CLI-Reihenfolge
+angewendet, dann die Kette. Alle drei Migrationen fehlerfrei; erzeugt werden
+`nutrition.nutrient_defs` (16 Sp.), `nutrition.foods` (9 Sp.),
+`nutrition.food_nutrients` (4 Sp.) — keine Governance-Tabellen mehr.
+
+Danach Vollvergleich gegen `postgres`:
+
+| Kennzahl | reset_test | postgres | |
+|---|---|---|---|
+| `foods` | 7.140 | 7.140 | ✓ |
+| `food_nutrients` | 698.092 | 698.092 | ✓ |
+| `food_aliases` | 21.420 | 21.420 | ✓ |
+| `food_tags` | 9.265 | 9.265 | ✓ |
+| `food_categories` | 518 | 518 | ✓ |
+| `nutrient_defs` | 138 | 138 | ✓ |
+| `tag_definitions` | 16 | 16 | ✓ |
+| Spalten | 105 | 105 | ✓ |
+| Indizes | 31 | 31 | ✓ |
+| Policies | 2 | 2 | ✓ |
+| `foods` mit Kategorie | 4.903 | 4.903 | ✓ |
+
+**Gesamtdauer der Kette: 10,6 Sekunden.** Testdatenbank verworfen.
+
+### Damit ist O-6 geschlossen
+
+`supabase/migrations/` ist bereinigt. Ein echter `supabase db reset` würde jetzt
+die korrekte Schema-Stufe erzeugen — **nur die Schema-Stufe**. Kataloge, Daten
+und Ableitungen kommen aus `_pipeline/` und müssen separat laufen.
+
+**`supabase db reset` bleibt trotzdem in der Deny-Liste.** Er löscht die
+laufende Datenbank; jeder Test gehört in eine Wegwerf-Datenbank.
+
+### Weiterhin offen
+
+- **Registrierung:** Keine Kettenstufe steht in
+  `supabase_migrations.schema_migrations`. Nach der Archivierung ist das
+  Register faktisch leer — die einzige registrierte Migration war die
+  Control-Plane-Datei.
+- **`021_wild_category_apply.sql`** wirkt weiterhin ohne sichtbaren Effekt.
+  `[annahme]` durch `020` abgedeckt.
+- **`supabase/migrations-draft/`** ist durch beide Läufe überholt.
