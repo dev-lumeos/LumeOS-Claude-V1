@@ -212,3 +212,62 @@ laufende Datenbank; jeder Test gehört in eine Wegwerf-Datenbank.
 - **`021_wild_category_apply.sql`** wirkt weiterhin ohne sichtbaren Effekt.
   `[annahme]` durch `020` abgedeckt.
 - **`supabase/migrations-draft/`** ist durch beide Läufe überholt.
+
+---
+
+## Nachtrag 2026-08-02 (Abend): Dritter Lauf — Nachweis aus dem versionierten Archiv (A-05)
+
+**Zweck:** Alle bisherigen Läufe lasen die CSVs aus der Container-Kopie
+`/tmp/p1-005-bls-local-import/`. Damit war ungeprüft, ob
+`supabase/_data/bls_4_0_local_import.zip` — die einzige **versionierte**
+Quelle — tatsächlich funktioniert. Dieser Lauf schliesst die Lücke.
+
+### Archiv-Integrität
+
+`[cmd]` Zip nach Scratchpad entpackt (nicht nach `tmp/`), Vergleich gegen
+die Container-Kopie:
+
+| Datei | Zeilen (Archiv) | Zeilen (Container) | MD5 identisch |
+|---|---|---|---|
+| `foods.csv` | 7.141 (inkl. Kopf) | 7.141 | ✓ `be0526245a1207ed79a3ec5bbe46d908` |
+| `food_nutrients.csv` | 698.093 (inkl. Kopf) | 698.093 | ✓ `12138d51ac20ff761ca5ad6e25f26e50` |
+
+Kopfzeilen identisch (`bls_code,name_de,name_en,name_th,name_display` bzw.
+`bls_code,nutrient_code,value,data_source`). **Byte-identisch.**
+
+### Kettenlauf aus dem Archiv
+
+`[cmd]` Wegwerf-Datenbank `a05_test`, auth-Stub wie oben. Die Container-Kopie
+wurde für die Dauer des Tests beiseitegelegt
+(`mv … .bak`), die **entpackten Archiv-Dateien** per `docker cp` an den von
+`030` erwarteten Pfad gelegt — so lief die exakte, unveränderte Repo-Kette
+gegen die Archiv-Daten: 3 Migrationen → 015 → 020 → 030 → 020 erneut → 021
+→ 050 → 051 → 060. Fehlerfrei mit `ON_ERROR_STOP=1`.
+
+### Ergebnis
+
+| Kennzahl | a05_test (Archiv) | postgres | Soll |
+|---|---|---|---|
+| `foods` | 7.140 | 7.140 | identisch ✓ |
+| `food_nutrients` | 698.092 | 698.092 | identisch ✓ |
+| `food_aliases` | 21.420 | 21.420 | identisch ✓ |
+| `food_tags` | 9.265 | 9.265 | identisch ✓ |
+| `food_categories` | 518 | 518 | identisch ✓ |
+| `nutrient_defs` | 138 | 138 | identisch ✓ |
+| `tag_definitions` | 16 | 16 | identisch ✓ |
+| Preference-/Curation-Tabellen | je 0 | je 0 | identisch ✓ |
+| `foods` mit Kategorie | 4.903 | 4.903 | identisch ✓ |
+| Spalten | 105 | 105 | identisch ✓ |
+| Indizes | **33** | 31 | 33 (Kette inkl. 060: +2 Trigram) ✓ |
+| Policies | **15** | 2 | 15 (Kette inkl. 060) ✓ |
+
+Aufgeräumt: `a05_test` verworfen (`[cmd]` Nachzählung 0), Container-Kopie
+unverändert zurückgetauscht (`[cmd]` MD5 nach Restore identisch).
+
+### Konsequenz
+
+**Die Reproduzierbarkeit hängt nicht mehr an untracked Dateien.**
+`git clone` + `supabase/_data/bls_4_0_local_import.zip` + Kette genügen.
+Damit ist `tmp/nutrition/p1-005-bls-local-import/` entbehrlich und darf auf
+die Löschliste (A-05) — ebenso die Container-Kopie unter `/tmp/`, die beim
+nächsten Container-Rebuild ohnehin verschwindet.
