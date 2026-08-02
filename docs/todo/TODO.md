@@ -62,6 +62,26 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   *Regel daraus: jeder untracked Ordner wird vor Löschung inhaltlich geprüft,
   nicht nur dem Namen nach.*
 
+- [ ] **A-06: Design-System spezifizieren** — `docs/spezifikation/10-plattform/design-system/`
+  ist leer. Quellen: `docs/design-system/` (DESIGN_CONCEPT, components, tokens),
+  `packages/ui` (Gerüst), Altbestand-Specs mit OKLCH-Tokens.
+  *Tom hat mehrere Ansätze — wird getrennt besprochen, nicht nebenbei geschrieben.*
+  Betrifft alle sieben Apps, weil das Design-System das einzige ist, was sie
+  sichtbar verbindet.
+
+- [ ] **A-07: ADR Servicelayer** — die Grundsatzentscheidung aus
+  `10-plattform/architektur`, Abschnitt 4. Zwei Architekturen liegen nebeneinander:
+  der Altbestand sieht neun Hono-Services mit eigenen Ports und JWT-Middleware vor,
+  `[cmd]` gebaut ist direkter Datenbankzugriff bei 17 leeren Service-Verzeichnissen.
+  Empfehlung im Dokument: direkter Zugriff als Regel, Services als begründete
+  Ausnahme — RLS gilt für jeden Zugriffsweg, Middleware nur für den eigenen.
+  *Blockiert ab dem zweiten Modul. Danach ist die Frage teuer.*
+  Nach `docs/spezifikation/90-entscheidungen/`.
+
+- [ ] **A-08: ADR Medienort** — `[read]` Training-Spec nennt Cloudflare R2,
+  `[cmd]` der Bestand liegt in Supabase Storage (15 GB, Bucket `exercises`).
+  Kostenfolge, und ein Wechsel würde einen Transfer bedeuten.
+
 ---
 
 ## B — Entwicklungsumgebung & Absicherung
