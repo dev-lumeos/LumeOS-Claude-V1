@@ -1,0 +1,6 @@
+# Rohdaten nicht versionieren - nur das Archiv.
+*.csv
+
+# Die Root-.gitignore sperrt *.zip (Z.57) wegen der Altlast-Archive.
+# Dieses Archiv ist die einzige Quelle der BLS-Rohdaten und MUSS versioniert sein.
+!bls_4_0_local_import.zip
