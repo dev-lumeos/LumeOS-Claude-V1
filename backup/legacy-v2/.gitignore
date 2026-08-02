@@ -1,0 +1,4 @@
+# Die Root-.gitignore sperrt *.zip (Z.57) wegen der Altlast-Archive.
+# Dieser Dump ist die einzige lokale Quelle der Trainingsdaten
+# aus der Vorgaengerinstanz LumeOS-V2 und MUSS versioniert sein.
+!lumeos_v2_prod_20260305.zip
