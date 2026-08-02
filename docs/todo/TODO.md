@@ -1,6 +1,6 @@
-﻿# TODO — LumeOS
+# TODO — LumeOS
 
-**Stand:** 2026-08-01 (fünfte Aktualisierung — Sektion E Legacy-Cloud-Instanz)
+**Stand:** 2026-08-02 (sechste Aktualisierung — tmp/-Korrektur, D-12-Umschwenk auf Pipeline-Verifikation, B-09 verengt)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -35,10 +35,20 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `SESSION_ONBOARDING.md`, `USER_MANUAL.md` und `system/memory/canonical/`
   als „aktuelle Referenzen". Alle drei sind Altlast.
 
-- [ ] **A-05: Repo-Müll entfernen** (untracked): `temp/` (16,5 GB), `tmp/` (31 MB),
-  `.wayland-core/`, `.wayland/`, `.ijfw/`, `ijfw/`, `_tmp_inventory/`,
-  `backup_system.zip`, `services.zip`, `system.zip`, `nul`,
-  `.codex-governance-ui.log`. *Vor Löschung `tmp/` prüfen — enthält evtl. SQL.*
+- [ ] **A-05: Repo-Müll entfernen** (untracked) — **korrigiert 2026-08-02,
+  dringend:** `tmp/` ist **KEIN Müll** und von der Löschliste ausgenommen.
+  Unter `tmp/nutrition/p1-005-bls-local-import/` lagen die einzigen
+  Quelldaten der Datenbank: `foods.csv` (7.140 Zeilen) und
+  `food_nutrients.csv` (698.092 Zeilen), beide untracked.
+  `[cmd]` Zeilenzahlen stimmen exakt mit dem Container überein.
+  Seit Commit 399d9bc sind sie als `supabase/_data/bls_4_0_local_import.zip`
+  versioniert. `tmp/` bleibt trotzdem stehen, bis ein Durchlauf aus `_data/`
+  bewiesen ist (D-12).
+  Übrige Löschliste bleibt: `temp/` (16,5 GB), `.wayland-core/`, `.wayland/`,
+  `.ijfw/`, `ijfw/`, `_tmp_inventory/`, `backup_system.zip`, `services.zip`,
+  `system.zip`, `nul`, `.codex-governance-ui.log`.
+  *Regel daraus: jeder untracked Ordner wird vor Löschung inhaltlich geprüft,
+  nicht nur dem Namen nach.*
 
 ---
 
@@ -79,8 +89,11 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **B-08: SessionEnd-Hook falsch verortet** — steht in `~/.claude/settings.json`
   mit hartkodiertem Pfad auf dieses Repo. Gehört in die Projekt-Settings oder weg.
 
-- [ ] **B-09: Encoding-Schäden suchen** — `packages/shared/src/supabase/client.ts`
-  enthält Mojibake. Repo-weit nach beschädigten UTF-8-Sequenzen suchen und beheben.
+- [ ] **B-09: Encoding-Schäden beheben** (verengt 2026-08-02) — `[cmd]`
+  `packages/shared/src/supabase/client.ts` ist sauber (Bytes `E2 80 94` =
+  korrekter Geviertstrich; der Befund war ein Konsolen-Anzeigefehler).
+  Echter Schaden nur in `supabase/migrations/20240522_002` (`k?se`, `n?sse` —
+  literales 0x3F). Fix nur in den Drafts, nicht in der Altdatei.
 
 - [ ] **B-10: ijfw-Plugin entscheiden** — `[cmd]` das Plugin
   (`"ijfw@ijfw": true` in `~/.claude/settings.json`) schreibt selbsttätig in
@@ -161,16 +174,31 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 ### Dringend: die DB ist nicht reproduzierbar
 
-- [ ] **D-12: Migrationen rückbauen** (**höchste Priorität**) —
-  `[cmd]` `supabase_migrations.schema_migrations` enthält **genau einen Eintrag**
+- [ ] **D-12: Aufbaukette verifizieren** (**höchste Priorität**, umgeschrieben
+  2026-08-02) — Ausgangsbefund bleibt: `[cmd]`
+  `supabase_migrations.schema_migrations` enthält **genau einen Eintrag**
   (`20260423120000_control_plane_tables`), während 11 Nutrition-Tabellen mit
-  rund 727.000 Zeilen existieren. Das gesamte Live-Schema ist ausserhalb der
-  Migrationspipeline entstanden.
-  Vier Tabellen stehen in **keiner** Migrationsdatei: `food_preferences`,
-  `food_preference_items`, `food_curation_candidates`, `food_curation_decisions`.
-  DDL gesichert unter `backup/rescue/2026-08-01_verwaiste_tabellen.sql`.
-  **Ziel:** Migrationsdateien so ergänzen, dass `supabase db reset` denselben
-  Zustand herstellt. *Voraussetzung für jede lokal→dev→main-Pipeline.*
+  rund 727.000 Zeilen existieren.
+  **Aber: die Aufbaukette war nicht verloren.** Sie lag in
+  `docs/project/p1-005/` und `tmp/` und ist seit Commit 399d9bc unter
+  `supabase/_pipeline/` gebündelt: 010 Schema, 020/021 Human Layer inkl.
+  Tag- und Alias-Ableitungen, 030 BLS-Import, 050/051 Nutzertabellen,
+  plus 4 Validierungsskripte.
+  **Neue Aufgabe:** nicht „Migrationen aus dem Dump rückbauen", sondern die
+  vorhandene Kette einmal gegen eine leere Datenbank durchlaufen lassen und
+  das Ergebnis mit dem Container vergleichen. Die 6 Dateien in
+  `supabase/migrations-draft/` bleiben als Abgleich nützlich.
+  Offen laut `supabase/README.md`: Schritt 040 fehlt (`category_id`,
+  `processing_level`, `is_prepared_dish`, `sort_weight` — Quelle ungeklärt);
+  `food_aliases` hat 21.420 Zeilen, 020 enthält nur 3 Alias-Blöcke.
+  **Erledigt daraus — O-8 (Makro-Spalten/Auto-Tagging):** `[read]` die
+  Tag-Ableitungen stehen in
+  `supabase/_pipeline/02_human_layer/020_food_human_layer.sql`:
+  `high_protein` PROT625>=20, `low_carb` CHO<=10, `low_fat` FAT<=3,
+  `high_fiber` FIBT>=6, Konfidenz fest 1.0, aus `food_nutrients`.
+  `[cmd]` Container: 1.400 / 4.659 / 2.648 / 558 Zeilen. Makro-Spalten auf
+  `foods` und `auto_tag_food()` existieren nicht und werden nicht gebraucht —
+  der EAV-Weg ist der reale.
 
 - [ ] **D-13: Warum liefen die „DO NOT EXECUTE"-Slices?** —
   `[cmd]` `name_th` existiert in `food_categories`, `foods` (plus `name_display_th`)
@@ -224,6 +252,10 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **D-03: `supabase/snippets/`** — `[cmd]` 3 Dateien, `[read]` reine
   Introspektions-Queries über `nutrient_defs` (Studio-Reste vom 2026-05-13).
   Löschen oder behalten entscheiden.
+  **Ergänzt 2026-08-02:** inhaltlich sind die 3 Snippets die
+  POST-APPLY VALIDATION QUERIES der Slice-Migrationen — ein Beleg für D-13:
+  die „DO NOT EXECUTE"-Slices wurden im Studio ausgeführt und von Hand
+  kontrolliert. Kopien liegen in `supabase/_snippets/`.
 
 - [ ] **D-04: E2E- und Testbasis klären** — `[cmd]` keine Root-`playwright.config.ts`
   (nur `playwright.governance.config.ts`), `apps/web/e2e/` enthält nur den
