@@ -1,9 +1,21 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-02 (sechste Aktualisierung — tmp/-Korrektur, D-12-Umschwenk auf Pipeline-Verifikation, B-09 verengt)
+**Stand:** 2026-08-02 (siebte Aktualisierung — D-12/D-13/D-03/B-09 erledigt, Altmigrationen archiviert, kritischer Pfad)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
+
+---
+
+## Kritischer Pfad
+
+1. **M1 — Datenzugriffsschicht** (→ D-08 + O-2 Grants + C-07):
+   `apps/web` greift per `docker exec psql` zu, es gibt keine Grants.
+   Blockiert: Auth, Schreibpfade, Deployment, RLS.
+2. **M2 — Frontend-Fundament** (→ C-01):
+   10 von 13 deklarierten Bibliotheken fehlen.
+3. **M3 — Erster Schreibpfad** (→ C-02) — braucht M1 und Toms Product Gate.
+4. **M4 — Cloud-Deployment** (→ Sektion E) — braucht M1.
 
 ---
 
@@ -89,11 +101,12 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **B-08: SessionEnd-Hook falsch verortet** — steht in `~/.claude/settings.json`
   mit hartkodiertem Pfad auf dieses Repo. Gehört in die Projekt-Settings oder weg.
 
-- [ ] **B-09: Encoding-Schäden beheben** (verengt 2026-08-02) — `[cmd]`
-  `packages/shared/src/supabase/client.ts` ist sauber (Bytes `E2 80 94` =
+- [x] **B-09: Encoding-Schäden** — entschärft, erledigt 2026-08-02.
+  `[cmd]` `packages/shared/src/supabase/client.ts` ist sauber (Bytes `E2 80 94` =
   korrekter Geviertstrich; der Befund war ein Konsolen-Anzeigefehler).
-  Echter Schaden nur in `supabase/migrations/20240522_002` (`k?se`, `n?sse` —
-  literales 0x3F). Fix nur in den Drafts, nicht in der Altdatei.
+  Echter Schaden nur in `20240522_002` (`k?se`, `n?sse` — literales 0x3F) —
+  die Datei liegt jetzt in `supabase/_archive/` und wird nicht mehr
+  ausgeführt. Folgenlos.
 
 - [ ] **B-10: ijfw-Plugin entscheiden** — `[cmd]` das Plugin
   (`"ijfw@ijfw": true` in `~/.claude/settings.json`) schreibt selbsttätig in
@@ -172,25 +185,22 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 ## D — Datenbank & Specs
 
-### Dringend: die DB ist nicht reproduzierbar
+### Reproduzierbarkeit — erledigt 2026-08-02
 
-- [ ] **D-12: Aufbaukette verifizieren** (**höchste Priorität**, umgeschrieben
-  2026-08-02) — Ausgangsbefund bleibt: `[cmd]`
-  `supabase_migrations.schema_migrations` enthält **genau einen Eintrag**
-  (`20260423120000_control_plane_tables`), während 11 Nutrition-Tabellen mit
-  rund 727.000 Zeilen existieren.
+- [x] **D-12: Aufbaukette verifizieren** — **erledigt 2026-08-02**
+  (`docs/ssot/33-pipeline-verifikation.md`).
+  Ausgangsbefund war: `[cmd]` `supabase_migrations.schema_migrations` enthält
+  **genau einen Eintrag** (`20260423120000_control_plane_tables`), während
+  11 Nutrition-Tabellen mit rund 727.000 Zeilen existieren.
   **Aber: die Aufbaukette war nicht verloren.** Sie lag in
   `docs/project/p1-005/` und `tmp/` und ist seit Commit 399d9bc unter
   `supabase/_pipeline/` gebündelt: 010 Schema, 020/021 Human Layer inkl.
   Tag- und Alias-Ableitungen, 030 BLS-Import, 050/051 Nutzertabellen,
   plus 4 Validierungsskripte.
-  **Neue Aufgabe:** nicht „Migrationen aus dem Dump rückbauen", sondern die
-  vorhandene Kette einmal gegen eine leere Datenbank durchlaufen lassen und
-  das Ergebnis mit dem Container vergleichen. Die 6 Dateien in
-  `supabase/migrations-draft/` bleiben als Abgleich nützlich.
-  Offen laut `supabase/README.md`: Schritt 040 fehlt (`category_id`,
-  `processing_level`, `is_prepared_dish`, `sort_weight` — Quelle ungeklärt);
-  `food_aliases` hat 21.420 Zeilen, 020 enthält nur 3 Alias-Blöcke.
+  **Verifikation:** `[cmd]` Zwei Läufe gegen frische Datenbanken, beide
+  identisch zum Container: 105 Spalten, 31 Indizes, 2 Policies, alle
+  11 Zeilenzahlen. Gesamtdauer 10,6 s. Der fehlende Nährstoff-Katalog wurde
+  gefunden und nach `supabase/_pipeline/015_kataloge/` extrahiert.
   **Erledigt daraus — O-8 (Makro-Spalten/Auto-Tagging):** `[read]` die
   Tag-Ableitungen stehen in
   `supabase/_pipeline/02_human_layer/020_food_human_layer.sql`:
@@ -199,12 +209,20 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `[cmd]` Container: 1.400 / 4.659 / 2.648 / 558 Zeilen. Makro-Spalten auf
   `foods` und `auto_tag_food()` existieren nicht und werden nicht gebraucht —
   der EAV-Weg ist der reale.
+  **Erledigt daraus — O-6 (Altdateien):** vier Dateien nach
+  `supabase/_archive/` verschoben — `20240522_001`, `20240522_002` und beide
+  Control-Plane-Migrationen. Governance ist in diesem Repo tot
+  (Entscheidung Tom). `supabase/migrations/` enthält nur noch die drei Slices.
+  Restfragen ausgelagert: → D-15 (Drafts), D-16 (021-Effekt), D-17 (Register).
 
-- [ ] **D-13: Warum liefen die „DO NOT EXECUTE"-Slices?** —
-  `[cmd]` `name_th` existiert in `food_categories`, `foods` (plus `name_display_th`)
-  und `nutrient_defs` (plus `group_th`) — genau der Inhalt von `20260513_002`,
-  das im Kopf `EXECUTION_CANDIDATE_REVIEW_ONLY / DO NOT EXECUTE` trägt.
-  Klären, wie es angewendet wurde, und den Statuskopf korrigieren.
+- [x] **D-13: Warum liefen die „DO NOT EXECUTE"-Slices?** — **erledigt
+  2026-08-02:** Die drei Slices **sind** die Schema-Stufe der Kette.
+  `[cmd]` Kein Transaktionsrahmen, idempotent über `to_regclass`-Guards,
+  laufen fehlerfrei. Der Statuskopf war Governance-Zeremonie.
+  Ursprungsbefund: `[cmd]` `name_th` existiert in `food_categories`, `foods`
+  (plus `name_display_th`) und `nutrient_defs` (plus `group_th`) — genau der
+  Inhalt von `20260513_002`, das im Kopf
+  `EXECUTION_CANDIDATE_REVIEW_ONLY / DO NOT EXECUTE` trägt.
 
 - [ ] **D-14: RLS im Container prüfen und entscheiden** (neu 2026-08-01) —
   `[cmd]` Ist-Zustand weicht von der Migration ab:
@@ -249,13 +267,12 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `food_curation_*` je 0 Zeilen; 4 `workorders` in `public`.
   Ergebnis führte zu D-11 bis D-14 und zur Korrektur von C-02.1.
 
-- [ ] **D-03: `supabase/snippets/`** — `[cmd]` 3 Dateien, `[read]` reine
-  Introspektions-Queries über `nutrient_defs` (Studio-Reste vom 2026-05-13).
-  Löschen oder behalten entscheiden.
-  **Ergänzt 2026-08-02:** inhaltlich sind die 3 Snippets die
-  POST-APPLY VALIDATION QUERIES der Slice-Migrationen — ein Beleg für D-13:
-  die „DO NOT EXECUTE"-Slices wurden im Studio ausgeführt und von Hand
-  kontrolliert. Kopien liegen in `supabase/_snippets/`.
+- [x] **D-03: `supabase/snippets/`** — **erledigt 2026-08-02.**
+  `[cmd]` 3 Dateien, `[read]` reine Introspektions-Queries über
+  `nutrient_defs` (Studio-Reste vom 2026-05-13). Als
+  POST-APPLY VALIDATION QUERIES der Slice-Migrationen belegt — ein Beleg für
+  D-13: die „DO NOT EXECUTE"-Slices wurden im Studio ausgeführt und von Hand
+  kontrolliert. In `supabase/_snippets/` gesichert. Original löschbar.
 
 - [ ] **D-04: E2E- und Testbasis klären** — `[cmd]` keine Root-`playwright.config.ts`
   (nur `playwright.governance.config.ts`), `apps/web/e2e/` enthält nur den
@@ -287,6 +304,16 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 - [ ] **D-10: Port-Kollision im Governance-Rest** — `[cmd]` `orchestrator-api`
   und `wo-classifier` haben beide Default-Port 9000. Bei Entfernung hinfällig.
+
+- [ ] **D-15: `supabase/migrations-draft/` einordnen** (neu 2026-08-02) —
+  durch beide Verifikationsläufe überholt. Verwerfen oder als Referenz behalten.
+
+- [ ] **D-16: `021_wild_category_apply.sql` klären** (neu 2026-08-02) —
+  läuft ohne sichtbaren Effekt. `[annahme]` durch 020 abgedeckt, ungeprüft.
+
+- [ ] **D-17: Migrationsregister-Strategie** (neu 2026-08-02) — das Register
+  ist nach der Archivierung faktisch leer. Entscheiden: Kette in reguläre
+  Migrationen überführen oder als dokumentierter Ablauf belassen.
 
 ---
 
