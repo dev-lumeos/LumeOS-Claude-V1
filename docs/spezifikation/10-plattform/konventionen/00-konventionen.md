@@ -79,7 +79,43 @@ Nährwerte je 100 g, wie im BLS. Umrechnung auf Portionen geschieht bei der
 Anzeige, nicht bei der Speicherung. Einheiten sind Anzeigeeinstellung, nie
 Speicherformat.
 
-## 8. Git
+## 8. Ports
+
+Feste Bereiche, damit sieben Apps und neun Services nebeneinander laufen.
+
+| Bereich | Vergabe |
+|---|---|
+| 3100–3169 | Apps, Zehnerabstand je App |
+| 5100–5900 | Services, Hunderterabstand je Modul |
+| 54321–54327 | Supabase lokal, von der CLI vergeben |
+
+| App | Port |
+|---|---|
+| `web` | 3100 |
+| `admin` | 3110 |
+| `buddy` | 3120 |
+| `coach` | 3130 |
+| `marketplace` | 3140 |
+| `gym` | 3150 |
+| `supplier` | 3160 |
+
+Der Zehnerabstand lässt Raum für Nebenprozesse je App (Storybook, Mock-Server).
+
+**Warum nicht 3000:** `[cmd]` Der Next.js-Standardport ist auf Toms Rechner von
+einer fremden Anwendung belegt. Ein Standardport ist keine Vergabe — jede App
+trägt ihren Port ausdrücklich in `package.json` (`next dev -p`).
+
+`[read]` Die Service-Ports stammen aus den Altbestand-Specs: Nutrition 5100,
+Training 5200, Supplements 5300, Recovery 5400, Buddy 5500, HumanCoach 5600,
+Marketplace 5700, Medical 5800, Goals 5900. Sie gelten nur, falls die
+Servicelayer-Entscheidung (TODO A-07) für Services ausfällt.
+
+`[cmd]` Der Altbestand nennt für Admin den Port 4100 — fällt aus jedem Schema
+und wird durch 3110 ersetzt.
+
+---
+
+## 9. Git
 
 Ein logischer Change je Commit. Meldungen englisch, im Format
 `typ(bereich): was` — `feat`, `fix`, `docs`, `chore`, `refactor`.
@@ -91,7 +127,7 @@ zwischen Sitzungen und gehören in Sitzungsberichte.
 Müll geführter Ordner enthielt die einzige Quelle von 705.232 Datenzeilen.
 Vor jeder Löschung inhaltliche Prüfung.
 
-## 9. Arbeitsteilung zwischen Agenten
+## 10. Arbeitsteilung zwischen Agenten
 
 Eine Datei hat zu einem Zeitpunkt einen Zuständigen. Wer eine Aufgabe
 delegiert, gibt die Datei ab — und liest sie neu ein, bevor er sie wieder
@@ -105,7 +141,7 @@ Berichte über getane Arbeit werden geprüft, nicht geglaubt. Die Prüfung ist
 ein Zähllauf über nachweisbare Merkmale — Anzahl Einträge, Zeilenzahlen,
 Hashes — nicht das Lesen der Zusammenfassung.
 
-## 10. Änderungen an der Datenbank
+## 11. Änderungen an der Datenbank
 
 Nie gegen die laufende Datenbank testen. Jeder Versuch in einer
 Wegwerf-Datenbank, danach verwerfen.
@@ -116,7 +152,7 @@ zurückgespielt wurde, ist eine Datei und kein Backup.
 `[cmd]` `pg_restore` meldet fehlende Policies nur als Warnung und gilt
 trotzdem als erfolgreich — der Vergleich nach dem Zurückspielen ist Pflicht.
 
-## 11. Abnahmekriterien
+## 12. Abnahmekriterien
 
 - **AK-1:** Gegeben eine beliebige Datei im Repo, dann ist sie UTF-8 ohne
   BOM, ausser sie ist ein PowerShell-Skript mit Zeichen ausserhalb ASCII.
@@ -127,7 +163,7 @@ trotzdem als erfolgreich — der Vergleich nach dem Zurückspielen ist Pflicht.
 - **AK-4:** Gegeben ein Zeitstempel in der Datenbank, dann ist er in UTC und
   trägt eine Zeitzone.
 
-## 12. Offene Fragen
+## 13. Offene Fragen
 
 1. **Fehlercodes** — gemeinsamer Katalog über alle Module oder Präfix je
    Modul? Ein Katalog erzwingt Abstimmung, Präfixe erlauben Wildwuchs.
