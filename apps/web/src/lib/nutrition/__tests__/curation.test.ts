@@ -1,18 +1,35 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { buildNutritionCurationSql, buildNutritionCurationPersistenceSql } from '../curation'
+import { buildCurationRpcArgs, buildNutritionCurationPersistenceSql } from '../curation'
 
-test('builds a read-only local curation SQL query', () => {
-  const sql = buildNutritionCurationSql()
+test('builds read-only curation rpc arguments with normalized defaults', () => {
+  const defaults = buildCurationRpcArgs()
 
-  assert.match(sql, /nutrition\.food_categories/)
-  assert.match(sql, /nutrition\.tag_definitions/)
-  assert.match(sql, /nutrition\.food_aliases/)
-  assert.match(sql, /alias_coverage/)
-  assert.match(sql, /zero_alias_foods/)
-  assert.match(sql, /WHERE f\.category_id IS NULL/)
-  assert.doesNotMatch(sql, /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE)\b/i)
+  assert.equal(defaults.p_unassigned_only, true)
+  assert.equal(defaults.p_category, '')
+  assert.equal(defaults.p_tag, '')
+  assert.equal(defaults.p_alias_state, '')
+  assert.equal(defaults.p_sort, 'category_missing_first')
+
+  const custom = buildCurationRpcArgs({
+    unassignedOnly: false,
+    category: 'brot',
+    tag: 'high_fiber',
+    aliasState: 'missing',
+    sort: 'macro_relevance',
+  })
+
+  assert.equal(custom.p_unassigned_only, false)
+  assert.equal(custom.p_category, 'brot')
+  assert.equal(custom.p_tag, 'high_fiber')
+  assert.equal(custom.p_alias_state, 'missing')
+  assert.equal(custom.p_sort, 'macro_relevance')
+
+  // Unbekannte Werte fallen deterministisch auf die Defaults zurück.
+  const fallback = buildCurationRpcArgs({ sort: 'evil' as never, aliasState: 'x' as never })
+  assert.equal(fallback.p_sort, 'category_missing_first')
+  assert.equal(fallback.p_alias_state, '')
 })
 
 test('builds local-only curation persistence tables without mutating foods', () => {

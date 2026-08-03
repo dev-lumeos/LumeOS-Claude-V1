@@ -3,8 +3,9 @@ import { describe, it } from 'node:test'
 
 import {
   buildFoodSearchFilterHref,
+  buildFoodSearchRpcArgs,
+  buildFoodSearchTokens,
   clampFoodSearchLimit,
-  buildFoodSearchWhereClause,
   normalizeFoodSearchSort,
   normalizeFoodSearchText,
   parseFoodSearchPayload,
@@ -17,16 +18,32 @@ describe('local Nutrition food search helpers', () => {
     assert.equal(normalizeFoodSearchText('Apfelmus'), 'apfelmus')
   })
 
-  it('builds a source-label and alias search clause for umlaut variants without invented synonyms', () => {
-    const clause = buildFoodSearchWhereClause('kuerbis oel')
+  it('tokenizes queries for the rpc food_search parameters without invented synonyms', () => {
+    assert.deepEqual(buildFoodSearchTokens('kuerbis oel'), ['kuerbis', 'oel'])
+    assert.deepEqual(buildFoodSearchTokens('Kürbis-Öl'), ['kuerbis', 'oel'])
+    assert.deepEqual(buildFoodSearchTokens(''), [])
+    assert.equal(buildFoodSearchTokens('a b c d e f g h').length, 6)
+  })
 
-    assert.match(clause.sql, /LIKE '%kuerbis%'/)
-    assert.match(clause.sql, /LIKE '%oel%'/)
-    assert.match(clause.sql, /name_de/)
-    assert.match(clause.sql, /name_en/)
-    assert.match(clause.sql, /food_aliases/)
-    assert.deepEqual(clause.tokens, ['kuerbis', 'oel'])
-    assert.doesNotMatch(clause.sql, /display_name/i)
+  it('builds rpc arguments with normalized slug, tag and clamped paging', () => {
+    const args = buildFoodSearchRpcArgs('Kürbis', 'food-1', {
+      category: 'Brot & Gebäck',
+      tag: 'High Fiber',
+      sort: 'protein_desc',
+      limit: 200,
+      offset: -5,
+    })
+
+    assert.equal(args.p_query, 'Kürbis')
+    assert.equal(args.p_normalized_query, 'kuerbis')
+    assert.deepEqual(args.p_tokens, ['kuerbis'])
+    assert.equal(args.p_selected_food_id, 'food-1')
+    assert.equal(args.p_category_slug, 'brot-gebaeck')
+    assert.equal(args.p_tag_code, 'high_fiber')
+    assert.equal(args.p_sort, 'protein_desc')
+    assert.equal(args.p_limit, 100)
+    assert.equal(args.p_offset, 0)
+    assert.equal(args.p_category_id, null)
   })
 
   it('builds stable filter hrefs for category and tag chips', () => {
@@ -124,5 +141,29 @@ describe('local Nutrition food search helpers', () => {
     assert.equal(payload.selected_food?.category_slug, 'brot')
     assert.equal(payload.categories[0]?.slug, 'brot')
     assert.equal(payload.tags[0]?.code, 'high_fiber')
+  })
+
+  it('parses the rpc payload also when it arrives as an object (supabase-js path)', () => {
+    const payload = parseFoodSearchPayload({
+      query: 'brot',
+      normalized_query: 'brot',
+      category: '',
+      category_id: '',
+      tag: '',
+      sort: 'relevance',
+      limit: 25,
+      offset: 0,
+      total: 2,
+      result_count: 0,
+      foods: [],
+      selected_food: null,
+      nutrients: [],
+      categories: [],
+      tags: [],
+    })
+
+    assert.equal(payload.total, 2)
+    assert.equal(payload.result_count, 0)
+    assert.equal(payload.selected_food, null)
   })
 })

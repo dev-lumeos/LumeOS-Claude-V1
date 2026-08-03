@@ -1,9 +1,9 @@
-import { execFile } from 'node:child_process'
-import { promisify } from 'node:util'
+// Schema-Debug über supabase-js rpc() — die Introspektion liegt als
+// Postgres-Funktion nutrition.schema_debug in
+// supabase/_pipeline/07_lesefunktionen/070_lesefunktionen.sql.
+// Hier verbleibt die Payload-Validierung.
 
-const execFileAsync = promisify(execFile)
-
-const LOCAL_DB_CONTAINER = 'supabase_db_LumeOS-Claude-V1'
+import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
 
 export type NutritionSchemaColumn = {
   name: string
@@ -85,200 +85,6 @@ export class LocalSchemaDebugError extends Error {
     this.code = code
   }
 }
-
-const LOCAL_SCHEMA_SQL = `
-WITH table_state AS (
-  SELECT
-    EXISTS (
-      SELECT 1
-      FROM information_schema.schemata
-      WHERE schema_name = 'nutrition'
-    ) AS schema_exists,
-    to_regclass('nutrition.nutrient_defs') IS NOT NULL AS table_exists
-),
-row_state AS (
-  SELECT CASE
-    WHEN (SELECT table_exists FROM table_state)
-      THEN (SELECT COUNT(*)::int FROM nutrition.nutrient_defs)
-    ELSE 0
-  END AS row_count
-),
-columns_json AS (
-  SELECT COALESCE(
-    json_agg(
-      json_build_object(
-        'name', column_name,
-        'data_type', data_type,
-        'is_nullable', is_nullable = 'YES'
-      )
-      ORDER BY ordinal_position
-    ),
-    '[]'::json
-  ) AS value
-  FROM information_schema.columns
-  WHERE table_schema = 'nutrition'
-    AND table_name = 'nutrient_defs'
-),
-indexes_json AS (
-  SELECT COALESCE(
-    json_agg(
-      json_build_object(
-        'name', indexname,
-        'definition', indexdef
-      )
-      ORDER BY indexname
-    ),
-    '[]'::json
-  ) AS value
-  FROM pg_indexes
-  WHERE schemaname = 'nutrition'
-    AND tablename = 'nutrient_defs'
-),
-constraints_json AS (
-  SELECT COALESCE(
-    json_agg(
-      json_build_object(
-        'name', conname,
-        'definition', pg_get_constraintdef(c.oid)
-      )
-      ORDER BY conname
-    ),
-    '[]'::json
-  ) AS value
-  FROM pg_constraint c
-  JOIN pg_class t ON t.oid = c.conrelid
-  JOIN pg_namespace n ON n.oid = t.relnamespace
-  WHERE n.nspname = 'nutrition'
-    AND t.relname = 'nutrient_defs'
-),
-group_counts_json AS (
-  SELECT COALESCE(
-    json_agg(
-      json_build_object(
-        'group_de', group_de,
-        'group_en', group_en,
-        'row_count', row_count
-      )
-      ORDER BY row_count DESC, group_de
-    ),
-    '[]'::json
-  ) AS value
-  FROM (
-    SELECT
-      group_de,
-      group_en,
-      COUNT(*)::int AS row_count
-    FROM nutrition.nutrient_defs
-    GROUP BY group_de, group_en
-  ) grouped
-),
-nutrient_preview_json AS (
-  SELECT COALESCE(
-    json_agg(
-      json_build_object(
-        'code', code,
-        'name_de', name_de,
-        'name_en', name_en,
-        'name_th', name_th,
-        'unit', unit,
-        'group_de', group_de,
-        'group_en', group_en,
-        'group_th', group_th,
-        'sort_index', sort_index,
-        'display_tier', display_tier,
-        'is_always_computed', is_always_computed,
-        'is_partly_computed', is_partly_computed,
-        'formula', formula,
-        'rda_male', rda_male,
-        'rda_female', rda_female,
-        'rda_unit', rda_unit
-      )
-      ORDER BY sort_index, code
-    ),
-    '[]'::json
-  ) AS value
-  FROM (
-    SELECT
-      code,
-      name_de,
-      name_en,
-      name_th,
-      unit,
-      group_de,
-      group_en,
-      group_th,
-      sort_index,
-      display_tier,
-      is_always_computed,
-      is_partly_computed,
-      formula,
-      rda_male,
-      rda_female,
-      rda_unit
-    FROM nutrition.nutrient_defs
-    ORDER BY sort_index, code
-    LIMIT 138
-  ) preview
-),
-rda_summary_json AS (
-  SELECT json_build_object(
-    'rda_male_populated', COUNT(*) FILTER (WHERE rda_male IS NOT NULL)::int,
-    'rda_female_populated', COUNT(*) FILTER (WHERE rda_female IS NOT NULL)::int,
-    'rda_unit_populated', COUNT(*) FILTER (WHERE rda_unit IS NOT NULL AND rda_unit <> '')::int
-  ) AS value
-  FROM nutrition.nutrient_defs
-),
-food_foundation_json AS (
-  SELECT json_build_object(
-    'foods_table_exists', to_regclass('nutrition.foods') IS NOT NULL,
-    'food_nutrients_table_exists', to_regclass('nutrition.food_nutrients') IS NOT NULL,
-    'foods_row_count', CASE
-      WHEN to_regclass('nutrition.foods') IS NULL THEN 0
-      ELSE (SELECT GREATEST(c.reltuples::int, 0) FROM pg_class c WHERE c.oid = to_regclass('nutrition.foods'))
-    END,
-    'food_nutrients_row_count', CASE
-      WHEN to_regclass('nutrition.food_nutrients') IS NULL THEN 0
-      ELSE (SELECT GREATEST(c.reltuples::int, 0) FROM pg_class c WHERE c.oid = to_regclass('nutrition.food_nutrients'))
-    END,
-    'food_nutrients_nutrient_fk_exists', EXISTS (
-      SELECT 1
-      FROM pg_constraint c
-      JOIN pg_class source_table ON source_table.oid = c.conrelid
-      JOIN pg_namespace source_ns ON source_ns.oid = source_table.relnamespace
-      JOIN pg_class target_table ON target_table.oid = c.confrelid
-      JOIN pg_namespace target_ns ON target_ns.oid = target_table.relnamespace
-      JOIN unnest(c.conkey) WITH ORDINALITY source_key(attnum, ordinality) ON true
-      JOIN pg_attribute source_attribute
-        ON source_attribute.attrelid = source_table.oid
-       AND source_attribute.attnum = source_key.attnum
-      JOIN unnest(c.confkey) WITH ORDINALITY target_key(attnum, ordinality)
-        ON target_key.ordinality = source_key.ordinality
-      JOIN pg_attribute target_attribute
-        ON target_attribute.attrelid = target_table.oid
-       AND target_attribute.attnum = target_key.attnum
-      WHERE c.contype = 'f'
-        AND source_ns.nspname = 'nutrition'
-        AND source_table.relname = 'food_nutrients'
-        AND source_attribute.attname = 'nutrient_code'
-        AND target_ns.nspname = 'nutrition'
-        AND target_table.relname = 'nutrient_defs'
-        AND target_attribute.attname = 'code'
-    )
-  ) AS value
-)
-SELECT json_build_object(
-  'schema_exists', (SELECT schema_exists FROM table_state),
-  'table_exists', (SELECT table_exists FROM table_state),
-  'row_count', (SELECT row_count FROM row_state),
-  'columns', (SELECT value FROM columns_json),
-  'indexes', (SELECT value FROM indexes_json),
-  'constraints', (SELECT value FROM constraints_json),
-  'group_counts', (SELECT value FROM group_counts_json),
-  'nutrient_preview', (SELECT value FROM nutrient_preview_json),
-  'rda_summary', (SELECT value FROM rda_summary_json),
-  'food_foundation', (SELECT value FROM food_foundation_json)
-)::text;
-`.trim()
 
 function normalizeBoolean(value: unknown): boolean {
   return value === true
@@ -396,31 +202,33 @@ function normalizeFoodFoundationStatus(value: unknown): NutritionFoodFoundationS
   }
 }
 
-export function parseNutritionSchemaDebug(stdout: string): NutritionSchemaDebugSnapshot {
-  const raw = stdout.trim()
-  if (!raw) {
-    throw new LocalSchemaDebugError('INVALID_DEBUG_PAYLOAD', 'Local schema debug command returned no output.')
-  }
-
-  let parsed: unknown
-  try {
-    parsed = JSON.parse(raw)
-  } catch (error) {
-    throw new LocalSchemaDebugError(
-      'INVALID_DEBUG_PAYLOAD',
-      `Local schema debug output was not valid JSON: ${error instanceof Error ? error.message : String(error)}`,
-    )
+/** Akzeptiert das rpc()-Ergebnis (Objekt) oder einen JSON-String (Tests). */
+export function parseNutritionSchemaDebug(input: unknown): NutritionSchemaDebugSnapshot {
+  let parsed: unknown = input
+  if (typeof input === 'string') {
+    const raw = input.trim()
+    if (!raw) {
+      throw new LocalSchemaDebugError('INVALID_DEBUG_PAYLOAD', 'Schema debug returned no output.')
+    }
+    try {
+      parsed = JSON.parse(raw)
+    } catch (error) {
+      throw new LocalSchemaDebugError(
+        'INVALID_DEBUG_PAYLOAD',
+        `Schema debug output was not valid JSON: ${error instanceof Error ? error.message : String(error)}`,
+      )
+    }
   }
 
   if (!parsed || typeof parsed !== 'object') {
-    throw new LocalSchemaDebugError('INVALID_DEBUG_PAYLOAD', 'Local schema debug payload is not an object.')
+    throw new LocalSchemaDebugError('INVALID_DEBUG_PAYLOAD', 'Schema debug payload is not an object.')
   }
 
   const record = parsed as Record<string, unknown>
   return {
     checkedAt: new Date().toISOString(),
     environment: 'local',
-    container: LOCAL_DB_CONTAINER,
+    container: NUTRITION_DB_SOURCE,
     schema_exists: normalizeBoolean(record.schema_exists),
     table_exists: normalizeBoolean(record.table_exists),
     row_count: normalizeNumber(record.row_count),
@@ -436,39 +244,20 @@ export function parseNutritionSchemaDebug(stdout: string): NutritionSchemaDebugS
 
 export async function getLocalNutritionSchemaDebug(): Promise<NutritionSchemaDebugSnapshot> {
   try {
-    const { stdout } = await execFileAsync('docker', [
-      'exec',
-      LOCAL_DB_CONTAINER,
-      'psql',
-      '-U',
-      'postgres',
-      '-d',
-      'postgres',
-      '-X',
-      '-A',
-      '-t',
-      '-v',
-      'ON_ERROR_STOP=1',
-      '-c',
-      LOCAL_SCHEMA_SQL,
-    ], {
-      maxBuffer: 1024 * 1024,
-      windowsHide: true,
-    })
-
-    return parseNutritionSchemaDebug(stdout)
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    if (/docker/i.test(message) || /OCI runtime exec failed/i.test(message) || /No such container/i.test(message)) {
+    const { data, error } = await nutritionRpc().rpc('schema_debug')
+    if (error) {
       throw new LocalSchemaDebugError(
-        'LOCAL_DB_UNAVAILABLE',
-        `Local Supabase DB container is unavailable: ${message}`,
+        isDbUnavailableMessage(error.message) ? 'LOCAL_DB_UNAVAILABLE' : 'LOCAL_SCHEMA_QUERY_FAILED',
+        error.message,
       )
     }
-
+    return parseNutritionSchemaDebug(data)
+  } catch (error) {
+    if (error instanceof LocalSchemaDebugError) throw error
+    const message = error instanceof Error ? error.message : String(error)
     throw new LocalSchemaDebugError(
-      'LOCAL_SCHEMA_QUERY_FAILED',
-      `Local nutrition schema debug query failed: ${message}`,
+      isDbUnavailableMessage(message) ? 'LOCAL_DB_UNAVAILABLE' : 'LOCAL_SCHEMA_QUERY_FAILED',
+      message,
     )
   }
 }

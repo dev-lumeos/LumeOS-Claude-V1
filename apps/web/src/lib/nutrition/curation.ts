@@ -1,10 +1,11 @@
-import { execFile } from 'node:child_process'
-import { promisify } from 'node:util'
+// Kurations-Übersicht über supabase-js rpc() — die Abfrage liegt als
+// Postgres-Funktion nutrition.curation_overview in
+// supabase/_pipeline/07_lesefunktionen/070_lesefunktionen.sql.
+// Hier verbleiben: Options-Normalisierung, Payload-Validierung und der
+// Katalog-Abgleich (preferences-catalog ist ein Code-Literal).
 
 import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from './preferences-catalog'
-
-const execFileAsync = promisify(execFile)
-const LOCAL_DB_CONTAINER = 'supabase_db_LumeOS-Claude-V1'
+import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
 
 export type CurationUnassignedFood = {
   id: string
@@ -29,6 +30,14 @@ export type NutritionCurationOptions = {
   tag?: string
   aliasState?: 'has' | 'missing' | ''
   sort?: 'sort_weight_desc' | 'name_asc' | 'macro_relevance' | 'category_missing_first'
+}
+
+export type CurationRpcArgs = {
+  p_unassigned_only: boolean
+  p_category: string
+  p_tag: string
+  p_alias_state: '' | 'has' | 'missing'
+  p_sort: Required<NutritionCurationOptions>['sort']
 }
 
 export type NutritionCurationPayload = {
@@ -103,10 +112,6 @@ export type NutritionCurationPayload = {
   }
 }
 
-function escapeSql(value: string): string {
-  return value.replace(/'/g, "''")
-}
-
 function normalizeOptions(options: NutritionCurationOptions = {}): Required<NutritionCurationOptions> {
   const sort = ['sort_weight_desc', 'name_asc', 'macro_relevance', 'category_missing_first'].includes(options.sort ?? '')
     ? options.sort as Required<NutritionCurationOptions>['sort']
@@ -118,6 +123,18 @@ function normalizeOptions(options: NutritionCurationOptions = {}): Required<Nutr
     tag: options.tag ?? '',
     aliasState,
     sort,
+  }
+}
+
+/** Baut die rpc()-Argumente für nutrition.curation_overview — testbar ohne Datenbank. */
+export function buildCurationRpcArgs(options: NutritionCurationOptions = {}): CurationRpcArgs {
+  const normalized = normalizeOptions(options)
+  return {
+    p_unassigned_only: normalized.unassignedOnly,
+    p_category: normalized.category,
+    p_tag: normalized.tag,
+    p_alias_state: normalized.aliasState,
+    p_sort: normalized.sort,
   }
 }
 
@@ -153,6 +170,8 @@ function parseUnassignedFood(value: unknown): CurationUnassignedFood | null {
   }
 }
 
+// Historisches DDL der Kurationstabellen. Wird nur vom Unit-Test referenziert;
+// die reale Quelle ist supabase/_pipeline/05_user_tabellen/051_curation_persistence.sql.
 export function buildNutritionCurationPersistenceSql(): string {
   return `
 CREATE TABLE IF NOT EXISTS nutrition.food_curation_candidates (
@@ -190,137 +209,18 @@ CREATE INDEX IF NOT EXISTS food_curation_decisions_candidate_idx
 `
 }
 
-export function buildNutritionCurationSql(options: NutritionCurationOptions = {}): string {
-  const normalized = normalizeOptions(options)
-  const filters = [
-    normalized.unassignedOnly ? 'f.category_id IS NULL' : 'TRUE',
-    normalized.category ? `fc.slug = '${escapeSql(normalized.category)}'` : 'TRUE',
-    normalized.tag ? `EXISTS (SELECT 1 FROM nutrition.food_tags ft_filter WHERE ft_filter.food_id = f.id AND ft_filter.tag_code = '${escapeSql(normalized.tag)}')` : 'TRUE',
-    normalized.aliasState === 'has' ? 'COALESCE(alias.alias_count, 0) > 0' : normalized.aliasState === 'missing' ? 'COALESCE(alias.alias_count, 0) = 0' : 'TRUE',
-  ].join('\n    AND ')
-  const orderBy = normalized.sort === 'sort_weight_desc'
-    ? 'f.sort_weight DESC NULLS LAST, source_label ASC'
-    : normalized.sort === 'name_asc'
-      ? 'source_label ASC'
-      : normalized.sort === 'macro_relevance'
-        ? 'COALESCE(m.prot625, 0) DESC, COALESCE(m.enercc, 0) DESC, source_label ASC'
-        : 'CASE WHEN f.category_id IS NULL THEN 0 ELSE 1 END, f.sort_weight DESC NULLS LAST, source_label ASC'
-
-  return `
-WITH category_levels AS (
-  SELECT level, COUNT(*)::int AS count
-  FROM nutrition.food_categories
-  GROUP BY level
-  ORDER BY level
-),
-tag_coverage AS (
-  SELECT td.code, td.name_de, COUNT(ft.food_id)::int AS food_count
-  FROM nutrition.tag_definitions td
-  LEFT JOIN nutrition.food_tags ft ON ft.tag_code = td.code
-  GROUP BY td.code, td.name_de
-  ORDER BY food_count DESC, td.code
-),
-alias_counts AS (
-  SELECT f.id, COUNT(fa.alias)::int AS alias_count
-  FROM nutrition.foods f
-  LEFT JOIN nutrition.food_aliases fa ON fa.food_id = f.id
-  GROUP BY f.id
-),
-unassigned AS (
-  SELECT
-    f.id,
-    f.bls_code,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
-    fc.slug AS current_category_slug,
-    fc.name_de AS current_category_name_de,
-    f.sort_weight,
-    COALESCE(alias.alias_count, 0)::int AS alias_count,
-    COALESCE(tags.tags, ARRAY[]::text[]) AS tags,
-    m.enercc::text,
-    m.prot625::text,
-    m.fat::text,
-    m.cho::text
-  FROM nutrition.foods f
-  LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
-  LEFT JOIN LATERAL (
-    SELECT COUNT(*) AS alias_count FROM nutrition.food_aliases fa WHERE fa.food_id = f.id
-  ) alias ON TRUE
-  LEFT JOIN LATERAL (
-    SELECT array_agg(ft.tag_code ORDER BY ft.tag_code) AS tags FROM nutrition.food_tags ft WHERE ft.food_id = f.id
-  ) tags ON TRUE
-  LEFT JOIN LATERAL (
-    SELECT
-      MAX(value) FILTER (WHERE nutrient_code='ENERCC') AS enercc,
-      MAX(value) FILTER (WHERE nutrient_code='PROT625') AS prot625,
-      MAX(value) FILTER (WHERE nutrient_code='FAT') AS fat,
-      MAX(value) FILTER (WHERE nutrient_code='CHO') AS cho
-    FROM nutrition.food_nutrients fn WHERE fn.food_id = f.id
-  ) m ON TRUE
-  WHERE ${filters}
-  ORDER BY ${orderBy}
-  LIMIT 50
-)
-SELECT json_build_object(
-  'counts', json_build_object(
-    'foods', (SELECT COUNT(*)::int FROM nutrition.foods),
-    'food_nutrients', (SELECT COUNT(*)::int FROM nutrition.food_nutrients),
-    'assigned_foods', (SELECT COUNT(*)::int FROM nutrition.foods WHERE category_id IS NOT NULL),
-    'unassigned_foods', (SELECT COUNT(*)::int FROM nutrition.foods WHERE category_id IS NULL),
-    'tag_definitions', (SELECT COUNT(*)::int FROM nutrition.tag_definitions),
-    'food_tags', (SELECT COUNT(*)::int FROM nutrition.food_tags),
-    'food_aliases', (SELECT COUNT(*)::int FROM nutrition.food_aliases)
-  ),
-  'category_levels', COALESCE((SELECT json_agg(json_build_object('level', level, 'count', count)) FROM category_levels), '[]'::json),
-  'tag_coverage', COALESCE((SELECT json_agg(json_build_object('code', code, 'name_de', name_de, 'food_count', food_count)) FROM tag_coverage), '[]'::json),
-  'low_coverage_tags', COALESCE((SELECT json_agg(json_build_object('code', code, 'name_de', name_de, 'food_count', food_count)) FROM tag_coverage WHERE food_count <= 5), '[]'::json),
-  'alias_coverage', json_build_object(
-    'zero_alias_foods', (SELECT COUNT(*)::int FROM alias_counts WHERE alias_count = 0),
-    'one_alias_foods', (SELECT COUNT(*)::int FROM alias_counts WHERE alias_count = 1),
-    'multi_alias_foods', (SELECT COUNT(*)::int FROM alias_counts WHERE alias_count > 1),
-    'german_umlaut_foods', (SELECT COUNT(*)::int FROM nutrition.foods WHERE name_de ~ '[äöüÄÖÜß]'),
-    'foods_with_en_source_label', (SELECT COUNT(*)::int FROM nutrition.foods WHERE COALESCE(NULLIF(name_en, ''), '') <> '')
-  ),
-  'candidate_tables', json_build_object(
-    'candidates_table_exists', to_regclass('nutrition.food_curation_candidates') IS NOT NULL,
-    'decisions_table_exists', to_regclass('nutrition.food_curation_decisions') IS NOT NULL,
-    'candidates', CASE WHEN to_regclass('nutrition.food_curation_candidates') IS NULL THEN 0 ELSE (SELECT COUNT(*)::int FROM nutrition.food_curation_candidates) END,
-    'pending_candidates', CASE WHEN to_regclass('nutrition.food_curation_candidates') IS NULL THEN 0 ELSE (SELECT COUNT(*)::int FROM nutrition.food_curation_candidates WHERE status = 'pending') END,
-    'decisions', CASE WHEN to_regclass('nutrition.food_curation_decisions') IS NULL THEN 0 ELSE (SELECT COUNT(*)::int FROM nutrition.food_curation_decisions) END
-  ),
-  'unassigned_examples', COALESCE((SELECT json_agg(json_build_object(
-    'id', id,
-    'bls_code', bls_code,
-    'source_label', source_label,
-    'current_category_slug', COALESCE(current_category_slug, ''),
-    'current_category_name_de', COALESCE(current_category_name_de, ''),
-    'sort_weight', COALESCE(sort_weight, 0),
-    'alias_count', alias_count,
-    'tags', tags,
-    'enercc', enercc,
-    'prot625', prot625,
-    'fat', fat,
-    'cho', cho,
-    'curation_status', CASE WHEN current_category_slug IS NULL THEN 'needs_curation' ELSE 'categorized' END,
-    'unresolved_reason', CASE WHEN current_category_slug IS NULL THEN 'No deterministic category_id is assigned yet.' ELSE '' END
-  )) FROM unassigned), '[]'::json)
-)::text AS payload;
-`
-}
-
 export async function getNutritionCurationData(options: NutritionCurationOptions = {}): Promise<NutritionCurationPayload> {
-  const { stdout } = await execFileAsync('docker', [
-    'exec',
-    LOCAL_DB_CONTAINER,
-    'psql',
-    '-U',
-    'postgres',
-    '-d',
-    'postgres',
-    '-At',
-    '-c',
-    buildNutritionCurationSql(options),
-  ], { maxBuffer: 1024 * 1024 * 10 })
-  const parsed = JSON.parse(stdout.trim()) as Record<string, unknown>
+  const args = buildCurationRpcArgs(options)
+  const { data, error } = await nutritionRpc().rpc('curation_overview', args)
+  if (error) {
+    throw new Error(
+      isDbUnavailableMessage(error.message)
+        ? `Nutrition database unavailable: ${error.message}`
+        : `Curation overview query failed: ${error.message}`,
+    )
+  }
+
+  const parsed = (data && typeof data === 'object' ? data : {}) as Record<string, unknown>
   const catalog = getNutritionPreferenceCatalog()
   const summary = summarizePreferenceCatalog(catalog)
   const unresolvedGroups = catalog.food_preference_groups.filter(group => group.mapping_status !== 'mapped')
@@ -340,7 +240,7 @@ export async function getNutritionCurationData(options: NutritionCurationOptions
   return {
     checkedAt: new Date().toISOString(),
     environment: 'local',
-    container: LOCAL_DB_CONTAINER,
+    container: NUTRITION_DB_SOURCE,
     counts: {
       foods: parseNumber((parsed.counts as Record<string, unknown> | undefined)?.foods),
       food_nutrients: parseNumber((parsed.counts as Record<string, unknown> | undefined)?.food_nutrients),

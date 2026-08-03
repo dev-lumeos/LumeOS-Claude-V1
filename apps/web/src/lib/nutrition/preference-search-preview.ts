@@ -1,10 +1,12 @@
-import { execFile } from 'node:child_process'
-import { promisify } from 'node:util'
+// Präferenz-gewichtete Such-Preview über supabase-js rpc() — die Abfrage
+// liegt als Postgres-Funktion nutrition.preference_search_preview in
+// supabase/_pipeline/07_lesefunktionen/070_lesefunktionen.sql.
+// Hier verbleiben: Katalog-Auflösung (deterministische Exclusions),
+// Normalisierung der Codes/Slugs/Tokens und der Payload-Zusammenbau.
 
 import { GENERAL_EXCLUSIONS, getNutritionPreferenceCatalog } from './preferences-catalog'
+import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
 
-const execFileAsync = promisify(execFile)
-const LOCAL_DB_CONTAINER = 'supabase_db_LumeOS-Claude-V1'
 const LABEL_POLICY = 'preference_preview_local_only_not_production_smart_search'
 
 type PreviewSort = 'relevance' | 'protein_desc' | 'kcal_asc' | 'name_asc'
@@ -46,8 +48,18 @@ export type PreferencePreviewPayload = {
   foods: PreferencePreviewFood[]
 }
 
-function escapeSql(value: string): string {
-  return value.replace(/'/g, "''")
+export type PreferencePreviewRpcArgs = {
+  p_query: string
+  p_normalized_query: string
+  p_tokens: string[]
+  p_excluded_category_slugs: string[]
+  p_liked_category_slugs: string[]
+  p_disliked_category_slugs: string[]
+  p_liked_tags: string[]
+  p_disliked_tags: string[]
+  p_sort: PreviewSort
+  p_limit: number
+  p_offset: number
 }
 
 function normalize(value: string): string {
@@ -80,10 +92,6 @@ function splitCodes(value: string | undefined): string[] {
     .slice(0, 20)
 }
 
-function sqlArray(values: string[]): string {
-  return `ARRAY[${values.map(value => `'${escapeSql(value)}'`).join(',')}]::text[]`
-}
-
 export function resolveDeterministicExclusions(codes: string[]) {
   const catalog = getNutritionPreferenceCatalog()
   const byCode = new Map(catalog.general_exclusions.map(item => [item.code, item]))
@@ -108,18 +116,8 @@ export function resolveDeterministicExclusions(codes: string[]) {
   return { applied, unresolved, categorySlugs: Array.from(new Set(categorySlugs)) }
 }
 
-function buildTextPredicate(query: string): string {
-  const tokens = normalize(query).split(' ').filter(Boolean).slice(0, 6)
-  if (tokens.length === 0) return 'TRUE'
-  const blob = `replace(replace(replace(replace(lower(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)), 'ä', 'ae'), 'ö', 'oe'), 'ü', 'ue'), 'ß', 'ss')`
-  return tokens.map(token => `(${blob} LIKE '%${escapeSql(token)}%' OR EXISTS (
-    SELECT 1 FROM nutrition.food_aliases fa
-    WHERE fa.food_id = f.id
-      AND replace(replace(replace(replace(lower(fa.alias), 'ä', 'ae'), 'ö', 'oe'), 'ü', 'ue'), 'ß', 'ss') LIKE '%${escapeSql(token)}%'
-  ))`).join(' AND ')
-}
-
-export function buildPreferencePreviewSql(params: {
+/** Baut die rpc()-Argumente für nutrition.preference_search_preview — testbar ohne Datenbank. */
+export function buildPreferencePreviewRpcArgs(params: {
   query: string
   exclusions: string[]
   likedCategories: string[]
@@ -129,129 +127,21 @@ export function buildPreferencePreviewSql(params: {
   limit: number
   offset: number
   sort: PreviewSort
-}): string {
-  const textPredicate = buildTextPredicate(params.query)
+}): PreferencePreviewRpcArgs {
   const exclusion = resolveDeterministicExclusions(params.exclusions)
-  const excludedSlugs = exclusion.categorySlugs
-  const likedCategorySlugs = params.likedCategories.map(slug).filter(Boolean)
-  const dislikedCategorySlugs = params.dislikedCategories.map(slug).filter(Boolean)
-  const likedTags = params.likedTags.map(code).filter(Boolean)
-  const dislikedTags = params.dislikedTags.map(code).filter(Boolean)
-  const limit = Math.min(Math.max(Math.trunc(params.limit) || 25, 1), 100)
-  const offset = Math.max(Math.trunc(params.offset) || 0, 0)
-  const orderBy = params.sort === 'protein_desc'
-    ? 'COALESCE(prot625, 0) DESC, preference_score DESC, source_label ASC'
-    : params.sort === 'kcal_asc'
-      ? 'COALESCE(enercc, 999999) ASC, preference_score DESC, source_label ASC'
-      : params.sort === 'name_asc'
-        ? 'source_label ASC'
-        : 'text_rank DESC, preference_score DESC, sort_weight DESC NULLS LAST, source_label ASC'
-
-  return `
-WITH RECURSIVE excluded_categories AS (
-  SELECT id, slug FROM nutrition.food_categories WHERE slug = ANY(${sqlArray(excludedSlugs)})
-  UNION ALL
-  SELECT child.id, child.slug
-  FROM nutrition.food_categories child
-  JOIN excluded_categories parent ON child.parent_id = parent.id
-),
-liked_categories AS (
-  SELECT id, slug FROM nutrition.food_categories WHERE slug = ANY(${sqlArray(likedCategorySlugs)})
-  UNION ALL
-  SELECT child.id, child.slug FROM nutrition.food_categories child JOIN liked_categories parent ON child.parent_id = parent.id
-),
-disliked_categories AS (
-  SELECT id, slug FROM nutrition.food_categories WHERE slug = ANY(${sqlArray(dislikedCategorySlugs)})
-  UNION ALL
-  SELECT child.id, child.slug FROM nutrition.food_categories child JOIN disliked_categories parent ON child.parent_id = parent.id
-),
-base AS (
-  SELECT
-    f.id,
-    f.bls_code,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
-    f.sort_weight,
-    fc.slug AS category_slug,
-    fc.name_de AS category_name_de,
-    m.enercc,
-    m.prot625,
-    m.fat,
-    m.cho,
-    COALESCE(tags.tags, ARRAY[]::text[]) AS tags,
-    CASE WHEN ${textPredicate} THEN 1 ELSE 0 END AS text_rank,
-    CASE WHEN lc.id IS NOT NULL THEN 50 ELSE 0 END
-      + CASE WHEN dc.id IS NOT NULL THEN -50 ELSE 0 END
-      + CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(likedTags)} THEN 30 ELSE 0 END
-      + CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(dislikedTags)} THEN -30 ELSE 0 END AS preference_score,
-    ARRAY_REMOVE(ARRAY[
-      CASE WHEN lc.id IS NOT NULL THEN 'liked_category' END,
-      CASE WHEN dc.id IS NOT NULL THEN 'disliked_category' END,
-      CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(likedTags)} THEN 'liked_tag' END,
-      CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(dislikedTags)} THEN 'disliked_tag' END
-    ], NULL) AS preference_notes,
-    ARRAY_REMOVE(ARRAY[
-      CASE WHEN lc.id IS NOT NULL THEN 'boosted because selected liked category includes this food category' END,
-      CASE WHEN dc.id IS NOT NULL THEN 'suppressed because selected disliked category includes this food category' END,
-      CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(likedTags)} THEN 'boosted because food has a selected liked tag' END,
-      CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && ${sqlArray(dislikedTags)} THEN 'suppressed because food has a selected disliked tag' END
-    ], NULL) AS preference_reasons
-  FROM nutrition.foods f
-  LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
-  LEFT JOIN excluded_categories ec ON ec.id = f.category_id
-  LEFT JOIN liked_categories lc ON lc.id = f.category_id
-  LEFT JOIN disliked_categories dc ON dc.id = f.category_id
-  LEFT JOIN LATERAL (
-    SELECT
-      MAX(value) FILTER (WHERE nutrient_code='ENERCC') AS enercc,
-      MAX(value) FILTER (WHERE nutrient_code='PROT625') AS prot625,
-      MAX(value) FILTER (WHERE nutrient_code='FAT') AS fat,
-      MAX(value) FILTER (WHERE nutrient_code='CHO') AS cho
-    FROM nutrition.food_nutrients fn WHERE fn.food_id = f.id
-  ) m ON TRUE
-  LEFT JOIN LATERAL (
-    SELECT array_agg(ft.tag_code ORDER BY ft.tag_code) AS tags
-    FROM nutrition.food_tags ft WHERE ft.food_id = f.id
-  ) tags ON TRUE
-  WHERE ${textPredicate}
-    AND ec.id IS NULL
-),
-excluded_count AS (
-  SELECT COUNT(*) AS count
-  FROM nutrition.foods f
-  JOIN excluded_categories ec ON ec.id = f.category_id
-  WHERE ${textPredicate}
-),
-ranked AS (
-  SELECT * FROM base ORDER BY ${orderBy} LIMIT ${limit} OFFSET ${offset}
-)
-SELECT json_build_object(
-  'query', ${sqlLiteral(params.query)},
-  'normalized_query', ${sqlLiteral(normalize(params.query))},
-  'total', (SELECT COUNT(*) FROM base),
-  'excluded_count', (SELECT count FROM excluded_count),
-  'boosted_count', (SELECT COUNT(*) FROM base WHERE preference_score > 0),
-  'suppressed_count', (SELECT COUNT(*) FROM base WHERE preference_score < 0),
-  'foods', COALESCE((SELECT json_agg(json_build_object(
-    'id', id,
-    'bls_code', bls_code,
-    'source_label', source_label,
-    'category_slug', category_slug,
-    'category_name_de', category_name_de,
-    'enercc', enercc::text,
-    'prot625', prot625::text,
-    'fat', fat::text,
-    'cho', cho::text,
-    'tags', tags,
-    'preference_score', preference_score,
-    'preference_notes', preference_notes,
-    'preference_reasons', preference_reasons
-  )) FROM ranked), '[]'::json)
-)::text AS payload;
-`
-}
-
-function sqlLiteral(value: string): string {
-  return `'${escapeSql(value)}'`
+  return {
+    p_query: params.query,
+    p_normalized_query: normalize(params.query),
+    p_tokens: normalize(params.query).split(' ').filter(Boolean).slice(0, 6),
+    p_excluded_category_slugs: exclusion.categorySlugs,
+    p_liked_category_slugs: params.likedCategories.map(slug).filter(Boolean),
+    p_disliked_category_slugs: params.dislikedCategories.map(slug).filter(Boolean),
+    p_liked_tags: params.likedTags.map(code).filter(Boolean),
+    p_disliked_tags: params.dislikedTags.map(code).filter(Boolean),
+    p_sort: params.sort,
+    p_limit: Math.min(Math.max(Math.trunc(params.limit) || 25, 1), 100),
+    p_offset: Math.max(Math.trunc(params.offset) || 0, 0),
+  }
 }
 
 function parseFood(value: unknown): PreferencePreviewFood | null {
@@ -299,7 +189,7 @@ export async function getPreferenceSearchPreview(params: {
   const sort = ['relevance', 'protein_desc', 'kcal_asc', 'name_asc'].includes(params.sort ?? '')
     ? params.sort as PreviewSort
     : 'relevance'
-  const sql = buildPreferencePreviewSql({
+  const args = buildPreferencePreviewRpcArgs({
     query: params.query,
     exclusions: exclusionCodes,
     likedCategories,
@@ -310,19 +200,17 @@ export async function getPreferenceSearchPreview(params: {
     offset: params.offset ?? 0,
     sort,
   })
-  const { stdout } = await execFileAsync('docker', [
-    'exec',
-    LOCAL_DB_CONTAINER,
-    'psql',
-    '-U',
-    'postgres',
-    '-d',
-    'postgres',
-    '-At',
-    '-c',
-    sql,
-  ], { maxBuffer: 1024 * 1024 * 10 })
-  const parsed = JSON.parse(stdout.trim()) as Record<string, unknown>
+
+  const { data, error } = await nutritionRpc().rpc('preference_search_preview', args)
+  if (error) {
+    throw new Error(
+      isDbUnavailableMessage(error.message)
+        ? `Nutrition database unavailable: ${error.message}`
+        : `Preference preview query failed: ${error.message}`,
+    )
+  }
+
+  const parsed = (data && typeof data === 'object' ? data : {}) as Record<string, unknown>
   const foods = Array.isArray(parsed.foods) ? parsed.foods.flatMap(item => parseFood(item) ?? []) : []
   const applied = [
     ...exclusion.applied,
@@ -334,7 +222,7 @@ export async function getPreferenceSearchPreview(params: {
   return {
     checkedAt: new Date().toISOString(),
     environment: 'local',
-    container: LOCAL_DB_CONTAINER,
+    container: NUTRITION_DB_SOURCE,
     preview_policy: LABEL_POLICY,
     query: params.query,
     exclusions: exclusionCodes,

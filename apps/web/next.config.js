@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: [],
+  transpilePackages: ['@lumeos/shared'],
   experimental: {
     typedRoutes: true,
   },

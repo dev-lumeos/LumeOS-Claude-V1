@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { buildPreferencePreviewSql, deterministicExclusionOptions, resolveDeterministicExclusions } from '../preference-search-preview'
+import { buildPreferencePreviewRpcArgs, deterministicExclusionOptions, resolveDeterministicExclusions } from '../preference-search-preview'
 
 test('resolves only deterministic general exclusion mappings', () => {
   const result = resolveDeterministicExclusions(['no_offal', 'no_gluten', 'unknown_code'])
@@ -12,8 +12,8 @@ test('resolves only deterministic general exclusion mappings', () => {
   assert.deepEqual(result.unresolved.map(item => item.code), ['no_gluten', 'unknown_code'])
 })
 
-test('builds a read-only preference preview SQL query', () => {
-  const sql = buildPreferencePreviewSql({
+test('builds read-only preference preview rpc arguments', () => {
+  const args = buildPreferencePreviewRpcArgs({
     query: 'kürbis',
     exclusions: ['no_offal'],
     likedCategories: ['gemuese'],
@@ -25,14 +25,37 @@ test('builds a read-only preference preview SQL query', () => {
     sort: 'relevance',
   })
 
-  assert.match(sql, /WITH RECURSIVE excluded_categories/)
-  assert.match(sql, /nutrition\.food_aliases/)
-  assert.match(sql, /nutrition\.food_nutrients/)
-  assert.match(sql, /nutrition\.food_tags/)
-  assert.match(sql, /'high_fiber'/)
-  assert.match(sql, /preference_reasons/)
-  assert.doesNotMatch(sql, /'high-fiber'/)
-  assert.doesNotMatch(sql, /\b(INSERT|UPDATE|DELETE|DROP|ALTER|CREATE)\b/i)
+  assert.equal(args.p_query, 'kürbis')
+  assert.equal(args.p_normalized_query, 'kuerbis')
+  assert.deepEqual(args.p_tokens, ['kuerbis'])
+  assert.deepEqual(args.p_excluded_category_slugs, ['innereien'])
+  assert.deepEqual(args.p_liked_category_slugs, ['gemuese'])
+  assert.deepEqual(args.p_disliked_category_slugs, ['wurstwaren-aufschnitt'])
+  assert.deepEqual(args.p_liked_tags, ['high_fiber'])
+  assert.deepEqual(args.p_disliked_tags, ['processed_food'])
+  assert.equal(args.p_sort, 'relevance')
+  assert.equal(args.p_limit, 25)
+  assert.equal(args.p_offset, 0)
+})
+
+test('normalizes tag codes and clamps paging in preview rpc arguments', () => {
+  const args = buildPreferencePreviewRpcArgs({
+    query: '',
+    exclusions: [],
+    likedCategories: ['Gemüse & Salat'],
+    dislikedCategories: [],
+    likedTags: ['High Fiber'],
+    dislikedTags: [],
+    limit: 500,
+    offset: -3,
+    sort: 'name_asc',
+  })
+
+  assert.deepEqual(args.p_liked_category_slugs, ['gemuese-salat'])
+  assert.deepEqual(args.p_liked_tags, ['high_fiber'])
+  assert.deepEqual(args.p_tokens, [])
+  assert.equal(args.p_limit, 100)
+  assert.equal(args.p_offset, 0)
 })
 
 test('exposes unresolved exclusion options for UI transparency', () => {
