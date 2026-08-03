@@ -148,6 +148,19 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 ## C — Produkt: apps/web
 
+- [ ] **C-11: Vor dem ersten Deployment auf Session-Client umstellen**
+  (neu 2026-08-03) — `[cmd]` `nutrition-db.ts` nutzt den Service-Client, weil
+  ohne Anmeldung (M3) jede Session `anon` wäre und kein `USAGE` auf `nutrition`
+  hätte. Serverseitig, `service_role` erreicht den Browser nicht, im Code
+  kommentiert.
+  **Lokal in der Entwicklung unkritisch** — keine fremden Nutzerdaten vorhanden,
+  Stammdaten sind ohnehin für alle lesbar.
+  *Freigabebedingung, kein Entwicklungsblocker: Bevor die App eine fremde
+  Umgebung erreicht oder echte Nutzerdaten entstehen, werden Stammdaten-Reads
+  auf den Session-Client umgestellt — sonst laufen die 15 Policies aus 060 im
+  Anwendungspfad ins Leere.* Gehört in die Deployment-Prüfliste
+  (`10-plattform/ci-cd`).
+
 - [ ] **C-01: Frontend-Stack-Lücke schliessen** — `[cmd]` `apps/web/package.json`
   gegen `docs/specs/WebPlatform/INDEX.md`: 10 von 13 deklarierten Bibliotheken fehlen.
   Vorhanden: Next.js 14, React 18, Tailwind, Supabase SSR (deklariert, ungenutzt).
