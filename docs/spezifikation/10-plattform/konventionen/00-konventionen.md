@@ -85,23 +85,26 @@ Feste Bereiche, damit sieben Apps und neun Services nebeneinander laufen.
 
 | Bereich | Vergabe |
 |---|---|
-| 3100–3169 | Apps, Zehnerabstand je App |
+| 3200–3290 | Apps, Zehnerabstand je App |
 | 5100–5900 | Services, Hunderterabstand je Modul |
 | 54321–54327 | Supabase lokal, von der CLI vergeben |
 
 | App | Port |
 |---|---|
-| `web` | 3100 |
-| `admin` | 3110 |
-| `buddy` | 3120 |
-| `coach` | 3130 |
-| `marketplace` | 3140 |
-| `gym` | 3150 |
-| `supplier` | 3160 |
+| `web` | 3200 |
+| `admin` | 3210 |
+| `buddy` | 3220 |
+| `coach` | 3230 |
+| `marketplace` | 3240 |
+| `gym` | 3250 |
+| `supplier` | 3260 |
 
 Der Zehnerabstand lässt Raum für Nebenprozesse je App (Storybook, Mock-Server).
 
-**Warum nicht 3000:** `[cmd]` Der Next.js-Standardport ist auf Toms Rechner von
+**Warum nicht 3000 und nicht 3100:** `[cmd]` 3100 und 3180 sind von einer
+Docker/WSL-Portweiterleitung belegt, 3000 von einer fremden Anwendung.
+
+**Warum nicht der Standardport:** `[cmd]` Der Next.js-Standardport ist auf Toms Rechner von
 einer fremden Anwendung belegt. Ein Standardport ist keine Vergabe — jede App
 trägt ihren Port ausdrücklich in `package.json` (`next dev -p`).
 
@@ -111,7 +114,7 @@ Marketplace 5700, Medical 5800, Goals 5900. Sie gelten nur, falls die
 Servicelayer-Entscheidung (TODO A-07) für Services ausfällt.
 
 `[cmd]` Der Altbestand nennt für Admin den Port 4100 — fällt aus jedem Schema
-und wird durch 3110 ersetzt.
+und wird durch 3210 ersetzt.
 
 ---
 
