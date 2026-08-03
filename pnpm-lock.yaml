@@ -32,6 +32,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@lumeos/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@supabase/ssr':
         specifier: ^0.1.0
         version: 0.1.0(@supabase/supabase-js@2.104.0)
