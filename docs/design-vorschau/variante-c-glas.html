@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="de" data-theme="dark"><head><meta charset="utf-8"><title>LumeOS — Liquid Glass</title>
+<style>
+:root { --bg: oklch(0.155 0.005 270);
+    --bg-elev: oklch(0.185 0.005 270);
+    --surface: oklch(0.205 0.005 270);
+    --surface-2: oklch(0.235 0.005 270);
+    --surface-hover: oklch(0.255 0.005 270);
+    --border: oklch(0.280 0.005 270);
+    --border-strong: oklch(0.360 0.005 270);
+    --fg: oklch(0.970 0.000 0);
+    --fg-muted: oklch(0.720 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.420 0.005 270);
+    --pos: oklch(0.78 0.13 150);
+    --warn: oklch(0.82 0.13 80);
+    --neg: oklch(0.72 0.16 22);
+    --acc-dash: oklch(0.78 0.04 240);
+    --acc-nutri: oklch(0.78 0.10 70);
+    --acc-train: oklch(0.74 0.10 290);
+    --acc-recov: oklch(0.78 0.08 160);
+    --acc-suppl: oklch(0.76 0.10 25);
+    --acc-goals: oklch(0.80 0.10 95);
+    --acc-medic: oklch(0.76 0.09 15);
+    --acc-coach: oklch(0.78 0.08 200);
+    --acc-buddy: oklch(0.76 0.09 310);
+    --acc-mkt: oklch(0.78 0.08 145);
+    --acc-admin: oklch(0.75 0.01 270);
+    --acc: var(--acc-dash);
+    --pad-card: 16px;
+    --radius: 8px;
+    --radius-sm: 6px;
+    --radius-lg: 12px;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+[data-theme="light"] { --bg: oklch(0.985 0.002 270);
+    --bg-elev: oklch(1.000 0.000 0);
+    --surface: oklch(1.000 0.000 0);
+    --surface-2: oklch(0.975 0.003 270);
+    --surface-hover: oklch(0.955 0.003 270);
+    --border: oklch(0.910 0.003 270);
+    --border-strong: oklch(0.820 0.005 270);
+    --fg: oklch(0.200 0.005 270);
+    --fg-muted: oklch(0.400 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.680 0.005 270);
+    --acc-dash: oklch(0.48 0.06 240);
+    --acc-nutri: oklch(0.55 0.13 60);
+    --acc-train: oklch(0.50 0.16 290);
+    --acc-recov: oklch(0.50 0.10 160);
+    --acc-suppl: oklch(0.55 0.15 25);
+    --acc-goals: oklch(0.58 0.13 90);
+    --acc-medic: oklch(0.55 0.14 15);
+    --acc-coach: oklch(0.55 0.10 200);
+    --acc-buddy: oklch(0.55 0.12 310);
+    --acc-mkt: oklch(0.52 0.10 145);
+    --acc-admin: oklch(0.45 0.01 270); }
+* { box-sizing:border-box; }
+body { margin:0; padding:26px; background:var(--bg); color:var(--fg);
+       font-family:var(--font-mono); font-size:13px; line-height:1.5;
+       -webkit-font-smoothing:antialiased; }
+header { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px; }
+h1 { font-size:17px; margin:0; }
+.tag { font-size:11px; color:var(--fg-dim); border:1px solid var(--border);
+       border-radius:99px; padding:2px 9px; }
+.lead { color:var(--fg-subtle); margin:0 0 24px; max-width:78ch; }
+button.um { font:inherit; cursor:pointer; background:var(--surface); color:var(--fg);
+            border:1px solid var(--border-strong); border-radius:var(--radius-sm); padding:5px 11px; }
+button.um:hover { background:var(--surface-hover); }
+h2 { font-size:10px; text-transform:uppercase; letter-spacing:.09em;
+     color:var(--fg-dim); margin:28px 0 10px; font-weight:600; }
+.zahl { font-variant-numeric:tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+body { position:relative; min-height:100vh; }
+body::before { content:''; position:fixed; inset:0; z-index:-1;
+  background:
+    radial-gradient(48rem 34rem at 12% 8%, color-mix(in oklch, var(--acc-nutri) 22%, transparent), transparent 62%),
+    radial-gradient(42rem 30rem at 88% 22%, color-mix(in oklch, var(--acc-train) 20%, transparent), transparent 60%),
+    radial-gradient(50rem 36rem at 55% 92%, color-mix(in oklch, var(--acc-recov) 18%, transparent), transparent 62%),
+    var(--bg);
+  animation:driften 26s ease-in-out infinite alternate; }
+@keyframes driften { to { transform:scale(1.09) translate3d(-1.5%, 1.5%, 0); } }
+
+.leiste { position:sticky; top:14px; z-index:5; display:flex; gap:6px; align-items:center;
+  padding:9px 12px; margin-bottom:20px; border-radius:99px;
+  background:color-mix(in oklch, var(--surface) 55%, transparent);
+  backdrop-filter:blur(20px) saturate(1.5); -webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid color-mix(in oklch, var(--fg) 12%, transparent);
+  box-shadow:0 10px 34px -14px rgba(0,0,0,.65); }
+.leiste a { padding:6px 13px; border-radius:99px; color:var(--fg-muted);
+  text-decoration:none; font-size:12px; transition:background .2s, color .2s; }
+.leiste a:hover { background:color-mix(in oklch, var(--fg) 9%, transparent); color:var(--fg); }
+.leiste a.an { background:color-mix(in oklch, var(--acc) 26%, transparent); color:var(--fg); }
+
+.raster { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:14px; }
+
+/* Glas nur fuer Rahmen und Ueberlagerungen */
+.glas { border-radius:var(--radius-lg); padding:1px;
+  background:linear-gradient(150deg,
+    color-mix(in oklch, var(--fg) 20%, transparent),
+    color-mix(in oklch, var(--fg) 4%, transparent));
+  box-shadow:0 16px 40px -20px rgba(0,0,0,.7); }
+/* Daten stehen auf deckender Flaeche - nie auf Glas */
+.inhalt { background:var(--surface); border-radius:calc(var(--radius-lg) - 1px);
+  padding:var(--pad-card); }
+.l { font-size:10px; text-transform:uppercase; letter-spacing:.07em; color:var(--fg-dim); }
+.w { font-size:30px; font-weight:600; margin:5px 0 1px; letter-spacing:-.01em; }
+.d { font-size:11px; color:var(--fg-subtle); }
+.zeile { display:flex; justify-content:space-between; padding:5px 0;
+  border-bottom:1px solid var(--border); font-size:12px; }
+.zeile:last-child { border:none; }
+.zeile span { color:var(--fg-muted); }
+
+/* Ueberlagerung: hier ist Glas richtig */
+.dialog { margin-top:22px; max-width:480px; border-radius:var(--radius-lg); padding:20px;
+  background:color-mix(in oklch, var(--surface) 62%, transparent);
+  backdrop-filter:blur(24px) saturate(1.6); -webkit-backdrop-filter:blur(24px) saturate(1.6);
+  border:1px solid color-mix(in oklch, var(--fg) 14%, transparent);
+  box-shadow:0 24px 60px -26px rgba(0,0,0,.8); }
+.dialog h3 { margin:0 0 7px; font-size:14px; }
+.dialog p { margin:0 0 14px; color:var(--fg-muted); font-size:12px; }
+.knopf { background:var(--acc); color:var(--bg); border:none; font:inherit; font-size:12px;
+  border-radius:var(--radius-sm); padding:7px 14px; cursor:pointer; }
+.knopf.zweit { background:color-mix(in oklch, var(--fg) 10%, transparent); color:var(--fg); }
+.hinweis { margin-top:26px; padding:13px 15px; border-radius:var(--radius);
+  border:1px solid var(--warn); color:var(--warn); font-size:12px; max-width:78ch; }
+</style></head><body>
+<header><h1>LumeOS — Liquid Glass</h1><span class="tag">Variante C</span>
+<button class="um" onclick="const h=document.documentElement;h.dataset.theme=h.dataset.theme==='light'?'dark':'light'">Theme</button>
+</header><p class="lead">Glas trennt Ebenen, ohne zusätzliche Farben einzuführen — deshalb wirkt es in dunklen Oberflächen besonders gut. Die Einschränkung ist hart: Glasmorphismus scheitert, sobald der Kontrast unter WCAG AA fällt. Hier steht deshalb keine Zahl auf Glas.</p>
+<nav class="leiste">
+  <a href="#" class="an">Dashboard</a><a href="#">Ernährung</a><a href="#">Training</a>
+  <a href="#">Erholung</a><a href="#">Ziele</a><a href="#">Medizin</a>
+</nav>
+<div class="raster">
+  <div class="glas"><div class="inhalt">
+    <div class="l">Energie heute</div><div class="w zahl">1.840</div>
+    <div class="d">von 2.150 kcal</div></div></div>
+  <div class="glas"><div class="inhalt">
+    <div class="l">Bereitschaft</div><div class="w zahl">79</div>
+    <div class="d">erholt · HRV 58 ms</div></div></div>
+  <div class="glas"><div class="inhalt">
+    <div class="l">Trainingsvolumen</div><div class="w zahl">8,4 t</div>
+    <div class="d">diese Woche · 4 Einheiten</div></div></div>
+  <div class="glas"><div class="inhalt">
+    <div class="l">Makros</div>
+    <div class="zeile"><span>Protein</span><b class="zahl">142 g</b></div>
+    <div class="zeile"><span>Kohlenhydrate</span><b class="zahl">186 g</b></div>
+    <div class="zeile"><span>Fett</span><b class="zahl">64 g</b></div>
+  </div></div>
+</div>
+<div class="dialog">
+  <h3>Buddy</h3>
+  <p>Du liegst 310 kcal unter deinem Ziel und hast heute trainiert. Soll ich etwas vorschlagen?</p>
+  <button class="knopf">Vorschlag ansehen</button>
+  <button class="knopf zweit">Später</button>
+</div>
+<p class="hinweis">Glas hier nur für Navigation und Dialog. Die Datenkarten haben einen
+Glasrand, aber eine deckende Fläche — sonst sinkt der Kontrast unter die Grenze.
+Zusätzlich: <code>backdrop-filter</code> läuft GPU-beschleunigt gut auf moderner Hardware,
+verursacht auf schwächeren Geräten aber Bildratenabfälle.</p>
+</body></html>

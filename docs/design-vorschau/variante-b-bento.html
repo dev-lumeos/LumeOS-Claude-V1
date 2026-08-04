@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="de" data-theme="dark"><head><meta charset="utf-8"><title>LumeOS — Bento</title>
+<style>
+:root { --bg: oklch(0.155 0.005 270);
+    --bg-elev: oklch(0.185 0.005 270);
+    --surface: oklch(0.205 0.005 270);
+    --surface-2: oklch(0.235 0.005 270);
+    --surface-hover: oklch(0.255 0.005 270);
+    --border: oklch(0.280 0.005 270);
+    --border-strong: oklch(0.360 0.005 270);
+    --fg: oklch(0.970 0.000 0);
+    --fg-muted: oklch(0.720 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.420 0.005 270);
+    --pos: oklch(0.78 0.13 150);
+    --warn: oklch(0.82 0.13 80);
+    --neg: oklch(0.72 0.16 22);
+    --acc-dash: oklch(0.78 0.04 240);
+    --acc-nutri: oklch(0.78 0.10 70);
+    --acc-train: oklch(0.74 0.10 290);
+    --acc-recov: oklch(0.78 0.08 160);
+    --acc-suppl: oklch(0.76 0.10 25);
+    --acc-goals: oklch(0.80 0.10 95);
+    --acc-medic: oklch(0.76 0.09 15);
+    --acc-coach: oklch(0.78 0.08 200);
+    --acc-buddy: oklch(0.76 0.09 310);
+    --acc-mkt: oklch(0.78 0.08 145);
+    --acc-admin: oklch(0.75 0.01 270);
+    --acc: var(--acc-dash);
+    --pad-card: 16px;
+    --radius: 8px;
+    --radius-sm: 6px;
+    --radius-lg: 12px;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+[data-theme="light"] { --bg: oklch(0.985 0.002 270);
+    --bg-elev: oklch(1.000 0.000 0);
+    --surface: oklch(1.000 0.000 0);
+    --surface-2: oklch(0.975 0.003 270);
+    --surface-hover: oklch(0.955 0.003 270);
+    --border: oklch(0.910 0.003 270);
+    --border-strong: oklch(0.820 0.005 270);
+    --fg: oklch(0.200 0.005 270);
+    --fg-muted: oklch(0.400 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.680 0.005 270);
+    --acc-dash: oklch(0.48 0.06 240);
+    --acc-nutri: oklch(0.55 0.13 60);
+    --acc-train: oklch(0.50 0.16 290);
+    --acc-recov: oklch(0.50 0.10 160);
+    --acc-suppl: oklch(0.55 0.15 25);
+    --acc-goals: oklch(0.58 0.13 90);
+    --acc-medic: oklch(0.55 0.14 15);
+    --acc-coach: oklch(0.55 0.10 200);
+    --acc-buddy: oklch(0.55 0.12 310);
+    --acc-mkt: oklch(0.52 0.10 145);
+    --acc-admin: oklch(0.45 0.01 270); }
+* { box-sizing:border-box; }
+body { margin:0; padding:26px; background:var(--bg); color:var(--fg);
+       font-family:var(--font-mono); font-size:13px; line-height:1.5;
+       -webkit-font-smoothing:antialiased; }
+header { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px; }
+h1 { font-size:17px; margin:0; }
+.tag { font-size:11px; color:var(--fg-dim); border:1px solid var(--border);
+       border-radius:99px; padding:2px 9px; }
+.lead { color:var(--fg-subtle); margin:0 0 24px; max-width:78ch; }
+button.um { font:inherit; cursor:pointer; background:var(--surface); color:var(--fg);
+            border:1px solid var(--border-strong); border-radius:var(--radius-sm); padding:5px 11px; }
+button.um:hover { background:var(--surface-hover); }
+h2 { font-size:10px; text-transform:uppercase; letter-spacing:.09em;
+     color:var(--fg-dim); margin:28px 0 10px; font-weight:600; }
+.zahl { font-variant-numeric:tabular-nums; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+}
+
+.bento { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+.k { background:var(--surface); border:1px solid var(--border);
+     border-radius:var(--radius-lg); padding:var(--pad-card);
+     transition:transform .25s cubic-bezier(.16,1,.3,1), border-color .25s;
+     animation:rein .5s cubic-bezier(.16,1,.3,1) backwards; }
+.k:hover { transform:translateY(-2px); border-color:var(--border-strong); }
+@keyframes rein { from { opacity:0; transform:translateY(10px); } }
+.k .l { font-size:10px; text-transform:uppercase; letter-spacing:.07em;
+        color:var(--fg-dim); margin-bottom:6px; }
+.k .w { font-size:26px; font-weight:600; letter-spacing:-.01em; }
+.k .d { font-size:11px; color:var(--fg-subtle); margin-top:2px; }
+.gross { grid-column:span 3; grid-row:span 2; }
+.gross .w { font-size:52px; line-height:1; }
+.breit { grid-column:span 3; }
+.mittel { grid-column:span 2; }
+.klein { grid-column:span 1; }
+.hoch { grid-column:span 2; grid-row:span 2; }
+.balken { display:flex; align-items:flex-end; gap:4px; height:70px; margin-top:12px; }
+.balken i { flex:1; border-radius:2px 2px 0 0; background:var(--acc);
+            opacity:.7; height:0; animation:auf .8s cubic-bezier(.16,1,.3,1) forwards; }
+.balken i:hover { opacity:1; }
+@keyframes auf { to { height:var(--h); } }
+.liste { margin-top:10px; }
+.liste div { display:flex; justify-content:space-between; padding:5px 0;
+             border-bottom:1px solid var(--border); font-size:12px; }
+.liste div:last-child { border:none; }
+.liste span { color:var(--fg-muted); }
+.punkte { display:flex; gap:5px; margin-top:12px; flex-wrap:wrap; }
+.punkt { width:11px; height:11px; border-radius:3px; background:var(--surface-2); }
+.punkt.an { background:var(--acc-train); }
+.ziel { height:5px; border-radius:99px; background:var(--surface-2); margin-top:10px; overflow:hidden; }
+.ziel i { display:block; height:100%; background:var(--acc-goals); width:0;
+          animation:breit 1s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes breit { to { width:var(--p); } }
+</style></head><body>
+<header><h1>LumeOS — Bento</h1><span class="tag">Variante B</span>
+<button class="um" onclick="const h=document.documentElement;h.dataset.theme=h.dataset.theme==='light'?'dark':'light'">Theme</button>
+</header><p class="lead">Die Fläche kommuniziert Priorität, bevor jemand ein Wort liest. Absichtliche Asymmetrie: eine Kennzahl über drei Spalten neben kleineren Kacheln. Weissraum gehört in die Karten, nicht zwischen sie. Bewegung nur beim Eintreten und beim Zeigen.</p>
+<div class="bento">
+  <div class="k gross" style="animation-delay:0ms">
+    <div class="l">Energie heute</div>
+    <div class="w zahl">1.840</div>
+    <div class="d">von 2.150 kcal · 86 %</div>
+    <div class="balken">
+      <i style="--h:40%;animation-delay:.1s"></i><i style="--h:65%;animation-delay:.15s"></i>
+      <i style="--h:52%;animation-delay:.2s"></i><i style="--h:78%;animation-delay:.25s"></i>
+      <i style="--h:60%;animation-delay:.3s"></i><i style="--h:86%;animation-delay:.35s"></i>
+      <i style="--h:71%;animation-delay:.4s"></i>
+    </div>
+  </div>
+  <div class="k hoch" style="animation-delay:50ms">
+    <div class="l">Makros</div>
+    <div class="liste">
+      <div><span>Protein</span><b class="zahl">142 g</b></div>
+      <div><span>Kohlenhydrate</span><b class="zahl">186 g</b></div>
+      <div><span>Fett</span><b class="zahl">64 g</b></div>
+      <div><span>Ballaststoffe</span><b class="zahl">31 g</b></div>
+      <div><span>Zucker</span><b class="zahl">42 g</b></div>
+      <div><span>Wasser</span><b class="zahl">2,1 L</b></div>
+    </div>
+  </div>
+  <div class="k klein" style="animation-delay:100ms">
+    <div class="l">HRV</div><div class="w zahl">58</div><div class="d">ms</div>
+  </div>
+  <div class="k klein" style="animation-delay:150ms">
+    <div class="l">Puls</div><div class="w zahl">52</div><div class="d">Ruhe</div>
+  </div>
+  <div class="k mittel" style="animation-delay:200ms">
+    <div class="l">Trainingswoche</div>
+    <div class="punkte">
+      <span class="punkt an"></span><span class="punkt"></span><span class="punkt an"></span>
+      <span class="punkt an"></span><span class="punkt"></span><span class="punkt an"></span>
+      <span class="punkt"></span>
+    </div>
+    <div class="d" style="margin-top:9px">4 von 7 Tagen · 8,4 t Volumen</div>
+  </div>
+  <div class="k breit" style="animation-delay:250ms">
+    <div class="l">Ziel — Körperfett unter 12 %</div>
+    <div class="w zahl">13,4 %</div>
+    <div class="ziel"><i style="--p:68%"></i></div>
+    <div class="d">68 % erreicht · noch 12 Tage</div>
+  </div>
+  <div class="k mittel" style="animation-delay:300ms">
+    <div class="l">Schlaf</div><div class="w zahl">7 h 20</div>
+    <div class="d">Tiefschlaf 1 h 45</div>
+  </div>
+  <div class="k klein" style="animation-delay:350ms">
+    <div class="l">Suppl.</div><div class="w zahl">4/6</div><div class="d">heute</div>
+  </div>
+  <div class="k breit" style="animation-delay:400ms">
+    <div class="l">Lebensmitteldatenbank</div>
+    <div class="w zahl">7.140</div>
+    <div class="d">Einträge · 698.092 Nährwerte · BLS 4.0</div>
+  </div>
+  <div class="k mittel" style="animation-delay:450ms">
+    <div class="l">Medizin</div><div class="w zahl">12</div>
+    <div class="d">Werte · 1 auffällig</div>
+  </div>
+</div>
+</body></html>
