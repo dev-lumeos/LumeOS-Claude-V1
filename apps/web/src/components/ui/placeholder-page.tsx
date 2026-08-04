@@ -83,7 +83,7 @@ export function PlaceholderPage({ moduleName }: { moduleName: string }) {
       <section>
         <SectionHeader kicker="Boundary" title="Warum diese Seite leer bleibt" />
         <EmptyState
-          description="Die Navigation soll vollständig sein, ohne Funktionen vorzutäuschen. Sobald ein Modul governance-korrekt freigegeben wird, kann diese Platzhalterfläche durch echte UI ersetzt werden."
+          description="Die Navigation soll vollständig sein, ohne Funktionen vorzutäuschen. Sobald ein Modul freigegeben wird, kann diese Platzhalterfläche durch echte UI ersetzt werden."
           title="Keine Fake-Live-Daten"
         />
       </section>

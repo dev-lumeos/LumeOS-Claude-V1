@@ -251,10 +251,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [router])
 
-  if (pathname === '/governance' || pathname.startsWith('/governance/')) {
-    return <>{children}</>
-  }
-
   return (
     <div
       className={`lume-shell lume-shell-${activeSection}`}

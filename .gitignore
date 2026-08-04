@@ -25,20 +25,21 @@ nul
 tools/lightrag/storage/
 
 # Runtime State (generiert zur Laufzeit — nicht committen)
-system/state/audit.jsonl
-system/state/audit.error.jsonl
-system/state/runtime_state.json
-system/state/runtime_state.lock
-system/state/pipeline-audit.jsonl
-system/state/pipeline-audit-live.jsonl
-system/approval/approvals.json
-system/approval/queue.json
-system/state/pipeline-metrics.jsonl
-system/reports/codex-worker/
-system/reports/model-runtime-history/
-system/reports/batches/
-system/reports/runs/
-system/reports/dossiers/
+# 2026-08-03: system/ nach _archive/governance/system/ verschoben, Pfade angepasst
+_archive/governance/system/state/audit.jsonl
+_archive/governance/system/state/audit.error.jsonl
+_archive/governance/system/state/runtime_state.json
+_archive/governance/system/state/runtime_state.lock
+_archive/governance/system/state/pipeline-audit.jsonl
+_archive/governance/system/state/pipeline-audit-live.jsonl
+_archive/governance/system/approval/approvals.json
+_archive/governance/system/approval/queue.json
+_archive/governance/system/state/pipeline-metrics.jsonl
+_archive/governance/system/reports/codex-worker/
+_archive/governance/system/reports/model-runtime-history/
+_archive/governance/system/reports/batches/
+_archive/governance/system/reports/runs/
+_archive/governance/system/reports/dossiers/
 supabase/snippets/
 
 # Nutrition raw source data stays local only.
