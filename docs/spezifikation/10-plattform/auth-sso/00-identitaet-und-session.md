@@ -66,10 +66,16 @@ Alle Apps nutzen dieselbe Supabase-Auth-Session. Das Cookie ist auf
 Erweiterbar ohne Änderung dieses Dokuments: eine neue App bringt eine neue
 Zeile und eine Zugehörigkeitsart mit.
 
-**Offen `[annahme]`:** Der Altbestand setzt `httpOnly: true`. Für serverseitige
-Prüfung ist das richtig, ein Browser-Client kann das Cookie dann aber nicht
-lesen. Welche Teile serverseitig laufen und welche nicht, ist gegen
-`@supabase/ssr` zu verifizieren, bevor dieses Dokument freigegeben wird.
+**Geklärt `[read]` 2026-08-03:** Die Cookie-Handhabung wird nicht selbst
+konfiguriert. `@supabase/ssr` nutzt standardmässig den PKCE-Flow und richtet
+Speicherung und Auslesen der Session selbsttätig ein. Die beobachtete
+Voreinstellung ist `httpOnly: false`, `sameSite: lax`, `path: /` — auf
+`httpOnly: true` gesetzt, könnte der Browser-Client die Session nicht mehr
+lesen. Zudem ist ein Fehlerbericht offen, wonach `cookieOptions` teilweise
+ignoriert wird.
+
+Die einzige Option, die je gesetzt wird, ist `domain` auf `.lumeos.app` —
+und erst, wenn die zweite App entsteht (TODO B-12).
 
 **Offen:** Der Altbestand nennt an einer Stelle `app.lumeos.app`, an anderer
 `lumeos.app` für dieselbe App. Die Domain von `web` ist festzulegen.

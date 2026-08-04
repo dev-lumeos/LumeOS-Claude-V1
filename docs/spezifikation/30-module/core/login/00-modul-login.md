@@ -142,35 +142,41 @@ zum ersten Mal im Anwendungspfad:
 
 ## 10. Entschieden am 2026-08-03
 
-**Cookies: dieselben Einstellungen lokal wie produktiv.**
-`Secure`, `httpOnly`, `SameSite=Lax` — keine Umgebungsweiche im Code.
-`[read]` MDN: die https-Anforderung entfällt, wenn `Secure` von localhost
-gesetzt wird; `http://localhost` und `http://*.localhost` gelten als
-potenziell vertrauenswürdig, weil sie auf demselben Gerät liegen.
+**Nichts an der Cookie-Konfiguration selbst bauen.**
+`[read]` `@supabase/ssr` nutzt standardmässig den PKCE-Flow und richtet die
+Speicherung und das Auslesen der Session in Cookies selbsttätig ein. Es gibt
+keinen Grund, `cookieOptions` anzufassen.
 
-**Datentragende Zugriffe laufen serverseitig.**
-Mit `httpOnly` kann der Browser-Client die Session nicht lesen — er greift
-über `document.cookie` zu. Das passt zum bestehenden Aufbau: der Datenzugriff
-läuft bereits über `rpc()` serverseitig. Der Browser-Client wird nur für
-Anmeldung und Abmeldung gebraucht, wo Supabase das Cookie selbst setzt.
+*Korrektur einer früheren Fassung dieses Dokuments:* Dort stand `httpOnly:
+true` als Vorgabe. `[read]` Die beobachtete Voreinstellung ist `httpOnly:
+false` neben `sameSite: lax` und `path: /`. Auf `true` gesetzt, könnte der
+Browser-Client die Session nicht mehr lesen. Zudem gibt es einen offenen
+Fehlerbericht, wonach `cookieOptions` teilweise ignoriert wird — eine
+Einstellung, die stillschweigend wirkungslos bleibt, ist schlimmer als keine.
+
+**Die einzige Cookie-Option, die je gesetzt wird, ist `domain`** — auf
+`.lumeos.app`, damit die Session über die Apps hinweg gilt. Und erst dann,
+wenn die zweite App entsteht. Siehe TODO B-12.
+
+**Lokal keine Sonderbehandlung.**
+`[read]` MDN: die https-Anforderung entfällt, wenn `Secure` von localhost
+gesetzt wird; lokale Adressen gelten als potenziell vertrauenswürdig. Was
+`@supabase/ssr` vorgibt, funktioniert lokal wie produktiv.
 
 **Profilanlage per Trigger auf `auth.users`.**
 Ein Trigger greift bei jeder Anmeldung, auch bei einer Erstanmeldung über
 `buddy` oder `coach`. Anwendungslogik in `web` würde dort Identitäten ohne
-Profil hinterlassen.
+Profil hinterlassen. Dies ist ein von Supabase dokumentiertes Muster.
 
 *Bedingung:* Der Trigger bleibt minimal — `id` und `created_at`, keine
 Pflichtfelder, keine Fremdschlüssel auf Fehlbares. **Ein fehlschlagender
 Trigger auf `auth.users` blockiert die Registrierung vollständig**, Supabase
 antwortet dann mit 500. Was dort steht, muss unter allen Umständen gelingen.
-Name, Sprache und Einheiten kommen später über Settings.
 
 **Lokale Anmeldung zuerst einfach.**
-Alle Apps auf `localhost` mit eigenen Ports. Die Anmeldung funktioniert je
-App; das app-übergreifende Weiterreichen der Session ist lokal nicht testbar.
-Solange nur `web` läuft, testet der aufwendige Weg etwas, das niemand nutzt.
-Die vollständige Nachbildung — Hosts-Einträge und lokale Zertifikate — ist
-als TODO festgehalten und wird fällig, sobald die zweite App entsteht.
+Alle Apps auf `localhost` mit eigenen Ports. Das app-übergreifende
+Weiterreichen der Session ist lokal nicht testbar; solange nur `web` läuft,
+testet der aufwendige Weg etwas, das niemand nutzt. Siehe TODO B-12.
 
 ---
 
