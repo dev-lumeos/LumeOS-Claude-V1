@@ -114,11 +114,13 @@ E-Mail mit Passwort. Ein Verfahren je Identität genügt; mehrere sind möglich.
 
 ## 8. Offene Fragen
 
-1. `httpOnly` und Browser-Client — siehe Abschnitt 4.
-2. Domain von `web`: `lumeos.app` oder `app.lumeos.app`.
-3. Onboarding: Der Altbestand beschreibt zehn Schritte, darunter Modulauswahl
-   und Tarifwahl. Beides gehört fachlich in `10-plattform/berechtigungen`
-   und ist dort noch nicht entschieden. Der Onboarding-Ablauf wird erst
-   spezifiziert, wenn das geklärt ist.
-4. Abmeldung über Domaingrenzen: AK-5 ist mit einem geteilten Cookie
-   naheliegend, aber ungeprüft.
+1. **Domain von `web`** — `lumeos.app` oder `app.lumeos.app`. Der Altbestand
+   nennt beides für dieselbe App. Hängt an TODO B-13 (`site_url` und
+   Rückleitadressen).
+2. **Onboarding** — der Altbestand beschreibt zehn Schritte, darunter
+   Modulauswahl und Tarifwahl. Beides gehört fachlich in
+   `10-plattform/berechtigungen` und ist dort nicht entschieden. Der Ablauf
+   wird erst spezifiziert, wenn das geklärt ist.
+3. **Abmeldung über Domaingrenzen** — AK-5 ist mit einem geteilten Cookie
+   naheliegend, aber ungeprüft. Lokal nicht testbar, siehe TODO B-12.
+
