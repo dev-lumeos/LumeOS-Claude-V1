@@ -8,8 +8,6 @@
       "Bash(supabase db push:*)",
       "Bash(npx supabase db reset:*)",
       "Bash(npx supabase db push:*)",
-      "Bash(powershell:*)",
-      "Bash(pwsh:*)",
       "Bash(rm:*)",
       "Bash(sudo:*)",
       "Bash(chmod:*)",
@@ -17,6 +15,8 @@
       "Read(./.env.*)"
     ],
     "ask": [
+      "Bash(powershell:*)",
+      "Bash(pwsh:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git checkout:*)",
