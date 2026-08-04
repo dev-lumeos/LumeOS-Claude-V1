@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>LumeOS — Design-Tokens</title>
+<style>
+:root { --bg: oklch(0.155 0.005 270);
+    --bg-elev: oklch(0.185 0.005 270);
+    --surface: oklch(0.205 0.005 270);
+    --surface-2: oklch(0.235 0.005 270);
+    --surface-hover: oklch(0.255 0.005 270);
+    --border: oklch(0.280 0.005 270);
+    --border-strong: oklch(0.360 0.005 270);
+    --fg: oklch(0.970 0.000 0);
+    --fg-muted: oklch(0.720 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.420 0.005 270);
+    --pos: oklch(0.78 0.13 150);
+    --warn: oklch(0.82 0.13 80);
+    --neg: oklch(0.72 0.16 22);
+    --acc-dash: oklch(0.78 0.04 240);
+    --acc-nutri: oklch(0.78 0.10 70);
+    --acc-train: oklch(0.74 0.10 290);
+    --acc-recov: oklch(0.78 0.08 160);
+    --acc-suppl: oklch(0.76 0.10 25);
+    --acc-goals: oklch(0.80 0.10 95);
+    --acc-medic: oklch(0.76 0.09 15);
+    --acc-coach: oklch(0.78 0.08 200);
+    --acc-buddy: oklch(0.76 0.09 310);
+    --acc-mkt: oklch(0.78 0.08 145);
+    --acc-admin: oklch(0.75 0.01 270);
+    --acc: var(--acc-dash);
+    --pad-card: 16px;
+    --radius: 8px;
+    --radius-sm: 6px;
+    --radius-lg: 12px;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+[data-theme="light"] { --bg: oklch(0.985 0.002 270);
+    --bg-elev: oklch(1.000 0.000 0);
+    --surface: oklch(1.000 0.000 0);
+    --surface-2: oklch(0.975 0.003 270);
+    --surface-hover: oklch(0.955 0.003 270);
+    --border: oklch(0.910 0.003 270);
+    --border-strong: oklch(0.820 0.005 270);
+    --fg: oklch(0.200 0.005 270);
+    --fg-muted: oklch(0.400 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.680 0.005 270);
+    --acc-dash: oklch(0.48 0.06 240);
+    --acc-nutri: oklch(0.55 0.13 60);
+    --acc-train: oklch(0.50 0.16 290);
+    --acc-recov: oklch(0.50 0.10 160);
+    --acc-suppl: oklch(0.55 0.15 25);
+    --acc-goals: oklch(0.58 0.13 90);
+    --acc-medic: oklch(0.55 0.14 15);
+    --acc-coach: oklch(0.55 0.10 200);
+    --acc-buddy: oklch(0.55 0.12 310);
+    --acc-mkt: oklch(0.52 0.10 145);
+    --acc-admin: oklch(0.45 0.01 270); }
+* { box-sizing: border-box; }
+body { margin:0; padding:32px; background:var(--bg); color:var(--fg);
+       font-family:var(--font-mono); font-size:13px; line-height:1.5; }
+header { display:flex; align-items:baseline; gap:16px; margin-bottom:8px; }
+h1 { font-size:18px; margin:0; }
+.hinweis { color:var(--fg-subtle); margin:0 0 28px; max-width:70ch; }
+button { font:inherit; cursor:pointer; background:var(--surface); color:var(--fg);
+         border:1px solid var(--border-strong); border-radius:var(--radius-sm); padding:6px 12px; }
+button:hover { background:var(--surface-hover); }
+section { margin-bottom:32px; }
+h2 { font-size:11px; text-transform:uppercase; letter-spacing:.08em;
+     color:var(--fg-dim); margin:0 0 12px; }
+.raster { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; }
+.feld { background:var(--surface); border:1px solid var(--border);
+        border-radius:var(--radius); padding:var(--pad-card); }
+.feld.breit { grid-column:1/-1; }
+.probe { height:44px; border-radius:var(--radius-sm); border:1px solid var(--border); }
+.probe.rad { background:var(--surface-2); }
+.probe.mass { background:transparent; border:none; display:flex; align-items:center; }
+.probe.mass i { display:block; height:14px; background:var(--acc); border-radius:2px; }
+.probe.schrift { border:none; height:auto; font-size:15px; padding:6px 0; }
+code { display:block; margin-top:8px; color:var(--fg); }
+.wert { display:block; color:var(--fg-subtle); font-size:11px; word-break:break-all; }
+.hell { display:inline-block; margin-top:6px; font-size:10px; color:var(--warn); }
+.beispiele { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px; }
+.karte { background:var(--surface); border:1px solid var(--border);
+         border-radius:var(--radius); padding:var(--pad-card); }
+.karte h3 { margin:0 0 10px; font-size:14px; }
+.zeile { display:flex; justify-content:space-between; padding:5px 0;
+         border-bottom:1px solid var(--border); }
+.zeile:last-child { border-bottom:none; }
+.zeile span:last-child { color:var(--fg); }
+.zeile span:first-child { color:var(--fg-muted); }
+.abzeichen { display:inline-block; padding:2px 8px; border-radius:99px; font-size:11px;
+             border:1px solid var(--border-strong); }
+.knopf { background:var(--acc); color:var(--bg); border:none; border-radius:var(--radius-sm);
+         padding:7px 14px; font:inherit; }
+</style>
+</head>
+<body>
+<header>
+  <h1>LumeOS — Design-Tokens</h1>
+  <button onclick="const h=document.documentElement;h.dataset.theme=h.dataset.theme==='light'?'dark':'light'">Theme wechseln</button>
+</header>
+<p class="hinweis">Erzeugt aus <code style="display:inline">apps/web/src/app/globals.css</code>.
+31 Tokens in <code style="display:inline">:root</code>,
+davon 22 im Hellmodus überschrieben.
+Diese Seite liest keine Kopie — was hier steht, hat die App.</p>
+
+  <section>
+    <h2>Flächen</h2>
+    <div class="raster"><div class="feld"><div class="probe" style="background:var(--bg)"></div>
+      <code>--bg</code><span class="wert">oklch(0.155 0.005 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--bg-elev)"></div>
+      <code>--bg-elev</code><span class="wert">oklch(0.185 0.005 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--surface)"></div>
+      <code>--surface</code><span class="wert">oklch(0.205 0.005 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--surface-2)"></div>
+      <code>--surface-2</code><span class="wert">oklch(0.235 0.005 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--surface-hover)"></div>
+      <code>--surface-hover</code><span class="wert">oklch(0.255 0.005 270)</span><span class="hell">hell abweichend</span></div></div>
+  </section>
+  <section>
+    <h2>Ränder</h2>
+    <div class="raster"><div class="feld"><div class="probe" style="background:var(--border)"></div>
+      <code>--border</code><span class="wert">oklch(0.280 0.005 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--border-strong)"></div>
+      <code>--border-strong</code><span class="wert">oklch(0.360 0.005 270)</span><span class="hell">hell abweichend</span></div></div>
+  </section>
+  <section>
+    <h2>Text</h2>
+    <div class="raster"><div class="feld"><div class="probe" style="background:var(--fg)"></div>
+      <code>--fg</code><span class="wert">oklch(0.970 0.000 0)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--fg-muted)"></div>
+      <code>--fg-muted</code><span class="wert">oklch(0.720 0.005 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--fg-subtle)"></div>
+      <code>--fg-subtle</code><span class="wert">oklch(0.550 0.005 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--fg-dim)"></div>
+      <code>--fg-dim</code><span class="wert">oklch(0.420 0.005 270)</span><span class="hell">hell abweichend</span></div></div>
+  </section>
+  <section>
+    <h2>Status</h2>
+    <div class="raster"><div class="feld"><div class="probe" style="background:var(--pos)"></div>
+      <code>--pos</code><span class="wert">oklch(0.78 0.13 150)</span></div><div class="feld"><div class="probe" style="background:var(--warn)"></div>
+      <code>--warn</code><span class="wert">oklch(0.82 0.13 80)</span></div><div class="feld"><div class="probe" style="background:var(--neg)"></div>
+      <code>--neg</code><span class="wert">oklch(0.72 0.16 22)</span></div></div>
+  </section>
+  <section>
+    <h2>Akzente je Modul und App</h2>
+    <div class="raster"><div class="feld"><div class="probe" style="background:var(--acc-dash)"></div>
+      <code>--acc-dash</code><span class="wert">oklch(0.78 0.04 240)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-nutri)"></div>
+      <code>--acc-nutri</code><span class="wert">oklch(0.78 0.10 70)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-train)"></div>
+      <code>--acc-train</code><span class="wert">oklch(0.74 0.10 290)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-recov)"></div>
+      <code>--acc-recov</code><span class="wert">oklch(0.78 0.08 160)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-suppl)"></div>
+      <code>--acc-suppl</code><span class="wert">oklch(0.76 0.10 25)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-goals)"></div>
+      <code>--acc-goals</code><span class="wert">oklch(0.80 0.10 95)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-medic)"></div>
+      <code>--acc-medic</code><span class="wert">oklch(0.76 0.09 15)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-coach)"></div>
+      <code>--acc-coach</code><span class="wert">oklch(0.78 0.08 200)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-buddy)"></div>
+      <code>--acc-buddy</code><span class="wert">oklch(0.76 0.09 310)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-mkt)"></div>
+      <code>--acc-mkt</code><span class="wert">oklch(0.78 0.08 145)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc-admin)"></div>
+      <code>--acc-admin</code><span class="wert">oklch(0.75 0.01 270)</span><span class="hell">hell abweichend</span></div><div class="feld"><div class="probe" style="background:var(--acc)"></div>
+      <code>--acc</code><span class="wert">var(--acc-dash)</span></div></div>
+  </section>
+  <section>
+    <h2>Radien</h2>
+    <div class="raster"><div class="feld"><div class="probe rad" style="border-radius:var(--radius-sm)"></div>
+      <code>--radius-sm</code><span class="wert">6px</span></div><div class="feld"><div class="probe rad" style="border-radius:var(--radius)"></div>
+      <code>--radius</code><span class="wert">8px</span></div><div class="feld"><div class="probe rad" style="border-radius:var(--radius-lg)"></div>
+      <code>--radius-lg</code><span class="wert">12px</span></div></div>
+  </section>
+  <section>
+    <h2>Abstände</h2>
+    <div class="raster"><div class="feld"><div class="probe mass"><i style="width:var(--pad-card)"></i></div>
+      <code>--pad-card</code><span class="wert">16px</span></div></div>
+  </section>
+  <section>
+    <h2>Schrift</h2>
+    <div class="raster"><div class="feld breit"><div class="probe schrift">0123456789 · Käse Nüsse · ui-monospace</div>
+      <code>--font-mono</code><span class="wert">ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace</span></div></div>
+  </section>
+<section>
+  <h2>Zusammengesetzt</h2>
+  <div class="beispiele">
+    <div class="karte">
+      <h3>Tageswerte</h3>
+      <div class="zeile"><span>Energie</span><span>1.840 kcal</span></div>
+      <div class="zeile"><span>Protein</span><span>142 g</span></div>
+      <div class="zeile"><span>Kohlenhydrate</span><span>186 g</span></div>
+    </div>
+    <div class="karte">
+      <h3>Status</h3>
+      <p><span class="abzeichen" style="color:var(--pos);border-color:var(--pos)">im Ziel</span>
+         <span class="abzeichen" style="color:var(--warn);border-color:var(--warn)">knapp</span>
+         <span class="abzeichen" style="color:var(--neg);border-color:var(--neg)">darüber</span></p>
+      <button class="knopf">Eintragen</button>
+    </div>
+    <div class="karte" style="background:var(--bg-elev)">
+      <h3>Erhöhte Fläche</h3>
+      <div class="zeile"><span>--bg-elev</span><span>hebt sich ab</span></div>
+      <div class="zeile"><span>--surface-2</span><span style="background:var(--surface-2);padding:2px 8px;border-radius:var(--radius-sm)">Feld</span></div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

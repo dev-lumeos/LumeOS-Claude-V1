@@ -36,7 +36,7 @@ Zustand — zuletzt vollständig aus dem versionierten Archiv
 
 **Hinweis zu den Slice-Köpfen:** Die drei Dateien in `migrations/` tragen
 historisch `DO NOT EXECUTE`-Statusköpfe. `[cmd]` Sie sind die reale,
-verifizierte Schema-Stufe (idempotent, `to_regclass`-Guards) — die Köpfe
+verifizierte Schema-Stufe (im ersten Lauf fehlerfrei; **nicht** wiederholbar, siehe unten) — die Köpfe
 sind Governance-Zeremonie (D-13, geklärt).
 
 ---
@@ -147,3 +147,25 @@ im Docker-Setup per `docker cp` in den DB-Container legen).
 - `021` gehört zur Kette — nicht überspringen (49 Zuweisungen).
 - Vor jedem Schritt die zugehörige Validierung aus `_pipeline/_validierung/`.
 - `_archive/` ist tot: nicht zitieren, nicht ausführen.
+
+---
+
+## Wiederholbarkeit — Einschränkung
+
+`[cmd]` 2026-08-03 geprüft: Die Kettenschritte **015 bis 090** sind
+wiederholbar, jeder zweite Lauf liefert dasselbe Ergebnis ohne Fehler.
+
+Für `supabase/migrations/` gilt das **nicht**:
+
+| Datei | Lauf 1 | Lauf 2 |
+|---|---|---|
+| `20260513_001` | ok | Fehler |
+| `20260513_002` | ok | Fehler |
+| `20260514_001` | ok | ok |
+
+Ursache in `001` ist ein falsch-positiver Textvergleich im eigenen
+Drift-Wächter. Praktisch folgenlos, weil das CLI-Register jede Migration nur
+einmal ausführt — aber wer die Dateien von Hand anwendet, muss es wissen.
+
+Eine frühere Fassung dieser Datei nannte die Schema-Stufe „idempotent".
+Das war aus der Existenz der Guards geschlossen, nicht getestet.

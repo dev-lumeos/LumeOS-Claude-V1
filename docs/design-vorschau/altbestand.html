@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>LumeOS — Designkonzept Altbestand (2026-04-27)</title>
+<style>
+* { box-sizing:border-box; }
+body { margin:0; padding:28px; background:#f9fafb; color:#111827;
+       font-family:system-ui,-apple-system,'Segoe UI',sans-serif; font-size:14px;
+       -webkit-font-smoothing:antialiased; }
+h1 { font-size:19px; margin:0 0 4px; }
+.warnung { background:#fef3c7; border:1px solid #fcd34d; color:#78350f;
+           border-radius:12px; padding:14px 16px; margin:0 0 26px; max-width:80ch; font-size:13px; }
+.warnung b { display:block; margin-bottom:4px; }
+h2 { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.08em;
+     color:#9ca3af; margin:32px 0 12px; }
+.raster { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+.modul { display:flex; flex-direction:column; gap:12px; }
+.kopf { border-radius:12px; padding:18px; color:#fff; box-shadow:0 10px 15px -3px rgba(0,0,0,.1); }
+.titelzeile { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.emoji { font-size:26px; }
+.kopf h3 { margin:0; font-size:17px; font-weight:700; }
+.kopf p { margin:2px 0 0; font-size:12px; opacity:.85; }
+.kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.kpi { background:rgba(255,255,255,.15); backdrop-filter:blur(4px);
+       border-radius:12px; padding:10px; text-align:center; }
+.kpi-e { display:block; font-size:14px; }
+.kpi-w { display:block; font-weight:700; font-size:15px; margin-top:2px; }
+.kpi-l { display:block; font-size:10px; opacity:.85; }
+.karte { background:#ffffff; border:1px solid #e5e7eb;
+         border-radius:12px; padding:20px; }
+.karte-kopf { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+.karte-kopf h4 { margin:0; font-size:17px; font-weight:700; }
+.meta { font-size:13px; color:#6b7280; }
+.abschnitt { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.05em;
+             color:#9ca3af; margin:0 0 10px; }
+.zeile { display:flex; align-items:center; justify-content:space-between; padding:5px 0; }
+.zeile span { font-size:13px; color:#374151; }
+.zeile b { font-size:13px; font-weight:600; color:#111827; }
+.leiste { background:#ffffff; border:1px solid #e5e7eb;
+          border-radius:12px; padding:12px; width:230px; }
+.nav { display:flex; align-items:center; gap:12px; border-radius:8px;
+       padding:9px 12px; font-size:14px; color:#4b5563; }
+.nav.aktiv { background:#f0fdf4; color:#15803d; font-weight:500;
+             border-left:3px solid #16a34a; }
+.buddy { background:linear-gradient(135deg, #eff6ff, #eef2ff); border:1px solid #dbeafe;
+         border-radius:8px; padding:16px; box-shadow:0 4px 6px -1px rgba(0,0,0,.1); max-width:75%; }
+.buddy h4 { margin:0 0 8px; font-size:14px; font-weight:600; color:#1f2937; }
+.buddy p { margin:0 0 14px; font-size:14px; color:#374151; }
+.knopf { background:#16a34a; color:#fff; border:none;
+         border-radius:8px; padding:8px 14px; font:inherit; font-size:13px; cursor:pointer; }
+.knopf.zweit { background:#fff; color:#374151;
+               border:1px solid #e5e7eb; }
+.abzeichen { display:inline-block; padding:3px 10px; border-radius:99px; font-size:12px; margin-right:6px; }
+.flex { display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+<h1>LumeOS — Designkonzept Altbestand</h1>
+<div class="warnung">
+  <b>Das ist nicht der aktuelle Stand.</b>
+  Erzeugt aus <code>docs/design-system/tokens/*.json</code>, generiert am 2026-04-27
+  durch AST-Analyse von 534 TSX-Dateien des Vorgängercodes (<code>apps/app/modules/**</code>).
+  Diese App existiert nicht mehr. Der heutige Stand ist dunkel als Voreinstellung mit
+  OKLCH-Tokens — siehe <code>tokens.html</code>.
+</div>
+
+<h2>Modulidentität — Verlaufskopf mit Emoji und Kennzahlen</h2>
+<div class="raster">
+  <div class="modul">
+    <div class="kopf" style="background:linear-gradient(135deg, #22c55e, #2dd4bf)">
+      <div class="titelzeile"><span class="emoji">🍽️</span>
+        <div><h3>Ernährung</h3><p>Dein Tagesprotokoll</p></div></div>
+      <div class="kpis"><div class="kpi"><span class="kpi-e">🔥</span><span class="kpi-w">1.840</span><span class="kpi-l">Kalorien</span></div><div class="kpi"><span class="kpi-e">💪</span><span class="kpi-w">142 g</span><span class="kpi-l">Protein</span></div><div class="kpi"><span class="kpi-e">💧</span><span class="kpi-w">2,1 L</span><span class="kpi-l">Wasser</span></div></div>
+    </div>
+    <div class="karte">
+      <div class="karte-kopf"><h4>Heute</h4><span class="meta">vor 2 Std.</span></div>
+      <p class="abschnitt">ÜBERSICHT</p>
+      <div class="zeile"><span>Frühstück</span><b>420 kcal</b></div>
+      <div class="zeile"><span>Mittagessen</span><b>780 kcal</b></div>
+      <div class="zeile"><span>Abendessen</span><b>640 kcal</b></div>
+    </div>
+  </div>
+  <div class="modul">
+    <div class="kopf" style="background:linear-gradient(135deg, #f97316, #ef4444)">
+      <div class="titelzeile"><span class="emoji">🏋️</span>
+        <div><h3>Training</h3><p>Dein Tagesprotokoll</p></div></div>
+      <div class="kpis"><div class="kpi"><span class="kpi-e">📊</span><span class="kpi-w">24</span><span class="kpi-l">Sätze</span></div><div class="kpi"><span class="kpi-e">⚡</span><span class="kpi-w">8,4 t</span><span class="kpi-l">Volumen</span></div><div class="kpi"><span class="kpi-e">⏱️</span><span class="kpi-w">62 min</span><span class="kpi-l">Dauer</span></div></div>
+    </div>
+    <div class="karte">
+      <div class="karte-kopf"><h4>Heute</h4><span class="meta">vor 2 Std.</span></div>
+      <p class="abschnitt">ÜBERSICHT</p>
+      <div class="zeile"><span>Frühstück</span><b>420 kcal</b></div>
+      <div class="zeile"><span>Mittagessen</span><b>780 kcal</b></div>
+      <div class="zeile"><span>Abendessen</span><b>640 kcal</b></div>
+    </div>
+  </div>
+  <div class="modul">
+    <div class="kopf" style="background:linear-gradient(135deg, #3b82f6, #06b6d4)">
+      <div class="titelzeile"><span class="emoji">😴</span>
+        <div><h3>Erholung</h3><p>Dein Tagesprotokoll</p></div></div>
+      <div class="kpis"><div class="kpi"><span class="kpi-e">🌙</span><span class="kpi-w">7 h 20</span><span class="kpi-l">Schlaf</span></div><div class="kpi"><span class="kpi-e">❤️</span><span class="kpi-w">58 ms</span><span class="kpi-l">HRV</span></div><div class="kpi"><span class="kpi-e">📉</span><span class="kpi-w">52</span><span class="kpi-l">Ruhepuls</span></div></div>
+    </div>
+    <div class="karte">
+      <div class="karte-kopf"><h4>Heute</h4><span class="meta">vor 2 Std.</span></div>
+      <p class="abschnitt">ÜBERSICHT</p>
+      <div class="zeile"><span>Frühstück</span><b>420 kcal</b></div>
+      <div class="zeile"><span>Mittagessen</span><b>780 kcal</b></div>
+      <div class="zeile"><span>Abendessen</span><b>640 kcal</b></div>
+    </div>
+  </div>
+  <div class="modul">
+    <div class="kopf" style="background:linear-gradient(135deg, #14b8a6, #06b6d4)">
+      <div class="titelzeile"><span class="emoji">💊</span>
+        <div><h3>Supplemente</h3><p>Dein Tagesprotokoll</p></div></div>
+      <div class="kpis"><div class="kpi"><span class="kpi-e">✅</span><span class="kpi-w">4 / 6</span><span class="kpi-l">Heute</span></div><div class="kpi"><span class="kpi-e">📦</span><span class="kpi-w">18 Tage</span><span class="kpi-l">Vorrat</span></div><div class="kpi"><span class="kpi-e">💶</span><span class="kpi-w">42 €</span><span class="kpi-l">Kosten</span></div></div>
+    </div>
+    <div class="karte">
+      <div class="karte-kopf"><h4>Heute</h4><span class="meta">vor 2 Std.</span></div>
+      <p class="abschnitt">ÜBERSICHT</p>
+      <div class="zeile"><span>Frühstück</span><b>420 kcal</b></div>
+      <div class="zeile"><span>Mittagessen</span><b>780 kcal</b></div>
+      <div class="zeile"><span>Abendessen</span><b>640 kcal</b></div>
+    </div>
+  </div>
+  <div class="modul">
+    <div class="kopf" style="background:linear-gradient(135deg, #a855f7, #ec4899)">
+      <div class="titelzeile"><span class="emoji">🎯</span>
+        <div><h3>Ziele</h3><p>Dein Tagesprotokoll</p></div></div>
+      <div class="kpis"><div class="kpi"><span class="kpi-e">🎯</span><span class="kpi-w">3</span><span class="kpi-l">Aktiv</span></div><div class="kpi"><span class="kpi-e">📈</span><span class="kpi-w">68 %</span><span class="kpi-l">Fortschritt</span></div><div class="kpi"><span class="kpi-e">📅</span><span class="kpi-w">12 Tage</span><span class="kpi-l">Frist</span></div></div>
+    </div>
+    <div class="karte">
+      <div class="karte-kopf"><h4>Heute</h4><span class="meta">vor 2 Std.</span></div>
+      <p class="abschnitt">ÜBERSICHT</p>
+      <div class="zeile"><span>Frühstück</span><b>420 kcal</b></div>
+      <div class="zeile"><span>Mittagessen</span><b>780 kcal</b></div>
+      <div class="zeile"><span>Abendessen</span><b>640 kcal</b></div>
+    </div>
+  </div>
+  <div class="modul">
+    <div class="kopf" style="background:linear-gradient(135deg, #f43f5e, #ec4899)">
+      <div class="titelzeile"><span class="emoji">🩺</span>
+        <div><h3>Medizin</h3><p>Dein Tagesprotokoll</p></div></div>
+      <div class="kpis"><div class="kpi"><span class="kpi-e">🧪</span><span class="kpi-w">12</span><span class="kpi-l">Werte</span></div><div class="kpi"><span class="kpi-e">⚠️</span><span class="kpi-w">1</span><span class="kpi-l">Auffällig</span></div><div class="kpi"><span class="kpi-e">📆</span><span class="kpi-w">04.07.</span><span class="kpi-l">Letzter</span></div></div>
+    </div>
+    <div class="karte">
+      <div class="karte-kopf"><h4>Heute</h4><span class="meta">vor 2 Std.</span></div>
+      <p class="abschnitt">ÜBERSICHT</p>
+      <div class="zeile"><span>Frühstück</span><b>420 kcal</b></div>
+      <div class="zeile"><span>Mittagessen</span><b>780 kcal</b></div>
+      <div class="zeile"><span>Abendessen</span><b>640 kcal</b></div>
+    </div>
+  </div></div>
+
+<h2>Navigation und Buddy-Karte</h2>
+<div class="flex">
+  <div class="leiste">
+    <p class="abschnitt" style="padding:0 12px">MODULE</p>
+    <div class="nav aktiv"><span style="font-size:17px">🍽️</span> Ernährung</div>
+    <div class="nav"><span style="font-size:17px">🏋️</span> Training</div>
+    <div class="nav"><span style="font-size:17px">😴</span> Erholung</div>
+    <div class="nav"><span style="font-size:17px">🎯</span> Ziele</div>
+  </div>
+  <div style="flex:1;min-width:280px">
+    <div class="buddy">
+      <h4>Buddy</h4>
+      <p>Du liegst heute 320 kcal unter deinem Ziel. Soll ich einen Snack vorschlagen?</p>
+      <button class="knopf">Vorschlag ansehen</button>
+      <button class="knopf zweit">Später</button>
+    </div>
+    <div class="karte" style="margin-top:14px">
+      <p class="abschnitt">STATUS</p>
+      <span class="abzeichen" style="background:#dcfce7;color:#15803d">im Ziel</span>
+      <span class="abzeichen" style="background:#fef9c3;color:#854d0e">knapp</span>
+      <span class="abzeichen" style="background:#fee2e2;color:#991b1b">darüber</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

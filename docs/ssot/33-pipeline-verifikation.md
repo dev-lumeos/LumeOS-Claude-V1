@@ -63,10 +63,30 @@ gefahrlos wiederholbar. `[cmd]` verifiziert.
 ### 1. Die „DO NOT EXECUTE"-Slices sind die Schema-Stufe
 
 Die drei Slice-Migrationen tragen im Kopf `EXECUTION_CANDIDATE_REVIEW_ONLY`
-bzw. `DO NOT EXECUTE`. `[cmd]` Sie haben keinen Transaktionsrahmen, sind über
-`to_regclass`-Guards idempotent und laufen fehlerfrei. Sie **sind** der reale
-Schema-Aufbau — der Statuskopf ist Governance-Zeremonie, die von der Praxis
-überholt wurde. **Damit ist TODO D-13 beantwortet.**
+bzw. `DO NOT EXECUTE`. `[cmd]` Sie haben keinen Transaktionsrahmen und laufen
+im ersten Durchgang fehlerfrei. Sie **sind** der reale Schema-Aufbau — der
+Statuskopf ist Governance-Zeremonie, die von der Praxis überholt wurde.
+**Damit ist TODO D-13 beantwortet.**
+
+**Korrektur 2026-08-03:** Eine frühere Fassung dieses Dokuments nannte die drei
+Slices „über `to_regclass`-Guards idempotent" und markierte das mit `[cmd]`.
+Das war falsch — belegt war nur ein einziger Lauf. Die Aussage folgte aus der
+Existenz der Guards, nicht aus einem Test.
+
+`[cmd]` Zweitlauf gegen eine Wegwerf-Datenbank:
+
+| Datei | Lauf 1 | Lauf 2 |
+|---|---|---|
+| `20260513_001` | ok | **Fehler** |
+| `20260513_002` | ok | **Fehler** |
+| `20260514_001` | ok | ok |
+
+Ursache in `001`: ein falsch-positiver Textvergleich im eigenen Drift-Wächter
+(`IN (1, 2, 3)` gegen die deparste Form `= ANY (ARRAY…)`).
+
+**Praktisch folgenlos**, weil das CLI-Register jede Migration nur einmal
+ausführt. Aber die Idempotenz-Aussage gilt ausschliesslich für die
+Kettenschritte 015 bis 090, nicht für `supabase/migrations/`.
 
 ### 2. `010_schema_foundation.sql` ist ein echter Nicht-Kandidat
 
