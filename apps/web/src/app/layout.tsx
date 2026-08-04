@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import '../lib/dates'
 import { AppShell } from '../components/shell/app-shell'
+import { QueryProvider } from '../components/providers/query-provider'
 
 export const metadata: Metadata = {
   title: 'LumeOS',
@@ -15,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body>
-        <AppShell>{children}</AppShell>
+        <QueryProvider>
+          <AppShell>{children}</AppShell>
+        </QueryProvider>
       </body>
     </html>
   )

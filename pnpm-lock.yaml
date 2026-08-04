@@ -41,6 +41,15 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.0.0
         version: 2.104.0
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.101.4(react@18.3.1)
+      date-fns:
+        specifier: ^4.0.0
+        version: 4.4.0
+      idb:
+        specifier: ^8.0.0
+        version: 8.0.3
       next:
         specifier: ^14.0.0
         version: 14.2.35(@playwright/test@1.41.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -50,6 +59,12 @@ importers:
       react-dom:
         specifier: ^18.0.0
         version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.0.0
+        version: 7.84.0(react@18.3.1)
+      zod:
+        specifier: ^3.23.0
+        version: 3.25.76
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
@@ -57,6 +72,9 @@ importers:
       '@types/react':
         specifier: ^18.0.0
         version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.0.0
+        version: 18.3.7(@types/react@18.3.28)
       autoprefixer:
         specifier: ^10.0.0
         version: 10.5.0(postcss@8.5.10)
@@ -66,47 +84,6 @@ importers:
       tailwindcss:
         specifier: ^3.0.0
         version: 3.4.19(tsx@4.21.0)(yaml@2.8.3)
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  packages/agent-core:
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  packages/execution-token:
-    dependencies:
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../wo-core
-      '@noble/ed25519':
-        specifier: ^2.0.0
-        version: 2.3.0
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  packages/graph-core:
-    devDependencies:
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  packages/scheduler-core:
-    dependencies:
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../wo-core
-    devDependencies:
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
@@ -124,74 +101,11 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
-  packages/supabase-clients:
-    dependencies:
-      '@supabase/supabase-js':
-        specifier: ^2.45.0
-        version: 2.104.0
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
   packages/types:
     devDependencies:
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
-
-  packages/vllm-client:
-    dependencies:
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../wo-core
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  packages/wo-core:
-    devDependencies:
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  services/governance-compiler:
-    dependencies:
-      '@hono/node-server':
-        specifier: ^1.0.0
-        version: 1.19.14(hono@4.12.14)
-      '@lumeos/vllm-client':
-        specifier: workspace:*
-        version: link:../../packages/vllm-client
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../../packages/wo-core
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.6.1
-      hono:
-        specifier: ^4.0.0
-        version: 4.12.14
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-      yaml:
-        specifier: ^2.0.0
-        version: 2.8.3
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      tsx:
-        specifier: ^4.0.0
-        version: 4.21.0
 
   services/nutrition-api:
     dependencies:
@@ -208,158 +122,6 @@ importers:
         specifier: ^3.0.0
         version: 3.25.76
     devDependencies:
-      tsx:
-        specifier: ^4.0.0
-        version: 4.21.0
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  services/orchestrator-api:
-    dependencies:
-      '@hono/node-server':
-        specifier: ^1.0.0
-        version: 1.19.14(hono@4.12.14)
-      '@lumeos/agent-core':
-        specifier: workspace:*
-        version: link:../../packages/agent-core
-      '@lumeos/graph-core':
-        specifier: workspace:*
-        version: link:../../packages/graph-core
-      '@lumeos/scheduler-core':
-        specifier: workspace:*
-        version: link:../../packages/scheduler-core
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../../packages/wo-core
-      hono:
-        specifier: ^4.0.0
-        version: 4.12.14
-    devDependencies:
-      tsx:
-        specifier: ^4.0.0
-        version: 4.21.0
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  services/sat-check:
-    dependencies:
-      '@hono/node-server':
-        specifier: ^1.0.0
-        version: 1.19.14(hono@4.12.14)
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../../packages/wo-core
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.6.1
-      hono:
-        specifier: ^4.0.0
-        version: 4.12.14
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      tsx:
-        specifier: ^4.0.0
-        version: 4.21.0
-
-  services/scheduler-api:
-    dependencies:
-      '@hono/node-server':
-        specifier: ^1.0.0
-        version: 1.19.14(hono@4.12.14)
-      '@lumeos/agent-core':
-        specifier: workspace:*
-        version: link:../../packages/agent-core
-      '@lumeos/graph-core':
-        specifier: workspace:*
-        version: link:../../packages/graph-core
-      '@lumeos/scheduler-core':
-        specifier: workspace:*
-        version: link:../../packages/scheduler-core
-      '@lumeos/supabase-clients':
-        specifier: workspace:*
-        version: link:../../packages/supabase-clients
-      '@lumeos/vllm-client':
-        specifier: workspace:*
-        version: link:../../packages/vllm-client
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../../packages/wo-core
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.6.1
-      hono:
-        specifier: ^4.0.0
-        version: 4.12.14
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      tsx:
-        specifier: ^4.0.0
-        version: 4.21.0
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-
-  services/wo-classifier:
-    dependencies:
-      '@hono/node-server':
-        specifier: ^1.0.0
-        version: 1.19.14(hono@4.12.14)
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../../packages/wo-core
-      '@supabase/supabase-js':
-        specifier: ^2.45.0
-        version: 2.104.0
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.6.1
-      hono:
-        specifier: ^4.0.0
-        version: 4.12.14
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
-      tsx:
-        specifier: ^4.0.0
-        version: 4.21.0
-
-  tools:
-    dependencies:
-      '@lumeos/execution-token':
-        specifier: workspace:*
-        version: link:../packages/execution-token
-      '@lumeos/vllm-client':
-        specifier: workspace:*
-        version: link:../packages/vllm-client
-      '@lumeos/wo-core':
-        specifier: workspace:*
-        version: link:../packages/wo-core
-      '@noble/ed25519':
-        specifier: ^2.0.0
-        version: 2.3.0
-      '@supabase/supabase-js':
-        specifier: ^2.45.0
-        version: 2.104.0
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.6.1
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.39
       tsx:
         specifier: ^4.0.0
         version: 4.21.0
@@ -605,9 +367,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@noble/ed25519@2.3.0':
-    resolution: {integrity: sha512-M7dvXL2B92/M7dw9+gzuydL8qn/jiqNHaoR3Q+cb1q1GHV7uwE17WCyFMG+Y+TZb5izcaXk5TdJRrDUxHXL78A==}
-
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -664,6 +423,14 @@ packages:
   '@swc/helpers@0.5.5':
     resolution: {integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==}
 
+  '@tanstack/query-core@5.101.4':
+    resolution: {integrity: sha512-gNwcvOJcRbLWPOLG/2OBm+zM+Yv+MKsXKEOWC57USuZDEsI71hEErQsiEGx5wX9rzWWkfwM0fVSPoiIFSsxfiw==}
+
+  '@tanstack/react-query@5.101.4':
+    resolution: {integrity: sha512-yRg2pfOCxIs4ZJW3XYYHU/WgtD04FHSnfHlpRT7h7pR77hwkdRG4wxbKe4aq6P0RvXUTBSQpQeadS1SUYUe+KA==}
+    peerDependencies:
+      react: ^18 || ^19
+
   '@turbo/darwin-64@2.9.6':
     resolution: {integrity: sha512-X/56SnVXIQZBLKwniGTwEQTGmtE5brSACnKMBWpY3YafuxVYefrC2acamfjgxP7BG5w3I+6jf0UrLoSzgPcSJg==}
     cpu: [x64]
@@ -705,6 +472,11 @@ packages:
 
   '@types/prop-types@15.7.15':
     resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
+
+  '@types/react-dom@18.3.7':
+    resolution: {integrity: sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ==}
+    peerDependencies:
+      '@types/react': ^18.0.0
 
   '@types/react@18.3.28':
     resolution: {integrity: sha512-z9VXpC7MWrhfWipitjNdgCauoMLRdIILQsAEV+ZesIzBq/oUlxk0m3ApZuMFCXdnS4U7KrI+l3WRUEGQ8K1QKw==}
@@ -784,15 +556,14 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
+  date-fns@4.4.0:
+    resolution: {integrity: sha512-+1UMbeh68lH1SegH83CGWwpb6OHHbpSgr3+s5Eww5M4CAgswBpoWS0AjTOfEJ33HiYKz1hdj/KTFprzXHmq/6w==}
+
   didyoumean@1.2.2:
     resolution: {integrity: sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw==}
 
   dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
-
-  dotenv@16.6.1:
-    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
-    engines: {node: '>=12'}
 
   electron-to-chromium@1.5.344:
     resolution: {integrity: sha512-4MxfbmNDm+KPh066EZy+eUnkcDPcZ35wNmOWzFuh/ijvHsve6kbLTLURy88uCNK5FbpN+yk2nQY6BYh1GEt+wg==}
@@ -877,6 +648,9 @@ packages:
   iceberg-js@0.8.1:
     resolution: {integrity: sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA==}
     engines: {node: '>=20.0.0'}
+
+  idb@8.0.3:
+    resolution: {integrity: sha512-LtwtVyVYO5BqRvcsKuB2iUMnHwPVByPCXFXOpuU96IZPPoPN6xjOGxZQ74pgSVVLQWtUOYgyeL4GE98BY5D3wg==}
 
   is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
@@ -1061,6 +835,12 @@ packages:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
       react: ^18.3.1
+
+  react-hook-form@7.84.0:
+    resolution: {integrity: sha512-+hWvQP6GLco56mDwrbU4XnHix8t1z90ltZsDIrREl+jnQFQxYLX8oAzqe/Xn8nHpmoXTY5M6oEXrAhbP1qevNQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
 
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
@@ -1326,8 +1106,6 @@ snapshots:
   '@next/swc-win32-x64-msvc@14.2.33':
     optional: true
 
-  '@noble/ed25519@2.3.0': {}
-
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -1397,6 +1175,13 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.8.1
 
+  '@tanstack/query-core@5.101.4': {}
+
+  '@tanstack/react-query@5.101.4(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-core': 5.101.4
+      react: 18.3.1
+
   '@turbo/darwin-64@2.9.6':
     optional: true
 
@@ -1426,6 +1211,10 @@ snapshots:
       undici-types: 6.21.0
 
   '@types/prop-types@15.7.15': {}
+
+  '@types/react-dom@18.3.7(@types/react@18.3.28)':
+    dependencies:
+      '@types/react': 18.3.28
 
   '@types/react@18.3.28':
     dependencies:
@@ -1507,11 +1296,11 @@ snapshots:
 
   csstype@3.2.3: {}
 
+  date-fns@4.4.0: {}
+
   didyoumean@1.2.2: {}
 
   dlv@1.1.3: {}
-
-  dotenv@16.6.1: {}
 
   electron-to-chromium@1.5.344: {}
 
@@ -1603,6 +1392,8 @@ snapshots:
   hono@4.12.14: {}
 
   iceberg-js@0.8.1: {}
+
+  idb@8.0.3: {}
 
   is-binary-path@2.1.0:
     dependencies:
@@ -1758,6 +1549,10 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
+  react-hook-form@7.84.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+
   react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
@@ -1891,6 +1686,7 @@ snapshots:
 
   ws@8.20.0: {}
 
-  yaml@2.8.3: {}
+  yaml@2.8.3:
+    optional: true
 
   zod@3.25.76: {}
