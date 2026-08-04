@@ -4,11 +4,19 @@
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./session": "./src/supabase/session.ts"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
     "@supabase/ssr": "^0.1.0"
   },
+  "peerDependencies": {
+    "next": "^14.0.0"
+  },
   "devDependencies": {
+    "next": "^14.0.0",
     "typescript": "^5.0.0"
   }
 }

@@ -1,21 +1,21 @@
 // Zentraler Zugang zur Nutrition-Datenbank über supabase-js (PostgREST).
 // Ersetzt den früheren `docker exec psql`-Umweg (M1 Teil C, 2026-08-03).
 //
-// Bewusst der Service-Client: apps/web hat noch keine Anmeldung (M3),
-// ein Session-Client wäre `anon` und hätte kein USAGE auf `nutrition`.
-// Diese Dateien laufen ausschliesslich serverseitig (runtime 'nodejs');
-// der service_role-Schlüssel erreicht den Browser nicht (AK-7).
-// Nach Einführung der Anmeldung werden Stammdaten-Reads auf den
-// Session-Client umgestellt.
+// Seit M3 (2026-08-04) läuft der Zugriff über den Session-Client mit der
+// Identität der angemeldeten Nutzerin — damit greifen die Policies aus
+// Kettenschritt 060 im Anwendungspfad. Ohne Session ist die Rolle `anon`
+// und scheitert bereits am fehlenden USAGE auf `nutrition`; die Middleware
+// leitet solche Aufrufe vorher nach /login.
+// Diese Dateien laufen ausschliesslich serverseitig (runtime 'nodejs').
 
-import { createServiceClient } from '@lumeos/shared'
+import { createSessionClient } from '@lumeos/shared/session'
 
 /** Ersetzt den alten Containernamen im Payload-Feld `container`. */
 export const NUTRITION_DB_SOURCE = 'supabase_api:nutrition'
 
 /** PostgREST-Client, auf das Schema `nutrition` gerichtet (für rpc()). */
 export function nutritionRpc() {
-  return createServiceClient().schema('nutrition')
+  return createSessionClient().schema('nutrition')
 }
 
 /**

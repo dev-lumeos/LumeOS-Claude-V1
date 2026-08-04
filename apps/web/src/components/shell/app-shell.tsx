@@ -2,8 +2,9 @@
 
 import Link from 'next/link'
 import type { Route } from 'next'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import { createClient } from '@lumeos/shared'
 
 const moduleAccentMap = {
   dashboard: 'dash',
@@ -251,6 +252,46 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [router])
 
+  // Anmeldestatus (M3 Login). Ohne gesetzte NEXT_PUBLIC_-Variablen bleibt
+  // der Client null und die Shell verhält sich wie bisher (kein Absturz).
+  const supabase = useMemo(() => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      return null
+    }
+    return createClient()
+  }, [])
+  const [authed, setAuthed] = useState(false)
+
+  useEffect(() => {
+    if (!supabase) {
+      return
+    }
+    let active = true
+    supabase.auth.getUser().then(({ data }) => {
+      if (active) {
+        setAuthed(Boolean(data.user))
+      }
+    })
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setAuthed(Boolean(session))
+    })
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
+  }, [supabase])
+
+  async function handleSignOut() {
+    if (!supabase) {
+      return
+    }
+    await supabase.auth.signOut()
+    router.push('/login' as Route)
+    router.refresh()
+  }
+
   return (
     <div
       className={`lume-shell lume-shell-${activeSection}`}
@@ -383,6 +424,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               Context
             </button>
             <button className="lume-topbar-control" type="button">Commands ⌘K</button>
+            {authed ? (
+              <button className="lume-topbar-control" type="button" onClick={handleSignOut}>
+                Abmelden
+              </button>
+            ) : null}
           </div>
         </header>
         <main className="lume-content">{children}</main>

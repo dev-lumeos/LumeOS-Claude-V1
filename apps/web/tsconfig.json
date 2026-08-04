@@ -15,7 +15,9 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@lumeos/shared": ["../../packages/shared/src/index.ts"]
+      "@lumeos/shared": ["../../packages/shared/src/index.ts"],
+      "@lumeos/shared/session": ["../../packages/shared/src/supabase/session.ts"],
+      "next/headers": ["./node_modules/next/headers.d.ts"]
     },
     "resolveJsonModule": true,
     "isolatedModules": true,
