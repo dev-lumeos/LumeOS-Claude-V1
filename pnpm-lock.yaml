@@ -97,6 +97,9 @@ importers:
         specifier: ^2.0.0
         version: 2.104.0
     devDependencies:
+      next:
+        specifier: ^14.0.0
+        version: 14.2.35(@playwright/test@1.41.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       typescript:
         specifier: ^5.0.0
         version: 5.9.3
