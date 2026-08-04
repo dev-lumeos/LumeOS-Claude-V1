@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-02 (siebte Aktualisierung — D-12/D-13/D-03/B-09 erledigt, Altmigrationen archiviert, kritischer Pfad)
+**Stand:** 2026-08-04 (achte Aktualisierung — Governance-Cluster archiviert; A-07, B-05, D-10 erledigt; C-08, D-04 angepasst; D-18 neu)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -9,13 +9,13 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 ## Kritischer Pfad
 
-1. **M1 — Datenzugriffsschicht** (→ D-08 + O-2 Grants + C-07):
-   `apps/web` greift per `docker exec psql` zu, es gibt keine Grants.
-   Blockiert: Auth, Schreibpfade, Deployment, RLS.
+1. **M1 — Datenzugriffsschicht** — **erledigt 2026-08-03.**
+   `apps/web` liest über supabase-js und `rpc()`; Schema `nutrition` ausgesetzt,
+   Rechte und Zeilenschutz produktiv (Kettenschritte 060/070). Siehe D-08, C-07.
 2. **M2 — Frontend-Fundament** (→ C-01):
    10 von 13 deklarierten Bibliotheken fehlen.
-3. **M3 — Erster Schreibpfad** (→ C-02) — braucht M1 und Toms Product Gate.
-4. **M4 — Cloud-Deployment** (→ Sektion E) — braucht M1.
+3. **M3 — Erster Schreibpfad** (→ C-02) — Product Gate ist offen, M1 erledigt.
+4. **M4 — Cloud-Deployment** (→ Sektion E) — Voraussetzungen erfüllt.
 
 ---
 
@@ -69,14 +69,15 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Betrifft alle sieben Apps, weil das Design-System das einzige ist, was sie
   sichtbar verbindet.
 
-- [ ] **A-07: ADR Servicelayer** — die Grundsatzentscheidung aus
-  `10-plattform/architektur`, Abschnitt 4. Zwei Architekturen liegen nebeneinander:
-  der Altbestand sieht neun Hono-Services mit eigenen Ports und JWT-Middleware vor,
-  `[cmd]` gebaut ist direkter Datenbankzugriff bei 17 leeren Service-Verzeichnissen.
-  Empfehlung im Dokument: direkter Zugriff als Regel, Services als begründete
-  Ausnahme — RLS gilt für jeden Zugriffsweg, Middleware nur für den eigenen.
-  *Blockiert ab dem zweiten Modul. Danach ist die Frage teuer.*
-  Nach `docs/spezifikation/90-entscheidungen/`.
+- [x] **A-07: ADR Servicelayer** — **erledigt 2026-08-04: Entscheidung
+  getroffen.** `[cmd]` `docs/spezifikation/90-entscheidungen/ADR-0001-datenzugriff.md`
+  existiert (Tom, parallel). Direkter Datenbankzugriff als Regel, Services als
+  begründete Ausnahme — mit M1 Teil C real umgesetzt (supabase-js + rpc());
+  die alte Neun-Services-Architektur ist mitsamt dem Governance-Cluster
+  archiviert (`_archive/governance/`, Commit 59cb41e).
+  Ursprungsbefund: zwei Architekturen lagen nebeneinander — Altbestand neun
+  Hono-Services mit eigenen Ports und JWT-Middleware, gebaut war direkter
+  Zugriff. RLS gilt für jeden Zugriffsweg, Middleware nur für den eigenen.
 
 - [ ] **A-08: ADR Medienort** — `[read]` Training-Spec nennt Cloudflare R2,
   `[cmd]` der Bestand liegt in Supabase Storage (15 GB, Bucket `exercises`).
@@ -105,15 +106,18 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   *Nötig, weil verkettete Bash-Befehle (`&&`, `;`) die Deny-Muster umgehen — beim Test
   landete eine lange Kette bei „requires approval" statt bei Deny.*
 
-- [ ] **B-05: Tote Hooks entfernen** — `.claude/hooks/pre-tool.ps1` hat
-  `[cmd]` 4 Parse-Fehler und lief nie (UTF-8 ohne BOM + Emoji ausserhalb der BMP
-  zerbricht das String-Quoting unter PS 5.1). `post-tool.ps1` parst, hat aber
-  denselben `param()`-Fehler und schreibt nach `system/state/audit.jsonl`.
-  Beide sind aus `settings.json` ausgehängt, Dateien liegen noch.
+- [x] **B-05: Tote Hooks entfernen** — **erledigt 2026-08-04: gegenstandslos.**
+  Beide Hooks waren aus `settings.json` ausgehängt und liefen nie
+  (`[cmd]` 2026-08-01: `pre-tool.ps1` 4 Parse-Fehler durch UTF-8 ohne BOM +
+  Emoji ausserhalb der BMP; `post-tool.ps1` `param()`-Fehler); das Schreibziel
+  `system/state/audit.jsonl` existiert seit der Governance-Archivierung nicht
+  mehr — die Hooks sind zielos. Die Dateien liegen noch unter `.claude/hooks/`
+  und gehen mit der `.claude`-Altlast-Folgerunde (`50-governance-rest.md`).
 
 - [ ] **B-06: Herkunft des `PowerShell`-Deny klären** — die Permissions-UI zeigt
   einen Eintrag, den keine gefundene Settings-Datei liefert. Per `/permissions`
   in der Session nachsehen, welche Datei ihn setzt.
+  Hinweis 2026-08-04: `Bash(powershell:*)` steht inzwischen auf `ask`.
 
 - [ ] **B-07: `skipAutoPermissionPrompt: true`** in `~/.claude/settings.json` prüfen.
   *Vermutliche Ursache dafür, dass 47 Allow-Regeln unbemerkt wachsen konnten.*
@@ -202,13 +206,18 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Produktcode (Supabase-Clients, Nutrition-Typen), werden von `apps/web` aber nicht
   importiert. Nutzen oder entfernen.
 
-- [ ] **C-08: `services/nutrition-api` einordnen** — Hono-Service, 4 Dateien,
-  von niemandem importiert, während `apps/web` direkt per SQL gegen Docker geht.
-  *Antwort Tom: Teil des Endausbaus.*
+- [ ] **C-08: `services/nutrition-api` einordnen** — angepasst 2026-08-04:
+  Hono-Service, 4 Dateien, von niemandem importiert; seit der
+  Governance-Archivierung einer von **vier** lebenden Workspace-Packages
+  (`10-workspace.md`). `apps/web` greift inzwischen per supabase-js/rpc()
+  direkt zu (M1 Teil C), nicht mehr per Docker-SQL.
+  *Antwort Tom: Teil des Endausbaus.* Rahmen dafür jetzt in
+  ADR-0001-datenzugriff (A-07): Services als begründete Ausnahme.
 
 - [ ] **C-09: Test-Runner einrichten** — `[cmd]` 12 Unit-Test-Dateien in
   `apps/web`, aber kein vitest/jest im Repo, kein `test`-Script;
   `turbo run test` läuft ins Leere. Die Tests sind derzeit nicht ausführbar.
+  (Seit 2026-08-03 sind es 11 Dateien — der Governance-Test liegt im Archiv.)
 
 - [ ] **C-10: UI-Zahlen gegen DB prüfen** — die App-Shell zeigt
   „117 Nährstoffe · BLS 10.840" als Literale. `[cmd]` Tatsächlich in der DB:
@@ -307,9 +316,12 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   D-13: die „DO NOT EXECUTE"-Slices wurden im Studio ausgeführt und von Hand
   kontrolliert. In `supabase/_snippets/` gesichert. Original löschbar.
 
-- [ ] **D-04: E2E- und Testbasis klären** — `[cmd]` keine Root-`playwright.config.ts`
-  (nur `playwright.governance.config.ts`), `apps/web/e2e/` enthält nur den
-  Governance-Smoke. Offen: E2E für Produktrouten. Hängt mit C-09 zusammen.
+- [ ] **D-04: E2E- und Testbasis klären** — angepasst 2026-08-04: `[cmd]`
+  `apps/web/e2e/` ist **leer** — die einzige Spec (Governance-Smoke) und
+  `playwright.governance.config.ts` liegen seit 2026-08-03 in
+  `_archive/governance/`; im Repo existiert damit gar keine Playwright-Config
+  mehr, `@playwright/test` steht noch in den Root-devDependencies.
+  Offen (unverändert): E2E für Produktrouten. Hängt mit C-09 zusammen.
 
 - [ ] **D-05: Spec-Audit starten** — `docs/specs/` (13 Module) auseinandernehmen,
   Diskrepanzen suchen, pro Modul offizielle Spec deklarieren. *Eigene Sitzung.*
@@ -328,15 +340,19 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 - [ ] **D-07: README „Phase 1B"** nach C-02 aktualisieren.
 
-- [ ] **D-08: supabase-js vs. Docker-SQL klären** — `apps/web` deklariert
-  `@supabase/supabase-js`, nutzt es aber nicht (`[cmd]` 0 Importe);
-  4 lib-Dateien gehen per `docker exec … psql` gegen den lokalen Container
-  (Containername hartkodiert). *Architekturentscheidung von Tom nötig —
-  neues Argument aus D-14: der Container trägt bereits `auth.uid()`-Policies,
-  die ohne Supabase-Auth nie greifen können.*
+- [x] **D-08: supabase-js vs. Docker-SQL** — **entschieden und umgesetzt 2026-08-03.**
+  `[cmd]` `apps/web` liest über supabase-js; kein `docker exec`, kein
+  `child_process`, kein Containername im Code. Die fünf gewachsenen Abfragen
+  wurden zu Postgres-Funktionen (Kettenschritt 070), die String-Interpolation
+  der alten SQL-Builder ist damit entfallen. Grundsatz in
+  `docs/spezifikation/90-entscheidungen/ADR-0001-datenzugriff.md` — direkter
+  Zugriff für jetzt, eigene Modul-APIs als Zielbild.
 
-- [ ] **D-10: Port-Kollision im Governance-Rest** — `[cmd]` `orchestrator-api`
-  und `wo-classifier` haben beide Default-Port 9000. Bei Entfernung hinfällig.
+- [x] **D-10: Port-Kollision im Governance-Rest** — **erledigt 2026-08-04:
+  hinfällig.** Der im Punkt vorgesehene Fall („bei Entfernung hinfällig") ist
+  eingetreten: `orchestrator-api` und `wo-classifier` liegen seit 2026-08-03
+  in `_archive/governance/services/` (`[cmd]` 476 Umbenennungen per `git mv`,
+  Commit 59cb41e).
 
 - [ ] **D-15: `supabase/migrations-draft/` einordnen** (neu 2026-08-02) —
   durch beide Verifikationsläufe überholt. Verwerfen oder als Referenz behalten.
@@ -347,6 +363,15 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **D-17: Migrationsregister-Strategie** (neu 2026-08-02) — das Register
   ist nach der Archivierung faktisch leer. Entscheiden: Kette in reguläre
   Migrationen überführen oder als dokumentierter Ablauf belassen.
+
+- [x] **D-18: Die vier Control-Plane-Tabellen in `public` entfernen** — **erledigt 2026-08-03**
+  (neu 2026-08-04) — `workorders`, `governance_artefacts`, `execution_tokens`,
+  `wo_failure_events` samt der vier April-Workorders sind der letzte lebende
+  Rest des Governance-Clusters (Code archiviert, die beiden Migrationen seit
+  2026-08-02 in `supabase/_archive/`). **Tom arbeitet parallel daran**;
+  Sicherung liegt bereit (`[cmd]` 2026-08-04: untracked
+  `backup/schema/2026-08-03_public_vor_drop.sql`).
+  *Datenbankeingriff — nicht nebenbei ausführen.*
 
 ---
 

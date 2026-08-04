@@ -1,131 +1,96 @@
-# Governance-Rest — was physisch bleibt und warum
+# Governance-Rest — archiviert am 2026-08-03
 
-**Stand:** 2026-08-01
-**Methode:** `[cmd]` Greps auf `system/`-Importe, Ports, Commit-Historie;
-Verzeichnislisten `system/`, `.github/workflows/`; `[read]` `pnpm-workspace.yaml`,
-`turbo.json`, `ci.yml`-Kopf, `system/README.md`-Kopf, `tools/package.json`,
-`snapshot.ts`, `command-runner.ts`. Package-Einordnung übernommen aus
-`10-workspace.md`.
-
----
-
-## Der Umzug
-
-`[read]` `CLAUDE.md:66` und `AGENTS.md:172`: „Governance ist in ein **eigenes
-Repo** umgezogen. Was hier noch liegt, ist Rest." Der einzige Fundort eines
-Repo-Namens: `[read]` `docs/specs/Admin/SPEC_01_UI_DESIGN.md:16` —
-„Governance Console = Workorder-Execution-System (in **AI-Governance-Core**,
-separates Repo)".
-
-`[cmd]` Commit-Kette des Schnitts: `6f36ef5` (blueprint core extraction) →
-`02fcc85` (prepare phase 0) → `11dcfa3` (complete phase 0) → `7798dcf` /
-`719f3b7` / `cf7f890` (CLAUDE.md, AGENTS.md, gstack-Notizen auf
-Direct-Work-Repo umgeschrieben).
-
-**Es existiert keine dokumentierte Entscheidung, die physischen Reste zu
-löschen.** `[cmd]` `docs/decisions/` enthält nur `.gitkeep`. Status: bleibt,
-bis Tom entscheidet.
+**Stand:** 2026-08-04
+**Methode:** `[cmd]` Verschiebung selbst durchgeführt und per `git status`
+verifiziert (Sitzungen 2026-08-03/04); Greps auf verbliebene Verweise;
+`[read]` Archiv-README, Seed-Manifest. Historischer Zustand vor der
+Archivierung: Vorfassung dieser Datei (Git-Historie, Stand 2026-08-01).
 
 ---
 
-## Was physisch da ist
+## Was passiert ist
 
-### Die 13 Governance-Packages
+Der Governance-Cluster — 13 Packages/Services, `system/`, die
+Governance-Konsole in `apps/web`, 32 `tools/scripts`-Dateien, die
+Playwright-Governance-Config — liegt seit dem 2026-08-03 unter
+**`_archive/governance/`**. `[cmd]` 476 Umbenennungen per `git mv`,
+0 Löschungen, Commit `59cb41e`; `tools`-Workspace-Eintrag entfernt
+(Commit `71ccf52`).
 
-Einordnung und interne Abhängigkeiten: `[read]` Tabelle in `10-workspace.md`
-(dort `[cmd]`-belegt). Zweck je Package (Ports `[cmd]` aus `src/index.ts`
-verifiziert):
+**Auslöser:** Beim gewöhnlichen `pnpm dev` am 2026-08-03 versuchte der
+Scheduler, zwei Workorders (`WO-e2e-1777085851593`, `WO-e2e-1777098883305`)
+an `spark_b` zu dispatchen — abgelehnt nur, weil die Agent-Registry den Namen
+nicht kannte, nicht durch eine Absicherung. Der Cluster war nicht tot, er war
+unbeaufsichtigt. Vollständige Dokumentation samt Regeln (nicht reaktivieren,
+nicht als Referenz zitieren): `[read]` `_archive/governance/README.md`.
 
-| Package | Zweck |
-|---|---|
-| `packages/wo-core` | Wurzel des Clusters: Workorder-Datenmodell, Schemata, Governance-Artefakt- und Execution-Token-Typen. Alle anderen hängen direkt oder indirekt daran. |
-| `packages/graph-core` | WO-Abhängigkeitsgraph: Validierung, Readiness |
-| `packages/agent-core` | Agenten-Registry-Typen |
-| `packages/scheduler-core` | Priorität und Slots |
-| `packages/execution-token` | Signieren/Verifizieren von Execution-Tokens (`@noble/ed25519`) |
-| `packages/vllm-client` | vLLM-Inferenz-Client + triple-hash |
-| `packages/supabase-clients` | Service-Role-Supabase-Clients „for Control Plane operations" |
-| `services/wo-classifier` | deterministischer Pre-Router, `[cmd]` Default-Port 9000 |
-| `services/scheduler-api` | Dispatch-Service, `[cmd]` Default-Port 9002; **importiert direkt aus `system/`** (siehe unten) |
-| `services/sat-check` | Pre-Execution-Gate, `[cmd]` Default-Port 9001 |
-| `services/orchestrator-api` | Entry Point (`/graph`, `/scheduler`, `/retry`), `[cmd]` Default-Port 9000 — **kollidiert mit wo-classifier** (`process.env.PORT` vs. `WO_CLASSIFIER_PORT`) |
-| `services/governance-compiler` | Compile-Service, `[cmd]` Default-Port 9003 |
-| `tools/` (`@lumeos/tools`) | `[read]` E2E-Skripte Control Plane; deps auf wo-core, vllm-client, execution-token. `tools/scripts/` (36 Dateien, ohne eigene package.json): Spark-Benchmarks, WO-Seeding, Grafana/vLLM-Starter. |
+Der frühere Kernbefund dieser Datei — `system/`, `scheduler-api` und die
+Governance-Konsole bilden einen nur gemeinsam entfernbaren Verbund — hat sich
+bestätigt: der Verbund wurde gemeinsam verschoben, `apps/web` kompiliert ohne
+ihn (`[cmd]` 2026-08-04 `pnpm typecheck` Exit 0, 4 Packages in scope).
 
-### `system/` — 5,2 MB, getrackt
+## Was wohin verschoben wurde
 
-`[cmd]` 19 Unterordner + 8 Top-Level-Markdowns. `[read]` `system/README.md`:
-„Status: MIXED ACTIVE CORE / SUPPORT / GENERATED EVIDENCE / PLACEHOLDER /
-ARCHIVE … Do not treat every folder here as equally active."
-`[annahme]` Binnengliederung laut README: Active Core (`agent-registry/`,
-`approval/`, `control-plane/`, `project-profiles/`, `state/`, `workers/`,
-`workorders/`), Support (`memory/`, `model-tiers/`, `policies/`, `prompts/`,
-`decomposition/`), Generated Evidence (`reports/`), Rest Platzhalter —
-Klassifikation nicht Datei für Datei nachgeprüft; maßgeblich laut README:
-`docs/project/system-structure/SYSTEM_TREE_AUDIT.md`.
+| Archiv-Ordner | Herkunft | Umfang |
+|---|---|---|
+| `_archive/governance/apps-web-governance/` | `apps/web/src/{app,app/api,components,lib}/governance/`, `apps/web/e2e/` | 21 Dateien: 10 Seiten, 2 API-Routen, Konsole, `command-runner.ts`/`snapshot.ts`, E2E-Spec |
+| `_archive/governance/packages/` | `packages/` | wo-core, graph-core, agent-core, scheduler-core, execution-token, vllm-client, supabase-clients (36 Dateien) |
+| `_archive/governance/services/` | `services/` | wo-classifier, scheduler-api, sat-check, orchestrator-api, governance-compiler (36 Dateien) |
+| `_archive/governance/tools-scripts/` | `tools/scripts/`, `tools/package.json` | 32 Skripte + `@lumeos/tools` (33 Dateien) |
+| `_archive/governance/system/` | `system/` | 349 getrackte Dateien + untracked Runtime-State |
+| `_archive/governance/onyx-seed/` | `tools/onyx/seed/` | zweite Governance-Kopie, siehe unten (2026-08-04) |
+| `_archive/governance/playwright.governance.config.ts` | Repo-Root | 1 Datei |
 
-### DB-Anteil
+In `tools/scripts/` verblieben nur `check-supabase.ps1`, `repo-status.ps1`,
+`start-claude-mem.ps1`, `start-lightrag.ps1` (produktneutral, je Datei geprüft —
+Begründung: `docs/sessions/2026-08-03-governance-archiviert.md`).
 
-2 Migrationen im Nutrition-Migrationsordner: `20260423120000_control_plane_tables.sql`
-(workorders, governance_artefacts, execution_tokens, wo_failure_events) und
-`20260424_002_wo_classifier_fields.sql`. Details: `30-datenbank.md`.
+## Die zweite Kopie: der Onyx-Seed (2026-08-04 nachgezogen)
 
-### Sonstiges (getrackt)
+`[cmd]` `tools/onyx/seed/lumeos-governance-current-truth/` enthielt 108 Dateien
+(51 md, 32 txt, 24 json): AGENTS.md, CLAUDE.md, SESSION_ONBOARDING.md,
+STACK_REFERENCE.md, MASTERPROMPT-Dateien, `system/`-Inhalte als `.txt`.
+`[read]` `SEED_MANIFEST.md`: Seed-Paket für das Onyx-Document-Set
+`LUMEOS_GOVERNANCE_CURRENT_TRUTH`, erstellt **2026-04-30** — der Name
+„current-truth" beschreibt den Stand von vor der Stilllegung.
 
-`[read]` Liste aus `10-workspace.md`: `AGENTS.md`, `SESSION_ONBOARDING.md`,
-`STACK_REFERENCE.md`, `.agents/`, `.codex/`, `playwright.governance.config.ts`,
-`artefakt.json`, `COMMANDS.md`, `.cursorrules` — plus die Governance-Teile von
-`docs/project/` (TODO A-03).
+Per `git mv` nach `_archive/governance/onyx-seed/` (nur 2 der 108 Dateien waren
+getrackt; der Rest untracked und physisch mitverschoben, Ignore-Regel folgt dem
+neuen Pfad). `[cmd]` Weder `tools/onyx/install.ps1` noch eine docker-compose
+referenziert den Seed-Pfad. Rest: `lumeos-governance-current-truth.zip` liegt
+untracked unter `tools/onyx/seed/` — `git mv` kann untrackte Dateien nicht
+bewegen; Behandlung über die Löschliste.
 
 ---
 
-## Kosten der Entfernung — der Kernbefund
+## Was physisch noch im Repo ist
 
-Die Entfernbarkeit ist **zweigeteilt**. Die frühere Formulierung in
-`10-workspace.md` („könnten entfernt werden, ohne dass `apps/web` es bemerkt")
-galt nur für die Packages und ist dort inzwischen präzisiert.
-
-### 1. Packages + Services löschen: billig
-
-- `[cmd]` `apps/web` hat 0 `@lumeos/*`-Importe — kein Produktbezug.
-- `[read]` `pnpm-workspace.yaml` (nur Wildcards `apps/*`, `services/*`,
-  `packages/*`, `tools`) und `turbo.json` (nur generische Tasks) nennen kein
-  Package namentlich — Löschen erfordert keine Config-Änderung.
-- `[read]` CI ist seit 2026-04-23 deaktiviert (`ci.yml`: „DISABLED",
-  `on: workflow_dispatch` only) — keine Pipeline bricht.
-- Einzige Nacharbeit: Root-Script `governance:ui:smoke` und
-  `playwright.governance.config.ts` zeigen dann ins Leere.
-
-### 2. `system/` löschen: bricht Produkt-Code
-
-`[cmd]` Grep 2026-08-01 — vier direkte Importe über die Workspace-Grenze:
-
-- `services/scheduler-api/src/index.ts:14` → `system/control-plane/dispatcher`
-- `services/scheduler-api/src/wo-adapter.ts:16` → ebenda (Typ-Import)
-- `services/scheduler-api/src/workorder-repository.ts:9–10` →
-  `system/control-plane/dispatcher` + `system/approval/approval-gate`
-
-Und — entscheidend — **`apps/web` selbst hängt an `system/`**:
-
-- `[read]` `apps/web/src/lib/governance/snapshot.ts:8` — statischer TS-Import
-  `system/project-profiles/project-profile-loader`. Ohne `system/` schlägt
-  `pnpm typecheck` für `apps/web` fehl.
-- `[read]` `command-runner.ts` (Z. 50–90) spawnt zur Laufzeit
-  `system/workorders/cli/…`, `system/control-plane/…`, `system/approval/…`,
-  `system/reports/…`.
-- `[cmd]` 10 `/governance`-Routen und die einzige E2E-Spec
-  (`governance-ui.browser-smoke.spec.ts`) sitzen darauf.
-
-**Konsequenz:** `system/`, `services/scheduler-api`,
-`apps/web/src/lib/governance/` + `/governance`-Routen +
-`playwright.governance.config.ts` bilden einen Verbund — entfernbar nur
-gemeinsam und nur mit Eingriff in `apps/web`.
+1. **Die vier Control-Plane-Tabellen in `public`** der lokalen Supabase:
+   `workorders`, `governance_artefacts`, `execution_tokens`,
+   `wo_failure_events` — mit den vier April-Workorders. Ihr Entfernen ist ein
+   Datenbankeingriff; Tom arbeitet daran (`[cmd]` 2026-08-04: untracked
+   `backup/schema/2026-08-03_public_vor_drop.sql` liegt bereit). Die beiden
+   zugehörigen Migrationen liegen seit 2026-08-02 in `supabase/_archive/`.
+2. **Altlast-Doku und -Configs** (getrackt, ausserhalb des Archivier-Umfangs):
+   `AGENTS.md`, `SESSION_ONBOARDING.md`, `STACK_REFERENCE.md`, `COMMANDS.md`,
+   `CLAUDE.md.v1.bak`, `artefakt.json`, `project.profile.json`, `.cursorrules`,
+   `.agents/`, `.codex/`, `.claude/agents|skills|hooks` (Spark-/WO-Agenten,
+   ausgehängte Hooks) — Kandidaten für eine Folgerunde.
+3. **`infra/`-Anteile:** Spark-systemd-Units, vLLM-Setups, Grafana/Prometheus
+   des WO-Dashboards — Governance-Hardware-Infrastruktur.
+4. **Kleinteile:** Spark-/Governance-Variablen in `.env.example`; deaktivierte
+   `ci.yml`; `[cmd]` 27 Erwähnungen archivierter Packages in `pnpm-lock.yaml`
+   (bereinigt das nächste `pnpm install`); Governance-Prosa auf
+   `/dashboard` (Anzeige-Text, keine Kopplung — Produkttext-Entscheidung).
+5. **Der Dispatch-Auslöser ist weiterhin ungeklärt** — die dispatchten
+   `WO-e2e-*`-IDs passen zu keiner Zeile in `public.workorders`. Mit dem
+   Archiv (kein Code mehr in Workspace-Pfaden) und dem anstehenden Drop der
+   Tabellen ist die Angriffsfläche entfernt, die Ursache aber nicht benannt.
 
 ---
 
 ## Regel für die Arbeit in diesem Repo
 
-Nichts aus `system/`, `AGENTS.md` oder den Workorder-Handbüchern als aktuelle
-Anweisung lesen (`[read]` CLAUDE.md „Altlasten"). Die Governance-**Konsole** in
-`apps/web` ist davon unberührt lauffähiger Code — sie zu entfernen ist eine
-Produktentscheidung (Verbund oben), keine Aufräumaktion.
+Nichts aus `_archive/governance/`, `AGENTS.md` oder den Workorder-Handbüchern
+als aktuelle Anweisung lesen. Wer etwas aus dem Archiv braucht, kopiert es
+bewusst und versieht die Kopie mit einem Statuskopf — Regeln im Archiv-README.
