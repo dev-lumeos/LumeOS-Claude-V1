@@ -87,6 +87,27 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 
 ## B — Entwicklungsumgebung & Absicherung
 
+- [ ] **B-12: Lokale Umgebung produktionsnah nachbilden** (neu 2026-08-03)
+  Sobald die zweite App entsteht. Hosts-Einträge `web.lumeos.local`,
+  `buddy.lumeos.local` und weitere, dazu lokale Zertifikate (mkcert), damit
+  das geteilte Cookie auf einer echten Domain liegt.
+  *Grund:* Das app-übergreifende Weiterreichen der Session über `.lumeos.app`
+  ist auf `localhost` nicht nachstellbar — dort gibt es keine Subdomains im
+  Cookie-Sinn. Solange nur `web` läuft, testet der Aufwand etwas, das niemand
+  nutzt; ab der zweiten App ist es die einzige Möglichkeit, SSO vor dem
+  Deployment zu prüfen.
+  `[read]` Die Cookie-Einstellungen selbst brauchen keinen Sonderweg:
+  `Secure` gilt auch auf localhost, weil lokale Adressen als
+  vertrauenswürdig zählen. Entschieden in
+  `docs/spezifikation/30-module/core/login/00-modul-login.md`.
+
+- [ ] **B-13: `site_url` und Rückleitadressen korrigieren** (neu 2026-08-03)
+  `[cmd]` `supabase/config.toml`: `site_url = "http://127.0.0.1:3000"` und
+  `additional_redirect_urls = ["https://127.0.0.1:3000"]` — die App läuft auf
+  **3200**. Nach einer Anmeldung würde Supabase auf einen Port zurückleiten,
+  auf dem nichts antwortet. *Blockiert jeden Anmeldeversuch.*
+  Dazu klären, wo die Liste für sieben Apps und drei Umgebungen gepflegt wird.
+
 - [x] **B-01: Permission-Schicht aufgebaut** — `[cmd]` `.claude/settings.json`
   mit 14 Deny / 7 Ask / 13 Allow. Verifiziert: `git push --dry-run` wurde geblockt,
   `pnpm typecheck` lief ohne Nachfrage.

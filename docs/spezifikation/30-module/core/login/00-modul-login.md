@@ -140,16 +140,47 @@ zum ersten Mal im Anwendungspfad:
 - **AK-8:** Gegeben eine erste Anmeldung, dann existiert danach ein
   Profileintrag zu dieser Identität.
 
-## 10. Offene Fragen
+## 10. Entschieden am 2026-08-03
 
-1. **`site_url`** — auf 3200 korrigieren; welche Adresse gilt für Produktion?
-   Hängt an der Domainfrage aus `10-plattform/auth-sso`.
-2. **`httpOnly` und Browser-Client** — `[annahme]` Der Altbestand setzt
-   `httpOnly: true`. Ob und wie der Browser-Client damit arbeitet, ist gegen
-   `@supabase/ssr` zu verifizieren, bevor gebaut wird.
-3. **Profilanlage** — Trigger auf `auth.users` oder Anwendungslogik? Ein
-   Trigger greift immer, auch bei Anmeldungen ausserhalb von `web`.
-4. **Verfahren zum Start** — alle vier gleichzeitig, oder mit E-Mail und
-   Passwort beginnen und die Anbieter nachziehen?
-5. **Rückleitadressen je App** — sieben Apps brauchen sieben Einträge in
+**Cookies: dieselben Einstellungen lokal wie produktiv.**
+`Secure`, `httpOnly`, `SameSite=Lax` — keine Umgebungsweiche im Code.
+`[read]` MDN: die https-Anforderung entfällt, wenn `Secure` von localhost
+gesetzt wird; `http://localhost` und `http://*.localhost` gelten als
+potenziell vertrauenswürdig, weil sie auf demselben Gerät liegen.
+
+**Datentragende Zugriffe laufen serverseitig.**
+Mit `httpOnly` kann der Browser-Client die Session nicht lesen — er greift
+über `document.cookie` zu. Das passt zum bestehenden Aufbau: der Datenzugriff
+läuft bereits über `rpc()` serverseitig. Der Browser-Client wird nur für
+Anmeldung und Abmeldung gebraucht, wo Supabase das Cookie selbst setzt.
+
+**Profilanlage per Trigger auf `auth.users`.**
+Ein Trigger greift bei jeder Anmeldung, auch bei einer Erstanmeldung über
+`buddy` oder `coach`. Anwendungslogik in `web` würde dort Identitäten ohne
+Profil hinterlassen.
+
+*Bedingung:* Der Trigger bleibt minimal — `id` und `created_at`, keine
+Pflichtfelder, keine Fremdschlüssel auf Fehlbares. **Ein fehlschlagender
+Trigger auf `auth.users` blockiert die Registrierung vollständig**, Supabase
+antwortet dann mit 500. Was dort steht, muss unter allen Umständen gelingen.
+Name, Sprache und Einheiten kommen später über Settings.
+
+**Lokale Anmeldung zuerst einfach.**
+Alle Apps auf `localhost` mit eigenen Ports. Die Anmeldung funktioniert je
+App; das app-übergreifende Weiterreichen der Session ist lokal nicht testbar.
+Solange nur `web` läuft, testet der aufwendige Weg etwas, das niemand nutzt.
+Die vollständige Nachbildung — Hosts-Einträge und lokale Zertifikate — ist
+als TODO festgehalten und wird fällig, sobald die zweite App entsteht.
+
+---
+
+## 11. Offene Fragen
+
+1. **`site_url` und Rückleitadressen** — `[cmd]` `supabase/config.toml` zeigt
+   auf Port 3000, die App läuft auf 3200. Zu korrigieren. Für Produktion:
+   Vercel-Adresse, später die eigene Domain, beide über https.
+2. **Verfahren zum Start** — alle vier gleichzeitig, oder mit E-Mail und
+   Passwort beginnen und Apple, Google, Passkey nachziehen?
+3. **Rückleitadressen je App** — sieben Apps brauchen sieben Einträge in
    `additional_redirect_urls`. Wo wird diese Liste gepflegt?
+
