@@ -1,0 +1,65 @@
+/* Theme: Lume — der Bestand aus globals.css, Werte unveraendert uebernommen
+   (Block 4 B2, 2026-08-05: Umschichtung, keine Neugestaltung).
+   Basisblock = Nachtmodus; [data-mode='light'] = Tagmodus.
+   Vertrag: src/styles/themes/contract.ts */
+
+[data-theme='lume'] {
+  --bg: oklch(0.155 0.005 270);
+  --bg-elev: oklch(0.185 0.005 270);
+  --surface: oklch(0.205 0.005 270);
+  --surface-2: oklch(0.235 0.005 270);
+  --surface-hover: oklch(0.255 0.005 270);
+  --border: oklch(0.280 0.005 270);
+  --border-strong: oklch(0.360 0.005 270);
+  --fg: oklch(0.970 0.000 0);
+  --fg-muted: oklch(0.720 0.005 270);
+  --fg-subtle: oklch(0.550 0.005 270);
+  --fg-dim: oklch(0.420 0.005 270);
+  --pos: oklch(0.78 0.13 150);
+  --warn: oklch(0.82 0.13 80);
+  --neg: oklch(0.72 0.16 22);
+  --acc-dash: oklch(0.78 0.04 240);
+  --acc-nutri: oklch(0.78 0.10 70);
+  --acc-train: oklch(0.74 0.10 290);
+  --acc-recov: oklch(0.78 0.08 160);
+  --acc-suppl: oklch(0.76 0.10 25);
+  --acc-goals: oklch(0.80 0.10 95);
+  --acc-medic: oklch(0.76 0.09 15);
+  --acc-coach: oklch(0.78 0.08 200);
+  --acc-buddy: oklch(0.76 0.09 310);
+  --acc-mkt: oklch(0.78 0.08 145);
+  --acc-admin: oklch(0.75 0.01 270);
+  --acc: var(--acc-dash);
+  --pad-card: 16px;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --radius-lg: 12px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  color-scheme: dark;
+}
+
+[data-theme='lume'][data-mode='light'] {
+  --bg: oklch(0.985 0.002 270);
+  --bg-elev: oklch(1.000 0.000 0);
+  --surface: oklch(1.000 0.000 0);
+  --surface-2: oklch(0.975 0.003 270);
+  --surface-hover: oklch(0.955 0.003 270);
+  --border: oklch(0.910 0.003 270);
+  --border-strong: oklch(0.820 0.005 270);
+  --fg: oklch(0.200 0.005 270);
+  --fg-muted: oklch(0.400 0.005 270);
+  --fg-subtle: oklch(0.550 0.005 270);
+  --fg-dim: oklch(0.680 0.005 270);
+  --acc-dash: oklch(0.48 0.06 240);
+  --acc-nutri: oklch(0.55 0.13 60);
+  --acc-train: oklch(0.50 0.16 290);
+  --acc-recov: oklch(0.50 0.10 160);
+  --acc-suppl: oklch(0.55 0.15 25);
+  --acc-goals: oklch(0.58 0.13 90);
+  --acc-medic: oklch(0.55 0.14 15);
+  --acc-coach: oklch(0.55 0.10 200);
+  --acc-buddy: oklch(0.55 0.12 310);
+  --acc-mkt: oklch(0.52 0.10 145);
+  --acc-admin: oklch(0.45 0.01 270);
+  color-scheme: light;
+}

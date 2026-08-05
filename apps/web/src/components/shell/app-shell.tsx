@@ -5,6 +5,7 @@ import type { Route } from 'next'
 import { useEffect, useMemo, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@lumeos/shared'
+import { ThemeSwitcher } from './theme-switcher'
 
 const moduleAccentMap = {
   dashboard: 'dash',
@@ -43,7 +44,6 @@ const systemNav = [
 ]
 
 type Density = 'compact' | 'default' | 'comfortable'
-type Theme = 'dark' | 'light'
 type ContextTone = 'pos' | 'warn' | 'info'
 
 const contextBySection: Record<
@@ -186,7 +186,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const [rightPanel, setRightPanel] = useState<'visible' | 'hidden'>('visible')
-  const [theme, setTheme] = useState<Theme>('dark')
   const [density, setDensity] = useState<Density>('default')
 
   const activeModule = moduleNav.find((item) => isActive(pathname, item.href))
@@ -200,13 +199,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const activeAccentKey = activeModule?.accentKey ?? moduleAccentMap[activeSection as keyof typeof moduleAccentMap] ?? moduleAccentMap.dashboard
   const context = contextBySection[activeSection] ?? contextBySection.dashboard
   useEffect(() => {
-    const storedTheme = window.localStorage.getItem('lumeos-theme')
     const storedPanel = window.localStorage.getItem('lumeos-right-panel')
     const storedDensity = window.localStorage.getItem('lumeos-density')
-
-    if (storedTheme === 'light' || storedTheme === 'dark') {
-      setTheme(storedTheme)
-    }
 
     if (storedPanel === 'hidden' || storedPanel === 'visible') {
       setRightPanel(storedPanel)
@@ -216,11 +210,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       setDensity(storedDensity)
     }
   }, [])
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    window.localStorage.setItem('lumeos-theme', theme)
-  }, [theme])
 
   useEffect(() => {
     window.localStorage.setItem('lumeos-right-panel', rightPanel)
@@ -417,9 +406,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <div className="lume-topbar-strip">
             <span className="lume-sync-pill"><span className="lume-status-dot" />Offline · 0 queued</span>
             <button className="lume-topbar-icon lume-topbar-secondary" type="button" aria-label="Notifications Placeholder">Bell 0</button>
-            <button className="lume-topbar-control" type="button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-              Theme
-            </button>
+            <ThemeSwitcher />
             <button className="lume-topbar-control" type="button" onClick={() => setRightPanel(rightPanel === 'visible' ? 'hidden' : 'visible')}>
               Context
             </button>

@@ -26,7 +26,24 @@ module.exports = {
         pos: 'var(--pos)',
         warn: 'var(--warn)',
         neg: 'var(--neg)',
-        acc: 'var(--acc)'
+        acc: 'var(--acc)',
+        // shadcn-Namensraum (Schritt A, 2026-08-05): reine ALIASE auf die
+        // bestehenden Tokens — kein zweiter Farbsatz, keine neuen CSS-
+        // Variablen, der Theme-Vertrag bleibt unveraendert.
+        // 'border' erwartet shadcn unter demselben Namen wie oben — identisch.
+        // Achtung Semantik: shadcns 'accent' ist die Hover-Flaeche
+        // (--surface-hover), NICHT der Markenakzent --acc (der ist 'primary').
+        background: 'var(--bg)',
+        foreground: 'var(--fg)',
+        card: { DEFAULT: 'var(--surface)', foreground: 'var(--fg)' },
+        popover: { DEFAULT: 'var(--bg-elev)', foreground: 'var(--fg)' },
+        primary: { DEFAULT: 'var(--acc)', foreground: 'var(--bg)' },
+        secondary: { DEFAULT: 'var(--surface-2)', foreground: 'var(--fg)' },
+        muted: { DEFAULT: 'var(--surface-2)', foreground: 'var(--fg-muted)' },
+        accent: { DEFAULT: 'var(--surface-hover)', foreground: 'var(--fg)' },
+        destructive: { DEFAULT: 'var(--neg)', foreground: 'var(--bg)' },
+        input: 'var(--border)',
+        ring: 'var(--acc)'
       },
       borderRadius: {
         token: 'var(--radius)',
@@ -38,5 +55,5 @@ module.exports = {
       }
     }
   },
-  plugins: []
+  plugins: [require('tailwindcss-animate')]
 }
