@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-05 (elfte Aktualisierung — B-14 und C-11 erledigt, M4-Voraussetzungen präzisiert, A-09 neu)
+**Stand:** 2026-08-05 (zwölfte Aktualisierung — Veralterungs-Audit eingepflegt: 8× erledigt, 9× überholt neu gefasst, D-17 verschärft, C-13/D-19 neu, Reihenfolge-Empfehlung)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -18,13 +18,28 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    (C-01), kein A-06-Blocker mehr.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
-4. **M4 — Cloud-Deployment** (→ Sektion E) — B-14 und C-11 sind erledigt
-   (2026-08-05). Noch offen als Voraussetzungen: **D-17**
-   (Migrationsregister — vor `supabase link` müssen die Migrationsdateien
-   den lokalen Zustand abbilden, vgl. E-08), **B-13-Rest**
-   (Produktions-`site_url` und Redirect-Liste je App und Umgebung) sowie
-   die Vorarbeiten **E-01 bis E-03** (Read-only-Prüfung, tote Verweise,
-   Abhängigkeiten der Cloud-Instanz).
+4. **M4 — Cloud-Deployment** (→ Sektion E) — B-14 und C-11 erledigt.
+   **Harter Blocker: D-17** (Migrationsregister — Geist-Eintrag, Slices
+   unregistriert, `profiles` ohne Migration; blockiert jeden Cloud-Kontakt
+   inkl. `supabase link`), mitsamt D-19 (README-Kette). Danach B-13-Rest
+   (Produktions-URLs/Redirect-Liste) und die Vorarbeiten E-01 bis E-03.
+
+
+## Bearbeitungsreihenfolge (Empfehlung aus dem Audit 2026-08-05)
+
+1. **D-17 (+ D-19)** — der Register-Drift ist akut: blockiert jeden
+   Cloud-Kontakt und macht `db reset` gefährlich.
+2. **Doku-Wurzeln: A-02 + A-09 zusammen** (beide Wurzeldateien führen aktiv
+   in die Irre; D-07 geht darin auf), dazu **C-13** (tote Produkt-Copy).
+3. **A-05** (Löschlauf ist vollständig freigegeben), dann **D-06**
+   (ADR 002/003 nachziehen, Zielort klären), **A-08**.
+4. **Audits:** C-07-Rest (types), C-08, C-10, D-04, D-05.
+5. **Umgebung:** B-08, B-11, B-07-Rest (Entscheidung).
+6. **Deployment:** B-13-Rest, E-01–E-03 (Dump als Vorstudie — Achtung:
+   Dump vom 2026-03-05 ist älter als die 2026-08-01-Messungen), dann
+   E-04 ff.
+7. **Modularbeit bewusst hinten:** C-03–C-06. **A-06** läuft parallel bei
+   Tom, kein Blocker. **B-12** wartet konzeptbedingt auf die zweite App.
 
 ---
 
@@ -41,52 +56,56 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   7. [x] `50-governance-rest.md` — was physisch bleibt und was Entfernung kostet
 
 - [ ] **A-02: `CLAUDE.md` ausdünnen** — nur Schreibregeln plus Verweis auf
-  `docs/ssot/00-INDEX.md`. Alle Fakten raus. *Grund: der Satz „services/ ist leer"
-  stand als Regel drin und war falsch.*
-  *Vorher B-10 klären — das ijfw-Plugin schreibt selbsttätig hinein.*
+  `docs/ssot/00-INDEX.md`. Alle Fakten raus. *Grund: der Satz „services/ ist
+  leer" stand als Regel drin und war falsch — und heute lügt die Datei
+  erneut:* `[cmd]` *Z. 24–25 behaupten „Keine Writes, kein Auth", falsch
+  seit C-02/M3.* **Keine Blockierung mehr:** die frühere Wartebedingung
+  (B-10) ist erledigt, das ijfw-Plugin ist deaktiviert und schreibt nicht
+  mehr hinein. D-07 geht hier auf (die Phase-1B-Aussagen leben in CLAUDE.md
+  und der Produkt-Copy; ein „README Phase 1B" existiert nicht).
+  Zusammen mit A-09 angehen — beide Wurzeldateien.
 
-- [ ] **A-03: Altlast archivieren** nach `docs/_archive/`:
-  `docs/todos/` (11 Dateien, alle Spark/System), `docs/governance/`,
-  Governance-Teil von `docs/project/`, `docs/ist-zustand/`.
-  Hinweis: `docs/ist-zustand/` liegt `[cmd]` noch am alten Ort,
-  `docs/_archive/` ist leer; Detailfehler der alten Bestandsaufnahme sind
-  in `docs/ssot/20-apps-web-ist.md` dokumentiert.
+- [x] **A-03: Altlast archivieren** — **erledigt (festgestellt im Audit
+  2026-08-05):** `[cmd]` `docs/todos/`, `docs/governance/` und
+  `docs/ist-zustand/` sind leer; `docs/_archive/` enthält governance/,
+  ist-zustand/, project/, todos/ samt Löschliste. Der Governance-Teil von
+  `docs/project/` ist verschoben; verblieben sind dort Produkt- und
+  GSTACK-Dokumente.
 
-- [ ] **A-04: `BrainstormDocs/_ARCHIVE_NOTICE.md` korrigieren** — verweist auf
-  `SESSION_ONBOARDING.md`, `USER_MANUAL.md` und `system/memory/canonical/`
-  als „aktuelle Referenzen". Alle drei sind Altlast.
+- [x] **A-04: `BrainstormDocs/_ARCHIVE_NOTICE.md` korrigieren** — **erledigt
+  (festgestellt im Audit 2026-08-05):** `[cmd]` die Notice verweist bereits
+  auf `docs/ssot/00-INDEX.md`, `docs/spezifikation/00-INDEX.md` und
+  `docs/todo/TODO.md`; die drei bemängelten Altlast-Verweise kommen nicht
+  mehr vor (0 Treffer).
 
-- [ ] **A-05: Repo-Müll entfernen** (untracked) — **korrigiert 2026-08-02,
-  dringend:** `tmp/` ist **KEIN Müll** und von der Löschliste ausgenommen.
-  Unter `tmp/nutrition/p1-005-bls-local-import/` lagen die einzigen
-  Quelldaten der Datenbank: `foods.csv` (7.140 Zeilen) und
-  `food_nutrients.csv` (698.092 Zeilen), beide untracked.
-  `[cmd]` Zeilenzahlen stimmen exakt mit dem Container überein.
-  Seit Commit 399d9bc sind sie als `supabase/_data/bls_4_0_local_import.zip`
-  versioniert. `tmp/` bleibt trotzdem stehen, bis ein Durchlauf aus `_data/`
-  bewiesen ist (D-12).
-  Übrige Löschliste bleibt: `temp/` (16,5 GB), `.wayland-core/`, `.wayland/`,
-  `.ijfw/`, `ijfw/`, `_tmp_inventory/`, `backup_system.zip`, `services.zip`,
-  `system.zip`, `nul`, `.codex-governance-ui.log`.
-  *Regel daraus: jeder untracked Ordner wird vor Löschung inhaltlich geprüft,
-  nicht nur dem Namen nach.*
-  Neu 2026-08-05 (offen, Entscheidung Tom): `.gitignore`-Vorschlag
-  `apps/web/.next*/` für beiseitegeschobene Build-Verzeichnisse — nicht
-  gesetzt, nur vorgemerkt.
+- [ ] **A-05: Repo-Müll entfernen** (untracked) — Stand Audit 2026-08-05:
+  `[cmd]` alle 12 Bestände liegen noch (`temp/` 16,5 GB, `tmp/`,
+  `.wayland-core/`, `.wayland/`, `.ijfw/`, `ijfw/`, `_tmp_inventory/`,
+  `backup_system.zip`, `services.zip`, `system.zip`, `nul`,
+  `.codex-governance-ui.log`).
+  **Die tmp/-Rückhaltebedingung ist entfallen:** D-12 ist seit 2026-08-02
+  bewiesen (Kette läuft vollständig aus dem `supabase/_data/`-Zip) —
+  `tmp/` ist zur Löschung frei. `temp/lumeosold/` bleibt ausgenommen
+  (Prod-Dumps der Vorgängerinstanz; ein Duplikat liegt als Zip unter
+  `backup/legacy-v2/` — vor Löschung gegenprüfen).
+  Dazu offen (Entscheidung Tom): `.gitignore`-Vorschlag `apps/web/.next*/`
+  für beiseitegeschobene Build-Verzeichnisse.
+  *Regel bleibt: jeder untracked Ordner wird vor Löschung inhaltlich
+  geprüft, nicht nur dem Namen nach.*
 
-- [ ] **A-06: Design-System spezifizieren** — `docs/spezifikation/10-plattform/design-system/`
-  ist leer. Quellen: `docs/design-system/` (DESIGN_CONCEPT, components, tokens),
-  `packages/ui` (Gerüst), Altbestand-Specs mit OKLCH-Tokens.
-  **Umgestuft 2026-08-05: kein Blocker mehr für M2** — das Design läuft
-  parallel bei Tom, gearbeitet wird modulweise mit dem bestehenden
-  Token-Satz; die elf Modul-Akzente bleiben unangetastet und weiterhin
-  nicht in `tailwind.config.js` gespiegelt.
-  A-06-Material (neu 2026-08-05): shadcn-Komponenten nutzen `rounded-md`
-  (6 px fest) statt der Token-Radien `rounded-token*` — kein Fehler, aber
-  ein Theme steuert die shadcn-Radien damit nicht; bei der
-  Design-Entscheidung mitbehandeln.
-  Betrifft alle sieben Apps, weil das Design-System das einzige ist, was
-  sie sichtbar verbindet.
+- [ ] **A-06: Design-System spezifizieren** — Stand Audit 2026-08-05:
+  `[cmd]` `docs/spezifikation/10-plattform/design-system/` ist **nicht mehr
+  leer** — `00-diskussionsstand.md` liegt vor. Quellen weiterhin:
+  `docs/design-system/` (DESIGN_CONCEPT, components, tokens), `packages/ui`
+  (Gerüst), Altbestand-Specs mit OKLCH-Tokens.
+  **Kein Blocker für M2** (umgestuft 2026-08-05) — Design läuft parallel
+  bei Tom, gearbeitet wird modulweise mit dem bestehenden Token-Satz; die
+  elf Modul-Akzente bleiben unangetastet und weiterhin nicht in
+  `tailwind.config.js` gespiegelt.
+  A-06-Material: shadcn-Komponenten nutzen `rounded-md` (6 px fest) statt
+  der Token-Radien `rounded-token*` — ein Theme steuert die shadcn-Radien
+  damit nicht; bei der Design-Entscheidung mitbehandeln.
+  Betrifft alle sieben Apps.
 
 - [x] **A-07: ADR Servicelayer** — **erledigt 2026-08-04: Entscheidung
   getroffen.** `[cmd]` `docs/spezifikation/90-entscheidungen/ADR-0001-datenzugriff.md`
@@ -129,12 +148,14 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   vertrauenswürdig zählen. Entschieden in
   `docs/spezifikation/30-module/core/login/00-modul-login.md`.
 
-- [ ] **B-13: `site_url` und Rückleitadressen korrigieren** (neu 2026-08-03)
-  `[cmd]` `supabase/config.toml`: `site_url = "http://127.0.0.1:3000"` und
-  `additional_redirect_urls = ["https://127.0.0.1:3000"]` — die App läuft auf
-  **3200**. Nach einer Anmeldung würde Supabase auf einen Port zurückleiten,
-  auf dem nichts antwortet. *Blockiert jeden Anmeldeversuch.*
-  Dazu klären, wo die Liste für sieben Apps und drei Umgebungen gepflegt wird.
+- [ ] **B-13: `site_url`/Rückleitadressen — Rest: Pflegeort und
+  Produktions-URLs** — der Kern ist seit M3 erledigt: `[cmd]`
+  `supabase/config.toml` steht auf `http://localhost:3200` +
+  `/auth/callback`, die Anmeldung läuft; der frühere Zustand
+  (127.0.0.1:3000, „blockiert jeden Anmeldeversuch") ist überholt.
+  **Offen:** Produktions-`site_url` (Vercel-Adresse, später Domain) und wo
+  die Redirect-Liste für sieben Apps und drei Umgebungen gepflegt wird.
+  M4-Voraussetzung.
 
 - [x] **B-01: Permission-Schicht aufgebaut** — `[cmd]` `.claude/settings.json`
   mit 14 Deny / 7 Ask / 13 Allow. Verifiziert: `git push --dry-run` wurde geblockt,
@@ -146,8 +167,10 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   *Kritisch war `Bash(powershell -Command:*)` — ein Generalschlüssel, der jede
   Deny-Regel umging, zusammen mit `git add *` und `git commit -m ' *`.*
 
-- [ ] **B-03: `Bash(rm:*)`-Deny verifizieren** — ungetestet. Claude Code hat beim
-  Test nicht `rm` versucht, sondern erst geprüft. Explizit provozieren.
+- [x] **B-03: `Bash(rm:*)`-Deny verifizieren** — **erledigt 2026-08-05:
+  explizit provoziert.** `[cmd]` `rm <pfad>` im Audit ausgeführt →
+  „Permission … has been denied" — die Deny-Regel wirkt. (Zuvor am
+  2026-08-04 bereits zweimal implizit ausgelöst.)
 
 - [x] **B-04: PreToolUse-Hook neu bauen** — **erledigt 2026-08-04.**
   `.claude/hooks/protect-paths.ps1` (86 Zeilen), eingehängt in `.claude/settings.json`
@@ -177,13 +200,18 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   mehr — die Hooks sind zielos. Die Dateien liegen noch unter `.claude/hooks/`
   und gehen mit der `.claude`-Altlast-Folgerunde (`50-governance-rest.md`).
 
-- [ ] **B-06: Herkunft des `PowerShell`-Deny klären** — die Permissions-UI zeigt
-  einen Eintrag, den keine gefundene Settings-Datei liefert. Per `/permissions`
-  in der Session nachsehen, welche Datei ihn setzt.
-  Hinweis 2026-08-04: `Bash(powershell:*)` steht inzwischen auf `ask`.
+- [x] **B-06: Herkunft des `PowerShell`-Deny klären** — **erledigt (Audit
+  2026-08-05): gegenstandslos.** `[cmd]` Die Nutzer-settings.json enthält
+  keine PowerShell-Regel; der Eintrag liegt sichtbar als `ask` in
+  `.claude/settings.json:40` (seit der Umstellung deny→ask am 2026-08-03).
+  Das Rätsel „keine gefundene Datei liefert ihn" existiert nicht mehr.
 
-- [ ] **B-07: `skipAutoPermissionPrompt: true`** in `~/.claude/settings.json` prüfen.
-  *Vermutliche Ursache dafür, dass 47 Allow-Regeln unbemerkt wachsen konnten.*
+- [ ] **B-07: `skipAutoPermissionPrompt` — Entscheidung steht aus** —
+  Prüfteil erledigt (Audit 2026-08-05): `[cmd]` der Schlüssel steht in
+  `~/.claude/settings.json` auf **true** — die vermutete Ursache für die
+  47 unbemerkt gewachsenen Allow-Regeln ist real. **Offen: die
+  Entscheidung** (Tom) — abschalten oder bewusst belassen. Es ist eine
+  Sicherheitseinstellung der Nutzerkonfiguration: lesen ja, ändern nein.
 
 - [ ] **B-08: SessionEnd-Hook falsch verortet** — steht in `~/.claude/settings.json`
   mit hartkodiertem Pfad auf dieses Repo. Gehört in die Projekt-Settings oder weg.
@@ -195,12 +223,11 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   die Datei liegt jetzt in `supabase/_archive/` und wird nicht mehr
   ausgeführt. Folgenlos.
 
-- [ ] **B-10: ijfw-Plugin entscheiden** — `[cmd]` das Plugin
-  (`"ijfw@ijfw": true` in `~/.claude/settings.json`) schreibt selbsttätig in
-  `CLAUDE.md` (3 Zeilen) und `AGENTS.md` (104 Zeilen), Block
-  `IJFW-MEMORY-START (managed -- do not edit manually)`.
-  *Blockiert A-02: eine ausgedünnte `CLAUDE.md` würde wieder befüllt, mit
-  ungeprüftem Inhalt.*
+- [x] **B-10: ijfw-Plugin entscheiden** — **erledigt 2026-08-05 (Tom):**
+  `[cmd]` `enabledPlugins: {"ijfw@ijfw": false}` und MCP-Server umbenannt
+  auf `_disabled_ijfw-memory` in der Nutzer-settings.json. Die
+  A-02-Blockierung ist damit gefallen; der von ijfw verwaltete Block in
+  CLAUDE.md/AGENTS.md wird nicht mehr beschrieben und geht mit A-02 raus.
 
 - [ ] **B-11: Worktree-Regel für parallele Agenten** (neu 2026-08-01) —
   `[cmd]` Prozessliste zeigte gleichzeitig einen Codex-Prozess (seit 09:19),
@@ -291,18 +318,23 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Preset-/Profil-Schreibpfad (Settings, → C-12).
 
 - [ ] **C-03: WP-02 Diary-Verdrahtung** — `db/schema/nutrition.sql` anschliessen
-  oder verwerfen. *Blockiert durch ADR-003 (Modellkonflikt EAV vs. flach).*
+  oder verwerfen. *Blockiert durch ADR-003 — Grenzfall (Audit 2026-08-05):
+  formal offen (nur ADR-0001 existiert), materiell durch 060/M3 entschieden;
+  es fehlt allein die Nachdokumentation in D-06.*
   Nebenfund `[read]`: im Entwurf hat `meal_items` RLS ohne Policy —
   wäre für authenticated gesperrt; bei Übernahme korrigieren.
+
 - [ ] **C-04: WP-03 Daily Summary** — hängt an C-03
 - [ ] **C-05: WP-04 Water Tracking** — `water_logs` fehlt komplett
 - [ ] **C-06: WP-05 erstes Mock-Modul echt machen** — Kandidat Goals.
   *Vorher die 2 kritischen Bugs aus `docs/specs/Goals/OPEN_ITEMS.md` klären
   (Adaptive-TDEE Cross-Schema, Contribution-Timing).*
 
-- [ ] **C-07: `packages/shared` und `packages/types` verdrahten** — beide enthalten
-  Produktcode (Supabase-Clients, Nutrition-Typen), werden von `apps/web` aber nicht
-  importiert. Nutzen oder entfernen.
+- [ ] **C-07: `packages/types` verdrahten oder entfernen** — Rest von
+  ursprünglich zwei Paketen (Audit 2026-08-05): `[cmd]` `@lumeos/shared`
+  ist seit M1 Teil C verdrahtet (workspace-Dependency; Importe u. a. in
+  nutrition-db, Auth-Callback, Login-Form) — **`@lumeos/types` hat
+  weiterhin 0 Importe.** Nutzen oder entfernen.
 
 - [ ] **C-08: `services/nutrition-api` einordnen** — angepasst 2026-08-04:
   Hono-Service, 4 Dateien, von niemandem importiert; seit der
@@ -338,6 +370,15 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Zielfeld je Zeile — dadurch sind die partiellen Indizes trennscharf: jede
   Zeile fällt in genau einen Index, Überlappung ist konstruktiv ausgeschlossen.
   Bisher stand das nur als Kommentar in `050_preferences_foundation.sql`.
+
+- [ ] **C-13: Tote „Keine Writes"-Copy in ausgelieferter Oberfläche**
+  (neu 2026-08-05, Audit-Fund) — `[cmd]` `dashboard-view.tsx`
+  Z. 15/133/138 („Keine Writes", „führt keine Migrationen aus", Badge
+  „Keine DB-Writes"), `app-shell.tsx` Z. 85 („Keine Writes ausführen"),
+  `placeholder-page.tsx` Z. 66 (Badge „Keine Writes") — **falsch seit
+  C-02/M3**: Schreibpfad und Anmeldung sind produktiv. Das ist
+  ausgelieferte Oberfläche, kein Doku-Problem; C-10 deckt nur die
+  Zahlen-Literale ab.
 
 ---
 
@@ -382,21 +423,13 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Inhalt von `20260513_002`, das im Kopf
   `EXECUTION_CANDIDATE_REVIEW_ONLY / DO NOT EXECUTE` trägt.
 
-- [ ] **D-14: RLS im Container prüfen und entscheiden** (neu 2026-08-01) —
-  `[cmd]` Ist-Zustand weicht von der Migration ab:
-
-  | Tabelle | RLS an | Policies |
-  |---|---|---|
-  | `food_preferences` | ja | 1 (`auth.uid()`) |
-  | `food_preference_items` | ja | 1 (`auth.uid()`) |
-  | alle übrigen 9 | **nein** | 0 |
-
-  Die Migration `20240522_002` beschreibt RLS auf allen 7 EAV-Tabellen
-  (`FOR SELECT TO authenticated`). Im Container ist davon nichts vorhanden.
-  *Zwei Fragen: Ist der offene Zugriff auf die EAV-Tabellen gewollt (Stammdaten)
-  oder ein Versehen? Und: die einzigen zwei Policies nutzen `auth.uid()` —
-  damit ist ADR-003 faktisch schon in Richtung Supabase-Auth entschieden,
-  ohne Dokumentation. Hängt an D-08 und C-03.*
+- [x] **D-14: RLS im Container prüfen und entscheiden** — **erledigt
+  (Audit 2026-08-05, von Tom nachgeprüft):** `[cmd]` live heute **11/11
+  Tabellen mit RLS, 15 Policies** — der am 2026-08-01 beschriebene Zustand
+  (2 von 11) ist seit 060-Live weg. Beide Fragen entschieden: der offene
+  EAV-Zugriff war ein Versehen und ist durch die Datenklassen aus 060
+  behoben; ADR-003 ist seit M3 real (Supabase-Auth produktiv).
+  Doku-Rest (ADR-003 nachschreiben) → D-06.
 
 - [x] **D-11: Restore-Test** — erledigt 2026-08-01.
   `[cmd]` Restore von `backup/data/2026-08-01_nutrition_full.dump` in eine leere
@@ -450,12 +483,22 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Specs referenzieren `packages/scoring`, wofür kein Gerüst existiert;
   `apps/marketplace` in Specs, aber ohne Gerüst.
 
-- [ ] **D-06: ADRs nach `docs/decisions/` überführen** — `[cmd]` leer (nur `.gitkeep`).
-  Register in `docs/ist-zustand/04-adr-liste.md`, Nutrition-ADRs `[cmd]` in
-  `docs/specs/Nutrition/04_adrs/` (12 Stück).
-  *Neu dazu: ADR-002 nachdokumentieren (C-02.1), ADR-003 im Licht von D-14.*
+- [ ] **D-06: ADRs konsolidieren** — überarbeitet 2026-08-05: `[cmd]`
+  `docs/decisions/` enthält weiter nur `.gitkeep`, aber der reale ADR-Ort
+  ist inzwischen `docs/spezifikation/90-entscheidungen/` (ADR-0001 liegt
+  dort); das alte Register liegt unter
+  `docs/_archive/ist-zustand/04-adr-liste.md`, Nutrition-ADRs in
+  `docs/specs/Nutrition/04_adrs/` (12 Stück). Zielort klären
+  (decisions/ vs. 90-entscheidungen/), dann nachziehen.
+  **Dieser Punkt trägt die ADR-Reste:** ADR-002 (Preferences-Design, aus
+  C-02.1) und ADR-003 (Supabase-Auth — materiell durch 060/M3 entschieden,
+  Beleg in D-14; es fehlt nur die Nachdokumentation).
 
-- [ ] **D-07: README „Phase 1B"** nach C-02 aktualisieren.
+- [ ] **D-07: „Phase 1B"-Aussagen aktualisieren** — überarbeitet
+  2026-08-05: `[cmd]` ein „README Phase 1B" existiert nirgends; die
+  Phase-1B-Behauptungen leben in `CLAUDE.md` (Z. 24–25), `AGENTS.md`
+  (Altlast) und der Produkt-Copy. **Geht in A-02/A-09 und C-13 auf** —
+  hier nur als Marker, keine eigene Arbeit planen.
 
 - [x] **D-08: supabase-js vs. Docker-SQL** — **entschieden und umgesetzt 2026-08-03.**
   `[cmd]` `apps/web` liest über supabase-js; kein `docker exec`, kein
@@ -471,15 +514,33 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   in `_archive/governance/services/` (`[cmd]` 476 Umbenennungen per `git mv`,
   Commit 59cb41e).
 
-- [ ] **D-15: `supabase/migrations-draft/` einordnen** (neu 2026-08-02) —
-  durch beide Verifikationsläufe überholt. Verwerfen oder als Referenz behalten.
+- [x] **D-15: `supabase/migrations-draft/` einordnen** — **erledigt (Audit
+  2026-08-05, von Tom nachgeprüft):** `[cmd]` liegt nicht mehr am alten Ort, sondern unter `supabase/_archive/` — die
+  Einordnung (Archiv-Referenz statt aktiver Bestand) ist faktisch gefallen.
 
-- [ ] **D-16: `021_wild_category_apply.sql` klären** (neu 2026-08-02) —
-  läuft ohne sichtbaren Effekt. `[annahme]` durch 020 abgedeckt, ungeprüft.
+- [x] **D-16: `021_wild_category_apply.sql` klären** — **erledigt
+  2026-08-02, der Haken fehlte:** die `[annahme]` „durch 020 abgedeckt"
+  ist widerlegt — `[cmd]` 021 ist notwendig (`affected_rows = 49`;
+  Kettenläufe 2026-08-04/05 liefern erneut 49; dokumentiert in
+  `supabase/README.md`).
 
-- [ ] **D-17: Migrationsregister-Strategie** (neu 2026-08-02) — das Register
-  ist nach der Archivierung faktisch leer. Entscheiden: Kette in reguläre
-  Migrationen überführen oder als dokumentierter Ablauf belassen.
+- [ ] **D-17: Migrationsregister — BLOCKER vor jedem Cloud-Kontakt**
+  (verschärft 2026-08-05, `[cmd]` von Tom nachgeprüft) — drei Ebenen
+  laufen auseinander:
+  1. **Register:** genau ein Eintrag, `20260423120000 control_plane_tables`
+     — ein **Geist-Eintrag**: die Datei liegt seit 2b68381 unter
+     `supabase/_archive/`, in `supabase/migrations/` existiert sie nicht,
+     die Tabellen sind gedroppt (D-18).
+  2. **Dateien:** die drei aktiven Slices in `supabase/migrations/` sind **nicht
+     registriert** (count 0).
+  3. **Ist-Zustand:** `public` enthält genau `profiles` — angelegt von
+     `_pipeline/09_identitaet/090`, in keiner Migration.
+  Folgen: `db push` spielte die drei Slices als ausstehend ein und
+  **liesse `profiles` aus — die Anmeldung wäre in der Cloud tot**;
+  `db pull`/`migration repair` treffen auf den Geist-Eintrag; `db reset`
+  baute die Control-Plane wieder auf und `profiles` nicht.
+  **Blockiert jeden Cloud-Kontakt, auch `supabase link`** — nicht nur das
+  Deployment. Eigener Auftrag folgt. Siehe D-19 (README-Kette).
 
 - [x] **D-18: Die vier Control-Plane-Tabellen in `public` entfernen** — **erledigt 2026-08-03**
   (neu 2026-08-04) — `workorders`, `governance_artefacts`, `execution_tokens`,
@@ -489,6 +550,13 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Sicherung liegt bereit (`[cmd]` 2026-08-04: untracked
   `backup/schema/2026-08-03_public_vor_drop.sql`).
   *Datenbankeingriff — nicht nebenbei ausführen.*
+
+- [ ] **D-19: supabase/README-Kette unvollständig** (neu 2026-08-05,
+  Audit-Fund, `[cmd]` von Tom bestätigt) — die verbindliche
+  Reihenfolge-Tabelle endet bei 060; **070 (Lesefunktionen) und 090
+  (Identität/`profiles`) fehlen**. Wer der dokumentierten Kette folgt,
+  baut eine Datenbank ohne Suche-RPCs und ohne Anmeldung. Hängt an D-17
+  und muss vor jedem Cloud-Kontakt mit erledigt sein.
 
 ---
 
@@ -599,10 +667,14 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   Übungen (13 %). Bewusster Verzicht oder Produktionsauftrag über 1.262 Übungen?
   *Gehört in die Produktentscheidung, nicht in eine Fussnote.*
 
-- [ ] **E-08: Deployment nach `main`** — erst wenn D-12 abgeschlossen ist.
-  *Vor einem `supabase link` müssen die Migrationsdateien den lokalen Zustand
-  abbilden, sonst entsteht ein dritter Drift-Zustand — diesmal in einer
-  Instanz, für die bezahlt wird.*
+- [ ] **E-08: Deployment nach `main`** — Wartebedingung korrigiert
+  2026-08-05: „erst wenn D-12 abgeschlossen" ist seit 2026-08-02 erfüllt
+  und damit hinfällig. **Reale Voraussetzungen: D-17 (Blocker vor jedem
+  Cloud-Kontakt inkl. `supabase link`, mitsamt D-19) und der B-13-Rest**
+  (Produktions-`site_url`/Redirect-Liste).
+  *Die Warnung bleibt: vor einem `link` müssen die Migrationsdateien den
+  lokalen Zustand abbilden, sonst entsteht ein dritter Drift-Zustand — in
+  einer Instanz, für die bezahlt wird.*
 
 - [ ] **E-09: Preview-Branches erst danach** — und dann als das, wofür sie
   gedacht sind: kurzlebige Testumgebungen je Änderung, kein dauerhaftes Dev.
