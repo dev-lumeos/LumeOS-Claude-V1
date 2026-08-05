@@ -3,6 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/shared/src/**"],
       "outputs": [".next/**", "dist/**"]
     },
     "dev": {

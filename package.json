@@ -6,7 +6,8 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "gate": "turbo run typecheck test build"
   },
   "devDependencies": {
     "@playwright/test": "1.41.2",

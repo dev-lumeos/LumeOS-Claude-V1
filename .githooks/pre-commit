@@ -1,0 +1,15 @@
+#!/bin/sh
+# Pre-Commit-Gate (B-14, 2026-08-05): typecheck + test + build.
+# Anlass: der /dashboard-Bruch (typedRoutes) lag vor, waehrend test und
+# typecheck gruen waren — nur der Build deckt diese Fehlerklasse ab.
+# Aktivierung: git config core.hooksPath .githooks
+# Umgehung im Notfall: git commit --no-verify (bewusst, nicht still).
+echo "[gate] pnpm gate (typecheck + test + build) ..."
+pnpm gate
+status=$?
+if [ $status -ne 0 ]; then
+  echo "[gate] ROT — Commit abgebrochen (Umgehung: --no-verify)." >&2
+  exit $status
+fi
+echo "[gate] gruen."
+exit 0

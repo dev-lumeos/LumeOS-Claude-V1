@@ -2,6 +2,27 @@
 
 Deterministic AI Production Pipeline for LUMEOS.
 
+## Entwicklung: Prüf-Gate (B-14, Stand 2026-08-05)
+
+Ein Befehl prüft alles: **`pnpm gate`** = `turbo run typecheck test build`.
+
+- **Aktivierung nach frischem Klon (Pflicht, sonst läuft kein Gate):**
+  `git config core.hooksPath .githooks`
+  Der Pre-Commit-Hook ist versioniert (`.githooks/pre-commit`), die
+  Aktivierung ist lokale Git-Konfiguration und passiert nicht von selbst.
+- **Einschränkung:** Der Hook prüft den **Working Tree, nicht den Index**.
+  Wer in logischen Scheiben committet, kann Commit 1 von 3 grün bekommen,
+  obwohl er für sich allein nicht baut — Änderungen aus Scheibe 2 liegen im
+  Working Tree und heilen den Bruch bereits. Bewusst so belassen: ein
+  Index-Checkout je Commit kostet Laufzeit und Komplexität.
+- **Notausgang:** `git commit --no-verify` — bewusst einsetzen, nicht still.
+- **Betriebsregel:** `next dev` und Gate **nicht gleichzeitig** laufen lassen.
+  Beide teilen sich `apps/web/.next`; `[cmd]` 2026-08-05 erzeugte ein
+  parallel laufender Dev-Server TS6053-Fehler auf `.next/types/**` im
+  Gate-Typecheck. (Alternative wäre ein eigener `distDir` für Gate-Builds —
+  Vorschlag, nicht umgesetzt.)
+- Laufzeit: warm ~1 s (Turbo-Cache), nach Änderungen ~35 s.
+
 ## Architecture
 
 **Brain** — Claude Code (planning, specs, workorders)
