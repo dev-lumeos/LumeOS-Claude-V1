@@ -91,6 +91,18 @@ CREATE INDEX IF NOT EXISTS idx_food_pref_items_user ON nutrition.food_preference
 CREATE INDEX IF NOT EXISTS idx_food_pref_items_category ON nutrition.food_preference_items(category_id);
 CREATE INDEX IF NOT EXISTS idx_food_pref_items_tag ON nutrition.food_preference_items(tag_code);
 
+-- Duplikatschutz (C-02, ergänzt 2026-08-04): genau EINE Zeile je Nutzerin
+-- und Food. `preference` gehört bewusst NICHT in den Schlüssel — Favorit und
+-- Ausschluss sind keine getrennten Zeilen, Umstufung ist ein UPDATE derselben
+-- Zeile; zwei Zeilen je Food wären ein widersprüchlicher Zustand.
+-- Partiell auf food_id IS NOT NULL: Zeilen anderer target_types (category,
+-- tag, cuisine, exclusion_preset, catalog_item) sind nicht betroffen —
+-- analoge Uniques dafür folgen mit deren Schreibpfaden.
+-- Schliesst die Select-vor-Insert-Race im Anwendungscode (23505 -> 409).
+CREATE UNIQUE INDEX IF NOT EXISTS uq_food_pref_items_user_food
+  ON nutrition.food_preference_items(user_id, food_id)
+  WHERE food_id IS NOT NULL;
+
 ALTER TABLE nutrition.food_preference_items ENABLE ROW LEVEL SECURITY;
 DO $policy$
 BEGIN

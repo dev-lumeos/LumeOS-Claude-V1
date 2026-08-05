@@ -19,3 +19,11 @@ SELECT 'orphan_preference_tags', COUNT(*)::text
 FROM nutrition.food_preference_items fpi
 WHERE fpi.tag_code IS NOT NULL
   AND NOT EXISTS (SELECT 1 FROM nutrition.tag_definitions td WHERE td.code = fpi.tag_code);
+SELECT 'unique_index_user_food_exists', (COUNT(*) = 1)::text
+FROM pg_indexes
+WHERE schemaname = 'nutrition' AND tablename = 'food_preference_items'
+  AND indexname = 'uq_food_pref_items_user_food'
+  AND indexdef LIKE '%UNIQUE%' AND indexdef LIKE '%WHERE%food_id IS NOT NULL%';
+SELECT 'duplicate_user_food_rows', COUNT(*)::text
+FROM (SELECT user_id, food_id FROM nutrition.food_preference_items
+      WHERE food_id IS NOT NULL GROUP BY 1, 2 HAVING COUNT(*) > 1) d;
