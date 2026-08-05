@@ -80,7 +80,6 @@ _archive/governance/onyx-seed/
 _tmp_inventory/
 
 # --- Wayland (managed): skill symlinks & knowledge, safe to keep ---
-.claude/
 .codebuddy/
 .codex/
 .cursor/
@@ -95,6 +94,16 @@ _tmp_inventory/
 .wayland-core/
 .wayland/
 # --- end Wayland ---
+
+# --- Projekt-eigene Claude-Konfiguration ---
+# .claude/ stand bis 2026-08-04 im Wayland-Block. Wirkungslos: 93 Dateien
+# darunter waren laengst getrackt (agents/, rules/, skills/, hooks/,
+# settings.json). Die Regel blockierte ausschliesslich NEUE Dateien und liess
+# .claude/hooks/protect-paths.ps1 (B-04) still verschwinden. Jetzt gezielt
+# nur das lokale Rauschen ignorieren.
+.claude/settings.local.json
+.claude/settings.local.json.bak-*
+.claude/hooks/*.log
 
 # --- ijfw runtime state (Session-Counter, Scan-Tmp, Logs, memory.db) ---
 .ijfw/
