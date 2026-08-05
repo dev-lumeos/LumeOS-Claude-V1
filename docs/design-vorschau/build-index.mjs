@@ -15,6 +15,11 @@ const lightBlock = block(/\[data-theme="light"\]\s*\{([\s\S]*?)\}/)
 
 // Reihenfolge und Beschreibung. Unbekannte Dateien landen automatisch unten.
 const BESCHREIBUNG = {
+  'themes.html': {
+    gruppe: 'Referenz', titel: 'Themes & Komponenten',
+    text: 'Vier Themes, je Tag- und Nachtmodus, an neun Komponenten-Primitiven aus den Moduldokumentationen. Umschalter oben, Tastatur: 1–4 und T. Ersetzt das Durchklicken durch Einzelseiten.',
+    marke: 'Vergleich',
+  },
   'tokens.html': {
     gruppe: 'Referenz', titel: 'Tokens',
     text: 'Alle Farbwerte, Radien, Abstände und die Schrift als Proben. Dunkel und Hell, mit Vermerk, welche Tokens im Hellmodus abweichen.',

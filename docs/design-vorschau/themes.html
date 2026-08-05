@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="de" data-theme="instrument" data-modus="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LumeOS — Themes und Komponenten</title>
+<style>
+
+[data-theme="instrument"][data-modus="dark"] { --bg:oklch(0.135 0.010 158); --bg-elev:oklch(0.165 0.012 158);
+      --surface:oklch(0.185 0.012 158); --surface-2:oklch(0.215 0.012 158);
+      --border:oklch(0.275 0.014 158); --border-strong:oklch(0.380 0.020 158);
+      --fg:oklch(0.955 0.010 158); --fg-muted:oklch(0.760 0.020 158);
+      --fg-subtle:oklch(0.600 0.020 158); --fg-dim:oklch(0.440 0.018 158);
+      --acc:oklch(0.840 0.115 158); --acc-weak:oklch(0.840 0.115 158 / 0.14);
+      --pos:oklch(0.84 0.12 152); --warn:oklch(0.76 0.13 78); --neg:oklch(0.62 0.18 25); 
+  --s1: oklch(0.88 0.13 152); --s2: oklch(0.81 0.12 140);
+  --s3: oklch(0.74 0.13 95);  --s4: oklch(0.67 0.14 62);
+  --s5: oklch(0.60 0.16 32);  --s6: oklch(0.53 0.19 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="instrument"][data-modus="light"] { --bg:oklch(0.970 0.008 158); --bg-elev:oklch(1 0 0);
+      --surface:oklch(1 0 0); --surface-2:oklch(0.955 0.008 158);
+      --border:oklch(0.895 0.010 158); --border-strong:oklch(0.790 0.016 158);
+      --fg:oklch(0.200 0.014 158); --fg-muted:oklch(0.400 0.016 158);
+      --fg-subtle:oklch(0.545 0.016 158); --fg-dim:oklch(0.680 0.014 158);
+      --acc:oklch(0.480 0.105 158); --acc-weak:oklch(0.480 0.105 158 / 0.12);
+      --pos:oklch(0.55 0.12 152); --warn:oklch(0.58 0.13 70); --neg:oklch(0.50 0.19 25); 
+  --s1: oklch(0.72 0.14 152); --s2: oklch(0.66 0.13 140);
+  --s3: oklch(0.60 0.14 95);  --s4: oklch(0.55 0.15 62);
+  --s5: oklch(0.49 0.17 32);  --s6: oklch(0.43 0.20 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="instrument"] { --radius: 2px; }
+
+[data-theme="telemetrie"][data-modus="dark"] { --bg:oklch(0.155 0.022 258); --bg-elev:oklch(0.190 0.024 258);
+      --surface:oklch(0.215 0.026 258); --surface-2:oklch(0.250 0.028 258);
+      --border:oklch(0.300 0.030 258); --border-strong:oklch(0.400 0.036 258);
+      --fg:oklch(0.965 0.006 258); --fg-muted:oklch(0.755 0.020 258);
+      --fg-subtle:oklch(0.590 0.024 258); --fg-dim:oklch(0.450 0.024 258);
+      --acc:oklch(0.760 0.125 58); --acc-weak:oklch(0.760 0.125 58 / 0.16);
+      --pos:oklch(0.80 0.12 152); --warn:oklch(0.80 0.13 82); --neg:oklch(0.66 0.18 25); 
+  --s1: oklch(0.88 0.13 152); --s2: oklch(0.81 0.12 140);
+  --s3: oklch(0.74 0.13 95);  --s4: oklch(0.67 0.14 62);
+  --s5: oklch(0.60 0.16 32);  --s6: oklch(0.53 0.19 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="telemetrie"][data-modus="light"] { --bg:oklch(0.975 0.006 258); --bg-elev:oklch(1 0 0);
+      --surface:oklch(1 0 0); --surface-2:oklch(0.962 0.008 258);
+      --border:oklch(0.905 0.010 258); --border-strong:oklch(0.800 0.018 258);
+      --fg:oklch(0.215 0.024 258); --fg-muted:oklch(0.410 0.024 258);
+      --fg-subtle:oklch(0.550 0.022 258); --fg-dim:oklch(0.685 0.018 258);
+      --acc:oklch(0.545 0.115 50); --acc-weak:oklch(0.545 0.115 50 / 0.13);
+      --pos:oklch(0.55 0.12 152); --warn:oklch(0.60 0.13 72); --neg:oklch(0.52 0.19 25); 
+  --s1: oklch(0.72 0.14 152); --s2: oklch(0.66 0.13 140);
+  --s3: oklch(0.60 0.14 95);  --s4: oklch(0.55 0.15 62);
+  --s5: oklch(0.49 0.17 32);  --s6: oklch(0.43 0.20 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="telemetrie"] { --radius: 8px; }
+
+[data-theme="journal"][data-modus="dark"] { --bg:oklch(0.175 0.014 148); --bg-elev:oklch(0.205 0.014 148);
+      --surface:oklch(0.225 0.014 148); --surface-2:oklch(0.258 0.014 148);
+      --border:oklch(0.310 0.016 148); --border-strong:oklch(0.410 0.020 148);
+      --fg:oklch(0.950 0.008 148); --fg-muted:oklch(0.750 0.014 148);
+      --fg-subtle:oklch(0.595 0.014 148); --fg-dim:oklch(0.450 0.012 148);
+      --acc:oklch(0.740 0.100 152); --acc-weak:oklch(0.740 0.100 152 / 0.15);
+      --pos:oklch(0.78 0.11 152); --warn:oklch(0.78 0.12 82); --neg:oklch(0.65 0.17 25); 
+  --s1: oklch(0.88 0.13 152); --s2: oklch(0.81 0.12 140);
+  --s3: oklch(0.74 0.13 95);  --s4: oklch(0.67 0.14 62);
+  --s5: oklch(0.60 0.16 32);  --s6: oklch(0.53 0.19 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="journal"][data-modus="light"] { --bg:oklch(0.962 0.014 108); --bg-elev:oklch(0.985 0.010 108);
+      --surface:oklch(0.985 0.010 108); --surface-2:oklch(0.945 0.014 108);
+      --border:oklch(0.885 0.014 108); --border-strong:oklch(0.775 0.020 118);
+      --fg:oklch(0.235 0.030 152); --fg-muted:oklch(0.420 0.028 152);
+      --fg-subtle:oklch(0.555 0.022 152); --fg-dim:oklch(0.690 0.016 122);
+      --acc:oklch(0.420 0.092 152); --acc-weak:oklch(0.420 0.092 152 / 0.12);
+      --pos:oklch(0.50 0.11 152); --warn:oklch(0.58 0.12 72); --neg:oklch(0.50 0.18 25); 
+  --s1: oklch(0.72 0.14 152); --s2: oklch(0.66 0.13 140);
+  --s3: oklch(0.60 0.14 95);  --s4: oklch(0.55 0.15 62);
+  --s5: oklch(0.49 0.17 32);  --s6: oklch(0.43 0.20 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="journal"] { --radius: 3px; }
+
+[data-theme="bestand"][data-modus="dark"] { --bg: oklch(0.155 0.005 270);
+    --bg-elev: oklch(0.185 0.005 270);
+    --surface: oklch(0.205 0.005 270);
+    --surface-2: oklch(0.235 0.005 270);
+    --surface-hover: oklch(0.255 0.005 270);
+    --border: oklch(0.280 0.005 270);
+    --border-strong: oklch(0.360 0.005 270);
+    --fg: oklch(0.970 0.000 0);
+    --fg-muted: oklch(0.720 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.420 0.005 270);
+    --pos: oklch(0.78 0.13 150);
+    --warn: oklch(0.82 0.13 80);
+    --neg: oklch(0.72 0.16 22);
+    --acc-dash: oklch(0.78 0.04 240);
+    --acc-nutri: oklch(0.78 0.10 70);
+    --acc-train: oklch(0.74 0.10 290);
+    --acc-recov: oklch(0.78 0.08 160);
+    --acc-suppl: oklch(0.76 0.10 25);
+    --acc-goals: oklch(0.80 0.10 95);
+    --acc-medic: oklch(0.76 0.09 15);
+    --acc-coach: oklch(0.78 0.08 200);
+    --acc-buddy: oklch(0.76 0.09 310);
+    --acc-mkt: oklch(0.78 0.08 145);
+    --acc-admin: oklch(0.75 0.01 270);
+    --acc: var(--acc-dash);
+    --pad-card: 16px;
+    --radius: 8px;
+    --radius-sm: 6px;
+    --radius-lg: 12px;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; --acc-weak:oklch(0.78 0.04 240 / 0.16); 
+  --s1: oklch(0.88 0.13 152); --s2: oklch(0.81 0.12 140);
+  --s3: oklch(0.74 0.13 95);  --s4: oklch(0.67 0.14 62);
+  --s5: oklch(0.60 0.16 32);  --s6: oklch(0.53 0.19 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="bestand"][data-modus="light"] { --bg: oklch(0.985 0.002 270);
+    --bg-elev: oklch(1.000 0.000 0);
+    --surface: oklch(1.000 0.000 0);
+    --surface-2: oklch(0.975 0.003 270);
+    --surface-hover: oklch(0.955 0.003 270);
+    --border: oklch(0.910 0.003 270);
+    --border-strong: oklch(0.820 0.005 270);
+    --fg: oklch(0.200 0.005 270);
+    --fg-muted: oklch(0.400 0.005 270);
+    --fg-subtle: oklch(0.550 0.005 270);
+    --fg-dim: oklch(0.680 0.005 270);
+    --acc-dash: oklch(0.48 0.06 240);
+    --acc-nutri: oklch(0.55 0.13 60);
+    --acc-train: oklch(0.50 0.16 290);
+    --acc-recov: oklch(0.50 0.10 160);
+    --acc-suppl: oklch(0.55 0.15 25);
+    --acc-goals: oklch(0.58 0.13 90);
+    --acc-medic: oklch(0.55 0.14 15);
+    --acc-coach: oklch(0.55 0.10 200);
+    --acc-buddy: oklch(0.55 0.12 310);
+    --acc-mkt: oklch(0.52 0.10 145);
+    --acc-admin: oklch(0.45 0.01 270); --acc-weak:oklch(0.48 0.06 240 / 0.12); 
+  --s1: oklch(0.72 0.14 152); --s2: oklch(0.66 0.13 140);
+  --s3: oklch(0.60 0.14 95);  --s4: oklch(0.55 0.15 62);
+  --s5: oklch(0.49 0.17 32);  --s6: oklch(0.43 0.20 22); 
+  --radius: 8px; --radius-sm: 4px; --radius-lg: 12px; --pad-card: 16px;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+[data-theme="bestand"] { --radius: 8px; }
+
+* { box-sizing:border-box; }
+body { margin:0; padding:0 0 72px; background:var(--bg); color:var(--fg);
+  font-family:var(--font-mono); font-size:12.5px; line-height:1.5;
+  transition:background .3s, color .3s; }
+[data-theme="journal"] body, [data-theme="telemetrie"] body { font-family:var(--font-ui); }
+.huelle { max-width:1180px; margin:0 auto; padding:0 22px; }
+
+/* Kopf */
+.leiste { position:sticky; top:0; z-index:9; background:var(--bg-elev);
+  border-bottom:1px solid var(--border); padding:11px 0; margin-bottom:26px; }
+.leiste .huelle { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+.leiste h1 { font-size:14px; margin:0; font-weight:600; letter-spacing:-.01em; }
+.wahl { display:flex; gap:0; border:1px solid var(--border-strong); border-radius:var(--radius); overflow:hidden; }
+.wahl button { font:inherit; font-size:11px; cursor:pointer; border:0; padding:5px 12px;
+  background:transparent; color:var(--fg-subtle); }
+.wahl button[aria-pressed="true"] { background:var(--acc); color:var(--bg); font-weight:600; }
+.wahl button:not([aria-pressed="true"]):hover { background:var(--surface-hover,var(--surface-2)); color:var(--fg); }
+.rechts { margin-left:auto; font-size:11px; color:var(--fg-dim); }
+.lead { color:var(--fg-muted); max-width:82ch; margin:0 0 26px; font-size:12px; }
+.lead b { color:var(--fg); font-weight:600; }
+
+/* Panel */
+.gitter { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:16px; }
+.panel { position:relative; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius); padding:16px; transition:background .3s, border-color .3s; }
+.panel > h2 { font-size:9.5px; text-transform:uppercase; letter-spacing:.1em; font-weight:600;
+  color:var(--fg-dim); margin:0 0 3px; }
+.panel > .wo { font-size:10.5px; color:var(--fg-subtle); margin:0 0 14px; }
+.panel.breit { grid-column:1/-1; }
+[data-theme="instrument"] .panel::before, [data-theme="instrument"] .panel::after {
+  content:''; position:absolute; width:9px; height:9px; border:1px solid var(--acc); opacity:.55; }
+[data-theme="instrument"] .panel::before { top:-1px; left:-1px; border-right:0; border-bottom:0; }
+[data-theme="instrument"] .panel::after { bottom:-1px; right:-1px; border-left:0; border-top:0; }
+[data-theme="instrument"] .gitter { background-image:
+  linear-gradient(var(--border) 1px, transparent 1px),
+  linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size:44px 44px; background-position:-1px -1px; }
+[data-theme="instrument"] .panel { box-shadow:0 0 0 4px var(--bg); }
+
+/* 1 Korridor */
+.korridor + .korridor { margin-top:15px; }
+.korridor .kopf { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:7px; }
+.korridor .kopf span { color:var(--fg-muted); font-size:11.5px; }
+.korridor .kopf b { font-family:var(--font-mono); font-size:14px; }
+.kopf b.ok { color:var(--pos); } .kopf b.ab { color:var(--neg); }
+.spur { position:relative; height:11px; background:var(--surface-2);
+  border:1px solid var(--border); border-radius:99px; }
+.ziel { position:absolute; top:-1px; bottom:-1px; background:var(--acc-weak);
+  border:1px solid var(--acc); border-radius:99px; }
+.marke { position:absolute; top:50%; width:3px; height:19px; margin:-9.5px 0 0 -1.5px;
+  background:var(--fg); border-radius:2px; box-shadow:0 0 0 2px var(--surface); }
+.skala { display:flex; justify-content:space-between; margin-top:5px;
+  font-size:10px; color:var(--fg-dim); }
+.skala .zl { color:var(--acc); }
+
+/* 2 Stufenleiste */
+.stufen { display:grid; grid-template-columns:repeat(6,1fr); gap:5px; }
+.stufe { opacity:.5; transition:opacity .2s; }
+.stufe.aktiv { opacity:1; }
+.band { height:5px; background:var(--st); border-radius:2px; margin-bottom:6px; }
+.stufe.aktiv .band { height:9px; margin-bottom:2px; }
+.sr { font-family:var(--font-mono); font-size:11px; color:var(--fg); }
+.sn { font-size:10.5px; color:var(--st); font-weight:600; }
+.sf { display:block; font-size:8.5px; color:var(--fg-dim); margin-top:3px;
+  overflow-wrap:anywhere; }
+
+/* 3 Zustandszeile */
+.zzeile { display:flex; flex-wrap:wrap; gap:4px 16px; font-family:var(--font-mono);
+  font-size:10.5px; color:var(--fg-dim); border-top:1px solid var(--border); padding-top:9px; }
+.zp i { display:inline-block; width:5px; height:5px; border-radius:99px;
+  background:var(--fg-dim); margin-right:6px; vertical-align:1px; }
+.zp.ok i { background:var(--pos); } .zp.warn i { background:var(--warn); }
+.zp.neg i { background:var(--neg); }
+.zp b { color:var(--fg-subtle); font-weight:400; }
+
+/* 4 Gate */
+.gate .bed { display:inline-block; font-size:11px; color:var(--acc);
+  border:1px dashed var(--acc); border-radius:var(--radius-sm); padding:3px 9px; margin-bottom:11px; }
+.aus { display:grid; gap:7px; }
+.ag { display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+  padding:7px 10px; border-radius:var(--radius-sm); border:1px solid var(--border);
+  border-left-width:3px; background:var(--surface-2); }
+.ag b { font-family:var(--font-mono); font-size:11.5px; }
+.ag span { font-size:10.5px; color:var(--fg-muted); font-family:var(--font-mono); }
+.ag.ok { border-left-color:var(--pos); } .ag.ok b { color:var(--pos); }
+.ag.warn { border-left-color:var(--warn); } .ag.warn b { color:var(--warn); }
+.ag.neg { border-left-color:var(--neg); } .ag.neg b { color:var(--neg); }
+
+/* 5 Radar */
+.radar { width:100%; max-width:210px; display:block; margin:0 auto; overflow:visible; }
+.radar .rg { fill:none; stroke:var(--border); stroke-width:1; }
+.radar .rp { fill:var(--acc-weak); stroke:var(--acc); stroke-width:1.6; stroke-linejoin:round; }
+.radar .rk { fill:var(--acc); }
+.radar .rt { fill:var(--fg-subtle); font-size:8px; text-anchor:middle;
+  font-family:var(--font-mono); dominant-baseline:middle; }
+
+/* 6 Verlauf */
+.verlauf { width:100%; display:block; overflow:visible; }
+.verlauf .vg { stroke:var(--border); stroke-width:1; }
+.verlauf .vf { fill:var(--acc-weak); }
+.verlauf .vc { fill:none; stroke:var(--fg-dim); stroke-width:1.4; stroke-dasharray:3 3; }
+.verlauf .va { fill:none; stroke:var(--acc); stroke-width:1.8; stroke-linejoin:round; }
+.verlauf .vz { fill:var(--neg); opacity:.16; }
+.legende { display:flex; gap:16px; margin-top:9px; font-size:10px; color:var(--fg-dim); }
+.legende i { display:inline-block; width:14px; height:2px; margin-right:5px; vertical-align:3px; }
+.legende .la i { background:var(--acc); } .legende .lc i { background:var(--fg-dim); }
+.legende .lz i { background:var(--neg); opacity:.5; height:8px; vertical-align:0; }
+
+/* 7 Koerperkarte */
+.koerper { width:100%; max-width:230px; display:block; margin:0 auto; overflow:visible; }
+.koerper .kw { fill:none; stroke:var(--border-strong); stroke-width:.9; }
+.koerper .kg { fill:var(--st); opacity:.82; }
+.koerper .kc { stroke:var(--fg-dim); stroke-width:.8; fill:var(--fg-dim); }
+.koerper .kt { fill:var(--fg-muted); font-size:7px; font-family:var(--font-mono); }
+.koerper .ktv { fill:var(--s6); font-size:8px; font-weight:600; font-family:var(--font-mono); }
+
+/* 8 Beitrag */
+.beitrag { width:100%; max-width:250px; display:block; margin:0 auto; overflow:visible; }
+.beitrag .bn { fill:var(--acc-weak); stroke:var(--acc); stroke-width:1.4; }
+.beitrag .bnt { fill:var(--acc); font-size:9px; text-anchor:middle; font-weight:600;
+  font-family:var(--font-mono); }
+.beitrag .bs { stroke:var(--acc); opacity:.45; }
+.beitrag .bk { fill:var(--surface-2); stroke:var(--border-strong); stroke-width:1; }
+.beitrag .bp { fill:var(--fg); font-size:8.5px; text-anchor:middle; font-family:var(--font-mono); }
+.beitrag .bt { fill:var(--fg-subtle); font-size:7.5px; text-anchor:middle; font-family:var(--font-mono); }
+
+/* 9 Schichten */
+.schichten { display:grid; gap:8px; }
+.sch { border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:9px 11px; background:var(--surface-2);
+  margin-left:calc(var(--tief) * 14px); }
+.sch.pflicht { border-color:var(--acc); background:var(--acc-weak); }
+.schr { display:flex; gap:8px; align-items:baseline; }
+.schr b { font-size:11px; } .schr span { font-size:11px; color:var(--fg-muted); }
+.sch p { margin:3px 0 0; font-size:10.5px; color:var(--fg-subtle); }
+.sch code { font-size:9px; color:var(--fg-dim); }
+.sch.pflicht code { color:var(--acc); }
+@media (prefers-reduced-motion: reduce) { * { transition-duration:.01ms !important; } }
+
+</style>
+</head>
+<body>
+<div class="leiste"><div class="huelle">
+  <h1>LumeOS — Themes</h1>
+  <div class="wahl" id="wt"><button data-t="instrument" aria-pressed="true">Instrument</button><button data-t="telemetrie" aria-pressed="false">Telemetrie</button><button data-t="journal" aria-pressed="false">Journal</button><button data-t="bestand" aria-pressed="false">Bestand</button></div>
+  <div class="wahl" id="wm">
+    <button data-m="dark" aria-pressed="true">Nacht</button>
+    <button data-m="light" aria-pressed="false">Tag</button>
+  </div>
+  <span class="rechts" id="tinfo"></span>
+</div></div>
+<div class="huelle">
+  <p class="lead" id="tbeschreibung"></p>
+  
+<div class="gitter">
+
+<section class="panel">
+  <h2>1 · Korridor-Balken</h2><p class="wo">Medical · Laborbereich gegen Zielkorridor</p><div class="korridor">
+    <div class="kopf"><span>Testosteron</span><b class="ab">350 ng/dL</b></div>
+    <div class="spur">
+      <div class="ziel" style="left:34.21052631578947%;width:52.63157894736843%"></div>
+      <div class="marke" style="left:14.473684210526317%"></div>
+    </div>
+    <div class="skala"><span>240</span><span class="zl">Zielkorridor 500–900</span><span>1000</span></div>
+  </div><div class="korridor">
+    <div class="kopf"><span>Vitamin D</span><b class="ok">52 ng/mL</b></div>
+    <div class="spur">
+      <div class="ziel" style="left:50%;width:25%"></div>
+      <div class="marke" style="left:65%"></div>
+    </div>
+    <div class="skala"><span>0</span><span class="zl">Zielkorridor 40–60</span><span>80</span></div>
+  </div><div class="korridor">
+    <div class="kopf"><span>hs-CRP</span><b class="ab">2.4 mg/L</b></div>
+    <div class="spur">
+      <div class="ziel" style="left:0%;width:10%"></div>
+      <div class="marke" style="left:24%"></div>
+    </div>
+    <div class="skala"><span>0</span><span class="zl">Zielkorridor 0–1</span><span>10</span></div>
+  </div>
+</section>
+
+<section class="panel breit">
+  <h2>2 · Stufenleiste</h2><p class="wo">Recovery · Readiness mit Systemfolge</p><div class="stufen">
+  <div class="stufe" style="--st:var(--s1)">
+      <div class="band"></div><div class="sr">90–100</div>
+      <div class="sn">Excellent</div><code class="sf">allow_training = MAX</code>
+    </div><div class="stufe" style="--st:var(--s2)">
+      <div class="band"></div><div class="sr">80–89</div>
+      <div class="sn">Good</div><code class="sf">allow_training = BASELINE</code>
+    </div><div class="stufe aktiv" style="--st:var(--s3)">
+      <div class="band"></div><div class="sr">70–79</div>
+      <div class="sn">Moderate</div><code class="sf">allow_training = REDUCED</code>
+    </div><div class="stufe" style="--st:var(--s4)">
+      <div class="band"></div><div class="sr">60–69</div>
+      <div class="sn">Poor</div><code class="sf">allow_training = LIGHT</code>
+    </div><div class="stufe" style="--st:var(--s5)">
+      <div class="band"></div><div class="sr">40–59</div>
+      <div class="sn">Rest</div><code class="sf">allow_training = REST</code>
+    </div><div class="stufe" style="--st:var(--s6)">
+      <div class="band"></div><div class="sr">< 40</div>
+      <div class="sn">Critical</div><code class="sf">allow_training = BLOCKED</code>
+    </div>
+</div>
+</section>
+
+<section class="panel">
+  <h2>3 · Radar</h2><p class="wo">Medical · fünf System Scores</p><svg viewBox="0 0 168 168" class="radar" role="img" aria-label="Systemwerte">
+    <polygon points="84.0,66.2 100.9,78.5 94.5,98.4 73.5,98.4 67.1,78.5" class="rg"/><polygon points="84.0,48.4 117.9,73.0 104.9,112.8 63.1,112.8 50.1,73.0" class="rg"/><polygon points="84.0,30.0 135.4,67.3 115.7,127.7 52.3,127.7 32.6,67.3" class="rg"/>
+    <line x1="84" y1="84" x2="84.0" y2="30.0" class="rg"/><line x1="84" y1="84" x2="135.4" y2="67.3" class="rg"/><line x1="84" y1="84" x2="115.7" y2="127.7" class="rg"/><line x1="84" y1="84" x2="52.3" y2="127.7" class="rg"/><line x1="84" y1="84" x2="32.6" y2="67.3" class="rg"/>
+    <polygon points="84.0,34.3 129.2,69.3 107.8,116.8 55.4,123.3 40.3,69.8" class="rp"/>
+    <text x="84.0" y="17.0" class="rt">Cardio</text><text x="147.7" y="63.3" class="rt">Metabolic</text><text x="123.4" y="138.2" class="rt">Liver</text><text x="44.6" y="138.2" class="rt">Kidney</text><text x="20.3" y="63.3" class="rt">Hormone</text>
+    <circle cx="84.0" cy="34.3" r="2.4" class="rk"/><circle cx="129.2" cy="69.3" r="2.4" class="rk"/><circle cx="107.8" cy="116.8" r="2.4" class="rk"/><circle cx="55.4" cy="123.3" r="2.4" class="rk"/><circle cx="40.3" cy="69.8" r="2.4" class="rk"/>
+  </svg>
+</section>
+
+<section class="panel">
+  <h2>4 · Doppelachsen-Verlauf</h2><p class="wo">Recovery · ACWR akut gegen chronisch</p><svg viewBox="0 0 320 108" class="verlauf" role="img" aria-label="Akute gegen chronische Last">
+    <line x1="0" y1="27" x2="320" y2="27" class="vg"/><line x1="0" y1="54" x2="320" y2="54" class="vg"/><line x1="0" y1="81" x2="320" y2="81" class="vg"/>
+    <path d="M0.0 87.6 L24.6 85.6 L49.2 83.6 L73.8 80.8 L98.5 78.1 L123.1 76.1 L147.7 72.7 L172.3 67.9 L196.9 63.2 L221.5 59.1 L246.2 57.7 L270.8 59.1 L295.4 61.1 L320.0 63.9 L320 108 L0 108 Z" class="vf"/>
+    <rect x="143.7" y="0" width="8" height="108" class="vz"/><rect x="168.3" y="0" width="8" height="108" class="vz"/><rect x="192.9" y="0" width="8" height="108" class="vz"/><rect x="217.5" y="0" width="8" height="108" class="vz"/>
+    <path d="M0.0 87.6 L24.6 85.6 L49.2 83.6 L73.8 80.8 L98.5 78.1 L123.1 76.1 L147.7 72.7 L172.3 67.9 L196.9 63.2 L221.5 59.1 L246.2 57.7 L270.8 59.1 L295.4 61.1 L320.0 63.9" class="vc"/>
+    <path d="M0.0 89.0 L24.6 79.5 L49.2 81.5 L73.8 72.7 L98.5 66.6 L123.1 75.4 L147.7 46.9 L172.3 27.9 L196.9 11.6 L221.5 19.0 L246.2 49.6 L270.8 64.5 L295.4 72.7 L320.0 76.1" class="va"/>
+  </svg><div class="legende"><span class="la"><i></i>Akut 7 d</span>
+   <span class="lc"><i></i>Chronisch 28 d</span><span class="lz"><i></i>ACWR &gt; 1.5</span></div>
+</section>
+
+<section class="panel">
+  <h2>5 · Körperkarte</h2><p class="wo">Recovery · Bereitschaft je Muskelgruppe</p><svg viewBox="0 0 114 170" class="koerper" role="img" aria-label="Muskelbereitschaft">
+  <g class="kw">
+    <circle cx="57" cy="26" r="12"/><path d="M50 38 h14 l6 6 v50 h-26 v-50 z"/>
+    <path d="M44 44 l-14 6 v52 M70 44 l14 6 v52"/><path d="M46 94 v62 M68 94 v62"/>
+    <path d="M40 156 h16 M58 156 h16"/>
+  </g>
+  <path d="M46 46 h22 v16 h-22 z" class="kg" style="--st:var(--s1)"><title>Brust</title></path><path d="M34 42 h10 v12 h-10 z" class="kg" style="--st:var(--s1)"><title>Schultern</title></path><path d="M70 42 h10 v12 h-10 z" class="kg" style="--st:var(--s1)"><title>Schultern</title></path><path d="M31 56 h9 v20 h-9 z" class="kg" style="--st:var(--s2)"><title>Bizeps</title></path><path d="M74 56 h9 v20 h-9 z" class="kg" style="--st:var(--s2)"><title>Bizeps</title></path><path d="M48 64 h18 v24 h-18 z" class="kg" style="--st:var(--s2)"><title>Bauch</title></path><path d="M29 78 h9 v20 h-9 z" class="kg" style="--st:var(--s1)"><title>Unterarm</title></path><path d="M76 78 h9 v20 h-9 z" class="kg" style="--st:var(--s1)"><title>Unterarm</title></path><path d="M45 92 h11 v34 h-11 z" class="kg" style="--st:var(--s6)"><title>Quads</title></path><path d="M58 92 h11 v34 h-11 z" class="kg" style="--st:var(--s6)"><title>Quads</title></path><path d="M46 130 h9 v26 h-9 z" class="kg" style="--st:var(--s4)"><title>Waden</title></path><path d="M59 130 h9 v26 h-9 z" class="kg" style="--st:var(--s4)"><title>Waden</title></path>
+  <g class="kc"><line x1="69" y1="112" x2="97" y2="112"/><circle cx="69" cy="112" r="2"/></g>
+  <text x="99" y="110" class="kt">Quads</text><text x="99" y="120" class="ktv">31 %</text>
+</svg>
+</section>
+
+<section class="panel">
+  <h2>6 · Beitragsdiagramm</h2><p class="wo">Goals · Zielbeitrag der Module</p><svg viewBox="0 0 184 184" class="beitrag" role="img" aria-label="Zielbeitrag je Modul">
+    <circle cx="92" cy="92" r="26" class="bn"/>
+    <text x="92" y="96" class="bnt">Goals</text>
+    <line x1="92.0" y1="30.0" x2="92.0" y2="64.0"
+        class="bs" style="stroke-width:4.64"/>
+      <circle cx="92.0" cy="30.0" r="15" class="bk"/>
+      <text x="92.0" y="33.0" class="bp">40%</text>
+      <text x="92.0" y="57.0" class="bt">Ernaehrung</text><line x1="151.0" y1="72.8" x2="118.6" y2="83.3"
+        class="bs" style="stroke-width:4.18"/>
+      <circle cx="151.0" cy="72.8" r="15" class="bk"/>
+      <text x="151.0" y="75.8" class="bp">35%</text>
+      <text x="151.0" y="99.8" class="bt">Training</text><line x1="128.4" y1="142.2" x2="108.5" y2="114.7"
+        class="bs" style="stroke-width:2.82"/>
+      <circle cx="128.4" cy="142.2" r="15" class="bk"/>
+      <text x="128.4" y="145.2" class="bp">20%</text>
+      <text x="128.4" y="169.2" class="bt">Recovery</text><line x1="55.6" y1="142.2" x2="75.5" y2="114.7"
+        class="bs" style="stroke-width:1.91"/>
+      <circle cx="55.6" cy="142.2" r="15" class="bk"/>
+      <text x="55.6" y="145.2" class="bp">10%</text>
+      <text x="55.6" y="169.2" class="bt">Supplements</text><line x1="33.0" y1="72.8" x2="65.4" y2="83.3"
+        class="bs" style="stroke-width:1.45"/>
+      <circle cx="33.0" cy="72.8" r="15" class="bk"/>
+      <text x="33.0" y="75.8" class="bp">5%</text>
+      <text x="33.0" y="99.8" class="bt">Medical</text>
+  </svg>
+</section>
+
+<section class="panel">
+  <h2>7 · Konzentrische Schichten</h2><p class="wo">Settings · Datensouveränität</p><div class="schichten">
+  <div class="sch pflicht" style="--tief:0">
+      <div class="schr"><b>Tier 1</b><span>Local-First</span></div>
+      <p>SQLite on Device. Zero-Knowledge.</p><code>default</code>
+    </div><div class="sch optin" style="--tief:1">
+      <div class="schr"><b>Tier 2</b><span>E2E Cloud</span></div>
+      <p>Nur verschluesselt, User-held Keys.</p><code>opt-in</code>
+    </div><div class="sch optin" style="--tief:2">
+      <div class="schr"><b>Tier 3</b><span>Provider</span></div>
+      <p>Granulare Freigabe an Arzt oder Coach.</p><code>opt-in</code>
+    </div>
+</div>
+</section>
+
+<section class="panel">
+  <h2>8 · Gate-Karte</h2><p class="wo">Nutrition · MealCam-Konfidenz</p><div class="gate">
+  <code class="bed">if (confidence)</code>
+  <div class="aus">
+    <div class="ag ok"><b>&ge; 0.85</b><span>auto_accept</span></div>
+    <div class="ag warn"><b>0.60 – 0.84</b><span>needs_verification</span></div>
+    <div class="ag neg"><b>&lt; 0.60</b><span>reject → manuell</span></div>
+  </div>
+</div>
+</section>
+
+<section class="panel breit">
+  <h2>9 · Zustandszeile</h2><p class="wo">Systemweit · niedrigste Priorität</p><div class="zzeile">
+  <span class="zp ok"><i></i>SYSTEM: <b>ONLINE</b></span><span class="zp "><i></i>MODULE_PORT: <b>5400</b></span><span class="zp "><i></i>ENGINE: <b>DETERMINISTIC</b></span><span class="zp warn"><i></i>vol_modifier: <b>0.70</b></span><span class="zp neg"><i></i>allow_training: <b>false</b></span><span class="zp "><i></i>LAST_SYNC: <b>14:23:05 UTC</b></span>
+</div>
+</section>
+</div>
+</div>
+<script>
+const B = {"instrument":"Fast-Schwarz, ein Mintakzent, Monospace durchgehend, HUD-Rahmen mit Passermarken. Aus dem Recovery-Deck. Panels haengen am Raster statt frei zu liegen.","telemetrie":"Tiefes Marineblau, Kupferakzent, weichere Kanten. Aus dem Medical-Deck - die Struktur davon, nicht der Hochglanz. Gefaste 3D-Panels bleiben aussen vor.","journal":"Papierfarbener Grund, dunkles Gruen, flache Linien ohne Flaeche. Aus dem Neural-Ecosystem-Deck. Ruhig, lesbar - und bewusst nicht futuristisch, als Gegenprobe.","bestand":"Die aktuelle Palette aus globals.css, unveraendert. Kontrollgruppe - hier laesst sich pruefen, ob ein Vorschlag wirklich besser ist oder nur anders."};
+const h = document.documentElement;
+const setzen = () => {
+  document.querySelectorAll('#wt button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.t === h.dataset.theme)));
+  document.querySelectorAll('#wm button').forEach(b =>
+    b.setAttribute('aria-pressed', String(b.dataset.m === h.dataset.modus)));
+  document.getElementById('tbeschreibung').textContent = B[h.dataset.theme];
+  document.getElementById('tinfo').textContent =
+    h.dataset.theme + ' · ' + (h.dataset.modus === 'dark' ? 'Nachtmodus' : 'Tagmodus');
+};
+document.getElementById('wt').onclick = e => {
+  if (!e.target.dataset.t) return; h.dataset.theme = e.target.dataset.t; setzen(); };
+document.getElementById('wm').onclick = e => {
+  if (!e.target.dataset.m) return; h.dataset.modus = e.target.dataset.m; setzen(); };
+addEventListener('keydown', e => {
+  if (e.key === 't' || e.key === 'T') {
+    h.dataset.modus = h.dataset.modus === 'dark' ? 'light' : 'dark'; setzen(); }
+  const i = parseInt(e.key, 10);
+  if (i >= 1 && i <= 4) { h.dataset.theme = ["instrument","telemetrie","journal","bestand"][i - 1]; setzen(); }
+});
+setzen();
+</script>
+</body>
+</html>
