@@ -110,3 +110,19 @@ _tmp_inventory/
 
 # --- lokale Commit-Message-Tempfile (PowerShell git commit -F) ---
 .commit-msg.tmp
+
+# --- Designvorlagen: lokales Referenzmaterial, ~5 GB Binaerdateien ---
+# Bewusst NICHT docs/design-system/ pauschal: dort liegen getrackte Dateien
+# (DESIGN_CONCEPT.md, README.md, components/, tokens/). Eine Pauschalregel
+# waere fuer die wirkungslos und wuerde nur jede neue Datei still schlucken.
+docs/design-system/Eclipse/
+docs/design-system/Levitate*/
+docs/design-system/Nocra/
+docs/design-system/hyper/
+docs/design-system/orion/
+docs/design-system/sandow/
+docs/design-system/.ijfw/
+docs/design-system/ijfw/
+
+# --- macOS-Rueckstaende aus den Designvorlagen ---
+.DS_Store
