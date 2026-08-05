@@ -7,7 +7,7 @@ WITH fns(name, args) AS (
   VALUES
     ('food_search', 10),
     ('food_categories_tree', 0),
-    ('preference_search_preview', 11),
+    ('preference_search_preview', 14),
     ('curation_overview', 5),
     ('schema_debug', 0)
 ),
@@ -61,9 +61,21 @@ checks(pruefung, soll, ist) AS (
          json_array_length(nutrition.food_categories_tree())::text
 
   -- preference_search_preview: leere Suche ohne Präferenzen
+  -- (11-Arg-Aufruf, prüft zugleich die DEFAULTs der drei Food-Parameter)
   UNION ALL
   SELECT 'preference_preview leer: total', '7140',
          (nutrition.preference_search_preview('', '', ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], 'relevance', 25, 0)->>'total')
+
+  -- preference_search_preview: Food-Level (C-02) — Favorit boostet,
+  -- Ausschluss entfernt genau einen Treffer und zählt ihn
+  UNION ALL
+  SELECT 'preference_preview Favorit: boosted_count', '1',
+         (nutrition.preference_search_preview('', '', ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], 'relevance', 25, 0,
+            ARRAY[(SELECT id FROM nutrition.foods ORDER BY bls_code LIMIT 1)]::uuid[], ARRAY[]::uuid[], ARRAY[]::uuid[])->>'boosted_count')
+  UNION ALL
+  SELECT 'preference_preview Food-Ausschluss: total sinkt um 1', '7139',
+         (nutrition.preference_search_preview('', '', ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], ARRAY[]::text[], 'relevance', 25, 0,
+            ARRAY[]::uuid[], ARRAY[]::uuid[], ARRAY[(SELECT id FROM nutrition.foods ORDER BY bls_code LIMIT 1)]::uuid[])->>'total')
 
   -- curation_overview: Zählwerk
   UNION ALL

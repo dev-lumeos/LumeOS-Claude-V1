@@ -504,7 +504,13 @@ $fn$;
 -- 3. preference_search_preview — Port von buildPreferencePreviewSql().
 --    Katalog-Auflösung (Exclusion-Presets → Kategorie-Slugs) bleibt im
 --    TypeScript; die Funktion erhält fertige Slug-/Tag-Arrays.
+--    Erweitert 2026-08-04 (C-02): drei Food-Level-Parameter mit DEFAULT —
+--    Favoriten (+80), Abneigungen (−80), harte Food-Ausschlüsse (Filter).
+--    Die alte 11-Parameter-Signatur wird explizit gedroppt, sonst entstünde
+--    ein Overload und PostgREST könnte benannte Aufrufe nicht auflösen.
 -- -------------------------------------------------------------
+DROP FUNCTION IF EXISTS nutrition.preference_search_preview(text, text, text[], text[], text[], text[], text[], text[], text, integer, integer);
+
 CREATE OR REPLACE FUNCTION nutrition.preference_search_preview(
   p_query text,
   p_normalized_query text,
@@ -516,7 +522,10 @@ CREATE OR REPLACE FUNCTION nutrition.preference_search_preview(
   p_disliked_tags text[],
   p_sort text,
   p_limit integer,
-  p_offset integer
+  p_offset integer,
+  p_liked_food_ids uuid[] DEFAULT ARRAY[]::uuid[],
+  p_disliked_food_ids uuid[] DEFAULT ARRAY[]::uuid[],
+  p_excluded_food_ids uuid[] DEFAULT ARRAY[]::uuid[]
 )
 RETURNS json
 LANGUAGE sql
@@ -556,17 +565,23 @@ base AS (
     m.cho,
     COALESCE(tags.tags, ARRAY[]::text[]) AS tags,
     1 AS text_rank,
-    CASE WHEN lc.id IS NOT NULL THEN 50 ELSE 0 END
+    CASE WHEN f.id = ANY(COALESCE(p_liked_food_ids, ARRAY[]::uuid[])) THEN 80 ELSE 0 END
+      + CASE WHEN f.id = ANY(COALESCE(p_disliked_food_ids, ARRAY[]::uuid[])) THEN -80 ELSE 0 END
+      + CASE WHEN lc.id IS NOT NULL THEN 50 ELSE 0 END
       + CASE WHEN dc.id IS NOT NULL THEN -50 ELSE 0 END
       + CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && COALESCE(p_liked_tags, ARRAY[]::text[]) THEN 30 ELSE 0 END
       + CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && COALESCE(p_disliked_tags, ARRAY[]::text[]) THEN -30 ELSE 0 END AS preference_score,
     ARRAY_REMOVE(ARRAY[
+      CASE WHEN f.id = ANY(COALESCE(p_liked_food_ids, ARRAY[]::uuid[])) THEN 'liked_food' END,
+      CASE WHEN f.id = ANY(COALESCE(p_disliked_food_ids, ARRAY[]::uuid[])) THEN 'disliked_food' END,
       CASE WHEN lc.id IS NOT NULL THEN 'liked_category' END,
       CASE WHEN dc.id IS NOT NULL THEN 'disliked_category' END,
       CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && COALESCE(p_liked_tags, ARRAY[]::text[]) THEN 'liked_tag' END,
       CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && COALESCE(p_disliked_tags, ARRAY[]::text[]) THEN 'disliked_tag' END
     ], NULL) AS preference_notes,
     ARRAY_REMOVE(ARRAY[
+      CASE WHEN f.id = ANY(COALESCE(p_liked_food_ids, ARRAY[]::uuid[])) THEN 'boosted because this food is marked as favorite' END,
+      CASE WHEN f.id = ANY(COALESCE(p_disliked_food_ids, ARRAY[]::uuid[])) THEN 'suppressed because this food is marked as disliked' END,
       CASE WHEN lc.id IS NOT NULL THEN 'boosted because selected liked category includes this food category' END,
       CASE WHEN dc.id IS NOT NULL THEN 'suppressed because selected disliked category includes this food category' END,
       CASE WHEN COALESCE(tags.tags, ARRAY[]::text[]) && COALESCE(p_liked_tags, ARRAY[]::text[]) THEN 'boosted because food has a selected liked tag' END,
@@ -602,11 +617,12 @@ base AS (
       )
     ))
     AND ec.id IS NULL
+    AND NOT (f.id = ANY(COALESCE(p_excluded_food_ids, ARRAY[]::uuid[])))
 ),
 excluded_count AS (
   SELECT COUNT(*) AS count
   FROM nutrition.foods f
-  JOIN excluded_categories ec ON ec.id = f.category_id
+  LEFT JOIN excluded_categories ec ON ec.id = f.category_id
   WHERE
     (p_tokens IS NULL OR cardinality(p_tokens) = 0 OR NOT EXISTS (
       SELECT 1 FROM unnest(p_tokens) AS t(tok)
@@ -619,6 +635,7 @@ excluded_count AS (
         )
       )
     ))
+    AND (ec.id IS NOT NULL OR f.id = ANY(COALESCE(p_excluded_food_ids, ARRAY[]::uuid[])))
 ),
 ranked AS (
   SELECT * FROM base
@@ -1000,14 +1017,14 @@ $fn$;
 REVOKE ALL ON FUNCTION nutrition.search_fold(text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nutrition.food_search(text, text, text[], uuid, text, uuid, text, text, integer, integer) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nutrition.food_categories_tree() FROM PUBLIC;
-REVOKE ALL ON FUNCTION nutrition.preference_search_preview(text, text, text[], text[], text[], text[], text[], text[], text, integer, integer) FROM PUBLIC;
+REVOKE ALL ON FUNCTION nutrition.preference_search_preview(text, text, text[], text[], text[], text[], text[], text[], text, integer, integer, uuid[], uuid[], uuid[]) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nutrition.curation_overview(boolean, text, text, text, text) FROM PUBLIC;
 REVOKE ALL ON FUNCTION nutrition.schema_debug() FROM PUBLIC;
 
 GRANT EXECUTE ON FUNCTION nutrition.search_fold(text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION nutrition.food_search(text, text, text[], uuid, text, uuid, text, text, integer, integer) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION nutrition.food_categories_tree() TO authenticated, service_role;
-GRANT EXECUTE ON FUNCTION nutrition.preference_search_preview(text, text, text[], text[], text[], text[], text[], text[], text, integer, integer) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION nutrition.preference_search_preview(text, text, text[], text[], text[], text[], text[], text[], text, integer, integer, uuid[], uuid[], uuid[]) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION nutrition.curation_overview(boolean, text, text, text, text) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION nutrition.schema_debug() TO authenticated, service_role;
 
