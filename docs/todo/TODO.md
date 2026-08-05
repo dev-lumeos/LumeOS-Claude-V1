@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-04 (achte Aktualisierung — Governance-Cluster archiviert; A-07, B-05, D-10 erledigt; C-08, D-04 angepasst; D-18 neu)
+**Stand:** 2026-08-05 (neunte Aktualisierung — C-02 und C-09 erledigt, widerlegte Notizen in C-02.1/C-09 korrigiert, C-12 neu)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -14,7 +14,8 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    Rechte und Zeilenschutz produktiv (Kettenschritte 060/070). Siehe D-08, C-07.
 2. **M2 — Frontend-Fundament** (→ C-01):
    10 von 13 deklarierten Bibliotheken fehlen.
-3. **M3 — Erster Schreibpfad** (→ C-02) — Product Gate ist offen, M1 erledigt.
+3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
+   Product Gate war offen, M1 erledigt.
 4. **M4 — Cloud-Deployment** (→ Sektion E) — Voraussetzungen erfüllt.
 
 ---
@@ -121,11 +122,25 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **B-03: `Bash(rm:*)`-Deny verifizieren** — ungetestet. Claude Code hat beim
   Test nicht `rm` versucht, sondern erst geprüft. Explizit provozieren.
 
-- [ ] **B-04: PreToolUse-Hook neu bauen** — für Pfadschutz, den Muster nicht treffen:
-  `supabase/migrations/`, `.env*`. Anforderungen: stdin-JSON lesen (nicht `param()`),
-  Matcher `Write|Edit|Read`, **Exit-Code 2** (nicht 1), mit BOM geschrieben, ohne Emoji.
-  *Nötig, weil verkettete Bash-Befehle (`&&`, `;`) die Deny-Muster umgehen — beim Test
-  landete eine lange Kette bei „requires approval" statt bei Deny.*
+- [x] **B-04: PreToolUse-Hook neu bauen** — **erledigt 2026-08-04.**
+  `.claude/hooks/protect-paths.ps1` (86 Zeilen), eingehängt in `.claude/settings.json`
+  mit zwei Matcher-Einträgen: `Write|Edit|Read` sowie zusätzlich `Bash` — ohne den
+  Bash-Matcher wäre genau die Anlass-Lücke offen geblieben.
+  Alle vier Anforderungen `[cmd]` belegt: stdin-JSON über `[Console]::In.ReadToEnd()`
+  (kein `param()`, 0 Treffer), Exit-Code 2 bei Ablehnung, mit BOM geschrieben
+  (`EF BB BF`), 0 Nicht-ASCII-Bytes nach dem BOM, 0 Parse-Fehler im PS-5.1-Parser.
+  Regeln: `.env*` für Lesen und Schreiben dicht (Ausnahme `.env.example`),
+  `supabase/migrations/` nur schreibgeschützt (Lesen bleibt Arbeitsalltag der
+  Kettenläufe), Fail-open bei unlesbarem stdin-JSON.
+  Provokation `[cmd]`, acht Fälle: `Read .env.local` → 2, `Write supabase/migrations/…`
+  → 2, verkettete Bash-Zeile `echo … && grep -c SUPABASE apps/web/.env.local` → 2
+  (genau die Form, die vorher durchkam); durchgelassen: `Read package.json`,
+  `Read .env.example`, `Read supabase/migrations/…`, `Bash pnpm test`, kaputtes stdin.
+  Ablehnungen werden nach `.claude/hooks/protect-paths.log` protokolliert.
+  Die lean-ctx-PreToolUse-Kette in der Nutzer-`settings.json` blieb unangetastet.
+  Nebenbefund: `.gitignore` listete `.claude/` im Wayland-Block — wirkungslos für die
+  93 bereits getrackten Dateien, blockierte aber jede neue. Zeile herausgelöst, statt
+  dessen nur `settings.local.json*` und `hooks/*.log` ignoriert.
 
 - [x] **B-05: Tote Hooks entfernen** — **erledigt 2026-08-04: gegenstandslos.**
   Beide Hooks waren aus `settings.json` ausgehängt und liefen nie
@@ -194,24 +209,33 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Nebenfund: `@types/react-dom` fehlt trotz `react-dom`.
   *Entscheidung nötig: alles auf einmal oder je Feature nachziehen.*
 
-- [ ] **C-02: WP-01 Preferences-Schreibpfad** (übernommen aus 2026-07-30)
-  1. [x] ~~Migration `nutrition.food_preferences` (+ `food_preference_items`)~~
-     → **korrigiert 2026-08-01:** `[cmd]` beide Tabellen existieren bereits in der
-     Live-DB (14 bzw. 13 Spalten, 0 Zeilen) — aber in **keiner** Migrationsdatei.
-     Beide tragen `auth.uid()`-RLS. ADR-002 wurde faktisch in der Datenbank
-     entschieden und nirgends dokumentiert. Neue Aufgabe: Design nachdokumentieren
-     und als Migration nachziehen → siehe D-12.
-  2. [ ] `src/lib/nutrition/preferences-write.ts`
-  3. [ ] `preference-search-preview.ts` liest echte DB-Preferences
-  4. [ ] API `POST/DELETE /api/nutrition/preferences`
-  5. [ ] UI `foods/page.tsx`: Favorit/Ausschluss-Toggles
-  6. [ ] Unit-Tests
-  7. [ ] Abnahme: Favorit gewichtet Suche, Ausschluss entfernt Treffer,
-     Zustand überlebt Container-Neustart
-  *Blockiert durch das Nutrition Product Gate
-  (`docs/ssot/40-spec-code-matrix.md`) — Tom muss es explizit öffnen.*
-  *Zusätzlich blockiert durch D-08: die Tabellen erwarten `auth.uid()`,
-  `apps/web` greift ohne Auth per `docker exec psql` zu.*
+- [x] **C-02: WP-01 Preferences-Schreibpfad** — **erledigt 2026-08-04**
+  (Sitzung C-02, Abnahme mit zwei echten Sessions; Duplikatschutz-Nachbesserung
+  2026-08-05).
+  1. [x] Migration/Aufbau der Tabellen — **Notiz von 2026-08-01 widerlegt
+     2026-08-05:** `[cmd]` `050_preferences_foundation.sql` legt beide Tabellen
+     an (CREATE TABLE IF NOT EXISTS, Z. 16 und 58), `060_zugriffsschicht.sql`
+     setzt Rechte und die 4 Policies je Operation, `v050_preferences.sql`
+     prüft. Die Behauptung „beide Tabellen existieren in keiner
+     Migrationsdatei" stammte aus der Zeit vor der Pipeline-Bündelung (D-12)
+     und ist überholt.
+  2. [x] `src/lib/nutrition/preferences-write.ts` — Insert-zuerst gegen den
+     UNIQUE-Index, 23505→409, 23503→400; reines Modell getrennt in
+     `preferences-model.ts`
+  3. [x] `preference-search-preview.ts` liest echte DB-Preferences
+     (RLS-Session statt URL-Parameter; RPC um 3 Food-Level-Parameter erweitert)
+  4. [x] API `GET/POST/DELETE /api/nutrition/preferences` (GET ergänzt —
+     die Toggles brauchen den eigenen Bestand)
+  5. [x] UI `foods/page.tsx`: Favorit-/Ausschluss-Toggles
+     (react-hook-form + zod, TanStack Query, kein optimistisches Update)
+  6. [x] Unit-Tests (7 neue in `preferences-model.test.ts`, gesamt 60/13/0)
+  7. [x] Abnahme `[cmd]` 2026-08-04: Favorit gewichtet (Platz 11→1, score 80),
+     Ausschluss entfernt (49→48), Zustand überlebt Container-Neustart,
+     RLS mit zweiter echter Session dicht.
+  **Duplikatschutz** `[cmd]` 2026-08-05: `uq_food_pref_items_user_food`
+  (partiell, `WHERE food_id IS NOT NULL`) in 050 + live, 23505 nachgewiesen.
+  *Offen bleiben:* Browser-E2E des Toggle-Flows (→ D-04),
+  Preset-/Profil-Schreibpfad (Settings, → C-12).
 
 - [ ] **C-03: WP-02 Diary-Verdrahtung** — `db/schema/nutrition.sql` anschliessen
   oder verwerfen. *Blockiert durch ADR-003 (Modellkonflikt EAV vs. flach).*
@@ -235,14 +259,32 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   *Antwort Tom: Teil des Endausbaus.* Rahmen dafür jetzt in
   ADR-0001-datenzugriff (A-07): Services als begründete Ausnahme.
 
-- [ ] **C-09: Test-Runner einrichten** — `[cmd]` 12 Unit-Test-Dateien in
-  `apps/web`, aber kein vitest/jest im Repo, kein `test`-Script;
-  `turbo run test` läuft ins Leere. Die Tests sind derzeit nicht ausführbar.
-  (Seit 2026-08-03 sind es 11 Dateien — der Governance-Test liegt im Archiv.)
+- [x] **C-09: Test-Runner einrichten** — **erledigt 2026-08-04.**
+  `[cmd]` `apps/web` hat ein `test`-Script (`tsx --test` über die
+  node:test-Dateien, kein vitest/jest — keine Datei umgeschrieben);
+  `pnpm test` aus dem Root läuft über Turbo. Es sind **11** Testdateien
+  (nicht 12 — der Governance-Test liegt seit 2026-08-03 im Archiv), seit C-02
+  zwölf Dateien mit **60 Tests / 13 Suites / 0 Fehlschlägen**.
+  `dependsOn ^build` der test-Task entfernt (Unit-Tests brauchen keine
+  Buildartefakte); Cache-Kante zu `packages/shared` über
+  `inputs: [$TURBO_DEFAULT$, $TURBO_ROOT$/packages/shared/src/**]`
+  geschlossen und per Sonde belegt (Hit → shared-Änderung → Miss → Revert → Hit).
 
 - [ ] **C-10: UI-Zahlen gegen DB prüfen** — die App-Shell zeigt
   „117 Nährstoffe · BLS 10.840" als Literale. `[cmd]` Tatsächlich in der DB:
   138 `nutrient_defs`, 7.140 `foods`. Zahlen korrigieren oder aus der DB lesen.
+
+- [ ] **C-12: Duplikatschutz für die übrigen fünf target_types**
+  (neu 2026-08-05) — `[cmd]` `uq_food_pref_items_user_food` sichert nur
+  `target_type='food'` (partiell `WHERE food_id IS NOT NULL`). Für `category`,
+  `tag`, `cuisine`, `exclusion_preset` und `catalog_item` fehlen die analogen
+  partiellen UNIQUE-Indizes — sie gehören zum jeweiligen Schreibpfad, konkret
+  **vor** den Preset-/Profil-Schreibpfad in Settings.
+  **Tragende Begründung, hier festgehalten:** der CHECK
+  `food_preference_items_exactly_one_target` erzwingt genau EIN gesetztes
+  Zielfeld je Zeile — dadurch sind die partiellen Indizes trennscharf: jede
+  Zeile fällt in genau einen Index, Überlappung ist konstruktiv ausgeschlossen.
+  Bisher stand das nur als Kommentar in `050_preferences_foundation.sql`.
 
 ---
 
@@ -342,7 +384,8 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `playwright.governance.config.ts` liegen seit 2026-08-03 in
   `_archive/governance/`; im Repo existiert damit gar keine Playwright-Config
   mehr, `@playwright/test` steht noch in den Root-devDependencies.
-  Offen (unverändert): E2E für Produktrouten. Hängt mit C-09 zusammen.
+  Offen (unverändert): E2E für Produktrouten — jetzt konkret auch der
+  Toggle-Flow aus C-02. Der Unit-Runner ist seit C-09 da.
 
 - [ ] **D-05: Spec-Audit starten** — `docs/specs/` (13 Module) auseinandernehmen,
   Diskrepanzen suchen, pro Modul offizielle Spec deklarieren. *Eigene Sitzung.*
