@@ -9,13 +9,10 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
 
   try {
+    // Seit C-02 kommen die Präferenzen aus der Datenbank (RLS-Session);
+    // die früheren URL-Parameter dafür entfallen.
     const payload = await getPreferenceSearchPreview({
       query: searchParams.get('q') ?? '',
-      exclusions: searchParams.get('exclusions') ?? '',
-      likedCategories: searchParams.get('liked_categories') ?? '',
-      dislikedCategories: searchParams.get('disliked_categories') ?? '',
-      likedTags: searchParams.get('liked_tags') ?? '',
-      dislikedTags: searchParams.get('disliked_tags') ?? '',
       limit: Number.parseInt(searchParams.get('limit') ?? '25', 10),
       offset: Number.parseInt(searchParams.get('offset') ?? '0', 10),
       sort: searchParams.get('sort') ?? 'relevance',

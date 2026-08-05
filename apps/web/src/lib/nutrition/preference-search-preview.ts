@@ -6,6 +6,7 @@
 
 import { GENERAL_EXCLUSIONS, getNutritionPreferenceCatalog } from './preferences-catalog'
 import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
+import { summarizeFoodPreferenceItems, type StoredFoodPreferenceItem } from './preferences-model'
 
 const LABEL_POLICY = 'preference_preview_local_only_not_production_smart_search'
 
@@ -60,6 +61,9 @@ export type PreferencePreviewRpcArgs = {
   p_sort: PreviewSort
   p_limit: number
   p_offset: number
+  p_liked_food_ids: string[]
+  p_disliked_food_ids: string[]
+  p_excluded_food_ids: string[]
 }
 
 function normalize(value: string): string {
@@ -82,14 +86,6 @@ function slug(value: string): string {
 
 function code(value: string): string {
   return value.trim().toLowerCase().replace(/[^a-z0-9_]+/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '')
-}
-
-function splitCodes(value: string | undefined): string[] {
-  return (value ?? '')
-    .split(',')
-    .map(item => item.trim())
-    .filter(Boolean)
-    .slice(0, 20)
 }
 
 export function resolveDeterministicExclusions(codes: string[]) {
@@ -124,6 +120,9 @@ export function buildPreferencePreviewRpcArgs(params: {
   dislikedCategories: string[]
   likedTags: string[]
   dislikedTags: string[]
+  likedFoodIds?: string[]
+  dislikedFoodIds?: string[]
+  excludedFoodIds?: string[]
   limit: number
   offset: number
   sort: PreviewSort
@@ -141,6 +140,9 @@ export function buildPreferencePreviewRpcArgs(params: {
     p_sort: params.sort,
     p_limit: Math.min(Math.max(Math.trunc(params.limit) || 25, 1), 100),
     p_offset: Math.max(Math.trunc(params.offset) || 0, 0),
+    p_liked_food_ids: params.likedFoodIds ?? [],
+    p_disliked_food_ids: params.dislikedFoodIds ?? [],
+    p_excluded_food_ids: params.excludedFoodIds ?? [],
   }
 }
 
@@ -169,23 +171,95 @@ function parseFood(value: unknown): PreferencePreviewFood | null {
   }
 }
 
+/**
+ * Gespeicherte Preferences der angemeldeten Nutzerin laden (RLS begrenzt
+ * beide Selects auf eigene Zeilen). Ersetzt seit C-02 die frühere Quelle
+ * (URL-Parameter): die Preview spiegelt jetzt den Datenbankzustand.
+ */
+async function loadStoredPreferenceInputs() {
+  const nutrition = nutritionRpc()
+  const [prefsResult, itemsResult] = await Promise.all([
+    nutrition.from('food_preferences').select('general_exclusions'),
+    nutrition
+      .from('food_preference_items')
+      .select('id, food_id, preference, target_type, tag_code, category_id, exclusion_preset_code'),
+  ])
+  for (const result of [prefsResult, itemsResult]) {
+    if (result.error) {
+      throw new Error(
+        isDbUnavailableMessage(result.error.message)
+          ? `Nutrition database unavailable: ${result.error.message}`
+          : `Preference read failed: ${result.error.message}`,
+      )
+    }
+  }
+
+  const rows = Array.isArray(itemsResult.data) ? itemsResult.data : []
+  const foodItems: StoredFoodPreferenceItem[] = []
+  const likedTags: string[] = []
+  const dislikedTags: string[] = []
+  const likedCategoryIds: string[] = []
+  const dislikedCategoryIds: string[] = []
+  const itemExclusionCodes: string[] = []
+  for (const row of rows) {
+    const record = row as Record<string, unknown>
+    const preference = record.preference
+    if (preference !== 'liked' && preference !== 'disliked' && preference !== 'hard_exclude') continue
+    if (record.target_type === 'food' && typeof record.food_id === 'string' && typeof record.id === 'string') {
+      foodItems.push({ id: record.id, food_id: record.food_id, preference })
+    } else if (record.target_type === 'tag' && typeof record.tag_code === 'string') {
+      if (preference === 'liked') likedTags.push(record.tag_code)
+      else dislikedTags.push(record.tag_code)
+    } else if (record.target_type === 'category' && typeof record.category_id === 'string') {
+      if (preference === 'liked') likedCategoryIds.push(record.category_id)
+      else dislikedCategoryIds.push(record.category_id)
+    } else if (record.target_type === 'exclusion_preset' && typeof record.exclusion_preset_code === 'string') {
+      itemExclusionCodes.push(record.exclusion_preset_code)
+    }
+  }
+
+  const generalExclusions = Array.isArray(prefsResult.data?.[0]?.general_exclusions)
+    ? (prefsResult.data[0].general_exclusions as unknown[]).filter(
+        (value): value is string => typeof value === 'string',
+      )
+    : []
+
+  const categoryIds = [...likedCategoryIds, ...dislikedCategoryIds]
+  const slugById = new Map<string, string>()
+  if (categoryIds.length > 0) {
+    const { data, error } = await nutrition.from('food_categories').select('id, slug').in('id', categoryIds)
+    if (error) {
+      throw new Error(`Preference read failed: ${error.message}`)
+    }
+    for (const row of data ?? []) {
+      if (typeof row.id === 'string' && typeof row.slug === 'string') slugById.set(row.id, row.slug)
+    }
+  }
+
+  const foods = summarizeFoodPreferenceItems(foodItems)
+  return {
+    exclusionCodes: Array.from(new Set([...generalExclusions, ...itemExclusionCodes])).slice(0, 20),
+    likedCategorySlugs: likedCategoryIds.flatMap(id => slugById.get(id) ?? []),
+    dislikedCategorySlugs: dislikedCategoryIds.flatMap(id => slugById.get(id) ?? []),
+    likedTags,
+    dislikedTags,
+    ...foods,
+  }
+}
+
 export async function getPreferenceSearchPreview(params: {
   query: string
-  exclusions?: string
-  likedCategories?: string
-  dislikedCategories?: string
-  likedTags?: string
-  dislikedTags?: string
   limit?: number
   offset?: number
   sort?: string
 }): Promise<PreferencePreviewPayload> {
-  const exclusionCodes = splitCodes(params.exclusions)
+  const stored = await loadStoredPreferenceInputs()
+  const exclusionCodes = stored.exclusionCodes
   const exclusion = resolveDeterministicExclusions(exclusionCodes)
-  const likedCategories = splitCodes(params.likedCategories)
-  const dislikedCategories = splitCodes(params.dislikedCategories)
-  const likedTags = splitCodes(params.likedTags)
-  const dislikedTags = splitCodes(params.dislikedTags)
+  const likedCategories = stored.likedCategorySlugs
+  const dislikedCategories = stored.dislikedCategorySlugs
+  const likedTags = stored.likedTags
+  const dislikedTags = stored.dislikedTags
   const sort = ['relevance', 'protein_desc', 'kcal_asc', 'name_asc'].includes(params.sort ?? '')
     ? params.sort as PreviewSort
     : 'relevance'
@@ -196,6 +270,9 @@ export async function getPreferenceSearchPreview(params: {
     dislikedCategories,
     likedTags,
     dislikedTags,
+    likedFoodIds: stored.likedFoodIds,
+    dislikedFoodIds: stored.dislikedFoodIds,
+    excludedFoodIds: stored.excludedFoodIds,
     limit: params.limit ?? 25,
     offset: params.offset ?? 0,
     sort,
@@ -214,6 +291,9 @@ export async function getPreferenceSearchPreview(params: {
   const foods = Array.isArray(parsed.foods) ? parsed.foods.flatMap(item => parseFood(item) ?? []) : []
   const applied = [
     ...exclusion.applied,
+    ...stored.likedFoodIds.map(id => ({ code: id, effect: 'like', target: `food:${id}` })),
+    ...stored.dislikedFoodIds.map(id => ({ code: id, effect: 'soft_dislike', target: `food:${id}` })),
+    ...stored.excludedFoodIds.map(id => ({ code: id, effect: 'hard_exclude', target: `food:${id}` })),
     ...likedCategories.map(code => ({ code, effect: 'like', target: `category:${code}` })),
     ...dislikedCategories.map(code => ({ code, effect: 'soft_dislike', target: `category:${code}` })),
     ...likedTags.map(code => ({ code, effect: 'like', target: `tag:${code}` })),

@@ -9,6 +9,7 @@ import {
 } from '../../../lib/nutrition/food-search'
 import { deterministicExclusionOptions, getPreferenceSearchPreview } from '../../../lib/nutrition/preference-search-preview'
 import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '../../../lib/nutrition/preferences-catalog'
+import { FoodPreferenceToggles } from './food-preference-toggles'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,11 +21,6 @@ type NutritionPageProps = {
     tag?: string
     sort?: string
     offset?: string
-    exclusions?: string
-    liked_categories?: string
-    disliked_categories?: string
-    liked_tags?: string
-    disliked_tags?: string
   }
 }
 
@@ -102,21 +98,13 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
   const tag = searchParams?.tag ?? ''
   const sort = searchParams?.sort ?? 'relevance'
   const offset = Number.parseInt(searchParams?.offset ?? '0', 10)
-  const exclusions = searchParams?.exclusions ?? ''
-  const likedCategories = searchParams?.liked_categories ?? ''
-  const dislikedCategories = searchParams?.disliked_categories ?? ''
-  const likedTags = searchParams?.liked_tags ?? ''
-  const dislikedTags = searchParams?.disliked_tags ?? ''
 
   try {
     const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag, sort, offset })
+    // Seit C-02 kommen die Präferenzen aus der Datenbank (RLS-Session),
+    // nicht mehr aus URL-Parametern.
     const preferencePreview = await getPreferenceSearchPreview({
       query,
-      exclusions,
-      likedCategories,
-      dislikedCategories,
-      likedTags,
-      dislikedTags,
       limit: 5,
       sort,
     })
@@ -161,8 +149,9 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
               <div>
                 <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Preferences foundation</div>
                 <p className="mt-2 max-w-3xl leading-6">
-                  Read-only local catalog for diet type, allergies, exclusions, cuisines, cooking constraints, and
-                  like/dislike curation. User persistence and Smart Search application remain a separate governed step.
+                  Local catalog for diet type, allergies, exclusions, cuisines, cooking constraints, and
+                  like/dislike curation. Food-level favorites and exclusions persist per user (C-02);
+                  preset- and profile-level writes follow with Settings.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -201,40 +190,41 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
               <div>
                 <div className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Preference-aware preview</div>
                   <p className="mt-2 max-w-3xl leading-6">
-                  Local-only preview mode. Deterministic hard exclusions remove matching categories; category/tag likes
-                  boost ranking; category/tag dislikes suppress ranking. Unsupported exclusions stay unresolved and are not applied.
+                  Preview over the stored preferences of the signed-in user. Hard exclusions remove foods and
+                  categories; favorites boost ranking; dislikes suppress ranking. Unsupported exclusions stay
+                  unresolved and are not applied.
                 </p>
               </div>
               <Link
                 className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500"
-                href={`/api/nutrition/foods/smart-preview?q=${encodeURIComponent(query)}&exclusions=${encodeURIComponent(exclusions)}&liked_categories=${encodeURIComponent(likedCategories)}&disliked_categories=${encodeURIComponent(dislikedCategories)}&liked_tags=${encodeURIComponent(likedTags)}&disliked_tags=${encodeURIComponent(dislikedTags)}` as Route}
+                href={`/api/nutrition/foods/smart-preview?q=${encodeURIComponent(query)}` as Route}
               >
                 Preview API
               </Link>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {exclusionOptions.map(option => {
-                const selected = exclusions.split(',').includes(option.code)
-                const href = (selected
-                  ? buildFoodSearchFilterHref({ query, category, tag, sort, offset }, { food: null })
-                  : `${buildFoodSearchFilterHref({ query, category, tag, sort, offset }, { food: null })}&exclusions=${encodeURIComponent(option.code)}`) as Route
+                const selected = preferencePreview.exclusions.includes(option.code)
                 return (
-                  <Link
+                  <span
                     className={`rounded-full border px-2.5 py-1 text-xs ${
                       selected
                         ? 'border-amber-300 bg-amber-300 text-amber-950'
                         : option.mapping_status === 'mapped'
-                          ? 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500'
+                          ? 'border-slate-700 bg-slate-950 text-slate-300'
                           : 'border-slate-800 bg-slate-950 text-slate-500'
                     }`}
-                    href={href}
                     key={option.code}
                   >
                     {option.label_de} {option.mapping_status !== 'mapped' ? '(unresolved)' : null}
-                  </Link>
+                  </span>
                 )
               })}
             </div>
+            <p className="mt-2 text-xs text-slate-500">
+              Preset-Ausschlüsse zeigen den gespeicherten Profilstand (Schreibpfad für Presets folgt mit Settings);
+              Favorit/Ausschluss je Lebensmittel steht in der Trefferliste.
+            </p>
             <div className="mt-4 grid gap-2 text-xs sm:grid-cols-4">
               <div className="rounded border border-slate-800 bg-slate-950 p-3">
                 <div className="text-slate-500">Preview matches</div>
@@ -379,6 +369,7 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                   {payload.foods.map((food) => {
                     const selected = payload.selected_food?.id === food.id
                     return (
+                      <div key={food.id}>
                       <Link
                         className={`block rounded-md border p-3 text-sm transition ${
                           selected
@@ -386,7 +377,6 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                             : 'border-slate-800 bg-slate-950/70 hover:border-slate-600'
                         }`}
                         href={buildFoodHref(query, payload.category, payload.tag, payload.sort, payload.offset, food.id)}
-                        key={food.id}
                       >
                         <div className="font-mono text-xs text-slate-400">{food.bls_code}</div>
                         <div className="mt-1 font-medium text-slate-100">{food.source_label}</div>
@@ -408,6 +398,8 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                         ) : null}
                         <div className="mt-1 text-xs text-slate-500">BLS source label, not final product copy</div>
                       </Link>
+                      <FoodPreferenceToggles foodId={food.id} />
+                      </div>
                     )
                   })}
                 </div>
