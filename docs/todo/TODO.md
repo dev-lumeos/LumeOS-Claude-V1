@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-05 (zehnte Aktualisierung — C-01-Reststand korrigiert, A-06 umgestuft, B-14 neu, Erledigt-Block 2026-08-05)
+**Stand:** 2026-08-05 (elfte Aktualisierung — B-14 und C-11 erledigt, M4-Voraussetzungen präzisiert, A-09 neu)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -18,7 +18,13 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    (C-01), kein A-06-Blocker mehr.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
-4. **M4 — Cloud-Deployment** (→ Sektion E) — Voraussetzungen erfüllt.
+4. **M4 — Cloud-Deployment** (→ Sektion E) — B-14 und C-11 sind erledigt
+   (2026-08-05). Noch offen als Voraussetzungen: **D-17**
+   (Migrationsregister — vor `supabase link` müssen die Migrationsdateien
+   den lokalen Zustand abbilden, vgl. E-08), **B-13-Rest**
+   (Produktions-`site_url` und Redirect-Liste je App und Umgebung) sowie
+   die Vorarbeiten **E-01 bis E-03** (Read-only-Prüfung, tote Verweise,
+   Abhängigkeiten der Cloud-Instanz).
 
 ---
 
@@ -95,6 +101,15 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 - [ ] **A-08: ADR Medienort** — `[read]` Training-Spec nennt Cloudflare R2,
   `[cmd]` der Bestand liegt in Supabase Storage (15 GB, Bucket `exercises`).
   Kostenfolge, und ein Wechsel würde einen Transfer bedeuten.
+
+- [ ] **A-09: Root-README sanieren** (neu 2026-08-05) — die
+  Gate-Dokumentation (B-14) steht jetzt im Root-README, dessen übriger
+  Inhalt Governance-Altlast ist (Spark-Routing, Brain/Law/Muscle,
+  Verweise auf `system/`). Wer das README öffnet, um das Gate zu
+  aktivieren, liest zuerst über eine Architektur, die es nicht mehr gibt,
+  und weiss danach nicht, was noch gilt. Die Ortswahl war richtig — sie
+  macht die Sanierung dringender, nicht weniger dringend.
+  Einordnung in A: Struktur-/Doku-Pflege wie A-02/A-03.
 
 ---
 
@@ -196,32 +211,44 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Zusatz: `desktop-commander` umgeht die Permission-Schicht vollständig;
   risikoreiche Schritte gehören in eine Claude-Code-Session.
 
-- [ ] **B-14: `pnpm build` ins Prüf-Gate aufnehmen** (neu 2026-08-05) —
-  neben test und typecheck. Begründung `[cmd]`: der /dashboard-Bruch
-  (typedRoutes; `app/page.tsx` importierte das Seitenmodul
-  `./dashboard/page`) lag vor, während `pnpm test` und `pnpm typecheck`
-  grün waren — unabhängig reproduziert in einem frischen Worktree auf
-  7140829. Ein Gate ohne Build deckt genau die Fehlerklasse nicht ab, die
-  beim Deployment zuerst auffällt; direkt relevant für M4.
-  Einordnung in B: das Gate gehört zur Entwicklungsumgebung/Absicherung
-  (wie B-01/B-04), kein Produktpunkt.
+- [x] **B-14: `pnpm build` ins Prüf-Gate aufnehmen** — **erledigt
+  2026-08-05: Gate geschaffen, nicht erweitert.** `[cmd]` Vorher existierte
+  KEIN automatisch auslösendes Gate: `core.hooksPath` ungesetzt, keine
+  aktiven Hooks, CI seit 2026-04-23 deaktiviert. Gebaut: Root-Script
+  `gate` (= `turbo run typecheck test build`), versionierter
+  `.githooks/pre-commit` (Aktivierung `git config core.hooksPath .githooks`,
+  im README dokumentiert), Build-Cache-Kante
+  `$TURBO_ROOT$/packages/shared/src/**` in der build-Task.
+  Zwei getrennte Nachweise: (a) `[cmd]` `pnpm gate` wird rot bei künstlich
+  wiederhergestelltem Seitenmodul-Import — test/typecheck grün, nur build
+  scheitert mit dem historischen /dashboard-Fehler; (b) `[cmd]` (Tom) der
+  Hook blockt einen echten `git commit`: Typfehler-Datei gestaged,
+  „[gate] ROT — Commit abgebrochen", Exit 1, HEAD unverändert a1a2804.
+  Bekannte Einschränkung (bewusst, im README): der Hook prüft den Working
+  Tree, nicht den Index — bei Scheiben-Commits kann ein Commit grün
+  durchlaufen, der für sich allein nicht baut. Betriebsregel: `next dev`
+  und Gate nicht gleichzeitig — geteiltes `.next`, sonst TS6053 auf
+  `.next/types/**`. Ursprungsbegründung: der /dashboard-Bruch lag vor,
+  während test und typecheck grün waren (Worktree-Repro auf 7140829).
 
 ---
 
 ## C — Produkt: apps/web
 
-- [ ] **C-11: Vor dem ersten Deployment auf Session-Client umstellen**
-  (neu 2026-08-03) — `[cmd]` `nutrition-db.ts` nutzt den Service-Client, weil
-  ohne Anmeldung (M3) jede Session `anon` wäre und kein `USAGE` auf `nutrition`
-  hätte. Serverseitig, `service_role` erreicht den Browser nicht, im Code
-  kommentiert.
-  **Lokal in der Entwicklung unkritisch** — keine fremden Nutzerdaten vorhanden,
-  Stammdaten sind ohnehin für alle lesbar.
-  *Freigabebedingung, kein Entwicklungsblocker: Bevor die App eine fremde
-  Umgebung erreicht oder echte Nutzerdaten entstehen, werden Stammdaten-Reads
-  auf den Session-Client umgestellt — sonst laufen die 15 Policies aus 060 im
-  Anwendungspfad ins Leere.* Gehört in die Deployment-Prüfliste
-  (`10-plattform/ci-cd`).
+- [x] **C-11: Stammdaten-Reads auf den Session-Client** — **erledigt: war
+  faktisch seit M3 (2026-08-04) erfüllt, der Punkt beschrieb einen
+  veralteten Stand.** Prüfung 2026-08-05 statt Übernahme der Prämisse:
+  `[cmd]` `createServiceClient` hat null Aufrufer (nur die Definition in
+  `packages/shared`), `nutrition-db.ts` nutzt `createSessionClient`,
+  `anon` hat weder USAGE noch SELECT auf `nutrition`, und keine
+  öffentliche Seite (`/`, `/login`, `/auth/callback`) liest Stammdaten.
+  Keine Grant-Änderung nötig, kein SQL vorgelegt.
+  Wirknachweise `[cmd]` mit zwei echten Sessions: anon erhält harten
+  `42501` statt stiller Leerliste; zweite Session sieht Stammdaten
+  (49 Treffer), aber `food_preference_items = []` bei existierender
+  Fremdzeile (postgres count 1); `/nutrition/foods` ohne Session →
+  307 auf `/login?redirect=…`; Suchbaselines unverändert
+  (kuerbis 49, high_fiber 558).
 
 - [ ] **C-01: Frontend-Stack-Lücke schliessen** — Reststand korrigiert
   2026-08-05: `[cmd]` **3 von 13 fehlen** (`@dnd-kit/core`, `zustand`,
@@ -600,6 +627,12 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   `dashboard-view.tsx` extrahiert, `pnpm build` grün (24 Routen)
 - [x] Vier Bibliotheken (Block 4 A): shadcn/ui-Fundament, lucide-react,
   Recharts, Framer Motion — Versionen und Abbildung siehe C-01
+- [x] B-14: Prüf-Gate geschaffen — `pnpm gate` (typecheck + test + build),
+  versionierter `.githooks/pre-commit`, Build-Cache-Kante auf
+  `packages/shared/src/**`; Wirksamkeit doppelt nachgewiesen
+  (rotes Gate bei künstlichem Bruch + geblockter echter Commit)
+- [x] C-11: als seit M3 erfüllt festgestellt — Prämisse geprüft statt
+  übernommen — und mit vier Wirknachweisen belegt; Gate-Doku im README
 
 ## Erledigt am 2026-08-01
 
