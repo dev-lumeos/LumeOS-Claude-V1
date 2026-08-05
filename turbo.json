@@ -10,7 +10,7 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^build"]
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/shared/src/**"]
     },
     "lint": {},
     "typecheck": {
