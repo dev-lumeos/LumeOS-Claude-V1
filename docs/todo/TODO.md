@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-05 (neunte Aktualisierung — C-02 und C-09 erledigt, widerlegte Notizen in C-02.1/C-09 korrigiert, C-12 neu)
+**Stand:** 2026-08-05 (zehnte Aktualisierung — C-01-Reststand korrigiert, A-06 umgestuft, B-14 neu, Erledigt-Block 2026-08-05)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -12,8 +12,10 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 1. **M1 — Datenzugriffsschicht** — **erledigt 2026-08-03.**
    `apps/web` liest über supabase-js und `rpc()`; Schema `nutrition` ausgesetzt,
    Rechte und Zeilenschutz produktiv (Kettenschritte 060/070). Siehe D-08, C-07.
-2. **M2 — Frontend-Fundament** (→ C-01):
-   10 von 13 deklarierten Bibliotheken fehlen.
+2. **M2 — Frontend-Fundament** (→ C-01) — **Kern steht seit 2026-08-05:**
+   Theming-System (Themes als Einzeldateien, Token-Vertrag, Cookie-SSR)
+   und 10 von 13 Bibliotheken inkl. shadcn-Fundament; Rest je Feature
+   (C-01), kein A-06-Blocker mehr.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
 4. **M4 — Cloud-Deployment** (→ Sektion E) — Voraussetzungen erfüllt.
@@ -62,13 +64,23 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `system.zip`, `nul`, `.codex-governance-ui.log`.
   *Regel daraus: jeder untracked Ordner wird vor Löschung inhaltlich geprüft,
   nicht nur dem Namen nach.*
+  Neu 2026-08-05 (offen, Entscheidung Tom): `.gitignore`-Vorschlag
+  `apps/web/.next*/` für beiseitegeschobene Build-Verzeichnisse — nicht
+  gesetzt, nur vorgemerkt.
 
 - [ ] **A-06: Design-System spezifizieren** — `docs/spezifikation/10-plattform/design-system/`
   ist leer. Quellen: `docs/design-system/` (DESIGN_CONCEPT, components, tokens),
   `packages/ui` (Gerüst), Altbestand-Specs mit OKLCH-Tokens.
-  *Tom hat mehrere Ansätze — wird getrennt besprochen, nicht nebenbei geschrieben.*
-  Betrifft alle sieben Apps, weil das Design-System das einzige ist, was sie
-  sichtbar verbindet.
+  **Umgestuft 2026-08-05: kein Blocker mehr für M2** — das Design läuft
+  parallel bei Tom, gearbeitet wird modulweise mit dem bestehenden
+  Token-Satz; die elf Modul-Akzente bleiben unangetastet und weiterhin
+  nicht in `tailwind.config.js` gespiegelt.
+  A-06-Material (neu 2026-08-05): shadcn-Komponenten nutzen `rounded-md`
+  (6 px fest) statt der Token-Radien `rounded-token*` — kein Fehler, aber
+  ein Theme steuert die shadcn-Radien damit nicht; bei der
+  Design-Entscheidung mitbehandeln.
+  Betrifft alle sieben Apps, weil das Design-System das einzige ist, was
+  sie sichtbar verbindet.
 
 - [x] **A-07: ADR Servicelayer** — **erledigt 2026-08-04: Entscheidung
   getroffen.** `[cmd]` `docs/spezifikation/90-entscheidungen/ADR-0001-datenzugriff.md`
@@ -184,6 +196,16 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Zusatz: `desktop-commander` umgeht die Permission-Schicht vollständig;
   risikoreiche Schritte gehören in eine Claude-Code-Session.
 
+- [ ] **B-14: `pnpm build` ins Prüf-Gate aufnehmen** (neu 2026-08-05) —
+  neben test und typecheck. Begründung `[cmd]`: der /dashboard-Bruch
+  (typedRoutes; `app/page.tsx` importierte das Seitenmodul
+  `./dashboard/page`) lag vor, während `pnpm test` und `pnpm typecheck`
+  grün waren — unabhängig reproduziert in einem frischen Worktree auf
+  7140829. Ein Gate ohne Build deckt genau die Fehlerklasse nicht ab, die
+  beim Deployment zuerst auffällt; direkt relevant für M4.
+  Einordnung in B: das Gate gehört zur Entwicklungsumgebung/Absicherung
+  (wie B-01/B-04), kein Produktpunkt.
+
 ---
 
 ## C — Produkt: apps/web
@@ -201,13 +223,17 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Anwendungspfad ins Leere.* Gehört in die Deployment-Prüfliste
   (`10-plattform/ci-cd`).
 
-- [ ] **C-01: Frontend-Stack-Lücke schliessen** — `[cmd]` `apps/web/package.json`
-  gegen `docs/specs/WebPlatform/INDEX.md`: 10 von 13 deklarierten Bibliotheken fehlen.
-  Vorhanden: Next.js 14, React 18, Tailwind, Supabase SSR (deklariert, ungenutzt).
-  Fehlt: shadcn/ui, lucide-react, Recharts, @dnd-kit, Zustand, TanStack Query,
-  react-hook-form, zod, date-fns, idb/next-pwa, Framer Motion.
-  Nebenfund: `@types/react-dom` fehlt trotz `react-dom`.
-  *Entscheidung nötig: alles auf einmal oder je Feature nachziehen.*
+- [ ] **C-01: Frontend-Stack-Lücke schliessen** — Reststand korrigiert
+  2026-08-05: `[cmd]` **3 von 13 fehlen** (`@dnd-kit/core`, `zustand`,
+  `next-pwa`); zehn vorhanden (lucide-react, recharts, framer-motion,
+  @radix-ui/react-slot, @tanstack/react-query, react-hook-form, zod,
+  date-fns, idb, @types/react-dom). Die alte Angabe „10 von 13 fehlen" ist
+  überholt. **Entscheidung: je Feature nachziehen, nicht als Block** — alle
+  drei hängen an konkreten Features (Drag-Reihenfolge, Client-State,
+  Offline), nicht am Design.
+  Dazugekommen 2026-08-05: shadcn-Fundament ohne `init` (components.json von
+  Hand, Button als Probe), Abbildung ausschliesslich als Config-Aliase auf
+  die bestehenden Tokens — null neue CSS-Variablen.
 
 - [x] **C-02: WP-01 Preferences-Schreibpfad** — **erledigt 2026-08-04**
   (Sitzung C-02, Abnahme mit zwei echten Sessions; Duplikatschutz-Nachbesserung
@@ -561,6 +587,19 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   Das Muster wiederholt sich über zwei unabhängige Instanzen.*
 
 ---
+
+## Erledigt am 2026-08-05
+
+- [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und
+  Token-Vertrag (Konstantenliste + Vertragstest im pnpm-test-Gate); neues
+  Theme = genau zwei Dateien, per Probe belegt; `data-theme`/`data-mode`
+  server-gerendert aus Cookies (kein Aufblitzen), Umschalter in der Topbar;
+  42 tote gov-Festfarben entfernt — `globals.css` farbwertfrei (0 hex/rgba)
+- [x] Vorbestehenden Build-Bruch behoben: `/dashboard` fiel aus den
+  typedRoutes, weil `app/page.tsx` das Seitenmodul importierte —
+  `dashboard-view.tsx` extrahiert, `pnpm build` grün (24 Routen)
+- [x] Vier Bibliotheken (Block 4 A): shadcn/ui-Fundament, lucide-react,
+  Recharts, Framer Motion — Versionen und Abbildung siehe C-01
 
 ## Erledigt am 2026-08-01
 
