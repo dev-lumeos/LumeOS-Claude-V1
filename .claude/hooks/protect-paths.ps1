@@ -1,11 +1,32 @@
-﻿# protect-paths.ps1 - PreToolUse-Hook fuer Pfadschutz (B-04, 2026-08-05).
-# Schuetzt supabase/migrations/ (Schreiben) und .env* (Lesen und Schreiben),
-# auch gegen verkettete Bash-Befehle, die die Deny-Muster umgehen.
+﻿# protect-paths.ps1 - PreToolUse-Hook fuer Pfadschutz (B-04, 2026-08-05;
+# B-16-Umbau 2026-08-06: Falsch-Positive auf Dokumentationstext eingegrenzt).
 #
-# Anforderungen (B-04): stdin-JSON (kein param), Exit 2 bei Ablehnung,
-# Datei mit BOM, keine Emoji. PS-5.1-kompatibel, nur ASCII im Inhalt.
-# Audit-Log: .claude/hooks/protect-paths.log (von git ignoriert; nur
-# Ablehnungen werden protokolliert, Durchlaesse nicht).
+# Schuetzt supabase/migrations/ (Schreiben) und .env* (Lesen und Schreiben).
+#
+# ZUM .env-BLOCK, DAMIT NIEMAND IHN ALS FEHLER DIAGNOSTIZIERT:
+# Das Blocken auch des LESENS von .env* ist ABSICHT (Secrets sollen nicht
+# in den Kontext). Wer den lokalen Anon-Key braucht, nutzt den
+# Standard-Demo-Key der lokalen Supabase-CLI (iss "supabase-demo") -
+# der funktioniert gegen jede lokale Instanz ohne .env-Zugriff.
+# .env.example bleibt frei.
+#
+# Anforderungen (B-04, unveraendert): stdin-JSON (kein param), Matcher
+# Write|Edit|Read plus Bash, Exit 2 bei Ablehnung, Datei mit BOM, ASCII.
+#
+# B-16: Bash-Analyse arbeitet jetzt so:
+#   1. Heredoc-Koerper (<<TAG ... TAG) werden vor der Pruefung entfernt -
+#      Dokumentations- und Datentexte loesen nicht mehr aus.
+#   2. Der Befehl wird an && || ; | und Zeilenenden in Segmente geteilt;
+#      geprueft wird das ERSTE Wort je Segment (Befehlsposition) plus
+#      Redirections - nicht mehr jedes Wort im Text.
+#      echo/printf blocken nie (reine Erwaehnung).
+# BENANNTE LUECKEN (bewusst, Damm gegen Versehen, nicht gegen Absicht):
+#   - Heredoc-Inhalte, die an Interpreter gehen und DARIN .env oder
+#     migrations anfassen, werden nicht mehr erkannt.
+#   - Variablen-Indirektion (f=.env; cat $f), eval/Subshells,
+#     Interpreter-Einzeiler (python -c "open('.env')").
+#   - Die Leser-/Schreiberlisten sind endlich; exotische Werkzeuge fehlen.
+# Audit-Log: .claude/hooks/protect-paths.log (nur Ablehnungen, UTF-8).
 
 $ErrorActionPreference = 'Stop'
 
@@ -35,7 +56,7 @@ function Deny([string]$reason, [string]$detail) {
         detail = $detail
     } | ConvertTo-Json -Compress
     try {
-        Add-Content -LiteralPath (Join-Path $PSScriptRoot 'protect-paths.log') -Value $entry
+        Add-Content -LiteralPath (Join-Path $PSScriptRoot 'protect-paths.log') -Value $entry -Encoding UTF8
     } catch {
         # Logfehler verhindern die Ablehnung nicht.
     }
@@ -48,13 +69,12 @@ if ($tool -eq 'Write' -or $tool -eq 'Edit' -or $tool -eq 'Read') {
     $leaf = ''
     if ($norm) { $leaf = ($norm -split '/')[-1] }
 
-    # supabase/migrations/: nur Schreiben blocken - Lesen der Slices ist
-    # legitimer Arbeitsalltag (Kettenlaeufe, Reviews).
+    # supabase/migrations/: nur Schreiben blocken - Lesen ist Arbeitsalltag.
     if (($tool -eq 'Write' -or $tool -eq 'Edit') -and $norm -match '(^|/)supabase/migrations/') {
         Deny 'supabase/migrations ist schreibgeschuetzt' $filePath
     }
 
-    # .env*: Lesen UND Schreiben blocken (Secrets). Ausnahme .env.example.
+    # .env*: Lesen UND Schreiben blocken (Absicht, siehe Kopf).
     if ($leaf -like '.env*' -and $leaf -ne '.env.example') {
         Deny '.env-Dateien sind gesperrt' $filePath
     }
@@ -62,22 +82,49 @@ if ($tool -eq 'Write' -or $tool -eq 'Edit' -or $tool -eq 'Read') {
 }
 
 if ($tool -eq 'Bash') {
-    $cmdNorm = $command.Replace('\', '/').ToLowerInvariant()
+    # 1) Heredoc-Koerper entfernen (<<TAG, <<'TAG', <<-TAG ... bis Zeile TAG).
+    $heredocOptions = [System.Text.RegularExpressions.RegexOptions]'Singleline, Multiline'
+    $heredoc = New-Object System.Text.RegularExpressions.Regex('<<-?[ \t]*([''"]?)(\w+)\1.*?^[ \t]*\2[ \t]*\r?$', $heredocOptions)
+    $stripped = $heredoc.Replace($command, ' HEREDOC_ENTFERNT ')
+    $norm = $stripped.Replace('\', '/').ToLowerInvariant()
 
-    # .env als eigenstaendiges Pfad-Token (auch mitten in Ketten),
-    # .env.example bleibt erlaubt. Schliesst die belegte Luecke:
-    # sed/cat auf .env.local liefen an Read-Deny vorbei.
-    $envHits = [regex]::Matches($cmdNorm, '(^|[\s/=("' + "'" + '`])\.env(\.[a-z0-9_.-]+)?([\s)"' + "'" + '`;&|<>]|$)')
-    foreach ($hit in $envHits) {
-        if ($hit.Value -notmatch '\.env\.example') {
-            Deny 'Bash-Befehl beruehrt .env' $command
+    # 2) In Segmente teilen; erstes Wort = Befehlsposition.
+    $segments = [System.Text.RegularExpressions.Regex]::Split($norm, '&&|\|\||[;|]|[\r\n]+')
+    $readers = @('cat','type','head','tail','less','more','grep','egrep','fgrep',
+                 'sed','awk','cut','sort','uniq','tr','wc','xxd','od','strings',
+                 'cp','mv','dd','install','source','.')
+    $writers = @('tee','cp','mv','rm','touch','truncate','dd','install','ln')
+    $envToken = '(^|[\s/=("''])[^\s"'')]*\.env(\.[a-z0-9_.-]+)?([\s)"'';&|<>]|$)'
+
+    foreach ($seg in $segments) {
+        $s = $seg.Trim()
+        if ($s -eq '') { continue }
+        $first = ($s -split '\s+')[0]
+
+        # .env: nur bei Lese-/Kopierbefehl oder Redirection auf das Token.
+        if (($s -match $envToken) -and ($s -notmatch '\.env\.example')) {
+            if ($readers -contains $first) {
+                Deny 'Bash-Befehl liest/kopiert .env' $command
+            }
+            if ($s -match '[<>][ \t]*\S*\.env') {
+                Deny 'Bash-Redirection auf .env' $command
+            }
         }
-    }
 
-    # supabase/migrations/: schreibende Bash-Muster blocken, Lesen erlaubt.
-    if ($cmdNorm -match 'supabase/migrations/') {
-        if ($cmdNorm -match '(>>?\s*[^\s]*supabase/migrations/|\btee\b|\bcp\b|\bmv\b|\brm\b|sed\s+-i|\btouch\b|\btruncate\b|out-file|set-content|add-content)') {
-            Deny 'Bash-Befehl schreibt nach supabase/migrations/' $command
+        # supabase/migrations/: nur schreibende Befehlsposition/Redirection.
+        if ($s -match 'supabase/migrations/') {
+            if ($writers -contains $first) {
+                Deny 'Bash-Befehl schreibt nach supabase/migrations/' $command
+            }
+            if ($first -eq 'git' -and $s -match '^git[ \t]+(mv|rm)([ \t]|$)') {
+                Deny 'git mv/rm auf supabase/migrations/' $command
+            }
+            if ($first -eq 'sed' -and $s -match '(^|[ \t])-i') {
+                Deny 'sed -i auf supabase/migrations/' $command
+            }
+            if ($s -match '>[ \t]*\S*supabase/migrations/') {
+                Deny 'Bash-Redirection nach supabase/migrations/' $command
+            }
         }
     }
     exit 0
