@@ -12,7 +12,7 @@ const flowItems = [
   { kicker: 'Heute', title: 'Shell sichtbar', text: 'Dashboard, Navigation und Modulrahmen sind lokal erreichbar.' },
   { kicker: 'Review', title: 'Nutrition Claims', text: 'BLS-Grenze und Foundation-Schema als Kandidatenmaterial prüfen.' },
   { kicker: 'Nächster Schritt', title: 'Goals Scope', text: 'Body, Zielkarten und Downstream-Relationen als UI-Konzept schärfen.' },
-  { kicker: 'Grenze', title: 'Keine Writes', text: 'Keine Datenbankaktion, keine Migration, keine Live-Userdaten.' },
+  { kicker: 'Grenze', title: 'Klarer Rahmen', text: 'Dieses Dashboard zeigt Mock-Daten. Echt sind Anmeldung, Nutrition-Suche und der Preferences-Schreibpfad — RLS-begrenzt.' },
 ]
 
 // Geteilte View fuer / und /dashboard (Block 4, 2026-08-05).
@@ -128,14 +128,18 @@ export function DashboardView() {
           </div>
         </Card>
 
-        <Card title="Grenzen / Nicht live" sub="Sicherheitsrahmen">
+        <Card title="Was echt ist, was Attrappe" sub="Sicherheitsrahmen">
           <p className="text-[13px] leading-6 text-[var(--fg-muted)]">
-            Diese WebPlatform-Fläche ist ein sichtbarer Produktdraft. Sie erzeugt keine Daten, liest keine Secrets, führt keine Migrationen aus und ist keine Governance-Entscheidung.
+            Dieses Dashboard ist ein Produktdraft mit Mock-Daten. Echt sind heute
+            die Anmeldung (Supabase Auth), die Nutrition-Lesepfade und der
+            Preferences-Schreibpfad — jede Zeile durch Zeilenschutz in der
+            Datenbank begrenzt. Migrationen laufen ausschliesslich über die
+            versionierte Kette, nie aus dieser Oberfläche.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <StatusBadge tone="readonly">Read-only UI</StatusBadge>
-            <StatusBadge tone="mock">Mock Boundaries</StatusBadge>
-            <StatusBadge tone="blocked">Keine DB-Writes</StatusBadge>
+            <StatusBadge tone="mock">Dashboard: Mock-Daten</StatusBadge>
+            <StatusBadge tone="candidate">Echt: Auth + Nutrition</StatusBadge>
+            <StatusBadge tone="readonly">Writes nur RLS-begrenzt</StatusBadge>
           </div>
         </Card>
       </section>

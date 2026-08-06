@@ -63,7 +63,7 @@ export function PlaceholderPage({ moduleName }: { moduleName: string }) {
         <Card accent={note.accent} title="Modulgrenze" sub="Foundation Draft">
           <p className="text-[13px] leading-6 text-[var(--fg-muted)]">{note.relation}</p>
           <div className="mt-4 flex flex-wrap gap-2">
-            <StatusBadge tone="readonly">Keine Writes</StatusBadge>
+            <StatusBadge tone="readonly">Platzhalter ohne Funktion</StatusBadge>
             <StatusBadge tone="candidate">Spec-Kontext</StatusBadge>
           </div>
         </Card>

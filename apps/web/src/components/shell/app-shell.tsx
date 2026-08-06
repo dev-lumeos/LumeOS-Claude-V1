@@ -82,7 +82,7 @@ const contextBySection: Record<
       { tone: 'warn', text: 'Planner, Insights und MealCam sind nicht live.' },
       { tone: 'pos', text: 'BLS-only Boundary ist im Modul sichtbar.' },
     ],
-    actions: ['Food Search öffnen', 'BLS Boundary lesen', 'Keine Writes ausführen'],
+    actions: ['Food Search öffnen', 'BLS Boundary lesen', 'Favoriten und Ausschlüsse setzen'],
   },
   training: {
     status: 'Placeholder',

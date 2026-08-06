@@ -150,7 +150,7 @@ export default function NutritionEntryPage() {
       </section>
 
       <section>
-        <SectionHeader kicker="Safety" title="Keine DB-Write-Actions" />
+        <SectionHeader kicker="Safety" title="Diese Diary-Seite schreibt nichts" />
         <EmptyState
           description="Diary, Planner, MealCam und Targets werden nicht als live behauptet. Diese Seite enthält keine Add-Meal-, Save- oder Recalc-Aktion und schreibt keine Foods, Preferences, Diary Logs oder Targets."
           title="Read-only Nutrition Diary Draft"
