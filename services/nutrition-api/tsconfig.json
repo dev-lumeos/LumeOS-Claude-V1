@@ -1,0 +1,26 @@
+{
+  // B-21 (2026-08-06): eigene Konfiguration, weil der Dienst sonst am Gate
+  // vorbeilaeuft. Die Wurzel-tsconfig.json traegt include:
+  // ["packages/*/src/**/*"] — services/ ist dort NICHT enthalten. `tsc` ohne
+  // eigene Konfiguration loeste die Wurzel auf und pruefte fremde Dateien:
+  // [cmd] tsc --showConfig zeigte 0 Treffer auf nutrition-api. build und
+  // typecheck meldeten trotzdem Erfolg — vorgetaeuschter Erfolg.
+  //
+  // noEmit hier bewusst NICHT gesetzt (die Wurzel setzt es): `build` soll
+  // wirklich nach dist/ schreiben, damit die outputs-Angabe in turbo.json
+  // (dist/**) gedeckt ist und der Turbo-Cache greift.
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
