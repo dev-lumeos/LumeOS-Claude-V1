@@ -65,7 +65,9 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
 
 **Was als Nächstes zu tun ist:** `docs/todo/TODO.md`
-**Getroffene Entscheidungen:** `docs/decisions/`
+**Getroffene Entscheidungen:** `docs/spezifikation/90-entscheidungen/`
+(D-06, 2026-08-06: `docs/decisions/` war nie befüllt — `[cmd]` einzige
+getrackte Datei dort ist `.gitkeep`. Der Ort ist aufgelöst.)
 **Sitzungsübergaben:** `docs/sessions/`
 
 ---
