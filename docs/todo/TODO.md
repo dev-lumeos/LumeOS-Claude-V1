@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-06 (dreizehnte Aktualisierung — D-17/D-19 erledigt (Baseline Weg B), B-15/B-16/B-17/D-20 neu, M4 und Reihenfolge nachgezogen)
+**Stand:** 2026-08-06 (vierzehnte Aktualisierung — Blöcke 8/9 geschlossen: B-08/B-15/B-16 und A-02/A-09/C-13 erledigt; B-18/B-19/B-20/A-10 neu, Reihenfolge auf Modulkurs)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -27,25 +27,30 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    Umgebung angewendet wird.
 
 
-## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 8/9)
 
-1. **B-15** — ein stiller Schreiber in archivierte Altlast ist dasselbe
-   Muster, das zum Dispatch-Vorfall führte; Aufwand klein, das Risiko
-   einer unbeaufsichtigten Nebenwirkung real. Deshalb jetzt an der Spitze.
-2. **Doku-Wurzeln: A-02 + A-09 zusammen**, dazu **C-13** — die beiden
-   Wurzeldateien und die ausgelieferte Oberfläche führen aktiv in die
-   Irre (D-07 geht darin auf).
-3. **B-16 + D-20** — zwei kleine Werkzeug-Korrekturen, die künftige
-   Sitzungen entlasten (Hook-Falsch-Positive, Baseline-Voraussetzung).
-4. **A-05** (Löschlauf vollständig freigegeben), dann **D-06**
-   (ADR 002/003 nachziehen, Zielort klären), **A-08**.
-5. **Audits:** C-07-Rest (types), C-08, C-10, D-04, D-05.
-6. **Umgebung:** B-07-Rest (Entscheidung), B-08, B-11, B-17 (niedrig).
-7. **Deployment:** B-13-Rest, E-01–E-03 (Dump als Vorstudie — Achtung:
-   Dump vom 2026-03-05 ist älter als die 2026-08-01-Messungen), dann
-   E-04 ff.
-8. **Modularbeit bewusst hinten:** C-03–C-06. **A-06** läuft parallel bei
-   Tom, kein Blocker. **B-12** wartet konzeptbedingt auf die zweite App.
+1. **B-18 + D-20** — zwei kleine Werkzeug-Handgriffe vor der Modularbeit:
+   das Gate muss verlässlich rot/grün sein, bevor tägliche Modul-Commits
+   darauf bauen (die Fehlklasse trat beim Block-9-Abnahmelauf erneut
+   auf), und der Baseline-Kopf kostet Minuten.
+2. **B-19** — einmaliges Ignore-Audit, klein; Modularbeit erzeugt neue
+   Dateien, und genau neue Dateien verschwinden bei solchen Regeln still
+   aus Commits.
+3. **D-06, dann Modularbeit C-03 → C-04–C-06** — Tom will nach dem
+   Aufräumen zu den Modulen. D-06 (ADR 002/003 nachziehen, Zielort
+   klären) löst die letzte formale C-03-Blockade; die Module rücken
+   damit bewusst von „hinten“ nach vorn.
+4. **Audits, wenn sie den Weg kreuzen:** C-07-Rest (types), C-08, C-10,
+   D-04 (E2E jetzt konkret: Toggle-Flow), D-05.
+5. **Entscheidungspunkte auf Zuruf (Tom):** A-05 (Löschlauf), A-10
+   (Wurzel-Restaltlast), A-08, B-07-Rest.
+6. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
+   klären), B-11, B-17 (niedrig).
+7. **Deployment nach den Modulen:** B-13-Rest, E-01–E-03 (Dump als
+   Vorstudie — Achtung: Dump vom 2026-03-05 ist älter als die
+   2026-08-01-Messungen), dann E-04 ff.
+8. **A-06** läuft parallel bei Tom; **B-12** wartet konzeptbedingt auf
+   die zweite App.
 
 
 ---
@@ -62,15 +67,14 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   6. [x] `40-spec-code-matrix.md` — je Modul Spec/Code/Delta + Bau-Reihenfolge
   7. [x] `50-governance-rest.md` — was physisch bleibt und was Entfernung kostet
 
-- [ ] **A-02: `CLAUDE.md` ausdünnen** — nur Schreibregeln plus Verweis auf
-  `docs/ssot/00-INDEX.md`. Alle Fakten raus. *Grund: der Satz „services/ ist
-  leer" stand als Regel drin und war falsch — und heute lügt die Datei
-  erneut:* `[cmd]` *Z. 24–25 behaupten „Keine Writes, kein Auth", falsch
-  seit C-02/M3.* **Keine Blockierung mehr:** die frühere Wartebedingung
-  (B-10) ist erledigt, das ijfw-Plugin ist deaktiviert und schreibt nicht
-  mehr hinein. D-07 geht hier auf (die Phase-1B-Aussagen leben in CLAUDE.md
-  und der Produkt-Copy; ein „README Phase 1B" existiert nicht).
-  Zusammen mit A-09 angehen — beide Wurzeldateien.
+- [x] **A-02: `CLAUDE.md` ausdünnen** — **erledigt 2026-08-06
+  (Block 9):** `[cmd]` 122 → 60 Zeilen. Enthält bewusst keinen
+  Repo-Zustand mehr — nur Rolle, Verweistabelle auf
+  SSOT/TODO/Spezifikation/READMEs und Schreibregeln (ergänzt um Marker-
+  und Wegwerf-DB-Regel). Der historische Fehlersatz „Keine Writes, kein
+  Auth“ steht nur noch als zitierte Warnung, warum Zustandssätze dort
+  verboten sind. ijfw-Restmarker entfernt (B-10), gstack auf zwei
+  Verhaltensregeln gekürzt. D-07 ist damit für CLAUDE.md abgearbeitet.
 
 - [x] **A-03: Altlast archivieren** — **erledigt (festgestellt im Audit
   2026-08-05):** `[cmd]` `docs/todos/`, `docs/governance/` und
@@ -128,14 +132,24 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `[cmd]` der Bestand liegt in Supabase Storage (15 GB, Bucket `exercises`).
   Kostenfolge, und ein Wechsel würde einen Transfer bedeuten.
 
-- [ ] **A-09: Root-README sanieren** (neu 2026-08-05) — die
-  Gate-Dokumentation (B-14) steht jetzt im Root-README, dessen übriger
-  Inhalt Governance-Altlast ist (Spark-Routing, Brain/Law/Muscle,
-  Verweise auf `system/`). Wer das README öffnet, um das Gate zu
-  aktivieren, liest zuerst über eine Architektur, die es nicht mehr gibt,
-  und weiss danach nicht, was noch gilt. Die Ortswahl war richtig — sie
-  macht die Sanierung dringender, nicht weniger dringend.
-  Einordnung in A: Struktur-/Doku-Pflege wie A-02/A-03.
+- [x] **A-09: Root-README sanieren** — **erledigt 2026-08-06 (Block 9):**
+  `[cmd]` 73 Zeilen, vollständig neu geschrieben: Produktbeschreibung mit
+  ehrlichem Ist (echt vs. Attrappe), Loslegen-Sequenz für den frischen
+  Klon, Strukturübersicht, Verweise auf SSOT/Konventionen. Spark-Tabelle,
+  Brain/Law/Muscle und `system/`-Verweise restlos raus (0 Treffer).
+  Gate-Sektion (B-14) inhaltlich geprüft und erhalten, ergänzt um den
+  Hinweis auf den protect-paths-Hook samt gewolltem `.env`-Lese-Block.
+
+- [ ] **A-10: Restaltlast im Wurzelverzeichnis** (neu 2026-08-06,
+  Entscheidungspunkt Tom) — `[cmd]` `COMMANDS.md`: der Kernbefehl zeigt
+  auf das archivierte `start-all.ps1`, drei Treffer auf gelöschte Hooks;
+  die lebenden Befehle stehen inzwischen im README → Vorschlag: per
+  `git mv` nach `_archive/governance/`. `.codex-governance-ui.log`
+  (53 Zeilen Next-Startup-Log der alten Governance-UI) → gehört in den
+  A-05-Löschlauf und steht dort schon. Bekannte Kandidaten derselben
+  Runde: `AGENTS.md`, `STACK_REFERENCE.md`, `SESSION_ONBOARDING.md`
+  (44 `system/`-Treffer) sowie `project.profile.json` (kein Leser im
+  lebenden Code, Vorschlag aus Block 8: archivieren).
 
 ---
 
@@ -220,8 +234,14 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Entscheidung** (Tom) — abschalten oder bewusst belassen. Es ist eine
   Sicherheitseinstellung der Nutzerkonfiguration: lesen ja, ändern nein.
 
-- [ ] **B-08: SessionEnd-Hook falsch verortet** — steht in `~/.claude/settings.json`
-  mit hartkodiertem Pfad auf dieses Repo. Gehört in die Projekt-Settings oder weg.
+- [x] **B-08: SessionEnd-Hook falsch verortet** — **erledigt 2026-08-06
+  (Block 8):** `[cmd]` der Eintrag mit hartkodiertem Repo-Pfad ist aus
+  `~/.claude/settings.json` entfernt (Sicherung
+  `settings.json.bak-2026-08-06` daneben); beide
+  lean-ctx-PreToolUse-Ketten nachweislich intakt. Der Hook selbst war
+  ein Wrapper für das deaktivierte claude-mem-Plugin und ging mit dem
+  alten Hook-Satz (B-15) — „in die Projekt-Settings“ war damit
+  gegenstandslos, es blieb „weg“.
 
 - [x] **B-09: Encoding-Schäden** — entschärft, erledigt 2026-08-02.
   `[cmd]` `packages/shared/src/supabase/client.ts` ist sauber (Bytes `E2 80 94` =
@@ -230,11 +250,36 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   die Datei liegt jetzt in `supabase/_archive/` und wird nicht mehr
   ausgeführt. Folgenlos.
 
-- [x] **B-10: ijfw-Plugin entscheiden** — **erledigt 2026-08-05 (Tom):**
-  `[cmd]` `enabledPlugins: {"ijfw@ijfw": false}` und MCP-Server umbenannt
-  auf `_disabled_ijfw-memory` in der Nutzer-settings.json. Die
-  A-02-Blockierung ist damit gefallen; der von ijfw verwaltete Block in
-  CLAUDE.md/AGENTS.md wird nicht mehr beschrieben und geht mit A-02 raus.
+- [ ] **B-10: ijfw-Plugin vollständig abschalten** — **2026-08-05 verfrüht
+  auf erledigt gesetzt, am 2026-08-06 zurückgenommen.**
+  Die damalige Abschaltung (`enabledPlugins: {"ijfw@ijfw": false}`,
+  MCP-Server umbenannt auf `_disabled_ijfw-memory` in der
+  Nutzer-`settings.json`) griff an genau einer von vier Stellen — und das
+  war die wirkungsloseste. `[cmd]` Am 2026-08-06 schrieb das Plugin den
+  IJFW-Block in `CLAUDE.md` (+6 Z.) und das ijfw-Frontmatter in
+  `AGENTS.md` (+104 Z.) zurück und überschrieb damit das A-02-Ergebnis.
+  Ursache: **das Plugin bringt seine Verdrahtung selbst mit.**
+  `~/.ijfw/claude/.mcp.json` deklariert `ijfw-memory` eigenständig — das
+  Umbenennen in der Nutzerkonfiguration entfernte nur eine redundante
+  zweite Deklaration. `~/.ijfw/claude/hooks/hooks.json` deklariert sieben
+  Hook-Punkte (SessionStart, Stop, PreCompact, UserPromptSubmit,
+  PreToolUse ×4, PostToolUse). Zusätzlich lief es zweigleisig:
+  `~/.codex/hooks.json` (7 ijfw-Hooks) und
+  `~/.codex/config.toml` `[mcp_servers.ijfw-memory] enabled = true`.
+  `[cmd]` Sechs Node-Prozesse liefen (2× `mcp-server/src/server.js`,
+  4× `dashboard-server.js --daemon`), Port 37894 aktiv, gestartet 09:40 —
+  also nach der Abschaltung.
+  Am 2026-08-06 erledigt: Prozesse beendet, alle vier Ladequellen
+  entschärft (Suffix `-disabled-2026-08-06`, `enabled = false`,
+  Sicherung `config.toml.bak-2026-08-06-ijfw`), `CLAUDE.md`/`AGENTS.md`
+  zurückgesetzt. Gegenprobe `[cmd]`: 0 ijfw-Prozesse, Port frei.
+  **Offen bleibt:** `/plugin uninstall ijfw@ijfw` — der Eintrag steht noch
+  in `installed_plugins.json`, ein Plugin-Update könnte die umbenannten
+  Dateien neu anlegen. Erst danach ist der Punkt zu.
+  **Prüfregel, die hieraus folgt:** Aus einer Konfigurationsdatei folgt
+  nicht die Wirkung. Nach dem Abschalten eines Plugins gehören Prozessliste
+  und offene Ports geprüft, und zwar für **jede** Werkzeugkette getrennt —
+  Claude Code und Codex haben eigene Verdrahtung.
 
 - [ ] **B-11: Worktree-Regel für parallele Agenten** (neu 2026-08-01) —
   `[cmd]` Prozessliste zeigte gleichzeitig einen Codex-Prozess (seit 09:19),
@@ -265,33 +310,70 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `.next/types/**`. Ursprungsbegründung: der /dashboard-Bruch lag vor,
   während test und typecheck grün waren (Worktree-Repro auf 7140829).
 
-- [ ] **B-15: `system/` wird wieder beschrieben — Verursacher abschalten**
-  (neu 2026-08-06) — `[cmd]` 2026-08-05 tauchte `system/state/audit.jsonl`
-  als untracked neu auf; das Verzeichnis ist archivierte
-  Governance-Altlast. `[annahme]` Vermutlich schreibt ein alter Eintrag
-  unter `.codex/hooks` aus der parallelen Codex-Sitzung. Verursacher
-  feststellen und abschalten — dasselbe Muster wie beim ijfw-Plugin (B-10)
-  und beim Dispatch-Vorfall: ein abgeschalteter Stack, der still
-  weiterschreibt.
-- [ ] **B-16: B-04-Hook — Falsch-Positive auf Dokumentationstext
-  eingrenzen** (neu 2026-08-06) — der Hook prüft bei Bash den ganzen
-  Befehlsstring und greift damit auch auf Texte, die geschützte Pfade nur
-  ERWÄHNEN. `[cmd]` Belegt: zweimal in Block 7 (Baseline-Erzeugung,
-  git-mv-Umzug), einmal bei der Statuspflege davor — dort hat der Block
-  den Lauf dazu gebracht, den eigenen Wortlaut abzuschwächen, um
-  vorbeizukommen. Ein Schutz, der Dokumentation über sich selbst bestraft,
-  erzeugt genau diesen Druck. Aufgabe: Falsch-Positiv-Klasse eingrenzen
-  (nur Tokens in Befehlsposition prüfen oder Heredoc-Blöcke ausnehmen).
-  Dazu festgehalten: der Hook blockt auch das LESEN von `.env*` —
-  **gewollt**; ein künftiger Auftrag, der z. B. den Anon-Key braucht,
-  läuft darauf und soll das nicht als Fehler diagnostizieren
-  (Ausweg bisher: Standard-Demo-Key der lokalen CLI).
+- [x] **B-15: `system/` wird wieder beschrieben — Verursacher
+  abgeschaltet** — **erledigt 2026-08-06 (Block 8):** Verursacher BELEGT
+  statt vermutet: `.codex/hooks/post-tool.ps1`, verdrahtet über
+  `.codex/hooks.json` aus der parallelen Codex-Sitzung. `[cmd]` Laborlauf
+  einer Skriptkopie mit isoliertem Root erzeugte einen formatgleichen
+  Eintrag; der hartkodierte `orchestration_mode: claude_code`-Marker im
+  Log hätte in die falsche Richtung gewiesen. Danach der gesamte alte
+  Hook-Satz entfernt (6 Dateien unter `.claude/hooks/` und
+  `.codex/hooks/`, Konfigurationen zuerst bereinigt) und **`system/`
+  ersatzlos entfernt** (Inventar vor Löschung: 1 Datei, 13 Zeilen).
+  Folgepunkt: B-20 — Codex ist seither ohne Pfadschutz.
+- [x] **B-16: B-04-Hook — Falsch-Positive auf Dokumentationstext
+  eingegrenzt** — **erledigt 2026-08-06 (Block 8):** `protect-paths.ps1`
+  prüft bei Bash nur noch Tokens in Befehlsposition je Segment plus
+  Redirections; Heredoc-Körper werden vor der Analyse entfernt. Lücken
+  benannt im Dateikopf (Heredocs an Interpreter, Variablen-Indirektion,
+  endliche Befehlslisten); der gewollte `.env`-Lese-Block samt
+  Demo-Key-Ausweg ist dort dokumentiert. `[cmd]` Toms unabhängige
+  Testbatterie: zehn Fälle, alle korrekt — geblockt `cat .env.local`,
+  verkettetes `sed` auf `.env.local`, `echo >`- und `cp`-Schreiben nach
+  `supabase/migrations/`, `Read .env.local`; durchgelassen `echo` mit
+  `.env` im Text, Heredoc über `migrations/` und `Bash(rm:*)`,
+  `Read package.json`, `pnpm test`, das LESEN aus `migrations/`.
+  **Korrektur der Zählung im Ursprungstext: es war EIN Falsch-Positiv**
+  (Statuspflege-Heredoc); die beiden Block-7-Fälle waren
+  Richtig-Positive (echtes Schreiben und `git mv` nach `migrations/`),
+  denen der Lauf regelkonform per Skriptdatei auswich.
 - [ ] **B-17: Pre-Commit-Gate prüft Working Tree, nicht Index**
   (neu 2026-08-06, niedrig) — bei Scheiben-Commits kann ein Commit grün
   durchlaufen, der für sich allein nicht baut (die Heilung liegt im
   Working Tree). Bewusst so belassen (Index-Checkout je Commit kostet
   Laufzeit und Komplexität), im README dokumentiert — hier als Vermerk,
   damit es als bekannte Eigenschaft geführt wird.
+- [ ] **B-18: Getrennter `distDir` fürs Gate** (neu 2026-08-06) — das
+  Gate ist unzuverlässig, weil es sich `apps/web/.next` mit anderen
+  Werkzeugen teilt. `[cmd]` Zuletzt 2026-08-06: TS6053 auf
+  `.next/types/**` OHNE laufenden Dev-Server (netstat leer), `.next`
+  extern halb abgeräumt; Wiederholung grün. Tom hat bestätigt, dass
+  Codex parallel im selben Repo arbeitet. Die Betriebsregel aus B-14
+  deckt nur „Dev-Server läuft parallel“ und greift hier nicht. Das
+  eigentliche Problem ist nicht die Unterbrechung: ein rotes Gate, das
+  bei Wiederholung grün wird, erzieht dazu, Fehlschläge zu wiederholen
+  statt zu lesen — genau die Gewohnheit, die den /dashboard-Bruch
+  wochenlang verdeckt hat. Aufgabe: eigener `distDir` für Gate-Builds.
+- [ ] **B-19: Ignore-Regeln gegen den Index prüfen** (neu 2026-08-06) —
+  `[cmd]` drei Fälle an einem Tag: `.claude/`, `docs/design-system/`,
+  `.codex/` — jeweils eine Ignore-Regel über einem Verzeichnis mit
+  getrackten Dateien. Für den Bestand wirkungslos, aber jede NEUE Datei
+  wird still blockiert: bei `.claude/` liess das `protect-paths.ps1`
+  aus dem Commit verschwinden, bei `.codex/` brauchte der Commit ein
+  `-f`. Aufgabe: einmal alle Regeln gegen den Index prüfen
+  (`git ls-files -i -c --exclude-standard` je Muster) und die Fälle
+  auflösen, statt sie weiter einzeln zu entdecken.
+- [ ] **B-20: Codex-Pfadschutz wiederherstellen** (neu 2026-08-06) —
+  seit dem Aufräumen (B-15) hat Codex keinen Pfadschutz; vorher einen,
+  der bei jedem Aufruf am Parser scheiterte — Wirkung null, die Absicht
+  bestand. Vorlage aus Block 8: `protect-paths.ps1` in
+  `.codex/hooks.json` einhängen, Matcher `Write|Edit|MultiEdit` und
+  `Bash`. **Zuerst zu klären:** `[annahme]` ob Codex stdin-JSON
+  liefert — die alte Verdrahtung übergab per `param()`; liefert Codex
+  kein stdin-JSON, liest der Hook Leere und ist fail-open, also erneut
+  wirkungslos; dann braucht es einen kleinen Wrapper param→stdin.
+  Dazu die drei Pfade, die der alte Hook abdeckte und protect-paths
+  nicht: `supabase/config.toml`, `db/migrations/`, `.claude/rules/`.
 
 ---
 
@@ -406,14 +488,19 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Zeile fällt in genau einen Index, Überlappung ist konstruktiv ausgeschlossen.
   Bisher stand das nur als Kommentar in `050_preferences_foundation.sql`.
 
-- [ ] **C-13: Tote „Keine Writes"-Copy in ausgelieferter Oberfläche**
-  (neu 2026-08-05, Audit-Fund) — `[cmd]` `dashboard-view.tsx`
-  Z. 15/133/138 („Keine Writes", „führt keine Migrationen aus", Badge
-  „Keine DB-Writes"), `app-shell.tsx` Z. 85 („Keine Writes ausführen"),
-  `placeholder-page.tsx` Z. 66 (Badge „Keine Writes") — **falsch seit
-  C-02/M3**: Schreibpfad und Anmeldung sind produktiv. Das ist
-  ausgelieferte Oberfläche, kein Doku-Problem; C-10 deckt nur die
-  Zahlen-Literale ab.
+- [x] **C-13: Tote „Keine Writes“-Copy in ausgelieferter Oberfläche** —
+  **erledigt 2026-08-06 (Block 9):** die fünf Systemaussagen berichtigt —
+  `dashboard-view.tsx` (Flow-Karte „Klarer Rahmen“, Karte „Was echt ist,
+  was Attrappe“, drei Badges mock/candidate/readonly), `app-shell.tsx`
+  (Context-Aktion → „Favoriten und Ausschlüsse setzen“),
+  `placeholder-page.tsx` (Badge → „Platzhalter ohne Funktion“); der
+  Diary-Header ist als Selbstaussage gefasst („Diese Diary-Seite schreibt
+  nichts“). Nur vorhandene Badge-Töne verwendet. `[cmd]` Suche über
+  Quellcode und Wurzeldateien: 0 verbliebene Systembehauptungen.
+  **Bewusst geblieben:** „This page still performs no writes“
+  (curation/page.tsx) und „never applies migrations“
+  (local-schema/page.tsx) — Selbstaussagen der jeweiligen Seite und
+  `[cmd]` wahr: keine der beiden Seiten enthält eine Schreiboperation.
 
 ---
 
