@@ -1,11 +1,22 @@
 import { NextResponse } from 'next/server'
 
+import { isCurrentUserAdmin } from '../../../../lib/auth/admin-session'
 import { getNutritionCurationData } from '../../../../lib/nutrition/curation'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 export async function GET(request: Request) {
+  // Dieselbe Rollenprüfung wie in der Seite (C.3, 2026-08-06). Ohne sie
+  // wäre die Route der Umweg um die Seite — die Seite verweigert, die
+  // Route liefert. Die Datenbank hielte zwar dicht (RLS aus 061), aber
+  // die Antwort sähe vollständig aus und trüge stillschweigend Nullwerte.
+  if (!(await isCurrentUserAdmin())) {
+    return NextResponse.json(
+      { error: 'FORBIDDEN', message: 'Kuration ist der Verwaltung vorbehalten.' },
+      { status: 403 },
+    )
+  }
   try {
     const url = new URL(request.url)
     return NextResponse.json(await getNutritionCurationData({

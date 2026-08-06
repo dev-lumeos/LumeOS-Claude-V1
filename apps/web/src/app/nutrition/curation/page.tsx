@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Route } from 'next'
 
+import { isCurrentUserAdmin } from '../../../lib/auth/admin-session'
 import { getNutritionCurationData } from '../../../lib/nutrition/curation'
 
 export const dynamic = 'force-dynamic'
@@ -29,6 +30,50 @@ function curationRoute(params: Record<string, string | undefined>): Route {
 }
 
 export default async function NutritionCurationPage({ searchParams }: NutritionCurationPageProps) {
+  // Rollenprüfung VOR dem Datenzugriff (C.3, 2026-08-06).
+  // Ohne sie lief die Seite in einen rohen Datenbankfehler
+  // ("permission denied for table food_curation_candidates"), weil
+  // curation_overview SECURITY INVOKER ist und intern die
+  // Curation-Tabellen liest. Seit 061 filtert RLS statt zu sperren —
+  // ein Nicht-Admin bekäme also stillschweigend Nullwerte, was noch
+  // schlechter wäre als der Fehler: eine Seite, die Vollständigkeit
+  // vortäuscht. Deshalb hier abbiegen, bevor gelesen wird.
+  if (!(await isCurrentUserAdmin())) {
+    return (
+      <main className="min-h-screen bg-slate-950 text-slate-100">
+        <div className="mx-auto max-w-3xl px-6 py-16">
+          <p className="text-sm font-medium text-emerald-300">LumeOS Nutrition Local</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight">Human Layer Curation</h1>
+          <div className="mt-6 rounded-lg border border-slate-700 bg-slate-900/60 p-5">
+            <p className="font-semibold">Diese Seite ist der Verwaltung vorbehalten.</p>
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Kuration entscheidet über den gemeinsamen Lebensmittelbestand, nicht über
+              deine eigenen Daten. Sie steht deshalb nur Konten mit Verwaltungsrolle offen.
+            </p>
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              Wenn du die Rolle gerade erhalten hast: melde dich einmal neu an. Die Rolle
+              steckt im Sitzungstoken und wirkt erst in einer frischen Sitzung.
+            </p>
+          </div>
+          <div className="mt-6 flex gap-2">
+            <Link
+              className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500"
+              href="/nutrition"
+            >
+              Zurück zu Nutrition
+            </Link>
+            <Link
+              className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500"
+              href="/dashboard"
+            >
+              Dashboard
+            </Link>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
   const unassigned = searchParams?.unassigned ?? 'true'
   const category = searchParams?.category ?? ''
   const tag = searchParams?.tag ?? ''
