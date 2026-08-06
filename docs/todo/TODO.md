@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-06 (fünfzehnte Aktualisierung — Block 10 geschlossen: B-18/B-19/D-20/D-06 erledigt, ADR-0002 und ADR-0003 geschrieben, ADR-Ort auf `90-entscheidungen/` festgelegt, C-03 entblockt; B-21 neu, Reihenfolge auf Modularbeit umgestellt)
+**Stand:** 2026-08-06 (sechzehnte Aktualisierung — Block 12 geschlossen: B-21/C-04/B-22/D-04 erledigt. Das Gate erfasst jetzt alle Pakete, die Datenbankrechte sind wiederholbar prüfbar, die E2E-Frage ist entschieden. Tagessumme als Sicht mit `security_invoker` live; offener Redirect in `/auth/callback` gefunden und behoben. Werkzeugarbeit abgeschlossen, Reihenfolge auf die Diary-Oberfläche umgestellt)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -18,6 +18,13 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    (C-01), kein A-06-Blocker mehr.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
+   **Ausgebaut 2026-08-06 (Blöcke 11/12):** Das Diary hat jetzt eine
+   vollständige Datenseite — `nutrition.meals` und `nutrition.meal_items`
+   mit eingefrorenen Nährwerten (C-03, ADR-0003, Kettenschritt 052) und
+   die Tagessumme als Sicht (C-04, Kettenschritt 053), beide live.
+   **Was fehlt, ist ausschliesslich die Oberfläche** — UI und API-Route
+   wurden bewusst zurückgestellt, bis der Aggregationsweg entschieden
+   war. Er ist es.
 4. **M4 — Cloud-Deployment** (→ Sektion E) — Registerlage bereinigt:
    D-17, D-19 und D-20 sind erledigt (Baseline, Register umgetragen,
    Gegenprobe `1|0|1`, README-Kette vollständig, Auth-Stub im
@@ -26,36 +33,48 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    Vorarbeiten E-01 bis E-03**.
 
 
-## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 10)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 12)
 
-**Das Werkzeug-Vorfeld ist geräumt.** B-18, B-19, D-20 und D-06 sind
-erledigt; das Gate ist verlässlich (`[cmd]` 6/6 grün bei laufendem
-Dev-Server), die Ignore-Regeln sind sauber (`[cmd]` 28 → 0), und C-03 hat
-keine formale Blockade mehr. Damit steht die Modularbeit an erster Stelle —
-sie war der Grund für das Aufräumen, nicht umgekehrt.
+**Die Werkzeug- und Prüfarbeit ist abgeschlossen.** Nach Block 12 sind
+B-21, B-22 und D-04 erledigt; damit ist die Reihe abgearbeitet, die mit
+B-18/B-19 begann. Konkret heisst das:
 
-1. **Modularbeit: C-03 → C-04 → C-05/C-06.** C-03 ist entblockt
-   (ADR-0003: EAV anschliessen, flacher Entwurf verworfen). Erst der
-   Diary-Anschluss, dann die Tagessummen (C-04, dort auch die Entscheidung
-   über den Aggregationsweg), dann Water (C-05) und das erste echt
-   gemachte Mock-Modul (C-06, Kandidat Goals — vorher die zwei Bugs aus
+- Das Gate erfasst jetzt **alle** Pakete — `[cmd]` `nutrition-api` wurde
+  vorher gar nicht geprüft und meldete trotzdem Erfolg (B-21).
+- Die Datenbankrechte sind **wiederholbar** prüfbar, mit einem Befehl und
+  Exit-Code (B-22) — die Lücke, durch die der Curation-Bug rutschte.
+- Die E2E-Frage ist **entschieden statt offen** (D-04): kein Gerüst jetzt,
+  Wiedervorlage benannt, und der Weg dorthin hat einen offenen Redirect
+  gefunden und behoben.
+
+**Damit steht die Modularbeit vorn — und diesmal ohne Vorbehalt.**
+
+1. **Modularbeit: C-05 → C-06, dann die Oberfläche zu C-03/C-04.**
+   Die Datenseite des Diary steht (C-03 Tabellen, C-04 Tagessumme, beide
+   live). **Was fehlt, ist die Oberfläche**: UI und API-Route wurden in
+   C-03 und C-04 bewusst nicht gebaut, weil erst der Aggregationsweg
+   feststehen musste. Er steht jetzt. Das ist der nächste sichtbare
+   Schritt — und der Punkt, an dem laut D-04 auch E2E wieder lohnt.
+   Danach Water (C-05) und das erste echt gemachte Mock-Modul (C-06,
+   Kandidat Goals — vorher die zwei Bugs aus
    `docs/specs/Goals/OPEN_ITEMS.md`).
 2. **C-12, sobald der Preset-/Profil-Schreibpfad ansteht** — die
    partiellen Uniques für die fünf übrigen Zieltypen gehören **vor** den
    jeweiligen Schreibpfad, nicht danach (Begründung in ADR-0002).
 3. **Audits, wenn sie den Weg kreuzen:** C-07-Rest (types), C-08
-   (zusammen mit B-21 — beide betreffen `nutrition-api`), C-10,
-   D-04 (E2E jetzt konkret: Toggle-Flow), D-05.
+   (`nutrition-api` einordnen — durch B-21 wird er jetzt geprüft, die
+   Einordnung bleibt offen), C-10, D-05.
 4. **Entscheidungspunkte auf Zuruf (Tom):** A-05 (Löschlauf), A-10
    (Wurzel-Restaltlast), A-08, B-07-Rest, B-10-Rest
    (`/plugin uninstall ijfw@ijfw`).
 5. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
-   klären), B-11, B-17 (niedrig), B-21 (klein, mit C-08).
+   klären; `[cmd]` von Block 12 nicht berührt), B-11, B-17 (niedrig).
 6. **Deployment nach den Modulen:** B-13-Rest, E-01–E-03 (Dump als
    Vorstudie — Achtung: Dump vom 2026-03-05 ist älter als die
    2026-08-01-Messungen), dann E-04 ff.
 7. **A-06** läuft parallel bei Tom; **B-12** wartet konzeptbedingt auf
-   die zweite App.
+   die zweite App; **C-14** (Kuration nach `apps/admin`) wartet auf die
+   Admin-App.
 
 
 ---
@@ -411,7 +430,7 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   Dazu die drei Pfade, die der alte Hook abdeckte und protect-paths
   nicht: `supabase/config.toml`, `db/migrations/`, `.claude/rules/`.
 
-- [ ] **B-21: `nutrition-api#build` erzeugt keine Outputs — turbo warnt bei
+- [x] **B-21: `nutrition-api#build` erzeugt keine Outputs — turbo warnt bei
   jedem Lauf** (neu 2026-08-06, klein, vorbestehend) — `[cmd]` Jeder
   `pnpm gate`-Lauf endet mit
   „`WARNING no output files found for task @lumeos/nutrition-api#build.
@@ -431,8 +450,29 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   und baut der Dienst wirklich), oder — falls der Dienst unverdrahtet
   bleibt (C-08: „Teil des Endausbaus") — `build`/`typecheck` bis dahin
   entfernen, statt Erfolg vorzutäuschen. Entscheidung gehört zu C-08.
+  **Erledigt 2026-08-06 (Block 12), Weg (a) gewählt: prüfen.**
+  Begründung: C-08 führt den Dienst als Teil des Endausbaus, ADR-0001
+  rahmt Services als begründete Ausnahme. Ein Dienst, der bleibt, gehört
+  geprüft; Weg (b) hätte die Prüfung dauerhaft abgeschaltet.
+  **Präzisierung des Befunds:** Die Wurzel-`tsconfig.json` trägt nicht
+  nur `noEmit: true`, sondern auch `include: ["packages/*/src/**/*"]` —
+  `services/` fehlte dort schlicht. Deshalb 0 Treffer.
+  Gebaut: eigene `services/nutrition-api/tsconfig.json` mit `outDir: dist`
+  (ohne `noEmit`, damit `dist/**` wirklich entsteht und die
+  `outputs`-Angabe in `turbo.json` gedeckt ist).
+  **Eigener Befund, gemeldet statt stillschweigend behoben:** Die vier
+  Dateien typechecken **nicht** fehlerfrei — aber nur wegen einer
+  Ursache, `[cmd]` `error TS2580: Cannot find name 'process'`.
+  `@types/node` liegt im Workspace, war aus dem Paket aber nicht
+  auflösbar (pnpm-Isolation). Als devDependency ergänzt — reines
+  Typpaket, ohne Laufzeitwirkung; ohne das kann der Dienst nicht
+  typechecken. Danach **0 Fehler**: der Quellcode selbst war sauber.
+  Abnahme `[cmd]`: `tsc --listFiles` erfasst **4 von 4** Dateien
+  (vorher 0). **Gegenprobe:** absichtlicher Typfehler → Gate **ROT,
+  Exit 2, TS2322**; danach zurückgenommen, Gate wieder Exit 0. Die
+  turbo-Warnung ist weg, weil `dist/**` jetzt entsteht.
 
-- [ ] **B-22: Datenbankrechte wiederholbar prüfen — das Gate kann es
+- [x] **B-22: Datenbankrechte wiederholbar prüfen — das Gate kann es
   nicht** (neu 2026-08-06, aus dem Curation-Bug) — `[cmd]` `pnpm gate`
   prüft Typen, reine Funktionen und den Build; **keiner davon berührt die
   Datenbank.** Der Curation-Bug (`permission denied for table
@@ -453,6 +493,47 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   **Bezug:** D-04 (E2E fehlt — ein Browser-Durchlauf hätte es auch
   gefunden), C-08. Kein Ersatz für D-04, sondern die billigere Hälfte:
   Rechte prüfen kostet Sekunden, ein E2E-Aufbau kostet eine Sitzung.
+  **Erledigt 2026-08-06 (Block 12):**
+  `supabase/_pipeline/_validierung/zugriffsrechte-pruefen.mjs` — ein
+  Befehl, ein Exit-Code. **Bewusst NICHT im `pnpm gate`:** das Gate muss
+  ohne Datenbank laufen (frischer Klon, CI ohne Docker), diese Prüfung
+  braucht zwingend eine laufende Instanz.
+  **Sessions ohne Zugangsdaten im Repo:** das Skript legt sich zwei
+  Wegwerf-Konten per Signup selbst an und entfernt sie am Ende wieder.
+  Der Service-Schlüssel ist nur optional (zum Löschen der Konten).
+  **DER WICHTIGSTE FUND — eine Prüfung darf ihre Sollliste nicht vom
+  Prüfling erzeugen lassen:** Die erste Fassung zog die Objektliste aus
+  der OpenAPI-Beschreibung von PostgREST. `[cmd]` Entzieht man
+  `authenticated` das SELECT auf `food_tags`, **verschwindet die Tabelle
+  aus der Beschreibung** — die Prüfung hätte sie nicht als unlesbar
+  gemeldet, sondern gar nicht mehr gekannt. Ein stiller blinder Fleck
+  genau an der Stelle, für die die Prüfung gebaut ist; dieselbe
+  Fehlerklasse wie „Gate meldet Erfolg, ohne den Dienst anzufassen"
+  (B-21), nur subtiler. Deshalb **062**: die Liste kommt aus dem
+  Systemkatalog über `nutrition.pruef_objektliste()` (SECURITY DEFINER,
+  `search_path=''`, gibt nur Namen und Art zurück, niemals Inhalte).
+  **Zweiter Fund:** Die erste Fassung gab die Aufräum-Befehle nur aus.
+  `[cmd]` Nach zwei Läufen lagen drei Nutzer und eine verwaiste Mahlzeit
+  auf live. Jetzt räumt sie selbst auf; auch der Abbruchpfad räumt auf
+  und liefert **Exit 1** statt falschem Grün.
+  **Zwei Gegenproben belegt** `[cmd]`: `security_invoker` abgeschaltet →
+  **rot**; Grant auf `food_tags` entzogen → **rot**, gefunden über
+  `rpc food_search` — also über den indirekten Weg, den auch der
+  Curation-Bug nahm.
+  **Gegen live:** Exit 0, **14 Objekte** aus dem Katalog (davon 1 Sicht),
+  **18 grün / 3 übersprungen / 0 rot**.
+  **Die drei Übersprungenen, einzeln begründet** — übersprungen heisst
+  hier nicht „ungeprüft":
+  1. `food_curation_candidates` — nur für Admins (C-14); die Tabelle hat
+     **keine `user_id`**, es sind Entscheidungen über den gemeinsamen
+     Bestand. Seit 061: SELECT-Grant vorhanden, Policy
+     `USING (public.is_admin())`. `[cmd]` mit einer echten Zeile
+     nachgemessen: **Nicht-Admin sieht 0, Admin sieht 1.**
+  2. `food_curation_decisions` — dieselbe Policy, derselbe Beleg.
+  3. `rpc curation_overview` — liefert für Nicht-Admins **HTTP 200 mit
+     Zählern 0**. Das ist kein Widerspruch: seit 061 **filtert RLS,
+     statt zu sperren**. Die Seite blendet für Nicht-Admins ab (C.3),
+     damit aus „0 Kandidaten" nicht „alles erledigt" gelesen wird.
 
 ---
 
@@ -531,7 +612,46 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   Der Aggregationsweg für Tagessummen (Sicht, materialisierte Sicht oder
   Summentabelle) ist noch offen und gehört zu C-04.
 
-- [ ] **C-04: WP-03 Daily Summary** — hängt an C-03
+- [x] **C-04: WP-03 Daily Summary** — **erledigt 2026-08-06 (Block 12).**
+  Hier fiel die Entscheidung, die C-03 ausdrücklich offengelassen hatte.
+  **Gewählt: SICHT** (`nutrition.daily_summary`, Kettenschritt 053,
+  live seit 2026-08-06, v053 **11/11 grün**).
+  **Nicht materialisierte Sicht:** die braucht einen Aktualisierungsweg
+  bei **jedem** Schreibvorgang (Insert/Update/Delete auf `meal_items`,
+  Delete auf `meals` mit CASCADE). Wer einen vergisst, bekommt keinen
+  Fehler, sondern einen **stillen Falschstand** — die Summe sieht richtig
+  aus und ist es nicht. PostgreSQL kennt zudem kein inkrementelles
+  REFRESH; jede Aktualisierung rechnete alle Nutzerinnen neu.
+  **Nicht Summentabelle:** zweite Wahrheit neben `meal_items`; bei
+  Abweichung nicht entscheidbar, welche recht hat.
+  **Warum die Sicht trägt:** Die Summe ist deterministisch, weil
+  `meal_items` **eingefrorene** Werte trägt (ADR-0003) — die Sicht
+  summiert nur und rechnet nicht gegen `food_nutrients`. Die neun
+  Schnell-Makros liegen als Spalten vor, also ohne JSONB-Auswertung.
+  **Was die Sicht NICHT kann** (benannt, nicht verschwiegen): keine
+  Wochen- oder Monatsschnitte; keine Zielwerte (die gehören zum Profil);
+  keine Summe über den JSONB-Schnappschuss, nur über die neun Makros;
+  nicht schneller als die Abfrage darunter — bei vielen Positionen je Tag
+  linear langsamer (`[annahme]`, nicht gemessen, es gibt noch keine Daten).
+  **Fehlender Wert bleibt fehlend:** `SUM()` ignoriert NULL und machte
+  die Summe still zu niedrig. Deshalb je Makro **zwei** Angaben — die
+  Summe und `<makro>_missing` (Zahl der Positionen ohne Wert). Hat keine
+  Position einen Wert, ist die Summe **NULL statt 0**: nichts gemessen
+  ist nicht null Gramm.
+  **DER TRAGENDE BELEG — `security_invoker` ist keine Formalie:**
+  `[cmd]` Mit `security_invoker = false` sah der zweite Nutzer
+  **2 Zeilen** des ersten. Mit `true`: **0**. Der Zeilenschutz der
+  darunterliegenden Tabellen greift bei einer Sicht **NICHT automatisch** —
+  ohne diese Option wäre `daily_summary` ein Datenleck über alle Nutzer
+  gewesen. Geprüft, nicht angenommen.
+  Abnahme `[cmd]` gegen live mit zwei echten Sessions: Tagessumme gegen
+  Handrechnung (CHO 309,2250 · FAT 1,8900 · PROT625 16,1700, meal_count 2,
+  item_count 3); `fibt` NULL mit `fibt_missing 3`; B sieht `[]`;
+  BLS-Wert 88,35 → 999,00 änderte die Tagessumme **nicht**; leere
+  Mahlzeit bleibt sichtbar mit Summen NULL.
+  Anwendungspfad: `diary-summary.ts` (rein) und `diary-summary-read.ts`
+  (I/O, Session-Client), 9 Unit-Tests. **UI und API-Route bewusst nicht** —
+  Entscheidung Tom: sie kommen mit der Oberfläche, nicht vorher.
 - [ ] **C-05: WP-04 Water Tracking** — `water_logs` fehlt komplett
 - [ ] **C-06: WP-05 erstes Mock-Modul echt machen** — Kandidat Goals.
   *Vorher die 2 kritischen Bugs aus `docs/specs/Goals/OPEN_ITEMS.md` klären
@@ -550,6 +670,15 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   direkt zu (M1 Teil C), nicht mehr per Docker-SQL.
   *Antwort Tom: Teil des Endausbaus.* Rahmen dafür jetzt in
   ADR-0001-datenzugriff (A-07): Services als begründete Ausnahme.
+  **Stand nach B-21 (2026-08-06) — der Punkt bleibt offen, aber die
+  Ausgangslage hat sich geändert:** Die Wahl aus B-21 lautete „prüfen
+  oder Skripte entfernen"; gewählt wurde **prüfen**, gerade weil C-08 den
+  Dienst als Teil des Endausbaus führt. `[cmd]` Der Dienst typecheckt und
+  baut jetzt wirklich (4 von 4 Dateien, vorher 0). Die Prämisse dieses
+  Punktes hält unverändert: `[cmd]` `git grep` auf `nutrition-api` über
+  `apps/` und `packages/` liefert **0 Importe**. Zu entscheiden bleibt
+  also die Einordnung (verdrahten oder verwerfen), nicht mehr die Frage,
+  ob das Gate ihn erfasst.
 
 - [x] **C-09: Test-Runner einrichten** — **erledigt 2026-08-04.**
   `[cmd]` `apps/web` hat ein `test`-Script (`tsx --test` über die
@@ -599,6 +728,10 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   Admin-Prüfung aus `apps/web` **entfernen** — nicht liegen lassen. Die
   Rollenprüfung selbst (`public.is_admin()`, 061) bleibt und wird dort
   gebraucht.
+  **Von Block 12 NICHT berührt** (nachgesehen, nicht angenommen):
+  `[cmd]` `apps/admin/` ist weiterhin ein leeres Gerüst (1 Datei). 062
+  legt nur `nutrition.pruef_objektliste()` an — eine Objektliste für die
+  Rechteprüfung, ohne Bezug zur Kuration. Der Punkt steht unverändert.
 
 - [x] **C-13: Tote „Keine Writes“-Copy in ausgelieferter Oberfläche** —
   **erledigt 2026-08-06 (Block 9):** die fünf Systemaussagen berichtigt —
@@ -704,13 +837,54 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   D-13: die „DO NOT EXECUTE"-Slices wurden im Studio ausgeführt und von Hand
   kontrolliert. In `supabase/_snippets/` gesichert. Original löschbar.
 
-- [ ] **D-04: E2E- und Testbasis klären** — angepasst 2026-08-04: `[cmd]`
-  `apps/web/e2e/` ist **leer** — die einzige Spec (Governance-Smoke) und
-  `playwright.governance.config.ts` liegen seit 2026-08-03 in
-  `_archive/governance/`; im Repo existiert damit gar keine Playwright-Config
-  mehr, `@playwright/test` steht noch in den Root-devDependencies.
-  Offen (unverändert): E2E für Produktrouten — jetzt konkret auch der
-  Toggle-Flow aus C-02. Der Unit-Runner ist seit C-09 da.
+- [x] **D-04: E2E- und Testbasis klären** — **erledigt 2026-08-06
+  (Block 12): Entscheidung getroffen, kein Gerüst gebaut.**
+  Ergebnis in `docs/ssot/36-testbasis.md` (drei Prüfebenen, was jede
+  leistet und was ausdrücklich **keine** leistet).
+  **Entscheidung: KEIN Playwright-Gerüst jetzt.** `@playwright/test`
+  bleibt in den Root-devDependencies (`[cmd]` installiert, Browser
+  vorhanden, kostet im Betrieb nichts) — aber `36-testbasis.md` hält
+  fest, dass es `[cmd]` **0 Spec-Dateien und keine Konfiguration** gibt,
+  damit niemand aus der blossen Anwesenheit von Playwright auf
+  E2E-Abdeckung schliesst. Genau diese falsche Sicherheit war der Grund,
+  den Punkt überhaupt zu stellen.
+  **Was E2E leisten würde und die anderen Ebenen nicht:** den Weg durch
+  Next.js selbst — Middleware, Cookie-Handhabung, Server Components, die
+  Admin-Prüfung aus C.3, den Anmeldefluss. B-22 spricht direkt mit
+  PostgREST und überspringt das alles. Ein kaputter Redirect nach dem
+  Anmelden wäre kein Rechteproblem und bliebe von B-22 unentdeckt. Die
+  Antwort ist also **nicht dünn** — trotzdem fällt die Entscheidung gegen
+  das Gerüst, und zwar aus diesem Grund:
+  **Die Prüfung der Frage hat sofort einen echten Fehler gefunden, ohne
+  einen einzigen E2E-Test — einen OFFENEN REDIRECT.**
+  `[cmd]` Gegen den laufenden Dev-Server:
+  `GET /auth/callback?redirect=%2F%2Fevil.com` → `Location: http://evil.com/`.
+  Die Prüfung stand **zweimal inline** als `raw.startsWith('/')`
+  (`login/page.tsx:15`, `auth/callback/route.ts:12`), beide Male mit
+  einem Kommentar, der ausdrücklich behauptete, offene Redirects seien
+  ausgeschlossen. `//evil.com` beginnt mit `/`, ist aber
+  protokollrelativ — der Browser liest es als fremden Host. Der Kommentar
+  behauptete, was der Code nicht tat. Ein offener Redirect ist die halbe
+  Miete jedes Phishing-Versuchs: der Link zeigt auf die echte Domain.
+  **Behoben als reine Funktion** `apps/web/src/lib/auth/safe-redirect.ts`
+  (eine Stelle statt zwei) mit 6 Tests. Gegenprobe `[cmd]` am laufenden
+  Server nach der Korrektur: `//evil.com`, `/\evil.com`,
+  `https://evil.com` und `///evil.com` landen alle auf `/dashboard`,
+  `/nutrition/foods` geht unverändert durch.
+  **Daraus die Lehre für die Entscheidung:** Der wertvollste Teil dieser
+  Fehlerklasse ist als reine Funktion billiger, schneller und **im Gate**
+  prüfbar. Ein Playwright-Gerüst hätte denselben Fehler gefunden — aber
+  erst nach Aufbau von Konfiguration, Testnutzerverwaltung, Serverstart
+  und CI-Anbindung, und danach dauerhaft zu pflegen.
+  **Wiedervorlage, benannt statt offengelassen:** sobald der erste
+  Modul-Schreibpfad eine Oberfläche bekommt, die bleiben soll (C-04-UI
+  oder C-06). E2E gegen eine Oberfläche, die mit A-06 und C-14 noch
+  umzieht, wäre Wegwerfarbeit.
+  **Was weiterhin ungeprüft bleibt** (in `36-testbasis.md` benannt):
+  kein Browser läuft; der Anmeldefluss ist nur von Hand belegt; die
+  Middleware-Umleitung ist `[cmd]` einmalig belegt
+  (`/nutrition/foods?q=test` → `/login?redirect=%2Fnutrition%2Ffoods%3Fq%3Dtest`),
+  aber nichts hält sie fest.
 
 - [ ] **D-05: Spec-Audit starten** — `docs/specs/` (13 Module) auseinandernehmen,
   Diskrepanzen suchen, pro Modul offizielle Spec deklarieren. *Eigene Sitzung.*
