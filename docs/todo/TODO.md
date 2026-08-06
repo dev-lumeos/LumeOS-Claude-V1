@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-05 (zwölfte Aktualisierung — Veralterungs-Audit eingepflegt: 8× erledigt, 9× überholt neu gefasst, D-17 verschärft, C-13/D-19 neu, Reihenfolge-Empfehlung)
+**Stand:** 2026-08-06 (dreizehnte Aktualisierung — D-17/D-19 erledigt (Baseline Weg B), B-15/B-16/B-17/D-20 neu, M4 und Reihenfolge nachgezogen)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -18,28 +18,35 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    (C-01), kein A-06-Blocker mehr.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
-4. **M4 — Cloud-Deployment** (→ Sektion E) — B-14 und C-11 erledigt.
-   **Harter Blocker: D-17** (Migrationsregister — Geist-Eintrag, Slices
-   unregistriert, `profiles` ohne Migration; blockiert jeden Cloud-Kontakt
-   inkl. `supabase link`), mitsamt D-19 (README-Kette). Danach B-13-Rest
-   (Produktions-URLs/Redirect-Liste) und die Vorarbeiten E-01 bis E-03.
+4. **M4 — Cloud-Deployment** (→ Sektion E) — Registerlage bereinigt:
+   D-17 und D-19 sind erledigt (Baseline, Register umgetragen, Gegenprobe
+   `1|0|1`, README-Kette vollständig). **Offen als Voraussetzungen:
+   B-13-Rest** (Produktions-`site_url`/Redirect-Liste je App und Umgebung)
+   **und die Vorarbeiten E-01 bis E-03**; dazu der kleine D-20
+   (Baseline-Dateikopf), bevor die Baseline ausserhalb der gewohnten
+   Umgebung angewendet wird.
 
 
-## Bearbeitungsreihenfolge (Empfehlung aus dem Audit 2026-08-05)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06)
 
-1. **D-17 (+ D-19)** — der Register-Drift ist akut: blockiert jeden
-   Cloud-Kontakt und macht `db reset` gefährlich.
-2. **Doku-Wurzeln: A-02 + A-09 zusammen** (beide Wurzeldateien führen aktiv
-   in die Irre; D-07 geht darin auf), dazu **C-13** (tote Produkt-Copy).
-3. **A-05** (Löschlauf ist vollständig freigegeben), dann **D-06**
+1. **B-15** — ein stiller Schreiber in archivierte Altlast ist dasselbe
+   Muster, das zum Dispatch-Vorfall führte; Aufwand klein, das Risiko
+   einer unbeaufsichtigten Nebenwirkung real. Deshalb jetzt an der Spitze.
+2. **Doku-Wurzeln: A-02 + A-09 zusammen**, dazu **C-13** — die beiden
+   Wurzeldateien und die ausgelieferte Oberfläche führen aktiv in die
+   Irre (D-07 geht darin auf).
+3. **B-16 + D-20** — zwei kleine Werkzeug-Korrekturen, die künftige
+   Sitzungen entlasten (Hook-Falsch-Positive, Baseline-Voraussetzung).
+4. **A-05** (Löschlauf vollständig freigegeben), dann **D-06**
    (ADR 002/003 nachziehen, Zielort klären), **A-08**.
-4. **Audits:** C-07-Rest (types), C-08, C-10, D-04, D-05.
-5. **Umgebung:** B-08, B-11, B-07-Rest (Entscheidung).
-6. **Deployment:** B-13-Rest, E-01–E-03 (Dump als Vorstudie — Achtung:
+5. **Audits:** C-07-Rest (types), C-08, C-10, D-04, D-05.
+6. **Umgebung:** B-07-Rest (Entscheidung), B-08, B-11, B-17 (niedrig).
+7. **Deployment:** B-13-Rest, E-01–E-03 (Dump als Vorstudie — Achtung:
    Dump vom 2026-03-05 ist älter als die 2026-08-01-Messungen), dann
    E-04 ff.
-7. **Modularbeit bewusst hinten:** C-03–C-06. **A-06** läuft parallel bei
+8. **Modularbeit bewusst hinten:** C-03–C-06. **A-06** läuft parallel bei
    Tom, kein Blocker. **B-12** wartet konzeptbedingt auf die zweite App.
+
 
 ---
 
@@ -257,6 +264,34 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   und Gate nicht gleichzeitig — geteiltes `.next`, sonst TS6053 auf
   `.next/types/**`. Ursprungsbegründung: der /dashboard-Bruch lag vor,
   während test und typecheck grün waren (Worktree-Repro auf 7140829).
+
+- [ ] **B-15: `system/` wird wieder beschrieben — Verursacher abschalten**
+  (neu 2026-08-06) — `[cmd]` 2026-08-05 tauchte `system/state/audit.jsonl`
+  als untracked neu auf; das Verzeichnis ist archivierte
+  Governance-Altlast. `[annahme]` Vermutlich schreibt ein alter Eintrag
+  unter `.codex/hooks` aus der parallelen Codex-Sitzung. Verursacher
+  feststellen und abschalten — dasselbe Muster wie beim ijfw-Plugin (B-10)
+  und beim Dispatch-Vorfall: ein abgeschalteter Stack, der still
+  weiterschreibt.
+- [ ] **B-16: B-04-Hook — Falsch-Positive auf Dokumentationstext
+  eingrenzen** (neu 2026-08-06) — der Hook prüft bei Bash den ganzen
+  Befehlsstring und greift damit auch auf Texte, die geschützte Pfade nur
+  ERWÄHNEN. `[cmd]` Belegt: zweimal in Block 7 (Baseline-Erzeugung,
+  git-mv-Umzug), einmal bei der Statuspflege davor — dort hat der Block
+  den Lauf dazu gebracht, den eigenen Wortlaut abzuschwächen, um
+  vorbeizukommen. Ein Schutz, der Dokumentation über sich selbst bestraft,
+  erzeugt genau diesen Druck. Aufgabe: Falsch-Positiv-Klasse eingrenzen
+  (nur Tokens in Befehlsposition prüfen oder Heredoc-Blöcke ausnehmen).
+  Dazu festgehalten: der Hook blockt auch das LESEN von `.env*` —
+  **gewollt**; ein künftiger Auftrag, der z. B. den Anon-Key braucht,
+  läuft darauf und soll das nicht als Fehler diagnostizieren
+  (Ausweg bisher: Standard-Demo-Key der lokalen CLI).
+- [ ] **B-17: Pre-Commit-Gate prüft Working Tree, nicht Index**
+  (neu 2026-08-06, niedrig) — bei Scheiben-Commits kann ein Commit grün
+  durchlaufen, der für sich allein nicht baut (die Heilung liegt im
+  Working Tree). Bewusst so belassen (Index-Checkout je Commit kostet
+  Laufzeit und Komplexität), im README dokumentiert — hier als Vermerk,
+  damit es als bekannte Eigenschaft geführt wird.
 
 ---
 
@@ -524,23 +559,21 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Kettenläufe 2026-08-04/05 liefern erneut 49; dokumentiert in
   `supabase/README.md`).
 
-- [ ] **D-17: Migrationsregister — BLOCKER vor jedem Cloud-Kontakt**
-  (verschärft 2026-08-05, `[cmd]` von Tom nachgeprüft) — drei Ebenen
-  laufen auseinander:
-  1. **Register:** genau ein Eintrag, `20260423120000 control_plane_tables`
-     — ein **Geist-Eintrag**: die Datei liegt seit 2b68381 unter
-     `supabase/_archive/`, in `supabase/migrations/` existiert sie nicht,
-     die Tabellen sind gedroppt (D-18).
-  2. **Dateien:** die drei aktiven Slices in `supabase/migrations/` sind **nicht
-     registriert** (count 0).
-  3. **Ist-Zustand:** `public` enthält genau `profiles` — angelegt von
-     `_pipeline/09_identitaet/090`, in keiner Migration.
-  Folgen: `db push` spielte die drei Slices als ausstehend ein und
-  **liesse `profiles` aus — die Anmeldung wäre in der Cloud tot**;
-  `db pull`/`migration repair` treffen auf den Geist-Eintrag; `db reset`
-  baute die Control-Plane wieder auf und `profiles` nicht.
-  **Blockiert jeden Cloud-Kontakt, auch `supabase link`** — nicht nur das
-  Deployment. Eigener Auftrag folgt. Siehe D-19 (README-Kette).
+- [x] **D-17: Migrationsregister** — **erledigt 2026-08-05/06 (Weg B,
+  Baseline).** `[cmd]` `migrations/` enthält als einzige Datei
+  `20260805120000_baseline_structure.sql`; die drei Slices liegen in
+  `supabase/_archive/`; das Register ist umgetragen — Gegenprobe
+  `1|0|1` (baseline_da 1, geist_weg 0, gesamt 1).
+  Strukturgleichheit doppelt belegt: Wegwerf-DB-Diff der Sitzung
+  (0 Abweichungen, 1.984 = 1.984 Zeilen) und Toms unabhängige Nachprüfung
+  `[cmd]`: Baseline in eigener Wegwerf-DB, Namensdiff über Tabellen,
+  Indizes, Policies und Funktionssignaturen = 104 Objekte, 0 Abweichungen;
+  dreizehn Merkmalszahlen identisch (12 Tabellen, 108 Spalten, 35 Indizes,
+  114 Constraints, 38 Funktionen, 19 Policies, 12 RLS, 1 Trigger, anon
+  ohne USAGE, 0/18 Grants, pg_trgm); der 090-Trigger legt beim Insert in
+  auth.users genau ein Profil an. Rollenteilung dokumentiert:
+  migrations/ = deploybare Struktur, _pipeline/ = lokale Wahrheit inkl.
+  Daten (supabase/README.md, vierte Fassung). Folgepunkt: D-20.
 
 - [x] **D-18: Die vier Control-Plane-Tabellen in `public` entfernen** — **erledigt 2026-08-03**
   (neu 2026-08-04) — `workorders`, `governance_artefacts`, `execution_tokens`,
@@ -551,12 +584,19 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   `backup/schema/2026-08-03_public_vor_drop.sql`).
   *Datenbankeingriff — nicht nebenbei ausführen.*
 
-- [ ] **D-19: supabase/README-Kette unvollständig** (neu 2026-08-05,
-  Audit-Fund, `[cmd]` von Tom bestätigt) — die verbindliche
-  Reihenfolge-Tabelle endet bei 060; **070 (Lesefunktionen) und 090
-  (Identität/`profiles`) fehlen**. Wer der dokumentierten Kette folgt,
-  baut eine Datenbank ohne Suche-RPCs und ohne Anmeldung. Hängt an D-17
-  und muss vor jedem Cloud-Kontakt mit erledigt sein.
+- [x] **D-19: supabase/README-Kette unvollständig** — **erledigt
+  2026-08-05:** `[cmd]` README 150 → 201 Zeilen (vierte Fassung); die
+  Reihenfolge-Tabelle ist vollständig inkl. **070 und 090**
+  (090 = `profiles` + Anmelde-Trigger), die Rollenteilung `migrations/`
+  gegen `_pipeline/` steht als eigene Sektion ganz oben.
+
+- [ ] **D-20: Baseline-Voraussetzung `auth.uid()` im Dateikopf nennen**
+  (neu 2026-08-06) — `[cmd]` die Baseline setzt ein vorhandenes
+  `auth.uid()` (und `auth.users`) voraus; gegen blankes Postgres scheitert
+  sie mit „function auth.uid() does not exist". In der Cloud liefert das
+  die Plattform, im Wegwerf-Test der Auth-Stub. Aufgabe: die Voraussetzung
+  in den Dateikopf der Baseline aufnehmen, damit der nächste Wegwerf-Test
+  nicht daran hängenbleibt.
 
 ---
 
