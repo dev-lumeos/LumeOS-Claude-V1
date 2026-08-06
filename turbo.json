@@ -4,7 +4,8 @@
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/shared/src/**"],
-      "outputs": [".next/**", "dist/**"]
+      "env": ["LUMEOS_DIST_DIR"],
+      "outputs": [".next-gate/**", ".next/**", "dist/**"]
     },
     "dev": {
       "cache": false,
@@ -15,7 +16,9 @@
     },
     "lint": {},
     "typecheck": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build", "build"],
+      "env": ["LUMEOS_DIST_DIR"],
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/packages/shared/src/**"]
     }
   }
 }

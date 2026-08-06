@@ -38,11 +38,27 @@ Ein Befehl prüft alles: **`pnpm gate`** = `turbo run typecheck test build`.
   Working Tree und heilen den Bruch bereits. Bewusst so belassen: ein
   Index-Checkout je Commit kostet Laufzeit und Komplexität.
 - **Notausgang:** `git commit --no-verify` — bewusst einsetzen, nicht still.
-- **Betriebsregel:** `next dev` und Gate **nicht gleichzeitig** laufen lassen.
-  Beide teilen sich `apps/web/.next`; `[cmd]` 2026-08-05 erzeugte ein
-  parallel laufender Dev-Server TS6053-Fehler auf `.next/types/**` im
-  Gate-Typecheck.
-- Laufzeit: warm ~1 s (Turbo-Cache), nach Änderungen ~35 s.
+- **Frühere Betriebsregel „`next dev` und Gate nicht gleichzeitig" —
+  entfällt seit B-18 (2026-08-06).** Sie galt, weil beide sich
+  `apps/web/.next` teilten: `[cmd]` 2026-08-05 (zweimal) und erneut
+  2026-08-06 erzeugte ein parallel laufender Dev-Server TS6053-Fehler auf
+  `.next/types/**` im Gate-Typecheck. Der Gate-Build schreibt jetzt nach
+  `apps/web/.next-gate` (`LUMEOS_DIST_DIR`, gesetzt in
+  `apps/web/scripts/gate-build.js`), der Dev-Server bleibt auf `.next`.
+  Beide Verzeichnisse bestehen nebeneinander, keins räumt das andere ab.
+  Dazu gehört zwingend die zweite Hälfte: `typecheck` hängt in `turbo.json`
+  jetzt auch am **eigenen** `build` (`dependsOn: ["^build", "build"]`).
+  Ohne sie blieb das Gate rot — `[cmd]` nach der Verzeichnistrennung allein
+  fielen 3 von 5 Läufen mit TS6053 auf `.next-gate/types/**` aus, weil turbo
+  `typecheck` und `build` desselben Pakets nebenläufig startete und der Build
+  das Verzeichnis abräumte, während `tsc` daraus las.
+  `[cmd]` 2026-08-06 belegt: **6 von 6** `pnpm gate --force`-Läufen grün,
+  **während** `next dev` auf Port 3200 bediente (HTTP 200 vorher wie
+  nachher) — derselbe Befehl, der die Regel vorher verletzte.
+  Wer sie noch irgendwo zitiert findet: sie ist gegenstandslos, nicht
+  gelockert.
+- Laufzeit: warm ~1 s (Turbo-Cache), kalt ~24 s (`[cmd]` 2026-08-06,
+  `pnpm gate --force` bei laufendem Dev-Server).
 - Zusätzlich schützt ein PreToolUse-Hook (`.claude/hooks/protect-paths.ps1`)
   `supabase/migrations/` vor Schreibzugriffen und `.env*` vor Lese- wie
   Schreibzugriffen — Letzteres ist Absicht, kein Fehler (Details im
