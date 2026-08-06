@@ -432,6 +432,28 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   bleibt (C-08: „Teil des Endausbaus") — `build`/`typecheck` bis dahin
   entfernen, statt Erfolg vorzutäuschen. Entscheidung gehört zu C-08.
 
+- [ ] **B-22: Datenbankrechte wiederholbar prüfen — das Gate kann es
+  nicht** (neu 2026-08-06, aus dem Curation-Bug) — `[cmd]` `pnpm gate`
+  prüft Typen, reine Funktionen und den Build; **keiner davon berührt die
+  Datenbank.** Der Curation-Bug (`permission denied for table
+  food_curation_candidates`) war deshalb für das Gate unsichtbar und fiel
+  erst im Browser auf. Der C-11-Nachweis lief über Lebensmittelsuche und
+  Nährstoffansicht — nicht über die Curation-Seite.
+  **Die Prüfart existiert bereits und hat funktioniert** (Block 11 Teil D,
+  2026-08-06): erst erheben, welche Tabellen und Funktionen `apps/web`
+  liest (`git grep` auf `.from('` und `.rpc('`), dann bei den
+  `SECURITY INVOKER`-Funktionen zusätzlich, welche Tabellen sie **intern**
+  lesen — genau dort versteckte sich der Fehler —, dann als echte
+  `authenticated`-Sitzung **wirklich lesen** statt der Grant-Tabelle zu
+  glauben. Ergebnis damals: 13 Tabellen und 5 RPCs geprüft, **genau zwei
+  kaputte Stellen, beide die bekannten**, keine weiteren.
+  Aufgabe: diese Prüfung als Skript ablegen (Kandidat:
+  `supabase/_pipeline/_validierung/`), damit sie nach jedem
+  Zugriffsschicht-Eingriff wiederholbar ist statt einmalig.
+  **Bezug:** D-04 (E2E fehlt — ein Browser-Durchlauf hätte es auch
+  gefunden), C-08. Kein Ersatz für D-04, sondern die billigere Hälfte:
+  Rechte prüfen kostet Sekunden, ein E2E-Aufbau kostet eine Sitzung.
+
 ---
 
 ## C — Produkt: apps/web
@@ -555,6 +577,28 @@ sie war der Grund für das Aufräumen, nicht umgekehrt.
   Zielfeld je Zeile — dadurch sind die partiellen Indizes trennscharf: jede
   Zeile fällt in genau einen Index, Überlappung ist konstruktiv ausgeschlossen.
   Bisher stand das nur als Kommentar in `050_preferences_foundation.sql`.
+
+- [ ] **C-14: Kuration gehört nach `apps/admin` — die Rollenabstufung in
+  `apps/web` ist ein bewusster Zwischenschritt** (neu 2026-08-06, aus C.3)
+  **Diese Ausnahme widerspricht der Spezifikation und muss als Ausnahme
+  sichtbar bleiben, sonst gilt sie irgendwann als Regel.**
+  `[read]` `docs/spezifikation/20-apps/web/00-app-web.md:65–69` sagt
+  ausdrücklich: „`web` kennt genau eine Rolle: die angemeldete Nutzerin,
+  die ihre eigenen Daten sieht. Es gibt hier **keine Rollenabstufung**.
+  Wer Coach ist, arbeitet in `coach`; **wer verwaltet, in `admin`**."
+  Seit C.3 (2026-08-06) gibt es in `apps/web` genau das: eine
+  Admin-Prüfung vor `/nutrition/curation` und der zugehörigen API-Route.
+  **Warum trotzdem so gebaut:** Die Seite lief in einen rohen
+  Datenbankfehler; die Alternativen waren, sie für jede Nutzerin zu öffnen
+  (falsch — `[cmd]` beide Curation-Tabellen haben **keine `user_id`**,
+  es sind systemweite Entscheidungen über den Lebensmittelbestand) oder
+  sie sofort umzuziehen (`[cmd]` `apps/admin/` ist ein leeres Gerüst,
+  1 Datei `.gitkeep` — das wäre ein eigener Block gewesen).
+  `061_rollen_admin.sql` ist die **Brücke, nicht das Ziel**.
+  Aufgabe beim Umzug: Seite und API-Route nach `apps/admin`, danach die
+  Admin-Prüfung aus `apps/web` **entfernen** — nicht liegen lassen. Die
+  Rollenprüfung selbst (`public.is_admin()`, 061) bleibt und wird dort
+  gebraucht.
 
 - [x] **C-13: Tote „Keine Writes“-Copy in ausgelieferter Oberfläche** —
   **erledigt 2026-08-06 (Block 9):** die fünf Systemaussagen berichtigt —
