@@ -82,6 +82,7 @@ Referenz und für Weiterentwicklung):
 | 051 | `05_user_tabellen/051_curation_persistence.sql` | `food_curation_candidates`, `_decisions` |
 | 052 | `05_user_tabellen/052_diary_foundation.sql` | **`nutrition.meals` + `nutrition.meal_items`** (C-03/WP-02, ADR-0003) inkl. eigener Grants, RLS und **je 4 Policies pro Tabelle**, `uq_meals_user_date_type`, Eigentümer-Wachhund auf `meal_items` — v052: 21 Prüfungen. **Noch nicht live** (Stand 2026-08-06, wartet auf Freigabe) |
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, 2 Trigram-Indizes, Grants, RLS/Policies auf allen 11 Tabellen — **live seit 2026-08-02** |
+| 061 | `06_zugriff/061_rollen_admin.sql` | **`public.is_admin()`** (liest nur den JWT-Claim `app_metadata->>role`, Standard `false`) + SELECT-Grant und je 1 SELECT-Policy auf die beiden Curation-Tabellen — **live seit 2026-08-06** (C.3). Keine Schreib-Policies. Rollen werden **nicht** von der Kette vergeben, siehe Dateikopf. v061: 15 Prüfungen |
 | 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen (`search_fold`, `food_search`, `food_categories_tree`, `preference_search_preview` mit 14 Argumenten, `curation_overview`, `schema_debug`) — v070: 18 Prüfungen |
 | 090 | `09_identitaet/090_profile.sql` | **`public.profiles` + Trigger `on_auth_user_created` auf `auth.users`** (die Anmeldung), 4 Policies — v090: 14 Prüfungen |
 
