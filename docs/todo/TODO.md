@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-06 (vierzehnte Aktualisierung — Blöcke 8/9 geschlossen: B-08/B-15/B-16 und A-02/A-09/C-13 erledigt; B-18/B-19/B-20/A-10 neu, Reihenfolge auf Modulkurs)
+**Stand:** 2026-08-06 (fünfzehnte Aktualisierung — Block 10 geschlossen: B-18/B-19/D-20/D-06 erledigt, ADR-0002 und ADR-0003 geschrieben, ADR-Ort auf `90-entscheidungen/` festgelegt, C-03 entblockt; B-21 neu, Reihenfolge auf Modularbeit umgestellt)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -19,37 +19,42 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
 4. **M4 — Cloud-Deployment** (→ Sektion E) — Registerlage bereinigt:
-   D-17 und D-19 sind erledigt (Baseline, Register umgetragen, Gegenprobe
-   `1|0|1`, README-Kette vollständig). **Offen als Voraussetzungen:
-   B-13-Rest** (Produktions-`site_url`/Redirect-Liste je App und Umgebung)
-   **und die Vorarbeiten E-01 bis E-03**; dazu der kleine D-20
-   (Baseline-Dateikopf), bevor die Baseline ausserhalb der gewohnten
-   Umgebung angewendet wird.
+   D-17, D-19 und D-20 sind erledigt (Baseline, Register umgetragen,
+   Gegenprobe `1|0|1`, README-Kette vollständig, Auth-Stub im
+   Baseline-Kopf). **Offen als Voraussetzungen: B-13-Rest**
+   (Produktions-`site_url`/Redirect-Liste je App und Umgebung) **und die
+   Vorarbeiten E-01 bis E-03**.
 
 
-## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 8/9)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 10)
 
-1. **B-18 + D-20** — zwei kleine Werkzeug-Handgriffe vor der Modularbeit:
-   das Gate muss verlässlich rot/grün sein, bevor tägliche Modul-Commits
-   darauf bauen (die Fehlklasse trat beim Block-9-Abnahmelauf erneut
-   auf), und der Baseline-Kopf kostet Minuten.
-2. **B-19** — einmaliges Ignore-Audit, klein; Modularbeit erzeugt neue
-   Dateien, und genau neue Dateien verschwinden bei solchen Regeln still
-   aus Commits.
-3. **D-06, dann Modularbeit C-03 → C-04–C-06** — Tom will nach dem
-   Aufräumen zu den Modulen. D-06 (ADR 002/003 nachziehen, Zielort
-   klären) löst die letzte formale C-03-Blockade; die Module rücken
-   damit bewusst von „hinten“ nach vorn.
-4. **Audits, wenn sie den Weg kreuzen:** C-07-Rest (types), C-08, C-10,
+**Das Werkzeug-Vorfeld ist geräumt.** B-18, B-19, D-20 und D-06 sind
+erledigt; das Gate ist verlässlich (`[cmd]` 6/6 grün bei laufendem
+Dev-Server), die Ignore-Regeln sind sauber (`[cmd]` 28 → 0), und C-03 hat
+keine formale Blockade mehr. Damit steht die Modularbeit an erster Stelle —
+sie war der Grund für das Aufräumen, nicht umgekehrt.
+
+1. **Modularbeit: C-03 → C-04 → C-05/C-06.** C-03 ist entblockt
+   (ADR-0003: EAV anschliessen, flacher Entwurf verworfen). Erst der
+   Diary-Anschluss, dann die Tagessummen (C-04, dort auch die Entscheidung
+   über den Aggregationsweg), dann Water (C-05) und das erste echt
+   gemachte Mock-Modul (C-06, Kandidat Goals — vorher die zwei Bugs aus
+   `docs/specs/Goals/OPEN_ITEMS.md`).
+2. **C-12, sobald der Preset-/Profil-Schreibpfad ansteht** — die
+   partiellen Uniques für die fünf übrigen Zieltypen gehören **vor** den
+   jeweiligen Schreibpfad, nicht danach (Begründung in ADR-0002).
+3. **Audits, wenn sie den Weg kreuzen:** C-07-Rest (types), C-08
+   (zusammen mit B-21 — beide betreffen `nutrition-api`), C-10,
    D-04 (E2E jetzt konkret: Toggle-Flow), D-05.
-5. **Entscheidungspunkte auf Zuruf (Tom):** A-05 (Löschlauf), A-10
-   (Wurzel-Restaltlast), A-08, B-07-Rest.
-6. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
-   klären), B-11, B-17 (niedrig).
-7. **Deployment nach den Modulen:** B-13-Rest, E-01–E-03 (Dump als
+4. **Entscheidungspunkte auf Zuruf (Tom):** A-05 (Löschlauf), A-10
+   (Wurzel-Restaltlast), A-08, B-07-Rest, B-10-Rest
+   (`/plugin uninstall ijfw@ijfw`).
+5. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
+   klären), B-11, B-17 (niedrig), B-21 (klein, mit C-08).
+6. **Deployment nach den Modulen:** B-13-Rest, E-01–E-03 (Dump als
    Vorstudie — Achtung: Dump vom 2026-03-05 ist älter als die
    2026-08-01-Messungen), dann E-04 ff.
-8. **A-06** läuft parallel bei Tom; **B-12** wartet konzeptbedingt auf
+7. **A-06** läuft parallel bei Tom; **B-12** wartet konzeptbedingt auf
    die zweite App.
 
 
@@ -343,26 +348,57 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Working Tree). Bewusst so belassen (Index-Checkout je Commit kostet
   Laufzeit und Komplexität), im README dokumentiert — hier als Vermerk,
   damit es als bekannte Eigenschaft geführt wird.
-- [ ] **B-18: Getrennter `distDir` fürs Gate** (neu 2026-08-06) — das
-  Gate ist unzuverlässig, weil es sich `apps/web/.next` mit anderen
-  Werkzeugen teilt. `[cmd]` Zuletzt 2026-08-06: TS6053 auf
-  `.next/types/**` OHNE laufenden Dev-Server (netstat leer), `.next`
-  extern halb abgeräumt; Wiederholung grün. Tom hat bestätigt, dass
-  Codex parallel im selben Repo arbeitet. Die Betriebsregel aus B-14
-  deckt nur „Dev-Server läuft parallel“ und greift hier nicht. Das
-  eigentliche Problem ist nicht die Unterbrechung: ein rotes Gate, das
-  bei Wiederholung grün wird, erzieht dazu, Fehlschläge zu wiederholen
-  statt zu lesen — genau die Gewohnheit, die den /dashboard-Bruch
-  wochenlang verdeckt hat. Aufgabe: eigener `distDir` für Gate-Builds.
-- [ ] **B-19: Ignore-Regeln gegen den Index prüfen** (neu 2026-08-06) —
-  `[cmd]` drei Fälle an einem Tag: `.claude/`, `docs/design-system/`,
-  `.codex/` — jeweils eine Ignore-Regel über einem Verzeichnis mit
-  getrackten Dateien. Für den Bestand wirkungslos, aber jede NEUE Datei
-  wird still blockiert: bei `.claude/` liess das `protect-paths.ps1`
-  aus dem Commit verschwinden, bei `.codex/` brauchte der Commit ein
-  `-f`. Aufgabe: einmal alle Regeln gegen den Index prüfen
-  (`git ls-files -i -c --exclude-standard` je Muster) und die Fälle
-  auflösen, statt sie weiter einzeln zu entdecken.
+- [x] **B-18: Getrennter `distDir` fürs Gate** — **erledigt 2026-08-06
+  (Block 10, Commit 8de0282). Zwei Ursachen, nicht eine.**
+  Der Auftrag hiess „eigener `distDir`“ — das allein hat es **nicht**
+  behoben. `[cmd]` Nach der Verzeichnistrennung trat TS6053 weiter auf,
+  nur mit `.next-gate`-Pfaden: **3 von 5 Läufen rot.** Zweite Ursache war
+  die Nebenläufigkeit *innerhalb* des Gates: turbo startete `typecheck`
+  und `build` desselben Pakets gleichzeitig, der Build räumte
+  `.next-gate/types` ab, während `tsc` daraus las.
+  Gebaut: (a) `distDir` über `LUMEOS_DIST_DIR`, gesetzt in
+  `apps/web/scripts/gate-build.js` (Node-Wrapper statt `cross-env` — kein
+  neues Paket); Dev-Server bleibt ohne die Variable auf `.next`;
+  tsconfig `include` listet **beide** types-Pfade. (b) `typecheck`
+  hängt in `turbo.json` jetzt auch am **eigenen** `build`
+  (`dependsOn: ["^build", "build"]`).
+  Abnahme `[cmd]`: **6 von 6** `pnpm gate --force` grün, **während**
+  `next dev` auf Port 3200 bediente (HTTP 200 vorher wie nachher) —
+  derselbe Befehl, der vorher reproduzierbar rot wurde. Beide
+  Verzeichnisse bestehen getrennt; `tsc --listFiles` zieht 24 Typdateien
+  aus `.next-gate/types` und 3 aus `.next/types`, die Prüfung ist also
+  mitgewandert, nicht verlorengegangen. Gegenprobe Schutznetz: künstlich
+  falsche Route → TS2769, Exit 2 (die /dashboard-Fehlerklasse wird
+  weiterhin erkannt), Datei per `git checkout` zurückgesetzt.
+  Laufzeit: warm 0,8 s (FULL TURBO, unverändert), kalt 17–24 s.
+  Die Betriebsregel aus B-14 ist damit **gegenstandslos** und im README
+  entsprechend berichtigt (nicht nur gestrichen).
+- [x] **B-19: Ignore-Regeln gegen den Index prüfen** — **erledigt
+  2026-08-06 (Block 10, Commit 0f30263).** `[cmd]`
+  `git ls-files -i -c --exclude-standard` **von 28 auf 0**.
+  Vier Fälle, einzeln bewertet statt pauschal aufgelöst:
+  1. `.codex/` — **war entgegen der Annahme NICHT eingegrenzt**, stand
+     noch pauschal im Wayland-Block; `hooks.json` (lean-ctx-Hooks, echte
+     Projektkonfiguration) darunter getrackt. Pauschalregel raus, statt
+     dessen gezielt `.codex/*.log` und `.codex/settings.local.json`.
+  2. `_archive/.../reports/runs/` (20) und `.../dossiers/` (4) — Regeln
+     entfernt: `[cmd]` 20/20 bzw. 4/4 getrackt, keine untrackte Datei
+     daneben; das Archiv ist seit 2026-08-04 eingefroren, dort entsteht
+     nichts mehr.
+  3. `_archive/.../state/pipeline-metrics.jsonl` (1) — Regel entfernt,
+     gleiche Lage.
+  4. `_archive/governance/onyx-seed/` — **eingegrenzt statt aufgelöst:**
+     `[cmd]` 107 Dateien auf Platte, davon 2 getrackt (der Bericht zur
+     Archivierung). Die übrigen 105 bleiben ignoriert.
+  Der Rest des Blocks bleibt stehen — `[cmd]` jene Pfade sind
+  nachweislich untrackt und weiterhin lokale Laufzeitreste.
+  Gegenprobe `[cmd]`: je aufgelöstem Ort eine neue Datei angelegt — alle
+  vier erschienen im Status, die onyx-seed-Sonde blieb korrekt ignoriert,
+  beide Ausnahme-Dokumente sichtbar; danach alle fünf Sonden entfernt.
+  **Nebenbefund, der Zeit spart:** Ein Verzeichnis-Pauschalmuster
+  (`ordner/`) lässt keine Ausnahme darin zu — git steigt in ein so
+  ausgeschlossenes Verzeichnis gar nicht erst ab. Es braucht Dateimuster
+  (`ordner/*`) je Ebene plus `!`-Ausnahmen.
 - [ ] **B-20: Codex-Pfadschutz wiederherstellen** (neu 2026-08-06) —
   seit dem Aufräumen (B-15) hat Codex keinen Pfadschutz; vorher einen,
   der bei jedem Aufruf am Parser scheiterte — Wirkung null, die Absicht
@@ -374,6 +410,27 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   wirkungslos; dann braucht es einen kleinen Wrapper param→stdin.
   Dazu die drei Pfade, die der alte Hook abdeckte und protect-paths
   nicht: `supabase/config.toml`, `db/migrations/`, `.claude/rules/`.
+
+- [ ] **B-21: `nutrition-api#build` erzeugt keine Outputs — turbo warnt bei
+  jedem Lauf** (neu 2026-08-06, klein, vorbestehend) — `[cmd]` Jeder
+  `pnpm gate`-Lauf endet mit
+  „`WARNING no output files found for task @lumeos/nutrition-api#build.
+  Please check your outputs key in turbo.json`". Ursache `[cmd]` gefunden,
+  nicht vermutet: `services/nutrition-api/` hat **keine eigene
+  `tsconfig.json`**; das Skript `build` ruft schlicht `tsc`, das daraufhin
+  die Wurzel-`tsconfig.json` auflöst — und die trägt `noEmit: true`.
+  Der Build kann also konstruktionsbedingt nichts erzeugen, während
+  `turbo.json` für die build-Task `dist/**` als Output erwartet.
+  **Der ernstere Teil ist nicht die Warnung:** `[cmd]`
+  `tsc --showConfig` listet ausschliesslich Dateien aus `packages/shared`
+  und `packages/types` — **0 Treffer auf `nutrition-api`**. Die vier
+  eigenen Quelldateien des Dienstes werden von seinem eigenen `build` und
+  `typecheck` **gar nicht geprüft**; beide melden Erfolg, ohne den Dienst
+  anzufassen. Das Gate ist an dieser Stelle blind.
+  Optionen: eigene `tsconfig.json` mit `outDir: dist` ergänzen (dann prüft
+  und baut der Dienst wirklich), oder — falls der Dienst unverdrahtet
+  bleibt (C-08: „Teil des Endausbaus") — `build`/`typecheck` bis dahin
+  entfernen, statt Erfolg vorzutäuschen. Entscheidung gehört zu C-08.
 
 ---
 
@@ -434,12 +491,23 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   *Offen bleiben:* Browser-E2E des Toggle-Flows (→ D-04),
   Preset-/Profil-Schreibpfad (Settings, → C-12).
 
-- [ ] **C-03: WP-02 Diary-Verdrahtung** — `db/schema/nutrition.sql` anschliessen
-  oder verwerfen. *Blockiert durch ADR-003 — Grenzfall (Audit 2026-08-05):
-  formal offen (nur ADR-0001 existiert), materiell durch 060/M3 entschieden;
-  es fehlt allein die Nachdokumentation in D-06.*
-  Nebenfund `[read]`: im Entwurf hat `meal_items` RLS ohne Policy —
-  wäre für authenticated gesperrt; bei Übernahme korrigieren.
+- [ ] **C-03: WP-02 Diary-Verdrahtung** — **nicht mehr blockiert**
+  (2026-08-06, Block 10): ADR-0003 ist geschrieben
+  (`docs/spezifikation/90-entscheidungen/ADR-0003-diary-naehrstoffmodell.md`).
+  **Entschieden: EAV anschliessen, `db/schema/nutrition.sql` ist
+  verworfen** — die Datei bleibt als Referenz liegen, ist aber kein
+  Sollwert. Was bleibt, ist Bau, keine Entscheidung: Diary-Tabellen im
+  Schema `nutrition` anlegen, an `food_nutrients` rechnen, die
+  Ergebniswerte je Mahlzeitposition **einfrieren** (sonst ändern sich
+  vergangene Tage rückwirkend, wenn ein BLS-Wert korrigiert wird).
+  Jede neue Tabelle bekommt Zeilenschutz **und** Policies je Operation,
+  dem Muster aus 060 folgend.
+  Nebenfund `[read]`, im ADR festgehalten: der verworfene Entwurf schaltet
+  für `meal_items` RLS ein, vergibt aber keine Policy — für
+  `authenticated` wäre die Tabelle gesperrt gewesen. Beim Neuaufbau nicht
+  wiederholen.
+  Der Aggregationsweg für Tagessummen (Sicht, materialisierte Sicht oder
+  Summentabelle) ist noch offen und gehört zu C-04.
 
 - [ ] **C-04: WP-03 Daily Summary** — hängt an C-03
 - [ ] **C-05: WP-04 Water Tracking** — `water_logs` fehlt komplett
@@ -550,8 +618,13 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Tabellen mit RLS, 15 Policies** — der am 2026-08-01 beschriebene Zustand
   (2 von 11) ist seit 060-Live weg. Beide Fragen entschieden: der offene
   EAV-Zugriff war ein Versehen und ist durch die Datenklassen aus 060
-  behoben; ADR-003 ist seit M3 real (Supabase-Auth produktiv).
-  Doku-Rest (ADR-003 nachschreiben) → D-06.
+  behoben; die Auth-Frage ist seit M3 real (Supabase-Auth produktiv).
+  Doku-Rest erledigt 2026-08-06 über D-06.
+  **Berichtigung 2026-08-06:** Der Satz „ADR-003 ist seit M3 real
+  (Supabase-Auth)" verwechselte die Nummern. `[read]` ADR-003 ist laut
+  Register das **Diary-Nährstoffmodell**; die Auth-/Zugriffsfrage war
+  ADR-004 und ging in ADR-0001 auf. Beides ist jetzt dokumentiert
+  (ADR-0003 bzw. ADR-0001).
 
 - [x] **D-11: Restore-Test** — erledigt 2026-08-01.
   `[cmd]` Restore von `backup/data/2026-08-01_nutrition_full.dump` in eine leere
@@ -605,16 +678,40 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   Specs referenzieren `packages/scoring`, wofür kein Gerüst existiert;
   `apps/marketplace` in Specs, aber ohne Gerüst.
 
-- [ ] **D-06: ADRs konsolidieren** — überarbeitet 2026-08-05: `[cmd]`
-  `docs/decisions/` enthält weiter nur `.gitkeep`, aber der reale ADR-Ort
-  ist inzwischen `docs/spezifikation/90-entscheidungen/` (ADR-0001 liegt
-  dort); das alte Register liegt unter
-  `docs/_archive/ist-zustand/04-adr-liste.md`, Nutrition-ADRs in
-  `docs/specs/Nutrition/04_adrs/` (12 Stück). Zielort klären
-  (decisions/ vs. 90-entscheidungen/), dann nachziehen.
-  **Dieser Punkt trägt die ADR-Reste:** ADR-002 (Preferences-Design, aus
-  C-02.1) und ADR-003 (Supabase-Auth — materiell durch 060/M3 entschieden,
-  Beleg in D-14; es fehlt nur die Nachdokumentation).
+- [x] **D-06: ADRs konsolidieren** — **erledigt 2026-08-06 (Block 10).**
+  **Zielort entschieden: `docs/spezifikation/90-entscheidungen/`.**
+  Begründung aus dem Bestand, nicht aus Geschmack: `[cmd]` der Ort ist in
+  der lebenden Spezifikationsstruktur verankert (`spezifikation/00-INDEX.md`,
+  `10-plattform/architektur/00-systemarchitektur.md` an zwei Stellen,
+  `_vorlagen/modul.md`), während **sämtliche** Verweise auf
+  `docs/decisions/` aus totem Bestand stammen: archivierte
+  Governance-Skills (`.claude/skills/`, `.agents/skills/`),
+  `CLAUDE.md.v1.bak`, `_archive/governance/`, `docs/prompts/`, der
+  Repomix-Abzug, die Obsidian-Spiegelung. `[cmd]` `docs/decisions/` hatte
+  als einzige getrackte Datei `.gitkeep` — der Ordner wurde nie befüllt.
+  Aufgelöst mit `docs/decisions/README.md` (Wegweiser samt
+  Nummern-Zuordnung); der Ordner selbst bleibt vorerst stehen, damit der
+  Verweis auffindbar ist — Entfernung entscheidet Tom (A-05-Nachbarschaft).
+  **Die zwei offenen ADRs sind geschrieben:**
+  - `ADR-0002-preferences-tabellendesign.md` — Set-Design nach SPEC_06
+    (zwei Tabellen) gegen Single-Row. `[cmd]` live belegt: `user_id` als
+    Primärschlüssel in `food_preferences`, CHECK
+    `food_preference_items_exactly_one_target`, je vier Policies pro
+    Operation auf beiden Tabellen.
+  - `ADR-0003-diary-naehrstoffmodell.md` — EAV anschliessen, flachen
+    Entwurf verwerfen. `[cmd]` 698.092 Zeilen in `food_nutrients`;
+    **0 von 5** flachen Makrospalten auf `nutrition.foods`; `meal_items`,
+    `meal_logs`, `diary_days` existieren weder in `nutrition` noch in
+    `public`. Der Entwurf hätte den `meal_items`-Fehler mitgebracht
+    (RLS an, keine Policy → für `authenticated` gesperrt).
+  **Nummern-Drift berichtigt:** Die TODO führte ADR-003 als
+  „Supabase-Auth". `[read]` Laut Register
+  (`docs/_archive/ist-zustand/04-adr-liste.md`, Z. 11) ist ADR-003 das
+  **Diary-Nährstoffmodell** und blockiert WP-02 = C-03 — was zur Rolle als
+  C-03-Blocker passt. Die Auth-/Zugriffsfrage war ADR-004 (Z. 12) und ist
+  mit ADR-0001 und M3 erledigt.
+  Nebenkorrektur: `docs/ssot/00-INDEX.md` zeigte noch auf `docs/decisions/`
+  — auf den realen Ort umgestellt.
 
 - [ ] **D-07: „Phase 1B"-Aussagen aktualisieren** — überarbeitet
   2026-08-05: `[cmd]` ein „README Phase 1B" existiert nirgends; die
@@ -677,13 +774,27 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
   (090 = `profiles` + Anmelde-Trigger), die Rollenteilung `migrations/`
   gegen `_pipeline/` steht als eigene Sektion ganz oben.
 
-- [ ] **D-20: Baseline-Voraussetzung `auth.uid()` im Dateikopf nennen**
-  (neu 2026-08-06) — `[cmd]` die Baseline setzt ein vorhandenes
-  `auth.uid()` (und `auth.users`) voraus; gegen blankes Postgres scheitert
-  sie mit „function auth.uid() does not exist". In der Cloud liefert das
-  die Plattform, im Wegwerf-Test der Auth-Stub. Aufgabe: die Voraussetzung
-  in den Dateikopf der Baseline aufnehmen, damit der nächste Wegwerf-Test
-  nicht daran hängenbleibt.
+- [x] **D-20: Baseline-Voraussetzung im Dateikopf nennen** — **erledigt
+  2026-08-06 (Block 10, Commit 27a7f64): +23/−0 Zeilen, nur der Kopf
+  wuchs.** Der Stub steht jetzt als kopierbares SQL im Dateikopf von
+  `supabase/migrations/20260805120000_baseline_structure.sql`.
+  **Drei Korrekturen am ursprünglichen Wortlaut dieses Punktes**, alle
+  `[cmd]` gegen eine Wegwerf-DB (PostgreSQL 17.6, danach verworfen;
+  laufende Instanz unberührt — 12 Tabellen, Datenbankliste wie vorher):
+  1. Der **erste** Abbruch ist nicht `function auth.uid() does not exist`,
+     sondern `schema "auth" does not exist` bei Z. ~1604
+     (`profiles_id_fkey` → `auth.users(id)`). `auth.uid()` kommt erst
+     danach bei Z. ~1668 (erste RLS-Policy) — der erste Abbruch verdeckte
+     den zweiten.
+  2. `auth.role()` und `raw_user_meta_data` werden von der Baseline
+     **gar nicht** verwendet (`[cmd]` 0 Treffer; der 090-Trigger liest nur
+     `NEW.id`) — im Stub nicht erforderlich.
+  3. **Zusätzlich nötig, ursprünglich nicht genannt:** die Rollen `anon`,
+     `authenticated`, `service_role` für die GRANTs. Sie sind clusterweit,
+     nicht pro Datenbank — deshalb im Supabase-Cluster unsichtbar, gegen
+     blankes Postgres aber fehlend.
+  `[cmd]` Mit vollständigem Stub läuft die Datei fehlerfrei durch
+  (`psql -v ON_ERROR_STOP=1`, Exit 0).
 
 ---
 
