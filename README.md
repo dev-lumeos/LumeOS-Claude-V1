@@ -1,6 +1,28 @@
-# LumeOS — Claude V1
+# LumeOS
 
-Deterministic AI Production Pipeline for LUMEOS.
+Health & Performance Operating System — Produkt-Monorepo.
+Kern ist **Buddy**, ein AI-Companion; die Fachmodule (Nutrition, Training,
+Recovery, …) liefern das Wissen. Aktuell gebaut: `apps/web` mit Anmeldung
+(Supabase Auth), Nutrition-Lesepfaden und dem ersten Schreibpfad
+(Food-Präferenzen), alles durch Zeilenschutz (RLS) in der Datenbank begrenzt.
+Vieles Übrige ist sichtbare Attrappe und sagt das auf der Fläche auch.
+
+## Loslegen
+
+```
+pnpm install
+git config core.hooksPath .githooks     # Prüf-Gate aktivieren (Pflicht, s. u.)
+supabase start                          # lokale Instanz (Docker)
+pnpm dev                                # apps/web auf http://localhost:3200
+```
+
+- Datenbankaufbau (Struktur-Baseline in `supabase/migrations/`, Daten über
+  die lokale Kette in `supabase/_pipeline/`): **`supabase/README.md`** —
+  dort steht die verbindliche Reihenfolge samt Validierungen.
+- `apps/web/.env.local` braucht `NEXT_PUBLIC_SUPABASE_URL` und
+  `NEXT_PUBLIC_SUPABASE_ANON_KEY` (lokal: Werte aus `supabase start`).
+- Anmeldung: E-Mail + Passwort unter `/login`; geschützte Routen leiten
+  unangemeldet dorthin um.
 
 ## Entwicklung: Prüf-Gate (B-14, Stand 2026-08-05)
 
@@ -19,55 +41,33 @@ Ein Befehl prüft alles: **`pnpm gate`** = `turbo run typecheck test build`.
 - **Betriebsregel:** `next dev` und Gate **nicht gleichzeitig** laufen lassen.
   Beide teilen sich `apps/web/.next`; `[cmd]` 2026-08-05 erzeugte ein
   parallel laufender Dev-Server TS6053-Fehler auf `.next/types/**` im
-  Gate-Typecheck. (Alternative wäre ein eigener `distDir` für Gate-Builds —
-  Vorschlag, nicht umgesetzt.)
+  Gate-Typecheck.
 - Laufzeit: warm ~1 s (Turbo-Cache), nach Änderungen ~35 s.
+- Zusätzlich schützt ein PreToolUse-Hook (`.claude/hooks/protect-paths.ps1`)
+  `supabase/migrations/` vor Schreibzugriffen und `.env*` vor Lese- wie
+  Schreibzugriffen — Letzteres ist Absicht, kein Fehler (Details im
+  Dateikopf des Hooks).
 
-## Architecture
-
-**Brain** — Claude Code (planning, specs, workorders)
-**Law** — Deterministic system (scheduler, governance, preflight, reports)
-**Muscle** — DGX Sparks A+B+C+D (parallel WO execution)
-
-## Stack
-
-- pnpm / Turborepo monorepo
-- Next.js (web frontend)
-- Hono APIs (services)
-- Supabase (database)
-- vLLM on DGX Sparks A+B+C+D
-- Claude Code as Brain (Max 200)
-
-## Sparks
-
-| Spark | IP | Model | Role |
-|---|---|---|---|
-| A | 192.168.0.128:8001 | Qwen3.6-35B FP8 | Orchestrator + Review |
-| B | 192.168.0.188:8001 | Qwen3-Coder-Next FP8 | Coding Worker |
-| C | 192.168.0.99:8001 | Gemma-4-26B FP8 | Fast Reviewer Tier 1 |
-| D | 192.168.0.101:8001 | GPT-OSS-120B MXFP4 | Senior Reviewer Tier 2 |
-
-## Structure
+## Struktur
 
 ```
-apps/        # Frontend surfaces
-services/    # Hono API backends
-packages/    # Shared runtime + system core
-db/          # Migrations, schema, seeds
-system/      # Governance system (WO, Scheduler, Agents, Reports, Memory)
-infra/       # vLLM, Supabase, Docker, systemd
-tools/       # Serena, Onyx, scripts
-docs/        # Specs, decisions, architecture, project docs
-.claude/     # Claude Code skills, rules, agents
+apps/web/              # Next.js 14 App (lebend): Auth, Nutrition, Theming
+services/nutrition-api # Hono-Gerüst (unverdrahtet); weitere Ordner: Endausbau
+packages/shared        # Supabase-Clients (verdrahtet)
+packages/types         # Domänentypen (noch unverdrahtet)
+supabase/              # migrations/ (Struktur-Baseline) + _pipeline/ (lokale Kette)
+docs/ssot/             # Ist-Zustand — die einzige verbindliche Beschreibung
+docs/spezifikation/    # Zielbild
+docs/todo/TODO.md      # Nächste Schritte
+_archive/              # Stillgelegte Governance-Ära — nicht reaktivieren
 ```
 
-## Key Docs
+## Wo der Rest steht
 
-- `docs/project/USER_MANUAL.md` — Operator guide for Tom
-- `docs/project/WORKORDER_CREATION_HANDBOOK.md` — WO creation process
-- `STACK_REFERENCE.md` — Hardware, models, agent routing
-- `SESSION_ONBOARDING.md` — Current system state
-- `system/control-plane/` — Governance, preflight, risk categories
-- `system/workorders/schemas/` — WO schema
-- `system/approval/` — Approval queue
-- `system/reports/` — Morning report, failed WO, model quality, dossiers
+- **Ist-Zustand & Regeln:** `docs/ssot/00-INDEX.md` (Rangfolge:
+  Code > ssot > alles andere; Herkunftsmarker `[cmd]`/`[read]`/`[annahme]`)
+- **Konventionen:** `docs/spezifikation/10-plattform/konventionen/`
+- **Arbeitsanweisungen für Claude:** `CLAUDE.md`
+- Wurzeldateien wie `AGENTS.md`, `SESSION_ONBOARDING.md`,
+  `STACK_REFERENCE.md`, `COMMANDS.md` sind Altlast der Governance-Ära —
+  nicht als Sollwert lesen (`docs/ssot/50-governance-rest.md`).
