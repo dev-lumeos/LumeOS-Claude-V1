@@ -3,13 +3,16 @@
 import { NextResponse } from 'next/server'
 import { createSessionClient } from '@lumeos/shared/session'
 
+import { safeRedirect } from '../../../lib/auth/safe-redirect'
+
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
   const code = url.searchParams.get('code')
-  const raw = url.searchParams.get('redirect')
-  const target = raw && raw.startsWith('/') ? raw : '/dashboard'
+  // Vorher: raw.startsWith('/') — das liess `//evil.com` durch und war
+  // damit ein offener Redirect ([cmd] belegt, D-04-Fund 2026-08-06).
+  const target = safeRedirect(url.searchParams.get('redirect'))
 
   if (code) {
     const supabase = createSessionClient()
