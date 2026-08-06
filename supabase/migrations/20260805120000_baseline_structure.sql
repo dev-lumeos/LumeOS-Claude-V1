@@ -1,3 +1,26 @@
+-- LumeOS Struktur-Baseline (D-17, 2026-08-05)
+--
+-- VORAUSSETZUNG: Diese Datei ist NICHT eigenstaendig gegen ein blankes
+-- Postgres anwendbar. Sie setzt die Supabase-Plattformobjekte voraus.
+-- In einem Supabase-Projekt liefert die Plattform sie; gegen eine
+-- Wegwerf-Datenbank braucht es vorher einen Stub.
+--
+-- Ohne Stub bricht sie in dieser Reihenfolge ab:
+--   Z. ~1604  schema "auth" does not exist        (profiles_id_fkey)
+--   Z. ~1668  function auth.uid() does not exist  (RLS-Policies)
+--
+-- Mindest-Stub, vorher einzuspielen:
+--   create schema auth;
+--   create table auth.users (id uuid primary key, email text);
+--   create function auth.uid() returns uuid language sql stable
+--     as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+--   -- Rollen sind clusterweit, im Supabase-Cluster bereits vorhanden:
+--   create role anon;  create role authenticated;  create role service_role;
+--
+-- Nicht noetig: auth.role() und raw_user_meta_data werden von dieser
+-- Datei nicht verwendet (der 090-Trigger liest nur NEW.id).
+--
+
 --
 -- PostgreSQL database dump
 --
