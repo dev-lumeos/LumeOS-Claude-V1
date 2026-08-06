@@ -1,5 +1,10 @@
 node_modules/
 .next/
+# B-18 (2026-08-06): eigenes Build-Verzeichnis des Gates, getrennt vom
+# Dev-Server (.next). Pauschalregel hier geprueft und unbedenklich:
+# `git ls-files | grep -E '(^|/)\.next(-gate)?/'` liefert nichts, es ist
+# also keine Datei darunter getrackt (B-19-Lehre).
+.next-gate/
 dist/
 .turbo/
 *.local
@@ -34,12 +39,20 @@ _archive/governance/system/state/pipeline-audit.jsonl
 _archive/governance/system/state/pipeline-audit-live.jsonl
 _archive/governance/system/approval/approvals.json
 _archive/governance/system/approval/queue.json
-_archive/governance/system/state/pipeline-metrics.jsonl
 _archive/governance/system/reports/codex-worker/
 _archive/governance/system/reports/model-runtime-history/
 _archive/governance/system/reports/batches/
-_archive/governance/system/reports/runs/
-_archive/governance/system/reports/dossiers/
+# B-19 (2026-08-06): drei Regeln hier entfernt —
+#   _archive/governance/system/state/pipeline-metrics.jsonl (1 Datei),
+#   _archive/governance/system/reports/runs/            (20 Dateien),
+#   _archive/governance/system/reports/dossiers/         (4 Dateien).
+# Alle darunter liegenden Dateien sind getrackt und keine einzige
+# untrackte daneben ([cmd] find vs. git ls-files, 20/20 und 4/4). Die
+# Regeln stammen aus der Zeit, als der Cluster lief und dort schrieb; seit
+# der Archivierung (2026-08-04, letzter Commit auf diese Pfade) entsteht
+# dort nichts mehr. Wirkungslos fuer den Bestand, blockierten sie nur noch
+# neue Dateien still. Der Rest des Blocks bleibt: jene Pfade sind [cmd]
+# nachweislich untrackt und weiterhin lokale Laufzeitreste.
 supabase/snippets/
 
 # Nutrition raw source data stays local only.
@@ -74,14 +87,26 @@ tools/onyx/install.original.ps1
 # 2026-08-04: Seed nach _archive/governance/onyx-seed/ verschoben, alte Regel
 # bleibt für das dort verbliebene Zip
 tools/onyx/seed/
-_archive/governance/onyx-seed/
+# B-19 (2026-08-06): eingegrenzt statt pauschal. [cmd] 107 Dateien auf
+# Platte, davon 2 getrackt (CURRENT_TRUTH_CLEANUP_REPORT.md und
+# lumeos-governance-current-truth/README.md — der Bericht zur Archivierung,
+# bewusst im Repo). Die uebrigen 105 sind lokal generierter Seed und
+# bleiben ignoriert. Die Ausnahmen stehen explizit, damit Aenderungen an
+# den beiden Dateien im Status auftauchen statt still geschluckt zu werden.
+# Kein Verzeichnis-Pauschalmuster (`onyx-seed/`): git steigt in ein so
+# ausgeschlossenes Verzeichnis gar nicht erst ab, dann greift keine
+# Ausnahme darin. Deshalb Dateimuster (`/*`) je Ebene plus Ausnahmen.
+_archive/governance/onyx-seed/*
+!_archive/governance/onyx-seed/CURRENT_TRUTH_CLEANUP_REPORT.md
+!_archive/governance/onyx-seed/lumeos-governance-current-truth/
+_archive/governance/onyx-seed/lumeos-governance-current-truth/*
+!_archive/governance/onyx-seed/lumeos-governance-current-truth/README.md
 
 # Temp inventory (lokale Inventur-Skripte und Outputs)
 _tmp_inventory/
 
 # --- Wayland (managed): skill symlinks & knowledge, safe to keep ---
 .codebuddy/
-.codex/
 .cursor/
 .factory/
 .gemini/
@@ -105,6 +130,15 @@ _tmp_inventory/
 .claude/settings.local.json.bak-*
 .claude/hooks/*.log
 
+# --- Codex-Konfiguration (B-19, 2026-08-06) ---
+# .codex/ stand bis 2026-08-06 pauschal im Wayland-Block. Wirkungslos fuer
+# den Bestand: .codex/hooks.json war laengst getrackt (lean-ctx-Hooks,
+# echte Projektkonfiguration) — der Commit brauchte deshalb ein -f. Die
+# Regel blockierte ausschliesslich NEUE Dateien. Wie bei .claude/ jetzt
+# gezielt nur das lokale Rauschen ignorieren, nicht das Verzeichnis.
+.codex/*.log
+.codex/settings.local.json
+
 # --- ijfw runtime state (Session-Counter, Scan-Tmp, Logs, memory.db) ---
 .ijfw/
 
@@ -115,14 +149,15 @@ _tmp_inventory/
 # Bewusst NICHT docs/design-system/ pauschal: dort liegen getrackte Dateien
 # (DESIGN_CONCEPT.md, README.md, components/, tokens/). Eine Pauschalregel
 # waere fuer die wirkungslos und wuerde nur jede neue Datei still schlucken.
-docs/design-system/Eclipse/
-docs/design-system/Levitate*/
-docs/design-system/Nocra/
-docs/design-system/hyper/
-docs/design-system/orion/
-docs/design-system/sandow/
-docs/design-system/.ijfw/
-docs/design-system/ijfw/
 
 # --- macOS-Rueckstaende aus den Designvorlagen ---
 .DS_Store
+
+# --- Designvorlagen: alles unter docs/design-system/ ist lokales
+# Referenzmaterial (~5 GB Binaerdateien), AUSSER der getrackten Doku.
+# Ausnahmemuster statt Einzelregeln, damit neue Ordner nicht nachgetragen
+# werden muessen. Reihenfolge ist wichtig: erst alles raus, dann zurueck.
+docs/design-system/*
+!docs/design-system/*.md
+!docs/design-system/components/
+!docs/design-system/tokens/
