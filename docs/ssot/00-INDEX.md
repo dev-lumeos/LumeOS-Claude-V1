@@ -61,6 +61,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `11-zielarchitektur.md` | Wie soll es am Ende aussehen? Welche Apps, welche Services? |
 | `20-apps-web-ist.md` | Was kann `apps/web` heute wirklich? |
 | `30-datenbank.md` | Welches Schema ist live? Welche Entwürfe liegen daneben? |
+| `35-naehrwert-bezugsgroesse.md` | Worauf beziehen sich die Nährwerte, und wie rechnet man auf eine Menge um? (Grundlage jeder Diary-Rechnung) |
 | `40-spec-code-matrix.md` | Je Modul: Spec vorhanden? Code vorhanden? Delta? |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
 
