@@ -80,6 +80,7 @@ Referenz und für Weiterentwicklung):
 | Slices | `_archive/20260513_001`, `_002`, `20260514_001` | Schema `nutrition`, `nutrient_defs`, `foods`, `food_nutrients` (seit 2026-08-05 archiviert — durch die Baseline ersetzt) |
 | 050 | `05_user_tabellen/050_preferences_foundation.sql` | `food_preferences`, `food_preference_items` inkl. RLS + `uq_food_pref_items_user_food` |
 | 051 | `05_user_tabellen/051_curation_persistence.sql` | `food_curation_candidates`, `_decisions` |
+| 052 | `05_user_tabellen/052_diary_foundation.sql` | **`nutrition.meals` + `nutrition.meal_items`** (C-03/WP-02, ADR-0003) inkl. eigener Grants, RLS und **je 4 Policies pro Tabelle**, `uq_meals_user_date_type`, Eigentümer-Wachhund auf `meal_items` — v052: 21 Prüfungen. **Noch nicht live** (Stand 2026-08-06, wartet auf Freigabe) |
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, 2 Trigram-Indizes, Grants, RLS/Policies auf allen 11 Tabellen — **live seit 2026-08-02** |
 | 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen (`search_fold`, `food_search`, `food_categories_tree`, `preference_search_preview` mit 14 Argumenten, `curation_overview`, `schema_debug`) — v070: 18 Prüfungen |
 | 090 | `09_identitaet/090_profile.sql` | **`public.profiles` + Trigger `on_auth_user_created` auf `auth.users`** (die Anmeldung), 4 Policies — v090: 14 Prüfungen |
@@ -127,6 +128,16 @@ für `authenticated`; DML auf die 2 Preference-Tabellen; ALL für
 offene Frage). Validierung: `_pipeline/_validierung/v060_zugriff.sql`
 (Soll/Ist, 22 Prüfungen). `config.toml`: `[api].schemas` enthält
 `nutrition` (aktiv).
+
+**Warum `052` seine Grants selbst mitbringt** (2026-08-06): `060` ist
+live und beschreibt die 11 Tabellen des Altbestands. Neue Tabellen dort
+nachzutragen hiesse, eine bereits angewendete Datei zu ändern — und die
+Default-Privileges aus `060` Abschnitt 3e vergeben bewusst nur `SELECT`
+an `authenticated`, nicht DML. Eine neue Nutzerdaten-Tabelle bekäme also
+ohne eigenen Grant Policies, die ins Leere greifen (PostgREST prüft
+Tabellenrechte **vor** RLS). Deshalb trägt `052` Grants, RLS und Policies
+für seine beiden Tabellen selbst — nach demselben Muster wie `060`
+Abschnitt 4c. Wer künftig Nutzerdaten-Tabellen ergänzt, macht es genauso.
 
 ---
 
