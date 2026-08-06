@@ -58,3 +58,26 @@ das gehört ins Governance-Repo, nicht hierher.
   verwenden, **nicht** die `mcp__claude-in-chrome__*`-Tools.
 - gstack-Skills, die auto-committen oder auto-pushen (`/ship`,
   `/land-and-deploy`), brauchen explizite Tom-Freigabe gemäss Schreibregeln.
+
+## Befehle schreiben
+
+Claude Code kann Befehle mit Schleifen, Befehlssubstitution oder
+Variablenexpansion nicht statisch prüfen und fragt dann nach — unabhängig
+von der Permission-Liste. Das kostet Tom bei jedem Zwischenschritt einen
+Klick, ohne dass er entscheiden könnte, was er da freigibt.
+
+Deshalb:
+
+- **Kein `cd`-Präfix.** Die Sitzung läuft im Repo-Wurzelverzeichnis.
+- **Keine Schleifen** (`for`, `while`) in Bash-Aufrufen.
+- **Keine Befehlssubstitution** (`$(...)`, Backticks).
+- **Keine Variablenexpansion** (`${PIPESTATUS[0]}`, `${x:-y}`, `$out`).
+- **Keine Heredocs** für mehrzeilige Inhalte.
+
+Stattdessen: mehrere einfache Befehle nacheinander, oder — wenn wirklich
+Logik nötig ist — ein Skript als Datei anlegen und die Datei aufrufen.
+Der Aufruf ist dann eine gerade Zeile und geht ohne Nachfrage durch.
+
+Exit-Codes werden einzeln abgefragt, nicht über `PIPESTATUS` aus einer
+Pipeline gezogen. Wiederholungsläufe werden als einzelne Aufrufe geschrieben,
+nicht als Schleife.
