@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-07 (neunzehnte Aktualisierung — Block 16 geschlossen: E-01/E-02/E-03 erledigt, E-11 neu, E-04 abgewertet. Legacy-Instanz erstmals mit lesendem Zugang vermessen (`docs/ssot/60-legacy-cloud.md`): 132 von 166 Tabellen leer, die 27/27/9/9/28 toten Medienverweise waren ein Messfehler (%28/%29 undekodiert), es bleibt genau einer. Trainingsdaten als JSON im Repo. Die E-Serie schrumpft von zehn auf sieben offene Punkte)
+**Stand:** 2026-08-07 (zwanzigste Aktualisierung — Blöcke 17/18 geschlossen: E-05 und E-06 erledigt, E-12 (Trainings-Schema live) und E-13 (`body_region`) neu, C-08 geprüft und weiter liegend. Das Trainings-Schema ist live: 109 Muskelgruppen, 58 Geräte, 1.416 Übungen, 6.625 Zuordnungen, 0 Waisen, 3.640 relative Medienpfade — Schema und Seed, bewusst ohne UI und API. Der Massstab, der die Dublettensuche beendet hat, war nicht eine weitere Regel, sondern die Frage „zeigen sie auf identische Medien?": 32 echte Dubletten zusammengeführt, 46 Scheindubletten stehengelassen. Kette und live sind prüfsummengleich)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -43,13 +43,19 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    Tabellen der Legacy-Instanz sind leer.** Was dort zu übernehmen ist,
    ist kleiner als gedacht — und liegt seit Block 16 als Export im Repo
    (`backup/legacy-v2/training/`).
+   **Seit 2026-08-07 (Blöcke 17/18) ist der Trainings-Teil übernommen**
+   (E-05, E-06, E-12): Die Daten liegen nicht mehr nur als Export vor,
+   sondern in einem eigens entworfenen `training.`-Schema **live** —
+   bereinigt, mit relativen Medienpfaden und eigener Validierung.
+   Damit sinkt der Übernahmedruck auf die Legacy-Instanz weiter.
 
 
-## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-07, nach Block 16)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-07, nach Block 18)
 
 **Werkzeugarbeit abgeschlossen (Block 12), Vorfeld geräumt (Block 13),
 Nutrition-Datenseite vollständig (Block 14), Repo aufgeräumt (Block 15),
-Legacy-Instanz vermessen und Trainingsdaten im Repo (Block 16).**
+Legacy-Instanz vermessen und Trainingsdaten im Repo (Block 16),
+Trainings-Schema live (Blöcke 17/18).**
 
 - Das Gate erfasst **alle** Pakete (B-21), die Datenbankrechte sind
   wiederholbar prüfbar (B-22), die E2E-Frage ist entschieden (D-04).
@@ -59,13 +65,15 @@ Legacy-Instanz vermessen und Trainingsdaten im Repo (Block 16).**
 - **Die E-Serie ist von zehn offenen Punkten auf sieben geschrumpft**
   (E-01/E-02/E-03 erledigt), und E-04 hat seine Dringlichkeit verloren.
   `[cmd]` 132 von 166 Legacy-Tabellen sind leer.
-- **Training hat Referenzdaten im Repo**: `backup/legacy-v2/training/`
-  (1.448 Übungen, 6.398 Zuordnungen, 157 Muskelgruppen, 61 Geräte).
-  Damit ist Training das erste Modul, dessen Stammdaten bereitliegen,
-  **bevor** es gebaut wird.
+- **Training hat seine Stammdaten nicht mehr nur im Repo, sondern live**
+  (E-12): 109 Muskelgruppen, 58 Geräte, 1.416 Übungen, 6.625 Zuordnungen,
+  bereinigt und validiert. Damit ist Training das erste Modul, dessen
+  Datenseite steht, **bevor** die Oberfläche gebaut wird.
+  **Was fehlt, ist bei Training dasselbe wie bei Nutrition: UI und
+  API-Route.**
 
 **Es steht weiterhin nichts zwischen den Nutrition-Oberflächen und dem
-Bau — und Training ist als nächstes Modul jetzt vorbereitet.**
+Bau — und Training hat jetzt dieselbe Ausgangslage.**
 
 1. **Die Nutrition-Oberflächen — der nächste sichtbare Schritt.**
    Datenseite vollständig und live. **Was fehlt, ist ausschliesslich
@@ -79,18 +87,20 @@ Bau — und Training ist als nächstes Modul jetzt vorbereitet.**
    `nutrition_targets`**, und daran hängt das Wasser-Tagesziel aus C-05:
    ohne diese Tabelle kann die Hydrationsanzeige keine Zielerreichung
    zeigen (`hydrationPercent()` liefert bewusst `null`).
-3. **Training, sobald es an der Reihe ist:** E-05 (Mapping gegen ein neu
-   entworfenes `training.`-Schema) — die Daten liegen, der Befund für den
-   Entwurf steht im Punkt. **Die Arrays sind die Quelle, nicht die
-   Zuordnungstabelle** (`[cmd]` 398 Zuordnungen gingen sonst verloren).
-4. **Vor jeder Medienentscheidung: E-06, dann ADR-0004.** `[cmd]` Alle
-   Pfade sind absolut; solange das gilt, ist ein Ortswechsel eine
-   Migration über 1.448 Zeilen statt einer Konfigurationszeile. Dazu
-   E-11 (67 % der Storage-Objekte sind verwaist) — sonst rechnet man
-   15 GB, wo 5 GB gemeint sind.
-5. **Audits, wenn sie den Weg kreuzen:** C-08 bleibt liegen (Kostenliste
-   steht im Punkt, Wiedervorlage mit C-06), D-05 (Spec-Audit, eigener
-   Block).
+3. **Training: Datenseite erledigt (E-05, E-06, E-12), offen ist die
+   Oberfläche.** Das Schema ist live und validiert; der nächste Schritt
+   ist derselbe wie bei Nutrition — UI und API-Route. Offen bleibt nur
+   die Nachpflege von `body_region` (E-13), die aber nichts blockiert,
+   solange keine Oberfläche danach filtert.
+4. **ADR-0004 (Medienort) ist jetzt entscheidbar** — die Voraussetzung
+   E-06 ist erfüllt, ein Ortswechsel ist **eine Konfigurationszeile**
+   statt einer Migration über 1.448 Zeilen. Vorher noch E-11 klären
+   (67 % der Storage-Objekte sind verwaist) — sonst rechnet man 15 GB,
+   wo 5 GB gemeint sind.
+5. **Audits, wenn sie den Weg kreuzen:** C-08 bleibt liegen — `[cmd]`
+   2026-08-07 geprüft: die Wiedervorlagebedingung ist **nicht** erfüllt,
+   weil Training bewusst ohne Anwendungspfad gebaut wurde. Dazu D-05
+   (Spec-Audit).
 6. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
    klären), B-11, B-17 (niedrig).
 7. **Deployment:** B-13-Rest als einzige verbleibende M4-Voraussetzung,
@@ -724,6 +734,12 @@ Bau — und Training ist als nächstes Modul jetzt vorbereitet.**
      `ADR_WATER_TOTAL_HYDRATION` (Final): es kommt aus
      `nutrition_targets`, geliefert von Goals. `[cmd]` Diese Tabelle
      existiert nicht → gehört zu C-06. Benannt statt mitgebaut.
+     **Präzisiert 2026-08-07 (D-05, Block 18):** `[cmd]` Die Tabelle heisst
+     `nutrition.nutrition_targets` und ist in **Nutrition** SPEC_06 §14
+     spezifiziert, nicht in den Goals-Specs (dort **0 Treffer**). Goals
+     *befüllt* sie nur. **Damit hängt C-05 nicht am Goals-Schema, sondern
+     an einer einzelnen Nutrition-Tabelle** — ein deutlich kleinerer
+     Schritt als „warten auf C-06".
      `hydrationPercent()` nimmt das Ziel als Parameter und liefert ohne
      Ziel **null**, nicht 0 % — 0 % wäre die Behauptung „nichts
      geschafft".
@@ -805,6 +821,30 @@ Bau — und Training ist als nächstes Modul jetzt vorbereitet.**
   **Entscheidung 2026-08-06 (Tom, Block 14): bleibt liegen.**
   Damit die Frage beim nächsten Mal nicht bei null anfängt, hier der
   vollständige Befund und die Kostenliste.
+
+  **Wiedervorlage geprüft 2026-08-07 (Block 18) — Bedingung NICHT
+  erfüllt, der Punkt bleibt liegen.** Die Wiedervorlage war an „mit C-06
+  (Goals)" geknüpft; mit Training existiert jetzt ein zweites Modul, also
+  war zu prüfen, ob die Bedingung sinngemäss schon zutrifft.
+  `[cmd]` Sie trifft **nicht** zu, und zwar aus einem konkreten Grund:
+  **Training hat gar keinen Anwendungspfad.** E-12 hat bewusst nur Schema
+  und Seed gebaut — `[cmd]` in `apps/web/src` gibt es zu Training nur
+  Shell-Navigation und CSS-Klassen, keinen Datenzugriff.
+  Ein Dienst lässt sich nicht daran einordnen, wie ein Modul zugreift, das
+  noch gar nicht zugreift.
+
+  **Nebenbefund, der die Frage später vergrössert** `[cmd]` 2026-08-07:
+  `services/` enthält **13 Verzeichnisse**, darunter `training-api`,
+  `goals-api` und elf weitere. **Nur `nutrition-api` ist ein Dienst** —
+  8 `.ts`-Dateien, eine `package.json`. Die anderen **12 sind leere
+  Gerüste**: je ein `src/.gitkeep`, sonst nichts.
+  *Aus der Existenz eines Verzeichnisses folgt kein Dienst.* Die
+  Einordnungsfrage betrifft also nicht einen Dienst, sondern ein Muster —
+  und die Antwort auf `nutrition-api` legt fest, was mit zwölf weiteren
+  Platzhaltern geschieht. Das erhöht den Wert der Entscheidung, ändert
+  aber nichts an ihrer Wartebedingung.
+  **Nächste echte Wiedervorlage: wenn C-06 (Goals) einen Anwendungspfad
+  bekommt** — oder wenn Training über UI/API zugreifen soll.
 
   **Was drinsteht** `[cmd]` 2026-08-06: 122 Zeilen in 4 Dateien,
   **8 TODO-Marker**, jede Route liefert eine leere Antwort
@@ -1113,15 +1153,39 @@ Bau — und Training ist als nächstes Modul jetzt vorbereitet.**
   (`/nutrition/foods?q=test` → `/login?redirect=%2Fnutrition%2Ffoods%3Fq%3Dtest`),
   aber nichts hält sie fest.
 
-- [ ] **D-05: Spec-Audit starten** — `docs/specs/` (13 Module) auseinandernehmen,
-  Diskrepanzen suchen, pro Modul offizielle Spec deklarieren. *Eigene Sitzung.*
-  Vorbefunde in `docs/ssot/40-spec-code-matrix.md` und `11-zielarchitektur.md`:
-  tote `CONSOLIDATED_KNOWLEDGE`-Verweise in 7 INDEX-Dateien; Buddy-INDEX zeigt
-  auf nicht existente `spec/`-Pfade; Modulzählung 10 vs. 11 vs. 7 vs. 13
-  unversöhnt; Next.js 14+ vs. 15; Goals/Admin-Specs deklarieren Vorgänger-Code
-  als „implementiert"; `apps/mobile`/`apps/staff` und 4 Service-Gerüste ohne Spec;
-  Specs referenzieren `packages/scoring`, wofür kein Gerüst existiert;
-  `apps/marketplace` in Specs, aber ohne Gerüst.
+- [~] **D-05: Spec-Audit** — **zwei Durchgänge geleistet, Überführung offen.**
+  1. **Struktur** (2026-08-02): `docs/ssot/70-spec-audit/00-INDEX.md` — je
+     Modul eine Akte, modulübergreifende Widersprüche verifiziert.
+  2. **Feldabgleich** (2026-08-07, Block 18):
+     `docs/ssot/70-spec-audit/01-feldabgleich.md` — die im ersten Durchgang
+     ausdrücklich ausgelassene Folgearbeit.
+     `[cmd]` **4 Module vollständig** (Training, Nutrition, Goals,
+     WebPlatform), **9 nur eingestuft**. Grenze benannt statt überschritten:
+     `[cmd]` 161 Dateien, 48.633 Zeilen passen nicht in einen Durchgang.
+
+  **Der härteste Fund ist ein Muster, kein Modulproblem** `[cmd]`: **14
+  `FOR ALL`-Policies in vier Modulen** (Buddy 8, Marketplace 3, HumanCoach 2,
+  Nutrition-SQL 1) mit `USING`, aber **ohne `WITH CHECK`** — beim INSERT wird
+  `USING` nicht ausgewertet, die Policy erlaubt also das Einfügen fremder
+  `user_id`. Dazu `::text`-Casts auf UUID-Spalten. **Das steht dort als
+  Hausstil**: wer ein weiteres Modul „nach Spec" baut, baut das Leck erneut
+  ein. *Regel in die Konventionen, bevor irgendetwas überführt wird.*
+
+  **Zwei Korrekturen an bisherigen Annahmen** `[cmd]`:
+  - Training/SPEC_06 trägt **keine** `FOR ALL`-Policies — seine 16 Policies
+    sind operationsgetrennt. Das Leck liegt in den vier Modulen oben.
+  - `nutrition_targets` steht **nicht** in den Goals-Specs (dort 0 Treffer),
+    sondern in **Nutrition** SPEC_06 §14, „gecacht von Goals". **C-05 wartet
+    damit auf eine Nutrition-Tabelle, nicht auf das Goals-Schema** — der
+    kleinere Schritt. Siehe auch C-05.
+
+  **Empfehlung (Toms Entscheidung):** Ordner **nicht** löschen und **nicht**
+  als Ganzes überführen, sondern modulweise ausschlachten — Reihenfolge
+  Goals → `nutrition_targets` → Trainingsbetrieb (12 Tabellen, nur dort) →
+  Medical. Je Modul erst archivieren, wenn sein Inhalt in
+  `docs/spezifikation/` steht. Kopfhinweis „Altbestand, kein Sollwert" in
+  `docs/specs/`, sonst werden die Bestandszahlen wieder als Ist gelesen.
+  **In Block 18 wurde nichts verschoben, gelöscht oder überführt.**
 
 - [x] **D-06: ADRs konsolidieren** — **erledigt 2026-08-06 (Block 10).**
   **Zielort entschieden: `docs/spezifikation/90-entscheidungen/`.**
@@ -1416,7 +1480,14 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   an einer Instanz, die ohnehin umgebaut wird, und gehört hinter E-05
   (Mapping) und E-08 (Deployment) eingereiht, nicht davor.
 
-- [ ] **E-05: Übernahmekandidaten exportieren und mappen** — sicher:
+- [x] **E-05: Übernahmekandidaten exportieren und mappen** — **erledigt:
+  Export 2026-08-07 (Block 16), Mapping und Einspielung 2026-08-07
+  (Blöcke 17/18) → siehe E-12.** Der Befund unten ist die Grundlage, auf
+  der das neue Schema entworfen wurde; er bleibt vollständig stehen, weil
+  er die Entwurfsentscheidungen trägt. `[cmd]` Die dort genannten
+  Qualitätsmängel sind in E-12 abgearbeitet — mit einer Ausnahme:
+  `body_region` ist als **E-13** weiterhin offen.
+  Ursprünglicher Auftrag — sicher:
   `exercises`, `exercise_muscles`, `equipment`, Muskelgruppen-Katalog.
   Als JSON-Dump (wenige MB), dann Mapping gegen
   `docs/specs/Training/SPEC_02_ENTITIES.md` und `SPEC_06_DATABASE_SCHEMA.md`,
@@ -1457,23 +1528,37 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
     **1.444** — ausformulierte Anleitungen, bei Neuerzeugung der teuerste
     Posten.
 
-- [ ] **E-06: Medienpfade relativ speichern** — Zielstruktur hält Bucket +
-  relativen Objektpfad, nicht die absolute URL. Basis-URL kommt aus der
-  Konfiguration. *Sonst steckt die Projekt-Ref in jeder Zeile.*
-  **`[cmd]` 2026-08-07: Der Befürchtungssatz ist gemessene Tatsache.**
-  **Alle** Medienwerte sind vollständige URLs — 1.274 Videos und 1.370
-  Bilder absolut, **null** relativ. Muster:
-  `https://<ref>.supabase.co/storage/v1/object/public/exercises/videos/<Kategorie>/<datei>.mp4`
-  Die Projekt-Referenz steht damit in jeder einzelnen Zeile.
-  **REIHENFOLGE: E-06 gehört VOR ADR-0004 (Medienort), nicht danach.**
-  Das ist der Kern und der Grund, diesen Punkt vorzuziehen: Solange die
-  Pfade absolut sind, ist jeder Ortswechsel eine Migration über 1.448
-  Zeilen × bis zu 5 Spalten — in einer Instanz, für die bezahlt wird, ohne
-  Rückweg ohne Kenntnis der alten URLs. Nach E-06 ist derselbe Wechsel
-  **eine Konfigurationszeile**.
-  Das gilt unabhängig davon, wie ADR-0004 ausfällt — deshalb ist E-06
-  keine Folge dieser Entscheidung, sondern ihre Voraussetzung.
-  Vermerkt auch in `docs/spezifikation/90-entscheidungen/ADR-0004-medienort.md`.
+- [x] **E-06: Medienpfade relativ speichern** — **erledigt 2026-08-07
+  (Block 17).** Zielstruktur hält Bucket + relativen Objektpfad, nicht die
+  absolute URL; die Basis-URL steht an genau einer Stelle
+  (`backup/legacy-v2/training/media-konfiguration.json`).
+  `[cmd]` **3.753 Medienwerte** zerlegt, **dekodiert** gespeichert,
+  **0 Ziel-Abweichungen**, und alle gegen `media/exercises/` gefunden.
+  Live trägt `training.exercises.media_paths` (JSONB) `[cmd]` **3.640**
+  Pfade, davon **0 mit `http`** und **0 absolut**.
+
+  **Die Erkenntnis, die den Punkt getragen hat: Byte-Gleichheit war der
+  falsche Massstab.** Die Rundprobe meldete zunächst 153 Abweichungen.
+  Ursache war nicht die Zerlegung, sondern die **uneinheitliche Kodierung
+  der Quelle**: dieselbe Datei steht dort mal mit rohem Leerzeichen, mal
+  mit `%20`, Klammern mal roh, mal `%28`/`%29`. Wer auf Byte-Gleichheit
+  prüft, misst die Kodierung und nicht das Ziel. Nach Umstellung auf
+  **„zeigen alt und neu auf dieselbe Datei?"**: 0 Abweichungen.
+  *Nicht das Ergebnis wurde passend gemacht, sondern der Massstab
+  korrigiert.* Dieselbe Verwechslung hatte schon in E-02 die 27/27/9/9/28
+  „toten" Verweise erzeugt.
+
+  **Nebenfund — E-02 ist damit ohne Datenverlust abgeschlossen:** Der eine
+  in der Cloud tote Verweis `[cmd]` **liegt lokal vor**. Die lokale Kopie
+  unter `media/` ist also **vollständiger als der Bucket**; es fehlt
+  nichts, was übernommen werden müsste.
+
+  Der ursprüngliche Grund bleibt zur Nachvollziehbarkeit stehen: Solange
+  die Pfade absolut waren, war jeder Ortswechsel eine Migration über 1.448
+  Zeilen × bis zu 5 Spalten ohne Rückweg. Jetzt ist er **eine
+  Konfigurationszeile**. E-06 war deshalb Voraussetzung von ADR-0004, nicht
+  dessen Folge. Vermerkt in
+  `docs/spezifikation/90-entscheidungen/ADR-0004-medienort.md`.
 
 - [ ] **E-07: Lücke weibliche Darstellungen entscheiden** — 186 von 1.448
   Übungen (13 %). Bewusster Verzicht oder Produktionsauftrag über 1.262 Übungen?
@@ -1521,6 +1606,70 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   nicht dasselbe wie ein überflüssiges: es könnte die bessere Aufnahme
   derselben Übung sein. Erst zuordnen, dann entscheiden.
   Details: `docs/ssot/60-legacy-cloud.md` Abschnitte 3 und 5.
+
+- [x] **E-12: Trainings-Schema gebaut und live** — **erledigt 2026-08-07
+  (Blöcke 17/18).** Kettenschritte `100_training_schema.sql`,
+  `101_training_seed.sql`, `102_plural_merge.sql`, Validierung
+  `_validierung/v100_training.sql`. Vier Tabellen: `muscle_groups`,
+  `equipment`, `exercises`, `exercise_muscles`.
+  **Schema + Seed, bewusst ohne UI und ohne API-Route** — der
+  Anwendungspfad ist nicht Teil dieses Punktes.
+
+  **Das alte Schema war ausdrücklich nicht der Sollwert.** Sieben
+  Abweichungen sind im Dateikopf von 100 einzeln begründet; die wichtigste:
+  die fünf URL-Spalten sind durch **ein** `media_paths` (JSONB) ersetzt
+  (E-06), und die Arrays sind die Quelle, nicht die alte
+  Zuordnungstabelle.
+
+  **Bestand und Herkunft jeder Zahl** `[cmd]` gegen live:
+
+  | | Cloud | live | Grund |
+  |---|---|---|---|
+  | `muscle_groups` | 157 | **109** | 45 Schreib-Dubletten, 2 Platzhalter, 3 Plural-Paare |
+  | `equipment` | 61 | **58** | 3 Schreib-Dubletten |
+  | `exercises` | 1.448 | **1.416** | 32 Schreib-Dubletten |
+  | `exercise_muscles` | 6.398 | **6.625** | Arrays statt Zuordnungstabelle |
+
+  **1.416 ist kein Datenverlust** — die 1.448 war nie richtig, nur oft
+  gezählt. Ebenso steigen die Zuordnungen trotz zusammengefallener Zeilen,
+  weil die Arrays die Quelle sind. Beides ist im Kopf von 101 dokumentiert,
+  damit es später nicht als Verlust gelesen wird. `[cmd]` 0 Waisen, 3.640
+  relative Medienpfade, Schreibrechte nur für Admins, `anon` ohne Zugang.
+
+  **Der eigentliche Ertrag ist der Massstab, nicht die Bereinigung.** Die
+  Dublettensuche wurde nicht durch eine weitere Regel beendet, sondern
+  durch die Frage **„zeigen sie auf identische Medien?"**. Sie hat
+  `[cmd]` **32 echte Dubletten** zusammengeführt (byte-identische
+  Medienpfade) und **46 Scheindubletten stehengelassen** — darunter
+  `"Ankle plantar flexion"` / `"Ankle - Plantar Flexion"` und sechs
+  eigenständige `Crunch (…)`-Varianten. Eine Namensregel hätte sie
+  verschmolzen und echte Übungen zerstört.
+  Umgekehrt hätte die Klammerregel aus `muscle_groups` in `exercises`
+  **56 echte Namen** zerstört (`"Chest dip (on dip station)"`) — dort sind
+  `[cmd]` alle 58 Klammern **gepaart**. Deshalb zwei verschiedene
+  Vergleichsschlüssel, je mit Begründung im Dateikopf.
+
+  **Singular/Plural ist bewusst KEINE Regel**, sondern eine handverlesene
+  Ausnahme (Tom, Block 18) über drei Paare. `[cmd]` Eine Regel
+  „End-s entfernen" würde `"Single Arm"`/`"Single Arms"` und
+  `"Both Arm"`/`"Both Arms"` verschmelzen — verschiedene Medienpfade, also
+  verschiedene Übungen. `v100` prüft die Ausnahme nach, damit sie beim
+  nächsten Seed-Lauf nicht stillschweigend zurückkommt.
+  `[cmd]` Kette und live sind prüfsummengleich (`muscle_groups` und
+  `exercise_muscles`), können also nicht auseinanderlaufen.
+
+- [ ] **E-13: `body_region` nachpflegen** (neu 2026-08-07, aus Block 18) —
+  `[cmd]` **45 von 109** Muskelgruppen tragen keine `body_region`, und die
+  Lücke folgt **nicht** der Seltenheit: `Semimembranosus` und
+  `Semitendinosus` haben je **381** Nutzungen ohne Region, 5 der 23
+  meistgenutzten Gruppen ebenfalls. `[cmd]` **1.468 von 6.625** Zuordnungen
+  (22 %) zeigen auf Gruppen ohne Region.
+  *Das ist fehlende Quelldatenpflege, keine Absicht* — sonst wären nicht
+  ausgerechnet die beiden meistgenutzten Hamstring-Muskeln betroffen.
+  Relevant, sobald eine Oberfläche nach Körperregion filtern soll; bis
+  dahin ohne Wirkung. `v100` führt die Zahl als Kennzahl mit, damit eine
+  Nachpflege sichtbar wird. **Keine Regionen raten** — sie gehören aus
+  einer anatomischen Quelle, nicht aus dem Namen abgeleitet.
 
 ---
 
