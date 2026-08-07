@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-06 (siebzehnte Aktualisierung — Block 13 geschlossen: C-12/C-10/D-07 erledigt, dazu B-07 und B-10 durch Toms Entscheidungen. Duplikatschutz vollständig (6 statt 1 UNIQUE, Kettenschritt 054 live); falsche UI-Zahlen berichtigt; „Phase 1B"-Reste entfernt, darunter eine SSOT-Aussage, die Schreibfreiheit verneinte. Vor der Diary-Oberfläche steht nichts mehr)
+**Stand:** 2026-08-06 (achtzehnte Aktualisierung — Block 14 geschlossen: C-05 und C-07 erledigt, C-08 mit Kostenliste bewusst liegengelassen. Water Tracking und Gesamt-Hydration live (055/056); `packages/types` entfernt, weil es Spalten deklarierte, die es nicht gibt, und das von ADR-0003 verworfene Modell zurückgeholt hätte. Die Datenseite der Nutrition-Module ist damit vollständig — es fehlen nur noch die Oberflächen)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -18,12 +18,13 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    (C-01), kein A-06-Blocker mehr.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
-   **Ausgebaut 2026-08-06 (Blöcke 11–13):** Das Diary hat jetzt eine
-   vollständige Datenseite — `nutrition.meals` und `nutrition.meal_items`
-   mit eingefrorenen Nährwerten (C-03, ADR-0003, Kettenschritt 052), die
-   Tagessumme als Sicht (C-04, Kettenschritt 053) und der vollständige
-   Duplikatschutz auf den Präferenzen (C-12, Kettenschritt 054) — alle
-   live, alle mit eigener Validierung.
+   **Ausgebaut 2026-08-06 (Blöcke 11–14):** Die Nutrition-Module haben
+   jetzt eine vollständige Datenseite — `nutrition.meals` und
+   `nutrition.meal_items` mit eingefrorenen Nährwerten (C-03, ADR-0003,
+   Kettenschritt 052), die Tagessumme als Sicht (C-04, 053), der
+   vollständige Duplikatschutz auf den Präferenzen (C-12, 054) sowie
+   `water_logs` und die Gesamt-Hydration (C-05, 055/056) — alle live,
+   alle mit eigener Validierung.
    **Was fehlt, ist ausschliesslich die Oberfläche** — UI und API-Route
    wurden bewusst zurückgestellt, bis der Aggregationsweg entschieden
    war. Er ist es.
@@ -35,11 +36,10 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    Vorarbeiten E-01 bis E-03**.
 
 
-## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 13)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 14)
 
-**Werkzeugarbeit abgeschlossen (Block 12), Vorfeld der Modularbeit
-geräumt (Block 13).** Was die Datenseite des Diary betrifft, ist alles
-erledigt, was der Oberfläche vorausgehen musste:
+**Werkzeugarbeit abgeschlossen (Block 12), Vorfeld geräumt (Block 13),
+Datenseite der Nutrition-Module vollständig (Block 14).**
 
 - Das Gate erfasst **alle** Pakete (B-21), die Datenbankrechte sind
   wiederholbar prüfbar (B-22), die E2E-Frage ist entschieden (D-04).
@@ -48,21 +48,30 @@ erledigt, was der Oberfläche vorausgehen musste:
 - Die Oberfläche behauptet keine falschen Zahlen mehr (C-10), und die
   „Phase 1B"-Reste sind weg (D-07) — darunter eine SSOT-Aussage, die
   Schreibfreiheit verneinte, während zwei Schreibpfade live sind.
+- **Water Tracking hat seine Datenseite** (C-05, 055/056 live), und
+  `packages/types` ist entfernt (C-07) — es deklarierte Spalten, die es
+  nicht gibt, und hätte das von ADR-0003 verworfene Modell zurückgeholt.
 
-**Es steht nichts mehr zwischen der Diary-Oberfläche und dem Bau.**
+**Es steht nichts mehr zwischen der Oberfläche und dem Bau — und es sind
+jetzt zwei Oberflächen, die auf derselben Entscheidung warten.**
 
-1. **Die Diary-Oberfläche — der nächste sichtbare Schritt.**
-   Datenseite vollständig: Tabellen (C-03, 052), Tagessumme (C-04, 053),
-   Duplikatschutz (C-12, 054), alle live. **Was fehlt, ist ausschliesslich
-   UI und API-Route** — bewusst zurückgestellt, bis der Aggregationsweg
-   entschieden war. Er ist es. Laut D-04 ist das auch der Punkt, an dem
-   ein E2E-Aufbau wieder lohnt: die erste Oberfläche, die bleiben soll.
-2. **Danach Modularbeit:** Water (C-05), dann das erste echt gemachte
-   Mock-Modul (C-06, Kandidat Goals — vorher die zwei Bugs aus
-   `docs/specs/Goals/OPEN_ITEMS.md`).
-3. **Audits, wenn sie den Weg kreuzen:** C-07-Rest (types), C-08
-   (`nutrition-api` einordnen — durch B-21 wird er jetzt geprüft, die
-   Einordnung bleibt offen), D-05.
+1. **Die Nutrition-Oberflächen — der nächste sichtbare Schritt.**
+   Datenseite vollständig und live: Diary-Tabellen (C-03, 052),
+   Tagessumme (C-04, 053), Duplikatschutz (C-12, 054), Water und
+   Gesamt-Hydration (C-05, 055/056). **Was fehlt, ist ausschliesslich
+   UI und API-Route** — dreimal bewusst zurückgestellt, bis der
+   Aggregationsweg entschieden war. Er ist es. Laut D-04 ist das auch der
+   Punkt, an dem ein E2E-Aufbau wieder lohnt: die erste Oberfläche, die
+   bleiben soll.
+2. **Danach Modularbeit:** C-06, das erste echt gemachte Mock-Modul
+   (Kandidat Goals — vorher die zwei Bugs aus
+   `docs/specs/Goals/OPEN_ITEMS.md`). **Goals trägt zusätzlich
+   `nutrition_targets`**, und daran hängt das Wasser-Tagesziel aus C-05:
+   ohne diese Tabelle kann die Hydrationsanzeige keine Zielerreichung
+   zeigen (`hydrationPercent()` liefert bewusst `null`).
+3. **Audits, wenn sie den Weg kreuzen:** C-07-Rest entfällt (Paket
+   entfernt), C-08 bleibt liegen — die Kostenliste steht jetzt im Punkt,
+   damit die Frage nicht wieder bei null anfängt. Offen: D-05.
 4. **Entscheidungspunkte auf Zuruf (Tom):** A-05 (Löschlauf), A-10
    (Wurzel-Restaltlast — trägt auch `AGENTS.md`, das in D-07 bewusst
    unberührt blieb), A-08.
@@ -672,16 +681,94 @@ erledigt, was der Oberfläche vorausgehen musste:
   Anwendungspfad: `diary-summary.ts` (rein) und `diary-summary-read.ts`
   (I/O, Session-Client), 9 Unit-Tests. **UI und API-Route bewusst nicht** —
   Entscheidung Tom: sie kommen mit der Oberfläche, nicht vorher.
-- [ ] **C-05: WP-04 Water Tracking** — `water_logs` fehlt komplett
+- [x] **C-05: WP-04 Water Tracking** — **Datenseite erledigt 2026-08-06
+  (Block 14).** Kettenschritte `055_water_logs.sql` (Tabelle) und
+  `056_hydration_summary.sql` (Sicht), beide live, **v055 17/17 grün**.
+  Oberfläche und API-Route bewusst nicht — sie kommen gebündelt mit der
+  Diary-Oberfläche, wenn die Designrichtung steht.
+  **Vier Entscheidungen, je begründet:**
+  1. **Einzeleintrag je Trinkvorgang**, kein hochgezählter Tagessatz —
+     wie beim Diary und aus demselben Grund: nur Einzelzeilen erlauben,
+     *eine* Fehleingabe zurückzunehmen. `[read]` SPEC_04 Feature 8 nennt
+     Quick-Add-Knöpfe (250/500/750/1000 ml) — das *sind* mehrere Vorgänge
+     je Tag; die Pending-Action-Regel („< 80 % nach 18:00 Uhr") braucht
+     ausserdem den Zeitverlauf. Preis benannt: jede Anzeige braucht eine
+     Summe. Deshalb `logged_at` zusätzlich zu `entry_date` —
+     `created_at` ist der Zeitpunkt der *Erfassung*, nicht des Trinkens.
+  2. **Einheit fest Milliliter**, keine Einheitsspalte. Eine solche lädt
+     dazu ein, sie beim Summieren zu vergessen; dann addiert jemand Liter
+     und Milliliter.
+  3. **Kein UNIQUE — bewusst, nicht vergessen.** Zweimal 250 ml um 14:00
+     Uhr sind zwei Gläser, kein Duplikat. Es gibt keine
+     Spaltenkombination, deren Wiederholung fachlich falsch wäre. Die
+     Wettlaufsituation aus C-02/C-12 existiert hier gar nicht: es wird nie
+     „lesen, dann entscheiden", es wird immer eingefügt. v055 prüft
+     ausdrücklich, dass **kein** UNIQUE auftaucht — sonst hätte jemand
+     einen Schutz erfunden, der echte Eingaben ablehnt.
+  4. **Tagesziel gehört nicht hierher.** `[read]`
+     `ADR_WATER_TOTAL_HYDRATION` (Final): es kommt aus
+     `nutrition_targets`, geliefert von Goals. `[cmd]` Diese Tabelle
+     existiert nicht → gehört zu C-06. Benannt statt mitgebaut.
+     `hydrationPercent()` nimmt das Ziel als Parameter und liefert ohne
+     Ziel **null**, nicht 0 % — 0 % wäre die Behauptung „nichts
+     geschafft".
+  **Zweite Hydrationsquelle, beim Lesen gefunden:** `[read]` Die
+  Gesamt-Hydration ist laut ADR getrunkenes Wasser **plus** Wasser aus
+  Nahrung. `[cmd]` Die zweite Quelle lag bereits vor —
+  `daily_summary.water_g` aus C-04. Deshalb `056` als Sicht über beide
+  Quellen. Einheitenfalle im Dateikopf dokumentiert: `amount_ml` ist ml,
+  `water_g` ist g; 1 g = 1 ml steht als ausdrückliche Rechnung, nicht als
+  stillschweigende Annahme.
+  **Zwei SPEC_06-Defekte nicht übernommen:** dort steht *eine*
+  `FOR ALL`-Policy mit nur `USING` (INSERT-Leck, wie 060 §4c beschreibt)
+  und der `::text`-Cast. Hier vier Policies je Operation, direkter
+  uuid-Vergleich.
+  Abnahme `[cmd]` gegen live mit zwei echten Sessions: Tabelle nutzbar
+  (INSERT 201, UPDATE 204, SELECT); **doppelte Menge angenommen** (201);
+  Gesamt-Hydration **1230 ml** = 1050 getrunken + 180 aus Nahrung,
+  `total_complete: true`; Position ohne `water_g` →
+  `food_ml_missing: 1`, `total_complete: **false**`; **B sieht `[]`** in
+  Tabelle *und* Sicht. `security_invoker` erneut als tragend belegt:
+  mit `false` sah B 2 Zeilen von A. Testdaten entfernt, live wieder
+  1 Nutzer.
 - [ ] **C-06: WP-05 erstes Mock-Modul echt machen** — Kandidat Goals.
   *Vorher die 2 kritischen Bugs aus `docs/specs/Goals/OPEN_ITEMS.md` klären
   (Adaptive-TDEE Cross-Schema, Contribution-Timing).*
 
-- [ ] **C-07: `packages/types` verdrahten oder entfernen** — Rest von
+- [x] **C-07: `packages/types` verdrahten oder entfernen** — Rest von
   ursprünglich zwei Paketen (Audit 2026-08-05): `[cmd]` `@lumeos/shared`
   ist seit M1 Teil C verdrahtet (workspace-Dependency; Importe u. a. in
   nutrition-db, Auth-Callback, Login-Form) — **`@lumeos/types` hat
   weiterhin 0 Importe.** Nutzen oder entfernen.
+  **Erledigt 2026-08-06 (Block 14): entfernt** (Entscheidung Tom, per
+  `git rm`, damit die Löschung im Commit landet und `git revert` sie
+  zurückholt).
+  **Der Grund war nicht „ungenutzt", sondern „falsch".** `[cmd]`
+  2026-08-06 gegen die laufende Instanz geprüft:
+  - `NutritionFood` deklarierte **11 Makrospalten** (`enercc`, `enercj`,
+    `water_g`, `prot625`, `fat`, `cho`, `fibt`, `sugar`, `fasat`,
+    `nacl`, `alc`) — **keine davon existiert** auf `nutrition.foods`.
+    Von 12 geprüften Feldern stimmte genau **eines** (`name_display_en`).
+  - Die Datei enthielt **zwei widersprüchliche `Food`-Typen**. Der zweite
+    (`bls_key`, `calories_per_100g`, `micronutrients`) ist wörtlich das
+    flache Modell aus `db/schema/nutrition.sql` — **das ADR-0003
+    verworfen hat.** Wer den Typ benutzt hätte, hätte das verworfene
+    Modell zurückgeholt, mit Rückendeckung des Compilers.
+  - `MealType` kannte 4 Werte, `[cmd]` der Live-CHECK deren 7.
+  **Die Lehre, die über diesen Punkt hinausgeht:** Ein falscher Typ ist
+  schlimmer als kein Typ, weil er genau die Prüfung abschaltet, die er zu
+  leisten vorgibt. Dieselbe Fehlerklasse wie das Gate, das
+  `nutrition-api` nie anfasste und trotzdem Erfolg meldete (B-21), und
+  wie die Rechteprüfung, die ihre Sollliste vom Prüfling bezog (B-22).
+  Dreimal in einer Woche — ein Muster, kein Zufall: **Werkzeuge, die
+  Sicherheit behaupten, ohne sie zu erzeugen.**
+  Nachweis vor der Löschung `[cmd]`: 0 Importe über Paketnamen, 0 über
+  relative Pfade, 0 tsconfig-`paths`-Einträge, 0 Dependency-Einträge in
+  irgendeiner `package.json`, 0 Task-Bezüge in `turbo.json`,
+  **0 Dateien** aus `packages/types` in der Kompilation von `apps/web`
+  (`tsc --listFiles`). Danach `pnpm install` (Scope 5 → **4**
+  Workspace-Projekte) und `[cmd]` `pnpm gate --force` **Exit 0** —
+  ungecacht, damit nichts hinter dem Turbo-Cache verborgen bleibt.
 
 - [ ] **C-08: `services/nutrition-api` einordnen** — angepasst 2026-08-04:
   Hono-Service, 4 Dateien, von niemandem importiert; seit der
@@ -699,6 +786,47 @@ erledigt, was der Oberfläche vorausgehen musste:
   `apps/` und `packages/` liefert **0 Importe**. Zu entscheiden bleibt
   also die Einordnung (verdrahten oder verwerfen), nicht mehr die Frage,
   ob das Gate ihn erfasst.
+
+  **Entscheidung 2026-08-06 (Tom, Block 14): bleibt liegen.**
+  Damit die Frage beim nächsten Mal nicht bei null anfängt, hier der
+  vollständige Befund und die Kostenliste.
+
+  **Was drinsteht** `[cmd]` 2026-08-06: 122 Zeilen in 4 Dateien,
+  **8 TODO-Marker**, jede Route liefert eine leere Antwort
+  (`{ results: [] }`, `{ meals: [] }`, `{ days: [] }`).
+  `@supabase/supabase-js` ist als Abhängigkeit deklariert, `[cmd]` aber
+  **nirgends im Quellcode benutzt**. `MealItemSchema` kennt vier
+  Mahlzeittypen, `[cmd]` der Live-CHECK auf `nutrition.meals` deren
+  sieben.
+
+  **Überschneidung** `[cmd]`: `/food/search` gegen
+  `/api/nutrition/foods`, `/meals` und `/diary` gegen das, was C-03/C-04
+  in `apps/web` gebaut haben. Der Dienst bildet Endpunkte nach, die heute
+  bereits bedient werden — nur leer.
+
+  **Was ADR-0001 wirklich sagt** `[read]`: nicht „Teil des Endausbaus"
+  als Freibrief, sondern wörtlich „**kein Vorbild, sondern ein
+  unverdrahteter Vorgriff. Sein Verbleib ist offen.**" Die dortige
+  Ausnahme für Services gilt, wo etwas *nicht* in die Datenbank gehört
+  (Wearables, Zahlungen, Modellaufrufe für Buddy, lange Importe) —
+  nichts davon tut dieser Dienst.
+
+  **KOSTENLISTE — Liegenlassen ist seit B-21 nicht mehr gratis** `[cmd]`:
+  | Posten | Beleg |
+  |---|---|
+  | eigene `tsconfig.json` | 26 Zeilen, nur für diesen Dienst |
+  | `@types/node` als devDependency | nur nötig, damit er typecheckt |
+  | läuft im Gate mit | `build` **und** `typecheck` je Lauf |
+  | bei jeder TypeScript-Anhebung mit anzufassen | für Code, der nichts tut |
+
+  **Empfehlung (Claude), falls die Frage wieder aufkommt: Rückbau —
+  aber schwächer als bei C-07.** Er ist nur *leer*, nicht *falsch*; er
+  behauptet nichts Unwahres. Ein 122-Zeilen-Gerüst aus TODOs steht in
+  einer Stunde neu, sobald Modulunabhängigkeit (Toms Grund für Zielbild B
+  in ADR-0001) wirklich ansteht. Bis dahin zahlt das Repo die
+  Kostenliste oben für Attrappen-Endpunkte.
+  Wiederherstellbar wäre er `[cmd]` in jedem Fall: seit 2026-04-23 in der
+  Historie, `git revert` genügt.
 
 - [x] **C-09: Test-Runner einrichten** — **erledigt 2026-08-04.**
   `[cmd]` `apps/web` hat ein `test`-Script (`tsx --test` über die
