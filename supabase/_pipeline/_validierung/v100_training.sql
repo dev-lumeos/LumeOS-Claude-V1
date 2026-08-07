@@ -12,9 +12,10 @@ SELECT 'exercise_muscles_exists', (to_regclass('training.exercise_muscles') IS N
 -- BESTAND — Herkunft der Zahlen, damit niemand Datenverlust vermutet
 -- =============================================================
 -- Cloud-Altbestand -> hier, je mit Grund:
---   muscle_groups     157 -> 112  (45 Dubletten: Klammer, Schreibweise,
+--   muscle_groups     157 -> 109  (45 Dubletten: Klammer, Schreibweise,
 --                                  doppeltes Leerzeichen; + 2 Platzhalter
---                                  "none"/"None" entfernt)
+--                                  "none"/"None" entfernt; + 3 Plural-
+--                                  Paare, Einzelfall Tom/Block 18)
 --   equipment          61 ->  58  (3 Schreibweisen-Dubletten)
 --   exercises       1.448 -> 1.416 (32 Schreibweisen-Dubletten, [cmd]
 --                                  alle mit IDENTISCHEN Medienpfaden)
@@ -24,7 +25,7 @@ SELECT 'exercise_muscles_exists', (to_regclass('training.exercise_muscles') IS N
 -- entfallen 14 auf den Platzhalter "none", der Rest faellt durch die
 -- Zusammenfuehrung zusammen — was uebrig bleibt, ist die Vereinigung.
 -- =============================================================
-SELECT 'muscle_groups_rows', COUNT(*)::text FROM training.muscle_groups;   -- 112
+SELECT 'muscle_groups_rows', COUNT(*)::text FROM training.muscle_groups;   -- 109
 SELECT 'equipment_rows', COUNT(*)::text FROM training.equipment;           -- 58
 SELECT 'exercises_rows', COUNT(*)::text FROM training.exercises;           -- 1416
 SELECT 'exercise_muscles_rows', COUNT(*)::text FROM training.exercise_muscles; -- 6625
@@ -179,3 +180,49 @@ SELECT 'namen_mit_doppeltem_leerzeichen', COUNT(*)::text
 FROM training.muscle_groups WHERE name ~ '\s{2,}';
 SELECT 'namen_mit_randleerzeichen', COUNT(*)::text
 FROM training.muscle_groups WHERE name <> btrim(name);
+
+-- =============================================================
+-- PLURAL-AUSNAHME (Tom, Block 18) — haelt der Zustand?
+-- =============================================================
+-- Diese drei Paare sind KEINE Regel, sondern eine Einzelfall-
+-- entscheidung. Genau deshalb muessen sie geprueft werden: eine
+-- Ausnahme, die niemand nachhaelt, kommt beim naechsten Seed-Lauf
+-- stillschweigend zurueck. Die aufgeloesten Namen muessen ABWESEND,
+-- die Singular-Namen VORHANDEN sein.
+SELECT 'plural_namen_abwesend', (COUNT(*) = 0)::text
+FROM training.muscle_groups
+WHERE name IN ('Inner Thighs', 'Internal Obliques', 'Outer Thighs');
+SELECT 'singular_namen_vorhanden', (COUNT(*) = 3)::text
+FROM training.muscle_groups
+WHERE name IN ('Inner Thigh', 'Internal Oblique', 'Outer Thigh');
+
+-- Die ueberlebenden Zeilen behalten ihre IDs — sonst waeren die
+-- Zuordnungen auf neue Zeilen gewandert statt umgehaengt worden.
+SELECT 'plural_ueberlebende_ids', (COUNT(*) = 3)::text
+FROM training.muscle_groups WHERE id IN (
+  'd46ddb12-f9b9-4fbf-ae2d-0a2dc0809514',   -- Inner Thigh (war Thighs)
+  'cc755ab4-4f26-438b-a7da-3df575ff3804',   -- Internal Oblique
+  'cd50499c-089c-414b-ae23-27ceb9f1b775');  -- Outer Thigh
+SELECT 'plural_aufgeloeste_ids_weg', (COUNT(*) = 0)::text
+FROM training.muscle_groups WHERE id IN (
+  'be4df651-1acd-402a-aebc-2fd8ee08efe9',
+  '7fa41d97-18e9-48cf-8342-81b571ec737d',
+  '866bd105-c95f-407d-8fa8-20fae1b9ed0a');
+
+-- NICHT angetastet: "Obliques" ist der gaengige anatomische Begriff
+-- ohne Singular-Zwilling, "Thighs" [cmd] keine Dublette (steht neben
+-- Glutes in "Resistance Band Clam", ohne Inner/Outer Thigh).
+-- Verschwinden sie, hat jemand die Ausnahme zur Regel gemacht.
+SELECT 'obliques_und_thighs_unberuehrt', (COUNT(*) = 2)::text
+FROM training.muscle_groups WHERE name IN ('Obliques', 'Thighs');
+
+-- --- body_region: Luecke bekannt, hier gemessen statt behauptet ---
+-- [cmd] 45 von 109 Gruppen ohne Region (vor dem Plural-Merge 47 von
+-- 112 — die zwei aufgeloesten Thigh-Zeilen trugen selbst keine),
+-- und die Luecke folgt NICHT
+-- der Seltenheit: Semimembranosus/Semitendinosus tragen je 381
+-- Nutzungen ohne Region. Das ist fehlende Quelldatenpflege, keine
+-- Absicht. Als Kennzahl gefuehrt, damit eine spaetere Nachpflege
+-- sichtbar wird; kein Sollwert, deshalb keine harte Pruefung.
+SELECT 'gruppen_ohne_body_region', COUNT(*)::text
+FROM training.muscle_groups WHERE body_region IS NULL;

@@ -8,7 +8,7 @@
 -- =============================================================
 -- BEREINIGUNGEN — hier benannt, nicht stillschweigend
 -- =============================================================
--- MUSKELGRUPPEN ZUSAMMENGEFUEHRT: 157 -> 112
+-- MUSKELGRUPPEN ZUSAMMENGEFUEHRT: 157 -> 109
 --
 -- Der Altbestand fuehrt denselben Muskel mehrfach, in DREI
 -- Schreibvarianten. [cmd] 2026-08-07 systematisch erhoben, indem
@@ -31,14 +31,35 @@
 -- auf, statt sich zu verstecken; v100 prueft es zusaetzlich.
 -- Kanonisch ist je Gruppe die MEISTBENUTZTE Variante.
 --
--- NICHT automatisch zusammengefuehrt — Singular/Plural:
---   "Internal Oblique)" (6x)  / "Internal Obliques)" (33x)
---   "Inner Thigh" (1x)        / "Inner Thighs" (11x)
---   "Outer Thigh" (4x)        / "Outer Thighs" (1x)
--- Gleiche Region, vermutlich derselbe Muskel — aber Singular
--- gegen Plural ist eine SPRACHLICHE Entscheidung, keine
--- mechanische. Eine Regel dafuer koennte anderswo echte Muskeln
--- verschmelzen. Bewusst offen gelassen, hier festgehalten.
+-- SINGULAR/PLURAL: HANDVERLESENE AUSNAHME, KEINE REGEL
+--
+-- Der Vergleichsschluessel oben enthaelt Singular/Plural
+-- ABSICHTLICH NICHT. Eine Regel "End-s entfernen" wuerde in
+-- exercises "Single Arm"/"Single Arms" und "Both Arm"/
+-- "Both Arms" verschmelzen — [cmd] verschiedene Medienpfade,
+-- also verschiedene Uebungen. Der Plural TRAEGT dort die
+-- Bedeutung (einarmig gegen beidarmig). Wer hier eine
+-- Verallgemeinerung herausliest, zerstoert Daten.
+--
+-- Diese DREI Paare sind eine Einzelfallentscheidung von Tom
+-- (Block 18), als Liste gefuehrt statt als Normalisierung.
+-- Es ueberlebt die Zeile mit MEHR NUTZUNGEN, sie behaelt ihre
+-- ID und bekommt den Singular-Namen — das haelt die Zahl der
+-- umzuhaengenden Zuordnungen klein (8 statt 45):
+--   "Inner Thighs" (11x)      BLEIBT -> "Inner Thigh"
+--   "Internal Obliques" (33x) BLEIBT -> "Internal Oblique"
+--   "Outer Thigh" (3x)        BLEIBT, schon Singular
+-- [cmd] 0 Uebungen tragen beide Varianten eines Paares, die
+-- Zuordnungssumme bleibt deshalb bei 6.625.
+-- Entspricht 102_plural_merge.sql, das dasselbe auf live tut.
+--
+-- NICHT in der Ausnahme, mit Grund:
+--   "Obliques" (219x) — gaengiger anatomischer Begriff, es
+--     gibt keinen Singular-Zwilling. Nicht umbenannt.
+--   "Thighs" (1x) — [cmd] KEINE Dublette: steht in
+--     "Resistance Band Clam" neben Glutes als primary, und
+--     jene Uebung traegt KEIN Inner/Outer Thigh. Eine grobe
+--     Aussage ueber den ganzen Oberschenkel.
 --
 -- PLATZHALTER "none"/"None" ENTFERNT (2 Zeilen).
 --   [cmd] 0x als primary, 14x als secondary, und ALLE 14
@@ -55,41 +76,6 @@
 --   "Leg Press Machine"/"Leg press machine" — beide je benutzt.
 --   Gefunden von der neuen v100-Pruefung auf normalisierte
 --   Eindeutigkeit, nicht von Hand.
---
--- =============================================================
--- SUCHE NACH WEITEREN KLASSEN — nach dem Merge, ergebnisoffen
--- =============================================================
--- Jeder bisherige Durchgang hat eine neue Dublettenklasse gezeigt.
--- Deshalb [cmd] 2026-08-07 nicht die drei bekannten nachgeprueft,
--- sondern 17 unabhaengige Normalisierungen ueber alle drei
--- Namenstabellen gelegt (51 Sonden): Strichvarianten, Apostrophe,
--- Anfuehrungszeichen, Singular/Plural, Schraegstrich, Komma,
--- Punkt, "&" gegen "and", Klammerinhalt, NFC/NFD, Diakritika,
--- geschuetzte Leerzeichen, Zahlwoerter, "alles ausser a-z0-9".
---
--- 5 Sonden liessen Zeilen zusammenfallen — ABER KEINE davon ist
--- eine Dublettenklasse. Entschieden mit dem Beleg, der schon die
--- 32 entschieden hat: zeigen die Namen auf DIESELBEN Medien?
---   Strich/Unterstrich vs Leerzeichen :  9 Gruppen, 0 identisch
---   Singular/Plural (je Wort)         : 14 Gruppen, 0 identisch
---   Klammerinhalt entfernt            : 23 Gruppen, 0 identisch
--- [cmd] In KEINER der 46 Gruppen stimmen die Medienpfade ueberein.
--- Es sind verschiedene Uebungen mit aehnlichen Namen:
---   "Ankle plantar flexion"  != "Ankle - Plantar Flexion"
---   "...DECLINE PRESS Both Arms" != "...Both Arm"  (beidarmig
---        gegen einarmig — der Plural TRAEGT die Bedeutung)
---   "Crunch (arms straight)" != "Crunch (hands overhead)"
---        != "Crunch (on bosu ball)"  — 6 eigenstaendige Uebungen
---
--- Das ist das Gegenstueck zum Klammerfehler: dort haette eine
--- Regel echte Namen zerstoert, hier wuerde sie echte UEBUNGEN
--- zerstoeren. Eine Regel "End-s entfernen" wuerde ausserdem in
--- exercises "Single Arm"/"Single Arms" verschmelzen — [cmd]
--- nachweislich zwei Uebungen. Deshalb gibt es sie nicht.
---
--- BEFUND: nach dem Merge keine weitere Dublettenklasse belegbar.
--- Die drei muscle_groups-Plural-Paare oben bleiben der einzige
--- offene Punkt — und der ist eine Entscheidung, kein Fund.
 --
 -- =============================================================
 -- HERKUNFT DER BESTANDSZAHL — bitte vor jeder Irritation lesen
@@ -138,7 +124,7 @@
 
 BEGIN;
 
--- --- Muskelgruppen (112) ---
+-- --- Muskelgruppen (109) ---
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('ebde0e92-cd75-47da-9aef-9943b5d7c3f6'::uuid, 'Abdominals', 'core', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('45c9f767-48b8-4356-845b-e87417925c9f'::uuid, 'Abductors', 'legs', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('cf767237-5ebc-4e5d-bb6d-53141a062e0f'::uuid, 'Achilles Tendon', NULL, 0) ON CONFLICT (id) DO NOTHING;
@@ -193,10 +179,8 @@ INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('5dc9b2c8-4123-47b7-b947-9e2303b0b2f0'::uuid, 'Hips', 'legs', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('d64a8470-faac-4045-a4ed-df840cedad23'::uuid, 'Iliopsoas', NULL, 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('a9268b79-5bcd-4708-96f0-1eeab9c7688a'::uuid, 'Infraspinatus', NULL, 0) ON CONFLICT (id) DO NOTHING;
-INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('be4df651-1acd-402a-aebc-2fd8ee08efe9'::uuid, 'Inner Thigh', NULL, 0) ON CONFLICT (id) DO NOTHING;
-INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('d46ddb12-f9b9-4fbf-ae2d-0a2dc0809514'::uuid, 'Inner Thighs', NULL, 0) ON CONFLICT (id) DO NOTHING;
-INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('7fa41d97-18e9-48cf-8342-81b571ec737d'::uuid, 'Internal Oblique', 'core', 0) ON CONFLICT (id) DO NOTHING;
-INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'Internal Obliques', 'core', 0) ON CONFLICT (id) DO NOTHING;
+INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('d46ddb12-f9b9-4fbf-ae2d-0a2dc0809514'::uuid, 'Inner Thigh', NULL, 0) ON CONFLICT (id) DO NOTHING;
+INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'Internal Oblique', 'core', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('99d34f8c-b28d-4d9d-b2fe-553b06d3fabd'::uuid, 'latissimus dorsi', 'back', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('6a991312-583e-44e4-9611-5f5f3736610e'::uuid, 'Lats', 'back', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('2a9170b0-e7bc-4bfe-9d00-dd007fdd8839'::uuid, 'Legs', 'legs', 0) ON CONFLICT (id) DO NOTHING;
@@ -209,7 +193,6 @@ INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('46733aaa-0e95-4428-8292-26ec73575db8'::uuid, 'Neck Muscles', NULL, 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'Obliques', 'core', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('cd50499c-089c-414b-ae23-27ceb9f1b775'::uuid, 'Outer Thigh', NULL, 0) ON CONFLICT (id) DO NOTHING;
-INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('866bd105-c95f-407d-8fa8-20fae1b9ed0a'::uuid, 'Outer Thighs', NULL, 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('f8954463-d1a4-44fe-9179-83885078923e'::uuid, 'Palmaris Longus', NULL, 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('a6fd8b31-91f5-4a95-aa7d-398a3cdafa24'::uuid, 'Pectoralis Major', 'chest', 0) ON CONFLICT (id) DO NOTHING;
 INSERT INTO training.muscle_groups (id, name, body_region, display_order) VALUES ('22fd9d49-45f1-4a70-8ddf-f1a7821d89be'::uuid, 'Peroneals', NULL, 0) ON CONFLICT (id) DO NOTHING;
@@ -2854,8 +2837,8 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('29f43068-28f4-4b90-8b01-fcc8b86148da'::uuid, 'e797edd9-7acf-413f-879f-4b45b5ad6b02'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('29f43068-28f4-4b90-8b01-fcc8b86148da'::uuid, 'ff616ae6-6bb5-444c-a9fb-a11dfffbb662'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('2a23c15b-32dd-47de-b58b-2ed1f05c3324'::uuid, '5fe4ad49-a528-4d0b-a8ef-d327140c6aa6'::uuid, 'secondary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('2a23c15b-32dd-47de-b58b-2ed1f05c3324'::uuid, '866bd105-c95f-407d-8fa8-20fae1b9ed0a'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('2a23c15b-32dd-47de-b58b-2ed1f05c3324'::uuid, 'b64bd764-bed9-4212-bd1e-6bd4b0493af7'::uuid, 'primary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('2a23c15b-32dd-47de-b58b-2ed1f05c3324'::uuid, 'cd50499c-089c-414b-ae23-27ceb9f1b775'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('2a23c15b-32dd-47de-b58b-2ed1f05c3324'::uuid, 'ff616ae6-6bb5-444c-a9fb-a11dfffbb662'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('2a250a0c-dbfd-4bca-beee-dab14a765925'::uuid, '1cc3ff12-e3bd-4ed2-a8ce-06ab03dbfc85'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('2a250a0c-dbfd-4bca-beee-dab14a765925'::uuid, '8fe7809c-fbb0-487e-8e5d-3d4bb8f3a7c7'::uuid, 'secondary') ON CONFLICT DO NOTHING;
@@ -3100,7 +3083,7 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('35c2def7-1c95-4b12-b720-f16981355cbf'::uuid, '1cc3ff12-e3bd-4ed2-a8ce-06ab03dbfc85'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('35c2def7-1c95-4b12-b720-f16981355cbf'::uuid, '1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('35c2def7-1c95-4b12-b720-f16981355cbf'::uuid, '58fb67c4-2a60-4399-bb1f-f4cddab2d5a7'::uuid, 'secondary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('35c2def7-1c95-4b12-b720-f16981355cbf'::uuid, '7fa41d97-18e9-48cf-8342-81b571ec737d'::uuid, 'primary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('35c2def7-1c95-4b12-b720-f16981355cbf'::uuid, 'cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('35d077fc-f1b2-4a82-847e-5cb54a8b2e4f'::uuid, '1cc3ff12-e3bd-4ed2-a8ce-06ab03dbfc85'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('35d077fc-f1b2-4a82-847e-5cb54a8b2e4f'::uuid, '8fe7809c-fbb0-487e-8e5d-3d4bb8f3a7c7'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('367833b3-0833-439e-b89f-99e8763c5e8b'::uuid, '8fe7809c-fbb0-487e-8e5d-3d4bb8f3a7c7'::uuid, 'primary') ON CONFLICT DO NOTHING;
@@ -3845,7 +3828,7 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('55048852-4b39-4d15-9b15-8cbdd9375e87'::uuid, 'fcc75dfb-8edb-4f53-a795-bb5edf5df399'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5515d4a7-2442-4c1a-ba57-b8bf2dd68c86'::uuid, '1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5515d4a7-2442-4c1a-ba57-b8bf2dd68c86'::uuid, '4e3cf868-f4a6-4510-bba6-0c9184fa3e02'::uuid, 'primary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5515d4a7-2442-4c1a-ba57-b8bf2dd68c86'::uuid, '7fa41d97-18e9-48cf-8342-81b571ec737d'::uuid, 'secondary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5515d4a7-2442-4c1a-ba57-b8bf2dd68c86'::uuid, 'cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5515d4a7-2442-4c1a-ba57-b8bf2dd68c86'::uuid, 'da807ea9-8d8b-4ad8-80b7-0685edd2a356'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5515d4a7-2442-4c1a-ba57-b8bf2dd68c86'::uuid, 'e797edd9-7acf-413f-879f-4b45b5ad6b02'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5515d4a7-2442-4c1a-ba57-b8bf2dd68c86'::uuid, 'ff616ae6-6bb5-444c-a9fb-a11dfffbb662'::uuid, 'secondary') ON CONFLICT DO NOTHING;
@@ -4133,7 +4116,7 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f1039fd-1cfc-461f-b330-338bb6b4dbcb'::uuid, 'ff616ae6-6bb5-444c-a9fb-a11dfffbb662'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f338d79-f396-4979-bd2c-543da783e906'::uuid, '0d3d6439-8dcf-416d-9f2f-ca25a8fde782'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f338d79-f396-4979-bd2c-543da783e906'::uuid, '1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'primary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f338d79-f396-4979-bd2c-543da783e906'::uuid, '7fa41d97-18e9-48cf-8342-81b571ec737d'::uuid, 'primary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f338d79-f396-4979-bd2c-543da783e906'::uuid, 'cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f338d79-f396-4979-bd2c-543da783e906'::uuid, 'ebde0e92-cd75-47da-9aef-9943b5d7c3f6'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f500b8b-9cfc-4cb0-ae4a-895aa0c90d32'::uuid, '0634e6c1-9f07-4dcc-80bc-00ace61a4bb0'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('5f500b8b-9cfc-4cb0-ae4a-895aa0c90d32'::uuid, '0d3d6439-8dcf-416d-9f2f-ca25a8fde782'::uuid, 'primary') ON CONFLICT DO NOTHING;
@@ -4172,7 +4155,7 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('6086b4d9-c9e0-4e75-ab09-26512a9d09e2'::uuid, 'fcc75dfb-8edb-4f53-a795-bb5edf5df399'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('60d0c75c-b650-407f-9f4c-9f70cb8f7e36'::uuid, '0d3d6439-8dcf-416d-9f2f-ca25a8fde782'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('60d0c75c-b650-407f-9f4c-9f70cb8f7e36'::uuid, '1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'primary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('60d0c75c-b650-407f-9f4c-9f70cb8f7e36'::uuid, '7fa41d97-18e9-48cf-8342-81b571ec737d'::uuid, 'primary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('60d0c75c-b650-407f-9f4c-9f70cb8f7e36'::uuid, 'cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('60d0c75c-b650-407f-9f4c-9f70cb8f7e36'::uuid, 'ebde0e92-cd75-47da-9aef-9943b5d7c3f6'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('60f854f8-29fc-4a88-b185-052206a55fcf'::uuid, '1cc3ff12-e3bd-4ed2-a8ce-06ab03dbfc85'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('60f854f8-29fc-4a88-b185-052206a55fcf'::uuid, '70470dfd-0df9-4198-a01d-41239ad3982a'::uuid, 'secondary') ON CONFLICT DO NOTHING;
@@ -6379,8 +6362,8 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c20837-04f0-4392-b4de-91f15cde8129'::uuid, '1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c20837-04f0-4392-b4de-91f15cde8129'::uuid, '4e3cf868-f4a6-4510-bba6-0c9184fa3e02'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c20837-04f0-4392-b4de-91f15cde8129'::uuid, '5fe4ad49-a528-4d0b-a8ef-d327140c6aa6'::uuid, 'primary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c20837-04f0-4392-b4de-91f15cde8129'::uuid, 'be4df651-1acd-402a-aebc-2fd8ee08efe9'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c20837-04f0-4392-b4de-91f15cde8129'::uuid, 'cd50499c-089c-414b-ae23-27ceb9f1b775'::uuid, 'secondary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c20837-04f0-4392-b4de-91f15cde8129'::uuid, 'd46ddb12-f9b9-4fbf-ae2d-0a2dc0809514'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c20837-04f0-4392-b4de-91f15cde8129'::uuid, 'da807ea9-8d8b-4ad8-80b7-0685edd2a356'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c3fac3-d840-44ed-8cc1-e36d708efafe'::uuid, '0634e6c1-9f07-4dcc-80bc-00ace61a4bb0'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('b4c3fac3-d840-44ed-8cc1-e36d708efafe'::uuid, '1c02fb80-f9d2-4f66-990d-95088e2131f8'::uuid, 'secondary') ON CONFLICT DO NOTHING;
@@ -6650,7 +6633,7 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('bee268a2-90e1-42bf-824d-8018b58a192c'::uuid, '1cc3ff12-e3bd-4ed2-a8ce-06ab03dbfc85'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('bee268a2-90e1-42bf-824d-8018b58a192c'::uuid, '1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('bee268a2-90e1-42bf-824d-8018b58a192c'::uuid, '58fb67c4-2a60-4399-bb1f-f4cddab2d5a7'::uuid, 'secondary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('bee268a2-90e1-42bf-824d-8018b58a192c'::uuid, '7fa41d97-18e9-48cf-8342-81b571ec737d'::uuid, 'primary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('bee268a2-90e1-42bf-824d-8018b58a192c'::uuid, 'cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('beef7a70-54c9-4121-8513-1df426680204'::uuid, '0634e6c1-9f07-4dcc-80bc-00ace61a4bb0'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('beef7a70-54c9-4121-8513-1df426680204'::uuid, '0d3d6439-8dcf-416d-9f2f-ca25a8fde782'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('beef7a70-54c9-4121-8513-1df426680204'::uuid, '1c02fb80-f9d2-4f66-990d-95088e2131f8'::uuid, 'secondary') ON CONFLICT DO NOTHING;
@@ -7247,7 +7230,7 @@ INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUE
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d43f7c37-007d-4597-b75f-ba4198b3f2b7'::uuid, 'fcc75dfb-8edb-4f53-a795-bb5edf5df399'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d4425106-a76b-4639-81e2-eea334d3e358'::uuid, '1cc3ff12-e3bd-4ed2-a8ce-06ab03dbfc85'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d4425106-a76b-4639-81e2-eea334d3e358'::uuid, '1d13951b-4a53-4680-8d2d-2e37687c6e4c'::uuid, 'primary') ON CONFLICT DO NOTHING;
-INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d4425106-a76b-4639-81e2-eea334d3e358'::uuid, '7fa41d97-18e9-48cf-8342-81b571ec737d'::uuid, 'primary') ON CONFLICT DO NOTHING;
+INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d4425106-a76b-4639-81e2-eea334d3e358'::uuid, 'cc755ab4-4f26-438b-a7da-3df575ff3804'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d4615769-a607-477d-a0da-d37bbb23c396'::uuid, 'a9916b79-333e-443e-9035-ad7a68347e74'::uuid, 'primary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d4914d64-5a86-498a-8c10-8ed415c826fc'::uuid, '0634e6c1-9f07-4dcc-80bc-00ace61a4bb0'::uuid, 'secondary') ON CONFLICT DO NOTHING;
 INSERT INTO training.exercise_muscles (exercise_id, muscle_group_id, role) VALUES ('d4914d64-5a86-498a-8c10-8ed415c826fc'::uuid, '1c02fb80-f9d2-4f66-990d-95088e2131f8'::uuid, 'secondary') ON CONFLICT DO NOTHING;
