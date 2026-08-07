@@ -162,3 +162,8 @@ docs/design-system/*
 !docs/design-system/*.md
 !docs/design-system/components/
 !docs/design-system/tokens/
+
+# --- Lokaler Medienbestand: 13 GB, liegt zusaetzlich in Supabase Storage.
+# Nur die README ist getrackt. Siehe media/README.md.
+media/*
+!media/README.md
