@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-06 (achtzehnte Aktualisierung — Block 14 geschlossen: C-05 und C-07 erledigt, C-08 mit Kostenliste bewusst liegengelassen. Water Tracking und Gesamt-Hydration live (055/056); `packages/types` entfernt, weil es Spalten deklarierte, die es nicht gibt, und das von ADR-0003 verworfene Modell zurückgeholt hätte. Die Datenseite der Nutrition-Module ist damit vollständig — es fehlen nur noch die Oberflächen)
+**Stand:** 2026-08-07 (neunzehnte Aktualisierung — Block 16 geschlossen: E-01/E-02/E-03 erledigt, E-11 neu, E-04 abgewertet. Legacy-Instanz erstmals mit lesendem Zugang vermessen (`docs/ssot/60-legacy-cloud.md`): 132 von 166 Tabellen leer, die 27/27/9/9/28 toten Medienverweise waren ein Messfehler (%28/%29 undekodiert), es bleibt genau einer. Trainingsdaten als JSON im Repo. Die E-Serie schrumpft von zehn auf sieben offene Punkte)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -31,34 +31,44 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 4. **M4 — Cloud-Deployment** (→ Sektion E) — Registerlage bereinigt:
    D-17, D-19 und D-20 sind erledigt (Baseline, Register umgetragen,
    Gegenprobe `1|0|1`, README-Kette vollständig, Auth-Stub im
-   Baseline-Kopf). **Offen als Voraussetzungen: B-13-Rest**
-   (Produktions-`site_url`/Redirect-Liste je App und Umgebung) **und die
-   Vorarbeiten E-01 bis E-03**.
+   Baseline-Kopf).
+   **Die Vorarbeiten E-01 bis E-03 sind seit 2026-08-07 erledigt**
+   (Block 16, erstmals mit nur lesendem Cloud-Zugang): Ist-Zustand
+   erhoben (`docs/ssot/60-legacy-cloud.md`), tote Medienverweise als
+   Messfehler entlarvt, Abhängigkeiten der Übernahmekandidaten geprüft —
+   `[cmd]` es hängt nichts an ihnen.
+   **Offen als Voraussetzung bleibt allein der B-13-Rest**
+   (Produktions-`site_url`/Redirect-Liste je App und Umgebung).
+   `[cmd]` Ernüchternd und für die Planung wichtig: **132 von 166
+   Tabellen der Legacy-Instanz sind leer.** Was dort zu übernehmen ist,
+   ist kleiner als gedacht — und liegt seit Block 16 als Export im Repo
+   (`backup/legacy-v2/training/`).
 
 
-## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 14)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-07, nach Block 16)
 
 **Werkzeugarbeit abgeschlossen (Block 12), Vorfeld geräumt (Block 13),
-Datenseite der Nutrition-Module vollständig (Block 14).**
+Nutrition-Datenseite vollständig (Block 14), Repo aufgeräumt (Block 15),
+Legacy-Instanz vermessen und Trainingsdaten im Repo (Block 16).**
 
 - Das Gate erfasst **alle** Pakete (B-21), die Datenbankrechte sind
   wiederholbar prüfbar (B-22), die E2E-Frage ist entschieden (D-04).
-- Der Duplikatschutz steht **vollständig** — sechs partielle UNIQUEs statt
-  einem (C-12). Er gehörte **vor** den Preset-Schreibpfad, nicht danach.
-- Die Oberfläche behauptet keine falschen Zahlen mehr (C-10), und die
-  „Phase 1B"-Reste sind weg (D-07) — darunter eine SSOT-Aussage, die
-  Schreibfreiheit verneinte, während zwei Schreibpfade live sind.
-- **Water Tracking hat seine Datenseite** (C-05, 055/056 live), und
-  `packages/types` ist entfernt (C-07) — es deklarierte Spalten, die es
-  nicht gibt, und hätte das von ADR-0003 verworfene Modell zurückgeholt.
+- **Die Nutrition-Datenseite ist vollständig und live:** Diary (052),
+  Tagessumme (053), Duplikatschutz (054), Water und Gesamt-Hydration
+  (055/056) — je mit eigener Validierung.
+- **Die E-Serie ist von zehn offenen Punkten auf sieben geschrumpft**
+  (E-01/E-02/E-03 erledigt), und E-04 hat seine Dringlichkeit verloren.
+  `[cmd]` 132 von 166 Legacy-Tabellen sind leer.
+- **Training hat Referenzdaten im Repo**: `backup/legacy-v2/training/`
+  (1.448 Übungen, 6.398 Zuordnungen, 157 Muskelgruppen, 61 Geräte).
+  Damit ist Training das erste Modul, dessen Stammdaten bereitliegen,
+  **bevor** es gebaut wird.
 
-**Es steht nichts mehr zwischen der Oberfläche und dem Bau — und es sind
-jetzt zwei Oberflächen, die auf derselben Entscheidung warten.**
+**Es steht weiterhin nichts zwischen den Nutrition-Oberflächen und dem
+Bau — und Training ist als nächstes Modul jetzt vorbereitet.**
 
 1. **Die Nutrition-Oberflächen — der nächste sichtbare Schritt.**
-   Datenseite vollständig und live: Diary-Tabellen (C-03, 052),
-   Tagessumme (C-04, 053), Duplikatschutz (C-12, 054), Water und
-   Gesamt-Hydration (C-05, 055/056). **Was fehlt, ist ausschliesslich
+   Datenseite vollständig und live. **Was fehlt, ist ausschliesslich
    UI und API-Route** — dreimal bewusst zurückgestellt, bis der
    Aggregationsweg entschieden war. Er ist es. Laut D-04 ist das auch der
    Punkt, an dem ein E2E-Aufbau wieder lohnt: die erste Oberfläche, die
@@ -69,18 +79,23 @@ jetzt zwei Oberflächen, die auf derselben Entscheidung warten.**
    `nutrition_targets`**, und daran hängt das Wasser-Tagesziel aus C-05:
    ohne diese Tabelle kann die Hydrationsanzeige keine Zielerreichung
    zeigen (`hydrationPercent()` liefert bewusst `null`).
-3. **Audits, wenn sie den Weg kreuzen:** C-07-Rest entfällt (Paket
-   entfernt), C-08 bleibt liegen — die Kostenliste steht jetzt im Punkt,
-   damit die Frage nicht wieder bei null anfängt. Offen: D-05.
-4. **Entscheidungspunkte auf Zuruf (Tom):** A-05 (Löschlauf), A-10
-   (Wurzel-Restaltlast — trägt auch `AGENTS.md`, das in D-07 bewusst
-   unberührt blieb), A-08.
-5. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
+3. **Training, sobald es an der Reihe ist:** E-05 (Mapping gegen ein neu
+   entworfenes `training.`-Schema) — die Daten liegen, der Befund für den
+   Entwurf steht im Punkt. **Die Arrays sind die Quelle, nicht die
+   Zuordnungstabelle** (`[cmd]` 398 Zuordnungen gingen sonst verloren).
+4. **Vor jeder Medienentscheidung: E-06, dann ADR-0004.** `[cmd]` Alle
+   Pfade sind absolut; solange das gilt, ist ein Ortswechsel eine
+   Migration über 1.448 Zeilen statt einer Konfigurationszeile. Dazu
+   E-11 (67 % der Storage-Objekte sind verwaist) — sonst rechnet man
+   15 GB, wo 5 GB gemeint sind.
+5. **Audits, wenn sie den Weg kreuzen:** C-08 bleibt liegen (Kostenliste
+   steht im Punkt, Wiedervorlage mit C-06), D-05 (Spec-Audit, eigener
+   Block).
+6. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
    klären), B-11, B-17 (niedrig).
-6. **Deployment nach den Modulen:** B-13-Rest, E-01–E-03 (Dump als
-   Vorstudie — Achtung: Dump vom 2026-03-05 ist älter als die
-   2026-08-01-Messungen), dann E-04 ff.
-7. **A-06** läuft parallel bei Tom; **B-12** wartet konzeptbedingt auf
+7. **Deployment:** B-13-Rest als einzige verbleibende M4-Voraussetzung,
+   dann E-08. E-04 erst danach — es blockiert nichts.
+8. **A-06** läuft parallel bei Tom; **B-12** wartet konzeptbedingt auf
    die zweite App; **C-14** (Kuration nach `apps/admin`) wartet auf die
    Admin-App.
 
@@ -1313,27 +1328,93 @@ der wieder verschwindet, kostet fast nichts.
 der Grund, das Projekt zu behalten. Was „dev neu bauen" wäre, passiert lokal:
 dort gibt es `supabase db reset`, kostenlos und beliebig oft.
 
-- [ ] **E-01: Read-only Prüfung der Instanz** — vollständige Tabellenliste in
-  `public` mit Zeilenzahlen, Storage-Policies, `auth.users`-Anzahl,
-  Postgres-Version, Branch-Konfiguration. Ergebnis nach
-  `docs/ssot/60-legacy-cloud.md`. *Nichts schreiben, kein `supabase link`,
-  kein `db push`/`db pull`.*
+- [x] **E-01: Read-only Prüfung der Instanz** — **erledigt 2026-08-07
+  (Block 16).** Ergebnis in **`docs/ssot/60-legacy-cloud.md`** (264 Z.) —
+  der belegte Ist-Zustand, der **alle früheren Schätzungen ersetzt**.
+  Erhoben über eine nur lesende Rolle, `default_transaction_read_only = on`.
+  **Kernbefund: `[cmd]` 132 von 166 Tabellen in `public` sind LEER, nur 34
+  tragen Daten.** Die Instanz ist kein gefülltes Produktivsystem, sondern
+  ein Schemagerüst mit wenigen befüllten Inseln. „166 Tabellen" klang nach
+  weit mehr Bestand, als da ist — und diese Zahl hat E-04 seine
+  Dringlichkeit genommen.
+  **Warum die alten Zahlen zu niedrig waren:** Sie stammten aus
+  `pg_class.reltuples`, einer Schätzung, die bei rund 25 Tabellen `-1`
+  zeigte („nie analysiert") und als „leer" missverstanden werden konnte.
+  Jetzt **echte `count(*)`** über alle 166 Tabellen, in einer Abfrage.
 
-- [ ] **E-02: Tote Verweise verifizieren** — erste Messung ergab 27/27/9/9/28
-  tote Verweise je Medienfeld (2–4,8 %). Die Konstanz deutet auf ein
-  Kodierungsartefakt der Prüfquery hin (URLs sind prozentkodiert, Dateinamen
-  enthalten Leerzeichen vor der Endung). `[annahme]` Vor Eintrag als Datenverlust
-  eine betroffene URL im Browser öffnen.
+  | Posten | `[cmd]` 2026-08-07 |
+  |---|---|
+  | PostgreSQL | 17.6 |
+  | Extensions | 7 (u. a. `vector` 0.8.0, `pg_trgm`, `pgcrypto`) |
+  | Schemas | `public` 166, `auth` 23, `storage` 8, `realtime` 3 |
+  | Policies in `public` | **101** auf 67 Tabellen |
+  | Nutzer | **7** — `dev@lumeos.app` (2026-03-17), sechs Demokonten (2026-03-19) |
+  | Buckets | genau einer: `exercises`, **öffentlich**, **10.776** Objekte |
 
-- [ ] **E-03: Abhängigkeiten prüfen, bevor `public` angefasst wird** —
-  Fremdschlüssel oder Trigger nach `storage.objects`; Storage-Policies, die auf
-  `public`-Tabellen verweisen; Views und Funktionen auf `public.<tabelle>`.
-  *`ALTER TABLE … SET SCHEMA` ist billig und reversibel, kann aber genau diese
-  brechen. Vorher Dump ziehen.*
+  Die befüllten Tabellen führen `foods` (7.140), `exercise_muscles` (6.398)
+  und `exercises` (1.448) an; die Nutzerdaten stammen aus den sechs
+  Demokonten und sind für eine Übernahme ohne Wert.
+
+- [x] **E-02: Tote Verweise verifizieren** — **erledigt 2026-08-07
+  (Block 16). Die alte Zahl war ein MESSFEHLER, kein Datenverlust.**
+  Der Verdacht auf ein Kodierungsartefakt war richtig — die Ursache liegt
+  aber genauer, als angenommen.
+  `[cmd]` In den URLs kommen **genau drei** Prozentsequenzen vor: `%20`
+  (13.514×), `%28` (99×), `%29` (99×) — Leerzeichen **und Klammern**.
+  Die alte Prüfung dekodierte nur `%20`.
+
+  | Normalisierung | tote Verweise je Feld |
+  |---|---|
+  | ohne | 27 / 27 / 9 / 9 / 28 |
+  | nur `%20` | 27 / 27 / 9 / 9 / 28 — **unverändert** |
+  | `%20` + `%28` + `%29` | **0 / 0 / 0 / 0 / 1** |
+
+  **Es bleibt genau EIN wirklich toter Verweis:**
+  `videos/Biceps/Alternate hammer curl seated dumbbells.mp4`.
+  **Warum es so lange unbemerkt blieb — die eigentliche Lehre:** `%20`
+  allein ändert das Ergebnis **nicht**. Die Zahl blieb über mehrere
+  Messungen stabil und wirkte dadurch bestätigt. **Eine Zahl, die sich
+  nicht bewegt, ist nicht automatisch richtig** — sie kann auch an einem
+  Fehler hängen, der bei jedem Lauf gleich wirkt. Konstanz ist kein Beleg;
+  sie war hier sogar das Tarnmittel.
+  Details: `docs/ssot/60-legacy-cloud.md` Abschnitt 5.
+
+- [x] **E-03: Abhängigkeiten prüfen, bevor `public` angefasst wird** —
+  **erledigt 2026-08-07 (Block 16).** Vollständig geprüft, nicht
+  stichprobenhaft: Fremdschlüssel in **beide** Richtungen, Trigger,
+  Sichten, Funktionen, Policies.
+  **`[cmd]` Ergebnis für `exercises`, `exercise_muscles`, `muscle_groups`
+  und `equipment`: es hängt NICHTS daran.** Keine Fremdschlüssel von den
+  Kandidaten weg, keine auf sie zu, keine Trigger, keine Sichten, keine
+  Funktionen, keine Policies.
+  **Der zweite Teil des Befunds ist der wichtigere: Die Verknüpfungen
+  existieren nur als Konvention, nicht als Constraint.**
+  `[cmd]` `exercises.equipment_id` ist **1.448 von 1.448** gefüllt — ohne
+  Fremdschlüssel. `exercise_muscles` verweist auf `exercises` und
+  `muscle_groups`, ebenfalls ohne. Nichts in der Datenbank hätte
+  verhindert, dass die Verweise ins Leere zeigen.
+  `[cmd]` Gegenprobe am Export, lokal nachgerechnet: **0 Waisen** in allen
+  drei Beziehungen. Die Daten sind stimmig — aber aus Disziplin, nicht aus
+  Struktur. Beim Neuentwurf gehören diese Beziehungen als echte
+  Fremdschlüssel abgebildet.
+  Details: `docs/ssot/60-legacy-cloud.md` Abschnitt 4.
 
 - [ ] **E-04: Alte `public`-Tabellen nach `legacy` verschieben** — nicht löschen.
   Kostet nichts, macht `public` frei für unsere Schemas, und die Daten bleiben
   greifbar. Bucket und `auth` bleiben unangetastet.
+  **ABGEWERTET 2026-08-07 (Block 16) — bleibt offen, ist aber kein Blocker
+  und keine Dringlichkeit mehr.** Zwei Messungen nehmen dem Punkt sein
+  Gewicht:
+  1. `[cmd]` (E-03) An den vier Übernahmekandidaten hängt **nichts** —
+     keine Fremdschlüssel, Trigger, Sichten, Funktionen oder Policies. Die
+     Warnung „`ALTER TABLE … SET SCHEMA` kann genau diese brechen" hat
+     hier kein Ziel: es gibt nichts zu brechen.
+  2. `[cmd]` (E-01) **132 von 166 Tabellen in `public` sind leer**, nur 34
+     tragen Daten. Der Aufräumgewinn ist damit kleiner, als die Zahl 166
+     vermuten liess — verschoben würden überwiegend leere Hüllen.
+  **Wer diesen Punkt künftig liest: er blockiert nichts.** Er ist Kosmetik
+  an einer Instanz, die ohnehin umgebaut wird, und gehört hinter E-05
+  (Mapping) und E-08 (Deployment) eingereiht, nicht davor.
 
 - [ ] **E-05: Übernahmekandidaten exportieren und mappen** — sicher:
   `exercises`, `exercise_muscles`, `equipment`, Muskelgruppen-Katalog.
@@ -1342,14 +1423,67 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   Einspielung in ein sauberes `training.`-Schema.
   *Inhalt vor Struktur: die Daten werden übernommen, die alte Struktur ist
   verhandelbar.*
+  **Export erledigt 2026-08-07 (Block 16), Mapping steht noch aus.**
+  `backup/legacy-v2/training/` als JSON, `[cmd]` Datensatzzahlen gegen die
+  Quelle geprüft: `exercises` **1.448**, `exercise_muscles` **6.398**,
+  `muscle_groups` **157**, `equipment` **61**. JSON gewählt, weil es die
+  `text[]`-Spalten verlustfrei trägt und die alte Struktur **nicht**
+  zementiert (SQL-INSERTs täten das).
+  **DER BEFUND FÜR DEN NEUENTWURF — die Arrays sind die Quelle, nicht die
+  Zuordnungstabelle.** `[cmd]` Am Export nachgerechnet, beide Rollen:
+
+  | | Array | Zuordnungstabelle | in beiden | nur Array | nur Tabelle |
+  |---|---|---|---|---|---|
+  | `primary` | 3.138 | 2.972 | 2.972 | **166** | **0** |
+  | `secondary` | 3.658 | 3.426 | 3.426 | **232** | **0** |
+
+  **398 Zuordnungen gingen verloren**, wenn man nur `exercise_muscles`
+  übernimmt. In beide Richtungen **kein einziger Widerspruch**: die Arrays
+  sind eine echte Obermenge.
+  Die Zuordnungstabelle wäre die sauberere Struktur gewesen — sie ist aber
+  **unvollständig gepflegt worden**. Wer beim Neuentwurf die schönere Form
+  wählt, ohne die Zahlen zu kennen, verliert 398 Fachaussagen.
+  **Qualitätsmängel, die beim Mapping zu bereinigen sind** `[cmd]`:
+  - `name_de` und `name_th` sind in **allen vier Tabellen durchgehend
+    `NULL`** — es gibt keine Übersetzungen zu retten, nur Spalten.
+  - **63 von 157** Muskelgruppennamen tragen eine überzählige schliessende
+    Klammer (`Triceps)`, `Extensor Carpi Radialis Longus)`).
+  - `muscle_groups.body_region`: **65 von 157** auf `other` (41 %).
+  - `equipment.category`: **alle 61** auf `general` — die Spalte trägt
+    keine Information.
+  - Leer in `exercises`: `description`, `score_hypertrophy`,
+    `score_strength`, `score_sfr`, `common_mistakes`, `aliases`.
+  - **Der eigentliche Wert:** `instructions` **1.448/1.448** und `tips`
+    **1.444** — ausformulierte Anleitungen, bei Neuerzeugung der teuerste
+    Posten.
 
 - [ ] **E-06: Medienpfade relativ speichern** — Zielstruktur hält Bucket +
   relativen Objektpfad, nicht die absolute URL. Basis-URL kommt aus der
   Konfiguration. *Sonst steckt die Projekt-Ref in jeder Zeile.*
+  **`[cmd]` 2026-08-07: Der Befürchtungssatz ist gemessene Tatsache.**
+  **Alle** Medienwerte sind vollständige URLs — 1.274 Videos und 1.370
+  Bilder absolut, **null** relativ. Muster:
+  `https://<ref>.supabase.co/storage/v1/object/public/exercises/videos/<Kategorie>/<datei>.mp4`
+  Die Projekt-Referenz steht damit in jeder einzelnen Zeile.
+  **REIHENFOLGE: E-06 gehört VOR ADR-0004 (Medienort), nicht danach.**
+  Das ist der Kern und der Grund, diesen Punkt vorzuziehen: Solange die
+  Pfade absolut sind, ist jeder Ortswechsel eine Migration über 1.448
+  Zeilen × bis zu 5 Spalten — in einer Instanz, für die bezahlt wird, ohne
+  Rückweg ohne Kenntnis der alten URLs. Nach E-06 ist derselbe Wechsel
+  **eine Konfigurationszeile**.
+  Das gilt unabhängig davon, wie ADR-0004 ausfällt — deshalb ist E-06
+  keine Folge dieser Entscheidung, sondern ihre Voraussetzung.
+  Vermerkt auch in `docs/spezifikation/90-entscheidungen/ADR-0004-medienort.md`.
 
 - [ ] **E-07: Lücke weibliche Darstellungen entscheiden** — 186 von 1.448
   Übungen (13 %). Bewusster Verzicht oder Produktionsauftrag über 1.262 Übungen?
   *Gehört in die Produktentscheidung, nicht in eine Fussnote.*
+  **`[cmd]` 2026-08-07 gegen die laufende Instanz bestätigt: genau 186.**
+  Die Zahl stimmt, sie war keine Schätzung. Aufschlüsselung:
+  `image_female_start` 186, `image_female_end` 186 — dieselben Übungen,
+  beide Felder gefüllt oder beide leer. Zum Vergleich `image_male_start`
+  1.370 (95 %), `video_url` 1.274 (88 %), ganz ohne Medien 39 (2,7 %).
+  Die Entscheidung bleibt offen; die Datenlage ist jetzt belegt.
 
 - [ ] **E-08: Deployment nach `main`** — Wartebedingung korrigiert
   2026-08-05: „erst wenn D-12 abgeschlossen" ist seit 2026-08-02 erfüllt
@@ -1368,6 +1502,25 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   Tom), bei echten Nutzerdaten nicht. *Vgl. D-14 — derselbe Befund lokal:
   9 von 11 `nutrition`-Tabellen ohne RLS, obwohl die Migration es beschreibt.
   Das Muster wiederholt sich über zwei unabhängige Instanzen.*
+
+- [ ] **E-11: Verwaiste Storage-Objekte klären, bevor Medien transferiert
+  werden** (neu 2026-08-07, aus E-02) — `[cmd]` Von den **10.776** Objekten
+  im Bucket `exercises` sind nur **3.553 referenziert**; **7.223 (67 %)**
+  werden von **keiner** Zeile in `exercises` benutzt.
+  **Das ändert die Grössenordnung jeder Transferplanung.** Die 15 GB, die
+  in Sektion E als Grund gelten, das Legacy-Projekt zu behalten, sind
+  möglicherweise nur zu einem Drittel gebrauchter Bestand. Vor jedem
+  Transfer (und vor der Kostenrechnung in ADR-0004) ist zu klären, ob die
+  verwaisten Objekte mitgenommen werden.
+  `[annahme]` Kern der Verwaisung dürften die **3.797 Objekte ohne
+  `videos/`- oder `images/`-Präfix** sein (`[cmd]` gemessen: 2.350 mit
+  `videos/`, 4.629 mit `images/`, 3.797 ohne). Sie liegen direkt unter dem
+  Muskelgruppen-Ordner, z. B. `Biceps/Dumbbell Lying Supine Curl1.jpeg` —
+  vermutlich ein früherer Uploadstand mit anderer Pfadstruktur.
+  **Nicht löschen, bevor das geprüft ist.** Ein unreferenziertes Objekt ist
+  nicht dasselbe wie ein überflüssiges: es könnte die bessere Aufnahme
+  derselben Übung sein. Erst zuordnen, dann entscheiden.
+  Details: `docs/ssot/60-legacy-cloud.md` Abschnitte 3 und 5.
 
 ---
 
