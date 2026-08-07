@@ -23,9 +23,16 @@ Ausführliche Runtime-Instructions: `CLAUDE.md`
 
 Monorepo (Turborepo + pnpm 9, Node >= 20).
 
-**Real Code enthält nur `apps/web`.** `services/` und `packages/` sind im
-`pnpm-workspace.yaml` deklariert, aber leer oder nicht vorhanden. Keine Pfade
-dort erfinden — vorher prüfen, ob sie existieren.
+**Berichtigt 2026-08-06 (A-10).** Hier stand: „Real Code enthält nur
+`apps/web`. `services/` und `packages/` sind im `pnpm-workspace.yaml`
+deklariert, aber leer oder nicht vorhanden." Das ist überholt.
+`[cmd]` 2026-08-06: der Workspace hat **vier** Projekte —
+`apps/web`, `packages/shared` (verdrahtet, Supabase-Clients),
+`services/nutrition-api` (unverdrahtet, Gerüst; siehe C-08) und das
+Wurzelpaket. `packages/types` wurde am 2026-08-06 entfernt (C-07).
+Der Rat bleibt richtig, nur die Begründung war falsch: **keine Pfade
+erfinden — vorher prüfen, ob sie existieren.** Der Ist-Zustand steht in
+`docs/ssot/00-INDEX.md`, nicht hier.
 
 ### apps/web
 

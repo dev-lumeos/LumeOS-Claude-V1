@@ -84,6 +84,8 @@ _archive/              # Stillgelegte Governance-Ära — nicht reaktivieren
   Code > ssot > alles andere; Herkunftsmarker `[cmd]`/`[read]`/`[annahme]`)
 - **Konventionen:** `docs/spezifikation/10-plattform/konventionen/`
 - **Arbeitsanweisungen für Claude:** `CLAUDE.md`
-- Wurzeldateien wie `AGENTS.md`, `SESSION_ONBOARDING.md`,
-  `STACK_REFERENCE.md`, `COMMANDS.md` sind Altlast der Governance-Ära —
-  nicht als Sollwert lesen (`docs/ssot/50-governance-rest.md`).
+- Die Wurzel-Altlast der Governance-Ära (`COMMANDS.md`,
+  `SESSION_ONBOARDING.md`, `STACK_REFERENCE.md`, `CLAUDE.md.v1.bak`) liegt
+  seit 2026-08-06 unter `_archive/governance/wurzel-altlast/` — Archiv,
+  kein Sollwert. `AGENTS.md` bleibt in der Wurzel: sie ist der
+  Einstiegspunkt für Agenten-Werkzeuge, nicht Altlast.

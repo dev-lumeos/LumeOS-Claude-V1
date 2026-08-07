@@ -43,12 +43,17 @@ passiert („services/ ist leer"; „keine Writes, kein Auth").
 ## Altlasten
 
 Die frühere Governance-Maschinerie ist archiviert (`_archive/governance/`,
-Regeln im dortigen README) bzw. in ein eigenes Repo umgezogen. Auf
-Wurzelebene liegen noch Altlast-Dokumente (`AGENTS.md`,
-`SESSION_ONBOARDING.md`, `STACK_REFERENCE.md`, `COMMANDS.md`,
-`project.profile.json`) — **nicht als Sollwert lesen**, Übersicht in
-`docs/ssot/50-governance-rest.md`. Wenn Tom nach Governance fragt:
-das gehört ins Governance-Repo, nicht hierher.
+Regeln im dortigen README) bzw. in ein eigenes Repo umgezogen.
+**Die Wurzel ist seit 2026-08-06 (A-10) geräumt:** `COMMANDS.md`,
+`SESSION_ONBOARDING.md`, `STACK_REFERENCE.md` und `CLAUDE.md.v1.bak`
+liegen jetzt unter `_archive/governance/wurzel-altlast/` (mit README, das
+je Datei nennt, warum). `project.profile.json` ist bereits früher
+entfallen.
+**`AGENTS.md` bleibt bewusst im Wurzelverzeichnis** — sie ist keine
+Altlast mehr, sondern der Einstiegspunkt für Agenten-Werkzeuge
+(lean-ctx-Block, Verweis auf `CLAUDE.md`); mehrere Werkzeuge lesen sie von
+sich aus. Wenn Tom nach Governance fragt: das gehört ins Governance-Repo,
+nicht hierher.
 
 ---
 
