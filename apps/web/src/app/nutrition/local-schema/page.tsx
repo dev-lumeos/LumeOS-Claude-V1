@@ -3,6 +3,9 @@ import { NutrientPreviewFilter } from './nutrient-preview-filter'
 
 export const dynamic = 'force-dynamic'
 
+/** Erwartete Zahl der Nährstoffdefinitionen nach dem 015-Katalog-Seed. */
+const EXPECTED_NUTRIENT_DEFS = 138
+
 function StatusBadge({ tone, label }: { tone: 'pass' | 'attention' | 'blocked'; label: string }) {
   const toneClass = tone === 'pass'
     ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
@@ -20,7 +23,15 @@ function StatusBadge({ tone, label }: { tone: 'pass' | 'attention' | 'blocked'; 
 export default async function LocalNutritionSchemaPage() {
   try {
     const snapshot = await getLocalNutritionSchemaDebug()
-    const hasLocalSeedRows = snapshot.table_exists && snapshot.row_count === 138
+    // C-10 (2026-08-06): Diese 138 ist KEINE Anzeigezahl, sondern eine
+    // Erwartung — sie beantwortet „entspricht der lokale Seed dem
+    // Katalog?". Sie gehört deshalb hart und darf NICHT aus derselben
+    // Tabelle geladen werden, die sie prüft; sonst stimmt sie immer und
+    // die Diagnose ist wertlos.
+    // Soll: 138 Nährstoffdefinitionen aus
+    // `_pipeline/015_kataloge/015_nutrient_defs_seed.sql`.
+    // `[cmd]` 2026-08-06 gegen die laufende Instanz geprüft: 138 — stimmt.
+    const hasLocalSeedRows = snapshot.table_exists && snapshot.row_count === EXPECTED_NUTRIENT_DEFS
     const foodFoundation = snapshot.food_foundation
     const foodFoundationReady = foodFoundation.foods_table_exists
       && foodFoundation.food_nutrients_table_exists

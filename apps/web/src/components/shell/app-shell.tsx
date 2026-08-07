@@ -73,10 +73,17 @@ const contextBySection: Record<
   },
   nutrition: {
     status: 'Diary-first Draft',
-    boundary: 'BLS-only, kein USDA/OFF, keine Diary Writes.',
+    boundary: 'BLS-only, kein USDA/OFF. Diary-Datenschicht steht, Oberfläche fehlt.',
     next: 'Food Search öffnen oder BLS-Grenzen prüfen.',
-    detail: 'Nutrition · 117 Nährstoffe · BLS 10.840 · Candidate',
-    buddy: 'Diary ist sichtbar, aber bewusst ohne Logging-Aktion.',
+    // C-10 (2026-08-06): Zahlen waren beide falsch — behauptet standen
+    // „117 Nährstoffe · BLS 10.840", `[cmd]` in der Datenbank sind es
+    // 138 nutrient_defs und 7.140 foods. Bewusst WEITERHIN hart, nicht
+    // aus der Datenbank geladen: die App-Shell rendert auf jeder Seite,
+    // eine Zählabfrage je Aufruf wäre Aufwand für eine Zahl, die sich
+    // nur beim BLS-Import ändert. Stand geprüft 2026-08-06; wer den
+    // Bestand ändert, ändert diese Zeile mit.
+    detail: 'Nutrition · 138 Nährstoffe · BLS 7.140 Lebensmittel · Candidate',
+    buddy: 'Diary schreibt in der Datenbank (C-03/C-04); die Oberfläche dazu fehlt noch.',
     insights: [
       { tone: 'info', text: 'Food Search bleibt unter /nutrition/foods erhalten.' },
       { tone: 'warn', text: 'Planner, Insights und MealCam sind nicht live.' },

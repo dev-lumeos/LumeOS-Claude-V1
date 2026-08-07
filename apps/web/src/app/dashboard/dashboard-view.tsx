@@ -34,7 +34,13 @@ export function DashboardView() {
       />
 
       <section className="lume-grid-4">
-        <MetricCard accent="var(--acc-dash)" label="Shell" note="App Shell, Topbar, Context Panel und Navigation sind sichtbar." unit="Routes" value="11" />
+        {/* C-10 (2026-08-06): stand als „Routes 11". `[cmd]` Weder die
+            Seitenzahl (15 page.tsx) noch die Navigationseinträge (9 hrefs)
+            ergeben 11 — die Zahl war an nichts verankert und wanderte mit
+            jeder neuen Route weiter weg. Statt sie neu zu raten oder je
+            Aufruf zu zählen: die Aussage ohne Zahl, denn die Karte sagt
+            selbst „zeigt keine Live-Daten". */}
+        <MetricCard accent="var(--acc-dash)" label="Shell" note="App Shell, Topbar, Context Panel und Navigation sind sichtbar." unit="Status" value="live" />
         <MetricCard accent="var(--acc-nutri)" label="Nutrition" note="BLS-only Foundation und alte Food Search sind verlinkt." unit="Scope" value="BLS" />
         <MetricCard accent="var(--acc-goals)" label="Goals" note="Goal Cards, Body Metrics und Relationen bleiben Mock." unit="Draft" value="01" />
         <MetricCard accent="var(--warn)" label="Truth" note="Nicht freigegeben, keine Queue und keine Execution." unit="State" value="0" />
