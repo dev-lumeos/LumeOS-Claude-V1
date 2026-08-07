@@ -1,0 +1,37 @@
+{
+  "_zweck": "E-06: Der Speicherort der Medien steht HIER und nur hier. Ein Ortswechsel ist damit eine Aenderung an dieser Datei, nicht eine Migration ueber 1.448 Zeilen.",
+  "_stand": "2026-08-07",
+  "_regel": "Vollstaendige URL = basis_url + bucket + '/' + relativer Pfad, jedes Pfadsegment einzeln prozentkodiert. Der relative Pfad steht je Uebung in exercises.json unter media_paths.",
+
+  "aktiv": "supabase_storage",
+
+  "orte": {
+    "supabase_storage": {
+      "_hinweis": "Ist-Zustand der Legacy-Instanz. Bucket ist oeffentlich (Teilentscheidung ADR-0004, 2026-08-07).",
+      "basis_url": "https://<projekt-ref>.supabase.co/storage/v1/object/public/",
+      "bucket": "exercises",
+      "oeffentlich": true
+    },
+    "lokal": {
+      "_hinweis": "Lokale Kopie im Repo, ignoriert. [cmd] 2026-08-07: alle 3.753 Verweise loesen hier exakt auf — auch der in der Cloud fehlende.",
+      "basis_url": "file:///",
+      "bucket": "media/exercises",
+      "oeffentlich": false
+    },
+    "cloudflare_r2": {
+      "_hinweis": "Option B aus ADR-0004. NICHT entschieden, hier nur als Platzhalter, damit sichtbar ist, dass ein Wechsel eine Zeile ist.",
+      "basis_url": null,
+      "bucket": null,
+      "oeffentlich": null
+    }
+  },
+
+  "_projektreferenz_bewusst_nicht_hier": "Die Projekt-Referenz steht als Platzhalter <projekt-ref> und wird zur Laufzeit aus der Umgebung eingesetzt. Sie gehoert nicht in eine versionierte Datei, auch wenn sie in den Medien-URLs des Exports noch als Datenbestandteil vorkommt.",
+
+  "_kodierung": {
+    "regel": "Der relative Pfad ist DEKODIERT gespeichert (echte Leerzeichen, echte Klammern). Kodiert wird erst beim Bilden der URL.",
+    "grund": "[cmd] 2026-08-07: Die Quelle kodiert uneinheitlich — dieselbe Datei steht mal als 'Stretching - Mobility' und mal als 'Stretching%20-%20Mobility', Klammern mal roh und mal als %28/%29. Ein dekodierter Pfad ist die einzige Form, die fuer beide Schreibweisen dieselbe ist.",
+    "vorkommende_sequenzen": ["%20", "%28", "%29"],
+    "sonderfall": "54 Werte tragen ROHE Leerzeichen im Ordnernamen und kodierte im Dateinamen — eine Mischform. decodeURIComponent behandelt beide richtig."
+  }
+}
