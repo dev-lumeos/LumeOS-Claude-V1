@@ -1,7 +1,7 @@
 ---
-status:     offen — Entscheidung steht aus (Tom)
-stand:      2026-08-06
-ankerhash:  305a078
+status:     teilweise entschieden — Ort offen, Sichtbarkeit entschieden
+stand:      2026-08-07
+ankerhash:  3cfbd12
 betrifft:   30-module/training, 30-module/nutrition (MealCam), 10-plattform/architektur, Sektion E
 ---
 
@@ -108,9 +108,39 @@ zur Migration.
 
 **Was Tom zum Entscheiden braucht:**
 1. Die Egress-Kosten der letzten Monate aus der Supabase-Abrechnung.
-2. Ob die Medien öffentlich bleiben sollen (`[cmd]` heute
-   `public: true`) — bei privaten Medien verliert R2 einen Teil seines
-   Vorteils, weil signierte URLs nötig würden.
+2. ~~Ob die Medien öffentlich bleiben sollen~~ — **entschieden, siehe
+   Teilentscheidung unten.**
+
+### Teilentscheidung 2026-08-07 (Tom): Der Bucket bleibt vorerst öffentlich
+
+`[cmd]` Der Bucket `exercises` steht auf `public: true`. Tom hat
+entschieden, das **so zu belassen** — als bewusste, umkehrbare Wahl, nicht
+als Versäumnis.
+
+**Warum das für den aktuellen Stand richtig ist:** Übungsvideos und
+-bilder sind Stammdaten, kein Nutzerinhalt. Sie zeigen niemanden und
+verraten nichts über eine Nutzerin. Signierte URLs kosteten Aufwand für
+Material, das ohnehin jeder sehen darf, sobald er die App benutzt — und
+sie brächen die einfache Auslieferung über ein CDN.
+
+**Warum es umkehrbar bleibt:** Ein Bucket lässt sich auf `private`
+umstellen; danach brauchen die Clients signierte URLs. Das ist Arbeit an
+**einer** Stelle (dem Medien-Zugriffspfad), **sofern E-06 vorher erledigt
+ist** — bei absoluten URLs in 1.448 Zeilen wäre es erneut eine Migration.
+Auch dieser Weg führt also über E-06.
+
+**Und das ist zugleich der Posten, der die R2-Frage entscheidet:**
+Öffentlicher Egress ist genau der Kostenblock, an dem sich Option A und B
+unterscheiden. Solange der Bucket öffentlich ist, fällt Egress bei jedem
+Videoabruf an — und `[cmd]` `[annahme]` **niemand hat gemessen, wie hoch
+er ist.** Die Entscheidung „öffentlich" macht die fehlende Zahl damit
+wichtiger, nicht unwichtiger.
+
+**Was aus E-11 hinzukommt:** `[cmd]` 2026-08-07 gemessen — von den 10.776
+Objekten sind nur **3.553 referenziert**, **7.223 (67 %) verwaist**. Die
+Kostenrechnung für beide Optionen betrifft also möglicherweise nur ein
+Drittel des Bestands. Vor jeder Transferentscheidung ist E-11 zu klären;
+sonst rechnet man 15 GB, wo 5 GB gemeint sind.
 
 ## Folgen
 
@@ -141,7 +171,14 @@ zur Migration.
 ## Offen
 
 - `[annahme]` Egress-Kosten nicht gemessen — die tragende Zahl fehlt.
-- `[cmd]` Die lokale Kopie unter `temp/lumeosold/assets/` (13,4 GB) ist
-  weder gesichert noch versioniert. Solange sie die einzige lokale Kopie
-  ist, ist sie **kein Löschkandidat** für A-05 — festgehalten am
-  2026-08-06, weil sie dort beinahe unter „Repo-Müll" gefallen wäre.
+  Durch die Teilentscheidung „Bucket bleibt öffentlich" wird sie
+  **wichtiger**, nicht unwichtiger.
+- **E-11: Wie gross ist der Bestand wirklich?** `[cmd]` 2026-08-07: von
+  10.776 Objekten sind nur **3.553 referenziert**, **7.223 (67 %)
+  verwaist**. Jede Kostenrechnung für A oder B betrifft möglicherweise nur
+  ein Drittel des Bestands. Vor der Ortsentscheidung zu klären.
+- `[cmd]` Die lokale Kopie liegt seit 2026-08-07 unter **`media/`**
+  (7.012 Dateien, 13,4 GB) — verschoben aus `temp/lumeosold/assets/`, wo
+  sie am 2026-08-06 beinahe unter „Repo-Müll" (A-05) gefallen wäre. Sie
+  ist weder gesichert noch versioniert und bleibt **kein Löschkandidat**,
+  solange sie die einzige lokale Kopie ist.
