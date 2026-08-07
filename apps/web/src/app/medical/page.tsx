@@ -26,7 +26,7 @@ export default function MedicalPage() {
           { label: 'Monitoring only', tone: 'readonly' },
           { label: 'Nicht live', tone: 'mock' },
         ]}
-        description="Medical ist laut Source-Spec ein sensibles Core-Modul. Dieser Phase-1B-Placeholder zeigt nur die Modulgrenze: Monitoring, Datenschutz und keine medizinische Beratung."
+        description="Medical ist laut Source-Spec ein sensibles Core-Modul. Dieser Platzhalter zeigt nur die Modulgrenze: Monitoring, Datenschutz und keine medizinische Beratung."
         eyebrow="Medical"
         title="Medical Foundation"
       />

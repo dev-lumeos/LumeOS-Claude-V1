@@ -35,8 +35,17 @@ Governance-Seiten und 2 Governance-API-Routen im Archiv.)
 | `/nutrition/local-schema` | `[read]` (2026-08-01) ruft `getLocalNutritionSchemaDebug()` |
 | 6 Nutrition-API-Routen | `[cmd]` 2026-08-04: alle mit `export const dynamic = 'force-dynamic'`; 5 davon zusätzlich `runtime = 'nodejs'` (Service-Client läuft nur serverseitig); `preferences/catalog` ohne runtime-Export (kein DB-Zugriff) |
 
-`[cmd]` Grep 2026-08-01 (Logik seither unverändert portiert): kein
-`INSERT`/`UPDATE`/`DELETE` in `lib/nutrition` — Phase 1B read-only.
+**Überholt seit M3 — berichtigt 2026-08-06 (D-07).** Hier stand:
+„`[cmd]` Grep 2026-08-01 … kein `INSERT`/`UPDATE`/`DELETE` in
+`lib/nutrition` — Phase 1B read-only." Das galt bis zum 2026-08-04 und
+ist seither falsch.
+`[cmd]` 2026-08-06: `lib/nutrition` enthält Schreiboperationen in
+**zwei** Dateien — `preferences-write.ts` (C-02, Favoriten und
+Ausschlüsse) und `diary-write.ts` (C-03, Mahlzeiten und Positionen mit
+eingefrorenen Nährwerten). Beide laufen über den Session-Client mit
+Zeilenschutz, nicht über den Service-Client.
+Der Begriff „Phase 1B" wird nicht mehr verwendet; Stand und Grenzen
+stehen in `docs/todo/TODO.md` und `docs/spezifikation/`.
 
 ### Mock / statisch
 
@@ -49,10 +58,23 @@ Governance-Seiten und 2 Governance-API-Routen im Archiv.)
 | `/training`, `/recovery`, `/supplements`, `/coach`, `/settings` | je 5 Zeilen `<PlaceholderPage />` |
 | `/nutrition/preferences` | `[read]` nur `redirect('/nutrition/foods')` |
 
-Auch die App-Shell zeigt Literale statt Daten: `[cmd]` 2026-08-04
-`app-shell.tsx:77` `'Nutrition · 117 Nährstoffe · BLS 10.840 · Candidate'`,
-Z. 377 fest `Offline · 0 queued`. Der frühere `/governance`-Early-Return in
-`app-shell.tsx` ist entfernt.
+Auch die App-Shell zeigt Literale statt Daten. Der frühere
+`/governance`-Early-Return in `app-shell.tsx` ist entfernt.
+
+**Berichtigt 2026-08-06 (C-10):** Die hier zuvor zitierte Zeile
+`'Nutrition · 117 Nährstoffe · BLS 10.840 · Candidate'` war **doppelt
+falsch** — `[cmd]` in der Datenbank stehen **138** `nutrient_defs` und
+**7.140** `foods`, nicht 117 und 10.840. Korrigiert auf die gemessenen
+Werte und **bewusst weiterhin hart**: die App-Shell rendert auf jeder
+Seite, eine Zählabfrage je Aufruf wäre Aufwand für eine Zahl, die sich
+nur beim BLS-Import ändert. Der Kommentar an der Fundstelle nennt Herkunft
+und Prüfdatum.
+Ebenfalls berichtigt: die Shell behauptete „keine Diary Writes" — seit
+C-03/C-04 falsch. `[cmd]` `lib/nutrition` enthält Schreibpfade in
+`preferences-write.ts` und `diary-write.ts`; was fehlt, ist die
+Diary-Oberfläche, nicht der Schreibpfad.
+Unverändert hart und unbeanstandet: `Offline · 0 queued` — eine
+Zustandsanzeige ohne Datenbezug, keine Bestandsbehauptung.
 
 ---
 

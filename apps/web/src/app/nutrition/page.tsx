@@ -12,7 +12,7 @@ const macroStrip = [
 const mealSlots = [
   { name: 'Breakfast', time: '08:30', state: 'leer', note: 'Noch kein live Diary Logging.' },
   { name: 'Lunch', time: '12:30', state: 'leer', note: 'Food Search ist separat verfügbar.' },
-  { name: 'Dinner', time: '19:00', state: 'leer', note: 'Keine Add-Meal- oder Save-Aktion in Phase 1B.' },
+  { name: 'Dinner', time: '19:00', state: 'leer', note: 'Diese Seite hat keine Add-Meal- oder Save-Aktion.' },
 ]
 
 const foundationCards = [
