@@ -1,5 +1,11 @@
 # Spec-Audit — Übersicht (D-05)
 
+> **Fortsetzung:** `01-feldabgleich.md` (2026-08-07, Block 18) leistet den
+> Feldabgleich, der unten als „nicht geleistet" markiert ist — für 4 Module
+> vollständig, für 9 nur eingestuft. **Härtester Fund dort:** `[cmd]` 14
+> `FOR ALL`-Policies in vier Modulen mit `USING`, aber ohne `WITH CHECK` —
+> ein INSERT-Leck, das als Hausstil in den Specs steht.
+
 **Stand:** 2026-08-02 (erste Fassung, autonome Sitzung) · **Ankerhash:** 76c8080
 **Methode:** `[cmd]` Ordnerlisten aller 13 Module; alle INDEX-/README-Dateien
 gelesen; Zählprüfungen (`CREATE TABLE` in SPEC_06 vs. Entity-Überschriften in
