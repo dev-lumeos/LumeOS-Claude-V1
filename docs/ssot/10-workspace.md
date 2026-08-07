@@ -31,7 +31,7 @@ sie das Datum der letzten Messung.
 | `apps/web` | `@lumeos/web` | 51 | `@lumeos/shared` (workspace:*) | **Produkt, lebend** | `[cmd]` 2026-08-04 |
 | `services/nutrition-api` | `@lumeos/nutrition-api` | 4 | keine | Produkt, unverdrahtet | `[cmd]` 2026-08-04 |
 | `packages/shared` | `@lumeos/shared` | 3 | keine | **Produkt, verdrahtet** — liefert den Supabase-Service-Client für `apps/web` | `[cmd]` 2026-08-04 |
-| `packages/types` | `@lumeos/types` | 3 | keine | Produkt, unverdrahtet | `[cmd]` 2026-08-04 |
+| `packages/types` | `@lumeos/types` | — | — | **entfernt 2026-08-06 (C-07)** — deklarierte Spalten, die `nutrition.foods` nie hatte, plus das von ADR-0003 verworfene flache Modell; 0 Importer. Per `git revert` wiederherstellbar | `[cmd]` 2026-08-06 |
 
 Der frühere zentrale Befund („`apps/web` hat null `@lumeos/*`-Importe") ist
 seit M1 Teil C überholt: `[cmd]` 2026-08-04 genau **ein** Import —
