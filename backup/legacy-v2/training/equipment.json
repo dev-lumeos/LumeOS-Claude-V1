@@ -1,0 +1,490 @@
+[
+  {
+    "id": "00364e03-9483-43be-a16f-9ed041f3f72e",
+    "name": "Leg press machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "019acf06-8639-4d82-b2d1-c9065d110fb0",
+    "name": "Bench, Pull Up Bar",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "0496ab82-eab1-4362-8dca-c3f5cd24f67f",
+    "name": "Bands",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "070b764c-4780-4a8a-b127-92da7d2660e8",
+    "name": "chair",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "0bcb2d29-e147-4deb-9a19-924da5ff89b3",
+    "name": "Couch",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "0e9c1392-3e8d-454d-be69-641c3a69f2b9",
+    "name": "EZ Bar",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "132c52b1-6336-4426-a457-c35a314038f2",
+    "name": "Smith Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "19c915e4-c3a9-45c3-a353-2dc75641ee31",
+    "name": "Hammer Strength MTS Iso-Lateral Biceps Curl Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "1a636d29-2aec-4f45-914e-8fab15563d39",
+    "name": "Iso-Lateral Shoulder Press Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "1ef31452-7681-4bfc-9d1a-bc84acc60cf8",
+    "name": "Dual Pec Fly Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "23ac3a8b-7dc5-4dd2-aaa6-7d6ffd8421f7",
+    "name": "Resistance Cable",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "28deca28-3c3f-422f-9707-032a51268ee5",
+    "name": "Leg Press Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "2c4e23f7-d7ad-4255-8299-13033b3bc1c8",
+    "name": "Dip Station",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "31083d5d-8548-4eea-84ef-fa925cdcc95e",
+    "name": "Cable Pulley Machine, Rope Attachment",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "353a86d0-9f31-40d3-bfba-969ae615da15",
+    "name": "Chair",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "35516b5e-1db4-4a4c-84d8-d7845b9c83f1",
+    "name": "Fixed Pole Bar",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "3639ee85-3c42-4623-8e39-8272474ef3d4",
+    "name": "weight plate",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "379b9cc2-e621-4bfd-8c4d-0073eb8a2cbe",
+    "name": "Seated hip abductor machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "41a888dc-9e8a-4146-b683-b681e55eefde",
+    "name": "MTS Iso-Lateral Kneeling Leg Curl Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "41ba8c93-2898-4292-8990-ecff221d46bf",
+    "name": "Assisted Pull Up Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "4b3ab084-5450-45b1-9dbf-057e78d84390",
+    "name": "Balloon",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "4e9ce883-ea47-492d-be41-fc224e54b4c7",
+    "name": "Stability Ball",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "4ec743bc-cfcd-4426-a49b-ad90f93abe76",
+    "name": "Bench",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "4fe96673-7837-4864-8933-5ae471a28857",
+    "name": "Dip stand",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "53ea8430-0519-4821-8528-65f92d96f08b",
+    "name": "Hammer Strength MTS Iso-Lateral Decline Press Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "54938b47-43e8-47cd-9efc-18b4424e71e1",
+    "name": "Pull Up Bar",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "68ed06e5-fd1e-4198-8eea-6b4b13e3ede2",
+    "name": "Barbell",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "6ba0eb0a-a2a7-44a6-9e09-9992b5e44a67",
+    "name": "Pull Up Bar, Resistance Band",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "6bee5d12-b738-4e9c-8561-dc0ca4c133aa",
+    "name": "Crossover machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "728a4c43-332b-462b-9bff-00f84d999f5c",
+    "name": "Hack Squat Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "7352a8b5-30da-44d7-9cae-8a031f5d2aed",
+    "name": "Kettlebells",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "791b8ac0-fb3c-4b64-b6a6-8790852c4f0a",
+    "name": "Stationary Exercise Bike",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "7c8ccea6-1ecd-4abd-a28f-2f05d0d539a5",
+    "name": "Dual Cable Pulley Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "819ba608-6b86-4333-80f2-88416b84445b",
+    "name": "Loop Resistance Band",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "8239c9cf-c829-4bdb-9d7d-53776a47155a",
+    "name": "Kneeling leg curl machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "825d0d50-6358-4cd6-97b0-ccd2dd4e5fff",
+    "name": "Hammer Strength Plate Loaded High Row Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "85c1cd44-00df-4e21-8e60-1305a873b259",
+    "name": "Seated Dip Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "9ce42536-8425-4171-a8e2-7f720ad5e136",
+    "name": "Balance Board",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "9ffbc39a-4891-4f46-b1f7-17bd2c6b7261",
+    "name": "Ab Wheel",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "a1c23345-7a3f-4f47-b874-d83028c84eba",
+    "name": "Dual Pec Deck Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "a6017729-dbd0-4f07-97fd-b74f488c07d7",
+    "name": "Chest Press Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "ae580acb-3c8a-4589-a39d-863915b3b75f",
+    "name": "Triceps Dips Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "b65535fb-68b6-4023-99b6-c3882b1aa15e",
+    "name": "Triceps Extension Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "b7ec08fd-b7eb-4a14-a54d-f3d91be90da6",
+    "name": "Cable Row Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "ba1cac69-c4db-4c14-8076-0f34af9c1f91",
+    "name": "Weight Plate",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "bfdb4696-9395-413b-bf0f-675c7a90d3be",
+    "name": "Dumbbell",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "c262cf7f-b27f-4dc4-b751-e52a5389258b",
+    "name": "None",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "c7e89ac2-e6d9-4bbe-affa-981f3abb355c",
+    "name": "Hyperextension Bench",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "cbeb9fc2-1d0e-4c15-a483-411ac788a9f9",
+    "name": "Hammer Strength Plate-Loaded Iso-Lateral Chest Press machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "cf71b4dd-e72b-4734-aa19-5566477202ad",
+    "name": "Hammer Strength Iso-Lateral Leg Curl Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "d1b09d97-2d9c-4d96-8fa5-9c8a98e393c6",
+    "name": "Rowing Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "d2db0953-15ad-4c5e-81e2-0c301cedd1b7",
+    "name": "Trap Bar",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "d8a6a67e-71db-4542-9dd7-a185a3e773af",
+    "name": "Lat Pull Down Machine (Cable)",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "d96af026-8ebc-405b-8263-77b866cc82e3",
+    "name": "Cable Pulley Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "de08e8c8-a4ec-465b-ae07-cc976f64cd81",
+    "name": "Yoga Mat",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "e5090dd6-0740-439b-9454-397339f2ef2e",
+    "name": "Pec Fly/Rear Delt Machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "e6b14232-455e-4a8b-91c7-e842d5b57b66",
+    "name": "Cable",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "eb86dcd9-df19-44ae-b784-7f624a093e6d",
+    "name": "Seated leg curl machine",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "ecbf4b6a-ecec-4ea8-a7d2-4e389d03d2e1",
+    "name": "Jump rope",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "fbd5e391-2fec-4076-b75a-1f90d31b099e",
+    "name": "Bar",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  },
+  {
+    "id": "febc440b-220a-421e-b13d-520467ea1696",
+    "name": "Dip Pull Up Station",
+    "name_de": null,
+    "name_th": null,
+    "category": "general",
+    "icon": null
+  }
+]

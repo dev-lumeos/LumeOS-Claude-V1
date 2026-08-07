@@ -64,6 +64,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `35-naehrwert-bezugsgroesse.md` | Worauf beziehen sich die Nährwerte, und wie rechnet man auf eine Menge um? (Grundlage jeder Diary-Rechnung) |
 | `36-testbasis.md` | Was wird womit geprüft — und was ausdrücklich **nicht**? (Gate, Rechteprüfung, E2E-Entscheidung) |
 | `40-spec-code-matrix.md` | Je Modul: Spec vorhanden? Code vorhanden? Delta? |
+| `60-legacy-cloud.md` | Was liegt wirklich in der Legacy-Cloud-Instanz? (echte Zeilenzahlen, Medienverweise, Schemakonflikt — ersetzt alle Schätzungen) |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
 
 **Was als Nächstes zu tun ist:** `docs/todo/TODO.md`
