@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-06 (sechzehnte Aktualisierung — Block 12 geschlossen: B-21/C-04/B-22/D-04 erledigt. Das Gate erfasst jetzt alle Pakete, die Datenbankrechte sind wiederholbar prüfbar, die E2E-Frage ist entschieden. Tagessumme als Sicht mit `security_invoker` live; offener Redirect in `/auth/callback` gefunden und behoben. Werkzeugarbeit abgeschlossen, Reihenfolge auf die Diary-Oberfläche umgestellt)
+**Stand:** 2026-08-06 (siebzehnte Aktualisierung — Block 13 geschlossen: C-12/C-10/D-07 erledigt, dazu B-07 und B-10 durch Toms Entscheidungen. Duplikatschutz vollständig (6 statt 1 UNIQUE, Kettenschritt 054 live); falsche UI-Zahlen berichtigt; „Phase 1B"-Reste entfernt, darunter eine SSOT-Aussage, die Schreibfreiheit verneinte. Vor der Diary-Oberfläche steht nichts mehr)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -18,10 +18,12 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    (C-01), kein A-06-Blocker mehr.
 3. **M3 — Erster Schreibpfad** (→ C-02) — **erledigt 2026-08-04** (C-02),
    Product Gate war offen, M1 erledigt.
-   **Ausgebaut 2026-08-06 (Blöcke 11/12):** Das Diary hat jetzt eine
+   **Ausgebaut 2026-08-06 (Blöcke 11–13):** Das Diary hat jetzt eine
    vollständige Datenseite — `nutrition.meals` und `nutrition.meal_items`
-   mit eingefrorenen Nährwerten (C-03, ADR-0003, Kettenschritt 052) und
-   die Tagessumme als Sicht (C-04, Kettenschritt 053), beide live.
+   mit eingefrorenen Nährwerten (C-03, ADR-0003, Kettenschritt 052), die
+   Tagessumme als Sicht (C-04, Kettenschritt 053) und der vollständige
+   Duplikatschutz auf den Präferenzen (C-12, Kettenschritt 054) — alle
+   live, alle mit eigener Validierung.
    **Was fehlt, ist ausschliesslich die Oberfläche** — UI und API-Route
    wurden bewusst zurückgestellt, bis der Aggregationsweg entschieden
    war. Er ist es.
@@ -33,42 +35,39 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    Vorarbeiten E-01 bis E-03**.
 
 
-## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 12)
+## Bearbeitungsreihenfolge (Empfehlung, Stand 2026-08-06, nach Block 13)
 
-**Die Werkzeug- und Prüfarbeit ist abgeschlossen.** Nach Block 12 sind
-B-21, B-22 und D-04 erledigt; damit ist die Reihe abgearbeitet, die mit
-B-18/B-19 begann. Konkret heisst das:
+**Werkzeugarbeit abgeschlossen (Block 12), Vorfeld der Modularbeit
+geräumt (Block 13).** Was die Datenseite des Diary betrifft, ist alles
+erledigt, was der Oberfläche vorausgehen musste:
 
-- Das Gate erfasst jetzt **alle** Pakete — `[cmd]` `nutrition-api` wurde
-  vorher gar nicht geprüft und meldete trotzdem Erfolg (B-21).
-- Die Datenbankrechte sind **wiederholbar** prüfbar, mit einem Befehl und
-  Exit-Code (B-22) — die Lücke, durch die der Curation-Bug rutschte.
-- Die E2E-Frage ist **entschieden statt offen** (D-04): kein Gerüst jetzt,
-  Wiedervorlage benannt, und der Weg dorthin hat einen offenen Redirect
-  gefunden und behoben.
+- Das Gate erfasst **alle** Pakete (B-21), die Datenbankrechte sind
+  wiederholbar prüfbar (B-22), die E2E-Frage ist entschieden (D-04).
+- Der Duplikatschutz steht **vollständig** — sechs partielle UNIQUEs statt
+  einem (C-12). Er gehörte **vor** den Preset-Schreibpfad, nicht danach.
+- Die Oberfläche behauptet keine falschen Zahlen mehr (C-10), und die
+  „Phase 1B"-Reste sind weg (D-07) — darunter eine SSOT-Aussage, die
+  Schreibfreiheit verneinte, während zwei Schreibpfade live sind.
 
-**Damit steht die Modularbeit vorn — und diesmal ohne Vorbehalt.**
+**Es steht nichts mehr zwischen der Diary-Oberfläche und dem Bau.**
 
-1. **Modularbeit: C-05 → C-06, dann die Oberfläche zu C-03/C-04.**
-   Die Datenseite des Diary steht (C-03 Tabellen, C-04 Tagessumme, beide
-   live). **Was fehlt, ist die Oberfläche**: UI und API-Route wurden in
-   C-03 und C-04 bewusst nicht gebaut, weil erst der Aggregationsweg
-   feststehen musste. Er steht jetzt. Das ist der nächste sichtbare
-   Schritt — und der Punkt, an dem laut D-04 auch E2E wieder lohnt.
-   Danach Water (C-05) und das erste echt gemachte Mock-Modul (C-06,
-   Kandidat Goals — vorher die zwei Bugs aus
+1. **Die Diary-Oberfläche — der nächste sichtbare Schritt.**
+   Datenseite vollständig: Tabellen (C-03, 052), Tagessumme (C-04, 053),
+   Duplikatschutz (C-12, 054), alle live. **Was fehlt, ist ausschliesslich
+   UI und API-Route** — bewusst zurückgestellt, bis der Aggregationsweg
+   entschieden war. Er ist es. Laut D-04 ist das auch der Punkt, an dem
+   ein E2E-Aufbau wieder lohnt: die erste Oberfläche, die bleiben soll.
+2. **Danach Modularbeit:** Water (C-05), dann das erste echt gemachte
+   Mock-Modul (C-06, Kandidat Goals — vorher die zwei Bugs aus
    `docs/specs/Goals/OPEN_ITEMS.md`).
-2. **C-12, sobald der Preset-/Profil-Schreibpfad ansteht** — die
-   partiellen Uniques für die fünf übrigen Zieltypen gehören **vor** den
-   jeweiligen Schreibpfad, nicht danach (Begründung in ADR-0002).
 3. **Audits, wenn sie den Weg kreuzen:** C-07-Rest (types), C-08
    (`nutrition-api` einordnen — durch B-21 wird er jetzt geprüft, die
-   Einordnung bleibt offen), C-10, D-05.
+   Einordnung bleibt offen), D-05.
 4. **Entscheidungspunkte auf Zuruf (Tom):** A-05 (Löschlauf), A-10
-   (Wurzel-Restaltlast), A-08, B-07-Rest, B-10-Rest
-   (`/plugin uninstall ijfw@ijfw`).
+   (Wurzel-Restaltlast — trägt auch `AGENTS.md`, das in D-07 bewusst
+   unberührt blieb), A-08.
 5. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
-   klären; `[cmd]` von Block 12 nicht berührt), B-11, B-17 (niedrig).
+   klären), B-11, B-17 (niedrig).
 6. **Deployment nach den Modulen:** B-13-Rest, E-01–E-03 (Dump als
    Vorstudie — Achtung: Dump vom 2026-03-05 ist älter als die
    2026-08-01-Messungen), dann E-04 ff.
@@ -251,12 +250,21 @@ B-18/B-19 begann. Konkret heisst das:
   `.claude/settings.json:40` (seit der Umstellung deny→ask am 2026-08-03).
   Das Rätsel „keine gefundene Datei liefert ihn" existiert nicht mehr.
 
-- [ ] **B-07: `skipAutoPermissionPrompt` — Entscheidung steht aus** —
-  Prüfteil erledigt (Audit 2026-08-05): `[cmd]` der Schlüssel steht in
-  `~/.claude/settings.json` auf **true** — die vermutete Ursache für die
-  47 unbemerkt gewachsenen Allow-Regeln ist real. **Offen: die
-  Entscheidung** (Tom) — abschalten oder bewusst belassen. Es ist eine
-  Sicherheitseinstellung der Nutzerkonfiguration: lesen ja, ändern nein.
+- [x] **B-07: `skipAutoPermissionPrompt`** — **entschieden 2026-08-06
+  (Tom): steht auf `false`.** `[cmd]` 2026-08-06 nachgeprüft:
+  `~/.claude/settings.json` → `skipAutoPermissionPrompt: false`,
+  Sicherung `settings.json.bak-2026-08-06-b07` daneben.
+  **Der ursprüngliche Verdacht war falsch herum — festgehalten, weil die
+  Fehlerrichtung lehrreich ist:** Der Audit vom 2026-08-05 notierte den
+  Schalter als „vermutete Ursache für die 47 unbemerkt gewachsenen
+  Allow-Regeln … ist real". Tatsächlich **unterdrückt** der Schalter das
+  automatische Merken — er kann die 47 Regeln also nicht verursacht haben.
+  Aus „der Schalter steht auf true" folgte im Audit „also ist er die
+  Ursache"; das war ein Schluss von der Existenz auf die Wirkung, genau
+  die Sorte Fehler, gegen die die Marker-Regel gedacht ist.
+  Die 47 Regeln bleiben damit **unerklärt** — sie sind seit B-02 auf 0
+  zurückgesetzt, der Entstehungsweg ist nie belegt worden. Falls sie
+  wieder wachsen, ist das ein neuer Befund, keine Wiederholung.
 
 - [x] **B-08: SessionEnd-Hook falsch verortet** — **erledigt 2026-08-06
   (Block 8):** `[cmd]` der Eintrag mit hartkodiertem Repo-Pfad ist aus
@@ -274,7 +282,7 @@ B-18/B-19 begann. Konkret heisst das:
   die Datei liegt jetzt in `supabase/_archive/` und wird nicht mehr
   ausgeführt. Folgenlos.
 
-- [ ] **B-10: ijfw-Plugin vollständig abschalten** — **2026-08-05 verfrüht
+- [x] **B-10: ijfw-Plugin vollständig abschalten** — **2026-08-05 verfrüht
   auf erledigt gesetzt, am 2026-08-06 zurückgenommen.**
   Die damalige Abschaltung (`enabledPlugins: {"ijfw@ijfw": false}`,
   MCP-Server umbenannt auf `_disabled_ijfw-memory` in der
@@ -297,9 +305,21 @@ B-18/B-19 begann. Konkret heisst das:
   entschärft (Suffix `-disabled-2026-08-06`, `enabled = false`,
   Sicherung `config.toml.bak-2026-08-06-ijfw`), `CLAUDE.md`/`AGENTS.md`
   zurückgesetzt. Gegenprobe `[cmd]`: 0 ijfw-Prozesse, Port frei.
-  **Offen bleibt:** `/plugin uninstall ijfw@ijfw` — der Eintrag steht noch
-  in `installed_plugins.json`, ein Plugin-Update könnte die umbenannten
-  Dateien neu anlegen. Erst danach ist der Punkt zu.
+  **Erledigt 2026-08-06 (Tom): `/plugin uninstall ijfw@ijfw` ausgeführt.**
+  Gegenprobe `[cmd]` 2026-08-06 nachgeprüft:
+  - `~/.claude/settings.json` → `enabledPlugins` enthält **keinen**
+    ijfw-Eintrag mehr
+  - **0** echte ijfw-Laufzeitprozesse (node-Prozesse mit ijfw in der
+    Kommandozeile), Port **37894 frei**
+  - `~/.ijfw/claude/.mcp.json` und `~/.ijfw/claude/hooks/hooks.json`
+    existieren **nicht mehr** — die Deinstallation hat die beiden
+    Ladequellen entfernt, nicht nur umbenannt. Damit ist die Sorge
+    „ein Plugin-Update legt die umbenannten Dateien neu an" gegenstandslos.
+  **Messfalle beim Nachprüfen, festgehalten weil sie wiederkommt:** Ein
+  Filter `CommandLine -like '*ijfw*'` meldete zunächst **4 Prozesse** —
+  das waren `[cmd]` die eigenen Prüfbefehle, die das Wort im Skriptpfad
+  tragen. Erst der Filter auf `node`-Prozesse zeigte die Wahrheit: 0.
+  Wer Prozesse zählt, muss ausschliessen, dass er sich selbst zählt.
   **Prüfregel, die hieraus folgt:** Aus einer Konfigurationsdatei folgt
   nicht die Wirkung. Nach dem Abschalten eines Plugins gehören Prozessliste
   und offene Ports geprüft, und zwar für **jede** Werkzeugkette getrennt —
@@ -691,11 +711,38 @@ B-18/B-19 begann. Konkret heisst das:
   `inputs: [$TURBO_DEFAULT$, $TURBO_ROOT$/packages/shared/src/**]`
   geschlossen und per Sonde belegt (Hit → shared-Änderung → Miss → Revert → Hit).
 
-- [ ] **C-10: UI-Zahlen gegen DB prüfen** — die App-Shell zeigt
-  „117 Nährstoffe · BLS 10.840" als Literale. `[cmd]` Tatsächlich in der DB:
-  138 `nutrient_defs`, 7.140 `foods`. Zahlen korrigieren oder aus der DB lesen.
+- [x] **C-10: UI-Zahlen gegen DB prüfen** — **erledigt 2026-08-06
+  (Block 13).** Nicht nur die genannte Stelle geprüft, sondern alle
+  Zahlenbehauptungen in `apps/web` erhoben. Fünf Fundstellen, je einzeln
+  entschieden — bewusst **nicht** pauschal dynamisiert, jede Abfrage kostet:
 
-- [ ] **C-12: Duplikatschutz für die übrigen fünf target_types**
+  | Fundstelle | Behauptet | Ist `[cmd]` | Entscheidung |
+  |---|---|---|---|
+  | `app-shell.tsx:78` | 117 Nährstoffe · BLS 10.840 | **138** / **7.140** | beides falsch → korrigiert, **hart belassen** |
+  | `app-shell.tsx:76/79` | „keine Diary Writes" | Schreibpfad live | falsch seit C-03/C-04 → berichtigt |
+  | `dashboard-view.tsx:37` | Routes **11** | 15 Seiten / 9 hrefs | an nichts verankert → **Zahl entfernt** |
+  | `local-schema/page.tsx:23` | `row_count === 138` | 138 | richtig → hart, als Konstante mit Herkunft |
+  | `nutrition/page.tsx:6–9` | Makro-Ziele 2400/180/… | — | kein Bestandsanspruch → unverändert |
+
+  **Begründung „hart belassen" bei der App-Shell:** sie rendert auf
+  **jeder** Seite; eine Zählabfrage je Aufruf wäre Aufwand für eine Zahl,
+  die sich nur beim BLS-Import ändert. Der Kommentar an der Fundstelle
+  nennt Herkunft und Prüfdatum — „richtig und hart ohne Herkunft" wäre nur
+  ein späterer Fehler.
+  **Begründung bei `local-schema`:** Die 138 ist dort keine Anzeigezahl,
+  sondern eine **Erwartung** („entspricht der lokale Seed dem Katalog?").
+  Sie darf **nicht** aus derselben Tabelle geladen werden, die sie prüft —
+  sonst stimmt sie immer und die Diagnose ist wertlos. Dieselbe
+  Fehlerklasse wie bei B-22 (Sollliste vom Prüfling) und B-21 (Gate meldet
+  Erfolg, ohne zu prüfen).
+  **Begründung beim Dashboard:** Die 11 entsprach `[cmd]` weder der
+  Seitenzahl (15) noch den Navigationseinträgen (9) — sie war an nichts
+  verankert. Statt sie neu zu raten oder je Aufruf zu zählen: entfernt,
+  denn die Karte sagt selbst „zeigt keine Live-Daten".
+  Nachgezogen: `docs/ssot/20-apps-web-ist.md` zitierte die falsche Zeile
+  noch als Ist-Zustand.
+
+- [x] **C-12: Duplikatschutz für die übrigen fünf target_types**
   (neu 2026-08-05) — `[cmd]` `uq_food_pref_items_user_food` sichert nur
   `target_type='food'` (partiell `WHERE food_id IS NOT NULL`). Für `category`,
   `tag`, `cuisine`, `exclusion_preset` und `catalog_item` fehlen die analogen
@@ -706,6 +753,43 @@ B-18/B-19 begann. Konkret heisst das:
   Zielfeld je Zeile — dadurch sind die partiellen Indizes trennscharf: jede
   Zeile fällt in genau einen Index, Überlappung ist konstruktiv ausgeschlossen.
   Bisher stand das nur als Kommentar in `050_preferences_foundation.sql`.
+  **Erledigt 2026-08-06 (Block 13):** Kettenschritt
+  `054_preference_uniques.sql`, live angewendet, **v054 20/20 grün**.
+  Fünf partielle UNIQUEs auf `(user_id, <ziel>)`, insgesamt **6** fachliche
+  UNIQUEs auf der Tabelle.
+  **`preference` gehört NICHT in den Schlüssel — am Schreibmodell gezeigt,
+  nicht angenommen:** `[read]` `decideFoodPreferenceWrite()` liefert bei
+  abweichender Präferenz **`'update'`**, nicht `'insert'` — eine
+  bestehende Zeile wird *umgestuft*. Wäre `preference` im Schlüssel,
+  könnten „mag ich" und „ausschliessen" für dasselbe Ziel als **zwei**
+  Zeilen koexistieren, ein widersprüchlicher Zustand. Die Begründung hängt
+  am Umstufungsmodell, nicht am Zieltyp; `[cmd]` das Modell darunter kennt
+  keinen `target_type`, nur der heutige Schreibpfad ist auf `'food'`
+  festgelegt. Gilt also für alle fünf gleichermassen.
+  **Fund, der die Prädikate bestimmte:** Der CHECK zählt **nicht
+  einheitlich** — `[cmd]` aus `pg_get_constraintdef`: `food_id`,
+  `category_id`, `tag_code` per `IS NOT NULL`, die drei Textcodes
+  (`cuisine_code`, `exclusion_preset_code`, `catalog_item_code`) per
+  `NULLIF(x, '')`. Für den CHECK gilt der **Leerstring als nicht
+  gesetzt**, für ein naives `IS NOT NULL` aber als gesetzt. Ein naives
+  Prädikat hätte Zeilen erfasst, die fachlich kein Ziel dieses Typs haben,
+  und zwei verschiedene echte Ziele wären an einem **Scheinkonflikt**
+  gescheitert. `[cmd]` auf live belegt: zwei Zeilen mit
+  `cuisine_code = ''` und verschiedenen `catalog_item_code` gehen **beide**
+  durch. Die Prädikate spiegeln den CHECK deshalb exakt.
+  Wirkprobe `[cmd]` gegen live: Doppel-Insert → **23505**; andere
+  `preference` bei gleichem Ziel → **ebenfalls 23505**; Umstufung per
+  UPDATE → geht; Testzeilen entfernt, live wieder **0 Zeilen**.
+  **Nebenfund an der eigenen Prüfung:** `kein_index_mit_preference` meldete
+  zunächst rot. Ursache war die **Prüfung**, nicht die Indizes —
+  `indexdef LIKE '%preference%'` trifft den Tabellennamen
+  `food_preference_items` und damit immer. Auf `pg_attribute` umgestellt.
+  Eine Prüfung, die konstruktionsbedingt nie grün wird, ist so wertlos wie
+  eine, die nie rot wird.
+  **Was die Indizes nicht leisten** (im Dateikopf benannt): Sie ersetzen
+  den Schreibpfad nicht — er muss den 23505 weiterhin in Umstufung oder
+  HTTP 409 übersetzen. Und `[cmd]` die drei Textcodes haben **keinen**
+  Fremdschlüssel: ein Tippfehler bleibt einer, nur eben ein eindeutiger.
 
 - [ ] **C-14: Kuration gehört nach `apps/admin` — die Rollenabstufung in
   `apps/web` ist ein bewusster Zwischenschritt** (neu 2026-08-06, aus C.3)
@@ -931,11 +1015,27 @@ B-18/B-19 begann. Konkret heisst das:
   Nebenkorrektur: `docs/ssot/00-INDEX.md` zeigte noch auf `docs/decisions/`
   — auf den realen Ort umgestellt.
 
-- [ ] **D-07: „Phase 1B"-Aussagen aktualisieren** — überarbeitet
-  2026-08-05: `[cmd]` ein „README Phase 1B" existiert nirgends; die
-  Phase-1B-Behauptungen leben in `CLAUDE.md` (Z. 24–25), `AGENTS.md`
-  (Altlast) und der Produkt-Copy. **Geht in A-02/A-09 und C-13 auf** —
-  hier nur als Marker, keine eigene Arbeit planen.
+- [x] **D-07: „Phase 1B"-Aussagen aktualisieren** — **erledigt 2026-08-06
+  (Block 13).** Die frühere Einschätzung „geht in A-02/A-09 und C-13 auf,
+  keine eigene Arbeit planen" war **zu optimistisch** — es standen noch
+  drei echte Reste. `[cmd]` `git grep "Phase 1B"` ohne Archive: 6 Treffer,
+  davon 3 in der TODO selbst.
+  Berichtigt:
+  1. **`docs/ssot/20-apps-web-ist.md`** — der substanzielle Fall. Dort
+     stand „`[cmd]` Grep 2026-08-01 … kein `INSERT`/`UPDATE`/`DELETE` in
+     `lib/nutrition` — Phase 1B read-only". `[cmd]` 2026-08-06 **falsch**:
+     Schreibpfade in **zwei** Dateien — `preferences-write.ts` (C-02) und
+     `diary-write.ts` (C-03). Ein Ist-Zustands-Dokument, das
+     Schreibfreiheit verneint, während zwei Schreibpfade live sind, ist
+     die gefährlichste Sorte veralteter Aussage: sie wird geglaubt.
+  2. `apps/web/src/app/nutrition/page.tsx` — „in Phase 1B" → Selbstaussage
+     der Seite ohne Phasenbezug.
+  3. `apps/web/src/app/medical/page.tsx` — „Phase-1B-Placeholder" →
+     „Platzhalter".
+  **`AGENTS.md:35` bewusst NICHT angefasst:** `[read]` CLAUDE.md führt die
+  Datei als Wurzel-Altlast („nicht als Sollwert lesen"), die Archivierung
+  steht in **A-10**. Sie zu korrigieren hiesse, eine Datei zu pflegen, die
+  weg soll.
 
 - [x] **D-08: supabase-js vs. Docker-SQL** — **entschieden und umgesetzt 2026-08-03.**
   `[cmd]` `apps/web` liest über supabase-js; kein `docker exec`, kein
