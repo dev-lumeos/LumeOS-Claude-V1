@@ -52,7 +52,6 @@ import { fileURLToPath } from 'node:url'
 const HIER = path.dirname(fileURLToPath(import.meta.url))
 const WURZEL = path.resolve(HIER, '../../..')
 
-const WEB = process.env.LUMEOS_WEB_URL || 'http://localhost:3200'
 const ADMIN = process.env.LUMEOS_ADMIN_URL || 'http://localhost:3210'
 const API = process.env.SUPABASE_URL || 'http://127.0.0.1:54321'
 
@@ -164,6 +163,54 @@ async function hole(url, cookieKopf) {
   return { status: antwort.status, ziel: antwort.headers.get('location'), text }
 }
 
+/**
+ * Aufwaermlauf gegen den Next-Dev-Server.
+ *
+ * `[cmd]` 2026-08-12: Direkt nach einem Neustart von apps/web meldete die
+ * API-Route 404 statt 403 — der Dev-Server kompiliert Routen erst bei der
+ * ERSTEN Anfrage. Beim zweiten Lauf 403, Exit 0. Das Skript meldete also
+ * einen Fehler, wo keiner war.
+ *
+ * Das ist derselbe Fehlertyp, den dieses Skript sonst aufdeckt: eine
+ * Pruefung, die etwas anderes misst als das, was sie behauptet. Hier
+ * misst sie den Kompilierzustand des Dev-Servers statt der Zugangsregel.
+ *
+ * Deshalb: jede Adresse einmal vorab abrufen und das Ergebnis verwerfen.
+ * Ein Produktionsbau braucht das nicht, stoert dort aber auch nicht.
+ */
+async function aufwaermen(adressen) {
+  process.stdout.write('Aufwaermlauf (Dev-Server kompiliert Routen erst bei Erstaufruf) ')
+  for (const url of adressen) {
+    try {
+      await fetch(url, { redirect: 'manual' })
+      process.stdout.write('.')
+    } catch {
+      process.stdout.write('x')
+    }
+  }
+  console.log(' fertig')
+}
+
+/**
+ * Wie `hole`, aber wiederholt einmal bei 404.
+ *
+ * Zweiter Schutz neben dem Aufwaermlauf: Wird eine Route erst durch den
+ * Aufruf erzeugt, liefert der erste Versuch 404. Ein echtes 404 bleibt
+ * auch beim zweiten Versuch 404 — die Wiederholung verdeckt also nichts,
+ * sie unterscheidet nur "noch nicht kompiliert" von "gibt es nicht".
+ */
+async function holeStabil(url, cookieKopf) {
+  const erst = await hole(url, cookieKopf)
+  if (erst.status !== 404) return erst
+  await new Promise(r => setTimeout(r, 1200))
+  const zweit = await hole(url, cookieKopf)
+  if (zweit.status !== 404) {
+    console.log(`        (404 beim Erstaufruf, nach Wiederholung ${zweit.status} — ` +
+      'Dev-Server hatte die Route noch nicht kompiliert)')
+  }
+  return zweit
+}
+
 // Absagetexte BEIDER Apps — sie formulieren unterschiedlich, und das ist
 // in Ordnung. `[cmd]` 2026-08-12 am gerenderten HTML abgelesen, nicht
 // aus dem Quelltext geschlossen:
@@ -216,9 +263,14 @@ async function main() {
   const { email, passwort } = testnutzerAusDoku()
 
   console.log('Admin-Sperre — zwei echte Sessions')
-  console.log('  web  :', WEB)
-  console.log('  admin:', ADMIN)
+  console.log('  admin:', ADMIN, '(Startseite, Kuration, Kurations-API)')
   console.log('  auth :', API)
+  console.log('')
+
+  // Aufwaermlauf vor der ersten Messung — siehe Begruendung bei
+  // `aufwaermen`. Ohne ihn meldet der erste Lauf nach einem
+  // Server-Neustart 404 statt 403.
+  await aufwaermen([ADMIN + '/', ADMIN + '/curation', ADMIN + '/api/curation'])
   console.log('')
 
   const nutzer = await anmelden(email, passwort, anon)
@@ -232,35 +284,35 @@ async function main() {
 
   // --- A) Nicht angemeldet ---
   console.log('A) NICHT ANGEMELDET — erwartet: Weiterleitung auf /login')
-  const a1 = await hole(ADMIN + '/', null)
+  const a1 = await holeStabil(ADMIN + '/', null)
   pruefe('admin /  -> 307 auf /login', a1.status === 307 && /\/login/.test(a1.ziel || ''),
     `HTTP ${a1.status} -> ${a1.ziel}`)
-  const a2 = await hole(WEB + '/nutrition/curation', null)
-  pruefe('web /nutrition/curation -> 307 auf /login', a2.status === 307 && /\/login/.test(a2.ziel || ''),
+  const a2 = await holeStabil(ADMIN + '/curation', null)
+  pruefe('admin /curation -> 307 auf /login', a2.status === 307 && /\/login/.test(a2.ziel || ''),
     `HTTP ${a2.status} -> ${a2.ziel}`)
-  const a3 = await hole(WEB + '/api/nutrition/curation', null)
+  const a3 = await holeStabil(ADMIN + '/api/curation', null)
   pruefe('API ohne Sitzung -> nicht 200', a3.status !== 200, `HTTP ${a3.status}`)
   console.log('')
 
   // --- B) Angemeldet, KEIN Admin — der Kern ---
   console.log('B) ANGEMELDET OHNE ADMIN-ROLLE — erwartet: ABSAGE, nicht leer, nicht /login')
-  const b1 = await hole(ADMIN + '/', nk.kopf)
+  const b1 = await holeStabil(ADMIN + '/', nk.kopf)
   pruefe('admin /  -> 200', b1.status === 200, `HTTP ${b1.status}${b1.ziel ? ' -> ' + b1.ziel : ''}`)
   pruefe('admin /  -> Sitzung erkannt (NICHT /login)', !/\/login/.test(b1.ziel || ''))
   pruefe('admin /  -> Absagetext sichtbar', istAbsage(b1.text))
   pruefe('admin /  -> NICHT die Adminseite', !istAdminSeite(b1.text))
 
-  const b2 = await hole(WEB + '/nutrition/curation', nk.kopf)
-  pruefe('web /nutrition/curation -> 200', b2.status === 200, `HTTP ${b2.status}${b2.ziel ? ' -> ' + b2.ziel : ''}`)
-  pruefe('web /nutrition/curation -> Sitzung erkannt', !/\/login/.test(b2.ziel || ''))
-  pruefe('web /nutrition/curation -> Absage sichtbar', istAbsage(b2.text))
+  const b2 = await holeStabil(ADMIN + '/curation', nk.kopf)
+  pruefe('admin /curation -> 200', b2.status === 200, `HTTP ${b2.status}${b2.ziel ? ' -> ' + b2.ziel : ''}`)
+  pruefe('admin /curation -> Sitzung erkannt', !/\/login/.test(b2.ziel || ''))
+  pruefe('admin /curation -> Absage sichtbar', istAbsage(b2.text))
   // DER KERN: nicht nur "eine Absage steht da", sondern auch "der
   // Kurationsinhalt steht NICHT da". Sonst waere eine Seite denkbar, die
   // beides zeigt — Hinweis oben, leere Liste darunter.
-  pruefe('web /nutrition/curation -> KEIN Kurationsinhalt', !zeigtKurationsInhalt(b2.text))
+  pruefe('admin /curation -> KEIN Kurationsinhalt', !zeigtKurationsInhalt(b2.text))
 
-  const b3 = await hole(WEB + '/api/nutrition/curation', nk.kopf)
-  pruefe('API /api/nutrition/curation -> 403', b3.status === 403, `HTTP ${b3.status}`)
+  const b3 = await holeStabil(ADMIN + '/api/curation', nk.kopf)
+  pruefe('API /api/curation -> 403', b3.status === 403, `HTTP ${b3.status}`)
   pruefe('API -> nicht 200 mit leeren Daten', b3.status !== 200,
     b3.text.slice(0, 120).replace(/\s+/g, ' '))
   console.log('')
@@ -286,15 +338,15 @@ async function main() {
     const ak = cookieKopf(adm.sitzung)
     console.log('  Angemeldet als', adm.email, '· role =', adm.rolle ?? '(keine)')
     pruefe('Konto traegt role=admin', adm.rolle === 'admin')
-    const c1 = await hole(ADMIN + '/', ak.kopf)
+    const c1 = await holeStabil(ADMIN + '/', ak.kopf)
     pruefe('admin /  -> 200', c1.status === 200, `HTTP ${c1.status}`)
     pruefe('admin /  -> Adminseite sichtbar', istAdminSeite(c1.text))
     pruefe('admin /  -> KEINE Absage', !istAbsage(c1.text))
-    const c2 = await hole(WEB + '/nutrition/curation', ak.kopf)
-    pruefe('web /nutrition/curation -> 200', c2.status === 200, `HTTP ${c2.status}`)
-    pruefe('web /nutrition/curation -> keine Absage', !istAbsage(c2.text))
-    const c3 = await hole(WEB + '/api/nutrition/curation', ak.kopf)
-    pruefe('API /api/nutrition/curation -> 200', c3.status === 200, `HTTP ${c3.status}`)
+    const c2 = await holeStabil(ADMIN + '/curation', ak.kopf)
+    pruefe('admin /curation -> 200', c2.status === 200, `HTTP ${c2.status}`)
+    pruefe('admin /curation -> keine Absage', !istAbsage(c2.text))
+    const c3 = await holeStabil(ADMIN + '/api/curation', ak.kopf)
+    pruefe('API /api/curation -> 200', c3.status === 200, `HTTP ${c3.status}`)
   }
 
   console.log('')
