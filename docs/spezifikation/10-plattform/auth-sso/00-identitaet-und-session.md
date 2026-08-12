@@ -1,17 +1,20 @@
 ---
 status:     entwurf
-version:    0.1
-stand:      2026-08-02
-ankerhash:  b0441a9
+version:    0.2
+stand:      2026-08-12
+ankerhash:  ce27ead
 quellen:    docs/specs/WebPlatform/SPEC_10_WORKSPACE_LINKS.md (Altbestand)
 abhaengig:  10-plattform/berechtigungen
 ---
 
 # Plattform: Identität, Anmeldung, Session
 
-**Grundsatz:** Eine Anmeldung, gültig für alle Apps, für die die Identität
-berechtigt ist. Welche das sind, entscheidet die Berechtigungsschicht —
-nicht dieses Dokument.
+**Grundsatz:** Eine Anmeldung, gültig für alle Apps des Produktbereichs,
+für die die Identität berechtigt ist. Welche das sind, entscheidet die
+Berechtigungsschicht — nicht dieses Dokument.
+**Ausnahme seit 2026-08-12: `admin` führt eine eigene Sitzung** (§4a).
+Ein Konto bleibt es trotzdem — getrennt ist die Sitzung, nicht die
+Identität (§3).
 
 ## 1. Zweck
 
@@ -50,21 +53,62 @@ ein Hinweis auf eine fehlende Zugehörigkeitsart — kein Grund für ein zweites
 
 ## 4. Session über Domaingrenzen
 
-Alle Apps nutzen dieselbe Supabase-Auth-Session. Das Cookie ist auf
-`.lumeos.app` gesetzt und gilt damit für alle Subdomains.
+Die Apps des **Produktbereichs** nutzen dieselbe Supabase-Auth-Session.
+Das Cookie ist auf `.lumeos.app` gesetzt und gilt damit für alle
+Subdomains. **`admin` ist davon ausgenommen** und führt eine eigene
+Sitzung (§4a).
 
-| App | Domain | Zugang |
-|---|---|---|
-| web | `lumeos.app` | offen (Landingpage), angemeldet für Module |
-| buddy | `buddy.lumeos.app` | angemeldet |
-| coach | `coach.lumeos.app` | angemeldet + Coach-Zugehörigkeit |
-| marketplace | `marketplace.lumeos.app` | offen (Katalog), angemeldet für Kauf |
-| admin | `admin.lumeos.app` | angemeldet + Admin-Zugehörigkeit |
-| gym | `gym.lumeos.app` | angemeldet + Gym-Zugehörigkeit |
-| supplier | `supplier.lumeos.app` | angemeldet + Supplier-Zugehörigkeit |
+| App | Domain | Zugang | Sitzung |
+|---|---|---|---|
+| web | `lumeos.app` | offen (Landingpage), angemeldet für Module | geteilt |
+| buddy | `buddy.lumeos.app` | angemeldet | geteilt |
+| coach | `coach.lumeos.app` | angemeldet + Coach-Zugehörigkeit | geteilt |
+| marketplace | `marketplace.lumeos.app` | offen (Katalog), angemeldet für Kauf | geteilt |
+| admin | `admin.lumeos.app` | angemeldet + Admin-Zugehörigkeit | **eigen** |
+| gym | `gym.lumeos.app` | angemeldet + Gym-Zugehörigkeit | geteilt |
+| supplier | `supplier.lumeos.app` | angemeldet + Supplier-Zugehörigkeit | geteilt |
 
 Erweiterbar ohne Änderung dieses Dokuments: eine neue App bringt eine neue
 Zeile und eine Zugehörigkeitsart mit.
+
+## 4a. Eigene Sitzung für die Verwaltung
+
+**Entscheidung Tom, 2026-08-12 (TODO B-12, „Weg B").** `admin` teilt das
+Sitzungscookie **nicht** mit dem Produktbereich. Eine Anmeldung in `web`
+wirkt dort nicht und umgekehrt; wer verwaltet, meldet sich in `admin`
+gesondert an.
+
+**Erster Grund — Testbarkeit.** Der geteilte Weg hätte `domain` auf
+`.lumeos.app` gesetzt. `[cmd]` Auf `localhost` ist das nicht setzbar: ein
+`domain`, das nicht zum Host passt, verwirft der Browser, und die
+Anmeldung schlüge lokal fehl. Die Einstellung müsste also
+umgebungsabhängig sein — in Produktion zwingend, lokal weggelassen.
+*Ein Weg, der lokal anders funktioniert als in Produktion, ist ein Weg,
+den niemand wirklich testet.* Ein eigener **Cookiename** verhält sich
+überall gleich.
+
+**Zweiter Grund — Trennung.** Ein Cookie aus dem Produktbereich öffnet
+die Verwaltung damit nicht. Das ist strenger als der geteilte Weg, nicht
+nur einfacher, und passt zu `20-apps/web` §6: `admin` wird bewusst nicht
+aus `web` verlinkt.
+
+**Umsetzung:** über den **Namen**, nicht über `domain`.
+`packages/shared/src/supabase/cookie-name.ts` bildet ihn als
+`sb-<projekt-ref>-<scope>-auth-token`; das Kürzel kommt aus
+`NEXT_PUBLIC_AUTH_COOKIE_SCOPE` je App. `[cmd]` Gemessen aus den
+`set-cookie`-Kopfzeilen beider laufenden Apps:
+
+| App | Cookiename |
+|---|---|
+| `web` | `sb-<ref>-auth-token` (unverändert, kein Kürzel gesetzt) |
+| `admin` | `sb-<ref>-admin-auth-token` |
+
+Der **Umgebungsteil bleibt abgeleitet**, damit lokale und Cloud-Sitzung
+derselben App nicht kollidieren. `domain` wird weiterhin **nirgends**
+gesetzt.
+
+Wiederholbarer Nachweis:
+`supabase/_pipeline/_validierung/cookie-trennung-pruefen.mjs`.
 
 **Geklärt `[read]` 2026-08-03:** Die Cookie-Handhabung wird nicht selbst
 konfiguriert. `@supabase/ssr` nutzt standardmässig den PKCE-Flow und richtet
@@ -74,19 +118,33 @@ Voreinstellung ist `httpOnly: false`, `sameSite: lax`, `path: /` — auf
 lesen. Zudem ist ein Fehlerbericht offen, wonach `cookieOptions` teilweise
 ignoriert wird.
 
-Die einzige Option, die je gesetzt wird, ist `domain` auf `.lumeos.app` —
-und erst, wenn die zweite App entsteht (TODO B-12).
+**Überholt durch §4a (2026-08-12):** Der Satz lautete hier, die einzige
+je gesetzte Option sei `domain` auf `.lumeos.app`, sobald die zweite App
+entsteht (TODO B-12). Die zweite App ist da, und die Entscheidung fiel
+gegen `domain`: gesetzt wird stattdessen der **Name** — für `admin`
+`[cmd]` `sb-<ref>-admin-auth-token`, für den Produktbereich gar nichts.
+`domain` bleibt damit weiterhin an keiner Stelle gesetzt.
 
 **Offen:** Der Altbestand nennt an einer Stelle `app.lumeos.app`, an anderer
 `lumeos.app` für dieselbe App. Die Domain von `web` ist festzulegen.
 
 ## 5. Ablauf beim Wechsel zwischen Apps
 
+Gilt für den **Produktbereich**. Für `admin` siehe den Zusatz darunter.
+
 1. Nutzerin klickt einen App-Link in `web`, Ziel öffnet in neuem Tab
 2. Ziel-App liest die Session aus dem geteilten Cookie
 3. Session vorhanden und berechtigt → direkt drin
 4. Session vorhanden, aber nicht berechtigt → Hinweisseite, kein stiller Redirect
 5. Keine Session → `/login?redirect=<ursprüngliches Ziel>`
+
+**Zusatz `admin` (§4a):** Schritt 1 entfällt — `admin` wird nicht aus
+`web` verlinkt (`20-apps/web` §6) und direkt aufgerufen. Schritt 2 findet
+kein geteiltes Cookie, weil die App einen eigenen Namen liest; der Ablauf
+beginnt deshalb regelmässig bei Schritt 5. Schritt 4 gilt unverändert:
+`[cmd]` ein angemeldeter Nicht-Admin bekommt eine **Absage**, keine leere
+Liste und keinen stillen Redirect — belegt in
+`supabase/_pipeline/_validierung/admin-sperre-pruefen.mjs`.
 
 **Zu Schritt 4:** Ein stiller Redirect zurück verschleiert die Ursache. Wer
 das Coach-Portal öffnet und keine Coach-Zugehörigkeit hat, soll das erfahren.
@@ -109,8 +167,14 @@ E-Mail mit Passwort. Ein Verfahren je Identität genügt; mehrere sind möglich.
 - **AK-4:** Gegeben eine Identität mit Coach- **und** Endnutzer-Rolle, wenn
   sie sich anmeldet, dann sind beide Apps zugänglich, ohne dass ein Konto
   gewechselt oder ein zweites angelegt werden muss.
-- **AK-5:** Gegeben eine Abmeldung in einer beliebigen App, dann ist die
-  Session in allen Apps beendet.
+- **AK-5:** Gegeben eine Abmeldung in einer beliebigen App **des
+  Produktbereichs**, dann ist die Session in allen Apps des
+  Produktbereichs beendet. `admin` ist ausgenommen (§4a) — dort wird
+  gesondert an- und abgemeldet.
+- **AK-6:** Gegeben eine angemeldete Identität in `web`, wenn sie
+  `admin.lumeos.app` öffnet, dann ist sie **nicht** angemeldet und landet
+  bei `/login`. `[cmd]` Belegt am 2026-08-12 in beide Richtungen
+  (`cookie-trennung-pruefen.mjs`).
 
 ## 8. Offene Fragen
 
@@ -122,5 +186,11 @@ E-Mail mit Passwort. Ein Verfahren je Identität genügt; mehrere sind möglich.
    `10-plattform/berechtigungen` und ist dort nicht entschieden. Der Ablauf
    wird erst spezifiziert, wenn das geklärt ist.
 3. **Abmeldung über Domaingrenzen** — AK-5 ist mit einem geteilten Cookie
-   naheliegend, aber ungeprüft. Lokal nicht testbar, siehe TODO B-12.
+   naheliegend, aber **weiterhin ungeprüft**. Der frühere Zusatz „lokal
+   nicht testbar, siehe TODO B-12" ist überholt: B-12 ist entschieden
+   (§4a), betrifft aber nur die Trennung von `admin`. Innerhalb des
+   Produktbereichs bleibt die Frage offen und lokal nicht prüfbar,
+   solange es dort nur eine App gibt: `[cmd]` `apps/buddy` und
+   `apps/coach` tragen je genau eine Datei (`src/.gitkeep`),
+   `apps/marketplace` existiert gar nicht.
 

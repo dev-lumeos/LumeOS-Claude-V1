@@ -1,8 +1,26 @@
-# Cookie-Bereich über Apps hinweg (B-12) — Vorlage zur Entscheidung
+# Cookie-Bereich über Apps hinweg (B-12)
 
-`[cmd]` Stand 2026-08-12 (Block 21). **Nichts hiervon ist umgesetzt.**
-Diese Datei stellt fest, was gilt, und legt zwei Wege mit Preis vor.
-Die Entscheidung trifft Tom.
+`[cmd]` Stand 2026-08-12. Vorlage aus Block 21, **Entscheidung und
+Umsetzung in Block 22.**
+
+> ## Entschieden: Weg B — getrennte Sitzung für die Verwaltung
+>
+> **Tom, 2026-08-12.** `apps/admin` führt ein eigenes Sitzungscookie.
+> Kein geteiltes Cookie über `.lumeos.app`, `domain` bleibt an keiner
+> Stelle gesetzt.
+>
+> **Der Grund, der den Ausschlag gab:** Weg A hätte `domain`
+> umgebungsabhängig gesetzt — auf `localhost` nicht setzbar, in
+> Produktion zwingend. *Ein Weg, der lokal anders funktioniert als in
+> Produktion, ist ein Weg, den niemand wirklich testet.* Weg B verhält
+> sich überall gleich.
+>
+> **Zweiter Grund:** Ein Cookie aus dem Produktbereich öffnet die
+> Verwaltung damit nicht. Das ist strenger als A, nicht nur einfacher.
+>
+> Ergebnis und Nachweis in §6. Die Vorlage für Weg A (§4) **bleibt
+> stehen** — sie ist die Begründung dafür, warum B gewählt wurde, und
+> fiele sonst beim nächsten Mal wieder als Frage an.
 
 ---
 
@@ -165,3 +183,90 @@ zweite Spalte dazu.
 `lumeos.app` für dieselbe App. Die Domain von `web` ist festzulegen."*
 Ohne diese Festlegung lässt sich `domain` nicht abschliessend setzen —
 `.lumeos.app` deckt beide, aber die Entscheidung gehört getroffen.
+
+---
+
+## 6. Umsetzung von Weg B (Block 22, 2026-08-12)
+
+### Wie der Name an die vier Stellen kommt
+
+Über **eine Umgebungsvariable**, gelesen an einer Stelle in
+`packages/shared`:
+
+```
+packages/shared/src/supabase/cookie-name.ts
+  authCookieName()     -> sb-<projekt-ref>-<scope>-auth-token | undefined
+  authCookieOptions()  -> { name } | undefined
+```
+
+Alle vier Client-Stellen lesen diese eine Funktion.
+
+**Warum kein Parameter:** `packages/shared` wird von beiden Apps benutzt,
+und `[cmd]` 14 Dateien rufen `createClient`/`createSessionClient`. Ein
+Parameter müsste durch jede einzelne durchgereicht werden — eine
+vergessene Stelle fiele still auf den geteilten Namen zurück und wäre
+wieder verbunden, ohne dass es auffiele.
+**Warum kein fester Wert in `shared`:** dann trügen ihn beide Apps.
+**Warum `NEXT_PUBLIC_*`:** dieselbe Mechanik wie bei URL und
+anon-Schlüssel; Next.js inlined den Wert in den Browser-Bundle, damit
+gilt er in `client.ts` (Browser) und in den Server-Pfaden gleichermassen.
+
+### Wie er heisst — und warum der Umgebungsteil bleibt
+
+`[cmd]` Der bisher abgeleitete Name trägt die Projekt-Referenz
+(`sb-127-auth-token` lokal, `sb-<ref>-auth-token` in der Cloud). Damit
+kollidieren die Sitzungen verschiedener **Umgebungen** nie. Ein flacher
+Name wie `sb-admin-auth-token` hätte genau das aufgegeben.
+
+Deshalb wird **nicht ersetzt, sondern ergänzt**:
+
+| App | `NEXT_PUBLIC_AUTH_COOKIE_SCOPE` | Cookiename |
+|---|---|---|
+| `web` | *nicht gesetzt* | `sb-<ref>-auth-token` |
+| `admin` | `admin` | `sb-<ref>-admin-auth-token` |
+
+`web` bleibt bewusst unverändert: getrennt sind die beiden, sobald
+**eine** von ihnen einen eigenen Namen trägt. Ein neuer Name in `web`
+würde jede bestehende Nutzersitzung entwerten, ohne dem Zweck zu dienen.
+
+### Bestehende Sitzungen
+
+**Wer in `apps/admin` angemeldet war, muss sich einmal neu anmelden.**
+Der Browser trägt dort noch ein Cookie unter dem alten Namen
+`sb-<ref>-auth-token`, das die App nicht mehr liest. Das ist harmlos —
+es läuft ab und wird nicht ausgewertet — aber es sieht aus wie ein
+Fehler, wenn man es nicht weiss. `apps/web` ist nicht betroffen.
+
+### Nachweis
+
+`[cmd]` Gemessen aus den `set-cookie`-Kopfzeilen der laufenden Apps,
+nicht aus dem Code geschlossen:
+
+```
+apps/web    setzt: sb-127-auth-token
+apps/admin  setzt: sb-127-admin-auth-token   -> disjunkt
+```
+
+`[cmd]` Wirkung in beide Richtungen geprüft: eine Sitzung unter dem
+web-Namen führt in `admin` zu `307 -> /login`, eine unter dem
+admin-Namen in `web` zu `307 -> /login`. Gegenprobe: unter dem jeweils
+eigenen Namen wird sie erkannt (`200`).
+
+Wiederholbar: `supabase/_pipeline/_validierung/cookie-trennung-pruefen.mjs`.
+Die beiden Skripte `admin-sperre-pruefen.mjs` und
+`admin-sperre-rolle-c.mjs` lesen den Namen aus **derselben Quelle wie die
+App** (Ableitung + `NEXT_PUBLIC_AUTH_COOKIE_SCOPE` aus
+`apps/admin/.env.local`) statt ihn nachzubauen — ändert jemand das
+Kürzel, ziehen sie mit. Ein Literal dort wäre der Fehler, den diese
+Skripte aufdecken sollen: eine Prüfung, die ihre Erwartung selbst
+erfindet.
+
+### Spezifikation nachgezogen
+
+`[read]` `auth-sso` §4 (früher als „§2" zitiert) beschrieb geteilte
+Sitzungen für **alle** Apps. Das widersprach der Entscheidung. Die Datei
+ist `status: entwurf`, Version 0.1, und verwies für genau diese Frage
+selbst auf TODO B-12 — die Änderung folgt also dem vorgesehenen Weg und
+überschreibt nichts Verbindliches. Nachgezogen auf Version 0.2:
+Grundsatz, §4 (Tabellenspalte „Sitzung"), neues §4a, §5 (Zusatz für
+`admin`), AK-5 eingeschränkt, **AK-6 neu**, offene Frage 3 berichtigt.
