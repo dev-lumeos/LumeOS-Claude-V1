@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import type { Route } from 'next'
 
-import { isCurrentUserAdmin } from '../../../lib/auth/admin-session'
-import { getNutritionCurationData } from '../../../lib/nutrition/curation'
+import { isCurrentUserAdmin } from '@lumeos/shared/auth'
+import { getNutritionCurationData } from '../../lib/nutrition/curation'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,7 +22,7 @@ function curationHref(params: Record<string, string | undefined>): string {
     if (value) search.set(key, value)
   }
   const query = search.toString()
-  return query ? `/nutrition/curation?${query}` : '/nutrition/curation'
+  return query ? `/curation?${query}` : '/curation'
 }
 
 function curationRoute(params: Record<string, string | undefined>): Route {
@@ -58,15 +58,9 @@ export default async function NutritionCurationPage({ searchParams }: NutritionC
           <div className="mt-6 flex gap-2">
             <Link
               className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500"
-              href="/nutrition"
+              href="/"
             >
-              Zurück zu Nutrition
-            </Link>
-            <Link
-              className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500"
-              href="/dashboard"
-            >
-              Dashboard
+              Zurück zur Startseite
             </Link>
           </div>
         </div>
@@ -102,10 +96,10 @@ export default async function NutritionCurationPage({ searchParams }: NutritionC
             </p>
           </div>
           <div className="flex gap-2">
-            <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/nutrition">
-              Food Search
+            <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/">
+              Übersicht
             </Link>
-            <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/api/nutrition/curation">
+            <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/api/curation">
               Curation API
             </Link>
           </div>

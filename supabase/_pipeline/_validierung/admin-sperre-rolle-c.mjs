@@ -39,7 +39,6 @@ const HIER = path.dirname(fileURLToPath(import.meta.url))
 const WURZEL = path.resolve(HIER, '../../..')
 
 const API = process.env.SUPABASE_URL || 'http://127.0.0.1:54321'
-const WEB = process.env.LUMEOS_WEB_URL || 'http://localhost:3200'
 const ADMIN = process.env.LUMEOS_ADMIN_URL || 'http://localhost:3210'
 
 function ausDoku() {
@@ -157,14 +156,14 @@ async function main() {
       t1.slice(0, 110))
     pruefe('admin /  -> KEINE Absage', !/Kein Zugang/i.test(t1))
 
-    const c2 = await hole(WEB + '/nutrition/curation', s.kopf)
+    const c2 = await hole(ADMIN + '/curation', s.kopf)
     const t2 = sichtbar(c2.text)
-    pruefe('web /nutrition/curation -> 200', c2.status === 200, `HTTP ${c2.status}`)
-    pruefe('web /nutrition/curation -> KEINE Absage',
+    pruefe('admin /curation -> 200', c2.status === 200, `HTTP ${c2.status}`)
+    pruefe('admin /curation -> KEINE Absage',
       !/der Verwaltung vorbehalten|Verwaltungsrolle/i.test(t2))
 
-    const c3 = await hole(WEB + '/api/nutrition/curation', s.kopf)
-    pruefe('API /api/nutrition/curation -> 200', c3.status === 200, `HTTP ${c3.status}`)
+    const c3 = await hole(ADMIN + '/api/curation', s.kopf)
+    pruefe('API /api/curation -> 200', c3.status === 200, `HTTP ${c3.status}`)
     pruefe('API -> liefert Daten, nicht leer', c3.text.length > 50,
       c3.text.slice(0, 120))
   } finally {

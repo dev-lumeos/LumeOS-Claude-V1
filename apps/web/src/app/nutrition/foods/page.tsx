@@ -8,7 +8,7 @@ import {
   normalizeFoodSearchText,
 } from '../../../lib/nutrition/food-search'
 import { deterministicExclusionOptions, getPreferenceSearchPreview } from '../../../lib/nutrition/preference-search-preview'
-import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '../../../lib/nutrition/preferences-catalog'
+import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '@lumeos/shared/nutrition/preferences-catalog'
 import { FoodPreferenceToggles } from './food-preference-toggles'
 
 export const dynamic = 'force-dynamic'
@@ -157,9 +157,6 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
               <div className="flex flex-wrap gap-2">
                 <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/api/nutrition/preferences/catalog">
                   Catalog API
-                </Link>
-                <Link className="rounded-md border border-slate-700 px-3 py-2 text-xs text-slate-100 hover:border-slate-500" href="/nutrition/curation">
-                  Curation
                 </Link>
               </div>
             </div>

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { ADMIN_ROLE, isAdminFromAppMetadata } from '../admin-role'
+import { ADMIN_ROLE, isAdminFromAppMetadata } from '@lumeos/shared/auth/role'
 
 test('admin role value matches what 061 checks in the database', () => {
   assert.equal(ADMIN_ROLE, 'admin')

@@ -4,8 +4,8 @@
 // Hier verbleiben: Options-Normalisierung, Payload-Validierung und der
 // Katalog-Abgleich (preferences-catalog ist ein Code-Literal).
 
-import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from './preferences-catalog'
-import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
+import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '@lumeos/shared/nutrition/preferences-catalog'
+import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from '@lumeos/shared/nutrition/db'
 
 export type CurationUnassignedFood = {
   id: string

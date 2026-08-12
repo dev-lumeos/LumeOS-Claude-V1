@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Bewusst nur die drei Tailwind-Schichten — keine Farbwerte, keine
+   Tokens. Begruendung in tailwind.config.js daneben: die Kurationsseite
+   nutzt ausschliesslich die Standard-Palette. */

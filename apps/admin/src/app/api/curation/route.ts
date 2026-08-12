@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
-import { isCurrentUserAdmin } from '../../../../lib/auth/admin-session'
-import { getNutritionCurationData } from '../../../../lib/nutrition/curation'
+import { isCurrentUserAdmin } from '@lumeos/shared/auth'
+import { getNutritionCurationData } from '../../../lib/nutrition/curation'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
