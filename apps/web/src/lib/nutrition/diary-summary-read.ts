@@ -14,7 +14,7 @@ import {
   parseDailySummaryRows,
   type DailySummaryRow,
 } from './diary-summary'
-import { isDbUnavailableMessage } from './nutrition-db'
+import { isDbUnavailableMessage } from '@lumeos/shared/nutrition/db'
 
 /** Spaltenliste der Sicht — Summen und Lückenzähler je Makro. */
 const SUMMARY_COLUMNS = [

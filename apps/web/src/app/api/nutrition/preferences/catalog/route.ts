@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '../../../../../lib/nutrition/preferences-catalog'
+import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '@lumeos/shared/nutrition/preferences-catalog'
 
 export const dynamic = 'force-dynamic'
 

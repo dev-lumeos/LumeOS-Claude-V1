@@ -3,7 +3,7 @@
 // supabase/_pipeline/07_lesefunktionen/070_lesefunktionen.sql.
 // Hier verbleibt die Payload-Validierung.
 
-import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
+import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from '@lumeos/shared/nutrition/db'
 
 export type NutritionSchemaColumn = {
   name: string

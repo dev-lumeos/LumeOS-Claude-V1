@@ -8,7 +8,7 @@ import {
   GENERAL_EXCLUSIONS,
   getNutritionPreferenceCatalog,
   summarizePreferenceCatalog,
-} from '../preferences-catalog'
+} from '@lumeos/shared/nutrition/preferences-catalog'
 
 test('preference catalog covers old-platform visible option groups without write behavior', () => {
   const catalog = getNutritionPreferenceCatalog()

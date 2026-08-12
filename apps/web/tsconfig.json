@@ -15,13 +15,33 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@lumeos/shared": ["../../packages/shared/src/index.ts"],
-      "@lumeos/shared/session": ["../../packages/shared/src/supabase/session.ts"],
-      "@lumeos/shared/auth": ["../../packages/shared/src/auth/admin-session.ts"],
-      "@lumeos/shared/auth/role": ["../../packages/shared/src/auth/admin-role.ts"],
-      "@lumeos/shared/auth/safe-redirect": ["../../packages/shared/src/auth/safe-redirect.ts"],
-      "next/headers": ["./node_modules/next/headers.d.ts"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@lumeos/shared": [
+        "../../packages/shared/src/index.ts"
+      ],
+      "@lumeos/shared/session": [
+        "../../packages/shared/src/supabase/session.ts"
+      ],
+      "@lumeos/shared/auth": [
+        "../../packages/shared/src/auth/admin-session.ts"
+      ],
+      "@lumeos/shared/auth/role": [
+        "../../packages/shared/src/auth/admin-role.ts"
+      ],
+      "@lumeos/shared/auth/safe-redirect": [
+        "../../packages/shared/src/auth/safe-redirect.ts"
+      ],
+      "@lumeos/shared/nutrition/db": [
+        "../../packages/shared/src/nutrition/nutrition-db.ts"
+      ],
+      "@lumeos/shared/nutrition/preferences-catalog": [
+        "../../packages/shared/src/nutrition/preferences-catalog.ts"
+      ],
+      "next/headers": [
+        "./node_modules/next/headers.d.ts"
+      ]
     },
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -37,7 +57,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next-gate/types/**/*.ts"
+    ".next-gate/types/**/*.ts",
+    ".next-probe/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

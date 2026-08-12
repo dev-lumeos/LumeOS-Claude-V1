@@ -6,7 +6,7 @@
 // Läuft ausschliesslich serverseitig (Route mit runtime 'nodejs').
 
 import { createSessionClient } from '@lumeos/shared/session'
-import { isDbUnavailableMessage } from './nutrition-db'
+import { isDbUnavailableMessage } from '@lumeos/shared/nutrition/db'
 import {
   DiaryWriteError,
   buildMealInsert,

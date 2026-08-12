@@ -9,7 +9,7 @@
 
 import { createSessionClient } from '@lumeos/shared/session'
 
-import { isDbUnavailableMessage } from './nutrition-db'
+import { isDbUnavailableMessage } from '@lumeos/shared/nutrition/db'
 import {
   WaterWriteError,
   buildWaterLogInsert,

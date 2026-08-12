@@ -4,7 +4,7 @@
 // Hier verbleiben: Normalisierung/Tokenisierung (eine Quelle), Argument-Bau,
 // Payload-Validierung und die URL-Helfer der Foods-Seite.
 
-import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
+import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from '@lumeos/shared/nutrition/db'
 
 const LABEL_POLICY = 'bls_source_label_not_final_display_name'
 const DEFAULT_LIMIT = 25

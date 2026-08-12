@@ -4,8 +4,8 @@
 // Hier verbleiben: Katalog-Auflösung (deterministische Exclusions),
 // Normalisierung der Codes/Slugs/Tokens und der Payload-Zusammenbau.
 
-import { GENERAL_EXCLUSIONS, getNutritionPreferenceCatalog } from './preferences-catalog'
-import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from './nutrition-db'
+import { GENERAL_EXCLUSIONS, getNutritionPreferenceCatalog } from '@lumeos/shared/nutrition/preferences-catalog'
+import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from '@lumeos/shared/nutrition/db'
 import { summarizeFoodPreferenceItems, type StoredFoodPreferenceItem } from './preferences-model'
 
 const LABEL_POLICY = 'preference_preview_local_only_not_production_smart_search'
