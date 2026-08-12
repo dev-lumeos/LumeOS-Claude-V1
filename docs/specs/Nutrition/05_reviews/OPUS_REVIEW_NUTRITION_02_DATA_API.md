@@ -1,5 +1,23 @@
 # OPUS_REVIEW_NUTRITION_02_DATA_API.md
 
+> [!WARNING]
+> **Die `FOR ALL`-Policies in dieser Datei tragen ein INSERT-Leck und
+> duerfen nicht uebernommen werden.**
+> Beim `INSERT` wertet Postgres `USING` nicht aus — dafuer ist
+> `WITH CHECK` da. Eine Policy `FOR ALL USING (auth.uid() = user_id)`
+> liest sich als Eigentuemerschutz, erlaubt aber jedem
+> Authentifizierten das Einfuegen mit **fremder** `user_id`.
+> `[cmd]` 2026-08-12: **17 solche Policies in 6 Dateien, keine einzige
+> mit `WITH CHECK`.** Ebenso zu ersetzen: die `::text`-Casts auf
+> UUID-Spalten.
+>
+> **Verbindlich ist stattdessen**
+> `docs/spezifikation/10-plattform/konventionen/00-konventionen.md` §12
+> (Policies je Operation, Grant-Falle, `security_invoker`).
+> Diese Datei bleibt als **Altbestand** stehen; ihre Ueberfuehrung ist
+> ein eigener Auftrag (TODO D-05), kein Teil dieses Hinweises.
+
+
 > Review 2 — Entities, Datenmodell, Schema, SQL-Patch, API-Konsistenz
 > Reviewer: Opus | Datum: 2026-05-02
 > Scope: nur Nutrition Spec Pfad (`docs/specs/Nutrition/`)

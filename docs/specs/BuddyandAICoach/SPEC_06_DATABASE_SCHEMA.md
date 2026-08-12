@@ -1,4 +1,22 @@
 # Buddy / AI Coach Module — Database Schema (Spec)
+
+> [!WARNING]
+> **Die `FOR ALL`-Policies in dieser Datei tragen ein INSERT-Leck und
+> duerfen nicht uebernommen werden.**
+> Beim `INSERT` wertet Postgres `USING` nicht aus — dafuer ist
+> `WITH CHECK` da. Eine Policy `FOR ALL USING (auth.uid() = user_id)`
+> liest sich als Eigentuemerschutz, erlaubt aber jedem
+> Authentifizierten das Einfuegen mit **fremder** `user_id`.
+> `[cmd]` 2026-08-12: **17 solche Policies in 6 Dateien, keine einzige
+> mit `WITH CHECK`.** Ebenso zu ersetzen: die `::text`-Casts auf
+> UUID-Spalten.
+>
+> **Verbindlich ist stattdessen**
+> `docs/spezifikation/10-plattform/konventionen/00-konventionen.md` §12
+> (Policies je Operation, Grant-Falle, `security_invoker`).
+> Diese Datei bleibt als **Altbestand** stehen; ihre Ueberfuehrung ist
+> ein eigener Auftrag (TODO D-05), kein Teil dieses Hinweises.
+
 > Spec Phase 6 | Vollständiges SQL
 
 ---

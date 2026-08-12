@@ -1,9 +1,10 @@
 ---
 status:     entwurf
-version:    0.1
-stand:      2026-08-02
-ankerhash:  b0441a9
-quellen:    docs/ssot/ (Ist-Zustand); Erfahrungen 2026-08-01/02
+version:    0.2
+stand:      2026-08-12
+ankerhash:  0b0c5da
+quellen:    docs/ssot/ (Ist-Zustand); Erfahrungen 2026-08-01/02;
+            Kettenschritte 052/053/060/061/062 und D-05 (§12)
 abhaengig:  keine
 ---
 
@@ -155,7 +156,120 @@ zurückgespielt wurde, ist eine Datei und kein Backup.
 `[cmd]` `pg_restore` meldet fehlende Policies nur als Warnung und gilt
 trotzdem als erfolgreich — der Vergleich nach dem Zurückspielen ist Pflicht.
 
-## 12. Abnahmekriterien
+## 12. Zeilenschutz, Policies und Rechte
+
+Diese Regeln stehen hier, weil jede einzelne aus einem Fehler stammt, der
+schon passiert ist. Sie sind nicht Geschmack, sondern Narben.
+
+### 12.1 Policies je Operation — kein `FOR ALL`
+
+Für jede Tabelle je eine Policy für `select`, `insert`, `update`, `delete`.
+Lesende Policies tragen `USING`, schreibende `WITH CHECK`.
+
+**Warum `FOR ALL` verboten ist:** Beim `INSERT` gibt es keine alte Zeile,
+also wertet Postgres `USING` nicht aus — dafür ist `WITH CHECK` da. Eine
+Policy wie
+
+```sql
+-- FALSCH: liest sich als "nur der Eigentümer", erlaubt aber jedem
+-- Authentifizierten das Einfügen mit fremder user_id.
+CREATE POLICY "x_owner" ON schema.tabelle FOR ALL
+  USING (auth.uid()::text = user_id::text);
+```
+
+deckt `INSERT` formal mit ab, prüft dort aber nichts. Sie **liest** sich als
+Eigentümerschutz und **wirkt** beim Einfügen gar nicht.
+
+`[cmd]` Im Altbestand `docs/specs/` stehen **17 solche Policies in sechs
+Dateien** (BuddyandAICoach 8, Marketplace 3, HumanCoach 2, Admin 1,
+Nutrition `03_sql` 1, Nutrition `05_reviews` 2) — **keine einzige** mit
+`WITH CHECK`. Diese Dateien tragen seit 2026-08-12 einen Warnhinweis; sie
+sind Altbestand und **keine Vorlage**.
+
+Richtig ist die Trennung:
+
+```sql
+CREATE POLICY "x_select" ON schema.tabelle FOR SELECT TO authenticated
+  USING (auth.uid() = user_id);
+CREATE POLICY "x_insert" ON schema.tabelle FOR INSERT TO authenticated
+  WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "x_update" ON schema.tabelle FOR UPDATE TO authenticated
+  USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "x_delete" ON schema.tabelle FOR DELETE TO authenticated
+  USING (auth.uid() = user_id);
+```
+
+`UPDATE` braucht beides: `USING` entscheidet, welche Zeile geändert werden
+darf, `WITH CHECK`, wie sie danach aussehen darf. Ohne `WITH CHECK` kann
+eine eigene Zeile auf eine fremde `user_id` umgeschrieben werden.
+
+### 12.2 Kein `::text`-Cast auf UUID
+
+`auth.uid()` liefert `uuid`, `user_id` ist `uuid` — direkt vergleichen.
+Der Cast `auth.uid()::text = user_id::text` erzwingt einen Textvergleich und
+verhindert die Indexnutzung auf jeder Zeile. Er steht im Altbestand
+durchgehend neben dem `FOR ALL` und wird nicht übernommen.
+
+### 12.3 Die Grant-Falle: erst Recht, dann Zeilenschutz
+
+**Ein Recht, das nicht erteilt ist, kann keine Policy zurückholen.**
+PostgREST und Postgres prüfen das Tabellenrecht **vor** RLS. Wer
+`GRANT SELECT` erteilt in der Absicht „schreiben darf nur der Admin",
+bekommt `permission denied` — **auch für den Admin**, dessen Policies dann
+toter Text sind.
+
+`[cmd]` Genau das ist beim Trainings-Schema passiert: erst stand dort nur
+`GRANT SELECT`, die Admin-Schreibpolicies liefen ins Leere. Derselbe
+Gedanke steht als bewusste Ergänzung in
+`supabase/_pipeline/06_zugriff/060_zugriffsschicht.sql` §3c: *„die Policies
+unter 4b wären ohne Tabellenrechte toter Text (PostgREST: erst Grant, dann
+RLS)"*.
+
+Regel: **DML-Recht erteilen, Eingrenzung über Policies.** Das Recht sagt
+*ob überhaupt*, die Policy sagt *welche Zeilen*. Wer die Eingrenzung ins
+Recht legt, verliert die Policy-Ebene.
+
+### 12.4 Sichten: `security_invoker = true` ist Pflicht
+
+Eine Sicht läuft standardmässig mit den Rechten ihrer Eigentümerin. **Die
+RLS der darunterliegenden Tabellen greift dann nicht** — die Sicht zeigt
+allen alles.
+
+```sql
+CREATE OR REPLACE VIEW schema.sicht
+WITH (security_invoker = true) AS SELECT ...
+```
+
+`[cmd]` Ohne diese Angabe sah der zweite Nutzer beim Diary zwei Zeilen des
+ersten. Belegt und behoben in
+`supabase/_pipeline/05_user_tabellen/053_daily_summary.sql`, nachgewiesen in
+`v053` mit zwei echten Sessions.
+
+### 12.5 Reihenfolge: Rechteprüfung **vor** dem Datenzugriff
+
+`[cmd]` Seit `061_rollen_admin.sql` **filtert** RLS, statt zu sperren. Ein
+Nicht-Admin, der eine Admin-Ansicht öffnet, bekommt sonst **stillschweigend
+leere Listen statt einer Absage** — er hält das Werkzeug für kaputt statt
+für gesperrt, und niemand erfährt vom Zugriffsversuch.
+
+Deshalb: `is_admin()` prüfen und abweisen, **bevor** Daten geladen werden.
+Der Zeilenschutz ist die zweite Verteidigungslinie, nicht die erste.
+
+### 12.6 Wie geprüft wird
+
+**Eine Policy zu lesen ist kein Nachweis.** Nachgewiesen wird mit **zwei
+echten Sessions** — je ein Nutzer, der darf, und einer, der nicht darf —
+gegen eine Wegwerf-Datenbank (§11).
+
+Die wiederholbare Rechteprüfung liegt in
+`supabase/_pipeline/_validierung/zugriffsrechte-pruefen.mjs` (B-22). Sie
+zieht ihre Objektliste `[cmd]` **nicht** aus PostgREST, sondern aus
+`062_pruef_objektliste.sql` — eine entzogene Berechtigung liess die Tabelle
+sonst aus der Beschreibung *verschwinden*, und die Prüfung meldete Erfolg,
+weil sie nichts mehr fand. **Ein Prüfwerkzeug, das seine Zielliste vom
+Prüfling bezieht, prüft nichts.**
+
+## 13. Abnahmekriterien
 
 - **AK-1:** Gegeben eine beliebige Datei im Repo, dann ist sie UTF-8 ohne
   BOM, ausser sie ist ein PowerShell-Skript mit Zeichen ausserhalb ASCII.
@@ -165,8 +279,13 @@ trotzdem als erfolgreich — der Vergleich nach dem Zurückspielen ist Pflicht.
   Personendaten und keinen internen Ausnahmetext.
 - **AK-4:** Gegeben ein Zeitstempel in der Datenbank, dann ist er in UTC und
   trägt eine Zeitzone.
+- **AK-5:** Gegeben eine Tabelle mit Zeilenschutz, dann trägt sie Policies je
+  Operation und keine `FOR ALL`-Policy, und jede schreibende Policy trägt
+  `WITH CHECK`.
+- **AK-6:** Gegeben eine Sicht auf Tabellen mit Zeilenschutz, dann ist sie mit
+  `security_invoker = true` angelegt.
 
-## 13. Offene Fragen
+## 14. Offene Fragen
 
 1. **Fehlercodes** — gemeinsamer Katalog über alle Module oder Präfix je
    Modul? Ein Katalog erzwingt Abstimmung, Präfixe erlauben Wildwuchs.
