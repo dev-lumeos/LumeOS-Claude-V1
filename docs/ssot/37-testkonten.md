@@ -47,12 +47,31 @@ apikey: <lokaler Demo-Anon-Schlüssel aus `supabase status -o env`>
 ```
 
 **Fallstrick, an dem ich am 2026-08-12 gescheitert bin:** Das
-Sitzungs-Cookie von Hand nachzubauen funktioniert nicht zuverlässig —
-`@supabase/ssr` leitet den Cookienamen aus der Supabase-URL ab, und ein
-geratener Name führt dazu, dass die Sitzung gar nicht erkannt wird. Der
-Aufruf landet dann beim Login, was wie eine wirksame Sperre aussieht, aber
-nur die Middleware prüft. Für Prüfungen gegen die laufende App: über das
-echte Anmeldeformular gehen und das Cookie von der App setzen lassen.
+Sitzungs-Cookie von Hand nachzubauen schlug fehl — der Aufruf landete mit
+`307` beim Login, was wie eine wirksame Sperre aussieht, aber nur die
+Middleware prüft.
+
+**Aufgelöst am 2026-08-12 (Block 20). Der Name war richtig, das Format
+war falsch** — die erste Diagnose („geratener Name") war es also nicht:
+
+- **Name** `[cmd]` supabase-js 2.104.0 leitet ihn im
+  `SupabaseClient`-Konstruktor ab:
+  `` `sb-${url.hostname.split('.')[0]}-auth-token` `` → lokal
+  **`sb-127-auth-token`**. `@supabase/ssr` 0.1.0 übernimmt diesen
+  `storageKey` unverändert und setzt nur dann einen eigenen, wenn
+  `cookieOptions.name` angegeben ist — `[cmd]` wir setzen bewusst keine
+  `cookieOptions`.
+- **Wert** `[cmd]` `@supabase/ssr` 0.1.0 reicht den Cookiewert in
+  `getItem` unverändert an auth-js weiter, das ihn `JSON.parse`t. Daraus
+  folgt: **kein `encodeURIComponent`** (die Kodierung lässt `JSON.parse`
+  werfen, die Sitzung gilt als nicht vorhanden), **kein `base64-`-Präfix**
+  (kam erst in späteren Fassungen), und **das volle Sitzungsobjekt**, kein
+  Array aus Tokens. Lange Werte teilt die Bibliothek in `.0`/`.1`-Stücke.
+
+Wer das nachbaut, prüft **zuerst**, ob die App die Sitzung überhaupt
+erkennt (kein `307` auf `/login`) — sonst misst er die Middleware und
+hält das Ergebnis für eine Zugangssperre. Beide Prüfskripte tun das und
+brechen sonst ab.
 
 ## Rolle vergeben
 
@@ -60,3 +79,25 @@ Nur über die Admin-API mit dem Service-Schlüssel — die Nutzer-API lehnt
 `app_metadata` mit `403 not_admin` ab. Das ist Absicht: `[cmd]` `user_metadata`
 ist vom Nutzer selbst setzbar und darf deshalb nie für Rechte gelesen
 werden. `public.is_admin()` liest ausschliesslich `app_metadata`.
+
+**Die Admin-API merged `app_metadata`, sie ersetzt es nicht.** `[cmd]`
+2026-08-12 belegt: ein `PUT` mit `{"provider":"email","providers":["email"]}`
+liess ein vorhandenes `"role":"admin"` **stehen** — die Rücknahme sah
+erfolgreich aus und war keine. Zum Entfernen ausdrücklich
+`{"app_metadata":{"role":null}}` senden; beim Merge entfernt `null` den
+Schlüssel. Danach **nachsehen**, nicht annehmen:
+
+```
+SELECT email, raw_app_meta_data FROM auth.users;
+```
+
+## Prüfskripte
+
+| Datei | Prüft | Ändert `auth.users`? |
+|---|---|---|
+| `supabase/_pipeline/_validierung/admin-sperre-pruefen.mjs` | A (nicht angemeldet) und B (angemeldet ohne Rolle) | **nein** |
+| `supabase/_pipeline/_validierung/admin-sperre-rolle-c.mjs` | C (angemeldet als Admin) | ja — vergibt dem Testkonto vorübergehend `role=admin` und nimmt sie zurück, mit Nachkontrolle |
+
+Beide brauchen laufende Dev-Server (`3200`, `3210`) und die lokale
+Supabase-Instanz; sie gehören deshalb **nicht** ins `pnpm gate` —
+dieselbe Begründung wie bei `zugriffsrechte-pruefen.mjs` (B-22).
