@@ -1,29 +1,10 @@
-// I/O für die Rollenprüfung (C.3, 2026-08-06).
-// Holt die Sitzung über den Session-Client und reicht app_metadata an die
-// reine Regel in admin-role.ts. Läuft ausschliesslich serverseitig.
+// Rollenprüfung (I/O) — VERSCHOBEN nach packages/shared (Block 19).
 //
-// Kein Service-Client: `[cmd]` createServiceClient hat null Aufrufer, das
-// bleibt so (C-11).
+// Umsetzung jetzt in packages/shared/src/auth/admin-session.ts, gemeinsam
+// genutzt von apps/web und apps/admin. Siehe admin-role.ts daneben.
+//
+// Diese Datei bleibt als Weiterleitung stehen, damit die bestehenden
+// Importpfade unverändert gelten. Neuer Code importiert direkt aus
+// '@lumeos/shared/auth'.
 
-import { createSessionClient } from '@lumeos/shared/session'
-
-import { isAdminFromAppMetadata } from './admin-role'
-
-/**
- * Ist die aktuelle Sitzung ein Admin?
- *
- * getUser() validiert gegen den Auth-Server (nicht nur das Cookie) und
- * liefert die app_metadata aus dem JWT — denselben Claim, den
- * public.is_admin() in der Datenbank prüft.
- *
- * Ohne Sitzung: false. Die Middleware leitet Unangemeldete ohnehin nach
- * /login um; diese Funktion trifft darüber keine Aussage.
- */
-export async function isCurrentUserAdmin(): Promise<boolean> {
-  const supabase = createSessionClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return false
-  return isAdminFromAppMetadata(user.app_metadata as Record<string, unknown> | null | undefined)
-}
+export { isCurrentUserAdmin } from '@lumeos/shared/auth'

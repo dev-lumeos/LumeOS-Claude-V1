@@ -6,7 +6,10 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
-    "./session": "./src/supabase/session.ts"
+    "./session": "./src/supabase/session.ts",
+    "./auth": "./src/auth/admin-session.ts",
+    "./auth/role": "./src/auth/admin-role.ts",
+    "./auth/safe-redirect": "./src/auth/safe-redirect.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",
