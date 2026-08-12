@@ -81,6 +81,23 @@ const adminKopf = {
   'content-type': 'application/json',
 }
 
+/**
+ * Der Cookiename, den apps/admin tatsaechlich benutzt (B-12, Weg B).
+ * Aus derselben Quelle wie die App gelesen, nicht nachgebaut — siehe
+ * die ausfuehrliche Begruendung in admin-sperre-pruefen.mjs.
+ */
+function cookieNameDerApp() {
+  const ref = new URL(API).hostname.split('.')[0]
+  const p = path.join(WURZEL, 'apps/admin/.env.local')
+  let scope = process.env.NEXT_PUBLIC_AUTH_COOKIE_SCOPE?.trim() ?? ''
+  if (!scope && fs.existsSync(p)) {
+    const m = fs.readFileSync(p, 'utf8')
+      .match(/^\s*NEXT_PUBLIC_AUTH_COOKIE_SCOPE\s*=\s*(\S+)/m)
+    if (m) scope = m[1].trim()
+  }
+  return scope ? `sb-${ref}-${scope}-auth-token` : `sb-${ref}-auth-token`
+}
+
 async function nutzer() {
   const r = await fetch(`${API}/auth/v1/admin/users/${uid}`, { headers: adminKopf })
   if (!r.ok) throw new Error(`Nutzer lesen: HTTP ${r.status}`)
@@ -107,8 +124,8 @@ async function anmelden() {
   const s = await r.json()
   const p = JSON.parse(Buffer.from(s.access_token.split('.')[1], 'base64url').toString('utf8'))
   // Cookieform: siehe ausfuehrliche Begruendung in admin-sperre-pruefen.mjs
-  const ref = new URL(API).hostname.split('.')[0]
-  return { kopf: `sb-${ref}-auth-token=${JSON.stringify(s)}`, rolle: p.app_metadata?.role ?? null }
+  // Name aus derselben Quelle wie die App (B-12, Weg B) — nicht nachgebaut.
+  return { kopf: `${cookieNameDerApp()}=${JSON.stringify(s)}`, rolle: p.app_metadata?.role ?? null }
 }
 
 async function hole(url, kopf) {

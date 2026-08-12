@@ -149,9 +149,33 @@ async function anmelden(email, passwort, anon) {
  * nicht erkannt" (307 auf /login) und einer echten Sitzung.
  */
 function cookieKopf(sitzung) {
-  const ref = new URL(API).hostname.split('.')[0]
-  const name = `sb-${ref}-auth-token`
+  const name = cookieNameDerApp()
   return { kopf: `${name}=${JSON.stringify(sitzung)}`, name }
+}
+
+/**
+ * Der Cookiename, den apps/admin TATSAECHLICH benutzt.
+ *
+ * Seit B-12 (Weg B) fuehrt die Verwaltung eine eigene Sitzung unter
+ * `sb-<ref>-admin-auth-token`. Der Name wird hier NICHT nachgebaut,
+ * sondern aus derselben Quelle gelesen wie in der App:
+ *   * die Ableitung steht in packages/shared/src/supabase/cookie-name.ts
+ *   * das Kuerzel in apps/admin/.env.local (NEXT_PUBLIC_AUTH_COOKIE_SCOPE)
+ *
+ * Ein Literal hier waere genau der Fehler, den dieses Skript aufdecken
+ * soll: eine Pruefung, die ihre Erwartung selbst erfindet, statt sie vom
+ * Prueflig zu nehmen. Aendert jemand das Kuerzel, zieht die Pruefung mit.
+ */
+function cookieNameDerApp() {
+  const ref = new URL(API).hostname.split('.')[0]
+  const p = path.join(WURZEL, 'apps/admin/.env.local')
+  let scope = process.env.NEXT_PUBLIC_AUTH_COOKIE_SCOPE?.trim() ?? ''
+  if (!scope && fs.existsSync(p)) {
+    const m = fs.readFileSync(p, 'utf8')
+      .match(/^\s*NEXT_PUBLIC_AUTH_COOKIE_SCOPE\s*=\s*(\S+)/m)
+    if (m) scope = m[1].trim()
+  }
+  return scope ? `sb-${ref}-${scope}-auth-token` : `sb-${ref}-auth-token`
 }
 
 async function hole(url, cookieKopf) {
