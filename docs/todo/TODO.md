@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-12 (einundzwanzigste Aktualisierung — Bloecke 19-21 geschlossen: B-23 (Policy-Regel in den Konventionen), B-24 (apps/admin als zweite App, mit belegtem Zwei-Sessions-Nachweis) und C-14 (Kuration nach apps/admin, Rollenabstufung in apps/web entfernt) erledigt; B-12 wartet nicht mehr konzeptbedingt, sondern auf Toms Entscheidung — Vorlage in docs/ssot/38-cookie-bereich.md. Zwei Lehren, die groesser sind als ihre Bloecke: ein Befund ohne Regel ist folgenlos (das INSERT-Leck stand seit einem Review dokumentiert und pflanzte sich in vier Module fort), und eine Pruefung, die etwas anderes misst als sie behauptet, ist schlimmer als keine (das nachgebaute Cookie prueste die Middleware und sah aus wie eine Zugangssperre))
+**Stand:** 2026-08-12 (zweiundzwanzigste Aktualisierung — Bloecke 19-22 geschlossen: B-23 (Policy-Regel), B-24 (apps/admin als zweite App), C-14 (Kuration umgezogen, Rollenabstufung in apps/web entfernt) und B-12 (Cookie-Bereich: Weg B, eigene Sitzung fuer die Verwaltung) erledigt; B-25 neu (geteilte Sitzung im Produktbereich, ungeprueft bis zur zweiten Produkt-App). Drei Lehren, die groesser sind als ihre Bloecke: ein Befund ohne Regel ist folgenlos; eine Pruefung, die etwas anderes misst als sie behauptet, ist schlimmer als keine; und ein Weg, der lokal anders funktioniert als in Produktion, ist ein Weg, den niemand wirklich testet — genau deshalb faellt die Cookie-Trennung ueber den Namen und nicht ueber domain)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -111,12 +111,13 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
    klären), B-11, B-17 (niedrig).
 7. **Deployment:** B-13-Rest als einzige verbleibende M4-Voraussetzung,
    dann E-08. E-04 erst danach — es blockiert nichts.
-8. **A-06** läuft parallel bei Tom. **B-12 wartet nicht mehr** — die
-   zweite App existiert, die Vorlage liegt vor
-   (`docs/ssot/38-cookie-bereich.md`), es fehlt nur Toms Entscheidung
-   zwischen geteilter und getrennter Anmeldung. **C-14 ist erledigt**
+8. **A-06** läuft parallel bei Tom. **B-12 ist entschieden und
+   umgesetzt** — `apps/admin` führt eine eigene Sitzung (Weg B), belegt
+   aus den `set-cookie`-Kopfzeilen beider Apps. **C-14 ist erledigt**
    (Kuration liegt in `apps/admin`, die Rollenabstufung in `apps/web`
-   ist entfernt).
+   ist entfernt). Offen bleibt daraus **B-25**: die geteilte Sitzung im
+   Produktbereich ist ungeprüft und wird es bleiben, bis eine zweite
+   Produkt-App existiert.
 
 
 ---
@@ -221,11 +222,57 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
 
 ## B — Entwicklungsumgebung & Absicherung
 
-- [ ] **B-12: Lokale Umgebung produktionsnah nachbilden** (neu 2026-08-03)
-  **Wartebedingung eingetreten, Vorlage liegt vor — Entscheidung offen
-  (2026-08-12, Block 21):** `docs/ssot/38-cookie-bereich.md`.
-  Die zweite App existiert seit Block 19, damit ist der Punkt nicht mehr
-  konzeptbedingt blockiert.
+- [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
+  umgesetzt 2026-08-12 (Blöcke 21/22).** Tom hat **Weg B** gewählt:
+  `apps/admin` führt eine **eigene Sitzung**, kein geteiltes Cookie über
+  `.lumeos.app`. `domain` bleibt an keiner Stelle gesetzt.
+
+  **Der Grund, der den Ausschlag gab:** Weg A hätte `domain`
+  umgebungsabhängig gesetzt — `[cmd]` auf `localhost` nicht setzbar (ein
+  `domain`, das nicht zum Host passt, verwirft der Browser), in
+  Produktion zwingend. *Ein Weg, der lokal anders funktioniert als in
+  Produktion, ist ein Weg, den niemand wirklich testet.* Weg B verhält
+  sich überall gleich. Zweitens öffnet ein Cookie aus dem Produktbereich
+  die Verwaltung damit nicht — strenger, nicht nur einfacher.
+
+  **Umsetzung über den NAMEN statt über `domain`:**
+  `packages/shared/src/supabase/cookie-name.ts` bildet
+  `sb-<projekt-ref>-<scope>-auth-token`, das Kürzel kommt aus
+  `NEXT_PUBLIC_AUTH_COOKIE_SCOPE` je App. Eine Umgebungsvariable und kein
+  Parameter, weil `[cmd]` 14 Dateien die Client-Fabriken aufrufen — eine
+  vergessene Stelle fiele still auf den geteilten Namen zurück.
+  **Der Umgebungsteil bleibt abgeleitet**, sonst kollidierten lokale und
+  Cloud-Sitzung derselben App. `apps/web` behält seinen Namen: getrennt
+  sind die beiden, sobald **eine** einen eigenen trägt.
+
+  `[cmd]` **Gemessen aus den `set-cookie`-Kopfzeilen** der laufenden
+  Apps, nicht aus dem Code geschlossen: `web` setzt `sb-127-auth-token`,
+  `admin` setzt `sb-127-admin-auth-token` — disjunkt. Wirkung in beide
+  Richtungen belegt (je `307 -> /login` in der fremden App, `200` in der
+  eigenen). Wiederholbar:
+  `supabase/_pipeline/_validierung/cookie-trennung-pruefen.mjs`.
+
+  **Nebenwirkung, damit niemand rätselt:** Wer in `apps/admin` angemeldet
+  war, muss sich **einmal neu anmelden** — das alte Cookie liegt noch im
+  Browser, wird aber nicht mehr gelesen. `apps/web` ist nicht betroffen.
+
+  **Spezifikation nachgezogen:** `[read]` `auth-sso` beschrieb geteilte
+  Sitzungen für alle Apps. Die Datei ist `status: entwurf` (0.1) und
+  verwies für genau diese Frage selbst auf B-12 — die Änderung folgt dem
+  vorgesehenen Weg. Jetzt 0.2 mit neuem §4a, eingeschränktem AK-5 und
+  neuem **AK-6** (web-Sitzung wirkt nicht in `admin`).
+
+  **Was von diesem Punkt NICHT erledigt ist:** das produktionsnahe
+  Nachbilden mit `hosts`-Einträgen und Zertifikaten. Es wird für die
+  Trennung von `admin` nicht mehr gebraucht — dafür ist gerade der Punkt,
+  dass Weg B keinen umgebungsabhängigen Sonderweg hat. Für die
+  **geteilte** Sitzung im Produktbereich (AK-1, AK-5) bleibt es offen und
+  ist `[cmd]` derzeit ohnehin nicht prüfbar: `apps/buddy` und
+  `apps/coach` tragen je eine `.gitkeep`, `apps/marketplace` existiert
+  nicht. Wiedervorlage mit der zweiten Produkt-App — als **B-25**
+  geführt, damit es nicht in einem erledigten Punkt verschwindet.
+
+  Ursprünglicher Punkt (neu 2026-08-03):
 
   `[cmd]` **Ist-Zustand: `domain` wird an keiner der vier Stellen
   gesetzt** (`packages/shared/src/supabase/{client,session}.ts`, beide
@@ -692,6 +739,26 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
      nur die Middleware.** Beide Skripte prüfen deshalb zuerst, ob die
      App die Sitzung überhaupt erkennt, und brechen sonst ab.
      Details in `docs/ssot/37-testkonten.md`.
+
+- [ ] **B-25: Geteilte Sitzung im Produktbereich prüfen** (neu 2026-08-12,
+  aus B-12) — B-12 hat die Trennung von `admin` entschieden und belegt.
+  **Ungeprüft bleibt die andere Hälfte:** ob die Sitzung zwischen `web`,
+  `buddy`, `coach` und `marketplace` tatsächlich geteilt wird
+  (`auth-sso` AK-1) und ob eine Abmeldung überall wirkt (AK-5).
+  `[cmd]` Derzeit nicht prüfbar: `apps/buddy` und `apps/coach` tragen je
+  genau eine Datei (`src/.gitkeep`), `apps/marketplace` existiert nicht.
+  Dafür braucht es das produktionsnahe Nachbilden aus dem alten
+  B-12-Kern: `hosts`-Einträge und lokale Zertifikate — `[cmd]` eine
+  Änderung an Toms System, deshalb nicht eigenmächtig.
+  **Wiedervorlage mit der zweiten Produkt-App.** Vorher testet der
+  Aufwand etwas, das niemand nutzt.
+  *Achtung bei der Umsetzung:* Für den Produktbereich ist Weg A
+  vorgesehen (`domain` auf `.lumeos.app`) — und der ist genau der
+  umgebungsabhängige Sonderweg, dessentwegen `admin` ihn nicht bekommen
+  hat. Vor dem Setzen ist zu klären, wie lokal geprüft wird, sonst
+  entsteht wieder eine Konfiguration, die erst beim Deployment auffällt.
+  Hintergrund: `docs/ssot/38-cookie-bereich.md` §4 (Weg A steht dort
+  bewusst weiterhin ausformuliert).
 
 ---
 
