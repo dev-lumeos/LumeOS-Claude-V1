@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-07 (zwanzigste Aktualisierung — Blöcke 17/18 geschlossen: E-05 und E-06 erledigt, E-12 (Trainings-Schema live) und E-13 (`body_region`) neu, C-08 geprüft und weiter liegend. Das Trainings-Schema ist live: 109 Muskelgruppen, 58 Geräte, 1.416 Übungen, 6.625 Zuordnungen, 0 Waisen, 3.640 relative Medienpfade — Schema und Seed, bewusst ohne UI und API. Der Massstab, der die Dublettensuche beendet hat, war nicht eine weitere Regel, sondern die Frage „zeigen sie auf identische Medien?": 32 echte Dubletten zusammengeführt, 46 Scheindubletten stehengelassen. Kette und live sind prüfsummengleich)
+**Stand:** 2026-08-12 (einundzwanzigste Aktualisierung — Bloecke 19-21 geschlossen: B-23 (Policy-Regel in den Konventionen), B-24 (apps/admin als zweite App, mit belegtem Zwei-Sessions-Nachweis) und C-14 (Kuration nach apps/admin, Rollenabstufung in apps/web entfernt) erledigt; B-12 wartet nicht mehr konzeptbedingt, sondern auf Toms Entscheidung — Vorlage in docs/ssot/38-cookie-bereich.md. Zwei Lehren, die groesser sind als ihre Bloecke: ein Befund ohne Regel ist folgenlos (das INSERT-Leck stand seit einem Review dokumentiert und pflanzte sich in vier Module fort), und eine Pruefung, die etwas anderes misst als sie behauptet, ist schlimmer als keine (das nachgebaute Cookie prueste die Middleware und sah aus wie eine Zugangssperre))
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -55,10 +55,16 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
 **Werkzeugarbeit abgeschlossen (Block 12), Vorfeld geräumt (Block 13),
 Nutrition-Datenseite vollständig (Block 14), Repo aufgeräumt (Block 15),
 Legacy-Instanz vermessen und Trainingsdaten im Repo (Block 16),
-Trainings-Schema live (Blöcke 17/18).**
+Trainings-Schema live (Blöcke 17/18), zweite App mit belegter
+Admin-Sperre (Blöcke 19–21).**
 
 - Das Gate erfasst **alle** Pakete (B-21), die Datenbankrechte sind
   wiederholbar prüfbar (B-22), die E2E-Frage ist entschieden (D-04).
+- **`apps/admin` läuft und trägt die Kuration** (B-24, C-14). `[cmd]`
+  Das Gate erfasst **8 Tasks** statt 5; die Zugangssperre ist mit zwei
+  echten Sessions belegt und der Nachweis ist wiederholbar. Damit ist
+  `apps/web` wieder das, was `[read]` `20-apps/web` §4 beschreibt: eine
+  App mit **genau einer Rolle**.
 - **Die Nutrition-Datenseite ist vollständig und live:** Diary (052),
   Tagessumme (053), Duplikatschutz (054), Water und Gesamt-Hydration
   (055/056) — je mit eigener Validierung.
@@ -105,9 +111,12 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
    klären), B-11, B-17 (niedrig).
 7. **Deployment:** B-13-Rest als einzige verbleibende M4-Voraussetzung,
    dann E-08. E-04 erst danach — es blockiert nichts.
-8. **A-06** läuft parallel bei Tom; **B-12** wartet konzeptbedingt auf
-   die zweite App; **C-14** (Kuration nach `apps/admin`) wartet auf die
-   Admin-App.
+8. **A-06** läuft parallel bei Tom. **B-12 wartet nicht mehr** — die
+   zweite App existiert, die Vorlage liegt vor
+   (`docs/ssot/38-cookie-bereich.md`), es fehlt nur Toms Entscheidung
+   zwischen geteilter und getrennter Anmeldung. **C-14 ist erledigt**
+   (Kuration liegt in `apps/admin`, die Rollenabstufung in `apps/web`
+   ist entfernt).
 
 
 ---
@@ -213,7 +222,37 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
 ## B — Entwicklungsumgebung & Absicherung
 
 - [ ] **B-12: Lokale Umgebung produktionsnah nachbilden** (neu 2026-08-03)
-  Sobald die zweite App entsteht. Hosts-Einträge `web.lumeos.local`,
+  **Wartebedingung eingetreten, Vorlage liegt vor — Entscheidung offen
+  (2026-08-12, Block 21):** `docs/ssot/38-cookie-bereich.md`.
+  Die zweite App existiert seit Block 19, damit ist der Punkt nicht mehr
+  konzeptbedingt blockiert.
+
+  `[cmd]` **Ist-Zustand: `domain` wird an keiner der vier Stellen
+  gesetzt** (`packages/shared/src/supabase/{client,session}.ts`, beide
+  Middlewares). Lokal teilen sich 3200 und 3210 die Sitzung nur deshalb,
+  weil Cookies nach **Host** getrennt werden und nicht nach Port — beide
+  sind `localhost`. **Das sieht aus wie funktionierendes SSO und prüft
+  die Produktionsannahme gerade nicht:** dort sind `lumeos.app` und
+  `admin.lumeos.app` verschiedene Hosts.
+
+  **Zwei Wege, beide mit Preis** (Details in der Vorlage):
+  **A** geteilte Sitzung über `.lumeos.app` — bequem, aber ein
+  gestohlenes Cookie öffnet auch die Verwaltung, und die Einstellung
+  muss umgebungsabhängig sein (`[cmd]` ein `domain`, das nicht zum Host
+  passt, wird vom Browser verworfen — lokal schlüge die Anmeldung fehl).
+  **B** getrennte Anmeldung für `admin` — eine Anmeldung mehr, dafür kein
+  umgebungsabhängiger Sonderweg und dieselbe Haltung wie `[read]`
+  `20-apps/web` §6 (admin wird bewusst nicht verlinkt).
+  **Empfehlung:** B für `admin`, A für den Produktbereich.
+
+  **Zum lokalen Nachbilden** (der ursprüngliche Kern dieses Punktes):
+  nötig wären `hosts`-Einträge und Zertifikate. `[cmd]` Das ist eine
+  Änderung an Toms System, nicht am Repo — **nicht ausgeführt**. Die
+  Vorlage nennt, was nötig wäre, und sagt auch, was ein solcher Test
+  **nicht** belegt (kein HTTPS, andere Ports): der belastbare Nachweis
+  ist die erste Umgebung mit echten Subdomains.
+
+  Ursprünglicher Punkt: Hosts-Einträge `web.lumeos.local`,
   `buddy.lumeos.local` und weitere, dazu lokale Zertifikate (mkcert), damit
   das geteilte Cookie auf einer echten Domain liegt.
   *Grund:* Das app-übergreifende Weiterreichen der Session über `.lumeos.app`
@@ -588,6 +627,71 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
      Zählern 0**. Das ist kein Widerspruch: seit 061 **filtert RLS,
      statt zu sperren**. Die Seite blendet für Nicht-Admins ab (C.3),
      damit aus „0 Kandidaten" nicht „alles erledigt" gelesen wird.
+
+- [x] **B-23: Policy-Regel festschreiben — ein Befund ohne Regel ist
+  folgenlos** — **erledigt 2026-08-12 (Block 19), aus D-05.**
+  Die Regel steht in
+  `docs/spezifikation/10-plattform/konventionen/00-konventionen.md` §12
+  (176 → 296 Zeilen): Policies je Operation statt `FOR ALL`, `USING` für
+  Lesen und `WITH CHECK` für Schreiben, kein `::text`-Cast auf UUID, die
+  Grant-Falle (erst Recht, dann Zeilenschutz), `security_invoker = true`
+  bei Sichten, Rechteprüfung **vor** dem Datenzugriff, und wie geprüft
+  wird (zwei echte Sessions, nicht die Policy lesen). Dazu **AK-5** und
+  **AK-6**. Alle sechs betroffenen Spec-Dateien tragen einen Warnhinweis;
+  `[cmd]` die Specs selbst sind unverändert (weiterhin genau 17
+  Policy-Zeilen, Tabellenzeilen identisch) — sie sind Altbestand, ihre
+  Überführung ist D-05.
+
+  **Der eigentliche Ertrag ist nicht die Regel, sondern warum sie
+  fehlte.** `[cmd]` Zwei der 17 Fundstellen stehen in
+  `Nutrition/05_reviews/OPUS_REVIEW_NUTRITION_02_DATA_API.md` — einem
+  Review, das dieses INSERT-Leck **bereits beschreibt**, samt Folge
+  („jeder eingeloggte User kann beliebige BLS-Portionen einfügen").
+  Der Befund war notiert und **nie zur Regel gemacht**. Danach hat sich
+  dasselbe Muster in vier Module fortgepflanzt (Buddy 8, Marketplace 3,
+  HumanCoach 2, Admin 1).
+  *Ein Befund, der nicht zur Regel wird, verhindert nichts — er
+  dokumentiert nur, dass man es wusste.* Deshalb gehört jeder
+  wiederkehrende Fund in die Konventionen, nicht in einen Bericht.
+
+- [x] **B-24: `apps/admin` als zweite App** — **erledigt 2026-08-12
+  (Blöcke 19–21).** Aus einem `.gitkeep`-Gerüst eine laufende App auf
+  Port 3210 (`[read]` Konvention §8 vergibt ihn, keine eigene Wahl nötig)
+  mit Anmeldung, Auth-Callback, Middleware ohne öffentlichen Teil und
+  Admin-Prüfung **vor** dem Datenzugriff. Seit Block 21 trägt sie die
+  Kuration (C-14).
+
+  **Auth-Helfer nach `packages/shared` verschoben, nicht kopiert:**
+  `admin-role.ts`, `admin-session.ts`, `safe-redirect.ts`. Zwei Apps, die
+  dieselbe Rolle prüfen, dürfen nicht zwei Wahrheiten haben — bei
+  Rollen- und Sicherheitslogik ist das die teuerste Stelle für Drift.
+  `[cmd]` Turbo-Kante empirisch belegt: 7/7 gecacht, eine Zeile in
+  `packages/shared` geändert → **0/7 gecacht**.
+
+  **Der Zwei-Sessions-Nachweis ist erbracht und wiederholbar** (Block 20):
+  `supabase/_pipeline/_validierung/admin-sperre-pruefen.mjs` (A und B,
+  ändert nichts) und `admin-sperre-rolle-c.mjs` (C, vergibt dem Testkonto
+  vorübergehend die Rolle und nimmt sie zurück). Bewusst zwei Dateien:
+  wer nur prüfen will, soll nichts ändern. Beide **nicht** im `pnpm gate`
+  — sie brauchen laufende Server und eine Datenbank, dieselbe Begründung
+  wie bei B-22.
+
+  **Zwei Fallen, die dabei zuschnappten und jetzt dokumentiert sind:**
+  1. `[cmd]` **Die Admin-API merged `app_metadata`, sie ersetzt es
+     nicht.** Den Ausgangswert `{provider, providers}` zurückzusenden
+     liess `"role":"admin"` **stehen** — die Rücknahme sah erfolgreich
+     aus und war keine. Richtig ist `{"role": null}`; beim Merge entfernt
+     `null` den Schlüssel. Das Skript prüft die Rücknahme seither **nach**,
+     statt sie anzunehmen.
+  2. `[cmd]` **Der Cookiename war richtig, das Format war falsch.** Die
+     erste Diagnose („geratener Name") stimmte nicht: `sb-127-auth-token`
+     ist korrekt aus der Supabase-URL abgeleitet. Gescheitert war der
+     Wert — `encodeURIComponent` lässt das `JSON.parse` in auth-js werfen,
+     die Sitzung gilt dann als nicht vorhanden und der Aufruf landet mit
+     307 beim Login. **Das sah aus wie eine wirksame Sperre und prüfte
+     nur die Middleware.** Beide Skripte prüfen deshalb zuerst, ob die
+     App die Sitzung überhaupt erkennt, und brechen sonst ab.
+     Details in `docs/ssot/37-testkonten.md`.
 
 ---
 
@@ -974,8 +1078,59 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   HTTP 409 übersetzen. Und `[cmd]` die drei Textcodes haben **keinen**
   Fremdschlüssel: ein Tippfehler bleibt einer, nur eben ein eindeutiger.
 
-- [ ] **C-14: Kuration gehört nach `apps/admin` — die Rollenabstufung in
-  `apps/web` ist ein bewusster Zwischenschritt** (neu 2026-08-06, aus C.3)
+- [x] **C-14: Kuration gehört nach `apps/admin` — die Rollenabstufung in
+  `apps/web` ist ein bewusster Zwischenschritt** — **erledigt 2026-08-12
+  (Block 21).** Umgezogen und die Ausnahme aufgelöst:
+
+  | von `apps/web` | nach | Zeilen |
+  |---|---|---|
+  | `src/app/nutrition/curation/page.tsx` | `apps/admin/src/app/curation/page.tsx` | 315 |
+  | `src/app/api/nutrition/curation/route.ts` | `apps/admin/src/app/api/curation/route.ts` | 40 |
+  | `src/lib/nutrition/curation.ts` | `apps/admin/src/lib/nutrition/curation.ts` | 313 |
+  | `src/lib/nutrition/__tests__/curation.test.ts` | `apps/admin/…/__tests__/curation.test.ts` | 44 |
+  | `src/lib/nutrition/nutrition-db.ts` | `packages/shared/src/nutrition/nutrition-db.ts` | 27 |
+  | `src/lib/nutrition/preferences-catalog.ts` | `packages/shared/src/nutrition/preferences-catalog.ts` | 238 |
+
+  Alles per `git mv` — die Herkunft bleibt in der Historie.
+  **Nicht umgezogen:** die RPC `nutrition.curation_overview` und die
+  Curation-Tabellen. Es zieht nur die Anwendungsseite um.
+  Die beiden letzten Zeilen der Tabelle sind **keine** Kuration, sondern
+  gemeinsame Infrastruktur: `[cmd]` `nutrition-db.ts` hat 10 Nutzer in
+  `apps/web`, die dort bleiben. Kopieren hätte Drift erzeugt, deshalb
+  nach `packages/shared` — dasselbe Muster wie bei den Auth-Helfern in
+  Block 19.
+
+  **Die Rollenabstufung in `apps/web` ist weg**, nicht liegen geblieben:
+  `admin-role.ts` und `admin-session.ts` (seit Block 19 nur noch
+  Weiterleitungen) sind gelöscht, der zugehörige Test liegt jetzt bei
+  `apps/admin`. `[cmd]` `git grep` auf `isCurrentUserAdmin`,
+  `isAdminFromAppMetadata`, `ADMIN_ROLE`, `admin-role`, `admin-session`
+  über `apps/web/src`: **0 Treffer.** Was bleibt, ist `safe-redirect` —
+  von Anmeldung und Callback gebraucht, keine Rollenlogik.
+
+  **Alte Adressen: 404, bewusst keine Weiterleitung.** `[cmd]` Mit
+  gültiger Sitzung liefern `/nutrition/curation` und
+  `/api/nutrition/curation` in `apps/web` je **404**. Eine Weiterleitung
+  nach `admin.lumeos.app` wäre faktisch der Link, den `[read]`
+  `20-apps/web` §6 ausschliesst („ein Link aus `web` würde nahelegen,
+  dass sie zum Produkt gehören"). Auch der Knopf „Curation" auf
+  `/nutrition/foods` ist entfernt statt umgehängt.
+
+  **Themesystem: weiter ohne, am Bedarf entschieden.** `[cmd]` Die
+  umgezogene Seite nutzt 100 `className`-Stellen, aber **null**
+  Theme-Token-Klassen — sie kommt mit der Standard-Palette aus. `apps/admin`
+  hat deshalb Tailwind bekommen (`tailwind.config.js`, `postcss.config.js`,
+  `globals.css`), aber **keine** Token-Spiegelung und keinen
+  Cookie-SSR-Bootstrap. Das Heben nach `packages/` bleibt für den Tag, an
+  dem `admin` eigene Markenoberfläche bekommt — dann mit zwei echten
+  Nutzern statt einem.
+
+  **Belegt mit zwei echten Sessions** (Block-20-Skripte, auf die neuen
+  Adressen umgestellt statt neu gebaut): A `307` → `/login`, B Absage auf
+  `/curation` **und** `403` auf `/api/curation`, C Seite mit Inhalt und
+  `200` mit Daten. `[cmd]` Beide Skripte Exit 0.
+
+  Ursprünglicher Punkt (neu 2026-08-06, aus C.3):
   **Diese Ausnahme widerspricht der Spezifikation und muss als Ausnahme
   sichtbar bleiben, sonst gilt sie irgendwann als Regel.**
   `[read]` `docs/spezifikation/20-apps/web/00-app-web.md:65–69` sagt
