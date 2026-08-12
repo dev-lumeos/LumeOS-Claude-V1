@@ -30,6 +30,40 @@ importers:
         specifier: ^5.0.0
         version: 5.9.3
 
+  apps/admin:
+    dependencies:
+      '@lumeos/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      '@supabase/ssr':
+        specifier: ^0.1.0
+        version: 0.1.0(@supabase/supabase-js@2.104.0)
+      '@supabase/supabase-js':
+        specifier: ^2.0.0
+        version: 2.104.0
+      next:
+        specifier: ^14.0.0
+        version: 14.2.35(@playwright/test@1.41.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react:
+        specifier: ^18.0.0
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.0.0
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/node':
+        specifier: ^20.0.0
+        version: 20.19.39
+      '@types/react':
+        specifier: ^18.0.0
+        version: 18.3.28
+      '@types/react-dom':
+        specifier: ^18.0.0
+        version: 18.3.7(@types/react@18.3.28)
+      typescript:
+        specifier: ^5.0.0
+        version: 5.9.3
+
   apps/web:
     dependencies:
       '@lumeos/shared':
