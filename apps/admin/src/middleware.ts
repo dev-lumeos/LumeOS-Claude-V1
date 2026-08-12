@@ -16,6 +16,7 @@
 // Die Rollenpruefung gehoert in die Seite (Server Component), weil sie
 // eine ABSAGE zeigen muss statt einer Umleitung — siehe page.tsx.
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { authCookieOptions } from '@lumeos/shared/cookie-name'
 import { NextResponse, type NextRequest } from 'next/server'
 
 function isPublicPath(pathname: string): boolean {
@@ -25,10 +26,16 @@ function isPublicPath(pathname: string): boolean {
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request: { headers: request.headers } })
 
+  // Eigener Cookiename fuer die Verwaltung (B-12, Weg B). Muss mit dem
+  // uebereinstimmen, den createSessionClient und createClient setzen —
+  // deshalb dieselbe Quelle statt eines Literals hier.
+  const cookieOptions = authCookieOptions()
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      ...(cookieOptions ? { cookieOptions } : {}),
       cookies: {
         get(name: string) {
           return request.cookies.get(name)?.value

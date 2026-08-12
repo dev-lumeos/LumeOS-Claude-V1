@@ -11,7 +11,8 @@
     "./auth/role": "./src/auth/admin-role.ts",
     "./auth/safe-redirect": "./src/auth/safe-redirect.ts",
     "./nutrition/db": "./src/nutrition/nutrition-db.ts",
-    "./nutrition/preferences-catalog": "./src/nutrition/preferences-catalog.ts"
+    "./nutrition/preferences-catalog": "./src/nutrition/preferences-catalog.ts",
+    "./cookie-name": "./src/supabase/cookie-name.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.0.0",

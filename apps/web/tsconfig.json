@@ -41,6 +41,9 @@
       ],
       "next/headers": [
         "./node_modules/next/headers.d.ts"
+      ],
+      "@lumeos/shared/cookie-name": [
+        "../../packages/shared/src/supabase/cookie-name.ts"
       ]
     },
     "resolveJsonModule": true,

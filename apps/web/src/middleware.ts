@@ -5,6 +5,7 @@
 // Unangemeldete Aufrufe geschützter Routen -> /login?redirect=<ziel>.
 // Bewusst KEINE cookieOptions (Spez. login/00-modul-login.md §10).
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { authCookieOptions } from '@lumeos/shared/cookie-name'
 import { NextResponse, type NextRequest } from 'next/server'
 
 function isPublicPath(pathname: string): boolean {
@@ -18,10 +19,18 @@ function isPublicPath(pathname: string): boolean {
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request: { headers: request.headers } })
 
+  // Symmetrisch zu apps/admin (B-12, Weg B). `apps/web` setzt
+  // NEXT_PUBLIC_AUTH_COOKIE_SCOPE bewusst NICHT — hier ist der Wert
+  // also `undefined` und es bleibt beim abgeleiteten Standardnamen.
+  // Die Zeile steht trotzdem, damit beide Middlewares dieselbe Quelle
+  // lesen und ein spaeterer eigener Name in web nicht vergessen wird.
+  const cookieOptions = authCookieOptions()
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      ...(cookieOptions ? { cookieOptions } : {}),
       cookies: {
         get(name: string) {
           return request.cookies.get(name)?.value
