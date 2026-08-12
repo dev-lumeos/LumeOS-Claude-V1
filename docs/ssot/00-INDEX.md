@@ -63,6 +63,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `30-datenbank.md` | Welches Schema ist live? Welche Entwürfe liegen daneben? |
 | `35-naehrwert-bezugsgroesse.md` | Worauf beziehen sich die Nährwerte, und wie rechnet man auf eine Menge um? (Grundlage jeder Diary-Rechnung) |
 | `36-testbasis.md` | Was wird womit geprüft — und was ausdrücklich **nicht**? (Gate, Rechteprüfung, E2E-Entscheidung) |
+| `37-testkonten.md` | Testkonten der lokalen Instanz — wer darf, wer nicht, und wozu die zweite Session gebraucht wird |
 | `40-spec-code-matrix.md` | Je Modul: Spec vorhanden? Code vorhanden? Delta? |
 | `60-legacy-cloud.md` | Was liegt wirklich in der Legacy-Cloud-Instanz? (echte Zeilenzahlen, Medienverweise, Schemakonflikt — ersetzt alle Schätzungen) |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
