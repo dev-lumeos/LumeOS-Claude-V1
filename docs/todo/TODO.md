@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-13 (vierundzwanzigste Aktualisierung — Block 24: B-13 erledigt. Tom hat die Domains entschieden: www.lumeos.app ist die Landingpage, web.lumeos.app die Webversion, admin/coach/marketplace/buddy je eigene Subdomain. Damit ist die Altfrage "lumeos.app oder app.lumeos.app" beantwortet — weder noch. Die Lücke in additional_redirect_urls (apps/admin fehlte) ist geschlossen, das Erzeugungsskript meldet Exit 0. Dabei ein Widerspruch in der Spezifikation gefunden und aufgelöst: auth-sso §4 und 20-apps/web §2 führten die Landingpage als Teil von web — sie ist jetzt eine eigene Domain ohne Anmeldung. Damit hat M4 keine offene Vorbedingung mehr; die Cloud-Einträge gehören in E-08 selbst)
+**Stand:** 2026-08-13 (fuenfundzwanzigste Aktualisierung — Block 25: B-26 und E-11 erledigt, B-20 und E-13 mit Vorarbeit vorgelegt, E-14 und E-15 neu. Der Pfadschutz wirkt NUR in Claude Code: gleiche Nutzlast, anderer tool_name — durchgelassen; leere Eingabe — durchgelassen. Bei E-11 loeste sich die Verwaisung auf: nicht eine alte Pfadstruktur, sondern 509 Uebungen, die es als Medien gibt und als Datenbankzeilen nie gab. E-13 ordnet 41 von 45 Regionen zu und laesst 4 Hals-Gruppen bewusst leer, weil SPEC_06 dafuer keine Region kennt. Zweimal war der eigene Massstab schuld an einem verdaechtigen Ergebnis — 0 % Geschwister bei E-11 lag am Vergleichsschluessel, nicht an den Daten)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -121,6 +121,16 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
    ist entfernt). Offen bleibt daraus **B-25**: die geteilte Sitzung im
    Produktbereich ist ungeprüft und wird es bleiben, bis eine zweite
    Produkt-App existiert.
+
+9. **Sektion F (Gedächtnisschichten, AMF)** steht neben allem anderen und
+   blockiert nichts. Sie ist kein LumeOS-Produktpunkt — AMF ist
+   projektübergreifend und bekommt ein eigenes Repo. Wenn daran gearbeitet
+   wird, dann in dieser Reihenfolge: **F-01** (Schnittstellenvertrag) vor
+   **F-02** (Ablageort) vor **F-04** (Sitzungsextraktor). **F-03**
+   (`obsidian-skills` einbinden) ist der kleinste Einstieg und jederzeit
+   umkehrbar. **F-06** (Backend wählen) ausdrücklich erst nach zwei Wochen
+   Gebrauch — der Blueprint stellt die Schnittstelle in Phase 6, das ist
+   die Reihenfolge, die dieser Plan umdreht.
 
 
 ---
@@ -737,17 +747,52 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   (`ordner/`) lässt keine Ausnahme darin zu — git steigt in ein so
   ausgeschlossenes Verzeichnis gar nicht erst ab. Es braucht Dateimuster
   (`ordner/*`) je Ebene plus `!`-Ausnahmen.
-- [ ] **B-20: Codex-Pfadschutz wiederherstellen** (neu 2026-08-06) —
-  seit dem Aufräumen (B-15) hat Codex keinen Pfadschutz; vorher einen,
-  der bei jedem Aufruf am Parser scheiterte — Wirkung null, die Absicht
-  bestand. Vorlage aus Block 8: `protect-paths.ps1` in
-  `.codex/hooks.json` einhängen, Matcher `Write|Edit|MultiEdit` und
-  `Bash`. **Zuerst zu klären:** `[annahme]` ob Codex stdin-JSON
-  liefert — die alte Verdrahtung übergab per `param()`; liefert Codex
-  kein stdin-JSON, liest der Hook Leere und ist fail-open, also erneut
-  wirkungslos; dann braucht es einen kleinen Wrapper param→stdin.
-  Dazu die drei Pfade, die der alte Hook abdeckte und protect-paths
-  nicht: `supabase/config.toml`, `db/migrations/`, `.claude/rules/`.
+- [~] **B-20: Codex-Pfadschutz wiederherstellen** (neu 2026-08-06) —
+  **Vorarbeit erledigt 2026-08-13 (Block 25), Einhängen bewusst NICHT
+  ausgeführt.** Seit B-15 hat Codex keinen Pfadschutz; vorher einen, der
+  bei jedem Aufruf am Parser scheiterte — Wirkung null, die Absicht
+  bestand.
+
+  **Warum nicht einfach einhängen:** `[cmd]` 2026-08-13 an
+  `protect-paths.ps1` gemessen — bei **leerer oder unlesbarer Eingabe
+  `exit 0`**, also fail-open. Liefert Codex kein stdin-JSON, steht danach
+  eine Konfiguration da, die aussieht wie Schutz und keiner ist. *Das
+  wäre schlechter als der heutige Zustand, weil niemand mehr nachsieht.*
+  `[annahme]` bleibt deshalb bestehen, bis gemessen: was übergibt Codex?
+
+  **Das Messwerkzeug liegt fertig** —
+  `scratchpad/codex-sonde.ps1` (im Sitzungs-Scratchpad, **nicht** in
+  `.codex/`): ein Hook, der nichts blockiert und nur mitschreibt, was er
+  bekommt (stdin, `args`, Umgebungsvariablen). `[cmd]` Gegen eine
+  Testeingabe geprüft, er zeichnet korrekt auf.
+  **Nicht eingehängt, weil `.codex/hooks.json` Toms laufende Sitzung
+  steuert** — eine kaputte Hook-Konfiguration legt sie lahm.
+  Vorgehen, wenn Tom es will: Sonde als dritten `PreToolUse`-Eintrag mit
+  Matcher `.*` eintragen, ein paar Aufrufe machen, `%TEMP%\codex-hook-sonde.log`
+  lesen, Eintrag wieder entfernen.
+
+  **Was `.codex/hooks.json` heute enthält** `[cmd]`: zwei lean-ctx-Hooks
+  (`Bash|bash` → rewrite, eine lange Namensliste → redirect). Codex führt
+  Hooks also aus. Die vielen Namensvarianten im Matcher
+  (`Read|read|ReadFile|read_file|View|view|…`) sind selbst ein Hinweis:
+  wer das schrieb, war sich über Codex' Werkzeugnamen ebenfalls nicht
+  sicher.
+
+  **Preis eines Wrappers**, falls die Sonde `param()`-Argumente zeigt:
+  eine zusätzliche Datei, die Argumente nach stdin-JSON umformt, plus
+  eine zweite Namenszuordnung (Codex-Werkzeugnamen → `Write`/`Edit`/
+  `Read`/`Bash`). Zwei Stellen, die auseinanderlaufen können, für einen
+  Schutz, der `[cmd]` schon in Claude Code benannte Lücken hat
+  (Heredocs, Variablen-Indirektion, Interpreter-Einzeiler). Vertretbar,
+  aber keine Kleinigkeit — deshalb erst messen.
+
+  **Die drei ungeschützten Pfade, unverändert offen** `[cmd]` alle drei
+  existieren, keiner ist in `protect-paths.ps1` abgedeckt:
+  `supabase/config.toml`, `db/migrations/`, `.claude/rules/`.
+  *Nebenbefund:* `db/migrations/` trägt genau eine SQL-Datei vom
+  2026-04-23 aus der Governance-Ära; die lebende Kette liegt unter
+  `supabase/`. Ob der Pfad überhaupt noch geschützt werden muss oder
+  eher archiviert gehört, ist ungeklärt.
 
 - [x] **B-21: `nutrition-api#build` erzeugt keine Outputs — turbo warnt bei
   jedem Lauf** (neu 2026-08-06, klein, vorbestehend) — `[cmd]` Jeder
@@ -939,19 +984,42 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   Hintergrund: `docs/ssot/38-cookie-bereich.md` §4 (Weg A steht dort
   bewusst weiterhin ausformuliert).
 
-- [ ] **B-26: Werkzeugwahl bei risikoreichen Schritten** (neu 2026-08-13,
-  aus B-11) — `desktop-commander` umgeht die Permission-Schicht
-  vollständig. Risikoreiche Schritte (Löschungen, Datenbankeingriffe,
-  Schreiben ausserhalb des Repos) gehören deshalb in eine
-  Claude-Code-Session, wo die Schicht greift.
-  **Aus B-11 herausgelöst**, weil es dort nicht hingehört: B-11 regelt
-  die *Gleichzeitigkeit* zweier Werkzeuge im selben Arbeitsbaum, hier
-  geht es um die *Wahl* des Werkzeugs für einen einzelnen Schritt.
-  Verwandt mit **B-20** (Codex-Pfadschutz), aber nicht davon abgedeckt —
-  B-20 hängt einen Hook in Codex ein und sagt nichts über
-  `desktop-commander`.
-  Zu klären: gilt das als Betriebsregel (dann in die Konventionen §10)
-  oder lässt sich die Schicht auch für `desktop-commander` erzwingen?
+- [x] **B-26: Werkzeugwahl bei risikoreichen Schritten** — **erledigt
+  2026-08-13 (Block 25).** Regel als **§10.2** in
+  `docs/spezifikation/10-plattform/konventionen/00-konventionen.md`.
+  Ergebnis ist eine Feststellung mit Regel, kein Umbau — die Schicht
+  lässt sich für fremde Werkzeuge **nicht** erzwingen, sie hängt an
+  Claude Codes `PreToolUse`.
+
+  **Der Befund ist allgemeiner als die Frage.** `[cmd]` 2026-08-13 an
+  `protect-paths.ps1` gemessen, mit **identischer Nutzlast** und nur
+  geändertem `tool_name`:
+
+  | Eingabe | Ergebnis |
+  |---|---|
+  | `tool_name: "Write"`, `file_path: ".env"` | **Exit 2, blockiert** |
+  | `tool_name: "mcp__desktop-commander__write_file"`, gleiche Datei | Exit 0, **durchgelassen** |
+  | `tool_name` fehlt | Exit 0, durchgelassen |
+  | `path` statt `file_path` | Exit 0, durchgelassen |
+  | leere Eingabe / kein JSON | Exit 0, durchgelassen |
+
+  Zwei Ursachen: der Hook vergleicht `$tool -eq 'Write'` **exakt** gegen
+  Claude Codes Werkzeugnamen (Zeile 67), und er ist **fail-open** — bei
+  unlesbarer Eingabe `exit 0`, damit er den Normalbetrieb nicht zerlegt.
+  Beides ist Absicht; zusammen heisst es: **kein fremdes Werkzeug wird
+  geprüft, und keines merkt es.**
+
+  **Prämisse korrigiert:** Der Punkt nannte `desktop-commander` als
+  Träger des Problems. `[cmd]` Das Werkzeug ist heute in **keiner**
+  MCP-Konfiguration eingetragen — weder `~/.claude.json` global noch
+  projektbezogen (dort: `serena`, `context7`, `lean-ctx`). Die Regel
+  greift trotzdem, aber sie gilt **jedem** Werkzeug ausserhalb Claude
+  Codes, nicht einem bestimmten. So ist sie formuliert.
+
+  **Was übrig bleibt, wenn der Hook nicht greift:** die Berechtigungs-
+  liste in `.claude/settings.json` (ebenfalls nur Claude Code), das
+  Dateisystem, der Mensch. In §10.2 festgehalten, damit es niemand für
+  gegeben hält.
 
 ---
 
@@ -2033,8 +2101,47 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   9 von 11 `nutrition`-Tabellen ohne RLS, obwohl die Migration es beschreibt.
   Das Muster wiederholt sich über zwei unabhängige Instanzen.*
 
-- [ ] **E-11: Verwaiste Storage-Objekte klären, bevor Medien transferiert
-  werden** (neu 2026-08-07, aus E-02) — `[cmd]` Von den **10.776** Objekten
+- [x] **E-11: Verwaiste Storage-Objekte klären, bevor Medien transferiert
+  werden** — **eingeordnet 2026-08-13 (Block 25).** Vollständig in
+  `docs/ssot/60-legacy-cloud.md` §5.
+
+  **Kein Cloud-Zugriff nötig gewesen:** `[cmd]` `media/exercises/` trägt
+  **alle 3.554 referenzierten Dateien**, 0 Referenzen zeigen ins Leere.
+  Der lokale Bestand reichte für die Antwort.
+
+  **Es ist keine Streu, sondern zwei Gruppen** `[cmd]` von 3.430
+  unreferenzierten Dateien (6.984 lokal gesamt):
+
+  | Gruppe | Dateien | Was |
+  |---|---|---|
+  | Übung hat referenzierte Medien | **929 (27 %)** | Zusatzaufnahmen: Zähler-Varianten, zweites Geschlecht |
+  | Übung hat **keine** Referenz | **2.501 (73 %)** | **509 eigenständige Übungen**, die es in der Datenbank nicht gibt |
+
+  Die 509 sind überwiegend Yoga-Posen mit je 6 Dateien
+  (`bow pose`, `cat pose`, `crow pose`, …). `[cmd]` Stichprobe an fünf
+  Namen: **null Treffer** in den 1.448 Übungen.
+
+  **Die `[annahme]` von 2026-08-07 ist widerlegt.** Sie lautete, die
+  3.797 präfixlosen Objekte machten den Kern der Verwaisung aus. `[cmd]`
+  **Kein Ordner ist vollständig unreferenziert** — die Quote liegt
+  zwischen 31 % und 79 %. Die Ursache ist nicht eine alte Pfadstruktur,
+  sondern **Medien für Übungen, die nie in die Datenbank kamen**.
+
+  **Empfehlung für den Transfer:** die 3.554 referenzierten zwingend; die
+  929 Zusatzaufnahmen mitnehmen (`[cmd]` darunter **1.488
+  unreferenzierte `_Female`-Dateien** gegen nur 394 referenzierte — das
+  berührt **E-07** unmittelbar: ein Teil der fehlenden weiblichen
+  Darstellungen liegt bereits vor und ist nur nicht verknüpft); die 2.501
+  für nicht existierende Übungen **nicht automatisch** — das ist eine
+  Produktentscheidung (Yoga ins Produkt oder nicht). **Nicht löschen**,
+  sie sind der einzige Bestand dieser Übungen.
+
+  **Nebenbefund:** `[cmd]` 24 `desktop.ini` im Medienbestand — Windows-
+  Metadaten von Google Drive File Stream, keine Medien. Gehören in keinen
+  Transfer.
+
+  Ursprünglicher Punkt (neu 2026-08-07, aus E-02) — `[cmd]` Von den
+  **10.776** Objekten
   im Bucket `exercises` sind nur **3.553 referenziert**; **7.223 (67 %)**
   werden von **keiner** Zeile in `exercises` benutzt.
   **Das ändert die Grössenordnung jeder Transferplanung.** Die 15 GB, die
@@ -2103,7 +2210,42 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   `[cmd]` Kette und live sind prüfsummengleich (`muscle_groups` und
   `exercise_muscles`), können also nicht auseinanderlaufen.
 
-- [ ] **E-13: `body_region` nachpflegen** (neu 2026-08-07, aus Block 18) —
+- [~] **E-13: `body_region` nachpflegen** — **SQL vorgelegt 2026-08-13
+  (Block 25), NICHT angewandt.** `supabase/_pipeline/10_training/103_body_region.sql`.
+
+  **Woher die Einteilung kommt — keine Erfindung:** `[read]` SPEC_06 und
+  der CHECK in `100_training_schema.sql` lassen genau sieben Werte zu
+  (`chest, back, shoulders, arms, core, legs, full_body`). `full_body`
+  ist erlaubt, wird `[cmd]` von keiner Zeile benutzt und auch hier nicht
+  vergeben.
+
+  **41 von 45 zugeordnet, 4 bewusst nicht.** `[cmd]` In der Wegwerf-DB
+  belegt: 109 Gruppen, danach 105 mit Region, **Zuordnungen auf
+  regionslose Gruppen von 1.468 auf 10** (22 % → 0,15 %). Idempotent
+  (zweiter Lauf gleich), Selbstkontrolle im SQL, **live unverändert bei
+  45**.
+
+  | Region | neu | Beispiele |
+  |---|---|---|
+  | `legs` | 19 | Semimembranosus, Semitendinosus, Soleus, Peroneals |
+  | `arms` | 14 | Brachioradialis, Flexor/Extensor Carpi …, Grip Muscles |
+  | `shoulders` | 3 | Rotatorenmanschette: Teres Minor, Infraspinatus, Subscapularis |
+  | `chest` | 3 | Clavicular Head, Sternal Head |
+  | `back` | 2 | Teres Major, levator scapulae |
+
+  **Nicht zugeordnet, mit Grund — 4 Gruppen bleiben NULL:**
+  `Neck Muscles` (5 Nutzungen), `Scalenes` (2), `Sternocleidomastoid`
+  (2), `splenius capitis` (1). Alle vier sind Hals-/Nackenmuskulatur, und
+  **SPEC_06 kennt dafür keine Region** — weder `back` noch `shoulders`
+  trifft zu, `full_body` wäre eine Behauptung. Das ist eine
+  Produktentscheidung (achte Region aufnehmen? unter `back` führen?),
+  keine anatomische Frage. *Eine falsche Region ist schlechter als
+  keine — sie wird später zum Filtern benutzt und niemand prüft sie nach.*
+
+  **Offen:** Toms Freigabe zum Anwenden, plus die Entscheidung zu den
+  vier Hals-Gruppen.
+
+  Ursprünglicher Punkt (neu 2026-08-07, aus Block 18) —
   `[cmd]` **45 von 109** Muskelgruppen tragen keine `body_region`, und die
   Lücke folgt **nicht** der Seltenheit: `Semimembranosus` und
   `Semitendinosus` haben je **381** Nutzungen ohne Region, 5 der 23
@@ -2116,7 +2258,178 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   Nachpflege sichtbar wird. **Keine Regionen raten** — sie gehören aus
   einer anatomischen Quelle, nicht aus dem Namen abgeleitet.
 
+- [ ] **E-14: `image_male_*` zeigt auf `_Female`-Dateien** (neu
+  2026-08-13, aus E-11) — `[cmd]` Bei **146 Übungen** trägt ein
+  `image_male_*`-Feld einen Pfad auf eine `_Female`-Datei. Beispiel:
+  `Ab Wheel Plank` → `image_male_start = images/Yoga/Ab Wheel Plank_Female.jpeg`.
+  `[cmd]` Die Gegenrichtung (`image_female_*` auf `_Male`) kommt **0×**
+  vor — es ist also keine beidseitige Vertauschung, sondern ein
+  einseitiger Importfehler.
+  **Wirkung:** Wer nach Geschlecht filtert oder die männliche Darstellung
+  zeigt, bekommt in 146 Fällen die weibliche. Das fällt nicht auf, weil
+  ein Bild da ist — nur das falsche.
+  **Geprüft, und es ist keine Vertauschung:** `[cmd]` 2026-08-13 —
+  **in allen 146 Fällen existiert lokal KEINE männliche Datei** (der
+  Pfad mit `_Male` statt `_Female` findet sich 0×). Es wurde also nichts
+  verwechselt; jemand hat die weibliche Aufnahme eingetragen, weil die
+  männliche fehlte. **Eine unmarkierte Notlösung, kein Importfehler.**
+
+  **Damit ist die naheliegende Korrektur die falsche.** Den Pfad
+  „richtigzustellen" geht nicht — es gibt kein Ziel. Zur Wahl stehen:
+  das Feld **leeren** (ehrlich, aber 146 Übungen verlieren ihr
+  Startbild), oder die Belegung **als bewusst kennzeichnen** (etwa ein
+  Feld „Darstellung: weiblich, männlich fehlt"). Beides ist eine
+  Produktentscheidung und hängt an **E-07**.
+  Hängt mit **E-07** zusammen (Lücke weibliche Darstellungen).
+
+- [ ] **E-15: Vier `body_region`-Werte im Altbestand sind anatomisch
+  falsch** (neu 2026-08-13, aus E-13) — `[cmd]` Beim Nachpflegen der
+  Lücke aufgefallen, **nicht mitkorrigiert**:
+
+  | Gruppe | steht auf | anatomisch |
+  |---|---|---|
+  | `Biceps Femoris` | `arms` | Hamstring → `legs` |
+  | `Rectus Femoris` | `core` | Quadrizepskopf → `legs` |
+  | `Tensor Fasciae Latae` | `back` | Hüftmuskel → `legs` |
+  | `Hip Rotators` | `shoulders` | Hüfte → `legs` |
+
+  Der Name führt hier in die Irre: „Biceps" Femoris ist kein Armmuskel,
+  „Rectus" Femoris kein Bauchmuskel. `[annahme]` Vermutlich beim Import
+  nach Namensähnlichkeit zugeordnet.
+  **Bewusst nicht nebenbei erledigt:** E-13 war das Füllen der Lücke,
+  nicht das Umschreiben vorhandener Werte. Wer sie ändert, ändert
+  bestehende Filterergebnisse — das gehört entschieden. Klein genug für
+  einen Einzeiler, sobald Tom zustimmt.
+
 ---
+## F — Gedächtnisschichten (AMF)
+
+**Warum das hier steht.** Tom verliert seit Monaten Zeit damit, eigene Inhalte
+wiederzufinden, und jede Agentensitzung beginnt bei null. `[cmd]` Unter
+`D:\GitHub` liegen 31 Verzeichnisse, neun davon mit „lumeos" im Namen, vier mit
+Git, zwei auf dasselbe Remote. `[cmd]` In `~/.claude/projects/` liegen 54
+Sitzungen mit 85,5 MB, in `~/.codex/sessions/` weitere 31 — eine davon allein
+73 MB. Das Material ist da und maschinenlesbar; es ist nur nicht auffindbar.
+
+**Grundlage:** Toms AMF-Blueprint vom 2026-08-13 (ChatGPT) mit vier Schichten:
+was ist WAHR (Repo + Git), was ist RELEVANT (semantisches Retrieval), was ist
+PASSIERT (episodisch), was hat sich VERÄNDERT (temporal). Die Zerlegung nach
+Fragen statt nach Technologien trägt. Die Reihenfolge im Blueprint nicht:
+dort steht die Schnittstelle in Phase 6, nach vier Backends.
+
+**Was hier NICHT gilt:** Das ist kein LumeOS-Produktpunkt. AMF ist
+projektübergreifend und lebt in einem eigenen Repo. Es steht hier, weil Tom es
+hier führen will und weil LumeOS der erste Anwender ist.
+
+**Recherchebefunde `[read]` 2026-08-13, die die Reihenfolge bestimmen:**
+
+- `kepano/obsidian-skills` — MIT, 44.300 Sterne, 46 Commits, vom Obsidian-CEO.
+  Fünf Fertigkeiten (`obsidian-markdown`, `obsidian-bases`, `json-canvas`,
+  `obsidian-cli`, `defuddle`), folgen der Agent-Skills-Spezifikation und laufen
+  in **Claude Code, Codex und OpenCode**. Kein Speicher — die Fähigkeit, ein
+  Format zu lesen und zu schreiben. Das ist der Unterschied: das Gedächtnis
+  *sind* die Dateien, nicht ein Index darüber.
+- Supermemory — lokale Binärdatei auf `localhost:6767`, fertige Anbindungen für
+  Claude Code, Codex und OpenCode. Lizenzlage widersprüchlich (MIT, Apache-2.0
+  und „geschlossen" je nach Quelle); vor einer Entscheidung am Objekt zu klären.
+- Graphiti — fachlich das stärkste der vier, bi-temporal mit
+  `valid_at`/`invalid_at`. Aber: braucht Neo4j, FalkorDB oder Neptune, und
+  **jeder `add_episode`-Aufruf kostet Modellaufrufe** zur Entitätsextraktion.
+  `[read]` Zep hat den Selbstbetrieb 2025 eingestellt; Graphiti bleibt quelloffen,
+  aber es gibt keinen Rückfallweg auf eine fertige Community-Edition.
+- MemPalace — **abgelehnt.** Vier Monate alt, 7.199 Sterne pro Tag, und die
+  Benchmark-Behauptung von 96,6 % musste binnen 48 Stunden korrigiert werden:
+  falsche Tokenizer-Heuristik, „verlustfreie" Kompression ist verlustbehaftet
+  und verliert 12,4 Punkte, eine angekündigte Funktion war nicht verdrahtet.
+  Speichert unbegrenzt wörtlich. Das ist dieselbe Fehlerklasse, die LumeOS
+  heute viermal getroffen hat: ein Werkzeug, das Sicherheit behauptet, ohne
+  sie zu erzeugen.
+- Alternativen, die der Blueprint nicht kennt: `basic-memory` (lokaler
+  MCP-Server über Markdown), `engram` (eine Go-Binärdatei, SQLite + FTS5, MCP),
+  `claude-mem`, `Cognee` (Apache-2.0, Graph), `mem0` (grösste Gemeinschaft,
+  aber nur 49,0 % LongMemEval).
+
+**Die fünfte Frage, die im Blueprint fehlt:** *Ist das noch wahr?* Alle vier
+Schichten beantworten Fragen über die Vergangenheit. Keine beantwortet, ob eine
+gefundene Aussage heute noch gilt. `[cmd]` LumeOS trägt 719 `[cmd]`-, 178
+`[read]`- und 75 `[annahme]`-Marker mit Datum — semantische Ähnlichkeit
+unterscheidet nicht zwischen richtig und veraltet. Jede Antwort aus AMF muss
+sagen können: erhoben am X gegen Commit Y, seither Z Commits.
+
+- [ ] **F-01: Schnittstellenvertrag zuerst** — bevor ein Backend gewählt wird.
+  Die sechs bis acht Werkzeuge, ihre Ein- und Ausgaben, das Provenance-Feld.
+  Das ist ein Dokument, kein Code. Grund: Jarvis und die drei Agenten hängen
+  später daran; was zuletzt entworfen wird, wird aus dem geformt, was die
+  Backends zufällig können. Mit dem Vertrag ist jedes Backend austauschbar.
+  Muss enthalten: Projekt-Namensraum, Zeitfilter, Herkunft je Treffer
+  (wann erhoben, gegen welchen Commit), und eine Antwort auf „ist das noch
+  aktuell".
+
+- [ ] **F-02: Ablageort festlegen** — ein Obsidian-Tresor als Markdown in Git,
+  oder etwas anderes mit denselben Eigenschaften: lesbar ohne Werkzeug,
+  versionierbar, korrigierbar, `grep`-bar. `[read]` Der Grund gegen einen
+  Vektorspeicher an erster Stelle: dort ist nicht sichtbar, was drinsteht, eine
+  Korrektur heisst neu einlesen und hoffen, und `git log` fällt weg.
+  Zu klären: ein Tresor für alles oder einer je Projekt, und wie er sich zu
+  `docs/ssot/` verhält — **es darf keine zweite Wahrheit entstehen.**
+
+- [ ] **F-03: obsidian-skills einbinden** — `npx skills add
+  kepano/obsidian-skills` für Claude Code, `~/.codex/skills` für Codex.
+  Danach können beide Agenten den Tresor lesen und schreiben, ohne dass ein
+  Backend läuft. Kleinster möglicher erster Schritt; kostet nichts und ist
+  umkehrbar. Prüfen: greift der `defuddle`-Skill auch für Rechercheergebnisse?
+
+- [ ] **F-04: Sitzungsextraktor** — der Teil, den kein Backend abnimmt.
+  `[cmd]` Claude-Code-Sitzungen liegen als JSONL mit `timestamp`, `cwd`,
+  `gitBranch`, `sessionId` und `message`; Codex mit `timestamp` und
+  `payload.cwd`. Beide vermischt mit Werkzeugaufrufen und Anhängen — `[cmd]`
+  in einer Sitzung 1.138 `attachment`- gegen 800 `user`-Sätze.
+  Der Extraktor zieht heraus: wer, wann, welches Projekt, welcher Branch, was
+  entschieden wurde. Das Ergebnis ist der Rohstoff für JEDE Schicht.
+  Projektzuordnung über `cwd`, nicht über den Verzeichnisnamen — `[cmd]`
+  „D--github" und „D--GitHub-LumeOS-Claude-V1" stehen nebeneinander,
+  Gross- und Kleinschreibung wechselt.
+
+- [ ] **F-05: Suche über das Extrahierte** — erste Fassung Volltext mit Filtern
+  nach Projekt, Agent und Zeitraum. Jeder Treffer mit Datum; ein Treffer ohne
+  Datum ist wertlos, weil nicht erkennbar ist, ob die Antwort von gestern oder
+  von Mai stammt. Aufruf aus jedem Verzeichnis, nicht nur aus dem AMF-Repo.
+  Abnahme an echten Fragen: „security_invoker", „Nemotron", „warum haben wir X
+  verworfen".
+
+- [ ] **F-06: Backend erst nach zwei Wochen Gebrauch wählen** — messen, welche
+  Frage die Volltextsuche NICHT beantwortet hat. Das ist die Anforderung an
+  Schicht zwei, nicht eine Architekturannahme. Kandidaten in dieser Reihenfolge:
+  `basic-memory` oder `engram` (beide MCP, beide lokal, beide ohne
+  Modellkosten), dann Supermemory-lokal. Graphiti nur, wenn eine Frage übrig
+  bleibt, die ohne Graph nicht beantwortbar ist — und dann mit gemessenen
+  Modellkosten, nicht geschätzten.
+
+- [ ] **F-07: Berechtigungen** — fehlt im Blueprint ganz. Jarvis ist ein anderer
+  Prozess mit anderem Kontext. Darf er schreiben? Darf er projektübergreifend
+  lesen? Ein Gedächtnisdienst ohne Zugriffsmodell ist der kürzeste Weg, dass
+  Projektinhalte dort auftauchen, wo sie nicht hingehören. Der Blueprint nennt
+  nur Secrets, nicht Inhalte.
+
+- [ ] **F-08: Werkstatt-Inventar** — `[cmd]` 31 Verzeichnisse unter `D:\GitHub`,
+  neun mit „lumeos" im Namen: `LumeOS-Claude-V1` (aktiv), `LumeOSmacmini` (zeigt
+  auf `lumeos-2026`), `LumeOS-Workspace-V1`, `lumeos-app`, `lumeos-app-backup`
+  (dasselbe Remote wie `lumeos-app`), dazu `lumeos-2026`, `lumeos-core`,
+  `lumeos-stack` ohne Git. Plus `Wayland-LumeOS-Factory`,
+  `LumeOS-BigBang-Screenshots`, `governance_brain`, `Design-Intelligence-System`.
+  Erheben: was lebt, was ist Duplikat, was ist archivierungsreif. Dieselbe
+  Arbeit wie E-01, nur über die Platte statt über die Cloud. **Nichts löschen** —
+  `referenz/lumeos-2026` hat gezeigt, was in solchen Verzeichnissen liegen kann
+  (22 Stashes, 19 ungepushte Commits, nirgends sonst gesichert).
+
+- [ ] **F-09: Wenn AMF steht — die Blueprint-Regeln prüfen** — §28 sagt „keine
+  neue Software-Factory", §1–40 beschreiben CLI, MCP-Server, Context Builder,
+  Health Checks, Backup/Restore, 18 Dokumentationsdateien und vier Backends.
+  Vor dem Ausbau abgleichen, was davon wirklich gebraucht wird.
+  `[read]` Ebenfalls zu prüfen: §15 macht den Dateipfad zur Projektidentität.
+  Pfade wandern — `temp/lumeosold` wurde am 2026-08-12 zu
+  `referenz/lumeos-2026`. Ein Resolver am Pfad bricht still.
+
 
 ## Erledigt am 2026-08-05
 
