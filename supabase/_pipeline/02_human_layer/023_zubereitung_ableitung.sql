@@ -31,10 +31,18 @@
 -- `[read]` Eine offizielle BLS-Schluesseltabelle liegt NICHT im Repo:
 -- `BLS_4_0_Components_DE_EN.xlsx` enthaelt Naehrstoffcodes,
 -- `BLS_4_0_Daten_2025_DE.xlsx` die Lebensmittelliste selbst (dieselbe
--- Quelle wie unsere Tabelle), und `BLS_4_0_Dokumentation_DE.pdf`
--- benutzt eingebettete Teilfonts, deren Text sich nicht auslesen
--- laesst. Abgeleitet ist hier also nicht die zweite Wahl, sondern die
--- einzige.
+-- Quelle wie unsere Tabelle).
+--
+-- BERICHTIGT 2026-08-14: Hier stand, `BLS_4_0_Dokumentation_DE.pdf`
+-- benutze eingebettete Teilfonts, deren Text sich nicht auslesen lasse.
+-- `[cmd]` Das ist FALSCH — die Datei traegt ToUnicode-CMaps,
+-- `pdftotext -layout` liefert 1.078 Zeilen sauberen Text.
+-- Die Schlussfolgerung bleibt trotzdem richtig, nur aus anderem Grund:
+-- `[read]` Kapitel 2.4 "BLS Code-Systematik" umfasst drei Saetze und EIN
+-- Beispiel (`C131000 — Hafer ganzes Korn, roh — Getreide`). Es nennt
+-- weder die zwanzig Gruppenbuchstaben noch die Bedeutung der Stellen
+-- 5-7. Abgeleitet ist hier also nicht die zweite Wahl, sondern die
+-- einzige. Siehe docs/ssot/45-bls-dokumentation.md.
 --
 -- =============================================================
 -- STATTDESSEN: DIE WOERTER, DIE IM NAMEN STEHEN
