@@ -65,6 +65,13 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `36-testbasis.md` | Was wird womit geprüft — und was ausdrücklich **nicht**? (Gate, Rechteprüfung, E2E-Entscheidung) |
 | `37-testkonten.md` | Testkonten der lokalen Instanz — wer darf, wer nicht, und wozu die zweite Session gebraucht wird |
 | `40-spec-code-matrix.md` | Je Modul: Spec vorhanden? Code vorhanden? Delta? |
+| `41-lebensmittelsuche-wortschatz.md` | Wie weit der BLS-Wortschatz von dem entfernt ist, was Menschen tippen |
+| `42-dekompositum-messung.md` | Das deutsche Zerlegewörterbuch am BLS-Bestand gemessen |
+| `43-wortschatz-luecke.md` | Die volle Lücke gegen OpenThesaurus, in vier Klassen |
+| `44-bls-codestruktur.md` | Was der BLS-Code über Warengruppe und Zubereitung bereits sagt |
+| `45-bls-dokumentation.md` | Was die amtliche Dokumentation hergibt — und was nicht |
+| `46-bls-importluecke.md` | 30 Fettsäuren fehlten; Bestand gegen die Quelle geprüft |
+| `47-lebensmittelsuche-stand.md` | **Der erreichte Stand** — fasst 41 bis 46 zusammen |
 | `60-legacy-cloud.md` | Was liegt wirklich in der Legacy-Cloud-Instanz? (echte Zeilenzahlen, Medienverweise, Schemakonflikt — ersetzt alle Schätzungen) |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
 
