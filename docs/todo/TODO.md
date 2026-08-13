@@ -1023,6 +1023,36 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
 
 ---
 
+- [x] **B-27: Sicherungen als Datenabzug statt schema-only** — **erledigt
+  2026-08-14.** `[cmd]` Beim Push warnte GitHub über zwei Dateien:
+  `live-nutrition-2026-08-14/nutrition-vor-023-072-073.sql` (52,6 MB) und
+  `live-nutrition-2026-08-13/nutrition-vor-022-071.sql` (51,8 MB). Beide
+  waren vollständige Datenabzüge mit `COPY`-Blöcken über alle Tabellen —
+  749.572 Zeilen —, obwohl eine Schemasicherung gemeint war. Zum
+  Vergleich: die 18 Dateien unter `backup/schema/` sind 0,02 bis 0,6 MB.
+
+  **Dreimal passiert:** Block 28, Block 29, und ein dritter Fall am
+  2026-08-14 mit 96 MB, der vor dem Commit auffiel. Kein Einzelfall.
+
+  **Weg C gewählt (Tom):** aus dem Arbeitsbaum entfernt, **in der
+  Historie belassen**. Ein `git filter-repo` hätte sie getilgt, aber alle
+  Commit-Hashes geändert — und `docs/sessions/` sowie diese TODO
+  verweisen auf Hashes als Anker. Erreichbar bleiben sie über
+  `git show <commit>:<pfad>`.
+
+  Dagegen gebaut:
+  - `backup/README.md` — welcher Befehl wohin, mit Begründung
+  - Konventionen §11 — Sicherungen sind `--schema-only`, Datenabzüge
+    komprimiert (`-Fc`) nach `backup/data/`; `[cmd]` dort liegen bereits
+    drei à 5,5 MB, dasselbe als Text wären über 50 MB
+  - `.githooks/pre-commit` bricht bei Dateien über 10 MB ab.
+    `[cmd]` Gegenprobe: eine 12-MB-Datei ergibt Exit 1 mit Hinweis auf
+    den richtigen Ablageort. Umgehung nur bewusst mit `--no-verify`.
+
+  *Die Regel, die daraus folgt: ein Format, das existiert, aber nicht
+  benutzt wird, ist keine Vorsorge. `backup/data/` gab es seit dem
+  2026-08-01.*
+
 ## C — Produkt: apps/web
 
 - [x] **C-11: Stammdaten-Reads auf den Session-Client** — **erledigt: war
@@ -1548,6 +1578,66 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   Ableitung, sondern Inhalt.
 
 ---
+
+- [ ] **C-17: Suchlaufzeit — 547 ms bei zweiwortigen Anfragen** (neu
+  2026-08-14). `[cmd]` Gemessen im Ausbau der Lebensmittelsuche:
+
+  | Anfrage | ohne Gruppen | mit Gruppen |
+  |---|---|---|
+  | `spinat` | 295 ms | 296 ms |
+  | `huehnerbrust` | 290 ms | 547 ms |
+  | (leer) | 152 ms | 152 ms |
+
+  Die Grundkosten lagen schon **vor** dem Ausbau bei 152–295 ms — die
+  Suche war nie schnell. Zweiwortige Anfragen kosten rund 257 ms
+  zusätzlich.
+
+  **Ursache benannt, älter als der Ausbau:** `[cmd]` Die Bedingung faltet
+  `concat_ws(bls_code, name_de, name_en, name_th)`, der Trigramm-Index
+  liegt auf `search_fold(name_de)` — zwei verschiedene Ausdrücke, also
+  sequenzieller Scan. Solange das so ist, hilft kein Index.
+
+  **Ein Umbauversuch wurde verworfen und begründet:** sechs feste
+  `text[]`-Slots statt jsonb, damit der Trigramm-Index greift. `[cmd]`
+  Isoliert schneller (0,97 ms gegen 48 ms), eingebaut **langsamer**
+  (704 ms gegen 562 ms), weil jeder der sechs Slots einen eigenen
+  Durchlauf auslöst — auch die leeren. Messwerte stehen im Code an der
+  Bedingung.
+
+  Vorgehen: erst den Ausdruck der Bedingung und den des Index in Deckung
+  bringen, dann neu messen. Nicht umgekehrt.
+
+- [ ] **C-18: Fehlsuchen mitschreiben** (neu 2026-08-14). Der nächste
+  grosse Hebel für die Suche, und der einzige, der nicht auf Vermutungen
+  beruht.
+
+  `[cmd]` Die 50 Begriffe im Prüfskript sind geraten — auch die, die
+  treffen. `[cmd]` Für den ganzen Bestand wären 5.000–8.000 Wörterbuch-
+  einträge nötig; die 50 häufigsten Erstwörter decken nur 24,9 % ab.
+  Wer die 30 Wörter kennt, die Menschen **tatsächlich** tippen, pflegt
+  diese statt 2.643 auf Verdacht.
+
+  `[read]` So arbeiten vergleichbare Anwendungen auch: nach Häufigkeit
+  sortieren und von oben abarbeiten. `[cmd]` Die Kurationstabellen
+  (`food_curation_candidates`, `food_curation_decisions`) sind dafür
+  gebaut und leer.
+
+  Vor dem Bauen zu klären: Was wird mitgeschrieben — jede Anfrage oder
+  nur die ohne Treffer? Wie lange aufbewahrt? Und: eine Suchanfrage ist
+  eine personenbezogene Angabe, sobald sie an einem Konto hängt. Das ist
+  keine Formalie, sondern entscheidet den Zuschnitt.
+
+- [ ] **C-19: `rinderhack` — Relevanz, nicht Wortschatz** (neu
+  2026-08-14). `[cmd]` Die Anfrage zerlegt richtig zu `rind` + `hack`
+  und liefert Treffer — aber `Blätterteigtaschen gefüllt mit Rinderhack`
+  steht vor `Rind Hackfleisch, roh`.
+
+  Der Fall lief zunächst als bestanden durch, weil die Erwartung im
+  Prüfskript nur `rind` verlangte. Der Massstab wurde verschärft statt
+  die Zahl zu behalten — jetzt steht er als offen da.
+
+  Gehört zu C-17 und zur Relevanzfrage, nicht zum Wortschatz. Die
+  Zerlegung hat geliefert, die Reihenfolge nicht.
 
 ## D — Datenbank & Specs
 
