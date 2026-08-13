@@ -179,3 +179,10 @@ referenz/*
 # dieses Repo. Siehe referenz/README.md. Der richtige Ort fuer die
 # Historie ist das Remote von lumeos-2026 selbst.
 backup/legacy-v2/*.bundle
+
+# --- BLS-Quelldateien: liegen bereits getrackt unter
+# _archive/…/legacy/specs-snapshot/Nutrition/00_raw/bls/original/ und die
+# Kette baut aus supabase/_data/bls_4_0_local_import.zip. Die Kopien unter
+# docs/ssot/daten/ sind Arbeitskopien — kein zweiter 14-MB-Satz in git.
+# Siehe docs/ssot/46-bls-importluecke.md.
+docs/ssot/daten/BLS_4_0_*
