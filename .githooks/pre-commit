@@ -4,6 +4,30 @@
 # typecheck gruen waren — nur der Build deckt diese Fehlerklasse ab.
 # Aktivierung: git config core.hooksPath .githooks
 # Umgehung im Notfall: git commit --no-verify (bewusst, nicht still).
+
+# --- Grossdateien (2026-08-14) ---
+# Anlass: GitHub warnte beim Push ueber zwei Sicherungen mit 52,6 und
+# 51,8 MB. Beide waren vollstaendige Datenabzuege, obwohl eine
+# Schemasicherung gemeint war — dreimal passiert (Block 28, Block 29,
+# und ein dritter Fall, der vor dem Commit auffiel).
+# GitHub empfiehlt hoechstens 50 MB und sperrt bei 100. Eine Datei, die
+# einmal in der Historie liegt, bleibt dort — deshalb hier und nicht
+# spaeter. Siehe backup/README.md.
+grenze=10485760   # 10 MB
+zu_gross=$(git diff --cached --name-only --diff-filter=ACM | while read -r f; do
+  [ -f "$f" ] || continue
+  groesse=$(wc -c < "$f")
+  [ "$groesse" -gt "$grenze" ] && echo "  $f  $((groesse / 1048576)) MB"
+done)
+if [ -n "$zu_gross" ]; then
+  echo "[gate] ROT — Dateien ueber 10 MB im Commit:" >&2
+  echo "$zu_gross" >&2
+  echo "[gate] Sicherungen gehoeren als --schema-only nach backup/schema/," >&2
+  echo "[gate] Datenabzuege komprimiert (-Fc) nach backup/data/." >&2
+  echo "[gate] Wenn die Datei wirklich so gross sein muss: --no-verify." >&2
+  exit 1
+fi
+
 echo "[gate] pnpm gate (typecheck + test + build) ..."
 pnpm gate
 status=$?

@@ -1,69 +1,66 @@
 # backup/
 
-Sicherungen der lokalen Supabase-Datenbank `supabase_db_LumeOS-Claude-V1`.
+Sicherungen vor strukturellen Änderungen an der Datenbank.
 
-**Angelegt:** 2026-08-01
-**Anlass:** Das Live-Schema `nutrition` ist ausserhalb der Migrationspipeline
-entstanden. `[cmd]` Das Migrations-Register `supabase_migrations.schema_migrations`
-enthält genau einen Eintrag (`20260423120000_control_plane_tables`), während
-11 Nutrition-Tabellen mit rund 727.000 Zeilen existieren.
-Vier davon stehen in gar keiner Migrationsdatei.
+## Regel
 
-**Konsequenz:** Es gibt keinen Weg von `git clone` zu dieser Datenbank.
-Ein `supabase db reset` würde den Datenbestand unwiederbringlich löschen.
-Deshalb steht `supabase db reset` in `.claude/settings.json` unter `deny`.
-
----
-
-## Ordner
-
-| Ordner | Inhalt | In Git? |
-|---|---|---|
-| `schema/` | Reine DDL-Dumps je Schema, klein, diff-bar | ja |
-| `data/` | Vollständige Dumps inkl. Daten (`--format=custom`) | **nein**, siehe `.gitignore` |
-| `rescue/` | DDL der Tabellen ohne Migrationsdatei — Vorlage für Rückbau | ja |
-| `rollen/` | Rollen- und Grant-Dumps (noch leer) | ja |
-
-## Namensschema
-
-`JJJJ-MM-TT_bereich_art.sql` bzw. `.dump`
-
----
-
-## Bestand 2026-08-01
-
-| Datei | Grösse | Inhalt |
-|---|---|---|
-| `schema/2026-08-01_nutrition_schema.sql` | 21 KB | DDL Schema `nutrition`, 11 Tabellen |
-| `schema/2026-08-01_public_schema.sql` | 17 KB | DDL Schema `public`, Control-Plane |
-| `data/2026-08-01_nutrition_full.dump` | 5,8 MB | Vollsicherung `nutrition`, custom format |
-| `rescue/2026-08-01_verwaiste_tabellen.sql` | 10 KB | DDL der 4 Tabellen ohne Migration |
-
-`[cmd]` Integrität geprüft mit `pg_restore --list`: alle 11 Tabellen im Dump lesbar.
-
-### Die vier verwaisten Tabellen
-
-Existieren in der DB, aber in keiner Datei unter `supabase/migrations/`:
-
-- `nutrition.food_preferences` (14 Spalten)
-- `nutrition.food_preference_items` (13 Spalten)
-- `nutrition.food_curation_candidates` (12 Spalten)
-- `nutrition.food_curation_decisions` (6 Spalten)
-
-`food_preferences` und `food_preference_items` sind laut `docs/todo/TODO.md`
-Punkt C-02.1 noch zu bauen — sie sind aber bereits vorhanden. Die Entscheidung
-zu ADR-002 (Tabellendesign) wurde faktisch in der Datenbank getroffen und
-nirgends dokumentiert.
-
----
-
-## Wiederherstellung
+**Schemasicherungen sind `--schema-only`** und gehören nach
+`backup/schema/`. `[cmd]` Die 18 Dateien dort sind 0,02 bis 0,6 MB.
 
 ```
-docker cp backup/data/JJJJ-MM-TT_nutrition_full.dump supabase_db_LumeOS-Claude-V1:/tmp/r.dump
-docker exec supabase_db_LumeOS-Claude-V1 pg_restore -U postgres -d postgres --clean --if-exists /tmp/r.dump
+docker exec <container> pg_dump -U postgres -d postgres \
+  -n nutrition --schema-only --no-owner > backup/schema/JJJJ-MM-TT_....sql
 ```
 
-**Ungeprüft.** Ein Dump, der nie zurückgespielt wurde, ist kein Backup —
-nur eine Datei. Der Restore-Test in eine leere Datenbank steht aus
-(`docs/todo/TODO.md`, D-11).
+**Datensicherungen** — wenn wirklich der Inhalt gebraucht wird — nehmen das
+komprimierte Format nach `backup/data/`:
+
+```
+docker exec <container> pg_dump -U postgres -d postgres -Fc -n nutrition \
+  > backup/data/JJJJ-MM-TT_....dump
+```
+
+`[cmd]` Dort liegen drei Abzüge à 5,5 MB. Dasselbe als Text wären über
+50 MB — das Format war da, es wurde nur nicht benutzt.
+
+## Warum es diese Regel gibt
+
+`[cmd]` Am 2026-08-14 warnte GitHub beim Push über zwei Dateien:
+
+| | |
+|---|---|
+| `live-nutrition-2026-08-14/nutrition-vor-023-072-073.sql` | 52,6 MB |
+| `live-nutrition-2026-08-13/nutrition-vor-022-071.sql` | 51,8 MB |
+
+Beide waren vollständige Datenabzüge mit `COPY`-Blöcken über alle
+Tabellen — 749.572 Zeilen —, obwohl eine Schemasicherung gemeint war.
+GitHub empfiehlt höchstens 50 MB und sperrt bei 100.
+
+**Dreimal passiert:** Block 28, Block 29, und ein dritter Fall am
+2026-08-14, der vor dem Commit auffiel (96 MB statt 0,2 MB). Kein
+Einzelfall, sondern ein Muster — deshalb die Regel und die Gate-Prüfung.
+
+## Was mit den beiden Dateien geschah
+
+Aus dem Arbeitsbaum entfernt, **in der Historie belassen**. Ein
+`git filter-repo` hätte sie getilgt, aber alle Commit-Hashes geändert —
+und die Übergabedokumente unter `docs/sessions/` sowie `docs/todo/TODO.md`
+verweisen auf Hashes als Anker. Die wären danach ins Leere gelaufen.
+
+Erreichbar bleiben sie über:
+```
+git show <commit>:backup/live-nutrition-2026-08-13/nutrition-vor-022-071.sql
+```
+
+## Was hier sonst liegt
+
+| Ordner | |
+|---|---|
+| `schema/` | Schemasicherungen, klein, getrackt |
+| `data/` | komprimierte Datenabzüge (`-Fc`) |
+| `live-*/` | Sicherungen je Kettenschritt, schema-only |
+| `legacy-v2/` | Export der Vorgängerinstanz, plus das Bundle mit deren Historie |
+
+`[cmd]` `legacy-v2/lumeos-2026-komplett.bundle` (48 MB) ist von git
+ausgenommen — 56 Refs mit 27 Branches und 22 Stashes des Vorgängerrepos,
+die es nirgends sonst gibt. Siehe `referenz/README.md`.

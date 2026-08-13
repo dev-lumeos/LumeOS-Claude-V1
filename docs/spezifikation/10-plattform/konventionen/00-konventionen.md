@@ -282,6 +282,26 @@ Wegwerf-Datenbank, danach verwerfen.
 Vor jeder strukturellen Änderung eine Sicherung. Eine Sicherung, die nie
 zurückgespielt wurde, ist eine Datei und kein Backup.
 
+**Sicherungen sind `--schema-only`.** `[cmd]` Dreimal ist stattdessen ein
+vollständiger Datenabzug entstanden — 52,6 MB, 51,8 MB, und ein dritter
+Fall mit 96 MB, der vor dem Commit auffiel. Die ersten beiden liegen
+dauerhaft in der Historie; GitHub warnte beim Push. Zum Vergleich: die
+18 Dateien unter `backup/schema/` sind 0,02 bis 0,6 MB.
+
+```
+pg_dump -U postgres -d postgres -n nutrition --schema-only --no-owner
+```
+
+Wer wirklich Daten sichern will, nimmt das komprimierte Format nach
+`backup/data/`: `pg_dump -Fc`. `[cmd]` Dort liegen drei Abzüge à 5,5 MB —
+dasselbe als Text wären über 50 MB. Das Format war da, es wurde nur nicht
+benutzt.
+
+`[cmd]` Der Pre-Commit-Hook bricht seit 2026-08-14 bei Dateien über 10 MB
+ab. Gegenprobe belegt: eine 12-MB-Datei ergibt Exit 1 mit Hinweis auf den
+richtigen Ablageort. Umgehung nur bewusst mit `--no-verify`.
+Begründung und Einzelheiten in `backup/README.md`.
+
 `[cmd]` `pg_restore` meldet fehlende Policies nur als Warnung und gilt
 trotzdem als erfolgreich — der Vergleich nach dem Zurückspielen ist Pflicht.
 
