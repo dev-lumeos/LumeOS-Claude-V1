@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-13 (fuenfundzwanzigste Aktualisierung — Block 25: B-26 und E-11 erledigt, B-20 und E-13 mit Vorarbeit vorgelegt, E-14 und E-15 neu. Der Pfadschutz wirkt NUR in Claude Code: gleiche Nutzlast, anderer tool_name — durchgelassen; leere Eingabe — durchgelassen. Bei E-11 loeste sich die Verwaisung auf: nicht eine alte Pfadstruktur, sondern 509 Uebungen, die es als Medien gibt und als Datenbankzeilen nie gab. E-13 ordnet 41 von 45 Regionen zu und laesst 4 Hals-Gruppen bewusst leer, weil SPEC_06 dafuer keine Region kennt. Zweimal war der eigene Massstab schuld an einem verdaechtigen Ergebnis — 0 % Geschwister bei E-11 lag am Vergleichsschluessel, nicht an den Daten)
+**Stand:** 2026-08-13 (siebenundzwanzigste Aktualisierung — Block 26 Nachtrag: E-16 erledigt und angewandt (107 Gruppen, 6.624 Zuordnungen, Gluteus Medius 402), E-19 neu. Toms Befund: der Tippfehler-Waechter zaehlte in die falsche Richtung — er meldete vier Nicht-Faelle und uebersah den einen echten, weil eine gemeinsame Uebung nicht entlastet, sondern BELASTET. Kein Merkmal trennt den echten Tippfehler automatisch von Biceps/Triceps (drei geprueft, keines traegt), deshalb ist die Pruefung jetzt eine Meldung mit begruendeter Ausnahmeliste und tippfehler_unerklaert = 0 als hartem Signal. Die Lehre steht in den Konventionen 11.1: ein Massstab ist an bekannten Faellen BEIDER Sorten zu belegen, sonst zeigt er zuverlaessig in die falsche Richtung)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -2210,8 +2210,43 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   `[cmd]` Kette und live sind prüfsummengleich (`muscle_groups` und
   `exercise_muscles`), können also nicht auseinanderlaufen.
 
-- [~] **E-13: `body_region` nachpflegen** — **SQL vorgelegt 2026-08-13
-  (Block 25), NICHT angewandt.** `supabase/_pipeline/10_training/103_body_region.sql`.
+- [x] **E-13: `body_region` nachpflegen** — **erledigt und angewandt
+  2026-08-13 (Blöcke 25/26).** Kettenschritte
+  `103_calvicular_merge.sql` und `104_body_region.sql`.
+
+  **Zuerst eine Dublette geklärt, sonst wäre es Arbeit an einer Leiche:**
+  `[cmd]` `Calvicular Head` (2 Nutzungen) ist ein Tippfehler von
+  `Clavicular Head` (22) — beide hätten `chest` bekommen, aber die eine
+  Zeile verschwindet. Belegt nicht über die Namensähnlichkeit, sondern
+  über die **Verwendung**: `Clavicular Head` steht 16 von 22 Mal an einer
+  **Incline**-Übung (der Schlüsselbeinanteil des Pectoralis ist genau
+  das, was Schrägbank trifft), `Calvicular Head` an „Cable low fly" und
+  „Cable machine high to low" — dieselbe Funktionsgruppe. Gegenprobe:
+  auch unter den 22 steht „Dumbbell One Arm Low Fly". Die Verwendung
+  trennt die Namen nicht. `[cmd]` 0 gemeinsame Übungen, 0 Kollisionen,
+  `body_region` und `display_order` bei beiden identisch.
+
+  **Kennzahlen live nach dem Anwenden** `[cmd]`, alle wie erwartet:
+
+  | | vorher | nachher |
+  |---|---|---|
+  | Muskelgruppen | 109 | **108** |
+  | ohne `body_region` | 45 | **4** |
+  | Zuordnungen | 6.625 | **6.625** (unverändert) |
+  | Zuordnungen auf regionslose Gruppen | 1.468 | **10** |
+  | Waisen | 0 | **0** |
+
+  Sicherung vorher nach `backup/live-training-2026-08-13/`, `[cmd]`
+  durch Wiederherstellung in eine Wegwerf-DB als brauchbar belegt (109 /
+  6.625). Beide Schritte dort getestet, dann live, Probe verworfen.
+
+  **41 Regionen zugeordnet, 4 bewusst nicht** — `Neck Muscles`,
+  `Scalenes`, `Sternocleidomastoid`, `splenius capitis`. `[read]` SPEC_06
+  kennt für Hals/Nacken **keine** Region; `back` oder `shoulders` wäre
+  falsch, `full_body` eine Behauptung. v100 prüft, dass genau diese vier
+  es sind — die Lücke ist damit benannt, nicht offen.
+
+  **Ursprünglicher Stand (Block 25):** SQL vorgelegt, nicht angewandt.
 
   **Woher die Einteilung kommt — keine Erfindung:** `[read]` SPEC_06 und
   der CHECK in `100_training_schema.sql` lassen genau sieben Werte zu
@@ -2300,6 +2335,117 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   nicht das Umschreiben vorhandener Werte. Wer sie ändert, ändert
   bestehende Filterergebnisse — das gehört entschieden. Klein genug für
   einen Einzeiler, sobald Tom zustimmt.
+
+- [x] **E-16: `gluteus mideus` — Tippfehler mit 383 Zuordnungen** —
+  **erledigt und angewandt 2026-08-13 (Block 26, Nachtrag).**
+  Kettenschritt `105_mideus_merge.sql`.
+
+  **Der Fall, an dem der erste Wächter versagt hat.** `[cmd]` Tom hat
+  die acht Levenshtein-Paare mit ihren gemeinsamen Übungen ausgelesen:
+  die vier **ohne** gemeinsame Übung sind alle Scheintreffer, der **eine
+  echte Tippfehler hat fünf**. Meine Prüfung meldete
+  `tippfehler_ohne_gegenbeleg = 4` — vier Nicht-Fälle, und den einen
+  übersehen. *Der Massstab war richtig, seine Leserichtung falsch:* eine
+  gemeinsame Übung entlastet nicht, sie **belastet**.
+
+  **Zusammengeführt nach dem 102-Muster, mit einer Besonderheit:**
+  `[cmd]` Die meistgenutzte Zeile trägt hier den **falschen** Namen
+  (383 gegen 20). Sie überlebt trotzdem und behält ihre ID — das hält
+  die Zahl der umzuhängenden Zuordnungen bei 20 statt 383 — und wird
+  danach umbenannt. Reihenfolge zwingend: umhängen → löschen →
+  umbenennen, weil der Zielname bis dahin von der aufzulösenden Zeile
+  belegt ist (`muscle_groups_name_key`).
+
+  `[cmd]` **1 echte Kollision** ("Resistance Band Lying Hyperextension
+  Abduction", beide `primary`); die vier übrigen gemeinsamen Übungen
+  tragen verschiedene Rollen und überleben beide.
+
+  | | vorher | nachher |
+  |---|---|---|
+  | Muskelgruppen | 108 | **107** |
+  | Zuordnungen | 6.625 | **6.624** (−1 Kollision) |
+  | `Gluteus Medius` | 20 | **402** (383+20−1) |
+  | ohne Region | 4 | **4** |
+  | Waisen | 0 | **0** |
+
+  Sicherung nach `backup/live-training-2026-08-13/training-vor-105.sql`,
+  in einer Wegwerf-DB wiederhergestellt und getestet, dann live.
+
+  **Nicht mit erledigt, weil es eine Erfassungsfrage ist:** In den vier
+  überlebenden Fällen steht derselbe Muskel jetzt mit `primary` **und**
+  `secondary` an derselben Übung. Das stammt aus der Quelle und ist
+  keine Folge des Merges — **als E-19 weitergeführt**.
+
+  Ursprünglicher Punkt: `[cmd]` `gluteus mideus` trägt **383**
+  Zuordnungen, die korrekt geschriebene `Gluteus Medius` nur **20**.
+  Offensichtlicher Tippfehler; die Bereinigung bewegt aber die Mehrheit
+  auf die Minderheitszeile und ist deshalb **keine Automatik**.
+
+  **Der Fall ist verwickelter als er aussieht.** `[cmd]` Die beiden
+  kommen in **5 Übungen gemeinsam** vor — bei „Resistance Band Lying
+  Hyperextension Abduction" sogar **beide als `primary`**, sonst einmal
+  `primary` und einmal `secondary`. Dieselbe Muskelgruppe steht dort also
+  zweimal an derselben Übung, unter zwei Schreibweisen und mit
+  widersprüchlicher Rolle. Das ist ein **Erfassungsfehler**, nicht nur
+  ein Schreibfehler.
+
+  **Zu entscheiden, bevor zusammengeführt wird:** Welche Rolle gilt in
+  den 5 gemeinsamen Übungen? `[cmd]` Genau **1** davon ist eine echte
+  Kollision (beide `primary`, „Resistance Band Lying Hyperextension
+  Abduction") — die anderen 4 tragen `primary` **und** `secondary` und
+  überlebten einen Merge beide. Ergebnis wäre 403 − 1 = **402**
+  Zuordnungen; die Übung stünde dann mit dem Muskel zweimal in
+  verschiedenen Rollen da. *Das ist die eigentliche Frage: nicht wie man
+  zusammenführt, sondern was fachlich gilt.*
+  v100 führt `gluteus_mideus_nutzungen` als Kennzahl mit, damit der Fall
+  sichtbar bleibt.
+
+- [ ] **E-17: `Achilles Tendon` ist eine Sehne in `muscle_groups`** (neu
+  2026-08-13, aus E-13/Block 26) — `[cmd]` 1 Zuordnung. Sie hat in E-13
+  die Region `legs` bekommen, damit sie nicht durch jeden Regionsfilter
+  fällt. **Geografisch richtig, fachlich falsch:** eine Sehne ist keine
+  Muskelgruppe.
+  **Klein, aber symptomatisch.** Dieselbe Tabelle führt weitere
+  Sammelbegriffe, die keine einzelnen Muskeln sind: `Grip Muscles`,
+  `Fingers Flexors`, `Foot Muscles`, `Neck Muscles`, `Arms`, `Thighs`.
+  Sie bleiben, weil Übungen sie benutzen — aber die Tabelle vermischt
+  damit **anatomische Muskeln** mit **funktionalen Gruppen**.
+  Zu entscheiden: eigene Kennzeichnung (`typ: muskel | gruppe | sehne`),
+  oder bewusst so lassen und im Schema dokumentieren. Erst relevant,
+  wenn eine Oberfläche nach Muskeln filtert; vorher kostet es nichts.
+
+- [ ] **E-18: `none/None` als Muskelgruppe — Restfrage** (neu
+  2026-08-13, aus Block 26) — `[cmd]` Im Seed sind die zwei
+  Platzhalterzeilen entfernt (v100 prüft `platzhalter_none = 0`), und
+  die 14 zugehörigen Zuordnungen entfielen ersatzlos: der Wert bedeutete
+  „keine sekundären Muskeln", also eine **Abwesenheit, als Wert
+  kodiert**.
+  **Was offen bleibt:** ob die 14 betroffenen Übungen fachlich wirklich
+  keine sekundären Muskeln haben oder ob dort nur niemand gepflegt hat.
+  `[cmd]` Alle 14 tragen echte primary-Muskeln, das Fehlen ist also
+  plausibel — belegt ist es nicht. Klärung nur mit einer fachlichen
+  Quelle, nicht aus den Daten.
+
+- [ ] **E-19: Derselbe Muskel mit `primary` UND `secondary` an einer
+  Übung** (neu 2026-08-13, aus E-16/Block 26) — `[cmd]` **35 Fälle im
+  gesamten Bestand**: eine Übung führt dieselbe Muskelgruppe zweimal,
+  einmal als `primary` und einmal als `secondary`.
+
+  **Beim mideus-Merge aufgefallen, aber NICHT von ihm verursacht.** Vier
+  der 35 stammen aus jenem Paar (`Resistance Band Lying Abduction` und
+  drei weitere Abduktionsübungen); die übrigen 31 gab es vorher. Der
+  Primärschlüssel `(exercise_id, muscle_group_id, role)` lässt das zu —
+  fachlich ist es ein Widerspruch: ein Muskel ist an einer Übung
+  entweder Haupt- oder Nebenmuskel, nicht beides.
+
+  **Nicht automatisch zu bereinigen.** Welche Rolle gilt, ist eine
+  fachliche Frage; `primary` zu bevorzugen wäre eine Regel ohne Beleg.
+  `[cmd]` Bei den vier mideus-Fällen trug die *korrekt* geschriebene
+  Zeile durchgängig `primary`, die falsch geschriebene `secondary` —
+  das ist ein Hinweis, aber kein Nachweis für die übrigen 31.
+  **Zu klären:** Reicht der Primärschlüssel, oder braucht es einen
+  UNIQUE auf `(exercise_id, muscle_group_id)` plus eine Entscheidung,
+  welche Rolle bei einem Konflikt gewinnt?
 
 ---
 ## F — Gedächtnisschichten (AMF)
