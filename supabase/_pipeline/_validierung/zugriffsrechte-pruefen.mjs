@@ -44,6 +44,8 @@
 // Aufruf:  node supabase/_pipeline/_validierung/zugriffsrechte-pruefen.mjs
 // Exit 0 = alles grün, Exit 1 = mindestens ein Befund.
 
+import { execSync } from 'node:child_process'
+
 const API = process.env.SUPABASE_URL ?? 'http://127.0.0.1:54321'
 const ANON = process.env.SUPABASE_ANON_KEY ?? 'sb_publishable_ACJWlzQHlZjBrEguHvfOxg_3BJgxAaH'
 const PW = 'B22-Pruefung-2026!'
@@ -69,6 +71,23 @@ const ABSICHTLICH_DICHT = {
 const rot = []
 const gruen = []
 const uebersprungen = []
+
+// Holt den Service-Schluessel aus `supabase status`, wie es
+// admin-sperre-rolle-c.mjs auch tut. Er wird AUSSCHLIESSLICH zum
+// Aufraeumen der beiden Wegwerfkonten gebraucht, nie zum Pruefen —
+// gepruefte Zugriffe laufen immer als `authenticated`.
+function serviceAusStatus() {
+  try {
+    const out = execSync('npx supabase status -o env', {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    })
+    const m = out.match(/SERVICE_ROLE_KEY="?([^"\r\n]+)"?/)
+    return m ? m[1] : null
+  } catch {
+    return null
+  }
+}
 
 function melde(ok, objekt, text) {
   if (ok) gruen.push(`${objekt}: ${text}`)
@@ -152,7 +171,13 @@ async function aufraeumen(...sessions) {
   }
   console.log('Testdaten entfernt (jede Session löscht ihre eigenen Zeilen).')
 
-  const SERVICE = process.env.SUPABASE_SERVICE_ROLE_KEY
+  // Der Service-Schluessel wird nur zum Aufraeumen gebraucht, nicht zum
+  // Pruefen. Er kommt aus der Umgebung oder — wie in den admin-Skripten —
+  // aus `supabase status`. Ohne Selbstreinigung bleiben nach jedem Lauf
+  // zwei Konten stehen; [cmd] 2026-08-13 lagen deshalb vier statt zwei
+  // Nutzer in auth.users. Eine Pruefung, die Muell hinterlaesst, wird
+  // irgendwann abgeschaltet.
+  const SERVICE = process.env.SUPABASE_SERVICE_ROLE_KEY || serviceAusStatus()
   if (SERVICE) {
     for (const sess of sessions) {
       await fetch(`${API}/auth/v1/admin/users/${sess.id}`, {
