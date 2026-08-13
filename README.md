@@ -24,27 +24,38 @@ pnpm dev                                # apps/web auf http://localhost:3200
 - Anmeldung: E-Mail + Passwort unter `/login`; geschützte Routen leiten
   unangemeldet dorthin um.
 
-## Entwicklung: Prüf-Gate (B-14, Stand 2026-08-05)
+## Entwicklung: Prüf-Gate (B-14, Stand 2026-08-13)
 
 Ein Befehl prüft alles: **`pnpm gate`** = `turbo run typecheck test build`.
+
+`[cmd]` 2026-08-13: **8 Tasks** über beide Apps und `packages/shared` —
+`typecheck`, `test` und `build` je Paket. Der Umfang wächst mit den
+Paketen mit; er ist nicht aufgezählt, sondern ergibt sich aus
+`turbo run` über den Workspace (B-21).
 
 - **Aktivierung nach frischem Klon (Pflicht, sonst läuft kein Gate):**
   `git config core.hooksPath .githooks`
   Der Pre-Commit-Hook ist versioniert (`.githooks/pre-commit`), die
   Aktivierung ist lokale Git-Konfiguration und passiert nicht von selbst.
-- **Einschränkung:** Der Hook prüft den **Working Tree, nicht den Index**.
-  Wer in logischen Scheiben committet, kann Commit 1 von 3 grün bekommen,
-  obwohl er für sich allein nicht baut — Änderungen aus Scheibe 2 liegen im
-  Working Tree und heilen den Bruch bereits. Bewusst so belassen: ein
-  Index-Checkout je Commit kostet Laufzeit und Komplexität.
+- **Einschränkung (B-17):** Der Hook prüft den **Working Tree, nicht den
+  Index**. Wer in logischen Scheiben committet, kann Commit 1 von 3 grün
+  bekommen, obwohl er für sich allein nicht baut — Änderungen aus Scheibe 2
+  liegen im Working Tree und heilen den Bruch bereits. Bewusst so belassen:
+  ein Index-Checkout je Commit kostet Laufzeit und Komplexität, und jeder
+  Commit wird vor dem Push ohnehin von Hand geprüft.
+  `[cmd]` 2026-08-13 nachgemessen statt behauptet: eine Datei mit
+  Typfehler gestaget, dieselbe Datei im Working Tree geheilt, `pnpm gate`
+  lief **grün** — der Index trug zu diesem Zeitpunkt Code, der nicht
+  typecheckt. Die Beschreibung stimmt also unverändert.
 - **Notausgang:** `git commit --no-verify` — bewusst einsetzen, nicht still.
 - **Frühere Betriebsregel „`next dev` und Gate nicht gleichzeitig" —
   entfällt seit B-18 (2026-08-06).** Sie galt, weil beide sich
   `apps/web/.next` teilten: `[cmd]` 2026-08-05 (zweimal) und erneut
   2026-08-06 erzeugte ein parallel laufender Dev-Server TS6053-Fehler auf
   `.next/types/**` im Gate-Typecheck. Der Gate-Build schreibt jetzt nach
-  `apps/web/.next-gate` (`LUMEOS_DIST_DIR`, gesetzt in
-  `apps/web/scripts/gate-build.js`), der Dev-Server bleibt auf `.next`.
+  `.next-gate` (`LUMEOS_DIST_DIR`, gesetzt in `scripts/gate-build.js`
+  **je App** — seit Block 19 auch in `apps/admin`), der Dev-Server bleibt
+  auf `.next`.
   Beide Verzeichnisse bestehen nebeneinander, keins räumt das andere ab.
   Dazu gehört zwingend die zweite Hälfte: `typecheck` hängt in `turbo.json`
   jetzt auch am **eigenen** `build` (`dependsOn: ["^build", "build"]`).

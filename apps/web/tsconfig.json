@@ -60,8 +60,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    ".next-gate/types/**/*.ts",
-    ".next-probe/types/**/*.ts"
+    ".next-gate/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

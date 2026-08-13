@@ -145,6 +145,76 @@ Berichte über getane Arbeit werden geprüft, nicht geglaubt. Die Prüfung ist
 ein Zähllauf über nachweisbare Merkmale — Anzahl Einträge, Zeilenzahlen,
 Hashes — nicht das Lesen der Zusammenfassung.
 
+### 10.1 Zwei Werkzeuge im selben Arbeitsbaum (B-11)
+
+Der Anlass ist real: Claude Code und Codex arbeiten in demselben Repo.
+Die Konflikte entstehen dabei **nicht** in den Quelldateien — dort greift
+die Regel oben — sondern in **generierten Zuständen**, die niemandem
+gehören und die beide Werkzeuge beschreiben.
+
+**Was geteilt ist** `[cmd]` 2026-08-13 erhoben:
+
+| Zustand | Ort | getrennt? |
+|---|---|---|
+| Gate-Build | `apps/*/.next-gate` | **ja**, seit B-18 |
+| Dev-Server-Build | `apps/*/.next` | nein — je App einer |
+| Turbo-Cache | `.turbo/cache` | nein |
+| Abhängigkeiten | `node_modules/` (Wurzel + je Paket) | nein |
+| Datenbank | lokale Supabase-Instanz, ein Satz Ports | nein |
+| Dev-Server | 3200 (`web`), 3210 (`admin`) | nein — je ein Prozess |
+
+**Die Bruchstelle ist `.next/types/`.** `[cmd]` Beide `tsconfig.json`
+listen `.next/types/**/*.ts` **und** `.next-gate/types/**/*.ts` im
+`include`. Der Dev-Server schreibt dort für jede Route eine Typdatei —
+also schreibt ein laufender Dev-Server in die Eingabemenge von `tsc`.
+Zwei belegte Folgen:
+
+1. `[cmd]` 2026-08-06 (B-18): Der Gate-Build räumte `.next` ab, während
+   der Dev-Server dieselben Dateien fortschrieb; `tsc` brach mit TS6053
+   ab, 3 von 5 Läufen rot. Behoben durch das eigene `.next-gate` **und**
+   `dependsOn: ["^build", "build"]` bei `typecheck` — beide Teile
+   zusammen, die Trennung allein genügte nicht.
+2. `[cmd]` 2026-08-12 (Block 21): Nach dem Umzug der Kurationsseite blieb
+   unter `apps/web/.next/types/app/api/nutrition/curation/route.ts` eine
+   Typdatei für eine Route liegen, die es nicht mehr gab. Der Quellcode
+   war sauber (`✓ Compiled successfully`), der Typcheck scheiterte
+   trotzdem. Der laufende Dev-Server hatte sie erzeugt und räumte sie
+   nicht ab.
+
+**Regel — Betrieb, nicht Werkzeug:**
+
+1. **Generierte Verzeichnisse gehören niemandem.** Wer `.next`, `.turbo`
+   oder `node_modules` aufräumt, sagt es vorher an. Ein „leeres"
+   Verzeichnis kann der Zwischenstand des anderen sein.
+2. **Nach jedem Umzug oder jeder Löschung einer Route den Dev-Server
+   dieser App neu starten.** Er räumt verwaiste Typdateien nicht ab.
+   Symptom: Der Build kompiliert, der Typcheck findet ein Modul nicht,
+   dessen Pfad es im Quellcode nicht mehr gibt.
+3. **Ein Gate-Lauf, der ohne Quelländerung rot wird, ist zuerst ein
+   Verdacht auf generierten Zustand** — nicht auf den eigenen Code.
+   Gegenprobe: `LUMEOS_DIST_DIR=.next-probe npx next build` baut in ein
+   frisches Verzeichnis. Kompiliert das sauber und scheitert nur der
+   Typcheck, liegt es an `.next/types`.
+4. **Die Datenbank ist einer.** Wegwerf-Datenbanken bekommen einen
+   eigenen Namen (§11); wer die laufende Instanz anfasst, tut das mit
+   Freigabe und sagt es an.
+5. **Je Port ein Prozess.** Wer einen Dev-Server neu startet, den ein
+   anderes Werkzeug gestartet hat, meldet es im Bericht.
+
+**`git worktree` ist NICHT die Empfehlung — aus Preisgründen:**
+`[cmd]` `node_modules` im Wurzelverzeichnis trägt **30.528 Dateien,
+409 MB**; dazu kommen die je Paket. Ein zweiter Arbeitsbaum braucht einen
+eigenen vollständigen `pnpm install` und pflegt ihn dauerhaft mit. Er
+löst ausserdem **die tatsächliche Bruchstelle nicht**: `.next/types`
+entsteht in *beiden* Bäumen neu, und die lokale Datenbank bliebe
+trotzdem geteilt. Er hilft nur gegen gleichzeitiges Schreiben an
+denselben Quelldateien — und dagegen hilft die Regel oben billiger.
+
+**Wann ein Worktree doch richtig ist:** wenn beide Werkzeuge über
+längere Zeit an **verschiedenen Branches** arbeiten sollen. Dann ist es
+kein Aufräumproblem mehr, sondern eine Frage des Git-Zustands, und die
+409 MB sind gut angelegt.
+
 ## 11. Änderungen an der Datenbank
 
 Nie gegen die laufende Datenbank testen. Jeder Versuch in einer
