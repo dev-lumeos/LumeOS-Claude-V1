@@ -5,6 +5,7 @@
 // Payload-Validierung und die URL-Helfer der Foods-Seite.
 
 import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from '@lumeos/shared/nutrition/db'
+import { buildFoodSearchTokenGroups } from './such-zerlegung'
 
 const LABEL_POLICY = 'bls_source_label_not_final_display_name'
 const DEFAULT_LIMIT = 25
@@ -126,6 +127,17 @@ export type FoodSearchRpcArgs = {
   p_query: string
   p_normalized_query: string
   p_tokens: string[]
+  /**
+   * Suchgruppen aus Zerlegung und Synonymen. ODER innerhalb einer
+   * Gruppe, UND zwischen den Gruppen. Als jsonb, weil die Gruppen
+   * unterschiedlich lang sind und Postgres kein zerklueftetes
+   * text[][] kennt.
+   *
+   * p_tokens bleibt daneben bestehen: es traegt die Anfrage so, wie
+   * der Nutzer sie getippt hat, und ist die Rueckfallebene, wenn die
+   * Gruppen leer sind.
+   */
+  p_token_groups: string[][]
   p_selected_food_id: string | null
   p_category_slug: string
   p_category_id: string | null
@@ -189,6 +201,20 @@ export function buildFoodSearchTokens(query: string): string[] {
     .map(token => token.trim())
     .filter(Boolean)
     .slice(0, MAX_TOKENS)
+}
+
+/**
+ * Suchgruppen: Zerlegung von Komposita plus Synonyme.
+ *
+ * Innerhalb einer Gruppe gilt ODER, zwischen den Gruppen UND. Die
+ * Faltung passiert VOR der Zerlegung, weil der Wortschatz gefaltet
+ * erzeugt wird — Begruendung und Messung in such-zerlegung.ts.
+ *
+ * `[cmd]` Ohne diese Gruppen liefert "huehnerbrust" 0 Treffer, mit
+ * ihnen 31, angefuehrt von "Hähnchen Brustfilet, roh".
+ */
+export function buildFoodSearchGroups(query: string): string[][] {
+  return buildFoodSearchTokenGroups(normalizeFoodSearchText(query))
 }
 
 export function buildFoodSearchFilterHref(
@@ -271,6 +297,7 @@ export function buildFoodSearchRpcArgs(
     p_query: query,
     p_normalized_query: normalizeFoodSearchText(query),
     p_tokens: buildFoodSearchTokens(query),
+    p_token_groups: buildFoodSearchGroups(query),
     p_selected_food_id: selectedFoodId?.trim() ? selectedFoodId.trim() : null,
     p_category_slug: normalizeSlug(options.category ?? ''),
     p_category_id: options.categoryId?.trim() ? options.categoryId.trim() : null,
