@@ -1,0 +1,14920 @@
+{
+ "erhoben": "2026-08-13",
+ "quelle": {
+  "bestand": "nutrition.foods.name_de, alle Woerter >= 3 Zeichen",
+  "thesaurus": "OpenThesaurus Textversion, Stand 2026-07-31, CC-BY-SA-4.0 oder LGPL"
+ },
+ "kennzahlen": {
+  "woerter_gesamt": 3656,
+  "vorkommen_gesamt": 28564,
+  "im_thesaurus": {
+   "woerter": 908,
+   "vorkommen": 17778
+  },
+  "zubereitung": {
+   "woerter": 80,
+   "vorkommen": 2720
+  },
+  "flexion": {
+   "woerter": 153,
+   "vorkommen": 727
+  },
+  "zusammengesetzt": {
+   "woerter": 934,
+   "vorkommen": 2910
+  },
+  "einzeln": {
+   "woerter": 1581,
+   "vorkommen": 4429
+  }
+ },
+ "einzeln": [
+  {
+   "wort": "milch",
+   "n": 109
+  },
+  {
+   "wort": "rührmasse",
+   "n": 82
+  },
+  {
+   "wort": "hähnchen",
+   "n": 81
+  },
+  {
+   "wort": "vitaminen",
+   "n": 54
+  },
+  {
+   "wort": "schweinefleisch",
+   "n": 47
+  },
+  {
+   "wort": "eifrei",
+   "n": 46
+  },
+  {
+   "wort": "süßungsmitteln",
+   "n": 45
+  },
+  {
+   "wort": "alaska",
+   "n": 44
+  },
+  {
+   "wort": "rohpökelware",
+   "n": 38
+  },
+  {
+   "wort": "schulter",
+   "n": 36
+  },
+  {
+   "wort": "bohnen",
+   "n": 33
+  },
+  {
+   "wort": "hammel",
+   "n": 33
+  },
+  {
+   "wort": "spinat",
+   "n": 29
+  },
+  {
+   "wort": "karamell",
+   "n": 28
+  },
+  {
+   "wort": "zubereitet",
+   "n": 28
+  },
+  {
+   "wort": "schokoliert",
+   "n": 26
+  },
+  {
+   "wort": "vegan",
+   "n": 26
+  },
+  {
+   "wort": "gesäuert",
+   "n": 25
+  },
+  {
+   "wort": "vorderhaxe",
+   "n": 25
+  },
+  {
+   "wort": "blätterteig",
+   "n": 24
+  },
+  {
+   "wort": "heilbutt",
+   "n": 24
+  },
+  {
+   "wort": "saurer",
+   "n": 24
+  },
+  {
+   "wort": "aromatisiert",
+   "n": 23
+  },
+  {
+   "wort": "kasseler",
+   "n": 23
+  },
+  {
+   "wort": "saure",
+   "n": 23
+  },
+  {
+   "wort": "bechamelsauce",
+   "n": 22
+  },
+  {
+   "wort": "bohne",
+   "n": 22
+  },
+  {
+   "wort": "grieß",
+   "n": 22
+  },
+  {
+   "wort": "mozzarella",
+   "n": 21
+  },
+  {
+   "wort": "filetmedaillon",
+   "n": 20
+  },
+  {
+   "wort": "karpfen",
+   "n": 20
+  },
+  {
+   "wort": "rotbarsch",
+   "n": 20
+  },
+  {
+   "wort": "forelle",
+   "n": 18
+  },
+  {
+   "wort": "kürbiskernen",
+   "n": 18
+  },
+  {
+   "wort": "sonnenblumenkernen",
+   "n": 18
+  },
+  {
+   "wort": "instantpulver",
+   "n": 17
+  },
+  {
+   "wort": "roggen",
+   "n": 17
+  },
+  {
+   "wort": "waffeltüte",
+   "n": 17
+  },
+  {
+   "wort": "ravioli",
+   "n": 16
+  },
+  {
+   "wort": "marzipan",
+   "n": 15
+  },
+  {
+   "wort": "mehliert",
+   "n": 15
+  },
+  {
+   "wort": "ungefüllt",
+   "n": 14
+  },
+  {
+   "wort": "vollkornmürbeteig",
+   "n": 14
+  },
+  {
+   "wort": "asiatische",
+   "n": 13
+  },
+  {
+   "wort": "hähnchenbrustfilet",
+   "n": 13
+  },
+  {
+   "wort": "kakaohaltig",
+   "n": 13
+  },
+  {
+   "wort": "flammeri",
+   "n": 12
+  },
+  {
+   "wort": "goldbutt",
+   "n": 12
+  },
+  {
+   "wort": "roggenvollkornknäckebrot",
+   "n": 12
+  },
+  {
+   "wort": "salami",
+   "n": 12
+  },
+  {
+   "wort": "thun",
+   "n": 12
+  },
+  {
+   "wort": "auster",
+   "n": 11
+  },
+  {
+   "wort": "buttermilch",
+   "n": 11
+  },
+  {
+   "wort": "frites",
+   "n": 11
+  },
+  {
+   "wort": "hüfte",
+   "n": 11
+  },
+  {
+   "wort": "mandeln",
+   "n": 11
+  },
+  {
+   "wort": "mexikanische",
+   "n": 11
+  },
+  {
+   "wort": "oliven",
+   "n": 11
+  },
+  {
+   "wort": "rinderkraftbrühe",
+   "n": 11
+  },
+  {
+   "wort": "teig",
+   "n": 11
+  },
+  {
+   "wort": "getreideflakes",
+   "n": 10
+  },
+  {
+   "wort": "hummer",
+   "n": 10
+  },
+  {
+   "wort": "maultaschen",
+   "n": 10
+  },
+  {
+   "wort": "schupfnudeln",
+   "n": 10
+  },
+  {
+   "wort": "schweinebauch",
+   "n": 10
+  },
+  {
+   "wort": "speisequarkzubereitung",
+   "n": 10
+  },
+  {
+   "wort": "vordereisbein",
+   "n": 10
+  },
+  {
+   "wort": "chicoree",
+   "n": 9
+  },
+  {
+   "wort": "entrahmter",
+   "n": 9
+  },
+  {
+   "wort": "gargezogen",
+   "n": 9
+  },
+  {
+   "wort": "grießklößchen",
+   "n": 9
+  },
+  {
+   "wort": "grießpudding",
+   "n": 9
+  },
+  {
+   "wort": "roggenmischbrot",
+   "n": 9
+  },
+  {
+   "wort": "schwarztee",
+   "n": 9
+  },
+  {
+   "wort": "seezunge",
+   "n": 9
+  },
+  {
+   "wort": "sesam",
+   "n": 9
+  },
+  {
+   "wort": "trüffel",
+   "n": 9
+  },
+  {
+   "wort": "vollkornschrot",
+   "n": 9
+  },
+  {
+   "wort": "weizenmischbrötchen",
+   "n": 9
+  },
+  {
+   "wort": "brotaufstrich",
+   "n": 8
+  },
+  {
+   "wort": "eierlikör",
+   "n": 8
+  },
+  {
+   "wort": "entbeint",
+   "n": 8
+  },
+  {
+   "wort": "erdbeeren",
+   "n": 8
+  },
+  {
+   "wort": "haselnuss",
+   "n": 8
+  },
+  {
+   "wort": "haselnüssen",
+   "n": 8
+  },
+  {
+   "wort": "languste",
+   "n": 8
+  },
+  {
+   "wort": "makrele",
+   "n": 8
+  },
+  {
+   "wort": "mangold",
+   "n": 8
+  },
+  {
+   "wort": "porridge",
+   "n": 8
+  },
+  {
+   "wort": "renke",
+   "n": 8
+  },
+  {
+   "wort": "roggenbrötchen",
+   "n": 8
+  },
+  {
+   "wort": "rotzunge",
+   "n": 8
+  },
+  {
+   "wort": "roulade",
+   "n": 8
+  },
+  {
+   "wort": "schleie",
+   "n": 8
+  },
+  {
+   "wort": "steinbutt",
+   "n": 8
+  },
+  {
+   "wort": "vollkornbrot",
+   "n": 8
+  },
+  {
+   "wort": "vollkornmehl",
+   "n": 8
+  },
+  {
+   "wort": "wachsbohne",
+   "n": 8
+  },
+  {
+   "wort": "wachtel",
+   "n": 8
+  },
+  {
+   "wort": "wels",
+   "n": 8
+  },
+  {
+   "wort": "biskuitroulade",
+   "n": 7
+  },
+  {
+   "wort": "felchen",
+   "n": 7
+  },
+  {
+   "wort": "kartoffelkroketten",
+   "n": 7
+  },
+  {
+   "wort": "katfisch",
+   "n": 7
+  },
+  {
+   "wort": "kräutertee",
+   "n": 7
+  },
+  {
+   "wort": "maräne",
+   "n": 7
+  },
+  {
+   "wort": "mohn",
+   "n": 7
+  },
+  {
+   "wort": "omelett",
+   "n": 7
+  },
+  {
+   "wort": "parmaschinken",
+   "n": 7
+  },
+  {
+   "wort": "plunderteig",
+   "n": 7
+  },
+  {
+   "wort": "roggenbrot",
+   "n": 7
+  },
+  {
+   "wort": "roggenvollkornbrot",
+   "n": 7
+  },
+  {
+   "wort": "schafmilch",
+   "n": 7
+  },
+  {
+   "wort": "schnäpel",
+   "n": 7
+  },
+  {
+   "wort": "thüringer",
+   "n": 7
+  },
+  {
+   "wort": "vollkornplunder",
+   "n": 7
+  },
+  {
+   "wort": "weizenvollkornbrot",
+   "n": 7
+  },
+  {
+   "wort": "ausbackteig",
+   "n": 6
+  },
+  {
+   "wort": "bologneser",
+   "n": 6
+  },
+  {
+   "wort": "buttercremetorte",
+   "n": 6
+  },
+  {
+   "wort": "camembert",
+   "n": 6
+  },
+  {
+   "wort": "entkoffeiniert",
+   "n": 6
+  },
+  {
+   "wort": "entrahmt",
+   "n": 6
+  },
+  {
+   "wort": "extrudiert",
+   "n": 6
+  },
+  {
+   "wort": "gelbflossen",
+   "n": 6
+  },
+  {
+   "wort": "getoastet",
+   "n": 6
+  },
+  {
+   "wort": "grießflammeri",
+   "n": 6
+  },
+  {
+   "wort": "hinterhesse",
+   "n": 6
+  },
+  {
+   "wort": "hokkaido",
+   "n": 6
+  },
+  {
+   "wort": "kartoffelklöße",
+   "n": 6
+  },
+  {
+   "wort": "knuspermüslimischung",
+   "n": 6
+  },
+  {
+   "wort": "krakauer",
+   "n": 6
+  },
+  {
+   "wort": "maxima",
+   "n": 6
+  },
+  {
+   "wort": "meeräsche",
+   "n": 6
+  },
+  {
+   "wort": "meerforelle",
+   "n": 6
+  },
+  {
+   "wort": "milz",
+   "n": 6
+  },
+  {
+   "wort": "morchel",
+   "n": 6
+  },
+  {
+   "wort": "muskelfleisch",
+   "n": 6
+  },
+  {
+   "wort": "pasteurisiert",
+   "n": 6
+  },
+  {
+   "wort": "pepo",
+   "n": 6
+  },
+  {
+   "wort": "präserve",
+   "n": 6
+  },
+  {
+   "wort": "pumpkin",
+   "n": 6
+  },
+  {
+   "wort": "ricotta",
+   "n": 6
+  },
+  {
+   "wort": "rinderhackfleisch",
+   "n": 6
+  },
+  {
+   "wort": "romanesco",
+   "n": 6
+  },
+  {
+   "wort": "rotbarschfilet",
+   "n": 6
+  },
+  {
+   "wort": "sardelle",
+   "n": 6
+  },
+  {
+   "wort": "sardellen",
+   "n": 6
+  },
+  {
+   "wort": "schwäbische",
+   "n": 6
+  },
+  {
+   "wort": "shiitakepilz",
+   "n": 6
+  },
+  {
+   "wort": "tilsiter",
+   "n": 6
+  },
+  {
+   "wort": "ultrahocherhitzt",
+   "n": 6
+  },
+  {
+   "wort": "ungeschält",
+   "n": 6
+  },
+  {
+   "wort": "vanilleflammeri",
+   "n": 6
+  },
+  {
+   "wort": "vollkornhefeteig",
+   "n": 6
+  },
+  {
+   "wort": "vorderhesse",
+   "n": 6
+  },
+  {
+   "wort": "weizenvollkornknäckebrot",
+   "n": 6
+  },
+  {
+   "wort": "artischocke",
+   "n": 5
+  },
+  {
+   "wort": "aufschnitt",
+   "n": 5
+  },
+  {
+   "wort": "austernpilz",
+   "n": 5
+  },
+  {
+   "wort": "bambussprossen",
+   "n": 5
+  },
+  {
+   "wort": "blätterteigtaschen",
+   "n": 5
+  },
+  {
+   "wort": "dinkelvollkornbrötchen",
+   "n": 5
+  },
+  {
+   "wort": "dornhai",
+   "n": 5
+  },
+  {
+   "wort": "erdnüssen",
+   "n": 5
+  },
+  {
+   "wort": "gemüsecremesuppe",
+   "n": 5
+  },
+  {
+   "wort": "karamellsauce",
+   "n": 5
+  },
+  {
+   "wort": "kartoffeltaschen",
+   "n": 5
+  },
+  {
+   "wort": "kleie",
+   "n": 5
+  },
+  {
+   "wort": "kohlrüben",
+   "n": 5
+  },
+  {
+   "wort": "leipziger",
+   "n": 5
+  },
+  {
+   "wort": "likör",
+   "n": 5
+  },
+  {
+   "wort": "milchsuppe",
+   "n": 5
+  },
+  {
+   "wort": "mirabelle",
+   "n": 5
+  },
+  {
+   "wort": "müllerinart",
+   "n": 5
+  },
+  {
+   "wort": "pastete",
+   "n": 5
+  },
+  {
+   "wort": "perlzwiebel",
+   "n": 5
+  },
+  {
+   "wort": "poularde",
+   "n": 5
+  },
+  {
+   "wort": "roggenvollkornbrötchen",
+   "n": 5
+  },
+  {
+   "wort": "sahneflammeri",
+   "n": 5
+  },
+  {
+   "wort": "schabefleisch",
+   "n": 5
+  },
+  {
+   "wort": "schellfisch",
+   "n": 5
+  },
+  {
+   "wort": "schwartenzug",
+   "n": 5
+  },
+  {
+   "wort": "seezungenfilet",
+   "n": 5
+  },
+  {
+   "wort": "steckrüben",
+   "n": 5
+  },
+  {
+   "wort": "süßer",
+   "n": 5
+  },
+  {
+   "wort": "vanillecremeeis",
+   "n": 5
+  },
+  {
+   "wort": "vol",
+   "n": 5
+  },
+  {
+   "wort": "vollkornbrötchen",
+   "n": 5
+  },
+  {
+   "wort": "weizenvollkornbrötchen",
+   "n": 5
+  },
+  {
+   "wort": "ziegenmilch",
+   "n": 5
+  },
+  {
+   "wort": "aprikosenkompott",
+   "n": 4
+  },
+  {
+   "wort": "artischocken",
+   "n": 4
+  },
+  {
+   "wort": "auberginenscheiben",
+   "n": 4
+  },
+  {
+   "wort": "bachsaibling",
+   "n": 4
+  },
+  {
+   "wort": "backschrot",
+   "n": 4
+  },
+  {
+   "wort": "bleu",
+   "n": 4
+  },
+  {
+   "wort": "böhmische",
+   "n": 4
+  },
+  {
+   "wort": "choi",
+   "n": 4
+  },
+  {
+   "wort": "cordon",
+   "n": 4
+  },
+  {
+   "wort": "corned",
+   "n": 4
+  },
+  {
+   "wort": "edamer",
+   "n": 4
+  },
+  {
+   "wort": "eihaltig",
+   "n": 4
+  },
+  {
+   "wort": "einkorn",
+   "n": 4
+  },
+  {
+   "wort": "emmer",
+   "n": 4
+  },
+  {
+   "wort": "erdbeer",
+   "n": 4
+  },
+  {
+   "wort": "erdnuss",
+   "n": 4
+  },
+  {
+   "wort": "fasan",
+   "n": 4
+  },
+  {
+   "wort": "geflügelmortadella",
+   "n": 4
+  },
+  {
+   "wort": "geschwenkt",
+   "n": 4
+  },
+  {
+   "wort": "gouda",
+   "n": 4
+  },
+  {
+   "wort": "granola",
+   "n": 4
+  },
+  {
+   "wort": "grießsuppe",
+   "n": 4
+  },
+  {
+   "wort": "grünen",
+   "n": 4
+  },
+  {
+   "wort": "hollandaise",
+   "n": 4
+  },
+  {
+   "wort": "iii",
+   "n": 4
+  },
+  {
+   "wort": "intermuskulär",
+   "n": 4
+  },
+  {
+   "wort": "jodiert",
+   "n": 4
+  },
+  {
+   "wort": "kalbsroulade",
+   "n": 4
+  },
+  {
+   "wort": "kartoffelrösti",
+   "n": 4
+  },
+  {
+   "wort": "kefir",
+   "n": 4
+  },
+  {
+   "wort": "knuspermüsli",
+   "n": 4
+  },
+  {
+   "wort": "kokos",
+   "n": 4
+  },
+  {
+   "wort": "kompott",
+   "n": 4
+  },
+  {
+   "wort": "lauchcremesuppe",
+   "n": 4
+  },
+  {
+   "wort": "leberpastete",
+   "n": 4
+  },
+  {
+   "wort": "leng",
+   "n": 4
+  },
+  {
+   "wort": "magermilchpulverzusatz",
+   "n": 4
+  },
+  {
+   "wort": "mehrfruchtnektar",
+   "n": 4
+  },
+  {
+   "wort": "mehrkornschrot",
+   "n": 4
+  },
+  {
+   "wort": "mortadella",
+   "n": 4
+  },
+  {
+   "wort": "muffins",
+   "n": 4
+  },
+  {
+   "wort": "mürbchen",
+   "n": 4
+  },
+  {
+   "wort": "nearwater",
+   "n": 4
+  },
+  {
+   "wort": "parboiled",
+   "n": 4
+  },
+  {
+   "wort": "perlhuhn",
+   "n": 4
+  },
+  {
+   "wort": "pesto",
+   "n": 4
+  },
+  {
+   "wort": "pfirsichkompott",
+   "n": 4
+  },
+  {
+   "wort": "pirogge",
+   "n": 4
+  },
+  {
+   "wort": "rebhuhn",
+   "n": 4
+  },
+  {
+   "wort": "restbug",
+   "n": 4
+  },
+  {
+   "wort": "rhabarberkompott",
+   "n": 4
+  },
+  {
+   "wort": "rinderfilet",
+   "n": 4
+  },
+  {
+   "wort": "rippe",
+   "n": 4
+  },
+  {
+   "wort": "risotto",
+   "n": 4
+  },
+  {
+   "wort": "rohkost",
+   "n": 4
+  },
+  {
+   "wort": "rosewein",
+   "n": 4
+  },
+  {
+   "wort": "sauerteigbrot",
+   "n": 4
+  },
+  {
+   "wort": "schweineroulade",
+   "n": 4
+  },
+  {
+   "wort": "schweineschnitzel",
+   "n": 4
+  },
+  {
+   "wort": "seeteufel",
+   "n": 4
+  },
+  {
+   "wort": "sherry",
+   "n": 4
+  },
+  {
+   "wort": "strudelteig",
+   "n": 4
+  },
+  {
+   "wort": "sushi",
+   "n": 4
+  },
+  {
+   "wort": "süßkirschkompott",
+   "n": 4
+  },
+  {
+   "wort": "tiroler",
+   "n": 4
+  },
+  {
+   "wort": "unpoliert",
+   "n": 4
+  },
+  {
+   "wort": "vanillebuttercreme",
+   "n": 4
+  },
+  {
+   "wort": "vanillesahneeis",
+   "n": 4
+  },
+  {
+   "wort": "vegetarische",
+   "n": 4
+  },
+  {
+   "wort": "vitamin",
+   "n": 4
+  },
+  {
+   "wort": "vollkorneierteigwaren",
+   "n": 4
+  },
+  {
+   "wort": "vollkornteigwaren",
+   "n": 4
+  },
+  {
+   "wort": "waffelkekse",
+   "n": 4
+  },
+  {
+   "wort": "wasserbiskuitboden",
+   "n": 4
+  },
+  {
+   "wort": "westfälischer",
+   "n": 4
+  },
+  {
+   "wort": "yamswurzel",
+   "n": 4
+  },
+  {
+   "wort": "augenbohne",
+   "n": 3
+  },
+  {
+   "wort": "beerenmischung",
+   "n": 3
+  },
+  {
+   "wort": "bircher",
+   "n": 3
+  },
+  {
+   "wort": "bolognese",
+   "n": 3
+  },
+  {
+   "wort": "brosme",
+   "n": 3
+  },
+  {
+   "wort": "brühreis",
+   "n": 3
+  },
+  {
+   "wort": "campari",
+   "n": 3
+  },
+  {
+   "wort": "candycreme",
+   "n": 3
+  },
+  {
+   "wort": "carne",
+   "n": 3
+  },
+  {
+   "wort": "chayote",
+   "n": 3
+  },
+  {
+   "wort": "chester",
+   "n": 3
+  },
+  {
+   "wort": "cookies",
+   "n": 3
+  },
+  {
+   "wort": "dinkelvollkornknäckebrot",
+   "n": 3
+  },
+  {
+   "wort": "dragiert",
+   "n": 3
+  },
+  {
+   "wort": "entsehnt",
+   "n": 3
+  },
+  {
+   "wort": "erdbeerkompott",
+   "n": 3
+  },
+  {
+   "wort": "frischkornbrei",
+   "n": 3
+  },
+  {
+   "wort": "fruchtkompott",
+   "n": 3
+  },
+  {
+   "wort": "gänseleberpastete",
+   "n": 3
+  },
+  {
+   "wort": "gebrannt",
+   "n": 3
+  },
+  {
+   "wort": "gefüllter",
+   "n": 3
+  },
+  {
+   "wort": "gorgonzolasauce",
+   "n": 3
+  },
+  {
+   "wort": "göttinger",
+   "n": 3
+  },
+  {
+   "wort": "grießauflauf",
+   "n": 3
+  },
+  {
+   "wort": "haferflockensuppe",
+   "n": 3
+  },
+  {
+   "wort": "hähnchenfleisch",
+   "n": 3
+  },
+  {
+   "wort": "hallimasch",
+   "n": 3
+  },
+  {
+   "wort": "hefeblätterteig",
+   "n": 3
+  },
+  {
+   "wort": "himbeeren",
+   "n": 3
+  },
+  {
+   "wort": "jodsalz",
+   "n": 3
+  },
+  {
+   "wort": "johannisbeerkompott",
+   "n": 3
+  },
+  {
+   "wort": "kalbfleischpastete",
+   "n": 3
+  },
+  {
+   "wort": "kalbsleberwurst",
+   "n": 3
+  },
+  {
+   "wort": "kandiert",
+   "n": 3
+  },
+  {
+   "wort": "karamellcreme",
+   "n": 3
+  },
+  {
+   "wort": "käsekrainer",
+   "n": 3
+  },
+  {
+   "wort": "kidneybohne",
+   "n": 3
+  },
+  {
+   "wort": "klopse",
+   "n": 3
+  },
+  {
+   "wort": "kokoscreme",
+   "n": 3
+  },
+  {
+   "wort": "königsberger",
+   "n": 3
+  },
+  {
+   "wort": "kranz",
+   "n": 3
+  },
+  {
+   "wort": "krokant",
+   "n": 3
+  },
+  {
+   "wort": "leberklößchen",
+   "n": 3
+  },
+  {
+   "wort": "luftgetrocknet",
+   "n": 3
+  },
+  {
+   "wort": "lumb",
+   "n": 3
+  },
+  {
+   "wort": "macadamianuss",
+   "n": 3
+  },
+  {
+   "wort": "maisgrieß",
+   "n": 3
+  },
+  {
+   "wort": "mango",
+   "n": 3
+  },
+  {
+   "wort": "markklößchen",
+   "n": 3
+  },
+  {
+   "wort": "marmorkuchen",
+   "n": 3
+  },
+  {
+   "wort": "matjeshering",
+   "n": 3
+  },
+  {
+   "wort": "meeresfrüchtemischung",
+   "n": 3
+  },
+  {
+   "wort": "milchkaltschale",
+   "n": 3
+  },
+  {
+   "wort": "noisette",
+   "n": 3
+  },
+  {
+   "wort": "ochsenschwanzsuppe",
+   "n": 3
+  },
+  {
+   "wort": "pangasius",
+   "n": 3
+  },
+  {
+   "wort": "pelamide",
+   "n": 3
+  },
+  {
+   "wort": "pfälzer",
+   "n": 3
+  },
+  {
+   "wort": "pfefferminzcreme",
+   "n": 3
+  },
+  {
+   "wort": "pflaumenkompott",
+   "n": 3
+  },
+  {
+   "wort": "pilaw",
+   "n": 3
+  },
+  {
+   "wort": "pisi",
+   "n": 3
+  },
+  {
+   "wort": "pistazie",
+   "n": 3
+  },
+  {
+   "wort": "pizzateig",
+   "n": 3
+  },
+  {
+   "wort": "polnische",
+   "n": 3
+  },
+  {
+   "wort": "provenzalische",
+   "n": 3
+  },
+  {
+   "wort": "quarkblätterteig",
+   "n": 3
+  },
+  {
+   "wort": "quarkklöße",
+   "n": 3
+  },
+  {
+   "wort": "quitte",
+   "n": 3
+  },
+  {
+   "wort": "radieschen",
+   "n": 3
+  },
+  {
+   "wort": "rehrücken",
+   "n": 3
+  },
+  {
+   "wort": "reiswaffeln",
+   "n": 3
+  },
+  {
+   "wort": "reizker",
+   "n": 3
+  },
+  {
+   "wort": "rinderfiletsteak",
+   "n": 3
+  },
+  {
+   "wort": "rinderherz",
+   "n": 3
+  },
+  {
+   "wort": "rinderleber",
+   "n": 3
+  },
+  {
+   "wort": "rinderragout",
+   "n": 3
+  },
+  {
+   "wort": "rindersteak",
+   "n": 3
+  },
+  {
+   "wort": "risi",
+   "n": 3
+  },
+  {
+   "wort": "rohwurst",
+   "n": 3
+  },
+  {
+   "wort": "romadur",
+   "n": 3
+  },
+  {
+   "wort": "roquefortsauce",
+   "n": 3
+  },
+  {
+   "wort": "rotbarschauflauf",
+   "n": 3
+  },
+  {
+   "wort": "rotkappe",
+   "n": 3
+  },
+  {
+   "wort": "rouladenherstellung",
+   "n": 3
+  },
+  {
+   "wort": "schaschlik",
+   "n": 3
+  },
+  {
+   "wort": "schildmakrele",
+   "n": 3
+  },
+  {
+   "wort": "schlankwels",
+   "n": 3
+  },
+  {
+   "wort": "schwäbisch",
+   "n": 3
+  },
+  {
+   "wort": "schwarzwälder",
+   "n": 3
+  },
+  {
+   "wort": "schweinefilet",
+   "n": 3
+  },
+  {
+   "wort": "schweinekotelett",
+   "n": 3
+  },
+  {
+   "wort": "semmelbröseln",
+   "n": 3
+  },
+  {
+   "wort": "souffle",
+   "n": 3
+  },
+  {
+   "wort": "spinatfüllung",
+   "n": 3
+  },
+  {
+   "wort": "steinbuscher",
+   "n": 3
+  },
+  {
+   "wort": "tintenfischringe",
+   "n": 3
+  },
+  {
+   "wort": "tiramisu",
+   "n": 3
+  },
+  {
+   "wort": "trinkjoghurt",
+   "n": 3
+  },
+  {
+   "wort": "trüffelfüllung",
+   "n": 3
+  },
+  {
+   "wort": "türkische",
+   "n": 3
+  },
+  {
+   "wort": "ungesalzen",
+   "n": 3
+  },
+  {
+   "wort": "verde",
+   "n": 3
+  },
+  {
+   "wort": "wachtelei",
+   "n": 3
+  },
+  {
+   "wort": "zwetschgenkompott",
+   "n": 3
+  },
+  {
+   "wort": "ajvar",
+   "n": 2
+  },
+  {
+   "wort": "alkoholhaltiger",
+   "n": 2
+  },
+  {
+   "wort": "antipasti",
+   "n": 2
+  },
+  {
+   "wort": "apfelkaltschale",
+   "n": 2
+  },
+  {
+   "wort": "äpfeln",
+   "n": 2
+  },
+  {
+   "wort": "apfelnektar",
+   "n": 2
+  },
+  {
+   "wort": "apfelringe",
+   "n": 2
+  },
+  {
+   "wort": "appenzeller",
+   "n": 2
+  },
+  {
+   "wort": "arrak",
+   "n": 2
+  },
+  {
+   "wort": "artischockenböden",
+   "n": 2
+  },
+  {
+   "wort": "bananenkompott",
+   "n": 2
+  },
+  {
+   "wort": "bechamel",
+   "n": 2
+  },
+  {
+   "wort": "benner",
+   "n": 2
+  },
+  {
+   "wort": "birnenkompott",
+   "n": 2
+  },
+  {
+   "wort": "birnenmus",
+   "n": 2
+  },
+  {
+   "wort": "bitterlikör",
+   "n": 2
+  },
+  {
+   "wort": "blattspinat",
+   "n": 2
+  },
+  {
+   "wort": "bohnensuppe",
+   "n": 2
+  },
+  {
+   "wort": "bordelaise",
+   "n": 2
+  },
+  {
+   "wort": "broccolicremesuppe",
+   "n": 2
+  },
+  {
+   "wort": "brotteig",
+   "n": 2
+  },
+  {
+   "wort": "burgunder",
+   "n": 2
+  },
+  {
+   "wort": "burrito",
+   "n": 2
+  },
+  {
+   "wort": "butterbohne",
+   "n": 2
+  },
+  {
+   "wort": "buttermilchdrink",
+   "n": 2
+  },
+  {
+   "wort": "canacheüberzug",
+   "n": 2
+  },
+  {
+   "wort": "carbonara",
+   "n": 2
+  },
+  {
+   "wort": "champignonpastete",
+   "n": 2
+  },
+  {
+   "wort": "charlotte",
+   "n": 2
+  },
+  {
+   "wort": "cheddar",
+   "n": 2
+  },
+  {
+   "wort": "cheeseburger",
+   "n": 2
+  },
+  {
+   "wort": "chicoreesalat",
+   "n": 2
+  },
+  {
+   "wort": "chocolat",
+   "n": 2
+  },
+  {
+   "wort": "con",
+   "n": 2
+  },
+  {
+   "wort": "crispies",
+   "n": 2
+  },
+  {
+   "wort": "cyclamat",
+   "n": 2
+  },
+  {
+   "wort": "dattel",
+   "n": 2
+  },
+  {
+   "wort": "dinkeleierteigwaren",
+   "n": 2
+  },
+  {
+   "wort": "dinkelvollkorneierteigwaren",
+   "n": 2
+  },
+  {
+   "wort": "dinkelvollkornteigwaren",
+   "n": 2
+  },
+  {
+   "wort": "dry",
+   "n": 2
+  },
+  {
+   "wort": "dünner",
+   "n": 2
+  },
+  {
+   "wort": "eierfrikassee",
+   "n": 2
+  },
+  {
+   "wort": "eiermilch",
+   "n": 2
+  },
+  {
+   "wort": "eingestreute",
+   "n": 2
+  },
+  {
+   "wort": "eiweißarm",
+   "n": 2
+  },
+  {
+   "wort": "endiviensalat",
+   "n": 2
+  },
+  {
+   "wort": "entenei",
+   "n": 2
+  },
+  {
+   "wort": "entölt",
+   "n": 2
+  },
+  {
+   "wort": "erbsenpüree",
+   "n": 2
+  },
+  {
+   "wort": "erdbeercreme",
+   "n": 2
+  },
+  {
+   "wort": "erdbeersahnecreme",
+   "n": 2
+  },
+  {
+   "wort": "erdbeersauce",
+   "n": 2
+  },
+  {
+   "wort": "erwärmt",
+   "n": 2
+  },
+  {
+   "wort": "essigsud",
+   "n": 2
+  },
+  {
+   "wort": "falafel",
+   "n": 2
+  },
+  {
+   "wort": "fischklößchen",
+   "n": 2
+  },
+  {
+   "wort": "fluorid",
+   "n": 2
+  },
+  {
+   "wort": "forno",
+   "n": 2
+  },
+  {
+   "wort": "fraiche",
+   "n": 2
+  },
+  {
+   "wort": "fränkische",
+   "n": 2
+  },
+  {
+   "wort": "frittaten",
+   "n": 2
+  },
+  {
+   "wort": "früchtetee",
+   "n": 2
+  },
+  {
+   "wort": "fruchtnektar",
+   "n": 2
+  },
+  {
+   "wort": "gänseei",
+   "n": 2
+  },
+  {
+   "wort": "gänseleberwurst",
+   "n": 2
+  },
+  {
+   "wort": "gebrüht",
+   "n": 2
+  },
+  {
+   "wort": "gemüseartischocke",
+   "n": 2
+  },
+  {
+   "wort": "gemüsepichelsteiner",
+   "n": 2
+  },
+  {
+   "wort": "getränkepulver",
+   "n": 2
+  },
+  {
+   "wort": "getränkt",
+   "n": 2
+  },
+  {
+   "wort": "getrüffelt",
+   "n": 2
+  },
+  {
+   "wort": "goreng",
+   "n": 2
+  },
+  {
+   "wort": "grießschnitten",
+   "n": 2
+  },
+  {
+   "wort": "grünkernbratlinge",
+   "n": 2
+  },
+  {
+   "wort": "guave",
+   "n": 2
+  },
+  {
+   "wort": "halbfettstufe",
+   "n": 2
+  },
+  {
+   "wort": "hartkaramelle",
+   "n": 2
+  },
+  {
+   "wort": "haselnusscreme",
+   "n": 2
+  },
+  {
+   "wort": "haselnussmakronen",
+   "n": 2
+  },
+  {
+   "wort": "haselnusspastete",
+   "n": 2
+  },
+  {
+   "wort": "heidelbeeren",
+   "n": 2
+  },
+  {
+   "wort": "heidelbeerkompott",
+   "n": 2
+  },
+  {
+   "wort": "heilbuttfilet",
+   "n": 2
+  },
+  {
+   "wort": "heißer",
+   "n": 2
+  },
+  {
+   "wort": "himbeerkompott",
+   "n": 2
+  },
+  {
+   "wort": "himbeersahnecreme",
+   "n": 2
+  },
+  {
+   "wort": "himbeersauce",
+   "n": 2
+  },
+  {
+   "wort": "hühnerfrikassee",
+   "n": 2
+  },
+  {
+   "wort": "instantkaffeepulver",
+   "n": 2
+  },
+  {
+   "wort": "irish",
+   "n": 2
+  },
+  {
+   "wort": "joghurteis",
+   "n": 2
+  },
+  {
+   "wort": "johannisbeernektar",
+   "n": 2
+  },
+  {
+   "wort": "johannisbeersaft",
+   "n": 2
+  },
+  {
+   "wort": "kaffeelikör",
+   "n": 2
+  },
+  {
+   "wort": "kalbfleischsülze",
+   "n": 2
+  },
+  {
+   "wort": "kalbskäsebrät",
+   "n": 2
+  },
+  {
+   "wort": "karamellflammeri",
+   "n": 2
+  },
+  {
+   "wort": "karamellpudding",
+   "n": 2
+  },
+  {
+   "wort": "kardone",
+   "n": 2
+  },
+  {
+   "wort": "kartoffelsouffle",
+   "n": 2
+  },
+  {
+   "wort": "klöße",
+   "n": 2
+  },
+  {
+   "wort": "koffeinhaltig",
+   "n": 2
+  },
+  {
+   "wort": "kokosmakronen",
+   "n": 2
+  },
+  {
+   "wort": "kokosmilch",
+   "n": 2
+  },
+  {
+   "wort": "kondensmagermilch",
+   "n": 2
+  },
+  {
+   "wort": "körniger",
+   "n": 2
+  },
+  {
+   "wort": "kutteln",
+   "n": 2
+  },
+  {
+   "wort": "limabohne",
+   "n": 2
+  },
+  {
+   "wort": "limettensaft",
+   "n": 2
+  },
+  {
+   "wort": "linsenbratlinge",
+   "n": 2
+  },
+  {
+   "wort": "löffelbiskuits",
+   "n": 2
+  },
+  {
+   "wort": "magerfleischanteil",
+   "n": 2
+  },
+  {
+   "wort": "mandarinensahnecreme",
+   "n": 2
+  },
+  {
+   "wort": "mandelbiskuitboden",
+   "n": 2
+  },
+  {
+   "wort": "mandelkrokant",
+   "n": 2
+  },
+  {
+   "wort": "mandelpesto",
+   "n": 2
+  },
+  {
+   "wort": "matjes",
+   "n": 2
+  },
+  {
+   "wort": "matjesfilet",
+   "n": 2
+  },
+  {
+   "wort": "meeresfrüchte",
+   "n": 2
+  },
+  {
+   "wort": "mehlklöße",
+   "n": 2
+  },
+  {
+   "wort": "mehrfruchtsaftschorle",
+   "n": 2
+  },
+  {
+   "wort": "mehrkorntoastbrot",
+   "n": 2
+  },
+  {
+   "wort": "mehrkornvollkornknäckebrot",
+   "n": 2
+  },
+  {
+   "wort": "milchbackteig",
+   "n": 2
+  },
+  {
+   "wort": "milchcreme",
+   "n": 2
+  },
+  {
+   "wort": "milchsauer",
+   "n": 2
+  },
+  {
+   "wort": "mohnstollen",
+   "n": 2
+  },
+  {
+   "wort": "mokkabuttercreme",
+   "n": 2
+  },
+  {
+   "wort": "mondbohne",
+   "n": 2
+  },
+  {
+   "wort": "multivitaminnektar",
+   "n": 2
+  },
+  {
+   "wort": "multivitaminsaft",
+   "n": 2
+  },
+  {
+   "wort": "mungbohnenkeimlinge",
+   "n": 2
+  },
+  {
+   "wort": "mungbohnensprossen",
+   "n": 2
+  },
+  {
+   "wort": "nektarine",
+   "n": 2
+  },
+  {
+   "wort": "nektarinenkompott",
+   "n": 2
+  },
+  {
+   "wort": "nitritpökelsalz",
+   "n": 2
+  },
+  {
+   "wort": "nusskranz",
+   "n": 2
+  },
+  {
+   "wort": "omelette",
+   "n": 2
+  },
+  {
+   "wort": "orangennektar",
+   "n": 2
+  },
+  {
+   "wort": "palmfett",
+   "n": 2
+  },
+  {
+   "wort": "pekannuss",
+   "n": 2
+  },
+  {
+   "wort": "pie",
+   "n": 2
+  },
+  {
+   "wort": "pilzcremesuppe",
+   "n": 2
+  },
+  {
+   "wort": "plockwurst",
+   "n": 2
+  },
+  {
+   "wort": "pork",
+   "n": 2
+  },
+  {
+   "wort": "portulak",
+   "n": 2
+  },
+  {
+   "wort": "probiotisch",
+   "n": 2
+  },
+  {
+   "wort": "püriert",
+   "n": 2
+  },
+  {
+   "wort": "putenei",
+   "n": 2
+  },
+  {
+   "wort": "quarkkeulchen",
+   "n": 2
+  },
+  {
+   "wort": "quattro",
+   "n": 2
+  },
+  {
+   "wort": "quittenkompott",
+   "n": 2
+  },
+  {
+   "wort": "rhabarberkaltschale",
+   "n": 2
+  },
+  {
+   "wort": "rinderbraten",
+   "n": 2
+  },
+  {
+   "wort": "rinderherzragout",
+   "n": 2
+  },
+  {
+   "wort": "rinderkutteln",
+   "n": 2
+  },
+  {
+   "wort": "rinderlebergeschnetzeltes",
+   "n": 2
+  },
+  {
+   "wort": "rinderroulade",
+   "n": 2
+  },
+  {
+   "wort": "rinderrumpsteak",
+   "n": 2
+  },
+  {
+   "wort": "rinderzunge",
+   "n": 2
+  },
+  {
+   "wort": "rohmasse",
+   "n": 2
+  },
+  {
+   "wort": "rohschinken",
+   "n": 2
+  },
+  {
+   "wort": "roquefort",
+   "n": 2
+  },
+  {
+   "wort": "rosso",
+   "n": 2
+  },
+  {
+   "wort": "saccharin",
+   "n": 2
+  },
+  {
+   "wort": "sahnekefir",
+   "n": 2
+  },
+  {
+   "wort": "salsa",
+   "n": 2
+  },
+  {
+   "wort": "sauerkirschkompott",
+   "n": 2
+  },
+  {
+   "wort": "sauerkirschnektar",
+   "n": 2
+  },
+  {
+   "wort": "saumagen",
+   "n": 2
+  },
+  {
+   "wort": "savarin",
+   "n": 2
+  },
+  {
+   "wort": "schaumomelett",
+   "n": 2
+  },
+  {
+   "wort": "schinkenplockwurst",
+   "n": 2
+  },
+  {
+   "wort": "schmorgurken",
+   "n": 2
+  },
+  {
+   "wort": "schnittlauchquark",
+   "n": 2
+  },
+  {
+   "wort": "schokobuttercreme",
+   "n": 2
+  },
+  {
+   "wort": "schokoladenflammeri",
+   "n": 2
+  },
+  {
+   "wort": "schokosahnetorte",
+   "n": 2
+  },
+  {
+   "wort": "schweinekamm",
+   "n": 2
+  },
+  {
+   "wort": "schweineleber",
+   "n": 2
+  },
+  {
+   "wort": "schweinemedaillon",
+   "n": 2
+  },
+  {
+   "wort": "schweineragout",
+   "n": 2
+  },
+  {
+   "wort": "schweinerücken",
+   "n": 2
+  },
+  {
+   "wort": "schweineschwarten",
+   "n": 2
+  },
+  {
+   "wort": "schweinesteak",
+   "n": 2
+  },
+  {
+   "wort": "seidentofu",
+   "n": 2
+  },
+  {
+   "wort": "servela",
+   "n": 2
+  },
+  {
+   "wort": "sojabohnenkeimlinge",
+   "n": 2
+  },
+  {
+   "wort": "sojabohnensprossen",
+   "n": 2
+  },
+  {
+   "wort": "sojaschnetzel",
+   "n": 2
+  },
+  {
+   "wort": "stachelbeerkompott",
+   "n": 2
+  },
+  {
+   "wort": "streichmettwurst",
+   "n": 2
+  },
+  {
+   "wort": "süßkartoffeln",
+   "n": 2
+  },
+  {
+   "wort": "süßstoffe",
+   "n": 2
+  },
+  {
+   "wort": "tartufo",
+   "n": 2
+  },
+  {
+   "wort": "teewurst",
+   "n": 2
+  },
+  {
+   "wort": "tequila",
+   "n": 2
+  },
+  {
+   "wort": "texturiert",
+   "n": 2
+  },
+  {
+   "wort": "tonic",
+   "n": 2
+  },
+  {
+   "wort": "tortellini",
+   "n": 2
+  },
+  {
+   "wort": "tortelloni",
+   "n": 2
+  },
+  {
+   "wort": "touristenwurst",
+   "n": 2
+  },
+  {
+   "wort": "trappistenkäse",
+   "n": 2
+  },
+  {
+   "wort": "tricolore",
+   "n": 2
+  },
+  {
+   "wort": "trüffelleberwurst",
+   "n": 2
+  },
+  {
+   "wort": "vanilleeis",
+   "n": 2
+  },
+  {
+   "wort": "vollkornblätterteig",
+   "n": 2
+  },
+  {
+   "wort": "vollkorngrieß",
+   "n": 2
+  },
+  {
+   "wort": "vollkornpizza",
+   "n": 2
+  },
+  {
+   "wort": "vollkornplunderteig",
+   "n": 2
+  },
+  {
+   "wort": "vollkornweizenschrot",
+   "n": 2
+  },
+  {
+   "wort": "vollkornzwieback",
+   "n": 2
+  },
+  {
+   "wort": "waffel",
+   "n": 2
+  },
+  {
+   "wort": "waffeln",
+   "n": 2
+  },
+  {
+   "wort": "weichkaramelle",
+   "n": 2
+  },
+  {
+   "wort": "weizenknusperbrot",
+   "n": 2
+  },
+  {
+   "wort": "weizenmischtoastbrot",
+   "n": 2
+  },
+  {
+   "wort": "weizenvollkorntoastbrot",
+   "n": 2
+  },
+  {
+   "wort": "westfälische",
+   "n": 2
+  },
+  {
+   "wort": "wilstermarschkäse",
+   "n": 2
+  },
+  {
+   "wort": "wurzelsud",
+   "n": 2
+  },
+  {
+   "wort": "zerkleinert",
+   "n": 2
+  },
+  {
+   "wort": "zitronensahnecreme",
+   "n": 2
+  },
+  {
+   "wort": "zuckerart",
+   "n": 2
+  },
+  {
+   "wort": "zwieback",
+   "n": 2
+  },
+  {
+   "wort": "aalrauchmettwurst",
+   "n": 1
+  },
+  {
+   "wort": "aalsuppe",
+   "n": 1
+  },
+  {
+   "wort": "ace",
+   "n": 1
+  },
+  {
+   "wort": "acerola",
+   "n": 1
+  },
+  {
+   "wort": "acerolasaft",
+   "n": 1
+  },
+  {
+   "wort": "agavenbrand",
+   "n": 1
+  },
+  {
+   "wort": "aglio",
+   "n": 1
+  },
+  {
+   "wort": "alfalfakeimlinge",
+   "n": 1
+  },
+  {
+   "wort": "alfalfasprossen",
+   "n": 1
+  },
+  {
+   "wort": "alkopops",
+   "n": 1
+  },
+  {
+   "wort": "alla",
+   "n": 1
+  },
+  {
+   "wort": "allgäuer",
+   "n": 1
+  },
+  {
+   "wort": "altbierbowle",
+   "n": 1
+  },
+  {
+   "wort": "ananasbowle",
+   "n": 1
+  },
+  {
+   "wort": "ananaskompott",
+   "n": 1
+  },
+  {
+   "wort": "ananasringe",
+   "n": 1
+  },
+  {
+   "wort": "ananassaftschorle",
+   "n": 1
+  },
+  {
+   "wort": "and",
+   "n": 1
+  },
+  {
+   "wort": "anspacher",
+   "n": 1
+  },
+  {
+   "wort": "apfeldicksaft",
+   "n": 1
+  },
+  {
+   "wort": "apfelklöße",
+   "n": 1
+  },
+  {
+   "wort": "apfelsahnemeerrettich",
+   "n": 1
+  },
+  {
+   "wort": "apfeltarte",
+   "n": 1
+  },
+  {
+   "wort": "apfeltaschen",
+   "n": 1
+  },
+  {
+   "wort": "apfelwaffeln",
+   "n": 1
+  },
+  {
+   "wort": "apple",
+   "n": 1
+  },
+  {
+   "wort": "aprikosenkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "aprikotur",
+   "n": 1
+  },
+  {
+   "wort": "aquavit",
+   "n": 1
+  },
+  {
+   "wort": "artischockensalat",
+   "n": 1
+  },
+  {
+   "wort": "artischockenviertel",
+   "n": 1
+  },
+  {
+   "wort": "asia",
+   "n": 1
+  },
+  {
+   "wort": "asiatischem",
+   "n": 1
+  },
+  {
+   "wort": "aufgebrüht",
+   "n": 1
+  },
+  {
+   "wort": "aufgezogen",
+   "n": 1
+  },
+  {
+   "wort": "avocado",
+   "n": 1
+  },
+  {
+   "wort": "avocadocreme",
+   "n": 1
+  },
+  {
+   "wort": "avocadocremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "ayran",
+   "n": 1
+  },
+  {
+   "wort": "backerbsen",
+   "n": 1
+  },
+  {
+   "wort": "bäckerin",
+   "n": 1
+  },
+  {
+   "wort": "backkartoffeln",
+   "n": 1
+  },
+  {
+   "wort": "backmargarine",
+   "n": 1
+  },
+  {
+   "wort": "backoblaten",
+   "n": 1
+  },
+  {
+   "wort": "backobstkompott",
+   "n": 1
+  },
+  {
+   "wort": "backpflaumen",
+   "n": 1
+  },
+  {
+   "wort": "backpulver",
+   "n": 1
+  },
+  {
+   "wort": "bacon",
+   "n": 1
+  },
+  {
+   "wort": "badische",
+   "n": 1
+  },
+  {
+   "wort": "baklava",
+   "n": 1
+  },
+  {
+   "wort": "bami",
+   "n": 1
+  },
+  {
+   "wort": "bananenmilch",
+   "n": 1
+  },
+  {
+   "wort": "bananenmus",
+   "n": 1
+  },
+  {
+   "wort": "bananennektar",
+   "n": 1
+  },
+  {
+   "wort": "bananennektarschorle",
+   "n": 1
+  },
+  {
+   "wort": "basler",
+   "n": 1
+  },
+  {
+   "wort": "bauernleberwurst",
+   "n": 1
+  },
+  {
+   "wort": "bauernwürstle",
+   "n": 1
+  },
+  {
+   "wort": "baumkuchenspitzen",
+   "n": 1
+  },
+  {
+   "wort": "beach",
+   "n": 1
+  },
+  {
+   "wort": "bearnaise",
+   "n": 1
+  },
+  {
+   "wort": "bearner",
+   "n": 1
+  },
+  {
+   "wort": "bechamelkartoffeln",
+   "n": 1
+  },
+  {
+   "wort": "beerenauslese",
+   "n": 1
+  },
+  {
+   "wort": "bel",
+   "n": 1
+  },
+  {
+   "wort": "beträufelt",
+   "n": 1
+  },
+  {
+   "wort": "bierschinkenpastete",
+   "n": 1
+  },
+  {
+   "wort": "bierteigmantel",
+   "n": 1
+  },
+  {
+   "wort": "bigosch",
+   "n": 1
+  },
+  {
+   "wort": "birnendicksaft",
+   "n": 1
+  },
+  {
+   "wort": "birnensaftschorle",
+   "n": 1
+  },
+  {
+   "wort": "bismarck",
+   "n": 1
+  },
+  {
+   "wort": "bismarckeiche",
+   "n": 1
+  },
+  {
+   "wort": "bismarckhering",
+   "n": 1
+  },
+  {
+   "wort": "blanchiert",
+   "n": 1
+  },
+  {
+   "wort": "blanchiertem",
+   "n": 1
+  },
+  {
+   "wort": "blanchierter",
+   "n": 1
+  },
+  {
+   "wort": "blätterkrokant",
+   "n": 1
+  },
+  {
+   "wort": "bloody",
+   "n": 1
+  },
+  {
+   "wort": "blumenkohlcremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "boeuf",
+   "n": 1
+  },
+  {
+   "wort": "bohnengulasch",
+   "n": 1
+  },
+  {
+   "wort": "bohnenpüree",
+   "n": 1
+  },
+  {
+   "wort": "bohnensalat",
+   "n": 1
+  },
+  {
+   "wort": "bologna",
+   "n": 1
+  },
+  {
+   "wort": "borschtsch",
+   "n": 1
+  },
+  {
+   "wort": "bouillabaisse",
+   "n": 1
+  },
+  {
+   "wort": "bowle",
+   "n": 1
+  },
+  {
+   "wort": "boysenbeere",
+   "n": 1
+  },
+  {
+   "wort": "brandy",
+   "n": 1
+  },
+  {
+   "wort": "brätklößchen",
+   "n": 1
+  },
+  {
+   "wort": "britisches",
+   "n": 1
+  },
+  {
+   "wort": "broccolipüree",
+   "n": 1
+  },
+  {
+   "wort": "brombeerkompott",
+   "n": 1
+  },
+  {
+   "wort": "brombeersaft",
+   "n": 1
+  },
+  {
+   "wort": "brötchenscheiben",
+   "n": 1
+  },
+  {
+   "wort": "brownies",
+   "n": 1
+  },
+  {
+   "wort": "brühkartoffeln",
+   "n": 1
+  },
+  {
+   "wort": "brühwürstchen",
+   "n": 1
+  },
+  {
+   "wort": "brulee",
+   "n": 1
+  },
+  {
+   "wort": "buchteln",
+   "n": 1
+  },
+  {
+   "wort": "budapester",
+   "n": 1
+  },
+  {
+   "wort": "bündner",
+   "n": 1
+  },
+  {
+   "wort": "butterbröseln",
+   "n": 1
+  },
+  {
+   "wort": "butterflöckchen",
+   "n": 1
+  },
+  {
+   "wort": "buttermilchdessert",
+   "n": 1
+  },
+  {
+   "wort": "buttermilchgelee",
+   "n": 1
+  },
+  {
+   "wort": "buttermilchkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "buttermilchpulver",
+   "n": 1
+  },
+  {
+   "wort": "buttermilchsulze",
+   "n": 1
+  },
+  {
+   "wort": "buttermilchsuppe",
+   "n": 1
+  },
+  {
+   "wort": "butterzwieback",
+   "n": 1
+  },
+  {
+   "wort": "cachaca",
+   "n": 1
+  },
+  {
+   "wort": "caipirinha",
+   "n": 1
+  },
+  {
+   "wort": "calvados",
+   "n": 1
+  },
+  {
+   "wort": "canache",
+   "n": 1
+  },
+  {
+   "wort": "cannelloni",
+   "n": 1
+  },
+  {
+   "wort": "cantaloupmelone",
+   "n": 1
+  },
+  {
+   "wort": "caprese",
+   "n": 1
+  },
+  {
+   "wort": "carpaccio",
+   "n": 1
+  },
+  {
+   "wort": "cashewnussmus",
+   "n": 1
+  },
+  {
+   "wort": "champignoncremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "champignonleberwurst",
+   "n": 1
+  },
+  {
+   "wort": "chia",
+   "n": 1
+  },
+  {
+   "wort": "chickenburger",
+   "n": 1
+  },
+  {
+   "wort": "chinesische",
+   "n": 1
+  },
+  {
+   "wort": "chininhaltig",
+   "n": 1
+  },
+  {
+   "wort": "colada",
+   "n": 1
+  },
+  {
+   "wort": "coleslaw",
+   "n": 1
+  },
+  {
+   "wort": "cranberries",
+   "n": 1
+  },
+  {
+   "wort": "cream",
+   "n": 1
+  },
+  {
+   "wort": "cremeeis",
+   "n": 1
+  },
+  {
+   "wort": "crepes",
+   "n": 1
+  },
+  {
+   "wort": "cuba",
+   "n": 1
+  },
+  {
+   "wort": "cumberlandsauce",
+   "n": 1
+  },
+  {
+   "wort": "curryjoghurtsauce",
+   "n": 1
+  },
+  {
+   "wort": "danablu",
+   "n": 1
+  },
+  {
+   "wort": "danbo",
+   "n": 1
+  },
+  {
+   "wort": "dänische",
+   "n": 1
+  },
+  {
+   "wort": "dekor",
+   "n": 1
+  },
+  {
+   "wort": "delikatesspastete",
+   "n": 1
+  },
+  {
+   "wort": "desodoriert",
+   "n": 1
+  },
+  {
+   "wort": "dinkelknusperbrot",
+   "n": 1
+  },
+  {
+   "wort": "dinkelvollkornbaguette",
+   "n": 1
+  },
+  {
+   "wort": "dinkelzwieback",
+   "n": 1
+  },
+  {
+   "wort": "distelöl",
+   "n": 1
+  },
+  {
+   "wort": "dog",
+   "n": 1
+  },
+  {
+   "wort": "dörrpflaumenkompott",
+   "n": 1
+  },
+  {
+   "wort": "dreispitz",
+   "n": 1
+  },
+  {
+   "wort": "dubarry",
+   "n": 1
+  },
+  {
+   "wort": "eberswalder",
+   "n": 1
+  },
+  {
+   "wort": "eclairs",
+   "n": 1
+  },
+  {
+   "wort": "eierkuchenteig",
+   "n": 1
+  },
+  {
+   "wort": "eierlikörcreme",
+   "n": 1
+  },
+  {
+   "wort": "eierlikörtorte",
+   "n": 1
+  },
+  {
+   "wort": "eierpastete",
+   "n": 1
+  },
+  {
+   "wort": "eierpunsch",
+   "n": 1
+  },
+  {
+   "wort": "eingemachtes",
+   "n": 1
+  },
+  {
+   "wort": "eingerührte",
+   "n": 1
+  },
+  {
+   "wort": "eingeweicht",
+   "n": 1
+  },
+  {
+   "wort": "eiserkuchen",
+   "n": 1
+  },
+  {
+   "wort": "eiskaffee",
+   "n": 1
+  },
+  {
+   "wort": "eiskonfekt",
+   "n": 1
+  },
+  {
+   "wort": "eistee",
+   "n": 1
+  },
+  {
+   "wort": "eistorte",
+   "n": 1
+  },
+  {
+   "wort": "eiswaffeln",
+   "n": 1
+  },
+  {
+   "wort": "eiswein",
+   "n": 1
+  },
+  {
+   "wort": "elisenlebkuchen",
+   "n": 1
+  },
+  {
+   "wort": "elsässer",
+   "n": 1
+  },
+  {
+   "wort": "endivie",
+   "n": 1
+  },
+  {
+   "wort": "endivien",
+   "n": 1
+  },
+  {
+   "wort": "entenpastete",
+   "n": 1
+  },
+  {
+   "wort": "erbswurst",
+   "n": 1
+  },
+  {
+   "wort": "erdbeerbowle",
+   "n": 1
+  },
+  {
+   "wort": "erdbeercremeeis",
+   "n": 1
+  },
+  {
+   "wort": "erdbeereis",
+   "n": 1
+  },
+  {
+   "wort": "erdbeerjoghurt",
+   "n": 1
+  },
+  {
+   "wort": "erdbeerkuchen",
+   "n": 1
+  },
+  {
+   "wort": "erdbeermilch",
+   "n": 1
+  },
+  {
+   "wort": "erdbeersaft",
+   "n": 1
+  },
+  {
+   "wort": "erdbeersahneeis",
+   "n": 1
+  },
+  {
+   "wort": "erdbeersahnetorte",
+   "n": 1
+  },
+  {
+   "wort": "erdbeerschaum",
+   "n": 1
+  },
+  {
+   "wort": "erdbeerschnee",
+   "n": 1
+  },
+  {
+   "wort": "erdnussflips",
+   "n": 1
+  },
+  {
+   "wort": "erdnusskerne",
+   "n": 1
+  },
+  {
+   "wort": "erdnussöl",
+   "n": 1
+  },
+  {
+   "wort": "erdnussplätzchen",
+   "n": 1
+  },
+  {
+   "wort": "escariol",
+   "n": 1
+  },
+  {
+   "wort": "esrom",
+   "n": 1
+  },
+  {
+   "wort": "essigmarinde",
+   "n": 1
+  },
+  {
+   "wort": "esterhazy",
+   "n": 1
+  },
+  {
+   "wort": "feijoa",
+   "n": 1
+  },
+  {
+   "wort": "feinsehnenanteil",
+   "n": 1
+  },
+  {
+   "wort": "felchenfilet",
+   "n": 1
+  },
+  {
+   "wort": "fenchelrohkost",
+   "n": 1
+  },
+  {
+   "wort": "fettabschnitte",
+   "n": 1
+  },
+  {
+   "wort": "fettwamme",
+   "n": 1
+  },
+  {
+   "wort": "fischkraftbrühe",
+   "n": 1
+  },
+  {
+   "wort": "fischkroketten",
+   "n": 1
+  },
+  {
+   "wort": "fischleberöl",
+   "n": 1
+  },
+  {
+   "wort": "fischmuskeleiweiß",
+   "n": 1
+  },
+  {
+   "wort": "fischsamtsauce",
+   "n": 1
+  },
+  {
+   "wort": "fish",
+   "n": 1
+  },
+  {
+   "wort": "fleischspieße",
+   "n": 1
+  },
+  {
+   "wort": "fleischsulze",
+   "n": 1
+  },
+  {
+   "wort": "florentiner",
+   "n": 1
+  },
+  {
+   "wort": "fontina",
+   "n": 1
+  },
+  {
+   "wort": "forellenfilet",
+   "n": 1
+  },
+  {
+   "wort": "formaggi",
+   "n": 1
+  },
+  {
+   "wort": "fränkischer",
+   "n": 1
+  },
+  {
+   "wort": "franzbrötchen",
+   "n": 1
+  },
+  {
+   "wort": "french",
+   "n": 1
+  },
+  {
+   "wort": "fricco",
+   "n": 1
+  },
+  {
+   "wort": "fruchtaromalikör",
+   "n": 1
+  },
+  {
+   "wort": "fruchteis",
+   "n": 1
+  },
+  {
+   "wort": "fruchtmichel",
+   "n": 1
+  },
+  {
+   "wort": "fruchtsaftlikör",
+   "n": 1
+  },
+  {
+   "wort": "fruchtsahnelikör",
+   "n": 1
+  },
+  {
+   "wort": "fruchtsulze",
+   "n": 1
+  },
+  {
+   "wort": "frühlingspastete",
+   "n": 1
+  },
+  {
+   "wort": "frutti",
+   "n": 1
+  },
+  {
+   "wort": "funghi",
+   "n": 1
+  },
+  {
+   "wort": "fürst",
+   "n": 1
+  },
+  {
+   "wort": "gaisburger",
+   "n": 1
+  },
+  {
+   "wort": "ganache",
+   "n": 1
+  },
+  {
+   "wort": "gänsefett",
+   "n": 1
+  },
+  {
+   "wort": "gänseleber",
+   "n": 1
+  },
+  {
+   "wort": "gänseleberkäse",
+   "n": 1
+  },
+  {
+   "wort": "gänsepresskopf",
+   "n": 1
+  },
+  {
+   "wort": "gänseschmalz",
+   "n": 1
+  },
+  {
+   "wort": "gänsezervelatwurst",
+   "n": 1
+  },
+  {
+   "wort": "gansgalantine",
+   "n": 1
+  },
+  {
+   "wort": "gari",
+   "n": 1
+  },
+  {
+   "wort": "gazpacho",
+   "n": 1
+  },
+  {
+   "wort": "gebräunter",
+   "n": 1
+  },
+  {
+   "wort": "geflügelbierwurst",
+   "n": 1
+  },
+  {
+   "wort": "geflügelcremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "geflügeljagdwurst",
+   "n": 1
+  },
+  {
+   "wort": "geflügelkraftbrühe",
+   "n": 1
+  },
+  {
+   "wort": "geflügelleberwurst",
+   "n": 1
+  },
+  {
+   "wort": "geflügelsalami",
+   "n": 1
+  },
+  {
+   "wort": "geflügelteewurst",
+   "n": 1
+  },
+  {
+   "wort": "geformt",
+   "n": 1
+  },
+  {
+   "wort": "gemüseaufstrich",
+   "n": 1
+  },
+  {
+   "wort": "gemüsebratlinge",
+   "n": 1
+  },
+  {
+   "wort": "gemüsemuffins",
+   "n": 1
+  },
+  {
+   "wort": "gemüserisotto",
+   "n": 1
+  },
+  {
+   "wort": "gemüsesamtsuppe",
+   "n": 1
+  },
+  {
+   "wort": "gemüsewaffeln",
+   "n": 1
+  },
+  {
+   "wort": "gepökelt",
+   "n": 1
+  },
+  {
+   "wort": "gepökeltem",
+   "n": 1
+  },
+  {
+   "wort": "geraspelt",
+   "n": 1
+  },
+  {
+   "wort": "germain",
+   "n": 1
+  },
+  {
+   "wort": "gerollte",
+   "n": 1
+  },
+  {
+   "wort": "gerstenmalz",
+   "n": 1
+  },
+  {
+   "wort": "gerstenmalzextrakt",
+   "n": 1
+  },
+  {
+   "wort": "gerührter",
+   "n": 1
+  },
+  {
+   "wort": "geschichtet",
+   "n": 1
+  },
+  {
+   "wort": "geschrotet",
+   "n": 1
+  },
+  {
+   "wort": "geschwärzt",
+   "n": 1
+  },
+  {
+   "wort": "geselchte",
+   "n": 1
+  },
+  {
+   "wort": "gestürzt",
+   "n": 1
+  },
+  {
+   "wort": "gesülzter",
+   "n": 1
+  },
+  {
+   "wort": "getreidebratlinge",
+   "n": 1
+  },
+  {
+   "wort": "getrüffelte",
+   "n": 1
+  },
+  {
+   "wort": "gewürfelte",
+   "n": 1
+  },
+  {
+   "wort": "gewürzauszügen",
+   "n": 1
+  },
+  {
+   "wort": "gewürzlikör",
+   "n": 1
+  },
+  {
+   "wort": "ginger",
+   "n": 1
+  },
+  {
+   "wort": "glasnudelsalat",
+   "n": 1
+  },
+  {
+   "wort": "glühwein",
+   "n": 1
+  },
+  {
+   "wort": "glutenhaltig",
+   "n": 1
+  },
+  {
+   "wort": "gorgonzola",
+   "n": 1
+  },
+  {
+   "wort": "grapefruitsaftschorle",
+   "n": 1
+  },
+  {
+   "wort": "graved",
+   "n": 1
+  },
+  {
+   "wort": "greyerzer",
+   "n": 1
+  },
+  {
+   "wort": "grießklöße",
+   "n": 1
+  },
+  {
+   "wort": "grießklößen",
+   "n": 1
+  },
+  {
+   "wort": "grießnockerl",
+   "n": 1
+  },
+  {
+   "wort": "grießnockerln",
+   "n": 1
+  },
+  {
+   "wort": "grissini",
+   "n": 1
+  },
+  {
+   "wort": "grünkernmehlsuppe",
+   "n": 1
+  },
+  {
+   "wort": "grünkernrisotto",
+   "n": 1
+  },
+  {
+   "wort": "grünkernsuppe",
+   "n": 1
+  },
+  {
+   "wort": "grützblutwurst",
+   "n": 1
+  },
+  {
+   "wort": "guacamole",
+   "n": 1
+  },
+  {
+   "wort": "gurkencremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "gutsleberwurst",
+   "n": 1
+  },
+  {
+   "wort": "gyros",
+   "n": 1
+  },
+  {
+   "wort": "gyrosburger",
+   "n": 1
+  },
+  {
+   "wort": "hackfleischbällchen",
+   "n": 1
+  },
+  {
+   "wort": "hackfleischpastete",
+   "n": 1
+  },
+  {
+   "wort": "hackfleischteig",
+   "n": 1
+  },
+  {
+   "wort": "haferbratlinge",
+   "n": 1
+  },
+  {
+   "wort": "haferflockenauflauf",
+   "n": 1
+  },
+  {
+   "wort": "haferflockenbrei",
+   "n": 1
+  },
+  {
+   "wort": "haferflockenplätzchen",
+   "n": 1
+  },
+  {
+   "wort": "hafervollkornbrot",
+   "n": 1
+  },
+  {
+   "wort": "hähnchencreme",
+   "n": 1
+  },
+  {
+   "wort": "hähnchenkeule",
+   "n": 1
+  },
+  {
+   "wort": "hähnchenpastete",
+   "n": 1
+  },
+  {
+   "wort": "halbfettbutter",
+   "n": 1
+  },
+  {
+   "wort": "hammelfett",
+   "n": 1
+  },
+  {
+   "wort": "hammelfilet",
+   "n": 1
+  },
+  {
+   "wort": "hammelgulasch",
+   "n": 1
+  },
+  {
+   "wort": "hammelkotelett",
+   "n": 1
+  },
+  {
+   "wort": "hammelragout",
+   "n": 1
+  },
+  {
+   "wort": "hammelsteak",
+   "n": 1
+  },
+  {
+   "wort": "hammeltalg",
+   "n": 1
+  },
+  {
+   "wort": "hanföl",
+   "n": 1
+  },
+  {
+   "wort": "hannoversche",
+   "n": 1
+  },
+  {
+   "wort": "haselnusscremeeis",
+   "n": 1
+  },
+  {
+   "wort": "haselnussflammeri",
+   "n": 1
+  },
+  {
+   "wort": "haselnusskerne",
+   "n": 1
+  },
+  {
+   "wort": "haselnusskugeln",
+   "n": 1
+  },
+  {
+   "wort": "haselnussmus",
+   "n": 1
+  },
+  {
+   "wort": "haselnussöl",
+   "n": 1
+  },
+  {
+   "wort": "haselnussplätzchen",
+   "n": 1
+  },
+  {
+   "wort": "haselnusspudding",
+   "n": 1
+  },
+  {
+   "wort": "haselnussstückchen",
+   "n": 1
+  },
+  {
+   "wort": "haselnusszopf",
+   "n": 1
+  },
+  {
+   "wort": "hausfrauenart",
+   "n": 1
+  },
+  {
+   "wort": "havarti",
+   "n": 1
+  },
+  {
+   "wort": "hefebasiert",
+   "n": 1
+  },
+  {
+   "wort": "heidelbeer",
+   "n": 1
+  },
+  {
+   "wort": "heidelbeersaft",
+   "n": 1
+  },
+  {
+   "wort": "heidelbeersahnecreme",
+   "n": 1
+  },
+  {
+   "wort": "heidelbeersuppe",
+   "n": 1
+  },
+  {
+   "wort": "heiße",
+   "n": 1
+  },
+  {
+   "wort": "helene",
+   "n": 1
+  },
+  {
+   "wort": "hergestellt",
+   "n": 1
+  },
+  {
+   "wort": "heringsstipp",
+   "n": 1
+  },
+  {
+   "wort": "herrentorte",
+   "n": 1
+  },
+  {
+   "wort": "herzoginkartoffeln",
+   "n": 1
+  },
+  {
+   "wort": "hessische",
+   "n": 1
+  },
+  {
+   "wort": "himbeereis",
+   "n": 1
+  },
+  {
+   "wort": "himbeersaft",
+   "n": 1
+  },
+  {
+   "wort": "himbeersahne",
+   "n": 1
+  },
+  {
+   "wort": "himbeertörtchen",
+   "n": 1
+  },
+  {
+   "wort": "hirschfleischpastete",
+   "n": 1
+  },
+  {
+   "wort": "hirschsalami",
+   "n": 1
+  },
+  {
+   "wort": "hirsebratlinge",
+   "n": 1
+  },
+  {
+   "wort": "hobelspäne",
+   "n": 1
+  },
+  {
+   "wort": "honigkuchenhäufchen",
+   "n": 1
+  },
+  {
+   "wort": "honigmelone",
+   "n": 1
+  },
+  {
+   "wort": "honigmelonensaft",
+   "n": 1
+  },
+  {
+   "wort": "honigtauhonig",
+   "n": 1
+  },
+  {
+   "wort": "honigteigplätzchen",
+   "n": 1
+  },
+  {
+   "wort": "hot",
+   "n": 1
+  },
+  {
+   "wort": "hugo",
+   "n": 1
+  },
+  {
+   "wort": "hummersalat",
+   "n": 1
+  },
+  {
+   "wort": "hummersamtsauce",
+   "n": 1
+  },
+  {
+   "wort": "hummersuppe",
+   "n": 1
+  },
+  {
+   "wort": "hummus",
+   "n": 1
+  },
+  {
+   "wort": "husarenkrapfen",
+   "n": 1
+  },
+  {
+   "wort": "imitiert",
+   "n": 1
+  },
+  {
+   "wort": "indisch",
+   "n": 1
+  },
+  {
+   "wort": "italian",
+   "n": 1
+  },
+  {
+   "wort": "jagdwurstpastete",
+   "n": 1
+  },
+  {
+   "wort": "jakobsmuscheln",
+   "n": 1
+  },
+  {
+   "wort": "jarlsberg",
+   "n": 1
+  },
+  {
+   "wort": "joghurtsahnetorte",
+   "n": 1
+  },
+  {
+   "wort": "johannisbeeren",
+   "n": 1
+  },
+  {
+   "wort": "johannisbeergelee",
+   "n": 1
+  },
+  {
+   "wort": "johannisbeerkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "johannisbeernektarschorle",
+   "n": 1
+  },
+  {
+   "wort": "johannisbeersauce",
+   "n": 1
+  },
+  {
+   "wort": "johannisbeertorte",
+   "n": 1
+  },
+  {
+   "wort": "kabanossi",
+   "n": 1
+  },
+  {
+   "wort": "kaffeeeis",
+   "n": 1
+  },
+  {
+   "wort": "kakaocremefüllung",
+   "n": 1
+  },
+  {
+   "wort": "kakaolikör",
+   "n": 1
+  },
+  {
+   "wort": "kalbfleischgalantine",
+   "n": 1
+  },
+  {
+   "wort": "kalbfleischpudding",
+   "n": 1
+  },
+  {
+   "wort": "kalbfleischspieße",
+   "n": 1
+  },
+  {
+   "wort": "kalbsbeinscheiben",
+   "n": 1
+  },
+  {
+   "wort": "kalbsfrikassee",
+   "n": 1
+  },
+  {
+   "wort": "kalbsgeschnetzeltes",
+   "n": 1
+  },
+  {
+   "wort": "kalbsleberspießchen",
+   "n": 1
+  },
+  {
+   "wort": "kalbsmedaillons",
+   "n": 1
+  },
+  {
+   "wort": "kalbsnierenbraten",
+   "n": 1
+  },
+  {
+   "wort": "kalbsnierengeschnetzeltes",
+   "n": 1
+  },
+  {
+   "wort": "kalbsrahmbraten",
+   "n": 1
+  },
+  {
+   "wort": "kalbsrahmgulasch",
+   "n": 1
+  },
+  {
+   "wort": "kalbsrollbraten",
+   "n": 1
+  },
+  {
+   "wort": "kalbsschulter",
+   "n": 1
+  },
+  {
+   "wort": "kapstachelbeersaft",
+   "n": 1
+  },
+  {
+   "wort": "karamellbonbon",
+   "n": 1
+  },
+  {
+   "wort": "karamelleis",
+   "n": 1
+  },
+  {
+   "wort": "karottencremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "karottenpüree",
+   "n": 1
+  },
+  {
+   "wort": "karottensaftschorle",
+   "n": 1
+  },
+  {
+   "wort": "karthäuser",
+   "n": 1
+  },
+  {
+   "wort": "kartoffelbällchen",
+   "n": 1
+  },
+  {
+   "wort": "kartoffelbratlinge",
+   "n": 1
+  },
+  {
+   "wort": "kartoffelmaultaschen",
+   "n": 1
+  },
+  {
+   "wort": "kartoffelomelett",
+   "n": 1
+  },
+  {
+   "wort": "kartoffelschichtspeise",
+   "n": 1
+  },
+  {
+   "wort": "kartoffelsticks",
+   "n": 1
+  },
+  {
+   "wort": "kartoffelteig",
+   "n": 1
+  },
+  {
+   "wort": "käsecremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "käsefondue",
+   "n": 1
+  },
+  {
+   "wort": "käseklößchen",
+   "n": 1
+  },
+  {
+   "wort": "käseknusperchen",
+   "n": 1
+  },
+  {
+   "wort": "käsepastete",
+   "n": 1
+  },
+  {
+   "wort": "käsepilaw",
+   "n": 1
+  },
+  {
+   "wort": "käsesahnecreme",
+   "n": 1
+  },
+  {
+   "wort": "käsesahnetorte",
+   "n": 1
+  },
+  {
+   "wort": "käsescheiben",
+   "n": 1
+  },
+  {
+   "wort": "käseschinkenwurst",
+   "n": 1
+  },
+  {
+   "wort": "käsewaffeln",
+   "n": 1
+  },
+  {
+   "wort": "katenrauchwurst",
+   "n": 1
+  },
+  {
+   "wort": "kathrinchen",
+   "n": 1
+  },
+  {
+   "wort": "kaviar",
+   "n": 1
+  },
+  {
+   "wort": "kaviarcreme",
+   "n": 1
+  },
+  {
+   "wort": "kaviarersatz",
+   "n": 1
+  },
+  {
+   "wort": "kaviarpaste",
+   "n": 1
+  },
+  {
+   "wort": "kichererbsenbällchen",
+   "n": 1
+  },
+  {
+   "wort": "kichererbsenbratlinge",
+   "n": 1
+  },
+  {
+   "wort": "kichererbsenmus",
+   "n": 1
+  },
+  {
+   "wort": "kidneybohnen",
+   "n": 1
+  },
+  {
+   "wort": "kir",
+   "n": 1
+  },
+  {
+   "wort": "kirschkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "kirschnektarschorle",
+   "n": 1
+  },
+  {
+   "wort": "kirschplotzer",
+   "n": 1
+  },
+  {
+   "wort": "knäckebrot",
+   "n": 1
+  },
+  {
+   "wort": "knäckebrotstückchen",
+   "n": 1
+  },
+  {
+   "wort": "knusperbrot",
+   "n": 1
+  },
+  {
+   "wort": "knusperkeks",
+   "n": 1
+  },
+  {
+   "wort": "knuspermüslizubereitung",
+   "n": 1
+  },
+  {
+   "wort": "knusperpraline",
+   "n": 1
+  },
+  {
+   "wort": "knusperreis",
+   "n": 1
+  },
+  {
+   "wort": "knusperwaffel",
+   "n": 1
+  },
+  {
+   "wort": "kokoschips",
+   "n": 1
+  },
+  {
+   "wort": "kokosflocken",
+   "n": 1
+  },
+  {
+   "wort": "kokoskuchen",
+   "n": 1
+  },
+  {
+   "wort": "kokosnussmilch",
+   "n": 1
+  },
+  {
+   "wort": "kokosschnitten",
+   "n": 1
+  },
+  {
+   "wort": "kokoswasser",
+   "n": 1
+  },
+  {
+   "wort": "kokoszwieback",
+   "n": 1
+  },
+  {
+   "wort": "kolbacz",
+   "n": 1
+  },
+  {
+   "wort": "komprimate",
+   "n": 1
+  },
+  {
+   "wort": "korinthe",
+   "n": 1
+  },
+  {
+   "wort": "korinthen",
+   "n": 1
+  },
+  {
+   "wort": "köthener",
+   "n": 1
+  },
+  {
+   "wort": "kräutercremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "kräuterleberwurst",
+   "n": 1
+  },
+  {
+   "wort": "kräuterlikör",
+   "n": 1
+  },
+  {
+   "wort": "kräuteromelett",
+   "n": 1
+  },
+  {
+   "wort": "krebsfleischimitat",
+   "n": 1
+  },
+  {
+   "wort": "kremeis",
+   "n": 1
+  },
+  {
+   "wort": "kroatische",
+   "n": 1
+  },
+  {
+   "wort": "kuchenmichel",
+   "n": 1
+  },
+  {
+   "wort": "küchle",
+   "n": 1
+  },
+  {
+   "wort": "kürbiscremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "kürbiskernöl",
+   "n": 1
+  },
+  {
+   "wort": "kürbiskompott",
+   "n": 1
+  },
+  {
+   "wort": "kürbisrösti",
+   "n": 1
+  },
+  {
+   "wort": "labskaus",
+   "n": 1
+  },
+  {
+   "wort": "lachsschinkenpastete",
+   "n": 1
+  },
+  {
+   "wort": "lachssteaks",
+   "n": 1
+  },
+  {
+   "wort": "lammfleischspieße",
+   "n": 1
+  },
+  {
+   "wort": "lammkoteletts",
+   "n": 1
+  },
+  {
+   "wort": "lammschmorbraten",
+   "n": 1
+  },
+  {
+   "wort": "landmettwurst",
+   "n": 1
+  },
+  {
+   "wort": "langos",
+   "n": 1
+  },
+  {
+   "wort": "lasagnette",
+   "n": 1
+  },
+  {
+   "wort": "laugendauergebäck",
+   "n": 1
+  },
+  {
+   "wort": "leberknödelsuppe",
+   "n": 1
+  },
+  {
+   "wort": "leberrisotto",
+   "n": 1
+  },
+  {
+   "wort": "leberwürste",
+   "n": 1
+  },
+  {
+   "wort": "legiert",
+   "n": 1
+  },
+  {
+   "wort": "libre",
+   "n": 1
+  },
+  {
+   "wort": "liegnitzer",
+   "n": 1
+  },
+  {
+   "wort": "limette",
+   "n": 1
+  },
+  {
+   "wort": "linsenkeimlinge",
+   "n": 1
+  },
+  {
+   "wort": "linsensprossen",
+   "n": 1
+  },
+  {
+   "wort": "linzer",
+   "n": 1
+  },
+  {
+   "wort": "lippischer",
+   "n": 1
+  },
+  {
+   "wort": "loganbeere",
+   "n": 1
+  },
+  {
+   "wort": "lollo",
+   "n": 1
+  },
+  {
+   "wort": "loquat",
+   "n": 1
+  },
+  {
+   "wort": "lothringisch",
+   "n": 1
+  },
+  {
+   "wort": "lulo",
+   "n": 1
+  },
+  {
+   "wort": "macchiato",
+   "n": 1
+  },
+  {
+   "wort": "madeirasauce",
+   "n": 1
+  },
+  {
+   "wort": "madeirawein",
+   "n": 1
+  },
+  {
+   "wort": "maiskeimöl",
+   "n": 1
+  },
+  {
+   "wort": "maiswaffeln",
+   "n": 1
+  },
+  {
+   "wort": "malteser",
+   "n": 1
+  },
+  {
+   "wort": "maltosehaltig",
+   "n": 1
+  },
+  {
+   "wort": "malzgetränk",
+   "n": 1
+  },
+  {
+   "wort": "malzhaltig",
+   "n": 1
+  },
+  {
+   "wort": "mandelkranz",
+   "n": 1
+  },
+  {
+   "wort": "mandelkränzchen",
+   "n": 1
+  },
+  {
+   "wort": "mandelmus",
+   "n": 1
+  },
+  {
+   "wort": "mandelöl",
+   "n": 1
+  },
+  {
+   "wort": "mangokompott",
+   "n": 1
+  },
+  {
+   "wort": "mangoldtarte",
+   "n": 1
+  },
+  {
+   "wort": "mangomus",
+   "n": 1
+  },
+  {
+   "wort": "mangonektar",
+   "n": 1
+  },
+  {
+   "wort": "mangosaft",
+   "n": 1
+  },
+  {
+   "wort": "mannit",
+   "n": 1
+  },
+  {
+   "wort": "maracujanektar",
+   "n": 1
+  },
+  {
+   "wort": "maracujanektarschorle",
+   "n": 1
+  },
+  {
+   "wort": "marantastärke",
+   "n": 1
+  },
+  {
+   "wort": "margarita",
+   "n": 1
+  },
+  {
+   "wort": "margherita",
+   "n": 1
+  },
+  {
+   "wort": "marinara",
+   "n": 1
+  },
+  {
+   "wort": "marmorwaffeln",
+   "n": 1
+  },
+  {
+   "wort": "mary",
+   "n": 1
+  },
+  {
+   "wort": "marzipanfüllung",
+   "n": 1
+  },
+  {
+   "wort": "marzipanmakronen",
+   "n": 1
+  },
+  {
+   "wort": "marzipanstangen",
+   "n": 1
+  },
+  {
+   "wort": "marzipanstollen",
+   "n": 1
+  },
+  {
+   "wort": "mascarpone",
+   "n": 1
+  },
+  {
+   "wort": "mate",
+   "n": 1
+  },
+  {
+   "wort": "matjessalat",
+   "n": 1
+  },
+  {
+   "wort": "maulbeere",
+   "n": 1
+  },
+  {
+   "wort": "maulbeersaft",
+   "n": 1
+  },
+  {
+   "wort": "mazarinkuchen",
+   "n": 1
+  },
+  {
+   "wort": "mecklenburg",
+   "n": 1
+  },
+  {
+   "wort": "meeresfrüchten",
+   "n": 1
+  },
+  {
+   "wort": "mehlpüfferchen",
+   "n": 1
+  },
+  {
+   "wort": "mehrkornbrot",
+   "n": 1
+  },
+  {
+   "wort": "mehrkornbrötchen",
+   "n": 1
+  },
+  {
+   "wort": "mehrkornflocken",
+   "n": 1
+  },
+  {
+   "wort": "mehrkornknusperbrot",
+   "n": 1
+  },
+  {
+   "wort": "melasse",
+   "n": 1
+  },
+  {
+   "wort": "melba",
+   "n": 1
+  },
+  {
+   "wort": "melonenkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "milanese",
+   "n": 1
+  },
+  {
+   "wort": "milchbasis",
+   "n": 1
+  },
+  {
+   "wort": "milchbrötchen",
+   "n": 1
+  },
+  {
+   "wort": "milchnudeln",
+   "n": 1
+  },
+  {
+   "wort": "milchpulver",
+   "n": 1
+  },
+  {
+   "wort": "milzwurst",
+   "n": 1
+  },
+  {
+   "wort": "mineraliengehalt",
+   "n": 1
+  },
+  {
+   "wort": "minestrone",
+   "n": 1
+  },
+  {
+   "wort": "mirabellenkompott",
+   "n": 1
+  },
+  {
+   "wort": "miso",
+   "n": 1
+  },
+  {
+   "wort": "misosuppe",
+   "n": 1
+  },
+  {
+   "wort": "mispel",
+   "n": 1
+  },
+  {
+   "wort": "mixed",
+   "n": 1
+  },
+  {
+   "wort": "mohnfüllung",
+   "n": 1
+  },
+  {
+   "wort": "mohnkranz",
+   "n": 1
+  },
+  {
+   "wort": "mohnkuchen",
+   "n": 1
+  },
+  {
+   "wort": "mohnöl",
+   "n": 1
+  },
+  {
+   "wort": "mohnschnecken",
+   "n": 1
+  },
+  {
+   "wort": "mohnstriezel",
+   "n": 1
+  },
+  {
+   "wort": "mohntorte",
+   "n": 1
+  },
+  {
+   "wort": "möhrenpüree",
+   "n": 1
+  },
+  {
+   "wort": "mojito",
+   "n": 1
+  },
+  {
+   "wort": "mokkabuttercremetorte",
+   "n": 1
+  },
+  {
+   "wort": "mokkaflammeri",
+   "n": 1
+  },
+  {
+   "wort": "mokkasahneeis",
+   "n": 1
+  },
+  {
+   "wort": "mokkasahnetorte",
+   "n": 1
+  },
+  {
+   "wort": "molkeneiweißkäse",
+   "n": 1
+  },
+  {
+   "wort": "molkenmischgetränk",
+   "n": 1
+  },
+  {
+   "wort": "mononatriumglutamat",
+   "n": 1
+  },
+  {
+   "wort": "mornaysauce",
+   "n": 1
+  },
+  {
+   "wort": "mosaikroulade",
+   "n": 1
+  },
+  {
+   "wort": "moussaka",
+   "n": 1
+  },
+  {
+   "wort": "mousselinesauce",
+   "n": 1
+  },
+  {
+   "wort": "multivitaminsaftschorle",
+   "n": 1
+  },
+  {
+   "wort": "muscheln",
+   "n": 1
+  },
+  {
+   "wort": "mutzen",
+   "n": 1
+  },
+  {
+   "wort": "nachos",
+   "n": 1
+  },
+  {
+   "wort": "nährhefe",
+   "n": 1
+  },
+  {
+   "wort": "nährzwieback",
+   "n": 1
+  },
+  {
+   "wort": "napoli",
+   "n": 1
+  },
+  {
+   "wort": "naranjilla",
+   "n": 1
+  },
+  {
+   "wort": "nasi",
+   "n": 1
+  },
+  {
+   "wort": "natriumarm",
+   "n": 1
+  },
+  {
+   "wort": "nektarhonig",
+   "n": 1
+  },
+  {
+   "wort": "netzmelone",
+   "n": 1
+  },
+  {
+   "wort": "niedernauer",
+   "n": 1
+  },
+  {
+   "wort": "nizza",
+   "n": 1
+  },
+  {
+   "wort": "nonpareille",
+   "n": 1
+  },
+  {
+   "wort": "nordische",
+   "n": 1
+  },
+  {
+   "wort": "nori",
+   "n": 1
+  },
+  {
+   "wort": "nudelpudding",
+   "n": 1
+  },
+  {
+   "wort": "nudelteig",
+   "n": 1
+  },
+  {
+   "wort": "nürnberger",
+   "n": 1
+  },
+  {
+   "wort": "nussbiskuitboden",
+   "n": 1
+  },
+  {
+   "wort": "nussbiskuitrolle",
+   "n": 1
+  },
+  {
+   "wort": "nussbiskuitroulade",
+   "n": 1
+  },
+  {
+   "wort": "nussecken",
+   "n": 1
+  },
+  {
+   "wort": "nussstangen",
+   "n": 1
+  },
+  {
+   "wort": "oblaten",
+   "n": 1
+  },
+  {
+   "wort": "oelek",
+   "n": 1
+  },
+  {
+   "wort": "olio",
+   "n": 1
+  },
+  {
+   "wort": "olivenöl",
+   "n": 1
+  },
+  {
+   "wort": "olivenpastete",
+   "n": 1
+  },
+  {
+   "wort": "orangenbiskuitplätzchen",
+   "n": 1
+  },
+  {
+   "wort": "orangencremetorte",
+   "n": 1
+  },
+  {
+   "wort": "orangenfilets",
+   "n": 1
+  },
+  {
+   "wort": "orangenflammeri",
+   "n": 1
+  },
+  {
+   "wort": "orangenkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "orangenlikör",
+   "n": 1
+  },
+  {
+   "wort": "ossobuco",
+   "n": 1
+  },
+  {
+   "wort": "ostpreußischer",
+   "n": 1
+  },
+  {
+   "wort": "ottilienkuchen",
+   "n": 1
+  },
+  {
+   "wort": "paella",
+   "n": 1
+  },
+  {
+   "wort": "paese",
+   "n": 1
+  },
+  {
+   "wort": "palmkernfett",
+   "n": 1
+  },
+  {
+   "wort": "palmkernöl",
+   "n": 1
+  },
+  {
+   "wort": "palmöl",
+   "n": 1
+  },
+  {
+   "wort": "panhas",
+   "n": 1
+  },
+  {
+   "wort": "pannacotta",
+   "n": 1
+  },
+  {
+   "wort": "pannfisch",
+   "n": 1
+  },
+  {
+   "wort": "paprikacremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "passionsfruchtnektar",
+   "n": 1
+  },
+  {
+   "wort": "pasteten",
+   "n": 1
+  },
+  {
+   "wort": "perlgraupen",
+   "n": 1
+  },
+  {
+   "wort": "pfannkuchenteig",
+   "n": 1
+  },
+  {
+   "wort": "pfefferminzgeschmack",
+   "n": 1
+  },
+  {
+   "wort": "pfefferminztee",
+   "n": 1
+  },
+  {
+   "wort": "pfefferpotthast",
+   "n": 1
+  },
+  {
+   "wort": "pfeilwurzelmehl",
+   "n": 1
+  },
+  {
+   "wort": "pfirsichkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "pfirsichnektar",
+   "n": 1
+  },
+  {
+   "wort": "pfirsichtörtchen",
+   "n": 1
+  },
+  {
+   "wort": "pfitzauf",
+   "n": 1
+  },
+  {
+   "wort": "pflanzerl",
+   "n": 1
+  },
+  {
+   "wort": "pflücksalat",
+   "n": 1
+  },
+  {
+   "wort": "pichelsteiner",
+   "n": 1
+  },
+  {
+   "wort": "pickert",
+   "n": 1
+  },
+  {
+   "wort": "pickles",
+   "n": 1
+  },
+  {
+   "wort": "pina",
+   "n": 1
+  },
+  {
+   "wort": "pistazien",
+   "n": 1
+  },
+  {
+   "wort": "pizzo",
+   "n": 1
+  },
+  {
+   "wort": "plumpudding",
+   "n": 1
+  },
+  {
+   "wort": "pökelrinderbrust",
+   "n": 1
+  },
+  {
+   "wort": "pomelo",
+   "n": 1
+  },
+  {
+   "wort": "pomelosaft",
+   "n": 1
+  },
+  {
+   "wort": "preiselbeer",
+   "n": 1
+  },
+  {
+   "wort": "preiselbeeren",
+   "n": 1
+  },
+  {
+   "wort": "preiselbeerkompott",
+   "n": 1
+  },
+  {
+   "wort": "preiselbeerkonfitüre",
+   "n": 1
+  },
+  {
+   "wort": "preiselbeersaft",
+   "n": 1
+  },
+  {
+   "wort": "preiselbeersauce",
+   "n": 1
+  },
+  {
+   "wort": "presslinge",
+   "n": 1
+  },
+  {
+   "wort": "presssäckel",
+   "n": 1
+  },
+  {
+   "wort": "prinzregententorte",
+   "n": 1
+  },
+  {
+   "wort": "prosciutto",
+   "n": 1
+  },
+  {
+   "wort": "provolone",
+   "n": 1
+  },
+  {
+   "wort": "pückler",
+   "n": 1
+  },
+  {
+   "wort": "pulled",
+   "n": 1
+  },
+  {
+   "wort": "punschsauce",
+   "n": 1
+  },
+  {
+   "wort": "püree",
+   "n": 1
+  },
+  {
+   "wort": "puszta",
+   "n": 1
+  },
+  {
+   "wort": "putengeschnetzeltes",
+   "n": 1
+  },
+  {
+   "wort": "quarkbällchen",
+   "n": 1
+  },
+  {
+   "wort": "quarktaschen",
+   "n": 1
+  },
+  {
+   "wort": "quittensaft",
+   "n": 1
+  },
+  {
+   "wort": "räderkuchen",
+   "n": 1
+  },
+  {
+   "wort": "radicchio",
+   "n": 1
+  },
+  {
+   "wort": "radicchiosalat",
+   "n": 1
+  },
+  {
+   "wort": "radieschensalat",
+   "n": 1
+  },
+  {
+   "wort": "rahmeis",
+   "n": 1
+  },
+  {
+   "wort": "rahmspinat",
+   "n": 1
+  },
+  {
+   "wort": "rarebit",
+   "n": 1
+  },
+  {
+   "wort": "raspeli",
+   "n": 1
+  },
+  {
+   "wort": "ratatouille",
+   "n": 1
+  },
+  {
+   "wort": "regenbogenforellen",
+   "n": 1
+  },
+  {
+   "wort": "rehbraten",
+   "n": 1
+  },
+  {
+   "wort": "rehfleisch",
+   "n": 1
+  },
+  {
+   "wort": "rehkeule",
+   "n": 1
+  },
+  {
+   "wort": "rehpfeffer",
+   "n": 1
+  },
+  {
+   "wort": "rehragout",
+   "n": 1
+  },
+  {
+   "wort": "rehschnitzel",
+   "n": 1
+  },
+  {
+   "wort": "reisflockenbrei",
+   "n": 1
+  },
+  {
+   "wort": "reiskroketten",
+   "n": 1
+  },
+  {
+   "wort": "reneclaudenkompott",
+   "n": 1
+  },
+  {
+   "wort": "rharbarbergrütze",
+   "n": 1
+  },
+  {
+   "wort": "rheinischer",
+   "n": 1
+  },
+  {
+   "wort": "rinderbierschinken",
+   "n": 1
+  },
+  {
+   "wort": "rinderbrät",
+   "n": 1
+  },
+  {
+   "wort": "rinderbrust",
+   "n": 1
+  },
+  {
+   "wort": "rinderfett",
+   "n": 1
+  },
+  {
+   "wort": "rinderfiletmedaillons",
+   "n": 1
+  },
+  {
+   "wort": "rindergeschnetzeltes",
+   "n": 1
+  },
+  {
+   "wort": "rinderkotelett",
+   "n": 1
+  },
+  {
+   "wort": "rinderlungenhaschee",
+   "n": 1
+  },
+  {
+   "wort": "rinderrahmgulasch",
+   "n": 1
+  },
+  {
+   "wort": "rinderrauchfleisch",
+   "n": 1
+  },
+  {
+   "wort": "rindersalami",
+   "n": 1
+  },
+  {
+   "wort": "rinderschmorbraten",
+   "n": 1
+  },
+  {
+   "wort": "rindertalg",
+   "n": 1
+  },
+  {
+   "wort": "rinderzungenragout",
+   "n": 1
+  },
+  {
+   "wort": "rindfleischspieße",
+   "n": 1
+  },
+  {
+   "wort": "risottoart",
+   "n": 1
+  },
+  {
+   "wort": "robertsauce",
+   "n": 1
+  },
+  {
+   "wort": "roggenbrotteig",
+   "n": 1
+  },
+  {
+   "wort": "roggenknäckebrot",
+   "n": 1
+  },
+  {
+   "wort": "roggenknusperbrot",
+   "n": 1
+  },
+  {
+   "wort": "roggenvollkornschrotbrot",
+   "n": 1
+  },
+  {
+   "wort": "rohmilch",
+   "n": 1
+  },
+  {
+   "wort": "rohpolnische",
+   "n": 1
+  },
+  {
+   "wort": "römischer",
+   "n": 1
+  },
+  {
+   "wort": "rosenkohlpüree",
+   "n": 1
+  },
+  {
+   "wort": "rosenkuchen",
+   "n": 1
+  },
+  {
+   "wort": "rotbarschragout",
+   "n": 1
+  },
+  {
+   "wort": "rotling",
+   "n": 1
+  },
+  {
+   "wort": "rotweinpunsch",
+   "n": 1
+  },
+  {
+   "wort": "rouladen",
+   "n": 1
+  },
+  {
+   "wort": "rübchen",
+   "n": 1
+  },
+  {
+   "wort": "rüben",
+   "n": 1
+  },
+  {
+   "wort": "rüblitorte",
+   "n": 1
+  },
+  {
+   "wort": "rügenwalder",
+   "n": 1
+  },
+  {
+   "wort": "rührteig",
+   "n": 1
+  },
+  {
+   "wort": "rumkugeln",
+   "n": 1
+  },
+  {
+   "wort": "rumsauce",
+   "n": 1
+  },
+  {
+   "wort": "rumtopf",
+   "n": 1
+  },
+  {
+   "wort": "sacherguss",
+   "n": 1
+  },
+  {
+   "wort": "sachertorte",
+   "n": 1
+  },
+  {
+   "wort": "sachertortenboden",
+   "n": 1
+  },
+  {
+   "wort": "sächsischer",
+   "n": 1
+  },
+  {
+   "wort": "sächsisches",
+   "n": 1
+  },
+  {
+   "wort": "safloröl",
+   "n": 1
+  },
+  {
+   "wort": "sahnecremetorte",
+   "n": 1
+  },
+  {
+   "wort": "sahneeis",
+   "n": 1
+  },
+  {
+   "wort": "sahnekaramelle",
+   "n": 1
+  },
+  {
+   "wort": "sahnelikör",
+   "n": 1
+  },
+  {
+   "wort": "sahnewaffeln",
+   "n": 1
+  },
+  {
+   "wort": "salame",
+   "n": 1
+  },
+  {
+   "wort": "salbei",
+   "n": 1
+  },
+  {
+   "wort": "saltimbocca",
+   "n": 1
+  },
+  {
+   "wort": "salzbrezeln",
+   "n": 1
+  },
+  {
+   "wort": "salzdillgurke",
+   "n": 1
+  },
+  {
+   "wort": "salzstangen",
+   "n": 1
+  },
+  {
+   "wort": "sambal",
+   "n": 1
+  },
+  {
+   "wort": "sanddornsaft",
+   "n": 1
+  },
+  {
+   "wort": "sandteig",
+   "n": 1
+  },
+  {
+   "wort": "sandwaffeln",
+   "n": 1
+  },
+  {
+   "wort": "sardellenfilets",
+   "n": 1
+  },
+  {
+   "wort": "sardellenpaste",
+   "n": 1
+  },
+  {
+   "wort": "sardellenpesto",
+   "n": 1
+  },
+  {
+   "wort": "sardellensauce",
+   "n": 1
+  },
+  {
+   "wort": "sauerkirschsaft",
+   "n": 1
+  },
+  {
+   "wort": "sauermolke",
+   "n": 1
+  },
+  {
+   "wort": "saures",
+   "n": 1
+  },
+  {
+   "wort": "scheiterhaufen",
+   "n": 1
+  },
+  {
+   "wort": "schellfischfilet",
+   "n": 1
+  },
+  {
+   "wort": "schillerlocken",
+   "n": 1
+  },
+  {
+   "wort": "schinkenbrätterrine",
+   "n": 1
+  },
+  {
+   "wort": "schinkenfleckerl",
+   "n": 1
+  },
+  {
+   "wort": "schinkenklößchen",
+   "n": 1
+  },
+  {
+   "wort": "schinkenmettwurst",
+   "n": 1
+  },
+  {
+   "wort": "schinkenrisotto",
+   "n": 1
+  },
+  {
+   "wort": "schinkenröllchen",
+   "n": 1
+  },
+  {
+   "wort": "schinkenroulade",
+   "n": 1
+  },
+  {
+   "wort": "schinkensalami",
+   "n": 1
+  },
+  {
+   "wort": "schinkenwaffeln",
+   "n": 1
+  },
+  {
+   "wort": "schlackwurst",
+   "n": 1
+  },
+  {
+   "wort": "schmierwurst",
+   "n": 1
+  },
+  {
+   "wort": "schmorbraten",
+   "n": 1
+  },
+  {
+   "wort": "schneeklößchen",
+   "n": 1
+  },
+  {
+   "wort": "schokobiskuitboden",
+   "n": 1
+  },
+  {
+   "wort": "schokobiskuitrolle",
+   "n": 1
+  },
+  {
+   "wort": "schokobiskuitroulade",
+   "n": 1
+  },
+  {
+   "wort": "schokobuttercremetorte",
+   "n": 1
+  },
+  {
+   "wort": "schokoladenbrezeln",
+   "n": 1
+  },
+  {
+   "wort": "schokoladenbuttercreme",
+   "n": 1
+  },
+  {
+   "wort": "schokoladencremeeis",
+   "n": 1
+  },
+  {
+   "wort": "schokoladenfettglasur",
+   "n": 1
+  },
+  {
+   "wort": "schokoladenlikör",
+   "n": 1
+  },
+  {
+   "wort": "schokoladensahneeis",
+   "n": 1
+  },
+  {
+   "wort": "schokoladenstreusel",
+   "n": 1
+  },
+  {
+   "wort": "schokozwieback",
+   "n": 1
+  },
+  {
+   "wort": "schottischer",
+   "n": 1
+  },
+  {
+   "wort": "schüblinge",
+   "n": 1
+  },
+  {
+   "wort": "schwarzwaldbecher",
+   "n": 1
+  },
+  {
+   "wort": "schwedische",
+   "n": 1
+  },
+  {
+   "wort": "schwedischer",
+   "n": 1
+  },
+  {
+   "wort": "schweinebrust",
+   "n": 1
+  },
+  {
+   "wort": "schweinefett",
+   "n": 1
+  },
+  {
+   "wort": "schweinefleischsülze",
+   "n": 1
+  },
+  {
+   "wort": "schweinefleischterrine",
+   "n": 1
+  },
+  {
+   "wort": "schweinegulasch",
+   "n": 1
+  },
+  {
+   "wort": "schweinehackfleisch",
+   "n": 1
+  },
+  {
+   "wort": "schweineherz",
+   "n": 1
+  },
+  {
+   "wort": "schweineherzragout",
+   "n": 1
+  },
+  {
+   "wort": "schweinehirn",
+   "n": 1
+  },
+  {
+   "wort": "schweinekümmelmagen",
+   "n": 1
+  },
+  {
+   "wort": "schweinelebergeschnetzeltes",
+   "n": 1
+  },
+  {
+   "wort": "schweineleberschnitten",
+   "n": 1
+  },
+  {
+   "wort": "schweinelunge",
+   "n": 1
+  },
+  {
+   "wort": "schweinenieren",
+   "n": 1
+  },
+  {
+   "wort": "schweinenierengeschnetzeltes",
+   "n": 1
+  },
+  {
+   "wort": "schweineohren",
+   "n": 1
+  },
+  {
+   "wort": "schweinepfeffer",
+   "n": 1
+  },
+  {
+   "wort": "schweinerippchen",
+   "n": 1
+  },
+  {
+   "wort": "schweinerollbraten",
+   "n": 1
+  },
+  {
+   "wort": "schweinerückenpastete",
+   "n": 1
+  },
+  {
+   "wort": "schweineschmalz",
+   "n": 1
+  },
+  {
+   "wort": "schweinezunge",
+   "n": 1
+  },
+  {
+   "wort": "schweinezungensülze",
+   "n": 1
+  },
+  {
+   "wort": "schweinskopfsülze",
+   "n": 1
+  },
+  {
+   "wort": "schweinskopfwurst",
+   "n": 1
+  },
+  {
+   "wort": "schwemmklößchen",
+   "n": 1
+  },
+  {
+   "wort": "schwertfischsalat",
+   "n": 1
+  },
+  {
+   "wort": "scones",
+   "n": 1
+  },
+  {
+   "wort": "seehase",
+   "n": 1
+  },
+  {
+   "wort": "seehechtfrikassee",
+   "n": 1
+  },
+  {
+   "wort": "seelachsroulade",
+   "n": 1
+  },
+  {
+   "wort": "sehnenarm",
+   "n": 1
+  },
+  {
+   "wort": "seitan",
+   "n": 1
+  },
+  {
+   "wort": "selleriecremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "selleriepüree",
+   "n": 1
+  },
+  {
+   "wort": "selleriescheiben",
+   "n": 1
+  },
+  {
+   "wort": "semmelklößchen",
+   "n": 1
+  },
+  {
+   "wort": "serbische",
+   "n": 1
+  },
+  {
+   "wort": "serbisches",
+   "n": 1
+  },
+  {
+   "wort": "serviettenknödel",
+   "n": 1
+  },
+  {
+   "wort": "sesammus",
+   "n": 1
+  },
+  {
+   "wort": "sesamöl",
+   "n": 1
+  },
+  {
+   "wort": "shrimps",
+   "n": 1
+  },
+  {
+   "wort": "siciliana",
+   "n": 1
+  },
+  {
+   "wort": "siedesalz",
+   "n": 1
+  },
+  {
+   "wort": "skyr",
+   "n": 1
+  },
+  {
+   "wort": "sojahaltig",
+   "n": 1
+  },
+  {
+   "wort": "sojakerne",
+   "n": 1
+  },
+  {
+   "wort": "sojakochcreme",
+   "n": 1
+  },
+  {
+   "wort": "sojalecithin",
+   "n": 1
+  },
+  {
+   "wort": "sojaproteinisolat",
+   "n": 1
+  },
+  {
+   "wort": "sojasprossen",
+   "n": 1
+  },
+  {
+   "wort": "sonnenblumenkernaufstrich",
+   "n": 1
+  },
+  {
+   "wort": "sonnenblumenöl",
+   "n": 1
+  },
+  {
+   "wort": "sorbet",
+   "n": 1
+  },
+  {
+   "wort": "sorbit",
+   "n": 1
+  },
+  {
+   "wort": "spargelcremesuppe",
+   "n": 1
+  },
+  {
+   "wort": "spargelrisotto",
+   "n": 1
+  },
+  {
+   "wort": "spargelschinkenröllchen",
+   "n": 1
+  },
+  {
+   "wort": "spinatauflauf",
+   "n": 1
+  },
+  {
+   "wort": "spinatgemüse",
+   "n": 1
+  },
+  {
+   "wort": "spinatgratin",
+   "n": 1
+  },
+  {
+   "wort": "spinatnocken",
+   "n": 1
+  },
+  {
+   "wort": "spinatpudding",
+   "n": 1
+  },
+  {
+   "wort": "spinatsamtsuppe",
+   "n": 1
+  },
+  {
+   "wort": "spinatsauce",
+   "n": 1
+  },
+  {
+   "wort": "sprühsahne",
+   "n": 1
+  },
+  {
+   "wort": "stachelbeergrütze",
+   "n": 1
+  },
+  {
+   "wort": "stachelbeerkaltschale",
+   "n": 1
+  },
+  {
+   "wort": "stachelbeerkuchen",
+   "n": 1
+  },
+  {
+   "wort": "stagioni",
+   "n": 1
+  },
+  {
+   "wort": "steinbuttfilet",
+   "n": 1
+  },
+  {
+   "wort": "sternpastete",
+   "n": 1
+  },
+  {
+   "wort": "stout",
+   "n": 1
+  },
+  {
+   "wort": "stracciatella",
+   "n": 1
+  },
+  {
+   "wort": "straßburger",
+   "n": 1
+  },
+  {
+   "wort": "streichwurstalternative",
+   "n": 1
+  },
+  {
+   "wort": "streusel",
+   "n": 1
+  },
+  {
+   "wort": "streuseln",
+   "n": 1
+  },
+  {
+   "wort": "streuselplätzchen",
+   "n": 1
+  },
+  {
+   "wort": "streuselschnecken",
+   "n": 1
+  },
+  {
+   "wort": "studentenfutter",
+   "n": 1
+  },
+  {
+   "wort": "studentenschnitzel",
+   "n": 1
+  },
+  {
+   "wort": "süddeutsche",
+   "n": 1
+  },
+  {
+   "wort": "sülzkotelett",
+   "n": 1
+  },
+  {
+   "wort": "sülzwurst",
+   "n": 1
+  },
+  {
+   "wort": "sunrise",
+   "n": 1
+  },
+  {
+   "wort": "surimi",
+   "n": 1
+  },
+  {
+   "wort": "süßkartoffelpüree",
+   "n": 1
+  },
+  {
+   "wort": "süßkirschen",
+   "n": 1
+  },
+  {
+   "wort": "süßkirschsaft",
+   "n": 1
+  },
+  {
+   "wort": "süßmolke",
+   "n": 1
+  },
+  {
+   "wort": "süßmolkenpulver",
+   "n": 1
+  },
+  {
+   "wort": "süßrahmbutter",
+   "n": 1
+  },
+  {
+   "wort": "suzette",
+   "n": 1
+  },
+  {
+   "wort": "sweet",
+   "n": 1
+  },
+  {
+   "wort": "szegediner",
+   "n": 1
+  },
+  {
+   "wort": "tahin",
+   "n": 1
+  },
+  {
+   "wort": "tamarillo",
+   "n": 1
+  },
+  {
+   "wort": "tatarensauce",
+   "n": 1
+  },
+  {
+   "wort": "teegebäck",
+   "n": 1
+  },
+  {
+   "wort": "teekuchen",
+   "n": 1
+  },
+  {
+   "wort": "teigmantel",
+   "n": 1
+  },
+  {
+   "wort": "teigschnitte",
+   "n": 1
+  },
+  {
+   "wort": "teilentrahmt",
+   "n": 1
+  },
+  {
+   "wort": "teller",
+   "n": 1
+  },
+  {
+   "wort": "teltower",
+   "n": 1
+  },
+  {
+   "wort": "terlaner",
+   "n": 1
+  },
+  {
+   "wort": "the",
+   "n": 1
+  },
+  {
+   "wort": "thunfischaufstrich",
+   "n": 1
+  },
+  {
+   "wort": "thymian",
+   "n": 1
+  },
+  {
+   "wort": "tintenfischtuben",
+   "n": 1
+  },
+  {
+   "wort": "toasties",
+   "n": 1
+  },
+  {
+   "wort": "tomatenpüree",
+   "n": 1
+  },
+  {
+   "wort": "tonno",
+   "n": 1
+  },
+  {
+   "wort": "tortillachips",
+   "n": 1
+  },
+  {
+   "wort": "traubendicksaft",
+   "n": 1
+  },
+  {
+   "wort": "traubenkernöl",
+   "n": 1
+  },
+  {
+   "wort": "trauttmansdorff",
+   "n": 1
+  },
+  {
+   "wort": "trockenbeerenauslese",
+   "n": 1
+  },
+  {
+   "wort": "trüffelfüllcreme",
+   "n": 1
+  },
+  {
+   "wort": "trüffelmosaikpastete",
+   "n": 1
+  },
+  {
+   "wort": "trüffeln",
+   "n": 1
+  },
+  {
+   "wort": "trüffeltorte",
+   "n": 1
+  },
+  {
+   "wort": "türkischer",
+   "n": 1
+  },
+  {
+   "wort": "tutti",
+   "n": 1
+  },
+  {
+   "wort": "übergrillt",
+   "n": 1
+  },
+  {
+   "wort": "unglasiert",
+   "n": 1
+  },
+  {
+   "wort": "vanillekipferl",
+   "n": 1
+  },
+  {
+   "wort": "veganes",
+   "n": 1
+  },
+  {
+   "wort": "vegetarischer",
+   "n": 1
+  },
+  {
+   "wort": "vegetarisches",
+   "n": 1
+  },
+  {
+   "wort": "verdünnt",
+   "n": 1
+  },
+  {
+   "wort": "vier",
+   "n": 1
+  },
+  {
+   "wort": "viertelfettstufe",
+   "n": 1
+  },
+  {
+   "wort": "vii",
+   "n": 1
+  },
+  {
+   "wort": "viii",
+   "n": 1
+  },
+  {
+   "wort": "vitamingetränk",
+   "n": 1
+  },
+  {
+   "wort": "vollkorncroissant",
+   "n": 1
+  },
+  {
+   "wort": "vollkorneierkuchen",
+   "n": 1
+  },
+  {
+   "wort": "vollkornhaselnusskuchen",
+   "n": 1
+  },
+  {
+   "wort": "vollkornhefezopf",
+   "n": 1
+  },
+  {
+   "wort": "vollkornkeks",
+   "n": 1
+  },
+  {
+   "wort": "vollkornknusperbrot",
+   "n": 1
+  },
+  {
+   "wort": "vollkornpfannkuchen",
+   "n": 1
+  },
+  {
+   "wort": "vollkornpizzateig",
+   "n": 1
+  },
+  {
+   "wort": "vollkornsandkuchen",
+   "n": 1
+  },
+  {
+   "wort": "vorzugsmilch",
+   "n": 1
+  },
+  {
+   "wort": "waffelhörnchen",
+   "n": 1
+  },
+  {
+   "wort": "waffelschnitte",
+   "n": 1
+  },
+  {
+   "wort": "waldorfsalat",
+   "n": 1
+  },
+  {
+   "wort": "walnusseis",
+   "n": 1
+  },
+  {
+   "wort": "walnussöl",
+   "n": 1
+  },
+  {
+   "wort": "wamme",
+   "n": 1
+  },
+  {
+   "wort": "wasserbad",
+   "n": 1
+  },
+  {
+   "wort": "weinchaudeau",
+   "n": 1
+  },
+  {
+   "wort": "weinschaumsauce",
+   "n": 1
+  },
+  {
+   "wort": "weißbrotscheiben",
+   "n": 1
+  },
+  {
+   "wort": "weisse",
+   "n": 1
+  },
+  {
+   "wort": "weißes",
+   "n": 1
+  },
+  {
+   "wort": "weißweinsud",
+   "n": 1
+  },
+  {
+   "wort": "weizenbaguettebrötchen",
+   "n": 1
+  },
+  {
+   "wort": "weizenfladenbrot",
+   "n": 1
+  },
+  {
+   "wort": "weizenglutenfertigmischung",
+   "n": 1
+  },
+  {
+   "wort": "weizenkeimöl",
+   "n": 1
+  },
+  {
+   "wort": "weizenknäckebrot",
+   "n": 1
+  },
+  {
+   "wort": "weizenpops",
+   "n": 1
+  },
+  {
+   "wort": "weizentortilla",
+   "n": 1
+  },
+  {
+   "wort": "weizenvollkornbaguette",
+   "n": 1
+  },
+  {
+   "wort": "welfencreme",
+   "n": 1
+  },
+  {
+   "wort": "welsh",
+   "n": 1
+  },
+  {
+   "wort": "wespennester",
+   "n": 1
+  },
+  {
+   "wort": "westfälinger",
+   "n": 1
+  },
+  {
+   "wort": "whiskey",
+   "n": 1
+  },
+  {
+   "wort": "whisky",
+   "n": 1
+  },
+  {
+   "wort": "wickelklöße",
+   "n": 1
+  },
+  {
+   "wort": "wildbretgalantine",
+   "n": 1
+  },
+  {
+   "wort": "wildbretpastete",
+   "n": 1
+  },
+  {
+   "wort": "wildklößchen",
+   "n": 1
+  },
+  {
+   "wort": "wildkraftbrühe",
+   "n": 1
+  },
+  {
+   "wort": "wildpastete",
+   "n": 1
+  },
+  {
+   "wort": "wildpilzmischung",
+   "n": 1
+  },
+  {
+   "wort": "wildschweinpastete",
+   "n": 1
+  },
+  {
+   "wort": "wollmispel",
+   "n": 1
+  },
+  {
+   "wort": "wollwurst",
+   "n": 1
+  },
+  {
+   "wort": "wrap",
+   "n": 1
+  },
+  {
+   "wort": "würfelpastete",
+   "n": 1
+  },
+  {
+   "wort": "würstel",
+   "n": 1
+  },
+  {
+   "wort": "wurstpasteten",
+   "n": 1
+  },
+  {
+   "wort": "würzpaste",
+   "n": 1
+  },
+  {
+   "wort": "würzsoße",
+   "n": 1
+  },
+  {
+   "wort": "xii",
+   "n": 1
+  },
+  {
+   "wort": "zedernbrot",
+   "n": 1
+  },
+  {
+   "wort": "zichorienkaffeepulver",
+   "n": 1
+  },
+  {
+   "wort": "ziehmargarine",
+   "n": 1
+  },
+  {
+   "wort": "zimtsterne",
+   "n": 1
+  },
+  {
+   "wort": "zitronensahnetorte",
+   "n": 1
+  },
+  {
+   "wort": "zitronensorbet",
+   "n": 1
+  },
+  {
+   "wort": "zucchinibratlinge",
+   "n": 1
+  },
+  {
+   "wort": "zucchinischeiben",
+   "n": 1
+  },
+  {
+   "wort": "zuckerlis",
+   "n": 1
+  },
+  {
+   "wort": "zuckerperlen",
+   "n": 1
+  },
+  {
+   "wort": "zugesetzer",
+   "n": 1
+  },
+  {
+   "wort": "zungenpastete",
+   "n": 1
+  },
+  {
+   "wort": "zwiebackauflauf",
+   "n": 1
+  },
+  {
+   "wort": "zwiebelringe",
+   "n": 1
+  }
+ ],
+ "zusammengesetzt": [
+  {
+   "wort": "grundsauce",
+   "n": 171,
+   "teile": [
+    "grund",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "essigmarinade",
+   "n": 61,
+   "teile": [
+    "essig",
+    "marinade"
+   ]
+  },
+  {
+   "wort": "gemüsemischung",
+   "n": 55,
+   "teile": [
+    "gemüse",
+    "mischung"
+   ]
+  },
+  {
+   "wort": "frischteigwaren",
+   "n": 46,
+   "teile": [
+    "frisch",
+    "teigwaren"
+   ]
+  },
+  {
+   "wort": "gemüsebrühe",
+   "n": 41,
+   "teile": [
+    "gemüse",
+    "brühe"
+   ]
+  },
+  {
+   "wort": "glutenfrei",
+   "n": 38,
+   "teile": [
+    "gluten",
+    "frei"
+   ]
+  },
+  {
+   "wort": "eierteigwaren",
+   "n": 35,
+   "teile": [
+    "eier",
+    "teigwaren"
+   ]
+  },
+  {
+   "wort": "hinterhaxe",
+   "n": 30,
+   "teile": [
+    "hinter",
+    "haxe"
+   ]
+  },
+  {
+   "wort": "fruchtmischung",
+   "n": 27,
+   "teile": [
+    "frucht",
+    "mischung"
+   ]
+  },
+  {
+   "wort": "fruchtzubereitung",
+   "n": 27,
+   "teile": [
+    "frucht",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "fleischbrühe",
+   "n": 24,
+   "teile": [
+    "fleisch",
+    "brühe"
+   ]
+  },
+  {
+   "wort": "gemüsepaprika",
+   "n": 23,
+   "teile": [
+    "gemüse",
+    "paprika"
+   ]
+  },
+  {
+   "wort": "sahnesauce",
+   "n": 23,
+   "teile": [
+    "sahne",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "fettreduziert",
+   "n": 19,
+   "teile": [
+    "fett",
+    "reduziert"
+   ]
+  },
+  {
+   "wort": "kaisergemüse",
+   "n": 19,
+   "teile": [
+    "kaiser",
+    "gemüse"
+   ]
+  },
+  {
+   "wort": "nougatfüllung",
+   "n": 19,
+   "teile": [
+    "nougat",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "frischkäsezubereitung",
+   "n": 16,
+   "teile": [
+    "frischkäse",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "joghurtmarinade",
+   "n": 16,
+   "teile": [
+    "joghurt",
+    "marinade"
+   ]
+  },
+  {
+   "wort": "suppenhuhn",
+   "n": 16,
+   "teile": [
+    "suppe",
+    "nhuhn"
+   ]
+  },
+  {
+   "wort": "zitronenmarinade",
+   "n": 16,
+   "teile": [
+    "zitrone",
+    "nmarinade"
+   ]
+  },
+  {
+   "wort": "filetsteak",
+   "n": 15,
+   "teile": [
+    "filet",
+    "steak"
+   ]
+  },
+  {
+   "wort": "schinkenspeck",
+   "n": 15,
+   "teile": [
+    "schinken",
+    "speck"
+   ]
+  },
+  {
+   "wort": "schinkenwurst",
+   "n": 15,
+   "teile": [
+    "schinken",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "schnittkäse",
+   "n": 14,
+   "teile": [
+    "schnitt",
+    "käse"
+   ]
+  },
+  {
+   "wort": "brustfilet",
+   "n": 13,
+   "teile": [
+    "brust",
+    "filet"
+   ]
+  },
+  {
+   "wort": "hackfleischfüllung",
+   "n": 13,
+   "teile": [
+    "hackfleisch",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "kräutersauce",
+   "n": 13,
+   "teile": [
+    "kräuter",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "mettwurst",
+   "n": 13,
+   "teile": [
+    "mett",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "zuckermais",
+   "n": 13,
+   "teile": [
+    "zucker",
+    "mais"
+   ]
+  },
+  {
+   "wort": "laktosefrei",
+   "n": 12,
+   "teile": [
+    "laktose",
+    "frei"
+   ]
+  },
+  {
+   "wort": "trockenfrüchten",
+   "n": 12,
+   "teile": [
+    "trocken",
+    "früchten"
+   ]
+  },
+  {
+   "wort": "wasserbiskuit",
+   "n": 12,
+   "teile": [
+    "wasser",
+    "biskuit"
+   ]
+  },
+  {
+   "wort": "weißweinsauce",
+   "n": 12,
+   "teile": [
+    "weißwein",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "goldbarsch",
+   "n": 11,
+   "teile": [
+    "gold",
+    "barsch"
+   ]
+  },
+  {
+   "wort": "haferflocken",
+   "n": 11,
+   "teile": [
+    "hafer",
+    "flocken"
+   ]
+  },
+  {
+   "wort": "mischpilze",
+   "n": 11,
+   "teile": [
+    "misch",
+    "pilze"
+   ]
+  },
+  {
+   "wort": "vanillepudding",
+   "n": 11,
+   "teile": [
+    "vanille",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "weichkäse",
+   "n": 11,
+   "teile": [
+    "weich",
+    "käse"
+   ]
+  },
+  {
+   "wort": "fettanteil",
+   "n": 10,
+   "teile": [
+    "fett",
+    "anteil"
+   ]
+  },
+  {
+   "wort": "flusskrebs",
+   "n": 10,
+   "teile": [
+    "fluss",
+    "krebs"
+   ]
+  },
+  {
+   "wort": "gemüsesaft",
+   "n": 10,
+   "teile": [
+    "gemüse",
+    "saft"
+   ]
+  },
+  {
+   "wort": "hintereisbein",
+   "n": 10,
+   "teile": [
+    "hinter",
+    "eisbein"
+   ]
+  },
+  {
+   "wort": "klarguss",
+   "n": 10,
+   "teile": [
+    "klar",
+    "guss"
+   ]
+  },
+  {
+   "wort": "leberwurst",
+   "n": 10,
+   "teile": [
+    "leber",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "pfefferschote",
+   "n": 10,
+   "teile": [
+    "pfeffer",
+    "schote"
+   ]
+  },
+  {
+   "wort": "schwertfisch",
+   "n": 10,
+   "teile": [
+    "schwert",
+    "fisch"
+   ]
+  },
+  {
+   "wort": "stielkotelett",
+   "n": 10,
+   "teile": [
+    "stiel",
+    "kotelett"
+   ]
+  },
+  {
+   "wort": "suppeneinlage",
+   "n": 10,
+   "teile": [
+    "suppe",
+    "neinlage"
+   ]
+  },
+  {
+   "wort": "vanillesauce",
+   "n": 10,
+   "teile": [
+    "vanille",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "vollkorn",
+   "n": 10,
+   "teile": [
+    "voll",
+    "korn"
+   ]
+  },
+  {
+   "wort": "weizenbrötchen",
+   "n": 10,
+   "teile": [
+    "weizen",
+    "brötchen"
+   ]
+  },
+  {
+   "wort": "apfelkuchen",
+   "n": 9,
+   "teile": [
+    "apfel",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "butterkekse",
+   "n": 9,
+   "teile": [
+    "butter",
+    "kekse"
+   ]
+  },
+  {
+   "wort": "butterplätzchen",
+   "n": 9,
+   "teile": [
+    "butter",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "fleischfüllung",
+   "n": 9,
+   "teile": [
+    "fleisch",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "gemüsesuppe",
+   "n": 9,
+   "teile": [
+    "gemüse",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "grünkern",
+   "n": 9,
+   "teile": [
+    "grün",
+    "kern"
+   ]
+  },
+  {
+   "wort": "kabeljaufilet",
+   "n": 9,
+   "teile": [
+    "kabeljau",
+    "filet"
+   ]
+  },
+  {
+   "wort": "kammsteak",
+   "n": 9,
+   "teile": [
+    "kamm",
+    "steak"
+   ]
+  },
+  {
+   "wort": "mandeldrink",
+   "n": 9,
+   "teile": [
+    "mandel",
+    "drink"
+   ]
+  },
+  {
+   "wort": "sandmasse",
+   "n": 9,
+   "teile": [
+    "sand",
+    "masse"
+   ]
+  },
+  {
+   "wort": "schwarzwurzel",
+   "n": 9,
+   "teile": [
+    "schwarz",
+    "wurzel"
+   ]
+  },
+  {
+   "wort": "semmelknödel",
+   "n": 9,
+   "teile": [
+    "semmel",
+    "knödel"
+   ]
+  },
+  {
+   "wort": "spritzgebäck",
+   "n": 9,
+   "teile": [
+    "spritz",
+    "gebäck"
+   ]
+  },
+  {
+   "wort": "venusmuschel",
+   "n": 9,
+   "teile": [
+    "venus",
+    "muschel"
+   ]
+  },
+  {
+   "wort": "weizenmischbrot",
+   "n": 9,
+   "teile": [
+    "weizen",
+    "mischbrot"
+   ]
+  },
+  {
+   "wort": "wildlachs",
+   "n": 9,
+   "teile": [
+    "wild",
+    "lachs"
+   ]
+  },
+  {
+   "wort": "bleichsellerie",
+   "n": 8,
+   "teile": [
+    "bleich",
+    "sellerie"
+   ]
+  },
+  {
+   "wort": "hacksteak",
+   "n": 8,
+   "teile": [
+    "hack",
+    "steak"
+   ]
+  },
+  {
+   "wort": "heringsfilet",
+   "n": 8,
+   "teile": [
+    "hering",
+    "sfilet"
+   ]
+  },
+  {
+   "wort": "hühnerfleisch",
+   "n": 8,
+   "teile": [
+    "hühner",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "käsesauce",
+   "n": 8,
+   "teile": [
+    "käse",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "miesmuschel",
+   "n": 8,
+   "teile": [
+    "mies",
+    "muschel"
+   ]
+  },
+  {
+   "wort": "wildente",
+   "n": 8,
+   "teile": [
+    "wild",
+    "ente"
+   ]
+  },
+  {
+   "wort": "wurzelpetersilie",
+   "n": 8,
+   "teile": [
+    "wurzel",
+    "petersilie"
+   ]
+  },
+  {
+   "wort": "biskuitrolle",
+   "n": 7,
+   "teile": [
+    "biskuit",
+    "rolle"
+   ]
+  },
+  {
+   "wort": "buckellachs",
+   "n": 7,
+   "teile": [
+    "buckel",
+    "lachs"
+   ]
+  },
+  {
+   "wort": "erbsensuppe",
+   "n": 7,
+   "teile": [
+    "erbse",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "fruchtcreme",
+   "n": 7,
+   "teile": [
+    "frucht",
+    "creme"
+   ]
+  },
+  {
+   "wort": "fruchtsaftgetränk",
+   "n": 7,
+   "teile": [
+    "fruchtsaft",
+    "getränk"
+   ]
+  },
+  {
+   "wort": "gemüsefüllung",
+   "n": 7,
+   "teile": [
+    "gemüse",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "jagdwurst",
+   "n": 7,
+   "teile": [
+    "jagd",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "karottensalat",
+   "n": 7,
+   "teile": [
+    "karotte",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "pflanzenfett",
+   "n": 7,
+   "teile": [
+    "pflanze",
+    "nfett"
+   ]
+  },
+  {
+   "wort": "pilzsauce",
+   "n": 7,
+   "teile": [
+    "pilz",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "rotweinsauce",
+   "n": 7,
+   "teile": [
+    "rotwein",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "sahnejoghurt",
+   "n": 7,
+   "teile": [
+    "sahne",
+    "joghurt"
+   ]
+  },
+  {
+   "wort": "schokoladensauce",
+   "n": 7,
+   "teile": [
+    "schokolade",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "steinbeißer",
+   "n": 7,
+   "teile": [
+    "stein",
+    "beißer"
+   ]
+  },
+  {
+   "wort": "unterschenkel",
+   "n": 7,
+   "teile": [
+    "unter",
+    "schenkel"
+   ]
+  },
+  {
+   "wort": "wildsauce",
+   "n": 7,
+   "teile": [
+    "wild",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "zartbitter",
+   "n": 7,
+   "teile": [
+    "zart",
+    "bitter"
+   ]
+  },
+  {
+   "wort": "zitronensaft",
+   "n": 7,
+   "teile": [
+    "zitrone",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "zuckerreduziert",
+   "n": 7,
+   "teile": [
+    "zucker",
+    "reduziert"
+   ]
+  },
+  {
+   "wort": "biskuitplätzchen",
+   "n": 6,
+   "teile": [
+    "biskuit",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "brustkern",
+   "n": 6,
+   "teile": [
+    "brust",
+    "kern"
+   ]
+  },
+  {
+   "wort": "fettgewebe",
+   "n": 6,
+   "teile": [
+    "fett",
+    "gewebe"
+   ]
+  },
+  {
+   "wort": "halbbitterschokolade",
+   "n": 6,
+   "teile": [
+    "halb",
+    "bitterschokolade"
+   ]
+  },
+  {
+   "wort": "halbfest",
+   "n": 6,
+   "teile": [
+    "halb",
+    "fest"
+   ]
+  },
+  {
+   "wort": "kalbskotelett",
+   "n": 6,
+   "teile": [
+    "kalb",
+    "skotelett"
+   ]
+  },
+  {
+   "wort": "kartoffelsuppe",
+   "n": 6,
+   "teile": [
+    "kartoffel",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "kuchenboden",
+   "n": 6,
+   "teile": [
+    "kuchen",
+    "boden"
+   ]
+  },
+  {
+   "wort": "leberhack",
+   "n": 6,
+   "teile": [
+    "leber",
+    "hack"
+   ]
+  },
+  {
+   "wort": "meerbrasse",
+   "n": 6,
+   "teile": [
+    "meer",
+    "brasse"
+   ]
+  },
+  {
+   "wort": "meerrettichsauce",
+   "n": 6,
+   "teile": [
+    "meerrettich",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "mittelbrust",
+   "n": 6,
+   "teile": [
+    "mittel",
+    "brust"
+   ]
+  },
+  {
+   "wort": "müslimischung",
+   "n": 6,
+   "teile": [
+    "müsli",
+    "mischung"
+   ]
+  },
+  {
+   "wort": "sahnepudding",
+   "n": 6,
+   "teile": [
+    "sahne",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "schafskopf",
+   "n": 6,
+   "teile": [
+    "schaf",
+    "skopf"
+   ]
+  },
+  {
+   "wort": "schmelzkäsezubereitung",
+   "n": 6,
+   "teile": [
+    "schmelzkäse",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "schokoladenpudding",
+   "n": 6,
+   "teile": [
+    "schokolade",
+    "npudding"
+   ]
+  },
+  {
+   "wort": "seelachsfilet",
+   "n": 6,
+   "teile": [
+    "seelachs",
+    "filet"
+   ]
+  },
+  {
+   "wort": "senfsauce",
+   "n": 6,
+   "teile": [
+    "senf",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "suppenkraut",
+   "n": 6,
+   "teile": [
+    "suppe",
+    "nkraut"
+   ]
+  },
+  {
+   "wort": "tomatenketchup",
+   "n": 6,
+   "teile": [
+    "tomate",
+    "nketchup"
+   ]
+  },
+  {
+   "wort": "tortenboden",
+   "n": 6,
+   "teile": [
+    "torte",
+    "nboden"
+   ]
+  },
+  {
+   "wort": "vanillezubereitung",
+   "n": 6,
+   "teile": [
+    "vanille",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "zitronenlimonade",
+   "n": 6,
+   "teile": [
+    "zitrone",
+    "nlimonade"
+   ]
+  },
+  {
+   "wort": "zuckererbse",
+   "n": 6,
+   "teile": [
+    "zucker",
+    "erbse"
+   ]
+  },
+  {
+   "wort": "bierwurst",
+   "n": 5,
+   "teile": [
+    "bier",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "butterpilz",
+   "n": 5,
+   "teile": [
+    "butter",
+    "pilz"
+   ]
+  },
+  {
+   "wort": "currysauce",
+   "n": 5,
+   "teile": [
+    "curry",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "dinkelbrot",
+   "n": 5,
+   "teile": [
+    "dinkel",
+    "brot"
+   ]
+  },
+  {
+   "wort": "dinkelbrötchen",
+   "n": 5,
+   "teile": [
+    "dinkel",
+    "brötchen"
+   ]
+  },
+  {
+   "wort": "fleischsalat",
+   "n": 5,
+   "teile": [
+    "fleisch",
+    "salat"
+   ]
+  },
+  {
+   "wort": "frühstücksspeck",
+   "n": 5,
+   "teile": [
+    "frühstück",
+    "sspeck"
+   ]
+  },
+  {
+   "wort": "gemüsefenchel",
+   "n": 5,
+   "teile": [
+    "gemüse",
+    "fenchel"
+   ]
+  },
+  {
+   "wort": "gemüsesauce",
+   "n": 5,
+   "teile": [
+    "gemüse",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "mehrfruchtsaft",
+   "n": 5,
+   "teile": [
+    "mehr",
+    "fruchtsaft"
+   ]
+  },
+  {
+   "wort": "ochsenschwanz",
+   "n": 5,
+   "teile": [
+    "ochse",
+    "nschwanz"
+   ]
+  },
+  {
+   "wort": "qualitätsschaumwein",
+   "n": 5,
+   "teile": [
+    "qualität",
+    "sschaumwein"
+   ]
+  },
+  {
+   "wort": "reisauflauf",
+   "n": 5,
+   "teile": [
+    "reis",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "sahnetorte",
+   "n": 5,
+   "teile": [
+    "sahne",
+    "torte"
+   ]
+  },
+  {
+   "wort": "sehnenfrei",
+   "n": 5,
+   "teile": [
+    "sehnen",
+    "frei"
+   ]
+  },
+  {
+   "wort": "speisequark",
+   "n": 5,
+   "teile": [
+    "speise",
+    "quark"
+   ]
+  },
+  {
+   "wort": "tomatensalat",
+   "n": 5,
+   "teile": [
+    "tomate",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "weißkrautsalat",
+   "n": 5,
+   "teile": [
+    "weißkraut",
+    "salat"
+   ]
+  },
+  {
+   "wort": "apfelsaft",
+   "n": 4,
+   "teile": [
+    "apfel",
+    "saft"
+   ]
+  },
+  {
+   "wort": "apfelstrudel",
+   "n": 4,
+   "teile": [
+    "apfel",
+    "strudel"
+   ]
+  },
+  {
+   "wort": "brotsuppe",
+   "n": 4,
+   "teile": [
+    "brot",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "colagetränk",
+   "n": 4,
+   "teile": [
+    "cola",
+    "getränk"
+   ]
+  },
+  {
+   "wort": "eierstich",
+   "n": 4,
+   "teile": [
+    "eier",
+    "stich"
+   ]
+  },
+  {
+   "wort": "eiklarmasse",
+   "n": 4,
+   "teile": [
+    "eiklar",
+    "masse"
+   ]
+  },
+  {
+   "wort": "fischfrikadelle",
+   "n": 4,
+   "teile": [
+    "fisch",
+    "frikadelle"
+   ]
+  },
+  {
+   "wort": "fischstäbchen",
+   "n": 4,
+   "teile": [
+    "fisch",
+    "stäbchen"
+   ]
+  },
+  {
+   "wort": "fladenbrot",
+   "n": 4,
+   "teile": [
+    "fladen",
+    "brot"
+   ]
+  },
+  {
+   "wort": "frischkäsefüllung",
+   "n": 4,
+   "teile": [
+    "frischkäse",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "fruchtcocktail",
+   "n": 4,
+   "teile": [
+    "frucht",
+    "cocktail"
+   ]
+  },
+  {
+   "wort": "fruchtsalat",
+   "n": 4,
+   "teile": [
+    "frucht",
+    "salat"
+   ]
+  },
+  {
+   "wort": "grillkäse",
+   "n": 4,
+   "teile": [
+    "grill",
+    "käse"
+   ]
+  },
+  {
+   "wort": "grillsauce",
+   "n": 4,
+   "teile": [
+    "grill",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "grundbrät",
+   "n": 4,
+   "teile": [
+    "grund",
+    "brät"
+   ]
+  },
+  {
+   "wort": "gulaschsuppe",
+   "n": 4,
+   "teile": [
+    "gulasch",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "gurkensalat",
+   "n": 4,
+   "teile": [
+    "gurke",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "halbtrocken",
+   "n": 4,
+   "teile": [
+    "halb",
+    "trocken"
+   ]
+  },
+  {
+   "wort": "hausmacher",
+   "n": 4,
+   "teile": [
+    "haus",
+    "macher"
+   ]
+  },
+  {
+   "wort": "joghurtalternative",
+   "n": 4,
+   "teile": [
+    "joghurt",
+    "alternative"
+   ]
+  },
+  {
+   "wort": "joghurtsahne",
+   "n": 4,
+   "teile": [
+    "joghurt",
+    "sahne"
+   ]
+  },
+  {
+   "wort": "kakaopulver",
+   "n": 4,
+   "teile": [
+    "kakao",
+    "pulver"
+   ]
+  },
+  {
+   "wort": "kalbsbrust",
+   "n": 4,
+   "teile": [
+    "kalb",
+    "sbrust"
+   ]
+  },
+  {
+   "wort": "kartoffelgratin",
+   "n": 4,
+   "teile": [
+    "kartoffel",
+    "gratin"
+   ]
+  },
+  {
+   "wort": "käsealternative",
+   "n": 4,
+   "teile": [
+    "käse",
+    "alternative"
+   ]
+  },
+  {
+   "wort": "kirschsauce",
+   "n": 4,
+   "teile": [
+    "kirsch",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "kräuterbutter",
+   "n": 4,
+   "teile": [
+    "kräuter",
+    "butter"
+   ]
+  },
+  {
+   "wort": "lachsschinken",
+   "n": 4,
+   "teile": [
+    "lachs",
+    "schinken"
+   ]
+  },
+  {
+   "wort": "linsensuppe",
+   "n": 4,
+   "teile": [
+    "linse",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "mehlmischung",
+   "n": 4,
+   "teile": [
+    "mehl",
+    "mischung"
+   ]
+  },
+  {
+   "wort": "mischfett",
+   "n": 4,
+   "teile": [
+    "misch",
+    "fett"
+   ]
+  },
+  {
+   "wort": "müslikekse",
+   "n": 4,
+   "teile": [
+    "müsli",
+    "kekse"
+   ]
+  },
+  {
+   "wort": "paprikasauce",
+   "n": 4,
+   "teile": [
+    "paprika",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "rettichsalat",
+   "n": 4,
+   "teile": [
+    "rettich",
+    "salat"
+   ]
+  },
+  {
+   "wort": "rheinische",
+   "n": 4,
+   "teile": [
+    "rhein",
+    "ische"
+   ]
+  },
+  {
+   "wort": "sandklaffmuschel",
+   "n": 4,
+   "teile": [
+    "sand",
+    "klaffmuschel"
+   ]
+  },
+  {
+   "wort": "sauerkrautsalat",
+   "n": 4,
+   "teile": [
+    "sauerkraut",
+    "salat"
+   ]
+  },
+  {
+   "wort": "schmetterlingssteak",
+   "n": 4,
+   "teile": [
+    "schmetterling",
+    "ssteak"
+   ]
+  },
+  {
+   "wort": "schnittfest",
+   "n": 4,
+   "teile": [
+    "schnitt",
+    "fest"
+   ]
+  },
+  {
+   "wort": "selleriesalat",
+   "n": 4,
+   "teile": [
+    "sellerie",
+    "salat"
+   ]
+  },
+  {
+   "wort": "traubensaft",
+   "n": 4,
+   "teile": [
+    "traube",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "weißwurst",
+   "n": 4,
+   "teile": [
+    "weiß",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "weizentoastbrot",
+   "n": 4,
+   "teile": [
+    "weizen",
+    "toastbrot"
+   ]
+  },
+  {
+   "wort": "apfelküchlein",
+   "n": 3,
+   "teile": [
+    "apfel",
+    "küchlein"
+   ]
+  },
+  {
+   "wort": "bierschinken",
+   "n": 3,
+   "teile": [
+    "bier",
+    "schinken"
+   ]
+  },
+  {
+   "wort": "birkenpilz",
+   "n": 3,
+   "teile": [
+    "birke",
+    "npilz"
+   ]
+  },
+  {
+   "wort": "blasenwurst",
+   "n": 3,
+   "teile": [
+    "blase",
+    "nwurst"
+   ]
+  },
+  {
+   "wort": "blumenkohlsalat",
+   "n": 3,
+   "teile": [
+    "blumenkohl",
+    "salat"
+   ]
+  },
+  {
+   "wort": "brätblock",
+   "n": 3,
+   "teile": [
+    "brät",
+    "block"
+   ]
+  },
+  {
+   "wort": "braunschweiger",
+   "n": 3,
+   "teile": [
+    "braun",
+    "schweiger"
+   ]
+  },
+  {
+   "wort": "buttergebäck",
+   "n": 3,
+   "teile": [
+    "butter",
+    "gebäck"
+   ]
+  },
+  {
+   "wort": "butterkäse",
+   "n": 3,
+   "teile": [
+    "butter",
+    "käse"
+   ]
+  },
+  {
+   "wort": "champignonsauce",
+   "n": 3,
+   "teile": [
+    "champignon",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "chinakohlsalat",
+   "n": 3,
+   "teile": [
+    "chinakohl",
+    "salat"
+   ]
+  },
+  {
+   "wort": "clubsandwich",
+   "n": 3,
+   "teile": [
+    "club",
+    "sandwich"
+   ]
+  },
+  {
+   "wort": "currybratwurst",
+   "n": 3,
+   "teile": [
+    "curry",
+    "bratwurst"
+   ]
+  },
+  {
+   "wort": "currywurst",
+   "n": 3,
+   "teile": [
+    "curry",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "dillcreme",
+   "n": 3,
+   "teile": [
+    "dill",
+    "creme"
+   ]
+  },
+  {
+   "wort": "dorschleber",
+   "n": 3,
+   "teile": [
+    "dorsch",
+    "leber"
+   ]
+  },
+  {
+   "wort": "edelpilzkäse",
+   "n": 3,
+   "teile": [
+    "edelpilz",
+    "käse"
+   ]
+  },
+  {
+   "wort": "fruchtsaftschorle",
+   "n": 3,
+   "teile": [
+    "fruchtsaft",
+    "schorle"
+   ]
+  },
+  {
+   "wort": "frühlingsrollen",
+   "n": 3,
+   "teile": [
+    "frühling",
+    "srollen"
+   ]
+  },
+  {
+   "wort": "geflügelbratwurst",
+   "n": 3,
+   "teile": [
+    "geflügel",
+    "bratwurst"
+   ]
+  },
+  {
+   "wort": "geflügelsalat",
+   "n": 3,
+   "teile": [
+    "geflügel",
+    "salat"
+   ]
+  },
+  {
+   "wort": "gemüseamaranth",
+   "n": 3,
+   "teile": [
+    "gemüse",
+    "amaranth"
+   ]
+  },
+  {
+   "wort": "gemüsesalat",
+   "n": 3,
+   "teile": [
+    "gemüse",
+    "salat"
+   ]
+  },
+  {
+   "wort": "getreidezubereitung",
+   "n": 3,
+   "teile": [
+    "getreide",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "gewürzcreme",
+   "n": 3,
+   "teile": [
+    "gewürz",
+    "creme"
+   ]
+  },
+  {
+   "wort": "grillfleisch",
+   "n": 3,
+   "teile": [
+    "grill",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "grundmasse",
+   "n": 3,
+   "teile": [
+    "grund",
+    "masse"
+   ]
+  },
+  {
+   "wort": "hackbraten",
+   "n": 3,
+   "teile": [
+    "hack",
+    "braten"
+   ]
+  },
+  {
+   "wort": "hefeweizen",
+   "n": 3,
+   "teile": [
+    "hefe",
+    "weizen"
+   ]
+  },
+  {
+   "wort": "heringssalat",
+   "n": 3,
+   "teile": [
+    "hering",
+    "ssalat"
+   ]
+  },
+  {
+   "wort": "hirsebrei",
+   "n": 3,
+   "teile": [
+    "hirse",
+    "brei"
+   ]
+  },
+  {
+   "wort": "hornfisch",
+   "n": 3,
+   "teile": [
+    "horn",
+    "fisch"
+   ]
+  },
+  {
+   "wort": "hornhecht",
+   "n": 3,
+   "teile": [
+    "horn",
+    "hecht"
+   ]
+  },
+  {
+   "wort": "hühnerbrühe",
+   "n": 3,
+   "teile": [
+    "hühner",
+    "brühe"
+   ]
+  },
+  {
+   "wort": "kaffeecreme",
+   "n": 3,
+   "teile": [
+    "kaffee",
+    "creme"
+   ]
+  },
+  {
+   "wort": "kalbfleischkäse",
+   "n": 3,
+   "teile": [
+    "kalb",
+    "fleischkäse"
+   ]
+  },
+  {
+   "wort": "kalbsbraten",
+   "n": 3,
+   "teile": [
+    "kalb",
+    "sbraten"
+   ]
+  },
+  {
+   "wort": "kalbshaxe",
+   "n": 3,
+   "teile": [
+    "kalb",
+    "shaxe"
+   ]
+  },
+  {
+   "wort": "kalbsherz",
+   "n": 3,
+   "teile": [
+    "kalb",
+    "sherz"
+   ]
+  },
+  {
+   "wort": "kalbsleber",
+   "n": 3,
+   "teile": [
+    "kalb",
+    "sleber"
+   ]
+  },
+  {
+   "wort": "kalbsschnitzel",
+   "n": 3,
+   "teile": [
+    "kalb",
+    "sschnitzel"
+   ]
+  },
+  {
+   "wort": "kapernsauce",
+   "n": 3,
+   "teile": [
+    "kaper",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "käsewürstchen",
+   "n": 3,
+   "teile": [
+    "käse",
+    "würstchen"
+   ]
+  },
+  {
+   "wort": "kirschtorte",
+   "n": 3,
+   "teile": [
+    "kirsch",
+    "torte"
+   ]
+  },
+  {
+   "wort": "kräuterquark",
+   "n": 3,
+   "teile": [
+    "kräuter",
+    "quark"
+   ]
+  },
+  {
+   "wort": "lauchsalat",
+   "n": 3,
+   "teile": [
+    "lauch",
+    "salat"
+   ]
+  },
+  {
+   "wort": "leberknödel",
+   "n": 3,
+   "teile": [
+    "leber",
+    "knödel"
+   ]
+  },
+  {
+   "wort": "leberpresssack",
+   "n": 3,
+   "teile": [
+    "leber",
+    "presssack"
+   ]
+  },
+  {
+   "wort": "leberreis",
+   "n": 3,
+   "teile": [
+    "leber",
+    "reis"
+   ]
+  },
+  {
+   "wort": "magerquark",
+   "n": 3,
+   "teile": [
+    "mager",
+    "quark"
+   ]
+  },
+  {
+   "wort": "mandelblättchen",
+   "n": 3,
+   "teile": [
+    "mandel",
+    "blättchen"
+   ]
+  },
+  {
+   "wort": "mandelkuchen",
+   "n": 3,
+   "teile": [
+    "mandel",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "meerbarbe",
+   "n": 3,
+   "teile": [
+    "meer",
+    "barbe"
+   ]
+  },
+  {
+   "wort": "mittelgrob",
+   "n": 3,
+   "teile": [
+    "mittel",
+    "grob"
+   ]
+  },
+  {
+   "wort": "nusskuchen",
+   "n": 3,
+   "teile": [
+    "nuss",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "paprikasalat",
+   "n": 3,
+   "teile": [
+    "paprika",
+    "salat"
+   ]
+  },
+  {
+   "wort": "petersilienblatt",
+   "n": 3,
+   "teile": [
+    "petersilie",
+    "nblatt"
+   ]
+  },
+  {
+   "wort": "pflanzenmargarine",
+   "n": 3,
+   "teile": [
+    "pflanze",
+    "nmargarine"
+   ]
+  },
+  {
+   "wort": "pizzabaguette",
+   "n": 3,
+   "teile": [
+    "pizza",
+    "baguette"
+   ]
+  },
+  {
+   "wort": "quarkauflauf",
+   "n": 3,
+   "teile": [
+    "quark",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "reisdrink",
+   "n": 3,
+   "teile": [
+    "reis",
+    "drink"
+   ]
+  },
+  {
+   "wort": "reissalat",
+   "n": 3,
+   "teile": [
+    "reis",
+    "salat"
+   ]
+  },
+  {
+   "wort": "rindsbratwurst",
+   "n": 3,
+   "teile": [
+    "rind",
+    "sbratwurst"
+   ]
+  },
+  {
+   "wort": "rückenspeck",
+   "n": 3,
+   "teile": [
+    "rücken",
+    "speck"
+   ]
+  },
+  {
+   "wort": "sahneschokolade",
+   "n": 3,
+   "teile": [
+    "sahne",
+    "schokolade"
+   ]
+  },
+  {
+   "wort": "salatcreme",
+   "n": 3,
+   "teile": [
+    "salat",
+    "creme"
+   ]
+  },
+  {
+   "wort": "schnittlauch",
+   "n": 3,
+   "teile": [
+    "schnitt",
+    "lauch"
+   ]
+  },
+  {
+   "wort": "schokoladentorte",
+   "n": 3,
+   "teile": [
+    "schokolade",
+    "ntorte"
+   ]
+  },
+  {
+   "wort": "schokoladenzubereitung",
+   "n": 3,
+   "teile": [
+    "schokolade",
+    "nzubereitung"
+   ]
+  },
+  {
+   "wort": "schwanzstück",
+   "n": 3,
+   "teile": [
+    "schwanz",
+    "stück"
+   ]
+  },
+  {
+   "wort": "schweinelende",
+   "n": 3,
+   "teile": [
+    "schwein",
+    "elende"
+   ]
+  },
+  {
+   "wort": "trockenprodukt",
+   "n": 3,
+   "teile": [
+    "trocken",
+    "produkt"
+   ]
+  },
+  {
+   "wort": "weingelee",
+   "n": 3,
+   "teile": [
+    "wein",
+    "gelee"
+   ]
+  },
+  {
+   "wort": "weinsauerkraut",
+   "n": 3,
+   "teile": [
+    "wein",
+    "sauerkraut"
+   ]
+  },
+  {
+   "wort": "weißlacker",
+   "n": 3,
+   "teile": [
+    "weiß",
+    "lacker"
+   ]
+  },
+  {
+   "wort": "weizenkeimen",
+   "n": 3,
+   "teile": [
+    "weizen",
+    "keimen"
+   ]
+  },
+  {
+   "wort": "wurstsalat",
+   "n": 3,
+   "teile": [
+    "wurst",
+    "salat"
+   ]
+  },
+  {
+   "wort": "zuckerglasur",
+   "n": 3,
+   "teile": [
+    "zucker",
+    "glasur"
+   ]
+  },
+  {
+   "wort": "zwiebelkuchen",
+   "n": 3,
+   "teile": [
+    "zwiebel",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "ahornsirup",
+   "n": 2,
+   "teile": [
+    "ahorn",
+    "sirup"
+   ]
+  },
+  {
+   "wort": "ananasgelee",
+   "n": 2,
+   "teile": [
+    "ananas",
+    "gelee"
+   ]
+  },
+  {
+   "wort": "apfelkraut",
+   "n": 2,
+   "teile": [
+    "apfel",
+    "kraut"
+   ]
+  },
+  {
+   "wort": "apfelsuppe",
+   "n": 2,
+   "teile": [
+    "apfel",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "aprikosensauce",
+   "n": 2,
+   "teile": [
+    "aprikose",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "basilikumbutter",
+   "n": 2,
+   "teile": [
+    "basilikum",
+    "butter"
+   ]
+  },
+  {
+   "wort": "bauchspeck",
+   "n": 2,
+   "teile": [
+    "bauch",
+    "speck"
+   ]
+  },
+  {
+   "wort": "biersauce",
+   "n": 2,
+   "teile": [
+    "bier",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "biersuppe",
+   "n": 2,
+   "teile": [
+    "bier",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "birnenkraut",
+   "n": 2,
+   "teile": [
+    "birne",
+    "nkraut"
+   ]
+  },
+  {
+   "wort": "biskuitboden",
+   "n": 2,
+   "teile": [
+    "biskuit",
+    "boden"
+   ]
+  },
+  {
+   "wort": "biskuitmasse",
+   "n": 2,
+   "teile": [
+    "biskuit",
+    "masse"
+   ]
+  },
+  {
+   "wort": "broccolisalat",
+   "n": 2,
+   "teile": [
+    "broccoli",
+    "salat"
+   ]
+  },
+  {
+   "wort": "butterkuchen",
+   "n": 2,
+   "teile": [
+    "butter",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "buttertoastbrot",
+   "n": 2,
+   "teile": [
+    "butter",
+    "toastbrot"
+   ]
+  },
+  {
+   "wort": "cabanossi",
+   "n": 2,
+   "teile": [
+    "caban",
+    "ossi"
+   ]
+  },
+  {
+   "wort": "cremefüllung",
+   "n": 2,
+   "teile": [
+    "creme",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "curryketchup",
+   "n": 2,
+   "teile": [
+    "curry",
+    "ketchup"
+   ]
+  },
+  {
+   "wort": "curryreis",
+   "n": 2,
+   "teile": [
+    "curry",
+    "reis"
+   ]
+  },
+  {
+   "wort": "dinkelteigwaren",
+   "n": 2,
+   "teile": [
+    "dinkel",
+    "teigwaren"
+   ]
+  },
+  {
+   "wort": "energiereduziert",
+   "n": 2,
+   "teile": [
+    "energie",
+    "reduziert"
+   ]
+  },
+  {
+   "wort": "energieriegel",
+   "n": 2,
+   "teile": [
+    "energie",
+    "riegel"
+   ]
+  },
+  {
+   "wort": "entenfleisch",
+   "n": 2,
+   "teile": [
+    "ente",
+    "nfleisch"
+   ]
+  },
+  {
+   "wort": "feinkostsauce",
+   "n": 2,
+   "teile": [
+    "feinkost",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "fenchelsalat",
+   "n": 2,
+   "teile": [
+    "fenchel",
+    "salat"
+   ]
+  },
+  {
+   "wort": "fettbacke",
+   "n": 2,
+   "teile": [
+    "fett",
+    "backe"
+   ]
+  },
+  {
+   "wort": "fischgulasch",
+   "n": 2,
+   "teile": [
+    "fisch",
+    "gulasch"
+   ]
+  },
+  {
+   "wort": "fleischersatz",
+   "n": 2,
+   "teile": [
+    "fleisch",
+    "ersatz"
+   ]
+  },
+  {
+   "wort": "fondantkonfekt",
+   "n": 2,
+   "teile": [
+    "fondant",
+    "konfekt"
+   ]
+  },
+  {
+   "wort": "fruchtfüllung",
+   "n": 2,
+   "teile": [
+    "frucht",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "fruchtgrütze",
+   "n": 2,
+   "teile": [
+    "frucht",
+    "grütze"
+   ]
+  },
+  {
+   "wort": "fruchtgummi",
+   "n": 2,
+   "teile": [
+    "frucht",
+    "gummi"
+   ]
+  },
+  {
+   "wort": "fruchtsirup",
+   "n": 2,
+   "teile": [
+    "frucht",
+    "sirup"
+   ]
+  },
+  {
+   "wort": "geflügelbockwurst",
+   "n": 2,
+   "teile": [
+    "geflügel",
+    "bockwurst"
+   ]
+  },
+  {
+   "wort": "geflügelfleischkäse",
+   "n": 2,
+   "teile": [
+    "geflügel",
+    "fleischkäse"
+   ]
+  },
+  {
+   "wort": "glasnudeln",
+   "n": 2,
+   "teile": [
+    "glas",
+    "nudeln"
+   ]
+  },
+  {
+   "wort": "grillbauch",
+   "n": 2,
+   "teile": [
+    "grill",
+    "bauch"
+   ]
+  },
+  {
+   "wort": "grundsuppe",
+   "n": 2,
+   "teile": [
+    "grund",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "gurkengemüse",
+   "n": 2,
+   "teile": [
+    "gurke",
+    "ngemüse"
+   ]
+  },
+  {
+   "wort": "hagelsalz",
+   "n": 2,
+   "teile": [
+    "hagel",
+    "salz"
+   ]
+  },
+  {
+   "wort": "hasenbraten",
+   "n": 2,
+   "teile": [
+    "hase",
+    "nbraten"
+   ]
+  },
+  {
+   "wort": "hasenfleisch",
+   "n": 2,
+   "teile": [
+    "hase",
+    "nfleisch"
+   ]
+  },
+  {
+   "wort": "hefeplinsen",
+   "n": 2,
+   "teile": [
+    "hefe",
+    "plinsen"
+   ]
+  },
+  {
+   "wort": "heringsrogen",
+   "n": 2,
+   "teile": [
+    "hering",
+    "srogen"
+   ]
+  },
+  {
+   "wort": "herzwurst",
+   "n": 2,
+   "teile": [
+    "herz",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "hirschbraten",
+   "n": 2,
+   "teile": [
+    "hirsch",
+    "braten"
+   ]
+  },
+  {
+   "wort": "holundersuppe",
+   "n": 2,
+   "teile": [
+    "holunder",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "jägerschnitzel",
+   "n": 2,
+   "teile": [
+    "jäger",
+    "schnitzel"
+   ]
+  },
+  {
+   "wort": "joghurtcreme",
+   "n": 2,
+   "teile": [
+    "joghurt",
+    "creme"
+   ]
+  },
+  {
+   "wort": "kabeljaurogen",
+   "n": 2,
+   "teile": [
+    "kabeljau",
+    "rogen"
+   ]
+  },
+  {
+   "wort": "kalbfleisch",
+   "n": 2,
+   "teile": [
+    "kalb",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "kalbfleischwurst",
+   "n": 2,
+   "teile": [
+    "kalb",
+    "fleischwurst"
+   ]
+  },
+  {
+   "wort": "kalbsgulasch",
+   "n": 2,
+   "teile": [
+    "kalb",
+    "sgulasch"
+   ]
+  },
+  {
+   "wort": "kalbshirn",
+   "n": 2,
+   "teile": [
+    "kalb",
+    "shirn"
+   ]
+  },
+  {
+   "wort": "kalbsnieren",
+   "n": 2,
+   "teile": [
+    "kalb",
+    "snieren"
+   ]
+  },
+  {
+   "wort": "kalbsrücken",
+   "n": 2,
+   "teile": [
+    "kalb",
+    "srücken"
+   ]
+  },
+  {
+   "wort": "kalbszunge",
+   "n": 2,
+   "teile": [
+    "kalb",
+    "szunge"
+   ]
+  },
+  {
+   "wort": "kammbraten",
+   "n": 2,
+   "teile": [
+    "kamm",
+    "braten"
+   ]
+  },
+  {
+   "wort": "kaninchenbraten",
+   "n": 2,
+   "teile": [
+    "kaninchen",
+    "braten"
+   ]
+  },
+  {
+   "wort": "käsesalat",
+   "n": 2,
+   "teile": [
+    "käse",
+    "salat"
+   ]
+  },
+  {
+   "wort": "käsewiener",
+   "n": 2,
+   "teile": [
+    "käse",
+    "wiener"
+   ]
+  },
+  {
+   "wort": "käsewindbeutel",
+   "n": 2,
+   "teile": [
+    "käse",
+    "windbeutel"
+   ]
+  },
+  {
+   "wort": "kirschstrudel",
+   "n": 2,
+   "teile": [
+    "kirsch",
+    "strudel"
+   ]
+  },
+  {
+   "wort": "knoblauchwurst",
+   "n": 2,
+   "teile": [
+    "knoblauch",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "kohlensäure",
+   "n": 2,
+   "teile": [
+    "kohle",
+    "nsäure"
+   ]
+  },
+  {
+   "wort": "kohlrabisalat",
+   "n": 2,
+   "teile": [
+    "kohlrabi",
+    "salat"
+   ]
+  },
+  {
+   "wort": "krustenbraten",
+   "n": 2,
+   "teile": [
+    "kruste",
+    "nbraten"
+   ]
+  },
+  {
+   "wort": "kürbiskern",
+   "n": 2,
+   "teile": [
+    "kürbis",
+    "kern"
+   ]
+  },
+  {
+   "wort": "kürbissuppe",
+   "n": 2,
+   "teile": [
+    "kürbis",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "lachsbraten",
+   "n": 2,
+   "teile": [
+    "lachs",
+    "braten"
+   ]
+  },
+  {
+   "wort": "lachsrogen",
+   "n": 2,
+   "teile": [
+    "lachs",
+    "rogen"
+   ]
+  },
+  {
+   "wort": "ladenbauch",
+   "n": 2,
+   "teile": [
+    "lade",
+    "nbauch"
+   ]
+  },
+  {
+   "wort": "lagerbier",
+   "n": 2,
+   "teile": [
+    "lager",
+    "bier"
+   ]
+  },
+  {
+   "wort": "lammbraten",
+   "n": 2,
+   "teile": [
+    "lamm",
+    "braten"
+   ]
+  },
+  {
+   "wort": "lammfleischklößchen",
+   "n": 2,
+   "teile": [
+    "lamm",
+    "fleischklößchen"
+   ]
+  },
+  {
+   "wort": "lammkeule",
+   "n": 2,
+   "teile": [
+    "lamm",
+    "keule"
+   ]
+  },
+  {
+   "wort": "lammragout",
+   "n": 2,
+   "teile": [
+    "lamm",
+    "ragout"
+   ]
+  },
+  {
+   "wort": "leberpudding",
+   "n": 2,
+   "teile": [
+    "leber",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "leberspätzle",
+   "n": 2,
+   "teile": [
+    "leber",
+    "spätzle"
+   ]
+  },
+  {
+   "wort": "linsengemüse",
+   "n": 2,
+   "teile": [
+    "linse",
+    "ngemüse"
+   ]
+  },
+  {
+   "wort": "magerstufe",
+   "n": 2,
+   "teile": [
+    "mager",
+    "stufe"
+   ]
+  },
+  {
+   "wort": "maisbrei",
+   "n": 2,
+   "teile": [
+    "mais",
+    "brei"
+   ]
+  },
+  {
+   "wort": "meerrettichmayonnaise",
+   "n": 2,
+   "teile": [
+    "meerrettich",
+    "mayonnaise"
+   ]
+  },
+  {
+   "wort": "mettwürstchen",
+   "n": 2,
+   "teile": [
+    "mett",
+    "würstchen"
+   ]
+  },
+  {
+   "wort": "mokkacreme",
+   "n": 2,
+   "teile": [
+    "mokka",
+    "creme"
+   ]
+  },
+  {
+   "wort": "mokkasahne",
+   "n": 2,
+   "teile": [
+    "mokka",
+    "sahne"
+   ]
+  },
+  {
+   "wort": "mungbohnenstärke",
+   "n": 2,
+   "teile": [
+    "mungbohne",
+    "nstärke"
+   ]
+  },
+  {
+   "wort": "muschelsauce",
+   "n": 2,
+   "teile": [
+    "muschel",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "müsliplätzchen",
+   "n": 2,
+   "teile": [
+    "müsli",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "müslizutaten",
+   "n": 2,
+   "teile": [
+    "müsli",
+    "zutaten"
+   ]
+  },
+  {
+   "wort": "nussboden",
+   "n": 2,
+   "teile": [
+    "nuss",
+    "boden"
+   ]
+  },
+  {
+   "wort": "nusstorte",
+   "n": 2,
+   "teile": [
+    "nuss",
+    "torte"
+   ]
+  },
+  {
+   "wort": "orangencreme",
+   "n": 2,
+   "teile": [
+    "orange",
+    "ncreme"
+   ]
+  },
+  {
+   "wort": "pfirsichtorte",
+   "n": 2,
+   "teile": [
+    "pfirsich",
+    "torte"
+   ]
+  },
+  {
+   "wort": "pilzragout",
+   "n": 2,
+   "teile": [
+    "pilz",
+    "ragout"
+   ]
+  },
+  {
+   "wort": "puddingalternative",
+   "n": 2,
+   "teile": [
+    "pudding",
+    "alternative"
+   ]
+  },
+  {
+   "wort": "puddingpulver",
+   "n": 2,
+   "teile": [
+    "pudding",
+    "pulver"
+   ]
+  },
+  {
+   "wort": "puffreis",
+   "n": 2,
+   "teile": [
+    "puff",
+    "reis"
+   ]
+  },
+  {
+   "wort": "putenbrust",
+   "n": 2,
+   "teile": [
+    "pute",
+    "nbrust"
+   ]
+  },
+  {
+   "wort": "putenragout",
+   "n": 2,
+   "teile": [
+    "pute",
+    "nragout"
+   ]
+  },
+  {
+   "wort": "putenschnitzel",
+   "n": 2,
+   "teile": [
+    "pute",
+    "nschnitzel"
+   ]
+  },
+  {
+   "wort": "quarkmayonnaise",
+   "n": 2,
+   "teile": [
+    "quark",
+    "mayonnaise"
+   ]
+  },
+  {
+   "wort": "reisfüllung",
+   "n": 2,
+   "teile": [
+    "reis",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "reismischung",
+   "n": 2,
+   "teile": [
+    "reis",
+    "mischung"
+   ]
+  },
+  {
+   "wort": "reisnudeln",
+   "n": 2,
+   "teile": [
+    "reis",
+    "nudeln"
+   ]
+  },
+  {
+   "wort": "remouladensauce",
+   "n": 2,
+   "teile": [
+    "remoulade",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "rindswurst",
+   "n": 2,
+   "teile": [
+    "rind",
+    "swurst"
+   ]
+  },
+  {
+   "wort": "rohrnudeln",
+   "n": 2,
+   "teile": [
+    "rohr",
+    "nudeln"
+   ]
+  },
+  {
+   "wort": "rosinensauce",
+   "n": 2,
+   "teile": [
+    "rosine",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "rotkohlsalat",
+   "n": 2,
+   "teile": [
+    "rotkohl",
+    "salat"
+   ]
+  },
+  {
+   "wort": "sahneschnitten",
+   "n": 2,
+   "teile": [
+    "sahne",
+    "schnitten"
+   ]
+  },
+  {
+   "wort": "salatgurke",
+   "n": 2,
+   "teile": [
+    "salat",
+    "gurke"
+   ]
+  },
+  {
+   "wort": "salatmarinade",
+   "n": 2,
+   "teile": [
+    "salat",
+    "marinade"
+   ]
+  },
+  {
+   "wort": "salatmayonnaise",
+   "n": 2,
+   "teile": [
+    "salat",
+    "mayonnaise"
+   ]
+  },
+  {
+   "wort": "sauerbraten",
+   "n": 2,
+   "teile": [
+    "sauer",
+    "braten"
+   ]
+  },
+  {
+   "wort": "sauerkrautfüllung",
+   "n": 2,
+   "teile": [
+    "sauerkraut",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "schaumeierkuchen",
+   "n": 2,
+   "teile": [
+    "schaum",
+    "eierkuchen"
+   ]
+  },
+  {
+   "wort": "schinkenfüllung",
+   "n": 2,
+   "teile": [
+    "schinken",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "schinkenhörnchen",
+   "n": 2,
+   "teile": [
+    "schinken",
+    "hörnchen"
+   ]
+  },
+  {
+   "wort": "schinkensauce",
+   "n": 2,
+   "teile": [
+    "schinken",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "schinkentorte",
+   "n": 2,
+   "teile": [
+    "schinken",
+    "torte"
+   ]
+  },
+  {
+   "wort": "schinkenwürstchen",
+   "n": 2,
+   "teile": [
+    "schinken",
+    "würstchen"
+   ]
+  },
+  {
+   "wort": "schlemmerfilet",
+   "n": 2,
+   "teile": [
+    "schlemmer",
+    "filet"
+   ]
+  },
+  {
+   "wort": "schokobiskuit",
+   "n": 2,
+   "teile": [
+    "schoko",
+    "biskuit"
+   ]
+  },
+  {
+   "wort": "schokogeschmack",
+   "n": 2,
+   "teile": [
+    "schoko",
+    "geschmack"
+   ]
+  },
+  {
+   "wort": "schokoladeneis",
+   "n": 2,
+   "teile": [
+    "schokolade",
+    "neis"
+   ]
+  },
+  {
+   "wort": "schokoladenglasur",
+   "n": 2,
+   "teile": [
+    "schokolade",
+    "nglasur"
+   ]
+  },
+  {
+   "wort": "schollenfilet",
+   "n": 2,
+   "teile": [
+    "scholle",
+    "nfilet"
+   ]
+  },
+  {
+   "wort": "schwartenbraten",
+   "n": 2,
+   "teile": [
+    "schwarte",
+    "nbraten"
+   ]
+  },
+  {
+   "wort": "schwarzwurzeln",
+   "n": 2,
+   "teile": [
+    "schwarz",
+    "wurzeln"
+   ]
+  },
+  {
+   "wort": "sehnenanteil",
+   "n": 2,
+   "teile": [
+    "sehnen",
+    "anteil"
+   ]
+  },
+  {
+   "wort": "selleriegemüse",
+   "n": 2,
+   "teile": [
+    "sellerie",
+    "gemüse"
+   ]
+  },
+  {
+   "wort": "senfmarinade",
+   "n": 2,
+   "teile": [
+    "senf",
+    "marinade"
+   ]
+  },
+  {
+   "wort": "silberzwiebel",
+   "n": 2,
+   "teile": [
+    "silber",
+    "zwiebel"
+   ]
+  },
+  {
+   "wort": "sojagranulat",
+   "n": 2,
+   "teile": [
+    "soja",
+    "granulat"
+   ]
+  },
+  {
+   "wort": "sonnenblumenkern",
+   "n": 2,
+   "teile": [
+    "sonnenblume",
+    "nkern"
+   ]
+  },
+  {
+   "wort": "specksauce",
+   "n": 2,
+   "teile": [
+    "speck",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "steppenkäse",
+   "n": 2,
+   "teile": [
+    "steppe",
+    "nkäse"
+   ]
+  },
+  {
+   "wort": "stockwurst",
+   "n": 2,
+   "teile": [
+    "stock",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "suppenpfannkuchen",
+   "n": 2,
+   "teile": [
+    "suppe",
+    "npfannkuchen"
+   ]
+  },
+  {
+   "wort": "tafelsüße",
+   "n": 2,
+   "teile": [
+    "tafel",
+    "süße"
+   ]
+  },
+  {
+   "wort": "teufelssauce",
+   "n": 2,
+   "teile": [
+    "teufel",
+    "ssauce"
+   ]
+  },
+  {
+   "wort": "thunfischsalat",
+   "n": 2,
+   "teile": [
+    "thunfisch",
+    "salat"
+   ]
+  },
+  {
+   "wort": "thunfischsteak",
+   "n": 2,
+   "teile": [
+    "thunfisch",
+    "steak"
+   ]
+  },
+  {
+   "wort": "tomatengemüse",
+   "n": 2,
+   "teile": [
+    "tomate",
+    "ngemüse"
+   ]
+  },
+  {
+   "wort": "trockenfrüchte",
+   "n": 2,
+   "teile": [
+    "trocken",
+    "früchte"
+   ]
+  },
+  {
+   "wort": "vollmilchschokoladenüberzug",
+   "n": 2,
+   "teile": [
+    "vollmilchschokolade",
+    "nüberzug"
+   ]
+  },
+  {
+   "wort": "weincreme",
+   "n": 2,
+   "teile": [
+    "wein",
+    "creme"
+   ]
+  },
+  {
+   "wort": "weinkäse",
+   "n": 2,
+   "teile": [
+    "wein",
+    "käse"
+   ]
+  },
+  {
+   "wort": "weinsuppe",
+   "n": 2,
+   "teile": [
+    "wein",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "weißweinaspik",
+   "n": 2,
+   "teile": [
+    "weißwein",
+    "aspik"
+   ]
+  },
+  {
+   "wort": "weizenbaguette",
+   "n": 2,
+   "teile": [
+    "weizen",
+    "baguette"
+   ]
+  },
+  {
+   "wort": "wermutwein",
+   "n": 2,
+   "teile": [
+    "wermut",
+    "wein"
+   ]
+  },
+  {
+   "wort": "wildbrühe",
+   "n": 2,
+   "teile": [
+    "wild",
+    "brühe"
+   ]
+  },
+  {
+   "wort": "wurstalternative",
+   "n": 2,
+   "teile": [
+    "wurst",
+    "alternative"
+   ]
+  },
+  {
+   "wort": "zanderfilet",
+   "n": 2,
+   "teile": [
+    "zander",
+    "filet"
+   ]
+  },
+  {
+   "wort": "zimtgeschmack",
+   "n": 2,
+   "teile": [
+    "zimt",
+    "geschmack"
+   ]
+  },
+  {
+   "wort": "zitronenbutter",
+   "n": 2,
+   "teile": [
+    "zitrone",
+    "nbutter"
+   ]
+  },
+  {
+   "wort": "zitronencreme",
+   "n": 2,
+   "teile": [
+    "zitrone",
+    "ncreme"
+   ]
+  },
+  {
+   "wort": "zitronenkuchen",
+   "n": 2,
+   "teile": [
+    "zitrone",
+    "nkuchen"
+   ]
+  },
+  {
+   "wort": "zuckerfrei",
+   "n": 2,
+   "teile": [
+    "zucker",
+    "frei"
+   ]
+  },
+  {
+   "wort": "zuckerkuchen",
+   "n": 2,
+   "teile": [
+    "zucker",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "zuckerzusatz",
+   "n": 2,
+   "teile": [
+    "zucker",
+    "zusatz"
+   ]
+  },
+  {
+   "wort": "zwiebelfleisch",
+   "n": 2,
+   "teile": [
+    "zwiebel",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "zwiebelsauce",
+   "n": 2,
+   "teile": [
+    "zwiebel",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "zwiebelsuppe",
+   "n": 2,
+   "teile": [
+    "zwiebel",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "ambrosiacreme",
+   "n": 1,
+   "teile": [
+    "ambrosia",
+    "creme"
+   ]
+  },
+  {
+   "wort": "amerikanische",
+   "n": 1,
+   "teile": [
+    "amerika",
+    "nische"
+   ]
+  },
+  {
+   "wort": "ananassaft",
+   "n": 1,
+   "teile": [
+    "ananas",
+    "saft"
+   ]
+  },
+  {
+   "wort": "anisplätzchen",
+   "n": 1,
+   "teile": [
+    "anis",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "apfelauflauf",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "apfelgrütze",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "grütze"
+   ]
+  },
+  {
+   "wort": "apfelkorn",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "korn"
+   ]
+  },
+  {
+   "wort": "apfelmark",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "mark"
+   ]
+  },
+  {
+   "wort": "apfelmeerrettich",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "meerrettich"
+   ]
+  },
+  {
+   "wort": "apfelpektin",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "pektin"
+   ]
+  },
+  {
+   "wort": "apfelreis",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "reis"
+   ]
+  },
+  {
+   "wort": "apfelschmarren",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "schmarren"
+   ]
+  },
+  {
+   "wort": "apfelschnee",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "schnee"
+   ]
+  },
+  {
+   "wort": "apfeltasche",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "tasche"
+   ]
+  },
+  {
+   "wort": "apfeltorte",
+   "n": 1,
+   "teile": [
+    "apfel",
+    "torte"
+   ]
+  },
+  {
+   "wort": "aprikosencreme",
+   "n": 1,
+   "teile": [
+    "aprikose",
+    "ncreme"
+   ]
+  },
+  {
+   "wort": "aprikoseneis",
+   "n": 1,
+   "teile": [
+    "aprikose",
+    "neis"
+   ]
+  },
+  {
+   "wort": "aprikosenglasur",
+   "n": 1,
+   "teile": [
+    "aprikose",
+    "nglasur"
+   ]
+  },
+  {
+   "wort": "aprikosenkuchen",
+   "n": 1,
+   "teile": [
+    "aprikose",
+    "nkuchen"
+   ]
+  },
+  {
+   "wort": "aprikosensaft",
+   "n": 1,
+   "teile": [
+    "aprikose",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "aprikosenteilchen",
+   "n": 1,
+   "teile": [
+    "aprikose",
+    "nteilchen"
+   ]
+  },
+  {
+   "wort": "auberginensalat",
+   "n": 1,
+   "teile": [
+    "aubergine",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "auberginensauce",
+   "n": 1,
+   "teile": [
+    "aubergine",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "balsamicoessig",
+   "n": 1,
+   "teile": [
+    "balsamico",
+    "essig"
+   ]
+  },
+  {
+   "wort": "bananenchips",
+   "n": 1,
+   "teile": [
+    "banane",
+    "nchips"
+   ]
+  },
+  {
+   "wort": "bananenquark",
+   "n": 1,
+   "teile": [
+    "banane",
+    "nquark"
+   ]
+  },
+  {
+   "wort": "bananensalat",
+   "n": 1,
+   "teile": [
+    "banane",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "barbecuesauce",
+   "n": 1,
+   "teile": [
+    "barbecue",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "basismischung",
+   "n": 1,
+   "teile": [
+    "basis",
+    "mischung"
+   ]
+  },
+  {
+   "wort": "bauernbratwurst",
+   "n": 1,
+   "teile": [
+    "bauer",
+    "nbratwurst"
+   ]
+  },
+  {
+   "wort": "bauernfrühstück",
+   "n": 1,
+   "teile": [
+    "bauer",
+    "nfrühstück"
+   ]
+  },
+  {
+   "wort": "bauernsalat",
+   "n": 1,
+   "teile": [
+    "bauer",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "baumkuchen",
+   "n": 1,
+   "teile": [
+    "baum",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "belegkirsche",
+   "n": 1,
+   "teile": [
+    "beleg",
+    "kirsche"
+   ]
+  },
+  {
+   "wort": "bienenstich",
+   "n": 1,
+   "teile": [
+    "biene",
+    "nstich"
+   ]
+  },
+  {
+   "wort": "bindegewebe",
+   "n": 1,
+   "teile": [
+    "binde",
+    "gewebe"
+   ]
+  },
+  {
+   "wort": "birnensaft",
+   "n": 1,
+   "teile": [
+    "birne",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "birnensalat",
+   "n": 1,
+   "teile": [
+    "birne",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "biskuitschnitte",
+   "n": 1,
+   "teile": [
+    "biskuit",
+    "schnitte"
+   ]
+  },
+  {
+   "wort": "blumenkohlauflauf",
+   "n": 1,
+   "teile": [
+    "blumenkohl",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "blutbregenwurst",
+   "n": 1,
+   "teile": [
+    "blut",
+    "bregenwurst"
+   ]
+  },
+  {
+   "wort": "blütenhonig",
+   "n": 1,
+   "teile": [
+    "blüte",
+    "nhonig"
+   ]
+  },
+  {
+   "wort": "blutpresssack",
+   "n": 1,
+   "teile": [
+    "blut",
+    "presssack"
+   ]
+  },
+  {
+   "wort": "bouillonkartoffeln",
+   "n": 1,
+   "teile": [
+    "bouillon",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "branntweinessig",
+   "n": 1,
+   "teile": [
+    "branntwein",
+    "essig"
+   ]
+  },
+  {
+   "wort": "braunhirse",
+   "n": 1,
+   "teile": [
+    "braun",
+    "hirse"
+   ]
+  },
+  {
+   "wort": "broccoliauflauf",
+   "n": 1,
+   "teile": [
+    "broccoli",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "brotfrucht",
+   "n": 1,
+   "teile": [
+    "brot",
+    "frucht"
+   ]
+  },
+  {
+   "wort": "buchweizenbrot",
+   "n": 1,
+   "teile": [
+    "buch",
+    "weizenbrot"
+   ]
+  },
+  {
+   "wort": "buchweizengrütze",
+   "n": 1,
+   "teile": [
+    "buchweizen",
+    "grütze"
+   ]
+  },
+  {
+   "wort": "buchweizenpfannkuchen",
+   "n": 1,
+   "teile": [
+    "buchweizen",
+    "pfannkuchen"
+   ]
+  },
+  {
+   "wort": "buchweizenplinsen",
+   "n": 1,
+   "teile": [
+    "buchweizen",
+    "plinsen"
+   ]
+  },
+  {
+   "wort": "buchweizentorte",
+   "n": 1,
+   "teile": [
+    "buchweizen",
+    "torte"
+   ]
+  },
+  {
+   "wort": "buttercreme",
+   "n": 1,
+   "teile": [
+    "butter",
+    "creme"
+   ]
+  },
+  {
+   "wort": "butterkartoffeln",
+   "n": 1,
+   "teile": [
+    "butter",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "butternockerln",
+   "n": 1,
+   "teile": [
+    "butter",
+    "nockerln"
+   ]
+  },
+  {
+   "wort": "butterreis",
+   "n": 1,
+   "teile": [
+    "butter",
+    "reis"
+   ]
+  },
+  {
+   "wort": "champignonsuppe",
+   "n": 1,
+   "teile": [
+    "champignon",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "clementinensaft",
+   "n": 1,
+   "teile": [
+    "clementine",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "cocktailwürstchen",
+   "n": 1,
+   "teile": [
+    "cocktail",
+    "würstchen"
+   ]
+  },
+  {
+   "wort": "colabier",
+   "n": 1,
+   "teile": [
+    "cola",
+    "bier"
+   ]
+  },
+  {
+   "wort": "colaweizen",
+   "n": 1,
+   "teile": [
+    "cola",
+    "weizen"
+   ]
+  },
+  {
+   "wort": "delikatesswürstchen",
+   "n": 1,
+   "teile": [
+    "delikatess",
+    "würstchen"
+   ]
+  },
+  {
+   "wort": "dominosteine",
+   "n": 1,
+   "teile": [
+    "domino",
+    "steine"
+   ]
+  },
+  {
+   "wort": "donauwellen",
+   "n": 1,
+   "teile": [
+    "donau",
+    "wellen"
+   ]
+  },
+  {
+   "wort": "dönerfleisch",
+   "n": 1,
+   "teile": [
+    "döner",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "doppelbock",
+   "n": 1,
+   "teile": [
+    "doppel",
+    "bock"
+   ]
+  },
+  {
+   "wort": "doppelkekse",
+   "n": 1,
+   "teile": [
+    "doppel",
+    "kekse"
+   ]
+  },
+  {
+   "wort": "dosenschinken",
+   "n": 1,
+   "teile": [
+    "dose",
+    "nschinken"
+   ]
+  },
+  {
+   "wort": "dreiviertelfett",
+   "n": 1,
+   "teile": [
+    "dreiviertel",
+    "fett"
+   ]
+  },
+  {
+   "wort": "druckgedämpft",
+   "n": 1,
+   "teile": [
+    "druck",
+    "gedämpft"
+   ]
+  },
+  {
+   "wort": "eierkartoffeln",
+   "n": 1,
+   "teile": [
+    "eier",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "eiersalat",
+   "n": 1,
+   "teile": [
+    "eier",
+    "salat"
+   ]
+  },
+  {
+   "wort": "eiersauce",
+   "n": 1,
+   "teile": [
+    "eier",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "eierschecke",
+   "n": 1,
+   "teile": [
+    "eier",
+    "schecke"
+   ]
+  },
+  {
+   "wort": "eiweißbrot",
+   "n": 1,
+   "teile": [
+    "eiweiß",
+    "brot"
+   ]
+  },
+  {
+   "wort": "eiweißbrötchen",
+   "n": 1,
+   "teile": [
+    "eiweiß",
+    "brötchen"
+   ]
+  },
+  {
+   "wort": "entenbrust",
+   "n": 1,
+   "teile": [
+    "ente",
+    "nbrust"
+   ]
+  },
+  {
+   "wort": "entenfett",
+   "n": 1,
+   "teile": [
+    "ente",
+    "nfett"
+   ]
+  },
+  {
+   "wort": "erbsenmehl",
+   "n": 1,
+   "teile": [
+    "erbse",
+    "nmehl"
+   ]
+  },
+  {
+   "wort": "fenchelblatt",
+   "n": 1,
+   "teile": [
+    "fenchel",
+    "blatt"
+   ]
+  },
+  {
+   "wort": "fenchelgemüse",
+   "n": 1,
+   "teile": [
+    "fenchel",
+    "gemüse"
+   ]
+  },
+  {
+   "wort": "fenchelsamen",
+   "n": 1,
+   "teile": [
+    "fenchel",
+    "samen"
+   ]
+  },
+  {
+   "wort": "fenchelsuppe",
+   "n": 1,
+   "teile": [
+    "fenchel",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "fettgebäck",
+   "n": 1,
+   "teile": [
+    "fett",
+    "gebäck"
+   ]
+  },
+  {
+   "wort": "fettgehalt",
+   "n": 1,
+   "teile": [
+    "fett",
+    "gehalt"
+   ]
+  },
+  {
+   "wort": "fettrand",
+   "n": 1,
+   "teile": [
+    "fett",
+    "rand"
+   ]
+  },
+  {
+   "wort": "fettreich",
+   "n": 1,
+   "teile": [
+    "fett",
+    "reich"
+   ]
+  },
+  {
+   "wort": "fettstufe",
+   "n": 1,
+   "teile": [
+    "fett",
+    "stufe"
+   ]
+  },
+  {
+   "wort": "fischbrühe",
+   "n": 1,
+   "teile": [
+    "fisch",
+    "brühe"
+   ]
+  },
+  {
+   "wort": "fischburger",
+   "n": 1,
+   "teile": [
+    "fisch",
+    "burger"
+   ]
+  },
+  {
+   "wort": "fischfrikadellen",
+   "n": 1,
+   "teile": [
+    "fisch",
+    "frikadellen"
+   ]
+  },
+  {
+   "wort": "fischmayonnaise",
+   "n": 1,
+   "teile": [
+    "fisch",
+    "mayonnaise"
+   ]
+  },
+  {
+   "wort": "fischpfanne",
+   "n": 1,
+   "teile": [
+    "fisch",
+    "pfanne"
+   ]
+  },
+  {
+   "wort": "fischsalat",
+   "n": 1,
+   "teile": [
+    "fisch",
+    "salat"
+   ]
+  },
+  {
+   "wort": "fleischfond",
+   "n": 1,
+   "teile": [
+    "fleisch",
+    "fond"
+   ]
+  },
+  {
+   "wort": "fleischküchlein",
+   "n": 1,
+   "teile": [
+    "fleisch",
+    "küchlein"
+   ]
+  },
+  {
+   "wort": "fleischpresssack",
+   "n": 1,
+   "teile": [
+    "fleisch",
+    "presssack"
+   ]
+  },
+  {
+   "wort": "fleischrotwurst",
+   "n": 1,
+   "teile": [
+    "fleisch",
+    "rotwurst"
+   ]
+  },
+  {
+   "wort": "fleischwursteinlage",
+   "n": 1,
+   "teile": [
+    "fleischwurst",
+    "einlage"
+   ]
+  },
+  {
+   "wort": "flockentorte",
+   "n": 1,
+   "teile": [
+    "flocke",
+    "ntorte"
+   ]
+  },
+  {
+   "wort": "flüssigsüße",
+   "n": 1,
+   "teile": [
+    "flüssig",
+    "süße"
+   ]
+  },
+  {
+   "wort": "folienkartoffeln",
+   "n": 1,
+   "teile": [
+    "folie",
+    "nkartoffeln"
+   ]
+  },
+  {
+   "wort": "fondantcreme",
+   "n": 1,
+   "teile": [
+    "fondant",
+    "creme"
+   ]
+  },
+  {
+   "wort": "fondantmasse",
+   "n": 1,
+   "teile": [
+    "fondant",
+    "masse"
+   ]
+  },
+  {
+   "wort": "friesenkekse",
+   "n": 1,
+   "teile": [
+    "friese",
+    "nkekse"
+   ]
+  },
+  {
+   "wort": "frischbackhefe",
+   "n": 1,
+   "teile": [
+    "frisch",
+    "backhefe"
+   ]
+  },
+  {
+   "wort": "frischecreme",
+   "n": 1,
+   "teile": [
+    "frische",
+    "creme"
+   ]
+  },
+  {
+   "wort": "frischkäsecreme",
+   "n": 1,
+   "teile": [
+    "frischkäse",
+    "creme"
+   ]
+  },
+  {
+   "wort": "fruchteinlage",
+   "n": 1,
+   "teile": [
+    "frucht",
+    "einlage"
+   ]
+  },
+  {
+   "wort": "früchtekuchen",
+   "n": 1,
+   "teile": [
+    "früchte",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "früchtequark",
+   "n": 1,
+   "teile": [
+    "früchte",
+    "quark"
+   ]
+  },
+  {
+   "wort": "fruchtriegel",
+   "n": 1,
+   "teile": [
+    "frucht",
+    "riegel"
+   ]
+  },
+  {
+   "wort": "fruchtsaftgehalt",
+   "n": 1,
+   "teile": [
+    "fruchtsaft",
+    "gehalt"
+   ]
+  },
+  {
+   "wort": "fruchtsauce",
+   "n": 1,
+   "teile": [
+    "frucht",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "fruchtschnitte",
+   "n": 1,
+   "teile": [
+    "frucht",
+    "schnitte"
+   ]
+  },
+  {
+   "wort": "fruchtsoße",
+   "n": 1,
+   "teile": [
+    "frucht",
+    "soße"
+   ]
+  },
+  {
+   "wort": "fruchtstückchen",
+   "n": 1,
+   "teile": [
+    "frucht",
+    "stückchen"
+   ]
+  },
+  {
+   "wort": "gelbwurst",
+   "n": 1,
+   "teile": [
+    "gelb",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "gemüsereis",
+   "n": 1,
+   "teile": [
+    "gemüse",
+    "reis"
+   ]
+  },
+  {
+   "wort": "gemüsesülze",
+   "n": 1,
+   "teile": [
+    "gemüse",
+    "sülze"
+   ]
+  },
+  {
+   "wort": "gemüsetopf",
+   "n": 1,
+   "teile": [
+    "gemüse",
+    "topf"
+   ]
+  },
+  {
+   "wort": "gerstensuppe",
+   "n": 1,
+   "teile": [
+    "gerste",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "getreidebrand",
+   "n": 1,
+   "teile": [
+    "getreide",
+    "brand"
+   ]
+  },
+  {
+   "wort": "getreidechips",
+   "n": 1,
+   "teile": [
+    "getreide",
+    "chips"
+   ]
+  },
+  {
+   "wort": "gewürzketchup",
+   "n": 1,
+   "teile": [
+    "gewürz",
+    "ketchup"
+   ]
+  },
+  {
+   "wort": "gewürzplätzchen",
+   "n": 1,
+   "teile": [
+    "gewürz",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "gewürzsalz",
+   "n": 1,
+   "teile": [
+    "gewürz",
+    "salz"
+   ]
+  },
+  {
+   "wort": "grapefruitsaft",
+   "n": 1,
+   "teile": [
+    "grapefruit",
+    "saft"
+   ]
+  },
+  {
+   "wort": "graupenblutwurst",
+   "n": 1,
+   "teile": [
+    "graupe",
+    "nblutwurst"
+   ]
+  },
+  {
+   "wort": "graupensuppe",
+   "n": 1,
+   "teile": [
+    "graupe",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "graupenwürstchen",
+   "n": 1,
+   "teile": [
+    "graupe",
+    "nwürstchen"
+   ]
+  },
+  {
+   "wort": "grillkuchen",
+   "n": 1,
+   "teile": [
+    "grill",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "grundrezept",
+   "n": 1,
+   "teile": [
+    "grund",
+    "rezept"
+   ]
+  },
+  {
+   "wort": "gummibonbon",
+   "n": 1,
+   "teile": [
+    "gummi",
+    "bonbon"
+   ]
+  },
+  {
+   "wort": "hackfleischsauce",
+   "n": 1,
+   "teile": [
+    "hackfleisch",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "haferbrot",
+   "n": 1,
+   "teile": [
+    "hafer",
+    "brot"
+   ]
+  },
+  {
+   "wort": "haferbrötchen",
+   "n": 1,
+   "teile": [
+    "hafer",
+    "brötchen"
+   ]
+  },
+  {
+   "wort": "hagebuttensauce",
+   "n": 1,
+   "teile": [
+    "hagebutte",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "hagebuttensuppe",
+   "n": 1,
+   "teile": [
+    "hagebutte",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "halbbitter",
+   "n": 1,
+   "teile": [
+    "halb",
+    "bitter"
+   ]
+  },
+  {
+   "wort": "hascheesuppe",
+   "n": 1,
+   "teile": [
+    "haschee",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "hasenpfeffer",
+   "n": 1,
+   "teile": [
+    "hase",
+    "npfeffer"
+   ]
+  },
+  {
+   "wort": "hasenragout",
+   "n": 1,
+   "teile": [
+    "hase",
+    "nragout"
+   ]
+  },
+  {
+   "wort": "hefemürbteig",
+   "n": 1,
+   "teile": [
+    "hefe",
+    "mürbteig"
+   ]
+  },
+  {
+   "wort": "hefepudding",
+   "n": 1,
+   "teile": [
+    "hefe",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "hefezopf",
+   "n": 1,
+   "teile": [
+    "hefe",
+    "zopf"
+   ]
+  },
+  {
+   "wort": "heidesand",
+   "n": 1,
+   "teile": [
+    "heide",
+    "sand"
+   ]
+  },
+  {
+   "wort": "heringssauce",
+   "n": 1,
+   "teile": [
+    "hering",
+    "ssauce"
+   ]
+  },
+  {
+   "wort": "hirschfleisch",
+   "n": 1,
+   "teile": [
+    "hirsch",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "hirschragout",
+   "n": 1,
+   "teile": [
+    "hirsch",
+    "ragout"
+   ]
+  },
+  {
+   "wort": "hirsebrot",
+   "n": 1,
+   "teile": [
+    "hirse",
+    "brot"
+   ]
+  },
+  {
+   "wort": "hirsefüllung",
+   "n": 1,
+   "teile": [
+    "hirse",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "hirtenkäse",
+   "n": 1,
+   "teile": [
+    "hirte",
+    "nkäse"
+   ]
+  },
+  {
+   "wort": "holundersaft",
+   "n": 1,
+   "teile": [
+    "holunder",
+    "saft"
+   ]
+  },
+  {
+   "wort": "honiggurke",
+   "n": 1,
+   "teile": [
+    "honig",
+    "gurke"
+   ]
+  },
+  {
+   "wort": "honigkuchenplätzchen",
+   "n": 1,
+   "teile": [
+    "honigkuchen",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "honigpfannkuchen",
+   "n": 1,
+   "teile": [
+    "honig",
+    "pfannkuchen"
+   ]
+  },
+  {
+   "wort": "hühnerfett",
+   "n": 1,
+   "teile": [
+    "hühner",
+    "fett"
+   ]
+  },
+  {
+   "wort": "hühnerherzen",
+   "n": 1,
+   "teile": [
+    "hühner",
+    "herzen"
+   ]
+  },
+  {
+   "wort": "hühnerleber",
+   "n": 1,
+   "teile": [
+    "hühner",
+    "leber"
+   ]
+  },
+  {
+   "wort": "hühnerragout",
+   "n": 1,
+   "teile": [
+    "hühner",
+    "ragout"
+   ]
+  },
+  {
+   "wort": "hühnersuppe",
+   "n": 1,
+   "teile": [
+    "hühner",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "innereiengericht",
+   "n": 1,
+   "teile": [
+    "innereien",
+    "gericht"
+   ]
+  },
+  {
+   "wort": "invertzuckercreme",
+   "n": 1,
+   "teile": [
+    "invertzucker",
+    "creme"
+   ]
+  },
+  {
+   "wort": "jägersauce",
+   "n": 1,
+   "teile": [
+    "jäger",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "joghurtbutter",
+   "n": 1,
+   "teile": [
+    "joghurt",
+    "butter"
+   ]
+  },
+  {
+   "wort": "joghurtgetränk",
+   "n": 1,
+   "teile": [
+    "joghurt",
+    "getränk"
+   ]
+  },
+  {
+   "wort": "kaffeeersatzpulver",
+   "n": 1,
+   "teile": [
+    "kaffeeersatz",
+    "pulver"
+   ]
+  },
+  {
+   "wort": "kaffeegebäck",
+   "n": 1,
+   "teile": [
+    "kaffee",
+    "gebäck"
+   ]
+  },
+  {
+   "wort": "kaffeezubereitung",
+   "n": 1,
+   "teile": [
+    "kaffee",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "kaiserreis",
+   "n": 1,
+   "teile": [
+    "kaiser",
+    "reis"
+   ]
+  },
+  {
+   "wort": "kakaocreme",
+   "n": 1,
+   "teile": [
+    "kakao",
+    "creme"
+   ]
+  },
+  {
+   "wort": "kakaomasse",
+   "n": 1,
+   "teile": [
+    "kakao",
+    "masse"
+   ]
+  },
+  {
+   "wort": "kakisaft",
+   "n": 1,
+   "teile": [
+    "kaki",
+    "saft"
+   ]
+  },
+  {
+   "wort": "kaktusfeige",
+   "n": 1,
+   "teile": [
+    "kaktus",
+    "feige"
+   ]
+  },
+  {
+   "wort": "kalbfleischklößchen",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "fleischklößchen"
+   ]
+  },
+  {
+   "wort": "kalbsbries",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "sbries"
+   ]
+  },
+  {
+   "wort": "kalbsbrühe",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "sbrühe"
+   ]
+  },
+  {
+   "wort": "kalbsfilet",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "sfilet"
+   ]
+  },
+  {
+   "wort": "kalbskäse",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "skäse"
+   ]
+  },
+  {
+   "wort": "kalbskeule",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "skeule"
+   ]
+  },
+  {
+   "wort": "kalbslende",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "slende"
+   ]
+  },
+  {
+   "wort": "kalbslungenhaschee",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "slungenhaschee"
+   ]
+  },
+  {
+   "wort": "kalbsragout",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "sragout"
+   ]
+  },
+  {
+   "wort": "kalbssteak",
+   "n": 1,
+   "teile": [
+    "kalb",
+    "ssteak"
+   ]
+  },
+  {
+   "wort": "kaltschale",
+   "n": 1,
+   "teile": [
+    "kalt",
+    "schale"
+   ]
+  },
+  {
+   "wort": "kandisfarin",
+   "n": 1,
+   "teile": [
+    "kandis",
+    "farin"
+   ]
+  },
+  {
+   "wort": "karottensuppe",
+   "n": 1,
+   "teile": [
+    "karotte",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "kartoffelauflauf",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "kartoffelgemüse",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "gemüse"
+   ]
+  },
+  {
+   "wort": "kartoffelhörnchen",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "hörnchen"
+   ]
+  },
+  {
+   "wort": "kartoffelkuchen",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "kartoffelküchlein",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "küchlein"
+   ]
+  },
+  {
+   "wort": "kartoffelpudding",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "kartoffelring",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "ring"
+   ]
+  },
+  {
+   "wort": "kartoffelschnee",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "schnee"
+   ]
+  },
+  {
+   "wort": "kartoffelwurst",
+   "n": 1,
+   "teile": [
+    "kartoffel",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "käsebrot",
+   "n": 1,
+   "teile": [
+    "käse",
+    "brot"
+   ]
+  },
+  {
+   "wort": "käsefüllung",
+   "n": 1,
+   "teile": [
+    "käse",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "käsegebäck",
+   "n": 1,
+   "teile": [
+    "käse",
+    "gebäck"
+   ]
+  },
+  {
+   "wort": "käseplätzchen",
+   "n": 1,
+   "teile": [
+    "käse",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "käsepudding",
+   "n": 1,
+   "teile": [
+    "käse",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "käsesorten",
+   "n": 1,
+   "teile": [
+    "käse",
+    "sorten"
+   ]
+  },
+  {
+   "wort": "käsesoufflee",
+   "n": 1,
+   "teile": [
+    "käse",
+    "soufflee"
+   ]
+  },
+  {
+   "wort": "käsespätzle",
+   "n": 1,
+   "teile": [
+    "käse",
+    "spätzle"
+   ]
+  },
+  {
+   "wort": "käsesuppe",
+   "n": 1,
+   "teile": [
+    "käse",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "käsetorte",
+   "n": 1,
+   "teile": [
+    "käse",
+    "torte"
+   ]
+  },
+  {
+   "wort": "käsezubereitung",
+   "n": 1,
+   "teile": [
+    "käse",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "kastanienbrot",
+   "n": 1,
+   "teile": [
+    "kastanie",
+    "nbrot"
+   ]
+  },
+  {
+   "wort": "kastanienfüllung",
+   "n": 1,
+   "teile": [
+    "kastanie",
+    "nfüllung"
+   ]
+  },
+  {
+   "wort": "kastanienmehl",
+   "n": 1,
+   "teile": [
+    "kastanie",
+    "nmehl"
+   ]
+  },
+  {
+   "wort": "kastenform",
+   "n": 1,
+   "teile": [
+    "kaste",
+    "nform"
+   ]
+  },
+  {
+   "wort": "kekskuchen",
+   "n": 1,
+   "teile": [
+    "keks",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "kichererbsenmehl",
+   "n": 1,
+   "teile": [
+    "kichererbse",
+    "nmehl"
+   ]
+  },
+  {
+   "wort": "kichererbsensalat",
+   "n": 1,
+   "teile": [
+    "kichererbse",
+    "nsalat"
+   ]
+  },
+  {
+   "wort": "kichererbsensnack",
+   "n": 1,
+   "teile": [
+    "kichererbse",
+    "nsnack"
+   ]
+  },
+  {
+   "wort": "kirschfüllung",
+   "n": 1,
+   "teile": [
+    "kirsch",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "kirschgrütze",
+   "n": 1,
+   "teile": [
+    "kirsch",
+    "grütze"
+   ]
+  },
+  {
+   "wort": "kirschknödel",
+   "n": 1,
+   "teile": [
+    "kirsch",
+    "knödel"
+   ]
+  },
+  {
+   "wort": "kirschsaft",
+   "n": 1,
+   "teile": [
+    "kirsch",
+    "saft"
+   ]
+  },
+  {
+   "wort": "kirschsuppe",
+   "n": 1,
+   "teile": [
+    "kirsch",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "kirschtasche",
+   "n": 1,
+   "teile": [
+    "kirsch",
+    "tasche"
+   ]
+  },
+  {
+   "wort": "kiwisaft",
+   "n": 1,
+   "teile": [
+    "kiwi",
+    "saft"
+   ]
+  },
+  {
+   "wort": "kleingebäck",
+   "n": 1,
+   "teile": [
+    "klein",
+    "gebäck"
+   ]
+  },
+  {
+   "wort": "knackwürstchen",
+   "n": 1,
+   "teile": [
+    "knack",
+    "würstchen"
+   ]
+  },
+  {
+   "wort": "knienudeln",
+   "n": 1,
+   "teile": [
+    "knie",
+    "nudeln"
+   ]
+  },
+  {
+   "wort": "knoblauchbutter",
+   "n": 1,
+   "teile": [
+    "knoblauch",
+    "butter"
+   ]
+  },
+  {
+   "wort": "knochenmark",
+   "n": 1,
+   "teile": [
+    "knochen",
+    "mark"
+   ]
+  },
+  {
+   "wort": "koffeinreduziert",
+   "n": 1,
+   "teile": [
+    "koffein",
+    "reduziert"
+   ]
+  },
+  {
+   "wort": "kohlenhydratreduziert",
+   "n": 1,
+   "teile": [
+    "kohlenhydrat",
+    "reduziert"
+   ]
+  },
+  {
+   "wort": "kohlpudding",
+   "n": 1,
+   "teile": [
+    "kohl",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "kohlrübensuppe",
+   "n": 1,
+   "teile": [
+    "kohlrübe",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "königinsuppe",
+   "n": 1,
+   "teile": [
+    "königin",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "königskuchen",
+   "n": 1,
+   "teile": [
+    "könig",
+    "skuchen"
+   ]
+  },
+  {
+   "wort": "krabbencreme",
+   "n": 1,
+   "teile": [
+    "krabbe",
+    "ncreme"
+   ]
+  },
+  {
+   "wort": "kräuteressig",
+   "n": 1,
+   "teile": [
+    "kräuter",
+    "essig"
+   ]
+  },
+  {
+   "wort": "kräuterfüllung",
+   "n": 1,
+   "teile": [
+    "kräuter",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "kräutersalz",
+   "n": 1,
+   "teile": [
+    "kräuter",
+    "salz"
+   ]
+  },
+  {
+   "wort": "krautspätzle",
+   "n": 1,
+   "teile": [
+    "kraut",
+    "spätzle"
+   ]
+  },
+  {
+   "wort": "krebssuppe",
+   "n": 1,
+   "teile": [
+    "krebs",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "küchenfertig",
+   "n": 1,
+   "teile": [
+    "küche",
+    "nfertig"
+   ]
+  },
+  {
+   "wort": "kümmelkartoffeln",
+   "n": 1,
+   "teile": [
+    "kümmel",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "kümmelsauce",
+   "n": 1,
+   "teile": [
+    "kümmel",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "kümmelwurst",
+   "n": 1,
+   "teile": [
+    "kümmel",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "kutterhilfsmittel",
+   "n": 1,
+   "teile": [
+    "kutter",
+    "hilfsmittel"
+   ]
+  },
+  {
+   "wort": "lammcurry",
+   "n": 1,
+   "teile": [
+    "lamm",
+    "curry"
+   ]
+  },
+  {
+   "wort": "lammfilet",
+   "n": 1,
+   "teile": [
+    "lamm",
+    "filet"
+   ]
+  },
+  {
+   "wort": "lammkotelett",
+   "n": 1,
+   "teile": [
+    "lamm",
+    "kotelett"
+   ]
+  },
+  {
+   "wort": "lammrücken",
+   "n": 1,
+   "teile": [
+    "lamm",
+    "rücken"
+   ]
+  },
+  {
+   "wort": "landjäger",
+   "n": 1,
+   "teile": [
+    "land",
+    "jäger"
+   ]
+  },
+  {
+   "wort": "landrotwurst",
+   "n": 1,
+   "teile": [
+    "land",
+    "rotwurst"
+   ]
+  },
+  {
+   "wort": "lauchsuppe",
+   "n": 1,
+   "teile": [
+    "lauch",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "laugenbrezel",
+   "n": 1,
+   "teile": [
+    "lauge",
+    "nbrezel"
+   ]
+  },
+  {
+   "wort": "laugenbrötchen",
+   "n": 1,
+   "teile": [
+    "lauge",
+    "nbrötchen"
+   ]
+  },
+  {
+   "wort": "leberrolle",
+   "n": 1,
+   "teile": [
+    "leber",
+    "rolle"
+   ]
+  },
+  {
+   "wort": "leberrotwurst",
+   "n": 1,
+   "teile": [
+    "leber",
+    "rotwurst"
+   ]
+  },
+  {
+   "wort": "linsenmehl",
+   "n": 1,
+   "teile": [
+    "linse",
+    "nmehl"
+   ]
+  },
+  {
+   "wort": "litschisaft",
+   "n": 1,
+   "teile": [
+    "litschi",
+    "saft"
+   ]
+  },
+  {
+   "wort": "lupinenmehl",
+   "n": 1,
+   "teile": [
+    "lupine",
+    "nmehl"
+   ]
+  },
+  {
+   "wort": "magermilchpulver",
+   "n": 1,
+   "teile": [
+    "magermilch",
+    "pulver"
+   ]
+  },
+  {
+   "wort": "maiskekse",
+   "n": 1,
+   "teile": [
+    "mais",
+    "kekse"
+   ]
+  },
+  {
+   "wort": "makronenkuchen",
+   "n": 1,
+   "teile": [
+    "makrone",
+    "nkuchen"
+   ]
+  },
+  {
+   "wort": "makronentorte",
+   "n": 1,
+   "teile": [
+    "makrone",
+    "ntorte"
+   ]
+  },
+  {
+   "wort": "mandarinensaft",
+   "n": 1,
+   "teile": [
+    "mandarine",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "mandelbelag",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "belag"
+   ]
+  },
+  {
+   "wort": "mandelbiskuit",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "biskuit"
+   ]
+  },
+  {
+   "wort": "mandelboden",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "boden"
+   ]
+  },
+  {
+   "wort": "mandelbrot",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "brot"
+   ]
+  },
+  {
+   "wort": "mandelcreme",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "creme"
+   ]
+  },
+  {
+   "wort": "mandelgebäck",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "gebäck"
+   ]
+  },
+  {
+   "wort": "mandelhörnchen",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "hörnchen"
+   ]
+  },
+  {
+   "wort": "mandelkruste",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "kruste"
+   ]
+  },
+  {
+   "wort": "mandelmakronen",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "makronen"
+   ]
+  },
+  {
+   "wort": "mandelmasse",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "masse"
+   ]
+  },
+  {
+   "wort": "mandelsauce",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "mandelstückchen",
+   "n": 1,
+   "teile": [
+    "mandel",
+    "stückchen"
+   ]
+  },
+  {
+   "wort": "mangostanesaft",
+   "n": 1,
+   "teile": [
+    "mangostane",
+    "saft"
+   ]
+  },
+  {
+   "wort": "maracujasaft",
+   "n": 1,
+   "teile": [
+    "maracuja",
+    "saft"
+   ]
+  },
+  {
+   "wort": "maronenkrem",
+   "n": 1,
+   "teile": [
+    "marone",
+    "nkrem"
+   ]
+  },
+  {
+   "wort": "meerrettichbutter",
+   "n": 1,
+   "teile": [
+    "meerrettich",
+    "butter"
+   ]
+  },
+  {
+   "wort": "meerrettichcreme",
+   "n": 1,
+   "teile": [
+    "meerrettich",
+    "creme"
+   ]
+  },
+  {
+   "wort": "meerrettichschaum",
+   "n": 1,
+   "teile": [
+    "meerrettich",
+    "schaum"
+   ]
+  },
+  {
+   "wort": "meerrettichsoße",
+   "n": 1,
+   "teile": [
+    "meerrettich",
+    "soße"
+   ]
+  },
+  {
+   "wort": "meersalz",
+   "n": 1,
+   "teile": [
+    "meer",
+    "salz"
+   ]
+  },
+  {
+   "wort": "mehlblutwurst",
+   "n": 1,
+   "teile": [
+    "mehl",
+    "blutwurst"
+   ]
+  },
+  {
+   "wort": "mehlschmarren",
+   "n": 1,
+   "teile": [
+    "mehl",
+    "schmarren"
+   ]
+  },
+  {
+   "wort": "milchreispudding",
+   "n": 1,
+   "teile": [
+    "milchreis",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "mischgemüse",
+   "n": 1,
+   "teile": [
+    "misch",
+    "gemüse"
+   ]
+  },
+  {
+   "wort": "mittelscharf",
+   "n": 1,
+   "teile": [
+    "mittel",
+    "scharf"
+   ]
+  },
+  {
+   "wort": "mosaikumrandung",
+   "n": 1,
+   "teile": [
+    "mosaik",
+    "umrandung"
+   ]
+  },
+  {
+   "wort": "natriumglutamat",
+   "n": 1,
+   "teile": [
+    "natrium",
+    "glutamat"
+   ]
+  },
+  {
+   "wort": "naturjoghurt",
+   "n": 1,
+   "teile": [
+    "natur",
+    "joghurt"
+   ]
+  },
+  {
+   "wort": "naturtrüb",
+   "n": 1,
+   "teile": [
+    "natur",
+    "trüb"
+   ]
+  },
+  {
+   "wort": "nierenfett",
+   "n": 1,
+   "teile": [
+    "niere",
+    "nfett"
+   ]
+  },
+  {
+   "wort": "nougatcremefüllung",
+   "n": 1,
+   "teile": [
+    "nougatcreme",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "nusscreme",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "creme"
+   ]
+  },
+  {
+   "wort": "nussfüllung",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "nusshörnchen",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "hörnchen"
+   ]
+  },
+  {
+   "wort": "nussplätzchen",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "plätzchen"
+   ]
+  },
+  {
+   "wort": "nussprinten",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "printen"
+   ]
+  },
+  {
+   "wort": "nusspudding",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "nusssahne",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "sahne"
+   ]
+  },
+  {
+   "wort": "nusstaler",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "taler"
+   ]
+  },
+  {
+   "wort": "nusszubereitung",
+   "n": 1,
+   "teile": [
+    "nuss",
+    "zubereitung"
+   ]
+  },
+  {
+   "wort": "ochsenzunge",
+   "n": 1,
+   "teile": [
+    "ochse",
+    "nzunge"
+   ]
+  },
+  {
+   "wort": "ofenkartoffeln",
+   "n": 1,
+   "teile": [
+    "ofen",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "ofenkäse",
+   "n": 1,
+   "teile": [
+    "ofen",
+    "käse"
+   ]
+  },
+  {
+   "wort": "orangenkuchen",
+   "n": 1,
+   "teile": [
+    "orange",
+    "nkuchen"
+   ]
+  },
+  {
+   "wort": "orangenlimonade",
+   "n": 1,
+   "teile": [
+    "orange",
+    "nlimonade"
+   ]
+  },
+  {
+   "wort": "orangensauce",
+   "n": 1,
+   "teile": [
+    "orange",
+    "nsauce"
+   ]
+  },
+  {
+   "wort": "orangentäschchen",
+   "n": 1,
+   "teile": [
+    "orange",
+    "ntäschchen"
+   ]
+  },
+  {
+   "wort": "pampelmusensaft",
+   "n": 1,
+   "teile": [
+    "pampelmuse",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "paprikagemüse",
+   "n": 1,
+   "teile": [
+    "paprika",
+    "gemüse"
+   ]
+  },
+  {
+   "wort": "paprikahuhn",
+   "n": 1,
+   "teile": [
+    "paprika",
+    "huhn"
+   ]
+  },
+  {
+   "wort": "paprikapaste",
+   "n": 1,
+   "teile": [
+    "paprika",
+    "paste"
+   ]
+  },
+  {
+   "wort": "paprikaspeckwurst",
+   "n": 1,
+   "teile": [
+    "paprika",
+    "speckwurst"
+   ]
+  },
+  {
+   "wort": "passionsfruchtsaft",
+   "n": 1,
+   "teile": [
+    "passion",
+    "sfruchtsaft"
+   ]
+  },
+  {
+   "wort": "petersilienkartoffeln",
+   "n": 1,
+   "teile": [
+    "petersilie",
+    "nkartoffeln"
+   ]
+  },
+  {
+   "wort": "pfeffernüsse",
+   "n": 1,
+   "teile": [
+    "pfeffer",
+    "nüsse"
+   ]
+  },
+  {
+   "wort": "pfeffersauce",
+   "n": 1,
+   "teile": [
+    "pfeffer",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "pfeffersteak",
+   "n": 1,
+   "teile": [
+    "pfeffer",
+    "steak"
+   ]
+  },
+  {
+   "wort": "pfirsichgeschmack",
+   "n": 1,
+   "teile": [
+    "pfirsich",
+    "geschmack"
+   ]
+  },
+  {
+   "wort": "pflanzencreme",
+   "n": 1,
+   "teile": [
+    "pflanze",
+    "ncreme"
+   ]
+  },
+  {
+   "wort": "pflastersteine",
+   "n": 1,
+   "teile": [
+    "pflaster",
+    "steine"
+   ]
+  },
+  {
+   "wort": "pflaumensaft",
+   "n": 1,
+   "teile": [
+    "pflaume",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "pflaumensuppe",
+   "n": 1,
+   "teile": [
+    "pflaume",
+    "nsuppe"
+   ]
+  },
+  {
+   "wort": "physalissaft",
+   "n": 1,
+   "teile": [
+    "physalis",
+    "saft"
+   ]
+  },
+  {
+   "wort": "pilzsuppe",
+   "n": 1,
+   "teile": [
+    "pilz",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "pökelfleisch",
+   "n": 1,
+   "teile": [
+    "pökel",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "pökelnacken",
+   "n": 1,
+   "teile": [
+    "pökel",
+    "nacken"
+   ]
+  },
+  {
+   "wort": "proteinbrot",
+   "n": 1,
+   "teile": [
+    "protein",
+    "brot"
+   ]
+  },
+  {
+   "wort": "proteinbrötchen",
+   "n": 1,
+   "teile": [
+    "protein",
+    "brötchen"
+   ]
+  },
+  {
+   "wort": "puddingcreme",
+   "n": 1,
+   "teile": [
+    "pudding",
+    "creme"
+   ]
+  },
+  {
+   "wort": "puddingfüllung",
+   "n": 1,
+   "teile": [
+    "pudding",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "puddingschnecken",
+   "n": 1,
+   "teile": [
+    "pudding",
+    "schnecken"
+   ]
+  },
+  {
+   "wort": "putenfleisch",
+   "n": 1,
+   "teile": [
+    "pute",
+    "nfleisch"
+   ]
+  },
+  {
+   "wort": "quarkcreme",
+   "n": 1,
+   "teile": [
+    "quark",
+    "creme"
+   ]
+  },
+  {
+   "wort": "quarkdressing",
+   "n": 1,
+   "teile": [
+    "quark",
+    "dressing"
+   ]
+  },
+  {
+   "wort": "quarkfüllung",
+   "n": 1,
+   "teile": [
+    "quark",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "quarkkrapfen",
+   "n": 1,
+   "teile": [
+    "quark",
+    "krapfen"
+   ]
+  },
+  {
+   "wort": "quarkmürbeteig",
+   "n": 1,
+   "teile": [
+    "quark",
+    "mürbeteig"
+   ]
+  },
+  {
+   "wort": "quarknapfkuchen",
+   "n": 1,
+   "teile": [
+    "quark",
+    "napfkuchen"
+   ]
+  },
+  {
+   "wort": "quarkpfannkuchen",
+   "n": 1,
+   "teile": [
+    "quark",
+    "pfannkuchen"
+   ]
+  },
+  {
+   "wort": "quarkplinsen",
+   "n": 1,
+   "teile": [
+    "quark",
+    "plinsen"
+   ]
+  },
+  {
+   "wort": "quarkpudding",
+   "n": 1,
+   "teile": [
+    "quark",
+    "pudding"
+   ]
+  },
+  {
+   "wort": "quarkremoulade",
+   "n": 1,
+   "teile": [
+    "quark",
+    "remoulade"
+   ]
+  },
+  {
+   "wort": "quarkstollen",
+   "n": 1,
+   "teile": [
+    "quark",
+    "stollen"
+   ]
+  },
+  {
+   "wort": "quarkstrudel",
+   "n": 1,
+   "teile": [
+    "quark",
+    "strudel"
+   ]
+  },
+  {
+   "wort": "quellwasser",
+   "n": 1,
+   "teile": [
+    "quell",
+    "wasser"
+   ]
+  },
+  {
+   "wort": "quicheboden",
+   "n": 1,
+   "teile": [
+    "quiche",
+    "boden"
+   ]
+  },
+  {
+   "wort": "raclettekäse",
+   "n": 1,
+   "teile": [
+    "raclette",
+    "käse"
+   ]
+  },
+  {
+   "wort": "rahmguss",
+   "n": 1,
+   "teile": [
+    "rahm",
+    "guss"
+   ]
+  },
+  {
+   "wort": "rahmkartoffeln",
+   "n": 1,
+   "teile": [
+    "rahm",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "rahmnockerln",
+   "n": 1,
+   "teile": [
+    "rahm",
+    "nockerln"
+   ]
+  },
+  {
+   "wort": "rahmpulver",
+   "n": 1,
+   "teile": [
+    "rahm",
+    "pulver"
+   ]
+  },
+  {
+   "wort": "rahmstufe",
+   "n": 1,
+   "teile": [
+    "rahm",
+    "stufe"
+   ]
+  },
+  {
+   "wort": "rapsölmargarine",
+   "n": 1,
+   "teile": [
+    "rapsöl",
+    "margarine"
+   ]
+  },
+  {
+   "wort": "reisfleisch",
+   "n": 1,
+   "teile": [
+    "reis",
+    "fleisch"
+   ]
+  },
+  {
+   "wort": "reispfannkuchen",
+   "n": 1,
+   "teile": [
+    "reis",
+    "pfannkuchen"
+   ]
+  },
+  {
+   "wort": "reisrand",
+   "n": 1,
+   "teile": [
+    "reis",
+    "rand"
+   ]
+  },
+  {
+   "wort": "reissuppe",
+   "n": 1,
+   "teile": [
+    "reis",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "reiswurst",
+   "n": 1,
+   "teile": [
+    "reis",
+    "wurst"
+   ]
+  },
+  {
+   "wort": "rhabarbercreme",
+   "n": 1,
+   "teile": [
+    "rhabarber",
+    "creme"
+   ]
+  },
+  {
+   "wort": "rhabarbergrütze",
+   "n": 1,
+   "teile": [
+    "rhabarber",
+    "grütze"
+   ]
+  },
+  {
+   "wort": "rhabarberkuchen",
+   "n": 1,
+   "teile": [
+    "rhabarber",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "rhabarbersaft",
+   "n": 1,
+   "teile": [
+    "rhabarber",
+    "saft"
+   ]
+  },
+  {
+   "wort": "rheinisch",
+   "n": 1,
+   "teile": [
+    "rhein",
+    "isch"
+   ]
+  },
+  {
+   "wort": "rindfleischbrühe",
+   "n": 1,
+   "teile": [
+    "rindfleisch",
+    "brühe"
+   ]
+  },
+  {
+   "wort": "rindfleischsülze",
+   "n": 1,
+   "teile": [
+    "rindfleisch",
+    "sülze"
+   ]
+  },
+  {
+   "wort": "rosinenbrot",
+   "n": 1,
+   "teile": [
+    "rosine",
+    "nbrot"
+   ]
+  },
+  {
+   "wort": "rosinenbrötchen",
+   "n": 1,
+   "teile": [
+    "rosine",
+    "nbrötchen"
+   ]
+  },
+  {
+   "wort": "rosinenkuchen",
+   "n": 1,
+   "teile": [
+    "rosine",
+    "nkuchen"
+   ]
+  },
+  {
+   "wort": "rotkohlgemüse",
+   "n": 1,
+   "teile": [
+    "rotkohl",
+    "gemüse"
+   ]
+  },
+  {
+   "wort": "rotweincreme",
+   "n": 1,
+   "teile": [
+    "rotwein",
+    "creme"
+   ]
+  },
+  {
+   "wort": "rotweinkuchen",
+   "n": 1,
+   "teile": [
+    "rotwein",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "rotweinmarinade",
+   "n": 1,
+   "teile": [
+    "rotwein",
+    "marinade"
+   ]
+  },
+  {
+   "wort": "sahnedickmilch",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "dickmilch"
+   ]
+  },
+  {
+   "wort": "sahneersatz",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "ersatz"
+   ]
+  },
+  {
+   "wort": "sahnehering",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "hering"
+   ]
+  },
+  {
+   "wort": "sahnemeerrettich",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "meerrettich"
+   ]
+  },
+  {
+   "wort": "sahnepralinen",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "pralinen"
+   ]
+  },
+  {
+   "wort": "sahnepulver",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "pulver"
+   ]
+  },
+  {
+   "wort": "sahnequark",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "quark"
+   ]
+  },
+  {
+   "wort": "sahnesauermilch",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "sauermilch"
+   ]
+  },
+  {
+   "wort": "sahnetoffee",
+   "n": 1,
+   "teile": [
+    "sahne",
+    "toffee"
+   ]
+  },
+  {
+   "wort": "salatsauce",
+   "n": 1,
+   "teile": [
+    "salat",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "sanddornbeere",
+   "n": 1,
+   "teile": [
+    "sand",
+    "dornbeere"
+   ]
+  },
+  {
+   "wort": "sandkuchen",
+   "n": 1,
+   "teile": [
+    "sand",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "sandtorte",
+   "n": 1,
+   "teile": [
+    "sand",
+    "torte"
+   ]
+  },
+  {
+   "wort": "satsumasaft",
+   "n": 1,
+   "teile": [
+    "satsuma",
+    "saft"
+   ]
+  },
+  {
+   "wort": "sauerkrautsuppe",
+   "n": 1,
+   "teile": [
+    "sauerkraut",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "sauermilchkäse",
+   "n": 1,
+   "teile": [
+    "sauermilch",
+    "käse"
+   ]
+  },
+  {
+   "wort": "sauerrahmbutter",
+   "n": 1,
+   "teile": [
+    "sauerrahm",
+    "butter"
+   ]
+  },
+  {
+   "wort": "schafjoghurt",
+   "n": 1,
+   "teile": [
+    "schaf",
+    "joghurt"
+   ]
+  },
+  {
+   "wort": "schaumzuckerware",
+   "n": 1,
+   "teile": [
+    "schaum",
+    "zuckerware"
+   ]
+  },
+  {
+   "wort": "schichtkuchen",
+   "n": 1,
+   "teile": [
+    "schicht",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "schichtsalat",
+   "n": 1,
+   "teile": [
+    "schicht",
+    "salat"
+   ]
+  },
+  {
+   "wort": "schinkencreme",
+   "n": 1,
+   "teile": [
+    "schinken",
+    "creme"
+   ]
+  },
+  {
+   "wort": "schinkenkartoffeln",
+   "n": 1,
+   "teile": [
+    "schinken",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "schinkenknödel",
+   "n": 1,
+   "teile": [
+    "schinken",
+    "knödel"
+   ]
+  },
+  {
+   "wort": "schinkennockerln",
+   "n": 1,
+   "teile": [
+    "schinken",
+    "nockerln"
+   ]
+  },
+  {
+   "wort": "schinkenpresskopf",
+   "n": 1,
+   "teile": [
+    "schinken",
+    "presskopf"
+   ]
+  },
+  {
+   "wort": "schlehensaft",
+   "n": 1,
+   "teile": [
+    "schlehe",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "schmandfüllung",
+   "n": 1,
+   "teile": [
+    "schmand",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "schneckennudeln",
+   "n": 1,
+   "teile": [
+    "schnecke",
+    "nnudeln"
+   ]
+  },
+  {
+   "wort": "schnittsalat",
+   "n": 1,
+   "teile": [
+    "schnitt",
+    "salat"
+   ]
+  },
+  {
+   "wort": "schokobrötchen",
+   "n": 1,
+   "teile": [
+    "schoko",
+    "brötchen"
+   ]
+  },
+  {
+   "wort": "schokokekse",
+   "n": 1,
+   "teile": [
+    "schoko",
+    "kekse"
+   ]
+  },
+  {
+   "wort": "schokoladenauflauf",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nauflauf"
+   ]
+  },
+  {
+   "wort": "schokoladenbaiser",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nbaiser"
+   ]
+  },
+  {
+   "wort": "schokoladencreme",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "ncreme"
+   ]
+  },
+  {
+   "wort": "schokoladenfondant",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nfondant"
+   ]
+  },
+  {
+   "wort": "schokoladenkuchen",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nkuchen"
+   ]
+  },
+  {
+   "wort": "schokoladenmantel",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nmantel"
+   ]
+  },
+  {
+   "wort": "schokoladensahne",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nsahne"
+   ]
+  },
+  {
+   "wort": "schokoladenschaum",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nschaum"
+   ]
+  },
+  {
+   "wort": "schokoladenstückchen",
+   "n": 1,
+   "teile": [
+    "schokolade",
+    "nstückchen"
+   ]
+  },
+  {
+   "wort": "schokolinsen",
+   "n": 1,
+   "teile": [
+    "schoko",
+    "linsen"
+   ]
+  },
+  {
+   "wort": "schokosahne",
+   "n": 1,
+   "teile": [
+    "schoko",
+    "sahne"
+   ]
+  },
+  {
+   "wort": "schusterpfanne",
+   "n": 1,
+   "teile": [
+    "schuster",
+    "pfanne"
+   ]
+  },
+  {
+   "wort": "schwarzbier",
+   "n": 1,
+   "teile": [
+    "schwarz",
+    "bier"
+   ]
+  },
+  {
+   "wort": "schwarzbrotauflauf",
+   "n": 1,
+   "teile": [
+    "schwarzbrot",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "schweinskäse",
+   "n": 1,
+   "teile": [
+    "schwein",
+    "skäse"
+   ]
+  },
+  {
+   "wort": "seehechtfilet",
+   "n": 1,
+   "teile": [
+    "seehecht",
+    "filet"
+   ]
+  },
+  {
+   "wort": "seelachsschnitten",
+   "n": 1,
+   "teile": [
+    "seelachs",
+    "schnitten"
+   ]
+  },
+  {
+   "wort": "selleriesuppe",
+   "n": 1,
+   "teile": [
+    "sellerie",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "semmelauflauf",
+   "n": 1,
+   "teile": [
+    "semmel",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "senfbutter",
+   "n": 1,
+   "teile": [
+    "senf",
+    "butter"
+   ]
+  },
+  {
+   "wort": "senfcreme",
+   "n": 1,
+   "teile": [
+    "senf",
+    "creme"
+   ]
+  },
+  {
+   "wort": "senfgurke",
+   "n": 1,
+   "teile": [
+    "senf",
+    "gurke"
+   ]
+  },
+  {
+   "wort": "sheabutter",
+   "n": 1,
+   "teile": [
+    "shea",
+    "butter"
+   ]
+  },
+  {
+   "wort": "sirupkuchen",
+   "n": 1,
+   "teile": [
+    "sirup",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "sojabohnenpaste",
+   "n": 1,
+   "teile": [
+    "sojabohne",
+    "npaste"
+   ]
+  },
+  {
+   "wort": "sojamehl",
+   "n": 1,
+   "teile": [
+    "soja",
+    "mehl"
+   ]
+  },
+  {
+   "wort": "sojasauce",
+   "n": 1,
+   "teile": [
+    "soja",
+    "sauce"
+   ]
+  },
+  {
+   "wort": "sojasoße",
+   "n": 1,
+   "teile": [
+    "soja",
+    "soße"
+   ]
+  },
+  {
+   "wort": "sojawürstchen",
+   "n": 1,
+   "teile": [
+    "soja",
+    "würstchen"
+   ]
+  },
+  {
+   "wort": "sommersalat",
+   "n": 1,
+   "teile": [
+    "sommer",
+    "salat"
+   ]
+  },
+  {
+   "wort": "sonnenblumenmargarine",
+   "n": 1,
+   "teile": [
+    "sonnenblume",
+    "nmargarine"
+   ]
+  },
+  {
+   "wort": "spargelauflauf",
+   "n": 1,
+   "teile": [
+    "spargel",
+    "auflauf"
+   ]
+  },
+  {
+   "wort": "spargelsalat",
+   "n": 1,
+   "teile": [
+    "spargel",
+    "salat"
+   ]
+  },
+  {
+   "wort": "spargelsuppe",
+   "n": 1,
+   "teile": [
+    "spargel",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "speckfüllung",
+   "n": 1,
+   "teile": [
+    "speck",
+    "füllung"
+   ]
+  },
+  {
+   "wort": "speckkartoffeln",
+   "n": 1,
+   "teile": [
+    "speck",
+    "kartoffeln"
+   ]
+  },
+  {
+   "wort": "speckpfannkuchen",
+   "n": 1,
+   "teile": [
+    "speck",
+    "pfannkuchen"
+   ]
+  },
+  {
+   "wort": "speckscholle",
+   "n": 1,
+   "teile": [
+    "speck",
+    "scholle"
+   ]
+  },
+  {
+   "wort": "specktorte",
+   "n": 1,
+   "teile": [
+    "speck",
+    "torte"
+   ]
+  },
+  {
+   "wort": "speisegelatine",
+   "n": 1,
+   "teile": [
+    "speise",
+    "gelatine"
+   ]
+  },
+  {
+   "wort": "spiegeleierkuchen",
+   "n": 1,
+   "teile": [
+    "spiegel",
+    "eierkuchen"
+   ]
+  },
+  {
+   "wort": "spritzkuchen",
+   "n": 1,
+   "teile": [
+    "spritz",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "stapelchips",
+   "n": 1,
+   "teile": [
+    "stapel",
+    "chips"
+   ]
+  },
+  {
+   "wort": "steinpilzsuppe",
+   "n": 1,
+   "teile": [
+    "steinpilz",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "stockfisch",
+   "n": 1,
+   "teile": [
+    "stock",
+    "fisch"
+   ]
+  },
+  {
+   "wort": "streichcreme",
+   "n": 1,
+   "teile": [
+    "streich",
+    "creme"
+   ]
+  },
+  {
+   "wort": "tafelspitz",
+   "n": 1,
+   "teile": [
+    "tafel",
+    "spitz"
+   ]
+  },
+  {
+   "wort": "tangerinensaft",
+   "n": 1,
+   "teile": [
+    "tangerine",
+    "nsaft"
+   ]
+  },
+  {
+   "wort": "tintenfische",
+   "n": 1,
+   "teile": [
+    "tinte",
+    "nfische"
+   ]
+  },
+  {
+   "wort": "tintenfischsalat",
+   "n": 1,
+   "teile": [
+    "tintenfisch",
+    "salat"
+   ]
+  },
+  {
+   "wort": "toastschnitten",
+   "n": 1,
+   "teile": [
+    "toast",
+    "schnitten"
+   ]
+  },
+  {
+   "wort": "tomatencreme",
+   "n": 1,
+   "teile": [
+    "tomate",
+    "ncreme"
+   ]
+  },
+  {
+   "wort": "tomatenfüllung",
+   "n": 1,
+   "teile": [
+    "tomate",
+    "nfüllung"
+   ]
+  },
+  {
+   "wort": "tomatenkartoffeln",
+   "n": 1,
+   "teile": [
+    "tomate",
+    "nkartoffeln"
+   ]
+  },
+  {
+   "wort": "tomatenmayonnaise",
+   "n": 1,
+   "teile": [
+    "tomate",
+    "nmayonnaise"
+   ]
+  },
+  {
+   "wort": "tomatenspätzle",
+   "n": 1,
+   "teile": [
+    "tomate",
+    "nspätzle"
+   ]
+  },
+  {
+   "wort": "tortenguss",
+   "n": 1,
+   "teile": [
+    "torte",
+    "nguss"
+   ]
+  },
+  {
+   "wort": "traubentorte",
+   "n": 1,
+   "teile": [
+    "traube",
+    "ntorte"
+   ]
+  },
+  {
+   "wort": "träublestorte",
+   "n": 1,
+   "teile": [
+    "träuble",
+    "storte"
+   ]
+  },
+  {
+   "wort": "trinkschokoladenpulver",
+   "n": 1,
+   "teile": [
+    "trinkschokolade",
+    "npulver"
+   ]
+  },
+  {
+   "wort": "trockenbackhefe",
+   "n": 1,
+   "teile": [
+    "trocken",
+    "backhefe"
+   ]
+  },
+  {
+   "wort": "trockenerbsen",
+   "n": 1,
+   "teile": [
+    "trocken",
+    "erbsen"
+   ]
+  },
+  {
+   "wort": "trockenfrucht",
+   "n": 1,
+   "teile": [
+    "trocken",
+    "frucht"
+   ]
+  },
+  {
+   "wort": "vanilleäpfel",
+   "n": 1,
+   "teile": [
+    "vanille",
+    "äpfel"
+   ]
+  },
+  {
+   "wort": "vanillefondant",
+   "n": 1,
+   "teile": [
+    "vanille",
+    "fondant"
+   ]
+  },
+  {
+   "wort": "vanillehörnchen",
+   "n": 1,
+   "teile": [
+    "vanille",
+    "hörnchen"
+   ]
+  },
+  {
+   "wort": "vanilleparfait",
+   "n": 1,
+   "teile": [
+    "vanille",
+    "parfait"
+   ]
+  },
+  {
+   "wort": "vanillequark",
+   "n": 1,
+   "teile": [
+    "vanille",
+    "quark"
+   ]
+  },
+  {
+   "wort": "vollmilchpulver",
+   "n": 1,
+   "teile": [
+    "vollmilch",
+    "pulver"
+   ]
+  },
+  {
+   "wort": "waldhonig",
+   "n": 1,
+   "teile": [
+    "wald",
+    "honig"
+   ]
+  },
+  {
+   "wort": "weinessig",
+   "n": 1,
+   "teile": [
+    "wein",
+    "essig"
+   ]
+  },
+  {
+   "wort": "weinkraut",
+   "n": 1,
+   "teile": [
+    "wein",
+    "kraut"
+   ]
+  },
+  {
+   "wort": "weinschaum",
+   "n": 1,
+   "teile": [
+    "wein",
+    "schaum"
+   ]
+  },
+  {
+   "wort": "weißbrotwürfel",
+   "n": 1,
+   "teile": [
+    "weiß",
+    "brotwürfel"
+   ]
+  },
+  {
+   "wort": "weißweincreme",
+   "n": 1,
+   "teile": [
+    "weißwein",
+    "creme"
+   ]
+  },
+  {
+   "wort": "weizengluten",
+   "n": 1,
+   "teile": [
+    "weizen",
+    "gluten"
+   ]
+  },
+  {
+   "wort": "weizenkleber",
+   "n": 1,
+   "teile": [
+    "weizen",
+    "kleber"
+   ]
+  },
+  {
+   "wort": "weizenprotein",
+   "n": 1,
+   "teile": [
+    "weizen",
+    "protein"
+   ]
+  },
+  {
+   "wort": "wildfrikadellen",
+   "n": 1,
+   "teile": [
+    "wild",
+    "frikadellen"
+   ]
+  },
+  {
+   "wort": "wildgulasch",
+   "n": 1,
+   "teile": [
+    "wild",
+    "gulasch"
+   ]
+  },
+  {
+   "wort": "wildpaste",
+   "n": 1,
+   "teile": [
+    "wild",
+    "paste"
+   ]
+  },
+  {
+   "wort": "wildragout",
+   "n": 1,
+   "teile": [
+    "wild",
+    "ragout"
+   ]
+  },
+  {
+   "wort": "wildreismischung",
+   "n": 1,
+   "teile": [
+    "wildreis",
+    "mischung"
+   ]
+  },
+  {
+   "wort": "wildschweinbraten",
+   "n": 1,
+   "teile": [
+    "wildschwein",
+    "braten"
+   ]
+  },
+  {
+   "wort": "wildschweinkeule",
+   "n": 1,
+   "teile": [
+    "wildschwein",
+    "keule"
+   ]
+  },
+  {
+   "wort": "wildsuppe",
+   "n": 1,
+   "teile": [
+    "wild",
+    "suppe"
+   ]
+  },
+  {
+   "wort": "wirsingmantel",
+   "n": 1,
+   "teile": [
+    "wirsing",
+    "mantel"
+   ]
+  },
+  {
+   "wort": "wurstkuchen",
+   "n": 1,
+   "teile": [
+    "wurst",
+    "kuchen"
+   ]
+  },
+  {
+   "wort": "wurstsülze",
+   "n": 1,
+   "teile": [
+    "wurst",
+    "sülze"
+   ]
+  },
+  {
+   "wort": "zichorienkaffee",
+   "n": 1,
+   "teile": [
+    "zichorie",
+    "nkaffee"
+   ]
+  },
+  {
+   "wort": "zimtschnecken",
+   "n": 1,
+   "teile": [
+    "zimt",
+    "schnecken"
+   ]
+  },
+  {
+   "wort": "zitronenkekse",
+   "n": 1,
+   "teile": [
+    "zitrone",
+    "nkekse"
+   ]
+  },
+  {
+   "wort": "zitronensahne",
+   "n": 1,
+   "teile": [
+    "zitrone",
+    "nsahne"
+   ]
+  },
+  {
+   "wort": "zitronenwackelpudding",
+   "n": 1,
+   "teile": [
+    "zitrone",
+    "nwackelpudding"
+   ]
+  },
+  {
+   "wort": "zucchinipuffer",
+   "n": 1,
+   "teile": [
+    "zucchini",
+    "puffer"
+   ]
+  },
+  {
+   "wort": "zuckererbsen",
+   "n": 1,
+   "teile": [
+    "zucker",
+    "erbsen"
+   ]
+  },
+  {
+   "wort": "zuckerhutsalat",
+   "n": 1,
+   "teile": [
+    "zuckerhut",
+    "salat"
+   ]
+  },
+  {
+   "wort": "zungenpresskopf",
+   "n": 1,
+   "teile": [
+    "zunge",
+    "npresskopf"
+   ]
+  },
+  {
+   "wort": "zwetschgenknödel",
+   "n": 1,
+   "teile": [
+    "zwetschge",
+    "nknödel"
+   ]
+  },
+  {
+   "wort": "zwiebelwurst",
+   "n": 1,
+   "teile": [
+    "zwiebel",
+    "wurst"
+   ]
+  }
+ ],
+ "zubereitung": [
+  {
+   "wort": "gekocht",
+   "n": 492
+  },
+  {
+   "wort": "gedünstet",
+   "n": 353
+  },
+  {
+   "wort": "geschmort",
+   "n": 228
+  },
+  {
+   "wort": "gebacken",
+   "n": 202
+  },
+  {
+   "wort": "mind",
+   "n": 186
+  },
+  {
+   "wort": "abgetropft",
+   "n": 168
+  },
+  {
+   "wort": "gesüßt",
+   "n": 165
+  },
+  {
+   "wort": "ungesüßt",
+   "n": 95
+  },
+  {
+   "wort": "getrocknet",
+   "n": 69
+  },
+  {
+   "wort": "geräuchert",
+   "n": 68
+  },
+  {
+   "wort": "frittiert",
+   "n": 60
+  },
+  {
+   "wort": "paniert",
+   "n": 54
+  },
+  {
+   "wort": "heller",
+   "n": 53
+  },
+  {
+   "wort": "gegart",
+   "n": 47
+  },
+  {
+   "wort": "pochiert",
+   "n": 44
+  },
+  {
+   "wort": "dunkler",
+   "n": 40
+  },
+  {
+   "wort": "mittelfett",
+   "n": 39
+  },
+  {
+   "wort": "gezuckert",
+   "n": 36
+  },
+  {
+   "wort": "max",
+   "n": 35
+  },
+  {
+   "wort": "kochschinken",
+   "n": 32
+  },
+  {
+   "wort": "backteig",
+   "n": 27
+  },
+  {
+   "wort": "bratenfleisch",
+   "n": 25
+  },
+  {
+   "wort": "kochpökelware",
+   "n": 22
+  },
+  {
+   "wort": "fettarm",
+   "n": 16
+  },
+  {
+   "wort": "kochfleisch",
+   "n": 14
+  },
+  {
+   "wort": "geschält",
+   "n": 12
+  },
+  {
+   "wort": "gedünstetem",
+   "n": 11
+  },
+  {
+   "wort": "gedünsteten",
+   "n": 7
+  },
+  {
+   "wort": "gekochtem",
+   "n": 7
+  },
+  {
+   "wort": "kochbanane",
+   "n": 7
+  },
+  {
+   "wort": "gebratenem",
+   "n": 6
+  },
+  {
+   "wort": "gebratenen",
+   "n": 6
+  },
+  {
+   "wort": "gekochten",
+   "n": 6
+  },
+  {
+   "wort": "gepufft",
+   "n": 5
+  },
+  {
+   "wort": "gerösteten",
+   "n": 5
+  },
+  {
+   "wort": "kochkäse",
+   "n": 5
+  },
+  {
+   "wort": "rösti",
+   "n": 5
+  },
+  {
+   "wort": "gemahlen",
+   "n": 4
+  },
+  {
+   "wort": "vollfett",
+   "n": 4
+  },
+  {
+   "wort": "bratapfel",
+   "n": 3
+  },
+  {
+   "wort": "bratensoße",
+   "n": 3
+  },
+  {
+   "wort": "bratlinge",
+   "n": 3
+  },
+  {
+   "wort": "backen",
+   "n": 2
+  },
+  {
+   "wort": "brathering",
+   "n": 2
+  },
+  {
+   "wort": "dampfnudeln",
+   "n": 2
+  },
+  {
+   "wort": "gehärtet",
+   "n": 2
+  },
+  {
+   "wort": "gekochte",
+   "n": 2
+  },
+  {
+   "wort": "geräuchertem",
+   "n": 2
+  },
+  {
+   "wort": "getrockneten",
+   "n": 2
+  },
+  {
+   "wort": "kochpolnische",
+   "n": 2
+  },
+  {
+   "wort": "kochwurst",
+   "n": 2
+  },
+  {
+   "wort": "räucherlachs",
+   "n": 2
+  },
+  {
+   "wort": "röstgemüse",
+   "n": 2
+  },
+  {
+   "wort": "röstzwiebeln",
+   "n": 2
+  },
+  {
+   "wort": "ungezuckert",
+   "n": 2
+  },
+  {
+   "wort": "bratkartoffel",
+   "n": 1
+  },
+  {
+   "wort": "bratmakrele",
+   "n": 1
+  },
+  {
+   "wort": "bratöl",
+   "n": 1
+  },
+  {
+   "wort": "frittierfett",
+   "n": 1
+  },
+  {
+   "wort": "frittieröl",
+   "n": 1
+  },
+  {
+   "wort": "gartenkresse",
+   "n": 1
+  },
+  {
+   "wort": "gebackenem",
+   "n": 1
+  },
+  {
+   "wort": "gebratene",
+   "n": 1
+  },
+  {
+   "wort": "gebratener",
+   "n": 1
+  },
+  {
+   "wort": "gedünsteter",
+   "n": 1
+  },
+  {
+   "wort": "gekochter",
+   "n": 1
+  },
+  {
+   "wort": "gerauchte",
+   "n": 1
+  },
+  {
+   "wort": "geriebenem",
+   "n": 1
+  },
+  {
+   "wort": "geriebenen",
+   "n": 1
+  },
+  {
+   "wort": "geröstel",
+   "n": 1
+  },
+  {
+   "wort": "gesüßtem",
+   "n": 1
+  },
+  {
+   "wort": "halbfett",
+   "n": 1
+  },
+  {
+   "wort": "kochfischware",
+   "n": 1
+  },
+  {
+   "wort": "kochmettwurst",
+   "n": 1
+  },
+  {
+   "wort": "kochsalami",
+   "n": 1
+  },
+  {
+   "wort": "kochschinkenwürfeln",
+   "n": 1
+  },
+  {
+   "wort": "marinierter",
+   "n": 1
+  },
+  {
+   "wort": "räucheraal",
+   "n": 1
+  },
+  {
+   "wort": "räucherforelle",
+   "n": 1
+  },
+  {
+   "wort": "rauchfleisch",
+   "n": 1
+  }
+ ],
+ "flexion": [
+  {
+   "wort": "tomaten",
+   "n": 66,
+   "stamm": "tomat"
+  },
+  {
+   "wort": "karotten",
+   "n": 36,
+   "stamm": "karott"
+  },
+  {
+   "wort": "torten",
+   "n": 34,
+   "stamm": "tort"
+  },
+  {
+   "wort": "rote",
+   "n": 31,
+   "stamm": "rot"
+  },
+  {
+   "wort": "champignons",
+   "n": 28,
+   "stamm": "champignon"
+  },
+  {
+   "wort": "erbsen",
+   "n": 25,
+   "stamm": "erbs"
+  },
+  {
+   "wort": "nüssen",
+   "n": 20,
+   "stamm": "nuss"
+  },
+  {
+   "wort": "bete",
+   "n": 18,
+   "stamm": "bet"
+  },
+  {
+   "wort": "früchten",
+   "n": 17,
+   "stamm": "frucht"
+  },
+  {
+   "wort": "kräutern",
+   "n": 17,
+   "stamm": "kraut"
+  },
+  {
+   "wort": "mineralstoffen",
+   "n": 17,
+   "stamm": "mineralstoff"
+  },
+  {
+   "wort": "schokoladen",
+   "n": 17,
+   "stamm": "schokolad"
+  },
+  {
+   "wort": "flocken",
+   "n": 15,
+   "stamm": "flock"
+  },
+  {
+   "wort": "frischen",
+   "n": 15,
+   "stamm": "frisch"
+  },
+  {
+   "wort": "rosinen",
+   "n": 15,
+   "stamm": "rosin"
+  },
+  {
+   "wort": "hafer",
+   "n": 12,
+   "stamm": "haf"
+  },
+  {
+   "wort": "europäische",
+   "n": 11,
+   "stamm": "europa"
+  },
+  {
+   "wort": "kekse",
+   "n": 10,
+   "stamm": "keks"
+  },
+  {
+   "wort": "schnecken",
+   "n": 10,
+   "stamm": "schneck"
+  },
+  {
+   "wort": "sichtbarer",
+   "n": 10,
+   "stamm": "sichtbar"
+  },
+  {
+   "wort": "frikadellen",
+   "n": 9,
+   "stamm": "frikadell"
+  },
+  {
+   "wort": "warmer",
+   "n": 9,
+   "stamm": "warm"
+  },
+  {
+   "wort": "milchschokoladen",
+   "n": 7,
+   "stamm": "milchschokolad"
+  },
+  {
+   "wort": "möhren",
+   "n": 7,
+   "stamm": "mohr"
+  },
+  {
+   "wort": "auberginen",
+   "n": 6,
+   "stamm": "aubergin"
+  },
+  {
+   "wort": "bayerischer",
+   "n": 6,
+   "stamm": "bayer"
+  },
+  {
+   "wort": "gemischter",
+   "n": 6,
+   "stamm": "gemischt"
+  },
+  {
+   "wort": "spätzle",
+   "n": 6,
+   "stamm": "spatzl"
+  },
+  {
+   "wort": "taube",
+   "n": 6,
+   "stamm": "taub"
+  },
+  {
+   "wort": "berner",
+   "n": 5,
+   "stamm": "bern"
+  },
+  {
+   "wort": "eigenen",
+   "n": 5,
+   "stamm": "eig"
+  },
+  {
+   "wort": "grobe",
+   "n": 5,
+   "stamm": "grob"
+  },
+  {
+   "wort": "pfifferlingen",
+   "n": 5,
+   "stamm": "pfifferling"
+  },
+  {
+   "wort": "pilzen",
+   "n": 5,
+   "stamm": "pilz"
+  },
+  {
+   "wort": "rohen",
+   "n": 5,
+   "stamm": "roh"
+  },
+  {
+   "wort": "sardine",
+   "n": 5,
+   "stamm": "sardin"
+  },
+  {
+   "wort": "sprotte",
+   "n": 5,
+   "stamm": "sprott"
+  },
+  {
+   "wort": "aprikosen",
+   "n": 4,
+   "stamm": "aprikos"
+  },
+  {
+   "wort": "bananen",
+   "n": 4,
+   "stamm": "banan"
+  },
+  {
+   "wort": "französische",
+   "n": 4,
+   "stamm": "franzos"
+  },
+  {
+   "wort": "früchte",
+   "n": 4,
+   "stamm": "frucht"
+  },
+  {
+   "wort": "krabben",
+   "n": 4,
+   "stamm": "krabb"
+  },
+  {
+   "wort": "natürliches",
+   "n": 4,
+   "stamm": "natur"
+  },
+  {
+   "wort": "paprikaschoten",
+   "n": 4,
+   "stamm": "paprikaschot"
+  },
+  {
+   "wort": "sauerkirschen",
+   "n": 4,
+   "stamm": "sauerkirsch"
+  },
+  {
+   "wort": "steinpilzen",
+   "n": 4,
+   "stamm": "steinpilz"
+  },
+  {
+   "wort": "sultaninen",
+   "n": 4,
+   "stamm": "sultanin"
+  },
+  {
+   "wort": "bayerische",
+   "n": 3,
+   "stamm": "bayer"
+  },
+  {
+   "wort": "birnen",
+   "n": 3,
+   "stamm": "birn"
+  },
+  {
+   "wort": "einfacher",
+   "n": 3,
+   "stamm": "einfach"
+  },
+  {
+   "wort": "feine",
+   "n": 3,
+   "stamm": "fein"
+  },
+  {
+   "wort": "feiner",
+   "n": 3,
+   "stamm": "fein"
+  },
+  {
+   "wort": "holländische",
+   "n": 3,
+   "stamm": "holland"
+  },
+  {
+   "wort": "holländischer",
+   "n": 3,
+   "stamm": "holland"
+  },
+  {
+   "wort": "kichererbsen",
+   "n": 3,
+   "stamm": "kichererbs"
+  },
+  {
+   "wort": "kirsch",
+   "n": 3,
+   "stamm": "kirsch"
+  },
+  {
+   "wort": "kirschen",
+   "n": 3,
+   "stamm": "kirsch"
+  },
+  {
+   "wort": "mandarinen",
+   "n": 3,
+   "stamm": "mandarin"
+  },
+  {
+   "wort": "pflanzliches",
+   "n": 3,
+   "stamm": "pflanzlich"
+  },
+  {
+   "wort": "russische",
+   "n": 3,
+   "stamm": "russisch"
+  },
+  {
+   "wort": "sardinen",
+   "n": 3,
+   "stamm": "sardin"
+  },
+  {
+   "wort": "schwarten",
+   "n": 3,
+   "stamm": "schwart"
+  },
+  {
+   "wort": "steinpilze",
+   "n": 3,
+   "stamm": "steinpilz"
+  },
+  {
+   "wort": "stöcker",
+   "n": 3,
+   "stamm": "stock"
+  },
+  {
+   "wort": "vollmilchschokoladen",
+   "n": 3,
+   "stamm": "vollmilchschokolad"
+  },
+  {
+   "wort": "zitronen",
+   "n": 3,
+   "stamm": "zitron"
+  },
+  {
+   "wort": "äpfel",
+   "n": 2,
+   "stamm": "apfel"
+  },
+  {
+   "wort": "bayerisches",
+   "n": 2,
+   "stamm": "bayer"
+  },
+  {
+   "wort": "croutons",
+   "n": 2,
+   "stamm": "crouton"
+  },
+  {
+   "wort": "deutsches",
+   "n": 2,
+   "stamm": "deutsch"
+  },
+  {
+   "wort": "englische",
+   "n": 2,
+   "stamm": "englisch"
+  },
+  {
+   "wort": "englischer",
+   "n": 2,
+   "stamm": "englisch"
+  },
+  {
+   "wort": "griechischer",
+   "n": 2,
+   "stamm": "griechisch"
+  },
+  {
+   "wort": "italienische",
+   "n": 2,
+   "stamm": "italien"
+  },
+  {
+   "wort": "makronen",
+   "n": 2,
+   "stamm": "makron"
+  },
+  {
+   "wort": "pfifferlinge",
+   "n": 2,
+   "stamm": "pfifferling"
+  },
+  {
+   "wort": "pflanzlichen",
+   "n": 2,
+   "stamm": "pflanzlich"
+  },
+  {
+   "wort": "pflaumen",
+   "n": 2,
+   "stamm": "pflaum"
+  },
+  {
+   "wort": "printen",
+   "n": 2,
+   "stamm": "print"
+  },
+  {
+   "wort": "schweinebrät",
+   "n": 2,
+   "stamm": "schweinebrat"
+  },
+  {
+   "wort": "spanische",
+   "n": 2,
+   "stamm": "spanisch"
+  },
+  {
+   "wort": "ungarisch",
+   "n": 2,
+   "stamm": "ungar"
+  },
+  {
+   "wort": "ungarische",
+   "n": 2,
+   "stamm": "ungar"
+  },
+  {
+   "wort": "arme",
+   "n": 1,
+   "stamm": "arm"
+  },
+  {
+   "wort": "ausgezogene",
+   "n": 1,
+   "stamm": "ausgezog"
+  },
+  {
+   "wort": "bayrische",
+   "n": 1,
+   "stamm": "bayrisch"
+  },
+  {
+   "wort": "bitterem",
+   "n": 1,
+   "stamm": "bitt"
+  },
+  {
+   "wort": "blutwürste",
+   "n": 1,
+   "stamm": "blutwurst"
+  },
+  {
+   "wort": "braune",
+   "n": 1,
+   "stamm": "braun"
+  },
+  {
+   "wort": "bremer",
+   "n": 1,
+   "stamm": "brem"
+  },
+  {
+   "wort": "brioches",
+   "n": 1,
+   "stamm": "brioch"
+  },
+  {
+   "wort": "buletten",
+   "n": 1,
+   "stamm": "bulett"
+  },
+  {
+   "wort": "cashewkerne",
+   "n": 1,
+   "stamm": "cashewkern"
+  },
+  {
+   "wort": "cornichons",
+   "n": 1,
+   "stamm": "cornichon"
+  },
+  {
+   "wort": "cracker",
+   "n": 1,
+   "stamm": "crack"
+  },
+  {
+   "wort": "delikatess",
+   "n": 1,
+   "stamm": "delikatess"
+  },
+  {
+   "wort": "dicken",
+   "n": 1,
+   "stamm": "dick"
+  },
+  {
+   "wort": "donuts",
+   "n": 1,
+   "stamm": "donut"
+  },
+  {
+   "wort": "doppelte",
+   "n": 1,
+   "stamm": "doppelt"
+  },
+  {
+   "wort": "doppelter",
+   "n": 1,
+   "stamm": "doppelt"
+  },
+  {
+   "wort": "dragees",
+   "n": 1,
+   "stamm": "drage"
+  },
+  {
+   "wort": "einfache",
+   "n": 1,
+   "stamm": "einfach"
+  },
+  {
+   "wort": "feines",
+   "n": 1,
+   "stamm": "fein"
+  },
+  {
+   "wort": "fleischklopse",
+   "n": 1,
+   "stamm": "fleischklops"
+  },
+  {
+   "wort": "gegrillter",
+   "n": 1,
+   "stamm": "gegrillt"
+  },
+  {
+   "wort": "gemischten",
+   "n": 1,
+   "stamm": "gemischt"
+  },
+  {
+   "wort": "geringem",
+   "n": 1,
+   "stamm": "gering"
+  },
+  {
+   "wort": "geschwollene",
+   "n": 1,
+   "stamm": "geschwoll"
+  },
+  {
+   "wort": "hohem",
+   "n": 1,
+   "stamm": "hoh"
+  },
+  {
+   "wort": "höherem",
+   "n": 1,
+   "stamm": "hoh"
+  },
+  {
+   "wort": "höherer",
+   "n": 1,
+   "stamm": "hoh"
+  },
+  {
+   "wort": "hühner",
+   "n": 1,
+   "stamm": "huhn"
+  },
+  {
+   "wort": "italienisch",
+   "n": 1,
+   "stamm": "italien"
+  },
+  {
+   "wort": "japanische",
+   "n": 1,
+   "stamm": "japan"
+  },
+  {
+   "wort": "kalte",
+   "n": 1,
+   "stamm": "kalt"
+  },
+  {
+   "wort": "krebse",
+   "n": 1,
+   "stamm": "krebs"
+  },
+  {
+   "wort": "liebesperlen",
+   "n": 1,
+   "stamm": "liebesperl"
+  },
+  {
+   "wort": "mangostane",
+   "n": 1,
+   "stamm": "mangostan"
+  },
+  {
+   "wort": "misch",
+   "n": 1,
+   "stamm": "misch"
+  },
+  {
+   "wort": "monde",
+   "n": 1,
+   "stamm": "mond"
+  },
+  {
+   "wort": "nieren",
+   "n": 1,
+   "stamm": "nier"
+  },
+  {
+   "wort": "nockerl",
+   "n": 1,
+   "stamm": "nockerl"
+  },
+  {
+   "wort": "norddeutsche",
+   "n": 1,
+   "stamm": "norddeutsch"
+  },
+  {
+   "wort": "nüsse",
+   "n": 1,
+   "stamm": "nuss"
+  },
+  {
+   "wort": "orientalische",
+   "n": 1,
+   "stamm": "oriental"
+  },
+  {
+   "wort": "pastillen",
+   "n": 1,
+   "stamm": "pastill"
+  },
+  {
+   "wort": "pastinaken",
+   "n": 1,
+   "stamm": "pastinak"
+  },
+  {
+   "wort": "pfirsichen",
+   "n": 1,
+   "stamm": "pfirsich"
+  },
+  {
+   "wort": "pikante",
+   "n": 1,
+   "stamm": "pikant"
+  },
+  {
+   "wort": "pinienkernen",
+   "n": 1,
+   "stamm": "pinienkern"
+  },
+  {
+   "wort": "pinkel",
+   "n": 1,
+   "stamm": "pinkel"
+  },
+  {
+   "wort": "puten",
+   "n": 1,
+   "stamm": "put"
+  },
+  {
+   "wort": "riesengarnelen",
+   "n": 1,
+   "stamm": "riesengarnel"
+  },
+  {
+   "wort": "rohem",
+   "n": 1,
+   "stamm": "roh"
+  },
+  {
+   "wort": "salate",
+   "n": 1,
+   "stamm": "salat"
+  },
+  {
+   "wort": "salzburger",
+   "n": 1,
+   "stamm": "salzburg"
+  },
+  {
+   "wort": "scharfer",
+   "n": 1,
+   "stamm": "scharf"
+  },
+  {
+   "wort": "schnitten",
+   "n": 1,
+   "stamm": "schnitt"
+  },
+  {
+   "wort": "schuhsohlen",
+   "n": 1,
+   "stamm": "schuhsohl"
+  },
+  {
+   "wort": "schweinsohren",
+   "n": 1,
+   "stamm": "schweinsohr"
+  },
+  {
+   "wort": "sin",
+   "n": 1,
+   "stamm": "sin"
+  },
+  {
+   "wort": "sojabohnen",
+   "n": 1,
+   "stamm": "sojabohn"
+  },
+  {
+   "wort": "spezial",
+   "n": 1,
+   "stamm": "spezial"
+  },
+  {
+   "wort": "spitzbuben",
+   "n": 1,
+   "stamm": "spitzbub"
+  },
+  {
+   "wort": "spurenelementen",
+   "n": 1,
+   "stamm": "spurenelement"
+  },
+  {
+   "wort": "stör",
+   "n": 1,
+   "stamm": "stor"
+  },
+  {
+   "wort": "stuttgarter",
+   "n": 1,
+   "stamm": "stuttgart"
+  },
+  {
+   "wort": "tabletten",
+   "n": 1,
+   "stamm": "tablett"
+  },
+  {
+   "wort": "verlorene",
+   "n": 1,
+   "stamm": "verlor"
+  },
+  {
+   "wort": "zerlassener",
+   "n": 1,
+   "stamm": "zerlass"
+  },
+  {
+   "wort": "zitrusfrüchten",
+   "n": 1,
+   "stamm": "zitrusfrucht"
+  },
+  {
+   "wort": "zuger",
+   "n": 1,
+   "stamm": "zug"
+  },
+  {
+   "wort": "zwetschgen",
+   "n": 1,
+   "stamm": "zwetschg"
+  }
+ ]
+}
