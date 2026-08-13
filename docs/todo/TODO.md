@@ -1639,6 +1639,87 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   Gehört zu C-17 und zur Relevanzfrage, nicht zum Wortschatz. Die
   Zerlegung hat geliefert, die Reihenfolge nicht.
 
+- [ ] **C-20: Treffer am Wortanfang schlägt Treffer in der Wortmitte**
+  (neu 2026-08-14). **Der grösste verbliebene Hebel für die Relevanz.**
+
+  `[cmd]` Gemessen an sechs Anfragen:
+
+  | Anfrage | Platz 1 heute |
+  |---|---|
+  | `butter` | Limabohne (**Butter**bohne Mondbohne) |
+  | `lachs` | Alaska-Pollack/Alaska-See**lachs** |
+  | `kuerbis` | **Kürbis**kern |
+  | `huhn` | Suppen**huhn**, Reb**huhn**, Perl**huhn** |
+
+  Die Suche vergleicht mit `LIKE '%tok%'` — ein Treffer **innerhalb**
+  eines längeren Wortes zählt genauso viel wie das ganze Wort. `[cmd]`
+  Der `huhn`-Fall steht seit `41-…` fest: 31 Treffer, und das gesuchte
+  Brustfilet war nicht dabei. *Eine Trefferzahl über null ist noch kein
+  Fund.*
+
+  Vorschlag: drei Stufen statt einer — ganzes Wort, Wortanfang,
+  Wortmitte. Vor dem Bauen messen, nicht danach.
+
+- [ ] **C-21: Kürzerer Name gewinnt bei gleichem Gewicht** (neu
+  2026-08-14). `[cmd]` Gemessen, hilft, aber weniger als erhofft.
+
+  Anlass: `schweinsragout` liefert `Schweineherzragout` auf Platz 1,
+  `Schweineragout` auf Platz 4 — `[cmd]` **alle fünf Treffer haben
+  sort_weight 0**, es sind alles Gerichte der Gruppe Y. Danach entscheidet
+  die alphabetische Sortierung, und `Schweineherz…` steht vor
+  `Schweinera…`, weil `h` vor `r` kommt.
+
+  `[cmd]` Messung über 152 Lebensmittel: Platz 1 von **48,0 % auf 49,3 %**,
+  14 besser, 24 schlechter. Löst zwei von sechs benannten Fällen:
+  `schweinsragout` → Schweineragout ✓, `gemuesebruehe` → Gemüsebrühe ✓.
+  Die übrigen vier scheitern an C-20, nicht an der Länge.
+
+  **Zur Messung selbst — sie prüfte gegen die falsche Erwartung:** Die
+  24 „schlechter"-Fälle sind fast alle Zubereitungsvarianten
+  (`weisskohl` 2 → 3 für *Weisskohl gedünstet*). Genau das soll die Regel
+  tun. Wer die Regel bewertet, braucht als Erwartung *das allgemeinste
+  passende Lebensmittel*, nicht *das zufällig gezogene*. Vor der Umsetzung
+  ist die Messung entsprechend zu bauen.
+
+- [ ] **C-22: Phonetische Schreibvarianten** (neu 2026-08-14). Eine
+  eigene Klasse, die weder Zerlegung noch Thesaurus abdeckt — und auch
+  nicht abdecken kann.
+
+  `[cmd]` `kornflakes` liefert **null Treffer**; `cornflakes` und
+  `corn flakes` liefern beide fünf. Ein deutscher Schreiber macht aus dem
+  `c` ein `k`. `Korn` und `Corn` sind aber verschiedene Wörter mit
+  verschiedener Bedeutung — ein Synonym wäre falsch.
+
+  Die Klasse ist grösser: `c`/`k`, `f`/`ph`, `i`/`y`, `t`/`th`, `k`/`ck`,
+  `s`/`ss`/`z`. `[cmd]` `yoghurt` steht bereits als bekannt offen im
+  Prüfskript und gehört hierher.
+
+  Vorschlag: eine kleine Regeltabelle auf der **Anfrageseite**, nicht in
+  der Datenbank — wenn eine Anfrage nichts findet, die Varianten
+  probieren. Nicht als Synonym eintragen: `Korn` soll weiterhin
+  Getreidekörner finden.
+
+  Vorher zu messen: wie viele der 3.656 Bestandswörter tragen überhaupt
+  einen dieser Laute? Bei wenigen lohnt die Regel nicht.
+
+- [ ] **C-23: Systematische Abdeckungsmessung statt handverlesener
+  Begriffe** (neu 2026-08-14).
+  `supabase/_pipeline/_validierung/suche-abdeckung-messen.ts` misst über
+  eine Stichprobe des ganzen Bestands, ob ein Mensch das Lebensmittel
+  findet — statt gegen 50 geratene Begriffe.
+
+  `[cmd]` Stand 2026-08-14, 152 Lebensmittel: **0 % gar nichts gefunden**,
+  **90,8 % in den ersten zehn**, **48,0 % auf Platz 1**.
+
+  Die Aussage daraus: *der Wortschatz trägt, die Rangfolge nicht.*
+  Die Lücke zwischen 90,8 und 48,0 ist die Arbeit von C-20 und C-21.
+
+  **Warnung im Kopf der Datei, aus eigenem Schaden:** `[cmd]` Der erste
+  Lauf nahm den ganzen Namenskopf als Anfrage und erzeugte
+  `auberginegebratenohnefettpfanne` — 19,1 % Fehlschläge, die keine waren.
+  *Wer eine Suche misst, misst zuerst, was er hineingibt.* Diese Regel
+  steht seit `42-…` fest und wurde am selben Tag dreimal gebrochen.
+
 ## D — Datenbank & Specs
 
 ### Reproduzierbarkeit — erledigt 2026-08-02
