@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-12 (zweiundzwanzigste Aktualisierung — Bloecke 19-22 geschlossen: B-23 (Policy-Regel), B-24 (apps/admin als zweite App), C-14 (Kuration umgezogen, Rollenabstufung in apps/web entfernt) und B-12 (Cookie-Bereich: Weg B, eigene Sitzung fuer die Verwaltung) erledigt; B-25 neu (geteilte Sitzung im Produktbereich, ungeprueft bis zur zweiten Produkt-App). Drei Lehren, die groesser sind als ihre Bloecke: ein Befund ohne Regel ist folgenlos; eine Pruefung, die etwas anderes misst als sie behauptet, ist schlimmer als keine; und ein Weg, der lokal anders funktioniert als in Produktion, ist ein Weg, den niemand wirklich testet — genau deshalb faellt die Cookie-Trennung ueber den Namen und nicht ueber domain)
+**Stand:** 2026-08-13 (dreiundzwanzigste Aktualisierung — Block 23: A-10, B-11, B-17 erledigt; A-05 neu erhoben (10 von 12 Bestaenden waren laengst weg) und auf eine Entscheidung reduziert; B-13 um Pflegeort und Vorlage ergaenzt, Produktions-URLs bleiben Toms Entscheidung; B-26 neu (Werkzeugwahl, aus B-11 herausgeloest). Der Fund des Blocks: temp/lumeosold ist kein Muell, sondern ein vollstaendiges Git-Repository mit 16 nicht gepushten Commits und 22 Stashes — Stashes werden nie gepusht, ein Loeschen haette sie endgueltig vernichtet. Ausserdem: das Gate prueft nachweislich den Working Tree und nicht den Index, und die Redirect-Liste in config.toml kennt apps/admin nicht)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -156,20 +156,45 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   `docs/todo/TODO.md`; die drei bemängelten Altlast-Verweise kommen nicht
   mehr vor (0 Treffer).
 
-- [ ] **A-05: Repo-Müll entfernen** (untracked) — Stand Audit 2026-08-05:
-  `[cmd]` alle 12 Bestände liegen noch (`temp/` 16,5 GB, `tmp/`,
+- [~] **A-05: Repo-Müll entfernen** (untracked) — **neu erhoben
+  2026-08-13 (Block 23); die Audit-Liste von 2026-08-05 war überholt.**
+  `[cmd]` **10 der 12 Bestände sind bereits weg** (`tmp/`,
   `.wayland-core/`, `.wayland/`, `.ijfw/`, `ijfw/`, `_tmp_inventory/`,
-  `backup_system.zip`, `services.zip`, `system.zip`, `nul`,
-  `.codex-governance-ui.log`).
-  **Die tmp/-Rückhaltebedingung ist entfallen:** D-12 ist seit 2026-08-02
-  bewiesen (Kette läuft vollständig aus dem `supabase/_data/`-Zip) —
-  `tmp/` ist zur Löschung frei. `temp/lumeosold/` bleibt ausgenommen
-  (Prod-Dumps der Vorgängerinstanz; ein Duplikat liegt als Zip unter
-  `backup/legacy-v2/` — vor Löschung gegenprüfen).
-  Dazu offen (Entscheidung Tom): `.gitignore`-Vorschlag `apps/web/.next*/`
-  für beiseitegeschobene Build-Verzeichnisse.
+  `backup_system.zip`, `services.zip`, `system.zip`,
+  `.codex-governance-ui.log`). Übrig sind **zwei**, und beide bleiben —
+  mit Begründung:
+
+  **`temp/` (3,10 GB) — NICHT löschen.** Die frühere Notiz nannte
+  „Prod-Dumps, ein Duplikat liegt als Zip unter `backup/legacy-v2/`".
+  `[cmd]` Das trifft den Inhalt nicht. Zwei Verzeichnisse:
+  - `temp/lumeosold/` (2,93 GB, 91.268 Dateien) ist ein **vollständiges
+    Git-Repository** — Remote `github.com/dev-lumeos/lumeos-2026.git`,
+    Branch `dev`. Darin `[cmd]` **16 nicht gepushte Commits** und
+    **22 Stashes**. Stashes werden nie gepusht; sie existieren
+    ausschliesslich in dieser Arbeitskopie. Ein Löschen vernichtet sie
+    endgültig, und kein Zip-Duplikat enthält sie.
+  - `temp/antigravity-awesome-skills-main/` (171 MB, 13.160 Dateien) ist
+    ein heruntergeladener öffentlicher Skill-Katalog ohne `.git` —
+    jederzeit neu ladbar, aber auch nicht im Weg.
+
+  **Vorschlag statt Löschung:** `temp/lumeosold` entweder pushen (dann
+  ist die Historie gesichert) oder bewusst als Archiv behalten und
+  umbenennen, damit der Name nicht „wegwerfbar" suggeriert. Beides ist
+  Toms Entscheidung — hier wurde nichts angefasst.
+
+  **`nul` (99 B) — bleibt, Kuriosität.** `[cmd]` Inhalt: eine deutsche
+  Fehlermeldung von `TASKKILL` vom 2026-04-23. Eine Windows-Shell hat
+  stderr in eine Datei mit dem reservierten Gerätenamen `nul`
+  geschrieben, statt sie zu verwerfen. `[cmd]` **git stört sich nicht
+  daran**: `.gitignore:24` listet `nul`, die Datei taucht weder als
+  getrackt noch als untracked auf. Löschen bräuchte den
+  `\\?\`-Pfadpräfix; der Nutzen wäre null, das Risiko ein Fehlgriff im
+  Wurzelverzeichnis.
+
   *Regel bleibt: jeder untracked Ordner wird vor Löschung inhaltlich
-  geprüft, nicht nur dem Namen nach.*
+  geprüft, nicht nur dem Namen nach — dieser Punkt ist gerade das
+  Beispiel dafür.*
+  **Offen:** nur noch Toms Entscheidung zu `temp/lumeosold`.
 
 - [ ] **A-06: Design-System spezifizieren** — Stand Audit 2026-08-05:
   `[cmd]` `docs/spezifikation/10-plattform/design-system/` ist **nicht mehr
@@ -207,16 +232,37 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   Gate-Sektion (B-14) inhaltlich geprüft und erhalten, ergänzt um den
   Hinweis auf den protect-paths-Hook samt gewolltem `.env`-Lese-Block.
 
-- [ ] **A-10: Restaltlast im Wurzelverzeichnis** (neu 2026-08-06,
-  Entscheidungspunkt Tom) — `[cmd]` `COMMANDS.md`: der Kernbefehl zeigt
-  auf das archivierte `start-all.ps1`, drei Treffer auf gelöschte Hooks;
-  die lebenden Befehle stehen inzwischen im README → Vorschlag: per
-  `git mv` nach `_archive/governance/`. `.codex-governance-ui.log`
-  (53 Zeilen Next-Startup-Log der alten Governance-UI) → gehört in den
-  A-05-Löschlauf und steht dort schon. Bekannte Kandidaten derselben
-  Runde: `AGENTS.md`, `STACK_REFERENCE.md`, `SESSION_ONBOARDING.md`
-  (44 `system/`-Treffer) sowie `project.profile.json` (kein Leser im
-  lebenden Code, Vorschlag aus Block 8: archivieren).
+- [x] **A-10: Restaltlast im Wurzelverzeichnis** — **erledigt 2026-08-13
+  (Block 23).** Die Hauptrunde lief in Block 15 (`COMMANDS.md`,
+  `SESSION_ONBOARDING.md`, `STACK_REFERENCE.md`, `CLAUDE.md.v1.bak` nach
+  `_archive/governance/wurzel-altlast/`); hier der Rest.
+
+  **Archiviert, per `git mv`** (Historie bleibt, `git revert` holt sie
+  zurück) — Einzelbegründung in
+  `_archive/governance/wurzel-altlast/README.md`:
+  - `artefakt.json` (2.677 B) — `[cmd]` **Testausgabe** des
+    Governance-Compilers vom 2026-04-23 (`wo_id: "test-001"`), kein
+    Konfigurationsfile. Zielt auf `packages/agent-core/src/registry.ts`;
+    `[cmd]` das Paket existiert nicht mehr, alle Leser liegen im Archiv.
+  - `.cursorrules` (734 B) — Cursor-Editor-Konfiguration mit dem
+    lean-ctx-Block. `[cmd]` Ältere Teilkopie von
+    `.claude/rules/lean-ctx.md` (14 gegen 33 Zeilen; die zehn Lesemodi
+    fehlen). Cursor wird hier nicht benutzt — die Datei konnte nur noch
+    auseinanderdriften.
+
+  **Bleibt liegen, mit Grund:** `.pdrignore` (26 B). `[cmd]` Angelegt am
+  2026-07-31 von einem externen Projekt-Scanner (Commit
+  `chore(pdr): exclude local env backup from project scan`); der Inhalt
+  ist ein einzelner Ausschlusspfad. Kein Leser **im Repo** — aber das
+  Werkzeug läuft ausserhalb, und ob Tom es noch benutzt, lässt sich hier
+  nicht feststellen. 26 Bytes rechtfertigen kein Abschalten fremder
+  Konfiguration auf Verdacht. *Aus der Existenz folgt keine Funktion —
+  aber aus der fehlenden Fundstelle im Repo auch keine Funktionslosigkeit
+  ausserhalb.* Entscheidung Tom.
+
+  **Nicht mehr offen:** `AGENTS.md` (Block 15 geprüft und saniert, kein
+  Altlastfall), `project.profile.json` (bereits früher entfallen),
+  `.codex-governance-ui.log` (`[cmd]` existiert nicht mehr).
 
 ---
 
@@ -317,9 +363,41 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   `supabase/config.toml` steht auf `http://localhost:3200` +
   `/auth/callback`, die Anmeldung läuft; der frühere Zustand
   (127.0.0.1:3000, „blockiert jeden Anmeldeversuch") ist überholt.
-  **Offen:** Produktions-`site_url` (Vercel-Adresse, später Domain) und wo
-  die Redirect-Liste für sieben Apps und drei Umgebungen gepflegt wird.
-  M4-Voraussetzung.
+  **Pflegeort geklärt und gebaut, Produktions-URLs vorgelegt
+  (2026-08-13, Block 23):** `docs/ssot/39-rueckleitadressen.md`.
+
+  **Der Pflegeort ist kein Ort, sondern eine Ableitung.** Eine
+  handgeführte Liste veraltet — B-22 in anderer Gestalt. Deshalb
+  `scripts/redirect-urls-erzeugen.mjs`: es liest **Port** aus
+  `apps/*/package.json` und die **Callback-Route** aus dem Dateibaum,
+  erzeugt die Liste daraus und **vergleicht sie mit `config.toml`**
+  (Exit 1 bei Abweichung). Eine neue App bringt beides mit; die Liste
+  wächst von selbst.
+
+  **Dabei eine Lücke gefunden.** `[cmd]` `additional_redirect_urls`
+  enthält nur Port 3200 — `apps/admin` (3210) fehlt, obwohl es seit
+  Block 19 eine eigene Callback-Route hat. **Heute folgenlos**, und der
+  Grund gehört dazu: `[cmd]` eine Passwort-Anmeldung liefert `HTTP 200`
+  ohne jeden Eintrag, weil `signInWithPassword` die Redirect-Liste gar
+  nicht benutzt — nur `emailRedirectTo` (Registrierung) und OAuth tun
+  das, und `apps/admin` hat beides nicht. Sobald dort eine
+  Passwort-Zurücksetzung, eine Einladung oder OAuth dazukommt, schlägt
+  es fehl. **Nicht eingetragen** — `config.toml` zu ändern wirkt auf die
+  laufende Instanz und braucht Freigabe; das Kommando liegt in §5 der
+  Vorlage.
+
+  **`safe-redirect.ts` ersetzt die Liste nicht.** `[cmd]` Die beiden
+  schützen verschiedene Sprünge: `safe-redirect.ts` den app-internen
+  (`?redirect=`, in unserem Code), die Supabase-Liste den Rücksprung
+  **von Supabase in die App** (E-Mail-Link, OAuth) — der passiert, bevor
+  unser Code läuft. Eines davon zu streichen liesse einen Weg offen.
+
+  **Offen bleibt allein, was nur Tom entscheiden kann** (§6 der Vorlage):
+  Domain von `web` (`lumeos.app` oder `app.lumeos.app` — hängt an
+  `auth-sso` §8 Frage 1), Umgang mit Vercel-Vorschau-Adressen (ein
+  Platzhalter `*.vercel.app` öffnet die Liste für fremde Projekte), und
+  die getrennten Listen für `dev` und `main`.
+  Bleibt M4-Voraussetzung.
 
 - [x] **B-01: Permission-Schicht aufgebaut** — `[cmd]` `.claude/settings.json`
   mit 14 Deny / 7 Ask / 13 Allow. Verifiziert: `git push --dry-run` wurde geblockt,
@@ -445,14 +523,43 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   und offene Ports geprüft, und zwar für **jede** Werkzeugkette getrennt —
   Claude Code und Codex haben eigene Verdrahtung.
 
-- [ ] **B-11: Worktree-Regel für parallele Agenten** (neu 2026-08-01) —
-  `[cmd]` Prozessliste zeigte gleichzeitig einen Codex-Prozess (seit 09:19),
-  eine zweite Claude-Instanz (seit 10:58) und diese Sitzung, alle auf demselben
-  Working Tree. *Die Permission-Schicht prüft einzelne Aufrufe, nicht
-  Gleichzeitigkeit — genau die Konstellation, aus der der Big Bang entstand.*
-  Regel festlegen: `claude --worktree` oder getrennte Branches je Agent.
-  Zusatz: `desktop-commander` umgeht die Permission-Schicht vollständig;
-  risikoreiche Schritte gehören in eine Claude-Code-Session.
+- [x] **B-11: Regel für parallele Agenten** — **erledigt 2026-08-13
+  (Block 23).** Regel steht als §10.1 in
+  `docs/spezifikation/10-plattform/konventionen/00-konventionen.md`
+  (Betriebsregel, kein Werkzeugzwang).
+
+  **Befund, der die Richtung geändert hat:** Die Konflikte entstehen
+  `[cmd]` **nicht in den Quelldateien**, sondern in **generierten
+  Zuständen**, die niemandem gehören. Erhoben: `.next` (je App),
+  `.next-gate` (seit B-18 getrennt), `.turbo/cache`, `node_modules`, die
+  lokale Datenbank, die Ports 3200/3210.
+
+  **Die Bruchstelle ist `.next/types/`.** `[cmd]` Beide `tsconfig.json`
+  listen `.next/types/**` **im `include`** — ein laufender Dev-Server
+  schreibt also in die Eingabemenge von `tsc`. Zwei belegte Folgen:
+  B-18 (Gate-Build räumte ab, während der Dev-Server schrieb, 3 von 5
+  Läufen rot) und Block 21 (verwaiste Typdatei einer umgezogenen Route
+  liess den Typcheck scheitern, obwohl der Build sauber kompilierte).
+
+  **`git worktree` ist bewusst NICHT die Empfehlung.** `[cmd]` Preis:
+  `node_modules` in der Wurzel trägt **30.528 Dateien, 409 MB**, dazu je
+  Paket — ein zweiter Baum braucht einen eigenen vollständigen
+  `pnpm install`. Er löst die tatsächliche Bruchstelle **nicht**:
+  `.next/types` entsteht in beiden Bäumen neu, die Datenbank bliebe
+  geteilt. Er hilft nur gegen gleichzeitiges Schreiben an denselben
+  Quelldateien — dagegen hilft die Regel billiger. Richtig wird er erst,
+  wenn zwei Werkzeuge längere Zeit auf **verschiedenen Branches**
+  arbeiten sollen.
+
+  **Ein Teil des alten Punktes ist NICHT erledigt und bleibt hier
+  stehen:** der Zusatz „`desktop-commander` umgeht die Permission-Schicht
+  vollständig; risikoreiche Schritte gehören in eine
+  Claude-Code-Session". Das ist keine Parallelitätsfrage, sondern eine
+  Werkzeugwahl, und §10.1 ist der falsche Ort dafür. Verwandt mit B-20
+  (Codex-Pfadschutz), aber nicht davon abgedeckt — B-20 hängt einen Hook
+  in Codex ein und sagt nichts über `desktop-commander`.
+  **Als B-26 weitergeführt**, damit es nicht in einem erledigten Punkt
+  verschwindet.
 
 - [x] **B-14: `pnpm build` ins Prüf-Gate aufnehmen** — **erledigt
   2026-08-05: Gate geschaffen, nicht erweitert.** `[cmd]` Vorher existierte
@@ -501,12 +608,24 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   (Statuspflege-Heredoc); die beiden Block-7-Fälle waren
   Richtig-Positive (echtes Schreiben und `git mv` nach `migrations/`),
   denen der Lauf regelkonform per Skriptdatei auswich.
-- [ ] **B-17: Pre-Commit-Gate prüft Working Tree, nicht Index**
-  (neu 2026-08-06, niedrig) — bei Scheiben-Commits kann ein Commit grün
-  durchlaufen, der für sich allein nicht baut (die Heilung liegt im
-  Working Tree). Bewusst so belassen (Index-Checkout je Commit kostet
-  Laufzeit und Komplexität), im README dokumentiert — hier als Vermerk,
-  damit es als bekannte Eigenschaft geführt wird.
+- [x] **B-17: Pre-Commit-Gate prüft Working Tree, nicht Index** —
+  **geschlossen 2026-08-13 (Block 23): Verhalten nachgemessen, Doku
+  berichtigt.** Bei Scheiben-Commits kann ein Commit grün durchlaufen,
+  der für sich allein nicht baut (die Heilung liegt im Working Tree).
+  Bewusst so belassen — ein Index-Checkout je Commit kostet Laufzeit und
+  Komplexität, und Tom prüft jeden Commit vor dem Push ohnehin.
+
+  `[cmd]` **Nachgemessen statt geglaubt:** eine Datei mit Typfehler
+  gestaget, dieselbe Datei im Working Tree geheilt, dann `pnpm gate` —
+  **grün**, obwohl der Index Code trug, der nicht typecheckt. Die
+  Beschreibung im README stimmt also unverändert. (Die Probe-Datei wurde
+  restlos entfernt, `git status` sauber.)
+
+  **Zwei Angaben drumherum waren veraltet und sind berichtigt:** der
+  Abschnitt trug „Stand 2026-08-05" und beschrieb den `.next-gate`-Umbau
+  nur für `apps/web` — `[cmd]` das Gate erfasst inzwischen **8 Tasks**
+  über beide Apps, und `apps/admin` hat seit Block 19 dasselbe
+  `scripts/gate-build.js`. *Der Punkt selbst stimmte; sein Umfeld nicht.*
 - [x] **B-18: Getrennter `distDir` fürs Gate** — **erledigt 2026-08-06
   (Block 10, Commit 8de0282). Zwei Ursachen, nicht eine.**
   Der Auftrag hiess „eigener `distDir`“ — das allein hat es **nicht**
@@ -759,6 +878,20 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   entsteht wieder eine Konfiguration, die erst beim Deployment auffällt.
   Hintergrund: `docs/ssot/38-cookie-bereich.md` §4 (Weg A steht dort
   bewusst weiterhin ausformuliert).
+
+- [ ] **B-26: Werkzeugwahl bei risikoreichen Schritten** (neu 2026-08-13,
+  aus B-11) — `desktop-commander` umgeht die Permission-Schicht
+  vollständig. Risikoreiche Schritte (Löschungen, Datenbankeingriffe,
+  Schreiben ausserhalb des Repos) gehören deshalb in eine
+  Claude-Code-Session, wo die Schicht greift.
+  **Aus B-11 herausgelöst**, weil es dort nicht hingehört: B-11 regelt
+  die *Gleichzeitigkeit* zweier Werkzeuge im selben Arbeitsbaum, hier
+  geht es um die *Wahl* des Werkzeugs für einen einzelnen Schritt.
+  Verwandt mit **B-20** (Codex-Pfadschutz), aber nicht davon abgedeckt —
+  B-20 hängt einen Hook in Codex ein und sagt nichts über
+  `desktop-commander`.
+  Zu klären: gilt das als Betriebsregel (dann in die Konventionen §10)
+  oder lässt sich die Schicht auch für `desktop-commander` erzwingen?
 
 ---
 
