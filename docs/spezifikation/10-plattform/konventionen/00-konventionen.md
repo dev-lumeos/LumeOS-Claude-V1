@@ -222,6 +222,58 @@ längere Zeit an **verschiedenen Branches** arbeiten sollen. Dann ist es
 kein Aufräumproblem mehr, sondern eine Frage des Git-Zustands, und die
 409 MB sind gut angelegt.
 
+### 10.2 Der Pfadschutz gilt nur für Claude Code (B-26, B-20)
+
+`.claude/hooks/protect-paths.ps1` schützt `supabase/migrations/`
+(Schreiben) und `.env*` (Lesen **und** Schreiben). **Er wirkt
+ausschliesslich in Claude Code** — jedes andere Werkzeug arbeitet ohne
+ihn.
+
+**Warum, an der Mechanik belegt** `[cmd]` 2026-08-13:
+
+| Eingabe | Ergebnis |
+|---|---|
+| `{"tool_name":"Write","tool_input":{"file_path":".env"}}` | **Exit 2, blockiert** |
+| dieselbe Nutzlast, `tool_name` = `mcp__desktop-commander__write_file` | Exit 0, **durchgelassen** |
+| dieselbe Nutzlast, `tool_name` fehlt | Exit 0, durchgelassen |
+| `path` statt `file_path` | Exit 0, durchgelassen |
+| leere Eingabe / kein JSON | Exit 0, durchgelassen |
+
+Zwei Ursachen, beide bewusst:
+1. **Namensvergleich.** Der Hook prüft `$tool -eq 'Write' -or 'Edit' -or
+   'Read'` — exakte Gleichheit auf Claude Codes Werkzeugnamen. Ein
+   MCP-Werkzeug heisst anders und fällt durch.
+2. **Fail-open.** Bei unlesbarer oder leerer Eingabe `exit 0`. Das ist
+   Absicht (der Hook darf den Normalbetrieb nicht zerlegen), heisst aber:
+   **wer nichts über stdin liefert, wird nicht geprüft.**
+
+**Regel:**
+
+- **Risikoreiche Schritte gehören in eine Claude-Code-Sitzung** —
+  Schreiben auf `supabase/migrations/`, Zugriff auf `.env*`, Löschungen,
+  Datenbankeingriffe. Nicht, weil andere Werkzeuge schlechter wären,
+  sondern weil dort **kein Damm steht**.
+- **Aus der Existenz eines Hooks folgt nicht sein Wirken.** Wer eine
+  Schutzwirkung annimmt, prüft sie mit einer Testeingabe nach — das
+  obige Verfahren dauert eine Minute.
+- **Was übrig bleibt, wenn der Hook nicht greift:** die
+  Berechtigungsliste in `.claude/settings.json` (ebenfalls nur Claude
+  Code), das Dateisystem und der Mensch. Sonst nichts.
+
+`[cmd]` 2026-08-13: `desktop-commander` ist derzeit **in keiner
+MCP-Konfiguration eingetragen** (weder `~/.claude.json` global noch
+projektbezogen — dort stehen `serena`, `context7`, `lean-ctx`). Die Regel
+gilt trotzdem, weil sie für **jedes** Werkzeug ausserhalb Claude Codes
+gilt, nicht für ein bestimmtes.
+
+**Codex** führt eigene Hooks (`.codex/hooks.json`, heute zwei
+lean-ctx-Einträge), hat aber `[cmd]` seit 2026-08-06 **keinen
+Pfadschutz**. Ihn einzuhängen ist erst sinnvoll, wenn belegt ist, was
+Codex an Hooks übergibt: liefert es kein stdin-JSON, greift Ursache 2
+oben und der Hook ist wirkungslos — *diesmal aber unbemerkt, weil eine
+Konfiguration dasteht.* Ein wirkungsloser Schutz, den man für wirksam
+hält, ist schlechter als gar keiner. Stand und Vorgehen: TODO B-20.
+
 ## 11. Änderungen an der Datenbank
 
 Nie gegen die laufende Datenbank testen. Jeder Versuch in einer
@@ -232,6 +284,92 @@ zurückgespielt wurde, ist eine Datei und kein Backup.
 
 `[cmd]` `pg_restore` meldet fehlende Policies nur als Warnung und gilt
 trotzdem als erfolgreich — der Vergleich nach dem Zurückspielen ist Pflicht.
+
+### 11.1 Dubletten: der Massstab ist eine Frage an die Daten
+
+Beim Übernehmen des Legacy-Bestands sind `[cmd]` **sechs
+Dublettenklassen** aufgetreten, jede erst nachdem die vorige beseitigt
+war:
+
+| # | Klasse | Beispiel | gefunden durch |
+|---|---|---|---|
+| 1 | überzählige schliessende Klammer | `Trapezius)` | Normalisierung |
+| 2 | Schreibweise | `Chair` / `chair` | Normalisierung |
+| 3 | doppeltes Leerzeichen | `Bench  Press` | Normalisierung |
+| 4 | Singular/Plural | `Inner Thigh` / `Inner Thighs` | Einzelfallprüfung |
+| 5 | **Tippfehler** | `Calvicular`/`Clavicular`, `mideus`/`Medius` | Levenshtein-Abstand |
+| — | *gepaarte Klammer* | `Chest dip (on dip station)` | **KEINE Klasse** |
+
+Die ersten drei fallen unter **einen** normalisierten
+Vergleichsschlüssel. Klasse 4 und 5 nicht: `thigh`/`thighs` und
+`calvicular`/`clavicular` bleiben nach jeder Normalisierung verschieden.
+
+**Die eigentliche Regel ist keine über Namen.** Jede dieser
+Entscheidungen fiel an einer **Frage an die Daten**, nicht an der
+Ähnlichkeit der Zeichenketten:
+
+- **Übungen:** *„Zeigen sie auf identische Medienpfade?"* `[cmd]` Das
+  führte 32 echte Dubletten zusammen und liess **46 Scheindubletten
+  stehen** — darunter `"Ankle plantar flexion"` gegen
+  `"Ankle - Plantar Flexion"`, die verschiedene Aufnahmen haben und
+  deshalb verschiedene Übungen sind.
+- **Muskelgruppen:** *„Werden beide je DERSELBEN Übung zugeordnet?"*
+  Eine Übung listet einen Muskel nicht zweimal.
+- **Wo auch das nicht reicht: die Verwendung.** `[cmd]`
+  `Clavicular Head` steht 16 von 22 Mal an einer Incline-Übung — der
+  Schlüsselbeinanteil des Pectoralis ist genau das, was Schrägbank
+  trifft. `Calvicular Head` steht an zwei Kabelzug-Übungen derselben
+  Funktionsgruppe. Die Verwendung trennt die Namen nicht.
+
+**Aber: derselbe Massstab trug bei den Muskelgruppen nur in EINE
+Richtung — und ich habe ihn zuerst in die falsche gelesen.**
+
+Bei den Übungen entschied „identische Medienpfade?" **beidseitig**:
+gleiche Pfade ⇒ dieselbe Übung, verschiedene Pfade ⇒ verschiedene
+Übungen. Beide Schlüsse tragen.
+
+Bei den Muskelgruppen trägt nur einer. `[cmd]` 2026-08-13 an allen acht
+Levenshtein-Paaren gemessen:
+
+| Paar | gemeinsame Übungen | Befund |
+|---|---|---|
+| `Biceps` / `Triceps` | 11 | zwei Muskeln |
+| `Gluteus Medius` / `gluteus mideus` | **5** | **Tippfehler** |
+| `Abductors` / `Adductors` | 1 | zwei Muskeln |
+| `Teres Major` / `Teres Minor` | **0** | zwei Muskeln |
+| `Lats` / `Legs` | 0 | zwei Muskeln |
+
+- **Eine gemeinsame Übung BELASTET** — dieselbe Muskelgruppe zweimal an
+  einer Übung kommt bei zwei verschiedenen Muskeln nicht vor.
+- **Keine gemeinsame Übung entlastet NICHT** — vier Paare mit 0 sind
+  trotzdem verschiedene Muskeln. Sie kommen nur nie zusammen vor.
+
+**Der Fehler, den das gekostet hat:** Die erste Fassung dieser Prüfung
+meldete `tippfehler_ohne_gegenbeleg` — Paare *ohne* gemeinsame Übung —
+in der Annahme, eine gemeinsame Übung entlaste. Sie meldete damit **vier
+Nicht-Fälle und übersah den einen echten**, weil der fünf gemeinsame
+Übungen hatte und deshalb in die „unverdächtig"-Gruppe fiel.
+*Der Massstab war richtig, seine Leserichtung falsch.*
+
+**Regel daraus:** Bevor ein Massstab in eine Prüfung wandert, ist an
+**bekannten Fällen beider Sorten** zu belegen, in welche Richtung er
+trägt — an mindestens einem bestätigten Treffer und einem bestätigten
+Nicht-Treffer. Ein Massstab, der nur an den Nicht-Treffern geprüft wurde,
+zeigt zuverlässig in die falsche Richtung.
+
+**Ein Nullergebnis ist zuerst ein Verdacht gegen den eigenen Massstab.**
+`[cmd]` Zweimal geschehen: 153 „Byte-Abweichungen" bei den Medienpfaden
+waren Kodierungsstil, nicht verschiedene Ziele; „0 % Geschwister" bei den
+verwaisten Medien lag daran, dass der Vergleichsschlüssel `_Female` auch
+aus den referenzierten Pfaden strich. *Beide Male war der Massstab zu
+korrigieren, nicht das Ergebnis.*
+
+**Deshalb gilt für die siebte Klasse:** erst die Frage an die Daten
+suchen, dann die Regel schreiben. Eine Schwelle zu raten (`Abstand ≤ 2`)
+erzeugt Scheintreffer, die entweder falsch bereinigt oder — schlimmer —
+als Dauerrot abgeschaltet werden. Prüfungen, die sich nicht hart machen
+lassen, gehören als **Meldung** in die Validierung, mit dem Grund im
+Kommentar (Muster: `tippfehler_ohne_gegenbeleg` in `v100_training.sql`).
 
 ## 12. Zeilenschutz, Policies und Rechte
 

@@ -173,12 +173,65 @@ und der Grund, E-06 **vor** die Ortsentscheidung zu ziehen.
 | davon von einer Zeile referenziert | **3.553** |
 | **verwaist** | **7.223 (67 %)** |
 
-Die 15 GB sind also nicht durchweg gebrauchter Bestand. `[annahme]` Die
-3.797 präfixlosen Objekte (Abschnitt 3) dürften den Kern der Verwaisung
-ausmachen — vermutlich ein früherer Uploadstand mit anderer Pfadstruktur.
-**Vor einem Transfer lohnt zu prüfen, ob 7.223 Objekte überhaupt
-mitgenommen werden müssen.** Bei 15 GB Gesamtbestand ist das die Frage,
-die den Transferaufwand halbiert oder drittelt.
+Die 15 GB sind also nicht durchweg gebrauchter Bestand.
+
+### Aufgelöst 2026-08-13 (E-11) — am lokalen Bestand, ohne Cloud-Zugriff
+
+**Kein Cloud-Zugriff nötig:** `[cmd]` `media/exercises/` trägt **alle
+3.554 referenzierten Dateien** — 0 Referenzen zeigen ins Leere. Der
+lokale Bestand ist damit vollständig genug, um die Frage zu beantworten.
+
+| Posten | Wert | Marker |
+|---|---|---|
+| lokale Mediendateien | **6.984** | `[cmd]` 2026-08-13 |
+| davon referenziert | **3.554** | `[cmd]` |
+| davon unreferenziert | **3.430** | `[cmd]` |
+| zusätzlich gefunden: `desktop.ini` | 24 | `[cmd]` |
+
+Die 24 `desktop.ini` sind **keine Medien**, sondern Windows-Metadaten von
+Google Drive File Stream (`IconResource=…GoogleDriveFS.exe`). Sie zählen
+in jeder Bucket-Statistik mit und gehören in keinen Transfer.
+
+**Die 3.430 zerfallen in zwei Gruppen — sie sind nicht Streu:**
+
+| Gruppe | Dateien | Was |
+|---|---|---|
+| Uebung **hat** referenzierte Medien | **929 (27 %)** | zusätzliche Aufnahmen derselben Übung: Zähler-Varianten (`…1.jpeg`), zweites Geschlecht |
+| Uebung hat **keine** Referenz | **2.501 (73 %)** | **509 eigenständige Übungen**, die es in der Datenbank nicht gibt |
+
+`[cmd]` Die 509 sind überwiegend Yoga-Posen mit je 6 Dateien (Bild/Video
+× männlich/weiblich × zwei Aufnahmen): `bow pose`, `cat pose`,
+`crow pose`, `chair pose`, `downward dog …`. Stichprobe an fünf Namen:
+**null Treffer** in den 1.448 exportierten Übungen.
+
+**Damit ist die `[annahme]` von 2026-08-07 widerlegt.** Sie lautete, die
+3.797 präfixlosen Objekte dürften den Kern der Verwaisung ausmachen. Die
+Verwaisung liegt **nicht** an einer alten Pfadstruktur, sondern daran,
+dass **Medien für Übungen existieren, die nie in die Datenbank kamen**.
+`[cmd]` Kein einziger Ordner ist vollständig unreferenziert — die Quote
+liegt zwischen 31 % (`videos/Calisthenics`) und 79 % (`images/Powerlifting`).
+
+**Empfehlung für den Transfer:**
+1. **Die 3.554 referenzierten Dateien** — zwingend.
+2. **Die 929 Zusatzaufnahmen** — mitnehmen. Sie gehören zu Übungen, die
+   es gibt; darunter sind `[cmd]` **1.488 unreferenzierte
+   `_Female`-Dateien** gegenüber nur 394 referenzierten. Das berührt
+   **E-07** (Lücke weibliche Darstellungen) unmittelbar: ein Teil der
+   fehlenden Darstellungen liegt bereits im Bestand und ist nur nicht
+   verknüpft.
+3. **Die 2.501 für 509 nicht existierende Übungen** — **nicht
+   automatisch**. Das ist eine Produktentscheidung: Wer Yoga ins Produkt
+   aufnimmt, hat die Medien schon. Wer nicht, transferiert 2.501 Dateien
+   für nichts. **Nicht löschen** — sie sind der einzige Bestand dieser
+   Übungen.
+4. **Die 24 `desktop.ini`** — nie.
+
+**Nebenbefund, ein echter Datenfehler:** `[cmd]` Bei **146 Übungen**
+zeigt ein `image_male_*`-Feld auf eine `_Female`-Datei (Beispiel:
+`Ab Wheel Plank` → `image_male_start = images/Yoga/Ab Wheel Plank_Female.jpeg`).
+Die Gegenrichtung kommt **0×** vor. Das ist keine Verwaisung, sondern
+eine Feldverwechslung beim Import — als eigener Punkt zu führen, siehe
+TODO.
 
 ---
 
