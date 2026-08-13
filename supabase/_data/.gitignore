@@ -2,5 +2,7 @@
 *.csv
 
 # Die Root-.gitignore sperrt *.zip (Z.57) wegen der Altlast-Archive.
-# Dieses Archiv ist die einzige Quelle der BLS-Rohdaten und MUSS versioniert sein.
+# Diese Archive sind die einzige Quelle der BLS-Rohdaten und MUESSEN
+# versioniert sein — ohne sie laesst sich die Kette nicht neu aufbauen.
 !bls_4_0_local_import.zip
+!bls_4_0_fettsaeuren.zip
