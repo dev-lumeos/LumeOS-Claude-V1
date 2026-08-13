@@ -1,8 +1,8 @@
-# Wurzel-Altlast — archiviert 2026-08-06 (A-10)
+# Wurzel-Altlast — archiviert 2026-08-06 und 2026-08-13 (A-10)
 
-Vier Dokumente, die bis zum 2026-08-06 im Wurzelverzeichnis lagen und dort
-als Sollwert missverstanden werden konnten. Per `git mv` verschoben, die
-Historie bleibt erhalten; `git revert` holt sie zurück.
+Sechs Dateien, die im Wurzelverzeichnis lagen und dort als Sollwert
+missverstanden werden konnten. Per `git mv` verschoben, die Historie
+bleibt erhalten; `git revert` holt sie zurück.
 
 **Archiv darf veraltet sein — das ist sein Zweck.** Nichts hier ist
 Current Truth. Der Ist-Zustand steht in `docs/ssot/00-INDEX.md`.
@@ -17,6 +17,13 @@ Current Truth. Der Ist-Zustand steht in `docs/ssot/00-INDEX.md`.
 | `SESSION_ONBOARDING.md` | 295 | **44 Treffer auf `system/`** — ein Verzeichnis, das es seit B-15 nicht mehr gibt. Beschreibt den Workorder-Ablauf der Governance-Ära. |
 | `STACK_REFERENCE.md` | 190 | Stack-Beschreibung aus derselben Ära, 1 Treffer auf `system/`. Der reale Stack steht im Root-`README.md` und in `docs/ssot/10-workspace.md`. |
 | `CLAUDE.md.v1.bak` | 190 | Sicherungskopie der `CLAUDE.md` **vor** dem A-02-Umbau. Enthält die alte Brain/Law/Muscle-Rollenbeschreibung und Verweise auf `docs/decisions/` (mit D-06 aufgelöst). |
+
+### Nachtrag 2026-08-13 (Block 23, A-10)
+
+| Datei | Grösse | Warum archiviert (`[cmd]` 2026-08-13) |
+|---|---|---|
+| `artefakt.json` | 2.677 B | **Testausgabe des Governance-Compilers vom 2026-04-23**, kein Konfigurationsfile: `wo_id: "test-001"`, `compiled_by: qwen3.6-35b-governance-compiler`. Zielt auf `packages/agent-core/src/registry.ts` — `[cmd]` dieses Paket existiert nicht mehr. Alle Leser (`governance-compiler`, `sat-check`, `wo-core`) liegen seit 2026-08-03 in `_archive/`. |
+| `.cursorrules` | 734 B | Editor-Konfiguration für Cursor mit dem lean-ctx-Block. `[cmd]` Inhaltlich eine **ältere Teilkopie** von `.claude/rules/lean-ctx.md` (dort 10 Lesemodi und die proaktiven Befehle, hier nur die Werkzeugtabelle). Cursor wird in diesem Repo nicht benutzt; die Datei konnte nur noch auseinanderdriften. |
 
 ---
 
