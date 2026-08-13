@@ -174,3 +174,8 @@ media/*
 # Commits, nirgends sonst gesichert).
 referenz/*
 !referenz/README.md
+
+# --- Bundle der Vorgaengerhistorie: 48 MB Binaerdatei, gehoert nicht in
+# dieses Repo. Siehe referenz/README.md. Der richtige Ort fuer die
+# Historie ist das Remote von lumeos-2026 selbst.
+backup/legacy-v2/*.bundle
