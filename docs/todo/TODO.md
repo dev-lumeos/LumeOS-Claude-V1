@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-13 (dreiundzwanzigste Aktualisierung — Block 23: A-10, B-11, B-17 erledigt; A-05 neu erhoben (10 von 12 Bestaenden waren laengst weg) und auf eine Entscheidung reduziert; B-13 um Pflegeort und Vorlage ergaenzt, Produktions-URLs bleiben Toms Entscheidung; B-26 neu (Werkzeugwahl, aus B-11 herausgeloest). Der Fund des Blocks: temp/lumeosold ist kein Muell, sondern ein vollstaendiges Git-Repository mit 16 nicht gepushten Commits und 22 Stashes — Stashes werden nie gepusht, ein Loeschen haette sie endgueltig vernichtet. Ausserdem: das Gate prueft nachweislich den Working Tree und nicht den Index, und die Redirect-Liste in config.toml kennt apps/admin nicht)
+**Stand:** 2026-08-13 (vierundzwanzigste Aktualisierung — Block 24: B-13 erledigt. Tom hat die Domains entschieden: www.lumeos.app ist die Landingpage, web.lumeos.app die Webversion, admin/coach/marketplace/buddy je eigene Subdomain. Damit ist die Altfrage "lumeos.app oder app.lumeos.app" beantwortet — weder noch. Die Lücke in additional_redirect_urls (apps/admin fehlte) ist geschlossen, das Erzeugungsskript meldet Exit 0. Dabei ein Widerspruch in der Spezifikation gefunden und aufgelöst: auth-sso §4 und 20-apps/web §2 führten die Landingpage als Teil von web — sie ist jetzt eine eigene Domain ohne Anmeldung. Damit hat M4 keine offene Vorbedingung mehr; die Cloud-Einträge gehören in E-08 selbst)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -37,8 +37,10 @@ ergänzt um die Funde der Sitzungen 2026-08-01.
    erhoben (`docs/ssot/60-legacy-cloud.md`), tote Medienverweise als
    Messfehler entlarvt, Abhängigkeiten der Übernahmekandidaten geprüft —
    `[cmd]` es hängt nichts an ihnen.
-   **Offen als Voraussetzung bleibt allein der B-13-Rest**
-   (Produktions-`site_url`/Redirect-Liste je App und Umgebung).
+   **Die letzte Voraussetzung B-13 ist seit 2026-08-13 erledigt**
+   (Domains entschieden, Ableitung gebaut, lokale Liste vollständig).
+   Was fehlt, sind die Einträge im Cloud-Dashboard — die brauchen eine
+   Cloud-Instanz und gehören damit in E-08 selbst, nicht davor.
    `[cmd]` Ernüchternd und für die Planung wichtig: **132 von 166
    Tabellen der Legacy-Instanz sind leer.** Was dort zu übernehmen ist,
    ist kleiner als gedacht — und liegt seit Block 16 als Export im Repo
@@ -109,8 +111,9 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
    (Spec-Audit).
 6. **Umgebung:** B-20 (Codex-Pfadschutz — vorher die stdin-Frage
    klären), B-11, B-17 (niedrig).
-7. **Deployment:** B-13-Rest als einzige verbleibende M4-Voraussetzung,
-   dann E-08. E-04 erst danach — es blockiert nichts.
+7. **Deployment: E-08.** Die letzte Vorbedingung B-13 ist seit
+   2026-08-13 erledigt; die Cloud-Einträge gehören in E-08 selbst.
+   E-04 erst danach — es blockiert nichts.
 8. **A-06** läuft parallel bei Tom. **B-12 ist entschieden und
    umgesetzt** — `apps/admin` führt eine eigene Sitzung (Weg B), belegt
    aus den `set-cookie`-Kopfzeilen beider Apps. **C-14 ist erledigt**
@@ -367,8 +370,56 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   vertrauenswürdig zählen. Entschieden in
   `docs/spezifikation/30-module/core/login/00-modul-login.md`.
 
-- [ ] **B-13: `site_url`/Rückleitadressen — Rest: Pflegeort und
-  Produktions-URLs** — der Kern ist seit M3 erledigt: `[cmd]`
+- [x] **B-13: `site_url`/Rückleitadressen** — **erledigt 2026-08-13
+  (Blöcke 23/24).** Domains entschieden, Ableitung gebaut, lokale Lücke
+  geschlossen. Vollständig in `docs/ssot/39-rueckleitadressen.md`.
+
+  **Domains (Tom, 2026-08-13):** `www.lumeos.app` Landingpage ·
+  `web.lumeos.app` die Webversion · `admin.lumeos.app` Verwaltung ·
+  `coach` / `marketplace` / `buddy` je `<app>.lumeos.app`.
+  **Die Altfrage „`lumeos.app` oder `app.lumeos.app`" ist damit
+  beantwortet: weder noch** — und die Landingpage ist **keine App mehr**,
+  sondern eine eigene Domain ohne Anmeldung.
+
+  **Lücke geschlossen:** `[cmd]` `additional_redirect_urls` kannte nur
+  Port 3200; `apps/admin` (3210) fehlte. Ergänzt in `supabase/config.toml`,
+  das Erzeugungsskript meldet seither **Exit 0** (vorher 1 — es hatte die
+  Lücke selbst gefunden).
+  **Noch nicht in Kraft:** `[cmd]` der laufende Auth-Container trägt
+  weiterhin nur 3200 (`GOTRUE_URI_ALLOW_LIST`) — `config.toml` wird beim
+  **Start** gelesen. `supabase stop && supabase start` ist ein Eingriff in
+  die laufende Instanz und wurde nicht ausgeführt. Folgenlos, solange nur
+  `signInWithPassword` benutzt wird; vor der ersten E-Mail- oder
+  OAuth-Anmeldung in `apps/admin` nötig.
+
+  **Pflegeort = Ableitung.** `scripts/redirect-urls-erzeugen.mjs` liest
+  Port, Callback-Route und Existenz aus dem Dateibaum; **nur die Domain**
+  ist eine gepflegte Tabelle im Skript, ausdrücklich als Entscheidung
+  markiert. Vier Zustände (**gebaut** / Gerüst / geplant / Landingpage)
+  sorgen dafür, dass es nicht rot wird für Apps, die es nicht gibt:
+  `[cmd]` heute erzeugen nur `web` und `admin` einen Eintrag, `buddy`,
+  `coach` und `marketplace` erscheinen als „geplant, nicht gebaut".
+  Umgebung als Parameter (`--umgebung produktion`), aber `main`
+  existiert nicht — es wird nur eingetragen, was da ist.
+
+  **Warnung festgehalten:** ein Platzhalter `*.vercel.app` in der
+  Redirect-Liste öffnet sie für **jedes fremde Vercel-Projekt** — wer
+  dort eines anlegt, fängt den Rückweg samt Auth-Code ab. Steht im Skript
+  und in §6 der Vorlage, damit es niemand später aus Bequemlichkeit tut.
+
+  **Was ausdrücklich NICHT zu diesem Punkt gehört:** die Einträge im
+  Supabase-Dashboard. Sie können erst gesetzt werden, wenn es eine
+  Cloud-Instanz für den Neubau gibt — **das ist E-08**, nicht B-13. Was
+  einzutragen ist, liegt fertig vor.
+
+  **Spezifikation nachgezogen** (Widerspruch gefunden, nicht stumm
+  überschrieben): `auth-sso` §4 führte `web` unter `lumeos.app` mit dem
+  Zusatz „offen (Landingpage)" — App und Landingpage waren dieselbe
+  Adresse. Ebenso `20-apps/web` §2 („`web` ist die einzige App mit
+  öffentlichem Teil"). Beides berichtigt, dazu `00-INDEX.md` und die
+  Ports-Tabelle in den Konventionen.
+
+  Ursprünglicher Punkt — der Kern war seit M3 erledigt: `[cmd]`
   `supabase/config.toml` steht auf `http://localhost:3200` +
   `/auth/callback`, die Anmeldung läuft; der frühere Zustand
   (127.0.0.1:3000, „blockiert jeden Anmeldeversuch") ist überholt.
@@ -1965,8 +2016,10 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
 - [ ] **E-08: Deployment nach `main`** — Wartebedingung korrigiert
   2026-08-05: „erst wenn D-12 abgeschlossen" ist seit 2026-08-02 erfüllt
   und damit hinfällig. **Reale Voraussetzungen: D-17 (Blocker vor jedem
-  Cloud-Kontakt inkl. `supabase link`, mitsamt D-19) und der B-13-Rest**
-  (Produktions-`site_url`/Redirect-Liste).
+  Cloud-Kontakt inkl. `supabase link`, mitsamt D-19).** B-13 ist seit
+  2026-08-13 erledigt — die Werte für `site_url` und Redirect-Liste
+  liegen fertig vor (`docs/ssot/39-rueckleitadressen.md` §6); ihr
+  Eintragen ist Teil DIESES Punktes, keine Vorbedingung mehr.
   *Die Warnung bleibt: vor einem `link` müssen die Migrationsdateien den
   lokalen Zustand abbilden, sonst entsteht ein dritter Drift-Zustand — in
   einer Instanz, für die bezahlt wird.*
