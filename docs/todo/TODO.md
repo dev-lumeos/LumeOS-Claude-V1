@@ -1763,6 +1763,75 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   auftauchen soll, ist eine eigene Frage — sie hat einen eigenen
   BLS-Bereich (X5B…) und liesse sich ausblenden wie die Gerichte.
 
+- [ ] **C-25: Zubereitungscode in die Sortierung — die eine Ursache
+  hinter C-20, C-21 und C-24** (neu 2026-08-14). **Höchste Priorität der
+  Suchrangfolge.**
+
+  `[cmd]` `Banane roh` (F503100) und `Banane getrocknet` (F503400) haben
+  **beide `sort_weight` 660**. `Broccoli roh` und `Broccoli gebacken`
+  beide 660. Danach entscheidet das Alphabet — und `gebacken` steht vor
+  `roh`, `getrocknet` vor `roh`.
+
+  **`sort_weight` kodiert die Warengruppe, nicht die Zubereitung.** Der
+  Zubereitungscode steht daneben (`[cmd]` Stellen 5–7 des BLS-Codes,
+  `100` = roh) und wird von `food_search` **nicht ausgewertet** —
+  obwohl `44-bls-codestruktur.md` ihn erhoben hat und
+  `preparation_kinds` ihn bereits als Filter benutzt.
+
+  **Die Regel:** Wer eine ZUTAT sucht, will die Rohform. MealCam wird
+  Bestandteile eines Tellers melden — `Banane`, nicht `Banane
+  getrocknet`.
+
+  `[cmd]` Was das allein löst: `banane` (Platz 2 → 1), `brokkoli`
+  (3 → 1), `apfel` (6 → 1), `milch`, `suesskartoffel`, `kartoffeln`,
+  `zucchini`, `paprika`, `eigelb`, `quinoa`, `kartoffelstock`.
+
+  Vor der Umsetzung messen, nicht danach — und **mit** Erwartungen, siehe
+  C-26. Erwartbar erledigen sich C-21 und C-24 damit ganz oder teilweise.
+
+- [ ] **C-26: Die MealCam-Messung ist der Massstab** (neu 2026-08-14).
+  `supabase/_pipeline/_validierung/mealcam-zutaten-messen.ts`
+
+  37 Zutaten aus den typischen Mahlzeiten von Kraftsportlern, je mit
+  einem **erwarteten BLS-Code**. `[read]` Grundlage: Recherche 2026-08-14
+  zu Meal-Prep-Praxis — Hühnchen/Pute/Rind/Lachs/Thunfisch,
+  Reis/Hafer/Süsskartoffel/Quinoa, Brokkoli/Spinat, Avocado/Mandeln/
+  Olivenöl, Magerquark/Hüttenkäse/Skyr.
+
+  `[cmd]` **Stand 2026-08-14: 2 von 16 auf Platz 1 (13 %.)**
+
+  **Warum diese Messung die anderen ersetzt:** Dieselbe Zutatenliste
+  ohne Erwartungen meldete **75 % „in Ordnung"** — sie fragte nur „kein
+  Gericht". Tatsächlich lieferte sie `milch` → Magermilchpulver,
+  `banane` → getrocknet, `brokkoli` → gebacken. Alles technisch
+  Grundnahrungsmittel, alles falsch.
+
+  *Eine Prüfung ohne Erwartung misst nichts.* Vierter Messfehler dieser
+  Familie an einem Tag — und der einzige, der die Lage **besser**
+  aussehen liess.
+
+  Offen: 21 der 37 tragen noch keinen Sollwert. Sie sind mit Begründung
+  vermerkt und beim nächsten Durchgang zu ergänzen.
+
+- [ ] **C-27: Drei Alltagswörter fehlen ganz** (neu 2026-08-14).
+  `[cmd]` Null Treffer für `huettenkaese`, `walnuesse`, `blaubeeren`.
+  Alle drei stehen im Bestand unter anderem Namen:
+
+  | getippt | im Bestand |
+  |---|---|
+  | `huettenkaese` | `Körniger Frischkäse < 10 % Fett i. Tr.` (M711100) |
+  | `walnuesse` | `Walnuss` (H120100) |
+  | `blaubeeren` | `Heidelbeere roh` (F304100) |
+
+  Dazu aus derselben Messung ohne Treffer: `basmatireis`, `vollkornreis`,
+  `vollkornnudeln`, `griechischer joghurt`.
+
+  Das sind keine Mundartformen — es sind Wörter, die jeder Kraftsportler
+  täglich benutzt. Genau dafür ist die Synonymschicht da; `[cmd]`
+  OpenThesaurus kennt sie nicht, sie gehören zu den 12 Brücken von Hand.
+  Beim Ergänzen die Häufigkeitsliste aus `daten/wortschatz-luecke.json`
+  danebenlegen — dort stehen 1.581 weitere Kandidaten nach Häufigkeit.
+
 ## D — Datenbank & Specs
 
 ### Reproduzierbarkeit — erledigt 2026-08-02
