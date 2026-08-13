@@ -134,13 +134,41 @@ gedeckt, nicht nur plausibel.**
 
 ## Offen
 
-1. **Die 30 Fettsäuren nachimportieren.** Die Datei liegt unter
-   `docs/ssot/daten/`. Vorher die Ursache belegen, nicht nur die Vermutung
-   zum Doppelpunkt übernehmen.
-2. **Datenherkunft übernehmen** — mindestens `Logische Null`, `Spuren` und
-   `<LOD`/`<LOQ`, weil diese drei die Bedeutung eines Wertes verändern.
-   Ob die volle 13-Kategorien-Angabe und die Referenztexte mitkommen, ist
-   eine eigene Entscheidung (Speicher gegen Nutzen).
-3. **Anzeigefrage:** Soll ein Nutzer sehen, ob ein Wert gemessen oder
-   gerechnet ist? `[cmd]` Bei 2,4 % Analysen wäre ein Abzeichen an den
-   gemessenen Werten aussagekräftiger als eines an den gerechneten.
+1. **Die 30 Fettsäuren nachimportieren.** — **erledigt 2026-08-14.**
+   Kettenschritt `031_fettsaeuren_nachtrag.sql`, Archiv
+   `supabase/_data/bls_4_0_fettsaeuren.zip`, Validierung `v031`.
+   `[cmd]` Live 138 Codes, 869.501 Werte, acht von acht Prüfungen grün.
+   Ursache belegt: die CSV im Zip trug bereits nur 108 Codes und exakt
+   698.092 Zeilen — der Datenbankimport war vollständig, der Verlust
+   passierte beim Erzeugen der CSV aus der Arbeitsmappe.
+   Stärkster Beleg für die Richtigkeit: `[cmd]` `FASAT` gegen die Summe
+   seiner dreizehn Einzelwerte stimmt bei **7.108 von 7.111**
+   Lebensmitteln. Die drei Abweichungen sind erwartbar — `[read]` `FASAT`
+   gilt als *immer berechnet* und kann aus anderer Quelle stammen.
+
+2. **Bestand vollständig geprüft** — **erledigt 2026-08-14.**
+   `[cmd]` Alle 698.092 vorhandenen Werte gegen die amtliche
+   Arbeitsmappe verglichen: 353 Abweichungen, **alle Rundungen auf die
+   fünfte Nachkommastelle** (0.79074 gegen 0.790735) — die Genauigkeit
+   unserer Spalte, kein Datenfehler. **Null inhaltliche Abweichungen.**
+
+3. **Datenherkunft nachimportieren — entschieden 2026-08-14 (Tom):
+   wird nicht gemacht.** Die Begründung, weil der Punkt oben grösser
+   klang als er ist:
+   - **Spuren und unterhalb der Nachweisgrenze**: `[cmd]` zusammen 5.677
+     Datenpunkte, **0,58 %**. `[read]` Der BLS beziffert sie selbst
+     nicht — ein Wert, den die Quelle nicht kennt, hilft bei einer
+     Tagesbilanz nicht.
+   - **Logische Null**: `[cmd]` steht als `0` in der Quelle und als `0`
+     bei uns. Der Wert ist in beiden Fällen richtig; die Unterscheidung
+     wäre nur für eine Herkunftsanzeige interessant, nicht für eine
+     Rechnung. Retinol in Pflanzen ist null, wie auch immer gekennzeichnet.
+   - **Was wirklich zählte, stimmt bereits**: `[cmd]` Die 110.083
+     fehlenden Werte wurden **nicht** als 0 importiert. Das ist die eine
+     Unterscheidung, die eine Tagessumme verfälschen würde — im Import
+     wie in `diary-model.ts` (`incompleteFields`) und in der Tagessumme
+     (`<makro>_missing`).
+
+   Wiedervorlage nur, falls eine Anzeige „gemessen gegen gerechnet"
+   gewünscht wird. `[cmd]` Dann wäre die Zahl, die es lohnt: nur **2,4 %**
+   der Werte sind Laboranalysen, 59,1 % Rezeptberechnung.
