@@ -37,11 +37,23 @@
 -- Deshalb wird die 10-Parameter-Fassung ausdruecklich entfernt. Der
 -- DROP steht VOR dem CREATE und nennt die Signatur vollstaendig, damit
 -- er nicht versehentlich die neue trifft.
+-- `[cmd]` Eine Hilfsfunktion nutrition.such_gruppe(jsonb,integer), die
+-- die Gruppen in sechs feste text[]-Slots aufloest, wurde gebaut und
+-- wieder verworfen: sie war langsamer als die jsonb-Fassung
+-- (704 ms gegen 562 ms). Begruendung an der Bedingung selbst.
+-- Der DROP raeumt sie weg, falls sie irgendwo schon angelegt wurde.
+DROP FUNCTION IF EXISTS nutrition.such_gruppe(jsonb, integer);
+
 DROP FUNCTION IF EXISTS nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer);
+-- Dasselbe fuer die 13-Parameter-Fassung aus Block 29: p_token_groups
+-- kommt hinzu, also entsteht sonst erneut eine zweite Signatur.
+DROP FUNCTION IF EXISTS nutrition.food_search(
+  text, text, text[], uuid, text, uuid, text, text, integer, integer,
+  text[], text[], boolean);
 -- =============================================================
 
-CREATE OR REPLACE FUNCTION nutrition.food_search(p_query text, p_normalized_query text, p_tokens text[], p_selected_food_id uuid, p_category_slug text, p_category_id uuid, p_tag_code text, p_sort text, p_limit integer, p_offset integer, p_preparations text[] DEFAULT NULL, p_groups text[] DEFAULT NULL, p_basics_only boolean DEFAULT false)
+CREATE OR REPLACE FUNCTION nutrition.food_search(p_query text, p_normalized_query text, p_tokens text[], p_selected_food_id uuid, p_category_slug text, p_category_id uuid, p_tag_code text, p_sort text, p_limit integer, p_offset integer, p_preparations text[] DEFAULT NULL, p_groups text[] DEFAULT NULL, p_basics_only boolean DEFAULT false, p_token_groups jsonb DEFAULT NULL)
  RETURNS json
  LANGUAGE sql
  STABLE
@@ -118,17 +130,63 @@ matching_foods AS (
     WHERE ft.food_id = f.id
   ) tags ON TRUE
   WHERE
-    (p_tokens IS NULL OR cardinality(p_tokens) = 0 OR NOT EXISTS (
-      SELECT 1 FROM unnest(p_tokens) AS t(tok)
-      WHERE NOT (
-        nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || tok || '%'
-        OR EXISTS (
-          SELECT 1 FROM nutrition.food_aliases fa
-          WHERE fa.food_id = f.id
-            AND nutrition.search_fold(fa.alias) LIKE '%' || tok || '%'
+    -- ACHTUNG: Diese Bedingung steht ZWEIMAL in dieser Funktion
+    -- (matching_foods und all_matching_food_ids). Wer eine aendert,
+    -- muss die andere mitaendern — sonst weicht `total` von der Liste
+    -- ab, wie am 2026-08-14 geschehen.
+    --
+    -- Zwei Faelle:
+    --   p_token_groups gesetzt -> ODER innerhalb einer Gruppe,
+    --     UND zwischen den Gruppen. Eine Gruppe traegt ein Wort samt
+    --     Zerlegungsteil und Synonymen.
+    --   sonst -> die alte Tokenlogik, unveraendert. Sie bleibt die
+    --     Rueckfallebene fuer Aufrufer ohne Gruppen.
+    (CASE
+      WHEN p_token_groups IS NOT NULL AND jsonb_array_length(p_token_groups) > 0 THEN
+        -- WARUM jsonb UND NICHT SECHS FESTE text[]-SLOTS:
+        -- `[cmd]` Beides gemessen. Die Slot-Fassung sollte den
+        -- Trigramm-Index nutzbar machen und war LANGSAMER: 704 ms
+        -- gegen 562 ms, weil jeder der sechs Slots einen eigenen
+        -- Durchlauf ueber nutrition.foods ausloest — auch die fuenf
+        -- leeren einer einwortigen Anfrage.
+        --
+        -- Der Index greift hier ohnehin nicht, und zwar unabhaengig
+        -- von den Gruppen: die Bedingung faltet
+        -- concat_ws(bls_code, name_de, name_en, name_th), waehrend
+        -- idx_foods_fold_trgm auf search_fold(name_de) liegt. Zwei
+        -- verschiedene Ausdruecke, also Seq Scan. Das war schon vor
+        -- Block 31 so und ist als Aufgabe notiert, nicht hier geloest.
+        --
+        -- `[cmd]` Grundkosten der Funktion ohne jede Gruppe: 178 ms
+        -- bei leerer Anfrage, 288 ms bei einem Wort. Die Gruppen
+        -- kosten zusaetzlich rund 275 ms.
+        NOT EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements(p_token_groups) AS g(gruppe)
+          WHERE NOT EXISTS (
+            SELECT 1
+            FROM jsonb_array_elements_text(g.gruppe) AS a(alt)
+            WHERE nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || a.alt || '%'
+               OR EXISTS (
+                 SELECT 1 FROM nutrition.food_aliases fa
+                 WHERE fa.food_id = f.id
+                   AND nutrition.search_fold(fa.alias) LIKE '%' || a.alt || '%'
+               )
+          )
         )
-      )
-    ))
+      ELSE
+        (p_tokens IS NULL OR cardinality(p_tokens) = 0 OR NOT EXISTS (
+          SELECT 1 FROM unnest(p_tokens) AS t(tok)
+          WHERE NOT (
+            nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || tok || '%'
+            OR EXISTS (
+              SELECT 1 FROM nutrition.food_aliases fa
+              WHERE fa.food_id = f.id
+                AND nutrition.search_fold(fa.alias) LIKE '%' || tok || '%'
+            )
+          )
+        ))
+    END)
     AND (
       (COALESCE(p_category_slug, '') = '' AND p_category_id IS NULL)
       OR EXISTS (
@@ -223,17 +281,63 @@ all_matching_food_ids AS (
   SELECT f.id
   FROM nutrition.foods f
   WHERE
-    (p_tokens IS NULL OR cardinality(p_tokens) = 0 OR NOT EXISTS (
-      SELECT 1 FROM unnest(p_tokens) AS t(tok)
-      WHERE NOT (
-        nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || tok || '%'
-        OR EXISTS (
-          SELECT 1 FROM nutrition.food_aliases fa
-          WHERE fa.food_id = f.id
-            AND nutrition.search_fold(fa.alias) LIKE '%' || tok || '%'
+    -- ACHTUNG: Diese Bedingung steht ZWEIMAL in dieser Funktion
+    -- (matching_foods und all_matching_food_ids). Wer eine aendert,
+    -- muss die andere mitaendern — sonst weicht `total` von der Liste
+    -- ab, wie am 2026-08-14 geschehen.
+    --
+    -- Zwei Faelle:
+    --   p_token_groups gesetzt -> ODER innerhalb einer Gruppe,
+    --     UND zwischen den Gruppen. Eine Gruppe traegt ein Wort samt
+    --     Zerlegungsteil und Synonymen.
+    --   sonst -> die alte Tokenlogik, unveraendert. Sie bleibt die
+    --     Rueckfallebene fuer Aufrufer ohne Gruppen.
+    (CASE
+      WHEN p_token_groups IS NOT NULL AND jsonb_array_length(p_token_groups) > 0 THEN
+        -- WARUM jsonb UND NICHT SECHS FESTE text[]-SLOTS:
+        -- `[cmd]` Beides gemessen. Die Slot-Fassung sollte den
+        -- Trigramm-Index nutzbar machen und war LANGSAMER: 704 ms
+        -- gegen 562 ms, weil jeder der sechs Slots einen eigenen
+        -- Durchlauf ueber nutrition.foods ausloest — auch die fuenf
+        -- leeren einer einwortigen Anfrage.
+        --
+        -- Der Index greift hier ohnehin nicht, und zwar unabhaengig
+        -- von den Gruppen: die Bedingung faltet
+        -- concat_ws(bls_code, name_de, name_en, name_th), waehrend
+        -- idx_foods_fold_trgm auf search_fold(name_de) liegt. Zwei
+        -- verschiedene Ausdruecke, also Seq Scan. Das war schon vor
+        -- Block 31 so und ist als Aufgabe notiert, nicht hier geloest.
+        --
+        -- `[cmd]` Grundkosten der Funktion ohne jede Gruppe: 178 ms
+        -- bei leerer Anfrage, 288 ms bei einem Wort. Die Gruppen
+        -- kosten zusaetzlich rund 275 ms.
+        NOT EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements(p_token_groups) AS g(gruppe)
+          WHERE NOT EXISTS (
+            SELECT 1
+            FROM jsonb_array_elements_text(g.gruppe) AS a(alt)
+            WHERE nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || a.alt || '%'
+               OR EXISTS (
+                 SELECT 1 FROM nutrition.food_aliases fa
+                 WHERE fa.food_id = f.id
+                   AND nutrition.search_fold(fa.alias) LIKE '%' || a.alt || '%'
+               )
+          )
         )
-      )
-    ))
+      ELSE
+        (p_tokens IS NULL OR cardinality(p_tokens) = 0 OR NOT EXISTS (
+          SELECT 1 FROM unnest(p_tokens) AS t(tok)
+          WHERE NOT (
+            nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || tok || '%'
+            OR EXISTS (
+              SELECT 1 FROM nutrition.food_aliases fa
+              WHERE fa.food_id = f.id
+                AND nutrition.search_fold(fa.alias) LIKE '%' || tok || '%'
+            )
+          )
+        ))
+    END)
     AND (
       (COALESCE(p_category_slug, '') = '' AND p_category_id IS NULL)
       OR EXISTS (
