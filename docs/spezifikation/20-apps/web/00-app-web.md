@@ -27,16 +27,26 @@ Organisationsverwaltung (Apps `gym`, `supplier`).
 
 ## 2. Unangemeldeter Zugang
 
-`web` ist die einzige App mit öffentlichem Teil: die Landingpage unter
-`lumeos.app`. Sie beschreibt das Produkt und führt zur Anmeldung.
+**Geändert `[read]` 2026-08-13 (Tom, B-13): Die Landingpage ist nicht mehr
+Teil von `web`.** Sie liegt unter `www.lumeos.app`, `web` selbst unter
+`web.lumeos.app`. Bis dahin stand hier: *„`web` ist die einzige App mit
+öffentlichem Teil: die Landingpage unter `lumeos.app`."* Das gilt nicht
+mehr — App und Landingpage sind zwei Adressen.
 
-Alles Weitere setzt eine Session voraus. Ein unangemeldeter Aufruf einer
-Modulseite führt nach `/login?redirect=<ziel>`, siehe
-`10-plattform/auth-sso`.
+`web` setzt damit **durchgehend eine Session voraus**. Ein unangemeldeter
+Aufruf führt nach `/login?redirect=<ziel>`, siehe `10-plattform/auth-sso`.
+`[cmd]` Die laufende App verhält sich bereits so: `/` liefert
+`HTTP 200` (Startseite), jede Modulseite ohne Sitzung `307` nach `/login`.
 
-**Offen:** Umfang der Landingpage — reine Produktseite, oder mit öffentlich
-lesbarem Lebensmittelkatalog? Zweites hätte Folgen für den Zeilenschutz:
-`[cmd]` heute hat die Rolle `anon` kein Zugriffsrecht auf `nutrition`.
+**Offen, jetzt an anderer Stelle:** Der Umfang der Landingpage —
+reine Produktseite oder mit öffentlich lesbarem Lebensmittelkatalog —
+ist weiterhin unentschieden, betrifft aber nicht mehr `web`, sondern
+`www.lumeos.app`. Zweites hätte Folgen für den Zeilenschutz: `[cmd]` die
+Rolle `anon` hat heute kein Zugriffsrecht auf `nutrition`.
+**Ebenfalls offen:** Was unter `web.lumeos.app/` steht, wenn dort keine
+Landingpage mehr liegt — heute ist es `[cmd]` eine öffentlich erreichbare
+Startseite. Ob sie bleibt, umleitet oder verschwindet, ist eine
+Produktentscheidung und hier nicht getroffen.
 
 ## 3. Module
 

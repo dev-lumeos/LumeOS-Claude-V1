@@ -90,15 +90,22 @@ Feste Bereiche, damit sieben Apps und neun Services nebeneinander laufen.
 | 5100–5900 | Services, Hunderterabstand je Modul |
 | 54321–54327 | Supabase lokal, von der CLI vergeben |
 
-| App | Port |
-|---|---|
-| `web` | 3200 |
-| `admin` | 3210 |
-| `buddy` | 3220 |
-| `coach` | 3230 |
-| `marketplace` | 3240 |
-| `gym` | 3250 |
-| `supplier` | 3260 |
+| App | Port | Domain (entschieden 2026-08-13) |
+|---|---|---|
+| `web` | 3200 | `web.lumeos.app` |
+| `admin` | 3210 | `admin.lumeos.app` |
+| `buddy` | 3220 | `buddy.lumeos.app` |
+| `coach` | 3230 | `coach.lumeos.app` |
+| `marketplace` | 3240 | `marketplace.lumeos.app` |
+| `gym` | 3250 | `gym.lumeos.app` *(kommt später, `[read]` Tom 2026-08-13)* |
+| `supplier` | 3260 | `supplier.lumeos.app` *(kommt später, `[read]` Tom 2026-08-13)* |
+
+`www.lumeos.app` trägt die Landingpage und ist **keine App** — kein Port,
+kein Verzeichnis unter `apps/`.
+
+`[cmd]` 2026-08-13: `apps/mobile` und `apps/staff` existieren als Gerüste,
+haben aber **weder Port noch Domain**. Wer sie baut, vergibt beides und
+trägt es hier nach.
 
 Der Zehnerabstand lässt Raum für Nebenprozesse je App (Storybook, Mock-Server).
 

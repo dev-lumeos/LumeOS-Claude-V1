@@ -58,15 +58,32 @@ Das Cookie ist auf `.lumeos.app` gesetzt und gilt damit für alle
 Subdomains. **`admin` ist davon ausgenommen** und führt eine eigene
 Sitzung (§4a).
 
+**Domains entschieden `[read]` 2026-08-13 (Tom, B-13).** Die Landingpage
+ist eine **eigene Domain** und nicht Teil von `web`:
+
 | App | Domain | Zugang | Sitzung |
 |---|---|---|---|
-| web | `lumeos.app` | offen (Landingpage), angemeldet für Module | geteilt |
+| — (Landingpage) | `www.lumeos.app` | offen, keine Anmeldung | keine |
+| web | `web.lumeos.app` | angemeldet | geteilt |
 | buddy | `buddy.lumeos.app` | angemeldet | geteilt |
 | coach | `coach.lumeos.app` | angemeldet + Coach-Zugehörigkeit | geteilt |
 | marketplace | `marketplace.lumeos.app` | offen (Katalog), angemeldet für Kauf | geteilt |
 | admin | `admin.lumeos.app` | angemeldet + Admin-Zugehörigkeit | **eigen** |
 | gym | `gym.lumeos.app` | angemeldet + Gym-Zugehörigkeit | geteilt |
 | supplier | `supplier.lumeos.app` | angemeldet + Supplier-Zugehörigkeit | geteilt |
+
+**Was sich damit geändert hat:** Diese Tabelle führte `web` bis zum
+2026-08-13 unter `lumeos.app` mit dem Zusatz „offen (Landingpage)" — App
+und Landingpage waren dieselbe Adresse. Sie sind es nicht mehr:
+`www.lumeos.app` trägt die Landingpage und **keine Anmeldung**,
+`web.lumeos.app` trägt die App. Der öffentliche Teil von `web`
+(`20-apps/web` §2) ist damit neu zu bewerten — als eigener Punkt geführt,
+nicht hier nebenbei entschieden.
+
+`gym` und `supplier` stehen weiterhin in dieser Tabelle, waren aber
+**nicht Teil der Entscheidung** vom 2026-08-13; sie behalten das Muster
+`<app>.lumeos.app`. `[cmd]` Für beide existiert kein Verzeichnis unter
+`apps/`.
 
 Erweiterbar ohne Änderung dieses Dokuments: eine neue App bringt eine neue
 Zeile und eine Zugehörigkeitsart mit.
@@ -125,8 +142,11 @@ gegen `domain`: gesetzt wird stattdessen der **Name** — für `admin`
 `[cmd]` `sb-<ref>-admin-auth-token`, für den Produktbereich gar nichts.
 `domain` bleibt damit weiterhin an keiner Stelle gesetzt.
 
-**Offen:** Der Altbestand nennt an einer Stelle `app.lumeos.app`, an anderer
-`lumeos.app` für dieselbe App. Die Domain von `web` ist festzulegen.
+**Erledigt `[read]` 2026-08-13:** Hier stand, der Altbestand nenne
+`app.lumeos.app` und `lumeos.app` für dieselbe App und die Domain von
+`web` sei festzulegen. Tom hat entschieden: **weder noch** — `web` liegt
+unter `web.lumeos.app`, `www.lumeos.app` trägt die Landingpage. Siehe die
+Tabelle in §4.
 
 ## 5. Ablauf beim Wechsel zwischen Apps
 
@@ -178,9 +198,12 @@ E-Mail mit Passwort. Ein Verfahren je Identität genügt; mehrere sind möglich.
 
 ## 8. Offene Fragen
 
-1. **Domain von `web`** — `lumeos.app` oder `app.lumeos.app`. Der Altbestand
-   nennt beides für dieselbe App. Hängt an TODO B-13 (`site_url` und
-   Rückleitadressen).
+1. ~~**Domain von `web`**~~ — **entschieden 2026-08-13 (Tom, B-13):**
+   weder `lumeos.app` noch `app.lumeos.app`, sondern **`web.lumeos.app`**;
+   `www.lumeos.app` ist die Landingpage und nicht die App. Tabelle in §4.
+   *Folgefrage, neu:* der öffentliche Teil von `web` (`20-apps/web` §2)
+   ist damit gegenstandslos geworden — was unter `web.lumeos.app/` steht,
+   wenn dort keine Landingpage mehr liegt, ist offen.
 2. **Onboarding** — der Altbestand beschreibt zehn Schritte, darunter
    Modulauswahl und Tarifwahl. Beides gehört fachlich in
    `10-plattform/berechtigungen` und ist dort nicht entschieden. Der Ablauf

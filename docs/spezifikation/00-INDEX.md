@@ -58,15 +58,27 @@ Ohne Ebene 0 ist kein Modul baubar.
 
 ## Apps
 
+Domains entschieden `[read]` 2026-08-13 (Tom, B-13). Status `[cmd]`
+2026-08-13 am Dateibaum erhoben, nicht fortgeschrieben.
+
 | App | Domain | Zielgruppe | Status |
 |---|---|---|---|
-| `web` | lumeos.app | Endnutzer; unangemeldet auch Landingpage | leer |
-| `admin` | admin.lumeos.app | Betrieb, intern | leer |
-| `buddy` | buddy.lumeos.app | Endnutzer, AI-Companion | leer |
-| `coach` | coach.lumeos.app | Human Coaches | leer |
-| `marketplace` | marketplace.lumeos.app | Anbieter und Käufer | leer |
-| `gym` | – | Gym-Verwaltung | leer |
-| `supplier` | – | Supplier-Verwaltung | leer |
+| — | www.lumeos.app | Landingpage, keine Anmeldung | nicht gebaut |
+| `web` | web.lumeos.app | Endnutzer | **gebaut** (Port 3200) |
+| `admin` | admin.lumeos.app | Betrieb, intern | **gebaut** (Port 3210) |
+| `buddy` | buddy.lumeos.app | Endnutzer, AI-Companion | Gerüst (`src/.gitkeep`) |
+| `coach` | coach.lumeos.app | Human Coaches | Gerüst (`src/.gitkeep`) |
+| `marketplace` | marketplace.lumeos.app | Anbieter und Käufer | kein Verzeichnis |
+| `gym` | – | Gym-Verwaltung | kein Verzeichnis |
+| `supplier` | – | Supplier-Verwaltung | kein Verzeichnis |
+| `mobile` | – *(offen)* | – *(offen)* | Gerüst (`src/.gitkeep`) |
+| `staff` | – *(offen)* | – *(offen)* | Gerüst (`src/.gitkeep`) |
+
+**`mobile` und `staff` sind Gerüste ohne Zuordnung.** `[cmd]` Beide
+liegen unter `apps/` mit je einer `src/.gitkeep`, kommen aber in der
+Domain-Entscheidung vom 2026-08-13 **nicht vor** und tragen auch keinen
+Port in der Konvention (§8). Weder Domain noch Zielgruppe sind
+festgelegt — hier bewusst offen gelassen statt geraten.
 
 Erweiterbar. Genannte Kandidaten: Arzt, Versicherung.
 
