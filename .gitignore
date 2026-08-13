@@ -167,3 +167,10 @@ docs/design-system/*
 # Nur die README ist getrackt. Siehe media/README.md.
 media/*
 !media/README.md
+
+# --- Referenzmaterial: fremde Repos, nicht versioniert.
+# Nur die README ist getrackt. Siehe referenz/README.md — dort steht,
+# warum lumeos-2026 nicht geloescht werden darf (22 Stashes, 19 ungepushte
+# Commits, nirgends sonst gesichert).
+referenz/*
+!referenz/README.md

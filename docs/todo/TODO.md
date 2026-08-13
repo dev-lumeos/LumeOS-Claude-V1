@@ -164,23 +164,33 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   `.codex-governance-ui.log`). Übrig sind **zwei**, und beide bleiben —
   mit Begründung:
 
-  **`temp/` (3,10 GB) — NICHT löschen.** Die frühere Notiz nannte
-  „Prod-Dumps, ein Duplikat liegt als Zip unter `backup/legacy-v2/`".
-  `[cmd]` Das trifft den Inhalt nicht. Zwei Verzeichnisse:
-  - `temp/lumeosold/` (2,93 GB, 91.268 Dateien) ist ein **vollständiges
-    Git-Repository** — Remote `github.com/dev-lumeos/lumeos-2026.git`,
-    Branch `dev`. Darin `[cmd]` **16 nicht gepushte Commits** und
-    **22 Stashes**. Stashes werden nie gepusht; sie existieren
-    ausschliesslich in dieser Arbeitskopie. Ein Löschen vernichtet sie
-    endgültig, und kein Zip-Duplikat enthält sie.
-  - `temp/antigravity-awesome-skills-main/` (171 MB, 13.160 Dateien) ist
-    ein heruntergeladener öffentlicher Skill-Katalog ohne `.git` —
-    jederzeit neu ladbar, aber auch nicht im Weg.
+  **`temp/` — entschieden 2026-08-12 (Tom): `lumeosold` wird als Referenz
+  gebraucht.** Der Vorgänger enthält Ansätze und Funktionen, die in den
+  Neubau einfliessen sollen. Umgezogen nach `referenz/lumeos-2026/`, weil
+  der Name `temp` das Verzeichnis zweimal beinahe gekostet hätte:
+  in Block 15 lagen darin 13,11 GB Übungsmedien (jetzt unter `media/`),
+  in Block 23 kam heraus, dass es ein vollständiges Git-Repository ist.
 
-  **Vorschlag statt Löschung:** `temp/lumeosold` entweder pushen (dann
-  ist die Historie gesichert) oder bewusst als Archiv behalten und
-  umbenennen, damit der Name nicht „wegwerfbar" suggeriert. Beides ist
-  Toms Entscheidung — hier wurde nichts angefasst.
+  `[cmd]` Nach dem Umzug unverändert: Remote
+  `github.com/dev-lumeos/lumeos-2026.git`, 27 lokale Branches,
+  **22 Stashes**, **16 nicht gepushte Commits auf `dev`** und 3 weitere
+  auf `feature/supabase-migration-v2`, letzter Commit 2026-03-24.
+  Stashes werden nie gepusht — sie existieren ausschliesslich in dieser
+  Arbeitskopie, und kein Zip enthält sie.
+
+  `referenz/README.md` hält fest, was der Ordner ist und was vor jedem
+  Aufräumen dort zu sichern wäre. `.gitignore` lässt nur diese README
+  durch; `[cmd]` Gegenprobe: `lumeos-2026` ignoriert, README sichtbar.
+
+  **Weiterhin offen, nicht dringend:** Die 19 ungepushten Commits und
+  22 Stashes sind nicht gesichert. `git push` der betroffenen Branches
+  oder ein `git bundle create … --all` würde das erledigen — Toms
+  Entscheidung, ob und wann.
+
+  `temp/` trägt jetzt noch `antigravity-awesome-skills-main/`
+  (171 MB, 13.160 Dateien) — `[cmd]` ein heruntergeladener öffentlicher
+  Skill-Katalog ohne `.git`, jederzeit neu ladbar. Löschbar, aber auch
+  nicht im Weg.
 
   **`nul` (99 B) — bleibt, Kuriosität.** `[cmd]` Inhalt: eine deutsche
   Fehlermeldung von `TASKKILL` vom 2026-04-23. Eine Windows-Shell hat
@@ -192,9 +202,8 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   Wurzelverzeichnis.
 
   *Regel bleibt: jeder untracked Ordner wird vor Löschung inhaltlich
-  geprüft, nicht nur dem Namen nach — dieser Punkt ist gerade das
-  Beispiel dafür.*
-  **Offen:** nur noch Toms Entscheidung zu `temp/lumeosold`.
+  geprüft, nicht nur dem Namen nach — dieser Punkt ist zweimal das
+  Beispiel dafür gewesen.*
 
 - [ ] **A-06: Design-System spezifizieren** — Stand Audit 2026-08-05:
   `[cmd]` `docs/spezifikation/10-plattform/design-system/` ist **nicht mehr
