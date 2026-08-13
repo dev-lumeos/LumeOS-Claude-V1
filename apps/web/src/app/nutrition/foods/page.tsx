@@ -124,23 +124,35 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
               <p className="text-sm font-medium text-emerald-300">LumeOS Nutrition Local</p>
               <h1 className="mt-2 text-3xl font-semibold tracking-tight">Food Search</h1>
               <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-300">
-                Read-only local search over the BLS-backed food foundation. Food names shown here are source labels from BLS,
-                not final human-friendly product labels.
+                Suche über den BLS-Lebensmittelbestand. Die angezeigten Namen sind die Bezeichnungen des BLS,
+                keine fertigen Produktnamen. Favorit und Ausschluss je Lebensmittel werden gespeichert.
               </p>
             </div>
             <div className="rounded-lg border border-slate-800 bg-slate-900/70 px-4 py-3 text-sm text-slate-300">
               <div>Container: <span className="font-mono text-slate-100">{payload.container}</span></div>
               <div className="mt-1">API: <span className="font-mono text-slate-100">/api/nutrition/foods</span></div>
-              <div className="mt-1">Mode: <span className="font-mono text-slate-100">read-only local</span></div>
+              <div className="mt-1">Modus: <span className="font-mono text-slate-100">lokal · Präferenzen schreibend</span></div>
             </div>
           </div>
 
           <section className="mb-6 rounded-lg border border-amber-700/50 bg-amber-950/30 p-4 text-sm text-amber-100">
-            <div className="font-semibold">Source label from BLS.</div>
+            <div className="font-semibold">Warum steht hier „Hähnchen Brustfilet, roh“ und nicht „Hähnchenbrust“?</div>
             <p className="mt-1 leading-6">
-              Human-friendly names remain future work. Category and tag filters are local Human Layer foundations seeded
-              from current specs and deterministic BLS-backed rules. This page does not invent display names, aliases,
-              categories, or nutrient values.
+              Die Namen stammen unverändert aus dem Bundeslebensmittelschlüssel (BLS). Das ist eine Fachsystematik:
+              sie trennt Grundprodukt und Zubereitung durch Komma und schreibt Wortteile auseinander.
+              Wir erfinden hier keine Anzeigenamen — was Sie sehen, ist die Bezeichnung der Quelle.
+            </p>
+            <p className="mt-2 leading-6">
+              <span className="font-semibold">Damit Sie trotzdem finden, was Sie suchen:</span> Zusammengeschriebene
+              Formen sind hinterlegt („hähnchenbrust“, „haferflocken“, „rindhackfleisch“), ebenso beide Hälften von
+              Doppelnamen wie „Dorsch/Kabeljau“ und die englischen Bezeichnungen. Das sind Schreibvarianten des
+              Bestands, keine erfundenen Namen.
+            </p>
+            <p className="mt-2 leading-6">
+              <span className="font-semibold">Noch nicht gefunden werden</span> Mundart und regionale Wörter
+              („Poulet“, „Marille“, „Karfiol“), umgangssprachliche Formen („Hühnerbrust“) und abweichende
+              Schreibweisen („Brokkoli“ statt „Broccoli“). Wenn eine Suche leer bleibt, hilft der Kategoriefilter
+              weiter.
             </p>
           </section>
 

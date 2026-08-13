@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-13 (siebenundzwanzigste Aktualisierung — Block 26 Nachtrag: E-16 erledigt und angewandt (107 Gruppen, 6.624 Zuordnungen, Gluteus Medius 402), E-19 neu. Toms Befund: der Tippfehler-Waechter zaehlte in die falsche Richtung — er meldete vier Nicht-Faelle und uebersah den einen echten, weil eine gemeinsame Uebung nicht entlastet, sondern BELASTET. Kein Merkmal trennt den echten Tippfehler automatisch von Biceps/Triceps (drei geprueft, keines traegt), deshalb ist die Pruefung jetzt eine Meldung mit begruendeter Ausnahmeliste und tippfehler_unerklaert = 0 als hartem Signal. Die Lehre steht in den Konventionen 11.1: ein Massstab ist an bekannten Faellen BEIDER Sorten zu belegen, sonst zeigt er zuverlaessig in die falsche Richtung)
+**Stand:** 2026-08-13 (achtundzwanzigste Aktualisierung — Block 28 auf Branch suche/wortschatz-und-relevanz: 11.102 abgeleitete Suchaliase (Kettenschritt 022) und die Relevanz an die Aliase angebunden (071). Abnahme ueber 47 Begriffe aus 11 Warengruppen: 19 von 19 neuen Faehigkeiten getroffen, 16 von 16 Rueckfallschutz gehalten, 12 bekannt offen. C-15 neu (Fehlsuchen mitschreiben, bevor Dialektaliase gepflegt werden) und C-16 neu (Training traegt dasselbe Muster: 1.416 rein englische Uebungsnamen ohne Aliasspalte). Nebenbefund: die Ableitung verdoppelte die Suchlaufzeit von 68,5 auf 143,2 ms, weil der vorhandene Trigram-Index auf der Spalte alias liegt und die Abfrage auf search_fold(alias) filtert — ein Ausdrucks-Index bringt sie auf 83,1 ms zurueck)
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · *Blocker kursiv*
 **Herkunft:** fortgeführt aus `docs/_archive/ist-zustand/03-todo.md` (Stand 2026-07-30),
 ergänzt um die Funde der Sitzungen 2026-08-01.
@@ -1496,6 +1496,56 @@ Bau — und Training hat jetzt dieselbe Ausgangslage.**
   (curation/page.tsx) und „never applies migrations“
   (local-schema/page.tsx) — Selbstaussagen der jeweiligen Seite und
   `[cmd]` wahr: keine der beiden Seiten enthält eine Schreiboperation.
+
+- [ ] **C-15: Fehlsuchen mitschreiben, bevor Dialektaliase gepflegt
+  werden** (neu 2026-08-13, aus Block 28) — Block 28 hat die
+  **ableitbare** Hälfte der Wortschatzlücke geschlossen (11.102 Aliase,
+  ohne Handarbeit). Was bleibt, ist echtes Sprachwissen: `[cmd]` **12 von
+  47** Abnahmebegriffen sind weiterhin offen — Mundart (`poulet`,
+  `marille`, `karfiol`, `paradeiser`, `schoggi`), Umgangssprache
+  (`huehnerbrust`, `huehnchenbrust`, `rinderhack`, `schweineschnitzel`),
+  Schreibvarianten (`brokkoli`, `yoghurt`) und Regionalwörter
+  (`blaubeere`).
+
+  **Nicht mit einer Wortliste anfangen.** `[cmd]` Der Befund
+  (`docs/ssot/41-lebensmittelsuche-wortschatz.md`) schätzt 5.000–8.000
+  Einträge für den ganzen Bestand — und die 50 häufigsten Grundbegriffe
+  decken nur **24,9 %** ab. Eine geratene Liste wäre teuer und träfe
+  daneben; auch die 71 Alternativen im Befund sind mein Sprachwissen,
+  keine Messung des Nutzerwortschatzes.
+
+  **Deshalb zuerst messen:** Anfragen mit null Treffern erfassen. Sie
+  sind die einzige Quelle, die sagt, welches Wort wirklich fehlt. Dann
+  pflegt man die 30 Wörter, die Leute tatsächlich tippen, statt 2.643
+  Begriffe auf Verdacht.
+  `[cmd]` Die Kurationstabellen (`food_curation_candidates`,
+  `food_curation_decisions`) sind genau dafür gebaut und **leer**.
+  `[cmd]` `food_aliases.source` unterscheidet seit Block 28
+  `derived` von `editorial` — gepflegte Aliase bleiben damit von
+  abgeleiteten trennbar.
+
+- [ ] **C-16: Training hat dasselbe Wortschatzproblem — eine Runde
+  früher erkennen** (neu 2026-08-13, aus Block 28) — `[cmd]`
+  `training.exercises` trägt **1.416 Übungen mit ausschliesslich
+  englischen Namen** (0 enthalten einen Umlaut), **keine Aliasspalte**,
+  und im ganzen Schema `training` existiert **genau eine** Funktion.
+  Wer „Bankdrücken" tippt, findet nichts.
+
+  **Das ist dasselbe Muster, ein Modul weiter:** Jede Datenquelle bringt
+  ihre eigene Sprache mit — der BLS deutsche Fachsystematik, der
+  Übungskatalog englische Produktnamen — und **keine davon ist die des
+  Nutzers**. Bei Nutrition hat es zwei Blöcke gekostet, das zu messen und
+  die ableitbare Hälfte zu schliessen.
+
+  **Was aus Block 28 übertragbar ist**, bevor Training eine Oberfläche
+  bekommt: die Alias-Ableitung ist mechanisch (Zusammenschreibung,
+  Trennzeichen) und braucht keine Pflege; die Relevanzstufen
+  (`exakt > Alias exakt > Präfix > Wortanfang > irgendwo`) sind
+  übertragbar; der Ausdrucks-Index auf die gefaltete Spalte ist
+  Voraussetzung, sonst kostet es Laufzeit.
+  **Der Unterschied:** Bei Training fehlt die deutsche Seite ganz — es
+  geht nicht um Schreibvarianten, sondern um Übersetzung. Das ist keine
+  Ableitung, sondern Inhalt.
 
 ---
 
