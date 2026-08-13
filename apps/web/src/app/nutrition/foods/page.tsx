@@ -4,8 +4,11 @@ import type { Route } from 'next'
 import {
   LocalFoodSearchError,
   buildFoodSearchFilterHref as buildBaseFoodSearchFilterHref,
+  getFoodGroupFacets,
   getLocalFoodSearch,
+  getPreparationFacets,
   normalizeFoodSearchText,
+  type FoodSearchFilterState,
 } from '../../../lib/nutrition/food-search'
 import { deterministicExclusionOptions, getPreferenceSearchPreview } from '../../../lib/nutrition/preference-search-preview'
 import { getNutritionPreferenceCatalog, summarizePreferenceCatalog } from '@lumeos/shared/nutrition/preferences-catalog'
@@ -21,7 +24,18 @@ type NutritionPageProps = {
     tag?: string
     sort?: string
     offset?: string
+    // Mehrfachauswahl: Next.js liefert wiederholte Parameter als Array,
+    // einen einzelnen als Zeichenkette. Beides muss angenommen werden.
+    prep?: string | string[]
+    group?: string | string[]
+    basics?: string
   }
+}
+
+/** Wiederholte Suchparameter zu einer Liste vereinheitlichen. */
+function alsListe(wert: string | string[] | undefined): string[] {
+  if (!wert) return []
+  return (Array.isArray(wert) ? wert : [wert]).map(v => v.trim()).filter(Boolean)
 }
 
 const COMMON_NUTRIENTS = new Set(['ENERCJ', 'ENERCC', 'PROT625', 'FAT', 'CHO', 'FIBT', 'SUGAR', 'NA'])
@@ -31,8 +45,11 @@ function buildFoodSearchFilterHref(...params: Parameters<typeof buildBaseFoodSea
   return href.replace(/^\/nutrition(?=\?|$)/, '/nutrition/foods') as Route
 }
 
-function buildFoodHref(query: string, category: string, tag: string, sort: string, offset: number, foodId: string): Route {
-  return buildFoodSearchFilterHref({ query, category, tag, sort, offset, food: foodId })
+// Nimmt den GANZEN Filterzustand entgegen, nicht einzelne Felder — sonst
+// verliert jeder Klick auf ein Lebensmittel die gesetzten Filter, und die
+// Adresse stimmt nicht mehr mit dem ueberein, was angezeigt wird.
+function buildFoodHref(zustand: FoodSearchFilterState, offset: number, foodId: string): Route {
+  return buildFoodSearchFilterHref({ ...zustand, offset, food: foodId })
 }
 
 function FoodSearchErrorView({ message }: { message: string }) {
@@ -91,6 +108,90 @@ function FacetSection({ active, clearHref, items, title }: { active: string; cle
   )
 }
 
+/**
+ * Ankreuzliste mit Mehrfachauswahl.
+ *
+ * Unterschied zu `FacetSection`: dort ist genau ein Wert aktiv, hier
+ * mehrere. „roh oder gegrillt" ist eine echte Frage — ein Klick auf
+ * einen gesetzten Eintrag nimmt ihn wieder weg.
+ *
+ * Verwendet dieselben Klassen wie `FacetSection`; A-06 ist offen,
+ * deshalb keine neuen Farben oder Tokens.
+ */
+function MultiFacetSection({
+  active, clearHref, items, title, hinweis,
+}: {
+  active: string[]
+  clearHref: Route
+  items: Array<{ key: string; label: string; href: Route }>
+  title: string
+  hinweis?: string
+}) {
+  if (items.length === 0) return null
+
+  return (
+    <div className="mt-5">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{title}</h3>
+        {active.length > 0 ? (
+          <Link className="text-xs text-emerald-300 hover:text-emerald-200" href={clearHref}>
+            Zurücksetzen
+          </Link>
+        ) : null}
+      </div>
+      {hinweis ? <p className="mb-2 text-xs text-slate-500">{hinweis}</p> : null}
+      <div className="flex flex-wrap gap-2">
+        {items.map(item => {
+          const selected = active.includes(item.key)
+          return (
+            <Link
+              className={`rounded-full border px-2.5 py-1 text-xs transition ${
+                selected
+                  ? 'border-emerald-400 bg-emerald-400 text-emerald-950'
+                  : 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500'
+              }`}
+              href={item.href}
+              key={item.key}
+            >
+              {item.label}
+            </Link>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Macht die Sortierung sichtbar.
+ *
+ * `[cmd]` `sort_weight` (0–980) entscheidet nach der Relevanz über die
+ * Reihenfolge: Fisch 695, Gemüse 612, Fleisch 414, zusammengesetzte
+ * Gerichte der Gruppen X und Y durchgehend 0. Bisher sah der Nutzer
+ * davon nichts — die Liste wirkte willkürlich sortiert.
+ *
+ * ALS ABZEICHEN, NICHT ALS ZAHL: Die 730 von „Hähnchen Brustfilet, roh"
+ * sagt niemandem etwas; „Grundzutat" schon. Drei Stufen genügen, um zu
+ * erklären, warum ein Grundprodukt vor einem Fertiggericht steht — und
+ * sie behaupten weniger, als eine Zahl es täte.
+ */
+function GewichtAbzeichen({ gewicht }: { gewicht: number }) {
+  const stufe =
+    gewicht >= 600 ? { text: 'Grundzutat', ton: 'border-emerald-700 text-emerald-300' }
+    : gewicht >= 300 ? { text: 'verarbeitet', ton: 'border-slate-700 text-slate-400' }
+    : gewicht > 0 ? { text: 'selten gesucht', ton: 'border-slate-800 text-slate-500' }
+    : { text: 'Gericht', ton: 'border-slate-800 text-slate-500' }
+
+  return (
+    <span
+      className={`rounded-full border px-2 py-0.5 text-[10px] ${stufe.ton}`}
+      title={`Sortiergewicht ${gewicht} von 980 — entscheidet nach der Relevanz die Reihenfolge`}
+    >
+      {stufe.text}
+    </span>
+  )
+}
+
 export default async function NutritionPage({ searchParams }: NutritionPageProps) {
   const query = searchParams?.q ?? ''
   const selectedFoodId = searchParams?.food
@@ -98,9 +199,21 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
   const tag = searchParams?.tag ?? ''
   const sort = searchParams?.sort ?? 'relevance'
   const offset = Number.parseInt(searchParams?.offset ?? '0', 10)
+  const preparations = alsListe(searchParams?.prep)
+  const groups = alsListe(searchParams?.group)
+  const basicsOnly = searchParams?.basics === '1' || searchParams?.basics === 'true'
 
   try {
-    const payload = await getLocalFoodSearch(query, selectedFoodId, { category, tag, sort, offset })
+    const payload = await getLocalFoodSearch(query, selectedFoodId, {
+      category, tag, sort, offset, preparations, groups, basicsOnly,
+    })
+    const filterState: FoodSearchFilterState = {
+      query, category, tag, sort, preparations, groups, basicsOnly,
+    }
+    const [preparationFacets, groupFacets] = await Promise.all([
+      getPreparationFacets(),
+      getFoodGroupFacets(),
+    ])
     // Seit C-02 kommen die Präferenzen aus der Datenbank (RLS-Session),
     // nicht mehr aus URL-Parametern.
     const preferencePreview = await getPreferenceSearchPreview({
@@ -151,8 +264,15 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
             <p className="mt-2 leading-6">
               <span className="font-semibold">Noch nicht gefunden werden</span> Mundart und regionale Wörter
               („Poulet“, „Marille“, „Karfiol“), umgangssprachliche Formen („Hühnerbrust“) und abweichende
-              Schreibweisen („Brokkoli“ statt „Broccoli“). Wenn eine Suche leer bleibt, hilft der Kategoriefilter
+              Schreibweisen („Brokkoli“ statt „Broccoli“). Wenn eine Suche leer bleibt, helfen die Filter
               weiter.
+            </p>
+            <p className="mt-2 leading-6">
+              <span className="font-semibold">Die Filter kommen aus dem BLS-Code selbst.</span> Zubereitung und
+              Warengruppe stecken an festen Stellen darin; die Bezeichnungen sind aus den Namen des Bestands
+              abgeleitet, nicht erfunden. Wo sich keine eindeutige Bedeutung belegen liess, wird kein Filter
+              angeboten. Das Abzeichen neben jedem Namen zeigt, warum ein Treffer wo steht: Grundzutaten stehen
+              vor verarbeiteten Erzeugnissen, zusammengesetzte Gerichte zuletzt.
             </p>
           </section>
 
@@ -362,6 +482,53 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                 title="V1 tag filters"
               />
 
+              <MultiFacetSection
+                active={preparations}
+                clearHref={buildFoodSearchFilterHref({ ...filterState, preparations: [] })}
+                hinweis="Mehrfachauswahl — mehrere Zubereitungen wirken als „oder“."
+                items={preparationFacets.map(item => ({
+                  key: item.code,
+                  label: item.label_de,
+                  href: buildFoodSearchFilterHref(filterState, {
+                    preparations: item.code, food: null, offset: '0',
+                  }),
+                }))}
+                title="Zubereitung"
+              />
+
+              <MultiFacetSection
+                active={groups}
+                clearHref={buildFoodSearchFilterHref({ ...filterState, groups: [] })}
+                hinweis="Warengruppe laut BLS-Code."
+                items={groupFacets.map(item => ({
+                  key: item.code,
+                  label: item.label_de,
+                  href: buildFoodSearchFilterHref(filterState, {
+                    groups: item.code, food: null, offset: '0',
+                  }),
+                }))}
+                title="Warengruppe"
+              />
+
+              <div className="mt-5">
+                <h3 className="mb-2 text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">Umfang</h3>
+                <Link
+                  className={`rounded-full border px-2.5 py-1 text-xs transition ${
+                    basicsOnly
+                      ? 'border-emerald-400 bg-emerald-400 text-emerald-950'
+                      : 'border-slate-700 bg-slate-950 text-slate-300 hover:border-slate-500'
+                  }`}
+                  href={buildFoodSearchFilterHref(filterState, {
+                    basicsOnly: basicsOnly ? 'false' : 'true', food: null, offset: '0',
+                  })}
+                >
+                  nur Grundnahrungsmittel
+                </Link>
+                <p className="mt-2 text-xs text-slate-500">
+                  Blendet zusammengesetzte Gerichte aus (BLS-Gruppen X und Y).
+                </p>
+              </div>
+
               <div className="mt-5 flex items-center justify-between gap-3">
                 <h2 className="text-lg font-semibold">Matches</h2>
                 <span className="rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-300">
@@ -385,10 +552,13 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
                             ? 'border-emerald-400 bg-emerald-950/40'
                             : 'border-slate-800 bg-slate-950/70 hover:border-slate-600'
                         }`}
-                        href={buildFoodHref(query, payload.category, payload.tag, payload.sort, payload.offset, food.id)}
+                        href={buildFoodHref(filterState, payload.offset, food.id)}
                       >
                         <div className="font-mono text-xs text-slate-400">{food.bls_code}</div>
-                        <div className="mt-1 font-medium text-slate-100">{food.source_label}</div>
+                        <div className="mt-1 flex flex-wrap items-center gap-2">
+                          <span className="font-medium text-slate-100">{food.source_label}</span>
+                          <GewichtAbzeichen gewicht={food.sort_weight} />
+                        </div>
                         <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] text-slate-300">
                           {food.enercc ? <span className="rounded border border-slate-700 px-1.5 py-0.5">{Number(food.enercc).toFixed(0)} kcal</span> : null}
                           {food.prot625 ? <span className="rounded border border-slate-700 px-1.5 py-0.5">{Number(food.prot625).toFixed(1)} g protein</span> : null}

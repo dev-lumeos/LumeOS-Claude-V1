@@ -87,6 +87,27 @@ export type FoodSearchFilterState = {
   food?: string
   sort?: FoodSearchSort | string
   offset?: number
+  /** Zubereitungsarten, Mehrfachauswahl — "roh oder gegrillt" ist eine echte Frage. */
+  preparations?: string[]
+  /** Warengruppen (erster Buchstabe des BLS-Codes), Mehrfachauswahl. */
+  groups?: string[]
+  /** Gerichte der Gruppen X und Y ausblenden. */
+  basicsOnly?: boolean
+}
+
+/** Eine Zubereitungsart, wie sie `nutrition.preparation_kinds` führt. */
+export type NutritionPreparationFacet = {
+  code: string
+  label_de: string
+  count: number
+}
+
+/** Eine Warengruppe, wie sie `nutrition.food_groups` führt. */
+export type NutritionFoodGroupFacet = {
+  code: string
+  label_de: string
+  ist_gericht: boolean
+  count: number
 }
 
 export type NutritionFoodCategoryTreeNode = {
@@ -112,6 +133,11 @@ export type FoodSearchRpcArgs = {
   p_sort: FoodSearchSort
   p_limit: number
   p_offset: number
+  /** Leeres Array statt null: die Funktion behandelt beides gleich, aber
+   *  ein Array ist im Aufruf eindeutiger als ein fehlender Wert. */
+  p_preparations: string[]
+  p_groups: string[]
+  p_basics_only: boolean
 }
 
 export class LocalFoodSearchError extends Error {
@@ -187,6 +213,20 @@ export function buildFoodSearchFilterHref(
         case 'offset':
           merged.offset = Number(value)
           break
+        // Mehrfachauswahl: der Wert ist ein Code, der umgeschaltet wird.
+        // Ein Klick auf eine gesetzte Zubereitung nimmt sie wieder weg —
+        // sonst braeuchte jede Ankreuzung zwei verschiedene Links.
+        case 'preparations':
+        case 'groups': {
+          const bisher = merged[key] ?? []
+          merged[key] = bisher.includes(value)
+            ? bisher.filter(v => v !== value)
+            : [...bisher, value]
+          break
+        }
+        case 'basicsOnly':
+          merged.basicsOnly = value === 'true' || value === '1'
+          break
       }
     }
   }
@@ -196,6 +236,16 @@ export function buildFoodSearchFilterHref(
   if (merged.tag?.trim()) params.set('tag', merged.tag.trim())
   if (merged.food?.trim()) params.set('food', merged.food.trim())
   if (merged.sort?.trim() && normalizeFoodSearchSort(merged.sort) !== 'relevance') params.set('sort', normalizeFoodSearchSort(merged.sort))
+  // Mehrfachauswahl als wiederholter Parameter (?prep=roh&prep=gegrillt).
+  // Sortiert, damit dieselbe Auswahl immer dieselbe Adresse ergibt —
+  // sonst waeren zwei gleichwertige Links verschieden.
+  for (const code of [...(merged.preparations ?? [])].sort()) {
+    if (code.trim()) params.append('prep', code.trim())
+  }
+  for (const code of [...(merged.groups ?? [])].sort()) {
+    if (code.trim()) params.append('group', code.trim())
+  }
+  if (merged.basicsOnly) params.set('basics', '1')
   if (typeof merged.offset === 'number' && merged.offset > 0) params.set('offset', String(clampFoodSearchOffset(merged.offset)))
   const query = params.toString()
   return query ? `/nutrition?${query}` : '/nutrition'
@@ -205,7 +255,17 @@ export function buildFoodSearchFilterHref(
 export function buildFoodSearchRpcArgs(
   query: string,
   selectedFoodId?: string,
-  options: { limit?: number; offset?: number; category?: string; categoryId?: string; tag?: string; sort?: string } = {},
+  options: {
+    limit?: number
+    offset?: number
+    category?: string
+    categoryId?: string
+    tag?: string
+    sort?: string
+    preparations?: string[]
+    groups?: string[]
+    basicsOnly?: boolean
+  } = {},
 ): FoodSearchRpcArgs {
   return {
     p_query: query,
@@ -218,6 +278,13 @@ export function buildFoodSearchRpcArgs(
     p_sort: normalizeFoodSearchSort(options.sort),
     p_limit: clampFoodSearchLimit(options.limit ?? DEFAULT_LIMIT),
     p_offset: clampFoodSearchOffset(options.offset ?? 0),
+    // Codes kommen aus der Adresse und damit vom Nutzer. Sie werden nur
+    // getrimmt und auf Leeres geprueft — die Datenbank vergleicht sie
+    // gegen preparation_kinds.code bzw. food_groups.code, ein
+    // unbekannter Code liefert also schlicht keinen Treffer.
+    p_preparations: (options.preparations ?? []).map(c => c.trim()).filter(Boolean),
+    p_groups: (options.groups ?? []).map(c => c.trim().toUpperCase()).filter(Boolean),
+    p_basics_only: options.basicsOnly === true,
   }
 }
 
@@ -363,10 +430,88 @@ export function parseFoodSearchPayload(input: unknown): NutritionFoodSearchPaylo
   }
 }
 
+/**
+ * Zubereitungsarten für die Ankreuzliste.
+ *
+ * Liest `nutrition.preparation_kinds` DIREKT — die Tabelle ist für
+ * `authenticated` lesbar (Kettenschritt 023), es braucht dafür keine
+ * eigene Funktion und damit keine Datenbankänderung.
+ *
+ * Die Reihenfolge kommt aus `sort_order`, die Beschriftung aus
+ * `label_de` — nicht aus dem Code. Wer eine Art umbenennt, ändert die
+ * Tabelle, nicht diese Datei.
+ *
+ * ZUR TREFFERZAHL: Sie wird hier NICHT mitgeliefert. `[cmd]` Die
+ * Suchfunktion gibt die gesetzten Filter zurück, aber keine Facetten mit
+ * Zählern; eine Zahl je Art bräuchte entweder eine neue Funktion in der
+ * Datenbank oder elf zusätzliche Abfragen je Seitenaufruf. Beides ist
+ * mehr, als der Nutzen rechtfertigt — und die Prüfung „bietet keinen
+ * leeren Filter an" leistet bereits die Selbstkontrolle in 023, die
+ * abbricht, sobald eine Art ohne Treffer entsteht.
+ */
+export async function getPreparationFacets(): Promise<NutritionPreparationFacet[]> {
+  try {
+    const { data, error } = await nutritionRpc()
+      .from('preparation_kinds')
+      .select('code,label_de,sort_order')
+      .order('sort_order', { ascending: true })
+    if (error) return []
+    const rows = Array.isArray(data) ? data : []
+    return rows
+      .map(row => ({
+        code: normalizeText((row as Record<string, unknown>).code),
+        label_de: normalizeText((row as Record<string, unknown>).label_de),
+        count: 0,
+      }))
+      .filter(row => row.code && row.label_de)
+  } catch {
+    return []
+  }
+}
+
+/**
+ * Warengruppen für die Ankreuzliste.
+ *
+ * `label_de` ist in `nutrition.food_groups` bewusst NULL, wo sich keine
+ * eindeutige Bezeichnung belegen liess — solche Gruppen werden hier
+ * herausgefiltert und damit nicht angeboten. Ein Filter ohne Namen wäre
+ * eine Zumutung, ein geratener Name wäre schlimmer.
+ */
+export async function getFoodGroupFacets(): Promise<NutritionFoodGroupFacet[]> {
+  try {
+    const { data, error } = await nutritionRpc()
+      .from('food_groups')
+      .select('code,label_de,ist_gericht,sort_order')
+      .order('sort_order', { ascending: true })
+    if (error) return []
+    const rows = Array.isArray(data) ? data : []
+    return rows
+      .map(row => ({
+        code: normalizeText((row as Record<string, unknown>).code),
+        label_de: normalizeText((row as Record<string, unknown>).label_de),
+        ist_gericht: (row as Record<string, unknown>).ist_gericht === true,
+        count: 0,
+      }))
+      .filter(row => row.code && row.label_de)
+  } catch {
+    return []
+  }
+}
+
 export async function getLocalFoodSearch(
   query: string,
   selectedFoodId?: string,
-  options: { category?: string; categoryId?: string; tag?: string; limit?: number; offset?: number; sort?: string } = {},
+  options: {
+    category?: string
+    categoryId?: string
+    tag?: string
+    limit?: number
+    offset?: number
+    sort?: string
+    preparations?: string[]
+    groups?: string[]
+    basicsOnly?: boolean
+  } = {},
 ): Promise<NutritionFoodSearchPayload> {
   const args = buildFoodSearchRpcArgs(query, selectedFoodId, options)
 

@@ -57,6 +57,54 @@ describe('local Nutrition food search helpers', () => {
     )
   })
 
+  it('traegt Zubereitung und Warengruppe als wiederholte Parameter in die Adresse', () => {
+    // Mehrfachauswahl: ?prep=roh&prep=gegrillt. Sortiert, damit dieselbe
+    // Auswahl immer dieselbe Adresse ergibt — sonst waeren zwei
+    // gleichwertige Links verschieden und der Cache doppelt belegt.
+    assert.equal(
+      buildFoodSearchFilterHref({ query: 'lachs', preparations: ['gegrillt', 'roh'] }),
+      '/nutrition?q=lachs&prep=gegrillt&prep=roh',
+    )
+    assert.equal(
+      buildFoodSearchFilterHref({ query: 'lachs', groups: ['T', 'V'], basicsOnly: true }),
+      '/nutrition?q=lachs&group=T&group=V&basics=1',
+    )
+  })
+
+  it('schaltet einen gesetzten Filter beim zweiten Klick wieder ab', () => {
+    // Ein Klick auf eine aktive Zubereitung nimmt sie weg — sonst
+    // braeuchte jede Ankreuzung zwei verschiedene Links.
+    assert.equal(
+      buildFoodSearchFilterHref({ preparations: ['roh', 'gegrillt'] }, { preparations: 'roh' }),
+      '/nutrition?prep=gegrillt',
+    )
+    assert.equal(
+      buildFoodSearchFilterHref({ preparations: ['roh'] }, { preparations: 'gegrillt' }),
+      '/nutrition?prep=gegrillt&prep=roh',
+    )
+  })
+
+  it('reicht die neuen Filter als Felder an die Datenbankfunktion', () => {
+    const args = buildFoodSearchRpcArgs('', undefined, {
+      preparations: [' roh ', '', 'gegrillt'],
+      groups: ['t', 'v'],
+      basicsOnly: true,
+    })
+    assert.deepEqual(args.p_preparations, ['roh', 'gegrillt'])
+    // Warengruppen sind Grossbuchstaben im BLS-Code.
+    assert.deepEqual(args.p_groups, ['T', 'V'])
+    assert.equal(args.p_basics_only, true)
+  })
+
+  it('laesst die neuen Filter weg, wenn nichts gesetzt ist', () => {
+    const args = buildFoodSearchRpcArgs('apfel')
+    assert.deepEqual(args.p_preparations, [])
+    assert.deepEqual(args.p_groups, [])
+    assert.equal(args.p_basics_only, false)
+    // Rueckfallschutz: die Adresse ohne Filter bleibt unveraendert.
+    assert.equal(buildFoodSearchFilterHref({ query: 'apfel' }), '/nutrition?q=apfel')
+  })
+
   it('normalizes pagination and sort inputs to the SPEC_07 local subset', () => {
     assert.equal(normalizeFoodSearchSort('protein_desc'), 'protein_desc')
     assert.equal(normalizeFoodSearchSort('kcal_asc'), 'kcal_asc')
