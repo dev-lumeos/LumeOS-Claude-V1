@@ -1979,6 +1979,91 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   v100 führt `gluteus_mideus_nutzungen` als Kennzahl mit, damit der Fall
   sichtbar bleibt.
 
+- [x] **C-38: `sort_weight` nach der Spec-Formel neu berechnen** (neu
+  2026-08-14). **Der billigste Hebel im ganzen Suchstrang** —
+  deterministisch, keine Kuration, keine KI.
+
+  `[read]` `docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md`,
+  Abschnitt „Sort Weight System", definiert die Berechnung vollständig:
+  Basis je Warengruppe (23 Werte, `U` Muskelfleisch 780, `X`
+  Fertiggerichte 200, `P` Alkohol 180), dazu Zuschläge und Abzüge.
+
+  **Zuschläge:** Core-Fitness-Food +200 · `PROT625` ≥ 20 g +80 · ≥ 30 g
+  weitere +120 · mager (≥ 20 g Protein und ≤ 5 g Fett) +50 · omega-3-reich
+  +40 · ballaststoffreich +30 · unverarbeitet roh +60.
+  **Abzüge:** hochverarbeitet −250 · Fertiggericht −300 · zubereitete
+  Variante eines Rohprodukts −150 · gesüßt −100 · Innereien −400 bis
+  −450 · Blut −500 · Fettgewebe −500 · Laborschnitte („S XI") −200.
+  Ergebnis auf 0–1000 begrenzt.
+
+  `[cmd]` **Der Ist-Zustand folgt dem nicht.** Nur **62 verschiedene
+  Werte** über 7.140 Einträge — grob nach Warengruppe und Zubereitung
+  gestaffelt, ohne Nährwert-Modifikatoren:
+
+  | | Ist | nach Formel |
+  |---|---|---|
+  | `U010100` Rind Hackfleisch, roh | **600** | 780 + 200 = 980 |
+  | `V416100` Hähnchen Brustfilet, roh | 730 | 760 + 200 + Proteinbonus |
+  | `U505100` Schwein Fettwamme | **400** | 780 − 500 = 280 |
+
+  **Warum das zuerst kommt:** Alle Eingangswerte liegen in
+  `food_nutrients` (`[cmd]` 121,8 Werte je Eintrag). Die Formel braucht
+  weder Handarbeit noch ein Sprachmodell und ist beim Import einmalig zu
+  rechnen. `[Vermutung]` Sie erledigt mehrere der sechs Restfälle des
+  Massstabs mit — `milch` → Magermilchpulver und `erdnussbutter` →
+  Erdnussmus laufen beide über Verarbeitungsgrad und Core-Liste.
+
+  **Was vorher zu klären ist:**
+  - `[read]` Die Core-Liste der Spec nennt 36 Einträge, teils ohne
+    BLS-Code („Lachs (diverse T-Codes)", „Magerquark (M)"). Die Zuordnung
+    ist zu belegen, nicht zu raten — jeder Code einmal nachgeschlagen.
+  - `processing_level` ist eine Spalte von `nutrition.foods`; ihr
+    Füllstand ist zu prüfen, bevor die Formel darauf baut.
+  - `[cmd]` Die heutigen Werte sind kein Zufallsprodukt — `sort_weight`
+    trägt bereits die Zubereitungsstufe aus Block 32. Beim Ersetzen darf
+    diese Wirkung nicht verloren gehen; **die Zubereitung gehört als
+    weiterer Modifikator in die Formel**, nicht daneben.
+
+  **Abnahme: der MealCam-Massstab darf nicht schlechter werden als 31 von
+  37**, Ziel 34. Vor und nach der Umstellung messen, beide Zahlen nennen.
+
+  `[cmd]` **Erledigt 2026-08-14, live verifiziert.** Bericht:
+  `docs/ssot/51-sortweight-formel.md` (drei Durchgänge).
+
+  | | vorher | jetzt |
+  |---|---|---|
+  | Massstab | 31 / 37 | **34 / 37** |
+  | Stufen | 62 | **95** |
+  | auf 0 | 2.165 (gerechnet) | **145** |
+
+  **Zwei Fehler in der Spec-Formel wurden dabei entschieden und
+  korrigiert:** Die Abzüge „Fertiggericht −300" und „Alkohol −300"
+  entfallen — die Basis kodiert die Warengruppe bereits, der Abzug
+  bestrafte dieselbe Eigenschaft ein zweites Mal und warf `[cmd]` 100 %
+  der Alkoholika auf denselben Wert. Und `whole_food` feuert jetzt auch
+  bei Zubereitungscode `000`, nicht nur `100` — `[read]`
+  `44-bls-codestruktur.md` belegt, dass `000` nicht „roh" heisst, sondern
+  „keine Zubereitungsvariante"; Code schlägt Spec.
+
+  **Umgesetzt als Kettenschritt**, nicht als `UPDATE`: `[cmd]` Der Block
+  in `020_food_human_layer.sql` wird aus
+  `daten/sortweight-formel.json` erzeugt (`_ableitung/sortweight-sql-erzeugen.ts`),
+  sonst driften Datendatei und SQL auseinander.
+
+  **Was `sort_weight` nicht löst**, gemessen statt vermutet: `milch`
+  (ein Getränk aus 87 % Wasser gewinnt gegen ein Pulver keine
+  Nährwertpunkte), `paprika` (Wortgrenze: Bestand `Gemüsepaprika`,
+  Nutzer tippt `paprika`), `erdnussbutter` (Kuration). **Keiner der drei
+  ist ein Gewichtsproblem.**
+
+  **Zwei Befunde bleiben offen und sind bewusst nicht repariert:**
+  `[cmd]` `processing_level` ist zu 100 % mit `raw` gefüllt, auch für
+  Bechamelsauce — falsch gefüllt, nicht leer, und das ist schlimmer.
+  `[cmd]` `food_tags` kennt weder `offal` noch `liver`; die
+  Innereien-Abzüge laufen über Namensmuster, wodurch `Leberknödel
+  Konserve` (800), `Gänseleber in Aspik` (640), `Schweinekümmelmagen`
+  (640) und `Kalb Nierenfett` (630) zu hoch stehen.
+
 - [x] **C-33: Der Zubereitungsschlüssel ist warengruppenabhängig — die
   Ursache hinter C-28** — **gemessen 2026-08-14. Auch die Reparatur ist
   gefallen.** Bericht: `docs/ssot/49-zubereitungsschluessel.md`,

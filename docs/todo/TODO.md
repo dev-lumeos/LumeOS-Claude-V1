@@ -109,7 +109,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 44 offen, 4 in Arbeit.
+`[cmd]` 46 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -139,8 +139,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-35** | Was aus zwei gefallenen Modellen brauchbar bleibt |  |
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
 | **C-37** | Tagesbilanz muss „nicht erfasst" von „nicht enthalten" unterscheiden |  |
-| **C-38** | `sort_weight` nach der Spec-Formel neu berechnen |  |
-| **C-39** | Canonical Names in drei Phasen |  |
+| **C-39** | Canonical Names in drei Phasen | ~ |
+| **C-40** | `X` und `Y` als eigener Durchgang |  |
+| **C-41** | Die Anzeigenamen einspielen |  |
+| **C-42** | Die Schemaprüfung um GRANTs und Policy-Bedingungen erweitern |  |
+| **C-43** | Die Kette ausführbar machen |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -1059,55 +1062,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   Abdeckungsgrad mitgeführt wird („85 % der heutigen Kalorien haben einen
   Eisenwert").
 
-- [ ] **C-38: `sort_weight` nach der Spec-Formel neu berechnen** (neu
-  2026-08-14). **Der billigste Hebel im ganzen Suchstrang** —
-  deterministisch, keine Kuration, keine KI.
 
-  `[read]` `docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md`,
-  Abschnitt „Sort Weight System", definiert die Berechnung vollständig:
-  Basis je Warengruppe (23 Werte, `U` Muskelfleisch 780, `X`
-  Fertiggerichte 200, `P` Alkohol 180), dazu Zuschläge und Abzüge.
-
-  **Zuschläge:** Core-Fitness-Food +200 · `PROT625` ≥ 20 g +80 · ≥ 30 g
-  weitere +120 · mager (≥ 20 g Protein und ≤ 5 g Fett) +50 · omega-3-reich
-  +40 · ballaststoffreich +30 · unverarbeitet roh +60.
-  **Abzüge:** hochverarbeitet −250 · Fertiggericht −300 · zubereitete
-  Variante eines Rohprodukts −150 · gesüßt −100 · Innereien −400 bis
-  −450 · Blut −500 · Fettgewebe −500 · Laborschnitte („S XI") −200.
-  Ergebnis auf 0–1000 begrenzt.
-
-  `[cmd]` **Der Ist-Zustand folgt dem nicht.** Nur **62 verschiedene
-  Werte** über 7.140 Einträge — grob nach Warengruppe und Zubereitung
-  gestaffelt, ohne Nährwert-Modifikatoren:
-
-  | | Ist | nach Formel |
-  |---|---|---|
-  | `U010100` Rind Hackfleisch, roh | **600** | 780 + 200 = 980 |
-  | `V416100` Hähnchen Brustfilet, roh | 730 | 760 + 200 + Proteinbonus |
-  | `U505100` Schwein Fettwamme | **400** | 780 − 500 = 280 |
-
-  **Warum das zuerst kommt:** Alle Eingangswerte liegen in
-  `food_nutrients` (`[cmd]` 121,8 Werte je Eintrag). Die Formel braucht
-  weder Handarbeit noch ein Sprachmodell und ist beim Import einmalig zu
-  rechnen. `[Vermutung]` Sie erledigt mehrere der sechs Restfälle des
-  Massstabs mit — `milch` → Magermilchpulver und `erdnussbutter` →
-  Erdnussmus laufen beide über Verarbeitungsgrad und Core-Liste.
-
-  **Was vorher zu klären ist:**
-  - `[read]` Die Core-Liste der Spec nennt 36 Einträge, teils ohne
-    BLS-Code („Lachs (diverse T-Codes)", „Magerquark (M)"). Die Zuordnung
-    ist zu belegen, nicht zu raten — jeder Code einmal nachgeschlagen.
-  - `processing_level` ist eine Spalte von `nutrition.foods`; ihr
-    Füllstand ist zu prüfen, bevor die Formel darauf baut.
-  - `[cmd]` Die heutigen Werte sind kein Zufallsprodukt — `sort_weight`
-    trägt bereits die Zubereitungsstufe aus Block 32. Beim Ersetzen darf
-    diese Wirkung nicht verloren gehen; **die Zubereitung gehört als
-    weiterer Modifikator in die Formel**, nicht daneben.
-
-  **Abnahme: der MealCam-Massstab darf nicht schlechter werden als 31 von
-  37**, Ziel 34. Vor und nach der Umstellung messen, beide Zahlen nennen.
-
-- [ ] **C-39: Canonical Names in drei Phasen** (neu 2026-08-14). Löst die
+- [~] **C-39: Canonical Names in drei Phasen** (neu 2026-08-14). Löst die
   Namensfrage, an der C-28 und C-33 gescheitert sind — auf einem dritten
   Weg, den die Spec vorgibt.
 
@@ -1148,6 +1104,110 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
   `[cmd]` **Der Bedarf ist beziffert:** 3.272 der 7.140 Namen tragen
   Klammer, Schrägstrich, Zahl oder mehr als fünf Wörter.
+
+  `[cmd]` **Stand 2026-08-14: Phase 2 abgeschlossen, 5.775 von 5.775
+  Zeilen** in `supabase/_pipeline/daten/anzeigenamen.jsonl`. Keine
+  Kollisionen, 33 mit `sicher: false`, 576 mit `nebennamen`. Bericht:
+  `docs/ssot/52-anzeigenamen-batch.md`.
+
+  Kennzahlen je Warengruppe folgen der Schwierigkeitsverteilung: `[cmd]`
+  `U` und `V` 0 % unverändert (79 / 65 % schwierig), `M` 3 % (95 %),
+  `T` 1 % (56 %) — `B` dagegen 83 % (6 %), und das ist dort richtig.
+
+  **Offen: `X`/`Y` (C-40) und das Einspielen (C-41).** Phase 1
+  (regelbasiert, `C`/`F`/`G`/`H`/`K`, 1.365 Einträge) ist nicht
+  angefasst.
+
+- [ ] **C-40: `X` und `Y` als eigener Durchgang** (neu 2026-08-14).
+  Setzt C-39 fort.
+
+  `[cmd]` Die 2.050 Gerichte sind zu **100 % unverändert** durchgereicht
+  worden, Median-Länge 38 → 38 und 33 → 33. Codex hat die Frage im
+  Bericht selbst beantwortet, nachdem die 20 längsten `X`-Einträge geprüft
+  waren:
+
+  > `[annahme]` Bei diesen 20 war die Regel „Durchreichen ist der
+  > Normalfall" zu weit ausgelegt. […] Die Bestandteile müssen erhalten
+  > bleiben, aber die amtliche Satzstruktur muss nicht erhalten bleiben.
+
+  `[cmd]` Beispiel: `Lasagne al forno, Teigwaren geschichtet mit
+  Bechamel- und Bologneser Sauce, mit Käse überbacken` — 95 Zeichen,
+  unverändert. Vorschlag aus dem Bericht: `Lasagne al forno mit Bolognese
+  und Bechamel`.
+
+  **Mitprüfen:** `[cmd]` `D` steht bei **63 % unverändert** gegenüber
+  73 % schwierigen Namen; 186 der unveränderten tragen eine Klammer
+  (`Apfel-Streuselkuchen (Mürbeteig)`). Verteidigbar, weil die Teigart
+  drei sonst identische Kuchen unterscheidet — aber der Wert stieg beim
+  Reparaturlauf von 44 % auf 63 %, ging also in die falsche Richtung.
+
+- [ ] **C-41: Die Anzeigenamen einspielen** (neu 2026-08-14). Setzt C-29
+  voraus.
+
+  `[cmd]` `supabase/_pipeline/daten/anzeigenamen.jsonl` ist vollständig:
+  5.775 Zeilen, keine Kollisionen, 33 mit `sicher: false`, **576 mit
+  `nebennamen`**. Die Datei ist erzeugt — der Weg in `nutrition.foods`
+  fehlt.
+
+  **Zwei Dinge sind vorher zu klären:**
+  - Die Kuration muss den Kettenlauf überleben (C-29). Ohne
+    Override-Schicht setzt der nächste Aufbau alles zurück.
+  - `[read]` **Aliase leiten sich aus `name_de` ab, nie aus dem
+    Anzeigenamen.** Sonst verschwinden die Nebenformen, die
+    `022_alias_ableitung.sql` heute aus Schrägstrichnamen gewinnt
+    (`[cmd]` 836 Einträge betroffen).
+
+  **Die 576 `nebennamen` sind kuratierte Aliase mit bekannter Herkunft** —
+  `Felchen` mit `Maräne`, `Renke`, `Schnäpel`. Wie sie in `food_aliases`
+  kommen und ob sie die maschinelle Ableitung ersetzen oder ergänzen,
+  ist offen.
+
+- [ ] **C-42: Die Schemaprüfung um GRANTs und Policy-Bedingungen
+  erweitern** (neu 2026-08-14). Die zwei blinden Flecken, die Claude Code
+  in `docs/ssot/53-kettenluecke.md` selbst benannt hat.
+
+  1. **GRANTs werden nicht geprüft.** `[read]` PostgREST prüft
+     Tabellenrechte **vor** RLS — eine Tabelle mit tadellosen Policies,
+     aber ohne `GRANT SELECT`, ist für die Anwendung genauso unerreichbar
+     wie eine gesperrte. Der nächstliegende Kandidat.
+  2. **Policy-Bedingungen werden nicht geprüft.** Geprüft wird, dass eine
+     Policy für eine Operation existiert, nicht was sie erlaubt. Ein
+     `USING (true)` auf `meals` bestünde die Prüfung und zeigte jedem
+     alle Mahlzeiten.
+
+  `[cmd]` Stand der Prüfung heute: 107 Einzelaussagen — 17 Zeilenschutz,
+  32 Policies je Operation, 2 `security_invoker`, 4 Trigger, 14
+  Fremdschlüssel. Indizes bewusst ausgelassen (Laufzeit, nicht
+  Korrektheit).
+
+- [ ] **C-43: Die Kette ausführbar machen** (neu 2026-08-14).
+
+  `[cmd]` **Es gibt keine Kettensteuerung.** Eine Volltextsuche nach den
+  Schrittdateien findet genau eine Fundstelle: `supabase/README.md`. Kein
+  Skript, kein `package.json`-Eintrag — die Kette ist eine Prosa-Tabelle,
+  die von Hand abgearbeitet wird.
+
+  Genau daran ist am 2026-08-14 der Neuaufbau gescheitert: Die Tabelle
+  endete bei `021`, **vierzehn Schritte fehlten**, fünf davon wirkten
+  tatsächlich nicht. Die Tabelle ist jetzt vollständig (20 Zeilen) — die
+  fehlende Ausführbarkeit bleibt.
+
+  **Was zu entscheiden ist, bevor gebaut wird:** ob die Reihenfolge aus
+  der README gelesen wird (dann ist sie Steuerung und Dokumentation
+  zugleich, mit dem Risiko, dass Prosa zu Code wird) oder aus einer
+  eigenen Datendatei, die gegen die README geprüft wird.
+
+  **Zwei Stolpersteine gehören mit hinein**, beide am 2026-08-14
+  gemessen: `public.handle_new_user()` und `public.is_admin()` überleben
+  `DROP SCHEMA nutrition CASCADE` und lassen die Baseline mit „already
+  exists" abbrechen; Schritt `030` liest per `\\copy` aus
+  `/tmp/p1-005-bls-local-import/` **im Container**, nicht lokal.
+
+  `[cmd]` Und die Falle, die knapp nicht zuschlug: Ohne `auth`-Schema
+  bricht `052` **nach** dem Anlegen ab, rollt zurück, und die Ausgabe
+  besteht aus lauter `NOTICE … skipping`-Zeilen. Wer nach `ERROR` am Ende
+  sucht, sieht nichts.
+
 
 
 

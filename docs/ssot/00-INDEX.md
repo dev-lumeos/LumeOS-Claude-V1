@@ -71,6 +71,12 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `44-bls-codestruktur.md` | Was der BLS-Code über Warengruppe und Zubereitung bereits sagt |
 | `45-bls-dokumentation.md` | Was die amtliche Dokumentation hergibt — und was nicht |
 | `46-bls-importluecke.md` | 30 Fettsäuren fehlten; Bestand gegen die Quelle geprüft |
+| `48-artengruppierung-messung.md` | Erster Versuch, Arten aus dem BLS-Code abzuleiten — **gemessen gefallen**, 39 von 100 |
+| `49-zubereitungsschluessel.md` | Die Reparatur dazu — **ebenfalls gefallen**, 47 von 100; der Schlüssel je Warengruppe, 204 Zellen |
+| `51-sortweight-formel.md` | Wie `sort_weight` gerechnet wird: Spec-Formel, zwei Korrekturen, Umsetzung in die Kette |
+| `52-anzeigenamen-batch.md` | Wie die 5.775 Anzeigenamen entstanden — und wie 704 Umlaute verloren gingen |
+| `53-kettenluecke.md` | Warum fünf Kettenschritte nie liefen, und die Prüfung, die es künftig meldet |
+| `54-nutrition-schema-abgleich.md` | Nutrition-Schema: was `SPEC_06` fordert, was gebaut ist, wo es auseinandergeht |
 | `47-lebensmittelsuche-stand.md` | **Der erreichte Stand** — fasst 41 bis 46 zusammen |
 | `60-legacy-cloud.md` | Was liegt wirklich in der Legacy-Cloud-Instanz? (echte Zeilenzahlen, Medienverweise, Schemakonflikt — ersetzt alle Schätzungen) |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
