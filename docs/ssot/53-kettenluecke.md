@@ -226,21 +226,38 @@ Liste veraltet oder es liegt Ausschuss im Schema.
 
 **Ihre blinden Flecken, jeder einzeln benannt:**
 
-- **Sie zählt keine Policies, Trigger, Indizes oder Fremdschlüssel.**
+> **Aktualisiert am 2026-08-16.** Der erste Punkt — keine Policies,
+> Trigger, Fremdschlüssel — ist behoben, siehe „Die Erweiterung" unten.
+> Er bleibt hier stehen, weil er den damaligen Stand festhält. Die
+> übrigen Punkte gelten unverändert.
+
+- ~~**Sie zählt keine Policies, Trigger, Indizes oder Fremdschlüssel.**~~
   `[cmd]` Gerade die fehlten hier mit: 12 Policies, 4 Trigger, 1
-  Fremdschlüssel. Eine Tabelle kann existieren und trotzdem ohne
-  Zeilenschutz dastehen — **das würde diese Prüfung nicht bemerken.**
-  Für RLS gibt es die getrennte `zugriffsrechte-pruefen.mjs`; die
-  Verbindung zwischen beiden ist nicht hergestellt.
+  Fremdschlüssel. **Behoben** — Policies je Operation, Zeilenschutz,
+  `security_invoker`, Trigger und Fremdschlüssel werden seit der
+  Erweiterung geprüft. **Indizes bewusst weiterhin nicht**, siehe unten.
 
 - **Sie prüft keine Spalten.** `meal_items` trug vor dem Neuaufbau
   `food_source`, eine Prüfbedingung und `frozen_at`. Ob die
   wiederhergestellte Tabelle dieselben Spalten hat, sagt diese Prüfung
   nicht — nur, dass es eine Tabelle dieses Namens gibt.
 
+- **Sie prüft keine GRANTs.** `[read]` PostgREST prüft Tabellenrechte
+  **vor** RLS — eine Tabelle mit tadellosen Policies, aber ohne
+  `GRANT SELECT`, ist für die Anwendung genauso unerreichbar wie eine
+  gesperrte. Das ist der nächstliegende blinde Fleck und der beste
+  Kandidat für die nächste Erweiterung.
+
 - **Sie prüft nur das Schema `nutrition`.** `public.profiles`, der
   Trigger auf `auth.users`, `public.is_admin()` — alles ungeprüft,
   obwohl `090` und `061` sie erzeugen.
+
+- **Sie prüft keine Policy-Bedingungen.** Geprüft wird, *dass* eine
+  Policy für eine Operation existiert, nicht *was* sie erlaubt. Eine
+  `USING (true)` auf `meals` würde die Prüfung bestehen und trotzdem
+  jedem alle Mahlzeiten zeigen. `[read]` Für die Bedingungen gibt es
+  `zugriffsrechte-pruefen.mjs`; die Verbindung zwischen beiden
+  Prüfungen ist weiterhin nicht hergestellt.
 
 - **Die Mindestzeilen sind Untergrenzen, keine Sollwerte.** Sie fangen
   „leer geblieben" ab, nicht „halb importiert". `[annahme]` Exakte
@@ -257,7 +274,9 @@ Liste veraltet oder es liegt Ausschuss im Schema.
 - **Die Liste altert.** Sie ist von Hand gepflegt — das ist der Preis
   dafür, dass sie ihre Werte nicht vom Prüfling bezieht. Wer einen
   Kettenschritt ergänzt und die Liste vergisst, bekommt einen Hinweis
-  („steht da, aber nicht in der Sollliste"), keinen Fehler.
+  („steht da, aber nicht in der Sollliste"), keinen Fehler. **Bei
+  Policies ist das jetzt schärfer:** eine *zusätzliche* Operation
+  erzeugt einen Hinweis, eine *fehlende* einen Fehler.
 
 ---
 
@@ -342,3 +361,161 @@ Die beiden Wegwerf-Datenbanken sind verworfen.
   angelegt worden. Ob dort vorher Zeilen standen, ist unbekannt;
   `[annahme]` bei einer Entwicklungsdatenbank ohne angemeldete Nutzer
   vermutlich nicht.
+
+---
+---
+
+# Die Erweiterung: Rechte, Trigger, Verweise
+
+`[cmd]` 2026-08-16, unmittelbar nach der Reparatur. Anlass ist der
+blinde Fleck, den dieser Bericht selbst benannt hat: **die Prüfung zählte
+Tabellen, aber nicht ihren Schutz.**
+
+`[read]` Warum das zählt: Im Repo gab es bereits eine Sicht ohne
+`security_invoker`, durch die der zweite Nutzer die Daten des ersten
+sah. „Tabelle vorhanden" und „Tabelle geschützt" sind zwei Aussagen —
+die erste zu prüfen und die zweite zu unterlassen, ist genau die Sorte
+Werkzeug, die Sicherheit behauptet, ohne sie zu erzeugen.
+
+## Was jetzt geprüft wird
+
+| | vorher | nachher |
+|---|---|---|
+| Tabellen | `[cmd]` 17 | 17 |
+| Sichten | `[cmd]` 2 | 2 |
+| Funktionen | `[cmd]` 10 | 10 |
+| **Zeilenschutz je Tabelle** | — | `[cmd]` **17** |
+| **Policies je Tabelle und Operation** | — | `[cmd]` **32** |
+| **`security_invoker` je Sicht** | — | `[cmd]` **2** |
+| **Trigger namentlich** | — | `[cmd]` **4** |
+| **Fremdschlüssel namentlich** | — | `[cmd]` **14** |
+| Mindestzeilen | `[cmd]` 9 | 9 |
+
+`[cmd]` Die Prüfung deckt damit **107 Einzelaussagen** statt 38 — 69
+davon sind neu (17 Zeilenschutz + 32 Policy-Operationen + 2
+`security_invoker` + 4 Trigger + 14 Fremdschlüssel).
+
+### Die vier Ergänzungen im Einzelnen
+
+**1. Zeilenschutz.** Für jede der 17 Tabellen steht `rls: true` in der
+Sollliste. Weicht `pg_tables.rowsecurity` ab, ist es ein **Fehler**,
+kein Hinweis.
+
+**2. Policies je Tabelle und Operation.** Nicht die Gesamtzahl, sondern
+je Tabelle, welche Operationen abgedeckt sein müssen. `[read]` Das
+Muster steht in `060_zugriffsschicht.sql`: Policies je Operation, keine
+Sammelpolicy. Der Bestand zerfällt sauber in zwei Gruppen:
+
+| | Tabellen | Policies |
+|---|---|---|
+| Katalogdaten (lesbar für alle) | `[cmd]` 11 | `SELECT` |
+| Nutzerdaten (eigene Zeilen) | `[cmd]` 6 | `SELECT`, `INSERT`, `UPDATE`, `DELETE` |
+
+**Der gefährlichste Fall wird zuerst geprüft:** Zeilenschutz an, aber
+**keine einzige Policy**. Die Tabelle ist dann für alle gesperrt — der
+Fehler aus ADR-0003, und von aussen sieht er aus wie „die Tabelle ist
+leer". Die Meldung nennt ihn beim Namen.
+
+**3. `security_invoker`.** `[cmd]` Beide Sichten tragen ihn heute; die
+erzeugenden Dateien `053` und `056` setzen ihn ausdrücklich
+(`WITH (security_invoker = true)`). Fehlt er, ist es ein Fehler.
+
+**4. Trigger und Fremdschlüssel namentlich**, jeweils mit erzeugendem
+Schritt — dasselbe Muster wie bei den Tabellen.
+
+## Jede Zeile gegen die erzeugende Datei geprüft
+
+Der Ist-Stand war der Ausgangspunkt, aber **keine Zeile ist ungeprüft
+übernommen worden.** `[cmd]` Die 32 Policies verteilen sich restlos auf
+fünf Pipeline-Dateien:
+
+| Datei | Policies |
+|---|---|
+| `060_zugriffsschicht.sql` | `[cmd]` 15 |
+| `052_diary_foundation.sql` | `[cmd]` 8 |
+| `055_water_logs.sql` | `[cmd]` 4 |
+| `023_zubereitung_ableitung.sql` | `[cmd]` 2 |
+| `061_rollen_admin.sql` | `[cmd]` 2 |
+| `024_suchsynonyme.sql` | `[cmd]` 1 |
+| **Summe** | **32** ✓ |
+
+Ebenso die vier Trigger (`052`: drei, `055`: einer) und die 14
+Fremdschlüssel (`[cmd]` 13 `REFERENCES` in der Baseline, 2 in `052` —
+davon einer auf `foods`, einer auf `meals`).
+
+**Nichts blieb übrig, das sich nicht in einer Pipeline-Datei
+wiederfindet.** Hätte es etwas gegeben, stünde es hier als Meldung statt
+in der Liste.
+
+## Der Nachweis in beide Richtungen
+
+`[read]` Eine Prüfung, die noch nie fehlgeschlagen ist, ist kein Beleg.
+Alles auf einer Wegwerf-Datenbank, danach verworfen.
+
+**Richtung 1 — vollständiges Schema (Vollkopie mit Daten):**
+
+```
+Tabellen     17/17    Zeilenschutz 17/17
+Sichten       2/2     Policies     17/17 Tabellen vollstaendig
+Funktionen   10/10    Sichten       2/2 mit security_invoker
+                      Trigger       4/4
+                      Fremdschl.   14/14
+SCHEMA VOLLSTAENDIG                              Exit 0
+```
+
+**Richtung 2 — fünf gezielte Eingriffe, jeder einzeln:**
+
+| Eingriff | Meldung | |
+|---|---|---|
+| `DROP POLICY meals_update` | `Policies: meals fehlt UPDATE — Schritt 052` | `[cmd]` Exit 1 |
+| alle vier Policies von `water_logs` | `water_logs hat Zeilenschutz, aber KEINE Policy — Tabelle ist gesperrt (ADR-0003) — Schritt 055` | `[cmd]` |
+| `security_invoker = false` auf `daily_summary` | `Sicht daily_summary: security_invoker=false, erwartet true — ohne den Schalter laeuft sie mit Eigentuemerrechten — Schritt 053` | `[cmd]` |
+| `DISABLE ROW LEVEL SECURITY` auf `meals` | `Zeilenschutz: meals hat rowsecurity=false, erwartet true — Schritt 052` | `[cmd]` |
+| Trigger + Fremdschlüssel entfernt | `Trigger: meal_items.meal_items_owner_guard_trg FEHLT` / `Fremdschluessel: meal_items_meal_id_fkey (meal_items -> meals) FEHLT` | `[cmd]` |
+
+`[cmd]` Der Einzelnachweis auf der Vollkopie: nach `DROP POLICY
+meals_update` meldet die Prüfung **genau eine** Abweichung und beendet
+sich mit Exit 1. Vorher Exit 0, nachher Exit 1, ein Unterschied — die
+Prüfung trennt.
+
+Jede Meldung nennt Tabelle, Operation und erzeugenden Schritt. Der Weg
+von der Meldung zur Reparatur ist einen Blick lang.
+
+## Ein Fehler in meiner eigenen Umsetzung
+
+`[cmd]` Der erste Lauf meldete `Zeilenschutz 0/17 wie erwartet` — obwohl
+alle 17 Tabellen Zeilenschutz haben. Ursache: ich verglich gegen `'t'`,
+aber `rowsecurity::text` liefert `'true'`. Die Prüfung hätte also
+**siebzehn falsche Fehler** gemeldet und wäre als unbrauchbar abgetan
+worden. Behoben; beide Schreibweisen werden akzeptiert.
+
+Das ist die Kehrseite derselben Medaille: eine Prüfung, die zu viel
+meldet, wird abgeschaltet — und schützt danach genauso wenig wie eine,
+die zu wenig meldet.
+
+## Indizes: bewusst ausgelassen
+
+`[read]` Auf Toms Vorgabe **nicht** aufgenommen, und die Begründung
+steht in der Datendatei unter `_bewusst_nicht_geprueft`:
+
+- Indizes sind **Laufzeit, nicht Korrektheit** — ein fehlender Index
+  macht die Suche langsam, keine Daten falsch oder sichtbar.
+- Die Liste wäre unpflegbar: jeder Ausdrucksindex aus `072`/`073`
+  müsste mitgezogen werden, und die werden beim Umbau der Suchbedingung
+  ohnehin neu gelegt (C-17).
+
+`[annahme]` Ein fehlender Trigram-Index würde sich in der
+Laufzeitmessung zeigen, nicht in einer Strukturprüfung. Gemessen ist das
+nicht.
+
+## Stand nach der Erweiterung
+
+```
+[cmd] schema-vollstaendigkeit-pruefen   SCHEMA VOLLSTAENDIG, Exit 0
+[cmd] 17 Tabellen · 2 Sichten · 10 Funktionen
+[cmd] 17 Zeilenschutz · 32 Policies · 2 security_invoker
+[cmd] 4 Trigger · 14 Fremdschluessel · 9 Mindestzeilen
+```
+
+Keine Schemaänderung — es wurde geprüft, nicht repariert. Die beiden
+Wegwerf-Datenbanken sind verworfen.
