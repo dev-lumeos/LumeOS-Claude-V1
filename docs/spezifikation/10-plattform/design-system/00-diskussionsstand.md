@@ -215,3 +215,79 @@ Information. Auf dem Handy war der Kopf der ganze Bildschirm.
 7. **Auswahl in Settings** — je Nutzer gespeichert? Dann braucht das Profil
    ein Feld, und die Auswahl gehört zur Modulspezifikation Settings.
 8. **Kontrastprüfung** — gegen WCAG 2 oder zusätzlich gegen APCA?
+
+---
+
+## 9. Gespräch 2026-08-14: das Lichtmodell
+
+Tom hat ein fremdes Dashboard als farblich ansprechend eingebracht (dunkler
+Grund, sieben Kennzahlkarten in je eigener Farbfamilie, Leuchten um das
+Symbol). Der Austausch drehte sich ausdrücklich **nicht** um die konkreten
+Farbtöne, sondern um das Konzept dahinter. Vier Feststellungen, die morgen
+Grundlage sind:
+
+**Eine Lichtquelle für die gesamte Oberfläche.** In jeder Karte sitzt der
+helle Punkt oben links, die Fläche wird nach unten rechts dunkler — bei
+allen Karten gleich. Darin liegt der Effekt: Es wirkt nicht wie sieben
+dekorierte Kacheln, sondern wie **ein Raum mit einer Lampe**, in dem sieben
+Gegenstände liegen.
+
+Als System heisst das: die Lichtrichtung ist **ein einziger Token**, kein
+Gestaltungsmittel je Komponente — etwa `--light-angle: 135deg`. Daraus folgt
+alles Weitere mechanisch: Verläufe laufen in diese Richtung, Schlagschatten
+fallen nach unten rechts, obere und linke Innenkante bekommen eine feine
+helle Linie, untere und rechte nicht. **Sobald eine Karte ihr Licht von
+rechts bekommt, zerfällt die Wirkung für alle.**
+
+**Das Modulsymbol ist die Lichtquelle, nicht nur ein Piktogramm.** Der
+radiale Verlauf geht vom Symbol aus, nicht von der Kartenecke. Die Karte ist
+der beleuchtete Raum, das Symbol der Leuchtkörper. Für LumeOS: jedes Modul
+hat ein Symbol, dieses trägt die Modulfarbe am stärksten, alles andere ist
+Abklingen.
+
+**Der Verlauf hat zwei Achsen.** Radial vom Symbol nach aussen (höchste
+Sättigung dort) und linear diagonal über die Fläche (abnehmende Helligkeit).
+Eine Achse allein wirkt flach. Dazu eine dritte, sehr leise Schicht: eine
+diagonale Schraffur im Kartenhintergrund in derselben Richtung — kaum
+sichtbar, macht aber den Unterschied zwischen Farbfläche und Material.
+
+**Farbe ist redundant, nicht tragend.** Häkchen und Grün sagen beide
+„abgeschlossen", Kreuz und Rot beide „storniert". Nimmt man die Farbe weg,
+funktioniert die Karte weiterhin. **Deshalb darf die Farbe kräftig sein — sie
+muss nichts allein tragen.** Das ist die Antwort auf den Messbefund aus
+Abschnitt 3: nicht elf unterscheidbare Farben suchen, sondern elf Module so
+bauen, dass Symbol und Position bereits reichen und die Farbe verstärkt.
+
+**Konsequenz für die Tokenstruktur:** Ein Modul ist dann nicht durch einen
+Akzentwert definiert, sondern durch ein Tripel aus **Symbol, Farbton und
+Rolle im Raster**. Lichtrichtung, Verlaufskurve, Abklingen und Kantenlichter
+sind global und für alle elf gleich. `[cmd]` Die heutigen Tokens beschreiben
+nur den Farbton; die Schicht darüber — die Physik des Raums, in dem sie
+erscheinen — fehlt vollständig.
+
+### Zahlenvergleich zum Referenzbild
+
+`[cmd]` Die elf Akzente im Dunkelmodus (`apps/web/src/styles/themes/lume.css`)
+liegen bei Helligkeit 0,74–0,80 und erreichen höchstens Chroma 0,10
+(`--acc-dash` sogar nur 0,04). Das Referenzbild arbeitet `[annahme]` bei
+geschätzt Chroma 0,15–0,25 und spreizt die Helligkeit deutlich weiter. Die
+LumeOS-Farben sind also nicht nur zu ähnlich, sondern auch matt.
+
+### Vorbehalte, die mit zu entscheiden sind
+
+- **Acht Farben dort, elf Module hier.** Bei dieser Sättigung werden elf
+  gleichzeitig sichtbare Akzente unruhig. Ausweg: ein Modul zeigt seinen
+  Akzent, die übrigen sind nicht gleichzeitig sichtbar — dann darf jeder
+  einzelne kräftig sein.
+- **Nutzungsdauer.** Ein Geschäftsdashboard wird zweimal wöchentlich kurz
+  angesehen; in eine Ernährungserfassung tippt jemand täglich mehrfach. Hohe
+  Sättigung über zwanzig Minuten Tagebuchpflege ermüdet anders als über zwei
+  Minuten Kennzahlenblick.
+- **Rot und Grün als Bedeutungsträger.** Im Bild tragen sie „abgeschlossen"
+  und „storniert". `[cmd]` Die LumeOS-Struktur ist hier bereits sauberer:
+  `--pos`, `--warn`, `--neg` sind von den elf Modul-Akzenten getrennt.
+  Bedeutung und Modulidentität sind zwei Achsen — das Bild vermischt sie,
+  und diese Trennung sollte nicht aufgegeben werden (siehe Abschnitt 4).
+- **Das Leuchten ist teuer.** Mehrfache Schatten und Verläufe je Karte kosten
+  Renderzeit, besonders auf Mobilgeräten, und altern am schnellsten. Als
+  optionale Schicht führen, nicht als Fundament.
