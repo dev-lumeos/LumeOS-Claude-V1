@@ -77,13 +77,20 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 1. **Nutrition-Oberflächen.** Der nächste sichtbare Schritt; die
    Datenseite trägt. Laut D-04 auch der Punkt, an dem ein E2E-Aufbau
    wieder lohnt: die erste Oberfläche, die bleiben soll.
-2. **Suche: C-18 zuerst** — Fehlsuchen mitschreiben. Der Punkt steht
-   seit Block 28 und ist zweimal zugunsten von Modellen verschoben
-   worden, die dann gefallen sind. Er ist der einzige Hebel, der nicht
-   auf geratenen Wortlisten beruht. Parallel dazu C-32 (Reis) als erster
-   durchkurierter Fall — er braucht keine Vorbedingung mehr. Danach
-   C-29 (Schichten), C-30 (Rangfolge), C-31 (Oberfläche). C-20 und C-24
-   nicht einzeln angehen; sie fallen in C-30 mit.
+2. **Suche: C-38 zuerst** — `sort_weight` nach der Spec-Formel. Der
+   billigste Hebel: deterministisch, alle Eingangswerte vorhanden, keine
+   Kuration. Dann **C-39 Phase 1** (regelbasierte Namen, 1.365 Einträge),
+   dann **C-39 Phase 2** (KI-Batch über Codex). **C-18** (Fehlsuchen
+   mitschreiben) läuft daneben und liefert die Priorisierung für später;
+   **C-32** (Reis) ist der erste durchkurierte Fall und braucht keine
+   Vorbedingung. Danach C-29 (Schichten), C-30 (Rangfolge),
+   C-31 (Oberfläche). C-20 und C-24 nicht einzeln angehen; sie fallen
+   dabei mit.
+
+   `[read]` **Grundlage ist seit dem 2026-08-14
+   `SPEC_05_FOOD_TAXONOMY.md`** — sie enthält Namensstrategie,
+   Scoring-Formel und die Core-Fitness-Liste. Vier Tage Modellsuche
+   (C-28, C-33) wären mit dieser Datei kürzer ausgefallen.
 3. **C-18 (Fehlsuchen mitschreiben)** bleibt der einzige Hebel, der nicht
    auf geratenen Begriffen beruht — er priorisiert die Kurationsarbeit
    aus C-31 und kann parallel laufen. **C-17 (Laufzeit)** gehört in
@@ -102,7 +109,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 42 offen, 4 in Arbeit.
+`[cmd]` 44 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -132,6 +139,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-35** | Was aus zwei gefallenen Modellen brauchbar bleibt |  |
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
 | **C-37** | Tagesbilanz muss „nicht erfasst" von „nicht enthalten" unterscheiden |  |
+| **C-38** | `sort_weight` nach der Spec-Formel neu berechnen |  |
+| **C-39** | Canonical Names in drei Phasen |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -1049,6 +1058,97 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   null), was die Oberfläche anzeigt, und ob je Nährstoff ein
   Abdeckungsgrad mitgeführt wird („85 % der heutigen Kalorien haben einen
   Eisenwert").
+
+- [ ] **C-38: `sort_weight` nach der Spec-Formel neu berechnen** (neu
+  2026-08-14). **Der billigste Hebel im ganzen Suchstrang** —
+  deterministisch, keine Kuration, keine KI.
+
+  `[read]` `docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md`,
+  Abschnitt „Sort Weight System", definiert die Berechnung vollständig:
+  Basis je Warengruppe (23 Werte, `U` Muskelfleisch 780, `X`
+  Fertiggerichte 200, `P` Alkohol 180), dazu Zuschläge und Abzüge.
+
+  **Zuschläge:** Core-Fitness-Food +200 · `PROT625` ≥ 20 g +80 · ≥ 30 g
+  weitere +120 · mager (≥ 20 g Protein und ≤ 5 g Fett) +50 · omega-3-reich
+  +40 · ballaststoffreich +30 · unverarbeitet roh +60.
+  **Abzüge:** hochverarbeitet −250 · Fertiggericht −300 · zubereitete
+  Variante eines Rohprodukts −150 · gesüßt −100 · Innereien −400 bis
+  −450 · Blut −500 · Fettgewebe −500 · Laborschnitte („S XI") −200.
+  Ergebnis auf 0–1000 begrenzt.
+
+  `[cmd]` **Der Ist-Zustand folgt dem nicht.** Nur **62 verschiedene
+  Werte** über 7.140 Einträge — grob nach Warengruppe und Zubereitung
+  gestaffelt, ohne Nährwert-Modifikatoren:
+
+  | | Ist | nach Formel |
+  |---|---|---|
+  | `U010100` Rind Hackfleisch, roh | **600** | 780 + 200 = 980 |
+  | `V416100` Hähnchen Brustfilet, roh | 730 | 760 + 200 + Proteinbonus |
+  | `U505100` Schwein Fettwamme | **400** | 780 − 500 = 280 |
+
+  **Warum das zuerst kommt:** Alle Eingangswerte liegen in
+  `food_nutrients` (`[cmd]` 121,8 Werte je Eintrag). Die Formel braucht
+  weder Handarbeit noch ein Sprachmodell und ist beim Import einmalig zu
+  rechnen. `[Vermutung]` Sie erledigt mehrere der sechs Restfälle des
+  Massstabs mit — `milch` → Magermilchpulver und `erdnussbutter` →
+  Erdnussmus laufen beide über Verarbeitungsgrad und Core-Liste.
+
+  **Was vorher zu klären ist:**
+  - `[read]` Die Core-Liste der Spec nennt 36 Einträge, teils ohne
+    BLS-Code („Lachs (diverse T-Codes)", „Magerquark (M)"). Die Zuordnung
+    ist zu belegen, nicht zu raten — jeder Code einmal nachgeschlagen.
+  - `processing_level` ist eine Spalte von `nutrition.foods`; ihr
+    Füllstand ist zu prüfen, bevor die Formel darauf baut.
+  - `[cmd]` Die heutigen Werte sind kein Zufallsprodukt — `sort_weight`
+    trägt bereits die Zubereitungsstufe aus Block 32. Beim Ersetzen darf
+    diese Wirkung nicht verloren gehen; **die Zubereitung gehört als
+    weiterer Modifikator in die Formel**, nicht daneben.
+
+  **Abnahme: der MealCam-Massstab darf nicht schlechter werden als 31 von
+  37**, Ziel 34. Vor und nach der Umstellung messen, beide Zahlen nennen.
+
+- [ ] **C-39: Canonical Names in drei Phasen** (neu 2026-08-14). Löst die
+  Namensfrage, an der C-28 und C-33 gescheitert sind — auf einem dritten
+  Weg, den die Spec vorgibt.
+
+  `[read]` `SPEC_05_FOOD_TAXONOMY.md`, Abschnitt „Canonical Names —
+  Generierungsstrategie":
+
+  | Phase | Verfahren | Umfang |
+  |---|---|---|
+  | 1 | regelbasiert, einfache Warengruppen (`C`, `F`, `G`, `H`, `K`) | `[cmd]` 1.365 Einträge |
+  | 2 | KI-Batch, komplexe Gruppen und Gerichte | `[cmd]` 3.725 + 2.050 |
+  | 3 | redaktionelle Prüfung, 10 % Stichprobe, Admin-Oberfläche | — |
+
+  `[read]` Die Spec liefert 20 belegte Beispiele, darunter
+  `Reis poliert, roh` → **Weisser Reis (roh)**,
+  `Hähnchen Brustfilet, roh` → **Hähnchenbrust (roh)**,
+  `Schwein Fettwamme, ohne Schwarten, geringer Magerfleischanteil (S XI)
+  roh` → **Schweinebauch (roh)**. Die ersten beiden decken sich mit dem,
+  was am 2026-08-14 unabhängig in C-32 vorgeschlagen wurde.
+
+  **Warum das nicht der dritte Anlauf desselben Fehlers ist:** C-28 und
+  C-33 sind daran gescheitert, dass die nötige Angabe **nicht im Code
+  steht** — dass `Alaska-Seelachs` kein Lachs und `Kartoffelpüree
+  Instantpulver` keine Kartoffel ist, weiss keine Ableitungsregel. Das
+  ist Weltwissen; ein Sprachmodell hat es. `[annahme]` Der Unterschied
+  ist sachlich, aber ungemessen — **die Abnahme gehört wieder vor den
+  Lauf**, nicht danach.
+
+  **Phase 1 kann sofort beginnen** und braucht nichts Neues: `[cmd]` Der
+  Zubereitungsschlüssel aus C-33 (204 Zellen, 104 als Zubereitung
+  belegt) sagt genau, welcher Namensteil wegfällt. Das ist der dritte
+  verwertbare Rest aus C-35, jetzt mit Verwendung.
+
+  **Phase 2 läuft bei Tom über Codex** (Kontingent vorhanden,
+  2026-08-14). Zu klären vor dem Lauf: Stichprobenumfang für die
+  Abnahme, Umgang mit Namen, die das Modell nicht kürzen kann, und ob
+  Gerichte (`X`/`Y`, 2.050 Stück) überhaupt einen kurzen Namen bekommen
+  sollen oder unverändert bleiben.
+
+  `[cmd]` **Der Bedarf ist beziffert:** 3.272 der 7.140 Namen tragen
+  Klammer, Schrägstrich, Zahl oder mehr als fünf Wörter.
+
 
 
 
