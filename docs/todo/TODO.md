@@ -665,13 +665,24 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
   **Was zu tun ist:**
 
-  1. **Zuerst nachsehen, nicht ableiten.** Die amtliche
-     BLS-Dokumentation enthält die Schlüsselliste der Zubereitungscodes.
-     `[cmd]` `pdftotext` ist für diese PDFs bestätigt. Eine abgeschriebene
-     Liste schlägt jede erschlossene.
+  1. **Nachsehen wurde versucht und ist erledigt — negativ.** `[cmd]`
+     `docs/ssot/daten/BLS_4_0_Dokumentation_DE.pdf`, Abschnitt 2.4
+     „BLS Code-Systematik", sagt nur: alphanumerischer Schlüssel der
+     Form `[Buchstabe][6 Ziffern]`, führender Buchstabe gleich
+     Hauptgruppe, dazu **ein** Beispiel. **Eine Schlüsselliste der
+     Stellen 5–7 gibt es dort nicht.** Die Klassifikation muss deshalb
+     aus dem Bestand abgeleitet werden — und weil sie abgeleitet ist,
+     muss jede Zeile einen Beleg tragen: alle 53 Einträge mit `F…600`
+     heissen „…saft", das belegt die Bedeutung. Was sich nicht so
+     belegen lässt, bleibt ungeklärt und wird als solches ausgewiesen.
   2. Je Warengruppe die Codes in zwei Klassen teilen: **dieselbe Art,
      andere Zubereitung** (roh, gekocht, tiefgefroren, geräuchert) gegen
      **anderes Erzeugnis** (Saft, Nektar, Mehl, Pulver, Zubereitung).
+     `[cmd]` Der Umfang ist überschaubar: **652 Kombinationen aus
+     Warengruppe und Zubereitungscode, davon 204 mit mindestens zehn
+     Einträgen** — diese 204 decken 5.776 der 7.140 Einträge ab. Die
+     Klassifikation ist also eine Liste von rund 200 Zeilen, nicht von
+     652.
   3. Die Gruppierung neu bilden: vier Stellen **plus** Erzeugnisklasse.
      Dann trennen sich Aprikose und Aprikosensaft, während Lachs roh und
      Lachs geräuchert zusammenbleiben.
