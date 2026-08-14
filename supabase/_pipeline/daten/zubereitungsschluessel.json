@@ -1,0 +1,3212 @@
+{
+  "erhoben": "2026-08-16",
+  "anlass": "C-33 — die Bedeutung der Stellen 5-7 haengt von der Warengruppe ab",
+  "quelle": "abgeleitet aus nutrition.foods; die amtliche BLS-Dokumentation enthaelt keine Schluesselliste",
+  "mindestgroesse": 10,
+  "kombinationen_gesamt": 652,
+  "kombinationen_erfasst": 204,
+  "klassen": {
+    "zubereitung": "dieselbe Art, anders behandelt — bleibt in der Gruppe",
+    "erzeugnis": "etwas anderes aus derselben Ausgangsware — bildet eine eigene Gruppe",
+    "ungeklaert": "kein gemeinsames Merkmal auffindbar — keine Bedeutung erfunden",
+    "unklassifiziert": "Merkmal belegt, aber nicht von Hand eingeordnet"
+  },
+  "zellen": [
+    {
+      "warengruppe": "B",
+      "code": "000",
+      "eintraege": 62,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Vollkornbrot",
+        "Vollkornbrot mit Ölsamen",
+        "Weizenvollkornbrot"
+      ]
+    },
+    {
+      "warengruppe": "B",
+      "code": "100",
+      "eintraege": 15,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Roggenvollkornbrot mit Kürbiskernen",
+        "Weizentoastbrot mit Roggen",
+        "Dinkelvollkornbrötchen mit Kürbiskernen"
+      ]
+    },
+    {
+      "warengruppe": "B",
+      "code": "200",
+      "eintraege": 15,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Weizenvollkorntoastbrot",
+        "Roggenvollkornbrot mit Nüssen",
+        "Mehrkorntoastbrot mit Ölsamen"
+      ]
+    },
+    {
+      "warengruppe": "B",
+      "code": "300",
+      "eintraege": 15,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Vollkornbrot mit Buttermilch",
+        "Weizenvollkornbrot mit Kürbiskernen",
+        "Roggenvollkornbrot mit Ölsamen"
+      ]
+    },
+    {
+      "warengruppe": "B",
+      "code": "400",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Weizenvollkornbrot mit Nüssen",
+        "Roggenvollkornbrot mit Sonnenblumenkernen",
+        "Dinkelvollkornbrötchen mit Sonnenblumenkernen"
+      ]
+    },
+    {
+      "warengruppe": "B",
+      "code": "500",
+      "eintraege": 21,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Vollkornbrot mit Sonnenblumenkernen",
+        "Weizenvollkornbrot mit Ölsamen",
+        "Roggenvollkornbrot mit Buttermilch"
+      ]
+    },
+    {
+      "warengruppe": "B",
+      "code": "700",
+      "eintraege": 19,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Vollkornbrot mit Kürbiskernen",
+        "Weizenvollkornbrot mit Buttermilch",
+        "Roggenbrot mit Kürbiskernen"
+      ]
+    },
+    {
+      "warengruppe": "B",
+      "code": "800",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Vollkornbrot mit Nüssen",
+        "Weizenvollkornbrot mit Quark",
+        "Roggenbrot mit Nüssen"
+      ]
+    },
+    {
+      "warengruppe": "C",
+      "code": "000",
+      "eintraege": 89,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Weizen ganzes Korn, roh",
+        "Weizen Flocken",
+        "Weizen Keim"
+      ]
+    },
+    {
+      "warengruppe": "C",
+      "code": "032",
+      "eintraege": 39,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Weizen ganzes Korn, gekocht",
+        "Weizen Flocken, gekocht",
+        "Weizen Grütze, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "C",
+      "code": "100",
+      "eintraege": 25,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Quinoa tricolore, roh",
+        "Bulgur (Hartweizen) roh",
+        "Weizen Vollkornschrot"
+      ]
+    },
+    {
+      "warengruppe": "C",
+      "code": "132",
+      "eintraege": 10,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Bulgur (Hartweizen) gekocht",
+        "Weizen Vollkornschrot, gekocht",
+        "Hartweizen Vollkorngrieß, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "C",
+      "code": "200",
+      "eintraege": 17,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Couscous (Hartweizen) roh",
+        "Weizen Mehl, Type 1050",
+        "Weizen Mehl, Type 550"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "000",
+      "eintraege": 105,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Backerbsen",
+        "Dinkelzwieback ungesüßt",
+        "Vollkornzwieback ungesüßt"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "100",
+      "eintraege": 81,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Schoko-Mandelbiskuitboden",
+        "Nuss-Wasserbiskuitboden",
+        "Schoko-Wasserbiskuitboden"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "200",
+      "eintraege": 61,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Mandelboden (mit Eiklar zubereitet)",
+        "Nussboden (mit Eiklar zubereitet)",
+        "Apfelkuchen (Rührmasse)"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "300",
+      "eintraege": 55,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Apfelkuchen gedeckt (Mürbeteig)",
+        "Apfel-Streuselkuchen (Rührmasse)",
+        "Zwetschgen-Streuselkuchen (Hefeteig)"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "400",
+      "eintraege": 37,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Apfelkuchen gedeckt mit Mandelbelag (Mürbeteig)",
+        "Nuss-Sahnetorte (Biskuit)",
+        "Biskuitrolle/Biskuitroulade, mit Konfitüre"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "500",
+      "eintraege": 34,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Aprikosen-Nuss-Torte (Rührmasse)",
+        "Linzer Torte (Mürbeteig)",
+        "Zuger Kirschtorte (Biskuit und Nussboden) mit Alkohol"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "600",
+      "eintraege": 29,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Schwarzwälder Kirschtorte (Schokobiskuit) mit Alkohol",
+        "Biskuitrolle/Biskuitroulade, mit Joghurtsahne",
+        "Buchweizentorte (Wasserbiskuit) mit Heidelbeersahnecreme"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "700",
+      "eintraege": 26,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Apfel-Quarktorte (ohne Boden)",
+        "Biskuitrolle/Biskuitroulade, mit Zitronensahnecreme",
+        "Möhren-Nusstorte/Rüblitorte (Biskuit)"
+      ]
+    },
+    {
+      "warengruppe": "D",
+      "code": "800",
+      "eintraege": 21,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Biskuitrolle/Biskuitroulade, mit Erdbeersahnecreme",
+        "Mokkasahnetorte (Wasserbiskuit) mit Alkohol",
+        "Heidelbeer-Muffins (Rührmasse)"
+      ]
+    },
+    {
+      "warengruppe": "E",
+      "code": "000",
+      "eintraege": 16,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.88
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Teigwaren eifrei, roh",
+        "Eierteigwaren roh",
+        "Eier-Frischteigwaren roh"
+      ]
+    },
+    {
+      "warengruppe": "E",
+      "code": "032",
+      "eintraege": 14,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Teigwaren eifrei, gekocht",
+        "Eierteigwaren gekocht",
+        "Eier-Frischteigwaren gekocht"
+      ]
+    },
+    {
+      "warengruppe": "E",
+      "code": "082",
+      "eintraege": 10,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht, dann gebraten ohne Fett",
+      "strittig": false,
+      "beispiele": [
+        "Teigwaren eifrei, gekocht, gebraten ohne Fett (Pfanne)",
+        "Eierteigwaren gekocht, gebraten ohne Fett (Pfanne)",
+        "Eier-Frischteigwaren gekocht, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "E",
+      "code": "100",
+      "eintraege": 11,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.82
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Wachtelei roh",
+        "Hühnerei roh",
+        "Hühnerei Eigelb, roh"
+      ]
+    },
+    {
+      "warengruppe": "E",
+      "code": "132",
+      "eintraege": 11,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Wachtelei gekocht",
+        "Hühnerei gekocht",
+        "Hühnerei Eigelb, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "F",
+      "code": "100",
+      "eintraege": 84,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.98
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Rhabarber roh",
+        "Fruchtmischung gezuckert, roh",
+        "Fruchtmischung ungesüßt, roh"
+      ]
+    },
+    {
+      "warengruppe": "F",
+      "code": "152",
+      "eintraege": 24,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "geduenstet",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geduenstet",
+      "strittig": false,
+      "beispiele": [
+        "Beerenmischung mit Sauerkirschen, ungesüßt, gedünstet",
+        "Apfel gedünstet",
+        "Apfel geschält, gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "F",
+      "code": "400",
+      "eintraege": 19,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "getrocknet",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "getrocknet — Trockenobst bleibt die Frucht",
+      "strittig": true,
+      "beispiele": [
+        "Fruchtmischung getrocknet (Trockenfrucht-Mix)",
+        "Apfel getrocknet",
+        "Apfel geschält, getrocknet"
+      ]
+    },
+    {
+      "warengruppe": "F",
+      "code": "600",
+      "eintraege": 53,
+      "beleg": {
+        "art": "wortteil",
+        "merkmal": "saft",
+        "anteil": 0.91
+      },
+      "klasse": "erzeugnis",
+      "bemerkung": "Fruchtsaft — anderer Naehrwert, andere Menge, andere Suchabsicht als die Frucht",
+      "strittig": false,
+      "beispiele": [
+        "Mehrfruchtsaft",
+        "Mehrfruchtsaft angereichert mit Vitaminen (Multivitaminsaft)",
+        "Mehrfruchtsaft angereichert mit Vitaminen und Mineralstoffen"
+      ]
+    },
+    {
+      "warengruppe": "F",
+      "code": "700",
+      "eintraege": 14,
+      "beleg": {
+        "art": "suffix",
+        "merkmal": "nektar",
+        "anteil": 1
+      },
+      "klasse": "erzeugnis",
+      "bemerkung": "Fruchtnektar — Saft plus Wasser und Zucker, eigenes Erzeugnis",
+      "strittig": false,
+      "beispiele": [
+        "Mehrfruchtnektar",
+        "Mehrfruchtnektar mit Süßungsmitteln",
+        "Mehrfruchtnektar, angereichert mit Vitaminen (Multivitaminnektar)"
+      ]
+    },
+    {
+      "warengruppe": "F",
+      "code": "902",
+      "eintraege": 62,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "abgetropft",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Konserve, abgetropft",
+      "strittig": false,
+      "beispiele": [
+        "Rhabarber gezuckert, Konserve, abgetropft",
+        "Rhabarber ungesüßt, Konserve, abgetropft",
+        "Fruchtmischung/Fruchtcocktail, gezuckert, Konserve, abgetropft"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "100",
+      "eintraege": 91,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.97
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Schnittlauch roh",
+        "Gemüsemischung Kaisergemüse, roh",
+        "Suppengrün/Suppenkraut, roh"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "132",
+      "eintraege": 62,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "gekocht",
+        "anteil": 0.98
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, gekocht",
+        "Suppengrün/Suppenkraut, gekocht",
+        "Spinat gekocht"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "142",
+      "eintraege": 25,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "fett",
+        "anteil": 0.88
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geschmort ohne Fett",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, geschmort ohne Fett",
+        "Bleichsellerie geschmort ohne Fett",
+        "Mangold geschmort ohne Fett"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "152",
+      "eintraege": 62,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "geduenstet",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geduenstet",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, gedünstet",
+        "Chicoree gedünstet",
+        "Spinat gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "162",
+      "eintraege": 39,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gebacken",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebacken",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, gebacken",
+        "Chicoree gebacken",
+        "Spinat gebacken"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "182",
+      "eintraege": 45,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, gebraten ohne Fett (Pfanne)",
+        "Chicoree gebraten ohne Fett (Pfanne)",
+        "Spinat gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "200",
+      "eintraege": 25,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "tiefgefroren",
+        "anteil": 0.96
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, tiefgefroren",
+        "Suppengrün/Suppenkraut, tiefgefroren",
+        "Spinat tiefgefroren"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "232",
+      "eintraege": 23,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, tiefgefroren, gekocht",
+        "Suppengrün/Suppenkraut, tiefgefroren, gekocht",
+        "Spinat tiefgefroren, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "242",
+      "eintraege": 11,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "tiefgefroren",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, geschmort",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, tiefgefroren, geschmort ohne Fett",
+        "Blumenkohl tiefgefroren, gedämpft",
+        "Grünkohl tiefgefroren, gedämpft"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "252",
+      "eintraege": 20,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "geduenstet",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, geduenstet",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, tiefgefroren, gedünstet",
+        "Spinat tiefgefroren, gedünstet",
+        "Blumenkohl tiefgefroren, gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "262",
+      "eintraege": 15,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gebacken",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebacken",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, tiefgefroren, gebacken",
+        "Spinat tiefgefroren, gebacken",
+        "Blumenkohl tiefgefroren, gebacken"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "282",
+      "eintraege": 16,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebraten",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung Kaisergemüse, tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Spinat tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Blumenkohl tiefgefroren, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "400",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "getrocknet (Kraeuter) — hier ist der Zweifel am groessten",
+      "strittig": true,
+      "beispiele": [
+        "Schnittlauch getrocknet",
+        "Suppengrün/Suppenkraut, getrocknet",
+        "Petersilienblatt getrocknet"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "600",
+      "eintraege": 10,
+      "beleg": {
+        "art": "suffix",
+        "merkmal": "gemuesesaft",
+        "anteil": 1
+      },
+      "klasse": "erzeugnis",
+      "bemerkung": "Gemuesesaft",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsesaft aus Gemüsemischung",
+        "Gemüsesaft aus Spinat",
+        "Gemüsesaft aus Sauerkraut"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "802",
+      "eintraege": 16,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "abgetropft",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gesaeuert, abgetropft",
+      "strittig": false,
+      "beispiele": [
+        "Gemüsemischung gesäuert (Puszta Salat) abgetropft",
+        "Blumenkohl gesäuert, abgetropft",
+        "Silberzwiebel gesäuert, abgetropft"
+      ]
+    },
+    {
+      "warengruppe": "G",
+      "code": "902",
+      "eintraege": 25,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "abgetropft",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Konserve, abgetropft",
+      "strittig": false,
+      "beispiele": [
+        "Kapern gesäuert, abgetropft",
+        "Spinat Konserve, abgetropft",
+        "Grünkohl Konserve, abgetropft"
+      ]
+    },
+    {
+      "warengruppe": "H",
+      "code": "000",
+      "eintraege": 14,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Sojaproteinisolat",
+        "Sojalecithin",
+        "Kokoswasser (Fruchtwasser)"
+      ]
+    },
+    {
+      "warengruppe": "H",
+      "code": "100",
+      "eintraege": 37,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Walnuss",
+        "Haselnuss",
+        "Kokos Fruchtfleisch, roh"
+      ]
+    },
+    {
+      "warengruppe": "H",
+      "code": "400",
+      "eintraege": 19,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Glasnudeln aus Mungbohnenstärke, roh",
+        "Walnuss gemahlen",
+        "Haselnuss gemahlen"
+      ]
+    },
+    {
+      "warengruppe": "H",
+      "code": "600",
+      "eintraege": 11,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "geroestet",
+        "anteil": 0.91
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geroestet",
+      "strittig": false,
+      "beispiele": [
+        "Erdnuss geröstet",
+        "Pekannuss geröstet ohne Fett",
+        "Cashewkern geröstet mit Fett"
+      ]
+    },
+    {
+      "warengruppe": "K",
+      "code": "100",
+      "eintraege": 21,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.9
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Kartoffel geschält, roh",
+        "Kartoffel ungeschält, roh",
+        "Kartoffelchips/Stapelchips, diverse Sorten"
+      ]
+    },
+    {
+      "warengruppe": "K",
+      "code": "152",
+      "eintraege": 13,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "geduenstet",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geduenstet",
+      "strittig": false,
+      "beispiele": [
+        "Champignon gedünstet",
+        "Trüffel gedünstet",
+        "Morchel gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "K",
+      "code": "182",
+      "eintraege": 18,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Kartoffel geschält, gebraten ohne Fett (Pfanne)",
+        "Maniok/Cassava, gebraten ohne Fett (Pfanne)",
+        "Batate/Süßkartoffel, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "K",
+      "code": "200",
+      "eintraege": 11,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "tiefgefroren",
+        "anteil": 0.91
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren",
+      "strittig": false,
+      "beispiele": [
+        "Kartoffel ungeschält, tiefgefroren",
+        "Pommes frites tiefgefroren",
+        "Kartoffelkloß halb und halb, tiefgefroren"
+      ]
+    },
+    {
+      "warengruppe": "K",
+      "code": "400",
+      "eintraege": 11,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "getrocknet",
+        "anteil": 0.82
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "getrocknet",
+      "strittig": true,
+      "beispiele": [
+        "Kartoffelkloß (aus rohen Kartoffeln) Trockenprodukt",
+        "Champignon getrocknet",
+        "Trüffel getrocknet"
+      ]
+    },
+    {
+      "warengruppe": "K",
+      "code": "432",
+      "eintraege": 10,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "getrocknet, gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Maniok/Cassava, gekocht",
+        "Champignon getrocknet, gekocht",
+        "Trüffel getrocknet, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "000",
+      "eintraege": 27,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Schafmilch mind. 4,5 % Fett",
+        "Ziegenmilch mind. 3 % Fett",
+        "Salzlakenkäse aus Kuhmilch, Hirtenkäse, mind. 45 % Fett i. Tr."
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "100",
+      "eintraege": 35,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "fett",
+        "anteil": 0.97
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Roquefort mind. 50 % Fett i. Tr.",
+        "Mozzarella mind. 45 % Fett i. Tr.",
+        "Milch entrahmt, frisch, höchstens 0,1 % Fett, pasteurisiert"
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "200",
+      "eintraege": 30,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Fettstufe — dieselbe Sorte, anderer Fettgehalt",
+      "strittig": true,
+      "beispiele": [
+        "Feta mind. 45 % Fett i. Tr.",
+        "Milch fettarm, frisch, 1,5 % Fett, pasteurisiert",
+        "H-Milch fettarm, 1,5 % Fett, ultrahocherhitzt"
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "300",
+      "eintraege": 44,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "fett",
+        "anteil": 0.95
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Fettstufe",
+      "strittig": true,
+      "beispiele": [
+        "Vollmilch frisch, 3,5 % Fett, pasteurisiert",
+        "Rohmilch/Vorzugsmilch, mind. 3,5 % Fett",
+        "H-Vollmilch 3,5 % Fett, ultrahocherhitzt"
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "400",
+      "eintraege": 20,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Fettstufe",
+      "strittig": true,
+      "beispiele": [
+        "Kondensmilch mind. 8 % Fett, gezuckert",
+        "Kondensmilch mind. 7,5 % Fett",
+        "Sahnejoghurt mind. 10 % Fett, mit Schokoladenzubereitung, gesüßt"
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "500",
+      "eintraege": 28,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "fett",
+        "anteil": 0.93
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Fettstufe",
+      "strittig": true,
+      "beispiele": [
+        "Sahnedickmilch/Sahnesauermilch, mind. 10 % Fett",
+        "Sahnekefir mind. 10 % Fett",
+        "Sahnejoghurt mind. 10 % Fett"
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "600",
+      "eintraege": 34,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Fettstufe",
+      "strittig": true,
+      "beispiele": [
+        "Hartkäse mind. 45 % Fett i. Tr.",
+        "Bergkäse mind. 45 % Fett i. Tr.",
+        "Chester (Cheddar) mind. 45 % Fett i. Tr."
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "700",
+      "eintraege": 35,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "fett",
+        "anteil": 0.97
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Fettstufe",
+      "strittig": true,
+      "beispiele": [
+        "Sahneersatz (Mischung aus pflanzlichen Fetten und Milch)",
+        "Sauerrahm/Schmand, mind. 20 % Fett",
+        "Hartkäse mind. 50 % Fett i. Tr."
+      ]
+    },
+    {
+      "warengruppe": "M",
+      "code": "800",
+      "eintraege": 18,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "fett",
+        "anteil": 0.94
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Fettstufe",
+      "strittig": true,
+      "beispiele": [
+        "Schlagsahne mind. 30 % Fett",
+        "Sprühsahne/Schlagsahne, gesüßt, mind. 30 % Fett",
+        "Sauerrahm/Creme fraiche, 30 % Fett"
+      ]
+    },
+    {
+      "warengruppe": "N",
+      "code": "000",
+      "eintraege": 64,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Nearwater/Aqua Plus Getränk, aromatisiert, ungesüßt",
+        "Nearwater/Aqua Plus Getränk, aromatisiert, gesüßt",
+        "Aperitif alkoholfrei"
+      ]
+    },
+    {
+      "warengruppe": "N",
+      "code": "100",
+      "eintraege": 12,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "getraenk",
+        "anteil": 1
+      },
+      "klasse": "erzeugnis",
+      "bemerkung": "Getraenk aus Kaffee/Tee — die Bohne ist nicht das Getraenk",
+      "strittig": false,
+      "beispiele": [
+        "Nearwater/Aqua Plus Getränk, aromatisiert, mit Zucker und Süßungsmitteln",
+        "Cola-Misch-Getränk Orange",
+        "Kaffee (Getränk)"
+      ]
+    },
+    {
+      "warengruppe": "P",
+      "code": "000",
+      "eintraege": 85,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Malzgetränk, alkoholfrei",
+        "Weizenbier kristallklar",
+        "Altbier"
+      ]
+    },
+    {
+      "warengruppe": "P",
+      "code": "100",
+      "eintraege": 19,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Hefeweizen/Weizenbier, naturtrüb",
+        "Pilsner Bier, alkoholfrei",
+        "Colaweizen (Weizenbier mit Cola)"
+      ]
+    },
+    {
+      "warengruppe": "Q",
+      "code": "000",
+      "eintraege": 59,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Olivenöl",
+        "Haselnussöl",
+        "Palmfett/Palmöl, raffiniert"
+      ]
+    },
+    {
+      "warengruppe": "R",
+      "code": "000",
+      "eintraege": 55,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Speisesalz/Siedesalz/Tafelsalz",
+        "Meersalz",
+        "Speisesalz jodiert/Jodsalz, mit Fluorid"
+      ]
+    },
+    {
+      "warengruppe": "R",
+      "code": "100",
+      "eintraege": 18,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Steinsalz",
+        "Speisesalz jodiert/Jodsalz, mit Fluorid und Folsäure",
+        "Nitritpökelsalz jodiert"
+      ]
+    },
+    {
+      "warengruppe": "R",
+      "code": "200",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Curry-Gewürzketchup",
+        "Feinkostsauce/Grillsauce, Tomaten-Basis",
+        "Tomaten passiert/Tomatenpüree"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "000",
+      "eintraege": 118,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Zucker weiß (Raffinadezucker/Weißzucker)",
+        "Zucker braun (Kandisfarin/Rohzucker)",
+        "Vanillezucker"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "100",
+      "eintraege": 20,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Puderzucker",
+        "Traubenzucker (Dextrose/Glukose)",
+        "Fruchtaufstrich"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "200",
+      "eintraege": 17,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Apfelkraut",
+        "Speiseeis (Schokolade, Vanille) gemischt, mit Eierlikör",
+        "Kaffeeeis"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "300",
+      "eintraege": 17,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Birnenkraut (ohne Zuckerzusatz)",
+        "Speiseeis (Nuss, Schokolade) gemischt, in Waffeltüte",
+        "Speiseeis (Karamell, Vanille) gemischt, in Waffeltüte"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "400",
+      "eintraege": 16,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Birnenkraut",
+        "Speiseeis (Frucht, Schokolade) gemischt, in Waffeltüte",
+        "Speiseeis (Nuss, Schokolade, Vanille) gemischt, in Waffeltüte"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "500",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Speiseeis Kaffee, in Waffeltüte",
+        "Speiseeis Vanille, in Waffeltüte",
+        "Speiseeis (Frucht, Nuss) gemischt"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "600",
+      "eintraege": 14,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Speiseeis Karamell, in Waffeltüte",
+        "Speiseeis (Frucht, Schokolade, Vanille) gemischt, in Waffeltüte",
+        "Speiseeis Vanille, überzogen mit Schokolade und Mandeln"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "700",
+      "eintraege": 14,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Speiseeis (Schokolade, Vanille) gemischt, in Waffeltüte",
+        "Speiseeis Frucht, in Waffeltüte",
+        "Speiseeis (Karamell, Nuss) gemischt"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "800",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Speiseeis Nuss, in Waffeltüte",
+        "Speiseeis (Frucht, Karamell) gemischt, in Waffeltüte",
+        "Speiseeis (Nuss, Vanille) gemischt"
+      ]
+    },
+    {
+      "warengruppe": "S",
+      "code": "900",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Speiseeis Schokolade, in Waffeltüte",
+        "Speiseeis (Frucht, Nuss) gemischt, in Waffeltüte",
+        "Speiseeis (Kaffee, Vanille) gemischt"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "100",
+      "eintraege": 77,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.88
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch roh",
+        "Dornhai roh",
+        "Aal roh"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "132",
+      "eintraege": 23,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch gekocht",
+        "Hecht pochiert",
+        "Hering pochiert"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "152",
+      "eintraege": 46,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "geduenstet",
+        "anteil": 0.98
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geduenstet",
+      "strittig": false,
+      "beispiele": [
+        "Dornhai gedünstet",
+        "Aal gedünstet",
+        "Hornfisch/Hornhecht, gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "162",
+      "eintraege": 15,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Ofen)",
+      "strittig": false,
+      "beispiele": [
+        "Hering gebraten ohne Fett (Ofen)",
+        "Sardelle gebraten ohne Fett (Ofen)",
+        "Thunfisch gebraten ohne Fett (Ofen)"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "172",
+      "eintraege": 19,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gegrillt",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gegrillt",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch gegrillt",
+        "Sardelle gegrillt",
+        "Sardine gegrillt"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "182",
+      "eintraege": 65,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch gebraten ohne Fett (Pfanne)",
+        "Dornhai gebraten ohne Fett (Pfanne)",
+        "Aal gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "200",
+      "eintraege": 48,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "tiefgefroren",
+        "anteil": 0.98
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch tiefgefroren",
+        "Thunfisch tiefgefroren",
+        "Weißer Thun tiefgefroren"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "232",
+      "eintraege": 16,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "tiefgefroren",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch tiefgefroren, gekocht",
+        "Dorsch/Kabeljau, tiefgefroren, pochiert",
+        "Köhler/Seelachs, tiefgefroren, pochiert"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "252",
+      "eintraege": 33,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "tiefgefroren",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, geduenstet",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch tiefgefroren, gedünstet",
+        "Weißer Thun tiefgefroren, gedünstet",
+        "Gelbflossen-Thun tiefgefroren, gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "262",
+      "eintraege": 18,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "ofen",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebraten (Ofen)",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch tiefgefroren, gebraten ohne Fett (Ofen)",
+        "Thunfisch tiefgefroren, gebraten ohne Fett (Ofen)",
+        "Dorsch/Kabeljau, tiefgefroren, gebraten ohne Fett (Ofen)"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "272",
+      "eintraege": 14,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gegrillt",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gegrillt",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch tiefgefroren, gegrillt",
+        "Thunfisch tiefgefroren, gegrillt",
+        "Dorsch/Kabeljau, tiefgefroren, gegrillt"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "282",
+      "eintraege": 43,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebraten (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Thunfisch tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Weißer Thun tiefgefroren, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "400",
+      "eintraege": 15,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "gesalzen",
+        "anteil": 0.93
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gesalzen",
+      "strittig": false,
+      "beispiele": [
+        "Heringsrogen gesalzen",
+        "Kabeljaurogen gesalzen",
+        "Lachsrogen gesalzen"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "600",
+      "eintraege": 24,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "geraeuchert",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geraeuchert",
+      "strittig": false,
+      "beispiele": [
+        "Dornhai geräuchert",
+        "Aal geräuchert (Räucheraal)",
+        "Bückling (Hering) heiß geräuchert"
+      ]
+    },
+    {
+      "warengruppe": "T",
+      "code": "702",
+      "eintraege": 11,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "abgetropft",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "in Oel, Konserve, abgetropft",
+      "strittig": false,
+      "beispiele": [
+        "Tintenfisch in Öl, Konserve, abgetropft",
+        "Bückling (Hering) in Öl, Konserve, abgetropft",
+        "Sardelle in Öl, Konserve, abgetropft"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "000",
+      "eintraege": 26,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.92
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Rind Muskelfleisch, roh",
+        "Rind Fleisch, fett- und sehnenfrei (R I) roh",
+        "Rind Fleisch, grob entsehnt, sichtbarer Fettanteil max. 5 % (R II) roh"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "100",
+      "eintraege": 139,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.96
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, roh",
+        "Rind Frikadelle, roh",
+        "Schwein Hackfleisch, roh"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "132",
+      "eintraege": 40,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, gekocht",
+        "Schwein Hackfleisch, gekocht",
+        "Kalb Hackfleisch, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "142",
+      "eintraege": 51,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geschmort ohne Fett",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, geschmort ohne Fett",
+        "Schwein Hackfleisch, geschmort ohne Fett",
+        "Kalb Hackfleisch, geschmort ohne Fett"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "162",
+      "eintraege": 93,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Ofen)",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, gebraten ohne Fett (Ofen)",
+        "Rind Frikadelle, gebraten ohne Fett (Ofen)",
+        "Schwein Hackfleisch, gebraten ohne Fett (Ofen)"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "172",
+      "eintraege": 48,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gegrillt",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gegrillt",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, gegrillt",
+        "Rind Frikadelle, gegrillt",
+        "Schwein Hackfleisch, gegrillt"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "182",
+      "eintraege": 40,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, gebraten ohne Fett (Pfanne)",
+        "Rind Frikadelle, gebraten ohne Fett (Pfanne)",
+        "Schwein Hackfleisch, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "200",
+      "eintraege": 62,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "tiefgefroren",
+        "anteil": 0.92
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, tiefgefroren",
+        "Schwein Hackfleisch, tiefgefroren",
+        "Schwein/Rind, Hackfleisch gemischt, tiefgefroren"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "232",
+      "eintraege": 23,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, tiefgefroren, gekocht",
+        "Schwein Hackfleisch, tiefgefroren, gekocht",
+        "Schwein/Rind, Hackfleisch gemischt, tiefgefroren, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "242",
+      "eintraege": 25,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, geschmort",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, tiefgefroren, geschmort ohne Fett",
+        "Schwein Hackfleisch, tiefgefroren, geschmort ohne Fett",
+        "Schwein/Rind, Hackfleisch gemischt, tiefgefroren, geschmort ohne Fett"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "262",
+      "eintraege": 43,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebraten (Ofen)",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, tiefgefroren, gebraten ohne Fett (Ofen)",
+        "Schwein Hackfleisch, tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Schwein/Rind, Hackfleisch gemischt, tiefgefroren, gebraten ohne Fett (Ofen)"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "272",
+      "eintraege": 26,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gegrillt",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gegrillt",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, tiefgefroren, gegrillt",
+        "Schwein Hackfleisch, tiefgefroren, gegrillt",
+        "Rind/Schwein, Hacksteak, tiefgefroren, gegrillt"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "282",
+      "eintraege": 17,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebraten (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Rind Hackfleisch, tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Rind/Schwein, Hackfleisch gemischt, tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Rind/Schwein, Hacksteak, tiefgefroren, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "700",
+      "eintraege": 14,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "geraeuchert",
+        "anteil": 0.86
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geraeuchert/Rohpoekelware",
+      "strittig": true,
+      "beispiele": [
+        "Rind Filet/Lende, Rohpökelware, geräuchert",
+        "Rind Roastbeef (Rücken) Rohpökelware, geräuchert",
+        "Rind Brustkern/Mittelbrust, Rohpökelware, geräuchert"
+      ]
+    },
+    {
+      "warengruppe": "U",
+      "code": "800",
+      "eintraege": 14,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Rind Fettgewebe, intermuskulär roh",
+        "Rind Roastbeef (Rücken) Rohpökelware",
+        "Rind Brustkern/Mittelbrust, Rohpökelware"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "100",
+      "eintraege": 98,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "roh",
+        "anteil": 0.97
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Schnecken roh",
+        "Pferd Fleisch, roh",
+        "Ziege Fleisch, roh"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "132",
+      "eintraege": 37,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Schnecken gekocht",
+        "Hirsch Fleisch, gekocht",
+        "Reh Keule, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "142",
+      "eintraege": 45,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "geschmort ohne Fett",
+      "strittig": false,
+      "beispiele": [
+        "Pferd Fleisch, geschmort ohne Fett",
+        "Ziege Fleisch, geschmort ohne Fett",
+        "Kaninchen Fleisch, geschmort ohne Fett"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "162",
+      "eintraege": 39,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Ofen)",
+      "strittig": false,
+      "beispiele": [
+        "Pferd Fleisch, gebraten ohne Fett (Ofen)",
+        "Ziege Fleisch, gebraten ohne Fett (Ofen)",
+        "Kaninchen Fleisch, gebraten ohne Fett (Ofen)"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "172",
+      "eintraege": 20,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gegrillt",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gegrillt",
+      "strittig": false,
+      "beispiele": [
+        "Reh Keule, gegrillt",
+        "Wildschwein Fleisch, gegrillt",
+        "Hähnchen Fleisch, ohne Haut, gegrillt"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "182",
+      "eintraege": 47,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Schnecken gebraten ohne Fett (Pfanne)",
+        "Hirsch Fleisch, gebraten ohne Fett (Pfanne)",
+        "Wildschwein Fleisch, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "200",
+      "eintraege": 45,
+      "beleg": {
+        "art": "mehrheit",
+        "merkmal": "tiefgefroren",
+        "anteil": 0.98
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren",
+      "strittig": false,
+      "beispiele": [
+        "Schnecken tiefgefroren",
+        "Pferd Fleisch, tiefgefroren",
+        "Kaninchen Fleisch, tiefgefroren"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "232",
+      "eintraege": 11,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gekocht",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Schnecken tiefgefroren, gekocht",
+        "Wildschwein Fleisch, tiefgefroren, gekocht",
+        "Hähnchen Fleisch, ohne Haut, tiefgefroren, gekocht"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "242",
+      "eintraege": 27,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, geschmort",
+      "strittig": false,
+      "beispiele": [
+        "Pferd Fleisch, tiefgefroren, geschmort ohne Fett",
+        "Kaninchen Fleisch, tiefgefroren, geschmort ohne Fett",
+        "Hirsch Rücken, tiefgefroren, geschmort ohne Fett"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "262",
+      "eintraege": 25,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebraten (Ofen)",
+      "strittig": false,
+      "beispiele": [
+        "Pferd Fleisch, tiefgefroren, gebraten ohne Fett (Ofen)",
+        "Kaninchen Fleisch, tiefgefroren, gebraten ohne Fett (Ofen)",
+        "Hirsch Rücken, tiefgefroren, gebraten ohne Fett (Ofen)"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "272",
+      "eintraege": 13,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "gegrillt",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gegrillt",
+      "strittig": false,
+      "beispiele": [
+        "Wildschwein Fleisch, tiefgefroren, gegrillt",
+        "Hähnchen Fleisch, ohne Haut, tiefgefroren, gegrillt",
+        "Hähnchen ganz, entbeint, mit Haut, tiefgefroren, gegrillt"
+      ]
+    },
+    {
+      "warengruppe": "V",
+      "code": "282",
+      "eintraege": 29,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "tiefgefroren, gebraten (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Schnecken tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Wildschwein Fleisch, tiefgefroren, gebraten ohne Fett (Pfanne)",
+        "Wachtel Fleisch, ohne Haut, tiefgefroren, gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "000",
+      "eintraege": 144,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Puten-Aufschnitt-Grundbrät mit Schweinefleisch",
+        "Aufschnitt-Grundbrät fettreduziert",
+        "Aufschnitt-Grundbrät"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "032",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "gekocht",
+      "strittig": false,
+      "beispiele": [
+        "Geflügelbockwurst mit Schweinefleisch, gargezogen",
+        "Geflügel-Wiener Würstchen gargezogen",
+        "Münchner Weißwurst gargezogen"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "082",
+      "eintraege": 12,
+      "beleg": {
+        "art": "wort",
+        "merkmal": "fett",
+        "anteil": 1
+      },
+      "klasse": "zubereitung",
+      "bemerkung": "gebraten ohne Fett (Pfanne)",
+      "strittig": false,
+      "beispiele": [
+        "Mettwurst gebraten ohne Fett (Pfanne)",
+        "Rheinische Bratwurst gebraten ohne Fett (Pfanne)",
+        "Münchner Weißwurst gebraten ohne Fett (Pfanne)"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "100",
+      "eintraege": 53,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "roh",
+      "strittig": false,
+      "beispiele": [
+        "Grobe Mettwurst fettreduziert",
+        "Teewurst fein/grob/Rügenwalder Art",
+        "Gänsezervelatwurst mit Schweinefleisch"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "200",
+      "eintraege": 34,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Streichmettwurst/Streichmettwurst mit Zwiebeln",
+        "Westfälische grobe Mettwurst",
+        "Salami Ia, fettreduziert"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "300",
+      "eintraege": 22,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Braunschweiger Mettwurst, fettreduziert",
+        "Salami (Schwein)",
+        "Touristenwurst (Rohwurst)"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "400",
+      "eintraege": 15,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Geflügelteewurst mit Schweinefleisch",
+        "Berner Würstchen",
+        "Bierwurst/Blasenwurst"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "500",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Teewurst fettreduziert",
+        "Salami Kroatische Art",
+        "Kochsalami"
+      ]
+    },
+    {
+      "warengruppe": "W",
+      "code": "600",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Kolbacz",
+        "Geselchte",
+        "Rostbratwurst"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "000",
+      "eintraege": 65,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Cornflakes mit Milch 1,5 % Fett und Honig gesüßt",
+        "Frischkornbrei ungesüßt, mit Fruchtmischung",
+        "Knuspermüsli (Granola) gesüßt, gebacken"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "010",
+      "eintraege": 55,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Cornflakes mit Milch 3,5 % Fett und Honig gesüßt",
+        "Frischkornbrei ungesüßt, mit Joghurt 3,5 % Fett und Fruchtmischung",
+        "Knuspermüsli (Granola) gesüßt, mit Joghurt 3,5 % Fett und Fruchtmischung"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "012",
+      "eintraege": 19,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Pesto verde",
+        "Linsen gekocht, in Grundsauce hell/weiß",
+        "Blattspinat gedünstet (mit Fett und Salz)"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "020",
+      "eintraege": 42,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Cornflakes mit Sojadrink und Ahornsirup gesüßt",
+        "Knuspermüsli (Granola) gesüßt, mit Milch 3,5 % Fett und Fruchtmischung",
+        "Haferflocken ungesüßt mit Joghurt 3,5 % Fett und Fruchtmischung"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "030",
+      "eintraege": 32,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Baguette-Brötchen mit Salami, Tomaten und Salatcreme",
+        "Knuspermüsli (Granola) gesüßt, mit Sojadrink und Fruchtmischung",
+        "Haferflocken ungesüßt, mit Sojadrink und Fruchtmischung"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "033",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Kartoffelsuppe mit Gemüsebrühe und Brühwurst",
+        "Bouillabaisse",
+        "Weiße-Bohnen-Suppe mit geräuchertem Schweinefleisch"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "040",
+      "eintraege": 30,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Pumpernickel mit Krabbencreme",
+        "Haferflocken gesüßt, mit Milch 3,5 % Fett und Fruchtmischung",
+        "Müsli ungesüßt, mit Sojadrink und Fruchtmischung"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "042",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Blumenkohl gedünstet, mit Semmelbröseln",
+        "Chinakohl gedünstet, mit geriebenem Käse",
+        "Salzkartoffeln (Kartoffeln mit Salz gekocht)"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "043",
+      "eintraege": 28,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Grundsauce dunkel/braun (von Fleischbrühe)",
+        "Johannisbeersauce einfach, aus Fruchtsaft",
+        "Sauce Hollandaise/Holländische Sauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "050",
+      "eintraege": 20,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Haferflocken ungesüßt, mit Milch 3,5 % Fett und Fruchtmischung",
+        "Rote-Bete-Salat (gegart) mit Zitronenmarinade",
+        "Kartoffelsalat mit Speck und Marinade (Gemüsebrühe)"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "053",
+      "eintraege": 27,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Grundsauce hell/weiß",
+        "Pilzsauce von Bechamelsauce",
+        "Gemüsesauce von heller/weißer Grundsauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "060",
+      "eintraege": 19,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Baguette-Brötchen mit Kochschinken, Käse, Tomaten und Remoulade",
+        "Clubsandwich mit Mozzarella, Tomaten und Kochschinken",
+        "Müsli Bircher-Benner Art, gesüßt, mit Äpfeln, Rosinen, Sahne und Nüssen"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "063",
+      "eintraege": 23,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Kichererbsensalat (gegart) mit warmer Essigmarinade",
+        "Grundsauce hell/weiß, vegan",
+        "Cumberlandsauce mit Rot- und Portwein"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "112",
+      "eintraege": 22,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Fruchtsalat ungesüßt",
+        "Curry-Sahnesauce mit Früchten",
+        "Sahne-Schinkensauce von heller/weißer Grundsauce mit Sahne"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "113",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Fleischbrühe mit Maultaschen (mit Schweinebrät)",
+        "Gemüse-Eintopf mit Wurst",
+        "Serbische Bohnensuppe mit Speck"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "133",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Gulaschsuppe ungarisch, mit Rindfleisch, Fleischbrühe, Tomaten und Kartoffeln",
+        "Gemüse-Eintopf mit Hammelfleisch",
+        "Leipziger Allerlei gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "143",
+      "eintraege": 40,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Toastschnitten mit Schinkencreme, gebacken",
+        "Meerrettichsauce von Bechamelsauce mit Milch 3,5 % Fett",
+        "Currysauce indisch"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "153",
+      "eintraege": 24,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Tomatensauce von heller/weißer Grundsauce",
+        "Currysauce von heller/weißer Grundsauce",
+        "Weißweinsauce von heller/weißer Grundsauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "163",
+      "eintraege": 23,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Tomatensauce aus Tomatenmark",
+        "Pilzsauce von heller/weißer Grundsauce",
+        "Champignon-Weißweinsauce von dunkler/brauner Grundsauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "212",
+      "eintraege": 20,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Kartoffelsuppe sauer, gebunden",
+        "Grünkohl gedünstet, mit Speck",
+        "Kohlroulade mit Hackfleischfüllung, gedünstet"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "213",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Tomatensuppe gebunden mit Reis",
+        "Irish Stew (Weißkraut-Kartoffel-Eintopf mit Hammelfleisch)",
+        "Kartoffelgulasch"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "243",
+      "eintraege": 26,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Toast mit Spargel, Lachsschinken und Käse, gebacken",
+        "Bechamelsauce",
+        "Champignonsauce von heller/weißer Grundsauce, mit Sahne und Weißwein"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "253",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Bechamelsauce mit Milch 3,5 % Fett",
+        "Zwiebelsauce von heller/weißer Grundsauce",
+        "Kräutersauce von Bechamelsauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "263",
+      "eintraege": 15,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Tomatensauce aus frischen Tomaten",
+        "Kräutersauce von heller/weißer Grundsauce",
+        "Weißwein-Sahnesauce von heller/weißer Grundsauce, mit Lachs"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "312",
+      "eintraege": 17,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Tomate-Mozzarella (Caprese)",
+        "Sahne-Käsesauce",
+        "Carbonara Sauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "343",
+      "eintraege": 25,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Weinschaumsauce/Weinchaudeau",
+        "Rumsauce von Vanillesauce",
+        "Schwemmklößchen, Suppeneinlage"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "353",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Gemüsesauce von Bechamelsauce",
+        "Paprikasauce von Bechamelsauce",
+        "Tomatensauce italienische Art"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "363",
+      "eintraege": 22,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Bechamelsauce mit Sahne",
+        "Rosinensauce von dunkler/brauner Grundsauce",
+        "Paprikasauce von dunkler/brauner Grundsauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "412",
+      "eintraege": 15,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Quiche (Mürbeteig) mit Broccoli und Blumenkohl",
+        "Karotten und Erbsen gedünstet (mit Fett und Salz)",
+        "Zucchini mit Hirsefüllung und Käse überbacken"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "443",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Sauerkrautsalat (roh) mit Apfel und gebratenem Speck",
+        "Senfsauce von dunkler/brauner Grundsauce",
+        "Heringssauce aus Kräutersauce von heller/weißer Grundsauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "453",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Senfsauce von heller/weißer Grundsauce",
+        "Sardellensauce von heller/weißer Grundsauce",
+        "Grundsauce hell/weiß mit Sahne"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "460",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Sandwich mit Geflügelsalat (Huhn)",
+        "Blumenkohlsalat (gegart) mit Essigmarinade",
+        "Broccolisalat (gegart) mit Essigmarinade"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "463",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Mornaysauce von Bechamelsauce",
+        "Teufelssauce von dunkler/brauner Grundsauce",
+        "Fischkraftbrühe"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "512",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Rote-Bete-Salat (gegart) mit Essigmarinade",
+        "Sauerkrautsalat (roh) mit Apfel, Paprika, gebratenem Speck und Essigmarinade",
+        "Tsatsiki"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "563",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Grüne Eiersauce von heller/weißer Grundsauce",
+        "Muschelsauce von heller/weißer Grundsauce",
+        "Sahnesauce von dunkler/brauner Grundsauce"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "612",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Karottensalat (gegart) mit warmer Essigmarinade",
+        "Karottensalat (roh) mit Essigmarinade",
+        "Blumenkohl gedünstet (mit Fett und Salz)"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "613",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Käsesauce von Bechamelsauce mit Kochschinken",
+        "Saure-Sahne-Dressing für Salat",
+        "Fleischbrühe mit Ei-Einlauf"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "713",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Fleischbrühe mit Grießklößchen",
+        "Gemüsesuppe",
+        "Selleriecremesuppe"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "812",
+      "eintraege": 14,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Karotten im Backteig (mit Bier) frittiert",
+        "Graupensuppe Mecklenburg (mit Gemüsebrühe, getrockneten Pflaumen, Entenfleisch)",
+        "Champignons im Backteig (mit Bier) frittiert"
+      ]
+    },
+    {
+      "warengruppe": "X",
+      "code": "813",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Tomatensauce aus Tomaten Konserve",
+        "Fleischbrühe mit Leberklößchen",
+        "Gemüsebrühe mit Gemüse"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "000",
+      "eintraege": 32,
+      "beleg": null,
+      "klasse": "zubereitung",
+      "bemerkung": "Grundform ohne Zubereitungsvariante",
+      "strittig": false,
+      "beispiele": [
+        "Fleischsulze mit gekochtem Schweinefleisch",
+        "Blätterteigtaschen gefüllt mit Rinderhackfleisch und Käse, gebacken",
+        "Gulasch (mit Rindfleisch)"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "010",
+      "eintraege": 18,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Fleischküchlein fein (Schwein/Kalb, Hackfleisch) gebraten",
+        "Kalbfleischpudding mit Lachsschinken und Champignons",
+        "Thunfischaufstrich mit Mayonnaise"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "012",
+      "eintraege": 31,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Innereiengericht (von Rind/Schwein) mit Sahnesauce",
+        "Rinderfilet mariniert, gebraten im Ofen",
+        "Rinderfiletsteak gebraten, mit Kräuterbutter"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "013",
+      "eintraege": 18,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Rinderbraten mit Sauce",
+        "Fleischbrühe (Rind)",
+        "Kalbskotelett gebraten, mit gebratenen Champignons"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "020",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Hackfleisch-Kohlpudding",
+        "Thunfischsteak gebraten mit Schinken",
+        "Lachs gebraten, in Grundsauce hell/weiß mit Sahne und Risi-Pisi"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "022",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Fleischkäse gebraten",
+        "Leberkäse gebraten",
+        "Rinderfiletsteak gebraten"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "023",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Leberpastete/Leberpudding",
+        "Kalbsrücken gebraten im Ofen",
+        "Kalbsragout fein (Ragout fin)"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "030",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Leberpudding mit Hackfleisch",
+        "Lachs-Spinat-Auflauf",
+        "Ofenkäse mit Knoblauch und Thymian gebacken"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "032",
+      "eintraege": 21,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Rinderfiletmedaillons gebraten, mit Röstgemüse",
+        "Rinderkotelett gebraten",
+        "Roastbeef gebraten im Ofen, mit Röstgemüse"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "033",
+      "eintraege": 14,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Hackfleischpastete (mit Mürbeteig) gebacken",
+        "Rinderfiletsteak gebraten, mit Sauce",
+        "Pfeffersteak vom Rind gebraten, mit Sauce"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "040",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Hackfleischfüllung (für Gemüse) roh",
+        "Schafskäse (Feta) mit Tomaten und Oliven gebacken",
+        "Buttermilchsulze (mit Arrak)"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "060",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Hackfleischteig roh (für Frikadellen, Buletten, Fleischklopse/-küchle/-pflanzerl)",
+        "Grießschnitten gesüßt gebraten",
+        "Sahneflammeri/Sahnepudding (als Dessert) mit Schokoladensauce"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "062",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Pfannkuchen/Eierkuchen, mit Milch 3,5 % Fett, gebraten in Butter",
+        "Honigpfannkuchen gebraten",
+        "Bockwurst mit Brötchen und Senf"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "112",
+      "eintraege": 28,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Deutsches Beefsteak gebraten",
+        "Rinderroulade geschmort, mit Sauce",
+        "Kalbshirn gebraten mit Ei"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "113",
+      "eintraege": 25,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Pfälzer Bratwurst gebraten, in Grundsauce dunkel/braun",
+        "Leberwürste erwärmt",
+        "Blutwürste erwärmt"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "123",
+      "eintraege": 21,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Pökelrinderbrust gekocht, mit Meerrettichsauce von heller/weißer Grundsauce",
+        "Rinderfilet gebraten im Ofen, mit Sauce",
+        "Rindergulasch ungarisch"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "132",
+      "eintraege": 29,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Schweinebauch gekocht, mit warmer Blut- und Leberwurst und gedünstetem Sauerkraut",
+        "Hamburger Hackbeefsteak gebraten",
+        "Roastbeef gebraten im Ofen, ohne Sauce"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "133",
+      "eintraege": 17,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Gebratene Rinderkutteln mit Ei aus Bologna",
+        "Sächsisches Zwiebelfleisch vom Rind",
+        "Kalbsmedaillons gebraten, in Weißweinsauce von heller/weißer Grundsauce"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "143",
+      "eintraege": 13,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Rührei gebraten",
+        "Schaumomelett gesüßt, gebraten, mit Zitronensaft beträufelt",
+        "Grießauflauf mit Apfel"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "212",
+      "eintraege": 18,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Rinderbraten ohne Sauce",
+        "Sauerbraten vom Rind, mit Sauce",
+        "Rindfleisch gedünstet (mit Fett und Salz)"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "223",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Hackbraten mit Grundsauce dunkel/braun",
+        "Roastbeef gebraten im Ofen, mit Sauce",
+        "Rinderrahmgulasch"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "232",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Kalbskotelett natur, gebraten",
+        "Kasseler im Brotteig gebacken",
+        "Lammfleischspieße mit Gemüse, gegrillt"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "233",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Hackbraten mit Gemüsesauce",
+        "Kalbskotelett gebraten, mit Sahnesauce",
+        "Schweinemedaillon gebraten, mit Apfel und Sauce"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "243",
+      "eintraege": 10,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Spiegelei gebacken, auf gedünstetem Spinat mit Tomaten",
+        "Rührei gebraten mit Tomaten",
+        "Omelett gebraten mit Käse"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "312",
+      "eintraege": 29,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Bratwurst gebraten",
+        "Ochsenschwanz geschmort (mit Fett und Salz)",
+        "Grillhähnchen"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "412",
+      "eintraege": 11,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Rinderfilet gebraten im Ofen (mit Fett und Salz)",
+        "Lammkeule geschmort mit Zwiebeln und Senf, mit Grundsauce dunkel/braun",
+        "Putengeschnetzeltes mit Weißwein und saurer Sahne"
+      ]
+    },
+    {
+      "warengruppe": "Y",
+      "code": "512",
+      "eintraege": 12,
+      "beleg": null,
+      "klasse": "ungeklaert",
+      "bemerkung": null,
+      "strittig": false,
+      "beispiele": [
+        "Hot Dog",
+        "Rindergeschnetzeltes",
+        "Rindfleisch gekocht"
+      ]
+    }
+  ]
+}
