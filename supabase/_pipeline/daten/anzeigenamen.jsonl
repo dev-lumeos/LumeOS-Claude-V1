@@ -1,0 +1,763 @@
+{"bls_code":"B101000","name_display_de":"Vollkornbrot","name_display_en":"Wholemeal bread","sicher":true}
+{"bls_code":"B106000","name_display_de":"Vollkornbrot mit Ölsamen","name_display_en":"Wholemeal bread with oilseeds","sicher":true}
+{"bls_code":"B106500","name_display_de":"Vollkornbrot mit Sonnenblumenkernen","name_display_en":"Wholemeal bread with sunflower seeds","sicher":true}
+{"bls_code":"B106700","name_display_de":"Vollkornbrot mit Kürbiskernen","name_display_en":"Wholemeal bread with pumpkin seeds","sicher":true}
+{"bls_code":"B106800","name_display_de":"Vollkornbrot mit Nüssen","name_display_en":"Wholemeal bread with nuts","sicher":true}
+{"bls_code":"B107300","name_display_de":"Vollkornbrot mit Buttermilch","name_display_en":"Wholemeal bread with buttermilk","sicher":true}
+{"bls_code":"B107900","name_display_de":"Vollkornbrot mit Quark","name_display_en":"Wholemeal bread with quark","sicher":true}
+{"bls_code":"B111000","name_display_de":"Weizenvollkornbrot","name_display_en":"Wholemeal wheat bread","sicher":true}
+{"bls_code":"B111200","name_display_de":"Weizenvollkorntoastbrot","name_display_en":"Wholemeal wheat toast","sicher":true}
+{"bls_code":"B111272","name_display_de":"Weizenvollkorntoastbrot (getoastet)","name_display_en":"Wholemeal wheat toast (toasted)","sicher":true}
+{"bls_code":"B111300","name_display_de":"Weizenvollkornbrot mit Kürbiskernen","name_display_en":"Wholemeal wheat bread with pumpkin seeds","sicher":true}
+{"bls_code":"B111400","name_display_de":"Weizenvollkornbrot mit Nüssen","name_display_en":"Wholemeal wheat bread with nuts","sicher":true}
+{"bls_code":"B111500","name_display_de":"Weizenvollkornbrot mit Ölsamen","name_display_en":"Wholemeal wheat bread with oilseeds","sicher":true}
+{"bls_code":"B111600","name_display_de":"Weizenvollkornbrot mit Sonnenblumenkernen","name_display_en":"Wholemeal wheat bread with sunflower seeds","sicher":true}
+{"bls_code":"B111700","name_display_de":"Weizenvollkornbrot mit Buttermilch","name_display_en":"Wholemeal wheat bread with buttermilk","sicher":true}
+{"bls_code":"B111800","name_display_de":"Weizenvollkornbrot mit Quark","name_display_en":"Wholemeal wheat bread with quark","sicher":true}
+{"bls_code":"B121000","name_display_de":"Roggenvollkornbrot","name_display_en":"Wholemeal rye bread","sicher":true}
+{"bls_code":"B121100","name_display_de":"Roggenvollkornbrot mit Kürbiskernen","name_display_en":"Wholemeal rye bread with pumpkin seeds","sicher":true}
+{"bls_code":"B121200","name_display_de":"Roggenvollkornbrot mit Nüssen","name_display_en":"Wholemeal rye bread with nuts","sicher":true}
+{"bls_code":"B121300","name_display_de":"Roggenvollkornbrot mit Ölsamen","name_display_en":"Wholemeal rye bread with oilseeds","sicher":true}
+{"bls_code":"B121400","name_display_de":"Roggenvollkornbrot mit Sonnenblumenkernen","name_display_en":"Wholemeal rye bread with sunflower seeds","sicher":true}
+{"bls_code":"B121500","name_display_de":"Roggenvollkornbrot mit Buttermilch","name_display_en":"Wholemeal rye bread with buttermilk","sicher":true}
+{"bls_code":"B121600","name_display_de":"Roggenvollkornbrot mit Quark","name_display_en":"Wholemeal rye bread with quark","sicher":true}
+{"bls_code":"B122000","name_display_de":"Roggenvollkornschrotbrot","name_display_en":"Coarse wholemeal rye bread","sicher":true}
+{"bls_code":"B131000","name_display_de":"Hafervollkornbrot","name_display_en":"Wholemeal oat bread","sicher":true}
+{"bls_code":"B221000","name_display_de":"Roggenbrot","name_display_en":"Rye bread","sicher":true}
+{"bls_code":"B226000","name_display_de":"Roggenbrot mit Ölsamen","name_display_en":"Rye bread with oilseeds","sicher":true}
+{"bls_code":"B226500","name_display_de":"Roggenbrot mit Sonnenblumenkernen","name_display_en":"Rye bread with sunflower seeds","sicher":true}
+{"bls_code":"B226700","name_display_de":"Roggenbrot mit Kürbiskernen","name_display_en":"Rye bread with pumpkin seeds","sicher":true}
+{"bls_code":"B226800","name_display_de":"Roggenbrot mit Nüssen","name_display_en":"Rye bread with nuts","sicher":true}
+{"bls_code":"B227300","name_display_de":"Roggenbrot mit Buttermilch","name_display_en":"Rye bread with buttermilk","sicher":true}
+{"bls_code":"B227700","name_display_de":"Roggenbrot mit Quark","name_display_en":"Rye bread with quark","sicher":true}
+{"bls_code":"B231000","name_display_de":"Haferbrot","name_display_en":"Oat bread","sicher":true}
+{"bls_code":"B251000","name_display_de":"Weizenmischbrot","name_display_en":"Wheat-rye bread","sicher":true}
+{"bls_code":"B254000","name_display_de":"Weizenmischtoastbrot","name_display_en":"Mixed wheat toast","sicher":true}
+{"bls_code":"B254072","name_display_de":"Weizenmischtoastbrot (getoastet)","name_display_en":"Mixed wheat toast (toasted)","sicher":true}
+{"bls_code":"B255500","name_display_de":"Weizenmischbrot mit Zwiebeln","name_display_en":"Wheat-rye bread with onions","sicher":true}
+{"bls_code":"B255700","name_display_de":"Weizenmischbrot mit Kümmel","name_display_en":"Wheat-rye bread with caraway seeds","sicher":true}
+{"bls_code":"B256000","name_display_de":"Weizenmischbrot mit Ölsamen","name_display_en":"Wheat-rye bread with oilseeds","sicher":true}
+{"bls_code":"B256500","name_display_de":"Weizenmischbrot mit Sonnenblumenkernen","name_display_en":"Wheat-rye bread with sunflower seeds","sicher":true}
+{"bls_code":"B256700","name_display_de":"Weizenmischbrot mit Nüssen","name_display_en":"Wheat-rye bread with nuts","sicher":true}
+{"bls_code":"B257300","name_display_de":"Weizenmischbrot mit Buttermilch","name_display_en":"Wheat-rye bread with buttermilk","sicher":true}
+{"bls_code":"B257700","name_display_de":"Weizenmischbrot mit Quark","name_display_en":"Wheat-rye bread with quark","sicher":true}
+{"bls_code":"B259000","name_display_de":"Weizenmischbrot mit Kürbiskernen","name_display_en":"Wheat-rye bread with pumpkin seeds","sicher":true}
+{"bls_code":"B271000","name_display_de":"Roggenmischbrot","name_display_en":"Rye-wheat bread","sicher":true}
+{"bls_code":"B275500","name_display_de":"Roggenmischbrot mit Zwiebeln","name_display_en":"Rye-wheat bread with onions","sicher":true}
+{"bls_code":"B275700","name_display_de":"Roggenmischbrot mit Kümmel","name_display_en":"Rye-wheat bread with caraway seeds","sicher":true}
+{"bls_code":"B276000","name_display_de":"Roggenmischbrot mit Ölsamen","name_display_en":"Rye-wheat bread with oilseeds","sicher":true}
+{"bls_code":"B276500","name_display_de":"Roggenmischbrot mit Sonnenblumenkernen","name_display_en":"Rye-wheat bread with sunflower seeds","sicher":true}
+{"bls_code":"B276700","name_display_de":"Roggenmischbrot mit Kürbiskernen","name_display_en":"Rye-wheat bread with pumpkin seeds","sicher":true}
+{"bls_code":"B276800","name_display_de":"Roggenmischbrot mit Nüssen","name_display_en":"Rye-wheat bread with nuts","sicher":true}
+{"bls_code":"B277300","name_display_de":"Roggenmischbrot mit Buttermilch","name_display_en":"Rye-wheat bread with buttermilk","sicher":true}
+{"bls_code":"B277700","name_display_de":"Roggenmischbrot mit Quark","name_display_en":"Rye-wheat bread with quark","sicher":true}
+{"bls_code":"B291000","name_display_de":"Mehrkornbrot mit Ölsamen","name_display_en":"Multigrain bread with oilseeds","sicher":true}
+{"bls_code":"B309000","name_display_de":"Glutenfreies Weißbrot","name_display_en":"Gluten-free white bread","sicher":true}
+{"bls_code":"B311000","name_display_de":"Weizenbrot/Weißbrot","name_display_en":"White bread/wheat bread","sicher":true}
+{"bls_code":"B314000","name_display_de":"Weizentoastbrot/Buttertoastbrot","name_display_en":"Wheat toast/butter toast","sicher":true}
+{"bls_code":"B314072","name_display_de":"Weizentoastbrot/Buttertoastbrot (getoastet)","name_display_en":"Wheat toast/butter toast (toasted)","sicher":true}
+{"bls_code":"B314100","name_display_de":"Weizentoastbrot mit Roggen","name_display_en":"Wheat toast with rye","sicher":true}
+{"bls_code":"B314172","name_display_de":"Weizentoastbrot mit Roggen (getoastet)","name_display_en":"Wheat toast with rye (toasted)","sicher":true}
+{"bls_code":"B314200","name_display_de":"Mehrkorntoastbrot mit Ölsamen","name_display_en":"Multigrain toast with oilseeds","sicher":true}
+{"bls_code":"B314272","name_display_de":"Mehrkorntoastbrot mit Ölsamen (getoastet)","name_display_en":"Multigrain toast with oilseeds (toasted)","sicher":true}
+{"bls_code":"B401000","name_display_de":"Vollkornbrötchen","name_display_en":"Wholemeal roll","sicher":true}
+{"bls_code":"B406000","name_display_de":"Vollkornbrötchen mit Ölsamen","name_display_en":"Wholemeal roll with oilseeds","sicher":true}
+{"bls_code":"B406500","name_display_de":"Vollkornbrötchen mit Sonnenblumenkernen","name_display_en":"Wholemeal roll with sunflower seeds","sicher":true}
+{"bls_code":"B406700","name_display_de":"Vollkornbrötchen mit Kürbiskernen","name_display_en":"Wholemeal roll with pumpkin seeds","sicher":true}
+{"bls_code":"B406800","name_display_de":"Vollkornbrötchen mit Nüssen","name_display_en":"Wholemeal roll with nuts","sicher":true}
+{"bls_code":"B411000","name_display_de":"Weizenvollkornbrötchen","name_display_en":"Wholemeal wheat roll","sicher":true}
+{"bls_code":"B416000","name_display_de":"Weizenvollkornbrötchen mit Ölsamen","name_display_en":"Wholemeal wheat roll with oilseeds","sicher":true}
+{"bls_code":"B416500","name_display_de":"Weizenvollkornbrötchen mit Sonnenblumenkernen","name_display_en":"Wholemeal wheat roll with sunflower seeds","sicher":true}
+{"bls_code":"B416700","name_display_de":"Weizenvollkornbrötchen mit Kürbiskernen","name_display_en":"Wholemeal wheat roll with pumpkin seeds","sicher":true}
+{"bls_code":"B416800","name_display_de":"Weizenvollkornbrötchen mit Nüssen","name_display_en":"Wholemeal wheat roll with nuts","sicher":true}
+{"bls_code":"B421000","name_display_de":"Roggenvollkornbrötchen","name_display_en":"Wholemeal rye roll","sicher":true}
+{"bls_code":"B426000","name_display_de":"Roggenvollkornbrötchen mit Ölsamen","name_display_en":"Wholemeal rye roll with oilseeds","sicher":true}
+{"bls_code":"B426500","name_display_de":"Roggenvollkornbrötchen mit Sonnenblumenkernen","name_display_en":"Wholemeal rye roll with sunflower seeds","sicher":true}
+{"bls_code":"B426700","name_display_de":"Roggenvollkornbrötchen mit Kürbiskernen","name_display_en":"Wholemeal rye roll with pumpkin seeds","sicher":true}
+{"bls_code":"B426800","name_display_de":"Roggenvollkornbrötchen mit Nüssen","name_display_en":"Wholemeal rye roll with nuts","sicher":true}
+{"bls_code":"B491000","name_display_de":"Dinkelvollkornbrötchen","name_display_en":"Wholemeal spelt roll","sicher":true}
+{"bls_code":"B491100","name_display_de":"Dinkelvollkornbrötchen mit Kürbiskernen","name_display_en":"Wholemeal spelt roll with pumpkin seeds","sicher":true}
+{"bls_code":"B491200","name_display_de":"Dinkelvollkornbrötchen mit Nüssen","name_display_en":"Wholemeal spelt roll with nuts","sicher":true}
+{"bls_code":"B491300","name_display_de":"Dinkelvollkornbrötchen mit Ölsamen","name_display_en":"Wholemeal spelt roll with oilseeds","sicher":true}
+{"bls_code":"B491400","name_display_de":"Dinkelvollkornbrötchen mit Sonnenblumenkernen","name_display_en":"Wholemeal spelt roll with sunflower seeds","sicher":true}
+{"bls_code":"B511000","name_display_de":"Weizenbrötchen","name_display_en":"Wheat roll","sicher":true}
+{"bls_code":"B511100","name_display_de":"Weizenbrötchen mit Kümmel und Salz","name_display_en":"Wheat roll with caraway seeds and salt","sicher":true}
+{"bls_code":"B511200","name_display_de":"Weizenbrötchen mit Schinkenspeck","name_display_en":"Wheat roll with bacon","sicher":true}
+{"bls_code":"B515500","name_display_de":"Weizenbrötchen mit Zwiebeln","name_display_en":"Wheat roll with onions","sicher":true}
+{"bls_code":"B516000","name_display_de":"Weizenbrötchen mit Ölsamen","name_display_en":"Wheat roll with oilseeds","sicher":true}
+{"bls_code":"B516300","name_display_de":"Weizenbrötchen mit Sesam","name_display_en":"Wheat roll with sesame seeds","sicher":true}
+{"bls_code":"B516400","name_display_de":"Weizenbrötchen mit Mohn","name_display_en":"Wheat roll with poppy seeds","sicher":true}
+{"bls_code":"B516500","name_display_de":"Weizenbrötchen mit Sonnenblumenkernen","name_display_en":"Wheat roll with sunflower seeds","sicher":true}
+{"bls_code":"B516700","name_display_de":"Weizenbrötchen mit Kürbiskernen","name_display_en":"Wheat roll with pumpkin seeds","sicher":true}
+{"bls_code":"B517700","name_display_de":"Weizenbrötchen mit Quark","name_display_en":"Wheat roll with quark","sicher":true}
+{"bls_code":"B521000","name_display_de":"Roggenbrötchen","name_display_en":"Rye roll","sicher":true}
+{"bls_code":"B521100","name_display_de":"Roggenbrötchen mit Kümmel und Salz","name_display_en":"Rye roll with caraway seeds and salt","sicher":true}
+{"bls_code":"B521200","name_display_de":"Roggenbrötchen mit Schinkenspeck","name_display_en":"Rye roll with bacon","sicher":true}
+{"bls_code":"B526000","name_display_de":"Roggenbrötchen mit Ölsamen","name_display_en":"Rye roll with oilseeds","sicher":true}
+{"bls_code":"B526300","name_display_de":"Roggenbrötchen mit Sesam","name_display_en":"Rye roll with sesame seeds","sicher":true}
+{"bls_code":"B526400","name_display_de":"Roggenbrötchen mit Mohn","name_display_en":"Rye roll with poppy seeds","sicher":true}
+{"bls_code":"B526500","name_display_de":"Roggenbrötchen mit Sonnenblumenkernen","name_display_en":"Rye roll with sunflower seeds","sicher":true}
+{"bls_code":"B526700","name_display_de":"Roggenbrötchen mit Kürbiskernen","name_display_en":"Rye roll with pumpkin seeds","sicher":true}
+{"bls_code":"B531000","name_display_de":"Haferbrötchen","name_display_en":"Oat roll","sicher":true}
+{"bls_code":"B551000","name_display_de":"Weizenmischbrötchen","name_display_en":"Wheat-rye roll","sicher":true}
+{"bls_code":"B551100","name_display_de":"Weizenmischbrötchen mit Kürbiskernen","name_display_en":"Wheat-rye roll with pumpkin seeds","sicher":true}
+{"bls_code":"B551200","name_display_de":"Weizenmischbrötchen mit Mohn","name_display_en":"Wheat-rye roll with poppy seeds","sicher":true}
+{"bls_code":"B551300","name_display_de":"Weizenmischbrötchen mit Ölsamen","name_display_en":"Wheat-rye roll with oilseeds","sicher":true}
+{"bls_code":"B551400","name_display_de":"Weizenmischbrötchen mit Sesam","name_display_en":"Wheat-rye roll with sesame seeds","sicher":true}
+{"bls_code":"B551500","name_display_de":"Weizenmischbrötchen mit Sonnenblumenkernen","name_display_en":"Wheat-rye roll with sunflower seeds","sicher":true}
+{"bls_code":"B551600","name_display_de":"Weizenmischbrötchen mit Kümmel und Salz","name_display_en":"Wheat-rye roll with caraway seeds and salt","sicher":true}
+{"bls_code":"B551700","name_display_de":"Weizenmischbrötchen mit Schinkenspeck","name_display_en":"Wheat-rye roll with bacon","sicher":true}
+{"bls_code":"B551800","name_display_de":"Weizenmischbrötchen mit Zwiebeln","name_display_en":"Wheat-rye roll with onions","sicher":true}
+{"bls_code":"B561000","name_display_de":"Dinkelbrötchen","name_display_en":"Spelt roll","sicher":true}
+{"bls_code":"B561100","name_display_de":"Dinkelbrötchen mit Kürbiskernen","name_display_en":"Spelt roll with pumpkin seeds","sicher":true}
+{"bls_code":"B561200","name_display_de":"Dinkelbrötchen mit Nüssen","name_display_en":"Spelt roll with nuts","sicher":true}
+{"bls_code":"B561300","name_display_de":"Dinkelbrötchen mit Ölsamen","name_display_en":"Spelt roll with oilseeds","sicher":true}
+{"bls_code":"B561400","name_display_de":"Dinkelbrötchen mit Sonnenblumenkernen","name_display_en":"Spelt roll with sunflower seeds","sicher":true}
+{"bls_code":"B591000","name_display_de":"Mehrkornbrötchen","name_display_en":"Multigrain roll","sicher":true}
+{"bls_code":"B629000","name_display_de":"Glutenfreies Knusperbrot","name_display_en":"Gluten-free crackerbread","sicher":true}
+{"bls_code":"B6A1000","name_display_de":"Weizenknäckebrot mit Sesam","name_display_en":"Wheat crispbread with sesame seeds","sicher":true}
+{"bls_code":"B6A1100","name_display_de":"Weizenvollkornknäckebrot mit Käse, Ölsamen und Tomaten","name_display_en":"Wholemeal wheat crispbread with cheese, oilseeds and tomatoes","sicher":true}
+{"bls_code":"B6A1200","name_display_de":"Weizenvollkornknäckebrot mit Müslizutaten (gesüßt)","name_display_en":"Wholemeal wheat crispbread with muesli ingredients (sweetened)","sicher":true}
+{"bls_code":"B6A1300","name_display_de":"Weizenvollkornknäckebrot mit Ölsamen","name_display_en":"Wholemeal wheat crispbread with oilseeds","sicher":true}
+{"bls_code":"B6A1400","name_display_de":"Weizenvollkornknäckebrot mit Ölsamen und Hartkäse","name_display_en":"Wholemeal wheat crispbread with oilseeds and hard cheese","sicher":true}
+{"bls_code":"B6A1500","name_display_de":"Weizenvollkornknäckebrot mit Ölsamen, Hartkäse und Möhre","name_display_en":"Wholemeal wheat crispbread with oilseeds, hard cheese and carrot","sicher":true}
+{"bls_code":"B6A1600","name_display_de":"Weizenvollkornknäckebrot mit Ölsamen, Hartkäse und Zwiebeln","name_display_en":"Wholemeal wheat crispbread with oilseeds, hard cheese and onions","sicher":true}
+{"bls_code":"B6A2000","name_display_de":"Roggenknäckebrot","name_display_en":"Rye crispbread","sicher":true}
+{"bls_code":"B6A2100","name_display_de":"Roggenvollkornknäckebrot","name_display_en":"Wholemeal rye crispbread","sicher":true}
+{"bls_code":"B6A2200","name_display_de":"Roggenvollkornknäckebrot mit Buttermilch","name_display_en":"Wholemeal rye crispbread with buttermilk","sicher":true}
+{"bls_code":"B6A2300","name_display_de":"Roggenvollkornknäckebrot mit Milch","name_display_en":"Wholemeal rye crispbread with milk","sicher":true}
+{"bls_code":"B6A2400","name_display_de":"Roggenvollkornknäckebrot mit Dinkel","name_display_en":"Wholemeal rye crispbread with spelt","sicher":true}
+{"bls_code":"B6A2500","name_display_de":"Roggenvollkornknäckebrot mit Gerstenmalz","name_display_en":"Wholemeal rye crispbread with barley malt","sicher":true}
+{"bls_code":"B6A2600","name_display_de":"Roggenvollkornknäckebrot mit Kleie und Ölsamen","name_display_en":"Wholemeal rye crispbread with bran and oilseeds","sicher":true}
+{"bls_code":"B6A2700","name_display_de":"Roggenvollkornknäckebrot mit Kümmel","name_display_en":"Wholemeal rye crispbread with caraway seeds","sicher":true}
+{"bls_code":"B6A2800","name_display_de":"Roggenvollkornknäckebrot mit Kürbiskernen","name_display_en":"Wholemeal rye crispbread with pumpkin seeds","sicher":true}
+{"bls_code":"B6A2900","name_display_de":"Roggenvollkornknäckebrot mit Leinsamen und Weizenkeimen","name_display_en":"Wholemeal rye crispbread with linseed and wheat germ","sicher":true}
+{"bls_code":"B6A3000","name_display_de":"Roggenvollkornknäckebrot mit Ölsamen","name_display_en":"Wholemeal rye crispbread with oilseeds","sicher":true}
+{"bls_code":"B6A3100","name_display_de":"Roggenvollkornknäckebrot mit Sesam","name_display_en":"Wholemeal rye crispbread with sesame seeds","sicher":true}
+{"bls_code":"B6A3200","name_display_de":"Roggenvollkornknäckebrot mit Sonnenblumenkernen","name_display_en":"Wholemeal rye crispbread with sunflower seeds","sicher":true}
+{"bls_code":"B6A4000","name_display_de":"Mehrkornvollkornknäckebrot","name_display_en":"Multigrain wholemeal crispbread","sicher":true}
+{"bls_code":"B6A4100","name_display_de":"Mehrkornvollkornknäckebrot mit Ölsamen","name_display_en":"Multigrain wholemeal crispbread with oilseeds","sicher":true}
+{"bls_code":"B6A5000","name_display_de":"Dinkelvollkornknäckebrot mit Müslizutaten (gesüßt)","name_display_en":"Wholemeal spelt crispbread with muesli ingredients (sweetened)","sicher":true}
+{"bls_code":"B6A5100","name_display_de":"Dinkelvollkornknäckebrot mit Ölsamen","name_display_en":"Wholemeal spelt crispbread with oilseeds","sicher":true}
+{"bls_code":"B6A5200","name_display_de":"Dinkelvollkornknäckebrot mit Ölsamen und Hartkäse","name_display_en":"Wholemeal spelt crispbread with oilseeds and hard cheese","sicher":true}
+{"bls_code":"B6A6000","name_display_de":"Knäckebrot glutenfrei, laktosefrei","name_display_en":"Crispbread gluten-free, lactose-free","sicher":true}
+{"bls_code":"B710500","name_display_de":"Dinkelbrot","name_display_en":"Spelt bread","sicher":true}
+{"bls_code":"B710600","name_display_de":"Dinkelbrot mit Kürbiskernen","name_display_en":"Spelt bread with pumpkin seeds","sicher":true}
+{"bls_code":"B710700","name_display_de":"Dinkelbrot mit Nüssen","name_display_en":"Spelt bread with nuts","sicher":true}
+{"bls_code":"B710800","name_display_de":"Dinkelbrot mit Ölsamen","name_display_en":"Spelt bread with oilseeds","sicher":true}
+{"bls_code":"B710900","name_display_de":"Dinkelbrot mit Sonnenblumenkernen","name_display_en":"Spelt bread with sunflower seeds","sicher":true}
+{"bls_code":"B717000","name_display_de":"Glutenfreies Hirsebrot","name_display_en":"Gluten-free millet bread","sicher":true}
+{"bls_code":"B718000","name_display_de":"Glutenfreies Kastanienbrot","name_display_en":"Gluten-free chestnut bread","sicher":true}
+{"bls_code":"B719000","name_display_de":"Glutenfreies Rosinenbrot","name_display_en":"Gluten-free raisin bread","sicher":true}
+{"bls_code":"B723000","name_display_de":"Laugengebäck mit Hagelsalz","name_display_en":"Salted pretzel pastry","sicher":true}
+{"bls_code":"B723100","name_display_de":"Laugengebäck ohne Hagelsalz","name_display_en":"Pretzel pastry without visible salt","sicher":true}
+{"bls_code":"B723200","name_display_de":"Laugengebäck mit Kürbiskernen","name_display_en":"Pretzel pastry with pumpkin seeds","sicher":true}
+{"bls_code":"B723300","name_display_de":"Laugengebäck mit Sesam","name_display_en":"Pretzel pastry with sesame seeds","sicher":true}
+{"bls_code":"B723400","name_display_de":"Laugengebäck mit Sonnenblumenkernen","name_display_en":"Pretzel pastry with sunflower seeds","sicher":true}
+{"bls_code":"B723500","name_display_de":"Laugengebäck mit Käse","name_display_en":"Pretzel pastry with cheese","sicher":true}
+{"bls_code":"B723600","name_display_de":"Laugengebäck mit Käse und Schinkenspeck","name_display_en":"Pretzel pastry with cheese and bacon","sicher":true}
+{"bls_code":"B780500","name_display_de":"Pumpernickel","name_display_en":"Pumpernickel","sicher":true}
+{"bls_code":"B781200","name_display_de":"Weizenbaguette","name_display_en":"Wheat baguette","sicher":true}
+{"bls_code":"B781300","name_display_de":"Weizenbaguettebrötchen","name_display_en":"Wheat baguette roll","sicher":true}
+{"bls_code":"B781400","name_display_de":"Weizenbaguette mit Nüssen","name_display_en":"Wheat baguette with nuts","sicher":true}
+{"bls_code":"B781500","name_display_de":"Weizenvollkornbaguette","name_display_en":"Wholemeal wheat baguette","sicher":true}
+{"bls_code":"B781600","name_display_de":"Dinkelvollkornbaguette","name_display_en":"Wholemeal spelt baguette","sicher":true}
+{"bls_code":"B782100","name_display_de":"Weizenfladenbrot","name_display_en":"Wheat flatbread","sicher":true}
+{"bls_code":"B783012","name_display_de":"Weizentortilla","name_display_en":"Wheat tortilla","sicher":true}
+{"bls_code":"B821000","name_display_de":"Paniermehl/Semmelbrösel/Semmelmehl","name_display_en":"Bread crumbs","sicher":true}
+{"bls_code":"B822000","name_display_de":"Glutenfreies Paniermehl","name_display_en":"Gluten-free bread crumbs","sicher":true}
+{"bls_code":"B881100","name_display_de":"Eiweißbrot/Proteinbrot","name_display_en":"Protein bread","sicher":true}
+{"bls_code":"B881200","name_display_de":"Eiweißbrötchen/Proteinbrötchen","name_display_en":"Protein roll","sicher":true}
+{"bls_code":"B8A1000","name_display_de":"Glutenfreies Baguette","name_display_en":"Gluten-free baguette","sicher":true}
+{"bls_code":"B8A2000","name_display_de":"Glutenfreies Brötchen","name_display_en":"Gluten-free roll","sicher":true}
+{"bls_code":"B8A3000","name_display_de":"Glutenfreies Buchweizenbrot","name_display_en":"Gluten-free buckwheat bread","sicher":true}
+{"bls_code":"B8A4000","name_display_de":"Glutenfreies Sauerteigbrot","name_display_en":"Gluten-free sourdough bread","sicher":true}
+{"bls_code":"B8A5000","name_display_de":"Glutenfreies Sauerteigbrot mit Kürbiskernen","name_display_en":"Gluten-free sourdough bread with pumpkin seeds","sicher":true}
+{"bls_code":"B8A6000","name_display_de":"Glutenfreies Sauerteigbrot mit Ölsamen","name_display_en":"Gluten-free sourdough bread with oilseeds","sicher":true}
+{"bls_code":"B8A7000","name_display_de":"Glutenfreies Sauerteigbrot mit Sonnenblumenkernen","name_display_en":"Gluten-free sourdough bread with sunflower seeds","sicher":true}
+{"bls_code":"B8A8000","name_display_de":"Glutenfreies Toastbrot","name_display_en":"Gluten-free toast","sicher":true}
+{"bls_code":"B8A8072","name_display_de":"Glutenfreies Toastbrot (getoastet)","name_display_en":"Gluten-free toast (toasted)","sicher":true}
+{"bls_code":"B8A9000","name_display_de":"Glutenfreies Vollkornbrot","name_display_en":"Gluten-free wholemeal bread","sicher":true}
+{"bls_code":"B8B1000","name_display_de":"Mehrkornknusperbrot mit Vitaminen und Spurenelementen","name_display_en":"Multigrain crackerbread with vitamins and trace elements","sicher":true}
+{"bls_code":"B8B2000","name_display_de":"Roggenknusperbrot","name_display_en":"Rye crackerbread","sicher":true}
+{"bls_code":"B8B3000","name_display_de":"Vollkornknusperbrot","name_display_en":"Wholemeal crackerbread","sicher":true}
+{"bls_code":"B8B4000","name_display_de":"Weizenknusperbrot","name_display_en":"Wheat crackerbread","sicher":true}
+{"bls_code":"B8B5000","name_display_de":"Weizenknusperbrot mit Butter","name_display_en":"Wheat crackerbread with butter","sicher":true}
+{"bls_code":"B8B6000","name_display_de":"Dinkelknusperbrot","name_display_en":"Spelt crackerbread","sicher":true}
+{"bls_code":"M011000","name_display_de":"Schafmilch (4,5% Fett)","name_display_en":"Sheep's milk (4.5% fat)","sicher":true}
+{"bls_code":"M012100","name_display_de":"Roquefort (50% Fett)","name_display_en":"Roquefort (50% fat)","sicher":true}
+{"bls_code":"M012200","name_display_de":"Feta (45% Fett)","name_display_en":"Feta (45% fat)","sicher":true}
+{"bls_code":"M021000","name_display_de":"Ziegenmilch (3% Fett)","name_display_en":"Goat's milk (3% fat)","sicher":true}
+{"bls_code":"M032100","name_display_de":"Mozzarella (45% Fett)","name_display_en":"Mozzarella (45% fat)","sicher":true}
+{"bls_code":"M052000","name_display_de":"Hirtenkäse aus Kuhmilch (45% Fett)","name_display_en":"Cow's milk brine cheese (45% fat)","sicher":true}
+{"bls_code":"M053000","name_display_de":"Ziegenkäse in Salzlake (45% Fett)","name_display_en":"Goat's milk brine cheese (45% fat)","sicher":true}
+{"bls_code":"M0A1000","name_display_de":"Mozzarella (20% Fett)","name_display_en":"Mozzarella (20% fat)","sicher":true}
+{"bls_code":"M111100","name_display_de":"Magermilch frisch (0,1% Fett)","name_display_en":"Fresh skimmed milk (0.1% fat)","sicher":true}
+{"bls_code":"M111200","name_display_de":"Fettarme Milch frisch (1,5% Fett)","name_display_en":"Fresh low-fat milk (1.5% fat)","sicher":true}
+{"bls_code":"M111300","name_display_de":"Vollmilch frisch (3,5% Fett)","name_display_en":"Fresh whole milk (3.5% fat)","sicher":true}
+{"bls_code":"M112300","name_display_de":"Rohmilch/Vorzugsmilch (3,5% Fett)","name_display_en":"Certified raw milk (3.5% fat)","sicher":true}
+{"bls_code":"M113100","name_display_de":"H-Magermilch (0,5% Fett)","name_display_en":"UHT skimmed milk (0.5% fat)","sicher":true}
+{"bls_code":"M113200","name_display_de":"Fettarme H-Milch (1,5% Fett)","name_display_en":"UHT low-fat milk (1.5% fat)","sicher":true}
+{"bls_code":"M113300","name_display_de":"H-Vollmilch (3,5% Fett)","name_display_en":"UHT whole milk (3.5% fat)","sicher":true}
+{"bls_code":"M114100","name_display_de":"Laktosefreie Magermilch (0,1% Fett)","name_display_en":"Lactose-free skimmed milk (0.1% fat)","sicher":true}
+{"bls_code":"M114200","name_display_de":"Laktosefreie fettarme Milch (1,5% Fett)","name_display_en":"Lactose-free low-fat milk (1.5% fat)","sicher":true}
+{"bls_code":"M114300","name_display_de":"Laktosefreie Vollmilch (3,5% Fett)","name_display_en":"Lactose-free whole milk (3.5% fat)","sicher":true}
+{"bls_code":"M117700","name_display_de":"Sahneersatz aus Pflanzenfett und Milch","name_display_en":"Cream substitute with vegetable fat and milk","sicher":true}
+{"bls_code":"M121100","name_display_de":"Dickmilch/Sauermilch (0,5% Fett)","name_display_en":"Soured milk (0.5% fat)","sicher":true}
+{"bls_code":"M121200","name_display_de":"Fettarme Dickmilch/Sauermilch (1,5-1,8% Fett)","name_display_en":"Low-fat soured milk (1.5-1.8% fat)","sicher":true}
+{"bls_code":"M121300","name_display_de":"Dickmilch/Sauermilch (3,5% Fett)","name_display_en":"Soured milk (3.5% fat)","sicher":true}
+{"bls_code":"M121500","name_display_de":"Sahnedickmilch/Sahnesauermilch (10% Fett)","name_display_en":"Cream soured milk (10% fat)","sicher":true}
+{"bls_code":"M130100","name_display_de":"Kefir (0,5% Fett)","name_display_en":"Kefir (0.5% fat)","sicher":true}
+{"bls_code":"M130200","name_display_de":"Fettarmer Kefir (1,5-1,8% Fett)","name_display_en":"Low-fat kefir (1.5-1.8% fat)","sicher":true}
+{"bls_code":"M130300","name_display_de":"Kefir (3,5% Fett)","name_display_en":"Kefir (3.5% fat)","sicher":true}
+{"bls_code":"M130500","name_display_de":"Sahnekefir (10% Fett)","name_display_en":"Cream kefir (10% fat)","sicher":true}
+{"bls_code":"M141100","name_display_de":"Joghurt (0,5% Fett)","name_display_en":"Yogurt (0.5% fat)","sicher":true}
+{"bls_code":"M141200","name_display_de":"Fettarmer Joghurt (1,5-1,8% Fett)","name_display_en":"Low-fat yogurt (1.5-1.8% fat)","sicher":true}
+{"bls_code":"M141300","name_display_de":"Naturjoghurt mild (3,5% Fett)","name_display_en":"Natural yogurt (3.5% fat)","sicher":true}
+{"bls_code":"M141500","name_display_de":"Sahnejoghurt (10% Fett)","name_display_en":"Cream yogurt (10% fat)","sicher":true}
+{"bls_code":"M148100","name_display_de":"Joghurt mit Magermilchpulver (0,5% Fett)","name_display_en":"Yogurt with skimmed milk powder (0.5% fat)","sicher":true}
+{"bls_code":"M148200","name_display_de":"Fettarmer Joghurt mit Magermilchpulver (1,5-1,8% Fett)","name_display_en":"Low-fat yogurt with skimmed milk powder (1.5-1.8% fat)","sicher":true}
+{"bls_code":"M148300","name_display_de":"Joghurt mit Magermilchpulver (3,5% Fett)","name_display_en":"Yogurt with skimmed milk powder (3.5% fat)","sicher":true}
+{"bls_code":"M148500","name_display_de":"Sahnejoghurt mit Magermilchpulver (10% Fett)","name_display_en":"Cream yogurt with skimmed milk powder (10% fat)","sicher":true}
+{"bls_code":"M149500","name_display_de":"Schafjoghurt","name_display_en":"Sheep's milk yogurt","sicher":true}
+{"bls_code":"M150000","name_display_de":"Buttermilch","name_display_en":"Buttermilk","sicher":true}
+{"bls_code":"M161000","name_display_de":"Süßmolke","name_display_en":"Sweet whey","sicher":true}
+{"bls_code":"M162000","name_display_de":"Sauermolke","name_display_en":"Sour whey","sicher":true}
+{"bls_code":"M171500","name_display_de":"Kaffeesahne (10% Fett)","name_display_en":"Coffee cream (10% fat)","sicher":true}
+{"bls_code":"M172500","name_display_de":"Saure Sahne (10% Fett)","name_display_en":"Sour cream (10% fat)","sicher":true}
+{"bls_code":"M172700","name_display_de":"Schmand (20% Fett)","name_display_en":"Schmand sour cream (20% fat)","sicher":true}
+{"bls_code":"M172900","name_display_de":"Crème fraîche (40% Fett)","name_display_en":"Crème fraîche (40% fat)","sicher":true}
+{"bls_code":"M173800","name_display_de":"Schlagsahne (30% Fett)","name_display_en":"Whipping cream (30% fat)","sicher":true}
+{"bls_code":"M173900","name_display_de":"Schlagsahne (36% Fett)","name_display_en":"Whipping cream (36% fat)","sicher":true}
+{"bls_code":"M175800","name_display_de":"Sprühsahne (gesüßt, 30% Fett)","name_display_en":"Sweetened spray cream (30% fat)","sicher":true}
+{"bls_code":"M176800","name_display_de":"Crème fraîche (30% Fett)","name_display_en":"Crème fraîche (30% fat)","sicher":true}
+{"bls_code":"M181100","name_display_de":"Gezuckerte Kondensmagermilch (1% Fett)","name_display_en":"Sweetened skimmed condensed milk (1% fat)","sicher":true}
+{"bls_code":"M181400","name_display_de":"Gezuckerte Kondensmilch (8% Fett)","name_display_en":"Sweetened condensed milk (8% fat)","sicher":true}
+{"bls_code":"M182100","name_display_de":"Kondensmagermilch (1% Fett)","name_display_en":"Skimmed evaporated milk (1% fat)","sicher":true}
+{"bls_code":"M182300","name_display_de":"Teilentrahmte Kondensmilch (1-7,5% Fett)","name_display_en":"Semi-skimmed evaporated milk (1-7.5% fat)","sicher":true}
+{"bls_code":"M182400","name_display_de":"Kondensmilch (7,5% Fett)","name_display_en":"Evaporated milk (7.5% fat)","sicher":true}
+{"bls_code":"M182500","name_display_de":"Kondensmilch (10% Fett)","name_display_en":"Evaporated milk (10% fat)","sicher":true}
+{"bls_code":"M1A3100","name_display_de":"Laktosefreie H-Magermilch (0,5% Fett)","name_display_en":"Lactose-free UHT skimmed milk (0.5% fat)","sicher":true}
+{"bls_code":"M1A5200","name_display_de":"Laktosefreie fettarme H-Milch (1,5% Fett)","name_display_en":"Lactose-free UHT low-fat milk (1.5% fat)","sicher":true}
+{"bls_code":"M1A7300","name_display_de":"Laktosefreie H-Vollmilch (3,5% Fett)","name_display_en":"Lactose-free UHT whole milk (3.5% fat)","sicher":true}
+{"bls_code":"M1B1100","name_display_de":"Laktosefreier Joghurt (0,5% Fett)","name_display_en":"Lactose-free yogurt (0.5% fat)","sicher":true}
+{"bls_code":"M1B2200","name_display_de":"Laktosefreier fettarmer Joghurt (1,5-1,8% Fett)","name_display_en":"Lactose-free low-fat yogurt (1.5-1.8% fat)","sicher":true}
+{"bls_code":"M1E3300","name_display_de":"Laktosefreier Joghurt (3,5% Fett)","name_display_en":"Lactose-free yogurt (3.5% fat)","sicher":true}
+{"bls_code":"M200100","name_display_de":"Milchmischgetränk aromatisiert (gesüßt, < 1% Fett)","name_display_en":"Flavoured milk drink (sweetened, < 1% fat)","sicher":true}
+{"bls_code":"M200200","name_display_de":"Milchmischgetränk aromatisiert (gesüßt, 1,5% Fett)","name_display_en":"Flavoured milk drink (sweetened, 1.5% fat)","sicher":true}
+{"bls_code":"M200300","name_display_de":"Milchmischgetränk aromatisiert (gesüßt, 3,5% Fett)","name_display_en":"Flavoured milk drink (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M206100","name_display_de":"Kakaomilch (gesüßt, < 1% Fett)","name_display_en":"Chocolate milk (sweetened, < 1% fat)","sicher":true}
+{"bls_code":"M206200","name_display_de":"Kakaomilch (gesüßt, 1,5% Fett)","name_display_en":"Chocolate milk (sweetened, 1.5% fat)","sicher":true}
+{"bls_code":"M206300","name_display_de":"Kakaomilch (gesüßt, 3,5% Fett)","name_display_en":"Chocolate milk (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M208000","name_display_de":"Kaffeemilchgetränk (gesüßt, 3,5% Fett)","name_display_en":"Coffee milk drink (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M231200","name_display_de":"Fruchtkefir (gesüßt, 1,5-1,8% Fett)","name_display_en":"Fruit kefir (sweetened, 1.5-1.8% fat)","sicher":true}
+{"bls_code":"M231500","name_display_de":"Sahne-Fruchtkefir (gesüßt, 10% Fett)","name_display_en":"Cream fruit kefir (sweetened, 10% fat)","sicher":true}
+{"bls_code":"M241100","name_display_de":"Fruchtjoghurt mild (gesüßt, 1% Fett)","name_display_en":"Mild fruit yogurt (sweetened, 1% fat)","sicher":true}
+{"bls_code":"M241200","name_display_de":"Fettarmer Fruchtjoghurt (gesüßt, 1,5-1,8% Fett)","name_display_en":"Low-fat fruit yogurt (sweetened, 1.5-1.8% fat)","sicher":true}
+{"bls_code":"M241300","name_display_de":"Fruchtjoghurt mild (gesüßt, 3,8% Fett)","name_display_en":"Mild fruit yogurt (sweetened, 3.8% fat)","sicher":true}
+{"bls_code":"M241500","name_display_de":"Sahne-Fruchtjoghurt (gesüßt, 10% Fett)","name_display_en":"Cream fruit yogurt (sweetened, 10% fat)","sicher":true}
+{"bls_code":"M246000","name_display_de":"Schokojoghurt (gesüßt, 3,5% Fett)","name_display_en":"Chocolate yogurt (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M248000","name_display_de":"Kaffeejoghurt (gesüßt, 3,5% Fett)","name_display_en":"Coffee yogurt (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M252000","name_display_de":"Buttermilchdrink mit Fruchtzubereitung (gesüßt)","name_display_en":"Sweetened buttermilk drink with fruit","sicher":true}
+{"bls_code":"M255000","name_display_de":"Buttermilchdessert mit Sahne und Frucht (gesüßt)","name_display_en":"Buttermilk dessert with cream and fruit (sweetened)","sicher":true}
+{"bls_code":"M259000","name_display_de":"Buttermilchdrink mit Frucht und Vitaminen (gesüßt)","name_display_en":"Buttermilk drink with fruit and vitamins (sweetened)","sicher":true}
+{"bls_code":"M260100","name_display_de":"Molkenmischgetränk mit Fruchtsaft und Vitaminen","name_display_en":"Whey drink with fruit juice and vitamins","sicher":true}
+{"bls_code":"M276300","name_display_de":"Frucht-Schokojoghurt (gesüßt, 3,5% Fett)","name_display_en":"Fruit chocolate yogurt (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M293300","name_display_de":"Schoko-Getreidejoghurt (gesüßt, 3,5% Fett)","name_display_en":"Chocolate cereal yogurt (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2A0100","name_display_de":"Milchmischgetränk aromatisiert (Zucker und Süßungsmittel, < 1% Fett)","name_display_en":"Flavoured milk drink (sugar and sweeteners, < 1% fat)","sicher":true}
+{"bls_code":"M2A0200","name_display_de":"Milchmischgetränk aromatisiert mit Vitaminen (gesüßt, 1,5% Fett)","name_display_en":"Flavoured milk drink with vitamins (sweetened, 1.5% fat)","sicher":true}
+{"bls_code":"M2A0300","name_display_de":"Milchmischgetränk aromatisiert mit Vitaminen (gesüßt, 3,5% Fett)","name_display_en":"Flavoured milk drink with vitamins (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2A1100","name_display_de":"Milchmischgetränk aromatisiert (mit Süßungsmitteln, < 1% Fett)","name_display_en":"Flavoured milk drink (with sweeteners, < 1% fat)","sicher":true}
+{"bls_code":"M2A2100","name_display_de":"Probiotisches Milchmischgetränk aromatisiert (Zucker und Süßungsmittel, < 1% Fett)","name_display_en":"Probiotic flavoured milk drink (sugar and sweeteners, < 1% fat)","sicher":true}
+{"bls_code":"M2A2200","name_display_de":"Probiotisches Milchmischgetränk aromatisiert (gesüßt, > 1% Fett)","name_display_en":"Probiotic flavoured milk drink (sweetened, > 1% fat)","sicher":true}
+{"bls_code":"M2A3200","name_display_de":"Laktosefreier fettarmer Fruchtjoghurt (gesüßt, 1,5-1,8% Fett)","name_display_en":"Lactose-free low-fat fruit yogurt (sweetened, 1.5-1.8% fat)","sicher":true}
+{"bls_code":"M2A3300","name_display_de":"Laktosefreier Fruchtjoghurt mild (gesüßt, 3,8% Fett)","name_display_en":"Lactose-free mild fruit yogurt (sweetened, 3.8% fat)","sicher":true}
+{"bls_code":"M2A6100","name_display_de":"Kakaomilch (Zucker und Süßungsmittel, < 1% Fett)","name_display_en":"Chocolate milk (sugar and sweeteners, < 1% fat)","sicher":true}
+{"bls_code":"M2A7200","name_display_de":"Kaffeemilchgetränk (gesüßt, 1,5% Fett)","name_display_en":"Coffee milk drink (sweetened, 1.5% fat)","sicher":true}
+{"bls_code":"M2A9200","name_display_de":"Fettarmer Fruchtjoghurt (Zucker und Süßungsmittel, 1,5-1,8% Fett)","name_display_en":"Low-fat fruit yogurt (sugar and sweeteners, 1.5-1.8% fat)","sicher":true}
+{"bls_code":"M2D1100","name_display_de":"Vanillejoghurt (Zucker und Süßungsmittel, 0,5% Fett)","name_display_en":"Vanilla yogurt (sugar and sweeteners, 0.5% fat)","sicher":true}
+{"bls_code":"M2H2300","name_display_de":"Milchshake aromatisiert (gesüßt, 3,5% Fett)","name_display_en":"Flavoured milkshake (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2H7300","name_display_de":"Schoko-Milchshake (gesüßt, 3,5% Fett)","name_display_en":"Chocolate milkshake (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2I3200","name_display_de":"Kaffeemilchgetränk mit Süßungsmitteln (1,5% Fett)","name_display_en":"Coffee milk drink with sweeteners (1.5% fat)","sicher":true}
+{"bls_code":"M2I5200","name_display_de":"Kaffeemilchgetränk ungesüßt (1,5% Fett)","name_display_en":"Unsweetened coffee milk drink (1.5% fat)","sicher":true}
+{"bls_code":"M2J1100","name_display_de":"Fruchtjoghurt mit Vitaminen (Zucker und Süßungsmittel, 0,5% Fett)","name_display_en":"Fruit yogurt with vitamins (sugar and sweeteners, 0.5% fat)","sicher":true}
+{"bls_code":"M2J2100","name_display_de":"Fruchtjoghurt (Zucker und Süßungsmittel, 0,5% Fett)","name_display_en":"Fruit yogurt (sugar and sweeteners, 0.5% fat)","sicher":true}
+{"bls_code":"M2J7100","name_display_de":"Trinkjoghurt mit Fruchtzubereitung (gesüßt, 0,5% Fett)","name_display_en":"Fruit yogurt drink (sweetened, 0.5% fat)","sicher":true}
+{"bls_code":"M2K7200","name_display_de":"Fettarmer Frucht-Getreidejoghurt (gesüßt, 1,5-1,8% Fett)","name_display_en":"Low-fat fruit cereal yogurt (sweetened, 1.5-1.8% fat)","sicher":true}
+{"bls_code":"M2L2200","name_display_de":"Fettarmer Trinkjoghurt mit Frucht (gesüßt, 1,5-1,8% Fett)","name_display_en":"Low-fat fruit yogurt drink (sweetened, 1.5-1.8% fat)","sicher":true}
+{"bls_code":"M2L2300","name_display_de":"Trinkjoghurt mit Frucht (gesüßt, 3,5% Fett)","name_display_en":"Fruit yogurt drink (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2L7300","name_display_de":"Frucht-Getreidejoghurt (gesüßt, 3,5% Fett)","name_display_en":"Fruit cereal yogurt (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2M2400","name_display_de":"Sahne-Schokojoghurt (gesüßt, 10% Fett)","name_display_en":"Cream chocolate yogurt (sweetened, 10% fat)","sicher":true}
+{"bls_code":"M2N1400","name_display_de":"Sahne-Vanillejoghurt (gesüßt, 10% Fett)","name_display_en":"Cream vanilla yogurt (sweetened, 10% fat)","sicher":true}
+{"bls_code":"M2N3400","name_display_de":"Sahne-Fruchtjoghurt mit Süßungsmitteln (10% Fett)","name_display_en":"Cream fruit yogurt with sweeteners (10% fat)","sicher":true}
+{"bls_code":"M2N6400","name_display_de":"Sahnejoghurt (gesüßt, 10% Fett)","name_display_en":"Cream yogurt (sweetened, 10% fat)","sicher":true}
+{"bls_code":"M2Q4220","name_display_de":"Kakaomilch mit Vitaminen (gesüßt, 1,5% Fett)","name_display_en":"Chocolate milk with vitamins (sweetened, 1.5% fat)","sicher":true}
+{"bls_code":"M2Q8320","name_display_de":"Kakaomilch mit Vitaminen (gesüßt, 3,5% Fett)","name_display_en":"Chocolate milk with vitamins (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2R2200","name_display_de":"Fettarmer Vanillejoghurt (gesüßt, 1,5-1,8% Fett)","name_display_en":"Low-fat vanilla yogurt (sweetened, 1.5-1.8% fat)","sicher":true}
+{"bls_code":"M2R7300","name_display_de":"Joghurt mit Knuspermüsli (gesüßt, 3,5% Fett)","name_display_en":"Yogurt with crunchy muesli (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2R8300","name_display_de":"Vanillejoghurt (gesüßt, 3,5% Fett)","name_display_en":"Vanilla yogurt (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2R9300","name_display_de":"Nussjoghurt (gesüßt, 3,5% Fett)","name_display_en":"Nut yogurt (sweetened, 3.5% fat)","sicher":true}
+{"bls_code":"M2S8300","name_display_de":"Ayran (gesalzen)","name_display_en":"Ayran (salted)","sicher":true}
+{"bls_code":"M300400","name_display_de":"Hartkäse (30% Fett)","name_display_en":"Hard cheese (30% fat)","sicher":true}
+{"bls_code":"M300600","name_display_de":"Hartkäse (45% Fett)","name_display_en":"Hard cheese (45% fat)","sicher":true}
+{"bls_code":"M300700","name_display_de":"Hartkäse (50% Fett)","name_display_en":"Hard cheese (50% fat)","sicher":true}
+{"bls_code":"M301300","name_display_de":"Appenzeller (20% Fett)","name_display_en":"Appenzeller (20% fat)","sicher":true}
+{"bls_code":"M301700","name_display_de":"Appenzeller (50% Fett)","name_display_en":"Appenzeller (50% fat)","sicher":true}
+{"bls_code":"M302600","name_display_de":"Bergkäse (45% Fett)","name_display_en":"Alpine cheese (45% fat)","sicher":true}
+{"bls_code":"M302700","name_display_de":"Bergkäse (50% Fett)","name_display_en":"Alpine cheese (50% fat)","sicher":true}
+{"bls_code":"M303600","name_display_de":"Cheddar (45% Fett)","name_display_en":"Cheddar (45% fat)","sicher":true}
+{"bls_code":"M303700","name_display_de":"Cheddar (50% Fett)","name_display_en":"Cheddar (50% fat)","sicher":true}
+{"bls_code":"M304600","name_display_de":"Emmentaler (45% Fett)","name_display_en":"Emmental cheese (45% fat)","sicher":true}
+{"bls_code":"M305700","name_display_de":"Gruyère (50% Fett)","name_display_en":"Gruyère (50% fat)","sicher":true}
+{"bls_code":"M306400","name_display_de":"Parmesan (30% Fett)","name_display_en":"Parmesan (30% fat)","sicher":true}
+{"bls_code":"M307700","name_display_de":"Raclettekäse (45% Fett)","name_display_en":"Raclette cheese (45% fat)","sicher":true}
+{"bls_code":"M309600","name_display_de":"Jarlsberg (45% Fett)","name_display_en":"Jarlsberg (45% fat)","sicher":true}
+{"bls_code":"M313600","name_display_de":"Provolone (45% Fett)","name_display_en":"Provolone (45% fat)","sicher":true}
+{"bls_code":"M3A4300","name_display_de":"Schafskäse in Salzlake (20% Fett)","name_display_en":"Sheep's milk brine cheese (20% fat)","sicher":true}
+{"bls_code":"M400300","name_display_de":"Schnittkäse (20% Fett)","name_display_en":"Semi-hard cheese (20% fat)","sicher":true}
+{"bls_code":"M400400","name_display_de":"Schnittkäse (30% Fett)","name_display_en":"Semi-hard cheese (30% fat)","sicher":true}
+{"bls_code":"M400500","name_display_de":"Schnittkäse (40% Fett)","name_display_en":"Semi-hard cheese (40% fat)","sicher":true}
+{"bls_code":"M400600","name_display_de":"Schnittkäse (45% Fett)","name_display_en":"Semi-hard cheese (45% fat)","sicher":true}
+{"bls_code":"M400700","name_display_de":"Schnittkäse (50% Fett)","name_display_en":"Semi-hard cheese (50% fat)","sicher":true}
+{"bls_code":"M400800","name_display_de":"Schnittkäse (60% Fett)","name_display_en":"Semi-hard cheese (60% fat)","sicher":true}
+{"bls_code":"M401400","name_display_de":"Edamer (30% Fett)","name_display_en":"Edam (30% fat)","sicher":true}
+{"bls_code":"M401500","name_display_de":"Edamer (40% Fett)","name_display_en":"Edam (40% fat)","sicher":true}
+{"bls_code":"M401600","name_display_de":"Edamer (45% Fett)","name_display_en":"Edam (45% fat)","sicher":true}
+{"bls_code":"M401700","name_display_de":"Edamer (50% Fett)","name_display_en":"Edam (50% fat)","sicher":true}
+{"bls_code":"M402400","name_display_de":"Gouda (30% Fett)","name_display_en":"Gouda (30% fat)","sicher":true}
+{"bls_code":"M402500","name_display_de":"Gouda (40% Fett)","name_display_en":"Gouda (40% fat)","sicher":true}
+{"bls_code":"M402600","name_display_de":"Gouda (48% Fett)","name_display_en":"Gouda (48% fat)","sicher":true}
+{"bls_code":"M403400","name_display_de":"Tilsiter (30% Fett)","name_display_en":"Tilsit cheese (30% fat)","sicher":true}
+{"bls_code":"M403500","name_display_de":"Tilsiter (40% Fett)","name_display_en":"Tilsit cheese (40% fat)","sicher":true}
+{"bls_code":"M403600","name_display_de":"Tilsiter (45% Fett)","name_display_en":"Tilsit cheese (45% fat)","sicher":true}
+{"bls_code":"M403700","name_display_de":"Tilsiter (50% Fett)","name_display_en":"Tilsit cheese (50% fat)","sicher":true}
+{"bls_code":"M403800","name_display_de":"Tilsiter (60% Fett)","name_display_en":"Tilsit cheese (60% fat)","sicher":true}
+{"bls_code":"M404600","name_display_de":"Wilstermarschkäse (45% Fett)","name_display_en":"Wilstermarsch cheese (45% fat)","sicher":true}
+{"bls_code":"M404700","name_display_de":"Wilstermarschkäse (50% Fett)","name_display_en":"Wilstermarsch cheese (50% fat)","sicher":true}
+{"bls_code":"M406700","name_display_de":"Fontina (50% Fett)","name_display_en":"Fontina (50% fat)","sicher":true}
+{"bls_code":"M410700","name_display_de":"Schnittkäse aus Schafmilch (50% Fett)","name_display_en":"Sheep's milk semi-hard cheese (50% fat)","sicher":true}
+{"bls_code":"M500300","name_display_de":"Halbfester Schnittkäse (20% Fett)","name_display_en":"Semi-soft cheese (20% fat)","sicher":true}
+{"bls_code":"M500400","name_display_de":"Halbfester Schnittkäse (30% Fett)","name_display_en":"Semi-soft cheese (30% fat)","sicher":true}
+{"bls_code":"M500500","name_display_de":"Halbfester Schnittkäse (40% Fett)","name_display_en":"Semi-soft cheese (40% fat)","sicher":true}
+{"bls_code":"M500600","name_display_de":"Halbfester Schnittkäse (45% Fett)","name_display_en":"Semi-soft cheese (45% fat)","sicher":true}
+{"bls_code":"M500700","name_display_de":"Halbfester Schnittkäse (50% Fett)","name_display_en":"Semi-soft cheese (50% fat)","sicher":true}
+{"bls_code":"M500800","name_display_de":"Halbfester Schnittkäse (60% Fett)","name_display_en":"Semi-soft cheese (60% fat)","sicher":true}
+{"bls_code":"M501600","name_display_de":"Butterkäse (45% Fett)","name_display_en":"Butterkäse (45% fat)","sicher":true}
+{"bls_code":"M501700","name_display_de":"Butterkäse (50% Fett)","name_display_en":"Butterkäse (50% fat)","sicher":true}
+{"bls_code":"M501800","name_display_de":"Butterkäse (60% Fett)","name_display_en":"Butterkäse (60% fat)","sicher":true}
+{"bls_code":"M502600","name_display_de":"Edelpilzkäse (45% Fett)","name_display_en":"Blue cheese (45% fat)","sicher":true}
+{"bls_code":"M502700","name_display_de":"Edelpilzkäse (50% Fett)","name_display_en":"Blue cheese (50% fat)","sicher":true}
+{"bls_code":"M502800","name_display_de":"Edelpilzkäse (60% Fett)","name_display_en":"Blue cheese (60% fat)","sicher":true}
+{"bls_code":"M503400","name_display_de":"Steinbuscher (30% Fett)","name_display_en":"Steinbuscher cheese (30% fat)","sicher":true}
+{"bls_code":"M503600","name_display_de":"Steinbuscher (45% Fett)","name_display_en":"Steinbuscher cheese (45% fat)","sicher":true}
+{"bls_code":"M503700","name_display_de":"Steinbuscher (50% Fett)","name_display_en":"Steinbuscher cheese (50% fat)","sicher":true}
+{"bls_code":"M504500","name_display_de":"Weißlacker (40% Fett)","name_display_en":"Weisslacker cheese (40% fat)","sicher":true}
+{"bls_code":"M504600","name_display_de":"Weißlacker (45% Fett)","name_display_en":"Weisslacker cheese (45% fat)","sicher":true}
+{"bls_code":"M504700","name_display_de":"Weißlacker (50% Fett)","name_display_en":"Weisslacker cheese (50% fat)","sicher":true}
+{"bls_code":"M505600","name_display_de":"Trappistenkäse (45% Fett)","name_display_en":"Trappista cheese (45% fat)","sicher":true}
+{"bls_code":"M505700","name_display_de":"Trappistenkäse (50% Fett)","name_display_en":"Trappista cheese (50% fat)","sicher":true}
+{"bls_code":"M506600","name_display_de":"Danbo (45% Fett)","name_display_en":"Danbo (45% fat)","sicher":true}
+{"bls_code":"M507600","name_display_de":"Esrom (45% Fett)","name_display_en":"Esrom (45% fat)","sicher":true}
+{"bls_code":"M508600","name_display_de":"Havarti (45% Fett)","name_display_en":"Havarti (45% fat)","sicher":true}
+{"bls_code":"M512400","name_display_de":"Steppenkäse (30% Fett)","name_display_en":"Steppenkäse (30% fat)","sicher":true}
+{"bls_code":"M512600","name_display_de":"Steppenkäse (45% Fett)","name_display_en":"Steppenkäse (45% fat)","sicher":true}
+{"bls_code":"M516700","name_display_de":"Danablu (50% Fett)","name_display_en":"Danish Blue (50% fat)","sicher":true}
+{"bls_code":"M524500","name_display_de":"Halloumi","name_display_en":"Halloumi","sicher":true}
+{"bls_code":"M524562","name_display_de":"Halloumi (gebacken)","name_display_en":"Halloumi (baked)","sicher":true}
+{"bls_code":"M524572","name_display_de":"Halloumi (gegrillt)","name_display_en":"Halloumi (grilled)","sicher":true}
+{"bls_code":"M524582","name_display_de":"Halloumi (gebraten)","name_display_en":"Halloumi (fried)","sicher":true}
+{"bls_code":"M5B1600","name_display_de":"Gorgonzola (48% Fett)","name_display_en":"Gorgonzola (48% fat)","sicher":true}
+{"bls_code":"M600300","name_display_de":"Weichkäse (20% Fett)","name_display_en":"Soft cheese (20% fat)","sicher":true}
+{"bls_code":"M600400","name_display_de":"Weichkäse (30% Fett)","name_display_en":"Soft cheese (30% fat)","sicher":true}
+{"bls_code":"M600500","name_display_de":"Weichkäse (40% Fett)","name_display_en":"Soft cheese (40% fat)","sicher":true}
+{"bls_code":"M600600","name_display_de":"Weichkäse (45% Fett)","name_display_en":"Soft cheese (45% fat)","sicher":true}
+{"bls_code":"M600700","name_display_de":"Weichkäse (50% Fett)","name_display_en":"Soft cheese (50% fat)","sicher":true}
+{"bls_code":"M600800","name_display_de":"Weichkäse (60% Fett)","name_display_en":"Soft cheese (60% fat)","sicher":true}
+{"bls_code":"M600900","name_display_de":"Weichkäse (70% Fett)","name_display_en":"Soft cheese (70% fat)","sicher":true}
+{"bls_code":"M601600","name_display_de":"Brie (45% Fett)","name_display_en":"Brie (45% fat)","sicher":true}
+{"bls_code":"M601700","name_display_de":"Brie (50% Fett)","name_display_en":"Brie (50% fat)","sicher":true}
+{"bls_code":"M601800","name_display_de":"Brie (60% Fett)","name_display_en":"Brie (60% fat)","sicher":true}
+{"bls_code":"M602400","name_display_de":"Camembert (30% Fett)","name_display_en":"Camembert (30% fat)","sicher":true}
+{"bls_code":"M602600","name_display_de":"Camembert (45% Fett)","name_display_en":"Camembert (45% fat)","sicher":true}
+{"bls_code":"M602700","name_display_de":"Camembert (50% Fett)","name_display_en":"Camembert (50% fat)","sicher":true}
+{"bls_code":"M602800","name_display_de":"Camembert (60% Fett)","name_display_en":"Camembert (60% fat)","sicher":true}
+{"bls_code":"M603300","name_display_de":"Limburger (20% Fett)","name_display_en":"Limburger (20% fat)","sicher":true}
+{"bls_code":"M603500","name_display_de":"Limburger (40% Fett)","name_display_en":"Limburger (40% fat)","sicher":true}
+{"bls_code":"M603700","name_display_de":"Limburger (50% Fett)","name_display_en":"Limburger (50% fat)","sicher":true}
+{"bls_code":"M604600","name_display_de":"Münsterkäse (45% Fett)","name_display_en":"Muenster cheese (45% fat)","sicher":true}
+{"bls_code":"M604700","name_display_de":"Münsterkäse (50% Fett)","name_display_en":"Muenster cheese (50% fat)","sicher":true}
+{"bls_code":"M605300","name_display_de":"Romadur (20% Fett)","name_display_en":"Romadur (20% fat)","sicher":true}
+{"bls_code":"M605500","name_display_de":"Romadur (40% Fett)","name_display_en":"Romadur (40% fat)","sicher":true}
+{"bls_code":"M605700","name_display_de":"Romadur (50% Fett)","name_display_en":"Romadur (50% fat)","sicher":true}
+{"bls_code":"M609600","name_display_de":"Weinkäse (45% Fett)","name_display_en":"Wine cheese (45% fat)","sicher":true}
+{"bls_code":"M609800","name_display_de":"Weinkäse (60% Fett)","name_display_en":"Wine cheese (60% fat)","sicher":true}
+{"bls_code":"M619700","name_display_de":"Bel Paese (50% Fett)","name_display_en":"Bel Paese (50% fat)","sicher":true}
+{"bls_code":"M6A3700","name_display_de":"Ziegen-Schnittkäse (50% Fett)","name_display_en":"Goat's milk semi-hard cheese (50% fat)","sicher":true}
+{"bls_code":"M6A5700","name_display_de":"Schafsweichkäse (45% Fett)","name_display_en":"Sheep's milk soft cheese (45% fat)","sicher":true}
+{"bls_code":"M6A6800","name_display_de":"Schafskäse in Salzlake (45% Fett)","name_display_en":"Sheep's milk brine cheese (45% fat)","sicher":true}
+{"bls_code":"M6A9600","name_display_de":"Ziegenweichkäse (45% Fett)","name_display_en":"Goat's milk soft cheese (45% fat)","sicher":true}
+{"bls_code":"M710100","name_display_de":"Skyr (< 10% Fett)","name_display_en":"Skyr (< 10% fat)","sicher":true}
+{"bls_code":"M710700","name_display_de":"Frischkäsezubereitung natur (50% Fett)","name_display_en":"Plain cream cheese preparation (50% fat)","sicher":true}
+{"bls_code":"M710800","name_display_de":"Frischkäsezubereitung natur (60% Fett)","name_display_en":"Plain cream cheese preparation (60% fat)","sicher":true}
+{"bls_code":"M711100","name_display_de":"Körniger Frischkäse (< 10% Fett)","name_display_en":"Cottage cheese (< 10% fat)","sicher":true}
+{"bls_code":"M711300","name_display_de":"Körniger Frischkäse (20% Fett)","name_display_en":"Cottage cheese (20% fat)","sicher":true}
+{"bls_code":"M712200","name_display_de":"Schichtkäse (10% Fett)","name_display_en":"Layered cheese (10% fat)","sicher":true}
+{"bls_code":"M712300","name_display_de":"Schichtkäse (20% Fett)","name_display_en":"Layered cheese (20% fat)","sicher":true}
+{"bls_code":"M712500","name_display_de":"Schichtkäse (40% Fett)","name_display_en":"Layered cheese (40% fat)","sicher":true}
+{"bls_code":"M713100","name_display_de":"Magerquark (< 10% Fett)","name_display_en":"Low-fat quark (< 10% fat)","sicher":true}
+{"bls_code":"M713200","name_display_de":"Speisequark (10% Fett)","name_display_en":"Quark (10% fat)","sicher":true}
+{"bls_code":"M713300","name_display_de":"Speisequark (20% Fett)","name_display_en":"Quark (20% fat)","sicher":true}
+{"bls_code":"M713500","name_display_de":"Speisequark (40% Fett)","name_display_en":"Quark (40% fat)","sicher":true}
+{"bls_code":"M713700","name_display_de":"Rahmquark (50% Fett)","name_display_en":"Cream quark (50% fat)","sicher":true}
+{"bls_code":"M715800","name_display_de":"Brotaufstrich aus Pflanzenfett, Rahm und Joghurt","name_display_en":"Spread with vegetable fat, cream and yogurt","sicher":true}
+{"bls_code":"M730100","name_display_de":"Sauermilchkäse (< 10% Fett)","name_display_en":"Soured milk cheese (< 10% fat)","sicher":true}
+{"bls_code":"M741600","name_display_de":"Ricotta (45% Fett)","name_display_en":"Ricotta (45% fat)","sicher":true}
+{"bls_code":"M771300","name_display_de":"Schnittfester Schmelzkäse (20% Fett)","name_display_en":"Sliceable processed cheese (20% fat)","sicher":true}
+{"bls_code":"M771400","name_display_de":"Schnittfester Schmelzkäse (30% Fett)","name_display_en":"Sliceable processed cheese (30% fat)","sicher":true}
+{"bls_code":"M771600","name_display_de":"Schnittfester Schmelzkäse (45% Fett)","name_display_en":"Sliceable processed cheese (45% fat)","sicher":true}
+{"bls_code":"M771700","name_display_de":"Schnittfester Schmelzkäse (50% Fett)","name_display_en":"Sliceable processed cheese (50% fat)","sicher":true}
+{"bls_code":"M772800","name_display_de":"Streichfähiger Frischkäse-Schmelzkäse (60% Fett)","name_display_en":"Spreadable cream cheese processed cheese (60% fat)","sicher":true}
+{"bls_code":"M780100","name_display_de":"Kochkäse (< 10% Fett)","name_display_en":"Cooked cheese (< 10% fat)","sicher":true}
+{"bls_code":"M780200","name_display_de":"Kochkäse (10% Fett)","name_display_en":"Cooked cheese (10% fat)","sicher":true}
+{"bls_code":"M780300","name_display_de":"Kochkäse (20% Fett)","name_display_en":"Cooked cheese (20% fat)","sicher":true}
+{"bls_code":"M780500","name_display_de":"Kochkäse (40% Fett)","name_display_en":"Cooked cheese (40% fat)","sicher":true}
+{"bls_code":"M7A1600","name_display_de":"Ziegenfrischkäse natur (45% Fett)","name_display_en":"Plain goat's cream cheese (45% fat)","sicher":true}
+{"bls_code":"M7A6800","name_display_de":"Mascarpone (80% Fett)","name_display_en":"Mascarpone (80% fat)","sicher":true}
+{"bls_code":"M7B1600","name_display_de":"Schafsfrischkäse natur (45% Fett)","name_display_en":"Plain sheep's cream cheese (45% fat)","sicher":true}
+{"bls_code":"M810300","name_display_de":"Schmelzkäsezubereitung (20% Fett)","name_display_en":"Processed cheese preparation (20% fat)","sicher":true}
+{"bls_code":"M810400","name_display_de":"Schmelzkäsezubereitung (30% Fett)","name_display_en":"Processed cheese preparation (30% fat)","sicher":true}
+{"bls_code":"M810500","name_display_de":"Schmelzkäsezubereitung (40% Fett)","name_display_en":"Processed cheese preparation (40% fat)","sicher":true}
+{"bls_code":"M810600","name_display_de":"Schmelzkäsezubereitung (45-52% Fett)","name_display_en":"Processed cheese preparation (45-52% fat)","sicher":true}
+{"bls_code":"M813700","name_display_de":"Schmelzkäsezubereitung mit Schinken (45-52% Fett)","name_display_en":"Processed cheese preparation with ham (45-52% fat)","sicher":true}
+{"bls_code":"M816000","name_display_de":"Schmelzkäsezubereitung mit Nüssen (45-52% Fett)","name_display_en":"Processed cheese preparation with nuts (45-52% fat)","sicher":true}
+{"bls_code":"M820100","name_display_de":"Frischkäsezubereitung natur (< 10% Fett)","name_display_en":"Plain cream cheese preparation (< 10% fat)","sicher":true}
+{"bls_code":"M820200","name_display_de":"Frischkäsezubereitung natur (10% Fett)","name_display_en":"Plain cream cheese preparation (10% fat)","sicher":true}
+{"bls_code":"M820500","name_display_de":"Frischkäsezubereitung natur (40% Fett)","name_display_en":"Plain cream cheese preparation (40% fat)","sicher":true}
+{"bls_code":"M820600","name_display_de":"Frischkäsezubereitung natur (45% Fett)","name_display_en":"Plain cream cheese preparation (45% fat)","sicher":true}
+{"bls_code":"M821300","name_display_de":"Joghurt-Frischkäse-Dessert mit Frucht (gesüßt)","name_display_en":"Yogurt cream cheese dessert with fruit (sweetened)","sicher":true}
+{"bls_code":"M827100","name_display_de":"Frischkäsezubereitung mit Gemüse/Kräutern (< 10% Fett)","name_display_en":"Cream cheese preparation with vegetables/herbs (< 10% fat)","sicher":true}
+{"bls_code":"M827200","name_display_de":"Frischkäsezubereitung mit Gemüse/Kräutern (10% Fett)","name_display_en":"Cream cheese preparation with vegetables/herbs (10% fat)","sicher":true}
+{"bls_code":"M827300","name_display_de":"Frischkäsezubereitung mit Gemüse/Kräutern (20% Fett)","name_display_en":"Cream cheese preparation with vegetables/herbs (20% fat)","sicher":true}
+{"bls_code":"M827400","name_display_de":"Frischkäsezubereitung mit Gemüse/Kräutern (30% Fett)","name_display_en":"Cream cheese preparation with vegetables/herbs (30% fat)","sicher":true}
+{"bls_code":"M827500","name_display_de":"Frischkäsezubereitung mit Gemüse/Kräutern (40% Fett)","name_display_en":"Cream cheese preparation with vegetables/herbs (40% fat)","sicher":true}
+{"bls_code":"M827700","name_display_de":"Frischkäsezubereitung mit Gemüse/Kräutern (50% Fett)","name_display_en":"Cream cheese preparation with vegetables/herbs (50% fat)","sicher":true}
+{"bls_code":"M827800","name_display_de":"Frischkäsezubereitung mit Gemüse/Kräutern (60% Fett)","name_display_en":"Cream cheese preparation with vegetables/herbs (60% fat)","sicher":true}
+{"bls_code":"M831100","name_display_de":"Quarkzubereitung mit Frucht (gesüßt, < 10% Fett)","name_display_en":"Quark preparation with fruit (sweetened, < 10% fat)","sicher":true}
+{"bls_code":"M831300","name_display_de":"Quarkzubereitung mit Frucht (gesüßt, 20% Fett)","name_display_en":"Quark preparation with fruit (sweetened, 20% fat)","sicher":true}
+{"bls_code":"M831500","name_display_de":"Quarkzubereitung mit Frucht (gesüßt, 40% Fett)","name_display_en":"Quark preparation with fruit (sweetened, 40% fat)","sicher":true}
+{"bls_code":"M832100","name_display_de":"Vanille-Quarkzubereitung (gesüßt, < 10% Fett)","name_display_en":"Vanilla quark preparation (sweetened, < 10% fat)","sicher":true}
+{"bls_code":"M837500","name_display_de":"Kräuterquarkzubereitung (40% Fett)","name_display_en":"Herb quark preparation (40% fat)","sicher":true}
+{"bls_code":"M856000","name_display_de":"Grießpudding mit Sahne und Frucht (gesüßt)","name_display_en":"Semolina pudding with cream and fruit (sweetened)","sicher":true}
+{"bls_code":"M857000","name_display_de":"Grießpudding mit Sahne (gesüßt)","name_display_en":"Semolina pudding with cream (sweetened)","sicher":true}
+{"bls_code":"M861000","name_display_de":"Mousse au chocolat auf Milchbasis (gesüßt)","name_display_en":"Milk-based mousse au chocolat (sweetened)","sicher":true}
+{"bls_code":"M863000","name_display_de":"Obatzter/Obazda (60% Fett)","name_display_en":"Obatzter/Obazda cheese spread (60% fat)","sicher":true}
+{"bls_code":"M881000","name_display_de":"Sahnepulver/Rahmpulver","name_display_en":"Cream powder","sicher":true}
+{"bls_code":"M882000","name_display_de":"Vollmilchpulver","name_display_en":"Whole milk powder","sicher":true}
+{"bls_code":"M884000","name_display_de":"Magermilchpulver","name_display_en":"Skimmed milk powder","sicher":true}
+{"bls_code":"M886000","name_display_de":"Buttermilchpulver","name_display_en":"Buttermilk powder","sicher":true}
+{"bls_code":"M887000","name_display_de":"Süßmolkenpulver","name_display_en":"Sweet whey powder","sicher":true}
+{"bls_code":"M8A1200","name_display_de":"Frucht-Frischkäsezubereitung mit Vitamin D und Calcium (gesüßt, 10% Fett)","name_display_en":"Fruit cream cheese preparation with vitamin D and calcium (sweetened, 10% fat)","sicher":true}
+{"bls_code":"M8A1300","name_display_de":"Frucht-Frischkäsezubereitung mit Calcium (gesüßt, 20% Fett)","name_display_en":"Fruit cream cheese preparation with calcium (sweetened, 20% fat)","sicher":true}
+{"bls_code":"M8A4000","name_display_de":"Kräuterquarkzubereitung (10% Fett)","name_display_en":"Herb quark preparation (10% fat)","sicher":true}
+{"bls_code":"M8A5000","name_display_de":"Kräuterquarkzubereitung (20% Fett)","name_display_en":"Herb quark preparation (20% fat)","sicher":true}
+{"bls_code":"M8A6000","name_display_de":"Kräuterquarkzubereitung (30% Fett)","name_display_en":"Herb quark preparation (30% fat)","sicher":true}
+{"bls_code":"M8B2100","name_display_de":"Frucht-Quarkzubereitung mit Zucker und Süßungsmitteln (< 10% Fett)","name_display_en":"Fruit quark preparation with sugar and sweeteners (< 10% fat)","sicher":true}
+{"bls_code":"M8C3300","name_display_de":"Vanille-Quarkzubereitung (gesüßt, 20% Fett)","name_display_en":"Vanilla quark preparation (sweetened, 20% fat)","sicher":true}
+{"bls_code":"U010100","name_display_de":"Rinderhackfleisch (roh)","name_display_en":"Ground beef (raw)","sicher":true}
+{"bls_code":"U010132","name_display_de":"Rinderhackfleisch (gekocht)","name_display_en":"Ground beef (boiled)","sicher":true}
+{"bls_code":"U010142","name_display_de":"Rinderhackfleisch (geschmort)","name_display_en":"Ground beef (braised)","sicher":true}
+{"bls_code":"U010162","name_display_de":"Rinderhackfleisch (im Ofen gebraten)","name_display_en":"Ground beef (oven-fried)","sicher":true}
+{"bls_code":"U010182","name_display_de":"Rinderhackfleisch (in der Pfanne gebraten)","name_display_en":"Ground beef (pan-fried)","sicher":true}
+{"bls_code":"U010200","name_display_de":"Rinderhackfleisch (tiefgekühlt)","name_display_en":"Ground beef (frozen)","sicher":true}
+{"bls_code":"U010232","name_display_de":"Rinderhackfleisch (tiefgekühlt, gekocht)","name_display_en":"Ground beef (frozen, boiled)","sicher":true}
+{"bls_code":"U010242","name_display_de":"Rinderhackfleisch (tiefgekühlt, geschmort)","name_display_en":"Ground beef (frozen, braised)","sicher":true}
+{"bls_code":"U010262","name_display_de":"Rinderhackfleisch (tiefgekühlt, im Ofen gebraten)","name_display_en":"Ground beef (frozen, oven-fried)","sicher":true}
+{"bls_code":"U010272","name_display_de":"Rinderhackfleisch (tiefgekühlt, gegrillt)","name_display_en":"Ground beef (frozen, grilled)","sicher":true}
+{"bls_code":"U011172","name_display_de":"Rinderhackfleisch (gegrillt)","name_display_en":"Ground beef (grilled)","sicher":true}
+{"bls_code":"U012282","name_display_de":"Rinderhackfleisch (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Ground beef (frozen, pan-fried)","sicher":true}
+{"bls_code":"U013100","name_display_de":"Rinderfrikadelle (roh)","name_display_en":"Beef patty (raw)","sicher":true}
+{"bls_code":"U013162","name_display_de":"Rinderfrikadelle (im Ofen gebraten)","name_display_en":"Beef patty (oven-fried)","sicher":true}
+{"bls_code":"U013172","name_display_de":"Rinderfrikadelle (gegrillt)","name_display_en":"Beef patty (grilled)","sicher":true}
+{"bls_code":"U013182","name_display_de":"Rinderfrikadelle (in der Pfanne gebraten)","name_display_en":"Beef patty (pan-fried)","sicher":true}
+{"bls_code":"U020100","name_display_de":"Schweinehackfleisch (roh)","name_display_en":"Ground pork (raw)","sicher":true}
+{"bls_code":"U020132","name_display_de":"Schweinehackfleisch (gekocht)","name_display_en":"Ground pork (boiled)","sicher":true}
+{"bls_code":"U020142","name_display_de":"Schweinehackfleisch (geschmort)","name_display_en":"Ground pork (braised)","sicher":true}
+{"bls_code":"U020162","name_display_de":"Schweinehackfleisch (im Ofen gebraten)","name_display_en":"Ground pork (oven-fried)","sicher":true}
+{"bls_code":"U020182","name_display_de":"Schweinehackfleisch (in der Pfanne gebraten)","name_display_en":"Ground pork (pan-fried)","sicher":true}
+{"bls_code":"U020200","name_display_de":"Schweinehackfleisch (tiefgekühlt)","name_display_en":"Ground pork (frozen)","sicher":true}
+{"bls_code":"U020242","name_display_de":"Schweinehackfleisch (tiefgekühlt, geschmort)","name_display_en":"Ground pork (frozen, braised)","sicher":true}
+{"bls_code":"U020272","name_display_de":"Schweinehackfleisch (tiefgekühlt, gegrillt)","name_display_en":"Ground pork (frozen, grilled)","sicher":true}
+{"bls_code":"U022232","name_display_de":"Schweinehackfleisch (tiefgekühlt, gekocht)","name_display_en":"Ground pork (frozen, boiled)","sicher":true}
+{"bls_code":"U023262","name_display_de":"Schweinehackfleisch (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Ground pork (frozen, pan-fried)","sicher":true}
+{"bls_code":"U024172","name_display_de":"Schweinehackfleisch (gegrillt)","name_display_en":"Ground pork (grilled)","sicher":true}
+{"bls_code":"U025100","name_display_de":"Schweinefrikadelle (roh)","name_display_en":"Pork patty (raw)","sicher":true}
+{"bls_code":"U025162","name_display_de":"Schweinefrikadelle (im Ofen gebraten)","name_display_en":"Pork patty (oven-fried)","sicher":true}
+{"bls_code":"U025172","name_display_de":"Schweinefrikadelle (gegrillt)","name_display_en":"Pork patty (grilled)","sicher":true}
+{"bls_code":"U025182","name_display_de":"Schweinefrikadelle (in der Pfanne gebraten)","name_display_en":"Pork patty (pan-fried)","sicher":true}
+{"bls_code":"U030100","name_display_de":"Kalbshackfleisch (roh)","name_display_en":"Ground veal (raw)","sicher":true}
+{"bls_code":"U030132","name_display_de":"Kalbshackfleisch (gekocht)","name_display_en":"Ground veal (boiled)","sicher":true}
+{"bls_code":"U030142","name_display_de":"Kalbshackfleisch (geschmort)","name_display_en":"Ground veal (braised)","sicher":true}
+{"bls_code":"U030162","name_display_de":"Kalbshackfleisch (im Ofen gebraten)","name_display_en":"Ground veal (oven-fried)","sicher":true}
+{"bls_code":"U030172","name_display_de":"Kalbshackfleisch (gegrillt)","name_display_en":"Ground veal (grilled)","sicher":true}
+{"bls_code":"U030182","name_display_de":"Kalbshackfleisch (in der Pfanne gebraten)","name_display_en":"Ground veal (pan-fried)","sicher":true}
+{"bls_code":"U040100","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (roh)","name_display_en":"Mixed ground pork/beef (raw)","sicher":true}
+{"bls_code":"U040132","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (gekocht)","name_display_en":"Mixed ground pork/beef (boiled)","sicher":true}
+{"bls_code":"U040142","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (geschmort)","name_display_en":"Mixed ground pork/beef (braised)","sicher":true}
+{"bls_code":"U040162","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (im Ofen gebraten)","name_display_en":"Mixed ground pork/beef (oven-fried)","sicher":true}
+{"bls_code":"U040182","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (in der Pfanne gebraten)","name_display_en":"Mixed ground pork/beef (pan-fried)","sicher":true}
+{"bls_code":"U042232","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (tiefgekühlt, gekocht)","name_display_en":"Mixed ground pork/beef (frozen, boiled)","sicher":true}
+{"bls_code":"U043262","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (tiefgekühlt, im Ofen gebraten)","name_display_en":"Mixed ground pork/beef (frozen, oven-fried)","sicher":true}
+{"bls_code":"U044262","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Mixed ground pork/beef (frozen, pan-fried)","sicher":true}
+{"bls_code":"U045172","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (gegrillt)","name_display_en":"Mixed ground pork/beef (grilled)","sicher":true}
+{"bls_code":"U047200","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (tiefgekühlt)","name_display_en":"Mixed ground pork/beef (frozen)","sicher":true}
+{"bls_code":"U047242","name_display_de":"Gemischtes Hackfleisch Schwein/Rind (tiefgekühlt, geschmort)","name_display_en":"Mixed ground pork/beef (frozen, braised)","sicher":true}
+{"bls_code":"U050100","name_display_de":"Gemischtes Hackfleisch Rind/Schwein (roh)","name_display_en":"Mixed ground beef/pork (raw)","sicher":true}
+{"bls_code":"U050132","name_display_de":"Gemischtes Hackfleisch Rind/Schwein (gekocht)","name_display_en":"Mixed ground beef/pork (boiled)","sicher":true}
+{"bls_code":"U050162","name_display_de":"Gemischtes Hackfleisch Rind/Schwein (im Ofen gebraten)","name_display_en":"Mixed ground beef/pork (oven-fried)","sicher":true}
+{"bls_code":"U050182","name_display_de":"Gemischtes Hackfleisch Rind/Schwein (in der Pfanne gebraten)","name_display_en":"Mixed ground beef/pork (pan-fried)","sicher":true}
+{"bls_code":"U050200","name_display_de":"Gemischtes Hackfleisch Rind/Schwein (tiefgekühlt)","name_display_en":"Mixed ground beef/pork (frozen)","sicher":true}
+{"bls_code":"U050242","name_display_de":"Gemischtes Hackfleisch Rind/Schwein (tiefgekühlt, geschmort)","name_display_en":"Mixed ground beef/pork (frozen, braised)","sicher":true}
+{"bls_code":"U050282","name_display_de":"Gemischtes Hackfleisch Rind/Schwein (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Mixed ground beef/pork (frozen, pan-fried)","sicher":true}
+{"bls_code":"U051100","name_display_de":"Gemischte Frikadelle Rind/Schwein (roh)","name_display_en":"Mixed beef/pork patty (raw)","sicher":true}
+{"bls_code":"U051162","name_display_de":"Gemischte Frikadelle Rind/Schwein (im Ofen gebraten)","name_display_en":"Mixed beef/pork patty (oven-fried)","sicher":true}
+{"bls_code":"U051172","name_display_de":"Gemischte Frikadelle Rind/Schwein (gegrillt)","name_display_en":"Mixed beef/pork patty (grilled)","sicher":true}
+{"bls_code":"U051182","name_display_de":"Gemischte Frikadelle Rind/Schwein (in der Pfanne gebraten)","name_display_en":"Mixed beef/pork patty (pan-fried)","sicher":true}
+{"bls_code":"U063100","name_display_de":"Hacksteak Rind/Schwein (roh)","name_display_en":"Beef/pork minced steak (raw)","sicher":true}
+{"bls_code":"U063162","name_display_de":"Hacksteak Rind/Schwein (im Ofen gebraten)","name_display_en":"Beef/pork minced steak (oven-fried)","sicher":true}
+{"bls_code":"U063172","name_display_de":"Hacksteak Rind/Schwein (gegrillt)","name_display_en":"Beef/pork minced steak (grilled)","sicher":true}
+{"bls_code":"U063182","name_display_de":"Hacksteak Rind/Schwein (in der Pfanne gebraten)","name_display_en":"Beef/pork minced steak (pan-fried)","sicher":true}
+{"bls_code":"U063200","name_display_de":"Hacksteak Rind/Schwein (tiefgekühlt)","name_display_en":"Beef/pork minced steak (frozen)","sicher":true}
+{"bls_code":"U063262","name_display_de":"Hacksteak Rind/Schwein (tiefgekühlt, im Ofen gebraten)","name_display_en":"Beef/pork minced steak (frozen, oven-fried)","sicher":true}
+{"bls_code":"U063272","name_display_de":"Hacksteak Rind/Schwein (tiefgekühlt, gegrillt)","name_display_en":"Beef/pork minced steak (frozen, grilled)","sicher":true}
+{"bls_code":"U063282","name_display_de":"Hacksteak Rind/Schwein (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Beef/pork minced steak (frozen, pan-fried)","sicher":true}
+{"bls_code":"U065100","name_display_de":"Schweinebrät (roh)","name_display_en":"Pork sausage meat (raw)","sicher":true}
+{"bls_code":"U065132","name_display_de":"Schweinebrät (gekocht)","name_display_en":"Pork sausage meat (boiled)","sicher":true}
+{"bls_code":"U065200","name_display_de":"Schweinebrät (tiefgekühlt)","name_display_en":"Pork sausage meat (frozen)","sicher":true}
+{"bls_code":"U067100","name_display_de":"Kalbskäsebrät mit Schweinefleisch (roh)","name_display_en":"Leberkäse sausage meat with pork (raw)","sicher":true}
+{"bls_code":"U067162","name_display_de":"Kalbskäsebrät mit Schweinefleisch (im Ofen gebraten)","name_display_en":"Leberkäse sausage meat with pork (oven-fried)","sicher":true}
+{"bls_code":"U070100","name_display_de":"Rindertatar (roh)","name_display_en":"Beef tartare (raw)","sicher":true}
+{"bls_code":"U070162","name_display_de":"Rindertatar (im Ofen gebraten)","name_display_en":"Beef tartare (oven-fried)","sicher":true}
+{"bls_code":"U070182","name_display_de":"Rindertatar (in der Pfanne gebraten)","name_display_en":"Beef tartare (pan-fried)","sicher":true}
+{"bls_code":"U070200","name_display_de":"Rindertatar (tiefgekühlt)","name_display_en":"Beef tartare (frozen)","sicher":true}
+{"bls_code":"U070232","name_display_de":"Rindertatar (tiefgekühlt, gekocht)","name_display_en":"Beef tartare (frozen, boiled)","sicher":true}
+{"bls_code":"U080100","name_display_de":"Rinderleberhack (roh)","name_display_en":"Ground beef liver (raw)","sicher":true}
+{"bls_code":"U080132","name_display_de":"Rinderleberhack (gekocht)","name_display_en":"Ground beef liver (boiled)","sicher":true}
+{"bls_code":"U080182","name_display_de":"Rinderleberhack (in der Pfanne gebraten)","name_display_en":"Ground beef liver (pan-fried)","sicher":true}
+{"bls_code":"U080200","name_display_de":"Rinderleberhack (tiefgekühlt)","name_display_en":"Ground beef liver (frozen)","sicher":true}
+{"bls_code":"U080232","name_display_de":"Rinderleberhack (tiefgekühlt, gekocht)","name_display_en":"Ground beef liver (frozen, boiled)","sicher":true}
+{"bls_code":"U080282","name_display_de":"Rinderleberhack (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Ground beef liver (frozen, pan-fried)","sicher":true}
+{"bls_code":"U101400","name_display_de":"Rindfleisch aus der Keule (getrocknet)","name_display_en":"Beef round (dried)","sicher":true}
+{"bls_code":"U104100","name_display_de":"Rindfleisch vom Knochen (roh)","name_display_en":"Beef bonemeat (raw)","sicher":true}
+{"bls_code":"U109100","name_display_de":"Ochsenschwanz (roh)","name_display_en":"Oxtail (raw)","sicher":true}
+{"bls_code":"U109142","name_display_de":"Ochsenschwanz (geschmort)","name_display_en":"Oxtail (braised)","sicher":true}
+{"bls_code":"U109182","name_display_de":"Ochsenschwanz (in der Pfanne gebraten)","name_display_en":"Oxtail (pan-fried)","sicher":true}
+{"bls_code":"U111700","name_display_de":"Rinderfilet-Rohpökelware (geräuchert)","name_display_en":"Cured smoked beef fillet","sicher":true}
+{"bls_code":"U121100","name_display_de":"Rinderkotelett aus dem Rücken (roh)","name_display_en":"Beef loin chop (raw)","sicher":true}
+{"bls_code":"U121172","name_display_de":"Rinderkotelett aus dem Rücken (gegrillt)","name_display_en":"Beef loin chop (grilled)","sicher":true}
+{"bls_code":"U121182","name_display_de":"Rinderkotelett aus dem Rücken (in der Pfanne gebraten)","name_display_en":"Beef loin chop (pan-fried)","sicher":true}
+{"bls_code":"U121200","name_display_de":"Rinderkotelett aus dem Rücken (tiefgekühlt)","name_display_en":"Beef loin chop (frozen)","sicher":true}
+{"bls_code":"U121272","name_display_de":"Rinderkotelett aus dem Rücken (tiefgekühlt, gegrillt)","name_display_en":"Beef loin chop (frozen, grilled)","sicher":true}
+{"bls_code":"U121282","name_display_de":"Rinderkotelett aus dem Rücken (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Beef loin chop (frozen, pan-fried)","sicher":true}
+{"bls_code":"U131100","name_display_de":"Rindersteak aus dem Rücken (roh)","name_display_en":"Beef loin steak (raw)","sicher":true}
+{"bls_code":"U131162","name_display_de":"Rindersteak aus dem Rücken (im Ofen gebraten)","name_display_en":"Beef loin steak (oven-fried)","sicher":true}
+{"bls_code":"U131172","name_display_de":"Rindersteak aus dem Rücken (gegrillt)","name_display_en":"Beef loin steak (grilled)","sicher":true}
+{"bls_code":"U131182","name_display_de":"Rindersteak aus dem Rücken (in der Pfanne gebraten)","name_display_en":"Beef loin steak (pan-fried)","sicher":true}
+{"bls_code":"U131200","name_display_de":"Rindersteak aus dem Rücken (tiefgekühlt)","name_display_en":"Beef loin steak (frozen)","sicher":true}
+{"bls_code":"U131262","name_display_de":"Rindersteak aus dem Rücken (tiefgekühlt, im Ofen gebraten)","name_display_en":"Beef loin steak (frozen, oven-fried)","sicher":true}
+{"bls_code":"U131272","name_display_de":"Rindersteak aus dem Rücken (tiefgekühlt, gegrillt)","name_display_en":"Beef loin steak (frozen, grilled)","sicher":true}
+{"bls_code":"U131282","name_display_de":"Rindersteak aus dem Rücken (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Beef loin steak (frozen, pan-fried)","sicher":true}
+{"bls_code":"U133100","name_display_de":"Mariniertes Rindersteak aus dem Rücken (roh)","name_display_en":"Marinated beef loin steak (raw)","sicher":true}
+{"bls_code":"U133172","name_display_de":"Mariniertes Rindersteak aus dem Rücken (gegrillt)","name_display_en":"Marinated beef loin steak (grilled)","sicher":true}
+{"bls_code":"U133182","name_display_de":"Mariniertes Rindersteak aus dem Rücken (in der Pfanne gebraten)","name_display_en":"Marinated beef loin steak (pan-fried)","sicher":true}
+{"bls_code":"U151100","name_display_de":"Rindergulasch aus dem Bug (roh)","name_display_en":"Beef shoulder goulash (raw)","sicher":true}
+{"bls_code":"U151142","name_display_de":"Rindergulasch aus dem Bug (geschmort)","name_display_en":"Beef shoulder goulash (braised)","sicher":true}
+{"bls_code":"U151182","name_display_de":"Rindergulasch aus dem Bug (in der Pfanne gebraten)","name_display_en":"Beef shoulder goulash (pan-fried)","sicher":true}
+{"bls_code":"U151200","name_display_de":"Rindergulasch aus dem Bug (tiefgekühlt)","name_display_en":"Beef shoulder goulash (frozen)","sicher":true}
+{"bls_code":"U151242","name_display_de":"Rindergulasch aus dem Bug (tiefgekühlt, geschmort)","name_display_en":"Beef shoulder goulash (frozen, braised)","sicher":true}
+{"bls_code":"U151282","name_display_de":"Rindergulasch aus dem Bug (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Beef shoulder goulash (frozen, pan-fried)","sicher":true}
+{"bls_code":"U163100","name_display_de":"Rinderroulade aus der Oberschale (roh)","name_display_en":"Beef topside roulade (raw)","sicher":true}
+{"bls_code":"U163142","name_display_de":"Rinderroulade aus der Oberschale (geschmort)","name_display_en":"Beef topside roulade (braised)","sicher":true}
+{"bls_code":"U163182","name_display_de":"Rinderroulade aus der Oberschale (in der Pfanne gebraten)","name_display_en":"Beef topside roulade (pan-fried)","sicher":true}
+{"bls_code":"U171100","name_display_de":"Rinderbraten aus dem Bug (roh)","name_display_en":"Beef shoulder roast (raw)","sicher":true}
+{"bls_code":"U171142","name_display_de":"Rinderbraten aus dem Bug (geschmort)","name_display_en":"Beef shoulder roast (braised)","sicher":true}
+{"bls_code":"U171162","name_display_de":"Rinderbraten aus dem Bug (im Ofen gebraten)","name_display_en":"Beef shoulder roast (oven-fried)","sicher":true}
+{"bls_code":"U171200","name_display_de":"Rinderbraten aus dem Bug (tiefgekühlt)","name_display_en":"Beef shoulder roast (frozen)","sicher":true}
+{"bls_code":"U171242","name_display_de":"Rinderbraten aus dem Bug (tiefgekühlt, geschmort)","name_display_en":"Beef shoulder roast (frozen, braised)","sicher":true}
+{"bls_code":"U171262","name_display_de":"Rinderbraten aus dem Bug (tiefgekühlt, im Ofen gebraten)","name_display_en":"Beef shoulder roast (frozen, oven-fried)","sicher":true}
+{"bls_code":"U171942","name_display_de":"Marinierter Rinderbraten aus dem Bug (geschmort)","name_display_en":"Marinated beef shoulder roast (braised)","sicher":true}
+{"bls_code":"U175100","name_display_de":"Rinderrostbraten (roh)","name_display_en":"Beef sirloin roast (raw)","sicher":true}
+{"bls_code":"U175162","name_display_de":"Rinderrostbraten (im Ofen gebraten)","name_display_en":"Beef sirloin roast (oven-fried)","sicher":true}
+{"bls_code":"U184100","name_display_de":"Rinderkochfleisch aus dem Bug (roh)","name_display_en":"Beef shoulder for boiling (raw)","sicher":true}
+{"bls_code":"U184132","name_display_de":"Rinderkochfleisch aus dem Bug (gekocht)","name_display_en":"Beef shoulder for boiling (boiled)","sicher":true}
+{"bls_code":"U185100","name_display_de":"Rinderkochfleisch aus der Hüfte (roh)","name_display_en":"Beef rump for boiling (raw)","sicher":true}
+{"bls_code":"U185132","name_display_de":"Rinderkochfleisch aus der Hüfte (gekocht)","name_display_en":"Beef rump for boiling (boiled)","sicher":true}
+{"bls_code":"U201000","name_display_de":"Rindfleisch (roh)","name_display_en":"Beef (raw)","sicher":true}
+{"bls_code":"U202000","name_display_de":"Mageres Rindfleisch ohne Sehnen (roh)","name_display_en":"Lean beef without tendons (raw)","sicher":true}
+{"bls_code":"U203000","name_display_de":"Rindfleisch grob entsehnt, bis 5% Fett (roh)","name_display_en":"Beef, coarsely trimmed, up to 5% fat (raw)","sicher":true}
+{"bls_code":"U204000","name_display_de":"Rindfleisch grob entsehnt, bis 10% Fett (roh)","name_display_en":"Beef, coarsely trimmed, up to 10% fat (raw)","sicher":true}
+{"bls_code":"U205000","name_display_de":"Rinderfett, subkutan (roh)","name_display_en":"Beef subcutaneous fat (raw)","sicher":true}
+{"bls_code":"U205300","name_display_de":"Rinderknochenmark (roh)","name_display_en":"Beef bone marrow (raw)","sicher":true}
+{"bls_code":"U205800","name_display_de":"Rinderfett zwischen den Muskeln (roh)","name_display_en":"Beef intermuscular fat (raw)","sicher":true}
+{"bls_code":"U207000","name_display_de":"Rinderbindegewebe (roh)","name_display_en":"Beef connective tissue (raw)","sicher":true}
+{"bls_code":"U209100","name_display_de":"Rinderblut (roh)","name_display_en":"Beef blood (raw)","sicher":true}
+{"bls_code":"U211100","name_display_de":"Rinderfilet (roh)","name_display_en":"Beef tenderloin (raw)","sicher":true}
+{"bls_code":"U211162","name_display_de":"Rinderfilet (im Ofen gebraten)","name_display_en":"Beef tenderloin (oven-fried)","sicher":true}
+{"bls_code":"U211200","name_display_de":"Rinderfilet (tiefgekühlt)","name_display_en":"Beef tenderloin (frozen)","sicher":true}
+{"bls_code":"U211262","name_display_de":"Rinderfilet (tiefgekühlt, im Ofen gebraten)","name_display_en":"Beef tenderloin (frozen, oven-fried)","sicher":true}
+{"bls_code":"U216100","name_display_de":"Rinderfiletsteak (roh)","name_display_en":"Beef tenderloin steak (raw)","sicher":true}
+{"bls_code":"U216172","name_display_de":"Rinderfiletsteak (gegrillt)","name_display_en":"Beef tenderloin steak (grilled)","sicher":true}
+{"bls_code":"U216182","name_display_de":"Rinderfiletsteak (in der Pfanne gebraten)","name_display_en":"Beef tenderloin steak (pan-fried)","sicher":true}
+{"bls_code":"U221100","name_display_de":"Roastbeef aus dem Rücken (roh)","name_display_en":"Beef loin roast (raw)","sicher":true}
+{"bls_code":"U221162","name_display_de":"Roastbeef aus dem Rücken (im Ofen gebraten)","name_display_en":"Beef loin roast (oven-fried)","sicher":true}
+{"bls_code":"U221200","name_display_de":"Roastbeef aus dem Rücken (tiefgekühlt)","name_display_en":"Beef loin roast (frozen)","sicher":true}
+{"bls_code":"U221262","name_display_de":"Roastbeef aus dem Rücken (tiefgekühlt, im Ofen gebraten)","name_display_en":"Beef loin roast (frozen, oven-fried)","sicher":true}
+{"bls_code":"U221700","name_display_de":"Roastbeef-Rohpökelware aus dem Rücken (geräuchert)","name_display_en":"Cured smoked beef loin roast","sicher":true}
+{"bls_code":"U221800","name_display_de":"Roastbeef-Rohpökelware aus dem Rücken","name_display_en":"Cured beef loin roast","sicher":true}
+{"bls_code":"U223000","name_display_de":"Mariniertes Roastbeef aus dem Rücken (roh)","name_display_en":"Marinated beef loin roast (raw)","sicher":true}
+{"bls_code":"U223072","name_display_de":"Mariniertes Roastbeef aus dem Rücken (gegrillt)","name_display_en":"Marinated beef loin roast (grilled)","sicher":true}
+{"bls_code":"U231100","name_display_de":"Rindernacken (roh)","name_display_en":"Beef neck/chuck (raw)","sicher":true}
+{"bls_code":"U231132","name_display_de":"Rindernacken (gekocht)","name_display_en":"Beef neck/chuck (boiled)","sicher":true}
+{"bls_code":"U231142","name_display_de":"Rindernacken (geschmort)","name_display_en":"Beef neck/chuck (braised)","sicher":true}
+{"bls_code":"U231200","name_display_de":"Rindernacken (tiefgekühlt)","name_display_en":"Beef neck/chuck (frozen)","sicher":true}
+{"bls_code":"U231232","name_display_de":"Rindernacken (tiefgekühlt, gekocht)","name_display_en":"Beef neck/chuck (frozen, boiled)","sicher":true}
+{"bls_code":"U231242","name_display_de":"Rindernacken (tiefgekühlt, geschmort)","name_display_en":"Beef neck/chuck (frozen, braised)","sicher":true}
+{"bls_code":"U235100","name_display_de":"Rinderhochrippe (roh)","name_display_en":"Beef prime rib (raw)","sicher":true}
+{"bls_code":"U235132","name_display_de":"Rinderhochrippe (gekocht)","name_display_en":"Beef prime rib (boiled)","sicher":true}
+{"bls_code":"U235142","name_display_de":"Rinderhochrippe (geschmort)","name_display_en":"Beef prime rib (braised)","sicher":true}
+{"bls_code":"U235162","name_display_de":"Rinderhochrippe (im Ofen gebraten)","name_display_en":"Beef prime rib (oven-fried)","sicher":true}
+{"bls_code":"U255100","name_display_de":"Rinderbrust (roh)","name_display_en":"Beef brisket (raw)","sicher":true}
+{"bls_code":"U255132","name_display_de":"Rinderbrust (gekocht)","name_display_en":"Beef brisket (boiled)","sicher":true}
+{"bls_code":"U255142","name_display_de":"Rinderbrust (geschmort)","name_display_en":"Beef brisket (braised)","sicher":true}
+{"bls_code":"U255162","name_display_de":"Rinderbrust (im Ofen gebraten)","name_display_en":"Beef brisket (oven-fried)","sicher":true}
+{"bls_code":"U255700","name_display_de":"Rinderbrust-Rohpökelware (geräuchert)","name_display_en":"Cured smoked beef brisket","sicher":true}
+{"bls_code":"U255800","name_display_de":"Rinderbrust-Rohpökelware","name_display_en":"Cured beef brisket","sicher":true}
+{"bls_code":"U261100","name_display_de":"Rinderschulter (roh)","name_display_en":"Beef shoulder (raw)","sicher":true}
+{"bls_code":"U261142","name_display_de":"Rinderschulter (geschmort)","name_display_en":"Beef shoulder (braised)","sicher":true}
+{"bls_code":"U261162","name_display_de":"Rinderschulter (im Ofen gebraten)","name_display_en":"Beef shoulder (oven-fried)","sicher":true}
+{"bls_code":"U261200","name_display_de":"Rinderschulter (tiefgekühlt)","name_display_en":"Beef shoulder (frozen)","sicher":true}
+{"bls_code":"U271100","name_display_de":"Rindervorderhesse (roh)","name_display_en":"Beef foreshank (raw)","sicher":true}
+{"bls_code":"U271132","name_display_de":"Rindervorderhesse (gekocht)","name_display_en":"Beef foreshank (boiled)","sicher":true}
+{"bls_code":"U271142","name_display_de":"Rindervorderhesse (geschmort)","name_display_en":"Beef foreshank (braised)","sicher":true}
+{"bls_code":"U271200","name_display_de":"Rindervorderhesse (tiefgekühlt)","name_display_en":"Beef foreshank (frozen)","sicher":true}
+{"bls_code":"U271232","name_display_de":"Rindervorderhesse (tiefgekühlt, gekocht)","name_display_en":"Beef foreshank (frozen, boiled)","sicher":true}
+{"bls_code":"U271242","name_display_de":"Rindervorderhesse (tiefgekühlt, geschmort)","name_display_en":"Beef foreshank (frozen, braised)","sicher":true}
+{"bls_code":"U281100","name_display_de":"Rinderkeule (roh)","name_display_en":"Beef round (raw)","sicher":true}
+{"bls_code":"U281132","name_display_de":"Rinderkeule (gekocht)","name_display_en":"Beef round (boiled)","sicher":true}
+{"bls_code":"U281142","name_display_de":"Rinderkeule (geschmort)","name_display_en":"Beef round (braised)","sicher":true}
+{"bls_code":"U281162","name_display_de":"Rinderkeule (im Ofen gebraten)","name_display_en":"Beef round (oven-fried)","sicher":true}
+{"bls_code":"U281200","name_display_de":"Rinderkeule (tiefgekühlt)","name_display_en":"Beef round (frozen)","sicher":true}
+{"bls_code":"U281232","name_display_de":"Rinderkeule (tiefgekühlt, gekocht)","name_display_en":"Beef round (frozen, boiled)","sicher":true}
+{"bls_code":"U281242","name_display_de":"Rinderkeule (tiefgekühlt, geschmort)","name_display_en":"Beef round (frozen, braised)","sicher":true}
+{"bls_code":"U281262","name_display_de":"Rinderkeule (tiefgekühlt, im Ofen gebraten)","name_display_en":"Beef round (frozen, oven-fried)","sicher":true}
+{"bls_code":"U284100","name_display_de":"Rinderhüfte (roh)","name_display_en":"Beef rump (raw)","sicher":true}
+{"bls_code":"U284132","name_display_de":"Rinderhüfte (gekocht)","name_display_en":"Beef rump (boiled)","sicher":true}
+{"bls_code":"U284142","name_display_de":"Rinderhüfte (geschmort)","name_display_en":"Beef rump (braised)","sicher":true}
+{"bls_code":"U284162","name_display_de":"Rinderhüfte (im Ofen gebraten)","name_display_en":"Beef rump (oven-fried)","sicher":true}
+{"bls_code":"U287100","name_display_de":"Rinderoberschale (roh)","name_display_en":"Beef topside (raw)","sicher":true}
+{"bls_code":"U287132","name_display_de":"Rinderoberschale (gekocht)","name_display_en":"Beef topside (boiled)","sicher":true}
+{"bls_code":"U287162","name_display_de":"Rinderoberschale (im Ofen gebraten)","name_display_en":"Beef topside (oven-fried)","sicher":true}
+{"bls_code":"U291100","name_display_de":"Rinderhinterhesse (roh)","name_display_en":"Beef hindshank (raw)","sicher":true}
+{"bls_code":"U291132","name_display_de":"Rinderhinterhesse (gekocht)","name_display_en":"Beef hindshank (boiled)","sicher":true}
+{"bls_code":"U291142","name_display_de":"Rinderhinterhesse (geschmort)","name_display_en":"Beef hindshank (braised)","sicher":true}
+{"bls_code":"U291200","name_display_de":"Rinderhinterhesse (tiefgekühlt)","name_display_en":"Beef hindshank (frozen)","sicher":true}
+{"bls_code":"U291232","name_display_de":"Rinderhinterhesse (tiefgekühlt, gekocht)","name_display_en":"Beef hindshank (frozen, boiled)","sicher":true}
+{"bls_code":"U291242","name_display_de":"Rinderhinterhesse (tiefgekühlt, geschmort)","name_display_en":"Beef hindshank (frozen, braised)","sicher":true}
+{"bls_code":"U304100","name_display_de":"Kalbfleisch vom Knochen (roh)","name_display_en":"Veal bonemeat (raw)","sicher":true}
+{"bls_code":"U323100","name_display_de":"Kalbskotelett aus dem Rücken (roh)","name_display_en":"Veal loin chop (raw)","sicher":true}
+{"bls_code":"U323162","name_display_de":"Kalbskotelett aus dem Rücken (im Ofen gebraten)","name_display_en":"Veal loin chop (oven-fried)","sicher":true}
+{"bls_code":"U323172","name_display_de":"Kalbskotelett aus dem Rücken (gegrillt)","name_display_en":"Veal loin chop (grilled)","sicher":true}
+{"bls_code":"U323182","name_display_de":"Kalbskotelett aus dem Rücken (in der Pfanne gebraten)","name_display_en":"Veal loin chop (pan-fried)","sicher":true}
+{"bls_code":"U331100","name_display_de":"Kalbssteak aus dem Rücken (roh)","name_display_en":"Veal loin steak (raw)","sicher":true}
+{"bls_code":"U331162","name_display_de":"Kalbssteak aus dem Rücken (im Ofen gebraten)","name_display_en":"Veal loin steak (oven-fried)","sicher":true}
+{"bls_code":"U331172","name_display_de":"Kalbssteak aus dem Rücken (gegrillt)","name_display_en":"Veal loin steak (grilled)","sicher":true}
+{"bls_code":"U331182","name_display_de":"Kalbssteak aus dem Rücken (in der Pfanne gebraten)","name_display_en":"Veal loin steak (pan-fried)","sicher":true}
+{"bls_code":"U331200","name_display_de":"Kalbssteak aus dem Rücken (tiefgekühlt)","name_display_en":"Veal loin steak (frozen)","sicher":true}
+{"bls_code":"U331262","name_display_de":"Kalbssteak aus dem Rücken (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal loin steak (frozen, oven-fried)","sicher":true}
+{"bls_code":"U331272","name_display_de":"Kalbssteak aus dem Rücken (tiefgekühlt, gegrillt)","name_display_en":"Veal loin steak (frozen, grilled)","sicher":true}
+{"bls_code":"U331282","name_display_de":"Kalbssteak aus dem Rücken (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Veal loin steak (frozen, pan-fried)","sicher":true}
+{"bls_code":"U333100","name_display_de":"Kalbsfiletsteak (roh)","name_display_en":"Veal tenderloin steak (raw)","sicher":true}
+{"bls_code":"U333162","name_display_de":"Kalbsfiletsteak (im Ofen gebraten)","name_display_en":"Veal tenderloin steak (oven-fried)","sicher":true}
+{"bls_code":"U333172","name_display_de":"Kalbsfiletsteak (gegrillt)","name_display_en":"Veal tenderloin steak (grilled)","sicher":true}
+{"bls_code":"U333182","name_display_de":"Kalbsfiletsteak (in der Pfanne gebraten)","name_display_en":"Veal tenderloin steak (pan-fried)","sicher":true}
+{"bls_code":"U342100","name_display_de":"Kalbsschnitzel aus der Keule (roh)","name_display_en":"Veal round schnitzel (raw)","sicher":true}
+{"bls_code":"U342162","name_display_de":"Kalbsschnitzel aus der Keule (im Ofen gebraten)","name_display_en":"Veal round schnitzel (oven-fried)","sicher":true}
+{"bls_code":"U342172","name_display_de":"Kalbsschnitzel aus der Keule (gegrillt)","name_display_en":"Veal round schnitzel (grilled)","sicher":true}
+{"bls_code":"U342182","name_display_de":"Kalbsschnitzel aus der Keule (in der Pfanne gebraten)","name_display_en":"Veal round schnitzel (pan-fried)","sicher":true}
+{"bls_code":"U342200","name_display_de":"Kalbsschnitzel aus der Keule (tiefgekühlt)","name_display_en":"Veal round schnitzel (frozen)","sicher":true}
+{"bls_code":"U342262","name_display_de":"Kalbsschnitzel aus der Keule (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal round schnitzel (frozen, oven-fried)","sicher":true}
+{"bls_code":"U342272","name_display_de":"Kalbsschnitzel aus der Keule (tiefgekühlt, gegrillt)","name_display_en":"Veal round schnitzel (frozen, grilled)","sicher":true}
+{"bls_code":"U342282","name_display_de":"Kalbsschnitzel aus der Keule (tiefgekühlt, in der Pfanne gebraten)","name_display_en":"Veal round schnitzel (frozen, pan-fried)","sicher":true}
+{"bls_code":"U351100","name_display_de":"Kalbsgulasch aus dem Bug (roh)","name_display_en":"Veal shoulder goulash (raw)","sicher":true}
+{"bls_code":"U351142","name_display_de":"Kalbsgulasch aus dem Bug (geschmort)","name_display_en":"Veal shoulder goulash (braised)","sicher":true}
+{"bls_code":"U351182","name_display_de":"Kalbsgulasch aus dem Bug (in der Pfanne gebraten)","name_display_en":"Veal shoulder goulash (pan-fried)","sicher":true}
+{"bls_code":"U362100","name_display_de":"Kalbsroulade aus der Keule (roh)","name_display_en":"Veal round roulade (raw)","sicher":true}
+{"bls_code":"U362200","name_display_de":"Kalbsroulade aus der Keule (tiefgekühlt)","name_display_en":"Veal round roulade (frozen)","sicher":true}
+{"bls_code":"U371100","name_display_de":"Kalbsbraten aus dem Bug (roh)","name_display_en":"Veal shoulder roast (raw)","sicher":true}
+{"bls_code":"U371162","name_display_de":"Kalbsbraten aus dem Bug (im Ofen gebraten)","name_display_en":"Veal shoulder roast (oven-fried)","sicher":true}
+{"bls_code":"U371200","name_display_de":"Kalbsbraten aus dem Bug (tiefgekühlt)","name_display_en":"Veal shoulder roast (frozen)","sicher":true}
+{"bls_code":"U371262","name_display_de":"Kalbsbraten aus dem Bug (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal shoulder roast (frozen, oven-fried)","sicher":true}
+{"bls_code":"U382100","name_display_de":"Kalbskochfleisch aus der Brust (roh)","name_display_en":"Veal breast for boiling (raw)","sicher":true}
+{"bls_code":"U382132","name_display_de":"Kalbskochfleisch aus der Brust (gekocht)","name_display_en":"Veal breast for boiling (boiled)","sicher":true}
+{"bls_code":"U382200","name_display_de":"Kalbskochfleisch aus der Brust (tiefgekühlt)","name_display_en":"Veal breast for boiling (frozen)","sicher":true}
+{"bls_code":"U382232","name_display_de":"Kalbskochfleisch aus der Brust (tiefgekühlt, gekocht)","name_display_en":"Veal breast for boiling (frozen, boiled)","sicher":true}
+{"bls_code":"U401000","name_display_de":"Kalbfleisch (roh)","name_display_en":"Veal (raw)","sicher":true}
+{"bls_code":"U402000","name_display_de":"Mageres Kalbfleisch ohne Sehnen (roh)","name_display_en":"Lean veal without tendons (raw)","sicher":true}
+{"bls_code":"U403100","name_display_de":"Kalbfleisch mit wenig Sehnen, bis 5% Fett (roh)","name_display_en":"Veal with low tendon content, up to 5% fat (raw)","sicher":true}
+{"bls_code":"U404000","name_display_de":"Kalbfleisch ohne Sehnen, über 20% Fett (roh)","name_display_en":"Veal without tendons, over 20% fat (raw)","sicher":true}
+{"bls_code":"U405000","name_display_de":"Kalbsfett, subkutan (roh)","name_display_en":"Veal subcutaneous fat (raw)","sicher":true}
+{"bls_code":"U405200","name_display_de":"Kalbsnierenfett (tiefgekühlt)","name_display_en":"Veal kidney fat (frozen)","sicher":true}
+{"bls_code":"U405800","name_display_de":"Kalbsfett zwischen den Muskeln (roh)","name_display_en":"Veal intermuscular fat (raw)","sicher":true}
+{"bls_code":"U411100","name_display_de":"Kalbsfilet (roh)","name_display_en":"Veal tenderloin (raw)","sicher":true}
+{"bls_code":"U411162","name_display_de":"Kalbsfilet (im Ofen gebraten)","name_display_en":"Veal tenderloin (oven-fried)","sicher":true}
+{"bls_code":"U411200","name_display_de":"Kalbsfilet (tiefgekühlt)","name_display_en":"Veal tenderloin (frozen)","sicher":true}
+{"bls_code":"U411262","name_display_de":"Kalbsfilet (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal tenderloin (frozen, oven-fried)","sicher":true}
+{"bls_code":"U421100","name_display_de":"Kalbsrücken (roh)","name_display_en":"Veal loin (raw)","sicher":true}
+{"bls_code":"U421142","name_display_de":"Kalbsrücken (geschmort)","name_display_en":"Veal loin (braised)","sicher":true}
+{"bls_code":"U421162","name_display_de":"Kalbsrücken (im Ofen gebraten)","name_display_en":"Veal loin (oven-fried)","sicher":true}
+{"bls_code":"U421200","name_display_de":"Kalbsrücken (tiefgekühlt)","name_display_en":"Veal loin (frozen)","sicher":true}
+{"bls_code":"U421242","name_display_de":"Kalbsrücken (tiefgekühlt, geschmort)","name_display_en":"Veal loin (frozen, braised)","sicher":true}
+{"bls_code":"U421262","name_display_de":"Kalbsrücken (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal loin (frozen, oven-fried)","sicher":true}
+{"bls_code":"U432100","name_display_de":"Kalbsnacken (roh)","name_display_en":"Veal neck (raw)","sicher":true}
+{"bls_code":"U432132","name_display_de":"Kalbsnacken (gekocht)","name_display_en":"Veal neck (boiled)","sicher":true}
+{"bls_code":"U432142","name_display_de":"Kalbsnacken (geschmort)","name_display_en":"Veal neck (braised)","sicher":true}
+{"bls_code":"U432162","name_display_de":"Kalbsnacken (im Ofen gebraten)","name_display_en":"Veal neck (oven-fried)","sicher":true}
+{"bls_code":"U432200","name_display_de":"Kalbsnacken (tiefgekühlt)","name_display_en":"Veal neck (frozen)","sicher":true}
+{"bls_code":"U432232","name_display_de":"Kalbsnacken (tiefgekühlt, gekocht)","name_display_en":"Veal neck (frozen, boiled)","sicher":true}
+{"bls_code":"U432242","name_display_de":"Kalbsnacken (tiefgekühlt, geschmort)","name_display_en":"Veal neck (frozen, braised)","sicher":true}
+{"bls_code":"U432262","name_display_de":"Kalbsnacken (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal neck (frozen, oven-fried)","sicher":true}
+{"bls_code":"U452100","name_display_de":"Kalbsbrust (roh)","name_display_en":"Veal breast (raw)","sicher":true}
+{"bls_code":"U452132","name_display_de":"Kalbsbrust (gekocht)","name_display_en":"Veal breast (boiled)","sicher":true}
+{"bls_code":"U452142","name_display_de":"Kalbsbrust (geschmort)","name_display_en":"Veal breast (braised)","sicher":true}
+{"bls_code":"U452162","name_display_de":"Kalbsbrust (im Ofen gebraten)","name_display_en":"Veal breast (oven-fried)","sicher":true}
+{"bls_code":"U452200","name_display_de":"Kalbsbrust (tiefgekühlt)","name_display_en":"Veal breast (frozen)","sicher":true}
+{"bls_code":"U452232","name_display_de":"Kalbsbrust (tiefgekühlt, gekocht)","name_display_en":"Veal breast (frozen, boiled)","sicher":true}
+{"bls_code":"U452242","name_display_de":"Kalbsbrust (tiefgekühlt, geschmort)","name_display_en":"Veal breast (frozen, braised)","sicher":true}
+{"bls_code":"U452262","name_display_de":"Kalbsbrust (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal breast (frozen, oven-fried)","sicher":true}
+{"bls_code":"U452700","name_display_de":"Kalbsbrust-Rohpökelware (geräuchert)","name_display_en":"Cured smoked veal breast","sicher":true}
+{"bls_code":"U452800","name_display_de":"Kalbsbrust-Rohpökelware","name_display_en":"Cured veal breast","sicher":true}
+{"bls_code":"U461100","name_display_de":"Kalbsschulter (roh)","name_display_en":"Veal shoulder (raw)","sicher":true}
+{"bls_code":"U461132","name_display_de":"Kalbsschulter (gekocht)","name_display_en":"Veal shoulder (boiled)","sicher":true}
+{"bls_code":"U461142","name_display_de":"Kalbsschulter (geschmort)","name_display_en":"Veal shoulder (braised)","sicher":true}
+{"bls_code":"U461162","name_display_de":"Kalbsschulter (im Ofen gebraten)","name_display_en":"Veal shoulder (oven-fried)","sicher":true}
+{"bls_code":"U461200","name_display_de":"Kalbsschulter (tiefgekühlt)","name_display_en":"Veal shoulder (frozen)","sicher":true}
+{"bls_code":"U461232","name_display_de":"Kalbsschulter (tiefgekühlt, gekocht)","name_display_en":"Veal shoulder (frozen, boiled)","sicher":true}
+{"bls_code":"U461242","name_display_de":"Kalbsschulter (tiefgekühlt, geschmort)","name_display_en":"Veal shoulder (frozen, braised)","sicher":true}
+{"bls_code":"U461262","name_display_de":"Kalbsschulter (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal shoulder (frozen, oven-fried)","sicher":true}
+{"bls_code":"U471100","name_display_de":"Kalbshaxe (roh)","name_display_en":"Veal shank (raw)","sicher":true}
+{"bls_code":"U471142","name_display_de":"Kalbshaxe (geschmort)","name_display_en":"Veal shank (braised)","sicher":true}
+{"bls_code":"U471162","name_display_de":"Kalbshaxe (im Ofen gebraten)","name_display_en":"Veal shank (oven-fried)","sicher":true}
+{"bls_code":"U471172","name_display_de":"Kalbshaxe (gegrillt)","name_display_en":"Veal shank (grilled)","sicher":true}
+{"bls_code":"U471200","name_display_de":"Kalbshaxe (tiefgekühlt)","name_display_en":"Veal shank (frozen)","sicher":true}
+{"bls_code":"U471242","name_display_de":"Kalbshaxe (tiefgekühlt, geschmort)","name_display_en":"Veal shank (frozen, braised)","sicher":true}
+{"bls_code":"U471262","name_display_de":"Kalbshaxe (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal shank (frozen, oven-fried)","sicher":true}
+{"bls_code":"U471272","name_display_de":"Kalbshaxe (tiefgekühlt, gegrillt)","name_display_en":"Veal shank (frozen, grilled)","sicher":true}
+{"bls_code":"U482100","name_display_de":"Kalbskeule (roh)","name_display_en":"Veal round (raw)","sicher":true}
+{"bls_code":"U482162","name_display_de":"Kalbskeule (im Ofen gebraten)","name_display_en":"Veal round (oven-fried)","sicher":true}
+{"bls_code":"U482200","name_display_de":"Kalbskeule (tiefgekühlt)","name_display_en":"Veal round (frozen)","sicher":true}
+{"bls_code":"U482262","name_display_de":"Kalbskeule (tiefgekühlt, im Ofen gebraten)","name_display_en":"Veal round (frozen, oven-fried)","sicher":true}
+{"bls_code":"U485100","name_display_de":"Kalbsnuss (roh)","name_display_en":"Veal thick flank (raw)","sicher":true}
+{"bls_code":"U485162","name_display_de":"Kalbsnuss (im Ofen gebraten)","name_display_en":"Veal thick flank (oven-fried)","sicher":true}
+{"bls_code":"U486100","name_display_de":"Kalbsunterschale (roh)","name_display_en":"Veal silverside (raw)","sicher":true}
+{"bls_code":"U486142","name_display_de":"Kalbsunterschale (geschmort)","name_display_en":"Veal silverside (braised)","sicher":true}
+{"bls_code":"U486162","name_display_de":"Kalbsunterschale (im Ofen gebraten)","name_display_en":"Veal silverside (oven-fried)","sicher":true}
+{"bls_code":"U4A3100","name_display_de":"Kalbfleisch bis 15% Fett (roh)","name_display_en":"Veal up to 15% fat (raw)","sicher":true}
