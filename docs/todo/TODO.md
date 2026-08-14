@@ -10,6 +10,18 @@ oder `[annahme]`. Nur `[cmd]` darf zu einer Regel werden.
 **Erledigtes** steht vollständig in `docs/todo/ERLEDIGT.md` — mit Datum,
 Beleg und Begründung. Diese Datei enthält nur, was noch aussteht.
 
+**Quellen für Nutrition** (Tom, 2026-08-14): Bei Arbeit am Nutrition-Modul
+gehören `docs/specs/Nutrition/` und `docs/BrainstormDocs/Nutrition/`
+**mit gelesen**. Sie sind kein Ist-Zustand und kein Sollwert — die
+Rangfolge bleibt Code > `docs/ssot/` > `docs/spezifikation/` — aber sie
+enthalten getroffene Produktentscheidungen, die sonst zweimal getroffen
+werden. `[cmd]` Allein unter `04_adrs/` liegen dreizehn ADRs, darunter
+`ADR_CUSTOM_FOODS_V1`, `ADR_BLS_ONLY`, `ADR_MEALCAM_V1`. Die generelle
+Regel „`docs/specs/` nicht als Referenz lesen" gilt **für Nutrition
+eingeschränkt**: als Quelle für Entscheidungen ja, als Beschreibung des
+Ist-Zustands nein. Widersprüche zwischen zwei Spec-Dateien sind
+vorhanden (siehe C-34, Punkt 4) und beim Lesen zu erwarten.
+
 **Kein Blockzähler mehr.** Der alte Kopf stand bis zuletzt auf
 „Block 28, Stand 2026-08-13", während im Repo bereits Block 34 gesichert
 war (`backup/nutrition-schema-vor-b34.sql`) und elf Punkte dazugekommen
@@ -89,7 +101,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 41 offen, 3 in Arbeit.
+`[cmd]` 42 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -110,13 +122,14 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-23** | Systematische Abdeckungsmessung statt handverlesener Begriffe |  |
 | **C-24** | Halbfertigprodukte ranken als Grundzutat |  |
 | **C-27** | Alltagswörter ohne Treffer — noch zwei |  |
-| **C-34** | Einträge, die der BLS nicht kennt |  |
+| **C-34** | Eigene Lebensmittel der Nutzer |  |
 | **C-29** | Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt |  |
 | **C-30** | Suche und Trefferliste auf Arten umstellen |  |
 | **C-31** | Admin-Oberfläche für die Kuration |  |
 | **C-32** | Reis vollständig kurieren — der erste Fall, an dem sich das Modell beweist |  |
 | **C-35** | Was aus zwei gefallenen Modellen brauchbar bleibt |  |
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
+| **C-37** | Tagesbilanz muss „nicht erfasst" von „nicht enthalten" unterscheiden |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -631,42 +644,100 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `Vollkorneierteigwaren roh` ebenfalls. **Offen bleiben zwei:**
   `basmatireis` und `griechischer joghurt`, beide weiterhin null Treffer.
 
-- [ ] **C-34: Einträge, die der BLS nicht kennt** (neu 2026-08-14).
-  Unabhängig vom Suchumbau, aber die Entscheidung über den Codebereich
-  fällt jetzt, nicht später.
+- [ ] **C-34: Eigene Lebensmittel der Nutzer** (neu 2026-08-14,
+  neugefasst nach Sichtung der Nutrition-Specs). Unabhängig vom
+  Suchumbau.
 
-  **Anlass** (Tom, 2026-08-14): Neue Spalten und neue Einträge in
-  `nutrition.foods` sind unproblematisch, ein gezieltes Update-Skript
-  ersetzt das heutige Überschreiben. Daraus die Frage, ob man Sorten
-  durch **Kopieren** eines BLS-Eintrags abbilden könnte — weisser Reis
-  kopiert und der Code erweitert.
+  **Der Fall ist bereits entschieden, nicht offen.** `[read]`
+  `docs/specs/Nutrition/04_adrs/ADR_CUSTOM_FOODS_V1.md` und
+  `docs/specs/Nutrition/02_patches/SPEC_02_PATCH_ENTITY07_CUSTOMFOOD.md`
+  legen Modell und Pflichtfelder fest. Was hier steht, ist die Umsetzung
+  dieser Entscheidung plus die Punkte, die dort offen geblieben sind —
+  keine Neuerfindung.
 
-  **Kopieren für Sorten: nein.** `[cmd]` `C352000` trägt **101
-  Nährwerte**; fünf Sorten mal drei Zubereitungen wären 15 Einträge und
-  1.515 Werte **ohne eine einzige neue Messung**. `[cmd]` `data_source`
-  kennt heute genau zwei Werte, beide auf die amtliche Arbeitsmappe
-  zurückführbar — das ist der Grund, warum der Abgleich 353 Abweichungen
-  fand und alle als Rundungen erklären konnte. Kopien erzeugen Werte
-  ohne Quelle; der nächste Abgleich meldet dann Abweichungen, die keine
-  sind. Sorten ohne eigene Messwerte gehören in die **Aliasschicht**.
-  Und der BLS-Code bleibt der Schlüssel zur amtlichen Quelle — ein erweiterter
-  Code ist dort ein Fremdkörper.
+  **Was die Spec festlegt:**
 
-  **Eigene Einträge für echte Lücken: ja**, und sie kommen sicher:
-  Supplements (Whey, Kreatin), thailändische Küche — `[cmd]` `name_th`
-  ist bei allen 7.140 Einträgen leer, und MealCam wird in Thailand
-  betrieben. Der BLS deckt das nicht ab und wird es nie.
+  | | |
+  |---|---|
+  | Tabelle | `foods_custom`, **vollständig getrennt** von `foods`, kein Merge |
+  | Sichtbarkeit V1 | nur für den erstellenden Nutzer; `is_public`/`shared_by` sind Phase 2 |
+  | Pflichtfelder | `name_de`, `enercc`, `prot625`, `fat`, `cho` — je 100 g |
+  | Optional | weitere Makros, ein Mikro-Subset (21 Felder), `brand`, `barcode`, `serving_size_g`, `custom_allergens` |
+  | Nährwertform | **flache Spalten**, nicht EAV |
+  | `source` | `user` · `manual` · `import` · `admin` |
+  | Ausgeschlossen | OpenFoodFacts |
+  | Suche | erscheinen zusammen mit BLS, bevorzugt, als „Eigenes Food" markiert |
 
-  **Zu entscheiden, bevor der erste Eintrag entsteht:**
-  - eigener Codebereich, **klar vom BLS getrennt** — kein erweiterter
-    BLS-Code, keine freie Vergabe im BLS-Raum
-  - eigener `data_source`-Wert je Quelle, damit der Abgleich gegen die
-    Arbeitsmappe weiterhin sauber zwischen amtlich und eigen trennt
-  - Umgang mit der Architekturentscheidung „BLS 4.0 als einzige
-    Datenquelle": eigene Einträge sind eine **benannte Ausnahme** mit
-    eigener Quelle, keine stille Aufweichung
-  - Verhalten in Suche und Sortierung: rangieren eigene Einträge gleich,
-    davor oder dahinter?
+  **Toms Ergänzung (2026-08-14), die über die Spec hinausgeht:** Der
+  Eintrag ist für den Nutzer **sofort verwendbar** — er verantwortet
+  seine Werte selbst. Zusätzlich erscheint er im Admin-Backend und kann
+  **nach Prüfung freigegeben** werden; so wächst der zentrale Bestand
+  kontrolliert. Die Spec kennt dafür nur `source = admin` („Admin pflegt
+  zentral") und schiebt Teilen nach Phase 2. **Die Freigabe ist damit
+  eine Erweiterung, keine Umsetzung** — sie gehört als solche
+  dokumentiert, bevor sie gebaut wird.
+
+  **Der Grundsatz, an dem sich alles ausrichtet** (Tom): Ein Shake mit
+  vier Makros und ein paar Mikros ist besser, als wenn er im Tagebuch gar
+  nicht vorkommt.
+
+  **Was im Schema schon da ist:** `[cmd]` `nutrition.meal_items` trägt
+  `food_source` mit Prüfbedingung `IN ('bls','manual')` und der Regel,
+  dass `food_id` bei `manual` leer sein **muss**. Dazu `frozen_at` und
+  eine `nutrients`-Spalte — die Mahlzeitzeile hält die Nährwerte als
+  Kopie, nicht als Verweis. **Damit ist ein Problem bereits gelöst,
+  bevor es auftritt:** Wird ein eigener Eintrag später korrigiert oder
+  bei der Freigabe angepasst, ändert sich das Frühstück von letzter Woche
+  nicht rückwirkend. Der heutige `manual`-Zweig hat aber keinen Eintrag
+  dahinter; für wiederverwendbare eigene Lebensmittel braucht es einen
+  dritten Zustand mit eigener Identität.
+
+  **Warum die Trennung richtig ist — der Grund ist nicht der, den man
+  zuerst nennt.** Rechte liessen sich auch mit `owner_id` in einer
+  Tabelle regeln. Der harte Grund ist der Kettenaufbau: `[cmd]` Der
+  Bestand entsteht in unter zehn Sekunden neu aus `supabase/_pipeline/`.
+  Nutzerdaten in `nutrition.foods` wären bei jedem Aufbau entweder weg
+  oder zwängen die Kette zu einer Rücksicht, die sie nicht kennt. Dazu
+  die Prüfbarkeit: `[cmd]` Der Abgleich gegen die amtliche Arbeitsmappe
+  (698.092 Werte, 353 Abweichungen, alle Rundungen) setzt voraus, dass in
+  der Tabelle nur steht, was aus ihr stammt.
+
+  **Der Preis, der eingeplant gehört:** Die Suche muss beide Mengen
+  sehen, und `food_search` ist heute auf eine Tabelle gebaut. Ebenso die
+  Aggregation — `[read]` ADR-0003 hat für BLS **EAV** gewählt, die Spec
+  für `foods_custom` **flache Spalten**. Beides ist je für sich richtig
+  (138 Nährstoffe gegen 25), aber die Tagessumme muss beide Formen
+  addieren.
+
+  **Vier offene Punkte:**
+
+  1. **Plausibilitätsprüfung vor der Freigabe.** Wenn die vier Makros
+     Pflicht sind, ist die Gegenrechnung kostenlos: 4 kcal je Gramm
+     Protein und Kohlenhydrate, 9 je Gramm Fett, 7 je Gramm Alkohol.
+     Weicht `enercc` um mehr als etwa zehn Prozent ab, stimmt etwas
+     nicht. Das fängt die Verwechslung „je Portion statt je 100 g" —
+     `[Wahrscheinlich]` der häufigste Eingabefehler überhaupt.
+  2. **Duplikate.** Tausend Nutzer legen tausendmal „Proteinshake" an.
+     Ohne Behandlung wächst nicht der Bestand, sondern der Müll.
+     `[Vermutung]` Der Hebel liegt vor der Freigabe: Wenn die Suche über
+     eigene Einträge gut funktioniert, legt der Nutzer den Shake gar
+     nicht erst zweimal an. Das koppelt diesen Punkt an C-30 zurück.
+  3. **Rangfolge.** Die Spec sagt „bevorzugt, höherer `sort_weight`".
+     `sort_weight` ist eine Spalte von `nutrition.foods`; für eine
+     getrennte Tabelle braucht es ein Äquivalent und eine Regel, wie
+     zwei Ranglisten zusammengeführt werden.
+  4. **Ein Widerspruch in der Spec selbst, vor der Umsetzung zu klären:**
+     `[read]` `ADR_CUSTOM_FOODS_V1.md` schliesst `mealcam` als
+     `source`-Wert ausdrücklich aus (MealCam soll `user` schreiben),
+     `SPEC_02_PATCH_ENTITY07_CUSTOMFOOD.md` führt `source` als
+     `user | mealcam`. Zwei Spec-Dateien, zwei Aussagen.
+
+  **Keine Sortenkopien.** `[cmd]` `C352000` trägt 101 Nährwerte; fünf
+  Reissorten mal drei Zubereitungen wären 15 Einträge und 1.515 Werte
+  ohne eine einzige neue Messung. `[cmd]` `data_source` kennt heute genau
+  zwei Werte, beide auf die Arbeitsmappe zurückführbar. Kopien erzeugen
+  Werte ohne Quelle; der nächste Abgleich meldet dann Abweichungen, die
+  keine sind. Sorten ohne eigene Messwerte gehören in die Aliasschicht.
 
 - [ ] **C-29: Drei Namensschichten und eine Kuration, die den
   Kettenlauf überlebt** (neu 2026-08-14). Setzt C-28 voraus.
@@ -905,6 +976,32 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
     nicht mehr beziffert — er ergibt sich aus C-18.
   - **C-32 (Reis)** bleibt der erste durchkurierte Fall und ist jetzt
     ohne Vorbedingung machbar.
+
+- [ ] **C-37: Tagesbilanz muss „nicht erfasst" von „nicht enthalten"
+  unterscheiden** (neu 2026-08-14). Vor dem Bau der Summen zu
+  entscheiden, nicht danach.
+
+  `[read]` ADR-0003 lässt den Aggregationsweg ausdrücklich offen —
+  Sicht, materialisierte Sicht oder Summentabelle. Diese Entscheidung
+  gehört mit hinein.
+
+  **Der Anlass:** `[cmd]` Der BLS-Bestand trägt im Schnitt **121,8
+  Nährwerte je Eintrag**. `[read]` Ein eigener Eintrag nach C-34 hat vier
+  Pflichtwerte; alles darüber ist freiwillig. Auf einer Verpackung stehen
+  sieben.
+
+  Wer die Hälfte seiner Kalorien aus eigenen Einträgen bezieht, hat für
+  die meisten Mikronährstoffe **keinen Wert** — nicht null. Behandelt die
+  Summe die Lücke wie eine Null, zeigt sie eine Unterversorgung an, die
+  möglicherweise nicht existiert. Bei einer Anwendung mit medizinischem
+  Anspruch ist das die falsche Art von Fehler, und sie trifft
+  ausgerechnet die Nutzer, die eigene Einträge am meisten verwenden.
+
+  **Zu entscheiden:** wie die Tagesbilanz Lücken führt (fehlend gegen
+  null), was die Oberfläche anzeigt, und ob je Nährstoff ein
+  Abdeckungsgrad mitgeführt wird („85 % der heutigen Kalorien haben einen
+  Eisenwert").
+
 
 
 
