@@ -25,11 +25,22 @@ lokalen Instanz. Was bei beiden fehlt, ist dasselbe: **UI und
 API-Route**. Bei Nutrition wurde das dreimal bewusst zurückgestellt, bis
 der Aggregationsweg entschieden war — er ist es.
 
-**Suche:** seit dem 2026-08-14 der zuletzt bearbeitete Strang.
-`[cmd]` Der Massstab (`mealcam-zutaten-messen.ts`, 37 Zutaten mit
-erwartetem BLS-Code) steht bei **31 von 37 auf Platz 1**, vorher 2 von 16.
-Offen ist die Rangfolge in drei benannten Klassen: C-20 (Wortmitte),
-C-22 (phonetische Varianten), C-24 (Halbfertigprodukte).
+**Suche:** der zuletzt bearbeitete Strang und ab 2026-08-14 auf einem
+anderen Weg. `[cmd]` Der Massstab (`mealcam-zutaten-messen.ts`, 37 Zutaten
+mit erwartetem BLS-Code) steht bei **31 von 37 auf Platz 1**, vorher
+2 von 16.
+
+**Die Richtungsentscheidung vom 2026-08-14:** Die bisherige Arbeit lag auf
+der **Anfrageseite** — Zerlegung, Synonyme, Plural, 32.522 Aliase. Diese
+Seite ist unbegrenzt; `[cmd]` für den ganzen Bestand wären 5.000–8.000
+Wörterbucheinträge nötig, die 50 häufigsten Erstwörter decken 24,9 % ab.
+Die **Bestandsseite** ist endlich: 7.140 Namen, maschinell erzeugt,
+regelhaft — und `[cmd]` der eine Eingriff dort (Zubereitungsstufe,
+Block 32) hat C-19, C-21 und einen Teil von C-27 auf einmal miterledigt.
+Der Umbau läuft deshalb über **C-28 → C-29 → C-30 → C-31**: Arten über
+den BLS-Code gruppieren, Namensschichten trennen, Suche auf Arten
+umstellen, dann erst die Oberfläche. C-20 und C-24 fallen dabei
+strukturell mit; C-22 bleibt eigenständig.
 
 **Deployment:** E-08 hat keine Vorbedingung mehr ausser sich selbst.
 
@@ -43,12 +54,15 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 1. **Nutrition-Oberflächen.** Der nächste sichtbare Schritt; die
    Datenseite trägt. Laut D-04 auch der Punkt, an dem ein E2E-Aufbau
    wieder lohnt: die erste Oberfläche, die bleiben soll.
-2. **Suche weiter:** C-18 (Fehlsuchen mitschreiben) vor allen weiteren
-   Wortlisten — der einzige Hebel, der nicht auf geratenen Begriffen
-   beruht. Danach C-20, dann C-22/C-24.
-3. **C-17 (Laufzeit)** parallel dazu: `[cmd]` die Bedingung faltet
-   `concat_ws(...)`, der Trigramm-Index liegt auf `search_fold(name_de)`
-   — zwei Ausdrücke, also sequenzieller Scan.
+2. **Suche: C-28 zuerst** — die Messung, die entscheidet, ob das
+   Artenmodell trägt. Erst danach C-29 (Schichten), C-30 (Suche),
+   C-31 (Oberfläche). C-20 und C-24 nicht einzeln angehen; sie fallen
+   in C-30 mit.
+3. **C-18 (Fehlsuchen mitschreiben)** bleibt der einzige Hebel, der nicht
+   auf geratenen Begriffen beruht — er priorisiert die Kurationsarbeit
+   aus C-31 und kann parallel laufen. **C-17 (Laufzeit)** gehört in
+   C-30 hinein, nicht davor: der Index wird beim Umbau der Bedingung
+   ohnehin neu gelegt.
 4. **C-06**, erstes echt gemachtes Mock-Modul (Kandidat Goals; Goals
    trägt `nutrition_targets`, daran hängt das Wasser-Tagesziel aus C-05).
 5. **Training-Oberfläche** — dieselbe Ausgangslage wie Nutrition.
@@ -62,7 +76,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 34 offen, 3 in Arbeit.
+`[cmd]` 38 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -83,6 +97,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-23** | Systematische Abdeckungsmessung statt handverlesener Begriffe |  |
 | **C-24** | Halbfertigprodukte ranken als Grundzutat |  |
 | **C-27** | Alltagswörter ohne Treffer — noch zwei |  |
+| **C-28** | Arten über den BLS-Code gruppieren — Messung vor dem Bau |  |
+| **C-29** | Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt |  |
+| **C-30** | Suche und Trefferliste auf Arten umstellen |  |
+| **C-31** | Admin-Oberfläche für die Kuration |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -596,6 +614,141 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `vollkornreis` -> `Reis unpoliert, roh` und `vollkornnudeln` ->
   `Vollkorneierteigwaren roh` ebenfalls. **Offen bleiben zwei:**
   `basmatireis` und `griechischer joghurt`, beide weiterhin null Treffer.
+
+- [ ] **C-28: Arten über den BLS-Code gruppieren — Messung vor dem Bau**
+  (neu 2026-08-14). **Schritt 0 des Suchumbaus. Nichts wird gebaut, bevor
+  diese Messung steht.**
+
+  **Der Befund, der den Umbau auslöst.** `[cmd]` Die Anfrage `lachs`
+  trifft **132 Einträge**. Was sie tatsächlich sind, steht nicht im Namen,
+  sondern im Code:
+
+  | BLS | was es ist | Einträge |
+  |---|---|---|
+  | `T410…` | Lachs, alle Zubereitungen | 15 |
+  | `T412/T415/T417` | Buckel-, Königs-, Wildlachs | 22 |
+  | `T207/T213` | Köhler/Seelachs, Alaska-Pollack — **kein Lachs** | 28 |
+  | `U578/W443…` | Schwein Lachsbraten, Lachsschinken — **Schwein** | 7 |
+  | `X…/Y…` | Gerichte mit Lachs | rund 50 |
+
+  `Alaska-Seelachs` heißt aus Handelsgründen so, nicht aus Sachgründen.
+  **Keine Zerlegung des Namens erkennt das** — der Name führt hier aktiv
+  in die Irre. Der Code trennt sauber, was der Name verwischt.
+
+  `[cmd]` **Die ersten vier Stellen des BLS-Codes kodieren die Art**,
+  die Stellen 5–7 die Zubereitung (`44-bls-codestruktur.md`). Über den
+  Bestand: **2.646 Arten auf 7.140 Einträge**; ohne Gerichte (X/Y)
+  **1.945 Arten auf 5.090 Einträge**. Fisch 5,4 Einträge je Art,
+  Fleisch 3,7, Öle 1,1.
+
+  **Das Suchmodell, das daraus folgt** (Tom, 2026-08-14): *Der Mensch
+  sucht die Art und wählt dann die Variante.* Niemand sucht „Alaska" oder
+  „Pollack" — jemand sucht Lachs und entscheidet danach, welchen. Die
+  Trefferliste zeigt also Arten, nicht 132 flache Zeilen.
+
+  **Was diese Messung beantwortet, bevor Code entsteht:**
+
+  1. Gruppierung nach `left(bls_code,4)` bilden und prüfen, ob innerhalb
+     jeder Gruppe wirklich **eine** Art steht.
+     **Abnahme: bei einer Stichprobe von 100 Gruppen keine gemischte.**
+     Scheitert das, fällt das Modell — und zwar hier, nicht nach drei
+     Tagen Bau.
+  2. Je Gruppe den Vertreter bestimmen: Rohform (`100`), sonst Grundform
+     (`000`). Die Logik steht bereits in `such_rang_zubereitung`.
+  3. Zählen, bei wie vielen Gruppen der aus dem Bestand abgeleitete
+     Gattungsname taugt und bei wie vielen nicht. **Das ist die Zahl, die
+     den Kurationsaufwand belegt** — Toms Schätzung lautet rund 2.000
+     Datensätze, das Modell sagt deutlich weniger, weil je **Art**
+     kuriert wird und nicht je Eintrag.
+
+  Ergebnis ist ein Messbericht, kein Schema und keine Migration.
+
+- [ ] **C-29: Drei Namensschichten und eine Kuration, die den
+  Kettenlauf überlebt** (neu 2026-08-14). Setzt C-28 voraus.
+
+  **Zwei Befunde, die das nötig machen:**
+
+  `[cmd]` **Die Kette überschreibt jede Handarbeit.**
+  `supabase/_pipeline/03_bls_import/030_apply_local.sql:48` trägt
+  `on conflict (bls_code) do update set … name_display = excluded.name_display`.
+  Jeder Aufbau — und der läuft in unter zehn Sekunden, also oft — setzt
+  den CSV-Wert zurück. Ein Editor auf dieser Spalte ist ein Editor auf
+  Sand.
+
+  `[cmd]` **Die Anzeigespalten sind heute reine Kopien.** `name_display`
+  ist bei **7.140 von 7.140** identisch mit `name_de` — null Abweichungen.
+  `name_display_en` ist identisch mit `name_en`, `name_display_th` und
+  `name_th` sind durchgehend leere Zeichenketten. Die Spalten tragen
+  keine Information; sie sind Platzhalter für genau diese Arbeit.
+
+  **Die drei Schichten:**
+
+  | Schicht | Inhalt | editierbar | Zweck |
+  |---|---|---|---|
+  | Quellname `name_de`/`name_en` | amtlicher BLS-Wortlaut | **nein** | Prüfbarkeit gegen die Arbeitsmappe |
+  | Gattungsname (je Art) | wie der Mensch sie nennt | ja | Anzeige und Sortierung |
+  | Suchnamen `food_aliases` | alle Schreibweisen | ja | was gefunden wird |
+
+  `name_de` bleibt unveränderlich. `[cmd]` Der Bestand ist gegen die
+  amtliche Arbeitsmappe verifiziert — 698.092 Werte, 353 Abweichungen,
+  alle Rundungen. Diese Prüfbarkeit hängt am unveränderten Wortlaut. Wer
+  den Quellnamen überschreibt, kann nie wieder gegen die Quelle prüfen.
+
+  **Umfang:**
+  - Override-Tabelle je Art, angewandt in einem Kettenschritt unter
+    `02_human_layer/` — nach dem Import, wie `024_suchsynonyme.sql` es
+    bereits vormacht.
+  - Umbenennung `name_display` → `name_display_de`. `[cmd]` 246
+    Vorkommen in 32 Dateien. Ein eigener Commit, keine Vermischung.
+  - **Offene Entscheidung für Tom:** Erzeugt ein gepflegter Gattungsname
+    automatisch einen Alias, oder nur einen Vorschlag zum Bestätigen?
+    Automatisch ist bequemer, aber eine Zuordnung wie „Hüttenkäse" auf
+    einen Frischkäse ist eine inhaltliche Aussage, die falsch sein kann.
+
+- [ ] **C-30: Suche und Trefferliste auf Arten umstellen** (neu
+  2026-08-14). Setzt C-28 und C-29 voraus.
+
+  Die Trefferliste zeigt Arten mit ihrem Vertreter, die Zubereitungs-
+  varianten hängen darunter. Damit wird die Rangfolge eine Frage
+  zwischen **Arten**, nicht mehr zwischen 132 Zeilen.
+
+  **Was dabei strukturell mitfällt, ohne eigene Regel:**
+  - **C-20** (Treffer in der Wortmitte): Ein Treffer im Gattungsnamen
+    schlägt einen Treffer im Qualifikator. `Kürbiskern` ist eine andere
+    Art als `Kürbis`.
+  - **C-24** (Halbfertigprodukte): `Kartoffelpüree Instantpulver` ist
+    eine eigene Art, nicht die Kartoffel.
+  - **C-19/C-21** sind über denselben Weg bereits erledigt (Block 32) —
+    das ist der Beleg, dass Eingriffe auf der Bestandsseite mehr tragen
+    als weitere Wortlisten auf der Anfrageseite.
+
+  **Abnahme: 34 von 37 im MealCam-Maßstab** (heute 31). Nicht 37 —
+  `[cmd]` mindestens zwei der sechs Restfälle sind keine Suchprobleme:
+  `milch` → Vollmilch 3,5 % ist eine Produktentscheidung, `erdnussbutter`
+  → Erdnussmus eine Bedeutungsfrage. Beide gehören in einen Override,
+  nicht in eine Sortierregel.
+
+  **C-17 (Laufzeit) gehört hierher**, nicht davor: wenn die Bedingung
+  ohnehin umgebaut wird, wird der Ausdrucks-Index in demselben Zug
+  passend gelegt.
+
+- [ ] **C-31: Admin-Oberfläche für die Kuration** (neu 2026-08-14).
+  Setzt C-29 und C-30 voraus — bewusst **zuletzt**.
+
+  Die Oberfläche kuriert **Gattungsnamen je Art**, nicht Einzelnamen je
+  Eintrag, und schreibt in die Override-Tabelle aus C-29, niemals direkt
+  in `nutrition.foods`.
+
+  **Warum nicht zuerst, obwohl Tom dort beginnen wollte:** C-28 bis C-30
+  sind Schema- und Vertragsfragen. Eine Oberfläche vor dem Vertrag wird
+  zweimal gebaut — und eine Oberfläche auf `name_display` würde Handarbeit
+  produzieren, die der nächste Kettenlauf verwirft.
+
+  Priorisierung der Kurationsarbeit, solange C-18 (Fehlsuchen
+  mitschreiben) nicht steht: die Häufigkeitsliste aus
+  `daten/wortschatz-luecke.json` (1.581 Kandidaten) und die 37 Zutaten
+  des MealCam-Maßstabs.
+
 
 ## D — Datenbank & Specs
 
