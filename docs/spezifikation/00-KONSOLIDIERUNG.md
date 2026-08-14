@@ -133,7 +133,7 @@ Altbestand ist Material, keine Warteschlange.
 | `specs/01_current_specs/SPEC_02_ENTITIES.md` | 20 KB | offen | — |
 | `specs/01_current_specs/SPEC_03_USER_FLOWS.md` | 14 KB | offen | — |
 | `specs/01_current_specs/SPEC_04_FEATURES.md` | 15 KB | offen | — |
-| `specs/01_current_specs/SPEC_05_FOOD_TAXONOMY.md` | 39 KB | offen | — |
+| `specs/01_current_specs/SPEC_05_FOOD_TAXONOMY.md` | 39 KB | aufgeloest | TODO C-38 (Scoring-Formel), C-39 (Canonical Names); Core-Fitness-Liste als Priorisierung |
 | `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` | 64 KB | offen | — |
 | `specs/01_current_specs/SPEC_07_API.md` | 22 KB | offen | — |
 | `specs/01_current_specs/SPEC_08_IMPORT_PIPELINE.md` | 16 KB | offen | — |
@@ -179,16 +179,30 @@ Altbestand ist Material, keine Warteschlange.
 
 ## Was zuerst gebraucht wird
 
-`[read]` Aus der laufenden Arbeit an der Lebensmittelsuche und an C-34:
+`[read]` Aus der laufenden Arbeit an der Lebensmittelsuche, an C-34 und
+an C-38/C-39:
 
-1. `specs/04_adrs/ADR_BLS_ONLY.md` — begründet die Entscheidung, die
-   C-34 gegen Sortenkopien schützt
-2. `specs/01_current_specs/SPEC_05_FOOD_TAXONOMY.md` — 38 KB zur
-   Lebensmittel-Systematik; nach zwei gefallenen Gruppierungsmodellen
-   (C-28, C-33) die naheliegendste ungelesene Quelle
-3. `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` — 62 KB, grösste
-   Einzeldatei; gehört vor jede Schemaänderung gelesen
-4. `specs/04_adrs/ADR_MEALCAM_V1.md` und `ADR_MEALCAM_CONSENT.md` —
-   klären den Widerspruch aus C-34 Punkt 4 (`source = mealcam`)
+1. `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` - 64 KB, groesste
+   Einzeldatei; gehoert vor jede Schemaaenderung gelesen
+2. `specs/01_current_specs/SPEC_09_SCORING.md` - grenzt vermutlich an das
+   Scoring aus C-38; vor dem Bau pruefen, ob dieselbe Kennzahl gemeint ist
+3. `specs/04_adrs/ADR_BLS_ONLY.md` - begruendet die Entscheidung, die
+   C-34 gegen Sortenkopien schuetzt
+4. `specs/04_adrs/ADR_MEALCAM_V1.md` und `ADR_MEALCAM_CONSENT.md` -
+   klaeren den Widerspruch aus C-34 Punkt 4 (`source = mealcam`)
 
 Der Rest wartet, bis er gebraucht wird.
+
+---
+
+## Warum dieses Register existiert
+
+`[read]` `SPEC_05_FOOD_TAXONOMY.md` enthaelt die Namensstrategie in drei
+Phasen, die vollstaendige `sort_weight`-Formel und eine kuratierte
+Prioritaetsliste. Gelesen wurde die Datei am 2026-08-14 - nach vier Tagen
+Arbeit an genau diesen Fragen und zwei gemessenen, gefallenen Modellen
+(C-28, C-33).
+
+Der Altbestand ist nicht deshalb liegen geblieben, weil er wertlos waere,
+sondern weil niemand wusste, was darin schon beantwortet ist. Genau das
+soll die Tabelle oben verhindern.
