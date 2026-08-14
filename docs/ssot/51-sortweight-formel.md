@@ -593,3 +593,213 @@ lief auf `wegwerf_c38b`, danach verworfen.
 
 Zur Anwendung fehlt nur noch die Freigabe.
 
+> **Überholt am 2026-08-16:** die Freigabe ist erfolgt, die Formel läuft
+> live über die Kette. Siehe dritter Teil.
+
+---
+---
+
+# Dritter Teil: angewendet über die Kette
+
+`[cmd]` 2026-08-16. Die Formel steht jetzt in
+`supabase/_pipeline/02_human_layer/020_food_human_layer.sql` und läuft
+bei jedem Kettenaufbau.
+
+## Warum ein `UPDATE` nicht gereicht hätte
+
+`[cmd]` Die 62 alten Werte waren kein Altbestand — sie entstanden bei
+**jedem Kettenlauf neu**, aus einem `UPDATE`-Block ab Zeile 6002 von
+`020_food_human_layer.sql`, überschrieben mit
+`-- Deterministic local sort_weight refresh based on SPEC_08 scoring rules.`
+
+Ein direktes `UPDATE` auf die laufende Datenbank wäre beim nächsten
+Aufbau spurlos verschwunden. Die Änderung musste in die Kette.
+
+## SPEC_05 gegen SPEC_08
+
+Die zu beantwortende Frage lautete: **enthält SPEC_08 etwas, das SPEC_05
+nicht hat?**
+
+**Ja, eine Sache — und sie ist nicht angewandt worden.**
+
+### Was der alte SQL-Block tatsächlich enthielt
+
+`[cmd]` Der Block war eine **Teilumsetzung** von SPEC_08: 46 Zeilen,
+Basis nach Warengruppe, Core-Bonus, Protein, Lean, vier Abzüge. Die
+U/V-Aufteilung nach der zweiten Codestelle, die SPEC_08 vorsieht,
+**stand nicht darin**.
+
+### Die Unterschiede
+
+| | SPEC_08 (alt) | SPEC_05 (neu) |
+|---|---|---|
+| Basis `E` | 680 | `[cmd]` **750** (Eier) bzw. 580 (Teigwaren) |
+| Basis `U` | 800/780/760/700/300 nach zweiter Stelle | 780, Fettgewebe 100 |
+| Basis `V` | 790/680/640, Innereien 320/280/150 | 760, Innereien 300 |
+| Core-Liste | `[cmd]` **8 Codes** + 4 T-Präfixe | `[cmd]` **30 Codes** |
+| Protein ≥ 30 | 120 **statt** 80 | 120 **zusätzlich** zu 80 |
+| Ballaststoffe, Omega-3 | — | +30 / +40 |
+| `whole_food` | — | +60 |
+| Innereien, Blut, Fettgewebe, Knochenmark | — | `[cmd]` −380 bis −500 |
+| Laborschnitte | — | −200 |
+| Specialty | — | +100 |
+| Grundform-Bonus | — | +120 (aus Block 32) |
+| `X`/`Y` −300 | ja | **gestrichen** (Doppelbestrafung) |
+| Zubereitet −150 | über Namen (`gekocht`/`gebraten`) | über Zubereitungscode **und** Namen |
+
+### Der eine Punkt, den nur SPEC_08 hat
+
+**Die zweite Stelle des BLS-Codes als Struktur-Merkmal.** SPEC_08 liest
+sie für `U` (Tierart) und `V` (Geflügel gegen Innereien); SPEC_05 kennt
+nur die erste Stelle und arbeitet sonst über Namen.
+
+`[cmd]` Am Bestand geprüft, und das Ergebnis ist gemischt:
+
+| SPEC_08 sagt | Bestand |
+|---|---|
+| `U[0-2]` = Rind-Muskelfleisch | **falsch** — `U0` enthält Rind, Schwein *und* Kalb Hackfleisch |
+| `U2` = Rind | trifft zu (`Rind Keule`, `Rind Hüfte`) |
+| `V4` = Geflügel | trifft zu (`Hähnchen Fleisch`, `Baby-Pute`) |
+| `V[5-6]` = Innereien | **trifft zu** (`Rind Herz`, `Kalb Herz`) |
+
+**Wieviel es brächte:** `[cmd]` 131 Einträge liegen in `V5`/`V6`. Davon
+erfasst die SPEC_05-Namensregel bereits **128**. Die verbleibenden drei
+sind:
+
+```
+Hähnchen Innereien, roh
+Hähnchen Innereien, gebraten ohne Fett (Pfanne)
+Hähnchen Innereien, geschmort ohne Fett
+```
+
+— das Sammelwort „Innereien" steht nicht in der Wortliste.
+
+`[annahme]` Der Gewinn wäre also drei Einträge, der Preis eine
+Codestellen-Regel, die für `U` nachweislich falsch ist. **Nicht
+angewandt** — es ist eine Produktentscheidung, und die Vorgabe lautete,
+sie zu melden statt sie umzusetzen.
+
+`SPEC_08_IMPORT_PIPELINE.md` steht jetzt im Register
+(`docs/spezifikation/00-KONSOLIDIERUNG.md`) auf `aufgeloest`, mit
+diesem Rest als ausdrücklich offen vermerkt.
+
+## Der Kettenschritt
+
+Der Block ist **erzeugt, nicht abgeschrieben**:
+`supabase/_pipeline/_ableitung/sortweight-sql-erzeugen.ts` liest
+`sortweight-formel.json` und schreibt das SQL. `[cmd]` 46 Zeilen alt →
+116 Zeilen neu, 30 Core-Codes.
+
+Der Kommentar über dem Block nennt SPEC_05 als Grundlage, die drei
+unwirksamen Regeln (`ultra_processed`, `fertiggericht`, `alkohol`) und
+die eine Spec-Abweichung (`whole_food` auch bei `000`), jeweils mit
+Verweis hierher.
+
+### Ein Fehler beim Erzeugen, gefunden und behoben
+
+`[cmd]` Der erste erzeugte Block brach den Kettenlauf ab:
+`syntax error at or near "nach"`. Ursache: der Generator schrieb den
+Kommentarschlüssel `_kommentar` aus der Datendatei als CASE-Zweig ins
+SQL. Behoben durch denselben `_`-Filter, den die Core-Liste schon
+hatte.
+
+## Der Neuaufbau
+
+Kette von leer nach `supabase/README.md`. **Zwei Hindernisse, beide
+nicht in der README beschrieben:**
+
+1. `[cmd]` `public.handle_new_user()` und `public.is_admin()` liegen in
+   `public` und **überleben `DROP SCHEMA nutrition CASCADE`**. Die
+   Baseline bricht dann mit `function "handle_new_user" already exists`
+   ab, und wegen `ON_ERROR_STOP=1` bleibt die ganze Kette stehen. Beide
+   Funktionen müssen mit gelöscht werden.
+2. `[cmd]` Schritt `030` liest per `\copy` aus
+   `/tmp/p1-005-bls-local-import/`. Die CSVs liegen im Repo unter
+   `supabase/_data/`, müssen aber **in den Container** kopiert werden —
+   `\copy` läuft im psql-Client, und der läuft dort.
+
+`[annahme]` Beides gehört in `supabase/README.md`; das ist nicht Teil
+dieses Auftrags.
+
+Ergebnis des Laufs, ohne Fehlermeldung:
+
+```
+foods              7140      (README: 7.140)
+food_nutrients   698092      (README: 698.092)
+food_aliases      32522
+food_tags          9265      (README: 9.265)
+search_synonyms    4877
+sort_weight-Stufen   95
+```
+
+## Die Live-Zahlen gegen die Sollwerte
+
+`[cmd]` **Der Live-Maßstab zeigt 34 von 37.** Damit ist C-38 umgesetzt.
+
+| | vor der Anwendung | Sollwert (Hilfstabelle) | live nach dem Aufbau |
+|---|---|---|---|
+| Sollwert auf Platz 1 | `[cmd]` 31 / 37 | 34 / 37 | `[cmd]` **34 / 37** |
+| in den ersten drei | `[cmd]` 35 | 35 | `[cmd]` **35** |
+| auf 0 | `[cmd]` — | 145 | `[cmd]` **145** |
+| auf 1000 | `[cmd]` — | 123 | `[cmd]` **123** |
+| Stufen gesamt | `[cmd]` 62 | 95 | `[cmd]` **95** |
+
+Die Verteilung je Warengruppe, live gegen Sollwert:
+
+| WG | Stufen soll | Stufen live | auf 0 soll | auf 0 live |
+|---|---|---|---|---|
+| **P** | 2 | `[cmd]` **2** | 0 | `[cmd]` **0** |
+| **X** | 9 | `[cmd]` **9** | 59 | `[cmd]` **59** |
+| **Y** | 16 | `[cmd]` **16** | 16 | `[cmd]` **16** |
+| **U** | 23 | `[cmd]` **23** | 9 | `[cmd]` **9** |
+| V | 21 | `[cmd]` 21 | 57 | `[cmd]` 57 |
+| T | 16 | `[cmd]` 16 | 0 | `[cmd]` 0 |
+| H | 22 | `[cmd]` 22 | 0 | `[cmd]` 0 |
+
+**Jede Zahl stimmt überein.** Bei der Übersetzung von TypeScript nach
+SQL ist nichts verlorengegangen — das war die Frage, an der dieser
+Schritt hätte scheitern können.
+
+Die drei offenen Fälle sind unverändert dieselben: `milch` (FEHL),
+`paprika` (Platz 4), `erdnussbutter` (Platz 2). Ihre Ursachen stehen im
+zweiten Teil; keine davon ist über `sort_weight` lösbar.
+
+### Eine Angleichung an Postgres
+
+`[cmd]` Die Schwarten-Regel war in TypeScript als
+`\bschwarten\b(?! und)` formuliert. Postgres wertet `(?! …)` anders aus
+— dieselbe Zeichenkette liefert dort `false` statt `true`. Beide Seiten
+sind deshalb auf eine Fassung ohne Lookahead umgestellt
+(`… ~ 'schwarten' AND NOT … ~ 'schwarten und'`). `[cmd]` Die Werte der
+Hilfstabelle blieben danach unverändert (145 / 123 / 95), die Regel ist
+also dieselbe geblieben.
+
+## Weitere Prüfungen
+
+```
+[cmd] pnpm gate                     8/8, Exit 0
+[cmd] suche-wortschatz-pruefen.ts   soll 31/31, schutz 16/16 — BESTANDEN
+```
+
+Die Hilfstabelle `nutrition._sortweight_neu` ist entfallen — sie war
+Messwerkzeug, kein Bestandteil.
+
+## Was der dritte Teil nicht sagt
+
+- **Er sagt nicht, dass die Kette jetzt vollständig dokumentiert ist.**
+  `[cmd]` Zwei Hindernisse beim Neuaufbau stehen nicht in
+  `supabase/README.md` (siehe oben). Nicht behoben.
+
+- **Er sagt nichts über die übrigen Abschnitte von SPEC_08.** Gelesen
+  und abgeglichen wurde der Scoring-Teil. Import und
+  Kategoriezuweisung sind ungelesen; das Register vermerkt es.
+
+- **Er sagt nichts über die Wirkung auf Suchanfragen ausserhalb der 37
+  Zutaten.** `[cmd]` 6.660 Einträge tragen einen anderen Wert als vorher.
+
+- **Die beiden bekannten Befunde bleiben unrepariert**, auftragsgemäß:
+  `processing_level` zu 100 % falsch mit `raw` gefüllt, und die vier
+  Innereien-Komposita, die zu hoch stehen (`Leberknödel Konserve` 800,
+  `Gänseleber in Aspik` 640, `Schweinekümmelmagen` 640,
+  `Kalb Nierenfett` 630).
+

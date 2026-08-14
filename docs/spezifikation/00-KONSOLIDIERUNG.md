@@ -136,7 +136,7 @@ Altbestand ist Material, keine Warteschlange.
 | `specs/01_current_specs/SPEC_05_FOOD_TAXONOMY.md` | 39 KB | aufgeloest | TODO C-38 (Scoring-Formel), C-39 (Canonical Names); Core-Fitness-Liste als Priorisierung |
 | `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` | 64 KB | offen | — |
 | `specs/01_current_specs/SPEC_07_API.md` | 22 KB | offen | — |
-| `specs/01_current_specs/SPEC_08_IMPORT_PIPELINE.md` | 16 KB | offen | — |
+| `specs/01_current_specs/SPEC_08_IMPORT_PIPELINE.md` | 16 KB | aufgeloest | Scoring-Abschnitt durch SPEC_05 abgeloest (C-38, `docs/ssot/51-sortweight-formel.md` Teil 3). **Ein Rest bleibt offen:** die U/V-Aufteilung nach der zweiten Codestelle steht nur hier, nicht in SPEC_05 — Produktentscheidung, nicht angewandt. Uebrige Abschnitte (Import, Kategoriezuweisung) ungelesen. |
 | `specs/01_current_specs/SPEC_09_SCORING.md` | 17 KB | offen | — |
 | `specs/01_current_specs/SPEC_10_COMPONENTS.md` | 13 KB | offen | — |
 | `specs/02_patches/SPEC_02_PASS2_ENTITIES.md` | 11 KB | offen | — |

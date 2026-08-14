@@ -83,7 +83,11 @@ const BLUT = /\bblut/
 const FETTGEWEBE = /\bfettgewebe\b/
 const KNOCHENMARK = /\bknochenmark\b/
 // Wie bei U_FETT: nur wenn die Schwarte das Erzeugnis ist.
-const SCHWARTE = /^[a-z]+ schwarte\b|\bschwarten\b(?! und)/
+// Ohne Lookahead formuliert, damit der erzeugte SQL-Block dieselbe
+// Regel ausdruecken kann — Postgres wertet `(?! …)` anders aus.
+const SCHWARTE_JA = /^[a-z]+ schwarte\b|\bschwarten\b/
+const SCHWARTE_NEIN = /\bschwarten und\b/
+const SCHWARTE = { test: (s: string) => SCHWARTE_JA.test(s) && !SCHWARTE_NEIN.test(s) }
 const LABOR = /\bs (i|ii|iii|iv|v|vi|vii|viii|ix|x|xi|xii)\b/
 const GESUESST = /\b(gesuesst|gezuckert|dragiert|kandiert)\b/
 const KONSERVE = /\bkonserve\b/

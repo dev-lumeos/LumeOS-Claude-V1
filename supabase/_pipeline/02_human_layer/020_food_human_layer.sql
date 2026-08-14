@@ -5999,49 +5999,121 @@ SET category_id = CASE
 END
 WHERE category_id IS NULL;
 
--- Deterministic local sort_weight refresh based on SPEC_08 scoring rules.
+-- =============================================================
+-- sort_weight nach SPEC_05_FOOD_TAXONOMY, Abschnitt "Sort Weight System"
+-- =============================================================
+-- ERZEUGT aus supabase/_pipeline/daten/sortweight-formel.json durch
+-- supabase/_pipeline/_ableitung/sortweight-sql-erzeugen.ts.
+-- NICHT von Hand aendern — die Formel steht in der Datendatei, sonst
+-- driften beide auseinander.
+--
+-- Vorher stand hier eine Fassung nach SPEC_08_IMPORT_PIPELINE. Die
+-- Unterschiede und die Ablösung sind in docs/ssot/51-sortweight-formel.md
+-- belegt (dritter Teil). Kurz:
+--   * SPEC_08 kannte 8 Core-Codes, SPEC_05 kennt 30.
+--   * SPEC_08 hatte keine Innereien-, Blut- und Fettgewebe-Abzuege.
+--   * SPEC_08 zog X/Y zusaetzlich -300 ab, obwohl die Basis die
+--     Warengruppe schon kodiert (Doppelbestrafung, siehe unten).
+--
+-- DREI REGELN DER SPEC SIND UNWIRKSAM ODER GESTRICHEN:
+--   * ultra_processed (-250): `[cmd]` nutrition.foods.processing_level
+--     traegt fuer alle 7.140 Eintraege den Wert 'raw', auch fuer
+--     Bechamelsauce. Der Abzug kann nicht feuern.
+--   * fertiggericht (-300, X/Y) und alkohol (-300, P): GESTRICHEN.
+--     Doppelbestrafung — die Basis kodiert die Warengruppe bereits
+--     (X 200, Y 240, P 180). `[cmd]` Mit dem Abzug standen alle 119
+--     P-Eintraege auf 0 (eine einzige Stufe), dazu 1.114 von 1.165 X
+--     und 862 von 885 Y.
+--
+-- EINE ABWEICHUNG VON DER SPEC, bewusst und entschieden:
+--   * whole_food (+60) feuert bei Zubereitungscode 100 ODER 000.
+--     Die Spec nennt nur 100. `[read]` 44-bls-codestruktur.md: 000
+--     heisst nicht "roh", sondern "keine Zubereitungsvariante" —
+--     Haferflocken, Skyr und Olivenoel tragen 000, weil sie keine
+--     Rohform HABEN. nutrition.such_rang_zubereitung behandelt beide
+--     seit Block 32 gleichrangig; Code schlaegt Spec.
+--
+-- `[cmd]` Abnahme: MealCam-Massstab 34 von 37 (vorher 31), 145
+-- Nullwerte statt 2.165, 95 Stufen statt 93.
+-- =============================================================
 UPDATE nutrition.foods f
 SET sort_weight = LEAST(1000, GREATEST(0,
+  -- Basis nach Warengruppe
   CASE substring(f.bls_code from 1 for 1)
+    WHEN 'B' THEN 520
     WHEN 'C' THEN 700
-    WHEN 'E' THEN 680
+    WHEN 'D' THEN 340
+    WHEN 'E' THEN 750
     WHEN 'F' THEN 660
     WHEN 'G' THEN 660
     WHEN 'H' THEN 650
     WHEN 'K' THEN 550
     WHEN 'M' THEN 660
-    WHEN 'T' THEN 700
-    WHEN 'B' THEN 520
-    WHEN 'D' THEN 340
+    WHEN 'N' THEN 400
+    WHEN 'P' THEN 180
     WHEN 'Q' THEN 460
     WHEN 'R' THEN 360
     WHEN 'S' THEN 240
-    WHEN 'N' THEN 400
-    WHEN 'P' THEN 180
+    WHEN 'T' THEN 700
+    WHEN 'U' THEN 780
+    WHEN 'V' THEN 760
+    WHEN 'W' THEN 440
     WHEN 'X' THEN 200
     WHEN 'Y' THEN 240
-    WHEN 'W' THEN 440
     ELSE 400
   END
+  -- Sonderfaelle: die Spec teilt E, U und V nach Untergruppe
   + CASE
-      WHEN f.bls_code IN ('V416100','V486100','U010100','U211100','C133000','C352000','E111100','E113100')
-        OR f.bls_code LIKE 'T102%' OR f.bls_code LIKE 'T103%' OR f.bls_code LIKE 'T302%' OR f.bls_code LIKE 'T306%' THEN 200
+      WHEN substring(f.bls_code from 1 for 1) = 'E' AND nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(teigwaren|nudeln|spaetzle)\M' THEN 580 - 750
+      WHEN substring(f.bls_code from 1 for 1) = 'U' AND (nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(fettgewebe|speck|flomen|wamme)\M'
+                            OR nutrition.search_fold(COALESCE(f.name_de,'')) ~ '^[a-z]+ schwarte\M') THEN 100 - 780
+      WHEN substring(f.bls_code from 1 for 1) = 'V' AND nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(leber|herz|magen|niere)\M' THEN 300 - 760
       ELSE 0
     END
-  + CASE
-      WHEN COALESCE(protein.value, 0) >= 30 THEN 120
-      WHEN COALESCE(protein.value, 0) >= 20 THEN 80
-      ELSE 0
-    END
-  + CASE WHEN COALESCE(protein.value, 0) >= 20 AND COALESCE(fat.value, 999) <= 5 THEN 50 ELSE 0 END
-  + CASE WHEN substring(f.bls_code from 1 for 1) IN ('X','Y') THEN -300 ELSE 0 END
-  + CASE WHEN lower(f.name_de) LIKE '%gesüßt%' OR lower(f.name_de) LIKE '%gezuckert%' OR lower(f.name_de) LIKE '%instant%' THEN -100 ELSE 0 END
-  + CASE WHEN lower(f.name_de) LIKE '%konserve%' OR lower(f.name_de) LIKE '%dose%' THEN -80 ELSE 0 END
-  + CASE WHEN lower(f.name_de) LIKE '%gekocht%' OR lower(f.name_de) LIKE '%gebraten%' THEN -150 ELSE 0 END
+  -- Zuschlaege
+  + CASE WHEN f.bls_code IN (
+        'B101000','C133000','C352000','E111100','E113100','F502100',
+        'F503100','G211100','G312100','G543100','G561100','G620100',
+        'H120100','H210100','H725100','H861000','K110100','K420100',
+        'M141100','M710100','M711100','M713100','Q120000','T102100',
+        'T121100','T410100','U010100','U211100','V416100','V486100'
+      ) THEN 200 ELSE 0 END
+  + CASE WHEN COALESCE(prot.value, -1) >= 20 THEN 80 ELSE 0 END
+  + CASE WHEN COALESCE(prot.value, -1) >= 30 THEN 120 ELSE 0 END
+  + CASE WHEN COALESCE(prot.value, -1) >= 20 AND fat.value IS NOT NULL
+              AND fat.value <= 5 THEN 50 ELSE 0 END
+  + CASE WHEN COALESCE(n3.value, -1) >= 1 THEN 40 ELSE 0 END
+  + CASE WHEN COALESCE(fibt.value, -1) >= 6 THEN 30 ELSE 0 END
+  + CASE WHEN substring(f.bls_code from 5 for 3) IN ('100','000') AND substring(f.bls_code from 1 for 1) IN ('C','G','F','H','T') THEN 60 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(hummer|kaviar|trueffel)\M' THEN 100 ELSE 0 END
+  -- Grundform: nicht aus der Spec, sondern aus Block 32. Ohne sie
+  -- faellt "Banane roh" hinter "Banane getrocknet".
+  + CASE WHEN (substring(f.bls_code from 5 for 3) IN ('100','000') AND NOT nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(gebraten|gekocht|gegrillt|paniert|geschmort|gebacken|frittiert|geduenstet|pochiert)\M') THEN 120 ELSE 0 END
+  -- Abzuege
+  + CASE WHEN (substring(f.bls_code from 5 for 3) IN ('100','000') AND NOT nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(gebraten|gekocht|gegrillt|paniert|geschmort|gebacken|frittiert|geduenstet|pochiert)\M') THEN 0 ELSE -150 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(gesuesst|gezuckert|dragiert|kandiert)\M' THEN -100 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\mkonserve\M' AND substring(f.bls_code from 1 for 1) <> 'T' THEN -80 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(herz|herzen|niere|nieren|magen|kutteln|bries|zunge|euter)\M'
+         THEN -400 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\mleber'
+              AND NOT nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(leberkaese|leberwurst|leberpastete|leberknoedel|leberterrine)\M'
+         THEN -380 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\m(hirn|gehirn|lunge|milz)\M' THEN -450 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\mblut' THEN -500 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\mfettgewebe\M' THEN -500 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\mknochenmark\M' THEN -450 ELSE 0 END
+  -- Schwarte nur, wenn das Stueck die Schwarte IST. `[cmd]` 8 Eintraege
+  -- heissen "(mit|ohne) Fett und Schwarte" und meinen ein Bratenstueck;
+  -- vier davon fielen sonst von 480 auf 0.
+  + CASE WHEN (nutrition.search_fold(COALESCE(f.name_de,'')) ~ '^[a-z]+ schwarte\M' OR nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\mschwarten\M')
+              AND NOT nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\mschwarten und\M' THEN -430 ELSE 0 END
+  + CASE WHEN nutrition.search_fold(COALESCE(f.name_de,'')) ~ '\ms (i|ii|iii|iv|v|vi|vii|viii|ix|x|xi|xii)\M' THEN -200 ELSE 0 END
 ))
 FROM nutrition.foods source_food
-LEFT JOIN nutrition.food_nutrients protein ON protein.food_id = source_food.id AND protein.nutrient_code = 'PROT625'
-LEFT JOIN nutrition.food_nutrients fat ON fat.food_id = source_food.id AND fat.nutrient_code = 'FAT'
+LEFT JOIN nutrition.food_nutrients prot ON prot.food_id = source_food.id AND prot.nutrient_code = 'PROT625'
+LEFT JOIN nutrition.food_nutrients fat  ON fat.food_id  = source_food.id AND fat.nutrient_code  = 'FAT'
+LEFT JOIN nutrition.food_nutrients fibt ON fibt.food_id = source_food.id AND fibt.nutrient_code = 'FIBT'
+LEFT JOIN nutrition.food_nutrients n3   ON n3.food_id   = source_food.id AND n3.nutrient_code   = 'FAPUN3'
 WHERE f.id = source_food.id;
 
 -- Deterministic macro-derived V1 food tags only. Manual/cuisine/religious tags stay deferred.
