@@ -1979,6 +1979,55 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   v100 führt `gluteus_mideus_nutzungen` als Kennzahl mit, damit der Fall
   sichtbar bleibt.
 
+- [x] **C-33: Der Zubereitungsschlüssel ist warengruppenabhängig — die
+  Ursache hinter C-28** — **gemessen 2026-08-14. Auch die Reparatur ist
+  gefallen.** Bericht: `docs/ssot/49-zubereitungsschluessel.md`,
+  Schlüssel: `supabase/_pipeline/daten/zubereitungsschluessel.json`.
+
+  | | alt (C-28) | neu (C-33) | Abnahme |
+  |---|---|---|---|
+  | einheitliche Gruppen | `[cmd]` 39/100 | `[cmd]` **47/100** | 95 |
+  | ohne Gerichte | `[cmd]` 61/100 | `[cmd]` 60/100 | 95 |
+  | Gruppen ohne Vertreter | `[cmd]` 953 | `[cmd]` **0** | — |
+
+  `[cmd]` **Die Regel greift an 4 von 204 Zellen und löst 1 von 48
+  Mischungen.** In der Klassifikation stehen 104 Zellen als Zubereitung,
+  4 als Erzeugnis — und **96 als ungeklärt**. Fast die Hälfte des
+  Schlüssels ist nicht deutbar.
+
+  **Der Grund ist strukturell, nicht handwerklich:** Die Ziffern kodieren
+  je nach Warengruppe verschiedene Dimensionen — bei Brot die Zutat
+  (`B106`: Ölsamen, Sonnenblumenkerne, Kürbiskerne), bei Gebäck die Sorte
+  (`D655`: Sachertorte, Linzer, Pfefferkuchen), bei Käse die Fettstufe,
+  bei Fleisch die Garmethode. Es gibt keine gemeinsame Semantik, die man
+  ableiten könnte, **weil keine da ist.** Der BLS führt je Warengruppe ein
+  eigenes Schema und hat nie beabsichtigt, dass jemand quer darüber
+  gruppiert.
+
+  **Damit ist nicht die Reparatur gescheitert, sondern die
+  Grundannahme:** dass sich aus dem Code maschinell eine „Art" ableiten
+  lässt. Kein dritter Versuch.
+
+  **Was verwertbar bleibt, steht in C-35.**
+
+  **Drei Fehler im Belegverfahren, von Claude Code selbst gefunden und
+  gemeldet:** Suffixe schnitten mitten im Wort; das Suffix wurde am
+  Namensende statt am ersten Wort gesucht, wodurch ausgerechnet `F`+`600`
+  durchfiel; und `B`+`400` galt als belegt durch das Wort „mit", das in
+  jedem Brotnamen steht. Alle drei hätten das Ergebnis **beschönigt**.
+  Die Selbstprüfung hat gehalten.
+
+  `[cmd]` **Eine Korrektur an meiner eigenen Vorgabe:** In C-33 stand
+  „alle 53 `F`+`600`-Namen enden auf ‚saft'" — mit `[cmd]` markiert.
+  Tatsächlich sind es 48 von 53, dazu zwei Nektare und drei Smoothies.
+  Ich hatte die Beispielliste vor Augen, in der „angereichert mit
+  Vitaminen" stand, und trotzdem „alle" geschrieben.
+
+  **Methodische Schwäche, die im Bericht steht:** `[cmd]` Alt und neu
+  ziehen ihre Stichprobe aus verschiedenen Grundmengen (1.400 gegen
+  1.375) — es sind nicht dieselben 100 Gruppen. Für die Grössenordnung
+  reicht der Vergleich, für eine exakte Differenz nicht.
+
 - [x] **C-28: Arten über den BLS-Code gruppieren — Messung vor dem Bau**
   — **gemessen 2026-08-14. Die Vermutung hat die Prüfung nicht
   bestanden.** Bericht: `docs/ssot/48-artengruppierung-messung.md`,
