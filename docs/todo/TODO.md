@@ -76,7 +76,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 38 offen, 3 in Arbeit.
+`[cmd]` 39 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -101,6 +101,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-29** | Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt |  |
 | **C-30** | Suche und Trefferliste auf Arten umstellen |  |
 | **C-31** | Admin-Oberfläche für die Kuration |  |
+| **C-32** | Reis vollständig kurieren — der erste Fall, an dem sich das Modell beweist |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -694,6 +695,18 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   alle Rundungen. Diese Prüfbarkeit hängt am unveränderten Wortlaut. Wer
   den Quellnamen überschreibt, kann nie wieder gegen die Quelle prüfen.
 
+  **`name_en` ist der maschinelle Startwert** (Befund 2026-08-14 am
+  Reis-Fall). `[cmd]` Der englische BLS-Name ist durchgängig
+  menschenlesbarer als der deutsche: `Reis poliert, roh` heißt dort
+  **White rice raw**, `Reis unpoliert` heißt **Brown rice**. Die
+  deutsche Fachsprache des BLS (poliert/unpoliert) hat im Englischen
+  keine Entsprechung. Der Gattungsname ist damit für einen grossen Teil
+  des Bestands keine Erfindung, sondern eine Übersetzung aus einem Feld,
+  das bereits vorhanden ist — Handarbeit fällt nur dort an, wo auch das
+  Englische Fachsprache bleibt. Vor der Kuration zu messen: bei wie
+  vielen Arten weicht `name_en` inhaltlich von `name_de` ab und ist
+  dabei das gebräuchlichere Wort.
+
   **Umfang:**
   - Override-Tabelle je Art, angewandt in einem Kettenschritt unter
     `02_human_layer/` — nach dem Import, wie `024_suchsynonyme.sql` es
@@ -748,6 +761,63 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   mitschreiben) nicht steht: die Häufigkeitsliste aus
   `daten/wortschatz-luecke.json` (1.581 Kandidaten) und die 37 Zutaten
   des MealCam-Maßstabs.
+
+- [ ] **C-32: Reis vollständig kurieren — der erste Fall, an dem sich das
+  Modell beweist** (neu 2026-08-14). Pilot für C-29 und C-31.
+
+  **Warum Reis:** Grundnahrungsmittel eines Kraftsportlers, täglich, in
+  jeder Mahlzeit. `[cmd]` Und heute liefert `basmatireis` **null
+  Treffer**. Der Fall ist klein genug, um in einer Sitzung fertig zu
+  werden, und gross genug, um jede Frage des Modells zu stellen.
+
+  `[cmd]` **Der Bestand: 13 Arten, 32 Einträge.**
+
+  | Art | Einträge | `name_de` heute | `name_en` | Vorschlag Anzeige |
+  |---|---|---|---|---|
+  | `C352` | 3 | Reis poliert, roh/gekocht | **White rice** | Weisser Reis |
+  | `C350` | 2 | Reis poliert, gedämpft/geschmort | White rice | Weisser Reis |
+  | `C359` | 4 | Reis parboiled, poliert | Rice parboiled | Parboiled-Reis |
+  | `C351` | 3 | Reis unpoliert | **Brown rice** | Vollkornreis |
+  | `C353` | 3 | Wildreis | Wild rice | Wildreis |
+  | `C354` | 2 | Reismischung mit Wildreis | Rice mix | Reismischung mit Wildreis |
+  | `C356` | 2 | Reis Grieß | Rice semolina | Reisgrieß |
+  | `C453` | 1 | Reis Mehl | Rice flour | Reismehl |
+  | `C456` | 1 | Reis Stärke | Rice starch | Reisstärke |
+  | `C457` | 1 | Reis Kleie | Rice bran | Reiskleie |
+  | `C532` | 6 | Reis gepufft, Reiswaffeln, **Schokolade** | — | **Gruppe trennen** |
+  | `C559` | 2 | Reisnudeln | Rice noodles | Reisnudeln |
+  | `C650` | 2 | Reisdrink | Rice drink | Reisdrink |
+
+  **Was der BLS nicht kennt:** `[cmd]` **kein Basmati, kein Jasmin, kein
+  Sushi-, Risotto- oder Milchreis.** Der BLS unterscheidet nach
+  Verarbeitung, nicht nach Sorte. Diese Namen gehören deshalb in die
+  **Aliasschicht**, nicht in den Anzeigenamen: Basmati, Jasmin,
+  Langkorn, Rundkorn und Sushireis zeigen alle auf `C352`. Wer `C352`
+  „Basmatireis" nennt, lässt die anderen vier verschwinden und behauptet
+  eine Genauigkeit, die die Nährwerte nicht haben. `[Wahrscheinlich]`
+  Für die Makronährwerte ist der Sortenunterschied ohnehin
+  vernachlässigbar; er liegt beim glykämischen Index.
+
+  **Vorsicht bei `milchreis`** — das ist zugleich ein fertiges Gericht.
+  Vor dem Eintragen prüfen, ob ein Y-Eintrag existiert; sonst führt der
+  Alias die Zutatensuche in ein Dessert.
+
+  **Zwei Befunde zur Gruppierung aus C-28, hier schon sichtbar:**
+  - `[cmd]` **`C532` ist zu grob:** die Gruppe enthält `Reis gepufft`,
+    drei Reiswaffeln **und zwei Schokoladen mit Puffreis**. Vier Stellen
+    trennen hier nicht.
+  - `[cmd]` **`C350`, `C352` und `C359` sind zu fein:** alle drei sind
+    polierter Reis, nur mit anderen Zubereitungen. Vier Stellen trennen
+    hier zu viel.
+
+  Beide Richtungen des Fehlers an einem einzigen Lebensmittel. Der Fall
+  gehört als Prüfstein in den Bericht zu C-28.
+
+  **Abnahme:** `basmatireis`, `jasminreis`, `sushireis`, `vollkornreis`,
+  `naturreis`, `parboiled reis` und `reis` liefern je den richtigen
+  Eintrag auf Platz 1 — als feste Erwartungen im MealCam-Maßstab, nicht
+  als Sichtprüfung.
+
 
 
 ## D — Datenbank & Specs
