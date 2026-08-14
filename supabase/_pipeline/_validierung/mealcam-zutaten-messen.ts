@@ -42,45 +42,55 @@ const DB = process.env.PGDATABASE ?? 'postgres'
 // Der Code steht hier und nicht der Name, weil Namen sich aendern koennen
 // und ein Name-Vergleich bei "Broccoli roh" gegen "Brokkoli roh"
 // scheitern wuerde.
+// `[cmd]` Block 32: Die 21 offenen Sollwerte sind belegt. Jeder Code
+// wurde im Bestand nachgeschlagen, keiner geraten. Wo mehrere Formen in
+// Frage kamen, steht die Wahl samt Grund daneben.
+//
+// `[cmd]` DABEI FIEL AUF, und es widerlegt die naheliegende Annahme
+// "Rohform = Zubereitungscode 100": Hafer Flocken (C133000), Skyr
+// (M710100), Mozzarella (M0A1000), Vollkornbrot (B101000), Olivenoel
+// (Q120000) und Erdnussbutter (H880200) tragen NICHT 100. Sie haben
+// keine Zubereitungsvariante — sie SIND die Form. Eine Regel, die nur
+// 100 bevorzugt, wuerde genau diese sechs schlechter stellen.
 const ZUTATEN: [string, string, string][] = [
   // --- Eiweiss ---
   ['haehnchenbrust', 'V416100', 'Haehnchen Brustfilet roh'],
-  ['putenbrust', '', 'Pute Brust roh — Code offen, siehe Bericht'],
-  ['rinderhack', '', 'Rind Hackfleisch roh'],
+  ['putenbrust', 'V486100', 'Pute Brust ohne Haut roh — nicht die Kochpoekelware W561000'],
+  ['rinderhack', 'U010100', 'Rind Hackfleisch roh — nicht Leberhack, nicht Rind/Schwein gemischt'],
   ['rindersteak', 'U131100', 'Rind Steak (Ruecken) roh'],
   ['lachs', 'T410100', 'Lachs roh — nicht Alaska-Seelachs, nicht Lachsrogen'],
-  ['thunfisch', '', 'Thunfisch roh'],
+  ['thunfisch', 'T121100', 'Thunfisch roh — nicht tiefgefroren gegrillt'],
   ['garnelen', 'T753100', 'Garnele/Granat/Krabbe roh'],
-  ['eiklar', '', 'Huehnerei Eiklar roh'],
-  ['eigelb', '', 'Huehnerei Eigelb roh — nicht getrocknet'],
+  ['eiklar', 'E113100', 'Huehnerei Eiklar roh'],
+  ['eigelb', 'E112100', 'Huehnerei Eigelb roh — nicht getrocknet (E112400)'],
   // --- Milch ---
-  ['magerquark', '', 'Speisequark Magerstufe'],
-  ['huettenkaese', 'M711100', 'Koerniger Frischkaese — heute NULL Treffer'],
-  ['skyr', '', 'Skyr'],
-  ['milch', '', 'Kuhmilch trinkbar — nicht Magermilchpulver'],
-  ['mozzarella', '', 'Mozzarella'],
+  ['magerquark', 'M713100', 'Speisequark Magerstufe < 10 % Fett i. Tr.'],
+  ['huettenkaese', 'M711100', 'Koerniger Frischkaese < 10 % — heute NULL Treffer'],
+  ['skyr', 'M710100', 'Skyr — traegt 100, aber ohne Variante'],
+  ['milch', 'M111300', 'Vollmilch frisch 3,5 % — was man trinkt, nicht Magermilchpulver'],
+  ['mozzarella', 'M0A1000', 'Mozzarella — traegt 000, nicht 100'],
   // --- Kohlenhydrate ---
-  ['reis', 'C352000', 'Reis poliert roh'],
-  ['haferflocken', '', 'Hafer Flocken'],
-  ['quinoa', '', 'Quinoa roh'],
-  ['suesskartoffel', '', 'Batate/Suesskartoffel roh — nicht frittiert'],
-  ['kartoffeln', '', 'Kartoffel roh — nicht Trockenprodukt'],
-  ['vollkornbrot', '', 'Vollkornbrot'],
+  ['reis', 'C352000', 'Reis poliert roh — traegt 000, nicht 100'],
+  ['haferflocken', 'C133000', 'Hafer Flocken — traegt 000, keine Zubereitungsvariante'],
+  ['quinoa', 'C118000', 'Quinoa weiss roh — nicht tricolore (C118100)'],
+  ['suesskartoffel', 'K420100', 'Batate/Suesskartoffel roh — nicht frittiert'],
+  ['kartoffeln', 'K110100', 'Kartoffel geschaelt roh — nicht Trockenprodukt'],
+  ['vollkornbrot', 'B101000', 'Vollkornbrot — nicht Hafer-/Weizen-/Roggenvollkornbrot'],
   // --- Gemuese ---
   ['brokkoli', 'G312100', 'Broccoli roh — nicht gebacken'],
   ['spinat', 'G211100', 'Spinat roh — nicht Tortelloni'],
   ['tomaten', 'G561100', 'Tomate roh — nicht Heringsfilet in Tomatensauce'],
   ['gurke', 'G520100', 'Gurke roh — nicht Gemuesesaft'],
   ['champignons', 'K701100', 'Champignon roh — nicht Zungenpastete'],
-  ['zucchini', '', 'Zucchini roh'],
-  ['paprika', '', 'Gemuesepaprika roh'],
-  ['karotten', '', 'Karotte roh — nicht Gemuesemischung'],
+  ['zucchini', 'G582100', 'Zucchini roh'],
+  ['paprika', 'G543100', 'Gemuesepaprika rot roh — rot ist die uebliche Lesart von "Paprika"'],
+  ['karotten', 'G620100', 'Karotte/Moehre roh — nicht Gemuesemischung'],
   // --- Fette ---
-  ['avocado', '', 'Avocado roh'],
+  ['avocado', 'F502100', 'Avocado roh'],
   ['walnuesse', 'H120100', 'Walnuss — heute NULL Treffer'],
-  ['mandeln', '', 'Mandel — nicht Frischecreme auf Mandelbasis'],
-  ['olivenoel', '', 'Olivenoel'],
-  ['erdnussbutter', '', 'Erdnussbutter'],
+  ['mandeln', 'H210100', 'Mandel suess — nicht bitter (H220100), nicht Mandeldrink'],
+  ['olivenoel', 'Q120000', 'Olivenoel — traegt 000'],
+  ['erdnussbutter', 'H880200', 'Erdnussbutter/Erdnusscreme — traegt 200, nicht 100'],
   // --- Obst ---
   ['banane', 'F503100', 'Banane roh — nicht getrocknet'],
   ['apfel', 'F110100', 'Apfel roh — nicht geduenstet'],

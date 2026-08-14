@@ -60,14 +60,14 @@ const FAELLE = [
   { q: 'haehnchenbrustfilet', gruppe: 'Fleisch', art: 'soll',  erwartung: 'haehnchen brustfilet', grund: 'Zusammenschreibung' },
 
   // --- Zusammenschreibungen aus ANDEREN Warengruppen ---
-  // `[cmd]` Diese Anfrage findet 51 Treffer, darunter "Rind Hackfleisch,
-  // roh" — aber auf Platz eins steht "Blätterteigtaschen gefüllt mit
-  // Rinderhack". Die Zerlegung hat geliefert, die REIHENFOLGE nicht.
-  // Deshalb bleibt der Fall als 'bekannt' stehen: die Erwartung auf
-  // blosses 'rind' zu senken, haette ihn gruen gemacht, ohne dass sich
-  // etwas verbessert. Gehoert zur Relevanz (Block 28), nicht zum
-  // Wortschatz.
-  { q: 'rinderhack',      gruppe: 'Fleisch',   art: 'bekannt', erwartung: 'rind hackfleisch', grund: 'zerlegt richtig, aber Blätterteigtaschen ranken vor dem Hackfleisch' },
+  // Stand Block 31: 51 Treffer, aber auf Platz eins standen
+  // "Blätterteigtaschen gefüllt mit Rinderhack". Die Zerlegung hatte
+  // geliefert, die Reihenfolge nicht — deshalb lief der Fall als
+  // 'bekannt'.
+  // `[cmd]` Block 32 loest ihn: die Zubereitungsstufe (C-25) holt
+  // "Rind Hackfleisch, roh" (U010100) auf Platz eins, der Burrito
+  // faellt auf Platz sechs. Damit wird der Fall zu 'soll'.
+  { q: 'rinderhack',      gruppe: 'Fleisch',   art: 'soll',    erwartung: 'hackfleisch', grund: 'C-25 holt die Rohform vor die Fertiggerichte' },
   { q: 'rindhackfleisch', gruppe: 'Fleisch',   art: 'soll',    erwartung: 'rind hackfleisch', grund: 'Zusammenschreibung des Bestandskopfs' },
   { q: 'schweineschnitzel', gruppe: 'Fleisch', art: 'soll',    erwartung: 'schwein',       grund: 'Fuge "e": schweine->schwein' },
   { q: 'schweinschnitzel', gruppe: 'Fleisch',  art: 'soll',    erwartung: 'schwein schnitzel', grund: 'Zusammenschreibung' },
