@@ -54,23 +54,48 @@ const errors: string[] = []
 function transliterateGermanWord(word: string) {
   return word
     .toLowerCase()
-    .replace(/ä/g, 'ae')
-    .replace(/ö/g, 'oe')
-    .replace(/ü/g, 'ue')
-    .replace(/ß/g, 'ss')
+    .replace(/\u00e4/g, 'ae')
+    .replace(/\u00f6/g, 'oe')
+    .replace(/\u00fc/g, 'ue')
+    .replace(/\u00df/g, 'ss')
 }
 
-for (const row of ausgabe) {
+function findCorruptChars(value: string) {
+  const found: string[] = []
+  if (value.includes('?')) found.push('?')
+  if (value.includes('\uFFFD')) found.push('\\uFFFD')
+  if (value.includes('\u0000')) found.push('\\u0000')
+  return found
+}
+
+for (const [index, row] of ausgabe.entries()) {
+  const lineNr = index + 1
+  const corruptFields: string[] = []
   if (!row.bls_code || typeof row.bls_code !== 'string') errors.push(`fehlender bls_code: ${JSON.stringify(row)}`)
   if (!row.name_display_de || typeof row.name_display_de !== 'string') errors.push(`${row.bls_code}: name_display_de fehlt/leer`)
   if (!row.name_display_en || typeof row.name_display_en !== 'string') errors.push(`${row.bls_code}: name_display_en fehlt/leer`)
+  if (typeof row.name_display_de === 'string') {
+    const corrupt = findCorruptChars(row.name_display_de)
+    if (corrupt.length) corruptFields.push(`name_display_de (${corrupt.join(', ')})`)
+  }
+  if (typeof row.name_display_en === 'string') {
+    const corrupt = findCorruptChars(row.name_display_en)
+    if (corrupt.length) corruptFields.push(`name_display_en (${corrupt.join(', ')})`)
+  }
   if (!Array.isArray(row.nebennamen)) {
     errors.push(`${row.bls_code}: nebennamen fehlt/ist kein Array`)
   } else {
-    for (const alias of row.nebennamen) {
+    for (const [aliasIndex, alias] of row.nebennamen.entries()) {
       if (typeof alias !== 'string' || !alias.trim()) errors.push(`${row.bls_code}: leerer/ungueltiger Nebenname`)
       if (/[(),]/.test(alias)) errors.push(`${row.bls_code}: Nebenname enthaelt Klammer oder Komma (${alias})`)
+      if (typeof alias === 'string') {
+        const corrupt = findCorruptChars(alias)
+        if (corrupt.length) corruptFields.push(`nebennamen[${aliasIndex}] (${corrupt.join(', ')})`)
+      }
     }
+  }
+  if (corruptFields.length) {
+    errors.push(`Zeile ${lineNr}, ${row.bls_code}: enthaelt ungueltige Zeichen in ${corruptFields.join('; ')}`)
   }
   if (typeof row.sicher !== 'boolean') errors.push(`${row.bls_code}: sicher ist kein boolean`)
   if (!inputByCode.has(row.bls_code)) errors.push(`${row.bls_code}: nicht in Eingabe`)
@@ -113,7 +138,7 @@ for (const row of ausgabe) {
     errors.push(`${row.bls_code}: verbotener Platzhalter in name_display_de`)
   }
   const displayFolded = row.name_display_de.toLowerCase()
-  const umlautWords = original.name_de.match(/[A-Za-zÄÖÜäöüß]+[ÄÖÜäöüß][A-Za-zÄÖÜäöüß]*/g) ?? []
+  const umlautWords = original.name_de.match(/[A-Za-z\u00c4\u00d6\u00dc\u00e4\u00f6\u00fc\u00df]+[\u00c4\u00d6\u00dc\u00e4\u00f6\u00fc\u00df][A-Za-z\u00c4\u00d6\u00dc\u00e4\u00f6\u00fc\u00df]*/g) ?? []
   for (const word of umlautWords) {
     const transliterated = transliterateGermanWord(word)
     if (transliterated !== word.toLowerCase() && displayFolded.includes(transliterated)) {
