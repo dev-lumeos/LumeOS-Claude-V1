@@ -37,10 +37,13 @@ Wörterbucheinträge nötig, die 50 häufigsten Erstwörter decken 24,9 % ab.
 Die **Bestandsseite** ist endlich: 7.140 Namen, maschinell erzeugt,
 regelhaft — und `[cmd]` der eine Eingriff dort (Zubereitungsstufe,
 Block 32) hat C-19, C-21 und einen Teil von C-27 auf einmal miterledigt.
-Der Umbau läuft deshalb über **C-28 → C-29 → C-30 → C-31**: Arten über
-den BLS-Code gruppieren, Namensschichten trennen, Suche auf Arten
-umstellen, dann erst die Oberfläche. C-20 und C-24 fallen dabei
-strukturell mit; C-22 bleibt eigenständig.
+Der Umbau läuft deshalb über **C-33 → C-29 → C-30 → C-32 → C-31**:
+Arten sauber gruppieren, Namensschichten trennen, Suche auf Arten
+umstellen, Reis als ersten durchkurierten Fall, dann erst die
+Oberfläche. `[cmd]` Der erste Anlauf (C-28, vierstellige Gruppierung)
+ist gemessen und gefallen — 39 von 100 gegen eine Abnahme von 95; die
+Ursache steht in C-33. C-20 und C-24 fallen beim Umbau strukturell mit;
+C-22 bleibt eigenständig.
 
 **Deployment:** E-08 hat keine Vorbedingung mehr ausser sich selbst.
 
@@ -54,10 +57,13 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 1. **Nutrition-Oberflächen.** Der nächste sichtbare Schritt; die
    Datenseite trägt. Laut D-04 auch der Punkt, an dem ein E2E-Aufbau
    wieder lohnt: die erste Oberfläche, die bleiben soll.
-2. **Suche: C-28 zuerst** — die Messung, die entscheidet, ob das
-   Artenmodell trägt. Erst danach C-29 (Schichten), C-30 (Suche),
-   C-31 (Oberfläche). C-20 und C-24 nicht einzeln angehen; sie fallen
-   in C-30 mit.
+2. **Suche: C-33 zuerst.** `[cmd]` C-28 ist gemessen und die
+   vierstellige Gruppierung gefallen — 39 von 100 gegen eine Abnahme von
+   95. Die Ursache ist gefunden und liegt in den Stellen 5–7, deren
+   Bedeutung von der Warengruppe abhängt (C-33). Erst wenn dieselbe
+   Messung dort 95 erreicht, folgen C-29 (Schichten), C-30 (Suche),
+   C-32 (Reis), C-31 (Oberfläche). C-20 und C-24 nicht einzeln angehen;
+   sie fallen in C-30 mit.
 3. **C-18 (Fehlsuchen mitschreiben)** bleibt der einzige Hebel, der nicht
    auf geratenen Begriffen beruht — er priorisiert die Kurationsarbeit
    aus C-31 und kann parallel laufen. **C-17 (Laufzeit)** gehört in
@@ -76,7 +82,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 39 offen, 3 in Arbeit.
+`[cmd]` 40 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -97,7 +103,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-23** | Systematische Abdeckungsmessung statt handverlesener Begriffe |  |
 | **C-24** | Halbfertigprodukte ranken als Grundzutat |  |
 | **C-27** | Alltagswörter ohne Treffer — noch zwei |  |
-| **C-28** | Arten über den BLS-Code gruppieren — Messung vor dem Bau |  |
+| **C-33** | Der Zubereitungsschlüssel ist warengruppenabhängig — die Ursache hinter C-28 |  |
+| **C-34** | Einträge, die der BLS nicht kennt |  |
 | **C-29** | Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt |  |
 | **C-30** | Suche und Trefferliste auf Arten umstellen |  |
 | **C-31** | Admin-Oberfläche für die Kuration |  |
@@ -616,65 +623,130 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `Vollkorneierteigwaren roh` ebenfalls. **Offen bleiben zwei:**
   `basmatireis` und `griechischer joghurt`, beide weiterhin null Treffer.
 
-- [ ] **C-28: Arten über den BLS-Code gruppieren — Messung vor dem Bau**
-  (neu 2026-08-14). **Schritt 0 des Suchumbaus. Nichts wird gebaut, bevor
-  diese Messung steht.**
+- [ ] **C-33: Der Zubereitungsschlüssel ist warengruppenabhängig — die
+  Ursache hinter C-28** (neu 2026-08-14). **Ersetzt die vierstellige
+  Gruppierung. Voraussetzung für C-29, C-30, C-31, C-32.**
 
-  **Der Befund, der den Umbau auslöst.** `[cmd]` Die Anfrage `lachs`
-  trifft **132 Einträge**. Was sie tatsächlich sind, steht nicht im Namen,
-  sondern im Code:
+  `[cmd]` **Die zehn im Bericht genannten Mischungen sind nicht chaotisch
+  — sie sind über die Stellen 5–7 sauber getrennt:**
 
-  | BLS | was es ist | Einträge |
+  | Code | Einträge | Stellen 5–7 |
   |---|---|---|
-  | `T410…` | Lachs, alle Zubereitungen | 15 |
-  | `T412/T415/T417` | Buckel-, Königs-, Wildlachs | 22 |
-  | `T207/T213` | Köhler/Seelachs, Alaska-Pollack — **kein Lachs** | 28 |
-  | `U578/W443…` | Schwein Lachsbraten, Lachsschinken — **Schwein** | 7 |
-  | `X…/Y…` | Gerichte mit Lachs | rund 50 |
+  | `F201100` | Aprikose roh | `100` |
+  | `F201400` | Aprikose getrocknet | `400` |
+  | `F201600` | **Aprikosensaft** | `600` |
+  | `F603600` | **Orangensaft** | `600` |
+  | `F603700` | **Orangennektar** | `700` |
+  | `M710100` | Skyr | `100` |
+  | `M710700` | **Frischkäsezubereitung** | `700` |
 
-  `Alaska-Seelachs` heißt aus Handelsgründen so, nicht aus Sachgründen.
-  **Keine Zerlegung des Namens erkennt das** — der Name führt hier aktiv
-  in die Irre. Der Code trennt sauber, was der Name verwischt.
+  Der Saft trägt `600`, der Nektar `700`. **Die Information, die der
+  vierstellige Code nicht trägt, steht an den Stellen 5–7** — sie wurde
+  nur als „Zubereitung" gelesen und deshalb beim Gruppieren ignoriert.
 
-  `[cmd]` **Die ersten vier Stellen des BLS-Codes kodieren die Art**,
-  die Stellen 5–7 die Zubereitung (`44-bls-codestruktur.md`). Über den
-  Bestand: **2.646 Arten auf 7.140 Einträge**; ohne Gerichte (X/Y)
-  **1.945 Arten auf 5.090 Einträge**. Fisch 5,4 Einträge je Art,
-  Fleisch 3,7, Öle 1,1.
+  **Der eigentliche Befund, und er korrigiert eine SSOT-Aussage:**
+  `[cmd]` **Die Bedeutung der Stellen 5–7 hängt von der Warengruppe ab.**
+  Code `600` heißt
 
-  **Das Suchmodell, das daraus folgt** (Tom, 2026-08-14): *Der Mensch
-  sucht die Art und wählt dann die Variante.* Niemand sucht „Alaska" oder
-  „Pollack" — jemand sucht Lachs und entscheidet danach, welchen. Die
-  Trefferliste zeigt also Arten, nicht 132 flache Zeilen.
+  | Warengruppe | `600` bedeutet | Einträge |
+  |---|---|---|
+  | `F` Obst | **Saft** (Apfelsaft, Orangensaft, Traubensaft) | 53 |
+  | `G` Gemüse | **Saft** (aus Karotte, aus Tomate, aus Sauerkraut) | 10 |
+  | `T` Fisch | geräuchert | 24 |
+  | `H` Nüsse | geröstet | 11 |
+  | `M` Käse | Fettstufe/Sorte | 34 |
 
-  **Was diese Messung beantwortet, bevor Code entsteht:**
+  `[cmd]` Ebenso `400`: bei Obst **getrocknet**, laut Tabelle global
+  „Konserve". **`docs/ssot/44-bls-codestruktur.md` ist damit an dieser
+  Stelle falsch** — die dortige Tabelle ist eine globale Aggregation und
+  gilt für Obst und Gemüse nicht. Sie ist zu korrigieren, bevor jemand
+  sie als Regel liest. *Aus der Häufigkeit einer Bedeutung folgt nicht
+  ihre Allgemeingültigkeit.*
 
-  1. Gruppierung nach `left(bls_code,4)` bilden und prüfen, ob innerhalb
-     jeder Gruppe wirklich **eine** Art steht.
-     **Abnahme: bei einer Stichprobe von 100 Gruppen keine gemischte.**
-     Scheitert das, fällt das Modell — und zwar hier, nicht nach drei
-     Tagen Bau.
-  2. Je Gruppe den Vertreter bestimmen: Rohform (`100`), sonst Grundform
-     (`000`). Die Logik steht bereits in `such_rang_zubereitung`.
-  3. Zählen, bei wie vielen Gruppen der aus dem Bestand abgeleitete
-     Gattungsname taugt und bei wie vielen nicht. **Das ist die Zahl, die
-     den Kurationsaufwand belegt** — Toms Schätzung lautet rund 2.000
-     Datensätze, das Modell sagt deutlich weniger, weil je **Art**
-     kuriert wird und nicht je Eintrag.
+  **Was zu tun ist:**
 
-  Ergebnis ist ein Messbericht, kein Schema und keine Migration.
+  1. **Zuerst nachsehen, nicht ableiten.** Die amtliche
+     BLS-Dokumentation enthält die Schlüsselliste der Zubereitungscodes.
+     `[cmd]` `pdftotext` ist für diese PDFs bestätigt. Eine abgeschriebene
+     Liste schlägt jede erschlossene.
+  2. Je Warengruppe die Codes in zwei Klassen teilen: **dieselbe Art,
+     andere Zubereitung** (roh, gekocht, tiefgefroren, geräuchert) gegen
+     **anderes Erzeugnis** (Saft, Nektar, Mehl, Pulver, Zubereitung).
+  3. Die Gruppierung neu bilden: vier Stellen **plus** Erzeugnisklasse.
+     Dann trennen sich Aprikose und Aprikosensaft, während Lachs roh und
+     Lachs geräuchert zusammenbleiben.
+  4. **Dieselbe Messung wie C-28 wiederholen, gleiche Stichprobe,
+     gleiche Abnahme von 95 von 100.** Ohne diesen zweiten Lauf ist die
+     Reparatur eine Behauptung.
+
+  **Was das nicht löst und was offen bleibt:** `[cmd]` `P273`
+  (Roséwein `000` gegen Rotling `100`) und `W154` (Schinkenmettwurst
+  `000` gegen Salami `500`) benutzen die Stellen 5–7, um verschiedene
+  Erzeugnisse zu unterscheiden — dort trennt keine Klasse, dort bleibt
+  Kuration. `[annahme]` Wie viele der 50 echten Mischungen zur einen und
+  wie viele zur anderen Sorte gehören, ist **nicht gemessen**. Das ist
+  die erste Zahl, die der neue Lauf liefern muss.
+
+  **Auch zu klären:** `[cmd]` 953 Gruppen ohne Vertreter. Ein
+  Gattungsname braucht keinen Rohzustand — Pumpernickel ist Pumpernickel.
+  Die Vertreterregel muss einen dritten Fall kennen: höchstes
+  `sort_weight` innerhalb der Gruppe.
+
+- [ ] **C-34: Einträge, die der BLS nicht kennt** (neu 2026-08-14).
+  Unabhängig vom Suchumbau, aber die Entscheidung über den Codebereich
+  fällt jetzt, nicht später.
+
+  **Anlass** (Tom, 2026-08-14): Neue Spalten und neue Einträge in
+  `nutrition.foods` sind unproblematisch, ein gezieltes Update-Skript
+  ersetzt das heutige Überschreiben. Daraus die Frage, ob man Sorten
+  durch **Kopieren** eines BLS-Eintrags abbilden könnte — weisser Reis
+  kopiert und der Code erweitert.
+
+  **Kopieren für Sorten: nein.** `[cmd]` `C352000` trägt **101
+  Nährwerte**; fünf Sorten mal drei Zubereitungen wären 15 Einträge und
+  1.515 Werte **ohne eine einzige neue Messung**. `[cmd]` `data_source`
+  kennt heute genau zwei Werte, beide auf die amtliche Arbeitsmappe
+  zurückführbar — das ist der Grund, warum der Abgleich 353 Abweichungen
+  fand und alle als Rundungen erklären konnte. Kopien erzeugen Werte
+  ohne Quelle; der nächste Abgleich meldet dann Abweichungen, die keine
+  sind. Sorten ohne eigene Messwerte gehören in die **Aliasschicht**.
+  Und der BLS-Code ist seit C-28/C-33 tragende Struktur — ein erweiterter
+  Code ist dort ein Fremdkörper.
+
+  **Eigene Einträge für echte Lücken: ja**, und sie kommen sicher:
+  Supplements (Whey, Kreatin), thailändische Küche — `[cmd]` `name_th`
+  ist bei allen 7.140 Einträgen leer, und MealCam wird in Thailand
+  betrieben. Der BLS deckt das nicht ab und wird es nie.
+
+  **Zu entscheiden, bevor der erste Eintrag entsteht:**
+  - eigener Codebereich, **klar vom BLS getrennt** — kein erweiterter
+    BLS-Code, keine freie Vergabe im BLS-Raum
+  - eigener `data_source`-Wert je Quelle, damit der Abgleich gegen die
+    Arbeitsmappe weiterhin sauber zwischen amtlich und eigen trennt
+  - Umgang mit der Architekturentscheidung „BLS 4.0 als einzige
+    Datenquelle": eigene Einträge sind eine **benannte Ausnahme** mit
+    eigener Quelle, keine stille Aufweichung
+  - Verhalten in Suche und Sortierung: rangieren eigene Einträge gleich,
+    davor oder dahinter?
 
 - [ ] **C-29: Drei Namensschichten und eine Kuration, die den
   Kettenlauf überlebt** (neu 2026-08-14). Setzt C-28 voraus.
 
   **Zwei Befunde, die das nötig machen:**
 
-  `[cmd]` **Die Kette überschreibt jede Handarbeit.**
+  `[cmd]` **Der heutige Importschritt überschreibt jede Handarbeit.**
   `supabase/_pipeline/03_bls_import/030_apply_local.sql:48` trägt
   `on conflict (bls_code) do update set … name_display = excluded.name_display`.
   Jeder Aufbau — und der läuft in unter zehn Sekunden, also oft — setzt
-  den CSV-Wert zurück. Ein Editor auf dieser Spalte ist ein Editor auf
-  Sand.
+  den CSV-Wert zurück.
+
+  **Das ist keine Eigenschaft der Kette, sondern dieses einen Skripts**
+  (Tom, 2026-08-14). Neue BLS-Codes kommen dazu, Quellwerte ändern sich
+  gelegentlich — ein Schritt, der **gezielt** aktualisiert und kuratierte
+  Felder unangetastet lässt, löst das sauber. Was bleibt, ist eine
+  Reihenfolge: **dieses Skript wird umgebaut, bevor der erste Name
+  kuriert wird.** Solange es unverändert läuft, ist jede Handarbeit beim
+  nächsten Aufbau verloren.
 
   `[cmd]` **Die Anzeigespalten sind heute reine Kopien.** `name_display`
   ist bei **7.140 von 7.140** identisch mit `name_de` — null Abweichungen.
@@ -719,7 +791,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
     einen Frischkäse ist eine inhaltliche Aussage, die falsch sein kann.
 
 - [ ] **C-30: Suche und Trefferliste auf Arten umstellen** (neu
-  2026-08-14). Setzt C-28 und C-29 voraus.
+  2026-08-14). Setzt **C-33** und C-29 voraus — C-28 in der
+  vierstelligen Form ist gemessen und gefallen.
 
   Die Trefferliste zeigt Arten mit ihrem Vertreter, die Zubereitungs-
   varianten hängen darunter. Damit wird die Rangfolge eine Frage
@@ -746,7 +819,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   passend gelegt.
 
 - [ ] **C-31: Admin-Oberfläche für die Kuration** (neu 2026-08-14).
-  Setzt C-29 und C-30 voraus — bewusst **zuletzt**.
+  Setzt C-29 und C-30 voraus — bewusst **zuletzt**. `[cmd]` Der Umfang
+  ist seit C-28 beziffert: **468 Arten** mit unbrauchbarem Namen, nicht
+  rund 2.000 Einträge.
 
   Die Oberfläche kuriert **Gattungsnamen je Art**, nicht Einzelnamen je
   Eintrag, und schreibt in die Override-Tabelle aus C-29, niemals direkt

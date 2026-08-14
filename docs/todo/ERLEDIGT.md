@@ -1979,6 +1979,34 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   v100 führt `gluteus_mideus_nutzungen` als Kennzahl mit, damit der Fall
   sichtbar bleibt.
 
+- [x] **C-28: Arten über den BLS-Code gruppieren — Messung vor dem Bau**
+  — **gemessen 2026-08-14. Die Vermutung hat die Prüfung nicht
+  bestanden.** Bericht: `docs/ssot/48-artengruppierung-messung.md`,
+  Skript: `supabase/_pipeline/_validierung/arten-gruppierung-messen.ts`.
+
+  `[cmd]` **39 von 100 Gruppen einheitlich** — die Abnahme lautete 95.
+  Nur auf Nicht-Gerichte gerechnet 61 von 100, also besser, aber
+  ebenfalls klar darunter. Die Zahl wurde gemeldet, wie sie ist; es wurde
+  nicht nachgebessert, bis sie gefällt. **Das ist der Zweck der Regel,
+  und sie hat gehalten** — der Bruch kostet einen halben Tag statt drei.
+
+  `[cmd]` Zwei weitere Ergebnisse: **1.564 von 2.646** Gruppen haben
+  genau einen eindeutigen Vertreter, **953 (36 %) gar keinen** — weder
+  `100` noch `000`, etwa Pumpernickel oder Vollkornbrot mit Buttermilch,
+  Erzeugnisse ohne Rohform. Und **468 von 1.596** Nicht-Gericht-Gruppen
+  (29,3 %) tragen einen maschinell unbrauchbaren Gattungsnamen.
+
+  **Damit ist Toms Schätzung belegt und unterboten:** rund 470 statt
+  rund 2.000, weil je Art statt je Eintrag kuriert wird.
+
+  **Die Gegenprobe hält:** `[cmd]` `T410` enthält 14 Einträge, alle
+  Lachs. Der Befund aus dem Lachs-Fall bleibt richtig. Widerlegt ist
+  nur, dass er sich verallgemeinert.
+
+  **Was den Bruch verursacht, steht in C-33** — die Ursache ist gemessen
+  und der Weg weiter offen. Der Punkt gilt als erledigt, weil er
+  geliefert hat, wozu er da war: eine Zahl, die eine Richtung stoppt.
+
 ## Erledigt am 2026-08-05
 
 - [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und
