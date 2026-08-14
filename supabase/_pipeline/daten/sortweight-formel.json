@@ -1,0 +1,119 @@
+{
+  "erhoben": "2026-08-16",
+  "anlass": "C-38 — sort_weight nach der Formel aus SPEC_05_FOOD_TAXONOMY.md",
+  "quelle": "docs/specs/Nutrition/01_current_specs/SPEC_05_FOOD_TAXONOMY.md, Abschnitt 'Sort Weight System'",
+  "hinweis": "Die Spec ist Datenquelle, kein Sollwert. Abweichungen zum Bestand sind in docs/ssot/51-sortweight-formel.md benannt, nicht hier stillschweigend aufgeloest.",
+  "grenzen": { "min": 0, "max": 1000 },
+
+  "basis_warengruppe": {
+    "_kommentar": "Basis-Score nach BLS-Kopfbuchstabe. Die Spec unterscheidet bei E, U und V zusaetzlich nach Untergruppe; das loesen die Regeln in 'basis_sonderfall'.",
+    "B": 520, "C": 700, "D": 340, "E": 750, "F": 660, "G": 660,
+    "H": 650, "K": 550, "M": 660, "N": 400, "P": 180, "Q": 460,
+    "R": 360, "S": 240, "T": 700, "U": 780, "V": 760, "W": 440,
+    "X": 200, "Y": 240
+  },
+
+  "basis_sonderfall": [
+    {
+      "wenn": "warengruppe=E und name enthaelt teigwaren/nudeln",
+      "basis": 580,
+      "grund": "Spec fuehrt E zweimal: Huehnereier 750, Teigwaren 580. Der Bestand legt beides unter E."
+    },
+    {
+      "wenn": "warengruppe=U und name enthaelt fettgewebe/speck/schwarte",
+      "basis": 100,
+      "grund": "Spec: U (Fett) 100 gegen U (Muskel) 780"
+    },
+    {
+      "wenn": "warengruppe=V und name enthaelt innerei-wort",
+      "basis": 300,
+      "grund": "Spec: V (Innereien) 300 gegen V (Gefluegel) 760"
+    }
+  ],
+
+  "zuschlaege": [
+    { "name": "core_fitness",  "wert": 200, "bedingung": "bls_code in core_liste" },
+    { "name": "protein_20",    "wert": 80,  "bedingung": "PROT625 >= 20" },
+    { "name": "protein_30",    "wert": 120, "bedingung": "PROT625 >= 30, zusaetzlich zu protein_20" },
+    { "name": "lean_protein",  "wert": 50,  "bedingung": "PROT625 >= 20 und FAT <= 5" },
+    { "name": "omega3_rich",   "wert": 40,  "bedingung": "FAPUN3 >= 1" },
+    { "name": "high_fiber",    "wert": 30,  "bedingung": "FIBT >= 6" },
+    {
+      "name": "whole_food", "wert": 60,
+      "bedingung": "zubereitungscode 100 ODER 000 und warengruppe in C,G,F,H,T",
+      "abweichung_von_spec": true,
+      "grund_abweichung": "Die Spec bindet den Bonus an 100. [read] 44-bls-codestruktur.md: 000 heisst nicht 'roh', sondern 'keine Zubereitungsvariante' — Haferflocken, Skyr, Mozzarella, Vollkornbrot, Olivenoel und Erdnussbutter tragen 000, weil sie keine Rohform haben. nutrition.such_rang_zubereitung behandelt 100 und 000 seit Block 32 gleichrangig; Code schlaegt Spec. [cmd] 111 Eintraege betroffen, davon 24 mit 100-Geschwister in derselben Gruppe — der quinoa-Fall."
+    },
+    { "name": "specialty",     "wert": 100, "bedingung": "name enthaelt hummer/kaviar/trueffel" }
+  ],
+
+  "abzuege": [
+    {
+      "name": "ultra_processed", "wert": -250,
+      "bedingung": "processing_level = 'ultra_processed'",
+      "wirkt": false,
+      "grund_unwirksam": "[cmd] Die Spalte traegt fuer alle 7.140 Eintraege den Wert 'raw', auch fuer Bechamelsauce. Der Abzug kann nicht feuern."
+    },
+    {
+      "name": "fertiggericht", "wert": -300, "bedingung": "warengruppe in X,Y",
+      "wirkt": false,
+      "grund_unwirksam": "GESTRICHEN (Entscheidung 2026-08-16). Doppelbestrafung: die Basis kodiert die Warengruppe bereits (X 200, Y 240), der Abzug zieht dieselbe Eigenschaft ein zweites Mal ab. [cmd] Ergebnis: 1.114 von 1.165 X-Eintraegen und 862 von 885 Y-Eintraegen standen auf 0, mit 3 bzw. 4 Stufen insgesamt — innerhalb der Gerichte gab es keine Reihenfolge mehr."
+    },
+    { "name": "zubereitet",      "wert": -150, "bedingung": "zubereitungscode weder 100 noch 000" },
+    { "name": "gesuesst",        "wert": -100, "bedingung": "name enthaelt gesuesst/gezuckert/dragiert" },
+    { "name": "konserve",        "wert": -80,  "bedingung": "name enthaelt konserve und warengruppe <> T" },
+    { "name": "innereien",       "wert": -400, "bedingung": "name enthaelt herz/niere/magen/kutteln/bries" },
+    { "name": "leber",           "wert": -380, "bedingung": "name enthaelt leber (ohne leberkaese/leberwurst)" },
+    { "name": "gehirn_lunge_milz","wert": -450, "bedingung": "name enthaelt hirn/lunge/milz" },
+    { "name": "blut",            "wert": -500, "bedingung": "name enthaelt blut" },
+    { "name": "fettgewebe",      "wert": -500, "bedingung": "name enthaelt fettgewebe" },
+    { "name": "knochenmark",     "wert": -450, "bedingung": "name enthaelt knochenmark" },
+    { "name": "schwarte",        "wert": -430, "bedingung": "name enthaelt schwarte" },
+    { "name": "laborschnitt",    "wert": -200, "bedingung": "name enthaelt roemische Ziffer S I bis S XII" },
+    {
+      "name": "alkohol", "wert": -300, "bedingung": "warengruppe = P",
+      "wirkt": false,
+      "grund_unwirksam": "GESTRICHEN (Entscheidung 2026-08-16). Doppelbestrafung wie bei fertiggericht: die Basis P traegt bereits 180. [cmd] Ergebnis: alle 119 P-Eintraege standen auf 0 — eine einzige Stufe fuer die ganze Warengruppe. Eine Regel, die 100 % einer Gruppe auf denselben Wert wirft, unterscheidet nichts mehr."
+    }
+  ],
+
+  "zubereitung": {
+    "_kommentar": "NICHT aus der Spec. Ergaenzung aus Block 32: das heutige sort_weight traegt die Zubereitungsstufe (nutrition.such_rang_zubereitung, 073_suchfilter.sql). Ohne sie faellt 'Banane roh' hinter 'Banane getrocknet'. Die Hoehe ist in Schritt 3 gemessen, nicht gewaehlt.",
+    "grundform_bonus": 120,
+    "bedingung": "zubereitungscode 100 oder 000"
+  },
+
+  "core_liste": {
+    "_kommentar": "Die 30 Eintraege der Spec, jeder einmal im Bestand nachgeschlagen. Wo die Spec nur eine Gattung nennt, steht die Wahl mit Grund. Belegt in docs/ssot/51-sortweight-formel.md.",
+    "V416100": "Haehnchen Brustfilet, roh — Code aus der Spec",
+    "V486100": "Pute Brust, ohne Haut, roh — Code aus der Spec",
+    "U010100": "Rind Hackfleisch, roh — Code aus der Spec",
+    "U211100": "Rind Filet/Lende, roh — Code aus der Spec",
+    "T410100": "Lachs roh — Spec sagt 'diverse T-Codes'; gewaehlt der Lachs selbst, NICHT T094100 Lachsrogen (hoeheres sort_weight, aber anderes Erzeugnis)",
+    "T121100": "Thunfisch roh — eindeutig",
+    "T102100": "Hering roh — eindeutig unter den Grundformen",
+    "E111100": "Huehnerei roh — Code aus der Spec",
+    "E113100": "Huehnerei Eiklar, roh — Code aus der Spec (Spec sagt 'Eiweiss')",
+    "M713100": "Speisequark Magerstufe — einziger Magerquark-Treffer",
+    "M711100": "Koerniger Frischkaese < 10 % — der Huettenkaese des Bestands",
+    "M710100": "Skyr — eindeutig",
+    "M141100": "Joghurt aus entrahmter Milch — ERSATZ: [cmd] 'Griechischer Joghurt' existiert im BLS nicht (0 Treffer)",
+    "H861000": "Tofu — Code aus der Spec; der Bestand kennt kein 'Tofu fest'",
+    "H725100": "Linse reif — gewaehlt vor H730000 (rot) als die allgemeine Form",
+    "C133000": "Hafer Flocken — Code aus der Spec",
+    "C352000": "Reis poliert, roh — Code aus der Spec",
+    "K420100": "Batate/Suesskartoffel, roh — eindeutig",
+    "K110100": "Kartoffel geschaelt, roh — Code aus der Spec",
+    "F503100": "Banane roh — gewaehlt vor Bananenchips und Bananennektar",
+    "B101000": "Vollkornbrot — der unspezifische Eintrag, nicht Hafer-/Weizen-/Roggenvollkornbrot",
+    "H210100": "Mandel suess — gewaehlt vor H220100 (bitter, ungeniessbar) und Mandeldrink",
+    "H120100": "Walnuss — gewaehlt vor Walnussoel",
+    "F502100": "Avocado roh — gewaehlt vor Guacamole",
+    "Q120000": "Olivenoel — der Bestand fuehrt keine Guete 'nativ extra'",
+    "G312100": "Broccoli roh — gewaehlt vor Broccolicremesuppe",
+    "G211100": "Spinat roh — eindeutig",
+    "G543100": "Gemuesepaprika rot, roh — rot als die uebliche Lesart von 'Paprika'; gruen und gelb bewusst NICHT aufgenommen",
+    "G561100": "Tomate roh — gewaehlt vor Tomatenmark und Ketchup",
+    "G620100": "Karotte/Moehre, roh — gewaehlt vor Karottensaftschorle"
+  }
+}
