@@ -102,14 +102,14 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 43 offen, 3 in Arbeit.
+`[cmd]` 42 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
 | **A-05** | Repo-Müll entfernen | ~ |
 | **A-06** | Design-System spezifizieren |  |
 | **A-08** | ADR Medienort |  |
-| **A-11** | Specs laufend zu SSOT konsolidieren |  |
+| **A-11** | Specs laufend zu SSOT konsolidieren | ~ |
 | **B-20** | Codex-Pfadschutz wiederherstellen | ~ |
 | **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
 | **C-01** | Frontend-Stack-Lücke schliessen |  |
@@ -224,54 +224,50 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `[cmd]` der Bestand liegt in Supabase Storage (15 GB, Bucket `exercises`).
   Kostenfolge, und ein Wechsel würde einen Transfer bedeuten.
 
-- [ ] **A-11: Specs laufend zu SSOT konsolidieren** (neu 2026-08-14).
-  Arbeitsregel, kein Bauauftrag.
+- [~] **A-11: Specs laufend zu SSOT konsolidieren** (neu 2026-08-14).
+  Arbeitsregel, kein Bauauftrag. **Ablauf und Register stehen seit dem
+  2026-08-14 in `docs/spezifikation/00-KONSOLIDIERUNG.md`.**
 
   **Toms Festlegung (2026-08-14):** Die Specs sind **Grundlage der
-  Diskussion** darüber, was als verbindlich gilt. Sie werden laufend
-  konsolidiert, das Ergebnis wird festgeschrieben. Nicht in einem Zug,
-  sondern jeweils dann, wenn an einem Bereich gearbeitet wird.
+  Diskussion** darüber, was verbindlich gilt. Sie werden laufend
+  konsolidiert — nicht in einem Zug, sondern jeweils dann, wenn an einem
+  Bereich gearbeitet wird. Das Verfahren muss für jeden gleich
+  funktionieren, auch für einen fremden Agenten.
 
-  **Der Ablauf:** Spec lesen → mit Tom besprechen → Entscheidung
-  festhalten → Herkunft im Register vermerken. Was nicht besprochen ist,
-  bleibt Material und wird nicht als geltend behandelt.
+  `[read]` **Das Verfahren war bereits vollständig beschrieben** und
+  wurde nur nicht angewandt: `docs/spezifikation/00-INDEX.md` (Stand
+  2026-08-02) legt die Rollen der Ordner fest, den Pflicht-Statuskopf,
+  die vier Regeln aus dem Spec-Audit und die Reihenfolge — und benennt
+  Nutrition als Kandidaten mit offenem Gate. Es fehlte kein Prozess,
+  sondern der Nachweis, wie weit er angewandt ist.
 
-  **Offene Entscheidung: wohin das Ergebnis gehört.** `[read]` `CLAUDE.md`
-  trennt heute: `docs/ssot/` ist der **Ist-Zustand**, `docs/spezifikation/`
-  der **Soll-Zustand**. Eine Produktentscheidung aus einer Spec ist Soll,
-  kein Ist — sie beschreibt, was gebaut werden soll, nicht was läuft.
+  **Die Ablagefrage ist damit beantwortet, nicht offen:** `[read]`
+  Regel 2 dort lautet „Ist und Soll getrennt". Produktentscheidungen
+  gehen nach `docs/spezifikation/`, Messungen und Code-Befunde nach
+  `docs/ssot/`, offene Punkte in diese Datei. Eine Produktentscheidung
+  ist Soll, auch wenn sie vor Monaten getroffen wurde.
 
-  Mein Vorschlag: **Produktentscheidungen nach `docs/spezifikation/`,
-  Messungen und Code-Befunde nach `docs/ssot/`.** Der Grund ist der
-  bereits einmal bezahlte: Landet Soll-Material in der Ist-Ablage, wird
-  es später als „so ist es" gelesen. `[cmd]` `docs/spezifikation/`
-  besteht heute fast nur aus `.gitkeep` — die Struktur steht, der Inhalt
-  fehlt, und genau dieser Prozess würde sie füllen. Tom entscheidet.
+  **Was neu entstanden ist**, und mehr soll es nicht werden:
+  - `docs/spezifikation/00-KONSOLIDIERUNG.md` — vier Schritte, vier
+    Zustände (`offen` · `gelesen` · `aufgeloest` · `verworfen`), ein
+    Register über `[cmd]` **84 Dateien** (45 Specs, 39 Brainstorm).
+  - `CLAUDE.md` nachgezogen: Altbestand wird **mitgelesen**, ist aber nie
+    Current Truth; in `docs/specs/` wird nicht geschrieben.
+  - `[read]` Der Steuersatz `BLOCKED_BY_PRODUCT_GATE` im Kopf von
+    `docs/specs/Nutrition/INDEX.md` ist als überholt gekennzeichnet — er
+    stammt aus dem abgelegten Governance-Modell und hätte beim nächsten
+    Lesen jemanden angehalten.
 
-  **Ein Register ist nötig**, sonst weiss nach drei Sitzungen niemand,
-  was schon konsolidiert ist. `[cmd]` Allein Nutrition hat **45
-  Spec-Dateien** (13 ADRs, 10 aktuelle Specs, 14 Patches, 4 Reviews),
-  dazu **41 Dateien** unter `docs/BrainstormDocs/Nutrition/`. Das
-  Register führt je Datei: gelesen, besprochen, aufgegangen in — oder
-  verworfen, mit Grund. Die Altdateien selbst bleiben unangetastet.
+  **Die Grenze, die dabei gilt:** kein Freigabelauf, keine Risikoklassen,
+  keine Warteschlange, keine Werkzeuge. Der Altbestand hat 1,5 MB
+  Spezifikation und nichts Gebautes hervorgebracht, die frühere
+  Governance-Maschinerie 476 Dateien. Wenn das Register anfängt, Pflege
+  zu kosten, ist es falsch gebaut.
 
-  **Anknüpfungspunkt:** `[read]` `docs/ssot/40-spec-code-matrix.md`
-  (Stand 2026-08-01) hat die Bestandsaufnahme bereits gemacht — welches
-  Modul wie tief spezifiziert und wie weit gebaut ist. Das Register
-  setzt darauf auf, statt neu zu zählen.
-
-  **Ein Satz, der dabei aufzulösen ist:** `[read]`
-  `docs/specs/Nutrition/INDEX.md` trägt im Kopf
-  `STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY … unless Tom
-  explicitly opens a specific product gate`. Das stammt aus dem
-  abgelegten Governance-Modell. Mit dieser Festlegung ist das Gate für
-  Nutrition faktisch offen — es sollte dort stehen, sonst stoppt beim
-  nächsten Lesen jemand an einem Satz, der nicht mehr gilt.
-
-  **Erster Anwendungsfall liegt vor:** C-34 ist am 2026-08-14 genau so
-  entstanden — `ADR_CUSTOM_FOODS_V1.md` und der Entitäts-Patch gelesen,
-  Toms Ergänzung zur Freigabe dagegengestellt, Widerspruch zwischen zwei
-  Spec-Dateien vermerkt. Das ist die Form, in der es laufen soll.
+  **Offen bleibt nur die Anwendung.** `[cmd]` Drei von 84 Dateien sind
+  eingetragen — die beiden, aus denen C-34 entstanden ist, plus die
+  Entscheidungssammlung. Der Punkt bleibt dauerhaft in Arbeit; er wird
+  nicht abgeschlossen, sondern angewandt.
 
 
 ## B — Entwicklungsumgebung & Absicherung

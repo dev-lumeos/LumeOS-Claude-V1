@@ -18,7 +18,8 @@ passiert („services/ ist leer"; „keine Writes, kein Auth").
 |---|---|
 | Was ist gebaut, was gilt? | `docs/ssot/00-INDEX.md` (Einstieg, Herkunftsmarker, Rangfolge: Code > ssot > Rest) |
 | Was ist als Nächstes zu tun? | `docs/todo/TODO.md` |
-| Was ist das Zielbild? | `docs/spezifikation/` |
+| Was ist das Zielbild? | `docs/spezifikation/` (Rollen der Ordner, Statuskopf, Regeln: `00-INDEX.md`) |
+| Was ist vom Altbestand schon ausgewertet? | `docs/spezifikation/00-KONSOLIDIERUNG.md` (Ablauf und Register) |
 | Wie entsteht die Datenbank? | `supabase/README.md` (Baseline + Pipeline, Rollenteilung) |
 | Wie starte ich, welche Gates gelten? | Root-`README.md` (u. a. `pnpm gate`, Hook-Aktivierung) |
 
@@ -35,7 +36,15 @@ passiert („services/ ist leer"; „keine Writes, kein Auth").
   Details in `docs/spezifikation/10-plattform/konventionen/`.
 - Nie gegen die laufende Datenbank testen; Wegwerf-Datenbank, danach
   verwerfen. Strukturelle Live-Änderungen nur nach Freigabe.
-- Keine alten BrainstormDocs als Current Truth verwenden.
+- **`docs/specs/` und `docs/BrainstormDocs/` sind Datenquelle, nie
+  Current Truth.** Sie beschreiben teils eine Vorgänger-Codebasis. Wer an
+  einem Modul arbeitet, liest den zugehörigen Altbestand **mit** — er
+  enthält getroffene Produktentscheidungen, die sonst zweimal getroffen
+  werden. Verbindlich wird ein Inhalt erst, wenn er besprochen und nach
+  `docs/spezifikation/` (Soll) oder `docs/ssot/` (Ist) übernommen ist.
+  Ablauf und Stand: `docs/spezifikation/00-KONSOLIDIERUNG.md`.
+- In `docs/specs/` wird nicht geschrieben — einzige Ausnahme ist ein
+  Statusvermerk im Kopf, der auf das Konsolidierungsregister zeigt.
 - Bei Unsicherheit: im Repo nachsehen, nicht raten.
 
 ---

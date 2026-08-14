@@ -1,8 +1,17 @@
 # Nutrition Module — Spec Index
 
-STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY
+> **Hinweis vom 2026-08-14 — der Status unten gilt nicht mehr.**
+> Tom hat festgelegt, dass die Nutrition-Specs Grundlage der laufenden
+> Arbeit sind. Ablauf und Stand der Auswertung:
+> `docs/spezifikation/00-KONSOLIDIERUNG.md`. Dieser Ordner bleibt
+> Datenquelle, kein Sollwert — verbindlich wird ein Inhalt erst nach
+> Übernahme in `docs/spezifikation/` (Soll) oder `docs/ssot/` (Ist).
+> Der folgende Absatz stammt aus dem abgelegten Governance-Modell und
+> steht nur noch als Herkunftsbeleg.
 
-This Nutrition spec index is retained as source-chain evidence and future planning context. It is not an active product runbook and does not authorize BLS import, Supabase commands, migrations, Nutrition implementation, or product batches. Product execution remains closed unless Tom explicitly opens a specific product gate.
+~~STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY~~
+
+~~This Nutrition spec index is retained as source-chain evidence and future planning context. It is not an active product runbook and does not authorize BLS import, Supabase commands, migrations, Nutrition implementation, or product batches. Product execution remains closed unless Tom explicitly opens a specific product gate.~~
 > LumeOS | Stand: Mai 2026
 
 ---
