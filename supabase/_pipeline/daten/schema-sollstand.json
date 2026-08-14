@@ -1,0 +1,63 @@
+{
+  "erhoben": "2026-08-16",
+  "anlass": "C-38-Neuaufbau liess meals, meal_items, water_logs und zwei Sichten verschwinden, ohne dass ein Kettenlauf sich beschwerte",
+  "regel": "VON HAND GEPFLEGT. Diese Liste darf ihre Werte NIEMALS aus der laufenden Datenbank beziehen — eine Pruefung, die ihre Sollwerte vom Prueflig nimmt, bestaetigt jeden Zustand. Wer einen Kettenschritt ergaenzt, traegt sein Erzeugnis hier ein.",
+  "quelle": "supabase/README.md, Tabelle 'Lokaler Neubau'. Belegt in docs/ssot/53-kettenluecke.md.",
+
+  "tabellen": [
+    { "name": "nutrient_defs",            "schritt": "Baseline" },
+    { "name": "foods",                    "schritt": "Baseline" },
+    { "name": "food_nutrients",           "schritt": "Baseline" },
+    { "name": "food_categories",          "schritt": "Baseline" },
+    { "name": "food_aliases",             "schritt": "Baseline" },
+    { "name": "food_tags",                "schritt": "Baseline" },
+    { "name": "tag_definitions",          "schritt": "Baseline" },
+    { "name": "food_preferences",         "schritt": "Baseline (050)" },
+    { "name": "food_preference_items",    "schritt": "Baseline (050)" },
+    { "name": "food_curation_candidates", "schritt": "Baseline (051)" },
+    { "name": "food_curation_decisions",  "schritt": "Baseline (051)" },
+    { "name": "preparation_kinds",        "schritt": "023" },
+    { "name": "food_groups",              "schritt": "023" },
+    { "name": "search_synonyms",          "schritt": "024" },
+    { "name": "meals",                    "schritt": "052" },
+    { "name": "meal_items",               "schritt": "052" },
+    { "name": "water_logs",               "schritt": "055" }
+  ],
+
+  "sichten": [
+    { "name": "daily_summary",     "schritt": "053" },
+    { "name": "hydration_summary", "schritt": "056" }
+  ],
+
+  "funktionen": [
+    { "name": "search_fold",             "schritt": "072" },
+    { "name": "food_search",             "schritt": "073" },
+    { "name": "such_rang_zubereitung",   "schritt": "073" },
+    { "name": "such_rang_wortgrenze",    "schritt": "073" },
+    { "name": "food_categories_tree",    "schritt": "070" },
+    { "name": "preference_search_preview","schritt": "070" },
+    { "name": "curation_overview",       "schritt": "070" },
+    { "name": "schema_debug",            "schritt": "070" },
+    { "name": "touch_updated_at",        "schritt": "052" },
+    { "name": "meal_items_owner_guard",  "schritt": "052" }
+  ],
+
+  "mindestzeilen": {
+    "_kommentar": "Untergrenzen, keine Sollwerte. Sie fangen den Fall ab, dass eine Tabelle zwar existiert, aber leer geblieben ist.",
+    "foods": 7140,
+    "food_nutrients": 698092,
+    "food_aliases": 30000,
+    "food_tags": 9000,
+    "nutrient_defs": 138,
+    "food_categories": 500,
+    "search_synonyms": 4800,
+    "preparation_kinds": 11,
+    "food_groups": 19
+  },
+
+  "nicht_erwartet": {
+    "_kommentar": "Was bewusst NICHT im Schema steht, damit niemand es faelschlich als Luecke meldet.",
+    "nutrition_targets": "gehoert zu Goals (C-06), von keinem Kettenschritt angelegt. [cmd] 055_water_logs.sql haelt das ausdruecklich fest.",
+    "_sortweight_neu": "Hilfstabelle der C-38-Messung, bewusst entfallen"
+  }
+}

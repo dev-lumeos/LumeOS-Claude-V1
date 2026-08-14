@@ -71,6 +71,60 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 030 | `03_bls_import/030_apply_local.sql` | `foods`, `food_nutrients` aus CSV | 7.140 / 698.092 |
 | 020 **erneut** | dito | Ableitungen greifen jetzt: Aliase, Tags, Kategoriezuweisungen | 21.420 / 9.265 / 7.140 |
 | 021 | `02_human_layer/021_wild_category_apply.sql` | **Kategoriezuweisung `V2%` → `wild`** | `affected_rows = 49` |
+| 022 | `02_human_layer/022_alias_ableitung.sql` | abgeleitete Aliase | 32.522 gesamt |
+| 023 | `02_human_layer/023_zubereitung_ableitung.sql` | `preparation_kinds` (11), `food_groups` (19) | 11 / 19 |
+| 024 | `02_human_layer/024_suchsynonyme.sql` | `search_synonyms` | 4.877, davon 21 von Hand |
+| **052** | `05_user_tabellen/052_diary_foundation.sql` | **`meals`, `meal_items`**, `touch_updated_at()`, `meal_items_owner_guard()`, 4 Trigger, 8 Policies | 2 Tabellen |
+| **053** | `05_user_tabellen/053_daily_summary.sql` | Sicht **`daily_summary`** | 1 Sicht |
+| **054** | `05_user_tabellen/054_preference_uniques.sql` | Eindeutigkeitsregeln auf `food_preference_items` | — |
+| **055** | `05_user_tabellen/055_water_logs.sql` | **`water_logs`** + Policies | 1 Tabelle |
+| **056** | `05_user_tabellen/056_hydration_summary.sql` | Sicht **`hydration_summary`** | 1 Sicht |
+| 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, Trigram-Indizes, Grants, RLS | v060: 22 Prüfungen |
+| 061 | `06_zugriff/061_rollen_admin.sql` | `public.is_admin()` + Policies | v061: 15 Prüfungen |
+| 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen | v070: 18 Prüfungen |
+| 072 | `07_lesefunktionen/072_normalisierung.sql` | `search_fold`, Ausdrucksindex | — |
+| 073 | `07_lesefunktionen/073_suchfilter.sql` | `food_search` samt Rangfunktionen | 1 Signatur |
+| 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users` | v090: 14 Prüfungen |
+
+**Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,
+`055` braucht `nutrition.touch_updated_at()` aus `052`, `056` braucht
+`water_logs` aus `055`. Einzeln laufen sie nicht.
+
+**`052` bis `056` brauchen das Schema `auth`.** `[cmd]` Ihre Policies
+rufen `auth.uid()`; ohne `auth` bricht `052` bei der ersten Policy ab —
+mit `ERROR: schema "auth" does not exist`, nachdem die Tabellen bereits
+angelegt waren. Da der Schritt in einer Transaktion läuft, wird alles
+zurückgerollt und **es bleibt keine Spur**. Bei einem Aufbau gegen eine
+Datenbank ohne Supabase-Auth fehlen die Diary-Objekte deshalb
+kommentarlos.
+
+**Abschlussprüfung:** `pnpm exec tsx
+_pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts` — vergleicht
+das Schema gegen die Sollliste in
+`_pipeline/daten/schema-sollstand.json`. `[cmd]` Am 2026-08-16 fielen
+`meals`, `meal_items`, `water_logs` und zwei Sichten aus, ohne dass ein
+Kettenlauf sich beschwert hätte; die Prüfung zählte nur, was sie
+erwartete.
+
+**Zwei Stolpersteine beim Neuaufbau von leer** (`[cmd]` 2026-08-16
+erlebt):
+
+1. **`public.handle_new_user()` und `public.is_admin()` überleben
+   `DROP SCHEMA nutrition CASCADE`** — sie liegen in `public`. Die
+   Baseline bricht dann mit `function "handle_new_user" already exists`
+   ab, und wegen `ON_ERROR_STOP=1` steht die ganze Kette. Beim Leeren
+   mit weglöschen:
+   ```
+   DROP SCHEMA IF EXISTS nutrition CASCADE;
+   DROP TABLE IF EXISTS public.profiles CASCADE;
+   DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
+   DROP FUNCTION IF EXISTS public.is_admin() CASCADE;
+   ```
+2. **Schritt `030` liest die CSVs im Container**, nicht im Repo:
+   `\copy` läuft im psql-Client. Die Dateien aus `supabase/_data/`
+   müssen vorher nach `/tmp/p1-005-bls-local-import/` **im Container**
+   kopiert werden (`docker cp`), sonst
+   `No such file or directory`.
 
 **Herkunft der Baseline-Struktur** (historische Kettenschritte, bleiben als
 Referenz und für Weiterentwicklung):
