@@ -12,10 +12,11 @@ Beleg und Begründung. Diese Datei enthält nur, was noch aussteht.
 
 **Quellen für Nutrition** (Tom, 2026-08-14): Bei Arbeit am Nutrition-Modul
 gehören `docs/specs/Nutrition/` und `docs/BrainstormDocs/Nutrition/`
-**mit gelesen**. Sie sind kein Ist-Zustand und kein Sollwert — die
-Rangfolge bleibt Code > `docs/ssot/` > `docs/spezifikation/` — aber sie
-enthalten getroffene Produktentscheidungen, die sonst zweimal getroffen
-werden. `[cmd]` Allein unter `04_adrs/` liegen dreizehn ADRs, darunter
+**mit gelesen**. Sie sind **Grundlage der Diskussion** darüber, was gilt —
+kein Ist-Zustand und für sich noch kein Sollwert. Die Rangfolge bleibt
+Code > `docs/ssot/` > `docs/spezifikation/`. Verbindlich wird ein Inhalt
+erst, wenn er besprochen und festgeschrieben ist; der Ablauf dafür steht
+in **A-11**. `[cmd]` Allein unter `04_adrs/` liegen dreizehn ADRs, darunter
 `ADR_CUSTOM_FOODS_V1`, `ADR_BLS_ONLY`, `ADR_MEALCAM_V1`. Die generelle
 Regel „`docs/specs/` nicht als Referenz lesen" gilt **für Nutrition
 eingeschränkt**: als Quelle für Entscheidungen ja, als Beschreibung des
@@ -101,13 +102,14 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 42 offen, 3 in Arbeit.
+`[cmd]` 43 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
 | **A-05** | Repo-Müll entfernen | ~ |
 | **A-06** | Design-System spezifizieren |  |
 | **A-08** | ADR Medienort |  |
+| **A-11** | Specs laufend zu SSOT konsolidieren |  |
 | **B-20** | Codex-Pfadschutz wiederherstellen | ~ |
 | **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
 | **C-01** | Frontend-Stack-Lücke schliessen |  |
@@ -221,6 +223,56 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 - [ ] **A-08: ADR Medienort** — `[read]` Training-Spec nennt Cloudflare R2,
   `[cmd]` der Bestand liegt in Supabase Storage (15 GB, Bucket `exercises`).
   Kostenfolge, und ein Wechsel würde einen Transfer bedeuten.
+
+- [ ] **A-11: Specs laufend zu SSOT konsolidieren** (neu 2026-08-14).
+  Arbeitsregel, kein Bauauftrag.
+
+  **Toms Festlegung (2026-08-14):** Die Specs sind **Grundlage der
+  Diskussion** darüber, was als verbindlich gilt. Sie werden laufend
+  konsolidiert, das Ergebnis wird festgeschrieben. Nicht in einem Zug,
+  sondern jeweils dann, wenn an einem Bereich gearbeitet wird.
+
+  **Der Ablauf:** Spec lesen → mit Tom besprechen → Entscheidung
+  festhalten → Herkunft im Register vermerken. Was nicht besprochen ist,
+  bleibt Material und wird nicht als geltend behandelt.
+
+  **Offene Entscheidung: wohin das Ergebnis gehört.** `[read]` `CLAUDE.md`
+  trennt heute: `docs/ssot/` ist der **Ist-Zustand**, `docs/spezifikation/`
+  der **Soll-Zustand**. Eine Produktentscheidung aus einer Spec ist Soll,
+  kein Ist — sie beschreibt, was gebaut werden soll, nicht was läuft.
+
+  Mein Vorschlag: **Produktentscheidungen nach `docs/spezifikation/`,
+  Messungen und Code-Befunde nach `docs/ssot/`.** Der Grund ist der
+  bereits einmal bezahlte: Landet Soll-Material in der Ist-Ablage, wird
+  es später als „so ist es" gelesen. `[cmd]` `docs/spezifikation/`
+  besteht heute fast nur aus `.gitkeep` — die Struktur steht, der Inhalt
+  fehlt, und genau dieser Prozess würde sie füllen. Tom entscheidet.
+
+  **Ein Register ist nötig**, sonst weiss nach drei Sitzungen niemand,
+  was schon konsolidiert ist. `[cmd]` Allein Nutrition hat **45
+  Spec-Dateien** (13 ADRs, 10 aktuelle Specs, 14 Patches, 4 Reviews),
+  dazu **41 Dateien** unter `docs/BrainstormDocs/Nutrition/`. Das
+  Register führt je Datei: gelesen, besprochen, aufgegangen in — oder
+  verworfen, mit Grund. Die Altdateien selbst bleiben unangetastet.
+
+  **Anknüpfungspunkt:** `[read]` `docs/ssot/40-spec-code-matrix.md`
+  (Stand 2026-08-01) hat die Bestandsaufnahme bereits gemacht — welches
+  Modul wie tief spezifiziert und wie weit gebaut ist. Das Register
+  setzt darauf auf, statt neu zu zählen.
+
+  **Ein Satz, der dabei aufzulösen ist:** `[read]`
+  `docs/specs/Nutrition/INDEX.md` trägt im Kopf
+  `STATUS: BLOCKED_BY_PRODUCT_GATE / REFERENCE_ONLY … unless Tom
+  explicitly opens a specific product gate`. Das stammt aus dem
+  abgelegten Governance-Modell. Mit dieser Festlegung ist das Gate für
+  Nutrition faktisch offen — es sollte dort stehen, sonst stoppt beim
+  nächsten Lesen jemand an einem Satz, der nicht mehr gilt.
+
+  **Erster Anwendungsfall liegt vor:** C-34 ist am 2026-08-14 genau so
+  entstanden — `ADR_CUSTOM_FOODS_V1.md` und der Entitäts-Patch gelesen,
+  Toms Ergänzung zur Freigabe dagegengestellt, Widerspruch zwischen zwei
+  Spec-Dateien vermerkt. Das ist die Form, in der es laufen soll.
+
 
 ## B — Entwicklungsumgebung & Absicherung
 
