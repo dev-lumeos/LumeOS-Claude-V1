@@ -44,6 +44,94 @@
 -- Der DROP raeumt sie weg, falls sie irgendwo schon angelegt wurde.
 DROP FUNCTION IF EXISTS nutrition.such_gruppe(jsonb, integer);
 
+-- =============================================================
+-- BLOCK 32 — C-25: Zubereitung in die Sortierung
+-- =============================================================
+-- Die eine Ursache hinter den meisten Fehlplatzierungen: `[cmd]`
+-- "Banane roh" (F503100) und "Banane getrocknet" (F503400) haben BEIDE
+-- sort_weight 660, also entscheidet das Alphabet — "getrocknet" vor
+-- "roh". Der Zubereitungscode steht an fester Stelle im BLS-Code
+-- (Stellen 5-7) und wurde bisher nur als FILTER benutzt, nie zum
+-- Sortieren.
+--
+-- WARUM 000 UND 100 GLEICHAUF, statt nur 100 zu bevorzugen:
+-- `[cmd]` Nur 847 von 7.140 Eintraegen tragen 100 (11,9 %), aber 984
+-- tragen 000. Eine Regel, die allein 100 belohnt, wuerde die groessere
+-- Gruppe schlechter stellen. `[cmd]` Von den 984 haben 888 ein
+-- sort_weight > 0 und 658 sind die EINZIGE Form ihres Stammes (kein
+-- Geschwistereintrag mit anderer Zubereitung) — sie haben keine
+-- Rohform, sie SIND die Form: Hafer Flocken (C133000), Skyr, Mozzarella,
+-- Olivenoel, Reis poliert roh (C352000).
+-- `[cmd]` Die 96 Eintraege mit 000 UND sort_weight = 0 sind die
+-- Gerichte (Kartoffelsouffle mit Bacon); die faengt sort_weight schon
+-- ab, das ist die naechste Sortierstufe.
+CREATE OR REPLACE FUNCTION nutrition.such_rang_zubereitung(p_bls_code text)
+RETURNS integer
+LANGUAGE sql
+IMMUTABLE
+PARALLEL SAFE
+AS $function$
+  SELECT CASE WHEN substr(COALESCE(p_bls_code, ''), 5, 3) IN ('100', '000')
+              THEN 1 ELSE 0 END;
+$function$;
+
+COMMENT ON FUNCTION nutrition.such_rang_zubereitung(text) IS
+  'C-25: 1 fuer unzubereitete Formen (Zubereitungscode 100 = roh oder '
+  '000 = einzige Form), sonst 0. Wer eine Zutat sucht, will die Rohform.';
+
+-- =============================================================
+-- BLOCK 32 — C-20: Wortgrenze vor Wortmitte
+-- =============================================================
+-- `[cmd]` "lachs" lieferte "Alaska-Pollack/Alaska-Seelachs", "tomaten"
+-- lieferte "Heringsfilet in Tomatencreme". Die Bedingung vergleicht mit
+-- LIKE '%tok%', ein Treffer INNERHALB eines laengeren Wortes zaehlt
+-- also genauso viel wie das ganze Wort.
+--
+-- DREI STUFEN: 3 = der Name IST das Wort, 2 = Treffer an einer
+-- Wortgrenze, 0 = nur Wortmitte.
+--
+-- WARUM WORTANFANG UND GANZES WORT GLEICHAUF (beide 2):
+-- `[cmd]` Mit einer eigenen, niedrigeren Stufe fuer den Wortanfang
+-- faellt "Haehnchen Brustfilet, roh" (V416100) hinter "Haehnchen Brust,
+-- ohne Haut, gegrillt" zurueck — denn "brust" ist dort nur ein
+-- Wortanfang. Das ist der Fall, der HEUTE schon richtig steht; die
+-- Regel haette ihn kaputtgemacht. Genau davor hat Tom gewarnt: ein
+-- Treffer auf ein zerlegtes Teil ist ein Wort-Treffer.
+CREATE OR REPLACE FUNCTION nutrition.such_rang_wortgrenze(p_name text, p_groups jsonb)
+RETURNS integer
+LANGUAGE sql
+IMMUTABLE
+PARALLEL SAFE
+AS $function$
+  -- Je Gruppe die BESTE Alternative (GREATEST/max), ueber alle Gruppen
+  -- die SCHLECHTESTE (LEAST/min): jede Gruppe muss gut sitzen, sonst
+  -- traegt der Treffer nicht. Bei "haehnchenbrust" sind das
+  -- [haehnchen|huhn] und [brust] — beide muessen Woerter treffen.
+  SELECT CASE
+    WHEN p_groups IS NULL OR jsonb_typeof(p_groups) <> 'array'
+      OR jsonb_array_length(p_groups) = 0 THEN 0
+    ELSE COALESCE((
+      SELECT min(g.beste)
+      FROM (
+        SELECT grp.nr,
+               COALESCE(max(CASE
+                 WHEN nutrition.search_fold(COALESCE(p_name,'')) = a.alt THEN 3
+                 WHEN nutrition.search_fold(COALESCE(p_name,'')) ~ ('\m' || a.alt) THEN 2
+                 ELSE 0 END), 0) AS beste
+        -- Gruppiert wird ueber die POSITION, nicht ueber den Inhalt:
+        -- zwei gleiche Gruppen duerfen nicht zu einer verschmelzen.
+        FROM jsonb_array_elements(p_groups) WITH ORDINALITY AS grp(gruppe, nr),
+             LATERAL jsonb_array_elements_text(grp.gruppe) AS a(alt)
+        GROUP BY grp.nr
+      ) g
+    ), 0)
+  END;
+$function$;
+
+COMMENT ON FUNCTION nutrition.such_rang_wortgrenze(text, jsonb) IS
+  'C-20: 3 = Name ist das Wort, 2 = Treffer an einer Wortgrenze, '
+  '0 = nur Wortmitte. Max je Gruppe, Min ueber die Gruppen.';
+
 DROP FUNCTION IF EXISTS nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer);
 -- Dasselbe fuer die 13-Parameter-Fassung aus Block 29: p_token_groups
@@ -271,7 +359,35 @@ matching_foods AS (
         ELSE 0.65
       END
     END DESC,
+    -- BLOCK 32, die Reihenfolge der drei neuen Stufen ist GEMESSEN,
+    -- nicht gewaehlt. `[cmd]` Gegen die 37 MealCam-Zutaten:
+    --   ohne Regel                      12 von 37 auf Platz 1
+    --   nur Wortgrenze (C-20)           12   — allein bringt sie nichts,
+    --                                        weil danach das Alphabet
+    --                                        entscheidet: alle sieben
+    --                                        "Tomate …" stehen gleich
+    --   nur Zubereitung (C-25)          23
+    --   beide, Wortgrenze zuerst        23
+    --   beide, Zubereitung zuerst       24
+    --   + Namenskuerze                  29
+    -- C-20 traegt also nur ZUSAMMEN mit C-25: sie holt die Tomate-Gruppe
+    -- vor die Heringsfilets, und C-25 entscheidet dann innerhalb.
+    CASE WHEN (SELECT sort FROM params) = 'relevance'
+         THEN nutrition.such_rang_zubereitung(f.bls_code) END DESC,
+    CASE WHEN (SELECT sort FROM params) = 'relevance'
+         THEN nutrition.such_rang_wortgrenze(f.name_de, p_token_groups) END DESC,
     CASE WHEN (SELECT sort FROM params) IN ('relevance', 'protein_desc') THEN f.sort_weight END DESC NULLS LAST,
+    -- Namenskuerze als STICHENTSCHEID, nach sort_weight.
+    -- `[cmd]` Die Stufe vor sort_weight zu ziehen wurde gemessen und
+    -- verworfen: sie holt zwar lachs, kartoffeln und spinat nach vorn,
+    -- zerstoert dafuer aber reis (auf Platz 6, hinter "Reis Mehl"),
+    -- mozzarella und mandeln (hinter "Mandeloel") — kurze Namen
+    -- gewinnen dann unabhaengig davon, ob sie die Zutat sind.
+    -- Unterm Strich beides 31 von 37, aber die spaetere Stellung haelt
+    -- 35 statt 34 in den ersten drei. sort_weight leistet dort echte
+    -- Arbeit; die Kuerze entscheidet nur, was es gleich gewichtet.
+    CASE WHEN (SELECT sort FROM params) = 'relevance'
+         THEN length(COALESCE(f.name_de, '')) END ASC,
     COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) ASC,
     f.bls_code ASC
   LIMIT (SELECT lim FROM params)

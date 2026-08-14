@@ -31,7 +31,7 @@
 -- ist nie das ZIEL einer Suche, sondern hoechstens die Eingabe. Wer
 -- "Piefke" tippt, bekommt Kartoffeln — unschoen, aber harmlos; wer
 -- "Kartoffel" tippt, bekommt niemals "Piefke" angezeigt.
--- `[cmd]` Ergebnis: 48.427 Gruppen -> 4857 gerichtete Eintraege.
+-- `[cmd]` Ergebnis: 48.427 Gruppen -> 4856 gerichtete Eintraege.
 -- `[cmd]` Kein Eintrag zeigt auf mehr als vier Ziele — die Zuordnung ist
 -- von sich aus spezifisch, eine Ausschlussliste war nicht noetig.
 --
@@ -41,7 +41,7 @@
 -- entfernte mehr Richtiges als Falsches.
 --
 -- =============================================================
--- QUELLE 2: Handarbeit, 12 Eintraege
+-- QUELLE 2: Handarbeit, 21 Eintraege
 -- =============================================================
 -- `[cmd]` "haehnchen" steht in KEINER Quelle — weder im Thesaurus noch
 -- im Zerlegewoerterbuch. Ausgerechnet das Wort, das der BLS 105x
@@ -566,7 +566,8 @@ INSERT INTO nutrition.search_synonyms (term, targets, source, grund) VALUES
   ('blattkohl', ARRAY['gruenkohl'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('blattsalat', ARRAY['kopfsalat'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('blattwerk', ARRAY['laub'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
-  ('blaubeere', ARRAY['heidelbeere'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
+  ('blaubeere', ARRAY['heidelbeere'], 'handarbeit', 'regional; der Bestand fuehrt nur Heidelbeere'),
+  ('blaubeeren', ARRAY['heidelbeere'], 'handarbeit', 'Pluralform, damit sie ohne Singularregel greift'),
   ('blaubluetig', ARRAY['edel'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('blaukraut', ARRAY['rotkohl'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('blaupilz', ARRAY['marone'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
@@ -2028,6 +2029,8 @@ INSERT INTO nutrition.search_synonyms (term, targets, source, grund) VALUES
   ('huelse', ARRAY['schale'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('huetes', ARRAY['kartoffelkloss'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('huets', ARRAY['kartoffelkloss'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
+  ('huetten', ARRAY['koerniger'], 'handarbeit', 'Zerlegung von huettenkaese liefert huetten+kaese'),
+  ('huettenkaese', ARRAY['koerniger'], 'handarbeit', 'Bestand sagt "Koerniger Frischkaese"; huettenkaese kommt dort nicht vor'),
   ('hufstueck', ARRAY['roastbeef','lende'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('huhn', ARRAY['haehnchen'], 'handarbeit', 'Gegenrichtung: der BLS fuehrt ueberwiegend haehnchen'),
   ('hui', ARRAY['wie'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
@@ -2972,6 +2975,7 @@ INSERT INTO nutrition.search_synonyms (term, targets, source, grund) VALUES
   ('natuerlich', ARRAY['echt'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('naturbloed', ARRAY['banane'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('naturell', ARRAY['natur'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
+  ('naturreis', ARRAY['unpoliert'], 'handarbeit', 'zweiter gebraeuchlicher Name fuer denselben Reis'),
   ('natursekt', ARRAY['wasser'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('nazi', ARRAY['brauner'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('nazisse', ARRAY['brauner'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
@@ -3016,7 +3020,9 @@ INSERT INTO nutrition.search_synonyms (term, targets, source, grund) VALUES
   ('normal', ARRAY['einfach','klassisch'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('normalerweise', ARRAY['ueberwiegend'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('noten', ARRAY['sorten'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
+  ('nudel', ARRAY['teigwaren'], 'handarbeit', 'Singular, gleiche Begruendung'),
   ('nudelauflauf', ARRAY['lasagne'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
+  ('nudeln', ARRAY['teigwaren'], 'handarbeit', 'Bestand sagt durchgaengig Teigwaren'),
   ('nuechtern', ARRAY['trocken'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('nuentig', ARRAY['down'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('nuesschen', ARRAY['feldsalat','rapunzel'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
@@ -4614,6 +4620,8 @@ INSERT INTO nutrition.search_synonyms (term, targets, source, grund) VALUES
   ('voller', ARRAY['gespickt'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('volljaehrig', ARRAY['reif'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('vollkommen', ARRAY['ganz'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
+  ('vollkornnudeln', ARRAY['vollkornteigwaren'], 'handarbeit', 'Bestand sagt Teigwaren, nicht Nudeln'),
+  ('vollkornreis', ARRAY['unpoliert'], 'handarbeit', 'Bestand sagt "Reis unpoliert, roh" (C351000)'),
   ('vollkugel', ARRAY['kugel'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('vollmachen', ARRAY['fuellen'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
   ('vollschlank', ARRAY['stark','fett'], 'openthesaurus', 'Gruppe enthaelt ein Bestandswort'),
