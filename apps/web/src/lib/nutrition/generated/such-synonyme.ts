@@ -7,7 +7,7 @@
 // Beleidigungen draussen, die ein ungerichteter Thesaurus mitliefert
 // (`[cmd]` kartoffel -> piefke). Begruendung je Eintrag in 024.
 //
-//  4869 Eintraege, davon 12 von Hand.
+//  4877 Eintraege, davon 12 von Hand.
 
 export const SUCH_SYNONYME: Readonly<Record<string, readonly string[]>> = {
   'abdomen': ['bauch'],
@@ -507,6 +507,7 @@ export const SUCH_SYNONYME: Readonly<Record<string, readonly string[]>> = {
   'blattsalat': ['kopfsalat'],
   'blattwerk': ['laub'],
   'blaubeere': ['heidelbeere'],
+  'blaubeeren': ['heidelbeere'],
   'blaubluetig': ['edel'],
   'blaukraut': ['rotkohl'],
   'blaupilz': ['marone'],
@@ -1968,6 +1969,8 @@ export const SUCH_SYNONYME: Readonly<Record<string, readonly string[]>> = {
   'huelse': ['schale'],
   'huetes': ['kartoffelkloss'],
   'huets': ['kartoffelkloss'],
+  'huetten': ['koerniger'],
+  'huettenkaese': ['koerniger'],
   'hufstueck': ['roastbeef', 'lende'],
   'huhn': ['haehnchen'],
   'hui': ['wie'],
@@ -2912,6 +2915,7 @@ export const SUCH_SYNONYME: Readonly<Record<string, readonly string[]>> = {
   'natuerlich': ['echt'],
   'naturbloed': ['banane'],
   'naturell': ['natur'],
+  'naturreis': ['unpoliert'],
   'natursekt': ['wasser'],
   'nazi': ['brauner'],
   'nazisse': ['brauner'],
@@ -2956,7 +2960,9 @@ export const SUCH_SYNONYME: Readonly<Record<string, readonly string[]>> = {
   'normal': ['einfach', 'klassisch'],
   'normalerweise': ['ueberwiegend'],
   'noten': ['sorten'],
+  'nudel': ['teigwaren'],
   'nudelauflauf': ['lasagne'],
+  'nudeln': ['teigwaren'],
   'nuechtern': ['trocken'],
   'nuentig': ['down'],
   'nuesschen': ['feldsalat', 'rapunzel'],
@@ -4554,6 +4560,8 @@ export const SUCH_SYNONYME: Readonly<Record<string, readonly string[]>> = {
   'voller': ['gespickt'],
   'volljaehrig': ['reif'],
   'vollkommen': ['ganz'],
+  'vollkornnudeln': ['vollkornteigwaren'],
+  'vollkornreis': ['unpoliert'],
   'vollkugel': ['kugel'],
   'vollmachen': ['fuellen'],
   'vollschlank': ['stark', 'fett'],

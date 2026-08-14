@@ -88,6 +88,59 @@ function mitSynonymen(wort: string): string[] {
 }
 
 /**
+ * Singularformen zu einem mutmasslichen Plural.
+ *
+ * ANLASS (Block 32): `[cmd]` `tomaten` traf 124 Eintraege, aber NIE
+ * "Tomate roh" — `LIKE '%tomaten%'` passt dort nicht. Der gesuchte
+ * Eintrag war ueberhaupt nicht in der Treffermenge, an keiner Position.
+ * Eine Sortierregel kann daran nichts aendern; das ist kein Rang-,
+ * sondern ein Wortschatzproblem. Betroffen waren `[cmd]` 11 von 19
+ * geprueften Erwartungen.
+ *
+ * REIN MORPHOLOGISCH, ABER NICHT FREI ERFUNDEN: Die Endung wird
+ * abgeschnitten, und das Ergebnis zaehlt nur, wenn es im Wortschatz
+ * steht — der aus Woerterbuch UND Bestand entsteht. `[cmd]` So
+ * ueberlebt `tomate` (belegt), waehrend `tomat` verworfen wird.
+ */
+function singularFormen(wort: string): string[] {
+  const out: string[] = []
+  const kandidaten = [
+    wort.replace(/nuesse$/, 'nuss'),   // walnuesse -> walnuss
+    wort.replace(/uesse$/, 'uss'),     // genuesse -> genuss
+    wort.replace(/n$/, ''),            // tomaten -> tomate, mandeln -> mandel
+    wort.replace(/en$/, ''),           // kartoffeln faellt schon oben, hier: -en
+    wort.replace(/s$/, ''),            // champignons -> champignon
+    wort.replace(/e$/, ''),            // garnele -> garnel (meist verworfen)
+  ]
+  for (const k of kandidaten) {
+    if (k === wort || k.length < 3) continue
+    if (!SUCH_WORTSCHATZ.has(k)) continue
+    if (out.indexOf(k) === -1) out.push(k)
+  }
+  return out
+}
+
+/**
+ * Ein Wort mit Synonymen UND Singularformen, samt deren Synonymen.
+ *
+ * `[cmd]` Gilt auch fuer Zerlegungsteile: "putenbrust" zerfaellt in
+ * "puten" + "brust", aber der Bestand schreibt "Pute Brust, ohne Haut,
+ * roh" — `LIKE '%puten%'` passt dort nicht. Ohne die Singularform des
+ * KOPFES blieb die Rohform unerreichbar, und die Suche lieferte nur
+ * die Kochpoekelware.
+ */
+function mitAllenFormen(wort: string): string[] {
+  const out = mitSynonymen(wort)
+  for (const s of singularFormen(wort)) {
+    if (out.indexOf(s) === -1) out.push(s)
+    for (const syn of mitSynonymen(s)) {
+      if (out.indexOf(syn) === -1) out.push(syn)
+    }
+  }
+  return out
+}
+
+/**
  * Baut aus einer Anfrage die Suchgruppen.
  *
  * Ergebnis: eine Liste von Gruppen. Innerhalb einer Gruppe gilt ODER
@@ -100,26 +153,51 @@ function mitSynonymen(wort: string): string[] {
  * verknuepft sind es 31 Treffer, angefuehrt von "Hähnchen Brustfilet,
  * roh". Ein Kompositum meint BEIDE Bestandteile.
  *
- * Woerter, die selbst im Wortschatz stehen, werden NICHT zerlegt.
- * `[cmd]` Sonst zerfiele "weisswurst" in "weiss"+"wurst" und traefe
- * jede weisse Sauce. Deshalb bleiben alle 16 Schutzfaelle unveraendert.
+ * WORTSCHATZWOERTER WERDEN TROTZDEM ZERLEGT — ALS ALTERNATIVE.
+ * Bis Block 32 galt: steht das Wort selbst im Wortschatz, wird nicht
+ * zerlegt. Das schuetzte `weisswurst` (soll nicht zu weiss+wurst
+ * zerfallen), blockierte aber `putenbrust`: `[cmd]` das Wort steht im
+ * Wortschatz, weil es "Putenbrust, Kochpoekelware" gibt — die Rohform
+ * heisst "Pute Brust, ohne Haut, roh" und war damit unerreichbar.
+ * Jetzt bleibt das ganze Wort erste Alternative seiner Gruppe UND die
+ * Zerlegung kommt als zusaetzliche Gruppe dazu, sofern beide Teile
+ * belegt sind. `weisswurst` findet sich weiter selbst; `putenbrust`
+ * erreicht zusaetzlich die Rohform.
  */
 export function buildFoodSearchTokenGroups(normalizedQuery: string): string[][] {
   const basis = normalizedQuery.split(' ').filter(Boolean)
   const gruppen: string[][] = []
 
   for (const token of basis) {
-    if (SUCH_WORTSCHATZ.has(token)) {
-      gruppen.push(mitSynonymen(token))
-      continue
-    }
     const teile = zerlegeWort(token)
-    if (!teile) {
-      gruppen.push(mitSynonymen(token))
+    const imWortschatz = SUCH_WORTSCHATZ.has(token)
+
+    if (teile && !imWortschatz) {
+      // Unbekanntes Kompositum: nur die Teile tragen.
+      gruppen.push(mitAllenFormen(teile[0]))
+      gruppen.push(mitAllenFormen(teile[1]))
       continue
     }
-    gruppen.push(mitSynonymen(teile[0]))
-    gruppen.push(mitSynonymen(teile[1]))
+
+    // Das Wort selbst, samt Synonymen und Singularformen.
+    const alternativen = mitAllenFormen(token)
+
+    // Bekanntes Wort, das sich ZUSAETZLICH zerlegen laesst: beide
+    // Lesarten anbieten. Der Kopf kommt in dieselbe Gruppe wie das
+    // ganze Wort (ODER), der Rest wird eine eigene Gruppe (UND).
+    // `[cmd]` So findet "putenbrust" sowohl die Kochpoekelware als
+    // auch "Pute Brust, ohne Haut, roh", waehrend "weisswurst" ueber
+    // die erste Alternative weiterhin sich selbst trifft.
+    if (teile && imWortschatz) {
+      for (const a of mitAllenFormen(teile[0])) {
+        if (alternativen.indexOf(a) === -1) alternativen.push(a)
+      }
+      gruppen.push(alternativen)
+      gruppen.push(mitAllenFormen(teile[1]))
+      continue
+    }
+
+    gruppen.push(alternativen)
   }
 
   return gruppen.slice(0, MAX_GRUPPEN)

@@ -5,9 +5,9 @@
 //   german-decompounder (LGPL, Uwe Schindler / Björn Jacke)
 //     docs/ssot/daten/quellen/dictionary-de.txt           14514 Woerter
 //   nutrition.foods (BLS-Namen, Woerter ab 4 Zeichen)      3608 Woerter
-//   nutrition.search_synonyms (Kettenschritt 024)          4869 Woerter
+//   nutrition.search_synonyms (Kettenschritt 024)          4877 Woerter
 //                                                        ------
-//   nach Faltung und Entdopplung                          21885 Woerter
+//   nach Faltung und Entdopplung                          21890 Woerter
 //
 // Alle Eintraege sind GEFALTET wie normalizeFoodSearchText bzw.
 // nutrition.search_fold. Damit zerlegen "hühnerbrust" und
@@ -3236,6 +3236,7 @@ export const SUCH_WORTSCHATZ: ReadonlySet<string> = new Set([
   'blau',
   'blaubeer',
   'blaubeere',
+  'blaubeeren',
   'blaubluetig',
   'blaukraut',
   'blaupilz',
@@ -9161,6 +9162,7 @@ export const SUCH_WORTSCHATZ: ReadonlySet<string> = new Set([
   'huets',
   'huette',
   'huetten',
+  'huettenkaese',
   'huf',
   'hufstueck',
   'hugenotte',
@@ -13293,6 +13295,7 @@ export const SUCH_WORTSCHATZ: ReadonlySet<string> = new Set([
   'naturbloed',
   'naturell',
   'naturjoghurt',
+  'naturreis',
   'natursekt',
   'naturtrueb',
   'navigation',
@@ -20563,11 +20566,13 @@ export const SUCH_WORTSCHATZ: ReadonlySet<string> = new Set([
   'vollkornknusperbrot',
   'vollkornmehl',
   'vollkornmuerbeteig',
+  'vollkornnudeln',
   'vollkornpfannkuchen',
   'vollkornpizza',
   'vollkornpizzateig',
   'vollkornplunder',
   'vollkornplunderteig',
+  'vollkornreis',
   'vollkornsandkuchen',
   'vollkornschrot',
   'vollkornteigwaren',

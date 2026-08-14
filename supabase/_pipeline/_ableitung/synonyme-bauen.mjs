@@ -63,6 +63,26 @@ const HAND = [
   ['truthahn',  'pute',            'beide gebraeuchlich, BLS fuehrt Pute'],
   ['kalb',      'kalbfleisch',     'wie Schwein/Rind'],
   ['lamm',      'lammfleisch',     'wie Schwein/Rind'],
+
+  // --- Block 32 (C-27): Alltagswoerter ohne Treffer ---
+  // `[cmd]` Alle drei standen im Bestand, waren aber nicht auffindbar,
+  // weil der Bestand ein voellig anderes Wort benutzt. Keine Quelle
+  // kennt diese Bruecken — weder Thesaurus noch Woerterbuch.
+  ['huettenkaese', 'koerniger',   'Bestand sagt "Koerniger Frischkaese"; huettenkaese kommt dort nicht vor'],
+  ['huetten',      'koerniger',   'Zerlegung von huettenkaese liefert huetten+kaese'],
+  ['blaubeere',    'heidelbeere', 'regional; der Bestand fuehrt nur Heidelbeere'],
+  ['blaubeeren',   'heidelbeere', 'Pluralform, damit sie ohne Singularregel greift'],
+  // `[cmd]` walnuesse -> walnuss loest die Singularregel selbst; hier
+  // steht nur, was sie NICHT kann.
+  ['vollkornreis', 'unpoliert',   'Bestand sagt "Reis unpoliert, roh" (C351000)'],
+  ['naturreis',    'unpoliert',   'zweiter gebraeuchlicher Name fuer denselben Reis'],
+  ['vollkornnudeln','vollkornteigwaren', 'Bestand sagt Teigwaren, nicht Nudeln'],
+  ['nudeln',       'teigwaren',   'Bestand sagt durchgaengig Teigwaren'],
+  ['nudel',        'teigwaren',   'Singular, gleiche Begruendung'],
+  // `[read]` NICHT aufgenommen: basmatireis und "griechischer joghurt".
+  // `[cmd]` Beide Produkte gibt es im BLS nicht (0 Zeilen). Eine
+  // Bruecke haette auf nichts gezeigt — das ist eine Bestandsluecke,
+  // kein Wortschatzproblem, und gehoert nicht hierher.
 ]
 
 // --- 3. Zusammenfuehren, Handarbeit gewinnt ---
