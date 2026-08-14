@@ -134,7 +134,7 @@ Altbestand ist Material, keine Warteschlange.
 | `specs/01_current_specs/SPEC_03_USER_FLOWS.md` | 14 KB | offen | — |
 | `specs/01_current_specs/SPEC_04_FEATURES.md` | 15 KB | offen | — |
 | `specs/01_current_specs/SPEC_05_FOOD_TAXONOMY.md` | 39 KB | aufgeloest | TODO C-38 (Scoring-Formel), C-39 (Canonical Names); Core-Fitness-Liste als Priorisierung |
-| `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` | 64 KB | offen | — |
+| `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` | 64 KB | gelesen | Ist/Soll-Abgleich in `docs/ssot/53-nutrition-schema-abgleich.md`; Tabellenebene erledigt, Spaltenebene offen |
 | `specs/01_current_specs/SPEC_07_API.md` | 22 KB | offen | — |
 | `specs/01_current_specs/SPEC_08_IMPORT_PIPELINE.md` | 16 KB | aufgeloest | Scoring-Abschnitt durch SPEC_05 abgeloest (C-38, `docs/ssot/51-sortweight-formel.md` Teil 3). **Ein Rest bleibt offen:** die U/V-Aufteilung nach der zweiten Codestelle steht nur hier, nicht in SPEC_05 — Produktentscheidung, nicht angewandt. Uebrige Abschnitte (Import, Kategoriezuweisung) ungelesen. |
 | `specs/01_current_specs/SPEC_09_SCORING.md` | 17 KB | offen | — |
@@ -182,9 +182,7 @@ Altbestand ist Material, keine Warteschlange.
 `[read]` Aus der laufenden Arbeit an der Lebensmittelsuche, an C-34 und
 an C-38/C-39:
 
-1. `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` - 64 KB, groesste
-   Einzeldatei; gehoert vor jede Schemaaenderung gelesen
-2. `specs/01_current_specs/SPEC_09_SCORING.md` - grenzt vermutlich an das
+1. `specs/01_current_specs/SPEC_09_SCORING.md` - grenzt vermutlich an das
    Scoring aus C-38; vor dem Bau pruefen, ob dieselbe Kennzahl gemeint ist
 3. `specs/04_adrs/ADR_BLS_ONLY.md` - begruendet die Entscheidung, die
    C-34 gegen Sortenkopien schuetzt
