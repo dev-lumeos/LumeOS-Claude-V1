@@ -19,6 +19,7 @@ type Ausgabe = {
   bls_code: string
   name_display_de: string
   name_display_en: string
+  nebennamen: string[]
   sicher: boolean
 }
 
@@ -63,6 +64,14 @@ for (const row of ausgabe) {
   if (!row.bls_code || typeof row.bls_code !== 'string') errors.push(`fehlender bls_code: ${JSON.stringify(row)}`)
   if (!row.name_display_de || typeof row.name_display_de !== 'string') errors.push(`${row.bls_code}: name_display_de fehlt/leer`)
   if (!row.name_display_en || typeof row.name_display_en !== 'string') errors.push(`${row.bls_code}: name_display_en fehlt/leer`)
+  if (!Array.isArray(row.nebennamen)) {
+    errors.push(`${row.bls_code}: nebennamen fehlt/ist kein Array`)
+  } else {
+    for (const alias of row.nebennamen) {
+      if (typeof alias !== 'string' || !alias.trim()) errors.push(`${row.bls_code}: leerer/ungueltiger Nebenname`)
+      if (/[(),]/.test(alias)) errors.push(`${row.bls_code}: Nebenname enthaelt Klammer oder Komma (${alias})`)
+    }
+  }
   if (typeof row.sicher !== 'boolean') errors.push(`${row.bls_code}: sicher ist kein boolean`)
   if (!inputByCode.has(row.bls_code)) errors.push(`${row.bls_code}: nicht in Eingabe`)
   const list = seen.get(row.bls_code) ?? []
@@ -77,6 +86,7 @@ if (duplicates.length) errors.push(`doppelte Codes: ${duplicates.map(([c, rows])
 
 const unchangedByGroup = new Map<string, { total: number, unchanged: number }>()
 const sicherByGroup = new Map<string, { total: number, sicher: number }>()
+const nebenByGroup = new Map<string, { total: number, withNeben: number }>()
 for (const row of ausgabe) {
   const original = inputByCode.get(row.bls_code)
   if (!original) continue
@@ -90,6 +100,11 @@ for (const row of ausgabe) {
   sicherStat.total++
   if (row.sicher) sicherStat.sicher++
   sicherByGroup.set(original.warengruppe, sicherStat)
+
+  const nebenStat = nebenByGroup.get(original.warengruppe) ?? { total: 0, withNeben: 0 }
+  nebenStat.total++
+  if (Array.isArray(row.nebennamen) && row.nebennamen.length > 0) nebenStat.withNeben++
+  nebenByGroup.set(original.warengruppe, nebenStat)
 
   if (row.name_display_de === original.name_de) {
     continue
@@ -136,6 +151,11 @@ const deviations = ausgabe
   })
   .map(row => ({ row, probeRow: probeByCode.get(row.bls_code)! }))
 
+const longestNeben = ausgabe
+  .filter(row => Array.isArray(row.nebennamen) && row.nebennamen.length > 0)
+  .sort((a, b) => b.nebennamen.length - a.nebennamen.length || a.bls_code.localeCompare(b.bls_code))
+  .slice(0, 20)
+
 console.log(`Eingabe: ${eingabe.length}`)
 console.log(`Ausgabe: ${ausgabe.length}`)
 console.log(`Fehlende Codes: ${missing.length}`)
@@ -158,6 +178,17 @@ console.log('\nunveraendert uebernommen je Warengruppe:')
 for (const [group, stat] of [...unchangedByGroup.entries()].sort()) {
   const pctUnchanged = stat.total ? (100 * stat.unchanged / stat.total).toFixed(1) : '0.0'
   console.log(`  ${group}: ${stat.unchanged}/${stat.total} (${pctUnchanged} %)`)
+}
+console.log('\nnebennamen nicht leer je Warengruppe:')
+for (const [group, stat] of [...nebenByGroup.entries()].sort()) {
+  const pctNeben = stat.total ? (100 * stat.withNeben / stat.total).toFixed(1) : '0.0'
+  console.log(`  ${group}: ${stat.withNeben}/${stat.total} (${pctNeben} %)`)
+}
+console.log('\n20 laengste nebennamen-Listen:')
+for (const row of longestNeben) {
+  const input = inputByCode.get(row.bls_code)
+  console.log(`  ${row.bls_code}: ${row.nebennamen.length} [${row.nebennamen.join('; ')}]`)
+  console.log(`    amtlich: ${input?.name_de ?? '?'}`)
 }
 console.log('\nLaengen name_de -> name_display_de:')
 console.log(`  alt p50/p90/max: ${pct(oldLengths, 0.5)}/${pct(oldLengths, 0.9)}/${oldLengths.at(-1) ?? 0}`)
