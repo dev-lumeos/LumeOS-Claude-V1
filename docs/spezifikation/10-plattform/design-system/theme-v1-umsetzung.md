@@ -85,6 +85,29 @@ Messung in `docs/ssot/68-theme-faehigkeit.md`:
 
 ---
 
+## Zwei Korrekturen an der Sidebar
+
+**Tom, 2026-08-15.** Beide betreffen die Navigation, nicht das Aussehen.
+
+**Workspaces sind Links, keine Module.** `[read]` `Coach Portal`,
+`Marketplace` und `Admin` stehen im Entwurf unter „WORKSPACES", als lägen
+sie in derselben Anwendung. Sie sind eigene Domain-Apps — `apps/web`
+verlinkt sie, bettet sie nicht ein. `[cmd]` `apps/admin` läuft bereits
+so: Port 3210, eigene Sitzung, eigener Cookie-Namensraum
+`sb-127-admin-auth-token`.
+
+Für die Shell heisst das: ein Verweis nach aussen, kein Eintrag im
+Modulrouting, kein `--acc`-Wechsel. Optisch darf der Eintrag aussehen wie
+die übrigen — verhalten muss er sich anders.
+
+**`Test · Onboarding` gehört nicht in die Produktnavigation.** `[read]`
+Es stand im Entwurf unter „SYSTEM", weil es einen Platz brauchte — Toms
+Worte: *„das musste irgendwohin, ist aber natürlich nicht der richtige
+Ort."* Wohin, ist offen. Eine Testfläche in der Nutzernavigation ist es
+nicht.
+
+---
+
 ## Zwei Zahlen im Entwurf, die nicht stimmen
 
 **Der Nutrition-Score steht auf `1`.** `[read]` Der Bildschirm zeigt

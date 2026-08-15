@@ -1310,6 +1310,21 @@ Umsetzen angepasst werden.
   Module. Nicht in `tailwind.config.js` gespiegelt sind die einzelnen
   `--acc-nutri` — deshalb `bg-acc` ja, `bg-acc-nutri` nein.
 
+  **Zwei Korrekturen an der Sidebar des Entwurfs** (Tom, 2026-08-15):
+
+  - **Workspaces sind Links, keine Module.** `[read]` `Coach Portal`,
+    `Marketplace` und `Admin` stehen im Entwurf unter „WORKSPACES", als
+    lägen sie in derselben Anwendung. Sie sind eigene Domain-Apps —
+    `apps/web` verlinkt sie, bettet sie nicht ein. `[cmd]` `apps/admin`
+    läuft bereits so: Port 3210, eigene Sitzung, eigener
+    Cookie-Namensraum `sb-127-admin-auth-token`. In der Shell also ein
+    Verweis nach aussen, kein Eintrag im Modulrouting.
+  - **`Test · Onboarding` gehört nicht in die Produktnavigation.**
+    `[read]` Es stand im Entwurf unter „SYSTEM", weil es einen Platz
+    brauchte — Toms Worte: *„das musste irgendwohin, ist aber natürlich
+    nicht der richtige Ort."* Wohin, ist offen; eine Testfläche in der
+    Nutzernavigation ist es nicht.
+
   **Zwei Entscheidungen, die sonst später weh tun:**
   - **Die Kontextspalte** steht auf jedem Bildschirm. Ab Tablet abwärts:
     Blatt, Reiter, oder weg?
