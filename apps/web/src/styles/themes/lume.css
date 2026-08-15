@@ -61,5 +61,14 @@
   --acc-buddy: oklch(0.55 0.12 310);
   --acc-mkt: oklch(0.52 0.10 145);
   --acc-admin: oklch(0.45 0.01 270);
+
+  /* Statusfarben fuer hellen Grund. `[cmd]` 2026-08-15 gemessen: die
+     Nachtwerte (L 0,72-0,82) galten im Tagmodus unveraendert weiter -
+     hell auf hell, damit unlesbar. Farbton und Chroma bleiben, nur die
+     Helligkeit faellt auf das Niveau der Akzente (L 0,45-0,58). */
+  --pos: oklch(0.52 0.13 150);
+  --warn: oklch(0.55 0.13 80);
+  --neg: oklch(0.50 0.16 22);
+
   color-scheme: light;
 }
