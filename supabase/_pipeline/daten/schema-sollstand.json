@@ -442,6 +442,30 @@
    },
    "grants_herkunft": "055 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
    "zeilenschutzart": "eigene_zeilen"
+  },
+  {
+   "name": "search_events",
+   "schritt": "057",
+   "rls": true,
+   "policies": [
+    "INSERT"
+   ],
+   "grants": {
+    "authenticated": [
+     "INSERT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "057 (service_role: 057 explizit; authenticated nur INSERT, kein SELECT)",
+   "zeilenschutzart": "eigene_zeilen"
   }
  ],
  "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
@@ -594,6 +618,12 @@
    "tabelle": "meal_items",
    "zeigt_auf": "foods",
    "schritt": "052"
+  },
+  {
+   "name": "search_events_selected_food_id_fkey",
+   "tabelle": "search_events",
+   "zeigt_auf": "foods",
+   "schritt": "057"
   }
  ],
  "funktionen": [
@@ -636,6 +666,10 @@
   {
    "name": "meal_items_owner_guard",
    "schritt": "052"
+  },
+  {
+   "name": "search_events_report",
+   "schritt": "057"
   }
  ],
  "mindestzeilen": {

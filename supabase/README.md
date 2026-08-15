@@ -81,6 +81,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | **054** | `05_user_tabellen/054_preference_uniques.sql` | Eindeutigkeitsregeln auf `food_preference_items` | — |
 | **055** | `05_user_tabellen/055_water_logs.sql` | **`water_logs`** + Policies | 1 Tabelle |
 | **056** | `05_user_tabellen/056_hydration_summary.sql` | Sicht **`hydration_summary`** | 1 Sicht |
+| **057** | `05_user_tabellen/057_search_events.sql` | **`search_events`** + Auswertung `search_events_report()` | 1 Tabelle, 1 Funktion |
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, Trigram-Indizes, Grants, RLS | v060: 22 Prüfungen |
 | 061 | `06_zugriff/061_rollen_admin.sql` | `public.is_admin()` + Policies | v061: 15 Prüfungen |
 | 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen | v070: 18 Prüfungen |

@@ -8,12 +8,19 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { authCookieOptions } from '@lumeos/shared/cookie-name'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const NUTRITION_SEARCH_SESSION_COOKIE = 'lumeos-nutrition-search-session'
+const NUTRITION_SEARCH_SESSION_MAX_AGE = 60 * 60 * 24 * 30
+
 function isPublicPath(pathname: string): boolean {
   return (
     pathname === '/' ||
     pathname === '/login' ||
     pathname === '/auth/callback'
   )
+}
+
+function needsNutritionSearchSession(pathname: string): boolean {
+  return pathname === '/nutrition/foods' || pathname.startsWith('/api/nutrition/foods')
 }
 
 export async function middleware(request: NextRequest) {
@@ -61,6 +68,20 @@ export async function middleware(request: NextRequest) {
     loginUrl.search = ''
     loginUrl.searchParams.set('redirect', pathname + search)
     return NextResponse.redirect(loginUrl)
+  }
+
+  if (user && needsNutritionSearchSession(pathname) && !request.cookies.get(NUTRITION_SEARCH_SESSION_COOKIE)?.value) {
+    const sessionId = crypto.randomUUID()
+    request.cookies.set(NUTRITION_SEARCH_SESSION_COOKIE, sessionId)
+    response.cookies.set({
+      name: NUTRITION_SEARCH_SESSION_COOKIE,
+      value: sessionId,
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: request.nextUrl.protocol === 'https:',
+      path: '/',
+      maxAge: NUTRITION_SEARCH_SESSION_MAX_AGE,
+    })
   }
 
   return response

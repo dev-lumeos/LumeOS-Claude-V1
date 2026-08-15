@@ -1,13 +1,16 @@
 ﻿import Link from 'next/link'
 import type { Route } from 'next'
+import { cookies } from 'next/headers'
 
 import {
   LocalFoodSearchError,
+  NUTRITION_SEARCH_SESSION_COOKIE,
   buildFoodSearchFilterHref as buildBaseFoodSearchFilterHref,
   getFoodGroupFacets,
   getLocalFoodSearch,
   getPreparationFacets,
   normalizeFoodSearchText,
+  recordFoodSearchEvent,
   type FoodSearchFilterState,
 } from '../../../lib/nutrition/food-search'
 import { deterministicExclusionOptions, getPreferenceSearchPreview } from '../../../lib/nutrition/preference-search-preview'
@@ -206,6 +209,18 @@ export default async function NutritionPage({ searchParams }: NutritionPageProps
   try {
     const payload = await getLocalFoodSearch(query, selectedFoodId, {
       category, tag, sort, offset, preparations, groups, basicsOnly,
+    })
+    const selectedIndex = selectedFoodId
+      ? payload.foods.findIndex(food => food.id === selectedFoodId)
+      : -1
+    await recordFoodSearchEvent({
+      sessionId: cookies().get(NUTRITION_SEARCH_SESSION_COOKIE)?.value,
+      query,
+      normalizedQuery: payload.normalized_query,
+      resultCount: payload.total,
+      selectedFoodId: payload.selected_food?.id ?? null,
+      selectedBlsCode: payload.selected_food?.bls_code ?? null,
+      selectedRank: selectedIndex >= 0 ? payload.offset + selectedIndex + 1 : null,
     })
     const filterState: FoodSearchFilterState = {
       query, category, tag, sort, preparations, groups, basicsOnly,

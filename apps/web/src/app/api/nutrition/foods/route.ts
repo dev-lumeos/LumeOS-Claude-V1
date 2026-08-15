@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-import { LocalFoodSearchError, getLocalFoodSearch } from '../../../../lib/nutrition/food-search'
+import {
+  LocalFoodSearchError,
+  NUTRITION_SEARCH_SESSION_COOKIE,
+  getLocalFoodSearch,
+  recordFoodSearchEvent,
+} from '../../../../lib/nutrition/food-search'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -17,6 +22,18 @@ export async function GET(request: NextRequest) {
 
   try {
     const payload = await getLocalFoodSearch(query, foodId, { category, categoryId, tag, limit, offset, sort })
+    const selectedIndex = foodId
+      ? payload.foods.findIndex(food => food.id === foodId)
+      : -1
+    await recordFoodSearchEvent({
+      sessionId: request.cookies.get(NUTRITION_SEARCH_SESSION_COOKIE)?.value,
+      query,
+      normalizedQuery: payload.normalized_query,
+      resultCount: payload.total,
+      selectedFoodId: payload.selected_food?.id ?? null,
+      selectedBlsCode: payload.selected_food?.bls_code ?? null,
+      selectedRank: selectedIndex >= 0 ? payload.offset + selectedIndex + 1 : null,
+    })
     return NextResponse.json(payload)
   } catch (error) {
     if (error instanceof LocalFoodSearchError) {

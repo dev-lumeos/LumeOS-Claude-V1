@@ -81,6 +81,18 @@ export type NutritionFoodSearchPayload = {
   tags: NutritionFoodTagFacet[]
 }
 
+export const NUTRITION_SEARCH_SESSION_COOKIE = 'lumeos-nutrition-search-session'
+
+export type FoodSearchEventInput = {
+  sessionId: string | undefined
+  query: string
+  normalizedQuery: string
+  resultCount: number
+  selectedFoodId?: string | null
+  selectedBlsCode?: string | null
+  selectedRank?: number | null
+}
+
 export type FoodSearchFilterState = {
   query?: string
   category?: string
@@ -558,6 +570,32 @@ export async function getLocalFoodSearch(
       isDbUnavailableMessage(message) ? 'LOCAL_DB_UNAVAILABLE' : 'LOCAL_FOOD_QUERY_FAILED',
       message,
     )
+  }
+}
+
+export async function recordFoodSearchEvent(input: FoodSearchEventInput): Promise<void> {
+  const sessionId = input.sessionId?.trim()
+  if (!sessionId) return
+
+  const row = {
+    session_id: sessionId,
+    query: input.query,
+    normalized_query: input.normalizedQuery,
+    result_count: Math.max(0, Math.trunc(input.resultCount)),
+    selected_food_id: input.selectedFoodId?.trim() || null,
+    selected_bls_code: input.selectedBlsCode?.trim() || null,
+    selected_rank: typeof input.selectedRank === 'number' && Number.isFinite(input.selectedRank)
+      ? Math.max(1, Math.trunc(input.selectedRank))
+      : null,
+  }
+
+  try {
+    const { error } = await nutritionRpc().from('search_events').insert(row)
+    if (error) {
+      console.warn(`Search event logging failed: ${error.message}`)
+    }
+  } catch (error) {
+    console.warn(`Search event logging failed: ${error instanceof Error ? error.message : String(error)}`)
   }
 }
 
