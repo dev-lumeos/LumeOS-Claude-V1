@@ -175,4 +175,31 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
+-- 2026-08-15 [cmd]: Der Trigger greift nur bei NEUEN Anmeldungen. Nach
+-- einem Kettenneuaufbau standen beide bestehenden auth.users ohne Profil
+-- da -- die Anmeldung schlug fehl, ohne dass jemand die Ursache sah.
+-- Dieser Nachzug macht den Schritt selbstheilend: er legt fuer jeden
+-- vorhandenen Nutzer ohne Profil eines an. Ohne ihn ist die Kette nur
+-- fuer eine leere auth.users vollstaendig.
+INSERT INTO public.profiles (id)
+SELECT u.id
+FROM auth.users u
+LEFT JOIN public.profiles p ON p.id = u.id
+WHERE p.id IS NULL
+ON CONFLICT (id) DO NOTHING;
+
+DO $$
+DECLARE
+  v_ohne integer;
+BEGIN
+  SELECT count(*) INTO v_ohne
+  FROM auth.users u
+  LEFT JOIN public.profiles p ON p.id = u.id
+  WHERE p.id IS NULL;
+  IF v_ohne > 0 THEN
+    RAISE EXCEPTION '% auth.users ohne Profil -- der Nachzug hat nicht gegriffen', v_ohne;
+  END IF;
+  RAISE NOTICE 'OK: jeder auth.users-Eintrag hat ein Profil';
+END $$;
+
 COMMIT;
