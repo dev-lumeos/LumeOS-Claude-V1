@@ -69,6 +69,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 015 | `015_kataloge/015_nutrient_defs_seed.sql` | 138 Nährstoffdefinitionen | 138 |
 | 020 | `02_human_layer/020_food_human_layer.sql` | Kategorien-/Tag-Seeds, **Tag- und Alias-Ableitungen** (Strukturteile: durch Baseline bereits da, Guards greifen) | 518 Kategorien, 16 Tag-Definitionen |
 | 030 | `03_bls_import/030_apply_local.sql` | `foods`, `food_nutrients` aus CSV | 7.140 / 698.092 |
+| 031 | `03_bls_import/031_fettsaeuren_nachtrag.sql` | 30 Einzelfettsäuren aus `bls_4_0_fettsaeuren.zip` | +171.409, gesamt 869.501 / 138 Codes |
 | 020 **erneut** | dito | Ableitungen greifen jetzt: Aliase, Tags, Kategoriezuweisungen | 21.420 / 9.265 / 7.140 |
 | 021 | `02_human_layer/021_wild_category_apply.sql` | **Kategoriezuweisung `V2%` → `wild`** | `affected_rows = 49` |
 | 022 | `02_human_layer/022_alias_ableitung.sql` | abgeleitete Aliase | 32.522 gesamt |
