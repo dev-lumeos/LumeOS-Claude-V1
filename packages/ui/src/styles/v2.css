@@ -1038,7 +1038,7 @@ a { color: inherit; text-decoration: none; }
 :root[data-theme="light"] .v2-module-hero {
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
-:root[data-theme="light"] .v2-mh-stat { background: rgba(255,255,255,0.75); }
+:root[data-theme="light"] .v2-mh-stat { background: var(--surface); }
 
 
 /* Lite hero — applies gradient panel treatment to existing module headers */
@@ -1114,12 +1114,129 @@ a { color: inherit; text-decoration: none; }
 }
 .v2-nav-item.v2-nav-sub.v2-active::after { background: var(--mod-acc, var(--acc)); }
 
-/* ---- Ergaenzung, nicht aus dem Entwurf ----------------------------
-   Wurzel der Route /v2. Setzt Grund und Schriftfarbe aus den geteilten
-   Tokens, ohne ein Raster zu erzwingen. .v2-app (dreispaltig) kommt
-   zum Einsatz, sobald G-02 Sidebar und Kontextspalte liefert. */
-.v2-root {
-  min-height: 100dvh;
-  background: var(--bg);
-  color: var(--fg);
+/* ============================================================
+   ERGAENZUNGEN — nicht aus dem Entwurf.
+   Jede mit Grund, damit spaeter unterscheidbar bleibt, was von
+   Codex' Entwurf stammt und was hier entstanden ist.
+   ============================================================ */
+
+/* 1. Modus-Umschalter in der Kopfzeile.
+   Der Entwurf baut ihn aus Inline-Stilen (shell.jsx, Topbar). Als
+   Klasse ist er einmal beschrieben statt zweimal gesetzt. Nur
+   vorhandene Tokens. */
+.v2-mode-switch {
+  display: flex;
+  gap: 1px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.v2-mode-switch button {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 22px;
+  border-radius: 4px;
+  color: var(--fg-muted);
+  cursor: pointer;
+}
+.v2-mode-switch button[data-on="true"] {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* 2. Ein deaktiviertes Bedienelement muss als solches erkennbar sein.
+   Der Entwurf kennt keinen disabled-Zustand, weil in einer Vorfuehrung
+   nichts deaktiviert ist. In der Anwendung schon: Suche, Commands und
+   Benachrichtigungen gibt es noch nicht. */
+.v2-btn:disabled,
+.v2-icon-btn:disabled,
+.v2-sidebar-search input:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 3. Sichtbarer Tastaturfokus.
+   [cmd] Der Entwurf setzt nirgends :focus-visible — bei Bedienung per
+   Tastatur ist dann nicht erkennbar, wo man steht. Die bestehende
+   Oberflaeche hat dasselbe Problem; hier wird es nicht uebernommen. */
+.v2-app :focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* 4. Schmale Fenster.
+   [cmd] Der Entwurf hat NULL @media-Regeln — er ist fuer den
+   Schreibtisch gezeichnet. Die bestehende Oberflaeche hat zwei
+   Haltepunkte (1279px, 1023px). Uebernommen wird deren Verhalten,
+   damit v2 sich nicht anders verhaelt als das, was Tom kennt.
+   Begruendung im Bericht, Abschnitt "Die Kontextspalte". */
+@media (max-width: 1279px) {
+  .v2-app,
+  .v2-app[data-rightpanel="hidden"] {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  /* Die Kontextspalte verschwindet zuerst: sie traegt Begleitung,
+     nicht den Inhalt selbst. */
+  .v2-context { display: none; }
+
+  .v2-sidebar { padding: 0.75rem 0.5rem; }
+  .v2-sidebar-brand .v2-brand-name,
+  .v2-sidebar-brand .v2-brand-meta,
+  .v2-sidebar-search,
+  .v2-nav-group-label,
+  .v2-nav-item kbd,
+  .v2-nav-sub-group,
+  .v2-user-meta {
+    display: none;
+  }
+  .v2-nav-item {
+    justify-content: center;
+    padding-right: 0.35rem;
+    padding-left: 0.35rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  /* Eine Spalte. Die Seitenleiste wird zur Kopfleiste ueber dem
+     Inhalt; das Fenster scrollt wieder normal. */
+  .v2-app,
+  .v2-app[data-rightpanel="hidden"] {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .v2-sidebar {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    width: auto;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .v2-sidebar-nav {
+    flex-direction: row;
+    gap: 0.35rem;
+    /* Nicht umbrechen, sondern schieben: drei Zeilen Navigation ueber
+       dem Inhalt kosten mehr Hoehe als ein Wischen kostet. */
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  .v2-nav-group {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.35rem;
+  }
+  .v2-nav-item {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .v2-sidebar-user { margin-top: 0; margin-left: auto; }
+  .v2-main { overflow: visible; }
 }

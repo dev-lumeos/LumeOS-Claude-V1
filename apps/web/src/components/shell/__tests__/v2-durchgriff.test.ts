@@ -141,16 +141,27 @@ test('v2.css bringt keine Hex-Farben mit', () => {
     'Hex-Farben umgehen die Tokenschicht und kennen keinen Hellmodus')
 })
 
-// [cmd] Der Entwurf traegt fuenf rgba()-Werte: ein Modal-Schleier, drei
-// Schatten, eine helle Flaeche. Sie sind uebernommen wie sie sind — G-01
-// aendert die Klassen nicht, sondern stellt sie bereit.
+// [cmd] Der Entwurf trug fuenf rgba()-Werte. In G-02 ist einer auf
+// einen Token gefallen: rgba(255,255,255,0.75) auf .v2-mh-stat stand
+// unter [data-theme="light"] fuer "helle Flaeche" — dafuer gibt es
+// --surface (im Hellmodus oklch(1 0 0), also genau Weiss).
+//
+// Die restlichen VIER bleiben, und zwar mit Absicht: drei Schatten
+// (0,03 / 0,05 Schwarz) und der Modal-Schleier (0,5 Schwarz). Fuer
+// beides gibt es [cmd] keinen Token — die 32 kennen weder Schatten
+// noch Ueberlagerung. Einen zu erfinden waere eine Token-Entscheidung,
+// und die gehoert Tom, nicht diesem Auftrag.
 // Der Test friert die Zahl ein, damit nicht unbemerkt weitere dazukommen.
-// [read] Sie gehoeren in G-02 auf Tokens umgestellt; besonders
-// rgba(255,255,255,0.75) unter [data-theme="light"] bricht, sobald ein
-// helles Thema nicht weiss ist.
 test('v2.css bringt keine NEUEN rgba-Werte mit', () => {
   const treffer = V2CSS.match(/rgba?\(/g) ?? []
-  assert.equal(treffer.length, 5,
-    `${treffer.length} rgba()-Werte statt der 5 aus dem Entwurf. Neue ` +
-    'Festfarben gehoeren nicht hinzu; die vorhandenen loest G-02 ab.')
+  assert.equal(treffer.length, 4,
+    `${treffer.length} rgba()-Werte statt der erwarteten 4 (drei Schatten, ` +
+    'ein Modal-Schleier). Neue Festfarben gehoeren nicht hinzu; wo ein ' +
+    'Token passt, gehoert er benutzt.')
+})
+
+test('die helle Flaeche laeuft ueber einen Token', () => {
+  assert.match(V2CSS, /\.v2-mh-stat\s*\{\s*background:\s*var\(--surface\)/,
+    'Die Ersetzung von rgba(255,255,255,0.75) durch var(--surface) fehlt — ' +
+    'sonst bricht die Flaeche, sobald ein helles Thema nicht weiss ist.')
 })
