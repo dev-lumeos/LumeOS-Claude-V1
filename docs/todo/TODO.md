@@ -109,7 +109,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 46 offen, 5 in Arbeit.
+`[cmd]` 43 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -125,10 +125,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-08** | `services/nutrition-api` einordnen |  |
 | **C-16** | Training hat dasselbe Wortschatzproblem — eine Runde früher erkennen |  |
 | **C-17** | Suchlaufzeit — 547 ms bei zweiwortigen Anfragen |  |
-| **C-18** | Fehlsuchen mitschreiben |  |
 | **C-20** | Treffer am Wortanfang schlägt Treffer in der Wortmitte |  |
 | **C-22** | Phonetische Schreibvarianten |  |
-| **C-23** | Systematische Abdeckungsmessung statt handverlesener Begriffe |  |
 | **C-24** | Halbfertigprodukte ranken als Grundzutat |  |
 | **C-27** | Alltagswörter ohne Treffer — noch zwei |  |
 | **C-34** | Eigene Lebensmittel der Nutzer |  |
@@ -139,11 +137,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-35** | Was aus zwei gefallenen Modellen brauchbar bleibt |  |
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
 | **C-37** | Tagesbilanz muss „nicht erfasst" von „nicht enthalten" unterscheiden |  |
-| **C-39** | Canonical Names in drei Phasen | ~ |
-| **C-40** | `X` und `Y` als eigener Durchgang |  |
-| **C-41** | Die Anzeigenamen einspielen |  |
-| **C-42** | Die Schemaprüfung um GRANTs und Policy-Bedingungen erweitern |  |
 | **C-43** | Die Kette ausführbar machen |  |
+| **C-44** | Die zwölf leeren Tags den Lebensmitteln zuweisen |  |
+| **C-45** | Nährstoff-Referenzwerte in eine eigene Tabelle |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -522,27 +518,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   Vorgehen: erst den Ausdruck der Bedingung und den des Index in Deckung
   bringen, dann neu messen. Nicht umgekehrt.
 
-- [ ] **C-18: Fehlsuchen mitschreiben** (neu 2026-08-14). Der nächste
-  grosse Hebel für die Suche, und der einzige, der nicht auf Vermutungen
-  beruht.
-
-  `[cmd]` Die 50 Begriffe im Prüfskript sind geraten — auch die, die
-  treffen. `[cmd]` Für den ganzen Bestand wären 5.000–8.000 Wörterbuch-
-  einträge nötig; die 50 häufigsten Erstwörter decken nur 24,9 % ab.
-  Wer die 30 Wörter kennt, die Menschen **tatsächlich** tippen, pflegt
-  diese statt 2.643 auf Verdacht.
-
-  `[read]` So arbeiten vergleichbare Anwendungen auch: nach Häufigkeit
-  sortieren und von oben abarbeiten. `[cmd]` Die Kurationstabellen
-  (`food_curation_candidates`, `food_curation_decisions`) sind dafür
-  gebaut und leer.
-
-  Vor dem Bauen zu klären: Was wird mitgeschrieben — jede Anfrage oder
-  nur die ohne Treffer? Wie lange aufbewahrt? Und: eine Suchanfrage ist
-  eine personenbezogene Angabe, sobald sie an einem Konto hängt. Das ist
-  keine Formalie, sondern entscheidet den Zuschnitt.
-
-  `[read]` Fuehrt C-15 fort, das dasselbe kuerzer beschrieb.
 
 - [ ] **C-20: Treffer am Wortanfang schlägt Treffer in der Wortmitte**
   (neu 2026-08-14). **Der grösste verbliebene Hebel für die Relevanz.**
@@ -607,28 +582,23 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `[cmd]` Nachgemessen 2026-08-14: `kornflakes` und `yoghurt` liefern
   weiterhin **null Treffer**. Unveraendert offen.
 
-- [ ] **C-23: Systematische Abdeckungsmessung statt handverlesener
-  Begriffe** (neu 2026-08-14).
-  `supabase/_pipeline/_validierung/suche-abdeckung-messen.ts` misst über
-  eine Stichprobe des ganzen Bestands, ob ein Mensch das Lebensmittel
-  findet — statt gegen 50 geratene Begriffe.
+  `[cmd]` **Gemessen 2026-08-15**, Bericht
+  `docs/ssot/58-phonetische-varianten.md`, Daten in
+  `daten/phonetische-varianten.json`. 3.616 gefaltete Bestandswörter;
+  je Lautpaar betroffen/verwechselbar: `c`/`k` 2.088/196,
+  `k`/`ck` 1.271/229, `i`/`y` 1.839/53, `t`/`th` 1.722/21,
+  `f`/`ph` 800/**2**. Sechs Regeln mit Gegenbeispielen, ausdrücklich
+  **nur als Nulltreffer-Fallback** — nie als generelle Erweiterung.
 
-  `[cmd]` Stand 2026-08-14, 152 Lebensmittel: **0 % gar nichts gefunden**,
-  **90,8 % in den ersten zehn**, **48,0 % auf Platz 1**.
+  **Entscheidung Tom, 2026-08-15:** Die Testfälle `fysalis`, `kracker`
+  und `sose` sind **entfernt**. Er kennt keinen davon; sie stammen aus
+  der Regel, nicht aus der Praxis. Es bleiben `kornflakes` und `yoghurt`,
+  beide aus dem MealCam-Massstab belegt. Weitere Fälle kommen aus
+  `nutrition.search_events` — echten Fehlsuchen statt geratenen Wörtern.
 
-  Die Aussage daraus: *der Wortschatz trägt, die Rangfolge nicht.*
-  Die Lücke zwischen 90,8 und 48,0 ist die Arbeit von C-20 und C-21.
+  **Die Regeln sind vorbereitet, nicht gebaut.** Ob sie gebaut werden,
+  entscheidet sich an den ersten Protokolldaten.
 
-  **Warnung im Kopf der Datei, aus eigenem Schaden:** `[cmd]` Der erste
-  Lauf nahm den ganzen Namenskopf als Anfrage und erzeugte
-  `auberginegebratenohnefettpfanne` — 19,1 % Fehlschläge, die keine waren.
-  *Wer eine Suche misst, misst zuerst, was er hineingibt.* Diese Regel
-  steht seit `42-…` fest und wurde am selben Tag dreimal gebrochen.
-
-  `[annahme]` Die Zahlen oben (48,0 % Platz 1) stammen von **vor** den
-  Sortierstufen aus Block 32 und sind damit veraltet. Der Lauf ueber 152
-  Lebensmittel dauert lange und wurde seither nicht wiederholt — vor der
-  naechsten Entscheidung neu messen, nicht die alte Zahl zitieren.
 
 - [ ] **C-24: Halbfertigprodukte ranken als Grundzutat** (neu 2026-08-14).
   Dritte Ursache der Rangfolgelücke, unabhängig von C-20 und C-21.
@@ -1063,122 +1033,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   Eisenwert").
 
 
-- [~] **C-39: Canonical Names in drei Phasen** (neu 2026-08-14). Löst die
-  Namensfrage, an der C-28 und C-33 gescheitert sind — auf einem dritten
-  Weg, den die Spec vorgibt.
 
-  `[read]` `SPEC_05_FOOD_TAXONOMY.md`, Abschnitt „Canonical Names —
-  Generierungsstrategie":
 
-  | Phase | Verfahren | Umfang |
-  |---|---|---|
-  | 1 | regelbasiert, einfache Warengruppen (`C`, `F`, `G`, `H`, `K`) | `[cmd]` 1.365 Einträge |
-  | 2 | KI-Batch, komplexe Gruppen und Gerichte | `[cmd]` 3.725 + 2.050 |
-  | 3 | redaktionelle Prüfung, 10 % Stichprobe, Admin-Oberfläche | — |
 
-  `[read]` Die Spec liefert 20 belegte Beispiele, darunter
-  `Reis poliert, roh` → **Weisser Reis (roh)**,
-  `Hähnchen Brustfilet, roh` → **Hähnchenbrust (roh)**,
-  `Schwein Fettwamme, ohne Schwarten, geringer Magerfleischanteil (S XI)
-  roh` → **Schweinebauch (roh)**. Die ersten beiden decken sich mit dem,
-  was am 2026-08-14 unabhängig in C-32 vorgeschlagen wurde.
-
-  **Warum das nicht der dritte Anlauf desselben Fehlers ist:** C-28 und
-  C-33 sind daran gescheitert, dass die nötige Angabe **nicht im Code
-  steht** — dass `Alaska-Seelachs` kein Lachs und `Kartoffelpüree
-  Instantpulver` keine Kartoffel ist, weiss keine Ableitungsregel. Das
-  ist Weltwissen; ein Sprachmodell hat es. `[annahme]` Der Unterschied
-  ist sachlich, aber ungemessen — **die Abnahme gehört wieder vor den
-  Lauf**, nicht danach.
-
-  **Phase 1 kann sofort beginnen** und braucht nichts Neues: `[cmd]` Der
-  Zubereitungsschlüssel aus C-33 (204 Zellen, 104 als Zubereitung
-  belegt) sagt genau, welcher Namensteil wegfällt. Das ist der dritte
-  verwertbare Rest aus C-35, jetzt mit Verwendung.
-
-  **Phase 2 läuft bei Tom über Codex** (Kontingent vorhanden,
-  2026-08-14). Zu klären vor dem Lauf: Stichprobenumfang für die
-  Abnahme, Umgang mit Namen, die das Modell nicht kürzen kann, und ob
-  Gerichte (`X`/`Y`, 2.050 Stück) überhaupt einen kurzen Namen bekommen
-  sollen oder unverändert bleiben.
-
-  `[cmd]` **Der Bedarf ist beziffert:** 3.272 der 7.140 Namen tragen
-  Klammer, Schrägstrich, Zahl oder mehr als fünf Wörter.
-
-  `[cmd]` **Stand 2026-08-14: Phase 2 abgeschlossen, 5.775 von 5.775
-  Zeilen** in `supabase/_pipeline/daten/anzeigenamen.jsonl`. Keine
-  Kollisionen, 33 mit `sicher: false`, 576 mit `nebennamen`. Bericht:
-  `docs/ssot/52-anzeigenamen-batch.md`.
-
-  Kennzahlen je Warengruppe folgen der Schwierigkeitsverteilung: `[cmd]`
-  `U` und `V` 0 % unverändert (79 / 65 % schwierig), `M` 3 % (95 %),
-  `T` 1 % (56 %) — `B` dagegen 83 % (6 %), und das ist dort richtig.
-
-  **Offen: `X`/`Y` (C-40) und das Einspielen (C-41).** Phase 1
-  (regelbasiert, `C`/`F`/`G`/`H`/`K`, 1.365 Einträge) ist nicht
-  angefasst.
-
-- [ ] **C-40: `X` und `Y` als eigener Durchgang** (neu 2026-08-14).
-  Setzt C-39 fort.
-
-  `[cmd]` Die 2.050 Gerichte sind zu **100 % unverändert** durchgereicht
-  worden, Median-Länge 38 → 38 und 33 → 33. Codex hat die Frage im
-  Bericht selbst beantwortet, nachdem die 20 längsten `X`-Einträge geprüft
-  waren:
-
-  > `[annahme]` Bei diesen 20 war die Regel „Durchreichen ist der
-  > Normalfall" zu weit ausgelegt. […] Die Bestandteile müssen erhalten
-  > bleiben, aber die amtliche Satzstruktur muss nicht erhalten bleiben.
-
-  `[cmd]` Beispiel: `Lasagne al forno, Teigwaren geschichtet mit
-  Bechamel- und Bologneser Sauce, mit Käse überbacken` — 95 Zeichen,
-  unverändert. Vorschlag aus dem Bericht: `Lasagne al forno mit Bolognese
-  und Bechamel`.
-
-  **Mitprüfen:** `[cmd]` `D` steht bei **63 % unverändert** gegenüber
-  73 % schwierigen Namen; 186 der unveränderten tragen eine Klammer
-  (`Apfel-Streuselkuchen (Mürbeteig)`). Verteidigbar, weil die Teigart
-  drei sonst identische Kuchen unterscheidet — aber der Wert stieg beim
-  Reparaturlauf von 44 % auf 63 %, ging also in die falsche Richtung.
-
-- [ ] **C-41: Die Anzeigenamen einspielen** (neu 2026-08-14). Setzt C-29
-  voraus.
-
-  `[cmd]` `supabase/_pipeline/daten/anzeigenamen.jsonl` ist vollständig:
-  5.775 Zeilen, keine Kollisionen, 33 mit `sicher: false`, **576 mit
-  `nebennamen`**. Die Datei ist erzeugt — der Weg in `nutrition.foods`
-  fehlt.
-
-  **Zwei Dinge sind vorher zu klären:**
-  - Die Kuration muss den Kettenlauf überleben (C-29). Ohne
-    Override-Schicht setzt der nächste Aufbau alles zurück.
-  - `[read]` **Aliase leiten sich aus `name_de` ab, nie aus dem
-    Anzeigenamen.** Sonst verschwinden die Nebenformen, die
-    `022_alias_ableitung.sql` heute aus Schrägstrichnamen gewinnt
-    (`[cmd]` 836 Einträge betroffen).
-
-  **Die 576 `nebennamen` sind kuratierte Aliase mit bekannter Herkunft** —
-  `Felchen` mit `Maräne`, `Renke`, `Schnäpel`. Wie sie in `food_aliases`
-  kommen und ob sie die maschinelle Ableitung ersetzen oder ergänzen,
-  ist offen.
-
-- [ ] **C-42: Die Schemaprüfung um GRANTs und Policy-Bedingungen
-  erweitern** (neu 2026-08-14). Die zwei blinden Flecken, die Claude Code
-  in `docs/ssot/53-kettenluecke.md` selbst benannt hat.
-
-  1. **GRANTs werden nicht geprüft.** `[read]` PostgREST prüft
-     Tabellenrechte **vor** RLS — eine Tabelle mit tadellosen Policies,
-     aber ohne `GRANT SELECT`, ist für die Anwendung genauso unerreichbar
-     wie eine gesperrte. Der nächstliegende Kandidat.
-  2. **Policy-Bedingungen werden nicht geprüft.** Geprüft wird, dass eine
-     Policy für eine Operation existiert, nicht was sie erlaubt. Ein
-     `USING (true)` auf `meals` bestünde die Prüfung und zeigte jedem
-     alle Mahlzeiten.
-
-  `[cmd]` Stand der Prüfung heute: 107 Einzelaussagen — 17 Zeilenschutz,
-  32 Policies je Operation, 2 `security_invoker`, 4 Trigger, 14
-  Fremdschlüssel. Indizes bewusst ausgelassen (Laufzeit, nicht
-  Korrektheit).
 
 - [ ] **C-43: Die Kette ausführbar machen** (neu 2026-08-14).
 
@@ -1207,6 +1064,90 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   bricht `052` **nach** dem Anlegen ab, rollt zurück, und die Ausgabe
   besteht aus lauter `NOTICE … skipping`-Zeilen. Wer nach `ERROR` am Ende
   sucht, sieht nichts.
+
+- [ ] **C-44: Die zwölf leeren Tags den Lebensmitteln zuweisen** (neu
+  2026-08-15). **Tom, 2026-08-15: „genau diese tag filter sind wichtig,
+  also brauchen wir und müssen dementsprechend die tags den foods
+  zuweisen können."**
+
+  `[cmd]` Von 16 definierten Tags sind **vier vergeben**, zwölf stehen an
+  null Lebensmitteln:
+
+  | vergeben | Einträge |
+  |---|---|
+  | `low_carb` | 4.659 |
+  | `low_fat` | 2.648 |
+  | `high_protein` | 1.400 |
+  | `high_fiber` | 558 |
+
+  **Leer:** `vegan` · `vegetarian` · `gluten_free` · `lactose_free` ·
+  `halal` · `kosher` · `nut_free` · `thai_food` · `spicy` ·
+  `mediterranean` · `processed_food` · `ultra_processed`.
+
+  **Warum das kein Schönheitsfehler ist:** Ein Filter, der technisch
+  funktioniert und nie einen Treffer liefert, ist schlimmer als ein
+  fehlender — er sieht aus, als sei die Datenbank leer. Der Fehler fällt
+  niemandem auf, weil nichts abstürzt.
+
+  **Die vier vergebenen sind aus Nährwerten abgeleitet. Die zwölf sind es
+  nicht.** `vegan`, `vegetarian`, `gluten_free`, `nut_free`, `halal`,
+  `kosher` brauchen Wissen über die Zutaten, nicht über die Nährwerte —
+  das ist dieselbe Sorte Aufgabe wie die Anzeigenamen und gehört in einen
+  Batch mit menschlicher Abnahme.
+
+  **Zwei Tags sind Sonderfälle:**
+  - `[cmd]` `thai_food`: 0 von 7.140 Einträgen tragen `name_th`, 0
+    Thai-Aliase. `[read]` `ADR_BLS_ONLY` Abschnitt 16 will Thai nur
+    strukturell. Der Tag hat im BLS-Bestand nichts zu markieren — er
+    gehört zu C-34.
+  - `processed_food` / `ultra_processed`: `[cmd]` `processing_level` ist
+    zu 100 % mit `raw` gefüllt, auch für Bechamelsauce. Die Spalte ist
+    **falsch**, nicht leer. Wer die Tags daraus ableitet, überträgt den
+    Fehler.
+
+  **Fachlich heikel und deshalb vorher zu klären:** `gluten_free` und
+  `nut_free` sind Allergenaussagen. Eine falsche Markierung kann jemanden
+  krank machen. `[read]` `SPEC_06` führt bei `foods_custom` ein Feld
+  `custom_allergens` nach EU-14 — die Frage, ob LumeOS Allergenfreiheit
+  überhaupt behauptet oder nur Zutaten ausweist, ist eine
+  Produktentscheidung, keine Datenaufgabe.
+
+  `[read]` Dazu ein zweiter Befund aus `docs/ssot/60-nutrition-specs-auswertung.md`:
+  `food_tags` trägt nur `food_id`, `tag_code`, `confidence` — **kein
+  Quellen- oder Grundfeld**, obwohl SPEC_09 Abschnitt 5 verlangt, dass
+  Tags erklärbar sind. Vor dem Befüllen zu entscheiden.
+
+- [ ] **C-45: Nährstoff-Referenzwerte in eine eigene Tabelle** (neu
+  2026-08-15). **Entscheidung Tom, 2026-08-15: eigene Tabelle.**
+  Voraussetzung für C-37.
+
+  `[cmd]` **0 von 138 Nährstoffen tragen `rda_male` oder `rda_female`**,
+  und `nutrition.nutrient_reference_values` existiert nicht. Beide
+  vorgesehenen Orte sind leer.
+
+  `[read]` Der Widerspruch aus der Spec-Auswertung: `SPEC_09_SCORING`
+  liest die Referenzwerte aus Spalten in `nutrient_defs`, Abschnitt 8
+  derselben Datei will eine eigene Tabelle mit RDA, AI, UL und
+  Altersabhängigkeit. **Die Spaltenlösung kann Abschnitt 8 nicht
+  abbilden** — eine Spalte je Nährstoff trägt keine Altersstaffel und
+  keine drei Wertarten.
+
+  **Zu klären, bevor gebaut wird:**
+  - **Woher kommen die Werte?** D-A-CH-Referenzwerte (DGE), EFSA, oder
+    die Kennzeichnungswerte der EU-LMIV? Sie unterscheiden sich, und die
+    Quelle gehört je Zeile dokumentiert — dieselbe Regel wie beim BLS.
+  - Welche Achsen: Alter, Geschlecht, Schwangerschaft, Stillzeit? Jede
+    Achse vervielfacht die Zeilen.
+  - `[cmd]` 138 Nährstoffe — für wie viele gibt es überhaupt
+    Referenzwerte? Vermutlich deutlich weniger.
+  - Was passiert mit den vorhandenen leeren Spalten `rda_male` und
+    `rda_female`? Entfernen oder als überholt kennzeichnen — stehen
+    lassen und ignorieren ist die schlechteste Wahl.
+
+  `[read]` `packages/scoring/` existiert nicht, obwohl SPEC_09 darauf
+  aufbaut. Der Tages-Score (0–100, nie gespeichert) ist eine andere
+  Kennzahl als `sort_weight` und hängt an dieser Tabelle.
+
 
 
 

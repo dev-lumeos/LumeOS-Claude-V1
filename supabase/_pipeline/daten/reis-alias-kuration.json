@@ -70,27 +70,19 @@
     },
     {
       "suchbegriff": "griechischer joghurt",
-      "ziel_bls_code": "M141100",
-      "status": "ersatz",
-      "begruendung": "Griechischer Joghurt existiert im BLS nicht. docs/ssot/51-sortweight-formel.md kennzeichnet M141100 als Ersatz: Joghurt aus entrahmter Milch, max. 0,5 % Fett."
-    }
-  ],
-  "strittige_zuordnungen": [
-    {
-      "suchbegriff": "sushireis",
-      "variante": "Zutat",
-      "ziel_bls_code": "C352000",
-      "status": "tom_entscheidet",
-      "begruendung": "Sushireis als rohe Reissorte waere naehrwertlich weisser polierter Reis. Das waere konsistent mit Basmati, Jasmin, Langkorn und Rundkorn."
+      "ziel_bls_code": "M148500",
+      "status": "gesetzt",
+      "begruendung": "Entscheidung Tom 2026-08-15 nach Recherche. Es gibt zwei Produkte unter einem Namen: Original griechischer Joghurt traegt 7-10 g Protein, das im deutschsprachigen Handel verbreitete 'nach griechischer Art' rund 4,5 g bei 10 % Fett (mit Rahm angereichert, nicht abgetropft). M148500 Sahnejoghurt 10 % mit Magermilchpulver trifft mit 10,0 g Fett und 4,0 g Protein genau dieses Produkt. Der zuvor vorgeschlagene Ersatz M141100 (0,1 g Fett) war falsch. Wer echten abgetropften Joghurt isst, legt ihn nach C-34 als eigenen Eintrag an - die Markenwerte schwanken zu stark fuer einen Datenbankwert."
     },
     {
       "suchbegriff": "sushireis",
-      "variante": "Gericht",
-      "ziel_bls_code": "X8A1100",
-      "status": "tom_entscheidet",
-      "begruendung": "Im Bestand existiert X8A1100 Sushi-Reis (Grundrezept). Wer Sushireis sucht, kann auch das zubereitete Grundrezept meinen."
+      "ziel_bls_code": "C352000",
+      "zweitziel_bls_code": "X8A1100",
+      "status": "gesetzt",
+      "begruendung": "Entscheidung Tom 2026-08-15: beide Treffer anzeigen, der Nutzer waehlt. C352000 ist die rohe Zutat (wer wiegt), X8A1100 Sushi-Reis (Grundrezept) das zubereitete Gericht (wer kocht). Kein Sonderfall mehr."
     }
   ],
+  "strittige_zuordnungen": [],
   "ausgeschlossen": [
     {
       "suchbegriff": "milchreis",

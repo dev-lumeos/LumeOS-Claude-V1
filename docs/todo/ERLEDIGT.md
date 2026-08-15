@@ -2141,6 +2141,267 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   und der Weg weiter offen. Der Punkt gilt als erledigt, weil er
   geliefert hat, wozu er da war: eine Zahl, die eine Richtung stoppt.
 
+- [x] **C-40: `X` und `Y` als eigener Durchgang** (neu 2026-08-14).
+  Setzt C-39 fort.
+
+  `[cmd]` Die 2.050 Gerichte sind zu **100 % unverändert** durchgereicht
+  worden, Median-Länge 38 → 38 und 33 → 33. Codex hat die Frage im
+  Bericht selbst beantwortet, nachdem die 20 längsten `X`-Einträge geprüft
+  waren:
+
+  > `[annahme]` Bei diesen 20 war die Regel „Durchreichen ist der
+  > Normalfall" zu weit ausgelegt. […] Die Bestandteile müssen erhalten
+  > bleiben, aber die amtliche Satzstruktur muss nicht erhalten bleiben.
+
+  `[cmd]` Beispiel: `Lasagne al forno, Teigwaren geschichtet mit
+  Bechamel- und Bologneser Sauce, mit Käse überbacken` — 95 Zeichen,
+  unverändert. Vorschlag aus dem Bericht: `Lasagne al forno mit Bolognese
+  und Bechamel`.
+
+  **Mitprüfen:** `[cmd]` `D` steht bei **63 % unverändert** gegenüber
+  73 % schwierigen Namen; 186 der unveränderten tragen eine Klammer
+  (`Apfel-Streuselkuchen (Mürbeteig)`). Verteidigbar, weil die Teigart
+  drei sonst identische Kuchen unterscheidet — aber der Wert stieg beim
+  Reparaturlauf von 44 % auf 63 %, ging also in die falsche Richtung.
+
+  `[cmd]` **Erledigt 2026-08-15.** 1.048 Codes geändert, ausschliesslich
+  in `D`, `X`, `Y`. `X` von 100 % unverändert auf 60 %, `Y` ebenso,
+  `D` von 63 % auf 29 % bei Median-Länge 29 → 22.
+  Beispiel: `Lasagne al forno, Teigwaren geschichtet mit Bechamel- und
+  Bologneser Sauce, mit Käse überbacken` → **`Lasagne al forno mit
+  Bolognese und Bechamel`**. Keine Kollisionen, keine Korruptionszeichen.
+
+- [x] **C-41: Die Anzeigenamen einspielen** (neu 2026-08-14). Setzt C-29
+  voraus.
+
+  `[cmd]` `supabase/_pipeline/daten/anzeigenamen.jsonl` ist vollständig:
+  5.775 Zeilen, keine Kollisionen, 33 mit `sicher: false`, **576 mit
+  `nebennamen`**. Die Datei ist erzeugt — der Weg in `nutrition.foods`
+  fehlt.
+
+  **Zwei Dinge sind vorher zu klären:**
+  - Die Kuration muss den Kettenlauf überleben (C-29). Ohne
+    Override-Schicht setzt der nächste Aufbau alles zurück.
+  - `[read]` **Aliase leiten sich aus `name_de` ab, nie aus dem
+    Anzeigenamen.** Sonst verschwinden die Nebenformen, die
+    `022_alias_ableitung.sql` heute aus Schrägstrichnamen gewinnt
+    (`[cmd]` 836 Einträge betroffen).
+
+  **Die 576 `nebennamen` sind kuratierte Aliase mit bekannter Herkunft** —
+  `Felchen` mit `Maräne`, `Renke`, `Schnäpel`. Wie sie in `food_aliases`
+  kommen und ob sie die maschinelle Ableitung ersetzen oder ergänzen,
+  ist offen.
+
+  `[cmd]` **Erledigt 2026-08-15**, drei Commits: Umbenennung
+  `name_display` → `name_display_de`, Kettenschritt `025` für die
+  Anzeigenamen, Kettenschritt `026` für die Nebennamen.
+  Live: 7.140 Anzeigenamen, davon **2.870 abweichend von `name_de`**.
+  `food_aliases` 32.805, davon **283 `curated_nebenname`** — von 663
+  kuratierten Nebennamen waren 380 bereits abgeleitet vorhanden.
+  Massstab unverändert 34/37, Schema Exit 0, Gate nach jedem Commit.
+
+  **C-29 war keine Vorbedingung**: solange die Kuration in der
+  versionierten JSONL liegt, reproduziert der Kettenschritt sie bei jedem
+  Aufbau. Die Override-Tabelle wird erst mit dem Admin gebraucht.
+
+- [x] **C-39: Canonical Names in drei Phasen** (neu 2026-08-14). Löst die
+  Namensfrage, an der C-28 und C-33 gescheitert sind — auf einem dritten
+  Weg, den die Spec vorgibt.
+
+  `[read]` `SPEC_05_FOOD_TAXONOMY.md`, Abschnitt „Canonical Names —
+  Generierungsstrategie":
+
+  | Phase | Verfahren | Umfang |
+  |---|---|---|
+  | 1 | regelbasiert, einfache Warengruppen (`C`, `F`, `G`, `H`, `K`) | `[cmd]` 1.365 Einträge |
+  | 2 | KI-Batch, komplexe Gruppen und Gerichte | `[cmd]` 3.725 + 2.050 |
+  | 3 | redaktionelle Prüfung, 10 % Stichprobe, Admin-Oberfläche | — |
+
+  `[read]` Die Spec liefert 20 belegte Beispiele, darunter
+  `Reis poliert, roh` → **Weisser Reis (roh)**,
+  `Hähnchen Brustfilet, roh` → **Hähnchenbrust (roh)**,
+  `Schwein Fettwamme, ohne Schwarten, geringer Magerfleischanteil (S XI)
+  roh` → **Schweinebauch (roh)**. Die ersten beiden decken sich mit dem,
+  was am 2026-08-14 unabhängig in C-32 vorgeschlagen wurde.
+
+  **Warum das nicht der dritte Anlauf desselben Fehlers ist:** C-28 und
+  C-33 sind daran gescheitert, dass die nötige Angabe **nicht im Code
+  steht** — dass `Alaska-Seelachs` kein Lachs und `Kartoffelpüree
+  Instantpulver` keine Kartoffel ist, weiss keine Ableitungsregel. Das
+  ist Weltwissen; ein Sprachmodell hat es. `[annahme]` Der Unterschied
+  ist sachlich, aber ungemessen — **die Abnahme gehört wieder vor den
+  Lauf**, nicht danach.
+
+  **Phase 1 kann sofort beginnen** und braucht nichts Neues: `[cmd]` Der
+  Zubereitungsschlüssel aus C-33 (204 Zellen, 104 als Zubereitung
+  belegt) sagt genau, welcher Namensteil wegfällt. Das ist der dritte
+  verwertbare Rest aus C-35, jetzt mit Verwendung.
+
+  **Phase 2 läuft bei Tom über Codex** (Kontingent vorhanden,
+  2026-08-14). Zu klären vor dem Lauf: Stichprobenumfang für die
+  Abnahme, Umgang mit Namen, die das Modell nicht kürzen kann, und ob
+  Gerichte (`X`/`Y`, 2.050 Stück) überhaupt einen kurzen Namen bekommen
+  sollen oder unverändert bleiben.
+
+  `[cmd]` **Der Bedarf ist beziffert:** 3.272 der 7.140 Namen tragen
+  Klammer, Schrägstrich, Zahl oder mehr als fünf Wörter.
+
+  `[cmd]` **Stand 2026-08-14: Phase 2 abgeschlossen, 5.775 von 5.775
+  Zeilen** in `supabase/_pipeline/daten/anzeigenamen.jsonl`. Keine
+  Kollisionen, 33 mit `sicher: false`, 576 mit `nebennamen`. Bericht:
+  `docs/ssot/52-anzeigenamen-batch.md`.
+
+  Kennzahlen je Warengruppe folgen der Schwierigkeitsverteilung: `[cmd]`
+  `U` und `V` 0 % unverändert (79 / 65 % schwierig), `M` 3 % (95 %),
+  `T` 1 % (56 %) — `B` dagegen 83 % (6 %), und das ist dort richtig.
+
+  **Offen: `X`/`Y` (C-40) und das Einspielen (C-41).** Phase 1
+  (regelbasiert, `C`/`F`/`G`/`H`/`K`, 1.365 Einträge) ist nicht
+  angefasst.
+
+  `[cmd]` **Erledigt 2026-08-15.** Alle drei Phasen. Phase 1 wurde am
+  Schluss nachgeholt: `C`, `F`, `G`, `H`, `K` fehlten vollständig —
+  1.365 Einträge, bei denen `name_display_de` identisch mit `name_de`
+  war, darunter der gesamte Reis. Kennzahlen: `G` 3 % unverändert,
+  `K` 4 %, `C` 25 %, `F` 24 %, `H` 39 %.
+  Die Spec-Muster sitzen zeichengleich: `Weißer Reis (roh)`,
+  `Vollkornreis (roh)`, `Parboiled-Reis (roh)`, `Haferflocken`.
+  **7.140 von 7.140**, keine Kollisionen.
+
+  `[cmd]` Unterwegs gingen **704 Umlaute verloren** — `Eiwei?brot` statt
+  `Eiweißbrot`, gültiges UTF-8 mit echtem Fragezeichen. `[annahme]`
+  Ursache: PowerShell-Here-String mit Nicht-ASCII an Node. Die Prüfung
+  kannte nur die vorherige Fehlerart (`ae`/`oe`/`ue`) und meldete grün.
+  Behoben, Gegentest 704 → 0.
+
+- [x] **C-18: Fehlsuchen mitschreiben** (neu 2026-08-14). Der nächste
+  grosse Hebel für die Suche, und der einzige, der nicht auf Vermutungen
+  beruht.
+
+  `[cmd]` Die 50 Begriffe im Prüfskript sind geraten — auch die, die
+  treffen. `[cmd]` Für den ganzen Bestand wären 5.000–8.000 Wörterbuch-
+  einträge nötig; die 50 häufigsten Erstwörter decken nur 24,9 % ab.
+  Wer die 30 Wörter kennt, die Menschen **tatsächlich** tippen, pflegt
+  diese statt 2.643 auf Verdacht.
+
+  `[read]` So arbeiten vergleichbare Anwendungen auch: nach Häufigkeit
+  sortieren und von oben abarbeiten. `[cmd]` Die Kurationstabellen
+  (`food_curation_candidates`, `food_curation_decisions`) sind dafür
+  gebaut und leer.
+
+  Vor dem Bauen zu klären: Was wird mitgeschrieben — jede Anfrage oder
+  nur die ohne Treffer? Wie lange aufbewahrt? Und: eine Suchanfrage ist
+  eine personenbezogene Angabe, sobald sie an einem Konto hängt. Das ist
+  keine Formalie, sondern entscheidet den Zuschnitt.
+
+  `[read]` Fuehrt C-15 fort, das dasselbe kuerzer beschrieb.
+
+  `[cmd]` **Erledigt 2026-08-15.** `nutrition.search_events` als
+  Kettenschritt `057`, Auswertungsfunktion `search_events_report()`,
+  Sitzungskennung über ein Cookie in `middleware.ts`, Insert nach der
+  Suche in `food-search.ts` — **`food_search` selbst blieb unverändert.**
+
+  `[cmd]` Rechte: `authenticated` hat **nur INSERT, kein SELECT**;
+  Auswertung über `service_role`. Keine Nutzerkennung.
+  `[cmd]` Laufzeit `huehnerbrust`: Median 743 ms vorher, 719 ms nachher —
+  keine messbare Verlangsamung.
+
+  **Entscheidung Tom, 2026-08-15 (Einwilligung):** Suchbegriffe werden
+  ohne Opt-in mitgeschrieben. Begründung: Wer Bedenken hat, gibt manuell
+  ein; niemand wird zur MealCam gezwungen. Das weicht bewusst vom Muster
+  in `ADR_MEALCAM_CONSENT` ab (privat als Standard, Opt-in getrennt) und
+  ist als bewusste Abweichung festgehalten, nicht als Versehen.
+
+- [x] **C-23: Systematische Abdeckungsmessung statt handverlesener
+  Begriffe** (neu 2026-08-14).
+  `supabase/_pipeline/_validierung/suche-abdeckung-messen.ts` misst über
+  eine Stichprobe des ganzen Bestands, ob ein Mensch das Lebensmittel
+  findet — statt gegen 50 geratene Begriffe.
+
+  `[cmd]` Stand 2026-08-14, 152 Lebensmittel: **0 % gar nichts gefunden**,
+  **90,8 % in den ersten zehn**, **48,0 % auf Platz 1**.
+
+  Die Aussage daraus: *der Wortschatz trägt, die Rangfolge nicht.*
+  Die Lücke zwischen 90,8 und 48,0 ist die Arbeit von C-20 und C-21.
+
+  **Warnung im Kopf der Datei, aus eigenem Schaden:** `[cmd]` Der erste
+  Lauf nahm den ganzen Namenskopf als Anfrage und erzeugte
+  `auberginegebratenohnefettpfanne` — 19,1 % Fehlschläge, die keine waren.
+  *Wer eine Suche misst, misst zuerst, was er hineingibt.* Diese Regel
+  steht seit `42-…` fest und wurde am selben Tag dreimal gebrochen.
+
+  `[annahme]` Die Zahlen oben (48,0 % Platz 1) stammen von **vor** den
+  Sortierstufen aus Block 32 und sind damit veraltet. Der Lauf ueber 152
+  Lebensmittel dauert lange und wurde seither nicht wiederholt — vor der
+  naechsten Entscheidung neu messen, nicht die alte Zahl zitieren.
+
+  `[cmd]` **Erledigt 2026-08-15.** Bericht `docs/ssot/56-suchabdeckung.md`.
+  152 Sollwerte, davon 99 Grundform, 52 einzige Form, 1 offen gelassen.
+
+  | | alt 2026-08-14 | alt heute | neu heute |
+  |---|---|---|---|
+  | Platz 1 | 48,0 % | **46,1 %** | 79,5 % |
+  | erste zehn | 90,8 % | 90,1 % | 97,4 % |
+
+  **Die mittlere Spalte ist der Befund**, und er war nicht beauftragt:
+  Die alte Bauart auf der heutigen Datenbank liefert 46,1 % — **C-38 hat
+  die breite Abdeckung nicht verbessert.** Der Sprung auf 79,5 % kommt
+  von der geänderten Frage, nicht vom Scoring. Ohne diese Gegenprobe
+  hätte man aus 48 und 79,5 einen Erfolg gelesen, den es nicht gibt.
+
+  **Was das über den MealCam-Massstab sagt:** C-38 hob ihn von 31 auf 34
+  von 37 — auf 152 systematisch gezogenen Bestandseinträgen wirkt es
+  nicht. Beide Messungen sind gültig und messen Verschiedenes: die eine,
+  was Menschen suchen, die andere, was im Bestand steht.
+
+  `[cmd]` Korrektur an der alten Punktfassung: die 152 sind **nicht
+  handverlesen**, sondern jedes 47. Lebensmittel nach `bls_code`.
+  `[cmd]` 74 % davon sind zubereitete Varianten — die alte Messung
+  bestrafte die Suche dafür, dass sie zu `zucchini` die rohe Zucchini
+  lieferte.
+
+- [x] **C-42: Die Schemaprüfung um GRANTs und Policy-Bedingungen
+  erweitern** (neu 2026-08-14). Die zwei blinden Flecken, die Claude Code
+  in `docs/ssot/53-kettenluecke.md` selbst benannt hat.
+
+  1. **GRANTs werden nicht geprüft.** `[read]` PostgREST prüft
+     Tabellenrechte **vor** RLS — eine Tabelle mit tadellosen Policies,
+     aber ohne `GRANT SELECT`, ist für die Anwendung genauso unerreichbar
+     wie eine gesperrte. Der nächstliegende Kandidat.
+  2. **Policy-Bedingungen werden nicht geprüft.** Geprüft wird, dass eine
+     Policy für eine Operation existiert, nicht was sie erlaubt. Ein
+     `USING (true)` auf `meals` bestünde die Prüfung und zeigte jedem
+     alle Mahlzeiten.
+
+  `[cmd]` Stand der Prüfung heute: 107 Einzelaussagen — 17 Zeilenschutz,
+  32 Policies je Operation, 2 `security_invoker`, 4 Trigger, 14
+  Fremdschlüssel. Indizes bewusst ausgelassen (Laufzeit, nicht
+  Korrektheit).
+
+  `[cmd]` **Erledigt 2026-08-15.** 291 Einzelaussagen statt 107:
+  167 GRANTs über 19 Objekte, 17 Policy-Bedingungsarten
+  (`oeffentlich` 10, `eigene_zeilen` 5, `admin` 2).
+  Exit 0, **null Falschmeldungen** gegen das intakte Schema.
+  Vier Eingriffe gefangen: `REVOKE SELECT`, `GRANT ALL`, `USING (true)`
+  auf `meals`, `GRANT … TO anon`.
+
+  `[cmd]` Ein Fund lag in der Sollliste, nicht in der Datenbank:
+  `ALTER DEFAULT PRIVILEGES … ON TABLES` umfasst in Postgres auch
+  Sichten (Objekttyp `r` für beide) — die vermeintlichen Zuvielrechte
+  der zwei Sichten waren korrekt.
+  `[cmd]` Und: INSERT-Policies tragen ihre Bedingung in `with_check`,
+  nicht in `qual`; wer nur `qual` liest, hält jede für leer.
+
+  **Der nächste blinde Fleck ist benannt:** Die Bedingung wird auf ein
+  **Merkmal** geprüft, nicht auf ihre **Wirkung**.
+  `USING (auth.uid() = user_id OR true)` nennt `auth.uid()` und bestünde
+  die Prüfung — und zeigte jedem alles. Nur ein echter Zugriffstest mit
+  zwei Nutzern schliesst das aus; `zugriffsrechte-pruefen.mjs` führt ihn
+  teilweise, die Verbindung zwischen beiden Prüfungen fehlt.
+  Dazu ungeprüft: Funktionsrechte (`[cmd]` 10 Funktionen mit `EXECUTE` —
+  fehlte `is_admin()` an `authenticated`, wären beide Admin-Policies
+  wirkungslos), Schema-`USAGE`, die Default Privileges selbst.
+
 ## Erledigt am 2026-08-05
 
 - [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und
