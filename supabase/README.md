@@ -67,6 +67,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 |---|---|---|---|
 | B | `migrations/20260805120000_baseline_structure.sql` | **Gesamte Struktur**: Schema `nutrition` (11 Tabellen), `public.profiles` + Trigger, alle Funktionen/Indizes/Policies/Grants, pg_trgm | v060 22, v070 18, v090 14 Prüfungen |
 | 015 | `015_kataloge/015_nutrient_defs_seed.sql` | 138 Nährstoffdefinitionen | 138 |
+| 016 | `015_kataloge/016_nutrient_reference_values.ts` | `nutrient_reference_values`: Referenzwert-Antworten für alle Nährstoffcodes, inklusive `NO_REFERENCE`-Zeilen; `nutrient_defs.rda_*` als überholt markiert | mindestens 138 Codes |
 | 020 | `02_human_layer/020_food_human_layer.sql` | Kategorien-/Tag-Seeds, **Tag- und Alias-Ableitungen** (Strukturteile: durch Baseline bereits da, Guards greifen) | 518 Kategorien, 16 Tag-Definitionen |
 | 030 | `03_bls_import/030_apply_local.sql` | `foods`, `food_nutrients` aus CSV | 7.140 / 698.092 |
 | 031 | `03_bls_import/031_fettsaeuren_nachtrag.sql` | 30 Einzelfettsäuren aus `bls_4_0_fettsaeuren.zip` | +171.409, gesamt 869.501 / 138 Codes |

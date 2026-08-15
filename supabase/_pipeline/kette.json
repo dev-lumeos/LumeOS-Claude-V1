@@ -18,6 +18,13 @@
       "depends_on": ["B"]
     },
     {
+      "id": "016",
+      "path": "supabase/_pipeline/015_kataloge/016_nutrient_reference_values.ts",
+      "kind": "tsx",
+      "creates": "Referenzwert-Antworten fuer alle 138 Naehrstoffcodes, inklusive NO_REFERENCE-Zeilen",
+      "depends_on": ["015"]
+    },
+    {
       "id": "020a",
       "path": "supabase/_pipeline/02_human_layer/020_food_human_layer.sql",
       "kind": "sql",
