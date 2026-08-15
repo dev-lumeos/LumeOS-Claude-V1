@@ -77,6 +77,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 024 | `02_human_layer/024_suchsynonyme.sql` | `search_synonyms` | 4.877, davon 21 von Hand |
 | 025 | `_ableitung/anzeigenamen-einspielen.ts` | kuratierte `name_display_de`/`name_display_en` aus `daten/anzeigenamen.jsonl` | 5.775 Anzeigenamen, 33 `sicher=false` sichtbar im Lauf |
 | 026 | `_ableitung/anzeigenamen-nebennamen-aliase.ts` | kuratierte `nebennamen` als `food_aliases.source='curated_nebenname'` | 576 Foods mit Nebennamen, 663 kuratierte Namen vor Deduplikation |
+| 027 | `_ableitung/027_lebensmittel-tags.ts` | kuratierte C-44-Tags aus `daten/lebensmittel-tags.jsonl`, ohne die Makro-Tags aus `020` zu löschen | 5.150 Foods, 8.702 kuratierte Tagzuordnungen |
 | **052** | `05_user_tabellen/052_diary_foundation.sql` | **`meals`, `meal_items`**, `touch_updated_at()`, `meal_items_owner_guard()`, 4 Trigger, 8 Policies | 2 Tabellen |
 | **053** | `05_user_tabellen/053_daily_summary.sql` | Sicht **`daily_summary`** | 1 Sicht |
 | **054** | `05_user_tabellen/054_preference_uniques.sql` | Eindeutigkeitsregeln auf `food_preference_items` | — |
