@@ -1049,7 +1049,7 @@ CREATE TABLE nutrition.food_aliases (
     alias text NOT NULL,
     locale text DEFAULT 'de'::text NOT NULL,
     source text DEFAULT 'editorial'::text NOT NULL,
-    CONSTRAINT food_aliases_source_check CHECK ((source = ANY (ARRAY['editorial'::text, 'ai_generated'::text, 'user'::text])))
+    CONSTRAINT food_aliases_source_check CHECK ((source = ANY (ARRAY['editorial'::text, 'ai_generated'::text, 'user'::text, 'derived'::text, 'curated_nebenname'::text])))
 );
 
 

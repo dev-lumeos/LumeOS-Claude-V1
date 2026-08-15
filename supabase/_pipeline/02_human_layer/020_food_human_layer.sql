@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS nutrition.food_aliases (
   food_id uuid NOT NULL REFERENCES nutrition.foods(id) ON DELETE CASCADE,
   alias text NOT NULL,
   locale text NOT NULL DEFAULT 'de',
-  source text NOT NULL DEFAULT 'editorial' CHECK (source IN ('editorial','ai_generated','user')),
+  source text NOT NULL DEFAULT 'editorial' CHECK (source IN ('editorial','ai_generated','user','derived','curated_nebenname')),
   PRIMARY KEY (food_id, alias, locale)
 );
 CREATE INDEX IF NOT EXISTS idx_food_aliases_food ON nutrition.food_aliases(food_id);

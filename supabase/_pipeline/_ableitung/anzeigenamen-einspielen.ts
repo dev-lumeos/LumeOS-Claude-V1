@@ -67,16 +67,20 @@ function readRows(): { rows: Anzeigename[]; lines: string[]; sicherFalse: number
   return { rows, lines, sicherFalse }
 }
 
+function csvCell(value: string): string {
+  return `"${value.replace(/"/g, '""')}"`
+}
+
 function runPsql(lines: string[]): void {
   const sql = `\\set ON_ERROR_STOP on
 BEGIN;
 
 CREATE TEMP TABLE tmp_anzeigenamen_jsonl (
-  payload jsonb NOT NULL
+  payload text NOT NULL
 ) ON COMMIT DROP;
 
-COPY tmp_anzeigenamen_jsonl (payload) FROM STDIN;
-${lines.join('\n')}
+COPY tmp_anzeigenamen_jsonl (payload) FROM STDIN WITH (FORMAT csv);
+${lines.map(csvCell).join('\n')}
 \\.
 
 DO $$
@@ -92,7 +96,7 @@ BEGIN
   END IF;
 
   WITH parsed AS (
-    SELECT payload->>'bls_code' AS bls_code
+    SELECT payload::jsonb->>'bls_code' AS bls_code
     FROM tmp_anzeigenamen_jsonl
   )
   SELECT COUNT(*) INTO v_missing
@@ -105,9 +109,9 @@ BEGIN
   END IF;
 
   WITH parsed AS (
-    SELECT payload->>'bls_code' AS bls_code,
-           payload->>'name_display_de' AS name_display_de,
-           payload->>'name_display_en' AS name_display_en
+    SELECT payload::jsonb->>'bls_code' AS bls_code,
+           payload::jsonb->>'name_display_de' AS name_display_de,
+           payload::jsonb->>'name_display_en' AS name_display_en
     FROM tmp_anzeigenamen_jsonl
   )
   UPDATE nutrition.foods f
@@ -123,7 +127,7 @@ BEGIN
 
   SELECT COUNT(*) INTO v_sicher_false
   FROM tmp_anzeigenamen_jsonl
-  WHERE (payload->>'sicher')::boolean = false;
+  WHERE (payload::jsonb->>'sicher')::boolean = false;
 
   RAISE NOTICE 'OK: % Anzeigenamen aktualisiert, % sicher=false', v_updated, v_sicher_false;
 END $$;

@@ -45,13 +45,14 @@ ALTER TABLE nutrition.food_aliases
   DROP CONSTRAINT IF EXISTS food_aliases_source_check;
 ALTER TABLE nutrition.food_aliases
   ADD CONSTRAINT food_aliases_source_check
-  CHECK (source = ANY (ARRAY['editorial','ai_generated','user','derived']));
+  CHECK (source = ANY (ARRAY['editorial','ai_generated','user','derived','curated_nebenname']));
 
 COMMENT ON COLUMN nutrition.food_aliases.source IS
   'editorial = von Hand gepflegt · ai_generated = von einem Modell '
   'vorgeschlagen · user = aus Nutzereingabe · derived = mechanisch aus '
   'dem Bestandsnamen abgeleitet (Kettenschritt 022), reproduzierbar und '
-  'nicht pflegebeduerftig.';
+  'nicht pflegebeduerftig · curated_nebenname = kuratierter Nebenname '
+  'aus anzeigenamen.jsonl.';
 
 -- --- Schritt 2: Kopf ohne Leerzeichen ---
 -- Der Kopf ist der Teil vor dem ersten Komma: "Haehnchen Brustfilet"
