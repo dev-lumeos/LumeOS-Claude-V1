@@ -178,3 +178,125 @@ prueft.
 `[annahme]` Die Abschlusspruefung ist weiterhin ein Lauf gegen eine
 Datenbank. Sie ist nicht Teil von `pnpm gate`, weil sie den lokalen
 Supabase-Container braucht.
+
+---
+
+## Nachtrag 2026-08-15: die Zeilenzahl in `025`/`026` wird abgeleitet
+
+`[cmd]` Der oben beschriebene Blocker ist weg. Die Kette laeuft von leer
+durch: `KETTE OK: 32.9s`, Abschlusspruefung `SCHEMA VOLLSTAENDIG`,
+Exit 0.
+
+### Was geaendert wurde
+
+`[read]` Die harte `5775` war keine Schlamperei, sondern Absicherung
+gegen einen stillen Teilimport — genau der Fehler, der bei den
+Fettsaeuren passiert ist. Sie einfach auf `7140` zu setzen haette das
+Problem beim naechsten Bestandsnachtrag wiederholt.
+
+`[cmd]` Stattdessen leitet `_ableitung/anzeigenamen-erwartung.ts` die
+Erwartung aus drei Quellen ab, die uebereinstimmen muessen:
+`daten/anzeigenamen.jsonl` (Ausgabe der Kuration),
+`daten/anzeigenamen-eingabe.jsonl` (Eingabe derselben Kuration) und
+`nutrition.foods` (der Bestand). Weicht eine ab, bricht der Schritt ab
+und nennt alle drei Zahlen. `025` und `026` benutzen dieselbe Ableitung;
+die SQL-Pruefung in `025` vergleicht zusaetzlich im Transaktionskontext
+`tmp_anzeigenamen_jsonl` gegen `nutrition.foods`.
+
+`[read]` In `026` gilt die Pruefung der EINGABE. Die Zahl der erzeugten
+Aliase ist naturgemaess kleiner, weil nur Zeilen mit `nebennamen`
+beitragen — nicht verwechseln.
+
+### Gegenprobe
+
+`[cmd]` Eine Testzeile an `anzeigenamen.jsonl` angehaengt, `025`
+gefahren — Exit 1:
+
+```
+Zeilenzahlen stimmen nicht ueberein — Abbruch.
+  anzeigenamen.jsonl        : 7141
+  anzeigenamen-eingabe.jsonl: 7140
+  nutrition.foods           : 7140
+```
+
+`[cmd]` `026` meldet dasselbe. Die Testzeile wurde entfernt; die Datei
+ist gegenueber HEAD unveraendert.
+
+### Zielwerte des Kettenlaufs
+
+`[cmd]` Gegen die Wegwerf-Datenbank `lumeos_kette_pruef`:
+
+| Groesse | Ist | Erwartet |
+|---|---|---|
+| `nutrition.foods` | 7.140 | 7.140 |
+| `nutrition.food_nutrients` | 869.501 | 869.501 |
+| davon Naehrstoffcodes | 138 | 138 |
+| davon `data_source` | 2 | 2 |
+| `nutrition.food_tags` | 17.967 | 17.967 |
+| `training.exercises` | 1.416 | 1.416 |
+| `training.muscle_groups` | 107 | 107 |
+| `nutrition.food_aliases` | 32.843 | 32.817 |
+
+`[cmd]` Die Aliasabweichung von +26 ist erklaert und kein Fehler des
+Laufs. Sie zerfaellt in zwei Teile:
+
+- `curated_nebenname` 311 statt 283 (+28), rein additiv — kein Alias der
+  laufenden Datenbank fehlt in der Kette. Es sind kuratierte Nebennamen
+  aus dem Phase-1-Nachtrag (`Rote Bete`, `Lauchzwiebel`, `Buletten`,
+  `Eierkuchen` u. a.), die nie eingespielt wurden, **weil `025`/`026`
+  genau an der harten `5775` abbrachen.** Der Lauf holt sie jetzt nach.
+- `derived` 11.100 statt 11.102 (−2), eine Normalisierungsdifferenz:
+  `[cmd]` die Kettendatenbank hat 0 Aliase mit `/`, die laufende 369.
+  Die geslashten Formen (`weizenpops/weizengepufft`) fallen unslashed
+  auf 367 verschiedene zusammen. Das ist Drift **in der laufenden
+  Datenbank**, nicht im Lauf; die Kette erzeugt den korrekten Stand.
+
+### Wie viele Schritte tragen noch eine harte Erwartung?
+
+`[cmd]` **Zwei** weitere Stellen sind an den Lebensmittelbestand
+gekoppelt und brechen beim naechsten Bestandsnachtrag genauso:
+
+| Datei | Stelle | Inhalt |
+|---|---|---|
+| `_ableitung/027_lebensmittel-tags.ts` | Z12 | `const EXPECTED_FOODS = 7140` |
+| `_validierung/suche-abdeckung-messen.ts` | Z66 | `if (n !== 7140)` |
+
+`[cmd]` `027` ist ein Kettenschritt — derselbe Defekt einen Schritt
+spaeter. Die Abdeckungsmessung ist kein Kettenschritt, faellt aber
+gleich aus.
+
+`[cmd]` Sieben weitere Vergleiche gegen Zahlenliterale stehen in
+`10_training/102` bis `105` (`109`/`108`/`107` Muskelgruppen,
+`6625`/`6624` Zuordnungen, `402` Gluteus-Medius-Zuordnungen). Die sind
+**nicht** an den Lebensmittelbestand gekoppelt: jeder Merge behauptet
+den Zustand, den seine eigene Umformung erzeugt, und dokumentiert ihn
+mit der Rechnung (`6625 minus 1 Kollision`, `383+20-1`). Sie brechen nur,
+wenn der Trainingsbestand waechst — andere Quelle, andere Entscheidung.
+Hier ist die harte Zahl eher richtig als falsch.
+
+`[read]` Methodenhinweis, weil er zum wiederkehrenden Muster gehoert:
+Der erste Sucher fand nur 3 Stellen, weil er ausschliesslich gegen eine
+Liste bekannter Bestandsgroessen prueft. Erst ein zweiter Lauf, der
+**jeden** Vergleich gegen ein grosses Zahlenliteral in den Schritten aus
+`kette.json` meldet, brachte 10 Fundstellen. Der enge Sucher war selbst
+ein Werkzeug, das Sicherheit behauptet, ohne sie zu erzeugen — er zaehlte
+nur, was er erwartet hatte.
+
+### Anmerkungen zum Lauf
+
+`[cmd]` Die Schemapruefung meldet zwei Hinweise, keine Fehler:
+`foods_custom` und `custom_food_energy_plausibility` stehen in der
+Datenbank, aber nicht in der Sollliste.
+
+`[cmd]` Ein Lauf von `025` ging waehrend der Diagnose versehentlich
+gegen `postgres` statt gegen die Wegwerf-Datenbank. Ein Abgleich aller
+7.140 Zeilen gegen `daten/anzeigenamen.jsonl` zeigt 7.140 identisch,
+0 abweichend — der Schritt hat die bereits kuratierten Werte erneut
+geschrieben, nichts veraendert.
+
+`[cmd]` Umgebungsartefakt, kein Repo-Defekt: `kette-ausfuehren.ts` ruft
+`tar` ueber `spawnSync` ohne Shell auf. Loest das gegen die GNU-tar aus
+Git Bash auf, scheitert das Entpacken mit
+`tar: Cannot connect to D: resolve failed` — GNU tar liest `D:\...` als
+Rechnernamen. Windows' `bsdtar` aus `System32` kann den Pfad. Der Lauf
+oben erfolgte mit einer `tar.exe`-Kopie vorn im PATH.
