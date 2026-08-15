@@ -159,12 +159,12 @@ matching_foods AS (
     f.name_de,
     f.name_en,
     f.name_th,
-    f.name_display,
+    f.name_display_de,
     f.name_display_en,
     f.name_display_th,
     f.category_id,
     f.sort_weight,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     CASE
       WHEN p_tokens IS NULL OR cardinality(p_tokens) = 0 THEN 0.5
       -- 1.00  Bestandsname exakt
@@ -388,7 +388,7 @@ matching_foods AS (
     -- Arbeit; die Kuerze entscheidet nur, was es gleich gewichtet.
     CASE WHEN (SELECT sort FROM params) = 'relevance'
          THEN length(COALESCE(f.name_de, '')) END ASC,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) ASC,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) ASC,
     f.bls_code ASC
   LIMIT (SELECT lim FROM params)
   OFFSET (SELECT off FROM params)
@@ -524,12 +524,12 @@ selected_food AS (
     f.name_de,
     f.name_en,
     f.name_th,
-    f.name_display,
+    f.name_display_de,
     f.name_display_en,
     f.name_display_th,
     f.category_id,
     f.sort_weight,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     fc.slug AS category_slug,
     fc.name_de AS category_name_de,
     m.enercc,
@@ -565,7 +565,7 @@ selected_food_json AS (
         'bls_code', bls_code,
         'source_label', source_label,
         'source_label_marker', 'bls_source_label_not_final_display_name',
-        'name_display', name_display,
+        'name_display_de', name_display_de,
         'name_display_en', name_display_en,
         'name_display_th', name_display_th,
         'name_de', name_de,
@@ -672,7 +672,7 @@ SELECT json_build_object(
         'bls_code', bls_code,
         'source_label', source_label,
         'source_label_marker', 'bls_source_label_not_final_display_name',
-        'name_display', name_display,
+        'name_display_de', name_display_de,
         'name_display_en', name_display_en,
         'name_display_th', name_display_th,
         'name_de', name_de,

@@ -5956,7 +5956,7 @@ ON CONFLICT (code) DO UPDATE SET
 -- Provisional/source-backed display fields. Values remain source labels, not curated human copy.
 UPDATE nutrition.foods
 SET
-  name_display = COALESCE(NULLIF(name_display, ''), name_de),
+  name_display_de = COALESCE(NULLIF(name_display_de, ''), name_de),
   name_display_en = COALESCE(NULLIF(name_display_en, ''), name_en),
   name_display_th = COALESCE(name_display_th, '');
 

@@ -109,7 +109,7 @@ unassigned AS (
   SELECT
     f.id,
     f.bls_code,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     fc.slug AS current_category_slug,
     fc.name_de AS current_category_name_de,
     f.sort_weight,
@@ -155,7 +155,7 @@ unassigned AS (
     CASE WHEN p_sort = 'sort_weight_desc'
            OR COALESCE(p_sort, 'category_missing_first') NOT IN ('sort_weight_desc','name_asc','macro_relevance')
          THEN f.sort_weight END DESC NULLS LAST,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) ASC
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) ASC
   LIMIT 50
 )
 SELECT json_build_object(
@@ -332,12 +332,12 @@ matching_foods AS (
     f.name_de,
     f.name_en,
     f.name_th,
-    f.name_display,
+    f.name_display_de,
     f.name_display_en,
     f.name_display_th,
     f.category_id,
     f.sort_weight,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     CASE
       WHEN p_tokens IS NULL OR cardinality(p_tokens) = 0 THEN 0.5
       WHEN lower(COALESCE(f.name_de, '')) = lower(p_query) THEN 1.0
@@ -425,7 +425,7 @@ matching_foods AS (
       END
     END DESC,
     CASE WHEN (SELECT sort FROM params) IN ('relevance', 'protein_desc') THEN f.sort_weight END DESC NULLS LAST,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) ASC,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) ASC,
     f.bls_code ASC
   LIMIT (SELECT lim FROM params)
   OFFSET (SELECT off FROM params)
@@ -486,12 +486,12 @@ selected_food AS (
     f.name_de,
     f.name_en,
     f.name_th,
-    f.name_display,
+    f.name_display_de,
     f.name_display_en,
     f.name_display_th,
     f.category_id,
     f.sort_weight,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     fc.slug AS category_slug,
     fc.name_de AS category_name_de,
     m.enercc,
@@ -527,7 +527,7 @@ selected_food_json AS (
         'bls_code', bls_code,
         'source_label', source_label,
         'source_label_marker', 'bls_source_label_not_final_display_name',
-        'name_display', name_display,
+        'name_display_de', name_display_de,
         'name_display_en', name_display_en,
         'name_display_th', name_display_th,
         'name_de', name_de,
@@ -629,7 +629,7 @@ SELECT json_build_object(
         'bls_code', bls_code,
         'source_label', source_label,
         'source_label_marker', 'bls_source_label_not_final_display_name',
-        'name_display', name_display,
+        'name_display_de', name_display_de,
         'name_display_en', name_display_en,
         'name_display_th', name_display_th,
         'name_de', name_de,
@@ -687,7 +687,7 @@ base AS (
   SELECT
     f.id,
     f.bls_code,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     f.sort_weight,
     fc.slug AS category_slug,
     fc.name_de AS category_name_de,
@@ -1196,7 +1196,7 @@ CREATE TABLE nutrition.foods (
     name_de text NOT NULL,
     name_en text,
     name_th text DEFAULT ''::text NOT NULL,
-    name_display text,
+    name_display_de text,
     sort_weight integer DEFAULT 500 NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -1496,10 +1496,10 @@ CREATE INDEX idx_foods_category ON nutrition.foods USING btree (category_id);
 
 
 --
--- Name: idx_foods_name_display; Type: INDEX; Schema: nutrition; Owner: -
+-- Name: idx_foods_name_display_de; Type: INDEX; Schema: nutrition; Owner: -
 --
 
-CREATE INDEX idx_foods_name_display ON nutrition.foods USING gin (name_display public.gin_trgm_ops);
+CREATE INDEX idx_foods_name_display_de ON nutrition.foods USING gin (name_display_de public.gin_trgm_ops);
 
 
 --

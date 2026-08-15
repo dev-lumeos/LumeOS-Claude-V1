@@ -20,7 +20,7 @@ export type NutritionFoodSearchRow = {
   bls_code: string
   source_label: string
   source_label_marker: typeof LABEL_POLICY
-  name_display: string
+  name_display_de: string
   name_display_en: string
   name_display_th: string
   name_de: string
@@ -342,7 +342,7 @@ function normalizeFoodRow(value: unknown): NutritionFoodSearchRow | null {
     bls_code: blsCode,
     source_label: normalizeText(record.source_label) || nameDe,
     source_label_marker: LABEL_POLICY,
-    name_display: normalizeText(record.name_display),
+    name_display_de: normalizeText(record.name_display_de),
     name_display_en: normalizeText(record.name_display_en),
     name_display_th: normalizeText(record.name_display_th),
     name_de: nameDe,

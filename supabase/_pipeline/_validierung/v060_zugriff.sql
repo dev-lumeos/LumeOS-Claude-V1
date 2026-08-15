@@ -25,9 +25,9 @@ checks(pruefung, soll, ist) AS (
 
   -- Trigram-Indizes
   UNION ALL
-  SELECT 'index idx_foods_name_display (GIN trgm)', '1',
+  SELECT 'index idx_foods_name_display_de (GIN trgm)', '1',
          (SELECT count(*) FROM pg_indexes
-          WHERE schemaname='nutrition' AND indexname='idx_foods_name_display'
+          WHERE schemaname='nutrition' AND indexname='idx_foods_name_display_de'
             AND indexdef ILIKE '%gin%trgm%')::text
   UNION ALL
   SELECT 'index idx_food_aliases_alias_trgm (GIN trgm)', '1',

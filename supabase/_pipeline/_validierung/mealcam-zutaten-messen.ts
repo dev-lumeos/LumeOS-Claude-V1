@@ -103,7 +103,7 @@ function suche(q: string) {
   const aus = execFileSync('docker', ['exec', C, 'psql', '-U', 'postgres', '-d', DB,
     '-t', '-A', '-F', '\u0001', '-c',
     `select o, coalesce(x->>'bls_code',''), coalesce((x->>'sort_weight')::int,0),
-            left(coalesce(x->>'name_display',''),46)
+            left(coalesce(x->>'name_display_de',''),46)
      from (select (nutrition.food_search('${q}','${q}',ARRAY[]::text[],NULL,NULL,NULL,NULL,NULL,10,0,NULL,NULL,NULL,'${g}'::jsonb))::jsonb j) t,
      lateral jsonb_array_elements(j->'foods') with ordinality e(x,o);`],
     { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })

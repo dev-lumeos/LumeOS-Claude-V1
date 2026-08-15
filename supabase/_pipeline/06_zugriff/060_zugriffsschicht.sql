@@ -11,7 +11,7 @@
 -- Quellen:
 --   [read] Trigram-Definitionen aus supabase/_archive/20240522_002_… Z. 271, 296.
 --          Z. 270 (idx_foods_name_de_trgm) ist dort ein fehlbenanntes Duplikat
---          derselben Definition auf name_display und wird bewusst NICHT
+--          derselben Definition auf name_display_de und wird bewusst NICHT
 --          übernommen (identischer Index unter zweitem Namen = reiner Ballast).
 --   [cmd]  2026-08-02: food_curation_candidates und food_curation_decisions
 --          haben KEINE user_id-Spalte (information_schema.columns) —
@@ -34,7 +34,7 @@ CREATE EXTENSION IF NOT EXISTS pg_trgm;
 --    Definitionen wörtlich aus _archive/20240522_002 übernommen
 --    (je Spalte einer, siehe Kopfkommentar).
 -- -------------------------------------------------------------
-CREATE INDEX IF NOT EXISTS idx_foods_name_display ON nutrition.foods USING GIN (name_display gin_trgm_ops);
+CREATE INDEX IF NOT EXISTS idx_foods_name_display_de ON nutrition.foods USING GIN (name_display_de gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_food_aliases_alias_trgm ON nutrition.food_aliases USING GIN (alias gin_trgm_ops);
 
 -- -------------------------------------------------------------

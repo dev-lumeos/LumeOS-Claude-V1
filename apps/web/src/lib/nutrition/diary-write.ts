@@ -112,7 +112,7 @@ async function loadFoodForFreezing(
 
   const { data: foodRows, error: foodError } = await nutrition
     .from('foods')
-    .select('id, name_de, name_display')
+    .select('id, name_de, name_display_de')
     .eq('id', foodId)
     .limit(1)
   if (foodError) {
@@ -145,7 +145,7 @@ async function loadFoodForFreezing(
 
   const record = food as Record<string, unknown>
   const name =
-    (typeof record.name_display === 'string' && record.name_display) ||
+    (typeof record.name_display_de === 'string' && record.name_display_de) ||
     (typeof record.name_de === 'string' && record.name_de) ||
     'Unbenannt'
   return { name, rows }

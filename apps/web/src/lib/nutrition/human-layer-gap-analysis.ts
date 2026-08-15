@@ -22,7 +22,7 @@ WITH unassigned AS (
   SELECT
     f.id,
     f.bls_code,
-    COALESCE(NULLIF(f.name_display, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
+    COALESCE(NULLIF(f.name_display_de, ''), f.name_de, f.name_en, f.bls_code) AS source_label,
     f.sort_weight,
     LEFT(f.bls_code, 1) AS prefix_1,
     LEFT(f.bls_code, 2) AS prefix_2

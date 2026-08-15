@@ -66,7 +66,7 @@ function suche(q: string, n = 3) {
   const g = JSON.stringify(buildFoodSearchGroups(q)).replace(/'/g, "''")
   const aus = execFileSync('docker', ['exec', C, 'psql', '-U', 'postgres', '-d', 'postgres',
     '-t', '-A', '-F', '\u0001', '-c',
-    `select coalesce(x->>'bls_code',''), left(coalesce(x->>'name_display',''),46)
+    `select coalesce(x->>'bls_code',''), left(coalesce(x->>'name_display_de',''),46)
      from (select (nutrition.food_search('${q}','${q}',ARRAY[]::text[],NULL,NULL,NULL,NULL,NULL,${n},0,NULL,NULL,NULL,'${g}'::jsonb))::jsonb j) t,
      lateral jsonb_array_elements(j->'foods') with ordinality e(x,o);`],
     { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
@@ -126,11 +126,11 @@ const kopf = [
   'Bestand unter diesem Stichwort **überhaupt hat**. Die drei Felder am',
   'Ende jeder Zeile sind zum Ausfüllen — Anzeigename, Aliase, Notiz.',
   '',
-  '`[cmd]` **Warum das nötig ist:** `name_display` ist bei allen 7.140',
+  '`[cmd]` **Warum das nötig ist:** `name_display_de` ist bei allen 7.140',
   'Lebensmitteln gefüllt, aber **identisch mit `name_de`** — Kettenschritt',
   '020 setzt ihn per `COALESCE` auf den BLS-Namen. Der Mechanismus steht,',
   'er ist nur leer. `food_search` liest bereits',
-  '`COALESCE(NULLIF(name_display,\'\'), name_de, …)`; ein gefülltes Feld',
+  '`COALESCE(NULLIF(name_display_de,\'\'), name_de, …)`; ein gefülltes Feld',
   'wirkt **sofort**, ohne Codeänderung.',
   '',
   '`[Sicher]` **Der Grund, warum das kein Schönheitsthema ist:** `[cmd]`',
