@@ -34,11 +34,36 @@ Es gibt keinen Weg von `git clone` zu dieser Datenbank. → TODO D-12
 | Tabelle | Spalten | Zeilen |
 |---|---|---|
 | `nutrition.foods` | 14 | 7.140 |
-| `nutrition.food_nutrients` | 4 | 698.092 |
+| `nutrition.food_nutrients` | 4 | **869.501** |
 | `nutrition.food_aliases` | 4 | 21.420 |
 | `nutrition.food_tags` | 3 | 9.265 |
 | `nutrition.food_categories` | 10 | 518 |
 | `nutrition.nutrient_defs` | 16 | 138 |
+
+`[cmd]` **Korrektur 2026-08-15.** Hier stand bis heute `698.092` für
+`food_nutrients`. Das war der Stand **nach einem unbemerkten Verlust**:
+Beim Kettenneuaufbau von C-38 lief Schritt `031_fettsaeuren_nachtrag.sql`
+nicht mit, weil er in der Kettentabelle der README fehlte — dieselbe
+Lücke wie bei `052` bis `056`. Verloren waren **171.409 Werte über 30
+Codes**, alle Einzelfettsäuren (EPA, DHA, Ölsäure); `[cmd]` alle 30
+tragen einen Doppelpunkt im Code, keiner der 108 übrigen.
+
+`[cmd]` Wiederhergestellt am 2026-08-15: 869.501 Werte, **138 Codes**,
+zwei `data_source`-Werte (`bls_4_0_local_import` 698.092,
+`bls_4_0_xlsx_nachtrag` 171.409).
+
+**Warum es einen Tag lang niemandem auffiel:** Gate, Schemaprüfung und
+beide Suchmassstäbe meldeten grün. Die Schemaprüfung hatte ihre
+Mindestzeilenzahl aus dem Ist-Stand **nach** dem Verlust übernommen und
+meldete `698.092 / 698.092 ok` — sie hatte den Schaden als Sollwert
+festgeschrieben. Die Massstäbe messen Suchtreffer, nicht Nährwerte; sie
+wären auch bei einer halben Million fehlender Werte grün geblieben.
+
+Seither prüft `schema-vollstaendigkeit-pruefen.ts` zusätzlich die Zahl
+der **Nährstoffcodes** (138) und der **`data_source`-Werte** (2). Beide
+hätten den Verlust sofort gemeldet — die Zeilenzahl allein war zu grob,
+weil sie mit dem Ist-Stand mitwanderte. Details:
+`docs/ssot/67-fettsaeuren-verlust.md`.
 | `nutrition.tag_definitions` | 9 | 16 |
 | `nutrition.food_preferences` | 14 | 0 |
 | `nutrition.food_preference_items` | 13 | 0 |
