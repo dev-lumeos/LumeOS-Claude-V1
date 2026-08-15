@@ -1,0 +1,161 @@
+{
+  "erhoben": "2026-08-15",
+  "anlass": "C-22 - Phonetische Schreibvarianten messen und als anfrageseitige Fallback-Regeln vorbereiten",
+  "ziel": "Regeln fuer Varianten, die nur angewendet werden, wenn die normale Suche null Treffer liefert. Keine Synonyme, keine DB-Writes.",
+  "messung": {
+    "quelle": "nutrition.foods live gelesen, gefaltet mit nutrition.search_fold, Tokens ab 4 Zeichen",
+    "bestandswoerter": 3616,
+    "lautpaare": [
+      {
+        "lautpaar": "c/k",
+        "betroffen": 2088,
+        "verwechselbar_geschaetzt": 196,
+        "beispiele": ["cornflakes", "broccoli", "curry", "cola", "cracker", "cashewkern", "camembert"],
+        "gegenbeispiele": ["korn", "kohl", "kohlrabi", "karotte", "kalb", "citrone"]
+      },
+      {
+        "lautpaar": "f/ph",
+        "betroffen": 800,
+        "verwechselbar_geschaetzt": 2,
+        "beispiele": ["physalis", "physalissaft"],
+        "gegenbeispiele": ["fisch", "fett", "filet", "fenchel"]
+      },
+      {
+        "lautpaar": "i/y",
+        "betroffen": 1839,
+        "verwechselbar_geschaetzt": 53,
+        "beispiele": ["joghurt", "curry", "mayonnaise", "gyros", "papaya", "syrup"],
+        "gegenbeispiele": ["reis", "milch", "rind", "sirup"]
+      },
+      {
+        "lautpaar": "t/th",
+        "betroffen": 1722,
+        "verwechselbar_geschaetzt": 21,
+        "beispiele": ["thunfisch", "thymian", "thueringer"],
+        "gegenbeispiele": ["tomate", "toast", "torte", "teig", "tee"]
+      },
+      {
+        "lautpaar": "k/ck",
+        "betroffen": 1271,
+        "verwechselbar_geschaetzt": 229,
+        "beispiele": ["cracker", "backen", "bockwurst", "artischocke"],
+        "gegenbeispiele": ["kabeljau", "kalb", "karotte", "kartoffel", "kohl"]
+      },
+      {
+        "lautpaar": "s/ss/z",
+        "betroffen": 2317,
+        "verwechselbar_geschaetzt": 684,
+        "beispiele": ["sosse", "zitrone", "zucker", "weiss"],
+        "gegenbeispiele": ["salat", "sahne", "schinken", "wurst", "citrone"]
+      }
+    ]
+  },
+  "regeln": [
+    {
+      "id": "c_zu_k_hartes_c",
+      "lautpaar": "c/k",
+      "richtung": "query_k -> bestand_c",
+      "nur_wenn_normale_suche_null_treffer": true,
+      "beschreibung": "Deutsche k-Schreibung fuer harte c-Schreibungen in importierten Produktnamen.",
+      "beispiele": [
+        { "suchbegriff": "kornflakes", "referenzbegriff": "cornflakes", "ziel_bls_code": "C515000" },
+        { "suchbegriff": "brokkoli", "referenzbegriff": "broccoli", "ziel_bls_code": "G312100" },
+        { "suchbegriff": "kracker", "referenzbegriff": "cracker", "ziel_bls_code": "D050000" }
+      ],
+      "gegenbeispiele": [
+        { "suchbegriff": "korn", "grund": "Korn ist ein eigenes deutsches Wort und darf nicht zu Corn werden." },
+        { "suchbegriff": "kohl", "grund": "Cohl ist kein sinnvoller Zielbegriff." },
+        { "suchbegriff": "kola", "grund": "Grenzfall: Kola kann Pflanze/Handelswort sein; nur als Fallback pruefen, nie als generelles Synonym." }
+      ]
+    },
+    {
+      "id": "ph_zu_f",
+      "lautpaar": "f/ph",
+      "richtung": "query_f -> bestand_ph",
+      "nur_wenn_normale_suche_null_treffer": true,
+      "beschreibung": "Vereinfachung von ph zu f bei Fremdwoertern.",
+      "beispiele": [
+        { "suchbegriff": "fysalis", "referenzbegriff": "physalis", "ziel_bls_code": "F552100" }
+      ],
+      "gegenbeispiele": [
+        { "suchbegriff": "fisch", "grund": "phisch waere Unsinn." },
+        { "suchbegriff": "filet", "grund": "philet waere Unsinn." }
+      ]
+    },
+    {
+      "id": "y_zu_i_joghurt",
+      "lautpaar": "i/y",
+      "richtung": "query_y -> bestand_joghurt",
+      "nur_wenn_normale_suche_null_treffer": true,
+      "beschreibung": "Englische y-Schreibung fuer Joghurt und wenige importierte Woerter.",
+      "beispiele": [
+        { "suchbegriff": "yoghurt", "referenzbegriff": "joghurt", "ziel_bls_code": "M141100" }
+      ],
+      "gegenbeispiele": [
+        { "suchbegriff": "reis", "grund": "reys waere keine plausible deutsche Anfrage." },
+        { "suchbegriff": "sirup", "grund": "syrup waere englisch; nur bei belegter Erwartung aufnehmen." }
+      ]
+    },
+    {
+      "id": "th_zu_t",
+      "lautpaar": "t/th",
+      "richtung": "query_t -> bestand_th",
+      "nur_wenn_normale_suche_null_treffer": true,
+      "beschreibung": "Vereinfachung von th zu t bei eingedeutschter Anfrage.",
+      "beispiele": [
+        { "suchbegriff": "tunfisch", "referenzbegriff": "thunfisch", "ziel_bls_code": "T121100" }
+      ],
+      "gegenbeispiele": [
+        { "suchbegriff": "tomate", "grund": "thomate waere Unsinn." },
+        { "suchbegriff": "toast", "grund": "thoast waere Unsinn." }
+      ]
+    },
+    {
+      "id": "ck_zu_k",
+      "lautpaar": "k/ck",
+      "richtung": "query_k -> bestand_ck",
+      "nur_wenn_normale_suche_null_treffer": true,
+      "beschreibung": "Einfaches k fuer ck-Schreibungen.",
+      "beispiele": [
+        { "suchbegriff": "kracker", "referenzbegriff": "cracker", "ziel_bls_code": "D050000" }
+      ],
+      "gegenbeispiele": [
+        { "suchbegriff": "kartoffel", "grund": "ckartoffel waere Unsinn." },
+        { "suchbegriff": "kalb", "grund": "ckalb waere Unsinn." }
+      ]
+    },
+    {
+      "id": "ss_s_z_eng",
+      "lautpaar": "s/ss/z",
+      "richtung": "query_s -> bestand_ss_oder_z",
+      "nur_wenn_normale_suche_null_treffer": true,
+      "beschreibung": "Vereinfachte s-Schreibung fuer ss/z in wenigen Lebensmitteln.",
+      "beispiele": [
+        { "suchbegriff": "sose", "referenzbegriff": "sosse", "ziel_bls_code": "R911000" }
+      ],
+      "gegenbeispiele": [
+        { "suchbegriff": "salat", "grund": "zalat oder ssalat waeren Unsinn." },
+        { "suchbegriff": "citrone", "grund": "Hat bereits einen Treffer auf Zitronensaeure; Fallback darf bei bestehenden Treffern nicht greifen." }
+      ]
+    }
+  ],
+  "abnahme": [
+    { "suchbegriff": "kornflakes", "referenzbegriff": "cornflakes", "ziel_bls_code": "C515000" },
+    { "suchbegriff": "yoghurt", "referenzbegriff": "joghurt", "ziel_bls_code": "M141100" },
+    { "suchbegriff": "brokkoli", "referenzbegriff": "broccoli", "ziel_bls_code": "G312100" },
+    { "suchbegriff": "fysalis", "referenzbegriff": "physalis", "ziel_bls_code": "F552100" },
+    { "suchbegriff": "tunfisch", "referenzbegriff": "thunfisch", "ziel_bls_code": "T121100" },
+    { "suchbegriff": "kracker", "referenzbegriff": "cracker", "ziel_bls_code": "D050000" },
+    { "suchbegriff": "sose", "referenzbegriff": "sosse", "ziel_bls_code": "R911000" }
+  ],
+  "nicht_anfassen": [
+    {
+      "suchbegriff": "griechischer joghurt",
+      "grund": "Zuordnung fachlich offen; M141100 ist mit 0,1 g Fett kein guter Ersatz fuer griechischen Joghurt mit 5 bis 10 g Fett."
+    },
+    {
+      "suchbegriff": "basmatireis",
+      "grund": "Liegt bereits in daten/reis-alias-kuration.json; gehoert zu C-32, nicht zu C-22."
+    }
+  ]
+}
