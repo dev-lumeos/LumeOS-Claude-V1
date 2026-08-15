@@ -2928,6 +2928,111 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Treffern über 7.140 Einträge ist eine Zufallsliste. `thai_food`,
   `halal`, `kosher` bleiben definiert und leer — sie gehören zu C-34.
 
+- [x] **C-45: Nährstoff-Referenzwerte in eine eigene Tabelle** (neu
+  2026-08-15). **Entscheidung Tom, 2026-08-15: eigene Tabelle.**
+  Voraussetzung für C-37.
+
+  `[cmd]` **0 von 138 Nährstoffen tragen `rda_male` oder `rda_female`**,
+  und `nutrition.nutrient_reference_values` existiert nicht. Beide
+  vorgesehenen Orte sind leer.
+
+  `[read]` Der Widerspruch aus der Spec-Auswertung: `SPEC_09_SCORING`
+  liest die Referenzwerte aus Spalten in `nutrient_defs`, Abschnitt 8
+  derselben Datei will eine eigene Tabelle mit RDA, AI, UL und
+  Altersabhängigkeit. **Die Spaltenlösung kann Abschnitt 8 nicht
+  abbilden** — eine Spalte je Nährstoff trägt keine Altersstaffel und
+  keine drei Wertarten.
+
+  **Zu klären, bevor gebaut wird:**
+  - **Woher kommen die Werte?** D-A-CH-Referenzwerte (DGE), EFSA, oder
+    die Kennzeichnungswerte der EU-LMIV? Sie unterscheiden sich, und die
+    Quelle gehört je Zeile dokumentiert — dieselbe Regel wie beim BLS.
+  - Welche Achsen: Alter, Geschlecht, Schwangerschaft, Stillzeit? Jede
+    Achse vervielfacht die Zeilen.
+  - `[cmd]` 138 Nährstoffe — für wie viele gibt es überhaupt
+    Referenzwerte? Vermutlich deutlich weniger.
+  - Was passiert mit den vorhandenen leeren Spalten `rda_male` und
+    `rda_female`? Entfernen oder als überholt kennzeichnen — stehen
+    lassen und ignorieren ist die schlechteste Wahl.
+
+  `[read]` `packages/scoring/` existiert nicht, obwohl SPEC_09 darauf
+  aufbaut. Der Tages-Score (0–100, nie gespeichert) ist eine andere
+  Kennzahl als `sort_weight` und hängt an dieser Tabelle.
+
+  `[cmd]` **Erledigt 2026-08-15**, Bericht `docs/ssot/61-referenzwerte.md`.
+  `nutrition.nutrient_reference_values` als Kettenschritt `016`:
+  **165 Zeilen über alle 138 Nährstoffcodes, keine ohne Quelle** —
+  je Zeile Quelle, Fundstelle und URL.
+
+  **Der erste Anlauf endete mit „keine Quelle vorhanden" — das war
+  falsch.** Gesucht worden war nach den D-A-CH-Referenzwerten (Buch,
+  kostenpflichtig), und daraus wurde geschlossen, die Beschaffung sei
+  Toms Sache. `[read]` Die EFSA veröffentlicht 34 Gutachten mit
+  Referenzwerten für 14 Vitamine und 15 Mineralstoffe, nach Lebensphase,
+  Geschlecht und Alter aufgelöst — frei als **DRV Summary Tables** und
+  über den **DRV Finder**. Dazu die US DRI der National Academies und
+  WHO/FAO für die Aminosäuren.
+
+  **Toms Vorgabe war „alle 138", nicht nur die 32 der Spec-Priorität:**
+  *„Was bringen mir 138 Mikros, wenn ich nicht weiss, was ich brauche?"*
+  Jeder Nährstoff hat jetzt eine Antwort:
+
+  | | |
+  |---|---|
+  | `PRI` (entspricht RDA) | 22 |
+  | `AI` | 25 |
+  | `UL` (Obergrenze) | 19 |
+  | `RI` / `PRI_COMBINED` / weitere | 6 |
+  | **`NO_STANDALONE_REFERENCE`** | **57** — geht in einem Sammelwert auf |
+  | **`NO_REFERENCE`** | **21** — es gibt keinen |
+  | `FORMULA` | 15 — wird berechnet |
+
+  **Die beiden Nicht-Kategorien sind der eigentliche Ertrag.** Eine
+  Leerstelle ohne Erklärung wäre kein Ergebnis gewesen; so sieht man
+  jedem Nährstoff an, warum er keinen Wert trägt.
+
+  `[cmd]` Belegte Werte, gegen die Quellen geprüft: Eisen PRI 11 mg
+  (männlich) und 16 mg (weiblich), Vitamin C 110 und 95 mg, Vitamin D
+  AI 15 µg, Natrium AI 2.000 mg; Obergrenzen von den National Academies,
+  wo EFSA keine setzt.
+
+  `[cmd]` Die zwölf UL-Werte, die ohne Quellenangabe im Repo lagen,
+  wurden **nicht** übernommen. `rda_male`, `rda_female` und `rda_unit`
+  in `nutrient_defs` sind als überholt gekennzeichnet.
+
+- [x] **C-47: Nutzerprofil und Bewertung der Tagesbilanz** (neu und
+  erledigt 2026-08-15). Bericht `docs/ssot/72-profil-und-bewertung.md`.
+
+  `[cmd]` **Ausgangslage:** `public.profiles` trug genau drei Spalten —
+  `id`, `created_at`, `updated_at`. Ohne Alter und Geschlecht lässt sich
+  kein Referenzwert auswählen.
+
+  **Gebaut, zwei Commits:**
+  - `090_profile.sql`: `birth_date` (nicht Alter — ein gespeichertes
+    Alter ist am nächsten Geburtstag falsch), `biological_sex`,
+    `height_cm`, `body_weight_kg`, `activity_level`, `nutrition_goal`,
+    Schwangerschaft und Stillzeit **als Zeiträume** mit Start und Ende.
+  - `059_daily_reference_assessment.sql`: führt `daily_summary`, die
+    Referenzwerte und das Profil zusammen — je Nährstoff Wert, Wertart,
+    Richtung, Deckungsgrad.
+
+  **Entscheidung Tom, 2026-08-15:** ein Geschlechtsfeld, zwei Werte
+  (`male`/`female`). `[cmd]` Für die Referenzwerte ist das die einzige
+  tragfähige Grundlage — EFSA setzt Eisen 11 gegen 16 mg biologisch.
+  `[read]` E-07 (Darstellung der Übungsmedien) bleibt davon unberührt
+  und wurde nicht zusammengelegt.
+
+  **Zwei Belege aus dem Testlauf:**
+  `[cmd]` Dieselbe Mahlzeit mit 8 mg Eisen ergibt bei einem Mann von 30
+  **72,7 %**, bei einer Frau von 30 **50,0 %** — die Zuordnung greift.
+  `[cmd]` Fehlendes Vitamin A liefert `reference_status = 'incomplete'`
+  **ohne Prozentwert**, statt eine Vollständigkeit vorzutäuschen.
+
+  **Bewusst nicht gebaut:** kein Ampelzustand, keine Bewertung in
+  Worten, kein Tages-Score, keine `micro_flags`. Die Funktion liefert
+  die Zahl und ihre Art; was daraus wird, ist eine Produktentscheidung
+  (C-49).
+
 ## Erledigt am 2026-08-05
 
 - [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und

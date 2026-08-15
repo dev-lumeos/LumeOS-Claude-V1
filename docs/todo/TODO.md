@@ -109,7 +109,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 35 offen, 4 in Arbeit.
+`[cmd]` 36 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -131,7 +131,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-31** | Admin-Oberfläche für die Kuration |  |
 | **C-35** | Was aus zwei gefallenen Modellen brauchbar bleibt |  |
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
-| **C-45** | Nährstoff-Referenzwerte in eine eigene Tabelle |  |
+| **C-48** | Die Tagesbilanz sichtbar machen |  |
+| **C-49** | Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -759,6 +760,65 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   - **C-32 (Reis)** bleibt der erste durchkurierte Fall und ist jetzt
     ohne Vorbedingung machbar.
 
+- [ ] **C-48: Die Tagesbilanz sichtbar machen** (neu 2026-08-15).
+  Der nächste Schritt, sobald Theme V1 steht.
+
+  `[cmd]` **Alles darunter ist fertig und live.** Was fehlt, ist
+  ausschliesslich Oberfläche:
+
+  | | |
+  |---|---|
+  | `daily_summary` | 70 Spalten, 24 Mikros mit Fehlzählern |
+  | `daily_reference_assessment` | Deckungsgrad je Nährstoff |
+  | `nutrient_reference_values` | 165 Zeilen, alle 138 Codes, Quelle je Zeile |
+  | `profiles` | `birth_date`, `biological_sex`, Zeiträume für Schwangerschaft/Stillzeit |
+  | `food_search` | 234 ms, Massstab 34/37 |
+
+  **Vier Regeln, die aus der Datenseite kommen und die Oberfläche binden:**
+
+  1. `[cmd]` **Fehlzähler müssen sichtbar bleiben.** Steht
+     `vita_missing` auf 2, ist die Summe unvollständig — die Bewertung
+     liefert dann `reference_status = 'incomplete'` **ohne** Prozentwert.
+     Die Oberfläche darf daraus keine Null machen.
+  2. `[cmd]` **Die Wertart entscheidet die Leserichtung.** 80 % eines
+     `PRI` ist zu wenig, 80 % eines `UL` ist zu viel. Beides als
+     „80 %" anzuzeigen wäre gefährlich.
+  3. `[cmd]` **57 Nährstoffe tragen `NO_STANDALONE_REFERENCE`**, 21
+     `NO_REFERENCE`. Beide sind kein „0 % gedeckt", sondern eine eigene
+     Aussage.
+  4. `[read]` **Die Referenzwerte gelten für gesunde Erwachsene in
+     Ruhe.** 100 % Deckung heisst nicht „genug für dich" — ein
+     Kraftsportler im Aufbau hat einen anderen Bedarf, und EFSA sagt
+     dazu nichts.
+
+  **Blockiert durch A-06** (Theme V1). `[cmd]` Und durch den Zustand von
+  `foods/page.tsx`: 208 harte Farbwerte, **eine einzige
+  Token-Verwendung**. Die Seite müsste vor oder mit dem Umbau auf Tokens
+  gezogen werden — sonst bleibt sie im Hellmodus dunkel.
+
+- [ ] **C-49: Deckungsgrad, Warnungen und Tages-Score — die drei Stufen
+  danach** (neu 2026-08-15). Jede braucht eine eigene Entscheidung.
+
+  **Stufe 1, gebaut:** `daily_reference_assessment` liefert Zahl und
+  Wertart. Keine Bewertung in Worten, kein Ampelzustand — bewusst.
+
+  **Stufe 2, offen: `micro_flags`.** `[read]` `SPEC_06` sieht die Tabelle
+  vor, sie existiert nicht. Eine Warnung bei Unterversorgung ist eine
+  medizinisch heikle Aussage — sie braucht eine Entscheidung darüber,
+  **ab wann gewarnt wird und mit welcher Formulierung**. `[cmd]` Bei 21
+  Nährstoffen ohne Referenzwert und 57 ohne eigenständigen kann die
+  Warnung nur einen Teil abdecken.
+
+  **Stufe 3, offen: der Tages-Score.** `[read]` `SPEC_09` führt eine
+  Kennzahl 0–100 in `packages/scoring/`. `[cmd]` Das Paket existiert
+  nicht. Ein einzelner Wert, der 24 Nährstoffe zusammenfasst, ist eine
+  Gewichtungsentscheidung — welcher Nährstoff wie stark zählt, steht
+  nirgends.
+
+  **Reihenfolge:** erst die Oberfläche für Stufe 1 (C-48), dann sehen,
+  ob Stufe 2 und 3 überhaupt gebraucht werden. `[read]` Die Lehre aus dem
+  Suchumbau: vier Tage an Modellen gearbeitet, bevor jemand gemessen hat,
+  was Menschen tatsächlich suchen.
 
 
 
@@ -767,36 +827,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 
 
-- [ ] **C-45: Nährstoff-Referenzwerte in eine eigene Tabelle** (neu
-  2026-08-15). **Entscheidung Tom, 2026-08-15: eigene Tabelle.**
-  Voraussetzung für C-37.
 
-  `[cmd]` **0 von 138 Nährstoffen tragen `rda_male` oder `rda_female`**,
-  und `nutrition.nutrient_reference_values` existiert nicht. Beide
-  vorgesehenen Orte sind leer.
 
-  `[read]` Der Widerspruch aus der Spec-Auswertung: `SPEC_09_SCORING`
-  liest die Referenzwerte aus Spalten in `nutrient_defs`, Abschnitt 8
-  derselben Datei will eine eigene Tabelle mit RDA, AI, UL und
-  Altersabhängigkeit. **Die Spaltenlösung kann Abschnitt 8 nicht
-  abbilden** — eine Spalte je Nährstoff trägt keine Altersstaffel und
-  keine drei Wertarten.
-
-  **Zu klären, bevor gebaut wird:**
-  - **Woher kommen die Werte?** D-A-CH-Referenzwerte (DGE), EFSA, oder
-    die Kennzeichnungswerte der EU-LMIV? Sie unterscheiden sich, und die
-    Quelle gehört je Zeile dokumentiert — dieselbe Regel wie beim BLS.
-  - Welche Achsen: Alter, Geschlecht, Schwangerschaft, Stillzeit? Jede
-    Achse vervielfacht die Zeilen.
-  - `[cmd]` 138 Nährstoffe — für wie viele gibt es überhaupt
-    Referenzwerte? Vermutlich deutlich weniger.
-  - Was passiert mit den vorhandenen leeren Spalten `rda_male` und
-    `rda_female`? Entfernen oder als überholt kennzeichnen — stehen
-    lassen und ignorieren ist die schlechteste Wahl.
-
-  `[read]` `packages/scoring/` existiert nicht, obwohl SPEC_09 darauf
-  aufbaut. Der Tages-Score (0–100, nie gespeichert) ist eine andere
-  Kennzahl als `sort_weight` und hängt an dieser Tabelle.
 
 
 
