@@ -156,6 +156,44 @@ for (const s of SOLL.sichten) {
 }
 console.log(`Sichten     ${sichtOk}/${SOLL.sichten.length} mit security_invoker`)
 
+// --- 3b. Spalten je Sicht, wo der Sollstand welche fuehrt (C-37) ---
+// `[read]` _bewusst_nicht_geprueft.spalten sagt: "Eine Tabelle kann den
+// richtigen Namen tragen und die falschen Spalten haben." Fuer Sichten
+// wog das schwerer als gedacht: daily_summary stand mit Namen,
+// security_invoker und Grants in der Liste — ihre 48 Mikro-Spalten
+// haetten ersatzlos verschwinden koennen, ohne dass hier etwas auffaellt.
+// Geprueft wird NUR, wo der Sollstand eine "spalten"-Liste fuehrt; die
+// allgemeine Aussage in _bewusst_nicht_geprueft bleibt sonst gueltig.
+// Reihenfolge zaehlt mit: bei einer Sicht ist sie Teil des Vertrags
+// (SELECT * und positionsbezogene Zugriffe haengen daran).
+let spaltenGeprueft = 0
+for (const s of SOLL.sichten) {
+  if (!Array.isArray(s.spalten) || !istSichten.has(s.name)) continue
+  spaltenGeprueft++
+  const ist = sql(
+    `SELECT column_name FROM information_schema.columns
+     WHERE table_schema='nutrition' AND table_name='${s.name}'
+     ORDER BY ordinal_position;`).map(r => r[0])
+  const fehlend = s.spalten.filter((c: string) => !ist.includes(c))
+  const zuviel = ist.filter(c => !s.spalten.includes(c))
+  if (fehlend.length) {
+    fehler.push(`Sicht ${s.name}: ${fehlend.length} Spalten FEHLEN` +
+      ` (${fehlend.slice(0, 6).join(', ')}${fehlend.length > 6 ? ' …' : ''})` +
+      ` — Schritt ${s.schritt}`)
+  }
+  if (zuviel.length) {
+    warnung.push(`Sicht ${s.name}: ${zuviel.length} Spalten stehen da,` +
+      ` aber nicht im Sollstand (${zuviel.slice(0, 6).join(', ')}` +
+      `${zuviel.length > 6 ? ' …' : ''}) — Liste veraltet?`)
+  }
+  if (!fehlend.length && !zuviel.length &&
+      s.spalten.join('|') !== ist.join('|')) {
+    fehler.push(`Sicht ${s.name}: Spalten vollstaendig, aber in anderer` +
+      ` Reihenfolge — bei einer Sicht ist die Reihenfolge Teil des Vertrags`)
+  }
+}
+console.log(`Sichtspalten ${spaltenGeprueft} Sicht(en) mit Spaltenliste geprueft`)
+
 // --- 4. Trigger namentlich ---
 const trigIst = new Set(sql(
   `SELECT c.relname||'.'||t.tgname FROM pg_trigger t
