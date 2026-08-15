@@ -12,12 +12,7 @@ WITH checks(pruefung, soll, ist) AS (
           WHERE n.nspname = 'public' AND c.relname = 'profiles'
             AND c.relkind = 'r')::text
 
-  -- Spalten: genau id/created_at/updated_at mit erwarteten Typen
-  UNION ALL
-  SELECT 'spaltenzahl profiles', '3',
-         (SELECT count(*) FROM information_schema.columns
-          WHERE table_schema = 'public' AND table_name = 'profiles')::text
-  UNION ALL
+  -- Spalten: id/created_at/updated_at plus C-47-Profilachsen.
   SELECT 'spalte id uuid not null', '1',
          (SELECT count(*) FROM information_schema.columns
           WHERE table_schema = 'public' AND table_name = 'profiles'
@@ -30,6 +25,42 @@ WITH checks(pruefung, soll, ist) AS (
             AND column_name IN ('created_at', 'updated_at')
             AND data_type = 'timestamp with time zone'
             AND is_nullable = 'NO' AND column_default IS NOT NULL)::text
+
+  UNION ALL
+  SELECT 'spaltenzahl profiles', '13',
+         (SELECT count(*) FROM information_schema.columns
+          WHERE table_schema = 'public' AND table_name = 'profiles')::text
+  UNION ALL
+  SELECT 'profilachsen nullable vorhanden', '10',
+         (SELECT count(*) FROM information_schema.columns
+          WHERE table_schema = 'public' AND table_name = 'profiles'
+            AND column_name IN (
+              'birth_date',
+              'biological_sex',
+              'height_cm',
+              'body_weight_kg',
+              'activity_level',
+              'nutrition_goal',
+              'pregnancy_started_on',
+              'pregnancy_ended_on',
+              'lactation_started_on',
+              'lactation_ended_on'
+            )
+            AND is_nullable = 'YES')::text
+  UNION ALL
+  SELECT 'profil-check-constraints c47', '8',
+         (SELECT count(*) FROM pg_constraint
+          WHERE conrelid = 'public.profiles'::regclass
+            AND conname IN (
+              'profiles_birth_date_check',
+              'profiles_biological_sex_check',
+              'profiles_height_cm_check',
+              'profiles_body_weight_kg_check',
+              'profiles_activity_level_check',
+              'profiles_nutrition_goal_check',
+              'profiles_pregnancy_period_check',
+              'profiles_lactation_period_check'
+            ))::text
 
   -- Fremdschlüssel auf auth.users mit ON DELETE CASCADE
   UNION ALL
