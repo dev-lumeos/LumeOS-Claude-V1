@@ -96,6 +96,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 073 | `07_lesefunktionen/073_suchfilter.sql` | `food_search` samt Rangfunktionen | 1 Signatur |
 | 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
 | 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen | v090: 16 Prüfungen |
+| 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` für Tageswerte gegen Profil und Referenzwerte | 1 Funktion |
 | 100 | `10_training/100_training_schema.sql` | Schema `training` mit `exercises`, `muscle_groups`, `equipment`, `exercise_muscles` | 4 Tabellen |
 | 101 | `10_training/101_training_seed.sql` | Training-Stammdaten aus Legacy-Export | 1.416 Uebungen, 109 Muskelgruppen, 58 Geraete, 6.625 Zuordnungen vor Merge |
 | 102 | `10_training/102_plural_merge.sql` | Plural-Merge fuer Muskelgruppen | Nachpflege |

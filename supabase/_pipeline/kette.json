@@ -235,6 +235,13 @@
       "depends_on": ["B", "auth_stub"]
     },
     {
+      "id": "059",
+      "path": "supabase/_pipeline/05_user_tabellen/059_daily_reference_assessment.sql",
+      "kind": "sql",
+      "creates": "daily_reference_assessment als numerische Tagesbilanz-Bewertung gegen Profil und Referenzwerte",
+      "depends_on": ["016", "053", "090"]
+    },
+    {
       "id": "100",
       "path": "supabase/_pipeline/10_training/100_training_schema.sql",
       "kind": "sql",
