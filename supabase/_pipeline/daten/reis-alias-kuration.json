@@ -1,0 +1,136 @@
+{
+  "erhoben": "2026-08-15",
+  "anlass": "C-32 - Reis kurieren: Sortennamen als vorbereitete Aliasdaten, noch nicht einspielen",
+  "ziel": "Suchbegriffe, die auf vorhandene BLS-Eintraege zeigen. Keine neuen Foods, keine DB-Writes.",
+  "quelle": [
+    "docs/todo/TODO.md C-32",
+    "docs/ssot/51-sortweight-formel.md",
+    "nutrition.foods live gelesen"
+  ],
+  "eintraege": [
+    {
+      "suchbegriff": "reis",
+      "ziel_bls_code": "C352000",
+      "status": "gesetzt",
+      "begruendung": "Generischer Reis-Suchbegriff. C352000 ist Reis poliert, roh / White rice raw und der Core-Zielcode fuer weissen Reis."
+    },
+    {
+      "suchbegriff": "basmatireis",
+      "ziel_bls_code": "C352000",
+      "status": "gesetzt",
+      "begruendung": "Basmati ist im BLS nicht als eigene Sorte vorhanden. Fuer Makronaehrwerte wird er auf weissen polierten Reis roh abgebildet; C-32 nennt die Zuordnung als unstrittig."
+    },
+    {
+      "suchbegriff": "jasminreis",
+      "ziel_bls_code": "C352000",
+      "status": "gesetzt",
+      "begruendung": "Jasminreis ist im BLS nicht als eigene Sorte vorhanden. Gleiche Verarbeitungsform wie weisser polierter Reis."
+    },
+    {
+      "suchbegriff": "langkornreis",
+      "ziel_bls_code": "C352000",
+      "status": "gesetzt",
+      "begruendung": "Langkornreis ist eine Sorten-/Handelsbezeichnung ohne eigene BLS-Messung. Ziel ist Reis poliert, roh."
+    },
+    {
+      "suchbegriff": "rundkornreis",
+      "ziel_bls_code": "C352000",
+      "status": "gesetzt",
+      "begruendung": "Rundkornreis ist eine Sorten-/Handelsbezeichnung ohne eigene BLS-Messung. Ziel ist Reis poliert, roh."
+    },
+    {
+      "suchbegriff": "naturreis",
+      "ziel_bls_code": "C351000",
+      "status": "gesetzt",
+      "begruendung": "Naturreis entspricht unpoliertem Reis. Der englische BLS-Name zu C351000 ist Brown rice raw."
+    },
+    {
+      "suchbegriff": "brauner reis",
+      "ziel_bls_code": "C351000",
+      "status": "gesetzt",
+      "begruendung": "Deutsche Suchform fuer Brown rice. C351000 ist Reis unpoliert, roh."
+    },
+    {
+      "suchbegriff": "vollkornreis",
+      "ziel_bls_code": "C351000",
+      "status": "gesetzt",
+      "begruendung": "Vollkornreis ist die gebraeuchliche Anzeige-/Suchform fuer unpolierten Reis."
+    },
+    {
+      "suchbegriff": "parboiled reis",
+      "ziel_bls_code": "C359000",
+      "status": "gesetzt",
+      "begruendung": "C359000 ist Reis parboiled, poliert, roh. Die rohe Grundform ist der erwartete Zielcode fuer die Zutatensuche."
+    },
+    {
+      "suchbegriff": "parboiledreis",
+      "ziel_bls_code": "C359000",
+      "status": "gesetzt",
+      "begruendung": "Zusammengeschriebene Suchform fuer Parboiled-Reis; gleicher Zielcode wie 'parboiled reis'."
+    },
+    {
+      "suchbegriff": "griechischer joghurt",
+      "ziel_bls_code": "M141100",
+      "status": "ersatz",
+      "begruendung": "Griechischer Joghurt existiert im BLS nicht. docs/ssot/51-sortweight-formel.md kennzeichnet M141100 als Ersatz: Joghurt aus entrahmter Milch, max. 0,5 % Fett."
+    }
+  ],
+  "strittige_zuordnungen": [
+    {
+      "suchbegriff": "sushireis",
+      "variante": "Zutat",
+      "ziel_bls_code": "C352000",
+      "status": "tom_entscheidet",
+      "begruendung": "Sushireis als rohe Reissorte waere naehrwertlich weisser polierter Reis. Das waere konsistent mit Basmati, Jasmin, Langkorn und Rundkorn."
+    },
+    {
+      "suchbegriff": "sushireis",
+      "variante": "Gericht",
+      "ziel_bls_code": "X8A1100",
+      "status": "tom_entscheidet",
+      "begruendung": "Im Bestand existiert X8A1100 Sushi-Reis (Grundrezept). Wer Sushireis sucht, kann auch das zubereitete Grundrezept meinen."
+    }
+  ],
+  "ausgeschlossen": [
+    {
+      "suchbegriff": "milchreis",
+      "status": "nicht_auf_rohen_reis",
+      "begruendung": "Milchreis ist im Bestand als Gericht/Dessert belegt. Ein Alias auf rohen Reis waere falsch."
+    },
+    {
+      "suchbegriff": "risotto",
+      "status": "nicht_auf_rohen_reis",
+      "begruendung": "Risotto ist im Bestand als Gericht belegt. Ein Alias auf rohen Reis waere falsch."
+    }
+  ],
+  "abnahme": [
+    {
+      "suchbegriff": "basmatireis",
+      "ziel_bls_code": "C352000"
+    },
+    {
+      "suchbegriff": "jasminreis",
+      "ziel_bls_code": "C352000"
+    },
+    {
+      "suchbegriff": "vollkornreis",
+      "ziel_bls_code": "C351000"
+    },
+    {
+      "suchbegriff": "naturreis",
+      "ziel_bls_code": "C351000"
+    },
+    {
+      "suchbegriff": "parboiled reis",
+      "ziel_bls_code": "C359000"
+    },
+    {
+      "suchbegriff": "reis",
+      "ziel_bls_code": "C352000"
+    },
+    {
+      "suchbegriff": "griechischer joghurt",
+      "ziel_bls_code": "M141100"
+    }
+  ]
+}
