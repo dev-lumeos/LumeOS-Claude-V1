@@ -5,11 +5,18 @@
 // name_display_de; the only source is the curated nebennamen array.
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
+import { erwarteteZeilen } from './anzeigenamen-erwartung'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
 const INPUT = 'supabase/_pipeline/daten/anzeigenamen.jsonl'
-const EXPECTED_LINES = 5775
+
+// ABGELEITET wie in 025 — siehe ./anzeigenamen-erwartung.ts.
+// ACHTUNG, nicht verwechseln: geprueft wird die Zeilenzahl der
+// EINGABE. Die Zahl der erzeugten Aliase ist naturgemaess kleiner,
+// weil nur Zeilen mit `nebennamen` etwas beitragen — `[cmd]` 663
+// kuratierte Namen aus 576 Foods.
+const EXPECTED_LINES = erwarteteZeilen(CONTAINER, DB)
 const SOURCE = 'curated_nebenname'
 
 type AliasRow = {

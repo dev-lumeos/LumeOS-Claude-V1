@@ -6,11 +6,16 @@
 // temporary psql table, and updates only the two display-name columns.
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
+import { erwarteteZeilen } from './anzeigenamen-erwartung'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
 const INPUT = 'supabase/_pipeline/daten/anzeigenamen.jsonl'
-const EXPECTED_LINES = 5775
+
+// ABGELEITET statt festgeschrieben. `[read]` Begruendung in
+// ./anzeigenamen-erwartung.ts — die harte 5775 war Absicherung gegen
+// einen stillen Teilimport und wurde beim Nachtrag nicht mitgezogen.
+const EXPECTED_LINES = erwarteteZeilen(CONTAINER, DB)
 
 type Anzeigename = {
   bls_code: string
@@ -86,13 +91,21 @@ ${lines.map(csvCell).join('\n')}
 DO $$
 DECLARE
   v_input int;
+  v_foods int;
   v_missing int;
   v_updated int;
   v_sicher_false int;
 BEGIN
   SELECT COUNT(*) INTO v_input FROM tmp_anzeigenamen_jsonl;
-  IF v_input <> ${EXPECTED_LINES} THEN
-    RAISE EXCEPTION 'anzeigenamen.jsonl: % Zeilen, erwartet ${EXPECTED_LINES}', v_input;
+  -- Dieselbe Ableitung wie auf der Hostseite: die Erwartung ist die
+  -- Zahl der Lebensmittel, nicht eine festgeschriebene Konstante.
+  -- Der Hostlauf hat zusaetzlich anzeigenamen-eingabe.jsonl geprueft;
+  -- hier ist die Datei nicht erreichbar, deshalb bleibt der Vergleich
+  -- gegen den Bestand.
+  SELECT COUNT(*) INTO v_foods FROM nutrition.foods;
+  IF v_input <> v_foods THEN
+    RAISE EXCEPTION 'anzeigenamen.jsonl: % Zeilen, nutrition.foods: % — muessen gleich sein',
+      v_input, v_foods;
   END IF;
 
   WITH parsed AS (
