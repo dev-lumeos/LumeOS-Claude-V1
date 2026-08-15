@@ -184,6 +184,237 @@
 {"name_de":"Weizenknusperbrot","name_en":"Wheat crackerbread","bls_code":"B8B4000","warengruppe":"B"}
 {"name_de":"Weizenknusperbrot (mit Butter)","name_en":"Wheat crackerbread (made with butter)","bls_code":"B8B5000","warengruppe":"B"}
 {"name_de":"Dinkelknusperbrot","name_en":"Spelt crackerbread","bls_code":"B8B6000","warengruppe":"B"}
+{"name_de":"Weizen ganzes Korn, roh","name_en":"Wheat whole grain, raw","bls_code":"C111000","warengruppe":"C"}
+{"name_de":"Weizen ganzes Korn, gekocht","name_en":"Wheat whole grain, boiled","bls_code":"C111032","warengruppe":"C"}
+{"name_de":"Weizen ganzes Korn, gekocht, gebacken","name_en":"Wheat whole grain, boiled, baked","bls_code":"C111062","warengruppe":"C"}
+{"name_de":"Weizen ganzes Korn, gekocht, gebraten ohne Fett (Pfanne)","name_en":"Wheat whole grain, boiled, fried without fat (pan)","bls_code":"C111082","warengruppe":"C"}
+{"name_de":"Weizen Flocken","name_en":"Wheat flakes","bls_code":"C113000","warengruppe":"C"}
+{"name_de":"Weizen Flocken, gekocht","name_en":"Wheat flakes, boiled","bls_code":"C113032","warengruppe":"C"}
+{"name_de":"Weizen Keim","name_en":"Wheat germ","bls_code":"C114000","warengruppe":"C"}
+{"name_de":"Weizen Grütze","name_en":"Wheat groats","bls_code":"C117000","warengruppe":"C"}
+{"name_de":"Weizen Grütze, gekocht","name_en":"Wheat groats, boiled","bls_code":"C117032","warengruppe":"C"}
+{"name_de":"Quinoa weiß, roh","name_en":"Quinoa white, raw","bls_code":"C118000","warengruppe":"C"}
+{"name_de":"Quinoa weiß, gekocht","name_en":"Quinoa white, boiled","bls_code":"C118032","warengruppe":"C"}
+{"name_de":"Quinoa tricolore, roh","name_en":"Quinoa tricolore, raw","bls_code":"C118100","warengruppe":"C"}
+{"name_de":"Quinoa tricolore, gekocht","name_en":"Quinoa tricolore, boiled","bls_code":"C118122","warengruppe":"C"}
+{"name_de":"Bulgur (Hartweizen) roh","name_en":"Bulgur (durum wheat) raw","bls_code":"C119100","warengruppe":"C"}
+{"name_de":"Bulgur (Hartweizen) gekocht","name_en":"Bulgur (durum wheat) boiled","bls_code":"C119132","warengruppe":"C"}
+{"name_de":"Couscous (Hartweizen) roh","name_en":"Couscous (durum wheat) raw","bls_code":"C119200","warengruppe":"C"}
+{"name_de":"Couscous (Hartweizen) gekocht","name_en":"Couscous (durum wheat) boiled","bls_code":"C119232","warengruppe":"C"}
+{"name_de":"Roggen ganzes Korn, roh","name_en":"Rye whole grain, raw","bls_code":"C121000","warengruppe":"C"}
+{"name_de":"Roggen ganzes Korn, gekocht","name_en":"Rye whole grain, boiled","bls_code":"C121032","warengruppe":"C"}
+{"name_de":"Roggen Flocken","name_en":"Rye flakes","bls_code":"C123000","warengruppe":"C"}
+{"name_de":"Roggen Flocken, gekocht","name_en":"Rye flakes, boiled","bls_code":"C123032","warengruppe":"C"}
+{"name_de":"Roggen Grieß","name_en":"Rye semolina","bls_code":"C126000","warengruppe":"C"}
+{"name_de":"Hafer ganzes Korn, gekocht","name_en":"Oat whole grain, boiled","bls_code":"C130032","warengruppe":"C"}
+{"name_de":"Hafer ganzes Korn, roh","name_en":"Oat whole grain, raw","bls_code":"C131000","warengruppe":"C"}
+{"name_de":"Hafer Flocken","name_en":"Oat flakes","bls_code":"C133000","warengruppe":"C"}
+{"name_de":"Hafer Flocken, gekocht","name_en":"Oat flakes, boiled","bls_code":"C133032","warengruppe":"C"}
+{"name_de":"Hafer Grieß","name_en":"Oat semolina","bls_code":"C136000","warengruppe":"C"}
+{"name_de":"Hafer Grütze","name_en":"Oat groats","bls_code":"C137000","warengruppe":"C"}
+{"name_de":"Hafer Grütze, gekocht","name_en":"Oat groats, boiled","bls_code":"C137032","warengruppe":"C"}
+{"name_de":"Hafer Kleie","name_en":"Oat bran flakes","bls_code":"C138000","warengruppe":"C"}
+{"name_de":"Gerste ganzes Korn, roh","name_en":"Barley whole grain, raw","bls_code":"C141000","warengruppe":"C"}
+{"name_de":"Gerste ganzes Korn, gekocht","name_en":"Barley whole grain, boiled","bls_code":"C141032","warengruppe":"C"}
+{"name_de":"Gerste Flocken","name_en":"Barley flakes","bls_code":"C143000","warengruppe":"C"}
+{"name_de":"Gerste Flocken, gekocht","name_en":"Barley flakes, boiled","bls_code":"C143032","warengruppe":"C"}
+{"name_de":"Gerste Grieß","name_en":"Barley semolina","bls_code":"C146000","warengruppe":"C"}
+{"name_de":"Gerste Grütze","name_en":"Barley groats","bls_code":"C147000","warengruppe":"C"}
+{"name_de":"Gerste Grütze, gekocht","name_en":"Barley groats, boiled","bls_code":"C147032","warengruppe":"C"}
+{"name_de":"Gerste Graupen","name_en":"Pearl barley","bls_code":"C148000","warengruppe":"C"}
+{"name_de":"Gerste Graupen, gekocht","name_en":"Pearl barley, boiled","bls_code":"C148032","warengruppe":"C"}
+{"name_de":"Weizen Vollkornmehl","name_en":"Wheat wholemeal flour","bls_code":"C211000","warengruppe":"C"}
+{"name_de":"Weizen Vollkornschrot","name_en":"Wheat coarse meal","bls_code":"C211100","warengruppe":"C"}
+{"name_de":"Weizen Vollkornschrot, gekocht","name_en":"Wheat coarse meal, boiled","bls_code":"C211132","warengruppe":"C"}
+{"name_de":"Weizen Backschrot, Type 1700","name_en":"Wheat coarse meal, Type 1700","bls_code":"C212000","warengruppe":"C"}
+{"name_de":"Weizen Backschrot, Type 1700, gekocht","name_en":"Wheat coarse meal, Type 1700, boiled","bls_code":"C212032","warengruppe":"C"}
+{"name_de":"Weizen Mehl, Type 812","name_en":"Wheat flour, Type 812","bls_code":"C213100","warengruppe":"C"}
+{"name_de":"Weizen Mehl, Type 1050","name_en":"Wheat flour, Type 1050","bls_code":"C213200","warengruppe":"C"}
+{"name_de":"Weizen Mehl, Type 1600","name_en":"Wheat flour, Type 1600","bls_code":"C213500","warengruppe":"C"}
+{"name_de":"Weizen Mehl, Type 405","name_en":"Wheat flour, Type 405","bls_code":"C214100","warengruppe":"C"}
+{"name_de":"Weizen Mehl, Type 550","name_en":"Wheat flour, Type 550","bls_code":"C214200","warengruppe":"C"}
+{"name_de":"Weizen Dunst","name_en":"Wheat middlings (dunst)","bls_code":"C215000","warengruppe":"C"}
+{"name_de":"Weizen Stärke","name_en":"Wheat starch","bls_code":"C216000","warengruppe":"C"}
+{"name_de":"Weizen Kleie","name_en":"Wheat bran","bls_code":"C217000","warengruppe":"C"}
+{"name_de":"Weichweizen Grieß","name_en":"Soft wheat semolina","bls_code":"C218000","warengruppe":"C"}
+{"name_de":"Weichweizen Grieß, gekocht","name_en":"Soft wheat semolina, boiled","bls_code":"C218032","warengruppe":"C"}
+{"name_de":"Hartweizen Vollkornmehl","name_en":"Durum wheat wholemeal flour","bls_code":"C219000","warengruppe":"C"}
+{"name_de":"Hartweizen Vollkorngrieß","name_en":"Durum wheat wholemeal semolina","bls_code":"C219100","warengruppe":"C"}
+{"name_de":"Hartweizen Vollkorngrieß, gekocht","name_en":"Durum wheat wholemeal semolina, boiled","bls_code":"C219132","warengruppe":"C"}
+{"name_de":"Hartweizen ganzes Korn, roh","name_en":"Durum wheat whole grain, raw","bls_code":"C219200","warengruppe":"C"}
+{"name_de":"Hartweizen ganzes Korn, gekocht","name_en":"Durum wheat whole grain, boiled","bls_code":"C219232","warengruppe":"C"}
+{"name_de":"Hartweizen Grieß","name_en":"Durum wheat semolina","bls_code":"C219300","warengruppe":"C"}
+{"name_de":"Hartweizen Grieß, gekocht","name_en":"Durum wheat semolina, boiled","bls_code":"C219332","warengruppe":"C"}
+{"name_de":"Roggen Vollkornmehl","name_en":"Rye wholemeal flour","bls_code":"C221000","warengruppe":"C"}
+{"name_de":"Roggen Vollkornschrot","name_en":"Rye coarse meal","bls_code":"C221100","warengruppe":"C"}
+{"name_de":"Roggen Vollkornschrot, gekocht","name_en":"Rye coarse meal, boiled","bls_code":"C221132","warengruppe":"C"}
+{"name_de":"Roggen Backschrot, Type 1800","name_en":"Rye coarse meal, Type 1800","bls_code":"C222000","warengruppe":"C"}
+{"name_de":"Roggen Backschrot, Type 1800, gekocht","name_en":"Rye coarse meal, Type 1800, boiled","bls_code":"C222032","warengruppe":"C"}
+{"name_de":"Roggen Mehl, Type 815","name_en":"Rye flour, Type 815","bls_code":"C223100","warengruppe":"C"}
+{"name_de":"Roggen Mehl, Type 997","name_en":"Rye flour, Type 997","bls_code":"C223200","warengruppe":"C"}
+{"name_de":"Roggen Mehl, Type 1150","name_en":"Rye flour, Type 1150","bls_code":"C223300","warengruppe":"C"}
+{"name_de":"Roggen Mehl, Type 1370","name_en":"Rye flour, Type 1370","bls_code":"C223400","warengruppe":"C"}
+{"name_de":"Roggen Mehl, Type 1740","name_en":"Rye flour, Type 1740","bls_code":"C223600","warengruppe":"C"}
+{"name_de":"Hafer Schrot","name_en":"Oat coarse meal","bls_code":"C232000","warengruppe":"C"}
+{"name_de":"Hafer Schrot, gekocht","name_en":"Oat coarse meal, boiled","bls_code":"C232032","warengruppe":"C"}
+{"name_de":"Hafer Mehl","name_en":"Oat flour","bls_code":"C233000","warengruppe":"C"}
+{"name_de":"Dinkel Mehl, Type 630","name_en":"Spelt flour, Type 630","bls_code":"C234000","warengruppe":"C"}
+{"name_de":"Dinkel Mehl, Type 812","name_en":"Spelt flour, Type 812","bls_code":"C234100","warengruppe":"C"}
+{"name_de":"Dinkel Mehl, Type 1050","name_en":"Spelt flour, Type 1050","bls_code":"C234200","warengruppe":"C"}
+{"name_de":"Dinkel Vollkornmehl","name_en":"Spelt wholemeal flour","bls_code":"C235000","warengruppe":"C"}
+{"name_de":"Dinkel Vollkornschrot","name_en":"Spelt coarse meal","bls_code":"C235100","warengruppe":"C"}
+{"name_de":"Dinkel Vollkornschrot, gekocht","name_en":"Spelt coarse meal, boiled","bls_code":"C235132","warengruppe":"C"}
+{"name_de":"Dinkel ganzes Korn, roh","name_en":"Spelt whole grain, raw","bls_code":"C236000","warengruppe":"C"}
+{"name_de":"Dinkel ganzes Korn, gekocht","name_en":"Spelt whole grain, boiled","bls_code":"C236032","warengruppe":"C"}
+{"name_de":"Dinkel Flocken","name_en":"Spelt flakes","bls_code":"C236100","warengruppe":"C"}
+{"name_de":"Dinkel Kleie","name_en":"Spelt bran","bls_code":"C237000","warengruppe":"C"}
+{"name_de":"Dinkel Grieß","name_en":"Spelt semolina","bls_code":"C238000","warengruppe":"C"}
+{"name_de":"Dinkel Grieß, gekocht","name_en":"Spelt semolina, boiled","bls_code":"C238032","warengruppe":"C"}
+{"name_de":"Emmer Vollkornmehl","name_en":"Emmer wheat wholemeal flour","bls_code":"C240000","warengruppe":"C"}
+{"name_de":"Emmer ganzes Korn, roh","name_en":"Emmer wheat whole grain, raw","bls_code":"C240100","warengruppe":"C"}
+{"name_de":"Emmer ganzes Korn, gekocht","name_en":"Emmer wheat whole grain, boiled","bls_code":"C240132","warengruppe":"C"}
+{"name_de":"Emmer Flocken","name_en":"Emmer wheat flakes","bls_code":"C240200","warengruppe":"C"}
+{"name_de":"Einkorn Vollkornmehl","name_en":"Einkorn wheat wholemeal flour","bls_code":"C241000","warengruppe":"C"}
+{"name_de":"Einkorn ganzes Korn, roh","name_en":"Einkorn wheat whole grain, raw","bls_code":"C241100","warengruppe":"C"}
+{"name_de":"Einkorn ganzes Korn, gekocht","name_en":"Einkorn wheat whole grain, boiled","bls_code":"C241132","warengruppe":"C"}
+{"name_de":"Einkorn Flocken","name_en":"Einkorn wheat flakes","bls_code":"C241200","warengruppe":"C"}
+{"name_de":"Gerste Schrot","name_en":"Barley coarse meal","bls_code":"C242000","warengruppe":"C"}
+{"name_de":"Gerste Schrot, gekocht","name_en":"Barley coarse meal, boiled","bls_code":"C242032","warengruppe":"C"}
+{"name_de":"Gerste Mehl","name_en":"Barley flour","bls_code":"C243000","warengruppe":"C"}
+{"name_de":"Grünkern ganzes Korn, roh","name_en":"Green spelt whole grain, raw","bls_code":"C311000","warengruppe":"C"}
+{"name_de":"Grünkern ganzes Korn, gekocht","name_en":"Green spelt whole grain, boiled","bls_code":"C311032","warengruppe":"C"}
+{"name_de":"Grünkern Grütze","name_en":"Green spelt groats","bls_code":"C317000","warengruppe":"C"}
+{"name_de":"Grünkern Grütze, gekocht","name_en":"Green spelt groats, boiled","bls_code":"C317032","warengruppe":"C"}
+{"name_de":"Buchweizen gekocht","name_en":"Buckwheat boiled","bls_code":"C320032","warengruppe":"C"}
+{"name_de":"Buchweizen roh","name_en":"Buckwheat raw","bls_code":"C322000","warengruppe":"C"}
+{"name_de":"Buchweizen Grieß","name_en":"Buckwheat semolina","bls_code":"C326000","warengruppe":"C"}
+{"name_de":"Buchweizen Grieß, gekocht","name_en":"Buckwheat semolina, boiled","bls_code":"C326032","warengruppe":"C"}
+{"name_de":"Buchweizen Grütze","name_en":"Buckwheat groats","bls_code":"C327000","warengruppe":"C"}
+{"name_de":"Buchweizen Grütze, gekocht","name_en":"Buckwheat groats, boiled","bls_code":"C327032","warengruppe":"C"}
+{"name_de":"Hirse roh","name_en":"Millet raw","bls_code":"C332000","warengruppe":"C"}
+{"name_de":"Hirse Flocken","name_en":"Millet wholegrain flakes","bls_code":"C333100","warengruppe":"C"}
+{"name_de":"Hirse Flocken, gekocht","name_en":"Millet wholegrain flakes, boiled","bls_code":"C333132","warengruppe":"C"}
+{"name_de":"Hirse gekocht","name_en":"Millet boiled","bls_code":"C334032","warengruppe":"C"}
+{"name_de":"Amaranth roh","name_en":"Amaranth raw","bls_code":"C335000","warengruppe":"C"}
+{"name_de":"Amaranth gekocht","name_en":"Amaranth boiled","bls_code":"C335032","warengruppe":"C"}
+{"name_de":"Mais roh","name_en":"Maize raw","bls_code":"C341000","warengruppe":"C"}
+{"name_de":"Mais gekocht","name_en":"Maize boiled","bls_code":"C341032","warengruppe":"C"}
+{"name_de":"Mais gekocht, gebacken","name_en":"Maize boiled, baked","bls_code":"C341162","warengruppe":"C"}
+{"name_de":"Mais Grieß","name_en":"Maize semolina","bls_code":"C346000","warengruppe":"C"}
+{"name_de":"Mais Grieß, gekocht","name_en":"Maize semolina, boiled","bls_code":"C346032","warengruppe":"C"}
+{"name_de":"Mais Grütze","name_en":"Maize grits","bls_code":"C347000","warengruppe":"C"}
+{"name_de":"Mais Grütze, gekocht","name_en":"Maize grits, boiled","bls_code":"C347032","warengruppe":"C"}
+{"name_de":"Reis poliert, geschmort ohne Fett","name_en":"White rice braised without fat","bls_code":"C350042","warengruppe":"C"}
+{"name_de":"Reis poliert, gedämpft","name_en":"White rice steamed","bls_code":"C350222","warengruppe":"C"}
+{"name_de":"Reis unpoliert, roh","name_en":"Brown rice raw","bls_code":"C351000","warengruppe":"C"}
+{"name_de":"Reis unpoliert, gekocht","name_en":"Brown rice boiled","bls_code":"C351032","warengruppe":"C"}
+{"name_de":"Reis unpoliert, gekocht, gebraten ohne Fett (Pfanne)","name_en":"Brown rice boiled, fried without fat (pan)","bls_code":"C351082","warengruppe":"C"}
+{"name_de":"Reis poliert, roh","name_en":"White rice raw","bls_code":"C352000","warengruppe":"C"}
+{"name_de":"Reis poliert, gekocht","name_en":"White rice boiled","bls_code":"C352032","warengruppe":"C"}
+{"name_de":"Reis poliert, gekocht, gebraten ohne Fett (Pfanne)","name_en":"White rice boiled, fried without fat (pan)","bls_code":"C352082","warengruppe":"C"}
+{"name_de":"Wildreis roh","name_en":"Wild rice raw","bls_code":"C353100","warengruppe":"C"}
+{"name_de":"Wildreis gekocht","name_en":"Wild rice boiled","bls_code":"C353132","warengruppe":"C"}
+{"name_de":"Wildreis gekocht, gebraten ohne Fett (Pfanne)","name_en":"Wild rice boiled, fried without fat (pan)","bls_code":"C353182","warengruppe":"C"}
+{"name_de":"Reismischung mit Wildreis, roh","name_en":"Rice mix with wild rice, raw","bls_code":"C354100","warengruppe":"C"}
+{"name_de":"Reismischung mit Wildreis, gekocht","name_en":"Rice mix with wild rice, boiled","bls_code":"C354132","warengruppe":"C"}
+{"name_de":"Reis Grieß","name_en":"Rice semolina","bls_code":"C356000","warengruppe":"C"}
+{"name_de":"Reis Grieß, gekocht","name_en":"Rice grits, boiled","bls_code":"C356032","warengruppe":"C"}
+{"name_de":"Reis parboiled, poliert, roh","name_en":"Rice parboiled, raw","bls_code":"C359000","warengruppe":"C"}
+{"name_de":"Reis parboiled, poliert, gekocht","name_en":"Rice parboiled, boiled","bls_code":"C359032","warengruppe":"C"}
+{"name_de":"Reis parboiled, poliert, geschmort ohne Fett","name_en":"Rice parboiled, braised without fat","bls_code":"C359042","warengruppe":"C"}
+{"name_de":"Reis parboiled, poliert, gekocht, gebraten ohne Fett (Pfanne)","name_en":"Rice parboiled, boiled, fried without fat (pan)","bls_code":"C359082","warengruppe":"C"}
+{"name_de":"Grünkern Vollkornschrot","name_en":"Green spelt coarse meal","bls_code":"C412000","warengruppe":"C"}
+{"name_de":"Grünkern Vollkornschrot, gekocht","name_en":"Green spelt coarse meal, boiled","bls_code":"C412032","warengruppe":"C"}
+{"name_de":"Grünkern Vollkornschrot gekocht, gebraten ohne Fett (Pfanne)","name_en":"Green spelt coarse meal, boiled, fried without fat (pan)","bls_code":"C412182","warengruppe":"C"}
+{"name_de":"Grünkern Vollkornmehl","name_en":"Green spelt flour","bls_code":"C413000","warengruppe":"C"}
+{"name_de":"Mehlmischung eiweißarm, glutenfrei, natriumarm","name_en":"Flour mix low protein, gluten-free, low sodium","bls_code":"C414000","warengruppe":"C"}
+{"name_de":"Mehlmischung glutenfrei","name_en":"Flour mix gluten-free","bls_code":"C414100","warengruppe":"C"}
+{"name_de":"Mehlmischung für Brot glutenfrei","name_en":"Flour mix for bread gluten-free","bls_code":"C415000","warengruppe":"C"}
+{"name_de":"Mehlmischung für Kuchen glutenfrei","name_en":"Flour mix for cake gluten-free","bls_code":"C416000","warengruppe":"C"}
+{"name_de":"Buchweizen Vollkornmehl","name_en":"Buckwheat wholemeal flour","bls_code":"C421000","warengruppe":"C"}
+{"name_de":"Buchweizen Schrot","name_en":"Buckwheat coarse meal","bls_code":"C422000","warengruppe":"C"}
+{"name_de":"Buchweizen Schrot, gekocht","name_en":"Buckwheat coarse meal, boiled","bls_code":"C422032","warengruppe":"C"}
+{"name_de":"Buchweizen Mehl","name_en":"Buckwheat flour","bls_code":"C424000","warengruppe":"C"}
+{"name_de":"Hirse Schrot","name_en":"Millet coarse meal","bls_code":"C432000","warengruppe":"C"}
+{"name_de":"Hirse Schrot, gekocht","name_en":"Millet coarse meal, boiled","bls_code":"C432032","warengruppe":"C"}
+{"name_de":"Hirse Mehl","name_en":"Millet flour","bls_code":"C433000","warengruppe":"C"}
+{"name_de":"Braunhirse Mehl","name_en":"Brown millet flour","bls_code":"C433100","warengruppe":"C"}
+{"name_de":"Mais Mehl","name_en":"Maize flour","bls_code":"C443000","warengruppe":"C"}
+{"name_de":"Mais Stärke","name_en":"Maize starch","bls_code":"C446000","warengruppe":"C"}
+{"name_de":"Reis Mehl","name_en":"Rice flour","bls_code":"C453000","warengruppe":"C"}
+{"name_de":"Reis Stärke","name_en":"Rice starch","bls_code":"C456000","warengruppe":"C"}
+{"name_de":"Reis Kleie","name_en":"Rice bran","bls_code":"C457000","warengruppe":"C"}
+{"name_de":"Mehrkornschrot","name_en":"Grain mix coarse meal","bls_code":"C492000","warengruppe":"C"}
+{"name_de":"Mehrkornschrot gekocht","name_en":"Grain mix coarse meal, boiled","bls_code":"C492032","warengruppe":"C"}
+{"name_de":"Mehrkornschrot gekocht, gebacken","name_en":"Grain mix coarse meal, boiled, baked","bls_code":"C492062","warengruppe":"C"}
+{"name_de":"Mehrkornschrot gekocht, gebraten ohne Fett (Pfanne)","name_en":"Grain mix coarse meal, boiled, fried without fat (pan)","bls_code":"C492082","warengruppe":"C"}
+{"name_de":"Müsli Basismischung (ohne Trockenfrüchte) ungesüßt","name_en":"Muesli basic mix (without dried fruit) unsweetened","bls_code":"C512000","warengruppe":"C"}
+{"name_de":"Müslimischung mit Trockenfrüchten, ungesüßt","name_en":"Muesli mix with dried fruit, unsweetened","bls_code":"C512300","warengruppe":"C"}
+{"name_de":"Müslimischung Bircher Art (mit Trockenfrüchten und Nüssen) ungesüßt","name_en":"Muesli mix Bircher style (with dried fruit and nuts) unsweetened","bls_code":"C512600","warengruppe":"C"}
+{"name_de":"Müslimischung mit Trockenfrüchten, glutenfrei, gesüßt","name_en":"Muesli mix with dried fruit, gluten-free, sweetened","bls_code":"C512700","warengruppe":"C"}
+{"name_de":"Müslimischung mit Schokolade, glutenfrei, gesüßt","name_en":"Muesli mix with chocolate, gluten-free, sweetenend","bls_code":"C512800","warengruppe":"C"}
+{"name_de":"Müslimischung mit Schokolade, gesüßt","name_en":"Muesli mix with chocolate, sweetened","bls_code":"C513300","warengruppe":"C"}
+{"name_de":"Knuspermüslimischung, klassisch, gesüßt","name_en":"Crunchy muesli mix, classic, sweetened","bls_code":"C514200","warengruppe":"C"}
+{"name_de":"Knuspermüslimischung, klassisch, gesüßt, angereichert mit Vitaminen und Mineralstoffen","name_en":"Crunchy muesli mix, classic, sweetened, fortified with vitamins and minerals","bls_code":"C514300","warengruppe":"C"}
+{"name_de":"Knuspermüslimischung mit Trockenfrüchten, gesüßt","name_en":"Crunchy muesli mix with dried fruit, sweetened","bls_code":"C514400","warengruppe":"C"}
+{"name_de":"Knuspermüslimischung mit Trockenfrüchten, gesüßt, angereichert mit Vitaminen und Mineralstoffen","name_en":"Crunchy muesli mix with dried fruit, sweetened, fortified with vitamins and minerals","bls_code":"C514500","warengruppe":"C"}
+{"name_de":"Knuspermüslimischung mit Schokolade, gesüßt","name_en":"Crunchy muesli mix with chocolate, sweetened","bls_code":"C514600","warengruppe":"C"}
+{"name_de":"Knuspermüslimischung mit Schokolade, gesüßt, angereichert mit Vitaminen und Mineralstoffen","name_en":"Crunchy muesli mix with chocolate, sweetened, fortified with vitamins and minerals","bls_code":"C514700","warengruppe":"C"}
+{"name_de":"Cornflakes gesüßt","name_en":"Cornflakes sweetened","bls_code":"C515000","warengruppe":"C"}
+{"name_de":"Cornflakes gesüßt, angereichert mit Vitaminen","name_en":"Cornflakes sweetened, fortified with vitamins","bls_code":"C515100","warengruppe":"C"}
+{"name_de":"Cornflakes gesüßt, mit Zuckerglasur und Erdnüssen, angereichert mit Vitaminen und Mineralstoffen","name_en":"Cornflakes sweetened, sugar frosted, with peanuts, fortified with vitamins and minerals","bls_code":"C515200","warengruppe":"C"}
+{"name_de":"Cornflakes gesüßt, mit Zuckerglasur und Erdnüssen","name_en":"Cornflakes sweetened, sugar frosted, with peanuts","bls_code":"C515300","warengruppe":"C"}
+{"name_de":"Cornflakes ungesüßt","name_en":"Cornflakes unsweetened","bls_code":"C515400","warengruppe":"C"}
+{"name_de":"Cornflakes gesüßt, mit Zuckerglasur","name_en":"Cornflakes sweetened, sugar frosted","bls_code":"C515600","warengruppe":"C"}
+{"name_de":"Popcorn gesalzen","name_en":"Popcorn salty","bls_code":"C518000","warengruppe":"C"}
+{"name_de":"Popcorn gesüßt","name_en":"Popcorn sweet","bls_code":"C519000","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt","name_en":"Cereal flakes sweetened","bls_code":"C522000","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt, angereichert mit Vitaminen und Mineralstoffen","name_en":"Cereal flakes sweetened, fortified with vitamins and minerals","bls_code":"C522100","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt, mit Trockenfrüchten","name_en":"Cereal flakes sweetened, with dried fruit","bls_code":"C522200","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt, mit Trockenfrüchten, angereichert mit Vitaminen und Mineralstoffen","name_en":"Cereal flakes sweetened, with dried fruit, fortified with vitamins and minerals","bls_code":"C522300","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt, mit Nüssen","name_en":"Cereal flakes sweetened, with nuts","bls_code":"C522400","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt, mit Nüssen, angereichert mit Vitaminen und Mineralstoffen","name_en":"Cereal flakes sweetened, with nuts, fortified with vitamins and minerals","bls_code":"C522500","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt, mit Schokolade","name_en":"Cereal flakes sweetened, with chocolate","bls_code":"C522600","warengruppe":"C"}
+{"name_de":"Getreideflakes gesüßt, mit Schokolade, angereichert mit Vitaminen und Mineralstoffen","name_en":"Cereal flakes sweetened, with chocolate, fortified with vitamins and minerals","bls_code":"C522700","warengruppe":"C"}
+{"name_de":"Polenta (Maisgrieß mit Wasser, Fett und Salz) gekocht","name_en":"Polenta (Maize semolina prepared with water, fat and salt) boiled","bls_code":"C526000","warengruppe":"C"}
+{"name_de":"Polenta (Maisgrieß mit Wasser, Fett und Salz) gekocht, gebacken","name_en":"Polenta (Maize semolina prepared with water, fat and salt) boiled, baked","bls_code":"C526062","warengruppe":"C"}
+{"name_de":"Polenta (Maisgrieß mit Wasser, Fett und Salz) gekocht, gebraten ohne Fett (Pfanne)","name_en":"Polenta (Maize semolina prepared with water, fat and salt) boiled, fried without fat (pan)","bls_code":"C526082","warengruppe":"C"}
+{"name_de":"Amaranth gepufft, ungesüßt","name_en":"Amaranth puffed, unsweetened","bls_code":"C530100","warengruppe":"C"}
+{"name_de":"Quinoa gepufft, ungesüßt","name_en":"Quinoa puffed, unsweetened","bls_code":"C530200","warengruppe":"C"}
+{"name_de":"Weizen gepufft, ungesüßt","name_en":"Wheat puffed, unsweetened","bls_code":"C531000","warengruppe":"C"}
+{"name_de":"Reis gepufft, ungesüßt","name_en":"Rice puffed, unsweetened","bls_code":"C532000","warengruppe":"C"}
+{"name_de":"Vollmilchschokolade mit Puffreis und Crispies","name_en":"Whole milk chocolate with puffed rice and crispies","bls_code":"C532100","warengruppe":"C"}
+{"name_de":"Weiße Schokolade mit Puffreis und Crispies","name_en":"White chocolate with puffed rice and crispies","bls_code":"C532200","warengruppe":"C"}
+{"name_de":"Reiswaffeln ungesalzen","name_en":"Puffed rice waffles unsalted","bls_code":"C532700","warengruppe":"C"}
+{"name_de":"Reiswaffeln gesalzen","name_en":"Puffed rice waffles salted","bls_code":"C532800","warengruppe":"C"}
+{"name_de":"Reiswaffeln schokoliert","name_en":"Puffed rice waffles chocolate coated","bls_code":"C532900","warengruppe":"C"}
+{"name_de":"Popcorn ungesüßt","name_en":"Popcorn unsweetened","bls_code":"C533000","warengruppe":"C"}
+{"name_de":"Maiswaffeln gesalzen","name_en":"Puffed maize waffles salted","bls_code":"C533100","warengruppe":"C"}
+{"name_de":"Cerealien extrudiert, gesüßt, ungefüllt, mit Zimtgeschmack","name_en":"Extruded cereals sweetened, unfilled, cinnamon flavoured","bls_code":"C534100","warengruppe":"C"}
+{"name_de":"Cerealien extrudiert, gesüßt, ungefüllt, mit Zimtgeschmack, angereichert mit Vitaminen und Mineralstoffen","name_en":"Extruded cereals sweetened, unfilled, cinnamon flavoured, fortified with vitamins and minerals","bls_code":"C534200","warengruppe":"C"}
+{"name_de":"Cerealien extrudiert, gesüßt, ungefüllt, mit Frucht-/Honig-/Karamell-/Schokogeschmack","name_en":"Extruded cereals sweetened, unfilled, fruit/honey/caramel/chocolate flavoured","bls_code":"C534300","warengruppe":"C"}
+{"name_de":"Cerealien extrudiert, gesüßt, ungefüllt, mit Frucht-/Honig-/Karamell-/Schokogeschmack, angereichert mit Vitaminen und Mineralstoffen","name_en":"Extruded cereals sweetened, unfilled, fruit/honey/caramel/chocolate flavoured, fortified with vitamins and minerals","bls_code":"C534400","warengruppe":"C"}
+{"name_de":"Cerealien extrudiert, gesüßt, divers gefüllt","name_en":"Extruded cereals sweetened, variously filled","bls_code":"C534500","warengruppe":"C"}
+{"name_de":"Cerealien extrudiert, gesüßt, divers gefüllt, angereichert mit Vitaminen und Mineralstoffen","name_en":"Extruded cereals sweetened, variously filled, fortified with vitamins and minerals","bls_code":"C534600","warengruppe":"C"}
+{"name_de":"Weizenpops/Weizen gepufft, gesüßt","name_en":"Wheat pops/wheat puffed, sweetened","bls_code":"C537000","warengruppe":"C"}
+{"name_de":"Müslimischung mit Trockenfrüchten, gesüßt","name_en":"Muesli mix with dried fruit, sweetened","bls_code":"C538000","warengruppe":"C"}
+{"name_de":"Cerealien aus Vollkornweizenschrot, gesüßt, ungefüllt, Natur/Frucht/Schokolade","name_en":"Wholemeal wheat cereals sweetened, unfilled, basic/fruit/chocolate","bls_code":"C539100","warengruppe":"C"}
+{"name_de":"Cerealien aus Vollkornweizenschrot, gesüßt, ungefüllt, Natur/Frucht/Schokolade, angereichert mit Vitaminen und Mineralstoffen","name_en":"Wholemeal wheat cereals sweetened, unfilled, basic/fruit/chocolate, fortified with vitamins and minerals","bls_code":"C539200","warengruppe":"C"}
+{"name_de":"Tortillachips (Nachos)","name_en":"Tortilla chips (Nachos)","bls_code":"C546000","warengruppe":"C"}
+{"name_de":"Gerstenmalzextrakt","name_en":"Barley malt extract","bls_code":"C549000","warengruppe":"C"}
+{"name_de":"Weizenkleber/Weizengluten","name_en":"Gluten (from wheat)","bls_code":"C551000","warengruppe":"C"}
+{"name_de":"Mehrkornflocken","name_en":"Multigrain flakes","bls_code":"C552000","warengruppe":"C"}
+{"name_de":"Weizenglutenfertigmischung, Trockenprodukt","name_en":"Wheat gluten mix, dried product","bls_code":"C556000","warengruppe":"C"}
+{"name_de":"Fleischersatz gluten-, milch- und sojahaltig","name_en":"Meat substitute containing gluten, milk and soya","bls_code":"C557000","warengruppe":"C"}
+{"name_de":"Fleischersatz glutenhaltig (Seitan)","name_en":"Meat substitute containing gluten (seitan)","bls_code":"C558000","warengruppe":"C"}
+{"name_de":"Reisnudeln roh","name_en":"Rice noodles raw","bls_code":"C559000","warengruppe":"C"}
+{"name_de":"Reisnudeln gekocht","name_en":"Rice noodles boiled","bls_code":"C559032","warengruppe":"C"}
+{"name_de":"Reisdrink ungesüßt","name_en":"Rice drink unsweetened","bls_code":"C650000","warengruppe":"C"}
+{"name_de":"Reisdrink ungesüßt, angereichert mit Vitaminen und Calcium","name_en":"Rice drink unsweetened, fortified with vitamins and calcium","bls_code":"C650200","warengruppe":"C"}
+{"name_de":"Haferdrink ungesüßt","name_en":"Oat drink unsweetened","bls_code":"C660000","warengruppe":"C"}
+{"name_de":"Haferdrink ungesüßt, angereichert mit Vitaminen, Calcium und Jod","name_en":"Oat drink unsweetened, fortified with vitamins, calcium and iodine","bls_code":"C660200","warengruppe":"C"}
+{"name_de":"Haferdrink gesüßt, aromatisiert","name_en":"Oat drink sweetened, flavoured","bls_code":"C660300","warengruppe":"C"}
+{"name_de":"Haferdrink gesüßt, aromatisiert, angereichert mit Vitaminen, Calcium und Jod","name_en":"Oat drink sweetened, flavoured, fortified with vitamins, calcium and iodine","bls_code":"C660500","warengruppe":"C"}
 {"name_de":"Backerbsen","name_en":"Soup pearls","bls_code":"D011000","warengruppe":"D"}
 {"name_de":"Dinkelzwieback ungesüßt","name_en":"Spelt rusk unsweetened","bls_code":"D024000","warengruppe":"D"}
 {"name_de":"Vollkornzwieback ungesüßt","name_en":"Wholemeal rusk unsweetened","bls_code":"D025000","warengruppe":"D"}
@@ -754,6 +985,1140 @@
 {"name_de":"Frischteigwaren eifrei, gekocht","name_en":"Fresh pasta egg-free, boiled","bls_code":"E811032","warengruppe":"E"}
 {"name_de":"Teigwaren eifrei, Ravioli (Fleischfüllung) in Tomatensoße, Konserve","name_en":"Pasta egg-free, Ravioli (meat filling) in tomato sauce, canned","bls_code":"E901000","warengruppe":"E"}
 {"name_de":"Teigwaren eifrei, Ravioli (Gemüsefüllung) in Tomatensoße, Konserve","name_en":"Pasta egg-free, Ravioli (vegetable filling) in tomato sauce, canned","bls_code":"E911000","warengruppe":"E"}
+{"name_de":"Mehrfruchtsaft","name_en":"Multi-fruit juice","bls_code":"F010600","warengruppe":"F"}
+{"name_de":"Mehrfruchtnektar","name_en":"Mixed fruit nectar","bls_code":"F012700","warengruppe":"F"}
+{"name_de":"Mehrfruchtnektar mit Süßungsmitteln","name_en":"Mixed fruit nectar with artificial sweeteners","bls_code":"F013700","warengruppe":"F"}
+{"name_de":"Mehrfruchtsaft angereichert mit Vitaminen (Multivitaminsaft)","name_en":"Multi-fruit juice fortified with vitamins (multivitamin juice)","bls_code":"F014600","warengruppe":"F"}
+{"name_de":"Mehrfruchtsaft angereichert mit Vitaminen und Mineralstoffen","name_en":"Multi-fruit juice fortified with vitamins and minerals","bls_code":"F016600","warengruppe":"F"}
+{"name_de":"Roter Mehrfruchtsaft","name_en":"Red multi-fruit juice","bls_code":"F020600","warengruppe":"F"}
+{"name_de":"Roter Mehrfruchtsaft angereichert mit Vitaminen (Roter Multivitaminsaft)","name_en":"Red multi-fruit juice fortified with vitamins (red multivitamin juice)","bls_code":"F021600","warengruppe":"F"}
+{"name_de":"Mehrfruchtnektar, angereichert mit Vitaminen (Multivitaminnektar)","name_en":"Mixed fruit nectar, fortified with vitamins (multivitamin nectar)","bls_code":"F022700","warengruppe":"F"}
+{"name_de":"Mehrfruchtnektar mit Süßungsmitteln, angereichert mit Vitaminen (Multivitaminnektar)","name_en":"Mixed fruit nectar with artificial sweeteners, fortified with vitamins (multivitamin nectar)","bls_code":"F023700","warengruppe":"F"}
+{"name_de":"Smoothie purpur (Früchte)","name_en":"Smoothie of purple fruits","bls_code":"F032600","warengruppe":"F"}
+{"name_de":"Smoothie gelb (Früchte)","name_en":"Smoothie of yellow fruits","bls_code":"F033600","warengruppe":"F"}
+{"name_de":"Smoothie grün (Früchte/Gemüse)","name_en":"Smoothie of green fruits and vegetables","bls_code":"F034600","warengruppe":"F"}
+{"name_de":"Rhabarber roh","name_en":"Rhubarb raw","bls_code":"F081100","warengruppe":"F"}
+{"name_de":"Rhabarbersaft","name_en":"Rhubarb juice","bls_code":"F081600","warengruppe":"F"}
+{"name_de":"Rhabarber gezuckert, Konserve, abgetropft","name_en":"Rhubarb sugared, canned, drained","bls_code":"F081902","warengruppe":"F"}
+{"name_de":"Rhabarber ungesüßt, Konserve, abgetropft","name_en":"Rhubarb unsweetened, canned, drained","bls_code":"F083902","warengruppe":"F"}
+{"name_de":"Fruchtmischung gezuckert, roh","name_en":"Mixed fruit sugared, raw","bls_code":"F090100","warengruppe":"F"}
+{"name_de":"Fruchtmischung getrocknet (Trockenfrucht-Mix)","name_en":"Mixed fruit dried","bls_code":"F090400","warengruppe":"F"}
+{"name_de":"Fruchtmischung/Fruchtcocktail, gezuckert, Konserve, abgetropft","name_en":"Fruit mix/fruit cocktail, sugared, canned, drained","bls_code":"F090902","warengruppe":"F"}
+{"name_de":"Fruchtmischung ungesüßt, roh","name_en":"Mixed fruit unsweetened","bls_code":"F091100","warengruppe":"F"}
+{"name_de":"Fruchtmischung/Fruchtcocktail, in Fruchtsaft, Konserve, abgetropft","name_en":"Fruit mix/fruit cocktail, in juice, canned, drained","bls_code":"F091902","warengruppe":"F"}
+{"name_de":"Beerenmischung mit Sauerkirschen, ungesüßt, roh","name_en":"Berry mix with sour cherries, unsweetened, raw","bls_code":"F092100","warengruppe":"F"}
+{"name_de":"Beerenmischung mit Sauerkirschen, ungesüßt, gedünstet","name_en":"Berry mix with sour cherries, unsweetened, stewed","bls_code":"F092152","warengruppe":"F"}
+{"name_de":"Fruchtmischung/Fruchtcocktail, mit Süßungsmitteln, Konserve, abgetropft","name_en":"Fruit mix/fruit cocktail, with artificial sweeteners, canned, drained","bls_code":"F092902","warengruppe":"F"}
+{"name_de":"Fruchtmischung/Fruchtcocktail, ungesüßt, Konserve, abgetropft","name_en":"Fruit mix/fruit cocktail, unsweetened, canned, drained","bls_code":"F093902","warengruppe":"F"}
+{"name_de":"Apfel roh","name_en":"Apple raw","bls_code":"F110100","warengruppe":"F"}
+{"name_de":"Apfel gedünstet","name_en":"Apple stewed","bls_code":"F110152","warengruppe":"F"}
+{"name_de":"Apfel getrocknet","name_en":"Apple dried","bls_code":"F110400","warengruppe":"F"}
+{"name_de":"Apfelsaft","name_en":"Apple juice","bls_code":"F110600","warengruppe":"F"}
+{"name_de":"Apfelnektar","name_en":"Apple nectar","bls_code":"F110700","warengruppe":"F"}
+{"name_de":"Apfelsaft angereichert mit Vitamin C","name_en":"Apple juice fortified with vitamin C","bls_code":"F112600","warengruppe":"F"}
+{"name_de":"Apfelnektar mit Süßungsmitteln","name_en":"Apple nectar with artificial sweeteners","bls_code":"F116600","warengruppe":"F"}
+{"name_de":"Apfel ungesüßt, Konserve, abgetropft","name_en":"Apple unsweetened, canned, drained","bls_code":"F119902","warengruppe":"F"}
+{"name_de":"Apfel geschält, roh","name_en":"Apple peeled, raw","bls_code":"F120100","warengruppe":"F"}
+{"name_de":"Apfel geschält, gedünstet","name_en":"Apple peeled, stewed","bls_code":"F120152","warengruppe":"F"}
+{"name_de":"Apfel geschält, getrocknet","name_en":"Apple peeled, dried","bls_code":"F120400","warengruppe":"F"}
+{"name_de":"Birne roh","name_en":"Pear raw","bls_code":"F130100","warengruppe":"F"}
+{"name_de":"Birne gedünstet","name_en":"Pear stewed","bls_code":"F130152","warengruppe":"F"}
+{"name_de":"Birne getrocknet","name_en":"Pear dried","bls_code":"F130400","warengruppe":"F"}
+{"name_de":"Birnensaft","name_en":"Pear juice","bls_code":"F130600","warengruppe":"F"}
+{"name_de":"Birne gezuckert, Konserve, abgetropft","name_en":"Pear sugared, canned, drained","bls_code":"F130902","warengruppe":"F"}
+{"name_de":"Birne ungesüßt, Konserve, abgetropft","name_en":"Pear unsweetened, canned, drained","bls_code":"F131902","warengruppe":"F"}
+{"name_de":"Birne mit Süßungsmitteln, Konserve, abgetropft","name_en":"Pear with artificial sweeteners, canned, drained","bls_code":"F133902","warengruppe":"F"}
+{"name_de":"Birne in Fruchtsaft, Konserve, abgetropft","name_en":"Pear in juice, canned, drained","bls_code":"F134902","warengruppe":"F"}
+{"name_de":"Quitte roh","name_en":"Quince raw","bls_code":"F140100","warengruppe":"F"}
+{"name_de":"Quitte gekocht","name_en":"Quince boiled","bls_code":"F140132","warengruppe":"F"}
+{"name_de":"Quitte gedünstet","name_en":"Quince stewed","bls_code":"F140152","warengruppe":"F"}
+{"name_de":"Quittensaft","name_en":"Quince juice","bls_code":"F140600","warengruppe":"F"}
+{"name_de":"Mispel roh","name_en":"Medlar raw","bls_code":"F150100","warengruppe":"F"}
+{"name_de":"Aprikose roh","name_en":"Apricot raw","bls_code":"F201100","warengruppe":"F"}
+{"name_de":"Aprikose gedünstet","name_en":"Apricot stewed","bls_code":"F201152","warengruppe":"F"}
+{"name_de":"Aprikose getrocknet","name_en":"Apricot dried","bls_code":"F201400","warengruppe":"F"}
+{"name_de":"Aprikosensaft","name_en":"Apricot juice","bls_code":"F201600","warengruppe":"F"}
+{"name_de":"Aprikose gezuckert, Konserve, abgetropft","name_en":"Apricot sugared, canned, drained","bls_code":"F201902","warengruppe":"F"}
+{"name_de":"Nektarine roh","name_en":"Nectarine raw","bls_code":"F202100","warengruppe":"F"}
+{"name_de":"Nektarine gedünstet","name_en":"Nectarine stewed","bls_code":"F202152","warengruppe":"F"}
+{"name_de":"Pfirsich roh","name_en":"Peach raw","bls_code":"F203100","warengruppe":"F"}
+{"name_de":"Pfirsich gedünstet","name_en":"Peach stewed","bls_code":"F203152","warengruppe":"F"}
+{"name_de":"Pfirsich getrocknet","name_en":"Peach dried","bls_code":"F203400","warengruppe":"F"}
+{"name_de":"Pfirsichnektar","name_en":"Peach nectar","bls_code":"F203700","warengruppe":"F"}
+{"name_de":"Pfirsich gezuckert, Konserve, abgetropft","name_en":"Peach sugared, canned, drained","bls_code":"F203902","warengruppe":"F"}
+{"name_de":"Pfirsich in Fruchtsaft, Konserve, abgetropft","name_en":"Peach in juice, canned, drained","bls_code":"F206902","warengruppe":"F"}
+{"name_de":"Pfirsich mit Süßungsmitteln, Konserve, abgetropft","name_en":"Peach with artificial sweeteners, canned, drained","bls_code":"F207902","warengruppe":"F"}
+{"name_de":"Pfirsich ungesüßt, Konserve, abgetropft","name_en":"Peach unsweetened, canned, drained","bls_code":"F208902","warengruppe":"F"}
+{"name_de":"Süßkirsche ungesüßt, Konserve, abgetropft","name_en":"Sweet cherry unsweetened, canned, drained","bls_code":"F210902","warengruppe":"F"}
+{"name_de":"Süßkirsche roh","name_en":"Sweet cherry raw","bls_code":"F211100","warengruppe":"F"}
+{"name_de":"Süßkirsche gedünstet","name_en":"Sweet cherry stewed","bls_code":"F211152","warengruppe":"F"}
+{"name_de":"Süßkirsche getrocknet","name_en":"Sweet cherry dried","bls_code":"F211400","warengruppe":"F"}
+{"name_de":"Süßkirschsaft","name_en":"Sweet cherry juice","bls_code":"F211600","warengruppe":"F"}
+{"name_de":"Süßkirsche gezuckert, Konserve, abgetropft","name_en":"Sweet cherry sugared, canned, drained","bls_code":"F211902","warengruppe":"F"}
+{"name_de":"Sauerkirsche roh","name_en":"Sour cherry raw","bls_code":"F212100","warengruppe":"F"}
+{"name_de":"Sauerkirsche gedünstet","name_en":"Sour cherry stewed","bls_code":"F212152","warengruppe":"F"}
+{"name_de":"Sauerkirschsaft","name_en":"Sour cherry juice","bls_code":"F212600","warengruppe":"F"}
+{"name_de":"Sauerkirschnektar","name_en":"Sour cherry nectar","bls_code":"F212700","warengruppe":"F"}
+{"name_de":"Sauerkirsche gezuckert, Konserve, abgetropft","name_en":"Sour cherry sugared, canned, drained","bls_code":"F212902","warengruppe":"F"}
+{"name_de":"Sauerkirsche ungesüßt, Konserve, abgetropft","name_en":"Sour cherry unsweetened, canned, drained","bls_code":"F213902","warengruppe":"F"}
+{"name_de":"Sauerkirsche mit Süßungsmitteln, Konserve, abgetropft","name_en":"Sour cherry with artificial sweeteners, canned, drained","bls_code":"F217902","warengruppe":"F"}
+{"name_de":"Pflaume roh","name_en":"Plum raw","bls_code":"F220100","warengruppe":"F"}
+{"name_de":"Pflaume gedünstet","name_en":"Plum stewed","bls_code":"F220152","warengruppe":"F"}
+{"name_de":"Pflaume getrocknet","name_en":"Plum dried (prunes)","bls_code":"F220400","warengruppe":"F"}
+{"name_de":"Pflaumensaft","name_en":"Plum juice","bls_code":"F220600","warengruppe":"F"}
+{"name_de":"Pflaume gezuckert, Konserve, abgetropft","name_en":"Plum sugared, canned, drained","bls_code":"F220902","warengruppe":"F"}
+{"name_de":"Zwetschge roh","name_en":"Blue plum raw","bls_code":"F223100","warengruppe":"F"}
+{"name_de":"Zwetschge gedünstet","name_en":"Blue plum stewed","bls_code":"F223152","warengruppe":"F"}
+{"name_de":"Mirabelle roh","name_en":"Mirabelle plum raw","bls_code":"F224100","warengruppe":"F"}
+{"name_de":"Mirabelle gedünstet","name_en":"Mirabelle plum stewed","bls_code":"F224152","warengruppe":"F"}
+{"name_de":"Mirabelle gezuckert, Konserve, abgetropft","name_en":"Mirabelle plum sugared, canned, drained","bls_code":"F224902","warengruppe":"F"}
+{"name_de":"Reineclaude roh","name_en":"Greengage raw","bls_code":"F225100","warengruppe":"F"}
+{"name_de":"Reineclaude gedünstet","name_en":"Greengage stewed","bls_code":"F225152","warengruppe":"F"}
+{"name_de":"Pflaume mit Süßungsmitteln, Konserve, abgetropft","name_en":"Plum with artificial sweeteners, canned, drained","bls_code":"F227902","warengruppe":"F"}
+{"name_de":"Pflaume ungesüßt, Konserve, abgetropft","name_en":"Plum unsweetened, canned, drained","bls_code":"F22A902","warengruppe":"F"}
+{"name_de":"Mirabelle mit Süßungsmitteln, Konserve, abgetropft","name_en":"Mirabelle plum with artificial sweeteners, canned, drained","bls_code":"F22B902","warengruppe":"F"}
+{"name_de":"Mirabelle ungesüßt, Konserve, abgetropft","name_en":"Mirabelle plum unsweetened, canned, drained","bls_code":"F22C902","warengruppe":"F"}
+{"name_de":"Süßkirsche mit Süßungsmitteln, Konserve, abgetropft","name_en":"Sweet cherry with artificial sweeteners, canned, drained","bls_code":"F240902","warengruppe":"F"}
+{"name_de":"Aprikose in Fruchtsaft, Konserve, abgetropft","name_en":"Apricot in juice, canned, drained","bls_code":"F2A1902","warengruppe":"F"}
+{"name_de":"Sauerkirschnektar mit Süßungsmitteln","name_en":"Sour cherry nectar with artificial sweeteners","bls_code":"F2A2700","warengruppe":"F"}
+{"name_de":"Aprikose mit Süßungsmitteln, Konserve, abgetropft","name_en":"Apricot with artificial sweeteners, canned, drained","bls_code":"F2B1902","warengruppe":"F"}
+{"name_de":"Aprikose ungesüßt, Konserve, abgetropft","name_en":"Apricot unsweetened, canned, drained","bls_code":"F2C1902","warengruppe":"F"}
+{"name_de":"Erdbeere roh","name_en":"Strawberry raw","bls_code":"F301100","warengruppe":"F"}
+{"name_de":"Erdbeere gedünstet","name_en":"Strawberry stewed","bls_code":"F301152","warengruppe":"F"}
+{"name_de":"Erdbeere getrocknet","name_en":"Strawberry dried","bls_code":"F301400","warengruppe":"F"}
+{"name_de":"Erdbeersaft","name_en":"Strawberry juice","bls_code":"F301600","warengruppe":"F"}
+{"name_de":"Erdbeere gezuckert, Konserve, abgetropft","name_en":"Strawberry sugared, canned, drained","bls_code":"F301902","warengruppe":"F"}
+{"name_de":"Himbeere roh","name_en":"Raspberry raw","bls_code":"F302100","warengruppe":"F"}
+{"name_de":"Himbeere gedünstet","name_en":"Raspberry stewed","bls_code":"F302152","warengruppe":"F"}
+{"name_de":"Himbeere getrocknet","name_en":"Raspberry dried","bls_code":"F302400","warengruppe":"F"}
+{"name_de":"Himbeersaft","name_en":"Raspberry juice","bls_code":"F302600","warengruppe":"F"}
+{"name_de":"Himbeere gezuckert, Konserve, abgetropft","name_en":"Raspberry sugared, canned, drained","bls_code":"F302902","warengruppe":"F"}
+{"name_de":"Brombeere roh","name_en":"Blackberry raw","bls_code":"F303100","warengruppe":"F"}
+{"name_de":"Brombeere gedünstet","name_en":"Blackberry stewed","bls_code":"F303152","warengruppe":"F"}
+{"name_de":"Brombeere getrocknet","name_en":"Blackberry dried","bls_code":"F303400","warengruppe":"F"}
+{"name_de":"Brombeersaft","name_en":"Blackberry juice","bls_code":"F303600","warengruppe":"F"}
+{"name_de":"Brombeere gezuckert, Konserve, abgetropft","name_en":"Blackberry sugared, canned, drained","bls_code":"F303902","warengruppe":"F"}
+{"name_de":"Heidelbeere roh","name_en":"Blueberry raw","bls_code":"F304100","warengruppe":"F"}
+{"name_de":"Heidelbeere gedünstet","name_en":"Blueberry stewed","bls_code":"F304152","warengruppe":"F"}
+{"name_de":"Heidelbeersaft","name_en":"Blueberry juice","bls_code":"F304600","warengruppe":"F"}
+{"name_de":"Heidelbeere gezuckert, Konserve, abgetropft","name_en":"Blueberry sugared, canned, drained","bls_code":"F304902","warengruppe":"F"}
+{"name_de":"Stachelbeere roh","name_en":"Gooseberry raw","bls_code":"F305100","warengruppe":"F"}
+{"name_de":"Stachelbeere gedünstet","name_en":"Gooseberry stewed","bls_code":"F305152","warengruppe":"F"}
+{"name_de":"Stachelbeere gezuckert, Konserve, abgetropft","name_en":"Gooseberry sugared, canned, drained","bls_code":"F305902","warengruppe":"F"}
+{"name_de":"Loganbeere roh","name_en":"Loganberry raw","bls_code":"F306100","warengruppe":"F"}
+{"name_de":"Boysenbeere roh","name_en":"Boysenberry raw","bls_code":"F307100","warengruppe":"F"}
+{"name_de":"Weintraube roh","name_en":"Grape raw","bls_code":"F310100","warengruppe":"F"}
+{"name_de":"Traubensaft","name_en":"Grape juice","bls_code":"F310600","warengruppe":"F"}
+{"name_de":"Weintraube rot, roh","name_en":"Grape red, raw","bls_code":"F311100","warengruppe":"F"}
+{"name_de":"Traubensaft rot","name_en":"Grape red juice","bls_code":"F311600","warengruppe":"F"}
+{"name_de":"Weintraube weiß, roh","name_en":"Grape white, raw","bls_code":"F312100","warengruppe":"F"}
+{"name_de":"Traubensaft weiß","name_en":"Grape white juice","bls_code":"F312600","warengruppe":"F"}
+{"name_de":"Weintraube weiß, ungesüßt, Konserve, abgetropft","name_en":"Grape white, unsweetened, canned, drained","bls_code":"F313902","warengruppe":"F"}
+{"name_de":"Traubensaft angereichert mit Eisen","name_en":"Grape juice fortified with iron","bls_code":"F317600","warengruppe":"F"}
+{"name_de":"Johannisbeere rot, roh","name_en":"Red currant raw","bls_code":"F321100","warengruppe":"F"}
+{"name_de":"Johannisbeere rot, gedünstet","name_en":"Red currant stewed","bls_code":"F321152","warengruppe":"F"}
+{"name_de":"Johannisbeersaft rot","name_en":"Red currant juice","bls_code":"F321600","warengruppe":"F"}
+{"name_de":"Johannisbeere rot, gezuckert, Konserve, abgetropft","name_en":"Red currant sugared, canned, drained","bls_code":"F321902","warengruppe":"F"}
+{"name_de":"Johannisbeere weiß, roh","name_en":"White currant raw","bls_code":"F322100","warengruppe":"F"}
+{"name_de":"Johannisbeere schwarz roh","name_en":"Black currant raw","bls_code":"F323100","warengruppe":"F"}
+{"name_de":"Johannisbeere schwarz gedünstet","name_en":"Black currant stewed","bls_code":"F323152","warengruppe":"F"}
+{"name_de":"Johannisbeersaft schwarz","name_en":"Black currant juice","bls_code":"F323600","warengruppe":"F"}
+{"name_de":"Johannisbeernektar schwarz","name_en":"Black currant nectar","bls_code":"F323700","warengruppe":"F"}
+{"name_de":"Johannisbeere schwarz, gezuckert, Konserve, abgetropft","name_en":"Black currant sugared, canned, drained","bls_code":"F323902","warengruppe":"F"}
+{"name_de":"Johannisbeere rot, ungesüßt, Konserve, abgetropft","name_en":"Red currant unsweetened, canned, drained","bls_code":"F324902","warengruppe":"F"}
+{"name_de":"Maulbeere roh","name_en":"Mulberry raw","bls_code":"F331100","warengruppe":"F"}
+{"name_de":"Maulbeersaft","name_en":"Mulberry juice","bls_code":"F331600","warengruppe":"F"}
+{"name_de":"Erdbeere ungesüßt, Konserve, abgetropft","name_en":"Strawberry unsweetened, canned, drained","bls_code":"F340902","warengruppe":"F"}
+{"name_de":"Erdbeere mit Süßungsmitteln, Konserve, abgetropft","name_en":"Strawberry with artificial sweeteners, canned, drained","bls_code":"F341902","warengruppe":"F"}
+{"name_de":"Himbeere mit Süßungsmitteln, Konserve, abgetropft","name_en":"Raspberry with artificial sweeteners, canned, drained","bls_code":"F3A2902","warengruppe":"F"}
+{"name_de":"Johannisbeernektar schwarz, mit Süßungsmitteln","name_en":"Black currant nectar with artificial sweeteners","bls_code":"F3A3700","warengruppe":"F"}
+{"name_de":"Brombeere ungesüßt, Konserve, abgetropft","name_en":"Blackberry unsweetened, canned, drained","bls_code":"F3A3902","warengruppe":"F"}
+{"name_de":"Heidelbeere mit Süßungsmitteln, Konserve, abgetropft","name_en":"Blueberry with artificial sweeteners, canned, drained","bls_code":"F3A4902","warengruppe":"F"}
+{"name_de":"Stachelbeere mit Süßungsmitteln, Konserve, abgetropft","name_en":"Gooseberry with artificial sweeteners, canned, drained","bls_code":"F3A5902","warengruppe":"F"}
+{"name_de":"Himbeere ungesüßt, Konserve, abgetropft","name_en":"Raspberry unsweetened, canned, drained","bls_code":"F3B2902","warengruppe":"F"}
+{"name_de":"Heidelbeere ungesüßt, Konserve, abgetropft","name_en":"Blueberry unsweetened, canned, drained","bls_code":"F3B4902","warengruppe":"F"}
+{"name_de":"Stachelbeere ungesüßt, Konserve, abgetropft","name_en":"Gooseberry unsweetened, canned, drained","bls_code":"F3B5902","warengruppe":"F"}
+{"name_de":"Preiselbeere roh","name_en":"Lingonberry raw","bls_code":"F401100","warengruppe":"F"}
+{"name_de":"Preiselbeersaft","name_en":"Lingonberry juice","bls_code":"F401600","warengruppe":"F"}
+{"name_de":"Preiselbeere gezuckert, Konserve, abgetropft","name_en":"Lingonberry sugared, canned, drained","bls_code":"F401902","warengruppe":"F"}
+{"name_de":"Hagebutte roh","name_en":"Rose hip raw","bls_code":"F402100","warengruppe":"F"}
+{"name_de":"Schlehe roh","name_en":"Sloe raw","bls_code":"F403100","warengruppe":"F"}
+{"name_de":"Schlehensaft","name_en":"Sloe fruit juice","bls_code":"F403600","warengruppe":"F"}
+{"name_de":"Eberesche süß, roh","name_en":"Sweet rowanberry raw","bls_code":"F404100","warengruppe":"F"}
+{"name_de":"Sanddornbeere roh","name_en":"Sea buckthorn berry raw","bls_code":"F405100","warengruppe":"F"}
+{"name_de":"Sanddornsaft","name_en":"Sea buckthorn berry juice","bls_code":"F405600","warengruppe":"F"}
+{"name_de":"Holunderbeere roh","name_en":"Elderberry raw","bls_code":"F406100","warengruppe":"F"}
+{"name_de":"Holundersaft","name_en":"Elderberry juice","bls_code":"F406600","warengruppe":"F"}
+{"name_de":"Moosbeere roh","name_en":"Small cranberry raw","bls_code":"F407100","warengruppe":"F"}
+{"name_de":"Moltebeere roh","name_en":"Cloudberry raw","bls_code":"F408000","warengruppe":"F"}
+{"name_de":"Wald-Erdbeere roh","name_en":"Wild strawberry raw","bls_code":"F409100","warengruppe":"F"}
+{"name_de":"Wald-Himbeere roh","name_en":"Wild raspberry raw","bls_code":"F411100","warengruppe":"F"}
+{"name_de":"Wald-Brombeere roh","name_en":"Wild blackberry raw","bls_code":"F413100","warengruppe":"F"}
+{"name_de":"Cranberries getrocknet, gezuckert","name_en":"Cranberries dried, sugared","bls_code":"F414400","warengruppe":"F"}
+{"name_de":"Preiselbeere gezuckert (mit Pektin) Konserve","name_en":"Lingonberry sugared (with pectine) canned","bls_code":"F4A1900","warengruppe":"F"}
+{"name_de":"Preiselbeere mit einer Zuckerart und Süßungsmitteln (mit Pektin) Konserve","name_en":"Lingonberry with sugar and artificial sweeteners (with pectine) canned","bls_code":"F4B1900","warengruppe":"F"}
+{"name_de":"Ananas roh","name_en":"Pineapple raw","bls_code":"F501100","warengruppe":"F"}
+{"name_de":"Ananas gedünstet","name_en":"Pineapple stewed","bls_code":"F501152","warengruppe":"F"}
+{"name_de":"Ananas getrocknet","name_en":"Pineapple dried","bls_code":"F501400","warengruppe":"F"}
+{"name_de":"Ananassaft","name_en":"Pineapple juice","bls_code":"F501600","warengruppe":"F"}
+{"name_de":"Ananas gezuckert, Konserve, abgetropft","name_en":"Pineapple sugared, canned, drained","bls_code":"F501902","warengruppe":"F"}
+{"name_de":"Avocado roh","name_en":"Avocado raw","bls_code":"F502100","warengruppe":"F"}
+{"name_de":"Banane roh","name_en":"Banana raw","bls_code":"F503100","warengruppe":"F"}
+{"name_de":"Banane getrocknet","name_en":"Banana dried","bls_code":"F503400","warengruppe":"F"}
+{"name_de":"Bananennektar","name_en":"Banana nectar","bls_code":"F503700","warengruppe":"F"}
+{"name_de":"Dattel roh","name_en":"Date raw","bls_code":"F504100","warengruppe":"F"}
+{"name_de":"Dattel getrocknet","name_en":"Date dried","bls_code":"F504400","warengruppe":"F"}
+{"name_de":"Feige roh","name_en":"Fig raw","bls_code":"F505100","warengruppe":"F"}
+{"name_de":"Feige getrocknet","name_en":"Fig dried","bls_code":"F505400","warengruppe":"F"}
+{"name_de":"Feige gezuckert, Konserve, abgetropft","name_en":"Fig sugared, canned, drained","bls_code":"F505902","warengruppe":"F"}
+{"name_de":"Granatapfel roh","name_en":"Pomegranate raw","bls_code":"F506100","warengruppe":"F"}
+{"name_de":"Kaki roh","name_en":"Persimmon raw","bls_code":"F507100","warengruppe":"F"}
+{"name_de":"Kakisaft","name_en":"Persimmon juice","bls_code":"F507600","warengruppe":"F"}
+{"name_de":"Maracuja/Passionsfrucht, roh","name_en":"Passion fruit raw","bls_code":"F508100","warengruppe":"F"}
+{"name_de":"Maracujasaft/Passionsfruchtsaft","name_en":"Passion fruit juice","bls_code":"F508600","warengruppe":"F"}
+{"name_de":"Maracujanektar/Passionsfruchtnektar","name_en":"Passion fruit nectar","bls_code":"F508700","warengruppe":"F"}
+{"name_de":"Acerola roh","name_en":"Acerola raw","bls_code":"F511100","warengruppe":"F"}
+{"name_de":"Acerolasaft","name_en":"Acerola juice","bls_code":"F511600","warengruppe":"F"}
+{"name_de":"Guave roh","name_en":"Guava raw","bls_code":"F513100","warengruppe":"F"}
+{"name_de":"Kiwi roh","name_en":"Kiwi fruit raw","bls_code":"F514100","warengruppe":"F"}
+{"name_de":"Kiwi gedünstet","name_en":"Kiwi stewed","bls_code":"F514152","warengruppe":"F"}
+{"name_de":"Kiwisaft","name_en":"Kiwi fruit juice","bls_code":"F514600","warengruppe":"F"}
+{"name_de":"Litschi roh","name_en":"Lychee raw","bls_code":"F515100","warengruppe":"F"}
+{"name_de":"Litschisaft","name_en":"Lychee juice","bls_code":"F515600","warengruppe":"F"}
+{"name_de":"Litschi gezuckert, Konserve, abgetropft","name_en":"Lychee sugared, canned, drained","bls_code":"F515902","warengruppe":"F"}
+{"name_de":"Mango roh","name_en":"Mango raw","bls_code":"F516100","warengruppe":"F"}
+{"name_de":"Mango getrocknet","name_en":"Mango dried","bls_code":"F516400","warengruppe":"F"}
+{"name_de":"Mangosaft","name_en":"Mango juice","bls_code":"F516600","warengruppe":"F"}
+{"name_de":"Mangonektar","name_en":"Mango nectar","bls_code":"F516700","warengruppe":"F"}
+{"name_de":"Mango gezuckert, Konserve, abgetropft","name_en":"Mango sugared, canned, drained","bls_code":"F516902","warengruppe":"F"}
+{"name_de":"Papaya roh","name_en":"Papaya raw","bls_code":"F517100","warengruppe":"F"}
+{"name_de":"Papaya getrocknet","name_en":"Papaya dried","bls_code":"F517400","warengruppe":"F"}
+{"name_de":"Papaya gezuckert, Konserve, abgetropft","name_en":"Papaya sugared, canned, drained","bls_code":"F517902","warengruppe":"F"}
+{"name_de":"Lulo/Naranjilla, roh","name_en":"Naranjilla raw","bls_code":"F522100","warengruppe":"F"}
+{"name_de":"Brotfrucht roh","name_en":"Breadfruit raw","bls_code":"F523100","warengruppe":"F"}
+{"name_de":"Cherimoya roh","name_en":"Cherimoya raw","bls_code":"F524100","warengruppe":"F"}
+{"name_de":"Japanische Wollmispel/Loquat, roh","name_en":"Japanese medlar/loquat, raw","bls_code":"F529100","warengruppe":"F"}
+{"name_de":"Netzmelone/Cantaloupmelone, roh","name_en":"Musk melon/cantaloup, raw","bls_code":"F532100","warengruppe":"F"}
+{"name_de":"Honigmelone roh","name_en":"Honeydew melon raw","bls_code":"F533100","warengruppe":"F"}
+{"name_de":"Honigmelonensaft","name_en":"Honeydew melon juice","bls_code":"F533600","warengruppe":"F"}
+{"name_de":"Wassermelone roh","name_en":"Watermelon raw","bls_code":"F535100","warengruppe":"F"}
+{"name_de":"Kochbanane roh","name_en":"Plantain raw","bls_code":"F545100","warengruppe":"F"}
+{"name_de":"Kochbanane gekocht","name_en":"Plantain boiled","bls_code":"F545132","warengruppe":"F"}
+{"name_de":"Kochbanane geschmort ohne Fett","name_en":"Plantain braised without fat","bls_code":"F545142","warengruppe":"F"}
+{"name_de":"Kochbanane gedünstet","name_en":"Plantain stewed","bls_code":"F545152","warengruppe":"F"}
+{"name_de":"Kochbanane gebacken","name_en":"Plantain baked","bls_code":"F545162","warengruppe":"F"}
+{"name_de":"Kochbanane gebraten ohne Fett (Pfanne)","name_en":"Plantain fried without fat (pan)","bls_code":"F545182","warengruppe":"F"}
+{"name_de":"Kochbanane getrocknet","name_en":"Plantain dried","bls_code":"F545400","warengruppe":"F"}
+{"name_de":"Jackfrucht roh","name_en":"Jackfruit raw","bls_code":"F549100","warengruppe":"F"}
+{"name_de":"Kapstachelbeere/Physalis, roh","name_en":"Cape gooseberry raw","bls_code":"F552100","warengruppe":"F"}
+{"name_de":"Kapstachelbeersaft/Physalissaft","name_en":"Cape gooseberry juice","bls_code":"F552600","warengruppe":"F"}
+{"name_de":"Karambole/Sternfrucht, roh","name_en":"Carambola/star fruit, raw","bls_code":"F553100","warengruppe":"F"}
+{"name_de":"Kaktusfeige roh","name_en":"Prickly pear raw","bls_code":"F556100","warengruppe":"F"}
+{"name_de":"Rambutan roh","name_en":"Rambutan raw","bls_code":"F559100","warengruppe":"F"}
+{"name_de":"Feijoa/Ananas-Guave, roh","name_en":"Feijoa/pineapple guava, raw","bls_code":"F563100","warengruppe":"F"}
+{"name_de":"Mangostane roh","name_en":"Mangosteen raw","bls_code":"F564100","warengruppe":"F"}
+{"name_de":"Mangostanesaft","name_en":"Mangosteen juice","bls_code":"F564600","warengruppe":"F"}
+{"name_de":"Tamarillo roh","name_en":"Tamarillo/tree tomato, raw","bls_code":"F572100","warengruppe":"F"}
+{"name_de":"Ananas ungesüßt, Konserve, abgetropft","name_en":"Pineapple unsweetened, canned, drained","bls_code":"F591902","warengruppe":"F"}
+{"name_de":"Ananas mit Süßungsmitteln, Konserve, abgetropft","name_en":"Pineapple with artificial sweeteners, canned, drained","bls_code":"F597902","warengruppe":"F"}
+{"name_de":"Ananas in Fruchtsaft, Konserve, abgetropft","name_en":"Pineapple in juice, canned, drained","bls_code":"F5A1902","warengruppe":"F"}
+{"name_de":"Zitrone roh","name_en":"Lemon raw","bls_code":"F601100","warengruppe":"F"}
+{"name_de":"Zitronensaft Konzentrat","name_en":"Lemon concentrate","bls_code":"F601300","warengruppe":"F"}
+{"name_de":"Zitronensaft","name_en":"Lemon juice","bls_code":"F601600","warengruppe":"F"}
+{"name_de":"Limette roh","name_en":"Lime raw","bls_code":"F602100","warengruppe":"F"}
+{"name_de":"Limettensaft Konzentrat","name_en":"Lime concentrate","bls_code":"F602300","warengruppe":"F"}
+{"name_de":"Limettensaft","name_en":"Lime juice","bls_code":"F602600","warengruppe":"F"}
+{"name_de":"Orange roh","name_en":"Orange raw","bls_code":"F603100","warengruppe":"F"}
+{"name_de":"Orangensaft","name_en":"Orange juice","bls_code":"F603600","warengruppe":"F"}
+{"name_de":"Orangennektar","name_en":"Orange nectar","bls_code":"F603700","warengruppe":"F"}
+{"name_de":"Grapefruit roh","name_en":"Grapefruit raw","bls_code":"F604100","warengruppe":"F"}
+{"name_de":"Grapefruitsaft","name_en":"Grapefruit juice","bls_code":"F604600","warengruppe":"F"}
+{"name_de":"Pampelmuse/Pomelo, roh","name_en":"Pomelo raw","bls_code":"F605100","warengruppe":"F"}
+{"name_de":"Pampelmusensaft/Pomelosaft","name_en":"Pomelo juice","bls_code":"F605600","warengruppe":"F"}
+{"name_de":"Mandarine roh","name_en":"Mandarin raw","bls_code":"F606100","warengruppe":"F"}
+{"name_de":"Mandarinensaft","name_en":"Mandarin juice","bls_code":"F606600","warengruppe":"F"}
+{"name_de":"Mandarine gezuckert, Konserve, abgetropft","name_en":"Mandarin sugared, canned, drained","bls_code":"F606902","warengruppe":"F"}
+{"name_de":"Clementine roh","name_en":"Clementine raw","bls_code":"F607100","warengruppe":"F"}
+{"name_de":"Clementinensaft","name_en":"Clementine juice","bls_code":"F607600","warengruppe":"F"}
+{"name_de":"Satsuma roh","name_en":"Satsuma mandarin raw","bls_code":"F608100","warengruppe":"F"}
+{"name_de":"Satsumasaft","name_en":"Satsuma mandarin juice","bls_code":"F608600","warengruppe":"F"}
+{"name_de":"Tangerine roh","name_en":"Tangerine raw","bls_code":"F609100","warengruppe":"F"}
+{"name_de":"Tangerinensaft","name_en":"Tangerine juice","bls_code":"F609600","warengruppe":"F"}
+{"name_de":"Kumquat roh","name_en":"Kumquat raw","bls_code":"F613100","warengruppe":"F"}
+{"name_de":"Orangennektar mit Süßungsmitteln","name_en":"Orange nectar with artificial sweeteners","bls_code":"F614600","warengruppe":"F"}
+{"name_de":"Mandarine ungesüßt, Konserve, abgetropft","name_en":"Mandarin unsweetened, canned, drained","bls_code":"F640902","warengruppe":"F"}
+{"name_de":"Mandarine in Fruchtsaft, Konserve, abgetropft","name_en":"Mandarin in juice, canned, drained","bls_code":"F6A6902","warengruppe":"F"}
+{"name_de":"Mandarine mit Süßungsmitteln, Konserve, abgetropft","name_en":"Mandarin with artificial sweeteners, canned, drained","bls_code":"F6B6902","warengruppe":"F"}
+{"name_de":"Fruchtschnitte/Fruchtriegel","name_en":"Fruit bar","bls_code":"F820000","warengruppe":"F"}
+{"name_de":"Rosine/Sultanine (Weinbeere getrocknet)","name_en":"Raisin/sultana (grape dried)","bls_code":"F840100","warengruppe":"F"}
+{"name_de":"Korinthe (Weinbeere getrocknet)","name_en":"Currant (grape dried)","bls_code":"F840300","warengruppe":"F"}
+{"name_de":"Bananenchips frittiert, gesüßt","name_en":"Banana crips/banana chips, deep-fried, sweetened","bls_code":"F850100","warengruppe":"F"}
+{"name_de":"Rote Grütze gezuckert, Konserve","name_en":"Red fruit jelly sugared, canned","bls_code":"F900900","warengruppe":"F"}
+{"name_de":"Apfelkompott/Apfelmus, gezuckert, Konserve","name_en":"Apple sauce/apple compote, sugared, canned","bls_code":"F921900","warengruppe":"F"}
+{"name_de":"Apfelkompott/Apfelmark, ungesüßt, Konserve","name_en":"Apple sauce/apple compote, unsweetened, canned","bls_code":"F923900","warengruppe":"F"}
+{"name_de":"Apfelkompott/Apfelmus, mit Süßungsmitteln, Konserve","name_en":"Apple sauce/apple compote, with artificial sweeteners, canned","bls_code":"F928900","warengruppe":"F"}
+{"name_de":"Rhabarberkompott mit einer Zuckerart und Süßungsmitteln, Konserve","name_en":"Rhubarb compote with sugar and artificial sweeteners, canned","bls_code":"F957900","warengruppe":"F"}
+{"name_de":"Cashewnussmus","name_en":"Cashew butter (100 % pure)","bls_code":"F960800","warengruppe":"F"}
+{"name_de":"Fruchtsoße gezuckert, Konserve","name_en":"Fruit sauce sugared, canned","bls_code":"F971900","warengruppe":"F"}
+{"name_de":"Kapern gesäuert, abgetropft","name_en":"Capers pickled, canned, drained","bls_code":"G012902","warengruppe":"G"}
+{"name_de":"Basilikum roh","name_en":"Basil raw","bls_code":"G061000","warengruppe":"G"}
+{"name_de":"Schnittlauch roh","name_en":"Chives raw","bls_code":"G081100","warengruppe":"G"}
+{"name_de":"Schnittlauch getrocknet","name_en":"Chives dried","bls_code":"G081400","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, roh","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) raw","bls_code":"G090100","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, gekocht","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) boiled","bls_code":"G090132","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, geschmort ohne Fett","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) braised without fat","bls_code":"G090142","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, gedünstet","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) stewed","bls_code":"G090152","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, gebacken","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) baked","bls_code":"G090162","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) fried without fat (pan)","bls_code":"G090182","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, tiefgefroren","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) deep-frozen","bls_code":"G090200","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, tiefgefroren, gekocht","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) deep-frozen, boiled","bls_code":"G090232","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, tiefgefroren, geschmort ohne Fett","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) deep-frozen, braised without fat","bls_code":"G090242","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, tiefgefroren, gedünstet","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) deep-frozen, stewed","bls_code":"G090252","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, tiefgefroren, gebacken","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) deep-frozen, baked","bls_code":"G090262","warengruppe":"G"}
+{"name_de":"Gemüsemischung Kaisergemüse, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables (carrots, cauliflower and broccoli florets) deep-frozen, fried without fat (pan)","bls_code":"G090282","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Gemüsemischung","name_en":"Mixed vegetables juice","bls_code":"G090600","warengruppe":"G"}
+{"name_de":"Gemüsemischung gesäuert (Puszta Salat) abgetropft","name_en":"Mixed vegetables pickled, drained","bls_code":"G090802","warengruppe":"G"}
+{"name_de":"Suppengrün/Suppenkraut, roh","name_en":"Mirepoix raw","bls_code":"G093100","warengruppe":"G"}
+{"name_de":"Suppengrün/Suppenkraut, gekocht","name_en":"Mirepoix boiled","bls_code":"G093132","warengruppe":"G"}
+{"name_de":"Suppengrün/Suppenkraut, tiefgefroren","name_en":"Mirepoix deep-frozen","bls_code":"G093200","warengruppe":"G"}
+{"name_de":"Suppengrün/Suppenkraut, tiefgefroren, gekocht","name_en":"Mirepoix deep-frozen, boiled","bls_code":"G093232","warengruppe":"G"}
+{"name_de":"Suppengrün/Suppenkraut, getrocknet","name_en":"Mirepoix dried","bls_code":"G093400","warengruppe":"G"}
+{"name_de":"Suppengrün/Suppenkraut, getrocknet, gekocht","name_en":"Mirepoix dried, boiled","bls_code":"G093432","warengruppe":"G"}
+{"name_de":"Chicoree roh","name_en":"Witloof chicory raw","bls_code":"G101100","warengruppe":"G"}
+{"name_de":"Chicoree gedünstet","name_en":"Witloof chicory stewed","bls_code":"G101152","warengruppe":"G"}
+{"name_de":"Chicoree gebacken","name_en":"Witloof chicory baked","bls_code":"G101162","warengruppe":"G"}
+{"name_de":"Chicoree gebraten ohne Fett (Pfanne)","name_en":"Witloof chicory fried without fat (pan)","bls_code":"G101182","warengruppe":"G"}
+{"name_de":"Endivie/Escariol, roh","name_en":"Endive/escarole, raw","bls_code":"G102100","warengruppe":"G"}
+{"name_de":"Eisbergsalat roh","name_en":"Iceberg lettuce raw","bls_code":"G103100","warengruppe":"G"}
+{"name_de":"Feldsalat/Rapunzel, roh","name_en":"Lamb's lettuce raw","bls_code":"G104100","warengruppe":"G"}
+{"name_de":"Kopfsalat roh","name_en":"Butterhead lettuce raw","bls_code":"G105100","warengruppe":"G"}
+{"name_de":"Radicchio roh","name_en":"Radicchio/red Italian chicory, raw","bls_code":"G106100","warengruppe":"G"}
+{"name_de":"Römischer Salat/Romanasalat, roh","name_en":"Cos lettuce/Romaine lettuce, raw","bls_code":"G107100","warengruppe":"G"}
+{"name_de":"Schnittsalat/Pflücksalat, roh","name_en":"Looseleaf lettuce raw","bls_code":"G108100","warengruppe":"G"}
+{"name_de":"Zuckerhutsalat roh","name_en":"Sugar loaf chicory raw","bls_code":"G109100","warengruppe":"G"}
+{"name_de":"Rucola roh","name_en":"Rocket raw","bls_code":"G130100","warengruppe":"G"}
+{"name_de":"Spinat gekocht","name_en":"Spinach boiled","bls_code":"G210132","warengruppe":"G"}
+{"name_de":"Spinat tiefgefroren, gekocht","name_en":"Spinach deep-frozen, boiled","bls_code":"G210232","warengruppe":"G"}
+{"name_de":"Spinat tiefgefroren, gedünstet","name_en":"Spinach deep-frozen, stewed","bls_code":"G210252","warengruppe":"G"}
+{"name_de":"Spinat tiefgefroren, gebacken","name_en":"Spinach deep-frozen, baked","bls_code":"G210262","warengruppe":"G"}
+{"name_de":"Spinat tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Spinach deep-frozen, fried without fat (pan)","bls_code":"G210282","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Spinat","name_en":"Spinach juice","bls_code":"G210600","warengruppe":"G"}
+{"name_de":"Spinat Konserve, abgetropft","name_en":"Spinach canned, drained","bls_code":"G210902","warengruppe":"G"}
+{"name_de":"Spinat roh","name_en":"Spinach raw","bls_code":"G211100","warengruppe":"G"}
+{"name_de":"Spinat gedünstet","name_en":"Spinach stewed","bls_code":"G211152","warengruppe":"G"}
+{"name_de":"Spinat gebacken","name_en":"Spinach baked","bls_code":"G211162","warengruppe":"G"}
+{"name_de":"Spinat gebraten ohne Fett (Pfanne)","name_en":"Spinach fried without fat (pan)","bls_code":"G211182","warengruppe":"G"}
+{"name_de":"Spinat tiefgefroren","name_en":"Spinach deep-frozen","bls_code":"G211200","warengruppe":"G"}
+{"name_de":"Gemüseamaranth roh","name_en":"Chinese spinach raw","bls_code":"G212100","warengruppe":"G"}
+{"name_de":"Gemüseamaranth gedünstet","name_en":"Chinese spinach stewed","bls_code":"G212152","warengruppe":"G"}
+{"name_de":"Gemüseamaranth gebraten ohne Fett (Pfanne)","name_en":"Chinese spinach fried without fat (pan)","bls_code":"G212182","warengruppe":"G"}
+{"name_de":"Neuseeländer Spinat roh","name_en":"New Zealand spinach raw","bls_code":"G213100","warengruppe":"G"}
+{"name_de":"Neuseeländer Spinat gekocht","name_en":"New Zealand spinach boiled","bls_code":"G213132","warengruppe":"G"}
+{"name_de":"Neuseeländer Spinat gedünstet","name_en":"New Zealand spinach stewed","bls_code":"G213152","warengruppe":"G"}
+{"name_de":"Neuseeländer Spinat gebraten ohne Fett (Pfanne)","name_en":"New Zealand spinach fried without fat (pan)","bls_code":"G213182","warengruppe":"G"}
+{"name_de":"Bleichsellerie roh","name_en":"Stalk celery raw","bls_code":"G220100","warengruppe":"G"}
+{"name_de":"Bleichsellerie gekocht","name_en":"Stalk celery boiled","bls_code":"G220132","warengruppe":"G"}
+{"name_de":"Bleichsellerie geschmort ohne Fett","name_en":"Stalk celery braised without fat","bls_code":"G220142","warengruppe":"G"}
+{"name_de":"Bleichsellerie gedünstet","name_en":"Stalk celery stewed","bls_code":"G220152","warengruppe":"G"}
+{"name_de":"Bleichsellerie gebacken","name_en":"Stalk celery baked","bls_code":"G220162","warengruppe":"G"}
+{"name_de":"Bleichsellerie gebraten ohne Fett (Pfanne)","name_en":"Stalk celery fried without fat (pan)","bls_code":"G221182","warengruppe":"G"}
+{"name_de":"Mangold roh","name_en":"Chard/leaf beet, raw","bls_code":"G230100","warengruppe":"G"}
+{"name_de":"Mangold gekocht","name_en":"Chard/leaf beet, boiled","bls_code":"G230132","warengruppe":"G"}
+{"name_de":"Mangold geschmort ohne Fett","name_en":"Chard/leaf beet, braised without fat","bls_code":"G230142","warengruppe":"G"}
+{"name_de":"Mangold gedünstet","name_en":"Chard/leaf beet, stewed","bls_code":"G230152","warengruppe":"G"}
+{"name_de":"Mangold gebacken","name_en":"Chard/leaf beet, baked","bls_code":"G230162","warengruppe":"G"}
+{"name_de":"Mangold gebraten ohne Fett (Pfanne)","name_en":"Chard/leaf beet, fried without fat (pan)","bls_code":"G230182","warengruppe":"G"}
+{"name_de":"Petersilienblatt roh","name_en":"Parsley leaf raw","bls_code":"G250100","warengruppe":"G"}
+{"name_de":"Petersilienblatt tiefgefroren","name_en":"Parsley leaf deep-frozen","bls_code":"G250200","warengruppe":"G"}
+{"name_de":"Petersilienblatt getrocknet","name_en":"Parsley leaf dried","bls_code":"G250400","warengruppe":"G"}
+{"name_de":"Brennnessel roh","name_en":"Stinging nettle raw","bls_code":"G261100","warengruppe":"G"}
+{"name_de":"Brennnessel gekocht","name_en":"Stinging nettle boiled","bls_code":"G261132","warengruppe":"G"}
+{"name_de":"Brennnessel gedünstet","name_en":"Stinging nettle stewed","bls_code":"G261152","warengruppe":"G"}
+{"name_de":"Löwenzahn roh","name_en":"Dandelion raw","bls_code":"G262100","warengruppe":"G"}
+{"name_de":"Sauerampfer roh","name_en":"Sorrel raw","bls_code":"G263100","warengruppe":"G"}
+{"name_de":"Sauerampfer gekocht","name_en":"Sorrel boiled","bls_code":"G263132","warengruppe":"G"}
+{"name_de":"Sauerampfer gedünstet","name_en":"Sorrel stewed","bls_code":"G263152","warengruppe":"G"}
+{"name_de":"Gartenkresse roh","name_en":"Garden cress raw","bls_code":"G280100","warengruppe":"G"}
+{"name_de":"Blumenkohl roh","name_en":"Cauliflower raw","bls_code":"G311100","warengruppe":"G"}
+{"name_de":"Blumenkohl gekocht","name_en":"Cauliflower boiled","bls_code":"G311132","warengruppe":"G"}
+{"name_de":"Blumenkohl gedämpft","name_en":"Cauliflower steamed","bls_code":"G311142","warengruppe":"G"}
+{"name_de":"Blumenkohl gedünstet","name_en":"Cauliflower stewed","bls_code":"G311152","warengruppe":"G"}
+{"name_de":"Blumenkohl gebacken","name_en":"Cauliflower baked","bls_code":"G311162","warengruppe":"G"}
+{"name_de":"Blumenkohl gebraten ohne Fett (Pfanne)","name_en":"Cauliflower fried without fat (pan)","bls_code":"G311182","warengruppe":"G"}
+{"name_de":"Blumenkohl tiefgefroren","name_en":"Cauliflower deep-frozen","bls_code":"G311200","warengruppe":"G"}
+{"name_de":"Blumenkohl tiefgefroren, gekocht","name_en":"Cauliflower deep-frozen, boiled","bls_code":"G311232","warengruppe":"G"}
+{"name_de":"Blumenkohl tiefgefroren, gedämpft","name_en":"Cauliflower deep-frozen, steamed","bls_code":"G311242","warengruppe":"G"}
+{"name_de":"Blumenkohl tiefgefroren, gedünstet","name_en":"Cauliflower deep-frozen, stewed","bls_code":"G311252","warengruppe":"G"}
+{"name_de":"Blumenkohl tiefgefroren, gebacken","name_en":"Cauliflower deep-frozen, baked","bls_code":"G311262","warengruppe":"G"}
+{"name_de":"Blumenkohl tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Cauliflower deep-frozen, fried without fat (pan)","bls_code":"G311282","warengruppe":"G"}
+{"name_de":"Blumenkohl gesäuert, abgetropft","name_en":"Cauliflower pickled, drained","bls_code":"G311802","warengruppe":"G"}
+{"name_de":"Broccoli roh","name_en":"Broccoli raw","bls_code":"G312100","warengruppe":"G"}
+{"name_de":"Broccoli gekocht","name_en":"Broccoli boiled","bls_code":"G312132","warengruppe":"G"}
+{"name_de":"Broccoli gedünstet","name_en":"Broccoli stewed","bls_code":"G312152","warengruppe":"G"}
+{"name_de":"Broccoli gebacken","name_en":"Broccoli baked","bls_code":"G312162","warengruppe":"G"}
+{"name_de":"Broccoli gebraten ohne Fett (Pfanne)","name_en":"Broccoli fried without fat (pan)","bls_code":"G312182","warengruppe":"G"}
+{"name_de":"Broccoli tiefgefroren","name_en":"Broccoli deep-frozen","bls_code":"G312200","warengruppe":"G"}
+{"name_de":"Broccoli tiefgefroren, gekocht","name_en":"Broccoli deep-frozen, boiled","bls_code":"G312232","warengruppe":"G"}
+{"name_de":"Broccoli tiefgefroren, gedünstet","name_en":"Broccoli deep-frozen, stewed","bls_code":"G312252","warengruppe":"G"}
+{"name_de":"Broccoli tiefgefroren, gebacken","name_en":"Broccoli deep-frozen, baked","bls_code":"G312262","warengruppe":"G"}
+{"name_de":"Broccoli tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Broccoli deep-frozen, fried without fat (pan)","bls_code":"G312282","warengruppe":"G"}
+{"name_de":"Chinakohl roh","name_en":"Chinese white cabbage raw","bls_code":"G321100","warengruppe":"G"}
+{"name_de":"Chinakohl gekocht","name_en":"Chinese white cabbage boiled","bls_code":"G321132","warengruppe":"G"}
+{"name_de":"Chinakohl gedünstet","name_en":"Chinese white cabbage stewed","bls_code":"G321152","warengruppe":"G"}
+{"name_de":"Chinakohl gebacken","name_en":"Chinese white cabbage baked","bls_code":"G321162","warengruppe":"G"}
+{"name_de":"Chinakohl gebraten ohne Fett (Pfanne)","name_en":"Chinese white cabbage fried without fat (pan)","bls_code":"G321182","warengruppe":"G"}
+{"name_de":"Grünkohl roh","name_en":"Curly kale raw","bls_code":"G322100","warengruppe":"G"}
+{"name_de":"Grünkohl gekocht","name_en":"Curly kale boiled","bls_code":"G322132","warengruppe":"G"}
+{"name_de":"Grünkohl gedämpft","name_en":"Curly kale steamed","bls_code":"G322142","warengruppe":"G"}
+{"name_de":"Grünkohl gedünstet","name_en":"Curly kale stewed","bls_code":"G322152","warengruppe":"G"}
+{"name_de":"Grünkohl gebraten ohne Fett (Pfanne)","name_en":"Curly kale fried without fat (pan)","bls_code":"G322182","warengruppe":"G"}
+{"name_de":"Grünkohl tiefgefroren","name_en":"Curly kale deep-frozen","bls_code":"G322200","warengruppe":"G"}
+{"name_de":"Grünkohl tiefgefroren, gekocht","name_en":"Curly kale deep-frozen, boiled","bls_code":"G322232","warengruppe":"G"}
+{"name_de":"Grünkohl tiefgefroren, gedämpft","name_en":"Curly kale deep-frozen, steamed","bls_code":"G322242","warengruppe":"G"}
+{"name_de":"Grünkohl tiefgefroren, gedünstet","name_en":"Curly kale deep-frozen, stewed","bls_code":"G322252","warengruppe":"G"}
+{"name_de":"Grünkohl tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Curly kale deep-frozen, fried without fat (pan)","bls_code":"G322282","warengruppe":"G"}
+{"name_de":"Grünkohl Konserve, abgetropft","name_en":"Curly kale canned, drained","bls_code":"G322902","warengruppe":"G"}
+{"name_de":"Pak Choi roh","name_en":"Pak choi raw","bls_code":"G324100","warengruppe":"G"}
+{"name_de":"Pak Choi gekocht","name_en":"Pak choi boiled","bls_code":"G324132","warengruppe":"G"}
+{"name_de":"Pak Choi gedünstet","name_en":"Pak choi stewed (prepard without fat)","bls_code":"G324152","warengruppe":"G"}
+{"name_de":"Pak Choi gebraten ohne Fett (Pfanne)","name_en":"Pak choi fried without fat (pan)","bls_code":"G324182","warengruppe":"G"}
+{"name_de":"Kohlrabi roh","name_en":"Kohlrabi raw","bls_code":"G331100","warengruppe":"G"}
+{"name_de":"Kohlrabi gekocht","name_en":"Kohlrabi boiled","bls_code":"G331132","warengruppe":"G"}
+{"name_de":"Kohlrabi gedünstet","name_en":"Kohlrabi stewed","bls_code":"G331152","warengruppe":"G"}
+{"name_de":"Kohlrabi gebacken","name_en":"Kohlrabi baked","bls_code":"G331162","warengruppe":"G"}
+{"name_de":"Kohlrabi gebraten ohne Fett (Pfanne)","name_en":"Kohlrabi fried without fat (pan)","bls_code":"G331182","warengruppe":"G"}
+{"name_de":"Kohlrabi Konserve, abgetropft","name_en":"Kohlrabi canned, drained","bls_code":"G331902","warengruppe":"G"}
+{"name_de":"Rosenkohl roh","name_en":"Brussels sprouts raw","bls_code":"G332100","warengruppe":"G"}
+{"name_de":"Rosenkohl gekocht","name_en":"Brussels sprouts boiled","bls_code":"G332132","warengruppe":"G"}
+{"name_de":"Rosenkohl gedünstet","name_en":"Brussels sprouts stewed","bls_code":"G332152","warengruppe":"G"}
+{"name_de":"Rosenkohl gebacken","name_en":"Brussels sprouts baked","bls_code":"G332162","warengruppe":"G"}
+{"name_de":"Rosenkohl gebraten ohne Fett (Pfanne)","name_en":"Brussels sprouts fried without fat (pan)","bls_code":"G332182","warengruppe":"G"}
+{"name_de":"Rosenkohl tiefgefroren","name_en":"Brussels sprouts deep-frozen","bls_code":"G332200","warengruppe":"G"}
+{"name_de":"Rosenkohl tiefgefroren, gekocht","name_en":"Brussels sprouts deep-frozen, boiled","bls_code":"G332232","warengruppe":"G"}
+{"name_de":"Rosenkohl tiefgefroren, gedünstet","name_en":"Brussels sprouts deep-frozen, stewed","bls_code":"G332252","warengruppe":"G"}
+{"name_de":"Rosenkohl tiefgefroren, gebacken","name_en":"Brussels sprouts deep-frozen, baked","bls_code":"G332262","warengruppe":"G"}
+{"name_de":"Rosenkohl Konserve, abgetropft","name_en":"Brussels sprouts canned, drained","bls_code":"G332902","warengruppe":"G"}
+{"name_de":"Rotkohl roh","name_en":"Red cabbage raw","bls_code":"G341100","warengruppe":"G"}
+{"name_de":"Rotkohl gekocht","name_en":"Red cabbage boiled","bls_code":"G341132","warengruppe":"G"}
+{"name_de":"Rotkohl geschmort ohne Fett","name_en":"Red cabbage braised without fat","bls_code":"G341142","warengruppe":"G"}
+{"name_de":"Rotkohl gedünstet","name_en":"Red cabbage stewed","bls_code":"G341152","warengruppe":"G"}
+{"name_de":"Rotkohl gebacken","name_en":"Red cabbage baked","bls_code":"G341162","warengruppe":"G"}
+{"name_de":"Rotkohl gebraten ohne Fett (Pfanne)","name_en":"Red cabbage fried without fat (pan)","bls_code":"G341182","warengruppe":"G"}
+{"name_de":"Rotkohlgemüse (küchenfertig) Konserve","name_en":"Red cabbage canned undrained","bls_code":"G341900","warengruppe":"G"}
+{"name_de":"Weißkohl roh","name_en":"White cabbage raw","bls_code":"G342100","warengruppe":"G"}
+{"name_de":"Weißkohl gekocht","name_en":"White cabbage boiled","bls_code":"G342132","warengruppe":"G"}
+{"name_de":"Weißkohl geschmort ohne Fett","name_en":"White cabbage braised without fat","bls_code":"G342142","warengruppe":"G"}
+{"name_de":"Weißkohl gedünstet","name_en":"White cabbage stewed","bls_code":"G342152","warengruppe":"G"}
+{"name_de":"Weißkohl gebacken","name_en":"White cabbage baked","bls_code":"G342162","warengruppe":"G"}
+{"name_de":"Weißkohl gebraten ohne Fett (Pfanne)","name_en":"White cabbage fried without fat (pan)","bls_code":"G342182","warengruppe":"G"}
+{"name_de":"Wirsing roh","name_en":"Savoy cabbage raw","bls_code":"G343100","warengruppe":"G"}
+{"name_de":"Wirsing gekocht","name_en":"Savoy cabbage boiled","bls_code":"G343132","warengruppe":"G"}
+{"name_de":"Wirsing geschmort ohne Fett","name_en":"Savoy cabbage braised without fat","bls_code":"G343142","warengruppe":"G"}
+{"name_de":"Wirsing gedünstet","name_en":"Savoy cabbage stewed","bls_code":"G343152","warengruppe":"G"}
+{"name_de":"Wirsing gebacken","name_en":"Savoy cabbage baked","bls_code":"G343162","warengruppe":"G"}
+{"name_de":"Wirsing gebraten ohne Fett (Pfanne)","name_en":"Savoy cabbage fried without fat (pan)","bls_code":"G343182","warengruppe":"G"}
+{"name_de":"Wirsing Konserve, abgetropft","name_en":"Savoy cabbage canned, drained","bls_code":"G343902","warengruppe":"G"}
+{"name_de":"Spitzkohl roh","name_en":"Pointed cabbage raw","bls_code":"G344100","warengruppe":"G"}
+{"name_de":"Spitzkohl gekocht","name_en":"Pointed cabbage boiled","bls_code":"G344132","warengruppe":"G"}
+{"name_de":"Spitzkohl gedünstet","name_en":"Pointed cabbage stewed","bls_code":"G344152","warengruppe":"G"}
+{"name_de":"Spitzkohl gebacken","name_en":"Pointed cabbage baked","bls_code":"G344162","warengruppe":"G"}
+{"name_de":"Spitzkohl gebraten ohne Fett (Pfanne)","name_en":"Pointed cabbage fried without fat (pan)","bls_code":"G344182","warengruppe":"G"}
+{"name_de":"Sauerkraut abgetropft, gekocht","name_en":"Sauerkraut drained, boiled","bls_code":"G345032","warengruppe":"G"}
+{"name_de":"Sauerkraut abgetropft, geschmort ohne Fett","name_en":"Sauerkraut drained, braised without fat","bls_code":"G345042","warengruppe":"G"}
+{"name_de":"Sauerkraut abgetropft, gebacken","name_en":"Sauerkraut drained, baked","bls_code":"G345062","warengruppe":"G"}
+{"name_de":"Sauerkraut abgetropft, gebraten ohne Fett (Pfanne)","name_en":"Sauerkraut drained, fried without fat (pan)","bls_code":"G345082","warengruppe":"G"}
+{"name_de":"Sauerkraut abgetropft, roh","name_en":"Sauerkraut drained, raw","bls_code":"G345100","warengruppe":"G"}
+{"name_de":"Sauerkraut abgetropft, gedünstet","name_en":"Sauerkraut drained, stewed","bls_code":"G345152","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Sauerkraut","name_en":"Sauerkraut juice","bls_code":"G345600","warengruppe":"G"}
+{"name_de":"Sauerkraut Konserve, abgetropft","name_en":"Sauerkraut canned, drained","bls_code":"G345902","warengruppe":"G"}
+{"name_de":"Weinsauerkraut roh","name_en":"Wine sauerkraut raw","bls_code":"G346100","warengruppe":"G"}
+{"name_de":"Weinsauerkraut gekocht","name_en":"Wine sauerkraut boiled","bls_code":"G346132","warengruppe":"G"}
+{"name_de":"Weinsauerkraut gedünstet","name_en":"Wine sauerkraut stewed","bls_code":"G346152","warengruppe":"G"}
+{"name_de":"Romanesco roh","name_en":"Romanesco broccoli raw","bls_code":"G350100","warengruppe":"G"}
+{"name_de":"Romanesco gekocht","name_en":"Romanesco broccoli boiled","bls_code":"G350132","warengruppe":"G"}
+{"name_de":"Romanesco gedünstet","name_en":"Romanesco broccoli stewed","bls_code":"G350152","warengruppe":"G"}
+{"name_de":"Romanesco gebacken","name_en":"Romanesco broccoli baked","bls_code":"G350162","warengruppe":"G"}
+{"name_de":"Romanesco gebraten ohne Fett (Pfanne)","name_en":"Romanesco broccoli fried without fat (pan)","bls_code":"G350182","warengruppe":"G"}
+{"name_de":"Artischocke roh","name_en":"Artichokes raw","bls_code":"G410100","warengruppe":"G"}
+{"name_de":"Artischocke gekocht","name_en":"Artichokes boiled","bls_code":"G410132","warengruppe":"G"}
+{"name_de":"Artischocke in Öl, Konserve, abgetropft","name_en":"Artichokes in oil, canned, drained","bls_code":"G410702","warengruppe":"G"}
+{"name_de":"Artischocke in Öl, Konserve, abgetropft gekocht","name_en":"Artichokes in oil, canned, drained boiled","bls_code":"G410732","warengruppe":"G"}
+{"name_de":"Artischocke Konserve, abgetropft","name_en":"Artichokes canned, drained","bls_code":"G410902","warengruppe":"G"}
+{"name_de":"Gemüseartischocke/Kardone, roh","name_en":"Cardoon raw","bls_code":"G414100","warengruppe":"G"}
+{"name_de":"Gemüseartischocke/Kardone, gekocht","name_en":"Cardoon boiled","bls_code":"G414132","warengruppe":"G"}
+{"name_de":"Stielmus/Rübstiel, roh","name_en":"Turnip tops/greens, raw","bls_code":"G420100","warengruppe":"G"}
+{"name_de":"Stielmus/Rübstiel, gekocht","name_en":"Turnip tops/greens, boiled","bls_code":"G420132","warengruppe":"G"}
+{"name_de":"Stielmus/Rübstiel, gedünstet","name_en":"Turnip tops/greens, stewed","bls_code":"G420152","warengruppe":"G"}
+{"name_de":"Stielmus/Rübstiel, gebraten ohne Fett (Pfanne)","name_en":"Turnip tops/greens, fried without fat (pan)","bls_code":"G420182","warengruppe":"G"}
+{"name_de":"Gemüsefenchel roh","name_en":"Fennel/Florence fennel, raw","bls_code":"G430100","warengruppe":"G"}
+{"name_de":"Gemüsefenchel gekocht","name_en":"Fennel/Florence fennel, boiled","bls_code":"G430132","warengruppe":"G"}
+{"name_de":"Gemüsefenchel gedünstet","name_en":"Fennel/Florence fennel, stewed","bls_code":"G430152","warengruppe":"G"}
+{"name_de":"Gemüsefenchel gebacken","name_en":"Fennel/Florence fennel, baked","bls_code":"G430162","warengruppe":"G"}
+{"name_de":"Gemüsefenchel gebraten ohne Fett (Pfanne)","name_en":"Fennel/Florence fennel, fried without fat (pan)","bls_code":"G430182","warengruppe":"G"}
+{"name_de":"Fenchelblatt/Bologneser Fenchel, roh","name_en":"Roman fennel/sweet fennel, raw","bls_code":"G431100","warengruppe":"G"}
+{"name_de":"Palmenherz roh","name_en":"Palm heart, raw","bls_code":"G440100","warengruppe":"G"}
+{"name_de":"Palmenherz gekocht","name_en":"Palm heart, boiled","bls_code":"G440132","warengruppe":"G"}
+{"name_de":"Palmenherz Konserve, abgetropft","name_en":"Palm heart, canned, drained","bls_code":"G440902","warengruppe":"G"}
+{"name_de":"Spargel roh","name_en":"Asparagus raw","bls_code":"G450100","warengruppe":"G"}
+{"name_de":"Spargel gekocht","name_en":"Asparagus boiled","bls_code":"G450132","warengruppe":"G"}
+{"name_de":"Spargel gedämpft","name_en":"Asparagus steamed","bls_code":"G450142","warengruppe":"G"}
+{"name_de":"Spargel gedünstet","name_en":"Asparagus stewed","bls_code":"G450152","warengruppe":"G"}
+{"name_de":"Spargel gebacken","name_en":"Asparagus baked","bls_code":"G450162","warengruppe":"G"}
+{"name_de":"Spargel tiefgefroren","name_en":"Asparagus deep-frozen","bls_code":"G450200","warengruppe":"G"}
+{"name_de":"Spargel tiefgefroren, gekocht","name_en":"Asparagus deep-frozen, boiled","bls_code":"G450232","warengruppe":"G"}
+{"name_de":"Spargel tiefgefroren, gedämpft","name_en":"Asparagus deep-frozen, steamed","bls_code":"G450242","warengruppe":"G"}
+{"name_de":"Spargel tiefgefroren, gedünstet","name_en":"Asparagus deep-frozen, stewed","bls_code":"G450252","warengruppe":"G"}
+{"name_de":"Spargel tiefgefroren, gebacken","name_en":"Asparagus deep-frozen, baked","bls_code":"G450262","warengruppe":"G"}
+{"name_de":"Spargel tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Asparagus deep-frozen, fried without fat (pan)","bls_code":"G450282","warengruppe":"G"}
+{"name_de":"Spargel Konserve, abgetropft","name_en":"Asparagus canned, drained","bls_code":"G450902","warengruppe":"G"}
+{"name_de":"Spargel gebraten ohne Fett (Pfanne)","name_en":"Asparagus fried without fat (pan)","bls_code":"G451082","warengruppe":"G"}
+{"name_de":"Portulak roh","name_en":"Purslane raw","bls_code":"G460100","warengruppe":"G"}
+{"name_de":"Portulak gedünstet","name_en":"Purslane stewed","bls_code":"G460152","warengruppe":"G"}
+{"name_de":"Porree/Lauch, geschmort ohne Fett","name_en":"Leek braised without fat","bls_code":"G470042","warengruppe":"G"}
+{"name_de":"Porree/Lauch, roh","name_en":"Leek raw","bls_code":"G470100","warengruppe":"G"}
+{"name_de":"Porree/Lauch, gekocht","name_en":"Leek boiled","bls_code":"G470132","warengruppe":"G"}
+{"name_de":"Porree/Lauch, gedünstet","name_en":"Leek stewed","bls_code":"G470152","warengruppe":"G"}
+{"name_de":"Porree/Lauch, gebacken","name_en":"Leek baked","bls_code":"G470162","warengruppe":"G"}
+{"name_de":"Porree/Lauch, gebraten ohne Fett (Pfanne)","name_en":"Leek fried without fat (pan)","bls_code":"G470182","warengruppe":"G"}
+{"name_de":"Porree/Lauch, tiefgefroren","name_en":"Leek deep-frozen","bls_code":"G470200","warengruppe":"G"}
+{"name_de":"Porree/Lauch, tiefgefroren, gekocht","name_en":"Leek deep-frozen, boiled","bls_code":"G470232","warengruppe":"G"}
+{"name_de":"Porree/Lauch, tiefgefroren, geschmort ohne Fett","name_en":"Leek deep-frozen, braised without fat","bls_code":"G470242","warengruppe":"G"}
+{"name_de":"Porree/Lauch, tiefgefroren, gedünstet","name_en":"Leek deep-frozen, stewed","bls_code":"G470252","warengruppe":"G"}
+{"name_de":"Porree/Lauch, tiefgefroren, gebacken","name_en":"Leek deep-frozen, baked","bls_code":"G470262","warengruppe":"G"}
+{"name_de":"Porree/Lauch, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Leek deep-frozen, fried without fat (pan)","bls_code":"G470282","warengruppe":"G"}
+{"name_de":"Speisezwiebel gegrillt","name_en":"Onion grilled","bls_code":"G480072","warengruppe":"G"}
+{"name_de":"Speisezwiebel roh","name_en":"Onion raw","bls_code":"G480100","warengruppe":"G"}
+{"name_de":"Speisezwiebel gekocht","name_en":"Onion boiled","bls_code":"G480132","warengruppe":"G"}
+{"name_de":"Speisezwiebel geschmort ohne Fett","name_en":"Onion braised without fat","bls_code":"G480142","warengruppe":"G"}
+{"name_de":"Speisezwiebel gedünstet","name_en":"Onion stewed","bls_code":"G480152","warengruppe":"G"}
+{"name_de":"Speisezwiebel gebacken","name_en":"Onion baked","bls_code":"G480162","warengruppe":"G"}
+{"name_de":"Speisezwiebel gebraten ohne Fett (Pfanne)","name_en":"Onion fried without fat (pan)","bls_code":"G480182","warengruppe":"G"}
+{"name_de":"Speisezwiebel tiefgefroren","name_en":"Onion deep-frozen","bls_code":"G480200","warengruppe":"G"}
+{"name_de":"Speisezwiebel tiefgefroren, gekocht","name_en":"Onion deep-frozen, boiled","bls_code":"G480232","warengruppe":"G"}
+{"name_de":"Speisezwiebel tiefgefroren, geschmort ohne Fett","name_en":"Onion deep-frozen, braised without fat","bls_code":"G480242","warengruppe":"G"}
+{"name_de":"Speisezwiebel tiefgefroren, gedünstet","name_en":"Onion deep-frozen, stewed","bls_code":"G480252","warengruppe":"G"}
+{"name_de":"Speisezwiebel tiefgefroren, gebacken","name_en":"Onion deep-frozen, baked","bls_code":"G480262","warengruppe":"G"}
+{"name_de":"Speisezwiebel tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Onion deep-frozen, fried without fat (pan)","bls_code":"G480282","warengruppe":"G"}
+{"name_de":"Speisezwiebel getrocknet","name_en":"Onion dried","bls_code":"G480400","warengruppe":"G"}
+{"name_de":"Speisezwiebel Pulver","name_en":"Onion powder","bls_code":"G480500","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Speisezwiebel","name_en":"Onion juice","bls_code":"G480600","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel, roh","name_en":"Spring onion raw","bls_code":"G482100","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel, gekocht","name_en":"Spring onion boiled","bls_code":"G482132","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel, geschmort ohne Fett","name_en":"Spring onion braised without fat","bls_code":"G482142","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel, gedünstet","name_en":"Spring onion stewed","bls_code":"G482152","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel, gebacken","name_en":"Spring onion baked","bls_code":"G482162","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel, gebraten ohne Fett (Pfanne)","name_en":"Spring onion fried without fat (pan)","bls_code":"G482182","warengruppe":"G"}
+{"name_de":"Perlzwiebel roh","name_en":"Pearl onion raw","bls_code":"G484100","warengruppe":"G"}
+{"name_de":"Perlzwiebel gekocht","name_en":"Pearl onion boiled","bls_code":"G484132","warengruppe":"G"}
+{"name_de":"Perlzwiebel gedünstet","name_en":"Pearl onion stewed","bls_code":"G484152","warengruppe":"G"}
+{"name_de":"Perlzwiebel gebacken","name_en":"Pearl onion baked","bls_code":"G484162","warengruppe":"G"}
+{"name_de":"Perlzwiebel gebraten ohne Fett (Pfanne)","name_en":"Pearl onion fried without fat (pan)","bls_code":"G484182","warengruppe":"G"}
+{"name_de":"Schalotte gebraten ohne Fett (Pfanne)","name_en":"Shallot fried without fat (pan)","bls_code":"G485082","warengruppe":"G"}
+{"name_de":"Schalotte roh","name_en":"Shallot raw","bls_code":"G485100","warengruppe":"G"}
+{"name_de":"Schalotte gekocht","name_en":"Shalot boiled","bls_code":"G485132","warengruppe":"G"}
+{"name_de":"Schalotte geschmort ohne Fett","name_en":"Shallot braised without fat","bls_code":"G485142","warengruppe":"G"}
+{"name_de":"Schalotte gedünstet","name_en":"Shalot stewed","bls_code":"G485152","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel (ohne Laub) roh","name_en":"Spring onion, bulb only, raw","bls_code":"G486100","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel (ohne Laub) gekocht","name_en":"Spring onion, bulb only, boiled","bls_code":"G486132","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel (ohne Laub) geschmort ohne Fett","name_en":"Spring onion, bulb only, braised without fat","bls_code":"G486142","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel (ohne Laub) gedünstet","name_en":"Spring onion, bulb only, stewed","bls_code":"G486152","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel (ohne Laub) gebacken","name_en":"Spring onion, bulb only, baked","bls_code":"G486162","warengruppe":"G"}
+{"name_de":"Frühlingszwiebel/Lauchzwiebel (ohne Laub) gebraten ohne Fett (Pfanne)","name_en":"Spring onion, bulb only, fried without fat (pan)","bls_code":"G486182","warengruppe":"G"}
+{"name_de":"Silberzwiebel roh","name_en":"Silverskin onion raw","bls_code":"G488100","warengruppe":"G"}
+{"name_de":"Silberzwiebel gesäuert, abgetropft","name_en":"Silverskin onion pickled, drained","bls_code":"G488802","warengruppe":"G"}
+{"name_de":"Knoblauch geschmort ohne Fett","name_en":"Garlic braised without fat","bls_code":"G490042","warengruppe":"G"}
+{"name_de":"Knoblauch roh","name_en":"Garlic raw","bls_code":"G490100","warengruppe":"G"}
+{"name_de":"Knoblauch gekocht","name_en":"Garlic boiled","bls_code":"G490132","warengruppe":"G"}
+{"name_de":"Knoblauch gedünstet","name_en":"Garlic stewed","bls_code":"G490152","warengruppe":"G"}
+{"name_de":"Knoblauch gebacken","name_en":"Garlic baked","bls_code":"G490162","warengruppe":"G"}
+{"name_de":"Knoblauch gebraten ohne Fett (Pfanne)","name_en":"Garlic fried without fat (pan)","bls_code":"G490182","warengruppe":"G"}
+{"name_de":"Knoblauch tiefgefroren","name_en":"Garlic deep-frozen","bls_code":"G490200","warengruppe":"G"}
+{"name_de":"Knoblauch tiefgefroren, gekocht","name_en":"Garlic deep-frozen, boiled","bls_code":"G490232","warengruppe":"G"}
+{"name_de":"Knoblauch tiefgefroren, geschmort ohne Fett","name_en":"Garlic deep-frozen, braised without fat","bls_code":"G490242","warengruppe":"G"}
+{"name_de":"Knoblauch tiefgefroren, gedünstet","name_en":"Garlic deep-frozen, stewed","bls_code":"G490252","warengruppe":"G"}
+{"name_de":"Knoblauch tiefgefroren, gebacken","name_en":"Garlic deep-frozen, baked","bls_code":"G490262","warengruppe":"G"}
+{"name_de":"Knoblauch tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Garlic deep-frozen, fried without fat (pan)","bls_code":"G490282","warengruppe":"G"}
+{"name_de":"Knoblauch getrocknet","name_en":"Garlic dried","bls_code":"G490400","warengruppe":"G"}
+{"name_de":"Knoblauch Pulver","name_en":"Garlic powder","bls_code":"G490500","warengruppe":"G"}
+{"name_de":"Knoblauch in Öl, Konserve, abgetropft","name_en":"Garlic in oil, canned, drained","bls_code":"G491702","warengruppe":"G"}
+{"name_de":"Knoblauch gesäuert, abgetropft","name_en":"Garlic pickled, drained","bls_code":"G491802","warengruppe":"G"}
+{"name_de":"Bärlauch roh","name_en":"Wild garlic raw","bls_code":"G492100","warengruppe":"G"}
+{"name_de":"Aubergine roh","name_en":"Aubergine raw","bls_code":"G510100","warengruppe":"G"}
+{"name_de":"Aubergine gekocht","name_en":"Aubergine boiled","bls_code":"G510132","warengruppe":"G"}
+{"name_de":"Aubergine geschmort ohne Fett","name_en":"Aubergine braised without fat","bls_code":"G510142","warengruppe":"G"}
+{"name_de":"Aubergine gedünstet","name_en":"Aubergine stewed","bls_code":"G510152","warengruppe":"G"}
+{"name_de":"Aubergine gebacken","name_en":"Aubergine baked","bls_code":"G510162","warengruppe":"G"}
+{"name_de":"Aubergine gegrillt","name_en":"Aubergine grilled","bls_code":"G510172","warengruppe":"G"}
+{"name_de":"Aubergine gebraten ohne Fett (Pfanne)","name_en":"Aubergine fried without fat (pan)","bls_code":"G510182","warengruppe":"G"}
+{"name_de":"Aubergine gegrillt, in Öl, Konserve, abgetropft","name_en":"Aubergine grilled, in oil, canned, drained","bls_code":"G510702","warengruppe":"G"}
+{"name_de":"Gurke geschmort ohne Fett","name_en":"Cucumber braised without fat","bls_code":"G520042","warengruppe":"G"}
+{"name_de":"Gurke gebacken","name_en":"Cucumber baked","bls_code":"G520062","warengruppe":"G"}
+{"name_de":"Gurke roh","name_en":"Cucumber raw","bls_code":"G520100","warengruppe":"G"}
+{"name_de":"Gurke gekocht","name_en":"Cucumber boiled","bls_code":"G520132","warengruppe":"G"}
+{"name_de":"Gurke gedünstet","name_en":"Cucumber stewed","bls_code":"G520152","warengruppe":"G"}
+{"name_de":"Gurke gebraten ohne Fett (Pfanne)","name_en":"Cucumber fried without fat (pan)","bls_code":"G520182","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Gurke","name_en":"Cucumber juice","bls_code":"G520600","warengruppe":"G"}
+{"name_de":"Gurke gesäuert (Gewürzgurke) abgetropft","name_en":"Cucumber/gherkin pickled, drained","bls_code":"G520802","warengruppe":"G"}
+{"name_de":"Okra roh","name_en":"Okra raw","bls_code":"G530100","warengruppe":"G"}
+{"name_de":"Okra gekocht","name_en":"Okra boiled","bls_code":"G530132","warengruppe":"G"}
+{"name_de":"Okra geschmort ohne Fett","name_en":"Okra braised without fat","bls_code":"G530142","warengruppe":"G"}
+{"name_de":"Okra gedünstet","name_en":"Okra stewed","bls_code":"G530152","warengruppe":"G"}
+{"name_de":"Okra Konserve, abgetropft","name_en":"Okra canned, drained","bls_code":"G530902","warengruppe":"G"}
+{"name_de":"Gemüsepaprika grün, gekocht","name_en":"Sweet pepper green, boiled","bls_code":"G541032","warengruppe":"G"}
+{"name_de":"Gemüsepaprika grün, geschmort ohne Fett","name_en":"Sweet pepper green, braised without fat","bls_code":"G541042","warengruppe":"G"}
+{"name_de":"Gemüsepaprika grün, gegrillt","name_en":"Sweet pepper green, grilled","bls_code":"G541072","warengruppe":"G"}
+{"name_de":"Gemüsepaprika grün, gebraten ohne Fett (Pfanne)","name_en":"Sweet pepper green, fried without fat (pan)","bls_code":"G541082","warengruppe":"G"}
+{"name_de":"Gemüsepaprika grün, roh","name_en":"Sweet pepper green, raw","bls_code":"G541100","warengruppe":"G"}
+{"name_de":"Gemüsepaprika grün, gedünstet","name_en":"Sweet pepper green, stewed","bls_code":"G541152","warengruppe":"G"}
+{"name_de":"Gemüsepaprika grün, gebacken","name_en":"Sweet pepper green, baked","bls_code":"G541162","warengruppe":"G"}
+{"name_de":"Gemüsepaprika gelb, geschmort ohne Fett","name_en":"Sweet pepper yellow, braised without fat","bls_code":"G542042","warengruppe":"G"}
+{"name_de":"Gemüsepaprika gelb, roh","name_en":"Sweet pepper yellow, raw","bls_code":"G542100","warengruppe":"G"}
+{"name_de":"Gemüsepaprika gelb, gekocht","name_en":"Sweet pepper yellow, boiled","bls_code":"G542132","warengruppe":"G"}
+{"name_de":"Gemüsepaprika gelb, gedünstet","name_en":"Sweet pepper yellow, stewed","bls_code":"G542152","warengruppe":"G"}
+{"name_de":"Gemüsepaprika gelb, gebacken","name_en":"Sweet pepper yellow, baked","bls_code":"G542162","warengruppe":"G"}
+{"name_de":"Gemüsepaprika gelb, gegrillt","name_en":"Sweet pepper yellow, grilled","bls_code":"G542172","warengruppe":"G"}
+{"name_de":"Gemüsepaprika gelb, gebraten ohne Fett (Pfanne)","name_en":"Sweet pepper yellow, fried without fat (pan)","bls_code":"G542182","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, gekocht","name_en":"Sweet pepper red, boiled","bls_code":"G543032","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, geschmort ohne Fett","name_en":"Sweet pepper red, braised without fat","bls_code":"G543042","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, gegrillt","name_en":"Sweet pepper red, grilled","bls_code":"G543072","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, gebraten ohne Fett (Pfanne)","name_en":"Sweet pepper red, fried without fat (pan)","bls_code":"G543082","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, roh","name_en":"Sweet pepper red, raw","bls_code":"G543100","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, gedünstet","name_en":"Sweet pepper red, stewed","bls_code":"G543152","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, gebacken","name_en":"Sweet pepper red, baked","bls_code":"G543162","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, gegrillt, in Öl, Konserve, abgetropft","name_en":"Sweet pepper red, grilled, in oil, canned, drained","bls_code":"G543702","warengruppe":"G"}
+{"name_de":"Gemüsepaprika rot, gesäuert, abgetropft","name_en":"Sweet pepper red, pickled, drained","bls_code":"G543802","warengruppe":"G"}
+{"name_de":"Pfefferschote in Öl, Konserve, abgetropft","name_en":"Chilli pepper in oil, canned, drained","bls_code":"G550702","warengruppe":"G"}
+{"name_de":"Pfefferschote gesäuert, abgetropft","name_en":"Chilli pepper pickled, drained","bls_code":"G550802","warengruppe":"G"}
+{"name_de":"Pfefferschote grün, roh","name_en":"Chilli pepper green, raw","bls_code":"G553100","warengruppe":"G"}
+{"name_de":"Pfefferschote grün, gekocht","name_en":"Chilli pepper green, boiled","bls_code":"G553132","warengruppe":"G"}
+{"name_de":"Pfefferschote grün, gedünstet","name_en":"Chilli pepper green, stewed","bls_code":"G553152","warengruppe":"G"}
+{"name_de":"Pfefferschote grün, gebraten ohne Fett (Pfanne)","name_en":"Chilli pepper green, fried without fat (pan)","bls_code":"G553182","warengruppe":"G"}
+{"name_de":"Pfefferschote rot, roh","name_en":"Chilli pepper red, raw","bls_code":"G554100","warengruppe":"G"}
+{"name_de":"Pfefferschote rot, gekocht","name_en":"Chilli pepper red, boiled","bls_code":"G554132","warengruppe":"G"}
+{"name_de":"Pfefferschote rot, gedünstet","name_en":"Chilli pepper red, stewed","bls_code":"G554152","warengruppe":"G"}
+{"name_de":"Pfefferschote rot, gebraten ohne Fett (Pfanne)","name_en":"Chilli pepper red, fried without fat (pan)","bls_code":"G554182","warengruppe":"G"}
+{"name_de":"Tomate geschmort ohne Fett","name_en":"Tomato braised without fat","bls_code":"G560142","warengruppe":"G"}
+{"name_de":"Tomate getrocknet","name_en":"Tomato dried","bls_code":"G560400","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Tomate, mit Salz","name_en":"Tomato juice with salt","bls_code":"G560600","warengruppe":"G"}
+{"name_de":"Tomate Konserve","name_en":"Tomato canned","bls_code":"G560900","warengruppe":"G"}
+{"name_de":"Tomate gegrillt","name_en":"Tomato grilled","bls_code":"G561072","warengruppe":"G"}
+{"name_de":"Tomate gebraten ohne Fett (Pfanne)","name_en":"Tomato fried without fat (pan)","bls_code":"G561082","warengruppe":"G"}
+{"name_de":"Tomate roh","name_en":"Tomato raw","bls_code":"G561100","warengruppe":"G"}
+{"name_de":"Tomate gekocht","name_en":"Tomato boiled","bls_code":"G561132","warengruppe":"G"}
+{"name_de":"Tomate gedünstet","name_en":"Tomato stewed","bls_code":"G561152","warengruppe":"G"}
+{"name_de":"Tomate gebacken","name_en":"Tomato baked","bls_code":"G561162","warengruppe":"G"}
+{"name_de":"Tomate Pulver","name_en":"Tomato powder","bls_code":"G561500","warengruppe":"G"}
+{"name_de":"Tomate gesäuert, abgetropft","name_en":"Tomato pickled, drained","bls_code":"G561802","warengruppe":"G"}
+{"name_de":"Tomate getrocknet, in Öl, Konserve, abgetropft","name_en":"Tomato dried, in oil, canned, drained","bls_code":"G567702","warengruppe":"G"}
+{"name_de":"Tomate geschält, Konserve","name_en":"Tomato peeled, canned","bls_code":"G568900","warengruppe":"G"}
+{"name_de":"Tomate getrocknet, mariniert, abgetropft","name_en":"Tomate dried, marinated, drained","bls_code":"G569902","warengruppe":"G"}
+{"name_de":"Zuckermais roh","name_en":"Sweetcorn raw","bls_code":"G570100","warengruppe":"G"}
+{"name_de":"Zuckermais gekocht","name_en":"Sweetcorn boiled","bls_code":"G570132","warengruppe":"G"}
+{"name_de":"Zuckermais gebacken","name_en":"Sweetcorn baked","bls_code":"G570162","warengruppe":"G"}
+{"name_de":"Zuckermais gegrillt","name_en":"Sweetcorn grilled","bls_code":"G570172","warengruppe":"G"}
+{"name_de":"Zuckermais gebraten ohne Fett (Pfanne)","name_en":"Sweetcorn fried without fat (pan)","bls_code":"G570182","warengruppe":"G"}
+{"name_de":"Zuckermais tiefgefroren","name_en":"Sweetcorn deep-frozen","bls_code":"G570200","warengruppe":"G"}
+{"name_de":"Zuckermais tiefgefroren, gekocht","name_en":"Sweetcorn deep-frozen, boiled","bls_code":"G570232","warengruppe":"G"}
+{"name_de":"Zuckermais tiefgefroren, gebacken","name_en":"Sweetcorn deep-frozen, baked","bls_code":"G570262","warengruppe":"G"}
+{"name_de":"Zuckermais tiefgefroren, gegrillt","name_en":"Sweetcorn deep-frozen, grilled","bls_code":"G570272","warengruppe":"G"}
+{"name_de":"Zuckermais tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Sweetcorn deep-frozen, fried without fat (pan)","bls_code":"G570282","warengruppe":"G"}
+{"name_de":"Zuckermais gesäuert, abgetropft","name_en":"Sweetcorn pickled, drained","bls_code":"G570802","warengruppe":"G"}
+{"name_de":"Zuckermais Konserve, abgetropft","name_en":"Sweetcorn canned, drained","bls_code":"G570902","warengruppe":"G"}
+{"name_de":"Kürbis Hokkaido (C. maxima) roh","name_en":"Hokkaido pumpkin raw","bls_code":"G581000","warengruppe":"G"}
+{"name_de":"Kürbis Hokkaido (C. maxima) gekocht","name_en":"Hokkaido pumpkin boiled","bls_code":"G581032","warengruppe":"G"}
+{"name_de":"Kürbis Hokkaido (C. maxima) geschmort ohne Fett","name_en":"Hokkaido pumpkin braised without fat","bls_code":"G581042","warengruppe":"G"}
+{"name_de":"Kürbis Hokkaido (C. maxima) gedünstet","name_en":"Hokkaido pumpkin stewed","bls_code":"G581052","warengruppe":"G"}
+{"name_de":"Kürbis Hokkaido (C. maxima) gebacken","name_en":"Hokkaido pumpkin baked","bls_code":"G581062","warengruppe":"G"}
+{"name_de":"Kürbis Hokkaido (C. maxima) gebraten ohne Fett (Pfanne)","name_en":"Hokkaido pumpkin fried without fat (pan)","bls_code":"G581082","warengruppe":"G"}
+{"name_de":"Kürbis Pumpkin (C. pepo) roh","name_en":"Pumpkin (C. pepo) raw","bls_code":"G581100","warengruppe":"G"}
+{"name_de":"Kürbis Pumpkin (C. pepo) gekocht","name_en":"Pumpkin (C. pepo) boiled","bls_code":"G581132","warengruppe":"G"}
+{"name_de":"Kürbis Pumpkin (C. pepo) geschmort ohne Fett","name_en":"Pumpkin (C. pepo) braised without fat","bls_code":"G581142","warengruppe":"G"}
+{"name_de":"Kürbis Pumpkin (C. pepo) gedünstet","name_en":"Pumpkin (C. pepo) stewed","bls_code":"G581152","warengruppe":"G"}
+{"name_de":"Kürbis Pumpkin (C. pepo) gebacken","name_en":"Pumpkin (C. pepo) baked","bls_code":"G581162","warengruppe":"G"}
+{"name_de":"Kürbis Pumpkin (C. pepo) gebraten ohne Fett (Pfanne)","name_en":"Pumpkin (C. pepo) fried without fat (pan)","bls_code":"G581182","warengruppe":"G"}
+{"name_de":"Kürbis gesäuert, abgetropft","name_en":"Pumpkin pickled, drained","bls_code":"G581802","warengruppe":"G"}
+{"name_de":"Zucchini roh","name_en":"Courgette raw","bls_code":"G582100","warengruppe":"G"}
+{"name_de":"Zucchini gekocht","name_en":"Courgette boiled","bls_code":"G582132","warengruppe":"G"}
+{"name_de":"Zucchini geschmort ohne Fett","name_en":"Courgette braised without fat","bls_code":"G582142","warengruppe":"G"}
+{"name_de":"Zucchini gedünstet","name_en":"Courgette stewed","bls_code":"G582152","warengruppe":"G"}
+{"name_de":"Zucchini gebacken","name_en":"Courgette baked","bls_code":"G582162","warengruppe":"G"}
+{"name_de":"Zucchini gegrillt","name_en":"Courgette grilled","bls_code":"G582172","warengruppe":"G"}
+{"name_de":"Zucchini gebraten ohne Fett (Pfanne)","name_en":"Courgette fried without fat (pan)","bls_code":"G582182","warengruppe":"G"}
+{"name_de":"Zucchini gesäuert, abgetropft","name_en":"Courgette pickled, drained","bls_code":"G582802","warengruppe":"G"}
+{"name_de":"Chayote roh","name_en":"Chayote raw","bls_code":"G583100","warengruppe":"G"}
+{"name_de":"Chayote gekocht","name_en":"Chayote boiled","bls_code":"G583132","warengruppe":"G"}
+{"name_de":"Chayote gebraten ohne Fett (Pfanne)","name_en":"Chayote fried without fat (pan)","bls_code":"G583182","warengruppe":"G"}
+{"name_de":"Kohlrübe/Steckrübe, roh","name_en":"Swede raw","bls_code":"G611100","warengruppe":"G"}
+{"name_de":"Kohlrübe/Steckrübe, gekocht","name_en":"Swede boiled","bls_code":"G611132","warengruppe":"G"}
+{"name_de":"Kohlrübe/Steckrübe, gedünstet","name_en":"Swede stewed","bls_code":"G611152","warengruppe":"G"}
+{"name_de":"Rote Rübe/Rote Bete, roh","name_en":"Beetroot raw","bls_code":"G613100","warengruppe":"G"}
+{"name_de":"Rote Rübe/Rote Bete, gekocht","name_en":"Beetroot boiled","bls_code":"G613132","warengruppe":"G"}
+{"name_de":"Rote Rübe/Rote Bete, gedünstet","name_en":"Beetroot stewed","bls_code":"G613152","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Rote Rübe/Rote Bete","name_en":"Beetroot juice","bls_code":"G613600","warengruppe":"G"}
+{"name_de":"Rote Rübe/Rote Bete, gesäuert, abgetropft","name_en":"Beetroot pickled, drained","bls_code":"G613802","warengruppe":"G"}
+{"name_de":"Weiße Rübe/Wasserrübe/Herbstrübe, roh","name_en":"Turnip raw","bls_code":"G614100","warengruppe":"G"}
+{"name_de":"Weiße Rübe/Wasserrübe/Herbstrübe, gekocht","name_en":"Turnip boiled","bls_code":"G614132","warengruppe":"G"}
+{"name_de":"Weiße Rübe/Wasserrübe/Herbstrübe, gedünstet","name_en":"Turnip stewed","bls_code":"G614152","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, roh","name_en":"Carrot raw","bls_code":"G620100","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, gekocht","name_en":"Carrot boiled","bls_code":"G620132","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, geschmort ohne Fett","name_en":"Carrot braised without fat","bls_code":"G620142","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, gedünstet","name_en":"Carrot stewed","bls_code":"G620152","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, gebacken","name_en":"Carrot baked","bls_code":"G620162","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, gebraten ohne Fett (Pfanne)","name_en":"Carrot fried without fat (pan)","bls_code":"G620182","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, tiefgefroren","name_en":"Carrot deep-frozen","bls_code":"G620200","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, tiefgefroren, gekocht","name_en":"Carrot deep-frozen, boiled","bls_code":"G620232","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, tiefgefroren, geschmort ohne Fett","name_en":"Carrot deep-frozen, braised without fat","bls_code":"G620242","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, tiefgefroren, gedünstet","name_en":"Carrot deep-frozen, stewed","bls_code":"G620252","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, tiefgefroren, gebacken","name_en":"Carrot deep-frozen, baked","bls_code":"G620262","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Carrot deep-frozen, fried without fat (pan)","bls_code":"G620282","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Karotte/Möhre","name_en":"Carrot juice","bls_code":"G620600","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, gesäuert, abgetropft","name_en":"Carrot pickled, drained","bls_code":"G620802","warengruppe":"G"}
+{"name_de":"Karotte/Möhre, Konserve, abgetropft","name_en":"Carrot canned, drained","bls_code":"G620902","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Karotte/Möhre, mit Honig","name_en":"Carrot juice, sweetened with honey","bls_code":"G622600","warengruppe":"G"}
+{"name_de":"Meerrettich roh","name_en":"Horseradish raw","bls_code":"G630100","warengruppe":"G"}
+{"name_de":"Meerrettich gekocht","name_en":"Horseradish boiled","bls_code":"G630132","warengruppe":"G"}
+{"name_de":"Pastinake roh","name_en":"Parsnip raw","bls_code":"G640100","warengruppe":"G"}
+{"name_de":"Pastinake gekocht","name_en":"Parsnip boiled","bls_code":"G640132","warengruppe":"G"}
+{"name_de":"Pastinake geschmort ohne Fett","name_en":"Parsnip braised without fat","bls_code":"G640142","warengruppe":"G"}
+{"name_de":"Pastinake gedünstet","name_en":"Parsnip stewed","bls_code":"G640152","warengruppe":"G"}
+{"name_de":"Pastinake gebacken","name_en":"Parsnip baked","bls_code":"G640162","warengruppe":"G"}
+{"name_de":"Pastinake gebraten ohne Fett (Pfanne)","name_en":"Parsnip fried without fat (pan)","bls_code":"G640182","warengruppe":"G"}
+{"name_de":"Schwarzwurzel roh","name_en":"Black salsify raw","bls_code":"G650100","warengruppe":"G"}
+{"name_de":"Schwarzwurzel gekocht","name_en":"Black salsify boiled","bls_code":"G650132","warengruppe":"G"}
+{"name_de":"Schwarzwurzel geschmort ohne Fett","name_en":"Black salsify braised without fat","bls_code":"G650142","warengruppe":"G"}
+{"name_de":"Schwarzwurzel gedünstet","name_en":"Black salsify stewed","bls_code":"G650152","warengruppe":"G"}
+{"name_de":"Schwarzwurzel tiefgefroren","name_en":"Black salsify deep-frozen","bls_code":"G650200","warengruppe":"G"}
+{"name_de":"Schwarzwurzel tiefgefroren, gekocht","name_en":"Black salsify deep-frozen, boiled","bls_code":"G650232","warengruppe":"G"}
+{"name_de":"Schwarzwurzel tiefgefroren, geschmort ohne Fett","name_en":"Black salsify deep-frozen, braised without fat","bls_code":"G650242","warengruppe":"G"}
+{"name_de":"Schwarzwurzel tiefgefroren, gedünstet","name_en":"Black salsify deep-frozen, stewed","bls_code":"G650252","warengruppe":"G"}
+{"name_de":"Schwarzwurzel Konserve, abgetropft","name_en":"Black salsify canned, drained","bls_code":"G650902","warengruppe":"G"}
+{"name_de":"Knollensellerie roh","name_en":"Celeriac raw","bls_code":"G660100","warengruppe":"G"}
+{"name_de":"Knollensellerie gekocht","name_en":"Celeriac boiled","bls_code":"G660132","warengruppe":"G"}
+{"name_de":"Knollensellerie gedünstet","name_en":"Celeriac stewed","bls_code":"G660152","warengruppe":"G"}
+{"name_de":"Knollensellerie gebacken","name_en":"Celeriac baked","bls_code":"G660162","warengruppe":"G"}
+{"name_de":"Knollensellerie gebraten ohne Fett (Pfanne)","name_en":"Celeriac fried without fat (pan)","bls_code":"G660182","warengruppe":"G"}
+{"name_de":"Gemüsesaft aus Knollensellerie","name_en":"Celeriac juice","bls_code":"G660600","warengruppe":"G"}
+{"name_de":"Knollensellerie gesäuert, abgetropft","name_en":"Celeriac pickled, drained","bls_code":"G660802","warengruppe":"G"}
+{"name_de":"Wurzelpetersilie roh","name_en":"Parsley root raw","bls_code":"G670100","warengruppe":"G"}
+{"name_de":"Wurzelpetersilie gekocht","name_en":"Parsley root boiled","bls_code":"G670132","warengruppe":"G"}
+{"name_de":"Wurzelpetersilie geschmort ohne Fett","name_en":"Parsley root braised without fat","bls_code":"G670142","warengruppe":"G"}
+{"name_de":"Wurzelpetersilie gedünstet","name_en":"Parsley root stewed","bls_code":"G670152","warengruppe":"G"}
+{"name_de":"Wurzelpetersilie gebacken","name_en":"Parsley root baked","bls_code":"G670162","warengruppe":"G"}
+{"name_de":"Wurzelpetersilie gebraten ohne Fett (Pfanne)","name_en":"Parsley root fried without fat (pan)","bls_code":"G670182","warengruppe":"G"}
+{"name_de":"Wurzelpetersilie getrocknet","name_en":"Parsley root dried","bls_code":"G670400","warengruppe":"G"}
+{"name_de":"Rettich roh","name_en":"Radish raw","bls_code":"G680100","warengruppe":"G"}
+{"name_de":"Rettich gedünstet","name_en":"Radish stewed","bls_code":"G680152","warengruppe":"G"}
+{"name_de":"Radieschen roh","name_en":"Small red radish raw","bls_code":"G691100","warengruppe":"G"}
+{"name_de":"Radieschen gedünstet","name_en":"Small red radish stewed","bls_code":"G691152","warengruppe":"G"}
+{"name_de":"Wasabi roh","name_en":"Japanese horseradish/wasabi root, raw","bls_code":"G693100","warengruppe":"G"}
+{"name_de":"Bohne grün, tiefgefroren, geschmort ohne Fett","name_en":"Bean green, deep-frozen, braised without fat","bls_code":"G710042","warengruppe":"G"}
+{"name_de":"Bohne grün, roh","name_en":"Bean green, raw","bls_code":"G710100","warengruppe":"G"}
+{"name_de":"Bohne grün, gekocht","name_en":"Bean green, boiled","bls_code":"G710132","warengruppe":"G"}
+{"name_de":"Bohne grün, geschmort ohne Fett","name_en":"Bean green, braised without fat","bls_code":"G710142","warengruppe":"G"}
+{"name_de":"Bohne grün, gedünstet","name_en":"Bean green, stewed","bls_code":"G710152","warengruppe":"G"}
+{"name_de":"Bohne grün, gebacken","name_en":"Bean green, baked","bls_code":"G710162","warengruppe":"G"}
+{"name_de":"Bohne grün, gebraten ohne Fett (Pfanne)","name_en":"Bean green, fried without fat (pan)","bls_code":"G710182","warengruppe":"G"}
+{"name_de":"Bohne grün, tiefgefroren","name_en":"Bean green, deep-frozen","bls_code":"G710200","warengruppe":"G"}
+{"name_de":"Bohne grün, tiefgefroren, gekocht","name_en":"Bean green, deep-frozen, boiled","bls_code":"G710232","warengruppe":"G"}
+{"name_de":"Bohne grün, tiefgefroren, gedünstet","name_en":"Bean green, deep-frozen, stewed","bls_code":"G710252","warengruppe":"G"}
+{"name_de":"Bohne grün, tiefgefroren, gebacken","name_en":"Bean green, deep-frozen, baked","bls_code":"G710262","warengruppe":"G"}
+{"name_de":"Bohne grün, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Bean green, deep-frozen, fried without fat (pan)","bls_code":"G710282","warengruppe":"G"}
+{"name_de":"Bohne grün, gesäuert, abgetropft","name_en":"Bean green, pickled, drained","bls_code":"G710802","warengruppe":"G"}
+{"name_de":"Bohne grün, Konserve, abgetropft","name_en":"Bean green, canned, drained","bls_code":"G710902","warengruppe":"G"}
+{"name_de":"Wachsbohne roh","name_en":"Wax bean raw","bls_code":"G720100","warengruppe":"G"}
+{"name_de":"Wachsbohne gekocht","name_en":"Wax bean boiled","bls_code":"G720132","warengruppe":"G"}
+{"name_de":"Wachsbohne gedünstet","name_en":"Wax bean stewed","bls_code":"G720152","warengruppe":"G"}
+{"name_de":"Wachsbohne tiefgefroren","name_en":"Wax bean deep-frozen","bls_code":"G720200","warengruppe":"G"}
+{"name_de":"Wachsbohne tiefgefroren, gekocht","name_en":"Wax bean deep-frozen, boiled","bls_code":"G720232","warengruppe":"G"}
+{"name_de":"Wachsbohne tiefgefroren, gedünstet","name_en":"Wax bean deep-frozen, stewed","bls_code":"G720252","warengruppe":"G"}
+{"name_de":"Wachsbohne gesäuert, abgetropft","name_en":"Wax bean pickled, drained","bls_code":"G720802","warengruppe":"G"}
+{"name_de":"Wachsbohne Konserve, abgetropft","name_en":"Wax bean canned, drained","bls_code":"G720902","warengruppe":"G"}
+{"name_de":"Dicke Bohne unreif, roh","name_en":"Broad bean immature, raw","bls_code":"G730100","warengruppe":"G"}
+{"name_de":"Dicke Bohne unreif, gekocht","name_en":"Broad bean immature, boiled","bls_code":"G730132","warengruppe":"G"}
+{"name_de":"Dicke Bohne unreif, tiefgefroren","name_en":"Broad bean immature, deep-frozen","bls_code":"G730200","warengruppe":"G"}
+{"name_de":"Dicke Bohne unreif, tiefgefroren, gekocht","name_en":"Broad bean immature, deep-frozen, boiled","bls_code":"G730232","warengruppe":"G"}
+{"name_de":"Dicke Bohne unreif, Konserve, abgetropft","name_en":"Broad bean immature, canned, drained","bls_code":"G730902","warengruppe":"G"}
+{"name_de":"Sojabohne unreif (Edamame) roh","name_en":"Soya bean immature (edamame) raw","bls_code":"G750100","warengruppe":"G"}
+{"name_de":"Sojabohne reif","name_en":"Soya bean mature","bls_code":"G750400","warengruppe":"G"}
+{"name_de":"Sojabohne reif, gekocht","name_en":"Soya bean mature, boiled","bls_code":"G750432","warengruppe":"G"}
+{"name_de":"Sojabohne unreif (Edamame) Konserve, abgetropft","name_en":"Soya bean immature (edamame) canned, drained","bls_code":"G750902","warengruppe":"G"}
+{"name_de":"Erbse grün, roh","name_en":"Pea green, raw","bls_code":"G760100","warengruppe":"G"}
+{"name_de":"Erbse grün, gekocht","name_en":"Pea green, boiled","bls_code":"G760132","warengruppe":"G"}
+{"name_de":"Erbse grün, gedünstet","name_en":"Pea green, stewed","bls_code":"G760152","warengruppe":"G"}
+{"name_de":"Erbse grün, gebacken","name_en":"Pea green, baked","bls_code":"G760162","warengruppe":"G"}
+{"name_de":"Erbse grün, gebraten ohne Fett (Pfanne)","name_en":"Pea green, fried without fat (pan)","bls_code":"G760182","warengruppe":"G"}
+{"name_de":"Erbse grün, tiefgefroren","name_en":"Pea green, deep-frozen","bls_code":"G760200","warengruppe":"G"}
+{"name_de":"Erbse grün, tiefgefroren, gekocht","name_en":"Pea green, deep-frozen, boiled","bls_code":"G760232","warengruppe":"G"}
+{"name_de":"Erbse grün, tiefgefroren, gedünstet","name_en":"Pea green, deep-frozen, stewed","bls_code":"G760252","warengruppe":"G"}
+{"name_de":"Erbse grün, tiefgefroren, gebacken","name_en":"Pea green, deep-frozen, baked","bls_code":"G760262","warengruppe":"G"}
+{"name_de":"Erbse grün, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Pea green, deep-frozen, fried without fat (pan)","bls_code":"G760282","warengruppe":"G"}
+{"name_de":"Erbse reif","name_en":"Pea green mature","bls_code":"G760400","warengruppe":"G"}
+{"name_de":"Erbse reif, gekocht","name_en":"Pea green mature, boiled","bls_code":"G760432","warengruppe":"G"}
+{"name_de":"Erbse grün, Konserve, abgetropft","name_en":"Pea green, canned, drained","bls_code":"G760902","warengruppe":"G"}
+{"name_de":"Zuckererbse gekocht","name_en":"Sugar pea boiled","bls_code":"G761032","warengruppe":"G"}
+{"name_de":"Zuckererbse roh","name_en":"Sugar pea raw","bls_code":"G761100","warengruppe":"G"}
+{"name_de":"Zuckererbse gedünstet","name_en":"Sugar pea stewed","bls_code":"G761152","warengruppe":"G"}
+{"name_de":"Zuckererbse tiefgefroren","name_en":"Sugar pea deep-frozen","bls_code":"G761200","warengruppe":"G"}
+{"name_de":"Zuckererbse tiefgefroren, gekocht","name_en":"Sugar pea deep-frozen, boiled","bls_code":"G761232","warengruppe":"G"}
+{"name_de":"Zuckererbse tiefgefroren, gedünstet","name_en":"Sugar pea deep-frozen, stewed","bls_code":"G761252","warengruppe":"G"}
+{"name_de":"Kichererbse reif","name_en":"Chick pea mature","bls_code":"G770400","warengruppe":"G"}
+{"name_de":"Kichererbse reif, gekocht","name_en":"Chick pea mature, boiled","bls_code":"G770432","warengruppe":"G"}
+{"name_de":"Limabohne (Butterbohne Mondbohne) reif","name_en":"Lima bean/butter bean, mature","bls_code":"G780400","warengruppe":"G"}
+{"name_de":"Limabohne (Butterbohne, Mondbohne) reif, gekocht","name_en":"Lima bean/butter bean, mature, boiled","bls_code":"G780432","warengruppe":"G"}
+{"name_de":"Gemüsecremesuppe Instantpulver","name_en":"Cream of vegetable soup instant powder","bls_code":"G850100","warengruppe":"G"}
+{"name_de":"Gemüsecremesuppe aus Instantpulver (mit Wasser zubereitet)","name_en":"Cream of vegetable soup, made from instant powder and water","bls_code":"G850132","warengruppe":"G"}
+{"name_de":"Röstzwiebeln (Fertigprodukt)","name_en":"Fried onions (ready-made product)","bls_code":"G860192","warengruppe":"G"}
+{"name_de":"Bohne grün, milchsauer fermentiert, abgetropft","name_en":"Bean green, lactic acid fermented, drained","bls_code":"G880402","warengruppe":"G"}
+{"name_de":"Mixed Pickles gesäuert, abgetropft","name_en":"Mixed pickles, drained","bls_code":"G880602","warengruppe":"G"}
+{"name_de":"Salzgurke/Salzdillgurke, milchsauer fermentiert, abgetropft","name_en":"Gherkin lactic acid fermented, drained","bls_code":"G890702","warengruppe":"G"}
+{"name_de":"Cornichons gesäuert, abgetropft","name_en":"Cornichons pickled, canned, drained","bls_code":"G890902","warengruppe":"G"}
+{"name_de":"Honiggurke gesäuert, abgetropft","name_en":"Sweet cucumber pickled, canned, drained","bls_code":"G891102","warengruppe":"G"}
+{"name_de":"Senfgurke gesäuert, abgetropft","name_en":"Mustard cucumber pickled, canned, drained","bls_code":"G891202","warengruppe":"G"}
+{"name_de":"Gemüse-Meerrettich (ohne Salz) Konserve","name_en":"Horseradish (unsalted) canned","bls_code":"G898100","warengruppe":"G"}
+{"name_de":"Sahne-Meerrettich Konserve","name_en":"Creamed horseradish canned","bls_code":"G898200","warengruppe":"G"}
+{"name_de":"Tafel-Meerrettich Konserve","name_en":"Horsereadish canned","bls_code":"G898300","warengruppe":"G"}
+{"name_de":"Ajvar Konserve","name_en":"Ajvar canned","bls_code":"G898400","warengruppe":"G"}
+{"name_de":"Gemüsemischung Leipziger Allerlei, tiefgefroren","name_en":"Mixed vegetables \"Leipziger Allerlei\", deep-frozen","bls_code":"G920200","warengruppe":"G"}
+{"name_de":"Gemüsemischung Leipziger Allerlei, tiefgefroren, gekocht","name_en":"Mixed vegetables \"Leipziger Allerlei\", deep-frozen, boiled","bls_code":"G920232","warengruppe":"G"}
+{"name_de":"Gemüsemischung Leipziger Allerlei, tiefgefroren, gedünstet","name_en":"Mixed vegetables \"Leipziger Allerlei\", deep-frozen, stewed","bls_code":"G920252","warengruppe":"G"}
+{"name_de":"Gemüsemischung Leipziger Allerlei, Konserve, abgetropft","name_en":"Mixed vegetables \"Leipziger Allerlei\", canned, drained","bls_code":"G920902","warengruppe":"G"}
+{"name_de":"Gemüseaufstrich, Brotaufstrich pflanzlich","name_en":"Vegetable spread","bls_code":"G940100","warengruppe":"G"}
+{"name_de":"Vegetarisches Gulasch, Konserve","name_en":"Vegetarian goulash, canned","bls_code":"G950900","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, Konserve, abgetropft","name_en":"Mixed vegetables Asian style, canned, drained","bls_code":"G991902","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, roh","name_en":"Mixed vegetables peas and carrots, raw","bls_code":"G992100","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, gekocht","name_en":"Mixed vegetables peas and carrots, boiled","bls_code":"G992132","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, gedünstet","name_en":"Mixed vegetables peas and carrots, stewed","bls_code":"G992152","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, gebacken","name_en":"Mixed vegetables peas and carrots, baked","bls_code":"G992162","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables peas and carrots, fried without fat (pan)","bls_code":"G992182","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, tiefgefroren","name_en":"Mixed vegetables peas and carrots, deep-frozen","bls_code":"G992200","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, tiefgefroren, gekocht","name_en":"Mixed vegetables peas and carrots, deep-frozen, boiled","bls_code":"G992232","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, tiefgefroren, gedünstet","name_en":"Mixed vegetables peas and carrots, deep-frozen, stewed","bls_code":"G992252","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, tiefgefroren, gebacken","name_en":"Mixed vegetables peas and carrots, deep-frozen, baked","bls_code":"G992262","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables peas and carrots, deep-frozen, fried without fat (pan)","bls_code":"G992282","warengruppe":"G"}
+{"name_de":"Gemüsemischung Erbsen-Karotten, Konserve, abgetropft","name_en":"Mixed vegetables peas and carrots, canned, drained","bls_code":"G992902","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, roh","name_en":"Mixed vegetables Mexican style, raw","bls_code":"G993100","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, gekocht","name_en":"Mixed vegetables Mexican style, boiled","bls_code":"G993132","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, geschmort ohne Fett","name_en":"Mixed vegetables Mexican style, braised without fat","bls_code":"G993142","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, gedünstet","name_en":"Mixed vegetables Mexican style, stewed","bls_code":"G993152","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables Mexican style, fried without fat (pan)","bls_code":"G993182","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, tiefgefroren","name_en":"Mixed vegetables Mexican style, deep-frozen","bls_code":"G993200","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, tiefgefroren, gekocht","name_en":"Mixed vegetables Mexican style, deep-frozen, boiled","bls_code":"G993232","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, tiefgefroren, geschmort ohne Fett","name_en":"Mixed vegetables Mexican style, deep-frozen, braised without fat","bls_code":"G993242","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, tiefgefroren, gedünstet","name_en":"Mixed vegetables Mexican style, deep-frozen, stewed","bls_code":"G993252","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables Mexican style, deep-frozen, fried without fat (pan)","bls_code":"G993282","warengruppe":"G"}
+{"name_de":"Gemüsemischung mexikanische Art, Konserve, abgetropft","name_en":"Mixed vegetables Mexican style, canned, drained","bls_code":"G993902","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, roh","name_en":"Mixed vegetables Asian style, raw","bls_code":"G994100","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, gekocht","name_en":"Mixed vegetables Asian style, boiled","bls_code":"G994132","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, geschmort ohne Fett","name_en":"Mixed vegetables Asian style, braised without fat","bls_code":"G994142","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, gedünstet","name_en":"Mixed vegetables Asian style, stewed","bls_code":"G994152","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, gebacken","name_en":"Mixed vegetables Asian style, baked","bls_code":"G994162","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables Asian style, fried without fat (pan)","bls_code":"G994182","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, tiefgefroren","name_en":"Mixed vegetables Asian style, deep-frozen","bls_code":"G994200","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, tiefgefroren, gekocht","name_en":"Mixed vegetables Asian style, deep-frozen, boiled","bls_code":"G994232","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, tiefgefroren, geschmort ohne Fett","name_en":"Mixed vegetables Asian style, deep-frozen, braised without fat","bls_code":"G994242","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, tiefgefroren, gedünstet","name_en":"Mixed vegetables Asian style, deep-frozen, stewed","bls_code":"G994252","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, tiefgefroren, gebacken","name_en":"Mixed vegetables Asian style, deep-frozen, baked","bls_code":"G994262","warengruppe":"G"}
+{"name_de":"Gemüsemischung asiatische Art, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Mixed vegetables Asian style, deep-frozen, fried without fat (pan)","bls_code":"G994282","warengruppe":"G"}
+{"name_de":"Nori-Blatt geröstet","name_en":"Sushi nori (toasted)","bls_code":"G995000","warengruppe":"G"}
+{"name_de":"Sojaproteinisolat","name_en":"Soya bean protein isolate","bls_code":"H011000","warengruppe":"H"}
+{"name_de":"Sojalecithin","name_en":"Soya bean lecithin","bls_code":"H012000","warengruppe":"H"}
+{"name_de":"Sojawürstchen","name_en":"Soya bean small sausage","bls_code":"H014900","warengruppe":"H"}
+{"name_de":"Glasnudeln aus Mungbohnenstärke, roh","name_en":"Glass noodles made from mung bean starch, raw","bls_code":"H030400","warengruppe":"H"}
+{"name_de":"Glasnudeln aus Mungbohnenstärke, gekocht","name_en":"Glass noodles made from mung bean starch, boiled","bls_code":"H030432","warengruppe":"H"}
+{"name_de":"Erdnuss geröstet","name_en":"Peanut roasted","bls_code":"H110600","warengruppe":"H"}
+{"name_de":"Erdnuss geröstet, gesalzen","name_en":"Peanut roasted, salted","bls_code":"H110700","warengruppe":"H"}
+{"name_de":"Erdnussmus","name_en":"Peanut butter (100 % pure)","bls_code":"H110800","warengruppe":"H"}
+{"name_de":"Walnuss","name_en":"Walnut","bls_code":"H120100","warengruppe":"H"}
+{"name_de":"Walnuss gemahlen","name_en":"Walnut ground","bls_code":"H120400","warengruppe":"H"}
+{"name_de":"Walnuss geröstet ohne Fett","name_en":"Walnut roasted without fat","bls_code":"H120610","warengruppe":"H"}
+{"name_de":"Haselnuss","name_en":"Hazelnut","bls_code":"H130100","warengruppe":"H"}
+{"name_de":"Haselnuss gemahlen","name_en":"Hazelnut ground","bls_code":"H130400","warengruppe":"H"}
+{"name_de":"Haselnuss geröstet ohne Fett","name_en":"Hazelnut roasted without fat","bls_code":"H130610","warengruppe":"H"}
+{"name_de":"Haselnussmus","name_en":"Hazelnut butter (100 % pure)","bls_code":"H130800","warengruppe":"H"}
+{"name_de":"Kokos Fruchtfleisch, roh","name_en":"Coconut meat, raw","bls_code":"H150100","warengruppe":"H"}
+{"name_de":"Kokos Fruchtfleisch, geraspelt, getrocknet","name_en":"Coconut meat, grated, dried","bls_code":"H150400","warengruppe":"H"}
+{"name_de":"Kokoswasser (Fruchtwasser)","name_en":"Coconut water (liquid from coconuts)","bls_code":"H151000","warengruppe":"H"}
+{"name_de":"Kokosmilch/Kokosnussmilch","name_en":"Coconut milk","bls_code":"H154000","warengruppe":"H"}
+{"name_de":"Pekannuss","name_en":"Pecan","bls_code":"H160100","warengruppe":"H"}
+{"name_de":"Pekannuss geröstet ohne Fett","name_en":"Pecan roasted without fat","bls_code":"H160600","warengruppe":"H"}
+{"name_de":"Cashewkern","name_en":"Cashew nut","bls_code":"H170100","warengruppe":"H"}
+{"name_de":"Cashewkern geröstet mit Fett","name_en":"Cashew nut roasted with fat","bls_code":"H170600","warengruppe":"H"}
+{"name_de":"Cashewkern geröstet ohne Fett","name_en":"Cashew nut roasted without fat","bls_code":"H170610","warengruppe":"H"}
+{"name_de":"Cashewkern geröstet mit Fett, gesalzen","name_en":"Cashew nut roasted with fat, salted","bls_code":"H170700","warengruppe":"H"}
+{"name_de":"Paranuss","name_en":"Brazil nut","bls_code":"H180100","warengruppe":"H"}
+{"name_de":"Paranuss geröstet ohne Fett","name_en":"Brazil nut roasted without fat","bls_code":"H180610","warengruppe":"H"}
+{"name_de":"Macadamianuss","name_en":"Macadamia nut","bls_code":"H190100","warengruppe":"H"}
+{"name_de":"Macadamianuss geröstet ohne Fett","name_en":"Macadamia nut roasted without fat","bls_code":"H190600","warengruppe":"H"}
+{"name_de":"Macadamianuss geröstet ohne Fett, gesalzen","name_en":"Macadamia nut roasted without fat, salted","bls_code":"H190700","warengruppe":"H"}
+{"name_de":"Mandel süß","name_en":"Sweet almond","bls_code":"H210100","warengruppe":"H"}
+{"name_de":"Mandel süß, blanchiert","name_en":"Sweet almond blanched","bls_code":"H210200","warengruppe":"H"}
+{"name_de":"Mandel süß, gemahlen","name_en":"Sweet almond crushed","bls_code":"H210400","warengruppe":"H"}
+{"name_de":"Mandel süß, geröstet ohne Fett","name_en":"Sweet almond roasted without fat","bls_code":"H210600","warengruppe":"H"}
+{"name_de":"Mandel süß, geröstet mit Fett, gesalzen","name_en":"Sweet almond roasted with fat, salted","bls_code":"H210710","warengruppe":"H"}
+{"name_de":"Mandelmus","name_en":"Sweet almond butter (100 % pure)","bls_code":"H212800","warengruppe":"H"}
+{"name_de":"Mandel bitter","name_en":"Bitter almond","bls_code":"H220100","warengruppe":"H"}
+{"name_de":"Edelkastanie/Marone","name_en":"Sweet chestnut","bls_code":"H230100","warengruppe":"H"}
+{"name_de":"Edelkastanie/Marone, gekocht","name_en":"Sweet chestnut boiled","bls_code":"H230132","warengruppe":"H"}
+{"name_de":"Edelkastanie/Marone, gebacken","name_en":"Sweet chestnut baked","bls_code":"H230162","warengruppe":"H"}
+{"name_de":"Edelkastanie/Marone, gegrillt","name_en":"Sweet chestnut grilled","bls_code":"H230172","warengruppe":"H"}
+{"name_de":"Edelkastanie/Marone, gebraten ohne Fett (Pfanne)","name_en":"Sweet chestnut fried without fat (pan)","bls_code":"H230182","warengruppe":"H"}
+{"name_de":"Kastanienmehl","name_en":"Sweet chestnut flour","bls_code":"H230400","warengruppe":"H"}
+{"name_de":"Pistazie","name_en":"Pistachio nut","bls_code":"H250100","warengruppe":"H"}
+{"name_de":"Pistazie geröstet ohne Fett","name_en":"Pistachio nut roasted without fat","bls_code":"H250600","warengruppe":"H"}
+{"name_de":"Pistazie geröstet ohne Fett, gesalzen","name_en":"Pistachio nut roasted without fat, salted","bls_code":"H250700","warengruppe":"H"}
+{"name_de":"Kürbiskern","name_en":"Pumpkin seed","bls_code":"H310100","warengruppe":"H"}
+{"name_de":"Kürbiskern geröstet ohne Fett","name_en":"Pumpkin seed roasted without fat","bls_code":"H310600","warengruppe":"H"}
+{"name_de":"Pinienkern","name_en":"Pine nut","bls_code":"H320100","warengruppe":"H"}
+{"name_de":"Pinienkern geröstet ohne Fett","name_en":"Pine nut roasted without fat","bls_code":"H320600","warengruppe":"H"}
+{"name_de":"Leinsamen","name_en":"Linseed/flax seed","bls_code":"H410100","warengruppe":"H"}
+{"name_de":"Leinsamen geschrotet","name_en":"Linseed/flax seed, ground","bls_code":"H410400","warengruppe":"H"}
+{"name_de":"Leinsamen geröstet ohne Fett","name_en":"Linseed/flax seed, roasted without fat","bls_code":"H410600","warengruppe":"H"}
+{"name_de":"Sesam","name_en":"Sesame seed","bls_code":"H420100","warengruppe":"H"}
+{"name_de":"Sesam geröstet ohne Fett","name_en":"Sesame seeds roasted without fat","bls_code":"H420610","warengruppe":"H"}
+{"name_de":"Sonnenblumenkern","name_en":"Sunflower seed","bls_code":"H430100","warengruppe":"H"}
+{"name_de":"Sonnenblumenkern geröstet ohne Fett","name_en":"Sunflower seeds roasted without fat","bls_code":"H430610","warengruppe":"H"}
+{"name_de":"Mohn","name_en":"Poppy seed","bls_code":"H450100","warengruppe":"H"}
+{"name_de":"Mohn gemahlen","name_en":"Poppy seed ground","bls_code":"H450400","warengruppe":"H"}
+{"name_de":"Chia-Samen","name_en":"Chia seeds","bls_code":"H480100","warengruppe":"H"}
+{"name_de":"Oliven grün, gesäuert, abgetropft","name_en":"Olives green, pickled, drained","bls_code":"H510802","warengruppe":"H"}
+{"name_de":"Oliven grün, gefüllt mit Paprikapaste, gesäuert, abgetropft","name_en":"Olives green, filled with sweet pepper paste, pickled, drained","bls_code":"H510900","warengruppe":"H"}
+{"name_de":"Oliven grün, gefüllt mit Mandeln, gesäuert, abgetropft","name_en":"Olives green, filled with almonds, pickled, drained","bls_code":"H511900","warengruppe":"H"}
+{"name_de":"Oliven geschwärzt, in Salzlake, abgetropft","name_en":"Olives blackened, in brine, drained","bls_code":"H520800","warengruppe":"H"}
+{"name_de":"Bambussprossen roh","name_en":"Bamboo shoots raw","bls_code":"H610100","warengruppe":"H"}
+{"name_de":"Bambussprossen gekocht","name_en":"Bamboo shoots boiled","bls_code":"H610132","warengruppe":"H"}
+{"name_de":"Bambussprossen gebraten ohne Fett (Pfanne)","name_en":"Bamboo shoots fried without fat (pan)","bls_code":"H610182","warengruppe":"H"}
+{"name_de":"Bambussprossen Konserve, abgetropft","name_en":"Bamboo shoots canned, drained","bls_code":"H610902","warengruppe":"H"}
+{"name_de":"Sojabohnensprossen/Sojabohnenkeimlinge, roh","name_en":"Soya bean sprouts raw","bls_code":"H620100","warengruppe":"H"}
+{"name_de":"Sojabohnensprossen/Sojabohnenkeimlinge, Konserve, abgetropft","name_en":"Soya bean sprouts canned, drained","bls_code":"H620902","warengruppe":"H"}
+{"name_de":"Alfalfasprossen/Alfalfakeimlinge, roh","name_en":"Lucerne/alfalfa sprouts, raw","bls_code":"H640100","warengruppe":"H"}
+{"name_de":"Mungbohnensprossen/Mungbohnenkeimlinge, roh","name_en":"Mung bean sprouts raw","bls_code":"H650100","warengruppe":"H"}
+{"name_de":"Mungbohnensprossen/Mungbohnenkeimlinge, Konserve, abgetropft","name_en":"Mung bean sprouts canned, drained","bls_code":"H650902","warengruppe":"H"}
+{"name_de":"Linsensprossen/Linsenkeimlinge, roh","name_en":"Lentils sprouted raw","bls_code":"H662100","warengruppe":"H"}
+{"name_de":"Augenbohne reif","name_en":"Cowpea/black-eyed pea, mature","bls_code":"H702100","warengruppe":"H"}
+{"name_de":"Augenbohne reif, gekocht","name_en":"Cowpea/black-eyed pea, mature, boiled","bls_code":"H702132","warengruppe":"H"}
+{"name_de":"Augenbohne reif, Konserve, abgetropft","name_en":"Cowpea/black-eyed pea, mature, canned, drained","bls_code":"H702902","warengruppe":"H"}
+{"name_de":"Erbsenmehl","name_en":"Pea flour","bls_code":"H710400","warengruppe":"H"}
+{"name_de":"Kichererbsenmehl","name_en":"Chickpea flour","bls_code":"H720400","warengruppe":"H"}
+{"name_de":"Kichererbse reif, Konserve, abgetropft","name_en":"Chickpea mature, canned, drained","bls_code":"H720902","warengruppe":"H"}
+{"name_de":"Linse reif","name_en":"Lentil mature","bls_code":"H725100","warengruppe":"H"}
+{"name_de":"Linse rot reif","name_en":"Lentil red mature","bls_code":"H730000","warengruppe":"H"}
+{"name_de":"Linse rot, reif, gekocht","name_en":"Lentil red, mature, boiled","bls_code":"H730032","warengruppe":"H"}
+{"name_de":"Linse reif, gekocht","name_en":"Lentil mature, boiled","bls_code":"H730132","warengruppe":"H"}
+{"name_de":"Linsenmehl","name_en":"Lentil flour","bls_code":"H730400","warengruppe":"H"}
+{"name_de":"Linse reif, Konserve, abgetropft","name_en":"Lentil mature, canned, drained","bls_code":"H730902","warengruppe":"H"}
+{"name_de":"Lupinenmehl","name_en":"Lupin flour","bls_code":"H731400","warengruppe":"H"}
+{"name_de":"Gartenbohne reif","name_en":"Haricot bean mature","bls_code":"H739400","warengruppe":"H"}
+{"name_de":"Gartenbohne reif, gekocht","name_en":"Haricot bean mature, boiled","bls_code":"H740132","warengruppe":"H"}
+{"name_de":"Gartenbohne reif, Konserve, abgetropft","name_en":"Haricot bean mature, canned, drained","bls_code":"H740902","warengruppe":"H"}
+{"name_de":"Kidneybohne reif","name_en":"Kidney bean mature","bls_code":"H742100","warengruppe":"H"}
+{"name_de":"Kidneybohne reif, gekocht","name_en":"Kidney bean mature, boiled","bls_code":"H742132","warengruppe":"H"}
+{"name_de":"Kidneybohne reif, Konserve, abgetropft","name_en":"Kidney bean mature, canned, drained","bls_code":"H742902","warengruppe":"H"}
+{"name_de":"Dicke Bohne reif","name_en":"Broad bean mature","bls_code":"H750100","warengruppe":"H"}
+{"name_de":"Dicke Bohne reif, gekocht","name_en":"Broad bean mature, boiled","bls_code":"H750132","warengruppe":"H"}
+{"name_de":"Sojabohne reif, geröstet ohne Fett (Sojakerne)","name_en":"Soya bean mature (soya kernel) roasted without fat","bls_code":"H760600","warengruppe":"H"}
+{"name_de":"Sojamehl vollfett","name_en":"Soya flour full fat","bls_code":"H764400","warengruppe":"H"}
+{"name_de":"Sojaschnetzel/Sojagranulat, texturiert, trocken","name_en":"Plant-based mince, made from texturised soya protein, plain, dry","bls_code":"H765000","warengruppe":"H"}
+{"name_de":"Sojaschnetzel/Sojagranulat, texturiert, eingeweicht, gebraten ohne Fett (Pfanne)","name_en":"Plant-based mince, made from texturised soya protein, plain, soaked, fried without fat (pan)","bls_code":"H765082","warengruppe":"H"}
+{"name_de":"Mungbohne reif","name_en":"Mung bean mature","bls_code":"H770100","warengruppe":"H"}
+{"name_de":"Mungbohne reif, gekocht","name_en":"Mung bean mature, boiled","bls_code":"H770132","warengruppe":"H"}
+{"name_de":"Mandeldrink ungesüßt","name_en":"Almond drink unsweetened","bls_code":"H800000","warengruppe":"H"}
+{"name_de":"Mandeldrink ungesüßt, angereichert mit Vitaminen und Calcium","name_en":"Almond drink unsweetened, fortified with vitamins and calcium","bls_code":"H800100","warengruppe":"H"}
+{"name_de":"Mandeldrink gesüßt, aromatisiert","name_en":"Almond drink sweetened, flavoured","bls_code":"H800200","warengruppe":"H"}
+{"name_de":"Mandeldrink gesüßt, aromatisiert, angereichert mit Calcium","name_en":"Almond drink sweetened, flavoured, fortified with calcium","bls_code":"H800300","warengruppe":"H"}
+{"name_de":"Mandeldrink gesüßt, aromatisiert, angereichert mit Vitaminen und Calcium","name_en":"Almond drink sweetened, flavoured, fortified with vitamins and calcium","bls_code":"H800400","warengruppe":"H"}
+{"name_de":"Studentenfutter","name_en":"Fruit and nut mix","bls_code":"H810000","warengruppe":"H"}
+{"name_de":"Erdnuss geröstet, im Teigmantel","name_en":"Peanut roasted, crispy coated","bls_code":"H810100","warengruppe":"H"}
+{"name_de":"Sojadrink ungesüßt","name_en":"Soya drink unsweetened","bls_code":"H841100","warengruppe":"H"}
+{"name_de":"Sojadrink ungesüßt, angereichert mit Vitaminen und Calcium","name_en":"Soya drink unsweetened, fortified with vitamins and calcium","bls_code":"H841400","warengruppe":"H"}
+{"name_de":"Sojadrink gesüßt, aromatisiert","name_en":"Soya drink sweetened, flavoured","bls_code":"H842400","warengruppe":"H"}
+{"name_de":"Sojadrink gesüßt, aromatisiert, angereichert mit Vitaminen und Calcium","name_en":"Soya drink sweetened, flavoured, fortified with vitamins and calcium","bls_code":"H842600","warengruppe":"H"}
+{"name_de":"Dessert/Puddingalternative, pflanzlich","name_en":"Plant-based dessert/pudding alternative","bls_code":"H843200","warengruppe":"H"}
+{"name_de":"Dessert/Puddingalternative, pflanzlich, angereichert mit Vitaminen und Calcium","name_en":"Plant-based dessert/pudding alternative, fortified with vitamins and calcium","bls_code":"H843300","warengruppe":"H"}
+{"name_de":"Soja-Joghurtalternative ungesüßt","name_en":"Plant-based yogurt alternative, made from soya, unsweetened","bls_code":"H844000","warengruppe":"H"}
+{"name_de":"Soja-Joghurtalternative ungesüßt, angereichert mit Vitaminen und Calcium","name_en":"Plant-based yogurt alternative, made from soya, unsweetened, fortified with vitamins and calcium","bls_code":"H844100","warengruppe":"H"}
+{"name_de":"Soja-Joghurtalternative gesüßt, aromatisiert","name_en":"Plant-based yogurt alternative, made from soya, sweetened, flavoured","bls_code":"H844400","warengruppe":"H"}
+{"name_de":"Soja-Joghurtalternative gesüßt, aromatisiert, angereichert mit Vitaminen und Calcium","name_en":"Plant-based yogurt alternative, made from soya, sweetened, flavoured fortified with vitamins and calcium","bls_code":"H844500","warengruppe":"H"}
+{"name_de":"Sojakochcreme","name_en":"Plant-based cream alternative, made from soya (for boiling and refining)","bls_code":"H845000","warengruppe":"H"}
+{"name_de":"Tofu","name_en":"Tofu","bls_code":"H861000","warengruppe":"H"}
+{"name_de":"Tofu gargezogen","name_en":"Tofu poached","bls_code":"H861032","warengruppe":"H"}
+{"name_de":"Tofu geschmort ohne Fett","name_en":"Tofu braised without fat","bls_code":"H861042","warengruppe":"H"}
+{"name_de":"Tofu gebacken","name_en":"Tofu baked","bls_code":"H861062","warengruppe":"H"}
+{"name_de":"Tofu gebraten ohne Fett (Pfanne)","name_en":"Tofu fried without fat (pan)","bls_code":"H861082","warengruppe":"H"}
+{"name_de":"Seidentofu","name_en":"Silken tofu","bls_code":"H861100","warengruppe":"H"}
+{"name_de":"Seidentofu gargezogen","name_en":"Silken tofu poached","bls_code":"H861132","warengruppe":"H"}
+{"name_de":"Miso/Sojabohnenpaste","name_en":"Miso/soya bean paste","bls_code":"H862200","warengruppe":"H"}
+{"name_de":"Sonnenblumenkernaufstrich, Brotaufstrich pflanzlich","name_en":"Sunflower seed spread","bls_code":"H880100","warengruppe":"H"}
+{"name_de":"Erdnussbutter/Erdnusscreme","name_en":"Peanut butter","bls_code":"H880200","warengruppe":"H"}
+{"name_de":"Käsealternative, Basis Cashewkerne, vegan","name_en":"Plant-based cheese alternative, cashew-based, vegan","bls_code":"H882000","warengruppe":"H"}
+{"name_de":"Frischecreme/Streichcreme, Basis Mandeln, vegan","name_en":"Plant-based soft cream cheese alternative, almond-based, vegan","bls_code":"H882100","warengruppe":"H"}
+{"name_de":"Bohnen weiß, in Tomatensoße, Konserve","name_en":"Haricot beans in tomato sauce, canned","bls_code":"H900900","warengruppe":"H"}
+{"name_de":"Tofu-Bratlinge gebraten ohne Fett (Pfanne)","name_en":"Tofu burgers fried without fat (pan)","bls_code":"H910200","warengruppe":"H"}
+{"name_de":"Vegetarische Bratwurst (aus Tofu und Weizenprotein)","name_en":"Vegetarian bratwurst (made from tofu and wheat protein)","bls_code":"H910300","warengruppe":"H"}
+{"name_de":"Veganes Schnitzel","name_en":"Vegan schnitzel","bls_code":"H910400","warengruppe":"H"}
+{"name_de":"Vegetarische Wiener Würstchen","name_en":"Vegetarian Vienna sausages","bls_code":"H910500","warengruppe":"H"}
+{"name_de":"Soja-Bolognese Konserve","name_en":"Soya Bolognese, canned","bls_code":"H923900","warengruppe":"H"}
+{"name_de":"Soja-Bratlinge gebraten ohne Fett (Pfanne)","name_en":"Soya burgers fried without fat (pan)","bls_code":"H926100","warengruppe":"H"}
+{"name_de":"Veganer Aufschnitt (Wurstalternative)","name_en":"Vegan cold cuts alternative","bls_code":"H930000","warengruppe":"H"}
+{"name_de":"Soja-Streichwurstalternative, vegan","name_en":"Soya spreadable sausage alternative, vegan","bls_code":"H930100","warengruppe":"H"}
+{"name_de":"Vegetarischer Aufschnitt (Wurstalternative, mit Ei)","name_en":"Vegetarian cold cuts alternative, with egg","bls_code":"H930200","warengruppe":"H"}
+{"name_de":"Hummus/Kichererbsenmus","name_en":"Hummus/chickpea puree","bls_code":"H960000","warengruppe":"H"}
+{"name_de":"Kartoffel geschält, roh","name_en":"Potatoe peeled, raw","bls_code":"K110100","warengruppe":"K"}
+{"name_de":"Kartoffel geschält, gekocht","name_en":"Potatoe peeled, boiled","bls_code":"K110132","warengruppe":"K"}
+{"name_de":"Kartoffel geschält, geschmort ohne Fett","name_en":"Potatoe peeled, braised without fat","bls_code":"K110142","warengruppe":"K"}
+{"name_de":"Kartoffel geschält, druckgedämpft","name_en":"Potatoe peeled, pressure-steamed","bls_code":"K110143","warengruppe":"K"}
+{"name_de":"Kartoffel geschält, gebacken","name_en":"Potatoe peeled, baked","bls_code":"K110162","warengruppe":"K"}
+{"name_de":"Kartoffel geschält, gebraten ohne Fett (Pfanne)","name_en":"Potatoe peeled, fried without fat (pan)","bls_code":"K110182","warengruppe":"K"}
+{"name_de":"Kartoffel geschält, gekocht, Konserve, abgetropft","name_en":"Potatoe peeled, boiled, canned, drained","bls_code":"K110902","warengruppe":"K"}
+{"name_de":"Kartoffel ungeschält, roh","name_en":"Potatoe unpeeled, raw","bls_code":"K120100","warengruppe":"K"}
+{"name_de":"Kartoffel ungeschält, gekocht","name_en":"Potatoe unpeeled, boiled","bls_code":"K120134","warengruppe":"K"}
+{"name_de":"Kartoffel ungeschält, gebacken","name_en":"Potatoe unpeeled, baked","bls_code":"K120164","warengruppe":"K"}
+{"name_de":"Kartoffel ungeschält, gebraten ohne Fett (Pfanne)","name_en":"Potatoe unpeeled, fried without fat (pan)","bls_code":"K120184","warengruppe":"K"}
+{"name_de":"Kartoffel ungeschält, tiefgefroren","name_en":"Potatoe unpeeled, deep-frozen","bls_code":"K120200","warengruppe":"K"}
+{"name_de":"Kartoffel ungeschält, tiefgefroren, gebacken","name_en":"Potatoe unpeeled, deep-frozen, baked","bls_code":"K120264","warengruppe":"K"}
+{"name_de":"Pommes frites tiefgefroren","name_en":"Potato chips/french fries, deep-frozen","bls_code":"K130200","warengruppe":"K"}
+{"name_de":"Pommes frites tiefgefroren, gebacken","name_en":"Potato chips/french fries, deep-frozen, baked","bls_code":"K130262","warengruppe":"K"}
+{"name_de":"Pommes frites tiefgefroren, gebacken, gesalzen","name_en":"Potato chips/french fries, deep-frozen, baked, salted","bls_code":"K130362","warengruppe":"K"}
+{"name_de":"Pommes frites tiefgefroren, frittiert","name_en":"Potato chips/french fries, deep-frozen, deep-fried","bls_code":"K130492","warengruppe":"K"}
+{"name_de":"Pommes frites tiefgefroren, frittiert, gesalzen","name_en":"Potato chips/french fries, deep-frozen, deep-fried, salted","bls_code":"K130592","warengruppe":"K"}
+{"name_de":"Kartoffelpüree Instantpulver","name_en":"Potatoes mashed instant powder","bls_code":"K213000","warengruppe":"K"}
+{"name_de":"Kartoffelstärke (Kartoffelmehl)","name_en":"Potato starch (potato flour)","bls_code":"K230000","warengruppe":"K"}
+{"name_de":"Kartoffelkloß (aus rohen Kartoffeln) Trockenprodukt","name_en":"Potato dumpling (from raw potatoes) dehydrated product","bls_code":"K240400","warengruppe":"K"}
+{"name_de":"Kartoffelkloß (aus gekochten Kartoffeln) Trockenprodukt","name_en":"Potato dumpling (from boiled potatoes) dehydrated product","bls_code":"K240500","warengruppe":"K"}
+{"name_de":"Kartoffelkloß halb und halb, tiefgefroren","name_en":"Potato dumpling half and half, deep-frozen","bls_code":"K241200","warengruppe":"K"}
+{"name_de":"Kartoffelkloß halb und halb, tiefgefroren, gargezogen","name_en":"Potato dumpling half and half, deep-frozen, poached","bls_code":"K241232","warengruppe":"K"}
+{"name_de":"Kartoffelpuffer tiefgefroren","name_en":"Potato pancakes deep-frozen","bls_code":"K260200","warengruppe":"K"}
+{"name_de":"Kartoffelpuffer tiefgefroren, gebacken","name_en":"Potato pancakes deep-frozen, baked","bls_code":"K260262","warengruppe":"K"}
+{"name_de":"Kartoffelpuffer tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Potato pancakes deep-frozen, fried without fat (pan)","bls_code":"K260282","warengruppe":"K"}
+{"name_de":"Kartoffelpuffer tiefgefroren, frittiert","name_en":"Potato pancakes deep-frozen, deep-fried","bls_code":"K260292","warengruppe":"K"}
+{"name_de":"Gnocchi roh","name_en":"Gnocchi raw","bls_code":"K270000","warengruppe":"K"}
+{"name_de":"Gnocchi gedämpft","name_en":"Gnocchi steamed","bls_code":"K270022","warengruppe":"K"}
+{"name_de":"Gnocchi gekocht","name_en":"Gnocchi boiled","bls_code":"K270032","warengruppe":"K"}
+{"name_de":"Gnocchi gekocht, gebacken","name_en":"Gnocchi boiled, baked","bls_code":"K270062","warengruppe":"K"}
+{"name_de":"Gnocchi gekocht, gebraten ohne Fett (Pfanne)","name_en":"Gnocchi boiled, fried without fat (pan)","bls_code":"K270082","warengruppe":"K"}
+{"name_de":"Gnocchi tiefgefroren","name_en":"Gnocchi deep-frozen","bls_code":"K271000","warengruppe":"K"}
+{"name_de":"Gnocchi tiefgefroren, gekocht","name_en":"Gnocchi deep-frozen, boiled","bls_code":"K271032","warengruppe":"K"}
+{"name_de":"Kartoffelchips/Stapelchips, diverse Sorten","name_en":"Potato crisps/potato chips (various types)","bls_code":"K280100","warengruppe":"K"}
+{"name_de":"Kartoffelsticks","name_en":"Potato sticks","bls_code":"K280200","warengruppe":"K"}
+{"name_de":"Kartoffelkroketten tiefgefroren","name_en":"Potato croquettes deep-frozen","bls_code":"K282200","warengruppe":"K"}
+{"name_de":"Kartoffelkroketten tiefgefroren, gebacken","name_en":"Potato croquettes deep-frozen, baked","bls_code":"K282262","warengruppe":"K"}
+{"name_de":"Kartoffelkroketten tiefgefroren, frittiert","name_en":"Potato croquettes deep-frozen, deep-fried","bls_code":"K282292","warengruppe":"K"}
+{"name_de":"Kartoffelchips energiereduziert","name_en":"Potato crisps/potato chips, calorie-reduced","bls_code":"K290100","warengruppe":"K"}
+{"name_de":"Kartoffeltaschen mit Frischkäsefüllung, tiefgefroren","name_en":"Potato pockets with cream cheese filling, deep-frozen","bls_code":"K311200","warengruppe":"K"}
+{"name_de":"Kartoffeltaschen mit Frischkäsefüllung, tiefgefroren, gebacken","name_en":"Potato pockets with cream cheese filling, deep-frozen, baked","bls_code":"K311262","warengruppe":"K"}
+{"name_de":"Kartoffeltaschen mit Frischkäsefüllung, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Potato pockets with cream cheese filling, deep-frozen, fried without fat (pan)","bls_code":"K311282","warengruppe":"K"}
+{"name_de":"Kartoffeltaschen mit Frischkäsefüllung tiefgefroren, frittiert","name_en":"Potato pockets with cream cheese filling, deep-frozen, deep-fried","bls_code":"K311292","warengruppe":"K"}
+{"name_de":"Kartoffelrösti tiefgefroren","name_en":"Potato rösti (fried grated potatoes) deep-frozen","bls_code":"K391200","warengruppe":"K"}
+{"name_de":"Kartoffelrösti tiefgefroren, gebacken","name_en":"Potato rösti (fried grated potatoes) deep-frozen, baked","bls_code":"K391262","warengruppe":"K"}
+{"name_de":"Kartoffelrösti tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Potato rösti (fried grated potatoes) deep-frozen, fried without fat (pan)","bls_code":"K391282","warengruppe":"K"}
+{"name_de":"Kartoffelrösti tiefgefroren, frittiert","name_en":"Potato rösti (fried grated potatoes) deep-frozen, deep-fried","bls_code":"K391292","warengruppe":"K"}
+{"name_de":"Kartoffel-Speck-Rösti tiefgefroren","name_en":"Potato rösti with bacon, deep-frozen","bls_code":"K392200","warengruppe":"K"}
+{"name_de":"Kartoffel-Speck-Rösti tiefgefroren, gebacken","name_en":"Potato rösti with bacon, deep-frozen, baked","bls_code":"K392262","warengruppe":"K"}
+{"name_de":"Kartoffel-Speck-Rösti tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Potato rösti with bacon, deep-frozen, fried without fat (pan)","bls_code":"K392282","warengruppe":"K"}
+{"name_de":"Kartoffel-Speck-Rösti tiefgefroren, frittiert","name_en":"Potato rösti with bacon, deep-frozen, deep-fried","bls_code":"K392292","warengruppe":"K"}
+{"name_de":"Maniok/Cassava, roh","name_en":"Manioc/cassava, raw","bls_code":"K410100","warengruppe":"K"}
+{"name_de":"Maniok/Cassava, gebacken","name_en":"Manioc/cassava, baked","bls_code":"K410162","warengruppe":"K"}
+{"name_de":"Maniok/Cassava, gebraten ohne Fett (Pfanne)","name_en":"Manioc/cassava, fried without fat (pan)","bls_code":"K410182","warengruppe":"K"}
+{"name_de":"Maniok/Cassava, gekocht","name_en":"Manioc/cassava, boiled","bls_code":"K410432","warengruppe":"K"}
+{"name_de":"Batate/Süßkartoffel, roh","name_en":"Batata/sweet potato, raw","bls_code":"K420100","warengruppe":"K"}
+{"name_de":"Batate/Süßkartoffel, gekocht","name_en":"Batata/sweet potato, boiled","bls_code":"K420132","warengruppe":"K"}
+{"name_de":"Batate/Süßkartoffel, gebacken","name_en":"Batata/sweet potato, baked","bls_code":"K420162","warengruppe":"K"}
+{"name_de":"Batate/Süßkartoffel, gebraten ohne Fett (Pfanne)","name_en":"Batata/sweet potato, fried without fat (pan)","bls_code":"K420182","warengruppe":"K"}
+{"name_de":"Batate/Süßkartoffel, frittiert, gesalzen","name_en":"Batata/sweet potato, deep-fried, salted","bls_code":"K420192","warengruppe":"K"}
+{"name_de":"Topinambur/Erdartischocke, roh","name_en":"Jerusalem artichoke/topinambur, raw","bls_code":"K430100","warengruppe":"K"}
+{"name_de":"Topinambur/Erdartischocke, gekocht","name_en":"Jerusalem artichoke/topinambur, boiled","bls_code":"K430132","warengruppe":"K"}
+{"name_de":"Topinambur/Erdartischocke, gebacken","name_en":"Jerusalem artichoke/topinambur, baked","bls_code":"K430162","warengruppe":"K"}
+{"name_de":"Topinambur/Erdartischocke, gebraten ohne Fett (Pfanne)","name_en":"Jerusalem artichoke/topinambur, fried without fat (pan)","bls_code":"K430182","warengruppe":"K"}
+{"name_de":"Yamswurzel roh","name_en":"Yam raw","bls_code":"K440100","warengruppe":"K"}
+{"name_de":"Yamswurzel gekocht","name_en":"Yam boiled","bls_code":"K440132","warengruppe":"K"}
+{"name_de":"Yamswurzel gebacken","name_en":"Yam baked","bls_code":"K440162","warengruppe":"K"}
+{"name_de":"Yamswurzel gebraten ohne Fett (Pfanne)","name_en":"Yam fried without fat (pan)","bls_code":"K440182","warengruppe":"K"}
+{"name_de":"Tapioka/Tapiokastärke","name_en":"Tapioca (granulated cassava starch)","bls_code":"K512000","warengruppe":"K"}
+{"name_de":"Pfeilwurzelmehl/Marantastärke","name_en":"Arrowroot flour","bls_code":"K550000","warengruppe":"K"}
+{"name_de":"Champignon roh","name_en":"Button mushroom raw","bls_code":"K701100","warengruppe":"K"}
+{"name_de":"Champignon gekocht","name_en":"Button mushroom boiled","bls_code":"K701132","warengruppe":"K"}
+{"name_de":"Champignon geschmort ohne Fett","name_en":"Button mushroom braised without fat","bls_code":"K701142","warengruppe":"K"}
+{"name_de":"Champignon gedünstet","name_en":"Button mushroom stewed","bls_code":"K701152","warengruppe":"K"}
+{"name_de":"Champignon gebacken","name_en":"Button mushroom baked","bls_code":"K701162","warengruppe":"K"}
+{"name_de":"Champignon gegrillt","name_en":"Button mushroom grilled","bls_code":"K701172","warengruppe":"K"}
+{"name_de":"Champignon gebraten ohne Fett (Pfanne)","name_en":"Button mushroom fried without fat (pan)","bls_code":"K701182","warengruppe":"K"}
+{"name_de":"Champignon tiefgefroren","name_en":"Button mushroom deep-frozen","bls_code":"K701200","warengruppe":"K"}
+{"name_de":"Champignon tiefgefroren, gedünstet","name_en":"Button mushroom deep-frozen, stewed","bls_code":"K701242","warengruppe":"K"}
+{"name_de":"Champignon tiefgefroren, gebacken","name_en":"Button mushroom deep-frozen, baked","bls_code":"K701262","warengruppe":"K"}
+{"name_de":"Champignon tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Button mushroom deep-frozen, fried without fat (pan)","bls_code":"K701282","warengruppe":"K"}
+{"name_de":"Champignon getrocknet","name_en":"Button mushroom dried","bls_code":"K701400","warengruppe":"K"}
+{"name_de":"Champignon getrocknet, gekocht","name_en":"Buttom mushroom dried, boiled","bls_code":"K701432","warengruppe":"K"}
+{"name_de":"Champignon gegrillt, in Öl, Konserve, abgetropft","name_en":"Button mushroom grilled, in oil, canned, drained","bls_code":"K701502","warengruppe":"K"}
+{"name_de":"Champignon Konserve, abgetropft","name_en":"Button mushroom canned, drained","bls_code":"K701902","warengruppe":"K"}
+{"name_de":"Trüffel roh","name_en":"Black truffle (Perigord black truffle) raw","bls_code":"K702100","warengruppe":"K"}
+{"name_de":"Trüffel gedünstet","name_en":"Black truffle (Perigord black truffle) stewed","bls_code":"K702152","warengruppe":"K"}
+{"name_de":"Trüffel gebraten ohne Fett (Pfanne)","name_en":"Black truffle (Perigord black truffle) fried without fat (pan)","bls_code":"K702182","warengruppe":"K"}
+{"name_de":"Trüffel getrocknet","name_en":"Black truffle (Perigord black truffle) dried","bls_code":"K702400","warengruppe":"K"}
+{"name_de":"Trüffel getrocknet, gekocht","name_en":"Black truffle (Perigord black truffle) dried, boiled","bls_code":"K702432","warengruppe":"K"}
+{"name_de":"Trüffel Konserve, abgetropft","name_en":"Black truffle (Perigord black truffle) canned, drained","bls_code":"K702902","warengruppe":"K"}
+{"name_de":"Morchel roh","name_en":"Morel raw","bls_code":"K703100","warengruppe":"K"}
+{"name_de":"Morchel gedünstet","name_en":"Morel stewed","bls_code":"K703152","warengruppe":"K"}
+{"name_de":"Morchel gebraten ohne Fett (Pfanne)","name_en":"Morel fried without fat (pan)","bls_code":"K703182","warengruppe":"K"}
+{"name_de":"Morchel getrocknet","name_en":"Morel dried","bls_code":"K703400","warengruppe":"K"}
+{"name_de":"Morchel getrocknet, gekocht","name_en":"Morel dried, boiled","bls_code":"K703432","warengruppe":"K"}
+{"name_de":"Morchel Konserve, abgetropft","name_en":"Morel canned, drained","bls_code":"K703902","warengruppe":"K"}
+{"name_de":"Birkenpilz roh","name_en":"Brown birch bolete raw","bls_code":"K704100","warengruppe":"K"}
+{"name_de":"Birkenpilz gedünstet","name_en":"Brown birch bolete stewed","bls_code":"K704152","warengruppe":"K"}
+{"name_de":"Birkenpilz gebraten ohne Fett (Pfanne)","name_en":"Brown birch bolete fried without fat (pan)","bls_code":"K704182","warengruppe":"K"}
+{"name_de":"Butterpilz roh","name_en":"Brown-yellow boletus (slippery jack) raw","bls_code":"K706100","warengruppe":"K"}
+{"name_de":"Butterpilz gedünstet","name_en":"Brown-yellow boletus (slippery jack) stewed","bls_code":"K706152","warengruppe":"K"}
+{"name_de":"Butterpilz gebraten ohne Fett (Pfanne)","name_en":"Brown-yellow boletus (slippery jack) fried without fat (pan)","bls_code":"K706182","warengruppe":"K"}
+{"name_de":"Butterpilz getrocknet","name_en":"Brown-yellow boletus (slippery jack) dried","bls_code":"K706400","warengruppe":"K"}
+{"name_de":"Butterpilz getrocknet, gekocht","name_en":"Brown-yellow boletus (slippery jack) dried, boiled","bls_code":"K706432","warengruppe":"K"}
+{"name_de":"Edel-Reizker roh","name_en":"Saffron milk cap (red pine mushroom) raw","bls_code":"K707100","warengruppe":"K"}
+{"name_de":"Edel-Reizker gedünstet","name_en":"Saffron milk cap (red pine mushroom) stewed","bls_code":"K707152","warengruppe":"K"}
+{"name_de":"Edel-Reizker gebraten ohne Fett (Pfanne)","name_en":"Saffron milk cap (red pine mushroom) fried without fat (pan)","bls_code":"K707182","warengruppe":"K"}
+{"name_de":"Hallimasch roh","name_en":"Dark honey mushroom raw","bls_code":"K709100","warengruppe":"K"}
+{"name_de":"Hallimasch gedünstet","name_en":"Dark honey mushroom stewed","bls_code":"K709152","warengruppe":"K"}
+{"name_de":"Hallimasch gebraten ohne Fett (Pfanne)","name_en":"Dark honey mushroom fried without fat (pan)","bls_code":"K709182","warengruppe":"K"}
+{"name_de":"Pfifferling gebacken","name_en":"Chanterelle baked","bls_code":"K713062","warengruppe":"K"}
+{"name_de":"Pfifferling roh","name_en":"Chanterelle raw","bls_code":"K713100","warengruppe":"K"}
+{"name_de":"Pfifferling geschmort ohne Fett","name_en":"Chanterelle braised without fat","bls_code":"K713142","warengruppe":"K"}
+{"name_de":"Pfifferling gedünstet","name_en":"Chanterelle stewed","bls_code":"K713152","warengruppe":"K"}
+{"name_de":"Pfifferling gebraten ohne Fett (Pfanne)","name_en":"Chanterelle fried without fat (pan)","bls_code":"K713182","warengruppe":"K"}
+{"name_de":"Pfifferling getrocknet","name_en":"Chanterelle dried","bls_code":"K713400","warengruppe":"K"}
+{"name_de":"Pfifferling getrocknet, gekocht","name_en":"Chanterelle dried, boiled","bls_code":"K713432","warengruppe":"K"}
+{"name_de":"Pfifferling Konserve, abgetropft","name_en":"Chanterelle canned, drained","bls_code":"K713902","warengruppe":"K"}
+{"name_de":"Rotkappe roh","name_en":"Orange birch bolete raw","bls_code":"K717100","warengruppe":"K"}
+{"name_de":"Rotkappe gedünstet","name_en":"Orange birch bolete stewed","bls_code":"K717152","warengruppe":"K"}
+{"name_de":"Rotkappe gebraten ohne Fett (Pfanne)","name_en":"Orange birch bolete fried without fat (pan)","bls_code":"K717182","warengruppe":"K"}
+{"name_de":"Steinpilz roh","name_en":"Porcini mushroom raw","bls_code":"K718100","warengruppe":"K"}
+{"name_de":"Steinpilz gedünstet","name_en":"Porcini mushroom stewed","bls_code":"K718152","warengruppe":"K"}
+{"name_de":"Steinpilz gebacken","name_en":"Porcini mushroom baked","bls_code":"K718162","warengruppe":"K"}
+{"name_de":"Steinpilz gebraten ohne Fett (Pfanne)","name_en":"Porcini mushroom fried without fat (pan)","bls_code":"K718182","warengruppe":"K"}
+{"name_de":"Steinpilz getrocknet","name_en":"Porcini mushroom dried","bls_code":"K718400","warengruppe":"K"}
+{"name_de":"Steinpilz getrocknet, gekocht","name_en":"Porcini mushroom dried, boiled","bls_code":"K718432","warengruppe":"K"}
+{"name_de":"Steinpilz Konserve, abgetropft","name_en":"Porcini mushroom canned, drained","bls_code":"K718902","warengruppe":"K"}
+{"name_de":"Shiitakepilz roh","name_en":"Shiitake mushroom raw","bls_code":"K724100","warengruppe":"K"}
+{"name_de":"Shiitakepilz gedünstet","name_en":"Shiitake mushroom stewed","bls_code":"K724152","warengruppe":"K"}
+{"name_de":"Shiitakepilz gebraten ohne Fett (Pfanne)","name_en":"Shiitake mushroom fried without fat (pan)","bls_code":"K724182","warengruppe":"K"}
+{"name_de":"Shiitakepilz getrocknet","name_en":"Shiitake mushroom dried","bls_code":"K724400","warengruppe":"K"}
+{"name_de":"Shiitakepilz getrocknet, gekocht","name_en":"Shiitake mushroom dried, boiled","bls_code":"K724432","warengruppe":"K"}
+{"name_de":"Shiitakepilz Konserve, abgetropft","name_en":"Shiitake mushroom canned, drained","bls_code":"K724902","warengruppe":"K"}
+{"name_de":"Austernpilz roh","name_en":"Oyster mushroom raw","bls_code":"K740100","warengruppe":"K"}
+{"name_de":"Austernpilz gedünstet","name_en":"Oyster mushroom stewed","bls_code":"K740152","warengruppe":"K"}
+{"name_de":"Austernpilz gebraten ohne Fett (Pfanne)","name_en":"Oyster mushroom fried without fat (pan)","bls_code":"K740182","warengruppe":"K"}
+{"name_de":"Austernpilz getrocknet","name_en":"Oyster mushroom dried","bls_code":"K740400","warengruppe":"K"}
+{"name_de":"Austernpilz getrocknet, gekocht","name_en":"Oyster mushroom dried, boiled","bls_code":"K740432","warengruppe":"K"}
+{"name_de":"Mischpilze roh","name_en":"Mixed mushrooms raw","bls_code":"K750100","warengruppe":"K"}
+{"name_de":"Mischpilze gedünstet","name_en":"Mixed mushrooms stewed","bls_code":"K750152","warengruppe":"K"}
+{"name_de":"Mischpilze gebacken","name_en":"Mixed mushrooms baked","bls_code":"K750162","warengruppe":"K"}
+{"name_de":"Mischpilze gebraten ohne Fett (Pfanne)","name_en":"Mixed mushrooms fried without fat (pan)","bls_code":"K750182","warengruppe":"K"}
+{"name_de":"Mischpilze tiefgefroren","name_en":"Mixed mushrooms deep-frozen","bls_code":"K750200","warengruppe":"K"}
+{"name_de":"Mischpilze tiefgefroren, gedünstet","name_en":"Mixed mushrooms deep-frozen, stewed","bls_code":"K750252","warengruppe":"K"}
+{"name_de":"Mischpilze tiefgefroren, gebacken","name_en":"Mixed mushrooms deep-frozen, baked","bls_code":"K750262","warengruppe":"K"}
+{"name_de":"Mischpilze tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Mixed mushrooms deep-frozen, fried without fat (pan)","bls_code":"K750282","warengruppe":"K"}
+{"name_de":"Mischpilze getrocknet","name_en":"Mixed mushrooms dried","bls_code":"K750400","warengruppe":"K"}
+{"name_de":"Mischpilze getrocknet, gekocht","name_en":"Mixed mushrooms dried, boiled","bls_code":"K750432","warengruppe":"K"}
+{"name_de":"Mischpilze Konserve, abgetropft","name_en":"Mixed mushrooms canned, drained","bls_code":"K750902","warengruppe":"K"}
+{"name_de":"Hefe Flocken/Nährhefe","name_en":"Yeast flakes/nutritional yeast","bls_code":"K762400","warengruppe":"K"}
+{"name_de":"Vegetarische Pastete, Brotaufstrich hefebasiert","name_en":"Vegetarian pate, spread yeast-based","bls_code":"K820000","warengruppe":"K"}
+{"name_de":"Pilzcremesuppe Instantpulver","name_en":"Cream of mushroom soup instant powder","bls_code":"K850500","warengruppe":"K"}
+{"name_de":"Pilzcremesuppe aus Instantpulver (mit Wasser zubereitet)","name_en":"Cream of mushroom soup, made from instant powder and water","bls_code":"K850532","warengruppe":"K"}
 {"name_de":"Schafmilch mind. 4,5 % Fett","name_en":"Sheep's milk min. 4.5 % fat","bls_code":"M011000","warengruppe":"M"}
 {"name_de":"Roquefort mind. 50 % Fett i. Tr.","name_en":"Roquefort min. 50 % fat in dry matter","bls_code":"M012100","warengruppe":"M"}
 {"name_de":"Feta mind. 45 % Fett i. Tr.","name_en":"Feta min. 45 % fat in dry matter","bls_code":"M012200","warengruppe":"M"}

@@ -1,153 +1,153 @@
 {"name_de":"Vollkornbrot","name_en":"Wholemeal bread","bls_code":"B101000","warengruppe":"B"}
 {"name_de":"Vollkornbrot mit Ölsamen","name_en":"Wholemeal bread with oilseeds","bls_code":"B106000","warengruppe":"B"}
-{"name_de":"Roggenvollkornbrot mit Kürbiskernen","name_en":"Wholemeal rye bread with pumpkin seeds","bls_code":"B121100","warengruppe":"B"}
-{"name_de":"Weizenmischbrot","name_en":"Wheat-rye bread (> 50 % and < 90 % wheat)","bls_code":"B251000","warengruppe":"B"}
-{"name_de":"Roggenmischbrot mit Kürbiskernen","name_en":"Rye-wheat bread (> 50 % and < 90 % rye) with pumpkin seeds","bls_code":"B276700","warengruppe":"B"}
-{"name_de":"Vollkornbrötchen mit Kürbiskernen","name_en":"Wholemeal roll with pumpkin seeds","bls_code":"B406700","warengruppe":"B"}
-{"name_de":"Dinkelvollkornbrötchen mit Sonnenblumenkernen","name_en":"Wholemeal spelt roll with sunflower seeds","bls_code":"B491400","warengruppe":"B"}
-{"name_de":"Roggenbrötchen mit Mohn","name_en":"Rye roll with poppy seeds","bls_code":"B526400","warengruppe":"B"}
-{"name_de":"Dinkelbrötchen mit Ölsamen","name_en":"Spelt roll with oilseeds","bls_code":"B561300","warengruppe":"B"}
-{"name_de":"Roggenvollkornknäckebrot mit Gerstenmalz","name_en":"Wholemeal rye crispbread with barley malt","bls_code":"B6A2500","warengruppe":"B"}
-{"name_de":"Dinkelbrot mit Nüssen","name_en":"Spelt bread with nuts","bls_code":"B710700","warengruppe":"B"}
-{"name_de":"Weizenbaguette mit Nüssen","name_en":"Wheat baguette with nuts","bls_code":"B781400","warengruppe":"B"}
+{"name_de":"Hafervollkornbrot","name_en":"Wholemeal oat bread","bls_code":"B131000","warengruppe":"B"}
+{"name_de":"Roggenmischbrot mit Ölsamen","name_en":"Rye-wheat bread (> 50 % and < 90 % rye) with oilseeds","bls_code":"B276000","warengruppe":"B"}
+{"name_de":"Weizenvollkornbrötchen mit Kürbiskernen","name_en":"Wholemeal wheat roll with pumpkin seeds","bls_code":"B416700","warengruppe":"B"}
+{"name_de":"Roggenbrötchen mit Kümmel und Salz","name_en":"Rye roll with caraway seeds and salt","bls_code":"B521100","warengruppe":"B"}
+{"name_de":"Knusperbrot glutenfrei","name_en":"Crackerbread gluten-free","bls_code":"B629000","warengruppe":"B"}
+{"name_de":"Dinkelvollkornknäckebrot mit Müslizutaten, gesüßt","name_en":"Wholemeal spelt criscpread with muesli ingredients, sweetened","bls_code":"B6A5000","warengruppe":"B"}
+{"name_de":"Weizenvollkornbaguette","name_en":"Wholemeal wheat baguette","bls_code":"B781500","warengruppe":"B"}
+{"name_de":"Weizen ganzes Korn, roh","name_en":"Wheat whole grain, raw","bls_code":"C111000","warengruppe":"C"}
+{"name_de":"Hafer Grütze, gekocht","name_en":"Oat groats, boiled","bls_code":"C137032","warengruppe":"C"}
+{"name_de":"Hartweizen Vollkorngrieß, gekocht","name_en":"Durum wheat wholemeal semolina, boiled","bls_code":"C219132","warengruppe":"C"}
+{"name_de":"Dinkel Grieß","name_en":"Spelt semolina","bls_code":"C238000","warengruppe":"C"}
+{"name_de":"Amaranth gekocht","name_en":"Amaranth boiled","bls_code":"C335032","warengruppe":"C"}
+{"name_de":"Grünkern Vollkornschrot, gekocht","name_en":"Green spelt coarse meal, boiled","bls_code":"C412032","warengruppe":"C"}
+{"name_de":"Müslimischung mit Schokolade, glutenfrei, gesüßt","name_en":"Muesli mix with chocolate, gluten-free, sweetenend","bls_code":"C512800","warengruppe":"C"}
+{"name_de":"Quinoa gepufft, ungesüßt","name_en":"Quinoa puffed, unsweetened","bls_code":"C530200","warengruppe":"C"}
 {"name_de":"Backerbsen","name_en":"Soup pearls","bls_code":"D011000","warengruppe":"D"}
-{"name_de":"Quicheboden (Mürbeteig)","name_en":"Quiche base (shortcrust pastry)","bls_code":"D0A8000","warengruppe":"D"}
-{"name_de":"Herrentorte (Mürbeteig und Wiener Boden hell) mit Apfel-Weincreme","name_en":"Dark chocolate torte (shortcrust pastry and Viennese sponge cake light) with apple wine-cream","bls_code":"D307000","warengruppe":"D"}
-{"name_de":"Englische Muffins/Toasties (Hefeteig) gebraten ohne Fett (Pfanne)","name_en":"English muffins/toasties (yeast dough) fried without fat (pan)","bls_code":"D400700","warengruppe":"D"}
-{"name_de":"Butterkuchen/Zuckerkuchen (Hefeteig)","name_en":"German butter cake (yeast dough)","bls_code":"D461700","warengruppe":"D"}
-{"name_de":"Nusskuchen vegan (Rührmasse)","name_en":"Nut cake vegan (cake batter)","bls_code":"D4A8500","warengruppe":"D"}
-{"name_de":"Lebkuchen schokoliert","name_en":"Chocolate gingerbread","bls_code":"D650600","warengruppe":"D"}
-{"name_de":"Bananen im Ausbackteig frittiert","name_en":"Bananas in frying batter deep-fried","bls_code":"D705400","warengruppe":"D"}
-{"name_de":"Buchteln (Hefeteig)","name_en":"\"Buchteln\" baked yeast buns","bls_code":"D741400","warengruppe":"D"}
-{"name_de":"Erdnussplätzchen (Mürbeteig)","name_en":"Peanut biscuits (shortcrust pastry)","bls_code":"D7A2200","warengruppe":"D"}
-{"name_de":"Kekse/Plätzchen, kakaohaltig (Rührmasse)","name_en":"Biscuits, containig cocoa (cake batter)","bls_code":"D7B5000","warengruppe":"D"}
+{"name_de":"Apfelkuchen (Quark-Öl-Teig)","name_en":"Apple cake (quark oil dough)","bls_code":"D1A3000","warengruppe":"D"}
+{"name_de":"Käsetorte (Mürbeteig)","name_en":"Cheese torte (shortcrust pastry)","bls_code":"D380200","warengruppe":"D"}
+{"name_de":"Nusskranz (Hefeteig)","name_en":"Nut ring cake (yeast dough)","bls_code":"D464200","warengruppe":"D"}
+{"name_de":"Gewürzplätzchen glutenfrei","name_en":"Spiced biscuits gluten-free","bls_code":"D618000","warengruppe":"D"}
+{"name_de":"Springerle","name_en":"\"Springerle\" anise biscuits","bls_code":"D701800","warengruppe":"D"}
+{"name_de":"Mandel-Zitronen-Herzen (ohne Fett und Mehl)","name_en":"Heart-shaped almond lemon biscuits (without fat and flour)","bls_code":"D753600","warengruppe":"D"}
+{"name_de":"Quark-Plunder","name_en":"Danish pastry with quark","bls_code":"D7A7500","warengruppe":"D"}
 {"name_de":"Wachtelei gekocht","name_en":"Quail egg boiled","bls_code":"E101132","warengruppe":"E"}
-{"name_de":"Hühnerei Pulver","name_en":"Chicken egg powder","bls_code":"E111500","warengruppe":"E"}
 {"name_de":"Hühnerei Eigelb, roh","name_en":"Chicken egg yolk, raw","bls_code":"E112100","warengruppe":"E"}
+{"name_de":"Hühnerei Eigelb, gebraten ohne Fett (Pfanne)","name_en":"Chicken egg yolk, fried without fat (pan)","bls_code":"E112182","warengruppe":"E"}
 {"name_de":"Hühnerei Eiklar, roh","name_en":"Chicken egg white, raw","bls_code":"E113100","warengruppe":"E"}
-{"name_de":"Hühnerei Eiklar, getrocknet","name_en":"Chicken egg white, dried","bls_code":"E113400","warengruppe":"E"}
-{"name_de":"Teigwaren eifrei, gekocht","name_en":"Pasta egg-free, boiled","bls_code":"E401032","warengruppe":"E"}
+{"name_de":"Putenei roh","name_en":"Turkey egg raw","bls_code":"E151100","warengruppe":"E"}
 {"name_de":"Eier-Frischteigwaren gekocht, gebacken","name_en":"Fresh egg pasta boiled, baked","bls_code":"E438062","warengruppe":"E"}
-{"name_de":"Vollkornteigwaren eifrei, gekocht, gebraten ohne Fett (Pfanne)","name_en":"Wholemeal pasta egg-free, boiled, fried without fat (pan)","bls_code":"E500082","warengruppe":"E"}
-{"name_de":"Eier-Frischteigwaren Ravioli (Fleischfüllung) gekocht, gebacken","name_en":"Fresh egg pasta Ravioli (meat filling) boiled, baked","bls_code":"E603062","warengruppe":"E"}
-{"name_de":"Schupfnudeln schwäbisch, gekocht","name_en":"Finger-shaped pasta Swabian style, boiled","bls_code":"E605232","warengruppe":"E"}
+{"name_de":"Vollkorneierteigwaren gekocht","name_en":"Wholemeal egg pasta boiled","bls_code":"E530032","warengruppe":"E"}
+{"name_de":"Kartoffel-Schupfnudeln gekocht, gebacken","name_en":"Potato noodles (Schupfnudeln) boiled, baked","bls_code":"E605062","warengruppe":"E"}
 {"name_de":"Semmelknödel getrocknet, gekocht","name_en":"White bread dumplings dried, boiled","bls_code":"E606232","warengruppe":"E"}
-{"name_de":"Böhmische Knödel gekocht, gebraten ohne Fett (Pfanne)","name_en":"Bohemian dumplings boiled, fried without fat (pan)","bls_code":"E608082","warengruppe":"E"}
-{"name_de":"Dinkelteigwaren eifrei, roh","name_en":"Spelt pasta egg-free, raw","bls_code":"E632000","warengruppe":"E"}
+{"name_de":"Eierteigwaren Tortellini (Fleischfüllung) getrocknet","name_en":"Egg pasta Tortellini (meat filling) dried","bls_code":"E609200","warengruppe":"E"}
+{"name_de":"Mehrfruchtsaft","name_en":"Multi-fruit juice","bls_code":"F010600","warengruppe":"F"}
+{"name_de":"Apfel geschält, gedünstet","name_en":"Apple peeled, stewed","bls_code":"F120152","warengruppe":"F"}
+{"name_de":"Süßkirschsaft","name_en":"Sweet cherry juice","bls_code":"F211600","warengruppe":"F"}
+{"name_de":"Erdbeere gezuckert, Konserve, abgetropft","name_en":"Strawberry sugared, canned, drained","bls_code":"F301902","warengruppe":"F"}
+{"name_de":"Johannisbeere schwarz gedünstet","name_en":"Black currant stewed","bls_code":"F323152","warengruppe":"F"}
+{"name_de":"Preiselbeere gezuckert (mit Pektin) Konserve","name_en":"Lingonberry sugared (with pectine) canned","bls_code":"F4A1900","warengruppe":"F"}
+{"name_de":"Mangonektar","name_en":"Mango nectar","bls_code":"F516700","warengruppe":"F"}
+{"name_de":"Zitronensaft Konzentrat","name_en":"Lemon concentrate","bls_code":"F601300","warengruppe":"F"}
+{"name_de":"Kapern gesäuert, abgetropft","name_en":"Capers pickled, canned, drained","bls_code":"G012902","warengruppe":"G"}
+{"name_de":"Petersilienblatt getrocknet","name_en":"Parsley leaf dried","bls_code":"G250400","warengruppe":"G"}
+{"name_de":"Rotkohl geschmort ohne Fett","name_en":"Red cabbage braised without fat","bls_code":"G341142","warengruppe":"G"}
+{"name_de":"Spargel Konserve, abgetropft","name_en":"Asparagus canned, drained","bls_code":"G450902","warengruppe":"G"}
+{"name_de":"Knoblauch in Öl, Konserve, abgetropft","name_en":"Garlic in oil, canned, drained","bls_code":"G491702","warengruppe":"G"}
+{"name_de":"Tomate geschält, Konserve","name_en":"Tomato peeled, canned","bls_code":"G568900","warengruppe":"G"}
+{"name_de":"Pastinake gedünstet","name_en":"Parsnip stewed","bls_code":"G640152","warengruppe":"G"}
+{"name_de":"Erbse grün, tiefgefroren, gebacken","name_en":"Pea green, deep-frozen, baked","bls_code":"G760262","warengruppe":"G"}
+{"name_de":"Sojaproteinisolat","name_en":"Soya bean protein isolate","bls_code":"H011000","warengruppe":"H"}
+{"name_de":"Kokoswasser (Fruchtwasser)","name_en":"Coconut water (liquid from coconuts)","bls_code":"H151000","warengruppe":"H"}
+{"name_de":"Mandel süß, geröstet mit Fett, gesalzen","name_en":"Sweet almond roasted with fat, salted","bls_code":"H210710","warengruppe":"H"}
+{"name_de":"Leinsamen geschrotet","name_en":"Linseed/flax seed, ground","bls_code":"H410400","warengruppe":"H"}
+{"name_de":"Sojabohnensprossen/Sojabohnenkeimlinge, roh","name_en":"Soya bean sprouts raw","bls_code":"H620100","warengruppe":"H"}
+{"name_de":"Linse reif, Konserve, abgetropft","name_en":"Lentil mature, canned, drained","bls_code":"H730902","warengruppe":"H"}
+{"name_de":"Mandeldrink ungesüßt, angereichert mit Vitaminen und Calcium","name_en":"Almond drink unsweetened, fortified with vitamins and calcium","bls_code":"H800100","warengruppe":"H"}
+{"name_de":"Tofu","name_en":"Tofu","bls_code":"H861000","warengruppe":"H"}
+{"name_de":"Kartoffel geschält, roh","name_en":"Potatoe peeled, raw","bls_code":"K110100","warengruppe":"K"}
+{"name_de":"Kartoffelstärke (Kartoffelmehl)","name_en":"Potato starch (potato flour)","bls_code":"K230000","warengruppe":"K"}
+{"name_de":"Kartoffelkroketten tiefgefroren, gebacken","name_en":"Potato croquettes deep-frozen, baked","bls_code":"K282262","warengruppe":"K"}
+{"name_de":"Batate/Süßkartoffel, roh","name_en":"Batata/sweet potato, raw","bls_code":"K420100","warengruppe":"K"}
+{"name_de":"Champignon gebacken","name_en":"Button mushroom baked","bls_code":"K701162","warengruppe":"K"}
+{"name_de":"Morchel gebraten ohne Fett (Pfanne)","name_en":"Morel fried without fat (pan)","bls_code":"K703182","warengruppe":"K"}
+{"name_de":"Pfifferling roh","name_en":"Chanterelle raw","bls_code":"K713100","warengruppe":"K"}
+{"name_de":"Shiitakepilz gebraten ohne Fett (Pfanne)","name_en":"Shiitake mushroom fried without fat (pan)","bls_code":"K724182","warengruppe":"K"}
 {"name_de":"Schafmilch mind. 4,5 % Fett","name_en":"Sheep's milk min. 4.5 % fat","bls_code":"M011000","warengruppe":"M"}
 {"name_de":"Mozzarella mind. 20 % Fett i. Tr.","name_en":"Mozzarella min. 20 % fat in dry matter","bls_code":"M0A1000","warengruppe":"M"}
 {"name_de":"Vollmilch frisch, 3,5 % Fett, pasteurisiert","name_en":"Whole milk, fresh, 3.5 % fat, pasteurised","bls_code":"M111300","warengruppe":"M"}
-{"name_de":"Sahnekefir mind. 10 % Fett","name_en":"Kefir min. 10 % fat","bls_code":"M130500","warengruppe":"M"}
-{"name_de":"Kondensmilch teilentrahmt, mind. 1 % bis < 7,5 % Fett","name_en":"Evaporated milk semi-skimmed, min. 1 % to < 7.5 % fat","bls_code":"M182300","warengruppe":"M"}
-{"name_de":"Buttermilchdrink mit Fruchtzubereitung, gesüßt","name_en":"Buttermilk drink with fruit preparation, sweetened","bls_code":"M252000","warengruppe":"M"}
-{"name_de":"Trinkjoghurt aus entrahmter Milch, max. 0,5 % Fett, mit Fruchtzubereitung, gesüßt","name_en":"Yogurt drink from skimmed milk, max. 0.5 % fat, with fruit preparation, sweetened","bls_code":"M2J7100","warengruppe":"M"}
-{"name_de":"Chester (Cheddar) mind. 50 % Fett i. Tr.","name_en":"Chester (Cheddar) cheese min. 50 % fat in dry matter","bls_code":"M303700","warengruppe":"M"}
-{"name_de":"Tilsiter mind. 50 % Fett i. Tr.","name_en":"Tilsit cheese min. 50 % fat in dry matter","bls_code":"M403700","warengruppe":"M"}
-{"name_de":"Trappistenkäse mind. 45 % Fett i. Tr.","name_en":"Trappista cheese min. 45 % fat in dry matter","bls_code":"M505600","warengruppe":"M"}
-{"name_de":"Camembert mind. 45 % Fett i. Tr.","name_en":"Camembert cheese min. 45 % fat in dry matter","bls_code":"M602600","warengruppe":"M"}
+{"name_de":"Sauerrahm/Schmand, mind. 20 % Fett","name_en":"Sour cream min. 20 % fat","bls_code":"M172700","warengruppe":"M"}
+{"name_de":"Milchmischgetränk < 1 % Fett, aromatisiert, mit Zucker und Süßungsmitteln","name_en":"Milk drink < 1 % fat, flavoured, with sugar and artificial sweeteners","bls_code":"M2A0100","warengruppe":"M"}
+{"name_de":"Bergkäse mind. 45 % Fett i. Tr.","name_en":"Bergkäse (Alpine cheese) min. 45 % fat in dry matter","bls_code":"M302600","warengruppe":"M"}
+{"name_de":"Butterkäse mind. 45 % Fett i. Tr.","name_en":"Butterkäse cheese min. 45 % fat in dry matter","bls_code":"M501600","warengruppe":"M"}
+{"name_de":"Limburger mind. 20 % Fett i. Tr.","name_en":"Limburger cheese min. 20 % fat in dry matter","bls_code":"M603300","warengruppe":"M"}
 {"name_de":"Skyr, Frischkäse < 10 % Fett i. Tr.","name_en":"Skyr Icelandic style strained yogurt < 10 % fat in dry matter","bls_code":"M710100","warengruppe":"M"}
 {"name_de":"Körniger Frischkäse < 10 % Fett i. Tr.","name_en":"Cottage cheese < 10 % fat in dry matter","bls_code":"M711100","warengruppe":"M"}
 {"name_de":"Speisequark Magerstufe, Magerquark < 10 % Fett i. Tr.","name_en":"Quark < 10 % fat in dry matter","bls_code":"M713100","warengruppe":"M"}
-{"name_de":"Speisequark Viertelfettstufe, 10 % Fett i. Tr.","name_en":"Quark 10 % fat in dry matter","bls_code":"M713200","warengruppe":"M"}
-{"name_de":"Schmelzkäsezubereitung 45 - 52 % Fett i. Tr., mit Nüssen","name_en":"Processed cheese preparation 45 - 52 % fat in dry matter, with nuts","bls_code":"M816000","warengruppe":"M"}
+{"name_de":"Frischkäse aus Schafmilch, Natur, mind. 45 % Fett i. Tr.","name_en":"Cream cheese made from sheep's milk, min. 45 % fat in dry matter","bls_code":"M7B1600","warengruppe":"M"}
 {"name_de":"Nearwater/Aqua Plus Getränk, aromatisiert, ungesüßt","name_en":"Nearwater/Aqua Plus beverage, flavoured, unsweetened","bls_code":"N001000","warengruppe":"N"}
-{"name_de":"Natürliches Mineralwasser still","name_en":"Natural mineral water still","bls_code":"N128000","warengruppe":"N"}
-{"name_de":"Fruchtsaftschorle Orange","name_en":"Orange juice spritzer","bls_code":"N257000","warengruppe":"N"}
-{"name_de":"Karottensaftschorle","name_en":"Carrot juice spritzer","bls_code":"N272000","warengruppe":"N"}
-{"name_de":"Limonade mit Gewürzauszügen und Süßungsmitteln","name_en":"Carbonated soft drink with spice extracts and artificial sweeteners","bls_code":"N316000","warengruppe":"N"}
-{"name_de":"Kaffee (Getränk) mit Kondensmilch 7,5 % Fett","name_en":"Coffee (infusion) with evaporated milk 7.5 % fat","bls_code":"N410400","warengruppe":"N"}
-{"name_de":"Kaffee (Getränk) koffeinreduziert","name_en":"Coffee (infusion) caffeine-reduced","bls_code":"N416000","warengruppe":"N"}
-{"name_de":"Cappuccino (Getränk) mit Milch 3,5 % Fett und Zucker","name_en":"Cappuccino (infusion) with milk 3.5 % fat and sugar","bls_code":"N4A3300","warengruppe":"N"}
-{"name_de":"Zichorienkaffeepulver","name_en":"Chicory coffee powder","bls_code":"N540900","warengruppe":"N"}
-{"name_de":"Schwarztee (Getränk) mit Sahne 30 % Fett und Zucker","name_en":"Black tea (infusion) with cream 30 % fat and sugar","bls_code":"N630500","warengruppe":"N"}
+{"name_de":"Fruchtsaftgetränk Johannisbeere","name_en":"Fruit juice beverage currant","bls_code":"N230000","warengruppe":"N"}
+{"name_de":"Mehrfruchtsaftschorle","name_en":"Multi-fruit juice spritzer","bls_code":"N271000","warengruppe":"N"}
+{"name_de":"Colagetränk koffeinhaltig, mit Süßungsmitteln","name_en":"Cola beverage caffeinated, with artificial sweeteners","bls_code":"N331000","warengruppe":"N"}
+{"name_de":"Kaffee (Getränk) entkoffeiniert, mit Kondensmilch 7,5 % Fett","name_en":"Coffee (infusion) decaffeinated, with evaporated milk 7.5 % fat","bls_code":"N414200","warengruppe":"N"}
+{"name_de":"Kaffeeersatz (Getränk) mit Milch 3,5 % Fett und Zucker","name_en":"Coffee substitute (infusion) with milk 3.5 % fat and sugar","bls_code":"N500300","warengruppe":"N"}
+{"name_de":"Schwarztee (Getränk) mit Milch 3,5 % Fett","name_en":"Black tea (infusion) with milk 3.5 % fat","bls_code":"N630200","warengruppe":"N"}
 {"name_de":"Malzgetränk, alkoholfrei","name_en":"Malt drink, alcohol-free","bls_code":"P122000","warengruppe":"P"}
-{"name_de":"Pilsner Bier, 0,0 % vol","name_en":"Pilsner beer 0.0 % vol","bls_code":"P163110","warengruppe":"P"}
-{"name_de":"Bier kohlenhydratreduziert","name_en":"Beer reduced carbohydrate content","bls_code":"P197000","warengruppe":"P"}
-{"name_de":"Weißwein halbtrocken","name_en":"White wine medium dry","bls_code":"P220000","warengruppe":"P"}
-{"name_de":"Erdbeerbowle","name_en":"Strawberry punch","bls_code":"P288100","warengruppe":"P"}
-{"name_de":"Qualitätsschaumwein, Sekt, halbtrocken","name_en":"Quality sparkling wine medium dry","bls_code":"P2A7100","warengruppe":"P"}
-{"name_de":"Portwein","name_en":"Port wine","bls_code":"P431000","warengruppe":"P"}
-{"name_de":"Bitterlikör/Kräuterlikör/Gewürzlikör","name_en":"Bitter/herb/spice liqueur","bls_code":"P560000","warengruppe":"P"}
-{"name_de":"Gin","name_en":"Gin","bls_code":"P722000","warengruppe":"P"}
-{"name_de":"Spirituosen mit bitterem Geschmack (Bitter)","name_en":"Bitter-tasting spirit drink or bitter","bls_code":"P7A2000","warengruppe":"P"}
+{"name_de":"Stout","name_en":"Stout","bls_code":"P177000","warengruppe":"P"}
+{"name_de":"Weißwein lieblich","name_en":"White wine medium sweet","bls_code":"P230000","warengruppe":"P"}
+{"name_de":"Qualitätsschaumwein, Sekt, trocken","name_en":"Quality sparkling wine dry","bls_code":"P2A6000","warengruppe":"P"}
+{"name_de":"Sherry dry","name_en":"Sherry dry","bls_code":"P461000","warengruppe":"P"}
+{"name_de":"Calvados","name_en":"Calvados","bls_code":"P640000","warengruppe":"P"}
+{"name_de":"Alkopops","name_en":"Alcopops","bls_code":"P8A2000","warengruppe":"P"}
 {"name_de":"Olivenöl","name_en":"Olive oil","bls_code":"Q120000","warengruppe":"Q"}
 {"name_de":"Haselnussöl","name_en":"Hazelnut oil","bls_code":"Q140000","warengruppe":"Q"}
-{"name_de":"Mandelöl","name_en":"Almond oil","bls_code":"Q190000","warengruppe":"Q"}
-{"name_de":"Sojaöl","name_en":"Soya oil","bls_code":"Q270000","warengruppe":"Q"}
+{"name_de":"Sesamöl","name_en":"Sesame oil","bls_code":"Q230000","warengruppe":"Q"}
 {"name_de":"Pflanzenmargarine Vollfett, angereichert mit Vitaminen","name_en":"Margarine full-fat, fortified with vitamins","bls_code":"Q400000","warengruppe":"Q"}
-{"name_de":"Pflanzencreme zum Braten und Kochen","name_en":"Vegetable fat cooking liquid","bls_code":"Q4B1000","warengruppe":"Q"}
-{"name_de":"Mischfett mit überwiegend Pflanzenfett, gesalzen, angereichert mit Vitaminen","name_en":"Mixed fat spread (mainly vegetable fat) salted, fortified with vitamins","bls_code":"Q4C5100","warengruppe":"Q"}
+{"name_de":"Pflanzliches Streichfett mit < 39 % Fett, angereichert mit Vitaminen","name_en":"Vegetable fat spread with < 39 % fat, fortified with vitamins","bls_code":"Q4C3000","warengruppe":"Q"}
 {"name_de":"Palmkernfett/Palmkernöl","name_en":"Palm kernel fat/palm kernel oil","bls_code":"Q570000","warengruppe":"Q"}
-{"name_de":"Halbfettbutter","name_en":"Butter half fat","bls_code":"Q640000","warengruppe":"Q"}
-{"name_de":"Mischfett mit überwiegend Milchfett, gesalzen","name_en":"Mixed fat spread, mainly milk fat, salted","bls_code":"Q6A7100","warengruppe":"Q"}
+{"name_de":"Butter gesalzen","name_en":"Butter salted","bls_code":"Q6A4000","warengruppe":"Q"}
 {"name_de":"Hammelfett/Hammeltalg","name_en":"Mutton tallow/fat","bls_code":"Q880000","warengruppe":"Q"}
 {"name_de":"Speisesalz/Siedesalz/Tafelsalz","name_en":"Common salt/table salt","bls_code":"R111000","warengruppe":"R"}
-{"name_de":"Weinessig","name_en":"Wine vinegar","bls_code":"R121000","warengruppe":"R"}
-{"name_de":"Tomatenketchup","name_en":"Tomato ketchup","bls_code":"R141100","warengruppe":"R"}
-{"name_de":"Glutamat/Mononatriumglutamat/Natriumglutamat","name_en":"Monosodium glutamate","bls_code":"R172000","warengruppe":"R"}
-{"name_de":"Pottasche (99 % Kaliumcarbonat, E 501)","name_en":"Potash (99 % potassium carbonate, E 501)","bls_code":"R421300","warengruppe":"R"}
-{"name_de":"Puddingpulver Schokolade, ungezuckert","name_en":"Pudding powder, chocolate, unsweetened","bls_code":"R481200","warengruppe":"R"}
-{"name_de":"Hühner Bouillon/Brühe/Suppe (Brühwürfel, Pulver)","name_en":"Chicken bouillon/stock/soup (stock cubes, powder)","bls_code":"R822000","warengruppe":"R"}
-{"name_de":"Zitronensahne für Gebäck/Torten","name_en":"Lemon cream for pastry/tortes","bls_code":"R923000","warengruppe":"R"}
-{"name_de":"Brotaufstrich Ei-Kräuter","name_en":"Egg-herb spread","bls_code":"R963000","warengruppe":"R"}
-{"name_de":"Schokoladensahne für Gebäck/Torten","name_en":"Chocolate cream for pastry/tortes","bls_code":"R9A2200","warengruppe":"R"}
+{"name_de":"Balsamicoessig","name_en":"Balsamic vinegar","bls_code":"R125000","warengruppe":"R"}
+{"name_de":"Tomaten passiert/Tomatenpüree","name_en":"Tomato puree","bls_code":"R161200","warengruppe":"R"}
+{"name_de":"Backhefe getrocknet (Trockenbackhefe)","name_en":"Baker's yeast dried","bls_code":"R458000","warengruppe":"R"}
+{"name_de":"Fleisch Bouillon/Brühe/Suppe (Brühwürfel, Pulver)","name_en":"Beef bouillon/stock/soup (stock cubes, powder)","bls_code":"R811000","warengruppe":"R"}
+{"name_de":"Vanillebuttercreme eihaltig, gestreckt, für Gebäck/Torten","name_en":"Vanilla butter cream with egg, light, for pastry/tortes","bls_code":"R930000","warengruppe":"R"}
+{"name_de":"Zitronensahnecreme für Gebäck/Torten","name_en":"Lemon cream (with starch) for pastry/tortes","bls_code":"R9A1400","warengruppe":"R"}
 {"name_de":"Zucker weiß (Raffinadezucker/Weißzucker)","name_en":"Sugar white (refined sugar)","bls_code":"S111000","warengruppe":"S"}
-{"name_de":"Ahornsirup","name_en":"Maple syrup","bls_code":"S151100","warengruppe":"S"}
-{"name_de":"Speiseeis Schokolade, in Waffeltüte","name_en":"Chocolate ice cream, in waffle cone","bls_code":"S210900","warengruppe":"S"}
-{"name_de":"Speiseeis (Frucht, Nuss, Schokolade) gemischt, mit Eierlikör","name_en":"Ice cream mixed (chocolate, fruit, nut) with egg liqueur","bls_code":"S241300","warengruppe":"S"}
-{"name_de":"Speiseeis (Frucht, Kaffee, Schoko, Vanille) gemischt","name_en":"Ice cream mixed (chocolate, vanilla, coffee, fruit)","bls_code":"S244200","warengruppe":"S"}
-{"name_de":"Lakritze","name_en":"Liquorice","bls_code":"S410000","warengruppe":"S"}
-{"name_de":"Milchschokolade mit Knusperreis","name_en":"Milk chocolate with puffed rice","bls_code":"S532000","warengruppe":"S"}
-{"name_de":"Zartbitter-/Halbbitterschokolade, mit Haselnüssen","name_en":"Bittersweet/semisweet chocolate, with hazelnuts","bls_code":"S560400","warengruppe":"S"}
-{"name_de":"Milchschokoladen-Riegel gefüllt mit Knusperwaffel","name_en":"Milk chocolate bar filled with crispy waffle","bls_code":"S581500","warengruppe":"S"}
-{"name_de":"Nuss-Pralinen","name_en":"Nut pralines","bls_code":"S623000","warengruppe":"S"}
+{"name_de":"Tafelsüße Flüssigsüße (Süßstoffe: Cyclamat, Saccharin)","name_en":"Table sweetener liquid (cyclamate, saccharin)","bls_code":"S171000","warengruppe":"S"}
+{"name_de":"Speiseeis mit Fruchtzubereitung, überzogen mit Schokolade","name_en":"Ice cream with fruit preparation, covered with chocolate","bls_code":"S231000","warengruppe":"S"}
+{"name_de":"Weichkaramelle","name_en":"Soft caramels","bls_code":"S330000","warengruppe":"S"}
+{"name_de":"Schokolade","name_en":"Chocolate","bls_code":"S500000","warengruppe":"S"}
+{"name_de":"Bitterschokolade","name_en":"Dark chocolate","bls_code":"S570000","warengruppe":"S"}
+{"name_de":"Weinbrand-Bohnen","name_en":"Pralines with brandy filling","bls_code":"S621200","warengruppe":"S"}
 {"name_de":"Tintenfisch roh","name_en":"Common cuttlefish raw","bls_code":"T020100","warengruppe":"T"}
-{"name_de":"Sardelle roh","name_en":"Anchovy raw","bls_code":"T104100","warengruppe":"T"}
+{"name_de":"Schildmakrele/Stöcker, roh","name_en":"Atlantic horse mackerel raw","bls_code":"T118100","warengruppe":"T"}
 {"name_de":"Thunfisch roh","name_en":"Tuna raw","bls_code":"T121100","warengruppe":"T"}
-{"name_de":"Grenadier gedünstet","name_en":"Grenadier stewed","bls_code":"T200152","warengruppe":"T"}
-{"name_de":"Alaska-Pollack/Alaska-Seelachs, pochiert","name_en":"Alaska pollock poached","bls_code":"T213132","warengruppe":"T"}
-{"name_de":"Flunder gedünstet","name_en":"Flounder stewed","bls_code":"T311152","warengruppe":"T"}
+{"name_de":"Seehecht gedünstet","name_en":"Hake stewed","bls_code":"T209152","warengruppe":"T"}
+{"name_de":"Bachsaibling roh","name_en":"Brook trout raw","bls_code":"T403100","warengruppe":"T"}
 {"name_de":"Lachs roh","name_en":"Salmon raw","bls_code":"T410100","warengruppe":"T"}
-{"name_de":"Königslachs gebraten ohne Fett (Pfanne)","name_en":"Chinook salmon fried without fat (pan)","bls_code":"T415182","warengruppe":"T"}
-{"name_de":"Blei/Brachsen/Brasse, tiefgefroren, gedünstet","name_en":"Common bream deep-frozen, stewed","bls_code":"T502252","warengruppe":"T"}
-{"name_de":"Katfisch/Steinbeißer, geräuchert","name_en":"Catfish/wolffish, smoked","bls_code":"T604600","warengruppe":"T"}
-{"name_de":"Hummer gekocht, gebraten ohne Fett (Pfanne)","name_en":"Lobster boiled, fried without fat (pan)","bls_code":"T730182","warengruppe":"T"}
+{"name_de":"Karpfen gedünstet","name_en":"Carp stewed","bls_code":"T501152","warengruppe":"T"}
+{"name_de":"Rotbarsch/Goldbarsch, gedämpft","name_en":"Ocean perch/redfish, steamed","bls_code":"T615142","warengruppe":"T"}
 {"name_de":"Garnele/Granat/Krabbe, roh","name_en":"Common shrimp raw","bls_code":"T753100","warengruppe":"T"}
-{"name_de":"Venusmuschel tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Venus clam deep-frozen, fried without fat (pan)","bls_code":"T797282","warengruppe":"T"}
+{"name_de":"Miesmuschel gekocht","name_en":"Common mussel boiled","bls_code":"T792132","warengruppe":"T"}
 {"name_de":"Rind Hackfleisch, roh","name_en":"Beef mince, raw","bls_code":"U010100","warengruppe":"U"}
 {"name_de":"Rind Hackfleisch, gekocht","name_en":"Beef mince, boiled","bls_code":"U010132","warengruppe":"U"}
-{"name_de":"Schwein Brät, tiefgefroren","name_en":"Pork sausage meat, deep-frozen","bls_code":"U065200","warengruppe":"U"}
 {"name_de":"Rind Steak (Rücken) roh","name_en":"Beef steak (loin) raw","bls_code":"U131100","warengruppe":"U"}
-{"name_de":"Rind Filet/Lende, gebraten ohne Fett (Ofen)","name_en":"Beef fillet (tenderloin) fried in the oven without fat","bls_code":"U211162","warengruppe":"U"}
-{"name_de":"Kalb Steak (Rücken) gegrillt","name_en":"Veal steak (loin) grilled","bls_code":"U331172","warengruppe":"U"}
-{"name_de":"Kalb Bug/Schulter, geschmort ohne Fett","name_en":"Veal shoulder, braised without fat","bls_code":"U461142","warengruppe":"U"}
-{"name_de":"Schwein Schnitzel (Oberschale) tiefgefroren","name_en":"Pork schnitzel (topside) deep-frozen","bls_code":"U541200","warengruppe":"U"}
-{"name_de":"Schwein Kotelett (Rücken/cranial) Kochpökelware","name_en":"Pork loin (cranial part) cooked cured","bls_code":"U622800","warengruppe":"U"}
-{"name_de":"Schaf Filetmedaillon, gebraten ohne Fett (Ofen)","name_en":"Sheep fillet medaillon, fried without fat (oven)","bls_code":"U711162","warengruppe":"U"}
-{"name_de":"Schaf Filet/Lende, roh","name_en":"Sheep tenderloin, raw","bls_code":"U811100","warengruppe":"U"}
-{"name_de":"Schaf Vorderhaxe, mager, gegrillt","name_en":"Sheep foreshank, lean, grilled","bls_code":"U871172","warengruppe":"U"}
+{"name_de":"Rind Steak (Rücken) tiefgefroren","name_en":"Beef steak (loin) deep-frozen","bls_code":"U131200","warengruppe":"U"}
+{"name_de":"Rind Hinterhesse, tiefgefroren","name_en":"Beef leg/hindshank, deep-frozen","bls_code":"U291200","warengruppe":"U"}
+{"name_de":"Kalb Kugel/Nuss, gebraten ohne Fett (Ofen)","name_en":"Veal thick flank, fried without fat (oven)","bls_code":"U485162","warengruppe":"U"}
+{"name_de":"Schwein Speck, ohne Schwartenzug (S VII) roh","name_en":"Pork neck and back fat, without rind (S VII) raw","bls_code":"U605700","warengruppe":"U"}
+{"name_de":"Schaf Kotelett, gebraten ohne Fett (Pfanne)","name_en":"Sheep chop (loin) fried without fat (pan)","bls_code":"U721182","warengruppe":"U"}
+{"name_de":"Lamm Brust, geschmort ohne Fett","name_en":"Lamb breast, braised without fat","bls_code":"U857142","warengruppe":"U"}
 {"name_de":"Schnecken roh","name_en":"Snails edible/escargots, raw","bls_code":"V050100","warengruppe":"V"}
-{"name_de":"Hase Fleisch, roh","name_en":"Hare meat, raw","bls_code":"V232100","warengruppe":"V"}
-{"name_de":"Wachtel Fleisch, ohne Haut, gebraten ohne Fett (Ofen)","name_en":"Quail meat, without skin, fried without fat (oven)","bls_code":"V354162","warengruppe":"V"}
+{"name_de":"Wildschwein Fleisch, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Wild boar meat, deep-frozen, fried without fat (pan)","bls_code":"V250282","warengruppe":"V"}
 {"name_de":"Hähnchen Brustfilet, roh","name_en":"Chicken breast fillet, raw","bls_code":"V416100","warengruppe":"V"}
-{"name_de":"Hähnchen Unterschenkel, mit Haut, mariniert, roh","name_en":"Chicken drumstick, with skin, marinated, raw","bls_code":"V420000","warengruppe":"V"}
-{"name_de":"Ente Fleisch, mit Haut, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Duck meat, with skin, deep-frozen, fried without fat (pan)","bls_code":"V464282","warengruppe":"V"}
-{"name_de":"Gans Innereien, geschmort ohne Fett","name_en":"Goose giblets, braised without fat","bls_code":"V478142","warengruppe":"V"}
+{"name_de":"Hähnchen Flügel, mit Haut, tiefgefroren","name_en":"Chicken wings, with skin, deep-frozen","bls_code":"V417200","warengruppe":"V"}
+{"name_de":"Ente Brust, mit Haut, gebraten ohne Fett (Ofen)","name_en":"Duck breast, with skin, fried without fat (oven)","bls_code":"V466162","warengruppe":"V"}
+{"name_de":"Pute Keule, ohne Haut, tiefgefroren","name_en":"Turkey leg, without skin, deep-frozen","bls_code":"V485200","warengruppe":"V"}
 {"name_de":"Pute Brust, ohne Haut, roh","name_en":"Turkey breast, without skin, raw","bls_code":"V486100","warengruppe":"V"}
-{"name_de":"Pute Flügel, mit Haut, roh","name_en":"Turkey wings, with skin, raw","bls_code":"V487100","warengruppe":"V"}
-{"name_de":"Rind Herz, tiefgefroren, gebraten ohne Fett (Pfanne)","name_en":"Beef heart, deep-frozen, fried without fat (pan)","bls_code":"V511282","warengruppe":"V"}
-{"name_de":"Lamm Leber, gebraten ohne Fett (Pfanne)","name_en":"Lamb liver, fried without fat (pan)","bls_code":"V535182","warengruppe":"V"}
-{"name_de":"Kalb Zunge, gekocht","name_en":"Veal tongue, boiled","bls_code":"V592132","warengruppe":"V"}
+{"name_de":"Kalb Herz, gebraten ohne Fett (Pfanne)","name_en":"Veal heart, fried without fat (pan)","bls_code":"V512182","warengruppe":"V"}
+{"name_de":"Schaf Milz, roh","name_en":"Sheep spleen, raw","bls_code":"V564100","warengruppe":"V"}
 {"name_de":"Puten-Aufschnitt-Grundbrät mit Schweinefleisch","name_en":"Sausage meat for turkey cold cuts with pork","bls_code":"W002000","warengruppe":"W"}
-{"name_de":"Hirschsalami mit Schweinefleisch","name_en":"Venison salami with pork","bls_code":"W149200","warengruppe":"W"}
-{"name_de":"Bockwurst gargezogen","name_en":"Bockwurst poached","bls_code":"W211132","warengruppe":"W"}
-{"name_de":"Geflügelbratwurst gegrillt","name_en":"Poultry bratwurst grilled","bls_code":"W223172","warengruppe":"W"}
-{"name_de":"Krakauer/Kochpolnische","name_en":"Krakow cooked sausage","bls_code":"W252100","warengruppe":"W"}
-{"name_de":"Schweineroulade","name_en":"Pork roulade sausage","bls_code":"W273600","warengruppe":"W"}
-{"name_de":"Leberrolle","name_en":"Liver roll (liver sausage)","bls_code":"W320100","warengruppe":"W"}
-{"name_de":"Graupenblutwurst","name_en":"Blood sausage with pearl barley","bls_code":"W384200","warengruppe":"W"}
-{"name_de":"Kasseler, Rohpökelware, geräuchert","name_en":"Pork loin chop, raw cured, smoked","bls_code":"W510000","warengruppe":"W"}
-{"name_de":"Mortadella/Schinkenwurst fein zerkleinert, Konserve","name_en":"Mortadella/Ham bologna finely minced, canned","bls_code":"W870200","warengruppe":"W"}
+{"name_de":"Knoblauchwurst roh","name_en":"Garlic sausage raw","bls_code":"W171100","warengruppe":"W"}
+{"name_de":"Rostbratwurst gebraten ohne Fett (Pfanne)","name_en":"Rostbratwurst sausage fried without fat (pan)","bls_code":"W222682","warengruppe":"W"}
+{"name_de":"Käsekrainer/Käsewürstchen","name_en":"Small scalded sausage filled with cheese","bls_code":"W255300","warengruppe":"W"}
+{"name_de":"Thüringer Fleischrotwurst fettreduziert","name_en":"Thuringian blood sausage reduced-fat","bls_code":"W309000","warengruppe":"W"}
+{"name_de":"Leberpastete mit Champignons","name_en":"Liver pate with button mushrooms","bls_code":"W395100","warengruppe":"W"}
+{"name_de":"Wildbretgalantine gebacken","name_en":"Game galantine baked","bls_code":"W845000","warengruppe":"W"}
 {"name_de":"Pumpernickel mit Krabbencreme","name_en":"Pumpernickel with shrimp cream spread","bls_code":"X013040","warengruppe":"X"}
 {"name_de":"Baguette-Brötchen mit Ei und Remoulade","name_en":"Baguette roll with egg and remoulade sauce","bls_code":"X023310","warengruppe":"X"}
 {"name_de":"Brötchen mit Fleischkäse","name_en":"Roll and fleischkaese sausage","bls_code":"X041910","warengruppe":"X"}

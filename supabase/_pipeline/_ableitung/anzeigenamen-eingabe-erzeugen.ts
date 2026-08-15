@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Erzeugt die Eingabe fuer C-39 Phase 2 und die deterministische 200er-Probe.
+// Erzeugt die Eingabe fuer C-39 Anzeigenamen und die deterministische 200er-Probe.
 //
 // AUFRUF:
 //   pnpm exec tsx supabase/_pipeline/_ableitung/anzeigenamen-eingabe-erzeugen.ts
@@ -13,7 +13,6 @@ import fs from 'node:fs'
 const C = 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
 const DATEN = 'supabase/_pipeline/daten'
-const REGEL_GRUPPEN = new Set(['C', 'F', 'G', 'H', 'K'])
 const GERICHTE = new Set(['X', 'Y'])
 
 type Food = {
@@ -47,7 +46,6 @@ select jsonb_build_object(
   'warengruppe', left(bls_code, 1)
 )::text
 from nutrition.foods
-where left(bls_code, 1) not in ('C', 'F', 'G', 'H', 'K')
 order by bls_code;
 `
 
@@ -65,7 +63,7 @@ const sample = new Map<string, Food>()
 
 for (const code of MEALCAM_CODES) {
   const row = byCode.get(code)
-  if (row && !REGEL_GRUPPEN.has(row.warengruppe)) sample.set(code, row)
+  if (row) sample.set(code, row)
 }
 
 for (const row of rows.filter(r => GERICHTE.has(r.warengruppe)).slice(0, 50)) {
@@ -73,7 +71,7 @@ for (const row of rows.filter(r => GERICHTE.has(r.warengruppe)).slice(0, 50)) {
 }
 
 const restGroups = [...new Set(rows.map(r => r.warengruppe))]
-  .filter(g => !REGEL_GRUPPEN.has(g) && !GERICHTE.has(g))
+  .filter(g => !GERICHTE.has(g))
   .sort()
 const restTarget = 200 - sample.size
 const base = Math.floor(restTarget / restGroups.length)

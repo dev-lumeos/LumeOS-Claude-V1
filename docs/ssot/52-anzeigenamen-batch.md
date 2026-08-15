@@ -3,15 +3,16 @@
 Stand: 2026-08-15.
 
 `[cmd]` Ergebnisdatei: `supabase/_pipeline/daten/anzeigenamen.jsonl`.
-Der Vollauf enthält 5.775 Ausgabezeilen zu 5.775 Eingabezeilen.
+Der Bestand enthält jetzt 7.140 Ausgabezeilen zu 7.140 Eingabezeilen.
 
-`[cmd]` Geändert wurden Datendatei, Prüfer und dieser Bericht. Es gab kein
-`UPDATE`, kein `INSERT`, keine Migration, keinen Commit und keinen Push.
+`[cmd]` Es gab kein `UPDATE`, kein `INSERT`, keinen Kettenlauf, keine
+Migration, keinen Commit und keinen Push.
 
 Dateien:
 
+- `supabase/_pipeline/_ableitung/anzeigenamen-eingabe-erzeugen.ts`
 - `supabase/_pipeline/daten/anzeigenamen-eingabe.jsonl`
-- `supabase/_pipeline/daten/anzeigenamen-probe.jsonl`
+- `supabase/_pipeline/daten/anzeigenamen-probe-eingabe.jsonl`
 - `supabase/_pipeline/daten/anzeigenamen.jsonl`
 - `supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts`
 - `docs/ssot/52-anzeigenamen-batch.md`
@@ -35,6 +36,10 @@ ist die Warengruppe; Stellen 5 bis 7 tragen die Zubereitung.
 amtliche Satzstruktur muss aber nicht erhalten bleiben, wenn ein Eigenname
 oder eine knappere Wortstellung denselben Inhalt trägt.
 
+`[read]` Die Gruppen `C`, `F`, `G`, `H` und `K` waren ursprünglich als
+regelbasierte Phase 1 vorgesehen. Diese Phase wurde nicht gebaut; der
+manuelle Phase-2-Vollauf hatte sie deshalb nicht in der Eingabe.
+
 ---
 
 ## Grundmenge
@@ -44,11 +49,64 @@ oder eine knappere Wortstellung denselben Inhalt trägt.
 | Menge | Anzahl |
 |---|---:|
 | `nutrition.foods` gesamt | 7.140 |
-| regelbasierte Gruppen `C`, `F`, `G`, `H`, `K` | 1.365 |
-| C-39-Phase-2-Eingabe | 5.775 |
+| ursprüngliche Phase-2-Eingabe | 5.775 |
+| nachgeholte Gruppen `C`, `F`, `G`, `H`, `K` | 1.365 |
+| neue Anzeigenamen-Eingabe | 7.140 |
+| neue Anzeigenamen-Ausgabe | 7.140 |
 | davon Gerichte `X`/`Y` | 2.050 |
 
-`[cmd]` `anzeigenamen.jsonl` hat 5.775 Zeilen.
+`[cmd]` Die neue Eingabe und Ausgabe sind nach `bls_code` sortiert.
+
+`[cmd]` Vergleich gegen `HEAD:supabase/_pipeline/daten/anzeigenamen.jsonl`:
+Für die bisherigen 5.775 Codes gab es 0 inhaltliche Änderungen.
+
+---
+
+## Die nachgeholte Phase 1
+
+`[cmd]` `anzeigenamen-eingabe-erzeugen.ts` schrieb nach Entfernen des Filters:
+
+```powershell
+anzeigenamen-eingabe.jsonl: 7140
+anzeigenamen-probe-eingabe.jsonl: 200
+MealCam-Codes in Probe: 16
+Gerichte X/Y in Probe: 50
+```
+
+`[cmd]` Die nachgeholten Gruppen:
+
+| Gruppe | Zeilen | `sicher:true` | unverändert | `nebennamen` nicht leer | Median alt -> neu |
+|---|---:|---:|---:|---:|---:|
+| C Getreide und Reis | 231 | 231 (100,0 %) | 58 (25,1 %) | 6 (2,6 %) | 22 -> 21 |
+| F Obst | 275 | 275 (100,0 %) | 65 (23,6 %) | 21 (7,6 %) | 19 -> 18 |
+| G Gemüse | 560 | 560 (100,0 %) | 19 (3,4 %) | 69 (12,3 %) | 28 -> 21 |
+| H Nüsse und Samen | 142 | 142 (100,0 %) | 55 (38,7 %) | 20 (14,1 %) | 26 -> 25 |
+| K Kartoffeln und Hülsenfrüchte | 157 | 157 (100,0 %) | 6 (3,8 %) | 17 (10,8 %) | 30 -> 23 |
+
+`[cmd]` Verbindliche Prüfpunkte in der Ausgabedatei:
+
+| Code | Anzeige DE | Anzeige EN |
+|---|---|---|
+| `C133000` | Haferflocken | Oat flakes |
+| `C351000` | Vollkornreis (roh) | Brown rice (raw) |
+| `C352000` | Weißer Reis (roh) | White rice (raw) |
+| `C359000` | Parboiled-Reis (roh) | Parboiled rice (raw) |
+| `G543100` | Paprika rot | Sweet pepper red |
+| `K213000` | Kartoffelpüree (Instantpulver) | Mashed potatoes (instant powder) |
+
+`[annahme]` In `C` war Reis der Prüfstein. `Reis unpoliert` wurde als
+`Vollkornreis (roh)` geführt, weil `name_en` `Brown rice raw` sagt und C-32
+diese Zuordnung als braunen bzw. vollkörnigen Reis behandelt.
+
+`[annahme]` In `G` und `K` wurden Zubereitungen stärker gekürzt als die
+amtliche Formulierung, aber nur dort, wo die Unterscheidung erhalten blieb:
+`roh`, `gekocht`, `gedünstet`, `gebraten`, `tiefgekühlt`, `Konserve` und
+Instantpulver bleiben sichtbar, wenn sie den Eintrag trennen.
+
+`[annahme]` In `F` und `H` ist ein höherer Anteil unveränderter Namen richtig.
+Viele Obst-, Nuss- und Samenbezeichnungen sind bereits gebräuchlich. Säfte,
+Konserven, Trockenfrüchte und Röstvarianten wurden als eigene Erzeugnisse
+geführt, nicht als bloße Zubereitung derselben Frucht.
 
 ---
 
@@ -76,8 +134,8 @@ pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts supabase/_
 
 | Prüfung | Ergebnis |
 |---|---:|
-| Eingabezeilen | 5.775 |
-| Ausgabezeilen | 5.775 |
+| Eingabezeilen | 7.140 |
+| Ausgabezeilen | 7.140 |
 | fehlende Codes | 0 |
 | doppelte Codes | 0 |
 | doppelte Anzeigenamen | 0 |
@@ -92,8 +150,13 @@ pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts supabase/_
 | Gruppe | Zeilen | `sicher:true` | unverändert | `nebennamen` nicht leer |
 |---|---:|---:|---:|---:|
 | B | 186 | 186 (100,0 %) | 155 (83,3 %) | 6 (3,2 %) |
+| C | 231 | 231 (100,0 %) | 58 (25,1 %) | 6 (2,6 %) |
 | D | 466 | 466 (100,0 %) | 137 (29,4 %) | 70 (15,0 %) |
 | E | 104 | 104 (100,0 %) | 2 (1,9 %) | 48 (46,2 %) |
+| F | 275 | 275 (100,0 %) | 65 (23,6 %) | 21 (7,6 %) |
+| G | 560 | 560 (100,0 %) | 19 (3,4 %) | 69 (12,3 %) |
+| H | 142 | 142 (100,0 %) | 55 (38,7 %) | 20 (14,1 %) |
+| K | 157 | 157 (100,0 %) | 6 (3,8 %) | 17 (10,8 %) |
 | M | 279 | 279 (100,0 %) | 8 (2,9 %) | 27 (9,7 %) |
 | N | 114 | 114 (100,0 %) | 28 (24,6 %) | 9 (7,9 %) |
 | P | 119 | 119 (100,0 %) | 55 (46,2 %) | 17 (14,3 %) |
@@ -108,10 +171,7 @@ pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts supabase/_
 | Y | 885 | 885 (100,0 %) | 527 (59,5 %) | 14 (1,6 %) |
 
 `[cmd]` Längenverteilung gesamt `name_de` -> `name_display_de`:
-p50 34 -> 30, p90 59 -> 51, max 123 -> 95.
-
-`[cmd]` Für die nachgezogenen Gruppen: `D` Median 29 -> 22, `X` 38 -> 36,
-`Y` 33 -> 32.
+p50 32 -> 29, p90 58 -> 50, max 132 -> 110.
 
 ---
 
@@ -129,24 +189,11 @@ geändert, 1.224 blieben unverändert.
 
 `[annahme]` Gekürzt wurde vor allem amtliche Satzstruktur:
 `Teigwaren geschichtet mit ...`, `zubereitet aus ...`, Grundsaucen-Formeln
-und erklärende Eigenname-Klammern. Beispiele:
-
-| amtlich | Anzeige |
-|---|---|
-| Lasagne al forno, Teigwaren geschichtet mit Bechamel- und Bologneser Sauce, mit Käse überbacken | Lasagne al forno mit Bolognese und Bechamel |
-| Pizza quattro stagioni (mit Tomatensauce, Artischocken, Champignons, Paprika, Kochschinken) | Pizza quattro stagioni |
-| Toast mit Ananas, Kochschinken und Käse ("Toast Hawaii") gebacken | Toast Hawaii (gebacken) |
-| Vanillepudding, Flammeri, zubereitet aus Pulver und Milch 3,5 % Fett, mit Früchten und Süßstoff | Vanillepudding aus Pulver mit Milch 3,5 % Fett mit Früchten und Süßstoff |
+und erklärende Eigenname-Klammern.
 
 `[annahme]` Unverändert blieben Gerichte, bei denen der amtliche Name bereits
 eine brauchbare Zutatenliste ist, zum Beispiel belegte Brötchen, viele Salate,
-Suppen, Eintöpfe und einfache Kombinationen wie `Clubsandwich mit Thunfisch,
-Gurke, Emmentaler und Mayonnaise`.
-
-`[annahme]` Grenzfälle waren Eigenname plus Zutatenliste. Bei starken
-Eigennamen wie `Pizza quattro stagioni`, `Toast Hawaii`, `Moussaka` oder
-`Bami Goreng` wurde die Erklärung gekürzt. Bei generischen Namen wie Breien,
-Salaten oder gefülltem Gemüse blieben die unterscheidenden Zutaten im Namen.
+Suppen, Eintöpfe und einfache Kombinationen.
 
 ---
 
@@ -159,12 +206,9 @@ unveränderte Namen trugen eine Klammer.
 Damit wurden 156 D-Zeilen geändert.
 
 `[annahme]` Entfernt wurden Klammer-Teigarten nur dort, wo sie keinen
-gleichnamigen Geschwistereintrag trennen. Beispiele: `Sachertorte
-(Rührmasse)` -> `Sachertorte`, `Quicheboden (Mürbeteig)` -> `Quicheboden`.
-
-`[annahme]` Erhalten blieben Teigarten, wenn sie Varianten trennen, zum
-Beispiel bei `Apfelkuchen`, `Apfel-Streuselkuchen`, `Käsekuchen`,
-`Nusskuchen` oder `Buttercremetorte`.
+gleichnamigen Geschwistereintrag trennen. Erhalten blieben Teigarten, wenn
+sie Varianten trennen, zum Beispiel bei `Apfelkuchen`, `Apfel-Streuselkuchen`,
+`Käsekuchen`, `Nusskuchen` oder `Buttercremetorte`.
 
 ---
 
@@ -200,14 +244,15 @@ Lachs-Namen verstärkt.
 `[cmd]` `R` wurde mit 97 Zeilen abgeschlossen; 28 Zeilen haben nicht-leere
 `nebennamen`.
 
-`[annahme]` In `R` fiel besonders viel Aliaswissen an: `Sojasauce/Sojasoße`,
-`Zitronat/Sukkade`, `Ganache/Canache`, `Aprikosenglasur/Aprikotur`.
+`[annahme]` In `R` fiel besonders viel Aliaswissen an:
+`Sojasauce/Sojasoße`, `Zitronat/Sukkade`, `Ganache/Canache`,
+`Aprikosenglasur/Aprikotur`.
 
 ---
 
 ## Kollisionen
 
-`[cmd]` Es gibt keine doppelten Anzeigenamen über den Gesamtbestand von 5.775
+`[cmd]` Es gibt keine doppelten Anzeigenamen über den Gesamtbestand von 7.140
 Zeilen.
 
 `[cmd]` Es gibt keine doppelten `bls_code`.
@@ -219,17 +264,16 @@ Arbeitsliste für manuelle Kollisionskorrekturen.
 
 ## Nebennamen
 
-`[cmd]` Nach dem X/Y-Durchgang haben 590 von 5.775 Zeilen nicht-leere
-`nebennamen`.
+`[cmd]` Nach dem Nachholen von `C`, `F`, `G`, `H` und `K` haben 732 von 7.140
+Zeilen nicht-leere `nebennamen`.
 
-`[cmd]` Neu kamen in `X` 9 und in `Y` 14 Zeilen mit `nebennamen` hinzu.
-Das betrifft nur echte Nebenbezeichnungen wie `Eierkuchen`,
-`Vollkorneierkuchen`, `Lahmacun`, `Vanilleflammeri`, `Sahneflammeri` oder
-`Zwetschgenkompott`.
+`[cmd]` In den nachgeholten Gruppen kamen nicht-leere `nebennamen` hinzu:
+`C` 6, `F` 21, `G` 69, `H` 20, `K` 17.
 
 `[annahme]` Nicht aufgenommen wurden Schrägstriche, wenn sie verschiedene
-Dinge statt echte Nebenbezeichnungen trennten, etwa gemischte Fleischarten
-oder unterschiedliche Saucenarten.
+Dinge statt echte Nebenbezeichnungen trennten. Auch erklärende Zusätze mit
+Komma oder Klammer wurden nicht als `nebennamen` übernommen, weil der Prüfer
+nur nackte Namen erlaubt.
 
 ---
 
@@ -237,7 +281,8 @@ oder unterschiedliche Saucenarten.
 
 `[cmd]` Es gibt 33 `sicher:false`-Zeilen.
 
-`[cmd]` Warengruppenverteilung: `T` 32, `W` 1.
+`[cmd]` Warengruppenverteilung: `T` 32, `W` 1. In `C`, `F`, `G`, `H` und `K`
+gibt es 0 `sicher:false`-Zeilen.
 
 `[annahme]` Ursachen:
 
@@ -261,8 +306,8 @@ mindestens einem echten `?` in `name_display_de`, `name_display_en` oder
 `[cmd]` Der erweiterte Prüfer wurde vor der Reparatur gegen die beschädigte
 Datei ausgeführt und schlug mit 704 Korruptionsmeldungen fehl.
 
-`[cmd]` Nach der Reparatur und nach dem X/Y-Durchgang meldet die Vollprüfung
-0 Zeilen mit `?`, `\uFFFD` oder `\u0000`.
+`[cmd]` Nach der Reparatur, nach dem X/Y-Durchgang und nach der nachgeholten
+Phase 1 meldet die Vollprüfung 0 Zeilen mit `?`, `\uFFFD` oder `\u0000`.
 
 `[annahme]` Die wahrscheinlichste Ursache war ein PowerShell-Schreibweg mit
 Nicht-ASCII-Zeichen in Here-Strings. Dadurch wurden Umlaute beim Übergang an
@@ -277,8 +322,13 @@ geschrieben wurden.
 `Y9A2050`.
 
 `[annahme]` Die Daten sind eine Arbeitsdatei. Das Einspielen in die Datenbank
-ist C-41; Editierbarkeit über Admin/Override-Tabelle bleibt C-29/C-31.
+erfolgt erst beim nächsten Kettenaufbau über Schritt `025`; dieser Auftrag hat
+keinen Kettenlauf ausgelöst.
 
 `[annahme]` Die `nebennamen` sind kuratiert, aber keine vollständige
 Synonymliste. Sie enthalten nur Nebenformen, die beim Schreiben der
 Anzeigenamen sichtbar wurden.
+
+`[annahme]` Die Namen sind eingespielt, sobald der bestehende Kettenschritt
+mit der neuen 7.140er Datei läuft; editierbar sind sie dadurch weiterhin
+nicht. Editierbarkeit bleibt C-29/C-31.
