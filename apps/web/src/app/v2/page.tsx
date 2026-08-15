@@ -1,16 +1,14 @@
-// Nachweisseite der Oberflaeche v2 (G-01).
+// Nachweisseite der Oberflaeche v2 (G-01, erweitert in G-02).
 //
-// Zweck: zeigen, dass die Route steht, das Stylesheet greift und die
-// Tokens ankommen. KEIN Modul, KEINE Navigation, KEINE Datenschicht —
-// das ist G-02 aufwaerts.
+// Zweig: die Huelle steht — Navigation, Kopfzeile, Inhaltsbereich,
+// Kontextspalte. KEINE Modulinhalte; die sind G-03 und G-06.
 //
-// Die Seite liest nichts aus der Datenbank. Sie muss nichts lesen:
-// geprueft wird die Darstellung, nicht der Inhalt.
-import { v2 } from '@lumeos/ui'
+// Die Seite zeigt die geteilten Bausteine einmal in Betrieb, damit
+// belegbar ist, dass sie greifen. Sie ist kein Modul und wird beim
+// Umschalten (G-07) ersetzt.
+import { Card, KPI, Pill, Ring, Meter, Row, ModuleHero } from '@lumeos/ui'
+import { AkzentProbe } from './akzent-probe'
 
-// Die elf Modulakzente. Sie stammen aus denselben Tokens wie die alte
-// Oberflaeche — deshalb ist ihr Erscheinen hier der Beleg, dass v2 auf
-// der geteilten Tokenschicht sitzt und keine eigene mitbringt.
 const AKZENTE = [
   ['--acc-dash', 'Dashboard'],
   ['--acc-nutri', 'Nutrition'],
@@ -25,74 +23,59 @@ const AKZENTE = [
   ['--acc-admin', 'Admin'],
 ] as const
 
-// Die drei Statusfarben. Sie stehen hier, weil sie im Hellmodus des
-// Entwurfs FEHLTEN und im Repo am 2026-08-15 repariert wurden
-// (d19e651). Wer den Modus umschaltet, sieht auf dieser Seite sofort,
-// ob die Reparatur noch traegt: bleiben die drei im Tagmodus lesbar,
-// ist sie da.
-const STATUS = [
-  ['--pos', 'pos'],
-  ['--warn', 'warn'],
-  ['--neg', 'neg'],
-] as const
-
 export default function V2Page() {
   return (
-    <main className={v2('module-header')} style={{ padding: '2rem' }}>
-      <div className={v2('module-title-block')}>
-        <div className={v2('eyebrow')}>G-01</div>
-        <h1 className={v2('module-title')}>Oberflaeche v2</h1>
-        <p className={v2('module-sub')}>
-          Parallelstruktur steht. Diese Seite baut noch keine Oberflaeche —
-          sie zeigt, dass die Route greift und die Tokens ankommen.
-          Bausteine folgen in G-02.
-        </p>
-      </div>
+    <>
+      <ModuleHero
+        icon="dashboard"
+        title="Oberflaeche v2 · Huelle"
+        sub="G-02: Seitenleiste, Kopfzeile und Kontextspalte stehen. Die Modulinhalte folgen in G-03."
+        pills={<><Pill variant="acc">G-02</Pill><Pill>Attrappe</Pill></>}
+        stats={[
+          { label: 'Bausteine', value: '9', sub: 'aus shared.jsx' },
+          { label: 'Symbole', value: '51', sub: 'getypt' },
+          { label: 'Klassen', value: '145', sub: 'Praefix v2-' },
+        ]}
+      />
 
-      <section className={v2('card')} style={{ marginTop: '1.5rem' }}>
-        <div className={v2('card-title')}>Modulakzente</div>
-        <div className={v2('card-sub')}>
-          geteilte Tokenschicht, dieselben Werte wie in der bestehenden
-          Oberflaeche
-        </div>
-        <div className={v2('g-cols-4')} style={{ marginTop: '1rem' }}>
-          {AKZENTE.map(([token, name]) => (
-            <div key={token} className={v2('kpi')}>
-              <div
-                className={v2('kpi-acc-bar')}
-                style={{ background: `var(${token})` }}
-              />
-              <div className={v2('kpi-label')}>{name}</div>
-              <div className={v2('kpi-value', 'mono')} style={{ fontSize: '0.7rem' }}>
-                {token}
+      <AkzentProbe akzente={AKZENTE} />
+
+      <div className="v2-grid v2-g-cols-2" style={{ marginTop: 16 }}>
+        <Card title="Bausteine" sub="einmal in Betrieb">
+          <div className="v2-grid v2-g-cols-2" style={{ marginBottom: 12 }}>
+            <KPI label="Kalorien" value="2.145" unit="kcal" delta="+120"
+                 deltaVariant="pos" spark={[10, 14, 12, 18, 16, 22, 20]} />
+            <KPI label="Protein" value="148" unit="g" delta="-12" deltaVariant="neg" />
+          </div>
+          <Row label="Ring, Meter, Pill" value="Beispiel" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 12 }}>
+            <Ring value={72} label="Score" size={92} />
+            <div style={{ flex: 1 }}>
+              <Meter value={72} />
+              <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
+                <Pill variant="pos">pos</Pill>
+                <Pill variant="warn">warn</Pill>
+                <Pill variant="neg">neg</Pill>
+                <Pill variant="acc">acc</Pill>
               </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        </Card>
 
-      <section className={v2('card')} style={{ marginTop: '1rem' }}>
-        <div className={v2('card-title')}>Statusfarben in beiden Modi</div>
-        <div className={v2('card-sub')}>
-          im Entwurf fehlten sie im Hellmodus — hier muessen sie in beiden
-          lesbar sein
-        </div>
-        <div className={v2('row')} style={{ marginTop: '1rem', gap: '0.5rem' }}>
-          {STATUS.map(([token, name]) => (
-            <span
-              key={token}
-              className={v2('pill')}
-              style={{
-                borderColor: `color-mix(in oklch, var(${token}) 40%, var(--border))`,
-                background: `color-mix(in oklch, var(${token}) 10%, var(--surface))`,
-                color: `var(${token})`,
-              }}
-            >
-              {name}
-            </span>
-          ))}
-        </div>
-      </section>
-    </main>
+        <Card title="Was hier NICHT steht" sub="mit Absicht">
+          <Row label="Modulinhalte" value="G-03 / G-06" />
+          <Row label="Buddy-Antworten" value="Attrappe" />
+          <Row label="Befehlspalette" value="fehlt" />
+          <Row label="Benachrichtigungen" value="fehlt" />
+          <p style={{
+            marginTop: 12, fontSize: 12, lineHeight: 1.5, color: 'var(--fg-muted)',
+          }}>
+            Bedienelemente ohne Funktion sind deaktiviert statt still. Ein
+            Knopf, der nichts tut, ist ein Versprechen — ein deaktivierter
+            ist eine Aussage.
+          </p>
+        </Card>
+      </div>
+    </>
   )
 }
