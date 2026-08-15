@@ -675,7 +675,7 @@
  "mindestzeilen": {
   "_kommentar": "Untergrenzen, keine Sollwerte. Sie fangen den Fall ab, dass eine Tabelle zwar existiert, aber leer geblieben ist.",
   "foods": 7140,
-  "food_nutrients": 698092,
+  "food_nutrients": 869501,
   "food_aliases": 30000,
   "food_tags": 9000,
   "nutrient_defs": 138,
@@ -683,6 +683,29 @@
   "search_synonyms": 4800,
   "preparation_kinds": 11,
   "food_groups": 19
+ },
+ "mindestzeilen_belege": {
+  "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
+  "foods": "[read] docs/ssot/30-datenbank.md, Tabelle Stand lokale Datenbank: 7.140.",
+  "food_nutrients": "[cmd] 031_fettsaeuren_nachtrag.sql + v031_fettsaeuren.sql: 698.092 aus 030 plus 171.409 Nachtrag = 869.501.",
+  "food_aliases": "[cmd] Gerundeter Ist-Stand nach 022/026: 32.805, Untergrenze 30.000.",
+  "food_tags": "[cmd] Gerundeter Ist-Stand nach Tag-Ableitung: 9.265, Untergrenze 9.000.",
+  "nutrient_defs": "[read] 015_nutrient_defs_seed.sql und BLS-Katalog: 138.",
+  "food_categories": "[cmd] Gerundeter Ist-Stand nach 020: 518, Untergrenze 500.",
+  "search_synonyms": "[cmd] Gerundeter Ist-Stand nach 024: 4.877, Untergrenze 4.800.",
+  "preparation_kinds": "[read] 023_zubereitung_ableitung.sql: 11 Zubereitungsarten.",
+  "food_groups": "[read] 023_zubereitung_ableitung.sql: 19 Warengruppen."
+ },
+ "datenqualitaet": {
+  "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",
+  "food_nutrients": {
+   "distinct_nutrient_codes": 138,
+   "data_sources": [
+    "bls_4_0_local_import",
+    "bls_4_0_xlsx_nachtrag"
+   ],
+   "beleg": "[cmd] v031_fettsaeuren.sql nach 031: 138 Codes, zwei data_source-Werte; Nachtrag 171.409 Werte nur fuer 30 Doppelpunkt-Codes."
+  }
  },
  "_bewusst_nicht_geprueft": {
   "indizes": "Absichtlich NICHT aufgenommen (Entscheidung 2026-08-16). Indizes sind Laufzeit, nicht Korrektheit — ein fehlender Index macht die Suche langsam, keine Daten falsch oder sichtbar. Die Liste waere ausserdem unpflegbar: jeder Ausdrucksindex aus 072/073 muesste mitgezogen werden.",

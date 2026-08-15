@@ -308,6 +308,35 @@ for (const [tab, min] of Object.entries(SOLL.mindestzeilen)) {
   if (!ok) fehler.push(`Zeilen: nutrition.${tab} hat ${n}, erwartet mindestens ${min}`)
 }
 
+// Inhaltliche Mindestqualitaet: Bei C-38 ging nicht die Tabelle verloren,
+// sondern eine ganze Codefamilie innerhalb von food_nutrients. Die
+// Zeilenzahl allein war zu grob und wurde danach sogar falsch als
+// Sollwert uebernommen. Diese Pruefung haette den Verlust sofort gesehen.
+if (SOLL.datenqualitaet?.food_nutrients && istTabellen.has('food_nutrients')) {
+  const soll = SOLL.datenqualitaet.food_nutrients
+  const codeIst = Number(sql(
+    `SELECT count(DISTINCT nutrient_code) FROM nutrition.food_nutrients;`)[0][0])
+  const codeSoll = Number(soll.distinct_nutrient_codes)
+  const codeOk = codeIst === codeSoll
+  console.log(`  ${'food_nutrients.codes'.padEnd(20)} ${String(codeIst).padStart(7)} / ${String(codeSoll).padStart(7)}  ${codeOk ? 'ok' : 'FALSCH'}`)
+  if (!codeOk) {
+    fehler.push(`Datenqualitaet: nutrition.food_nutrients hat ${codeIst} verschiedene ` +
+      `Naehrstoffcodes, erwartet ${codeSoll}`)
+  }
+
+  const quellenIst = sql(
+    `SELECT DISTINCT data_source FROM nutrition.food_nutrients ORDER BY data_source;`
+  ).map(r => r[0])
+  const quellenSoll = [...(soll.data_sources as string[])].sort()
+  const quellenOk = quellenIst.length === quellenSoll.length &&
+    quellenIst.every((q, i) => q === quellenSoll[i])
+  console.log(`  ${'food_nutrients.sources'.padEnd(20)} ${String(quellenIst.length).padStart(7)} / ${String(quellenSoll.length).padStart(7)}  ${quellenOk ? 'ok' : 'FALSCH'}`)
+  if (!quellenOk) {
+    fehler.push(`Datenqualitaet: nutrition.food_nutrients data_source ist ` +
+      `[${quellenIst.join(', ')}], erwartet [${quellenSoll.join(', ')}]`)
+  }
+}
+
 console.log('')
 if (warnung.length) {
   console.log('Hinweise:')
