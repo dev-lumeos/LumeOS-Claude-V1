@@ -2402,6 +2402,532 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   fehlte `is_admin()` an `authenticated`, wären beide Admin-Policies
   wirkungslos), Schema-`USAGE`, die Default Privileges selbst.
 
+- [x] **C-16: Training hat dasselbe Wortschatzproblem — eine Runde
+  früher erkennen** (neu 2026-08-13, aus Block 28) — `[cmd]`
+  `training.exercises` trägt **1.416 Übungen mit ausschliesslich
+  englischen Namen** (0 enthalten einen Umlaut), **keine Aliasspalte**,
+  und im ganzen Schema `training` existiert **genau eine** Funktion.
+  Wer „Bankdrücken" tippt, findet nichts.
+
+  **Das ist dasselbe Muster, ein Modul weiter:** Jede Datenquelle bringt
+  ihre eigene Sprache mit — der BLS deutsche Fachsystematik, der
+  Übungskatalog englische Produktnamen — und **keine davon ist die des
+  Nutzers**. Bei Nutrition hat es zwei Blöcke gekostet, das zu messen und
+  die ableitbare Hälfte zu schliessen.
+
+  **Was aus Block 28 übertragbar ist**, bevor Training eine Oberfläche
+  bekommt: die Alias-Ableitung ist mechanisch (Zusammenschreibung,
+  Trennzeichen) und braucht keine Pflege; die Relevanzstufen
+  (`exakt > Alias exakt > Präfix > Wortanfang > irgendwo`) sind
+  übertragbar; der Ausdrucks-Index auf die gefaltete Spalte ist
+  Voraussetzung, sonst kostet es Laufzeit.
+  **Der Unterschied:** Bei Training fehlt die deutsche Seite ganz — es
+  geht nicht um Schreibvarianten, sondern um Übersetzung. Das ist keine
+  Ableitung, sondern Inhalt.
+
+---
+
+  `[cmd]` **Gemessen 2026-08-15**, Bericht `docs/ssot/64-training-wortschatz.md`.
+  **Ja, dasselbe Problem — und diesmal vor dem Bau sichtbar.**
+  `[cmd]` Alle 1.416 Übungsnamen sind englisch (0 Einträge mit Umlaut),
+  `training.exercises` hat **kein `name_de` und kein Aliasfeld**, und es
+  gibt keine Suchfunktion. Gegen einfaches `ILIKE` gemessen:
+  **3 von 34 Sollwerten auf Platz 1, 25 ohne jeden Treffer** —
+  `bankdruecken`, `kniebeuge`, `kreuzheben`, `klimmzug`, `latzug`,
+  `beinpresse` laufen leer.
+  `[cmd]` Korrektur am Bestand: **107 Muskelgruppen, 6.624 Zuordnungen**,
+  nicht 109 und 6.625.
+  **Der Unterschied zu Nutrition:** dort wurde das Problem nach dem
+  Bauen sichtbar. Hier gibt es weder Suchfunktion noch Feld, das
+  umgebaut werden müsste — die deutsche Namensschicht kann von Anfang an
+  mitgeplant werden.
+
+- [x] **C-17: Suchlaufzeit — 547 ms bei zweiwortigen Anfragen** (neu
+  2026-08-14). `[cmd]` Gemessen im Ausbau der Lebensmittelsuche:
+
+  | Anfrage | ohne Gruppen | mit Gruppen |
+  |---|---|---|
+  | `spinat` | 295 ms | 296 ms |
+  | `huehnerbrust` | 290 ms | 547 ms |
+  | (leer) | 152 ms | 152 ms |
+
+  Die Grundkosten lagen schon **vor** dem Ausbau bei 152–295 ms — die
+  Suche war nie schnell. Zweiwortige Anfragen kosten rund 257 ms
+  zusätzlich.
+
+  **Ursache benannt, älter als der Ausbau:** `[cmd]` Die Bedingung faltet
+  `concat_ws(bls_code, name_de, name_en, name_th)`, der Trigramm-Index
+  liegt auf `search_fold(name_de)` — zwei verschiedene Ausdrücke, also
+  sequenzieller Scan. Solange das so ist, hilft kein Index.
+
+  **Ein Umbauversuch wurde verworfen und begründet:** sechs feste
+  `text[]`-Slots statt jsonb, damit der Trigramm-Index greift. `[cmd]`
+  Isoliert schneller (0,97 ms gegen 48 ms), eingebaut **langsamer**
+  (704 ms gegen 562 ms), weil jeder der sechs Slots einen eigenen
+  Durchlauf auslöst — auch die leeren. Messwerte stehen im Code an der
+  Bedingung.
+
+  Vorgehen: erst den Ausdruck der Bedingung und den des Index in Deckung
+  bringen, dann neu messen. Nicht umgekehrt.
+
+  `[cmd]` **Erledigt 2026-08-15**, Bericht `docs/ssot/63-suchlaufzeit.md`.
+  Live: `huehnerbrust` **494 → 234 ms**, `spinat` 264 → 128 ms,
+  Trefferzahlen unverändert, beide Massstäbe halten.
+
+  **Die Diagnose in diesem Punkt war in beiden Teilen falsch:**
+  `[cmd]` Einen Index auf `search_fold(name_de)` **gibt es gar nicht** —
+  auf `foods` liegt nur ein GIN-Index, und der auf `name_display_de` aus
+  C-41. Und er wäre ohnehin nicht der Engpass gewesen: der Seq Scan über
+  `foods` kostet **1,9 %**, die Alias-Prüfung lief **14.212 mal** und
+  trug 98 % der Buffer.
+
+  Gewählt: eine Hilfsfunktion mit dynamischem SQL. `[cmd]` Der Grund ist
+  messbar — dieselbe Bedingung kostet 2.120.811 Buffer, wenn die
+  Alternative aus dem jsonb kommt, und 248, wenn sie als Literal
+  dasteht. Ein Trigramm-Index braucht das Muster zur Planungszeit.
+
+  **Vier von fünf Anläufen verworfen**, zwei Lehren daraus: *isoliert
+  schnell heisst nicht eingebaut schnell* (Anlauf 3: Buffer 42.799 → 363,
+  Zeit 255 → 506 ms), und `[cmd]` Anlauf 4 mass den eigenen Messaufbau —
+  in der Datenbank kostet die Alias-Auflösung 5 ms, der Rest war
+  docker/psql-Rundlauf.
+
+  **Offen als eigene Baustelle:** `[cmd]` Von den 234 ms sind rund
+  225 ms Grundkosten — die leere Anfrage ist gleich teuer geblieben.
+  `[annahme]` Verdacht auf die beiden `LEFT JOIN LATERAL` und den
+  zweiten Durchlauf für `total`. Ungemessen.
+
+- [x] **C-22: Phonetische Schreibvarianten** (neu 2026-08-14). Eine
+  eigene Klasse, die weder Zerlegung noch Thesaurus abdeckt — und auch
+  nicht abdecken kann.
+
+  `[cmd]` `kornflakes` liefert **null Treffer**; `cornflakes` und
+  `corn flakes` liefern beide fünf. Ein deutscher Schreiber macht aus dem
+  `c` ein `k`. `Korn` und `Corn` sind aber verschiedene Wörter mit
+  verschiedener Bedeutung — ein Synonym wäre falsch.
+
+  Die Klasse ist grösser: `c`/`k`, `f`/`ph`, `i`/`y`, `t`/`th`, `k`/`ck`,
+  `s`/`ss`/`z`. `[cmd]` `yoghurt` steht bereits als bekannt offen im
+  Prüfskript und gehört hierher.
+
+  Vorschlag: eine kleine Regeltabelle auf der **Anfrageseite**, nicht in
+  der Datenbank — wenn eine Anfrage nichts findet, die Varianten
+  probieren. Nicht als Synonym eintragen: `Korn` soll weiterhin
+  Getreidekörner finden.
+
+  Vorher zu messen: wie viele der 3.656 Bestandswörter tragen überhaupt
+  einen dieser Laute? Bei wenigen lohnt die Regel nicht.
+
+  `[cmd]` Nachgemessen 2026-08-14: `kornflakes` und `yoghurt` liefern
+  weiterhin **null Treffer**. Unveraendert offen.
+
+  `[cmd]` **Gemessen 2026-08-15**, Bericht
+  `docs/ssot/58-phonetische-varianten.md`, Daten in
+  `daten/phonetische-varianten.json`. 3.616 gefaltete Bestandswörter;
+  je Lautpaar betroffen/verwechselbar: `c`/`k` 2.088/196,
+  `k`/`ck` 1.271/229, `i`/`y` 1.839/53, `t`/`th` 1.722/21,
+  `f`/`ph` 800/**2**. Sechs Regeln mit Gegenbeispielen, ausdrücklich
+  **nur als Nulltreffer-Fallback** — nie als generelle Erweiterung.
+
+  **Entscheidung Tom, 2026-08-15:** Die Testfälle `fysalis`, `kracker`
+  und `sose` sind **entfernt**. Er kennt keinen davon; sie stammen aus
+  der Regel, nicht aus der Praxis. Es bleiben `kornflakes` und `yoghurt`,
+  beide aus dem MealCam-Massstab belegt. Weitere Fälle kommen aus
+  `nutrition.search_events` — echten Fehlsuchen statt geratenen Wörtern.
+
+  **Die Regeln sind vorbereitet, nicht gebaut.** Ob sie gebaut werden,
+  entscheidet sich an den ersten Protokolldaten.
+
+  `[cmd]` **Erledigt 2026-08-15 als Vorbereitung**, Bericht
+  `docs/ssot/58-phonetische-varianten.md`, Regeln in
+  `daten/phonetische-varianten.json`. Sechs Regeln mit Gegenbeispielen,
+  ausdrücklich **nur als Nulltreffer-Fallback**.
+  **Gebaut werden sie erst, wenn `nutrition.search_events` zeigt, dass
+  jemand so tippt** — die Entscheidung ist bewusst vertagt.
+
+- [x] **C-32: Reis vollständig kurieren — der erste Fall, an dem sich das
+  Modell beweist** (neu 2026-08-14). Pilot für C-29 und C-31.
+
+  **Warum Reis:** Grundnahrungsmittel eines Kraftsportlers, täglich, in
+  jeder Mahlzeit. `[cmd]` Und heute liefert `basmatireis` **null
+  Treffer**. Der Fall ist klein genug, um in einer Sitzung fertig zu
+  werden, und gross genug, um jede Frage des Modells zu stellen.
+
+  `[cmd]` **Der Bestand: 13 Arten, 32 Einträge.**
+
+  | Art | Einträge | `name_de` heute | `name_en` | Vorschlag Anzeige |
+  |---|---|---|---|---|
+  | `C352` | 3 | Reis poliert, roh/gekocht | **White rice** | Weisser Reis |
+  | `C350` | 2 | Reis poliert, gedämpft/geschmort | White rice | Weisser Reis |
+  | `C359` | 4 | Reis parboiled, poliert | Rice parboiled | Parboiled-Reis |
+  | `C351` | 3 | Reis unpoliert | **Brown rice** | Vollkornreis |
+  | `C353` | 3 | Wildreis | Wild rice | Wildreis |
+  | `C354` | 2 | Reismischung mit Wildreis | Rice mix | Reismischung mit Wildreis |
+  | `C356` | 2 | Reis Grieß | Rice semolina | Reisgrieß |
+  | `C453` | 1 | Reis Mehl | Rice flour | Reismehl |
+  | `C456` | 1 | Reis Stärke | Rice starch | Reisstärke |
+  | `C457` | 1 | Reis Kleie | Rice bran | Reiskleie |
+  | `C532` | 6 | Reis gepufft, Reiswaffeln, **Schokolade** | — | **Gruppe trennen** |
+  | `C559` | 2 | Reisnudeln | Rice noodles | Reisnudeln |
+  | `C650` | 2 | Reisdrink | Rice drink | Reisdrink |
+
+  **Was der BLS nicht kennt:** `[cmd]` **kein Basmati, kein Jasmin, kein
+  Sushi-, Risotto- oder Milchreis.** Der BLS unterscheidet nach
+  Verarbeitung, nicht nach Sorte. Diese Namen gehören deshalb in die
+  **Aliasschicht**, nicht in den Anzeigenamen: Basmati, Jasmin,
+  Langkorn, Rundkorn und Sushireis zeigen alle auf `C352`. Wer `C352`
+  „Basmatireis" nennt, lässt die anderen vier verschwinden und behauptet
+  eine Genauigkeit, die die Nährwerte nicht haben. `[Wahrscheinlich]`
+  Für die Makronährwerte ist der Sortenunterschied ohnehin
+  vernachlässigbar; er liegt beim glykämischen Index.
+
+  **Vorsicht bei `milchreis`** — das ist zugleich ein fertiges Gericht.
+  Vor dem Eintragen prüfen, ob ein Y-Eintrag existiert; sonst führt der
+  Alias die Zutatensuche in ein Dessert.
+
+  **Zwei Befunde zur Gruppierung aus C-28, hier schon sichtbar:**
+  - `[cmd]` **`C532` ist zu grob:** die Gruppe enthält `Reis gepufft`,
+    drei Reiswaffeln **und zwei Schokoladen mit Puffreis**. Vier Stellen
+    trennen hier nicht.
+  - `[cmd]` **`C350`, `C352` und `C359` sind zu fein:** alle drei sind
+    polierter Reis, nur mit anderen Zubereitungen. Vier Stellen trennen
+    hier zu viel.
+
+  Beide Richtungen des Fehlers an einem einzigen Lebensmittel. Der Fall
+  gehört als Prüfstein in den Bericht zu C-28.
+
+  **Abnahme:** `basmatireis`, `jasminreis`, `sushireis`, `vollkornreis`,
+  `naturreis`, `parboiled reis` und `reis` liefern je den richtigen
+  Eintrag auf Platz 1 — als feste Erwartungen im MealCam-Maßstab, nicht
+  als Sichtprüfung.
+
+  `[cmd]` **Erledigt 2026-08-15.** Die Sortenzuordnungen sind eingespielt
+  (Schritt `028`, `curated_suchbegriff`), das Prüfskript steht bei
+  **7 von 7** statt 4. `basmatireis`, `jasminreis`, `vollkornreis`,
+  `naturreis`, `parboiled reis`, `reis` und `griechischer joghurt`
+  treffen ihren Sollwert auf Platz 1.
+
+  **Zwei Entscheidungen Toms:** `sushireis` bekommt **zwei** Ziele
+  (`C352000` rohe Zutat und `X8A1100` Grundrezept) — der Nutzer wählt.
+  `griechischer joghurt` zeigt nach Recherche auf `M148500`
+  (Sahnejoghurt mit Magermilchpulver, 10 % Fett / 4,0 g Protein), weil
+  das im deutschsprachigen Handel als „griechischer Art" verkaufte
+  Produkt genau das ist; der zuvor vorgeschlagene `M141100` mit 0,1 g
+  Fett war falsch. `milchreis` und `risotto` sind **nicht** zugeordnet —
+  `[cmd]` beide existieren im BLS ausschliesslich als Gericht.
+
+  `[read]` Die Anzeigenamen der 13 Reis-Arten kamen mit C-39 Phase 1:
+  `Weißer Reis (roh)`, `Vollkornreis (roh)`, `Parboiled-Reis (roh)`.
+
+- [x] **C-34: Eigene Lebensmittel der Nutzer** (neu 2026-08-14,
+  neugefasst nach Sichtung der Nutrition-Specs). Unabhängig vom
+  Suchumbau.
+
+  **Der Fall ist bereits entschieden, nicht offen.** `[read]`
+  `docs/specs/Nutrition/04_adrs/ADR_CUSTOM_FOODS_V1.md` und
+  `docs/specs/Nutrition/02_patches/SPEC_02_PATCH_ENTITY07_CUSTOMFOOD.md`
+  legen Modell und Pflichtfelder fest. Was hier steht, ist die Umsetzung
+  dieser Entscheidung plus die Punkte, die dort offen geblieben sind —
+  keine Neuerfindung.
+
+  **Was die Spec festlegt:**
+
+  | | |
+  |---|---|
+  | Tabelle | `foods_custom`, **vollständig getrennt** von `foods`, kein Merge |
+  | Sichtbarkeit V1 | nur für den erstellenden Nutzer; `is_public`/`shared_by` sind Phase 2 |
+  | Pflichtfelder | `name_de`, `enercc`, `prot625`, `fat`, `cho` — je 100 g |
+  | Optional | weitere Makros, ein Mikro-Subset (21 Felder), `brand`, `barcode`, `serving_size_g`, `custom_allergens` |
+  | Nährwertform | **flache Spalten**, nicht EAV |
+  | `source` | `user` · `manual` · `import` · `admin` |
+  | Ausgeschlossen | OpenFoodFacts |
+  | Suche | erscheinen zusammen mit BLS, bevorzugt, als „Eigenes Food" markiert |
+
+  **Toms Ergänzung (2026-08-14), die über die Spec hinausgeht:** Der
+  Eintrag ist für den Nutzer **sofort verwendbar** — er verantwortet
+  seine Werte selbst. Zusätzlich erscheint er im Admin-Backend und kann
+  **nach Prüfung freigegeben** werden; so wächst der zentrale Bestand
+  kontrolliert. Die Spec kennt dafür nur `source = admin` („Admin pflegt
+  zentral") und schiebt Teilen nach Phase 2. **Die Freigabe ist damit
+  eine Erweiterung, keine Umsetzung** — sie gehört als solche
+  dokumentiert, bevor sie gebaut wird.
+
+  **Der Grundsatz, an dem sich alles ausrichtet** (Tom): Ein Shake mit
+  vier Makros und ein paar Mikros ist besser, als wenn er im Tagebuch gar
+  nicht vorkommt.
+
+  **Was im Schema schon da ist:** `[cmd]` `nutrition.meal_items` trägt
+  `food_source` mit Prüfbedingung `IN ('bls','manual')` und der Regel,
+  dass `food_id` bei `manual` leer sein **muss**. Dazu `frozen_at` und
+  eine `nutrients`-Spalte — die Mahlzeitzeile hält die Nährwerte als
+  Kopie, nicht als Verweis. **Damit ist ein Problem bereits gelöst,
+  bevor es auftritt:** Wird ein eigener Eintrag später korrigiert oder
+  bei der Freigabe angepasst, ändert sich das Frühstück von letzter Woche
+  nicht rückwirkend. Der heutige `manual`-Zweig hat aber keinen Eintrag
+  dahinter; für wiederverwendbare eigene Lebensmittel braucht es einen
+  dritten Zustand mit eigener Identität.
+
+  **Warum die Trennung richtig ist — der Grund ist nicht der, den man
+  zuerst nennt.** Rechte liessen sich auch mit `owner_id` in einer
+  Tabelle regeln. Der harte Grund ist der Kettenaufbau: `[cmd]` Der
+  Bestand entsteht in unter zehn Sekunden neu aus `supabase/_pipeline/`.
+  Nutzerdaten in `nutrition.foods` wären bei jedem Aufbau entweder weg
+  oder zwängen die Kette zu einer Rücksicht, die sie nicht kennt. Dazu
+  die Prüfbarkeit: `[cmd]` Der Abgleich gegen die amtliche Arbeitsmappe
+  (698.092 Werte, 353 Abweichungen, alle Rundungen) setzt voraus, dass in
+  der Tabelle nur steht, was aus ihr stammt.
+
+  **Der Preis, der eingeplant gehört:** Die Suche muss beide Mengen
+  sehen, und `food_search` ist heute auf eine Tabelle gebaut. Ebenso die
+  Aggregation — `[read]` ADR-0003 hat für BLS **EAV** gewählt, die Spec
+  für `foods_custom` **flache Spalten**. Beides ist je für sich richtig
+  (138 Nährstoffe gegen 25), aber die Tagessumme muss beide Formen
+  addieren.
+
+  **Vier offene Punkte:**
+
+  1. **Plausibilitätsprüfung vor der Freigabe.** Wenn die vier Makros
+     Pflicht sind, ist die Gegenrechnung kostenlos: 4 kcal je Gramm
+     Protein und Kohlenhydrate, 9 je Gramm Fett, 7 je Gramm Alkohol.
+     Weicht `enercc` um mehr als etwa zehn Prozent ab, stimmt etwas
+     nicht. Das fängt die Verwechslung „je Portion statt je 100 g" —
+     `[Wahrscheinlich]` der häufigste Eingabefehler überhaupt.
+  2. **Duplikate.** Tausend Nutzer legen tausendmal „Proteinshake" an.
+     Ohne Behandlung wächst nicht der Bestand, sondern der Müll.
+     `[Vermutung]` Der Hebel liegt vor der Freigabe: Wenn die Suche über
+     eigene Einträge gut funktioniert, legt der Nutzer den Shake gar
+     nicht erst zweimal an. Das koppelt diesen Punkt an C-30 zurück.
+  3. **Rangfolge.** Die Spec sagt „bevorzugt, höherer `sort_weight`".
+     `sort_weight` ist eine Spalte von `nutrition.foods`; für eine
+     getrennte Tabelle braucht es ein Äquivalent und eine Regel, wie
+     zwei Ranglisten zusammengeführt werden.
+  4. **Ein Widerspruch in der Spec selbst, vor der Umsetzung zu klären:**
+     `[read]` `ADR_CUSTOM_FOODS_V1.md` schliesst `mealcam` als
+     `source`-Wert ausdrücklich aus (MealCam soll `user` schreiben),
+     `SPEC_02_PATCH_ENTITY07_CUSTOMFOOD.md` führt `source` als
+     `user | mealcam`. Zwei Spec-Dateien, zwei Aussagen.
+
+  **Keine Sortenkopien.** `[cmd]` `C352000` trägt 101 Nährwerte; fünf
+  Reissorten mal drei Zubereitungen wären 15 Einträge und 1.515 Werte
+  ohne eine einzige neue Messung. `[cmd]` `data_source` kennt heute genau
+  zwei Werte, beide auf die Arbeitsmappe zurückführbar. Kopien erzeugen
+  Werte ohne Quelle; der nächste Abgleich meldet dann Abweichungen, die
+  keine sind. Sorten ohne eigene Messwerte gehören in die Aliasschicht.
+
+  `[cmd]` **Erledigt 2026-08-15**, Berichte
+  `docs/ssot/66-eigene-lebensmittel-entwurf.md` und `71-…`.
+  `nutrition.foods_custom` steht als Kettenschritt `058`: getrennt von
+  `foods`, flache Nährwertspalten, Zeilenschutz mit vier Policies je
+  Operation, `is_public`/`shared_by` angelegt aber ungenutzt (Phase 2).
+  `meal_items` trägt jetzt `food_source='custom'` und `custom_food_id`.
+
+  **Die Plausibilitätsprüfung ist gebaut** als
+  `nutrition.custom_food_energy_plausibility` — sie **meldet, blockiert
+  nicht**: 4 kcal je Gramm Protein und Kohlenhydrate, 9 je Fett, 7 je
+  Alkohol, Abweichung über zehn Prozent gilt als unplausibel. In beide
+  Richtungen geprüft.
+
+  `[cmd]` Der Testlauf hat die offene Frage aus dem Entwurf beantwortet:
+  Die Tagesbilanz zählt eigene Einträge über die eingefrorenen
+  `meal_items`-Werte korrekt.
+
+  **Entscheidung Tom:** `mealcam` ist **kein** `source`-Wert — zwei ADRs
+  im Status Final führen `user | manual | import | admin`, nur eine
+  Patch-Datei führte `mealcam`. MealCam schreibt `user`.
+
+  **Was fehlt:** die Oberfläche. Die Tabelle ist leer und bleibt es, bis
+  ein Nutzer etwas anlegen kann.
+
+- [x] **C-37: Tagesbilanz muss „nicht erfasst" von „nicht enthalten"
+  unterscheiden** (neu 2026-08-14). Vor dem Bau der Summen zu
+  entscheiden, nicht danach.
+
+  `[read]` ADR-0003 lässt den Aggregationsweg ausdrücklich offen —
+  Sicht, materialisierte Sicht oder Summentabelle. Diese Entscheidung
+  gehört mit hinein.
+
+  **Der Anlass:** `[cmd]` Der BLS-Bestand trägt im Schnitt **121,8
+  Nährwerte je Eintrag**. `[read]` Ein eigener Eintrag nach C-34 hat vier
+  Pflichtwerte; alles darüber ist freiwillig. Auf einer Verpackung stehen
+  sieben.
+
+  Wer die Hälfte seiner Kalorien aus eigenen Einträgen bezieht, hat für
+  die meisten Mikronährstoffe **keinen Wert** — nicht null. Behandelt die
+  Summe die Lücke wie eine Null, zeigt sie eine Unterversorgung an, die
+  möglicherweise nicht existiert. Bei einer Anwendung mit medizinischem
+  Anspruch ist das die falsche Art von Fehler, und sie trifft
+  ausgerechnet die Nutzer, die eigene Einträge am meisten verwenden.
+
+  **Zu entscheiden:** wie die Tagesbilanz Lücken führt (fehlend gegen
+  null), was die Oberfläche anzeigt, und ob je Nährstoff ein
+  Abdeckungsgrad mitgeführt wird („85 % der heutigen Kalorien haben einen
+  Eisenwert").
+
+  `[cmd]` **Erledigt 2026-08-15**, Bericht
+  `docs/ssot/70-tagesbilanz-mikros.md`. `nutrition.daily_summary` führt
+  jetzt **70 Spalten** statt 22: 24 Mikronährstoffe mit je einem
+  Fehlzähler, dazu die acht Makros.
+
+  **Entscheidung: flach, nicht JSONB** — und die Zahl, die sie trug,
+  zeigte in die andere Richtung als erwartet: `[cmd]` 23 von 24 Codes
+  sind über 94 % belegt (Iodid am schwächsten mit 87,2 %). JSONB lohnt
+  bei dünnen Daten; hier wäre fast jeder Schlüssel in fast jeder Zeile
+  gesetzt und der Name je Zeile mitgeschrieben.
+
+  **Die Spec-Variante mit `COALESCE(…, 0)` ist nicht übernommen.** Der
+  Beleg an echten Zeilen: `[cmd]` Tag 1 `vitc = 0.00000` bei
+  `vitc_missing = 0` (gemessene Null) gegen Tag 2 `vita = NULL` bei
+  `vita_missing = 2` (nicht gemessen). Mit `COALESCE` stünde beides auf
+  null.
+
+  **Ein blinder Fleck wurde dabei geschlossen:** `[cmd]` Der
+  Sollstand-Eintrag führte Name, Schritt, `security_invoker` und Grants
+  — **keine Spalten**. Die 48 Mikro-Spalten hätten ersatzlos
+  verschwinden können, Exit 0. Nachgerüstet und zum Fehlschlagen
+  gebracht (Sicht auf drei Spalten verkürzt → „67 Spalten FEHLEN").
+
+  **Diese Sicht summiert, sie bewertet nicht.** `[cmd]` 0 von 138
+  Nährstoffen tragen einen RDA-Wert — das ist C-45.
+
+- [x] **C-43: Die Kette ausführbar machen** (neu 2026-08-14).
+
+  `[cmd]` **Es gibt keine Kettensteuerung.** Eine Volltextsuche nach den
+  Schrittdateien findet genau eine Fundstelle: `supabase/README.md`. Kein
+  Skript, kein `package.json`-Eintrag — die Kette ist eine Prosa-Tabelle,
+  die von Hand abgearbeitet wird.
+
+  Genau daran ist am 2026-08-14 der Neuaufbau gescheitert: Die Tabelle
+  endete bei `021`, **vierzehn Schritte fehlten**, fünf davon wirkten
+  tatsächlich nicht. Die Tabelle ist jetzt vollständig (20 Zeilen) — die
+  fehlende Ausführbarkeit bleibt.
+
+  **Was zu entscheiden ist, bevor gebaut wird:** ob die Reihenfolge aus
+  der README gelesen wird (dann ist sie Steuerung und Dokumentation
+  zugleich, mit dem Risiko, dass Prosa zu Code wird) oder aus einer
+  eigenen Datendatei, die gegen die README geprüft wird.
+
+  **Zwei Stolpersteine gehören mit hinein**, beide am 2026-08-14
+  gemessen: `public.handle_new_user()` und `public.is_admin()` überleben
+  `DROP SCHEMA nutrition CASCADE` und lassen die Baseline mit „already
+  exists" abbrechen; Schritt `030` liest per `\\copy` aus
+  `/tmp/p1-005-bls-local-import/` **im Container**, nicht lokal.
+
+  `[cmd]` Und die Falle, die knapp nicht zuschlug: Ohne `auth`-Schema
+  bricht `052` **nach** dem Anlegen ab, rollt zurück, und die Ausgabe
+  besteht aus lauter `NOTICE … skipping`-Zeilen. Wer nach `ERROR` am Ende
+  sucht, sieht nichts.
+
+  `[cmd]` **Erledigt 2026-08-15**, Bericht
+  `docs/ssot/69-kette-ausfuehrbar.md`. `supabase/_pipeline/kette.json`
+  als Reihenfolge, `kette-ausfuehren.ts` als Ausführer,
+  `kette-readme-pruefen.ts` als Abgleich gegen die README.
+  `[cmd]` **38 Schritte dokumentiert, Lauf von leer in rund 32 Sekunden**,
+  danach automatisch die Vollständigkeitsprüfung.
+
+  **Der Ausführer verweigert die laufende Datenbank** — nur
+  Wegwerf-Datenbanken. Einspielen in den laufenden Stand bleibt
+  Handarbeit je Schritt.
+
+  **Beim ersten Lauf fand er sofort einen Defekt:** `[cmd]`
+  `EXPECTED_LINES = 5775` stand hart in `025` und `026`, die Datei war
+  auf 7.140 gewachsen — die Kette brach ab. **Und der Defekt hatte still
+  Daten unterschlagen:** 28 kuratierte Nebennamen (*Rote Bete*,
+  *Lauchzwiebel*, *Buletten*) wurden nie eingespielt, weil `025` genau
+  dort abbrach. Die Erwartung wird jetzt aus drei Quellen abgeleitet
+  (Ausgabe, Eingabe, Bestand); weicht eine ab, nennt der Abbruch alle
+  drei Zahlen. Dasselbe in `027` nachgezogen.
+
+  `[cmd]` **Ein weiterer Defekt fiel beim Live-Einspielen auf:** `026`
+  und `028` setzen **beide** die Prüfbedingung
+  `food_aliases_source_check`, jeder mit eigener Werteliste. Auf leerer
+  Datenbank unsichtbar, weil `028` später erweitert — gegen einen
+  Bestand mit `028`-Zeilen bricht `026` ab. Beide Listen jetzt
+  vollständig.
+
+  `[cmd]` **Und `062` war nie gelaufen**: `pruef_objektliste` fehlte in
+  der laufenden Datenbank. Nachgefahren.
+
+  **Der methodisch beste Fund steht im Bericht:** Der erste Sucher nach
+  weiteren harten Zahlen meldete 3 Stellen, ein breiterer fand 10 —
+  *„der enge Sucher war selbst ein Werkzeug, das Sicherheit behauptet,
+  ohne sie zu erzeugen; er zählte nur, was er erwartet hatte."*
+
+- [x] **C-44: Die zwölf leeren Tags den Lebensmitteln zuweisen** (neu
+  2026-08-15). **Tom, 2026-08-15: „genau diese tag filter sind wichtig,
+  also brauchen wir und müssen dementsprechend die tags den foods
+  zuweisen können."**
+
+  `[cmd]` Von 16 definierten Tags sind **vier vergeben**, zwölf stehen an
+  null Lebensmitteln:
+
+  | vergeben | Einträge |
+  |---|---|
+  | `low_carb` | 4.659 |
+  | `low_fat` | 2.648 |
+  | `high_protein` | 1.400 |
+  | `high_fiber` | 558 |
+
+  **Leer:** `vegan` · `vegetarian` · `gluten_free` · `lactose_free` ·
+  `halal` · `kosher` · `nut_free` · `thai_food` · `spicy` ·
+  `mediterranean` · `processed_food` · `ultra_processed`.
+
+  **Warum das kein Schönheitsfehler ist:** Ein Filter, der technisch
+  funktioniert und nie einen Treffer liefert, ist schlimmer als ein
+  fehlender — er sieht aus, als sei die Datenbank leer. Der Fehler fällt
+  niemandem auf, weil nichts abstürzt.
+
+  **Die vier vergebenen sind aus Nährwerten abgeleitet. Die zwölf sind es
+  nicht.** `vegan`, `vegetarian`, `gluten_free`, `nut_free`, `halal`,
+  `kosher` brauchen Wissen über die Zutaten, nicht über die Nährwerte —
+  das ist dieselbe Sorte Aufgabe wie die Anzeigenamen und gehört in einen
+  Batch mit menschlicher Abnahme.
+
+  **Zwei Tags sind Sonderfälle:**
+  - `[cmd]` `thai_food`: 0 von 7.140 Einträgen tragen `name_th`, 0
+    Thai-Aliase. `[read]` `ADR_BLS_ONLY` Abschnitt 16 will Thai nur
+    strukturell. Der Tag hat im BLS-Bestand nichts zu markieren — er
+    gehört zu C-34.
+  - `processed_food` / `ultra_processed`: `[cmd]` `processing_level` ist
+    zu 100 % mit `raw` gefüllt, auch für Bechamelsauce. Die Spalte ist
+    **falsch**, nicht leer. Wer die Tags daraus ableitet, überträgt den
+    Fehler.
+
+  **Fachlich heikel und deshalb vorher zu klären:** `gluten_free` und
+  `nut_free` sind Allergenaussagen. Eine falsche Markierung kann jemanden
+  krank machen. `[read]` `SPEC_06` führt bei `foods_custom` ein Feld
+  `custom_allergens` nach EU-14 — die Frage, ob LumeOS Allergenfreiheit
+  überhaupt behauptet oder nur Zutaten ausweist, ist eine
+  Produktentscheidung, keine Datenaufgabe.
+
+  `[read]` Dazu ein zweiter Befund aus `docs/ssot/60-nutrition-specs-auswertung.md`:
+  `food_tags` trägt nur `food_id`, `tag_code`, `confidence` — **kein
+  Quellen- oder Grundfeld**, obwohl SPEC_09 Abschnitt 5 verlangt, dass
+  Tags erklärbar sind. Vor dem Befüllen zu entscheiden.
+
+  `[cmd]` **Erledigt 2026-08-15**, Bericht
+  `docs/ssot/62-lebensmittel-tags.md`, eingespielt als Schritt `027`.
+  `food_tags` von 9.265 auf **17.967**.
+
+  **Zwei Entscheidungen Toms haben die Tags umgebaut:**
+
+  `[read]` **Allergene werden umgekehrt markiert.** Aus `nut_free` wurde
+  `contains_nuts`, aus `gluten_free` `contains_gluten`, aus
+  `lactose_free` `contains_lactose`. Der Grund: „Enthält Nüsse" lässt
+  sich belegen, „enthält keine Nüsse" nicht. Der Filter blendet die
+  Markierten aus; ein unmarkierter Eintrag gilt als **ungeprüft**, nicht
+  als sicher. Allergien werden im Onboarding erfasst; in Nutrition ist
+  es ein Suchfilter, keine medizinische Zusicherung.
+
+  `[cmd]` **`processed_food` traf 84 % und wurde gestrichen.** Ein
+  Filter, der fast alles behält, trennt nichts. Nach NOVA ersetzt durch
+  die Ränder: **`whole_food` 2.884** (NOVA 1+2) und `ultra_processed`
+  927 (NOVA 4). **Die Mitte bleibt unmarkiert** — 1.990 Einträge, weil
+  ohne Zutatenlisten nicht belegbar.
+
+  `mediterranean` (15) und `spicy` (11) zurückgezogen: ein Filter mit elf
+  Treffern über 7.140 Einträge ist eine Zufallsliste. `thai_food`,
+  `halal`, `kosher` bleiben definiert und leer — sie gehören zu C-34.
+
 ## Erledigt am 2026-08-05
 
 - [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und
