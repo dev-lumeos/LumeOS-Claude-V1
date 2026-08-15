@@ -1,0 +1,927 @@
+{
+ "erhoben": "2026-08-15",
+ "anlass": "C-23 — Abdeckungsmessung mit Erwartungen statt ohne",
+ "regel": "VON HAND GEPFLEGT nach der einmaligen Erzeugung. Diese Liste darf ihre Werte NICHT bei jedem Lauf aus der Datenbank neu ableiten — sonst bezieht die Pruefung ihre Sollwerte vom Prueflig und bestaetigt jeden Zustand.",
+ "stichprobe": "jedes 47. Lebensmittel nach bls_code, deterministisch",
+ "sollwertregel": "Grundform derselben Art (Zubereitungscode 100/000, Name traegt alle Anfragewoerter, hoechstes sort_weight, kuerzester Name). Gibt es keine, ist der Sollwert das gezogene Lebensmittel selbst.",
+ "kennzahlen": {
+  "gesamt": 152,
+  "aus_grundform": 99,
+  "einzige_form": 52,
+  "ohne_anfrage": 1
+ },
+ "faelle": [
+  [
+   "vollkornbrot",
+   "B101000",
+   "B101000",
+   "Grundform \"Vollkornbrot\" — gezogen war \"Vollkornbrot\""
+  ],
+  [
+   "roggenmischbrot oelsamen",
+   "B276000",
+   "B276000",
+   "Grundform \"Roggenmischbrot mit Ölsamen\" — gezogen war \"Roggenmischbrot mit Ölsamen\""
+  ],
+  [
+   "roggenbroetchen schinkenspeck",
+   "B521200",
+   "B521200",
+   "einzige Form: \"Roggenbrötchen mit Schinkenspeck\""
+  ],
+  [
+   "dinkelvollkornknaeckebrot oelsamen",
+   "B6A5100",
+   "B6A5200",
+   "Grundform \"Dinkelvollkornknäckebrot mit Ölsamen\" — gezogen war \"Dinkelvollkornknäckebrot mit Ölsamen und\""
+  ],
+  [
+   "weizen ganzes",
+   "C111000",
+   "C111062",
+   "Grundform \"Weizen ganzes Korn, roh\" — gezogen war \"Weizen ganzes Korn, gekocht, gebacken\""
+  ],
+  [
+   "weizen dunst",
+   "C215000",
+   "C215000",
+   "Grundform \"Weizen Dunst\" — gezogen war \"Weizen Dunst\""
+  ],
+  [
+   "gerste mehl",
+   "C243000",
+   "C243000",
+   "Grundform \"Gerste Mehl\" — gezogen war \"Gerste Mehl\""
+  ],
+  [
+   "mehlmischung eiweissarm",
+   "C414000",
+   "C414000",
+   "Grundform \"Mehlmischung eiweißarm, glutenfrei, natriumarm\" — gezogen war \"Mehlmischung eiweißarm, glutenfrei, natr\""
+  ],
+  [
+   "getreideflakes",
+   "C522000",
+   "C522600",
+   "Grundform \"Getreideflakes gesüßt\" — gezogen war \"Getreideflakes gesüßt, mit Schokolade\""
+  ],
+  [
+   "kokoszwieback",
+   "D035000",
+   "D035000",
+   "Grundform \"Kokoszwieback\" — gezogen war \"Kokoszwieback\""
+  ],
+  [
+   "zwetschgenstreuselkuchen",
+   "D1A1300",
+   "D1A1300",
+   "einzige Form: \"Zwetschgen-Streuselkuchen (Hefeteig)\""
+  ],
+  [
+   "schokosahnetorte",
+   "D313400",
+   "D313400",
+   "einzige Form: \"Schokosahnetorte (Schoko-Wasserbiskuit)\""
+  ],
+  [
+   "ananasmarzipankuchen",
+   "D431800",
+   "D431800",
+   "einzige Form: \"Ananas-Marzipan-Kuchen (Rührmasse)\""
+  ],
+  [
+   "brownies",
+   "D4A2000",
+   "D4A2000",
+   "Grundform \"Brownies\" — gezogen war \"Brownies\""
+  ],
+  [
+   "schinkenwaffeln",
+   "D623400",
+   "D623400",
+   "einzige Form: \"Schinkenwaffeln (Rührmasse)\""
+  ],
+  [
+   "haferflockenplaetzchen",
+   "D701600",
+   "D701600",
+   "einzige Form: \"Haferflockenplätzchen\""
+  ],
+  [
+   "donut",
+   "D740100",
+   "D741000",
+   "Grundform \"Mandel-Marzipan-Donuts (Hefeteig) frittiert\" — gezogen war \"Donut (Hefeteig) frittiert, mit Schokola\""
+  ],
+  [
+   "kaesewindbeutel frischkaesezubereitung",
+   "D7A4000",
+   "D7A4000",
+   "Grundform \"Käsewindbeutel (Brandmasse) gefüllt mit Frischkäsezubereitun\" — gezogen war \"Käsewindbeutel (Brandmasse) gefüllt mit \""
+  ],
+  [
+   "nussspritzgebaeck nougatfuellung",
+   "D7B7200",
+   "D7B7200",
+   "einzige Form: \"Nuss-Spritzgebäck (Rührmasse) mit Nougatfüllun\""
+  ],
+  [
+   "huehnerei eigelb",
+   "E112100",
+   "E112100",
+   "Grundform \"Hühnerei Eigelb, roh\" — gezogen war \"Hühnerei Eigelb, roh\""
+  ],
+  [
+   "eierfrischteigwaren ravioli",
+   "E603082",
+   "E603082",
+   "einzige Form: \"Eier-Frischteigwaren Ravioli (Fleischfüllung) \""
+  ],
+  [
+   "mehrfruchtsaft",
+   "N271000",
+   "F010600",
+   "Grundform \"Mehrfruchtsaftschorle\" — gezogen war \"Mehrfruchtsaft\""
+  ],
+  [
+   "quittensaft",
+   "F140600",
+   "F140600",
+   "einzige Form: \"Quittensaft\""
+  ],
+  [
+   "aprikose fruchtsaft",
+   "F2A1902",
+   "F2A1902",
+   "einzige Form: \"Aprikose in Fruchtsaft, Konserve, abgetropft\""
+  ],
+  [
+   "maulbeere",
+   "F331100",
+   "F331100",
+   "Grundform \"Maulbeere roh\" — gezogen war \"Maulbeere roh\""
+  ],
+  [
+   "kakisaft",
+   "F507600",
+   "F507600",
+   "einzige Form: \"Kakisaft\""
+  ],
+  [
+   "ananas",
+   "F563100",
+   "F597902",
+   "Grundform \"Feijoa/Ananas-Guave, roh\" — gezogen war \"Ananas mit Süßungsmitteln, Konserve, abg\""
+  ],
+  [
+   "gemuesemischung kaisergemuese",
+   "G090100",
+   "G090152",
+   "Grundform \"Gemüsemischung Kaisergemüse, roh\" — gezogen war \"Gemüsemischung Kaisergemüse, gedünstet\""
+  ],
+  [
+   "spinat",
+   "G211100",
+   "G213152",
+   "Grundform \"Spinat roh\" — gezogen war \"Neuseeländer Spinat gedünstet\""
+  ],
+  [
+   "broccoli",
+   "G312100",
+   "G312282",
+   "Grundform \"Broccoli roh\" — gezogen war \"Broccoli tiefgefroren, gebraten ohne Fet\""
+  ],
+  [
+   "weisskohl",
+   "G342100",
+   "G342152",
+   "Grundform \"Weißkohl roh\" — gezogen war \"Weißkohl gedünstet\""
+  ],
+  [
+   "fenchelblatt fenchel",
+   "G431100",
+   "G431100",
+   "Grundform \"Fenchelblatt/Bologneser Fenchel, roh\" — gezogen war \"Fenchelblatt/Bologneser Fenchel, roh\""
+  ],
+  [
+   "fruehlingszwiebel lauchzwiebel",
+   "G482100",
+   "G482100",
+   "Grundform \"Frühlingszwiebel/Lauchzwiebel, roh\" — gezogen war \"Frühlingszwiebel/Lauchzwiebel, roh\""
+  ],
+  [
+   "aubergine",
+   "G510100",
+   "G510182",
+   "Grundform \"Aubergine roh\" — gezogen war \"Aubergine gebraten ohne Fett (Pfanne)\""
+  ],
+  [
+   "pfefferschote",
+   "G554100",
+   "G554182",
+   "Grundform \"Pfefferschote rot, roh\" — gezogen war \"Pfefferschote rot, gebraten ohne Fett (P\""
+  ],
+  [
+   "zucchini",
+   "G582100",
+   "G582182",
+   "Grundform \"Zucchini roh\" — gezogen war \"Zucchini gebraten ohne Fett (Pfanne)\""
+  ],
+  [
+   "schwarzwurzel",
+   "G650100",
+   "G650252",
+   "Grundform \"Schwarzwurzel roh\" — gezogen war \"Schwarzwurzel tiefgefroren, gedünstet\""
+  ],
+  [
+   "dicke bohne",
+   "H750100",
+   "G730902",
+   "Grundform \"Dicke Bohne reif\" — gezogen war \"Dicke Bohne unreif, Konserve, abgetropft\""
+  ],
+  [
+   "gemuesemischung",
+   "G090100",
+   "G991902",
+   "Grundform \"Gemüsemischung Kaisergemüse, roh\" — gezogen war \"Gemüsemischung asiatische Art, Konserve,\""
+  ],
+  [
+   "haselnuss",
+   "H130100",
+   "H130100",
+   "Grundform \"Haselnuss\" — gezogen war \"Haselnuss\""
+  ],
+  [
+   "mohn",
+   "H450100",
+   "H450400",
+   "Grundform \"Mohn\" — gezogen war \"Mohn gemahlen\""
+  ],
+  [
+   "mandeldrink",
+   "H800000",
+   "H800400",
+   "Grundform \"Mandeldrink ungesüßt\" — gezogen war \"Mandeldrink gesüßt, aromatisiert, angere\""
+  ],
+  [
+   "kartoffel ungeschaelt",
+   "K120100",
+   "K120184",
+   "Grundform \"Kartoffel ungeschält, roh\" — gezogen war \"Kartoffel ungeschält, gebraten ohne Fett\""
+  ],
+  [
+   "batate suesskartoffel",
+   "K420100",
+   "K420100",
+   "Grundform \"Batate/Süßkartoffel, roh\" — gezogen war \"Batate/Süßkartoffel, roh\""
+  ],
+  [
+   "butterpilz",
+   "K706100",
+   "K706182",
+   "Grundform \"Butterpilz roh\" — gezogen war \"Butterpilz gebraten ohne Fett (Pfanne)\""
+  ],
+  [
+   "mischpilze",
+   "K750100",
+   "K750432",
+   "Grundform \"Mischpilze roh\" — gezogen war \"Mischpilze getrocknet, gekocht\""
+  ],
+  [
+   "sauerrahm schmand",
+   "M172700",
+   "M172700",
+   "einzige Form: \"Sauerrahm/Schmand, mind. 20 % Fett\""
+  ],
+  [
+   "milchmischgetraenk",
+   "M2A1100",
+   "M2A6100",
+   "Grundform \"Milchmischgetränk < 1 % Fett, aromatisiert, mit Süßungsmitte\" — gezogen war \"Milchmischgetränk < 1 % Fett, mit Kakao/\""
+  ],
+  [
+   "schnittkaese",
+   "M400800",
+   "M400800",
+   "einzige Form: \"Schnittkäse mind. 60 % Fett i. Tr.\""
+  ],
+  [
+   "gorgonzola",
+   "X3A4000",
+   "M5B1600",
+   "Grundform \"Gorgonzolasauce\" — gezogen war \"Gorgonzola mind. 48 % Fett i. Tr.\""
+  ],
+  [
+   "schmelzkaese",
+   "M816000",
+   "M771400",
+   "Grundform \"Schmelzkäsezubereitung 45 - 52 % Fett i. Tr., mit Nüssen\" — gezogen war \"Schmelzkäse schnittfest, mind. 30 % Fett\""
+  ],
+  [
+   "speisequarkzubereitung",
+   "M8A4000",
+   "M8A6000",
+   "Grundform \"Speisequarkzubereitung mind. 10 % Fett i. Tr., mit Kräutern\" — gezogen war \"Speisequarkzubereitung mind. 30 % Fett i\""
+  ],
+  [
+   "limonade",
+   "N314000",
+   "N316000",
+   "Grundform \"Limonade chininhaltig\" — gezogen war \"Limonade mit Gewürzauszügen und Süßungsm\""
+  ],
+  [
+   "kaffeeersatz sojadrink",
+   "N5A2000",
+   "N5A2000",
+   "Grundform \"Kaffeeersatz (Getränk) mit Sojadrink, ungesüßt\" — gezogen war \"Kaffeeersatz (Getränk) mit Sojadrink, un\""
+  ],
+  [
+   "weizenbier fruchtnektar",
+   "P1A1110",
+   "P1A1110",
+   "einzige Form: \"Weizenbier mit Fruchtnektar\""
+  ],
+  [
+   "sherry sweet",
+   "P464000",
+   "P464000",
+   "Grundform \"Sherry sweet\" — gezogen war \"Sherry sweet\""
+  ],
+  [
+   "cocktail",
+   "X1A9000",
+   "P9B4000",
+   "Grundform \"Krabben-Cocktail mit Mayonnaise, gestreckt mit süßer Sahne\" — gezogen war \"Cocktail, Margarita\""
+  ],
+  [
+   "butter",
+   "M886000",
+   "Q6A4000",
+   "Grundform \"Buttermilchpulver\" — gezogen war \"Butter gesalzen\""
+  ],
+  [
+   "ingwer ingwerwurzel",
+   "R211200",
+   "R211200",
+   "einzige Form: \"Ingwer/Ingwerwurzel, roh\""
+  ],
+  [
+   "himbeersahnecreme gebaeck",
+   "R9A1100",
+   "R9A1100",
+   "Grundform \"Himbeersahnecreme für Gebäck/Torten\" — gezogen war \"Himbeersahnecreme für Gebäck/Torten\""
+  ],
+  [
+   "ahornsirup",
+   "S151100",
+   "S151100",
+   "Grundform \"Ahornsirup\" — gezogen war \"Ahornsirup\""
+  ],
+  [
+   "speiseeis fruchtzubereitung",
+   "S231000",
+   "S231000",
+   "Grundform \"Speiseeis mit Fruchtzubereitung, überzogen mit Schokolade\" — gezogen war \"Speiseeis mit Fruchtzubereitung, überzog\""
+  ],
+  [
+   "fondantcreme",
+   "S356000",
+   "S356000",
+   "Grundform \"Fondantcreme\" — gezogen war \"Fondantcreme\""
+  ],
+  [
+   "vollmilchschokolade nussgewuerzcreme",
+   "S539300",
+   "S539300",
+   "einzige Form: \"Vollmilchschokolade gefüllt mit Nuss-Gewürzcre\""
+  ],
+  [
+   "pralinen",
+   "S625000",
+   "S620000",
+   "Grundform \"Trüffel-Pralinen\" — gezogen war \"Pralinen gefüllt\""
+  ],
+  [
+   "tintenfisch",
+   "T020100",
+   "T020252",
+   "Grundform \"Tintenfisch roh\" — gezogen war \"Tintenfisch tiefgefroren, gedünstet\""
+  ],
+  [
+   "sardelle",
+   "T104100",
+   "T104182",
+   "Grundform \"Sardelle roh\" — gezogen war \"Sardelle gebraten ohne Fett (Pfanne)\""
+  ],
+  [
+   "gelbflossenthun",
+   "T124282",
+   "T124282",
+   "einzige Form: \"Gelbflossen-Thun tiefgefroren, gebraten ohne F\""
+  ],
+  [
+   "seehecht",
+   "T209100",
+   "T209182",
+   "Grundform \"Seehecht roh\" — gezogen war \"Seehecht gebraten ohne Fett (Pfanne)\""
+  ],
+  [
+   "schwarzer heilbutt",
+   "T307100",
+   "T307252",
+   "Grundform \"Schwarzer Heilbutt roh\" — gezogen war \"Schwarzer Heilbutt tiefgefroren, gedünst\""
+  ],
+  [
+   "lachs",
+   "T410100",
+   "T410600",
+   "Grundform \"Lachs roh\" — gezogen war \"Lachs geräuchert (Räucherlachs)\""
+  ],
+  [
+   "meerforelle",
+   "T424100",
+   "T424200",
+   "Grundform \"Meerforelle roh\" — gezogen war \"Meerforelle tiefgefroren\""
+  ],
+  [
+   "barsch flussbarsch",
+   "T601100",
+   "T601200",
+   "Grundform \"Barsch/Flussbarsch, roh\" — gezogen war \"Barsch/Flussbarsch, tiefgefroren\""
+  ],
+  [
+   "meeraesche",
+   "T633100",
+   "T633100",
+   "Grundform \"Meeräsche roh\" — gezogen war \"Meeräsche roh\""
+  ],
+  [
+   "auster",
+   "T780100",
+   "T780200",
+   "Grundform \"Europäische Auster roh\" — gezogen war \"Europäische Auster tiefgefroren\""
+  ],
+  [
+   "brathering",
+   "T830102",
+   "T830102",
+   "einzige Form: \"Brathering Konserve, abgetropft\""
+  ],
+  [
+   "rind hackfleisch",
+   "U010100",
+   "U010182",
+   "Grundform \"Rind Hackfleisch, roh\" — gezogen war \"Rind Hackfleisch, gebraten ohne Fett (Pf\""
+  ],
+  [
+   "rind schwein",
+   "U931100",
+   "U050182",
+   "Grundform \"Rindfleisch im eigenen Saft, mit Schweineschwarten, Konserve\" — gezogen war \"Rind/Schwein, Hackfleisch gemischt, gebr\""
+  ],
+  [
+   "rind steak",
+   "U216100",
+   "U131182",
+   "Grundform \"Rind Filetsteak roh\" — gezogen war \"Rind Steak (Rücken) gebraten ohne Fett (\""
+  ],
+  [
+   "rind roastbeef",
+   "U221100",
+   "U221162",
+   "Grundform \"Rind Roastbeef (Rücken) roh\" — gezogen war \"Rind Roastbeef (Rücken) gebraten ohne Fe\""
+  ],
+  [
+   "rind oberschale",
+   "U287100",
+   "U287162",
+   "Grundform \"Rind Oberschale, roh\" — gezogen war \"Rind Oberschale, gebraten ohne Fett (Ofe\""
+  ],
+  [
+   "kalb fleisch",
+   "U401000",
+   "U403100",
+   "Grundform \"Kalb Muskelfleisch, roh\" — gezogen war \"Kalb Fleisch, geringer Sehnenanteil, sic\""
+  ],
+  [
+   "kalb haxe",
+   "U471100",
+   "U471262",
+   "Grundform \"Kalb Haxe, roh\" — gezogen war \"Kalb Haxe, tiefgefroren, gebraten ohne F\""
+  ],
+  [
+   "schwein schmetterlingssteak",
+   "U533100",
+   "U533100",
+   "Grundform \"Schwein Schmetterlingssteak, roh\" — gezogen war \"Schwein Schmetterlingssteak, roh\""
+  ],
+  [
+   "schwein kochfleisch",
+   "U583100",
+   "U583200",
+   "Grundform \"Schwein Kochfleisch (Bauch) roh\" — gezogen war \"Schwein Kochfleisch (Bauch) tiefgefroren\""
+  ],
+  [
+   "schwein bauch",
+   "U57A100",
+   "U642172",
+   "Grundform \"Schwein Grillbauch, roh\" — gezogen war \"Schwein Bauch (wie gewachsen) gegrillt\""
+  ],
+  [
+   "schwein hintereisbein",
+   "U693100",
+   "U693272",
+   "Grundform \"Schwein Hintereisbein/Hinterhaxe, roh\" — gezogen war \"Schwein Hintereisbein/Hinterhaxe, tiefge\""
+  ],
+  [
+   "schaf schnitzel",
+   "U741100",
+   "U742182",
+   "Grundform \"Schaf Schnitzel (Keule, mager) roh\" — gezogen war \"Schaf Schnitzel (Keule, mittelfett) gebr\""
+  ],
+  [
+   "schaf brust",
+   "U853100",
+   "U852142",
+   "Grundform \"Schaf Brust, fett, roh\" — gezogen war \"Schaf Brust, mittelfett, geschmort ohne \""
+  ],
+  [
+   "schaf vorderhaxe",
+   "U871100",
+   "U872100",
+   "Grundform \"Schaf Vorderhaxe, mager, roh\" — gezogen war \"Schaf Vorderhaxe, mittelfett, roh\""
+  ],
+  [
+   "schaf hinterhaxe",
+   "U891100",
+   "U892172",
+   "Grundform \"Schaf Hinterhaxe, mager, roh\" — gezogen war \"Schaf Hinterhaxe, mittelfett, gegrillt\""
+  ],
+  [
+   "hirsch fleisch",
+   "V212100",
+   "V212162",
+   "Grundform \"Hirsch Fleisch, roh\" — gezogen war \"Hirsch Fleisch, gebraten ohne Fett (Ofen\""
+  ],
+  [
+   "fasan fleisch",
+   "V311100",
+   "V311162",
+   "Grundform \"Fasan Fleisch, mit Haut, roh\" — gezogen war \"Fasan Fleisch, mit Haut, gebraten ohne F\""
+  ],
+  [
+   "haehnchen brustfilet",
+   "V416100",
+   "V416162",
+   "Grundform \"Hähnchen Brustfilet, roh\" — gezogen war \"Hähnchen Brustfilet, gebraten ohne Fett \""
+  ],
+  [
+   "perlhuhn fleisch",
+   "V454100",
+   "V454162",
+   "Grundform \"Perlhuhn Fleisch, mit Haut, roh\" — gezogen war \"Perlhuhn Fleisch, mit Haut, gebraten ohn\""
+  ],
+  [
+   "gans fleisch",
+   "V471100",
+   "V474182",
+   "Grundform \"Gans Fleisch, ohne Haut, roh\" — gezogen war \"Gans Fleisch, mit Haut, gebraten ohne Fe\""
+  ],
+  [
+   "pute keule",
+   "V485100",
+   "V485172",
+   "Grundform \"Pute Keule, ohne Haut, roh\" — gezogen war \"Pute Keule, ohne Haut, gegrillt\""
+  ],
+  [
+   "haehnchen oberschenkel",
+   "V4A5100",
+   "V4A5162",
+   "Grundform \"Hähnchen Oberschenkel, mit Haut, roh\" — gezogen war \"Hähnchen Oberschenkel, mit Haut, gebrate\""
+  ],
+  [
+   "hammel hirn",
+   "V526100",
+   "V526100",
+   "Grundform \"Hammel Hirn, roh\" — gezogen war \"Hammel Hirn, roh\""
+  ],
+  [
+   "schaf niere",
+   "V574100",
+   "V574100",
+   "Grundform \"Schaf Niere, roh\" — gezogen war \"Schaf Niere, roh\""
+  ],
+  [
+   "haehnchen magen",
+   "V654100",
+   "V654182",
+   "Grundform \"Hähnchen Magen, roh\" — gezogen war \"Hähnchen Magen, gebraten ohne Fett (Pfan\""
+  ],
+  [
+   "salami",
+   "W140000",
+   "W144000",
+   "Grundform \"Salami\" — gezogen war \"Salami Italienische Art, mit Lammfleisch\""
+  ],
+  [
+   "wuerstchen",
+   "W181000",
+   "W211472",
+   "Grundform \"Rohpolnische Würstchen/Polnische Bratwurst\" — gezogen war \"Berner Würstchen gegrillt\""
+  ],
+  [
+   "fleischkaese",
+   "W244000",
+   "W233062",
+   "Grundform \"Fleischkäse weiß\" — gezogen war \"Fleischkäse einfach, fein/Original Bayer\""
+  ],
+  [
+   "touristenwurst",
+   "W258000",
+   "W258000",
+   "Grundform \"Touristenwurst einfach, gebrüht\" — gezogen war \"Touristenwurst einfach, gebrüht\""
+  ],
+  [
+   "champignonleberwurst",
+   "W319200",
+   "W319200",
+   "einzige Form: \"Champignonleberwurst\""
+  ],
+  [
+   "gaenseleberpastete schweinefleisch",
+   "W397300",
+   "W397300",
+   "einzige Form: \"Gänseleberpastete mit Schweinefleisch, gebacke\""
+  ],
+  [
+   "gefuellter schweinebauch",
+   "W811000",
+   "W811000",
+   "Grundform \"Gefüllter Schweinebauch gebraten ohne Fett (Ofen)\" — gezogen war \"Gefüllter Schweinebauch gebraten ohne Fe\""
+  ],
+  [
+   "wurstkuchen",
+   "W981100",
+   "W981100",
+   "Grundform \"Wurstkuchen mit Mürbeteig, mit Alkohol, gebacken\" — gezogen war \"Wurstkuchen mit Mürbeteig, mit Alkohol, \""
+  ],
+  [
+   "knuspermuesli",
+   "X0A3000",
+   "X0A3020",
+   "Grundform \"Knuspermüsli (Granola) gesüßt, gebacken\" — gezogen war \"Knuspermüsli (Granola) gesüßt, mit Milch\""
+  ],
+  [
+   "reissalat",
+   "X1A3030",
+   "X1A3030",
+   "einzige Form: \"Reissalat bunt, mit Hühnerfleisch, Ei und Mayo\""
+  ],
+  [
+   "endiviensalat",
+   "X212240",
+   "X212240",
+   "einzige Form: \"Endiviensalat mit Essigmarinde\""
+  ],
+  [
+   "rotebetesalat",
+   "X2A1120",
+   "X2A1120",
+   "einzige Form: \"Rote-Bete-Salat (roh) mit Essigmarinade\""
+  ],
+  [
+   "mornaysauce bechamelsauce",
+   "X327463",
+   "X327463",
+   "einzige Form: \"Mornaysauce von Bechamelsauce\""
+  ],
+  [
+   "salatmarinade meerrettich",
+   "X351440",
+   "X351440",
+   "einzige Form: \"Salatmarinade mit Meerrettich\""
+  ],
+  [
+   "barbecuesauce grillsauce",
+   "X384143",
+   "X384143",
+   "einzige Form: \"Barbecuesauce/Grillsauce\""
+  ],
+  [
+   "gemuesebruehe",
+   "X8A1000",
+   "X416243",
+   "Grundform \"Brühreis (mit Gemüsebrühe)\" — gezogen war \"Gemüsebrühe\""
+  ],
+  [
+   "fleischkloesschen",
+   "Y4A1000",
+   "X436343",
+   "Grundform \"Lammfleischklößchen gegart\" — gezogen war \"Fleischklößchen\""
+  ],
+  [
+   "kartoffelsuppe",
+   "X450243",
+   "X450243",
+   "einzige Form: \"Kartoffelsuppe sauer, mit Blut- und Leberwurst\""
+  ],
+  [
+   "linsensuppe gemuese",
+   "X462513",
+   "X462513",
+   "einzige Form: \"Linsensuppe mit Gemüse\""
+  ],
+  [
+   "vanillemilchsuppe griess",
+   "X472143",
+   "X472143",
+   "einzige Form: \"Vanille-Milchsuppe gebunden mit Grieß\""
+  ],
+  [
+   "linseneintopf suppengemuese",
+   "X4A8040",
+   "X4A8040",
+   "einzige Form: \"Linsen-Eintopf mit Suppengemüse und Eier-Frisc\""
+  ],
+  [
+   "chicoree",
+   "G101100",
+   "X526062",
+   "Grundform \"Chicoree roh\" — gezogen war \"Chicoree gedünstet, mit Butter\""
+  ],
+  [
+   "pueree artischockenboeden",
+   "X541563",
+   "X541563",
+   "einzige Form: \"Püree von Artischockenböden\""
+  ],
+  [
+   "kuerbis",
+   "H310100",
+   "X559063",
+   "Grundform \"Kürbiskern\" — gezogen war \"Kürbis gebacken, in Grundsauce hell/weiß\""
+  ],
+  [
+   "pastinaken",
+   "X573712",
+   "X573712",
+   "einzige Form: \"Pastinaken gekocht, gebraten (mit Fett und Sal\""
+  ],
+  [
+   "gemuesekartoffelfleischbrei",
+   "X5B1030",
+   "X5B1030",
+   "einzige Form: \"Gemüse-Kartoffel-Fleisch-Brei, mit Karotte und\""
+  ],
+  [
+   "speckkartoffeln",
+   "X651642",
+   "X651642",
+   "einzige Form: \"Speckkartoffeln gedünstet\""
+  ],
+  [
+   "kartoffelteig",
+   "X6A5000",
+   "X6A5000",
+   "Grundform \"Kartoffelteig (aus gekochten Kartoffeln) roh\" — gezogen war \"Kartoffelteig (aus gekochten Kartoffeln)\""
+  ],
+  [
+   "eierteigwaren tomaten",
+   "X744133",
+   "X744133",
+   "einzige Form: \"Eierteigwaren mit gedünsteten Tomaten und Pete\""
+  ],
+  [
+   "risipisi",
+   "X822212",
+   "X822212",
+   "einzige Form: \"Risi-Pisi (gekochter Reis mit gedünsteten grün\""
+  ],
+  [
+   "pizza marinara",
+   "X915333",
+   "X915333",
+   "einzige Form: \"Pizza marinara (mit Tomatensauce, Mozzarella, \""
+  ],
+  [
+   "hafer gruetze",
+   "C137000",
+   "X987812",
+   "Grundform \"Hafer Grütze\" — gezogen war \"Hafer Grütze, gekocht (mit Fett und Salz\""
+  ],
+  [
+   "",
+   "",
+   "X9A6040",
+   "keine brauchbare Anfrage aus \"Hefeteig, gesalzen, mit Milch 3,5 % Fett, roh\" ableitbar"
+  ],
+  [
+   "rinderfilet",
+   "Y111123",
+   "Y111123",
+   "einzige Form: \"Rinderfilet gebraten im Ofen, mit Sauce\""
+  ],
+  [
+   "rinderzunge",
+   "Y179012",
+   "Y179012",
+   "einzige Form: \"Rinderzunge gekocht\""
+  ],
+  [
+   "kalbsnierenbraten grundsauce",
+   "Y253133",
+   "Y253133",
+   "einzige Form: \"Kalbsnierenbraten mit Grundsauce dunkel/braun\""
+  ],
+  [
+   "schweinelende",
+   "Y311712",
+   "Y311712",
+   "einzige Form: \"Schweinelende gebraten im Ofen (mit Fett und S\""
+  ],
+  [
+   "gyros",
+   "Y384112",
+   "Y384112",
+   "einzige Form: \"Gyros (Schweinefleisch) gebraten\""
+  ],
+  [
+   "wildschweinbraten speck",
+   "Y546123",
+   "Y546123",
+   "einzige Form: \"Wildschweinbraten mit Speck und Wildsauce von \""
+  ],
+  [
+   "matjesfilet hausfrauenart",
+   "Y611012",
+   "Y611012",
+   "einzige Form: \"Matjesfilet nach Hausfrauenart\""
+  ],
+  [
+   "heilbutt",
+   "T306100",
+   "Y637513",
+   "Grundform \"Heilbutt/Weißer Heilbutt, roh\" — gezogen war \"Heilbutt gebraten amerikanische Art\""
+  ],
+  [
+   "hummer",
+   "T730100",
+   "Y682333",
+   "Grundform \"Hummer roh\" — gezogen war \"Hummer gegart, in Currysauce von heller/\""
+  ],
+  [
+   "rotbarschauflauf kartoffeln",
+   "Y6A3000",
+   "Y6A3000",
+   "Grundform \"Rotbarschauflauf mit Kartoffeln und Spinat\" — gezogen war \"Rotbarschauflauf mit Kartoffeln und Spin\""
+  ],
+  [
+   "quarkkloesse",
+   "Y760142",
+   "Y760142",
+   "einzige Form: \"Quarkklöße (mit Zucker und Zimt)\""
+  ],
+  [
+   "griessauflauf rosinen",
+   "Y821043",
+   "Y821043",
+   "einzige Form: \"Grießauflauf mit Rosinen\""
+  ],
+  [
+   "pfirsichkompott",
+   "Y841812",
+   "Y841812",
+   "einzige Form: \"Pfirsichkompott ungesüßt\""
+  ],
+  [
+   "pflaumenkompott zwetschgenkompott",
+   "Y849912",
+   "Y849912",
+   "einzige Form: \"Pflaumenkompott/Zwetschgenkompott, mit Süßstof\""
+  ],
+  [
+   "griessflammeri griesspudding",
+   "Y864053",
+   "Y864053",
+   "einzige Form: \"Grießflammeri/Grießpudding, mit Ei und Kirschs\""
+  ],
+  [
+   "quark konfituere",
+   "Y882510",
+   "Y882510",
+   "einzige Form: \"Quark (Halbfettstufe) mit Konfitüre\""
+  ],
+  [
+   "sahneflammeri sahnepudding",
+   "Y8A5030",
+   "Y8A5030",
+   "einzige Form: \"Sahneflammeri/Sahnepudding, mit Eigelb\""
+  ],
+  [
+   "currywurst pommes",
+   "Y944062",
+   "Y944062",
+   "einzige Form: \"Currywurst mit Pommes frites\""
+  ]
+ ]
+}

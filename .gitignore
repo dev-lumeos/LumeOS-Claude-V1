@@ -186,3 +186,7 @@ backup/legacy-v2/*.bundle
 # docs/ssot/daten/ sind Arbeitskopien — kein zweiter 14-MB-Satz in git.
 # Siehe docs/ssot/46-bls-importluecke.md.
 docs/ssot/daten/BLS_4_0_*
+
+# Zwischenstand der Abdeckungsmessung (C-23). Wird bei jedem Lauf neu
+# geschrieben, damit ein Abbruch nicht alles kostet — kein Bestandteil.
+supabase/_pipeline/daten/_abdeckung-zwischenstand.json
