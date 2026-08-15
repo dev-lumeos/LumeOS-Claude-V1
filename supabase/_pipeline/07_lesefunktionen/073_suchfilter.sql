@@ -132,6 +132,57 @@ COMMENT ON FUNCTION nutrition.such_rang_wortgrenze(text, jsonb) IS
   'C-20: 3 = Name ist das Wort, 2 = Treffer an einer Wortgrenze, '
   '0 = nur Wortmitte. Max je Gruppe, Min ueber die Gruppen.';
 
+-- =============================================================
+-- C-17: Alias-Treffer je Gruppe, EINMAL statt je Zeile
+-- =============================================================
+-- `[cmd]` 2026-08-15 gemessen. Der Ausfuehrungsplan der alten Bedingung
+-- zeigte fuer "huehnerbrust":
+--   Seq Scan on foods            818 Buffer
+--   Index Only Scan food_aliases 43.347 Buffer, loops=14212
+-- Die Alias-Pruefung lief also je Lebensmittel UND je Alternative.
+-- Sie war 98 % der Arbeit; der viel zitierte "fehlende Index auf
+-- search_fold(name_de)" war es NICHT.
+--
+-- WARUM DYNAMISCHES SQL, und das ist kein Selbstzweck:
+-- `[cmd]` Steht die Alternative als `a.alt` aus einem jsonb im
+-- Ausdruck, kann Postgres den Trigramm-Index nicht nutzen — derselbe
+-- Test lief mit **2.120.811** Buffern. Als Literal
+-- (`LIKE '%huehner%'`) greift idx_food_aliases_fold_trgm sofort:
+-- Bitmap Heap Scan, 248 Buffer, 5 ms.
+-- quote_literal() schuetzt dabei gegen Einschleusung; die Werte kommen
+-- ohnehin aus der Zerlegung der App, nicht ungeprueft vom Nutzer.
+CREATE OR REPLACE FUNCTION nutrition.such_alias_treffer(p_groups jsonb)
+RETURNS TABLE (nr integer, food_id uuid)
+LANGUAGE plpgsql
+STABLE
+PARALLEL SAFE
+AS $function$
+DECLARE
+  v_gruppe jsonb;
+  v_nr integer := 0;
+  v_bed text;
+BEGIN
+  IF p_groups IS NULL OR jsonb_typeof(p_groups) <> 'array' THEN RETURN; END IF;
+  FOR v_gruppe IN SELECT * FROM jsonb_array_elements(p_groups) LOOP
+    v_nr := v_nr + 1;
+    SELECT string_agg(
+             'nutrition.search_fold(alias) LIKE ' || quote_literal('%' || a || '%'),
+             ' OR ')
+      INTO v_bed
+      FROM jsonb_array_elements_text(v_gruppe) AS t(a)
+      WHERE a <> '';
+    CONTINUE WHEN v_bed IS NULL;
+    RETURN QUERY EXECUTE
+      'SELECT DISTINCT ' || v_nr || '::integer, fa.food_id
+       FROM nutrition.food_aliases fa WHERE ' || v_bed;
+  END LOOP;
+END;
+$function$;
+
+COMMENT ON FUNCTION nutrition.such_alias_treffer(jsonb) IS
+  'C-17: Food-IDs je Suchgruppe ueber die Aliase, einmal ermittelt '
+  'statt je Zeile. Dynamisches SQL, damit der Trigramm-Index greift.';
+
 DROP FUNCTION IF EXISTS nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer);
 -- Dasselbe fuer die 13-Parameter-Fassung aus Block 29: p_token_groups
@@ -248,18 +299,32 @@ matching_foods AS (
         -- `[cmd]` Grundkosten der Funktion ohne jede Gruppe: 178 ms
         -- bei leerer Anfrage, 288 ms bei einem Wort. Die Gruppen
         -- kosten zusaetzlich rund 275 ms.
+        -- C-17 (2026-08-15): Die Alias-Pruefung lief je Zeile UND je
+        -- Alternative. `[cmd]` Der Plan zeigte fuer "huehnerbrust"
+        -- einen Index Only Scan auf food_aliases mit loops=14212 und
+        -- 43.347 von 44.165 Buffern (98 %) — der Seq Scan auf foods
+        -- kostete nur 818. Der Engpass war NICHT der fehlende Index
+        -- auf foods, sondern die korrelierte Unterabfrage.
+        --
+        -- Jetzt liefert nutrition.such_alias_treffer() die Food-IDs je
+        -- Gruppe EINMAL. Sie baut ihre Bedingung dynamisch, damit die
+        -- Alternativen als Literale im Plan stehen — nur dann nutzt
+        -- Postgres idx_food_aliases_fold_trgm.
+        -- `[cmd]` 43.316 -> 1.025 Buffer, 260 -> 93 ms, Trefferzahl
+        -- unveraendert 31.
         NOT EXISTS (
           SELECT 1
-          FROM jsonb_array_elements(p_token_groups) AS g(gruppe)
-          WHERE NOT EXISTS (
-            SELECT 1
-            FROM jsonb_array_elements_text(g.gruppe) AS a(alt)
-            WHERE nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || a.alt || '%'
-               OR EXISTS (
-                 SELECT 1 FROM nutrition.food_aliases fa
-                 WHERE fa.food_id = f.id
-                   AND nutrition.search_fold(fa.alias) LIKE '%' || a.alt || '%'
-               )
+          FROM jsonb_array_elements(p_token_groups) WITH ORDINALITY AS g(gruppe, nr)
+          WHERE NOT (
+            EXISTS (
+              SELECT 1
+              FROM jsonb_array_elements_text(g.gruppe) AS a(alt)
+              WHERE nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || a.alt || '%'
+            )
+            OR (g.nr::integer, f.id) IN (
+              SELECT t.nr, t.food_id
+              FROM nutrition.such_alias_treffer(p_token_groups) t
+            )
           )
         )
       ELSE
@@ -427,18 +492,32 @@ all_matching_food_ids AS (
         -- `[cmd]` Grundkosten der Funktion ohne jede Gruppe: 178 ms
         -- bei leerer Anfrage, 288 ms bei einem Wort. Die Gruppen
         -- kosten zusaetzlich rund 275 ms.
+        -- C-17 (2026-08-15): Die Alias-Pruefung lief je Zeile UND je
+        -- Alternative. `[cmd]` Der Plan zeigte fuer "huehnerbrust"
+        -- einen Index Only Scan auf food_aliases mit loops=14212 und
+        -- 43.347 von 44.165 Buffern (98 %) — der Seq Scan auf foods
+        -- kostete nur 818. Der Engpass war NICHT der fehlende Index
+        -- auf foods, sondern die korrelierte Unterabfrage.
+        --
+        -- Jetzt liefert nutrition.such_alias_treffer() die Food-IDs je
+        -- Gruppe EINMAL. Sie baut ihre Bedingung dynamisch, damit die
+        -- Alternativen als Literale im Plan stehen — nur dann nutzt
+        -- Postgres idx_food_aliases_fold_trgm.
+        -- `[cmd]` 43.316 -> 1.025 Buffer, 260 -> 93 ms, Trefferzahl
+        -- unveraendert 31.
         NOT EXISTS (
           SELECT 1
-          FROM jsonb_array_elements(p_token_groups) AS g(gruppe)
-          WHERE NOT EXISTS (
-            SELECT 1
-            FROM jsonb_array_elements_text(g.gruppe) AS a(alt)
-            WHERE nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || a.alt || '%'
-               OR EXISTS (
-                 SELECT 1 FROM nutrition.food_aliases fa
-                 WHERE fa.food_id = f.id
-                   AND nutrition.search_fold(fa.alias) LIKE '%' || a.alt || '%'
-               )
+          FROM jsonb_array_elements(p_token_groups) WITH ORDINALITY AS g(gruppe, nr)
+          WHERE NOT (
+            EXISTS (
+              SELECT 1
+              FROM jsonb_array_elements_text(g.gruppe) AS a(alt)
+              WHERE nutrition.search_fold(concat_ws(' ', f.bls_code, f.name_de, f.name_en, f.name_th)) LIKE '%' || a.alt || '%'
+            )
+            OR (g.nr::integer, f.id) IN (
+              SELECT t.nr, t.food_id
+              FROM nutrition.such_alias_treffer(p_token_groups) t
+            )
           )
         )
       ELSE
