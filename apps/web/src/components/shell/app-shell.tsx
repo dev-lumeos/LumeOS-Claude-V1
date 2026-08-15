@@ -288,6 +288,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     router.refresh()
   }
 
+  // Oberflaeche v2 (G-01) bringt ihre eigene Huelle mit und laeuft
+  // parallel unter /v2. Ohne diesen Durchgriff steckte sie in der alten
+  // Sidebar/Topbar — die Parallelstruktur waere keine.
+  // Bewusst NACH allen Hooks: ein frueher Ausstieg davor wuerde die
+  // Hook-Reihenfolge zwischen Routen aendern.
+  // Der Vergleich trifft nur /v2 und /v2/... — /nutrition, /training und
+  // die uebrigen zehn Modulrouten sehen unveraendert die alte Huelle.
+  if (pathname === '/v2' || pathname.startsWith('/v2/')) {
+    return <>{children}</>
+  }
+
   return (
     <div
       className={`lume-shell lume-shell-${activeSection}`}
