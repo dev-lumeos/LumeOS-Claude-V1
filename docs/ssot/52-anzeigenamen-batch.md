@@ -1,6 +1,6 @@
 # Anzeigenamen-Batch C-39 Phase 2
 
-Stand: 2026-08-14.
+Stand: 2026-08-15.
 
 `[cmd]` Ergebnisdatei: `supabase/_pipeline/daten/anzeigenamen.jsonl`.
 Der Vollauf enthält 5.775 Ausgabezeilen zu 5.775 Eingabezeilen.
@@ -16,10 +16,9 @@ Dateien:
 - `supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts`
 - `docs/ssot/52-anzeigenamen-batch.md`
 
-`[annahme]` Die Anzeigenamen der Zutaten wurden als Datensätze geschrieben,
-nicht durch ein Regelprogramm erzeugt. Befehle dienten zum Lesen, Anhängen,
-Sortieren, Zählen und Prüfen. Für `X`/`Y` wurde die gelesene Regel
-angewendet, dass unverändertes Durchreichen bei Gerichten der Normalfall ist.
+`[annahme]` Die Anzeigenamen wurden als kuratierte Datensätze geschrieben.
+Befehle dienten zum Lesen, Zählen, Prüfen und zum verlustarmen Schreiben der
+JSONL-Zeilen.
 
 ---
 
@@ -29,19 +28,12 @@ angewendet, dass unverändertes Durchreichen bei Gerichten der Normalfall ist.
 gebräuchliche Anzeigenamen, Zubereitung in Klammern nur bei Unterscheidung,
 keine erfundenen Sorten.
 
-`[read]` Verbindliche Muster aus der Spec waren unter anderem:
-`Hühnerei roh` -> `Ei (roh)`, `Hähnchen Brustfilet, roh` ->
-`Hähnchenbrust (roh)`, `Rind Hackfleisch, roh` -> `Rinderhackfleisch (roh)`,
-`Vollmilch frisch, 3,5% Fett, past.` -> `Vollmilch (3,5% Fett)`,
-`Hafer Flocken` -> `Haferflocken`, `Reis poliert, roh` ->
-`Weißer Reis (roh)` und `Schwein Fettwamme ... roh` -> `Schweinebauch (roh)`.
-
 `[read]` `44-bls-codestruktur.md` belegt: der erste Buchstabe des BLS-Codes
 ist die Warengruppe; Stellen 5 bis 7 tragen die Zubereitung.
 
-`[read]` Für Gerichte `X`/`Y` dürfen Namen länger bleiben. Dort ist
-unverändertes Durchreichen der Normalfall, weil die Bestandteile im Namen
-erhalten bleiben sollen.
+`[read]` Für Gerichte `X`/`Y` müssen die Bestandteile erhalten bleiben. Die
+amtliche Satzstruktur muss aber nicht erhalten bleiben, wenn ein Eigenname
+oder eine knappere Wortstellung denselben Inhalt trägt.
 
 ---
 
@@ -56,24 +48,28 @@ erhalten bleiben sollen.
 | C-39-Phase-2-Eingabe | 5.775 |
 | davon Gerichte `X`/`Y` | 2.050 |
 
-`[cmd]` `anzeigenamen.jsonl` hat 5.775 Zeilen, kein BOM und LF-Zeilenenden.
+`[cmd]` `anzeigenamen.jsonl` hat 5.775 Zeilen.
 
 ---
 
 ## Prüfer
 
-`[cmd]` `anzeigenamen-pruefen.ts` prüft jetzt zusätzlich:
+`[cmd]` `anzeigenamen-pruefen.ts` prüft:
 
-- `nebennamen` ist in jeder Ausgabezeile vorhanden und ein Array.
-- Kein `nebennamen`-Eintrag ist leer oder enthält Klammern oder Kommas.
-- Zeilen mit nicht-leeren `nebennamen` werden je Warengruppe gezählt.
-- Die 20 längsten `nebennamen`-Listen werden mit amtlichem Namen ausgegeben.
-- Kollisionen werden über den Gesamtbestand geprüft.
+- genau eine Ausgabezeile je Eingabezeile
+- gültiges JSON und alle Pflichtfelder
+- keine verbotenen Platzhalter wie `(allgemein)`
+- kein `?`, kein `\uFFFD`, kein `\u0000`
+- `nebennamen` ist in jeder Ausgabezeile vorhanden und ein Array
+- kein `nebennamen`-Eintrag ist leer oder enthält Klammern oder Kommas
+- Kollisionen über den Gesamtbestand
+- Kennzahlen je Warengruppe
+- Abweichungen zur 200er-Probe
 
 `[cmd]` Vollprüfung:
 
 ```powershell
-pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts supabase/_pipeline/daten/anzeigenamen-eingabe.jsonl supabase/_pipeline/daten/anzeigenamen.jsonl
+pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts supabase/_pipeline/daten/anzeigenamen-eingabe.jsonl supabase/_pipeline/daten/anzeigenamen.jsonl supabase/_pipeline/daten/anzeigenamen-probe.jsonl
 ```
 
 `[cmd]` Ergebnis:
@@ -85,7 +81,7 @@ pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts supabase/_
 | fehlende Codes | 0 |
 | doppelte Codes | 0 |
 | doppelte Anzeigenamen | 0 |
-| `nebennamen` formal fehlerhaft | 0 |
+| Korruptionszeichen `?`/`\uFFFD`/`\u0000` | 0 |
 
 ---
 
@@ -96,40 +92,79 @@ pnpm exec tsx supabase/_pipeline/_validierung/anzeigenamen-pruefen.ts supabase/_
 | Gruppe | Zeilen | `sicher:true` | unverändert | `nebennamen` nicht leer |
 |---|---:|---:|---:|---:|
 | B | 186 | 186 (100,0 %) | 155 (83,3 %) | 6 (3,2 %) |
-| D | 466 | 466 (100,0 %) | 203 (43,6 %) | 70 (15,0 %) |
-| E | 104 | 104 (100,0 %) | 0 (0,0 %) | 48 (46,2 %) |
+| D | 466 | 466 (100,0 %) | 137 (29,4 %) | 70 (15,0 %) |
+| E | 104 | 104 (100,0 %) | 2 (1,9 %) | 48 (46,2 %) |
 | M | 279 | 279 (100,0 %) | 8 (2,9 %) | 27 (9,7 %) |
-| N | 114 | 114 (100,0 %) | 22 (19,3 %) | 9 (7,9 %) |
-| P | 119 | 119 (100,0 %) | 41 (34,5 %) | 17 (14,3 %) |
-| Q | 65 | 65 (100,0 %) | 11 (16,9 %) | 13 (20,0 %) |
-| R | 97 | 97 (100,0 %) | 17 (17,5 %) | 28 (28,9 %) |
-| S | 253 | 253 (100,0 %) | 67 (26,5 %) | 38 (15,0 %) |
+| N | 114 | 114 (100,0 %) | 28 (24,6 %) | 9 (7,9 %) |
+| P | 119 | 119 (100,0 %) | 55 (46,2 %) | 17 (14,3 %) |
+| Q | 65 | 65 (100,0 %) | 33 (50,8 %) | 13 (20,0 %) |
+| R | 97 | 97 (100,0 %) | 23 (23,7 %) | 28 (28,9 %) |
+| S | 253 | 253 (100,0 %) | 90 (35,6 %) | 38 (15,0 %) |
 | T | 520 | 488 (93,8 %) | 3 (0,6 %) | 151 (29,0 %) |
 | U | 685 | 685 (100,0 %) | 0 (0,0 %) | 119 (17,4 %) |
 | V | 462 | 462 (100,0 %) | 1 (0,2 %) | 0 (0,0 %) |
-| W | 375 | 374 (99,7 %) | 107 (28,5 %) | 50 (13,3 %) |
-| X | 1.165 | 1.165 (100,0 %) | 1.165 (100,0 %) | 0 (0,0 %) |
-| Y | 885 | 885 (100,0 %) | 885 (100,0 %) | 0 (0,0 %) |
+| W | 375 | 374 (99,7 %) | 164 (43,7 %) | 50 (13,3 %) |
+| X | 1.165 | 1.165 (100,0 %) | 697 (59,8 %) | 9 (0,8 %) |
+| Y | 885 | 885 (100,0 %) | 527 (59,5 %) | 14 (1,6 %) |
 
-`[cmd]` Längenverteilung `name_de` -> `name_display_de`:
+`[cmd]` Längenverteilung gesamt `name_de` -> `name_display_de`:
+p50 34 -> 30, p90 59 -> 51, max 123 -> 95.
 
-| Gruppe | p50 | p90 | max |
-|---|---:|---:|---:|
-| B | 28 -> 28 | 41 -> 41 | 66 -> 59 |
-| D | 29 -> 27 | 51 -> 42 | 83 -> 70 |
-| E | 30 -> 28 | 60 -> 42 | 82 -> 59 |
-| M | 43 -> 28 | 73 -> 50 | 123 -> 82 |
-| N | 32 -> 24 | 52 -> 43 | 108 -> 77 |
-| P | 18 -> 12 | 40 -> 24 | 74 -> 40 |
-| Q | 18 -> 13 | 58 -> 42 | 84 -> 50 |
-| R | 31 -> 23 | 49 -> 43 | 80 -> 53 |
-| S | 33 -> 29 | 55 -> 48 | 81 -> 63 |
-| T | 32 -> 28 | 54 -> 46 | 84 -> 77 |
-| U | 41 -> 36 | 60 -> 53 | 93 -> 74 |
-| V | 38 -> 33 | 57 -> 50 | 74 -> 63 |
-| W | 27 -> 22 | 49 -> 38 | 90 -> 66 |
-| X | 38 -> 38 | 64 -> 64 | 98 -> 98 |
-| Y | 33 -> 33 | 62 -> 62 | 101 -> 101 |
+`[cmd]` Für die nachgezogenen Gruppen: `D` Median 29 -> 22, `X` 38 -> 36,
+`Y` 33 -> 32.
+
+---
+
+## Gerichte
+
+`[cmd]` `X` und `Y` wurden nachgezogen: 826 von 2.050 Gerichten wurden
+geändert, 1.224 blieben unverändert.
+
+`[cmd]` Aufteilung:
+
+| Gruppe | Zeilen | gekürzt/geändert | zu Recht unverändert | Median-Länge |
+|---|---:|---:|---:|---:|
+| X | 1.165 | 468 | 697 (59,8 %) | 38 -> 36 |
+| Y | 885 | 358 | 527 (59,5 %) | 33 -> 32 |
+
+`[annahme]` Gekürzt wurde vor allem amtliche Satzstruktur:
+`Teigwaren geschichtet mit ...`, `zubereitet aus ...`, Grundsaucen-Formeln
+und erklärende Eigenname-Klammern. Beispiele:
+
+| amtlich | Anzeige |
+|---|---|
+| Lasagne al forno, Teigwaren geschichtet mit Bechamel- und Bologneser Sauce, mit Käse überbacken | Lasagne al forno mit Bolognese und Bechamel |
+| Pizza quattro stagioni (mit Tomatensauce, Artischocken, Champignons, Paprika, Kochschinken) | Pizza quattro stagioni |
+| Toast mit Ananas, Kochschinken und Käse ("Toast Hawaii") gebacken | Toast Hawaii (gebacken) |
+| Vanillepudding, Flammeri, zubereitet aus Pulver und Milch 3,5 % Fett, mit Früchten und Süßstoff | Vanillepudding aus Pulver mit Milch 3,5 % Fett mit Früchten und Süßstoff |
+
+`[annahme]` Unverändert blieben Gerichte, bei denen der amtliche Name bereits
+eine brauchbare Zutatenliste ist, zum Beispiel belegte Brötchen, viele Salate,
+Suppen, Eintöpfe und einfache Kombinationen wie `Clubsandwich mit Thunfisch,
+Gurke, Emmentaler und Mayonnaise`.
+
+`[annahme]` Grenzfälle waren Eigenname plus Zutatenliste. Bei starken
+Eigennamen wie `Pizza quattro stagioni`, `Toast Hawaii`, `Moussaka` oder
+`Bami Goreng` wurde die Erklärung gekürzt. Bei generischen Namen wie Breien,
+Salaten oder gefülltem Gemüse blieben die unterscheidenden Zutaten im Namen.
+
+---
+
+## D-Nachprüfung
+
+`[cmd]` Vor dem Nachziehen standen in `D` 293 von 466 Zeilen unverändert; 186
+unveränderte Namen trugen eine Klammer.
+
+`[cmd]` Nach der Nachprüfung sind in `D` 137 von 466 Zeilen unverändert.
+Damit wurden 156 D-Zeilen geändert.
+
+`[annahme]` Entfernt wurden Klammer-Teigarten nur dort, wo sie keinen
+gleichnamigen Geschwistereintrag trennen. Beispiele: `Sachertorte
+(Rührmasse)` -> `Sachertorte`, `Quicheboden (Mürbeteig)` -> `Quicheboden`.
+
+`[annahme]` Erhalten blieben Teigarten, wenn sie Varianten trennen, zum
+Beispiel bei `Apfelkuchen`, `Apfel-Streuselkuchen`, `Käsekuchen`,
+`Nusskuchen` oder `Buttercremetorte`.
 
 ---
 
@@ -162,24 +197,11 @@ Angaben. `V416100` bleibt `Hähnchenbrust (roh)`, während `V4A6100`
 `Alaska-Seelachs` wurde der Handelsname beibehalten, aber nicht zu einem
 Lachs-Namen verstärkt.
 
-`[cmd]` `D` wurde mit 466 Zeilen abgeschlossen; unverändert sind 203 von 466
-Zeilen.
-
-`[annahme]` `D3` bis `D7B` waren schwerer als `D0`/`D1`, weil Teig- und
-Masseangaben häufig trennen. Deshalb blieben Angaben wie `(Mürbeteig)`,
-`(Rührmasse)`, `(Brandmasse)` oder `(Plunderteig)` oft im Anzeigenamen.
-
 `[cmd]` `R` wurde mit 97 Zeilen abgeschlossen; 28 Zeilen haben nicht-leere
 `nebennamen`.
 
 `[annahme]` In `R` fiel besonders viel Aliaswissen an: `Sojasauce/Sojasoße`,
 `Zitronat/Sukkade`, `Ganache/Canache`, `Aprikosenglasur/Aprikotur`.
-
-`[cmd]` `X` und `Y` wurden mit 2.050 Zeilen abgeschlossen; 2.050 von 2.050
-Namen sind unverändert übernommen.
-
-`[annahme]` Das ist bei Gerichten gewollt: die Bestandteile sind der
-Anzeigename. Eine Kürzung hätte dort eher Information entfernt.
 
 ---
 
@@ -197,29 +219,17 @@ Arbeitsliste für manuelle Kollisionskorrekturen.
 
 ## Nebennamen
 
-`[cmd]` 576 von 5.775 Zeilen haben nicht-leere `nebennamen`.
+`[cmd]` Nach dem X/Y-Durchgang haben 590 von 5.775 Zeilen nicht-leere
+`nebennamen`.
 
-`[cmd]` Die 20 längsten `nebennamen`-Listen enthalten maximal drei Einträge.
-Beispiele:
-
-| Code | Anzeigename | Nebennamen |
-|---|---|---|
-| `T406100` | Felchen (roh) | Maräne · Renke · Schnäpel |
-| `T406152` | Felchen (gedünstet) | Maräne · Renke · Schnäpel |
-| `B821000` | Paniermehl | Semmelbrösel · Semmelmehl |
-| `D7A6000` | Berliner ungefüllt (frittiert) | Pfannkuchen · Krapfen |
-| `M172900` | Crème fraîche (40% Fett) | Sauerrahm · Creme fraiche |
-| `N601000` | Rooibos-Tee | Roibusch-Tee · Rotbusch-Tee |
-| `R111000` | Speisesalz | Siedesalz · Tafelsalz |
-| `R172000` | Glutamat | Mononatriumglutamat · Natriumglutamat |
+`[cmd]` Neu kamen in `X` 9 und in `Y` 14 Zeilen mit `nebennamen` hinzu.
+Das betrifft nur echte Nebenbezeichnungen wie `Eierkuchen`,
+`Vollkorneierkuchen`, `Lahmacun`, `Vanilleflammeri`, `Sahneflammeri` oder
+`Zwetschgenkompott`.
 
 `[annahme]` Nicht aufgenommen wurden Schrägstriche, wenn sie verschiedene
-Dinge statt echte Nebenbezeichnungen trennten. Beispiele: gemischte
-Fleischarten, verschiedene Likörarten, `Knoblauchbutter/Kräuterbutter`.
-
-`[annahme]` In `X`/`Y` wurden keine Nebennamen ergänzt. Dort bleiben die
-amtlichen Gerichtnamen unverändert, sodass Schrägstrichbestandteile nicht
-verworfen wurden.
+Dinge statt echte Nebenbezeichnungen trennten, etwa gemischte Fleischarten
+oder unterschiedliche Saucenarten.
 
 ---
 
@@ -249,82 +259,26 @@ mindestens einem echten `?` in `name_display_de`, `name_display_en` oder
 `?` war kein Konsolenartefakt.
 
 `[cmd]` Der erweiterte Prüfer wurde vor der Reparatur gegen die beschädigte
-Datei ausgeführt und schlug mit 704 Korruptionsmeldungen fehl. Beispiel:
-`Zeile 169, B881100: enthaelt ungueltige Zeichen in name_display_de (?)`.
+Datei ausgeführt und schlug mit 704 Korruptionsmeldungen fehl.
 
-`[cmd]` Nach der Reparatur meldet der Byte-/JSONL-Check 0 Zeilen mit `?`,
-`\uFFFD` oder `\u0000`. Die Vollprüfung läuft wieder mit 5.775 Eingaben,
-5.775 Ausgaben, 0 fehlenden Codes, 0 doppelten Codes und 0 doppelten
-Anzeigenamen durch.
+`[cmd]` Nach der Reparatur und nach dem X/Y-Durchgang meldet die Vollprüfung
+0 Zeilen mit `?`, `\uFFFD` oder `\u0000`.
 
-`[annahme]` Die wahrscheinlichste Ursache ist der Schreibweg des letzten
-Durchgangs: Nicht-ASCII-Zeichen standen in PowerShell-Here-Strings, wurden
-dort beim Übergang an Node als `?` übergeben und anschließend von Node als
-gültiges UTF-8-`?` in die JSONL-Datei geschrieben. Das erklärt, warum die
-Datei formal UTF-8 blieb und warum vor allem die zuletzt per Shell-Here-String
-geschriebenen Gruppen `D`, `W`, `S`, `N`, `P`, `E`, `R` und `Q` betroffen
-waren.
-
-`[annahme]` Die alte Prüfung war auf den Fehler des ersten Anlaufs ausgelegt:
-umschriebene Umlaute wie `Eiweiss`, `Koerniger Frischkaese`, `Olivenoel`.
-Sie erkannte nicht, dass aus `Eiweiß` ein echtes `Eiwei?` geworden war.
-
-`[cmd]` Der Prüfer kontrolliert jetzt zusätzlich zeilenweise:
-
-- kein `?` in `name_display_de`, `name_display_en` oder `nebennamen`
-- kein Ersetzungszeichen `\uFFFD`
-- kein NUL-Zeichen `\u0000`
-- Fehlerausgabe mit Zeilennummer und `bls_code`
-
-`[annahme]` Die Reparatur wurde auf die vom Prüfer betroffenen Zeilen
-beschränkt. Die Korrekturen wurden aus den beschädigten Feldern und dem
-amtlichen Namen derselben Zeile nachvollzogen; nicht betroffene Zeilen sollten
-inhaltlich unberührt bleiben.
-
----
-
-## X-Stichprobe
-
-`[cmd]` Die 20 längsten `X`-Einträge wurden geprüft. Alle 20 waren im Vollauf
-unverändert übernommen.
-
-`[cmd]` Beispiele aus der Stichprobe:
-
-| Code | Länge | Name |
-|---|---:|---|
-| `X703012` | 98 | Eier-Frischteigwaren Ravioli, mit Hackfleischfüllung, in Tomatensauce von heller/weißer Grundsauce |
-| `X5B1030` | 96 | Gemüse-Kartoffel-Fleisch-Brei, mit Karotte und Schweinefleisch (ohne Salz, geeignet für Beikost) |
-| `X730033` | 95 | Lasagne al forno, Teigwaren geschichtet mit Bechamel- und Bologneser Sauce, mit Käse überbacken |
-| `X761033` | 95 | Eier-Frischteigwaren Ravioli, vegetarisch gefüllt, mit gekochtem Gemüse in Grundsauce hell/weiß |
-| `X914233` | 91 | Pizza quattro stagioni (mit Tomatensauce, Artischocken, Champignons, Paprika, Kochschinken) |
-| `X6A1000` | 85 | Kartoffeln gekocht, mit gebratenem Hähnchenfleisch und Kräutersauce von Bechamelsauce |
-
-`[annahme]` Bei diesen 20 war die Regel "Durchreichen ist der Normalfall" zu
-weit ausgelegt. Mehrere Einträge könnten ohne Informationsverlust kürzer
-werden, zum Beispiel `Lasagne al forno mit Bolognese und Bechamel`,
-`Ravioli mit Hackfleischfüllung in Tomatensauce` oder
-`Pizza quattro stagioni`. Die Bestandteile müssen erhalten bleiben, aber die
-amtliche Satzstruktur muss nicht erhalten bleiben.
-
-`[annahme]` Ein eigener `X`/`Y`-Durchgang ist sinnvoll. Dieser Reparaturlauf
-ändert `X`/`Y` bewusst nicht, weil der Auftrag nur die Frage klären sollte.
+`[annahme]` Die wahrscheinlichste Ursache war ein PowerShell-Schreibweg mit
+Nicht-ASCII-Zeichen in Here-Strings. Dadurch wurden Umlaute beim Übergang an
+Node zu echten `?`, die anschließend als gültiges UTF-8 in die JSONL-Datei
+geschrieben wurden.
 
 ---
 
 ## Was dieser Durchgang nicht kann
 
-`[cmd]` Die Datei ist vollständig und in Eingabereihenfolge sortiert:
-erster Code `B101000`, letzter Code `Y9A2050`.
+`[cmd]` Die Datei ist vollständig: erster Code `B101000`, letzter Code
+`Y9A2050`.
 
-`[annahme]` Die Daten sind eine Arbeitsdatei für Tom. Sie sind nicht in die
-Datenbank eingespielt und nicht mit `food_aliases`, `food_search`,
-`search_synonyms` oder `preparation_kinds` verbunden.
-
-`[annahme]` `X`/`Y` verbessern die Suche nur begrenzt, weil die Namen
-bewusst unverändert blieben. Der Suchgewinn liegt vor allem in den
-Zutatengruppen `M`, `U`, `V`, `T`, `D`, `W`, `S`, `N`, `P`, `E`, `R` und
-`Q`.
+`[annahme]` Die Daten sind eine Arbeitsdatei. Das Einspielen in die Datenbank
+ist C-41; Editierbarkeit über Admin/Override-Tabelle bleibt C-29/C-31.
 
 `[annahme]` Die `nebennamen` sind kuratiert, aber keine vollständige
-Synonymliste. Sie enthalten nur die Nebenformen, die beim Schreiben der
+Synonymliste. Sie enthalten nur Nebenformen, die beim Schreiben der
 Anzeigenamen sichtbar wurden.
