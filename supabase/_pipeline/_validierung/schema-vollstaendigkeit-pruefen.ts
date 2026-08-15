@@ -308,6 +308,39 @@ for (const [tab, min] of Object.entries(SOLL.mindestzeilen)) {
   if (!ok) fehler.push(`Zeilen: nutrition.${tab} hat ${n}, erwartet mindestens ${min}`)
 }
 
+// C-43: Die Kette umfasst nicht mehr nur nutrition. Die zuvor fehlenden
+// Schritte 100-105 erzeugen Training-Daten; ohne diese Zaehler koennte ein
+// Kettenlauf die komplette Trainingsschicht verlieren und trotzdem gruen sein.
+if (SOLL.mindestzeilen_schema) {
+  for (const [qualified, min] of Object.entries(SOLL.mindestzeilen_schema)) {
+    if (qualified.startsWith('_')) continue
+    const [schema, table] = qualified.split('.')
+    if (!schema || !table) {
+      fehler.push(`Sollliste: mindestzeilen_schema enthaelt ungueltigen Namen ${qualified}`)
+      continue
+    }
+    const exists = sql(
+      `SELECT EXISTS (
+         SELECT 1 FROM information_schema.tables
+         WHERE table_schema='${schema.replace(/'/g, "''")}'
+           AND table_name='${table.replace(/'/g, "''")}'
+           AND table_type='BASE TABLE'
+       )::text;`
+    )[0]?.[0] === 'true'
+    if (!exists) {
+      console.log(`  ${qualified.padEnd(20)} ${String(0).padStart(7)} / ${String(min).padStart(7)}  FEHLT`)
+      fehler.push(`Tabelle: ${qualified} FEHLT`)
+      continue
+    }
+    const n = Number(sql(
+      `SELECT count(*) FROM "${schema.replace(/"/g, '""')}"."${table.replace(/"/g, '""')}";`
+    )[0][0])
+    const ok = n >= (min as number)
+    console.log(`  ${qualified.padEnd(20)} ${String(n).padStart(7)} / ${String(min).padStart(7)}  ${ok ? 'ok' : 'ZU WENIG'}`)
+    if (!ok) fehler.push(`Zeilen: ${qualified} hat ${n}, erwartet mindestens ${min}`)
+  }
+}
+
 // Inhaltliche Mindestqualitaet: Bei C-38 ging nicht die Tabelle verloren,
 // sondern eine ganze Codefamilie innerhalb von food_nutrients. Die
 // Zeilenzahl allein war zu grob und wurde danach sogar falsch als

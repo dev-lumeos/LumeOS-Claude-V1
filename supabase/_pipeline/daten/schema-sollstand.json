@@ -670,6 +670,14 @@
   {
    "name": "search_events_report",
    "schritt": "057"
+  },
+  {
+   "name": "pruef_objektliste",
+   "schritt": "062"
+  },
+  {
+   "name": "such_alias_treffer",
+   "schritt": "073"
   }
  ],
  "mindestzeilen": {
@@ -684,6 +692,13 @@
   "preparation_kinds": 11,
   "food_groups": 19
  },
+ "mindestzeilen_schema": {
+  "_kommentar": "Untergrenzen ausserhalb nutrition. C-43: Die Schritte 100-105 muessen im Kettenlauf sichtbar werden; sonst koennte Training komplett fehlen und die Nutrition-Pruefung waere trotzdem gruen.",
+  "training.exercises": 1416,
+  "training.muscle_groups": 107,
+  "training.equipment": 58,
+  "training.exercise_muscles": 6624
+ },
  "mindestzeilen_belege": {
   "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
   "foods": "[read] docs/ssot/30-datenbank.md, Tabelle Stand lokale Datenbank: 7.140.",
@@ -695,6 +710,12 @@
   "search_synonyms": "[cmd] Gerundeter Ist-Stand nach 024: 4.877, Untergrenze 4.800.",
   "preparation_kinds": "[read] 023_zubereitung_ableitung.sql: 11 Zubereitungsarten.",
   "food_groups": "[read] 023_zubereitung_ableitung.sql: 19 Warengruppen."
+ },
+ "mindestzeilen_schema_belege": {
+  "training.exercises": "[cmd] Ist-Stand nach 100-105: 1.416 Uebungen.",
+  "training.muscle_groups": "[cmd] Ist-Stand nach 100-105: 107 Muskelgruppen.",
+  "training.equipment": "[cmd] Ist-Stand nach 100-105: 58 Geraete.",
+  "training.exercise_muscles": "[cmd] Ist-Stand nach 100-105: 6.624 Zuordnungen."
  },
  "datenqualitaet": {
   "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",

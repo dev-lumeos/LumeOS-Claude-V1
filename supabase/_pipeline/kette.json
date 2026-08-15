@@ -1,0 +1,266 @@
+{
+  "name": "lumeos-lokale-kette",
+  "version": 1,
+  "description": "Ausfuehrbare lokale Aufbaukette. Diese Datei ist die Steuerung; die README dokumentiert sie.",
+  "steps": [
+    {
+      "id": "B",
+      "path": "supabase/migrations/20260805120000_baseline_structure.sql",
+      "kind": "sql",
+      "creates": "Struktur-Baseline fuer public und nutrition, ohne Stammdaten",
+      "depends_on": []
+    },
+    {
+      "id": "015",
+      "path": "supabase/_pipeline/015_kataloge/015_nutrient_defs_seed.sql",
+      "kind": "sql",
+      "creates": "138 Naehrstoffdefinitionen",
+      "depends_on": ["B"]
+    },
+    {
+      "id": "020a",
+      "path": "supabase/_pipeline/02_human_layer/020_food_human_layer.sql",
+      "kind": "sql",
+      "creates": "Kategorien, Tag-Definitionen und leere Ableitungsstrukturen vor dem BLS-Import",
+      "depends_on": ["B"]
+    },
+    {
+      "id": "030",
+      "path": "supabase/_pipeline/03_bls_import/030_apply_local.sql",
+      "kind": "sql",
+      "creates": "7.140 foods und 698.092 food_nutrients aus CSV",
+      "depends_on": ["015", "020a"]
+    },
+    {
+      "id": "031",
+      "path": "supabase/_pipeline/03_bls_import/031_fettsaeuren_nachtrag.sql",
+      "kind": "sql",
+      "creates": "171.409 Einzelfettsaeure-Werte; insgesamt 869.501 food_nutrients ueber 138 Codes",
+      "depends_on": ["030"]
+    },
+    {
+      "id": "020b",
+      "path": "supabase/_pipeline/02_human_layer/020_food_human_layer.sql",
+      "kind": "sql",
+      "creates": "Human-Layer-Ableitungen, die erst nach food_nutrients greifen",
+      "depends_on": ["031"]
+    },
+    {
+      "id": "021",
+      "path": "supabase/_pipeline/02_human_layer/021_wild_category_apply.sql",
+      "kind": "sql",
+      "creates": "Wild-Kategoriezuweisung fuer V2%",
+      "depends_on": ["020b"]
+    },
+    {
+      "id": "070",
+      "path": "supabase/_pipeline/07_lesefunktionen/070_lesefunktionen.sql",
+      "kind": "sql",
+      "creates": "Basis-RPC-Funktionen fuer Nutrition inklusive search_fold",
+      "depends_on": ["020b"]
+    },
+    {
+      "id": "072",
+      "path": "supabase/_pipeline/07_lesefunktionen/072_normalisierung.sql",
+      "kind": "sql",
+      "creates": "search_fold und Normalisierungsindex",
+      "depends_on": ["070"]
+    },
+    {
+      "id": "022",
+      "path": "supabase/_pipeline/02_human_layer/022_alias_ableitung.sql",
+      "kind": "sql",
+      "creates": "Abgeleitete food_aliases aus amtlichen Namen",
+      "depends_on": ["020b", "072"]
+    },
+    {
+      "id": "023",
+      "path": "supabase/_pipeline/02_human_layer/023_zubereitung_ableitung.sql",
+      "kind": "sql",
+      "creates": "preparation_kinds und food_groups",
+      "depends_on": ["030"]
+    },
+    {
+      "id": "024",
+      "path": "supabase/_pipeline/02_human_layer/024_suchsynonyme.sql",
+      "kind": "sql",
+      "creates": "search_synonyms",
+      "depends_on": ["020b"]
+    },
+    {
+      "id": "071",
+      "path": "supabase/_pipeline/07_lesefunktionen/071_suchrelevanz.sql",
+      "kind": "sql",
+      "creates": "Aliasbewusste Suchrelevanz",
+      "depends_on": ["022", "070"]
+    },
+    {
+      "id": "073",
+      "path": "supabase/_pipeline/07_lesefunktionen/073_suchfilter.sql",
+      "kind": "sql",
+      "creates": "food_search und Such-Rangfunktionen",
+      "depends_on": ["071", "072"]
+    },
+    {
+      "id": "025",
+      "path": "supabase/_pipeline/_ableitung/anzeigenamen-einspielen.ts",
+      "kind": "tsx",
+      "creates": "Kuratierte name_display_de/name_display_en aus daten/anzeigenamen.jsonl",
+      "depends_on": ["030"]
+    },
+    {
+      "id": "026",
+      "path": "supabase/_pipeline/_ableitung/anzeigenamen-nebennamen-aliase.ts",
+      "kind": "tsx",
+      "creates": "Kuratierte Nebennamen als food_aliases.source='curated_nebenname'",
+      "depends_on": ["022", "025", "072"]
+    },
+    {
+      "id": "027",
+      "path": "supabase/_pipeline/_ableitung/027_lebensmittel-tags.ts",
+      "kind": "tsx",
+      "creates": "Kuratierte C-44-Tags, ohne Makro-Tags aus 020 zu loeschen",
+      "depends_on": ["020b"]
+    },
+    {
+      "id": "028",
+      "path": "supabase/_pipeline/_ableitung/028_kuratierte-aliase.ts",
+      "kind": "tsx",
+      "creates": "Kuratierte Suchbegriffe als food_aliases.source='curated_suchbegriff'",
+      "depends_on": ["022", "072"]
+    },
+    {
+      "id": "050",
+      "path": "supabase/_pipeline/05_user_tabellen/050_preferences_foundation.sql",
+      "kind": "sql",
+      "creates": "food_preferences und food_preference_items",
+      "depends_on": ["B"]
+    },
+    {
+      "id": "051",
+      "path": "supabase/_pipeline/05_user_tabellen/051_curation_persistence.sql",
+      "kind": "sql",
+      "creates": "food_curation_candidates und food_curation_decisions",
+      "depends_on": ["B"]
+    },
+    {
+      "id": "052",
+      "path": "supabase/_pipeline/05_user_tabellen/052_diary_foundation.sql",
+      "kind": "sql",
+      "creates": "meals, meal_items, Trigger und RLS-Policies",
+      "depends_on": ["B", "auth_stub"]
+    },
+    {
+      "id": "053",
+      "path": "supabase/_pipeline/05_user_tabellen/053_daily_summary.sql",
+      "kind": "sql",
+      "creates": "daily_summary",
+      "depends_on": ["052"]
+    },
+    {
+      "id": "054",
+      "path": "supabase/_pipeline/05_user_tabellen/054_preference_uniques.sql",
+      "kind": "sql",
+      "creates": "Eindeutigkeitsregeln auf food_preference_items",
+      "depends_on": ["050"]
+    },
+    {
+      "id": "055",
+      "path": "supabase/_pipeline/05_user_tabellen/055_water_logs.sql",
+      "kind": "sql",
+      "creates": "water_logs",
+      "depends_on": ["052"]
+    },
+    {
+      "id": "056",
+      "path": "supabase/_pipeline/05_user_tabellen/056_hydration_summary.sql",
+      "kind": "sql",
+      "creates": "hydration_summary",
+      "depends_on": ["055"]
+    },
+    {
+      "id": "057",
+      "path": "supabase/_pipeline/05_user_tabellen/057_search_events.sql",
+      "kind": "sql",
+      "creates": "search_events und search_events_report()",
+      "depends_on": ["052"]
+    },
+    {
+      "id": "060",
+      "path": "supabase/_pipeline/06_zugriff/060_zugriffsschicht.sql",
+      "kind": "sql",
+      "creates": "Zugriffsschicht, RLS, Grants und Trigram-Indizes",
+      "depends_on": ["020b", "050", "051", "052", "055"]
+    },
+    {
+      "id": "061",
+      "path": "supabase/_pipeline/06_zugriff/061_rollen_admin.sql",
+      "kind": "sql",
+      "creates": "public.is_admin() und Admin-Policies fuer Curation",
+      "depends_on": ["060", "auth_stub"]
+    },
+    {
+      "id": "062",
+      "path": "supabase/_pipeline/06_zugriff/062_pruef_objektliste.sql",
+      "kind": "sql",
+      "creates": "nutrition.pruef_objektliste()",
+      "depends_on": ["060"]
+    },
+    {
+      "id": "080",
+      "path": "supabase/_pipeline/08_bereinigung/080_public_bereinigen.sql",
+      "kind": "sql",
+      "creates": "Bereinigung alter Governance-Objekte in public",
+      "depends_on": ["B"]
+    },
+    {
+      "id": "090",
+      "path": "supabase/_pipeline/09_identitaet/090_profile.sql",
+      "kind": "sql",
+      "creates": "public.profiles und Trigger auf auth.users",
+      "depends_on": ["B", "auth_stub"]
+    },
+    {
+      "id": "100",
+      "path": "supabase/_pipeline/10_training/100_training_schema.sql",
+      "kind": "sql",
+      "creates": "training-Schema mit exercises, muscle_groups, equipment und exercise_muscles",
+      "depends_on": ["061"]
+    },
+    {
+      "id": "101",
+      "path": "supabase/_pipeline/10_training/101_training_seed.sql",
+      "kind": "sql",
+      "creates": "Training-Stammdaten aus Legacy-Export",
+      "depends_on": ["100"]
+    },
+    {
+      "id": "102",
+      "path": "supabase/_pipeline/10_training/102_plural_merge.sql",
+      "kind": "sql",
+      "creates": "Plural-Merge fuer Training-Muskelgruppen",
+      "depends_on": ["101"]
+    },
+    {
+      "id": "103",
+      "path": "supabase/_pipeline/10_training/103_calvicular_merge.sql",
+      "kind": "sql",
+      "creates": "Calvicular-/Clavicular-Merge",
+      "depends_on": ["102"]
+    },
+    {
+      "id": "104",
+      "path": "supabase/_pipeline/10_training/104_body_region.sql",
+      "kind": "sql",
+      "creates": "Training body_region-Nachpflege",
+      "depends_on": ["103"]
+    },
+    {
+      "id": "105",
+      "path": "supabase/_pipeline/10_training/105_mideus_merge.sql",
+      "kind": "sql",
+      "creates": "Mideus-/Medius-Merge",
+      "depends_on": ["104"]
+    }
+  ]
+}
