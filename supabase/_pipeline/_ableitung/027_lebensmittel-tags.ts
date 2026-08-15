@@ -5,11 +5,17 @@
 // curated C-44 tag set and leaves the macro-derived tags from 020 intact.
 import { spawnSync } from 'node:child_process'
 import fs from 'node:fs'
+import { foodsImBestand } from './anzeigenamen-erwartung'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
 const INPUT = 'supabase/_pipeline/daten/lebensmittel-tags.jsonl'
-const EXPECTED_FOODS = 7140
+// `[cmd]` 2026-08-15: Hier stand `7140` fest. Derselbe Defekt wie in 025
+// und 026, ein Schritt spaeter — er haette beim naechsten
+// Bestandsnachtrag genauso zugeschlagen. Die Zahl wird jetzt aus dem
+// Bestand gelesen; die Absicherung gegen einen stillen Teilimport
+// bleibt, weil die Kuration weiterhin gegen diese Zahl geprueft wird.
+const EXPECTED_FOODS = foodsImBestand(CONTAINER, DB)
 
 const TAG_DEFINITIONS = [
   ['whole_food', 'Grundnahrungsmittel', 'Whole food', 'processing', false, 50],

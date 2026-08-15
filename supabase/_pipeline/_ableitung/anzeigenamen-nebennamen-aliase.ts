@@ -81,10 +81,18 @@ function runPsql(aliases: AliasRow[]): void {
 BEGIN;
 
 ALTER TABLE nutrition.food_aliases
+  -- 2026-08-15 [cmd]: Die Liste traegt AUCH curated_suchbegriff, obwohl
+  -- dieser Schritt ihn nicht erzeugt. Grund: 028 setzt dieselbe Bedingung
+  -- mit seiner eigenen Liste. Auf leerer Datenbank faellt das nicht auf,
+  -- weil 028 spaeter laeuft und erweitert — gegen einen Bestand, in dem
+  -- 028 bereits Zeilen angelegt hat, bricht dieser Schritt ab.
+  -- Dieselbe Bedingung an zwei Orten: beide Listen muessen vollstaendig
+  -- sein, sonst entscheidet die Reihenfolge ueber den Erfolg.
   DROP CONSTRAINT IF EXISTS food_aliases_source_check;
 ALTER TABLE nutrition.food_aliases
   ADD CONSTRAINT food_aliases_source_check
-  CHECK (source = ANY (ARRAY['editorial','ai_generated','user','derived','${SOURCE}']));
+  CHECK (source = ANY (ARRAY['editorial','ai_generated','user','derived',
+                             'curated_nebenname','curated_suchbegriff']));
 
 COMMENT ON COLUMN nutrition.food_aliases.source IS
   'editorial = von Hand gepflegt; ai_generated = von einem Modell vorgeschlagen; user = aus Nutzereingabe; derived = mechanisch aus dem Bestandsnamen abgeleitet; curated_nebenname = kuratierter Nebenname aus anzeigenamen.jsonl.';
