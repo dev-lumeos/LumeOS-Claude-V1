@@ -109,7 +109,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 36 offen, 4 in Arbeit.
+`[cmd]` 43 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -153,6 +153,13 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **F-07** | Berechtigungen |  |
 | **F-08** | Werkstatt-Inventar |  |
 | **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
+| **G-01** | Parallelstruktur und Tokens |  |
+| **G-02** | Die Shell |  |
+| **G-03** | Nutrition als erstes echtes Modul |  |
+| **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
+| **G-05** | Dashboard |  |
+| **G-06** | Die übrigen Module nach Datenlage |  |
+| **G-07** | Umschalten |  |
 
 ---
 
@@ -1241,3 +1248,129 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `[read]` Ebenfalls zu prüfen: §15 macht den Dateipfad zur Projektidentität.
   Pfade wandern — `temp/lumeosold` wurde am 2026-08-12 zu
   `referenz/lumeos-2026`. Ein Resolver am Pfad bricht still.
+
+---
+
+## G - Theme V1 umsetzen
+
+`[read]` Plan: `docs/spezifikation/10-plattform/design-system/theme-v1-umsetzung.md`
+
+Grundlage ist `theme-v1/` - `[cmd]` 55 Modulseiten, `shell.jsx`,
+`shared.jsx`, `styles.css` mit 32 Tokens und 123 Klassen, dazu zwoelf
+Bildschirmfotos. **Vorlage, nicht Vertrag** (Tom, 2026-08-15): Es gibt
+diverse Dinge, die ihm noch nicht gefallen - grafische Elemente, die beim
+Umsetzen angepasst werden.
+
+**Die bestehende Oberflaeche bleibt.** Die neue laeuft parallel unter
+`/v2`, gegen dieselbe Datenschicht. Umgeschaltet wird am Ende (G-07).
+
+- [ ] **G-01: Parallelstruktur und Tokens** (neu 2026-08-15). Der erste
+  Schritt, und er baut noch keine Oberfläche.
+
+  **Toms Vorgabe:** die bestehende Variante bleibt, die neue kommt
+  **parallel** dazu. Umgeschaltet wird am Ende, nicht am Anfang.
+
+  - `apps/web/src/app/v2/` als sichtbares Präfix. `[cmd]` Eine
+    Routengruppe `(v2)` scheidet aus — sie erscheint nicht in der URL und
+    kollidiert mit den zwölf bestehenden Modulordnern.
+  - `packages/ui` in Betrieb nehmen. `[cmd]` Enthält heute nur
+    `src/.gitkeep`.
+  - Die 123 Klassen aus `theme-v1/styles.css` übernehmen, **unter
+    eigenem Präfix**, damit die alten Seiten unberührt bleiben.
+  - `[cmd]` Die 32 Tokens sind identisch mit den vorhandenen — nichts zu
+    übernehmen. **Ausnahme:** `--pos`, `--warn`, `--neg` fehlen im
+    Hellmodus des Entwurfs; im Repo am 2026-08-15 repariert, der Fehler
+    darf nicht zurückkommen.
+
+  **Die Datenschicht wird geteilt, nicht kopiert** —
+  `lib/nutrition/food-search.ts`, die `rpc()`-Aufrufe, die
+  Supabase-Klienten, `middleware.ts`. Dort steckt die Arbeit von zwei
+  Tagen.
+
+- [ ] **G-02: Die Shell** (neu 2026-08-15). Setzt G-01 voraus.
+
+  `[cmd]` `sidebar`, `sidebar-nav`, `nav-group`, `topbar`, `breadcrumb`,
+  `module-header`, `card`/`card-tight`/`card-flat`, `btn-accent`, `tabs`,
+  `avatar` — diese Klassen wiederholen sich in allen 55 Modulseiten. Wer
+  sie beim zweiten Modul nachbaut, baut sie falsch.
+  Vorlage: `theme-v1/shell.jsx` und `shared.jsx`.
+
+  `[cmd]` **Der Akzentmechanismus existiert bereits:**
+  `app-shell.tsx:296` setzt `--acc` inline aus einer Map über alle elf
+  Module. Nicht in `tailwind.config.js` gespiegelt sind die einzelnen
+  `--acc-nutri` — deshalb `bg-acc` ja, `bg-acc-nutri` nein.
+
+  **Zwei Entscheidungen, die sonst später weh tun:**
+  - **Die Kontextspalte** steht auf jedem Bildschirm. Ab Tablet abwärts:
+    Blatt, Reiter, oder weg?
+  - **Buddy antwortet kontextbezogen auf jeder Seite** — ein
+    Modellaufruf je Seitenaufruf, bei elf Modulen und täglicher Nutzung.
+    Kostenfrage, keine Designfrage.
+
+- [ ] **G-03: Nutrition als erstes echtes Modul** (neu 2026-08-15).
+  Setzt G-02 voraus.
+
+  `[cmd]` **Nur dort ist die Datenseite vollständig** — Suche mit
+  234 ms, 7.140 Anzeigenamen, 17.967 Tags, Tagebuch, 24 Mikros mit
+  Fehlzählern, Bewertung gegen 165 Referenzwerte, `foods_custom`. Jedes
+  andere Modul bräuchte erst Daten.
+
+  Vorlage: `module-nutrition.jsx`, `module-nutrition-nutrients.jsx`,
+  `module-nutrition-spec.jsx`.
+
+  `[cmd]` **`foods/page.tsx` wird ersetzt, nicht umgebaut** — 208 harte
+  Farbwerte, eine einzige Token-Verwendung. Sie bleibt unter
+  `/nutrition`, bis `/v2/nutrition` sie ablöst.
+
+  **Vier Regeln aus der Datenseite** (siehe C-48): Fehlzähler dürfen
+  nicht zu Nullen werden · 80 % eines `UL` heisst das Gegenteil von 80 %
+  eines `PRI` · die 78 Nährstoffe ohne Referenzwert sind kein „0 %
+  gedeckt" · 100 % Deckung heisst nicht „genug für dich".
+
+- [ ] **G-04: Zwei Zahlen im Entwurf, die nicht stimmen** (neu
+  2026-08-15). Klein, aber vor dem Bau zu klären.
+
+  **Der Nutrition-Score steht auf `1`.** `[read]` Der Bildschirm zeigt
+  Faktoren um 0,7 und Schwellen `ok ≥ 80 · warn 50–79 · block < 50`.
+  `[annahme]` Skalierung 0–1 gegen Schwellen 0–100. Es ist der Wert, den
+  ein Nutzer zuerst ansieht.
+
+  **Vitamin D: 20 µg im Entwurf, 15 µg in der Datenbank.** `[cmd]` Wir
+  haben EFSA `AI 15 µg` eingetragen; der Entwurf zeigt „12µg (target
+  20µg)", das ist der DGE-Wert. **Beide sind belegbar, aber es muss einer
+  gelten** — sonst zeigt die Oberfläche etwas anderes, als die
+  Bewertungsfunktion rechnet.
+
+- [ ] **G-05: Dashboard** (neu 2026-08-15). Setzt G-03 voraus.
+
+  Trägt aus allen Modulen zusammen und ist erst sinnvoll, wenn eines
+  davon echte Daten liefert. Vorlage: `module-dashboard.jsx`.
+
+  `[cmd]` Aus dem Entwurf ablesbar: Readiness-Ring, vier Kennzahlkarten,
+  Tagesverlauf, Makrobalken, Aktivitätsprotokoll. **Die Kennzahlen
+  ausserhalb von Nutrition sind bis dahin Attrappen** — im Bericht
+  benennen, welche.
+
+- [ ] **G-06: Die übrigen Module nach Datenlage** (neu 2026-08-15).
+
+  `[cmd]` **Training** hat 1.416 Übungen, aber keine deutsche
+  Namensschicht und keine Suchfunktion — C-16 hat gemessen: 3 von 34
+  Sollwerten auf Platz 1, 25 ohne Treffer. **Vor der Oberfläche zu
+  lösen.**
+
+  **Recovery, Supplements, Medical, Goals, Coach, Marketplace** haben
+  keine Datenseite. Die Entwürfe stehen (`module-recovery-v2.jsx`,
+  `module-supplements.jsx` mit 81 KB, `module-medical-v2.jsx`) — sie
+  liefen bis dahin gegen Attrappen.
+
+  **Reihenfolge offen.** `[read]` Die Lehre aus dem Suchumbau: erst
+  messen, was die Datenseite hergibt, dann bauen.
+
+- [ ] **G-07: Umschalten** (neu 2026-08-15). Der letzte Schritt.
+
+  Wenn alle Module unter `/v2` stehen: die alten Ordner entfernen, `v2`
+  hochziehen, Verweise anpassen. **Erst dann**, und nicht früher.
+
+  Mit abzuräumen: `[cmd]` `apps/admin` nutzt **null Tokens** und ist
+  vollständig hart verdrahtet — eigener Posten, eigene Entscheidung, ob
+  Theme V1 auch dort gilt.
