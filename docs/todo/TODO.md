@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-14, Anker `7b5e631` auf `dev`.
+**Stand:** 2026-08-15, Anker `b1c6273` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -9,6 +9,16 @@ von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 oder `[annahme]`. Nur `[cmd]` darf zu einer Regel werden.
 **Erledigtes** steht vollständig in `docs/todo/ERLEDIGT.md` — mit Datum,
 Beleg und Begründung. Diese Datei enthält nur, was noch aussteht.
+
+**Grössere Vorhaben haben einen eigenen Plan.** Er steht nicht in dieser
+Datei, damit sie lesbar bleibt — aber er wird hier genannt, sonst geht er
+verloren:
+
+| | |
+|---|---|
+| **Theme V1 umsetzen** (Sektion G) | `docs/spezifikation/10-plattform/design-system/theme-v1-umsetzung.md` |
+| **Altbestand konsolidieren** (A-11) | `docs/spezifikation/00-KONSOLIDIERUNG.md` |
+| **Rollen der Ordner, Statuskopf, Regeln** | `docs/spezifikation/00-INDEX.md` |
 
 **Quellen für Nutrition** (Tom, 2026-08-14): Bei Arbeit am Nutrition-Modul
 gehören `docs/specs/Nutrition/` und `docs/BrainstormDocs/Nutrition/`
