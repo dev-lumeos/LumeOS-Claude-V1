@@ -21,6 +21,9 @@
       "@lumeos/shared": [
         "../../packages/shared/src/index.ts"
       ],
+      "@lumeos/ui": [
+        "../../packages/ui/src/index.ts"
+      ],
       "@lumeos/shared/session": [
         "../../packages/shared/src/supabase/session.ts"
       ],
