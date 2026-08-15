@@ -70,12 +70,14 @@ function parseArgs(): Args {
 }
 
 function run(command: string, args: string[], options: { input?: string; env?: NodeJS.ProcessEnv } = {}) {
+  const useShell = process.platform === 'win32' && command === 'pnpm'
   const result = spawnSync(command, args, {
     cwd: ROOT,
     input: options.input,
     env: options.env ?? process.env,
     encoding: 'utf8',
     maxBuffer: 512 * 1024 * 1024,
+    shell: useShell,
   })
 
   if (result.stdout) process.stdout.write(result.stdout)
@@ -83,7 +85,8 @@ function run(command: string, args: string[], options: { input?: string; env?: N
 
   if (result.status !== 0) {
     const code = result.status ?? 1
-    throw new Error(`${command} ${args.join(' ')} schlug fehl (Exit ${code})`)
+    const detail = result.error ? `: ${result.error.message}` : ''
+    throw new Error(`${command} ${args.join(' ')} schlug fehl (Exit ${code})${detail}`)
   }
 }
 

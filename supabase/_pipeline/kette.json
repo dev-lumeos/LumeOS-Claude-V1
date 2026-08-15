@@ -186,11 +186,18 @@
       "depends_on": ["052"]
     },
     {
+      "id": "058",
+      "path": "supabase/_pipeline/05_user_tabellen/058_custom_foods.sql",
+      "kind": "sql",
+      "creates": "foods_custom, meal_items.custom_food_id und Custom-Food-Plausibilitaetsfunktion",
+      "depends_on": ["052"]
+    },
+    {
       "id": "060",
       "path": "supabase/_pipeline/06_zugriff/060_zugriffsschicht.sql",
       "kind": "sql",
       "creates": "Zugriffsschicht, RLS, Grants und Trigram-Indizes",
-      "depends_on": ["020b", "050", "051", "052", "055"]
+      "depends_on": ["020b", "050", "051", "052", "055", "058"]
     },
     {
       "id": "061",
