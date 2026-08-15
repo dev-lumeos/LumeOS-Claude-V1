@@ -75,7 +75,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 022 | `02_human_layer/022_alias_ableitung.sql` | abgeleitete Aliase | 32.522 gesamt |
 | 023 | `02_human_layer/023_zubereitung_ableitung.sql` | `preparation_kinds` (11), `food_groups` (19) | 11 / 19 |
 | 024 | `02_human_layer/024_suchsynonyme.sql` | `search_synonyms` | 4.877, davon 21 von Hand |
-| 025 | `_ableitung/anzeigenamen-einspielen.ts` | kuratierte `name_display_de`/`name_display_en` aus `daten/anzeigenamen.jsonl` | 5.775 Anzeigenamen, 33 `sicher=false` sichtbar im Lauf |
+| 025 | `_ableitung/anzeigenamen-einspielen.ts` | kuratierte `name_display_de`/`name_display_en` aus `daten/anzeigenamen.jsonl` | 7.140 Anzeigenamen, 33 `sicher=false` sichtbar im Lauf |
 | 026 | `_ableitung/anzeigenamen-nebennamen-aliase.ts` | kuratierte `nebennamen` als `food_aliases.source='curated_nebenname'` | 576 Foods mit Nebennamen, 663 kuratierte Namen vor Deduplikation |
 | 027 | `_ableitung/027_lebensmittel-tags.ts` | kuratierte C-44-Tags aus `daten/lebensmittel-tags.jsonl`, ohne die Makro-Tags aus `020` zu löschen | 5.150 Foods, 8.702 kuratierte Tagzuordnungen |
 | 028 | `_ableitung/028_kuratierte-aliase.ts` | kuratierte Suchbegriffe und Sortenaliase aus `daten/reis-alias-kuration.json` als `food_aliases.source='curated_suchbegriff'` | 13 Zuordnungen vor Deduplikation |
@@ -87,10 +87,19 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | **057** | `05_user_tabellen/057_search_events.sql` | **`search_events`** + Auswertung `search_events_report()` | 1 Tabelle, 1 Funktion |
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, Trigram-Indizes, Grants, RLS | v060: 22 Prüfungen |
 | 061 | `06_zugriff/061_rollen_admin.sql` | `public.is_admin()` + Policies | v061: 15 Prüfungen |
+| 062 | `06_zugriff/062_pruef_objektliste.sql` | `nutrition.pruef_objektliste()` fuer Objektlisten- und Rechtepruefung | 1 Funktion |
 | 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen | v070: 18 Prüfungen |
+| 071 | `07_lesefunktionen/071_suchrelevanz.sql` | aliasbewusste Suchrelevanz | `food_search` ersetzt |
 | 072 | `07_lesefunktionen/072_normalisierung.sql` | `search_fold`, Ausdrucksindex | — |
 | 073 | `07_lesefunktionen/073_suchfilter.sql` | `food_search` samt Rangfunktionen | 1 Signatur |
+| 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
 | 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users` | v090: 14 Prüfungen |
+| 100 | `10_training/100_training_schema.sql` | Schema `training` mit `exercises`, `muscle_groups`, `equipment`, `exercise_muscles` | 4 Tabellen |
+| 101 | `10_training/101_training_seed.sql` | Training-Stammdaten aus Legacy-Export | 1.416 Uebungen, 109 Muskelgruppen, 58 Geraete, 6.625 Zuordnungen vor Merge |
+| 102 | `10_training/102_plural_merge.sql` | Plural-Merge fuer Muskelgruppen | Nachpflege |
+| 103 | `10_training/103_calvicular_merge.sql` | Calvicular-/Clavicular-Merge | Nachpflege |
+| 104 | `10_training/104_body_region.sql` | `body_region`-Nachpflege fuer Muskelgruppen | Nachpflege |
+| 105 | `10_training/105_mideus_merge.sql` | Mideus-/Medius-Merge | Endbestand 1.416 Uebungen, 107 Muskelgruppen, 58 Geraete, 6.624 Zuordnungen |
 
 **Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,
 `055` braucht `nutrition.touch_updated_at()` aus `052`, `056` braucht
@@ -103,6 +112,12 @@ angelegt waren. Da der Schritt in einer Transaktion läuft, wird alles
 zurückgerollt und **es bleibt keine Spur**. Bei einem Aufbau gegen eine
 Datenbank ohne Supabase-Auth fehlen die Diary-Objekte deshalb
 kommentarlos.
+
+**Ausfuehrung:** `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts` liest
+`supabase/_pipeline/kette.json`. Diese Datei ist die Steuerung; die Tabelle
+hier ist Dokumentation und wird mit
+`pnpm exec tsx supabase/_pipeline/_validierung/kette-readme-pruefen.ts`
+gegen die Steuerdatei abgeglichen.
 
 **Abschlussprüfung:** `pnpm exec tsx
 _pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts` — vergleicht
