@@ -242,22 +242,16 @@ Liste veraltet oder es liegt Ausschuss im Schema.
   wiederhergestellte Tabelle dieselben Spalten hat, sagt diese Prüfung
   nicht — nur, dass es eine Tabelle dieses Namens gibt.
 
-- **Sie prüft keine GRANTs.** `[read]` PostgREST prüft Tabellenrechte
-  **vor** RLS — eine Tabelle mit tadellosen Policies, aber ohne
-  `GRANT SELECT`, ist für die Anwendung genauso unerreichbar wie eine
-  gesperrte. Das ist der nächstliegende blinde Fleck und der beste
-  Kandidat für die nächste Erweiterung.
+- ~~**Sie prüft keine GRANTs.**~~ **Behoben (C-42, 2026-08-15)** —
+  Rechte je Rolle, exakt statt „mindestens". Siehe dritter Teil.
 
 - **Sie prüft nur das Schema `nutrition`.** `public.profiles`, der
   Trigger auf `auth.users`, `public.is_admin()` — alles ungeprüft,
   obwohl `090` und `061` sie erzeugen.
 
-- **Sie prüft keine Policy-Bedingungen.** Geprüft wird, *dass* eine
-  Policy für eine Operation existiert, nicht *was* sie erlaubt. Eine
-  `USING (true)` auf `meals` würde die Prüfung bestehen und trotzdem
-  jedem alle Mahlzeiten zeigen. `[read]` Für die Bedingungen gibt es
-  `zugriffsrechte-pruefen.mjs`; die Verbindung zwischen beiden
-  Prüfungen ist weiterhin nicht hergestellt.
+- ~~**Sie prüft keine Policy-Bedingungen.**~~ **Behoben (C-42,
+  2026-08-15)** — je Tabelle als „öffentlich lesbar" / „nur eigene
+  Zeilen" / „admin" hinterlegt. Siehe dritter Teil.
 
 - **Die Mindestzeilen sind Untergrenzen, keine Sollwerte.** Sie fangen
   „leer geblieben" ab, nicht „halb importiert". `[annahme]` Exakte
@@ -519,3 +513,184 @@ nicht.
 
 Keine Schemaänderung — es wurde geprüft, nicht repariert. Die beiden
 Wegwerf-Datenbanken sind verworfen.
+
+---
+---
+
+# Dritter Teil: GRANTs und Policy-Bedingungen (C-42)
+
+`[cmd]` 2026-08-15. Anlass sind die zwei blinden Flecken, die der
+zweite Teil selbst benannt hat. Beide sind **still**: die Prüfung meldet
+grün, und die Anwendung ist entweder blind oder offen.
+
+## Was jetzt geprüft wird
+
+| | vorher | nachher |
+|---|---|---|
+| Tabellen · Sichten · Funktionen | 17 · 2 · 10 | unverändert |
+| Zeilenschutz · Policies · Trigger · FK | 17 · 32 · 4 · 14 | unverändert |
+| **GRANTs (Einzelrechte je Rolle)** | — | `[cmd]` **167** |
+| **Policy-Bedingungsart je Tabelle** | — | `[cmd]` **17** |
+| **Einzelaussagen gesamt** | `[cmd]` 107 | `[cmd]` **291** |
+
+## Teil 1 — GRANTs
+
+### Welche Rollen, welche Rechte
+
+`[read]` Nachgeschlagen in `060_zugriffsschicht.sql` und
+`061_rollen_admin.sql`, nicht vom Ist-Stand abgeschrieben. Es gibt
+**zwei** Rollen:
+
+| Rolle | Rechte | Herkunft |
+|---|---|---|
+| `authenticated` | `SELECT` auf Stammdaten (7 Tabellen) | 060 3b |
+| | `SELECT,INSERT,UPDATE,DELETE` auf Nutzerdaten | 060 3c, 052, 055 |
+| | `SELECT` auf die Curation-Tabellen | 061 |
+| `service_role` | alle sieben Rechte auf alles | 060 3d + 3e |
+
+`postgres` steht **nicht** in der Sollliste — es ist Eigentümer, seine
+Rechte sind Eigentum, keine Grants. Das ist eine Entscheidung, keine
+Auslassung.
+
+### Exakt, nicht „mindestens"
+
+Geprüft wird die **genaue** Rechtemenge je Rolle. Eine Liste, die nur
+„mindestens diese Rechte" prüft, sieht den gefährlicheren Fall nicht —
+ein `GRANT ALL` auf einer Stammdatentabelle bestünde sie.
+
+Zusätzlich schlägt eine **nicht vorgesehene Rolle** an: trägt eine
+Tabelle Rechte für `anon`, meldet die Prüfung das, auch wenn alle
+erwarteten Rechte stimmen.
+
+### Ein Befund beim ersten Lauf — und es war meine Liste, nicht die Datenbank
+
+`[cmd]` Der erste Lauf meldete `GRANTs 17/19`:
+
+```
+GRANT: Sicht daily_summary hat ZU VIEL
+       service_role:INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER
+```
+
+`053` und `056` vergeben nur `SELECT`. Die Ursache steht in `060 3e`:
+`ALTER DEFAULT PRIVILEGES IN SCHEMA nutrition GRANT ALL ON TABLES TO
+service_role`. `[cmd]` **`ON TABLES` umfasst in Postgres auch Sichten** —
+der Objekttyp in `pg_default_acl` ist `r` für beide.
+
+Die Datenbank verhält sich also richtig; **meine Sollliste war falsch.**
+Korrigiert, mit der Herkunft in der Zeile. Dieselbe Regel erklärt auch,
+warum `food_groups`, `preparation_kinds` und `search_synonyms`
+`service_role`-Vollrechte tragen, obwohl `023`/`024` nur `SELECT`
+vergeben.
+
+## Teil 2 — Policy-Bedingungen
+
+**Nicht zeichengenau verglichen.** Postgres normalisiert den Ausdruck,
+und jede Umformulierung würde die Prüfung brechen. Geprüft wird die
+Eigenschaft, auf die es ankommt — je Tabelle als fachliche Aussage
+hinterlegt:
+
+| Art | Tabellen | Bedingung muss | Herkunft |
+|---|---|---|---|
+| `oeffentlich` | `[cmd]` 10 | `true` ist richtig (Stammdaten) | 060 4a |
+| `eigene_zeilen` | `[cmd]` 5 | **`auth.uid()` nennen** | 060 4b, 052, 055 |
+| `admin` | `[cmd]` 2 | **`is_admin()` nennen** | 061 |
+
+`[cmd]` Bei `foods`, `food_nutrients`, `nutrient_defs` ist
+`USING (true)` richtig — ein weiter Lesezugriff auf Stammdaten ist
+gewollt. Bei `meals`, `meal_items`, `water_logs`, `food_preferences`,
+`food_preference_items` wäre dieselbe Bedingung ein **Datenleck**.
+
+Die INSERT-Policies tragen ihre Bedingung in `with_check` statt in
+`qual`; beide werden gelesen, sonst würde jede INSERT-Policy als „leer"
+gelten.
+
+Eine Bedingung, die **enger** ist als hinterlegt, ist ein **Hinweis**,
+kein Fehler — enger schadet nicht, weicht aber von der fachlichen
+Aussage ab und gehört gemeldet.
+
+## Der Nachweis in beide Richtungen
+
+`[read]` Eine Prüfung, die noch nie fehlgeschlagen ist, ist kein Beleg.
+Alles auf einer Wegwerf-Datenbank, danach verworfen.
+
+**Richtung 1 — intaktes Schema:** `[cmd]` Exit 0, und **null
+Falschmeldungen**. Das war beim letzten Mal nicht so: `[cmd]` damals
+meldete der erste Lauf 17 falsche Fehler, weil `rowsecurity` gegen `'t'`
+statt `'true'` verglichen wurde. Diesmal ist die Zahl null — nachdem der
+eine echte Befund (Sichten-Grants) in der Sollliste korrigiert war.
+
+**Richtung 2 — vier gezielte Eingriffe:**
+
+| Eingriff | Meldung |
+|---|---|
+| `REVOKE SELECT ON foods FROM authenticated` | `[cmd]` `GRANT: Tabelle foods fehlt authenticated:SELECT — die Anwendung kommt nicht heran (PostgREST prueft Grants vor RLS) — Herkunft 060 3b` |
+| `GRANT ALL ON foods TO authenticated` | `[cmd]` `GRANT: Tabelle foods hat ZU VIEL authenticated:INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER` |
+| `meals_select` auf `USING (true)` | `[cmd]` `POLICY-BEDINGUNG: meals.meals_select fuehrt "nur eigene Zeilen", nennt aber kein auth.uid() — Bedingung "true" zeigt jedem alles — Schritt 052` |
+| `GRANT SELECT ON meals TO anon` | `[cmd]` `GRANT: Tabelle meals traegt Rechte fuer die nicht vorgesehene Rolle anon (SELECT)` |
+
+Jede Meldung nennt Objekt, Rolle bzw. Operation und den erzeugenden
+Schritt.
+
+## Was die neue Sollliste abdeckt und was nicht
+
+**Sie deckt ab:** Existenz von Tabellen, Sichten, Funktionen;
+Zeilenschutz; Policies je Operation; `security_invoker`; Trigger;
+Fremdschlüssel; Mindestzeilen; **Rechte je Rolle exakt**; **Art der
+Policy-Bedingung**. `[cmd]` 291 Einzelaussagen.
+
+**Was nach dieser Erweiterung ungeprüft bleibt — der nächste blinde
+Fleck:**
+
+- **Die Bedingung wird auf ein Merkmal geprüft, nicht auf ihre
+  Wirkung.** Eine Policy `USING (auth.uid() = user_id OR true)` nennt
+  `auth.uid()` und bestünde die Prüfung — und zeigte trotzdem jedem
+  alles. `[annahme]` Das lässt sich nur durch einen echten Zugriffstest
+  mit zwei Nutzern ausschliessen, wie ihn `zugriffsrechte-pruefen.mjs`
+  für einen Teil der Tabellen führt. **Die Verbindung zwischen beiden
+  Prüfungen ist weiterhin nicht hergestellt** — das ist jetzt der beste
+  Kandidat für die nächste Erweiterung.
+
+- **Spaltenrechte.** `GRANT SELECT (name_de) ON foods` würde als
+  `SELECT` gezählt. `[cmd]` Heute unkritisch — **null Spalten im Schema
+  tragen eine eigene ACL** (`pg_attribute.attacl`); die 1.049 Zeilen in
+  `column_privileges` sind Tabellenrechte, je Spalte aufgefaltet.
+  Geprüft wird es trotzdem nicht.
+
+- **Funktionsrechte.** `[cmd]` 10 Funktionen tragen `EXECUTE`-Rechte,
+  die Sollliste erfasst sie **nicht**. `public.is_admin()` wird in `061`
+  ausdrücklich an `authenticated` vergeben — fehlte dieses Recht, wären
+  die beiden Admin-Policies wirkungslos. Bewusst offen gelassen: die
+  Rechte liegen teils in `public`, und die Prüfung deckt nur
+  `nutrition` ab.
+
+- **Schema-Rechte.** `GRANT USAGE ON SCHEMA nutrition` (060 3a) ist die
+  Voraussetzung für alles Übrige und wird nicht geprüft. Fehlt es, ist
+  jede Tabelle unerreichbar, obwohl alle Tabellenrechte stimmen.
+
+- **`DEFAULT PRIVILEGES`.** Sie erklären einen Teil der Ist-Rechte
+  (siehe Befund oben), stehen aber selbst nicht in der Sollliste. Würde
+  jemand sie ändern, bekämen künftige Tabellen andere Rechte — die
+  Prüfung merkte es erst, wenn eine solche Tabelle entsteht.
+
+- **Spalten, Datentypen, `NOT NULL`, `CHECK`.** Unverändert ungeprüft.
+
+- **Sie läuft nicht automatisch.** Unverändert: sie braucht eine
+  laufende Datenbank und hängt nicht in `pnpm gate`.
+
+- **Die Liste altert.** Unverändert, jetzt mit mehr Fläche: 167
+  Einzelrechte von Hand gepflegt. Wer einen Grant ändert und die Liste
+  vergisst, bekommt einen **Fehler** — das ist beabsichtigt, macht die
+  Pflege aber verbindlich.
+
+## Stand
+
+```
+[cmd] SCHEMA VOLLSTAENDIG, Exit 0, null Falschmeldungen
+[cmd] 17 Tabellen · 2 Sichten · 10 Funktionen · 17 Zeilenschutz
+[cmd] 32 Policies · 2 security_invoker · 4 Trigger · 14 Fremdschluessel
+[cmd] 167 Einzelrechte · 17 Bedingungsarten · 9 Mindestzeilen
+```
+
+**Keine Schemaänderung** — geprüft, nicht repariert. Der eine gefundene
+Widerspruch (Sichten-Grants) lag in der Sollliste, nicht in der
+Datenbank, und ist dort korrigiert. Die Wegwerf-Datenbank ist verworfen.

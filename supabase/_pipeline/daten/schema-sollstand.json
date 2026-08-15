@@ -1,99 +1,665 @@
 {
-  "erhoben": "2026-08-16",
-  "anlass": "C-38-Neuaufbau liess meals, meal_items, water_logs und zwei Sichten verschwinden, ohne dass ein Kettenlauf sich beschwerte",
-  "regel": "VON HAND GEPFLEGT. Diese Liste darf ihre Werte NIEMALS aus der laufenden Datenbank beziehen — eine Pruefung, die ihre Sollwerte vom Prueflig nimmt, bestaetigt jeden Zustand. Wer einen Kettenschritt ergaenzt, traegt sein Erzeugnis hier ein.",
-  "quelle": "supabase/README.md, Tabelle 'Lokaler Neubau'. Belegt in docs/ssot/53-kettenluecke.md.",
-
-  "_zeilenschutz": "Jede Tabelle traegt rls (Zeilenschutz an/aus) und policies (Operationen, die abgedeckt sein muessen). ACHTUNG: rls=true UND policies=[] heisst GESPERRT — niemand kommt an die Daten. Das ist der Fehler aus ADR-0003 und wird als Fehler gemeldet, nicht als Hinweis.",
-
-  "tabellen": [
-    { "name": "nutrient_defs",            "schritt": "Baseline",       "rls": true, "policies": ["SELECT"] },
-    { "name": "foods",                    "schritt": "Baseline",       "rls": true, "policies": ["SELECT"] },
-    { "name": "food_nutrients",           "schritt": "Baseline",       "rls": true, "policies": ["SELECT"] },
-    { "name": "food_categories",          "schritt": "Baseline",       "rls": true, "policies": ["SELECT"] },
-    { "name": "food_aliases",             "schritt": "Baseline",       "rls": true, "policies": ["SELECT"] },
-    { "name": "food_tags",                "schritt": "Baseline",       "rls": true, "policies": ["SELECT"] },
-    { "name": "tag_definitions",          "schritt": "Baseline",       "rls": true, "policies": ["SELECT"] },
-    { "name": "food_preferences",         "schritt": "Baseline (050)", "rls": true, "policies": ["SELECT","INSERT","UPDATE","DELETE"] },
-    { "name": "food_preference_items",    "schritt": "Baseline (050)", "rls": true, "policies": ["SELECT","INSERT","UPDATE","DELETE"] },
-    { "name": "food_curation_candidates", "schritt": "Baseline (051)", "rls": true, "policies": ["SELECT"] },
-    { "name": "food_curation_decisions",  "schritt": "Baseline (051)", "rls": true, "policies": ["SELECT"] },
-    { "name": "preparation_kinds",        "schritt": "023",            "rls": true, "policies": ["SELECT"] },
-    { "name": "food_groups",              "schritt": "023",            "rls": true, "policies": ["SELECT"] },
-    { "name": "search_synonyms",          "schritt": "024",            "rls": true, "policies": ["SELECT"] },
-    { "name": "meals",                    "schritt": "052",            "rls": true, "policies": ["SELECT","INSERT","UPDATE","DELETE"] },
-    { "name": "meal_items",               "schritt": "052",            "rls": true, "policies": ["SELECT","INSERT","UPDATE","DELETE"] },
-    { "name": "water_logs",               "schritt": "055",            "rls": true, "policies": ["SELECT","INSERT","UPDATE","DELETE"] }
-  ],
-
-  "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
-
-  "sichten": [
-    { "name": "daily_summary",     "schritt": "053", "security_invoker": true },
-    { "name": "hydration_summary", "schritt": "056", "security_invoker": true }
-  ],
-
-  "trigger": [
-    { "tabelle": "meals",      "name": "meals_touch_updated_at",      "schritt": "052" },
-    { "tabelle": "meal_items", "name": "meal_items_touch_updated_at", "schritt": "052" },
-    { "tabelle": "meal_items", "name": "meal_items_owner_guard_trg",  "schritt": "052" },
-    { "tabelle": "water_logs", "name": "water_logs_touch_updated_at", "schritt": "055" }
-  ],
-
-  "_fremdschluessel": "Namentlich, weil beim Ausfall 2026-08-16 meal_items_meal_id_fkey mitverschwand. Ein fehlender Fremdschluessel faellt sonst erst auf, wenn verwaiste Zeilen entstanden sind.",
-
-  "fremdschluessel": [
-    { "name": "foods_category_id_fkey",                     "tabelle": "foods",                     "zeigt_auf": "food_categories",           "schritt": "Baseline" },
-    { "name": "food_nutrients_food_id_fkey",                "tabelle": "food_nutrients",            "zeigt_auf": "foods",                     "schritt": "Baseline" },
-    { "name": "food_nutrients_nutrient_code_fkey",          "tabelle": "food_nutrients",            "zeigt_auf": "nutrient_defs",             "schritt": "Baseline" },
-    { "name": "food_aliases_food_id_fkey",                  "tabelle": "food_aliases",              "zeigt_auf": "foods",                     "schritt": "Baseline" },
-    { "name": "food_tags_food_id_fkey",                     "tabelle": "food_tags",                 "zeigt_auf": "foods",                     "schritt": "Baseline" },
-    { "name": "food_tags_tag_code_fkey",                    "tabelle": "food_tags",                 "zeigt_auf": "tag_definitions",           "schritt": "Baseline" },
-    { "name": "food_categories_parent_id_fkey",             "tabelle": "food_categories",           "zeigt_auf": "food_categories",           "schritt": "Baseline" },
-    { "name": "food_preference_items_food_id_fkey",         "tabelle": "food_preference_items",     "zeigt_auf": "foods",                     "schritt": "Baseline (050)" },
-    { "name": "food_preference_items_category_id_fkey",     "tabelle": "food_preference_items",     "zeigt_auf": "food_categories",           "schritt": "Baseline (050)" },
-    { "name": "food_preference_items_tag_code_fkey",        "tabelle": "food_preference_items",     "zeigt_auf": "tag_definitions",           "schritt": "Baseline (050)" },
-    { "name": "food_curation_candidates_food_id_fkey",      "tabelle": "food_curation_candidates",  "zeigt_auf": "foods",                     "schritt": "Baseline (051)" },
-    { "name": "food_curation_decisions_candidate_id_fkey",  "tabelle": "food_curation_decisions",   "zeigt_auf": "food_curation_candidates",  "schritt": "Baseline (051)" },
-    { "name": "meal_items_meal_id_fkey",                    "tabelle": "meal_items",                "zeigt_auf": "meals",                     "schritt": "052" },
-    { "name": "meal_items_food_id_fkey",                    "tabelle": "meal_items",                "zeigt_auf": "foods",                     "schritt": "052" }
-  ],
-
-  "funktionen": [
-    { "name": "search_fold",             "schritt": "072" },
-    { "name": "food_search",             "schritt": "073" },
-    { "name": "such_rang_zubereitung",   "schritt": "073" },
-    { "name": "such_rang_wortgrenze",    "schritt": "073" },
-    { "name": "food_categories_tree",    "schritt": "070" },
-    { "name": "preference_search_preview","schritt": "070" },
-    { "name": "curation_overview",       "schritt": "070" },
-    { "name": "schema_debug",            "schritt": "070" },
-    { "name": "touch_updated_at",        "schritt": "052" },
-    { "name": "meal_items_owner_guard",  "schritt": "052" }
-  ],
-
-  "mindestzeilen": {
-    "_kommentar": "Untergrenzen, keine Sollwerte. Sie fangen den Fall ab, dass eine Tabelle zwar existiert, aber leer geblieben ist.",
-    "foods": 7140,
-    "food_nutrients": 698092,
-    "food_aliases": 30000,
-    "food_tags": 9000,
-    "nutrient_defs": 138,
-    "food_categories": 500,
-    "search_synonyms": 4800,
-    "preparation_kinds": 11,
-    "food_groups": 19
+ "erhoben": "2026-08-16",
+ "anlass": "C-38-Neuaufbau liess meals, meal_items, water_logs und zwei Sichten verschwinden, ohne dass ein Kettenlauf sich beschwerte",
+ "regel": "VON HAND GEPFLEGT. Diese Liste darf ihre Werte NIEMALS aus der laufenden Datenbank beziehen — eine Pruefung, die ihre Sollwerte vom Prueflig nimmt, bestaetigt jeden Zustand. Wer einen Kettenschritt ergaenzt, traegt sein Erzeugnis hier ein.",
+ "quelle": "supabase/README.md, Tabelle 'Lokaler Neubau'. Belegt in docs/ssot/53-kettenluecke.md.",
+ "_zeilenschutz": "Jede Tabelle traegt rls (Zeilenschutz an/aus) und policies (Operationen, die abgedeckt sein muessen). ACHTUNG: rls=true UND policies=[] heisst GESPERRT — niemand kommt an die Daten. Das ist der Fehler aus ADR-0003 und wird als Fehler gemeldet, nicht als Hinweis.",
+ "tabellen": [
+  {
+   "name": "nutrient_defs",
+   "schritt": "Baseline",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
   },
-
-  "_bewusst_nicht_geprueft": {
-    "indizes": "Absichtlich NICHT aufgenommen (Entscheidung 2026-08-16). Indizes sind Laufzeit, nicht Korrektheit — ein fehlender Index macht die Suche langsam, keine Daten falsch oder sichtbar. Die Liste waere ausserdem unpflegbar: jeder Ausdrucksindex aus 072/073 muesste mitgezogen werden.",
-    "spalten": "Nicht geprueft. Eine Tabelle kann den richtigen Namen tragen und die falschen Spalten haben — siehe docs/ssot/53-kettenluecke.md, Abschnitt 'Was diese Pruefung nicht sagt'.",
-    "grants": "Nicht geprueft. RLS ohne GRANT sperrt genauso wie RLS ohne Policy; PostgREST prueft GRANT VOR RLS. Kandidat fuer die naechste Erweiterung."
+  {
+   "name": "foods",
+   "schritt": "Baseline",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
   },
-
-  "nicht_erwartet": {
-    "_kommentar": "Was bewusst NICHT im Schema steht, damit niemand es faelschlich als Luecke meldet.",
-    "nutrition_targets": "gehoert zu Goals (C-06), von keinem Kettenschritt angelegt. [cmd] 055_water_logs.sql haelt das ausdruecklich fest.",
-    "_sortweight_neu": "Hilfstabelle der C-38-Messung, bewusst entfallen"
+  {
+   "name": "food_nutrients",
+   "schritt": "Baseline",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "food_categories",
+   "schritt": "Baseline",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "food_aliases",
+   "schritt": "Baseline",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "food_tags",
+   "schritt": "Baseline",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "tag_definitions",
+   "schritt": "Baseline",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3b (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "food_preferences",
+   "schritt": "Baseline (050)",
+   "rls": true,
+   "policies": [
+    "SELECT",
+    "INSERT",
+    "UPDATE",
+    "DELETE"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3c (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "eigene_zeilen"
+  },
+  {
+   "name": "food_preference_items",
+   "schritt": "Baseline (050)",
+   "rls": true,
+   "policies": [
+    "SELECT",
+    "INSERT",
+    "UPDATE",
+    "DELETE"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "060 3c (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "eigene_zeilen"
+  },
+  {
+   "name": "food_curation_candidates",
+   "schritt": "Baseline (051)",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "061 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "admin"
+  },
+  {
+   "name": "food_curation_decisions",
+   "schritt": "Baseline (051)",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "061 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "admin"
+  },
+  {
+   "name": "preparation_kinds",
+   "schritt": "023",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "023 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "food_groups",
+   "schritt": "023",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "023 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "search_synonyms",
+   "schritt": "024",
+   "rls": true,
+   "policies": [
+    "SELECT"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "024 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "oeffentlich"
+  },
+  {
+   "name": "meals",
+   "schritt": "052",
+   "rls": true,
+   "policies": [
+    "SELECT",
+    "INSERT",
+    "UPDATE",
+    "DELETE"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "052 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "eigene_zeilen"
+  },
+  {
+   "name": "meal_items",
+   "schritt": "052",
+   "rls": true,
+   "policies": [
+    "SELECT",
+    "INSERT",
+    "UPDATE",
+    "DELETE"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "052 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "eigene_zeilen"
+  },
+  {
+   "name": "water_logs",
+   "schritt": "055",
+   "rls": true,
+   "policies": [
+    "SELECT",
+    "INSERT",
+    "UPDATE",
+    "DELETE"
+   ],
+   "grants": {
+    "authenticated": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "055 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
+   "zeilenschutzart": "eigene_zeilen"
   }
+ ],
+ "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
+ "sichten": [
+  {
+   "name": "daily_summary",
+   "schritt": "053",
+   "security_invoker": true,
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "053 vergibt SELECT; service_role erhaelt zusaetzlich ALL aus den DEFAULT PRIVILEGES in 060 3e — [cmd] \"ON TABLES\" umfasst in Postgres auch Sichten"
+  },
+  {
+   "name": "hydration_summary",
+   "schritt": "056",
+   "security_invoker": true,
+   "grants": {
+    "authenticated": [
+     "SELECT"
+    ],
+    "service_role": [
+     "SELECT",
+     "INSERT",
+     "UPDATE",
+     "DELETE",
+     "REFERENCES",
+     "TRIGGER",
+     "TRUNCATE"
+    ]
+   },
+   "grants_herkunft": "056 vergibt SELECT; service_role erhaelt zusaetzlich ALL aus den DEFAULT PRIVILEGES in 060 3e — [cmd] \"ON TABLES\" umfasst in Postgres auch Sichten"
+  }
+ ],
+ "trigger": [
+  {
+   "tabelle": "meals",
+   "name": "meals_touch_updated_at",
+   "schritt": "052"
+  },
+  {
+   "tabelle": "meal_items",
+   "name": "meal_items_touch_updated_at",
+   "schritt": "052"
+  },
+  {
+   "tabelle": "meal_items",
+   "name": "meal_items_owner_guard_trg",
+   "schritt": "052"
+  },
+  {
+   "tabelle": "water_logs",
+   "name": "water_logs_touch_updated_at",
+   "schritt": "055"
+  }
+ ],
+ "_fremdschluessel": "Namentlich, weil beim Ausfall 2026-08-16 meal_items_meal_id_fkey mitverschwand. Ein fehlender Fremdschluessel faellt sonst erst auf, wenn verwaiste Zeilen entstanden sind.",
+ "fremdschluessel": [
+  {
+   "name": "foods_category_id_fkey",
+   "tabelle": "foods",
+   "zeigt_auf": "food_categories",
+   "schritt": "Baseline"
+  },
+  {
+   "name": "food_nutrients_food_id_fkey",
+   "tabelle": "food_nutrients",
+   "zeigt_auf": "foods",
+   "schritt": "Baseline"
+  },
+  {
+   "name": "food_nutrients_nutrient_code_fkey",
+   "tabelle": "food_nutrients",
+   "zeigt_auf": "nutrient_defs",
+   "schritt": "Baseline"
+  },
+  {
+   "name": "food_aliases_food_id_fkey",
+   "tabelle": "food_aliases",
+   "zeigt_auf": "foods",
+   "schritt": "Baseline"
+  },
+  {
+   "name": "food_tags_food_id_fkey",
+   "tabelle": "food_tags",
+   "zeigt_auf": "foods",
+   "schritt": "Baseline"
+  },
+  {
+   "name": "food_tags_tag_code_fkey",
+   "tabelle": "food_tags",
+   "zeigt_auf": "tag_definitions",
+   "schritt": "Baseline"
+  },
+  {
+   "name": "food_categories_parent_id_fkey",
+   "tabelle": "food_categories",
+   "zeigt_auf": "food_categories",
+   "schritt": "Baseline"
+  },
+  {
+   "name": "food_preference_items_food_id_fkey",
+   "tabelle": "food_preference_items",
+   "zeigt_auf": "foods",
+   "schritt": "Baseline (050)"
+  },
+  {
+   "name": "food_preference_items_category_id_fkey",
+   "tabelle": "food_preference_items",
+   "zeigt_auf": "food_categories",
+   "schritt": "Baseline (050)"
+  },
+  {
+   "name": "food_preference_items_tag_code_fkey",
+   "tabelle": "food_preference_items",
+   "zeigt_auf": "tag_definitions",
+   "schritt": "Baseline (050)"
+  },
+  {
+   "name": "food_curation_candidates_food_id_fkey",
+   "tabelle": "food_curation_candidates",
+   "zeigt_auf": "foods",
+   "schritt": "Baseline (051)"
+  },
+  {
+   "name": "food_curation_decisions_candidate_id_fkey",
+   "tabelle": "food_curation_decisions",
+   "zeigt_auf": "food_curation_candidates",
+   "schritt": "Baseline (051)"
+  },
+  {
+   "name": "meal_items_meal_id_fkey",
+   "tabelle": "meal_items",
+   "zeigt_auf": "meals",
+   "schritt": "052"
+  },
+  {
+   "name": "meal_items_food_id_fkey",
+   "tabelle": "meal_items",
+   "zeigt_auf": "foods",
+   "schritt": "052"
+  }
+ ],
+ "funktionen": [
+  {
+   "name": "search_fold",
+   "schritt": "072"
+  },
+  {
+   "name": "food_search",
+   "schritt": "073"
+  },
+  {
+   "name": "such_rang_zubereitung",
+   "schritt": "073"
+  },
+  {
+   "name": "such_rang_wortgrenze",
+   "schritt": "073"
+  },
+  {
+   "name": "food_categories_tree",
+   "schritt": "070"
+  },
+  {
+   "name": "preference_search_preview",
+   "schritt": "070"
+  },
+  {
+   "name": "curation_overview",
+   "schritt": "070"
+  },
+  {
+   "name": "schema_debug",
+   "schritt": "070"
+  },
+  {
+   "name": "touch_updated_at",
+   "schritt": "052"
+  },
+  {
+   "name": "meal_items_owner_guard",
+   "schritt": "052"
+  }
+ ],
+ "mindestzeilen": {
+  "_kommentar": "Untergrenzen, keine Sollwerte. Sie fangen den Fall ab, dass eine Tabelle zwar existiert, aber leer geblieben ist.",
+  "foods": 7140,
+  "food_nutrients": 698092,
+  "food_aliases": 30000,
+  "food_tags": 9000,
+  "nutrient_defs": 138,
+  "food_categories": 500,
+  "search_synonyms": 4800,
+  "preparation_kinds": 11,
+  "food_groups": 19
+ },
+ "_bewusst_nicht_geprueft": {
+  "indizes": "Absichtlich NICHT aufgenommen (Entscheidung 2026-08-16). Indizes sind Laufzeit, nicht Korrektheit — ein fehlender Index macht die Suche langsam, keine Daten falsch oder sichtbar. Die Liste waere ausserdem unpflegbar: jeder Ausdrucksindex aus 072/073 muesste mitgezogen werden.",
+  "spalten": "Nicht geprueft. Eine Tabelle kann den richtigen Namen tragen und die falschen Spalten haben — siehe docs/ssot/53-kettenluecke.md, Abschnitt 'Was diese Pruefung nicht sagt'.",
+  "grants": "Nicht geprueft. RLS ohne GRANT sperrt genauso wie RLS ohne Policy; PostgREST prueft GRANT VOR RLS. Kandidat fuer die naechste Erweiterung."
+ },
+ "nicht_erwartet": {
+  "_kommentar": "Was bewusst NICHT im Schema steht, damit niemand es faelschlich als Luecke meldet.",
+  "nutrition_targets": "gehoert zu Goals (C-06), von keinem Kettenschritt angelegt. [cmd] 055_water_logs.sql haelt das ausdruecklich fest.",
+  "_sortweight_neu": "Hilfstabelle der C-38-Messung, bewusst entfallen"
+ },
+ "_grants": "Rechte je Rolle, aus den SQL-Dateien abgeleitet. GEPRUEFT WIRD EXAKT, nicht \"mindestens\": ein zusaetzliches Recht (GRANT ALL) ist der gefaehrlichere Fall und muss anschlagen. postgres steht NICHT in der Liste — es ist Eigentuemer, seine Rechte sind Eigentum, keine Grants.",
+ "_zeilenschutzart": "Fachliche Aussage je Tabelle, nachgeschlagen in 060/052/055: oeffentlich = USING (true) ist richtig (Stammdaten); eigene_zeilen = die Bedingung MUSS auth.uid() nennen, sonst Datenleck; admin = die Bedingung MUSS public.is_admin() nennen."
 }

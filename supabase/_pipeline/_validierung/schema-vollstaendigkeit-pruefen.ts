@@ -168,6 +168,122 @@ for (const t of SOLL.trigger) {
 }
 console.log(`Trigger     ${trigOk}/${SOLL.trigger.length} vorhanden`)
 
+// =============================================================
+// C-42: GRANTs und Policy-Bedingungen
+// =============================================================
+// `[read]` PostgREST prueft Tabellenrechte VOR RLS — eine Tabelle mit
+// tadellosen Policies, aber ohne GRANT SELECT, ist fuer die Anwendung
+// genauso unerreichbar wie eine gesperrte. Und eine Policy mit
+// USING (true) auf einer Nutzertabelle zeigt jedem alles. Beide Faelle
+// sind STILL: die Pruefung meldete gruen, die Anwendung war blind oder
+// offen.
+
+// --- 6. GRANTs je Rolle, EXAKT ---
+// Nicht "mindestens diese Rechte": ein zusaetzliches Recht (GRANT ALL
+// auf einer Stammdatentabelle) ist der gefaehrlichere Fall und faellt
+// bei einer Mindestpruefung durch.
+// `postgres` bleibt aussen vor — es ist Eigentuemer, seine Rechte sind
+// Eigentum, keine Grants.
+const grantIst = new Map<string, Map<string, Set<string>>>()
+for (const [obj, rolle, recht] of sql(
+  `SELECT table_name, grantee, privilege_type
+   FROM information_schema.role_table_grants
+   WHERE table_schema='nutrition' AND grantee <> 'postgres';`)) {
+  if (!grantIst.has(obj)) grantIst.set(obj, new Map())
+  const m = grantIst.get(obj)!
+  if (!m.has(rolle)) m.set(rolle, new Set())
+  m.get(rolle)!.add(recht)
+}
+
+let grantOk = 0, grantGeprueft = 0
+function pruefeGrants(art: string, eintraege: Array<Record<string, any>>, vorhanden: Set<string>) {
+  for (const e of eintraege) {
+    if (!vorhanden.has(e.name)) continue          // Fehlen ist oben gemeldet
+    if (!e.grants) continue
+    grantGeprueft++
+    let sauber = true
+    const ist = grantIst.get(e.name) ?? new Map<string, Set<string>>()
+    for (const [rolle, soll] of Object.entries(e.grants as Record<string, string[]>)) {
+      const habe = ist.get(rolle) ?? new Set<string>()
+      const fehlend = soll.filter(r => !habe.has(r))
+      const zuviel = [...habe].filter(r => !soll.includes(r))
+      if (fehlend.length) {
+        sauber = false
+        fehler.push(`GRANT: ${art} ${e.name} fehlt ${rolle}:${fehlend.join(',')}` +
+          ` — die Anwendung kommt nicht heran (PostgREST prueft Grants vor RLS)` +
+          ` — Herkunft ${e.grants_herkunft ?? e.schritt}`)
+      }
+      if (zuviel.length) {
+        sauber = false
+        fehler.push(`GRANT: ${art} ${e.name} hat ZU VIEL ${rolle}:${zuviel.join(',')}` +
+          ` — Herkunft ${e.grants_herkunft ?? e.schritt}`)
+      }
+    }
+    // Rollen, die ueberhaupt nicht vorgesehen sind.
+    for (const rolle of ist.keys()) {
+      if (!(rolle in (e.grants as Record<string, string[]>))) {
+        sauber = false
+        fehler.push(`GRANT: ${art} ${e.name} traegt Rechte fuer die nicht ` +
+          `vorgesehene Rolle ${rolle} (${[...ist.get(rolle)!].join(',')})`)
+      }
+    }
+    if (sauber) grantOk++
+  }
+}
+pruefeGrants('Tabelle', SOLL.tabellen, istTabellen)
+pruefeGrants('Sicht', SOLL.sichten, istSichten)
+console.log(`GRANTs      ${grantOk}/${grantGeprueft} Objekte wie erwartet`)
+
+// --- 7. Policy-BEDINGUNGEN, nicht nur ihre Existenz ---
+// Nicht zeichengenau vergleichen: Postgres normalisiert den Ausdruck,
+// und jede Umformulierung wuerde die Pruefung brechen. Geprueft wird
+// die EIGENSCHAFT, auf die es ankommt:
+//   oeffentlich   -> USING (true) ist richtig (Stammdaten)
+//   eigene_zeilen -> die Bedingung MUSS auth.uid() nennen
+//   admin         -> die Bedingung MUSS public.is_admin() nennen
+const bedIst = new Map<string, string[]>()
+for (const [tab, pol, using, check] of sql(
+  `SELECT tablename, policyname, COALESCE(qual,''), COALESCE(with_check,'')
+   FROM pg_policies WHERE schemaname='nutrition';`)) {
+  if (!bedIst.has(tab)) bedIst.set(tab, [])
+  bedIst.get(tab)!.push(`${pol}${using}${check}`)
+}
+
+let bedOk = 0, bedGeprueft = 0
+for (const t of SOLL.tabellen) {
+  if (!istTabellen.has(t.name)) continue
+  const art = t.zeilenschutzart
+  if (!art) continue
+  bedGeprueft++
+  let sauber = true
+  for (const eintrag of bedIst.get(t.name) ?? []) {
+    const [pol, using, check] = eintrag.split('')
+    // INSERT-Policies tragen die Bedingung in with_check, nicht in qual.
+    const ausdruck = (using + ' ' + check).trim()
+    const leerOderWahr = ausdruck === '' || /^true$/i.test(ausdruck)
+    const nenntUid = /auth\.uid\(\)/.test(ausdruck)
+    const nenntAdmin = /is_admin\(\)/.test(ausdruck)
+
+    if (art === 'eigene_zeilen' && (leerOderWahr || !nenntUid)) {
+      sauber = false
+      fehler.push(`POLICY-BEDINGUNG: ${t.name}.${pol} fuehrt "nur eigene Zeilen", ` +
+        `nennt aber kein auth.uid() — Bedingung "${ausdruck.slice(0, 40)}" ` +
+        `zeigt jedem alles — Schritt ${t.schritt}`)
+    } else if (art === 'admin' && !nenntAdmin) {
+      sauber = false
+      fehler.push(`POLICY-BEDINGUNG: ${t.name}.${pol} soll auf is_admin() pruefen, ` +
+        `Bedingung ist "${ausdruck.slice(0, 40)}" — Schritt ${t.schritt}`)
+    } else if (art === 'oeffentlich' && !leerOderWahr) {
+      // Kein Fehler: enger als noetig schadet nicht. Aber es weicht von
+      // der hinterlegten fachlichen Aussage ab und gehoert gemeldet.
+      warnung.push(`POLICY-BEDINGUNG: ${t.name}.${pol} ist als "oeffentlich lesbar" ` +
+        `gefuehrt, traegt aber die Bedingung "${ausdruck.slice(0, 40)}"`)
+    }
+  }
+  if (sauber) bedOk++
+}
+console.log(`Policy-Bed. ${bedOk}/${bedGeprueft} Tabellen wie erwartet`)
+
 // --- 5. Fremdschluessel namentlich ---
 const fkIst = new Set(sql(
   `SELECT conname FROM pg_constraint
