@@ -128,7 +128,7 @@ Altbestand ist Material, keine Warteschlange.
 | `brainstorm/nutrition_README.md` | 5 KB | offen | — |
 | `brainstorm/nutrition_RESEARCH.md` | 11 KB | offen | — |
 | `brainstorm/tdee-formulas.md` | 5 KB | offen | — |
-| `specs/00_decisions/NUTRITION_NEXT_SPEC_DECISIONS.md` | 22 KB | gelesen | Abschnitt 3 und 4 in C-34; Rest offen |
+| `specs/00_decisions/NUTRITION_NEXT_SPEC_DECISIONS.md` | 22 KB | gelesen | Abschnitt 3 und 4 in C-34. **Rest 2026-08-15 durchgegangen** (`docs/ssot/60-…`): 12/14/16 decken sich mit dem Bestand, 8 widerspricht SPEC_09, 5 verlangt ein Tag-Quellenfeld das fehlt (`[cmd]` 16 Tags definiert, 4 vergeben), 4 verlangt vier Ranking-Boosts die fehlen. |
 | `specs/01_current_specs/SPEC_01_MODULE_CONTRACT.md` | 15 KB | offen | — |
 | `specs/01_current_specs/SPEC_02_ENTITIES.md` | 20 KB | offen | — |
 | `specs/01_current_specs/SPEC_03_USER_FLOWS.md` | 14 KB | offen | — |
@@ -137,7 +137,7 @@ Altbestand ist Material, keine Warteschlange.
 | `specs/01_current_specs/SPEC_06_DATABASE_SCHEMA.md` | 64 KB | gelesen | Ist/Soll-Abgleich in `docs/ssot/53-nutrition-schema-abgleich.md`; Tabellenebene erledigt, Spaltenebene offen |
 | `specs/01_current_specs/SPEC_07_API.md` | 22 KB | offen | — |
 | `specs/01_current_specs/SPEC_08_IMPORT_PIPELINE.md` | 16 KB | aufgeloest | Scoring-Abschnitt durch SPEC_05 abgeloest (C-38, `docs/ssot/51-sortweight-formel.md` Teil 3). **Ein Rest bleibt offen:** die U/V-Aufteilung nach der zweiten Codestelle steht nur hier, nicht in SPEC_05 — Produktentscheidung, nicht angewandt. Uebrige Abschnitte (Import, Kategoriezuweisung) ungelesen. |
-| `specs/01_current_specs/SPEC_09_SCORING.md` | 17 KB | offen | — |
+| `specs/01_current_specs/SPEC_09_SCORING.md` | 17 KB | gelesen | `docs/ssot/60-nutrition-specs-auswertung.md`. **Registervermutung ausgeraeumt:** `[cmd]` 0 Vorkommen von `sort_weight` — andere Kennzahl als C-38 (Tages-Compliance 0–100, nie gespeichert), keine dritte Formelfassung. **Widerspruch offen:** RDA-Ort gegen Abschnitt 8 von NUTRITION_NEXT_SPEC_DECISIONS; `[cmd]` rda_male/rda_female sind bei allen 138 Naehrstoffen leer. |
 | `specs/01_current_specs/SPEC_10_COMPONENTS.md` | 13 KB | offen | — |
 | `specs/02_patches/SPEC_02_PASS2_ENTITIES.md` | 11 KB | offen | — |
 | `specs/02_patches/SPEC_02_PATCH_ENTITY07_CUSTOMFOOD.md` | 2 KB | aufgeloest | TODO C-34 (Tabellenentwurf `foods_custom`) |
@@ -154,13 +154,13 @@ Altbestand ist Material, keine Warteschlange.
 | `specs/02_patches/SPEC_10_PATCH_APRIL2026.md` | 2 KB | offen | — |
 | `specs/03_sql/NUTRIENT_REFERENCE_VALUES_SEED_STRUCTURE.md` | 6 KB | offen | — |
 | `specs/03_sql/SPEC_06_V1_MIGRATION.sql` | 17 KB | offen | — |
-| `specs/04_adrs/ADR_BLS_ONLY.md` | 2 KB | offen | — |
+| `specs/04_adrs/ADR_BLS_ONLY.md` | 2 KB | gelesen | `docs/ssot/60-…`. **Nennt KEINE Ausnahmen** fuer Supplements oder Thai — die in C-34 angenommenen Ausnahmen traegt sie nicht. Vier `source`-Werte (user/manual/import/admin), `mealcam` nicht darunter. |
 | `specs/04_adrs/ADR_COACH_PERMISSIONS_V1.md` | 2 KB | offen | — |
 | `specs/04_adrs/ADR_CUSTOM_FOODS_V1.md` | 2 KB | aufgeloest | TODO C-34 (Modell, Pflichtfelder, `source`-Werte) |
 | `specs/04_adrs/ADR_GHOST_ENTRY_RECIPE.md` | 2 KB | offen | — |
 | `specs/04_adrs/ADR_IMPROVEMENTS_PACKAGE.md` | 7 KB | offen | — |
-| `specs/04_adrs/ADR_MEALCAM_CONSENT.md` | 2 KB | offen | — |
-| `specs/04_adrs/ADR_MEALCAM_V1.md` | 2 KB | offen | — |
+| `specs/04_adrs/ADR_MEALCAM_CONSENT.md` | 2 KB | gelesen | `docs/ssot/60-…`. Privat als Standard, Opt-in getrennt vom Onboarding, jederzeit widerrufbar. **Fuer C-18 relevant:** ob die Regel auch fuer Suchbegriffe gilt, sagt keine Spec — Entscheidung Tom. |
+| `specs/04_adrs/ADR_MEALCAM_V1.md` | 2 KB | gelesen | `docs/ssot/60-…`. **Loest den erwarteten `source`-Widerspruch NICHT** — erwaehnt `source` mit keinem Wort. MealCam darf nie automatisch finale Meal Items schreiben; Vision-Anbieter bewusst offen. |
 | `specs/04_adrs/ADR_NUTRITION_PREFERENCES_V1.md` | 3 KB | offen | — |
 | `specs/04_adrs/ADR_RECIPES_SCHEMA_ONLY.md` | 1 KB | offen | — |
 | `specs/04_adrs/ADR_RECIPE_SOURCE_BUDDY.md` | 1 KB | offen | — |
