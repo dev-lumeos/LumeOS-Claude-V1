@@ -10,6 +10,9 @@
 // Heute sagt das Tagebuch „keine Ziele". Das war richtig, solange es
 // keine Zieltabelle gab. Jetzt gibt es sie — und der Satz muss sagen,
 // WAS fehlt.
+'use client'
+
+import * as React from 'react'
 import Link from 'next/link'
 import type { Route } from 'next'
 import { Icon } from '@lumeos/ui'
@@ -163,13 +166,60 @@ export function Zielhinweis({
             getrennt</strong>, damit nicht jede Profilaenderung ein neues Ziel
             anlegt.
           </p>
-          <p style={{ marginTop: 6, color: 'var(--fg-dim)', fontSize: 11 }}>
-            Das Setzen ist GO-05. Bis dahin bleiben die Ringe leer.
-          </p>
+          <div style={{ marginTop: 10 }}>
+            <ZielSetzen />
+          </div>
         </div>
       </div>
     )
   }
 
   return null
+}
+
+
+/**
+ * Aus dem Vorschlag ein Ziel machen.
+ *
+ * `[read]` Der eine Klick, der Rechnen und Speichern verbindet. Ohne
+ * ihn bliebe die Trennung aus GO-04 eine Sackgasse: die Formel rechnet,
+ * und niemand kann das Ergebnis festhalten.
+ */
+function ZielSetzen() {
+  const [laeuft, setLaeuft] = React.useState(false)
+  const [fehler, setFehler] = React.useState<string | null>(null)
+
+  async function setzen() {
+    setLaeuft(true)
+    setFehler(null)
+    try {
+      const a = await fetch('/api/profile/ziele', { method: 'POST' })
+      const d = await a.json().catch(() => ({}))
+      if (!a.ok) {
+        setFehler(d?.error ?? `HTTP ${a.status}`)
+        return
+      }
+      window.location.reload()
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaeuft(false)
+    }
+  }
+
+  return (
+    <>
+      <button type="button" className="v2-btn v2-btn-accent"
+              disabled={laeuft} onClick={setzen}>
+        <Icon name="check" className="v2-ic v2-ic-sm" />
+        {laeuft ? 'Wird gesetzt …' : 'Als Tagesziel setzen'}
+      </button>
+      <span style={{ marginLeft: 10, fontSize: 10.5, color: 'var(--fg-dim)' }}>
+        gilt ab heute — aeltere Tage behalten ihr Ziel
+      </span>
+      {fehler && (
+        <div className="v2-feldfehler" style={{ marginTop: 6 }}>{fehler}</div>
+      )}
+    </>
+  )
 }
