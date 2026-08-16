@@ -190,3 +190,37 @@ docs/ssot/daten/BLS_4_0_*
 # Zwischenstand der Abdeckungsmessung (C-23). Wird bei jedem Lauf neu
 # geschrieben, damit ein Abbruch nicht alles kostet — kein Bestandteil.
 supabase/_pipeline/daten/_abdeckung-zwischenstand.json
+
+# skua machine-local cache (graphs, smoke browser binaries + screenshots)
+.skua/cache/
+
+# --- Werkzeuge und Zwischenstaende, 2026-08-16 -------------------------
+# Toms lokale skua-Installation: Hooks, Skills, Tickets, Konfiguration.
+# Gehoert zu seiner Arbeitsumgebung, nicht zum Produkt.
+#
+# ACHTUNG: .claude/hooks/ und .claude/skills/ enthalten BEIDES -- die
+# bereits getrackten Projekt-Skills (nutrition-specialist,
+# goals-specialist, protect-paths.ps1 ...) bleiben getrackt, weil
+# .gitignore auf getrackte Dateien nicht wirkt. Nur NEUE Dateien dort
+# werden ignoriert. Ein neuer Projekt-Skill braucht `git add -f`.
+.claude/commands/
+.claude/hooks/
+.claude/skills/
+.skua/
+.skua-install-audit/
+.tickets/
+skua.config.json
+
+# Vorlaufige Schemasicherungen aus Kettenlaeufen. Der Runner legt sie vor
+# jedem Lauf an; an manchen Tagen sind das zwei Dutzend. Bewusst
+# aufbewahrte Staende werden einzeln mit `git add -f` aufgenommen.
+backup/schema/*_c43_vor_kettenlauf.sql
+backup/schema/schema-before-*.sql
+
+# Hilfsskripte des Orchestrators. Werden geschrieben, ausgefuehrt und
+# geloescht; was liegen bleibt, ist Versehen.
+backup/_*.py
+
+# Toms Design-Auswertung. Eigenes Material, sehr lange Pfade -- bei
+# rekursiven Suchen ausschliessen.
+docs/design-system-analysis/
