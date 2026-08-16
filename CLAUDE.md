@@ -35,9 +35,18 @@ und sicher nicht die Arbeiter."*
 melden. Der Orchestrator liest den Bericht, prueft nach und committet.
 Tom sieht an und pusht.
 
-`[cmd]` Seit 2026-08-16 gesperrt: `git add`, `git commit`, `git stage`,
-`git rebase`, `git cherry-pick`, `git revert` — zusaetzlich zu
-`git push`, `git reset --hard`, `git clean`.
+`[cmd]` Seit 2026-08-16 in `.claude/settings.json` gesperrt: `git add`,
+`git commit`, `git stage`, `git rebase`, `git cherry-pick`,
+`git revert` — zusaetzlich zu `git push`, `git reset --hard`,
+`git clean`.
+
+**Die Sperre greift nur bei Claude Code.** `[cmd]` `.claude/settings.json`
+ist seine Konfiguration; Codex liest sie nicht — belegt am 2026-08-16:
+Sperre um 20:51 gesetzt, Codex committete um 20:53.
+
+**Bei Codex steht es deshalb im Auftragstext**, in jedem Auftrag:
+*„Nicht committen, nicht stagen — melden."* Das ist schwaecher als eine
+Sperre, aber Codex haelt sich an Textvorgaben.
 
 **Warum:** Zwei Agenten teilen sich einen Git-Index. An einem Tag ist
 das dreimal schiefgegangen — ein Commit mit sechs fremden Dateien, und
