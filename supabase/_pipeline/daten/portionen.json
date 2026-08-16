@@ -1,0 +1,300 @@
+{
+  "version": 1,
+  "herkunft": {
+    "quelle": "referenz/lumeos-2026/scripts/seed-portions.py",
+    "quelle_schema": "referenz/lumeos-2026/supabase/migrations/002_create_nutrition_tables.sql",
+    "bewertung": "Aus dem Vorgaengerrepo uebernommen; Grammwerte sind dort nicht quellenbelegt und werden als haushaltsuebliche Schaetzwerte gefuehrt.",
+    "kanonisch": "meal_items.amount_g bleibt die einzige Rechengroesse. Portionen sind Eingabehilfe."
+  },
+  "portion_sets": [
+    {
+      "id": "basis_100g",
+      "begruendung": "Universelle Gramm-Eingabe aus dem Vorgaengerrepo; bewusst nicht fuer Wuerzmittel/Zutaten R, weil dort Gramm oder konkrete Rezeptmenge haeufig richtiger ist.",
+      "selector": {
+        "bls_prefixes": ["B", "C", "D", "E", "F", "G", "H", "K", "M", "N", "P", "Q", "S", "T", "U", "V", "W", "X", "Y"]
+      },
+      "portions": [
+        { "name_de": "100 g", "name_en": "100 g", "amount_g": 100, "sort_order": 1, "is_default": true }
+      ]
+    },
+    {
+      "id": "brot",
+      "begruendung": "Vorgaengerrepo: Kategorie Brot.",
+      "selector": { "bls_prefixes": ["B"] },
+      "portions": [
+        { "name_de": "1 Scheibe", "name_en": "1 slice", "amount_g": 30, "sort_order": 10 },
+        { "name_de": "1 dicke Scheibe", "name_en": "1 thick slice", "amount_g": 50, "sort_order": 11 },
+        { "name_de": "1 Brötchen", "name_en": "1 roll", "amount_g": 60, "sort_order": 12 },
+        { "name_de": "1 Toast", "name_en": "1 toast", "amount_g": 25, "sort_order": 13 }
+      ]
+    },
+    {
+      "id": "backwaren_stueck",
+      "begruendung": "Backwaren und Kuchen werden im Alltag stueck- oder scheibenweise erfasst.",
+      "selector": { "bls_prefixes": ["D"] },
+      "portions": [
+        { "name_de": "1 Stück", "name_en": "1 piece", "amount_g": 80, "sort_order": 10 },
+        { "name_de": "1 Scheibe", "name_en": "1 slice", "amount_g": 60, "sort_order": 11 }
+      ]
+    },
+    {
+      "id": "obst_frucht",
+      "begruendung": "Vorgaengerrepo: Kategorie Obst; Saefte und Nektare bekommen eigene Trinkportionen.",
+      "selector": {
+        "bls_prefixes": ["F"],
+        "name_excludes_any": ["saft", "nektar", "sirup"]
+      },
+      "portions": [
+        { "name_de": "1 Stück (mittel)", "name_en": "1 piece (medium)", "amount_g": 120, "sort_order": 10 },
+        { "name_de": "1 Stück (klein)", "name_en": "1 piece (small)", "amount_g": 80, "sort_order": 11 },
+        { "name_de": "1 Stück (groß)", "name_en": "1 piece (large)", "amount_g": 180, "sort_order": 12 },
+        { "name_de": "1 Handvoll", "name_en": "1 handful", "amount_g": 50, "sort_order": 13 },
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 150, "sort_order": 14 }
+      ]
+    },
+    {
+      "id": "obst_saft",
+      "begruendung": "Saft ist ein eigenes Erzeugnis; Trinkmenge statt Stueck.",
+      "selector": {
+        "bls_prefixes": ["F"],
+        "name_includes_any": ["saft", "nektar", "sirup"]
+      },
+      "portions": [
+        { "name_de": "1 Glas", "name_en": "1 glass", "amount_g": 200, "sort_order": 10 },
+        { "name_de": "1 kleine Flasche", "name_en": "1 small bottle", "amount_g": 330, "sort_order": 11 }
+      ]
+    },
+    {
+      "id": "gemuese",
+      "begruendung": "Vorgaengerrepo: Kategorie Gemuese.",
+      "selector": { "bls_prefixes": ["G"] },
+      "portions": [
+        { "name_de": "1 Stück (mittel)", "name_en": "1 piece (medium)", "amount_g": 100, "sort_order": 10 },
+        { "name_de": "1 Portion gekocht", "name_en": "1 serving cooked", "amount_g": 150, "sort_order": 11 },
+        { "name_de": "1 Portion Salat", "name_en": "1 salad serving", "amount_g": 80, "sort_order": 12 },
+        { "name_de": "1 Handvoll", "name_en": "1 handful", "amount_g": 50, "sort_order": 13 }
+      ]
+    },
+    {
+      "id": "nuesse_samen",
+      "begruendung": "Vorgaengerrepo: Kategorie Nuesse/Nuss.",
+      "selector": { "bls_prefixes": ["H"] },
+      "portions": [
+        { "name_de": "1 Handvoll", "name_en": "1 handful", "amount_g": 30, "sort_order": 10 },
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 25, "sort_order": 11 }
+      ]
+    },
+    {
+      "id": "getreide_roh",
+      "begruendung": "Vorgaengerrepo: Kategorie Getreide; Getreidedrinks sind ausgeschlossen.",
+      "selector": {
+        "bls_prefixes": ["C"],
+        "name_excludes_any": ["drink"]
+      },
+      "portions": [
+        { "name_de": "1 Portion Müsli", "name_en": "1 portion muesli", "amount_g": 50, "sort_order": 10 },
+        { "name_de": "1 Portion gekocht", "name_en": "1 serving cooked", "amount_g": 180, "sort_order": 11 },
+        { "name_de": "1 Tasse roh", "name_en": "1 cup raw", "amount_g": 80, "sort_order": 12 }
+      ]
+    },
+    {
+      "id": "reis",
+      "begruendung": "Vorgaengerrepo: Kategorie Reis.",
+      "selector": {
+        "bls_prefixes": ["C", "X"],
+        "name_includes_any": ["reis"]
+      },
+      "portions": [
+        { "name_de": "1 Portion roh", "name_en": "1 serving raw", "amount_g": 75, "sort_order": 20 },
+        { "name_de": "1 Portion gekocht", "name_en": "1 serving cooked", "amount_g": 180, "sort_order": 21 }
+      ]
+    },
+    {
+      "id": "getreidedrinks",
+      "begruendung": "Getreidedrinks sind Getraenke, nicht trockene Getreideportionen.",
+      "selector": {
+        "bls_prefixes": ["C"],
+        "name_includes_any": ["drink"]
+      },
+      "portions": [
+        { "name_de": "1 Glas", "name_en": "1 glass", "amount_g": 250, "sort_order": 10 }
+      ]
+    },
+    {
+      "id": "eier",
+      "begruendung": "Vorgaengerrepo: Kategorie Ei.",
+      "selector": { "bls_code_prefixes": ["E1"] },
+      "portions": [
+        { "name_de": "1 Ei (Größe M)", "name_en": "1 egg (medium)", "amount_g": 58, "sort_order": 10 },
+        { "name_de": "1 Ei (Größe L)", "name_en": "1 egg (large)", "amount_g": 68, "sort_order": 11 },
+        { "name_de": "1 Eigelb", "name_en": "1 egg yolk", "amount_g": 18, "sort_order": 12 },
+        { "name_de": "1 Eiweiß", "name_en": "1 egg white", "amount_g": 33, "sort_order": 13 }
+      ]
+    },
+    {
+      "id": "teigwaren",
+      "begruendung": "Vorgaengerrepo: Kategorie Nudeln.",
+      "selector": { "bls_code_prefixes": ["E4", "E5", "E6", "E8", "E9"] },
+      "portions": [
+        { "name_de": "1 Portion roh", "name_en": "1 serving raw", "amount_g": 80, "sort_order": 10 },
+        { "name_de": "1 Portion gekocht", "name_en": "1 serving cooked", "amount_g": 200, "sort_order": 11 }
+      ]
+    },
+    {
+      "id": "kartoffeln",
+      "begruendung": "Vorgaengerrepo: Kategorie Kartoffel.",
+      "selector": { "bls_code_prefixes": ["K1", "K2", "K3", "K4"] },
+      "portions": [
+        { "name_de": "1 Stück (mittel)", "name_en": "1 piece (medium)", "amount_g": 130, "sort_order": 10 },
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 200, "sort_order": 11 }
+      ]
+    },
+    {
+      "id": "pilze",
+      "begruendung": "Pilze liegen im aktuellen BLS unter K7; alltagstauglicher als Kartoffelportionen.",
+      "selector": { "bls_code_prefixes": ["K7"] },
+      "portions": [
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 150, "sort_order": 10 },
+        { "name_de": "1 Handvoll", "name_en": "1 handful", "amount_g": 70, "sort_order": 11 }
+      ]
+    },
+    {
+      "id": "milch_joghurt_quark",
+      "begruendung": "Vorgaengerrepo: Kategorien Milch, Joghurt, Quark.",
+      "selector": {
+        "bls_prefixes": ["M"],
+        "name_includes_any": ["milch", "joghurt", "quark", "ayran", "kefir", "sahne"]
+      },
+      "portions": [
+        { "name_de": "1 Glas", "name_en": "1 glass", "amount_g": 250, "sort_order": 10 },
+        { "name_de": "1 Becher", "name_en": "1 cup/container", "amount_g": 200, "sort_order": 11 },
+        { "name_de": "1 Becher Joghurt", "name_en": "1 yogurt container", "amount_g": 150, "sort_order": 12 },
+        { "name_de": "1 Portion Quark", "name_en": "1 curd serving", "amount_g": 150, "sort_order": 13 }
+      ]
+    },
+    {
+      "id": "kaese",
+      "begruendung": "Vorgaengerrepo: Kategorie Milch/Kaese.",
+      "selector": {
+        "bls_prefixes": ["M"],
+        "name_includes_any": ["käse", "kaese", "feta", "mozzarella", "gouda", "edamer", "emmentaler"]
+      },
+      "portions": [
+        { "name_de": "1 Scheibe Käse", "name_en": "1 slice cheese", "amount_g": 25, "sort_order": 20 },
+        { "name_de": "1 Portion Käse", "name_en": "1 cheese serving", "amount_g": 40, "sort_order": 21 }
+      ]
+    },
+    {
+      "id": "fleisch",
+      "begruendung": "Vorgaengerrepo: Kategorie Fleisch.",
+      "selector": { "bls_prefixes": ["U"] },
+      "portions": [
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 150, "sort_order": 10 },
+        { "name_de": "1 Scheibe", "name_en": "1 slice", "amount_g": 30, "sort_order": 11 },
+        { "name_de": "1 Steak", "name_en": "1 steak", "amount_g": 200, "sort_order": 12 },
+        { "name_de": "1 Schnitzel", "name_en": "1 schnitzel", "amount_g": 180, "sort_order": 13 }
+      ]
+    },
+    {
+      "id": "gefluegel",
+      "begruendung": "Vorgaengerrepo: Fleischportionen, um Hähnchenbrustfilet ergaenzt.",
+      "selector": { "bls_prefixes": ["V"] },
+      "portions": [
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 150, "sort_order": 10 },
+        { "name_de": "1 Scheibe", "name_en": "1 slice", "amount_g": 30, "sort_order": 11 },
+        { "name_de": "1 Hähnchenbrustfilet", "name_en": "1 chicken breast", "amount_g": 175, "sort_order": 12 }
+      ]
+    },
+    {
+      "id": "wurst",
+      "begruendung": "Vorgaengerrepo: Kategorie Wurst/Aufschnitt.",
+      "selector": { "bls_prefixes": ["W"] },
+      "portions": [
+        { "name_de": "1 Scheibe", "name_en": "1 slice", "amount_g": 20, "sort_order": 10 },
+        { "name_de": "1 Würstchen", "name_en": "1 sausage", "amount_g": 80, "sort_order": 11 },
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 50, "sort_order": 12 }
+      ]
+    },
+    {
+      "id": "fisch",
+      "begruendung": "Vorgaengerrepo: Kategorie Fisch.",
+      "selector": { "bls_prefixes": ["T"] },
+      "portions": [
+        { "name_de": "1 Filet", "name_en": "1 fillet", "amount_g": 150, "sort_order": 10 },
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 150, "sort_order": 11 },
+        { "name_de": "1 Dose (abgetropft)", "name_en": "1 can (drained)", "amount_g": 120, "sort_order": 12 }
+      ]
+    },
+    {
+      "id": "getraenke",
+      "begruendung": "Vorgaengerrepo: Kategorie Getraenke.",
+      "selector": { "bls_prefixes": ["N", "P"] },
+      "portions": [
+        { "name_de": "1 Glas (200 ml)", "name_en": "1 glass (200 ml)", "amount_g": 200, "sort_order": 10 },
+        { "name_de": "1 Flasche (330 ml)", "name_en": "1 bottle (330 ml)", "amount_g": 330, "sort_order": 11 },
+        { "name_de": "1 Flasche (500 ml)", "name_en": "1 bottle (500 ml)", "amount_g": 500, "sort_order": 12 },
+        { "name_de": "1 Dose (330 ml)", "name_en": "1 can (330 ml)", "amount_g": 330, "sort_order": 13 }
+      ]
+    },
+    {
+      "id": "oele",
+      "begruendung": "Vorgaengerrepo: Kategorie Oel; 1 EL bewusst 10 g statt universell 15 g.",
+      "selector": {
+        "bls_prefixes": ["Q"],
+        "name_includes_any": ["öl", "oel"]
+      },
+      "portions": [
+        { "name_de": "1 EL", "name_en": "1 tablespoon", "amount_g": 10, "sort_order": 10 },
+        { "name_de": "1 TL", "name_en": "1 teaspoon", "amount_g": 4, "sort_order": 11 }
+      ]
+    },
+    {
+      "id": "butter_margarine_fette",
+      "begruendung": "Vorgaengerrepo: Butter/Margarine.",
+      "selector": {
+        "bls_prefixes": ["Q"],
+        "name_includes_any": ["butter", "margarine", "fett", "schmalz"]
+      },
+      "portions": [
+        { "name_de": "1 Portion (dünn)", "name_en": "1 thin spread", "amount_g": 5, "sort_order": 20 },
+        { "name_de": "1 Portion (dick)", "name_en": "1 thick spread", "amount_g": 15, "sort_order": 21 },
+        { "name_de": "1 Stück (20 g)", "name_en": "1 pat (20 g)", "amount_g": 20, "sort_order": 22 }
+      ]
+    },
+    {
+      "id": "zucker_sirup_honig",
+      "begruendung": "Vorgaengerrepo: Zucker, Honig, Marmelade.",
+      "selector": {
+        "bls_prefixes": ["S", "R"],
+        "name_includes_any": ["zucker", "sirup", "honig", "marmelade", "konfitüre", "konfituere"]
+      },
+      "portions": [
+        { "name_de": "1 TL", "name_en": "1 teaspoon", "amount_g": 5, "sort_order": 10 },
+        { "name_de": "1 EL", "name_en": "1 tablespoon", "amount_g": 12, "sort_order": 11 },
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 20, "sort_order": 12 }
+      ]
+    },
+    {
+      "id": "schokolade_suesswaren",
+      "begruendung": "Vorgaengerrepo: Schokolade; fuer Suesswaren auf Stueck/Riegel erweitert.",
+      "selector": { "bls_prefixes": ["S"] },
+      "portions": [
+        { "name_de": "1 Stück", "name_en": "1 piece", "amount_g": 5, "sort_order": 20 },
+        { "name_de": "1 Riegel", "name_en": "1 bar", "amount_g": 25, "sort_order": 21 },
+        { "name_de": "1 Tafel", "name_en": "1 tablet", "amount_g": 100, "sort_order": 22 }
+      ]
+    },
+    {
+      "id": "mehl_staerke",
+      "begruendung": "Vorgaengerrepo: Kategorie Mehl.",
+      "selector": {
+        "bls_prefixes": ["C", "K"],
+        "name_includes_any": ["mehl", "stärke", "staerke"]
+      },
+      "portions": [
+        { "name_de": "1 EL", "name_en": "1 tablespoon", "amount_g": 10, "sort_order": 30 },
+        { "name_de": "1 Tasse", "name_en": "1 cup", "amount_g": 125, "sort_order": 31 }
+      ]
+    }
+  ]
+}
