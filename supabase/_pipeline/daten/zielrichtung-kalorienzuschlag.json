@@ -1,0 +1,73 @@
+{
+  "erhoben": "2026-08-16",
+  "anlass": "GO-02 - die Zuordnung von profiles.nutrition_goal auf einen Kalorienzuschlag. Ohne sie weiss GO-04 nicht, ob Defizit oder Ueberschuss - das ist das Vorzeichen.",
+  "ziel": "Je Zielrichtung ein Faktor auf den TDEE. Keine Phasenmodelle, keine Makro-Splits - die stehen in der Funktion.",
+  "quelle": [
+    "referenz/lumeos-2026/src/modules/onboarding/utils/calculateTDEE.ts (goalModifiers, Prozent des TDEE)",
+    "referenz/lumeos-2026/src/modules/nutrition/hooks/useTDEE.ts (GOAL_ADJUSTMENTS, absolute kcal)",
+    "referenz/lumeos-2026/src/modules/onboarding/components/Step4Goal.tsx (12 Ziel-Kennungen)",
+    "docs/specs/Goals/PHASE_MODELS.md (Defizit- und Ueberschussbereiche)",
+    "[cmd] public.profiles CHECK-Constraint profiles_nutrition_goal_check"
+  ],
+
+  "_warum_prozent": "Der Vorgaenger hat BEIDE Wege: calculateTDEE.ts rechnet mit Prozent des TDEE, useTDEE.ts mit absoluten kcal (-500/0/+250/+500). Gewaehlt ist Prozent. Grund: ein festes Defizit von 500 kcal ist bei einem TDEE von 1900 ein Viertel und bei 3400 ein Siebtel - dieselbe Zahl bedeutet fuer zwei Menschen etwas voellig anderes. PHASE_MODELS.md gibt die Zielrate ohnehin relativ an ('0.5-0.75% BW/week').",
+
+  "_warum_nicht_die_phasen": "PHASE_MODELS.md kennt neun Phasen (fat_loss, lean_bulk, maintenance, recomp, contest_prep, reverse_diet, expert_bb_annual, mini_cut, peak_week). profiles.nutrition_goal kennt sechs Werte. Diese Datei bildet NUR die sechs vorhandenen ab - die Phasen sind GO-06/GO-07 und brauchen eine eigene Tabelle mit Verlauf. Wer hier neun Phasen einbaut, baut eine Tabelle in eine Datei.",
+
+  "eintraege": [
+    {
+      "nutrition_goal": "lose_weight",
+      "kalorienfaktor": -0.20,
+      "status": "gesetzt",
+      "vorgaenger": "moderate_cut: -0.20",
+      "begruendung": "Der Vorgaenger fuehrt drei Cut-Stufen (-0.15 / -0.20 / -0.25). Unser Feld kennt nur eine. Genommen ist die mittlere: [read] PHASE_MODELS.md nennt fuer 'moderate' ein Defizit von 400-600 kcal, was bei einem TDEE von 2000-3000 genau -20 % entspricht. Die aggressive Stufe traegt dort eine Hoechstdauer von 8 Wochen - eine Begrenzung, die es hier noch nicht gibt."
+    },
+    {
+      "nutrition_goal": "maintain",
+      "kalorienfaktor": 0.0,
+      "status": "gesetzt",
+      "vorgaenger": "maintain: 0",
+      "begruendung": "Beide Vorgaengerdateien sind sich einig. [read] PHASE_MODELS.md: 'TDEE +/- 100'."
+    },
+    {
+      "nutrition_goal": "gain_muscle",
+      "kalorienfaktor": 0.10,
+      "status": "gesetzt",
+      "vorgaenger": "lean_bulk: 0.10",
+      "begruendung": "Der Vorgaenger fuehrt drei Bulk-Stufen (0.10 / 0.15 / 0.20). Genommen ist die konservativste. [read] PHASE_MODELS.md nennt fuer LEAN_BULK 200-400 kcal Ueberschuss - bei 2500 kcal TDEE sind 10 % genau 250. Die hoeheren Stufen erzeugen laut derselben Datei mehr Fettzunahme ('bf_increase > 2% in 4 weeks -> reduce_surplus')."
+    },
+    {
+      "nutrition_goal": "recomposition",
+      "kalorienfaktor": 0.0,
+      "status": "gesetzt",
+      "vorgaenger": "body_recomp: 0",
+      "begruendung": "Beide Vorgaengerdateien setzen 0. [read] PHASE_MODELS.md beschreibt RECOMP als Kalorienzyklus (+200 an Trainingstagen, -300 an Ruhetagen, 'weekly_average: ~Maintenance'). Der Zyklus braucht einen Trainingsplan; solange der fehlt, ist der Wochenschnitt die ehrliche Naeherung - und der ist Maintenance."
+    },
+    {
+      "nutrition_goal": "performance",
+      "kalorienfaktor": 0.10,
+      "status": "gesetzt",
+      "vorgaenger": "performance: 0.10",
+      "begruendung": "Uebernommen. [read] In PHASE_MODELS.md gibt es keine Entsprechung - dort gibt es keine Leistungsphase. Der Vorgaenger behandelt sie wie einen leichten Ueberschuss, was zu 'Leistung' passt: unter dem Erhaltungsbedarf faellt sie."
+    },
+    {
+      "nutrition_goal": "health",
+      "kalorienfaktor": null,
+      "status": "OFFEN",
+      "vorgaenger": "keiner",
+      "begruendung": "[cmd] 'health' kommt weder in goalModifiers noch in Step4Goal.tsx vor - der Vorgaenger kennt diese Zielrichtung nicht. [read] SCORING.md fuehrt zwar einen Gewichtungssatz 'health' fuer die Modulbeitraege, aber keinen Kalorienzuschlag. Die Luecke wird VORGELEGT, nicht gefuellt: 0.0 waere eine stille Entscheidung, dass Gesundheit gleich Erhaltung ist. Bis Tom entscheidet, faellt die Berechnung fuer dieses Ziel aus - siehe 'verhalten_bei_offen'."
+    }
+  ],
+
+  "verhalten_bei_offen": "Steht der Faktor auf null, liefert goals.berechne_zielwerte KEINE Zahlen und meldet 'zielrichtung_ohne_faktor'. Kein stiller Ruecktritt auf 0 - das waere geraten, und die Oberflaeche wuerde einen Wert zeigen, den niemand entschieden hat.",
+
+  "abgrenzung": {
+    "nicht_hier": [
+      "Makro-Splits - die stehen in goals.berechne_zielwerte, weil sie vom Zuschlag abhaengen",
+      "Phasenmodelle und ihre Dauergrenzen - GO-06/GO-07",
+      "Die adaptive Anpassung - GO-13, braucht zwei Wochen Daten"
+    ]
+  },
+
+  "abnahme": "[cmd] Sechs Eintraege, einer davon offen. Die fuenf gesetzten decken die fuenf Werte ab, die der Vorgaenger kennt."
+}
