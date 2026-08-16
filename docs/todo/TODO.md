@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-16, Anker `9b95b65` auf `dev`.
+**Stand:** 2026-08-16, Anker `2b447cb` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 45 offen, 5 in Arbeit.
+`[cmd]` 47 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -136,6 +136,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-06** | Design-System spezifizieren |  |
 | **A-08** | ADR Medienort |  |
 | **A-11** | Specs laufend zu SSOT konsolidieren | ~ |
+| **A-12** | Das Spec-Audit auswerten |  |
+| **A-13** | Das Konsolidierungsregister abarbeiten |  |
 | **B-20** | Codex-Pfadschutz wiederherstellen | ~ |
 | **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
 | **C-01** | Frontend-Stack-Lücke schliessen |  |
@@ -298,6 +300,52 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   eingetragen — die beiden, aus denen C-34 entstanden ist, plus die
   Entscheidungssammlung. Der Punkt bleibt dauerhaft in Arbeit; er wird
   nicht abgeschlossen, sondern angewandt.
+
+- [ ] **A-12: Das Spec-Audit auswerten** (neu 2026-08-16).
+
+  `[cmd]` `docs/ssot/70-spec-audit/` enthält **15 Dateien** — einen
+  Feldabgleich über alle elf Module, entstanden am 2026-08-02, Anker
+  `76c8080`. **Bisher hat ihn niemand ausgewertet**; er stand bis heute
+  nicht einmal im SSOT-Index.
+
+  Je Modul eine Akte mit dem härtesten Befund: `[read]` drei
+  konkurrierende Alt-Specs bei Admin, neun tote Übersichtsdateien bei
+  Buddy, Vorgängerrepo-Pfade bei Goals, Doppelquelle bei Dashboard.
+
+  **Der dort genannte härteste Fund ist erledigt, ohne dass es jemand
+  bemerkt hat:** `[read]` *„14 `FOR ALL`-Policies in vier Modulen mit
+  `USING`, aber ohne `WITH CHECK` — ein INSERT-Leck, das als Hausstil in
+  den Specs steht."* `[cmd]` Heute: **null solche Policies** — die
+  Trennung je Operation kam mit C-42. **Der Befund betraf die Specs,
+  nicht das Gebaute.**
+
+  `[read]` `01-feldabgleich.md` (12 KB) leistet den Abgleich für vier
+  Module vollständig, für neun nur eingestuft. **Der Rest ist
+  Folgearbeit** — und er sagt, welche Module beim Bau die meisten
+  Überraschungen bergen.
+
+  **Vor jedem neuen Modul die zugehörige Akte lesen.** `[read]` Das
+  gehört in `00-UMSETZUNGSPLAENE.md`, Schritt 1.
+
+- [ ] **A-13: Das Konsolidierungsregister abarbeiten** (neu 2026-08-16).
+  Setzt A-11 fort.
+
+  `[cmd]` **74 von 84 Nutrition-Dateien stehen auf `offen`**, 6 gelesen,
+  4 aufgelöst.
+
+  `[read]` Zweimal hat das Fehlen einer Auswertung Tage gekostet:
+  `SPEC_05_FOOD_TAXONOMY.md` wurde am vierten Tag der Arbeit an genau
+  ihren Fragen gelesen, und `docs/specs/Goals/` meldet vollständige
+  Umsetzung für ein Modul, das hier nicht existiert.
+
+  **Nicht alles auf einmal.** `[read]` Das Verfahren in
+  `00-UMSETZUNGSPLAENE.md` sagt: je Modul ein Plan, bevor gebaut wird.
+  Die Nutrition-Dateien sind zum Grossteil abgearbeitet **im Sinne des
+  Gebauten** — was fehlt, ist der Vermerk im Register.
+
+  `[cmd]` **Nächste Kandidaten**, weil ihre Module anstehen:
+  `SPEC_09_SCORING.md` (C-49), die Preferences-Specs (G-11), und die
+  Planner-/Meal-plans-Specs.
 
 
 ## B — Entwicklungsumgebung & Absicherung
