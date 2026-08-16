@@ -116,6 +116,12 @@
 -- der eingebettete Wasser-Unterabfrage — Wasser laeuft getrennt in
 -- hydration_summary (056) und bleibt dort.
 --
+-- C-53, 2026-08-16: Zwei essenzielle Fettsaeuren kommen dazu. LEU war
+-- [cmd] schon seit C-37 enthalten, obwohl C-53 es als fehlend nannte.
+-- PostgreSQL erlaubt bei CREATE OR REPLACE VIEW nur Anhaengen, nicht
+-- Einfuegen in der Mitte. Deshalb stehen die C-53-Spalten am Ende,
+-- damit die 70 alten Spalten unveraendert bleiben.
+--
 -- ZAEHLWEISE DER LUECKEN. Bei den Makros ist der fehlende Wert eine
 -- NULL-Spalte, bei den Mikros ein FEHLENDER SCHLUESSEL im JSONB
 -- ([read] 052: "Fehlende Werte sind kein Schluessel — ein fehlender
@@ -228,7 +234,16 @@ SELECT
   COUNT(mi.id) - COUNT((mi.nutrients->>'FAPUN3')::NUMERIC) AS fapun3_missing,
   COUNT(mi.id) - COUNT((mi.nutrients->>'FAPUN6')::NUMERIC) AS fapun6_missing,
   COUNT(mi.id) - COUNT((mi.nutrients->>'AAE9')::NUMERIC) AS aae9_missing,
-  COUNT(mi.id) - COUNT((mi.nutrients->>'LEU')::NUMERIC) AS leu_missing
+  COUNT(mi.id) - COUNT((mi.nutrients->>'LEU')::NUMERIC) AS leu_missing,
+
+  -- C-53: angehaengt, nicht einsortiert, damit CREATE OR REPLACE VIEW
+  -- keine bestehenden Spalten verschiebt. Beide Codes sind essenziell
+  -- und haben seit C-52 Goals-Zielwerte; bewertet werden sie erst durch
+  -- daily_reference_assessment.
+  SUM((mi.nutrients->>'F18:2CN6')::NUMERIC)       AS f18_2cn6, -- g Linolsaeure
+  COUNT(mi.id) - COUNT((mi.nutrients->>'F18:2CN6')::NUMERIC) AS f18_2cn6_missing,
+  SUM((mi.nutrients->>'F18:3CN3')::NUMERIC)       AS f18_3cn3, -- g Alpha-Linolensaeure
+  COUNT(mi.id) - COUNT((mi.nutrients->>'F18:3CN3')::NUMERIC) AS f18_3cn3_missing
 FROM nutrition.meals m
 LEFT JOIN nutrition.meal_items mi ON mi.meal_id = m.id
 GROUP BY m.user_id, m.entry_date;
@@ -243,7 +258,8 @@ COMMENT ON VIEW nutrition.daily_summary IS
   'security_invoker=true, damit die RLS-Policies von meals/meal_items greifen. '
   'Je Wert zusaetzlich <wert>_missing: Zahl der Positionen ohne Wert — '
   'ist sie > 0, ist die Summe eine Untergrenze. Neun Makros aus den Spalten, '
-  '24 Mikros aus dem JSONB-Schnappschuss mi.nutrients. '
+  '24 Mikros aus dem JSONB-Schnappschuss mi.nutrients, plus C-53: '
+  'Linolsaeure und Alpha-Linolensaeure. '
   'Diese Sicht SUMMIERT und BEWERTET NICHT: sie fuehrt keine Referenz- oder '
   'Tageswerte und sagt nicht, ob eine Menge ausreicht.';
 

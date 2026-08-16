@@ -154,7 +154,9 @@ day_values AS (
     ('FAPUN3', ds.fapun3, ds.fapun3_missing),
     ('FAPUN6', ds.fapun6, ds.fapun6_missing),
     ('AAE9', ds.aae9, ds.aae9_missing),
-    ('LEU', ds.leu, ds.leu_missing)
+    ('LEU', ds.leu, ds.leu_missing),
+    ('F18:2CN6', ds.f18_2cn6, ds.f18_2cn6_missing),
+    ('F18:3CN3', ds.f18_3cn3, ds.f18_3cn3_missing)
   ) AS v(nutrient_code, actual_value, missing_count)
   WHERE ds.user_id = p_user_id
     AND ds.entry_date = p_entry_date

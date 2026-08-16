@@ -295,3 +295,90 @@ Weiter gilt, was schon fuer die Makros galt:
   Position im Schnappschuss und sind ueber diese Sicht nicht erreichbar.
 - **Wasser ist hier nicht vollstaendig.** `water_g` ist das Wasser aus
   Lebensmitteln. Getrunkenes steht in `hydration_summary` (056).
+
+## C-53: Warum drei und nicht elf
+
+`[cmd]` Ausgangsmessung am 2026-08-16 gegen den laufenden Container:
+`nutrition.daily_summary` hatte **70 Spalten**. Die im Auftrag genannte
+Entscheidung "drei aufnehmen" traf fachlich zu, aber technisch war einer
+der drei schon enthalten: `LEU` und `leu_missing` standen bereits in
+`053_daily_summary.sql`, in `daten/schema-sollstand.json` und in
+`059_daily_reference_assessment.sql`.
+
+`[cmd]` Deshalb wurden in C-53 nur die zwei fehlenden Spaltenpaare
+angehaengt: `f18_2cn6` / `f18_2cn6_missing` und `f18_3cn3` /
+`f18_3cn3_missing`. Ergebnis: **74 Spalten**, nicht 76. Die letzten
+Spalten der Sicht sind jetzt:
+
+| Position | Spalte |
+|---:|---|
+| 69 | `aae9_missing` |
+| 70 | `leu_missing` |
+| 71 | `f18_2cn6` |
+| 72 | `f18_2cn6_missing` |
+| 73 | `f18_3cn3` |
+| 74 | `f18_3cn3_missing` |
+
+`[read]` Die Fettsaeurespalten stehen am Ende statt neben `fapun3` und
+`fapun6`, weil PostgreSQL bei `CREATE OR REPLACE VIEW` keine Spalten in
+der Mitte einfuegen kann. Anhaengen laesst die 70 alten Spalten in Name
+und Reihenfolge unveraendert.
+
+### Aufgenommen
+
+| Code | Entscheidung | Grund |
+|---|---|---|
+| `F18:2CN6` Linolsaeure | aufgenommen | `[cmd]` Seit C-52 mit GO-04-Zielwert, EFSA AI 4 E%, Abdeckung 6.912 von 7.140 Lebensmitteln. Essenziell. |
+| `F18:3CN3` Alpha-Linolensaeure | aufgenommen | `[cmd]` Seit C-52 mit GO-04-Zielwert, EFSA AI 0,5 E%, Abdeckung 6.719 von 7.140. Essenziell. |
+| `LEU` Leucin | blieb aufgenommen | `[cmd]` War schon seit C-37 in der Sicht und Bewertung. Kraftsportrelevant, WHO/FAO-Referenzwert vorhanden. |
+
+### Nicht aufgenommen
+
+| Codegruppe | Entscheidung | Grund |
+|---|---|---|
+| 7 weitere Aminosaeuren | nicht aufgenommen | `[annahme]` Fuer die Kraftsport-Oberflaeche ist Leucin als Trigger-/Leitsignal plausibel; einzelne Ziele fuer Isoleucin, Valin, Lysin usw. waeren mehr Breite als Nutzen. Die Referenzwerte bleiben in `nutrient_reference_values`, aber nicht in der Tagessumme. |
+| `NIAEQ` | nicht aufgenommen | `[read]` Rechengroesse fuer Niacinaequivalente; `NIA` steht bereits in der Sicht. Ein zweiter Niacinwert ohne klare Anzeigeentscheidung wuerde doppelt wirken. |
+
+### Bewertung und C-48-Regeln
+
+`[cmd]` `daily_reference_assessment` liest die Nährstoffliste fest
+verdrahtet, nicht dynamisch aus der Sicht. C-53 hat die beiden
+Fettsaeurecodes dort ergaenzt. Auf den C-82-Testdaten liefert die
+Funktion jetzt **35 verschiedene Nährstoffcodes** und **47 Zeilen** fuer
+Tom Miller am 2026-08-16; vor C-53 waren es 33 Codes und 45 Zeilen.
+
+`[cmd]` Die Fettsaeuren erscheinen in der Bewertung, aber ohne
+Prozentwert:
+
+| Code | Wert | Status |
+|---|---:|---|
+| `F18:2CN6` | 8,22982 g | `energy_share` |
+| `F18:3CN3` | 1,38572 g | `energy_share` |
+
+Das ist kein Fehler. `[read]` GO-00 entschied, dass `E%` nicht als
+Deckungsgrad in der Nährstoffbewertung angezeigt wird. Seit C-52 haben
+die beiden Codes eigene GO-04-Zielwerte; die Ring-/Zielanzeige gehoert
+dorthin, nicht in `daily_reference_assessment`.
+
+`[cmd]` Der Leucin-Gegenbeleg aus einer Transaktion mit echtem
+`daily_summary`-Weg: eine Position mit eingefrorenem `LEU = 1,70` und
+Profilgewicht 78,4 kg liefert in `daily_summary` `leu = 1,70` und in
+`daily_reference_assessment` `reference_value_min = 3,058 g`,
+`reference_pct = 55,6`, `reference_status = complete`. Der Wert kommt
+damit aus der Sicht, nicht aus einer Direktabfrage gegen `meal_items`.
+
+### Nachweis
+
+`[cmd]` Kettenlauf ueber den Runner auf `lumeos_c53_daily_summary`:
+`KETTE OK: 35,7s`, `SCHEMA VOLLSTAENDIG`.
+
+`[cmd]` `schema-vollstaendigkeit-pruefen.ts` gegen dieselbe
+Wegwerf-Datenbank: Exit 0, `Sichtspalten 1 Sicht(en) mit Spaltenliste
+geprueft`.
+
+`[cmd]` C-82-Testdaten auf derselben Wegwerf-Datenbank: 3 Nutzer, 512
+Mahlzeiten, 1.560 Positionen. `testdaten-pruefen.ts` laeuft weiter
+durch; die Szenariotage halten. Die Ausgabe meldet jetzt
+`daily_reference_assessment: 47 Zeilen, 30 mit Prozentwert` — zwei
+Zeilen mehr, aber keine neuen Prozentwerte, weil beide Fettsaeuren
+`energy_share` sind.

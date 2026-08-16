@@ -664,9 +664,13 @@
         "fapun3_missing",
         "fapun6_missing",
         "aae9_missing",
-        "leu_missing"
+        "leu_missing",
+        "f18_2cn6",
+        "f18_2cn6_missing",
+        "f18_3cn3",
+        "f18_3cn3_missing"
       ],
-      "spalten_herkunft": "C-37, 2026-08-15: aus dem SELECT-Block von 053 gelesen, nicht aus der laufenden Datenbank. 22 Spalten aus C-04 (unveraendert) plus 48 aus C-37 (24 Mikros und ihre Fehlzaehler)."
+      "spalten_herkunft": "C-37, 2026-08-15: aus dem SELECT-Block von 053 gelesen, nicht aus der laufenden Datenbank. 22 Spalten aus C-04 (unveraendert) plus 48 aus C-37 (24 Mikros und ihre Fehlzaehler). C-53, 2026-08-16: F18:2CN6 und F18:3CN3 als vier Spalten am Ende angehaengt; LEU war bereits vorhanden."
     },
     {
       "name": "hydration_summary",
