@@ -19,6 +19,7 @@ import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { Zielhinweis } from './zielhinweis'
+import { Erfassen } from './erfassen'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
 const HAUPTMAKROS: Array<{
@@ -26,11 +27,13 @@ const HAUPTMAKROS: Array<{
   label: string
   unit: string
   color: string
+  /** Das passende Feld in goals.nutrition_targets. */
+  zielFeld: 'kcal' | 'protein_g' | 'carbs_g' | 'fat_g'
 }> = [
-  { code: 'enercc', label: 'Energie', unit: 'kcal', color: 'var(--acc-nutri)' },
-  { code: 'prot625', label: 'Protein', unit: 'g', color: 'var(--acc-train)' },
-  { code: 'cho', label: 'Kohlenhydrate', unit: 'g', color: 'var(--acc-recov)' },
-  { code: 'fat', label: 'Fett', unit: 'g', color: 'var(--acc-goals)' },
+  { code: 'enercc',  label: 'Energie',       unit: 'kcal', color: 'var(--acc-nutri)', zielFeld: 'kcal' },
+  { code: 'prot625', label: 'Protein',       unit: 'g',    color: 'var(--acc-train)', zielFeld: 'protein_g' },
+  { code: 'cho',     label: 'Kohlenhydrate', unit: 'g',    color: 'var(--acc-recov)', zielFeld: 'carbs_g' },
+  { code: 'fat',     label: 'Fett',          unit: 'g',    color: 'var(--acc-goals)', zielFeld: 'fat_g' },
 ]
 
 const WEITERE_MAKROS: Array<{ code: SummaryMacro; label: string; unit: string }> = [
@@ -78,8 +81,8 @@ export function TagebuchAnsicht({
         sub={tagText(datum)}
         pills={
           <>
-            <Pill variant="acc">G-03</Pill>
-            <Pill>nur lesen</Pill>
+            <Pill variant="acc">C-03</Pill>
+            <Pill>lesen und schreiben</Pill>
           </>
         }
         stats={[
@@ -103,20 +106,21 @@ export function TagebuchAnsicht({
         </div>
       )}
 
-      {/* Der ehrliche Zustand von heute: nichts erfasst, und es GIBT
-          keinen Weg, hier etwas zu erfassen. Beides gehoert gesagt. */}
+      {/* Bis C-03 stand hier, dass es keinen Weg zum Erfassen gibt.
+          Es gibt jetzt einen — direkt darunter. */}
       {!fehler && leer && (
         <div className="v2-empty" style={{ marginTop: 16 }}>
           <Icon name="nutrition" />
           <div>
             <strong>Nichts erfasst an diesem Tag.</strong>
             <p style={{ marginTop: 6 }}>
-              Diese Seite <em>liest</em> das Tagebuch. Das Erfassen von
-              Mahlzeiten ist ein eigener Auftrag (C-03) und noch nicht
-              gebaut — deshalb steht hier kein „Mahlzeit hinzufuegen".
+              Mahlzeit anlegen, Lebensmittel suchen, Menge angeben — die
+              Naehrwerte werden dabei <strong>eingefroren</strong>. Eine
+              spaetere Korrektur am Lebensmittel aendert diesen Tag nicht
+              mehr.
             </p>
             <p style={{ marginTop: 6 }}>
-              Die Suche funktioniert bereits:{' '}
+              Nur stoebern?{' '}
               <Link href={'/v2/nutrition/suche' as Route} className="v2-link">
                 Lebensmittel suchen
               </Link>
@@ -125,16 +129,25 @@ export function TagebuchAnsicht({
         </div>
       )}
 
+      <div style={{ marginTop: 16 }}>
+        <Erfassen datum={datum} />
+      </div>
+
       <div className="v2-grid v2-g-cols-2" style={{ marginTop: 16, alignItems: 'start' }}>
         <Card title="Tagessumme" sub="aus den eingefrorenen Werten">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18 }}>
             {HAUPTMAKROS.map(m => {
               const wert = summe?.macros[m.code]
+              // C-03: Der Nenner kommt aus goals.zielwerte_am. Fehlt er,
+              // bleibt der Ring ohne Verhaeltnis — der Baustein nimmt
+              // `target` seit G-03 als optional.
+              const ziel = ziele ? ziele[m.zielFeld] : null
               return (
                 <div key={m.code} style={{ textAlign: 'center' }}>
                   <ProgressRing
                     value={wert?.value ?? null}
-                    target={null}
+                    target={ziel}
+                    showPercent={ziel !== null}
                     unit={m.unit}
                     size={88}
                     color={m.color}
@@ -230,8 +243,18 @@ export function TagebuchAnsicht({
             <div style={{ maxHeight: 460, overflowY: 'auto' }}>
               {bewertung.map(b => (
                 <CoverageRow
-                  key={b.nutrient_code}
-                  name={b.nutrient_name_de}
+                  key={`${b.nutrient_code}-${b.reference_kind ?? 'x'}`}
+                  name={
+                    <>
+                      {b.nutrient_name_de}
+                      {/* Ohne diese Marke stehen Vitamin A und D zweimal
+                          untereinander und sehen nach einem Fehler aus.
+                          Es sind zwei Aussagen: Ziel und Obergrenze. */}
+                      {b.reference_kind && (
+                        <span className="v2-kind">{b.reference_kind}</span>
+                      )}
+                    </>
+                  }
                   unit={b.nutrient_unit}
                   value={b.actual_value}
                   missing={b.missing_count}

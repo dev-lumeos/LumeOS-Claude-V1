@@ -1424,6 +1424,72 @@ select.v2-feld { cursor: pointer; }
   font-size: 10.5px;
 }
 
+/* 10. Mahlzeiten und Positionen (C-03).
+   Der Entwurf hat .tbl-meal und .meal-card, aber fuer eine ANZEIGE —
+   ohne Eingabefelder, Mengenaenderung oder Entfernen. Hier eine
+   eigene Zeile, weil sie Bedienelemente traegt. Nur vorhandene Tokens. */
+.v2-meal {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 10px 12px;
+}
+.v2-meal-kopf {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.v2-meal-titel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--fg);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.v2-meal-titel:hover { color: var(--acc); }
+
+.v2-position {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 72px auto;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-top: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  font-size: 12px;
+}
+.v2-position-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-muted);
+}
+.v2-position-kcal { text-align: right; color: var(--fg); font-size: 11.5px; }
+
+/* Wertart neben dem Naehrstoffnamen (C-03). Ein Naehrstoff kann
+   zweimal dastehen — einmal als Ziel (PRI/AI), einmal als Obergrenze
+   (UL). Ohne die Marke sieht das nach einem Fehler aus. */
+.v2-kind {
+  margin-left: 6px;
+  padding: 0 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  vertical-align: 1px;
+}
+
+.v2-suchblock {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+}
+
 /* Leiste unter dem Formular. */
 .v2-formleiste {
   display: flex;
