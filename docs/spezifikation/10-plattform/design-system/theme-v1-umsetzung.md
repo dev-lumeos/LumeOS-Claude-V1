@@ -30,6 +30,41 @@ mit Tabs hingehört.
 
 **Die Vorlage wurde als Materialsammlung behandelt statt als Vorgabe.**
 
+### Wie hier entwickelt wird
+
+**Tom, 2026-08-16:** *„Wie entwickelt man? Man hat eine Vision,
+zerstückelt die in Module, plant die Specs, macht einen Mockup — jedes
+Feature trägt einen Hinweis, ob es Mockup ist; wenn es verdrahtet ist,
+fällt der Mockup-Hinweis weg — befüllt den Mockup mit Realdata. So sieht
+man als Mensch das Gesamtbild und kann entscheiden."*
+
+**Der Mockup-Hinweis ist der Fortschrittsbalken.** Was markiert ist, ist
+offen. Was nicht mehr markiert ist, ist fertig. Wer die unfertigen
+Kacheln weglässt, nimmt genau die Anzeige weg, die das Design liefern
+soll — dann sieht man drei Kacheln und muss sich neun dazudenken.
+
+**Deshalb: nichts weglässen, was die Vorlage zeigt.** Attrappe
+kennzeichnen, verdrahten, Kennzeichnung entfernen.
+
+### Der Unterschied zum Ring ohne Ziel
+
+`[read]` In G-03 wurde entschieden, **keinen gefüllten Ring ohne Ziel**
+zu zeigen: *„ein zu 68 % gefüllter Ring wäre eine Falschaussage mit
+hoher Überzeugungskraft."* Das war richtig — und es ist **nicht**
+dasselbe.
+
+| | |
+|---|---|
+| Ring ohne Ziel | eine Zahl, die aussieht wie gemessen, **ohne Kennzeichnung** |
+| Kachel mit Attrappenmarke | eine Fläche, die **sagt, dass sie noch nichts weiß** |
+
+`[cmd]` Das Argument *„eine MOCK-Marke nimmt einer Zahl nicht ihre
+Wirkung"* gilt für Endnutzer. **Auf einem Entwicklungsstand, den nur Tom
+sieht, gibt es diesen Endnutzer nicht.** Vor der Auslieferung wird die
+Frage neu gestellt; während gebaut wird, zählt das Gesamtbild.
+
+---
+
 ### Die Regel
 
 **Übernehmen, nicht nachempfinden** — dieselbe Regel wie beim
