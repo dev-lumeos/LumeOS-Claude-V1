@@ -15,6 +15,8 @@ import { getDailySummary } from '../../../lib/nutrition/diary-summary-read'
 import { getReferenceAssessment } from '../../../lib/nutrition/reference-assessment-read'
 import type { DailySummaryRow } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
+import { getZielwerteAm, getZielwertVorschlag } from '../../../lib/profile/zielwerte-read'
+import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { TagebuchAnsicht } from './ansicht'
 
 export const metadata: Metadata = {
@@ -61,6 +63,25 @@ export default async function V2NutritionPage({
     bewertungFehler = e instanceof Error ? e.message : String(e)
   }
 
+  // GO-03/GO-04: Was gilt, und was gelten koennte. Getrennt gelesen —
+  // ein Fehler der einen Frage macht die andere nicht ungueltig.
+  let ziele: Zielwerte | null = null
+  let vorschlag: Zielvorschlag | null = null
+  let zielFehler: string | null = null
+  try {
+    ziele = await getZielwerteAm(datum)
+    if (!ziele) vorschlag = await getZielwertVorschlag(datum)
+  } catch (e) {
+    // [cmd] Solange `goals` nicht in supabase/config.toml als
+    // exponiertes Schema steht, antwortet PostgREST mit PGRST106
+    // ("Invalid schema: goals"). Die Zeile ist ergaenzt, greift aber
+    // erst nach einem Neustart des lokalen Stacks — siehe Bericht.
+    // Bis dahin bleibt `vorschlag` null, und die Seite zeigt denselben
+    // Hinweis wie ohne Profil. Kein eigener Fehlerkasten: die Nutzerin
+    // kann daran nichts aendern.
+    zielFehler = e instanceof Error ? e.message : String(e)
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
@@ -68,6 +89,9 @@ export default async function V2NutritionPage({
       bewertung={bewertung}
       fehler={fehler}
       bewertungFehler={bewertungFehler}
+      ziele={ziele}
+      vorschlag={vorschlag}
+      zielFehler={zielFehler}
     />
   )
 }

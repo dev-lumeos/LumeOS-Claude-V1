@@ -17,6 +17,8 @@ import {
 } from '@lumeos/ui'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
+import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
+import { Zielhinweis } from './zielhinweis'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
 const HAUPTMAKROS: Array<{
@@ -47,13 +49,16 @@ function tagText(datum: string): string {
 }
 
 export function TagebuchAnsicht({
-  datum, summe, bewertung, fehler, bewertungFehler,
+  datum, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler,
 }: {
   datum: string
   summe: DailySummaryRow | null
   bewertung: ReferenceAssessmentRow[]
   fehler: string | null
   bewertungFehler?: string | null
+  ziele?: Zielwerte | null
+  vorschlag?: Zielvorschlag | null
+  zielFehler?: string | null
 }) {
   const leer = !summe || summe.item_count === 0
 
@@ -148,18 +153,16 @@ export function TagebuchAnsicht({
             })}
           </div>
 
-          {/* Warum kein Ring gefuellt ist. Ohne diesen Satz sieht die
-              Karte nach einem Fehler aus. */}
-          <p className="v2-hinweis" style={{ marginTop: 14 }}>
-            <Icon name="alert" className="v2-ic v2-ic-sm" />
-            <span>
-              <strong>Keine Ringe, weil es keine Ziele gibt.</strong>{' '}
-              [cmd] Dieses Repo hat keine Zieltabelle — die Vorlage zeigt
-              an dieser Stelle vier erfundene Zahlen (2.700 kcal, 180 g
-              Protein …). Solange Tagesziele nicht aus einer Quelle
-              kommen, zeigt der Ring den Wert und kein Verhaeltnis.
-            </span>
-          </p>
+          {/* Warum kein Ring gefuellt ist — und was dagegen zu tun ist.
+              Bis GO-03 stand hier „es gibt keine Zieltabelle". Die gibt
+              es jetzt; der Satz muss sagen, WAS fehlt. */}
+          <div style={{ marginTop: 14 }}>
+            <Zielhinweis
+              ziele={ziele ?? null}
+              vorschlag={vorschlag ?? null}
+              fehler={zielFehler ?? null}
+            />
+          </div>
 
           <div style={{ marginTop: 12 }}>
             {WEITERE_MAKROS.map(m => {

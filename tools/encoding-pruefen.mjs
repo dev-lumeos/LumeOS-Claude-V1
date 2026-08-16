@@ -79,6 +79,16 @@ const MIT_MARKE_ERLAUBT = new Set(['fffd', 'doppelt'])
 const DOPPELT = [
   { bytes: [0xc3, 0x83], name: 'c383' },  // A-Tilde + Folgebyte
   { bytes: [0xc3, 0x82], name: 'c382' },  // A-Zirkumflex + Folgebyte
+  // NACHTRAG 2026-08-16 (GO-04): c3a2 fehlte, und die Luecke war nicht
+  // theoretisch — ein frischer Commit trug einen doppelt kodierten
+  // Gedankenstrich, und diese Pruefung sagte "sauber".
+  //
+  // Der Grund: Ein ZWEIBYTE-Zeichen (c3 bc = u-Umlaut) wird doppelt
+  // kodiert zu c383 c2bc — Einleitung c383. Ein DREIBYTE-Zeichen
+  // (e2 80 94 = Gedankenstrich) wird zu c3a2 c280 c294 — Einleitung
+  // c3a2. Die ersten beiden Muster decken nur die Zweibyte-Faelle ab,
+  // also Umlaute; alle typografischen Zeichen fielen durch.
+  { bytes: [0xc3, 0xa2], name: 'c3a2' },  // a-Zirkumflex + Folgebyte
 ]
 
 function* dateien(dir) {
@@ -178,8 +188,12 @@ for (const datei of dateien(WURZEL)) {
         // Nach A-Tilde/A-Zirkumflex muss ein weiteres Mehrbyte-Zeichen kommen,
         // sonst ist es ein echtes A-Tilde (z. B. in einem franzoesischen
         // Wort) und kein Schaden.
+        // NACHTRAG 2026-08-16: `0xe2` fehlte. Beim doppelt kodierten
+        // Gedankenstrich (c3a2 e282ac e2809d) steht genau dort ein e2,
+        // und die Pruefung lief daran vorbei.
         const istFolgebyte =
           (folge >= 0xc2 && folge <= 0xc3) ||   // c2xx/c3xx
+          (folge >= 0xe2 && folge <= 0xe3) ||   // e2xx: Dreibyte-Zeichen
           (folge >= 0x80 && folge <= 0xbf)      // 8x-bx: direkte Folge
         if (istFolgebyte) {
           melde({

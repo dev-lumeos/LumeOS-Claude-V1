@@ -46,6 +46,26 @@ test('doppelte Kodierung wird erkannt', () => {
   assert.match(r.text, /doppelt/)
 })
 
+test('ein doppelt kodiertes Dreibyte-Zeichen wird erkannt', () => {
+  // NACHTRAG 2026-08-16: Diese Luecke war echt. Ein frischer Commit trug
+  // einen doppelt kodierten Gedankenstrich, und die Pruefung sagte
+  // "sauber" — sie kannte nur die Einleitungen c383/c382, die bei
+  // ZWEIBYTE-Zeichen (Umlauten) entstehen. Ein DREIBYTE-Zeichen
+  // (e2 80 94) wird zu c3a2 e282ac e28094, Einleitung c3a2.
+  const r = pruefe({
+    'a.ts': Buffer.from([0x48, 0x69, 0x20, 0xc3, 0xa2, 0xe2, 0x82, 0xac, 0xe2, 0x80, 0x94]),
+  })
+  assert.equal(r.code, 1, 'Gedankenstrich doppelt kodiert muss auffallen')
+  assert.match(r.text, /c3a2/)
+})
+
+test('ein echtes a-Zirkumflex schlaegt nicht an', () => {
+  // "Ça va" und franzoesische Woerter mit â duerfen durchgehen.
+  const r = pruefe({ 'a.md': Buffer.from('Ça va, châteaux, être', 'utf8') })
+  assert.equal(r.code, 0, `Falschmeldung:
+${r.text}`)
+})
+
 test('UTF-16 wird erkannt, nicht nur der UTF-8-BOM', () => {
   // [read] Die PowerShell-Umleitung schreibt UTF-16LE. Die frueherere
   // Pruefung fragte nur nach ef bb bf und sah es deshalb nicht.
