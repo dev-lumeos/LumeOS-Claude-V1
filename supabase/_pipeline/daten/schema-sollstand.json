@@ -520,6 +520,30 @@
         ]
       },
       "grants_herkunft": "058_custom_foods.sql Z210-211"
+    },
+    {
+      "name": "foods_portions",
+      "schritt": "029",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "zeilenschutzart": "oeffentlich",
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "029_portionen-einspielen.ts"
     }
   ],
   "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
@@ -837,7 +861,8 @@
     "food_categories": 500,
     "search_synonyms": 4800,
     "preparation_kinds": 11,
-    "food_groups": 19
+    "food_groups": 19,
+    "foods_portions": 23000
   },
   "mindestzeilen_schema": {
     "_kommentar": "Untergrenzen ausserhalb nutrition. C-43: Die Schritte 100-105 muessen im Kettenlauf sichtbar werden; sonst koennte Training komplett fehlen und die Nutrition-Pruefung waere trotzdem gruen.",
@@ -857,7 +882,8 @@
     "food_categories": "[cmd] Gerundeter Ist-Stand nach 020: 518, Untergrenze 500.",
     "search_synonyms": "[cmd] Gerundeter Ist-Stand nach 024: 4.877, Untergrenze 4.800.",
     "preparation_kinds": "[read] 023_zubereitung_ableitung.sql: 11 Zubereitungsarten.",
-    "food_groups": "[read] 023_zubereitung_ableitung.sql: 19 Warengruppen."
+    "food_groups": "[read] 023_zubereitung_ableitung.sql: 19 Warengruppen.",
+    "foods_portions": "029_portionen-einspielen.ts, gemessen 2026-08-15: 23.402 Zeilen ueber 7.048 Lebensmittel. Gerundet, weil die Zahl mit jeder Kategoriezuordnung wandert."
   },
   "mindestzeilen_schema_belege": {
     "training.exercises": "[cmd] Ist-Stand nach 100-105: 1.416 Uebungen.",
@@ -889,7 +915,6 @@
   },
   "_grants": "Rechte je Rolle, aus den SQL-Dateien abgeleitet. GEPRUEFT WIRD EXAKT, nicht \"mindestens\": ein zusaetzliches Recht (GRANT ALL) ist der gefaehrlichere Fall und muss anschlagen. postgres steht NICHT in der Liste — es ist Eigentuemer, seine Rechte sind Eigentum, keine Grants.",
   "_zeilenschutzart": "Fachliche Aussage je Tabelle, nachgeschlagen in 060/052/055: oeffentlich = USING (true) ist richtig (Stammdaten); eigene_zeilen = die Bedingung MUSS auth.uid() nennen, sonst Datenleck; admin = die Bedingung MUSS public.is_admin() nennen.",
-
   "_fremde_schemata": "GO-03: Die Pruefung oben liest ausschliesslich das Schema `nutrition` — [cmd] 10 Abfragen mit fest verdrahtetem nutrition. Ein neues Schema waere damit strukturell UNGEPRUEFT: Tabelle, Zeilenschutz, Policies und Grants koennten fehlen, ohne dass ein Kettenlauf sich beschwert. Genau diese Fehlerklasse hat C-43 aufgedeckt. Deshalb dieser Block: Tabellen ausserhalb nutrition, mit denselben vier Fragen.",
   "fremde_schemata": [
     {
@@ -897,10 +922,28 @@
       "name": "nutrition_targets",
       "schritt": "110",
       "rls": true,
-      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
       "grants": {
-        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
-        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
       },
       "grants_herkunft": "110 vergibt beides explizit; goals faellt nicht unter die DEFAULT PRIVILEGES aus 060 3e, die nur fuer nutrition gesetzt sind.",
       "zeilenschutzart": "eigene_zeilen"
@@ -908,7 +951,15 @@
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
   "fremde_funktionen": [
-    { "schema": "goals", "name": "berechne_zielwerte", "schritt": "110" },
-    { "schema": "goals", "name": "zielwerte_am", "schritt": "110" }
+    {
+      "schema": "goals",
+      "name": "berechne_zielwerte",
+      "schritt": "110"
+    },
+    {
+      "schema": "goals",
+      "name": "zielwerte_am",
+      "schritt": "110"
+    }
   ]
 }
