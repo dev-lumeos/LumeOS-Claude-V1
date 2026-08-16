@@ -1277,6 +1277,36 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 `[read]` Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`
 
+- [ ] **GO-00: Die Referenzwerte tragen unpassende Einheiten** (neu
+  2026-08-15). **Blockiert die Prozentwerte in C-48.**
+
+  `[cmd]` Von 72 Referenzzeilen mit Wert passen **nur 25** zur Einheit
+  des Nährstoffs im Bestand:
+
+  | Referenz | Bestand | Fälle | |
+  |---|---|---|---|
+  | `mg/day` | `µg` | 9 | Faktor 1.000 |
+  | `g/day` | `mg` | 4 | Faktor 1.000 |
+  | `mg/kg bw/day` | `g` | 9 | braucht Körpergewicht |
+  | `E%` | `g` | 4 | Energieprozent |
+  | `mg/MJ`, `mg NE/MJ`, `L/day` | | 3 | andere Bezugsgrösse |
+
+  `[cmd]` Calcium gegen `UL` ergibt **32.000 %**.
+
+  **Der Fehler stammt aus C-45 und ist bei der Abnahme durchgegangen.**
+  Geprüft wurde, dass jede Zeile eine Quelle trägt und alle 138 Codes
+  abgedeckt sind — nicht, ob die Einheit zur Bezugsgrösse passt. Die
+  Prüfung war in einer Dimension vollständig und in der anderen blind.
+
+  **Die vier C-48-Regeln halten trotzdem** — sie bestimmen, *ob* ein
+  Prozentwert erscheint, nicht *welcher*. Die Architektur ist in
+  Ordnung, die Daten sind es nicht.
+
+  **Drei Fälle brauchen mehr als eine Umrechnung:** `mg/kg bw/day` setzt
+  das Körpergewicht voraus (steht seit GO-01 im Profil), `E%` die
+  Tagesenergie, `mg/MJ` ebenfalls. Ob diese Referenzwerte überhaupt
+  angezeigt werden sollen, ist eine Entscheidung — kein Rechenschritt.
+
 - [ ] **GO-01 bis GO-17: Goals** (neu 2026-08-15).
   **Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`**
   — 353 Zeilen, mit Quellenregister, gemessenem Ist-Zustand, neun
@@ -1333,6 +1363,25 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `BrainstormDocs/Goals/new/` ist byte-identisch — an dieser Stelle eine
   Kopie, keine Synthese. `[cmd]` `DATABASE.md` ist nicht ausführbar wie
   abgedruckt (`UNIQUE (…) WHERE` gibt es in PostgreSQL nicht).
+
+  **Drei Korrekturen am Plan, beim Bauen von GO-01 sichtbar geworden:**
+
+  - **Eine vierte Entscheidung gehört nach Block A.** `[cmd]`
+    `nutrition_goal` kennt sechs Werte, die Phasenmodelle neun —
+    `performance` und `health` haben dort **keine Entsprechung**. Ohne
+    diese Abbildung weiss GO-04 nicht, ob Defizit oder Überschuss. Das
+    ist das Vorzeichen, keine Feinheit. Der Plan ordnete es GO-06 zu.
+  - **GO-03 braucht ein Gültigkeitsdatum.** Sonst ist später nicht
+    sagbar, gegen welches Ziel ein vergangener Tag lief — das Tagebuch
+    zeigte rückwirkend falsche Deckungsgrade, sobald jemand die Phase
+    wechselt.
+  - **Zwischen GO-04 und GO-05 fehlt ein Schritt:** Was zeigt das
+    Tagebuch bei halbem Profil? Heute sagt es „keine Ziele". Es muss
+    sagen, **was fehlt und wohin man geht** — dieselbe Logik wie beim
+    Ring, der nicht lügen soll.
+
+  `[cmd]` Ausserdem: GO-04 ist kleiner als gedacht (zwei Formeln, alle
+  Eingaben liegen vor), GO-03 grösser.
 
   **Offene Entscheidungen vor Block B:** vier verschiedene
   Zielvokabulare ohne Abbildung (6 / 12 / 9 / 4 Werte) und derselbe
