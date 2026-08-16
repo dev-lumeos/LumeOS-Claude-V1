@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-15, Anker `2e33c5e` auf `dev`.
+**Stand:** 2026-08-15, Anker `38480ca` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 40 offen, 5 in Arbeit.
+`[cmd]` 41 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -171,7 +171,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **F-07** | Berechtigungen |  |
 | **F-08** | Werkstatt-Inventar |  |
 | **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
-| **GO-00** | Die Referenzwerte tragen unpassende Einheiten |  |
+| **C-52** | Zwei essenzielle Fettsäuren ohne Ziel und ohne Bewertung |  |
+| **C-53** | Elf Nährstoffe erreichen die Bewertung nicht |  |
 | **GO-01** | Goals | ~ |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-05** | Dashboard |  |
@@ -1259,44 +1260,42 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 
 
-- [ ] **GO-00: Die Referenzwerte tragen unpassende Einheiten** (neu
-  2026-08-15). **Teil 1 erledigt, Teil 2 offen.**
+- [ ] **C-52: Zwei essenzielle Fettsäuren ohne Ziel und ohne
+  Bewertung** (neu 2026-08-15). Rest aus GO-00.
 
-  **Erledigt:** `[cmd]` Die eindeutigen Umrechnungen (mg/µg/g) sind im
-  Seed korrigiert, Commits `7ddd307` und `d7cb600`. Calcium steht bei
-  `PRI 1000 mg` und `UL 2500 mg` statt bei 32.000 %. Die Schemaprüfung
-  kennt jetzt Einheiten und meldete am beschädigten Stand 47 unpassend.
+  `[cmd]` `F18:2CN6` (Linsäure) und `F18:3CN3` (Alpha-Linolensäure)
+  stehen mit `E%`-Referenzwerten da, sind aber **weder in GO-02 noch in
+  der Bewertung**: 0 Treffer in `110_goals_zielwerte.sql` und in der
+  Zuordnungsdatei.
 
-  **Offen: 16 Zeilen mit fremder Bezugsgrösse.** Sie sind im Seed als
-  abweichend markiert — **das verhindert die Prüfmeldung, nicht den
-  falschen Prozentwert.** `[cmd]` Protein zeigt im Tagebuch **1.593 %**
-  statt ~20 %: sein Referenzwert ist `0,83 g/kg bw/day`, und
-  `daily_reference_assessment` teilt, ohne mit den 78,4 kg zu
-  multiplizieren.
+  `[read]` Die Begründung für `E%` lautete: *gehört zu GO-02, dort wird
+  es schon gerechnet.* Das gilt für `CHO` und `FAT` — für diese beiden
+  nicht. **Damit fallen sie durch beide Raster.**
 
-  **Entschieden am 2026-08-15** nach Recherche, wie etablierte Apps es
-  halten — **niemand zeigt eine Einheit je Kilogramm**, alle rechnen um
-  und zeigen absolut:
+  **Zu entscheiden:** Zielwerte in GO-02 ergänzen, oder als
+  `nicht_bewertbar` ausweisen. `[Wahrscheinlich]` Ersteres — es sind die
+  einzigen zwei essenziellen Fettsäuren, und EFSA setzt für beide einen
+  AI.
 
-  | | | |
-  |---|---|---|
-  | `mg/kg bw/day`, `g/kg bw/day` | **10** | zur Laufzeit umrechnen mit `body_weight_kg`, absolut anzeigen |
-  | `E%` | **4** | Verteilungsregel für Makros — gehört zu GO-02, nicht in die Nährstoffbewertung |
-  | `mg/MJ`, `mg NE/MJ` | **2** | Nährstoffdichte, Fachmass — nicht anzeigen, Grund ausweisen |
+- [ ] **C-53: Elf Nährstoffe erreichen die Bewertung nicht** (neu
+  2026-08-15). Rest aus GO-00.
 
-  `[read]` Tom, 2026-08-15: *„Ok, das passt so für mich."*
+  `[cmd]` Nur **5 der 16** reparierten Zeilen kommen heute überhaupt in
+  `daily_reference_assessment` an. Der Grund: die Funktion bewertet die
+  33 Nährstoffe aus `daily_summary` — **acht Aminosäuren, `NIAEQ` und
+  die beiden Fettsäuren stehen dort nicht.**
 
-  **Die Umrechnung gehört zur Laufzeit in `daily_reference_assessment`,
-  nicht in den Seed.** `[cmd]` Die Funktion liest das Profil bereits für
-  Alter und Geschlecht; das Gewicht steht seit GO-01 in derselben Zeile.
-  Beim Gewichtswechsel ändert sich der Wert dann mit, statt in der
-  Tabelle zu veralten.
+  `[cmd]` `daily_summary` führt 70 Spalten: acht Makros und 24 Mikros mit
+  Fehlzählern. Die Auswahl der 24 stammt aus `SPEC_06`.
 
-  **Warum das liegen blieb:** Die Entscheidung fiel im Gespräch und
-  wurde nicht zum TODO-Punkt. Zwei Aufträge sperrten
-  `daily_reference_assessment` — zu Recht, aber niemand hatte den
-  Auftrag, sie umzusetzen. **Eine Entscheidung ohne Punkt existiert
-  nicht.**
+  **Zu entscheiden:** Werden die elf aufgenommen — und wenn ja, mit
+  welchem Nutzen? `[Vermutung]` Bei Leucin ja (Kraftsport), bei den
+  übrigen Aminosäuren fraglich. Jede zusätzliche kostet zwei Spalten in
+  einer Sicht, die schon 70 hat.
+
+  **Die GO-00-Reparatur deckt sie trotzdem ab** — sie greift beim
+  Aufnehmen, nicht danach.
+
 
 - [~] **GO-01 bis GO-17: Goals** (neu 2026-08-15). **Block A zu vier
   Fünfteln erledigt.**

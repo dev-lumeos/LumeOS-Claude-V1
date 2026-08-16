@@ -3386,3 +3386,91 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   der Datenbank durchgesetzt, nicht in der Oberfläche. Die Seite rechnet
   nicht nach — das wäre die Stelle, an der aus einem Fehlzähler eine
   Null wird.*
+
+- [x] **GO-00: Die Referenzwerte tragen unpassende Einheiten** (neu
+  2026-08-15). **Teil 1 erledigt, Teil 2 offen.**
+
+  **Erledigt:** `[cmd]` Die eindeutigen Umrechnungen (mg/µg/g) sind im
+  Seed korrigiert, Commits `7ddd307` und `d7cb600`. Calcium steht bei
+  `PRI 1000 mg` und `UL 2500 mg` statt bei 32.000 %. Die Schemaprüfung
+  kennt jetzt Einheiten und meldete am beschädigten Stand 47 unpassend.
+
+  **Offen: 16 Zeilen mit fremder Bezugsgrösse.** Sie sind im Seed als
+  abweichend markiert — **das verhindert die Prüfmeldung, nicht den
+  falschen Prozentwert.** `[cmd]` Protein zeigt im Tagebuch **1.593 %**
+  statt ~20 %: sein Referenzwert ist `0,83 g/kg bw/day`, und
+  `daily_reference_assessment` teilt, ohne mit den 78,4 kg zu
+  multiplizieren.
+
+  **Entschieden am 2026-08-15** nach Recherche, wie etablierte Apps es
+  halten — **niemand zeigt eine Einheit je Kilogramm**, alle rechnen um
+  und zeigen absolut:
+
+  | | | |
+  |---|---|---|
+  | `mg/kg bw/day`, `g/kg bw/day` | **10** | zur Laufzeit umrechnen mit `body_weight_kg`, absolut anzeigen |
+  | `E%` | **4** | Verteilungsregel für Makros — gehört zu GO-02, nicht in die Nährstoffbewertung |
+  | `mg/MJ`, `mg NE/MJ` | **2** | Nährstoffdichte, Fachmass — nicht anzeigen, Grund ausweisen |
+
+  `[read]` Tom, 2026-08-15: *„Ok, das passt so für mich."*
+
+  **Die Umrechnung gehört zur Laufzeit in `daily_reference_assessment`,
+  nicht in den Seed.** `[cmd]` Die Funktion liest das Profil bereits für
+  Alter und Geschlecht; das Gewicht steht seit GO-01 in derselben Zeile.
+  Beim Gewichtswechsel ändert sich der Wert dann mit, statt in der
+  Tabelle zu veralten.
+
+  **Warum das liegen blieb:** Die Entscheidung fiel im Gespräch und
+  wurde nicht zum TODO-Punkt. Zwei Aufträge sperrten
+  `daily_reference_assessment` — zu Recht, aber niemand hatte den
+  Auftrag, sie umzusetzen. **Eine Entscheidung ohne Punkt existiert
+  nicht.**
+
+  `[cmd]` **Erledigt 2026-08-15, beide Teile.**
+
+  **Teil 1** (`7ddd307`, `d7cb600`): eindeutige mg/µg/g-Umrechnungen im
+  Seed. Calcium von 32.000 % auf `PRI 1000 mg` / `UL 2500 mg`. Die
+  Schemaprüfung kennt jetzt Einheiten und meldete am beschädigten Stand
+  **47 unpassend**, danach 0.
+
+  **Teil 2** (`91ee6b2`): die 16 Zeilen mit fremder Bezugsgrösse, zur
+  **Laufzeit** in `daily_reference_assessment` aufgelöst.
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `PROT625` | **1.593 %** | **31,7 %** — 20,66 g gegen 65,072 g |
+  | `LEU` | Tausendfaches | 55,5 % — 1,70 g gegen 3,058 g |
+  | `CHO`, `FAT` | falscher Prozentwert | `energy_share`, kein Prozentwert |
+  | `NIAEQ` | falscher Prozentwert | `nutrient_density` |
+
+  `[cmd]` Verteilung unverändert bei 45: 37 complete, 3 energy_share,
+  2 not_applicable, 2 incomplete, 1 nutrient_density. **Genau vier Zeilen
+  haben `complete` verlassen.**
+
+  **Der angezeigte Referenzwert ist der aufgelöste** — 65,072 g statt
+  `0,83 g/kg bw/day`. War nicht beauftragt: ohne ihn könnte niemand die
+  Prozentzahl nachrechnen.
+
+  **Der Fund unter dem Fund:** `[cmd]` Neun der zehn per-kg-Zeilen stehen
+  in `mg/kg`, während der Nährstoff in `g` geführt wird. Ohne die
+  Division durch 1000 hätte Leucin das Tausendfache gezeigt — **derselbe
+  Fehler eine Ebene tiefer**, gedeckt von derselben Markierung, die Teil 1
+  gesetzt hatte.
+
+  **Ohne Gewicht kein Wert:** `[cmd]` `missing_weight`, kein Prozentwert,
+  **und kein Referenzwert** — `0,83` dort stehenzulassen wäre
+  irreführend.
+
+  **Live gelesen, nicht eingefroren — jetzt festgehalten:** Eine
+  Mahlzeit ist ein Ereignis der Vergangenheit, ein Referenzwert eine
+  Aussage über diesen Menschen. `[cmd]` Seit heute verstärkt: das
+  Körpergewicht geht in zehn Referenzwerte direkt ein — wer sein Gewicht
+  korrigiert, ändert den Protein-Deckungsgrad jedes vergangenen Tages.
+  Die Alternative wäre schlechter: ein alter Eintrag gegen ein Gewicht
+  bewertet, das die Person nicht mehr hat.
+
+  **Warum Teil 2 liegen blieb:** Die Entscheidung fiel im Gespräch und
+  wurde nicht zum TODO-Punkt. Zwei Aufträge sperrten
+  `daily_reference_assessment` — zu Recht, aber niemand hatte den
+  Auftrag, sie umzusetzen. **Eine Entscheidung ohne Punkt existiert
+  nicht.**
