@@ -47,6 +47,43 @@ passiert („services/ ist leer"; „keine Writes, kein Auth").
   Statusvermerk im Kopf, der auf das Konsolidierungsregister zeigt.
 - Bei Unsicherheit: im Repo nachsehen, nicht raten.
 
+
+---
+
+## Das Vorgaengerrepo ist die wichtigste Quelle
+
+`referenz/lumeos-2026/` enthaelt das lauffaehige Vorgaengerprodukt.
+
+**Tom, 2026-08-15:** *"Das alte Repo ist am Code gescheitert, weil es mit
+jedem Feature gewachsen ist. All das Wissen, das aufgebaut wurde, liegt
+darin. Was wir nun tun, ist systematisch den Endausbau dieses Repos neu
+aufzubauen, diesmal richtig — also nutze diese Ressourcen."*
+
+**Gescheitert ist die Struktur, nicht die Erkenntnis.** `[cmd]` 75
+Migrationen, elf gebaute Module, 52 Seed-Dateien, eine Wissensbasis mit
+86 KB, Mehrsprachigkeit bis Thai. Was dort steht, wurde einmal
+durchdacht, gebaut und benutzt.
+
+**Der Wegweiser: `docs/ssot/80-vorgaengerrepo-fundus.md`** — nach Thema
+geordnet, mit Pfad. TDEE, Makros, Portionen, 1RM, Koerperfett, HRV,
+Halbwertszeiten, Biomarker-Synonyme, Regelwerk, Testdaten.
+
+**Vor jeder Einstufung als "fehlt" wird dort nachgesehen.** `[cmd]` An
+einem einzigen Tag wurde dreimal etwas als offene Frage behandelt, das
+fertig dort lag: die TDEE-Formeln, die Portionsgroessen, die
+Einheiten-Umrechnung. Jedes Mal kam der Hinweis von Tom, nicht aus der
+Arbeit.
+
+**Lesen ja, schreiben nie.** `referenz/` traegt 22 Stashes und 19
+ungepushte Commits — dort wird nichts veraendert.
+
+**Und was uebernommen wird, wird gemessen.** *Aus der Existenz einer
+Sache folgt nicht ihre Funktion.* Das Schema ist ein anderes
+(`public.foods` mit UUID gegen `nutrition.foods` mit `bls_code`), der
+Code lief gegen andere Tabellen. Er ist ein belegter Ausgangspunkt, keine
+fertige Loesung — aber ein belegter Ausgangspunkt schlaegt jede
+plausible Annahme.
+
 ---
 
 ## Altlasten
