@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-16, Anker `dd162a2` auf `dev`.
+**Stand:** 2026-08-16, Anker `9b95b65` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 42 offen, 7 in Arbeit.
+`[cmd]` 45 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -151,8 +151,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
 | **C-48** | Die Tagesbilanz sichtbar machen |  |
 | **C-49** | Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach |  |
-| **C-57** | Wasserziel nach der Konsensformel | ~ |
-| **C-58** | Settings — Sichtbarkeit und überholte Texte | ~ |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -181,6 +179,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-05** | Dashboard |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
 | **G-07** | Umschalten |  |
+| **G-10** | `btn-accent` auf Seiten ohne Modulakzent |  |
+| **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
+| **G-12** | Die Suche in die Erfassung einbinden |  |
 
 ---
 
@@ -831,52 +832,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   Suchumbau: vier Tage an Modellen gearbeitet, bevor jemand gemessen hat,
   was Menschen tatsächlich suchen.
 
-- [~] **C-57: Wasserziel nach der Konsensformel** (neu 2026-08-16).
-  **In Arbeit.**
-
-  `[cmd]` Heute: `body_weight_kg × 35`, fest. Recherchiert am
-  2026-08-16, Struktur der gängigen Rechner:
-  **`Basis × Aktivitätsfaktor × Klimafaktor + Trainingsbonus`**
-
-  | | |
-  |---|---|
-  | Basis | 30 ml/kg sedentär · 35 normal · 40 aktiv (nähert die IOM-Empfehlung von 30–40 ml/kg) |
-  | Training | ~350 ml je 30 min (ACSM); intensiv 750 ml–1 L/h |
-  | Klima | +10 % warm, +20 % sehr heiss und feucht |
-  | Schwangerschaft, Stillzeit | eigener Zuschlag |
-
-  **Tom, 2026-08-16:** *„Gyms sind indoor und meist klimatisiert, das
-  können wir nicht globalisiert betrachten. Wir sehen den Faktor für
-  Klima vor, denn irgendwann binden wir Gyms an. Trainingssessions
-  werden wir auch bald kennen, also auch vorsehen."*
-
-  **Beide Faktoren stehen auf neutral**, kein Profilfeld: Klima 1,0,
-  Trainingsbonus 0. `[cmd]` Klima gehört an den Ort des Trainings, nicht
-  an den Wohnort — ein Studio in Bangkok ist klimatisiert.
-
-  **Kein Maximum.** `[Sicher]` Keine der Formeln kennt eine Obergrenze
-  im Alltagsbereich; `progress_pct` darf über 100 gehen und
-  kennzeichnet dort nichts.
 
 
-- [~] **C-58: Settings — Sichtbarkeit und überholte Texte** (neu
-  2026-08-16). **In Arbeit.**
-
-  **Tom, 2026-08-16:** *„Da muss man nicht eine hochintelligente KI
-  sein, um zu wissen, dass man das bei männlich ausblendet."*
-
-  `[cmd]` Schwangerschaft und Stillzeit werden bei
-  `biological_sex = male` nicht gerendert — der Wert steht im selben
-  Formular zwei Felder darüber.
-
-  **Zwei überholte Texte:** `[cmd]` *„Diese Seite erfasst, sie rechnet
-  nicht […] bleiben die Ringe im Tagebuch leer"* und `TDEE-FORMEL:
-  moeglich` — beides stimmt seit GO-04 nicht mehr. `[read]` Derselbe
-  Fall wie veraltete Statuszeilen: ein Hinweis, der einmal richtig war,
-  wird zur Falschaussage, sobald das Gebaute ihn überholt.
-
-  Dazu: `mm/dd/yyyy` in deutscher Oberfläche, und der Speichern-Knopf
-  ist ausgegraut abgesetzt.
 
 
 
@@ -1559,3 +1516,58 @@ Umsetzen angepasst werden.
   Mit abzuräumen: `[cmd]` `apps/admin` nutzt **null Tokens** und ist
   vollständig hart verdrahtet — eigener Posten, eigene Entscheidung, ob
   Theme V1 auch dort gilt.
+
+- [ ] **G-10: `btn-accent` auf Seiten ohne Modulakzent** (neu
+  2026-08-16). Befund aus C-58.
+
+  `[cmd]` Der Speichern-Knopf in Settings war unsichtbar: Er trug
+  `v2-btn-accent`, das sich aus `--acc` färbt — **und Settings hat
+  keinen Modulakzent.** Mit und ohne Änderung blassgrau, Unterschied nur
+  die Deckkraft.
+
+  **Das betrifft nicht nur Settings.** `[cmd]` Jede Seite ohne
+  Modulakzent hat dasselbe Problem mit jedem `btn-accent` — und
+  `app-shell.tsx` setzt `--acc` nur für die elf Module.
+
+  **Zu prüfen:** Welche Seiten haben keinen Akzent? Was passiert dort
+  mit `v2-btn-accent`, `v2-accent-dot` und allem anderen, das aus
+  `--acc` liest? `[annahme]` Ein Rückfallwert im Token wäre die
+  einfachste Lösung — dann ist nichts unsichtbar, auch wenn die Seite
+  kein Modul ist.
+
+- [ ] **G-11: Die restlichen Nutrition-Tabs anbinden** (neu 2026-08-16).
+  Setzt G-08 voraus.
+
+  `[cmd]` Sieben Tabs stehen, drei tragen Daten (`Diary`, `Nutrients`,
+  `Food DB`). **Vier sind Attrappen:** `Insights`, `Meal plans`,
+  `Preferences`, `Planner`.
+
+  | | woran es hängt |
+  |---|---|
+  | `Insights` | Auswertungen über Zeiträume — `daily_summary` rechnet je Tag, nicht je Woche |
+  | `Meal plans` | `[cmd]` `meal_plans` existiert nicht |
+  | `Preferences` | `[cmd]` `food_preferences` und `food_preference_items` existieren, sind leer und nirgends angebunden |
+  | `Planner` | setzt `meal_plans` voraus |
+
+  **`Preferences` ist der nächste realistische Schritt** — `[cmd]` die
+  Tabellen stehen seit Kettenschritt `050`, mit Zeilenschutz und
+  Policies. Was fehlt, ist die Oberfläche und die Verbindung zur Suche.
+
+  `[read]` `Insights` braucht eine Wochen- oder Monatsaggregation. Seit
+  den Testdaten gibt es **43 Tage je Nutzer** — das wäre erstmals
+  belegbar.
+
+- [ ] **G-12: Die Suche in die Erfassung einbinden** (neu 2026-08-16).
+
+  `[cmd]` Heute liegt die Lebensmittelsuche unter `Food DB` als eigene
+  Seite; die Erfassung im Tagebuch ist davon getrennt. In der Vorlage
+  führt jede Mahlzeitenkarte einen `+`-Knopf und Zeilen wie
+  `MealCam · Search · Same as yesterday`.
+
+  **Was das braucht:** Suche als Auswahlfeld in der Mahlzeitenkarte,
+  Portionsauswahl beim Hinzufügen (`[cmd]` `foods_portions` mit 23.402
+  Zeilen steht bereit), und `Same as yesterday` — das aus dem Vortag
+  kopiert.
+
+  `[cmd]` **Der Schreibpfad steht** (C-03), die Portionsspalten auch
+  (C-51). Es fehlt die Verbindung.
