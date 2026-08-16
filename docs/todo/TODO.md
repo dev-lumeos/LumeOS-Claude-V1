@@ -1278,51 +1278,45 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 `[read]` Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`
 
 - [ ] **C-50: Portionsgrössen** (neu 2026-08-15). **Tom, 2026-08-15:**
-  *„Da müssen wir noch Portionen definieren."*
+  *„Da müssen wir noch Portionen definieren"* — und auf Nachfrage:
+  *„Hatten wir auch schon komplett gelöst, suche."*
 
-  **Spezifiziert ja, gebaut nein.** `[read]`
-  `SPEC_06_PATCH_V1_DECISIONS.md` führt eine Tabelle `food_portions` —
-  *„Portionsgrössen pro Food (Stück, Scheibe, Glas etc.)"*, mit dem
-  Vermerk *„V1 braucht gram-based canonical calculation mit
-  Portionsgrössen-Support."* `[cmd]` Sie existiert nicht.
-
-  `[cmd]` Vorhanden ist nur:
+  **Er hatte recht. Es ist eine Übernahme, keine Neuentwicklung.**
+  `[cmd]` Drei Fundstellen in `referenz/lumeos-2026/`:
 
   | | |
   |---|---|
-  | `foods_custom.serving_size_g` + `serving_name` | nur eigene Einträge, z.B. „1 Riegel" |
-  | `meal_items.amount_g` | Gramm, kanonisch |
-  | `water_logs.amount_ml` | Milliliter |
+  | `supabase/migrations/002_create_nutrition_tables.sql` | `foods_portions` — `food_id`, `name_de`, `name_en`, `amount_g`, `is_default` |
+  | `scripts/seed-portions.py` | 8 KB, über 100 Portionseinträge |
+  | `src/modules/nutrition/hooks/useFoodPortions.ts` | der Lesepfad |
 
-  `[read]` Die Spec nennt drei Bezugspunkte, alle fehlen: Portionen je
-  Lebensmittel, **zuletzt benutzte Portionen je Nutzer**, und Portionen
-  für eigene Lebensmittel.
+  **Der Ansatz hängt an der Kategorie, nicht am Lebensmittel.** `[cmd]`
+  Fünf universelle Portionen (EL 15 g, TL 5 g, Tasse 250 g, Glas 200 ml,
+  100 g) plus kategoriespezifische: `Brot` bekommt Scheibe 30 g, dicke
+  Scheibe 50 g, Brötchen 60 g, Toast 25 g; `Fleisch` Portion 150 g,
+  Steak 200 g, Hähnchenbrustfilet 175 g; `Obst` Stück klein/mittel/gross
+  und Handvoll.
 
-  **Es fehlt an allen drei Stellen.** `[cmd]` Auch die Designvorlage
-  kennt keine Portionen — sie zeigt durchgehend Gramm, einzige Ausnahme
-  `5 of 12 glasses` beim Wasser. Und der BLS liefert nichts: 30 Einträge
-  tragen „Stück" im Namen, 10 „Scheibe", aber das ist Text, keine Menge.
+  **Damit sind es rund hundert Definitionen statt 7.140 Kurationen.**
+  Die erste Fassung dieses Punktes hat das Problem um zwei
+  Grössenordnungen zu gross beschrieben — der Fehler lag darin, nicht
+  zuerst im Vorgängerrepo gesucht zu haben.
 
-  **Das ist eine Kuration wie die Anzeigenamen**, nicht eine Ableitung.
-  Ein Ei wiegt 58 g, eine Scheibe Mischbrot 45 g, ein Glas Milch 200 ml
-  — nichts davon steht im Bestand.
-
-  **Der Umfang ist die erste Frage.** `[annahme]` Nicht alle 7.140
-  brauchen eine Portion: Bei `Bechamelsauce` ist Gramm richtig, bei
-  `Hühnerei` nicht. `[read]` Die Core-Fitness-Liste aus `SPEC_05` und die
-  37 MealCam-Zutaten sind die Kandidaten, mit denen man anfängt.
-
-  **Was vorher zu entscheiden ist:**
-  - **Kanonisch bleibt Gramm.** `[cmd]` `meal_items.amount_g` ist so
-    gebaut, und `frozen_at` friert die Nährwerte ein. Portionen sind
-    eine Eingabehilfe, keine zweite Wahrheit — sonst driften zwei
-    Mengenangaben auseinander.
-  - **Mehrere Portionen je Lebensmittel** (Scheibe, Laib, Gramm) oder
-    eine? Die Spec sagt es nicht.
-  - **Woher die Gewichte?** `[read]` Dieselbe Regel wie bei den
-    Referenzwerten: keine Zahl ohne Quelle. Haushaltsmasse stehen in der
-    BLS-Dokumentation oder in den DGE-Referenztabellen — **prüfen, nicht
-    schätzen.**
+  **Was bei der Übernahme zu klären ist:**
+  - `[cmd]` Das alte Schema nutzt `public.foods`, dieses `nutrition.foods`
+    mit `bls_code` als Schlüssel. Die Zuordnung Kategorie → Portion muss
+    gegen `nutrition.food_categories` (518 Einträge) neu gelegt werden,
+    nicht gegen die alten Muster.
+  - **Gramm bleibt kanonisch.** `[cmd]` `meal_items.amount_g` ist so
+    gebaut, `frozen_at` friert die Nährwerte ein. Portionen sind eine
+    Eingabehilfe, keine zweite Wahrheit.
+  - `[read]` Die Spec nennt zusätzlich **zuletzt benutzte Portionen je
+    Nutzer** — im Vorgängerrepo nicht gefunden, also eigener Schritt.
+  - **Woher die Gewichte stammen, ist im Seed-Skript nicht vermerkt.**
+    `[annahme]` Haushaltsübliche Masse. Beim Übernehmen entscheiden, ob
+    das reicht oder ob eine Quelle nachgetragen wird — `[read]` GO-00
+    zeigt gerade, was passiert, wenn eine Zahl ohne geprüfte
+    Bezugsgrösse eingetragen wird.
 
 - [ ] **GO-00: Die Referenzwerte tragen unpassende Einheiten** (neu
   2026-08-15). **Blockiert die Prozentwerte in C-48.**

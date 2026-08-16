@@ -59,6 +59,31 @@ Alle Spec- und Brainstorm-Dateien des Moduls, je Zeile ein Stand:
 **`aufgeloest` setzt voraus, dass Tom die Entscheidung bestätigt hat.**
 Was ein Agent gelesen hat, ist `gelesen`.
 
+### 1b. Im Vorgängerrepo nachsehen — vor allem anderen
+
+`[cmd]` `referenz/lumeos-2026/` enthält das lauffähige Vorgängerprodukt.
+**Bevor etwas als „fehlt" eingestuft wird, wird dort gesucht.**
+
+Zweimal an einem Tag hat sich das gerächt:
+
+| | |
+|---|---|
+| **TDEE-Formeln** | als „muss recherchiert werden" eingestuft — `[cmd]` `src/modules/onboarding/utils/calculateTDEE.ts` rechnet sie vollständig, inklusive der beiden Regeln, die in keiner Spec stehen |
+| **Portionsgrössen** | als Kuration von 7.140 Einträgen beschrieben — `[cmd]` `scripts/seed-portions.py` löst es mit rund hundert kategoriebasierten Definitionen |
+
+`[read]` Tom, 2026-08-15: *„Ich denke, die Formeln dazu gibt es schon,
+denn alles hat schonmal funktioniert."* Und: *„Hatten wir auch schon
+komplett gelöst, suche."*
+
+**`referenz/` ist gesperrt fürs Schreiben, nicht fürs Lesen.** 22
+Stashes, 19 ungepushte Commits — es wird dort nichts verändert, aber es
+ist die belegte Quelle für alles, was schon einmal lief.
+
+**Was übernommen wird, wird gemessen.** `[read]` *Aus der Existenz einer
+Sache folgt nicht ihre Funktion.* Der Code ist gegen ein anderes Schema
+gelaufen (`public.foods` statt `nutrition.foods`, UUID statt
+`bls_code`) — er ist ein belegter Ausgangspunkt, keine fertige Lösung.
+
 ### 2. Ist-Zustand, gemessen
 
 Was existiert heute — mit `[cmd]`, nicht aus der Spec abgeschrieben.
