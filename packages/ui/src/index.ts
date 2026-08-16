@@ -42,6 +42,16 @@ export type {
   TabsProps, TabItem,
 } from './primitives'
 
+// --- In G-03 dazugekommen ---------------------------------------
+// Beide gehoeren hierher, nicht in die Seite: sie wiederholen sich in
+// jedem Modul, das Werte gegen Ziele oder Referenzwerte zeigt.
+export { ProgressRing } from './progress-ring'
+export type { ProgressRingProps } from './progress-ring'
+export { CoverageRow, bewerte } from './coverage-row'
+export type {
+  CoverageRowProps, ReferenceDirection, ReferenceStatus,
+} from './coverage-row'
+
 // --- Huelle -----------------------------------------------------
 export { AppShell } from './shell/app-shell'
 export type { AppShellProps } from './shell/app-shell'

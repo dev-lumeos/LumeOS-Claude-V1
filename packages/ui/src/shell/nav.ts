@@ -55,7 +55,16 @@ export const V2_BASE = '/v2'
 
 export const MODULES: NavEntry[] = [
   { id: 'dashboard',   label: 'Dashboard',    icon: 'dashboard',   href: `${V2_BASE}`,             shortcut: '1' },
-  { id: 'nutrition',   label: 'Nutrition',    icon: 'nutrition',   href: `${V2_BASE}/nutrition`,   shortcut: '2' },
+  {
+    // G-03: zwei Seiten, deshalb Untereintraege. Der Aufbau war schon
+    // da (Coach), er wird hier zum zweiten Mal benutzt.
+    id: 'nutrition', label: 'Nutrition', icon: 'nutrition',
+    href: `${V2_BASE}/nutrition`, shortcut: '2',
+    sub: [
+      { id: 'nutrition-diary',  label: 'Tagebuch', href: `${V2_BASE}/nutrition` },
+      { id: 'nutrition-search', label: 'Suche',    href: `${V2_BASE}/nutrition/suche` },
+    ],
+  },
   { id: 'training',    label: 'Training',     icon: 'training',    href: `${V2_BASE}/training`,    shortcut: '3' },
   { id: 'recovery',    label: 'Recovery',     icon: 'recovery',    href: `${V2_BASE}/recovery`,    shortcut: '4' },
   { id: 'supplements', label: 'Supplements',  icon: 'supplements', href: `${V2_BASE}/supplements`, shortcut: '5' },

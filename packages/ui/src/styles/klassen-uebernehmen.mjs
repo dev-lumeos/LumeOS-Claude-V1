@@ -280,6 +280,154 @@ const zusatz = `
   .v2-sidebar-user { margin-top: 0; margin-left: auto; }
   .v2-main { overflow: visible; }
 }
+
+/* 5. Deckungszeile je Naehrstoff (G-03).
+   Der Entwurf zeigt Naehrstoffe als Balken mit Prozentwert, aber immer
+   in einer Leserichtung. [read] C-48 verlangt drei Faelle mehr:
+   Untergrenze statt Prozent, Obergrenze statt Ziel, und "kein
+   Einzelwert" statt eines leeren Balkens. Deshalb eine eigene Zeile. */
+.v2-coverage-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(60px, 120px) 62px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 6px 4px;
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  font-size: 12px;
+  text-align: left;
+}
+button.v2-coverage-row { cursor: pointer; }
+button.v2-coverage-row:hover { background: var(--surface-hover); }
+.v2-coverage-row:last-child { border-bottom: 0; }
+
+.v2-coverage-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg-muted);
+}
+.v2-coverage-value { color: var(--fg); white-space: nowrap; }
+
+.v2-coverage-bar {
+  position: relative;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.v2-coverage-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+/* Markierung der 100 % bei einer Obergrenze. */
+.v2-coverage-limit {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 1px;
+  background: var(--fg-dim);
+}
+.v2-coverage-pct { text-align: right; white-space: nowrap; font-size: 11px; }
+.v2-coverage-missing {
+  grid-column: 1 / -1;
+  color: var(--warn);
+  font-size: 10px;
+}
+
+/* 6. Trefferzeile der Lebensmittelsuche (G-03). */
+.v2-hit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.v2-hit:hover {
+  border-color: color-mix(in oklch, var(--acc) 30%, var(--border));
+  background: var(--surface-hover);
+}
+.v2-hit[data-selected="true"] {
+  border-color: color-mix(in oklch, var(--acc) 50%, var(--border));
+  background: color-mix(in oklch, var(--acc) 8%, var(--surface));
+}
+.v2-hit-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--fg);
+  font-size: 12.5px;
+}
+.v2-hit-meta {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--fg-dim);
+  font-size: 10.5px;
+}
+.v2-hit-kcal { color: var(--fg-muted); font-size: 11.5px; white-space: nowrap; }
+
+/* 7. Eingabefeld im Inhaltsbereich (G-03).
+   Der Entwurf hat nur das Feld in der Seitenleiste (.sidebar-search
+   input) — mit Platz fuer ein Lupensymbol davor und auf 240px Breite
+   gerechnet. Im Inhaltsbereich braucht es die volle Breite. */
+.v2-feld {
+  flex: 1;
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+  color: var(--fg);
+  font-size: 12.5px;
+}
+.v2-feld::placeholder { color: var(--fg-dim); }
+.v2-feld:focus-visible { border-color: var(--acc); }
+
+/* 8. Leerer Zustand und Hinweiszeile (G-03).
+   Der Entwurf kennt beides nicht — in einer Vorfuehrung ist nie etwas
+   leer und nie etwas unsicher. In der Anwendung ist genau das der
+   Normalfall: [cmd] meals und meal_items haben 0 Zeilen. */
+.v2-empty {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: color-mix(in oklch, var(--surface) 70%, var(--bg));
+  padding: 16px;
+  color: var(--fg-muted);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.v2-empty strong { color: var(--fg); }
+
+.v2-hinweis {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  border-top: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
+  padding-top: 10px;
+  color: var(--fg-dim);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.v2-hinweis strong { color: var(--fg-muted); }
+
+.v2-link {
+  color: var(--acc);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 `
 
 fs.mkdirSync(path.dirname(ZIEL), { recursive: true })
