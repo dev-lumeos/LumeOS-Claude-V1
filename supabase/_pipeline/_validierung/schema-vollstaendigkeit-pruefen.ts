@@ -446,8 +446,98 @@ if (istTabellen.has('nutrient_reference_values') && istTabellen.has('nutrient_de
     fehler.push(`Datenqualitaet: nutrition.nutrient_reference_values hat ` +
       `${abweichungen.length} Wertzeile(n), deren Einheit nicht zur ` +
       `nutrient_defs.unit passt und nicht als GO-00-Sonderbezug markiert ist` +
-      ` â€” ${beispiele}${abweichungen.length > 12 ? '; â€¦' : ''}`)
+      ` — ${beispiele}${abweichungen.length > 12 ? '; …' : ''}`)
   }
+}
+
+// =============================================================
+// Fremde Schemata (GO-03/GO-04)
+// =============================================================
+// Alles oben liest `nutrition`. [cmd] Ein neues Schema waere damit
+// strukturell ungeprueft — Tabelle, Zeilenschutz, Policies und Grants
+// koennten fehlen, ohne dass ein Kettenlauf sich beschwert. Das ist
+// dieselbe Fehlerklasse, die C-43 aufgedeckt hat, nur eine Ebene
+// hoeher: dort fehlten Schritte, hier faellt ein ganzes Schema aus dem
+// Blickfeld.
+if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
+  let fremdOk = 0
+  for (const t of SOLL.fremde_schemata) {
+    const voll = `${t.schema}.${t.name}`
+
+    const daIst = sql(
+      `SELECT EXISTS (SELECT 1 FROM information_schema.tables
+         WHERE table_schema='${t.schema}' AND table_name='${t.name}'
+           AND table_type='BASE TABLE')::text;`)[0]?.[0] === 'true'
+    if (!daIst) {
+      fehler.push(`Tabelle: ${voll} FEHLT — erzeugt von Schritt ${t.schritt}`)
+      continue
+    }
+
+    // Zeilenschutz
+    const rls = sql(
+      `SELECT c.relrowsecurity::text FROM pg_class c
+       JOIN pg_namespace n ON n.oid=c.relnamespace
+       WHERE n.nspname='${t.schema}' AND c.relname='${t.name}';`)[0]?.[0]
+    const rlsAn = rls === 'true' || rls === 't'
+    if (rlsAn !== (t.rls === true)) {
+      fehler.push(`Zeilenschutz: ${voll} hat rowsecurity=${rlsAn}, erwartet ${t.rls}` +
+        ` — Schritt ${t.schritt}`)
+      continue
+    }
+
+    // Policies je Operation — derselbe Massstab wie fuer nutrition.
+    const polIst2 = new Set(sql(
+      `SELECT cmd FROM pg_policies
+       WHERE schemaname='${t.schema}' AND tablename='${t.name}';`).map(r => r[0]))
+    if (t.rls && polIst2.size === 0) {
+      fehler.push(`Policies: ${voll} hat Zeilenschutz, aber KEINE Policy` +
+        ` — Tabelle ist gesperrt (ADR-0003) — Schritt ${t.schritt}`)
+      continue
+    }
+    const polFehlt = (t.policies as string[]).filter(op => !polIst2.has(op))
+    if (polFehlt.length) {
+      fehler.push(`Policies: ${voll} fehlt ${polFehlt.join(', ')} — Schritt ${t.schritt}`)
+      continue
+    }
+
+    // Grants, exakt wie bei nutrition.
+    const grIst = new Map<string, Set<string>>()
+    for (const [rolle, recht] of sql(
+      `SELECT grantee, privilege_type FROM information_schema.role_table_grants
+       WHERE table_schema='${t.schema}' AND table_name='${t.name}';`)) {
+      if (!grIst.has(rolle)) grIst.set(rolle, new Set())
+      grIst.get(rolle)!.add(recht)
+    }
+    let grOk = true
+    for (const [rolle, soll] of Object.entries(t.grants as Record<string, string[]>)) {
+      const ist = grIst.get(rolle) ?? new Set<string>()
+      const fehlt = soll.filter(r => !ist.has(r))
+      const zuviel = [...ist].filter(r => !soll.includes(r))
+      if (fehlt.length) {
+        fehler.push(`GRANT: ${voll} fehlt ${rolle} ${fehlt.join(', ')} — Schritt ${t.schritt}`)
+        grOk = false
+      }
+      if (zuviel.length) {
+        fehler.push(`GRANT: ${voll} hat ${rolle} ZU VIEL: ${zuviel.join(', ')}` +
+          ` — Schritt ${t.schritt}`)
+        grOk = false
+      }
+    }
+    if (grOk) fremdOk++
+  }
+  console.log(`Fremde Tab. ${fremdOk}/${SOLL.fremde_schemata.length} vollstaendig`)
+}
+
+if (Array.isArray(SOLL.fremde_funktionen) && SOLL.fremde_funktionen.length) {
+  let fnOk = 0
+  for (const f of SOLL.fremde_funktionen) {
+    const da = sql(
+      `SELECT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace
+         WHERE n.nspname='${f.schema}' AND p.proname='${f.name}')::text;`)[0]?.[0] === 'true'
+    if (da) fnOk++
+    else fehler.push(`Funktion: ${f.schema}.${f.name} FEHLT — Schritt ${f.schritt}`)
+  }
+  console.log(`Fremde Fkt. ${fnOk}/${SOLL.fremde_funktionen.length} vorhanden`)
 }
 
 console.log('')

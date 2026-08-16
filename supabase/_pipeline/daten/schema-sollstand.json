@@ -888,5 +888,27 @@
     "foods_custom_zeilen": "Die Tabelle bleibt vorerst leer - es gibt noch keine Oberflaeche, ueber die ein Nutzer einen Eintrag anlegen koennte. Keine Mindestzeilenzahl."
   },
   "_grants": "Rechte je Rolle, aus den SQL-Dateien abgeleitet. GEPRUEFT WIRD EXAKT, nicht \"mindestens\": ein zusaetzliches Recht (GRANT ALL) ist der gefaehrlichere Fall und muss anschlagen. postgres steht NICHT in der Liste — es ist Eigentuemer, seine Rechte sind Eigentum, keine Grants.",
-  "_zeilenschutzart": "Fachliche Aussage je Tabelle, nachgeschlagen in 060/052/055: oeffentlich = USING (true) ist richtig (Stammdaten); eigene_zeilen = die Bedingung MUSS auth.uid() nennen, sonst Datenleck; admin = die Bedingung MUSS public.is_admin() nennen."
+  "_zeilenschutzart": "Fachliche Aussage je Tabelle, nachgeschlagen in 060/052/055: oeffentlich = USING (true) ist richtig (Stammdaten); eigene_zeilen = die Bedingung MUSS auth.uid() nennen, sonst Datenleck; admin = die Bedingung MUSS public.is_admin() nennen.",
+
+  "_fremde_schemata": "GO-03: Die Pruefung oben liest ausschliesslich das Schema `nutrition` — [cmd] 10 Abfragen mit fest verdrahtetem nutrition. Ein neues Schema waere damit strukturell UNGEPRUEFT: Tabelle, Zeilenschutz, Policies und Grants koennten fehlen, ohne dass ein Kettenlauf sich beschwert. Genau diese Fehlerklasse hat C-43 aufgedeckt. Deshalb dieser Block: Tabellen ausserhalb nutrition, mit denselben vier Fragen.",
+  "fremde_schemata": [
+    {
+      "schema": "goals",
+      "name": "nutrition_targets",
+      "schritt": "110",
+      "rls": true,
+      "policies": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+      "grants": {
+        "authenticated": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "service_role": ["SELECT", "INSERT", "UPDATE", "DELETE", "REFERENCES", "TRIGGER", "TRUNCATE"]
+      },
+      "grants_herkunft": "110 vergibt beides explizit; goals faellt nicht unter die DEFAULT PRIVILEGES aus 060 3e, die nur fuer nutrition gesetzt sind.",
+      "zeilenschutzart": "eigene_zeilen"
+    }
+  ],
+  "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
+  "fremde_funktionen": [
+    { "schema": "goals", "name": "berechne_zielwerte", "schritt": "110" },
+    { "schema": "goals", "name": "zielwerte_am", "schritt": "110" }
+  ]
 }

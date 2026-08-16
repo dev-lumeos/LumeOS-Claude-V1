@@ -289,6 +289,13 @@
       "kind": "sql",
       "creates": "Mideus-/Medius-Merge",
       "depends_on": ["104"]
+    },
+    {
+      "id": "110",
+      "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
+      "kind": "sql",
+      "creates": "Schema goals, nutrition_targets, berechne_zielwerte, zielwerte_am",
+      "depends_on": ["B"]
     }
   ]
 }

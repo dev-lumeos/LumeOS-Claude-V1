@@ -104,6 +104,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 103 | `10_training/103_calvicular_merge.sql` | Calvicular-/Clavicular-Merge | Nachpflege |
 | 104 | `10_training/104_body_region.sql` | `body_region`-Nachpflege fuer Muskelgruppen | Nachpflege |
 | 105 | `10_training/105_mideus_merge.sql` | Mideus-/Medius-Merge | Endbestand 1.416 Uebungen, 107 Muskelgruppen, 58 Geraete, 6.624 Zuordnungen |
+| 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 
 **Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,
 `055` braucht `nutrition.touch_updated_at()` aus `052`, `056` braucht
