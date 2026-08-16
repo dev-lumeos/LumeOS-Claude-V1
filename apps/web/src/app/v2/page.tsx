@@ -1,81 +1,90 @@
-// Nachweisseite der Oberflaeche v2 (G-01, erweitert in G-02).
+// Dashboard der Oberflaeche v2 (G-05).
 //
-// Zweig: die Huelle steht — Navigation, Kopfzeile, Inhaltsbereich,
-// Kontextspalte. KEINE Modulinhalte; die sind G-03 und G-06.
+// Vorlage: theme-v1/module-dashboard.jsx.
 //
-// Die Seite zeigt die geteilten Bausteine einmal in Betrieb, damit
-// belegbar ist, dass sie greifen. Sie ist kein Modul und wird beim
-// Umschalten (G-07) ersetzt.
-import { Card, KPI, Pill, Ring, Meter, Row, ModuleHero } from '@lumeos/ui'
-import { AkzentProbe } from './akzent-probe'
+// DIE ENTSCHEIDUNG DIESES AUFTRAGS steht in der Ansicht — hier nur die
+// Daten. Serverkomponente, damit Tagessumme, Ziele und Bewertung aus
+// derselben Sitzung kommen wie im Tagebuch.
+import type { Metadata } from 'next'
 
-const AKZENTE = [
-  ['--acc-dash', 'Dashboard'],
-  ['--acc-nutri', 'Nutrition'],
-  ['--acc-train', 'Training'],
-  ['--acc-recov', 'Recovery'],
-  ['--acc-suppl', 'Supplements'],
-  ['--acc-goals', 'Goals'],
-  ['--acc-medic', 'Medical'],
-  ['--acc-coach', 'Coach'],
-  ['--acc-buddy', 'Buddy'],
-  ['--acc-mkt', 'Marketplace'],
-  ['--acc-admin', 'Admin'],
-] as const
+import { getDailySummary, listDailySummaries } from '../../lib/nutrition/diary-summary-read'
+import { getReferenceAssessment } from '../../lib/nutrition/reference-assessment-read'
+import { getZielwerteAm, getZielwertVorschlag } from '../../lib/profile/zielwerte-read'
+import type { DailySummaryRow } from '../../lib/nutrition/diary-summary'
+import type { ReferenceAssessmentRow } from '../../lib/nutrition/reference-assessment-read'
+import type { Zielvorschlag, Zielwerte } from '../../lib/profile/zielwerte-read'
+import { DashboardAnsicht } from './dashboard'
 
-export default function V2Page() {
+export const metadata: Metadata = {
+  title: 'Dashboard · LumeOS',
+}
+
+export const dynamic = 'force-dynamic'
+
+/** Heute in lokaler Zeit als YYYY-MM-DD. */
+function heute(): string {
+  const d = new Date()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const t = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${m}-${t}`
+}
+
+/** N Tage vor dem Stichtag, als YYYY-MM-DD. */
+function minusTage(datum: string, n: number): string {
+  const d = new Date(`${datum}T00:00:00`)
+  d.setDate(d.getDate() - n)
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const t = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${m}-${t}`
+}
+
+export default async function V2Dashboard({
+  searchParams,
+}: {
+  searchParams?: { datum?: string }
+}) {
+  // `?datum=` ist dasselbe Muster wie im Tagebuch — und der Weg, die
+  // elf Szenariotage anzusehen.
+  const datum = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
+    ? searchParams!.datum!
+    : heute()
+
+  let summe: DailySummaryRow | null = null
+  let verlauf: DailySummaryRow[] = []
+  let bewertung: ReferenceAssessmentRow[] = []
+  let ziele: Zielwerte | null = null
+  let vorschlag: Zielvorschlag | null = null
+  let fehler: string | null = null
+
+  // Jede Frage einzeln abgefangen: faellt eine aus, bleiben die
+  // uebrigen Kacheln gueltig. Ein Dashboard, das komplett verschwindet,
+  // weil eine Abfrage klemmt, ist schlechter als eines mit einer
+  // leeren Kachel.
+  try {
+    summe = await getDailySummary(datum)
+  } catch (e) {
+    fehler = e instanceof Error ? e.message : String(e)
+  }
+  try {
+    verlauf = await listDailySummaries(minusTage(datum, 6), datum)
+  } catch { /* Der Verlauf ist Beiwerk; ohne ihn fehlt nur die Kurve. */ }
+  try {
+    bewertung = await getReferenceAssessment(datum)
+  } catch { /* siehe oben */ }
+  try {
+    ziele = await getZielwerteAm(datum)
+    if (!ziele) vorschlag = await getZielwertVorschlag(datum)
+  } catch { /* Ohne Ziele zeigt die Ansicht denselben Hinweis wie das Tagebuch. */ }
+
   return (
-    <>
-      <ModuleHero
-        icon="dashboard"
-        title="Oberflaeche v2 · Huelle"
-        sub="G-02: Seitenleiste, Kopfzeile und Kontextspalte stehen. Die Modulinhalte folgen in G-03."
-        pills={<><Pill variant="acc">G-02</Pill><Pill>Attrappe</Pill></>}
-        stats={[
-          { label: 'Bausteine', value: '9', sub: 'aus shared.jsx' },
-          { label: 'Symbole', value: '51', sub: 'getypt' },
-          { label: 'Klassen', value: '145', sub: 'Praefix v2-' },
-        ]}
-      />
-
-      <AkzentProbe akzente={AKZENTE} />
-
-      <div className="v2-grid v2-g-cols-2" style={{ marginTop: 16 }}>
-        <Card title="Bausteine" sub="einmal in Betrieb">
-          <div className="v2-grid v2-g-cols-2" style={{ marginBottom: 12 }}>
-            <KPI label="Kalorien" value="2.145" unit="kcal" delta="+120"
-                 deltaVariant="pos" spark={[10, 14, 12, 18, 16, 22, 20]} />
-            <KPI label="Protein" value="148" unit="g" delta="-12" deltaVariant="neg" />
-          </div>
-          <Row label="Ring, Meter, Pill" value="Beispiel" />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 12 }}>
-            <Ring value={72} label="Score" size={92} />
-            <div style={{ flex: 1 }}>
-              <Meter value={72} />
-              <div style={{ display: 'flex', gap: 6, marginTop: 10 }}>
-                <Pill variant="pos">pos</Pill>
-                <Pill variant="warn">warn</Pill>
-                <Pill variant="neg">neg</Pill>
-                <Pill variant="acc">acc</Pill>
-              </div>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Was hier NICHT steht" sub="mit Absicht">
-          <Row label="Modulinhalte" value="G-03 / G-06" />
-          <Row label="Buddy-Antworten" value="Attrappe" />
-          <Row label="Befehlspalette" value="fehlt" />
-          <Row label="Benachrichtigungen" value="fehlt" />
-          <p style={{
-            marginTop: 12, fontSize: 12, lineHeight: 1.5, color: 'var(--fg-muted)',
-          }}>
-            Bedienelemente ohne Funktion sind deaktiviert statt still. Ein
-            Knopf, der nichts tut, ist ein Versprechen — ein deaktivierter
-            ist eine Aussage.
-          </p>
-        </Card>
-      </div>
-    </>
+    <DashboardAnsicht
+      datum={datum}
+      summe={summe}
+      verlauf={verlauf}
+      bewertung={bewertung}
+      ziele={ziele}
+      vorschlag={vorschlag}
+      fehler={fehler}
+    />
   )
 }
