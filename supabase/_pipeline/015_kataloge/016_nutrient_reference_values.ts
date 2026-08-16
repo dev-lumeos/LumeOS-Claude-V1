@@ -468,6 +468,46 @@ function noReferenceReason(def: NutrientDef): { kind: string; source: string; so
   }
 }
 
+function withConvertedValue(row: ReferenceRow, def: NutrientDef): ReferenceRow {
+  if (row.value_min == null && row.value_max == null) return row
+
+  const convertValues = (factor: number, unit: string): ReferenceRow => ({
+    ...row,
+    value_min: row.value_min == null ? row.value_min : row.value_min * factor,
+    value_max: row.value_max == null ? row.value_max : row.value_max * factor,
+    unit,
+  })
+
+  if (row.basis === 'per_day') {
+    if (def.unit === 'µg') {
+      if (row.unit === 'mg/day') return convertValues(1000, 'µg')
+      if (row.unit === 'ug/day' || row.unit === 'ug RE/day' || row.unit === 'ug DFE/day') {
+        return convertValues(1, 'µg')
+      }
+    }
+    if (def.unit === 'mg') {
+      if (row.unit === 'g/day') return convertValues(1000, 'mg')
+      if (row.unit === 'mg/day') return convertValues(1, 'mg')
+    }
+    if (def.unit === 'g') {
+      if (row.unit === 'mg/day') return convertValues(0.001, 'g')
+      if (row.unit === 'g/day') return convertValues(1, 'g')
+      if (row.unit === 'L/day' && row.nutrient_code === 'WATER') return convertValues(1000, 'g')
+    }
+  }
+
+  if (['per_kg_bw_per_day', 'energy_percent', 'per_mj'].includes(row.basis)) {
+    return {
+      ...row,
+      notes: row.notes.includes('GO-00')
+        ? row.notes
+        : `${row.notes} GO-00: Bewusst abweichende Bezugseinheit; nicht ohne Profilgewicht oder Tagesenergie als Prozentwert interpretieren.`,
+    }
+  }
+
+  return row
+}
+
 function runDockerPsql(args: string[], input?: string): string {
   const result = spawnSync('docker', ['exec', ...(input ? ['-i'] : []), CONTAINER, 'psql', '-U', 'postgres', '-d', DB, ...args], {
     input,
@@ -669,7 +709,7 @@ const covered = new Set(explicit.map(row => row.nutrient_code))
 const answerRows = [
   ...explicit,
   ...nutrientDefs.filter(def => !covered.has(def.code)).map(noReferenceRow),
-]
+].map(row => withConvertedValue(row, defsByCode.get(row.nutrient_code)!))
 
 const duplicateCheck = new Set<string>()
 for (const row of answerRows) {

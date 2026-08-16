@@ -409,3 +409,128 @@ Lücken; jede Zeile trägt Quelle und Fundstelle.
   die UL-Zeilen fachlich gegengeprüft werden. Besonders relevant sind
   die Nährstoffe, bei denen EFSA und US DRI auseinandergehen.
 - `[cmd]` Die Kette baut die Tabelle, aber kein UI liest sie heute.
+
+---
+
+# GO-00: Referenzwert-Einheiten repariert
+
+`[cmd]` Erhoben und repariert am 2026-08-16. Anlass: Die
+Referenzwert-Tabelle war in C-45 vollständig nach Quelle und Codeabdeckung,
+aber blind für Einheiten. Dadurch konnte `daily_reference_assessment` einen
+Tageswert in `mg` gegen einen Referenzwert in `g/day` teilen.
+
+`[cmd]` Gegenprobe vor der Reparatur:
+`schema-vollstaendigkeit-pruefen.ts` meldete auf dem damaligen Live-Stand
+`reference_units 47 unpassend` und Exit 1. Das war die Prüfung, die C-45
+gebraucht hätte.
+
+## Vollständige Paarliste vor der Reparatur
+
+`[cmd]` 72 Referenzzeilen trugen einen Zahlenwert. Die Paarung
+`nutrient_reference_values.unit` gegen `nutrient_defs.unit` war:
+
+| Referenz | Bestand | Bezug | Zeilen | Codes |
+|---|---|---|---:|---|
+| `mg/day` | `mg` | `per_day` | 23 | `CA`, `CLD`, `FE`, `K`, `MG`, `NA`, `NIA`, `P`, `PANTAC`, `RIBF`, `VITC`, `VITE`, `ZN` |
+| `ug/day` | `µg` | `per_day` | 11 | `BIOT`, `CU`, `FOLAC`, `ID`, `MO`, `VITB12`, `VITD`, `VITK` |
+| `mg/day` | `µg` | `per_day` | 9 | `CU`, `FD`, `MN`, `VITB6` |
+| `mg/kg bw/day` | `g` | `per_kg_bw_per_day` | 9 | `HIS`, `ILE`, `LEU`, `LYS`, `MET`, `PHE`, `THR`, `TRP`, `VAL` |
+| `E%` | `g` | `energy_percent` | 4 | `CHO`, `F18:2CN6`, `F18:3CN3`, `FAT` |
+| `g/day` | `mg` | `per_day` | 4 | `CA`, `P` |
+| `ug RE/day` | `µg` | `per_day` | 3 | `VITA` |
+| `g/day` | `g` | `per_day` | 2 | `FIBT`, `NACL` |
+| `L/day` | `g` | `per_day` | 2 | `WATER` |
+| `g/kg bw/day` | `g` | `per_kg_bw_per_day` | 1 | `PROT625` |
+| `mg NE/MJ` | `mg` | `per_mj` | 1 | `NIAEQ` |
+| `mg/day` | `g` | `per_day` | 1 | `F20:5CN3` |
+| `mg/MJ` | `mg` | `per_mj` | 1 | `THIA` |
+| `ug DFE/day` | `µg` | `per_day` | 1 | `FOL` |
+
+`[cmd]` In drei Fallgruppen:
+
+| Fall | Zeilen | Codes |
+|---|---:|---|
+| direkt kompatibel | 25 | `CA`, `CLD`, `FE`, `FIBT`, `K`, `MG`, `NA`, `NACL`, `NIA`, `P`, `PANTAC`, `RIBF`, `VITC`, `VITE`, `ZN` |
+| reine Umrechnung | 31 | `BIOT`, `CA`, `CU`, `F20:5CN3`, `FD`, `FOL`, `FOLAC`, `ID`, `MN`, `MO`, `P`, `VITA`, `VITB12`, `VITB6`, `VITD`, `VITK`, `WATER` |
+| Körpergewicht | 10 | `HIS`, `ILE`, `LEU`, `LYS`, `MET`, `PHE`, `PROT625`, `THR`, `TRP`, `VAL` |
+| Energiebezug | 6 | `CHO`, `F18:2CN6`, `F18:3CN3`, `FAT`, `NIAEQ`, `THIA` |
+
+## Reparatur
+
+`[cmd]` Fall 1 wurde im Seed von
+`supabase/_pipeline/015_kataloge/016_nutrient_reference_values.ts`
+konvertiert. Die Quelle bleibt dieselbe; Wert und Einheit werden nur in
+die Bestandseinheit übersetzt:
+
+| Vorher | Nachher |
+|---|---|
+| `mg/day` bei Bestand `µg` | Wert mal 1000, Einheit `µg` |
+| `g/day` bei Bestand `mg` | Wert mal 1000, Einheit `mg` |
+| `mg/day` bei Bestand `g` | Wert mal 0,001, Einheit `g` |
+| `L/day` für Wasser | Wert mal 1000, Einheit `g` |
+| `ug/day`, `ug RE/day`, `ug DFE/day` | Einheit `µg`, Wert bleibt gleich |
+
+`[cmd]` Fall 2 und 3 wurden nicht still in Tageswerte umgerechnet. Diese
+16 Zeilen behalten ihren Sonderbezug und tragen in `notes` eine
+GO-00-Markierung. Damit ist maschinell sichtbar: ein Prozentwert braucht
+hier erst Körpergewicht oder Tagesenergie.
+
+`[annahme]` Meine fachliche Empfehlung für Tom: Für Fall 2 und 3 sollte
+die Oberfläche vorerst keinen Ring-Prozentwert anzeigen, sondern die
+Wertart mit Grund zeigen. Laufzeit-Umrechnung ist möglich, aber erst dann
+sauber, wenn Gewicht und vollständige Tagesenergie vorliegen.
+
+## Ergebnis nach der Reparatur
+
+`[cmd]` Wegwerf-Kettenlauf:
+`pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts --keep-database`
+auf `lumeos_kette_20260816030837`, 40 Schritte, `KETTE OK: 33.9s`.
+
+`[cmd]` Abschlussprüfung:
+
+| Aussage | Ergebnis |
+|---|---:|
+| `nutrient_reference_values` | 165 Zeilen |
+| verschiedene Codes | 138 |
+| Zeilen ohne Quelle | 0 |
+| `reference_units` | 0 unpassend |
+| Schema | `SCHEMA VOLLSTAENDIG` |
+
+`[cmd]` Paarliste nach der Reparatur:
+
+| Referenz | Bestand | Bezug | Zeilen |
+|---|---|---|---:|
+| `mg` | `mg` | `per_day` | 27 |
+| `µg` | `µg` | `per_day` | 24 |
+| `mg/kg bw/day` | `g` | `per_kg_bw_per_day` | 9 |
+| `g` | `g` | `per_day` | 5 |
+| `E%` | `g` | `energy_percent` | 4 |
+| `g/kg bw/day` | `g` | `per_kg_bw_per_day` | 1 |
+| `mg NE/MJ` | `mg` | `per_mj` | 1 |
+| `mg/MJ` | `mg` | `per_mj` | 1 |
+
+`[cmd]` Calcium-Gegentest in der Wegwerf-DB: Eine manuelle Mahlzeit mit
+`CA = 800 mg` liefert in `daily_reference_assessment` für einen
+30-jährigen Mann:
+
+| Wertart | Referenz | Prozent |
+|---|---:|---:|
+| `PRI` | 950 mg | 84,2 % |
+| `UL` | 2500 mg | 32,0 % |
+
+Damit ist der konkrete Fehler `2,5 g` als `2,5 mg` nicht mehr möglich.
+
+## Was die Abnahme übersehen hat
+
+`[cmd]` C-45 prüfte: 165 Zeilen, 138 Codes, Quelle und Fundstelle je Zeile.
+Das war in dieser Dimension vollständig.
+
+`[cmd]` Nicht geprüft wurde, ob `value_min/value_max` in derselben Einheit
+stehen wie Tageswerte aus `daily_summary`. Genau diese fehlende Dimension
+erzeugte falsche Prozentwerte um Faktor 1.000.
+
+`[read]` Das ist dasselbe Muster wie bei den Mindestzeilenzahlen aus
+`docs/ssot/53-kettenluecke.md`: Eine Prüfung kann grün sein, wenn sie die
+falsche Eigenschaft vollständig misst. Beim Fettsäurenverlust war die
+Zeilenzahl blind für Codes und Quellen; hier war Codeabdeckung blind für
+Einheiten.
