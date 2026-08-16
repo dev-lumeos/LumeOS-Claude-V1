@@ -1277,6 +1277,49 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 `[read]` Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`
 
+- [ ] **C-51: Die gewählte Portion in `meal_items` festhalten** (neu
+  2026-08-15). **Vor dem Schreibpfad ins Tagebuch (C-03).**
+
+  **Tom, 2026-08-15:** *„Der User oder die MealCam-KI wird entscheiden,
+  wie die Eingabe sein wird — ob effektiv in Gramm oder Portion
+  gewählt wird."*
+
+  `[cmd]` Seit C-50 stehen 23.402 Portionen bereit. `meal_items` führt
+  `amount_g`, `food_name` und die eingefrorenen Nährwerte — **kein Feld
+  für die gewählte Portion und keins für die Anzahl.** Die Wahl geht
+  beim Speichern verloren.
+
+  **Drei Folgen:**
+
+  - **Die Anzeige verliert die Absicht.** Wer „2 Scheiben Brot"
+    eingetragen hat, sieht später `60 g`. Fachlich richtig, aber nicht
+    mehr das, was er getippt hat.
+  - **MealCam schätzt keine Gramm.** `[read]` Eine Bildauswertung
+    erkennt „ein Teller Nudeln", nicht „312 g". Ohne Portionsfeld muss
+    sie umrechnen und wirft die Schätzgrösse weg — dabei ist gerade
+    dort die Unsicherheit interessant.
+  - **„Zuletzt benutzte Portion je Nutzer" ist nicht baubar.** `[read]`
+    `SPEC_06_PATCH_V1_DECISIONS.md` verlangt es; ohne dieses Feld weiss
+    niemand, welche Portion zuletzt gewählt wurde — nur wie viel Gramm.
+
+  **Der Vorschlag:** zwei Felder — die gewählte Portion und die Anzahl.
+  `amount_g` **bleibt kanonisch** und wird daraus berechnet; die beiden
+  Felder sind das **Protokoll der Eingabe**, nicht die Wahrheit über die
+  Menge. Bei direkter Grammeingabe bleiben sie leer — und das ist selbst
+  eine Aussage.
+
+  **Zu klären:**
+  - `[cmd]` `frozen_at` friert die Nährwerte ein. Was passiert, wenn eine
+    Portionsdefinition später geändert wird? Der Verweis darf die
+    eingefrorene Menge nicht nachträglich verschieben.
+  - `foods_custom` führt eigene `serving_size_g` und `serving_name` —
+    zwei Herkunftsarten für eine Portion. Ein Feld oder zwei?
+  - Bei MealCam: gehört die Schätzunsicherheit dazu? `[read]` Das
+    berührt `ADR_MEALCAM_V1` und ist eine Produktfrage.
+
+  `[cmd]` **Jetzt billig:** `meal_items` hat 0 Zeilen. Später ist es eine
+  Migration mit Bestand.
+
 - [ ] **C-50: Portionsgrössen** (neu 2026-08-15). **Tom, 2026-08-15:**
   *„Da müssen wir noch Portionen definieren"* — und auf Nachfrage:
   *„Hatten wir auch schon komplett gelöst, suche."*
