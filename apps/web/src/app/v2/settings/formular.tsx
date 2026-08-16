@@ -114,9 +114,13 @@ export function ProfilFormular({
             sub: 'Alter + Geschlecht',
           },
           {
-            label: 'TDEE-Formel',
-            value: hasTdeeProfile(gespeichert) ? 'moeglich' : 'fehlt',
-            sub: 'GO-04 rechnet',
+            // Bis GO-04 stand hier „GO-04 rechnet" — eine Ankuendigung.
+            // Sie rechnet inzwischen, also sagt die Zeile das auch.
+            label: 'Tagesziele',
+            value: hasTdeeProfile(gespeichert) ? 'gerechnet' : 'fehlt',
+            sub: hasTdeeProfile(gespeichert)
+              ? 'Ringe im Tagebuch'
+              : 'Geburtsdatum, Geschlecht, Groesse, Gewicht, Aktivitaet',
           },
         ]}
       />
@@ -142,9 +146,17 @@ export function ProfilFormular({
               </div>
             </div>
 
+            {/* `[cmd]` Das Format des Feldes bestimmt der Browser, nicht
+                die Seite: `lang="de"` steht am <html>, und mit ihm
+                rendert Chrome `tt.mm.jjjj` — auch bei englischer
+                Browsersprache (gemessen mit locale en-US). Wer trotzdem
+                `mm/dd/yyyy` sieht, hat Chrome auf eine andere
+                Anzeigesprache gestellt; das laesst sich von der Seite
+                aus nicht ueberschreiben. Deshalb steht die erwartete
+                Reihenfolge im Hinweis. */}
             <Feld
               label="Geburtsdatum"
-              hinweis="Datum, nicht Alter — ein gespeichertes Alter ist am naechsten Geburtstag falsch."
+              hinweis="Tag.Monat.Jahr — Datum, nicht Alter: ein gespeichertes Alter ist am naechsten Geburtstag falsch."
               fehler={feldfehler.birth_date}
             >
               <input
@@ -253,6 +265,14 @@ export function ProfilFormular({
               )}
             </Card>
 
+            {/* Nur bei `female`. Der Block wird AUSGEBLENDET, nicht
+                geleert: `werte` behaelt die Zeitraeume, und das Formular
+                schickt sie beim Speichern unveraendert mit. Wer sich
+                verklickt, verliert nichts — beim Zurueckwechseln stehen
+                die Daten wieder da.
+                `[cmd]` Geprueft: Geschlecht auf `male`, speichern,
+                zurueck auf `female` — die Zeitraeume sind noch da. */}
+            {werte.biological_sex === 'female' && (
             <Card
               title="Schwangerschaft und Stillzeit"
               sub="Zeitraeume, keine Eigenschaften"
@@ -287,13 +307,36 @@ export function ProfilFormular({
                 fehlerBis={feldfehler.lactation_ended_on}
               />
             </Card>
+            )}
+
+            {/* Ausgeblendet, aber nicht vergessen: wer Zeitraeume
+                eingetragen hat und das Geschlecht wechselt, soll sehen,
+                dass die Angaben noch da sind. Ohne diesen Satz sieht es
+                aus, als seien sie weg. */}
+            {werte.biological_sex !== 'female'
+              && (werte.pregnancy_started_on || werte.lactation_started_on) && (
+              <p className="v2-hinweis">
+                <Icon name="alert" className="v2-ic v2-ic-sm" />
+                <span>
+                  Eingetragene Zeitraeume zu Schwangerschaft und Stillzeit
+                  sind <strong>gespeichert und bleiben erhalten</strong>.
+                  Sie werden nur angezeigt, wenn das biologische
+                  Geschlecht „weiblich" ist.
+                </span>
+              </p>
+            )}
           </div>
         </div>
 
         <div className="v2-formleiste">
+          {/* `[cmd]` Vorher `v2-btn-accent`: der faerbt sich aus `--acc`,
+              und Settings hat keinen Modulakzent — der Knopf blieb auch
+              MIT Aenderungen blassgrau und war vom deaktivierten
+              Zustand kaum zu unterscheiden. `v2-btn-primary` ist der
+              starke Knopf der Vorlage (dort „Log", „MealCam"). */}
           <button
             type="submit"
-            className="v2-btn v2-btn-accent"
+            className="v2-btn v2-btn-primary"
             disabled={zustand.art === 'speichert' || !geaendert}
           >
             <Icon name="check" className="v2-ic v2-ic-sm" />
@@ -314,14 +357,20 @@ export function ProfilFormular({
         </div>
       </form>
 
+      {/* Bis GO-04 stand hier, die Ringe blieben leer, weil noch nichts
+          rechnet. `[cmd]` Das ist ueberholt: `goals.berechne_zielwerte`
+          liefert Werte, und im Tagebuch stehen gefuellte Ringe. Ein
+          Hinweis, der einmal richtig war, wird zur Falschaussage,
+          sobald das Gebaute ihn ueberholt. */}
       <p className="v2-hinweis" style={{ marginTop: 16 }}>
         <Icon name="alert" className="v2-ic v2-ic-sm" />
         <span>
-          <strong>Diese Seite erfasst, sie rechnet nicht.</strong> Aus
-          diesen Angaben entstehen spaeter Tagesziele (GO-03, GO-04) und
-          die Referenzwerte der Naehrstoffbewertung. Solange das nicht
-          gebaut ist, bleiben die Ringe im Tagebuch leer — auch mit
-          vollstaendigem Profil.
+          <strong>Aus diesen Angaben werden Tagesziele gerechnet.</strong>{' '}
+          Die Formel schaetzt Grundumsatz und Tagesbedarf; daraus
+          entstehen die Ringe im Tagebuch und die Referenzwerte der
+          Naehrstoffbewertung. Gesetzt wird ein Ziel erst, wenn du es
+          bestaetigst — <strong>eine Schaetzung ist keine Messung</strong>,
+          und ein gesetztes Ziel gilt ab dem Tag, an dem du es setzt.
         </span>
       </p>
     </>
@@ -379,7 +428,7 @@ function Zeitraum({
         />
       </div>
       <div style={{ fontSize: 10.5, color: 'var(--fg-dim)', marginTop: 4 }}>
-        Beginn und Ende. Ende leer heisst: laeuft noch.
+        Beginn und Ende (Tag.Monat.Jahr). Ende leer heisst: laeuft noch.
       </div>
       {(fehlerVon || fehlerBis) && (
         <div className="v2-feldfehler">{fehlerVon ?? fehlerBis}</div>
