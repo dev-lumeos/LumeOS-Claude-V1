@@ -64,6 +64,12 @@ Was ein Agent gelesen hat, ist `gelesen`.
 `[cmd]` `referenz/lumeos-2026/` enthält das lauffähige Vorgängerprodukt.
 **Bevor etwas als „fehlt" eingestuft wird, wird dort gesucht.**
 
+**Ein Wegweiser liegt vor:** `docs/ssot/80-vorgaengerrepo-fundus.md`
+— 75 Migrationen, `packages/scoring`, `rules-engine`, und die
+Fundstellen zu TDEE, Makros, Portionen, 1RM, Körperfett, HRV,
+Halbwertszeiten und Biomarker-Synonymen. **Dort zuerst nachsehen,
+dann suchen.**
+
 Zweimal an einem Tag hat sich das gerächt:
 
 | | |
