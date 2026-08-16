@@ -3199,6 +3199,42 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Kopieren von gestern, Mahlzeit löschen, Uhrzeit, Notizen, mehrere
   Tage. Liste im Bericht.
 
+- [x] **C-55: Hydration — Datenseite und Anbindung** (neu und erledigt
+  2026-08-16). Commits `3dc2222`, `452da02`.
+
+  `[cmd]` `nutrition.hydration_day(user_id, date)` liefert Tagessumme,
+  Ziel, Gläser, 14-Tage-Vergleich. 212 Wassereinträge in den Testdaten,
+  Fall im Register.
+
+  **Das Ziel trägt seine Herkunft im Namen:** `target_source =
+  profile_body_weight_35_ml_per_kg` — `[cmd]` 2.975 ml bei 85 kg, aus
+  dem Vorgängerrepo übernommen (`WaterTracker`: *35ml/kg recommended*).
+
+  **Zwei Herkünfte farblich getrennt** (Tom): `var(--acc-nutri)` voll
+  für Getrunkenes, derselbe Ton auf 40 % für den Anteil aus
+  Lebensmitteln — **kein neues Token**. `[cmd]` Der Fall ist real: an
+  einem Tag standen 1.242,7 ml komplett aus Lebensmitteln, getrunken
+  war nichts.
+
+  `[cmd]` Der `+250ml`-Knopf schreibt: ein Klick brachte 500 → 750 ml,
+  6 → 7 Gläser, 59 → 67 % ohne Neuladen.
+
+- [x] **C-56: Mikro-Übersicht — Netzdiagramm und Schwellenliste** (neu
+  und erledigt 2026-08-16). Commit `3eab1d8`.
+
+  `[cmd]` `micronutrient_snapshot` (8 kuratierte Nährstoffe aus
+  `daten/mikro-uebersicht.json`) und `micronutrient_below_threshold`.
+
+  **Der Beleg, dass die Schwelle greift:** `[cmd]` 4 von 20 an einem
+  normalen Tag, **16 von 17 am Mangel-Szenariotag**.
+
+  `[cmd]` **Vier Regeln gelten:** nur `reference_direction = 'target'` ·
+  `incomplete` gehört nicht in die Liste (unvollständig erfasst ist
+  nicht zu wenig gegessen) · `NO_REFERENCE` ebenso wenig ·
+  `energy_share` und `nutrient_density` haben keinen Prozentwert.
+
+
+
 ## Erledigt am 2026-08-05
 
 - [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und
@@ -3474,3 +3510,47 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `daily_reference_assessment` — zu Recht, aber niemand hatte den
   Auftrag, sie umzusetzen. **Eine Entscheidung ohne Punkt existiert
   nicht.**
+
+- [x] **G-08: Die Vorlage als Mockup übernehmen** (neu und erledigt
+  2026-08-16). Commit `f82f3df`.
+
+  **Tom, 2026-08-16:** *„Wieso holen wir nicht einfach das ganze
+  Template als Mockup rein und binden dann an?"*
+
+  `[cmd]` Übernommen: `module-dashboard.jsx` → `/v2/dashboard`
+  (12 Kacheln), `module-nutrition.jsx` → Tab `Diary`,
+  `module-nutrition-nutrients.jsx` → Tab `Nutrients` (79 Nährstoffe,
+  8 Gruppen, mechanisch extrahiert), `RadarChart` nach `packages/ui`.
+
+  **Mit den erfundenen Daten** — 1.847 kcal, Recovery 82, 2.142 TSS,
+  Readiness 84, Pre-workout 68, Netzdiagramm, Below threshold.
+
+  **Zwei Abweichungen zurückgenommen:** vier Ringe wurden wieder ein
+  Kalorienring plus drei lineare Balken; `ModuleHero` wich dem
+  Vorlagenkopf. `[read]` Und der Satz, auf den es ankam: *„Mein leerer
+  Ring aus dem letzten Durchgang war die Abweichung, nicht die Zahl."*
+
+  `[cmd]` Eine Stelle ohne Vorlagenwert: `btn-sm` wird in vier Kacheln
+  benutzt, in `styles.css` aber nie definiert.
+
+- [x] **G-09: Attrappen vollständig, Knöpfe mit Modal** (neu und
+  erledigt 2026-08-16). Commit `4da6bac`.
+
+  **Tom, 2026-08-16:** *„Alles kommt rein. Wenn es ein Modal öffnen
+  will, das es noch nicht gibt, kommt ein designpassendes Modal ‚in
+  Entwicklung'. Wenn es eine Attrappe ist, ist scheissegal, was da drin
+  steht — es zeigt ja nur, wie es aussehen könnte."*
+
+  `[cmd]` 12 Kacheln mit 9 Marken, 7 Tabs, 0 Sidebar-Untereinträge,
+  `in-entwicklung.tsx` in `packages/ui`.
+
+  **Der Test ist der eigentliche Ertrag:** `v2-attrappen.test.ts` hält
+  fest, dass keine Kachel still verschwindet — gegengeprobt: eine Marke
+  entfernt → rot mit *„9 Kacheln haben keine Datenquelle, aber 8 sind
+  gekennzeichnet"*.
+
+  **Drei Argumente sind dabei gefallen**, alle vom Typ „weglassen statt
+  kennzeichnen": *eine erfundene Zahl sieht aus wie eine Messung* · *ein
+  Knopf ohne Ziel ist schlimmer als kein Knopf* · *im Kopf ist kein
+  Platz für eine Marke*. `[read]` Festgehalten in
+  `theme-v1-umsetzung.md`.

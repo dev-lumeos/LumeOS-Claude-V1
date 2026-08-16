@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-15, Anker `38480ca` auf `dev`.
+**Stand:** 2026-08-16, Anker `dd162a2` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 41 offen, 5 in Arbeit.
+`[cmd]` 42 offen, 7 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -151,6 +151,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
 | **C-48** | Die Tagesbilanz sichtbar machen |  |
 | **C-49** | Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach |  |
+| **C-57** | Wasserziel nach der Konsensformel | ~ |
+| **C-58** | Settings — Sichtbarkeit und überholte Texte | ~ |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -171,6 +173,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **F-07** | Berechtigungen |  |
 | **F-08** | Werkstatt-Inventar |  |
 | **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
+| **C-54** | `display_tier` als Ordnung der Anzeige benutzen |  |
 | **C-52** | Zwei essenzielle Fettsäuren ohne Ziel und ohne Bewertung |  |
 | **C-53** | Elf Nährstoffe erreichen die Bewertung nicht |  |
 | **GO-01** | Goals | ~ |
@@ -827,6 +830,54 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   ob Stufe 2 und 3 überhaupt gebraucht werden. `[read]` Die Lehre aus dem
   Suchumbau: vier Tage an Modellen gearbeitet, bevor jemand gemessen hat,
   was Menschen tatsächlich suchen.
+
+- [~] **C-57: Wasserziel nach der Konsensformel** (neu 2026-08-16).
+  **In Arbeit.**
+
+  `[cmd]` Heute: `body_weight_kg × 35`, fest. Recherchiert am
+  2026-08-16, Struktur der gängigen Rechner:
+  **`Basis × Aktivitätsfaktor × Klimafaktor + Trainingsbonus`**
+
+  | | |
+  |---|---|
+  | Basis | 30 ml/kg sedentär · 35 normal · 40 aktiv (nähert die IOM-Empfehlung von 30–40 ml/kg) |
+  | Training | ~350 ml je 30 min (ACSM); intensiv 750 ml–1 L/h |
+  | Klima | +10 % warm, +20 % sehr heiss und feucht |
+  | Schwangerschaft, Stillzeit | eigener Zuschlag |
+
+  **Tom, 2026-08-16:** *„Gyms sind indoor und meist klimatisiert, das
+  können wir nicht globalisiert betrachten. Wir sehen den Faktor für
+  Klima vor, denn irgendwann binden wir Gyms an. Trainingssessions
+  werden wir auch bald kennen, also auch vorsehen."*
+
+  **Beide Faktoren stehen auf neutral**, kein Profilfeld: Klima 1,0,
+  Trainingsbonus 0. `[cmd]` Klima gehört an den Ort des Trainings, nicht
+  an den Wohnort — ein Studio in Bangkok ist klimatisiert.
+
+  **Kein Maximum.** `[Sicher]` Keine der Formeln kennt eine Obergrenze
+  im Alltagsbereich; `progress_pct` darf über 100 gehen und
+  kennzeichnet dort nichts.
+
+
+- [~] **C-58: Settings — Sichtbarkeit und überholte Texte** (neu
+  2026-08-16). **In Arbeit.**
+
+  **Tom, 2026-08-16:** *„Da muss man nicht eine hochintelligente KI
+  sein, um zu wissen, dass man das bei männlich ausblendet."*
+
+  `[cmd]` Schwangerschaft und Stillzeit werden bei
+  `biological_sex = male` nicht gerendert — der Wert steht im selben
+  Formular zwei Felder darüber.
+
+  **Zwei überholte Texte:** `[cmd]` *„Diese Seite erfasst, sie rechnet
+  nicht […] bleiben die Ringe im Tagebuch leer"* und `TDEE-FORMEL:
+  moeglich` — beides stimmt seit GO-04 nicht mehr. `[read]` Derselbe
+  Fall wie veraltete Statuszeilen: ein Hinweis, der einmal richtig war,
+  wird zur Falschaussage, sobald das Gebaute ihn überholt.
+
+  Dazu: `mm/dd/yyyy` in deutscher Oberfläche, und der Speichern-Knopf
+  ist ausgegraut abgesetzt.
+
 
 
 
