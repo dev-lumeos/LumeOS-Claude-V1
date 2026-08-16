@@ -202,44 +202,9 @@ export function PreWorkoutOptimizer() {
   )
 }
 
-export function HydrationCard() {
-  return (
-    <Card
-      title="Hydration"
-      sub="Today"
-      attrappe={ATTRAPPE}
-      actions={
-        <InEntwicklungKnopf
-          titel="+250ml"
-          grund="Es gibt `hydration.water_logs` und `hydration_summary`, aber keinen Schreibweg in der Oberflaeche."
-          className="v2-btn v2-btn-ghost"
-          style={{ height: 22, fontSize: 11, padding: '0 8px' }}
-        >
-          <Icon name="plus" className="v2-ic v2-ic-sm" /> +250ml
-        </InEntwicklungKnopf>
-      }
-    >
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
-        <span className="v2-num" style={{ fontSize: 28, fontWeight: 500 }}>1.2</span>
-        <span className="v2-dim" style={{ fontSize: 12 }}>/ 3.0 L</span>
-      </div>
-      <Meter value={1.2} max={3.0} color="var(--acc-recov)" tall />
-      <div style={{ display: 'flex', gap: 4, marginTop: 10 }}>
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} style={{
-            flex: 1, height: 20, borderRadius: 2,
-            background: i < 5 ? 'var(--acc-recov)' : 'var(--surface-2)',
-            opacity: i < 5 ? 0.7 + (i / 12) * 0.3 : 1,
-          }} />
-        ))}
-      </div>
-      <div style={{ marginTop: 6, fontSize: 10, color: 'var(--fg-dim)', display: 'flex', justifyContent: 'space-between' }}>
-        <span>5 of 12 glasses</span>
-        <span className="v2-num">38% behind 14d avg</span>
-      </div>
-    </Card>
-  )
-}
+// HydrationCard ist ENTFALLEN: die Kachel ist angebunden und liegt
+// jetzt in `hydration.tsx` — mit echten Zahlen aus `hydration_day` und
+// den zwei Farben fuer getrunken / aus Lebensmitteln.
 
 export function MicronutrientSnapshot() {
   return (

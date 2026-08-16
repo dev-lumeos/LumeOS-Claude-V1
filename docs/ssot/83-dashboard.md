@@ -518,3 +518,29 @@ gebaut ist nach der Datei.
 | Seitenfehler | `[cmd]` 0 |
 | `pnpm gate` | `[cmd]` 8 von 8, ungecacht |
 | `pnpm test` | `[cmd]` 189 Tests, 0 fehlgeschlagen |
+
+
+---
+
+## Nachtrag 2026-08-16 (4): Hydration angebunden
+
+Die Kachel liest `nutrition.hydration_day` (Codex' Funktion, unangetastet)
+und traegt **keine Attrappenmarke** mehr; der `+250ml`-Knopf schreibt
+ueber `/api/nutrition/water` in `water_logs` und bekommt den neu
+gerechneten Tag zurueck — die Kachel aktualisiert sich ohne Neuladen.
+
+**Die farbliche Trennung:** Balken und Glaeserleiste sind zweifarbig —
+`var(--acc-nutri)` voll fuer Getrunkenes, derselbe Ton auf 40 % gemischt
+fuer den Anteil aus Lebensmitteln; **kein neues Token**. Darunter steht
+im Klartext, welcher Teil welcher ist. `[cmd]` Am 13.09. sind das
+1.750 ml getrunken (7 Glaeser dunkel) und 1.242,7 ml aus Lebensmitteln
+(4 Glaeser gedaempft); am 13.08. steht zusaetzlich „1 Position(en) ohne
+Wasserwert. Der Anteil aus Lebensmitteln ist eine Untergrenze."
+
+`[cmd]` Der Schreibpfad ist im Browser belegt: ein Klick auf `+250ml`
+brachte 500 → 750 ml, 6 → 7 Glaeser, 59 → 67 %. `pnpm gate` 8 von 8,
+189 Tests, drei Breiten ohne Ueberlauf.
+
+`[cmd]` Fuer den Nachweis wurden Toms Konto die 85 Wassereintraege des
+Seed-Nutzers kopiert (`dev@lumeos.app` hatte keine) — sonst gaebe es
+keinen Tag, an dem beide Anteile vorkommen.

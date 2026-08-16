@@ -17,6 +17,8 @@ import type { DailySummaryRow } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import { getZielwerteAm, getZielwertVorschlag } from '../../../lib/profile/zielwerte-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
+import { getHydrationDay } from '../../../lib/nutrition/hydration-day-read'
+import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { TagebuchAnsicht } from './ansicht'
 
 export const metadata: Metadata = {
@@ -89,10 +91,20 @@ export default async function V2NutritionPage({
     zielFehler = e instanceof Error ? e.message : String(e)
   }
 
+  // Der Wasserhaushalt. Eigener try: faellt er aus, bleibt der Rest
+  // des Tagebuchs gueltig.
+  let wasser: HydrationDay | null = null
+  try {
+    wasser = await getHydrationDay(datum)
+  } catch {
+    wasser = null
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
       tab={tab}
+      wasser={wasser}
       summe={summe}
       bewertung={bewertung}
       fehler={fehler}

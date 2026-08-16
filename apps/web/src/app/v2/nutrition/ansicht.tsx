@@ -19,8 +19,10 @@ import {
 import { Tableiste } from './tableiste'
 import {
   SmartSuggestionsCard, NutritionScoreCard, NutritionPendingActions,
-  PreWorkoutOptimizer, HydrationCard, MicronutrientSnapshot, BelowThreshold,
+  PreWorkoutOptimizer, MicronutrientSnapshot, BelowThreshold,
 } from './diary-entwurf'
+import { HydrationKachel } from './hydration'
+import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { NutrientAnalysisView } from './nutrients-entwurf'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
@@ -79,7 +81,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 }
 
 export function TagebuchAnsicht({
-  datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler,
+  datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
 }: {
   datum: string
   tab: string
@@ -90,6 +92,7 @@ export function TagebuchAnsicht({
   ziele?: Zielwerte | null
   vorschlag?: Zielvorschlag | null
   zielFehler?: string | null
+  wasser?: HydrationDay | null
 }) {
   const leer = !summe || summe.item_count === 0
 
@@ -321,7 +324,10 @@ export function TagebuchAnsicht({
         <NutritionScoreCard />
         <NutritionPendingActions />
         <PreWorkoutOptimizer />
-        <HydrationCard />
+        {/* ANGEBUNDEN: hydration_day. Deshalb keine Marke mehr — und
+            zwei Farben, weil die Vorlage die beiden Herkuenfte nicht
+            unterscheidet. */}
+        <HydrationKachel tag={wasser ?? null} datum={datum} />
         <MicronutrientSnapshot />
         <BelowThreshold />
 
