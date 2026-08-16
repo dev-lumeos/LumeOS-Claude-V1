@@ -234,6 +234,30 @@ if (MODE === 'clean') {
       AND behind_14d_avg_pct > 20;`)) {
     errors.push('Fall Hydration unter Ziel: Summe, Ziel oder 14-Tage-Vergleich stimmen nicht')
   }
+  if (numberScalar(`
+    SELECT count(*)
+    FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '2026-08-16');`) !== 8) {
+    errors.push('Fall Micronutrient snapshot: liefert nicht exakt 8 Werte')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '2026-08-16')
+    WHERE nutrient_code = 'F18:3CN3'
+      AND reference_kind = 'GOAL'
+      AND reference_pct IS NOT NULL;`)) {
+    errors.push('Fall Micronutrient snapshot: Omega-3 (ALA) wird nicht gegen Goals-Ziel bewertet')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '2026-08-09') mangel
+    CROSS JOIN nutrition.micronutrient_below_threshold('${tom}'::uuid, DATE '2026-08-16') normal
+    WHERE mangel.threshold_pct = 75
+      AND normal.threshold_pct = 75
+      AND mangel.total_assessed > 0
+      AND normal.total_assessed > 0
+      AND mangel.below_count > normal.below_count;`)) {
+    errors.push('Fall Below threshold: Mangel-Szenariotag ist nicht laenger als ein normaler Tag')
+  }
 
   console.log('C-82 Testdaten-Pruefung (present)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)

@@ -571,6 +571,30 @@
         ]
       },
       "grants_herkunft": "029_portionen-einspielen.ts"
+    },
+    {
+      "name": "micronutrient_overview_items",
+      "schritt": "059a",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "zeilenschutzart": "oeffentlich",
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "030_mikro-uebersicht.ts"
     }
   ],
   "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
@@ -883,6 +907,14 @@
     {
       "name": "daily_reference_assessment",
       "schritt": "059"
+    },
+    {
+      "name": "micronutrient_snapshot",
+      "schritt": "059a"
+    },
+    {
+      "name": "micronutrient_below_threshold",
+      "schritt": "059a"
     }
   ],
   "mindestzeilen": {
@@ -897,7 +929,8 @@
     "search_synonyms": 4800,
     "preparation_kinds": 11,
     "food_groups": 19,
-    "foods_portions": 23000
+    "foods_portions": 23000,
+    "micronutrient_overview_items": 8
   },
   "mindestzeilen_schema": {
     "_kommentar": "Untergrenzen ausserhalb nutrition. C-43: Die Schritte 100-105 muessen im Kettenlauf sichtbar werden; sonst koennte Training komplett fehlen und die Nutrition-Pruefung waere trotzdem gruen.",
@@ -918,7 +951,8 @@
     "search_synonyms": "[cmd] Gerundeter Ist-Stand nach 024: 4.877, Untergrenze 4.800.",
     "preparation_kinds": "[read] 023_zubereitung_ableitung.sql: 11 Zubereitungsarten.",
     "food_groups": "[read] 023_zubereitung_ableitung.sql: 19 Warengruppen.",
-    "foods_portions": "029_portionen-einspielen.ts, gemessen 2026-08-15: 23.402 Zeilen ueber 7.048 Lebensmittel. Gerundet, weil die Zahl mit jeder Kategoriezuordnung wandert."
+    "foods_portions": "029_portionen-einspielen.ts, gemessen 2026-08-15: 23.402 Zeilen ueber 7.048 Lebensmittel. Gerundet, weil die Zahl mit jeder Kategoriezuordnung wandert.",
+    "micronutrient_overview_items": "[read] supabase/_pipeline/daten/mikro-uebersicht.json: exakt 8 kuratierte Eintraege fuer die Vorlage."
   },
   "mindestzeilen_schema_belege": {
     "training.exercises": "[cmd] Ist-Stand nach 100-105: 1.416 Uebungen.",

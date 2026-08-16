@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "beschreibung": "Kuratierte Auswahl fuer das Micronutrient-Snapshot-Netzdiagramm.",
+  "eintraege": [
+    {
+      "code": "VITC",
+      "label_de": "Vitamin C",
+      "label_en": "Vit C",
+      "order": 1,
+      "source": "daily_reference_assessment",
+      "begruendung": "Vorlage; wasserloesliches Vitamin mit PRI/UL."
+    },
+    {
+      "code": "VITD",
+      "label_de": "Vitamin D",
+      "label_en": "Vit D",
+      "order": 2,
+      "source": "daily_reference_assessment",
+      "begruendung": "Vorlage; haeufig niedriger Wert, AI/UL vorhanden."
+    },
+    {
+      "code": "FE",
+      "label_de": "Eisen",
+      "label_en": "Iron",
+      "order": 3,
+      "source": "daily_reference_assessment",
+      "begruendung": "Vorlage; geschlechtsabhaengiger PRI."
+    },
+    {
+      "code": "CA",
+      "label_de": "Calcium",
+      "label_en": "Calcium",
+      "order": 4,
+      "source": "daily_reference_assessment",
+      "begruendung": "Vorlage; PRI/UL vorhanden."
+    },
+    {
+      "code": "MG",
+      "label_de": "Magnesium",
+      "label_en": "Magnesium",
+      "order": 5,
+      "source": "daily_reference_assessment",
+      "begruendung": "Vorlage; AI vorhanden."
+    },
+    {
+      "code": "ZN",
+      "label_de": "Zink",
+      "label_en": "Zinc",
+      "order": 6,
+      "source": "daily_reference_assessment",
+      "begruendung": "Vorlage; PRI/UL vorhanden."
+    },
+    {
+      "code": "VITB12",
+      "label_de": "Vitamin B12",
+      "label_en": "B12",
+      "order": 7,
+      "source": "daily_reference_assessment",
+      "begruendung": "Vorlage; AI vorhanden."
+    },
+    {
+      "code": "F18:3CN3",
+      "label_de": "Omega-3 (ALA)",
+      "label_en": "omega-3 (ALA)",
+      "order": 8,
+      "source": "goals_alpha_linolenic_acid",
+      "begruendung": "Vorlage nennt Omega-3. Gesamt-Omega-3 hat keinen Zielwert; ALA ist die belegte essenzielle Omega-3-Fettsaeure mit Goals-Zielwert."
+    }
+  ]
+}

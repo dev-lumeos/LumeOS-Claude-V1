@@ -310,6 +310,13 @@
       "kind": "sql",
       "creates": "Schema goals, nutrition_targets, berechne_zielwerte, zielwerte_am",
       "depends_on": ["B"]
+    },
+    {
+      "id": "059a",
+      "path": "supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts",
+      "kind": "tsx",
+      "creates": "micronutrient_overview_items, micronutrient_snapshot und micronutrient_below_threshold",
+      "depends_on": ["059", "110"]
     }
   ]
 }
