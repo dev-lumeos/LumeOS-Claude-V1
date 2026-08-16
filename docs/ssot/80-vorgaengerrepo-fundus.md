@@ -117,6 +117,70 @@ belegter Ausgangspunkt, keine fertige Lösung.
 
 ---
 
+## Testdaten — 52 Seed-Dateien
+
+`[read]` Tom, 2026-08-15: *„Zum Beispiel wirst du auch Seeds für Meals
+finden, die wir mühelos umschreiben können, damit wir Mahlzeitendaten
+zum Testen haben. Dasselbe Supplements normal und extended — und und
+und. Wir waren sehr weit in dieser Version."*
+
+`[cmd]` Es ist mehr als eine Handvoll Beispielsätze:
+
+| | | |
+|---|---|---|
+| `scripts/seed-knowledge-full.ts` | 86 KB | Buddys Wissensbasis |
+| `scripts/seed-medical.ts` | 36 KB | Biomarker, Befunde |
+| `supabase/seed.disabled/seed_supplements.sql` | 35 KB | Supplements |
+| `scripts/seed-training.sql` | 34 KB | Trainingsdaten |
+| `supabase/seed-complete.sql` | 25 KB | **alle Nutzerdaten in einer Datei** |
+| `scripts/seed-dev-showcase-complete.ts` | 24 KB | Vorführbestand |
+| `scripts/seed-marketplace.ts` | 20 KB | Marktplatz |
+| `scripts/seed-complete-users.ts` | 20 KB | Nutzer mit Verlauf |
+| `scripts/seed-portions.py` | 8 KB | Portionsgrössen |
+| `src/api/training/seeds/seed_routines.sql` | 9 KB | Trainingspläne |
+
+Dazu fünf Dokumentationsdateien: `SEED_INDEX.md`, `SEED_README.md`,
+`SEED_DATA.md`, `SEED_SUMMARY.md`, `EXECUTE_SEED.md`.
+
+### Was `seed-complete.sql` enthält
+
+`[read]` Laut `SEED_DATA.md` **drei vollständige Testnutzer** — Tom
+Miller, Max Schmidt, Sarah Johnson — je mit:
+
+Profil · Nutrition · Körpermesswerte **mit Verlauf** · Training ·
+Supplements · Recovery · Abonnement und Guthaben.
+
+Dazu fünf durchgespielte Prüfszenarien (Dashboard, Ernährungserfassung,
+Trainingspläne, Fortschritt, Stufenrechte).
+
+### Warum das hier zählt
+
+`[cmd]` `nutrition.meals` und `meal_items` haben **0 Zeilen**. Deshalb
+steht in mehreren Punkten „auf Daten wartend“:
+
+- **C-49** — Tages-Score ohne Tage, an denen er sich zeigen liesse
+- **GO-13 bis GO-17** — die adaptive TDEE braucht zwei volle Wochen
+  Gewichts- und Kaloriendaten
+- **G-05** — das Dashboard trägt aus Modulen zusammen, die nichts haben
+- `[cmd]` **C-23** — die Abdeckungsmessung misst gegen geratene
+  Begriffe statt gegen echte Anfragen
+
+**Ein umgeschriebener Seed löst keinen dieser Punkte fachlich** — aber
+er macht sie prüfbar, bevor der erste echte Nutzer etwas einträgt.
+
+### Was beim Umschreiben zu beachten ist
+
+`[cmd]` Das alte Schema passt nicht: `public.foods` mit UUID gegen
+`nutrition.foods` mit `bls_code`, `daily_nutrition_aggregates` gegen
+`daily_summary`, andere Spaltennamen in `meal_items`.
+
+**Und Testdaten gehören nicht in die Kette.** `[read]` Die Kette baut
+den Sollzustand einer leeren Datenbank; Testnutzer sind ein eigener,
+ausdrücklich aufgerufener Schritt. Sonst steht in der Vorführung
+irgendwann Sarah Johnsons Frühstück.
+
+---
+
 ## Was diese Datei nicht sagt
 
 - **Ob der Code richtig rechnet.** `[read]` *Aus der Existenz einer Sache
