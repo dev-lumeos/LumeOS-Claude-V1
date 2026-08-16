@@ -137,6 +137,13 @@
       "depends_on": ["022", "072"]
     },
     {
+      "id": "029",
+      "path": "supabase/_pipeline/_ableitung/029_portionen-einspielen.ts",
+      "kind": "tsx",
+      "creates": "Kuratierte Portionsgroessen aus daten/portionen.json in nutrition.foods_portions",
+      "depends_on": ["030"]
+    },
+    {
       "id": "050",
       "path": "supabase/_pipeline/05_user_tabellen/050_preferences_foundation.sql",
       "kind": "sql",
