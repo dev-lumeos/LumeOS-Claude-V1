@@ -18,6 +18,7 @@ verloren:
 |---|---|
 | **Theme V1 umsetzen** (Sektion G) | `docs/spezifikation/10-plattform/design-system/theme-v1-umsetzung.md` |
 | **Altbestand konsolidieren** (A-11) | `docs/spezifikation/00-KONSOLIDIERUNG.md` |
+| **Goals** (GO-01 ff.) | `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md` |
 | **Rollen der Ordner, Statuskopf, Regeln** | `docs/spezifikation/00-INDEX.md` |
 
 **Jedes Modul, das neu angepackt wird, bekommt vorher einen
@@ -127,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 43 offen, 4 in Arbeit.
+`[cmd]` 44 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -171,6 +172,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **F-07** | Berechtigungen |  |
 | **F-08** | Werkstatt-Inventar |  |
 | **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
+| **GO-01** | Goals |  |
 | **G-01** | Parallelstruktur und Tokens |  |
 | **G-02** | Die Shell |  |
 | **G-03** | Nutrition als erstes echtes Modul |  |
@@ -1268,6 +1270,73 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `referenz/lumeos-2026`. Ein Resolver am Pfad bricht still.
 
 ---
+
+---
+
+## GO - Goals
+
+`[read]` Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`
+
+- [ ] **GO-01 bis GO-17: Goals** (neu 2026-08-15).
+  **Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`**
+  — 353 Zeilen, mit Quellenregister, gemessenem Ist-Zustand, neun
+  Widersprüchen und der Abgrenzung, was **nicht** gebaut wird.
+
+  `[read]` Goals ist der Massstab, an dem Buddy seine Empfehlungen misst
+  — **keine eigenständige Dateneingabe.** `[cmd]` Die Vision nennt
+  „Goals" einmal, „Buddy" 22-mal; Prinzip 1 lautet *„Buddy IST das
+  Produkt"*. Die Spec nennt Goals „Betriebssystem-Kern" — das trägt die
+  Vision so nicht.
+
+  **Der Blocker ist nicht das fehlende Schema.** `[cmd]` Die sechs
+  Profilspalten für die TDEE-Formel existieren seit dem 2026-08-15 und
+  sind bei **beiden** Nutzern leer — 0 von 2. Nichts füllt sie. Deshalb
+  steht Profilpflege als GO-01 vor allem anderen; sie braucht kein neues
+  Schema.
+
+  **Block A — die Ringe füllen** (GO-01 … GO-05): Profilpflege ·
+  Makro-Regel entscheiden · `goals`-Zieltabelle mit vier Zahlen · TDEE
+  als reine Funktion · Ringe anschliessen.
+  `[cmd]` Danach zeigt `/v2/nutrition` gefüllte Ringe statt leerer.
+
+  **Block B — Goals als Modul** (GO-06 … GO-12): Zielvokabular
+  vereinheitlichen, `user_goals` und `goal_phases`, Phasenparameter,
+  Zielübersicht, Körpermessungen, Meilensteine, Onboarding.
+
+  **Block C — nicht terminierbar** (GO-13 … GO-17): `[cmd]` Die adaptive
+  TDEE braucht **zwei volle Wochen** Gewichts- und Kaloriendaten;
+  `meals` hat 0 Zeilen und es gibt keinen Schreibpfad. Ein Datum dafür
+  wäre erfunden.
+
+  **Entscheidungen Toms, 2026-08-15:** Die Zieltabelle gehört in ein
+  eigenes `goals`-Schema, nicht nach `nutrition`. Der Plan liegt unter
+  `30-module/core/`, nicht unter `40-…` (das ist für Lieferungen
+  reserviert).
+
+  **Die Rangfolge der Quellen ist nicht die übliche:**
+
+  | | | |
+  |---|---|---|
+  | 1. Vorgängerrepo | `referenz/lumeos-2026/` | die **Rechenwege** |
+  | 2. Designvorlage | `theme-v1/module-goals*.jsx` | der **Umfang** |
+  | 3. Spec | `docs/specs/Goals/` | die **Absicht** |
+
+  `[cmd]` **Die Formeln existieren als laufender Code:**
+  `referenz/lumeos-2026/src/modules/onboarding/utils/calculateTDEE.ts`
+  liefert `tdee`, `targetCalories`, `proteinG`, `fatG`, `carbsG` — und
+  beantwortet zwei der gemeldeten Lücken: **Mifflin-St Jeor mit
+  angewandtem Aktivitätsfaktor** (die Spec-Formel liefert BMR und liegt
+  um Faktor 1,2–1,9 zu niedrig) und **Kohlenhydrate als Restgrösse**
+  (steht in keiner Goals-Spec).
+
+  `[cmd]` Die Spec ist die schwächste Quelle: KI-erzeugt, und
+  `BrainstormDocs/Goals/new/` ist byte-identisch — an dieser Stelle eine
+  Kopie, keine Synthese. `[cmd]` `DATABASE.md` ist nicht ausführbar wie
+  abgedruckt (`UNIQUE (…) WHERE` gibt es in PostgreSQL nicht).
+
+  **Offene Entscheidungen vor Block B:** vier verschiedene
+  Zielvokabulare ohne Abbildung (6 / 12 / 9 / 4 Werte) und derselbe
+  Anpassungsalgorithmus zweimal mit unterschiedlichen Schwellen.
 
 ## G - Theme V1 umsetzen
 
