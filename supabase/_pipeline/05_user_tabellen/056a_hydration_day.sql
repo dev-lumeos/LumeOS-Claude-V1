@@ -4,8 +4,7 @@
 --        hydration_summary um Tagesziel, Glaszaehler und 14-Tage-Vergleich.
 --
 -- Laeuft NACH 056 und 090. Die Sicht 056 bleibt die Quelle fuer getrunkenes
--- Wasser plus Wasser aus Nahrung; 090 liefert public.profiles.body_weight_kg
--- fuer das Tagesziel.
+-- Wasser plus Wasser aus Nahrung; 090 liefert Profilwerte fuer das Tagesziel.
 -- =============================================================
 
 BEGIN;
@@ -45,7 +44,32 @@ AS $$
 WITH profile AS (
   SELECT
     p.id AS user_id,
-    p.body_weight_kg
+    p.body_weight_kg,
+    p.activity_level,
+    CASE p.activity_level
+      WHEN 'sedentary' THEN 1.0000::numeric
+      WHEN 'light' THEN 1.0833::numeric
+      WHEN 'moderate' THEN 1.1667::numeric
+      WHEN 'active' THEN 1.2500::numeric
+      WHEN 'very_active' THEN 1.3333::numeric
+      ELSE NULL::numeric
+    END AS activity_factor,
+    1.0000::numeric AS climate_factor,
+    0::numeric AS training_bonus_ml,
+    CASE
+      WHEN p.pregnancy_started_on IS NOT NULL
+       AND p.pregnancy_started_on <= p_entry_date
+       AND (p.pregnancy_ended_on IS NULL OR p.pregnancy_ended_on >= p_entry_date)
+        THEN 300::numeric
+      ELSE 0::numeric
+    END AS pregnancy_bonus_ml,
+    CASE
+      WHEN p.lactation_started_on IS NOT NULL
+       AND p.lactation_started_on <= p_entry_date
+       AND (p.lactation_ended_on IS NULL OR p.lactation_ended_on >= p_entry_date)
+        THEN 1100::numeric
+      ELSE 0::numeric
+    END AS lactation_bonus_ml
   FROM public.profiles p
   WHERE p.id = p_user_id
 ),
@@ -61,11 +85,27 @@ today AS (
     h.total_complete,
     CASE
       WHEN p.body_weight_kg IS NULL THEN NULL
-      ELSE ROUND(p.body_weight_kg * 35)
+      WHEN p.activity_factor IS NULL THEN NULL
+      ELSE ROUND(
+        (p.body_weight_kg * 30 * p.activity_factor * p.climate_factor)
+        + p.training_bonus_ml
+        + p.pregnancy_bonus_ml
+        + p.lactation_bonus_ml
+      )
     END AS target_ml,
     CASE
       WHEN p.body_weight_kg IS NULL THEN 'missing_body_weight'
-      ELSE 'profile_body_weight_35_ml_per_kg'
+      WHEN p.activity_factor IS NULL THEN 'missing_activity_level'
+      ELSE concat(
+        'profile_body_weight_activity_formula(',
+        'base_30_ml_per_kg',
+        '*activity_factor_', trim(to_char(p.activity_factor, 'FM999999990.0000')),
+        '*climate_factor_', trim(to_char(p.climate_factor, 'FM999999990.0000')),
+        '+training_bonus_', trim(to_char(p.training_bonus_ml, 'FM999999990')), '_ml',
+        '+pregnancy_bonus_', trim(to_char(p.pregnancy_bonus_ml, 'FM999999990')), '_ml',
+        '+lactation_bonus_', trim(to_char(p.lactation_bonus_ml, 'FM999999990')), '_ml',
+        ')'
+      )
     END AS target_source
   FROM profile p
   LEFT JOIN nutrition.hydration_summary h
@@ -120,10 +160,11 @@ $$;
 
 COMMENT ON FUNCTION nutrition.hydration_day(UUID, DATE) IS
   'C-55: Lesefunktion fuer Hydration-Seitenleiste. Nutzt hydration_summary '
-  'als Rohquelle, berechnet Ziel als body_weight_kg * 35 ml nach Vorgaengerrepo '
-  'WaterTracker, liefert Glaszaehler zu 250 ml und Vergleich gegen die '
-  'vorherigen 14 Kalendertage. Kein eigenes Zielmodell; ein historisiertes '
-  'Wasserziel gehoert spaeter zu Goals.';
+  'als Rohquelle, berechnet Ziel als body_weight_kg * 30 ml * Aktivitaetsfaktor '
+  '* Klimafaktor plus Trainings-/Schwangerschafts-/Stillzeitbonus, liefert '
+  'Glaszaehler zu 250 ml und Vergleich gegen die vorherigen 14 Kalendertage. '
+  'Klima steht bis zur Orts-/Gym-Anbindung auf 1.0, Trainingsbonus bis zu '
+  'Trainingseinheiten auf 0 ml. Kein Maximum; progress_pct darf ueber 100 liegen.';
 
 REVOKE ALL ON FUNCTION nutrition.hydration_day(UUID, DATE) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION nutrition.hydration_day(UUID, DATE)

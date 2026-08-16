@@ -227,7 +227,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM nutrition.hydration_day('${tom}'::uuid, DATE '2026-08-16')
     WHERE log_count > 0
-      AND target_ml = 2975
+      AND target_ml = 3400
       AND total_ml < target_ml * 0.60
       AND avg_14d_days = 14
       AND avg_14d_total_ml > total_ml
