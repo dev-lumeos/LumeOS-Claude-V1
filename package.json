@@ -7,7 +7,8 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "gate": "turbo run typecheck test build"
+    "gate": "node tools/encoding-pruefen.mjs && turbo run typecheck test build",
+    "encoding": "node tools/encoding-pruefen.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.41.2",
