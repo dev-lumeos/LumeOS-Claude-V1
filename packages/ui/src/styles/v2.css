@@ -1530,6 +1530,72 @@ select.v2-feld { cursor: pointer; }
 }
 .v2-hinweis strong { color: var(--fg-muted); }
 
+/* Attrappe — die Kachel steht, die Daten fehlen noch.
+   [read] Tom, 2026-08-16: der Hinweis ist der Fortschrittsbalken. Er
+   muss auf einen Blick vom verdrahteten Nachbarn zu unterscheiden sein,
+   ohne die Anordnung zu veraendern — sonst springt das Bild, sobald
+   eine Kachel fertig wird. Deshalb nur Rahmen und Deckkraft, keine
+   andere Groesse und kein anderer Abstand.
+   [cmd] Der Entwurf kennt diese Klasse nicht: er ist durchgehend
+   Attrappe und braucht deshalb keine Kennzeichnung. */
+.v2-card.v2-attrappe {
+  border-style: dashed;
+  border-color: color-mix(in oklch, var(--warn) 32%, var(--border));
+  background: color-mix(in oklch, var(--warn) 3%, var(--surface));
+}
+/* Der Inhalt tritt zurueck, der Kopf mit der Marke bleibt lesbar. */
+.v2-card.v2-attrappe > *:not(.v2-card-h):not(.v2-attrappe-grund) {
+  opacity: 0.62;
+}
+.v2-attrappe-grund {
+  margin: 0 0 10px;
+  color: var(--fg-dim);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Die Flaeche, die eine Attrappe statt Inhalt zeigt. Sie haelt die
+   Hoehe, damit das Raster nicht springt, wenn die Kachel spaeter
+   echten Inhalt bekommt. */
+.v2-attrappe-flaeche {
+  border: 1px dashed color-mix(in oklch, var(--border-strong) 70%, transparent);
+  border-radius: var(--radius);
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 6px,
+    color-mix(in oklch, var(--fg-dim) 7%, transparent) 6px 12px
+  );
+}
+
+/* Eine Attrappe ohne Card braucht den Bezugspunkt fuer die Marke. */
+.v2-card.v2-attrappe { position: relative; }
+
+/* Das Hauptraster des Dashboards — Vorlage: gridTemplateColumns
+   "1.4fr 1fr". [cmd] Der Entwurf hat null @media-Regeln; dass die
+   Umsetzung welche braucht, ist eine erlaubte Anpassung (G-02). Unter
+   1100px stapeln die Spalten, sonst wird die rechte Spalte unlesbar
+   schmal. */
+.v2-dash-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .v2-dash-grid { grid-template-columns: 1fr; }
+}
+
+/* Diary-Raster — Vorlage: gridTemplateColumns "1.5fr 1fr". */
+.v2-diary-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .v2-diary-grid { grid-template-columns: 1fr; }
+}
+
 .v2-link {
   color: var(--acc);
   text-decoration: underline;

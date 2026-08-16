@@ -34,12 +34,12 @@ export type { ModuleId, ModuleAccentKey } from './module-accent'
 
 // --- Geteilte Bausteine -----------------------------------------
 export {
-  Card, Pill, Sparkline, KPI, Ring, Meter, Row, ModuleHero, Tabs,
+  Card, Pill, Sparkline, LineChart, KPI, Ring, Meter, Row, ModuleHero, Tabs,
 } from './primitives'
 export type {
   CardProps, PillProps, PillVariant, SparklineProps, KPIProps,
   RingProps, MeterProps, RowProps, ModuleHeroProps, ModuleHeroStat,
-  TabsProps, TabItem,
+  TabsProps, TabItem, LineChartProps, LineSeries,
 } from './primitives'
 
 // --- In G-03 dazugekommen ---------------------------------------

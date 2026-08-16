@@ -91,8 +91,18 @@ export function ProgressRing({
       </svg>
 
       <div className="v2-ring-label">
+        {/* Nachkommastellen fliegen aus dem Ring. [cmd] Gemessen an
+            2.371,95 kcal in einem 84er-Ring: die Zahl steht ueber dem
+            Rand. Innerhalb des Rings zaehlt die Groessenordnung, nicht
+            die zweite Nachkommastelle — die genaue Zahl steht in der
+            Tagessumme. Unter 10 bleibt eine Stelle erhalten, sonst
+            wuerden 0,8 g Salz zu „1". */}
         <span className="v2-v" style={{ fontSize: size >= 92 ? 21 : 19, lineHeight: 1 }}>
-          {hatWert ? value.toLocaleString('de-DE') : '—'}
+          {hatWert
+            ? value.toLocaleString('de-DE', {
+                maximumFractionDigits: Math.abs(value) < 10 ? 1 : 0,
+              })
+            : '—'}
         </span>
         <span className="v2-l" style={{
           fontSize: 9, marginTop: 2, letterSpacing: '0.02em', textTransform: 'none',

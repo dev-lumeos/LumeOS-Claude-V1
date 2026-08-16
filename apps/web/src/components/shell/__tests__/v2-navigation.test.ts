@@ -46,8 +46,26 @@ test('ein unbekannter Pfad faellt auf das Dashboard zurueck', () => {
 })
 
 test('der laengere Pfad gewinnt', () => {
-  const r = resolveNav('/v2/nutrition/suche')
-  assert.equal(r.entry.id, 'nutrition')
-  assert.equal(r.sub?.id, 'nutrition-search',
-    'Die Suche muss den Untereintrag treffen, nicht nur das Modul')
+  // Geprueft an Coach, weil Nutrition seit der Tab-Umstellung keine
+  // Untereintraege mehr hat. Die Regel selbst gilt weiter.
+  const r = resolveNav('/v2/coach/ai')
+  assert.equal(r.entry.id, 'coach')
+  assert.equal(r.sub?.id, 'coach-ai',
+    'Der Unterpfad muss den Untereintrag treffen, nicht nur das Modul')
+})
+
+test('Nutrition fuehrt keine Untereintraege mehr', () => {
+  // [read] Tom, 2026-08-16: "Was soll die Subnavigation links?" Die
+  // Vorlage fuehrt sieben Tabs IM MODUL; die Untereintraege waren eine
+  // Erfindung aus G-03. Ohne diesen Test kaeme die naechste Seite unter
+  // /v2/nutrition/... wieder als Untereintrag zurueck.
+  const nutrition = MODULES.find(m => m.id === 'nutrition')
+  assert.ok(nutrition, 'Nutrition muss es geben')
+  assert.equal(nutrition!.sub, undefined,
+    'Die Tabs stehen in der Seite, nicht in der Seitenleiste')
+
+  // Die Suche bleibt trotzdem beim Modul — sonst faellt sie aufs
+  // Dashboard zurueck und die Seitenleiste zeigt den falschen Eintrag.
+  assert.equal(resolveNav('/v2/nutrition/suche').entry.id, 'nutrition')
+  assert.equal(resolveNav('/v2/nutrition/suche').sub, undefined)
 })

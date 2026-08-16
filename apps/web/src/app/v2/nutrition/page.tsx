@@ -36,11 +36,18 @@ function heute(): string {
 export default async function V2NutritionPage({
   searchParams,
 }: {
-  searchParams?: { datum?: string }
+  searchParams?: { datum?: string; tab?: string }
 }) {
   const datum = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
     ? searchParams!.datum!
     : heute()
+
+  // Der aktive Tab steht in der Adresse, damit die Tagesdaten
+  // serverseitig geladen bleiben (Begruendung in tableiste.tsx).
+  // Unbekannte Werte fallen auf `diary` zurueck statt eine leere Seite
+  // zu zeigen.
+  const ERLAUBT = ['diary', 'insights', 'nutrients', 'foods', 'plans', 'prefs', 'planner']
+  const tab = ERLAUBT.includes(searchParams?.tab ?? '') ? searchParams!.tab! : 'diary'
 
   let summe: DailySummaryRow | null = null
   let bewertung: ReferenceAssessmentRow[] = []
@@ -85,6 +92,7 @@ export default async function V2NutritionPage({
   return (
     <TagebuchAnsicht
       datum={datum}
+      tab={tab}
       summe={summe}
       bewertung={bewertung}
       fehler={fehler}

@@ -18,7 +18,12 @@ aus G-01. Sie war verwaist, seit `page.tsx` das Dashboard trägt.
 
 ## Die Kernfrage: was echt ist und was nicht
 
-Der Auftrag stellte zwei Möglichkeiten zur Wahl. **Gewählt ist (a): nur
+> **ÜBERHOLT seit 2026-08-16.** Tom hat entschieden: **zwölf Kacheln,
+> neun als Attrappe gekennzeichnet.** Der Abschnitt bleibt als Beleg,
+> welche Begründung vorlag und woran sie scheiterte — der Denkfehler ist
+> im zweiten Nachtrag benannt. Was heute gilt, steht dort.
+
+Der Auftrag stellte zwei Möglichkeiten zur Wahl. **Gewählt war (a): nur
 zeigen, was es gibt.**
 
 `[cmd]` Die Vorlage hat zwölf Kacheln — vier Kennzahlen (Recovery 82,
@@ -65,6 +70,11 @@ sind nicht gebaut — sie gehören zu C-49.
 **Attrappe im Sinne von G-03 ist keine dieser Kacheln.** Es gibt auf
 dieser Seite keine erfundene Zahl. Das ist die Folge der Entscheidung
 oben — der Preis ist, dass die Seite dünner ist als die Vorlage.
+
+> **Überholt:** Die neun Kacheln sind seit dem zweiten Nachtrag da, als
+> Attrappe gekennzeichnet. Die Tabelle unten steht weiterhin richtig —
+> sie ist jetzt die Liste dessen, was jede Attrappe zum Verdrahten
+> braucht, und steht so auch als `BRAUCHT` im Code.
 
 **Nicht übernommen aus der Vorlage** (und was ein Modul liefern müsste,
 damit die Kachel erscheint — die Liste für G-06):
@@ -315,3 +325,103 @@ plus Lueckenkarte) bleibt unberuehrt — die liegt bei Tom.
 | `pnpm gate` | `[cmd]` 8 von 8, ungecacht |
 | `pnpm test` | `[cmd]` 182 Tests, 182 bestanden, ungecacht |
 | Sicherung | `[cmd]` `backup/schema/20260816_vor_testdaten_live.sql`, `--schema-only`, 439 KB |
+
+
+---
+
+## Nachtrag 2026-08-16 (2): nach der Vorlage gebaut
+
+Die Kachelfrage aus G-05 ist von Tom entschieden — **zwoelf Kacheln, neun
+als Attrappe gekennzeichnet.** Der Denkfehler in meiner Begruendung ist
+benannt: *„eine Marke nimmt einer Zahl nicht ihre Wirkung"* ist ein
+Argument ueber Endnutzer. Auf einem Stand, den nur Tom sieht, gibt es
+diesen Endnutzer nicht — und wer die unfertigen Kacheln weglaesst, nimmt
+genau die Anzeige weg, die das Design liefern soll.
+
+Der Unterschied zum Ring ohne Ziel bleibt bestehen und ist gebaut:
+
+| | |
+|---|---|
+| Ring ohne Ziel | eine Zahl, die aussieht wie gemessen, **ohne Kennzeichnung** — bleibt verboten |
+| Attrappenkachel | eine Flaeche, die **sagt, dass sie noch nichts weiss** |
+
+### Die Marke ist der Fortschrittsbalken
+
+Gebaut als Requisite an `Card`: `attrappe={grund}`. Sie erzeugt drei
+Dinge — die Marke „Attrappe" im Kopf, den gestrichelten Rahmen und den
+Satz, **woran es haengt**. Verdrahten heisst: Requisite entfernen.
+
+`[cmd]` Gegen das stille Verschwinden steht
+`apps/web/src/components/shell/__tests__/v2-attrappen.test.ts` mit fuenf
+Pruefungen: alle Vorlage-Kacheln vorhanden, Anzahl der Marken gleich der
+Anzahl fehlender Quellen, sieben Tabs, drei Begleitkarten, und der
+`Nutrition score` ohne erfundenen Wert. **Gegengeprobt:** eine Marke
+entfernt → Test rot mit „9 Kacheln haben keine Datenquelle, aber 8 sind
+gekennzeichnet"; danach zurueckgesetzt → gruen.
+
+### Bildschirmfoto-Vergleich: Dashboard
+
+`[cmd]` Vorlage `theme-v1/module-dashboard.jsx` gegen `/v2`.
+
+| Vorlage | Umsetzung | Abweichung und Grund |
+|---|---|---|
+| Kopf „Today · Sat · May 16 · Streak 23d" | „Today", Datum als Pille | **Streak entfaellt** — es gibt keine Serienzaehlung. Waere eine erfundene Zahl im Kopf, wo keine Marke hinpasst. |
+| KPI Recovery 82 | „—" + Attrappe | Schema `recovery` fehlt |
+| KPI Training Load 2.142 TSS | „—" + Attrappe | keine Trainings-Sitzungen |
+| KPI Calories 1.847 / 2.700 | **echt**, aus `daily_summary` + `zielwerte_am` | — |
+| KPI Sleep 7:42 | „—" + Attrappe | keine Schlafdaten |
+| Raster 1.4fr / 1fr | gleich | unter 1100 px gestapelt (`@media`) — der Entwurf hat null `@media`-Regeln, die Anpassung ist nach G-02 erlaubt |
+| Today's flow (Zeitstrahl) | Attrappe | `meals` fuehrt nur `entry_date`, keine Uhrzeit |
+| Macros · today | **echt** | — |
+| Activity (Ereignisstrom) | Attrappe | keine Ereignisse mit Zeitstempel |
+| Readiness (Ring + fuenf Balken) | Aufbau steht, Werte „—" + Attrappe | Ring auf 0, Balken leer — **keine erfundenen 82/84/78** |
+| Body battery (Kurve) | Attrappe | dieselbe Quelle wie Readiness |
+| Tonight (Push B, drei Felder) | Aufbau steht, „Keine Einheit geplant" + Attrappe | keine Trainingsplanung |
+| PR watch (drei Lifts) | Attrappe | keine Trainings-Sitzungen |
+| — | **zusaetzlich:** Naehrstoffdeckung, Energie letzte sieben Tage | Aus G-05 uebernommen. Die Vorlage hat sie nicht; sie tragen aber die C-48-Aussagen, ohne die das Dashboard nur eine einzige echte Zahl haette. **Das ist eine Abweichung nach oben und gehoert Tom zur Entscheidung.** |
+
+### Bildschirmfoto-Vergleich: Nutrition
+
+`[cmd]` Vorlage `theme-v1/module-nutrition.jsx` und
+`uploads/pasted-1786754205537-0.png` gegen `/v2/nutrition`.
+
+| Vorlage | Umsetzung | Abweichung und Grund |
+|---|---|---|
+| Kopf „Nutrition · Sat · May 16 · 138-nutrient tracking" | gleich, Datum als Pille | — |
+| Herkunftszeile „BLS 4.0 · Max Rubner-Institut" | gleich | — |
+| Aktionen: ‹ › Quick-add, Recalc macros, Find food, MealCam | **‹ › und „Lebensmittel suchen"** | Quick-add, Recalc und MealCam oeffnen Modale, die es nicht gibt. Ein Knopf ohne Ziel ist schlimmer als kein Knopf — **gemeldet, nicht gebaut.** |
+| Sieben Tabs | gleich, gleiche Reihenfolge | Zaehler: Diary aus `meal_count`, Nutrients fest 138 (BLS-Naehrstoffe, keine Tagesgroesse) |
+| Tab-Zustand in `useState` | in der Adresse (`?tab=`) | Die Tagesdaten laden serverseitig. Mit lokalem Zustand muesste entweder alles in den Browser (dann liest die Seite mit fremder Identitaet) oder jeder Tab braeuchte eine Route (dann waeren wir wieder bei den Untereintraegen). Nebenwirkung dafuer: ein Tab ist verlinkbar. |
+| Sidebar-Untereintraege | **entfallen** | Die Vorlage hat keine. `[cmd]` Im Browser gezaehlt: 0. |
+| Diary-Raster 1.5fr / 1fr | gleich | wie oben gestapelt unter 1100 px |
+| links: Ring + Makrobalken, Mahlzeitenkarten | gleich, Mahlzeiten aus C-03 (mit Schreibweg) | — |
+| rechts: Smart suggestions | Attrappe | keine Musterauswertung |
+| rechts: Nutrition score `1`, Schwelle ok ≥ 80 | Ring auf **0**, Beschriftung **„—"**, Attrappe | `[read]` Auftrag: „Als Attrappe zeigen, keinen Wert erfinden." Die 1 aus dem Entwurf zu uebernehmen waere eine erfundene Messung. Gewichtung ist C-49. |
+| rechts: Pending actions | Attrappe | Regeln ueber mehrere Module, Buddy ist Attrappe |
+| rechts: Micronutrient snapshot | **echt** — „Deckung je Naehrstoff" | — |
+
+**Abweichung ohne technischen Grund: keine.** Die drei oben (Streak,
+Modalknoepfe, die zwei Zusatzkarten) sind benannt und liegen bei Tom.
+
+### Was dabei aufgefallen ist
+
+`[cmd]` Die Makroringe zeigten `2.371,95` in einem 84-px-Ring — die Zahl
+stand ueber dem Rand. Behoben in `ProgressRing`: ab 10 ohne
+Nachkommastelle, darunter eine (sonst wuerden 0,8 g Salz zu „1"). Die
+genaue Zahl steht weiter in der Tagessumme.
+
+### Nachweise
+
+| Pruefung | Ergebnis |
+|---|---|
+| Angemeldet als `dev@lumeos.app` | `[cmd]` ja, nicht als test-user |
+| Kacheln auf `/v2` | `[cmd]` 4 KPI + 8 Karten = **12 der Vorlage, 9 gekennzeichnet**, dazu 2 Zusatzkarten aus G-05 |
+| Tabs auf `/v2/nutrition` | `[cmd]` `["Diary 4","Insights","Nutrients 138","Food DB","Meal plans","Preferences","Planner"]` |
+| Sidebar-Untereintraege | `[cmd]` 0 |
+| Jeder Tab einzeln | `[cmd]` insights/nutrients/plans/prefs/planner je 1 Attrappe, foods verlinkt die Suche |
+| Szenariotage im Browser | `[cmd]` 16.08. (15/20, 3 ueber Grenze) · 05.08. (2/21, Vitamin A) · 13.08. (12/16, 2) · 02.08. (**ohne Tagesziel**: Ringe ohne Prozent) |
+| Drei Breiten, beide Seiten | `[cmd]` 1600 / 1100 / 800 px, kein Ueberlauf |
+| `/nutrition` unveraendert | `[cmd]` 0 `v2-`-Elemente, `lume-shell` vorhanden |
+| Seitenfehler | `[cmd]` 0 |
+| `pnpm gate` | `[cmd]` 8 von 8, ungecacht |
+| `pnpm test` | `[cmd]` **188** Tests (183 + 5 neue), 0 fehlgeschlagen |

@@ -12,9 +12,10 @@ import * as React from 'react'
 import Link from 'next/link'
 import type { Route } from 'next'
 import {
-  Card, Pill, Icon, Row, ModuleHero, ProgressRing, CoverageRow,
-  type ReferenceStatus, type ReferenceDirection,
+  Card, Pill, Icon, Row, ModuleHero, ProgressRing, CoverageRow, Ring,
+  type ReferenceStatus, type ReferenceDirection, type TabItem,
 } from '@lumeos/ui'
+import { Tableiste } from './tableiste'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
@@ -51,10 +52,31 @@ function tagText(datum: string): string {
   })
 }
 
+/**
+ * Die sieben Tabs der Vorlage — Reihenfolge und Benennung uebernommen.
+ *
+ * `[cmd]` `module-nutrition.jsx` Zeile 28-36. `Diary` traegt dort einen
+ * Zaehler (3 = Mahlzeiten), `Nutrients` einen (138). Der erste wird hier
+ * aus den Daten gefuellt, der zweite bleibt fest: `[cmd]` es sind die
+ * 138 Naehrstoffe des BLS, keine Tagesgroesse.
+ */
+function tabs(mahlzeiten: number | null): TabItem[] {
+  return [
+    { id: 'diary',     label: 'Diary',       icon: 'edit',     count: mahlzeiten ?? undefined },
+    { id: 'insights',  label: 'Insights',    icon: 'sparkles' },
+    { id: 'nutrients', label: 'Nutrients',   icon: 'layers',   count: 138 },
+    { id: 'foods',     label: 'Food DB',     icon: 'search' },
+    { id: 'plans',     label: 'Meal plans',  icon: 'calendar' },
+    { id: 'prefs',     label: 'Preferences', icon: 'settings' },
+    { id: 'planner',   label: 'Planner',     icon: 'calendar' },
+  ]
+}
+
 export function TagebuchAnsicht({
-  datum, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler,
+  datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler,
 }: {
   datum: string
+  tab: string
   summe: DailySummaryRow | null
   bewertung: ReferenceAssessmentRow[]
   fehler: string | null
@@ -75,14 +97,39 @@ export function TagebuchAnsicht({
 
   return (
     <>
+      {/* Kopfzeile wie in der Vorlage: Titel, Datum, „138-nutrient
+          tracking", Herkunftszeile, Aktionen rechts.
+          [cmd] Die Vorlage nennt „BLS 4.0 · Max Rubner-Institut" — das
+          ist die Quelle, die auch hier liegt. */}
       <ModuleHero
         icon="nutrition"
-        title="Tagebuch"
-        sub={tagText(datum)}
+        title="Nutrition"
+        sub="Tagebuch, Mikronaehrstoff-Analyse und Planung · BLS 4.0 · Max Rubner-Institut"
         pills={
           <>
-            <Pill variant="acc">C-03</Pill>
-            <Pill>lesen und schreiben</Pill>
+            <Pill>{tagText(datum)}</Pill>
+            <Pill variant="acc">138-nutrient tracking</Pill>
+          </>
+        }
+        actions={
+          <>
+            <Link
+              href={`/v2/nutrition?datum=${vortag(datum)}` as Route}
+              className="v2-btn v2-btn-ghost"
+              aria-label="Vorheriger Tag"
+            >
+              <Icon name="chevron_left" className="v2-ic v2-ic-sm" />
+            </Link>
+            <Link
+              href={`/v2/nutrition?datum=${folgetag(datum)}` as Route}
+              className="v2-btn v2-btn-ghost"
+              aria-label="Naechster Tag"
+            >
+              <Icon name="chevron_right" className="v2-ic v2-ic-sm" />
+            </Link>
+            <Link href={'/v2/nutrition?tab=foods' as Route} className="v2-btn">
+              <Icon name="search" className="v2-ic v2-ic-sm" /> Lebensmittel suchen
+            </Link>
           </>
         }
         stats={[
@@ -91,10 +138,16 @@ export function TagebuchAnsicht({
           {
             label: 'Bewertbar',
             value: bewertbar.length > 0 ? `${erreicht}/${bewertbar.length}` : '—',
-            sub: bewertbar.length > 0 ? 'Ziele erreicht' : undefined,
+            sub: bewertbar.length > 0 ? 'Referenz gedeckt' : undefined,
           },
         ]}
       />
+
+      <Tableiste items={tabs(summe?.meal_count ?? null)} aktiv={tab} />
+
+      {tab !== 'diary' && <AndererTab tab={tab} />}
+      {tab === 'diary' && (
+      <>
 
       {fehler && (
         <div className="v2-insight v2-neg" style={{ marginTop: 16 }}>
@@ -129,11 +182,12 @@ export function TagebuchAnsicht({
         </div>
       )}
 
-      <div style={{ marginTop: 16 }}>
-        <Erfassen datum={datum} />
-      </div>
-
-      <div className="v2-grid v2-g-cols-2" style={{ marginTop: 16, alignItems: 'start' }}>
+      {/* Die Diary-Anordnung der Vorlage: links Tagessumme und
+          Mahlzeitenkarten, rechts die drei Begleitkarten.
+          [cmd] `module-nutrition.jsx` Zeile 184: gridTemplateColumns
+          "1.5fr 1fr". */}
+      <div className="v2-diary-grid" style={{ marginTop: 16 }}>
+        <div className="v2-col-gap" style={{ gap: 12 }}>
         <Card title="Tagessumme" sub="aus den eingefrorenen Werten">
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18 }}>
             {HAUPTMAKROS.map(m => {
@@ -197,6 +251,51 @@ export function TagebuchAnsicht({
               )
             })}
           </div>
+        </Card>
+
+        {/* Die Mahlzeitenkarten der Vorlage. Hier ist es die Erfassung
+            aus C-03 — sie fuehrt dieselben Mahlzeiten, kann aber
+            zusaetzlich schreiben. */}
+        <Erfassen datum={datum} />
+        </div>
+
+        {/* ---------- Rechte Spalte der Vorlage ---------- */}
+        <div className="v2-col-gap" style={{ gap: 12 }}>
+        <Card
+          title="Smart suggestions"
+          sub="based on your patterns"
+          attrappe="Vorschlaege brauchen erkannte Muster ueber viele Tage — es gibt keine Musterauswertung."
+        >
+          <div className="v2-attrappe-flaeche" style={{ height: 120 }} />
+        </Card>
+
+        {/* [read] Der Auftrag: „Der Nutrition score steht im Entwurf auf
+            1 bei Schwellen ok >= 80 — er gehoert zu C-49. Als Attrappe
+            zeigen, keinen Wert erfinden." Genau deshalb steht hier ein
+            Ring auf 0 mit „—", nicht die 1 aus dem Entwurf: eine
+            uebernommene Zahl waere eine erfundene Messung. */}
+        <Card
+          title="Nutrition score"
+          sub="deterministisch · ohne KI"
+          attrappe="Die Gewichtung — welcher Naehrstoff wie stark zaehlt — ist C-49 und in keiner Spec entschieden."
+        >
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+            <Ring value={0} max={100} color="var(--acc-nutri)" label="—" size={92} stroke={7} />
+            <div style={{ flex: 1, fontSize: 11.5, color: 'var(--fg-muted)', lineHeight: 1.45 }}>
+              Der Entwurf zeigt hier eine Zahl mit der Schwelle
+              „ok ab 80". Welche Groessen sie bilden und wie stark jede
+              zaehlt, steht in keiner Spec — deshalb bleibt das Feld leer
+              statt gefuellt.
+            </div>
+          </div>
+        </Card>
+
+        <Card
+          title="Pending actions"
+          sub="feeds Buddy's daily TODO"
+          attrappe="Offene Punkte entstehen aus Regeln ueber mehrere Module — Buddy ist seit G-02 eine Attrappe."
+        >
+          <div className="v2-attrappe-flaeche" style={{ height: 96 }} />
         </Card>
 
         <Card
@@ -282,7 +381,90 @@ export function TagebuchAnsicht({
             </span>
           </p>
         </Card>
+        </div>
       </div>
+      </>
+      )}
     </>
   )
+}
+
+/**
+ * Die sechs Tabs, die die Vorlage zeigt und fuer die es noch keine
+ * Daten gibt.
+ *
+ * `[read]` Nicht weglassen, sondern kennzeichnen: „Was markiert ist,
+ * ist offen." Wer den Tab anklickt, sieht, woran es haengt — und nicht
+ * eine leere Flaeche, die nach einem Fehler aussieht.
+ *
+ * `Food DB` ist die Ausnahme: die Suche gibt es (G-03), sie liegt unter
+ * `/v2/nutrition/suche` und wird von dort verlinkt statt hier doppelt
+ * eingebaut.
+ */
+function AndererTab({ tab }: { tab: string }) {
+  const inhalt: Record<string, { titel: string; braucht: string }> = {
+    insights: {
+      titel: 'Insights',
+      braucht: 'Auswertungen ueber Zeitraeume — heute gibt es nur die Tagessumme. `daily_summary` fuehrt keine Wochen- oder Monatswerte.',
+    },
+    nutrients: {
+      titel: 'Nutrients',
+      braucht: 'Die Deckung je Naehrstoff steht im Tagebuch. Die eigene Ansicht mit Verlauf je Naehrstoff braucht Verlaufsdaten.',
+    },
+    plans: {
+      titel: 'Meal plans',
+      braucht: 'Ein Schema fuer Essensplaene — es gibt keines.',
+    },
+    prefs: {
+      titel: 'Preferences',
+      braucht: 'Ernaehrungsvorlieben und Unvertraeglichkeiten am Profil — die Spalten fehlen.',
+    },
+    planner: {
+      titel: 'Planner',
+      braucht: 'Planung kuenftiger Tage. `meals` kennt nur erfasste Tage, keine geplanten.',
+    },
+  }
+
+  if (tab === 'foods') {
+    return (
+      <div style={{ marginTop: 16 }}>
+        <Card title="Food DB" sub="Lebensmittelsuche">
+          <p style={{ fontSize: 12.5, color: 'var(--fg-muted)', lineHeight: 1.55 }}>
+            Die Suche steht als eigene Seite.{' '}
+            <Link href={'/v2/nutrition/suche' as Route} className="v2-link">
+              Lebensmittel suchen
+            </Link>
+          </p>
+        </Card>
+      </div>
+    )
+  }
+
+  const t = inhalt[tab]
+  if (!t) return null
+  return (
+    <div style={{ marginTop: 16 }}>
+      <Card title={t.titel} sub="in der Vorlage vorgesehen" attrappe={t.braucht}>
+        <div className="v2-attrappe-flaeche" style={{ height: 160 }} />
+      </Card>
+    </div>
+  )
+}
+
+/** Ein Tag zurueck, als YYYY-MM-DD. */
+function vortag(datum: string): string {
+  return verschiebe(datum, -1)
+}
+
+/** Ein Tag vor, als YYYY-MM-DD. */
+function folgetag(datum: string): string {
+  return verschiebe(datum, 1)
+}
+
+function verschiebe(datum: string, tage: number): string {
+  const d = new Date(`${datum}T00:00:00`)
+  d.setDate(d.getDate() + tage)
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const t = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${m}-${t}`
 }

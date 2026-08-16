@@ -56,14 +56,14 @@ export const V2_BASE = '/v2'
 export const MODULES: NavEntry[] = [
   { id: 'dashboard',   label: 'Dashboard',    icon: 'dashboard',   href: `${V2_BASE}`,             shortcut: '1' },
   {
-    // G-03: zwei Seiten, deshalb Untereintraege. Der Aufbau war schon
-    // da (Coach), er wird hier zum zweiten Mal benutzt.
+    // KEINE Untereintraege. G-03 hatte hier zwei — die Folge davon,
+    // dass zwei Seiten nebeneinander lagen, wo die Vorlage sieben Tabs
+    // IM MODUL fuehrt. [read] Tom, 2026-08-16: „Was soll die
+    // Subnavigation links?" Die Tabs stehen jetzt in der Seite; der
+    // Seitenleisteneintrag ist wieder einzeilig wie bei allen anderen
+    // Modulen.
     id: 'nutrition', label: 'Nutrition', icon: 'nutrition',
     href: `${V2_BASE}/nutrition`, shortcut: '2',
-    sub: [
-      { id: 'nutrition-diary',  label: 'Tagebuch', href: `${V2_BASE}/nutrition` },
-      { id: 'nutrition-search', label: 'Suche',    href: `${V2_BASE}/nutrition/suche` },
-    ],
   },
   { id: 'training',    label: 'Training',     icon: 'training',    href: `${V2_BASE}/training`,    shortcut: '3' },
   { id: 'recovery',    label: 'Recovery',     icon: 'recovery',    href: `${V2_BASE}/recovery`,    shortcut: '4' },

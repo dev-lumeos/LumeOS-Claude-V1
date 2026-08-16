@@ -28,22 +28,45 @@ export type CardProps = {
   /** Farbpunkt vor dem Titel, z. B. der Modulakzent. */
   accent?: string
   onClick?: () => void
+  /**
+   * Attrappe: die Kachel steht, hat aber noch keine Datenquelle.
+   *
+   * `[read]` Tom, 2026-08-16: „Jedes Feature traegt einen Hinweis, ob es
+   * Mockup ist; wenn es verdrahtet ist, faellt der Hinweis weg." Die
+   * Marke ist damit der Fortschrittsbalken — nicht Zierrat, sondern die
+   * Anzeige, woran noch zu arbeiten ist.
+   *
+   * Der Text sagt, WORAN es haengt (fehlendes Schema, fehlende Spalte).
+   * `true` genuegt, wenn es nichts Genaueres zu sagen gibt.
+   *
+   * Verdrahtet? Requisite entfernen — nicht den Text aendern.
+   */
+  attrappe?: boolean | string
 }
 
 export function Card({
-  title, sub, actions, children, className = '', style, accent, onClick,
+  title, sub, actions, children, className = '', style, accent, onClick, attrappe,
 }: CardProps) {
-  const hatKopf = title != null || actions != null
+  const hatKopf = title != null || actions != null || attrappe
+  const grund = typeof attrappe === 'string' ? attrappe : null
   return (
-    <div className={`v2-card ${className}`.trim()} style={style} onClick={onClick}>
+    <div
+      className={`v2-card ${attrappe ? 'v2-attrappe' : ''} ${className}`.trim()}
+      style={style}
+      onClick={onClick}
+    >
       {hatKopf && (
         <div className="v2-card-h">
           {accent && <span className="v2-dot" style={{ background: accent }} />}
           {title && <span className="v2-card-title">{title}</span>}
           {sub && <span className="v2-card-sub">{sub}</span>}
-          <div className="v2-card-actions">{actions}</div>
+          <div className="v2-card-actions">
+            {attrappe && <Pill variant="warn">Attrappe</Pill>}
+            {actions}
+          </div>
         </div>
       )}
+      {grund && <p className="v2-attrappe-grund">{grund}</p>}
       {children}
     </div>
   )
@@ -109,6 +132,88 @@ export function Sparkline({
       {fill && <path d={`${d} L ${w} ${h} L 0 ${h} Z`} fill={color} opacity="0.12" />}
       <path d={d} fill="none" stroke={color} strokeWidth={strokeWidth}
             vectorEffect="non-scaling-stroke" />
+    </svg>
+  )
+}
+
+// ---------------------------------------------------------------
+// LineChart
+// ---------------------------------------------------------------
+
+export type LineSeries = { data: number[]; color?: string }
+
+export type LineChartProps = {
+  /** Eine Reihe je Kurve. Die erste bekommt die Flaeche. */
+  series: LineSeries[]
+  h?: number
+  xLabels?: string[]
+  color?: string
+  showArea?: boolean
+  /** Feste Achse `[min, max]`. Ohne sie aus den Daten abgeleitet. */
+  range?: [number, number]
+}
+
+/**
+ * Mehrere Kurven in einem Feld, mit Achsenbeschriftung.
+ *
+ * Uebersetzt aus `shared.jsx`. `Sparkline` kann das nicht: eine Reihe,
+ * keine Achse. Beide behalten heisst nicht doppelt — die Sparkline
+ * sitzt in KPI-Kacheln, wo kein Platz fuer Achsen ist.
+ */
+export function LineChart({
+  series, h = 160, xLabels, color = 'var(--acc)', showArea = true, range,
+}: LineChartProps) {
+  const reihen = series.filter(s => s.data.length > 0)
+  // Wie bei der Sparkline: eine Kurve aus einem Punkt teilt durch 0 und
+  // verschwindet lautlos. Lieber gar nichts zeichnen.
+  if (reihen.length === 0 || reihen.every(s => s.data.length < 2)) return null
+
+  const alle = reihen.flatMap(s => s.data)
+  const [min, max] = range ?? [Math.min(...alle) * 0.9, Math.max(...alle) * 1.05]
+  const spanne = max - min || 1
+  const w = 600
+  const pad = { l: 28, r: 8, t: 8, b: 18 }
+  const iw = w - pad.l - pad.r
+  const ih = h - pad.t - pad.b
+  const zuX = (i: number, n: number) => pad.l + (n > 1 ? (i / (n - 1)) * iw : iw / 2)
+  const zuY = (v: number) => pad.t + ih - ((v - min) / spanne) * ih
+
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: h }}
+         preserveAspectRatio="none" aria-hidden focusable="false">
+      {[0, 0.25, 0.5, 0.75, 1].map(t => (
+        <g key={t}>
+          <line x1={pad.l} x2={w - pad.r} y1={pad.t + t * ih} y2={pad.t + t * ih}
+                stroke="var(--border)" strokeWidth="1" />
+          <text x={pad.l - 6} y={pad.t + t * ih + 3} textAnchor="end" fontSize="9"
+                fill="var(--fg-dim)" fontFamily="var(--font-mono)">
+            {Math.round(max - t * spanne)}
+          </text>
+        </g>
+      ))}
+      {reihen.map((s, si) => {
+        const pts = s.data.map((v, i): [number, number] => [zuX(i, s.data.length), zuY(v)])
+        const d = pts
+          .map((pt, i) => (i === 0 ? 'M' : 'L') + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1))
+          .join(' ')
+        const flaeche = `${d} L ${pts[pts.length - 1][0]} ${pad.t + ih} L ${pts[0][0]} ${pad.t + ih} Z`
+        return (
+          <g key={si}>
+            {showArea && si === 0 && <path d={flaeche} fill={s.color ?? color} opacity="0.08" />}
+            <path d={d} fill="none" stroke={s.color ?? color} strokeWidth="1.5"
+                  vectorEffect="non-scaling-stroke" />
+            {pts.map((pt, i) => (
+              <circle key={i} cx={pt[0]} cy={pt[1]} r="2" fill={s.color ?? color} />
+            ))}
+          </g>
+        )
+      })}
+      {xLabels?.map((l, i) => (
+        <text key={l + i} x={zuX(i, xLabels.length)} y={h - 4} textAnchor="middle"
+              fontSize="9" fill="var(--fg-dim)" fontFamily="var(--font-mono)">
+          {l}
+        </text>
+      ))}
     </svg>
   )
 }
