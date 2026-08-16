@@ -29,6 +29,70 @@ Nutrition-Ringe füllen. Es ist keine eigenständige Dateneingabe.
 
 ---
 
+## Entscheidungen Toms, 2026-08-15
+
+**Die Zieltabelle gehört in ein `goals`-Schema**, nicht nach `nutrition`.
+`[cmd]` `nutrition_targets` steht in `daten/schema-sollstand.json` bereits
+unter `nicht_erwartet` mit dem Vermerk, dass es zu Goals gehört — die
+Absicht war getroffen. Ein leeres Schema kostet eine Zeile im
+Kettenschritt; ein späterer Umzug kostet eine Migration mit
+Datenverlustrisiko.
+
+**Der Plan liegt unter `30-module/core/goals/`.** `[read]` `00-INDEX.md`
+reserviert `40-…` für Lieferungen; der ursprüngliche Auftrag nannte den
+falschen Pfad. Damit ist W-9 erledigt.
+
+---
+
+## Die Rangfolge der Quellen — und sie ist nicht die erwartete
+
+**Tom, 2026-08-15:** *„Die Specs wurden anhand diverser alter Docs von KI
+erstellt. […] Was effektiv alles in Goals muss, zeigt die neue
+Designseite. […] Die Berechnungen — ich denke, die Formeln dazu gibt es
+schon, denn alles hat schonmal funktioniert."*
+
+Daraus folgt eine Rangfolge, die dem üblichen Muster widerspricht:
+
+| | | |
+|---|---|---|
+| **1. Vorgängerrepo** | `referenz/lumeos-2026/` | **die Rechenwege** — Code, der lief |
+| **2. Designvorlage** | `theme-v1/module-goals*.jsx` | **der Umfang** — was ins Modul gehört |
+| **3. Spec** | `docs/specs/Goals/` | **die Absicht** — die schwächste der drei |
+
+`[cmd]` Die Spec ist die schwächste, weil sie KI-erzeugt ist und
+`BrainstormDocs/Goals/new/` byte-identisch entspricht — an dieser Stelle
+eine Kopie, keine Synthese.
+
+### Die Formeln liegen als laufender Code vor
+
+`[cmd]` `referenz/lumeos-2026/src/modules/onboarding/utils/calculateTDEE.ts`
+liefert genau die fünf Zahlen, die die Ringe brauchen: `tdee`,
+`targetCalories`, `proteinG`, `fatG`, `carbsG`.
+
+**Sie beantwortet beide Lücken, die dieser Plan gemeldet hat:**
+
+- `[cmd]` **Mifflin-St Jeor, nicht Harris-Benedict** — und der
+  Aktivitätsmultiplikator wird angewandt (`bmr * multiplier`). Genau der
+  Fehler aus W-2: die Spec-Formel liefert BMR und liegt ohne Faktor um
+  1,2 bis 1,9 zu niedrig.
+- `[cmd]` **Kohlenhydrate sind die Restgrösse** — `carbsG` aus
+  `targetCalories` minus Protein und Fett. Die Regel, die in keiner
+  Goals-Spec steht, existiert dort als Code.
+
+Weitere Fundstellen: `src/modules/nutrition/hooks/useTDEE.ts`,
+`src/api/goals/routes/nutrition-goals.ts`.
+
+`[read]` **`referenz/` steht auf der Nicht-anfassen-Liste — das gilt fürs
+Schreiben.** Lesend ist es die Datenquelle für genau solche Fälle: 22
+Stashes, 19 ungepushte Commits, nichts wird dort verändert.
+
+**Was übernommen wird, wird gemessen, nicht abgeschrieben.** `[read]`
+*Aus der Existenz einer Sache folgt nicht ihre Funktion* — dass Code
+dort liegt, heisst nicht, dass er richtig rechnet. Aber er ist ein
+belegter Ausgangspunkt statt einer plausiblen Annahme.
+
+---
+
 ## 1. Quellen
 
 `aufgeloest` **nur nach Bestätigung durch Tom**. Was gelesen wurde, ist
