@@ -161,6 +161,10 @@ einem Fehlzaehler eine Null wird.
 
 ## Ein Befund: 60 von 138 Naehrstoffnamen sind doppelt kodiert
 
+<!-- encoding-pruefung:absicht — dieser Abschnitt ZITIERT beschaedigte
+     Sequenzen als Beleg. Sie duerfen nicht "repariert" werden, sonst
+     steht hier "Einheit µg statt µg". -->
+
 `[cmd]` Im Browser fiel auf: „Kohlenhydrate, verfÃ¼gbar",
 „Vitamin A, Retinol-Ã„quivalent", Einheit „Âµg".
 

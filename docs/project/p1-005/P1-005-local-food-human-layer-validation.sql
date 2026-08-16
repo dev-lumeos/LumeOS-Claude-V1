@@ -1,3 +1,5 @@
+-- encoding-pruefung:absicht — diese Datei sucht nach beschaedigten
+-- Sequenzen und traegt sie deshalb selbst. Kein Schaden.
 
 SELECT 'foods_total', COUNT(*)::text FROM nutrition.foods
 UNION ALL SELECT 'food_nutrients_total', COUNT(*)::text FROM nutrition.food_nutrients

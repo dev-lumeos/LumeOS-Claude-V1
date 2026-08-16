@@ -1,3 +1,5 @@
+-- encoding-pruefung:absicht — diese Datei sucht nach beschaedigten
+-- Sequenzen und traegt sie deshalb selbst. Kein Schaden.
 -- P1-005 local-only validation for V2xxxx -> Wild category apply
 
 SELECT

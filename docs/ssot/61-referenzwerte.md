@@ -259,9 +259,9 @@ Prüfregeln schon geschrieben sind.
   Nährstoffe einen Referenzwert brauchen, ist es nicht.
 ---
 
-# NÃ¤hrstoff-Referenzwerte: gebaut
+# Nährstoff-Referenzwerte: gebaut
 
-`[cmd]` Fortsetzung 2026-08-15, C-45. Der frÃ¼here Abbruch ist aufgehoben:
+`[cmd]` Fortsetzung 2026-08-15, C-45. Der frühere Abbruch ist aufgehoben:
 EFSA, National Academies/NCBI und WHO/FAO liefern freie, belegbare
 Quellen. Der Kettenschritt steht jetzt als
 `supabase/_pipeline/015_kataloge/016_nutrient_reference_values.ts`.
@@ -269,22 +269,22 @@ Quellen. Der Kettenschritt steht jetzt als
 **Ergebnis:** `[cmd]` Der Wegwerf-Kettenlauf
 `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts --keep-database`
 lief auf `lumeos_kette_20260815072650` durch. Schritt `016` erzeugte
-**165 Zeilen fÃ¼r 138 NÃ¤hrstoffcodes**. Die AbschlussprÃ¼fung meldete
+**165 Zeilen für 138 Nährstoffcodes**. Die Abschlussprüfung meldete
 `SCHEMA VOLLSTAENDIG`.
 
 ## Was gebaut wurde
 
-`[cmd]` Neue Tabelle `nutrition.nutrient_reference_values`, Ã¶ffentliche
-Stammdaten. Sie trÃ¤gt `nutrient_code`, `reference_kind`, Alters- und
+`[cmd]` Neue Tabelle `nutrition.nutrient_reference_values`, öffentliche
+Stammdaten. Sie trägt `nutrient_code`, `reference_kind`, Alters- und
 Geschlechtsachsen, Schwangerschaft/Stillzeit, `value_min/value_max`,
 Einheit, Wertbasis sowie Quelle und Fundstelle je Zeile.
 
 `[cmd]` RLS ist aktiv, Policy `SELECT USING (true)`, `authenticated`
 hat nur `SELECT`, `service_role` hat `ALL`. Die drei leeren Spalten in
 `nutrient_defs` (`rda_male`, `rda_female`, `rda_unit`) wurden per
-`COMMENT ON COLUMN` als Ã¼berholt markiert, nicht entfernt.
+`COMMENT ON COLUMN` als überholt markiert, nicht entfernt.
 
-`[cmd]` `schema-sollstand.json` prÃ¼ft die Tabelle, RLS, Policy, Grants,
+`[cmd]` `schema-sollstand.json` prüft die Tabelle, RLS, Policy, Grants,
 FK und mindestens 138 Zeilen. Der Kettenlauf meldete:
 
 | Aussage | Wert |
@@ -294,12 +294,12 @@ FK und mindestens 138 Zeilen. Der Kettenlauf meldete:
 | RLS | 20/20 |
 | Policies | 20/20 |
 | GRANTs | 22/22 |
-| FremdschlÃ¼ssel | 16/16 |
+| Fremdschlüssel | 16/16 |
 | `nutrient_reference_values` | 165 / 138 |
 
-## Welche Quelle je NÃ¤hrstoff
+## Welche Quelle je Nährstoff
 
-`[read]` PrimÃ¤rquelle ist EFSA. Der EFSA-DRV-Summary-PDF liefert die
+`[read]` Primärquelle ist EFSA. Der EFSA-DRV-Summary-PDF liefert die
 Wertarten selbst: `PRI`, `AR`, `AI`, `RI`; ein `AI` ist also bewusst
 nicht dasselbe wie ein `PRI`.
 
@@ -319,25 +319,25 @@ nicht dasselbe wie ein `PRI`.
 | `NO_STANDALONE_REFERENCE` | 57 |
 
 **EFSA DRV Summary Tables 2017** `[read]`:
-Energie, Protein, Fett, gesÃ¤ttigte FettsÃ¤uren, Kohlenhydrate,
-Ballaststoffe, Wasser, LinolsÃ¤ure, Alpha-LinolensÃ¤ure, EPA+DHA,
-Vitamine A/D/E/K/C/B1/B2/B6/B12, Folat, Niacin-Ã„quivalent,
-PantothensÃ¤ure, Biotin, Calcium, Jod, Eisen, Mangan, MolybdÃ¤n,
+Energie, Protein, Fett, gesättigte Fettsäuren, Kohlenhydrate,
+Ballaststoffe, Wasser, Linolsäure, Alpha-Linolensäure, EPA+DHA,
+Vitamine A/D/E/K/C/B1/B2/B6/B12, Folat, Niacin-Äquivalent,
+Pantothensäure, Biotin, Calcium, Jod, Eisen, Mangan, Molybdän,
 Phosphor, Kalium, Fluorid, Zink sowie die explizite Chromium-Aussage
 „AI oder PRI nicht angemessen".
 
 **EFSA Einzelgutachten nach 2017** `[read]`:
 Natrium, Chlorid, Vitamin-D-UL, Vitamin-A-UL, Vitamin-B6-UL,
-Vitamin-E-UL, FolsÃ¤ure-UL und Kupfer-Safe-Level. Diese spÃ¤teren
-Gutachten ersetzen bei ULs die Ã¤lteren US-Werte, wenn sie abweichen.
+Vitamin-E-UL, Folsäure-UL und Kupfer-Safe-Level. Diese späteren
+Gutachten ersetzen bei ULs die älteren US-Werte, wenn sie abweichen.
 
 **National Academies / NCBI DRI Reference Tables** `[read]`:
 US-DRI-ULs dort, wo im gebauten Schritt kein neuerer EFSA-Wert
 eingetragen wurde: Vitamin C, Calcium, Jod, Eisen, Magnesium
-Supplement-UL, Mangan, MolybdÃ¤n, Phosphor, Fluorid, Zink.
+Supplement-UL, Mangan, Molybdän, Phosphor, Fluorid, Zink.
 
 **WHO/FAO/UNU 2007** `[read]`:
-essenzielle AminosÃ¤uren. Methionin+Cystein und Phenylalanin+Tyrosin
+essenzielle Aminosäuren. Methionin+Cystein und Phenylalanin+Tyrosin
 sind kombinierte Anforderungen; Cystein und Tyrosin bekommen deshalb
 `NO_STANDALONE_REFERENCE`.
 
@@ -345,67 +345,67 @@ sind kombinierte Anforderungen; Cystein und Tyrosin bekommen deshalb
 
 `[cmd]` Der Seed dokumentiert Abweichungen in `notes`, statt zu mitteln:
 
-| NÃ¤hrstoff | EFSA | US DRI | Entscheidung |
+| Nährstoff | EFSA | US DRI | Entscheidung |
 |---|---:|---:|---|
 | Vitamin D AI | 15 ug | andere Stellen oft 20 ug | EFSA 15 ug |
 | Vitamin B6 UL | 12 mg | 100 mg | EFSA 12 mg |
 | Vitamin E UL | 300 mg | 1000 mg | EFSA 300 mg |
 | Kupfer UL/Safe Level | 5000 ug | 10000 ug | EFSA 5000 ug |
 
-`[annahme]` FÃ¼r LumeOS ist das richtig, weil Tom EFSA als PrimÃ¤rquelle
-gesetzt hat. Die US-Werte bleiben nur dort SekundÃ¤rquelle, wo kein
+`[annahme]` Für LumeOS ist das richtig, weil Tom EFSA als Primärquelle
+gesetzt hat. Die US-Werte bleiben nur dort Sekundärquelle, wo kein
 neuerer EFSA-UL im Schritt hinterlegt ist.
 
-## Welche NÃ¤hrstoffe keinen Wert bekommen und warum
+## Welche Nährstoffe keinen Wert bekommen und warum
 
-`[cmd]` 78 Zeilen sind ausdrÃ¼cklich ohne eigenstÃ¤ndigen Referenzwert:
+`[cmd]` 78 Zeilen sind ausdrücklich ohne eigenständigen Referenzwert:
 21 `NO_REFERENCE` und 57 `NO_STANDALONE_REFERENCE`. Das sind keine
-LÃ¼cken; jede Zeile trÃ¤gt Quelle und Fundstelle.
+Lücken; jede Zeile trägt Quelle und Fundstelle.
 
 | Codes | Grund |
 |---|---|
 | `ALC`, `ASH`, `CHORL`, `NT` | Alkohol, Rohasche, Cholesterin und Stickstoff sind keine Bedarfsziele im Sinne der Zufuhrempfehlungen |
-| `RETOL`, `CARTB`, `CAROTPAXB` | kein Standalone-Wert; Vitamin-A-Ã„quivalent `VITA` nutzen |
-| `CHOCAL`, `ERGCAL` | kein Standalone-Wert; Vitamin-D-Ã„quivalent `VITD` nutzen |
+| `RETOL`, `CARTB`, `CAROTPAXB` | kein Standalone-Wert; Vitamin-A-Äquivalent `VITA` nutzen |
+| `CHOCAL`, `ERGCAL` | kein Standalone-Wert; Vitamin-D-Äquivalent `VITD` nutzen |
 | `TOCPHA`, `TOCPHB`, `TOCPHG`, `TOCPHD`, `TOCTRA` | kein Standalone-Wert; Vitamin E `VITE` nutzen |
 | `VITK1`, `VITK2` | kein Standalone-Wert; Vitamin K `VITK` nutzen |
 | `NIA`, `FOLFD` | Zielwert liegt auf `NIAEQ` bzw. `FOL`; `NIA` hat nur einen UL |
 | `S`, `CR` | Schwefel ohne quantifizierten DRV; Chrom laut EFSA ohne angemessenen AI/PRI |
-| `ACEAC`, `CITAC`, `LACAC`, `MALAC`, `TARAC` | organische SÃ¤uren, kein Bedarf |
+| `ACEAC`, `CITAC`, `LACAC`, `MALAC`, `TARAC` | organische Säuren, kein Bedarf |
 | `MANTL`, `SORTL`, `XYLTL` | Zuckeralkohole, kein Bedarf |
 | `GLUS`, `FRUS`, `GALS`, `SUCS`, `MALS`, `LACS`, `OLSAC`, `STARCH` | kein Standalone-Wert; Gesamt-Kohlenhydrate `CHO` nutzen |
 | `FIBLMW`, `FIBINS`, `FIBSOL`, `FIBHMWS`, `FIBHMWI` | kein Standalone-Wert; Gesamt-Ballaststoffe `FIBT` nutzen |
-| `F4:0`, `F6:0`, `F8:0`, `F10:0`, `F12:0`, `F14:0`, `F15:0`, `F16:0`, `F17:0`, `F18:0`, `F20:0`, `F22:0`, `F24:0` | kein Standalone-Wert fÃ¼r einzelne gesÃ¤ttigte FettsÃ¤uren |
-| `F14:1CN5`, `F16:1CN7`, `F18:1CN7`, `F18:1CN9`, `F20:1CN9`, `F22:1CN9` | kein Standalone-Wert fÃ¼r einzelne einfach ungesÃ¤ttigte FettsÃ¤uren |
-| `F18:4CN3`, `F22:5CN3`, `F18:2C9T11`, `F18:3CN6`, `F20:2CN6`, `F20:3CN6`, `F20:4CN6`, `FAX` | kein Standalone-Wert fÃ¼r diese mehrfach ungesÃ¤ttigten FettsÃ¤uren oder Sammelreste |
-| `F22:6CN3` | DHA ist Ã¼ber den kombinierten EPA+DHA-Wert abgedeckt |
-| `ALA`, `ARG`, `ASP`, `GLU`, `GLY`, `PRO`, `SER` | nicht-essenzielle AminosÃ¤uren, kein Standalone-Bedarf |
-| `CYSTE`, `TYR` | Ã¼ber Methionin+Cystein bzw. Phenylalanin+Tyrosin abgedeckt |
+| `F4:0`, `F6:0`, `F8:0`, `F10:0`, `F12:0`, `F14:0`, `F15:0`, `F16:0`, `F17:0`, `F18:0`, `F20:0`, `F22:0`, `F24:0` | kein Standalone-Wert für einzelne gesättigte Fettsäuren |
+| `F14:1CN5`, `F16:1CN7`, `F18:1CN7`, `F18:1CN9`, `F20:1CN9`, `F22:1CN9` | kein Standalone-Wert für einzelne einfach ungesättigte Fettsäuren |
+| `F18:4CN3`, `F22:5CN3`, `F18:2C9T11`, `F18:3CN6`, `F20:2CN6`, `F20:3CN6`, `F20:4CN6`, `FAX` | kein Standalone-Wert für diese mehrfach ungesättigten Fettsäuren oder Sammelreste |
+| `F22:6CN3` | DHA ist über den kombinierten EPA+DHA-Wert abgedeckt |
+| `ALA`, `ARG`, `ASP`, `GLU`, `GLY`, `PRO`, `SER` | nicht-essenzielle Aminosäuren, kein Standalone-Bedarf |
+| `CYSTE`, `TYR` | über Methionin+Cystein bzw. Phenylalanin+Tyrosin abgedeckt |
 
 ## Was diese Werte nicht leisten
 
-- `[read]` Es sind Zufuhrempfehlungen fÃ¼r gesunde Menschen, keine
+- `[read]` Es sind Zufuhrempfehlungen für gesunde Menschen, keine
   Laborreferenzbereiche. Ferritin, Natrium im Serum oder Blutwerte
-  gehÃ¶ren zum Biomarker-Modul.
-- `[annahme]` Sie gelten fÃ¼r gesunde Erwachsene in Ruhe. Ein
-  Kraftsportler im Aufbau, eine DiÃ¤tphase oder Krankheit Ã¤ndern den
+  gehören zum Biomarker-Modul.
+- `[annahme]` Sie gelten für gesunde Erwachsene in Ruhe. Ein
+  Kraftsportler im Aufbau, eine Diätphase oder Krankheit ändern den
   Bedarf; EFSA beantwortet diese Sportziel-Frage nicht.
 - `[cmd]` Energie ist als `FORMULA` modelliert, nicht als fixe
-  Kalorienzahl. Tagesziele mÃ¼ssen weiter aus Profil, KÃ¶rperdaten und
-  AktivitÃ¤t kommen.
+  Kalorienzahl. Tagesziele müssen weiter aus Profil, Körperdaten und
+  Aktivität kommen.
 - `[cmd]` Einheiten sind Quellen-Einheiten. `VITB6` steht im BLS in
-  Mikrogramm, EFSA/UL in Milligramm; die spÃ¤tere Bewertung muss
+  Mikrogramm, EFSA/UL in Milligramm; die spätere Bewertung muss
   konvertieren, statt Einheiten still gleichzusetzen.
 - `[annahme]` Schwangerschaft und Stillzeit sind strukturell abbildbar,
-  aber V1 wertet sie nicht aus. Einige EFSA-Quellen fÃ¼hren Werte; die
-  Tabelle kann sie aufnehmen, der Seed beschrÃ¤nkt sich auf den
-  erwachsenen Kern plus dort nÃ¶tige Hinweise.
+  aber V1 wertet sie nicht aus. Einige EFSA-Quellen führen Werte; die
+  Tabelle kann sie aufnehmen, der Seed beschränkt sich auf den
+  erwachsenen Kern plus dort nötige Hinweise.
 
 ## Was offen bleibt
 
 - `[annahme]` Die Tabelle ist ein Stammdatenfundament. Sie baut noch
   keine Prozentanzeige, kein Ampelsystem und keine `micro_flags`.
 - `[annahme]` Vor einer medizinisch formulierten Nutzerwarnung sollten
-  die UL-Zeilen fachlich gegengeprÃ¼ft werden. Besonders relevant sind
-  die NÃ¤hrstoffe, bei denen EFSA und US DRI auseinandergehen.
+  die UL-Zeilen fachlich gegengeprüft werden. Besonders relevant sind
+  die Nährstoffe, bei denen EFSA und US DRI auseinandergehen.
 - `[cmd]` Die Kette baut die Tabelle, aber kein UI liest sie heute.
