@@ -13,6 +13,53 @@ Der Entwurf ist **Vorlage, nicht Vertrag.** Änderungen kommen beim Bauen.
 
 ---
 
+## Die Vorlage ist die Vorgabe
+
+**Tom, 2026-08-16, nach dem ersten Vergleich von `/v2/nutrition` mit
+`module-nutrition.jsx`:** *„Wieso sieht es nicht wie die Vorlage aus?
+Für was mache ich tagelang Design, wenn es nicht umgesetzt wird? Was
+soll die Subnavigation links?"*
+
+`[cmd]` **Was schiefging:** Der Auftrag G-03 nannte die Vorlage und gab
+dann eine andere Struktur vor — *„zwei Seiten unter `/v2/nutrition`:
+Tagebuch und Lebensmittelsuche"*. Die Vorlage führt **sieben Tabs im
+Modul** (Diary, Insights, Nutrients, Food DB, Meal plans, Preferences,
+Planner). Die Sub-Navigation in der Seitenleiste ist die Folge: Sie
+musste erfunden werden, weil zwei Seiten nebeneinander lagen, wo eine
+mit Tabs hingehört.
+
+**Die Vorlage wurde als Materialsammlung behandelt statt als Vorgabe.**
+
+### Die Regel
+
+**Übernehmen, nicht nachempfinden** — dieselbe Regel wie beim
+Vorgängerrepo in `CLAUDE.md`, und sie gilt hier genauso:
+
+- **Struktur, Reihenfolge, Benennung und Anordnung kommen aus der
+  Vorlage.** Tabs bleiben Tabs, Karten bleiben Karten, die Reihenfolge
+  der Blöcke bleibt.
+- **Angepasst wird nur, was technisch nicht geht** — anderes Schema,
+  fehlende Daten, Barrierefreiheit, Bildschirmbreiten. `[cmd]` Der
+  Entwurf hat null `@media`-Regeln; dass die Umsetzung welche braucht,
+  ist eine Anpassung. Eine Tab-Leiste durch Sidebar-Einträge zu ersetzen
+  ist keine.
+- **Was noch keine Daten hat, wird als Attrappe gekennzeichnet, nicht
+  weggelassen.** `[read]` Das Muster steht in G-03: `READ-ONLY MOCK`,
+  `Nicht live` — eine Attrappe, die sich ausweist, ist ehrlich; eine
+  weggelassene Kachel sieht aus, als sei sie nicht vorgesehen.
+- **Abweichungen werden vorgelegt, nicht entschieden.** Wer beim Bauen
+  einen Grund findet, von der Vorlage abzuweichen, meldet ihn — Tom
+  entscheidet.
+
+### Auch für Aufträge
+
+`[cmd]` Der Fehler lag im Auftrag, nicht in der Ausführung. **Ein
+Auftrag, der die Vorlage nennt, darf ihr nicht widersprechen.** Wo ein
+Auftrag eine Struktur vorgibt, muss sie aus der Vorlage stammen — oder
+die Abweichung muss ausdrücklich begründet und von Tom bestätigt sein.
+
+---
+
 ## Die Parallelität — und warum sie so aussieht
 
 **Neue Oberfläche unter `/v2`, alte bleibt unberührt.**
