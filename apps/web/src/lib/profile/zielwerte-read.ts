@@ -24,6 +24,8 @@ export type Zielwerte = {
   protein_g: number | null
   carbs_g: number | null
   fat_g: number | null
+  linoleic_acid_g: number | null
+  alpha_linolenic_acid_g: number | null
   herkunft: 'formel' | 'manuell'
   tdee: number | null
   nutrition_goal: string | null
@@ -37,6 +39,8 @@ export type Zielvorschlag = {
   protein_g: number | null
   carbs_g: number | null
   fat_g: number | null
+  linoleic_acid_g: number | null
+  alpha_linolenic_acid_g: number | null
   nutrition_goal: string | null
   kalorienfaktor: number | null
   /** `null` heisst: es ging. Sonst der Grund. */
@@ -82,6 +86,8 @@ export async function getZielwerteAm(stichtag: string): Promise<Zielwerte | null
     protein_g: zahl(r.protein_g),
     carbs_g: zahl(r.carbs_g),
     fat_g: zahl(r.fat_g),
+    linoleic_acid_g: zahl(r.linoleic_acid_g),
+    alpha_linolenic_acid_g: zahl(r.alpha_linolenic_acid_g),
     herkunft: r.herkunft === 'manuell' ? 'manuell' : 'formel',
     tdee: zahl(r.tdee),
     nutrition_goal: text(r.nutrition_goal),
@@ -107,7 +113,8 @@ export async function getZielwertVorschlag(stichtag: string): Promise<Zielvorsch
   if (!zeile) {
     return {
       bmr: null, tdee: null, kcal: null, protein_g: null, carbs_g: null,
-      fat_g: null, nutrition_goal: null, kalorienfaktor: null,
+      fat_g: null, linoleic_acid_g: null, alpha_linolenic_acid_g: null,
+      nutrition_goal: null, kalorienfaktor: null,
       hindernis: 'profil_unvollstaendig',
       fehlende_felder: [],
     }
@@ -121,6 +128,8 @@ export async function getZielwertVorschlag(stichtag: string): Promise<Zielvorsch
     protein_g: zahl(zeile.protein_g),
     carbs_g: zahl(zeile.carbs_g),
     fat_g: zahl(zeile.fat_g),
+    linoleic_acid_g: zahl(zeile.linoleic_acid_g),
+    alpha_linolenic_acid_g: zahl(zeile.alpha_linolenic_acid_g),
     nutrition_goal: text(zeile.nutrition_goal),
     kalorienfaktor: zahl(zeile.kalorienfaktor),
     hindernis: h === 'profil_unvollstaendig' || h === 'zielrichtung_ohne_faktor'

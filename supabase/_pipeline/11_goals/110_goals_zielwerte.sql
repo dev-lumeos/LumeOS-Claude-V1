@@ -1,8 +1,9 @@
 -- =============================================================
 -- 110 — Schema `goals`: Zielwerte (GO-03, GO-04)
 -- Datum: 2026-08-16
--- Zweck: Die vier Zahlen, gegen die das Tagebuch rechnet — kcal,
---        Protein, Kohlenhydrate, Fett je Tag. Dazu die reine Funktion,
+-- Zweck: Die Zahlen, gegen die das Tagebuch rechnet — kcal,
+--        Protein, Kohlenhydrate, Fett je Tag, dazu die zwei essenziellen
+--        Fettsäuren Linolsäure und Alpha-Linolensäure. Dazu die reine Funktion,
 --        die sie aus dem Profil herleitet.
 -- Idempotent: CREATE ... IF NOT EXISTS, Policies per DROP + CREATE,
 --             Funktion per CREATE OR REPLACE mit vorherigem DROP.
@@ -63,6 +64,8 @@ CREATE TABLE IF NOT EXISTS goals.nutrition_targets (
   protein_g    NUMERIC(6,1),
   carbs_g      NUMERIC(6,1),
   fat_g        NUMERIC(6,1),
+  linoleic_acid_g NUMERIC(6,1),
+  alpha_linolenic_acid_g NUMERIC(6,1),
 
   -- Woher der Wert kommt. Ohne diese Angabe ist spaeter nicht
   -- unterscheidbar, ob jemand die Zahl gesetzt oder die Formel sie
@@ -94,8 +97,41 @@ CREATE TABLE IF NOT EXISTS goals.nutrition_targets (
   CONSTRAINT nutrition_targets_carbs_check
     CHECK (carbs_g IS NULL OR (carbs_g >= 0 AND carbs_g <= 1500)),
   CONSTRAINT nutrition_targets_fat_check
-    CHECK (fat_g IS NULL OR (fat_g >= 0 AND fat_g <= 500))
+    CHECK (fat_g IS NULL OR (fat_g >= 0 AND fat_g <= 500)),
+  CONSTRAINT nutrition_targets_linoleic_acid_check
+    CHECK (linoleic_acid_g IS NULL OR (linoleic_acid_g >= 0 AND linoleic_acid_g <= 200)),
+  CONSTRAINT nutrition_targets_alpha_linolenic_acid_check
+    CHECK (alpha_linolenic_acid_g IS NULL OR (alpha_linolenic_acid_g >= 0 AND alpha_linolenic_acid_g <= 50))
 );
+
+ALTER TABLE goals.nutrition_targets
+  ADD COLUMN IF NOT EXISTS linoleic_acid_g NUMERIC(6,1),
+  ADD COLUMN IF NOT EXISTS alpha_linolenic_acid_g NUMERIC(6,1);
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'nutrition_targets_linoleic_acid_check'
+      AND conrelid = 'goals.nutrition_targets'::regclass
+  ) THEN
+    ALTER TABLE goals.nutrition_targets
+      ADD CONSTRAINT nutrition_targets_linoleic_acid_check
+      CHECK (linoleic_acid_g IS NULL OR (linoleic_acid_g >= 0 AND linoleic_acid_g <= 200));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conname = 'nutrition_targets_alpha_linolenic_acid_check'
+      AND conrelid = 'goals.nutrition_targets'::regclass
+  ) THEN
+    ALTER TABLE goals.nutrition_targets
+      ADD CONSTRAINT nutrition_targets_alpha_linolenic_acid_check
+      CHECK (alpha_linolenic_acid_g IS NULL OR (alpha_linolenic_acid_g >= 0 AND alpha_linolenic_acid_g <= 50));
+  END IF;
+END $$;
 
 COMMENT ON TABLE goals.nutrition_targets IS
   'Tagesziele je Nutzerin, ab einem Datum gueltig (GO-03). Ein Wechsel '
@@ -105,6 +141,10 @@ COMMENT ON COLUMN goals.nutrition_targets.gueltig_ab IS
   'Ab wann diese Zeile gilt. Teil des Primaerschluessels.';
 COMMENT ON COLUMN goals.nutrition_targets.herkunft IS
   'formel = aus goals.berechne_zielwerte, manuell = von Hand gesetzt.';
+COMMENT ON COLUMN goals.nutrition_targets.linoleic_acid_g IS
+  'C-52: Ziel fuer Linolsaeure (F18:2CN6), berechnet aus EFSA AI 4 E% und Zielkalorien.';
+COMMENT ON COLUMN goals.nutrition_targets.alpha_linolenic_acid_g IS
+  'C-52: Ziel fuer Alpha-Linolensaeure (F18:3CN3), berechnet aus EFSA AI 0,5 E% und Zielkalorien.';
 
 CREATE INDEX IF NOT EXISTS idx_nutrition_targets_user_ab
   ON goals.nutrition_targets(user_id, gueltig_ab DESC);
@@ -193,6 +233,8 @@ RETURNS TABLE (
   protein_g       NUMERIC,
   carbs_g         NUMERIC,
   fat_g           NUMERIC,
+  linoleic_acid_g NUMERIC,
+  alpha_linolenic_acid_g NUMERIC,
   nutrition_goal  TEXT,
   kalorienfaktor  NUMERIC,
   -- Warum es NICHT gerechnet werden konnte. NULL heisst: es ging.
@@ -287,7 +329,11 @@ makros AS (
     -- Protein: 2 g je kg. Beide Vorgaengerdateien sind sich einig.
     ROUND(a.body_weight_kg * 2, 1) AS protein_wert,
     -- Fett: 25 % der Zielkalorien, geteilt durch 9 kcal/g.
-    ROUND(a.kcal_wert * 0.25 / 9, 1) AS fett_wert
+    ROUND(a.kcal_wert * 0.25 / 9, 1) AS fett_wert,
+    -- C-52: EFSA AI fuer die zwei essenziellen Fettsaeuren als
+    -- Energieprozent. 1 g Fett/Fettsaeure = 9 kcal.
+    ROUND(a.kcal_wert * 0.04 / 9, 1) AS linolsaeure_wert,
+    ROUND(a.kcal_wert * 0.005 / 9, 1) AS alpha_linolensaeure_wert
   FROM abgeleitet a
 )
 SELECT
@@ -305,6 +351,8 @@ SELECT
        ELSE ROUND(GREATEST(m.kcal_wert - (m.protein_wert * 4 + m.fett_wert * 9), 0) / 4, 1)
   END,
   m.fett_wert,
+  m.linolsaeure_wert,
+  m.alpha_linolensaeure_wert,
   m.nutrition_goal,
   m.ziel_faktor,
   CASE
@@ -319,7 +367,8 @@ $$;
 COMMENT ON FUNCTION goals.berechne_zielwerte(UUID, DATE) IS
   'Zielwerte aus dem Profil (GO-04). REINE Funktion — schreibt nicht. '
   'Mifflin-St Jeor mit Aktivitaetsfaktor, Zuschlag je Zielrichtung, '
-  'Protein 2 g/kg, Fett 25 % der Zielkalorien, Kohlenhydrate als Rest. '
+  'Protein 2 g/kg, Fett 25 % der Zielkalorien, Kohlenhydrate als Rest, '
+  'Linolsaeure 4 E% und Alpha-Linolensaeure 0,5 E% aus EFSA AI. '
   'Fehlt etwas, stehen die Zahlen auf NULL und hindernis nennt den Grund.';
 
 GRANT EXECUTE ON FUNCTION goals.berechne_zielwerte(UUID, DATE)
@@ -341,6 +390,8 @@ RETURNS TABLE (
   protein_g    NUMERIC,
   carbs_g      NUMERIC,
   fat_g        NUMERIC,
+  linoleic_acid_g NUMERIC,
+  alpha_linolenic_acid_g NUMERIC,
   herkunft     TEXT,
   tdee         NUMERIC,
   nutrition_goal TEXT
@@ -351,6 +402,7 @@ SECURITY INVOKER
 SET search_path = ''
 AS $$
   SELECT t.gueltig_ab, t.kcal, t.protein_g, t.carbs_g, t.fat_g,
+         t.linoleic_acid_g, t.alpha_linolenic_acid_g,
          t.herkunft, t.tdee, t.nutrition_goal
   FROM goals.nutrition_targets t
   WHERE t.user_id = p_user_id

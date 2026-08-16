@@ -775,10 +775,61 @@ des Körpers.
 
 ## Was offen bleibt
 
-- **`F18:2CN6` und `F18:3CN3`** haben weder Bewertung noch Zielwert
-  (siehe oben).
+- **`F18:2CN6` und `F18:3CN3`** haben seit C-52 Zielwerte in
+  `goals.berechne_zielwerte` und `goals.nutrition_targets`, aber noch
+  keine Tagesbewertung. `[cmd]` Sie stehen nicht in `daily_summary`;
+  C-53 entscheidet, ob sie dort aufgenommen werden.
 - **11 der 16 Zeilen sind latent** — sie erreichen die Bewertung erst,
   wenn die Nährstoffe in `daily_summary` aufgenommen werden.
 - **Kein Wert im Seed wurde geändert.** `[cmd]` `0,83 g/kg` steht
   unverändert dort; `nutrient_reference_values` und `nutrient_defs`
   sind unberührt.
+
+## C-52: Essenzielle Fettsäuren als Zielwerte
+
+`[cmd]` Geprüft in `nutrition.nutrient_reference_values`: EFSA setzt für
+`F18:2CN6` (Linolsäure) einen `AI` von **4 E%** und für `F18:3CN3`
+(Alpha-Linolensäure) einen `AI` von **0,5 E%**. Beide Zeilen stehen auf
+`basis = energy_percent`, Quelle `EFSA Dietary Reference Values`, Fundstelle
+`Table 3`.
+
+`[cmd]` Abdeckung im Bestand:
+
+| Code | Lebensmittel mit Wert | mit positivem Wert | Anteil positiv |
+|---|---:|---:|---:|
+| `F18:2CN6` | 6.912 | 6.569 | 92,0 % |
+| `F18:3CN3` | 6.719 | 6.184 | 86,6 % |
+
+`[cmd]` Entscheidung: **als GO-04-Zielwerte aufnehmen**, nicht als
+`nicht_bewertbar` ausweisen. Die Abdeckung ist hoch genug; ein Zielwert
+würde nicht flächig `incomplete` erzeugen. Gerechnet wird aus den
+Zielkalorien: `kcal * 0,04 / 9` für Linolsäure und `kcal * 0,005 / 9`
+für Alpha-Linolensäure.
+
+`[cmd]` Gegenprobe auf der Wegwerf-Datenbank `lumeos_c52_fatty_acids`,
+vollständiges Profil wie in GO-04: `bmr 1.746,5`, `tdee 2.707,1`,
+`kcal 2.977,8`. Die neuen Zielwerte sind **13,2 g Linolsäure** und
+**1,7 g Alpha-Linolensäure**. `goals.zielwerte_am` liefert dieselben
+beiden Werte nach dem Speichern in `goals.nutrition_targets`.
+
+`[cmd]` `daily_summary` hat weiter **70 Spalten**. C-52 ändert das
+absichtlich nicht: jeder zusätzlich summierte Nährstoff kostet zwei
+Spalten, Wert plus Fehlzähler. **Sichtbar in der Bewertung werden die
+beiden Fettsäuren erst mit C-53**, falls Tom entscheidet, sie in die
+Tagessumme aufzunehmen.
+
+### Was mit den übrigen Fettsäuren ist
+
+`[cmd]` Die Gruppe `Fettsäuren` hat **36** Nährstoffcodes. Genau zwei
+bekommen jetzt eigene Zielwerte: Linolsäure und Alpha-Linolensäure.
+`[read]` Der Grund ist die EFSA-Fundstelle selbst: Table 3 nennt LA,
+ALA und kombiniert EPA+DHA, aber keine eigenen Ziele für die übrigen
+einzelnen Fettsäuren.
+
+`[cmd]` EPA (`F20:5CN3`) bleibt anders gelagert: C-45 führt dafür einen
+kombinierten `AI_COMBINED` zusammen mit DHA (`F22:6CN3`) von 250 mg/Tag.
+Das ist kein einzelner Zielwert für EPA und keiner für DHA allein.
+Alle übrigen Fettsäuren bleiben `NO_STANDALONE_REFERENCE` oder
+Bestandteil aggregierter BLS-Summen. `[annahme]` Ein Ziel für diese
+Einzelformen würde eine Genauigkeit behaupten, die die Referenzquelle
+nicht setzt.
