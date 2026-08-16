@@ -46,6 +46,35 @@ soll — dann sieht man drei Kacheln und muss sich neun dazudenken.
 **Deshalb: nichts weglässen, was die Vorlage zeigt.** Attrappe
 kennzeichnen, verdrahten, Kennzeichnung entfernen.
 
+### Was in einer Attrappe steht, ist gleichgültig
+
+**Tom, 2026-08-16:** *„Alles kommt rein. Wenn es ein Modal öffnen will,
+das es noch nicht gibt, kommt ein designpassendes Modal „in
+Entwicklung". Wenn es eine Attrappe ist, ist scheissegal, was da drin
+steht — es zeigt ja nur, wie es aussehen könnte."*
+
+**Eine markierte Attrappe darf erfundene Zahlen enthalten.** Genau dafür
+ist die Markierung da. `Recovery 82`, `2.142 TSS`, `7:42 h` — die Zahlen
+aus dem Entwurf bleiben stehen, damit die Kachel aussieht, wie sie
+aussehen wird.
+
+**Knöpfe kommen alle rein.** Wo das Ziel fehlt, öffnet ein Modal
+„in Entwicklung" im Stil des Themes. Ein fehlender Knopf ist unsichtbar;
+ein Knopf, der sagt, dass er noch nicht fertig ist, steht auf der
+Fortschrittsliste.
+
+**Damit entfallen drei Argumente, die zum Weglässen geführt haben:**
+
+| Argument | warum es nicht trägt |
+|---|---|
+| „eine erfundene Zahl neben echten sieht aus wie eine Messung" | die Marke sagt genau das Gegenteil, und sie steht daneben |
+| „ein Knopf ohne Ziel ist schlimmer als kein Knopf" | ein Modal „in Entwicklung" ist ein Ziel |
+| „im Kopf ist kein Platz für eine Marke" | dann gehört der Platz geschaffen, nicht die Kachel entfernt |
+
+`[cmd]` Alle drei sind in dieser Sitzung aufgetreten — bei den neun
+Dashboard-Kacheln, bei `Quick-add`/`Recalc macros`/`MealCam`, und beim
+`Streak 23d` im Kopf.
+
 ### Der Unterschied zum Ring ohne Ziel
 
 `[read]` In G-03 wurde entschieden, **keinen gefüllten Ring ohne Ziel**
