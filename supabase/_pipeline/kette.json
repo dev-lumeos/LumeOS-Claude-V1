@@ -249,6 +249,13 @@
       "depends_on": ["B", "auth_stub"]
     },
     {
+      "id": "056a",
+      "path": "supabase/_pipeline/05_user_tabellen/056a_hydration_day.sql",
+      "kind": "sql",
+      "creates": "hydration_day(user_id, date) mit Tagesziel, Glaeserzaehler und 14-Tage-Vergleich",
+      "depends_on": ["056", "090"]
+    },
+    {
       "id": "059",
       "path": "supabase/_pipeline/05_user_tabellen/059_daily_reference_assessment.sql",
       "kind": "sql",

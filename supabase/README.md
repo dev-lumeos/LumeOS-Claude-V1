@@ -98,6 +98,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 073 | `07_lesefunktionen/073_suchfilter.sql` | `food_search` samt Rangfunktionen | 1 Signatur |
 | 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
 | 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen | v090: 16 Prüfungen |
+| 056a | `05_user_tabellen/056a_hydration_day.sql` | Funktion `hydration_day(user_id, date)` mit Tagesziel, Gläserzahl und 14-Tage-Vergleich | 1 Funktion |
 | 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` für Tageswerte gegen Profil und Referenzwerte | 1 Funktion |
 | 100 | `10_training/100_training_schema.sql` | Schema `training` mit `exercises`, `muscle_groups`, `equipment`, `exercise_muscles` | 4 Tabellen |
 | 101 | `10_training/101_training_seed.sql` | Training-Stammdaten aus Legacy-Export | 1.416 Uebungen, 109 Muskelgruppen, 58 Geraete, 6.625 Zuordnungen vor Merge |
@@ -109,7 +110,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 
 **Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,
 `055` braucht `nutrition.touch_updated_at()` aus `052`, `056` braucht
-`water_logs` aus `055`. Einzeln laufen sie nicht.
+`water_logs` aus `055`, `056a` liest die Sicht aus `056` und
+`public.profiles.body_weight_kg` aus `090`. Einzeln laufen sie nicht.
 
 **`052` bis `056` brauchen das Schema `auth`.** `[cmd]` Ihre Policies
 rufen `auth.uid()`; ohne `auth` bricht `052` bei der ersten Policy ab —

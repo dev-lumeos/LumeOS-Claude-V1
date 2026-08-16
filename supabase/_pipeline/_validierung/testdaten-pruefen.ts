@@ -39,6 +39,7 @@ const profiles = numberScalar(`SELECT count(*) FROM public.profiles WHERE id IN 
 const targets = numberScalar(`SELECT count(*) FROM goals.nutrition_targets WHERE user_id IN (${IDS_SQL});`)
 const meals = numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id IN (${IDS_SQL});`)
 const items = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL});`)
+const waterLogs = numberScalar(`SELECT count(*) FROM nutrition.water_logs WHERE user_id IN (${IDS_SQL});`)
 const maxDays = numberScalar(`
   SELECT COALESCE(max(tage), 0)
   FROM (
@@ -56,12 +57,13 @@ if (MODE === 'clean') {
   if (targets !== 0) errors.push(`nutrition_targets: ${targets}, erwartet 0`)
   if (meals !== 0) errors.push(`meals: ${meals}, erwartet 0`)
   if (items !== 0) errors.push(`meal_items: ${items}, erwartet 0`)
+  if (waterLogs !== 0) errors.push(`water_logs: ${waterLogs}, erwartet 0`)
   if (foods !== 7140) errors.push(`foods: ${foods}, erwartet 7140`)
   if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
 
   console.log('C-82 Testdaten-Pruefung (clean)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
-  console.log(`  Meals/Items: ${meals}/${items}`)
+  console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
   const frozenMissing = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL}) AND frozen_at IS NULL;`)
@@ -92,6 +94,7 @@ if (MODE === 'clean') {
   if (targets !== 3) errors.push(`nutrition_targets: ${targets}, erwartet 3`)
   if (meals < 120) errors.push(`meals: ${meals}, erwartet mindestens 120`)
   if (items < 1000) errors.push(`meal_items: ${items}, erwartet mindestens 1000`)
+  if (waterLogs < 120) errors.push(`water_logs: ${waterLogs}, erwartet mindestens 120`)
   if (maxDays < 42) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 42`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
@@ -220,10 +223,21 @@ if (MODE === 'clean') {
     WHERE reference_status = 'missing_profile';`)) {
     errors.push('Fall Profil unvollstaendig: missing_profile fehlt')
   }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.hydration_day('${tom}'::uuid, DATE '2026-08-16')
+    WHERE log_count > 0
+      AND target_ml = 2975
+      AND total_ml < target_ml * 0.60
+      AND avg_14d_days = 14
+      AND avg_14d_total_ml > total_ml
+      AND behind_14d_avg_pct > 20;`)) {
+    errors.push('Fall Hydration unter Ziel: Summe, Ziel oder 14-Tage-Vergleich stimmen nicht')
+  }
 
   console.log('C-82 Testdaten-Pruefung (present)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
-  console.log(`  Meals/Items: ${meals}/${items}`)
+  console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
   console.log(`  daily_summary Zeilen: ${dailyRows}`)

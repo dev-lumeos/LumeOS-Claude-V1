@@ -80,6 +80,14 @@
     "expected": "Der Tag hat mindestens 20 Positionen und enthaelt sowohl Portionseingaben als auch direkte Grammeingaben."
   },
   {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-16",
+    "case": "Hydration deutlich unter Ziel und 14-Tage-Schnitt",
+    "expected": "hydration_day liefert Ziel 2.975 ml aus 85 kg x 35 ml/kg, einen Wassereintrag, total_ml unter 60 Prozent des Ziels und behind_14d_avg_pct ueber 20."
+  },
+  {
     "user": "Sarah Johnson",
     "email": "sarah.seed@example.com",
     "user_id": "10000000-0000-0000-0000-000000000103",

@@ -33,6 +33,14 @@ type MealRow = {
   notes: string
 }
 
+type WaterLogRow = {
+  userId: string
+  entryDate: string
+  amountMl: number
+  source: 'manual' | 'quick_add'
+  loggedAt: string
+}
+
 type ItemTemplate = {
   blsCode: string
   amountG: number
@@ -314,6 +322,7 @@ function tuple(values: Array<string | number | null>): string {
 
 const meals: MealRow[] = []
 const items: ItemRow[] = []
+const waterLogs: WaterLogRow[] = []
 for (const user of USERS) {
   const plan = PLANS[user.email]
   for (const date of daysBetween(START_DATE, END_DATE)) {
@@ -334,6 +343,34 @@ for (const user of USERS) {
         items.push({ ...template, mealId, userId: user.id })
       }
     }
+  }
+}
+
+function waterAmountsFor(user: TestUser, date: string): number[] {
+  if (user.email === 'tom.seed@example.com' && date === '2026-08-16') {
+    return [250]
+  }
+  if (user.email === 'tom.seed@example.com') {
+    return [1000, 750]
+  }
+  if (user.email === 'max.seed@example.com') {
+    return [750, 500]
+  }
+  return [500]
+}
+
+for (const user of USERS) {
+  for (const date of daysBetween(START_DATE, END_DATE)) {
+    if (SPECIAL_DAY_PLANS[user.email]?.[date] === 'skip-day') continue
+    waterAmountsFor(user, date).forEach((amountMl, index) => {
+      waterLogs.push({
+        userId: user.id,
+        entryDate: date,
+        amountMl,
+        source: index === 0 ? 'quick_add' : 'manual',
+        loggedAt: `${date}T${String(8 + index * 5).padStart(2, '0')}:00:00Z`,
+      })
+    })
   }
 }
 
@@ -361,6 +398,13 @@ const mealValues = meals.map(meal => tuple([
   meal.mealType,
   meal.notes,
 ])).join(',\n')
+const waterValues = waterLogs.map(log => tuple([
+  log.userId,
+  log.entryDate,
+  log.amountMl,
+  log.source,
+  log.loggedAt,
+])).join(',\n')
 const itemValues = items.map(item => tuple([
   item.mealId,
   item.userId,
@@ -374,6 +418,7 @@ const itemValues = items.map(item => tuple([
 const sql = `
 BEGIN;
 
+DELETE FROM nutrition.water_logs WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meals WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
@@ -456,6 +501,21 @@ INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type, notes)
 SELECT id, user_id, entry_date, meal_type, notes
 FROM test_meals;
 
+CREATE TEMP TABLE test_water_logs (
+  user_id uuid NOT NULL,
+  entry_date date NOT NULL,
+  amount_ml numeric NOT NULL,
+  source text NOT NULL,
+  logged_at timestamptz NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_water_logs VALUES
+${waterValues};
+
+INSERT INTO nutrition.water_logs (user_id, entry_date, amount_ml, source, logged_at)
+SELECT user_id, entry_date, amount_ml, source, logged_at
+FROM test_water_logs;
+
 CREATE TEMP TABLE test_items (
   meal_id uuid NOT NULL,
   user_id uuid NOT NULL,
@@ -528,11 +588,13 @@ DECLARE
   v_users integer;
   v_meals integer;
   v_items integer;
+  v_water integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
   SELECT count(*) INTO v_meals FROM nutrition.meals WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_items FROM nutrition.meal_items WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_water FROM nutrition.water_logs WHERE user_id IN (${userIds});
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -541,8 +603,8 @@ BEGIN
     GROUP BY user_id
   ) d;
 
-  RAISE NOTICE 'OK: C-82 Testdaten: % Nutzer, % Mahlzeiten, % Positionen, max % Tage',
-    v_users, v_meals, v_items, v_max_days;
+  RAISE NOTICE 'OK: C-82 Testdaten: % Nutzer, % Mahlzeiten, % Positionen, % Wassereintraege, max % Tage',
+    v_users, v_meals, v_items, v_water, v_max_days;
 END $$;
 
 COMMIT;
@@ -561,4 +623,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege.`)
