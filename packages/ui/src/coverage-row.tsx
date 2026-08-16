@@ -26,6 +26,9 @@ export type ReferenceDirection = 'target' | 'upper_limit' | 'range' | 'not_appli
 export type ReferenceStatus =
   | 'complete' | 'incomplete' | 'no_value'
   | 'not_applicable' | 'no_applicable_reference' | 'missing_profile'
+  // GO-00 Teil 2: drei Gruende, aus denen ein Referenzwert nicht als
+  // Prozentwert erscheinen kann, obwohl er existiert.
+  | 'missing_weight' | 'energy_share' | 'nutrient_density'
 
 export type CoverageRowProps = {
   name: React.ReactNode
@@ -83,6 +86,13 @@ function ersatztext(status: ReferenceStatus): string {
     case 'not_applicable': return 'kein Einzelwert'
     case 'no_applicable_reference': return 'kein Referenzwert'
     case 'missing_profile': return 'Profil fehlt'
+    // `[read]` Jeder dieser drei sagt etwas anderes, und der
+    // Unterschied zaehlt: beim ersten fehlt eine Angabe, die die
+    // Nutzerin nachtragen kann; bei den beiden anderen ist der
+    // Referenzwert schlicht keine Tagesmenge.
+    case 'missing_weight': return 'Gewicht fehlt'
+    case 'energy_share': return 'Anteil an der Energie'
+    case 'nutrient_density': return 'je Megajoule'
     default: return ''
   }
 }

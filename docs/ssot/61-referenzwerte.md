@@ -534,3 +534,251 @@ erzeugte falsche Prozentwerte um Faktor 1.000.
 falsche Eigenschaft vollständig misst. Beim Fettsäurenverlust war die
 Zeilenzahl blind für Codes und Quellen; hier war Codeabdeckung blind für
 Einheiten.
+
+
+---
+
+# GO-00, Teil 2: Die Einheiten zur Laufzeit umrechnen
+
+`[cmd]` Erhoben am 2026-08-16, Zweig `dev`. Teil 1 (`7ddd307`,
+`d7cb600`) hatte die eindeutigen mg/µg/g-Fälle im Seed korrigiert.
+**Offen blieben 16 Zeilen mit fremder Bezugsgrösse** — im Seed als
+abweichend markiert, was die Prüfmeldung verhinderte, nicht den falschen
+Prozentwert.
+
+## Der Befund, gemessen
+
+`[cmd]` Protein zeigte **1.593 %**. Sein Referenzwert ist `0,83 g/kg
+bw/day`; die Funktion teilte 13,22 g durch 0,83, ohne mit den 78,4 kg zu
+multiplizieren.
+
+`[cmd]` Die 16 Zeilen, nach Bezugsgrösse:
+
+| `basis` | Zeilen | Nährstoffe |
+|---|---:|---|
+| `per_kg_bw_per_day` | **10** | `PROT625` (g/kg) und neun Aminosäuren (mg/kg): `HIS`, `ILE`, `LEU`, `LYS`, `MET`, `PHE`, `THR`, `TRP`, `VAL` |
+| `energy_percent` / `as_low_as_possible` | **4** | `CHO`, `FAT`, `F18:2CN6`, `F18:3CN3`, dazu `FASAT` ohne Werte |
+| `per_mj` | **2** | `NIAEQ`, `THIA` |
+
+## Wo umgerechnet wird — und warum dort
+
+**Zur Laufzeit in `daily_reference_assessment`, nicht im Seed.**
+
+`[read]` `0,83 g/kg` bleibt `0,83 g/kg` — so schreibt es die EFSA, und
+der Seed bildet die Quelle ab. Ein Wert je Kilogramm lässt sich
+ausserdem gar nicht vorab ausrechnen: er hängt am Gewicht der Nutzerin,
+und das ändert sich.
+
+`[cmd]` Die Funktion liest `public.profiles` bereits für Alter und
+Geschlecht; `body_weight_kg` steht seit GO-01 in derselben Zeile. Die
+Erweiterung war eine Spalte im vorhandenen CTE.
+
+### Der Rechenweg
+
+`[cmd]` Eine neue Zwischenstufe (`aufgeloeste_referenzen`) macht aus dem
+Rohwert einen absoluten Tageswert:
+
+```
+per_kg_bw_per_day:  value * body_weight_kg / (unit LIKE 'mg/kg%' ? 1000 : 1)
+per_day:            value
+sonst:              NULL + Grund
+```
+
+`[cmd]` **Die Division durch 1000 war nicht offensichtlich:** neun der
+zehn Zeilen stehen in `mg/kg bw/day`, während der Nährstoff selbst in
+**g** geführt wird. Ohne sie zeigte Leucin das Tausendfache. Protein
+steht in `g/kg` und braucht nur die Multiplikation.
+
+`[cmd]` Nachgerechnet: `0,83 × 78,4 = 65,072 g/Tag`. Bei 20,66 g
+gegessen sind das **31,7 %**.
+
+`[cmd]` Für Leucin: `39 mg/kg × 78,4 = 3.057,6 mg = 3,058 g/Tag`; bei
+1,70 g sind das **55,5 %**.
+
+### Auch der angezeigte Referenzwert ist der aufgelöste
+
+`[cmd]` `reference_value_min` liefert jetzt `65.072` mit Einheit `g` —
+nicht mehr `0,83` mit `g/kg bw/day`. `[read]` Sonst könnte niemand die
+31,7 % nachrechnen: die Zahl im Nenner wäre eine andere als die
+angezeigte.
+
+Ist die Bezugsgrösse nicht auflösbar, steht dort NULL statt des
+Rohwerts.
+
+## Warum absolut angezeigt wird
+
+`[read]` Entscheidung Tom, 2026-08-15, nach einer Erhebung, wie
+etablierte Ernährungs-Apps es halten: **keine zeigt eine Einheit je
+Kilogramm.** MyFitnessPal nennt 1,2 g/kg als Zielsetzung in den
+Einstellungen; im Tagebuch stehen 120 g.
+
+## Ohne Gewicht kein Prozentwert
+
+`[cmd]` Nachgemessen — Gewicht auf NULL gesetzt:
+
+```
+ PROT625 | 20,66 |        | | missing_weight
+ LEU     |  1,70 |        | | missing_weight
+ CA      | 75,20 | 950,00 | 7,9 % | complete
+```
+
+**Kein Standardgewicht, kein Rückfallwert.** `[read]` Dieselbe Regel wie
+bei fehlendem Alter oder Geschlecht — und dieselbe, die GO-04 für die
+Rückfälle `|| 1.55` und `targetCalories: 0` angewandt hat: ein
+erfundener Nenner ist schlimmer als keine Zahl, weil er aussieht wie
+eine Messung.
+
+`[cmd]` Auch `reference_value_min` bleibt dann leer. `0,83` dort
+stehenzulassen wäre irreführend: es ist kein Tageswert.
+
+## Die vier `E%`-Zeilen
+
+`[read]` `E%` ist keine Nährstoffempfehlung, sondern eine Aussage über
+die Energieverteilung — „Fett soll 20 bis 35 % der Tagesenergie
+ausmachen". Genau das rechnet GO-02 beim Zielwert; hier ein zweites Mal
+zu rechnen hiesse zwei Wahrheiten zu führen.
+
+`[cmd]` Sie erscheinen jetzt mit Status `energy_share` und ohne
+Prozentwert. In der Oberfläche steht „Anteil an der Energie".
+
+### Deckt GO-02 sie wirklich ab? Teilweise — ein Befund
+
+Der Auftrag verlangt diese Prüfung. `[cmd]` `goals.berechne_zielwerte`
+liefert für das Testprofil:
+
+```
+ kcal 2977,8 | protein_g 156,8 | carbs_g 401,6 | fat_g 82,7
+```
+
+| Nährstoff | von GO-02 abgedeckt? |
+|---|---|
+| `CHO` (Kohlenhydrate) | **ja** — `carbs_g` |
+| `FAT` (Fett) | **ja** — `fat_g` |
+| `FASAT` (gesättigte Fettsäuren) | **nein** |
+| `F18:2CN6` (Linolsäure) | **nein** |
+| `F18:3CN3` (Alpha-Linolensäure) | **nein** |
+
+`[cmd]` Die Suche nach `F18:2CN6`, `F18:3CN3` und `Linol` in
+`110_goals_zielwerte.sql` und `zielrichtung-kalorienzuschlag.json`
+liefert **0 Treffer**. GO-02 kennt nur die drei Makros, keine einzelnen
+Fettsäuren.
+
+**Das ist ein Befund, keine Erledigung.** `[annahme]` Für die beiden
+essenziellen Fettsäuren gibt es damit heute weder in der Bewertung noch
+im Zielwert eine Aussage. `FASAT` ist der harmlosere Fall — die Spec
+führt ihn als „so wenig wie möglich", eine Obergrenze ohne Zahl.
+
+## Die zwei `per_mj`-Zeilen
+
+`[read]` Je Megajoule ist ein Fachmass für Nährstoffdichte: „1,6 mg
+Niacin-Äquivalent je MJ zugeführter Energie". Es sagt nichts darüber,
+ob heute genug gegessen wurde — bei halber Energiezufuhr wäre die halbe
+Menge „richtig".
+
+`[cmd]` Status `nutrient_density`, kein Prozentwert. In der Oberfläche
+steht „je Megajoule".
+
+## Wie viele der 16 heute überhaupt sichtbar sind
+
+`[cmd]` Nur **5 von 16** erreichen die Bewertung:
+
+| `basis` | erreichen die Bewertung |
+|---|---|
+| `per_kg_bw_per_day` | 2 von 10 (`PROT625`, `LEU`) |
+| `energy_percent` | 2 von 4 (`CHO`, `FAT`) |
+| `per_mj` | 1 von 2 (`THIA`) |
+
+`[cmd]` Der Grund: `daily_reference_assessment` bewertet die 33
+Nährstoffe, die `daily_summary` führt. Acht Aminosäuren, `NIAEQ` und die
+beiden Fettsäuren sind dort nicht dabei.
+
+**Die Reparatur deckt trotzdem alle 16 ab** — sie greift, sobald ein
+Nährstoff in die Tagessumme aufgenommen wird. `[read]` Das ist der
+Unterschied zwischen „heute kein Problem" und „behoben".
+
+## Nachweis
+
+`[cmd]` **Protein: 1.593 % → 31,7 %** mit dem echten Profil (78,4 kg,
+20,66 g gegessen, Referenz 65,072 g).
+`[cmd]` **Leucin: 55,5 %** gegen 3,058 g — die mg→g-Umrechnung greift.
+
+`[cmd]` Die C-48-Zahlen aus C-03, vorher und nachher:
+
+| | vorher | nachher |
+|---|---:|---:|
+| `complete` | 41 | **37** |
+| `incomplete` | 2 | 2 |
+| `not_applicable` | 2 | 2 |
+| `energy_share` | — | **3** |
+| `nutrient_density` | — | **1** |
+| **Summe** | 45 | **45** |
+
+`[cmd]` Genau vier Zeilen haben `complete` verlassen: `CHO`, `FAT`,
+`FASAT` (Energieanteil) und `THIA` (je MJ). **Nichts anderes hat sich
+bewegt** — die Gesamtzahl ist unverändert.
+
+`[cmd]` Kettenlauf von leer: `KETTE OK: 37.3s`, `SCHEMA VOLLSTAENDIG`.
+Auf der frisch gebauten Datenbank dieselben Werte (31,7 % / 55,6 %) —
+der Kettenschritt trägt die Reparatur, nicht nur die laufende Instanz.
+
+`[cmd]` `pnpm gate`: 8 von 8. Tests: **182 von 182** (vorher 177; fünf
+neue für die drei Zustände).
+
+`[cmd]` Im Browser: „Protein (Nx6,25) PRI | 32 %", „Leucin PRI | 56 %",
+„Kohlenhydrate RI | Anteil an der Energie", „Vitamin B1 AI | je
+Megajoule". Drei Breiten ohne waagrechten Überlauf.
+
+## Was live gelesen wird und was eingefroren ist
+
+`[read]` Diese Trennung stand bisher nirgends. Sie steht jetzt als
+Kommentar an der Funktion und hier.
+
+| | eingefroren | live gelesen |
+|---|---|---|
+| **Nährwerte einer Mahlzeit** | ja (ADR-0003) | — |
+| **Menge, Portion** | ja (C-03, C-51) | — |
+| **Referenzwerte** | — | **ja** |
+| **Profil** (Alter, Geschlecht, Gewicht) | — | **ja** |
+| **Zielwerte** | — | mit `gueltig_ab` |
+
+**Warum die Nährwerte eingefroren sind:** Eine Mahlzeit ist ein
+Ereignis der Vergangenheit. Was am Dienstag gegessen wurde, bleibt am
+Freitag dieselbe Menge Eisen, auch wenn der BLS-Wert inzwischen
+korrigiert wurde. `[cmd]` In C-03 belegt: Lebensmittel auf 999 kcal
+geändert, die Position blieb bei 348.
+
+**Warum die Referenzwerte es nicht sind:** Ein Referenzwert ist das
+Gegenteil — eine Aussage darüber, was *dieser Mensch* braucht. Er hängt
+an Alter, Geschlecht, Gewicht, Schwangerschaft; alles Dinge, die sich
+ändern, und deren **aktueller** Stand die richtige Grundlage ist. Wer
+10 kg zunimmt, braucht mehr Protein, auch rückblickend betrachtet.
+
+**Die Folge, die niemanden überraschen soll:** Ein Tagebucheintrag von
+letzter Woche kann heute einen anderen Deckungsgrad zeigen als gestern,
+**ohne dass etwas kaputt ist**. Die gegessene Menge steht fest; der
+Massstab hat sich bewegt.
+
+`[cmd]` Seit heute gilt das verstärkt: das **Körpergewicht** geht in
+zehn Referenzwerte direkt ein. Wer sein Gewicht im Profil korrigiert,
+ändert damit den Protein-Deckungsgrad jedes vergangenen Tages.
+
+`[read]` Die Gegenprobe zeigt, warum die Alternative schlechter wäre:
+Würde man Referenzwerte je Tag einfrieren, wäre ein alter Eintrag gegen
+ein veraltetes Profil bewertet — gegen ein Gewicht, das die Person nicht
+mehr hat. Das ist die schlechtere Aussage.
+
+**Die Zielwerte sind der Mittelweg:** `goals.nutrition_targets` trägt
+`gueltig_ab` und wirkt nur vorwärts. Ein Zielwechsel ändert vergangene
+Tage nicht, ein Gewichtswechsel schon. `[annahme]` Das ist stimmig —
+ein Ziel ist eine Absicht mit Datum, ein Referenzwert eine Eigenschaft
+des Körpers.
+
+## Was offen bleibt
+
+- **`F18:2CN6` und `F18:3CN3`** haben weder Bewertung noch Zielwert
+  (siehe oben).
+- **11 der 16 Zeilen sind latent** — sie erreichen die Bewertung erst,
+  wenn die Nährstoffe in `daily_summary` aufgenommen werden.
+- **Kein Wert im Seed wurde geändert.** `[cmd]` `0,83 g/kg` steht
+  unverändert dort; `nutrient_reference_values` und `nutrient_defs`
+  sind unberührt.

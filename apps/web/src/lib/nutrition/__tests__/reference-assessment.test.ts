@@ -144,3 +144,84 @@ test('gemessene Zeilen aus lumeos_g03 werden richtig gelesen', () => {
   assert.equal(energie.reference_status, 'complete')
   assert.equal(energie.reference_pct, null)
 })
+
+
+// --- GO-00 Teil 2: fremde Bezugsgroessen ---------------------------
+// `[cmd]` 16 der 109 Referenzzeilen stehen nicht je Tag. Vorher hat die
+// Funktion sie behandelt, als staenden sie es — Protein zeigte 1.593 %.
+
+test('ein Wert je Kilogramm liefert einen absoluten Referenzwert', () => {
+  // `[cmd]` Gemessen: PROT625 hat 0,83 g/kg, das Profil 78,4 kg.
+  // 0,83 x 78,4 = 65,072 g/Tag; 20,66 g davon sind 31,7 %.
+  const [z] = parseAssessmentRows([{
+    nutrient_code: 'PROT625',
+    actual_value: '20.66',
+    reference_value_min: '65.072',
+    reference_unit: 'g',
+    reference_pct: '31.7',
+    reference_status: 'complete',
+    missing_count: 0,
+  }])
+  assert.equal(z.reference_value_min, 65.072,
+    'Der Referenzwert muss aufgeloest ankommen, nicht als 0,83')
+  assert.equal(z.reference_pct, 31.7)
+  assert.equal(bewerte('target', z.reference_pct).ton, 'neg',
+    '31,7 % eines Ziels sind deutlich darunter')
+})
+
+test('ohne Gewicht gibt es keinen Prozentwert und keinen Ersatz', () => {
+  // `[read]` Kein Standardgewicht. Ein erfundener Nenner waere
+  // schlimmer als keine Zahl — er sieht aus wie eine Messung.
+  const [z] = parseAssessmentRows([{
+    nutrient_code: 'PROT625',
+    actual_value: '20.66',
+    reference_value_min: null,
+    reference_pct: null,
+    reference_status: 'missing_weight',
+    missing_count: 0,
+  }])
+  assert.equal(z.reference_pct, null)
+  assert.equal(z.reference_value_min, null,
+    'Auch der Referenzwert bleibt leer — 0,83 waere hier irrefuehrend')
+  assert.equal(z.reference_status, 'missing_weight')
+  assert.equal(bewerte('target', z.reference_pct).ton, 'neutral')
+})
+
+test('ein Energieanteil wird nicht als Deckungsgrad gezeigt', () => {
+  // `[read]` E% ist eine Aussage ueber die Energieverteilung, keine
+  // Naehrstoffmenge. GO-02 rechnet das beim Zielwert.
+  for (const code of ['FAT', 'CHO']) {
+    const [z] = parseAssessmentRows([{
+      nutrient_code: code,
+      actual_value: '36.46',
+      reference_pct: null,
+      reference_status: 'energy_share',
+      missing_count: 0,
+    }])
+    assert.equal(z.reference_pct, null, `${code} darf keinen Prozentwert haben`)
+    assert.equal(z.reference_status, 'energy_share')
+  }
+})
+
+test('eine Naehrstoffdichte wird nicht als Deckungsgrad gezeigt', () => {
+  const [z] = parseAssessmentRows([{
+    nutrient_code: 'THIA',
+    actual_value: '0.6172',
+    reference_pct: null,
+    reference_status: 'nutrient_density',
+    missing_count: 0,
+  }])
+  assert.equal(z.reference_pct, null)
+  assert.equal(z.reference_status, 'nutrient_density')
+})
+
+test('die drei neuen Zustaende faerben nichts ein', () => {
+  // Sie stehen fuer "kein Prozentwert moeglich", nicht fuer "schlecht".
+  for (const s of ['missing_weight', 'energy_share', 'nutrient_density'] as const) {
+    const [z] = parseAssessmentRows([{
+      nutrient_code: 'X', reference_status: s, reference_pct: null,
+    }])
+    assert.equal(z.reference_status, s)
+    assert.equal(bewerte('target', z.reference_pct).ton, 'neutral')
+  }
+})

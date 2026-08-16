@@ -11,6 +11,32 @@
 --     Bedeutung in eine Spalte zu quetschen.
 --   * daily_summary bleibt unveraendert. Sie summiert; diese Funktion
 --     bewertet numerisch, aber ohne Ampel oder Worturteil.
+--
+-- =============================================================
+-- REFERENZWERTE WERDEN LIVE GELESEN — NICHT EINGEFROREN
+-- =============================================================
+-- `[read]` Das ist eine Entscheidung, keine Nachlaessigkeit, und sie
+-- stand bis GO-00 Teil 2 nirgends geschrieben.
+--
+-- Die NAEHRWERTE einer Mahlzeit sind eingefroren (ADR-0003): was am
+-- Dienstag gegessen wurde, bleibt am Freitag dieselbe Menge Eisen, auch
+-- wenn der BLS-Wert inzwischen korrigiert wurde. Die Mahlzeit ist ein
+-- Ereignis der Vergangenheit.
+--
+-- Der REFERENZWERT ist das Gegenteil: eine Aussage darueber, was DIESER
+-- Mensch braucht. Er haengt an Alter, Geschlecht, Gewicht,
+-- Schwangerschaft — alles Dinge, die sich aendern, und deren aktueller
+-- Stand die richtige Grundlage ist. Wer 10 kg zunimmt, braucht mehr
+-- Protein, auch rueckblickend betrachtet.
+--
+-- FOLGE, die niemanden ueberraschen soll: Ein Tagebucheintrag von
+-- letzter Woche kann heute einen anderen Deckungsgrad zeigen als
+-- gestern, ohne dass etwas kaputt ist. Die gegessene Menge steht fest;
+-- der Massstab hat sich bewegt.
+--
+-- Wer das aendern will, muesste `nutrient_reference_values` je Tag
+-- einfrieren — dann waere aber ein alter Eintrag gegen ein veraltetes
+-- Profil bewertet, und das ist die schlechtere Aussage.
 -- =============================================================
 
 BEGIN;
@@ -57,6 +83,10 @@ WITH profile AS (
     p_entry_date AS entry_date,
     p.birth_date,
     p.biological_sex,
+    -- GO-00 Teil 2: fuer Referenzwerte je Kilogramm Koerpergewicht.
+    -- Live gelesen, nicht in den Seed gerechnet — beim Gewichtswechsel
+    -- aendert sich der Wert damit mit, statt zu veralten.
+    p.body_weight_kg,
     CASE
       WHEN p.birth_date IS NULL THEN NULL
       ELSE EXTRACT(YEAR FROM age(p_entry_date, p.birth_date))::INTEGER
@@ -80,6 +110,7 @@ profile_one AS (
     p_entry_date AS entry_date,
     pr.birth_date,
     pr.biological_sex,
+    pr.body_weight_kg,
     pr.age_years,
     COALESCE(pr.is_pregnant, false) AS is_pregnant,
     COALESCE(pr.is_lactating, false) AS is_lactating,
@@ -169,9 +200,76 @@ reference_candidates AS (
      OR (NOT r.is_pregnant AND NOT r.is_lactating)
    )
 ),
+-- =============================================================
+-- GO-00 Teil 2: die Bezugsgroesse aufloesen
+-- =============================================================
+-- `[cmd]` 16 der 109 Referenzzeilen stehen nicht je Tag, sondern je
+-- Kilogramm Koerpergewicht (10), als Energieanteil (4) oder je
+-- Megajoule (2). Vorher hat die Funktion sie behandelt, als staenden
+-- sie je Tag — Protein zeigte 1.593 % statt rund 20 %, weil 13,22 g
+-- durch 0,83 geteilt wurde statt durch 0,83 x 78,4 kg.
+--
+-- WARUM HIER UND NICHT IM SEED:
+-- `[read]` 0,83 g/kg bleibt 0,83 g/kg — so schreibt es die EFSA, und
+-- der Seed bildet die Quelle ab. Ein Wert je Kilogramm laesst sich
+-- ausserdem gar nicht vorab ausrechnen: er haengt am Gewicht der
+-- Nutzerin, und das aendert sich. Umgerechnet wird beim Lesen.
+--
+-- WARUM ABSOLUT ANGEZEIGT WIRD:
+-- `[read]` Entscheidung Tom, 2026-08-15, nach einer Erhebung, wie
+-- etablierte Ernaehrungs-Apps es halten: keine zeigt eine Einheit je
+-- Kilogramm. MyFitnessPal nennt 1,2 g/kg als Zielsetzung in den
+-- Einstellungen; im Tagebuch stehen 120 g.
+--
+-- OHNE GEWICHT KEIN PROZENTWERT. Kein Standardgewicht, kein
+-- Ruecktritt — dieselbe Regel wie bei fehlendem Alter oder Geschlecht.
+-- `[read]` Ein erfundener Nenner waere schlimmer als keine Zahl: er
+-- sieht aus wie eine Messung.
+aufgeloeste_referenzen AS (
+  SELECT
+    rc.*,
+    p.body_weight_kg,
+    CASE
+      -- Je Kilogramm Koerpergewicht: mit dem Gewicht multiplizieren.
+      -- `[cmd]` Neun der zehn Zeilen stehen in mg/kg, waehrend der
+      -- Naehrstoff selbst in g gefuehrt wird (die Aminosaeuren) —
+      -- deshalb zusaetzlich durch 1000. Protein steht in g/kg und
+      -- braucht nur die Multiplikation.
+      WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NOT NULL THEN
+        rc.value_min * p.body_weight_kg
+        / CASE WHEN rc.unit LIKE 'mg/kg%' THEN 1000 ELSE 1 END
+      WHEN rc.basis = 'per_day' THEN rc.value_min
+      ELSE NULL
+    END AS abs_value_min,
+    CASE
+      WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NOT NULL THEN
+        rc.value_max * p.body_weight_kg
+        / CASE WHEN rc.unit LIKE 'mg/kg%' THEN 1000 ELSE 1 END
+      WHEN rc.basis = 'per_day' THEN rc.value_max
+      ELSE NULL
+    END AS abs_value_max,
+    -- Warum ein Wert NICHT als Prozent erscheint. NULL heisst: er darf.
+    CASE
+      WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NULL
+        THEN 'missing_weight'
+      -- `[read]` E% ist keine Naehrstoffempfehlung, sondern eine
+      -- Aussage ueber die Energieverteilung ("Fett soll 20-35 % der
+      -- Tagesenergie ausmachen"). Genau das rechnet GO-02 beim
+      -- Zielwert; hier ein zweites Mal zu rechnen hiesse zwei
+      -- Wahrheiten zu fuehren.
+      WHEN rc.basis IN ('energy_percent', 'as_low_as_possible')
+        THEN 'energy_share'
+      -- `[read]` Je Megajoule ist ein Fachmass fuer Naehrstoffdichte.
+      -- Es sagt nichts darueber, ob heute genug gegessen wurde.
+      WHEN rc.basis = 'per_mj' THEN 'nutrient_density'
+      ELSE NULL
+    END AS basis_hindernis
+  FROM reference_candidates rc
+  CROSS JOIN profile_one p
+),
 selected_references AS (
   SELECT *
-  FROM reference_candidates
+  FROM aufgeloeste_referenzen
   WHERE rn = 1
 )
 SELECT
@@ -185,25 +283,41 @@ SELECT
   (dv.missing_count = 0 AND dv.actual_value IS NOT NULL) AS value_complete,
   sr.reference_kind,
   sr.reference_direction,
-  sr.value_min AS reference_value_min,
-  sr.value_max AS reference_value_max,
-  sr.unit AS reference_unit,
+  -- GO-00 Teil 2: der AUFGELOESTE Wert, in der Einheit des
+  -- Naehrstoffs. Sonst staende bei Protein "0,83" als Referenz, und
+  -- niemand koennte die 20 % nachrechnen.
+  -- Ist die Bezugsgroesse nicht aufloesbar (E%, je MJ, Gewicht fehlt),
+  -- steht hier NULL — der Rohwert waere irrefuehrend.
+  ROUND(sr.abs_value_min, 3) AS reference_value_min,
+  ROUND(sr.abs_value_max, 3) AS reference_value_max,
+  -- Ebenso die Einheit: nach der Aufloesung gilt die des Naehrstoffs.
+  CASE
+    WHEN sr.abs_value_min IS NULL AND sr.abs_value_max IS NULL THEN sr.unit
+    ELSE nd.unit
+  END AS reference_unit,
   sr.basis AS reference_basis,
+  -- GO-00 Teil 2: gerechnet wird gegen den AUFGELOESTEN Wert
+  -- (abs_value_*), nicht gegen die rohe Zahl aus der Tabelle.
+  -- Steht ein basis_hindernis, gibt es keinen Prozentwert.
   CASE
     WHEN dv.missing_count > 0 OR dv.actual_value IS NULL THEN NULL
     WHEN sr.reference_kind IN ('NO_REFERENCE', 'NO_STANDALONE_REFERENCE') THEN NULL
-    WHEN COALESCE(sr.value_min, sr.value_max) IS NULL OR COALESCE(sr.value_min, sr.value_max) = 0 THEN NULL
-    ELSE ROUND(dv.actual_value / COALESCE(sr.value_min, sr.value_max) * 100, 1)
+    WHEN sr.basis_hindernis IS NOT NULL THEN NULL
+    WHEN COALESCE(sr.abs_value_min, sr.abs_value_max) IS NULL
+      OR COALESCE(sr.abs_value_min, sr.abs_value_max) = 0 THEN NULL
+    ELSE ROUND(dv.actual_value / COALESCE(sr.abs_value_min, sr.abs_value_max) * 100, 1)
   END AS reference_pct,
   CASE
     WHEN dv.missing_count > 0 OR dv.actual_value IS NULL THEN NULL
-    WHEN sr.value_min IS NULL OR sr.value_min = 0 THEN NULL
-    ELSE ROUND(dv.actual_value / sr.value_min * 100, 1)
+    WHEN sr.basis_hindernis IS NOT NULL THEN NULL
+    WHEN sr.abs_value_min IS NULL OR sr.abs_value_min = 0 THEN NULL
+    ELSE ROUND(dv.actual_value / sr.abs_value_min * 100, 1)
   END AS reference_pct_min,
   CASE
     WHEN dv.missing_count > 0 OR dv.actual_value IS NULL THEN NULL
-    WHEN sr.value_max IS NULL OR sr.value_max = 0 THEN NULL
-    ELSE ROUND(dv.actual_value / sr.value_max * 100, 1)
+    WHEN sr.basis_hindernis IS NOT NULL THEN NULL
+    WHEN sr.abs_value_max IS NULL OR sr.abs_value_max = 0 THEN NULL
+    ELSE ROUND(dv.actual_value / sr.abs_value_max * 100, 1)
   END AS reference_pct_max,
   CASE
     WHEN NOT p.profile_complete THEN 'missing_profile'
@@ -211,6 +325,12 @@ SELECT
     WHEN dv.missing_count > 0 THEN 'incomplete'
     WHEN dv.actual_value IS NULL THEN 'no_value'
     WHEN sr.reference_kind IN ('NO_REFERENCE', 'NO_STANDALONE_REFERENCE') THEN 'not_applicable'
+    -- Drei neue Zustaende, je mit eigenem Grund. `[read]` Sie treten an
+    -- die Stelle eines falschen Prozentwerts, nicht an die Stelle von
+    -- 'complete' — die Zeile bleibt sichtbar, nur ohne Balken.
+    WHEN sr.basis_hindernis = 'missing_weight' THEN 'missing_weight'
+    WHEN sr.basis_hindernis = 'energy_share' THEN 'energy_share'
+    WHEN sr.basis_hindernis = 'nutrient_density' THEN 'nutrient_density'
     ELSE 'complete'
   END AS reference_status,
   p.age_years AS profile_age_years,
