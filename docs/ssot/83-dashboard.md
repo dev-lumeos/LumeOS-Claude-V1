@@ -53,7 +53,7 @@ sind nicht gebaut — sie gehören zu C-49.
 | Kachel | Herkunft | Attrappe? |
 |---|---|---|
 | Kopf „Mahlzeiten" | `nutrition.daily_summary.meal_count` / `item_count` | nein |
-| Kopf „Ziele erreicht" | `daily_reference_assessment`, gezählt über `reference_status='complete'` **und** `reference_pct IS NOT NULL` **und** `reference_direction='target'` | nein |
+| Kopf „Referenz gedeckt" (bis 16.08. „Ziele erreicht", siehe Nachtrag) | `daily_reference_assessment`, gezählt über `reference_status='complete'` **und** `reference_pct IS NOT NULL` **und** `reference_direction='target'` | nein |
 | Kopf „Über Grenze" | dieselbe Sicht, `reference_direction='upper_limit'` und `reference_pct > 100` | nein |
 | „Makros heute", vier Ringe | Wert aus `daily_summary` (`enercc`, `prot625`, `cho`, `fat`), Ziel aus `goals.zielwerte_am` | nein |
 | Hinweis „Schätzung ist keine Messung" | `herkunft` und `tdee` aus `zielwerte_am` | nein |
@@ -99,6 +99,9 @@ umgangen:
   933,6 kcal) und **ein** Ziel (`gueltig_ab` 2026-08-16, 2977,8 kcal).
 - Testdaten live einzuspielen erlaubt der Auftrag nur nach Absprache.
   Die habe ich nicht eingeholt, also ist es unterblieben.
+  **Überholt seit 2026-08-16:** Tom hat die Regel aufgehoben — wer etwas
+  zum Prüfen braucht, stellt es selbst her. Die Testdaten liegen jetzt
+  live; siehe Nachtrag am Ende.
 
 Geprüft wurde deshalb **zweigleisig**:
 
@@ -225,3 +228,90 @@ sparen:
 
 `[annahme]` Kein Beleg, dass frühere Aufträge dieser Sitzung davon
 betroffen waren — geprüft wurde es nicht.
+
+
+---
+
+## Nachtrag 2026-08-16: startklar gemacht
+
+`[cmd]` Drei Dinge erledigt, damit Tom unter seinem eigenen Konto etwas
+sieht.
+
+### 1. Dev-Server laeuft
+
+`[cmd]` PID 30768, gestartet 18:20 Uhr. Beleg, dass er den **aktuellen**
+Stand ausliefert: die Kopfzeile zeigt „REFERENZ GEDECKT" — die
+Beschriftung aus Punkt 3, die es vorher nicht gab. Ein alter Prozess
+koennte sie nicht kennen.
+
+Der Port war noch von meinem eigenen Produktionsserver aus dieser
+Sitzung belegt (17:58) — beendet, bevor der Dev-Server startete.
+
+### 2. Toms Konto hat Daten
+
+`[cmd]` Vorher: Profil vorhanden, **alle sechs Felder NULL**, 0
+Mahlzeiten, 0 Ziele. Das war der Grund fuer die leeren Seiten.
+
+**Entscheidung: den Seed NICHT umbiegen, sondern kopieren.** Der Grund
+ist eine Zeile in `testdaten-einspielen.ts`:
+
+    DELETE FROM auth.users WHERE id IN (${userIds});
+
+Zeigte der Seed auf `dev@lumeos.app`, loeschte er bei jedem Lauf Toms
+**echtes Anmeldekonto samt Passwort**. Dazu kommt: `testdaten-pruefen.ts`
+und das Szenarienregister pruefen die drei festen Seed-UUIDs — andere
+IDs braechen genau die Pruefung, die gruen sein soll.
+
+Gebaut ist deshalb `supabase/_pipeline/_testdaten/eigenes-konto-fuellen.sql`:
+kopiert Profil, Zielwerte, Mahlzeiten und Positionen von
+`tom.seed@example.com` auf ein echtes Konto. Das `auth.users`-Konto wird
+nie angefasst. `[cmd]` Wiederholbar geprueft — zweiter Lauf liefert
+dieselben Zahlen, keine Dubletten.
+
+| | vorher | nachher |
+|---|---|---|
+| Profilfelder gesetzt | 0 von 6 | 6 von 6 |
+| Mahlzeiten | 0 | 172 |
+| Positionen | 0 | 535 |
+| Tage | 0 | 43 |
+| Zielwerte | 0 | 1 |
+
+Die eingefrorenen Naehrwerte werden unveraendert uebernommen (ADR-0003),
+nicht neu gegen `food_nutrients` gerechnet. `gueltig_ab` bleibt wie in
+der Vorlage — ein Ziel wirkt vorwaerts.
+
+`[cmd]` Toms Passwort war unbekannt und der Magic-Link-Weg scheidet aus
+(er liefert das Token als URL-Fragment, das der Server nicht sieht; die
+App arbeitet mit Cookie-Sitzungen). Deshalb ist fuer `dev@lumeos.app`
+ein Testpasswort gesetzt: **`LumeosDev2026`**. Aenderbar in den
+Einstellungen.
+
+### 3. „Ziele erreicht" heisst jetzt „Referenz gedeckt"
+
+Der Befund aus dem Bericht oben, behoben. Zwei Aenderungen:
+
+- **Beschriftung.** Das *Tagesziel* kommt aus `goals` und meint Kalorien
+  und Makros; die Zahl daneben zaehlt *Naehrstoffe* gegen ihre
+  Referenzwerte. Unter einem Namen las sich das am 02.08. als „Ziele
+  erreicht 15/30" an einem Tag ganz ohne Tagesziel.
+- **Nenner.** Gezaehlt werden nur noch Zeilen mit Richtung `target`.
+  Bei einer Obergrenze ist „erreicht" keine sinnvolle Frage — dort hiesse
+  es „ueberschritten", das Gegenteil. `[cmd]` Am 16.08. sinkt der Nenner
+  dadurch von 32 auf 20.
+
+Die Kachel-Frage aus G-05 (zwoelf Kacheln mit Attrappen gegen drei echte
+plus Lueckenkarte) bleibt unberuehrt — die liegt bei Tom.
+
+### Nachweise
+
+| Pruefung | Ergebnis |
+|---|---|
+| Dev-Server | `[cmd]` PID 30768, Port 3200, liefert „REFERENZ GEDECKT" |
+| Angemeldet als `dev@lumeos.app` | `[cmd]` Tagebuch 8 Positionen sichtbar, 0 Seitenfehler |
+| Dashboard 16.08. | `[cmd]` Mahlzeiten 4, Referenz gedeckt 15/20, Ueber Grenze 3; Ringe 95 % / 98 % / 79 % / 94 % |
+| Dashboard 05.08. | `[cmd]` 2/21, Ueber Grenze 1 (Vitamin A); Ringe 12 % / 6 % / 19 % / 1 % |
+| Dashboard 13.08. | `[cmd]` 12/16, Ueber Grenze 2; Ringe 103 % / 76 % / 104 % / 98 % |
+| `testdaten-pruefen.ts` live | `[cmd]` „OK: C-82 Testdaten stimmen." — 3/3/3, 512 Mahlzeiten, 1560 Positionen |
+| `pnpm gate` | `[cmd]` 8 von 8, ungecacht |
+| `pnpm test` | `[cmd]` 182 Tests, 182 bestanden, ungecacht |
+| Sicherung | `[cmd]` `backup/schema/20260816_vor_testdaten_live.sql`, `--schema-only`, 439 KB |

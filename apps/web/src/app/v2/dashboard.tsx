@@ -91,8 +91,11 @@ export function DashboardAnsicht({
   // andere zaehlt hier NICHT mit — das ist Regel 1 und 3 aus C-48.
   const bewertbar = bewertung.filter(b => b.reference_status === 'complete'
     && b.reference_pct !== null)
-  const erreicht = bewertbar.filter(b =>
-    b.reference_direction === 'target' && (b.reference_pct ?? 0) >= 100)
+  // Zeilen mit Richtung `target` — eine Empfehlung, die man decken kann.
+  // Obergrenzen gehoeren NICHT hierher: „erreicht" hiesse dort „ueber-
+  // schritten", und das ist das Gegenteil.
+  const empfehlungen = bewertbar.filter(b => b.reference_direction === 'target')
+  const erreicht = empfehlungen.filter(b => (b.reference_pct ?? 0) >= 100)
   const ueberGrenze = bewertbar.filter(b =>
     b.reference_direction === 'upper_limit' && (b.reference_pct ?? 0) > 100)
   const unvollstaendig = bewertung.filter(b => b.reference_status === 'incomplete')
@@ -125,9 +128,16 @@ export function DashboardAnsicht({
             sub: summe && summe.item_count > 0 ? `${summe.item_count} Positionen` : undefined,
           },
           {
-            label: 'Ziele erreicht',
-            value: bewertbar.length > 0 ? `${erreicht.length}/${bewertbar.length}` : '—',
-            sub: bewertbar.length > 0 ? 'mit Referenzwert' : undefined,
+            // NICHT „Ziele erreicht". Das Tagesziel kommt aus `goals` und
+            // meint Kalorien und Makros; DIESE Zahl zaehlt Naehrstoffe
+            // gegen ihre Referenzwerte. Am 02.08. stand „Ziele erreicht
+            // 15/30" an einem Tag GANZ OHNE Tagesziel — zwei verschiedene
+            // Dinge unter einem Namen.
+            // Der Nenner sind nur die Zeilen mit Richtung `target`:
+            // bei einer Obergrenze ist „erreicht" keine sinnvolle Frage.
+            label: 'Referenz gedeckt',
+            value: empfehlungen.length > 0 ? `${erreicht.length}/${empfehlungen.length}` : '—',
+            sub: empfehlungen.length > 0 ? 'Naehrstoffe, nicht das Tagesziel' : undefined,
           },
           {
             label: 'Ueber Grenze',
@@ -272,8 +282,9 @@ export function DashboardAnsicht({
           {bewertbar.length > 0 && (
             <>
               <Row
-                label="Ziele erreicht"
-                value={`${erreicht.length} von ${bewertbar.filter(b => b.reference_direction === 'target').length}`}
+                label="Referenz gedeckt"
+                value={`${erreicht.length} von ${empfehlungen.length}`}
+                sub="Naehrstoffempfehlungen, nicht das Tagesziel"
               />
               <Row
                 label="Ueber einer Obergrenze"
