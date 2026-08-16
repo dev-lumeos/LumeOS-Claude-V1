@@ -54,7 +54,10 @@ export type WorkspaceEntry = {
 export const V2_BASE = '/v2'
 
 export const MODULES: NavEntry[] = [
-  { id: 'dashboard',   label: 'Dashboard',    icon: 'dashboard',   href: `${V2_BASE}`,             shortcut: '1' },
+  // Das Dashboard liegt auf `/v2/dashboard` (Auftrag). `/v2` leitet
+  // dorthin um und loest weiterhin auf diesen Eintrag auf — sonst
+  // zeigte die Seitenleiste waehrend der Umleitung ins Leere.
+  { id: 'dashboard',   label: 'Dashboard',    icon: 'dashboard',   href: `${V2_BASE}/dashboard`,   shortcut: '1' },
   {
     // KEINE Untereintraege. G-03 hatte hier zwei — die Folge davon,
     // dass zwei Seiten nebeneinander lagen, wo die Vorlage sieben Tabs

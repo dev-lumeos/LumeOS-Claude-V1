@@ -34,13 +34,17 @@ export type { ModuleId, ModuleAccentKey } from './module-accent'
 
 // --- Geteilte Bausteine -----------------------------------------
 export {
-  Card, Pill, Sparkline, LineChart, KPI, Ring, Meter, Row, ModuleHero, Tabs,
+  Card, Pill, Sparkline, LineChart, RadarChart, KPI, Ring, Meter, Row, ModuleHero, Tabs,
 } from './primitives'
 export type {
   CardProps, PillProps, PillVariant, SparklineProps, KPIProps,
   RingProps, MeterProps, RowProps, ModuleHeroProps, ModuleHeroStat,
-  TabsProps, TabItem, LineChartProps, LineSeries,
+  TabsProps, TabItem, LineChartProps, LineSeries, RadarChartProps, RadarPoint,
 } from './primitives'
+
+// --- Attrappen-Knoepfe -------------------------------------------
+export { InEntwicklung, InEntwicklungKnopf } from './in-entwicklung'
+export type { InEntwicklungProps } from './in-entwicklung'
 
 // --- In G-03 dazugekommen ---------------------------------------
 // Beide gehoeren hierher, nicht in die Seite: sie wiederholen sich in

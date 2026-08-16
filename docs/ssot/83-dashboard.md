@@ -425,3 +425,96 @@ genaue Zahl steht weiter in der Tagessumme.
 | Seitenfehler | `[cmd]` 0 |
 | `pnpm gate` | `[cmd]` 8 von 8, ungecacht |
 | `pnpm test` | `[cmd]` **188** Tests (183 + 5 neue), 0 fehlgeschlagen |
+
+
+---
+
+## Nachtrag 2026-08-16 (3): die Vorlage als Mockup uebernommen
+
+`[read]` Tom: *„Wieso holen wir nicht einfach das ganze Template als
+Mockup rein und binden dann an?"* — gemacht.
+
+### Was uebernommen ist
+
+| Vorlage | Ziel | Umfang |
+|---|---|---|
+| `module-dashboard.jsx` | `/v2/dashboard` | 12 Kacheln, alle Entwurfszahlen |
+| `module-nutrition.jsx` (Diary) | `/v2/nutrition` | Kopf, 7 Tabs, Tagesstreifen, 7 Begleitkarten |
+| `module-nutrition-nutrients.jsx` | Tab `Nutrients` | 79 Naehrstoffe, 8 Gruppen, Detailfenster |
+| `shared.jsx` | `packages/ui` | `RadarChart` ergaenzt (fehlte als einziges) |
+
+Die erfundenen Daten stehen unveraendert da: `1.847 kcal`,
+`Recovery 82`, `2.142 TSS`, `Sleep 7:42`, `Readiness 84`, PR watch,
+Tonight, `Pre-workout 68`, `Hydration 1.2 / 3.0 L`, das Netzdiagramm,
+`Below threshold`. **Der Nutrition score steht auf `1`** — er kommt aus
+der Formel der Vorlage (`module-nutrition-spec.jsx:38-42`,
+protein 0.30 / calorie 0.25 / carbs 0.15 / fat 0.15 / fiber 0.15, mal
+Stufenfaktor). Der leere Ring aus dem vorigen Durchgang ist
+zurueckgenommen.
+
+`[cmd]` Der Naehrstoffbaum ist mechanisch aus der Vorlage extrahiert
+(Zeile 11-442 → `nutrient-baum.ts`), nicht abgetippt. Ein Test zaehlt
+79 Eintraege und 8 Gruppen.
+
+### Was angebunden ist
+
+| Kachel | Quelle | Marke |
+|---|---|---|
+| Dashboard „Macros · today" | `daily_summary` + `goals.zielwerte_am` | **weg** |
+| Diary-Tagesstreifen (Ring + 3 Balken) | dieselben | **weg** |
+| Mahlzeitenkarten | `meals`, `meal_items` (C-03, mit Schreibweg) | **weg** |
+| „Deckung je Naehrstoff" | `daily_reference_assessment` | **weg** |
+| Suche (`Find food`) | `food_search`, `foods_portions` | **weg** |
+
+Alle uebrigen behalten Marke und Entwurfszahlen.
+
+**Hydration geprueft, nicht angebunden.** `[cmd]` `hydration.water_logs`
+und `hydration_summary` existieren — aber es gibt keinen Schreibweg in
+der Oberflaeche und keine gelesene Zeile. Die Kachel bliebe auf 0, was
+schlechter waere als der Entwurf. Der `+250ml`-Knopf sagt das im Modal.
+
+### Knoepfe ohne Ziel
+
+`packages/ui/src/in-entwicklung.tsx` — **einmal**, wie verlangt. Modal im
+Stil des Themes, `Escape` schliesst. Benutzt von: Week, Export, Log,
+Filter, Mehr, All events, Start, Quick-add, Recalc macros, MealCam, den
+Aktionsknoepfen der Vorschlaege und Pending actions, Export/Filter im
+Naehrstoffbaum, „Why this?", „30-day trend", „Find foods rich in …".
+
+### Bildschirmfoto-Vergleich: jede Abweichung
+
+| Stelle | Vorlage | Umsetzung | Grund |
+|---|---|---|---|
+| Route Dashboard | eine Datei, `setActive` | `/v2/dashboard`, `/v2` leitet um | **technisch** — hier gibt es Routen |
+| Tab-Zustand | `useState` | `?tab=` in der Adresse | **technisch** — die Tagesdaten laden serverseitig |
+| Diary-Makrolabel | `width: 56` | `minWidth: 56` | **technisch** — „Kohlenhydrate" ist laenger als „Carbs" und lief in die Zahl |
+| `btn-sm` | in vier Kacheln benutzt | Regel ergaenzt | **[cmd] die Vorlage definiert die Klasse nirgends** in `styles.css`. Werte aus dem Augenmass der Umgebung — die Vorlage ist hier unvollstaendig. |
+| `@media` | keine | drei Haltepunkte | **technisch**, wie in G-02 vereinbart |
+| Modul-Kopf Nutrition | `module-header module-hero-lite` | gleich | Der vorige Durchgang benutzte `ModuleHero` aus G-02 — ein anderer Kopf mit Medaillon. Er quetschte den Titelblock in eine schmale Spalte. **Behoben.** |
+| Diary-Tagesstreifen | **ein** Kalorienring + **drei** lineare Balken | gleich | Der vorige Durchgang hatte vier Ringe. **Zurueckgenommen.** |
+| Sprache | englisch | englisch belassen | Die uebernommenen Kacheln behalten ihre Beschriftung — wer sie eindeutscht, kann sie nicht mehr danebenlegen. Die angebundenen Teile (Tagessumme, Erfassen) sind weiter deutsch. |
+| Dashboard-Kopf | Datum „Sat · May 16" | uebernommen | Entwurfsdatum, keine Anbindung |
+
+**Ohne technischen Grund weicht nichts ab.**
+
+### Was in der Vorlage auffiel
+
+`[cmd]` `module-nutrition.jsx` fuehrt sieben Tabs, das
+Bildschirmfoto `uploads/pasted-1786754205537-0.png` zeigt fuenf und
+`117-nutrient tracking` statt 138. Das Foto ist aelter als die Datei —
+gebaut ist nach der Datei.
+
+### Nachweise
+
+| Pruefung | Ergebnis |
+|---|---|
+| Angemeldet als `dev@lumeos.app` | `[cmd]` ja |
+| `/v2/dashboard` | `[cmd]` 11 Kacheln + 4 KPI, 10 als Attrappe, „Macros · today" angebunden |
+| `/v2/nutrition` Diary | `[cmd]` 13 Kacheln, 7 als Attrappe |
+| `/v2/nutrition?tab=nutrients` | `[cmd]` 8 Gruppenkarten, „79 nutrients tracked", Kennzahlen 79/55/24/0 |
+| Modal „in Entwicklung" | `[cmd]` oeffnet, schliesst mit Escape |
+| Drei Breiten, drei Seiten | `[cmd]` 1600 / 1100 / 800 px, kein Ueberlauf |
+| `/nutrition` unveraendert | `[cmd]` 0 `v2-`-Elemente, `lume-shell` vorhanden |
+| Seitenfehler | `[cmd]` 0 |
+| `pnpm gate` | `[cmd]` 8 von 8, ungecacht |
+| `pnpm test` | `[cmd]` 189 Tests, 0 fehlgeschlagen |

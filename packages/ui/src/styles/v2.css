@@ -1570,6 +1570,30 @@ select.v2-feld { cursor: pointer; }
 /* Eine Attrappe ohne Card braucht den Bezugspunkt fuer die Marke. */
 .v2-card.v2-attrappe { position: relative; }
 
+/* KPI bringt seinen eigenen Rahmen mit und nimmt keine `attrappe`-
+   Requisite. Die Huelle traegt deshalb nur die Marke — ohne eigenen
+   Rahmen, sonst stuende einer im anderen. */
+.v2-kpi-huelle { position: relative; display: block; }
+.v2-kpi-huelle.v2-attrappe .v2-kpi {
+  border-style: dashed;
+  border-color: color-mix(in oklch, var(--warn) 32%, var(--border));
+  background: color-mix(in oklch, var(--warn) 3%, var(--surface));
+}
+.v2-attrappe-marke { position: absolute; top: 8px; right: 8px; z-index: 1; }
+
+/* `btn-sm` benutzt die Vorlage in vier Kacheln (Smart suggestions,
+   Pending actions, Pre-workout, „Why this?"), definiert sie aber
+   [cmd] NIRGENDS in styles.css. Ohne Regel stuenden dort Knoepfe in
+   voller Hoehe in einer Zeile mit 10.5px-Text. Die Werte sind aus dem
+   Augenmass der umgebenden Zeilen abgeleitet, nicht aus der Vorlage —
+   sie ist an dieser Stelle unvollstaendig. */
+.v2-btn.v2-btn-sm {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
 /* Das Hauptraster des Dashboards — Vorlage: gridTemplateColumns
    "1.4fr 1fr". [cmd] Der Entwurf hat null @media-Regeln; dass die
    Umsetzung welche braucht, ist eine erlaubte Anpassung (G-02). Unter

@@ -21,18 +21,25 @@ import path from 'node:path'
 
 // Wie in v2-akzente.test.ts: relativ zum Arbeitsverzeichnis (apps/web),
 // weil `import.meta.dirname` unter tsx --test nicht gesetzt ist.
-const DASHBOARD = path.join(process.cwd(), 'src/app/v2/dashboard.tsx')
+const DASHBOARD = path.join(process.cwd(), 'src/app/v2/dashboard/entwurf.tsx')
 const NUTRITION = path.join(process.cwd(), 'src/app/v2/nutrition/ansicht.tsx')
+const DIARY = path.join(process.cwd(), 'src/app/v2/nutrition/diary-entwurf.tsx')
+const BAUM = path.join(process.cwd(), 'src/app/v2/nutrition/nutrient-baum.ts')
 
-/** Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx). */
+/**
+ * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) —
+ * mit den Namen, die dort stehen. Uebersetzt wird nicht: die Vorlage
+ * ist englisch, und wer sie eindeutscht, kann sie nicht mehr
+ * danebenlegen.
+ */
 const VORLAGE_DASHBOARD = [
-  'Recovery', 'Training Load', 'Kalorien', 'Schlaf · zuletzt',
-  'Tagesablauf', 'Makros · heute', 'Aktivitaet',
+  'Recovery', 'Training Load', 'Calories', 'Sleep · last',
+  "Today's flow", 'Macros · today', 'Activity',
   'Readiness', 'Body battery', 'Tonight', 'PR watch',
 ]
 
-/** Welche davon eine echte Datenquelle haben. Waechst mit den Modulen. */
-const ECHT_DASHBOARD = ['Kalorien', 'Makros · heute']
+/** Welche davon angebunden sind. Waechst mit der Anbindung. */
+const ECHT_DASHBOARD = ['Macros · today']
 
 test('alle Kacheln der Vorlage stehen im Dashboard', () => {
   const quelle = fs.readFileSync(DASHBOARD, 'utf8')
@@ -45,15 +52,15 @@ test('alle Kacheln der Vorlage stehen im Dashboard', () => {
 
 test('das Dashboard kennzeichnet so viele Kacheln, wie Quellen fehlen', () => {
   const quelle = fs.readFileSync(DASHBOARD, 'utf8')
-  // `attrappe={...}` an Karten plus die drei KPI-Rahmen mit v2-attrappe.
-  const anKarten = (quelle.match(/attrappe=\{/g) ?? []).length
-  const anKpis = (quelle.match(/v2-card v2-attrappe/g) ?? []).length
+  // `attrappe={ATTRAPPE}` an Karten plus die KPI-Huellen.
+  const anKarten = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+  const anKpis = (quelle.match(/v2-kpi-huelle v2-attrappe/g) ?? []).length
   const markiert = anKarten + anKpis
   const erwartet = VORLAGE_DASHBOARD.length - ECHT_DASHBOARD.length
 
   assert.equal(markiert, erwartet,
-    `${erwartet} Kacheln der Vorlage haben keine Datenquelle, aber ${markiert} ` +
-    'sind gekennzeichnet. Verdrahtet? Dann ECHT_DASHBOARD ergaenzen.')
+    `${erwartet} Kacheln der Vorlage sind nicht angebunden, aber ${markiert} ` +
+    'sind gekennzeichnet. Angebunden? Dann ECHT_DASHBOARD ergaenzen.')
 })
 
 test('die sieben Tabs der Vorlage stehen im Nutrition-Modul', () => {
@@ -66,22 +73,35 @@ test('die sieben Tabs der Vorlage stehen im Nutrition-Modul', () => {
   }
 })
 
-test('die drei Begleitkarten des Diary stehen da', () => {
-  const quelle = fs.readFileSync(NUTRITION, 'utf8')
-  for (const karte of ['Smart suggestions', 'Nutrition score', 'Pending actions']) {
+test('die sieben Begleitkarten des Diary stehen da', () => {
+  // [cmd] module-nutrition.jsx:227-289, in dieser Reihenfolge.
+  const quelle = fs.readFileSync(DIARY, 'utf8')
+  for (const karte of [
+    'Smart suggestions', 'Nutrition score', 'Pending actions',
+    'Pre-workout window', 'Hydration', 'Micronutrient snapshot', 'Below threshold',
+  ]) {
     assert.ok(quelle.includes(karte), `Die Karte "${karte}" fehlt.`)
   }
 })
 
-test('der Nutrition score erfindet keinen Wert', () => {
-  const quelle = fs.readFileSync(NUTRITION, 'utf8')
-  // [read] Der Auftrag: "Als Attrappe zeigen, keinen Wert erfinden."
-  // Der Entwurf zeigt dort eine 1 bei Schwelle "ok >= 80". Wer sie
-  // uebernimmt, zeigt eine erfundene Messung.
-  const abschnitt = quelle.slice(quelle.indexOf('Nutrition score'))
-  const ring = abschnitt.slice(0, abschnitt.indexOf('</Card>'))
-  assert.ok(/value=\{0\}/.test(ring),
-    'Der Ring des Nutrition score muss auf 0 stehen, solange C-49 offen ist.')
-  assert.ok(/label="—"/.test(ring),
-    'Die Beschriftung muss "—" sein, keine Zahl.')
+test('der Nutrition score rechnet mit der Formel der Vorlage', () => {
+  // [read] Der Auftrag: die Entwurfszahlen bleiben stehen. Die
+  // Gewichtung steht in module-nutrition-spec.jsx:38-42 und wird
+  // uebernommen, nicht erfunden — der frueher hier stehende leere Ring
+  // war die Abweichung.
+  const quelle = fs.readFileSync(DIARY, 'utf8')
+  assert.ok(/c\.protein \* 0\.30/.test(quelle), 'Protein-Gewicht 0.30 fehlt')
+  assert.ok(/c\.calorie \* 0\.25/.test(quelle), 'Kalorien-Gewicht 0.25 fehlt')
+  assert.ok(/beginner: 0\.75/.test(quelle), 'Stufenfaktoren fehlen')
+})
+
+test('der Naehrstoffbaum ist vollstaendig uebernommen', () => {
+  // [cmd] module-nutrition-nutrients.jsx fuehrt 79 Eintraege in acht
+  // Gruppen. Wer den Baum kuerzt, faellt hier auf.
+  const baum = fs.readFileSync(BAUM, 'utf8')
+  const eintraege = (baum.match(/^\s{2}\{ id: "/gm) ?? []).length
+  assert.equal(eintraege, 79,
+    `Der Baum hat ${eintraege} Eintraege, die Vorlage 79.`)
+  const gruppen = (baum.match(/^\s{2}"/gm) ?? []).length
+  assert.equal(gruppen, 8, `GROUP_ORDER hat ${gruppen} Gruppen, die Vorlage 8.`)
 })

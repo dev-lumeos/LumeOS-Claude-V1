@@ -12,10 +12,16 @@ import * as React from 'react'
 import Link from 'next/link'
 import type { Route } from 'next'
 import {
-  Card, Pill, Icon, Row, ModuleHero, ProgressRing, CoverageRow, Ring,
+  Card, Pill, Icon, Row, ProgressRing, CoverageRow, Meter,
+  InEntwicklungKnopf,
   type ReferenceStatus, type ReferenceDirection, type TabItem,
 } from '@lumeos/ui'
 import { Tableiste } from './tableiste'
+import {
+  SmartSuggestionsCard, NutritionScoreCard, NutritionPendingActions,
+  PreWorkoutOptimizer, HydrationCard, MicronutrientSnapshot, BelowThreshold,
+} from './diary-entwurf'
+import { NutrientAnalysisView } from './nutrients-entwurf'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
@@ -101,47 +107,62 @@ export function TagebuchAnsicht({
           tracking", Herkunftszeile, Aktionen rechts.
           [cmd] Die Vorlage nennt „BLS 4.0 · Max Rubner-Institut" — das
           ist die Quelle, die auch hier liegt. */}
-      <ModuleHero
-        icon="nutrition"
-        title="Nutrition"
-        sub="Tagebuch, Mikronaehrstoff-Analyse und Planung · BLS 4.0 · Max Rubner-Institut"
-        pills={
-          <>
+      {/* [cmd] module-nutrition.jsx:9-26 — `module-header
+          module-hero-lite` mit Titelblock links und Aktionen rechts.
+          NICHT `ModuleHero` aus G-02: der ist ein anderer Kopf mit
+          Medaillon und Kennzahlenblock, den die Vorlage hier nicht hat.
+          Er quetschte den Titelblock in eine schmale Spalte. */}
+      <div className="v2-module-header v2-module-hero-lite">
+        <div className="v2-module-title-block">
+          <div className="v2-module-title-row">
+            <span className="v2-module-title">Nutrition</span>
             <Pill>{tagText(datum)}</Pill>
             <Pill variant="acc">138-nutrient tracking</Pill>
-          </>
-        }
-        actions={
-          <>
-            <Link
-              href={`/v2/nutrition?datum=${vortag(datum)}` as Route}
-              className="v2-btn v2-btn-ghost"
-              aria-label="Vorheriger Tag"
-            >
-              <Icon name="chevron_left" className="v2-ic v2-ic-sm" />
-            </Link>
-            <Link
-              href={`/v2/nutrition?datum=${folgetag(datum)}` as Route}
-              className="v2-btn v2-btn-ghost"
-              aria-label="Naechster Tag"
-            >
-              <Icon name="chevron_right" className="v2-ic v2-ic-sm" />
-            </Link>
-            <Link href={'/v2/nutrition?tab=foods' as Route} className="v2-btn">
-              <Icon name="search" className="v2-ic v2-ic-sm" /> Lebensmittel suchen
-            </Link>
-          </>
-        }
-        stats={[
-          { label: 'Mahlzeiten', value: summe ? String(summe.meal_count) : '—' },
-          { label: 'Positionen', value: summe ? String(summe.item_count) : '—' },
-          {
-            label: 'Bewertbar',
-            value: bewertbar.length > 0 ? `${erreicht}/${bewertbar.length}` : '—',
-            sub: bewertbar.length > 0 ? 'Referenz gedeckt' : undefined,
-          },
-        ]}
-      />
+          </div>
+          <div className="v2-module-sub">
+            Diary, micronutrient analysis, and meal planning · BLS 4.0 · Max Rubner-Institut
+          </div>
+        </div>
+        <div className="v2-module-actions">
+          {/* Reihenfolge der Vorlage: ‹ › Quick-add, Recalc macros,
+              Find food, MealCam. Die drei ohne Ziel oeffnen das Modal
+              „in Entwicklung"; „Find food" fuehrt auf die gebaute Suche. */}
+          <Link
+            href={`/v2/nutrition?datum=${vortag(datum)}` as Route}
+            className="v2-btn v2-btn-ghost"
+            aria-label="Vorheriger Tag"
+          >
+            <Icon name="chevron_left" className="v2-ic v2-ic-sm" />
+          </Link>
+          <Link
+            href={`/v2/nutrition?datum=${folgetag(datum)}` as Route}
+            className="v2-btn v2-btn-ghost"
+            aria-label="Naechster Tag"
+          >
+            <Icon name="chevron_right" className="v2-ic v2-ic-sm" />
+          </Link>
+          <InEntwicklungKnopf titel="Quick-add" className="v2-btn">
+            <Icon name="zap" className="v2-ic v2-ic-sm" /> Quick-add
+          </InEntwicklungKnopf>
+          <InEntwicklungKnopf
+            titel="Recalc macros"
+            grund="Die Zielwerte werden im Profil berechnet und gesetzt — ein Weg von hier aus fehlt."
+            className="v2-btn"
+          >
+            <Icon name="trend_up" className="v2-ic v2-ic-sm" /> Recalc macros
+          </InEntwicklungKnopf>
+          <Link href={'/v2/nutrition/suche' as Route} className="v2-btn">
+            <Icon name="search" className="v2-ic v2-ic-sm" /> Find food
+          </Link>
+          <InEntwicklungKnopf
+            titel="MealCam"
+            grund="Bilderkennung fuer Mahlzeiten — es gibt weder Modell noch Endpunkt."
+            className="v2-btn v2-btn-primary"
+          >
+            <Icon name="camera" className="v2-ic v2-ic-sm" /> MealCam
+          </InEntwicklungKnopf>
+        </div>
+      </div>
 
       <Tableiste items={tabs(summe?.meal_count ?? null)} aktiv={tab} />
 
@@ -188,36 +209,66 @@ export function TagebuchAnsicht({
           "1.5fr 1fr". */}
       <div className="v2-diary-grid" style={{ marginTop: 16 }}>
         <div className="v2-col-gap" style={{ gap: 12 }}>
-        <Card title="Tagessumme" sub="aus den eingefrorenen Werten">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18 }}>
-            {HAUPTMAKROS.map(m => {
-              const wert = summe?.macros[m.code]
-              // C-03: Der Nenner kommt aus goals.zielwerte_am. Fehlt er,
-              // bleibt der Ring ohne Verhaeltnis — der Baustein nimmt
-              // `target` seit G-03 als optional.
-              const ziel = ziele ? ziele[m.zielFeld] : null
-              return (
-                <div key={m.code} style={{ textAlign: 'center' }}>
-                  <ProgressRing
-                    value={wert?.value ?? null}
-                    target={ziel}
-                    showPercent={ziel !== null}
-                    unit={m.unit}
-                    size={88}
-                    color={m.color}
-                    incomplete={(wert?.missing ?? 0) > 0}
-                  />
-                  <div style={{ fontSize: 10, color: 'var(--fg-dim)', marginTop: 4 }}>
-                    {m.label}
-                  </div>
-                  {(wert?.missing ?? 0) > 0 && (
-                    <div style={{ fontSize: 9, color: 'var(--warn)' }}>
-                      {wert!.missing} ohne Wert
+        {/* Day summary strip — EIN Kalorienring, DREI lineare Balken.
+            [cmd] module-nutrition.jsx:188-218. Der vorige Durchgang
+            hatte daraus vier Ringe gemacht; das ist zurueckgenommen.
+            Angebunden: die Werte kommen aus daily_summary, die Ziele aus
+            goals.zielwerte_am. Fehlt ein Ziel, bleibt der Nenner „—" —
+            der Ring fuellt sich dann nicht (G-03). */}
+        <Card>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+              <ProgressRing
+                value={summe?.macros.enercc.value ?? null}
+                target={ziele?.kcal ?? null}
+                showPercent={ziele?.kcal != null}
+                unit="kcal"
+                size={96}
+                color="var(--acc-nutri)"
+                incomplete={(summe?.macros.enercc.missing ?? 0) > 0}
+              />
+              <div className="v2-num" style={{ fontSize: 10, color: 'var(--fg-dim)' }}>
+                {summe?.macros.enercc.value != null && ziele?.kcal != null
+                  ? `${Math.round(ziele.kcal - summe.macros.enercc.value).toLocaleString('de-DE')} kcal left`
+                  : 'ohne Tagesziel'}
+              </div>
+            </div>
+            <div style={{ flex: 1, minWidth: 220, display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {HAUPTMAKROS.filter(m => m.code !== 'enercc').map(m => {
+                const wert = summe?.macros[m.code]?.value ?? null
+                const ziel = ziele ? ziele[m.zielFeld] : null
+                const pct = wert !== null && ziel ? Math.round((wert / ziel) * 100) : null
+                return (
+                  <div key={m.code}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 5 }}>
+                      {/* ABWEICHUNG MIT GRUND: die Vorlage setzt hier
+                          `width: 56` fuer „Protein"/„Carbs"/„Fat". Die
+                          deutschen Woerter sind laenger
+                          („Kohlenhydrate"), sie liefen bei fester
+                          Breite in die Zahl daneben. Deshalb
+                          `minWidth` statt `width`. */}
+                      <span className="v2-eyebrow" style={{ minWidth: 56, flexShrink: 0 }}>{m.label}</span>
+                      <span className="v2-num" style={{ fontSize: 14, fontWeight: 500 }}>
+                        {wert === null ? '—' : Math.round(wert)}
+                        <span style={{ fontSize: 10, color: 'var(--fg-dim)', marginLeft: 1 }}>
+                          /{ziel === null ? '—' : Math.round(ziel)}g
+                        </span>
+                      </span>
+                      <span className="v2-num v2-dim" style={{ fontSize: 10, marginLeft: 'auto' }}>
+                        {wert !== null && ziel !== null ? `${Math.round(ziel - wert)}g left` : ''}
+                      </span>
+                      <span className="v2-num" style={{
+                        fontSize: 11, width: 34, textAlign: 'right',
+                        color: pct !== null && pct >= 100 ? 'var(--pos)' : 'var(--fg-muted)',
+                      }}>
+                        {pct === null ? '—' : `${pct}%`}
+                      </span>
                     </div>
-                  )}
-                </div>
-              )
-            })}
+                    <Meter value={wert ?? 0} max={ziel ?? 100} color={m.color} tall />
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           {/* Warum kein Ring gefuellt ist — und was dagegen zu tun ist.
@@ -259,44 +310,20 @@ export function TagebuchAnsicht({
         <Erfassen datum={datum} />
         </div>
 
-        {/* ---------- Rechte Spalte der Vorlage ---------- */}
+        {/* ---------- Rechte Spalte, Reihenfolge der Vorlage ----------
+            [cmd] module-nutrition.jsx:227-289. Sieben Kacheln, alle mit
+            ihren Entwurfszahlen uebernommen — inklusive Nutrition score
+            (Formel aus module-nutrition-spec.jsx), Pre-workout 68 und
+            Hydration 1.2/3.0 L. Die Deckung je Naehrstoff steht als
+            achte darunter: sie ist angebunden und ersetzt nichts. */}
         <div className="v2-col-gap" style={{ gap: 12 }}>
-        <Card
-          title="Smart suggestions"
-          sub="based on your patterns"
-          attrappe="Vorschlaege brauchen erkannte Muster ueber viele Tage — es gibt keine Musterauswertung."
-        >
-          <div className="v2-attrappe-flaeche" style={{ height: 120 }} />
-        </Card>
-
-        {/* [read] Der Auftrag: „Der Nutrition score steht im Entwurf auf
-            1 bei Schwellen ok >= 80 — er gehoert zu C-49. Als Attrappe
-            zeigen, keinen Wert erfinden." Genau deshalb steht hier ein
-            Ring auf 0 mit „—", nicht die 1 aus dem Entwurf: eine
-            uebernommene Zahl waere eine erfundene Messung. */}
-        <Card
-          title="Nutrition score"
-          sub="deterministisch · ohne KI"
-          attrappe="Die Gewichtung — welcher Naehrstoff wie stark zaehlt — ist C-49 und in keiner Spec entschieden."
-        >
-          <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
-            <Ring value={0} max={100} color="var(--acc-nutri)" label="—" size={92} stroke={7} />
-            <div style={{ flex: 1, fontSize: 11.5, color: 'var(--fg-muted)', lineHeight: 1.45 }}>
-              Der Entwurf zeigt hier eine Zahl mit der Schwelle
-              „ok ab 80". Welche Groessen sie bilden und wie stark jede
-              zaehlt, steht in keiner Spec — deshalb bleibt das Feld leer
-              statt gefuellt.
-            </div>
-          </div>
-        </Card>
-
-        <Card
-          title="Pending actions"
-          sub="feeds Buddy's daily TODO"
-          attrappe="Offene Punkte entstehen aus Regeln ueber mehrere Module — Buddy ist seit G-02 eine Attrappe."
-        >
-          <div className="v2-attrappe-flaeche" style={{ height: 96 }} />
-        </Card>
+        <SmartSuggestionsCard />
+        <NutritionScoreCard />
+        <NutritionPendingActions />
+        <PreWorkoutOptimizer />
+        <HydrationCard />
+        <MicronutrientSnapshot />
+        <BelowThreshold />
 
         <Card
           title="Deckung je Naehrstoff"
@@ -407,10 +434,6 @@ function AndererTab({ tab }: { tab: string }) {
       titel: 'Insights',
       braucht: 'Auswertungen ueber Zeitraeume — heute gibt es nur die Tagessumme. `daily_summary` fuehrt keine Wochen- oder Monatswerte.',
     },
-    nutrients: {
-      titel: 'Nutrients',
-      braucht: 'Die Deckung je Naehrstoff steht im Tagebuch. Die eigene Ansicht mit Verlauf je Naehrstoff braucht Verlaufsdaten.',
-    },
     plans: {
       titel: 'Meal plans',
       braucht: 'Ein Schema fuer Essensplaene — es gibt keines.',
@@ -423,6 +446,11 @@ function AndererTab({ tab }: { tab: string }) {
       titel: 'Planner',
       braucht: 'Planung kuenftiger Tage. `meals` kennt nur erfasste Tage, keine geplanten.',
     },
+  }
+
+  // Der Naehrstoffbaum der Vorlage — vollstaendig uebernommen.
+  if (tab === 'nutrients') {
+    return <div style={{ marginTop: 16 }}><NutrientAnalysisView /></div>
   }
 
   if (tab === 'foods') {

@@ -219,6 +219,73 @@ export function LineChart({
 }
 
 // ---------------------------------------------------------------
+// RadarChart
+// ---------------------------------------------------------------
+
+export type RadarPoint = {
+  label: string
+  /** 0 bis 1. */
+  value: number
+  /** 0 bis 1. Ohne Angabe zeichnet die Vorlage 0.8. */
+  target?: number
+}
+
+export type RadarChartProps = {
+  data: RadarPoint[]
+  h?: number
+  color?: string
+}
+
+/** Netzdiagramm. Uebersetzt aus `shared.jsx`, sonst unveraendert. */
+export function RadarChart({ data, h = 220, color = 'var(--acc)' }: RadarChartProps) {
+  if (data.length < 3) return null
+  const w = h
+  const cx = w / 2
+  const cy = h / 2
+  const r = Math.min(w, h) / 2 - 26
+  const n = data.length
+  const pt = (i: number, v: number): [number, number] => {
+    const winkel = (i / n) * 2 * Math.PI - Math.PI / 2
+    return [cx + Math.cos(winkel) * r * v, cy + Math.sin(winkel) * r * v]
+  }
+  const pfad = (werte: number[]) =>
+    `${werte.map((v, i) => (i === 0 ? 'M' : 'L') + pt(i, v).map(x => x.toFixed(1)).join(' ')).join(' ')} Z`
+
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', height: h }}
+         aria-hidden focusable="false">
+      {[0.25, 0.5, 0.75, 1].map(rr => (
+        <polygon key={rr}
+          points={Array.from({ length: n }, (_, j) => pt(j, rr).join(',')).join(' ')}
+          fill="none" stroke="var(--border)" strokeWidth="1" />
+      ))}
+      {data.map((d, i) => (
+        <line key={d.label} x1={cx} y1={cy} x2={pt(i, 1)[0]} y2={pt(i, 1)[1]}
+              stroke="var(--border)" strokeWidth="1" />
+      ))}
+      {data.some(d => d.target != null) && (
+        <path d={pfad(data.map(d => d.target ?? 0.8))} fill="none"
+              stroke="var(--fg-dim)" strokeWidth="1" strokeDasharray="3 3" />
+      )}
+      <path d={pfad(data.map(d => d.value))} fill={color} opacity="0.18" />
+      <path d={pfad(data.map(d => d.value))} fill="none" stroke={color} strokeWidth="1.5" />
+      {data.map((d, i) => (
+        <circle key={d.label} cx={pt(i, d.value)[0]} cy={pt(i, d.value)[1]} r="2.5" fill={color} />
+      ))}
+      {data.map((d, i) => {
+        const [x, y] = pt(i, 1.15)
+        return (
+          <text key={d.label} x={x} y={y + 3} textAnchor="middle" fontSize="9"
+                fill="var(--fg-muted)" fontFamily="var(--font-mono)">
+            {d.label}
+          </text>
+        )
+      })}
+    </svg>
+  )
+}
+
+// ---------------------------------------------------------------
 // KPI
 // ---------------------------------------------------------------
 
