@@ -435,7 +435,34 @@
         ]
       },
       "grants_herkunft": "052 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "meal_id",
+        "user_id",
+        "food_id",
+        "food_source",
+        "food_name",
+        "amount_g",
+        "enercc",
+        "prot625",
+        "fat",
+        "cho",
+        "fibt",
+        "sugar",
+        "fasat",
+        "nacl",
+        "water_g",
+        "nutrients",
+        "frozen_at",
+        "created_at",
+        "updated_at",
+        "custom_food_id",
+        "portion_name",
+        "portion_quantity",
+        "portion_amount_g"
+      ],
+      "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten."
     },
     {
       "name": "water_logs",
@@ -904,7 +931,7 @@
   },
   "_bewusst_nicht_geprueft": {
     "indizes": "Absichtlich NICHT aufgenommen (Entscheidung 2026-08-16). Indizes sind Laufzeit, nicht Korrektheit — ein fehlender Index macht die Suche langsam, keine Daten falsch oder sichtbar. Die Liste waere ausserdem unpflegbar: jeder Ausdrucksindex aus 072/073 muesste mitgezogen werden.",
-    "spalten": "Fuer TABELLEN weiterhin nicht geprueft. Eine Tabelle kann den richtigen Namen tragen und die falschen Spalten haben - siehe docs/ssot/53-kettenluecke.md, Abschnitt \"Was diese Pruefung nicht sagt\". Fuer SICHTEN seit C-37 (2026-08-15) geprueft, sofern der Eintrag eine \"spalten\"-Liste fuehrt; daily_summary tut das.",
+    "spalten": "Nicht allgemein fuer alle Tabellen/Sichten geprueft. Seit C-37 (Sichten) und C-51 (Tabellen) werden Spalten nur dort geprueft, wo der Sollstand eine \"spalten\"-Liste fuehrt; daily_summary und meal_items tun das.",
     "grants": "Seit C-42 (2026-08-15) DOCH geprueft, exakt statt \"mindestens\": siehe pruefeGrants. Der Eintrag bleibt als Spur stehen, warum die Luecke bestand — RLS ohne GRANT sperrt genauso wie RLS ohne Policy; PostgREST prueft GRANT VOR RLS."
   },
   "nicht_erwartet": {

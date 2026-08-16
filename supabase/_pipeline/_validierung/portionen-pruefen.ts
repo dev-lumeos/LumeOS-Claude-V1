@@ -60,6 +60,16 @@ const multiDefault = countScalar(`
   ) d;`)
 if (multiDefault !== 0) errors.push(`${multiDefault} Foods tragen mehr als eine Vorgabeportion`)
 
+const missingDefault = countScalar(`
+  SELECT COUNT(*)
+  FROM (
+    SELECT food_id
+    FROM nutrition.foods_portions
+    GROUP BY food_id
+    HAVING COUNT(*) FILTER (WHERE is_default) = 0
+  ) d;`)
+if (missingDefault !== 0) errors.push(`${missingDefault} Foods tragen Portionen, aber keine Vorgabeportion`)
+
 const badAmounts = countScalar(`SELECT COUNT(*) FROM nutrition.foods_portions WHERE amount_g <= 0;`)
 if (badAmounts !== 0) errors.push(`${badAmounts} Portionen haben amount_g <= 0`)
 
@@ -82,6 +92,7 @@ console.log(`  Portionszeilen: ${total}`)
 console.log(`  Foods mit Portion: ${foodsWith}`)
 console.log(`  Foods ohne Portion: ${foodsWithout}`)
 console.log(`  Mehrfach-Defaults: ${multiDefault}`)
+console.log(`  Fehlende Defaults: ${missingDefault}`)
 
 if (errors.length) {
   console.error('')

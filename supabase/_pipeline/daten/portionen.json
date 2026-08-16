@@ -265,13 +265,26 @@
       "id": "zucker_sirup_honig",
       "begruendung": "Vorgaengerrepo: Zucker, Honig, Marmelade.",
       "selector": {
-        "bls_prefixes": ["S", "R"],
+        "bls_prefixes": ["S"],
         "name_includes_any": ["zucker", "sirup", "honig", "marmelade", "konfitüre", "konfituere"]
       },
       "portions": [
         { "name_de": "1 TL", "name_en": "1 teaspoon", "amount_g": 5, "sort_order": 10 },
         { "name_de": "1 EL", "name_en": "1 tablespoon", "amount_g": 12, "sort_order": 11 },
         { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 20, "sort_order": 12 }
+      ]
+    },
+    {
+      "id": "r_zucker_backzutaten",
+      "begruendung": "C-51: R-Zucker/Backzutaten hatten Portionen, aber keine Vorgabe; 20 g als haushaltsuebliche Einzelportion.",
+      "selector": {
+        "bls_prefixes": ["R"],
+        "name_includes_any": ["zucker", "sirup", "honig", "marmelade", "konfitüre", "konfituere"]
+      },
+      "portions": [
+        { "name_de": "1 TL", "name_en": "1 teaspoon", "amount_g": 5, "sort_order": 10 },
+        { "name_de": "1 EL", "name_en": "1 tablespoon", "amount_g": 12, "sort_order": 11 },
+        { "name_de": "1 Portion", "name_en": "1 serving", "amount_g": 20, "sort_order": 12, "is_default": true }
       ]
     },
     {
