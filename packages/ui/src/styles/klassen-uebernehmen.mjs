@@ -392,6 +392,87 @@ button.v2-coverage-row:hover { background: var(--surface-hover); }
 }
 .v2-feld::placeholder { color: var(--fg-dim); }
 .v2-feld:focus-visible { border-color: var(--acc); }
+select.v2-feld { cursor: pointer; }
+
+/* 9. Formularteile (GO-01).
+   Der Entwurf hat ein Onboarding mit denselben Mustern
+   (module-onboarding.jsx), aber ausschliesslich als Inline-Stile —
+   Auswahlliste, Zahlenfeld mit Einheit, Aktivitaetsliste mit Faktor.
+   Hier als Klassen, damit sie einmal beschrieben sind. Nur vorhandene
+   Tokens. */
+
+/* Einheit rechts im Zahlenfeld. */
+.v2-feld-einheit {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  pointer-events: none;
+}
+
+/* Eine Zeile einer Auswahlliste (Aktivitaetsstufen). */
+.v2-wahl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+}
+.v2-wahl:hover { background: var(--surface-hover); }
+.v2-wahl[data-on="true"] {
+  border-color: color-mix(in oklch, var(--acc) 35%, var(--border));
+  background: color-mix(in oklch, var(--acc) 10%, var(--surface));
+}
+.v2-wahl-punkt {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 2px solid var(--border-strong);
+  border-radius: 999px;
+  background: transparent;
+}
+.v2-wahl[data-on="true"] .v2-wahl-punkt {
+  border-color: var(--acc);
+  background: var(--acc);
+}
+.v2-wahl-titel {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--fg);
+}
+.v2-wahl[data-on="true"] .v2-wahl-titel { font-weight: 600; }
+.v2-wahl-hinweis {
+  display: block;
+  margin-top: 1px;
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+
+/* Fehlermeldung am Feld. */
+.v2-feldfehler {
+  margin-top: 4px;
+  color: var(--neg);
+  font-size: 10.5px;
+}
+
+/* Leiste unter dem Formular. */
+.v2-formleiste {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
 
 /* 8. Leerer Zustand und Hinweiszeile (G-03).
    Der Entwurf kennt beides nicht — in einer Vorfuehrung ist nie etwas

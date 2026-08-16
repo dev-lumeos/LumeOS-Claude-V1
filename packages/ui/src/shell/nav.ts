@@ -85,10 +85,10 @@ export const WORKSPACES: WorkspaceEntry[] = [
   { id: 'admin',       label: 'Admin',        icon: 'admin',       url: 'https://admin.lumeos.app' },
 ]
 
-export const SETTINGS_ENTRY = {
-  id: 'settings' as ModuleId,
+export const SETTINGS_ENTRY: NavEntry = {
+  id: 'settings',
   label: 'Settings',
-  icon: 'settings' as IconName,
+  icon: 'settings',
   href: `${V2_BASE}/settings`,
 }
 
@@ -118,6 +118,13 @@ export function resolveNav(pathname: string): {
     pruefe(m.href, m)
     for (const s of m.sub ?? []) pruefe(s.href, m, s)
   }
+
+  // `[cmd]` Settings gehoert dazu, steht aber nicht in MODULES — es
+  // liegt in der Seitenleiste unter SYSTEM. Ohne diese Zeile fiel
+  // /v2/settings auf das Dashboard zurueck: die Kopfzeile schrieb
+  // "Dashboard", und die Seitenleiste hob den falschen Eintrag hervor.
+  // Aufgefallen in GO-01, als Settings die erste echte Seite bekam.
+  pruefe(SETTINGS_ENTRY.href, SETTINGS_ENTRY)
 
   // Kein Treffer: das Dashboard liegt auf der Wurzel und ist die
   // Voreinstellung — wie in der Vorlage (MODULES[0]).
