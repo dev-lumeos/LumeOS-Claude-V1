@@ -1362,34 +1362,43 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
     Bezugsgrösse eingetragen wird.
 
 - [ ] **GO-00: Die Referenzwerte tragen unpassende Einheiten** (neu
-  2026-08-15). **Blockiert die Prozentwerte in C-48.**
+  2026-08-15). **Teil 1 erledigt, Teil 2 offen.**
 
-  `[cmd]` Von 72 Referenzzeilen mit Wert passen **nur 25** zur Einheit
-  des Nährstoffs im Bestand:
+  **Erledigt:** `[cmd]` Die eindeutigen Umrechnungen (mg/µg/g) sind im
+  Seed korrigiert, Commits `7ddd307` und `d7cb600`. Calcium steht bei
+  `PRI 1000 mg` und `UL 2500 mg` statt bei 32.000 %. Die Schemaprüfung
+  kennt jetzt Einheiten und meldete am beschädigten Stand 47 unpassend.
 
-  | Referenz | Bestand | Fälle | |
-  |---|---|---|---|
-  | `mg/day` | `µg` | 9 | Faktor 1.000 |
-  | `g/day` | `mg` | 4 | Faktor 1.000 |
-  | `mg/kg bw/day` | `g` | 9 | braucht Körpergewicht |
-  | `E%` | `g` | 4 | Energieprozent |
-  | `mg/MJ`, `mg NE/MJ`, `L/day` | | 3 | andere Bezugsgrösse |
+  **Offen: 16 Zeilen mit fremder Bezugsgrösse.** Sie sind im Seed als
+  abweichend markiert — **das verhindert die Prüfmeldung, nicht den
+  falschen Prozentwert.** `[cmd]` Protein zeigt im Tagebuch **1.593 %**
+  statt ~20 %: sein Referenzwert ist `0,83 g/kg bw/day`, und
+  `daily_reference_assessment` teilt, ohne mit den 78,4 kg zu
+  multiplizieren.
 
-  `[cmd]` Calcium gegen `UL` ergibt **32.000 %**.
+  **Entschieden am 2026-08-15** nach Recherche, wie etablierte Apps es
+  halten — **niemand zeigt eine Einheit je Kilogramm**, alle rechnen um
+  und zeigen absolut:
 
-  **Der Fehler stammt aus C-45 und ist bei der Abnahme durchgegangen.**
-  Geprüft wurde, dass jede Zeile eine Quelle trägt und alle 138 Codes
-  abgedeckt sind — nicht, ob die Einheit zur Bezugsgrösse passt. Die
-  Prüfung war in einer Dimension vollständig und in der anderen blind.
+  | | | |
+  |---|---|---|
+  | `mg/kg bw/day`, `g/kg bw/day` | **10** | zur Laufzeit umrechnen mit `body_weight_kg`, absolut anzeigen |
+  | `E%` | **4** | Verteilungsregel für Makros — gehört zu GO-02, nicht in die Nährstoffbewertung |
+  | `mg/MJ`, `mg NE/MJ` | **2** | Nährstoffdichte, Fachmass — nicht anzeigen, Grund ausweisen |
 
-  **Die vier C-48-Regeln halten trotzdem** — sie bestimmen, *ob* ein
-  Prozentwert erscheint, nicht *welcher*. Die Architektur ist in
-  Ordnung, die Daten sind es nicht.
+  `[read]` Tom, 2026-08-15: *„Ok, das passt so für mich."*
 
-  **Drei Fälle brauchen mehr als eine Umrechnung:** `mg/kg bw/day` setzt
-  das Körpergewicht voraus (steht seit GO-01 im Profil), `E%` die
-  Tagesenergie, `mg/MJ` ebenfalls. Ob diese Referenzwerte überhaupt
-  angezeigt werden sollen, ist eine Entscheidung — kein Rechenschritt.
+  **Die Umrechnung gehört zur Laufzeit in `daily_reference_assessment`,
+  nicht in den Seed.** `[cmd]` Die Funktion liest das Profil bereits für
+  Alter und Geschlecht; das Gewicht steht seit GO-01 in derselben Zeile.
+  Beim Gewichtswechsel ändert sich der Wert dann mit, statt in der
+  Tabelle zu veralten.
+
+  **Warum das liegen blieb:** Die Entscheidung fiel im Gespräch und
+  wurde nicht zum TODO-Punkt. Zwei Aufträge sperrten
+  `daily_reference_assessment` — zu Recht, aber niemand hatte den
+  Auftrag, sie umzusetzen. **Eine Entscheidung ohne Punkt existiert
+  nicht.**
 
 - [ ] **GO-01 bis GO-17: Goals** (neu 2026-08-15).
   **Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`**
