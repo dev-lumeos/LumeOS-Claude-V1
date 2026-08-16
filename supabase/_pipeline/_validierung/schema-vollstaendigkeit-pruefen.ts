@@ -408,6 +408,48 @@ if (SOLL.datenqualitaet?.food_nutrients && istTabellen.has('food_nutrients')) {
   }
 }
 
+// GO-00: Referenzwerte duerfen nur dann in Prozent umgerechnet werden,
+// wenn ihre Einheit zur Bestandseinheit passt. C-45 pruefte Quelle und
+// Codeabdeckung, aber nicht diese Vergleichbarkeit; Calcium-UL wurde
+// dadurch als 2.5 g gegen mg-Bestand gelesen und ergab 32.000 %.
+if (istTabellen.has('nutrient_reference_values') && istTabellen.has('nutrient_defs')) {
+  const abweichungen = sql(
+    `SELECT r.nutrient_code,
+            r.reference_kind,
+            r.unit,
+            d.unit,
+            r.basis,
+            COALESCE(r.notes, '')
+     FROM nutrition.nutrient_reference_values r
+     JOIN nutrition.nutrient_defs d ON d.code = r.nutrient_code
+     WHERE COALESCE(r.value_min, r.value_max) IS NOT NULL
+       AND NOT (
+         r.unit = d.unit
+         OR (
+           r.basis = 'per_day'
+           AND (
+             (r.unit = 'mg/day' AND d.unit = 'mg')
+             OR (r.unit = 'g/day' AND d.unit = 'g')
+           )
+         )
+         OR (
+           r.basis IN ('per_kg_bw_per_day', 'energy_percent', 'per_mj')
+           AND COALESCE(r.notes, '') LIKE '%GO-00%'
+         )
+       )
+     ORDER BY r.nutrient_code, r.reference_kind, r.unit;`
+  )
+  console.log(`  ${'reference_units'.padEnd(20)} ${String(abweichungen.length).padStart(7)} unpassend`)
+  if (abweichungen.length) {
+    const beispiele = abweichungen.slice(0, 12).map(([code, kind, refUnit, defUnit, basis]) =>
+      `${code}/${kind}: ${refUnit} vs ${defUnit} (${basis})`).join('; ')
+    fehler.push(`Datenqualitaet: nutrition.nutrient_reference_values hat ` +
+      `${abweichungen.length} Wertzeile(n), deren Einheit nicht zur ` +
+      `nutrient_defs.unit passt und nicht als GO-00-Sonderbezug markiert ist` +
+      ` â€” ${beispiele}${abweichungen.length > 12 ? '; â€¦' : ''}`)
+  }
+}
+
 console.log('')
 if (warnung.length) {
   console.log('Hinweise:')
