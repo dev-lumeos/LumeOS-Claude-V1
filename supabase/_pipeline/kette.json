@@ -207,11 +207,18 @@
       "depends_on": ["052"]
     },
     {
+      "id": "058a",
+      "path": "supabase/_pipeline/05_user_tabellen/058a_meal_item_portions.sql",
+      "kind": "sql",
+      "creates": "meal_items-Portionssnapshot: portion_name, portion_quantity, portion_amount_g",
+      "depends_on": ["029", "052", "058"]
+    },
+    {
       "id": "060",
       "path": "supabase/_pipeline/06_zugriff/060_zugriffsschicht.sql",
       "kind": "sql",
       "creates": "Zugriffsschicht, RLS, Grants und Trigram-Indizes",
-      "depends_on": ["020b", "050", "051", "052", "055", "058"]
+      "depends_on": ["020b", "050", "051", "052", "055", "058", "058a"]
     },
     {
       "id": "061",

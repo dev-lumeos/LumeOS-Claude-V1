@@ -88,6 +88,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | **056** | `05_user_tabellen/056_hydration_summary.sql` | Sicht **`hydration_summary`** | 1 Sicht |
 | **057** | `05_user_tabellen/057_search_events.sql` | **`search_events`** + Auswertung `search_events_report()` | 1 Tabelle, 1 Funktion |
 | **058** | `05_user_tabellen/058_custom_foods.sql` | **`foods_custom`**, `meal_items.custom_food_id`, Plausibilitaetsfunktion | 1 Tabelle, 1 Funktion, 1 FK |
+| **058a** | `05_user_tabellen/058a_meal_item_portions.sql` | `meal_items` speichert Portionssnapshot (`portion_name`, `portion_quantity`, `portion_amount_g`) | 3 Spalten, 1 Check |
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, Trigram-Indizes, Grants, RLS | v060: 22 Prüfungen |
 | 061 | `06_zugriff/061_rollen_admin.sql` | `public.is_admin()` + Policies | v061: 15 Prüfungen |
 | 062 | `06_zugriff/062_pruef_objektliste.sql` | `nutrition.pruef_objektliste()` fuer Objektlisten- und Rechtepruefung | 1 Funktion |
