@@ -1,0 +1,90 @@
+[
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-02",
+    "case": "Tag ohne Ziel",
+    "expected": "goals.zielwerte_am liefert vor dem ersten gueltig_ab keine Zeile; daily_summary hat trotzdem Mahlzeiten."
+  },
+  {
+    "user": "Max Schmidt",
+    "email": "max.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000102",
+    "date": "2026-08-04",
+    "case": "Salz/Natrium deutlich ueber Referenz",
+    "expected": "Speisesalz erzeugt Natrium ueber 2000 mg und Salz ueber 5 g; aktuelle Referenzdaten fuehren dafuer AI/FORMULA, keinen UL."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-05",
+    "case": "Vitamin A ueber UL",
+    "expected": "Kalbsleber erzeugt fuer VITA eine UL-Zeile mit reference_pct ueber 100."
+  },
+  {
+    "user": "Max Schmidt",
+    "email": "max.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000102",
+    "date": "2026-08-06",
+    "case": "Lueckenhafte Naehrwerte",
+    "expected": "Apfelpektin hat unvollstaendige Mikrodaten; daily_reference_assessment liefert reference_status incomplete."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-07",
+    "case": "Kalorien deutlich unter Ziel",
+    "expected": "daily_summary liegt bei rund 40 Prozent des kcal-Ziels."
+  },
+  {
+    "user": "Max Schmidt",
+    "email": "max.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000102",
+    "date": "2026-08-08",
+    "case": "Tag ohne jede Mahlzeit",
+    "expected": "nutrition.meals und daily_summary liefern fuer diesen Nutzer und Tag keine Zeile."
+  },
+  {
+    "user": "Max Schmidt",
+    "email": "max.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000102",
+    "date": "2026-08-09",
+    "case": "Mikronaehrstoffmangel",
+    "expected": "Eisen, Calcium und Vitamin D liegen bei unter 50 Prozent der passenden Referenz."
+  },
+  {
+    "user": "Max Schmidt",
+    "email": "max.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000102",
+    "date": "2026-08-10",
+    "case": "Kalorien deutlich ueber Ziel",
+    "expected": "daily_summary liegt bei ueber 140 Prozent des kcal-Ziels."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-11",
+    "case": "Leere Mahlzeiten",
+    "expected": "Mahlzeiten sind angelegt, item_count ist 0 und die Summen bleiben NULL."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-13",
+    "case": "Viele Positionen und gemischte Mengenangaben",
+    "expected": "Der Tag hat mindestens 20 Positionen und enthaelt sowohl Portionseingaben als auch direkte Grammeingaben."
+  },
+  {
+    "user": "Sarah Johnson",
+    "email": "sarah.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000103",
+    "date": "2026-08-16",
+    "case": "Profil unvollstaendig",
+    "expected": "birth_date und body_weight_kg sind NULL; daily_reference_assessment liefert missing_profile."
+  }
+]

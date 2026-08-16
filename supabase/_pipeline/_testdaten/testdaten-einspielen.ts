@@ -4,16 +4,18 @@ import crypto from 'node:crypto'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
-const ANCHOR = '2026-08-16'
+const START_DATE = '2026-08-02'
+const TARGET_START_DATE = '2026-08-03'
+const END_DATE = '2026-09-13'
 
 type TestUser = {
   id: string
   email: string
   displayName: string
-  birthDate: string
+  birthDate: string | null
   biologicalSex: 'male' | 'female'
   heightCm: number
-  bodyWeightKg: number
+  bodyWeightKg: number | null
   activityLevel: 'light' | 'moderate' | 'active' | 'very_active'
   nutritionGoal: 'lose_weight' | 'gain_muscle' | 'performance'
   kcal: number
@@ -43,6 +45,11 @@ type ItemRow = ItemTemplate & {
   mealId: string
   userId: string
 }
+
+type DayPlan = Record<string, ItemTemplate[]>
+type SpecialDayPlan = DayPlan | 'skip-day'
+
+const MEAL_TYPES = ['breakfast', 'lunch', 'snack', 'dinner'] as const
 
 const USERS: TestUser[] = [
   {
@@ -81,10 +88,10 @@ const USERS: TestUser[] = [
     id: '10000000-0000-0000-0000-000000000103',
     email: 'sarah.seed@example.com',
     displayName: 'Sarah Johnson',
-    birthDate: '1993-11-08',
+    birthDate: null,
     biologicalSex: 'female',
     heightCm: 165,
-    bodyWeightKg: 65,
+    bodyWeightKg: null,
     activityLevel: 'active',
     nutritionGoal: 'lose_weight',
     kcal: 1800,
@@ -166,6 +173,110 @@ const PLANS: Record<string, Record<string, ItemTemplate[]>> = {
   },
 }
 
+const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
+  'tom.seed@example.com': {
+    '2026-08-05': {
+      breakfast: [
+        { blsCode: 'Y273032', amountG: 20 },
+        { blsCode: 'C352000', amountG: 75, portionName: '1 Portion roh', portionQuantity: 1, portionAmountG: 75 },
+      ],
+      lunch: [],
+      snack: [],
+      dinner: [],
+    },
+    '2026-08-07': {
+      breakfast: [
+        { blsCode: 'C352000', amountG: 250 },
+        { blsCode: 'F503100', amountG: 120 },
+      ],
+      lunch: [],
+      snack: [],
+      dinner: [],
+    },
+    '2026-08-11': {
+      breakfast: [],
+      lunch: [],
+      snack: [],
+      dinner: [],
+    },
+    '2026-08-13': {
+      breakfast: [
+        { blsCode: 'C133000', amountG: 80, portionName: '1 Tasse roh', portionQuantity: 1, portionAmountG: 80 },
+        { blsCode: 'M141100', amountG: 200 },
+        { blsCode: 'F503100', amountG: 100 },
+        { blsCode: 'B101000', amountG: 30, portionName: '1 Scheibe', portionQuantity: 1, portionAmountG: 30 },
+        { blsCode: 'E111100', amountG: 58, portionName: '1 Ei (Größe M)', portionQuantity: 1, portionAmountG: 58 },
+        { blsCode: 'Q120000', amountG: 5 },
+      ],
+      lunch: [
+        { blsCode: 'V416100', amountG: 100 },
+        { blsCode: 'C352000', amountG: 75, portionName: '1 Portion roh', portionQuantity: 1, portionAmountG: 75 },
+        { blsCode: 'G312132', amountG: 100 },
+        { blsCode: 'G211100', amountG: 100 },
+        { blsCode: 'Q120000', amountG: 15, portionName: '1 EL', portionQuantity: 1, portionAmountG: 15 },
+        { blsCode: 'R111000', amountG: 1 },
+      ],
+      snack: [
+        { blsCode: 'M713100', amountG: 100 },
+        { blsCode: 'B101000', amountG: 60, portionName: '1 Scheibe', portionQuantity: 2, portionAmountG: 30 },
+        { blsCode: 'F503100', amountG: 80 },
+        { blsCode: 'C133000', amountG: 50, portionName: '1 Portion Müsli', portionQuantity: 1, portionAmountG: 50 },
+        { blsCode: 'S111000', amountG: 20 },
+        { blsCode: 'Q120000', amountG: 5 },
+      ],
+      dinner: [
+        { blsCode: 'T410052', amountG: 100 },
+        { blsCode: 'K420100', amountG: 150 },
+        { blsCode: 'G312132', amountG: 150 },
+        { blsCode: 'C351000', amountG: 75, portionName: '1 Portion roh', portionQuantity: 1, portionAmountG: 75 },
+        { blsCode: 'E111100', amountG: 58, portionName: '1 Ei (Größe M)', portionQuantity: 1, portionAmountG: 58 },
+        { blsCode: 'Q120000', amountG: 10 },
+      ],
+    },
+  },
+  'max.seed@example.com': {
+    '2026-08-04': {
+      breakfast: [
+        { blsCode: 'R111000', amountG: 6 },
+        { blsCode: 'B101000', amountG: 60, portionName: '1 Scheibe', portionQuantity: 2, portionAmountG: 30 },
+      ],
+      lunch: [],
+      snack: [],
+      dinner: [],
+    },
+    '2026-08-06': {
+      breakfast: [
+        { blsCode: 'R466000', amountG: 50 },
+      ],
+      lunch: [],
+      snack: [],
+      dinner: [],
+    },
+    '2026-08-08': 'skip-day',
+    '2026-08-09': {
+      breakfast: [
+        { blsCode: 'C352000', amountG: 300 },
+        { blsCode: 'S111000', amountG: 200 },
+        { blsCode: 'Q120000', amountG: 50 },
+      ],
+      lunch: [],
+      snack: [],
+      dinner: [],
+    },
+    '2026-08-10': {
+      breakfast: [
+        { blsCode: 'Q120000', amountG: 300 },
+        { blsCode: 'S111000', amountG: 150 },
+        { blsCode: 'C352000', amountG: 75, portionName: '1 Portion roh', portionQuantity: 1, portionAmountG: 75 },
+        { blsCode: 'V416100', amountG: 200 },
+      ],
+      lunch: [],
+      snack: [],
+      dinner: [],
+    },
+  },
+}
+
 function uuidFrom(label: string): string {
   const hex = crypto.createHash('sha1').update(`lumeos-testdaten:${label}`).digest('hex').slice(0, 32)
   return [
@@ -183,6 +294,14 @@ function addDays(date: string, days: number): string {
   return d.toISOString().slice(0, 10)
 }
 
+function daysBetween(start: string, end: string): string[] {
+  const dates: string[] = []
+  for (let date = start; date <= end; date = addDays(date, 1)) {
+    dates.push(date)
+  }
+  return dates
+}
+
 function lit(value: string | number | null): string {
   if (value === null) return 'NULL'
   if (typeof value === 'number') return Number.isInteger(value) ? String(value) : value.toFixed(3)
@@ -197,9 +316,12 @@ const meals: MealRow[] = []
 const items: ItemRow[] = []
 for (const user of USERS) {
   const plan = PLANS[user.email]
-  for (let offset = -13; offset <= 0; offset++) {
-    const date = addDays(ANCHOR, offset)
-    for (const mealType of ['breakfast', 'lunch', 'snack', 'dinner']) {
+  for (const date of daysBetween(START_DATE, END_DATE)) {
+    const specialPlan = SPECIAL_DAY_PLANS[user.email]?.[date] ?? null
+    if (specialPlan === 'skip-day') continue
+    const dayPlan = specialPlan ?? plan
+
+    for (const mealType of MEAL_TYPES) {
       const mealId = uuidFrom(`${user.email}:${date}:${mealType}`)
       meals.push({
         id: mealId,
@@ -208,7 +330,7 @@ for (const user of USERS) {
         mealType,
         notes: `C-82 Testdaten aus dem Vorgaengerrepo: ${user.displayName}`,
       })
-      for (const template of plan[mealType]) {
+      for (const template of dayPlan[mealType]) {
         items.push({ ...template, mealId, userId: user.id })
       }
     }
@@ -262,10 +384,10 @@ CREATE TEMP TABLE test_users (
   id uuid PRIMARY KEY,
   email text NOT NULL,
   display_name text NOT NULL,
-  birth_date date NOT NULL,
+  birth_date date,
   biological_sex text NOT NULL,
   height_cm numeric NOT NULL,
-  body_weight_kg numeric NOT NULL,
+  body_weight_kg numeric,
   activity_level text NOT NULL,
   nutrition_goal text NOT NULL,
   kcal numeric NOT NULL,
@@ -305,7 +427,7 @@ ON CONFLICT (id) DO UPDATE SET
 INSERT INTO goals.nutrition_targets (
   user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee, nutrition_goal, notiz
 )
-SELECT id, DATE '${ANCHOR}' - 13, kcal, protein_g, carbs_g, fat_g,
+SELECT id, DATE '${TARGET_START_DATE}', kcal, protein_g, carbs_g, fat_g,
        'formel', tdee, nutrition_goal,
        'C-82 Testdaten aus Vorgängerrepo-Zuschnitt'
 FROM test_users
