@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-15, Anker `b1c6273` auf `dev`.
+**Stand:** 2026-08-15, Anker `2e33c5e` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 44 offen, 4 in Arbeit.
+`[cmd]` 40 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -139,7 +139,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **B-20** | Codex-Pfadschutz wiederherstellen | ~ |
 | **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
 | **C-01** | Frontend-Stack-Lücke schliessen |  |
-| **C-03** | WP-02 Diary-Verdrahtung |  |
 | **C-06** | WP-05 erstes Mock-Modul echt machen |  |
 | **C-08** | `services/nutrition-api` einordnen |  |
 | **C-20** | Treffer am Wortanfang schlägt Treffer in der Wortmitte |  |
@@ -172,10 +171,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **F-07** | Berechtigungen |  |
 | **F-08** | Werkstatt-Inventar |  |
 | **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
-| **GO-01** | Goals |  |
-| **G-01** | Parallelstruktur und Tokens |  |
-| **G-02** | Die Shell |  |
-| **G-03** | Nutrition als erstes echtes Modul |  |
+| **GO-00** | Die Referenzwerte tragen unpassende Einheiten |  |
+| **GO-01** | Goals | ~ |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-05** | Dashboard |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
@@ -381,23 +378,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   Hand, Button als Probe), Abbildung ausschliesslich als Config-Aliase auf
   die bestehenden Tokens — null neue CSS-Variablen.
 
-- [ ] **C-03: WP-02 Diary-Verdrahtung** — **nicht mehr blockiert**
-  (2026-08-06, Block 10): ADR-0003 ist geschrieben
-  (`docs/spezifikation/90-entscheidungen/ADR-0003-diary-naehrstoffmodell.md`).
-  **Entschieden: EAV anschliessen, `db/schema/nutrition.sql` ist
-  verworfen** — die Datei bleibt als Referenz liegen, ist aber kein
-  Sollwert. Was bleibt, ist Bau, keine Entscheidung: Diary-Tabellen im
-  Schema `nutrition` anlegen, an `food_nutrients` rechnen, die
-  Ergebniswerte je Mahlzeitposition **einfrieren** (sonst ändern sich
-  vergangene Tage rückwirkend, wenn ein BLS-Wert korrigiert wird).
-  Jede neue Tabelle bekommt Zeilenschutz **und** Policies je Operation,
-  dem Muster aus 060 folgend.
-  Nebenfund `[read]`, im ADR festgehalten: der verworfene Entwurf schaltet
-  für `meal_items` RLS ein, vergibt aber keine Policy — für
-  `authenticated` wäre die Tabelle gesperrt gewesen. Beim Neuaufbau nicht
-  wiederholen.
-  Der Aggregationsweg für Tagessummen (Sicht, materialisierte Sicht oder
-  Summentabelle) ist noch offen und gehört zu C-04.
 
 - [ ] **C-06: WP-05 erstes Mock-Modul echt machen** — Kandidat Goals.
   *Vorher die 2 kritischen Bugs aus `docs/specs/Goals/OPEN_ITEMS.md` klären
@@ -1277,89 +1257,7 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 `[read]` Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`
 
-- [ ] **C-51: Die gewählte Portion in `meal_items` festhalten** (neu
-  2026-08-15). **Vor dem Schreibpfad ins Tagebuch (C-03).**
 
-  **Tom, 2026-08-15:** *„Der User oder die MealCam-KI wird entscheiden,
-  wie die Eingabe sein wird — ob effektiv in Gramm oder Portion
-  gewählt wird."*
-
-  `[cmd]` Seit C-50 stehen 23.402 Portionen bereit. `meal_items` führt
-  `amount_g`, `food_name` und die eingefrorenen Nährwerte — **kein Feld
-  für die gewählte Portion und keins für die Anzahl.** Die Wahl geht
-  beim Speichern verloren.
-
-  **Drei Folgen:**
-
-  - **Die Anzeige verliert die Absicht.** Wer „2 Scheiben Brot"
-    eingetragen hat, sieht später `60 g`. Fachlich richtig, aber nicht
-    mehr das, was er getippt hat.
-  - **MealCam schätzt keine Gramm.** `[read]` Eine Bildauswertung
-    erkennt „ein Teller Nudeln", nicht „312 g". Ohne Portionsfeld muss
-    sie umrechnen und wirft die Schätzgrösse weg — dabei ist gerade
-    dort die Unsicherheit interessant.
-  - **„Zuletzt benutzte Portion je Nutzer" ist nicht baubar.** `[read]`
-    `SPEC_06_PATCH_V1_DECISIONS.md` verlangt es; ohne dieses Feld weiss
-    niemand, welche Portion zuletzt gewählt wurde — nur wie viel Gramm.
-
-  **Der Vorschlag:** zwei Felder — die gewählte Portion und die Anzahl.
-  `amount_g` **bleibt kanonisch** und wird daraus berechnet; die beiden
-  Felder sind das **Protokoll der Eingabe**, nicht die Wahrheit über die
-  Menge. Bei direkter Grammeingabe bleiben sie leer — und das ist selbst
-  eine Aussage.
-
-  **Zu klären:**
-  - `[cmd]` `frozen_at` friert die Nährwerte ein. Was passiert, wenn eine
-    Portionsdefinition später geändert wird? Der Verweis darf die
-    eingefrorene Menge nicht nachträglich verschieben.
-  - `foods_custom` führt eigene `serving_size_g` und `serving_name` —
-    zwei Herkunftsarten für eine Portion. Ein Feld oder zwei?
-  - Bei MealCam: gehört die Schätzunsicherheit dazu? `[read]` Das
-    berührt `ADR_MEALCAM_V1` und ist eine Produktfrage.
-
-  `[cmd]` **Jetzt billig:** `meal_items` hat 0 Zeilen. Später ist es eine
-  Migration mit Bestand.
-
-- [ ] **C-50: Portionsgrössen** (neu 2026-08-15). **Tom, 2026-08-15:**
-  *„Da müssen wir noch Portionen definieren"* — und auf Nachfrage:
-  *„Hatten wir auch schon komplett gelöst, suche."*
-
-  **Er hatte recht. Es ist eine Übernahme, keine Neuentwicklung.**
-  `[cmd]` Drei Fundstellen in `referenz/lumeos-2026/`:
-
-  | | |
-  |---|---|
-  | `supabase/migrations/002_create_nutrition_tables.sql` | `foods_portions` — `food_id`, `name_de`, `name_en`, `amount_g`, `is_default` |
-  | `scripts/seed-portions.py` | 8 KB, über 100 Portionseinträge |
-  | `src/modules/nutrition/hooks/useFoodPortions.ts` | der Lesepfad |
-
-  **Der Ansatz hängt an der Kategorie, nicht am Lebensmittel.** `[cmd]`
-  Fünf universelle Portionen (EL 15 g, TL 5 g, Tasse 250 g, Glas 200 ml,
-  100 g) plus kategoriespezifische: `Brot` bekommt Scheibe 30 g, dicke
-  Scheibe 50 g, Brötchen 60 g, Toast 25 g; `Fleisch` Portion 150 g,
-  Steak 200 g, Hähnchenbrustfilet 175 g; `Obst` Stück klein/mittel/gross
-  und Handvoll.
-
-  **Damit sind es rund hundert Definitionen statt 7.140 Kurationen.**
-  Die erste Fassung dieses Punktes hat das Problem um zwei
-  Grössenordnungen zu gross beschrieben — der Fehler lag darin, nicht
-  zuerst im Vorgängerrepo gesucht zu haben.
-
-  **Was bei der Übernahme zu klären ist:**
-  - `[cmd]` Das alte Schema nutzt `public.foods`, dieses `nutrition.foods`
-    mit `bls_code` als Schlüssel. Die Zuordnung Kategorie → Portion muss
-    gegen `nutrition.food_categories` (518 Einträge) neu gelegt werden,
-    nicht gegen die alten Muster.
-  - **Gramm bleibt kanonisch.** `[cmd]` `meal_items.amount_g` ist so
-    gebaut, `frozen_at` friert die Nährwerte ein. Portionen sind eine
-    Eingabehilfe, keine zweite Wahrheit.
-  - `[read]` Die Spec nennt zusätzlich **zuletzt benutzte Portionen je
-    Nutzer** — im Vorgängerrepo nicht gefunden, also eigener Schritt.
-  - **Woher die Gewichte stammen, ist im Seed-Skript nicht vermerkt.**
-    `[annahme]` Haushaltsübliche Masse. Beim Übernehmen entscheiden, ob
-    das reicht oder ob eine Quelle nachgetragen wird — `[read]` GO-00
-    zeigt gerade, was passiert, wenn eine Zahl ohne geprüfte
-    Bezugsgrösse eingetragen wird.
 
 - [ ] **GO-00: Die Referenzwerte tragen unpassende Einheiten** (neu
   2026-08-15). **Teil 1 erledigt, Teil 2 offen.**
@@ -1400,7 +1298,43 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   Auftrag, sie umzusetzen. **Eine Entscheidung ohne Punkt existiert
   nicht.**
 
-- [ ] **GO-01 bis GO-17: Goals** (neu 2026-08-15).
+- [~] **GO-01 bis GO-17: Goals** (neu 2026-08-15). **Block A zu vier
+  Fünfteln erledigt.**
+
+  `[cmd]` **Erledigt 2026-08-15:**
+
+  | | |
+  |---|---|
+  | **GO-01** Profilpflege | `/v2/settings`, sechs Felder, 0/6 → 6/6, Zeilenschutz beidseitig belegt |
+  | **GO-02** Zielzuordnung | `daten/zielrichtung-kalorienzuschlag.json` |
+  | **GO-03** Zieltabelle | `goals.nutrition_targets` mit `gueltig_ab` |
+  | **GO-04** Berechnung | `goals.berechne_zielwerte` — BMR 1.746,5 · TDEE 2.707,1 · **2.977,8 kcal** · 156,8 g Protein |
+  | **GO-05** Ringe | mit C-03 angeschlossen, `goals.zielwerte_am` als Nenner |
+
+  **Der Vorgänger hatte GO-02 nicht gelöst, sondern viermal verschieden
+  beantwortet:** `[cmd]` `calculateTDEE.ts` nimmt die Trainingsfrequenz
+  und rechnet Prozent, `useTDEE.ts` nimmt `activity_level` und rechnet
+  absolute kcal, eine dritte Stelle führt ein viertes Zielvokabular.
+  **Der Fundus muss das sagen**, sonst liest es beim nächsten Mal wieder
+  jemand als gelöst.
+
+  **Drei Stellen bewusst nicht übernommen:** `[cmd]`
+  `getFullYear() - Geburtsjahr` ignoriert den Geburtstag (für den
+  1.12.1990 sagt der Vorgänger 36, die neue Funktion 35). Der Rückfall
+  `|| 1.55`. Und `targetCalories: 0` — *eine 0 im Kalorienziel ist keine
+  Fehlermeldung, sondern eine Behauptung.*
+
+  `[cmd]` **`health` bleibt offen** mit `null` und Status `OFFEN`. Der
+  Vorgänger kennt die Zielrichtung nicht; 0,0 wäre eine stille
+  Entscheidung gewesen.
+
+  `[cmd]` **Das Gültigkeitsdatum belegt:** 20.08. liefert 2.978, 15.09.
+  liefert 2.200, 01.08. liefert **keine Zeile** — nicht das älteste Ziel
+  als Näherung.
+
+  **Offen bleibt Block B (GO-06 … GO-12) und Block C (GO-13 … GO-17).**
+  `[cmd]` Block C ist seit den Testdaten prüfbar — 14 Tage je Nutzer —
+  aber fachlich weiterhin auf echte Verläufe angewiesen.
   **Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`**
   — 353 Zeilen, mit Quellenregister, gemessenem Ist-Zustand, neun
   Widersprüchen und der Abgrenzung, was **nicht** gebaut wird.
@@ -1492,84 +1426,6 @@ Umsetzen angepasst werden.
 
 **Die bestehende Oberflaeche bleibt.** Die neue laeuft parallel unter
 `/v2`, gegen dieselbe Datenschicht. Umgeschaltet wird am Ende (G-07).
-
-- [ ] **G-01: Parallelstruktur und Tokens** (neu 2026-08-15). Der erste
-  Schritt, und er baut noch keine Oberfläche.
-
-  **Toms Vorgabe:** die bestehende Variante bleibt, die neue kommt
-  **parallel** dazu. Umgeschaltet wird am Ende, nicht am Anfang.
-
-  - `apps/web/src/app/v2/` als sichtbares Präfix. `[cmd]` Eine
-    Routengruppe `(v2)` scheidet aus — sie erscheint nicht in der URL und
-    kollidiert mit den zwölf bestehenden Modulordnern.
-  - `packages/ui` in Betrieb nehmen. `[cmd]` Enthält heute nur
-    `src/.gitkeep`.
-  - Die 123 Klassen aus `theme-v1/styles.css` übernehmen, **unter
-    eigenem Präfix**, damit die alten Seiten unberührt bleiben.
-  - `[cmd]` Die 32 Tokens sind identisch mit den vorhandenen — nichts zu
-    übernehmen. **Ausnahme:** `--pos`, `--warn`, `--neg` fehlen im
-    Hellmodus des Entwurfs; im Repo am 2026-08-15 repariert, der Fehler
-    darf nicht zurückkommen.
-
-  **Die Datenschicht wird geteilt, nicht kopiert** —
-  `lib/nutrition/food-search.ts`, die `rpc()`-Aufrufe, die
-  Supabase-Klienten, `middleware.ts`. Dort steckt die Arbeit von zwei
-  Tagen.
-
-- [ ] **G-02: Die Shell** (neu 2026-08-15). Setzt G-01 voraus.
-
-  `[cmd]` `sidebar`, `sidebar-nav`, `nav-group`, `topbar`, `breadcrumb`,
-  `module-header`, `card`/`card-tight`/`card-flat`, `btn-accent`, `tabs`,
-  `avatar` — diese Klassen wiederholen sich in allen 55 Modulseiten. Wer
-  sie beim zweiten Modul nachbaut, baut sie falsch.
-  Vorlage: `theme-v1/shell.jsx` und `shared.jsx`.
-
-  `[cmd]` **Der Akzentmechanismus existiert bereits:**
-  `app-shell.tsx:296` setzt `--acc` inline aus einer Map über alle elf
-  Module. Nicht in `tailwind.config.js` gespiegelt sind die einzelnen
-  `--acc-nutri` — deshalb `bg-acc` ja, `bg-acc-nutri` nein.
-
-  **Zwei Korrekturen an der Sidebar des Entwurfs** (Tom, 2026-08-15):
-
-  - **Workspaces sind Links, keine Module.** `[read]` `Coach Portal`,
-    `Marketplace` und `Admin` stehen im Entwurf unter „WORKSPACES", als
-    lägen sie in derselben Anwendung. Sie sind eigene Domain-Apps —
-    `apps/web` verlinkt sie, bettet sie nicht ein. `[cmd]` `apps/admin`
-    läuft bereits so: Port 3210, eigene Sitzung, eigener
-    Cookie-Namensraum `sb-127-admin-auth-token`. In der Shell also ein
-    Verweis nach aussen, kein Eintrag im Modulrouting.
-  - **`Test · Onboarding` gehört nicht in die Produktnavigation.**
-    `[read]` Es stand im Entwurf unter „SYSTEM", weil es einen Platz
-    brauchte — Toms Worte: *„das musste irgendwohin, ist aber natürlich
-    nicht der richtige Ort."* Wohin, ist offen; eine Testfläche in der
-    Nutzernavigation ist es nicht.
-
-  **Zwei Entscheidungen, die sonst später weh tun:**
-  - **Die Kontextspalte** steht auf jedem Bildschirm. Ab Tablet abwärts:
-    Blatt, Reiter, oder weg?
-  - **Buddy antwortet kontextbezogen auf jeder Seite** — ein
-    Modellaufruf je Seitenaufruf, bei elf Modulen und täglicher Nutzung.
-    Kostenfrage, keine Designfrage.
-
-- [ ] **G-03: Nutrition als erstes echtes Modul** (neu 2026-08-15).
-  Setzt G-02 voraus.
-
-  `[cmd]` **Nur dort ist die Datenseite vollständig** — Suche mit
-  234 ms, 7.140 Anzeigenamen, 17.967 Tags, Tagebuch, 24 Mikros mit
-  Fehlzählern, Bewertung gegen 165 Referenzwerte, `foods_custom`. Jedes
-  andere Modul bräuchte erst Daten.
-
-  Vorlage: `module-nutrition.jsx`, `module-nutrition-nutrients.jsx`,
-  `module-nutrition-spec.jsx`.
-
-  `[cmd]` **`foods/page.tsx` wird ersetzt, nicht umgebaut** — 208 harte
-  Farbwerte, eine einzige Token-Verwendung. Sie bleibt unter
-  `/nutrition`, bis `/v2/nutrition` sie ablöst.
-
-  **Vier Regeln aus der Datenseite** (siehe C-48): Fehlzähler dürfen
-  nicht zu Nullen werden · 80 % eines `UL` heisst das Gegenteil von 80 %
-  eines `PRI` · die 78 Nährstoffe ohne Referenzwert sind kein „0 %
-  gedeckt" · 100 % Deckung heisst nicht „genug für dich".
 
 - [ ] **G-04: Zwei Zahlen im Entwurf, die nicht stimmen** (neu
   2026-08-15). Klein, aber vor dem Bau zu klären.
