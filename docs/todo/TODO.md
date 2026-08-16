@@ -1277,6 +1277,53 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 `[read]` Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`
 
+- [ ] **C-50: Portionsgrössen** (neu 2026-08-15). **Tom, 2026-08-15:**
+  *„Da müssen wir noch Portionen definieren."*
+
+  **Spezifiziert ja, gebaut nein.** `[read]`
+  `SPEC_06_PATCH_V1_DECISIONS.md` führt eine Tabelle `food_portions` —
+  *„Portionsgrössen pro Food (Stück, Scheibe, Glas etc.)"*, mit dem
+  Vermerk *„V1 braucht gram-based canonical calculation mit
+  Portionsgrössen-Support."* `[cmd]` Sie existiert nicht.
+
+  `[cmd]` Vorhanden ist nur:
+
+  | | |
+  |---|---|
+  | `foods_custom.serving_size_g` + `serving_name` | nur eigene Einträge, z.B. „1 Riegel" |
+  | `meal_items.amount_g` | Gramm, kanonisch |
+  | `water_logs.amount_ml` | Milliliter |
+
+  `[read]` Die Spec nennt drei Bezugspunkte, alle fehlen: Portionen je
+  Lebensmittel, **zuletzt benutzte Portionen je Nutzer**, und Portionen
+  für eigene Lebensmittel.
+
+  **Es fehlt an allen drei Stellen.** `[cmd]` Auch die Designvorlage
+  kennt keine Portionen — sie zeigt durchgehend Gramm, einzige Ausnahme
+  `5 of 12 glasses` beim Wasser. Und der BLS liefert nichts: 30 Einträge
+  tragen „Stück" im Namen, 10 „Scheibe", aber das ist Text, keine Menge.
+
+  **Das ist eine Kuration wie die Anzeigenamen**, nicht eine Ableitung.
+  Ein Ei wiegt 58 g, eine Scheibe Mischbrot 45 g, ein Glas Milch 200 ml
+  — nichts davon steht im Bestand.
+
+  **Der Umfang ist die erste Frage.** `[annahme]` Nicht alle 7.140
+  brauchen eine Portion: Bei `Bechamelsauce` ist Gramm richtig, bei
+  `Hühnerei` nicht. `[read]` Die Core-Fitness-Liste aus `SPEC_05` und die
+  37 MealCam-Zutaten sind die Kandidaten, mit denen man anfängt.
+
+  **Was vorher zu entscheiden ist:**
+  - **Kanonisch bleibt Gramm.** `[cmd]` `meal_items.amount_g` ist so
+    gebaut, und `frozen_at` friert die Nährwerte ein. Portionen sind
+    eine Eingabehilfe, keine zweite Wahrheit — sonst driften zwei
+    Mengenangaben auseinander.
+  - **Mehrere Portionen je Lebensmittel** (Scheibe, Laib, Gramm) oder
+    eine? Die Spec sagt es nicht.
+  - **Woher die Gewichte?** `[read]` Dieselbe Regel wie bei den
+    Referenzwerten: keine Zahl ohne Quelle. Haushaltsmasse stehen in der
+    BLS-Dokumentation oder in den DGE-Referenztabellen — **prüfen, nicht
+    schätzen.**
+
 - [ ] **GO-00: Die Referenzwerte tragen unpassende Einheiten** (neu
   2026-08-15). **Blockiert die Prozentwerte in C-48.**
 
