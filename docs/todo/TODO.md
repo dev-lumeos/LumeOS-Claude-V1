@@ -20,6 +20,14 @@ verloren:
 | **Altbestand konsolidieren** (A-11) | `docs/spezifikation/00-KONSOLIDIERUNG.md` |
 | **Rollen der Ordner, Statuskopf, Regeln** | `docs/spezifikation/00-INDEX.md` |
 
+**Jedes Modul, das neu angepackt wird, bekommt vorher einen
+Umsetzungsplan** — und der wird hier verlinkt, sonst geht er verloren.
+Das Verfahren steht in `docs/spezifikation/00-UMSETZUNGSPLAENE.md`.
+`[read]` Zweimal hat das Fehlen einer solchen Datei Tage gekostet:
+`SPEC_05_FOOD_TAXONOMY.md` wurde am vierten Tag der Arbeit an genau
+ihren Fragen gelesen, und `docs/specs/Goals/` meldet „vollständig
+implementiert" für ein Modul, das in diesem Repo nicht existiert.
+
 **Quellen für Nutrition** (Tom, 2026-08-14): Bei Arbeit am Nutrition-Modul
 gehören `docs/specs/Nutrition/` und `docs/BrainstormDocs/Nutrition/`
 **mit gelesen**. Sie sind **Grundlage der Diskussion** darüber, was gilt —
