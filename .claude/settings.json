@@ -198,14 +198,19 @@
       "Bash(git add --all:*)",
       "Bash(git add .:*)",
       "Bash(git add -u:*)",
-      "Bash(git commit --amend:*)"
+      "Bash(git commit --amend:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git stage:*)",
+      "Bash(git rebase:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(git revert:*)"
     ],
     "ask": [
       "Bash(powershell:*)",
       "Bash(pwsh:*)",
       "Bash(git checkout:*)",
       "Bash(git merge:*)",
-      "Bash(git rebase:*)",
       "Bash(pnpm install:*)",
       "Bash(npx supabase:*)"
     ],
@@ -343,9 +348,7 @@
       "Bash(shift:*)",
       "Bash(exit:*)",
       "Bash(return:*)",
-      "Bash(export:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(export:*)"
     ],
     "defaultMode": "acceptEdits"
   },

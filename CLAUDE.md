@@ -25,6 +25,32 @@ passiert („services/ ist leer"; „keine Writes, kein Auth").
 
 ---
 
+## Wer committet
+
+**Tom, 2026-08-16:** *„Du orchestrierst — dann machst du deinen Job
+falsch. Die beiden arbeiten und du pruefst es; wenn ok, committest du,
+und sicher nicht die Arbeiter."*
+
+**Die Agenten committen nicht.** Sie bauen, pruefen ihr Ergebnis und
+melden. Der Orchestrator liest den Bericht, prueft nach und committet.
+Tom sieht an und pusht.
+
+`[cmd]` Seit 2026-08-16 gesperrt: `git add`, `git commit`, `git stage`,
+`git rebase`, `git cherry-pick`, `git revert` — zusaetzlich zu
+`git push`, `git reset --hard`, `git clean`.
+
+**Warum:** Zwei Agenten teilen sich einen Git-Index. An einem Tag ist
+das dreimal schiefgegangen — ein Commit mit sechs fremden Dateien, und
+zwei Commits, bei denen der Inhalt des einen unter der Nachricht des
+anderen landete. Die Regel *„git diff --cached --name-only vor jedem
+Commit"* deckt das auf, verhindert es aber nicht: Zwischen dem Lesen und
+dem Commit kann ein anderer Prozess stagen.
+
+**Das ist kein Disziplinproblem, sondern ein geteilter Zustand.** Ein
+Index, ein Committer.
+
+---
+
 ## Schreibregeln
 
 - Keine Codeänderung ohne explizite Freigabe.
