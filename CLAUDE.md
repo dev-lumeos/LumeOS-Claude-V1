@@ -77,12 +77,36 @@ Arbeit.
 **Lesen ja, schreiben nie.** `referenz/` traegt 22 Stashes und 19
 ungepushte Commits — dort wird nichts veraendert.
 
-**Und was uebernommen wird, wird gemessen.** *Aus der Existenz einer
-Sache folgt nicht ihre Funktion.* Das Schema ist ein anderes
-(`public.foods` mit UUID gegen `nutrition.foods` mit `bls_code`), der
-Code lief gegen andere Tabellen. Er ist ein belegter Ausgangspunkt, keine
-fertige Loesung — aber ein belegter Ausgangspunkt schlaegt jede
-plausible Annahme.
+### Es geht nicht ums Kopieren — und auch nicht ums Misstrauen
+
+**Tom, 2026-08-15:** *"Es geht nicht darum, den Code dieses Repos zu
+kopieren. Es geht darum, aus diesem ueber Monate gewachsenen Repo — wo
+immer wieder neue Ideen reingebaut wurden und nochmal was Neues obendrauf
+— ein Featureprodukt anzuschauen und richtig nachzubauen. Und dazu kann
+man sehr wohl schon geloeste Sachen 1zu1 uebernehmen, mit den noetigen
+Anpassungen."*
+
+**Das alte Repo ist die vollstaendigste Anforderungsquelle, die es
+gibt.** Wenn die Frage lautet, was ein Modul koennen muss, steht die
+Antwort nicht in der Spec — sie steht in elf gebauten Modulen, die
+jemand benutzt hat. `[cmd]` Die Specs sind KI-erzeugt und an einer Stelle
+nachweislich eine Kopie des Brainstorms; das Design zeigt die
+Oberflaeche; **nur das alte Repo zeigt, was das Produkt tatsaechlich
+tat.**
+
+**Geloeste Sachen werden uebernommen, nicht nachempfunden.** Wenn
+`seed-portions.py` hundert Portionsdefinitionen fuehrt, werden die
+uebernommen — angepasst wird die Zuordnung ans neue Schema, nicht die
+30 g fuer eine Scheibe Brot.
+
+**Angepasst wird, was sich geaendert hat**, und das ist bekannt:
+`public.foods` mit UUID gegen `nutrition.foods` mit `bls_code`,
+`daily_nutrition_aggregates` gegen `daily_summary`, andere Schemata,
+andere Spaltennamen. Das ist Uebersetzungsarbeit, kein Nachbau.
+
+**Gemessen wird trotzdem** — nicht aus Misstrauen, sondern weil eine
+Uebernahme ohne Messung nicht belegt, dass sie angekommen ist. *Aus der
+Existenz einer Sache folgt nicht ihre Funktion.*
 
 ---
 
