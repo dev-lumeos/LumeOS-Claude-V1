@@ -248,3 +248,37 @@ export async function removeMealItem(itemId: string): Promise<{ removed: number 
   }
   return { removed }
 }
+
+/** Eine Portionsdefinition, wie die Auswahl sie braucht. */
+export type FoodPortion = {
+  name_de: string
+  amount_g: number
+  is_default: boolean
+}
+
+/**
+ * Portionen eines Lebensmittels (C-51).
+ *
+ * Nur lesend; `foods_portions` sind Stammdaten mit einer
+ * SELECT-Policy fuer authenticated.
+ */
+export async function listPortionsForFood(foodId: string): Promise<FoodPortion[]> {
+  const { supabase } = await requireSession()
+  const { data, error } = await supabase
+    .schema('nutrition')
+    .from('foods_portions')
+    .select('name_de, amount_g, is_default')
+    .eq('food_id', foodId)
+    .order('sort_order', { ascending: true })
+  if (error) throw classifyDbError(error.message, 'WRITE_FAILED')
+  if (!Array.isArray(data)) return []
+  return data.flatMap(row => {
+    if (!row || typeof row !== 'object') return []
+    const r = row as Record<string, unknown>
+    const name = typeof r.name_de === 'string' ? r.name_de : ''
+    // PostgREST liefert numeric als String.
+    const g = typeof r.amount_g === 'string' ? Number(r.amount_g) : r.amount_g
+    if (!name || typeof g !== 'number' || !Number.isFinite(g) || g <= 0) return []
+    return [{ name_de: name, amount_g: g, is_default: r.is_default === true }]
+  })
+}

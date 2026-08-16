@@ -69,7 +69,29 @@ export const mealItemCreateSchema = z.object({
   meal_id: z.string().uuid('meal_id muss eine UUID sein.'),
   food_id: z.string().uuid('food_id muss eine UUID sein.'),
   amount_g: z.number().positive('amount_g muss grösser als 0 sein.').finite(),
+
+  // C-51: die gewählte Portion, als Schnappschuss. Entweder alle drei
+  // oder keines — `[cmd]` genau so prüft es der CHECK in 058a.
+  portion_name: z.string().min(1).max(200).optional(),
+  portion_quantity: z.number().positive().finite().optional(),
+  portion_amount_g: z.number().positive().finite().optional(),
 })
+  .refine(
+    d => {
+      const gesetzt = [d.portion_name, d.portion_quantity, d.portion_amount_g]
+        .filter(v => v !== undefined).length
+      return gesetzt === 0 || gesetzt === 3
+    },
+    { message: 'Portion braucht Name, Anzahl und Gramm je Portion — oder nichts davon.' },
+  )
+  .refine(
+    d => d.portion_quantity === undefined || d.portion_amount_g === undefined ||
+         // Der CHECK erlaubt 0,01 Abweichung; hier dieselbe Grenze,
+         // damit die Meldung aus der Anwendung kommt und nicht aus
+         // Postgres.
+         Math.abs(d.amount_g - d.portion_quantity * d.portion_amount_g) <= 0.01,
+    { message: 'amount_g muss Anzahl × Gramm je Portion sein.', path: ['amount_g'] },
+  )
 export type MealItemCreate = z.infer<typeof mealItemCreateSchema>
 
 export const mealItemUpdateSchema = z.object({
@@ -162,6 +184,13 @@ export function buildMealItemInsert(
     food_source: 'bls' as const,
     food_name: foodName,
     amount_g: input.amount_g,
+    // C-51: Die Gramm je Portion werden MITGESCHRIEBEN, nicht als
+    // Verweis auf foods_portions. `[read]` Sonst hinge ein erfasster
+    // Tag an einer Tabelle, die sich ändern kann — derselbe Grund wie
+    // beim Einfrieren der Nährwerte.
+    portion_name: input.portion_name ?? null,
+    portion_quantity: input.portion_quantity ?? null,
+    portion_amount_g: input.portion_amount_g ?? null,
     ...frozen.macros,
     nutrients: frozen.nutrients,
   }
