@@ -41,6 +41,8 @@
 
 BEGIN;
 
+DROP FUNCTION IF EXISTS nutrition.daily_reference_assessment(UUID, DATE);
+
 CREATE OR REPLACE FUNCTION nutrition.daily_reference_assessment(
   p_user_id UUID,
   p_entry_date DATE
@@ -51,6 +53,7 @@ RETURNS TABLE (
   nutrient_code TEXT,
   nutrient_name_de TEXT,
   nutrient_unit TEXT,
+  nutrient_display_tier INTEGER,
   actual_value NUMERIC,
   missing_count INTEGER,
   value_complete BOOLEAN,
@@ -280,6 +283,7 @@ SELECT
   dv.nutrient_code,
   nd.name_de AS nutrient_name_de,
   nd.unit AS nutrient_unit,
+  nd.display_tier AS nutrient_display_tier,
   dv.actual_value,
   dv.missing_count::INTEGER,
   (dv.missing_count = 0 AND dv.actual_value IS NOT NULL) AS value_complete,
@@ -352,6 +356,7 @@ $$;
 COMMENT ON FUNCTION nutrition.daily_reference_assessment(UUID, DATE) IS
   'C-47: Numerischer Vergleich von daily_summary mit nutrient_reference_values anhand public.profiles. '
   'Fuehrt reference_kind und reference_direction mit; keine Ampel, kein Score, keine Wortbewertung. '
+  'C-54: Fuehrt nutrient_display_tier aus nutrient_defs mit, damit die Anzeige Haupt- und Nebenwerte ordnen kann. '
   'Bei *_missing > 0 bleibt reference_pct NULL, damit eine unvollstaendige Summe nicht als Deckung erscheint.';
 
 GRANT EXECUTE ON FUNCTION nutrition.daily_reference_assessment(UUID, DATE)

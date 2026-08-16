@@ -382,3 +382,95 @@ durch; die Szenariotage halten. Die Ausgabe meldet jetzt
 `daily_reference_assessment: 47 Zeilen, 30 mit Prozentwert` — zwei
 Zeilen mehr, aber keine neuen Prozentwerte, weil beide Fettsaeuren
 `energy_share` sind.
+
+## C-54: Traegt die Einstufung?
+
+`[cmd]` `nutrition.nutrient_defs.display_tier` ist fachlich brauchbar als
+Anzeigeordnung, aber nicht als Ersatz fuer `daily_summary`. Gemessen am
+2026-08-16 gegen den laufenden Container:
+
+| Stufe | Anzahl | Aussage |
+|---:|---:|---|
+| 1 | 31 | Traegt fuer Haupt- und Nebenmakros plus die wichtigsten Mikros. Enthalten sind Energie, Protein, Fett, Kohlenhydrate, Ballaststoffe, Zucker, gesaettigte Fettsaeuren, Salz, Wasser und zentrale Vitamine/Mineralstoffe. |
+| 2 | 47 | Traegt fuer nachrangige, aber fachlich relevante Detailwerte. Hier liegen `F18:2CN6`, `F18:3CN3` und `LEU`; sie gehoeren unter die Hauptwerte, nicht in die Restliste. |
+| 3 | 60 | Traegt als Rest-/Detailstufe. Kein Stufe-3-Wert steht in `daily_summary`. |
+
+`[cmd]` Die 31 Stufe-1-Codes sind:
+
+`ALC`, `CA`, `CHO`, `CHORL`, `ENERCC`, `ENERCJ`, `FASAT`, `FAT`,
+`FE`, `FIBT`, `FOL`, `ID`, `K`, `MG`, `NA`, `NACL`, `NIA`, `P`,
+`PROT625`, `RIBF`, `SUGAR`, `THIA`, `VITA`, `VITB12`, `VITB6`,
+`VITC`, `VITD`, `VITE`, `VITK`, `WATER`, `ZN`.
+
+`[cmd]` `daily_summary` fuehrt nach C-53 35 Naehrstoffcodes. Davon sind
+29 in Stufe 1 und 6 in Stufe 2; kein Wert ist Stufe 3. Umgekehrt fehlen
+aus Stufe 1 nur `ENERCJ` und `ALC` in `daily_summary`. Das ist kein
+Gegenbeleg gegen `display_tier`: `ENERCJ` ist dieselbe Energie in einer
+zweiten Einheit, `ALC` ist ein Makrobestandteil, aber kein Ring- oder
+Standardwert der bisherigen Tagesbilanz.
+
+### Woher die Anzeige die Stufe bekommt
+
+`[cmd]` `daily_reference_assessment` las `nutrient_defs` schon vor C-54
+fuer Name, Einheit und Sortierung (`ORDER BY nd.display_tier,
+nd.sort_index`). C-54 fuehrt deshalb `nutrient_display_tier` dort mit.
+Das ist die passende Schnittstelle: Die Stufe gehoert zum Naehrstoff,
+nicht zum Tag. `daily_summary` bleibt bei 74 Spalten und bekommt keine
+Stufenspalten.
+
+`[cmd]` Ein Aufruf von `daily_reference_assessment` liefert damit je
+Naehrstoff Wert und Stufe. Beispiel auf den C-82-Testdaten:
+
+| Code | Stufe | Wertstatus |
+|---|---:|---|
+| `ENERCC` | 1 | `complete` |
+| `FIBT` | 1 | `complete` |
+| `LEU` | 2 | `complete` |
+| `F18:2CN6` | 2 | `energy_share` |
+| `F18:3CN3` | 2 | `energy_share` |
+
+### Die zwei offenen Fettsaeure-Faelle
+
+`[cmd]` Linolsaeure und Alpha-Linolensaeure haben Tageswerte in
+`daily_summary` und erscheinen in `daily_reference_assessment` mit
+`nutrient_display_tier = 2`, aber weiterhin ohne `reference_pct`. Das ist
+absichtlich unveraendert: `[read]` GO-00 nahm `E%` aus der
+Naehrstoffbewertung heraus.
+
+`[cmd]` Der Nenner fuer einen Prozentwert liegt nicht in
+`nutrient_reference_values`, sondern seit C-52 in
+`goals.nutrition_targets`: Zielwerte in Gramm, aus dem Kalorienziel
+abgeleitet. Wenn die Oberflaeche fuer `F18:2CN6` und `F18:3CN3` einen
+Ring oder Prozentwert zeigen soll, muss sie den Nenner aus Goals nehmen.
+`daily_reference_assessment` bleibt dafuer die falsche Stelle, solange
+Tom GO-00 nicht zuruecknimmt.
+
+### Nachweis C-54
+
+`[cmd]` Kettenlauf ueber `kette-ausfuehren.ts` auf
+`lumeos_c54_display_tier`: `KETTE OK: 36,0s`, `SCHEMA VOLLSTAENDIG`.
+
+`[cmd]` C-82-Testdaten auf derselben Wegwerf-Datenbank:
+`testdaten-pruefen.ts` meldet 3 Nutzer, 512 Mahlzeiten, 1.560 Positionen
+und laeuft durch. Die Szenariotage halten.
+
+`[cmd]` Beispielaufruf auf der Wegwerf-Datenbank fuer Tom Miller am
+2026-08-16:
+
+| Code | Stufe | Wert | Status | Prozent |
+|---|---:|---:|---|---:|
+| `ENERCC` | 1 | 2371,95000 | `complete` | |
+| `FIBT` | 1 | 38,59640 | `complete` | 154,4 |
+| `F18:2CN6` | 2 | 8,22982 | `energy_share` | |
+| `F18:3CN3` | 2 | 1,38572 | `energy_share` | |
+| `LEU` | 2 | 13,50262 | `complete` | 407,3 |
+
+`[cmd]` Live eingespielt am 2026-08-16: `daily_reference_assessment`
+liefert in der Signatur `nutrient_display_tier integer`, und
+`schema-vollstaendigkeit-pruefen.ts` gegen `postgres` endet mit
+`SCHEMA VOLLSTAENDIG`.
+
+`[cmd]` `testdaten-pruefen.ts` gegen die Live-Datenbank endet dagegen
+mit Exit 1, weil dort aktuell 0 Testnutzer, 0 Mahlzeiten und 0
+Positionen liegen. Das ist kein C-54-Fehler; der Szenario-Nachweis wurde
+gegen die Wegwerf-Datenbank mit eingespielten C-82-Daten gefuehrt.
