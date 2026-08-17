@@ -224,3 +224,4 @@ backup/_*.py
 # Toms Design-Auswertung. Eigenes Material, sehr lange Pfade -- bei
 # rekursiven Suchen ausschliessen.
 docs/design-system-analysis/
+.gstack/
