@@ -30,4 +30,10 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+// A-14: next-intl. Der Pfad zeigt auf die Anfragekonfiguration; ohne
+// ihn sucht das Plugin unter `./i18n/request.ts` relativ zur Wurzel.
+// [read] KEIN Routing je Sprache — die Sprache kommt aus einem Cookie,
+// die Adresse bleibt ohne Praefix. Begruendung: docs/ssot/88-i18n.md.
+const withNextIntl = require('next-intl/plugin')('./src/i18n/request.ts')
+
+module.exports = withNextIntl(nextConfig)

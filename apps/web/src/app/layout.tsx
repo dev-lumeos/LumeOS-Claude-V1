@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
 import './globals.css'
 import '../lib/dates'
 import { AppShell } from '../components/shell/app-shell'
@@ -11,6 +13,7 @@ import {
   isThemeId,
   isThemeMode,
 } from '../styles/themes/registry'
+import { SPRACH_COOKIE, STANDARD_SPRACHE, istSprache } from '../i18n/sprachen'
 
 export const metadata: Metadata = {
   title: 'LumeOS',
@@ -22,7 +25,7 @@ export const metadata: Metadata = {
 // serverseitig gerendertes data-mode) gewinnt, dann tut das Skript nichts.
 const MODE_BOOTSTRAP = `(function(){try{var h=document.documentElement;if(!h.getAttribute('data-mode')){h.setAttribute('data-mode',window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');}}catch(e){}})();`
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode
@@ -36,13 +39,23 @@ export default function RootLayout({
   const theme = isThemeId(themeCookie) ? themeCookie : DEFAULT_THEME_ID
   const mode = isThemeMode(modeCookie) ? modeCookie : undefined
 
+  // A-14: dieselbe Herkunft wie Theme und Modus — ein Cookie, das der
+  // Server beim ersten Rendern schon kennt. `lang` folgt der Wahl:
+  // davon haengen Datumsfelder, Silbentrennung und Vorlesehilfen ab.
+  const sprache = istSprache(store.get(SPRACH_COOKIE)?.value)
+    ? (store.get(SPRACH_COOKIE)!.value as string)
+    : STANDARD_SPRACHE
+  const nachrichten = await getMessages()
+
   return (
-    <html lang="de" data-theme={theme} data-mode={mode}>
+    <html lang={sprache} data-theme={theme} data-mode={mode}>
       <body>
         <script dangerouslySetInnerHTML={{ __html: MODE_BOOTSTRAP }} />
-        <QueryProvider>
-          <AppShell>{children}</AppShell>
-        </QueryProvider>
+        <NextIntlClientProvider messages={nachrichten} locale={sprache}>
+          <QueryProvider>
+            <AppShell>{children}</AppShell>
+          </QueryProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )
