@@ -1507,9 +1507,26 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `07:42 Breakfast`, `10:14 Snack`, `13:08 Lunch` — **die Spalte steht
   in der Umsetzung an ihrer Stelle und zeigt `—`.**
 
-  **Zu entscheiden:** Zeitpunkt der Erfassung oder des Essens?
-  `[Wahrscheinlich]` Letzteres — wer abends nachtraegt, meint nicht
-  22 Uhr. Dann braucht es eine Eingabe, keinen Zeitstempel.
+  **Entschieden, Tom 2026-08-17:** *„Aktuelle Zeit als Vorgabe,
+  editierbar. Und fuer den Nachtragefall (erkennen wir ja) eine Warnung
+  wie: bitte passen Sie die Einnahmezeit an. Das ist wichtig, denn wir
+  haben zeitliche Darstellungen."*
+
+  **Es ist der Zeitpunkt des Essens, nicht der Erfassung.**
+
+  | | |
+  |---|---|
+  | Vorgabe | die aktuelle Uhrzeit |
+  | Aenderbar | ja, als Eingabe |
+  | Nachtragefall | **das erfasste Datum ist nicht heute** — dann ist die aktuelle Uhrzeit sinnlos und ein Hinweis erscheint |
+
+  `[cmd]` Der Nachtragefall ist eindeutig erkennbar: `entry_date`
+  gegen das heutige Datum. **Kein Raten, keine Schwelle.**
+
+  **Warum es zaehlt:** `[cmd]` Die Designvorlage baut mehrere Ansichten
+  darauf — `Tagesablauf 06:30–22:00`, `Pre-workout window · 17:30
+  session` mit `Eat by 16:00`, und die Mahlzeitenkarten mit Uhrzeit.
+  **Ohne Zeit gibt es keine davon.**
 
 
 - [~] **GO-01 bis GO-17: Goals** (neu 2026-08-15). **Block A zu vier
