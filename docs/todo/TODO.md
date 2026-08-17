@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `9719cc4` auf `dev`.
+**Stand:** 2026-08-17, Anker `434c1f0` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 61 offen, 3 in Arbeit.
+`[cmd]` 62 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -196,6 +196,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-25** | Training an echte Daten anschliessen |  |
 | **G-27** | `v2-rec-grid-1135` und drei weitere Raster |  |
 | **G-30** | Recovery an die Check-ins anschliessen |  |
+| **GO-09** | Zieluebersicht in `/v2/goals` |  |
 
 ---
 
@@ -1888,3 +1889,22 @@ Umsetzen angepasst werden.
   eine Kennzahl daraus rechnen.
 
   **Angebunden heisst: Marke weg.** Alles andere behaelt sie.
+
+- [ ] **GO-09: Zieluebersicht in `/v2/goals`** (neu 2026-08-17). Folgt
+  auf GO-07.
+
+  `[cmd]` Seit `111` gibt es `goals.user_goals` und `goal_phases` mit 3
+  Zielen und 3 Phasen live, dazu `nutrition_targets` aus Block A.
+
+  `[cmd]` **Ein Claude Code baut gerade `/v2/goals` als Mockup** (G-28).
+  Danach ist dies der Anschluss — **lesend, wie G-03 bei Nutrition.**
+
+  `[read]` Aus dem Plan: *„Goals ist der Massstab, an dem Buddy misst —
+  keine eigenstaendige Dateneingabe."* **Die Uebersicht zeigt, sie
+  erfasst nicht.**
+
+  **Was schon rechnet:** `[cmd]` `berechne_zielwerte` liefert fuer Toms
+  Profil 2.977,8 kcal, 156,8 g Protein, 3.400 ml Wasser — und
+  `zielwerte_am` gibt sie zum Stichtag aus.
+
+  **Angebunden heisst: Marke weg.**

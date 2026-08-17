@@ -4339,3 +4339,39 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `<Icon name="arr_r"/>`, ein Tippfehler fuer `arrow_right`. **In der
   Vorlage zeichnet die Stelle nichts.** Hier steht der gemeinte Pfeil —
   dieselbe Entscheidung wie in G-20.
+
+- [x] **GO-06 + GO-07: Zielvokabular, Ziele und Phasen** (erledigt
+  2026-08-17).
+
+  `[cmd]` Kettenschritt `111`, **50 Schritte dokumentiert.**
+  `goals.user_goals` und `goals.goal_phases` — damit hat `goals` drei
+  Tabellen.
+
+  ### GO-06: die Entscheidung, die alles blockierte
+
+  `[read]` Widerspruch W-3 aus dem Plan: **vier Zielvokabulare ohne
+  Abbildung** — `nutrition_goal` mit 6 Werten, Phasenmodelle mit 9, eine
+  dritte Stelle mit 12, eine vierte mit `lose`/`maintain`/`gain`.
+
+  `[cmd]` Aufgeloest als **Datendatei**, nicht als Code:
+  `daten/zielvokabular.json`. **Sie nennt ihre vier Quellen im Kopf** —
+  `090_profile.sql`, `PHASE_MODELS.md`, `DATABASE.md` und das
+  Vorgaengerrepo — und den Anlass: *„vier Zielvokabulare aufeinander
+  abbilden, ohne offene Begriffe still zu fuellen."*
+
+  `[read]` Dieselbe Haltung wie bei `health` in GO-02: **was keine
+  Entsprechung hat, wird markiert, nicht geraten.**
+
+  Dazu `daten/zielphasen-parameter.json` (GO-08 vorgezogen).
+
+  ### GO-07: die Tabellen
+
+  `[cmd]` **Live: 3 Ziele, 3 Phasen.** Zeilenschutz beidseitig belegt —
+  Tom sieht seine, Sarah keine, Fremd-Insert scheitert.
+
+  `[cmd]` **Das Gueltigkeitsdatum traegt, an drei Stichtagen belegt:**
+  vor dem ersten `gueltig_ab` **keine Phase**, danach `maintenance`,
+  dann `lean_bulk`. **Nicht die aelteste als Naeherung** — dieselbe
+  Regel wie bei `nutrition_targets` in GO-03.
+
+  `[cmd]` `pnpm gate` gruen, 8/8.
