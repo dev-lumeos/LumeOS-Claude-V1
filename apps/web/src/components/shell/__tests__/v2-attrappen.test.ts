@@ -28,6 +28,8 @@ const BAUM = path.join(process.cwd(), 'src/app/v2/nutrition/nutrient-baum.ts')
 const TRAINING = path.join(process.cwd(), 'src/app/v2/training/ansicht.tsx')
 const TRAINING_SPEC = path.join(process.cwd(), 'src/app/v2/training/tabs-spec.tsx')
 const TRAINING_HR = path.join(process.cwd(), 'src/app/v2/training/tabs-offline-hr.tsx')
+const RECOVERY = path.join(process.cwd(), 'src/app/v2/recovery/ansicht.tsx')
+const RECOVERY_MOTOR = path.join(process.cwd(), 'src/app/v2/recovery/motor.ts')
 
 /**
  * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) —
@@ -177,6 +179,97 @@ test('die Formeln der Spec-Vorlage sind uebernommen, nicht erfunden', () => {
   // Feedback loop, module-training-spec.jsx:195-196.
   assert.ok(/l\.pump >= 2\.5 && l\.sore <= 1\.5/.test(quelle), 'MAV-Regel fehlt')
   assert.ok(/l\.sore >= 2\.5 && l\.pump <= 1\.5/.test(quelle), 'MRV-Regel fehlt')
+})
+
+/**
+ * Die neun Tabs der Vorlage (theme-v1/module-recovery-v2.jsx:32-42) —
+ * in dieser Reihenfolge.
+ *
+ * `[cmd]` Uebernommen ist `-v2.jsx`, NICHT `module-recovery.jsx`:
+ * `app.jsx:122` mountet `RecoveryModuleV2`, wenn es vorliegt, und der
+ * alte Rahmen ist nur der Notnagel. Der alte fuehrt sieben andere Tabs
+ * (Today, Sleep, Biometrics, Protocols, Body map, Stress, Insights).
+ */
+const VORLAGE_RECOVERY_TABS = [
+  'Today', 'Check-in', 'Muscle map', 'HRV', 'Sleep',
+  'Modalities', 'Overtraining', 'Protocols', 'Stress',
+]
+
+test('die neun Tabs der Vorlage stehen im Recovery-Modul', () => {
+  const quelle = fs.readFileSync(RECOVERY, 'utf8')
+  for (const tab of VORLAGE_RECOVERY_TABS) {
+    assert.ok(quelle.includes(`'${tab}'`),
+      `Der Tab "${tab}" fehlt. Die Vorlage (-v2.jsx) fuehrt neun.`)
+  }
+})
+
+test('das Recovery-Modul kennzeichnet jede Kachel', () => {
+  // Kein Schema heisst: jede Kachel traegt die Marke. Wer eine
+  // anbindet, entfernt `attrappe` und zaehlt die Erwartung herunter.
+  const dateien: Array<[string, number]> = [
+    [RECOVERY, 5],
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 4],
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 10],
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 17],
+  ]
+  for (const [datei, erwartet] of dateien) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
+    const markiert = mitGrund + ohneGrund
+    assert.equal(markiert, erwartet,
+      `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
+      'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+test('die Koerperkarte fuehrt alle 18 Muskelgruppen der Vorlage', () => {
+  // [cmd] module-recovery-engine.jsx:5-10. Wer die Liste kuerzt, laesst
+  // Flaechen der Figur ungefaerbt — das faellt am Bildschirm nicht auf.
+  const quelle = fs.readFileSync(RECOVERY_MOTOR, 'utf8')
+  for (const m of ['trapezius', 'upper_back', 'lower_back', 'chest',
+                   'biceps', 'triceps', 'forearm', 'front_deltoids', 'back_deltoids',
+                   'abs', 'obliques', 'adductor', 'hamstring',
+                   'quadriceps', 'abductors', 'calves', 'gluteal', 'neck']) {
+    assert.ok(quelle.includes(`'${m}'`), `Die Muskelgruppe "${m}" fehlt.`)
+  }
+  // Und jede braucht eine SVG-Geometrie, sonst bleibt sie unsichtbar.
+  const pfade = (quelle.match(/^ {2}\w+: \{ view: '(front|back)'/gm) ?? []).length
+  assert.equal(pfade, 18, `MUSCLE_PATHS hat ${pfade} Eintraege, die Vorlage 18.`)
+})
+
+test('die Formeln der Recovery-Vorlage sind uebernommen, nicht erfunden', () => {
+  // [read] Dieselbe Regel wie beim Nutrition score und beim Training
+  // score: die Gewichtung steht in der Vorlage.
+  const q = fs.readFileSync(RECOVERY_MOTOR, 'utf8')
+  // Schlafwert, wearable-Pfad — module-recovery-engine.jsx:261.
+  assert.ok(/eff \* 0\.4 \+ dur \* 0\.4 \+ deep \* 0\.2/.test(q), 'Schlafgewichtung 0.4/0.4/0.2 fehlt')
+  // Schlafwert, subjektiver Pfad — :265.
+  assert.ok(/q \* 0\.6 \+ d \* 0\.4/.test(q), 'Subjektive Schlafgewichtung 0.6/0.4 fehlt')
+  // HRV z-Wert — :230-231.
+  assert.ok(/70 \+ z \* 15/.test(q), 'HRV-Ankerformel 70 + z × 15 fehlt')
+  // Die vier Modifikatoren der Muskelerholung — :119-122.
+  assert.ok(/s <= 6 \? 1\.10/.test(q), 'volumeMod fehlt')
+  assert.ok(/q >= 8\.5 \? 1\.15/.test(q), 'sleepMod fehlt')
+  assert.ok(/v === 0 \? 1\.1/.test(q), 'sorenessMod fehlt')
+  // Uebertraining: die Schwere haengt an der Anzahl — :344.
+  assert.ok(/n >= 7 \? 'critical' : n >= 5 \? 'high' : n >= 3 \? 'moderate'/.test(q),
+    'Schwellen der Uebertrainings-Schwere fehlen')
+  // Modalitaeten-Deckel — :187.
+  assert.ok(/MAX_DAILY_BONUS = 5\.0/.test(q), 'Bonusdeckel 5.0 fehlt')
+})
+
+test('der Erholungswert kennt beide Modi mit den Gewichten der Vorlage', () => {
+  // [cmd] module-recovery-engine.jsx:283-303. `manual` gewichtet
+  // Schlafqualitaet mit 30 und kennt kein HRV; `hrv` nimmt 25 fuer HRV.
+  // Beide Summen ergeben 100.
+  const q = fs.readFileSync(RECOVERY_MOTOR, 'utf8')
+  assert.ok(/w: 30, val: \(c\.sleep_quality \/ 10\) \* 30/.test(q),
+    'manual-Modus: Schlafqualitaet mit Gewicht 30 fehlt')
+  assert.ok(/w: 25, val: \(hrv\.score \/ 100\) \* 25/.test(q),
+    'hrv-Modus: HRV mit Gewicht 25 fehlt')
+  assert.ok(/MOOD_MULTIPLIER\[c\.mood\] \* 5/.test(q),
+    'manual-Modus: Stimmung mit Gewicht 5 fehlt')
 })
 
 test('der Naehrstoffbaum ist vollstaendig uebernommen', () => {

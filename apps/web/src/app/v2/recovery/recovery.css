@@ -1,0 +1,229 @@
+/* Die Rasterklassen des Recovery-Moduls.
+ *
+ * WARUM HIER UND NICHT IN v2.css:
+ * `[read]` Der Auftrag G-21: „packages/ui/ nicht anfassen — fehlt eine
+ * Klasse oder ein Symbol: melden. Mach es genauso" wie bei Training.
+ * Diese Datei ist die Meldung in ausfuehrbarer Form: sie fuehrt genau
+ * die Raster, die die Vorlage als `style={{gridTemplateColumns: …}}`
+ * inline mitbringt und die es in v2.css nicht gibt.
+ *
+ * `[cmd]` GEPRUEFT: die Bausteine reichen alle — v2-card, v2-pill,
+ * v2-btn(-sm/-ghost/-primary), v2-tbl, v2-modal*, v2-row*, v2-eyebrow,
+ * v2-num, v2-mono, v2-dim, v2-muted, v2-divider, v2-col-gap,
+ * v2-row-gap, v2-grid, v2-g-cols-2/3/4, v2-card-tight, v2-icon-btn,
+ * v2-dot, v2-spacer. Auch die SYMBOLE reichen: moon, brain, droplet,
+ * camera, recovery, flame, alert, edit, plus, check, play, x,
+ * chevron_right, chevron_down, trend_up, zap, calendar, training,
+ * arrow_right — alle 19 liegen in icons.tsx. **Anders als bei Training
+ * fehlt diesmal kein Symbol.**
+ *
+ * `[cmd]` WAEHREND DIESES AUFTRAGS hat ein anderer Agent die geteilten
+ * Raster nach v2.css geholt und `app/v2/training/training.css`
+ * geloescht. Zentral verfuegbar sind seither `v2-grid-14` (1.4fr/1fr),
+ * `v2-grid-15` (1.5fr/1fr), `v2-grid-21`, `v2-span-2` und
+ * `v2-tbl-wrap` — alle mit dem 1100px-Haltepunkt. **Dieses Modul
+ * benutzt sie**, statt sie zu wiederholen: `v2-grid-15` fuer Today,
+ * `v2-grid-14` fuer HRV, Sleep, Overtraining und Stress. Hier stehen
+ * nur noch die Raster, die es sonst nirgends gibt.
+ *
+ * NICHT benutzt wird `v2-grid v2-g-cols-2` als Zweispalter: das Paar
+ * setzt nur die Spalten (v2.css:470) und bricht auf schmalen Schirmen
+ * NICHT um. Wo zwei Kacheln mit Tabellen nebeneinander stehen, braucht
+ * es den Haltepunkt — dafuer `v2-rec-grid-11`.
+ *
+ * `[annahme]` Wandern auch diese vier spaeter nach v2.css, faellt die
+ * Datei ganz weg.
+ *
+ * DIE HALTEPUNKTE: `[cmd]` Der Entwurf hat null @media-Regeln. 1100px
+ * ist derselbe Haltepunkt, den v2.css fuer die geteilten Raster setzt.
+ */
+
+/* --- Zweispalter 1.3fr / 1fr ------------------------------------
+ * [cmd] module-recovery-v2.jsx:257 (Check-in), :829 (Protocols). */
+.v2-rec-grid-13 {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+/* --- Zweispalter 1fr / 1.35fr -----------------------------------
+ * [cmd] module-recovery-v2.jsx:389 (Muscle map). Die Karte links ist
+ * schmaler als die Tabelle rechts — umgekehrt zu allen anderen. */
+.v2-rec-grid-1135 {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 14px;
+  align-items: start;
+}
+
+/* --- Zweispalter 1fr / 1fr --------------------------------------
+ * [cmd] module-recovery-v2.jsx:675 (Modalities). */
+.v2-rec-grid-11 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .v2-rec-grid-13,
+  .v2-rec-grid-1135,
+  .v2-rec-grid-11 { grid-template-columns: 1fr; }
+}
+
+/* --- Die Koerperkarte: Vorder- und Rueckansicht -----------------
+ * [cmd] module-recovery-v2.jsx:96 — zwei Figuren nebeneinander. Unter
+ * 420px werden sie so schmal, dass die Muskelflaechen nicht mehr
+ * treffbar sind; dann untereinander. */
+.v2-rec-bodymap {
+  display: flex;
+  gap: 16px;
+}
+@media (max-width: 420px) {
+  .v2-rec-bodymap { flex-direction: column; gap: 8px; }
+}
+
+/* --- Legende unter der Koerperkarte ----------------------------- */
+.v2-rec-legende {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 10px;
+  font-size: 10px;
+  color: var(--fg-muted);
+  flex-wrap: wrap;
+}
+
+/* --- Ring + Text nebeneinander ----------------------------------
+ * [cmd] module-recovery-v2.jsx:453, :549; modals2:92. */
+.v2-rec-ring-zeile {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+@media (max-width: 560px) {
+  .v2-rec-ring-zeile { flex-wrap: wrap; gap: 12px; }
+}
+
+/* --- Kopf der Score-Kachel (Today) ------------------------------
+ * [cmd] module-recovery-v2.jsx:111 — Ring 140px plus Aufschluesselung. */
+.v2-rec-score-kopf {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+@media (max-width: 620px) {
+  .v2-rec-score-kopf { flex-wrap: wrap; gap: 14px; }
+}
+
+/* --- Eine Zeile der Score-Zusammensetzung -----------------------
+ * [cmd] module-recovery-v2.jsx:144. */
+.v2-rec-term {
+  display: grid;
+  grid-template-columns: 130px 90px 1fr 52px;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+}
+@media (max-width: 700px) {
+  .v2-rec-term { grid-template-columns: 96px 1fr 46px; }
+  /* Der Rohwert faellt weg — er wiederholt, was der Balken zeigt. */
+  .v2-rec-term > :nth-child(2) { display: none; }
+}
+
+/* --- Die Stimmungsknoepfe (Check-in) ----------------------------
+ * [cmd] module-recovery-v2.jsx:288 — fuenf nebeneinander. */
+.v2-rec-mood {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+@media (max-width: 560px) {
+  .v2-rec-mood { flex-wrap: wrap; }
+  .v2-rec-mood > * { flex: 1 1 30%; }
+}
+
+/* --- Eine Schlafphasen-Zeile ------------------------------------
+ * [cmd] module-recovery-v2.jsx:564. */
+.v2-rec-phase {
+  display: grid;
+  grid-template-columns: 52px 1fr 64px 40px;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+}
+
+/* --- Die Formelkaesten ------------------------------------------
+ * [cmd] module-recovery-v2.jsx:471, :578; modals2:100. Sie zeigen die
+ * Herleitung als einzeiligen Code — auf schmalen Schirmen muessen sie
+ * scrollen duerfen, sonst schieben sie die Seite auf. */
+.v2-rec-formel {
+  font-size: 10px;
+  line-height: 1.7;
+  padding: 10px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+/* --- Wirksamkeit einer Modalitaet -------------------------------
+ * [cmd] module-recovery-v2.jsx:717. */
+.v2-rec-effekt {
+  display: grid;
+  grid-template-columns: 1fr 1fr 76px;
+  gap: 10px;
+  align-items: center;
+}
+@media (max-width: 620px) {
+  .v2-rec-effekt { grid-template-columns: 1fr 1fr; }
+  .v2-rec-effekt > :last-child { grid-column: 1 / -1; text-align: left; }
+}
+
+/* --- Die elf Modalitaeten zur Auswahl ---------------------------
+ * [cmd] module-recovery-modals2.jsx:122 — vier Spalten. */
+.v2-rec-modalitaeten {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 14px;
+}
+@media (max-width: 560px) {
+  .v2-rec-modalitaeten { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* --- Eine Zeile der Muskel-Rechnung -----------------------------
+ * [cmd] module-recovery-modals2.jsx:202. */
+.v2-rec-rechnung {
+  display: grid;
+  grid-template-columns: 128px 88px 62px 1fr;
+  gap: 9px;
+  align-items: center;
+  font-size: 11px;
+}
+@media (max-width: 620px) {
+  .v2-rec-rechnung { grid-template-columns: 110px 1fr 56px; }
+  /* Die Erlaeuterung faellt weg, der Faktor bleibt. */
+  .v2-rec-rechnung > :last-child { display: none; }
+}
+
+/* --- Eine Zeile der Stressquellen -------------------------------
+ * [cmd] module-crossmodule-rest.jsx:59. */
+.v2-rec-stress-zeile {
+  display: grid;
+  grid-template-columns: 130px 1fr 40px;
+  gap: 10px;
+  align-items: center;
+}
+@media (max-width: 560px) {
+  .v2-rec-stress-zeile { grid-template-columns: 96px 1fr 34px; }
+}
+
+/* --- Die Skalenknoepfe 1-10 -------------------------------------
+ * Sie tragen ihre Farbe inline aus der Vorlage; die Klasse setzt nur,
+ * was ein `button` sonst mitbringt. */
+.v2-rec-skala-btn {
+  font: inherit;
+}
