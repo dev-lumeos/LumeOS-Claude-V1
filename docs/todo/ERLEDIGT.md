@@ -4663,3 +4663,56 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` `v2-attrappen.test.ts` haelt seither fest, dass **keine Kachel
   still verschwindet.**
+
+- [x] **GO-14: Welche Koerperfettformel gilt** (neu 2026-08-17).
+  **Entscheidung fuer Tom**, Befund aus GO-10.
+
+  `[cmd]` Das Vorgaengerrepo hat **51 Fundstellen zu Koerperfett** —
+  Jackson-Pollock, Durnin, Navy, FFMI — verteilt auf
+  `BodyCompositionView.tsx` (13 KB), `goal-measurements.ts` (18 KB) und
+  `useBodyComposition.ts`.
+
+  **Die Messwerte liegen jetzt** (`goals.body_circumferences`, 7 Zeilen),
+  **die Formel fehlt.**
+
+  `[read]` **Das ist keine Umsetzungsfrage.** Die Verfahren
+  unterscheiden sich in Messstellen und Genauigkeit: Navy braucht
+  Umfaenge, Jackson-Pollock Hautfalten, Durnin vier Messpunkte. **Was
+  gemessen werden kann, entscheidet, welche Formel ueberhaupt in Frage
+  kommt.**
+
+  **Vorzulegen:** welche Verfahren mit den erhobenen Umfaengen rechenbar
+  sind, was jedes braucht, und wie genau es ist.
+
+  `[cmd]` **Erledigt 2026-08-17**, Commit `1dd6ff2`.
+  `goals.body_composition_navy(uuid, date)` — KFA, Spanne, FFMI,
+  Herkunft und Vorbehalt in einer Funktion.
+
+  `[cmd]` **Live fuer `tom.seed`, 2026-09-13:** KFA **10,31 %**, Spanne
+  **6,81–13,81**, FFMI 21,97, Lean Mass 76,24 kg, `source =
+  derived_navy`, `input_source = manual`.
+
+  **Der Vorbehalt steht am Wert**, nicht in der Dokumentation:
+  *„Umfangsverfahren: Standardfehler ca. ±3,5 Prozentpunkte."*
+
+  `[cmd]` **Ohne Umfaenge kein Wert:** Sarah liefert **0 Zeilen**, keinen
+  Schaetzwert. `[read]` Wie `missing_body_weight` beim Wasserziel.
+
+  `[cmd]` **Der Verlauf traegt:** 11,82 % am 02.08. auf 10,31 % am
+  13.09., **1,51 Prozentpunkte** — eine erkennbare Tendenz, der Seed ist
+  nicht zu flach.
+
+  ### Die Herkunft ist mitgebaut
+
+  **Tom, 2026-08-17:** *„Als Ausbaustufe bedenken: wir werden Anbindungen
+  fuer alle Gadgets anbieten."*
+
+  `[cmd]` `body_measurements` und `body_circumferences` tragen jetzt
+  Herkunftsspalten, die Testdaten sind als `manual` markiert, **und der
+  berechnete Wert weist sich als `derived_navy` aus.**
+
+  `[read]` **Der Grund:** Eine BIA-Waage und die Navy-Formel liefern fuer
+  denselben Menschen **8 bis 10 Prozentpunkte Unterschied** — ein
+  Verlauf aus gemischten Quellen zeigt Spruenge, die niemand erlebt hat.
+  **Nachtraeglich waere die Spalte billig, die tausend Zeilen ohne
+  Herkunft nicht.**
