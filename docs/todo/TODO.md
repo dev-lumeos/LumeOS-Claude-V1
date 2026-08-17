@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `8fe025e` auf `dev`.
+**Stand:** 2026-08-17, Anker `4688de3` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 53 offen, 5 in Arbeit.
+`[cmd]` 55 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -187,6 +187,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-06** | Die übrigen Module nach Datenlage |  |
 | **G-07** | Umschalten |  |
 | **G-10** | `btn-accent` auf Seiten ohne Modulakzent |  |
+| **G-11a** | Preferences — die Oberflaeche |  |
+| **C-62** | `hard` auf Allergene ist kein Sicherheitsversprechen |  |
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-12** | Die Suche in die Erfassung einbinden |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
@@ -1723,6 +1725,54 @@ Umsetzen angepasst werden.
   `--acc` liest? `[annahme]` Ein Rückfallwert im Token wäre die
   einfachste Lösung — dann ist nichts unsichtbar, auch wenn die Seite
   kein Modul ist.
+
+- [ ] **G-11a: Preferences — die Oberflaeche** (neu 2026-08-17).
+  Datenseite erledigt.
+
+  `[cmd]` **Erledigt 2026-08-17**, Kettenschritt `074`:
+  `nutrition.food_preferences_read` und `food_preferences_write`, beide
+  live. Testdaten: Tom hat 1 Praeferenzzeile und 3 Eintraege — **`hard`
+  Nuesse, `soft` Kekse, `boost` Weisser Reis.**
+
+  `[cmd]` Zeilenschutz in beide Richtungen belegt: eigene Zeile lesen 1,
+  fremde 0; eigener Schreibzugriff ok, fremder blockiert mit `42501`.
+
+  `[cmd]` **`food_search` blieb unveraendert** — wie beauftragt. Wo die
+  vier Stufen ansetzen muessten, steht im Bericht.
+
+  **Was offen ist:** die Oberflaeche im Tab `Preferences`. `[cmd]` Die
+  Designvorlage hat dafuer **keinen Inhalt** — nur den
+  Navigationseintrag. `[cmd]` Das Vorgaengerrepo hat
+  `FoodPreferences.tsx` mit **48 KB**.
+
+  **Und die Wirkung auf die Suche ist ein eigener Schritt** — sie
+  greift erst, wenn `food_search` die Praeferenzen liest.
+
+- [ ] **C-62: `hard` auf Allergene ist kein Sicherheitsversprechen**
+  (neu 2026-08-17). Befund aus G-11a.
+
+  `[read]` Aus dem Bericht: *„`hard` auf Allergene ist technisch ein
+  harter Ausschluss, aber fachlich kein Sicherheitsversprechen, weil
+  `contains_nuts` nur 120 von 7.140 Foods markiert. Unmarkiert heisst
+  ungeprueft, nicht nussfrei."*
+
+  `[read]` Das ist die Kehrseite der richtigen Entscheidung aus C-44:
+  Allergene wurden **umgekehrt** markiert, weil „enthaelt Nuesse"
+  belegbar ist und „enthaelt keine" nicht.
+
+  **Ein Ausschluss auf dieser Grundlage wirkt in beide Richtungen
+  falsch:** Er blendet aus, was markiert ist — und zeigt alles, was nur
+  nicht markiert wurde.
+
+  **Zu entscheiden, bevor die Oberflaeche Allergien anbietet:**
+  - Sagt die Anzeige, dass die Markierung unvollstaendig ist?
+  - Oder wird `hard` erst angeboten, wenn die Abdeckung reicht?
+  - `[cmd]` Wie viele Lebensmittel muessten markiert sein, damit es
+    traegt? **Das ist eine Kurationsfrage in der Groessenordnung der
+    Anzeigenamen.**
+
+  `[read]` Eine Allergikerin, die sich auf einen Filter verlaesst, der
+  nur 120 von 7.140 kennt, ist schlechter dran als ohne Filter.
 
 - [ ] **G-11: Die restlichen Nutrition-Tabs anbinden** (neu 2026-08-16).
   Setzt G-08 voraus.
