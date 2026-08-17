@@ -4461,3 +4461,45 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `requires`, und „8 IFBB Mandatory" ueber einer Liste mit zehn Posen.
 
   `[cmd]` 30 von 30 Tab×Breite-Kombinationen geprueft.
+
+- [x] **G-33: Supplements gegen die Vorlage nachgezogen** (erledigt
+  2026-08-17).
+
+  **Toms Befund war messbar richtig.** `[cmd]` Ein Skript liest je Tab
+  **rekursiv den Aufrufbaum ueber alle vier Vorlagendateien**:
+
+  | Tab | Vorlage | vorher | jetzt |
+  |---|---|---|---|
+  | `extended` | 8 | **0** | 8 |
+  | `compliance` | 3 | **0** | 3 |
+  | `today` / `stack` | 2 / 2 | 2 / 2 | unveraendert |
+
+  `[cmd]` **15 von 15, fehlend 0.** Die Umsetzung wuchs von 708 auf
+  1.865 Zeilen — 11 Unterkomponenten, ~530 Zeilen Vorlage.
+
+  ### Die Falle, benannt
+
+  `[read]` *„Der Tab-Rumpf ist nicht das Modul. `SuppExtended` hat in der
+  Vorlage 46 Zeilen, meine Fassung hatte 97 — **nach Zeilenzahl also
+  mehr, tatsaechlich fehlten 365 Zeilen Inhalt.**"*
+
+  **Drei Regeln daraus**, in `theme-v1-umsetzung.md` festgehalten:
+  Aufrufbaum statt Zeilenzahl · ueber **alle** Vorlagendateien
+  (`CalendarView` steht in der Modaldatei, **das erste Skript hielt sie
+  fuer undefiniert**) · eigene Zustaende sind eigene Bildschirme
+  (**`ExtendedGate` ist eine Aufklaerungsseite — ohne sie zeigt der Tab
+  sofort Hormonprotokolle**).
+
+  ### Der Tab „Database" — Entscheidung
+
+  `[cmd]` **So gelassen, wie die Vorlage es haelt:** nicht in der Leiste,
+  aber ueber den Kopfknopf erreichbar.
+
+  `[read]` **Anders als `PeriodizationFullView` bei Training** — dort
+  zeigte ein Aufruf ins Leere und wurde entfernt. *„Hier ist die
+  Komponente vollstaendig und erreichbar — eine zweite Zugangsebene, kein
+  Versehen. Die Wirkstoffdatenbank ist Nachschlagewerk, kein
+  Tagesbereich."*
+
+  `[cmd]` Zwei neue Pruefungen, beide gegengeprobt: Marken je Datei
+  (12/6/4) und alle 15 Unterkomponenten vorhanden. Gate 8/8, 209 Tests.
