@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `f825ea8` auf `dev`.
+**Stand:** 2026-08-17, Anker `c4abd94` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,20 +128,18 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 56 offen, 5 in Arbeit.
+`[cmd]` 56 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
-| **A-05** | Repo-Müll entfernen | ~ |
 | **A-06** | Design-System spezifizieren |  |
 | **A-08** | ADR Medienort |  |
 | **A-11** | Specs laufend zu SSOT konsolidieren | ~ |
-| **A-12** | Das Spec-Audit auswerten |  |
 | **A-13** | Das Konsolidierungsregister abarbeiten |  |
 | **C-63** | `locale` in `public.profiles` |  |
 | **C-64** | 942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen |  |
 | **A-15** | Sprachpflege als laufende Regel |  |
-| **B-20** | Codex-Pfadschutz wiederherstellen | ~ |
+| **B-20** | Codex-Pfadschutz wiederherstellen |  |
 | **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
 | **C-01** | Frontend-Stack-Lücke schliessen |  |
 | **C-06** | WP-05 erstes Mock-Modul echt machen |  |
@@ -198,54 +196,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## A — Struktur & SSOT (laufend)
 
-- [~] **A-05: Repo-Müll entfernen** (untracked) — **neu erhoben
-  2026-08-13 (Block 23); die Audit-Liste von 2026-08-05 war überholt.**
-  `[cmd]` **10 der 12 Bestände sind bereits weg** (`tmp/`,
-  `.wayland-core/`, `.wayland/`, `.ijfw/`, `ijfw/`, `_tmp_inventory/`,
-  `backup_system.zip`, `services.zip`, `system.zip`,
-  `.codex-governance-ui.log`). Übrig sind **zwei**, und beide bleiben —
-  mit Begründung:
-
-  **`temp/` — entschieden 2026-08-12 (Tom): `lumeosold` wird als Referenz
-  gebraucht.** Der Vorgänger enthält Ansätze und Funktionen, die in den
-  Neubau einfliessen sollen. Umgezogen nach `referenz/lumeos-2026/`, weil
-  der Name `temp` das Verzeichnis zweimal beinahe gekostet hätte:
-  in Block 15 lagen darin 13,11 GB Übungsmedien (jetzt unter `media/`),
-  in Block 23 kam heraus, dass es ein vollständiges Git-Repository ist.
-
-  `[cmd]` Nach dem Umzug unverändert: Remote
-  `github.com/dev-lumeos/lumeos-2026.git`, 27 lokale Branches,
-  **22 Stashes**, **16 nicht gepushte Commits auf `dev`** und 3 weitere
-  auf `feature/supabase-migration-v2`, letzter Commit 2026-03-24.
-  Stashes werden nie gepusht — sie existieren ausschliesslich in dieser
-  Arbeitskopie, und kein Zip enthält sie.
-
-  `referenz/README.md` hält fest, was der Ordner ist und was vor jedem
-  Aufräumen dort zu sichern wäre. `.gitignore` lässt nur diese README
-  durch; `[cmd]` Gegenprobe: `lumeos-2026` ignoriert, README sichtbar.
-
-  **Weiterhin offen, nicht dringend:** Die 19 ungepushten Commits und
-  22 Stashes sind nicht gesichert. `git push` der betroffenen Branches
-  oder ein `git bundle create … --all` würde das erledigen — Toms
-  Entscheidung, ob und wann.
-
-  `temp/` trägt jetzt noch `antigravity-awesome-skills-main/`
-  (171 MB, 13.160 Dateien) — `[cmd]` ein heruntergeladener öffentlicher
-  Skill-Katalog ohne `.git`, jederzeit neu ladbar. Löschbar, aber auch
-  nicht im Weg.
-
-  **`nul` (99 B) — bleibt, Kuriosität.** `[cmd]` Inhalt: eine deutsche
-  Fehlermeldung von `TASKKILL` vom 2026-04-23. Eine Windows-Shell hat
-  stderr in eine Datei mit dem reservierten Gerätenamen `nul`
-  geschrieben, statt sie zu verwerfen. `[cmd]` **git stört sich nicht
-  daran**: `.gitignore:24` listet `nul`, die Datei taucht weder als
-  getrackt noch als untracked auf. Löschen bräuchte den
-  `\\?\`-Pfadpräfix; der Nutzen wäre null, das Risiko ein Fehlgriff im
-  Wurzelverzeichnis.
-
-  *Regel bleibt: jeder untracked Ordner wird vor Löschung inhaltlich
-  geprüft, nicht nur dem Namen nach — dieser Punkt ist zweimal das
-  Beispiel dafür gewesen.*
 
 - [ ] **A-06: Design-System spezifizieren** — Stand Audit 2026-08-05:
   `[cmd]` `docs/spezifikation/10-plattform/design-system/` ist **nicht mehr
@@ -310,31 +260,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   Entscheidungssammlung. Der Punkt bleibt dauerhaft in Arbeit; er wird
   nicht abgeschlossen, sondern angewandt.
 
-- [ ] **A-12: Das Spec-Audit auswerten** (neu 2026-08-16).
-
-  `[cmd]` `docs/ssot/70-spec-audit/` enthält **15 Dateien** — einen
-  Feldabgleich über alle elf Module, entstanden am 2026-08-02, Anker
-  `76c8080`. **Bisher hat ihn niemand ausgewertet**; er stand bis heute
-  nicht einmal im SSOT-Index.
-
-  Je Modul eine Akte mit dem härtesten Befund: `[read]` drei
-  konkurrierende Alt-Specs bei Admin, neun tote Übersichtsdateien bei
-  Buddy, Vorgängerrepo-Pfade bei Goals, Doppelquelle bei Dashboard.
-
-  **Der dort genannte härteste Fund ist erledigt, ohne dass es jemand
-  bemerkt hat:** `[read]` *„14 `FOR ALL`-Policies in vier Modulen mit
-  `USING`, aber ohne `WITH CHECK` — ein INSERT-Leck, das als Hausstil in
-  den Specs steht."* `[cmd]` Heute: **null solche Policies** — die
-  Trennung je Operation kam mit C-42. **Der Befund betraf die Specs,
-  nicht das Gebaute.**
-
-  `[read]` `01-feldabgleich.md` (12 KB) leistet den Abgleich für vier
-  Module vollständig, für neun nur eingestuft. **Der Rest ist
-  Folgearbeit** — und er sagt, welche Module beim Bau die meisten
-  Überraschungen bergen.
-
-  **Vor jedem neuen Modul die zugehörige Akte lesen.** `[read]` Das
-  gehört in `00-UMSETZUNGSPLAENE.md`, Schritt 1.
 
 - [ ] **A-13: Das Konsolidierungsregister abarbeiten** (neu 2026-08-16).
   Setzt A-11 fort.
@@ -406,7 +331,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## B — Entwicklungsumgebung & Absicherung
 
-- [~] **B-20: Codex-Pfadschutz wiederherstellen** (neu 2026-08-06) —
+- [ ] **B-20: Codex-Pfadschutz wiederherstellen** (neu 2026-08-06) —
   **Vorarbeit erledigt 2026-08-13 (Block 25), Einhängen bewusst NICHT
   ausgeführt.** Seit B-15 hat Codex keinen Pfadschutz; vorher einen, der
   bei jedem Aufruf am Parser scheiterte — Wirkung null, die Absicht
@@ -994,6 +919,19 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `docs/spezifikation/` steht. Kopfhinweis „Altbestand, kein Sollwert" in
   `docs/specs/`, sonst werden die Bestandszahlen wieder als Ist gelesen.
   **In Block 18 wurde nichts verschoben, gelöscht oder überführt.**
+
+  **Nachgetragen 2026-08-16:** `[cmd]` Der Bericht stand bis dahin
+  **nicht im SSOT-Index** — deshalb hat ihn niemand gelesen. Jetzt
+  eingetragen.
+
+  `[cmd]` **Der dort genannte haerteste Fund ist erledigt, ohne dass es
+  jemand bemerkt hat:** *„14 `FOR ALL`-Policies in vier Modulen mit
+  `USING`, aber ohne `WITH CHECK` — ein INSERT-Leck."* Heute: **null
+  solche Policies**, die Trennung je Operation kam mit C-42. **Der
+  Befund betraf die Specs, nicht das Gebaute.**
+
+  **Vor jedem neuen Modul die zugehoerige Modulakte lesen** — `[read]`
+  das gehoert zu Schritt 1c in `00-UMSETZUNGSPLAENE.md`.
 
 ## E — Legacy-Cloud-Instanz (LumeOS-V2)
 

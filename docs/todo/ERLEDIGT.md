@@ -193,6 +193,70 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   faellt sichtbar auf Deutsch zurueck. Die Attrappenkacheln bleiben
   englisch, wie verlangt.
 
+- [x] **A-05: Repo-Müll entfernen** (untracked) — **neu erhoben
+  2026-08-13 (Block 23); die Audit-Liste von 2026-08-05 war überholt.**
+  `[cmd]` **10 der 12 Bestände sind bereits weg** (`tmp/`,
+  `.wayland-core/`, `.wayland/`, `.ijfw/`, `ijfw/`, `_tmp_inventory/`,
+  `backup_system.zip`, `services.zip`, `system.zip`,
+  `.codex-governance-ui.log`). Übrig sind **zwei**, und beide bleiben —
+  mit Begründung:
+
+  **`temp/` — entschieden 2026-08-12 (Tom): `lumeosold` wird als Referenz
+  gebraucht.** Der Vorgänger enthält Ansätze und Funktionen, die in den
+  Neubau einfliessen sollen. Umgezogen nach `referenz/lumeos-2026/`, weil
+  der Name `temp` das Verzeichnis zweimal beinahe gekostet hätte:
+  in Block 15 lagen darin 13,11 GB Übungsmedien (jetzt unter `media/`),
+  in Block 23 kam heraus, dass es ein vollständiges Git-Repository ist.
+
+  `[cmd]` Nach dem Umzug unverändert: Remote
+  `github.com/dev-lumeos/lumeos-2026.git`, 27 lokale Branches,
+  **22 Stashes**, **16 nicht gepushte Commits auf `dev`** und 3 weitere
+  auf `feature/supabase-migration-v2`, letzter Commit 2026-03-24.
+  Stashes werden nie gepusht — sie existieren ausschliesslich in dieser
+  Arbeitskopie, und kein Zip enthält sie.
+
+  `referenz/README.md` hält fest, was der Ordner ist und was vor jedem
+  Aufräumen dort zu sichern wäre. `.gitignore` lässt nur diese README
+  durch; `[cmd]` Gegenprobe: `lumeos-2026` ignoriert, README sichtbar.
+
+  **Weiterhin offen, nicht dringend:** Die 19 ungepushten Commits und
+  22 Stashes sind nicht gesichert. `git push` der betroffenen Branches
+  oder ein `git bundle create … --all` würde das erledigen — Toms
+  Entscheidung, ob und wann.
+
+  `temp/` trägt jetzt noch `antigravity-awesome-skills-main/`
+  (171 MB, 13.160 Dateien) — `[cmd]` ein heruntergeladener öffentlicher
+  Skill-Katalog ohne `.git`, jederzeit neu ladbar. Löschbar, aber auch
+  nicht im Weg.
+
+  **`nul` (99 B) — bleibt, Kuriosität.** `[cmd]` Inhalt: eine deutsche
+  Fehlermeldung von `TASKKILL` vom 2026-04-23. Eine Windows-Shell hat
+  stderr in eine Datei mit dem reservierten Gerätenamen `nul`
+  geschrieben, statt sie zu verwerfen. `[cmd]` **git stört sich nicht
+  daran**: `.gitignore:24` listet `nul`, die Datei taucht weder als
+  getrackt noch als untracked auf. Löschen bräuchte den
+  `\\?\`-Pfadpräfix; der Nutzen wäre null, das Risiko ein Fehlgriff im
+  Wurzelverzeichnis.
+
+  *Regel bleibt: jeder untracked Ordner wird vor Löschung inhaltlich
+  geprüft, nicht nur dem Namen nach — dieser Punkt ist zweimal das
+  Beispiel dafür gewesen.*
+
+  `[cmd]` **Erledigt 2026-08-16**, Commit `e76db63`. Der Arbeitsbaum ist
+  sauber: **0 untracked, 0 modified.**
+
+  Ignoriert werden jetzt: Toms skua-Installation (`.claude/commands/`,
+  `hooks/`, `skills/`, `.skua/`, `.tickets/`, `skua.config.json`), die
+  Kettenlauf-Sicherungen (`backup/schema/*_c43_vor_kettenlauf.sql` —
+  `[cmd]` 29 an einem Tag), die Hilfsskripte des Orchestrators
+  (`backup/_*.py`) und `docs/design-system-analysis/`.
+
+  `[cmd]` **Eine Warnung steht in der Datei:** `.claude/hooks/` und
+  `.claude/skills/` enthalten beides — **74 Projekt-Skills sind bereits
+  getrackt und bleiben es**, weil `.gitignore` auf getrackte Dateien
+  nicht wirkt. Nur Neues dort wird ignoriert; ein neuer Projekt-Skill
+  braucht `git add -f`.
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
