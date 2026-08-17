@@ -117,6 +117,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `92-recovery-mockup.md` | Recovery nach der Vorlage, 36 Kacheln, **alles Attrappe** (kein Schema). **Zwei konkurrierende Rahmen — `app.jsx:122` entscheidet, welcher gilt.** Damit drei Muster für Vorlagendateien, und die Prüfung, die sie unterscheidet |
 | `94-goals-mockup.md` | Goals nach der Vorlage, 39 Kacheln, alle markiert — **obwohl fünf davon auf `goals.zielwerte_am` passen und sofort echt werden könnten.** Dreistufige Vorlagenkette; `Math.random()` der Vorlage ersetzt, weil es die Hydration bricht |
 | `95-supplements-mockup.md` | Supplements nach der Vorlage — der Rahmen und seine **sieben eigenen Tabs**, vier weitere als benannte Luecke. **227 KB Vorlage, viertes Muster: arbeitsteilig statt konkurrierend.** Mit dem, was im Vorgaengerrepo danebenliegt (acht Tabellen, 36 KB Seed, Halbwertszeit) |
+| `99-medical-mockup.md` | Medical nach der Vorlage, 21 Kacheln, **alles Attrappe** (kein Schema). **Erste gezählte Vollständigkeit: 56 von 56**, mit wiederholbarem Skript. Fünftes Muster: der Rahmen ruft seine Zulieferer als **blosse Globale** — ein `window.`-Grep findet sie nicht. Plus 457 Laborwert-Synonyme im Vorgängerrepo |
 | `47-lebensmittelsuche-stand.md` | **Der erreichte Stand** — fasst 41 bis 46 zusammen |
 | `60-legacy-cloud.md` | Was liegt wirklich in der Legacy-Cloud-Instanz? (echte Zeilenzahlen, Medienverweise, Schemakonflikt — ersetzt alle Schätzungen) |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |

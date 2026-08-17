@@ -38,6 +38,8 @@ const RECOVERY = path.join(process.cwd(), 'src/app/v2/recovery/ansicht.tsx')
 const RECOVERY_MOTOR = path.join(process.cwd(), 'src/app/v2/recovery/motor.ts')
 const GOALS = path.join(process.cwd(), 'src/app/v2/goals/ansicht.tsx')
 const GOALS_DATEN = path.join(process.cwd(), 'src/app/v2/goals/daten.ts')
+const MEDICAL = path.join(process.cwd(), 'src/app/v2/medical/ansicht.tsx')
+const MEDICAL_DATEN = path.join(process.cwd(), 'src/app/v2/medical/daten.ts')
 
 /**
  * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) —
@@ -383,6 +385,92 @@ test('Goals wuerfelt seine Verlaufsdaten nicht', () => {
     .join('\n')
   assert.ok(!/Math\.random\(\)/.test(q),
     'Math.random() in den Daten — das bricht die Hydration. Feste Pseudofolge benutzen.')
+})
+
+/**
+ * Die fuenf Tabs der Vorlage (theme-v1/module-medical-v2.jsx:33-39).
+ *
+ * `[cmd]` Uebernommen ist `-v2.jsx`: `app.jsx:124` waehlt
+ * `window.MedicalModuleV2 ? … : <MedicalModule/>`, und V2 liegt vor.
+ */
+const VORLAGE_MEDICAL_TABS = ['Dashboard', 'Biomarkers', 'Import', 'Tracking', 'Insights']
+
+test('die fuenf Tabs der Vorlage stehen im Medical-Modul', () => {
+  const quelle = fs.readFileSync(MEDICAL, 'utf8')
+  for (const tab of VORLAGE_MEDICAL_TABS) {
+    assert.ok(quelle.includes(`'${tab}'`),
+      `Der Tab "${tab}" fehlt. Die Vorlage fuehrt fuenf.`)
+  }
+})
+
+test('das Medical-Modul kennzeichnet jede Kachel', () => {
+  const dateien: Array<[string, number]> = [
+    [MEDICAL, 5],
+    [path.join(process.cwd(), 'src/app/v2/medical/tab-biomarker.tsx'), 8],
+    [path.join(process.cwd(), 'src/app/v2/medical/tab-tracking.tsx'), 8],
+  ]
+  for (const [datei, erwartet] of dateien) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
+    const markiert = mitGrund + ohneGrund
+    assert.equal(markiert, erwartet,
+      `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
+      'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+test('der Biomarker-Katalog ist vollstaendig uebernommen', () => {
+  // [cmd] module-medical-data.jsx:28-96 fuehrt 48 Marker mit LOINC.
+  // `-data.jsx` ist die erste reine Datendatei einer Modulvorlage —
+  // wer den Katalog kuerzt, verliert stumm Zeilen in der Tabelle.
+  const q = fs.readFileSync(MEDICAL_DATEN, 'utf8')
+  const marker = (q.match(/\{ id: '[a-z0-9]+', loinc: /g) ?? []).length
+  assert.equal(marker, 48, `BIOMARKERS hat ${marker} Eintraege, die Vorlage 48.`)
+  // Die fuenf Systeme und ihre Gewichte.
+  for (const s of ['liver', 'cardiovascular', 'kidney', 'hormonal', 'metabolic']) {
+    assert.ok(q.includes(`${s}:`), `Das System "${s}" fehlt.`)
+  }
+})
+
+test('die Formeln der Medical-Vorlage sind uebernommen, nicht erfunden', () => {
+  // [read] Dieselbe Regel wie bei Nutrition, Training, Recovery, Goals.
+  const q = fs.readFileSync(MEDICAL_DATEN, 'utf8')
+  // Die sechs Flaggen und ihre Punkte — module-medical-data.jsx:5.
+  assert.ok(/optimal: 100, normal: 75, low: 40, high: 40/.test(q),
+    'FLAG_SCORE fehlt oder weicht ab')
+  // Die Reihenfolge der Flaggenpruefung — :19-24. Kritisch schlaegt
+  // optimal; wer sie umstellt, bekommt andere Flaggen.
+  assert.ok(q.indexOf("return 'critical_low'") < q.indexOf("return 'optimal'"),
+    'Die Reihenfolge der Flaggenpruefung ist vertauscht')
+  // Systemgewichte — :120.
+  assert.ok(/cardiovascular: 0\.25, metabolic: 0\.25, hormonal: 0\.20/.test(q),
+    'SYSTEM_WEIGHTS fehlt oder weicht ab')
+  // Die Schwellen des Systemwerts — :141.
+  assert.ok(/avg >= 85 \? 'optimal' : avg >= 65 \? 'normal'/.test(q),
+    'Schwellen von calcSystemScore fehlen')
+  // Trend als lineare Regression — :165-166.
+  assert.ok(/pct < 5 \? 'stable'/.test(q), 'Trendrichtung fehlt')
+  assert.ok(/pct < 15 \? 'mild'/.test(q), 'Trendstaerke fehlt')
+})
+
+test('Medical uebernimmt den arr_r-Tippfehler der Vorlage nicht', () => {
+  // `[cmd]` module-medical-v2.jsx:708 schreibt `name="arr_r"` — ein
+  // Symbol, das es nicht gibt; dort zeichnet die Stelle nichts.
+  // Derselbe Tippfehler stand in Training und Recovery.
+  //
+  // Kommentare werden vorher entfernt: der Vermerk, der die Abweichung
+  // begruendet, zitiert die Vorlagenzeile woertlich und wuerde sonst
+  // selbst als Fund gelten.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*\/\//.test(z)).join('\n')
+
+  for (const d of ['ansicht.tsx', 'tab-biomarker.tsx', 'tab-tracking.tsx', 'modale.tsx', 'bausteine.tsx']) {
+    const q = ohneKommentar(fs.readFileSync(path.join(process.cwd(), 'src/app/v2/medical', d), 'utf8'))
+    assert.ok(!/name="arr_r"/.test(q), `${d}: arr_r als Symbolname uebernommen.`)
+  }
 })
 
 test('der Naehrstoffbaum ist vollstaendig uebernommen', () => {
