@@ -102,5 +102,13 @@
     "date": "2026-08-16",
     "case": "Profil unvollstaendig",
     "expected": "birth_date und body_weight_kg sind NULL; daily_reference_assessment liefert missing_profile."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-03 bis 2026-09-06",
+    "case": "Trainingssitzungen mit mehreren Wochen Verlauf",
+    "expected": "training.workout_sessions enthaelt neun abgeschlossene Sitzungen mit echten Uebungen aus training.exercises, mehreren Saetzen, berechnetem Volumen und estimated_1rm."
   }
 ]

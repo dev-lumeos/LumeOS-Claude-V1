@@ -108,6 +108,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 103 | `10_training/103_calvicular_merge.sql` | Calvicular-/Clavicular-Merge | Nachpflege |
 | 104 | `10_training/104_body_region.sql` | `body_region`-Nachpflege fuer Muskelgruppen | Nachpflege |
 | 105 | `10_training/105_mideus_merge.sql` | Mideus-/Medius-Merge | Endbestand 1.416 Uebungen, 107 Muskelgruppen, 58 Geraete, 6.624 Zuordnungen |
+| 106 | `10_training/106_workout_sessions.sql` | Training-Userdaten: `workout_sessions`, `workout_exercises`, `workout_sets` | 3 Tabellen, 4 Funktionen, RLS je Operation |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
 

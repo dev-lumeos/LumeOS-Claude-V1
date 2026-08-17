@@ -42,6 +42,49 @@ type WaterLogRow = {
   loggedAt: string
 }
 
+type TrainingSessionRow = {
+  id: string
+  userId: string
+  sessionDate: string
+  startedTime: string
+  endedTime: string
+  name: string
+  location: string
+  notes: string
+}
+
+type TrainingExerciseTemplate = {
+  exerciseName: string
+  plannedSets: number
+  plannedReps: string
+  plannedWeightKg: number | null
+  sets: Array<{
+    reps: number
+    weightKg: number
+    rpe: number
+    setType?: 'working' | 'warmup'
+  }>
+}
+
+type TrainingExerciseRow = {
+  id: string
+  sessionId: string
+  exerciseName: string
+  exerciseOrder: number
+  plannedSets: number
+  plannedReps: string
+  plannedWeightKg: number | null
+}
+
+type TrainingSetRow = {
+  workoutExerciseId: string
+  setNumber: number
+  reps: number
+  weightKg: number
+  rpe: number
+  setType: 'working' | 'warmup'
+}
+
 type ItemTemplate = {
   blsCode: string
   amountG: number
@@ -330,6 +373,9 @@ function tuple(values: Array<string | number | null>): string {
 const meals: MealRow[] = []
 const items: ItemRow[] = []
 const waterLogs: WaterLogRow[] = []
+const trainingSessions: TrainingSessionRow[] = []
+const trainingExercises: TrainingExerciseRow[] = []
+const trainingSets: TrainingSetRow[] = []
 for (const user of USERS) {
   const plan = PLANS[user.email]
   for (const date of daysBetween(START_DATE, END_DATE)) {
@@ -398,6 +444,132 @@ for (const user of USERS) {
   }
 }
 
+const TRAINING_PLAN: Record<string, TrainingExerciseTemplate[]> = {
+  push: [
+    {
+      exerciseName: 'Barbell Bench Press',
+      plannedSets: 3,
+      plannedReps: '5-8',
+      plannedWeightKg: 82.5,
+      sets: [
+        { reps: 8, weightKg: 60, rpe: 6.5, setType: 'warmup' },
+        { reps: 8, weightKg: 80, rpe: 8 },
+        { reps: 7, weightKg: 82.5, rpe: 8.5 },
+        { reps: 6, weightKg: 82.5, rpe: 9 },
+      ],
+    },
+    {
+      exerciseName: 'Barbell bench press incline',
+      plannedSets: 3,
+      plannedReps: '8-10',
+      plannedWeightKg: 60,
+      sets: [
+        { reps: 10, weightKg: 57.5, rpe: 8 },
+        { reps: 9, weightKg: 60, rpe: 8.5 },
+        { reps: 8, weightKg: 60, rpe: 9 },
+      ],
+    },
+  ],
+  pull: [
+    {
+      exerciseName: 'Barbell bent over row pronated grip',
+      plannedSets: 3,
+      plannedReps: '8-10',
+      plannedWeightKg: 75,
+      sets: [
+        { reps: 10, weightKg: 70, rpe: 7.5 },
+        { reps: 9, weightKg: 75, rpe: 8 },
+        { reps: 8, weightKg: 75, rpe: 8.5 },
+      ],
+    },
+    {
+      exerciseName: 'band kneeling lat pulldown',
+      plannedSets: 3,
+      plannedReps: '10-12',
+      plannedWeightKg: 35,
+      sets: [
+        { reps: 12, weightKg: 32.5, rpe: 7.5 },
+        { reps: 11, weightKg: 35, rpe: 8 },
+        { reps: 10, weightKg: 35, rpe: 8.5 },
+      ],
+    },
+  ],
+  legs: [
+    {
+      exerciseName: 'Barbell  squat back POV',
+      plannedSets: 3,
+      plannedReps: '5-8',
+      plannedWeightKg: 105,
+      sets: [
+        { reps: 8, weightKg: 80, rpe: 6.5, setType: 'warmup' },
+        { reps: 8, weightKg: 100, rpe: 8 },
+        { reps: 7, weightKg: 105, rpe: 8.5 },
+        { reps: 6, weightKg: 105, rpe: 9 },
+      ],
+    },
+    {
+      exerciseName: 'Band Deadlift',
+      plannedSets: 3,
+      plannedReps: '6-8',
+      plannedWeightKg: 115,
+      sets: [
+        { reps: 8, weightKg: 110, rpe: 8 },
+        { reps: 7, weightKg: 115, rpe: 8.5 },
+        { reps: 6, weightKg: 115, rpe: 9 },
+      ],
+    },
+  ],
+}
+
+const TRAINING_DAYS = [
+  { date: '2026-08-03', key: 'push', name: 'Push A' },
+  { date: '2026-08-06', key: 'pull', name: 'Pull A' },
+  { date: '2026-08-09', key: 'legs', name: 'Legs A' },
+  { date: '2026-08-17', key: 'push', name: 'Push A' },
+  { date: '2026-08-20', key: 'pull', name: 'Pull A' },
+  { date: '2026-08-23', key: 'legs', name: 'Legs A' },
+  { date: '2026-08-31', key: 'push', name: 'Push A' },
+  { date: '2026-09-03', key: 'pull', name: 'Pull A' },
+  { date: '2026-09-06', key: 'legs', name: 'Legs A' },
+] as const
+
+for (const day of TRAINING_DAYS) {
+  const sessionId = uuidFrom(`tom.seed@example.com:training:${day.date}:${day.key}`)
+  trainingSessions.push({
+    id: sessionId,
+    userId: '10000000-0000-0000-0000-000000000101',
+    sessionDate: day.date,
+    startedTime: '17:30',
+    endedTime: '18:45',
+    name: day.name,
+    location: 'Gym',
+    notes: 'C-66 Testdaten: mehrere Wochen Training mit echten Uebungen und Saetzen',
+  })
+
+  TRAINING_PLAN[day.key].forEach((template, exerciseIndex) => {
+    const exerciseId = uuidFrom(`tom.seed@example.com:training:${day.date}:${day.key}:${template.exerciseName}`)
+    trainingExercises.push({
+      id: exerciseId,
+      sessionId,
+      exerciseName: template.exerciseName,
+      exerciseOrder: exerciseIndex + 1,
+      plannedSets: template.plannedSets,
+      plannedReps: template.plannedReps,
+      plannedWeightKg: template.plannedWeightKg,
+    })
+    template.sets.forEach((set, setIndex) => {
+      trainingSets.push({
+        workoutExerciseId: exerciseId,
+        setNumber: setIndex + 1,
+        reps: set.reps,
+        weightKg: set.weightKg,
+        rpe: set.rpe,
+        setType: set.setType ?? 'working',
+      })
+    })
+  })
+}
+
 const userIds = USERS.map(user => lit(user.id)).join(', ')
 const userValues = USERS.map(user => tuple([
   user.id,
@@ -430,6 +602,33 @@ const waterValues = waterLogs.map(log => tuple([
   log.source,
   log.loggedAt,
 ])).join(',\n')
+const trainingSessionValues = trainingSessions.map(session => tuple([
+  session.id,
+  session.userId,
+  session.sessionDate,
+  session.startedTime,
+  session.endedTime,
+  session.name,
+  session.location,
+  session.notes,
+])).join(',\n')
+const trainingExerciseValues = trainingExercises.map(exercise => tuple([
+  exercise.id,
+  exercise.sessionId,
+  exercise.exerciseName,
+  exercise.exerciseOrder,
+  exercise.plannedSets,
+  exercise.plannedReps,
+  exercise.plannedWeightKg,
+])).join(',\n')
+const trainingSetValues = trainingSets.map(set => tuple([
+  set.workoutExerciseId,
+  set.setNumber,
+  set.reps,
+  set.weightKg,
+  set.rpe,
+  set.setType,
+])).join(',\n')
 const itemValues = items.map(item => tuple([
   item.mealId,
   item.userId,
@@ -446,6 +645,16 @@ BEGIN;
 DELETE FROM nutrition.water_logs WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meals WHERE user_id IN (${userIds});
+DELETE FROM training.workout_sets ws
+USING training.workout_exercises we, training.workout_sessions s
+WHERE ws.workout_exercise_id = we.id
+  AND we.workout_session_id = s.id
+  AND s.user_id IN (${userIds});
+DELETE FROM training.workout_exercises we
+USING training.workout_sessions s
+WHERE we.workout_session_id = s.id
+  AND s.user_id IN (${userIds});
+DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preference_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preferences WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
@@ -658,18 +867,112 @@ SELECT
   enercc, prot625, fat, cho, fibt, sugar, fasat, nacl, water_g, nutrients
 FROM frozen;
 
+CREATE TEMP TABLE test_training_sessions (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  session_date date NOT NULL,
+  started_time time NOT NULL,
+  ended_time time NOT NULL,
+  name text NOT NULL,
+  location text NOT NULL,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_training_sessions VALUES
+${trainingSessionValues};
+
+INSERT INTO training.workout_sessions (
+  id, user_id, session_date, started_time, ended_time, name, status, location, notes, duration_minutes
+)
+SELECT id, user_id, session_date, started_time, ended_time, name, 'completed', location, notes, 75
+FROM test_training_sessions;
+
+CREATE TEMP TABLE test_training_exercises (
+  id uuid PRIMARY KEY,
+  session_id uuid NOT NULL,
+  exercise_name text NOT NULL,
+  exercise_order integer NOT NULL,
+  planned_sets integer NOT NULL,
+  planned_reps text NOT NULL,
+  planned_weight_kg numeric
+) ON COMMIT DROP;
+
+INSERT INTO test_training_exercises VALUES
+${trainingExerciseValues};
+
+DO $$
+DECLARE
+  v_missing text;
+BEGIN
+  SELECT string_agg(DISTINCT t.exercise_name, ', ' ORDER BY t.exercise_name)
+    INTO v_missing
+  FROM test_training_exercises t
+  LEFT JOIN training.exercises e ON e.name = t.exercise_name
+  WHERE e.id IS NULL;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'Testdaten: Training-Uebungen fehlen im Bestand: %', v_missing;
+  END IF;
+END $$;
+
+INSERT INTO training.workout_exercises (
+  id, workout_session_id, exercise_id, exercise_order,
+  planned_sets, planned_reps, planned_weight_kg
+)
+SELECT
+  t.id,
+  t.session_id,
+  e.id,
+  t.exercise_order,
+  t.planned_sets,
+  t.planned_reps,
+  t.planned_weight_kg
+FROM test_training_exercises t
+JOIN training.exercises e ON e.name = t.exercise_name;
+
+CREATE TEMP TABLE test_training_sets (
+  workout_exercise_id uuid NOT NULL,
+  set_number smallint NOT NULL,
+  reps integer NOT NULL,
+  weight_kg numeric NOT NULL,
+  rpe numeric NOT NULL,
+  set_type text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_training_sets VALUES
+${trainingSetValues};
+
+INSERT INTO training.workout_sets (
+  workout_exercise_id, set_number, reps, weight_kg, rpe, set_type, completed_at
+)
+SELECT workout_exercise_id, set_number, reps, weight_kg, rpe, set_type, now()
+FROM test_training_sets;
+
 DO $$
 DECLARE
   v_users integer;
   v_meals integer;
   v_items integer;
   v_water integer;
+  v_training_sessions integer;
+  v_training_exercises integer;
+  v_training_sets integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
   SELECT count(*) INTO v_meals FROM nutrition.meals WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_items FROM nutrition.meal_items WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_water FROM nutrition.water_logs WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_training_sessions FROM training.workout_sessions WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_training_exercises
+  FROM training.workout_exercises we
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${userIds});
+  SELECT count(*) INTO v_training_sets
+  FROM training.workout_sets ws
+  JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${userIds});
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -680,6 +983,8 @@ BEGIN
 
   RAISE NOTICE 'OK: C-82 Testdaten: % Nutzer, % Mahlzeiten, % Positionen, % Wassereintraege, max % Tage',
     v_users, v_meals, v_items, v_water, v_max_days;
+  RAISE NOTICE 'OK: C-66 Training-Testdaten: % Sitzungen, % Uebungen, % Saetze',
+    v_training_sessions, v_training_exercises, v_training_sets;
 END $$;
 
 COMMIT;
@@ -698,4 +1003,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze.`)

@@ -42,6 +42,18 @@ const preferenceItems = numberScalar(`SELECT count(*) FROM nutrition.food_prefer
 const meals = numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id IN (${IDS_SQL});`)
 const items = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL});`)
 const waterLogs = numberScalar(`SELECT count(*) FROM nutrition.water_logs WHERE user_id IN (${IDS_SQL});`)
+const trainingSessions = numberScalar(`SELECT count(*) FROM training.workout_sessions WHERE user_id IN (${IDS_SQL});`)
+const trainingExercises = numberScalar(`
+  SELECT count(*)
+  FROM training.workout_exercises we
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${IDS_SQL});`)
+const trainingSets = numberScalar(`
+  SELECT count(*)
+  FROM training.workout_sets ws
+  JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${IDS_SQL});`)
 const maxDays = numberScalar(`
   SELECT COALESCE(max(tage), 0)
   FROM (
@@ -62,6 +74,9 @@ if (MODE === 'clean') {
   if (meals !== 0) errors.push(`meals: ${meals}, erwartet 0`)
   if (items !== 0) errors.push(`meal_items: ${items}, erwartet 0`)
   if (waterLogs !== 0) errors.push(`water_logs: ${waterLogs}, erwartet 0`)
+  if (trainingSessions !== 0) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet 0`)
+  if (trainingExercises !== 0) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 0`)
+  if (trainingSets !== 0) errors.push(`training.workout_sets: ${trainingSets}, erwartet 0`)
   if (foods !== 7140) errors.push(`foods: ${foods}, erwartet 7140`)
   if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
 
@@ -69,6 +84,7 @@ if (MODE === 'clean') {
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
+  console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
   const frozenMissing = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL}) AND frozen_at IS NULL;`)
@@ -102,6 +118,9 @@ if (MODE === 'clean') {
   if (meals < 120) errors.push(`meals: ${meals}, erwartet mindestens 120`)
   if (items < 1000) errors.push(`meal_items: ${items}, erwartet mindestens 1000`)
   if (waterLogs < 120) errors.push(`water_logs: ${waterLogs}, erwartet mindestens 120`)
+  if (trainingSessions !== 9) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet 9`)
+  if (trainingExercises !== 18) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 18`)
+  if (trainingSets !== 60) errors.push(`training.workout_sets: ${trainingSets}, erwartet 60`)
   if (maxDays < 42) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 42`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
@@ -267,6 +286,37 @@ if (MODE === 'clean') {
       AND behind_14d_avg_pct > 20;`)) {
     errors.push('Fall Hydration unter Ziel: Summe, Ziel oder 14-Tage-Vergleich stimmen nicht')
   }
+  if (!hasRows(`
+    SELECT 1
+    FROM training.workout_sessions s
+    JOIN training.workout_exercises we ON we.workout_session_id = s.id
+    JOIN training.workout_sets ws ON ws.workout_exercise_id = we.id
+    JOIN training.exercises e ON e.id = we.exercise_id
+    JOIN training.exercise_muscles em ON em.exercise_id = e.id
+    WHERE s.user_id = '${tom}'::uuid
+      AND s.session_date = DATE '2026-08-03'
+      AND s.started_time = TIME '17:30'
+      AND s.ended_time = TIME '18:45'
+      AND s.total_sets > 0
+      AND s.total_volume_kg > 0
+      AND we.exercise_name = e.name
+      AND e.name = 'Barbell Bench Press'
+      AND ws.estimated_1rm IS NOT NULL
+      AND em.role = 'primary';`)) {
+    errors.push('Fall Training: Sitzung mit echter Uebung, Muskelzuordnung und estimated_1rm fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM (
+      SELECT count(DISTINCT session_date) AS tage
+      FROM training.workout_sessions
+      WHERE user_id = '${tom}'::uuid
+        AND status = 'completed'
+        AND session_date BETWEEN DATE '2026-08-03' AND DATE '2026-09-06'
+    ) d
+    WHERE tage >= 9;`)) {
+    errors.push('Fall Training Verlauf: mehrere Wochen abgeschlossene Sitzungen fehlen')
+  }
   if (numberScalar(`
     SELECT count(*)
     FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '2026-08-16');`) !== 8) {
@@ -296,6 +346,7 @@ if (MODE === 'clean') {
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
+  console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
   console.log(`  daily_summary Zeilen: ${dailyRows}`)

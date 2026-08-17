@@ -19,6 +19,31 @@ WITH deleted_items AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_water_logs AS (
+  DELETE FROM nutrition.water_logs
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_training_sets AS (
+  DELETE FROM training.workout_sets ws
+  USING training.workout_exercises we, training.workout_sessions s
+  WHERE ws.workout_exercise_id = we.id
+    AND we.workout_session_id = s.id
+    AND s.user_id IN (${ids})
+  RETURNING 1
+),
+deleted_training_exercises AS (
+  DELETE FROM training.workout_exercises we
+  USING training.workout_sessions s
+  WHERE we.workout_session_id = s.id
+    AND s.user_id IN (${ids})
+  RETURNING 1
+),
+deleted_training_sessions AS (
+  DELETE FROM training.workout_sessions
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_meals AS (
   DELETE FROM nutrition.meals
   WHERE user_id IN (${ids})
@@ -51,6 +76,10 @@ deleted_users AS (
 )
 SELECT
   (SELECT count(*) FROM deleted_items) AS meal_items,
+  (SELECT count(*) FROM deleted_water_logs) AS water_logs,
+  (SELECT count(*) FROM deleted_training_sets) AS training_sets,
+  (SELECT count(*) FROM deleted_training_exercises) AS training_exercises,
+  (SELECT count(*) FROM deleted_training_sessions) AS training_sessions,
   (SELECT count(*) FROM deleted_meals) AS meals,
   (SELECT count(*) FROM deleted_preference_items) AS food_preference_items,
   (SELECT count(*) FROM deleted_preferences) AS food_preferences,
