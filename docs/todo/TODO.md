@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `4accb53` auf `dev`.
+**Stand:** 2026-08-17, Anker `5b907a8` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 70 offen, 3 in Arbeit.
+`[cmd]` 71 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -190,6 +190,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-23** | Der Modulkopf bricht um |  |
 | **G-24** | JetBrains Mono laden |  |
 | **G-26** | `MuscleBodyMap` nach `packages/ui` |  |
+| **A-17** | Datenherkunft, bevor die Geraete kommen |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **C-65** | Toms Passwort steht nirgends |  |
@@ -1753,6 +1754,51 @@ Umsetzen angepasst werden.
   `[cmd]` **Wo sie hingehoert:** Recovery (in Arbeit), Training (`/v2`
   steht), Supplements (noch nicht gebaut). **Eine Komponente fuer drei
   Module** — deshalb `packages/ui`, nicht je Modul.
+
+- [ ] **A-17: Datenherkunft, bevor die Geraete kommen** (neu
+  2026-08-17). **Architekturpunkt, betrifft alle Messtabellen.**
+
+  **Tom, 2026-08-17:** *„Als Ausbaustufe bedenken: wir werden
+  Anbindungen fuer alle Gadgets anbieten, sprich wir werden viele Daten
+  kriegen."*
+
+  ### Drei Dinge aendern sich
+
+  **1. Die Herkunft muss am Wert stehen.** `[cmd]` Heute weiss niemand,
+  ob ein Gewicht getippt oder von einer Waage kam.
+
+  `[read]` **Und das ist keine Formalie:** Eine BIA-Waage und die
+  Navy-Formel liefern fuer denselben Menschen **8 bis 10 Prozentpunkte
+  Unterschied**. Die Empfehlung aus der Recherche lautet ausdruecklich:
+  *niemals BIA gegen Navy vergleichen, nur BIA gegen BIA.* **Ein Verlauf
+  aus gemischten Quellen zeigt Spruenge, die niemand erlebt hat.**
+
+  **2. Die Menge aendert die Struktur.** `[cmd]` `recovery.checkins`
+  haelt heute einen Eintrag je Tag — 36 Zeilen. **Ein Wearable liefert
+  HRV im Minutentakt.** Das ist eine andere Tabelle mit anderen Indizes,
+  und die Tagesansicht liest dann eine Verdichtung, keine Rohwerte.
+
+  **3. Konflikte werden zur Regel.** Zwei Quellen, ein Tag, zwei Werte.
+  **Wer gewinnt, muss festgelegt sein, bevor es passiert** — nicht,
+  wenn der erste Nutzer sich beschwert.
+
+  ### Was jetzt schon zu tun ist
+
+  **Jede neue Messtabelle traegt eine Herkunft**, auch solange nur
+  `manuell` vorkommt. `[cmd]` Betroffen: `body_measurements`,
+  `body_circumferences`, `recovery.checkins`,
+  `training.workout_sessions`, `nutrition.water_logs`.
+
+  `[read]` **Nachtraeglich ist es teuer:** Eine Spalte hinzufuegen ist
+  billig, aber tausend Zeilen ohne Herkunft bleiben fuer immer
+  uneindeutig — `[cmd]` genau die Lage, die bei `locale` vermieden
+  wurde, wo `NULL` von `de` unterscheidbar bleiben musste.
+
+  ### Was das Vorgaengerrepo dazu hat
+
+  `[cmd]` **Zu pruefen** — der Fundus nennt HRV und Readiness mit 30
+  Fundstellen (`useRecoveryIntel.ts`, `RecoveryIntel.ts` mit 26 KB).
+  **Ob dort eine Geraeteanbindung existierte, ist ungeprueft.**
 
 - [ ] **A-16: `public/mockup/` als dritten Fundus auswerten** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Der Rest — koennen wir als
