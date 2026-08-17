@@ -25,6 +25,9 @@ const DASHBOARD = path.join(process.cwd(), 'src/app/v2/dashboard/entwurf.tsx')
 const NUTRITION = path.join(process.cwd(), 'src/app/v2/nutrition/ansicht.tsx')
 const DIARY = path.join(process.cwd(), 'src/app/v2/nutrition/diary-entwurf.tsx')
 const BAUM = path.join(process.cwd(), 'src/app/v2/nutrition/nutrient-baum.ts')
+const TRAINING = path.join(process.cwd(), 'src/app/v2/training/ansicht.tsx')
+const TRAINING_SPEC = path.join(process.cwd(), 'src/app/v2/training/tabs-spec.tsx')
+const TRAINING_HR = path.join(process.cwd(), 'src/app/v2/training/tabs-offline-hr.tsx')
 
 /**
  * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) —
@@ -93,6 +96,87 @@ test('der Nutrition score rechnet mit der Formel der Vorlage', () => {
   assert.ok(/c\.protein \* 0\.30/.test(quelle), 'Protein-Gewicht 0.30 fehlt')
   assert.ok(/c\.calorie \* 0\.25/.test(quelle), 'Kalorien-Gewicht 0.25 fehlt')
   assert.ok(/beginner: 0\.75/.test(quelle), 'Stufenfaktoren fehlen')
+})
+
+/**
+ * Die zehn Tabs der Vorlage (theme-v1/module-training.jsx:28-39) — in
+ * dieser Reihenfolge. Anders als beim Dashboard ist hier KEINE Kachel
+ * angebunden: `[cmd]` training.exercises hat 1.416 Zeilen Stammdaten,
+ * aber `training.sessions` und `training.sets` gibt es nicht, und jede
+ * Zahl des Moduls braucht Sitzungen.
+ */
+const VORLAGE_TRAINING_TABS = [
+  'Today', 'Plan', 'History', 'Exercises', 'Progression',
+  'Volume landmarks', 'Standards', 'Calendar', 'HR zones', 'Offline sync',
+]
+
+test('die zehn Tabs der Vorlage stehen im Training-Modul', () => {
+  const quelle = fs.readFileSync(TRAINING, 'utf8')
+  for (const tab of VORLAGE_TRAINING_TABS) {
+    assert.ok(quelle.includes(`'${tab}'`),
+      `Der Tab "${tab}" fehlt. Die Vorlage fuehrt zehn.`)
+  }
+})
+
+test('das Training-Modul kennzeichnet jede Kachel', () => {
+  // Keine Quelle heisst: jede Kachel traegt die Marke. Wer eine
+  // anbindet, entfernt `attrappe` und zaehlt die Erwartung herunter —
+  // dann faellt hier auf, dass es passiert ist.
+  //
+  // Gezaehlt werden BEIDE Schreibweisen: `attrappe={ATTRAPPE}` traegt
+  // die Marke samt Begruendung, das blosse `attrappe` nur die Marke.
+  // Letzteres steht an den kleinen Zahlenkacheln, wo der
+  // Begruendungssatz laenger waere als die Kachel.
+  const dateien: Array<[string, number]> = [
+    [TRAINING, 11],
+    [TRAINING_SPEC, 17],
+    [TRAINING_HR, 9],
+    [path.join(process.cwd(), 'src/app/v2/training/tabs-extras.tsx'), 1],
+  ]
+  for (const [datei, erwartet] of dateien) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
+    const markiert = mitGrund + ohneGrund
+    assert.equal(markiert, erwartet,
+      `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
+      'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+test('die vier Ansichten der Spec-Vorlage stehen da', () => {
+  // [cmd] module-training-spec.jsx definiert window.TrainingProgressionView,
+  // TrainingLandmarksView, TrainingStandardsView, TrainingCalendarView.
+  // module-training.jsx:48-51 zeigt genau diese vier in den Tabs 5-8.
+  const quelle = fs.readFileSync(TRAINING_SPEC, 'utf8')
+  for (const view of ['TrainingProgressionView', 'TrainingLandmarksView',
+                      'TrainingStandardsView', 'TrainingCalendarView']) {
+    assert.ok(quelle.includes(`export function ${view}`), `${view} fehlt.`)
+  }
+})
+
+test('die Volume landmarks fuehren die zehn Muskelgruppen der Vorlage', () => {
+  // [cmd] module-training-spec.jsx:174-185. Wer die Liste kuerzt,
+  // faellt hier auf — wie beim Naehrstoffbaum.
+  const quelle = fs.readFileSync(TRAINING_SPEC, 'utf8')
+  for (const m of ['Chest', 'Back', 'Shoulders', 'Biceps', 'Triceps',
+                   'Quads', 'Hamstrings', 'Glutes', 'Calves', 'Abs']) {
+    assert.ok(quelle.includes(`m: '${m}'`), `Die Muskelgruppe "${m}" fehlt.`)
+  }
+})
+
+test('die Formeln der Spec-Vorlage sind uebernommen, nicht erfunden', () => {
+  // [read] Dieselbe Regel wie beim Nutrition score: die Gewichtung
+  // steht in der Vorlage und wird uebernommen.
+  const quelle = fs.readFileSync(TRAINING_SPEC, 'utf8')
+  // Training score, module-training-spec.jsx:345.
+  assert.ok(/adherence \* 0\.40/.test(quelle), 'Gewicht adherence 0.40 fehlt')
+  assert.ok(/landmarks \* 0\.30/.test(quelle), 'Gewicht landmarks 0.30 fehlt')
+  assert.ok(/strength \* 0\.20/.test(quelle), 'Gewicht strength 0.20 fehlt')
+  assert.ok(/balance \* 0\.10/.test(quelle), 'Gewicht balance 0.10 fehlt')
+  // Feedback loop, module-training-spec.jsx:195-196.
+  assert.ok(/l\.pump >= 2\.5 && l\.sore <= 1\.5/.test(quelle), 'MAV-Regel fehlt')
+  assert.ok(/l\.sore >= 2\.5 && l\.pump <= 1\.5/.test(quelle), 'MRV-Regel fehlt')
 })
 
 test('der Naehrstoffbaum ist vollstaendig uebernommen', () => {

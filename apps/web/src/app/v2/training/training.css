@@ -1,0 +1,233 @@
+/* Die Rasterklassen des Training-Moduls.
+ *
+ * WARUM HIER UND NICHT IN v2.css:
+ * `[read]` Der Auftrag G-16: „packages/ui/src/styles/v2.css nicht
+ * anfassen. Fehlt eine: melden, nicht ergaenzen." Diese Datei ist die
+ * Meldung in ausfuehrbarer Form — sie fuehrt genau die Klassen, die
+ * die vier Vorlagendateien als `style={{gridTemplateColumns: …}}`
+ * inline mitbringen und die es in v2.css nicht gibt.
+ *
+ * `[cmd]` GEPRUEFT: die 169 Klassen aus v2.css decken alles Uebrige ab
+ * — v2-card, v2-pill, v2-btn(-sm/-ghost/-primary/-accent), v2-tbl,
+ * v2-modal*, v2-row*, v2-eyebrow, v2-num, v2-mono, v2-dim, v2-muted,
+ * v2-divider, v2-col-gap, v2-row-gap, v2-grid, v2-g-cols-2/3/4,
+ * v2-card-tight, v2-placeholder-img, v2-icon-btn, v2-spacer, v2-dot.
+ * Was fehlt, sind ausschliesslich Modul-Raster.
+ *
+ * ES GEHOERT SPAETER NACH v2.css. `[read]` Die Regel „Bausteine, die
+ * sich wiederholen, stehen in packages/ui" gilt: v2-train-grid-14 ist
+ * derselbe Zweispalter wie v2-dash-grid. Sobald ein Auftrag v2.css
+ * oeffnen darf, wandern diese sechs Raster dorthin — bis dahin liegen
+ * sie hier, weil eine Route ohne Raster schlechter waere als eine
+ * doppelte Regel.
+ *
+ * DIE HALTEPUNKTE: `[cmd]` Der Entwurf hat null @media-Regeln (er ist
+ * fuer den Desktop gezeichnet). 1100px ist derselbe Haltepunkt, den
+ * v2.css fuer .v2-dash-grid und .v2-diary-grid setzt — nicht neu
+ * erfunden, uebernommen.
+ */
+
+/* --- Zweispalter 1.4fr / 1fr ------------------------------------
+ * [cmd] module-training.jsx:83 (Today), :616 (Calendar via -spec),
+ * module-training-offline-hr.jsx:39 (Offline), :204 (HR zones). */
+.v2-train-grid-14 {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* --- Zweispalter 1.5fr / 1fr ------------------------------------
+ * [cmd] module-training-spec.jsx:70 (Progression), :347 (Standards). */
+.v2-train-grid-15 {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+/* --- Zweispalter 1fr / 1fr --------------------------------------
+ * [cmd] module-training.jsx:288 (Plan), module-training-spec.jsx:272
+ * (Feedback loop). */
+.v2-train-grid-11 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* --- Zweispalter 2fr / 1fr --------------------------------------
+ * [cmd] module-training.jsx:357 (History). */
+.v2-train-grid-21 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+/* [cmd] module-training.jsx:405, :433 — `gridColumn: "span 2"`. */
+.v2-train-span-2 { grid-column: span 2; }
+
+@media (max-width: 1100px) {
+  .v2-train-grid-14,
+  .v2-train-grid-15,
+  .v2-train-grid-11,
+  .v2-train-grid-21 { grid-template-columns: 1fr; }
+  .v2-train-span-2 { grid-column: auto; }
+}
+
+/* --- Die Wochenleiste (Today) -----------------------------------
+ * [cmd] module-training.jsx:216 — sieben Spalten. Unter 700px wuerde
+ * eine Spalte 40px breit; dann zwei Reihen zu vier. */
+.v2-train-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+@media (max-width: 700px) {
+  .v2-train-week { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* --- Der Sitzungskopf (Today) -----------------------------------
+ * [cmd] module-training.jsx:86 — Medaillon, Text, Startknopf. */
+.v2-train-session-kopf {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+@media (max-width: 640px) {
+  .v2-train-session-kopf { flex-wrap: wrap; }
+}
+
+/* [cmd] module-training.jsx:87-92. */
+.v2-train-medallion {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: color-mix(in oklch, var(--acc-train) 18%, transparent);
+  border: 1px solid color-mix(in oklch, var(--acc-train) 35%, transparent);
+  display: grid;
+  place-items: center;
+  color: var(--acc-train);
+  flex-shrink: 0;
+}
+
+/* --- Volumen nach Muskel (History) ------------------------------
+ * [cmd] module-training.jsx:406. */
+.v2-train-vol-tbl {
+  display: grid;
+  grid-template-columns: 120px 1fr 80px 80px 80px;
+  gap: 8px;
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .v2-train-vol-tbl { grid-template-columns: 90px 1fr 52px 62px 62px; }
+}
+
+/* --- Filterzeile der Uebungsliste (Exercises) -------------------
+ * [cmd] module-training.jsx:455. */
+.v2-train-lib-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* --- Der Pausenzaehler (Live workout) ---------------------------
+ * [cmd] module-training.jsx:602. */
+.v2-train-rest {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* --- Eine Zeile der Volume landmarks ----------------------------
+ * [cmd] module-training-spec.jsx:236. */
+.v2-train-landmark-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 90px 110px 120px;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 45%, transparent);
+}
+@media (max-width: 900px) {
+  .v2-train-landmark-row { grid-template-columns: 74px 1fr 70px 86px; }
+  .v2-train-landmark-row > :last-child { grid-column: 2 / -1; text-align: left; }
+}
+
+/* --- Post-workout feedback --------------------------------------
+ * [cmd] module-training-spec.jsx:292. */
+.v2-train-feedback-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+
+/* Die Bewertungsknoepfe 1-3 tragen ihre Farbe inline aus der Vorlage;
+ * die Klasse setzt nur, was `button` sonst mitbringt. */
+.v2-train-score-btn { font: inherit; }
+
+/* --- Eine Zeile der HR-Zonen ------------------------------------
+ * [cmd] module-training-offline-hr.jsx:218. */
+.v2-train-hr-row {
+  display: grid;
+  grid-template-columns: 22px 96px 1fr 52px 46px;
+  gap: 10px;
+  align-items: center;
+}
+@media (max-width: 560px) {
+  .v2-train-hr-row { grid-template-columns: 22px 80px 1fr 44px; }
+  .v2-train-hr-row > :last-child { display: none; }
+}
+
+/* --- Der Kopf der Offline-Kachel --------------------------------
+ * [cmd] module-training-offline-hr.jsx:42. */
+.v2-train-offline-kopf {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex-wrap: wrap;
+}
+
+/* --- Eine Uebungszeile im Routine-Editor ------------------------
+ * [cmd] module-training-extras.jsx:169. */
+.v2-train-ex-row {
+  display: grid;
+  grid-template-columns: 20px 1fr 110px 70px 90px 80px;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+@media (max-width: 720px) {
+  .v2-train-ex-row { grid-template-columns: 20px 1fr 80px; }
+  .v2-train-ex-row > :nth-child(4),
+  .v2-train-ex-row > :nth-child(5) { display: none; }
+}
+
+/* --- Die vier Kopffelder des Block-Editors ----------------------
+ * [cmd] module-training-extras.jsx:331. */
+.v2-train-block-felder {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 640px) {
+  .v2-train-block-felder { grid-template-columns: 1fr 1fr; }
+}
+
+/* --- Breite Tabellen scrollen in sich --------------------------
+ * Der Entwurf setzt Tabellen mit sechs festen Spaltenbreiten in
+ * Karten, die auf dem Telefon 320px breit sind. Ohne diesen Rahmen
+ * schiebt die Tabelle die ganze Seite auf. */
+.v2-tbl-wrap {
+  overflow-x: auto;
+}

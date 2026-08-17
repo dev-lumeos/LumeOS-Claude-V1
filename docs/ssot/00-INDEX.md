@@ -113,6 +113,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `83-dashboard.md` | Dashboard nach der Vorlage, 12 Kacheln mit Attrappenmarken |
 | `84-hydration.md` | Wasserziel und Tagesdaten. **Getrunkenes und Wasser aus Lebensmitteln getrennt** |
 | `85-mikro-uebersicht.md` | Netzdiagramm und Schwellenliste — **16 von 17 am Mangel-Szenariotag** |
+| `91-training-mockup.md` | Training nach der Vorlage, 38 Kacheln, **alles Attrappe**. Klärt, wie die vier Vorlagendateien eines Moduls zusammenhängen — und welche Kachel zuerst echte Daten bekommen kann |
 | `47-lebensmittelsuche-stand.md` | **Der erreichte Stand** — fasst 41 bis 46 zusammen |
 | `60-legacy-cloud.md` | Was liegt wirklich in der Legacy-Cloud-Instanz? (echte Zeilenzahlen, Medienverweise, Schemakonflikt — ersetzt alle Schätzungen) |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
