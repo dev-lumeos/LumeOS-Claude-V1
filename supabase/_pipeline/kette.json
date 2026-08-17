@@ -333,6 +333,20 @@
       "depends_on": ["B", "auth_stub"]
     },
     {
+      "id": "130",
+      "path": "supabase/_pipeline/13_supplements/130_supplements_schema.sql",
+      "kind": "sql",
+      "creates": "Supplements-Schema mit Katalog, Stacks, Stack-Items, Einnahmelogs und Interaktionsstruktur",
+      "depends_on": ["B", "auth_stub"]
+    },
+    {
+      "id": "131",
+      "path": "supabase/_pipeline/13_supplements/131_supplements_katalog.ts",
+      "kind": "tsx",
+      "creates": "Standard-Supplement-Katalog aus daten/supplement-katalog.json",
+      "depends_on": ["130"]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",

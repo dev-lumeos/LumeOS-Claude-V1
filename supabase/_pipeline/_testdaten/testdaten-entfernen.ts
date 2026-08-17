@@ -49,6 +49,23 @@ deleted_recovery_checkins AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_supplement_intake_logs AS (
+  DELETE FROM supplements.intake_logs
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_supplement_stack_items AS (
+  DELETE FROM supplements.stack_items si
+  USING supplements.user_stacks us
+  WHERE si.stack_id = us.id
+    AND us.user_id IN (${ids})
+  RETURNING 1
+),
+deleted_supplement_stacks AS (
+  DELETE FROM supplements.user_stacks
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_meals AS (
   DELETE FROM nutrition.meals
   WHERE user_id IN (${ids})
@@ -96,6 +113,9 @@ SELECT
   (SELECT count(*) FROM deleted_training_exercises) AS training_exercises,
   (SELECT count(*) FROM deleted_training_sessions) AS training_sessions,
   (SELECT count(*) FROM deleted_recovery_checkins) AS recovery_checkins,
+  (SELECT count(*) FROM deleted_supplement_intake_logs) AS supplement_intake_logs,
+  (SELECT count(*) FROM deleted_supplement_stack_items) AS supplement_stack_items,
+  (SELECT count(*) FROM deleted_supplement_stacks) AS supplement_stacks,
   (SELECT count(*) FROM deleted_meals) AS meals,
   (SELECT count(*) FROM deleted_preference_items) AS food_preference_items,
   (SELECT count(*) FROM deleted_preferences) AS food_preferences,

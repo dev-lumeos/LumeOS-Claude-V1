@@ -110,6 +110,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 105 | `10_training/105_mideus_merge.sql` | Mideus-/Medius-Merge | Endbestand 1.416 Uebungen, 107 Muskelgruppen, 58 Geraete, 6.624 Zuordnungen |
 | 106 | `10_training/106_workout_sessions.sql` | Training-Userdaten: `workout_sessions`, `workout_exercises`, `workout_sets` | 3 Tabellen, 4 Funktionen, RLS je Operation |
 | 120 | `12_recovery/120_recovery_checkins.sql` | Recovery-Userdaten: `checkins` | 1 Tabelle, 1 Funktion, RLS je Operation |
+| 130 | `13_supplements/130_supplements_schema.sql` | Supplements-Schema: `supplement_catalog`, `supplement_interactions`, `user_stacks`, `stack_items`, `intake_logs`, `daily_intake_summary` | 5 Tabellen, 1 Sicht, 2 Funktionen, RLS je Operation |
+| 131 | `13_supplements/131_supplements_katalog.ts` | Standard-Supplement-Katalog aus `daten/supplement-katalog.json` | 44 aktive Supplements |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |

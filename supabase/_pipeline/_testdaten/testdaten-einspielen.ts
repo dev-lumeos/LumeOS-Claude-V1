@@ -140,6 +140,44 @@ type GoalPhaseRow = {
   transitionReason: string | null
 }
 
+type SupplementStackRow = {
+  id: string
+  userId: string
+  name: string
+  description: string
+  goal: 'muscle_building' | 'fat_loss' | 'recovery_sleep' | 'health' | 'longevity' | 'performance' | 'custom'
+  isActive: boolean
+}
+
+type SupplementStackItemRow = {
+  id: string
+  stackId: string
+  supplementSlug: string
+  dose: number
+  doseUnit: string
+  frequency: 'daily' | 'weekdays' | 'training_days' | 'custom' | 'cycling'
+  timing: 'morning' | 'midday' | 'evening' | 'pre_workout' | 'post_workout' | 'bedtime' | 'with_meal' | 'any'
+  stockRemaining: number | null
+  stockUnit: string | null
+  lowStockThreshold: number | null
+  sortOrder: number
+  notes: string
+}
+
+type SupplementIntakeLogRow = {
+  userId: string
+  stackItemId: string
+  intakeDate: string
+  intakeTime: string
+  status: 'planned' | 'taken' | 'skipped' | 'snoozed'
+  supplementNameSnapshot: string
+  doseSnapshot: number
+  doseUnitSnapshot: string
+  actualDose: number | null
+  actualDoseUnit: string | null
+  notes: string
+}
+
 type ItemTemplate = {
   blsCode: string
   amountG: number
@@ -539,6 +577,131 @@ const goalPhaseRows: GoalPhaseRow[] = [
     transitionReason: 'Performance hat kein eigenes Phasenmapping',
   },
 ]
+
+const supplementStacks: SupplementStackRow[] = [
+  {
+    id: '40000000-0000-0000-0000-000000000101',
+    userId: '10000000-0000-0000-0000-000000000101',
+    name: 'Muskelaufbau Basics',
+    description: 'C-68 Testdaten: aktiver Supplement-Stack mit Refill-Fall',
+    goal: 'muscle_building',
+    isActive: true,
+  },
+]
+
+const supplementStackItems: SupplementStackItemRow[] = [
+  {
+    id: '41000000-0000-0000-0000-000000000101',
+    stackId: '40000000-0000-0000-0000-000000000101',
+    supplementSlug: 'creatine-monohydrate',
+    dose: 5,
+    doseUnit: 'g',
+    frequency: 'daily',
+    timing: 'morning',
+    stockRemaining: 180,
+    stockUnit: 'g',
+    lowStockThreshold: 50,
+    sortOrder: 1,
+    notes: 'Baseline-Supplement',
+  },
+  {
+    id: '41000000-0000-0000-0000-000000000102',
+    stackId: '40000000-0000-0000-0000-000000000101',
+    supplementSlug: 'vitamin-d3',
+    dose: 5000,
+    doseUnit: 'IU',
+    frequency: 'daily',
+    timing: 'morning',
+    stockRemaining: 4,
+    stockUnit: 'softgels',
+    lowStockThreshold: 7,
+    sortOrder: 2,
+    notes: 'C-68 Szenario: refillUrgent, weil Restbestand unter Schwelle',
+  },
+  {
+    id: '41000000-0000-0000-0000-000000000103',
+    stackId: '40000000-0000-0000-0000-000000000101',
+    supplementSlug: 'omega-3-epa-dha',
+    dose: 2,
+    doseUnit: 'g',
+    frequency: 'daily',
+    timing: 'with_meal',
+    stockRemaining: 30,
+    stockUnit: 'softgels',
+    lowStockThreshold: 10,
+    sortOrder: 3,
+    notes: 'Mit Mahlzeit',
+  },
+  {
+    id: '41000000-0000-0000-0000-000000000104',
+    stackId: '40000000-0000-0000-0000-000000000101',
+    supplementSlug: 'magnesium',
+    dose: 400,
+    doseUnit: 'mg',
+    frequency: 'daily',
+    timing: 'evening',
+    stockRemaining: 24,
+    stockUnit: 'capsules',
+    lowStockThreshold: 10,
+    sortOrder: 4,
+    notes: 'Abends',
+  },
+]
+
+const supplementIntakeLogs: SupplementIntakeLogRow[] = [
+  {
+    userId: '10000000-0000-0000-0000-000000000101',
+    stackItemId: '41000000-0000-0000-0000-000000000101',
+    intakeDate: '2026-08-18',
+    intakeTime: '08:10',
+    status: 'taken',
+    supplementNameSnapshot: 'Creatine Monohydrate',
+    doseSnapshot: 5,
+    doseUnitSnapshot: 'g',
+    actualDose: 5,
+    actualDoseUnit: 'g',
+    notes: 'C-68 Testdaten: eingenommen, Snapshot bleibt auch bei Stack-Aenderung',
+  },
+  {
+    userId: '10000000-0000-0000-0000-000000000101',
+    stackItemId: '41000000-0000-0000-0000-000000000102',
+    intakeDate: '2026-08-18',
+    intakeTime: '08:12',
+    status: 'taken',
+    supplementNameSnapshot: 'Vitamin D3',
+    doseSnapshot: 5000,
+    doseUnitSnapshot: 'IU',
+    actualDose: 5000,
+    actualDoseUnit: 'IU',
+    notes: 'C-68 Testdaten: Low-Stock-Item wurde genommen',
+  },
+  {
+    userId: '10000000-0000-0000-0000-000000000101',
+    stackItemId: '41000000-0000-0000-0000-000000000103',
+    intakeDate: '2026-08-18',
+    intakeTime: '12:45',
+    status: 'taken',
+    supplementNameSnapshot: 'Omega-3 (EPA/DHA)',
+    doseSnapshot: 2,
+    doseUnitSnapshot: 'g',
+    actualDose: 2,
+    actualDoseUnit: 'g',
+    notes: 'C-68 Testdaten: Einnahme mit Mahlzeit',
+  },
+  {
+    userId: '10000000-0000-0000-0000-000000000101',
+    stackItemId: '41000000-0000-0000-0000-000000000104',
+    intakeDate: '2026-08-18',
+    intakeTime: '21:30',
+    status: 'planned',
+    supplementNameSnapshot: 'Magnesium',
+    doseSnapshot: 400,
+    doseUnitSnapshot: 'mg',
+    actualDose: null,
+    actualDoseUnit: null,
+    notes: 'C-68 Testdaten: geplante Abend-Einnahme',
+  },
+]
 for (const user of USERS) {
   const plan = PLANS[user.email]
   for (const date of daysBetween(START_DATE, END_DATE)) {
@@ -891,6 +1054,41 @@ const goalPhaseValues = goalPhaseRows.map(phase => tuple([
   phase.recommendedNext,
   phase.transitionReason,
 ])).join(',\n')
+const supplementStackValues = supplementStacks.map(stack => tuple([
+  stack.id,
+  stack.userId,
+  stack.name,
+  stack.description,
+  stack.goal,
+  stack.isActive,
+])).join(',\n')
+const supplementStackItemValues = supplementStackItems.map(item => tuple([
+  item.id,
+  item.stackId,
+  item.supplementSlug,
+  item.dose,
+  item.doseUnit,
+  item.frequency,
+  item.timing,
+  item.stockRemaining,
+  item.stockUnit,
+  item.lowStockThreshold,
+  item.sortOrder,
+  item.notes,
+])).join(',\n')
+const supplementIntakeLogValues = supplementIntakeLogs.map(log => tuple([
+  log.userId,
+  log.stackItemId,
+  log.intakeDate,
+  log.intakeTime,
+  log.status,
+  log.supplementNameSnapshot,
+  log.doseSnapshot,
+  log.doseUnitSnapshot,
+  log.actualDose,
+  log.actualDoseUnit,
+  log.notes,
+])).join(',\n')
 const itemValues = items.map(item => tuple([
   item.mealId,
   item.userId,
@@ -918,6 +1116,12 @@ WHERE we.workout_session_id = s.id
   AND s.user_id IN (${userIds});
 DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
 DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
+DELETE FROM supplements.intake_logs WHERE user_id IN (${userIds});
+DELETE FROM supplements.stack_items si
+USING supplements.user_stacks us
+WHERE si.stack_id = us.id
+  AND us.user_id IN (${userIds});
+DELETE FROM supplements.user_stacks WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preference_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preferences WHERE user_id IN (${userIds});
 DELETE FROM goals.goal_phases WHERE user_id IN (${userIds});
@@ -1052,6 +1256,95 @@ SELECT
   gueltig_ab, projected_end_date, actual_end_date,
   transitioned_from, recommended_next, transition_reason
 FROM test_goal_phases;
+
+CREATE TEMP TABLE test_supplement_stacks (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  name text NOT NULL,
+  description text NOT NULL,
+  goal text NOT NULL,
+  is_active boolean NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_supplement_stacks VALUES
+${supplementStackValues};
+
+INSERT INTO supplements.user_stacks (
+  id, user_id, name, description, goal, source, is_active
+)
+SELECT id, user_id, name, description, goal, 'user', is_active
+FROM test_supplement_stacks;
+
+CREATE TEMP TABLE test_supplement_stack_items (
+  id uuid PRIMARY KEY,
+  stack_id uuid NOT NULL,
+  supplement_slug text NOT NULL,
+  dose numeric NOT NULL,
+  dose_unit text NOT NULL,
+  frequency text NOT NULL,
+  timing text NOT NULL,
+  stock_remaining numeric,
+  stock_unit text,
+  low_stock_threshold numeric,
+  sort_order integer NOT NULL,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_supplement_stack_items VALUES
+${supplementStackItemValues};
+
+DO $$
+DECLARE
+  v_missing text;
+BEGIN
+  SELECT string_agg(DISTINCT i.supplement_slug, ', ' ORDER BY i.supplement_slug)
+    INTO v_missing
+  FROM test_supplement_stack_items i
+  LEFT JOIN supplements.supplement_catalog c ON c.slug = i.supplement_slug
+  WHERE c.id IS NULL;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'Testdaten: Supplement-Slugs fehlen im Katalog: %', v_missing;
+  END IF;
+END $$;
+
+INSERT INTO supplements.stack_items (
+  id, stack_id, supplement_id, dose, dose_unit, frequency, timing,
+  stock_remaining, stock_unit, low_stock_threshold, sort_order, notes
+)
+SELECT
+  i.id, i.stack_id, c.id, i.dose, i.dose_unit, i.frequency, i.timing,
+  i.stock_remaining, i.stock_unit, i.low_stock_threshold, i.sort_order, i.notes
+FROM test_supplement_stack_items i
+JOIN supplements.supplement_catalog c ON c.slug = i.supplement_slug;
+
+CREATE TEMP TABLE test_supplement_intake_logs (
+  user_id uuid NOT NULL,
+  stack_item_id uuid NOT NULL,
+  intake_date date NOT NULL,
+  intake_time time NOT NULL,
+  status text NOT NULL,
+  supplement_name_snapshot text NOT NULL,
+  dose_snapshot numeric NOT NULL,
+  dose_unit_snapshot text NOT NULL,
+  actual_dose numeric,
+  actual_dose_unit text,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_supplement_intake_logs VALUES
+${supplementIntakeLogValues};
+
+INSERT INTO supplements.intake_logs (
+  user_id, stack_item_id, intake_date, intake_time, status,
+  supplement_name_snapshot, dose_snapshot, dose_unit_snapshot,
+  actual_dose, actual_dose_unit, notes
+)
+SELECT
+  user_id, stack_item_id, intake_date, intake_time, status,
+  supplement_name_snapshot, dose_snapshot, dose_unit_snapshot,
+  actual_dose, actual_dose_unit, notes
+FROM test_supplement_intake_logs;
 
 SELECT nutrition.food_preferences_write(
   '10000000-0000-0000-0000-000000000101'::uuid,
@@ -1326,6 +1619,9 @@ DECLARE
   v_recovery_checkins integer;
   v_user_goals integer;
   v_goal_phases integer;
+  v_supplement_stacks integer;
+  v_supplement_items integer;
+  v_supplement_logs integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
@@ -1345,6 +1641,12 @@ BEGIN
   SELECT count(*) INTO v_recovery_checkins FROM recovery.checkins WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_user_goals FROM goals.user_goals WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_goal_phases FROM goals.goal_phases WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_supplement_stacks FROM supplements.user_stacks WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_supplement_items
+  FROM supplements.stack_items si
+  JOIN supplements.user_stacks us ON us.id = si.stack_id
+  WHERE us.user_id IN (${userIds});
+  SELECT count(*) INTO v_supplement_logs FROM supplements.intake_logs WHERE user_id IN (${userIds});
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -1361,6 +1663,8 @@ BEGIN
     v_recovery_checkins;
   RAISE NOTICE 'OK: GO-07 Goals-Testdaten: % Ziele, % Phasen',
     v_user_goals, v_goal_phases;
+  RAISE NOTICE 'OK: C-68 Supplements-Testdaten: % Stacks, % Items, % Einnahmen',
+    v_supplement_stacks, v_supplement_items, v_supplement_logs;
 END $$;
 
 COMMIT;
@@ -1379,4 +1683,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen.`)

@@ -57,6 +57,14 @@ const trainingSets = numberScalar(`
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${IDS_SQL});`)
 const recoveryCheckins = numberScalar(`SELECT count(*) FROM recovery.checkins WHERE user_id IN (${IDS_SQL});`)
+const supplementCatalog = numberScalar(`SELECT count(*) FROM supplements.supplement_catalog WHERE is_active;`)
+const supplementStacks = numberScalar(`SELECT count(*) FROM supplements.user_stacks WHERE user_id IN (${IDS_SQL});`)
+const supplementStackItems = numberScalar(`
+  SELECT count(*)
+  FROM supplements.stack_items si
+  JOIN supplements.user_stacks us ON us.id = si.stack_id
+  WHERE us.user_id IN (${IDS_SQL});`)
+const supplementIntakeLogs = numberScalar(`SELECT count(*) FROM supplements.intake_logs WHERE user_id IN (${IDS_SQL});`)
 const maxDays = numberScalar(`
   SELECT COALESCE(max(tage), 0)
   FROM (
@@ -83,6 +91,10 @@ if (MODE === 'clean') {
   if (trainingExercises !== 0) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 0`)
   if (trainingSets !== 0) errors.push(`training.workout_sets: ${trainingSets}, erwartet 0`)
   if (recoveryCheckins !== 0) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 0`)
+  if (supplementStacks !== 0) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 0`)
+  if (supplementStackItems !== 0) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 0`)
+  if (supplementIntakeLogs !== 0) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 0`)
+  if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (foods !== 7140) errors.push(`foods: ${foods}, erwartet 7140`)
   if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
 
@@ -93,6 +105,7 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
+  console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
   const frozenMissing = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL}) AND frozen_at IS NULL;`)
@@ -132,6 +145,10 @@ if (MODE === 'clean') {
   if (trainingExercises !== 18) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 18`)
   if (trainingSets !== 60) errors.push(`training.workout_sets: ${trainingSets}, erwartet 60`)
   if (recoveryCheckins !== 36) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 36`)
+  if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
+  if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
+  if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
+  if (supplementIntakeLogs !== 4) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 4`)
   if (maxDays < 42) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 42`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
@@ -385,6 +402,51 @@ if (MODE === 'clean') {
       AND ohne_hrv > 0;`)) {
     errors.push('Fall Recovery Verlauf: mehrere Wochen Check-ins mit HRV-losen Zeilen fehlen')
   }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.user_stacks us
+    JOIN supplements.stack_items si ON si.stack_id = us.id
+    JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
+    WHERE us.user_id = '${tom}'::uuid
+      AND us.is_active
+      AND us.name = 'Muskelaufbau Basics'
+      AND c.slug = 'creatine-monohydrate'
+      AND si.dose = 5
+      AND si.dose_unit = 'g';`)) {
+    errors.push('Fall Supplements Stack: aktiver Stack mit Kreatin aus Katalog fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.user_stacks us
+    JOIN supplements.stack_items si ON si.stack_id = us.id
+    JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
+    WHERE us.user_id = '${tom}'::uuid
+      AND c.slug = 'vitamin-d3'
+      AND si.stock_remaining <= si.low_stock_threshold;`)) {
+    errors.push('Fall Supplements Refill: Vitamin-D3 Low-Stock-Item fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.intake_logs il
+    WHERE il.user_id = '${tom}'::uuid
+      AND il.intake_date = DATE '2026-08-18'
+      AND il.intake_time = TIME '08:12'
+      AND il.status = 'taken'
+      AND il.supplement_name_snapshot = 'Vitamin D3'
+      AND il.dose_snapshot = 5000
+      AND il.dose_unit_snapshot = 'IU';`)) {
+    errors.push('Fall Supplements Einnahme: eingefrorener Vitamin-D3-Snapshot fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.daily_intake_summary
+    WHERE user_id = '${tom}'::uuid
+      AND intake_date = DATE '2026-08-18'
+      AND total_logged = 4
+      AND total_taken = 3
+      AND total_planned = 1;`)) {
+    errors.push('Fall Supplements Tagesuebersicht: 3 genommen und 1 geplant fehlen')
+  }
   if (numberScalar(`
     SELECT count(*)
     FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '2026-08-16');`) !== 8) {
@@ -417,6 +479,7 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
+  console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
   console.log(`  daily_summary Zeilen: ${dailyRows}`)

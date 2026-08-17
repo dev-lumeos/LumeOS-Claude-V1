@@ -956,7 +956,8 @@
     "training.exercises": 1416,
     "training.muscle_groups": 107,
     "training.equipment": 58,
-    "training.exercise_muscles": 6624
+    "training.exercise_muscles": 6624,
+    "supplements.supplement_catalog": 44
   },
   "mindestzeilen_belege": {
     "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
@@ -977,7 +978,8 @@
     "training.exercises": "[cmd] Ist-Stand nach 100-105: 1.416 Uebungen.",
     "training.muscle_groups": "[cmd] Ist-Stand nach 100-105: 107 Muskelgruppen.",
     "training.equipment": "[cmd] Ist-Stand nach 100-105: 58 Geraete.",
-    "training.exercise_muscles": "[cmd] Ist-Stand nach 100-105: 6.624 Zuordnungen."
+    "training.exercise_muscles": "[cmd] Ist-Stand nach 100-105: 6.624 Zuordnungen.",
+    "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein."
   },
   "datenqualitaet": {
     "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",
@@ -1221,6 +1223,149 @@
       },
       "grants_herkunft": "120_recovery_checkins.sql vergibt authenticated DML und service_role ALL explizit.",
       "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_catalog",
+      "schritt": "130/131",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "130_supplements_schema.sql vergibt SELECT an authenticated und service_role ALL; 131_supplements_katalog.ts fuellt den Katalog.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_interactions",
+      "schritt": "130",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "130_supplements_schema.sql vergibt Rechte explizit, weil supplements nicht unter nutrition-Default-Privileges faellt.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "user_stacks",
+      "schritt": "130",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "130_supplements_schema.sql vergibt Rechte explizit, weil supplements nicht unter nutrition-Default-Privileges faellt.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "stack_items",
+      "schritt": "130",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "130_supplements_schema.sql vergibt Rechte explizit, weil supplements nicht unter nutrition-Default-Privileges faellt.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "intake_logs",
+      "schritt": "130",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "130_supplements_schema.sql vergibt Rechte explizit, weil supplements nicht unter nutrition-Default-Privileges faellt.",
+      "zeilenschutzart": "eigene_zeilen"
     }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
@@ -1269,6 +1414,16 @@
       "schema": "recovery",
       "name": "touch_updated_at",
       "schritt": "120"
+    },
+    {
+      "schema": "supplements",
+      "name": "touch_updated_at",
+      "schritt": "130"
+    },
+    {
+      "schema": "supplements",
+      "name": "refresh_stack_item_count",
+      "schritt": "130"
     }
   ]
 }
