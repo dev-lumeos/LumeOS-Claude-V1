@@ -3596,6 +3596,31 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` Die Pruefung zaehlt jetzt beides und faellt bei fehlenden oder
   doppelten Vorgaben.
 
+- [x] **C-66: Trainingssitzungen und Saetze** (neu und erledigt 2026-08-17).
+
+  **Der Punkt wurde nachtraeglich angelegt** — der Auftrag lief, ohne dass er in der Liste stand.
+
+  `[cmd]` **Erledigt 2026-08-17**, Kettenschritt `106`.
+  `training.workout_sessions`, `workout_exercises`, `workout_sets` —
+  jeweils mit Zeilenschutz, Policies je Operation und Grants.
+
+  `[cmd]` **Live:** 9 Sitzungen, 18 Uebungen in Sitzungen, 60 Saetze.
+  Zeilenschutz in beide Richtungen belegt: Tom sieht 9 Sitzungen und 60
+  Saetze, Max sieht 0, fremder Insert blockiert.
+
+  `[cmd]` **Ein Fall mit allem dran:** 2026-08-03, `Push A`,
+  17:30–18:45, **3.307,50 kg Tonnage**, 6 Saetze, 48 Wiederholungen —
+  und `Barbell Bench Press` ist mit den Stammdaten und drei
+  Muskelzuordnungen verbunden.
+
+  **Der Uebungsname wird eingefroren**, wie bei `meal_items` die
+  Naehrwerte. `[read]` Eine spaetere Stammdatenkorrektur verschiebt
+  damit keine alte Sitzung.
+
+  `[cmd]` Dazu Satz-Metriken und Sitzungs-Aggregate. Was aus der Spec
+  nicht uebernommen wurde und was eine Sitzung noch nicht kann, steht in
+  `docs/ssot/93-trainingssitzungen.md`.
+
 
 
 ## Erledigt am 2026-08-05

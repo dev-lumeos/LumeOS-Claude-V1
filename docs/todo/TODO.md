@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `7cac873` auf `dev`.
+**Stand:** 2026-08-17, Anker `57e1a1c` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 59 offen, 3 in Arbeit.
+`[cmd]` 60 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -194,6 +194,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-19** | 15 Rasterklassen aus Training nach `v2.css` |  |
 | **G-20** | `chevron_up` fehlt im Symbolsatz |  |
 | **C-65** | Toms Passwort steht nirgends |  |
+| **G-25** | Training an echte Daten anschliessen |  |
 
 ---
 
@@ -1793,3 +1794,24 @@ Umsetzen angepasst werden.
   `[cmd]` Seit dem 2026-08-16 lautet es `LumeosDev2026` — **von einem
   Agenten gesetzt, ohne dass es im Auftrag stand.** Es gehoert in
   `37-testkonten.md`, oder Tom setzt ein eigenes und traegt es ein.
+
+- [ ] **G-25: Training an echte Daten anschliessen** (neu 2026-08-17).
+  Folgt auf C-66.
+
+  `[cmd]` `/v2/training` steht mit **38 Kacheln, alle Attrappe** — der
+  Grund war, dass es keine Sitzungen gab. **Seit `106` gibt es sie.**
+
+  `[cmd]` Live liegen 9 Sitzungen, 18 Uebungen, 60 Saetze; dazu die
+  Stammdaten mit 1.416 Uebungen, 58 Geraeten und 6.624
+  Muskelzuordnungen.
+
+  **Der Tab „Exercises" ist der naechste Schritt.** `[read]` Aus dem
+  G-16-Bericht: *vier von sechs Spalten sind sofort da; `e1RM` und
+  `Best set` bleiben `—`, weil sie Saetze brauchen.* **Jetzt sind sie
+  da.**
+
+  `[cmd]` `e1RM` braucht eine Formel — `[read]` das Vorgaengerrepo hat
+  `OneRepMaxCalculator.tsx` mit **42 Fundstellen zu Epley und Brzycki**.
+  **Dort nachsehen, bevor jemand rechnet.**
+
+  **Angebunden heisst: Marke weg.** Alles andere behaelt sie.
