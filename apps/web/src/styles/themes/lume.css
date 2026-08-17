@@ -34,6 +34,24 @@
   --radius: 8px;
   --radius-sm: 6px;
   --radius-lg: 12px;
+  /* G-18: `--font-sans` FEHLTE. `[cmd]` `v2.css` benutzt sie seit G-01
+     als `font-family` des Koerpers, definiert war sie
+     nie — die Seite fiel damit auf die Browservorgabe zurueck, unter
+     Windows „Times New Roman". Gemessen, nicht vermutet: `getComputedStyle`
+     lieferte fuer `body` und `.v2-module-title` genau das.
+     Toms Befund („schlechter lesbar als die Vorgabe") war richtig, die
+     vermutete Ursache nicht: die Farbtokens sind mit der Vorlage
+     deckungsgleich — es war die Serifenschrift.
+
+     `--lumeos-inter` setzt `next/font/google` im Wurzel-Layout. Die
+     Schrift wird BEIM BAUEN heruntergeladen und vom eigenen Server
+     ausgeliefert; zur Laufzeit geht keine Anfrage an Google. Damit
+     bleibt die G-01-Entscheidung gewahrt („keine fremde Abhaengigkeit
+     im kritischen Pfad") und die Schrift der Vorlage kommt trotzdem an.
+
+     Die Rueckfallkette entspricht der Vorlage:
+     `'Inter', -apple-system, system-ui, sans-serif`. */
+  --font-sans: var(--lumeos-inter), 'Inter', -apple-system, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   color-scheme: dark;
 }

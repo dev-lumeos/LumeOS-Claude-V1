@@ -48,6 +48,12 @@ export const THEME_TOKENS_BASE = [
   '--radius',
   '--radius-sm',
   '--radius-lg',
+  // G-18: `--font-sans` stand hier NICHT — und fehlte deshalb neun
+  // Tage lang unbemerkt in lume.css, obwohl v2.css sie benutzt. Die
+  // Seite lief auf die Browservorgabe (unter Windows eine
+  // Serifenschrift). Ein Vertrag, der die eine Schriftvariable prueft
+  // und die andere nicht, prueft die Haelfte.
+  '--font-sans',
   '--font-mono',
 ] as const
 

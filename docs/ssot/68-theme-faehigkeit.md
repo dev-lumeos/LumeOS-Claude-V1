@@ -284,3 +284,106 @@ Zwei Fragen, beide mit Zahlen unterlegt:
 2. **Sollen die drei Statusfarben im Hellmodus eigene Werte bekommen?**
    `[cmd]` `--pos`, `--warn`, `--neg` sind heute für dunklen Grund
    gebaut und gelten im Tagmodus unverändert weiter.
+
+
+---
+
+## Nachtrag 2026-08-17 (G-18): die Schrift fehlte
+
+**Tom, 2026-08-17:** *„Es ist schlechter lesbar als die Vorgabe. Da muss
+in den Schriften mehr Deckkraft rein."*
+
+**Der Befund stimmte, die vermutete Ursache nicht.** `[cmd]` Die
+Farbtokens sind mit der Vorlage deckungsgleich — `--fg-dim 0.420`,
+`--fg-muted 0.720`, `--fg-subtle 0.550`, Wert für Wert. **Es war die
+Schrift.**
+
+### Was gemessen wurde
+
+`[cmd]` `--font-sans` war **nirgends definiert**. `v2.css` benutzt sie
+seit G-01 als `font-family` des Körpers; `lume.css` kannte nur
+`--font-mono`. Vorher/nachher mit `getComputedStyle` auf
+`/v2/nutrition`, gleiche Breite:
+
+| | vorher | nachher |
+|---|---|---|
+| `--font-sans` | **leer** | `'__Inter_8b3a0b', …, 'Inter', -apple-system, system-ui, sans-serif` |
+| `body` rendert in | **„Times New Roman"** | `__Inter_8b3a0b` |
+| `.v2-module-title` | **„Times New Roman"** | `__Inter_8b3a0b` |
+| geladene Schriften | **keine** | Inter 400, 500, 600, 700 |
+
+Eine Serifenschrift bei 11–13 px auf getöntem Grund — genau der
+Eindruck „dünner und unruhiger", den Tom beschrieben hat.
+
+### Was gebaut ist
+
+`next/font/google` lädt Inter **beim Bauen** herunter und liefert sie
+vom eigenen Server. `[cmd]` **Keine Anfrage an `fonts.googleapis.com`
+zur Laufzeit** — im Netzwerkprotokoll des Browsers gezählt: 0 Anfragen
+an Google oder gstatic; die sieben fremden Anfragen gehen an das lokale
+Supabase (127.0.0.1:54321).
+
+`[read]` Die G-01-Entscheidung („keine fremde Abhängigkeit im kritischen
+Pfad") bleibt damit gewahrt. Sie war richtig — nur ihre Folge, dass
+`--font-sans` ersatzlos entfiel, war nicht bedacht.
+
+Die Definition steht in `lume.css` bei den anderen Tokens; `v2.css`
+wurde **nicht angefasst** (dort arbeiten andere).
+
+**Die Tokens sind unverändert.** `[read]` Erst mit Inter lässt sich
+beurteilen, ob noch etwas zu blass ist — und dann gezielt, statt auf
+Verdacht.
+
+### `--font-mono`: gelassen, und warum die Messung nichts beweist
+
+**Gelassen.** `[cmd]` Die Vorlage setzt `'JetBrains Mono'`, hier steht
+die Systemkette (`ui-monospace, SFMono-Regular, Menlo, …`).
+
+`[cmd]` Der Vergleich beider Ketten mit denselben Kennzahlen
+(`2.372 / 2.500 kcal`, `07:42`, `0.79 × 0.30`) ergab ein **identisches
+Bild** — **aber das beweist nichts**: JetBrains Mono ist auf diesem
+Rechner nicht installiert, die zweite Kette fiel auf dieselbe
+Systemschrift zurück. Die Messung kann die beiden hier nicht
+unterscheiden.
+
+`[annahme]` Monospace-Schriften ähneln sich in Laufweite und Ziffernbau
+stärker als Proportionalschriften; der Unterschied dürfte deutlich
+kleiner sein als der zwischen Times New Roman und Inter. Belegen lässt
+sich das erst, wenn JetBrains Mono geladen wird — **das wäre ein zweiter
+`next/font`-Aufruf und gehört in einen eigenen Punkt**, falls die
+Kennzahlen jemandem auffallen.
+
+### Zwei Funde am Rande
+
+`[cmd]` **Der Theme-Vertrag prüfte `--font-mono`, aber nicht
+`--font-sans`.** Deshalb fiel neun Tage lang nicht auf, dass die eine
+fehlte. `--font-sans` steht jetzt in `THEME_TOKENS_BASE` — gegengeprobt:
+Token versteckt → Test rot mit „base block misses tokens: --font-sans",
+zurückgesetzt → grün.
+
+`[cmd]` **Der Vertragstest schneidet den Block am ersten `}` ab.**
+`blockFor()` in `theme-contract.test.ts` sucht `css.indexOf('}')`. Ein
+Kommentar im Token-Block, der eine geschweifte Klammer enthält, kappt
+damit alles danach — bei mir verschwanden dadurch beide Schrift-Tokens
+aus der Prüfung, obwohl sie dastanden. Umgangen, indem der Kommentar
+ohne Klammern auskommt. **Der Parser bleibt anfällig** — das ist keine
+Baustelle dieses Auftrags, gehört aber notiert.
+
+### Was nach der Schrift noch auffällt
+
+`[cmd]` Der Modulkopf von `/v2/nutrition` bricht auch mit Inter um: die
+sechs Aktionsknöpfe (`Quick-add`, `Recalc macros`, `Find food`,
+`MealCam`) plus die Datumsnavigation aus G-14 passen bei 1600 px nicht
+in eine Zeile. **Das ist kein Schriftproblem** — es war vorher da und
+ist danach da. Kein Überlauf, nur Umbruch. Gemeldet, nicht angefasst.
+
+### Nachweise
+
+| Prüfung | Ergebnis |
+|---|---|
+| Bildschirmfoto vorher/nachher | `[cmd]` gleiche Seite (`/v2/nutrition?datum=2026-08-14`), gleiche Breite (1600 px) |
+| Anfragen an Google zur Laufzeit | `[cmd]` **0** |
+| Inter geladen | `[cmd]` 400, 500, 600, 700 — `document.fonts` |
+| `pnpm gate` | `[cmd]` grün, 8 Tasks |
+| Drei Breiten | `[cmd]` 1600 / 1100 / 800 px, kein Überlauf |
+| `/nutrition` unverändert | `[cmd]` 0 `v2-`-Elemente, `lume-shell` vorhanden, eigene Schriftkette |

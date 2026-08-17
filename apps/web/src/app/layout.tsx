@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
+import { Inter } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import './globals.css'
@@ -14,6 +15,31 @@ import {
   isThemeMode,
 } from '../styles/themes/registry'
 import { SPRACH_COOKIE, STANDARD_SPRACHE, istSprache } from '../i18n/sprachen'
+
+/**
+ * G-18: Inter, die Schrift der Vorlage.
+ *
+ * `[cmd]` `next/font/google` laedt sie BEIM BAUEN herunter und legt sie
+ * neben die eigenen Dateien. Zur Laufzeit geht keine Anfrage an
+ * `fonts.googleapis.com` — im Netzwerkprotokoll belegt.
+ *
+ * `[read]` G-01 hatte den `@import` der Vorlage bewusst weggelassen
+ * („keine fremde Abhaengigkeit im kritischen Pfad"). Die Begruendung
+ * bleibt richtig; dieser Weg erfuellt sie und liefert die Schrift
+ * trotzdem.
+ *
+ * `display: 'swap'` wie in der Vorlage (`&display=swap`): der Text
+ * steht sofort da und wird ersetzt, sobald die Schrift geladen ist —
+ * statt fuer einen Moment unsichtbar zu bleiben.
+ *
+ * Die Gewichte sind die der Vorlage: 400, 500, 600, 700.
+ */
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--lumeos-inter',
+})
 
 export const metadata: Metadata = {
   title: 'LumeOS',
@@ -47,8 +73,12 @@ export default async function RootLayout({
     : STANDARD_SPRACHE
   const nachrichten = await getMessages()
 
+  // G-18: `inter.variable` setzt `--lumeos-inter` auf den Namen der
+  // geladenen Schriftfamilie. `lume.css` reicht sie an `--font-sans`
+  // weiter — die Tokens bleiben an einer Stelle, `v2.css` muss nichts
+  // wissen.
   return (
-    <html lang={sprache} data-theme={theme} data-mode={mode}>
+    <html lang={sprache} className={inter.variable} data-theme={theme} data-mode={mode}>
       <body>
         <script dangerouslySetInnerHTML={{ __html: MODE_BOOTSTRAP }} />
         <NextIntlClientProvider messages={nachrichten} locale={sprache}>
