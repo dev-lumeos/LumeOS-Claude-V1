@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `a02e838` auf `dev`.
+**Stand:** 2026-08-17, Anker `4accb53` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 68 offen, 3 in Arbeit.
+`[cmd]` 70 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -203,6 +203,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-34** | `.v2-btn` hat kein `white-space: nowrap` |  |
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
 | **G-37** | Supplements an den Katalog anschliessen |  |
+| **GO-14** | Welche Koerperfettformel gilt |  |
+| **GO-11** | Meilensteine und Fortschritt je Ziel |  |
 
 ---
 
@@ -2009,3 +2011,39 @@ Umsetzen angepasst werden.
   einem von neun Eintraegen gesetzt. Sobald echte Bestaende kommen, ist
   zu entscheiden, **ob es eine Schwelle ist (Bestand unter X Tagen) oder
   eine Markierung von Hand.** Der Testfall `vitamin-d3` steht bereit.
+
+- [ ] **GO-14: Welche Koerperfettformel gilt** (neu 2026-08-17).
+  **Entscheidung fuer Tom**, Befund aus GO-10.
+
+  `[cmd]` Das Vorgaengerrepo hat **51 Fundstellen zu Koerperfett** —
+  Jackson-Pollock, Durnin, Navy, FFMI — verteilt auf
+  `BodyCompositionView.tsx` (13 KB), `goal-measurements.ts` (18 KB) und
+  `useBodyComposition.ts`.
+
+  **Die Messwerte liegen jetzt** (`goals.body_circumferences`, 7 Zeilen),
+  **die Formel fehlt.**
+
+  `[read]` **Das ist keine Umsetzungsfrage.** Die Verfahren
+  unterscheiden sich in Messstellen und Genauigkeit: Navy braucht
+  Umfaenge, Jackson-Pollock Hautfalten, Durnin vier Messpunkte. **Was
+  gemessen werden kann, entscheidet, welche Formel ueberhaupt in Frage
+  kommt.**
+
+  **Vorzulegen:** welche Verfahren mit den erhobenen Umfaengen rechenbar
+  sind, was jedes braucht, und wie genau es ist.
+
+- [ ] **GO-11: Meilensteine und Fortschritt je Ziel** (neu 2026-08-17).
+  Folgt auf GO-07 und GO-10.
+
+  `[read]` Aus dem Umsetzungsplan: `goals.goal_milestones` und
+  Fortschritt je Ziel — setzt Ziele (GO-07, steht) und Messungen
+  (GO-10, steht) voraus. **Beide sind jetzt da.**
+
+  `[cmd]` Das Vorgaengerrepo hat `user_milestones` in
+  `043_coach_profile_system.sql`.
+
+  `[cmd]` **Vorsicht bei der Fortschrittsrechnung:** Der Goals-Mockup
+  hat gemeldet, dass `calcGoalProgress` in der Vorlage **eine
+  wirkungslose Division** enthaelt (W-8) — **stehen gelassen, weil es
+  Toms Entwurf ist.** Beim Bau der echten Rechnung ist das die Stelle,
+  an der entschieden werden muss.

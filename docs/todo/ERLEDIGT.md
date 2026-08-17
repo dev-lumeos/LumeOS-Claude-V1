@@ -4540,3 +4540,27 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` Zwei neue Pruefungen, beide gegengeprobt: Marken je Datei
   (12/6/4) und alle 15 Unterkomponenten vorhanden. Gate 8/8, 209 Tests.
+
+- [x] **GO-10: Koerpermessungen und Gewichtsverlauf** (erledigt
+  2026-08-17).
+
+  `[cmd]` Kettenschritt `112`, **53 Schritte** in der Kette.
+  `goals.body_measurements` und `goals.body_circumferences` — damit hat
+  `goals` fuenf Tabellen.
+
+  `[cmd]` **Live: 43 Messungen, 7 Umfaenge** — ein Verlauf ueber den
+  ganzen Testzeitraum. Zeilenschutz beidseitig belegt: Tom sieht 43
+  eigene, 0 fremde; eigener Insert klappt, fremder scheitert.
+
+  `[cmd]` **Profilgewicht-Sync gebaut** — die Frage aus dem Auftrag, wie
+  `public.profiles.body_weight_kg` und der Verlauf zueinander stehen, ist
+  damit beantwortet und nicht offengelassen.
+
+  **Fotosessions und Fotos ausdruecklich nicht gebaut**, wie
+  beauftragt — `[read]` der Umsetzungsplan fuehrt sie unter „Was nicht
+  gebaut wird", und der Goals-Mockup hat `PhotoUploadPanel` aus
+  demselben Grund ausgelassen: **es laedt Dateien hoch.**
+
+  **Keine Koerperfettformel** — `[read]` Jackson-Pollock, Durnin und
+  Navy liegen im Vorgaengerrepo (51 Fundstellen), **welche gilt, ist eine
+  Entscheidung fuer Tom.**
