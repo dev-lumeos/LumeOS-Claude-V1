@@ -104,6 +104,42 @@ type RecoveryCheckinRow = {
   notes: string
 }
 
+type GoalRow = {
+  id: string
+  userId: string
+  goalType: 'body_composition' | 'performance' | 'health' | 'lifestyle'
+  subtype: string | null
+  title: string
+  description: string | null
+  targetValue: number | null
+  targetUnit: string | null
+  startValue: number | null
+  currentValue: number | null
+  gueltigAb: string
+  targetDate: string | null
+  status: 'active' | 'paused' | 'achieved' | 'abandoned' | 'on_hold'
+  priority: number
+  isPrimary: boolean
+  progressPct: number
+  motivationReason: string | null
+  difficultyLevel: 'easy' | 'moderate' | 'challenging' | 'aggressive' | 'unrealistic' | null
+}
+
+type GoalPhaseRow = {
+  id: string
+  userId: string
+  goalId: string | null
+  phaseType: 'fat_loss' | 'lean_bulk' | 'maintenance' | 'recomp' | 'contest_prep' | 'reverse_diet' | 'expert_bb_annual' | 'mini_cut' | 'peak_week'
+  variant: string | null
+  parameters: string
+  gueltigAb: string
+  projectedEndDate: string | null
+  actualEndDate: string | null
+  transitionedFrom: string | null
+  recommendedNext: string | null
+  transitionReason: string | null
+}
+
 type ItemTemplate = {
   blsCode: string
   amountG: number
@@ -379,13 +415,14 @@ function daysBetween(start: string, end: string): string[] {
   return dates
 }
 
-function lit(value: string | number | null): string {
+function lit(value: string | number | boolean | null): string {
   if (value === null) return 'NULL'
+  if (typeof value === 'boolean') return value ? 'true' : 'false'
   if (typeof value === 'number') return Number.isInteger(value) ? String(value) : value.toFixed(3)
   return `'${value.replace(/'/g, "''")}'`
 }
 
-function tuple(values: Array<string | number | null>): string {
+function tuple(values: Array<string | number | boolean | null>): string {
   return `(${values.map(lit).join(', ')})`
 }
 
@@ -396,6 +433,112 @@ const trainingSessions: TrainingSessionRow[] = []
 const trainingExercises: TrainingExerciseRow[] = []
 const trainingSets: TrainingSetRow[] = []
 const recoveryCheckins: RecoveryCheckinRow[] = []
+const goalRows: GoalRow[] = [
+  {
+    id: '30000000-0000-0000-0000-000000000101',
+    userId: '10000000-0000-0000-0000-000000000101',
+    goalType: 'body_composition',
+    subtype: 'gain_muscle',
+    title: 'Lean Bulk bis September',
+    description: 'C-82/GO-07 Testziel fuer sichtbare Goals-Kacheln',
+    targetValue: 88,
+    targetUnit: 'kg',
+    startValue: 85,
+    currentValue: 86.2,
+    gueltigAb: '2026-08-03',
+    targetDate: '2026-09-30',
+    status: 'active',
+    priority: 1,
+    isPrimary: true,
+    progressPct: 40,
+    motivationReason: 'Muskelaufbau ohne aggressiven Ueberschuss',
+    difficultyLevel: 'moderate',
+  },
+  {
+    id: '30000000-0000-0000-0000-000000000102',
+    userId: '10000000-0000-0000-0000-000000000101',
+    goalType: 'performance',
+    subtype: 'strength',
+    title: 'Bankdruecken stabilisieren',
+    description: 'Sekundaeres Performance-Ziel fuer Max-3-aktive-Regel',
+    targetValue: 120,
+    targetUnit: 'kg',
+    startValue: 105,
+    currentValue: 110,
+    gueltigAb: '2026-08-10',
+    targetDate: '2026-10-31',
+    status: 'active',
+    priority: 2,
+    isPrimary: false,
+    progressPct: 33,
+    motivationReason: 'Kraftziel parallel zum Aufbau',
+    difficultyLevel: 'challenging',
+  },
+  {
+    id: '30000000-0000-0000-0000-000000000201',
+    userId: '10000000-0000-0000-0000-000000000102',
+    goalType: 'performance',
+    subtype: 'training_capacity',
+    title: 'Mehr Trainingsleistung',
+    description: 'Performance-Ziel ohne Default-Phase aus GO-06',
+    targetValue: null,
+    targetUnit: null,
+    startValue: null,
+    currentValue: null,
+    gueltigAb: '2026-08-03',
+    targetDate: null,
+    status: 'active',
+    priority: 1,
+    isPrimary: true,
+    progressPct: 0,
+    motivationReason: 'Performance bleibt als Goal-Typ erhalten, auch wenn die Phase offen ist',
+    difficultyLevel: null,
+  },
+]
+const goalPhaseRows: GoalPhaseRow[] = [
+  {
+    id: '31000000-0000-0000-0000-000000000101',
+    userId: '10000000-0000-0000-0000-000000000101',
+    goalId: '30000000-0000-0000-0000-000000000101',
+    phaseType: 'maintenance',
+    variant: 'baseline',
+    parameters: '{"source":"GO-07 testdata","reason":"Startphase vor Lean Bulk"}',
+    gueltigAb: '2026-08-03',
+    projectedEndDate: '2026-08-16',
+    actualEndDate: '2026-08-16',
+    transitionedFrom: null,
+    recommendedNext: 'lean_bulk',
+    transitionReason: 'Ausgangswoche stabilisieren',
+  },
+  {
+    id: '31000000-0000-0000-0000-000000000102',
+    userId: '10000000-0000-0000-0000-000000000101',
+    goalId: '30000000-0000-0000-0000-000000000101',
+    phaseType: 'lean_bulk',
+    variant: 'moderate',
+    parameters: '{"source":"GO-07 testdata","calorie_surplus_kcal":250}',
+    gueltigAb: '2026-08-17',
+    projectedEndDate: '2026-09-30',
+    actualEndDate: null,
+    transitionedFrom: 'maintenance',
+    recommendedNext: 'mini_cut',
+    transitionReason: 'Phasenwechsel im Testzeitraum',
+  },
+  {
+    id: '31000000-0000-0000-0000-000000000201',
+    userId: '10000000-0000-0000-0000-000000000102',
+    goalId: null,
+    phaseType: 'maintenance',
+    variant: 'performance_placeholder',
+    parameters: '{"source":"GO-07 testdata","note":"Phase unabhaengig vom konkreten Ziel"}',
+    gueltigAb: '2026-08-05',
+    projectedEndDate: null,
+    actualEndDate: null,
+    transitionedFrom: null,
+    recommendedNext: null,
+    transitionReason: 'Performance hat kein eigenes Phasenmapping',
+  },
+]
 for (const user of USERS) {
   const plan = PLANS[user.email]
   for (const date of daysBetween(START_DATE, END_DATE)) {
@@ -714,6 +857,40 @@ const recoveryCheckinValues = recoveryCheckins.map(checkin => tuple([
   checkin.hrvRmssd,
   checkin.notes,
 ])).join(',\n')
+const goalValues = goalRows.map(goal => tuple([
+  goal.id,
+  goal.userId,
+  goal.goalType,
+  goal.subtype,
+  goal.title,
+  goal.description,
+  goal.targetValue,
+  goal.targetUnit,
+  goal.startValue,
+  goal.currentValue,
+  goal.gueltigAb,
+  goal.targetDate,
+  goal.status,
+  goal.priority,
+  goal.isPrimary,
+  goal.progressPct,
+  goal.motivationReason,
+  goal.difficultyLevel,
+])).join(',\n')
+const goalPhaseValues = goalPhaseRows.map(phase => tuple([
+  phase.id,
+  phase.userId,
+  phase.goalId,
+  phase.phaseType,
+  phase.variant,
+  phase.parameters,
+  phase.gueltigAb,
+  phase.projectedEndDate,
+  phase.actualEndDate,
+  phase.transitionedFrom,
+  phase.recommendedNext,
+  phase.transitionReason,
+])).join(',\n')
 const itemValues = items.map(item => tuple([
   item.mealId,
   item.userId,
@@ -743,6 +920,8 @@ DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
 DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preference_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preferences WHERE user_id IN (${userIds});
+DELETE FROM goals.goal_phases WHERE user_id IN (${userIds});
+DELETE FROM goals.user_goals WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
 DELETE FROM public.profiles WHERE id IN (${userIds});
 DELETE FROM auth.users WHERE id IN (${userIds});
@@ -807,6 +986,72 @@ ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
   nutrition_goal = EXCLUDED.nutrition_goal,
   notiz = EXCLUDED.notiz,
   updated_at = now();
+
+CREATE TEMP TABLE test_goals (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  goal_type text NOT NULL,
+  subtype text,
+  title text NOT NULL,
+  description text,
+  target_value numeric,
+  target_unit text,
+  start_value numeric,
+  current_value numeric,
+  gueltig_ab date NOT NULL,
+  target_date date,
+  status text NOT NULL,
+  priority smallint NOT NULL,
+  is_primary boolean NOT NULL,
+  progress_pct numeric NOT NULL,
+  motivation_reason text,
+  difficulty_level text
+) ON COMMIT DROP;
+
+INSERT INTO test_goals VALUES
+${goalValues};
+
+INSERT INTO goals.user_goals (
+  id, user_id, goal_type, subtype, title, description,
+  target_value, target_unit, start_value, current_value,
+  gueltig_ab, target_date, status, priority, is_primary,
+  progress_pct, motivation_reason, difficulty_level
+)
+SELECT
+  id, user_id, goal_type, subtype, title, description,
+  target_value, target_unit, start_value, current_value,
+  gueltig_ab, target_date, status, priority, is_primary,
+  progress_pct, motivation_reason, difficulty_level
+FROM test_goals;
+
+CREATE TEMP TABLE test_goal_phases (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  goal_id uuid,
+  phase_type text NOT NULL,
+  variant text,
+  parameters jsonb NOT NULL,
+  gueltig_ab date NOT NULL,
+  projected_end_date date,
+  actual_end_date date,
+  transitioned_from text,
+  recommended_next text,
+  transition_reason text
+) ON COMMIT DROP;
+
+INSERT INTO test_goal_phases VALUES
+${goalPhaseValues};
+
+INSERT INTO goals.goal_phases (
+  id, user_id, goal_id, phase_type, variant, parameters,
+  gueltig_ab, projected_end_date, actual_end_date,
+  transitioned_from, recommended_next, transition_reason
+)
+SELECT
+  id, user_id, goal_id, phase_type, variant, parameters,
+  gueltig_ab, projected_end_date, actual_end_date,
+  transitioned_from, recommended_next, transition_reason
+FROM test_goal_phases;
 
 SELECT nutrition.food_preferences_write(
   '10000000-0000-0000-0000-000000000101'::uuid,
@@ -1079,6 +1324,8 @@ DECLARE
   v_training_exercises integer;
   v_training_sets integer;
   v_recovery_checkins integer;
+  v_user_goals integer;
+  v_goal_phases integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
@@ -1096,6 +1343,8 @@ BEGIN
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${userIds});
   SELECT count(*) INTO v_recovery_checkins FROM recovery.checkins WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_user_goals FROM goals.user_goals WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_goal_phases FROM goals.goal_phases WHERE user_id IN (${userIds});
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -1110,6 +1359,8 @@ BEGIN
     v_training_sessions, v_training_exercises, v_training_sets;
   RAISE NOTICE 'OK: C-67 Recovery-Testdaten: % Check-ins',
     v_recovery_checkins;
+  RAISE NOTICE 'OK: GO-07 Goals-Testdaten: % Ziele, % Phasen',
+    v_user_goals, v_goal_phases;
 END $$;
 
 COMMIT;
@@ -1128,4 +1379,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen.`)

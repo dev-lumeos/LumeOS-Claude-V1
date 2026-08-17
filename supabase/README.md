@@ -111,6 +111,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 106 | `10_training/106_workout_sessions.sql` | Training-Userdaten: `workout_sessions`, `workout_exercises`, `workout_sets` | 3 Tabellen, 4 Funktionen, RLS je Operation |
 | 120 | `12_recovery/120_recovery_checkins.sql` | Recovery-Userdaten: `checkins` | 1 Tabelle, 1 Funktion, RLS je Operation |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
+| 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
 
 **Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,

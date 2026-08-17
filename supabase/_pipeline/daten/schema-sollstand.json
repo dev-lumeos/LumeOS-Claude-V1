@@ -1037,6 +1037,68 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "goals",
+      "name": "user_goals",
+      "schritt": "111",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "111_goals_ziele_phasen.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "goals",
+      "name": "goal_phases",
+      "schritt": "111",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "111_goals_ziele_phasen.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "training",
       "name": "workout_sessions",
       "schritt": "106",
@@ -1172,6 +1234,16 @@
       "schema": "goals",
       "name": "zielwerte_am",
       "schritt": "110"
+    },
+    {
+      "schema": "goals",
+      "name": "phase_am",
+      "schritt": "111"
+    },
+    {
+      "schema": "goals",
+      "name": "touch_updated_at",
+      "schritt": "111"
     },
     {
       "schema": "training",

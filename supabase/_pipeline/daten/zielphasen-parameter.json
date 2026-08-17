@@ -1,0 +1,100 @@
+{
+  "erhoben": "2026-08-17",
+  "anlass": "GO-08: Phasenparameter aus PHASE_MODELS.md als Daten, nicht als Code",
+  "quelle": "docs/specs/Goals/PHASE_MODELS.md",
+  "hinweis": "Diese Datei wird noch nicht eingespielt. Sie konserviert die Parameter, bis Tom entscheidet, welche davon in Berechnung und UI wirken.",
+  "phases": [
+    {
+      "phase_type": "fat_loss",
+      "variants": {
+        "moderate": {
+          "calorie_deficit": { "min": -400, "max": -600 },
+          "rate_of_loss": "0.5-0.75% BW/week",
+          "protein_g_per_kg": { "min": 1.8, "max": 2.4 },
+          "fat_min_g_per_kg": 0.5,
+          "max_duration_weeks": 20,
+          "diet_break": { "every_weeks": 8, "duration_weeks": 1 }
+        },
+        "aggressive": {
+          "calorie_deficit": { "min": -750, "max": -1000 },
+          "rate_of_loss": "1.0-1.5% BW/week",
+          "protein_g_per_kg": { "min": 2.3, "max": 3.1 },
+          "max_duration_weeks": 8,
+          "diet_break": { "every_weeks": 4, "duration_weeks": 1 }
+        }
+      },
+      "transitions_to": ["reverse_diet", "maintenance", "lean_bulk"]
+    },
+    {
+      "phase_type": "lean_bulk",
+      "parameters": {
+        "calorie_surplus": { "min": 200, "max": 400 },
+        "rate_of_gain": "0.25-0.5% BW/month",
+        "protein_g_per_kg": { "min": 1.6, "max": 2.2 },
+        "fat_pct_calories": { "min": 25, "max": 35 },
+        "max_duration_weeks": 52
+      },
+      "transitions_to": ["mini_cut", "maintenance", "contest_prep"]
+    },
+    {
+      "phase_type": "maintenance",
+      "parameters": {
+        "calorie_target": "TDEE +/- 100",
+        "protein_g_per_kg": { "min": 1.4, "max": 2.0 },
+        "duration": "indefinite"
+      },
+      "transitions_to": ["fat_loss", "lean_bulk", "recomp", "contest_prep"]
+    },
+    {
+      "phase_type": "reverse_diet",
+      "parameters": {
+        "weekly_calorie_increase": { "min": 50, "max": 150 },
+        "primary_macro_increase": "carbs",
+        "protein": "maintain",
+        "max_duration_weeks": 16
+      },
+      "transitions_to": ["maintenance", "lean_bulk", "fat_loss"]
+    },
+    {
+      "phase_type": "contest_prep",
+      "parameters": {
+        "total_duration_weeks": { "min": 16, "max": 24 },
+        "protein_g_per_kg": { "min": 2.3, "max": 3.1 },
+        "refeeds": { "start_after_week": 8, "frequency": "1-2 per week" },
+        "peak_week": { "carb_depletion_days": 3, "carb_load_days": 2, "sodium_manipulation": true }
+      },
+      "transitions_to": ["reverse_diet"]
+    },
+    {
+      "phase_type": "recomp",
+      "parameters": {
+        "calorie_cycling": { "training_days": "+200 from TDEE", "rest_days": "-300 from TDEE", "weekly_average": "~maintenance" },
+        "protein_g_per_kg": { "min": 2.0, "max": 2.4 }
+      },
+      "transitions_to": ["lean_bulk", "fat_loss"]
+    },
+    {
+      "phase_type": "expert_bb_annual",
+      "parameters": {
+        "auto_transitions": true,
+        "coach_override": true,
+        "requires": ["experience_level >= advanced"]
+      }
+    },
+    {
+      "phase_type": "mini_cut",
+      "parameters": {
+        "duration": "2-4 weeks",
+        "relation": "short fat-loss phase between gaining phases"
+      }
+    },
+    {
+      "phase_type": "peak_week",
+      "parameters": {
+        "duration": "1 week",
+        "relation": "contest_prep subphase",
+        "warning": "requires coach decision before product use"
+      }
+    }
+  ]
+}

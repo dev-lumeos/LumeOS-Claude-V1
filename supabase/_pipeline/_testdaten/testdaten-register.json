@@ -118,5 +118,13 @@
     "date": "2026-08-18",
     "case": "Recovery Check-in ohne HRV, schlechte Erholung",
     "expected": "recovery.checkins enthaelt einen Check-in mit hrv_rmssd NULL, sleep_quality 3, subjective_feeling 3, mood tired und starkem Muskelkater. Der manual-Modus hat damit einen vollstaendigen Datensatz ohne Geraet."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-02, 2026-08-10, 2026-08-18",
+    "case": "Goals und Phasen mit gueltig_ab und Phasenwechsel",
+    "expected": "goals.phase_am liefert am 2026-08-02 keine Zeile, am 2026-08-10 maintenance und am 2026-08-18 lean_bulk. Tom hat zwei aktive Ziele, genau eines davon primary."
   }
 ]

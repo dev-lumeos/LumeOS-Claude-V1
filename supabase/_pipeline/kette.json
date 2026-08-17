@@ -340,6 +340,13 @@
       "depends_on": ["B"]
     },
     {
+      "id": "111",
+      "path": "supabase/_pipeline/11_goals/111_goals_ziele_phasen.sql",
+      "kind": "sql",
+      "creates": "Goals-Userdaten: user_goals, goal_phases und phase_am",
+      "depends_on": ["110", "auth_stub"]
+    },
+    {
       "id": "059a",
       "path": "supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts",
       "kind": "tsx",

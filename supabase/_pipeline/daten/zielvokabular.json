@@ -1,0 +1,96 @@
+{
+  "erhoben": "2026-08-17",
+  "anlass": "GO-06: vier Zielvokabulare aufeinander abbilden, ohne offene Begriffe still zu fuellen",
+  "quellen": [
+    "public.profiles.nutrition_goal CHECK in 090_profile.sql",
+    "docs/specs/Goals/PHASE_MODELS.md",
+    "docs/specs/Goals/DATABASE.md",
+    "referenz/lumeos-2026/src/modules/onboarding/utils/calculateTDEE.ts",
+    "referenz/lumeos-2026/src/modules/onboarding/components/Step4Goal.tsx",
+    "referenz/lumeos-2026/src/modules/goals/lib/definitions.ts"
+  ],
+  "regel": "Diese Datei ist die Abbildung, nicht die Formel. OFFEN bleibt offen und darf nicht als 0 oder maintenance interpretiert werden.",
+  "profile_nutrition_goal": [
+    {
+      "value": "lose_weight",
+      "goal_type": "body_composition",
+      "default_phase_type": "fat_loss",
+      "legacy_goal_ids": ["moderate_cut", "conservative_cut", "aggressive_cut", "mini_cut", "contest_prep", "cut", "lose"],
+      "calorie_modifier_status": "mapped",
+      "calorie_modifier_source": "daten/zielrichtung-kalorienzuschlag.json: lose_weight = -0.20",
+      "begruendung": "Abnehmen entspricht dem Fat-Loss-Zweig; moderate_cut ist die im aktuellen Profil genutzte Abstraktion."
+    },
+    {
+      "value": "maintain",
+      "goal_type": "lifestyle",
+      "default_phase_type": "maintenance",
+      "legacy_goal_ids": ["maintain", "maintenance_diet_break"],
+      "calorie_modifier_status": "mapped",
+      "calorie_modifier_source": "daten/zielrichtung-kalorienzuschlag.json: maintain = 0",
+      "begruendung": "Halten entspricht Maintenance; Diet Break ist eine Spezialform, aber kein eigener Profilwert."
+    },
+    {
+      "value": "gain_muscle",
+      "goal_type": "body_composition",
+      "default_phase_type": "lean_bulk",
+      "legacy_goal_ids": ["lean_bulk", "clean_bulk", "aggressive_bulk", "bulk", "gain"],
+      "calorie_modifier_status": "mapped",
+      "calorie_modifier_source": "daten/zielrichtung-kalorienzuschlag.json: gain_muscle = 0.10",
+      "begruendung": "Muskelaufbau entspricht Lean Bulk als konservativer Default; aggressivere Varianten bleiben Phasen-/Variantenwahl."
+    },
+    {
+      "value": "recomposition",
+      "goal_type": "body_composition",
+      "default_phase_type": "recomp",
+      "legacy_goal_ids": ["body_recomp", "recomp"],
+      "calorie_modifier_status": "mapped",
+      "calorie_modifier_source": "daten/zielrichtung-kalorienzuschlag.json: recomposition = 0",
+      "begruendung": "Recomposition ist im Phasenmodell als RECOMP gefuehrt und im Vorgänger als body_recomp."
+    },
+    {
+      "value": "performance",
+      "goal_type": "performance",
+      "default_phase_type": null,
+      "legacy_goal_ids": ["performance"],
+      "calorie_modifier_status": "mapped_for_targets_only",
+      "calorie_modifier_source": "daten/zielrichtung-kalorienzuschlag.json: performance = 0.10",
+      "begruendung": "Der Vorgänger rechnet fuer Performance +10 Prozent, aber PHASE_MODELS.md hat keine Performance-Phase. Deshalb kein Default-Phase-Mapping."
+    },
+    {
+      "value": "health",
+      "goal_type": "health",
+      "default_phase_type": null,
+      "legacy_goal_ids": [],
+      "calorie_modifier_status": "OFFEN",
+      "calorie_modifier_source": null,
+      "begruendung": "Health existiert in profiles.nutrition_goal und SCORING.md, aber weder im Phasenmodell noch im Vorgänger-Onboarding als Kalorienziel. Nicht auf maintenance raten."
+    }
+  ],
+  "phase_types": [
+    "fat_loss",
+    "lean_bulk",
+    "maintenance",
+    "recomp",
+    "contest_prep",
+    "reverse_diet",
+    "expert_bb_annual",
+    "mini_cut",
+    "peak_week"
+  ],
+  "goal_types": [
+    "body_composition",
+    "performance",
+    "health",
+    "lifestyle"
+  ],
+  "offen": [
+    {
+      "value": "performance",
+      "frage": "Soll Performance eine eigene Phase bekommen oder nur goal_type ohne Phase bleiben?"
+    },
+    {
+      "value": "health",
+      "frage": "Welcher Kalorien- und Phasenbezug gilt fuer Health, wenn ueberhaupt?"
+    }
+  ]
+}

@@ -37,6 +37,8 @@ const errors: string[] = []
 const users = numberScalar(`SELECT count(*) FROM auth.users WHERE id IN (${IDS_SQL});`)
 const profiles = numberScalar(`SELECT count(*) FROM public.profiles WHERE id IN (${IDS_SQL});`)
 const targets = numberScalar(`SELECT count(*) FROM goals.nutrition_targets WHERE user_id IN (${IDS_SQL});`)
+const userGoals = numberScalar(`SELECT count(*) FROM goals.user_goals WHERE user_id IN (${IDS_SQL});`)
+const goalPhases = numberScalar(`SELECT count(*) FROM goals.goal_phases WHERE user_id IN (${IDS_SQL});`)
 const preferences = numberScalar(`SELECT count(*) FROM nutrition.food_preferences WHERE user_id IN (${IDS_SQL});`)
 const preferenceItems = numberScalar(`SELECT count(*) FROM nutrition.food_preference_items WHERE user_id IN (${IDS_SQL});`)
 const meals = numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id IN (${IDS_SQL});`)
@@ -70,6 +72,8 @@ if (MODE === 'clean') {
   if (users !== 0) errors.push(`auth.users: ${users}, erwartet 0`)
   if (profiles !== 0) errors.push(`profiles: ${profiles}, erwartet 0`)
   if (targets !== 0) errors.push(`nutrition_targets: ${targets}, erwartet 0`)
+  if (userGoals !== 0) errors.push(`user_goals: ${userGoals}, erwartet 0`)
+  if (goalPhases !== 0) errors.push(`goal_phases: ${goalPhases}, erwartet 0`)
   if (preferences !== 0) errors.push(`food_preferences: ${preferences}, erwartet 0`)
   if (preferenceItems !== 0) errors.push(`food_preference_items: ${preferenceItems}, erwartet 0`)
   if (meals !== 0) errors.push(`meals: ${meals}, erwartet 0`)
@@ -84,6 +88,7 @@ if (MODE === 'clean') {
 
   console.log('C-82 Testdaten-Pruefung (clean)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
+  console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
@@ -116,6 +121,8 @@ if (MODE === 'clean') {
   if (users !== 3) errors.push(`auth.users: ${users}, erwartet 3`)
   if (profiles !== 3) errors.push(`profiles: ${profiles}, erwartet 3`)
   if (targets !== 3) errors.push(`nutrition_targets: ${targets}, erwartet 3`)
+  if (userGoals !== 3) errors.push(`user_goals: ${userGoals}, erwartet 3`)
+  if (goalPhases !== 3) errors.push(`goal_phases: ${goalPhases}, erwartet 3`)
   if (preferences !== 1) errors.push(`food_preferences: ${preferences}, erwartet 1`)
   if (preferenceItems !== 3) errors.push(`food_preference_items: ${preferenceItems}, erwartet 3`)
   if (meals < 120) errors.push(`meals: ${meals}, erwartet mindestens 120`)
@@ -139,6 +146,34 @@ if (MODE === 'clean') {
 
   if (numberScalar(`SELECT count(*) FROM goals.zielwerte_am('${tom}'::uuid, DATE '2026-08-02');`) !== 0) {
     errors.push('Fall Tag ohne Ziel: goals.zielwerte_am liefert vor gueltig_ab trotzdem eine Zeile')
+  }
+  if (numberScalar(`SELECT count(*) FROM goals.phase_am('${tom}'::uuid, DATE '2026-08-02');`) !== 0) {
+    errors.push('Fall Tag ohne Phase: goals.phase_am liefert vor erster gueltig_ab trotzdem eine Zeile')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.phase_am('${tom}'::uuid, DATE '2026-08-10')
+    WHERE phase_type = 'maintenance'
+      AND gueltig_ab = DATE '2026-08-03';`)) {
+    errors.push('Fall Goals Phase vor Wechsel: maintenance am 2026-08-10 fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.phase_am('${tom}'::uuid, DATE '2026-08-18')
+    WHERE phase_type = 'lean_bulk'
+      AND gueltig_ab = DATE '2026-08-17';`)) {
+    errors.push('Fall Goals Phasenwechsel: lean_bulk am 2026-08-18 fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.user_goals
+    WHERE user_id = '${tom}'::uuid
+      AND status = 'active'
+    GROUP BY user_id
+    HAVING count(*) = 2
+       AND count(*) FILTER (WHERE is_primary) = 1
+       AND max(priority) <= 3;`)) {
+    errors.push('Fall Goals aktiv: Toms zwei aktive Ziele mit genau einem Primary fehlen')
   }
   if (!hasRows(`SELECT 1 FROM nutrition.daily_summary WHERE user_id = '${tom}'::uuid AND entry_date = DATE '2026-08-02' AND item_count > 0;`)) {
     errors.push('Fall Tag ohne Ziel: daily_summary fehlt oder hat keine Positionen')
@@ -377,6 +412,7 @@ if (MODE === 'clean') {
 
   console.log('C-82 Testdaten-Pruefung (present)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
+  console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
