@@ -31,6 +31,13 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
 import { Datumsnavigation, Zukunftshinweis } from './datumsnavigation'
+// G-38: die Tabs, die bisher nur als Attrappen-Platzhalter dastanden.
+import { NutritionInsightsTab } from './tab-insights'
+import { MealPlansTab } from './tab-plans'
+import { FoodPreferencesTab } from './tab-prefs'
+import { NutritionPlannerTab } from './tab-planner'
+import { Kopfknoepfe } from './kopfknoepfe'
+import './nutrition.css'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
 const HAUPTMAKROS: Array<{
@@ -143,26 +150,18 @@ export async function TagebuchAnsicht({
           {/* G-14: `‹ Heute ›` als Einheit. Vorher zwei blasse Pfeile
               hier — sichtbar erst, wenn man wusste, dass es sie gibt. */}
           <Datumsnavigation datum={datum} istAdmin={istAdmin} />
-          <InEntwicklungKnopf titel="Quick-add" className="v2-btn">
-            <Icon name="zap" className="v2-ic v2-ic-sm" /> Quick-add
-          </InEntwicklungKnopf>
-          <InEntwicklungKnopf
-            titel="Recalc macros"
-            grund="Die Zielwerte werden im Profil berechnet und gesetzt — ein Weg von hier aus fehlt."
-            className="v2-btn"
-          >
-            <Icon name="trend_up" className="v2-ic v2-ic-sm" /> Recalc macros
-          </InEntwicklungKnopf>
-          <Link href={'/v2/nutrition/suche' as Route} className="v2-btn">
-            <Icon name="search" className="v2-ic v2-ic-sm" /> Find food
-          </Link>
-          <InEntwicklungKnopf
-            titel="MealCam"
-            grund="Bilderkennung fuer Mahlzeiten — es gibt weder Modell noch Endpunkt."
-            className="v2-btn v2-btn-primary"
-          >
-            <Icon name="camera" className="v2-ic v2-ic-sm" /> MealCam
-          </InEntwicklungKnopf>
+          {/* G-38: Quick-add und MealCam oeffnen jetzt die Fenster der
+              Vorlage statt „in Entwicklung". Sie stehen in einer
+              Client-Insel, weil diese Ansicht eine async
+              Server-Komponente ist und keinen Zustand halten kann.
+              „Find food" bleibt dazwischen — Reihenfolge der Vorlage. */}
+          <Kopfknoepfe
+            kinder={(
+              <Link href={'/v2/nutrition/suche' as Route} className="v2-btn">
+                <Icon name="search" className="v2-ic v2-ic-sm" /> Find food
+              </Link>
+            )}
+          />
         </div>
       </div>
 
@@ -452,6 +451,22 @@ function AndererTab({ tab }: { tab: string }) {
   // Der Naehrstoffbaum der Vorlage — vollstaendig uebernommen.
   if (tab === 'nutrients') {
     return <div style={{ marginTop: 16 }}><NutrientAnalysisView /></div>
+  }
+
+  // G-38: vier Tabs, die bis hierher nur einen Platzhalter zeigten.
+  // Sie sind nach der Vorlage gebaut und weiterhin Attrappe — jede
+  // Kachel traegt den Hinweis, woran die Anbindung haengt.
+  if (tab === 'insights') {
+    return <div style={{ marginTop: 16 }}><NutritionInsightsTab /></div>
+  }
+  if (tab === 'plans') {
+    return <div style={{ marginTop: 16 }}><MealPlansTab /></div>
+  }
+  if (tab === 'prefs') {
+    return <div style={{ marginTop: 16 }}><FoodPreferencesTab /></div>
+  }
+  if (tab === 'planner') {
+    return <div style={{ marginTop: 16 }}><NutritionPlannerTab /></div>
   }
 
   if (tab === 'foods') {

@@ -1,0 +1,252 @@
+/* Die Rasterklassen der nachgezogenen Nutrition-Tabs (G-38).
+ *
+ * WARUM HIER UND NICHT IN v2.css:
+ * `[cmd]` `v2.css` ist ERZEUGT — `packages/ui/src/styles/
+ * klassen-uebernehmen.mjs` schreibt sie neu. Von Hand dort ergaenzte
+ * Klassen verschwinden beim naechsten Lauf; in G-19 hat ein Lauf 164
+ * Zeilen geloescht. Modul-eigene Raster stehen deshalb neben der Route,
+ * wie schon bei `supplements.css` (G-29).
+ *
+ * `[cmd]` VORHER GEPRUEFT, welche Klassen es schon gibt. Elf der
+ * dreizehn benutzten Klassen liegen bereits in v2.css (v2-grid-14,
+ * v2-g-cols-2, v2-col-gap, v2-num, v2-tbl, v2-icon-btn, v2-dim,
+ * v2-mono, v2-divider, v2-pill-acc, v2-btn-sm). Sie werden BENUTZT,
+ * nicht nachgebaut. Hier stehen nur die, die es sonst nirgends gibt.
+ */
+
+/* --- Eine Kategoriezeile im Preferences-Tab ----------------------
+ * [cmd] module-nutrition-spec.jsx:233 — Name, Punktwert, drei Schalter.
+ * Die Vorlage traegt das inline. */
+.v2-prefs-kat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+/* Die drei Neigungsschalter (+ · −).
+ * [cmd] module-nutrition-spec.jsx:238 — 22x22, quadratisch. */
+.v2-prefs-schalter {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  border: 0;
+}
+
+/* --- Ein geplanter Eintrag im Meal-Plans-Tab ---------------------
+ * [cmd] module-nutrition-spec.jsx:389 — Rahmen und Flaeche faerben
+ * sich nach Zustand, deshalb bleiben Farbe und Randart inline. */
+.v2-ghost-eintrag {
+  padding: 12px;
+  border-radius: 7px;
+}
+
+/* Die Zeile aus Uhrzeit, Mahlzeit, Zustand und Kalorien. */
+.v2-ghost-kopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+/* Die Positionen ruecken unter die Uhrzeit ein.
+ * [cmd] module-nutrition-spec.jsx:400 — `paddingLeft: 46`. */
+.v2-ghost-positionen {
+  font-size: 11.5px;
+  padding-left: 46px;
+  line-height: 1.5;
+}
+
+/* --- Die Umschaltleiste der drei Unter-Tabs ----------------------
+ * [cmd] module-nutrition-spec.jsx:350 — die Vorlage traegt sie inline.
+ * Unter 640px darf sie umbrechen, sonst schiebt sie die Seite auf. */
+.v2-segmented {
+  display: flex;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 2px;
+  gap: 1px;
+}
+@media (max-width: 640px) {
+  .v2-segmented { flex-wrap: wrap; }
+}
+
+/* --- Der Warnkasten in „Plan settings" ---------------------------
+ * [cmd] module-nutrition-spec.jsx:421. */
+.v2-hinweis-warn {
+  padding: 10px;
+  background: color-mix(in srgb, var(--warn) 6%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--warn) 22%, var(--border));
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+
+/* --- Eine Zeile der Einkaufsliste --------------------------------
+ * [cmd] module-nutrition-spec.jsx:491 — Haken, Name, Menge. */
+.v2-einkauf-zeile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+
+/* --- Die Naehrstoff-Heatmap (Insights) ---------------------------
+ * [cmd] module-nutrition.jsx:410/413 — 80px Name, dann 30 Tagesspalten.
+ * 30 Spalten passen auf kein Telefon: die Karte scrollt in sich,
+ * statt die Seite aufzuschieben. */
+.v2-heat-wrap { overflow-x: auto; }
+.v2-heat {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 4px;
+  min-width: 480px;
+}
+.v2-heat-name {
+  font-size: 11px;
+  color: var(--fg-muted);
+  display: flex;
+  align-items: center;
+}
+.v2-heat-zeile {
+  display: grid;
+  grid-template-columns: repeat(30, 1fr);
+  gap: 2px;
+}
+
+/* --- Die Wochenmatrix (Planner) ----------------------------------
+ * [cmd] module-nutrition.jsx:612 — 100px Slotname, dann sieben Tage.
+ * Gleiche Ueberlegung: sie scrollt in sich. */
+.v2-planner-wrap { overflow-x: auto; }
+.v2-planner {
+  display: grid;
+  grid-template-columns: 100px repeat(7, 1fr);
+  gap: 6px;
+  min-width: 640px;
+}
+
+/* --- Die Modale ---------------------------------------------------
+ * [cmd] Rahmen, Kopf, Rumpf und Fuss gibt es schon (v2-modal*,
+ * v2.css:822-843). Hier stehen nur die Teile, die die Vorlage in den
+ * vier Nutrition-Fenstern inline traegt. */
+
+/* Das farbige Quadrat links im Kopf.
+ * [cmd] module-nutrition-spec.jsx:88 — 26x26, Akzentfarbe des Moduls. */
+.v2-modal-symbol {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--acc-nutri) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--acc-nutri) 38%, var(--border));
+  color: var(--acc-nutri);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* Die Einheit rechts im Zahlenfeld (Quick-add).
+ * [cmd] module-nutrition-spec.jsx:164. */
+.v2-feld-suffix {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  pointer-events: none;
+}
+
+/* Das kleine Feld in der Zeitplan-Tabelle.
+ * [cmd] module-nutrition-spec.jsx:569 — 26px hoch, in der Tabelle. */
+.v2-feld-klein {
+  width: 100%;
+  height: 26px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 0 8px;
+  font-size: 11.5px;
+  color: var(--fg);
+}
+
+/* Die Tabelle im Einstellungsfenster scrollt in sich. */
+.v2-nutri-tbl-wrap { overflow-x: auto; }
+
+/* --- Die EU-14-Allergene (Custom food) ---------------------------
+ * [cmd] module-nutrition-spec.jsx:137 — vier Spalten.
+ * Unter 560px zwei, sonst passt kein Name in eine Zeile. */
+.v2-allergen-gitter {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+}
+@media (max-width: 560px) {
+  .v2-allergen-gitter { grid-template-columns: repeat(2, 1fr); }
+}
+.v2-allergen {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 11.5px;
+  text-align: left;
+}
+.v2-allergen-haken {
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+/* --- Der Schalter „morning_weigh_in" ------------------------------
+ * [cmd] module-nutrition-spec.jsx:614-617. */
+.v2-schalter-zeile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.v2-schalter {
+  width: 30px;
+  height: 17px;
+  border-radius: 999px;
+  padding: 2px;
+  flex-shrink: 0;
+}
+.v2-schalter-knopf {
+  width: 13px;
+  height: 13px;
+  border-radius: 999px;
+  background: var(--bg);
+}
+
+/* Das Kaestchen davor. [cmd] module-nutrition-spec.jsx:492 — 15x15.
+ * Farbe und Fuellung haengen am Zustand und bleiben inline. */
+.v2-einkauf-haken {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}

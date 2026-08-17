@@ -554,3 +554,150 @@ test('der Stack der Vorlage ist vollstaendig uebernommen', () => {
   assert.equal((db.match(/\{ name: /g) ?? []).length, 15,
     'SUPPLEMENT_DB der Vorlage hat fuenfzehn Eintraege.')
 })
+
+// --- G-38: die nachgezogenen Nutrition-Tabs --------------------------
+const NUT_PREFS = path.join(process.cwd(), 'src/app/v2/nutrition/tab-prefs.tsx')
+const NUT_PLANS = path.join(process.cwd(), 'src/app/v2/nutrition/tab-plans.tsx')
+const NUT_INSIGHTS = path.join(process.cwd(), 'src/app/v2/nutrition/tab-insights.tsx')
+const NUT_PLANNER = path.join(process.cwd(), 'src/app/v2/nutrition/tab-planner.tsx')
+const NUT_MODALE = path.join(process.cwd(), 'src/app/v2/nutrition/modale.tsx')
+
+test('die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel', () => {
+  // [cmd] G-38: vier Tabs standen bis dahin nur als Platzhalter da.
+  // Gebaut ist die Oberflaeche, angebunden ist nichts — `plans`,
+  // `prefs` und `planner` haben kein Schema, `insights` rechnet nicht
+  // ueber Zeitraeume. Wer einen Tab anbindet, entfernt `attrappe` und
+  // zaehlt hier herunter.
+  const dateien: Array<[string, number]> = [
+    [NUT_PREFS, 6],
+    [NUT_PLANS, 8],
+    [NUT_INSIGHTS, 3],
+    [NUT_PLANNER, 1],
+  ]
+  for (const [datei, erwartet] of dateien) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    assert.equal(mitGrund, erwartet,
+      `${path.basename(datei)}: ${mitGrund} gekennzeichnet, erwartet ${erwartet}. ` +
+      'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+test('die vier Modale der Nutrition-Vorlage sind da', () => {
+  // [cmd] Die Vorlage fuehrt vier (module-nutrition.jsx:68-71):
+  // quickadd, customfood, nutsettings, mealcam. G-38 hat sie gebaut;
+  // vorher zeigte der Kopf fuer alle nur „in Entwicklung".
+  const quelle = fs.readFileSync(NUT_MODALE, 'utf8')
+  for (const k of ['MealCamModal', 'CustomFoodModal', 'QuickAddModal', 'NutritionSettingsModal']) {
+    // `\\b` mit zwei Zeichen: in einem Template-Literal waere `\b`
+    // das Steuerzeichen Backspace, keine Wortgrenze. Dieselbe Falle
+    // wie in G-33 — hier faellt sie auf, weil der Test zuerst
+    // fehlgeschlagen ist.
+    assert.ok(new RegExp(`function ${k}\\b`).test(quelle),
+      `Das Modal "${k}" der Vorlage fehlt.`)
+  }
+})
+
+test('kein Math.random in den v2-Modulen', () => {
+  // [cmd] G-38: die Vorlage wuerfelt an zwei Stellen
+  // (module-nutrition.jsx:405 Heatmap, :648 Planner-Kalorien). In
+  // Next.js rendert der Server einmal und der Browser noch einmal —
+  // mit `Math.random()` kommen zwei Bilder heraus und React bricht die
+  // Hydration ab. Beide sind durch feste Formeln ersetzt. Dieser Test
+  // haelt fest, dass niemand sie zurueckholt.
+  const wurzel = path.join(process.cwd(), 'src/app/v2')
+  const offen: string[] = []
+  const lauf = (verz: string) => {
+    for (const e of fs.readdirSync(verz, { withFileTypes: true })) {
+      const p = path.join(verz, e.name)
+      if (e.isDirectory()) lauf(p)
+      else if (e.name.endsWith('.tsx') || e.name.endsWith('.ts')) {
+        // [cmd] NUR CODE, KEINE KOMMENTARE. Der erste Lauf meldete
+        // goals/ansicht.tsx, goals/daten.ts und medical/daten.ts —
+        // alle drei erklaeren in einem Kommentar, dass sie
+        // `Math.random()` gerade NICHT benutzen. Ein Werkzeug, das
+        // seine eigene Begruendung als Verstoss zaehlt, ist wertlos;
+        // dieselbe Klasse Fehler wie beim rgba-Test (G-22).
+        const roh = fs.readFileSync(p, 'utf8')
+        const ohne = roh
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          .replace(/^[^\n]*?\/\/[^\n]*$/gm, '')
+        if (/Math\.random\s*\(/.test(ohne)) offen.push(e.name)
+      }
+    }
+  }
+  lauf(wurzel)
+  assert.deepEqual(offen, [],
+    `Math.random() zerlegt die Hydration. Gefunden in: ${offen.join(', ')}`)
+})
+
+test('berechnete Stilwerte sind auf Engine-Genauigkeit gerundet', () => {
+  // [cmd] G-38: DIESER TEST GAB ES NICHT, ALS DER FEHLER AUFTRAT.
+  // `Math.random()` war ersetzt, der Test darauf war gruen — und der
+  // Browser meldete trotzdem:
+  //   Prop `style` did not match.
+  //   Server: opacity:0.6199775584337404
+  //   Client: opacity:0.6199775584345043
+  //
+  // `Math.sin` ist in ECMAScript nicht bitgenau festgelegt; Node und
+  // das V8 im Browser weichen ab der zwoelften Stelle ab. Ein Wert,
+  // der aus `Math.sin` kommt und ungerundet in ein `style` faellt,
+  // zerlegt die Hydration genauso wie `Math.random()` — nur leiser.
+  //
+  // ABER NUR, WO ES WEHTUT. `[cmd]` Der erste Entwurf dieses Tests
+  // schlug bei goals/daten.ts, nutrients-entwurf.tsx und modale.tsx an
+  // — alle drei rechnen mit `Math.sin`, aber ihre Werte gehen in
+  // Diagrammdaten (Sparkline, LineChart), nicht in ein `style`.
+  // React vergleicht bei der Hydration die gerenderten Attribute;
+  // eine Zahl, die nur die Hoehe einer SVG-Kurve bestimmt, taucht dort
+  // nicht als Text auf. Ein Test, der sie trotzdem meldet, erzeugt
+  // Laerm statt Sicherheit — und Laerm schaltet man irgendwann ab.
+  //
+  // Die Regel greift deshalb nur fuer Funktionen, deren Ergebnis in
+  // einem `style` landet: `opacity:`, `width:`, `height:` und Co. im
+  // selben Rumpf.
+  const wurzel = path.join(process.cwd(), 'src/app/v2')
+  const offen: string[] = []
+  const lauf = (verz: string) => {
+    for (const e of fs.readdirSync(verz, { withFileTypes: true })) {
+      const p = path.join(verz, e.name)
+      if (e.isDirectory()) lauf(p)
+      else if (e.name.endsWith('.tsx') || e.name.endsWith('.ts')) {
+        const roh = fs.readFileSync(p, 'utf8')
+        const ohne = roh
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          .replace(/^[^\n]*?\/\/[^\n]*$/gm, '')
+        // `[cmd]` OHNE `matchAll`: das tsconfig-Ziel dieses Pakets
+        // laesst das Iterieren eines RegExp-Iterators nicht zu
+        // (TS2802), auch nicht per Spread. Die uebrigen Tests dieser
+        // Datei benutzen deshalb `.match()` — hier dasselbe.
+        const ungerundet: string[] = []
+        const funktionen = ohne.match(/function\s+\w+[^{]*\{[\s\S]*?\n\}/g) ?? []
+        for (const f of funktionen) {
+          if (!/Math\.sin\s*\(/.test(f) || /Math\.round\s*\(/.test(f)) continue
+          const name = /function\s+(\w+)/.exec(f)
+          if (name) ungerundet.push(name[1])
+        }
+        if (ungerundet.length === 0) continue
+
+        const stile = ohne.match(/style=\{\{[\s\S]*?\}\}/g) ?? []
+        // Der Wert kann direkt im `style` stehen — `opacity: wert(i, j)` —
+        // oder ueber eine Variable dorthin kommen: `const v = wert(i, j)`
+        // und dann `opacity: 0.25 + v * 0.7`. Beides verfolgen.
+        const zuweisungen = ohne.match(/const\s+\w+\s*=\s*\w+\s*\(/g) ?? []
+        for (const fn of ungerundet) {
+          const direkt = stile.some(s => new RegExp(`\\b${fn}\\s*\\(`).test(s))
+          const ueberVariable = zuweisungen.some(z => {
+            const t = new RegExp(`const\\s+(\\w+)\\s*=\\s*${fn}\\s*\\(`).exec(z)
+            return t ? stile.some(s => new RegExp(`\\b${t[1]}\\b`).test(s)) : false
+          })
+          if (direkt || ueberVariable) offen.push(`${e.name} (${fn})`)
+        }
+      }
+    }
+  }
+  lauf(wurzel)
+  assert.deepEqual(offen, [],
+    'Ein aus Math.sin berechneter Wert muss gerundet werden, sonst weichen '
+    + `Server und Browser ab. Ungerundet in: ${offen.join(', ')}`)
+})
