@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `57e1a1c` auf `dev`.
+**Stand:** 2026-08-17, Anker `ab87f63` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 60 offen, 3 in Arbeit.
+`[cmd]` 62 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -190,6 +190,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-22** | Der Vertragstest schneidet den Block am ersten `}` ab |  |
 | **G-23** | Der Modulkopf bricht um |  |
 | **G-24** | JetBrains Mono laden |  |
+| **G-26** | `MuscleBodyMap` nach `packages/ui` |  |
+| **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-19** | 15 Rasterklassen aus Training nach `v2.css` |  |
 | **G-20** | `chevron_up` fehlt im Symbolsatz |  |
@@ -1719,6 +1721,73 @@ Umsetzen angepasst werden.
   `[cmd]` Der Weg ist derselbe wie bei Inter: `next/font/google`, beim
   Bauen geladen, keine Laufzeitabhaengigkeit.
 
+
+- [ ] **G-26: `MuscleBodyMap` nach `packages/ui`** (neu 2026-08-17).
+  **Tom, 2026-08-17:** *„Die Muskelkomponente nehmen wir sicher mit rein
+  und verwenden sie, wo gebraucht. Das HTML zeigt schon, was moeglich
+  ist — das ist sehr vielseitig."*
+
+  `[cmd]` `apps/web/public/mockup/components/MuscleBodyMap.js` — 593
+  Zeilen, dazu `body_front.svg` mit 24 KB. **Eine Komponente, fuenf
+  Aufrufarten, ein Klick-Handler:**
+
+  | | |
+  |---|---|
+  | `renderFatigue` | Muskel-Ermuedung → **Recovery** |
+  | `renderActivation` | Muskel-Aktivierung → **Training** |
+  | `renderInjection` | Injektionspunkte mit Rotation → **Supplements** |
+  | `renderPoints` | beliebige Punkte |
+  | `renderCombined` | Muskeln plus Overlay |
+
+  `MuscleBodyMap_test.html` zeigt alle fuenf Modi nebeneinander.
+
+  **Der Anlass:** `[read]` Tom ueber die Recovery-Attrappen: *„da tauchen
+  zum ersten Mal Muscle Readiness etc. als Grafiken auf, die sind
+  oberhaesslich."*
+
+  ### Was vor der Uebernahme zu klaeren ist
+
+  `[cmd]` **Das Mockup benutzt ein anderes Designsystem als `theme-v1`:**
+  `DM Sans` statt Inter, feste Farben wie `#f1f3f4` und `#374151`, eine
+  eigene `tokens.css` mit 16 KB.
+
+  `[annahme]` Die Muskelkarte selbst duerfte davon unberuehrt sein — SVG
+  plus Farbskala. **Pruefen, bevor sie nach `packages/ui` geht**, und
+  die Farbskala auf die vorhandenen Tokens legen.
+
+  `[cmd]` **Wo sie hingehoert:** Recovery (in Arbeit), Training (`/v2`
+  steht), Supplements (noch nicht gebaut). **Eine Komponente fuer drei
+  Module** — deshalb `packages/ui`, nicht je Modul.
+
+- [ ] **A-16: `public/mockup/` als dritten Fundus auswerten** (neu
+  2026-08-17). **Tom, 2026-08-17:** *„Der Rest — koennen wir als
+  Ergaenzung anschauen und weitere Ideen einbringen; das war ein
+  Zwischenwurf, der auch schon sehr weit war."*
+
+  `[cmd]` **Ueber 90 Dateien fuer alle elf Module**, teils sehr
+  ausgearbeitet: `MicroDashboard.js` 27 KB, `PreferencesView.js` 18 KB,
+  `DiaryView.js` 17 KB, `HistoryView.js` 12 KB, dazu `tokens.css`,
+  `index.html` und ein Shell-Geruest.
+
+  `[cmd]` **Es stand in keinem Index** — weder im SSOT noch in der
+  Spezifikation. Damit ist es der dritte unentdeckte Fundus nach
+  `referenz/lumeos-2026/` und `theme-v1/`.
+
+  ### Der Rang ist geklaert
+
+  `[read]` **`theme-v1/` bleibt die Vorgabe.** `public/mockup/` ist
+  **Ergaenzung und Ideenquelle**, kein Sollwert — Tom nennt es einen
+  Zwischenwurf.
+
+  **Was das praktisch heisst:** Wo `theme-v1` etwas zeigt, gilt
+  `theme-v1`. Wo es eine Luecke hat oder `public/mockup` eine bessere
+  Loesung traegt — wie bei der Muskelkarte — **wird sie vorgelegt, nicht
+  uebernommen.**
+
+  **Der Wegweiser fehlt.** `[read]` Bei `referenz/` hat
+  `docs/ssot/80-vorgaengerrepo-fundus.md` das geloest; hier braucht es
+  dasselbe: was liegt wo, und was davon ist besser als das, was wir
+  haben.
 
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
