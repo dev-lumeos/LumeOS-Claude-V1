@@ -83,6 +83,14 @@
     "user": "Tom Miller",
     "email": "tom.seed@example.com",
     "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-14",
+    "case": "Mehrere Snacks am selben Tag",
+    "expected": "nutrition.meals enthaelt zwei Snack-Mahlzeiten mit meal_time 10:14 und 16:00; die Sortierung kann ueber meal_time laufen."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
     "date": "2026-08-16",
     "case": "Hydration deutlich unter Ziel und 14-Tage-Schnitt",
     "expected": "hydration_day liefert Ziel 3.400 ml aus 85 kg x 30 ml/kg x Aktivitaetsfaktor 1,3333, einen Wassereintrag, total_ml unter 60 Prozent des Ziels und behind_14d_avg_pct ueber 20."

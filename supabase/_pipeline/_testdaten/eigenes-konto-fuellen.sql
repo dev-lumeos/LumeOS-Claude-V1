@@ -58,18 +58,22 @@ SELECT :tom::uuid, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee, 
 FROM goals.nutrition_targets WHERE user_id = :quelle::uuid;
 
 -- 3. Mahlzeiten mit neuer id, aber gemerkter Herkunft fuer die Positionen.
-CREATE TEMP TABLE abbild (neu uuid, alt uuid) ON COMMIT DROP;
+--    Die Abbildung laeuft explizit ueber IDs, nicht ueber
+--    (entry_date, meal_type): seit C-59 darf derselbe Typ mehrfach am Tag
+--    vorkommen.
+CREATE TEMP TABLE abbild (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
 
 WITH quelle AS (
-  SELECT id, entry_date, meal_type, notes FROM nutrition.meals WHERE user_id = :quelle::uuid
-), neu AS (
-  INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type, notes)
-  SELECT gen_random_uuid(), :tom::uuid, entry_date, meal_type, notes FROM quelle
-  RETURNING id, entry_date, meal_type
+  SELECT gen_random_uuid() AS neu, id AS alt
+  FROM nutrition.meals
+  WHERE user_id = :quelle::uuid
 )
-INSERT INTO abbild (neu, alt)
-SELECT n.id, q.id FROM neu n
-JOIN quelle q ON q.entry_date = n.entry_date AND q.meal_type = n.meal_type;
+INSERT INTO abbild (neu, alt) SELECT neu, alt FROM quelle;
+
+INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type, meal_time, notes)
+SELECT a.neu, :tom::uuid, m.entry_date, m.meal_type, m.meal_time, m.notes
+FROM nutrition.meals m
+JOIN abbild a ON a.alt = m.id;
 
 -- 4. Positionen. Die eingefrorenen Naehrwerte werden UNVERAENDERT uebernommen
 --    (ADR-0003) -- nicht neu gegen food_nutrients gerechnet.
