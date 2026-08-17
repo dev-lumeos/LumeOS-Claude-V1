@@ -1,0 +1,181 @@
+/* Die Rasterklassen des Goals-Moduls.
+ *
+ * WARUM HIER UND NICHT IN v2.css:
+ * `[read]` Der Auftrag G-28: „packages/ui/ nicht anfassen — fehlt ein
+ * Symbol oder eine Klasse: melden, und Modul-Raster in eine goals.css
+ * neben die Route, wie bei Training und Recovery."
+ *
+ * `[cmd]` **Es fehlt diesmal kein Symbol.** Alle 19 gebrauchten liegen
+ * in icons.tsx: goals, training, brain, medical, nutrition, recovery,
+ * supplements, check, x, arrow_right, edit, layers, download, copy,
+ * camera, plus, trend_up, trend_down, chevron_right, trash. Und
+ * `arr_r` — der Tippfehler, der in Training und Recovery auftrat —
+ * kommt in keiner der drei Goals-Dateien vor.
+ *
+ * `[cmd]` **Die geteilten Raster reichen weitgehend.** v2.css fuehrt
+ * seit dem Training-Aufraeumen `v2-grid-14` (1.4fr/1fr), `v2-grid-15`
+ * (1.5fr/1fr), `v2-grid-21`, `v2-span-2` und `v2-tbl-wrap` — alle mit
+ * dem 1100px-Haltepunkt. Dieses Modul benutzt sie: `v2-grid-15` fuer
+ * Goals, Phase engine, Adaptive TDEE und Cross-module, `v2-grid-14`
+ * fuer Measurements, Body metrics, Physique und Poses.
+ *
+ * Uebrig bleiben acht Raster, die es sonst nirgends gibt.
+ *
+ * `[annahme]` Wandern sie spaeter nach v2.css, faellt die Datei weg.
+ *
+ * DIE HALTEPUNKTE: `[cmd]` Der Entwurf hat null @media-Regeln. 1100px
+ * ist derselbe Haltepunkt wie in v2.css.
+ */
+
+/* --- Composition: zwei gleiche Spalten MIT Haltepunkt ------------
+ * [cmd] module-goals.jsx:563. `v2-grid v2-g-cols-2` waere die
+ * naheliegende Wahl, bricht aber nicht um (v2.css:470 setzt nur die
+ * Spalten). Die linke Kachel traegt sechs Rechenzeilen — die brauchen
+ * auf dem Telefon die volle Breite. */
+.v2-goals-comp {
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .v2-goals-comp { grid-template-columns: 1fr; }
+}
+
+/* --- Energiebilanz: Ring plus Zeilen ----------------------------
+ * [cmd] module-goals.jsx:580. */
+.v2-goals-energie {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 10px;
+}
+@media (max-width: 560px) {
+  .v2-goals-energie { flex-wrap: wrap; gap: 10px; }
+}
+
+/* --- Die Gantt-Zeile (Timeline) ---------------------------------
+ * [cmd] module-goals.jsx:338 und :374 — 180px Titel, Rest Balken.
+ * Unter 700px bleibt vom Balken nichts Lesbares; dann Titel darueber. */
+.v2-goals-gantt {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .v2-goals-gantt { grid-template-columns: 1fr; gap: 4px; }
+}
+
+/* --- Der Kopf der laufenden Phase -------------------------------
+ * [cmd] module-goals-pro.jsx:209. */
+.v2-goals-phase-kopf {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+@media (max-width: 620px) {
+  .v2-goals-phase-kopf { flex-wrap: wrap; gap: 12px; }
+}
+
+/* --- Die sieben Phasenkacheln -----------------------------------
+ * [cmd] module-goals-pro.jsx:262 — vier Spalten. */
+.v2-goals-phasen {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+@media (max-width: 900px) { .v2-goals-phasen { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .v2-goals-phasen { grid-template-columns: repeat(2, 1fr); } }
+
+/* --- Der TDEE-Kopf mit senkrechtem Trenner ----------------------
+ * [cmd] module-goals-pro.jsx:497. */
+.v2-goals-tdee-kopf {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.v2-goals-tdee-trenner {
+  width: 1px;
+  align-self: stretch;
+  background: var(--border);
+}
+@media (max-width: 620px) {
+  .v2-goals-tdee-kopf { flex-wrap: wrap; gap: 12px; }
+  /* Ein senkrechter Trenner zwischen umgebrochenen Zeilen ergibt
+     keinen Sinn — er faellt weg statt quer zu stehen. */
+  .v2-goals-tdee-trenner { display: none; }
+}
+
+/* --- Der Cross-module-Kopf --------------------------------------
+ * [cmd] module-goals-pro.jsx:585. */
+.v2-goals-cross-kopf {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+@media (max-width: 620px) {
+  .v2-goals-cross-kopf { flex-wrap: wrap; gap: 12px; }
+}
+
+/* --- Die Herleitung als Text (Adaptive TDEE) --------------------
+ * [cmd] module-goals-pro.jsx:527. Die Einrueckung traegt die
+ * Spaltenausrichtung; auf schmalen Schirmen scrollt der Kasten in
+ * sich, statt die Seite aufzuschieben. */
+.v2-goals-trace {
+  margin: 0;
+  padding: 14px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--fg-muted);
+  white-space: pre;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+}
+
+/* --- Die sechs Zieltypen (New-goal-Modal) -----------------------
+ * [cmd] module-goals.jsx:708. */
+.v2-goals-typen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+@media (max-width: 480px) {
+  .v2-goals-typen { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- Der Kopf des Zieldetail-Modals -----------------------------
+ * [cmd] module-goals.jsx:751 — vier Kacheln nebeneinander. */
+.v2-goals-detail-kopf {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+@media (max-width: 620px) {
+  .v2-goals-detail-kopf { grid-template-columns: 1fr 1fr; }
+}
+
+/* --- Die Posenkacheln -------------------------------------------
+ * [cmd] module-goals-pro.jsx:826 — fuenf Spalten. */
+.v2-goals-posen {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+@media (max-width: 900px) { .v2-goals-posen { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 620px) { .v2-goals-posen { grid-template-columns: repeat(3, 1fr); } }
+
+/* --- Eine Zeile der Muskelgruppen-Bewertung ---------------------
+ * [cmd] module-goals-pro.jsx:891. */
+.v2-goals-muskelwert {
+  display: grid;
+  grid-template-columns: 80px 1fr 32px;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
