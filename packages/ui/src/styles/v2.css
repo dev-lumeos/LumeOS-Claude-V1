@@ -1628,6 +1628,39 @@ select.v2-feld { cursor: pointer; }
   color: var(--fg);
 }
 
+/* G-14: `‹ Heute ›` als Einheit, mittig im Modulkopf.
+   Der Entwurf zeigt zwei blasse Pfeile am Rand der Aktionsleiste — eine
+   Navigation, die man nicht als solche erkennt. Hier steht sie als
+   Block zusammen, mit Rahmen, damit sie sich von den Aktionsknoepfen
+   daneben abhebt. */
+.v2-datumsnav {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.v2-datumsfeld {
+  min-width: 140px;
+  height: 26px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.v2-datumsfeld:hover:not(:disabled) { background: var(--surface-2); }
+/* „Heute" ist kein Knopf — es gibt nichts anzuklicken. Deshalb ohne
+   Zeigerwechsel und ohne die gedaempfte Schrift der Sperre. */
+.v2-datumsfeld:disabled { cursor: default; opacity: 1; }
+
 .v2-btn.v2-btn-sm {
   height: 22px;
   padding: 0 8px;

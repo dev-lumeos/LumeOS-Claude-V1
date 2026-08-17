@@ -19,6 +19,10 @@ import { getZielwerteAm, getZielwertVorschlag } from '../../../lib/profile/zielw
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { getHydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
+import { createSessionClient } from '@lumeos/shared/session'
+import { isAdminFromAppMetadata } from '@lumeos/shared/auth/role'
+
+import { datumOderHeute } from '../../../lib/datum'
 import { TagebuchAnsicht } from './ansicht'
 
 export const metadata: Metadata = {
@@ -27,22 +31,26 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic'
 
-/** Heute in lokaler Zeit als YYYY-MM-DD. */
-function heute(): string {
-  const d = new Date()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const t = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${t}`
-}
-
 export default async function V2NutritionPage({
   searchParams,
 }: {
   searchParams?: { datum?: string; tab?: string }
 }) {
-  const datum = /^\d{4}-\d{2}-\d{2}$/.test(searchParams?.datum ?? '')
-    ? searchParams!.datum!
-    : heute()
+  const datum = datumOderHeute(searchParams?.datum)
+
+  // G-14: die Rolle kommt aus `app_metadata` — NICHT aus
+  // `user_metadata`. `[read]` Letzteres kann die Nutzerin selbst
+  // setzen (belegt am 2026-08-06); ersteres nicht. Die Pruefung ist
+  // dieselbe wie im Admin-Bereich, damit es nur eine Regel gibt.
+  let istAdmin = false
+  try {
+    const supabase = createSessionClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    istAdmin = isAdminFromAppMetadata(
+      user?.app_metadata as Record<string, unknown> | null | undefined)
+  } catch {
+    istAdmin = false
+  }
 
   // Der aktive Tab steht in der Adresse, damit die Tagesdaten
   // serverseitig geladen bleiben (Begruendung in tableiste.tsx).
@@ -104,6 +112,7 @@ export default async function V2NutritionPage({
     <TagebuchAnsicht
       datum={datum}
       tab={tab}
+      istAdmin={istAdmin}
       wasser={wasser}
       summe={summe}
       bewertung={bewertung}

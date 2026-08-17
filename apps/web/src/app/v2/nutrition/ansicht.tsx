@@ -30,6 +30,7 @@ import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-as
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { Zielhinweis } from './zielhinweis'
 import { Mahlzeiten } from './mahlzeiten'
+import { Datumsnavigation, Zukunftshinweis } from './datumsnavigation'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
 const HAUPTMAKROS: Array<{
@@ -85,9 +86,12 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
+  istAdmin = false,
 }: {
   datum: string
   tab: string
+  /** G-14: nur Admins duerfen in die Zukunft blaettern. */
+  istAdmin?: boolean
   summe: DailySummaryRow | null
   bewertung: ReferenceAssessmentRow[]
   fehler: string | null
@@ -136,20 +140,9 @@ export async function TagebuchAnsicht({
           {/* Reihenfolge der Vorlage: ‹ › Quick-add, Recalc macros,
               Find food, MealCam. Die drei ohne Ziel oeffnen das Modal
               „in Entwicklung"; „Find food" fuehrt auf die gebaute Suche. */}
-          <Link
-            href={`/v2/nutrition?datum=${vortag(datum)}` as Route}
-            className="v2-btn v2-btn-ghost"
-            aria-label={t('vorherigerTag')}
-          >
-            <Icon name="chevron_left" className="v2-ic v2-ic-sm" />
-          </Link>
-          <Link
-            href={`/v2/nutrition?datum=${folgetag(datum)}` as Route}
-            className="v2-btn v2-btn-ghost"
-            aria-label={t('naechsterTag')}
-          >
-            <Icon name="chevron_right" className="v2-ic v2-ic-sm" />
-          </Link>
+          {/* G-14: `‹ Heute ›` als Einheit. Vorher zwei blasse Pfeile
+              hier — sichtbar erst, wenn man wusste, dass es sie gibt. */}
+          <Datumsnavigation datum={datum} istAdmin={istAdmin} />
           <InEntwicklungKnopf titel="Quick-add" className="v2-btn">
             <Icon name="zap" className="v2-ic v2-ic-sm" /> Quick-add
           </InEntwicklungKnopf>
@@ -174,6 +167,8 @@ export async function TagebuchAnsicht({
       </div>
 
       <Tableiste items={tabs(summe?.meal_count ?? null)} aktiv={tab} />
+
+      <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && <AndererTab tab={tab} />}
       {tab === 'diary' && (
@@ -485,20 +480,3 @@ function AndererTab({ tab }: { tab: string }) {
   )
 }
 
-/** Ein Tag zurueck, als YYYY-MM-DD. */
-function vortag(datum: string): string {
-  return verschiebe(datum, -1)
-}
-
-/** Ein Tag vor, als YYYY-MM-DD. */
-function folgetag(datum: string): string {
-  return verschiebe(datum, 1)
-}
-
-function verschiebe(datum: string, tage: number): string {
-  const d = new Date(`${datum}T00:00:00`)
-  d.setDate(d.getDate() + tage)
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const t = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${t}`
-}
