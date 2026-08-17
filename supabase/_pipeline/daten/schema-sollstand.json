@@ -1128,6 +1128,37 @@
       },
       "grants_herkunft": "106_workout_sessions.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft ueber workout_exercises die zugehoerige workout_session.",
       "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "recovery",
+      "name": "checkins",
+      "schritt": "120",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "120_recovery_checkins.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
     }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
@@ -1161,6 +1192,11 @@
       "schema": "training",
       "name": "refresh_workout_totals",
       "schritt": "106"
+    },
+    {
+      "schema": "recovery",
+      "name": "touch_updated_at",
+      "schritt": "120"
     }
   ]
 }

@@ -44,6 +44,11 @@ deleted_training_sessions AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_recovery_checkins AS (
+  DELETE FROM recovery.checkins
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_meals AS (
   DELETE FROM nutrition.meals
   WHERE user_id IN (${ids})
@@ -80,6 +85,7 @@ SELECT
   (SELECT count(*) FROM deleted_training_sets) AS training_sets,
   (SELECT count(*) FROM deleted_training_exercises) AS training_exercises,
   (SELECT count(*) FROM deleted_training_sessions) AS training_sessions,
+  (SELECT count(*) FROM deleted_recovery_checkins) AS recovery_checkins,
   (SELECT count(*) FROM deleted_meals) AS meals,
   (SELECT count(*) FROM deleted_preference_items) AS food_preference_items,
   (SELECT count(*) FROM deleted_preferences) AS food_preferences,

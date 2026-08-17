@@ -85,6 +85,25 @@ type TrainingSetRow = {
   setType: 'working' | 'warmup'
 }
 
+type RecoveryCheckinRow = {
+  userId: string
+  entryDate: string
+  checkinTime: string
+  sleepHours: number
+  sleepQuality: number
+  subjectiveFeeling: number
+  mood: 'motivated' | 'good' | 'neutral' | 'tired' | 'sick'
+  energyLevel: number
+  motivation: number
+  soreness: string
+  stressLevel: number
+  alcoholUnits: number
+  caffeineMg: number
+  screenTimeBeforeBed: number
+  hrvRmssd: number | null
+  notes: string
+}
+
 type ItemTemplate = {
   blsCode: string
   amountG: number
@@ -376,6 +395,7 @@ const waterLogs: WaterLogRow[] = []
 const trainingSessions: TrainingSessionRow[] = []
 const trainingExercises: TrainingExerciseRow[] = []
 const trainingSets: TrainingSetRow[] = []
+const recoveryCheckins: RecoveryCheckinRow[] = []
 for (const user of USERS) {
   const plan = PLANS[user.email]
   for (const date of daysBetween(START_DATE, END_DATE)) {
@@ -570,6 +590,53 @@ for (const day of TRAINING_DAYS) {
   })
 }
 
+function recoveryCheckinFor(date: string, index: number): RecoveryCheckinRow {
+  if (date === '2026-08-18') {
+    return {
+      userId: '10000000-0000-0000-0000-000000000101',
+      entryDate: date,
+      checkinTime: '07:18',
+      sleepHours: 4.8,
+      sleepQuality: 3,
+      subjectiveFeeling: 3,
+      mood: 'tired',
+      energyLevel: 3,
+      motivation: 3,
+      soreness: '{"chest":3,"quadriceps":2,"lower_back":2}',
+      stressLevel: 8,
+      alcoholUnits: 1,
+      caffeineMg: 420,
+      screenTimeBeforeBed: 95,
+      hrvRmssd: null,
+      notes: 'C-67 Szenario: schlechte Erholung ohne HRV fuer manual mode',
+    }
+  }
+
+  const isAfterLegs = ['2026-08-10', '2026-08-24', '2026-09-07'].includes(date)
+  return {
+    userId: '10000000-0000-0000-0000-000000000101',
+    entryDate: date,
+    checkinTime: '07:12',
+    sleepHours: isAfterLegs ? 7.0 : 7.6 + (index % 3) * 0.2,
+    sleepQuality: isAfterLegs ? 7 : 8,
+    subjectiveFeeling: isAfterLegs ? 7 : 8,
+    mood: index % 5 === 0 ? 'motivated' : 'good',
+    energyLevel: isAfterLegs ? 7 : 8,
+    motivation: index % 5 === 0 ? 9 : 8,
+    soreness: isAfterLegs ? '{"quadriceps":2,"glutes":2}' : '{"chest":1,"back":1}',
+    stressLevel: index % 6 === 0 ? 5 : 3,
+    alcoholUnits: 0,
+    caffeineMg: 260 + (index % 3) * 40,
+    screenTimeBeforeBed: 25 + (index % 4) * 10,
+    hrvRmssd: index % 4 === 0 ? 62 + index : null,
+    notes: 'C-67 Testdaten: Recovery Check-in fuer Verlauf und manual mode',
+  }
+}
+
+daysBetween('2026-08-03', '2026-09-07').forEach((date, index) => {
+  recoveryCheckins.push(recoveryCheckinFor(date, index))
+})
+
 const userIds = USERS.map(user => lit(user.id)).join(', ')
 const userValues = USERS.map(user => tuple([
   user.id,
@@ -629,6 +696,24 @@ const trainingSetValues = trainingSets.map(set => tuple([
   set.rpe,
   set.setType,
 ])).join(',\n')
+const recoveryCheckinValues = recoveryCheckins.map(checkin => tuple([
+  checkin.userId,
+  checkin.entryDate,
+  checkin.checkinTime,
+  checkin.sleepHours,
+  checkin.sleepQuality,
+  checkin.subjectiveFeeling,
+  checkin.mood,
+  checkin.energyLevel,
+  checkin.motivation,
+  checkin.soreness,
+  checkin.stressLevel,
+  checkin.alcoholUnits,
+  checkin.caffeineMg,
+  checkin.screenTimeBeforeBed,
+  checkin.hrvRmssd,
+  checkin.notes,
+])).join(',\n')
 const itemValues = items.map(item => tuple([
   item.mealId,
   item.userId,
@@ -655,6 +740,7 @@ USING training.workout_sessions s
 WHERE we.workout_session_id = s.id
   AND s.user_id IN (${userIds});
 DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
+DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preference_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preferences WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
@@ -948,6 +1034,41 @@ INSERT INTO training.workout_sets (
 SELECT workout_exercise_id, set_number, reps, weight_kg, rpe, set_type, now()
 FROM test_training_sets;
 
+CREATE TEMP TABLE test_recovery_checkins (
+  user_id uuid NOT NULL,
+  entry_date date NOT NULL,
+  checkin_time time NOT NULL,
+  sleep_hours numeric NOT NULL,
+  sleep_quality smallint NOT NULL,
+  subjective_feeling smallint NOT NULL,
+  mood text NOT NULL,
+  energy_level smallint NOT NULL,
+  motivation smallint NOT NULL,
+  soreness jsonb NOT NULL,
+  stress_level smallint NOT NULL,
+  alcohol_units numeric NOT NULL,
+  caffeine_mg integer NOT NULL,
+  screen_time_before_bed integer NOT NULL,
+  hrv_rmssd numeric,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_recovery_checkins VALUES
+${recoveryCheckinValues};
+
+INSERT INTO recovery.checkins (
+  user_id, entry_date, checkin_time,
+  sleep_hours, sleep_quality, subjective_feeling, mood,
+  energy_level, motivation, soreness, stress_level,
+  alcohol_units, caffeine_mg, screen_time_before_bed, hrv_rmssd, notes
+)
+SELECT
+  user_id, entry_date, checkin_time,
+  sleep_hours, sleep_quality, subjective_feeling, mood,
+  energy_level, motivation, soreness, stress_level,
+  alcohol_units, caffeine_mg, screen_time_before_bed, hrv_rmssd, notes
+FROM test_recovery_checkins;
+
 DO $$
 DECLARE
   v_users integer;
@@ -957,6 +1078,7 @@ DECLARE
   v_training_sessions integer;
   v_training_exercises integer;
   v_training_sets integer;
+  v_recovery_checkins integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
@@ -973,6 +1095,7 @@ BEGIN
   JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${userIds});
+  SELECT count(*) INTO v_recovery_checkins FROM recovery.checkins WHERE user_id IN (${userIds});
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -985,6 +1108,8 @@ BEGIN
     v_users, v_meals, v_items, v_water, v_max_days;
   RAISE NOTICE 'OK: C-66 Training-Testdaten: % Sitzungen, % Uebungen, % Saetze',
     v_training_sessions, v_training_exercises, v_training_sets;
+  RAISE NOTICE 'OK: C-67 Recovery-Testdaten: % Check-ins',
+    v_recovery_checkins;
 END $$;
 
 COMMIT;
@@ -1003,4 +1128,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins.`)

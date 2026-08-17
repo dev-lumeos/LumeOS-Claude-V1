@@ -326,6 +326,13 @@
       "depends_on": ["105", "auth_stub"]
     },
     {
+      "id": "120",
+      "path": "supabase/_pipeline/12_recovery/120_recovery_checkins.sql",
+      "kind": "sql",
+      "creates": "Recovery-Userdaten: checkins mit subjektivem Schlaf, Stimmung, Stress, Soreness und optionalen Wearable-Werten",
+      "depends_on": ["B", "auth_stub"]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",

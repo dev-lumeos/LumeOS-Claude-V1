@@ -54,6 +54,7 @@ const trainingSets = numberScalar(`
   JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${IDS_SQL});`)
+const recoveryCheckins = numberScalar(`SELECT count(*) FROM recovery.checkins WHERE user_id IN (${IDS_SQL});`)
 const maxDays = numberScalar(`
   SELECT COALESCE(max(tage), 0)
   FROM (
@@ -77,6 +78,7 @@ if (MODE === 'clean') {
   if (trainingSessions !== 0) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet 0`)
   if (trainingExercises !== 0) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 0`)
   if (trainingSets !== 0) errors.push(`training.workout_sets: ${trainingSets}, erwartet 0`)
+  if (recoveryCheckins !== 0) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 0`)
   if (foods !== 7140) errors.push(`foods: ${foods}, erwartet 7140`)
   if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
 
@@ -85,6 +87,7 @@ if (MODE === 'clean') {
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
+  console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
   const frozenMissing = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL}) AND frozen_at IS NULL;`)
@@ -121,6 +124,7 @@ if (MODE === 'clean') {
   if (trainingSessions !== 9) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet 9`)
   if (trainingExercises !== 18) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 18`)
   if (trainingSets !== 60) errors.push(`training.workout_sets: ${trainingSets}, erwartet 60`)
+  if (recoveryCheckins !== 36) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 36`)
   if (maxDays < 42) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 42`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
@@ -314,8 +318,37 @@ if (MODE === 'clean') {
         AND status = 'completed'
         AND session_date BETWEEN DATE '2026-08-03' AND DATE '2026-09-06'
     ) d
-    WHERE tage >= 9;`)) {
+  WHERE tage >= 9;`)) {
     errors.push('Fall Training Verlauf: mehrere Wochen abgeschlossene Sitzungen fehlen')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM recovery.checkins
+    WHERE user_id = '${tom}'::uuid
+      AND entry_date = DATE '2026-08-18'
+      AND checkin_time = TIME '07:18'
+      AND hrv_rmssd IS NULL
+      AND sleep_quality = 3
+      AND subjective_feeling = 3
+      AND mood = 'tired'
+      AND (soreness->>'chest')::int = 3;`)) {
+    errors.push('Fall Recovery manual: schlechter Check-in ohne HRV fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM (
+      SELECT count(*) AS checkins,
+             min(entry_date) AS von,
+             max(entry_date) AS bis,
+             count(*) FILTER (WHERE hrv_rmssd IS NULL) AS ohne_hrv
+      FROM recovery.checkins
+      WHERE user_id = '${tom}'::uuid
+    ) r
+    WHERE checkins >= 35
+      AND von = DATE '2026-08-03'
+      AND bis = DATE '2026-09-07'
+      AND ohne_hrv > 0;`)) {
+    errors.push('Fall Recovery Verlauf: mehrere Wochen Check-ins mit HRV-losen Zeilen fehlen')
   }
   if (numberScalar(`
     SELECT count(*)
@@ -347,6 +380,7 @@ if (MODE === 'clean') {
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
+  console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
   console.log(`  daily_summary Zeilen: ${dailyRows}`)
