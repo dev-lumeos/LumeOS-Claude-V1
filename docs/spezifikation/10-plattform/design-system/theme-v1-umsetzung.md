@@ -133,6 +133,29 @@ Rahmen und hielt sie fuer undefiniert.**
 ist eine ganze Aufklaerungsseite; **ohne sie zeigt der Tab sofort
 Hormonprotokolle.** Ein Zustand, der etwas verbirgt, ist kein Detail.
 
+### Zwei Nachtraege aus G-36 (Medical)
+
+**4. Nicht nur nach `window.` greppen.** `[cmd]` In
+`module-medical-v2.jsx` findet ein `window.`-Grep **nichts** — nach dem
+Goals-Muster hiesse das „steht allein". **Das ist falsch:** Der Rahmen
+ruft acht Modale und zwanzig Datennamen als **blosse Globale** auf
+(`<BiomarkerDetailModal/>`, nicht `window.X`), weil alle vier Dateien in
+denselben Skript-Gueltigkeitsbereich geladen werden.
+
+`[read]` **Wer nur nach `window.` greppt, baut acht Modale und den
+halben Datenbestand nicht.**
+
+**5. Kacheltitel zaehlen, nicht nur Komponentennamen.** `[cmd]` Bei
+Medical melden **drei von fuenf Tabs „0 Unterkomponenten"**, weil die
+Kacheln inline gesetzt sind. **Ein reines Namenszaehlen haette gruen
+gemeldet, waehrend vier von fuenf Kacheln fehlen** — genau der
+Supplements-Fehler in anderer Gestalt.
+
+`[read]` **Die verbleibende Luecke, vom Agenten selbst benannt:** *„es
+prueft Namen und Titel, nicht Inhalt."*
+
+---
+
 ### Was der Abgleich ergab
 
 | Tab | Vorlage | vorher | jetzt |
