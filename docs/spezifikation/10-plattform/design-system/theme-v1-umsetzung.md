@@ -156,6 +156,40 @@ prueft Namen und Titel, nicht Inhalt."*
 
 ---
 
+### Drei Werkzeugfehler, die eine sichere Falschmessung erzeugen
+
+`[cmd]` Aus G-38, wo alle sechs Module gemessen wurden. **Jeder dieser
+Fehler liefert eine Zahl, die richtig aussieht:**
+
+**6. Kommentare zaehlen nicht als Umsetzung.** `[cmd]` `MealCard` und
+`NutritionDiary` galten als gebaut — sie standen nur in einem
+**Herkunftskommentar.**
+
+**7. Gegen den geltenden Rahmen messen, nicht gegen den abgeloesten.**
+`[cmd]` Ein Lauf gegen den alten Recovery-Rahmen erzeugte **22
+Phantomluecken**; `app.jsx:122` waehlt `RecoveryModuleV2`, der alte
+greift nie.
+
+**8. Tote Vorlagendateien nicht mitzaehlen.** `[cmd]` Vier Modale und
+zwei Konstanten, die `-v2.jsx` **nullmal** nennt.
+
+### Was gefunden wurde
+
+| Modul | Stand |
+|---|---|
+| Dashboard | 3/3 |
+| **Nutrition** | **38/38** (vorher 11/38) |
+| Training | 45/45 |
+| Recovery | 67/71 — **alle vier sind die Muskelkarte** |
+| Goals | 65/65 |
+| Supplements | 42/67 — fuenf Tabs offen (G-31) |
+
+`[read]` **Die Grobmessung des Orchestrators traf beide Faelle richtig,
+aus verschiedenen Gruenden:** Nutrition war eine **reale Luecke**,
+Recovery ein **Messfehler**.
+
+---
+
 ### Was der Abgleich ergab
 
 | Tab | Vorlage | vorher | jetzt |
