@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `415530e` auf `dev`.
+**Stand:** 2026-08-17, Anker `3446725` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 72 offen, 4 in Arbeit.
+`[cmd]` 73 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -206,8 +206,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **C-69** | Medical-Schema |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
-| **G-38** | Vollstaendigkeit aller Mockups nachmessen | ~ |
 | **G-40** | Coach als Mockup — zwei Unterbereiche |  |
+| **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
 
 ---
 
@@ -1960,6 +1960,11 @@ Umsetzen angepasst werden.
   `[cmd]` Und die Muskelkarte aus G-26 traegt `renderInjection` mit
   Rotation — **sie ist fuer diesen Tab gebaut.**
 
+  **Dazu aus G-38:** `[cmd]` **`SuppCost` ist ein gebauter Tab, aber
+  die Vorlage fuehrt fuenf Kacheln, die Umsetzung zwei.** `[read]`
+  Dieselbe Klasse Luecke wie `SuppExtended` in G-33 — *sieht beim
+  Klicken vollstaendig aus, ist es nicht.*
+
 
 - [ ] **G-32: `refillUrgent` ist an einem von neun Eintraegen gesetzt**
   (neu 2026-08-17). Befund aus G-29.
@@ -2122,24 +2127,6 @@ Umsetzen angepasst werden.
   `[read]` Dritter Fund dieser Art nach G-20 (fuenf Symbole) und G-21.
   **`arr_r` nicht uebernommen** — ein Test haelt das fest.
 
-- [~] **G-38: Vollstaendigkeit aller Mockups nachmessen** (neu
-  2026-08-17). **In Arbeit.** **Nachtraeglich angelegt** — der Auftrag
-  lief, ohne dass er in der Liste stand.
-
-  `[cmd]` Dashboard, Nutrition, Training, Recovery und Goals wurden
-  abgenommen, **bevor die Zaehlung Pflicht wurde.** Nur Supplements ist
-  geprueft — und dort fehlten in zwei Tabs **15 von 15
-  Unterkomponenten.**
-
-  **Eine Grobmessung liegt vor**, sie reicht nicht: `[cmd]` goals 33/33,
-  training 28/29, dashboard 2/3, **recovery 12/15**, **nutrition 5/16**,
-  supplements 23/54 (davon fuenf Tabs bewusst offen, G-31).
-
-  `[annahme]` Bei Nutrition **koennten** es Umbenennungen sein — die
-  Umsetzung benennt deutsch. **Das Skript kann das nicht
-  unterscheiden.** Bei Recovery fehlen `BodyMap18`, `SILHOUETTE_PATH`,
-  `MuscleDetailModal2` — **die Muskelkarte**, und die wird ohnehin durch
-  G-26 ersetzt.
 
 - [ ] **G-40: Coach als Mockup — zwei Unterbereiche** (neu 2026-08-17).
   **Nachtraeglich angelegt.**
@@ -2174,3 +2161,18 @@ Umsetzen angepasst werden.
   (`HumanCoach` mit **`SPEC_11_UI_DESIGN.md`, das es bei keinem anderen
   Modul gibt**, und `BuddyandAICoach`), **84 Fundstellen im
   Vorgaengerrepo**, vier Migrationen.
+
+- [ ] **G-41: Bei 375 px scrollt jede v2-Seite waagerecht** (neu
+  2026-08-17). Randbefund aus G-38.
+
+  `[cmd]` **Ursache ist `.v2-sidebar-nav` mit 880 px**, nicht der
+  Modulinhalt — **betrifft auch unveraenderte Seiten.**
+
+  `[read]` Die bisherige Pruefung *„drei Breiten ohne Ueberlauf"* hat es
+  nie gefunden, weil sie bei groesseren Breiten misst. **375 px ist die
+  Breite eines Telefons.**
+
+  `[cmd]` Die Shell stammt aus G-02, wo die Haltepunkte der bestehenden
+  Oberflaeche uebernommen wurden — **der Entwurf hat null
+  `@media`-Regeln.** Unter 1.280 px wurde die Kontextspalte
+  ausgeblendet; **die Sidebar blieb unberuehrt.**

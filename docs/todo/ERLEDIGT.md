@@ -4716,3 +4716,74 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Verlauf aus gemischten Quellen zeigt Spruenge, die niemand erlebt hat.
   **Nachtraeglich waere die Spalte billig, die tausend Zeilen ohne
   Herkunft nicht.**
+
+- [x] **G-38: Vollstaendigkeit aller Mockups nachmessen** (neu
+  2026-08-17). **In Arbeit.** **Nachtraeglich angelegt** — der Auftrag
+  lief, ohne dass er in der Liste stand.
+
+  `[cmd]` Dashboard, Nutrition, Training, Recovery und Goals wurden
+  abgenommen, **bevor die Zaehlung Pflicht wurde.** Nur Supplements ist
+  geprueft — und dort fehlten in zwei Tabs **15 von 15
+  Unterkomponenten.**
+
+  **Eine Grobmessung liegt vor**, sie reicht nicht: `[cmd]` goals 33/33,
+  training 28/29, dashboard 2/3, **recovery 12/15**, **nutrition 5/16**,
+  supplements 23/54 (davon fuenf Tabs bewusst offen, G-31).
+
+  `[annahme]` Bei Nutrition **koennten** es Umbenennungen sein — die
+  Umsetzung benennt deutsch. **Das Skript kann das nicht
+  unterscheiden.** Bei Recovery fehlen `BodyMap18`, `SILHOUETTE_PATH`,
+  `MuscleDetailModal2` — **die Muskelkarte**, und die wird ohnehin durch
+  G-26 ersetzt.
+
+  `[cmd]` **Erledigt 2026-08-17.** `tools/vollstaendigkeit.mjs` misst
+  alle Module; Bericht in `docs/ssot/101-vollstaendigkeit.md`.
+
+  | Modul | Stand |
+  |---|---|
+  | Dashboard | 3/3 |
+  | **Nutrition** | **38/38** (vorher 11/38) |
+  | Training | 45/45 |
+  | Recovery | 67/71 — **alle vier sind die Muskelkarte** |
+  | Goals | 65/65 |
+  | Supplements | 42/67 — fuenf Tabs offen (G-31) |
+
+  ### Drei Werkzeugfehler vor den Zahlen
+
+  `[read]` *„Jeder haette eine Messung geliefert, die sicher aussieht und
+  falsch ist."*
+
+  `[cmd]` **Kommentare als Umsetzung gezaehlt** — `MealCard` und
+  `NutritionDiary` galten als gebaut, standen aber nur in einem
+  Herkunftskommentar. **Gegen den abgeloesten Recovery-Rahmen
+  gemessen** — 22 Phantomluecken. **Tote Vorlagendateien mitgezaehlt** —
+  vier Modale und zwei Konstanten, die `-v2.jsx` nullmal nennt.
+
+  `[read]` **Beide Grobzahlen des Orchestrators trafen zu, aus
+  verschiedenen Gruenden:** Nutrition war eine **reale Luecke**, Recovery
+  ein **Messfehler.**
+
+  ### Nachgezogen
+
+  `[cmd]` Vier Tabs (Preferences, Meal plans, Insights, Planner) und vier
+  Modale, Datenkonstanten mechanisch uebernommen. **18 Kacheln mit
+  Marke, kein Fenster schreibt.**
+
+  **`NutritionFoods` bewusst nicht gebaut:** `[read]` *„Die Vorlage hat
+  dort zwoelf feste Zeilen, die Umsetzung eine echte BLS-Suche (G-03).
+  Nachbauen hiesse, funktionierenden Code durch eine Attrappe zu
+  ersetzen."*
+
+  ### Der Fehler, den kein Test fand
+
+  `[cmd]` `Math.random()` war ersetzt, der Test darauf gruen — **der
+  Browser meldete trotzdem** `0.6199775584337404` gegen
+  `0.6199775584345043`.
+
+  `[read]` **`Math.sin` ist in ECMAScript nicht bitgenau festgelegt.
+  „Fest" heisst nicht „bei jedem Aufruf gleich", sondern „in jeder
+  Engine gleich."** Der neue Test prueft das — **aber nur bei Werten, die
+  in ein `style` fallen**; ein erster Entwurf meldete auch
+  Diagrammdaten und haette Laerm statt Sicherheit erzeugt.
+
+  `[cmd]` Alle vier neuen Tests zum Fehlschlagen gebracht.
