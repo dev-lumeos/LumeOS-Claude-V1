@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `d6b7259` auf `dev`.
+**Stand:** 2026-08-17, Anker `7cac873` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 57 offen, 3 in Arbeit.
+`[cmd]` 59 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -187,7 +187,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-12** | Die Suche in die Erfassung einbinden |  |
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
-| **G-18** | Die Schrift fehlt |  |
+| **G-22** | Der Vertragstest schneidet den Block am ersten `}` ab |  |
+| **G-23** | Der Modulkopf bricht um |  |
+| **G-24** | JetBrains Mono laden |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-19** | 15 Rasterklassen aus Training nach `v2.css` |  |
 | **G-20** | `chevron_up` fehlt im Symbolsatz |  |
@@ -1673,50 +1675,49 @@ Umsetzen angepasst werden.
   nicht dringend.** Es wird dringend, sobald das Dashboard
   datumsabhaengige Kacheln bekommt.
 
-- [ ] **G-18: Die Schrift fehlt** (neu 2026-08-17). **Tom, 2026-08-17:**
-  *„Es ist schlechter lesbar als die Vorgabe."*
+- [ ] **G-22: Der Vertragstest schneidet den Block am ersten `}` ab**
+  (neu 2026-08-17). Befund aus G-18.
 
-  **Es liegt nicht an der Deckkraft.** `[cmd]` Die Farbtokens sind
-  identisch mit der Vorlage — `--fg-dim 0.420`, `--fg-muted 0.720`,
-  Wert für Wert.
+  `[cmd]` `blockFor()` sucht `css.indexOf('}')` — **ein Kommentar mit
+  geschweifter Klammer kappt alles danach.** Beim Bau von G-18
+  verschwanden dadurch beide Schrift-Tokens aus der Pruefung, obwohl sie
+  dastanden.
 
-  `[cmd]` **Es liegt daran, dass `--font-sans` nicht existiert.** Die
-  Vorlage setzt `--font-sans: 'Inter', -apple-system, system-ui,
-  sans-serif` und laedt Inter ueber `fonts.googleapis.com`. In diesem
-  Repo definiert `lume.css` **nur `--font-mono`** — und `v2.css`
-  benutzt `var(--font-sans)`, eine Variable ohne Definition.
+  **Umgangen, nicht behoben** — der Parser bleibt anfaellig.
 
-  **Damit faellt die Schrift auf die Browservorgabe zurueck**, unter
-  Windows meist eine Serifenschrift. Genau das ist in Toms
-  Bildschirmfotos zu sehen: „Nutrition", „Tagebuch", „Mahlzeiten
-  erfassen" stehen mit Serifen. **Bei kleinen Groessen auf dunklem Grund
-  wirkt das duenner und unruhiger — unabhaengig von der Farbe.**
+  `[read]` Dieselbe Fehlerklasse wie die Encoding- und i18n-Pruefungen:
+  **eine Pruefung, die still weniger prueft, als sie vorgibt.** Sie
+  meldet gruen und hat den halben Block nie gesehen.
 
-  ### Woher es kommt
+- [ ] **G-23: Der Modulkopf bricht um** (neu 2026-08-17). Befund aus
+  G-18.
 
-  `[read]` Entscheidung aus G-01: *„Nicht uebernommen: der Font-Import
-  von `fonts.googleapis.com` — `apps/web` laedt keine externen
-  Schriften; das waere eine fremde Abhaengigkeit im kritischen Pfad
-  gewesen."*
+  `[cmd]` **Sechs Aktionsknoepfe plus die G-14-Datumsnavigation passen
+  bei 1600 px nicht in eine Zeile.** Kein Ueberlauf, nur Umbruch — und
+  kein Schriftproblem, es war vorher da.
 
-  **Die Begruendung war richtig, die Folge nicht bedacht:** Der Import
-  fiel weg, `--font-sans` wurde nie ersetzt.
+  `[cmd]` Die Vorlage zeigt `‹ ›` plus vier Knoepfe; hier kamen die
+  Datumsnavigation als Block und `Lebensmittel suchen` dazu.
 
-  ### Die Loesung ohne externe Abhaengigkeit
+  **Zu entscheiden:** Welche Knoepfe gehoeren in den Kopf und welche
+  woandershin? `[read]` Die Vorlage ist die Vorgabe — wenn sie vier
+  zeigt und hier sechs stehen, ist die Frage, was dazugekommen ist und
+  warum.
 
-  `[cmd]` `apps/web` ist Next.js — **`next/font/google` laedt Inter beim
-  Bauen herunter und liefert sie vom eigenen Server aus.** Keine Anfrage
-  an Google zur Laufzeit, kein zusaetzlicher Verbindungsaufbau. Das ist
-  der Standardweg fuer genau diesen Fall.
+- [ ] **G-24: JetBrains Mono laden** (neu 2026-08-17). Rest aus G-18.
 
-  `[cmd]` Dasselbe gilt fuer `JetBrains Mono` — die Vorlage setzt es als
-  `--font-mono`, hier steht `ui-monospace, SFMono-Regular, Menlo, …`.
-  **Pruefen, ob das gewollt ist**: Systemschriften sind hier vertretbar,
-  weil Monospace ueberall aehnlich aussieht.
+  `[cmd]` Die Vorlage setzt `--font-mono: 'JetBrains Mono', ui-monospace,
+  monospace`; hier steht nur die Systemkette. `v2.css` benutzt
+  `var(--font-mono)` an sechs Stellen — dort stehen in der Vorlage die
+  Kennzahlen.
 
-  **Danach neu beurteilen.** `[Wahrscheinlich]` Damit erledigt sich der
-  Lesbarkeitseindruck; falls dann noch etwas zu blass ist, sind es die
-  Tokens — und die lassen sich gezielt anfassen.
+  `[annahme]` Der Unterschied duerfte klein sein. **Belegbar erst, wenn
+  die Schrift geladen ist** — dann laesst sich vergleichen statt
+  vermuten.
+
+  `[cmd]` Der Weg ist derselbe wie bei Inter: `next/font/google`, beim
+  Bauen geladen, keine Laufzeitabhaengigkeit.
+
 
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze

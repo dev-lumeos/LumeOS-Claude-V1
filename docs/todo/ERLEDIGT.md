@@ -4060,3 +4060,81 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **`training.sessions` und `training.sets` kommen in
   `supabase/_pipeline/` nirgends vor** — das ist der Grund, warum alles
   andere Attrappe ist.
+
+- [x] **G-18: Die Schrift fehlt** (neu 2026-08-17). **Tom, 2026-08-17:**
+  *„Es ist schlechter lesbar als die Vorgabe."*
+
+  **Es liegt nicht an der Deckkraft.** `[cmd]` Die Farbtokens sind
+  identisch mit der Vorlage — `--fg-dim 0.420`, `--fg-muted 0.720`,
+  Wert für Wert.
+
+  `[cmd]` **Es liegt daran, dass `--font-sans` nicht existiert.** Die
+  Vorlage setzt `--font-sans: 'Inter', -apple-system, system-ui,
+  sans-serif` und laedt Inter ueber `fonts.googleapis.com`. In diesem
+  Repo definiert `lume.css` **nur `--font-mono`** — und `v2.css`
+  benutzt `var(--font-sans)`, eine Variable ohne Definition.
+
+  **Damit faellt die Schrift auf die Browservorgabe zurueck**, unter
+  Windows meist eine Serifenschrift. Genau das ist in Toms
+  Bildschirmfotos zu sehen: „Nutrition", „Tagebuch", „Mahlzeiten
+  erfassen" stehen mit Serifen. **Bei kleinen Groessen auf dunklem Grund
+  wirkt das duenner und unruhiger — unabhaengig von der Farbe.**
+
+  ### Woher es kommt
+
+  `[read]` Entscheidung aus G-01: *„Nicht uebernommen: der Font-Import
+  von `fonts.googleapis.com` — `apps/web` laedt keine externen
+  Schriften; das waere eine fremde Abhaengigkeit im kritischen Pfad
+  gewesen."*
+
+  **Die Begruendung war richtig, die Folge nicht bedacht:** Der Import
+  fiel weg, `--font-sans` wurde nie ersetzt.
+
+  ### Die Loesung ohne externe Abhaengigkeit
+
+  `[cmd]` `apps/web` ist Next.js — **`next/font/google` laedt Inter beim
+  Bauen herunter und liefert sie vom eigenen Server aus.** Keine Anfrage
+  an Google zur Laufzeit, kein zusaetzlicher Verbindungsaufbau. Das ist
+  der Standardweg fuer genau diesen Fall.
+
+  `[cmd]` Dasselbe gilt fuer `JetBrains Mono` — die Vorlage setzt es als
+  `--font-mono`, hier steht `ui-monospace, SFMono-Regular, Menlo, …`.
+  **Pruefen, ob das gewollt ist**: Systemschriften sind hier vertretbar,
+  weil Monospace ueberall aehnlich aussieht.
+
+  **Danach neu beurteilen.** `[Wahrscheinlich]` Damit erledigt sich der
+  Lesbarkeitseindruck; falls dann noch etwas zu blass ist, sind es die
+  Tokens — und die lassen sich gezielt anfassen.
+
+  `[cmd]` **Erledigt 2026-08-17**, Commit `7cac873`. Mit
+  `getComputedStyle` gemessen:
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `body` rendert in | **„Times New Roman"** | `__Inter_8b3a0b` |
+  | `--font-sans` | **leer** | Inter + Rueckfallkette der Vorlage |
+  | geladene Schriften | keine | Inter 400, 500, 600, 700 |
+
+  **Eine Serifenschrift bei 11–13 px** — genau der Eindruck „duenner
+  und unruhiger". `[cmd]` Die Tokens blieben unangetastet.
+
+  `[cmd]` `next/font/google` laedt beim Bauen: **0 Anfragen an Google zur
+  Laufzeit**, im Netzwerkprotokoll gezaehlt. **Die G-01-Entscheidung
+  bleibt gewahrt.**
+
+  ### `--font-mono` gelassen — und die Messung beweist nichts
+
+  `[read]` Der Vergleich beider Ketten ergab ein identisches Bild, **aber
+  JetBrains Mono ist hier nicht installiert und fiel auf dieselbe
+  Systemschrift zurueck. Die Messung kann die beiden nicht
+  unterscheiden.**
+
+  `[annahme]` Monospace-Schriften aehneln sich staerker als
+  Proportionalschriften; belegen liesse es sich erst, wenn JetBrains
+  Mono geladen wird.
+
+  ### Der Grund, warum es neun Tage unbemerkt blieb
+
+  `[cmd]` **Der Theme-Vertrag prueft `--font-mono`, aber nicht
+  `--font-sans`.** Jetzt in `THEME_TOKENS_BASE`, gegengeprobt: Token
+  versteckt → rot, zurueckgesetzt → gruen.
