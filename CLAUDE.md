@@ -69,9 +69,29 @@ jedem Auftrag an Claude Code:
 schreiben, ausfuehren, loeschen. Das laeuft ohne Nachfrage durch und ist
 nebenbei lesbar und wiederholbar.
 
-`[annahme]` `defaultMode: "bypassPermissions"` waere die Alternative —
-**ungeprueft, ob die `deny`-Liste dann noch greift.** Wenn nicht, fiele
-damit auch die Commit-Sperre. Nicht ohne Messung einschalten.
+## Der Modus ist `bypassPermissions` — gemessen, nicht angenommen
+
+`[cmd]` Seit 2026-08-17 steht `defaultMode: "bypassPermissions"` in
+`.claude/settings.json`. **Die Agenten laufen damit ohne Nachfragen
+durch — auch nachts, auch wenn niemand davorsitzt.**
+
+**Die Sperre haelt trotzdem.** `[cmd]` Am 2026-08-17 gemessen:
+`git commit -m "test"` wurde blockiert, HEAD blieb auf `520d001`, nichts
+gestaged. **`deny`-Regeln greifen auch unter `bypassPermissions`.**
+
+`[read]` Die Recherche hatte zwei Aussagen gefunden, die sich
+widersprachen. **Die Messung entscheidet, nicht die Mehrheit der
+Quellen.** Geprueft ist genau eine Regel; dass die uebrigen 22 ebenso
+greifen, folgt aus derselben Mechanik, **ist aber nicht einzeln
+gemessen.**
+
+**Was dabei nicht greift:** `[read]` MCP-Aufrufe genehmigen sich im
+Bypass-Modus selbst. Falls Claude Code MCP-Server angebunden bekommt,
+gehoeren sie ueber `mcp__servername` in `deny` oder `ask`.
+
+**Der eigentliche Schutz ist ohnehin nicht die Allow-Liste:**
+`protect-paths.ps1` laeuft als `PreToolUse`-Hook bei jedem Bash-Aufruf
+und blockiert mit Exit-Code 2 — **in jedem Modus.**
 
 **Warum:** Zwei Agenten teilen sich einen Git-Index. An einem Tag ist
 das dreimal schiefgegangen — ein Commit mit sechs fremden Dateien, und
