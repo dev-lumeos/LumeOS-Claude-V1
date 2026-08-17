@@ -3533,6 +3533,69 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   513 Mahlzeiten, 1.561 Positionen, Kettenlauf ueber 47 Schritte,
   Schema vollstaendig.
 
+- [x] **C-63: `locale` in `public.profiles`** (neu 2026-08-17). Folgt
+  aus A-14, von Claude Code angefordert.
+
+  `[cmd]` Heute gilt die Sprachwahl **je Browser** (Cookie). Mit der
+  Spalte gilt sie je Person.
+
+  **Der Zuschnitt steht:** `locale text`, erlaubt `de` / `en` / `th`,
+  **Vorgabe `NULL`, nicht `'de'`** — `[read]` sonst ist „hat Deutsch
+  gewaehlt" nicht von „wurde nie gefragt" zu unterscheiden. Dazu ein
+  `CHECK`.
+
+  `[cmd]` Der Anschluss ist klein: eine Abfrage in `getRequestConfig`,
+  ein `PUT` in der Auswahl.
+
+  `[cmd]` **Erledigt 2026-08-17**, Commit `df91c03`. `public.profiles`
+  traegt `locale text`, erlaubt `NULL` / `de` / `en` / `th`, **kein
+  Default.** `handle_new_user()` bleibt unveraendert — neue Profile
+  bekommen ebenfalls `NULL`.
+
+  `[cmd]` Live geprueft: `locale='fr'` wird vom `CHECK` abgewiesen, alle
+  17 Pruefungen in `v090_profile.sql` gruen.
+
+  **Der Anschluss steht aus** — eine Abfrage in `getRequestConfig`, ein
+  `PUT` in der Sprachwahl. Bis dahin gilt die Wahl je Browser.
+
+- [x] **C-60: Die Vorgabeportion ist wertlos** (neu 2026-08-17).
+  **Tom, 2026-08-17:** *„Die Portionen muessen in die Auswahl mit rein
+  als logische Vorwahl."*
+
+  `[cmd]` **Bei 7.043 von 7.048 Lebensmitteln heisst die Vorgabeportion
+  „100 g".** Nur fuenf haben etwas anderes. Die Erfassung schlaegt
+  deshalb immer „100 g" vor — auch bei Brot, wo `[cmd]` 1.333 Eintraege
+  „1 Scheibe 30 g" danebenliegen.
+
+  `[read]` Bei C-50 war richtig, dass **Gramm kanonisch** bleibt — die
+  Darstellung im Tagebuch in Gramm ist korrekt (Tom bestaetigt). **Fuer
+  die Vorauswahl beim Erfassen ist sie falsch.**
+
+  **Was zu tun ist:** Je Lebensmittel die logischste Portion als Vorgabe
+  markieren — bei Brot die Scheibe, bei Eiern das Stueck, bei Oel den
+  Essloeffel. `[cmd]` Die Daten liegen in `daten/portionen.json`; es ist
+  eine Frage der Markierung, nicht der Erhebung. `[annahme]` Wo keine
+  sinnvollere Portion existiert (Gewuerze, Zutaten), bleibt „100 g".
+
+  `[cmd]` **Erledigt 2026-08-17**, Commit `13b0a89`.
+
+  | | vorher | nachher |
+  |---|---|---|
+  | Vorgabe `100 g` | **7.043** | 2.039 |
+  | sinnvolle Vorgabe | 5 | **5.009** |
+
+  `[cmd]` Live belegt: Vollkornbrot → `1 Scheibe 30 g`, Huehnerei →
+  `1 Ei (Groesse M) 58 g`, Banane → `1 Stueck (mittel) 120 g`, Olivenoel
+  → `1 EL 10 g`.
+
+  **Der Weg fuehrte ueber die Kategorie**, nicht ueber 7.048
+  Einzelfaelle — `[cmd]` kategoriespezifische Vorgaben schlagen
+  `basis_100g`. Die verbliebenen 2.039 sind Zutaten und Halbfertiges,
+  wo `100 g` richtig bleibt.
+
+  `[cmd]` Die Pruefung zaehlt jetzt beides und faellt bei fehlenden oder
+  doppelten Vorgaben.
+
 
 
 ## Erledigt am 2026-08-05

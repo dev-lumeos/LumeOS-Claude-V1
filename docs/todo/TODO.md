@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `3cec380` auf `dev`.
+**Stand:** 2026-08-17, Anker `13b0a89` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 55 offen, 3 in Arbeit.
+`[cmd]` 53 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -136,7 +136,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-08** | ADR Medienort |  |
 | **A-11** | Specs laufend zu SSOT konsolidieren | ~ |
 | **A-13** | Das Konsolidierungsregister abarbeiten |  |
-| **C-63** | `locale` in `public.profiles` |  |
 | **C-64** | 942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen |  |
 | **A-15** | Sprachpflege als laufende Regel |  |
 | **B-20** | Codex-Pfadschutz wiederherstellen |  |
@@ -177,7 +176,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-54** | `display_tier` als Ordnung der Anzeige benutzen |  |
 | **C-52** | Zwei essenzielle Fettsäuren ohne Ziel und ohne Bewertung |  |
 | **C-53** | Elf Nährstoffe erreichen die Bewertung nicht |  |
-| **C-60** | Die Vorgabeportion ist wertlos |  |
 | **GO-01** | Goals | ~ |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-05** | Dashboard |  |
@@ -280,19 +278,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `SPEC_09_SCORING.md` (C-49), die Preferences-Specs (G-11), und die
   Planner-/Meal-plans-Specs.
 
-- [ ] **C-63: `locale` in `public.profiles`** (neu 2026-08-17). Folgt
-  aus A-14, von Claude Code angefordert.
-
-  `[cmd]` Heute gilt die Sprachwahl **je Browser** (Cookie). Mit der
-  Spalte gilt sie je Person.
-
-  **Der Zuschnitt steht:** `locale text`, erlaubt `de` / `en` / `th`,
-  **Vorgabe `NULL`, nicht `'de'`** — `[read]` sonst ist „hat Deutsch
-  gewaehlt" nicht von „wurde nie gefragt" zu unterscheiden. Dazu ein
-  `CHECK`.
-
-  `[cmd]` Der Anschluss ist klein: eine Abfrage in `getRequestConfig`,
-  ein `PUT` in der Auswahl.
 
 - [ ] **C-64: 942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen**
   (neu 2026-08-17). Folgt aus A-14.
@@ -1381,24 +1366,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   Aufnehmen, nicht danach.
 
 
-- [ ] **C-60: Die Vorgabeportion ist wertlos** (neu 2026-08-17).
-  **Tom, 2026-08-17:** *„Die Portionen muessen in die Auswahl mit rein
-  als logische Vorwahl."*
-
-  `[cmd]` **Bei 7.043 von 7.048 Lebensmitteln heisst die Vorgabeportion
-  „100 g".** Nur fuenf haben etwas anderes. Die Erfassung schlaegt
-  deshalb immer „100 g" vor — auch bei Brot, wo `[cmd]` 1.333 Eintraege
-  „1 Scheibe 30 g" danebenliegen.
-
-  `[read]` Bei C-50 war richtig, dass **Gramm kanonisch** bleibt — die
-  Darstellung im Tagebuch in Gramm ist korrekt (Tom bestaetigt). **Fuer
-  die Vorauswahl beim Erfassen ist sie falsch.**
-
-  **Was zu tun ist:** Je Lebensmittel die logischste Portion als Vorgabe
-  markieren — bei Brot die Scheibe, bei Eiern das Stueck, bei Oel den
-  Essloeffel. `[cmd]` Die Daten liegen in `daten/portionen.json`; es ist
-  eine Frage der Markierung, nicht der Erhebung. `[annahme]` Wo keine
-  sinnvollere Portion existiert (Gewuerze, Zutaten), bleibt „100 g".
 
 
 
