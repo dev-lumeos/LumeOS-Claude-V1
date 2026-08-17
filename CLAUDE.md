@@ -48,6 +48,31 @@ Sperre um 20:51 gesetzt, Codex committete um 20:53.
 *„Nicht committen, nicht stagen — melden."* Das ist schwaecher als eine
 Sperre, aber Codex haelt sich an Textvorgaben.
 
+## Pruefungen als Skript, nicht als Shell-Einzeiler
+
+**Tom, 2026-08-17:** *„So belanglosen Scheiss will ich nicht
+beantworten."*
+
+`[cmd]` Die Permission-Schicht von Claude Code prueft **Einzelmuster**.
+Ein verketteter Befehl mit Kommandosubstitution — `$(grep … | tr …)`
+— oder ein mehrzeiliges `python -c` in einer `&&`-Kette trifft kein
+Muster, **auch wenn jeder Bestandteil erlaubt ist.** `grep`, `echo`,
+`for`, `head`, `tr` stehen alle auf `allow`; die Nachfrage kommt
+trotzdem.
+
+**Das laesst sich mit einer Musterliste nicht loesen.** Deshalb steht in
+jedem Auftrag an Claude Code:
+
+> **Pruefschleifen als Skript**, nicht als Shell-Einzeiler mit `$(…)`.
+
+`[read]` So arbeitet der Orchestrator selbst: eine `.py`-Datei
+schreiben, ausfuehren, loeschen. Das laeuft ohne Nachfrage durch und ist
+nebenbei lesbar und wiederholbar.
+
+`[annahme]` `defaultMode: "bypassPermissions"` waere die Alternative —
+**ungeprueft, ob die `deny`-Liste dann noch greift.** Wenn nicht, fiele
+damit auch die Commit-Sperre. Nicht ohne Messung einschalten.
+
 **Warum:** Zwei Agenten teilen sich einen Git-Index. An einem Tag ist
 das dreimal schiefgegangen — ein Commit mit sechs fremden Dateien, und
 zwei Commits, bei denen der Inhalt des einen unter der Nachricht des

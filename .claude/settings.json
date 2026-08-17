@@ -348,7 +348,9 @@
       "Bash(shift:*)",
       "Bash(exit:*)",
       "Bash(return:*)",
-      "Bash(export:*)"
+      "Bash(export:*)",
+      "Bash([:*)",
+      "Bash(false:*)"
     ],
     "defaultMode": "acceptEdits"
   },
