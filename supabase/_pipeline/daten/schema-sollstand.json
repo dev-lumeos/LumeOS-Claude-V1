@@ -379,7 +379,7 @@
     },
     {
       "name": "meals",
-      "schritt": "052",
+      "schritt": "052/052a",
       "rls": true,
       "policies": [
         "SELECT",
@@ -405,7 +405,18 @@
         ]
       },
       "grants_herkunft": "052 (service_role: 060 3d bzw. DEFAULT PRIVILEGES aus 060 3e)",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "user_id",
+        "entry_date",
+        "meal_type",
+        "notes",
+        "created_at",
+        "updated_at",
+        "meal_time"
+      ],
+      "spalten_herkunft": "[cmd] 2026-08-17 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 052a_meal_time.sql ergaenzt meal_time als lokale Uhrzeit des Essens."
     },
     {
       "name": "meal_items",

@@ -82,6 +82,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 028 | `_ableitung/028_kuratierte-aliase.ts` | kuratierte Suchbegriffe und Sortenaliase aus `daten/reis-alias-kuration.json` als `food_aliases.source='curated_suchbegriff'` | 13 Zuordnungen vor Deduplikation |
 | 029 | `_ableitung/029_portionen-einspielen.ts` | `foods_portions` mit kuratierten Haushaltsportionen aus `daten/portionen.json`; Gramm bleibt kanonisch | 23.402 Portionszeilen für 7.048 Foods, 92 ohne Portion |
 | **052** | `05_user_tabellen/052_diary_foundation.sql` | **`meals`, `meal_items`**, `touch_updated_at()`, `meal_items_owner_guard()`, 4 Trigger, 8 Policies | 2 Tabellen |
+| **052a** | `05_user_tabellen/052a_meal_time.sql` | `meals.meal_time`, Sortierindizes und Wegfall des Unique-Index auf Nutzer/Tag/Typ | mehrere Mahlzeiten je Typ speicherbar |
 | **053** | `05_user_tabellen/053_daily_summary.sql` | Sicht **`daily_summary`** | 1 Sicht |
 | **054** | `05_user_tabellen/054_preference_uniques.sql` | Eindeutigkeitsregeln auf `food_preference_items` | — |
 | **055** | `05_user_tabellen/055_water_logs.sql` | **`water_logs`** + Policies | 1 Tabelle |
@@ -165,7 +166,7 @@ Referenz und für Weiterentwicklung):
 | Slices | `_archive/20260513_001`, `_002`, `20260514_001` | Schema `nutrition`, `nutrient_defs`, `foods`, `food_nutrients` (seit 2026-08-05 archiviert — durch die Baseline ersetzt) |
 | 050 | `05_user_tabellen/050_preferences_foundation.sql` | `food_preferences`, `food_preference_items` inkl. RLS + `uq_food_pref_items_user_food` |
 | 051 | `05_user_tabellen/051_curation_persistence.sql` | `food_curation_candidates`, `_decisions` |
-| 052 | `05_user_tabellen/052_diary_foundation.sql` | **`nutrition.meals` + `nutrition.meal_items`** (C-03/WP-02, ADR-0003) inkl. eigener Grants, RLS und **je 4 Policies pro Tabelle**, `uq_meals_user_date_type`, Eigentümer-Wachhund auf `meal_items` — v052: 21 Prüfungen. **Noch nicht live** (Stand 2026-08-06, wartet auf Freigabe) |
+| 052 | `05_user_tabellen/052_diary_foundation.sql` | **`nutrition.meals` + `nutrition.meal_items`** (C-03/WP-02, ADR-0003) inkl. eigener Grants, RLS und **je 4 Policies pro Tabelle**, historischer `uq_meals_user_date_type` (wird durch 052a entfernt), Eigentümer-Wachhund auf `meal_items` — v052: 21 Prüfungen. **Noch nicht live** (Stand 2026-08-06, wartet auf Freigabe) |
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, 2 Trigram-Indizes, Grants, RLS/Policies auf allen 11 Tabellen — **live seit 2026-08-02** |
 | 061 | `06_zugriff/061_rollen_admin.sql` | **`public.is_admin()`** (liest nur den JWT-Claim `app_metadata->>role`, Standard `false`) + SELECT-Grant und je 1 SELECT-Policy auf die beiden Curation-Tabellen — **live seit 2026-08-06** (C.3). Keine Schreib-Policies. Rollen werden **nicht** von der Kette vergeben, siehe Dateikopf. v061: 15 Prüfungen |
 | 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen (`search_fold`, `food_search`, `food_categories_tree`, `preference_search_preview` mit 14 Argumenten, `curation_overview`, `schema_debug`) — v070: 18 Prüfungen |

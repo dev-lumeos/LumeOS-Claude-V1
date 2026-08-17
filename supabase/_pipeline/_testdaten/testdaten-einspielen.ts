@@ -30,6 +30,7 @@ type MealRow = {
   userId: string
   entryDate: string
   mealType: string
+  mealTime: string
   notes: string
 }
 
@@ -58,6 +59,12 @@ type DayPlan = Record<string, ItemTemplate[]>
 type SpecialDayPlan = DayPlan | 'skip-day'
 
 const MEAL_TYPES = ['breakfast', 'lunch', 'snack', 'dinner'] as const
+const MEAL_TIMES: Record<(typeof MEAL_TYPES)[number], string> = {
+  breakfast: '07:30',
+  lunch: '12:30',
+  snack: '16:00',
+  dinner: '19:30',
+}
 
 const USERS: TestUser[] = [
   {
@@ -337,6 +344,7 @@ for (const user of USERS) {
         userId: user.id,
         entryDate: date,
         mealType,
+        mealTime: MEAL_TIMES[mealType],
         notes: `C-82 Testdaten aus dem Vorgaengerrepo: ${user.displayName}`,
       })
       for (const template of dayPlan[mealType]) {
@@ -345,6 +353,22 @@ for (const user of USERS) {
     }
   }
 }
+
+const secondSnackId = uuidFrom('tom.seed@example.com:2026-08-14:snack:zweiter-snack')
+meals.push({
+  id: secondSnackId,
+  userId: '10000000-0000-0000-0000-000000000101',
+  entryDate: '2026-08-14',
+  mealType: 'snack',
+  mealTime: '10:14',
+  notes: 'C-61/C-59 Testdaten: zweiter Snack am selben Tag',
+})
+items.push({
+  mealId: secondSnackId,
+  userId: '10000000-0000-0000-0000-000000000101',
+  blsCode: 'F503100',
+  amountG: 80,
+})
 
 function waterAmountsFor(user: TestUser, date: string): number[] {
   if (user.email === 'tom.seed@example.com' && date === '2026-08-16') {
@@ -396,6 +420,7 @@ const mealValues = meals.map(meal => tuple([
   meal.userId,
   meal.entryDate,
   meal.mealType,
+  meal.mealTime,
   meal.notes,
 ])).join(',\n')
 const waterValues = waterLogs.map(log => tuple([
@@ -540,14 +565,15 @@ CREATE TEMP TABLE test_meals (
   user_id uuid NOT NULL,
   entry_date date NOT NULL,
   meal_type text NOT NULL,
+  meal_time time NOT NULL,
   notes text NOT NULL
 ) ON COMMIT DROP;
 
 INSERT INTO test_meals VALUES
 ${mealValues};
 
-INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type, notes)
-SELECT id, user_id, entry_date, meal_type, notes
+INSERT INTO nutrition.meals (id, user_id, entry_date, meal_type, meal_time, notes)
+SELECT id, user_id, entry_date, meal_type, meal_time, notes
 FROM test_meals;
 
 CREATE TEMP TABLE test_water_logs (

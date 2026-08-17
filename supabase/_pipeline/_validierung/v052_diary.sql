@@ -43,14 +43,19 @@ SELECT 'meal_items_grants_authenticated', string_agg(DISTINCT privilege_type, ',
 FROM information_schema.role_table_grants
 WHERE table_schema = 'nutrition' AND table_name = 'meal_items' AND grantee = 'authenticated';
 
--- --- Duplikatschutz ---
-SELECT 'uq_meals_user_date_type_exists', (COUNT(*) = 1)::text
+-- --- C-61/C-59: Uhrzeit und mehrere Mahlzeiten je Typ ---
+SELECT 'meal_time_column_exists', (COUNT(*) = 1)::text
+FROM information_schema.columns
+WHERE table_schema = 'nutrition' AND table_name = 'meals'
+  AND column_name = 'meal_time' AND data_type = 'time without time zone';
+SELECT 'uq_meals_user_date_type_absent', (COUNT(*) = 0)::text
 FROM pg_indexes
 WHERE schemaname = 'nutrition' AND tablename = 'meals'
   AND indexname = 'uq_meals_user_date_type' AND indexdef LIKE '%UNIQUE%';
-SELECT 'duplicate_meals_rows', COUNT(*)::text
-FROM (SELECT user_id, entry_date, meal_type FROM nutrition.meals
-      GROUP BY 1,2,3 HAVING COUNT(*) > 1) d;
+SELECT 'idx_meals_user_date_time_exists', (COUNT(*) = 1)::text
+FROM pg_indexes
+WHERE schemaname = 'nutrition' AND tablename = 'meals'
+  AND indexname = 'idx_meals_user_date_time';
 
 -- --- Eigentuemer-Wachhund auf meal_items ---
 SELECT 'meal_items_owner_guard_trigger', (COUNT(*) = 1)::text

@@ -165,11 +165,18 @@
       "depends_on": ["B", "auth_stub"]
     },
     {
+      "id": "052a",
+      "path": "supabase/_pipeline/05_user_tabellen/052a_meal_time.sql",
+      "kind": "sql",
+      "creates": "meals.meal_time, Sortierindizes und Wegfall des Unique-Index auf Nutzer/Tag/Typ",
+      "depends_on": ["052"]
+    },
+    {
       "id": "053",
       "path": "supabase/_pipeline/05_user_tabellen/053_daily_summary.sql",
       "kind": "sql",
       "creates": "daily_summary",
-      "depends_on": ["052"]
+      "depends_on": ["052a"]
     },
     {
       "id": "054",

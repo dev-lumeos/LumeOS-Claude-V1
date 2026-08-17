@@ -218,6 +218,21 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM (
+      SELECT
+        count(*) AS snacks,
+        string_agg(to_char(meal_time, 'HH24:MI'), ',' ORDER BY meal_time, created_at, id) AS zeiten
+      FROM nutrition.meals
+      WHERE user_id = '${tom}'::uuid
+        AND entry_date = DATE '2026-08-14'
+        AND meal_type = 'snack'
+    ) d
+    WHERE snacks = 2
+      AND zeiten = '10:14,16:00';`)) {
+    errors.push('Fall mehrere Snacks: zwei Snacks am selben Tag werden nicht nach meal_time sortierbar gespeichert')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM public.profiles
     WHERE id = '${sarah}'::uuid
       AND birth_date IS NULL
