@@ -387,3 +387,162 @@ ist danach da. Kein Überlauf, nur Umbruch. Gemeldet, nicht angefasst.
 | `pnpm gate` | `[cmd]` grün, 8 Tasks |
 | Drei Breiten | `[cmd]` 1600 / 1100 / 800 px, kein Überlauf |
 | `/nutrition` unverändert | `[cmd]` 0 `v2-`-Elemente, `lume-shell` vorhanden, eigene Schriftkette |
+
+
+---
+
+## Nachtrag 2026-08-17 (G-19 / G-20 / G-22)
+
+### Schritt 0: die Bypass-Messung
+
+`[cmd]` **`git commit -m "test"` wurde BLOCKIERT.** Die Permission-Schicht
+meldete „Permission to use Bash … has been denied", HEAD blieb auf
+`520d001`, nichts gestaged.
+
+**Belegt: `deny`-Regeln greifen auch unter
+`defaultMode: "bypassPermissions"`.** Die Quelle, die das Gegenteil
+behauptet, ist damit widerlegt — die 23 Deny-Regeln halten, und die
+Agenten koennen ohne Nachfragen laufen.
+
+`[annahme]` Geprueft wurde genau eine Regel (`git commit`). Dass die
+uebrigen 22 ebenso greifen, folgt aus derselben Mechanik, ist aber
+nicht einzeln gemessen.
+
+---
+
+### G-20 — sechs fehlende Symbole, nicht eines
+
+`[cmd]` Ein Abgleich der vier Modulvorlagen gegen `icons.tsx` (Skript
+ueber `name="…"` und `icon: "…"`): **52 Symbole vorhanden, 53 benutzt,
+sechs ohne Entsprechung.**
+
+| Symbol | benutzt in | aufgenommen |
+|---|---|---|
+| `chevron_up` | `module-training-extras.jsx` | ja |
+| `bolt` | Nutrition und Training, vier Dateien | ja — formgleich mit `zap` |
+| `cloud_off` | `module-training.jsx` | ja |
+| `refresh` | `module-recovery-modals.jsx` | ja |
+| `user` | `shell.jsx` (Human Coaches, Open profile) | ja |
+| `arr_r` | `module-recovery-v2.jsx`, **einmal** | **nein** |
+
+**`arr_r` ist ein Tippfehler der Vorlage.** `[cmd]` `shared.jsx`
+definiert `arrow_right`, benutzt an dieser einen Stelle aber `arr_r` —
+das Symbol zeichnet dort ebenfalls nichts. Aufzunehmen waere, den
+Fehler zu uebernehmen.
+
+`[cmd]` **Keines der sechs ist in `shared.jsx` der Vorlage definiert.**
+Sie zeichnen dort also alle nichts — die Vorlage ist an dieser Stelle
+unvollstaendig, nicht unser Symbolsatz. Das ist der Grund, warum es
+niemandem auffiel: `<Icon>` rendert bei unbekanntem Namen still nichts,
+in beiden Welten.
+
+Die Trainingsseite steht wieder auf `chevron_up` / `chevron_down`; der
+Ersatz durch `arrow_up` / `arrow_down` aus G-16 ist zurueckgenommen.
+
+---
+
+### G-19 — aus 15 Klassen wurden 3 Verhaeltnisse plus 11 Sonderfaelle
+
+`training.css` ist **geloescht**, der Import aus `page.tsx` entfernt.
+
+**Zusammengefasst statt verschoben:**
+
+| vorher | jetzt |
+|---|---|
+| `v2-train-grid-14` (1.4fr/1fr) | `.v2-grid-14` — **gemeinsam mit `.v2-dash-grid`** |
+| `v2-train-grid-15` (1.5fr/1fr) | `.v2-grid-15` — **gemeinsam mit `.v2-diary-grid`** |
+| `v2-train-grid-21` (2fr/1fr) | `.v2-grid-21` |
+| `v2-train-grid-11` (1fr/1fr) | **entfaellt** — dafuer gibt es `.v2-g-cols-2` aus dem Entwurf |
+| `v2-train-span-2` | `.v2-span-2` |
+
+`[cmd]` **Von fuenf Rastern bleiben drei.** Die elf uebrigen Klassen
+(Wochenleiste, Sitzungskopf, Medaillon, Volumentabelle, Filterzeile,
+Pausenzaehler, Landmark-Zeile, Feedback-Zeile, HR-Zeile, Offline-Kopf,
+Uebungszeile, Block-Felder) bleiben eigenstaendig: ihre Spaltenbreiten
+kommen aus je einer Vorlagenstelle und wiederholen sich nirgends.
+
+`[cmd]` Im Browser gemessen: `.v2-grid-14` → `557px / 398px` (1,4:1),
+`.v2-grid-15` → `573px / 382px` (1,5:1), `.v2-grid-21` → `637px / 318px`
+(2:1). Keine alte Klasse mehr im DOM (`[class*="v2-train-grid"]` = 0).
+
+`[cmd]` **Der `rgba`-Test bleibt bei vier.** Kein Raster braucht einen
+Schatten.
+
+### Der eigentliche Fund: der Erzeuger haette 164 Zeilen geloescht
+
+`[cmd]` `v2.css` entsteht aus `klassen-uebernehmen.mjs`. **Fuenf
+Klassengruppen standen nur in der erzeugten Datei und nicht im
+`zusatz`-Block des Erzeugers:** `v2-dash-grid`, `v2-diary-grid`,
+`v2-attrappe*`, `v2-sprachliste`/`v2-sprachwahl`, `v2-datumsnav`,
+`v2-btn-sm`.
+
+**Gemessen, nicht vermutet:** ein Lauf des Erzeugers reduzierte die
+Datei von **1701 auf 1537 Zeilen** — 164 Zeilen weg, darunter das
+Dashboard-Raster, die Attrappenmarke aus G-05, die Sprachwahl aus A-14
+und die Datumsnavigation aus G-14. Alles aus den letzten fuenf
+Auftraegen.
+
+**Behoben:** die handergaenzten Klassen stehen jetzt im `zusatz`-Block,
+mit einer Trennlinie und dem Hinweis, wo Neues hingehoert. `[cmd]`
+Danach erneut erzeugt: **1905 Zeilen, alle Klassen vorhanden** — die
+alten, die handergaenzten und die neuen Raster.
+
+`[annahme]` Warum es nie auffiel: der Erzeuger wurde seit G-01 nicht
+mehr gelaufen. Wer ihn das naechste Mal angefasst haette, haette den
+Schaden erst nach dem Neuladen gesehen.
+
+---
+
+### G-22 — der Vertragstest sah 30 von 32 Tokens
+
+`[cmd]` `blockFor()` nahm `css.indexOf('}')` — **die erste schliessende
+Klammer**, egal ob sie zu einer Regel gehoert oder in einem Kommentar
+steht.
+
+**Gemessen am Zustand vor der Reparatur:** mit dem G-18-Kommentar
+(`body { font-family: var(--font-sans) }`) im Block sah der alte Parser
+**30 von 32 Tokens** — `--font-sans` und `--font-mono` fielen dahinter
+und waren fuer die Pruefung unsichtbar. Sie meldete gruen.
+
+`[cmd]` **Heute uebersieht sie nichts** — weil ich den Kommentar bei
+G-18 umformuliert habe, um sie zum Laufen zu bringen. Der Fehler war
+also latent, nicht aktiv. **Genau das ist die Gefahr:** die Pruefung
+war nur so lange richtig, wie niemand eine Klammer in einen Kommentar
+schrieb.
+
+**Behoben, zweifach:**
+
+1. **Kommentare werden vor der Suche entfernt** — laengengleich durch
+   Leerzeichen ersetzt, damit die Positionen stimmen.
+2. **Klammern werden gezaehlt** statt die erste zu nehmen. Ein
+   verschachtelter Block (`@media`, `&:hover`) beendete den aeusseren
+   sonst zu frueh. `[annahme]` Heute steht keiner in den Theme-Dateien —
+   die Pruefung soll aber nicht davon abhaengen, dass das so bleibt.
+
+`[cmd]` **Gegengeprobt:** Kommentar mit `}` mitten in den Block gesetzt,
+direkt vor die Schrift-Tokens → Test **gruen**, die Tokens dahinter
+werden gesehen. Zum Vergleich derselbe Zustand mit der alten Logik
+nachgerechnet: **30 statt 32**. Danach zurueckgesetzt.
+
+`[read]` **Dieselbe Fehlerklasse zum vierten Mal** — eine Pruefung, die
+still weniger prueft, als sie vorgibt. Encoding (Dreibyte-Zeichen),
+i18n (Schluessel, der in beiden Sprachen fehlt), die Zeilenzahlen aus
+C-43, jetzt der Vertragsparser.
+
+---
+
+### Nachweise
+
+| Pruefung | Ergebnis |
+|---|---|
+| Bypass-Messung | `[cmd]` `git commit` blockiert, HEAD unveraendert |
+| `chevron_up` im Symbolsatz | `[cmd]` ja, Training benutzt es |
+| Fehlende Symbole gesamt | `[cmd]` 6 gefunden, 5 aufgenommen, `arr_r` als Vorlagen-Tippfehler gemeldet |
+| `training.css` | `[cmd]` geloescht, Import entfernt |
+| Raster nach dem Zusammenfassen | `[cmd]` **3 Verhaeltnisse** statt 5, dazu 11 Sonderfaelle |
+| Erzeuger laeuft ohne Verlust | `[cmd]` 1905 Zeilen, alle Klassen vorhanden |
+| `rgba`-Vorkommen | `[cmd]` 4, unveraendert |
+| Vertragstest hinter `}`-Kommentar | `[cmd]` gruen, gegengeprobt |
+| `pnpm gate` | `[cmd]` gruen, 8 Tasks |
+| Drei Breiten `/v2/training` | `[cmd]` 1600 / 1100 / 800 px, kein Ueberlauf |
+| Erscheinungsbild `/v2/training` | `[cmd]` unveraendert, 0 Seitenfehler, zehn Tabs |

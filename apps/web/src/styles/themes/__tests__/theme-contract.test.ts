@@ -21,13 +21,49 @@ const registeredIds = Array.from(registrySource.matchAll(/id:\s*'([a-z0-9-]+)'/g
 const importedIds = Array.from(registrySource.matchAll(/import\s+'\.\/([a-z0-9-]+)\.css'/g), m => m[1])
 const cssFiles = readdirSync(THEMES_DIR).filter(f => f.endsWith('.css')).map(f => f.replace(/\.css$/, ''))
 
-function blockFor(css: string, selector: string): string {
+/**
+ * Kommentare entfernen, bevor nach Klammern gesucht wird.
+ *
+ * G-22: `[cmd]` Ohne diesen Schritt kappte eine geschweifte Klammer IM
+ * KOMMENTAR den Block. Bei G-18 stand `body { font-family:
+ * var(--font-sans) }` in einer Erklaerung — das schliessende `}`
+ * beendete den Block fuer den Parser, und beide Schrift-Tokens
+ * dahinter waren fuer die Pruefung unsichtbar. Sie meldete gruen und
+ * hatte die Haelfte nie gesehen.
+ */
+function ohneKommentare(css: string): string {
+  // Gleiche Laenge behalten, damit Positionen stimmen: der Inhalt wird
+  // durch Leerzeichen ersetzt, Zeilenumbrueche bleiben.
+  return css.replace(/\/\*[\s\S]*?\*\//g, treffer =>
+    treffer.replace(/[^\n]/g, ' '))
+}
+
+/**
+ * Der Inhalt eines Selektorblocks.
+ *
+ * G-22: zaehlt Klammern, statt die erste schliessende zu nehmen. Ein
+ * verschachtelter Block (`@media`, `&:hover`) beendete den aeusseren
+ * sonst zu frueh — heute steht keiner in den Theme-Dateien, aber die
+ * Pruefung soll nicht davon abhaengen, dass das so bleibt.
+ */
+function blockFor(cssRoh: string, selector: string): string {
+  const css = ohneKommentare(cssRoh)
   const start = css.indexOf(selector)
   if (start === -1) return ''
   const open = css.indexOf('{', start)
-  const close = css.indexOf('}', open)
-  if (open === -1 || close === -1) return ''
-  return css.slice(open + 1, close)
+  if (open === -1) return ''
+
+  let tiefe = 0
+  for (let i = open; i < css.length; i++) {
+    if (css[i] === '{') tiefe++
+    else if (css[i] === '}') {
+      tiefe--
+      // Der Rueckgabewert kommt aus dem ROHEN Text: die Kommentare
+      // sollen im Ergebnis stehen, nur beim Suchen nicht stoeren.
+      if (tiefe === 0) return cssRoh.slice(open + 1, i)
+    }
+  }
+  return ''
 }
 
 test('registry, css imports and css files match exactly', () => {
