@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `2dbbc43` auf `dev`.
+**Stand:** 2026-08-17, Anker `e274735` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 59 offen, 3 in Arbeit.
+`[cmd]` 61 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -194,6 +194,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **C-65** | Toms Passwort steht nirgends |  |
 | **G-25** | Training an echte Daten anschliessen |  |
+| **C-67** | `recovery.checkins` — die Tabelle, die sieben Kacheln weckt |  |
+| **G-27** | `v2-rec-grid-1135` und drei weitere Raster |  |
 
 ---
 
@@ -1846,3 +1848,46 @@ Umsetzen angepasst werden.
   **Dort nachsehen, bevor jemand rechnet.**
 
   **Angebunden heisst: Marke weg.** Alles andere behaelt sie.
+
+- [ ] **C-67: `recovery.checkins` — die Tabelle, die sieben Kacheln
+  weckt** (neu 2026-08-17). Folgt aus G-21.
+
+  `[cmd]` **`recovery` hat kein Schema** — es kommt in
+  `supabase/_pipeline/` in keiner SQL-Datei vor, **nicht einmal
+  Stammdaten**, anders als bei Training. Es gibt keine Kachel, die ohne
+  neue Tabelle echt wird.
+
+  `[read]` Aus dem G-21-Bericht: *„Der groesste Hebel ist
+  `recovery.checkins` — eine Tabelle weckt sieben Kacheln: den
+  Check-in-Tab, den Erholungswert im `manual`-Modus (braucht kein HRV),
+  die Kopfzeile und den subjektiven Schlafpfad."*
+
+  `[cmd]` **Die Spalten stehen fertig in `CHECKIN`** (in
+  `module-recovery-engine.jsx`), und `docs/specs/Recovery/` ist mit elf
+  Dateien vollstaendig — `SPEC_06_DATABASE_SCHEMA.md` mit 17 KB.
+
+  `[cmd]` Das Vorgaengerrepo hat
+  `supabase/migrations/010_create_recovery_tables.sql`,
+  `upsertRecoveryAndEvaluate.ts` **mit Test** und
+  `recoveryCalculations.ts` **mit Test**.
+
+  **Danach `training.sessions`/`sets` fuer die Muskelkarte** — `[cmd]`
+  die Naht liegt als `MUSCLE_SLUG_MAP` schon da, und die Sitzungen
+  existieren seit `106`.
+
+- [ ] **G-27: `v2-rec-grid-1135` und drei weitere Raster** (neu
+  2026-08-17). Rest aus G-21.
+
+  `[cmd]` Vier eigene Raster in `apps/web/src/app/v2/recovery/recovery.css`
+  — darunter `v2-rec-grid-1135`, **links schmaler als rechts, einmalig
+  im Repo.**
+
+  `[read]` `v2-grid v2-g-cols-2` **ist kein Ersatz: es hat keinen
+  Haltepunkt.**
+
+  `[cmd]` Die geteilten Raster nutzt Recovery bereits zentral
+  (`v2-grid-14`, `-15`, `v2-tbl-wrap`) — der Agent hat mitten im Auftrag
+  auf G-19 umgestellt. **Was bleibt, ist der Rest.**
+
+  **Gleiche Behandlung wie bei Training:** in den `zusatz`-Block des
+  Erzeugers, nicht von Hand in `v2.css`.

@@ -4247,3 +4247,51 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   **Zweifach behoben:** Kommentare werden vor der Suche entfernt, und
   Klammern werden gezaehlt statt die erste zu nehmen. Gegengeprobt mit
   einem `}`-Kommentar direkt vor den Schrift-Tokens.
+
+- [x] **G-21: Recovery als Mockup** (neu und erledigt 2026-08-17).
+
+  **Der Punkt wurde nachtraeglich angelegt** — der Auftrag lief, ohne
+  dass er in der Liste stand.
+
+  `[cmd]` **Erledigt 2026-08-17.** `/v2/recovery` steht: zehn Dateien,
+  2.906 Zeilen, **36 Kacheln, alle mit Attrappenmarke.** Gate 8/8, 199
+  Tests (vorher 194).
+
+  ### System oder Fassungen? **Beides — ein drittes Muster**
+
+  `[cmd]` **Ein abgeloester Rahmen.** Der Beleg steht in `app.jsx:122`:
+  `case "recovery": return window.RecoveryModuleV2 ? <…V2 /> : <RecoveryModule />`
+
+  `RecoveryModuleV2` liegt vor, **die Bedingung ist immer wahr** —
+  `module-recovery.jsx` (545 Zeilen) und `-modals.jsx` (567 Zeilen) sind
+  **toter Notnagel.** Uebernommen sind die drei geltenden: `-v2.jsx`
+  (Rahmen), `-engine.jsx` (Daten und Formeln, kein JSX), `-modals2.jsx`.
+
+  **Die Falle:** `[cmd]` Ein Grep nach `MuscleDetail`/`ProtocolDetail`
+  trifft beide Rahmen. Der neue ruft `MuscleDetailModal2` auf — **die
+  „2" ist die Fassung fuer den zweiten Rahmen.**
+
+  `[cmd]` **Der neunte Tab steht in einer sechsten Datei:** „Stress" ist
+  in keiner der fuenf definiert, sondern in
+  `module-crossmodule-rest.jsx:22`. Ohne sie bliebe der Tab leer.
+
+  ### Die Regel, die daraus folgt
+
+  **Drei Module, drei Muster:** Nutrition = konkurrierende Fassung,
+  Training = ein System, Recovery = abgeloester Rahmen.
+
+  `[read]` **Die verlaessliche Pruefung ist immer `app.jsx`** — die
+  einzige Stelle, an der die Vorlage selbst sagt, was gilt. **Das gehoert
+  in jeden weiteren Modulauftrag.**
+
+  ### Zwei Funde
+
+  `[cmd]` **Ein echter Fehler behoben:** Die `<title>`-Schreibweise der
+  Vorlage erzeugte **32 Konsolenfehler** (Hydrations-Abweichung). Als
+  Template-Literal: 1 — der vorbestehende `data-mode`-Hinweis, der auf
+  `/v2/dashboard` genauso auftritt.
+
+  `[cmd]` **`arr_r` schon wieder:** `-v2.jsx:811` schreibt
+  `<Icon name="arr_r"/>`, ein Tippfehler fuer `arrow_right`. **In der
+  Vorlage zeichnet die Stelle nichts.** Hier steht der gemeinte Pfeil —
+  dieselbe Entscheidung wie in G-20.
