@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `ab87f63` auf `dev`.
+**Stand:** 2026-08-17, Anker `2dbbc43` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 62 offen, 3 in Arbeit.
+`[cmd]` 59 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -187,14 +187,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-12** | Die Suche in die Erfassung einbinden |  |
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
-| **G-22** | Der Vertragstest schneidet den Block am ersten `}` ab |  |
 | **G-23** | Der Modulkopf bricht um |  |
 | **G-24** | JetBrains Mono laden |  |
 | **G-26** | `MuscleBodyMap` nach `packages/ui` |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
-| **G-19** | 15 Rasterklassen aus Training nach `v2.css` |  |
-| **G-20** | `chevron_up` fehlt im Symbolsatz |  |
 | **C-65** | Toms Passwort steht nirgends |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 
@@ -1678,19 +1675,6 @@ Umsetzen angepasst werden.
   nicht dringend.** Es wird dringend, sobald das Dashboard
   datumsabhaengige Kacheln bekommt.
 
-- [ ] **G-22: Der Vertragstest schneidet den Block am ersten `}` ab**
-  (neu 2026-08-17). Befund aus G-18.
-
-  `[cmd]` `blockFor()` sucht `css.indexOf('}')` — **ein Kommentar mit
-  geschweifter Klammer kappt alles danach.** Beim Bau von G-18
-  verschwanden dadurch beide Schrift-Tokens aus der Pruefung, obwohl sie
-  dastanden.
-
-  **Umgangen, nicht behoben** — der Parser bleibt anfaellig.
-
-  `[read]` Dieselbe Fehlerklasse wie die Encoding- und i18n-Pruefungen:
-  **eine Pruefung, die still weniger prueft, als sie vorgibt.** Sie
-  meldet gruen und hat den halben Block nie gesehen.
 
 - [ ] **G-23: Der Modulkopf bricht um** (neu 2026-08-17). Befund aus
   G-18.
@@ -1824,29 +1808,7 @@ Umsetzen angepasst werden.
   Vorauswahl. `[read]` Tom: *„die Darstellung danach in der View in
   Gramm ist korrekt."*
 
-- [ ] **G-19: 15 Rasterklassen aus Training nach `v2.css`** (neu
-  2026-08-17). Rest aus G-16.
 
-  `[cmd]` Sie liegen in `apps/web/src/app/v2/training/training.css`,
-  weil `packages/ui` waehrend G-16 gesperrt war.
-
-  `[read]` **Die 169 vorhandenen Klassen decken alle Bausteine ab** —
-  was fehlt, sind ausschliesslich Modul-Raster, die die Vorlage inline
-  traegt. `[cmd]` `v2-train-grid-14` ist derselbe Zweispalter wie
-  `v2-dash-grid`.
-
-  **Beim Verschieben zusammenfassen**, nicht eins zu eins uebernehmen —
-  sonst stehen am Ende elf Modul-Raster nebeneinander, die dasselbe tun.
-
-- [ ] **G-20: `chevron_up` fehlt im Symbolsatz** (neu 2026-08-17). Rest
-  aus G-16.
-
-  `[cmd]` Die Vorlage benutzt es im Routine-Editor. Nicht ergaenzt, weil
-  `packages/ui` gesperrt war — stattdessen `arrow_up`/`arrow_down`.
-
-  `[read]` `<Icon>` rendert bei unbekanntem Namen **still nichts**; seit
-  G-02 ist `IconName` eine Union, damit das ein Uebersetzungsfehler
-  wird. **Deshalb der Ersatz statt eines stillen Lochs.**
 
 - [ ] **C-65: Toms Passwort steht nirgends** (neu 2026-08-17). Befund
   aus G-16.

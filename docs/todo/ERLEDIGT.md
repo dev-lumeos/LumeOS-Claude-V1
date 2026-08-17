@@ -4163,3 +4163,87 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Der Theme-Vertrag prueft `--font-mono`, aber nicht
   `--font-sans`.** Jetzt in `THEME_TOKENS_BASE`, gegengeprobt: Token
   versteckt → rot, zurueckgesetzt → gruen.
+
+- [x] **G-20: `chevron_up` fehlt im Symbolsatz** (neu 2026-08-17). Rest
+  aus G-16.
+
+  `[cmd]` Die Vorlage benutzt es im Routine-Editor. Nicht ergaenzt, weil
+  `packages/ui` gesperrt war — stattdessen `arrow_up`/`arrow_down`.
+
+  `[read]` `<Icon>` rendert bei unbekanntem Namen **still nichts**; seit
+  G-02 ist `IconName` eine Union, damit das ein Uebersetzungsfehler
+  wird. **Deshalb der Ersatz statt eines stillen Lochs.**
+
+  `[cmd]` **Erledigt 2026-08-17** — und es war nicht eines, sondern
+  **sechs**: 52 Symbole vorhanden, 53 benutzt.
+
+  `chevron_up`, `bolt`, `cloud_off`, `refresh`, `user` — **alle fuenf
+  aufgenommen.** `arr_r` **nicht**: `[cmd]` Die Vorlage definiert
+  `arrow_right` und benutzt an einer Stelle `arr_r` — **das ist ihr
+  Tippfehler, und ihn zu uebernehmen hiesse, ihn zu zementieren.**
+
+  `[cmd]` **Keines der sechs ist in `shared.jsx` der Vorlage
+  definiert** — sie zeichnen dort ebenfalls nichts. **Deshalb fiel es
+  niemandem auf.** Training steht wieder auf `chevron_up`.
+
+- [x] **G-19: 15 Rasterklassen aus Training nach `v2.css`** (neu
+  2026-08-17). Rest aus G-16.
+
+  `[cmd]` Sie liegen in `apps/web/src/app/v2/training/training.css`,
+  weil `packages/ui` waehrend G-16 gesperrt war.
+
+  `[read]` **Die 169 vorhandenen Klassen decken alle Bausteine ab** —
+  was fehlt, sind ausschliesslich Modul-Raster, die die Vorlage inline
+  traegt. `[cmd]` `v2-train-grid-14` ist derselbe Zweispalter wie
+  `v2-dash-grid`.
+
+  **Beim Verschieben zusammenfassen**, nicht eins zu eins uebernehmen —
+  sonst stehen am Ende elf Modul-Raster nebeneinander, die dasselbe tun.
+
+  `[cmd]` **Erledigt 2026-08-17** — aus fuenf Rastern wurden drei.
+  `v2-train-grid-14` und `.v2-dash-grid` teilen sich `.v2-grid-14`, `-15`
+  geht mit `.v2-diary-grid`, `-21` bleibt eigenstaendig. **`-11` entfaellt
+  ganz**, dafuer gibt es `.v2-g-cols-2` aus dem Entwurf.
+
+  `[cmd]` Im Browser nachgemessen: 1,4:1 / 1,5:1 / 2:1. `training.css`
+  geloescht, `rgba` bleibt bei 4.
+
+  ### Der eigentliche Fund
+
+  `[cmd]` **Fuenf Klassengruppen standen nur in der erzeugten Datei, nicht
+  im Erzeuger.** Ein Lauf von `klassen-uebernehmen.mjs` reduzierte
+  `v2.css` von 1.701 auf 1.537 Zeilen — **164 weg, darunter
+  Dashboard-Raster, die Attrappenmarke (G-05), die Sprachwahl (A-14) und
+  die Datumsnavigation (G-14).**
+
+  **Gemessen, nicht vermutet.** Danach in den `zusatz`-Block geholt und
+  erneut erzeugt: alles da.
+
+  `[read]` Eine tickende Bombe: Der naechste Erzeugerlauf haette vier
+  Arbeitsergebnisse spurlos entfernt — und niemand haette den
+  Zusammenhang gesehen.
+
+- [x] **G-22: Der Vertragstest schneidet den Block am ersten `}` ab**
+  (neu 2026-08-17). Befund aus G-18.
+
+  `[cmd]` `blockFor()` sucht `css.indexOf('}')` — **ein Kommentar mit
+  geschweifter Klammer kappt alles danach.** Beim Bau von G-18
+  verschwanden dadurch beide Schrift-Tokens aus der Pruefung, obwohl sie
+  dastanden.
+
+  **Umgangen, nicht behoben** — der Parser bleibt anfaellig.
+
+  `[read]` Dieselbe Fehlerklasse wie die Encoding- und i18n-Pruefungen:
+  **eine Pruefung, die still weniger prueft, als sie vorgibt.** Sie
+  meldet gruen und hat den halben Block nie gesehen.
+
+  `[cmd]` **Erledigt 2026-08-17.** Mit dem G-18-Kommentar im Block sah die
+  alte Logik **30 von 32 Tokens** — beide Schrift-Tokens fielen dahinter.
+
+  `[read]` **Heute uebersieht sie nichts, weil der Kommentar damals
+  umformuliert wurde, um sie zum Laufen zu bringen: der Fehler war
+  latent, nicht aktiv. Genau das ist die Gefahr.**
+
+  **Zweifach behoben:** Kommentare werden vor der Suche entfernt, und
+  Klammern werden gezaehlt statt die erste zu nehmen. Gegengeprobt mit
+  einem `}`-Kommentar direkt vor den Schrift-Tokens.
