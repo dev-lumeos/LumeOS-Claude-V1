@@ -62,7 +62,10 @@ export async function listOwnMealItems(mealId: string): Promise<StoredMealItem[]
   const { data, error } = await supabase
     .schema('nutrition')
     .from('meal_items')
-    .select('id, meal_id, food_id, food_name, amount_g, enercc, prot625, fat, cho')
+    // G-12: die Portionsspalten kommen mit. Sie stehen seit C-51 in
+    // der Tabelle und wurden nie gelesen — ohne sie ist in der Zeile
+    // nicht erkennbar, ob „2 Scheiben" gemeint waren oder 60 g.
+    .select('id, meal_id, food_id, food_name, amount_g, enercc, prot625, fat, cho, portion_name, portion_quantity, portion_amount_g')
     .eq('meal_id', mealId)
     .order('created_at', { ascending: true })
   if (error) {

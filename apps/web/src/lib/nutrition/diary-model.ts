@@ -232,6 +232,10 @@ export type StoredMealItem = {
   prot625: number | null
   fat: number | null
   cho: number | null
+  /** C-51: gewaehlte Portion. `null` heisst: direkt in Gramm erfasst. */
+  portion_name: string | null
+  portion_quantity: number | null
+  portion_amount_g: number | null
 }
 
 function asNumberOrNull(value: unknown): number | null {
@@ -292,6 +296,11 @@ export function parseStoredMealItems(rows: unknown): StoredMealItem[] {
         prot625: asNumberOrNull(record.prot625),
         fat: asNumberOrNull(record.fat),
         cho: asNumberOrNull(record.cho),
+        // G-12: der Schnappschuss der gewaehlten Portion (C-51).
+        // Fehlt er, wurde direkt in Gramm erfasst.
+        portion_name: typeof record.portion_name === 'string' ? record.portion_name : null,
+        portion_quantity: asNumberOrNull(record.portion_quantity),
+        portion_amount_g: asNumberOrNull(record.portion_amount_g),
       },
     ]
   })

@@ -28,7 +28,7 @@ import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { Zielhinweis } from './zielhinweis'
-import { Erfassen } from './erfassen'
+import { Mahlzeiten } from './mahlzeiten'
 
 /** Die vier Makros, die die Vorlage oben zeigt. */
 const HAUPTMAKROS: Array<{
@@ -307,10 +307,10 @@ export function TagebuchAnsicht({
           </div>
         </Card>
 
-        {/* Die Mahlzeitenkarten der Vorlage. Hier ist es die Erfassung
-            aus C-03 — sie fuehrt dieselben Mahlzeiten, kann aber
-            zusaetzlich schreiben. */}
-        <Erfassen datum={datum} />
+        {/* Die Mahlzeitenkarten der Vorlage — Anzeige wie dort,
+            Bearbeitung ueber `+` und `···`. Ersetzt das Formular aus
+            C-03, das je Zeile ein Eingabefeld hatte. */}
+        <Mahlzeiten datum={datum} />
         </div>
 
         {/* ---------- Rechte Spalte, Reihenfolge der Vorlage ----------
