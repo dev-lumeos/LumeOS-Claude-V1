@@ -207,3 +207,117 @@ liegen hat — es ist der Bereich mit der grössten Sorgfaltspflicht.
 `/v2/goals`** — `ansicht.tsx` dort importiert `./modale`, das es noch
 nicht gibt. Das ist der parallel arbeitende Agent, nicht dieser Auftrag.
 `tsc` über `apps/web` meldet **ausserhalb von `v2/goals` null Fehler**.
+
+
+---
+
+## Nachtrag 2026-08-17 (G-33): gegen die Vorlage nachgezogen
+
+**Tom:** *„Extended weit weg von der Vorgabe und viel anderes auch."*
+**Der Befund war richtig, und zwar messbar.**
+
+### Der Abgleich, als Skript
+
+`[cmd]` Ein Skript liest je Tab, welche Unterkomponenten die Vorlage
+aufruft — rekursiv, über alle vier Vorlagendateien — und prüft, ob es
+sie in der Umsetzung gibt.
+
+**Vorher:**
+
+| Tab | Vorlage | gebaut | fehlend |
+|---|---|---|---|
+| today | 2 | 2 | — |
+| stack | 2 | 2 | — |
+| **extended** | **8** | **0** | ExtendedGate, ExtendedHeader, ExtendedCompoundCard, CycleTimeline, BloodworkPanel, SideEffectLog, HalfLifeChart, ExtendedDrawer |
+| database | 0 | 0 | — |
+| **compliance** | **3** | **0** | ComplianceHeatmap, ComplianceStrip, CalendarView |
+| interactions | 0 | 0 | — |
+| cost | 0 | 0 | — |
+
+**11 Unterkomponenten, rund 530 Zeilen Vorlage.**
+
+**Nachher: 15 von 15, fehlend 0.** Dieselbe Messung, dasselbe Skript.
+
+`[cmd]` Die Umsetzung wuchs von 708 auf **1.865 Zeilen** über fünf
+Dateien — `tab-extended.tsx` und `tab-compliance.tsx` sind neu, weil
+`tabs.tsx` sonst über 1.200 Zeilen läge.
+
+### Was beim ersten Durchgang fehlte und warum
+
+`[read]` **Der Tab-Rumpf ist nicht das Modul.** Das ist die Falle, und
+sie sieht harmlos aus:
+
+`SuppExtended` hat in der Vorlage **46 Zeilen**. Meine Fassung hatte
+97 — nach Zeilenzahl also *mehr*. Tatsächlich fehlte alles, was zählt:
+der Rumpf **ruft acht Komponenten auf**, die zusammen 365 Zeilen tragen.
+Wer den Rumpf liest und nachbaut, hat einen Tab, der aussieht wie
+gemeint und drei Viertel des Inhalts nicht hat.
+
+**Drei Dinge, die der nächste Modulauftrag prüfen sollte:**
+
+1. **Den Aufrufbaum, nicht die Zeilenzahl.** Ein Rumpf mit 40 Zeilen
+   kann 400 Zeilen Inhalt haben.
+2. **Über alle Vorlagendateien.** `[cmd]` `CalendarView` steht in
+   `module-supplements-modals.jsx`, wird aber vom Rahmen aufgerufen —
+   mein erstes Abgleichskript las nur den Rahmen und hielt sie für
+   undefiniert. Erst der Blick in alle vier Dateien zeigte es.
+3. **Eigene Zustände sind eigene Bildschirme.** `ExtendedGate` ist eine
+   ganze Aufklärungsseite vor dem Tab. Wer sie weglässt, zeigt sofort
+   Hormonprotokolle — genau das, was die Vorlage verhindert.
+
+`[annahme]` Der Grund für das Übersehen war die Reihenfolge: G-29 hat
+die Tab-Rümpfe gelesen, gebaut und die Zeilenzahl des Ergebnisses mit
+der des Rumpfs verglichen. Beide Zahlen sahen stimmig aus. **Verglichen
+wurde nie, was der Rumpf aufruft.**
+
+### Der Tab „Database" — Entscheidung
+
+`[cmd]` **Die Tab-Leiste der Vorlage hat elf Einträge; `database` ist
+keiner davon.** Der Rahmen rendert ihn aber und erreicht ihn über einen
+Kopfknopf (`onClick={() => setTab("database")}`, Zeile 234).
+
+**Entscheidung: so lassen, wie die Vorlage es hält** — nicht in der
+Leiste, aber über den Knopf „Database" erreichbar. Die Umsetzung tut das
+bereits.
+
+`[read]` **Anders als `PeriodizationFullView` bei Training.** Dort zeigte
+ein Aufruf ins Leere — die Komponente gab es nicht, also war der Aufruf
+tot und wurde entfernt. Hier ist es umgekehrt: die Komponente ist
+vollständig und erreichbar, nur nicht in der Leiste. Das ist kein
+Versehen, sondern eine zweite Zugangsebene — die Wirkstoffdatenbank ist
+Nachschlagewerk, kein Tagesbereich.
+
+### Verbliebene Abweichungen
+
+| Stelle | Vorlage | hier | Grund |
+|---|---|---|---|
+| Fünf Tabs | eigene Ansichten aus `-spec.jsx` / `-injection.jsx` | Karte „kommt aus …" | **G-31**, nicht dieser Auftrag |
+| Attrappenmarke | keine | jede Kachel | Regel seit G-05 |
+| Slot-Karten | — | Marke ohne Begründungssatz | vier gleiche Sätze untereinander sind Lärm |
+| `refillUrgent` | an **einem** von neun Einträgen | unverändert | Befund der Vorlage, nicht begradigt |
+| Modul-Raster | inline | `supplements.css` | `packages/ui` ist gesperrt |
+
+**Ohne technischen Grund weicht nichts ab.**
+
+### Nachweise
+
+| Prüfung | Ergebnis |
+|---|---|
+| Unterkomponenten je Tab | `[cmd]` **15 von 15**, fehlend 0 (vorher 4 von 15) |
+| Extended-Gate | `[cmd]` sichtbar vor der Freischaltung; danach sechs Karten, alle markiert |
+| Compliance | `[cmd]` 3 Karten (Heatmap, Streaks, Tabelle mit acht Zeilen) statt vorher 2 |
+| Jeder Tab markiert | `[cmd]` Karten = Attrappen in allen elf Tabs |
+| Modal | `[cmd]` öffnet, schliesst mit Escape (1 → 0) |
+| Konsolenfehler | `[cmd]` 5, davon 4 die bekannte `data-mode`-Warnung und 1 ein RSC-Vorabruf — **identisch mit `/v2/dashboard`**, nichts modul-eigenes |
+| Seitenfehler | `[cmd]` 0 |
+| Drei Breiten | `[cmd]` 1600 / 1100 / 800 px, kein Überlauf |
+| `pnpm gate` | `[cmd]` **grün, 8 Tasks** — das rote Gate lag an `/v2/goals` und ist behoben, nicht von mir |
+| `pnpm test` | `[cmd]` **209** Tests, 0 fehlgeschlagen |
+
+**Zwei neue Prüfungen**, beide gegengeprobt:
+
+- **Marken je Datei** (12 / 6 / 4) — wer eine Kachel anbindet, senkt die
+  Zahl.
+- **Alle 15 Unterkomponenten vorhanden** — `HalfLifeChart` versteckt →
+  rot mit „Die Unterkomponente „HalfLifeChart" der Vorlage fehlt.",
+  danach zurückgesetzt.

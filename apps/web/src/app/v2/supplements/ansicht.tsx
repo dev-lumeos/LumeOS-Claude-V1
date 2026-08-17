@@ -22,9 +22,12 @@ import { Card, Pill, Icon, Tabs, InEntwicklungKnopf, type TabItem } from '@lumeo
 import { STACK, EXTENDED_STACK } from './daten'
 import { SuppCtx, type ModalZustand, type ModalTyp } from './kontext'
 import {
-  SuppToday, SuppStack, SuppExtended, SuppDatabase,
-  SuppCompliance, SuppInteractions, SuppCost,
+  SuppToday, SuppStack, SuppDatabase, SuppInteractions, SuppCost,
 } from './tabs'
+// G-33: die beiden Tabs mit den meisten Unterkomponenten stehen in
+// eigenen Dateien — `tabs.tsx` waere sonst ueber 1.200 Zeilen lang.
+import { SuppExtended } from './tab-extended'
+import { SuppCompliance } from './tab-compliance'
 import { SupplementsModale } from './modale'
 
 /** Die elf Tabs der Vorlage (module-supplements.jsx:240-253). */

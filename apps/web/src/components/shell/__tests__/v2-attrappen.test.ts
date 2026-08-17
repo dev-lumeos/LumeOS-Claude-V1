@@ -31,6 +31,9 @@ const TRAINING_HR = path.join(process.cwd(), 'src/app/v2/training/tabs-offline-h
 const SUPP = path.join(process.cwd(), 'src/app/v2/supplements/tabs.tsx')
 const SUPP_RAHMEN = path.join(process.cwd(), 'src/app/v2/supplements/ansicht.tsx')
 const SUPP_DATEN = path.join(process.cwd(), 'src/app/v2/supplements/daten.ts')
+const SUPP_MODALE = path.join(process.cwd(), 'src/app/v2/supplements/modale.tsx')
+const SUPP_EXT = path.join(process.cwd(), 'src/app/v2/supplements/tab-extended.tsx')
+const SUPP_COMP = path.join(process.cwd(), 'src/app/v2/supplements/tab-compliance.tsx')
 const RECOVERY = path.join(process.cwd(), 'src/app/v2/recovery/ansicht.tsx')
 const RECOVERY_MOTOR = path.join(process.cwd(), 'src/app/v2/recovery/motor.ts')
 const GOALS = path.join(process.cwd(), 'src/app/v2/goals/ansicht.tsx')
@@ -414,12 +417,39 @@ test('das Supplements-Modul kennzeichnet jede Kachel', () => {
   // Keine Quelle heisst: jede Kachel traegt die Marke. [cmd] Es gibt
   // kein `supplements`-Schema — wer eine Kachel anbindet, entfernt
   // `attrappe` und zaehlt die Erwartung herunter.
-  const quelle = fs.readFileSync(SUPP, 'utf8')
-  const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
-  const ohneGrund = (quelle.match(/^\s+attrappe$/gm) ?? []).length
-  assert.equal(mitGrund + ohneGrund, 17,
-    `${mitGrund + ohneGrund} Kacheln gekennzeichnet, erwartet 17. ` +
-    'Angebunden? Dann die Erwartung hier senken.')
+  //
+  // G-33: die Erwartung steht je Datei. Extended und Compliance sind
+  // seit dem Nachziehen eigene Dateien.
+  const dateien: Array<[string, number]> = [
+    [SUPP, 12],
+    [SUPP_EXT, 6],
+    [SUPP_COMP, 4],
+  ]
+  for (const [datei, erwartet] of dateien) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    const ohneGrund = (quelle.match(/^\s+attrappe$/gm) ?? []).length
+    assert.equal(mitGrund + ohneGrund, erwartet,
+      `${path.basename(datei)}: ${mitGrund + ohneGrund} gekennzeichnet, erwartet ${erwartet}. ` +
+      'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+test('die Unterkomponenten der Vorlage sind alle da', () => {
+  // [cmd] G-33: der erste Durchgang baute die Tab-RUEMPFE und liess elf
+  // Unterkomponenten weg — 530 Zeilen Vorlage. Der Rumpf ist nicht das
+  // Modul. Dieser Test haelt die Liste fest.
+  const alles = [SUPP, SUPP_EXT, SUPP_COMP, SUPP_RAHMEN, SUPP_MODALE]
+    .map(f => fs.readFileSync(f, 'utf8')).join(String.fromCharCode(10))
+  for (const k of [
+    'ExtendedGate', 'ExtendedHeader', 'ExtendedCompoundCard', 'CycleTimeline',
+    'BloodworkPanel', 'SideEffectLog', 'HalfLifeChart', 'ExtendedDrawer',
+    'ComplianceHeatmap', 'ComplianceStrip', 'CalendarView',
+    'SlotCard', 'CheckCircle', 'StackMatrix', 'StackList',
+  ]) {
+    assert.ok(new RegExp(`function ${k}\\b`).test(alles),
+      `Die Unterkomponente "${k}" der Vorlage fehlt.`)
+  }
 })
 
 test('der Stack der Vorlage ist vollstaendig uebernommen', () => {

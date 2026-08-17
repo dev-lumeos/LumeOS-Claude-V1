@@ -79,3 +79,75 @@
 
 /* Breite Tabellen scrollen in sich statt die Seite aufzuschieben. */
 .v2-supp-tbl-wrap { overflow-x: auto; }
+
+/* --- G-33: die Raster der nachgezogenen Unterkomponenten ---------
+ * [cmd] Alle vier tragen sie in der Vorlage inline. */
+
+/* Die vier Kopffelder einer Wirkstoffkarte.
+ * [cmd] module-supplements.jsx:1338 — `1fr 1fr 1fr 1fr`. */
+.v2-supp-compound-felder {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 10px;
+  font-size: 11px;
+}
+@media (max-width: 640px) {
+  .v2-supp-compound-felder { grid-template-columns: 1fr 1fr; }
+}
+
+/* Der Zyklus-Zeitstrahl: Namensspalte plus 16 Wochen.
+ * [cmd] module-supplements.jsx:1396/1400. */
+.v2-supp-cycle {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 8px;
+  align-items: center;
+  min-width: 520px;
+}
+.v2-supp-cycle-weeks,
+.v2-supp-cycle-bars {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 2px;
+}
+.v2-supp-cycle-weeks {
+  font-size: 9px;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+}
+
+/* Die Beitragsgrafik: Tagesspalte plus 13 Wochen.
+ * [cmd] module-supplements.jsx:812/816. */
+.v2-supp-heat {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 4px;
+}
+.v2-supp-heat-tage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-size: 9px;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  padding-top: 14px;
+}
+.v2-supp-heat-monate,
+.v2-supp-heat-gitter {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 3px;
+}
+.v2-supp-heat-monate {
+  margin-bottom: 4px;
+  font-size: 9px;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+}
+
+/* Der Monatskalender. [cmd] module-supplements-modals.jsx:406/411. */
+.v2-supp-kalender {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
