@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `3446725` auf `dev`.
+**Stand:** 2026-08-17, Anker `01a4f3a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -2102,6 +2102,31 @@ Umsetzen angepasst werden.
   `[cmd]` **Referenzbereiche sind alters- und geschlechtsabhaengig** —
   wie bei den Naehrstoffen. Und sie unterscheiden sich je Labor. **Was
   gilt, ist eine Entscheidung, keine Recherche.**
+
+  ### Stand 2026-08-17: Rohbestand liegt, Kuration offen
+
+  `[cmd]` `daten/biomarker-katalog.json` — **122 Kandidaten**, davon 86
+  mit LOINC, 117 mit Referenzbereich-Kandidaten, **464
+  Referenzbereich-Zeilen**. Synonyme: 41 mit DE, 88 mit EN, **17 mit
+  TH**.
+
+  **Ausdruecklich als `curation_candidate_not_import_ready`
+  markiert** — `[read]` viele Bereiche stammen aus Vorgaengerquellen und
+  brauchen noch Quelle und Entscheidung.
+
+  `[cmd]` **Die Spec-Zaehlung passt nicht zum Inhalt:**
+  `SPEC_05_BIOMARKER_CATALOG.md` nennt 74 Marker in acht Panels — **aus
+  der Spec selbst waren nur 47 SQL-Zeilen greifbar.** Gemeldet, nicht
+  still aufgeloest.
+
+  `[cmd]` **Und die Panel-Zuordnung traegt noch nicht:** 13 verschiedene
+  Werte, teils doppelt (`hormone` **und** `hormone_panel`, `vitamin`
+  **und** `vitamins_panel`), `blood` mit 32 gegen `cbc_panel` mit 5, und
+  **29 Eintraege ganz ohne Panel.**
+
+  **Was zur Entscheidung ansteht:** die acht Panels der Spec als
+  Sollgliederung · welcher Referenzbereich gilt, wo Quellen abweichen ·
+  Labor- gegen Optimalbereich · die 36 ohne LOINC.
 
 - [ ] **C-69: Medical-Schema** (verschoben hinter C-70). Befund aus
   G-36.
