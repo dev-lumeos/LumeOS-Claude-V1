@@ -140,6 +140,36 @@ type GoalPhaseRow = {
   transitionReason: string | null
 }
 
+type BodyMeasurementRow = {
+  userId: string
+  measurementDate: string
+  measurementTime: string
+  weightKg: number
+  bodyFatPct: number | null
+  bfMethod: 'bia' | 'manual' | 'visual' | null
+  notes: string
+}
+
+type BodyCircumferenceRow = {
+  userId: string
+  measurementDate: string
+  measurementTime: string
+  neckCm: number
+  shouldersCm: number
+  chestCm: number
+  upperArmLeftCm: number
+  upperArmRightCm: number
+  forearmLeftCm: number
+  forearmRightCm: number
+  waistCm: number
+  hipCm: number
+  thighLeftCm: number
+  thighRightCm: number
+  calfLeftCm: number
+  calfRightCm: number
+  notes: string
+}
+
 type SupplementStackRow = {
   id: string
   userId: string
@@ -577,6 +607,49 @@ const goalPhaseRows: GoalPhaseRow[] = [
     transitionReason: 'Performance hat kein eigenes Phasenmapping',
   },
 ]
+
+const bodyMeasurements: BodyMeasurementRow[] = daysBetween(START_DATE, END_DATE).map((date, index, allDates) => {
+  const trend = index / (allDates.length - 1)
+  const noise = ((index % 5) - 2) * 0.08
+  return {
+    userId: '10000000-0000-0000-0000-000000000101',
+    measurementDate: date,
+    measurementTime: '07:05',
+    weightKg: Number((83.8 + 1.2 * trend + noise).toFixed(2)),
+    bodyFatPct: Number((15.8 - 0.6 * trend + ((index % 4) - 1.5) * 0.05).toFixed(2)),
+    bfMethod: index % 7 === 0 ? 'bia' : 'manual',
+    notes: 'GO-10 Testdaten: taeglicher Gewichtsverlauf fuer adaptive TDEE',
+  }
+})
+bodyMeasurements[bodyMeasurements.length - 1]!.weightKg = 85
+
+const bodyCircumferences: BodyCircumferenceRow[] = [
+  { date: '2026-08-02', neck: 41.2, shoulders: 123.0, chest: 107.0, armL: 38.4, armR: 38.9, forearmL: 31.6, forearmR: 31.9, waist: 84.0, hip: 97.0, thighL: 59.5, thighR: 60.0, calfL: 38.7, calfR: 39.2 },
+  { date: '2026-08-09', neck: 41.1, shoulders: 123.3, chest: 107.3, armL: 38.5, armR: 39.0, forearmL: 31.7, forearmR: 32.0, waist: 83.8, hip: 96.8, thighL: 59.6, thighR: 60.1, calfL: 38.8, calfR: 39.3 },
+  { date: '2026-08-16', neck: 41.1, shoulders: 123.7, chest: 107.6, armL: 38.6, armR: 39.1, forearmL: 31.8, forearmR: 32.0, waist: 83.4, hip: 96.6, thighL: 59.7, thighR: 60.2, calfL: 38.8, calfR: 39.3 },
+  { date: '2026-08-23', neck: 41.0, shoulders: 124.0, chest: 107.8, armL: 38.7, armR: 39.2, forearmL: 31.8, forearmR: 32.1, waist: 83.0, hip: 96.4, thighL: 59.8, thighR: 60.3, calfL: 38.9, calfR: 39.4 },
+  { date: '2026-08-30', neck: 41.0, shoulders: 124.2, chest: 108.0, armL: 38.8, armR: 39.3, forearmL: 31.9, forearmR: 32.1, waist: 82.7, hip: 96.3, thighL: 59.9, thighR: 60.4, calfL: 38.9, calfR: 39.4 },
+  { date: '2026-09-06', neck: 41.0, shoulders: 124.4, chest: 108.2, armL: 38.9, armR: 39.4, forearmL: 32.0, forearmR: 32.2, waist: 82.4, hip: 96.1, thighL: 60.0, thighR: 60.5, calfL: 39.0, calfR: 39.5 },
+  { date: '2026-09-13', neck: 40.9, shoulders: 124.5, chest: 108.4, armL: 39.0, armR: 39.5, forearmL: 32.0, forearmR: 32.2, waist: 82.0, hip: 96.0, thighL: 60.0, thighR: 60.5, calfL: 39.0, calfR: 39.5 },
+].map(row => ({
+  userId: '10000000-0000-0000-0000-000000000101',
+  measurementDate: row.date,
+  measurementTime: '07:10',
+  neckCm: row.neck,
+  shouldersCm: row.shoulders,
+  chestCm: row.chest,
+  upperArmLeftCm: row.armL,
+  upperArmRightCm: row.armR,
+  forearmLeftCm: row.forearmL,
+  forearmRightCm: row.forearmR,
+  waistCm: row.waist,
+  hipCm: row.hip,
+  thighLeftCm: row.thighL,
+  thighRightCm: row.thighR,
+  calfLeftCm: row.calfL,
+  calfRightCm: row.calfR,
+  notes: 'GO-10 Testdaten: woechentliche Umfangsmessung fuer Goals Composition',
+}))
 
 const supplementStacks: SupplementStackRow[] = [
   {
@@ -1054,6 +1127,34 @@ const goalPhaseValues = goalPhaseRows.map(phase => tuple([
   phase.recommendedNext,
   phase.transitionReason,
 ])).join(',\n')
+const bodyMeasurementValues = bodyMeasurements.map(measurement => tuple([
+  measurement.userId,
+  measurement.measurementDate,
+  measurement.measurementTime,
+  measurement.weightKg,
+  measurement.bodyFatPct,
+  measurement.bfMethod,
+  measurement.notes,
+])).join(',\n')
+const bodyCircumferenceValues = bodyCircumferences.map(measurement => tuple([
+  measurement.userId,
+  measurement.measurementDate,
+  measurement.measurementTime,
+  measurement.neckCm,
+  measurement.shouldersCm,
+  measurement.chestCm,
+  measurement.upperArmLeftCm,
+  measurement.upperArmRightCm,
+  measurement.forearmLeftCm,
+  measurement.forearmRightCm,
+  measurement.waistCm,
+  measurement.hipCm,
+  measurement.thighLeftCm,
+  measurement.thighRightCm,
+  measurement.calfLeftCm,
+  measurement.calfRightCm,
+  measurement.notes,
+])).join(',\n')
 const supplementStackValues = supplementStacks.map(stack => tuple([
   stack.id,
   stack.userId,
@@ -1124,6 +1225,8 @@ WHERE si.stack_id = us.id
 DELETE FROM supplements.user_stacks WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preference_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.food_preferences WHERE user_id IN (${userIds});
+DELETE FROM goals.body_circumferences WHERE user_id IN (${userIds});
+DELETE FROM goals.body_measurements WHERE user_id IN (${userIds});
 DELETE FROM goals.goal_phases WHERE user_id IN (${userIds});
 DELETE FROM goals.user_goals WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
@@ -1256,6 +1359,69 @@ SELECT
   gueltig_ab, projected_end_date, actual_end_date,
   transitioned_from, recommended_next, transition_reason
 FROM test_goal_phases;
+
+CREATE TEMP TABLE test_body_measurements (
+  user_id uuid NOT NULL,
+  measurement_date date NOT NULL,
+  measurement_time time NOT NULL,
+  weight_kg numeric NOT NULL,
+  body_fat_pct numeric,
+  bf_method text,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_body_measurements VALUES
+${bodyMeasurementValues};
+
+INSERT INTO goals.body_measurements (
+  user_id, measurement_date, measurement_time, weight_kg, body_fat_pct, bf_method, notes
+)
+SELECT user_id, measurement_date, measurement_time, weight_kg, body_fat_pct, bf_method, notes
+FROM test_body_measurements;
+
+CREATE TEMP TABLE test_body_circumferences (
+  user_id uuid NOT NULL,
+  measurement_date date NOT NULL,
+  measurement_time time NOT NULL,
+  neck_cm numeric NOT NULL,
+  shoulders_cm numeric NOT NULL,
+  chest_cm numeric NOT NULL,
+  upper_arm_left_cm numeric NOT NULL,
+  upper_arm_right_cm numeric NOT NULL,
+  forearm_left_cm numeric NOT NULL,
+  forearm_right_cm numeric NOT NULL,
+  waist_cm numeric NOT NULL,
+  hip_cm numeric NOT NULL,
+  thigh_left_cm numeric NOT NULL,
+  thigh_right_cm numeric NOT NULL,
+  calf_left_cm numeric NOT NULL,
+  calf_right_cm numeric NOT NULL,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_body_circumferences VALUES
+${bodyCircumferenceValues};
+
+INSERT INTO goals.body_circumferences (
+  user_id, measurement_date, measurement_time,
+  neck_cm, shoulders_cm, chest_cm,
+  upper_arm_left_cm, upper_arm_right_cm,
+  forearm_left_cm, forearm_right_cm,
+  waist_cm, hip_cm,
+  thigh_left_cm, thigh_right_cm,
+  calf_left_cm, calf_right_cm,
+  notes
+)
+SELECT
+  user_id, measurement_date, measurement_time,
+  neck_cm, shoulders_cm, chest_cm,
+  upper_arm_left_cm, upper_arm_right_cm,
+  forearm_left_cm, forearm_right_cm,
+  waist_cm, hip_cm,
+  thigh_left_cm, thigh_right_cm,
+  calf_left_cm, calf_right_cm,
+  notes
+FROM test_body_circumferences;
 
 CREATE TEMP TABLE test_supplement_stacks (
   id uuid PRIMARY KEY,
@@ -1619,6 +1785,8 @@ DECLARE
   v_recovery_checkins integer;
   v_user_goals integer;
   v_goal_phases integer;
+  v_body_measurements integer;
+  v_body_circumferences integer;
   v_supplement_stacks integer;
   v_supplement_items integer;
   v_supplement_logs integer;
@@ -1641,6 +1809,8 @@ BEGIN
   SELECT count(*) INTO v_recovery_checkins FROM recovery.checkins WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_user_goals FROM goals.user_goals WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_goal_phases FROM goals.goal_phases WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_body_measurements FROM goals.body_measurements WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_body_circumferences FROM goals.body_circumferences WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_supplement_stacks FROM supplements.user_stacks WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_supplement_items
   FROM supplements.stack_items si
@@ -1663,6 +1833,8 @@ BEGIN
     v_recovery_checkins;
   RAISE NOTICE 'OK: GO-07 Goals-Testdaten: % Ziele, % Phasen',
     v_user_goals, v_goal_phases;
+  RAISE NOTICE 'OK: GO-10 Koerpermessungen-Testdaten: % Gewicht/KFA, % Umfaenge',
+    v_body_measurements, v_body_circumferences;
   RAISE NOTICE 'OK: C-68 Supplements-Testdaten: % Stacks, % Items, % Einnahmen',
     v_supplement_stacks, v_supplement_items, v_supplement_logs;
 END $$;
@@ -1683,4 +1855,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen.`)

@@ -131,6 +131,14 @@
     "user": "Tom Miller",
     "email": "tom.seed@example.com",
     "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-02 bis 2026-09-13",
+    "case": "Gewichtsverlauf und Koerperumfaenge",
+    "expected": "goals.body_measurements enthaelt 43 taegliche Messpunkte mit sichtbarem Trend; goals.body_circumferences enthaelt sieben woechentliche Messungen mit 13 Umfaengen. Das Profilgewicht entspricht dem neuesten Gewichtsmesspunkt."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
     "date": "2026-08-18",
     "case": "Supplement-Stack mit Einnahmen und Nachkauf-Fall",
     "expected": "supplements.user_stacks enthaelt einen aktiven Stack mit vier Items; supplements.intake_logs enthaelt drei genommene und eine geplante Einnahme. Vitamin D3 liegt unter der Nachkauf-Schwelle."

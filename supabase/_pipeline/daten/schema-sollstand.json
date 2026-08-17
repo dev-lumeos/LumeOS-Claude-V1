@@ -1101,6 +1101,68 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "goals",
+      "name": "body_measurements",
+      "schritt": "112",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "112_body_measurements.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "goals",
+      "name": "body_circumferences",
+      "schritt": "112",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "112_body_measurements.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "training",
       "name": "workout_sessions",
       "schritt": "106",
@@ -1389,6 +1451,21 @@
       "schema": "goals",
       "name": "touch_updated_at",
       "schritt": "111"
+    },
+    {
+      "schema": "goals",
+      "name": "fill_body_measurement_snapshot",
+      "schritt": "112"
+    },
+    {
+      "schema": "goals",
+      "name": "refresh_profile_body_weight",
+      "schritt": "112"
+    },
+    {
+      "schema": "goals",
+      "name": "sync_profile_weight_from_measurement",
+      "schritt": "112"
     },
     {
       "schema": "training",

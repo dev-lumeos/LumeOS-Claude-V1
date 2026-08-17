@@ -39,6 +39,8 @@ const profiles = numberScalar(`SELECT count(*) FROM public.profiles WHERE id IN 
 const targets = numberScalar(`SELECT count(*) FROM goals.nutrition_targets WHERE user_id IN (${IDS_SQL});`)
 const userGoals = numberScalar(`SELECT count(*) FROM goals.user_goals WHERE user_id IN (${IDS_SQL});`)
 const goalPhases = numberScalar(`SELECT count(*) FROM goals.goal_phases WHERE user_id IN (${IDS_SQL});`)
+const bodyMeasurements = numberScalar(`SELECT count(*) FROM goals.body_measurements WHERE user_id IN (${IDS_SQL});`)
+const bodyCircumferences = numberScalar(`SELECT count(*) FROM goals.body_circumferences WHERE user_id IN (${IDS_SQL});`)
 const preferences = numberScalar(`SELECT count(*) FROM nutrition.food_preferences WHERE user_id IN (${IDS_SQL});`)
 const preferenceItems = numberScalar(`SELECT count(*) FROM nutrition.food_preference_items WHERE user_id IN (${IDS_SQL});`)
 const meals = numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id IN (${IDS_SQL});`)
@@ -82,6 +84,8 @@ if (MODE === 'clean') {
   if (targets !== 0) errors.push(`nutrition_targets: ${targets}, erwartet 0`)
   if (userGoals !== 0) errors.push(`user_goals: ${userGoals}, erwartet 0`)
   if (goalPhases !== 0) errors.push(`goal_phases: ${goalPhases}, erwartet 0`)
+  if (bodyMeasurements !== 0) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 0`)
+  if (bodyCircumferences !== 0) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet 0`)
   if (preferences !== 0) errors.push(`food_preferences: ${preferences}, erwartet 0`)
   if (preferenceItems !== 0) errors.push(`food_preference_items: ${preferenceItems}, erwartet 0`)
   if (meals !== 0) errors.push(`meals: ${meals}, erwartet 0`)
@@ -101,6 +105,7 @@ if (MODE === 'clean') {
   console.log('C-82 Testdaten-Pruefung (clean)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
   console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
+  console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
@@ -136,6 +141,8 @@ if (MODE === 'clean') {
   if (targets !== 3) errors.push(`nutrition_targets: ${targets}, erwartet 3`)
   if (userGoals !== 3) errors.push(`user_goals: ${userGoals}, erwartet 3`)
   if (goalPhases !== 3) errors.push(`goal_phases: ${goalPhases}, erwartet 3`)
+  if (bodyMeasurements !== 43) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 43`)
+  if (bodyCircumferences !== 7) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet 7`)
   if (preferences !== 1) errors.push(`food_preferences: ${preferences}, erwartet 1`)
   if (preferenceItems !== 3) errors.push(`food_preference_items: ${preferenceItems}, erwartet 3`)
   if (meals < 120) errors.push(`meals: ${meals}, erwartet mindestens 120`)
@@ -191,6 +198,59 @@ if (MODE === 'clean') {
        AND count(*) FILTER (WHERE is_primary) = 1
        AND max(priority) <= 3;`)) {
     errors.push('Fall Goals aktiv: Toms zwei aktive Ziele mit genau einem Primary fehlen')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM (
+      SELECT count(*) AS messungen,
+             min(measurement_date) AS von,
+             max(measurement_date) AS bis,
+             min(weight_kg) AS min_kg,
+             max(weight_kg) AS max_kg,
+             max(weight_kg) FILTER (WHERE measurement_date = DATE '2026-09-13') AS latest_kg
+      FROM goals.body_measurements
+      WHERE user_id = '${tom}'::uuid
+    ) m
+    JOIN public.profiles p ON p.id = '${tom}'::uuid
+    WHERE m.messungen = 43
+      AND m.von = DATE '2026-08-02'
+      AND m.bis = DATE '2026-09-13'
+      AND m.max_kg - m.min_kg >= 0.8
+      AND p.body_weight_kg = m.latest_kg;`)) {
+    errors.push('Fall Koerpermessungen: 43-Tage-Gewichtsverlauf oder Profilgewicht-Sync fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.body_measurements
+    WHERE user_id = '${tom}'::uuid
+      AND measurement_date = DATE '2026-09-13'
+      AND measurement_time = TIME '07:05'
+      AND height_cm_snapshot = 185
+      AND bmi IS NOT NULL
+      AND lean_mass_kg IS NOT NULL
+      AND ffmi IS NOT NULL;`)) {
+    errors.push('Fall Koerpermessungen: Hoehen-Snapshot oder abgeleitete Werte fehlen')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.body_circumferences
+    WHERE user_id = '${tom}'::uuid
+      AND measurement_date = DATE '2026-09-13'
+      AND measurement_time = TIME '07:10'
+      AND neck_cm IS NOT NULL
+      AND shoulders_cm IS NOT NULL
+      AND chest_cm IS NOT NULL
+      AND upper_arm_left_cm IS NOT NULL
+      AND upper_arm_right_cm IS NOT NULL
+      AND forearm_left_cm IS NOT NULL
+      AND forearm_right_cm IS NOT NULL
+      AND waist_cm IS NOT NULL
+      AND hip_cm IS NOT NULL
+      AND thigh_left_cm IS NOT NULL
+      AND thigh_right_cm IS NOT NULL
+      AND calf_left_cm IS NOT NULL
+      AND calf_right_cm IS NOT NULL;`)) {
+    errors.push('Fall Umfaenge: letzte Messung mit 13 Koerperumfaengen fehlt')
   }
   if (!hasRows(`SELECT 1 FROM nutrition.daily_summary WHERE user_id = '${tom}'::uuid AND entry_date = DATE '2026-08-02' AND item_count > 0;`)) {
     errors.push('Fall Tag ohne Ziel: daily_summary fehlt oder hat keine Positionen')
@@ -475,6 +535,7 @@ if (MODE === 'clean') {
   console.log('C-82 Testdaten-Pruefung (present)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
   console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
+  console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)

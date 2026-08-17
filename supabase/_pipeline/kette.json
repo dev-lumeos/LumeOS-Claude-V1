@@ -361,6 +361,13 @@
       "depends_on": ["110", "auth_stub"]
     },
     {
+      "id": "112",
+      "path": "supabase/_pipeline/11_goals/112_body_measurements.sql",
+      "kind": "sql",
+      "creates": "Goals-Koerperdaten: body_measurements, body_circumferences und Profilgewicht-Sync",
+      "depends_on": ["111", "090", "auth_stub"]
+    },
+    {
       "id": "059a",
       "path": "supabase/_pipeline/_ableitung/030_mikro-uebersicht.ts",
       "kind": "tsx",

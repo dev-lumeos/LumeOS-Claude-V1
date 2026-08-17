@@ -86,6 +86,16 @@ deleted_goal_phases AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_body_circumferences AS (
+  DELETE FROM goals.body_circumferences
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_body_measurements AS (
+  DELETE FROM goals.body_measurements
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_user_goals AS (
   DELETE FROM goals.user_goals
   WHERE user_id IN (${ids})
@@ -120,6 +130,8 @@ SELECT
   (SELECT count(*) FROM deleted_preference_items) AS food_preference_items,
   (SELECT count(*) FROM deleted_preferences) AS food_preferences,
   (SELECT count(*) FROM deleted_goal_phases) AS goal_phases,
+  (SELECT count(*) FROM deleted_body_circumferences) AS body_circumferences,
+  (SELECT count(*) FROM deleted_body_measurements) AS body_measurements,
   (SELECT count(*) FROM deleted_user_goals) AS user_goals,
   (SELECT count(*) FROM deleted_targets) AS nutrition_targets,
   (SELECT count(*) FROM deleted_profiles) AS profiles,
