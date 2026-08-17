@@ -90,6 +90,38 @@ Sache folgt nicht ihre Funktion.* Der Code ist gegen ein anderes Schema
 gelaufen (`public.foods` statt `nutrition.foods`, UUID statt
 `bls_code`) — er ist ein belegter Ausgangspunkt, keine fertige Lösung.
 
+### 1c. Vor JEDEM Auftrag — nicht nur vor jedem Modul
+
+**Tom, 2026-08-17:** *„Ab jetzt arbeiten wir IMMER so. Ich will nicht im
+Nachhinein basteln, wenn es vorher klar wäre."*
+
+Die Suche im Vorgaengerrepo und in den Specs galt bisher **je Modul**.
+Das reicht nicht: Ein Auftrag zur Erfassung im Tagebuch hätte
+`DiaryView.tsx`, `AddFoodModal.tsx`, `FoodLogEntry.tsx` und
+`AdjustMealModal.tsx` gefunden — `[cmd]` das alte Repo hat **41
+Nutrition-Komponenten**, gebaut waren drei Ansichten.
+
+**Drei Fragen, bevor ein Auftrag geschrieben wird:**
+
+1. **Was zeigt die Designvorlage?** `[cmd]` Zeile für Zeile, nicht dem
+   Sinn nach. Die Vorlage ist die Vorgabe.
+2. **Was liegt im Vorgaengerrepo?** `docs/ssot/80-vorgaengerrepo-fundus.md`
+   zuerst, dann suchen. **Geloeste Sachen werden uebernommen.**
+3. **Was sagen die Specs dazu?** Und was steht in
+   `docs/ssot/70-spec-audit/` fuer dieses Modul?
+
+**Was dabei gefunden wird, gehoert in den Auftrag** — mit Dateipfad.
+Nicht als Hinweis, sondern als Vorgabe.
+
+`[read]` **Warum das zaehlt:** An einem Tag wurde dreimal etwas als
+offene Frage behandelt, das fertig im alten Repo lag — TDEE-Formeln,
+Portionsgroessen, Einheiten-Umrechnung. Und die Nutrition-Oberflaeche
+brauchte drei Durchgaenge, weil der Auftrag die Vorlage nannte und dann
+eine andere Struktur vorgab.
+
+**Beides ist Vorarbeit, keine Nacharbeit.** Wer sie ueberspringt, baut
+zweimal.
+
 ### 2. Ist-Zustand, gemessen
 
 Was existiert heute — mit `[cmd]`, nicht aus der Spec abgeschrieben.
