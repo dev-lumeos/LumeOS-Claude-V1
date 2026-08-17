@@ -3621,6 +3621,50 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   nicht uebernommen wurde und was eine Sitzung noch nicht kann, steht in
   `docs/ssot/93-trainingssitzungen.md`.
 
+- [x] **C-67: `recovery.checkins` — die Tabelle, die sieben Kacheln
+  weckt** (neu 2026-08-17). Folgt aus G-21.
+
+  `[cmd]` **`recovery` hat kein Schema** — es kommt in
+  `supabase/_pipeline/` in keiner SQL-Datei vor, **nicht einmal
+  Stammdaten**, anders als bei Training. Es gibt keine Kachel, die ohne
+  neue Tabelle echt wird.
+
+  `[read]` Aus dem G-21-Bericht: *„Der groesste Hebel ist
+  `recovery.checkins` — eine Tabelle weckt sieben Kacheln: den
+  Check-in-Tab, den Erholungswert im `manual`-Modus (braucht kein HRV),
+  die Kopfzeile und den subjektiven Schlafpfad."*
+
+  `[cmd]` **Die Spalten stehen fertig in `CHECKIN`** (in
+  `module-recovery-engine.jsx`), und `docs/specs/Recovery/` ist mit elf
+  Dateien vollstaendig — `SPEC_06_DATABASE_SCHEMA.md` mit 17 KB.
+
+  `[cmd]` Das Vorgaengerrepo hat
+  `supabase/migrations/010_create_recovery_tables.sql`,
+  `upsertRecoveryAndEvaluate.ts` **mit Test** und
+  `recoveryCalculations.ts` **mit Test**.
+
+  **Danach `training.sessions`/`sets` fuer die Muskelkarte** — `[cmd]`
+  die Naht liegt als `MUSCLE_SLUG_MAP` schon da, und die Sitzungen
+  existieren seit `106`.
+
+  `[cmd]` **Erledigt 2026-08-17**, Kettenschritt `120`.
+  `recovery.checkins` mit Zeilenschutz, Policies je Operation und
+  Grants. **49 Kettenschritte dokumentiert.**
+
+  `[cmd]` **Live: 36 Check-ins, davon nur 9 mit HRV** — **27 Datensaetze
+  ohne Geraet.** Das ist der `manual`-Modus, und er traegt.
+
+  `[cmd]` Zeilenschutz beidseitig belegt: Tom sieht 36, Max sieht 0,
+  fremder Insert blockiert.
+
+  `[cmd]` **Der Szenariotag steht im Register:** 2026-08-18, schlechte
+  Erholung, `hrv_rmssd` leer, **4,8 h Schlaf** — ein vollstaendiger
+  Datensatz ohne Messgeraet.
+
+  `[read]` Damit koennen die sieben Kacheln aus dem G-21-Bericht echt
+  werden: Check-in-Tab, Erholungswert im `manual`-Modus, Kopfzeile und
+  der subjektive Schlafpfad.
+
 
 
 ## Erledigt am 2026-08-05
