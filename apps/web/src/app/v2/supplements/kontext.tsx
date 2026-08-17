@@ -1,0 +1,37 @@
+'use client'
+
+// Der geteilte Zustand des Supplements-Moduls.
+//
+// `[cmd]` Die Vorlage haelt ihn in `SuppCtx` (module-supplements.jsx:
+// `const SuppCtx = React.createContext({})`) und reicht `takenToday`,
+// `toggleTaken` und `open` an die Tabs. Uebernommen, nur mit Typen.
+//
+// `[read]` Die Modalarten sind die zwoelf der Vorlage (Zeile 273-285).
+// Sie stehen hier als Union, damit ein Tippfehler ein Uebersetzungs-
+// fehler wird und kein stilles Nichts — dieselbe Linie wie bei
+// `IconName` seit G-02.
+import * as React from 'react'
+
+export type ModalTyp =
+  | 'add' | 'catalogAdd' | 'catalogAddEnh' | 'skip' | 'product'
+  | 'interaction' | 'reorder' | 'addLab' | 'addSideEffect'
+  | 'addCompound' | 'planCycle' | 'permissions' | 'logDose'
+
+export type ModalZustand = { type: ModalTyp; payload?: unknown } | null
+
+export type SuppKontext = {
+  /** Welche Einnahmen heute abgehakt sind. */
+  takenToday: Record<string, boolean>
+  toggleTaken: (id: string) => void
+  open: (type: ModalTyp, payload?: unknown) => void
+}
+
+export const SuppCtx = React.createContext<SuppKontext>({
+  takenToday: {},
+  toggleTaken: () => {},
+  open: () => {},
+})
+
+export function useSupp() {
+  return React.useContext(SuppCtx)
+}

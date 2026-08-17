@@ -28,8 +28,13 @@ const BAUM = path.join(process.cwd(), 'src/app/v2/nutrition/nutrient-baum.ts')
 const TRAINING = path.join(process.cwd(), 'src/app/v2/training/ansicht.tsx')
 const TRAINING_SPEC = path.join(process.cwd(), 'src/app/v2/training/tabs-spec.tsx')
 const TRAINING_HR = path.join(process.cwd(), 'src/app/v2/training/tabs-offline-hr.tsx')
+const SUPP = path.join(process.cwd(), 'src/app/v2/supplements/tabs.tsx')
+const SUPP_RAHMEN = path.join(process.cwd(), 'src/app/v2/supplements/ansicht.tsx')
+const SUPP_DATEN = path.join(process.cwd(), 'src/app/v2/supplements/daten.ts')
 const RECOVERY = path.join(process.cwd(), 'src/app/v2/recovery/ansicht.tsx')
 const RECOVERY_MOTOR = path.join(process.cwd(), 'src/app/v2/recovery/motor.ts')
+const GOALS = path.join(process.cwd(), 'src/app/v2/goals/ansicht.tsx')
+const GOALS_DATEN = path.join(process.cwd(), 'src/app/v2/goals/daten.ts')
 
 /**
  * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) —
@@ -272,6 +277,111 @@ test('der Erholungswert kennt beide Modi mit den Gewichten der Vorlage', () => {
     'manual-Modus: Stimmung mit Gewicht 5 fehlt')
 })
 
+/**
+ * Die zehn Tabs der Vorlage (theme-v1/module-goals.jsx:172-183) — in
+ * dieser Reihenfolge.
+ *
+ * `[cmd]` EIN Rahmen, keine Weiche: `app.jsx:125` lautet
+ * `case "goals": return <GoalsModule />;`. `-pro.jsx` liefert fuenf
+ * dieser zehn Tabs zu, `-editor.jsx` zwei Modale fuer `-pro.jsx`.
+ */
+const VORLAGE_GOALS_TABS = [
+  'Goals', 'Phase engine', 'Adaptive TDEE', 'Cross-module', 'Timeline',
+  'Body metrics', 'Measurements', 'Composition', 'Physique ratios', 'Pose sessions',
+]
+
+test('die zehn Tabs der Vorlage stehen im Goals-Modul', () => {
+  const quelle = fs.readFileSync(GOALS, 'utf8')
+  for (const tab of VORLAGE_GOALS_TABS) {
+    assert.ok(quelle.includes(`'${tab}'`),
+      `Der Tab "${tab}" fehlt. Die Vorlage fuehrt zehn.`)
+  }
+})
+
+test('das Goals-Modul kennzeichnet jede Kachel', () => {
+  // `[cmd]` Goals hat als erstes Modul ECHTE Daten in Reichweite
+  // (goals.zielwerte_am seit GO-03/04) — angebunden ist trotzdem
+  // nichts: der Auftrag verlangt erst das Mockup. Wer eine Kachel
+  // anbindet, entfernt `attrappe` und senkt die Erwartung hier.
+  const dateien: Array<[string, number]> = [
+    [GOALS, 16],
+    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 16],
+    [path.join(process.cwd(), 'src/app/v2/goals/tab-physique.tsx'), 7],
+  ]
+  for (const [datei, erwartet] of dateien) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
+    const markiert = mitGrund + ohneGrund
+    assert.equal(markiert, erwartet,
+      `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
+      'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+test('die fuenf Ansichten aus -pro.jsx stehen da', () => {
+  // [cmd] module-goals.jsx:191-195 zeigt genau diese fuenf ueber
+  // `window.Goals*View` an; definiert sind sie in -pro.jsx. Ohne sie
+  // waeren fuenf von zehn Tabs leer — derselbe Aufbau wie bei Training.
+  const phase = fs.readFileSync(path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 'utf8')
+  const phys = fs.readFileSync(path.join(process.cwd(), 'src/app/v2/goals/tab-physique.tsx'), 'utf8')
+  for (const view of ['GoalsPhaseView', 'GoalsTDEEView', 'GoalsCrossModuleView']) {
+    assert.ok(phase.includes(`export function ${view}`), `${view} fehlt.`)
+  }
+  for (const view of ['GoalsPhysiqueView', 'GoalsPosesView']) {
+    assert.ok(phys.includes(`export function ${view}`), `${view} fehlt.`)
+  }
+})
+
+test('Goals fuehrt die sieben Phasen und 13 Umfaenge der Vorlage', () => {
+  // [cmd] module-goals-pro.jsx:5-68 (sieben Phasen) und :164-178
+  // (13 Umfaenge). Wer eine Phase kuerzt, laesst eine Kachel im
+  // Zustandsautomaten verschwinden.
+  const q = fs.readFileSync(GOALS_DATEN, 'utf8')
+  for (const p of ['fat_loss', 'lean_bulk', 'maintenance', 'recomp',
+                   'contest_prep', 'reverse_diet', 'expert_bb_annual']) {
+    assert.ok(q.includes(`${p}: {`), `Die Phase "${p}" fehlt.`)
+  }
+  // Nur der CIRCUMFERENCES-Block: `MEASUREMENTS` hat dieselbe
+  // Zeilenform, aber sechs statt zwei Zahlenfeldern.
+  const block = q.slice(q.indexOf('export const CIRCUMFERENCES'))
+  const umfaenge = (block.match(/\{ id: '[a-z_]+', label: '[^']+', v: /g) ?? []).length
+  assert.equal(umfaenge, 13, `CIRCUMFERENCES hat ${umfaenge} Eintraege, die Vorlage 13.`)
+})
+
+test('die Formeln der Goals-Vorlage sind uebernommen, nicht erfunden', () => {
+  // [read] Dieselbe Regel wie bei Nutrition, Training und Recovery.
+  const q = fs.readFileSync(GOALS_DATEN, 'utf8')
+  // Mifflin-St Jeor — module-goals.jsx:556-558. `[read]` Der
+  // Umsetzungsplan (W-6) haelt fest, dass die Spec-Formel den
+  // Aktivitaetsfaktor VERGISST; die Vorlage wendet ihn an.
+  assert.ok(/10 \* p\.weight \+ 6\.25 \* p\.height - 5 \* p\.age \+ 5/.test(q),
+    'Mifflin-St Jeor (maennlich) fehlt')
+  assert.ok(/bmr \* p\.activityFactor/.test(q), 'Aktivitaetsfaktor wird nicht angewandt')
+  // Gewichtung der Modulbeitraege — module-goals-pro.jsx:118.
+  assert.ok(/training: 0\.35/.test(q), 'Gewicht training 0.35 fehlt')
+  assert.ok(/nutrition: 0\.30/.test(q), 'Gewicht nutrition 0.30 fehlt')
+  // Der goldene Schnitt — module-goals-pro.jsx:186.
+  assert.ok(/goldenTarget: 1\.618/.test(q), 'Goldener Schnitt 1.618 fehlt')
+  // Schwellen von calcGoalProgress — module-goals-pro.jsx:132.
+  assert.ok(/overall >= 80 \? 'excellent'/.test(q), 'Schwellen des Gesamtwerts fehlen')
+})
+
+test('Goals wuerfelt seine Verlaufsdaten nicht', () => {
+  // `[cmd]` module-goals.jsx:101-121 erzeugt die Gewichts- und
+  // Koerperfettverlaeufe mit `Math.random()`. Serverseitig kommen
+  // andere Zahlen heraus als im Browser — das ergibt bei jedem
+  // Seitenaufruf eine Hydrations-Abweichung. Bei Recovery hat
+  // dieselbe Klasse Fehler 32 Konsolenmeldungen erzeugt.
+  // Kommentarzeilen erklaeren, WARUM es fehlt — sie zaehlen nicht.
+  const q = fs.readFileSync(GOALS_DATEN, 'utf8')
+    .split('\n')
+    .filter(z => !/^\s*(\/\/|\*|\/\*)/.test(z))
+    .join('\n')
+  assert.ok(!/Math\.random\(\)/.test(q),
+    'Math.random() in den Daten — das bricht die Hydration. Feste Pseudofolge benutzen.')
+})
+
 test('der Naehrstoffbaum ist vollstaendig uebernommen', () => {
   // [cmd] module-nutrition-nutrients.jsx fuehrt 79 Eintraege in acht
   // Gruppen. Wer den Baum kuerzt, faellt hier auf.
@@ -281,4 +391,48 @@ test('der Naehrstoffbaum ist vollstaendig uebernommen', () => {
     `Der Baum hat ${eintraege} Eintraege, die Vorlage 79.`)
   const gruppen = (baum.match(/^\s{2}"/gm) ?? []).length
   assert.equal(gruppen, 8, `GROUP_ORDER hat ${gruppen} Gruppen, die Vorlage 8.`)
+})
+
+/**
+ * Die elf Tabs der Supplements-Vorlage
+ * (theme-v1/module-supplements.jsx:240-253), in dieser Reihenfolge.
+ */
+const VORLAGE_SUPP_TABS = [
+  'Today', 'Stack', 'Extended', 'Catalog', 'Stacks', 'Intelligence',
+  'Inventory', 'Injections', 'Compliance', 'Interactions', 'Cost',
+]
+
+test('die elf Tabs der Vorlage stehen im Supplements-Modul', () => {
+  const quelle = fs.readFileSync(SUPP_RAHMEN, 'utf8')
+  for (const tab of VORLAGE_SUPP_TABS) {
+    assert.ok(quelle.includes(`label: '${tab}'`),
+      `Der Tab "${tab}" fehlt. Die Vorlage fuehrt elf.`)
+  }
+})
+
+test('das Supplements-Modul kennzeichnet jede Kachel', () => {
+  // Keine Quelle heisst: jede Kachel traegt die Marke. [cmd] Es gibt
+  // kein `supplements`-Schema — wer eine Kachel anbindet, entfernt
+  // `attrappe` und zaehlt die Erwartung herunter.
+  const quelle = fs.readFileSync(SUPP, 'utf8')
+  const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+  const ohneGrund = (quelle.match(/^\s+attrappe$/gm) ?? []).length
+  assert.equal(mitGrund + ohneGrund, 17,
+    `${mitGrund + ohneGrund} Kacheln gekennzeichnet, erwartet 17. ` +
+    'Angebunden? Dann die Erwartung hier senken.')
+})
+
+test('der Stack der Vorlage ist vollstaendig uebernommen', () => {
+  // [cmd] module-supplements.jsx fuehrt neun Eintraege im STACK und
+  // fuenfzehn in SUPPLEMENT_DB. Wer die Liste kuerzt, faellt hier auf —
+  // wie beim Naehrstoffbaum in G-12.
+  const daten = fs.readFileSync(SUPP_DATEN, 'utf8')
+  const stack = daten.slice(daten.indexOf('export const STACK'),
+                            daten.indexOf('export const SLOTS'))
+  assert.equal((stack.match(/^\s{2}\{$/gm) ?? []).length, 9,
+    'Der STACK der Vorlage hat neun Eintraege.')
+  const db = daten.slice(daten.indexOf('export const SUPPLEMENT_DB'),
+                         daten.indexOf('export const INTERACTIONS'))
+  assert.equal((db.match(/\{ name: /g) ?? []).length, 15,
+    'SUPPLEMENT_DB der Vorlage hat fuenfzehn Eintraege.')
 })

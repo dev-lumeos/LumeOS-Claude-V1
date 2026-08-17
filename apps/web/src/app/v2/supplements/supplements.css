@@ -1,0 +1,81 @@
+/* Die Rasterklassen des Supplements-Moduls.
+ *
+ * WARUM HIER UND NICHT IN v2.css:
+ * `[read]` Der Auftrag G-29: „packages/ui/ nicht anfassen — fehlt eine
+ * Klasse: melden, Modul-Raster in eine supplements.css neben die
+ * Route." Diese Datei ist genau das.
+ *
+ * `[cmd]` VORHER GEPRUEFT, welche Raster die Vorlage inline traegt
+ * (neun verschiedene `gridTemplateColumns`). Vier davon gibt es schon:
+ *   1.4fr 1fr    -> .v2-grid-14   (seit G-19)
+ *   1.5fr 1fr    -> .v2-grid-15   (seit G-19)
+ *   1fr 1fr 1fr  -> .v2-g-cols-3  (aus dem Entwurf)
+ *   1fr×4        -> .v2-g-cols-4  (aus dem Entwurf)
+ * Sie werden BENUTZT, nicht nachgebaut. Hier stehen nur die fuenf,
+ * die es sonst nirgends gibt.
+ *
+ * DIE HALTEPUNKTE: `[cmd]` Der Entwurf hat null @media-Regeln. 1100px
+ * ist derselbe Haltepunkt wie in v2.css — uebernommen, nicht erfunden.
+ */
+
+/* --- Eine Zeile der Einnahmeliste (Today, Slot-Karten) ----------
+ * [cmd] module-supplements.jsx:432 — Haken, Name, Dosis. */
+.v2-supp-dose-row {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 45%, transparent);
+}
+.v2-supp-dose-row:last-child { border-bottom: 0; }
+
+/* --- Die Wochenmatrix (Compliance) ------------------------------
+ * [cmd] module-supplements.jsx:520 — 16 Spalten fuer 16 Tage.
+ * Unter 900px werden daraus acht, sonst ist eine Spalte 12px breit. */
+.v2-supp-adherence {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 3px;
+}
+@media (max-width: 900px) {
+  .v2-supp-adherence { grid-template-columns: repeat(8, 1fr); }
+}
+
+/* --- Namensspalte plus Matrix (Compliance) ----------------------
+ * [cmd] module-supplements.jsx:517 — 140px Name, Rest die Matrix. */
+.v2-supp-adherence-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 5px 0;
+}
+@media (max-width: 700px) {
+  .v2-supp-adherence-row { grid-template-columns: 92px 1fr; }
+}
+
+/* --- Kostenzeile (Cost) ------------------------------------------
+ * [cmd] module-supplements.jsx:570 — Name, Balken, Betrag. */
+.v2-supp-cost-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 60px;
+  gap: 10px;
+  align-items: center;
+  padding: 6px 0;
+}
+
+/* --- Zeile der Wirkstoffdatenbank (Database) ---------------------
+ * [cmd] module-supplements.jsx:648 — 120px Kategorie, Rest Text. */
+.v2-supp-db-row {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+@media (max-width: 640px) {
+  .v2-supp-db-row { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* Breite Tabellen scrollen in sich statt die Seite aufzuschieben. */
+.v2-supp-tbl-wrap { overflow-x: auto; }

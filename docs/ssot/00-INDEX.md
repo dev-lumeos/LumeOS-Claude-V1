@@ -115,6 +115,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `85-mikro-uebersicht.md` | Netzdiagramm und Schwellenliste — **16 von 17 am Mangel-Szenariotag** |
 | `91-training-mockup.md` | Training nach der Vorlage, 38 Kacheln, **alles Attrappe**. Klärt, wie die vier Vorlagendateien eines Moduls zusammenhängen — und welche Kachel zuerst echte Daten bekommen kann |
 | `92-recovery-mockup.md` | Recovery nach der Vorlage, 36 Kacheln, **alles Attrappe** (kein Schema). **Zwei konkurrierende Rahmen — `app.jsx:122` entscheidet, welcher gilt.** Damit drei Muster für Vorlagendateien, und die Prüfung, die sie unterscheidet |
+| `95-supplements-mockup.md` | Supplements nach der Vorlage — der Rahmen und seine **sieben eigenen Tabs**, vier weitere als benannte Luecke. **227 KB Vorlage, viertes Muster: arbeitsteilig statt konkurrierend.** Mit dem, was im Vorgaengerrepo danebenliegt (acht Tabellen, 36 KB Seed, Halbwertszeit) |
 | `47-lebensmittelsuche-stand.md` | **Der erreichte Stand** — fasst 41 bis 46 zusammen |
 | `60-legacy-cloud.md` | Was liegt wirklich in der Legacy-Cloud-Instanz? (echte Zeilenzahlen, Medienverweise, Schemakonflikt — ersetzt alle Schätzungen) |
 | `50-governance-rest.md` | Was ist vom alten Governance-System übrig und warum? |
