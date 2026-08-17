@@ -226,10 +226,12 @@ if (MODE === 'clean') {
       AND measurement_date = DATE '2026-09-13'
       AND measurement_time = TIME '07:05'
       AND height_cm_snapshot = 185
+      AND measurement_source = 'manual'
+      AND bf_method = 'manual'
       AND bmi IS NOT NULL
       AND lean_mass_kg IS NOT NULL
       AND ffmi IS NOT NULL;`)) {
-    errors.push('Fall Koerpermessungen: Hoehen-Snapshot oder abgeleitete Werte fehlen')
+    errors.push('Fall Koerpermessungen: Hoehen-Snapshot, Herkunft oder abgeleitete Werte fehlen')
   }
   if (!hasRows(`
     SELECT 1
@@ -249,8 +251,43 @@ if (MODE === 'clean') {
       AND thigh_left_cm IS NOT NULL
       AND thigh_right_cm IS NOT NULL
       AND calf_left_cm IS NOT NULL
-      AND calf_right_cm IS NOT NULL;`)) {
-    errors.push('Fall Umfaenge: letzte Messung mit 13 Koerperumfaengen fehlt')
+      AND calf_right_cm IS NOT NULL
+      AND measurement_source = 'manual';`)) {
+    errors.push('Fall Umfaenge: letzte Messung mit 13 Koerperumfaengen oder Herkunft fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.body_composition_navy('${tom}'::uuid, DATE '2026-09-13')
+    WHERE method = 'navy_circumference'
+      AND source = 'derived_navy'
+      AND input_source = 'manual'
+      AND standard_error_pct_points = 3.5
+      AND body_fat_pct BETWEEN 5 AND 35
+      AND body_fat_pct - body_fat_pct_min = 3.5
+      AND body_fat_pct_max - body_fat_pct = 3.5
+      AND ffmi IS NOT NULL
+      AND lean_mass_kg IS NOT NULL
+      AND caution LIKE '%Athleten%';`)) {
+    errors.push('Fall Navy-Koerperfett: Wert, Spanne, FFMI oder Herkunft fehlen')
+  }
+  if (numberScalar(`SELECT count(*) FROM goals.body_composition_navy('${sarah}'::uuid, DATE '2026-09-13');`) !== 0) {
+    errors.push('Fall Navy-Koerperfett ohne Umfaenge: Funktion liefert trotz fehlender Eingaben eine Zeile')
+  }
+  if (!hasRows(`
+    WITH first_value AS (
+      SELECT body_fat_pct
+      FROM goals.body_composition_navy('${tom}'::uuid, DATE '2026-08-02')
+    ),
+    last_value AS (
+      SELECT body_fat_pct
+      FROM goals.body_composition_navy('${tom}'::uuid, DATE '2026-09-13')
+    )
+    SELECT 1
+    FROM first_value f
+    CROSS JOIN last_value l
+    WHERE f.body_fat_pct > l.body_fat_pct
+      AND f.body_fat_pct - l.body_fat_pct >= 1.0;`)) {
+    errors.push('Fall Navy-Koerperfett Verlauf: ueber 43 Tage ist keine fallende Tendenz sichtbar')
   }
   if (!hasRows(`SELECT 1 FROM nutrition.daily_summary WHERE user_id = '${tom}'::uuid AND entry_date = DATE '2026-08-02' AND item_count > 0;`)) {
     errors.push('Fall Tag ohne Ziel: daily_summary fehlt oder hat keine Positionen')

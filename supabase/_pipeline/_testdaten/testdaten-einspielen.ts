@@ -146,7 +146,8 @@ type BodyMeasurementRow = {
   measurementTime: string
   weightKg: number
   bodyFatPct: number | null
-  bfMethod: 'bia' | 'manual' | 'visual' | null
+  bfMethod: 'manual' | 'visual' | null
+  measurementSource: 'manual'
   notes: string
 }
 
@@ -167,6 +168,7 @@ type BodyCircumferenceRow = {
   thighRightCm: number
   calfLeftCm: number
   calfRightCm: number
+  measurementSource: 'manual'
   notes: string
 }
 
@@ -617,7 +619,8 @@ const bodyMeasurements: BodyMeasurementRow[] = daysBetween(START_DATE, END_DATE)
     measurementTime: '07:05',
     weightKg: Number((83.8 + 1.2 * trend + noise).toFixed(2)),
     bodyFatPct: Number((15.8 - 0.6 * trend + ((index % 4) - 1.5) * 0.05).toFixed(2)),
-    bfMethod: index % 7 === 0 ? 'bia' : 'manual',
+    bfMethod: 'manual',
+    measurementSource: 'manual',
     notes: 'GO-10 Testdaten: taeglicher Gewichtsverlauf fuer adaptive TDEE',
   }
 })
@@ -648,6 +651,7 @@ const bodyCircumferences: BodyCircumferenceRow[] = [
   thighRightCm: row.thighR,
   calfLeftCm: row.calfL,
   calfRightCm: row.calfR,
+  measurementSource: 'manual',
   notes: 'GO-10 Testdaten: woechentliche Umfangsmessung fuer Goals Composition',
 }))
 
@@ -1134,6 +1138,7 @@ const bodyMeasurementValues = bodyMeasurements.map(measurement => tuple([
   measurement.weightKg,
   measurement.bodyFatPct,
   measurement.bfMethod,
+  measurement.measurementSource,
   measurement.notes,
 ])).join(',\n')
 const bodyCircumferenceValues = bodyCircumferences.map(measurement => tuple([
@@ -1153,6 +1158,7 @@ const bodyCircumferenceValues = bodyCircumferences.map(measurement => tuple([
   measurement.thighRightCm,
   measurement.calfLeftCm,
   measurement.calfRightCm,
+  measurement.measurementSource,
   measurement.notes,
 ])).join(',\n')
 const supplementStackValues = supplementStacks.map(stack => tuple([
@@ -1367,6 +1373,7 @@ CREATE TEMP TABLE test_body_measurements (
   weight_kg numeric NOT NULL,
   body_fat_pct numeric,
   bf_method text,
+  measurement_source text NOT NULL,
   notes text NOT NULL
 ) ON COMMIT DROP;
 
@@ -1374,9 +1381,9 @@ INSERT INTO test_body_measurements VALUES
 ${bodyMeasurementValues};
 
 INSERT INTO goals.body_measurements (
-  user_id, measurement_date, measurement_time, weight_kg, body_fat_pct, bf_method, notes
+  user_id, measurement_date, measurement_time, weight_kg, body_fat_pct, bf_method, measurement_source, notes
 )
-SELECT user_id, measurement_date, measurement_time, weight_kg, body_fat_pct, bf_method, notes
+SELECT user_id, measurement_date, measurement_time, weight_kg, body_fat_pct, bf_method, measurement_source, notes
 FROM test_body_measurements;
 
 CREATE TEMP TABLE test_body_circumferences (
@@ -1396,6 +1403,7 @@ CREATE TEMP TABLE test_body_circumferences (
   thigh_right_cm numeric NOT NULL,
   calf_left_cm numeric NOT NULL,
   calf_right_cm numeric NOT NULL,
+  measurement_source text NOT NULL,
   notes text NOT NULL
 ) ON COMMIT DROP;
 
@@ -1410,6 +1418,7 @@ INSERT INTO goals.body_circumferences (
   waist_cm, hip_cm,
   thigh_left_cm, thigh_right_cm,
   calf_left_cm, calf_right_cm,
+  measurement_source,
   notes
 )
 SELECT
@@ -1420,6 +1429,7 @@ SELECT
   waist_cm, hip_cm,
   thigh_left_cm, thigh_right_cm,
   calf_left_cm, calf_right_cm,
+  measurement_source,
   notes
 FROM test_body_circumferences;
 

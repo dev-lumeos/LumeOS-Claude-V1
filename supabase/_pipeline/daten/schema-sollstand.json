@@ -1468,6 +1468,11 @@
       "schritt": "112"
     },
     {
+      "schema": "goals",
+      "name": "body_composition_navy",
+      "schritt": "112"
+    },
+    {
       "schema": "training",
       "name": "fill_workout_exercise_snapshot",
       "schritt": "106"

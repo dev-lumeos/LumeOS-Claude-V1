@@ -133,7 +133,7 @@
     "user_id": "10000000-0000-0000-0000-000000000101",
     "date": "2026-08-02 bis 2026-09-13",
     "case": "Gewichtsverlauf und Koerperumfaenge",
-    "expected": "goals.body_measurements enthaelt 43 taegliche Messpunkte mit sichtbarem Trend; goals.body_circumferences enthaelt sieben woechentliche Messungen mit 13 Umfaengen. Das Profilgewicht entspricht dem neuesten Gewichtsmesspunkt."
+    "expected": "goals.body_measurements enthaelt 43 taegliche Messpunkte mit sichtbarem Trend; goals.body_circumferences enthaelt sieben woechentliche Messungen mit 13 Umfaengen. Das Profilgewicht entspricht dem neuesten Gewichtsmesspunkt. goals.body_composition_navy liefert daraus Koerperfett mit Spanne, FFMI und Herkunft derived_navy/manual."
   },
   {
     "user": "Tom Miller",
