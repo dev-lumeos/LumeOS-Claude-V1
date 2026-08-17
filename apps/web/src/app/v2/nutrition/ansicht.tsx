@@ -9,6 +9,7 @@
 // Deshalb zeigen die Ringe hier den Wert ohne Ziel, und wo ein Ziel
 // noetig waere, steht, dass es fehlt.
 import * as React from 'react'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import type { Route } from 'next'
 import {
@@ -39,18 +40,20 @@ const HAUPTMAKROS: Array<{
   /** Das passende Feld in goals.nutrition_targets. */
   zielFeld: 'kcal' | 'protein_g' | 'carbs_g' | 'fat_g'
 }> = [
-  { code: 'enercc',  label: 'Energie',       unit: 'kcal', color: 'var(--acc-nutri)', zielFeld: 'kcal' },
-  { code: 'prot625', label: 'Protein',       unit: 'g',    color: 'var(--acc-train)', zielFeld: 'protein_g' },
-  { code: 'cho',     label: 'Kohlenhydrate', unit: 'g',    color: 'var(--acc-recov)', zielFeld: 'carbs_g' },
-  { code: 'fat',     label: 'Fett',          unit: 'g',    color: 'var(--acc-goals)', zielFeld: 'fat_g' },
+  // A-14: `label` ist der SCHLUESSEL, nicht der Text — uebersetzt wird
+  // erst in der Komponente, wo `t` vorliegt.
+  { code: 'enercc',  label: 'kalorien',      unit: 'kcal', color: 'var(--acc-nutri)', zielFeld: 'kcal' },
+  { code: 'prot625', label: 'protein',       unit: 'g',    color: 'var(--acc-train)', zielFeld: 'protein_g' },
+  { code: 'cho',     label: 'kohlenhydrate', unit: 'g',    color: 'var(--acc-recov)', zielFeld: 'carbs_g' },
+  { code: 'fat',     label: 'fett',          unit: 'g',    color: 'var(--acc-goals)', zielFeld: 'fat_g' },
 ]
 
 const WEITERE_MAKROS: Array<{ code: SummaryMacro; label: string; unit: string }> = [
-  { code: 'fibt', label: 'Ballaststoffe', unit: 'g' },
-  { code: 'sugar', label: 'Zucker', unit: 'g' },
-  { code: 'fasat', label: 'gesaettigte Fettsaeuren', unit: 'g' },
-  { code: 'nacl', label: 'Salz', unit: 'g' },
-  { code: 'water_g', label: 'Wasser aus Lebensmitteln', unit: 'g' },
+  { code: 'fibt', label: 'ballaststoffe', unit: 'g' },
+  { code: 'sugar', label: 'zucker', unit: 'g' },
+  { code: 'fasat', label: 'gesaettigt', unit: 'g' },
+  { code: 'nacl', label: 'salz', unit: 'g' },
+  { code: 'water_g', label: 'wasser', unit: 'g' },
 ]
 
 function tagText(datum: string): string {
@@ -80,7 +83,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
   ]
 }
 
-export function TagebuchAnsicht({
+export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
 }: {
   datum: string
@@ -94,6 +97,9 @@ export function TagebuchAnsicht({
   zielFehler?: string | null
   wasser?: HydrationDay | null
 }) {
+  // A-14: Serverkomponente — `getTranslations`, nicht `useTranslations`.
+  const t = await getTranslations('Nutrition')
+  const tA = await getTranslations('Allgemein')
   const leer = !summe || summe.item_count === 0
 
   // Der Profilzustand steht in jeder Zeile gleich — eine reicht.
@@ -123,7 +129,7 @@ export function TagebuchAnsicht({
             <Pill variant="acc">138-nutrient tracking</Pill>
           </div>
           <div className="v2-module-sub">
-            Diary, micronutrient analysis, and meal planning · BLS 4.0 · Max Rubner-Institut
+            {t('untertitel')}
           </div>
         </div>
         <div className="v2-module-actions">
@@ -133,14 +139,14 @@ export function TagebuchAnsicht({
           <Link
             href={`/v2/nutrition?datum=${vortag(datum)}` as Route}
             className="v2-btn v2-btn-ghost"
-            aria-label="Vorheriger Tag"
+            aria-label={t('vorherigerTag')}
           >
             <Icon name="chevron_left" className="v2-ic v2-ic-sm" />
           </Link>
           <Link
             href={`/v2/nutrition?datum=${folgetag(datum)}` as Route}
             className="v2-btn v2-btn-ghost"
-            aria-label="Naechster Tag"
+            aria-label={t('naechsterTag')}
           >
             <Icon name="chevron_right" className="v2-ic v2-ic-sm" />
           </Link>
@@ -177,7 +183,7 @@ export function TagebuchAnsicht({
         <div className="v2-insight v2-neg" style={{ marginTop: 16 }}>
           <div className="v2-insight-mark" />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="v2-insight-title">Tagessumme nicht lesbar</div>
+            <div className="v2-insight-title">{t('summeNichtLesbar')}</div>
             <div className="v2-insight-body">{fehler}</div>
           </div>
         </div>
@@ -232,8 +238,8 @@ export function TagebuchAnsicht({
               />
               <div className="v2-num" style={{ fontSize: 10, color: 'var(--fg-dim)' }}>
                 {summe?.macros.enercc.value != null && ziele?.kcal != null
-                  ? `${Math.round(ziele.kcal - summe.macros.enercc.value).toLocaleString('de-DE')} kcal left`
-                  : 'ohne Tagesziel'}
+                  ? t('kcalOffen', { menge: Math.round(ziele.kcal - summe.macros.enercc.value).toLocaleString('de-DE') })
+                  : t('ohneTagesziel')}
               </div>
             </div>
             <div style={{ flex: 1, minWidth: 220, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -250,7 +256,7 @@ export function TagebuchAnsicht({
                           („Kohlenhydrate"), sie liefen bei fester
                           Breite in die Zahl daneben. Deshalb
                           `minWidth` statt `width`. */}
-                      <span className="v2-eyebrow" style={{ minWidth: 56, flexShrink: 0 }}>{m.label}</span>
+                      <span className="v2-eyebrow" style={{ minWidth: 56, flexShrink: 0 }}>{t(m.label)}</span>
                       <span className="v2-num" style={{ fontSize: 14, fontWeight: 500 }}>
                         {wert === null ? '—' : Math.round(wert)}
                         <span style={{ fontSize: 10, color: 'var(--fg-dim)', marginLeft: 1 }}>
@@ -258,7 +264,7 @@ export function TagebuchAnsicht({
                         </span>
                       </span>
                       <span className="v2-num v2-dim" style={{ fontSize: 10, marginLeft: 'auto' }}>
-                        {wert !== null && ziel !== null ? `${Math.round(ziel - wert)}g left` : ''}
+                        {wert !== null && ziel !== null ? t('gLeft', { menge: Math.round(ziel - wert) }) : ''}
                       </span>
                       <span className="v2-num" style={{
                         fontSize: 11, width: 34, textAlign: 'right',
@@ -291,7 +297,7 @@ export function TagebuchAnsicht({
               return (
                 <Row
                   key={m.code}
-                  label={m.label}
+                  label={t(m.label)}
                   value={
                     <>
                       {wert?.value == null
@@ -332,11 +338,11 @@ export function TagebuchAnsicht({
         <BelowThreshold />
 
         <Card
-          title="Deckung je Naehrstoff"
-          sub={`${bewertung.length} bewertet`}
+          title={t('deckungTitel')}
+          sub={t('bewertet', { anzahl: bewertung.length })}
           actions={
             bewertbar.length > 0
-              ? <Pill variant="acc">{bewertbar.length} mit Referenz</Pill>
+              ? <Pill variant="acc">{t('mitReferenz', { anzahl: bewertbar.length })}</Pill>
               : undefined
           }
         >
@@ -344,12 +350,9 @@ export function TagebuchAnsicht({
             <div className="v2-insight v2-warn" style={{ marginBottom: 12 }}>
               <div className="v2-insight-mark" />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="v2-insight-title">Profil unvollstaendig</div>
+                <div className="v2-insight-title">{t('profilUnvollstaendig')}</div>
                 <div className="v2-insight-body">
-                  Referenzwerte haengen an Alter und biologischem Geschlecht.
-                  [cmd] Beides fehlt im Profil, deshalb steht bei jedem
-                  Naehrstoff „Profil fehlt" statt eines Prozentwerts —
-                  nicht 0 %.
+                  {t('profilHinweis')}
                 </div>
               </div>
             </div>
@@ -359,7 +362,7 @@ export function TagebuchAnsicht({
             <div className="v2-insight v2-neg" style={{ marginBottom: 12 }}>
               <div className="v2-insight-mark" />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="v2-insight-title">Bewertung nicht lesbar</div>
+                <div className="v2-insight-title">{t('bewertungNichtLesbar')}</div>
                 <div className="v2-insight-body">{bewertungFehler}</div>
               </div>
             </div>
@@ -367,7 +370,7 @@ export function TagebuchAnsicht({
 
           {bewertung.length === 0 && !bewertungFehler && (
             <p className="v2-muted" style={{ fontSize: 12 }}>
-              Ohne erfasste Positionen gibt es nichts zu bewerten.
+              {t('ohnePositionen')}
             </p>
           )}
 
@@ -407,10 +410,7 @@ export function TagebuchAnsicht({
           <p className="v2-hinweis" style={{ marginTop: 12 }}>
             <Icon name="alert" className="v2-ic v2-ic-sm" />
             <span>
-              <strong>100 % heisst nicht „genug fuer dich".</strong> Die
-              Referenzwerte gelten fuer gesunde Erwachsene in Ruhe. Wer
-              trainiert, krank ist, schwanger ist oder Medikamente nimmt,
-              braucht andere Mengen — das kann diese Seite nicht wissen.
+              <strong>{t('regel100')}</strong> {t('referenzHinweis')}
             </span>
           </p>
         </Card>

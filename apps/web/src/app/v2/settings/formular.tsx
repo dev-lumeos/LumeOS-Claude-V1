@@ -7,6 +7,7 @@
 // Uebernommen wurden die Muster, nicht die Inline-Stile: die Klassen
 // aus v2.css leisten dasselbe und sind an einer Stelle beschrieben.
 import * as React from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, Pill, Icon, ModuleHero, Meter } from '@lumeos/ui'
 
 import {
@@ -59,6 +60,9 @@ export function ProfilFormular({
   start: StoredProfile
   ladefehler: string | null
 }) {
+  // A-14: zwei Namensraeume — die Seite und das Allgemeine.
+  const t = useTranslations('Einstellungen')
+  const tA = useTranslations('Allgemein')
   const [werte, setWerte] = React.useState<Formwerte>(() => zuFormwerten(start))
   const [gespeichert, setGespeichert] = React.useState<StoredProfile>(start)
   const [zustand, setZustand] = React.useState<Zustand>({ art: 'ruhe' })
@@ -103,24 +107,24 @@ export function ProfilFormular({
     <>
       <ModuleHero
         icon="settings"
-        title="Einstellungen"
-        sub="Profil — Grundlage fuer Referenzwerte und Tagesziele."
-        pills={<><Pill variant="acc">GO-01</Pill><Pill>lesen und schreiben</Pill></>}
+        title={t('titel')}
+        sub={t('untertitel')}
+        pills={<><Pill variant="acc">GO-01</Pill><Pill>{t('lesenSchreiben')}</Pill></>}
         stats={[
-          { label: 'Angegeben', value: `${stand.gesetzt}/${stand.gesamt}` },
+          { label: t('angegeben'), value: `${stand.gesetzt}/${stand.gesamt}` },
           {
-            label: 'Referenzwerte',
-            value: hasReferenceProfile(gespeichert) ? 'moeglich' : 'fehlt',
-            sub: 'Alter + Geschlecht',
+            label: t('referenzwerte'),
+            value: hasReferenceProfile(gespeichert) ? t('moeglich') : t('fehlt'),
+            sub: t('alterGeschlecht'),
           },
           {
             // Bis GO-04 stand hier „GO-04 rechnet" — eine Ankuendigung.
             // Sie rechnet inzwischen, also sagt die Zeile das auch.
-            label: 'Tagesziele',
-            value: hasTdeeProfile(gespeichert) ? 'gerechnet' : 'fehlt',
+            label: t('tagesziele'),
+            value: hasTdeeProfile(gespeichert) ? t('gerechnet') : t('fehlt'),
             sub: hasTdeeProfile(gespeichert)
-              ? 'Ringe im Tagebuch'
-              : 'Geburtsdatum, Geschlecht, Groesse, Gewicht, Aktivitaet',
+              ? t('ringeImTagebuch')
+              : t('fehlendeFelder'),
           },
         ]}
       />
@@ -129,7 +133,7 @@ export function ProfilFormular({
         <div className="v2-insight v2-neg" style={{ marginTop: 16 }}>
           <div className="v2-insight-mark" />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="v2-insight-title">Profil nicht lesbar</div>
+            <div className="v2-insight-title">{t('profilNichtLesbar')}</div>
             <div className="v2-insight-body">{ladefehler}</div>
           </div>
         </div>
@@ -137,12 +141,11 @@ export function ProfilFormular({
 
       <form onSubmit={absenden}>
         <div className="v2-grid v2-g-cols-2" style={{ marginTop: 16, alignItems: 'start' }}>
-          <Card title="Koerper" sub="Grundlage der Formeln">
+          <Card title={t('koerper')} sub={t('koerperSub')}>
             <div style={{ marginBottom: 14 }}>
               <Meter value={stand.gesetzt} max={stand.gesamt} />
               <div style={{ fontSize: 10.5, color: 'var(--fg-dim)', marginTop: 5 }}>
-                {stand.gesetzt} von {stand.gesamt} Angaben — alles freiwillig,
-                aber ohne sie bleibt gerechnet, was ungerechnet bleiben muss.
+                {t('freiwillig', { gesetzt: stand.gesetzt, gesamt: stand.gesamt })}
               </div>
             </div>
 
@@ -155,8 +158,8 @@ export function ProfilFormular({
                 aus nicht ueberschreiben. Deshalb steht die erwartete
                 Reihenfolge im Hinweis. */}
             <Feld
-              label="Geburtsdatum"
-              hinweis="Tag.Monat.Jahr — Datum, nicht Alter: ein gespeichertes Alter ist am naechsten Geburtstag falsch."
+              label={t('geburtsdatum')}
+              hinweis={t('geburtsdatumHinweis')}
               fehler={feldfehler.birth_date}
             >
               <input
@@ -168,13 +171,13 @@ export function ProfilFormular({
               />
             </Feld>
 
-            <Feld label="Biologisches Geschlecht" fehler={feldfehler.biological_sex}>
+            <Feld label={t('geschlecht')} fehler={feldfehler.biological_sex}>
               <select
                 className="v2-feld"
                 value={werte.biological_sex}
                 onChange={e => setze('biological_sex', e.target.value)}
               >
-                <option value="">— nicht angegeben —</option>
+                <option value="">{t('nichtAngegeben')}</option>
                 {BIOLOGICAL_SEXES.map(s => (
                   <option key={s} value={s}>
                     {BIOLOGICAL_SEX_LABEL[s as BiologicalSex]}
@@ -184,7 +187,7 @@ export function ProfilFormular({
             </Feld>
 
             <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-              <Feld label="Groesse" fehler={feldfehler.height_cm}>
+              <Feld label={t('groesse')} fehler={feldfehler.height_cm}>
                 <div style={{ position: 'relative', display: 'flex' }}>
                   <input
                     type="number"
@@ -199,7 +202,7 @@ export function ProfilFormular({
                 </div>
               </Feld>
 
-              <Feld label="Gewicht" fehler={feldfehler.body_weight_kg}>
+              <Feld label={t('gewicht')} fehler={feldfehler.body_weight_kg}>
                 <div style={{ position: 'relative', display: 'flex' }}>
                   <input
                     type="number"
@@ -215,7 +218,7 @@ export function ProfilFormular({
               </Feld>
             </div>
 
-            <Feld label="Zielrichtung" fehler={feldfehler.nutrition_goal}>
+            <Feld label={t('zielrichtung')} fehler={feldfehler.nutrition_goal}>
               <select
                 className="v2-feld"
                 value={werte.nutrition_goal}
@@ -232,7 +235,7 @@ export function ProfilFormular({
           </Card>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <Card title="Aktivitaet" sub="bestimmt den TDEE-Faktor">
+            <Card title={t('aktivitaet')} sub={t('aktivitaetSub')}>
               {/* `[read]` Die Vorlage zeigt den Faktor neben jeder Stufe.
                   Ohne ihn ist „massig aktiv" eine leere Behauptung. */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -274,16 +277,13 @@ export function ProfilFormular({
                 zurueck auf `female` — die Zeitraeume sind noch da. */}
             {werte.biological_sex === 'female' && (
             <Card
-              title="Schwangerschaft und Stillzeit"
-              sub="Zeitraeume, keine Eigenschaften"
+              title={t('schwangerschaft')}
+              sub={t('schwangerschaftSub')}
             >
               <p className="v2-hinweis" style={{ borderTop: 0, paddingTop: 0, marginBottom: 12 }}>
                 <Icon name="alert" className="v2-ic v2-ic-sm" />
                 <span>
-                  Beides sind Zustaende auf Zeit, deshalb Beginn und Ende.
-                  Referenzwerte fuer einen Tag richten sich danach, ob der
-                  Tag im Zeitraum liegt — nicht danach, ob irgendwann
-                  einmal ein Haken gesetzt wurde.
+                  {t('zeitraumHinweis')}
                 </span>
               </p>
 
@@ -318,10 +318,7 @@ export function ProfilFormular({
               <p className="v2-hinweis">
                 <Icon name="alert" className="v2-ic v2-ic-sm" />
                 <span>
-                  Eingetragene Zeitraeume zu Schwangerschaft und Stillzeit
-                  sind <strong>gespeichert und bleiben erhalten</strong>.
-                  Sie werden nur angezeigt, wenn das biologische
-                  Geschlecht „weiblich" ist.
+                  {t('zeitraeumeErhalten')} {t('nurWeiblich')}
                 </span>
               </p>
             )}
@@ -340,15 +337,15 @@ export function ProfilFormular({
             disabled={zustand.art === 'speichert' || !geaendert}
           >
             <Icon name="check" className="v2-ic v2-ic-sm" />
-            {zustand.art === 'speichert' ? 'Speichert …' : 'Speichern'}
+            {zustand.art === 'speichert' ? t('speichertGerade') : tA('speichern')}
           </button>
 
           {zustand.art === 'gespeichert' && !geaendert && (
-            <span style={{ color: 'var(--pos)', fontSize: 12 }}>Gespeichert.</span>
+            <span style={{ color: 'var(--pos)', fontSize: 12 }}>{t('gespeichert')}</span>
           )}
           {geaendert && zustand.art !== 'speichert' && (
             <span style={{ color: 'var(--fg-dim)', fontSize: 12 }}>
-              Nicht gespeicherte Aenderungen.
+              {t('nichtGespeichert')}
             </span>
           )}
           {zustand.art === 'fehler' && (
@@ -365,12 +362,9 @@ export function ProfilFormular({
       <p className="v2-hinweis" style={{ marginTop: 16 }}>
         <Icon name="alert" className="v2-ic v2-ic-sm" />
         <span>
-          <strong>Aus diesen Angaben werden Tagesziele gerechnet.</strong>{' '}
-          Die Formel schaetzt Grundumsatz und Tagesbedarf; daraus
-          entstehen die Ringe im Tagebuch und die Referenzwerte der
-          Naehrstoffbewertung. Gesetzt wird ein Ziel erst, wenn du es
-          bestaetigst — <strong>eine Schaetzung ist keine Messung</strong>,
-          und ein gesetztes Ziel gilt ab dem Tag, an dem du es setzt.
+          <strong>{t('formelHinweis')}</strong>{' '}
+          {t('formelHinweisLang')}{' '}
+          <strong>{t('schaetzungKeineMessung')}</strong>
         </span>
       </p>
     </>
@@ -408,6 +402,7 @@ function Zeitraum({
   fehlerVon?: string
   fehlerBis?: string
 }) {
+  const t = useTranslations('Einstellungen')
   return (
     <div style={{ marginBottom: 12 }}>
       <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{titel}</div>
@@ -428,7 +423,7 @@ function Zeitraum({
         />
       </div>
       <div style={{ fontSize: 10.5, color: 'var(--fg-dim)', marginTop: 4 }}>
-        Beginn und Ende (Tag.Monat.Jahr). Ende leer heisst: laeuft noch.
+        {t('beginnEnde')}
       </div>
       {(fehlerVon || fehlerBis) && (
         <div className="v2-feldfehler">{fehlerVon ?? fehlerBis}</div>
