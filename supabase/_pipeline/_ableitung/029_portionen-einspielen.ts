@@ -144,7 +144,6 @@ function matches(food: Food, selector: Selector): boolean {
 function buildRows(data: DataFile, foods: Food[]): OutputRow[] {
   const rows: OutputRow[] = []
   const seen = new Set<string>()
-  const defaults = new Map<string, number>()
 
   for (const set of data.portion_sets) {
     const matched = foods.filter(food => matches(food, set.selector))
@@ -155,15 +154,13 @@ function buildRows(data: DataFile, foods: Food[]): OutputRow[] {
         const key = `${food.bls_code}\u0000${portion.name_de}\u0000${portion.amount_g}`
         if (seen.has(key)) continue
         seen.add(key)
-        const isDefault = portion.is_default === true
-        if (isDefault) defaults.set(food.bls_code, (defaults.get(food.bls_code) ?? 0) + 1)
         rows.push({
           bls_code: food.bls_code,
           name_de: portion.name_de,
           name_en: portion.name_en ?? '',
           amount_g: portion.amount_g,
           sort_order: portion.sort_order ?? 0,
-          is_default: isDefault,
+          is_default: portion.is_default === true,
           selector_id: set.id,
           source_note: set.begruendung,
         })
@@ -171,10 +168,33 @@ function buildRows(data: DataFile, foods: Food[]): OutputRow[] {
     }
   }
 
-  const tooManyDefaults = [...defaults.entries()].filter(([, count]) => count > 1)
-  if (tooManyDefaults.length) {
-    fail(`Mehr als eine Default-Portion fuer ${tooManyDefaults.length} Foods, Beispiel ${tooManyDefaults[0][0]}`)
+  const byFood = new Map<string, OutputRow[]>()
+  for (const row of rows) {
+    if (!byFood.has(row.bls_code)) byFood.set(row.bls_code, [])
+    byFood.get(row.bls_code)!.push(row)
+    row.is_default = false
   }
+
+  for (const [blsCode, foodRows] of byFood.entries()) {
+    const candidates = foodRows.filter(row => {
+      const set = data.portion_sets.find(portionSet => portionSet.id === row.selector_id)
+      const portion = set?.portions.find(p => p.name_de === row.name_de && p.amount_g === row.amount_g)
+      return portion?.is_default === true
+    })
+    if (candidates.length === 0) {
+      fail(`Keine Default-Portion fuer ${blsCode}`)
+    }
+
+    const preferred = [...candidates].sort((a, b) => {
+      const aBasis = a.selector_id === 'basis_100g' ? 1 : 0
+      const bBasis = b.selector_id === 'basis_100g' ? 1 : 0
+      return aBasis - bBasis ||
+        a.sort_order - b.sort_order ||
+        a.name_de.localeCompare(b.name_de, 'de-DE')
+    })[0]
+    preferred.is_default = true
+  }
+
   return rows.sort((a, b) =>
     a.bls_code.localeCompare(b.bls_code) ||
     a.sort_order - b.sort_order ||

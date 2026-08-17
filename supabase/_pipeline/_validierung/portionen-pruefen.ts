@@ -17,35 +17,53 @@ function sql(query: string): string[][] {
     .map(line => line.split(SEP))
 }
 
-const errors: string[] = []
-
-function hasPortion(code: string, nameDe: string): boolean {
-  const rows = sql(`
-    SELECT EXISTS (
-      SELECT 1
-      FROM nutrition.foods f
-      JOIN nutrition.foods_portions p ON p.food_id = f.id
-      WHERE f.bls_code = '${code.replace(/'/g, "''")}'
-        AND p.name_de = '${nameDe.replace(/'/g, "''")}'
-    )::text;`)
-  return rows[0]?.[0] === 'true'
+function sqlLiteral(value: string): string {
+  return `'${value.replace(/'/g, "''")}'`
 }
 
 function countScalar(query: string): number {
   return Number(sql(query)[0]?.[0] ?? 0)
 }
 
+function hasPortion(code: string, nameDe: string, mustBeDefault = false): boolean {
+  const rows = sql(`
+    SELECT EXISTS (
+      SELECT 1
+      FROM nutrition.foods f
+      JOIN nutrition.foods_portions p ON p.food_id = f.id
+      WHERE f.bls_code = ${sqlLiteral(code)}
+        AND p.name_de = ${sqlLiteral(nameDe)}
+        ${mustBeDefault ? 'AND p.is_default' : ''}
+    )::text;`)
+  return rows[0]?.[0] === 'true'
+}
+
+const errors: string[] = []
+
 const expectedPresent: [string, string, string][] = [
   ['B101000', '1 Scheibe', 'Vollkornbrot'],
-  ['Q120000', '1 EL', 'Olivenöl'],
+  ['Q120000', '1 EL', 'Oliven\u00f6l'],
   ['X912033', '100 g', 'Fertiggericht/Pizza Margherita'],
-  ['E111100', '1 Ei (Größe M)', 'Hühnerei roh'],
+  ['E111100', '1 Ei (Gr\u00f6\u00dfe M)', 'H\u00fchnerei roh'],
   ['C352000', '1 Portion roh', 'Reis poliert, roh'],
 ]
 
 for (const [code, portion, label] of expectedPresent) {
   if (!hasPortion(code, portion)) {
     errors.push(`Soll fehlt: ${code} ${label} muss Portion "${portion}" tragen`)
+  }
+}
+
+const expectedDefaults: [string, string, string][] = [
+  ['B101000', '1 Scheibe', 'Vollkornbrot'],
+  ['Q120000', '1 EL', 'Oliven\u00f6l'],
+  ['E111100', '1 Ei (Gr\u00f6\u00dfe M)', 'H\u00fchnerei roh'],
+  ['F503100', '1 St\u00fcck (mittel)', 'Banane'],
+]
+
+for (const [code, portion, label] of expectedDefaults) {
+  if (!hasPortion(code, portion, true)) {
+    errors.push(`Vorgabe falsch: ${code} ${label} muss "${portion}" als Default tragen`)
   }
 }
 
@@ -86,11 +104,23 @@ const foodsWithout = countScalar(`
   SELECT COUNT(*)
   FROM nutrition.foods f
   WHERE NOT EXISTS (SELECT 1 FROM nutrition.foods_portions p WHERE p.food_id = f.id);`)
+const non100Defaults = countScalar(`
+  SELECT COUNT(DISTINCT food_id)
+  FROM nutrition.foods_portions
+  WHERE is_default
+    AND name_de <> '100 g';`)
+const default100 = countScalar(`
+  SELECT COUNT(DISTINCT food_id)
+  FROM nutrition.foods_portions
+  WHERE is_default
+    AND name_de = '100 g';`)
 
 console.log('Portionen-Pruefung')
 console.log(`  Portionszeilen: ${total}`)
 console.log(`  Foods mit Portion: ${foodsWith}`)
 console.log(`  Foods ohne Portion: ${foodsWithout}`)
+console.log(`  Vorgabe ungleich 100 g: ${non100Defaults}`)
+console.log(`  Vorgabe 100 g: ${default100}`)
 console.log(`  Mehrfach-Defaults: ${multiDefault}`)
 console.log(`  Fehlende Defaults: ${missingDefault}`)
 

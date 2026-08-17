@@ -99,7 +99,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 073 | `07_lesefunktionen/073_suchfilter.sql` | `food_search` samt Rangfunktionen | 1 Signatur |
 | 074 | `07_lesefunktionen/074_preferences_api.sql` | `food_preferences_read()` und `food_preferences_write()` fuer Nutrition-Preferences, ohne `food_search` zu veraendern | 2 Funktionen |
 | 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
-| 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen | v090: 16 Prüfungen |
+| 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen und C-63 `locale` | v090: 17 Prüfungen |
 | 056a | `05_user_tabellen/056a_hydration_day.sql` | Funktion `hydration_day(user_id, date)` mit Tagesziel, Gläserzahl und 14-Tage-Vergleich | 1 Funktion |
 | 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` für Tageswerte gegen Profil und Referenzwerte | 1 Funktion |
 | 100 | `10_training/100_training_schema.sql` | Schema `training` mit `exercises`, `muscle_groups`, `equipment`, `exercise_muscles` | 4 Tabellen |
@@ -170,7 +170,7 @@ Referenz und für Weiterentwicklung):
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, 2 Trigram-Indizes, Grants, RLS/Policies auf allen 11 Tabellen — **live seit 2026-08-02** |
 | 061 | `06_zugriff/061_rollen_admin.sql` | **`public.is_admin()`** (liest nur den JWT-Claim `app_metadata->>role`, Standard `false`) + SELECT-Grant und je 1 SELECT-Policy auf die beiden Curation-Tabellen — **live seit 2026-08-06** (C.3). Keine Schreib-Policies. Rollen werden **nicht** von der Kette vergeben, siehe Dateikopf. v061: 15 Prüfungen |
 | 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen (`search_fold`, `food_search`, `food_categories_tree`, `preference_search_preview` mit 14 Argumenten, `curation_overview`, `schema_debug`) — v070: 18 Prüfungen |
-| 090 | `09_identitaet/090_profile.sql` | **`public.profiles` + Trigger `on_auth_user_created` auf `auth.users`** (die Anmeldung), C-47-Profilachsen, 4 Policies — v090: 16 Prüfungen |
+| 090 | `09_identitaet/090_profile.sql` | **`public.profiles` + Trigger `on_auth_user_created` auf `auth.users`** (die Anmeldung), C-47-Profilachsen, C-63 `locale`, 4 Policies — v090: 17 Prüfungen |
 
 **`020` läuft zweimal:** Es legt Strukturen an *und* enthält die Ableitungen,
 die gegen `food_nutrients` arbeiten — also gegen Daten, die erst `030`
