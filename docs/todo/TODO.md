@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `36acdac` auf `dev`.
+**Stand:** 2026-08-17, Anker `a02e838` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -198,11 +198,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-30** | Recovery an die Check-ins anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
 | **G-31** | Die fuenf fehlenden Supplements-Tabs |  |
-| **C-68** | Supplements-Schema |  |
 | **G-32** | `refillUrgent` ist an einem von neun Eintraegen gesetzt |  |
 | **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
 | **G-34** | `.v2-btn` hat kein `white-space: nowrap` |  |
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
+| **G-37** | Supplements an den Katalog anschliessen |  |
 
 ---
 
@@ -1933,22 +1933,6 @@ Umsetzen angepasst werden.
   `[cmd]` Und die Muskelkarte aus G-26 traegt `renderInjection` mit
   Rotation — **sie ist fuer diesen Tab gebaut.**
 
-- [ ] **C-68: Supplements-Schema** (neu 2026-08-17). Befund aus G-29.
-
-  `[cmd]` **Kein `supplements`-Schema** — wie bei Recovery vor `120`.
-  Alle Kacheln sind Attrappe.
-
-  **Der Fundus ist groesser als erwartet:** `[cmd]`
-  `referenz/lumeos-2026/` hat **acht Tabellen in drei Migrationen**
-  (`008_supplements.sql`, `050_supplements_schema_expansion.sql`), einen
-  **Seed mit 35,9 KB — mehr Wirkstoffe als die Vorlage** — und **15
-  Komponenten**.
-
-  `[cmd]` **Halbwertszeit in fuenf Dateien**, darunter
-  `useBloodLevels.ts` mit `half_life_hours`.
-
-  `[read]` Das ist dieselbe Lage wie bei den Portionen und den
-  TDEE-Formeln: **eine Uebernahme, keine Neuentwicklung.**
 
 - [ ] **G-32: `refillUrgent` ist an einem von neun Eintraegen gesetzt**
   (neu 2026-08-17). Befund aus G-29.
@@ -2003,3 +1987,25 @@ Umsetzen angepasst werden.
   **Gleiche Behandlung wie G-19 und G-27:** in den `zusatz`-Block des
   Erzeugers, **beim Verschieben zusammenfassen.** `[read]` Sonst stehen
   am Ende elf Modul-Rastersaetze nebeneinander, die dasselbe tun.
+
+- [ ] **G-37: Supplements an den Katalog anschliessen** (neu
+  2026-08-17). Folgt auf C-68.
+
+  `[cmd]` `/v2/supplements` steht seit G-33 vollstaendig — elf Tabs, 15
+  von 15 Unterkomponenten, **alle Attrappe.** Seit `130`/`131` gibt es
+  das Schema.
+
+  `[cmd]` **44 Katalogeintraege, 1 Stack mit 4 Positionen, 4 Einnahmen**
+  live. Dazu `daily_intake_summary` als Sicht.
+
+  **Die naheliegenden Tabs:** `Today` (Einnahmen des Tages), `Stack`
+  (Matrix und Liste), `Database` (der Katalog — `[read]` ueber den
+  Kopfknopf erreichbar, nicht in der Leiste, wie die Vorlage es haelt).
+
+  `[cmd]` **`Compliance` braucht mehr Einnahmen** — vier reichen fuer
+  keine Quote. **Cost** braucht Preise; pruef, ob der Katalog sie fuehrt.
+
+  `[read]` **G-32 haengt daran:** `refillUrgent` ist in der Attrappe an
+  einem von neun Eintraegen gesetzt. Sobald echte Bestaende kommen, ist
+  zu entscheiden, **ob es eine Schwelle ist (Bestand unter X Tagen) oder
+  eine Markierung von Hand.** Der Testfall `vitamin-d3` steht bereit.

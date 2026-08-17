@@ -3665,6 +3665,43 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   werden: Check-in-Tab, Erholungswert im `manual`-Modus, Kopfzeile und
   der subjektive Schlafpfad.
 
+- [x] **C-68: Supplements-Schema** (neu 2026-08-17). Befund aus G-29.
+
+  `[cmd]` **Kein `supplements`-Schema** — wie bei Recovery vor `120`.
+  Alle Kacheln sind Attrappe.
+
+  **Der Fundus ist groesser als erwartet:** `[cmd]`
+  `referenz/lumeos-2026/` hat **acht Tabellen in drei Migrationen**
+  (`008_supplements.sql`, `050_supplements_schema_expansion.sql`), einen
+  **Seed mit 35,9 KB — mehr Wirkstoffe als die Vorlage** — und **15
+  Komponenten**.
+
+  `[cmd]` **Halbwertszeit in fuenf Dateien**, darunter
+  `useBloodLevels.ts` mit `half_life_hours`.
+
+  `[read]` Das ist dieselbe Lage wie bei den Portionen und den
+  TDEE-Formeln: **eine Uebernahme, keine Neuentwicklung.**
+
+  `[cmd]` **Erledigt 2026-08-17**, Kettenschritte `130` und `131`,
+  **52 Schritte** in der Kette.
+
+  `supplements` mit **fuenf Tabellen, einer Sicht, zwei Funktionen:**
+  `supplement_catalog`, `user_stacks`, `stack_items`, `intake_logs`,
+  `supplement_interactions`, dazu `daily_intake_summary`.
+
+  `[cmd]` **Live: 44 Katalogeintraege, 1 Stack, 4 Positionen, 4
+  Einnahmen.** Zeilenschutz beidseitig belegt — Tom sieht 1/4/4, Sarah
+  0/0/0, Fremd-Insert blockiert.
+
+  `[cmd]` **Der Refill-Fall steht im Register:** `vitamin-d3`. `[read]`
+  Damit ist G-32 pruefbar — dort ist `refillUrgent` an einem von neun
+  Attrappen-Eintraegen gesetzt und wird an drei Stellen gelesen.
+
+  **Zwei Bereiche ausdruecklich nicht gebaut**, wie beauftragt: keine
+  Injection-Planner-Tabellen (G-31 und der Change Request mit 17 KB),
+  **keine medizinische Wechselwirkungsbewertung** — `[read]` die Tabelle
+  ja, aber keine Regel, die sagt, was gefaehrlich ist.
+
 
 
 ## Erledigt am 2026-08-05
