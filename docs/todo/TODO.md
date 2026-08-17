@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `af15d69` auf `dev`.
+**Stand:** 2026-08-17, Anker `f825ea8` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 55 offen, 5 in Arbeit.
+`[cmd]` 56 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -138,7 +138,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-11** | Specs laufend zu SSOT konsolidieren | ~ |
 | **A-12** | Das Spec-Audit auswerten |  |
 | **A-13** | Das Konsolidierungsregister abarbeiten |  |
-| **A-14** | i18n einführen und fortlaufend pflegen |  |
+| **C-63** | `locale` in `public.profiles` |  |
+| **C-64** | 942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen |  |
 | **A-15** | Sprachpflege als laufende Regel |  |
 | **B-20** | Codex-Pfadschutz wiederherstellen | ~ |
 | **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
@@ -355,61 +356,38 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `SPEC_09_SCORING.md` (C-49), die Preferences-Specs (G-11), und die
   Planner-/Meal-plans-Specs.
 
-- [ ] **A-14: i18n einführen und fortlaufend pflegen** (neu 2026-08-17).
-  **Vor jedem weiteren Oberflächenauftrag.**
+- [ ] **C-63: `locale` in `public.profiles`** (neu 2026-08-17). Folgt
+  aus A-14, von Claude Code angefordert.
 
-  **Tom, 2026-08-17:** *„Ich sehe ein Mischmasch an Sprachen. Wir müssen
-  sofort das i18n-Konzept mit einbinden und fortlaufend pflegen bei der
-  Entwicklung."*
+  `[cmd]` Heute gilt die Sprachwahl **je Browser** (Cookie). Mit der
+  Spalte gilt sie je Person.
 
-  `[cmd]` Die Oberfläche mischt heute in derselben Zeile: Tabs
-  `Diary · Insights · Nutrients · Food DB`, darunter `Mahlzeiten
-  erfassen · Fruehstueck · Positionen`. **In `apps/web` gibt es keine
-  i18n-Schicht.**
+  **Der Zuschnitt steht:** `locale text`, erlaubt `de` / `en` / `th`,
+  **Vorgabe `NULL`, nicht `'de'`** — `[read]` sonst ist „hat Deutsch
+  gewaehlt" nicht von „wurde nie gefragt" zu unterscheiden. Dazu ein
+  `CHECK`.
 
-  ### Die Regel
+  `[cmd]` Der Anschluss ist klein: eine Abfrage in `getRequestConfig`,
+  ein `PUT` in der Auswahl.
 
-  **Englisch und Deutsch werden befüllt.** Thai wird **vorgesehen** und
-  bei Bedarf nachgezogen — dafür wird ein Übersetzungsauftrag vergeben.
+- [ ] **C-64: 942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen**
+  (neu 2026-08-17). Folgt aus A-14.
 
-  **Jeder neue Text geht durch die Schicht**, ab sofort. Kein Text mehr
-  fest in einer Komponente.
+  `[cmd]` `referenz/lumeos-2026/src/i18n/translations/` traegt **961
+  Blattschluessel je Sprache in 17 Namensraeumen — Thai vollstaendig.**
+  Uebernommen sind bisher 19.
 
-  ### Das Vorgängerrepo hat es vollständig
+  **Das ist kein Uebersetzungsauftrag, sondern eine Uebertragung.** Die
+  Werte existieren; was fehlt, ist die Zuordnung auf den neuen
+  Zuschnitt.
 
-  `[cmd]` `referenz/lumeos-2026/src/i18n/`:
+  `[read]` Tom, 2026-08-17: *„Thai sehen wir vor und ziehen wir bei
+  Bedarf nach."* **Der Bestand ist der Grund, warum das billig wird** —
+  wer neu uebersetzen laesst, zahlt fuer etwas, das dasteht.
 
-  | | |
-  |---|---|
-  | `translations/de.ts` | **55 KB** |
-  | `translations/th.ts` | **50 KB** — Thai ist zu grossen Teilen übersetzt |
-  | `translations/en.ts` | 31 KB |
-  | `useTranslation.ts` | **Eigenbau**, keine Bibliothek |
-  | `apps/admin/…/i18n/page.tsx` | 12 KB — **Verwaltungsoberfläche für Übersetzungen** |
+  **Sinnvoll erst, wenn mehr Seiten umgestellt sind** — sonst werden
+  Schluessel zugeordnet, die niemand benutzt.
 
-  `[cmd]` Durchgehend in allen Modulen benutzt. **Englisch ist dort die
-  dünnste Sprache**, nicht Deutsch.
-
-  ### Zu entscheiden, bevor gebaut wird
-
-  - **Eigenbau übernehmen oder Bibliothek?** `[cmd]` Der Vorgänger hat
-    einen eigenen `useTranslation`; `apps/web` ist Next.js App Router,
-    wo `next-intl` verbreitet ist. **Der Eigenbau ist erprobt und
-    schemafrei** — die Bibliothek bringt Routing je Sprache mit.
-  - **Wohin die Sprache des Nutzers?** `[cmd]` `public.profiles` trägt
-    seit GO-01 sechs Felder; eine `locale`-Spalte wäre die siebte.
-  - **Was mit den 50 KB Thai?** Sie sind für ein anderes Schema
-    geschrieben — **prüfen, wie viel übertragbar ist**, bevor jemand neu
-    übersetzt.
-  - **Und die Datenbank?** `[cmd]` `nutrition.foods` führt `name_de`,
-    `name_en`, `name_th` und `name_display_de`, `name_display_en`,
-    `name_display_th` — **`name_th` ist bei allen 7.140 leer.** Die
-    Struktur steht, die Inhalte fehlen. Das ist ein eigener Punkt.
-
-  ### Sprachauswahl in Settings
-
-  Teil dieses Punktes. `[cmd]` `/v2/settings` steht seit GO-01; die
-  Auswahl gehört dorthin.
 
 - [ ] **A-15: Sprachpflege als laufende Regel** (neu 2026-08-17). Folgt
   auf A-14.

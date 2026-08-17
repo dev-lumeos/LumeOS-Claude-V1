@@ -95,6 +95,104 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
 ---
 
+- [x] **A-14: i18n einführen und fortlaufend pflegen** (neu 2026-08-17).
+  **Vor jedem weiteren Oberflächenauftrag.**
+
+  **Tom, 2026-08-17:** *„Ich sehe ein Mischmasch an Sprachen. Wir müssen
+  sofort das i18n-Konzept mit einbinden und fortlaufend pflegen bei der
+  Entwicklung."*
+
+  `[cmd]` Die Oberfläche mischt heute in derselben Zeile: Tabs
+  `Diary · Insights · Nutrients · Food DB`, darunter `Mahlzeiten
+  erfassen · Fruehstueck · Positionen`. **In `apps/web` gibt es keine
+  i18n-Schicht.**
+
+  ### Die Regel
+
+  **Englisch und Deutsch werden befüllt.** Thai wird **vorgesehen** und
+  bei Bedarf nachgezogen — dafür wird ein Übersetzungsauftrag vergeben.
+
+  **Jeder neue Text geht durch die Schicht**, ab sofort. Kein Text mehr
+  fest in einer Komponente.
+
+  ### Das Vorgängerrepo hat es vollständig
+
+  `[cmd]` `referenz/lumeos-2026/src/i18n/`:
+
+  | | |
+  |---|---|
+  | `translations/de.ts` | **55 KB** |
+  | `translations/th.ts` | **50 KB** — Thai ist zu grossen Teilen übersetzt |
+  | `translations/en.ts` | 31 KB |
+  | `useTranslation.ts` | **Eigenbau**, keine Bibliothek |
+  | `apps/admin/…/i18n/page.tsx` | 12 KB — **Verwaltungsoberfläche für Übersetzungen** |
+
+  `[cmd]` Durchgehend in allen Modulen benutzt. **Englisch ist dort die
+  dünnste Sprache**, nicht Deutsch.
+
+  ### Zu entscheiden, bevor gebaut wird
+
+  - **Eigenbau übernehmen oder Bibliothek?** `[cmd]` Der Vorgänger hat
+    einen eigenen `useTranslation`; `apps/web` ist Next.js App Router,
+    wo `next-intl` verbreitet ist. **Der Eigenbau ist erprobt und
+    schemafrei** — die Bibliothek bringt Routing je Sprache mit.
+  - **Wohin die Sprache des Nutzers?** `[cmd]` `public.profiles` trägt
+    seit GO-01 sechs Felder; eine `locale`-Spalte wäre die siebte.
+  - **Was mit den 50 KB Thai?** Sie sind für ein anderes Schema
+    geschrieben — **prüfen, wie viel übertragbar ist**, bevor jemand neu
+    übersetzt.
+  - **Und die Datenbank?** `[cmd]` `nutrition.foods` führt `name_de`,
+    `name_en`, `name_th` und `name_display_de`, `name_display_en`,
+    `name_display_th` — **`name_th` ist bei allen 7.140 leer.** Die
+    Struktur steht, die Inhalte fehlen. Das ist ein eigener Punkt.
+
+  ### Sprachauswahl in Settings
+
+  Teil dieses Punktes. `[cmd]` `/v2/settings` steht seit GO-01; die
+  Auswahl gehört dorthin.
+
+  `[cmd]` **Erledigt 2026-08-17.** next-intl, **ohne Sprachpraefix in der
+  Adresse** — `localePrefix: 'never'`, die Sprache kommt aus einem
+  Cookie, die Adresse bleibt `/v2/nutrition`.
+
+  `[read]` **Kein Behelf:** next-intl fuehrt dafuer einen eigenen
+  Betriebsmodus samt Beispielanwendung. Was es kostet: kein Deep-Link je
+  Sprache, nichts fuer Suchmaschinen (bei einer angemeldeten Anwendung
+  folgenlos), Seiten je Anfrage gerendert — beide umgestellten sind
+  ohnehin `force-dynamic`. **Was es spart:** Mit Praefix haette G-07
+  zweimal umgebaut werden muessen. Und die Sprache gehoert zur Person,
+  nicht zur Seite — sonst gaebe es zwei Wahrheiten.
+
+  ### Aus dem Vorgaengerrepo
+
+  `[cmd]` **961 Blattschluessel je Sprache, 17 Namensraeume — und Thai
+  vollstaendig**, dieselbe Zahl wie Deutsch und Englisch. Der Aufbau
+  passt direkt auf next-intl, nur TS-Objekt statt JSON.
+
+  `[cmd]` Fuer die zwei umgestellten Seiten: **19 Werte uebernommen, 76
+  neu geschrieben** — nicht wegen Qualitaet, sondern wegen anderem
+  Zuschnitt (eingefrorene Naehrwerte und Portionsschnappschuss gab es
+  dort nicht). **942 Schluessel liegen bereit** — fuer Thai der einzige
+  vorhandene Bestand.
+
+  ### Die Pruefung
+
+  `[cmd]` `tools/i18n-pruefen.mjs`, in `pnpm gate` vor Turbo, **8 Tasks
+  unveraendert.** Dreimal zum Fehlschlagen gebracht: Schluessel aus `en`
+  entfernt → rot; Schluessel nur in `en` → rot in Gegenrichtung; Wert
+  auf `''` → rot als leer. **Nachgeprueft:** Exit 1 mit Angabe des
+  fehlenden Schluessels, danach Exit 0.
+
+  `[cmd]` **Thai wird gezaehlt, nicht erzwungen:** `th: 0 von 95 belegt`.
+
+  ### Nachweis
+
+  `[cmd]` Umschalten in der Kopfzeile: *Einstellungen/Angegeben/
+  Referenzwerte* → *Settings/Specified/Reference values*, `lang` folgt,
+  **die Adresse bleibt `/v2/settings`**, ueberlebt das Neuladen. Thai
+  faellt sichtbar auf Deutsch zurueck. Die Attrappenkacheln bleiben
+  englisch, wie verlangt.
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
