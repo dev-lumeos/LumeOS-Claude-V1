@@ -4417,3 +4417,47 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` 202 Tests (199 + 3 neue, alle gegengeprobt), drei Breiten ohne
   Ueberlauf.
+
+- [x] **G-28: Goals als Mockup** (erledigt 2026-08-17).
+
+  `[cmd]` `/v2/goals` steht: neun Dateien, 3.667 Zeilen, **39 Kacheln,
+  alle markiert.** 208 Tests.
+
+  ### Ein Rahmen, zwei Zulieferer — dreistufig
+
+  `[cmd]` `app.jsx:125` sagt: keine Weiche. **Und die Pruefung ging
+  weiter:** `window.GoalsModule` wird genau einmal gesetzt
+  (`module-goals.jsx:903`), weder `-pro.jsx` noch `-editor.jsx`
+  ueberschreiben es. Die Kette:
+
+  - `module-goals.jsx` ruft **5×** `window.Goals*View` → `-pro.jsx`
+  - `-pro.jsx` ruft **2×** `window.Phase*` → `-editor.jsx`
+
+  `[cmd]` **Fuenf der zehn Tabs sind im Rahmen leer.** Wer nur die
+  Hauptdatei nimmt, baut ein halbleeres Modul.
+
+  `[read]` **`-pro.jsx` ist keine Profi-Fassung** — die Vermutung aus
+  dem Auftrag war falsch. **Vier Module, drei Muster — und `app.jsx`
+  bleibt die verlaessliche Pruefung, aber rekursiv.**
+
+  `[cmd]` `PhotoUploadPanel` steckt wieder in
+  `module-crossmodule-rest.jsx` — wie der Stress-Tab bei Recovery.
+  **Nicht uebernommen:** es laedt Dateien hoch, und der Umsetzungsplan
+  fuehrt Fotosessions unter „Was nicht gebaut wird".
+
+  ### Zwei Entscheidungen
+
+  `[cmd]` **`Math.random()` ersetzt.** `module-goals.jsx:101-121`
+  wuerfelt die Verlaufsdaten — **Server und Browser bekommen
+  verschiedene Zahlen.** Bei Recovery erzeugte dieselbe Fehlerklasse 32
+  Konsolenmeldungen. Mit fester Pseudofolge: 1 Fehler, identisch mit
+  `/v2/dashboard`. **Ein Test haelt fest, dass es nicht zurueckkommt.**
+
+  `[cmd]` **Das feste „Heute" der Vorlage uebernommen** (2026-05-16) —
+  ein echtes `Date.now()` waere dieselbe Hydrationsfalle.
+
+  **Stehen geblieben ist, was die Vorlage falsch macht:** die
+  wirkungslose Division in `calcGoalProgress` (W-8), das doppelte
+  `requires`, und „8 IFBB Mandatory" ueber einer Liste mit zehn Posen.
+
+  `[cmd]` 30 von 30 Tab×Breite-Kombinationen geprueft.

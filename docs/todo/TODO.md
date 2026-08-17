@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `6700f94` auf `dev`.
+**Stand:** 2026-08-17, Anker `512c61d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 65 offen, 3 in Arbeit.
+`[cmd]` 68 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -200,6 +200,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-31** | Die fuenf fehlenden Supplements-Tabs |  |
 | **C-68** | Supplements-Schema |  |
 | **G-32** | `refillUrgent` ist an einem von neun Eintraegen gesetzt |  |
+| **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
+| **G-34** | `.v2-btn` hat kein `white-space: nowrap` |  |
+| **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
 
 ---
 
@@ -1958,3 +1961,45 @@ Umsetzen angepasst werden.
   Richtig so — aber sobald echte Daten kommen, gehoert entschieden, ob
   das Feld eine Schwelle ist (Bestand unter X Tagen) oder eine
   Markierung von Hand.
+
+- [ ] **GO-13: Fuenf Goals-Kacheln koennen sofort echt werden** (neu
+  2026-08-17). Befund aus G-28.
+
+  `[cmd]` **Ohne neue Tabelle**, aus dem, was seit Block A steht:
+
+  | Kachel | Feld |
+  |---|---|
+  | `CalcRow` TDEE / BMR | `zielwerte_am.tdee`, `getZielwertVorschlag().bmr` |
+  | Energy balance (Ring-Maximum) | `kcal` |
+  | Profile · inputs | `public.profiles` |
+  | Formula baseline (Adaptive TDEE) | `tdee`, Herkunft `formel` |
+
+  `[cmd]` **Die Composition-Kachel rechnet dieselbe Kette wie GO-04** —
+  Mifflin-St Jeor mal Aktivitaetsfaktor.
+
+  `[read]` **Bemerkenswert:** Der Umsetzungsplan haelt als W-6 fest, dass
+  **die Spec den Aktivitaetsfaktor vergisst** — die Designvorlage macht
+  es richtig. **Die Vorlage ist hier genauer als die Spezifikation.**
+
+- [ ] **G-34: `.v2-btn` hat kein `white-space: nowrap`** (neu
+  2026-08-17). Befund aus G-28.
+
+  `[cmd]` `v2.css:344`. **Die Kopfknoepfe brechen innerhalb des Knopfes
+  um** — die Knopfhoehe bleibt bei 26 px, gemessen.
+
+  **Betrifft jedes Modul.** `packages/ui` war waehrend G-28 gesperrt —
+  gemeldet, nicht lokal umgangen.
+
+  `[read]` Haengt mit G-23 zusammen: Dort bricht der **Modulkopf** um,
+  weil zu viele Knoepfe drin sind. **Hier bricht der Knopf selbst.**
+  Zwei verschiedene Fehler, dieselbe Stelle.
+
+- [ ] **G-35: Zwoelf Modul-Raster in `goals.css`** (neu 2026-08-17). Rest
+  aus G-28.
+
+  `[cmd]` Die geteilten `v2-grid-14`/`-15` tragen **acht der zehn
+  Tabs** — der Rest sind Sonderfaelle.
+
+  **Gleiche Behandlung wie G-19 und G-27:** in den `zusatz`-Block des
+  Erzeugers, **beim Verschieben zusammenfassen.** `[read]` Sonst stehen
+  am Ende elf Modul-Rastersaetze nebeneinander, die dasselbe tun.
