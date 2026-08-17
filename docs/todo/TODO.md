@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `6dfd053` auf `dev`.
+**Stand:** 2026-08-17, Anker `d6b7259` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 54 offen, 3 in Arbeit.
+`[cmd]` 57 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -189,6 +189,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **G-18** | Die Schrift fehlt |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
+| **G-19** | 15 Rasterklassen aus Training nach `v2.css` |  |
+| **G-20** | `chevron_up` fehlt im Symbolsatz |  |
+| **C-65** | Toms Passwort steht nirgends |  |
 
 ---
 
@@ -1749,3 +1752,43 @@ Umsetzen angepasst werden.
   behoben.** Der Dialog zeigt nur die Vorgabe; stimmt sie, stimmt die
   Vorauswahl. `[read]` Tom: *„die Darstellung danach in der View in
   Gramm ist korrekt."*
+
+- [ ] **G-19: 15 Rasterklassen aus Training nach `v2.css`** (neu
+  2026-08-17). Rest aus G-16.
+
+  `[cmd]` Sie liegen in `apps/web/src/app/v2/training/training.css`,
+  weil `packages/ui` waehrend G-16 gesperrt war.
+
+  `[read]` **Die 169 vorhandenen Klassen decken alle Bausteine ab** —
+  was fehlt, sind ausschliesslich Modul-Raster, die die Vorlage inline
+  traegt. `[cmd]` `v2-train-grid-14` ist derselbe Zweispalter wie
+  `v2-dash-grid`.
+
+  **Beim Verschieben zusammenfassen**, nicht eins zu eins uebernehmen —
+  sonst stehen am Ende elf Modul-Raster nebeneinander, die dasselbe tun.
+
+- [ ] **G-20: `chevron_up` fehlt im Symbolsatz** (neu 2026-08-17). Rest
+  aus G-16.
+
+  `[cmd]` Die Vorlage benutzt es im Routine-Editor. Nicht ergaenzt, weil
+  `packages/ui` gesperrt war — stattdessen `arrow_up`/`arrow_down`.
+
+  `[read]` `<Icon>` rendert bei unbekanntem Namen **still nichts**; seit
+  G-02 ist `IconName` eine Union, damit das ein Uebersetzungsfehler
+  wird. **Deshalb der Ersatz statt eines stillen Lochs.**
+
+- [ ] **C-65: Toms Passwort steht nirgends** (neu 2026-08-17). Befund
+  aus G-16.
+
+  `[cmd]` `docs/ssot/37-testkonten.md:15` fuehrt fuer `dev@lumeos.app`
+  nur *„(Toms eigenes)"*. Der Agent hat deshalb mit
+  `test-user@lumeos.local` geprueft.
+
+  **Fuer G-16 folgenlos** — die Seite liest nichts, keine
+  rollenabhaengige Anzeige. **Fuer alles mit Adminbezug nicht:** `[cmd]`
+  G-14 brauchte beide Rollenfaelle, und die Vorwaertssperre ist nur mit
+  Toms Konto pruefbar.
+
+  `[cmd]` Seit dem 2026-08-16 lautet es `LumeosDev2026` — **von einem
+  Agenten gesetzt, ohne dass es im Auftrag stand.** Es gehoert in
+  `37-testkonten.md`, oder Tom setzt ein eigenes und traegt es ein.

@@ -4017,3 +4017,46 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` Heute gibt es genau eine Verlinkung zwischen Dashboard und
   Tagebuch. **Sobald das Dashboard datumsabhaengige Kacheln bekommt,
   kippt das** — dann gehoert es als Suchparameter gebaut.
+
+- [x] **G-16: Training als Mockup** (neu und erledigt 2026-08-17).
+
+  **Der Punkt wurde nachtraeglich angelegt** — der Auftrag lief, ohne
+  dass er in der Liste stand. `[read]` Derselbe Fehler, den Tom am
+  2026-08-16 geruegt hat.
+
+  `[cmd]` `/v2/training` steht: sieben Dateien, 3.026 Zeilen, **38
+  Kacheln, alle mit Attrappenmarke.** Gate 8/8, 194 Tests (vorher 189).
+
+  ### Die vier Vorlagendateien sind ein System, keine Fassungen
+
+  `[cmd]` **Der Beleg steht im Rahmen selbst**,
+  `module-training.jsx:48-53`:
+  `{tab === "progress" && window.TrainingProgressionView && …}`
+
+  **Sechs von zehn Tabs sind im Rahmen leer** und werden aus den
+  Begleitdateien gefuellt. Wer nur `module-training.jsx` uebernimmt,
+  baut ein Modul, bei dem sechs Tabs nichts anzeigen.
+
+  | | |
+  |---|---|
+  | `-spec.jsx` | vier Tabs, drei Rechner, die Formeln |
+  | `-extras.jsx` | sechs Modale, der Kontext, eine Kachel |
+  | `-offline-hr.jsx` | zwei Tabs |
+
+  `[read]` **Anders als bei Nutrition**, wo `-spec.jsx` eine
+  konkurrierende Fassung war. **Das gilt fuer die naechsten Module nicht
+  automatisch** — es muss je Modul geprueft werden.
+
+  `[cmd]` Zwei Aufrufe im Rahmen zeigen ins Leere:
+  `PeriodizationFullView` und `HeartRateWidget` existieren in keiner der
+  vier Dateien. Entfallen, mit Vermerk.
+
+  ### Was zuerst echte Daten bekommen kann
+
+  `[cmd]` **Der Tab „Exercises":** vier von sechs Spalten sind sofort da
+  — 1.416 Uebungen, 58 Geraete, 6.624 Muskelzuordnungen. `e1RM` und
+  `Best set` bleiben `—`, weil sie Saetze brauchen.
+
+  `[cmd]` **`training.sessions` und `training.sets` kommen in
+  `supabase/_pipeline/` nirgends vor** — das ist der Grund, warum alles
+  andere Attrappe ist.
