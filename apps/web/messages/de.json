@@ -54,7 +54,15 @@
     "profilHinweis": "Referenzwerte haengen an Alter und biologischem Geschlecht. Fehlt beides, steht bei jedem Naehrstoff „Profil fehlt\" statt eines Prozentwerts — nicht 0 %.",
     "kcalOffen": "{menge} kcal left",
     "ohneTagesziel": "ohne Tagesziel",
-    "gLeft": "{menge}g left"
+    "gLeft": "{menge}g left",
+    "heute": "Heute",
+    "zurueckZuHeute": "Zurueck zu heute",
+    "zukunftGesperrt": "Kuenftige Tage sind gesperrt.",
+    "zukunftTitel": "Ein Tag in der Zukunft",
+    "zukunftText": "Hier ist noch nichts erfasst — das ist kein Fehler. Als Admin kannst du vorausschauen; erfassen laesst sich ein Tag, wenn er da ist.",
+    "uhrzeitFehlt": "ohne Uhrzeit",
+    "tagebuchNichtLesbar": "Tagebuch nicht lesbar",
+    "zucker": "Zucker"
   },
   "Einstellungen": {
     "titel": "Einstellungen",

@@ -54,7 +54,15 @@
     "profilHinweis": "Reference values depend on age and biological sex. Without both, every nutrient shows „profile missing\" instead of a percentage — not 0 %.",
     "kcalOffen": "{menge} kcal left",
     "ohneTagesziel": "no daily target",
-    "gLeft": "{menge}g left"
+    "gLeft": "{menge}g left",
+    "heute": "Today",
+    "zurueckZuHeute": "Back to today",
+    "zukunftGesperrt": "Future days are locked.",
+    "zukunftTitel": "A day in the future",
+    "zukunftText": "Nothing logged here yet — that is not an error. As an admin you can look ahead; a day can be logged once it arrives.",
+    "uhrzeitFehlt": "no time",
+    "tagebuchNichtLesbar": "Diary not readable",
+    "zucker": "Sugar"
   },
   "Einstellungen": {
     "titel": "Settings",

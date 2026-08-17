@@ -19,7 +19,7 @@
 //
 // Muster und Platz nach `tools/encoding-pruefen.mjs`: laeuft in
 // `pnpm gate` VOR Turbo, damit die Zahl der Tasks unveraendert bleibt.
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync, existsSync, readdirSync } from 'node:fs'
 import path from 'node:path'
 
 const WURZEL = process.cwd()
@@ -98,6 +98,62 @@ if (!fehler.length) {
   }
 }
 
+// 2b. Benutzte Schluessel gegen vorhandene.
+//
+// ANLASS `[cmd]`: `Nutrition.zucker` fehlte in BEIDEN Pflichtsprachen.
+// Der Vergleich der Sprachen untereinander sieht das nicht — fehlt ein
+// Schluessel ueberall, sind sie sich ja einig. Aufgefallen ist es erst
+// zur Laufzeit, mit genau dem Fehler, den A-15 verhindern soll
+// (MISSING_MESSAGE, die Seite blieb leer). Deshalb diese zweite Runde.
+//
+// `[annahme]` Die Suche findet `t('schluessel')` und
+// `t('schluessel', {…})` bei einem `useTranslations('Namensraum')` bzw.
+// `getTranslations('Namensraum')` in derselben Datei. Berechnete
+// Schluessel (`t(variable)`) findet sie NICHT — die gibt es hier
+// bewusst nur fuer die Makrolabels, und deren Werte stehen als
+// Zeichenketten im selben Modul.
+const benutzt = []
+if (!fehler.length) {
+  const quellen = []
+  const sammle = (verz) => {
+    for (const e of readdirSync(verz, { withFileTypes: true })) {
+      const voll = path.join(verz, e.name)
+      if (e.isDirectory()) {
+        if (e.name !== 'node_modules' && !e.name.startsWith('.')) sammle(voll)
+      } else if (/\.tsx?$/.test(e.name)) {
+        quellen.push(voll)
+      }
+    }
+  }
+  const src = path.join(WURZEL, 'apps/web/src')
+  if (existsSync(src)) sammle(src)
+
+  for (const q of quellen) {
+    const text = readFileSync(q, 'utf8')
+    // Namensraeume dieser Datei, in Reihenfolge ihres Auftretens.
+    const ns = [...text.matchAll(/(?:use|get)Translations\(\s*['"]([A-Za-z0-9_]+)['"]/g)]
+      .map(m => m[1])
+    if (ns.length === 0) continue
+    // Zwei Formen: der direkte Aufruf `t('schluessel')` und der
+    // DEKLARIERTE Schluessel `label: 'schluessel'`, der spaeter als
+    // `t(m.label)` durchlaeuft. Ohne die zweite Form bliebe genau die
+    // Luecke offen, die `Nutrition.zucker` hinterlassen hat: der
+    // Schluessel steht im Code, aber nie in einem `t(...)`.
+    const treffer = [
+      ...text.matchAll(/\bt[A-Z]?\w*\(\s*['"]([A-Za-z0-9_.]+)['"]/g),
+      ...text.matchAll(/\blabel:\s*['"]([a-z][A-Za-z0-9_]*)['"]/g),
+    ]
+    for (const m of treffer) {
+      const s = m[1]
+      // Bei mehreren Namensraeumen je Datei kann die Zuordnung nicht
+      // sicher erfolgen — dann gilt der Schluessel als vorhanden,
+      // sobald IRGENDEIN Namensraum der Datei ihn kennt.
+      const kandidaten = ns.map(n => `${n}.${s}`)
+      benutzt.push({ datei: path.relative(WURZEL, q), s, kandidaten })
+    }
+  }
+}
+
 const gesamt = daten[PFLICHT[0]]?.schluessel.size ?? 0
 
 // 3. Optionale Sprachen: zaehlen, nicht erzwingen.
@@ -107,10 +163,19 @@ const optionalStand = OPTIONAL.map(s => {
   return { s, belegt, offen: Math.max(0, gesamt - belegt) }
 })
 
+const unbekannt = []
+if (!fehler.length) {
+  const habe = daten[PFLICHT[0]].schluessel
+  for (const b of benutzt) {
+    if (!b.kandidaten.some(k => habe.has(k))) unbekannt.push(b)
+  }
+}
+
 const anzahlLuecken = [...luecken.values()].reduce((n, l) => n + l.length, 0)
 
-if (!fehler.length && anzahlLuecken === 0) {
+if (!fehler.length && anzahlLuecken === 0 && unbekannt.length === 0) {
   console.log(`[i18n] ${gesamt} Schluessel je Pflichtsprache (${PFLICHT.join(', ')}), vollstaendig.`)
+  console.log(`[i18n] ${benutzt.length} Verwendungen im Code geprueft, alle vorhanden.`)
   for (const o of optionalStand) {
     console.log(`[i18n] ${o.s}: ${o.belegt} von ${gesamt} belegt — ${o.offen} offen (vorgesehen, nicht erzwungen).`)
   }
@@ -125,6 +190,13 @@ for (const [sprache, liste] of [...luecken].sort()) {
     console.error(`      ${l.k}  (${l.grund}; ${l.vorbild} hat: ${JSON.stringify(l.wert).slice(0, 48)})`)
   }
   if (liste.length > 12) console.error(`      … und ${liste.length - 12} weitere`)
+}
+if (unbekannt.length) {
+  console.error(`  Im Code benutzt, aber NIRGENDS hinterlegt — ${unbekannt.length}:`)
+  for (const u of unbekannt.slice(0, 12)) {
+    console.error(`      ${u.kandidaten.join(' | ')}   (${u.datei})`)
+  }
+  if (unbekannt.length > 12) console.error(`      … und ${unbekannt.length - 12} weitere`)
 }
 console.error('')
 console.error('[i18n] Pflichtsprachen sind de und en — beide Richtungen zaehlen.')
