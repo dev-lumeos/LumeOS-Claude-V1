@@ -15,7 +15,6 @@
 import type { Metadata } from 'next'
 
 import { TrainingAnsicht } from './ansicht'
-import './training.css'
 
 export const metadata: Metadata = {
   title: 'Training · LumeOS',

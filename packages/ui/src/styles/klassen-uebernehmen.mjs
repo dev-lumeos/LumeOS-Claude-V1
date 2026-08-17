@@ -575,6 +575,374 @@ select.v2-feld { cursor: pointer; }
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* ================================================================
+   AB HIER: von Hand ergaenzt, NICHT aus dem Entwurf erzeugt.
+   ================================================================
+   [cmd] G-19 hat gemessen, dass ein Lauf dieses Erzeugers 164 Zeilen
+   geloescht haette — die Klassen aus G-03 bis G-18 standen nur in
+   v2.css und nicht hier. Wer eine Klasse ergaenzt, ergaenzt sie
+   AB HIER, nicht in der erzeugten Datei.
+   ================================================================ */
+/* Attrappe — die Kachel steht, die Daten fehlen noch.
+   [read] Tom, 2026-08-16: der Hinweis ist der Fortschrittsbalken. Er
+   muss auf einen Blick vom verdrahteten Nachbarn zu unterscheiden sein,
+   ohne die Anordnung zu veraendern — sonst springt das Bild, sobald
+   eine Kachel fertig wird. Deshalb nur Rahmen und Deckkraft, keine
+   andere Groesse und kein anderer Abstand.
+   [cmd] Der Entwurf kennt diese Klasse nicht: er ist durchgehend
+   Attrappe und braucht deshalb keine Kennzeichnung. */
+.v2-card.v2-attrappe {
+  border-style: dashed;
+  border-color: color-mix(in oklch, var(--warn) 32%, var(--border));
+  background: color-mix(in oklch, var(--warn) 3%, var(--surface));
+}
+/* Der Inhalt tritt zurueck, der Kopf mit der Marke bleibt lesbar. */
+.v2-card.v2-attrappe > *:not(.v2-card-h):not(.v2-attrappe-grund) {
+  opacity: 0.62;
+}
+.v2-attrappe-grund {
+  margin: 0 0 10px;
+  color: var(--fg-dim);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+/* Die Flaeche, die eine Attrappe statt Inhalt zeigt. Sie haelt die
+   Hoehe, damit das Raster nicht springt, wenn die Kachel spaeter
+   echten Inhalt bekommt. */
+.v2-attrappe-flaeche {
+  border: 1px dashed color-mix(in oklch, var(--border-strong) 70%, transparent);
+  border-radius: var(--radius);
+  background: repeating-linear-gradient(
+    135deg,
+    transparent 0 6px,
+    color-mix(in oklch, var(--fg-dim) 7%, transparent) 6px 12px
+  );
+}
+
+/* Eine Attrappe ohne Card braucht den Bezugspunkt fuer die Marke. */
+.v2-card.v2-attrappe { position: relative; }
+
+/* KPI bringt seinen eigenen Rahmen mit und nimmt keine \`attrappe\`-
+   Requisite. Die Huelle traegt deshalb nur die Marke — ohne eigenen
+   Rahmen, sonst stuende einer im anderen. */
+.v2-kpi-huelle { position: relative; display: block; }
+.v2-kpi-huelle.v2-attrappe .v2-kpi {
+  border-style: dashed;
+  border-color: color-mix(in oklch, var(--warn) 32%, var(--border));
+  background: color-mix(in oklch, var(--warn) 3%, var(--surface));
+}
+.v2-attrappe-marke { position: absolute; top: 8px; right: 8px; z-index: 1; }
+
+/* \`btn-sm\` benutzt die Vorlage in vier Kacheln (Smart suggestions,
+   Pending actions, Pre-workout, „Why this?"), definiert sie aber
+   [cmd] NIRGENDS in styles.css. Ohne Regel stuenden dort Knoepfe in
+   voller Hoehe in einer Zeile mit 10.5px-Text. Die Werte sind aus dem
+   Augenmass der umgebenden Zeilen abgeleitet, nicht aus der Vorlage —
+   sie ist an dieser Stelle unvollstaendig. */
+/* A-14: die Sprachliste in der Kopfzeile. Der Entwurf kennt keine
+   Sprachwahl — er ist einsprachig englisch. Aufbau und Masse folgen
+   dem Modus-Umschalter daneben, damit die Kopfzeile eine Zeile bleibt. */
+.v2-sprachliste {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  min-width: 148px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  /* KEIN Schatten. Der Test friert die vorhandenen Festfarben ein, und
+     fuer Schatten gibt es keinen Token — ein neuer waere eine
+     Token-Entscheidung und gehoert Tom. Rahmen und Flaeche heben die
+     Liste ausreichend ab. */
+}
+.v2-sprachwahl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.v2-sprachwahl:hover { background: var(--surface-2); color: var(--fg); }
+.v2-sprachwahl[data-on='true'] {
+  background: color-mix(in oklch, var(--acc) 12%, var(--surface-2));
+  color: var(--fg);
+}
+
+/* G-14: \`‹ Heute ›\` als Einheit, mittig im Modulkopf.
+   Der Entwurf zeigt zwei blasse Pfeile am Rand der Aktionsleiste — eine
+   Navigation, die man nicht als solche erkennt. Hier steht sie als
+   Block zusammen, mit Rahmen, damit sie sich von den Aktionsknoepfen
+   daneben abhebt. */
+.v2-datumsnav {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.v2-datumsfeld {
+  min-width: 140px;
+  height: 26px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.v2-datumsfeld:hover:not(:disabled) { background: var(--surface-2); }
+/* „Heute" ist kein Knopf — es gibt nichts anzuklicken. Deshalb ohne
+   Zeigerwechsel und ohne die gedaempfte Schrift der Sperre. */
+.v2-datumsfeld:disabled { cursor: default; opacity: 1; }
+
+.v2-btn.v2-btn-sm {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+/* Das Hauptraster des Dashboards — Vorlage: gridTemplateColumns
+   "1.4fr 1fr". [cmd] Der Entwurf hat null @media-Regeln; dass die
+   Umsetzung welche braucht, ist eine erlaubte Anpassung (G-02). Unter
+   1100px stapeln die Spalten, sonst wird die rechte Spalte unlesbar
+   schmal. */
+.v2-dash-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .v2-dash-grid { grid-template-columns: 1fr; }
+}
+
+/* Diary-Raster — Vorlage: gridTemplateColumns "1.5fr 1fr". */
+.v2-diary-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .v2-diary-grid { grid-template-columns: 1fr; }
+}
+/* ================================================================
+   9. Modul-Raster (G-19)
+   ================================================================
+   Die Vorlagen tragen ihre Raster inline als
+   style={{gridTemplateColumns: …}}. Sie gehoeren hierher, nicht in
+   eine Datei je Modul: [cmd] v2-train-grid-14 war Zeichen fuer
+   Zeichen derselbe Zweispalter wie .v2-dash-grid.
+
+   ZUSAMMENGEFASST statt eins zu eins uebernommen. Aus vier
+   Trainings-Rastern plus zwei vorhandenen wurden DREI Verhaeltnisse:
+
+     .v2-grid-14   1.4fr / 1fr   Dashboard, Training Today, Calendar,
+                                 Offline sync, HR zones
+     .v2-grid-15   1.5fr / 1fr   Diary, Progression, Standards
+     .v2-grid-21   2fr / 1fr     History
+
+   Das Verhaeltnis 1fr/1fr braucht kein eigenes Raster — dafuer gibt
+   es .v2-g-cols-2 aus dem Entwurf. Damit fallen zwei der urspruenglich
+   fuenf Trainings-Raster ganz weg.
+
+   .v2-dash-grid und .v2-diary-grid bleiben als Aliasse stehen: sie
+   stehen in Dashboard und Nutrition, und die durfte dieser Auftrag
+   nicht anfassen.
+
+   HALTEPUNKT 1100px — derselbe wie bisher, nicht neu erfunden. */
+.v2-grid-14,
+.v2-dash-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.v2-grid-15,
+.v2-diary-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.v2-grid-21 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+.v2-span-2 { grid-column: span 2; }
+
+@media (max-width: 1100px) {
+  .v2-grid-14, .v2-dash-grid,
+  .v2-grid-15, .v2-diary-grid,
+  .v2-grid-21 { grid-template-columns: 1fr; }
+  .v2-span-2 { grid-column: auto; }
+}
+
+/* Breite Tabellen scrollen in sich statt die Seite aufzuschieben.
+   Der Entwurf setzt Tabellen mit festen Spaltenbreiten in Karten, die
+   auf dem Telefon 320px breit sind. */
+.v2-tbl-wrap { overflow-x: auto; }
+
+/* --- Raster, die nur das Training braucht -----------------------
+   Sie bleiben eigenstaendig: ihre Spaltenbreiten kommen aus der
+   jeweiligen Vorlagenstelle und wiederholen sich nirgends sonst. */
+
+/* Wochenleiste (Today). [cmd] module-training.jsx:216 — sieben
+   Spalten; unter 700px waere eine 40px breit, dann zwei Reihen. */
+.v2-train-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+@media (max-width: 700px) {
+  .v2-train-week { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Sitzungskopf (Today). [cmd] module-training.jsx:86. */
+.v2-train-session-kopf {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+@media (max-width: 640px) {
+  .v2-train-session-kopf { flex-wrap: wrap; }
+}
+
+/* [cmd] module-training.jsx:87-92. */
+.v2-train-medallion {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  background: color-mix(in oklch, var(--acc-train) 18%, transparent);
+  border: 1px solid color-mix(in oklch, var(--acc-train) 35%, transparent);
+  display: grid;
+  place-items: center;
+  color: var(--acc-train);
+  flex-shrink: 0;
+}
+
+/* Volumen nach Muskel (History). [cmd] module-training.jsx:406. */
+.v2-train-vol-tbl {
+  display: grid;
+  grid-template-columns: 120px 1fr 80px 80px 80px;
+  gap: 8px;
+  align-items: center;
+}
+@media (max-width: 760px) {
+  .v2-train-vol-tbl { grid-template-columns: 90px 1fr 52px 62px 62px; }
+}
+
+/* Filterzeile der Uebungsliste. [cmd] module-training.jsx:455. */
+.v2-train-lib-filter {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+/* Pausenzaehler (Live workout). [cmd] module-training.jsx:602. */
+.v2-train-rest {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* Eine Zeile der Volume landmarks. [cmd] module-training-spec.jsx:236. */
+.v2-train-landmark-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 90px 110px 120px;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid color-mix(in oklch, var(--border) 45%, transparent);
+}
+@media (max-width: 900px) {
+  .v2-train-landmark-row { grid-template-columns: 74px 1fr 70px 86px; }
+  .v2-train-landmark-row > :last-child { grid-column: 2 / -1; text-align: left; }
+}
+
+/* Post-workout feedback. [cmd] module-training-spec.jsx:292. */
+.v2-train-feedback-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+.v2-train-score-btn { font: inherit; }
+
+/* Eine Zeile der HR-Zonen. [cmd] module-training-offline-hr.jsx:218. */
+.v2-train-hr-row {
+  display: grid;
+  grid-template-columns: 22px 96px 1fr 52px 46px;
+  gap: 10px;
+  align-items: center;
+}
+@media (max-width: 560px) {
+  .v2-train-hr-row { grid-template-columns: 22px 80px 1fr 44px; }
+  .v2-train-hr-row > :last-child { display: none; }
+}
+
+/* Kopf der Offline-Kachel. [cmd] module-training-offline-hr.jsx:42. */
+.v2-train-offline-kopf {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex-wrap: wrap;
+}
+
+/* Uebungszeile im Routine-Editor. [cmd] module-training-extras.jsx:169. */
+.v2-train-ex-row {
+  display: grid;
+  grid-template-columns: 20px 1fr 110px 70px 90px 80px;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+@media (max-width: 720px) {
+  .v2-train-ex-row { grid-template-columns: 20px 1fr 80px; }
+  .v2-train-ex-row > :nth-child(4),
+  .v2-train-ex-row > :nth-child(5) { display: none; }
+}
+
+/* Die vier Kopffelder des Block-Editors. [cmd] module-training-extras.jsx:331. */
+.v2-train-block-felder {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 640px) {
+  .v2-train-block-felder { grid-template-columns: 1fr 1fr; }
+}
 `
 
 fs.mkdirSync(path.dirname(ZIEL), { recursive: true })
