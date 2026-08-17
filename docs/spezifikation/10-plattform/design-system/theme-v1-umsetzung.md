@@ -115,6 +115,37 @@ sieben Unterkomponenten auf — `ExtendedGate`, `ExtendedHeader`,
 
 **Der Tab-Rumpf ist nicht das Modul.**
 
+### Drei Regeln fuer das Zaehlskript
+
+`[cmd]` Aus G-33, wo der Abgleich zum ersten Mal gefahren wurde — und
+wo das erste Skript selbst danebenlag:
+
+**1. Den Aufrufbaum pruefen, nicht die Zeilenzahl.** `[cmd]`
+`SuppExtended` hatte in der Vorlage 46 Zeilen, die Umsetzung 97 — **nach
+Zeilenzahl also mehr, tatsaechlich fehlten 365 Zeilen Inhalt.** Der
+Rumpf ruft acht Komponenten auf.
+
+**2. Ueber alle Vorlagendateien, nicht nur den Rahmen.** `[cmd]`
+`CalendarView` steht in der Modaldatei — **das erste Skript las nur den
+Rahmen und hielt sie fuer undefiniert.**
+
+**3. Eigene Zustaende sind eigene Bildschirme.** `[cmd]` `ExtendedGate`
+ist eine ganze Aufklaerungsseite; **ohne sie zeigt der Tab sofort
+Hormonprotokolle.** Ein Zustand, der etwas verbirgt, ist kein Detail.
+
+### Was der Abgleich ergab
+
+| Tab | Vorlage | vorher | jetzt |
+|---|---|---|---|
+| `extended` | 8 | **0** | 8 |
+| `compliance` | 3 | **0** | 3 |
+| `today` / `stack` | 2 / 2 | 2 / 2 | unveraendert |
+
+`[cmd]` 15 von 15 Unterkomponenten, 0 fehlend. **Die Umsetzung wuchs von
+708 auf 1.865 Zeilen.**
+
+---
+
 ### Der Pflichtnachweis
 
 **Ein Skript, das je Tab die von der Vorlage aufgerufenen Komponenten
