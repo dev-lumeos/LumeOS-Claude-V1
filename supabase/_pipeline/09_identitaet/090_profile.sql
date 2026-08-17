@@ -44,7 +44,8 @@ ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS pregnancy_started_on DATE,
   ADD COLUMN IF NOT EXISTS pregnancy_ended_on DATE,
   ADD COLUMN IF NOT EXISTS lactation_started_on DATE,
-  ADD COLUMN IF NOT EXISTS lactation_ended_on DATE;
+  ADD COLUMN IF NOT EXISTS lactation_ended_on DATE,
+  ADD COLUMN IF NOT EXISTS locale TEXT;
 
 ALTER TABLE public.profiles
   DROP CONSTRAINT IF EXISTS profiles_birth_date_check,
@@ -53,6 +54,7 @@ ALTER TABLE public.profiles
   DROP CONSTRAINT IF EXISTS profiles_body_weight_kg_check,
   DROP CONSTRAINT IF EXISTS profiles_activity_level_check,
   DROP CONSTRAINT IF EXISTS profiles_nutrition_goal_check,
+  DROP CONSTRAINT IF EXISTS profiles_locale_check,
   DROP CONSTRAINT IF EXISTS profiles_pregnancy_period_check,
   DROP CONSTRAINT IF EXISTS profiles_lactation_period_check;
 
@@ -88,6 +90,9 @@ ALTER TABLE public.profiles
       'health'
     )
   ),
+  ADD CONSTRAINT profiles_locale_check CHECK (
+    locale IS NULL OR locale IN ('de', 'en', 'th')
+  ),
   ADD CONSTRAINT profiles_pregnancy_period_check CHECK (
     pregnancy_started_on IS NULL OR pregnancy_ended_on IS NULL OR pregnancy_ended_on >= pregnancy_started_on
   ),
@@ -115,6 +120,8 @@ COMMENT ON COLUMN public.profiles.lactation_started_on IS
   'C-47: Stillzeit ist ein Zeitraum, kein dauerhaftes Profilmerkmal.';
 COMMENT ON COLUMN public.profiles.lactation_ended_on IS
   'C-47: Ende des Stillzeitraums; Zustand wird fuer einen Stichtag berechnet.';
+COMMENT ON COLUMN public.profiles.locale IS
+  'C-63: Gewaehlte Sprache der Person (de/en/th). NULL = noch nicht gefragt; kein Default, damit keine Entscheidung vorgetaeuscht wird.';
 
 -- -------------------------------------------------------------
 -- 2. Rechte (vor RLS — Rechte werden zuerst geprüft).
