@@ -19,9 +19,11 @@
 // Portionen, Same as yesterday. MealCam bleibt Attrappe.
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Card, Icon, InEntwicklung } from '@lumeos/ui'
 
 import { MEAL_TYPES, type MealType } from '../../../lib/nutrition/diary-model'
+import { vortag } from '../../../lib/datum'
 import type { NutritionFoodSearchRow } from '../../../lib/nutrition/food-search'
 
 /** Die Slots der Vorlage, in ihrer Reihenfolge. */
@@ -51,6 +53,8 @@ type Position = {
 type Mahlzeit = {
   id: string
   meal_type: MealType
+  /** G-15: `HH:MM:SS`. `null` heisst: keine Zeit hinterlegt. */
+  meal_time: string | null
   notes: string | null
   items: Position[]
 }
@@ -61,6 +65,11 @@ type Portion = { name_de: string; amount_g: number; is_default: boolean }
 function n(v: string | null | undefined): string {
   const x = v === null || v === undefined ? NaN : Number(v)
   return Number.isFinite(x) ? Math.round(x).toLocaleString('de-DE') : '—'
+}
+
+/** `HH:MM:SS` zu `HH:MM`. Ohne Zeit bleibt die Spalte leer. */
+function uhrzeit(v: string | null | undefined): string {
+  return typeof v === 'string' && v.length >= 5 ? v.slice(0, 5) : '—'
 }
 
 /** Zahl ohne Nachkommastellen, wie in der Vorlage. */
@@ -78,6 +87,8 @@ export function Mahlzeiten({
   const [laden, setLaden] = React.useState(true)
   const [fehler, setFehler] = React.useState<string | null>(null)
   const router = useRouter()
+  const t = useTranslations('Nutrition')
+  const tA = useTranslations('Allgemein')
 
   const laden_ = React.useCallback(async () => {
     setLaden(true)
@@ -105,13 +116,25 @@ export function Mahlzeiten({
     onGeaendert?.()
   }, [laden_, onGeaendert, router])
 
-  // Die Vorlage zeigt FUENF Karten — auch die leeren. Ohne sie gaebe es
-  // keinen Platz fuer „Search" und „Same as yesterday".
-  const vorhanden = new Map(mahlzeiten.map(m => [m.meal_type, m]))
-  const reihenfolge: MealType[] = ['breakfast', 'snack', 'lunch', 'dinner', 'post_workout']
+  // G-15: JEDE vorhandene Mahlzeit bekommt eine eigene Karte.
+  //
+  // `[cmd]` Vorher stand hier `new Map(m => [m.meal_type, m])` — ein
+  // Schluessel je Typ. Zwei Snacks am selben Tag (14.08., 10:14 und
+  // 16:00) kollabierten damit zu einem; der erste verschwand
+  // spurlos, weil `Map` beim zweiten ueberschreibt. Seit
+  // Kettenschritt 052a ist der UNIQUE-Index weg, der das frueher
+  // verhinderte — die Ansicht hatte die Annahme behalten.
+  //
+  // Die Sortierung kommt aus der Datenbank (nach `meal_time`), nicht
+  // aus einer festen Liste. Fuer Typen OHNE Eintrag stehen weiterhin
+  // leere Karten da — sonst gaebe es keinen Platz fuer „Search" und
+  // „Same as yesterday".
+  const VORLAGE: MealType[] = ['breakfast', 'snack', 'lunch', 'dinner', 'post_workout']
+  const belegteTypen = new Set(mahlzeiten.map(m => m.meal_type))
+  const leereSlots = VORLAGE.filter(typ => !belegteTypen.has(typ))
 
   if (laden && mahlzeiten.length === 0) {
-    return <Card><p className="v2-muted" style={{ fontSize: 12 }}>Laedt …</p></Card>
+    return <Card><p className="v2-muted" style={{ fontSize: 12 }}>{tA('laedt')}</p></Card>
   }
 
   return (
@@ -120,28 +143,33 @@ export function Mahlzeiten({
         <div className="v2-insight v2-neg">
           <div className="v2-insight-mark" />
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div className="v2-insight-title">Tagebuch nicht lesbar</div>
+            <div className="v2-insight-title">{t('tagebuchNichtLesbar')}</div>
             <div className="v2-insight-body">{fehler}</div>
           </div>
         </div>
       )}
-      {reihenfolge.map(typ => (
+
+      {/* Erst die erfassten, in ihrer zeitlichen Reihenfolge. */}
+      {mahlzeiten.map(m => (
         <MahlzeitKarte
-          key={typ}
+          key={m.id}
           datum={datum}
-          typ={typ}
-          mahlzeit={vorhanden.get(typ) ?? null}
+          typ={m.meal_type}
+          mahlzeit={m}
           onGeaendert={neuLaden}
         />
       ))}
-      {/* Mahlzeiten, die es gibt, aber nicht in der Reihenfolge der
-          Vorlage stehen — sonst verschwaenden sie aus der Anzeige. */}
-      {mahlzeiten
-        .filter(m => !reihenfolge.includes(m.meal_type))
-        .map(m => (
-          <MahlzeitKarte key={m.id} datum={datum} typ={m.meal_type}
-                         mahlzeit={m} onGeaendert={neuLaden} />
-        ))}
+
+      {/* Dann die Slots der Vorlage, fuer die nichts erfasst ist. */}
+      {leereSlots.map(typ => (
+        <MahlzeitKarte
+          key={`leer-${typ}`}
+          datum={datum}
+          typ={typ}
+          mahlzeit={null}
+          onGeaendert={neuLaden}
+        />
+      ))}
     </>
   )
 }
@@ -190,10 +218,9 @@ function MahlzeitKarte({
     setLaeuft(true)
     setFehler(null)
     try {
-      const gestern = new Date(`${datum}T00:00:00`)
-      gestern.setDate(gestern.getDate() - 1)
-      const gd = `${gestern.getFullYear()}-${String(gestern.getMonth() + 1).padStart(2, '0')}-${String(gestern.getDate()).padStart(2, '0')}`
-      const a = await fetch(`/api/nutrition/diary?datum=${gd}`)
+      // `vortag` rechnet ueber Mittag — an Zeitumstellungstagen
+      // kippte die fruehere Mitternachtsrechnung um einen Tag.
+      const a = await fetch(`/api/nutrition/diary?datum=${vortag(datum)}`)
       const d = await a.json()
       if (!a.ok) throw new Error(d?.error ?? 'Vortag nicht lesbar.')
       const quelle = (d.meals ?? []).find((m: Mahlzeit) => m.meal_type === typ)
@@ -236,11 +263,13 @@ function MahlzeitKarte({
         }}
         onClick={() => { if (!leer) setOffen(o => !o) }}
       >
-        {/* `[cmd]` Die Vorlage zeigt hier eine Uhrzeit (07:42). `meals`
-            fuehrt nur `entry_date`, keine Zeit — die Spalte bleibt
-            deshalb leer statt erfunden. Gemeldet, nicht ersetzt. */}
+        {/* G-15: die Uhrzeit steht jetzt da. `[cmd]` Bis
+            Kettenschritt 052a fuehrte `meals` nur `entry_date`; die
+            Spalte zeigte deshalb einen Strich. Heute traegt jede der
+            686 Mahlzeiten eine Zeit — die Vorlage zeigt „07:42
+            Breakfast", und genau das steht hier. */}
         <span className="v2-num" style={{ fontSize: 10, color: 'var(--fg-dim)', width: 40 }}>
-          —
+          {uhrzeit(mahlzeit?.meal_time)}
         </span>
         <span style={{ fontSize: 13, fontWeight: 600 }}>{SLOT_LABEL[typ]}</span>
         <span className="v2-dim" style={{ fontSize: 11 }}>

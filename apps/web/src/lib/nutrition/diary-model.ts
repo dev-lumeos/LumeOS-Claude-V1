@@ -218,6 +218,15 @@ export type StoredMeal = {
   id: string
   entry_date: string
   meal_type: MealType
+  /**
+   * G-15: die Uhrzeit der Mahlzeit (`HH:MM:SS`).
+   *
+   * `[cmd]` Seit Kettenschritt 052a gibt es sie, und der UNIQUE-Index
+   * auf (user, datum, typ) ist weg — zwei Snacks am Tag sind erlaubt.
+   * `null` bleibt moeglich, solange aeltere Zeilen ohne Zeit denkbar
+   * sind; heute traegt jede der 686 Mahlzeiten eine.
+   */
+  meal_time: string | null
   notes: string | null
 }
 
@@ -263,6 +272,7 @@ export function parseStoredMeals(rows: unknown): StoredMeal[] {
     return [
       {
         id: record.id,
+        meal_time: typeof record.meal_time === 'string' ? record.meal_time : null,
         entry_date: record.entry_date,
         meal_type: record.meal_type as MealType,
         notes: typeof record.notes === 'string' ? record.notes : null,

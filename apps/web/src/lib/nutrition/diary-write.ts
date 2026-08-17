@@ -47,8 +47,14 @@ export async function listOwnMeals(entryDate: string): Promise<StoredMeal[]> {
   const { data, error } = await supabase
     .schema('nutrition')
     .from('meals')
-    .select('id, entry_date, meal_type, notes')
+    .select('id, entry_date, meal_type, meal_time, notes')
     .eq('entry_date', entryDate)
+    // G-15: nach UHRZEIT, nicht nach Anlagezeitpunkt. `created_at`
+    // sortiert danach, wann jemand getippt hat — wer das Fruehstueck
+    // abends nachtraegt, stand damit hinter dem Abendessen.
+    // `nullsFirst: false` haelt Zeilen ohne Zeit ans Ende statt an den
+    // Anfang; PostgREST setzt NULL sonst nach vorn.
+    .order('meal_time', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: true })
   if (error) {
     throw classifyDbError(error.message, 'WRITE_FAILED')
@@ -75,9 +81,13 @@ export async function listOwnMealItems(mealId: string): Promise<StoredMealItem[]
 }
 
 /**
- * Mahlzeit anlegen. Insert zuerst — die Wahrheit über Duplikate ist der
- * UNIQUE-Index uq_meals_user_date_type (23505), nicht ein Select vorab
- * (das wäre eine Race Condition, siehe C-02/C-12).
+ * Mahlzeit anlegen.
+ *
+ * G-15: `[cmd]` Der UNIQUE-Index uq_meals_user_date_type ist seit
+ * Kettenschritt 052a WEG — zwei Snacks am selben Tag sind erlaubt und
+ * kommen in den Testdaten vor (14.08., 10:14 und 16:00). Die
+ * 23505-Behandlung bleibt trotzdem stehen: sie kostet nichts und deckt
+ * den Fall ab, dass jemand den Index wieder einführt.
  */
 export async function createMeal(input: MealCreate): Promise<StoredMeal> {
   const { supabase, userId } = await requireSession()
@@ -85,7 +95,7 @@ export async function createMeal(input: MealCreate): Promise<StoredMeal> {
     .schema('nutrition')
     .from('meals')
     .insert(buildMealInsert(userId, input))
-    .select('id, entry_date, meal_type, notes')
+    .select('id, entry_date, meal_type, meal_time, notes')
   if (error) {
     if (error.code === '23505') {
       throw new DiaryWriteError(
