@@ -421,6 +421,8 @@ BEGIN;
 DELETE FROM nutrition.water_logs WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meals WHERE user_id IN (${userIds});
+DELETE FROM nutrition.food_preference_items WHERE user_id IN (${userIds});
+DELETE FROM nutrition.food_preferences WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
 DELETE FROM public.profiles WHERE id IN (${userIds});
 DELETE FROM auth.users WHERE id IN (${userIds});
@@ -485,6 +487,53 @@ ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
   nutrition_goal = EXCLUDED.nutrition_goal,
   notiz = EXCLUDED.notiz,
   updated_at = now();
+
+SELECT nutrition.food_preferences_write(
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  jsonb_build_object(
+    'diet_type', 'omnivore',
+    'allergies', jsonb_build_array('tree_nuts'),
+    'intolerances', jsonb_build_array('lactose'),
+    'general_exclusions', jsonb_build_array('ultra_processed'),
+    'preferred_cuisines', jsonb_build_array('mediterranean'),
+    'meals_per_day', 4,
+    'snacks_per_day', 1,
+    'cooking_skill', 'advanced',
+    'prep_time_max_min', 30,
+    'budget_level', 'medium',
+    'meal_prep_ok', true,
+    'planner_notes', 'G-11a Testdaten: Allergie, Abneigung und Like fuer spaetere Suchwirkung'
+  ),
+  jsonb_build_array(
+    jsonb_build_object(
+      'preference', 'hard_exclude',
+      'strength', 'hard_exclude',
+      'target_type', 'tag',
+      'tag_code', 'contains_nuts',
+      'source', 'settings'
+    ),
+    jsonb_build_object(
+      'preference', 'disliked',
+      'strength', 'soft_dislike',
+      'target_type', 'category',
+      'category_id', (
+        SELECT id FROM nutrition.food_categories
+        WHERE slug = 'backwaren-gebaeck-snack-kategorie-kekse-plaetzchen'
+      ),
+      'source', 'settings'
+    ),
+    jsonb_build_object(
+      'preference', 'liked',
+      'strength', 'boost',
+      'target_type', 'food',
+      'food_id', (
+        SELECT id FROM nutrition.foods
+        WHERE bls_code = 'C352000'
+      ),
+      'source', 'settings'
+    )
+  )
+);
 
 CREATE TEMP TABLE test_meals (
   id uuid PRIMARY KEY,

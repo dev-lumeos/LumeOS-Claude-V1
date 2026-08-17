@@ -37,6 +37,8 @@ const errors: string[] = []
 const users = numberScalar(`SELECT count(*) FROM auth.users WHERE id IN (${IDS_SQL});`)
 const profiles = numberScalar(`SELECT count(*) FROM public.profiles WHERE id IN (${IDS_SQL});`)
 const targets = numberScalar(`SELECT count(*) FROM goals.nutrition_targets WHERE user_id IN (${IDS_SQL});`)
+const preferences = numberScalar(`SELECT count(*) FROM nutrition.food_preferences WHERE user_id IN (${IDS_SQL});`)
+const preferenceItems = numberScalar(`SELECT count(*) FROM nutrition.food_preference_items WHERE user_id IN (${IDS_SQL});`)
 const meals = numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id IN (${IDS_SQL});`)
 const items = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL});`)
 const waterLogs = numberScalar(`SELECT count(*) FROM nutrition.water_logs WHERE user_id IN (${IDS_SQL});`)
@@ -55,6 +57,8 @@ if (MODE === 'clean') {
   if (users !== 0) errors.push(`auth.users: ${users}, erwartet 0`)
   if (profiles !== 0) errors.push(`profiles: ${profiles}, erwartet 0`)
   if (targets !== 0) errors.push(`nutrition_targets: ${targets}, erwartet 0`)
+  if (preferences !== 0) errors.push(`food_preferences: ${preferences}, erwartet 0`)
+  if (preferenceItems !== 0) errors.push(`food_preference_items: ${preferenceItems}, erwartet 0`)
   if (meals !== 0) errors.push(`meals: ${meals}, erwartet 0`)
   if (items !== 0) errors.push(`meal_items: ${items}, erwartet 0`)
   if (waterLogs !== 0) errors.push(`water_logs: ${waterLogs}, erwartet 0`)
@@ -63,6 +67,7 @@ if (MODE === 'clean') {
 
   console.log('C-82 Testdaten-Pruefung (clean)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
+  console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
@@ -92,6 +97,8 @@ if (MODE === 'clean') {
   if (users !== 3) errors.push(`auth.users: ${users}, erwartet 3`)
   if (profiles !== 3) errors.push(`profiles: ${profiles}, erwartet 3`)
   if (targets !== 3) errors.push(`nutrition_targets: ${targets}, erwartet 3`)
+  if (preferences !== 1) errors.push(`food_preferences: ${preferences}, erwartet 1`)
+  if (preferenceItems !== 3) errors.push(`food_preference_items: ${preferenceItems}, erwartet 3`)
   if (meals < 120) errors.push(`meals: ${meals}, erwartet mindestens 120`)
   if (items < 1000) errors.push(`meal_items: ${items}, erwartet mindestens 1000`)
   if (waterLogs < 120) errors.push(`water_logs: ${waterLogs}, erwartet mindestens 120`)
@@ -225,6 +232,17 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM nutrition.food_preferences_read('${tom}'::uuid) pref
+    WHERE pref->'preferences'->>'diet_type' = 'omnivore'
+      AND jsonb_array_length(pref->'search_application'->'hard') = 1
+      AND jsonb_array_length(pref->'search_application'->'soft') = 1
+      AND jsonb_array_length(pref->'search_application'->'boost') = 1
+      AND pref->'search_application'->'hard' @> '[{"target_type":"tag","tag_code":"contains_nuts"}]'::jsonb
+      AND pref->'search_application'->'boost' @> '[{"target_type":"food"}]'::jsonb;`)) {
+    errors.push('Fall Preferences: Leseschicht liefert hard/soft/boost nicht vollstaendig')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM nutrition.hydration_day('${tom}'::uuid, DATE '2026-08-16')
     WHERE log_count > 0
       AND target_ml = 3400
@@ -261,6 +279,7 @@ if (MODE === 'clean') {
 
   console.log('C-82 Testdaten-Pruefung (present)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
+  console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)

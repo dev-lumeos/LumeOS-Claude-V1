@@ -24,6 +24,16 @@ deleted_meals AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_preference_items AS (
+  DELETE FROM nutrition.food_preference_items
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_preferences AS (
+  DELETE FROM nutrition.food_preferences
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_targets AS (
   DELETE FROM goals.nutrition_targets
   WHERE user_id IN (${ids})
@@ -42,6 +52,8 @@ deleted_users AS (
 SELECT
   (SELECT count(*) FROM deleted_items) AS meal_items,
   (SELECT count(*) FROM deleted_meals) AS meals,
+  (SELECT count(*) FROM deleted_preference_items) AS food_preference_items,
+  (SELECT count(*) FROM deleted_preferences) AS food_preferences,
   (SELECT count(*) FROM deleted_targets) AS nutrition_targets,
   (SELECT count(*) FROM deleted_profiles) AS profiles,
   (SELECT count(*) FROM deleted_users) AS users;

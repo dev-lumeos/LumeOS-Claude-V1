@@ -915,6 +915,14 @@
     {
       "name": "micronutrient_below_threshold",
       "schritt": "059a"
+    },
+    {
+      "name": "food_preferences_read",
+      "schritt": "074"
+    },
+    {
+      "name": "food_preferences_write",
+      "schritt": "074"
     }
   ],
   "mindestzeilen": {

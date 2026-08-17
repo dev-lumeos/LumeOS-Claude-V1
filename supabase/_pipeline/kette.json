@@ -235,6 +235,13 @@
       "depends_on": ["060"]
     },
     {
+      "id": "074",
+      "path": "supabase/_pipeline/07_lesefunktionen/074_preferences_api.sql",
+      "kind": "sql",
+      "creates": "food_preferences_read() und food_preferences_write() fuer Nutrition-Preferences",
+      "depends_on": ["054", "060"]
+    },
+    {
       "id": "080",
       "path": "supabase/_pipeline/08_bereinigung/080_public_bereinigen.sql",
       "kind": "sql",
