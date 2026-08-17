@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `1dd6ff2` auf `dev`.
+**Stand:** 2026-08-17, Anker `415530e` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 71 offen, 4 in Arbeit.
+`[cmd]` 72 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -203,6 +203,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
 | **G-37** | Supplements an den Katalog anschliessen |  |
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
+| **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **C-69** | Medical-Schema |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
 | **G-38** | Vollstaendigkeit aller Mockups nachmessen | ~ |
@@ -2053,30 +2054,64 @@ Umsetzen angepasst werden.
   Toms Entwurf ist.** Beim Bau der echten Rechnung ist das die Stelle,
   an der entschieden werden muss.
 
-- [ ] **C-69: Medical-Schema** (neu 2026-08-17). Befund aus G-36.
+- [ ] **C-70: Der Biomarker-Katalog — vollstaendig und belegt** (neu
+  2026-08-17). **Vor C-69.**
+
+  **Tom, 2026-08-17:** *„Alle Daten sind nur Beispiele im Mockup. Die
+  realen Daten muessen wir zusammensuchen, recherchieren und validieren.
+  Ich will ein Maximum, was solche Daten angeht, und nicht irgendeinen
+  Auszug, der von KI generiert wird."*
+
+  ### Die Vorlage ist ein Ausschnitt
+
+  | | CBC | gesamt |
+  |---|---|---|
+  | **Designvorlage** | **4** (hct, plt, rbc, wbc) | 59 LOINC-Codes |
+  | **`SPEC_05_BIOMARKER_CATALOG.md`** | **15** | **74 in acht Panels** |
+
+  `[cmd]` Die Spec gliedert: CBC 15 · Metabolic 12 · Lipid 8 · Liver 7 ·
+  Thyroid 6 · Hormones 10 · Inflammation 6 · Vitamins & Minerals 10.
+
+  `[cmd]` Dazu **114 INSERT-Zeilen** im Seed des Vorgaengerrepos,
+  `biomarkerDetails.ts` mit 1.563 Zeilen und **242 Eintraegen**, sowie
+  `biomarkerSynonyms.ts` mit **457 Synonympaaren auf 91 kanonische
+  Namen, davon 18 auf Thai.**
+
+  ### Die Regelunterscheidung
+
+  `[read]` **Die Vorlage ist die Vorgabe fuer Struktur und Anordnung —
+  nicht fuer Bestandsdaten.** Bei den Lebensmitteln ist es genauso: Die
+  Vorlage zeigt vier Zeilen im Tagebuch, der Bestand hat 7.140
+  Eintraege. **Niemand kaeme auf die Idee, die Vorlage als
+  Lebensmitteldatenbank zu lesen.**
+
+  ### Was der Katalog braucht
+
+  **Je Marker:** kanonischer Name, **LOINC-Code**, Einheit,
+  Referenzbereich mit Quelle, Panel-Zuordnung, Synonyme (de/en/th).
+
+  `[read]` **Und jede Zahl braucht eine Quelle.** GO-00 hat gezeigt, was
+  ohne passiert: **47 von 72 Referenzzeilen falsch verknuepft**, Calcium
+  bei 32.000 %, weil die Einheit nicht zur Bezugsgroesse passte.
+
+  `[cmd]` **Referenzbereiche sind alters- und geschlechtsabhaengig** —
+  wie bei den Naehrstoffen. Und sie unterscheiden sich je Labor. **Was
+  gilt, ist eine Entscheidung, keine Recherche.**
+
+- [ ] **C-69: Medical-Schema** (verschoben hinter C-70). Befund aus
+  G-36.
 
   `[cmd]` **Kein `medical`-Schema** — alle 21 Kacheln sind Attrappe.
 
-  **Der Fundus ist der groesste bisher:** `[cmd]` **selbst gemessen**
-  (die Pfade im Auftrag stimmten nicht — die Dateien liegen unter
-  `src/modules/medical/data/`):
+  `[cmd]` **Der Spec-Widerspruch gilt:** `SPEC_06` hat 8 `CREATE TABLE`;
+  `UserMedicalInsight` und `UserHealthReport` kommen in `SPEC_02`
+  **4-mal** vor, in `SPEC_06` **0-mal**. `[read]` Haertester Befund des
+  Spec-Audits.
 
-  | | |
-  |---|---|
-  | `biomarkerSynonyms.ts` | **457 Synonympaare auf 91 kanonische Namen, davon 18 auf Thai** |
-  | `biomarkerDetails.ts` | **242 Eintraege, 1.563 Zeilen** |
-  | `015_medical.sql` | 7 Tabellen, teils anders benannt als `SPEC_06` |
+  `[cmd]` `015_medical.sql` im Vorgaengerrepo hat 7 Tabellen, **teils
+  anders benannt als `SPEC_06`.**
 
-  `[read]` **Die Synonymtabelle ist exakt das, was der Import-Tab
-  voraussetzt** — der Uploadtext der Vorlage wirbt mit *„German,
-  English, Thai lab formats supported"*. **Und die 18 Thai-Eintraege
-  sind der einzige Thai-Bestand im ganzen Projekt neben den 961
-  i18n-Schluesseln.**
-
-  `[cmd]` **Der Spec-Widerspruch ist bestaetigt:** `SPEC_06` hat 8
-  `CREATE TABLE`; `UserMedicalInsight` und `UserHealthReport` kommen in
-  `SPEC_02` **4-mal** vor, in `SPEC_06` **0-mal**. `[read]` Das ist der
-  haerteste Befund des Spec-Audits, und er gilt.
+  **Setzt C-70 voraus** — ohne den Katalog steht das Schema leer da.
 
 - [ ] **G-39: Zwei Symbole fehlen (`shield`, `file`)** (neu 2026-08-17).
   Befund aus G-36.
