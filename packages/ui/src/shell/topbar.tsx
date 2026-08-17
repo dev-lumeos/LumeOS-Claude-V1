@@ -32,11 +32,19 @@ export type TopbarProps = {
   /** Kontextspalte ein-/ausblenden. */
   onToggleContext?: () => void
   contextOpen?: boolean
+  /**
+   * Zusaetzliche Bedienelemente links neben dem Modus-Umschalter.
+   *
+   * A-14: die Sprachwahl haengt an `next-intl` und damit an `apps/web`
+   * — `packages/ui` kennt die Bibliothek nicht und soll sie nicht
+   * kennen. Deshalb ein Platz statt eines eigenen Bausteins.
+   */
+  actions?: React.ReactNode
 }
 
 export function Topbar({
   moduleTag, moduleLabel, parentLabel, syncState = 'synced',
-  mode, onModeChange, onToggleContext, contextOpen,
+  mode, onModeChange, onToggleContext, contextOpen, actions,
 }: TopbarProps) {
   return (
     <header className="v2-topbar">
@@ -65,6 +73,8 @@ export function Topbar({
         <button type="button" className="v2-icon-btn" title="Notifications" disabled>
           <Icon name="bell" title="Benachrichtigungen" />
         </button>
+
+        {actions}
 
         {onModeChange && (
           <div

@@ -1587,6 +1587,47 @@ select.v2-feld { cursor: pointer; }
    voller Hoehe in einer Zeile mit 10.5px-Text. Die Werte sind aus dem
    Augenmass der umgebenden Zeilen abgeleitet, nicht aus der Vorlage —
    sie ist an dieser Stelle unvollstaendig. */
+/* A-14: die Sprachliste in der Kopfzeile. Der Entwurf kennt keine
+   Sprachwahl — er ist einsprachig englisch. Aufbau und Masse folgen
+   dem Modus-Umschalter daneben, damit die Kopfzeile eine Zeile bleibt. */
+.v2-sprachliste {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 40;
+  min-width: 148px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  /* KEIN Schatten. Der Test friert die vorhandenen Festfarben ein, und
+     fuer Schatten gibt es keinen Token — ein neuer waere eine
+     Token-Entscheidung und gehoert Tom. Rahmen und Flaeche heben die
+     Liste ausreichend ab. */
+}
+.v2-sprachwahl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--fg-muted);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.v2-sprachwahl:hover { background: var(--surface-2); color: var(--fg); }
+.v2-sprachwahl[data-on='true'] {
+  background: color-mix(in oklch, var(--acc) 12%, var(--surface-2));
+  color: var(--fg);
+}
+
 .v2-btn.v2-btn-sm {
   height: 22px;
   padding: 0 8px;

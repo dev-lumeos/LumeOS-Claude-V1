@@ -36,12 +36,14 @@ export type AppShellProps = {
   context?: Omit<ContextPanelProps, 'label'> & { label?: string }
   /** Dichte der Karten: compact | default | comfortable. */
   density?: 'compact' | 'default' | 'comfortable'
+  /** Zusaetzliche Bedienelemente in der Kopfzeile (A-14: Sprachwahl). */
+  topbarActions?: React.ReactNode
 }
 
 export function AppShell({
   pathname, linkAs, children,
   userName, userStatus, userInitials, userMenu, version,
-  syncState, mode, onModeChange, context, density = 'default',
+  syncState, mode, onModeChange, context, density = 'default', topbarActions,
 }: AppShellProps) {
   const [kontextOffen, setKontextOffen] = React.useState(true)
 
@@ -81,6 +83,7 @@ export function AppShell({
           onModeChange={onModeChange}
           onToggleContext={context ? () => setKontextOffen(o => !o) : undefined}
           contextOpen={zeigeKontext}
+          actions={topbarActions}
         />
         <div className="v2-content">{children}</div>
       </main>

@@ -12,6 +12,7 @@ import type { Route } from 'next'
 import { usePathname } from 'next/navigation'
 import { createClient } from '@lumeos/shared'
 import { AppShell } from '@lumeos/ui'
+import { Sprachwahl } from '../../components/shell/sprachwahl'
 import { MODE_COOKIE } from '../../styles/themes/registry'
 
 // next/link ist in dieser App typisiert (typedRoutes). Die Huelle im
@@ -62,6 +63,8 @@ export function V2Shell({ children }: { children: React.ReactNode }) {
       userStatus={email ? 'angemeldet' : undefined}
       mode={mode}
       onModeChange={wechsleModus}
+      // A-14: die Sprachwahl sitzt neben Nachtmodus und Kontext.
+      topbarActions={<Sprachwahl />}
       // Die Kontextspalte zeigt hier bewusst KEINE echten Inhalte:
       // Schnellaktionen und Erkenntnisse sind Moduldaten (G-03/G-06),
       // Buddys Text braeuchte einen Modellaufruf. Was die Vorlage dort
