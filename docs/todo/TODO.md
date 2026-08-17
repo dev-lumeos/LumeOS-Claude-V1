@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `13b0a89` auf `dev`.
+**Stand:** 2026-08-17, Anker `c73d1f4` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 53 offen, 3 in Arbeit.
+`[cmd]` 54 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -187,6 +187,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-12** | Die Suche in die Erfassung einbinden |  |
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
+| **G-18** | Die Schrift fehlt |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 
 ---
@@ -1668,6 +1669,51 @@ Umsetzen angepasst werden.
   eine Verlinkung zwischen Dashboard und Tagebuch — **deshalb noch
   nicht dringend.** Es wird dringend, sobald das Dashboard
   datumsabhaengige Kacheln bekommt.
+
+- [ ] **G-18: Die Schrift fehlt** (neu 2026-08-17). **Tom, 2026-08-17:**
+  *„Es ist schlechter lesbar als die Vorgabe."*
+
+  **Es liegt nicht an der Deckkraft.** `[cmd]` Die Farbtokens sind
+  identisch mit der Vorlage — `--fg-dim 0.420`, `--fg-muted 0.720`,
+  Wert für Wert.
+
+  `[cmd]` **Es liegt daran, dass `--font-sans` nicht existiert.** Die
+  Vorlage setzt `--font-sans: 'Inter', -apple-system, system-ui,
+  sans-serif` und laedt Inter ueber `fonts.googleapis.com`. In diesem
+  Repo definiert `lume.css` **nur `--font-mono`** — und `v2.css`
+  benutzt `var(--font-sans)`, eine Variable ohne Definition.
+
+  **Damit faellt die Schrift auf die Browservorgabe zurueck**, unter
+  Windows meist eine Serifenschrift. Genau das ist in Toms
+  Bildschirmfotos zu sehen: „Nutrition", „Tagebuch", „Mahlzeiten
+  erfassen" stehen mit Serifen. **Bei kleinen Groessen auf dunklem Grund
+  wirkt das duenner und unruhiger — unabhaengig von der Farbe.**
+
+  ### Woher es kommt
+
+  `[read]` Entscheidung aus G-01: *„Nicht uebernommen: der Font-Import
+  von `fonts.googleapis.com` — `apps/web` laedt keine externen
+  Schriften; das waere eine fremde Abhaengigkeit im kritischen Pfad
+  gewesen."*
+
+  **Die Begruendung war richtig, die Folge nicht bedacht:** Der Import
+  fiel weg, `--font-sans` wurde nie ersetzt.
+
+  ### Die Loesung ohne externe Abhaengigkeit
+
+  `[cmd]` `apps/web` ist Next.js — **`next/font/google` laedt Inter beim
+  Bauen herunter und liefert sie vom eigenen Server aus.** Keine Anfrage
+  an Google zur Laufzeit, kein zusaetzlicher Verbindungsaufbau. Das ist
+  der Standardweg fuer genau diesen Fall.
+
+  `[cmd]` Dasselbe gilt fuer `JetBrains Mono` — die Vorlage setzt es als
+  `--font-mono`, hier steht `ui-monospace, SFMono-Regular, Menlo, …`.
+  **Pruefen, ob das gewollt ist**: Systemschriften sind hier vertretbar,
+  weil Monospace ueberall aehnlich aussieht.
+
+  **Danach neu beurteilen.** `[Wahrscheinlich]` Damit erledigt sich der
+  Lesbarkeitseindruck; falls dann noch etwas zu blass ist, sind es die
+  Tokens — und die lassen sich gezielt anfassen.
 
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
