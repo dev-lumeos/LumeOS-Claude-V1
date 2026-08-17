@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-16, Anker `2b447cb` auf `dev`.
+**Stand:** 2026-08-17, Anker `42b6b13` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 47 offen, 5 in Arbeit.
+`[cmd]` 49 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -138,6 +138,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-11** | Specs laufend zu SSOT konsolidieren | ~ |
 | **A-12** | Das Spec-Audit auswerten |  |
 | **A-13** | Das Konsolidierungsregister abarbeiten |  |
+| **A-14** | i18n einführen und fortlaufend pflegen |  |
+| **A-15** | Sprachpflege als laufende Regel |  |
 | **B-20** | Codex-Pfadschutz wiederherstellen | ~ |
 | **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
 | **C-01** | Frontend-Stack-Lücke schliessen |  |
@@ -346,6 +348,76 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
   `[cmd]` **Nächste Kandidaten**, weil ihre Module anstehen:
   `SPEC_09_SCORING.md` (C-49), die Preferences-Specs (G-11), und die
   Planner-/Meal-plans-Specs.
+
+- [ ] **A-14: i18n einführen und fortlaufend pflegen** (neu 2026-08-17).
+  **Vor jedem weiteren Oberflächenauftrag.**
+
+  **Tom, 2026-08-17:** *„Ich sehe ein Mischmasch an Sprachen. Wir müssen
+  sofort das i18n-Konzept mit einbinden und fortlaufend pflegen bei der
+  Entwicklung."*
+
+  `[cmd]` Die Oberfläche mischt heute in derselben Zeile: Tabs
+  `Diary · Insights · Nutrients · Food DB`, darunter `Mahlzeiten
+  erfassen · Fruehstueck · Positionen`. **In `apps/web` gibt es keine
+  i18n-Schicht.**
+
+  ### Die Regel
+
+  **Englisch und Deutsch werden befüllt.** Thai wird **vorgesehen** und
+  bei Bedarf nachgezogen — dafür wird ein Übersetzungsauftrag vergeben.
+
+  **Jeder neue Text geht durch die Schicht**, ab sofort. Kein Text mehr
+  fest in einer Komponente.
+
+  ### Das Vorgängerrepo hat es vollständig
+
+  `[cmd]` `referenz/lumeos-2026/src/i18n/`:
+
+  | | |
+  |---|---|
+  | `translations/de.ts` | **55 KB** |
+  | `translations/th.ts` | **50 KB** — Thai ist zu grossen Teilen übersetzt |
+  | `translations/en.ts` | 31 KB |
+  | `useTranslation.ts` | **Eigenbau**, keine Bibliothek |
+  | `apps/admin/…/i18n/page.tsx` | 12 KB — **Verwaltungsoberfläche für Übersetzungen** |
+
+  `[cmd]` Durchgehend in allen Modulen benutzt. **Englisch ist dort die
+  dünnste Sprache**, nicht Deutsch.
+
+  ### Zu entscheiden, bevor gebaut wird
+
+  - **Eigenbau übernehmen oder Bibliothek?** `[cmd]` Der Vorgänger hat
+    einen eigenen `useTranslation`; `apps/web` ist Next.js App Router,
+    wo `next-intl` verbreitet ist. **Der Eigenbau ist erprobt und
+    schemafrei** — die Bibliothek bringt Routing je Sprache mit.
+  - **Wohin die Sprache des Nutzers?** `[cmd]` `public.profiles` trägt
+    seit GO-01 sechs Felder; eine `locale`-Spalte wäre die siebte.
+  - **Was mit den 50 KB Thai?** Sie sind für ein anderes Schema
+    geschrieben — **prüfen, wie viel übertragbar ist**, bevor jemand neu
+    übersetzt.
+  - **Und die Datenbank?** `[cmd]` `nutrition.foods` führt `name_de`,
+    `name_en`, `name_th` und `name_display_de`, `name_display_en`,
+    `name_display_th` — **`name_th` ist bei allen 7.140 leer.** Die
+    Struktur steht, die Inhalte fehlen. Das ist ein eigener Punkt.
+
+  ### Sprachauswahl in Settings
+
+  Teil dieses Punktes. `[cmd]` `/v2/settings` steht seit GO-01; die
+  Auswahl gehört dorthin.
+
+- [ ] **A-15: Sprachpflege als laufende Regel** (neu 2026-08-17). Folgt
+  auf A-14.
+
+  **Jeder Auftrag, der Text erzeugt, füllt Englisch und Deutsch.** Thai
+  bleibt leer, bis ein Übersetzungsauftrag läuft.
+
+  **Eine Prüfung, die das hält:** `[cmd]` Nach dem Muster von
+  `tools/encoding-pruefen.mjs` — ein Schlüssel, der in `de` fehlt oder
+  in `en` fehlt, lässt das Gate fehlschlagen. Thai wird gezählt, nicht
+  erzwungen.
+
+  `[read]` Ohne die Prüfung verlässt es sich auf Disziplin — und daran
+  ist in diesem Projekt schon dreimal etwas gescheitert.
 
 
 ## B — Entwicklungsumgebung & Absicherung
