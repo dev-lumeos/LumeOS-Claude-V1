@@ -4564,3 +4564,50 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   **Keine Koerperfettformel** — `[read]` Jackson-Pollock, Durnin und
   Navy liegen im Vorgaengerrepo (51 Fundstellen), **welche gilt, ist eine
   Entscheidung fuer Tom.**
+
+- [x] **G-36: Medical als Mockup** (erledigt 2026-08-17).
+
+  `[cmd]` `/v2/medical` steht: zehn Dateien, 3.209 Zeilen, **21 Kacheln,
+  alle markiert.** Gate 8/8, 214 Tests, 1 Konsolenfehler (Normalwert).
+
+  ### Das fuenfte Muster — und der Grund, warum es auffiel
+
+  `[cmd]` `app.jsx:124` waehlt `MedicalModuleV2`, gesetzt ueber
+  `Object.assign(window, …)` in `-v2.jsx:818`. **Der alte Rahmen (809
+  Zeilen) ist toter Notnagel** — wie bei Recovery.
+
+  **Die zweite Ebene faellt anders aus als bei Goals.** `[cmd]` Ein
+  `window.`-Grep in `-v2.jsx` findet **nichts**. Nach dem Goals-Muster
+  hiesse das „steht allein" — **das ist falsch:** Der Rahmen ruft acht
+  Modale und zwanzig Datennamen als **blosse Globale** auf
+  (`<BiomarkerDetailModal/>`), weil alle vier Dateien in denselben
+  Skript-Gueltigkeitsbereich geladen werden.
+
+  `[read]` **Wer nur nach `window.` greppt, baut acht Modale und den
+  halben Datenbestand nicht.** — **Sieben Module, fuenf Muster.**
+
+  `[cmd]` **`-data.jsx` ist tatsaechlich neu** — die erste reine
+  Datendatei einer Vorlage: 48 Biomarker mit LOINC, Doppelbereich,
+  Verlauf. Extrahiert, nicht abgetippt.
+
+  ### Die Zaehlung: 56 von 56
+
+  `[cmd]` Das Skript zaehlt **Kacheltitel, nicht nur
+  Komponentennamen** — und das war noetig: **drei von fuenf Tabs melden
+  „0 Unterkomponenten"**, weil Medical seine Kacheln inline setzt.
+
+  `[read]` *„Ein reines Namenszaehlen haette gruen gemeldet, waehrend
+  vier von fuenf Kacheln fehlen — genau der Supplements-Fehler."* Beim
+  ersten Lauf nannte es die 16 zu bauenden Titel.
+
+  `[read]` **Die verbleibende Luecke, selbst benannt:** *„es prueft
+  Namen und Titel, nicht Inhalt."*
+
+  ### Geprueft, nicht angenommen
+
+  `[cmd]` **Keine Hydrationsfalle** — weder `Math.random()` noch
+  `Date.now()` in den vier Dateien, anders als bei Goals.
+
+  `[cmd]` Der Doppelbereich funktioniert nachweisbar: Glucose 102 ueber
+  Laborgrenze 99 → „High"; HbA1c 5,4 % im Labor-, aber ueber dem
+  Optimalband → „Normal".

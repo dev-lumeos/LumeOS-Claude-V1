@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `5b907a8` auf `dev`.
+**Stand:** 2026-08-17, Anker `459a09b` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 71 offen, 3 in Arbeit.
+`[cmd]` 73 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -206,6 +206,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-37** | Supplements an den Katalog anschliessen |  |
 | **GO-14** | Welche Koerperfettformel gilt |  |
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
+| **C-69** | Medical-Schema |  |
+| **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
 
 ---
 
@@ -2093,3 +2095,37 @@ Umsetzen angepasst werden.
   wirkungslose Division** enthaelt (W-8) — **stehen gelassen, weil es
   Toms Entwurf ist.** Beim Bau der echten Rechnung ist das die Stelle,
   an der entschieden werden muss.
+
+- [ ] **C-69: Medical-Schema** (neu 2026-08-17). Befund aus G-36.
+
+  `[cmd]` **Kein `medical`-Schema** — alle 21 Kacheln sind Attrappe.
+
+  **Der Fundus ist der groesste bisher:** `[cmd]` **selbst gemessen**
+  (die Pfade im Auftrag stimmten nicht — die Dateien liegen unter
+  `src/modules/medical/data/`):
+
+  | | |
+  |---|---|
+  | `biomarkerSynonyms.ts` | **457 Synonympaare auf 91 kanonische Namen, davon 18 auf Thai** |
+  | `biomarkerDetails.ts` | **242 Eintraege, 1.563 Zeilen** |
+  | `015_medical.sql` | 7 Tabellen, teils anders benannt als `SPEC_06` |
+
+  `[read]` **Die Synonymtabelle ist exakt das, was der Import-Tab
+  voraussetzt** — der Uploadtext der Vorlage wirbt mit *„German,
+  English, Thai lab formats supported"*. **Und die 18 Thai-Eintraege
+  sind der einzige Thai-Bestand im ganzen Projekt neben den 961
+  i18n-Schluesseln.**
+
+  `[cmd]` **Der Spec-Widerspruch ist bestaetigt:** `SPEC_06` hat 8
+  `CREATE TABLE`; `UserMedicalInsight` und `UserHealthReport` kommen in
+  `SPEC_02` **4-mal** vor, in `SPEC_06` **0-mal**. `[read]` Das ist der
+  haerteste Befund des Spec-Audits, und er gilt.
+
+- [ ] **G-39: Zwei Symbole fehlen (`shield`, `file`)** (neu 2026-08-17).
+  Befund aus G-36.
+
+  `[cmd]` `shield` **zweimal, an der sichtbarsten Stelle** → ersetzt
+  durch `admin`; `file` → `copy`. `packages/ui` war gesperrt.
+
+  `[read]` Dritter Fund dieser Art nach G-20 (fuenf Symbole) und G-21.
+  **`arr_r` nicht uebernommen** — ein Test haelt das fest.
