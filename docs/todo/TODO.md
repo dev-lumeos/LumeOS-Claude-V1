@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `42b6b13` auf `dev`.
+**Stand:** 2026-08-17, Anker `8fe025e` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 49 offen, 5 in Arbeit.
+`[cmd]` 53 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -178,6 +178,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-54** | `display_tier` als Ordnung der Anzeige benutzen |  |
 | **C-52** | Zwei essenzielle Fettsäuren ohne Ziel und ohne Bewertung |  |
 | **C-53** | Elf Nährstoffe erreichen die Bewertung nicht |  |
+| **C-59** | Mahlzeiten mehrfach je Typ |  |
+| **C-60** | Die Vorgabeportion ist wertlos |  |
+| **C-61** | Mahlzeiten haben keine Uhrzeit |  |
 | **GO-01** | Goals | ~ |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-05** | Dashboard |  |
@@ -186,6 +189,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-10** | `btn-accent` auf Seiten ohne Modulakzent |  |
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-12** | Die Suche in die Erfassung einbinden |  |
+| **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 
 ---
 
@@ -1459,6 +1463,54 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   **Die GO-00-Reparatur deckt sie trotzdem ab** — sie greift beim
   Aufnehmen, nicht danach.
 
+- [ ] **C-59: Mahlzeiten mehrfach je Typ** (neu 2026-08-17).
+  **Tom, 2026-08-17:** *„Ein Snack ist keine fixierte Mahlzeit, das muss
+  multiple erfassbar werden."*
+
+  `[cmd]` `meals` traegt einen `UNIQUE`-Index auf
+  `(user_id, entry_date, meal_type)` — **zwei Snacks am selben Tag sind
+  nicht speicherbar.** Die Designvorlage fuehrt genau das: `10:14 Snack`
+  und `16:00 Snack`.
+
+  `[cmd]` Beim Bau von G-12 wurde der zweite behelfsweise als
+  `Post-workout` gefuehrt — gemeldet, nicht entschieden.
+
+  **Zu klaeren:** `[cmd]` Ohne Uhrzeit sind zwei Mahlzeiten desselben
+  Typs nicht unterscheidbar und nicht sortierbar (C-61). `Same as
+  yesterday` muss bei mehreren gleichen Typs die richtige treffen.
+  `daily_summary` rechnet ueber alle Positionen des Tages und ist nicht
+  betroffen — pruefen.
+
+- [ ] **C-60: Die Vorgabeportion ist wertlos** (neu 2026-08-17).
+  **Tom, 2026-08-17:** *„Die Portionen muessen in die Auswahl mit rein
+  als logische Vorwahl."*
+
+  `[cmd]` **Bei 7.043 von 7.048 Lebensmitteln heisst die Vorgabeportion
+  „100 g".** Nur fuenf haben etwas anderes. Die Erfassung schlaegt
+  deshalb immer „100 g" vor — auch bei Brot, wo `[cmd]` 1.333 Eintraege
+  „1 Scheibe 30 g" danebenliegen.
+
+  `[read]` Bei C-50 war richtig, dass **Gramm kanonisch** bleibt — die
+  Darstellung im Tagebuch in Gramm ist korrekt (Tom bestaetigt). **Fuer
+  die Vorauswahl beim Erfassen ist sie falsch.**
+
+  **Was zu tun ist:** Je Lebensmittel die logischste Portion als Vorgabe
+  markieren — bei Brot die Scheibe, bei Eiern das Stueck, bei Oel den
+  Essloeffel. `[cmd]` Die Daten liegen in `daten/portionen.json`; es ist
+  eine Frage der Markierung, nicht der Erhebung. `[annahme]` Wo keine
+  sinnvollere Portion existiert (Gewuerze, Zutaten), bleibt „100 g".
+
+- [ ] **C-61: Mahlzeiten haben keine Uhrzeit** (neu 2026-08-17).
+  Voraussetzung fuer C-59.
+
+  `[cmd]` `meals` fuehrt nur `entry_date`. Die Vorlage zeigt
+  `07:42 Breakfast`, `10:14 Snack`, `13:08 Lunch` — **die Spalte steht
+  in der Umsetzung an ihrer Stelle und zeigt `—`.**
+
+  **Zu entscheiden:** Zeitpunkt der Erfassung oder des Essens?
+  `[Wahrscheinlich]` Letzteres — wer abends nachtraegt, meint nicht
+  22 Uhr. Dann braucht es eine Eingabe, keinen Zeitstempel.
+
 
 - [~] **GO-01 bis GO-17: Goals** (neu 2026-08-15). **Block A zu vier
   Fünfteln erledigt.**
@@ -1691,3 +1743,38 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Der Schreibpfad steht** (C-03), die Portionsspalten auch
   (C-51). Es fehlt die Verbindung.
+
+- [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
+  2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
+  Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
+  weisser Reis anstatt Reis poliert."*
+
+  **Der Dialog zeigt den falschen Namen.** `[cmd]` Er zeigt
+  `Reis poliert, roh` — das ist `name_de`, der amtliche BLS-Wortlaut.
+  **`name_display_de` sagt `Weisser Reis (roh)`.**
+
+  `[cmd]` `food_search` liefert **beide Felder**, und
+  `lib/nutrition/food-search.ts` kennt beide — **der Dialog greift auf
+  das falsche zu.** Ein Anzeigefehler, keine fehlende Datenbasis.
+  `[read]` Damit ist die Arbeit von C-39 und C-41 unsichtbar: 7.140
+  Anzeigenamen, davon 2.870 abweichend vom amtlichen Namen.
+
+  **Was sonst fehlt:** `[cmd]` `food_search` nimmt `p_category_slug`,
+  `p_category_id`, `p_tag_code` und `p_sort` entgegen — der Dialog
+  nutzt nichts davon.
+
+  | | |
+  |---|---|
+  | Filter nach Kategorie | `[cmd]` 518 Kategorien |
+  | Filter nach Tag | `[cmd]` 11 vergebene — `whole_food` 2.884, `vegan` 1.377 |
+  | Aliase | `[cmd]` 32.845 in vier Herkuenften |
+  | Sortierung | `sort_weight`, 95 Stufen |
+
+  `[cmd]` Die Suchseite unter `Food DB` nutzt einen Teil davon; **der
+  Dialog faengt bei null an.**
+
+  **Portionen als Vorwahl:** `[cmd]` Heute zeigt die Auswahl
+  `100 g (100 g) · Vorgabe` — **das ist C-60 und wird in den Daten
+  behoben.** Der Dialog zeigt nur die Vorgabe; stimmt sie, stimmt die
+  Vorauswahl. `[read]` Tom: *„die Darstellung danach in der View in
+  Gramm ist korrekt."*
