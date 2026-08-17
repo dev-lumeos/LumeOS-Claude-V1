@@ -94,6 +94,43 @@ Frage neu gestellt; während gebaut wird, zählt das Gesamtbild.
 
 ---
 
+### Vollstaendigkeit wird gezaehlt, nicht angesehen
+
+**Tom, 2026-08-17, nach dem Supplements-Mockup:** *„Was ist daran so
+schwer? Wir haben eine Designvorlage, du pruefst vorher gegen Spec und
+altes Repo, ob alles vorhanden ist, und Claude dupliziert das rein als
+Attrappe."*
+
+`[cmd]` **Der Fehler lag im Nachweis.** Die Auftraege verlangten *„alle
+Tabs durchgeklickt, Bildschirmfoto neben die Vorlage"* — **das prueft,
+ob eine Seite erscheint, nicht ob sie vollstaendig ist.** Wer sieben
+Tabs baut und je Tab die Haelfte der Unterkomponenten, besteht diesen
+Nachweis.
+
+`[cmd]` Belegt bei Supplements: Vorlage **1.605 Zeilen**, Umsetzung
+**708**. `SuppCost` 115 gegen 60. Und `SuppExtended` ruft in der Vorlage
+sieben Unterkomponenten auf — `ExtendedGate`, `ExtendedHeader`,
+`ExtendedCompoundCard`, `CycleTimeline`, `SideEffectLog`,
+`BloodworkPanel`, Sichtbarkeitskarte.
+
+**Der Tab-Rumpf ist nicht das Modul.**
+
+### Der Pflichtnachweis
+
+**Ein Skript, das je Tab die von der Vorlage aufgerufenen Komponenten
+gegen die Umsetzung zaehlt — nach Namen, nicht nach Zeilen.** Fehlende
+gehoeren in den Bericht, jede mit Grund.
+
+`[read]` Das ist mechanisch pruefbar und laesst sich nicht mit *„sieht
+gut aus"* bestehen. **Dieselbe Logik wie bei `v2-attrappen.test.ts`:
+keine Kachel verschwindet still.**
+
+**Gilt fuer jeden Mockup-Auftrag**, und nachtraeglich fuer die bereits
+gebauten — `[cmd]` Dashboard, Nutrition, Training und Recovery wurden
+ohne diese Zaehlung abgenommen.
+
+---
+
 ### Die Regel
 
 **Übernehmen, nicht nachempfinden** — dieselbe Regel wie beim
