@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `434c1f0` auf `dev`.
+**Stand:** 2026-08-17, Anker `6700f94` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 62 offen, 3 in Arbeit.
+`[cmd]` 65 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -197,6 +197,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-27** | `v2-rec-grid-1135` und drei weitere Raster |  |
 | **G-30** | Recovery an die Check-ins anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
+| **G-31** | Die fuenf fehlenden Supplements-Tabs |  |
+| **C-68** | Supplements-Schema |  |
+| **G-32** | `refillUrgent` ist an einem von neun Eintraegen gesetzt |  |
 
 ---
 
@@ -1908,3 +1911,50 @@ Umsetzen angepasst werden.
   `zielwerte_am` gibt sie zum Stichtag aus.
 
   **Angebunden heisst: Marke weg.**
+
+- [ ] **G-31: Die fuenf fehlenden Supplements-Tabs** (neu 2026-08-17).
+  Rest aus G-29.
+
+  `[cmd]` Catalog, Stacks, Intelligence, Inventory (alle aus
+  `module-supplements-spec.jsx`, 72 KB) und Injections (aus
+  `-injection.jsx`, 36 KB).
+
+  `[cmd]` **Sie stehen bereits in der Tab-Leiste** und sagen an ihrer
+  Stelle, woher sie kaemen — die Leiste ist ehrlich, nur unvollstaendig.
+
+  `[read]` **Injections ist der interessanteste:** Das Vorgaengerrepo hat
+  dazu `CyclePlanner.tsx` und `BloodLevelChart.tsx` mit **28 Fundstellen
+  zu Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
+  mit `half_life_hours`. **Das deckt genau diesen Tab ab.**
+
+  `[cmd]` Und die Muskelkarte aus G-26 traegt `renderInjection` mit
+  Rotation — **sie ist fuer diesen Tab gebaut.**
+
+- [ ] **C-68: Supplements-Schema** (neu 2026-08-17). Befund aus G-29.
+
+  `[cmd]` **Kein `supplements`-Schema** — wie bei Recovery vor `120`.
+  Alle Kacheln sind Attrappe.
+
+  **Der Fundus ist groesser als erwartet:** `[cmd]`
+  `referenz/lumeos-2026/` hat **acht Tabellen in drei Migrationen**
+  (`008_supplements.sql`, `050_supplements_schema_expansion.sql`), einen
+  **Seed mit 35,9 KB — mehr Wirkstoffe als die Vorlage** — und **15
+  Komponenten**.
+
+  `[cmd]` **Halbwertszeit in fuenf Dateien**, darunter
+  `useBloodLevels.ts` mit `half_life_hours`.
+
+  `[read]` Das ist dieselbe Lage wie bei den Portionen und den
+  TDEE-Formeln: **eine Uebernahme, keine Neuentwicklung.**
+
+- [ ] **G-32: `refillUrgent` ist an einem von neun Eintraegen gesetzt**
+  (neu 2026-08-17). Befund aus G-29.
+
+  `[cmd]` Das Feld wird **an drei Stellen gelesen**, ist aber nur an
+  einem der neun Praeparate gesetzt — **acht fallen auf die Warnfarbe
+  zurueck.**
+
+  `[read]` **Uebernommen wie es ist; begradigen waere eine Erfindung.**
+  Richtig so — aber sobald echte Daten kommen, gehoert entschieden, ob
+  das Feld eine Schwelle ist (Bestand unter X Tagen) oder eine
+  Markierung von Hand.

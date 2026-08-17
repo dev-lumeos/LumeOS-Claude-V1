@@ -4375,3 +4375,45 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Regel wie bei `nutrition_targets` in GO-03.
 
   `[cmd]` `pnpm gate` gruen, 8/8.
+
+- [x] **G-29: Supplements als Mockup** (erledigt 2026-08-17).
+  **Teilweise — sieben von zwoelf Tabs, gemeldet statt kaschiert.**
+
+  ### Das vierte Muster
+
+  `[cmd]` `app.jsx:123` sagt: **ein Rahmen, keine V2-Weiche.** Und
+  selbst nachgeprueft statt daraus geschlossen: `-spec.jsx` exportiert
+  **10 Namen**, `-injection.jsx` **3**, und der Rahmen ruft sie mit
+  `window.X && <window.X />` auf — **arbeitsteilig, nicht
+  konkurrierend.** Bei `interactions` gibt es sogar einen Rueckfall auf
+  die eigene Fassung.
+
+  `[read]` **Vier Module, vier Muster:** Nutrition = konkurrierende
+  Fassung, Training = ein System, Recovery = abgeloester Rahmen,
+  Supplements = arbeitsteilig mit Rueckfall.
+
+  ### Was gebaut ist
+
+  `[cmd]` **227 KB waren zu viel fuer einen Durchgang** — wie im
+  Auftrag erlaubt. Gebaut: der Rahmen und seine **sieben eigenen Tabs
+  vollstaendig** — Today (Ring, vier Slot-Karten, Next dose, Refills,
+  Active cycles), Stack, Extended, Database, Compliance, Interactions,
+  Cost.
+
+  **Fuenf Tabs fehlen** — Catalog, Stacks, Intelligence, Inventory
+  (alle `-spec.jsx`) und Injections. `[read]` **Sie stehen in der
+  Tab-Leiste und sagen an ihrer Stelle, woher sie kaemen** — *weglassen
+  haette die Leiste vollstaendig aussehen lassen, obwohl sie es nicht
+  ist.*
+
+  `[cmd]` Die Daten mechanisch extrahiert, 433 Zeilen, **alle Zahlen der
+  Vorlage unveraendert.**
+
+  ### Konsolenfehler: geprueft, nicht angenommen
+
+  `[cmd]` **1 Fehler** — identisch mit `/v2/dashboard`. Die
+  `<title>`-Schreibweise, die bei Recovery 32 erzeugte, **kommt in
+  dieser Vorlage nicht vor** (`grep <title>` = 0).
+
+  `[cmd]` 202 Tests (199 + 3 neue, alle gegengeprobt), drei Breiten ohne
+  Ueberlauf.
