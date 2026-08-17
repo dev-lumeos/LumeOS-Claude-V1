@@ -4611,3 +4611,55 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` Der Doppelbereich funktioniert nachweisbar: Glucose 102 ueber
   Laborgrenze 99 → „High"; HbA1c 5,4 % im Labor-, aber ueber dem
   Optimalband → „Normal".
+
+- [x] **G-12: Die Suche in die Erfassung einbinden** (neu 2026-08-16).
+
+  `[cmd]` Heute liegt die Lebensmittelsuche unter `Food DB` als eigene
+  Seite; die Erfassung im Tagebuch ist davon getrennt. In der Vorlage
+  führt jede Mahlzeitenkarte einen `+`-Knopf und Zeilen wie
+  `MealCam · Search · Same as yesterday`.
+
+  **Was das braucht:** Suche als Auswahlfeld in der Mahlzeitenkarte,
+  Portionsauswahl beim Hinzufügen (`[cmd]` `foods_portions` mit 23.402
+  Zeilen steht bereit), und `Same as yesterday` — das aus dem Vortag
+  kopiert.
+
+  `[cmd]` **Der Schreibpfad steht** (C-03), die Portionsspalten auch
+  (C-51). Es fehlt die Verbindung.
+
+  `[cmd]` **Erledigt 2026-08-17**, Commits `45d82fd` und der
+  Mahlzeitenkarten-Umbau. **Nachtraeglich abgehakt** — der Punkt blieb
+  beim Schliessen liegen.
+
+  `[cmd]` Suchen, Portion waehlen, Menge angeben — **alles in der Karte,
+  ohne Seitenwechsel.** Belegt: „Banane roh" und „Vollkornbrot" mit
+  gefuelltem `portion_name`/`portion_quantity`/`portion_amount_g`,
+  „Haferflocken" ueber direkte Gramm **mit leeren Portionsfeldern.**
+
+  `[cmd]` `search_events` bekam `selected_bls_code` und `selected_rank`
+  (`B101000/1`, `T410072/7`). Ringe sprangen von `—` auf 550/2.500 kcal
+  ohne Neuladen. **`Same as yesterday` uebernahm 4 Positionen vom Vortag
+  mit neu eingefrorenen Naehrwerten.**
+
+- [x] **G-05: Dashboard** (neu 2026-08-15). Setzt G-03 voraus.
+
+  Trägt aus allen Modulen zusammen und ist erst sinnvoll, wenn eines
+  davon echte Daten liefert. Vorlage: `module-dashboard.jsx`.
+
+  `[cmd]` Aus dem Entwurf ablesbar: Readiness-Ring, vier Kennzahlkarten,
+  Tagesverlauf, Makrobalken, Aktivitätsprotokoll. **Die Kennzahlen
+  ausserhalb von Nutrition sind bis dahin Attrappen** — im Bericht
+  benennen, welche.
+
+  `[cmd]` **Erledigt 2026-08-17** — zuerst mit `ed3a4aa` (nur Kacheln
+  mit Datenquelle), dann mit G-09 auf **zwoelf Kacheln, neun
+  gekennzeichnet** umgestellt. **Nachtraeglich abgehakt.**
+
+  `[read]` Der Weg dorthin ist die Lehre: Die erste Fassung liess neun
+  Kacheln weg mit der Begruendung *„eine MOCK-Marke nimmt einer Zahl
+  nicht ihre Wirkung"*. **Tom hat das verworfen** — der Mockup-Hinweis
+  ist der Fortschrittsbalken, und was in einer Attrappe steht, ist
+  gleichgueltig.
+
+  `[cmd]` `v2-attrappen.test.ts` haelt seither fest, dass **keine Kachel
+  still verschwindet.**

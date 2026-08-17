@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `459a09b` auf `dev`.
+**Stand:** 2026-08-17, Anker `0c70437` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 73 offen, 3 in Arbeit.
+`[cmd]` 72 offen, 4 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -178,14 +178,12 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-53** | Elf Nährstoffe erreichen die Bewertung nicht |  |
 | **GO-01** | Goals | ~ |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
-| **G-05** | Dashboard |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
 | **G-07** | Umschalten |  |
 | **G-10** | `btn-accent` auf Seiten ohne Modulakzent |  |
 | **G-11a** | Preferences — die Oberflaeche |  |
 | **C-62** | `hard` auf Allergene ist kein Sicherheitsversprechen |  |
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
-| **G-12** | Die Suche in die Erfassung einbinden |  |
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **G-23** | Der Modulkopf bricht um |  |
 | **G-24** | JetBrains Mono laden |  |
@@ -208,6 +206,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
 | **C-69** | Medical-Schema |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
+| **G-38** | Vollstaendigkeit aller Mockups nachmessen | ~ |
+| **G-40** | Coach als Mockup — zwei Unterbereiche |  |
 
 ---
 
@@ -1532,15 +1532,6 @@ Umsetzen angepasst werden.
   gelten** — sonst zeigt die Oberfläche etwas anderes, als die
   Bewertungsfunktion rechnet.
 
-- [ ] **G-05: Dashboard** (neu 2026-08-15). Setzt G-03 voraus.
-
-  Trägt aus allen Modulen zusammen und ist erst sinnvoll, wenn eines
-  davon echte Daten liefert. Vorlage: `module-dashboard.jsx`.
-
-  `[cmd]` Aus dem Entwurf ablesbar: Readiness-Ring, vier Kennzahlkarten,
-  Tagesverlauf, Makrobalken, Aktivitätsprotokoll. **Die Kennzahlen
-  ausserhalb von Nutrition sind bis dahin Attrappen** — im Bericht
-  benennen, welche.
 
 - [ ] **G-06: Die übrigen Module nach Datenlage** (neu 2026-08-15).
 
@@ -1654,20 +1645,6 @@ Umsetzen angepasst werden.
   den Testdaten gibt es **43 Tage je Nutzer** — das wäre erstmals
   belegbar.
 
-- [ ] **G-12: Die Suche in die Erfassung einbinden** (neu 2026-08-16).
-
-  `[cmd]` Heute liegt die Lebensmittelsuche unter `Food DB` als eigene
-  Seite; die Erfassung im Tagebuch ist davon getrennt. In der Vorlage
-  führt jede Mahlzeitenkarte einen `+`-Knopf und Zeilen wie
-  `MealCam · Search · Same as yesterday`.
-
-  **Was das braucht:** Suche als Auswahlfeld in der Mahlzeitenkarte,
-  Portionsauswahl beim Hinzufügen (`[cmd]` `foods_portions` mit 23.402
-  Zeilen steht bereit), und `Same as yesterday` — das aus dem Vortag
-  kopiert.
-
-  `[cmd]` **Der Schreibpfad steht** (C-03), die Portionsspalten auch
-  (C-51). Es fehlt die Verbindung.
 
 
 
@@ -2129,3 +2106,56 @@ Umsetzen angepasst werden.
 
   `[read]` Dritter Fund dieser Art nach G-20 (fuenf Symbole) und G-21.
   **`arr_r` nicht uebernommen** — ein Test haelt das fest.
+
+- [~] **G-38: Vollstaendigkeit aller Mockups nachmessen** (neu
+  2026-08-17). **In Arbeit.** **Nachtraeglich angelegt** — der Auftrag
+  lief, ohne dass er in der Liste stand.
+
+  `[cmd]` Dashboard, Nutrition, Training, Recovery und Goals wurden
+  abgenommen, **bevor die Zaehlung Pflicht wurde.** Nur Supplements ist
+  geprueft — und dort fehlten in zwei Tabs **15 von 15
+  Unterkomponenten.**
+
+  **Eine Grobmessung liegt vor**, sie reicht nicht: `[cmd]` goals 33/33,
+  training 28/29, dashboard 2/3, **recovery 12/15**, **nutrition 5/16**,
+  supplements 23/54 (davon fuenf Tabs bewusst offen, G-31).
+
+  `[annahme]` Bei Nutrition **koennten** es Umbenennungen sein — die
+  Umsetzung benennt deutsch. **Das Skript kann das nicht
+  unterscheiden.** Bei Recovery fehlen `BodyMap18`, `SILHOUETTE_PATH`,
+  `MuscleDetailModal2` — **die Muskelkarte**, und die wird ohnehin durch
+  G-26 ersetzt.
+
+- [ ] **G-40: Coach als Mockup — zwei Unterbereiche** (neu 2026-08-17).
+  **Nachtraeglich angelegt.**
+
+  **Tom, 2026-08-17:** *„Coach Hauptnavigationspunkt mit 2 Subnav: Human
+  Coaches und AI Coach. Zwei Subnav, weil die optional verfuegbar sein
+  werden."*
+
+  | | |
+  |---|---|
+  | `Coach` → `Human Coaches` | `COACH-HUMAN`, elf Tabs |
+  | `Coach` → `AI Coach` | `COACH-AI`, zwoelf Tabs |
+
+  **Die Sub-Navigation ist hier richtig.** `[read]` Bei Nutrition war
+  sie falsch — dort standen zwei Seiten, wo die Vorlage Tabs fuehrt.
+  **Hier sind es zwei eigenstaendige Bereiche unter einem Menuepunkt**,
+  die spaeter einzeln buchbar sein werden.
+
+  `[read]` **Tom zum AI Coach:** *„Der AI Coach ist ein Teil von
+  Buddy-Logik. Der effektive Endausbau, welcher DER BUDDY als App sein
+  wird, wird viel umfangreicher sein."* — **Das Modul, nicht der
+  Endausbau.**
+
+  `[cmd]` **306 KB, das groesste bisher:** Human Coaches 197 KB in sechs
+  Dateien (`-gaps.jsx` mit 34 KB ist ein Name, den es sonst nirgends
+  gibt), AI Coach 109 KB in vier.
+
+  `[cmd]` **Coach Portal gehoert nicht dazu** — es steht unter
+  `WORKSPACES` als externer Link, seit G-02 so entschieden.
+
+  **Danebenliegend:** `[cmd]` zwei vollstaendige Specsaetze
+  (`HumanCoach` mit **`SPEC_11_UI_DESIGN.md`, das es bei keinem anderen
+  Modul gibt**, und `BuddyandAICoach`), **84 Fundstellen im
+  Vorgaengerrepo**, vier Migrationen.
