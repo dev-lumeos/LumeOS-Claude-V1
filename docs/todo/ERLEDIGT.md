@@ -3854,3 +3854,103 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Knopf ohne Ziel ist schlimmer als kein Knopf* · *im Kopf ist kein
   Platz für eine Marke*. `[read]` Festgehalten in
   `theme-v1-umsetzung.md`.
+
+- [x] **G-15: Die Ansicht kollabiert mehrere Mahlzeiten desselben Typs**
+  (neu 2026-08-17). Folgt aus C-59.
+
+  `[cmd]` Die Datenseite kann seit `052a` zwei Snacks am selben Tag —
+  **die Oberflaeche zeigt sie als einen.** Aus dem Codex-Bericht: *der
+  bestehende Webpfad sortiert nach `created_at`, und die v2-Ansicht
+  fasst über `Map(meal_type)` zusammen.*
+
+  `[cmd]` Live belegt: 2026-08-14 traegt Snacks um 10:14 und 16:00.
+
+  **Was zu aendern ist:** Sortierung nach `meal_time` statt
+  `created_at`, und der Schluessel der Zusammenfassung darf nicht der
+  Typ sein.
+
+  `[read]` Gehoert zu G-14 (Datumsnavigation) — beides betrifft
+  denselben Lesepfad und dieselbe Ansicht.
+
+  `[cmd]` **Erledigt 2026-08-17.** Der Fehler stand in einer Zeile:
+  `new Map(m => [m.meal_type, m])` — **ein Schluessel je Typ, der zweite
+  ueberschrieb den ersten spurlos.**
+
+  `[read]` Die Annahme stammte aus der Zeit des `UNIQUE`-Index; seit
+  `052a` gibt es ihn nicht mehr, **die Ansicht hatte es nicht
+  mitbekommen.**
+
+  `[cmd]` Jetzt eine Karte je Mahlzeit, sortiert nach `meal_time` statt
+  `created_at`, mit Uhrzeit. Am 14.08.: 07:30 Breakfast · 10:14 Snack ·
+  12:30 Lunch · 16:00 Snack · 19:30 Dinner.
+
+- [x] **G-14: Datumsnavigation** (neu 2026-08-17). **Tom, 2026-08-17:**
+  *„Ich sehe nur den heutigen Tag und kann den nicht switchen."*
+
+  **Es funktioniert bereits — die Knöpfe sind nur unsichtbar.** `[cmd]`
+  `?datum=` als Suchparameter, zwei `Link` mit `vortag()` und
+  `folgetag()`. Sie tragen `v2-btn-ghost` und stehen als zwei blasse
+  Pfeile links neben „Lebensmittel suchen“ — kaum vom Hintergrund
+  unterscheidbar.
+
+  `[read]` Derselbe Fall wie der Speichern-Knopf in C-58: **ein Knopf,
+  den man nicht sieht, existiert für den Nutzer nicht.**
+
+  ### Was gegenüber dem Vorgängerrepo fehlt
+
+  `[cmd]` `referenz/lumeos-2026/src/contexts/DateContext.tsx` und
+  `modules/nutrition/components/DateNavigation.tsx`:
+
+  | Vorgängerrepo | hier |
+  |---|---|
+  | `goPrev`, `goNext`, **`goToday`** | nur vor und zurück |
+  | `isToday`-Prüfung, „heute“ hervorgehoben | fehlt |
+  | Datumsauswahl über Kalender | fehlt |
+  | **`DateContext` für alle Module** | nur Nutrition, über die Adresse |
+
+  **Das Datum gehört in einen gemeinsamen Zustand**, nicht je Modul —
+  wer im Tagebuch auf gestern blättert und dann aufs Dashboard wechselt,
+  erwartet dort denselben Tag.
+
+  ### Ein Fund, der weiter reicht als die Anzeige
+
+  `[cmd]` `DateContext.tsx` löst die **Zeitzonenfrage** ausdrücklich:
+  `getLocalDateStr` nimmt `getFullYear`/`getMonth`/`getDate` — **lokal,
+  nicht UTC**. Und beim Blättern `new Date(datum + 'T12:00:00')`, also
+  Mittag, **um Zeitumstellungen zu umgehen**.
+
+  `[cmd]` Die Umsetzung hier nimmt `T00:00:00` — **an
+  Zeitumstellungstagen kippt das um einen Tag.** Für Thailand ohne
+  Sommerzeit folgenlos, für Europa nicht.
+
+  `[read]` Das berührt C-61: Dort ist die Zeitzonenfrage für `meals`
+  gestellt. **Beides gehört zusammen entschieden** — welcher Tag ein
+  Eintrag ist, hängt an derselben Antwort.
+
+  `[cmd]` **Erledigt 2026-08-17.** `‹ Heute ›` als Block mit Rahmen,
+  mittig. „Heute" als Wort — dann ist das Feld kein Knopf; an anderen
+  Tagen `Fr., 14. Aug. 2026`, Klick fuehrt zurueck.
+
+  `[cmd]` **Beide Rollenfaelle belegt:** als `dev@lumeos.app` (Admin)
+  geht vorwaerts und der Zukunftstag meldet sich als solcher; als
+  `test-user@lumeos.local` gesperrt mit *„Kuenftige Tage sind
+  gesperrt."* Die Rolle kommt aus `app_metadata` ueber
+  `isAdminFromAppMetadata` — **dieselbe Funktion wie im Admin-Bereich**,
+  nicht neu gebaut.
+
+  `[cmd]` **Mittag uebernommen:** drei Stellen rechneten ueber
+  Mitternacht und waeren an Zeitumstellungstagen um einen Tag gekippt.
+  Alle laufen jetzt ueber `lib/datum.ts`.
+
+  ### Der gemeinsame Datumszustand kommt nicht — begruendet
+
+  `[read]` *Der Kontext des Vorgaengers laesst sich nicht uebernehmen:
+  dort ein Router-Zustand im Browser, hier Serverkomponenten je Route.
+  Ein Browser-Kontext wuesste das Datum, der Server nicht — zwei
+  Wahrheiten. Ein Cookie waere serverseitig richtig, aber ein Datum, das
+  sich ueber Tage merkt, ist eines, das man vergisst.*
+
+  **Der Weg ist, das Datum beim Modulwechsel im Link mitzugeben.**
+  `[cmd]` Heute gibt es genau eine Verlinkung zwischen Dashboard und
+  Tagebuch. **Sobald das Dashboard datumsabhaengige Kacheln bekommt,
+  kippt das** — dann gehoert es als Suchparameter gebaut.

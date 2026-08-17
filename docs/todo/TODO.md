@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `c4abd94` auf `dev`.
+**Stand:** 2026-08-17, Anker `3cec380` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 56 offen, 3 in Arbeit.
+`[cmd]` 55 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -188,8 +188,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-62** | `hard` auf Allergene ist kein Sicherheitsversprechen |  |
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-12** | Die Suche in die Erfassung einbinden |  |
-| **G-14** | Datumsnavigation |  |
-| **G-15** | Die Ansicht kollabiert mehrere Mahlzeiten desselben Typs |  |
+| **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 
 ---
@@ -1683,65 +1682,25 @@ Umsetzen angepasst werden.
   `[cmd]` **Der Schreibpfad steht** (C-03), die Portionsspalten auch
   (C-51). Es fehlt die Verbindung.
 
-- [ ] **G-14: Datumsnavigation** (neu 2026-08-17). **Tom, 2026-08-17:**
-  *„Ich sehe nur den heutigen Tag und kann den nicht switchen."*
 
-  **Es funktioniert bereits — die Knöpfe sind nur unsichtbar.** `[cmd]`
-  `?datum=` als Suchparameter, zwei `Link` mit `vortag()` und
-  `folgetag()`. Sie tragen `v2-btn-ghost` und stehen als zwei blasse
-  Pfeile links neben „Lebensmittel suchen“ — kaum vom Hintergrund
-  unterscheidbar.
 
-  `[read]` Derselbe Fall wie der Speichern-Knopf in C-58: **ein Knopf,
-  den man nicht sieht, existiert für den Nutzer nicht.**
+- [ ] **G-17: Datum beim Modulwechsel mitgeben** (neu 2026-08-17). Rest
+  aus G-14.
 
-  ### Was gegenüber dem Vorgängerrepo fehlt
+  `[cmd]` Heute lebt das Datum nur in der Nutrition-Adresse. Wer im
+  Tagebuch auf gestern blaettert und aufs Dashboard wechselt, sieht dort
+  wieder heute.
 
-  `[cmd]` `referenz/lumeos-2026/src/contexts/DateContext.tsx` und
-  `modules/nutrition/components/DateNavigation.tsx`:
+  `[read]` **Ein gemeinsamer Zustand wurde geprueft und verworfen:** Der
+  Kontext des Vorgaengers ist ein Browser-Zustand, hier gibt es
+  Serverkomponenten je Route — ein Browser-Kontext wuesste das Datum,
+  der Server nicht. Ein Cookie waere serverseitig richtig, **aber ein
+  Datum, das sich ueber Tage merkt, ist eines, das man vergisst.**
 
-  | Vorgängerrepo | hier |
-  |---|---|
-  | `goPrev`, `goNext`, **`goToday`** | nur vor und zurück |
-  | `isToday`-Prüfung, „heute“ hervorgehoben | fehlt |
-  | Datumsauswahl über Kalender | fehlt |
-  | **`DateContext` für alle Module** | nur Nutrition, über die Adresse |
-
-  **Das Datum gehört in einen gemeinsamen Zustand**, nicht je Modul —
-  wer im Tagebuch auf gestern blättert und dann aufs Dashboard wechselt,
-  erwartet dort denselben Tag.
-
-  ### Ein Fund, der weiter reicht als die Anzeige
-
-  `[cmd]` `DateContext.tsx` löst die **Zeitzonenfrage** ausdrücklich:
-  `getLocalDateStr` nimmt `getFullYear`/`getMonth`/`getDate` — **lokal,
-  nicht UTC**. Und beim Blättern `new Date(datum + 'T12:00:00')`, also
-  Mittag, **um Zeitumstellungen zu umgehen**.
-
-  `[cmd]` Die Umsetzung hier nimmt `T00:00:00` — **an
-  Zeitumstellungstagen kippt das um einen Tag.** Für Thailand ohne
-  Sommerzeit folgenlos, für Europa nicht.
-
-  `[read]` Das berührt C-61: Dort ist die Zeitzonenfrage für `meals`
-  gestellt. **Beides gehört zusammen entschieden** — welcher Tag ein
-  Eintrag ist, hängt an derselben Antwort.
-
-- [ ] **G-15: Die Ansicht kollabiert mehrere Mahlzeiten desselben Typs**
-  (neu 2026-08-17). Folgt aus C-59.
-
-  `[cmd]` Die Datenseite kann seit `052a` zwei Snacks am selben Tag —
-  **die Oberflaeche zeigt sie als einen.** Aus dem Codex-Bericht: *der
-  bestehende Webpfad sortiert nach `created_at`, und die v2-Ansicht
-  fasst über `Map(meal_type)` zusammen.*
-
-  `[cmd]` Live belegt: 2026-08-14 traegt Snacks um 10:14 und 16:00.
-
-  **Was zu aendern ist:** Sortierung nach `meal_time` statt
-  `created_at`, und der Schluessel der Zusammenfassung darf nicht der
-  Typ sein.
-
-  `[read]` Gehoert zu G-14 (Datumsnavigation) — beides betrifft
-  denselben Lesepfad und dieselbe Ansicht.
+  **Der Weg: als Suchparameter im Link.** `[cmd]` Heute gibt es genau
+  eine Verlinkung zwischen Dashboard und Tagebuch — **deshalb noch
+  nicht dringend.** Es wird dringend, sobald das Dashboard
+  datumsabhaengige Kacheln bekommt.
 
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
