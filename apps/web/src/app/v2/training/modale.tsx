@@ -288,21 +288,17 @@ function ExerciseEditorRow({ ex, idx, updEx, moveEx, delEx }: {
       <TInput value={ex.rir} aria-label="RIR" onChange={e => updEx(idx, 'rir', e.target.value)} />
       <TInput value={`${ex.restSec}s rest`} aria-label="Rest" readOnly />
       <div style={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-        {/* ABWEICHUNG MIT GRUND: die Vorlage nimmt hier `chevron_up` /
-            `chevron_down`. `[cmd]` `chevron_up` fehlt im Symbolsatz von
-            packages/ui (icons.tsx fuehrt chevron_down, chevron_left,
-            chevron_right — kein chevron_up). Ergaenzt wird es nicht:
-            G-16 sperrt packages/ui. Genommen ist das vorhandene Paar
-            `arrow_up` / `arrow_down`, damit beide Knoepfe zueinander
-            passen — ein Chevron neben einem Pfeil waere schlechter als
-            zwei Pfeile. Gemeldet im Bericht. */}
+        {/* G-20: zurueck auf die Symbole der Vorlage. `chevron_up`
+            fehlte im Symbolsatz und ist jetzt da — der Ersatz durch
+            `arrow_up`/`arrow_down` aus G-16 (packages/ui war gesperrt)
+            entfaellt damit. */}
         <button type="button" className="v2-icon-btn" onClick={() => moveEx(idx, -1)}
                 title="Move up" aria-label="Move up">
-          <Icon name="arrow_up" className="v2-ic v2-ic-sm" />
+          <Icon name="chevron_up" className="v2-ic v2-ic-sm" />
         </button>
         <button type="button" className="v2-icon-btn" onClick={() => moveEx(idx, 1)}
                 title="Move down" aria-label="Move down">
-          <Icon name="arrow_down" className="v2-ic v2-ic-sm" />
+          <Icon name="chevron_down" className="v2-ic v2-ic-sm" />
         </button>
         <button type="button" className="v2-icon-btn" onClick={() => delEx(idx)}
                 title="Delete" aria-label="Delete">

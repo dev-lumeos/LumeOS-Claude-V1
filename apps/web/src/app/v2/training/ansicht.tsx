@@ -148,7 +148,7 @@ function TrainingToday({ onStart }: { onStart: () => void }) {
   }
 
   return (
-    <div className="v2-train-grid-14">
+    <div className="v2-grid-14">
       <div className="v2-col-gap" style={{ gap: 16 }}>
         <Card attrappe={ATTRAPPE}>
           <div className="v2-train-session-kopf">
@@ -361,7 +361,7 @@ function StreakHeatmap() {
 function TrainingPlan() {
   const t = React.useContext(TrainingKontext)
   return (
-    <div className="v2-train-grid-11">
+    <div className="v2-grid v2-g-cols-2">
       <Card
         title="Mesocycle · Block 3" sub="May 5 — Jun 8 · 5 weeks"
         attrappe={ATTRAPPE}
@@ -467,7 +467,7 @@ function TrainingHistory() {
   const lifts = ['Bench Press', 'Squat', 'Deadlift', 'OHP']
   const [active, setActive] = React.useState(lifts[0])
   return (
-    <div className="v2-train-grid-21">
+    <div className="v2-grid-21">
       <Card
         title={`${active} · e1RM progression`}
         sub="last 12 weeks"
@@ -517,7 +517,7 @@ function TrainingHistory() {
         </div>
       </Card>
 
-      <Card title="Volume by muscle · 4 wks" attrappe={ATTRAPPE} className="v2-train-span-2">
+      <Card title="Volume by muscle · 4 wks" attrappe={ATTRAPPE} className="v2-span-2">
         <div className="v2-train-vol-tbl">
           <div className="v2-eyebrow">Muscle</div>
           <div className="v2-eyebrow">Distribution</div>
@@ -545,7 +545,7 @@ function TrainingHistory() {
         </div>
       </Card>
 
-      <div className="v2-train-span-2"><TrainingBodyStatsCorrelation /></div>
+      <div className="v2-span-2"><TrainingBodyStatsCorrelation /></div>
     </div>
   )
 }

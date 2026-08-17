@@ -90,7 +90,7 @@ export function TrainingProgressionView() {
   const m = PROGRESSION_MODELS.find(x => x.id === sel) ?? PROGRESSION_MODELS[1]
   const triggered = DELOAD_TRIGGERS.filter(t => t.hit).length
   return (
-    <div className="v2-train-grid-15">
+    <div className="v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
         <Card title="Progression models" sub="5 models · one per routine · deterministic" attrappe={ATTRAPPE}>
           <div className="v2-col-gap" style={{ gap: 6 }}>
@@ -352,7 +352,7 @@ export function TrainingLandmarksView() {
       </Card>
 
       <div style={{ height: 14 }} />
-      <div className="v2-train-grid-11">
+      <div className="v2-grid v2-g-cols-2">
         <Card title="Feedback loop" sub="pump + soreness → personal MAV/MRV" attrappe={ATTRAPPE}>
           <div className="v2-dim" style={{ fontSize: 11.5, marginBottom: 12, lineHeight: 1.55 }}>
             After each session you rate pump (1–3) and soreness (1–3) per muscle group. After 5 data points the algorithm shifts your personal landmarks.
@@ -445,7 +445,7 @@ export function TrainingStandardsView() {
     (scoreParts.adherence * 0.40 + scoreParts.landmarks * 0.30
      + scoreParts.strength * 0.20 + scoreParts.balance * 0.10) * 100)
   return (
-    <div className="v2-train-grid-15">
+    <div className="v2-grid-15">
       <Card title="Strength standards"
             sub={`Brzycki e1RM ÷ bodyweight ${bw} kg · population comparison`}
             attrappe={ATTRAPPE}>
@@ -509,7 +509,7 @@ export function TrainingCalendarView() {
     .concat(Array.from({ length: days }, (_, i) => i + 1))
   while (cells.length % 7) cells.push(null)
   return (
-    <div className="v2-train-grid-14">
+    <div className="v2-grid-14">
       <Card
         title="May 2026" sub={`${done.length} sessions logged · ${planned.length} planned`}
         attrappe={ATTRAPPE}

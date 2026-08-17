@@ -69,7 +69,7 @@ export function TrainingOfflineView() {
 
   const totalSize = '20.6 MB'
   return (
-    <div className="v2-train-grid-14">
+    <div className="v2-grid-14">
       <div className="v2-col-gap" style={{ gap: 14 }}>
         <Card attrappe={ATTRAPPE}>
           <div className="v2-train-offline-kopf">
@@ -261,7 +261,7 @@ export function TrainingHRAnalysis() {
         ))}
       </div>
 
-      <div className="v2-train-grid-14">
+      <div className="v2-grid-14">
         <Card title="Time in zone" sub={`${total} minutes total · Polar H10`} attrappe={ATTRAPPE}>
           <div style={{ display: 'flex', height: 30, borderRadius: 7, overflow: 'hidden', border: '1px solid var(--border)', marginBottom: 14 }}>
             {HR_ZONES.map(z => (
@@ -336,7 +336,7 @@ export function TrainingHRAnalysis() {
         </Card>
 
         <Card title="HR trace · full session" sub="60-second resolution"
-              attrappe={ATTRAPPE} className="v2-train-span-2">
+              attrappe={ATTRAPPE} className="v2-span-2">
           <LineChart h={170} range={[70, 180]}
             xLabels={['0', '10', '20', '30', '40', '50', '60', '74 min']}
             series={[

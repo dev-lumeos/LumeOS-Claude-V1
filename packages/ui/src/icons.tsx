@@ -21,6 +21,10 @@ export const ICONS = {
   chevron_left: <path d="m15 18-6-6 6-6" />,
   chevron_right: <path d="m9 18 6-6-6-6" />,
   chevron_down: <path d="m6 9 6 6 6-6" />,
+  // G-20: `chevron_up` fehlte. `[cmd]` Die Training-Vorlage benutzt es
+  // im Routine-Editor; beim Bau von G-16 war `packages/ui` gesperrt,
+  // deshalb stand dort `arrow_up`. Gespiegelt aus `chevron_down`.
+  chevron_up: <path d="m18 15-6-6-6 6" />,
   arrow_right: <><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></>,
   arrow_up: <><path d="M12 19V5" /><path d="m5 12 7-7 7 7" /></>,
   arrow_down: <><path d="M12 5v14" /><path d="m19 12-7 7-7-7" /></>,
@@ -63,6 +67,28 @@ export const ICONS = {
   calendar: <><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h18" /></>,
   message: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
   wifi_off: <><path d="M1 1l22 22" /><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" /><path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" /><path d="M10.71 5.05A16 16 0 0 1 22.58 9" /><path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88" /><path d="M8.53 16.11a6 6 0 0 1 6.95 0" /><path d="M12 20h.01" /></>,
+
+  // ---------------------------------------------------------------
+  // G-20: was die Vorlagen sonst noch verlangen
+  // ---------------------------------------------------------------
+  // `[cmd]` Ein Abgleich der vier Modulvorlagen gegen diese Datei ergab
+  // sechs Namen ohne Symbol. KEINER davon ist in `shared.jsx` der
+  // Vorlage definiert — sie zeichnen dort also ebenfalls nichts. Die
+  // Vorlage ist an dieser Stelle unvollstaendig, nicht diese Datei.
+  //
+  // Aufgenommen sind die fuenf, die eine erkennbare Absicht tragen;
+  // `arr_r` bleibt draussen (siehe unten).
+
+  /** Blitz. Die Vorlage nutzt ihn fuer „Quick-add" und Schnellwege.
+      Formgleich mit `zap` — beide Namen kommen in den Vorlagen vor. */
+  bolt: <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />,
+  /** Wolke mit Schraegstrich — Offline-Anzeige im Training. */
+  cloud_off: <><path d="M1 1l22 22" /><path d="M17.5 19H9a7 7 0 0 1-1.2-13.9" /><path d="M10.6 4.6A7 7 0 0 1 22 10a5 5 0 0 1-1.5 3.6" /></>,
+  /** Kreispfeil — „erneut laden" in den Recovery-Modalen. */
+  refresh: <><path d="M21 12a9 9 0 1 1-2.6-6.4" /><path d="M21 3v6h-6" /></>,
+  /** Person. `[cmd]` `shell.jsx` benutzt `icon: "user"` fuer „Human
+      Coaches" und „Open profile", definiert das Symbol aber nicht. */
+  user: <><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></>,
   download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="m7 10 5 5 5-5" /><path d="M12 15V3" /></>,
   copy: <><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></>,
 } as const
