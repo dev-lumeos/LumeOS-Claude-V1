@@ -3314,6 +3314,63 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   aus nicht überschreibbar. Statt einer Scheinlösung steht die
   erwartete Reihenfolge im Hinweistext.
 
+- [x] **C-61: Mahlzeiten haben keine Uhrzeit** (neu 2026-08-17).
+  Voraussetzung fuer C-59.
+
+  `[cmd]` `meals` fuehrt nur `entry_date`. Die Vorlage zeigt
+  `07:42 Breakfast`, `10:14 Snack`, `13:08 Lunch` — **die Spalte steht
+  in der Umsetzung an ihrer Stelle und zeigt `—`.**
+
+  **Entschieden, Tom 2026-08-17:** *„Aktuelle Zeit als Vorgabe,
+  editierbar. Und fuer den Nachtragefall (erkennen wir ja) eine Warnung
+  wie: bitte passen Sie die Einnahmezeit an. Das ist wichtig, denn wir
+  haben zeitliche Darstellungen."*
+
+  **Es ist der Zeitpunkt des Essens, nicht der Erfassung.**
+
+  | | |
+  |---|---|
+  | Vorgabe | die aktuelle Uhrzeit |
+  | Aenderbar | ja, als Eingabe |
+  | Nachtragefall | **das erfasste Datum ist nicht heute** — dann ist die aktuelle Uhrzeit sinnlos und ein Hinweis erscheint |
+
+  `[cmd]` Der Nachtragefall ist eindeutig erkennbar: `entry_date`
+  gegen das heutige Datum. **Kein Raten, keine Schwelle.**
+
+  **Warum es zaehlt:** `[cmd]` Die Designvorlage baut mehrere Ansichten
+  darauf — `Tagesablauf 06:30–22:00`, `Pre-workout window · 17:30
+  session` mit `Eat by 16:00`, und die Mahlzeitenkarten mit Uhrzeit.
+  **Ohne Zeit gibt es keine davon.**
+
+  `[cmd]` **Erledigt 2026-08-17**, Kettenschritt `052a`. `meals` traegt
+  `meal_time`; **686 bestehende Mahlzeiten mit stabilen Zeiten
+  nachgetragen**, 0 ohne Zeit.
+
+- [x] **C-59: Mahlzeiten mehrfach je Typ** (neu 2026-08-17).
+  **Tom, 2026-08-17:** *„Ein Snack ist keine fixierte Mahlzeit, das muss
+  multiple erfassbar werden."*
+
+  `[cmd]` `meals` traegt einen `UNIQUE`-Index auf
+  `(user_id, entry_date, meal_type)` — **zwei Snacks am selben Tag sind
+  nicht speicherbar.** Die Designvorlage fuehrt genau das: `10:14 Snack`
+  und `16:00 Snack`.
+
+  `[cmd]` Beim Bau von G-12 wurde der zweite behelfsweise als
+  `Post-workout` gefuehrt — gemeldet, nicht entschieden.
+
+  **Zu klaeren:** `[cmd]` Ohne Uhrzeit sind zwei Mahlzeiten desselben
+  Typs nicht unterscheidbar und nicht sortierbar (C-61). `Same as
+  yesterday` muss bei mehreren gleichen Typs die richtige treffen.
+  `daily_summary` rechnet ueber alle Positionen des Tages und ist nicht
+  betroffen — pruefen.
+
+  `[cmd]` **Erledigt 2026-08-17**, zusammen mit C-61. Der Index
+  `uq_meals_user_date_type` ist weg, neue Sortierindizes stehen.
+
+  `[cmd]` **Live belegt:** zwei Snacks am 2026-08-14 um 10:14 und 16:00.
+  513 Mahlzeiten, 1.561 Positionen, Kettenlauf ueber 47 Schritte,
+  Schema vollstaendig.
+
 
 
 ## Erledigt am 2026-08-05

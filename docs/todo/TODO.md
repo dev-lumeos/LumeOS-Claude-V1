@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `2d18bc9` auf `dev`.
+**Stand:** 2026-08-17, Anker `af15d69` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 56 offen, 5 in Arbeit.
+`[cmd]` 55 offen, 5 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -178,9 +178,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-54** | `display_tier` als Ordnung der Anzeige benutzen |  |
 | **C-52** | Zwei essenzielle Fettsäuren ohne Ziel und ohne Bewertung |  |
 | **C-53** | Elf Nährstoffe erreichen die Bewertung nicht |  |
-| **C-59** | Mahlzeiten mehrfach je Typ |  |
 | **C-60** | Die Vorgabeportion ist wertlos |  |
-| **C-61** | Mahlzeiten haben keine Uhrzeit |  |
 | **GO-01** | Goals | ~ |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-05** | Dashboard |  |
@@ -192,6 +190,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-12** | Die Suche in die Erfassung einbinden |  |
 | **G-14** | Datumsnavigation |  |
+| **G-15** | Die Ansicht kollabiert mehrere Mahlzeiten desselben Typs |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 
 ---
@@ -1466,23 +1465,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   **Die GO-00-Reparatur deckt sie trotzdem ab** — sie greift beim
   Aufnehmen, nicht danach.
 
-- [ ] **C-59: Mahlzeiten mehrfach je Typ** (neu 2026-08-17).
-  **Tom, 2026-08-17:** *„Ein Snack ist keine fixierte Mahlzeit, das muss
-  multiple erfassbar werden."*
-
-  `[cmd]` `meals` traegt einen `UNIQUE`-Index auf
-  `(user_id, entry_date, meal_type)` — **zwei Snacks am selben Tag sind
-  nicht speicherbar.** Die Designvorlage fuehrt genau das: `10:14 Snack`
-  und `16:00 Snack`.
-
-  `[cmd]` Beim Bau von G-12 wurde der zweite behelfsweise als
-  `Post-workout` gefuehrt — gemeldet, nicht entschieden.
-
-  **Zu klaeren:** `[cmd]` Ohne Uhrzeit sind zwei Mahlzeiten desselben
-  Typs nicht unterscheidbar und nicht sortierbar (C-61). `Same as
-  yesterday` muss bei mehreren gleichen Typs die richtige treffen.
-  `daily_summary` rechnet ueber alle Positionen des Tages und ist nicht
-  betroffen — pruefen.
 
 - [ ] **C-60: Die Vorgabeportion ist wertlos** (neu 2026-08-17).
   **Tom, 2026-08-17:** *„Die Portionen muessen in die Auswahl mit rein
@@ -1503,33 +1485,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   eine Frage der Markierung, nicht der Erhebung. `[annahme]` Wo keine
   sinnvollere Portion existiert (Gewuerze, Zutaten), bleibt „100 g".
 
-- [ ] **C-61: Mahlzeiten haben keine Uhrzeit** (neu 2026-08-17).
-  Voraussetzung fuer C-59.
-
-  `[cmd]` `meals` fuehrt nur `entry_date`. Die Vorlage zeigt
-  `07:42 Breakfast`, `10:14 Snack`, `13:08 Lunch` — **die Spalte steht
-  in der Umsetzung an ihrer Stelle und zeigt `—`.**
-
-  **Entschieden, Tom 2026-08-17:** *„Aktuelle Zeit als Vorgabe,
-  editierbar. Und fuer den Nachtragefall (erkennen wir ja) eine Warnung
-  wie: bitte passen Sie die Einnahmezeit an. Das ist wichtig, denn wir
-  haben zeitliche Darstellungen."*
-
-  **Es ist der Zeitpunkt des Essens, nicht der Erfassung.**
-
-  | | |
-  |---|---|
-  | Vorgabe | die aktuelle Uhrzeit |
-  | Aenderbar | ja, als Eingabe |
-  | Nachtragefall | **das erfasste Datum ist nicht heute** — dann ist die aktuelle Uhrzeit sinnlos und ein Hinweis erscheint |
-
-  `[cmd]` Der Nachtragefall ist eindeutig erkennbar: `entry_date`
-  gegen das heutige Datum. **Kein Raten, keine Schwelle.**
-
-  **Warum es zaehlt:** `[cmd]` Die Designvorlage baut mehrere Ansichten
-  darauf — `Tagesablauf 06:30–22:00`, `Pre-workout window · 17:30
-  session` mit `Eat by 16:00`, und die Mahlzeitenkarten mit Uhrzeit.
-  **Ohne Zeit gibt es keine davon.**
 
 
 - [~] **GO-01 bis GO-17: Goals** (neu 2026-08-15). **Block A zu vier
@@ -1854,6 +1809,23 @@ Umsetzen angepasst werden.
   `[read]` Das berührt C-61: Dort ist die Zeitzonenfrage für `meals`
   gestellt. **Beides gehört zusammen entschieden** — welcher Tag ein
   Eintrag ist, hängt an derselben Antwort.
+
+- [ ] **G-15: Die Ansicht kollabiert mehrere Mahlzeiten desselben Typs**
+  (neu 2026-08-17). Folgt aus C-59.
+
+  `[cmd]` Die Datenseite kann seit `052a` zwei Snacks am selben Tag —
+  **die Oberflaeche zeigt sie als einen.** Aus dem Codex-Bericht: *der
+  bestehende Webpfad sortiert nach `created_at`, und die v2-Ansicht
+  fasst über `Map(meal_type)` zusammen.*
+
+  `[cmd]` Live belegt: 2026-08-14 traegt Snacks um 10:14 und 16:00.
+
+  **Was zu aendern ist:** Sortierung nach `meal_time` statt
+  `created_at`, und der Schluessel der Zusammenfassung darf nicht der
+  Typ sein.
+
+  `[read]` Gehoert zu G-14 (Datumsnavigation) — beides betrifft
+  denselben Lesepfad und dieselbe Ansicht.
 
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
