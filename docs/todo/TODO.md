@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `3bbeb09` auf `dev`.
+**Stand:** 2026-08-18, Anker `b4a8a39` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -203,7 +203,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-34** | `.v2-btn` hat kein `white-space: nowrap` |  |
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
 | **G-37** | Supplements an den Katalog anschliessen |  |
-| **GO-11** | Meilensteine und Fortschritt je Ziel |  |
 | **C-76** | Seed-Befunde fuer Medical |  |
 | **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
 | **C-77** | Alle Seeds auf `dev@lumeos.app` nachziehen |  |
@@ -218,6 +217,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-48** | Graue Teile heben sich nicht ab |  |
 | **G-50** | `v2-g-cols-5` fehlt |  |
 | **C-75** | BSS und Voice sind Neubau |  |
+| **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
 
 ---
 
@@ -2128,21 +2128,6 @@ Umsetzen angepasst werden.
   eine Markierung von Hand.** Der Testfall `vitamin-d3` steht bereit.
 
 
-- [ ] **GO-11: Meilensteine und Fortschritt je Ziel** (neu 2026-08-17).
-  Folgt auf GO-07 und GO-10.
-
-  `[read]` Aus dem Umsetzungsplan: `goals.goal_milestones` und
-  Fortschritt je Ziel — setzt Ziele (GO-07, steht) und Messungen
-  (GO-10, steht) voraus. **Beide sind jetzt da.**
-
-  `[cmd]` Das Vorgaengerrepo hat `user_milestones` in
-  `043_coach_profile_system.sql`.
-
-  `[cmd]` **Vorsicht bei der Fortschrittsrechnung:** Der Goals-Mockup
-  hat gemeldet, dass `calcGoalProgress` in der Vorlage **eine
-  wirkungslose Division** enthaelt (W-8) — **stehen gelassen, weil es
-  Toms Entwurf ist.** Beim Bau der echten Rechnung ist das die Stelle,
-  an der entschieden werden muss.
 
 - [ ] **C-76: Seed-Befunde fuer Medical** (neu 2026-08-18). **Fuer
   Codex, sobald frei.**
@@ -2590,3 +2575,29 @@ Umsetzen angepasst werden.
   beruehrt C-71, wo die Autonomiestufen des menschlichen Coaches
   anstehen — **beide Male geht es um dieselbe Frage: wie fein wird
   abgestuft.**
+
+- [ ] **GO-15: `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel**
+  (neu 2026-08-18). **Entscheidung fuer Tom.** Befund aus GO-11.
+
+  `[cmd]` Die Funktion mischt Rohwert und Formel per EMA:
+  `0,3 × 2.247,6 + 0,7 × 3.527,0 = 3.143,2`.
+
+  **Das heisst: der ausgewiesene „adaptive" Wert stammt zu 70 % aus der
+  Formel, die er ersetzen soll.**
+
+  `[cmd]` **Und der Abstand ist gross:** Rohwert 2.247,6 gegen Formel
+  3.527,0 — **1.279 kcal.** Bei 2.372 kcal Zufuhr und leichter Zunahme
+  ist ein Verbrauch von 3.527 nicht plausibel.
+
+  `[read]` **Die Daempfung ist bei wenig Daten richtig — aber hier steht
+  `complete` und `confidence high`.** Wenn der Messwert bei hoher
+  Verlaesslichkeit trotzdem zu 30 % zaehlt, ist „adaptiv" ein Etikett.
+
+  `[annahme]` **Ein von der Verlaesslichkeit abhaengiges Alpha** waere
+  der naheliegende Weg — wenig Daten heisst nah an der Formel, viele
+  Daten heisst nah an der Messung.
+
+  `[cmd]` **Vorbehalt:** Die Testdaten sind erzeugt. **Mahlzeiten und
+  Gewichtsverlauf wurden getrennt generiert** und muessen nicht
+  zueinander passen — der Abstand von 1.279 kcal kann daher
+  stammen. **Vor einer Aenderung an Alpha gehoert das geprueft.**

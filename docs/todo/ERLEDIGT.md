@@ -5347,3 +5347,41 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   prueft, dass die AI-Seite ihre ungebauten Tabs nennt, wurde falsch,
   sobald das Modul existierte."* — **ersetzt durch eine Pruefung, dass
   der Platzhalter weg ist.**
+
+- [x] **GO-11: Meilensteine und Fortschritt je Ziel** (neu 2026-08-17).
+  Folgt auf GO-07 und GO-10.
+
+  `[read]` Aus dem Umsetzungsplan: `goals.goal_milestones` und
+  Fortschritt je Ziel — setzt Ziele (GO-07, steht) und Messungen
+  (GO-10, steht) voraus. **Beide sind jetzt da.**
+
+  `[cmd]` Das Vorgaengerrepo hat `user_milestones` in
+  `043_coach_profile_system.sql`.
+
+  `[cmd]` **Vorsicht bei der Fortschrittsrechnung:** Der Goals-Mockup
+  hat gemeldet, dass `calcGoalProgress` in der Vorlage **eine
+  wirkungslose Division** enthaelt (W-8) — **stehen gelassen, weil es
+  Toms Entwurf ist.** Beim Bau der echten Rechnung ist das die Stelle,
+  an der entschieden werden muss.
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritt `113`, **60 Schritte**
+  in der Kette. `goals.goal_milestones`, `adaptive_tdee()`,
+  `goal_progress_at()`, `goal_milestone_status()`.
+
+  ### Der adaptive Wert rechnet
+
+  `[cmd]` **Tom, 2026-09-13:** Formel 3.527,0 — adaptiv **3.143,2** —
+  Abstand **−383,8 kcal**. Fenster: 14 Intake-Tage, 14
+  Gewichtsmessungen, `complete`, `confidence high`.
+
+  `[cmd]` **Die Rechnung ist nachvollziehbar:** 2.372 kcal Zufuhr,
+  **+0,21 kg ueber 13 Tage** → Rohwert **2.247,6 kcal**
+  (`kcal_per_kg 7700`).
+
+  `[cmd]` **Zwei Verweigerungsfaelle belegt:** `max.seed` liefert nichts
+  (keine Gewichtsmessungen), `test-user` nichts (zu wenig Intake).
+  `[read]` **Kein Schaetzwert, keine Null** — wie
+  `missing_body_weight` beim Wasserziel.
+
+  `[cmd]` Meilensteine: **erreicht, offen, verfehlt und nicht messbar
+  werden getrennt.** RLS: Tom sieht 3, Sarah 0.
