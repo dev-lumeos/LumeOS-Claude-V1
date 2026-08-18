@@ -66,6 +66,30 @@ nicht darin steht, existiert fuer die naechste Sitzung nicht.
 committet. **Eine Zeile mit dem Befund, nicht mit dem Dateinamen** —
 der steht schon in der ersten Spalte.
 
+## Eine Zahl ohne Stichtag ist keine Zahl
+
+**Tom, 2026-08-18:** *,Es geht nicht darum, was der User macht. Es geht
+darum, dass wir Daten haben fuer die Entwicklung — und wenn diese Daten
+heute stoppen, kann ich die naechsten Tage nicht entwickeln, ohne jeden
+Tag neu zu seeden."*
+
+`[cmd]` **Zwei Auftraege sind am 2026-08-18 daran gescheitert.** Der
+Orchestrator nannte *„Koerperfett 10,31 %, FFMI 21,97"* und *„adaptiver
+TDEE 3.143,2"* — **beides richtig, beides fuer den 2026-09-13.** Heute
+liefert dieselbe Funktion 11,38 % und NULL.
+
+**Die Zahlen waren nicht falsch, ihnen fehlte der Tag.**
+
+`[read]` **In jedem Auftrag gehoert der Stichtag zur Zahl:** nicht
+*„Koerperfett 10,31 %"*, sondern *„10,31 % am 13.9., heute 11,38 %"*.
+**Sonst prueft der Agent gegen eine Zahl, die fuer einen anderen Tag
+gilt** — und meldet einen Widerspruch, den es nicht gibt.
+
+**Und die Seeds reichen bewusst in die Zukunft.** `[cmd]` Seit C-78
+laufen sie ueber ±90 Tage, mit einem Startdatum als einzigem
+Parameter. **Das ist kein Fehler in den Daten, sondern der Vorrat, aus
+dem entwickelt wird.**
+
 ## Seeds gehoeren auf `dev@lumeos.app`
 
 **Tom, 2026-08-18:** *,Wegwerf-DB ist mir scheissegal, wie und wo er
