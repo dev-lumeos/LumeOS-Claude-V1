@@ -13,7 +13,10 @@ port = 54321
 # GO-03: `goals` ergaenzt. Ohne diesen Eintrag existieren Tabelle und
 # Funktionen zwar, sind aber ueber PostgREST nicht erreichbar — die
 # Oberflaeche bekommt PGRST106 statt der Zielwerte.
-schemas = ["public", "graphql_public", "nutrition", "goals", "supplements", "medical"]
+# G-55: `recovery` ergaenzt. Bei C-67 vergessen, deshalb lieferte der
+# Check-in-Anschluss `Invalid schema: recovery` — die 36 Zeilen lagen da,
+# nur unerreichbar. Jedes Schema braucht hier eine Zeile.
+schemas = ["public", "graphql_public", "nutrition", "goals", "supplements", "medical", "recovery"]
 # Extra schemas to add to the search_path of every request.
 extra_search_path = ["public", "extensions"]
 # The maximum number of rows returns from a view, table, or stored procedure. Limits payload size
