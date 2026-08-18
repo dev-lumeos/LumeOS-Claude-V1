@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `9c52d5a` auf `dev`.
+**Stand:** 2026-08-18, Anker `e3af018` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 76 offen, 3 in Arbeit.
+`[cmd]` 74 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -183,7 +183,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
-| **C-89** | 26 der 43 Koerpermessungen liegen in der Zukunft |  |
 | **G-65** | Der Preferences-Tab in Nutrition |  |
 | **C-93** | Ausschluss-Presets, international recherchiert |  |
 | **G-66** | Der Food-DB-Tab mit Filtern |  |
@@ -191,7 +190,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-67** | Daumen hoch und runter in der Lebensmittel-Detailansicht |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
 | **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
-| **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
@@ -199,7 +197,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
 | **G-59** | Welche Knoepfe gehoeren in den Modulkopf |  |
 | **G-61** | `refillUrgent` als Schwelle |  |
-| **C-82** | Compliance braucht 120 Zeilen und Auslasser |  |
 | **G-62** | Die 17 Marken in `tabs.tsx` bleiben 17 |  |
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
 | **G-63** | Vier Felder liegen ungenutzt |  |
@@ -211,6 +208,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
 | **C-96** | `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen |  |
+| **C-97** | Der heutige Tag fehlt im Seed |  |
 
 ---
 
@@ -1700,25 +1698,6 @@ Umsetzen angepasst werden.
   als der vierte Fall:** Jedes Schema in `schema-sollstand.json` gegen
   die Liste in `config.toml`.
 
-- [ ] **C-89: 26 der 43 Koerpermessungen liegen in der Zukunft** (neu
-  2026-08-18). Befund aus GO-16.
-
-  `[cmd]` **Die Seeds reichen bis 2026-09-13** — heute ist der 18.8.
-  Deshalb liefert `body_composition_navy` heute **11,38 % / FFMI 21,49**,
-  nicht die 10,31 % / 21,97 aus dem GO-14-Bericht (die galten fuer den
-  13.9.).
-
-  `[cmd]` **Und `adaptive_tdee` liefert heute NULL** — `dev` hat **13
-  von 14** vollstaendigen Zufuhrtagen, Status
-  `insufficient_intake_days`.
-
-  `[read]` **Beides ist dieselbe Ursache:** Die Testdaten wurden fuer
-  einen Zeitraum erzeugt, der in der Zukunft endet. **Ein echter Nutzer
-  traegt keine Messungen fuer den naechsten Monat ein** — die Anzeige
-  soll das auch nicht abbilden.
-
-  **Gehoert zu C-78** (zusammenhaengende Seeds): **Der Zeitraum muss
-  heute enden, nicht in vier Wochen.**
 
 
 - [ ] **G-65: Der Preferences-Tab in Nutrition** (neu 2026-08-18).
@@ -2039,56 +2018,6 @@ Umsetzen angepasst werden.
   `SettingsView.tsx` fuehrt eine `CoachPermissionsSection`, aufklappbar
   je Coach, mit `/api/human-coach/permissions/my-coaches`.
 
-- [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
-  **Spaeter — wenn die noetigen Tabellen stehen.**
-
-  **Tom, 2026-08-18:** *„Unabhaengige Seeds sind immer problematisch,
-  weil sie nicht korrespondieren und Logiken nicht passen — z. B. Food
-  Logs zeigen High Calories, aber das Gewicht geht ab. … diese Seeds
-  muessen wir ueberarbeiten und am Ende Seeds generieren, die alle
-  zusammen korrespondieren."*
-
-  ### Der Anlass ist gemessen
-
-  `[cmd]` **GO-11 hat es sichtbar gemacht:** Bei 2.372 kcal Zufuhr und
-  **+0,21 kg** ueber 13 Tage kommt ein Rohwert von **2.247,6 kcal**
-  heraus — gegen einen Formelwert von **3.527,0**. **1.279 kcal
-  Abstand.**
-
-  `[read]` **Mahlzeiten und Gewichtsverlauf wurden getrennt
-  generiert.** Der Abstand kann daher stammen — **und solange das so
-  ist, laesst sich keine Formel an diesen Daten pruefen.**
-
-  ### Was daraus folgt
-
-  **Ein Erzeuger, nicht mehrere.** Aus einem Profil und einem
-  Zielverlauf ergeben sich Zufuhr, Gewicht, Training, Erholung und
-  Koerpermessungen — **nicht umgekehrt.**
-
-  **Was zusammenhaengen muss:**
-
-  | | |
-  |---|---|
-  | Zufuhr und Gewicht | Ueberschuss macht schwerer, Defizit leichter |
-  | Training und Erholung | Ein harter Tag senkt die Bereitschaft am naechsten |
-  | Training und Muskelkarte | Was trainiert wurde, ist ermuedet |
-  | Sitzungen und Koerpermessungen | Kraftzuwachs zeigt sich im Umfang |
-  | Supplements und Laborwerte | Vitamin D ueber Monate hebt den Spiegel |
-
-  `[read]` **Der letzte Punkt ist der Sinn des Produkts:** Buddy soll
-  Zusammenhaenge finden. **An Daten ohne Zusammenhang findet er
-  keine** — und schlimmer, er findet falsche.
-
-  ### Wann
-
-  **Nicht jetzt.** `[cmd]` Es fehlen noch Tabellen — Schlafdaten,
-  HRV-Verlauf, Muskelzustaende, Protokolle. **Ein Erzeuger, der auf
-  halbem Schema aufsetzt, wird zweimal gebaut.**
-
-  `[read]` **Bis dahin gilt:** Was an den heutigen Seeds gemessen wird,
-  belegt **die Mechanik, nicht die Formel.** Der GO-11-Bericht sagt es
-  richtig — die Funktion rechnet, ob sie **richtig** rechnet, ist offen
-  (GO-15).
 
 
 
@@ -2286,22 +2215,6 @@ Umsetzen angepasst werden.
   Tagesdosis; `low_stock_threshold` bleibt als Rueckfall, wo keine
   Tagesdosis bekannt ist.
 
-- [ ] **C-82: Compliance braucht 120 Zeilen und Auslasser** (neu
-  2026-08-18). Befund aus G-37.
-
-  `[cmd]` **Heute: 4 Einnahmen an 1 Tag, kein `skipped`.** Der Tab
-  rechnet `compliance_pct = 100`.
-
-  `[read]` **Das ist kein Befund, sondern ein Artefakt.** Und der
-  Auslasser fehlt **strukturell** — ohne ihn hat *„Last skip · reason"*
-  nichts zu zeigen, **egal wie viele Tage dazukommen.**
-
-  `[cmd]` **Gebraucht: 30 Tage fuer Streifen und Tabelle, 90 fuer die
-  Heatmap** — bei 4 Positionen **120 bzw. 360 Zeilen**, mit Auslassern.
-
-  `[read]` **Gehoert zu C-78** (zusammenhaengende Seeds): Wer 90 Tage
-  Einnahmen erzeugt, sollte sie an Training und Ernaehrung koppeln —
-  **ein vergessener Tag ist meist ein voller Tag.**
 
 - [ ] **G-62: Die 17 Marken in `tabs.tsx` bleiben 17** (neu 2026-08-18).
   Befund aus G-37.
@@ -2461,3 +2374,22 @@ Umsetzen angepasst werden.
   G-64-Agent hat es umgangen ueber den stabilen Schluessel
   `equipment_group` statt der Beschriftung — **richtig so, aber die
   Ursache bleibt.**
+
+- [ ] **C-97: Der heutige Tag fehlt im Seed** (neu 2026-08-18). Randfall
+  aus C-78.
+
+  `[cmd]` **Die Mahlzeiten enden am Vortag.** Deshalb liefert
+  `adaptive_tdee` **fuer heute `insufficient_intake_days`** (13 von 14),
+  **fuer gestern `complete`** (14 von 14, 3.121,9 kcal).
+
+  `[read]` **Zwei Lesarten, und beide sind vertretbar:**
+
+  **Der Seed ist richtig** — ein Nutzer hat heute noch nicht alle
+  Mahlzeiten erfasst, der Tag laeuft. **Dann muss die Funktion ihr
+  Fenster bis gestern legen**, nicht bis zum Stichtag.
+
+  **Oder der Seed liefert heute mit** — dann rechnet die Funktion
+  sofort, aber der laufende Tag zaehlt als vollstaendig.
+
+  `[cmd]` **Fuer die Entwicklung ist es stoerend:** Die Kachel zeigt
+  heute die Bedingung statt der Zahl, obwohl 180 Tage Daten liegen.

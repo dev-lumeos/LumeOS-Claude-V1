@@ -4655,6 +4655,133 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   *Langhantel*, *Hantelbank*. **UTF-8 per Bytecheck bestaetigt**, 0
   Ersatzzeichen.
 
+- [x] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
+  **Spaeter — wenn die noetigen Tabellen stehen.**
+
+  **Tom, 2026-08-18:** *„Unabhaengige Seeds sind immer problematisch,
+  weil sie nicht korrespondieren und Logiken nicht passen — z. B. Food
+  Logs zeigen High Calories, aber das Gewicht geht ab. … diese Seeds
+  muessen wir ueberarbeiten und am Ende Seeds generieren, die alle
+  zusammen korrespondieren."*
+
+  ### Der Anlass ist gemessen
+
+  `[cmd]` **GO-11 hat es sichtbar gemacht:** Bei 2.372 kcal Zufuhr und
+  **+0,21 kg** ueber 13 Tage kommt ein Rohwert von **2.247,6 kcal**
+  heraus — gegen einen Formelwert von **3.527,0**. **1.279 kcal
+  Abstand.**
+
+  `[read]` **Mahlzeiten und Gewichtsverlauf wurden getrennt
+  generiert.** Der Abstand kann daher stammen — **und solange das so
+  ist, laesst sich keine Formel an diesen Daten pruefen.**
+
+  ### Was daraus folgt
+
+  **Ein Erzeuger, nicht mehrere.** Aus einem Profil und einem
+  Zielverlauf ergeben sich Zufuhr, Gewicht, Training, Erholung und
+  Koerpermessungen — **nicht umgekehrt.**
+
+  **Was zusammenhaengen muss:**
+
+  | | |
+  |---|---|
+  | Zufuhr und Gewicht | Ueberschuss macht schwerer, Defizit leichter |
+  | Training und Erholung | Ein harter Tag senkt die Bereitschaft am naechsten |
+  | Training und Muskelkarte | Was trainiert wurde, ist ermuedet |
+  | Sitzungen und Koerpermessungen | Kraftzuwachs zeigt sich im Umfang |
+  | Supplements und Laborwerte | Vitamin D ueber Monate hebt den Spiegel |
+
+  `[read]` **Der letzte Punkt ist der Sinn des Produkts:** Buddy soll
+  Zusammenhaenge finden. **An Daten ohne Zusammenhang findet er
+  keine** — und schlimmer, er findet falsche.
+
+  ### Wann
+
+  **Nicht jetzt.** `[cmd]` Es fehlen noch Tabellen — Schlafdaten,
+  HRV-Verlauf, Muskelzustaende, Protokolle. **Ein Erzeuger, der auf
+  halbem Schema aufsetzt, wird zweimal gebaut.**
+
+  `[read]` **Bis dahin gilt:** Was an den heutigen Seeds gemessen wird,
+  belegt **die Mechanik, nicht die Formel.** Der GO-11-Bericht sagt es
+  richtig — die Funktion rechnet, ob sie **richtig** rechnet, ist offen
+  (GO-15).
+
+  `[cmd]` **Erledigt 2026-08-18.** `testdaten-einspielen.ts` erzeugt
+  **zwei relative 90-Tage-Fenster** ueber `--start`, `--next-start`,
+  `--days`.
+
+  | | |
+  |---|---|
+  | Zeitraum | **2026-05-20 bis 2026-11-16** — ±90 Tage |
+  | Mahlzeiten | **721** je Konto (2.157 gesamt), 4 je Tag, lueckenlos |
+  | Koerpermessungen | **180** |
+  | Recovery-Check-ins | **170** |
+  | Trainingssitzungen | **30** |
+  | Medical-Befunde | 5 |
+
+  `[cmd]` **`test-user@lumeos.local` bleibt klein** — 1 Mahlzeit, 2
+  Positionen, 1 Zielwert. Er traegt den Zeilenschutz-Nachweis.
+
+  ### Die Rueckrechnung geht auf
+
+  `[cmd]` **`adaptive_tdee` ist `complete`**, 14 von 14 Tagen: adaptiv
+  **3.121,9** gegen Formel 3.527,0, **Abstand −405,1**. Rohwert 2.176,5
+  bei **+0,330 kg** ueber das Fenster.
+
+  `[read]` **Das war das Ziel:** Aus Zufuhr und Gewichtsverlauf ergibt
+  sich ein Verbrauch, der sich nachrechnen laesst. **Vorher lagen 1.279
+  kcal dazwischen und niemand wusste, ob Formel oder Daten schuld
+  waren.**
+
+  `[cmd]` **Und der Zeitraum endet nicht heute** — er reicht 90 Tage
+  voraus. **Toms Vorgabe:** *„Wenn diese Daten heute stoppen, kann ich
+  die naechsten Tage nicht entwickeln, ohne jeden Tag neu zu seeden."*
+
+- [x] **C-89: 26 der 43 Koerpermessungen liegen in der Zukunft** (neu
+  2026-08-18). Befund aus GO-16.
+
+  `[cmd]` **Die Seeds reichen bis 2026-09-13** — heute ist der 18.8.
+  Deshalb liefert `body_composition_navy` heute **11,38 % / FFMI 21,49**,
+  nicht die 10,31 % / 21,97 aus dem GO-14-Bericht (die galten fuer den
+  13.9.).
+
+  `[cmd]` **Und `adaptive_tdee` liefert heute NULL** — `dev` hat **13
+  von 14** vollstaendigen Zufuhrtagen, Status
+  `insufficient_intake_days`.
+
+  `[read]` **Beides ist dieselbe Ursache:** Die Testdaten wurden fuer
+  einen Zeitraum erzeugt, der in der Zukunft endet. **Ein echter Nutzer
+  traegt keine Messungen fuer den naechsten Monat ein** — die Anzeige
+  soll das auch nicht abbilden.
+
+  **Gehoert zu C-78** (zusammenhaengende Seeds): **Der Zeitraum muss
+  heute enden, nicht in vier Wochen.**
+
+  `[cmd]` **Erledigt 2026-08-18 mit C-78** — der Zeitraum ist jetzt
+  bewusst ±90 Tage. **Die Zukunftsdaten sind kein Fehler, sondern der
+  Vorrat, aus dem entwickelt wird.**
+
+- [x] **C-82: Compliance braucht 120 Zeilen und Auslasser** (neu
+  2026-08-18). Befund aus G-37.
+
+  `[cmd]` **Heute: 4 Einnahmen an 1 Tag, kein `skipped`.** Der Tab
+  rechnet `compliance_pct = 100`.
+
+  `[read]` **Das ist kein Befund, sondern ein Artefakt.** Und der
+  Auslasser fehlt **strukturell** — ohne ihn hat *„Last skip · reason"*
+  nichts zu zeigen, **egal wie viele Tage dazukommen.**
+
+  `[cmd]` **Gebraucht: 30 Tage fuer Streifen und Tabelle, 90 fuer die
+  Heatmap** — bei 4 Positionen **120 bzw. 360 Zeilen**, mit Auslassern.
+
+  `[read]` **Gehoert zu C-78** (zusammenhaengende Seeds): Wer 90 Tage
+  Einnahmen erzeugt, sollte sie an Training und Ernaehrung koppeln —
+  **ein vergessener Tag ist meist ein voller Tag.**
+
+  `[cmd]` **Vermutlich erledigt mit C-78** — 30 Trainingssitzungen und
+  170 Check-ins statt 9 und 36. **Zu pruefen, ob die Einnahmen
+  mitgewachsen sind und Auslasser enthalten.**
+
 
 
 ## Erledigt am 2026-08-05
