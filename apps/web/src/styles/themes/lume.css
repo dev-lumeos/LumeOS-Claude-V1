@@ -52,7 +52,11 @@
      Die Rueckfallkette entspricht der Vorlage:
      `'Inter', -apple-system, system-ui, sans-serif`. */
   --font-sans: var(--lumeos-inter), 'Inter', -apple-system, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  /* G-56: JetBrains Mono, wie die Vorlage (styles.css:8). Geladen wie
+     Inter — `next/font/google` im Wurzel-Layout, beim Bauen geholt.
+     Die Rueckfallkette bleibt die bisherige Systemkette, damit nichts
+     verschwindet, falls die Schrift einmal nicht ankommt. */
+  --font-mono: var(--lumeos-mono), 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   color-scheme: dark;
 }
 

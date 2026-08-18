@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
-import { Inter } from 'next/font/google'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import './globals.css'
@@ -41,6 +41,34 @@ const inter = Inter({
   variable: '--lumeos-inter',
 })
 
+/**
+ * G-56: JetBrains Mono, die Kennzahlenschrift der Vorlage.
+ *
+ * `[cmd]` Der Entwurf setzt `--font-mono: 'JetBrains Mono', ui-monospace,
+ * monospace` (styles.css:8) und laedt sie im selben `@import` wie Inter,
+ * mit den Gewichten 400, 500 und 600. Hier stand bis jetzt nur die
+ * Systemkette — und `v2.css` benutzt `var(--font-mono)` an sechs
+ * Stellen, **dort stehen die Kennzahlen**: Rangzahlen, LOINC-Codes,
+ * Bereichsangaben, Zeitstempel.
+ *
+ * `[read]` G-18 konnte den Unterschied nicht messen: *„Die Messung kann
+ * die beiden nicht unterscheiden, weil JetBrains Mono hier nicht
+ * installiert ist."* Erst nach dem Laden laesst sich vergleichen — und
+ * genau deshalb wird sie geladen, nicht weil eine Messung sie verlangt
+ * haette.
+ *
+ * Derselbe Weg wie bei Inter: beim Bauen heruntergeladen, vom eigenen
+ * Server ausgeliefert, zur Laufzeit keine Anfrage an Google. Die
+ * G-01-Entscheidung („keine fremde Abhaengigkeit im kritischen Pfad")
+ * bleibt gewahrt.
+ */
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  display: 'swap',
+  variable: '--lumeos-mono',
+})
+
 export const metadata: Metadata = {
   title: 'LumeOS',
   description: 'Health & Performance Operating System'
@@ -78,7 +106,12 @@ export default async function RootLayout({
   // weiter — die Tokens bleiben an einer Stelle, `v2.css` muss nichts
   // wissen.
   return (
-    <html lang={sprache} className={inter.variable} data-theme={theme} data-mode={mode}>
+    <html
+      lang={sprache}
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      data-theme={theme}
+      data-mode={mode}
+    >
       <body>
         <script dangerouslySetInnerHTML={{ __html: MODE_BOOTSTRAP }} />
         <NextIntlClientProvider messages={nachrichten} locale={sprache}>
