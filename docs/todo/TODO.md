@@ -1901,6 +1901,36 @@ Umsetzen angepasst werden.
   Wert → Klick zeigt die Einzelmuskeln → Liste zeigt, wie der Wert
   zustande kam.
 
+  ### Die Liste bekommt eine Ebene darunter
+
+  **Tom, 2026-08-18:** *„Die Auflästung rechts kann mit passenden
+  Gruppen gemacht werden, dann muessen aber die Childs darunter
+  ebenfalls angezeigt werden."*
+
+  `[cmd]` **Die Vorlage kennt die Unterteilung bereits teilweise:** Im
+  Tab `Muscle map` stehen `Rear delts` und `Front delts` als eigene
+  Zeilen, dazu `Upper back` und `Lower back` — **18 Gruppen.**
+
+  `[cmd]` **Was fehlt, ist die Ebene darunter:**
+  `training.muscle_groups` hat **10 Schultergruppen**, die Liste zeigt
+  zwei. Bei `legs` sind es **37 gegen sechs**.
+
+  **Drei Ebenen, nicht zwei:**
+
+  | Ebene | was sie zeigt |
+  |---|---|
+  | **Flaeche** | 15 faerbbare Bereiche auf der Karte |
+  | **Gruppe** | die 18 Zeilen der Liste — `Rear delts`, `Upper back` … |
+  | **Muskel** | die 107 aus `training.muscle_groups`, aufklappbar |
+
+  `[read]` **Der Klick auf die Flaeche trifft dieselbe Aufklappung** —
+  Flaeche → Gruppen → Muskeln. **Eine Kette, drei Stufen, keine
+  Sackgasse.**
+
+  `[cmd]` Die Spaltenwerte der Liste — **Stunden, Saetze, Soreness,
+  Prozent** — gelten je Ebene: **die Gruppe verdichtet, was ihre Muskeln
+  liefern**, wie die Flaeche das Gleiche mit den Gruppen tut.
+
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
   Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
