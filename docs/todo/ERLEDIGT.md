@@ -4219,6 +4219,143 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Wegweiser** — wer `140` liest, findet `match_status` und die drei
   Zustaende.
 
+- [x] **C-70: Der Biomarker-Katalog — vollstaendig und belegt** (neu
+  2026-08-17). **Vor C-69.**
+
+  **Tom, 2026-08-17:** *„Alle Daten sind nur Beispiele im Mockup. Die
+  realen Daten muessen wir zusammensuchen, recherchieren und validieren.
+  Ich will ein Maximum, was solche Daten angeht, und nicht irgendeinen
+  Auszug, der von KI generiert wird."*
+
+  ### Die Vorlage ist ein Ausschnitt
+
+  | | CBC | gesamt |
+  |---|---|---|
+  | **Designvorlage** | **4** (hct, plt, rbc, wbc) | 59 LOINC-Codes |
+  | **`SPEC_05_BIOMARKER_CATALOG.md`** | **15** | **74 in acht Panels** |
+
+  `[cmd]` Die Spec gliedert: CBC 15 · Metabolic 12 · Lipid 8 · Liver 7 ·
+  Thyroid 6 · Hormones 10 · Inflammation 6 · Vitamins & Minerals 10.
+
+  `[cmd]` Dazu **114 INSERT-Zeilen** im Seed des Vorgaengerrepos,
+  `biomarkerDetails.ts` mit 1.563 Zeilen und **242 Eintraegen**, sowie
+  `biomarkerSynonyms.ts` mit **457 Synonympaaren auf 91 kanonische
+  Namen, davon 18 auf Thai.**
+
+  ### Die Regelunterscheidung
+
+  `[read]` **Die Vorlage ist die Vorgabe fuer Struktur und Anordnung —
+  nicht fuer Bestandsdaten.** Bei den Lebensmitteln ist es genauso: Die
+  Vorlage zeigt vier Zeilen im Tagebuch, der Bestand hat 7.140
+  Eintraege. **Niemand kaeme auf die Idee, die Vorlage als
+  Lebensmitteldatenbank zu lesen.**
+
+  ### Was der Katalog braucht
+
+  **Je Marker:** kanonischer Name, **LOINC-Code**, Einheit,
+  Referenzbereich mit Quelle, Panel-Zuordnung, Synonyme (de/en/th).
+
+  `[read]` **Und jede Zahl braucht eine Quelle.** GO-00 hat gezeigt, was
+  ohne passiert: **47 von 72 Referenzzeilen falsch verknuepft**, Calcium
+  bei 32.000 %, weil die Einheit nicht zur Bezugsgroesse passte.
+
+  `[cmd]` **Referenzbereiche sind alters- und geschlechtsabhaengig** —
+  wie bei den Naehrstoffen. Und sie unterscheiden sich je Labor. **Was
+  gilt, ist eine Entscheidung, keine Recherche.**
+
+  ### Stand 2026-08-17: Rohbestand liegt, Kuration offen
+
+  `[cmd]` `daten/biomarker-katalog.json` — **122 Kandidaten**, davon 86
+  mit LOINC, 117 mit Referenzbereich-Kandidaten, **464
+  Referenzbereich-Zeilen**. Synonyme: 41 mit DE, 88 mit EN, **17 mit
+  TH**.
+
+  **Ausdruecklich als `curation_candidate_not_import_ready`
+  markiert** — `[read]` viele Bereiche stammen aus Vorgaengerquellen und
+  brauchen noch Quelle und Entscheidung.
+
+  `[cmd]` **Die Spec-Zaehlung passt nicht zum Inhalt:**
+  `SPEC_05_BIOMARKER_CATALOG.md` nennt 74 Marker in acht Panels — **aus
+  der Spec selbst waren nur 47 SQL-Zeilen greifbar.** Gemeldet, nicht
+  still aufgeloest.
+
+  `[cmd]` **Und die Panel-Zuordnung traegt noch nicht:** 13 verschiedene
+  Werte, teils doppelt (`hormone` **und** `hormone_panel`, `vitamin`
+  **und** `vitamins_panel`), `blood` mit 32 gegen `cbc_panel` mit 5, und
+  **29 Eintraege ganz ohne Panel.**
+
+  **Was zur Entscheidung ansteht:** die acht Panels der Spec als
+  Sollgliederung · welcher Referenzbereich gilt, wo Quellen abweichen ·
+  Labor- gegen Optimalbereich · die 36 ohne LOINC.
+
+  ### Stand 2026-08-18: Masterlist steht, Aufteilung noetig
+
+  `[cmd]` `daten/biomarker-loinc-masterlist.json` — **11.676 LOINC-Codes**
+  aus `Loinc_2.82`, abgeleitet und reproduzierbar.
+
+  | | |
+  |---|---|
+  | Labor / klinisch | 11.232 / 444 |
+  | mit UCUM-Einheit | 8.267 |
+  | mit Verbrauchername | 11.268 |
+  | **mit deutschem Namen** | **4.593** |
+  | mit Panelzuordnung | 4.137 |
+  | mit Definition | 823 |
+
+  `[cmd]` **Stichproben treffen quer durch alle Bereiche:** `718-7`
+  Haemoglobin · `2986-8` Testosteron · `2857-1` PSA · `8310-5`
+  Koerpertemperatur · `8867-4` Herzfrequenz · `8480-6` systolischer
+  Blutdruck · `50196-5` okkultes Blut im Stuhl · `5792-7` Glukose im
+  Urin.
+
+  **Der Kopf traegt die Auswahlregel, die Quellendateien und den
+  LOINC-Urhebervermerk**, und `reference_ranges` steht auf
+  `not_in_loinc` mit der Notiz, wie Bereiche spaeter andocken. `[read]`
+  **Der Platz ist da, bevor die Daten kommen.**
+
+  ### Zwei Groessenprobleme
+
+  `[cmd]` **Der Quellordner ist 924 MB** — seit `6708571` in
+  `.gitignore`, mit Bezugsquelle und Lizenzhinweis im Kommentar.
+
+  `[cmd]` **Die Masterlist ist 25,9 MB, der Pre-Commit-Hook lehnt ueber
+  10 MB ab.** `[read]` Die Grenze gibt es, seit eine Sicherung das Repo
+  aufgeblasen hat.
+
+  **Entschieden (Tom, 2026-08-18): aufteilen, nicht kuerzen.** `[read]`
+  Der Grund gegen das Wegwerfen von Feldern: **`system` sagt, ob ein Wert
+  aus Blut, Urin oder Stuhl kommt — genau das braucht der Import.** Was
+  heute unnoetig aussieht, ist morgen die Zuordnungshilfe.
+
+  `[cmd]` **Kein thailaendisches Sprachpaket in LOINC 2.82.** Die 18
+  Thai-Synonyme aus `biomarkerSynonyms.ts` bleiben der einzige Bestand.
+
+  `[cmd]` **Erledigt 2026-08-18.** In drei Schritten gebaut:
+
+  | | |
+  |---|---|
+  | zuerst | 122 kurierte Kandidaten aus vier Quellen, 464 Bereichszeilen |
+  | dann | **11.676 LOINC-Codes** aus `Loinc_2.82`, 8.267 mit Einheit, 4.593 mit deutschem Namen |
+  | zuletzt | **acht Dateien** unter `daten/biomarker-loinc/`, groesste 8,39 MB |
+
+  `[read]` **Toms Vorgabe war der Wendepunkt:** *„Ich will ein Maximum,
+  was solche Daten angeht, und nicht irgendeinen Auszug, der von KI
+  generiert wird."* — **Die Designvorlage fuehrt 4 CBC-Marker, die Spec
+  15, LOINC den ganzen Bestand.**
+
+  `[cmd]` **Die Stichproben treffen quer durch alle Bereiche:** `718-7`
+  Haemoglobin, `2986-8` Testosteron, `2857-1` PSA, `8310-5`
+  Koerpertemperatur, `8867-4` Herzfrequenz, `8480-6` systolischer
+  Blutdruck, `50196-5` okkultes Blut im Stuhl, `5792-7` Glukose im Urin.
+
+  `[cmd]` **Der Quellordner (924 MB) ist ignoriert**, das Erzeugerskript
+  liegt im Repo, **der LOINC-Urhebervermerk steht in jeder der acht
+  Dateien.**
+
+  `[read]` **Die Regel dahinter gilt weiter:** Die Vorlage ist die
+  Vorgabe fuer Struktur und Anordnung, **nicht fuer Bestandsdaten.** Wie
+  bei den 7.140 Lebensmitteln, wo das Tagebuch vier Zeilen zeigt.
+
 
 
 ## Erledigt am 2026-08-05
