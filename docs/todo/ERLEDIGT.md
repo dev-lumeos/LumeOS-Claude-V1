@@ -6318,3 +6318,185 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` 16 Punkte unveraendert (12 vorne, 4 hinten), Wegfilter 10 IM +
   6 SubQ. **Bildschirmfotos beide Modi x vier Breiten, plus Vorzustand**
   — was in G-45 fehlte. `rgba` bei 4, keine neuen Tokens.
+
+- [x] **G-43: `history` und `shield` fehlen, `Pill` hat kein `dot`**
+  (neu 2026-08-18). Befund aus G-40.
+
+  `[cmd]` **`shield` zum zweiten Mal** (G-36 und G-40), **beide Male an
+  einer Datenschutz-Ueberschrift** — die naheliegendste Ergaenzung.
+
+  `[cmd]` Dazu: `Pill` hat kein `dot`, und es gibt **keinen
+  `Empty`-Baustein**. Beide in `coach/bausteine.tsx` modul-lokal
+  nachgebaut. `[read]` Wer sie beim zweiten Modul nachbaut, baut sie
+  falsch — dieselbe Regel wie bei den Shell-Bausteinen in G-02.
+
+  `[cmd]` **Und `.v2-card-h` bricht Kartentitel um**, wenn ein langer
+  Untertitel auf die Attrappen-Marke trifft. `[read]` Dritter Befund
+  dieser Art nach G-23 (Modulkopf) und G-34 (`.v2-btn` ohne `nowrap`).
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-39: Zwei Symbole fehlen (`shield`, `file`)** (neu 2026-08-17).
+  Befund aus G-36.
+
+  `[cmd]` `shield` **zweimal, an der sichtbarsten Stelle** → ersetzt
+  durch `admin`; `file` → `copy`. `packages/ui` war gesperrt.
+
+  `[read]` Dritter Fund dieser Art nach G-20 (fuenf Symbole) und G-21.
+  **`arr_r` nicht uebernommen** — ein Test haelt das fest.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-50: `v2-g-cols-5` fehlt** (neu 2026-08-18). Befund aus G-42.
+
+  `[cmd]` `v2.css` hat nur `-2`, `-3`, `-4`. **Modul-lokal nachgebaut.**
+
+  `[read]` Zusammen mit G-43 (`shield` **zum dritten Mal**, `file`,
+  `Pill` ohne `dot`, kein `Empty`) — **die Sammelstelle fuer fehlende
+  Bausteine.**
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-52: `InEntwicklungKnopf` kennt kein `disabled`** (neu
+  2026-08-18). Befund aus G-45.
+
+  `[cmd]` **Im Log-Fenster ist das nicht nebensaechlich:** Die Vorlage
+  **sperrt den Speichern-Knopf bei ueberschrittener Menge oder laufendem
+  Ruhefenster.**
+
+  `[read]` Ein Knopf, der eine Grenze nicht durchsetzt, **sieht aus wie
+  eine Sicherung und ist keine.**
+
+  `[cmd]` **Ohne `packages/ui` geloest:** der gesperrte Fall rendert ein
+  echtes `<button disabled>`. **Fuenfter Fall nach den G-43-Luecken**
+  (`shield` dreimal, `file`, `Pill` ohne `dot`, kein `Empty`,
+  `v2-g-cols-5`).
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-41: Bei 375 px scrollt jede v2-Seite waagerecht** (neu
+  2026-08-17). Randbefund aus G-38.
+
+  `[cmd]` **Ursache ist `.v2-sidebar-nav` mit 880 px**, nicht der
+  Modulinhalt — **betrifft auch unveraenderte Seiten.**
+
+  `[read]` Die bisherige Pruefung *„drei Breiten ohne Ueberlauf"* hat es
+  nie gefunden, weil sie bei groesseren Breiten misst. **375 px ist die
+  Breite eines Telefons.**
+
+  `[cmd]` Die Shell stammt aus G-02, wo die Haltepunkte der bestehenden
+  Oberflaeche uebernommen wurden — **der Entwurf hat null
+  `@media`-Regeln.** Unter 1.280 px wurde die Kontextspalte
+  ausgeblendet; **die Sidebar blieb unberuehrt.**
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-34: `.v2-btn` hat kein `white-space: nowrap`** (neu
+  2026-08-17). Befund aus G-28.
+
+  `[cmd]` `v2.css:344`. **Die Kopfknoepfe brechen innerhalb des Knopfes
+  um** — die Knopfhoehe bleibt bei 26 px, gemessen.
+
+  **Betrifft jedes Modul.** `packages/ui` war waehrend G-28 gesperrt —
+  gemeldet, nicht lokal umgangen.
+
+  `[read]` Haengt mit G-23 zusammen: Dort bricht der **Modulkopf** um,
+  weil zu viele Knoepfe drin sind. **Hier bricht der Knopf selbst.**
+  Zwei verschiedene Fehler, dieselbe Stelle.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-24: JetBrains Mono laden** (neu 2026-08-17). Rest aus G-18.
+
+  `[cmd]` Die Vorlage setzt `--font-mono: 'JetBrains Mono', ui-monospace,
+  monospace`; hier steht nur die Systemkette. `v2.css` benutzt
+  `var(--font-mono)` an sechs Stellen — dort stehen in der Vorlage die
+  Kennzahlen.
+
+  `[annahme]` Der Unterschied duerfte klein sein. **Belegbar erst, wenn
+  die Schrift geladen ist** — dann laesst sich vergleichen statt
+  vermuten.
+
+  `[cmd]` Der Weg ist derselbe wie bei Inter: `next/font/google`, beim
+  Bauen geladen, keine Laufzeitabhaengigkeit.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-10: `btn-accent` auf Seiten ohne Modulakzent** (neu
+  2026-08-16). Befund aus C-58.
+
+  `[cmd]` Der Speichern-Knopf in Settings war unsichtbar: Er trug
+  `v2-btn-accent`, das sich aus `--acc` färbt — **und Settings hat
+  keinen Modulakzent.** Mit und ohne Änderung blassgrau, Unterschied nur
+  die Deckkraft.
+
+  **Das betrifft nicht nur Settings.** `[cmd]` Jede Seite ohne
+  Modulakzent hat dasselbe Problem mit jedem `btn-accent` — und
+  `app-shell.tsx` setzt `--acc` nur für die elf Module.
+
+  **Zu prüfen:** Welche Seiten haben keinen Akzent? Was passiert dort
+  mit `v2-btn-accent`, `v2-accent-dot` und allem anderen, das aus
+  `--acc` liest? `[annahme]` Ein Rückfallwert im Token wäre die
+  einfachste Lösung — dann ist nichts unsichtbar, auch wenn die Seite
+  kein Modul ist.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-27: `v2-rec-grid-1135` und drei weitere Raster** (neu
+  2026-08-17). Rest aus G-21.
+
+  `[cmd]` Vier eigene Raster in `apps/web/src/app/v2/recovery/recovery.css`
+  — darunter `v2-rec-grid-1135`, **links schmaler als rechts, einmalig
+  im Repo.**
+
+  `[read]` `v2-grid v2-g-cols-2` **ist kein Ersatz: es hat keinen
+  Haltepunkt.**
+
+  `[cmd]` Die geteilten Raster nutzt Recovery bereits zentral
+  (`v2-grid-14`, `-15`, `v2-tbl-wrap`) — der Agent hat mitten im Auftrag
+  auf G-19 umgestellt. **Was bleibt, ist der Rest.**
+
+  **Gleiche Behandlung wie bei Training:** in den `zusatz`-Block des
+  Erzeugers, nicht von Hand in `v2.css`.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-35: Zwoelf Modul-Raster in `goals.css`** (neu 2026-08-17). Rest
+  aus G-28.
+
+  `[cmd]` Die geteilten `v2-grid-14`/`-15` tragen **acht der zehn
+  Tabs** — der Rest sind Sonderfaelle.
+
+  **Gleiche Behandlung wie G-19 und G-27:** in den `zusatz`-Block des
+  Erzeugers, **beim Verschieben zusammenfassen.** `[read]` Sonst stehen
+  am Ende elf Modul-Rastersaetze nebeneinander, die dasselbe tun.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
+
+- [x] **G-23: Der Modulkopf bricht um** (neu 2026-08-17). Befund aus
+  G-18.
+
+  `[cmd]` **Sechs Aktionsknoepfe plus die G-14-Datumsnavigation passen
+  bei 1600 px nicht in eine Zeile.** Kein Ueberlauf, nur Umbruch — und
+  kein Schriftproblem, es war vorher da.
+
+  `[cmd]` Die Vorlage zeigt `‹ ›` plus vier Knoepfe; hier kamen die
+  Datumsnavigation als Block und `Lebensmittel suchen` dazu.
+
+  **Zu entscheiden:** Welche Knoepfe gehoeren in den Kopf und welche
+  woandershin? `[read]` Die Vorlage ist die Vorgabe — wenn sie vier
+  zeigt und hier sechs stehen, ist die Frage, was dazugekommen ist und
+  warum.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
+  Tests.**
