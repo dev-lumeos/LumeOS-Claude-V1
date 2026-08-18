@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `ef3392a` auf `dev`.
+**Stand:** 2026-08-18, Anker `52e1457` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -205,10 +205,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-37** | Supplements an den Katalog anschliessen |  |
 | **C-76** | Seed-Befunde fuer Medical |  |
 | **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
-| **C-77** | Alle Seeds auf `dev@lumeos.app` nachziehen |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-79** | 410 von 464 Referenzbereichen sind Text ohne Zahlen |  |
 | **C-80** | `142` ergaenzt Spalten, die `140` nicht kennt |  |
+| **C-81** | Das Passwort fuer `dev@lumeos.app` ist unbekannt |  |
 | **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
@@ -2197,52 +2197,6 @@ Umsetzen angepasst werden.
   `[cmd]` **„25 von 0 gezeigt"** — die Zaehlung der Trefferliste ist
   kaputt.
 
-- [ ] **C-77: Alle Seeds auf `dev@lumeos.app` nachziehen** (neu
-  2026-08-18). **Fuer Codex, hohe Prioritaet.**
-
-  **Tom, 2026-08-18:** *„Wegwerf-DB ist mir scheissegal, wie und wo er
-  anlegt. Danach muessen Seeds in meinen Dev-Account, sonst sehe ich
-  nichts."*
-
-  ### Gemessen
-
-  | Konto | Mahlzeiten | Messungen | Befunde | anmeldbar |
-  |---|---|---|---|---|
-  | **`dev@lumeos.app`** | 173 | **0** | **0** | ja |
-  | `tom.seed@example.com` | 173 | 43 | 2 | **nein** |
-  | `test-user@lumeos.local` | 1 | 0 | 2 | ja |
-
-  `[cmd]` **Nur Mahlzeiten sind auf Toms Konto** — weil
-  `eigenes-konto-fuellen.sql` genau das tut. **Alles seither liegt bei
-  `tom.seed`**, und dieses Konto hat **kein Passwort**
-  (`encrypted_password IS NULL`), ist also nicht anmeldbar.
-
-  `[read]` **Damit war nichts im Browser sichtbar** — weder fuer Tom
-  noch fuer einen Agenten, der einen Nachweis fuehren sollte. Der
-  G-46-Agent hat es beim Versuch gemerkt und gefragt.
-
-  ### Was nachzuziehen ist
-
-  `[cmd]` **43 Koerpermessungen, 7 Umfaenge** (GO-10/GO-14) · **36
-  Recovery-Check-ins** (C-67) · **9 Trainingssitzungen, 18 Uebungen, 60
-  Saetze** (C-66) · **1 Supplement-Stack mit 4 Positionen und 4
-  Einnahmen** (C-68) · **Ziele und Phasen** (GO-07) · **Laborbefunde**
-  (C-69, dann C-76).
-
-  `[read]` **`eigenes-konto-fuellen.sql` ist das Muster** — es
-  erweitern, nicht daneben ein zweites Skript bauen.
-
-  `[cmd]` **Und die zwei Kopien auf `test-user` wegraeumen**, die der
-  G-46-Agent fuer seinen Nachweis angelegt hat — `test-user` ist ein
-  Pruefkonto, kein Demokonto.
-
-  ### Warum es mehr ist als Bequemlichkeit
-
-  `[read]` **Der Zeilenschutz-Nachweis braucht zwei anmeldbare
-  Konten** — einen, der die Daten sieht, und einen, der sie nicht sieht.
-  **Ein Konto ohne Passwort taugt fuer keines von beidem.** Bisher wurde
-  RLS gegen `tom.seed` und `max.seed` geprueft — **beide nicht
-  anmeldbar**, der Nachweis lief nur ueber SQL.
 
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
@@ -2337,6 +2291,36 @@ Umsetzen angepasst werden.
   gewollt? `[read]` Ein Kettenschritt, der die Tabelle eines frueheren
   erweitert, ist normal — **aber wer nur `140` liest, kennt das Schema
   nicht.**
+
+- [ ] **C-81: Das Passwort fuer `dev@lumeos.app` ist unbekannt** (neu
+  2026-08-18). **Blockiert jeden Browser-Nachweis.** Befund aus C-77.
+
+  `[cmd]` **`LumeOS2026!` liefert lokal `invalid_credentials`.** Der
+  Agent hat wie beauftragt **kein Passwort gesetzt oder geaendert.**
+
+  `[read]` **Damit ist der Bestand da, aber nicht ansehbar** — 43
+  Messungen, 36 Check-ins, 9 Sitzungen und 2 Befunde liegen auf einem
+  Konto, in das sich niemand anmelden kann.
+
+  ### Die Geschichte dahinter
+
+  `[cmd]` Am 2026-08-16 hat ein Agent `dev@lumeos.app` **ein Passwort
+  gesetzt, ohne dass es im Auftrag stand** — `LumeosDev2026`. **Es steht
+  in keiner Dokumentation** (C-65), und `docs/ssot/37-testkonten.md:15`
+  fuehrt fuer das Konto nur *„(Toms eigenes)"*.
+
+  `[read]` **Zwei Kandidaten, beide ungeprueft** — und die lokale
+  Datenbank wurde seither mehrfach neu aufgebaut. **Was in `auth.users`
+  steht, weiss niemand.**
+
+  **Was zu tun ist:** Tom setzt ein Passwort seiner Wahl und traegt es in
+  `37-testkonten.md` ein — **oder er sagt, welches gelten soll, und ein
+  Agent setzt es.** `[read]` Beides ist in Ordnung; **still gesetzt und
+  nirgends vermerkt ist es nicht.**
+
+  `[cmd]` **Und `test-user@lumeos.local` braucht dieselbe Klarheit** —
+  er ist das zweite anmeldbare Konto und traegt den
+  Zeilenschutz-Nachweis.
 
 - [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
   aus C-72.

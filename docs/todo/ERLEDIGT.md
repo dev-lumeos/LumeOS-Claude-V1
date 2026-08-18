@@ -3940,6 +3940,74 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   **Damit ist G-49 baubar** — die drei Ebenen (Flaeche, Gruppe, Muskel)
   haben jetzt eine Struktur, auf der sie aufsetzen koennen.
 
+- [x] **C-77: Alle Seeds auf `dev@lumeos.app` nachziehen** (neu
+  2026-08-18). **Fuer Codex, hohe Prioritaet.**
+
+  **Tom, 2026-08-18:** *„Wegwerf-DB ist mir scheissegal, wie und wo er
+  anlegt. Danach muessen Seeds in meinen Dev-Account, sonst sehe ich
+  nichts."*
+
+  ### Gemessen
+
+  | Konto | Mahlzeiten | Messungen | Befunde | anmeldbar |
+  |---|---|---|---|---|
+  | **`dev@lumeos.app`** | 173 | **0** | **0** | ja |
+  | `tom.seed@example.com` | 173 | 43 | 2 | **nein** |
+  | `test-user@lumeos.local` | 1 | 0 | 2 | ja |
+
+  `[cmd]` **Nur Mahlzeiten sind auf Toms Konto** — weil
+  `eigenes-konto-fuellen.sql` genau das tut. **Alles seither liegt bei
+  `tom.seed`**, und dieses Konto hat **kein Passwort**
+  (`encrypted_password IS NULL`), ist also nicht anmeldbar.
+
+  `[read]` **Damit war nichts im Browser sichtbar** — weder fuer Tom
+  noch fuer einen Agenten, der einen Nachweis fuehren sollte. Der
+  G-46-Agent hat es beim Versuch gemerkt und gefragt.
+
+  ### Was nachzuziehen ist
+
+  `[cmd]` **43 Koerpermessungen, 7 Umfaenge** (GO-10/GO-14) · **36
+  Recovery-Check-ins** (C-67) · **9 Trainingssitzungen, 18 Uebungen, 60
+  Saetze** (C-66) · **1 Supplement-Stack mit 4 Positionen und 4
+  Einnahmen** (C-68) · **Ziele und Phasen** (GO-07) · **Laborbefunde**
+  (C-69, dann C-76).
+
+  `[read]` **`eigenes-konto-fuellen.sql` ist das Muster** — es
+  erweitern, nicht daneben ein zweites Skript bauen.
+
+  `[cmd]` **Und die zwei Kopien auf `test-user` wegraeumen**, die der
+  G-46-Agent fuer seinen Nachweis angelegt hat — `test-user` ist ein
+  Pruefkonto, kein Demokonto.
+
+  ### Warum es mehr ist als Bequemlichkeit
+
+  `[read]` **Der Zeilenschutz-Nachweis braucht zwei anmeldbare
+  Konten** — einen, der die Daten sieht, und einen, der sie nicht sieht.
+  **Ein Konto ohne Passwort taugt fuer keines von beidem.** Bisher wurde
+  RLS gegen `tom.seed` und `max.seed` geprueft — **beide nicht
+  anmeldbar**, der Nachweis lief nur ueber SQL.
+
+  `[cmd]` **Erledigt 2026-08-18.** `eigenes-konto-fuellen.sql`
+  erweitert — **derselbe Demo-Bestand wie bei `tom.seed`:**
+
+  | | |
+  |---|---|
+  | Ernaehrung | 173 Mahlzeiten, 536 Positionen, 85 Wassereintraege |
+  | Koerper | **43 Messungen, 7 Umfaenge** |
+  | Recovery | **36 Check-ins** |
+  | Training | 9 Sitzungen, 18 Uebungen, 60 Saetze |
+  | Supplements | 1 Stack, 4 Positionen, 4 Einnahmen |
+  | Goals | 2 Ziele, 2 Phasen, 3 Meilensteine |
+  | Medical | 2 Befunde, 6 Werte |
+
+  `[cmd]` **`tom.seed` blieb unveraendert** — kopiert, nicht
+  verschoben. **`test-user` ist wieder sauber** (0 Befunde, 0 Werte),
+  sein kleiner Pruefbestand bleibt: 1 Mahlzeit, 2 Positionen, 1
+  Zielwert.
+
+  `[cmd]` Zeilenschutz-Sicht: als `dev@lumeos.app` sichtbar 43/36/9, als
+  `test-user` jeweils 0.
+
 
 
 ## Erledigt am 2026-08-05
