@@ -3796,6 +3796,79 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` Zeilenschutz: Tom sieht 2 Befunde und 6 Werte, Max 0/0,
   **Fremdimport bricht mit `medical import: user mismatch` ab.**
 
+- [x] **C-73: Die 107 Muskelgruppen kurieren** (neu 2026-08-18).
+  **Vor G-49.**
+
+  `[cmd]` `training.muscle_groups` hat **107 Eintraege** in 7 Regionen —
+  **und keine Hierarchie.** Die Tabelle traegt nur `name`,
+  `body_region`, `display_order`. **Kein Elternfeld.**
+
+  ### Der Befund an einer Region
+
+  `[cmd]` Die zehn unter `shoulders`:
+
+  ```
+  Deltoids · Front Shoulders · Hip Rotators · Rear Shoulders ·
+  Rotator Cuff · Rotator Cuff Muscles · Shoulders ·
+  Teres Minor · Infraspinatus · Subscapularis
+  ```
+
+  | | |
+  |---|---|
+  | **Dublette** | `Rotator Cuff` und `Rotator Cuff Muscles` |
+  | **Falsche Region** | `Hip Rotators` — das sind Hueftrotatoren |
+  | **Ueberschneidung** | `Deltoids` gegen `Shoulders`, dazu `Front`/`Rear Shoulders` |
+  | **Fehlende Ebene** | `Teres Minor`, `Infraspinatus`, `Subscapularis` **sind** die Rotatorenmanschette — sie stehen gleichrangig daneben |
+
+  `[read]` **Dieselbe Lage wie bei den Lebensmitteln vor der Kuration:
+  Die Zahl stimmt, die Ordnung nicht.**
+
+  ### Was zu tun ist
+
+  **Zuerst messen**, wie viele der 107 betroffen sind — `shoulders` ist
+  eine Stichprobe, **legs hat 37 und arms 24.**
+
+  **Dann:** Dubletten zusammenfuehren · falsche Regionen richtigstellen ·
+  **eine Elternbeziehung ergaenzen**, damit `Infraspinatus` unter
+  `Rotator Cuff` haengt.
+
+  `[cmd]` **Woher die Eintraege stammen, ist zu klaeren** — `[read]` der
+  Fundus nennt `import-exercises.ts` und `import-free-exercise-db.ts` im
+  Vorgaengerrepo. **Wenn sie aus einer fremden Quelle kommen, ist die
+  Kuration eine Uebersetzungsschicht, keine Korrektur am Bestand.**
+
+  `[cmd]` **`exercise_muscles` haengt mit 6.624 Zuordnungen daran** —
+  eine zusammengefuehrte Dublette darf keine Uebung verlieren.
+
+  **Ohne diesen Punkt klappt sich unter `Deltoids` eine Liste auf, die
+  `Hip Rotators` enthaelt.**
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritt `107`.
+
+  | | |
+  |---|---|
+  | Gruppen | **107 → 96** |
+  | `exercise_muscles` | **bleibt 6.624** — keine Zuordnung verloren |
+  | Waisen | **0** |
+  | Eltern-Beziehungen | **89** |
+
+  `[read]` **Die zweite Zahl war der Nachweis, der zaehlte** — eine
+  zusammengefuehrte Dublette darf keine Uebung verlieren.
+
+  ### Die Schulterhierarchie traegt
+
+  ```
+  Shoulders
+  ├─ Deltoids ──── Front Shoulders, Rear Deltoids
+  └─ Rotator Cuff ─ Infraspinatus, Subscapularis, Teres Minor
+  ```
+
+  `[cmd]` **`Hip Rotators` ist weg aus `shoulders`**, die Dublette
+  `Rotator Cuff Muscles` zusammengefuehrt.
+
+  **Damit ist G-49 baubar** — die drei Ebenen (Flaeche, Gruppe, Muskel)
+  haben jetzt eine Struktur, auf der sie aufsetzen koennen.
+
 
 
 ## Erledigt am 2026-08-05

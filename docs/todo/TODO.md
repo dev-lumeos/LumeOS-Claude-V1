@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `5444420` auf `dev`.
+**Stand:** 2026-08-18, Anker `d4e8bcc` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 82 offen, 3 in Arbeit.
+`[cmd]` 81 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -206,7 +206,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-37** | Supplements an den Katalog anschliessen |  |
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
 | **C-74** | 152 Aliaspaare nicht importiert |  |
-| **C-73** | Die 107 Muskelgruppen kurieren |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
@@ -1933,6 +1932,10 @@ Umsetzen angepasst werden.
   Prozent** — gelten je Ebene: **die Gruppe verdichtet, was ihre Muskeln
   liefern**, wie die Flaeche das Gleiche mit den Gruppen tut.
 
+  `[cmd]` **C-73 ist seit 2026-08-18 erledigt** — 96 Gruppen, 89
+  Eltern-Beziehungen, `exercise_muscles` unveraendert bei 6.624.
+  **Die Struktur steht, G-49 ist baubar.**
+
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
   Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
@@ -2200,52 +2203,6 @@ Umsetzen angepasst werden.
   Marker** — die 292 Aliase schliessen die Luecke nur dort, wo sie
   bekannt ist.
 
-- [ ] **C-73: Die 107 Muskelgruppen kurieren** (neu 2026-08-18).
-  **Vor G-49.**
-
-  `[cmd]` `training.muscle_groups` hat **107 Eintraege** in 7 Regionen —
-  **und keine Hierarchie.** Die Tabelle traegt nur `name`,
-  `body_region`, `display_order`. **Kein Elternfeld.**
-
-  ### Der Befund an einer Region
-
-  `[cmd]` Die zehn unter `shoulders`:
-
-  ```
-  Deltoids · Front Shoulders · Hip Rotators · Rear Shoulders ·
-  Rotator Cuff · Rotator Cuff Muscles · Shoulders ·
-  Teres Minor · Infraspinatus · Subscapularis
-  ```
-
-  | | |
-  |---|---|
-  | **Dublette** | `Rotator Cuff` und `Rotator Cuff Muscles` |
-  | **Falsche Region** | `Hip Rotators` — das sind Hueftrotatoren |
-  | **Ueberschneidung** | `Deltoids` gegen `Shoulders`, dazu `Front`/`Rear Shoulders` |
-  | **Fehlende Ebene** | `Teres Minor`, `Infraspinatus`, `Subscapularis` **sind** die Rotatorenmanschette — sie stehen gleichrangig daneben |
-
-  `[read]` **Dieselbe Lage wie bei den Lebensmitteln vor der Kuration:
-  Die Zahl stimmt, die Ordnung nicht.**
-
-  ### Was zu tun ist
-
-  **Zuerst messen**, wie viele der 107 betroffen sind — `shoulders` ist
-  eine Stichprobe, **legs hat 37 und arms 24.**
-
-  **Dann:** Dubletten zusammenfuehren · falsche Regionen richtigstellen ·
-  **eine Elternbeziehung ergaenzen**, damit `Infraspinatus` unter
-  `Rotator Cuff` haengt.
-
-  `[cmd]` **Woher die Eintraege stammen, ist zu klaeren** — `[read]` der
-  Fundus nennt `import-exercises.ts` und `import-free-exercise-db.ts` im
-  Vorgaengerrepo. **Wenn sie aus einer fremden Quelle kommen, ist die
-  Kuration eine Uebersetzungsschicht, keine Korrektur am Bestand.**
-
-  `[cmd]` **`exercise_muscles` haengt mit 6.624 Zuordnungen daran** —
-  eine zusammengefuehrte Dublette darf keine Uebung verlieren.
-
-  **Ohne diesen Punkt klappt sich unter `Deltoids` eine Liste auf, die
-  `Hip Rotators` enthaelt.**
 
 - [ ] **C-70: Der Biomarker-Katalog — vollstaendig und belegt** (neu
   2026-08-17). **Vor C-69.**
