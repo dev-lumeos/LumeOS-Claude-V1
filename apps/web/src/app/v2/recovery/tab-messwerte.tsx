@@ -16,14 +16,15 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE.
 import * as React from 'react'
-import { Card, Pill, Icon, Ring, Meter, Row, LineChart } from '@lumeos/ui'
+import { Card, Pill, Icon, Ring, Meter, Row, LineChart, ErmuedungsKarte } from '@lumeos/ui'
 
 import {
   CHECKIN, MUSCLE_GROUPS_BODYMAP, MUSCLE_LABEL, MUSCLE_STATE, NUTRITION_INPUT,
   HRV_BASELINE, HRV_LOG, SLEEP_DATA,
   calcMuscleRecovery, calcHRVScore, calcSleepScore,
 } from './motor'
-import { Koerperkarte } from './koerperkarte'
+// G-26: die anatomische Karte kommt jetzt aus packages/ui.
+import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { useRecovery } from './kontext'
 import { ATTRAPPE } from './ansicht'
 
@@ -48,13 +49,16 @@ export function RecMuscleMap() {
   return (
     <div className="v2-rec-grid-1135">
       <Card title="Muscle recovery" sub="18 groups · click for the breakdown" attrappe={ATTRAPPE}>
-        <Koerperkarte values={values} mode="recovery"
-                      onPick={s => open({ typ: 'muscle', slug: s })} size={200} />
-        <div className="v2-rec-legende">
-          <span className="v2-row-gap"><span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--pos)', opacity: 0.68 }} />ready</span>
-          <span className="v2-row-gap"><span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--warn)', opacity: 0.68 }} />recovering</span>
-          <span className="v2-row-gap"><span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--neg)', opacity: 0.68 }} />not ready</span>
-        </div>
+        {/* G-26: die anatomische Karte. Sie bringt ihre Legende mit —
+            die drei Zeilen, die hier standen, sind entfallen. */}
+        <ErmuedungsKarte
+          daten={alsErmuedung(values)}
+          breite={180}
+          onPick={(id, typ) => {
+            const slug = KARTE_ZU_RECOVERY[id]
+            if (typ === 'muscle' && slug) open({ typ: 'muscle', slug })
+          }}
+        />
         <div className="v2-divider" />
         <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Base recovery curve</div>
         <LineChart h={110} range={[0, 105]} xLabels={['0h', '12h', '24h', '48h', '72h', '96h']}

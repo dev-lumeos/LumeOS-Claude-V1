@@ -16,14 +16,15 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE.
 import * as React from 'react'
-import { Card, Pill, Icon, Ring, InEntwicklungKnopf } from '@lumeos/ui'
+import { Card, Pill, Icon, Ring, InEntwicklungKnopf, Koerperkarte } from '@lumeos/ui'
 
 import {
   CHECKIN, MOOD_META, MOOD_MULTIPLIER, MUSCLE_LABEL, MUSCLE_STATE,
   READINESS_LEVELS, ACWR_DATA, TODAY_MODALITIES,
   calcTrainingLoadScore, calcModalityBonus, calcHRVScore, readinessFor,
 } from './motor'
-import { Koerperkarte } from './koerperkarte'
+// G-26: die anatomische Karte kommt jetzt aus packages/ui.
+import { katerAlsMuskeln, RECOVERY_ZU_KARTE, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { ATTRAPPE } from './ansicht'
 
 /** Die zehn Gesichter der Vorlage. [cmd] module-recovery-v2.jsx:254. */
@@ -110,17 +111,29 @@ export function RecCheckin() {
 
         <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Soreness · tap a muscle to cycle 0 → 3</div>
         <Card className="v2-card-tight" style={{ padding: 12, marginBottom: 12 }}>
-          <Koerperkarte values={soreness} mode="soreness"
-                        onPick={slug => { cycle(slug); setSel(slug) }}
-                        selected={sel} size={180} />
-          <div className="v2-rec-legende">
-            {([['0 none', 'var(--surface-2)'], ['1 mild', 'var(--acc-recov)'],
-               ['2 moderate', 'var(--warn)'], ['3 severe', 'var(--neg)']] as Array<[string, string]>).map(([l, c]) => (
-              <span key={l} className="v2-row-gap">
-                <span style={{ width: 10, height: 10, borderRadius: 2, background: c, opacity: 0.68 }} />{l}
-              </span>
-            ))}
-          </div>
+          {/* G-26: dieselbe anatomische Karte wie in Today.
+              `[cmd]` HIER NICHT `ErmuedungsKarte`: die bringt die
+              Legende „Ready / Caution / Rest" mit, und der Check-in
+              misst in Stufen 0-3. Zwei Legenden nebeneinander, die
+              dieselbe Flaeche verschieden benennen, sind schlimmer als
+              keine. Deshalb die Grundkomponente mit der Legende, die
+              zu dieser Skala gehoert. */}
+          <Koerperkarte
+            muskeln={katerAlsMuskeln(soreness)}
+            breite={160}
+            ausgewaehlt={sel ? RECOVERY_ZU_KARTE[sel] : null}
+            legende={[
+              { color: 'var(--surface-2)', label: '0 none' },
+              { color: 'var(--acc-recov)', label: '1 mild' },
+              { color: 'var(--warn)', label: '2 moderate' },
+              { color: 'var(--neg)', label: '3 severe' },
+            ]}
+            onPick={(id, typ) => {
+              if (typ !== 'muscle') return
+              const slug = KARTE_ZU_RECOVERY[id]
+              if (slug) { cycle(slug); setSel(slug) }
+            }}
+          />
           {sel && (
             <div style={{
               marginTop: 10, padding: 9, background: 'var(--bg-elev)',

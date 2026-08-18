@@ -32,7 +32,8 @@
 // anzubinden.
 import * as React from 'react'
 import {
-  Card, Pill, Icon, Ring, Meter, Row, Tabs, InEntwicklungKnopf, type TabItem,
+  Card, Pill, Icon, Ring, Meter, Row, Tabs, InEntwicklungKnopf,
+  ErmuedungsKarte, type TabItem,
 } from '@lumeos/ui'
 
 import {
@@ -42,7 +43,9 @@ import {
   evaluateOvertraining, recoveryPendingActions,
 } from './motor'
 import { RecoveryKontext, useRecovery, type ModalZustand, type ScoreModus } from './kontext'
-import { Koerperkarte } from './koerperkarte'
+// G-26: `./koerperkarte` (der Entwurf) ist raus — die anatomische
+// Karte steht in packages/ui, weil drei Module sie brauchen.
+import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { RecoveryModale } from './modale'
 import { RecCheckin } from './tab-checkin'
 import { RecMuscleMap, RecHRV, RecSleep } from './tab-messwerte'
@@ -221,13 +224,20 @@ function RecToday() {
             </button>
           }
         >
-          <Koerperkarte values={recoveryValues} mode="recovery"
-                        onPick={s => open({ typ: 'muscle', slug: s })} size={170} />
-          <div className="v2-rec-legende">
-            <span className="v2-row-gap"><span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--pos)', opacity: 0.68 }} />ready &gt; 80%</span>
-            <span className="v2-row-gap"><span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--warn)', opacity: 0.68 }} />recovering 50–80%</span>
-            <span className="v2-row-gap"><span style={{ width: 10, height: 10, borderRadius: 2, background: 'var(--neg)', opacity: 0.68 }} />not ready &lt; 50%</span>
-          </div>
+          {/* G-26: die anatomische Karte aus packages/ui ersetzt die
+              18 Flaechen des Entwurfs. Die Legende bringt sie mit —
+              die drei Zeilen, die hier standen, sind entfallen, weil
+              sie dieselbe Skala zweimal beschrieben haetten. */}
+          <ErmuedungsKarte
+            daten={alsErmuedung(recoveryValues)}
+            breite={150}
+            onPick={(id, typ) => {
+              // Zurueckuebersetzen: die Karte meldet ihre ID, das
+              // Fenster erwartet das Recovery-Kuerzel.
+              const slug = KARTE_ZU_RECOVERY[id]
+              if (typ === 'muscle' && slug) open({ typ: 'muscle', slug })
+            }}
+          />
         </Card>
       </div>
 

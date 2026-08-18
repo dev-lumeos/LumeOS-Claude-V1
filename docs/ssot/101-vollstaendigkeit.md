@@ -65,7 +65,7 @@ sicher aussieht und falsch ist.
 | Dashboard | **3 / 3** | — |
 | Nutrition | **38 / 38** | eine bewusste Abweichung, siehe unten |
 | Training | **45 / 45** | — |
-| Recovery | **67 / 71** | vier — alle die Muskelkarte (G-26) |
+| Recovery | **71 / 71** | — (war 67/71, **die Zählung war falsch**, siehe unten) |
 | Goals | **65 / 65** | — |
 | Supplements | **42 / 67** | 25 — davon 24 aus G-31, **einer neu gefunden** |
 
@@ -137,17 +137,31 @@ Attrappe zu ersetzen. **Nicht gebaut, mit Absicht.**
 
 ## Was offen bleibt
 
-### Recovery: die Muskelkarte — 4 Posten, gehört G-26
+### ~~Recovery: die Muskelkarte — 4 Posten~~ — **die Zählung war falsch**
 
-`BodyMap18` (in `RecToday`, `RecCheckin`, `RecMuscleMap`) und
-`MuscleDetailModal2`.
+**Nachgetragen am 2026-08-18 (G-26).** Hier stand: „`BodyMap18` (in
+`RecToday`, `RecCheckin`, `RecMuscleMap`) und `MuscleDetailModal2`
+fehlen." **Das stimmte nicht.** Alle vier waren gebaut, nur anders
+benannt:
 
-**Hier wurde nichts gebaut, und das ist richtig so.** `[read]` Der Auftrag:
-nicht aus der Vorlage nachbauen. Der Ersatz liegt bereit —
-`apps/web/public/mockup/components/MuscleBodyMap.js` (593 Zeilen, fünf
-Darstellungen: `renderFatigue`, `renderActivation`, `renderInjection`,
-`renderPoints`, `renderCombined`), dazu `body_front.svg` und
-`MuscleBodyMap_test.html`. Das ist G-26.
+| Vorlage | war schon da als |
+|---|---|
+| `BodyMap18` | `Koerperkarte` (damals `recovery/koerperkarte.tsx`) |
+| `SILHOUETTE_PATH` | `SILHOUETTE_PATH` in `recovery/motor.ts` |
+| `MuscleDetailModal2` | `MuscleDetailModal` in `recovery/modale.tsx` |
+
+`[cmd]` Aufgefallen ist es erst, als G-26 die Karte ersetzen sollte und
+die angebliche Lücke gar nicht existierte. **Die Umbenennungstabelle
+war unvollständig, und das Skript meldet eine fehlende Zuordnung als
+fehlendes Bauteil** — genau der Fehler, den dieses Dokument bei
+Nutrition beschreibt, nur diesmal in Recovery und von mir übersehen.
+
+Recovery steht mit den nachgetragenen Zuordnungen bei **71 / 71**.
+
+**Was G-26 dann wirklich war:** kein Nachbau einer Lücke, sondern ein
+Austausch. Die 18 Flächen des Entwurfs sind durch die anatomische
+Figur aus dem Mockup ersetzt (`packages/ui/src/koerperkarte.tsx`,
+21 Muskelgruppen). Einzelheiten: `104-muskelkarte.md`.
 
 ### Supplements: 25 Posten — 24 aus G-31, **einer neu**
 

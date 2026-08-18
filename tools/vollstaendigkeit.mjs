@@ -117,6 +117,36 @@ const UMBENANNT = {
         + 'einmal statt fuenfmal gebaut.',
     },
   },
+  recovery: {
+    // `[cmd]` NACHGETRAGEN IN G-26. Die G-38-Zaehlung meldete diese
+    // beiden als fehlend und schrieb „alle vier fehlenden sind die
+    // Muskelkarte" — **das war falsch.** Beide waren gebaut, nur
+    // anders benannt. Aufgefallen ist es erst, als G-26 die Karte
+    // ersetzen sollte und die angebliche Luecke gar nicht existierte.
+    BodyMap18: {
+      ziel: 'Koerperkarte',
+      warum: 'Seit G-26 aus packages/ui (koerperkarte.tsx) — die '
+        + 'anatomische Figur aus dem Mockup, 21 Muskelgruppen statt 18 '
+        + 'Flaechen. Dieselben drei Aufrufstellen (ansicht.tsx:224, '
+        + 'tab-checkin.tsx:125, tab-messwerte.tsx:54), dieselbe Rolle: '
+        + 'Werte je Muskel einfaerben und den Klick melden. Vorher lag '
+        + 'sie als recovery/koerperkarte.tsx im Modul.',
+    },
+    SILHOUETTE_PATH: {
+      ziel: 'UMRISS_VORNE',
+      warum: 'koerperkarte-pfade.ts — der Koerperumriss. Die Vorlage '
+        + 'fuehrt einen Pfad fuer beide Ansichten, die uebernommene '
+        + 'Karte je einen (UMRISS_VORNE, UMRISS_HINTEN), weil ihre '
+        + 'Figur vorne und hinten verschieden aussieht.',
+    },
+    MuscleDetailModal2: {
+      ziel: 'MuscleDetailModal',
+      warum: 'modale.tsx:339 — dasselbe Fenster ohne die „2". `[read]` '
+        + 'Die Vorlage haengt sie an, weil dort zwei Rahmen '
+        + 'konkurrieren; die Umsetzung fuehrt nur einen, also braucht '
+        + 'sie die Unterscheidung nicht.',
+    },
+  },
   training: {
     TrainingToolLauncher: {
       ziel: 'TrainingModale',
@@ -279,11 +309,28 @@ const MODULE = {
     ],
   },
   'coach-ai': {
+    // `[cmd]` Der Unterbereich liegt unter `/v2/coach/ai`, nicht unter
+    // `/v2/coach-ai` — zwei Unterbereiche, ein Menuepunkt.
+    verzeichnis: 'coach/ai',
+    // `[cmd]` VIER Dateien, nicht drei. `module-coach-meta.jsx` steht
+    // hier mit, weil `BuddyCoachOverrides` DORT definiert ist
+    // (Zeile 161), nicht in einer Buddy-Datei — der Rahmen ruft es an
+    // `module-buddy.jsx:132`. Wer nur die drei `-buddy-*`-Dateien
+    // durchsucht, meldet den Tab „Coach overrides" als fehlend und
+    // findet seine Vorlage nie.
     dateien: ['module-buddy.jsx', 'module-buddy-engines.jsx',
-      'module-buddy-knowledge.jsx', 'module-buddy-voice.jsx'],
+      'module-buddy-knowledge.jsx', 'module-buddy-voice.jsx',
+      'module-coach-meta.jsx'],
     rahmen: 'BuddyModule',
     rahmenDatei: 'module-buddy.jsx',
     tabs: null,
+    // `[cmd]` `module-coach-meta.jsx` gehoert zu Human Coaches (G-40)
+    // und liefert hierher nur `BuddyCoachOverrides`. Seine uebrigen
+    // Ausfuhren stehen dort gebaut und zaehlen hier nicht mit.
+    bekanntOffen: [
+      'CoachRelationshipCard', 'CoachOnboardingWizard',
+      'COACH_META', 'ONBOARD_STEPS',
+    ],
   },
 }
 
@@ -369,8 +416,15 @@ function miss(name, cfg) {
   const vorlageDefiniert = new Set()
   for (const q of quellen) for (const n of definierte(q)) vorlageDefiniert.add(n)
 
-  const modulVerz = path.join(V2, name)
-  if (!fs.existsSync(modulVerz)) throw new Error(`Modul fehlt: apps/web/src/app/v2/${name}`)
+  // `[cmd]` Der Verzeichnisname folgt sonst dem Modulnamen. Coach fuehrt
+  // zwei Unterbereiche unter EINEM Menuepunkt (`/v2/coach/human` und
+  // `/v2/coach/ai`, `nav.ts:77-81`), also traegt `coach-ai` seinen Pfad
+  // selbst ein. Ohne das suchte die Zaehlung unter `v2/coach-ai` — ein
+  // Verzeichnis, das es nicht gibt und nicht geben soll.
+  const modulVerz = path.join(V2, cfg.verzeichnis ?? name)
+  if (!fs.existsSync(modulVerz)) {
+    throw new Error(`Modul fehlt: apps/web/src/app/v2/${cfg.verzeichnis ?? name}`)
+  }
 
   const dateien = fs.readdirSync(modulVerz, { recursive: true })
     .filter(f => typeof f === 'string' && (f.endsWith('.tsx') || f.endsWith('.ts')))

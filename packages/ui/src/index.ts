@@ -32,6 +32,22 @@ export type { IconName, IconProps } from './icons'
 export { MODULE_ACCENT, accentVar } from './module-accent'
 export type { ModuleId, ModuleAccentKey } from './module-accent'
 
+// --- Koerperkarte (G-26) ----------------------------------------
+// Drei Module brauchen sie: Recovery (Ermuedung), Training
+// (Aktivierung), Supplements (Injektionspunkte). Deshalb hier und
+// nicht je Modul.
+export {
+  Koerperkarte, ErmuedungsKarte, AktivierungsKarte, InjektionsKarte,
+  ermuedungsFarbe, aktivierungsFarbe, injektionsFarbe, INJEKTIONS_ORTE,
+} from './koerperkarte'
+export type {
+  KoerperkarteProps, KoerperSeite, MuskelWert, KoerperPunkt, LegendenEintrag,
+} from './koerperkarte'
+// Die Pfaddaten selbst — wer zuordnet, muss pruefen koennen, ob es
+// eine Gruppe ueberhaupt gibt.
+export { MUSKELN } from './koerperkarte-pfade'
+export type { Muskel, InjektionsOrt } from './koerperkarte-pfade'
+
 // --- Geteilte Bausteine -----------------------------------------
 export {
   Card, Pill, Sparkline, LineChart, RadarChart, KPI, Ring, Meter, Row, ModuleHero, Tabs,

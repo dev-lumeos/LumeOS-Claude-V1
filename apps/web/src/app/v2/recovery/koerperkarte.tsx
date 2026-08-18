@@ -1,5 +1,21 @@
 'use client'
 
+// ══════════════════════════════════════════════════════════════════
+// ABGELOEST DURCH G-26 — wird nicht mehr eingebunden.
+//
+// `[cmd]` Am 2026-08-18 geprueft: kein `import` zeigt mehr hierher.
+// Die drei Aufrufstellen (ansicht.tsx, tab-checkin.tsx,
+// tab-messwerte.tsx) benutzen jetzt `Koerperkarte` aus
+// `packages/ui` — die anatomische Figur aus dem Mockup.
+//
+// **NICHT GELOESCHT, sondern stehen gelassen.** Der Auftrag hiess
+// „ersetzen", nicht „aufraeumen"; und `SILHOUETTE_PATH` /
+// `MUSCLE_PATHS` in `motor.ts` haengen an dieser Datei. Wer beides
+// entfernen will, tut es in einem eigenen Schritt und prueft, dass
+// `motor.ts` seine 18 Kuerzel behaelt — die braucht die Zuordnung in
+// `muskel-zuordnung.ts` weiterhin.
+// ══════════════════════════════════════════════════════════════════
+//
 // Die Koerperkarte mit 18 Muskelgruppen.
 //
 // QUELLE: theme-v1/module-recovery-v2.jsx:66-97 (`BodyMap18`).
