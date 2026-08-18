@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `7659a0a` auf `dev`.
+**Stand:** 2026-08-18, Anker `5444420` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 81 offen, 3 in Arbeit.
+`[cmd]` 82 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -210,12 +210,13 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
-| **G-42** | AI Coach — zwanzig Tabs offen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
 | **G-46** | Medical an den Katalog anschliessen |  |
 | **G-47** | Der Umriss fehlt in der Uebernahme |  |
 | **G-48** | Graue Teile heben sich nicht ab |  |
+| **G-50** | `v2-g-cols-5` fehlt |  |
+| **C-75** | BSS und Voice sind Neubau |  |
 
 ---
 
@@ -2384,17 +2385,6 @@ Umsetzen angepasst werden.
   `@media`-Regeln.** Unter 1.280 px wurde die Kontextspalte
   ausgeblendet; **die Sidebar blieb unberuehrt.**
 
-- [ ] **G-42: AI Coach — zwanzig Tabs offen** (neu 2026-08-18). Rest aus
-  G-40.
-
-  `[cmd]` `/v2/coach/ai` existiert und **nennt alle zwanzig fehlenden
-  Tabs auf dem Bildschirm** — 41 Posten aus `module-buddy.jsx` und drei
-  Begleitdateien (109 KB).
-
-  `[read]` **Tom, 2026-08-17:** *„Der AI Coach ist ein Teil von
-  Buddy-Logik. Der effektive Endausbau, welcher DER BUDDY als App sein
-  wird, wird viel umfangreicher sein."* — **Das Modul, nicht der
-  Endausbau.**
 
 - [ ] **C-71: Das Rechtemodell des Vorgaengerrepos** (neu 2026-08-18).
   **Eine Produktentscheidung darin.** Befund aus G-40.
@@ -2541,3 +2531,34 @@ Umsetzen angepasst werden.
 
   `[annahme]` Ein eigener Ton fuer nicht gemessene Koerperteile waere die
   saubere Loesung, **aber das ist ein neuer Token.**
+
+- [ ] **G-50: `v2-g-cols-5` fehlt** (neu 2026-08-18). Befund aus G-42.
+
+  `[cmd]` `v2.css` hat nur `-2`, `-3`, `-4`. **Modul-lokal nachgebaut.**
+
+  `[read]` Zusammen mit G-43 (`shield` **zum dritten Mal**, `file`,
+  `Pill` ohne `dot`, kein `Empty`) — **die Sammelstelle fuer fehlende
+  Bausteine.**
+
+- [ ] **C-75: BSS und Voice sind Neubau** (neu 2026-08-18). Befund aus
+  G-42.
+
+  `[cmd]` Das Vorgaengerrepo hat **sechs Buddy-Migrationen, 13 Tabellen,
+  `buddy.ts` mit 1.647 Zeilen** — und `behavioral_signatures` deckt den
+  Signature-Tab **bis zu den Musternamen.**
+
+  `[cmd]` **Aber zwei Tabs haben dort kein Gegenstueck:**
+
+  | | |
+  |---|---|
+  | **BSS** | `stability_score`, `behavior_stability` — **nichts gefunden** |
+  | **Voice** | kein `whisper`, kein `speechSynthesis`, kein `parseGymCommand` |
+
+  `[read]` **Das aendert den Aufwand:** Fuer die uebrigen 18 Tabs ist
+  eine Anbindung eine Uebersetzung — **fuer diese beiden ein Neubau.**
+
+  `[cmd]` **Und die Stufen weichen ab:** drei im Vorgaengerrepo
+  (`free`/`premium`/`pro`) gegen **vier in der Vorlage.** `[read]` Das
+  beruehrt C-71, wo die Autonomiestufen des menschlichen Coaches
+  anstehen — **beide Male geht es um dieselbe Frage: wie fein wird
+  abgestuft.**

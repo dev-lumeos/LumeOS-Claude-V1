@@ -5133,3 +5133,73 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   und fand `soleus` — die ID aus meiner eigenen Gegenprobe. Die Datei
   war zurueckgesetzt, der Dev-Server lieferte noch den alten Build."*
   **Derselbe Fehler wie in G-05.**
+
+- [x] **G-42: AI Coach — zwanzig Tabs offen** (neu 2026-08-18). Rest aus
+  G-40.
+
+  `[cmd]` `/v2/coach/ai` existiert und **nennt alle zwanzig fehlenden
+  Tabs auf dem Bildschirm** — 41 Posten aus `module-buddy.jsx` und drei
+  Begleitdateien (109 KB).
+
+  `[read]` **Tom, 2026-08-17:** *„Der AI Coach ist ein Teil von
+  Buddy-Logik. Der effektive Endausbau, welcher DER BUDDY als App sein
+  wird, wird viel umfangreicher sein."* — **Das Modul, nicht der
+  Endausbau.**
+
+  `[cmd]` **Erledigt 2026-08-18: 42 von 42 Posten, 20 Tabs**, null
+  Konsolenfehler und **null Hydrationsabweichungen** ueber alle zwanzig.
+  **Beide Unterbereiche des Coach-Menuepunkts sind fertig.**
+
+  ### Die Frage des Auftrags hatte eine andere Antwort
+
+  `[cmd]` **Die elf Zulieferer fehlten nicht — alle fuenfzehn
+  existieren.** Neun in `-engines.jsx`, drei in `-knowledge.jsx`, einer
+  in `-voice.jsx`.
+
+  **Die Falle lag woanders:** `[cmd]` `Object.assign(window, {…})` in
+  `-engines.jsx:847` listet **nur Daten, keine Komponenten** — die neun
+  Ansichten werden einzeln ueber `window.BuddyBSS = …` gesetzt.
+  `[read]` *„Wer diese Zeile als Inhaltsverzeichnis liest, verpasst neun
+  von zwoelf Zulieferern."*
+
+  `[cmd]` **Und einer liegt wirklich woanders:** `BuddyCoachOverrides`
+  steht in `module-coach-meta.jsx:161` — **einer Human-Coaches-Datei** —
+  und wird aus `module-buddy.jsx:132` gerufen.
+
+  ### `uploads/` gegen `docs/specs/`: kein Unterschied
+
+  `[cmd]` **Alle sieben Buddy-Specs sind byte-identisch.** Der Hash im
+  Dateinamen **unterscheidet Module, nicht Fassungen** —
+  `SPEC_09_SCORING-8a1632fa` ist Buddy, `-d4545dde` Training, die Datei
+  ohne Hash Nutrition. **A-18 ist damit entschaerft.**
+
+  ### Zwei Tabs sind Neubau, keine Uebersetzung
+
+  `[cmd]` Das Vorgaengerrepo hat **sechs Buddy-Migrationen (650 Zeilen,
+  13 Tabellen)** und `buddy.ts` mit **1.647 Zeilen**;
+  `behavioral_signatures` **deckt den Signature-Tab bis zu den
+  Musternamen und `confidence`/`sample_size`.**
+
+  `[cmd]` **Aber BSS gibt es dort nicht** (`stability_score`,
+  `behavior_stability` — nichts) **und Voice auch nicht** (kein
+  `whisper`, kein `speechSynthesis`, kein `parseGymCommand`; nur die
+  Stufen-Flags). Dazu: **drei Stufen dort gegen vier in der Vorlage.**
+
+  ### Keine Hydrationsfalle — und eine echte Kollision
+
+  `[cmd]` Ueber alle **1.746 Vorlagenzeilen** gemessen: kein
+  `Math.random()`, `Date.now()`, `Math.sin`, keine Zeitgeber. **Ein Test
+  haelt das fest.**
+
+  `[cmd]` **Eine noetige Abweichung:** Die Verlaufsfarben des Orbs
+  trugen feste SVG-IDs je Zustand — der Tab „Avatar states“ zeigt alle
+  fuenf gleichzeitig, Chat rendert `responding` erneut. **Dieselbe
+  Kollision wie bei der Koerperkarte in G-21**, gleich geloest mit
+  `useId()`.
+
+  ### Zwei eigene Testaussagen korrigiert
+
+  `[read]` *„Die BSS-Formel benutzt ×, nicht `*`. Und der G-40-Test, der
+  prueft, dass die AI-Seite ihre ungebauten Tabs nennt, wurde falsch,
+  sobald das Modul existierte."* — **ersetzt durch eine Pruefung, dass
+  der Platzhalter weg ist.**
