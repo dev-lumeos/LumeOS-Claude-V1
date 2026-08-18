@@ -84,3 +84,46 @@ Stand: 2026-08-18
 
 [read] Keine Oberflaeche wurde gebaut oder geaendert.
 
+## E-14 bis E-19: Was je Punkt gemessen wurde
+
+[cmd] Vor dem Restschritt standen live 1.416 `training.exercises`, 96 `training.muscle_groups`, 6.624 `training.exercise_muscles`, 0 Waisen auf Gruppen und 0 Waisen auf Uebungen.
+
+[cmd] E-17: `Achilles Tendon` war genau 1 Muskelgruppe mit genau 1 Zuordnung: `Standing gastrocnemius stretch` -> `Achilles Tendon` als `secondary`. Dieselbe Uebung hatte `Calves` bereits als `primary`.
+
+[cmd] E-18: `lower(name) = 'none'` lieferte 0 Muskelgruppen. Der Fehler ist im aktuellen Bestand nach C-73 nicht mehr vorhanden.
+
+[cmd] E-15: Die fuenf in C-73/104 benannten Regionsfaelle sind nach dem Schritt korrekt: `Biceps Femoris`, `Rectus Femoris`, `Tensor Fasciae Latae` und `Hip Rotators` stehen in `legs`; `Rear Deltoids` steht in `shoulders`.
+
+[cmd] E-19: 35 Paare hatten dieselbe Uebung und dieselbe Muskelgruppe gleichzeitig als `primary` und `secondary`. Die betroffenen Uebungen waren unter anderem `Band Deadlift`, `Dumbbell Reverse Fly`, `Cable twist`, `Lying leg raise`, mehrere Band-Hip-Abduction-Varianten und `Straight bar cable pull down`.
+
+[cmd] E-14: 26 `image_male_start`-Eintraege in `training.exercises.media_paths` zeigen auf Pfade mit `_Female.` im Dateinamen. `image_male_end` lieferte im aktuellen JSONB-Pfadmuster 0 solche Treffer.
+
+[cmd] Nach `supabase/_pipeline/10_training/108_exercise_curation_rest.sql` stehen live 1.416 Uebungen, 95 Muskelgruppen, 6.588 Zuordnungen, 0 Waisen, 0 `Achilles Tendon`, 0 `none`/`None` und 0 Primary/Secondary-Doppelrollen.
+
+[cmd] Der Kettenlauf ueber `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts` lief gegen die Wegwerf-Datenbank `lumeos_kette_20260818045508` gruen durch. Schritt 108 meldete dort: `OK: 1416 Uebungen, 95 Gruppen, 6588 Zuordnungen, 0 Waisen, 0 Doppelrollen`.
+
+[cmd] Live danach: `schema-vollstaendigkeit-pruefen.ts` meldete `SCHEMA VOLLSTAENDIG`, `training.muscle_groups 95 / 95 ok` und `training.exercise_muscles 6588 / 6588 ok`. `testdaten-pruefen.ts` meldete `OK: C-82 Testdaten stimmen`. `pnpm gate` lief mit 8/8 Tasks gruen.
+
+## Was `fix_muscles.sql` schon geloest hat
+
+[read] `referenz/lumeos-2026/fix_muscles.sql` ist ein automatisch erzeugter Zuordnungsseed: Kopfzeile `Auto-generated muscle group assignments for 349 exercises`, danach wiederholte `INSERT INTO exercise_muscles (exercise_id, muscle_group_id, role) VALUES`-Bloecke je Ordner.
+
+[read] Das Skript loest die heutige Restkuration nicht direkt: es arbeitet gegen das alte Schema und alte IDs, nicht gegen `training.exercises`/`training.muscle_groups` in dieser Pipeline. In der gezielten Suche fanden sich keine direkten Regeln fuer `Achilles`, `none`, `body_region` oder `image_male_*`.
+
+[annahme] Fachlich bestaetigt es aber den Zuschnitt: Muskelzuordnungen wurden im Vorgaengerrepo bereits als eigene Zuordnungsschicht behandelt, nicht als freie Anzeige aus dem Uebungsnamen.
+
+## Umbenannt oder übersetzt
+
+[read] Die Herkunft bleibt wie in C-73: `101_training_seed.sql` importiert Legacy-Daten; deshalb wird nicht der Quellname als angebliche Originalwahrheit umgeschrieben, sondern die Kuration liegt in nachgelagerten Schritten.
+
+[cmd] In Schritt 108 wurde kein Name uebersetzt und keine Uebung umbenannt. `Achilles Tendon` wurde entfernt, weil es eine Sehne ist und keine Muskelgruppe. Die einzige betroffene Uebung bleibt ueber `Calves`, `Hamstrings`, `Semimembranosus`, `Semitendinosus` und `Soleus` weiterhin zugeordnet.
+
+[cmd] Die 35 E-19-Zeilen wurden nicht zusammengefuehrt, sondern die jeweils niedrigere Rolle `secondary` wurde entfernt, wenn fuer dasselbe `(exercise_id, muscle_group_id)` bereits `primary` existierte. Das verhindert doppelte Belastungszaehlung in der Muskelkarte.
+
+## Was offen bleibt
+
+[cmd] E-14 bleibt offen: 26 maennliche Startbild-Pfade zeigen auf `_Female`-Dateien. Es wurden keine Bilder erzeugt, umbenannt oder ersetzt.
+
+[annahme] E-14 beruehrt die Produktfrage aus E-07: Fehlen maennliche Darstellungen, oder sind die Pfadfelder falsch befuellt? Diese Entscheidung gehoert nicht in die Datenbank-Kuration.
+
+[annahme] Die Struktur traegt die drei Ebenen Flaeche -> Gruppe -> Muskel weiterhin. Belegt sind Rotatorenmanschette, Deltoids und Quadrizeps; die eigentliche Zuordnung auf die Kartenflaechen bleibt G-49.

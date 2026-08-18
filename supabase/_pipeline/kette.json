@@ -326,11 +326,18 @@
       "depends_on": ["105"]
     },
     {
+      "id": "108",
+      "path": "supabase/_pipeline/10_training/108_exercise_curation_rest.sql",
+      "kind": "sql",
+      "creates": "Training-Restkuration E-14 bis E-19: Achilles-Sehne entfernt, none geprueft, Primary/Secondary-Doppelrollen bereinigt",
+      "depends_on": ["107"]
+    },
+    {
       "id": "106",
       "path": "supabase/_pipeline/10_training/106_workout_sessions.sql",
       "kind": "sql",
       "creates": "Training-Userdaten: workout_sessions, workout_exercises und workout_sets mit RLS",
-      "depends_on": ["107", "auth_stub"]
+      "depends_on": ["108", "auth_stub"]
     },
     {
       "id": "120",

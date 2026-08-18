@@ -958,9 +958,9 @@
   "mindestzeilen_schema": {
     "_kommentar": "Untergrenzen ausserhalb nutrition. C-43: Die Schritte 100-105 muessen im Kettenlauf sichtbar werden; sonst koennte Training komplett fehlen und die Nutrition-Pruefung waere trotzdem gruen.",
     "training.exercises": 1416,
-    "training.muscle_groups": 96,
+    "training.muscle_groups": 95,
     "training.equipment": 58,
-    "training.exercise_muscles": 6624,
+    "training.exercise_muscles": 6588,
     "supplements.supplement_catalog": 44,
     "medical.biomarker_catalog": 11676,
     "medical.biomarker_reference_ranges": 464,
@@ -983,9 +983,9 @@
   },
   "mindestzeilen_schema_belege": {
     "training.exercises": "[cmd] Ist-Stand nach 100-105: 1.416 Uebungen.",
-    "training.muscle_groups": "[cmd] Ist-Stand nach 100-107: 96 Muskelgruppen nach 11 kollisionsfreien Alias-/Dubletten-Merges; exercise_muscles bleibt bei 6.624.",
+    "training.muscle_groups": "[cmd] Ist-Stand nach 100-108: 95 Muskelgruppen nach 11 kollisionsfreien Alias-/Dubletten-Merges und Entfernen von Achilles Tendon als Sehne.",
     "training.equipment": "[cmd] Ist-Stand nach 100-105: 58 Geraete.",
-    "training.exercise_muscles": "[cmd] Ist-Stand nach 100-105: 6.624 Zuordnungen.",
+    "training.exercise_muscles": "[cmd] Ist-Stand nach 100-108: 6.588 Zuordnungen. 6.624 nach C-73 minus 35 Primary/Secondary-Doppelrollen und minus 1 Achilles-Tendon-Sehnenzuordnung.",
     "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
     "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit zusammen 464 Referenzbereich-Zeilen; 141 importiert sie als Katalog-Fallback-Kandidaten.",
