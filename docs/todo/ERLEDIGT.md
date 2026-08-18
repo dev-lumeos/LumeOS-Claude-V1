@@ -6855,3 +6855,47 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   genommen als Above range / Below range / In range. **Optimal nicht: es
   benennt keine Lage, und in der Attrappe steht es in einer Reihe mit
   Critical low / Critical high, also auf derselben Urteilsskala.**"*
+
+- [x] **GO-09: Zieluebersicht in `/v2/goals`** (neu 2026-08-17). Folgt
+  auf GO-07.
+
+  `[cmd]` Seit `111` gibt es `goals.user_goals` und `goal_phases` mit 3
+  Zielen und 3 Phasen live, dazu `nutrition_targets` aus Block A.
+
+  `[cmd]` **Ein Claude Code baut gerade `/v2/goals` als Mockup** (G-28).
+  Danach ist dies der Anschluss — **lesend, wie G-03 bei Nutrition.**
+
+  `[read]` Aus dem Plan: *„Goals ist der Massstab, an dem Buddy misst —
+  keine eigenstaendige Dateneingabe."* **Die Uebersicht zeigt, sie
+  erfasst nicht.**
+
+  **Was schon rechnet:** `[cmd]` `berechne_zielwerte` liefert fuer Toms
+  Profil 2.977,8 kcal, 156,8 g Protein, 3.400 ml Wasser — und
+  `zielwerte_am` gibt sie zum Stichtag aus.
+
+  **Angebunden heisst: Marke weg.**
+
+  `[cmd]` **Erledigt 2026-08-18 mit GO-16** — die Zieluebersicht liest
+  echt, zwei aktive Ziele, Phase `lean bulk`.
+
+- [x] **GO-13: Fuenf Goals-Kacheln koennen sofort echt werden** (neu
+  2026-08-17). Befund aus G-28.
+
+  `[cmd]` **Ohne neue Tabelle**, aus dem, was seit Block A steht:
+
+  | Kachel | Feld |
+  |---|---|
+  | `CalcRow` TDEE / BMR | `zielwerte_am.tdee`, `getZielwertVorschlag().bmr` |
+  | Energy balance (Ring-Maximum) | `kcal` |
+  | Profile · inputs | `public.profiles` |
+  | Formula baseline (Adaptive TDEE) | `tdee`, Herkunft `formel` |
+
+  `[cmd]` **Die Composition-Kachel rechnet dieselbe Kette wie GO-04** —
+  Mifflin-St Jeor mal Aktivitaetsfaktor.
+
+  `[read]` **Bemerkenswert:** Der Umsetzungsplan haelt als W-6 fest, dass
+  **die Spec den Aktivitaetsfaktor vergisst** — die Designvorlage macht
+  es richtig. **Die Vorlage ist hier genauer als die Spezifikation.**
+
+  `[cmd]` **Erledigt 2026-08-18 mit GO-16** — die fuenf Kacheln lesen
+  `zielwerte_am` und `berechne_zielwerte`, **Marken 38 → 23.**
