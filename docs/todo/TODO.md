@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `298e3ee` auf `dev`.
+**Stand:** 2026-08-18, Anker `9c52d5a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 74 offen, 3 in Arbeit.
+`[cmd]` 76 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -209,6 +209,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-17** | Meilenstein-Kachel ohne Stelle im Mockup |  |
 | **GO-18** | `user_goals.progress_pct` gegen `goal_progress_at()` |  |
 | **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
+| **G-68** | `e1RM` deckt 6 von 1.416 |  |
+| **C-96** | `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen |  |
 
 ---
 
@@ -2433,3 +2435,29 @@ Umsetzen angepasst werden.
   `[read]` **Eine Phase, die weiss, woher sie kommt und was als
   naechstes empfohlen ist, ist mehr als ein Etikett.** Das Mockup zeigt
   nur den Namen.
+
+- [ ] **G-68: `e1RM` deckt 6 von 1.416** (neu 2026-08-18). Meldung aus
+  G-64.
+
+  `[read]` *„Sie traegt beim Filtern auf trainierte Uebungen sofort,
+  aber als Spalte fuer den ganzen Katalog sind 1.410 Striche viel. Die
+  ehrlichere Bauform waere ein eigener Bereich „meine Uebungen"."*
+
+  `[cmd]` **Gehoert zum Sitzungs-Schritt**, nicht zum Katalog — dort
+  liegen 9 Sitzungen, 18 Uebungen, 60 Saetze.
+
+- [ ] **C-96: `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen**
+  (neu 2026-08-18). Befund aus G-64.
+
+  `[cmd]` **Eine von 29 Zeilen trug `Geraete & Baenke` statt `Geräte &
+  Bänke`** — per Hex-Dump belegt:
+  `476572616574652026204261656e6b65` gegen `c3a4` bei den uebrigen 28.
+
+  `[cmd]` **Live korrigiert am 2026-08-18**, Gruppe jetzt 29 statt 28+1.
+  **Aber `109a_equipment_groups_disciplines.sql` traegt den Fehler
+  weiter** — beim naechsten Kettenlauf kommt er zurueck.
+
+  `[read]` **Fuenfte Fundstelle derselben Encoding-Klasse.** Der
+  G-64-Agent hat es umgangen ueber den stabilen Schluessel
+  `equipment_group` statt der Beschriftung — **richtig so, aber die
+  Ursache bleibt.**
