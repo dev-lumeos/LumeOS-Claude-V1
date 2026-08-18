@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `94e9687` auf `dev`.
+**Stand:** 2026-08-18, Anker `ef3392a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 84 offen, 3 in Arbeit.
+`[cmd]` 85 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -207,13 +207,14 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
 | **C-77** | Alle Seeds auf `dev@lumeos.app` nachziehen |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
+| **C-79** | 410 von 464 Referenzbereichen sind Text ohne Zahlen |  |
+| **C-80** | `142` ergaenzt Spalten, die `140` nicht kennt |  |
 | **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
-| **G-46** | Medical an den Katalog anschliessen |  |
 | **G-47** | Der Umriss fehlt in der Uebernahme |  |
 | **G-48** | Graue Teile heben sich nicht ab |  |
 | **G-50** | `v2-g-cols-5` fehlt |  |
@@ -2294,6 +2295,49 @@ Umsetzen angepasst werden.
   richtig — die Funktion rechnet, ob sie **richtig** rechnet, ist offen
   (GO-15).
 
+- [ ] **C-79: 410 von 464 Referenzbereichen sind Text ohne Zahlen** (neu
+  2026-08-18). Befund aus G-46.
+
+  `[cmd]` **Nur 54 der 464 Zeilen tragen Zahlen** — und **genau die
+  werden von `lab_result_values_read` als
+  `do_not_import_without_source` ausgeschlossen.**
+
+  `[cmd]` **Kein LOINC-Code hat heute Labor- und Optimalbereich als
+  Zahlen.** Damit ist der Katalogrueckfall in der Praxis Text, und die
+  Anzeige kann keinen Balken zeichnen.
+
+  `[read]` **Die Anzeige geht damit richtig um** — sie liest die drei im
+  Bestand gefundenen Schreibweisen und **laesst Mehrdeutiges als Text
+  stehen, statt eine Grenze zu erfinden.** Aber es bleibt eine
+  Datenluecke.
+
+  **Was zu klaeren ist:** Woher kommen belastbare Zahlen? `[cmd]`
+  **NHANES** liefert sie fuer 38 haeufige Tests **nach Geschlecht und
+  Ethnie** (2,5. und 97,5. Perzentil). Der Rest kommt aus
+  Laborhandbuechern — **Kuration, keine Uebernahme.**
+
+  `[read]` **Und die 54 ausgeschlossenen gehoeren zuerst angesehen:**
+  Warum tragen sie keine Quelle? Wenn sie belastbar sind, fehlt nur der
+  Herkunftsvermerk.
+
+- [ ] **C-80: `142` ergaenzt Spalten, die `140` nicht kennt** (neu
+  2026-08-18). Befund aus G-46.
+
+  `[cmd]` `142_laborimport_matching.sql` fuegt **vier Spalten** hinzu —
+  `match_status`, `match_candidates`, `match_source`, `raw_marker_name`
+  — **die in `140_medical_schema.sql` fehlen.**
+
+  `[read]` **Aufgefallen ist es an einem Fehler:** Der erste
+  Kopierversuch des G-46-Agenten scheiterte an der
+  Pruefbedingung. *„Und dieses Scheitern hat `match_status` als das
+  massgebliche Signal fuer die drei Zustaende sichtbar gemacht"* — die
+  Anzeige liest es jetzt, statt aus `entry_confidence` zu schliessen.
+
+  **Zu pruefen:** Gehoeren die vier nach `140`, oder ist die Trennung
+  gewollt? `[read]` Ein Kettenschritt, der die Tabelle eines frueheren
+  erweitert, ist normal — **aber wer nur `140` liest, kennt das Schema
+  nicht.**
+
 - [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
   aus C-72.
 
@@ -2528,21 +2572,6 @@ Umsetzen angepasst werden.
   dieser Art nach G-23 (Modulkopf) und G-34 (`.v2-btn` ohne `nowrap`).
 
 
-- [ ] **G-46: Medical an den Katalog anschliessen** (neu 2026-08-18).
-  Folgt auf C-69.
-
-  `[cmd]` `/v2/medical` steht seit G-36 mit **21 Kacheln, alle
-  Attrappe** — und seit `140` gibt es das Schema.
-
-  **Die naheliegenden Kacheln:** die Biomarker-Liste (Katalog), der
-  Befund mit seinen Werten, und der **Doppelbereich** — `[cmd]` der
-  Medical-Agent hat ihn belegt: *Glucose 102 ueber Laborgrenze 99 →
-  „High"; HbA1c 5,4 % im Labor-, aber ueber dem Optimalband →
-  „Normal".*
-
-  `[read]` **Keine Bewertung.** Ob ein Wert gut ist, ist eine
-  medizinische Aussage — die Anzeige sagt, **wo er liegt**, nicht was er
-  bedeutet.
 
 - [ ] **G-47: Der Umriss fehlt in der Uebernahme** (neu 2026-08-18,
   **Diagnose korrigiert**).

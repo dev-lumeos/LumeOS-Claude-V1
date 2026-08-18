@@ -5385,3 +5385,77 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` Meilensteine: **erreicht, offen, verfehlt und nicht messbar
   werden getrennt.** RLS: Tom sieht 3, Sarah 0.
+
+- [x] **G-46: Medical an den Katalog anschliessen** (neu 2026-08-18).
+  Folgt auf C-69.
+
+  `[cmd]` `/v2/medical` steht seit G-36 mit **21 Kacheln, alle
+  Attrappe** — und seit `140` gibt es das Schema.
+
+  **Die naheliegenden Kacheln:** die Biomarker-Liste (Katalog), der
+  Befund mit seinen Werten, und der **Doppelbereich** — `[cmd]` der
+  Medical-Agent hat ihn belegt: *Glucose 102 ueber Laborgrenze 99 →
+  „High"; HbA1c 5,4 % im Labor-, aber ueber dem Optimalband →
+  „Normal".*
+
+  `[read]` **Keine Bewertung.** Ob ein Wert gut ist, ist eine
+  medizinische Aussage — die Anzeige sagt, **wo er liegt**, nicht was er
+  bedeutet.
+
+  `[cmd]` **Erledigt 2026-08-18. Zwei Karten verlieren die Marke, 21
+  bleiben** — die Befundtabelle und die Katalogsuche, **beide in eigenen
+  Dateien**, damit die Trennung im Dateisystem sichtbar ist, nicht nur
+  in einem Kommentar.
+
+  `[read]` **Keine bestehende Karte verlor ihre Marke, weil keine
+  angebunden wurde:** Die Entwurfstabelle zeigt Zeitreihe, Sparkline und
+  Bereichsbalken — **dafuer gibt es keine Daten** (C-76).
+
+  ### Der Doppelbereich, live
+
+  `[cmd]` Glucose **102 mg/dL** gegen Laborbereich 70–99 (Quelle
+  `Befund`), Optimalband 70–85 → *„Ueber dem Bereich"*. Calcium zeigt
+  Quelle **`Katalog`** — **der Rueckfall, als solcher beschriftet.**
+
+  `[cmd]` **Die Vorrangregel steht in `lab_result_values_read` als
+  `COALESCE(v.lab_reference_*, rr.*)`** — der Lesepfad benutzt sie,
+  statt sie nachzubauen, **und ein Test verbietet `COALESCE` in
+  `lesen.ts`**, damit keine zweite Wahrheit entsteht.
+
+  ### Der unbekannte Marker wird gezeigt
+
+  `[cmd]` Rohtext, *„im Katalog nicht gefunden"*, und eine Fusszeile:
+  *„2 von 6 Werten sind keinem Katalogeintrag zugeordnet … weggelassen
+  wird keiner."* **Bei der mehrdeutigen Glucose nennt die Anzeige alle
+  drei Kandidaten mit ihren Konfidenzen**, statt einen zu waehlen.
+
+  ### Keine Bewertung
+
+  `[cmd]` Die Spalte sagt **Im Bereich / Ueber / Unter / Ohne
+  Bereich**. `[read]` *„Die `Optimal`, `Critical low` und `Critical
+  high` der Attrappe erscheinen nicht, und es gibt kein Rot — Rot hiesse
+  „gefaehrlich", und das ist eine medizinische Aussage."*
+
+  ### Die Messung, die das Bild aendert
+
+  `[cmd]` **Von 464 Referenzbereich-Zeilen tragen nur 54 Zahlen** — und
+  **genau die schliesst `lab_result_values_read` als
+  `do_not_import_without_source` aus.** Die 410 durchgelassenen sind
+  Text.
+
+  `[cmd]` **Kein LOINC-Code hat heute Labor- und Optimalbereich als
+  Zahlen.** Die Anzeige liest die drei im Bestand gefundenen
+  Schreibweisen und **laesst Mehrdeutiges als Text stehen, statt eine
+  Grenze zu erfinden.**
+
+  `[cmd]` Suche: 353–382 ms mit 220 ms Entprellung, **also 130–160 ms
+  Arbeit ueber 11.676 Zeilen.** SQL allein: 0,05 ms leer, 1,9 ms haeufig,
+  23,2 ms selten.
+
+  ### Zwei eigene Fehler, vor dem Bericht korrigiert
+
+  `[read]` *„Mein „keine Bewertung"-Test bemaengelte die
+  Spaltenueberschrift `Optimalband` — das ist der Name des Bereichstyps
+  im Schema (`range_type = 'optimal'`), kein Urteil."* Dazu: die
+  Markenzaehlung las 7 statt 8, **weil die Regel nur `{ATTRAPPE}` kannte,
+  nicht die eigene Begruendung der Entwurfstabelle.**
