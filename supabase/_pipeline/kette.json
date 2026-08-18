@@ -333,11 +333,18 @@
       "depends_on": ["108"]
     },
     {
+      "id": "109a",
+      "path": "supabase/_pipeline/10_training/109a_equipment_groups_disciplines.sql",
+      "kind": "sql",
+      "creates": "Training-Suchfilter-Kuration: Geraetegruppen, deutsche Geraetenamen und Disziplin je Uebung",
+      "depends_on": ["109"]
+    },
+    {
       "id": "106",
       "path": "supabase/_pipeline/10_training/106_workout_sessions.sql",
       "kind": "sql",
       "creates": "Training-Userdaten: workout_sessions, workout_exercises und workout_sets mit RLS",
-      "depends_on": ["109", "auth_stub"]
+      "depends_on": ["109a", "auth_stub"]
     },
     {
       "id": "120",

@@ -183,3 +183,58 @@ Stand: 2026-08-18
 [cmd] `schema-vollstaendigkeit-pruefen.ts` meldete live `SCHEMA VOLLSTAENDIG`, inklusive `training.exercise_catalog_enrichment 1407 / 1407 ok` und `Fremde Tab. 21/21 vollstaendig`.
 
 [cmd] `testdaten-pruefen.ts` meldete live `OK: C-82 Testdaten stimmen.` `pnpm gate` lief gruen: 8/8 Turbo-Tasks erfolgreich.
+
+## C-90: Wie die 58 Geraete auf Gruppen fallen
+
+[read] `referenz/lumeos-2026/src/modules/training/components/ExerciseSearch.tsx` fuehrt vier Geraetegruppen: `Freie Gewichte`, `Kabel & Baender`, `Geraete & Baenke`, `Sonstiges`. Die Werte passen nicht 1:1 zum aktuellen Bestand (`Cable Machine` dort, `Cable Pulley Machine` hier; `None (Bodyweight)` dort, `None` hier), deshalb wurde zugeordnet statt kopiert.
+
+[cmd] Vor C-90 standen live 58 flache `training.equipment`-Zeilen, 1.416 `training.exercises` und 6.588 `training.exercise_muscles`. `training.exercises.exercise_type` stand bei 1.416/1.416 auf `strength` und trug damit keine Filterinformation.
+
+[cmd] `supabase/_pipeline/10_training/109a_equipment_groups_disciplines.sql` ergaenzt an `training.equipment` die Felder `name_de`, `equipment_group`, `equipment_group_de`, `equipment_group_en` und an `training.exercises` `discipline`, `discipline_rule`.
+
+[cmd] Live nach dem Schritt:
+
+| Gruppe | Geraete | Uebungen |
+|---|---:|---:|
+| Freie Gewichte | 8 | 1.056 |
+| Kabel & Baender | 11 | 182 |
+| Geraete & Baenke | 29 | 98 |
+| Sonstiges | 10 | 80 |
+
+[cmd] 58/58 Geraete haben einen deutschen Namen. Stichproben: `None` -> `Körpergewicht`, `Dumbbell` -> `Kurzhantel`, `Cable Pulley Machine` -> `Kabelzugmaschine`, `Bench` -> `Hantelbank`, `Jump rope` -> `Springseil`, `Yoga Mat` -> `Yogamatte`.
+
+[cmd] `None` bleibt als Sonderfall unter `Freie Gewichte`, wie in der Vorgaenger-UI `None (Bodyweight)` unter derselben Gruppe stand. Es haengt an 527 Uebungen, also 37 Prozent des Bestands. Als Filter taugt es nur, wenn die UI es als `Körpergewicht` sichtbar macht und zusaetzlich die Disziplin `Bodyweight` anbietet.
+
+## C-90: Nach welchen Regeln die Disziplin entsteht
+
+[cmd] Die Regelreihenfolge ist bewusst spezifisch vor allgemein:
+
+| Reihenfolge | Regel | Disziplin | Uebungen |
+|---:|---|---|---:|
+| 1 | Cardio-Geraet oder Cardio-Name (`Jump rope`, `Rowing Machine`, `Stationary Exercise Bike`, `Jumping jack`, `Skipping`) | Cardio | 9 |
+| 2 | `stretch`, `mobility`, `foam roller`, `flexibility` im Namen | Stretching | 108 |
+| 3 | Yoga-/Pose-Signal im Namen (`yoga`, `pose`, `chatarunga`, `cobra`, `setu bandhasana`, ...) | Yoga | 11 |
+| 4 | `category = Bodyweight` oder Geraet `None` | Bodyweight | 511 |
+| 5 | `category IN (Free Weights, Resistance)` | Strength | 777 |
+
+[annahme] Wenn eine Uebung `Yoga Mat` nutzt, aber `stretch` im Namen traegt, gewinnt `Stretching`. Das Geraet ist Zubehoer; der Bewegungsname ist die staerkere fachliche Aussage. Deshalb entstehen keine Yoga-Matten-Falschpositiven bei Dehnuebungen.
+
+[cmd] 0/1.416 Uebungen bleiben ohne Disziplin. Das liegt nicht an Raten, sondern daran, dass die Bestandskategorien `Bodyweight`, `Free Weights` und `Resistance` als letzte, breite Auffangregeln vollstaendig tragen.
+
+## C-90: Was ohne Zuordnung bleibt
+
+[cmd] 0/58 Geraete bleiben ohne Gruppe oder deutschen Namen. 0/1.416 Uebungen bleiben ohne Disziplin.
+
+[cmd] `Sonstiges` enthaelt 10 Geraete und 80 Uebungen: `Yoga Mat` 40, `Ab Wheel` 11, `Stability Ball` 10, `Chair` 8, `Jump rope` 5, `Balance Board` 2, `Balloon` 1, `Couch` 1, `Rowing Machine` 1, `Stationary Exercise Bike` 1.
+
+[cmd] Der Byteinhalt wurde nach dem Live-Einspielen geprueft: 0 Fragezeichen in `training.equipment.name_de` und `equipment_group_de`; `Körpergewicht`, `Geräte & Bänke` und `Kabel & Bänder` liegen als UTF-8 in der Datenbank.
+
+## C-90: Ob die Gliederung als Filter taugt
+
+[cmd] Die Gliederung traegt knapp genug fuer den Exercises-Tab: `Sonstiges` liegt bei 10/58 Geraeten und 80/1.416 Uebungen, also klar unter einem Drittel. Die starke Schieflage liegt nicht bei `Sonstiges`, sondern bei `None`/`Körpergewicht` mit 527 Uebungen.
+
+[annahme] Fuer G-64 sollte `None` nicht als kryptischer Geraetename erscheinen, sondern als `Körpergewicht` und parallel ueber die Disziplin `Bodyweight` filterbar sein. Dann ist der grosse Block kein kaputter Geraetefilter, sondern ein erwartbarer Trainingsmodus.
+
+[cmd] `training.exercises` bleibt bei 1.416 und `training.exercise_muscles` bei 6.588. Der Wegwerf-Kettenlauf `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts --database lumeos_kette_c90_utf8_20260818` lief gruen; Schritt 109a meldete `OK: 58 Geraete gruppiert, 58 deutsche Namen, 1416 Disziplinen, 6588 Muskelzuordnungen, Sonstiges 10 Geraete/80 Uebungen`.
+
+[cmd] Live danach: `schema-vollstaendigkeit-pruefen.ts` meldete `SCHEMA VOLLSTAENDIG`, `testdaten-pruefen.ts` meldete `OK: C-82 Testdaten stimmen`, `kette-readme-pruefen.ts` meldete `README/Kette: ok (64 Schritte dokumentiert)`, und `pnpm gate` lief gruen mit 8/8 Tasks.
