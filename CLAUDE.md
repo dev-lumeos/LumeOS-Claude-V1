@@ -111,6 +111,23 @@ Hilfsfunktionen.
 `[read]` Mehrzeiliges geht nur ueber `exec("...")` mit `\n`; die REPL
 bricht sonst an der ersten Leerzeile ab.
 
+**Die Kette ist zweistufig — beide Stufen muessen zu sein.** `[cmd]`
+`subprocess.run(shell=True)` startet je Aufruf ein `cmd.exe` aus
+system32, auch innerhalb der Python-Sitzung. Das braucht:
+
+```python
+si = subprocess.STARTUPINFO()
+si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+si.wShowWindow = 0
+def sh(c):
+    return subprocess.run(c, shell=True, capture_output=True, text=True,
+                          startupinfo=si,
+                          creationflags=subprocess.CREATE_NO_WINDOW).stdout.strip()
+```
+
+`[read]` Ohne `CREATE_NO_WINDOW` poppt bei jedem `git`-Aufruf ein
+Fenster auf — seltener als vorher, aber genauso stoerend.
+
 **Und die eigenen Werkzeuge nutzen:** `read_file` statt `Get-Content`,
 `list_directory` statt `Get-ChildItem`, `edit_block` statt einer
 Ersetzung per Skript.
