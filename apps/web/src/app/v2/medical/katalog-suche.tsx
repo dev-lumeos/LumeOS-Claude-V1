@@ -22,6 +22,13 @@
 // anlegen** („Kein Schema ändern, keine Migration"). Gesucht wird
 // deshalb über PostgREST auf der Tabelle, mit demselben Grundsatz:
 // begrenzt, serverseitig, sortiert.
+//
+// **SEIT G-60 HINTER DER SUCHE, NICHT AUF DER SEITE.** `[read]` Der
+// Auftrag: *„Hinter die Suche, nicht auf die Seite. Wie die 7.140
+// Lebensmittel, wo das Tagebuch vier Zeilen zeigt."* Die Kachel steht
+// nicht mehr als Dauerliste unter der Markerliste; sie klappt aus,
+// wenn jemand sie oeffnet. **Gebaut bleibt sie unveraendert** — die
+// 130–160 ms ueber 11.676 Zeilen sind gemessen und richtig.
 import * as React from 'react'
 import { Card, Icon, Pill } from '@lumeos/ui'
 

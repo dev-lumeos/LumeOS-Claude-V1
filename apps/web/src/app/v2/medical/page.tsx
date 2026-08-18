@@ -23,9 +23,10 @@
 import type { Metadata } from 'next'
 
 import {
-  angemeldeteNutzerin, ladeBefundwerte, sucheKatalog, zaehleKatalog,
+  angemeldeteNutzerin, ladeBefundwerte, ladeMarkerStamm, sucheKatalog, zaehleKatalog,
   type BefundWert, type KatalogTreffer,
 } from '../../../lib/medical/lesen'
+import { zuReihen, type MarkerReihe } from '../../../lib/medical/reihe'
 import { MedicalAnsicht } from './ansicht'
 import './medical.css'
 
@@ -39,6 +40,8 @@ export const dynamic = 'force-dynamic'
 
 export default async function V2MedicalPage() {
   let werte: BefundWert[] = []
+  let reihen: MarkerReihe[] = []
+  let befunde = 0
   let katalogStart: KatalogTreffer[] = []
   let katalogGesamt = 0
   let ladefehler: string | null = null
@@ -50,13 +53,21 @@ export default async function V2MedicalPage() {
       sucheKatalog(''),
       zaehleKatalog(),
     ])
+
+    // Kurzname und Klasse je Code — ein Zugriff fuer alle, erst wenn
+    // die Werte da sind, weil er ihre Codes braucht.
+    const codes = Array.from(
+      new Set(werte.map(w => w.loinc_code).filter((c): c is string => !!c)),
+    )
+    reihen = zuReihen(werte, await ladeMarkerStamm(codes))
+    befunde = new Set(werte.map(w => w.report_id)).size
   } catch (e) {
     ladefehler = e instanceof Error ? e.message : String(e)
   }
 
   return (
     <MedicalAnsicht
-      echt={{ werte, katalogStart, katalogGesamt, ladefehler }}
+      echt={{ reihen, befunde, werte, katalogStart, katalogGesamt, ladefehler }}
     />
   )
 }

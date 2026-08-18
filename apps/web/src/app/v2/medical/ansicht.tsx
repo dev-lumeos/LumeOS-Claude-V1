@@ -43,6 +43,7 @@ import {
   calcBiomarkerFlag, calcSystemScore, calcOverallHealthScore, generateAlerts,
 } from './daten'
 import type { BefundWert, KatalogTreffer } from '../../../lib/medical/lesen'
+import type { MarkerReihe } from '../../../lib/medical/reihe'
 import { MedicalKontext, useMedical, type ModalZustand } from './kontext'
 import { MedicalModale } from './modale'
 import { MedBiomarkers, MedImport } from './tab-biomarker'
@@ -54,10 +55,15 @@ export const ATTRAPPE =
   + '`medical`-Schema gibt es noch nicht.'
 
 // [cmd] module-medical-v2.jsx:33-39, in dieser Reihenfolge.
-function tabs(): TabItem[] {
+//
+// `[cmd]` SEIT G-60 zaehlt „Biomarkers" echt: 35 Marker der
+// angemeldeten Nutzerin statt der 48 erfundenen der Vorlage. Die
+// uebrigen drei Zaehler stehen weiter auf Attrappendaten, weil ihre
+// Tabs es sind.
+function tabs(markerZahl: number): TabItem[] {
   return [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
-    { id: 'biomarkers', label: 'Biomarkers', icon: 'trend_up', count: BIOMARKERS.length },
+    { id: 'biomarkers', label: 'Biomarkers', icon: 'trend_up', count: markerZahl },
     { id: 'import', label: 'Import', icon: 'camera' },
     {
       id: 'tracking', label: 'Tracking', icon: 'edit',
@@ -78,6 +84,22 @@ function tabs(): TabItem[] {
  * anzeigen.
  */
 export type EchteDaten = {
+  /**
+   * Die Marker mit ihrem Verlauf — 140 flache Werte, gefaltet zu 35
+   * Reihen. `[read]` Die Faltung steht in `lib/medical/reihe.ts`, nicht
+   * hier: sie ist eine Rechnung und soll ohne React pruefbar bleiben.
+   */
+  reihen: MarkerReihe[]
+  /** Wie viele Laborbefunde die Werte tragen — fuer die Unterzeile. */
+  befunde: number
+  /**
+   * Die Rohwerte, eine Zeile je Messung.
+   *
+   * `[read]` Der Import-Tab braucht sie: dort steht `match_status`,
+   * und der ist eine Aussage ueber die einzelne importierte Zeile, nicht
+   * ueber den Marker. In der Liste hat er nichts verloren — Tom:
+   * *„In der Liste ist er Testmaterial."*
+   */
   werte: BefundWert[]
   katalogStart: KatalogTreffer[]
   katalogGesamt: number
@@ -123,8 +145,18 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
               </Pill>
             )}
           </div>
+          {/* `[cmd]` Die Zahl ist seit G-60 echt: die Marker der
+              angemeldeten Nutzerin, nicht die 48 der Vorlage.
+              `Health score` und `alerts` daneben sind es NICHT — sie
+              stammen aus `calcOverallHealthScore()` und
+              `generateAlerts()` ueber den erfundenen Katalog.
+              `[read]` Der Auftrag: *„Wo die Attrappe etwas zeigt, das
+              die Daten nicht hergeben — sag es, erfinde nichts."*
+              Beide stehen im Bericht; ein Gesundheitswert waere
+              ausserdem genau die Bewertung, die die Anzeige nicht
+              abgibt. */}
           <div className="v2-module-sub">
-            {BIOMARKERS.length} biomarkers · LOINC-mapped · dual-range (lab + optimal) · no diagnosis, no therapy advice
+            {echt.reihen.length} biomarkers · LOINC-mapped · dual-range (lab + optimal) · no diagnosis, no therapy advice
           </div>
         </div>
         <div className="v2-module-actions">
@@ -145,11 +177,11 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
         </div>
       </div>
 
-      <Tabs items={tabs()} active={tab} onChange={setTab} />
+      <Tabs items={tabs(echt.reihen.length)} active={tab} onChange={setTab} />
 
       {tab === 'dashboard' && <MedDashboard />}
       {tab === 'biomarkers' && <MedBiomarkers echt={echt} />}
-      {tab === 'import' && <MedImport />}
+      {tab === 'import' && <MedImport echt={echt} />}
       {tab === 'tracking' && <MedTracking />}
       {tab === 'insights' && <MedInsights />}
 

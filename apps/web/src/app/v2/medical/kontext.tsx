@@ -9,11 +9,20 @@
 // Bericht.
 import * as React from 'react'
 
+import type { MarkerReihe } from '../../../lib/medical/reihe'
 import type { Biomarker, Symptom, Medikament } from './daten'
 
-/** Die acht Modale. [cmd] module-medical-v2.jsx:49-56. */
+/**
+ * Die acht Modale der Vorlage. [cmd] module-medical-v2.jsx:49-56.
+ *
+ * `[read]` SEIT G-60 NEUN: `markerReihe` ist das Gegenstueck zu
+ * `biomarker` — dieselbe Form, aber mit echten Werten aus
+ * `medical.lab_result_values`. Die Attrappenvariante bleibt, solange
+ * Tabs stehen, die sie oeffnen.
+ */
 export type ModalZustand =
   | { typ: 'biomarker'; b: Biomarker }
+  | { typ: 'markerReihe'; r: MarkerReihe }
   | { typ: 'symptom'; s: Symptom }
   | { typ: 'logSymptom' }
   | { typ: 'med'; m: Medikament }

@@ -14,15 +14,14 @@ import * as React from 'react'
 import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf } from '@lumeos/ui'
 
 import {
-  BIOMARKERS, BIOMARKER_CATEGORIES, FLAG_META, OCR_EXTRACTED,
-  LAB_REPORTS, UNIT_CONVERSIONS, calcBiomarkerFlag,
+  OCR_EXTRACTED, LAB_REPORTS, UNIT_CONVERSIONS,
 } from './daten'
-import { RangeIndicator, FlagPill, TrendBadge } from './bausteine'
 import { useMedical } from './kontext'
 import { ATTRAPPE, type EchteDaten } from './ansicht'
 import { katalogSuchen } from './aktionen'
-import { BefundTabelle } from './befund-tabelle'
 import { KatalogSuche } from './katalog-suche'
+import { MarkerListe } from './marker-liste'
+import { ImportZuordnung } from './import-zuordnung'
 
 const FELD: React.CSSProperties = {
   width: '100%', height: 30, background: 'var(--surface)',
@@ -31,173 +30,77 @@ const FELD: React.CSSProperties = {
 }
 const FELD_MONO: React.CSSProperties = { ...FELD, fontFamily: 'var(--font-mono)' }
 
-/**
- * Warum die Entwurfstabelle ihre Marke behaelt, obwohl daneben echte
- * Werte stehen (G-46).
- *
- * `[cmd]` Eigener Satz statt `ATTRAPPE`, weil der Grund hier ein
- * anderer ist: nicht „kein Schema", sondern „Schema da, Spalten leer".
- */
-const ENTWURFSKATALOG =
-  'Bleibt Attrappe: die Tabelle zeigt Zeitreihe, Sparkline und '
-  + 'Bereichsbalken. `medical.lab_result_values` fuehrt heute sechs '
-  + 'Testwerte und keine Zeitreihe — die Spalten haetten nichts zu '
-  + 'zeigen. Die echten Werte stehen oben.'
-
 // ═══ TAB 2 · BIOMARKERS ══════════════════════════════════════════
 // [cmd] module-medical-v2.jsx:237-309.
 //
-// **SEIT G-46 GETEILT.** Oben stehen die echten Daten — die Befundwerte
-// der angemeldeten Nutzerin und die Suche über den Katalog mit 11.676
-// Markern. Sie tragen KEINE Attrappenmarke mehr.
+// **SEIT G-60 EINE LISTE, NICHT DREI.** `[read]` Der Auftrag: *„Das
+// Mockup ist die Vorgabe. Es bekommt echte Daten."* Verschwunden sind
+// die zwei Listen aus G-46 — die Flachliste mit einer Zeile je Messung
+// und die Entwurfstabelle mit 48 erfundenen Markern. **Der Fehler lag
+// im Auftrag G-46, nicht in der Umsetzung:** er verlangte *„die
+// Biomarker-Liste und den Befund"*, zwei Dinge, die im Mockup so nicht
+// vorkommen.
 //
-// Darunter steht die Entwurfstabelle der Vorlage mit ihren 48
-// erfundenen Markern. `[read]` Der Auftrag: *„Was angebunden ist,
-// verliert die Marke. Alles andere behält sie."* Sie behält sie,
-// **und der Untertitel sagt, warum sie noch da ist**: sie zeigt
-// Verlauf, Sparkline und Bereichsbalken, für die es noch keine Daten
-// gibt — `lab_result_values` führt sechs Testwerte, keine Zeitreihe.
+// Was hier steht, ist die Form der Attrappe mit echten Werten:
+// `MarkerListe` (`marker-liste.tsx`) — Filterleiste, Panelpillen,
+// Bereichsbalken, Verlauf, Sparkline, klickbare Zeile.
+//
+// **DER KATALOG STEHT HINTER DER SUCHE**, nicht auf der Seite —
+// `[read]` *„Wie die 7.140 Lebensmittel, wo das Tagebuch vier Zeilen
+// zeigt."* Er klappt aus, wenn jemand ihn oeffnet.
 export function MedBiomarkers({ echt }: { echt: EchteDaten }) {
-  const { open } = useMedical()
-  const [cat, setCat] = React.useState('all')
-  const [q, setQ] = React.useState('')
-  const [onlyFlagged, setOnlyFlagged] = React.useState(false)
+  const [katalogOffen, setKatalogOffen] = React.useState(false)
 
-  const list = BIOMARKERS
-    .filter(b => cat === 'all' || b.cat === cat)
-    .filter(b => !q || (b.name + b.de + b.abbr + b.loinc).toLowerCase().includes(q.toLowerCase()))
-    .filter(b => !onlyFlagged || calcBiomarkerFlag(b.value, b) !== 'optimal')
-    .slice()
-    .sort((a, b) => b.prio - a.prio)
+  if (echt.ladefehler) {
+    return (
+      <Card title="Biomarkers" sub="konnten nicht geladen werden">
+        <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
+          {echt.ladefehler}
+        </div>
+      </Card>
+    )
+  }
 
   return (
     <div>
-      {/* ── ECHT: die Befundwerte ─────────────────────────────── */}
-      {echt.ladefehler ? (
-        <Card title="Befundwerte" sub="konnten nicht geladen werden">
-          <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
-            {echt.ladefehler}
-          </div>
-        </Card>
-      ) : (
-        <BefundTabelle werte={echt.werte} />
-      )}
+      <MarkerListe reihen={echt.reihen} befunde={echt.befunde} />
 
-      <div style={{ height: 14 }} />
-
-      {/* ── ECHT: die Katalogsuche ────────────────────────────── */}
-      <KatalogSuche
-        start={echt.katalogStart}
-        gesamt={echt.katalogGesamt}
-        suchen={katalogSuchen}
-      />
-
-      <div className="v2-divider" style={{ marginTop: 18, marginBottom: 14 }} />
-
-      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>
-        Aus dem Entwurf · noch ohne Datenquelle
-      </div>
-
-      <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, position: 'relative', minWidth: 200 }}>
-          <Icon name="search" className="v2-ic v2-ic-sm" style={{
-            position: 'absolute', left: 10, top: '50%',
-            transform: 'translateY(-50%)', color: 'var(--fg-subtle)',
-          }} />
-          <input
-            value={q} onChange={e => setQ(e.target.value)}
-            aria-label="Search biomarkers"
-            placeholder={`Search ${BIOMARKERS.length} biomarkers · name, abbreviation, LOINC…`}
-            style={{
-              width: '100%', height: 32, background: 'var(--surface)',
-              border: '1px solid var(--border)', borderRadius: 7,
-              padding: '0 12px 0 30px', fontSize: 12, color: 'var(--fg)',
-            }}
-          />
-        </div>
-        <button type="button" onClick={() => setOnlyFlagged(v => !v)}
-                aria-pressed={onlyFlagged}
-                className={onlyFlagged ? 'v2-btn v2-btn-primary' : 'v2-btn'}>
-          <Icon name="filter" className="v2-ic v2-ic-sm" />Non-optimal only
+      <div style={{ marginTop: 14 }}>
+        <button
+          type="button"
+          onClick={() => setKatalogOffen(v => !v)}
+          aria-expanded={katalogOffen}
+          className="v2-btn"
+        >
+          <Icon name="search" className="v2-ic v2-ic-sm" />
+          {katalogOffen
+            ? 'Katalog schliessen'
+            : `Im Katalog suchen · ${echt.katalogGesamt.toLocaleString('de-DE')} Marker`}
         </button>
       </div>
 
-      <div style={{ display: 'flex', gap: 5, marginBottom: 14, flexWrap: 'wrap' }}>
-        {BIOMARKER_CATEGORIES.map(c => (
-          <button key={c.id} type="button" onClick={() => setCat(c.id)}
-                  aria-pressed={cat === c.id}
-                  className={cat === c.id ? 'v2-pill v2-pill-acc' : 'v2-pill'}
-                  style={{ cursor: 'pointer', padding: '3px 10px', fontSize: 11 }}>
-            {c.label}
-            <span className="v2-dim" style={{ marginLeft: 4 }}>
-              {c.id === 'all' ? BIOMARKERS.length : BIOMARKERS.filter(b => b.cat === c.id).length}
-            </span>
-          </button>
-        ))}
-      </div>
-
-      <Card
-        title="Entwurfskatalog"
-        sub="48 erfundene Marker mit Verlauf und Bereichsbalken"
-        attrappe={ENTWURFSKATALOG}
-      >
-        <div className="v2-tbl-wrap">
-          <table className="v2-tbl">
-            <thead>
-              <tr>
-                <th>Biomarker</th>
-                <th style={{ width: 90 }}>LOINC</th>
-                <th style={{ width: 90, textAlign: 'right' }}>Value</th>
-                <th style={{ width: 190 }}>Lab · optimal · you</th>
-                <th style={{ width: 110 }}>Flag</th>
-                <th style={{ width: 80 }}>Trend</th>
-                <th style={{ width: 80 }}>Sparkline</th>
-                <th style={{ width: 26 }} />
-              </tr>
-            </thead>
-            <tbody>
-              {list.map(b => {
-                const flag = calcBiomarkerFlag(b.value, b)
-                const m = FLAG_META[flag]
-                return (
-                  <tr key={b.id} style={{ cursor: 'pointer' }}
-                      onClick={() => open({ typ: 'biomarker', b })}>
-                    <td>
-                      <div style={{ fontSize: 12.5, fontWeight: 500 }}>{b.name}</div>
-                      <div className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
-                        {b.abbr} · {b.cat.replace(/_/g, ' ')} · ev {b.ev}
-                      </div>
-                    </td>
-                    <td className="v2-mono v2-dim" style={{ fontSize: 10.5 }}>{b.loinc}</td>
-                    <td className="v2-num" style={{ textAlign: 'right', color: m.c, fontWeight: 600 }}>
-                      {b.value}
-                      <span className="v2-dim" style={{ fontSize: 9.5, marginLeft: 3 }}>{b.unit}</span>
-                    </td>
-                    <td style={{ padding: '6px 8px 6px 0' }}>
-                      <RangeIndicator b={b} height={16} showLabels={false} />
-                    </td>
-                    <td><FlagPill flag={flag} /></td>
-                    <td><TrendBadge hist={b.hist} /></td>
-                    <td style={{ padding: '4px 8px 4px 0' }}>
-                      <Sparkline data={b.hist} color={m.c} h={20} />
-                    </td>
-                    <td>
-                      <Icon name="chevron_right" className="v2-ic v2-ic-sm" style={{ color: 'var(--fg-dim)' }} />
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+      {katalogOffen && (
+        <div style={{ marginTop: 12 }}>
+          <KatalogSuche
+            start={echt.katalogStart}
+            gesamt={echt.katalogGesamt}
+            suchen={katalogSuchen}
+          />
         </div>
-      </Card>
+      )}
     </div>
   )
 }
 
 // ═══ TAB 3 · IMPORT ══════════════════════════════════════════════
 // [cmd] module-medical-v2.jsx:312-468.
-export function MedImport() {
+//
+// **EINE KACHEL DARIN IST SEIT G-60 ECHT:** `ImportZuordnung` zeigt,
+// wie viele importierte Werte einem Katalogeintrag zugeordnet sind.
+// `[cmd]` Tom: *„`match_status` gehört nicht in die Liste, sondern in
+// den Import-Tab."* Der Rest des Tabs bleibt Attrappe — es gibt weder
+// Dateiablage noch OCR-Dienst.
+export function MedImport({ echt }: { echt: EchteDaten }) {
   const { open } = useMedical()
   const [sub, setSub] = React.useState('upload')
 
@@ -350,6 +253,11 @@ export function MedImport() {
                 </table>
               </div>
             </Card>
+
+            {/* ECHT: die Zuordnung der importierten Werte. Sie steht
+                unter der Attrappenkachel, weil sie dieselbe Frage
+                beantwortet — nur mit gemessenen Zahlen. */}
+            <ImportZuordnung werte={echt.werte} />
           </div>
         </div>
       )}

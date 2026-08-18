@@ -28,10 +28,19 @@ import {
 } from './daten'
 import { RangeIndicator, FlagPill } from './bausteine'
 import type { ModalZustand } from './kontext'
+// `[read]` Das Marker-Modal steht in einer eigenen Datei, weil diese
+// hier Attrappe ist und jenes echte Werte zeigt — dieselbe Trennung an
+// der Datei wie schon bei `marker-liste.tsx`.
+import { MarkerReihenModal } from './marker-modal'
 
 // ── Der Rahmen ──────────────────────────────────────────────────
 // [cmd] module-medical-modals.jsx:3-18.
-function MMod({
+//
+// `[read]` EXPORTIERT seit G-60: das Marker-Modal mit den echten
+// Werten liegt in `marker-modal.tsx` und benutzt denselben Rahmen.
+// Zwei Rahmen waeren zwei Wahrheiten ueber Kopfzeile, Escape und
+// Fusszeile — der Rahmen ist die Vorlage, nicht die Attrappe.
+export function MMod({
   title, subtitle, eyebrow, accent, onClose, footer, children, width = 660,
 }: {
   title: React.ReactNode
@@ -95,6 +104,7 @@ export function MedicalModale({ modal, onClose }: {
   if (!modal) return null
   switch (modal.typ) {
     case 'biomarker': return <BiomarkerDetailModal b={modal.b} onClose={onClose} />
+    case 'markerReihe': return <MarkerReihenModal r={modal.r} onClose={onClose} />
     case 'symptom': return <SymptomDetailModal s={modal.s} onClose={onClose} />
     case 'logSymptom': return <LogSymptomModal onClose={onClose} />
     case 'med': return <MedicationDetailModal m={modal.m} onClose={onClose} />

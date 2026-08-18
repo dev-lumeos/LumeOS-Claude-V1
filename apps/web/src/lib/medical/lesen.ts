@@ -263,6 +263,53 @@ export async function sucheKatalog(begriff: string, limit = 25): Promise<Katalog
   return (data ?? []) as unknown as KatalogTreffer[]
 }
 
+/** Was der Katalog je Code über den Marker weiss, soweit es die Liste braucht. */
+export type MarkerStamm = {
+  /** Kurzname aus `biomarker_aliases.canonical_name`. */
+  kurz: string | null
+  /** `loinc_class` — die einzige Gruppierung, die die Daten führen. */
+  klasse: string | null
+}
+
+/**
+ * Kurzname und Klasse je Code.
+ *
+ * `[cmd]` **Warum `biomarker_aliases` und nicht `biomarker_catalog.short_name`:**
+ * der Katalog führt seinen LOINC-Kurznamen für alle 11.676 Codes, aber
+ * das sind Kodierungskürzel, keine Anzeigenamen — `2986-8` heisst dort
+ * `Testost SerPl-mCnc`, `718-7` heisst `Hgb Bld-mCnc`. Die Attrappe
+ * zeigt `TT` und `Hb`. `medical.biomarker_aliases.canonical_name`
+ * trägt die lesbare Form (`Total Testosterone`, `Hemoglobin`) —
+ * gemessen für 27 der 35 benutzten Codes; die übrigen acht bleiben
+ * ohne Kurznamen. Was die Daten nicht führen, wird nicht erfunden.
+ *
+ * `[cmd]` `loinc_class` deckt die benutzten Marker vollständig ab,
+ * verteilt sich aber auf nur vier Werte (CHEM 31 · HEM/BC 2 ·
+ * CHAL.ROUTINE 1 · DRUG/TOX 1) — nicht auf die elf Panels der
+ * Attrappe. Im Bericht steht, was das heisst.
+ */
+export async function ladeMarkerStamm(codes: string[]): Promise<Map<string, MarkerStamm>> {
+  const karte = new Map<string, MarkerStamm>()
+  if (codes.length === 0) return karte
+
+  const db = medicalDb()
+  const [katalog, aliase] = await Promise.all([
+    db.from('biomarker_catalog').select('loinc_code, loinc_class').in('loinc_code', codes),
+    db.from('biomarker_aliases').select('loinc_code, canonical_name').in('loinc_code', codes),
+  ])
+
+  for (const z of (katalog.data ?? []) as unknown as Array<{ loinc_code: string; loinc_class: string | null }>) {
+    karte.set(z.loinc_code, { kurz: null, klasse: z.loinc_class ?? null })
+  }
+  for (const z of (aliase.data ?? []) as unknown as Array<{ loinc_code: string; canonical_name: string | null }>) {
+    const v = karte.get(z.loinc_code) ?? { kurz: null, klasse: null }
+    // Ein Code hat mehrere Aliase mit demselben `canonical_name`; der
+    // erste genügt, ein zweiter überschriebe ihn mit sich selbst.
+    if (!v.kurz && z.canonical_name) karte.set(z.loinc_code, { ...v, kurz: z.canonical_name })
+  }
+  return karte
+}
+
 /** Wie viele Marker der Katalog führt — für die Beschriftung der Suche. */
 export async function zaehleKatalog(): Promise<number> {
   const { count, error } = await medicalDb()

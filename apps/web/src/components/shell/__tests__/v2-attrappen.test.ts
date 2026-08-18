@@ -411,14 +411,22 @@ test('die fuenf Tabs der Vorlage stehen im Medical-Modul', () => {
 })
 
 test('das Medical-Modul kennzeichnet jede Kachel', () => {
-  // `[cmd]` STAND SEIT G-46: 21 Marken. Zwei Kacheln haben ihre
-  // verloren, weil sie angebunden sind — `BefundTabelle` und
-  // `KatalogSuche` in eigenen Dateien. `tab-biomarker.tsx` behaelt
-  // seine acht: die Entwurfstabelle bleibt Attrappe, weil sie Verlauf
-  // und Sparkline zeigt, fuer die es keine Daten gibt.
+  // `[cmd]` STAND SEIT G-60: **20 Marken**, vorher 21.
+  //
+  // Verschwunden ist die Entwurfstabelle in `tab-biomarker.tsx` (der
+  // Satz `ENTWURFSKATALOG`) — nicht weil sie angebunden wurde, sondern
+  // weil sie **geloescht** ist. `[read]` Ihre Begruendung war *„die
+  // Tabelle zeigt Zeitreihe, Sparkline und Bereichsbalken —
+  // `lab_result_values` fuehrt sechs Testwerte und keine Zeitreihe."*
+  // Das gilt nicht mehr: 140 Werte, 5 Befunde, echter Verlauf. Ihre
+  // Form traegt jetzt `marker-liste.tsx` mit echten Daten.
+  //
+  // Die uebrigen 20 stehen, weil ihre Tabs es sind: Dashboard,
+  // Tracking, Insights und der Grossteil des Import-Tabs haben kein
+  // Schema hinter sich.
   const dateien: Array<[string, number]> = [
     [MEDICAL, 5],
-    [path.join(process.cwd(), 'src/app/v2/medical/tab-biomarker.tsx'), 8],
+    [path.join(process.cwd(), 'src/app/v2/medical/tab-biomarker.tsx'), 7],
     [path.join(process.cwd(), 'src/app/v2/medical/tab-tracking.tsx'), 8],
   ]
   for (const [datei, erwartet] of dateien) {
@@ -1147,12 +1155,19 @@ test('der Befehlsparser der Sprachsitzung erkennt die Vorlagenbeispiele', () => 
   assert.equal(treffer('banane'), null, 'Unbekanntes darf nichts ausloesen')
 })
 
-// ── Medical · Anbindung an den Katalog (G-46) ────────────────────────
+// ── Medical · das Mockup an den Daten (G-46, G-60) ───────────────────
+//
+// `[read]` SEIT G-60 ist `befund-tabelle.tsx` weg. Der Auftrag: *„Die
+// zwei gebauten Listen verschwinden."* An ihre Stelle tritt
+// `marker-liste.tsx` — dieselben Pruefungen, dieselbe Grenze, aber in
+// der Form der Attrappe: eine Zeile je Marker statt je Messung.
 
-const MED_BEFUND = path.join(process.cwd(), 'src/app/v2/medical/befund-tabelle.tsx')
+const MED_LISTE = path.join(process.cwd(), 'src/app/v2/medical/marker-liste.tsx')
+const MED_MODAL = path.join(process.cwd(), 'src/app/v2/medical/marker-modal.tsx')
 const MED_KATALOG = path.join(process.cwd(), 'src/app/v2/medical/katalog-suche.tsx')
 const MED_LESEN = path.join(process.cwd(), 'src/lib/medical/lesen.ts')
 const MED_LOGIK = path.join(process.cwd(), 'src/lib/medical/befund.ts')
+const MED_REIHE = path.join(process.cwd(), 'src/lib/medical/reihe.ts')
 
 test('die angebundenen Medical-Kacheln tragen keine Marke mehr', () => {
   // `[read]` Der Auftrag G-46: „Was angebunden ist, verliert die Marke.
@@ -1162,7 +1177,12 @@ test('die angebundenen Medical-Kacheln tragen keine Marke mehr', () => {
   // gezaehlt, was BLEIBT, hier wird festgehalten, was GEHT. Ohne sie
   // koennte jemand die Marke versehentlich wieder anbringen, und die
   // Zaehlung oben faende das gut, solange die Summe stimmt.
-  for (const datei of [MED_BEFUND, MED_KATALOG]) {
+  // `[cmd]` SEIT G-60 sind es vier statt zwei: dazu kamen die
+  // Markerliste, ihr Modal und die Zuordnungskachel des Import-Tabs.
+  for (const datei of [
+    MED_LISTE, MED_MODAL, MED_KATALOG,
+    path.join(process.cwd(), 'src/app/v2/medical/import-zuordnung.tsx'),
+  ]) {
     const quelle = fs.readFileSync(datei, 'utf8')
     const karten = (quelle.match(/<Card\b/g) ?? []).length
     assert.ok(karten > 0, `${path.basename(datei)}: keine Karte gefunden.`)
@@ -1192,8 +1212,25 @@ test('die Medical-Anzeige bewertet nicht, sie verortet', () => {
   // Lage eines Werts — also allein stehend. Eine reine Textsuche nach
   // „Optimal" trifft beides und meldet die Spaltenueberschrift als
   // Verstoss; sie ist deshalb auf das allein stehende Wort begrenzt.
-  for (const datei of [MED_BEFUND, MED_LOGIK]) {
+  // `[cmd]` SEIT G-60 auch fuer `marker-liste.tsx`, `marker-modal.tsx`
+  // und `reihe.ts` — die drei Dateien, die die Form der Attrappe
+  // tragen. Genau dort ist die Versuchung am groessten, ihre Woerter
+  // gleich mitzunehmen.
+  //
+  // `[read]` Tom zu G-60: *„Die Attrappe zeigt `Optimal`, `High`, `Low`
+  // — das sind Lagebezeichnungen, keine Urteile, solange sie sagen, WO
+  // ein Wert liegt. Pruef, ob die Mockup-Begriffe dasselbe leisten."*
+  // `In range` / `Above range` / `Below range` leisten es; `Optimal`
+  // nicht — es benennt keine Lage, sondern spricht ein Guetesiegel aus,
+  // und die Attrappe fuehrt dazu `Critical low`/`Critical high`.
+  //
+  // Ausgenommen bleibt `Optimal range`/`optimal band` als NAME des
+  // Bereichstyps aus dem Schema (`range_type = 'optimal'`) — deshalb
+  // ist das Muster auf das allein stehende Wort begrenzt.
+  for (const datei of [MED_LISTE, MED_MODAL, MED_REIHE, MED_LOGIK]) {
     const quelle = ohneKommentar(fs.readFileSync(datei, 'utf8'))
+      // `Optimal range` und `optimal band` sind Bereichsnamen, keine Lagen.
+      .replace(/Optimal range|optimal band|optimal:/g, '')
     for (const urteil of [/critical_low/, /critical_high/, /\bCritical\b/, /\bOptimal\b/]) {
       assert.ok(!urteil.test(quelle),
         `${path.basename(datei)}: ${urteil.source} ist ein Urteil, keine Lage.`)
@@ -1223,12 +1260,14 @@ test('der Befundbereich schlaegt den Katalogbereich', () => {
   assert.ok(!/COALESCE|coalesce/.test(lesen),
     'Der Lesepfad baut den Bereichsvorrang nach, statt ihn zu benutzen.')
 
-  // Und die Herkunft wird angezeigt, nicht verschluckt.
-  const befund = fs.readFileSync(MED_BEFUND, 'utf8')
-  assert.ok(/reference_source/.test(befund),
-    'Die Anzeige zeigt nicht, woher der Bereich stammt.')
-  assert.ok(/catalog_fallback/.test(befund),
-    'Der Rueckfall ist in der Anzeige nicht als solcher erkennbar.')
+  // Und die Faltung entscheidet ihn auch nicht neu: sie ruft
+  // `gueltigerBereich` auf, statt `reference_low`/`reference_high`
+  // selbst gegen den Katalog abzuwaegen.
+  const reihe = fs.readFileSync(MED_REIHE, 'utf8')
+  assert.ok(/gueltigerBereich/.test(reihe),
+    'Die Faltung benutzt die Vorrangregel nicht.')
+  assert.ok(!/COALESCE|coalesce/.test(reihe),
+    'Die Faltung baut den Bereichsvorrang nach, statt ihn zu benutzen.')
 })
 
 test('der Katalog wird durchsucht, nicht geladen', () => {
@@ -1262,14 +1301,113 @@ test('ein unbekannter Marker verschwindet nicht', () => {
   assert.ok(!/return null/.test(zuo![0]),
     'zuordnung() gibt null zurueck — eine Zeile ohne Zuordnung faellt dann weg.')
 
-  const befund = fs.readFileSync(MED_BEFUND, 'utf8')
-  assert.ok(/marker_name/.test(befund),
+  // `[cmd]` Die Faltung gruppiert nach LOINC — und faellt auf den
+  // Namen zurueck, wenn keiner da ist. OHNE diesen Rueckfall lagen die
+  // zwei codelosen Werte („Glucose [Mass/volume]…" und „Unbekannter
+  // Marker X") in einem gemeinsamen `null`-Topf und erschienen als EIN
+  // Marker mit zwei Namen — ein Datenverlust, den niemand bemerkt.
+  const reihe = fs.readFileSync(MED_REIHE, 'utf8')
+  assert.ok(/loinc_code \?\? `name:/.test(reihe),
+    'Die Faltung hat keinen Rueckfall auf den Namen — codelose Marker fielen zusammen.')
+
+  const liste = fs.readFileSync(MED_LISTE, 'utf8')
+  assert.ok(/r\.name/.test(liste),
     'Der Rohtext des Markers wird nicht angezeigt.')
-  assert.ok(/ungepr/.test(befund),
-    'Die Anzeige sagt nicht, dass unzugeordnete Werte ungeprueft sind.')
-  // Kein Filter, der nach loinc_code aussortiert.
-  assert.ok(!/filter\([^)]*loinc_code\)/.test(befund),
+
+  // `[cmd]` Kein Filter der ANGEZEIGTEN Liste darf nach LOINC
+  // aussortieren. Geprueft wird die Filterkette von `const liste =`
+  // — nicht die ganze Datei: `reihen.filter(r => !r.loinc_code).length`
+  // ZAEHLT die unzugeordneten Marker fuer den Hinweis darunter, es
+  // entfernt sie nicht. Eine Textsuche ueber die Datei traefe beides.
+  const kette = /const liste = reihen[\s\S]*?\n\n/.exec(liste)
+  assert.ok(kette, 'Die Filterkette der Liste nicht gefunden.')
+  assert.ok(!/loinc_code\)/.test(kette![0].replace(/r\.loinc_code \?\? ''/g, '')),
     'Die Anzeige filtert nach LOINC — unbekannte Marker verschwaenden.')
+
+  // Und der Hinweis nennt sie, statt sie zu verschweigen.
+  assert.ok(/keinem Katalogeintrag zugeordnet/.test(liste),
+    'Die Anzeige sagt nicht, dass unzugeordnete Marker Rohtext sind.')
+})
+
+test('Medical zeigt EINE Liste, nicht drei', () => {
+  // `[read]` Der Auftrag G-60: *„Drei Listen untereinander: 140 Werte
+  // als Flachliste · 11.676 Katalogeintraege · die Attrappe — und nur
+  // die letzte zeigt, wie es aussehen soll. Die zwei gebauten Listen
+  // verschwinden."*
+  //
+  // `[cmd]` Diese Pruefung ist das Gedaechtnis dieser Entscheidung:
+  // ohne sie kaeme beim naechsten Auftrag wieder eine Tabelle daneben,
+  // und die Begruendung dafuer stuende nirgends.
+  assert.ok(!fs.existsSync(path.join(process.cwd(), 'src/app/v2/medical/befund-tabelle.tsx')),
+    'befund-tabelle.tsx ist zurueck — die Flachliste war der Fehler von G-46.')
+
+  const tab = fs.readFileSync(path.join(process.cwd(), 'src/app/v2/medical/tab-biomarker.tsx'), 'utf8')
+  const tab2 = /export function MedBiomarkers[\s\S]*?\n\}/.exec(tab)
+  assert.ok(tab2, 'MedBiomarkers nicht gefunden.')
+  assert.ok(!/<table/.test(tab2![0]),
+    'Der Biomarker-Tab traegt wieder eine eigene Tabelle — es gibt genau eine Liste.')
+  // Der Entwurfskatalog mit den 48 erfundenen Markern ist weg.
+  assert.ok(!/BIOMARKERS/.test(tab2![0]),
+    'Der Biomarker-Tab greift wieder auf die 48 erfundenen Marker zu.')
+})
+
+test('die Marker-Liste traegt die Form der Attrappe', () => {
+  // `[read]` Der Auftrag: *„Das Mockup ist die Vorgabe. Was es zeigt,
+  // bleibt — Panels, Filter, Verlauf, Balken, Popups."*
+  //
+  // `[cmd]` Gezaehlt wird nach Merkmalen, nicht nach Zeilen: dieselbe
+  // Regel wie bei `vollstaendigkeit.mjs`. Wer eine Spalte still
+  // weglaesst, faellt hier auf.
+  const liste = fs.readFileSync(MED_LISTE, 'utf8')
+  for (const [merkmal, muster] of [
+    ['Panelfilter', /aria-pressed=\{klasse === k\.id\}/],
+    ['Suchfeld', /Search \$\{reihen\.length\} biomarkers/],
+    ['Non-optimal only', /Non-optimal only/],
+    ['Bereichsbalken', /Bereichsbalken/],
+    ['Sparkline', /<Sparkline/],
+    ['Verlauf', /trendProzent/],
+    ['klickbare Zeile', /onClick=\{\(\) => open\(\{ typ: 'markerReihe'/],
+  ] as Array<[string, RegExp]>) {
+    assert.ok(muster.test(liste), `Die Liste fuehrt "${merkmal}" nicht mehr.`)
+  }
+
+  // `[cmd]` Tom: *„Wir haben die Daten fuer diese Evidence nicht, also
+  // weg."* — und `match_status` gehoert in den Import-Tab.
+  const ohneKommentar = liste
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*\/\//.test(z)).join('\n')
+  assert.ok(!/\bev\b|evidence/i.test(ohneKommentar),
+    'Die Liste zeigt einen Evidenzgrad — die Daten fuehren ihn nicht.')
+  assert.ok(!/match_status|match_candidates/.test(ohneKommentar),
+    'Die Liste zeigt match_status — der gehoert in den Import-Tab.')
+
+  // Und dort steht er.
+  const imp = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/medical/import-zuordnung.tsx'), 'utf8')
+  assert.ok(/match_status/.test(imp) && /match_candidates/.test(imp),
+    'Der Import-Tab zeigt die Zuordnung nicht.')
+})
+
+test('der Verlauf rechnet ueber gemessene Punkte, nicht ueber erfundene', () => {
+  // `[cmd]` Die Attrappe rechnet eine Regression ueber SECHS erfundene
+  // Punkte und beschriftet sie `Q1 25`…`Q2 26` (`daten.ts`,
+  // `calcBiomarkerTrend`). Die Daten fuehren vier bis fuenf echte
+  // Messungen zwischen 2026-02-18 und 2026-08-19.
+  const reihe = fs.readFileSync(MED_REIHE, 'utf8')
+  const trend = /export function trendProzent[\s\S]*?\n\}/.exec(reihe)
+  assert.ok(trend, 'trendProzent nicht gefunden.')
+  assert.ok(/zahlen\.length < 2/.test(trend![0]),
+    'Ein Trend aus einem Punkt ist keiner — die Untergrenze fehlt.')
+  assert.ok(/erst === 0/.test(trend![0]),
+    'Bei Ausgangswert 0 ist die relative Aenderung nicht definiert.')
+
+  // Kein hartkodiertes Quartalsraster aus der Attrappe.
+  const modal = fs.readFileSync(MED_MODAL, 'utf8')
+  assert.ok(!/'Q1 25'|Q1 26/.test(modal),
+    'Das Modal beschriftet erfundene Quartale statt der echten Befunddaten.')
+  assert.ok(/m\.datum/.test(modal),
+    'Die Kurve beschriftet die Achse nicht mit den Befunddaten.')
 })
 
 test('die Lagerechnung stimmt an den Raendern', () => {
