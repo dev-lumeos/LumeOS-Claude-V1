@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `b18a3ec` auf `dev`.
+**Stand:** 2026-08-18, Anker `93d1df8` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 72 offen, 3 in Arbeit.
+`[cmd]` 71 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -188,7 +188,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **G-27** | `v2-rec-grid-1135` und drei weitere Raster |  |
-| **G-30** | Recovery an die Check-ins anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
 | **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
 | **G-34** | `.v2-btn` hat kein `white-space: nowrap` |  |
@@ -201,12 +200,12 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
-| **G-55** | Die Koerperkarte fertigstellen — Recovery richtig |  |
 | **G-50** | `v2-g-cols-5` fehlt |  |
 | **C-75** | BSS und Voice sind Neubau |  |
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
 | **G-52** | `InEntwicklungKnopf` kennt kein `disabled` |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
+| **G-57** | Die Silhouette im Injections-Tab |  |
 
 ---
 
@@ -1764,27 +1763,6 @@ Umsetzen angepasst werden.
   **Gleiche Behandlung wie bei Training:** in den `zusatz`-Block des
   Erzeugers, nicht von Hand in `v2.css`.
 
-- [ ] **G-30: Recovery an die Check-ins anschliessen** (neu 2026-08-17).
-  Folgt auf C-67.
-
-  `[cmd]` `/v2/recovery` steht mit **36 Kacheln, alle Attrappe** — der
-  Grund war das fehlende Schema. **Seit `120` gibt es `recovery.checkins`
-  mit 36 Zeilen live.**
-
-  `[read]` Aus dem G-21-Bericht: *„eine Tabelle weckt sieben Kacheln: den
-  Check-in-Tab, den Erholungswert im `manual`-Modus (braucht kein HRV),
-  die Kopfzeile und den subjektiven Schlafpfad."*
-
-  `[cmd]` **27 der 36 Check-ins haben kein HRV** — der `manual`-Modus ist
-  der Normalfall, nicht die Ausnahme. **Die Anzeige muss ihn tragen**,
-  nicht als Mangel behandeln.
-
-  **Der Erholungswert selbst ist ein eigener Punkt.** `[read]` Er ist
-  `SPEC_09` und hat dieselbe Frage wie C-49: welcher Faktor wie stark
-  zaehlt. **Anbinden heisst hier: die erfassten Werte zeigen**, nicht
-  eine Kennzahl daraus rechnen.
-
-  **Angebunden heisst: Marke weg.** Alles andere behaelt sie.
 
 - [ ] **GO-09: Zieluebersicht in `/v2/goals`** (neu 2026-08-17). Folgt
   auf GO-07.
@@ -2173,64 +2151,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-55: Die Koerperkarte fertigstellen — Recovery richtig** (neu
-  2026-08-18). **Fasst G-47, G-49 und G-54 zusammen. Ein Auftrag, ein
-  Agent.**
-
-  **Tom, 2026-08-18:** *„Der Auftrag war: binde die neue Grafik ein,
-  abgeleitet aus dem Beispiel-HTML, welches wir als Komponente
-  reingeholt haben und schon halbherzig bei Recovery drin haben. Da
-  sollte es einen Folgeauftrag geben, Recovery fertigzustellen und
-  richtig."*
-
-  ### Was fehlt — im Bildvergleich belegt
-
-  `[cmd]` **`MuscleBodyMap_test.html` zeigt die Figur vollstaendig:**
-  Umriss, Kopf, Haende, Fuesse, Muskeln als Flaechen.
-
-  `[cmd]` **`/v2/recovery` zeigt nur die eingefaerbten Muskeln** — kein
-  Umriss, keine Haende, keine Fuesse. **Die Muskeln stehen frei im
-  Raum.**
-
-  `[cmd]` **Die Ursache ist gemessen:** `OUTLINE_FRONT` (5.010 Zeichen)
-  und `OUTLINE_BACK` (3.823) stehen in `MuscleBodyMap.js` **ab Zeile
-  285** — **in `koerperkarte-pfade.ts` fehlen sie.**
-
-  `[read]` **`body_front.svg` wird von der Vorlage gar nicht benutzt.**
-  Der G-26-Agent nahm sie als Quelle, fand dort einen abgeschnittenen
-  Umriss und schloss daraus, die Vorlage sei kaputt. **Sie ist es
-  nicht.**
-
-  ### Vier Teile, alle an derselben Komponente
-
-  **1. Der Umriss** (war G-47) — `OUTLINE_FRONT`/`_BACK` uebernehmen,
-  dazu `head`, `hair`, `hands`, `ankles`, `feet` aus `MUSCLES`.
-  `[cmd]` Das Original arbeitet mit **einem viewBox 724×1448**,
-  `front` bei x≈0–724, `back` bei x≈724–1448 — **dieselbe
-  Koordinatenwelt.**
-
-  **2. Die drei Ebenen** (war G-49) — `[cmd]` C-73 ist fertig: **96
-  Gruppen, 89 Eltern-Beziehungen.** Flaeche (15) → Gruppe (18 Zeilen der
-  Liste) → Muskel (96). **Die Flaeche traegt den verdichteten Wert, der
-  Klick trennt wieder auf.**
-
-  **3. Die Sichtbarkeit** (war G-54) — `[cmd]` `--surface` gegen
-  `--surface-2`: **0,012 Helligkeit.** Betrifft auch den
-  Supplements-Injections-Tab. **Gestaltungsfrage: eigener Token,
-  staerkere Kontur, oder hellere Flaeche.**
-
-  **4. Der Anschluss** (war G-30) — `[cmd]` **36 Check-ins liegen live,
-  27 davon ohne HRV.** `[read]` Anbinden heisst hier: **die erfassten
-  Werte zeigen**, keine Kennzahl daraus rechnen (das ist `SPEC_09`).
-
-  ### Der Nachweis, der diesmal zaehlt
-
-  **Bildschirmfoto neben `MuscleBodyMap_test.html`**, beide Ansichten,
-  hell und dunkel.
-
-  `[read]` **Der G-45-Nachweis lautete** *„16 Orte auf zwei
-  Silhouetten"* — **das prueft die Punkte, nicht den Koerper.** Ein
-  Bildvergleich war verlangt und wurde nicht geliefert.
 
 - [ ] **G-50: `v2-g-cols-5` fehlt** (neu 2026-08-18). Befund aus G-42.
 
@@ -2316,3 +2236,18 @@ Umsetzen angepasst werden.
   die fehlenden Felder und den Injections-Tab als Aufrufer, **oder sie
   faellt weg.** Ein Baustein ohne Aufrufer wird beim naechsten Mal ein
   zweites Mal gebaut — **das ist bereits passiert.**
+
+- [ ] **G-57: Die Silhouette im Injections-Tab** (neu 2026-08-18). Rest
+  aus G-55.
+
+  `[cmd]` **Gemessen: `fill="var(--surface)"` auf `--surface`** —
+  **Abstand 0,000.** Die Figur ist dort nicht nur schwach sichtbar,
+  sondern **exakt unsichtbar.**
+
+  `[read]` **Andere Datei, andere Tokens** als die Koerperkarte — die
+  G-55-Loesung (`--border-strong`, Kontur je Form) greift nicht mit.
+  Der Agent hat es gemessen und nicht umgebaut, wie verlangt.
+
+  `[cmd]` Die Silhouette liegt in
+  `apps/web/src/app/v2/supplements/tab-injektionen.tsx`, viewBox
+  `0 0 100 120`, **ein `<path>` mit `SILHOUETTE`.**

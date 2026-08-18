@@ -5987,3 +5987,147 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Erledigt 2026-08-18 mit G-45** — alle zwoelf Tabs, 67 von
   67 Posten. `SuppCost` von 2 auf 5 Kacheln nachgezogen,
   `refillUrgent` unveraendert uebernommen.
+
+- [x] **G-55: Die Koerperkarte fertigstellen — Recovery richtig** (neu
+  2026-08-18). **Fasst G-47, G-49 und G-54 zusammen. Ein Auftrag, ein
+  Agent.**
+
+  **Tom, 2026-08-18:** *„Der Auftrag war: binde die neue Grafik ein,
+  abgeleitet aus dem Beispiel-HTML, welches wir als Komponente
+  reingeholt haben und schon halbherzig bei Recovery drin haben. Da
+  sollte es einen Folgeauftrag geben, Recovery fertigzustellen und
+  richtig."*
+
+  ### Was fehlt — im Bildvergleich belegt
+
+  `[cmd]` **`MuscleBodyMap_test.html` zeigt die Figur vollstaendig:**
+  Umriss, Kopf, Haende, Fuesse, Muskeln als Flaechen.
+
+  `[cmd]` **`/v2/recovery` zeigt nur die eingefaerbten Muskeln** — kein
+  Umriss, keine Haende, keine Fuesse. **Die Muskeln stehen frei im
+  Raum.**
+
+  `[cmd]` **Die Ursache ist gemessen:** `OUTLINE_FRONT` (5.010 Zeichen)
+  und `OUTLINE_BACK` (3.823) stehen in `MuscleBodyMap.js` **ab Zeile
+  285** — **in `koerperkarte-pfade.ts` fehlen sie.**
+
+  `[read]` **`body_front.svg` wird von der Vorlage gar nicht benutzt.**
+  Der G-26-Agent nahm sie als Quelle, fand dort einen abgeschnittenen
+  Umriss und schloss daraus, die Vorlage sei kaputt. **Sie ist es
+  nicht.**
+
+  ### Vier Teile, alle an derselben Komponente
+
+  **1. Der Umriss** (war G-47) — `OUTLINE_FRONT`/`_BACK` uebernehmen,
+  dazu `head`, `hair`, `hands`, `ankles`, `feet` aus `MUSCLES`.
+  `[cmd]` Das Original arbeitet mit **einem viewBox 724×1448**,
+  `front` bei x≈0–724, `back` bei x≈724–1448 — **dieselbe
+  Koordinatenwelt.**
+
+  **2. Die drei Ebenen** (war G-49) — `[cmd]` C-73 ist fertig: **96
+  Gruppen, 89 Eltern-Beziehungen.** Flaeche (15) → Gruppe (18 Zeilen der
+  Liste) → Muskel (96). **Die Flaeche traegt den verdichteten Wert, der
+  Klick trennt wieder auf.**
+
+  **3. Die Sichtbarkeit** (war G-54) — `[cmd]` `--surface` gegen
+  `--surface-2`: **0,012 Helligkeit.** Betrifft auch den
+  Supplements-Injections-Tab. **Gestaltungsfrage: eigener Token,
+  staerkere Kontur, oder hellere Flaeche.**
+
+  **4. Der Anschluss** (war G-30) — `[cmd]` **36 Check-ins liegen live,
+  27 davon ohne HRV.** `[read]` Anbinden heisst hier: **die erfassten
+  Werte zeigen**, keine Kennzahl daraus rechnen (das ist `SPEC_09`).
+
+  ### Der Nachweis, der diesmal zaehlt
+
+  **Bildschirmfoto neben `MuscleBodyMap_test.html`**, beide Ansichten,
+  hell und dunkel.
+
+  `[read]` **Der G-45-Nachweis lautete** *„16 Orte auf zwei
+  Silhouetten"* — **das prueft die Punkte, nicht den Koerper.** Ein
+  Bildvergleich war verlangt und wurde nicht geliefert.
+
+  `[cmd]` **Erledigt 2026-08-18.** Gate 8/8, **280+7 Tests** (11 neue,
+  jeder zum Fehlschlagen gebracht), `rgba` bei 4.
+
+  ### Teil 1: Der Umriss war nie das Problem — der Auftrag lag falsch
+
+  `[cmd]` **Der Umriss ist im Mockup toter Code.**
+  `MuscleBodyMap.js:310` erzeugt `outlinePath`, `:316` haengt `outlineG`
+  an — **der Pfad wird nie an die Gruppe gehaengt.** Auf der Testseite
+  gemessen: **`innerHTML`-Laenge der Umrissgruppe = 0.** Die Figur
+  entsteht **allein aus `MUSCLES`.**
+
+  `[cmd]` **Die Portierung fuehrt alle Formen:** 23 von 23, **158 von
+  158 Pfaden, null Abweichungen.** `head`, `hair`, `hands`, `ankles`,
+  `feet` sind da.
+
+  `[read]` **Und die 118 fehlerhaften `C`-Befehle waren richtig
+  gemessen.** Der Orchestrator hatte das widerlegt — zu Unrecht: *die
+  Beispiele sind `C` mit vier Zahlen, zu wenig fuer ein Paket, nicht zu
+  viel. Der Umriss ist defekt; das ist nur folgenlos, weil ihn niemand
+  braucht.*
+
+  ### Teil 3: Das war der eigentliche Fehler
+
+  | Token | dunkel | hell |
+  |---|---|---|
+  | `--surface-2` (war gesetzt) | 0,030 | 0,025 |
+  | **`--border-strong`** | **0,155** | **0,180** |
+
+  `[cmd]` **Gewaehlt: `--border-strong`** — der einzige vorhandene Token
+  ueber 0,15 in beiden Modi, **kein neuer.** Dazu **eine Kontur je Form**
+  statt des defekten Gesamtumrisses.
+
+  `[cmd]` **Bildvergleich mit `MuscleBodyMap_test.html` liegt bei, hell
+  und dunkel** — der Nachweis, der in G-45 fehlte.
+
+  ### Teil 2: Die drei Ebenen
+
+  `[cmd]` **Alle 96 haben ein Ziel**, per Test gegen die Kettendatei
+  geprueft. Verteilung: `forearm` 17, `calves` 10, `quadriceps` 9,
+  `gluteal`/`adductors`/`deltoids` je 8 — **Summe exakt 96, auch das im
+  Test.**
+
+  `[read]` **Gemittelt, nicht maximiert** — (90+10+50)/3 = 50. *Ein
+  Maximum liesse `forearm` rot aussehen, weil einer von siebzehn platt
+  ist.*
+
+  `[cmd]` **Der Klick trennt auf:** Brust zeigt *MUSCLES ON THIS AREA,
+  5 OF 96* mit `Pectoralis Major` und den vier anderen.
+
+  ### Teil 4: Angebunden, nach einer fehlenden Zeile
+
+  `[cmd]` **Eine Kachel verliert die Marke.** Am Bildschirm meldete sie
+  zuerst ehrlich *Die Tabelle ist da, aber nicht lesbar: Invalid schema:
+  recovery* — `supabase/config.toml:16` fuehrte `recovery` nicht.
+
+  `[read]` **Der Agent hat gemeldet statt gegriffen**, obwohl es eine
+  Zeile war und er die Ursache exakt benannt hatte. **Der Orchestrator
+  hat sie ergaenzt**, Supabase neu gestartet, ueber PostgREST belegt.
+
+- [x] **G-30: Recovery an die Check-ins anschliessen** (neu 2026-08-17).
+  Folgt auf C-67.
+
+  `[cmd]` `/v2/recovery` steht mit **36 Kacheln, alle Attrappe** — der
+  Grund war das fehlende Schema. **Seit `120` gibt es `recovery.checkins`
+  mit 36 Zeilen live.**
+
+  `[read]` Aus dem G-21-Bericht: *„eine Tabelle weckt sieben Kacheln: den
+  Check-in-Tab, den Erholungswert im `manual`-Modus (braucht kein HRV),
+  die Kopfzeile und den subjektiven Schlafpfad."*
+
+  `[cmd]` **27 der 36 Check-ins haben kein HRV** — der `manual`-Modus ist
+  der Normalfall, nicht die Ausnahme. **Die Anzeige muss ihn tragen**,
+  nicht als Mangel behandeln.
+
+  **Der Erholungswert selbst ist ein eigener Punkt.** `[read]` Er ist
+  `SPEC_09` und hat dieselbe Frage wie C-49: welcher Faktor wie stark
+  zaehlt. **Anbinden heisst hier: die erfassten Werte zeigen**, nicht
+  eine Kennzahl daraus rechnen.
+
+  **Angebunden heisst: Marke weg.** Alles andere behaelt sie.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-55** — Lesepfad und Kachel
+  gebaut, eine Kachel ohne Marke. **Erst nach `config.toml:16`**, wo
+  `recovery` fehlte.
