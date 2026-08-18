@@ -311,13 +311,20 @@ test('die zehn Tabs der Vorlage stehen im Goals-Modul', () => {
 })
 
 test('das Goals-Modul kennzeichnet jede Kachel', () => {
-  // `[cmd]` Goals hat als erstes Modul ECHTE Daten in Reichweite
-  // (goals.zielwerte_am seit GO-03/04) — angebunden ist trotzdem
-  // nichts: der Auftrag verlangt erst das Mockup. Wer eine Kachel
-  // anbindet, entfernt `attrappe` und senkt die Erwartung hier.
+  // `[cmd]` STAND SEIT GO-16: **23 Marken**, vorher 38.
+  //
+  // Fuenf Tabs tragen echte Daten und liegen in eigenen Dateien —
+  // `ziel-karten.tsx`, `tab-koerper.tsx`, `tab-composition.tsx`,
+  // `tdee-kopf.tsx`. Die Attrappenfassungen von Goals, Body metrics,
+  // Measurements und Composition sind **geloescht**, nicht
+  // auskommentiert; in `ansicht.tsx` bleibt genau eine Marke (der
+  // Timeline-Tab), in `tab-phase.tsx` fiel die TDEE-Kopfkachel weg.
+  //
+  // Wer eine weitere Kachel anbindet, entfernt `attrappe` und senkt
+  // die Erwartung hier.
   const dateien: Array<[string, number]> = [
-    [GOALS, 16],
-    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 16],
+    [GOALS, 1],
+    [path.join(process.cwd(), 'src/app/v2/goals/tab-phase.tsx'), 15],
     [path.join(process.cwd(), 'src/app/v2/goals/tab-physique.tsx'), 7],
   ]
   for (const [datei, erwartet] of dateien) {
@@ -392,6 +399,169 @@ test('Goals wuerfelt seine Verlaufsdaten nicht', () => {
     .join('\n')
   assert.ok(!/Math\.random\(\)/.test(q),
     'Math.random() in den Daten — das bricht die Hydration. Feste Pseudofolge benutzen.')
+})
+
+// ── Goals · das Mockup an den Daten (GO-16) ──────────────────────────
+
+const GOALS_LESEN = path.join(process.cwd(), 'src/lib/goals/lesen.ts')
+const GOALS_COMP = path.join(process.cwd(), 'src/app/v2/goals/tab-composition.tsx')
+const GOALS_KARTEN = path.join(process.cwd(), 'src/app/v2/goals/ziel-karten.tsx')
+const GOALS_TDEE = path.join(process.cwd(), 'src/app/v2/goals/tdee-kopf.tsx')
+const GOALS_KOERPER = path.join(process.cwd(), 'src/app/v2/goals/tab-koerper.tsx')
+
+test('die angebundenen Goals-Kacheln tragen keine Marke mehr', () => {
+  // `[read]` Dieselbe Regel wie bei Medical (G-60): „Was angebunden
+  // ist, verliert die Marke." Gegenstueck zur Zaehlung darueber: die
+  // zaehlt, was BLEIBT, das hier haelt fest, was GEHT.
+  for (const datei of [GOALS_COMP, GOALS_KARTEN, GOALS_TDEE, GOALS_KOERPER]) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    assert.ok((quelle.match(/<Card\b/g) ?? []).length > 0,
+      `${path.basename(datei)}: keine Karte gefunden.`)
+    assert.ok(!/attrappe=/.test(quelle),
+      `${path.basename(datei)}: traegt eine Attrappenmarke, ist aber angebunden.`)
+  }
+
+  // Und die vier Attrappenfassungen sind GELOESCHT, nicht daneben
+  // stehengelassen — toter Code, der wie eine Alternative aussieht,
+  // ist die naechste falsche Faehrte.
+  const ansicht = fs.readFileSync(GOALS, 'utf8')
+  for (const tot of ['function CompTab', 'function MetricsTab',
+                     'function MeasureTab', 'function GoalsTab']) {
+    assert.ok(!ansicht.includes(tot),
+      `${tot} steht wieder in ansicht.tsx — die Attrappenfassung ist ersetzt.`)
+  }
+})
+
+test('Goals rechnet gegen das echte Heute, nicht gegen 2026-05-16', () => {
+  // `[read]` Der Auftrag GO-16: „Das feste Heute wurde in G-28
+  // uebernommen, weil Date.now() eine Hydrationsfalle ist. Sobald echte
+  // Daten fliessen, muss es das echte Datum sein — lib/datum.ts rechnet
+  // ueber Mittag, dieselbe Loesung, keine zweite."
+  const seite = fs.readFileSync(path.join(process.cwd(), 'src/app/v2/goals/page.tsx'), 'utf8')
+  assert.ok(/from '\.\.\/\.\.\/\.\.\/lib\/datum'/.test(seite),
+    'Die Seite holt den Stichtag nicht aus lib/datum.')
+  assert.ok(/heute\(\)/.test(seite), 'heute() wird nicht aufgerufen.')
+
+  // Keine zweite Datumsloesung im Lesepfad und in den angebundenen Tabs.
+  //
+  // Kommentare werden vorher entfernt — dieselbe Falle wie beim
+  // `arr_r`-Test: der Vermerk, der die Abwesenheit BEGRUENDET, zitiert
+  // `Date.now()` woertlich und wuerde sonst selbst als Fund gelten.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*(\/\/|\*)/.test(z)).join('\n')
+
+  for (const datei of [GOALS_LESEN, GOALS_COMP, GOALS_KARTEN, GOALS_TDEE, GOALS_KOERPER]) {
+    const q = ohneKommentar(fs.readFileSync(datei, 'utf8'))
+    assert.ok(!/Date\.now\(\)/.test(q),
+      `${path.basename(datei)}: Date.now() — das ist die Hydrationsfalle aus G-28.`)
+    assert.ok(!/HEUTE_DER_VORLAGE/.test(q),
+      `${path.basename(datei)}: benutzt das feste Heute der Vorlage.`)
+  }
+})
+
+test('Goals zeigt die Spanne am Koerperfettwert, nicht in einer Fussnote', () => {
+  // `[read]` Der Auftrag: „Die Spanne gehoert an den Wert, nicht in
+  // eine Fussnote — und der Vorbehalt steht in der Funktion. Zeig ihn."
+  //
+  // `[cmd]` `goals.body_composition_navy` liefert
+  // `body_fat_pct_min`/`_max` und `caution` mit. Ein Wert ohne Spanne
+  // saehe aus wie eine Messung; es ist eine Schaetzung mit ±3,5 Punkten.
+  const comp = fs.readFileSync(GOALS_COMP, 'utf8')
+  for (const feld of ['body_fat_pct_min', 'body_fat_pct_max', 'caution']) {
+    assert.ok(comp.includes(feld), `Die Composition-Kachel zeigt "${feld}" nicht.`)
+  }
+
+  // Der Lesepfad fuehrt sie im selben Typ wie den Wert — wer
+  // `body_fat_pct` anzeigt, hat die Spanne schon in der Hand.
+  const lesen = fs.readFileSync(GOALS_LESEN, 'utf8')
+  const typ = /export type Koerperzusammensetzung = \{[\s\S]*?\n\}/.exec(lesen)
+  assert.ok(typ, 'Koerperzusammensetzung nicht gefunden.')
+  for (const feld of ['body_fat_pct', 'body_fat_pct_min', 'body_fat_pct_max', 'caution']) {
+    assert.ok(typ![0].includes(feld), `Der Typ fuehrt "${feld}" nicht.`)
+  }
+})
+
+test('der adaptive TDEE zeigt seine Herkunft und verschleiert alpha nicht', () => {
+  // `[read]` Der Auftrag: „Beide bleiben sichtbar, mit ihrer Herkunft."
+  // Und: „alpha 0.3 macht den adaptiven Wert zu 70 % zur Formel — nicht
+  // aendern, aber wenn die Anzeige es verschleiert, melden."
+  const tdee = fs.readFileSync(GOALS_TDEE, 'utf8')
+  assert.ok(/formula_tdee_kcal/.test(tdee), 'Die Formelgrundlage fehlt.')
+  assert.ok(/adaptive_tdee_kcal/.test(tdee), 'Der adaptive Wert fehlt.')
+  assert.ok(/alpha/.test(tdee), 'Der Glaettungsfaktor wird nicht gezeigt.')
+  // Ausgeschrieben, nicht nur als Kuerzel: wer `α=0.3` nicht kennt,
+  // liest sonst eine Eigenstaendigkeit, die die Zahl nicht hat.
+  assert.ok(/1 - t\.alpha/.test(tdee),
+    'Der Anteil, den der Vorwert behaelt, wird nicht ausgeschrieben.')
+
+  // `[cmd]` Der Wert ist heute null (13 von 14 Zufuhrtagen). Statt einer
+  // Ersatzzahl steht der Status da — eine Zahl saehe gemessen aus.
+  assert.ok(/status/.test(tdee), 'Der Status der Funktion wird nicht gezeigt.')
+  assert.ok(/complete_intake_days/.test(tdee),
+    'Die Bedingung, an der es scheitert, wird nicht genannt.')
+})
+
+test('Goals bewertet nicht, es zeigt', () => {
+  // `[read]` Der Auftrag: „Keine Bewertung. Ob jemand sein Ziel gut
+  // verfolgt, ist eine Aussage ueber einen Menschen."
+  //
+  // `[cmd]` Die Attrappe fuehrt `pace: 'ahead' | 'on-track' | 'behind'`
+  // (daten.ts) — drei Urteile ueber die Person. Die Datenbank fuehrt so
+  // etwas nicht, und in den angebundenen Dateien kommt es nicht vor.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*(\/\/|\*)/.test(z)).join('\n')
+
+  for (const datei of [GOALS_COMP, GOALS_KARTEN, GOALS_TDEE, GOALS_KOERPER]) {
+    const q = ohneKommentar(fs.readFileSync(datei, 'utf8'))
+    for (const urteil of [/'ahead'/, /'on-track'/, /'behind'/, /deltaVariant/]) {
+      assert.ok(!urteil.test(q),
+        `${path.basename(datei)}: ${urteil.source} ist ein Urteil ueber einen Menschen.`)
+    }
+  }
+})
+
+test('Goals erfasst nicht — die Uebersicht zeigt nur', () => {
+  // `[read]` Der Umsetzungsplan: „Goals ist der Massstab, an dem Buddy
+  // misst — keine eigenstaendige Dateneingabe."
+  //
+  // `[cmd]` Die 16 Eingabefelder des Mockups bleiben stehen und
+  // markiert (Toms Entscheidung zu GO-16). Die ANGEBUNDENEN Dateien
+  // duerfen keines haben — sonst entstuende genau der Erfassungspfad,
+  // den die Vision ausschliesst.
+  for (const datei of [GOALS_COMP, GOALS_KARTEN, GOALS_TDEE, GOALS_KOERPER]) {
+    const q = fs.readFileSync(datei, 'utf8')
+    assert.ok(!/<input|<textarea|<select/.test(q),
+      `${path.basename(datei)}: hat ein Eingabefeld — Goals erfasst nicht.`)
+  }
+  // Und der Lesepfad hat keinen Schreibweg.
+  const lesen = fs.readFileSync(GOALS_LESEN, 'utf8')
+  for (const schreib of [/\.insert\(/, /\.update\(/, /\.upsert\(/, /\.delete\(/]) {
+    assert.ok(!schreib.test(lesen),
+      `lesen.ts: ${schreib.source} — der Lesepfad schreibt.`)
+  }
+})
+
+test('Goals zeichnet keine Messungen, die es noch nicht gibt', () => {
+  // `[cmd]` Von 43 Koerpermessungen tragen **26 ein Datum nach heute**
+  // (bis 2026-09-13) — die Testdaten decken einen ganzen Zeitraum ab.
+  // Eine Kurve, die sie mitzeichnet, behauptet Messungen, die es nicht
+  // gibt. Der Lesepfad schneidet, und die Zahl der ausgelassenen wird
+  // GENANNT, nicht verschwiegen.
+  const lesen = fs.readFileSync(GOALS_LESEN, 'utf8')
+  const laden = /export async function ladeMessungen[\s\S]*?\n\}/.exec(lesen)
+  assert.ok(laden, 'ladeMessungen nicht gefunden.')
+  assert.ok(/\.lte\('measurement_date'/.test(laden![0]),
+    'ladeMessungen schneidet nicht am Stichtag — Zukunftsmessungen kaemen mit.')
+  assert.ok(/export async function zaehleZukunftsmessungen/.test(lesen),
+    'Die ausgelassenen Messungen werden nicht gezaehlt.')
+
+  const koerper = fs.readFileSync(GOALS_KOERPER, 'utf8')
+  assert.ok(/zukunft/.test(koerper),
+    'Die Anzeige nennt die ausgelassenen Messungen nicht.')
 })
 
 /**

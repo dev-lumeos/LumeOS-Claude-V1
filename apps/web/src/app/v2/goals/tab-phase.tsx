@@ -26,6 +26,7 @@ import {
 } from './daten'
 import { PhaseEditorModal, PhaseTemplateLibrary } from './phase-editor'
 import { ATTRAPPE } from './ansicht'
+import { TdeeKopf } from './tdee-kopf'
 
 /** `weeklyIncrease` -> „Weekly increase". [cmd] module-goals-pro.jsx:334. */
 function feldName(k: string): string {
@@ -442,7 +443,12 @@ function PhasenVorschau({ ph, aktuell, onClose, onEdit }: {
 // nennt sie „nicht terminierbar": sie braucht zwei volle Wochen
 // Daten, und `meals` hat 0 Zeilen. Die Formelbaseline dagegen
 // (Mifflin × 1.725) liegt seit GO-04 vor.
-export function GoalsTDEEView() {
+// `[cmd]` **DIE KOPFKACHEL IST SEIT GO-16 ECHT** (`tdee-kopf.tsx`) —
+// `goals.adaptive_tdee` liefert Formelgrundlage, Status und den
+// Glaettungsfaktor. Der Rest des Tabs bleibt Attrappe: die
+// Neun-Wochen-Kurve, die Herleitung und die Wochenanpassung brauchen
+// eine Historie, die die Funktion nicht fuehrt.
+export function GoalsTDEEView({ tdee }: { tdee?: import('../../../lib/goals/lesen').AdaptiverTdee | null }) {
   const t = TDEE_STATE
   const wochenZufuhr = t.weeklyIntakeAvg * 7
   const kalorienDelta = Math.round(t.weightDeltaKg * 7700)
@@ -451,26 +457,7 @@ export function GoalsTDEEView() {
   return (
     <div className="v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card attrappe={ATTRAPPE}>
-          <div className="v2-goals-tdee-kopf">
-            <div>
-              <div className="v2-eyebrow">Adaptive TDEE</div>
-              <div className="v2-num" style={{ fontSize: 34, fontWeight: 600, letterSpacing: '-0.03em', lineHeight: 1 }}>
-                {t.current.toLocaleString('en-US')}
-              </div>
-              <div className="v2-dim v2-mono" style={{ fontSize: 11, marginTop: 4 }}>
-                kcal / day · EMA α={t.alpha}
-              </div>
-            </div>
-            <div className="v2-goals-tdee-trenner" />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <Row label="Formula baseline (Mifflin × 1.725)" value={`${t.formulaBaseline.toLocaleString('en-US')} kcal`} />
-              <Row label="Adaptive delta" value={`+${t.current - t.formulaBaseline} kcal`} />
-              <Row label="Weekly intake avg" value={`${t.weeklyIntakeAvg.toLocaleString('en-US')} kcal`} />
-              <Row label="Weight Δ (7d MA)" value={`${t.weightDeltaKg} kg`} />
-            </div>
-          </div>
-        </Card>
+        <TdeeKopf t={tdee ?? null} />
 
         <Card title="TDEE evolution" sub="9 weeks · adaptive from real intake + weight data" attrappe={ATTRAPPE}>
           <LineChart h={180} range={[2600, 2900]}
