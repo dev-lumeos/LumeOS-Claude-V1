@@ -6268,3 +6268,53 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Erledigt 2026-08-18 mit G-55** — Lesepfad und Kachel
   gebaut, eine Kachel ohne Marke. **Erst nach `config.toml:16`**, wo
   `recovery` fehlte.
+
+- [x] **G-57: Die Silhouette im Injections-Tab** (neu 2026-08-18). Rest
+  aus G-55.
+
+  `[cmd]` **Gemessen: `fill="var(--surface)"` auf `--surface`** —
+  **Abstand 0,000.** Die Figur ist dort nicht nur schwach sichtbar,
+  sondern **exakt unsichtbar.**
+
+  `[read]` **Andere Datei, andere Tokens** als die Koerperkarte — die
+  G-55-Loesung (`--border-strong`, Kontur je Form) greift nicht mit.
+  Der Agent hat es gemessen und nicht umgebaut, wie verlangt.
+
+  `[cmd]` Die Silhouette liegt in
+  `apps/web/src/app/v2/supplements/tab-injektionen.tsx`, viewBox
+  `0 0 100 120`, **ein `<path>` mit `SILHOUETTE`.**
+
+  `[cmd]` **Erledigt 2026-08-18.** Eine Datei, Fuellung und Kontur auf
+  `--border-strong`.
+
+  | Modus | vorher | nachher | Faktor |
+  |---|---|---|---|
+  | dunkel | 0,018 | **0,137** | 7,4x |
+  | hell | 0,013 | **0,167** | 12,3x |
+
+  ### Eine Praezisierung am Befund
+
+  `[read]` **Der Auftrag nannte Abstand 0,000** — der Agent hat
+  nachgemessen: *„Die Karte traegt zusaetzlich `v2-attrappe`, der Grund
+  ist am Bildschirm also 0,223 (dunkel) bzw. 0,987 (hell), nicht der
+  reine `--surface`-Token. Der Restabstand kam von der Attrappenmarke,
+  nicht von der Figur."*
+
+  ### Die Kontur musste mit — stand nicht im Auftrag
+
+  `[cmd]` `--border` liegt nur 0,080/0,090 von der neuen Fuellung
+  entfernt **und ist im Nachtmodus dunkler als sie** (0,280 gegen
+  0,360). `[read]` *„Sie haette die Figur nach innen abgeschnitten."*
+  Kontur faellt jetzt mit der Fuellung zusammen.
+
+  ### Warum nicht die G-55-Loesung
+
+  `[read]` **Dieselbe Erkenntnis, andere Bezugsgroesse.** G-55 fuellt mit
+  `--surface-2`, **weil die Recovery-Karte Muskelflaechen einfaerbt** —
+  die Fuellung ist dort nur Untergrund. *„Hier gibt es nur 16 Punkte,
+  die Fuellung traegt die ganze Figur."* **Der G-55-Agent hat richtig
+  nicht umgebaut.**
+
+  `[cmd]` 16 Punkte unveraendert (12 vorne, 4 hinten), Wegfilter 10 IM +
+  6 SubQ. **Bildschirmfotos beide Modi x vier Breiten, plus Vorzustand**
+  — was in G-45 fehlte. `rgba` bei 4, keine neuen Tokens.

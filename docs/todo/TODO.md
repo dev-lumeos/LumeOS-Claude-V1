@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `b93e1a4` auf `dev`.
+**Stand:** 2026-08-18, Anker `cdd7705` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -204,7 +204,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
 | **G-52** | `InEntwicklungKnopf` kennt kein `disabled` |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
-| **G-57** | Die Silhouette im Injections-Tab |  |
+| **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
 
 ---
 
@@ -2126,17 +2126,16 @@ Umsetzen angepasst werden.
   faellt weg.** Ein Baustein ohne Aufrufer wird beim naechsten Mal ein
   zweites Mal gebaut — **das ist bereits passiert.**
 
-- [ ] **G-57: Die Silhouette im Injections-Tab** (neu 2026-08-18). Rest
-  aus G-55.
+- [ ] **G-58: Kontrast auf Attrappenkarten gegen den gerenderten Grund
+  messen** (neu 2026-08-18). Befund aus G-57.
 
-  `[cmd]` **Gemessen: `fill="var(--surface)"` auf `--surface`** —
-  **Abstand 0,000.** Die Figur ist dort nicht nur schwach sichtbar,
-  sondern **exakt unsichtbar.**
+  `[cmd]` **Die `v2-attrappe`-Toenung verschiebt jeden Kontrast auf
+  Attrappenkarten um rund 0,015.**
 
-  `[read]` **Andere Datei, andere Tokens** als die Koerperkarte — die
-  G-55-Loesung (`--border-strong`, Kontur je Form) greift nicht mit.
-  Der Agent hat es gemessen und nicht umgebaut, wie verlangt.
+  `[read]` **Wer dort Farbabstaende misst, muss gegen den gerenderten
+  Grund messen, nicht gegen den Token.** In G-57 war der Unterschied
+  klein genug, um die Entscheidung nicht zu drehen — **beim naechsten
+  Mal muss er das nicht sein.**
 
-  `[cmd]` Die Silhouette liegt in
-  `apps/web/src/app/v2/supplements/tab-injektionen.tsx`, viewBox
-  `0 0 100 120`, **ein `<path>` mit `SILHOUETTE`.**
+  **Betrifft G-56** (die `packages/ui`-Reste) und jede kuenftige
+  Kontrastmessung. `[cmd]` Sieben von acht Modulen sind noch Attrappe.
