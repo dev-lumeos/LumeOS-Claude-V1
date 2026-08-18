@@ -234,12 +234,48 @@ const MODULE = {
     rahmen: 'CoachModule',
     rahmenDatei: 'module-coach.jsx',
     tabs: null,
-    // Der Arbeitsplatz der Trainerin — eigener Menuepunkt, eigener Auftrag.
     bekanntOffen: [
+      // 1. Der Arbeitsplatz der Trainerin — eigener Menuepunkt, eigener
+      //    Auftrag. `[cmd]` `module-coach.jsx:137` verdrahtet
+      //    `const side = "athlete"` fest; ueber diese Weiche ist der
+      //    Portalzweig im Athletenbereich **nie erreichbar**. Er steht
+      //    seit G-02 unter WORKSPACES als externer Link
+      //    (`nav.ts:86`, coach.lumeos.app).
       'CoachPortalStandalone', 'CoachPortalAnalytics', 'CoachPortalAutonomy',
       'CoachPortalRules', 'CoachPortalSmartAlerts', 'CoachPortalTeam',
       'PortalAthletesV2', 'PortalClientOnboarding', 'PortalPrograms',
       'PortalWorkflows', 'ClientDashboardCard',
+      'PortalOverview', 'PortalAthletes', 'PortalPlans', 'PortalMessages',
+      'PortalRevenue', 'PortalAlerts',
+      // 2. Die zwei Modale des Portalzweigs. `[cmd]`
+      //    `module-coach.jsx:213/215` oeffnet sie ueber `athleteDet` und
+      //    `newPlan` — beide Schluessel setzt nur der Portalzweig.
+      'AthleteDetailModal', 'NewPlanModal',
+      // 3. Die Daten des Portalzweigs. `[cmd]` `PORTAL_ATHLETES` liest
+      //    nur PortalOverview/-Athletes/-Alerts, `COACH_PLANS` nur
+      //    PortalPlans — alle drei stehen unter 1.
+      'PORTAL_ATHLETES', 'COACH_PLANS',
+      // 4. Der abgeloeste Vorgaenger. `[cmd]` `module-coach.jsx:199`:
+      //        window.AthletePermissionsV2
+      //          ? <window.AthletePermissionsV2/> : <AthletePermissions/>
+      //    `AthletePermissionsV2` liegt vor (`Object.assign(window, …)`,
+      //    module-coach-athlete.jsx:565), also gewinnt es immer — wie bei
+      //    Recovery und Medical ist der alte Stand der Notnagel, der nie
+      //    greift. Uebernommen ist V2, samt seiner Kachel
+      //    „Permission matrix"; die V1-Kachel „Per-coach permissions
+      //    matrix" ist deren abgeloeste Fassung, nicht eine zweite.
+      'AthletePermissions',
+      // 5. Der Werkzeugkasten von `-gaps.jsx`. `[cmd]`
+      //    `module-coach.jsx:216` haengt `CoachExtrasLauncher`
+      //    bedingungslos an den Rahmen; er oeffnet sechs Modale, von
+      //    denen **fuenf dem Portalzweig gehoeren** (Alarmdetail,
+      //    Regeleditor, Trainereinstellungen, Teameinladung,
+      //    Teammitglied). Das sechste, `AthleteDetailEnhanced`, ersetzt
+      //    `AthleteDetailModal` — auch das Portalzweig (siehe 2.).
+      //    Faellt mit dem Portalauftrag an, nicht hier.
+      'CoachExtrasLauncher', 'AlertDetailModal', 'AthleteDetailEnhanced',
+      'CoachSettingsModal', 'InviteTeamMemberModal', 'RuleEditModal',
+      'TeamMemberDetailModal',
     ],
   },
   'coach-ai': {
@@ -412,7 +448,15 @@ function miss(name, cfg) {
       if (v.via) umbenannt.push({ von: n, nach: v.via, warum: v.warum })
       if (v.offen) offen.push(n)
     }
-    const titelFehlt = titel.filter(t => {
+    // Die Kacheln eines bewusst offenen Tabs zaehlen nicht mit. `[cmd]`
+    // Sonst faellt die Begruendung auf halbem Weg: `AthletePermissions`
+    // ist als abgeloester Vorgaenger eingetragen und wird bei den
+    // Komponenten uebersprungen — seine Kachel „Per-coach permissions
+    // matrix" wurde aber weiter als Luecke gemeldet. Genau diese Kachel
+    // steht in der abloesenden Fassung als „Permission matrix" da; sie
+    // zu bauen hiesse, den ueberholten Stand nachzureichen.
+    const tabOffen = bekannt.has(tab)
+    const titelFehlt = tabOffen ? [] : titel.filter(t => {
       const kern = t.split('…')[0].trim()
       return kern.length > 2 && !umsetzung.includes(kern)
     })
@@ -460,7 +504,14 @@ function miss(name, cfg) {
       .filter(n => /^[A-Z][A-Z0-9_]{2,}$/.test(n) || n.startsWith('calc') || n.startsWith('generate'))
       .filter(n => new RegExp(`\\b${n}\\b`).test(rahmenQuelle)),
   )].sort()
-  const datenFehlt = datenNamen.filter(n => !new RegExp(`\\b${n}\\b`).test(umsetzung))
+  // `bekanntOffen` gilt hier genauso wie bei den Komponenten. `[cmd]`
+  // Vorher tat es das nicht: Coach meldete `PORTAL_ATHLETES` und
+  // `COACH_PLANS` als Luecke, obwohl beide zum Portalzweig gehoeren,
+  // der eingetragen offen ist. Ein Modul konnte eine Datenkonstante
+  // nicht als bewusst offen erklaeren — die Komponente daneben schon.
+  const datenFehlt = datenNamen
+    .filter(n => !new RegExp(`\\b${n}\\b`).test(umsetzung))
+    .filter(n => !bekannt.has(n))
   gesamt += datenNamen.length
   fehlend += datenFehlt.length
   if (datenNamen.length) {

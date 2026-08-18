@@ -1,0 +1,85 @@
+/* Die Rasterklassen des Coach-Moduls.
+ *
+ * WARUM HIER UND NICHT IN v2.css:
+ * `[read]` Der Auftrag G-40: „packages/ui/ nicht anfassen — fehlt ein
+ * Symbol: melden. Modul-Raster in eine coach.css neben die Route."
+ *
+ * `[cmd]` ZWEI SYMBOLE FEHLEN — gemeldet, nicht ergaenzt:
+ *   `history` — module-coach.jsx:398, Knopf „Audit log · 142 entries".
+ *               Ersetzt durch `refresh`, das Kreispfeil-Motiv des
+ *               Satzes; ein Verlauf ist der Blick zurueck.
+ *   `shield`  — module-coach-athlete.jsx:150, Kopfzeile „You own your
+ *               data". Ersetzt durch `admin`, dasselbe Schutzschild-
+ *               Motiv aus der Seitenleiste — dieselbe Ersetzung wie in
+ *               G-36, damit dasselbe Motiv nicht zweimal anders faellt.
+ * Alle uebrigen 13 gebrauchten Symbole liegen in icons.tsx:
+ * message, check, download, chevron_right, plus, x, user, camera,
+ * edit, copy, coach, alert, bell.
+ *
+ * `[cmd]` `arr_r` (module-coach.jsx:808, Knopf „Send") ist derselbe
+ * Tippfehler fuer `arrow_right` wie in G-20, G-21 und G-36 — nicht
+ * uebernommen, `arrow_right` steht in icons.tsx.
+ *
+ * `[cmd]` EINE HYDRATIONSFALLE, entschaerft: `InviteCoachModal`
+ * (module-coach.jsx:775) zeichnet sein QR-Muster mit
+ * `Math.random() > 0.5` ueber 64 Zellen. Auf dem Server faellt das
+ * anders als im Browser — 64 Abweichungen in einem Modal. Ersetzt
+ * durch ein festes Bitmuster (`QR_MUSTER` in modale.tsx): dieselbe
+ * Optik, ohne Zufall. `Date.now()` kommt in den sechs Coach-Dateien
+ * nicht vor.
+ *
+ * `[cmd]` Die geteilten Raster reichen weitgehend: `v2-grid-15` traegt
+ * Overview und Autonomy, `v2-grid-14` die Check-ins, `v2-g-cols-2/3/4`
+ * die Kachelreihen, `v2-tbl-wrap` die sieben breiten Tabellen. Uebrig
+ * bleiben die vier Raster unten, die es sonst nirgends gibt.
+ *
+ * DIE HALTEPUNKTE: `[cmd]` Der Entwurf hat null @media-Regeln. 1100px
+ * ist derselbe Haltepunkt wie in v2.css.
+ */
+
+/* Der Nachrichten-Tab: feste Spalte fuer die Threadliste, Rest fuer
+ * das Gespraech. `[cmd]` module-coach.jsx:407 — "320px 1fr".
+ * `v2-g-cols-2` waere hier falsch: die Liste soll nicht mitwachsen. */
+.v2-coach-threads {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 12px;
+}
+
+/* Die Kennzahlenzeile einer Trainerkarte im Coaches-Tab.
+ * `[cmd]` module-coach.jsx:329 — vier gleiche Spalten, aber innerhalb
+ * einer Karte, nicht auf Seitenebene. `v2-g-cols-4` traegt keinen
+ * Haltepunkt; bei 4 × „Cadence · Active plan · Fee · Rating" bricht
+ * das unter 1100px sonst in die Breite. */
+.v2-coach-kennzahlen {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+
+/* Die Trainerkarte selbst: Bild, Text, Knopfspalte.
+ * `[cmd]` module-coach.jsx:317 — Flexzeile, die unter 1100px umbricht,
+ * damit die Knopfspalte nicht die Textspalte erdrueckt. */
+.v2-coach-zeile {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Der Schrittbalken des Onboarding-Assistenten.
+ * `[cmd]` module-coach-meta.jsx:104 — fuenf gleich breite Schritte mit
+ * Pfeilen dazwischen. Unter 1100px umbrechend statt gestaucht. */
+.v2-coach-schritte {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 1100px) {
+  .v2-coach-threads { grid-template-columns: 1fr; }
+  .v2-coach-kennzahlen { grid-template-columns: 1fr 1fr; }
+  .v2-coach-zeile { flex-wrap: wrap; }
+  .v2-coach-schritte { flex-wrap: wrap; }
+}

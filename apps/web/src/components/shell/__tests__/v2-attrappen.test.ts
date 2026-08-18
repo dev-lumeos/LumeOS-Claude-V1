@@ -40,6 +40,13 @@ const GOALS = path.join(process.cwd(), 'src/app/v2/goals/ansicht.tsx')
 const GOALS_DATEN = path.join(process.cwd(), 'src/app/v2/goals/daten.ts')
 const MEDICAL = path.join(process.cwd(), 'src/app/v2/medical/ansicht.tsx')
 const MEDICAL_DATEN = path.join(process.cwd(), 'src/app/v2/medical/daten.ts')
+const COACH = path.join(process.cwd(), 'src/app/v2/coach/ansicht.tsx')
+const COACH_DATEN = path.join(process.cwd(), 'src/app/v2/coach/daten.ts')
+const COACH_RECHTE = path.join(process.cwd(), 'src/app/v2/coach/tab-rechte.tsx')
+const COACH_AUTO = path.join(process.cwd(), 'src/app/v2/coach/tab-autonomie.tsx')
+const COACH_ONBOARD = path.join(process.cwd(), 'src/app/v2/coach/tab-onboarding.tsx')
+const COACH_MODALE = path.join(process.cwd(), 'src/app/v2/coach/modale.tsx')
+const COACH_AI = path.join(process.cwd(), 'src/app/v2/coach/ai/page.tsx')
 
 /**
  * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) —
@@ -700,4 +707,168 @@ test('berechnete Stilwerte sind auf Engine-Genauigkeit gerundet', () => {
   assert.deepEqual(offen, [],
     'Ein aus Math.sin berechneter Wert muss gerundet werden, sonst weichen '
     + `Server und Browser ab. Ungerundet in: ${offen.join(', ')}`)
+})
+
+// ── Coach · Human Coaches (G-40) ─────────────────────────────────────
+
+/**
+ * Die zehn Tabs der Vorlage (theme-v1/module-coach.jsx:183-194) — in
+ * dieser Reihenfolge.
+ *
+ * `[cmd]` DER AUFTRAG NANNTE ELF. Gezaehlt sind es zehn. Wer die Zahl
+ * aus dem Auftrag uebernimmt statt aus der Vorlage, sucht dauerhaft
+ * einen Tab, den es nicht gibt. Steht so im Bericht.
+ */
+const VORLAGE_COACH_TABS = [
+  'Overview', 'Coaches', 'Permissions', 'Proposals', 'Autonomy',
+  'Check-ins', 'Messages', 'Notes', 'Invites', 'Onboarding',
+]
+
+test('die zehn Tabs der Vorlage stehen im Coach-Modul', () => {
+  const quelle = fs.readFileSync(COACH, 'utf8')
+  for (const tab of VORLAGE_COACH_TABS) {
+    assert.ok(quelle.includes(`'${tab}'`),
+      `Der Tab "${tab}" fehlt. Die Vorlage fuehrt zehn.`)
+  }
+})
+
+test('das Coach-Modul kennzeichnet jede Kachel', () => {
+  // Keine Quelle heisst: jede Kachel traegt die Marke. `[cmd]` Ein
+  // `coach`-Schema gibt es nicht — der Begriff kommt in
+  // `supabase/_pipeline/` in keiner SQL-Datei vor.
+  const dateien: Array<[string, number]> = [
+    [COACH, 11],
+    [COACH_RECHTE, 5],
+    [COACH_AUTO, 11],
+    [COACH_ONBOARD, 6],
+  ]
+  for (const [datei, erwartet] of dateien) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
+    const markiert = mitGrund + ohneGrund
+    assert.equal(markiert, erwartet,
+      `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. `
+      + 'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+test('jede Karte des Coach-Moduls traegt eine Marke', () => {
+  // Schaerfer als die Zaehlung oben: nicht "so viele wie erwartet",
+  // sondern "keine ohne". Wer eine Karte ergaenzt und die Marke
+  // vergisst, faellt hier auf, ohne dass jemand eine Zahl pflegt.
+  for (const datei of [COACH, COACH_RECHTE, COACH_AUTO, COACH_ONBOARD]) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const karten = (quelle.match(/<Card\b/g) ?? []).length
+    const marken = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    assert.equal(marken, karten,
+      `${path.basename(datei)}: ${karten} Karten, aber ${marken} Marken.`)
+  }
+})
+
+test('die fuenf Ansichten der Coach-Zulieferer stehen da', () => {
+  // [cmd] module-coach-athlete.jsx:565 exportiert AthletePermissionsV2,
+  // AthleteProposals, AthleteAutonomy, AthleteCheckins;
+  // module-coach-meta.jsx:200 den CoachOnboardingWizard.
+  const rechte = fs.readFileSync(COACH_RECHTE, 'utf8')
+  const auto = fs.readFileSync(COACH_AUTO, 'utf8')
+  const onboard = fs.readFileSync(COACH_ONBOARD, 'utf8')
+  assert.ok(/export function AthletePermissionsV2/.test(rechte), 'AthletePermissionsV2 fehlt')
+  assert.ok(/export function AthleteProposals/.test(rechte), 'AthleteProposals fehlt')
+  assert.ok(/export function AthleteAutonomy/.test(auto), 'AthleteAutonomy fehlt')
+  assert.ok(/export function AthleteCheckins/.test(auto), 'AthleteCheckins fehlt')
+  assert.ok(/export function CoachOnboardingWizard/.test(onboard), 'CoachOnboardingWizard fehlt')
+})
+
+test('die Coach-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis', () => {
+  // Stichproben aus allen drei Quelldateien. Zahlen, die jemand beim
+  // Abschreiben verrutschen koennte.
+  const quelle = fs.readFileSync(COACH_DATEN, 'utf8')
+  // module-coach.jsx:3-84 — vier Trainer.
+  assert.ok(/'c-train'/.test(quelle) && /'c-suppl'/.test(quelle), 'Trainer-Kennungen fehlen')
+  assert.ok(/€180 \/ month/.test(quelle), 'Das Honorar des Trainingscoachs fehlt')
+  // module-coach-athlete.jsx:92-110 — Autonomiestufe 4.
+  assert.ok(/level: 4/.test(quelle), 'Die Autonomiestufe fehlt')
+  assert.ok(/regressionRisk: 0\.12/.test(quelle), 'Das Rueckfallrisiko fehlt')
+  // module-coach-meta.jsx:4-9 — Facharzttitel auf Deutsch.
+  assert.ok(/Facharzt Endokrinologie/.test(quelle), 'Die Zulassung des Arztes fehlt')
+})
+
+test('die sieben Module der Rechtematrix sind vollzaehlig', () => {
+  // [cmd] module-coach-athlete.jsx:6-14. Die Matrix ist der Kern des
+  // Moduls: fehlt eine Zeile, sieht die Tabelle vollstaendig aus und
+  // verschweigt genau die Freigabe, die niemand vergessen darf.
+  const quelle = fs.readFileSync(COACH_DATEN, 'utf8')
+  for (const m of ['training', 'nutrition', 'recovery', 'supplements',
+    'medical', 'goals', 'body_metrics']) {
+    assert.ok(new RegExp(`key: '${m}'`).test(quelle),
+      `Das Rechtemodul "${m}" fehlt. Die Vorlage fuehrt sieben.`)
+  }
+})
+
+test('das Coach-Modul uebernimmt den Tippfehler arr_r nicht', () => {
+  // [cmd] module-coach.jsx:808 schreibt `<Icon name="arr_r">` — derselbe
+  // Tippfehler wie in G-20, G-21 und G-36. `arrow_right` steht in
+  // icons.tsx, `arr_r` nicht.
+  //
+  // Kommentare zaehlen nicht: die Dateien ZITIEREN den Tippfehler, um
+  // die Ersetzung zu belegen. Wer das nicht herausrechnet, testet den
+  // eigenen Beleg.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*\/\//.test(z)).join('\n')
+
+  for (const datei of [COACH, COACH_RECHTE, COACH_AUTO, COACH_ONBOARD, COACH_MODALE]) {
+    const quelle = ohneKommentar(fs.readFileSync(datei, 'utf8'))
+    assert.ok(!/arr_r/.test(quelle),
+      `${path.basename(datei)}: `
+      + '`arr_r` ist ein Tippfehler der Vorlage — `arrow_right` benutzen.')
+  }
+})
+
+test('das QR-Muster ist fest, nicht zufaellig', () => {
+  // [cmd] module-coach.jsx:775 zeichnet das QR-Bild mit
+  // `Math.random() > 0.5` ueber 64 Zellen. Auf dem Server faellt das
+  // anders als im Browser — 64 Abweichungen in einem Modal.
+  //
+  // ANLASS: dieselbe Falle hat bei Goals zugeschlagen. Diese Pruefung
+  // haelt fest, dass die Ersetzung steht UND dass sie 64 Zellen hat —
+  // ein auf 32 gekuerztes Muster faellt sonst niemandem auf.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*\/\//.test(z)).join('\n')
+
+  const quelle = ohneKommentar(fs.readFileSync(COACH_MODALE, 'utf8'))
+  assert.ok(!/Math\.random/.test(quelle),
+    'modale.tsx: `Math.random()` erzeugt eine Hydrationsabweichung.')
+  assert.ok(/QR_MUSTER/.test(quelle), 'Das feste QR-Muster fehlt.')
+
+  const block = /const QR_MUSTER[^=]*=\s*\[([\s\S]*?)\]/.exec(quelle)
+  assert.ok(block, 'QR_MUSTER ist keine Liste.')
+  const zellen = (block![1].match(/[01]/g) ?? []).length
+  assert.equal(zellen, 64,
+    `Das QR-Muster hat ${zellen} Zellen, die Vorlage zeichnet 8 × 8 = 64.`)
+})
+
+test('der AI Coach nennt seine zwanzig ungebauten Tabs', () => {
+  // [read] G-29 hat den Umgang festgelegt: lieber ganze Tabs als halbe,
+  // und was fehlt, steht in der Oberflaeche — nicht im Bericht allein.
+  // Eine fehlende Kachel sieht sonst aus, als sei sie nicht vorgesehen.
+  //
+  // [cmd] module-buddy.jsx:26-45 fuehrt zwanzig Tabs. Der Auftrag nannte
+  // zwoelf.
+  const quelle = fs.readFileSync(COACH_AI, 'utf8')
+  const VORLAGE_BUDDY_TABS = [
+    'Chat', 'Insights feed', 'Memory', 'Decisions', 'Personality',
+    'Avatar states', 'Plan & gate', 'Engines', 'Journey', 'Watcher',
+    'BSS', 'Signature', 'Interventions', 'Safety', 'Butler',
+    'Voice / Live', 'Knowledge', 'Rules', 'Coach overrides', 'Clone & Gym',
+  ]
+  assert.equal(VORLAGE_BUDDY_TABS.length, 20, 'Die Vorlage fuehrt zwanzig Tabs.')
+  for (const tab of VORLAGE_BUDDY_TABS) {
+    assert.ok(quelle.includes(`'${tab}'`),
+      `Der ungebaute Tab "${tab}" wird nicht genannt. Weglassen ist keine Meldung.`)
+  }
 })
