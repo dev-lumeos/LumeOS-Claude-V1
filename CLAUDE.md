@@ -153,6 +153,43 @@ jedem Auftrag an Claude Code:
 schreiben, ausfuehren, loeschen. Das laeuft ohne Nachfrage durch und ist
 nebenbei lesbar und wiederholbar.
 
+### Und zwar ohne Fenster
+
+**Tom, 2026-08-18:** *,Wenn die Agents die Anweisung kriegen, mit
+Skripten zu arbeiten, dann gehoert auch dazu: ohne Window."*
+
+`[cmd]` **Jeder Shell-Aufruf reisst unter Windows den Fokus weg.** Am
+2026-08-18 gemessen: **52 `cmd.exe`, 59 `conhost.exe`** gleichzeitig —
+davon **15 unter `wslhost.exe`**, also aus Claude Code, der ueber WSL
+laeuft.
+
+**Das gehoert zur selben Regel:**
+
+> **Pruefschleifen als Skript — und ohne Konsolenfenster.**
+
+**In Python:**
+
+```python
+import subprocess, shlex
+si = subprocess.STARTUPINFO()
+si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+si.wShowWindow = 0
+def sh(c):
+    return subprocess.run(shlex.split(c, posix=False), capture_output=True,
+                          text=True, startupinfo=si,
+                          creationflags=subprocess.CREATE_NO_WINDOW).stdout.strip()
+```
+
+`[cmd]` **`shell=True` genuegt nicht** — es startet auf Windows immer
+ein `cmd.exe`, auch mit `CREATE_NO_WINDOW`. **`shlex.split` und
+`shell=False` vermeiden den Prozess ganz.**
+
+`[read]` **Und weniger ist besser als unsichtbar:** Der Orchestrator kam
+auf **3.657 Prozessstarts gegen 19 Sitzungsaufrufe**. Eine offene
+Sitzung (`start_process("python -i -q")`, danach
+`interact_with_process`) ersetzt hunderte Einzelstarts — **und der
+Zustand bleibt erhalten.**
+
 ## Der Modus ist `bypassPermissions` — gemessen, nicht angenommen
 
 `[cmd]` Seit 2026-08-17 steht `defaultMode: "bypassPermissions"` in
