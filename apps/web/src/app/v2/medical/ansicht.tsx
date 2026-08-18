@@ -42,6 +42,7 @@ import {
   SYSTEM_META, SYSTEM_WEIGHTS,
   calcBiomarkerFlag, calcSystemScore, calcOverallHealthScore, generateAlerts,
 } from './daten'
+import type { BefundWert, KatalogTreffer } from '../../../lib/medical/lesen'
 import { MedicalKontext, useMedical, type ModalZustand } from './kontext'
 import { MedicalModale } from './modale'
 import { MedBiomarkers, MedImport } from './tab-biomarker'
@@ -67,7 +68,23 @@ function tabs(): TabItem[] {
   ]
 }
 
-export function MedicalAnsicht() {
+/**
+ * Die echten Daten, die die Seite serverseitig geladen hat (G-46).
+ *
+ * `[cmd]` Sie kommen als Requisiten herein, weil dieser Rahmen eine
+ * Client-Komponente ist und `createSessionClient()` Cookies über
+ * `next/headers` liest — das geht nur auf dem Server. Dasselbe Muster
+ * wie `/v2/settings`: laden in `page.tsx`, durchreichen, hier nur
+ * anzeigen.
+ */
+export type EchteDaten = {
+  werte: BefundWert[]
+  katalogStart: KatalogTreffer[]
+  katalogGesamt: number
+  ladefehler: string | null
+}
+
+export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
   const [tab, setTab] = React.useState('dashboard')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
 
@@ -131,7 +148,7 @@ export function MedicalAnsicht() {
       <Tabs items={tabs()} active={tab} onChange={setTab} />
 
       {tab === 'dashboard' && <MedDashboard />}
-      {tab === 'biomarkers' && <MedBiomarkers />}
+      {tab === 'biomarkers' && <MedBiomarkers echt={echt} />}
       {tab === 'import' && <MedImport />}
       {tab === 'tracking' && <MedTracking />}
       {tab === 'insights' && <MedInsights />}

@@ -19,7 +19,10 @@ import {
 } from './daten'
 import { RangeIndicator, FlagPill, TrendBadge } from './bausteine'
 import { useMedical } from './kontext'
-import { ATTRAPPE } from './ansicht'
+import { ATTRAPPE, type EchteDaten } from './ansicht'
+import { katalogSuchen } from './aktionen'
+import { BefundTabelle } from './befund-tabelle'
+import { KatalogSuche } from './katalog-suche'
 
 const FELD: React.CSSProperties = {
   width: '100%', height: 30, background: 'var(--surface)',
@@ -28,9 +31,33 @@ const FELD: React.CSSProperties = {
 }
 const FELD_MONO: React.CSSProperties = { ...FELD, fontFamily: 'var(--font-mono)' }
 
+/**
+ * Warum die Entwurfstabelle ihre Marke behaelt, obwohl daneben echte
+ * Werte stehen (G-46).
+ *
+ * `[cmd]` Eigener Satz statt `ATTRAPPE`, weil der Grund hier ein
+ * anderer ist: nicht „kein Schema", sondern „Schema da, Spalten leer".
+ */
+const ENTWURFSKATALOG =
+  'Bleibt Attrappe: die Tabelle zeigt Zeitreihe, Sparkline und '
+  + 'Bereichsbalken. `medical.lab_result_values` fuehrt heute sechs '
+  + 'Testwerte und keine Zeitreihe — die Spalten haetten nichts zu '
+  + 'zeigen. Die echten Werte stehen oben.'
+
 // ═══ TAB 2 · BIOMARKERS ══════════════════════════════════════════
 // [cmd] module-medical-v2.jsx:237-309.
-export function MedBiomarkers() {
+//
+// **SEIT G-46 GETEILT.** Oben stehen die echten Daten — die Befundwerte
+// der angemeldeten Nutzerin und die Suche über den Katalog mit 11.676
+// Markern. Sie tragen KEINE Attrappenmarke mehr.
+//
+// Darunter steht die Entwurfstabelle der Vorlage mit ihren 48
+// erfundenen Markern. `[read]` Der Auftrag: *„Was angebunden ist,
+// verliert die Marke. Alles andere behält sie."* Sie behält sie,
+// **und der Untertitel sagt, warum sie noch da ist**: sie zeigt
+// Verlauf, Sparkline und Bereichsbalken, für die es noch keine Daten
+// gibt — `lab_result_values` führt sechs Testwerte, keine Zeitreihe.
+export function MedBiomarkers({ echt }: { echt: EchteDaten }) {
   const { open } = useMedical()
   const [cat, setCat] = React.useState('all')
   const [q, setQ] = React.useState('')
@@ -45,6 +72,32 @@ export function MedBiomarkers() {
 
   return (
     <div>
+      {/* ── ECHT: die Befundwerte ─────────────────────────────── */}
+      {echt.ladefehler ? (
+        <Card title="Befundwerte" sub="konnten nicht geladen werden">
+          <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
+            {echt.ladefehler}
+          </div>
+        </Card>
+      ) : (
+        <BefundTabelle werte={echt.werte} />
+      )}
+
+      <div style={{ height: 14 }} />
+
+      {/* ── ECHT: die Katalogsuche ────────────────────────────── */}
+      <KatalogSuche
+        start={echt.katalogStart}
+        gesamt={echt.katalogGesamt}
+        suchen={katalogSuchen}
+      />
+
+      <div className="v2-divider" style={{ marginTop: 18, marginBottom: 14 }} />
+
+      <div className="v2-eyebrow" style={{ marginBottom: 8 }}>
+        Aus dem Entwurf · noch ohne Datenquelle
+      </div>
+
       <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
         <div style={{ flex: 1, position: 'relative', minWidth: 200 }}>
           <Icon name="search" className="v2-ic v2-ic-sm" style={{
@@ -83,7 +136,11 @@ export function MedBiomarkers() {
         ))}
       </div>
 
-      <Card attrappe={ATTRAPPE}>
+      <Card
+        title="Entwurfskatalog"
+        sub="48 erfundene Marker mit Verlauf und Bereichsbalken"
+        attrappe={ENTWURFSKATALOG}
+      >
         <div className="v2-tbl-wrap">
           <table className="v2-tbl">
             <thead>
