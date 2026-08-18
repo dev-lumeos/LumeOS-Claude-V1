@@ -2270,8 +2270,19 @@ Umsetzen angepasst werden.
   `[cmd]` **`vitamin-d3` loest aus** — 4 Softgels bei Schwelle 7. Der
   Testfall steht im Register.
 
-  **Offen:** Schwelle je Position oder aus der Reichweite? Und **braucht
-  es zwei Warnstufen?**
+  **Entschieden (Tom, 2026-08-18): drei Stufen aus der Reichweite.**
+
+  | Reichweite | |
+  |---|---|
+  | **1 Monat** | Hinweis |
+  | **2 Wochen** | Warnung — bestellen |
+  | **1 Woche** | dringend — bestellen |
+
+  `[read]` **Aus der Reichweite, nicht je Position** — *„4 d left" sagt
+  mehr als „unter 7 Stueck"*, und eine Schwelle je Position muesste
+  gepflegt werden. `[cmd]` Die Reichweite ergibt sich aus Bestand und
+  Tagesdosis; `low_stock_threshold` bleibt als Rueckfall, wo keine
+  Tagesdosis bekannt ist.
 
 - [ ] **C-82: Compliance braucht 120 Zeilen und Auslasser** (neu
   2026-08-18). Befund aus G-37.
