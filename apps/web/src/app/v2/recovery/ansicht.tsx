@@ -47,6 +47,9 @@ import { RecoveryKontext, useRecovery, type ModalZustand, type ScoreModus } from
 // Karte steht in packages/ui, weil drei Module sie brauchen.
 import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { RecoveryModale } from './modale'
+// G-55: die erfassten Check-ins.
+import type { CheckinStand } from '../../../lib/recovery/checkin-read'
+import { CheckinStreifen } from './checkin-streifen'
 import { RecCheckin } from './tab-checkin'
 import { RecMuscleMap, RecHRV, RecSleep } from './tab-messwerte'
 import { RecModalities, RecOvertraining, RecProtocols, RecStress } from './tab-protokolle'
@@ -71,7 +74,7 @@ function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem
   ]
 }
 
-export function RecoveryAnsicht() {
+export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
   const [tab, setTab] = React.useState('today')
   const [modus, setModus] = React.useState<ScoreModus>('hrv')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
@@ -125,7 +128,7 @@ export function RecoveryAnsicht() {
 
       <Tabs items={tabs(18, TODAY_MODALITIES.length, ot.count)} active={tab} onChange={setTab} />
 
-      {tab === 'today' && <RecToday />}
+      {tab === 'today' && <RecToday checkins={checkins} />}
       {tab === 'checkin' && <RecCheckin />}
       {tab === 'muscles' && <RecMuscleMap />}
       {tab === 'hrv' && <RecHRV />}
@@ -142,7 +145,7 @@ export function RecoveryAnsicht() {
 
 // ═══ TODAY ═══════════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:99-242.
-function RecToday() {
+function RecToday({ checkins }: { checkins?: CheckinStand }) {
   const { open, modus, setModus, sc, rd, ot, pending, zeigeTab } = useRecovery()
 
   const recoveryValues = React.useMemo(() => muskelwerte(), [])
@@ -150,6 +153,10 @@ function RecToday() {
   return (
     <div className="v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
+        {/* G-55: die einzige Kachel mit echten Daten. Sie steht oben,
+            weil sie den Unterschied zum Rest sichtbar macht — alles
+            darunter traegt die Attrappenmarke. */}
+        <CheckinStreifen stand={checkins} />
         <Card attrappe={ATTRAPPE}>
           <div className="v2-rec-score-kopf">
             <Ring value={sc.score} max={100} color={rd.c} label={rd.level} size={140} stroke={10} />

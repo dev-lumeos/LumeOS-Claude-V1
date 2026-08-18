@@ -421,3 +421,270 @@ Fenster. **Kein waagerechtes Scrollen der Karte** bei keiner Breite.
 `[cmd]` Zählung: **Recovery 71 / 71.**
 
 **Nichts ist committet oder gestaged.**
+
+---
+
+# Nachtrag 2026-08-18 (G-55): Recovery fertiggestellt
+
+`[read]` **Tom, 2026-08-18:** *„Der Auftrag war: binde die neue Grafik
+ein … Da sollte es einen Folgeauftrag geben, Recovery fertigzustellen
+und richtig."*
+
+---
+
+## Was der Umriss gebraucht hat
+
+**Nichts — er war nie das Problem.** Der Auftrag geht davon aus, dass
+`OUTLINE_FRONT`/`OUTLINE_BACK` in meiner Portierung fehlen und die
+Figur deshalb ohne Kontur dasteht. `[cmd]` Beide Annahmen sind
+nachgemessen falsch:
+
+### 1. Der Umriss ist im Mockup toter Code
+
+`[cmd]` `MuscleBodyMap.js:310` erzeugt `outlinePath`, `:316` hängt
+`outlineG` an — **aber `outlinePath` wird nie an `outlineG` gehängt.**
+Am Bildschirm nachgemessen, auf der Testseite des Mockups selbst:
+
+```
+Umrissgruppe innerHTML-Laenge = 0
+alle Pfade y = 96-1340   viewBox = 0 0 724 1448
+```
+
+**Die Umrissgruppe ist leer.** Die vollständige Figur — Kopf, Hände,
+Füße, alles — entsteht **allein aus `MUSCLES`**.
+
+### 2. Meine Portierung führt alle Formen
+
+`[cmd]` Mechanisch verglichen, Form für Form und Pfad für Pfad:
+
+| | Mockup | Portierung |
+|---|---|---|
+| Formen | 23 | 23 |
+| Pfade gesamt | 158 | 158 |
+| nur im Mockup | — | — |
+| Abweichungen | **0** | |
+
+`head`, `hair`, `hands`, `ankles`, `feet` sind **da** — mit exakt
+denselben Pfadzahlen (2 · 2 · 23 · 6 · 6).
+
+### 3. Die „118 fehlerhaften C-Befehle" waren richtig gemessen
+
+`[read]` Der Auftrag sagt, das seien „normale SVG-Syntax, mehrere
+Koordinatentripel hinter einem Buchstaben". `[cmd]` Nachgerechnet mit
+der Regel *„gültig, wenn die Zahl der Argumente ein Vielfaches der
+Paketgröße ist"* — genau die Regel, die mehrere Tripel erlaubt:
+
+| | Befehle | Zahlen | ungültig |
+|---|---|---|---|
+| `OUTLINE_FRONT` | 200 | 688 | **118** |
+| `OUTLINE_BACK` | 202 | 501 | **173** |
+
+Die Beispiele sind `C` mit **vier** Zahlen — zu wenig für ein Paket,
+nicht zu viel. **Der Umriss ist tatsächlich defekt.** Das spielt aber
+keine Rolle, weil ihn niemand braucht: das Mockup zeichnet ihn nicht,
+und die Figur ist ohne ihn vollständig.
+
+**Was stattdessen zu tun war:** Die Formen waren da und trotzdem
+unsichtbar. Das ist Teil 3.
+
+---
+
+## Wie die 96 auf die Flächen fallen
+
+`[cmd]` C-73 gegen die Kettendatei gemessen
+(`supabase/_pipeline/10_training/107_muscle_groups_hierarchy.sql`):
+**96 Namen, 89 Eltern-Beziehungen, sieben Wurzeln.**
+
+| Wurzel | darunter |
+|---|---|
+| Legs | 41 |
+| Arms | 21 |
+| Back | 10 |
+| Shoulders | 8 |
+| Core | 7 |
+| Chest | 5 |
+| Neck Muscles | 4 |
+
+### Die drei Ebenen
+
+| Ebene | Anzahl | wo |
+|---|---|---|
+| **Fläche** | 17 färbbar + 6 ohne Farbe | `EINORDNUNG` (G-44) |
+| **Gruppe** | 18 | `RECOVERY_ZU_KARTE` (G-26) |
+| **Muskel** | 96 | `MUSKEL_ZU_FLAECHE` (neu) |
+
+`[cmd]` **Alle 96 haben ein Ziel** — per Test gegen die Kettendatei
+geprüft, nicht gegen eine Kopie. Die Verteilung je Fläche:
+
+| Fläche | Muskeln | Fläche | Muskeln |
+|---|---|---|---|
+| `forearm` | 17 | `abs` | 5 |
+| `gluteal` | 8 | `chest` | 5 |
+| `adductors` | 8 | `quadriceps` | 9 |
+| `deltoids` | 8 | `hamstring` | 4 |
+| `calves` | 10 | `neck` | 4 |
+| `upper-back` | 6 | `lower-back` | 2 |
+| `biceps` | 3 | `obliques` | 2 |
+| `trapezius` | 2 | `tibialis` | 2 |
+| `triceps` | 1 | | |
+
+### Mittel, nicht Maximum
+
+`[read]` Tom: *„dem Total/Anzahl zusammenfassender Muskeln die Farbe"*.
+
+`verdichte()` bildet den Mittelwert. **Der Unterschied ist nicht
+akademisch:** ein Maximum ließe `forearm` rot aussehen, weil einer von
+siebzehn platt ist. Ein Test hält das fest — `(90+10+50)/3 = 50`, nicht
+`90`.
+
+### Der Klick trennt wieder auf
+
+`[cmd]` Am Bildschirm geprüft: Klick auf die Brust öffnet das
+Muskeldetail und zeigt **„MUSCLES ON THIS AREA · 5 OF 96 (C-73)"** mit
+Chest · Clavicular Head · Pectoralis Major · Sternal Head · Upper
+Chest — dazu der Satz, warum gemittelt und nicht maximiert wird.
+
+### Sechs bekommen nie Farbe
+
+`head`, `hair`, `hands`, `feet`, `ankles`, `knees` — als
+`nicht-muskel` eingeordnet (G-44). **Kein Muskel darf auf sie zeigen;**
+ein Test verbietet es.
+
+### Eine Näherung, ausdrücklich benannt
+
+`[annahme]` **Die Oberschenkelaußenseite hat keine eigene Fläche.** Die
+Karte führt `adductors` (innen), nicht `abductors` (außen).
+`Abductors`, `Hip Abductors`, `Outer Thigh` und `Tensor Fasciae Latae`
+fallen deshalb auf `quadriceps` — die nächstliegende sichtbare Fläche.
+Genauer wäre eine eigene Fläche, die es in der Vorlage nicht gibt.
+
+---
+
+## Wie die Sichtbarkeit gelöst wurde
+
+`[cmd]` In beiden Modi gemessen, oklch-Helligkeit gegen den
+Kartengrund `--surface`:
+
+| Token | dunkel | hell | |
+|---|---|---|---|
+| `--surface-2` | 0,030 | 0,025 | **unsichtbar** ← war gesetzt |
+| `--surface-hover` | 0,050 | 0,045 | knapp |
+| `--border` | 0,075 | 0,090 | knapp |
+| **`--border-strong`** | **0,155** | **0,180** | **deutlich** |
+
+**`--surface-2` war der Fehler.** Der Mockup färbt mit `#b8bec8` auf
+**weißem** Grund — ein Mittelgrau, das sich klar abhebt. Diese
+Anwendung läuft im Normalfall **dunkel**, und dort liegt `--surface-2`
+drei Hundertstel über dem Kartengrund.
+
+**Gewählt: `--border-strong`** — der einzige vorhandene Token über 0,15
+in **beiden** Modi, und schon die Konturfarbe. `[cmd]` **Kein neuer
+Token**, `rgba` bleibt bei 4.
+
+**Dazu eine Kontur je Form** statt des defekten Gesamtumrisses:
+`color-mix(in oklch, var(--fg-subtle) 55%, transparent)`, 1 px. Das
+trennt auch dort, wo zwei gleichfarbige Flächen aneinanderstoßen — und
+braucht keine Pfadreparatur an der Vorlage.
+
+**Am Bildschirm:** Hände, Füße, Kopf und Knie sind in beiden Modi
+sichtbar; die Figur liest sich als Körper, nicht als schwebende
+Muskeln. Bildvergleich mit `MuscleBodyMap_test.html` liegt bei.
+
+### Supplements greift NICHT mit
+
+`[cmd]` Gemessen: `/v2/supplements` → Injections zeichnet seine
+Silhouette mit `fill="var(--surface)"` auf einer `--surface`-Karte —
+**Abstand 0,000**, zusammengehalten nur durch einen `--border`-Strich
+(0,075). Andere Datei, andere Tokens, viewBox 100×120.
+
+**Meine Lösung reicht dort nicht hin.** `[read]` Der Auftrag sagt:
+messen, nicht umbauen. Gemessen, nicht umgebaut — die Zahlen stehen
+hier.
+
+---
+
+## Was angebunden ist und was Attrappe bleibt
+
+### Angebunden: die erfassten Check-ins
+
+`[cmd]` `recovery.checkins` liegt seit Kettenschritt 120. Neu gebaut:
+
+- `apps/web/src/lib/recovery/checkin-read.ts` — liest über die Sitzung,
+  kein Service-Client.
+- `apps/web/src/app/v2/recovery/checkin-streifen.tsx` — zeigt Schlaf,
+  Schlafgüte, Gefühl, Energie, Ruhepuls, HRV, Stimmung, Stress,
+  Muskelkater je Gruppe und Schmerzstellen.
+- `page.tsx` ist jetzt eine **async Serverkomponente** und lädt.
+
+**Eine Kachel verliert die Marke** — genau diese. `[read]` Der Auftrag:
+*„Anbinden heisst hier: die erfassten Werte zeigen, keine Kennzahl
+daraus rechnen."* Sie rechnet nichts.
+
+**Alle anderen Kacheln behalten die Marke**, einschließlich des
+Erholungswerts: er ist `SPEC_09` und hat dieselbe offene Frage wie
+C-49 — welche Gewichtung gilt. Eine Zahl zu zeigen, die niemand
+beschlossen hat, wäre eine Behauptung.
+
+**Die Muskelkarte bleibt Attrappe.** Es gibt keine Muskelzustandsdaten.
+
+### Der Anschluss greift noch nicht — eine Zeile fehlt
+
+`[cmd]` Am Bildschirm meldet die Kachel:
+
+> Die Tabelle ist da, aber nicht lesbar: **Invalid schema: recovery**
+
+**Der Grund ist eine Zeile in `supabase/config.toml:16`:**
+
+```toml
+schemas = ["public", "graphql_public", "nutrition",
+           "goals", "supplements", "medical"]
+                                     ^^^ recovery fehlt
+```
+
+`[cmd]` Jedes der vier Schemata wurde beim eigenen Auftrag eingetragen
+(`5d12aad` goals, `a02e838` supplements, `417aae3` medical). Bei C-120
+ist es vergessen worden.
+
+**Nicht angefasst** — `supabase/` gehört dem anderen Agenten, und Tom
+hat am 2026-08-18 entschieden: melden, nicht selbst ergänzen. **Der
+Anschluss ist gebaut und greift, sobald die Zeile steht.** Die Kachel
+sagt bis dahin ehrlich, woran es liegt.
+
+---
+
+## Nachweis
+
+`[cmd]` **Bildvergleich** mit `MuscleBodyMap_test.html`, beide
+Ansichten, hell und dunkel — der Nachweis, der in G-45 fehlte.
+
+`[cmd]` **Alle 96 Gruppen haben ein Ziel**, mit der Zahl je Fläche
+(Tabelle oben). Vier Prüfungen dazu, jede absichtlich zum Fehlschlagen
+gebracht:
+
+| Prüfung | Gegenprobe |
+|---|---|
+| jede der 96 hat eine Fläche | `Soleus` entfernt → *„Ohne Flaechenziel: Soleus"* |
+| jedes Ziel gibt es wirklich | `Tibialis → hands` → *„das ist nicht-muskel"* |
+| gemittelt, nicht maximiert | Formel verbogen → Test fällt |
+| keine erfundenen Namen | — |
+
+`[cmd]` **Der Klick trennt auf** — Brust → 5 von 96 Muskeln, am
+Bildschirm belegt.
+
+`[cmd]` **Eine Kachel verliert die Marke** (Morning check-ins).
+
+`[cmd]` `pnpm gate` — **8 von 8 grün, 278 Web-Tests + 7 Admin-Tests.**
+Davon 9 neu (`muskel-ebenen.test.ts`).
+
+`[cmd]` **Drei Breiten** (375 / 768 / 1440 px) ohne Überlauf der Karte,
+**`rgba` bei 4**, kein neuer Farbtoken, `v2.css` nicht von Hand
+angefasst.
+
+### Aufräumrest
+
+Fünf Wegwerf-Skripte liegen noch im Wurzelverzeichnis
+(`pruef-umriss.mjs`, `pruef-figur.mjs`, `pruef-hierarchie.mjs`,
+`pruef-namen.mjs`, `pruef-kontrast.mjs`) sowie `_g55-nachtrag.md`.
+Die Löschung wurde abgelehnt — bitte selbst entfernen.
+
+**Nichts ist committet oder gestaged.**

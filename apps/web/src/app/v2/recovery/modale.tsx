@@ -32,6 +32,9 @@ import {
   calcHRVScore, calcModalityBonus, calcMuscleRecovery, baseRecoveryCurve,
   type Protocol,
 } from './motor'
+// G-55: die dritte Ebene — welche Muskeln auf eine Flaeche fallen.
+import { RECOVERY_ZU_KARTE } from './muskel-zuordnung'
+import { muskelnZurFlaeche } from './muskel-ebenen'
 import type { ModalZustand } from './kontext'
 
 // ── Der Rahmen ──────────────────────────────────────────────────
@@ -380,6 +383,33 @@ function MuscleDetailModal({ slug, onClose }: { slug: string; onClose: () => voi
           </div>
         </div>
       </div>
+
+      {/* G-55: die dritte Ebene. `[read]` Der Auftrag: „Der Klick auf
+          eine Flaeche zeigt ihre Gruppen, der Klick auf eine Gruppe
+          ihre Muskeln." Hier steht das Ende der Kette — welche der 96
+          aus C-73 auf diese Flaeche fallen. */}
+      {(() => {
+        const flaeche = RECOVERY_ZU_KARTE[slug]
+        const muskeln = flaeche ? muskelnZurFlaeche(flaeche) : []
+        if (muskeln.length === 0) return null
+        return (
+          <>
+            <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+              Muscles on this area · {muskeln.length} of 96 (C-73)
+            </div>
+            <Card className="v2-card-tight" style={{ padding: 12, marginBottom: 14 }}>
+              <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                {muskeln.map(m => <Pill key={m} style={{ fontSize: 9.5 }}>{m}</Pill>)}
+              </div>
+              <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 8, lineHeight: 1.5 }}>
+                Die Flaeche traegt das Mittel dieser Muskeln, nicht ihr
+                Maximum — sonst faerbte ein einzelner platter Muskel die
+                ganze Flaeche rot.
+              </div>
+            </Card>
+          </>
+        )
+      })()}
 
       <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Calculation</div>
       <Card className="v2-card-tight" style={{ padding: 12, marginBottom: 14 }}>

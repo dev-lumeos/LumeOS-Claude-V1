@@ -133,8 +133,40 @@ export function injektionsFarbe(tageSeither: number): string {
 // sie sind keine Statusfarbe und kein Flaechenton, sondern
 // gegenstaendliche Farbe. Ein Token dafuer waere ein neuer Token —
 // deshalb bleiben sie als Festwert stehen und stehen so im Bericht.
-const GRUNDFLAECHE = 'var(--surface-2)'
+// `[cmd]` G-55, in beiden Modi gemessen (lume.css, oklch-Helligkeit
+// gegen den Kartengrund `--surface`):
+//
+//   Token             dunkel   hell
+//   --surface-2        0,030   0,025   unsichtbar
+//   --surface-hover    0,050   0,045   knapp
+//   --border           0,075   0,090   knapp
+//   --border-strong    0,155   0,180   deutlich
+//
+// **`--surface-2` war der Fehler.** Der Mockup faerbt mit `#b8bec8`
+// auf WEISSEM Grund — ein Mittelgrau, das sich klar abhebt. Diese
+// Anwendung laeuft im Normalfall DUNKEL, und dort liegt `--surface-2`
+// 0,03 ueber dem Kartengrund. Haende, Fuesse und Schienbein
+// verschwanden.
+//
+// **Gewaehlt ist `--border-strong`:** der einzige vorhandene Token,
+// der in BEIDEN Modi ueber 0,15 liegt — und schon die Konturfarbe.
+// Kein neuer Token.
+const GRUNDFLAECHE = 'var(--border-strong)'
 const UMRISS_FARBE = 'var(--border-strong)'
+
+// `[cmd]` DAZU EINE KONTUR JE FORM. Der Mockup zeichnet einen
+// Gesamtumriss (`OUTLINE_FRONT`) — **der ist dort toter Code:**
+// `outlinePath` entsteht in Zeile 310, wird aber nie an `outlineG`
+// gehaengt. Am Bildschirm nachgemessen: die Umrissgruppe der
+// Testseite ist leer, die volle Figur kommt allein aus `MUSCLES`.
+//
+// Meine Portierung zeichnet den Umriss zwar, aber seine Pfaddaten
+// sind fehlerhaft (118 `C`-Befehle mit vier statt sechs Zahlen), also
+// bricht der Browser mittendrin ab. Statt die Daten zu reparieren —
+// das waere Arbeit an der Vorlage — bekommt **jede Form ihre eigene
+// duenne Kontur.** Das trennt die Flaechen auch dort, wo zwei
+// gleichfarbige aneinanderstossen, und braucht keine Pfadreparatur.
+const KONTUR = 'color-mix(in oklch, var(--fg-subtle) 55%, transparent)'
 
 const VB_W = 724
 const VB_H = 1448
@@ -230,8 +262,8 @@ function Ansicht({
                     d={d}
                     fill={fuellung}
                     fillOpacity={aktiv ? Math.min(1, deckung + 0.15) : deckung}
-                    stroke={aktiv ? 'var(--fg)' : undefined}
-                    strokeWidth={aktiv ? 6 : undefined}
+                    stroke={aktiv ? 'var(--fg)' : KONTUR}
+                    strokeWidth={aktiv ? 6 : 1}
                     style={{
                       cursor: klickbar ? 'pointer' : 'default',
                       vectorEffect: 'non-scaling-stroke',

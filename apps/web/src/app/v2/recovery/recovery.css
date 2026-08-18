@@ -227,3 +227,12 @@
 .v2-rec-skala-btn {
   font: inherit;
 }
+
+/* Ein Wertfeld im Check-in-Streifen (G-55).
+ * Dieselbe Form wie die Felder im Muskeldetail-Fenster. */
+.v2-rec-feld {
+  padding: 9px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
