@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `07c0663` auf `dev`.
+**Stand:** 2026-08-18, Anker `3dae1a2` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 76 offen, 3 in Arbeit.
+`[cmd]` 77 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -187,10 +187,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **G-23** | Der Modulkopf bricht um |  |
 | **G-24** | JetBrains Mono laden |  |
-| **G-26** | `MuscleBodyMap` nach `packages/ui` |  |
 | **A-17** | Datenherkunft, bevor die Geraete kommen |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
+| **G-44** | Die Muskelkarte deckt nicht alle Gruppen ab |  |
+| **G-45** | Supplements — Injektionsorte und Subnavigation |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **C-65** | Toms Passwort steht nirgends |  |
 | **G-25** | Training an echte Daten anschliessen |  |
@@ -1700,42 +1701,6 @@ Umsetzen angepasst werden.
   Bauen geladen, keine Laufzeitabhaengigkeit.
 
 
-- [ ] **G-26: `MuscleBodyMap` nach `packages/ui`** (neu 2026-08-17).
-  **Tom, 2026-08-17:** *„Die Muskelkomponente nehmen wir sicher mit rein
-  und verwenden sie, wo gebraucht. Das HTML zeigt schon, was moeglich
-  ist — das ist sehr vielseitig."*
-
-  `[cmd]` `apps/web/public/mockup/components/MuscleBodyMap.js` — 593
-  Zeilen, dazu `body_front.svg` mit 24 KB. **Eine Komponente, fuenf
-  Aufrufarten, ein Klick-Handler:**
-
-  | | |
-  |---|---|
-  | `renderFatigue` | Muskel-Ermuedung → **Recovery** |
-  | `renderActivation` | Muskel-Aktivierung → **Training** |
-  | `renderInjection` | Injektionspunkte mit Rotation → **Supplements** |
-  | `renderPoints` | beliebige Punkte |
-  | `renderCombined` | Muskeln plus Overlay |
-
-  `MuscleBodyMap_test.html` zeigt alle fuenf Modi nebeneinander.
-
-  **Der Anlass:** `[read]` Tom ueber die Recovery-Attrappen: *„da tauchen
-  zum ersten Mal Muscle Readiness etc. als Grafiken auf, die sind
-  oberhaesslich."*
-
-  ### Was vor der Uebernahme zu klaeren ist
-
-  `[cmd]` **Das Mockup benutzt ein anderes Designsystem als `theme-v1`:**
-  `DM Sans` statt Inter, feste Farben wie `#f1f3f4` und `#374151`, eine
-  eigene `tokens.css` mit 16 KB.
-
-  `[annahme]` Die Muskelkarte selbst duerfte davon unberuehrt sein — SVG
-  plus Farbskala. **Pruefen, bevor sie nach `packages/ui` geht**, und
-  die Farbskala auf die vorhandenen Tokens legen.
-
-  `[cmd]` **Wo sie hingehoert:** Recovery (in Arbeit), Training (`/v2`
-  steht), Supplements (noch nicht gebaut). **Eine Komponente fuer drei
-  Module** — deshalb `packages/ui`, nicht je Modul.
 
 - [ ] **A-17: Datenherkunft, bevor die Geraete kommen** (neu
   2026-08-17). **Architekturpunkt, betrifft alle Messtabellen.**
@@ -1841,6 +1806,70 @@ Umsetzen angepasst werden.
   `docs/ssot/80-vorgaengerrepo-fundus.md` das geloest; hier braucht es
   dasselbe: was liegt wo, und was davon ist besser als das, was wir
   haben.
+
+- [ ] **G-44: Die Muskelkarte deckt nicht alle Gruppen ab** (neu
+  2026-08-18). **Tom, 2026-08-18:** *„Es fehlen diverse Aktivierungen von
+  Parts, dass man den ganzen Body erkennt. Recheck, ob alle Muskeln in
+  der Grafik auch in der Liste auftauchen."*
+
+  `[cmd]` **Gemessen: Die Karte hat 41 IDs, die Zuordnung deckt 18 ab.**
+
+  **Echte Muskeln ohne Zuordnung — sie bleiben grau:**
+
+  | | |
+  |---|---|
+  | `tibialis` | Schienbeinmuskel |
+  | `lat_l` / `lat_r` | Latissimus — **es gibt keine Sammelgruppe `lats`** |
+  | `vg_l` / `vg_r` | `[Vermutung]` Vastus oder Wade |
+
+  `[cmd]` **Und `both` in der Zuordnung zeigt auf nichts** — eine ID,
+  die die Karte nicht kennt.
+
+  Die uebrigen ohne Zuordnung sind **Teilstuecke** (`bicep_l`/`bicep_r`
+  unter `biceps`, `pec_*`, `delt_*`, `quad_*`, `glute_*`,
+  `tricep_*`) oder **keine Muskeln**: `head`, `hair`, `hands`, `feet`,
+  `knees`, `ankles`, `label`, `side`.
+
+  `[read]` **Der Beinahe-Fehler aus G-26 zeigt das Muster:**
+  `upper-back` und `lower-back` waren als *„keine Entsprechung"*
+  eingestuft — **die Karte hat beide, mit Bindestrich geschrieben, den
+  die Suche nicht traf.** Zwei Gruppen waeren dauerhaft grau geblieben,
+  **ohne Fehlermeldung.**
+
+  **Was zu tun ist:** Jede Karten-ID einer Gruppe zuordnen oder
+  ausdruecklich als Nicht-Muskel markieren — **und ein Test, der eine
+  unzugeordnete ID zum Fehler macht.** `[cmd]` Der bestehende Test haelt
+  eine Lueckenliste gegen eine feste Erwartung; er muss die Liste
+  **vollstaendig** fuehren.
+
+  `[cmd]` **Eine echte Luecke bleibt laut G-26:** `abductors` — die
+  Karte kennt nur die Innenseite. **Nicht auf `gluteal` gelegt, das ist
+  ein anderer Muskel.** Richtig so.
+
+- [ ] **G-45: Supplements — Injektionsorte und Subnavigation** (neu
+  2026-08-18). **Tom, 2026-08-18:** *„Supplements ist nicht fertig als
+  Mockup erstellt worden, denn da hat es Injektionsorte mit dieser
+  speziellen Map. In Supplements nochmal an den Subnavigationen checken
+  und das Mockup duplizieren."*
+
+  `[cmd]` **Der Baustein ist fertig:** `InjektionsKarte` in
+  `packages/ui/src/koerperkarte.tsx`, **gebaut und exportiert, aber
+  nirgends aufgerufen.** `[read]` Aus dem G-26-Bericht: *„Wer den
+  Injections-Tab baut, findet sie fertig vor."*
+
+  `[cmd]` **Fuenf Tabs sind offen** (G-31): Catalog, Stacks,
+  Intelligence, Inventory aus `-spec.jsx` (72 KB) und **Injections aus
+  `-injection.jsx` (36 KB).**
+
+  **Und die Subnavigation ist zu pruefen** — `[read]` bei Coach hat sich
+  gezeigt, dass ein Modul zwei eigenstaendige Unterbereiche haben kann;
+  bei Nutrition war eine Subnavigation dagegen falsch. **`app.jsx`
+  entscheidet, nicht die Vermutung.**
+
+  `[cmd]` **Danebenliegend:** `CyclePlanner.tsx` und
+  `BloodLevelChart.tsx` im Vorgaengerrepo mit **28 Fundstellen zu
+  Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
+  mit `half_life_hours`.
 
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze

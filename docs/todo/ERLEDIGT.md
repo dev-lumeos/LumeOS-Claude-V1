@@ -4848,3 +4848,108 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `module-coach.jsx:137` erreichbar — fest verdrahtet.** Damit liegt
   **der gesamte Trainer-Arbeitsplatz in der Datei und ist
   unerreichbar.** Als `bekanntOffen` mit Gruenden vermerkt.
+
+- [x] **G-26: `MuscleBodyMap` nach `packages/ui`** (neu 2026-08-17).
+  **Tom, 2026-08-17:** *„Die Muskelkomponente nehmen wir sicher mit rein
+  und verwenden sie, wo gebraucht. Das HTML zeigt schon, was moeglich
+  ist — das ist sehr vielseitig."*
+
+  `[cmd]` `apps/web/public/mockup/components/MuscleBodyMap.js` — 593
+  Zeilen, dazu `body_front.svg` mit 24 KB. **Eine Komponente, fuenf
+  Aufrufarten, ein Klick-Handler:**
+
+  | | |
+  |---|---|
+  | `renderFatigue` | Muskel-Ermuedung → **Recovery** |
+  | `renderActivation` | Muskel-Aktivierung → **Training** |
+  | `renderInjection` | Injektionspunkte mit Rotation → **Supplements** |
+  | `renderPoints` | beliebige Punkte |
+  | `renderCombined` | Muskeln plus Overlay |
+
+  `MuscleBodyMap_test.html` zeigt alle fuenf Modi nebeneinander.
+
+  **Der Anlass:** `[read]` Tom ueber die Recovery-Attrappen: *„da tauchen
+  zum ersten Mal Muscle Readiness etc. als Grafiken auf, die sind
+  oberhaesslich."*
+
+  ### Was vor der Uebernahme zu klaeren ist
+
+  `[cmd]` **Das Mockup benutzt ein anderes Designsystem als `theme-v1`:**
+  `DM Sans` statt Inter, feste Farben wie `#f1f3f4` und `#374151`, eine
+  eigene `tokens.css` mit 16 KB.
+
+  `[annahme]` Die Muskelkarte selbst duerfte davon unberuehrt sein — SVG
+  plus Farbskala. **Pruefen, bevor sie nach `packages/ui` geht**, und
+  die Farbskala auf die vorhandenen Tokens legen.
+
+  `[cmd]` **Wo sie hingehoert:** Recovery (in Arbeit), Training (`/v2`
+  steht), Supplements (noch nicht gebaut). **Eine Komponente fuer drei
+  Module** — deshalb `packages/ui`, nicht je Modul.
+
+  `[cmd]` **Erledigt 2026-08-18.** `packages/ui/src/koerperkarte.tsx`
+  plus **262 Zeilen Pfaddaten**, mechanisch uebernommen. **21
+  Muskelgruppen statt 18 Flaechen**, zwei Ansichten, drei Aufrufarten:
+  `ErmuedungsKarte`, `AktivierungsKarte`, `InjektionsKarte`.
+
+  Recovery nutzt sie an **allen drei Stellen** — Today, Check-in,
+  Muscle map.
+
+  ### Eine Korrektur an G-38 vorweg
+
+  `[read]` **Die Annahme, die Muskelkarte fehle, war falsch.** Die
+  G-38-Zaehlung sagte Recovery 67/71 — *„all four missing are the muscle
+  map"*. **Alle vier waren gebaut, nur anders benannt:** `BodyMap18` →
+  `Koerperkarte`, `MuscleDetailModal2` → `MuscleDetailModal`,
+  `SILHOUETTE_PATH` lag in `motor.ts`.
+
+  `[read]` *„Meine Umbenennungstabelle war unvollstaendig, und das
+  Skript meldet eine fehlende Zuordnung als fehlendes Bauteil — genau
+  der Fehler, den mein eigener Bericht bei Nutrition beschreibt."*
+  Recovery steht jetzt bei **71/71**.
+
+  **Der Auftrag bleibt richtig, nur seine Begruendung aendert sich:** Es
+  ging nie um eine Luecke, **sondern um haesslich gegen gut.**
+
+  ### Die Farbskala
+
+  `[cmd]` **19 Hex-Werte auf Tokens gelegt, keiner neu erfunden.** Die
+  Zuordnung folgt der Bedeutung, die der Mockup selbst vergibt — seine
+  Legende sagt *„Ready/Caution/Rest"*, also `--pos`/`--warn`/`--neg`.
+
+  `[cmd]` **Eng wurde es bei der Aktivierung:** vier Stufen, das Theme
+  hat auf der Achse drei. Geloest per
+  `color-mix(in oklch, var(--neg) 70%, black)` — **dieselbe Farbe,
+  dunkler, kein neuer Wert.** `[read]` Ob die vierte Stufe einen eigenen
+  Token bekommt, ist Toms Entscheidung.
+
+  `[cmd]` **Zwei Festwerte bleiben:** Haut `#c8c0b8` und Haare
+  `#6b5b4e` — *„sie tragen keine Bedeutung und sind kein Flaechenton;
+  ein Token dafuer waere ein neuer Token."*
+
+  `[cmd]` `rgba` bleibt bei 4. `v2.css` **ueber den Erzeuger gewachsen:
+  44 Zeilen dazu, keine geloescht.**
+
+  ### Der Beinahe-Fehler
+
+  `[cmd]` `upper_back` und `lower_back` waren als *„keine
+  Entsprechung"* eingestuft — **die Karte hat beide, mit Bindestrich
+  geschrieben, den die Suche nicht traf.** Zwei Gruppen waeren dauerhaft
+  grau geblieben, **ohne Fehlermeldung.**
+
+  `[read]` *„Aufgefallen erst beim Zaehlen der gerenderten Gruppen im
+  Browser, nicht beim Lesen."* — **Ein Test haelt die Lueckenliste jetzt
+  gegen eine feste Erwartung.**
+
+  `[cmd]` Gate 8/8, **237+7 Tests** (10 neue, jeder zum Fehlschlagen
+  gebracht), drei Breiten, **Hell und Dunkel geprueft — der Dunkelmodus
+  faerbt mit, ohne Nacharbeit.**
+
+  ### Training und Supplements
+
+  `[cmd]` **Training kann folgen, aber nicht halb:** `AktivierungsKarte`
+  ist fertig, **es fehlt die Zuordnung von `training.exercise_muscles`
+  (6.624 Zeilen) auf die Karten-IDs.**
+
+  `[cmd]` **Supplements nicht:** `InjektionsKarte` ist gebaut und
+  exportiert, **wird aber nirgends aufgerufen** — der Injections-Tab ist
+  G-45.
