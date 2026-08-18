@@ -4998,3 +4998,89 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Supplements nicht:** `InjektionsKarte` ist gebaut und
   exportiert, **wird aber nirgends aufgerufen** — der Injections-Tab ist
   G-45.
+
+- [x] **G-44: Die Muskelkarte deckt nicht alle Gruppen ab** (neu
+  2026-08-18). **Tom, 2026-08-18:** *„Es fehlen diverse Aktivierungen von
+  Parts, dass man den ganzen Body erkennt. Recheck, ob alle Muskeln in
+  der Grafik auch in der Liste auftauchen."*
+
+  `[cmd]` **Gemessen: Die Karte hat 41 IDs, die Zuordnung deckt 18 ab.**
+
+  **Echte Muskeln ohne Zuordnung — sie bleiben grau:**
+
+  | | |
+  |---|---|
+  | `tibialis` | Schienbeinmuskel |
+  | `lat_l` / `lat_r` | Latissimus — **es gibt keine Sammelgruppe `lats`** |
+  | `vg_l` / `vg_r` | `[Vermutung]` Vastus oder Wade |
+
+  `[cmd]` **Und `both` in der Zuordnung zeigt auf nichts** — eine ID,
+  die die Karte nicht kennt.
+
+  Die uebrigen ohne Zuordnung sind **Teilstuecke** (`bicep_l`/`bicep_r`
+  unter `biceps`, `pec_*`, `delt_*`, `quad_*`, `glute_*`,
+  `tricep_*`) oder **keine Muskeln**: `head`, `hair`, `hands`, `feet`,
+  `knees`, `ankles`, `label`, `side`.
+
+  `[read]` **Der Beinahe-Fehler aus G-26 zeigt das Muster:**
+  `upper-back` und `lower-back` waren als *„keine Entsprechung"*
+  eingestuft — **die Karte hat beide, mit Bindestrich geschrieben, den
+  die Suche nicht traf.** Zwei Gruppen waeren dauerhaft grau geblieben,
+  **ohne Fehlermeldung.**
+
+  **Was zu tun ist:** Jede Karten-ID einer Gruppe zuordnen oder
+  ausdruecklich als Nicht-Muskel markieren — **und ein Test, der eine
+  unzugeordnete ID zum Fehler macht.** `[cmd]` Der bestehende Test haelt
+  eine Lueckenliste gegen eine feste Erwartung; er muss die Liste
+  **vollstaendig** fuehren.
+
+  `[cmd]` **Eine echte Luecke bleibt laut G-26:** `abductors` — die
+  Karte kennt nur die Innenseite. **Nicht auf `gluteal` gelegt, das ist
+  ein anderer Muskel.** Richtig so.
+
+  `[cmd]` **Erledigt 2026-08-18.** **39 IDs, nicht 41** — zur Laufzeit
+  gezaehlt, nicht per Grep. `[read]` *„Genau daran ist beim letzten Mal
+  `upper-back` durchgefallen."*
+
+  **Meine beiden Mehr loesen sich auf:** `label` und `side` sind
+  **Eigenschaften der Injektionsort-Objekte, keine IDs.** Und `both` ist
+  der Wert von `side` bei beidseitigen Muskeln — **es stand nie in der
+  Zuordnung, nur in einem Kommentar.**
+
+  | Art | Anzahl |
+  |---|---|
+  | Muskelgruppe | 17 |
+  | Injektionsort (Teilstueck) | 16 |
+  | Nicht-Muskel | 6 |
+
+  ### Zwei meiner Vermutungen geklaert
+
+  `[cmd]` **`vg_*` ist „Ventrogluteal"** — eine Injektionsstelle im
+  Gesaessbereich, **kein Vastus und keine Wade.** Die Vorlage
+  beschriftet sie selbst so.
+
+  `[cmd]` **`lat_*` braucht keine Sammelgruppe** — der Latissimus steckt
+  in `upper-back`, das mit sechs Pfaden den ganzen oberen Ruecken
+  zeichnet.
+
+  `[cmd]` **`tibialis` ist die einzige echte Luecke:** die Karte
+  zeichnet ihn, `MUSCLE_GROUPS_BODYMAP` fuehrt ihn nicht. `[read]` *„Ein
+  Kuerzel zu ergaenzen hiesse, eine Muskelgruppe zu erfinden, die das
+  Modul nicht misst."* **Nicht entschieden.** `abductors` bleibt wie in
+  G-26.
+
+  ### Der Test geht jetzt von der Karte aus
+
+  `[cmd]` `karten-ids.test.ts` **startet bei den IDs der Karte statt bei
+  einer Lueckenliste.** Drei Pruefungen, alle gegengeprobt: neue ID
+  `soleus` faellt · erfundener Eintrag `lats` faellt · `chest` →
+  `pec_l` faellt. Dazu `zaehlen.test.ts` mit der festen Aufteilung
+  17/16/6.
+
+  `[cmd]` **Im Browser gezaehlt:** 23 Muskel-IDs — 16 eingefaerbt, 5
+  grau, 2 fester Ton. Bei allen drei Breiten gleich. **252 Tests gruen.**
+
+  `[read]` **Und ein Messfehler beim Messen:** *„Ich zaehlte zuerst 24
+  und fand `soleus` — die ID aus meiner eigenen Gegenprobe. Die Datei
+  war zurueckgesetzt, der Dev-Server lieferte noch den alten Build."*
+  **Derselbe Fehler wie in G-05.**

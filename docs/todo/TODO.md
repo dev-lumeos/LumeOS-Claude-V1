@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `417aae3` auf `dev`.
+**Stand:** 2026-08-18, Anker `6929158` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 78 offen, 3 in Arbeit.
+`[cmd]` 79 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -190,7 +190,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-17** | Datenherkunft, bevor die Geraete kommen |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
-| **G-44** | Die Muskelkarte deckt nicht alle Gruppen ab |  |
 | **G-45** | Supplements — Injektionsorte und Subnavigation |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **C-65** | Toms Passwort steht nirgends |  |
@@ -213,6 +212,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
 | **C-72** | Der Import-Pfad fuer Laborbefunde |  |
 | **G-46** | Medical an den Katalog anschliessen |  |
+| **G-47** | Der Koerperumriss der Vorlage ist kaputt |  |
+| **G-48** | Graue Teile heben sich nicht ab |  |
 
 ---
 
@@ -1808,44 +1809,6 @@ Umsetzen angepasst werden.
   dasselbe: was liegt wo, und was davon ist besser als das, was wir
   haben.
 
-- [ ] **G-44: Die Muskelkarte deckt nicht alle Gruppen ab** (neu
-  2026-08-18). **Tom, 2026-08-18:** *„Es fehlen diverse Aktivierungen von
-  Parts, dass man den ganzen Body erkennt. Recheck, ob alle Muskeln in
-  der Grafik auch in der Liste auftauchen."*
-
-  `[cmd]` **Gemessen: Die Karte hat 41 IDs, die Zuordnung deckt 18 ab.**
-
-  **Echte Muskeln ohne Zuordnung — sie bleiben grau:**
-
-  | | |
-  |---|---|
-  | `tibialis` | Schienbeinmuskel |
-  | `lat_l` / `lat_r` | Latissimus — **es gibt keine Sammelgruppe `lats`** |
-  | `vg_l` / `vg_r` | `[Vermutung]` Vastus oder Wade |
-
-  `[cmd]` **Und `both` in der Zuordnung zeigt auf nichts** — eine ID,
-  die die Karte nicht kennt.
-
-  Die uebrigen ohne Zuordnung sind **Teilstuecke** (`bicep_l`/`bicep_r`
-  unter `biceps`, `pec_*`, `delt_*`, `quad_*`, `glute_*`,
-  `tricep_*`) oder **keine Muskeln**: `head`, `hair`, `hands`, `feet`,
-  `knees`, `ankles`, `label`, `side`.
-
-  `[read]` **Der Beinahe-Fehler aus G-26 zeigt das Muster:**
-  `upper-back` und `lower-back` waren als *„keine Entsprechung"*
-  eingestuft — **die Karte hat beide, mit Bindestrich geschrieben, den
-  die Suche nicht traf.** Zwei Gruppen waeren dauerhaft grau geblieben,
-  **ohne Fehlermeldung.**
-
-  **Was zu tun ist:** Jede Karten-ID einer Gruppe zuordnen oder
-  ausdruecklich als Nicht-Muskel markieren — **und ein Test, der eine
-  unzugeordnete ID zum Fehler macht.** `[cmd]` Der bestehende Test haelt
-  eine Lueckenliste gegen eine feste Erwartung; er muss die Liste
-  **vollstaendig** fuehren.
-
-  `[cmd]` **Eine echte Luecke bleibt laut G-26:** `abductors` — die
-  Karte kennt nur die Innenseite. **Nicht auf `gluteal` gelegt, das ist
-  ein anderer Muskel.** Richtig so.
 
 - [ ] **G-45: Supplements — Injektionsorte und Subnavigation** (neu
   2026-08-18). **Tom, 2026-08-18:** *„Supplements ist nicht fertig als
@@ -2383,3 +2346,37 @@ Umsetzen angepasst werden.
   `[read]` **Keine Bewertung.** Ob ein Wert gut ist, ist eine
   medizinische Aussage — die Anzeige sagt, **wo er liegt**, nicht was er
   bedeutet.
+
+- [ ] **G-47: Der Koerperumriss der Vorlage ist kaputt** (neu
+  2026-08-18). **Der eigentliche Grund fuer Toms Anlass.** Befund aus
+  G-44.
+
+  `[cmd]` **Der Umriss endet bei `y=815`, die Muskeln reichen bis
+  `y=1340`** — **ab Oberschenkelmitte hat die Figur keine Kontur.**
+
+  `[cmd]` **Ursache: 118 von 200 Pfadbefehlen sind fehlerhaft** — `C`
+  mit vier statt sechs Zahlen. **Der Browser hoert an der ersten
+  kaputten Stelle auf.**
+
+  `[read]` **Der Fehler steckt in der Mockup-Quelle, nicht in der
+  Uebernahme** — dort endet der Umriss sogar noch frueher. **Zu
+  reparieren waere `apps/web/public/mockup/components/body_front.svg`.**
+
+  `[read]` **Das erklaert Toms Anlass genauer als die
+  Zuordnungsluecke:** *„Es fehlen diverse Aktivierungen von Parts, dass
+  man den ganzen Body erkennt."* — **Der Body zerfaellt, weil ihm die
+  Kontur fehlt, nicht weil Muskeln fehlen.**
+
+- [ ] **G-48: Graue Teile heben sich nicht ab** (neu 2026-08-18). Befund
+  aus G-44.
+
+  `[cmd]` **Gemessen: Hintergrund gegen graues Teil unterscheidet sich um
+  0,012 Helligkeit** — in beiden Modi. **Praktisch unsichtbar, deshalb
+  wirkt die linke Hand abgetrennt.**
+
+  `[cmd]` Die Grundflaeche ist `--surface-2`, **und daran zu drehen wirkt
+  auf die ganze Oberflaeche.** `[read]` Deshalb gemeldet, nicht
+  entschieden — es ist eine Gestaltungsfrage fuer Tom.
+
+  `[annahme]` Ein eigener Ton fuer nicht gemessene Koerperteile waere die
+  saubere Loesung, **aber das ist ein neuer Token.**
