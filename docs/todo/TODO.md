@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `5325763` auf `dev`.
+**Stand:** 2026-08-18, Anker `298e3ee` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 72 offen, 3 in Arbeit.
+`[cmd]` 74 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -189,6 +189,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-66** | Der Food-DB-Tab mit Filtern |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **G-67** | Daumen hoch und runter in der Lebensmittel-Detailansicht |  |
+| **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
+| **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
@@ -1967,6 +1969,74 @@ Umsetzen angepasst werden.
   sicher?"*, sondern *„Rosenkohl kuenftig nicht mehr anzeigen?"* mit dem
   Hinweis, wo es rueckgaengig geht (Preferences, Individual foods).
 
+- [ ] **GO-20: Ziele brauchen Prioritaeten, Bearbeiten und Historie**
+  (neu 2026-08-18). **Toms Vorgaben.**
+
+  **Tom, 2026-08-18:** *„Goals brauchen noch Prioritaeten, die man
+  festlegen kann — das bildet dann auch die Reihenfolge. Bestehende
+  muessen auch editierbar sein."*
+
+  ### Drei Dinge
+
+  **1. Prioritaet je Ziel** — sie bestimmt die Reihenfolge in der
+  Uebersicht. `[cmd]` Heute traegt ein Ziel die Marke `primaer`, aber
+  keine Rangzahl.
+
+  **2. Bestehende Ziele bearbeiten.** `[cmd]` Heute gibt es nur `New
+  goal` im Kopf.
+
+  **3. Abgelaufene Ziele mit Status** — **erreicht, nicht erreicht,
+  abgebrochen.**
+
+  `[read]` **Toms Beobachtung:** *„Ich sehe 2 Goals, die definiert
+  — Meilensteine? Erreichte Goals? Dann macht man einfach einen Seed mit
+  abgelaufenen Goals, die in Meilensteine landen (im Sinne von
+  History)."*
+
+  `[cmd]` **Heute sind die drei Meilensteine Zwischenziele auf dem Weg**
+  — 86 kg bis 20. August, 85 kg, 86,5 kg. **Keine Historie.**
+
+  `[read]` **Und die Timeline waere der bessere Ort:** *„Wenn wir uns
+  Timeline anschauen, das wuerde das schon von sich aus darstellen — da
+  muesste aber jede Zeile anwaehlbar sein fuer Details."*
+
+  **Zu bauen:** Rangspalte · Bearbeiten · Abschlussstatus ·
+  Seed mit abgelaufenen Zielen · **Timeline-Zeilen anwaehlbar.**
+
+- [ ] **C-95: Coach-Rechte je Modul, mit oder ohne Bestaetigung** (neu
+  2026-08-18). **Ersetzt den offenen Teil von C-71.**
+
+  **Tom, 2026-08-18:** *„Coach-Autonomie: alles, was der User selber
+  nicht beurteilen kann. Das muss neu rein in Permissions pro Modul.
+  Beginnen wir einfachheitshalber: Coach darf aendern ohne Bestaetigung
+  oder mit Bestaetigung des Users. Gehen wir tiefer rein spaeter."*
+
+  ### Die Korrektur
+
+  `[cmd]` **Der Tab `Autonomie` in `/v2/coach/human` ist etwas
+  anderes** — **die Coach-Sicht auf seiner Plattform**, nicht die
+  Rechte, die der Nutzer vergibt. `[read]` Der Orchestrator hatte es
+  falsch verortet.
+
+  ### Was zu bauen ist
+
+  **Je Modul zwei Werte:** *ohne Bestaetigung* oder *mit Bestaetigung
+  des Nutzers.*
+
+  `[cmd]` **Module:** Nutrition, Training, Recovery, Goals,
+  Supplements, Medical.
+
+  `[read]` **Die Begruendung ist der Kern:** Ein Coach entscheidet, was
+  der Nutzer fachlich nicht beurteilen kann. **Der Nutzer entscheidet,
+  ob er das ohne Rueckfrage geschehen laesst** — je Modul verschieden,
+  weil das Vertrauen verschieden ist.
+
+  `[cmd]` **Feiner spaeter** — Toms Vorgabe. **Nicht vorbauen.**
+
+  `[read]` **Und die Vorlage sitzt im Vorgaengerrepo:**
+  `SettingsView.tsx` fuehrt eine `CoachPermissionsSection`, aufklappbar
+  je Coach, mit `/api/human-coach/permissions/my-coaches`.
+
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
 
@@ -2332,7 +2402,13 @@ Umsetzen angepasst werden.
   gerechneten Wert und nennt die Herkunft — richtig so. **Aber eine
   Spalte, die nicht stimmt, wird irgendwann von jemandem gelesen.**
 
-  **Zu klaeren:** Wird `progress_pct` gepflegt oder faellt sie weg?
+  **Entschieden (Tom, 2026-08-18): pflegen, wenn moeglich.**
+
+  `[cmd]` **Ein Trigger auf `body_measurements` und `workout_sets`**, der
+  `progress_pct` nachzieht. `[read]` **Wenn es nicht geht, faellt die
+  Spalte weg** — zwei Wahrheiten sind schlechter als eine.
+
+  **Alt:** Wird `progress_pct` gepflegt oder faellt sie weg?
   `[cmd]` Wenn sie bleibt, braucht sie einen Trigger; wenn nicht, gehoert
   sie geloescht.
 
