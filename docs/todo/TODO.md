@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `db521e7` auf `dev`.
+**Stand:** 2026-08-18, Anker `b851426` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 67 offen, 3 in Arbeit.
+`[cmd]` 68 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -198,10 +198,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-61** | `refillUrgent` als Schwelle |  |
 | **C-82** | Compliance braucht 120 Zeilen und Auslasser |  |
 | **G-62** | Die 17 Marken in `tabs.tsx` bleiben 17 |  |
-| **C-84** | Die elf Panels gibt es in keiner Quelle |  |
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
 | **G-63** | Vier Felder liegen ungenutzt |  |
 | **C-86** | 8 mehrdeutige Uebungen und 1 ohne DB-Namen |  |
+| **C-91** | Drei Marker fehlen im LOINC-Zuschnitt |  |
+| **C-92** | Die Spec verwechselt Marker |  |
 
 ---
 
@@ -2086,32 +2087,6 @@ Umsetzen angepasst werden.
   beide dastehen, zeigt `v2-attrappen.test.ts` eine Zahl, die nicht mehr
   die Lage beschreibt.
 
-- [ ] **C-84: Die elf Panels gibt es in keiner Quelle** (neu
-  2026-08-18). **Befund aus G-60, blockiert den Health score.**
-
-  `[cmd]` **Vier Stellen geprueft:**
-
-  | | |
-  |---|---|
-  | `loinc_class` | **4 Gruppen**, 31 von 35 sind `CHEM` |
-  | `panel_type` | **bei 11.421 von 11.676 leer**, kein benutzter Marker traegt einen |
-  | `panels` (JSONB) | **Kreatinin haengt in 33 Elternpanels**, darunter Tiermedizin |
-  | `curated_slug` | Markerschluessel, keine Gruppe |
-
-  `[cmd]` **Auch das Vorgaengerrepo hat es nicht** — `category` ist dort
-  **Probenmaterial** (blood/hormone/vitamin), keine Panelgliederung.
-
-  `[read]` **Die Attrappe zeigt CBC 5, Metabolic 4, Lipid 5, Liver 6,
-  Kidney 4, Thyroid 4, Hormone 10, Inflammation 3, Vitamins 6, Screening
-  1** — **das ist eine kuratierte Gliederung, die niemand gebaut hat.**
-
-  `[cmd]` **Das blockiert den Health score:** Er wiegt fuenf Systeme und
-  braucht dieselbe Zuordnung.
-
-  **Woher sie kommen koennte:** `[cmd]` `SPEC_05_BIOMARKER_CATALOG.md`
-  fuehrt **74 Marker in acht Panels** — aus der Spec waren nur 47
-  SQL-Zeilen greifbar (C-70). **Das ist die naechste Stelle zum
-  Nachsehen.**
 
 - [ ] **C-85: Kurznamen fehlen bei 11 von 35** (neu 2026-08-18). Befund
   aus G-60.
@@ -2154,3 +2129,36 @@ Umsetzen angepasst werden.
   nicht eingeordnet** — 1.878 in der Datei gegen 1.416 in der Datenbank.
   `[read]` **Absichtlich weggelassen oder beim Import verloren — das
   sind zwei verschiedene Antworten.**
+
+- [ ] **C-91: Drei Marker fehlen im LOINC-Zuschnitt** (neu 2026-08-18).
+  Rest aus C-84.
+
+  `[cmd]` **`10231-9` IGF-1, `5762-0` Zink, `2913-2` Selen** stehen in
+  der Spec, **aber nicht im 11.676er Zuschnitt.**
+
+  `[read]` **Der Zuschnitt war `CLASSTYPE 1/2` mit `COMMON_TEST_RANK`** —
+  wer keinen Haeufigkeitsrang hat, fiel raus. **Drei Marker, die ein
+  Sportler misst, sind darunter.**
+
+  **Zu klaeren:** Nachziehen aus der vollen LOINC-Tabelle (97.314 aktive
+  Codes), oder den Zuschnitt weiten? `[cmd]` Der Quellordner ist
+  ignoriert, **aber `109`/`144` zeigen, dass reproduzierbares Lesen
+  funktioniert.**
+
+- [ ] **C-92: Die Spec verwechselt Marker** (neu 2026-08-18). **Befund
+  aus C-84, betrifft jede weitere Spec-Uebernahme.**
+
+  `[cmd]` **Identitaetsfehler:** ApoB/ApoA1 · Reverse T3/T3 ·
+  TPO-Ab/TRAb · **Magnesium RBC gegen Methaemoglobin.**
+
+  `[cmd]` **Einheiten- und Bezugsfehler:** Lp(a) `nmol/L` gegen `mg/dL`,
+  eGFR `mL/min` gegen `mL/min/{1.73_m2}`.
+
+  `[read]` **`CLAUDE.md` sagt es:** *„Die Specs sind KI-erzeugt und an
+  einer Stelle nachweislich eine Kopie des Brainstorms."* **Hier ist der
+  zweite Beleg** — und diesmal mit medizinischer Folge.
+
+  **Was daraus folgt:** `[read]` **Spec-Uebernahmen brauchen einen
+  Identitaetsabgleich gegen LOINC**, nicht nur einen Codeabgleich. Der
+  C-84-Agent hat ihn gefahren — **das gehoert zur Regel, nicht zum
+  Zufall.**

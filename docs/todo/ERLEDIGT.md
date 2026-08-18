@@ -4513,6 +4513,70 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   **Alltagsname und Fachname.** Das ist die Vorlage fuer zwei
   Filterachsen und fuer deutsche Bezeichnungen.
 
+- [x] **C-84: Die elf Panels gibt es in keiner Quelle** (neu
+  2026-08-18). **Befund aus G-60, blockiert den Health score.**
+
+  `[cmd]` **Vier Stellen geprueft:**
+
+  | | |
+  |---|---|
+  | `loinc_class` | **4 Gruppen**, 31 von 35 sind `CHEM` |
+  | `panel_type` | **bei 11.421 von 11.676 leer**, kein benutzter Marker traegt einen |
+  | `panels` (JSONB) | **Kreatinin haengt in 33 Elternpanels**, darunter Tiermedizin |
+  | `curated_slug` | Markerschluessel, keine Gruppe |
+
+  `[cmd]` **Auch das Vorgaengerrepo hat es nicht** — `category` ist dort
+  **Probenmaterial** (blood/hormone/vitamin), keine Panelgliederung.
+
+  `[read]` **Die Attrappe zeigt CBC 5, Metabolic 4, Lipid 5, Liver 6,
+  Kidney 4, Thyroid 4, Hormone 10, Inflammation 3, Vitamins 6, Screening
+  1** — **das ist eine kuratierte Gliederung, die niemand gebaut hat.**
+
+  `[cmd]` **Das blockiert den Health score:** Er wiegt fuenf Systeme und
+  braucht dieselbe Zuordnung.
+
+  **Woher sie kommen koennte:** `[cmd]` `SPEC_05_BIOMARKER_CATALOG.md`
+  fuehrt **74 Marker in acht Panels** — aus der Spec waren nur 47
+  SQL-Zeilen greifbar (C-70). **Das ist die naechste Stelle zum
+  Nachsehen.**
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritt `144`.
+  `biomarker_reference_ranges` **464 → 560**, `biomarker_catalog` bleibt
+  11.676.
+
+  ### Die Zahl der Spec stimmt dreimal nicht
+
+  `[cmd]` **Das Spec-SQL liefert 47 Marker** — **nicht die „100+“ der
+  Ueberschrift und nicht die 74 der Panelzahlen.** `[read]` In C-70 stand
+  *„nur 47 SQL-Zeilen greifbar"* — **das war die richtige Zahl, nur als
+  Zaehlung abgetan.**
+
+  | | |
+  |---|---|
+  | im LOINC-Katalog | **44 von 47** |
+  | display-nutzbar | 40 |
+  | mit numerischen Bereichen | **38** |
+
+  `[cmd]` **Die Quelle steht je Zeile:** 96 aus
+  `SPEC_05_BIOMARKER_CATALOG.md`, dazu Fundstellen wie *WHO Iron
+  Deficiency Guidelines*, *Endocrine Society*, *American Thyroid
+  Association*, *AHA Scientific Statement 2023*.
+
+  ### Was nicht still importiert wurde
+
+  `[cmd]` **Fehlend im LOINC-Zuschnitt:** `10231-9` IGF-1, `5762-0`
+  Zink, `2913-2` Selen.
+
+  `[cmd]` **Identitaetsfehler in der Spec:** ApoB/ApoA1, Reverse T3/T3,
+  TPO-Ab/TRAb, **Magnesium RBC gegen Methaemoglobin.**
+
+  `[cmd]` **Einheiten- und Bezugsfehler:** Lp(a) `nmol/L` gegen `mg/dL`,
+  eGFR `mL/min` gegen `mL/min/{1.73_m2}`.
+
+  `[read]` **Das ist der Kern des Berichts:** Die Spec ist KI-erzeugt,
+  und sie verwechselt Marker. **Wer sie ungeprueft einspielt, bekommt
+  Methaemoglobin-Bereiche auf Magnesium.**
+
 
 
 ## Erledigt am 2026-08-05
