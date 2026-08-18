@@ -44,6 +44,11 @@ import {
 } from './tabs-spec'
 import { TrainingOfflineView, TrainingHRAnalysis } from './tabs-offline-hr'
 import { TrainingBodyStatsCorrelation } from './tabs-extras'
+// G-64: der einzige Tab mit echten Daten.
+import { TrainingUebungen } from './tab-uebungen'
+import type {
+  Uebung, GeraeteGruppe, MuskelWurzel,
+} from '../../../lib/training/uebungen-read'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -55,7 +60,9 @@ const TABS: TabItem[] = [
   { id: 'today', label: 'Today', icon: 'zap' },
   { id: 'plan', label: 'Plan', icon: 'calendar' },
   { id: 'history', label: 'History', icon: 'trend_up' },
-  { id: 'library', label: 'Exercises', icon: 'layers', count: 1200 },
+  // G-64: Die Zahl kommt aus dem Katalog, nicht mehr fest aus dem
+  // Entwurf. `[cmd]` Der Entwurf sagte 1.200, der Katalog fuehrt 1.416.
+  { id: 'library', label: 'Exercises', icon: 'layers' },
   { id: 'progress', label: 'Progression', icon: 'trend_up' },
   { id: 'landmarks', label: 'Volume landmarks', icon: 'layers' },
   { id: 'standards', label: 'Standards', icon: 'goals' },
@@ -64,7 +71,29 @@ const TABS: TabItem[] = [
   { id: 'offline', label: 'Offline sync', icon: 'wifi_off' },
 ]
 
-export function TrainingAnsicht() {
+/**
+ * Die Tab-Leiste mit der echten Katalogzahl.
+ *
+ * `[cmd]` Der Entwurf schreibt `count: 1200` fest; der Katalog fuehrt
+ * 1.416. Steht keine Zahl zur Verfuegung (kein Katalog gelesen),
+ * bleibt der Tab ohne Zaehler — eine erfundene Zahl waere schlechter
+ * als keine.
+ */
+function tabs(uebungen: number): TabItem[] {
+  return TABS.map(t =>
+    t.id === 'library' && uebungen > 0 ? { ...t, count: uebungen } : t)
+}
+
+export function TrainingAnsicht({
+  uebungenStart = [], uebungenGesamt = 0,
+  geraeteGruppen = [], disziplinen = [], muskelBaum = [],
+}: {
+  uebungenStart?: Uebung[]
+  uebungenGesamt?: number
+  geraeteGruppen?: GeraeteGruppe[]
+  disziplinen?: Array<{ name: string; anzahl: number }>
+  muskelBaum?: MuskelWurzel[]
+} = {}) {
   const [tab, setTab] = React.useState('today')
   const [liveOpen, setLiveOpen] = React.useState(false)
   const [modal, setModal] = React.useState<{ typ: ModalTyp; nutzlast?: unknown } | null>(null)
@@ -106,12 +135,25 @@ export function TrainingAnsicht() {
         </div>
       </div>
 
-      <Tabs items={TABS} active={tab} onChange={setTab} />
+      <Tabs items={tabs(uebungenGesamt)} active={tab} onChange={setTab} />
 
       {tab === 'today' && <TrainingToday onStart={() => setLiveOpen(true)} />}
       {tab === 'plan' && <TrainingPlan />}
       {tab === 'history' && <TrainingHistory />}
-      {tab === 'library' && <TrainingLibrary />}
+      {tab === 'library' && (
+        uebungenGesamt > 0
+          ? (
+            <TrainingUebungen
+              start={uebungenStart}
+              gesamtKatalog={uebungenGesamt}
+              geraeteGruppen={geraeteGruppen}
+              disziplinen={disziplinen}
+              muskelBaum={muskelBaum}
+            />
+          )
+          // Ohne Katalog bleibt der Entwurf stehen — mit seiner Marke.
+          : <TrainingLibrary />
+      )}
       {tab === 'progress' && <TrainingProgressionView />}
       {tab === 'landmarks' && <TrainingLandmarksView />}
       {tab === 'standards' && <TrainingStandardsView />}
