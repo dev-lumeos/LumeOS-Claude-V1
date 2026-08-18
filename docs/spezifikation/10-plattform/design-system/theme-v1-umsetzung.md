@@ -240,6 +240,30 @@ Ausgangspunkt, nicht Sollwert.**
 
 ---
 
+### Regel 12 aus G-55: der Orchestrator misst auch falsch
+
+`[cmd]` Der Auftrag behauptete, der Umriss der Vorlage sei vollstaendig
+und ein frueherer Agent habe sich geirrt. **Beides war falsch.**
+
+**Der Umriss ist im Mockup toter Code.** `[cmd]`
+`MuscleBodyMap.js:310` erzeugt `outlinePath`, `:316` haengt `outlineG`
+an — **aber der Pfad wird nie an die Gruppe gehaengt.** Auf der
+Testseite des Mockups gemessen: **Umrissgruppe `innerHTML`-Laenge = 0.**
+Die vollstaendige Figur entsteht **allein aus `MUSCLES`.**
+
+**Und die 118 fehlerhaften `C`-Befehle waren richtig gemessen.**
+`[cmd]` Der Orchestrator rechnete 688 Zahlen gegen 117 `C` und schloss
+auf Koordinatenpakete. **Nachgerechnet mit genau dieser Regel: die
+Beispiele sind `C` mit vier Zahlen — zu wenig fuer ein Paket, nicht zu
+viel.**
+
+`[read]` **Eine Zahl im Auftrag ist eine Behauptung, auch wenn sie vom
+Orchestrator kommt.** In G-45 war es eine Katalogzahl (44 statt 34),
+hier eine Diagnose. **Beide Male hat das Nachmessen sie widerlegt — und
+beide Male stand die Messung im Bericht, nicht der Gehorsam.**
+
+---
+
 ### Was der Abgleich ergab
 
 | Tab | Vorlage | vorher | jetzt |
