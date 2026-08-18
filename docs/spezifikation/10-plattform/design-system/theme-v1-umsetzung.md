@@ -218,6 +218,28 @@ nur einen Bestand zu indizieren.
 
 ---
 
+### Regel 11 aus G-45: ein Verteiler ist kein fehlendes Bauteil
+
+`[cmd]` Die Zaehlung meldete **neun fehlende Modale, die alle da
+waren.** **Die Vorlage baut je Fenster eine Komponente, die Umsetzung
+einen Verteiler mit `case`-Zweigen.**
+
+`[read]` **Dieselbe Klasse Fehler wie `BodyMap18` in G-26** — das
+Skript meldet eine fehlende Zuordnung als fehlendes Bauteil. **Ein
+Namensunterschied ist keine Luecke, solange die Funktion da ist** —
+aber er muss je Eintrag belegt werden, nicht pauschal weggewinkt.
+
+### Zahlen im Auftrag sind nicht geprueft
+
+`[cmd]` Der G-45-Auftrag nannte **44 Katalogeintraege** — **die stehen
+in der Datenbank. Die Vorlage fuehrt 34.**
+
+`[read]` *„Mein erster Test hat die 44 ungeprueft uebernommen und schlug
+fehl; nachgezaehlt sind es 34."* — **Eine Zahl aus dem Auftrag ist
+Ausgangspunkt, nicht Sollwert.**
+
+---
+
 ### Was der Abgleich ergab
 
 | Tab | Vorlage | vorher | jetzt |
