@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `1d76d45` auf `dev`.
+**Stand:** 2026-08-18, Anker `980e1e7` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 83 offen, 3 in Arbeit.
+`[cmd]` 82 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -189,15 +189,12 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-24** | JetBrains Mono laden |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
-| **G-45** | Supplements — Injektionsorte und Subnavigation |  |
 | **G-49** | Die Liste fuehrt jeden Muskel, die Grafik verdichtet |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **G-27** | `v2-rec-grid-1135` und drei weitere Raster |  |
 | **G-30** | Recovery an die Check-ins anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
-| **G-31** | Die fuenf fehlenden Supplements-Tabs |  |
-| **G-32** | `refillUrgent` ist an einem von neun Eintraegen gesetzt |  |
 | **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
 | **G-34** | `.v2-btn` hat kein `white-space: nowrap` |  |
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
@@ -218,6 +215,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-50** | `v2-g-cols-5` fehlt |  |
 | **C-75** | BSS und Voice sind Neubau |  |
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
+| **G-52** | `InEntwicklungKnopf` kennt kein `disabled` |  |
+| **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
 
 ---
 
@@ -1770,30 +1769,6 @@ Umsetzen angepasst werden.
   haben.
 
 
-- [ ] **G-45: Supplements — Injektionsorte und Subnavigation** (neu
-  2026-08-18). **Tom, 2026-08-18:** *„Supplements ist nicht fertig als
-  Mockup erstellt worden, denn da hat es Injektionsorte mit dieser
-  speziellen Map. In Supplements nochmal an den Subnavigationen checken
-  und das Mockup duplizieren."*
-
-  `[cmd]` **Der Baustein ist fertig:** `InjektionsKarte` in
-  `packages/ui/src/koerperkarte.tsx`, **gebaut und exportiert, aber
-  nirgends aufgerufen.** `[read]` Aus dem G-26-Bericht: *„Wer den
-  Injections-Tab baut, findet sie fertig vor."*
-
-  `[cmd]` **Fuenf Tabs sind offen** (G-31): Catalog, Stacks,
-  Intelligence, Inventory aus `-spec.jsx` (72 KB) und **Injections aus
-  `-injection.jsx` (36 KB).**
-
-  **Und die Subnavigation ist zu pruefen** — `[read]` bei Coach hat sich
-  gezeigt, dass ein Modul zwei eigenstaendige Unterbereiche haben kann;
-  bei Nutrition war eine Subnavigation dagegen falsch. **`app.jsx`
-  entscheidet, nicht die Vermutung.**
-
-  `[cmd]` **Danebenliegend:** `CyclePlanner.tsx` und
-  `BloodLevelChart.tsx` im Vorgaengerrepo mit **28 Fundstellen zu
-  Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
-  mit `half_life_hours`.
 
 - [ ] **G-49: Die Liste fuehrt jeden Muskel, die Grafik verdichtet**
   (neu 2026-08-18). **Toms Vorgabe.**
@@ -2012,41 +1987,8 @@ Umsetzen angepasst werden.
 
   **Angebunden heisst: Marke weg.**
 
-- [ ] **G-31: Die fuenf fehlenden Supplements-Tabs** (neu 2026-08-17).
-  Rest aus G-29.
-
-  `[cmd]` Catalog, Stacks, Intelligence, Inventory (alle aus
-  `module-supplements-spec.jsx`, 72 KB) und Injections (aus
-  `-injection.jsx`, 36 KB).
-
-  `[cmd]` **Sie stehen bereits in der Tab-Leiste** und sagen an ihrer
-  Stelle, woher sie kaemen — die Leiste ist ehrlich, nur unvollstaendig.
-
-  `[read]` **Injections ist der interessanteste:** Das Vorgaengerrepo hat
-  dazu `CyclePlanner.tsx` und `BloodLevelChart.tsx` mit **28 Fundstellen
-  zu Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
-  mit `half_life_hours`. **Das deckt genau diesen Tab ab.**
-
-  `[cmd]` Und die Muskelkarte aus G-26 traegt `renderInjection` mit
-  Rotation — **sie ist fuer diesen Tab gebaut.**
-
-  **Dazu aus G-38:** `[cmd]` **`SuppCost` ist ein gebauter Tab, aber
-  die Vorlage fuehrt fuenf Kacheln, die Umsetzung zwei.** `[read]`
-  Dieselbe Klasse Luecke wie `SuppExtended` in G-33 — *sieht beim
-  Klicken vollstaendig aus, ist es nicht.*
 
 
-- [ ] **G-32: `refillUrgent` ist an einem von neun Eintraegen gesetzt**
-  (neu 2026-08-17). Befund aus G-29.
-
-  `[cmd]` Das Feld wird **an drei Stellen gelesen**, ist aber nur an
-  einem der neun Praeparate gesetzt — **acht fallen auf die Warnfarbe
-  zurueck.**
-
-  `[read]` **Uebernommen wie es ist; begradigen waere eine Erfindung.**
-  Richtig so — aber sobald echte Daten kommen, gehoert entschieden, ob
-  das Feld eine Schwelle ist (Bestand unter X Tagen) oder eine
-  Markierung von Hand.
 
 - [ ] **GO-13: Fuenf Goals-Kacheln koennen sofort echt werden** (neu
   2026-08-17). Befund aus G-28.
@@ -2620,3 +2562,31 @@ Umsetzen angepasst werden.
   Gewichtsverlauf wurden getrennt generiert** und muessen nicht
   zueinander passen — der Abstand von 1.279 kcal kann daher
   stammen. **Vor einer Aenderung an Alpha gehoert das geprueft.**
+
+- [ ] **G-52: `InEntwicklungKnopf` kennt kein `disabled`** (neu
+  2026-08-18). Befund aus G-45.
+
+  `[cmd]` **Im Log-Fenster ist das nicht nebensaechlich:** Die Vorlage
+  **sperrt den Speichern-Knopf bei ueberschrittener Menge oder laufendem
+  Ruhefenster.**
+
+  `[read]` Ein Knopf, der eine Grenze nicht durchsetzt, **sieht aus wie
+  eine Sicherung und ist keine.**
+
+  `[cmd]` **Ohne `packages/ui` geloest:** der gesperrte Fall rendert ein
+  echtes `<button disabled>`. **Fuenfter Fall nach den G-43-Luecken**
+  (`shield` dreimal, `file`, `Pill` ohne `dot`, kein `Empty`,
+  `v2-g-cols-5`).
+
+- [ ] **G-53: `InjektionsKarte` in `packages/ui` hat keinen Aufrufer**
+  (neu 2026-08-18). Befund aus G-45.
+
+  `[cmd]` **Gebaut und exportiert in G-26, von keinem Tab gerufen.** Die
+  Supplements-Karte wurde nach Toms Entscheidung **im Modul** gebaut,
+  weil die Vorlage sechs Felder je Ort fuehrt, die der Baustein nicht
+  hat.
+
+  `[read]` **Nicht loeschen, aber entscheiden:** entweder sie bekommt
+  die fehlenden Felder und den Injections-Tab als Aufrufer, **oder sie
+  faellt weg.** Ein Baustein ohne Aufrufer wird beim naechsten Mal ein
+  zweites Mal gebaut — **das ist bereits passiert.**

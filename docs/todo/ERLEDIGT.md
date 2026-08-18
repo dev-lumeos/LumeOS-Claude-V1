@@ -5593,3 +5593,118 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   im Schema (`range_type = 'optimal'`), kein Urteil."* Dazu: die
   Markenzaehlung las 7 statt 8, **weil die Regel nur `{ATTRAPPE}` kannte,
   nicht die eigene Begruendung der Entwurfstabelle.**
+
+- [x] **G-45: Supplements — Injektionsorte und Subnavigation** (neu
+  2026-08-18). **Tom, 2026-08-18:** *„Supplements ist nicht fertig als
+  Mockup erstellt worden, denn da hat es Injektionsorte mit dieser
+  speziellen Map. In Supplements nochmal an den Subnavigationen checken
+  und das Mockup duplizieren."*
+
+  `[cmd]` **Der Baustein ist fertig:** `InjektionsKarte` in
+  `packages/ui/src/koerperkarte.tsx`, **gebaut und exportiert, aber
+  nirgends aufgerufen.** `[read]` Aus dem G-26-Bericht: *„Wer den
+  Injections-Tab baut, findet sie fertig vor."*
+
+  `[cmd]` **Fuenf Tabs sind offen** (G-31): Catalog, Stacks,
+  Intelligence, Inventory aus `-spec.jsx` (72 KB) und **Injections aus
+  `-injection.jsx` (36 KB).**
+
+  **Und die Subnavigation ist zu pruefen** — `[read]` bei Coach hat sich
+  gezeigt, dass ein Modul zwei eigenstaendige Unterbereiche haben kann;
+  bei Nutrition war eine Subnavigation dagegen falsch. **`app.jsx`
+  entscheidet, nicht die Vermutung.**
+
+  `[cmd]` **Danebenliegend:** `CyclePlanner.tsx` und
+  `BloodLevelChart.tsx` im Vorgaengerrepo mit **28 Fundstellen zu
+  Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
+  mit `half_life_hours`.
+
+  `[cmd]` **Erledigt 2026-08-18: alle zwoelf Tabs, 67 von 67 Posten.**
+  Neu: Catalog, Stacks, Intelligence, Inventory, Injections. **Dazu
+  `SuppCost` von 2 auf 5 Kacheln** — der G-33-Rest. `refillUrgent`
+  steht unveraendert, nicht begradigt.
+
+  ### `-injection.jsx` ist ein Tab, kein Bereich
+
+  `[cmd]` **Drei Belege, in dieser Reihenfolge geprueft:**
+  `app.jsx:123` fuehrt einen Fall · `module-supplements.jsx:249` listet
+  `injection` in der Tab-Leiste · `:270` rendert
+  `InjectionPlannerView` **im selben Rumpf.**
+
+  `[read]` **Die 36 KB sind gross, weil der Tab vier eigene Unter-Tabs
+  hat** — Rotation map, Schedule, Log, Site guide. **`-spec.jsx` mit 72
+  KB traegt sogar vier Tabs auf einmal.**
+
+  ### Die Injektionskarte: `packages/ui` passte nicht
+
+  `[cmd]` **Gemessen: nur 8 von 16 Orten decken sich.** Die Vorlage
+  fuehrt **acht SubQ-Stellen**, die dort fehlen (`vglute_*`, `abd_*`,
+  `sq_delt_*`, `thigh_sq_*`), **plus sechs Felder je Ort** — `route`,
+  `maxMl`, `restDays`, `needle`, `short`, `note`.
+
+  `[read]` *„Ohne die gibt es weder Ruhefenster noch Volumengrenze noch
+  Nadelempfehlung, also genau das, worum es geht."* Dazu eine andere
+  Koordinatenwelt: **100×120 gegen 724×1448.**
+
+  `[cmd]` **Nach Toms Entscheidung Vorlage 1:1 im Modul gebaut**,
+  `packages/ui` unangetastet. Am Bildschirm: 16 Orte auf zwei
+  Silhouetten, Klick auf „Quad L" zeigt die Nadel (25G), Wegfilter
+  rechnet **6 SubQ + 10 IM = 16.**
+
+  ### Zwei eigene Fehler benannt
+
+  `[cmd]` **Die Zaehlung meldete neun fehlende Modale, die alle da
+  waren** — die Vorlage baut je Fenster eine Komponente, die Umsetzung
+  einen Verteiler mit `case`-Zweigen. **Nachgetragen mit Beleg je
+  Eintrag.**
+
+  `[cmd]` **Und eine Zahl aus dem Auftrag traf nicht zu:** Er nannte 44
+  Katalogeintraege — **die stehen in der Datenbank, die Vorlage fuehrt
+  34.** *„Mein erster Test hat die 44 ungeprueft uebernommen und schlug
+  fehl."*
+
+  `[cmd]` Gate 8/8, **269+7 Tests** (11 neue, jeder zum Fehlschlagen
+  gebracht), `rgba` bei 4, `packages/ui` unveraendert.
+
+- [x] **G-31: Die fuenf fehlenden Supplements-Tabs** (neu 2026-08-17).
+  Rest aus G-29.
+
+  `[cmd]` Catalog, Stacks, Intelligence, Inventory (alle aus
+  `module-supplements-spec.jsx`, 72 KB) und Injections (aus
+  `-injection.jsx`, 36 KB).
+
+  `[cmd]` **Sie stehen bereits in der Tab-Leiste** und sagen an ihrer
+  Stelle, woher sie kaemen — die Leiste ist ehrlich, nur unvollstaendig.
+
+  `[read]` **Injections ist der interessanteste:** Das Vorgaengerrepo hat
+  dazu `CyclePlanner.tsx` und `BloodLevelChart.tsx` mit **28 Fundstellen
+  zu Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
+  mit `half_life_hours`. **Das deckt genau diesen Tab ab.**
+
+  `[cmd]` Und die Muskelkarte aus G-26 traegt `renderInjection` mit
+  Rotation — **sie ist fuer diesen Tab gebaut.**
+
+  **Dazu aus G-38:** `[cmd]` **`SuppCost` ist ein gebauter Tab, aber
+  die Vorlage fuehrt fuenf Kacheln, die Umsetzung zwei.** `[read]`
+  Dieselbe Klasse Luecke wie `SuppExtended` in G-33 — *sieht beim
+  Klicken vollstaendig aus, ist es nicht.*
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-45** — alle zwoelf Tabs, 67 von
+  67 Posten. `SuppCost` von 2 auf 5 Kacheln nachgezogen,
+  `refillUrgent` unveraendert uebernommen.
+
+- [x] **G-32: `refillUrgent` ist an einem von neun Eintraegen gesetzt**
+  (neu 2026-08-17). Befund aus G-29.
+
+  `[cmd]` Das Feld wird **an drei Stellen gelesen**, ist aber nur an
+  einem der neun Praeparate gesetzt — **acht fallen auf die Warnfarbe
+  zurueck.**
+
+  `[read]` **Uebernommen wie es ist; begradigen waere eine Erfindung.**
+  Richtig so — aber sobald echte Daten kommen, gehoert entschieden, ob
+  das Feld eine Schwelle ist (Bestand unter X Tagen) oder eine
+  Markierung von Hand.
+
+  `[cmd]` **Erledigt 2026-08-18 mit G-45** — alle zwoelf Tabs, 67 von
+  67 Posten. `SuppCost` von 2 auf 5 Kacheln nachgezogen,
+  `refillUrgent` unveraendert uebernommen.
