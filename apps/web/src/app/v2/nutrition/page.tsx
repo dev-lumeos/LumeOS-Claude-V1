@@ -19,6 +19,8 @@ import { getZielwerteAm, getZielwertVorschlag } from '../../../lib/profile/zielw
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
 import { getHydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
+import { getLocalFoodSearch } from '../../../lib/nutrition/food-search'
+import type { NutritionFoodSearchPayload } from '../../../lib/nutrition/food-search'
 import { createSessionClient } from '@lumeos/shared/session'
 import { isAdminFromAppMetadata } from '@lumeos/shared/auth/role'
 
@@ -108,6 +110,20 @@ export default async function V2NutritionPage({
     wasser = null
   }
 
+  // G-66: die erste Trefferseite des Food-DB-Tabs. Nur laden, wenn der
+  // Tab auch gezeigt wird — 7.140 Lebensmittel sind kein Beiwerk fuer
+  // das Tagebuch. `[cmd]` Die RPC braucht ohne Filter rund 250 ms.
+  let foodsStart: NutritionFoodSearchPayload | null = null
+  if (tab === 'foods') {
+    try {
+      foodsStart = await getLocalFoodSearch('', undefined, { limit: 50 })
+    } catch {
+      // Faellt sie aus, laedt der Tab im Browser nach und zeigt dort
+      // seinen Fehler — die uebrige Seite bleibt gueltig.
+      foodsStart = null
+    }
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
@@ -121,6 +137,7 @@ export default async function V2NutritionPage({
       ziele={ziele}
       vorschlag={vorschlag}
       zielFehler={zielFehler}
+      foodsStart={foodsStart}
     />
   )
 }

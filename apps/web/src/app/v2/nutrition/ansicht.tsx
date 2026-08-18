@@ -36,6 +36,9 @@ import { NutritionInsightsTab } from './tab-insights'
 import { MealPlansTab } from './tab-plans'
 import { FoodPreferencesTab } from './tab-prefs'
 import { NutritionPlannerTab } from './tab-planner'
+// G-66: der Food-DB-Tab in der Form des Entwurfs.
+import { NutritionFoodsTab } from './tab-foods'
+import type { NutritionFoodSearchPayload } from '../../../lib/nutrition/food-search'
 import { Kopfknoepfe } from './kopfknoepfe'
 import './nutrition.css'
 
@@ -93,7 +96,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
-  istAdmin = false,
+  istAdmin = false, foodsStart = null,
 }: {
   datum: string
   tab: string
@@ -107,6 +110,8 @@ export async function TagebuchAnsicht({
   vorschlag?: Zielvorschlag | null
   zielFehler?: string | null
   wasser?: HydrationDay | null
+  /** G-66: die erste Trefferseite des Food-DB-Tabs. */
+  foodsStart?: NutritionFoodSearchPayload | null
 }) {
   // A-14: Serverkomponente — `getTranslations`, nicht `useTranslations`.
   const t = await getTranslations('Nutrition')
@@ -169,7 +174,7 @@ export async function TagebuchAnsicht({
 
       <Zukunftshinweis datum={datum} />
 
-      {tab !== 'diary' && <AndererTab tab={tab} />}
+      {tab !== 'diary' && <AndererTab tab={tab} foodsStart={foodsStart} />}
       {tab === 'diary' && (
       <>
 
@@ -428,7 +433,13 @@ export async function TagebuchAnsicht({
  * `/v2/nutrition/suche` und wird von dort verlinkt statt hier doppelt
  * eingebaut.
  */
-function AndererTab({ tab }: { tab: string }) {
+function AndererTab({
+  tab, foodsStart,
+}: {
+  tab: string
+  /** G-66: die erste Trefferseite, serverseitig geladen. */
+  foodsStart?: NutritionFoodSearchPayload | null
+}) {
   const inhalt: Record<string, { titel: string; braucht: string }> = {
     insights: {
       titel: 'Insights',
@@ -470,18 +481,13 @@ function AndererTab({ tab }: { tab: string }) {
   }
 
   if (tab === 'foods') {
-    return (
-      <div style={{ marginTop: 16 }}>
-        <Card title="Food DB" sub="Lebensmittelsuche">
-          <p style={{ fontSize: 12.5, color: 'var(--fg-muted)', lineHeight: 1.55 }}>
-            Die Suche steht als eigene Seite.{' '}
-            <Link href={'/v2/nutrition/suche' as Route} className="v2-link">
-              Lebensmittel suchen
-            </Link>
-          </p>
-        </Card>
-      </div>
-    )
+    // G-66: der Tab in der Form des Entwurfs, mit echten Daten.
+    // `[read]` Bis G-66 stand hier ein Satz und ein Link. Der
+    // G-38-Bericht hatte das begruendet („die Vorlage hat zwoelf feste
+    // Zeilen, die Umsetzung eine echte BLS-Suche") — das war richtig,
+    // solange die Suche die einzige Form war. Jetzt hat der Tab die
+    // Form des Entwurfs UND die echte Suche dahinter.
+    return <NutritionFoodsTab start={foodsStart ?? null} />
   }
 
   const t = inhalt[tab]
