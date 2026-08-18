@@ -99,8 +99,102 @@ Stand: 2026-08-17
 
 [read] Ein Bewertungssystem wurde nicht gebaut. Der Katalog sagt spaeter, was gemessen wurde und welche Bereiche gelten; er sagt nicht, ob ein Nutzer etwas tun soll.
 
+## C-70 neu: Masterlist aus LOINC
+
+Stand: 2026-08-18
+
+[cmd] Datendatei angelegt: `supabase/_pipeline/daten/biomarker-loinc-masterlist.json`.
+
+[cmd] Die bisherige Datei `supabase/_pipeline/daten/biomarker-katalog.json` bleibt unveraendert. Sie ist die angereicherte 122er-Teilmenge mit Referenzbereich-Kandidaten; die neue LOINC-Datei ist die breite Import-Masterlist.
+
+[cmd] LOINC 2.82 liegt lokal unter `docs/ssot/daten/Loinc_2.82/`, inklusive `LoincLicense_5.8.txt`.
+
+[cmd] `LoincTable/Loinc.csv`: 109.325 Codes insgesamt, 97.314 aktiv. Nach `CLASSTYPE`: 60.009 Labor, 24.999 Klinisch, 503 Anhang, 11.803 Umfrage.
+
+[cmd] `COMMON_TEST_RANK` ist bei 19.644 aktiven Codes belegt.
+
+[cmd] Linguistic Variants: `deDE15LinguisticVariant.csv` und `deAT24LinguisticVariant.csv` vorhanden; keine thailaendische Sprachvariantendatei gefunden.
+
+## Wie der Zuschnitt zustande kam
+
+[cmd] Gemessene Alternativen, jeweils aktiv, `CLASSTYPE` 1 oder 2, mit `COMMON_TEST_RANK`:
+
+| Zuschnitt | Zeilen | Labor | Klinisch | UCUM-Einheit | Definition |
+|---|---:|---:|---:|---:|---:|
+| Rank <= 2.000 | 1.964 | 1.834 | 130 | 1.144 | 233 |
+| Rank <= 5.000 | 4.911 | 4.595 | 316 | 2.776 | 523 |
+| Rank <= 10.000 | 9.834 | 9.134 | 700 | 5.492 | 921 |
+| Alle gerankten CLASSTYPE 1/2 | 19.582 | 18.543 | 1.039 | 11.344 | 1.482 |
+| Alle gerankten CLASSTYPE 1/2 nach Domaenenausschluss | 11.676 | 11.232 | 444 | 8.267 | 823 |
+
+[cmd] Gewaehlter Zuschnitt: aktive LOINC-Codes mit `CLASSTYPE` 1 oder 2 und belegtem `COMMON_TEST_RANK`; kein Top-2000-Cap.
+
+[cmd] Ausgeschlossen wurden Klassen-Segmente fuer Radiologie/Imaging, Mikrobiologie-Einzelkeime, Antibiotika-Suszeptibilitaet, Allergietests, Frageboegen, Dokumenten-Ontologie, Genetik/Molekularpathologie, HLA, Pathologie/Zytologie, Admin-/Geraete-/Order-Klassen, Public-Health- und andere Nicht-Messwert-Domaenen.
+
+[cmd] Therapeutic Drug/Toxicology (`DRUG/TOX`, 2.903 Zeilen) bleibt enthalten. Begruendung: reale Analyseberichte koennen Medikamentenspiegel oder Toxikologie enthalten; die spaetere Healthcheck-Anzeige kann enger filtern, der Importkatalog sollte diese Werte nicht verlieren.
+
+[cmd] Ergebnisdatei: 11.676 Eintraege. Davon 11.232 Labor, 444 klinisch; 8.267 mit UCUM-Beispieleinheit, 823 mit Definition, 11.268 mit Consumer Name, 4.593 mit deutschem LOINC-Namen, 4.137 mit Panelzuordnung.
+
+[cmd] Groesste Klassen im Zuschnitt: `CHEM` 3.717, `DRUG/TOX` 2.903, `HEM/BC` 985, `SERO` 897, `CHAL` 695, `COAG` 467, `CELLMARK` 349, `UA` 338.
+
+[cmd] Fuenf Stichproben sind enthalten:
+
+| Art | LOINC | Name | Einheit | Deutscher Name |
+|---|---|---|---|---|
+| Blutwert | `718-7` | Hemoglobin [Mass/volume] in Blood | g/dL | Haemoglobin [Masse/Volumen] in Blut |
+| Urinwert | `5804-0` | Protein [Mass/volume] in Urine by Test strip | mg/dL | Protein [Masse/Volumen] in Urin mittels Teststreifen |
+| Vitalzeichen | `8867-4` | Heart rate | {beats}/min;{counts}/min | Herzfrequenz |
+| Tumormarker | `2039-6` | Carcinoembryonic Ag [Mass/volume] in Serum or Plasma | ng/mL | Carcinoembryonales Antigen [Masse/Volumen] in Serum oder Plasma |
+| Stuhlwert | `38445-3` | Calprotectin [Mass/mass] in Stool | ug/g | Calprotectin [Masse/Masse] in Stuhl |
+
+[annahme] Der Zuschnitt ist fuer Import robuster als fuer Anzeige. Die Anzeige filtert spaeter nach gelieferten Werten, Panel und Produktentscheidung; der Katalog darf deshalb breiter sein als eine sichtbare Healthcheck-Liste.
+
+## Was LOINC liefert und was nicht
+
+[cmd] LOINC liefert fuer jeden Eintrag den Code, Status, Komponentenname, Langname, Kurzname, Display Name, Klasse, `CLASSTYPE`, Ranking, System, Property, Scale, Time Aspect, Methode, Beispiel-Einheiten, Related Names und teilweise Definitionen.
+
+[cmd] Der Consumer Name steht in `Loinc.csv` im Zuschnitt nicht sinnvoll belegt, aber `AccessoryFiles/ConsumerName/ConsumerName.csv` liefert fuer 11.268 der 11.676 gewaehlten Eintraege einen Consumer Name.
+
+[cmd] Deutsche Namen kommen aus `deDE15LinguisticVariant.csv`; 4.593 der 11.676 gewaehlten Eintraege haben dort mindestens Komponente, Langname oder Display Name.
+
+[cmd] Panelzuordnungen kommen aus `AccessoryFiles/PanelsAndForms/PanelsAndForms.csv`; 4.137 der 11.676 gewaehlten Eintraege haben mindestens eine Panelbeziehung.
+
+[cmd] LOINC liefert keine Normbereiche. Jeder Eintrag in der neuen Datei hat deshalb `reference_ranges.status = not_in_loinc`.
+
+[cmd] Vier gewaehlte Eintraege tragen `EXTERNAL_COPYRIGHT_NOTICE` direkt oder ueber die Paneldaten: Braden Scale, FLACC-Schmerzskala und EarlyCDT-Lung-Cancer-Antibody-Interpretation. Diese duerfen nicht blind in eine eigene UI-/Katalogbeschreibung umformuliert werden.
+
+[read] Ein Wert ohne Normbereich ist trotzdem ein bekannter Test. Er kann importiert und angezeigt werden, aber nicht bewertet werden. Das entspricht der `NO_REFERENCE`-Logik bei den Naehrstoffen.
+
+## Was die Lizenz bedeutet
+
+[read] Die LOINC-Lizenz erlaubt Nutzung, Kopie und Verteilung ohne Lizenzgebuehren fuer kommerzielle und nicht-kommerzielle Zwecke, aber nicht zur Entwicklung eines konkurrierenden Identifikationsstandards.
+
+[read] Feldnamen und Feldinhalte der LOINC-Artefakte duerfen nicht veraendert werden. Lokale Zusatzfelder duerfen angehaengt werden.
+
+[read] Bei Einbindung von LOINC-Inhalten muss der LOINC-Hinweis mitgefuehrt werden. Die neue Datendatei fuehrt deshalb `license_notice_required` top-level mit.
+
+[read] Extrahierte LOINC-Information muss mit dem passenden LOINC-Identifier und einem LOINC-Anzeigenamen verbunden bleiben. Die Datei fuehrt deshalb `loinc_code` plus LOINC-Namen je Eintrag.
+
+[read] LOINC-Sprachuebersetzungen sind eigene Lizenzthemen. Wir nutzen nur die mitgelieferte deutsche Sprachvariante; eine thailaendische Variante liegt lokal nicht vor.
+
+[annahme] Fuer C-69 sollte die spaetere Tabelle mindestens LOINC-Version, Lizenzhinweis und einen Marker fuer externe Copyright-Hinweise fuehren. Sonst ist nicht erkennbar, welche Eintraege besondere Rechte tragen.
+
+## Wie Normbereiche spaeter andocken
+
+[cmd] Die Masterlist selbst enthaelt keine Normbereiche. Sie unterscheidet bewusst zwischen "Test bekannt" und "Normbereich bekannt".
+
+[cmd] Die vorhandene 122er-Datei enthaelt 464 Referenzbereich-Kandidaten mit Quellenstatus und bleibt als erste Andockquelle erhalten.
+
+[read] NHANES-Referenzintervalle und Laborhandbuecher gehoeren in einen eigenen Schritt, weil sie Alters-, Geschlechts-, Ethnie-, Methoden- und Laborabhaengigkeiten tragen.
+
+[annahme] C-69 sollte Normbereiche als eigene Kindstruktur modellieren: `loinc_code`, Range-Typ (`lab`, `optimal`, `critical`), Geschlecht, Alter, Population/Ethnie, Methode/Labor, Einheit, Unter-/Obergrenze, Quelle, Fundstelle, Quellenstatus.
+
+[annahme] Ein LOINC-Eintrag ohne Range bleibt importierbar und sichtbar. Die Bewertung muss dann explizit `no_reference_range` liefern, statt eine Null oder ein Normalurteil zu erfinden.
+
 ## Validierung
 
 [cmd] `node -e "JSON.parse(require('fs').readFileSync('supabase/_pipeline/daten/biomarker-katalog.json','utf8')); console.log('json ok')"`: Exit 0, `json ok`.
+
+[cmd] `node -e "JSON.parse(require('fs').readFileSync('supabase/_pipeline/daten/biomarker-loinc-masterlist.json','utf8')); console.log('json ok')"`: Exit 0, `json ok`.
 
 [cmd] `pnpm gate`: Exit 0; 8/8 Tasks erfolgreich, keine Fehler.

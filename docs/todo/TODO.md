@@ -2128,6 +2128,48 @@ Umsetzen angepasst werden.
   Sollgliederung · welcher Referenzbereich gilt, wo Quellen abweichen ·
   Labor- gegen Optimalbereich · die 36 ohne LOINC.
 
+  ### Stand 2026-08-18: Masterlist steht, Aufteilung noetig
+
+  `[cmd]` `daten/biomarker-loinc-masterlist.json` — **11.676 LOINC-Codes**
+  aus `Loinc_2.82`, abgeleitet und reproduzierbar.
+
+  | | |
+  |---|---|
+  | Labor / klinisch | 11.232 / 444 |
+  | mit UCUM-Einheit | 8.267 |
+  | mit Verbrauchername | 11.268 |
+  | **mit deutschem Namen** | **4.593** |
+  | mit Panelzuordnung | 4.137 |
+  | mit Definition | 823 |
+
+  `[cmd]` **Stichproben treffen quer durch alle Bereiche:** `718-7`
+  Haemoglobin · `2986-8` Testosteron · `2857-1` PSA · `8310-5`
+  Koerpertemperatur · `8867-4` Herzfrequenz · `8480-6` systolischer
+  Blutdruck · `50196-5` okkultes Blut im Stuhl · `5792-7` Glukose im
+  Urin.
+
+  **Der Kopf traegt die Auswahlregel, die Quellendateien und den
+  LOINC-Urhebervermerk**, und `reference_ranges` steht auf
+  `not_in_loinc` mit der Notiz, wie Bereiche spaeter andocken. `[read]`
+  **Der Platz ist da, bevor die Daten kommen.**
+
+  ### Zwei Groessenprobleme
+
+  `[cmd]` **Der Quellordner ist 924 MB** — seit `6708571` in
+  `.gitignore`, mit Bezugsquelle und Lizenzhinweis im Kommentar.
+
+  `[cmd]` **Die Masterlist ist 25,9 MB, der Pre-Commit-Hook lehnt ueber
+  10 MB ab.** `[read]` Die Grenze gibt es, seit eine Sicherung das Repo
+  aufgeblasen hat.
+
+  **Entschieden (Tom, 2026-08-18): aufteilen, nicht kuerzen.** `[read]`
+  Der Grund gegen das Wegwerfen von Feldern: **`system` sagt, ob ein Wert
+  aus Blut, Urin oder Stuhl kommt — genau das braucht der Import.** Was
+  heute unnoetig aussieht, ist morgen die Zuordnungshilfe.
+
+  `[cmd]` **Kein thailaendisches Sprachpaket in LOINC 2.82.** Die 18
+  Thai-Synonyme aus `biomarkerSynonyms.ts` bleiben der einzige Bestand.
+
 - [ ] **C-69: Medical-Schema** (verschoben hinter C-70). Befund aus
   G-36.
 
