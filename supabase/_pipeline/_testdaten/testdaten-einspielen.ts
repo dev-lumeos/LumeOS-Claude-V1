@@ -913,39 +913,94 @@ const supplementIntakeLogs: SupplementIntakeLogRow[] = [
   },
 ]
 
-const medicalLabReports: MedicalLabReportRow[] = [
-  {
-    id: '50000000-0000-0000-0000-000000000101',
-    userId: '10000000-0000-0000-0000-000000000101',
-    reportDate: '2026-08-18',
-    reportTime: '09:20',
-    labName: 'LumeOS Testlabor',
-    title: 'C-69 Beispielbefund',
-    source: 'seed',
-    notes: 'C-69 Testdaten: ein Laborbefund mit Laborbereich und Katalog-Fallback',
-  },
+type MedicalPanelMarker = {
+  loincCode: string
+  name: string
+  unit: string
+  labReferenceLow: number
+  labReferenceHigh: number
+  values: readonly [number, number, number, number]
+}
+
+const MEDICAL_PANEL_REPORTS = [
+  { id: '50000000-0000-0000-0000-000000000101', reportDate: '2026-02-18', title: 'C-76 Verlaufspanel 1' },
+  { id: '50000000-0000-0000-0000-000000000102', reportDate: '2026-04-18', title: 'C-76 Verlaufspanel 2' },
+  { id: '50000000-0000-0000-0000-000000000103', reportDate: '2026-06-18', title: 'C-76 Verlaufspanel 3' },
+  { id: '50000000-0000-0000-0000-000000000104', reportDate: '2026-08-18', title: 'C-76 Verlaufspanel 4' },
+] as const
+
+const medicalPanelMarkers: MedicalPanelMarker[] = [
+  { loincCode: '2986-8', name: 'Total Testosterone', unit: 'ng/dL', labReferenceLow: 300, labReferenceHigh: 1000, values: [580, 650, 700, 712] },
+  { loincCode: '1558-6', name: 'Glucose (fasting)', unit: 'mg/dL', labReferenceLow: 70, labReferenceHigh: 99, values: [88, 94, 99, 102] },
+  { loincCode: '4548-4', name: 'HbA1c', unit: '%', labReferenceLow: 4.0, labReferenceHigh: 5.7, values: [5.2, 5.3, 5.4, 5.4] },
+  { loincCode: '2991-8', name: 'Free Testosterone', unit: 'ng/dL', labReferenceLow: 9, labReferenceHigh: 30, values: [12, 15.5, 18, 18.4] },
+  { loincCode: '2243-4', name: 'Estradiol (sens.)', unit: 'pg/mL', labReferenceLow: 10, labReferenceHigh: 40, values: [22, 32, 27, 26] },
+  { loincCode: '14635-7', name: 'Vitamin D (25-OH)', unit: 'ng/mL', labReferenceLow: 30, labReferenceHigh: 100, values: [22, 36, 46, 48] },
+  { loincCode: '4544-3', name: 'Hematocrit', unit: '%', labReferenceLow: 39, labReferenceHigh: 50, values: [44, 45, 47, 48] },
+  { loincCode: '13457-7', name: 'LDL Cholesterol', unit: 'mg/dL', labReferenceLow: 0, labReferenceHigh: 130, values: [118, 108, 102, 102] },
+  { loincCode: '2276-4', name: 'Ferritin', unit: 'ng/mL', labReferenceLow: 12, labReferenceHigh: 300, values: [88, 118, 138, 142] },
+  { loincCode: '30522-7', name: 'hs-CRP', unit: 'mg/L', labReferenceLow: 0, labReferenceHigh: 3.0, values: [0.7, 0.5, 0.6, 0.6] },
+  { loincCode: '1884-6', name: 'ApoB', unit: 'mg/dL', labReferenceLow: 0, labReferenceHigh: 130, values: [104, 94, 88, 88] },
+  { loincCode: '20448-7', name: 'Insulin (fasting)', unit: 'µIU/mL', labReferenceLow: 2.6, labReferenceHigh: 24.9, values: [5.2, 6.2, 7.1, 7.4] },
+  { loincCode: '1742-6', name: 'ALT', unit: 'U/L', labReferenceLow: 0, labReferenceHigh: 40, values: [24, 27, 28, 28] },
+  { loincCode: '718-7', name: 'Hemoglobin', unit: 'g/dL', labReferenceLow: 13.5, labReferenceHigh: 17.5, values: [15.0, 15.5, 15.8, 15.8] },
+  { loincCode: '2160-0', name: 'Creatinine', unit: 'mg/dL', labReferenceLow: 0.7, labReferenceHigh: 1.3, values: [1.05, 1.10, 1.13, 1.14] },
+  { loincCode: '3016-3', name: 'TSH', unit: 'mIU/L', labReferenceLow: 0.4, labReferenceHigh: 4.5, values: [1.9, 1.7, 1.9, 1.8] },
+  { loincCode: '2857-1', name: 'PSA', unit: 'ng/mL', labReferenceLow: 0, labReferenceHigh: 2.5, values: [0.7, 0.8, 0.9, 0.9] },
+  { loincCode: '2085-9', name: 'HDL Cholesterol', unit: 'mg/dL', labReferenceLow: 40, labReferenceHigh: 100, values: [48, 54, 57, 58] },
+  { loincCode: '2571-8', name: 'Triglycerides', unit: 'mg/dL', labReferenceLow: 0, labReferenceHigh: 150, values: [102, 90, 80, 78] },
+  { loincCode: '1920-8', name: 'AST', unit: 'U/L', labReferenceLow: 0, labReferenceHigh: 40, values: [20, 22, 23, 22] },
+  { loincCode: '3051-0', name: 'Free T3', unit: 'pg/mL', labReferenceLow: 2.3, labReferenceHigh: 4.2, values: [3.4, 3.2, 3.1, 3.1] },
+  { loincCode: '2484-4', name: 'IGF-1', unit: 'ng/mL', labReferenceLow: 115, labReferenceHigh: 355, values: [180, 240, 282, 286] },
+  { loincCode: '2143-6', name: 'Cortisol (AM)', unit: 'µg/dL', labReferenceLow: 6, labReferenceHigh: 23, values: [14.8, 15.6, 16.0, 16.2] },
+  { loincCode: '2324-2', name: 'GGT', unit: 'U/L', labReferenceLow: 0, labReferenceHigh: 60, values: [18, 21, 23, 24] },
+  { loincCode: '13967-5', name: 'SHBG', unit: 'nmol/L', labReferenceLow: 10, labReferenceHigh: 57, values: [36, 34, 32, 32] },
+  { loincCode: '2132-9', name: 'Vitamin B12', unit: 'pg/mL', labReferenceLow: 200, labReferenceHigh: 900, values: [480, 560, 600, 612] },
+  { loincCode: '2601-3', name: 'Magnesium (RBC)', unit: 'mg/dL', labReferenceLow: 4.2, labReferenceHigh: 6.8, values: [5.2, 5.6, 5.8, 5.9] },
+  { loincCode: '10501-5', name: 'LH', unit: 'IU/L', labReferenceLow: 1.7, labReferenceHigh: 8.6, values: [4.0, 4.3, 4.1, 4.2] },
+  { loincCode: '13965-9', name: 'Homocysteine', unit: 'µmol/L', labReferenceLow: 5, labReferenceHigh: 15, values: [11.2, 10.4, 9.9, 9.8] },
+  { loincCode: '2093-3', name: 'Total Cholesterol', unit: 'mg/dL', labReferenceLow: 0, labReferenceHigh: 200, values: [192, 186, 185, 184] },
+  { loincCode: '2842-3', name: 'Prolactin', unit: 'ng/mL', labReferenceLow: 2, labReferenceHigh: 18, values: [8.8, 9.2, 9.3, 9.4] },
+  { loincCode: '5763-8', name: 'Zinc (serum)', unit: 'µg/dL', labReferenceLow: 70, labReferenceHigh: 120, values: [84, 91, 95, 96] },
+  { loincCode: '3024-7', name: 'Free T4', unit: 'ng/dL', labReferenceLow: 0.8, labReferenceHigh: 1.8, values: [1.3, 1.3, 1.3, 1.3] },
+  { loincCode: '15067-2', name: 'FSH', unit: 'IU/L', labReferenceLow: 1.5, labReferenceHigh: 12.4, values: [4.0, 3.9, 3.8, 3.8] },
 ]
 
-const medicalLabValues: MedicalLabValueRow[] = [
-  {
-    reportId: '50000000-0000-0000-0000-000000000101',
-    userId: '10000000-0000-0000-0000-000000000101',
-    loincCode: '718-7',
-    markerNameSnapshot: 'Hemoglobin',
-    unitSnapshot: 'g/dL',
-    valueNumeric: 15.2,
+const medicalLabReports: MedicalLabReportRow[] = MEDICAL_PANEL_REPORTS.map(report => ({
+  id: report.id,
+  userId: '10000000-0000-0000-0000-000000000101',
+  reportDate: report.reportDate,
+  reportTime: '09:20',
+  labName: 'LumeOS Testlabor',
+  title: report.title,
+  source: 'seed',
+  notes: 'C-76 Testdaten: Verlaufspanel mit 34 Markern aus der Medical-Vorlage',
+}))
+
+const medicalPanelValues: MedicalLabValueRow[] = medicalLabReports.flatMap((report, reportIndex) =>
+  medicalPanelMarkers.map(marker => ({
+    reportId: report.id,
+    userId: report.userId,
+    loincCode: marker.loincCode,
+    markerNameSnapshot: marker.name,
+    unitSnapshot: marker.unit,
+    valueNumeric: marker.values[reportIndex],
     valueText: null,
     valueOperator: '=',
-    labReferenceLow: 13.8,
-    labReferenceHigh: 17.2,
-    labReferenceText: null,
-    labReferenceUnit: 'g/dL',
-    labReferenceSource: 'LumeOS Testlabor Befunddruck',
+    labReferenceLow: marker.labReferenceLow,
+    labReferenceHigh: marker.labReferenceHigh,
+    labReferenceText: `${marker.labReferenceLow}-${marker.labReferenceHigh} ${marker.unit}`,
+    labReferenceUnit: marker.unit,
+    labReferenceSource: 'LumeOS Testlabor Verlaufspanel',
     source: 'seed',
-    notes: 'Labor-eigener Bereich gewinnt vor Katalog-Fallback',
-  },
+    notes: 'C-76 Testdaten: wiederholter Marker fuer Zeitreihe und Sparkline',
+  })),
+)
+
+const medicalLabValues: MedicalLabValueRow[] = [
+  ...medicalPanelValues,
   {
-    reportId: '50000000-0000-0000-0000-000000000101',
+    reportId: '50000000-0000-0000-0000-000000000104',
     userId: '10000000-0000-0000-0000-000000000101',
     loincCode: '17861-6',
     markerNameSnapshot: 'Calcium',
@@ -959,24 +1014,7 @@ const medicalLabValues: MedicalLabValueRow[] = [
     labReferenceUnit: null,
     labReferenceSource: null,
     source: 'seed',
-    notes: 'Kein Laborbereich im Befund; Lesefunktion nutzt Katalog-Fallback',
-  },
-  {
-    reportId: '50000000-0000-0000-0000-000000000101',
-    userId: '10000000-0000-0000-0000-000000000101',
-    loincCode: '2345-7',
-    markerNameSnapshot: 'Glucose',
-    unitSnapshot: 'mg/dL',
-    valueNumeric: 102,
-    valueText: null,
-    valueOperator: '=',
-    labReferenceLow: 70,
-    labReferenceHigh: 99,
-    labReferenceText: null,
-    labReferenceUnit: 'mg/dL',
-    labReferenceSource: 'LumeOS Testlabor Befunddruck',
-    source: 'seed',
-    notes: 'Wert ausserhalb des labor-eigenen Bereichs fuer spaetere Anzeigepruefung',
+    notes: 'C-69 Testdaten: kein Laborbereich im Befund; Lesefunktion nutzt Katalog-Fallback',
   },
 ]
 

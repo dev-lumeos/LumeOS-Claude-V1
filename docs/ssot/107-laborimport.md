@@ -67,3 +67,51 @@
 [read] Keine Dateiverarbeitung, kein OCR, keine medizinische Bewertung, keine Einheitenumrechnung.
 
 [annahme] Thai-Laborformate brauchen eine eigene Faltung oder eine nicht-lateinische Suchnormalisierung. Die 18 aktiven Thai-Aliase aus dem Vorgaengerrepo bleiben bis dahin dokumentiert; 17 scheitern direkt an der aktuellen lateinischen Faltung.
+
+---
+
+# C-76/C-74/C-79/C-80 Medical-Datenrest
+
+**Stand:** 2026-08-18
+
+## Was die Seed-Befunde enthalten
+
+[cmd] `module-medical-data.jsx` enthaelt 49 Biomarker-Zeilen in `BIOMARKERS`. Die aktuelle Vorlagen-Reportzeile nennt aber `markers: 34`; der Seed folgt dieser Reportzahl, nicht der hoeheren Gesamtliste.
+
+[cmd] Der 34er-Seed nutzt die 34 hoechstpriorisierten Vorlagenmarker mit vorhandenem LOINC-Code im lokalen Katalog. `HOMA-IR` und `Reverse T3` haben keinen LOINC-Code in der Vorlage; `eGFR` nennt dort `33914-3`, dieser Code ist im 11.676er-Katalog nicht enthalten. Gefunden wurden nur formelspezifische Alternativen wie `48642-3` und `62238-1`; sie wurden nicht still als Ersatz gesetzt.
+
+[cmd] Wegwerf-Datenbank `lumeos_c76_medical_seed`: Kettenlauf 61 Schritte, Abschlusspruefung gruen. Danach Testdaten: 5 Medical-Befunde, 140 Medical-Messwerte; `testdaten-pruefen.ts` Exit 0.
+
+[cmd] Live nach Einspielen und Kopie ueber `eigenes-konto-fuellen.sql`: `dev@lumeos.app` und `tom.seed@example.com` tragen je 5 Befunde und 140 Werte, Zeitraum `2026-02-18` bis `2026-08-19`. `test-user@lumeos.local` traegt 0 Befunde und 0 Werte.
+
+[cmd] Ein Verlauf ist belegt: Glukose `1558-6` auf `dev@lumeos.app` steigt ueber die vier Verlaufspanel-Befunde `88 -> 94 -> 99 -> 102 mg/dL`; HbA1c steigt `5,2 -> 5,3 -> 5,4 -> 5,4 %`. Die drei Importzustaende sind auf `dev@lumeos.app` je einmal vorhanden: `exact`, `ambiguous`, `unknown`.
+
+[annahme] Der Verlauf ist ein UI-Testbestand, kein physiologisch mit Ernaehrung, Training oder Gewicht korrespondierendes Modell. Innerhalb der Laborwerte ist er konsistent genug fuer Tabelle, Sparkline und Trenddarstellung.
+
+## Warum die 54 keine Quelle tragen
+
+[cmd] `medical.biomarker_reference_ranges`: 464 Zeilen gesamt, 54 numerisch, 410 nur Text. Alle 54 numerischen Zeilen tragen `source_status = 'unbelegt_vorgaenger_seed'`, `decision_status = 'do_not_import_without_source'`, Quelle `predecessor seed without medical citation`.
+
+[cmd] Kein LOINC-Code hat heute Labor- und Optimalbereich beide numerisch belegt: `0` Codes mit numerischem `lab` und numerischem `optimal`.
+
+[read] Damit ist der Ausschluss richtig. Es fehlt nicht nur ein Herkunftsvermerk an belastbaren Zahlen; die Zahlen stammen aus dem Vorgaenger-Seed ohne medizinische Fundstelle. Sie duerfen weiter nicht als Normbereich in `lab_result_values_read` durchgereicht werden.
+
+## Was aus den 152 wird
+
+[cmd] `biomarker-aliases.json`: 457 Legacy-Textpaare, davon 454 aktiv. Importiert sind 286 eindeutige Aliaspaare plus 6 bewusst mehrdeutige Aliaszeilen. 152 bleiben draussen.
+
+[cmd] Die 152 teilen sich auf: 115 `target_without_loinc_code`, 18 `target_loinc_not_in_masterlist`, 17 `folding_function_latin_only`, 2 `ambiguous_without_system_context`.
+
+[annahme] Das sind drei verschiedene Arbeiten: Die 115 brauchen Kuration gegen konkrete LOINC-Ziele; die 18 zeigen Luecken oder bewusste Schnitte im aktuellen Masterlist-Zuschnitt; die 17 Thai-Faelle brauchen eine nicht-lateinische Normalisierung. Nur die 2 Glukose-Faelle sind echte fachliche Mehrdeutigkeit ohne Systemkontext.
+
+## Was NHANES kosten wuerde
+
+[cmd] Die heutige Struktur von `medical.biomarker_reference_ranges` traegt `sex`, `age_min_years`, `age_max_years`, `population`, `min_value`, `max_value`, `unit`, `source` und `source_path`. Sie kann geschlechts-, alters- und populationsbezogene NHANES-Zeilen aufnehmen, ohne das Schema zu erweitern.
+
+[annahme] Ein NHANES-Import waere kein kleiner Nachtrag: Er braucht Mapping von 38 NHANES-Tests auf LOINC, Entscheidung zur Population/Ethnie-Anzeige, Quellenpfade je Zeile und eine Regel, ob NHANES als Laborbereich, populationsbezogener Referenzbereich oder separater Fallback neben Laborbereichen gilt. Der Aufwand liegt eher bei Kurations- und Entscheidungsarbeit als bei der Tabellenstruktur.
+
+## C-80: Schema-Lesbarkeit
+
+[read] `142_laborimport_matching.sql` erweitert `medical.lab_result_values` bewusst um `raw_marker_name`, `match_status`, `match_candidates` und `match_source`.
+
+[cmd] Kleinster Eingriff: `140_medical_schema.sql` verweist im Kopf jetzt auf Schritt `142`, statt die Spalten nach `140` umzuziehen. Die Trennung bleibt in der Kette erhalten, aber wer das vollstaendige Importschema liest, sieht den Anschluss.

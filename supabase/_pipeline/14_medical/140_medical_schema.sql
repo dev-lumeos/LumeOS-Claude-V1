@@ -8,6 +8,10 @@
 --   [read] SPEC_06 beschreibt acht Tabellen. C-69 baut nur Katalog,
 --          Befund und Messwert; Insights, Reports, Symptome,
 --          Medikamente, Alerts und Scores bleiben Folgeschritte.
+--   [read] Schritt 142 ergaenzt die Import-Matching-Spalten
+--          raw_marker_name, match_status, match_candidates und
+--          match_source auf lab_result_values. Wer das vollstaendige
+--          Importschema liest, braucht 140 und 142 zusammen.
 --   [read] UserMedicalInsight und UserHealthReport stehen in SPEC_02,
 --          aber nicht in SPEC_06. Der Widerspruch wird nicht aufgeloest.
 --   [cmd]  Im aktuellen Repo existiert vor diesem Schritt kein

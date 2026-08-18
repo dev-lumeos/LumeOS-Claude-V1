@@ -170,8 +170,8 @@ if (MODE === 'clean') {
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
   if (medicalRanges !== 464) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 464`)
   if (medicalAliases !== 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet 292`)
-  if (medicalReports !== 2) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 2`)
-  if (medicalValues !== 6) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 6`)
+  if (medicalReports !== 5) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 5`)
+  if (medicalValues !== 140) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 140`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
@@ -598,17 +598,61 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM medical.lab_result_values_read('${tom}'::uuid, '50000000-0000-0000-0000-000000000101'::uuid)
+    FROM (
+      SELECT
+        count(DISTINCT r.id) AS reports,
+        count(DISTINCT v.loinc_code) AS marker,
+        min(r.report_date) AS von,
+        max(r.report_date) AS bis
+      FROM medical.lab_reports r
+      JOIN medical.lab_result_values v ON v.report_id = r.id
+      WHERE r.user_id = '${tom}'::uuid
+        AND r.title LIKE 'C-76 Verlaufspanel%'
+        AND v.loinc_code <> '17861-6'
+    ) p
+    WHERE reports = 4
+      AND marker = 34
+      AND von = DATE '2026-02-18'
+      AND bis = DATE '2026-08-18';`)) {
+    errors.push('Fall Medical Verlaufspanel: vier Befunde mit 34 wiederholten Markern fehlen')
+  }
+  if (!hasRows(`
+    WITH glucose AS (
+      SELECT r.report_date, v.value_numeric
+      FROM medical.lab_reports r
+      JOIN medical.lab_result_values v ON v.report_id = r.id
+      WHERE r.user_id = '${tom}'::uuid
+        AND v.loinc_code = '1558-6'
+    ),
+    hba1c AS (
+      SELECT r.report_date, v.value_numeric
+      FROM medical.lab_reports r
+      JOIN medical.lab_result_values v ON v.report_id = r.id
+      WHERE r.user_id = '${tom}'::uuid
+        AND v.loinc_code = '4548-4'
+    )
+    SELECT 1
+    FROM glucose g1
+    JOIN glucose g2 ON g1.report_date = DATE '2026-02-18' AND g2.report_date = DATE '2026-08-18'
+    JOIN hba1c h1 ON h1.report_date = DATE '2026-02-18'
+    JOIN hba1c h2 ON h2.report_date = DATE '2026-08-18'
+    WHERE g2.value_numeric > g1.value_numeric
+      AND h2.value_numeric >= h1.value_numeric;`)) {
+    errors.push('Fall Medical Verlauf: Glukose/HbA1c zeigen keine erkennbare Tendenz')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM medical.lab_result_values_read('${tom}'::uuid, '50000000-0000-0000-0000-000000000104'::uuid)
     WHERE loinc_code = '718-7'
       AND reference_source = 'lab_report'
-      AND reference_low = 13.8
-      AND reference_high = 17.2
+      AND reference_low = 13.5
+      AND reference_high = 17.5
       AND reference_unit = 'g/dL';`)) {
     errors.push('Fall Medical Laborbereich: labor-eigener Referenzbereich gewinnt nicht')
   }
   if (!hasRows(`
     SELECT 1
-    FROM medical.lab_result_values_read('${tom}'::uuid, '50000000-0000-0000-0000-000000000101'::uuid)
+    FROM medical.lab_result_values_read('${tom}'::uuid, '50000000-0000-0000-0000-000000000104'::uuid)
     WHERE loinc_code = '17861-6'
       AND reference_source = 'catalog_fallback'
       AND reference_text = '8.5–10.5 mg/dL';`)) {

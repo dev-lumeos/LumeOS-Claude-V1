@@ -147,9 +147,9 @@
     "user": "Tom Miller",
     "email": "tom.seed@example.com",
     "user_id": "10000000-0000-0000-0000-000000000101",
-    "date": "2026-08-18",
-    "case": "Medical-Laborbefund mit Laborbereich und Katalog-Fallback",
-    "expected": "medical.lab_reports enthaelt einen Befund mit drei LOINC-Werten. Hemoglobin nutzt den labor-eigenen Bereich; Calcium hat keinen Laborbereich und faellt ueber medical.lab_result_values_read auf den Katalogbereich zurueck."
+    "date": "2026-02-18 bis 2026-08-18",
+    "case": "Medical-Laborverlauf mit 34 Markern",
+    "expected": "medical.lab_reports enthaelt vier Verlaufspanel-Befunde mit denselben 34 LOINC-Markern. Glukose und HbA1c zeigen eine erkennbare Tendenz; Hemoglobin nutzt den labor-eigenen Bereich. Calcium liegt als zusaetzlicher Fallback-Fall ohne Laborbereich im neuesten Befund."
   },
   {
     "user": "Tom Miller",
