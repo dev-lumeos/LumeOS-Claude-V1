@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `912828a` auf `dev`.
+**Stand:** 2026-08-18, Anker `28bf841` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -184,7 +184,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-25** | Training an echte Daten anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
 | **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
-| **C-83** | Der Uebungskatalog aus der XLSX anreichern |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
@@ -198,6 +197,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-84** | Die elf Panels gibt es in keiner Quelle |  |
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
 | **G-63** | Vier Felder liegen ungenutzt |  |
+| **C-86** | 8 mehrdeutige Uebungen und 1 ohne DB-Namen |  |
 
 ---
 
@@ -1710,55 +1710,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **C-83: Der Uebungskatalog aus der XLSX anreichern** (neu
-  2026-08-18). **Tom, 2026-08-18:** *„Zu den Exercises gibt's eine
-  XLS-Datei mit Beschreibungen."*
-
-  ### Die Datei liegt im Repo, nicht im Vorgaengerrepo
-
-  `[cmd]` `media/exercises/katalog/1500+ exercise data.xlsx`, **328 KB,
-  2.343 Zeilen**, sieben Spalten:
-
-  | Spalte | gefuellt |
-  |---|---|
-  | `Exercise` | 2.343 (100 %) |
-  | **`Exercise Instructions (step by step)`** | 1.748 (75 %) |
-  | **`Exercise Tips`** | 1.744 (74 %) |
-  | **`Primary Activating Muscles`** | 1.743 |
-  | **`Secondary Activating Muscles`** | 1.743 |
-  | `Equipment` | 1.645 |
-  | `Categories` | 1.520 |
-
-  `[cmd]` **1.878 unterschiedliche Uebungen ohne Geschlechtssuffix** —
-  gegen **1.416 in `training.exercises`. 462 Differenz, Ursache
-  ungeklaert.**
-
-  ### Warum es zaehlt
-
-  `[read]` **Die Muskeln stehen als Fliesstext mit beiden Namen:**
-  *„Chest (Pectoralis major), Shoulders (Deltoids), Triceps (Triceps
-  brachii)"* — **Alltagsname und Fachname.** Das ist die Vorlage fuer
-  zwei Filterachsen **und fuer die deutschen Namen, die dem Katalog
-  fehlen.**
-
-  `[cmd]` **Die Kategorien decken sich fast:** Free Weights 554/546,
-  Bodyweight 547/529, Resistance 397/341 — **plus 22 als `bodyweight`
-  klein geschrieben**, eine Dublette, die nicht mitgekommen ist.
-
-  `[cmd]` **Die Geraete sind brauchbar, aber ungeputzt:** `None` 402
-  **und** `None (Bodyweight)` 68 sind dasselbe, `Ski Ergometer ` hat ein
-  Leerzeichen am Ende.
-
-  ### Was zu tun ist
-
-  **Erst messen:** Wie viele der 1.416 finden ihre Zeile? Woran
-  scheitern die uebrigen? **Was sind die 462, die nur in der Datei
-  stehen?**
-
-  **Dann anreichern**, wo es eindeutig ist — `[cmd]` `instructions` und
-  `tips` sind bereits Spalten in `training.exercises`. `[read]` **Aber
-  `instructions` ist auf 1.416 von 1.416 gefuellt** — **pruefen, ob der
-  Bestand aus derselben Quelle stammt oder ein anderer ist.**
 
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
@@ -2082,3 +2033,18 @@ Umsetzen angepasst werden.
   `[read]` **Die Attrappe zeigt sie nicht**, deshalb wurden sie
   weggelassen — richtig nach der Regel. **Aber `fasting_status` aendert
   die Beurteilung eines Glukosewerts**, und das gehoert entschieden.
+
+- [ ] **C-86: 8 mehrdeutige Uebungen und 1 ohne DB-Namen** (neu
+  2026-08-18). Rest aus C-83.
+
+  `[cmd]` **8 Matches waren mehrdeutig und wurden bewusst ausgelassen**,
+  **1 Name findet keine Entsprechung** — *MAJOR GROUPS Muscle body*.
+
+  `[read]` **Richtig so** — eine mehrdeutige Zuordnung still zu waehlen
+  waere schlimmer als keine. **Aber neun Uebungen ohne Anreicherung sind
+  neun ohne Muskelangaben in der Suche.**
+
+  `[cmd]` **Und die 462 aus der XLSX, die keine Uebung haben, sind noch
+  nicht eingeordnet** — 1.878 in der Datei gegen 1.416 in der Datenbank.
+  `[read]` **Absichtlich weggelassen oder beim Import verloren — das
+  sind zwei verschiedene Antworten.**

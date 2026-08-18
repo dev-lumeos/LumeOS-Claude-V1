@@ -4421,6 +4421,98 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `missing_weight` beim Protein und `missing_body_weight` beim
   Wasserziel.
 
+- [x] **C-83: Der Uebungskatalog aus der XLSX anreichern** (neu
+  2026-08-18). **Tom, 2026-08-18:** *„Zu den Exercises gibt's eine
+  XLS-Datei mit Beschreibungen."*
+
+  ### Die Datei liegt im Repo, nicht im Vorgaengerrepo
+
+  `[cmd]` `media/exercises/katalog/1500+ exercise data.xlsx`, **328 KB,
+  2.343 Zeilen**, sieben Spalten:
+
+  | Spalte | gefuellt |
+  |---|---|
+  | `Exercise` | 2.343 (100 %) |
+  | **`Exercise Instructions (step by step)`** | 1.748 (75 %) |
+  | **`Exercise Tips`** | 1.744 (74 %) |
+  | **`Primary Activating Muscles`** | 1.743 |
+  | **`Secondary Activating Muscles`** | 1.743 |
+  | `Equipment` | 1.645 |
+  | `Categories` | 1.520 |
+
+  `[cmd]` **1.878 unterschiedliche Uebungen ohne Geschlechtssuffix** —
+  gegen **1.416 in `training.exercises`. 462 Differenz, Ursache
+  ungeklaert.**
+
+  ### Warum es zaehlt
+
+  `[read]` **Die Muskeln stehen als Fliesstext mit beiden Namen:**
+  *„Chest (Pectoralis major), Shoulders (Deltoids), Triceps (Triceps
+  brachii)"* — **Alltagsname und Fachname.** Das ist die Vorlage fuer
+  zwei Filterachsen **und fuer die deutschen Namen, die dem Katalog
+  fehlen.**
+
+  `[cmd]` **Die Kategorien decken sich fast:** Free Weights 554/546,
+  Bodyweight 547/529, Resistance 397/341 — **plus 22 als `bodyweight`
+  klein geschrieben**, eine Dublette, die nicht mitgekommen ist.
+
+  `[cmd]` **Die Geraete sind brauchbar, aber ungeputzt:** `None` 402
+  **und** `None (Bodyweight)` 68 sind dasselbe, `Ski Ergometer ` hat ein
+  Leerzeichen am Ende.
+
+  ### Was zu tun ist
+
+  **Erst messen:** Wie viele der 1.416 finden ihre Zeile? Woran
+  scheitern die uebrigen? **Was sind die 462, die nur in der Datei
+  stehen?**
+
+  **Dann anreichern**, wo es eindeutig ist — `[cmd]` `instructions` und
+  `tips` sind bereits Spalten in `training.exercises`. `[read]` **Aber
+  `instructions` ist auf 1.416 von 1.416 gefuellt** — **pruefen, ob der
+  Bestand aus derselben Quelle stammt oder ein anderer ist.**
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritt `109` —
+  `training.exercise_catalog_enrichment`, **1.407 Zeilen, 0 Waisen.**
+  Das Skript liest die XLSX **reproduzierbar**, statt einmalig zu
+  importieren.
+
+  | | |
+  |---|---|
+  | Uebungen geprueft | 1.416 |
+  | sichere Anreicherungen | **1.407** |
+  | mehrdeutig, bewusst ausgelassen | **8** |
+  | kein DB-Name | 1 (*MAJOR GROUPS Muscle body*) |
+  | `exercises` / `exercise_muscles` | **1.416 / 6.588, unveraendert** |
+
+  ### Die Frage des Auftrags ist beantwortet
+
+  `[cmd]` **`instructions_same_as_exercises` auf 1.406 von 1.407** —
+  **der Bestand stammt aus derselben Quelle.** `tips` ebenso auf 1.401.
+  `[read]` **Damit gab es nichts zu ergaenzen — und das ist jetzt
+  belegt statt vermutet.**
+
+  `[cmd]` **Alle fuenf Anreicherungsspalten sind vollstaendig gefuellt:**
+  `primary_activating_muscles`, `secondary_activating_muscles`,
+  `equipment_canonical`, `categories_canonical` — je 1.407 von 1.407.
+
+  ### Die Geraete sind geputzt
+
+  `[cmd]` **`None` 439** — die Dublette `None (Bodyweight)` ist
+  eingegangen. **`EZ Bar` statt `Ez Bar`**, `Ski Ergometer ` ohne
+  Leerzeichen. **85 bleiben leer.**
+
+  `[cmd]` **`match_status` fuehrt drei Zustaende:** `unique` 1.338,
+  `duplicate_identical` 62, `duplicate_one_filled` 7. `[read]` **Die 62
+  identischen Dubletten sind die `_Male`/`_Female`-Paare** — sie tragen
+  denselben Inhalt.
+
+  ### Was jetzt fuer die Uebungssuche dasteht
+
+  `[read]` **Die Muskeln stehen mit beiden Namen:** *„Chest (Pectoralis
+  major), Shoulders (Deltoids), Triceps (Triceps brachii)"* —
+  **Alltagsname und Fachname.** Das ist die Vorlage fuer zwei
+  Filterachsen und fuer deutsche Bezeichnungen.
+
 
 
 ## Erledigt am 2026-08-05
