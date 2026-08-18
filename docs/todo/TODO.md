@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `87d4ff9` auf `dev`.
+**Stand:** 2026-08-18, Anker `434f364` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -211,7 +211,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
 | **G-47** | Der Umriss fehlt in der Uebernahme |  |
-| **G-48** | Graue Teile heben sich nicht ab |  |
+| **G-54** | Koerperflaechen verschwinden im dunklen Theme |  |
 | **G-50** | `v2-g-cols-5` fehlt |  |
 | **C-75** | BSS und Voice sind Neubau |  |
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
@@ -2492,19 +2492,52 @@ Umsetzen angepasst werden.
   x≈724–1448. **Das erklaert, warum `hands` Pfade bei x=100 und x=1336
   hat.** Wer das anders aufteilt, verschiebt alles.
 
-- [ ] **G-48: Graue Teile heben sich nicht ab** (neu 2026-08-18). Befund
-  aus G-44.
+- [ ] **G-54: Koerperflaechen verschwinden im dunklen Theme** (neu
+  2026-08-18). **Fasst G-48 mit ein.**
 
-  `[cmd]` **Gemessen: Hintergrund gegen graues Teil unterscheidet sich um
-  0,012 Helligkeit** — in beiden Modi. **Praktisch unsichtbar, deshalb
-  wirkt die linke Hand abgetrennt.**
+  **Tom, 2026-08-18** zum Injections-Tab: *„Ich frag mich ja schon, was
+  der eine Stunde gemacht hat — da ist der alte Musclemap-Scheiss
+  drin."*
 
-  `[cmd]` Die Grundflaeche ist `--surface-2`, **und daran zu drehen wirkt
-  auf die ganze Oberflaeche.** `[read]` Deshalb gemeldet, nicht
-  entschieden — es ist eine Gestaltungsfrage fuer Tom.
+  ### Die Uebernahme ist exakt — das Theme ist das Problem
 
-  `[annahme]` Ein eigener Ton fuer nicht gemessene Koerperteile waere die
-  saubere Loesung, **aber das ist ein neuer Token.**
+  `[cmd]` **Nachgemessen: Vorlage und Umsetzung sind identisch.**
+  Derselbe Pfad, dasselbe `viewBox 0 0 100 120`,
+  `fill="var(--surface)"`, `stroke="var(--border)"`,
+  `strokeWidth="0.6"`.
+
+  `[cmd]` **Aber `--surface` gegen `--surface-2` unterscheidet sich um
+  0,012 Helligkeit** — in G-26 gemessen. **Im hellen Entwurf sichtbar,
+  im dunklen praktisch nicht.**
+
+  `[read]` **Dieselbe Ursache an drei Stellen:** die Silhouette im
+  Injections-Tab, die grauen Teile der Muskelkarte (*„deshalb wirkt die
+  linke Hand abgetrennt"*), und alles, was `--surface` auf `--surface-2`
+  zeichnet.
+
+  ### Was zu entscheiden ist
+
+  `[cmd]` **An `--surface-2` zu drehen wirkt auf die ganze
+  Oberflaeche** — deshalb wurde es in G-26 gemeldet statt entschieden.
+
+  `[annahme]` **Drei Wege:** ein eigener Token fuer Koerperflaechen ·
+  die Kontur staerker (`--fg-subtle` statt `--border`) · oder die
+  Flaeche selbst heller.
+
+  `[cmd]` **Der Entwurf ist fuer Hell gebaut** —
+  `apps/web/public/mockup/` benutzt `#f1f3f4` und `#374151` auf weissem
+  Grund. **Was dort funktioniert, muss im Dunkeln nicht funktionieren,
+  und das ist der Normalmodus dieser Anwendung.**
+
+  ### Warum es durchging
+
+  `[cmd]` Der G-45-Nachweis lautete *„16 Orte auf zwei Silhouetten,
+  Klick auf „Quad L" zeigt dessen Nadel (25G), Wegfilter rechnet 6 SubQ
+  + 10 IM = 16."*
+
+  `[read]` **Das prueft die Punkte, nicht den Koerper.** Ein
+  Bildschirmfoto neben die Vorlage haette es gezeigt — **es war im
+  Auftrag verlangt und ist im Bericht nicht erwaehnt.**
 
 - [ ] **G-50: `v2-g-cols-5` fehlt** (neu 2026-08-18). Befund aus G-42.
 
