@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `434f364` auf `dev`.
+**Stand:** 2026-08-18, Anker `f83453f` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 82 offen, 3 in Arbeit.
+`[cmd]` 80 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -189,7 +189,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-24** | JetBrains Mono laden |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
-| **G-49** | Die Liste fuehrt jeden Muskel, die Grafik verdichtet |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **G-27** | `v2-rec-grid-1135` und drei weitere Raster |  |
@@ -210,8 +209,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
-| **G-47** | Der Umriss fehlt in der Uebernahme |  |
-| **G-54** | Koerperflaechen verschwinden im dunklen Theme |  |
+| **G-55** | Die Koerperkarte fertigstellen — Recovery richtig |  |
 | **G-50** | `v2-g-cols-5` fehlt |  |
 | **C-75** | BSS und Voice sind Neubau |  |
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
@@ -1770,105 +1768,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-49: Die Liste fuehrt jeden Muskel, die Grafik verdichtet**
-  (neu 2026-08-18). **Toms Vorgabe.**
-
-  **Tom, 2026-08-18:** *„Die Grafik zeigt nur eine Uebersicht, ich sage
-  nicht, wir brauchen da jeden kleinsten Part. Aber unsere Liste muss
-  jeden einzelnen Muskel fuehren und bewerten. Fuer die Grafik fassen
-  wir die einzelnen Muskeln zusammen und legen dementsprechend dem
-  Total/Anzahl zusammenfassender Muskeln die Farbe."*
-
-  ### Die Zahlen
-
-  | | |
-  |---|---|
-  | `training.muscle_groups` | **107 Gruppen** in 7 Regionen |
-  | Karte `MUSCLES` | **15 faerbbare Flaechen** |
-
-  `[cmd]` Verteilung in der Datenbank: **legs 37 · arms 24 · back 17 ·
-  shoulders 10 · core 10 · chest 5.**
-
-  `[cmd]` **Die Datenbank kennt `Deltoids` und `Rear Deltoids`
-  getrennt — die Karte hat eine einzige Flaeche `deltoids`.** Ein
-  Push-Tag und ein Pull-Tag faerben heute denselben Schulterbereich.
-
-  ### Was daraus folgt
-
-  **Die Karte ist eine Ansicht, keine Datenquelle.**
-
-  1. **Die Liste bewertet alle 107** — einzeln, mit eigenem
-     Erholungswert.
-  2. **Die Flaeche bekommt den zusammengefassten Wert** der Muskeln, die
-     auf sie fallen. `[read]` Tom nennt es *„dem Total/Anzahl
-     zusammenfassender Muskeln die Farbe"* — **also ein Mittel, kein
-     Maximum.** Ob gewichtet, ist zu klaeren.
-  3. **Jede der 107 braucht ein Ziel.** Keine ohne Flaeche.
-  4. **Sechs Eintraege bekommen nie Farbe:** `head`, `hair`, `hands`,
-     `feet`, `ankles`, `knees` — **ausdruecklich als Nicht-Muskel
-     markiert**, nicht als fehlende Zuordnung.
-
-  `[read]` **Damit loest sich auch G-44:** `tibialis` ist keine Luecke,
-  sondern eine Flaeche ohne zugeordnete Datenbankgruppe — und
-  `abductors` umgekehrt eine Gruppe ohne Flaeche.
-
-  ### Der Klick trennt wieder auf
-
-  **Tom, 2026-08-18:** *„Das heisst, beim Anklicken auf der Grafik
-  muessen dann auch dementsprechend alle Treffer gezeigt werden."*
-
-  `[read]` **Das ist die Gegenprobe zur Verdichtung:** Wenn eine Flaeche
-  mehrere Muskeln zusammenfasst, muss der Klick sie wieder auftrennen —
-  **sonst sieht man eine Farbe und weiss nicht, woraus sie entstand.**
-
-  `[cmd]` **Der Klick-Handler liegt bereits vor:**
-  `setClickHandler((id, type, data) => …)` mit
-  `type = 'muscle' | 'injection' | 'point'`. Er liefert heute die
-  **Flaechen-ID** — er muss die dahinterliegenden Gruppen mitgeben.
-
-  `[cmd]` Die Vorlage sieht das vor: die Muskelkarte in Recovery traegt
-  *„18 groups · click for the calculation"*, und der Tab `Muscle map`
-  zeigt daneben eine **Liste je Muskel mit Stunden, Saetzen, Soreness und
-  Prozentwert.**
-
-  **Damit ist die Kette geschlossen:** Flaeche zeigt den verdichteten
-  Wert → Klick zeigt die Einzelmuskeln → Liste zeigt, wie der Wert
-  zustande kam.
-
-  ### Die Liste bekommt eine Ebene darunter
-
-  **Tom, 2026-08-18:** *„Die Auflästung rechts kann mit passenden
-  Gruppen gemacht werden, dann muessen aber die Childs darunter
-  ebenfalls angezeigt werden."*
-
-  `[cmd]` **Die Vorlage kennt die Unterteilung bereits teilweise:** Im
-  Tab `Muscle map` stehen `Rear delts` und `Front delts` als eigene
-  Zeilen, dazu `Upper back` und `Lower back` — **18 Gruppen.**
-
-  `[cmd]` **Was fehlt, ist die Ebene darunter:**
-  `training.muscle_groups` hat **10 Schultergruppen**, die Liste zeigt
-  zwei. Bei `legs` sind es **37 gegen sechs**.
-
-  **Drei Ebenen, nicht zwei:**
-
-  | Ebene | was sie zeigt |
-  |---|---|
-  | **Flaeche** | 15 faerbbare Bereiche auf der Karte |
-  | **Gruppe** | die 18 Zeilen der Liste — `Rear delts`, `Upper back` … |
-  | **Muskel** | die 107 aus `training.muscle_groups`, aufklappbar |
-
-  `[read]` **Der Klick auf die Flaeche trifft dieselbe Aufklappung** —
-  Flaeche → Gruppen → Muskeln. **Eine Kette, drei Stufen, keine
-  Sackgasse.**
-
-  `[cmd]` Die Spaltenwerte der Liste — **Stunden, Saetze, Soreness,
-  Prozent** — gelten je Ebene: **die Gruppe verdichtet, was ihre Muskeln
-  liefern**, wie die Flaeche das Gleiche mit den Gruppen tut.
-
-  `[cmd]` **C-73 ist seit 2026-08-18 erledigt** — 96 Gruppen, 89
-  Eltern-Beziehungen, `exercise_muscles` unveraendert bei 6.624.
-  **Die Struktur steht, G-49 ist baubar.**
-
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
   Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
@@ -2453,91 +2352,64 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-47: Der Umriss fehlt in der Uebernahme** (neu 2026-08-18,
-  **Diagnose korrigiert**).
+- [ ] **G-55: Die Koerperkarte fertigstellen — Recovery richtig** (neu
+  2026-08-18). **Fasst G-47, G-49 und G-54 zusammen. Ein Auftrag, ein
+  Agent.**
 
-  ### Die erste Diagnose war falsch
+  **Tom, 2026-08-18:** *„Der Auftrag war: binde die neue Grafik ein,
+  abgeleitet aus dem Beispiel-HTML, welches wir als Komponente
+  reingeholt haben und schon halbherzig bei Recovery drin haben. Da
+  sollte es einen Folgeauftrag geben, Recovery fertigzustellen und
+  richtig."*
 
-  `[read]` G-44 meldete: *„Der Koerperumriss endet bei y=815 — 118 von
-  200 Pfadbefehlen sind fehlerhaft, C mit vier statt sechs Zahlen. Der
-  Fehler steckt in der Mockup-Quelle."*
+  ### Was fehlt — im Bildvergleich belegt
 
-  `[cmd]` **Nachgemessen: die Vorlage ist vollstaendig.**
-  `OUTLINE_FRONT` hat **5.010 Zeichen, 688 Zahlen, y von -30 bis
-  1.351** — bis zu den Fuessen. `OUTLINE_BACK` ebenso, bis 1.370.
+  `[cmd]` **`MuscleBodyMap_test.html` zeigt die Figur vollstaendig:**
+  Umriss, Kopf, Haende, Fuesse, Muskeln als Flaechen.
 
-  `[cmd]` Und **117 `C`-Befehle in einem Pfad mit 688 Zahlen** ist
-  normale SVG-Syntax — mehrere Koordinatentripel hinter einem
-  Buchstaben, wie es jeder Vektoreditor schreibt.
+  `[cmd]` **`/v2/recovery` zeigt nur die eingefaerbten Muskeln** — kein
+  Umriss, keine Haende, keine Fuesse. **Die Muskeln stehen frei im
+  Raum.**
 
-  ### Der eigentliche Fehler
+  `[cmd]` **Die Ursache ist gemessen:** `OUTLINE_FRONT` (5.010 Zeichen)
+  und `OUTLINE_BACK` (3.823) stehen in `MuscleBodyMap.js` **ab Zeile
+  285** — **in `koerperkarte-pfade.ts` fehlen sie.**
 
-  `[cmd]` **`body_front.svg` wird von der Komponente gar nicht
-  benutzt.** Die Umrisse stehen als `OUTLINE_FRONT` und `OUTLINE_BACK`
-  **in `MuscleBodyMap.js` ab Zeile 285.**
+  `[read]` **`body_front.svg` wird von der Vorlage gar nicht benutzt.**
+  Der G-26-Agent nahm sie als Quelle, fand dort einen abgeschnittenen
+  Umriss und schloss daraus, die Vorlage sei kaputt. **Sie ist es
+  nicht.**
 
-  `[cmd]` **In `koerperkarte-pfade.ts` gibt es sie nicht** — weder unter
-  diesem noch unter einem deutschen Namen.
+  ### Vier Teile, alle an derselben Komponente
 
-  `[read]` **Der Agent hat die falsche Datei als Quelle genommen**, dort
-  einen abgeschnittenen Umriss gefunden und daraus geschlossen, die
-  Vorlage sei kaputt. **Tom: *„Bloedsinn, es wurde einfach falsch
-  umgesetzt."***
+  **1. Der Umriss** (war G-47) — `OUTLINE_FRONT`/`_BACK` uebernehmen,
+  dazu `head`, `hair`, `hands`, `ankles`, `feet` aus `MUSCLES`.
+  `[cmd]` Das Original arbeitet mit **einem viewBox 724×1448**,
+  `front` bei x≈0–724, `back` bei x≈724–1448 — **dieselbe
+  Koordinatenwelt.**
 
-  ### Und ein zweiter Punkt
+  **2. Die drei Ebenen** (war G-49) — `[cmd]` C-73 ist fertig: **96
+  Gruppen, 89 Eltern-Beziehungen.** Flaeche (15) → Gruppe (18 Zeilen der
+  Liste) → Muskel (96). **Die Flaeche traegt den verdichteten Wert, der
+  Klick trennt wieder auf.**
 
-  `[cmd]` Das Original arbeitet mit **einem viewBox von 724×1448** und
-  schneidet Vorder- und Rueckansicht ueber `VB_X` heraus — beide liegen
-  in **derselben Koordinatenwelt**, `front` bei x≈0–724, `back` bei
-  x≈724–1448. **Das erklaert, warum `hands` Pfade bei x=100 und x=1336
-  hat.** Wer das anders aufteilt, verschiebt alles.
+  **3. Die Sichtbarkeit** (war G-54) — `[cmd]` `--surface` gegen
+  `--surface-2`: **0,012 Helligkeit.** Betrifft auch den
+  Supplements-Injections-Tab. **Gestaltungsfrage: eigener Token,
+  staerkere Kontur, oder hellere Flaeche.**
 
-- [ ] **G-54: Koerperflaechen verschwinden im dunklen Theme** (neu
-  2026-08-18). **Fasst G-48 mit ein.**
+  **4. Der Anschluss** (war G-30) — `[cmd]` **36 Check-ins liegen live,
+  27 davon ohne HRV.** `[read]` Anbinden heisst hier: **die erfassten
+  Werte zeigen**, keine Kennzahl daraus rechnen (das ist `SPEC_09`).
 
-  **Tom, 2026-08-18** zum Injections-Tab: *„Ich frag mich ja schon, was
-  der eine Stunde gemacht hat — da ist der alte Musclemap-Scheiss
-  drin."*
+  ### Der Nachweis, der diesmal zaehlt
 
-  ### Die Uebernahme ist exakt — das Theme ist das Problem
+  **Bildschirmfoto neben `MuscleBodyMap_test.html`**, beide Ansichten,
+  hell und dunkel.
 
-  `[cmd]` **Nachgemessen: Vorlage und Umsetzung sind identisch.**
-  Derselbe Pfad, dasselbe `viewBox 0 0 100 120`,
-  `fill="var(--surface)"`, `stroke="var(--border)"`,
-  `strokeWidth="0.6"`.
-
-  `[cmd]` **Aber `--surface` gegen `--surface-2` unterscheidet sich um
-  0,012 Helligkeit** — in G-26 gemessen. **Im hellen Entwurf sichtbar,
-  im dunklen praktisch nicht.**
-
-  `[read]` **Dieselbe Ursache an drei Stellen:** die Silhouette im
-  Injections-Tab, die grauen Teile der Muskelkarte (*„deshalb wirkt die
-  linke Hand abgetrennt"*), und alles, was `--surface` auf `--surface-2`
-  zeichnet.
-
-  ### Was zu entscheiden ist
-
-  `[cmd]` **An `--surface-2` zu drehen wirkt auf die ganze
-  Oberflaeche** — deshalb wurde es in G-26 gemeldet statt entschieden.
-
-  `[annahme]` **Drei Wege:** ein eigener Token fuer Koerperflaechen ·
-  die Kontur staerker (`--fg-subtle` statt `--border`) · oder die
-  Flaeche selbst heller.
-
-  `[cmd]` **Der Entwurf ist fuer Hell gebaut** —
-  `apps/web/public/mockup/` benutzt `#f1f3f4` und `#374151` auf weissem
-  Grund. **Was dort funktioniert, muss im Dunkeln nicht funktionieren,
-  und das ist der Normalmodus dieser Anwendung.**
-
-  ### Warum es durchging
-
-  `[cmd]` Der G-45-Nachweis lautete *„16 Orte auf zwei Silhouetten,
-  Klick auf „Quad L" zeigt dessen Nadel (25G), Wegfilter rechnet 6 SubQ
-  + 10 IM = 16."*
-
-  `[read]` **Das prueft die Punkte, nicht den Koerper.** Ein
-  Bildschirmfoto neben die Vorlage haette es gezeigt — **es war im
-  Auftrag verlangt und ist im Bericht nicht erwaehnt.**
+  `[read]` **Der G-45-Nachweis lautete** *„16 Orte auf zwei
+  Silhouetten"* — **das prueft die Punkte, nicht den Koerper.** Ein
+  Bildvergleich war verlangt und wurde nicht geliefert.
 
 - [ ] **G-50: `v2-g-cols-5` fehlt** (neu 2026-08-18). Befund aus G-42.
 
