@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `28bf841` auf `dev`.
+**Stand:** 2026-08-18, Anker `c48e531` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 63 offen, 3 in Arbeit.
+`[cmd]` 66 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -184,6 +184,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-25** | Training an echte Daten anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
 | **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
+| **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
+| **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
+| **C-89** | 26 der 43 Koerpermessungen liegen in der Zukunft |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
@@ -1710,6 +1713,60 @@ Umsetzen angepasst werden.
 
 
 
+
+- [ ] **C-87: `exercises_select` war aus der Datenbank verschwunden**
+  (neu 2026-08-18). **Behoben, aber die Ursache ist offen.** Befund aus
+  G-64.
+
+  `[cmd]` **`training.exercises` hatte RLS an und null Policies.** Alle
+  sieben anderen `training`-Tabellen hatten welche — `equipment` 1,
+  `exercise_muscles` 1, `muscle_groups` 1, `workout_*` je 4.
+
+  `[cmd]` **Es ist Drift, kein Entwurf:** Die Kette definiert
+  `exercises_select` in `100_training_schema.sql:266`, und sie greift —
+  alle 1.416 sind `is_active`, `public.is_admin()` existiert.
+
+  `[cmd]` **Wiederhergestellt am 2026-08-18**, woertlich aus der Kette.
+  **Der Beleg fuer das Verschwinden:** `DROP POLICY IF EXISTS` meldete
+  *„does not exist, skipping"*. Danach 1.416 Zeilen als `authenticated`.
+
+  **Offen:** Wie ist sie verlorengegangen? `[read]` Ein Kettenschritt,
+  der die Tabelle neu anlegt, waere der Verdacht — **`108` und `109`
+  haben `training` angefasst.** `[cmd]` **Und die
+  Schema-Vollstaendigkeitspruefung hat es nicht gemeldet** — sie prueft
+  Tabellen und Spalten, offenbar nicht Policies.
+
+- [ ] **C-88: Jedes neue Schema braucht eine Zeile in `config.toml`**
+  (neu 2026-08-18). **Dritter Fall.**
+
+  `[cmd]` **`goals` (GO-03), `recovery` (C-67), `training` (G-64)** —
+  jedes Mal beim eigenen Auftrag vergessen, jedes Mal erst beim
+  Anbinden aufgefallen: `PGRST106: Invalid schema`.
+
+  `[read]` **Die Datei traegt inzwischen drei Kommentare, die es
+  erklaeren** — und es passiert trotzdem. **Eine Pruefung waere billiger
+  als der vierte Fall:** Jedes Schema in `schema-sollstand.json` gegen
+  die Liste in `config.toml`.
+
+- [ ] **C-89: 26 der 43 Koerpermessungen liegen in der Zukunft** (neu
+  2026-08-18). Befund aus GO-16.
+
+  `[cmd]` **Die Seeds reichen bis 2026-09-13** — heute ist der 18.8.
+  Deshalb liefert `body_composition_navy` heute **11,38 % / FFMI 21,49**,
+  nicht die 10,31 % / 21,97 aus dem GO-14-Bericht (die galten fuer den
+  13.9.).
+
+  `[cmd]` **Und `adaptive_tdee` liefert heute NULL** — `dev` hat **13
+  von 14** vollstaendigen Zufuhrtagen, Status
+  `insufficient_intake_days`.
+
+  `[read]` **Beides ist dieselbe Ursache:** Die Testdaten wurden fuer
+  einen Zeitraum erzeugt, der in der Zukunft endet. **Ein echter Nutzer
+  traegt keine Messungen fuer den naechsten Monat ein** — die Anzeige
+  soll das auch nicht abbilden.
+
+  **Gehoert zu C-78** (zusammenhaengende Seeds): **Der Zeitraum muss
+  heute enden, nicht in vier Wochen.**
 
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
