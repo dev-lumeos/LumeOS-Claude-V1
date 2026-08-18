@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `689da32` auf `dev`.
+**Stand:** 2026-08-18, Anker `247e74d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 60 offen, 3 in Arbeit.
+`[cmd]` 58 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -170,8 +170,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **F-08** | Werkstatt-Inventar |  |
 | **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
 | **C-54** | `display_tier` als Ordnung der Anzeige benutzen |  |
-| **C-52** | Zwei essenzielle Fettsäuren ohne Ziel und ohne Bewertung |  |
-| **C-53** | Elf Nährstoffe erreichen die Bewertung nicht |  |
 | **GO-01** | Goals | ~ |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
@@ -1263,41 +1261,7 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   das sind mehr als die acht, die `daily_summary` als Makros führt. Sieh
   nach, welche das sind und ob die Einstufung trägt.
 
-- [ ] **C-52: Zwei essenzielle Fettsäuren ohne Ziel und ohne
-  Bewertung** (neu 2026-08-15). Rest aus GO-00.
 
-  `[cmd]` `F18:2CN6` (Linsäure) und `F18:3CN3` (Alpha-Linolensäure)
-  stehen mit `E%`-Referenzwerten da, sind aber **weder in GO-02 noch in
-  der Bewertung**: 0 Treffer in `110_goals_zielwerte.sql` und in der
-  Zuordnungsdatei.
-
-  `[read]` Die Begründung für `E%` lautete: *gehört zu GO-02, dort wird
-  es schon gerechnet.* Das gilt für `CHO` und `FAT` — für diese beiden
-  nicht. **Damit fallen sie durch beide Raster.**
-
-  **Zu entscheiden:** Zielwerte in GO-02 ergänzen, oder als
-  `nicht_bewertbar` ausweisen. `[Wahrscheinlich]` Ersteres — es sind die
-  einzigen zwei essenziellen Fettsäuren, und EFSA setzt für beide einen
-  AI.
-
-- [ ] **C-53: Elf Nährstoffe erreichen die Bewertung nicht** (neu
-  2026-08-15). Rest aus GO-00.
-
-  `[cmd]` Nur **5 der 16** reparierten Zeilen kommen heute überhaupt in
-  `daily_reference_assessment` an. Der Grund: die Funktion bewertet die
-  33 Nährstoffe aus `daily_summary` — **acht Aminosäuren, `NIAEQ` und
-  die beiden Fettsäuren stehen dort nicht.**
-
-  `[cmd]` `daily_summary` führt 70 Spalten: acht Makros und 24 Mikros mit
-  Fehlzählern. Die Auswahl der 24 stammt aus `SPEC_06`.
-
-  **Zu entscheiden:** Werden die elf aufgenommen — und wenn ja, mit
-  welchem Nutzen? `[Vermutung]` Bei Leucin ja (Kraftsport), bei den
-  übrigen Aminosäuren fraglich. Jede zusätzliche kostet zwei Spalten in
-  einer Sicht, die schon 70 hat.
-
-  **Die GO-00-Reparatur deckt sie trotzdem ab** — sie greift beim
-  Aufnehmen, nicht danach.
 
 
 

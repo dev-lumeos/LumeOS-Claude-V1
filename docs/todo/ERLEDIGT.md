@@ -4356,6 +4356,71 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Vorgabe fuer Struktur und Anordnung, **nicht fuer Bestandsdaten.** Wie
   bei den 7.140 Lebensmitteln, wo das Tagebuch vier Zeilen zeigt.
 
+- [x] **C-52: Zwei essenzielle Fettsäuren ohne Ziel und ohne
+  Bewertung** (neu 2026-08-15). Rest aus GO-00.
+
+  `[cmd]` `F18:2CN6` (Linsäure) und `F18:3CN3` (Alpha-Linolensäure)
+  stehen mit `E%`-Referenzwerten da, sind aber **weder in GO-02 noch in
+  der Bewertung**: 0 Treffer in `110_goals_zielwerte.sql` und in der
+  Zuordnungsdatei.
+
+  `[read]` Die Begründung für `E%` lautete: *gehört zu GO-02, dort wird
+  es schon gerechnet.* Das gilt für `CHO` und `FAT` — für diese beiden
+  nicht. **Damit fallen sie durch beide Raster.**
+
+  **Zu entscheiden:** Zielwerte in GO-02 ergänzen, oder als
+  `nicht_bewertbar` ausweisen. `[Wahrscheinlich]` Ersteres — es sind die
+  einzigen zwei essenziellen Fettsäuren, und EFSA setzt für beide einen
+  AI.
+
+  `[cmd]` **Erledigt 2026-08-18.** `F18:2CN6` und `F18:3CN3` werden
+  gegen die **Goals-Grammziele** bewertet, nicht mehr als
+  `energy_share` gefuehrt.
+
+  `[cmd]` **Live am 2026-08-14:** F18:2CN6 8,260 g von 11,100 g =
+  **74,4 %**, F18:3CN3 1,425 g von 1,400 g = **101,8 %** — beide
+  `complete`.
+
+  ### Die Kette musste umsortiert werden
+
+  `[cmd]` **Schritt `059` laeuft jetzt nach `110`**, weil er
+  `goals.zielwerte_am` braucht. `[read]` **Das ist der Preis dafuer, dass
+  die Bewertung an den persoenlichen Zielen haengt statt an einer festen
+  Tabelle** — und der richtige, weil 13,2 g Linolsaeure fuer Tom etwas
+  anderes sind als fuer jemand anderen.
+
+- [x] **C-53: Elf Nährstoffe erreichen die Bewertung nicht** (neu
+  2026-08-15). Rest aus GO-00.
+
+  `[cmd]` Nur **5 der 16** reparierten Zeilen kommen heute überhaupt in
+  `daily_reference_assessment` an. Der Grund: die Funktion bewertet die
+  33 Nährstoffe aus `daily_summary` — **acht Aminosäuren, `NIAEQ` und
+  die beiden Fettsäuren stehen dort nicht.**
+
+  `[cmd]` `daily_summary` führt 70 Spalten: acht Makros und 24 Mikros mit
+  Fehlzählern. Die Auswahl der 24 stammt aus `SPEC_06`.
+
+  **Zu entscheiden:** Werden die elf aufgenommen — und wenn ja, mit
+  welchem Nutzen? `[Vermutung]` Bei Leucin ja (Kraftsport), bei den
+  übrigen Aminosäuren fraglich. Jede zusätzliche kostet zwei Spalten in
+  einer Sicht, die schon 70 hat.
+
+  **Die GO-00-Reparatur deckt sie trotzdem ab** — sie greift beim
+  Aufnehmen, nicht danach.
+
+  `[cmd]` **Erledigt 2026-08-18 mit C-52.**
+
+  | | vorher | nachher |
+  |---|---|---|
+  | Zeilen mit Prozentwert | 17 | **19** |
+  | Mangel-Szenariotag | 16/17 | **18/19** |
+
+  `[cmd]` **`CHORL` bleibt `NO_REFERENCE` und `not_applicable`, ohne
+  Prozentwert.** `[read]` Richtig so — **ein Naehrstoff ohne belegten
+  Referenzwert bekommt keinen erfundenen.** Wie
+  `missing_weight` beim Protein und `missing_body_weight` beim
+  Wasserziel.
+
 
 
 ## Erledigt am 2026-08-05
