@@ -18,6 +18,7 @@ passiert („services/ ist leer"; „keine Writes, kein Auth").
 |---|---|
 | Was ist gebaut, was gilt? | `docs/ssot/00-INDEX.md` (Einstieg, Herkunftsmarker, Rangfolge: Code > ssot > Rest) |
 | Was ist als Nächstes zu tun? | `docs/todo/TODO.md` |
+| In welcher Reihenfolge, und warum? | `docs/spezifikation/00-MODULPLAN.md` |
 | Was ist das Zielbild? | `docs/spezifikation/` (Rollen der Ordner, Statuskopf, Regeln: `00-INDEX.md`) |
 | Was ist vom Altbestand schon ausgewertet? | `docs/spezifikation/00-KONSOLIDIERUNG.md` (Ablauf und Register) |
 | Wie entsteht die Datenbank? | `supabase/README.md` (Baseline + Pipeline, Rollenteilung) |
