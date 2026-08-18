@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `247e74d` auf `dev`.
+**Stand:** 2026-08-18, Anker `03643e1` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -180,12 +180,12 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
+| **G-60** | Medical — das Mockup an die Daten binden |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
 | **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
 | **G-37** | Supplements an den Katalog anschliessen |  |
-| **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
@@ -1595,6 +1595,57 @@ Umsetzen angepasst werden.
 
 
 
+- [ ] **G-60: Medical — das Mockup an die Daten binden** (neu
+  2026-08-18). **Ersetzt G-51.** Korrektur an G-46.
+
+  **Tom, 2026-08-18:** *„Am Ende will ich das Mockup mit all seinen
+  Funktionen mit Daten angebunden haben — da gehoeren die Popups,
+  Filter etc., was immer auch im Mockup drin ist, auch dazu. Und nichts
+  neu Erfundenes ohne Absprache mit mir."*
+
+  ### Was heute auf der Seite steht
+
+  `[cmd]` **Drei Listen untereinander:** 140 Werte als Flachliste ·
+  11.676 Katalogeintraege · **die Attrappe** — und nur die letzte zeigt
+  Panels, Verlauf, Bereichsbalken und *„Non-optimal only"*.
+
+  `[read]` **Der Fehler lag im Auftrag.** G-46 sagte *„die
+  Biomarker-Liste und der Befund"* — zwei Dinge, die im Mockup so nicht
+  vorkommen. **Der Agent hat gebaut, was verlangt war.**
+
+  ### Der Ablauf, der ab jetzt gilt
+
+  > **Mockup → Abgleich mit altem Repo und Specs → Tabellen definieren
+  > → Seeds erzeugen → Auftrag: dieses Mockup an diese Daten binden.**
+
+  **Und: Wenn eine Tabellenspalte fehlt oder etwas dazugehoert, kommt es
+  vor dem Auftrag zu Tom** — besprochen, dann gebaut.
+
+  ### Zwei Punkte, mit Tom geklaert (2026-08-18)
+
+  `[cmd]` **Evidenzgrad (`ev A+` / `ev A`) faellt weg** — die Attrappe
+  zeigt ihn, **die Daten haben ihn nicht.** Tom: *„Wir haben die Daten
+  fuer diese Evidence nicht, also weg."*
+
+  `[cmd]` **`match_status` gehoert nicht in die Liste, sondern in den
+  Import-Tab.** `[read]` Beim Hochladen ist er nuetzlich — *„138 von
+  140 zugeordnet, 2 unklar"*. **In der Liste ist er Testmaterial:** die
+  zwei Faelle wurden erzeugt, damit der Importpfad pruefbar ist.
+
+  ### Was zu bauen ist
+
+  **Eine Liste statt drei**, in der Form der Attrappe: **Panel-Filter**
+  (CBC 5, Metabolic 4, Lipid 5, Liver 6, Kidney 4, Thyroid 4, Hormone
+  10, Inflammation 3, Vitamins 6, Screening 1) · **Verlauf ueber die
+  fuenf Befunde** · **Bereichsbalken** statt Textspalte · **„Nur
+  nicht-optimal"** · die Popups, die das Mockup hat.
+
+  `[cmd]` **Die Daten sind da:** 140 Werte, 5 Befunde, 2026-02-18 bis
+  2026-08-19, mit Verlauf (Glukose 88 → 102, HbA1c 5,2 → 5,4).
+
+  `[cmd]` **Der Katalog gehoert hinter die Suche**, nicht auf die Seite —
+  wie die 7.140 Lebensmittel, wo das Tagebuch vier Zeilen zeigt.
+
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
   Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
@@ -1723,31 +1774,6 @@ Umsetzen angepasst werden.
   eine Markierung von Hand.** Der Testfall `vitamin-d3` steht bereit.
 
 
-
-
-- [ ] **G-51: Der Rohkatalog gehoert nicht auf die Seite** (neu
-  2026-08-18). Korrektur an G-46.
-
-  `[cmd]` `/v2/medical` listet heute **den LOINC-Rohkatalog** — 11.676
-  Eintraege nach Haeufigkeitsrang, erster Eintrag `Specimen Nom
-  (Specimen)`.
-
-  `[read]` **Das ist ein Nachschlagewerk, kein Nutzerinhalt.** Der
-  Auftrag sagte *„die Biomarker-Liste"*, ohne zu klaeren, was das
-  heisst — **der Fehler liegt im Auftrag, nicht in der Umsetzung.**
-
-  **Der Katalog gehoert hinter die Suche**, nicht auf die Startseite.
-  `[read]` Dieselbe Regel wie bei den 7.140 Lebensmitteln: **die
-  Vorlage zeigt vier Zeilen im Tagebuch, nicht den Bestand.**
-
-  ### Zwei Fehler nebenbei
-
-  `[cmd]` **`lab_result_values_read: JWT issued at future`** — die
-  Befundwerte laden gar nicht. `[annahme]` Zeitversatz zwischen Browser
-  und Supabase-Container.
-
-  `[cmd]` **„25 von 0 gezeigt"** — die Zaehlung der Trefferliste ist
-  kaputt.
 
 
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
