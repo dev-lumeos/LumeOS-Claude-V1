@@ -103,7 +103,7 @@ Stand: 2026-08-17
 
 Stand: 2026-08-18
 
-[cmd] Datendatei angelegt: `supabase/_pipeline/daten/biomarker-loinc-masterlist.json`.
+[cmd] C-70 legte zuerst `supabase/_pipeline/daten/biomarker-loinc-masterlist.json` an; C-70b hat diese 25,9-MB-Einzeldatei wieder entfernt und durch die aufgeteilten Dateien unter `supabase/_pipeline/daten/biomarker-loinc/` ersetzt.
 
 [cmd] Die bisherige Datei `supabase/_pipeline/daten/biomarker-katalog.json` bleibt unveraendert. Sie ist die angereicherte 122er-Teilmenge mit Referenzbereich-Kandidaten; die neue LOINC-Datei ist die breite Import-Masterlist.
 
@@ -191,10 +191,75 @@ Stand: 2026-08-18
 
 [annahme] Ein LOINC-Eintrag ohne Range bleibt importierbar und sichtbar. Die Bewertung muss dann explizit `no_reference_range` liefern, statt eine Null oder ein Normalurteil zu erfinden.
 
+## C-70b: Masterlist aufgeteilt
+
+Stand: 2026-08-18
+
+[cmd] Erzeugerskript angelegt: `supabase/_pipeline/_ableitung/biomarker-loinc-masterlist-erzeugen.ts`.
+
+[cmd] Das Skript erzeugt `supabase/_pipeline/daten/biomarker-loinc/` mit acht Daten-Dateien plus `index.json`.
+
+[cmd] Die alte Einzeldatei `supabase/_pipeline/daten/biomarker-loinc-masterlist.json` existiert nicht mehr.
+
+[cmd] `git check-ignore -v docs/ssot/daten/Loinc_2.82/LoincTable/Loinc.csv`: `.gitignore:233:docs/ssot/daten/Loinc_2.82/`; der 924-MB-Quellordner bleibt lokal/ignoriert.
+
+## Wie geschnitten wurde
+
+[cmd] Schnitt nach fachlichen Buckets, nicht nach zufaelliger Zeilenzahl. Grosse Klassen stehen einzeln, fachlich zusammenhaengende kleine Klassen sind gebuendelt.
+
+| Datei | Zeilen | Bytes |
+|---|---:|---:|
+| `chemistry.json` | 3.717 | 8.801.011 |
+| `drug-toxicology.json` | 2.975 | 6.089.416 |
+| `hematology-coagulation.json` | 1.688 | 4.248.653 |
+| `serology-cellmarkers.json` | 1.279 | 2.965.631 |
+| `challenge-fertility.json` | 870 | 2.064.797 |
+| `urine-specimen.json` | 592 | 1.637.372 |
+| `vitals-clinical.json` | 404 | 1.065.020 |
+| `other-small.json` | 151 | 393.167 |
+| `index.json` | - | 10.932 |
+
+[cmd] Jede Datei liegt unter der Hook-Grenze von 10.485.760 Bytes. Die groesste Datei ist `chemistry.json` mit 8.801.011 Bytes.
+
+[cmd] Summe ueber die acht Daten-Dateien: 11.676 Eintraege, 11.676 eindeutige LOINC-Codes, keine Doppelung.
+
+[cmd] Der LOINC-Urhebervermerk steht in allen acht Daten-Dateien als `license_notice_required`.
+
+[cmd] Stichproben-Orte:
+
+| LOINC | Marker | Datei |
+|---|---|---|
+| `718-7` | Haemoglobin | `hematology-coagulation.json` |
+| `2986-8` | Testosteron | `chemistry.json` |
+| `2857-1` | PSA | `chemistry.json` |
+| `8310-5` | Koerpertemperatur | `vitals-clinical.json` |
+| `8867-4` | Herzfrequenz | `vitals-clinical.json` |
+| `8480-6` | systolischer Blutdruck | `vitals-clinical.json` |
+| `50196-5` | okkultes Blut im Stuhl | `other-small.json` |
+| `5792-7` | Glukose im Urin | `urine-specimen.json` |
+
+[annahme] `other-small.json` enthaelt bewusst Restklassen wie `PANEL.CHEM` und `TUMRRGT`, nicht weil sie fachlich unwichtig waeren, sondern weil sie fuer eine eigene grosse Datei zu klein sind.
+
+## Wie die Ableitung reproduziert wird
+
+[cmd] `pnpm exec tsx supabase/_pipeline/_ableitung/biomarker-loinc-masterlist-erzeugen.ts`: Exit 0; erzeugte 11.676 Eintraege und die acht Split-Dateien.
+
+[cmd] Das Skript bricht ab, wenn eine der benoetigten LOINC-Quelldateien fehlt: `Loinc.csv`, `PanelsAndForms.csv`, `deDE15LinguisticVariant.csv`, `ConsumerName.csv`, `LoincLicense_5.8.txt`.
+
+[cmd] Der Index `supabase/_pipeline/daten/biomarker-loinc/index.json` enthaelt `source_required = docs/ssot/daten/Loinc_2.82`, die Auswahlregel, die Klassen-zu-Datei-Abbildung, die Dateigroessen und die acht Stichprobenorte.
+
+[cmd] `git config --get core.hooksPath`: `.githooks`.
+
+[cmd] `bash .githooks/pre-commit`: Exit 1 in WSL, weil der Linux-Lauf `@parcel/watcher-linux-x64-glibc` nicht im Windows-Installationsstand fand. Das ist kein Groessentest-Befund; `pnpm gate` in PowerShell laeuft gruen.
+
+[cmd] Die Hook-Groessenregel wurde direkt gegen die erzeugten Dateien nachgemessen: alle Dateien `UnderLimit = True` bei Limit 10.485.760 Bytes.
+
+[read] Die Ableitung ist ohne lokalen LOINC-Quellordner nicht reproduzierbar. Das ist Absicht: der Quellordner ist ignoriert; das Skript sagt dann klar, welche Quelldatei fehlt, statt aus der abgeleiteten Datei weiterzuerzeugen.
+
 ## Validierung
 
 [cmd] `node -e "JSON.parse(require('fs').readFileSync('supabase/_pipeline/daten/biomarker-katalog.json','utf8')); console.log('json ok')"`: Exit 0, `json ok`.
 
-[cmd] `node -e "JSON.parse(require('fs').readFileSync('supabase/_pipeline/daten/biomarker-loinc-masterlist.json','utf8')); console.log('json ok')"`: Exit 0, `json ok`.
+[cmd] `node -e "const fs=require('fs'); const dir='supabase/_pipeline/daten/biomarker-loinc'; let total=0; const seen=new Set(); let licenseOk=0; for (const f of fs.readdirSync(dir).filter(f=>f.endsWith('.json')&&f!=='index.json')) { const d=JSON.parse(fs.readFileSync(dir+'/'+f,'utf8')); if (d.license_notice_required) licenseOk++; for (const r of d.records) { total++; if (seen.has(r.loinc_code)) throw new Error('duplicate '+r.loinc_code); seen.add(r.loinc_code); } } console.log(JSON.stringify({total,unique:seen.size,license_files:licenseOk},null,2))"`: Exit 0; `total` 11.676, `unique` 11.676, `license_files` 8.
 
 [cmd] `pnpm gate`: Exit 0; 8/8 Tasks erfolgreich, keine Fehler.
