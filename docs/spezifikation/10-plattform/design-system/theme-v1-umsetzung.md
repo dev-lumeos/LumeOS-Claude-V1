@@ -190,6 +190,34 @@ Recovery ein **Messfehler**.
 
 ---
 
+### Zwei Nachtraege aus G-42 (AI Coach)
+
+**9. `Object.assign(window, {…})` ist kein Inhaltsverzeichnis.**
+`[cmd]` In `module-buddy-engines.jsx:847` listet die Sammelzuweisung
+**nur Daten, keine Komponenten** — die neun Ansichten werden einzeln
+ueber `window.BuddyBSS = …` gesetzt.
+
+`[read]` *„Wer diese Zeile als Inhaltsverzeichnis der Datei liest,
+verpasst neun von zwoelf Zulieferern."*
+
+**10. Ein Zulieferer kann in der Datei eines anderen Moduls liegen.**
+`[cmd]` `BuddyCoachOverrides` steht in `module-coach-meta.jsx:161` —
+**einer Human-Coaches-Datei** — und wird aus `module-buddy.jsx:132`
+gerufen. **Ohne diese Datei im Register haette die Zaehlung den Tab als
+fehlend gemeldet und seine Vorlage nie gefunden.**
+
+### `uploads/` ist keine Fassungsgeschichte
+
+`[cmd]` **Alle sieben Buddy-Specs sind byte-identisch mit
+`docs/specs/`.** Der Hash im Dateinamen **unterscheidet Module, nicht
+Fassungen**: `SPEC_09_SCORING-8a1632fa` ist Buddy, `-d4545dde` ist
+Training, die Datei ohne Hash ist Nutrition.
+
+`[read]` **Damit ist A-18 entschaerft** — es gibt nichts abzugleichen,
+nur einen Bestand zu indizieren.
+
+---
+
 ### Was der Abgleich ergab
 
 | Tab | Vorlage | vorher | jetzt |
