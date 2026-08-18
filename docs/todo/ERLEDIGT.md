@@ -3702,6 +3702,51 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   **keine medizinische Wechselwirkungsbewertung** — `[read]` die Tabelle
   ja, aber keine Regel, die sagt, was gefaehrlich ist.
 
+- [x] **C-69: Medical-Schema** (verschoben hinter C-70). Befund aus
+  G-36.
+
+  `[cmd]` **Kein `medical`-Schema** — alle 21 Kacheln sind Attrappe.
+
+  `[cmd]` **Der Spec-Widerspruch gilt:** `SPEC_06` hat 8 `CREATE TABLE`;
+  `UserMedicalInsight` und `UserHealthReport` kommen in `SPEC_02`
+  **4-mal** vor, in `SPEC_06` **0-mal**. `[read]` Haertester Befund des
+  Spec-Audits.
+
+  `[cmd]` `015_medical.sql` im Vorgaengerrepo hat 7 Tabellen, **teils
+  anders benannt als `SPEC_06`.**
+
+  **Setzt C-70 voraus** — ohne den Katalog steht das Schema leer da.
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritte `140` und `141`,
+  **55 Schritte** in der Kette. Vier Tabellen: `biomarker_catalog`,
+  `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`.
+
+  `[cmd]` **Live: 11.676 Katalogeintraege und 464 Referenzbereiche**,
+  dazu 1 Befund mit 3 Messwerten. Zeilenschutz beidseitig — Tom sieht
+  1/3, Max 0/0, Fremd-Insert abgelehnt.
+
+  ### Alle vier Vorgaben erfuellt — und zwei mehr
+
+  | | |
+  |---|---|
+  | **Eingefroren** | `marker_name_snapshot`, `unit_snapshot`, `frozen_at` |
+  | **Bereich am Befund** | `lab_reference_low/high/text/unit/source` |
+  | **Herkunft** | `source`, `source_detail` |
+  | **zusaetzlich** | `entry_confidence`, `needs_verification` |
+
+  `[read]` **Die letzten beiden waren nicht beauftragt** und sind
+  richtig: Ein Wert aus einer Foto-Erkennung ist etwas anderes als ein
+  getippter — **und das gehoert an die Zeile, nicht in die
+  Verarbeitungslogik.**
+
+  `[read]` **Der Referenzbereich sitzt am Befund, nicht am Katalog:**
+  Jedes Labor fuehrt eigene Bereiche, und sie stehen auf dem Ausdruck.
+  Der Katalogbereich ist der Rueckfall, wenn der Befund keinen
+  mitliefert.
+
+  `[cmd]` PostgREST sieht `medical` erst nach `supabase stop` und
+  `start` — wie bei `goals`.
+
 
 
 ## Erledigt am 2026-08-05

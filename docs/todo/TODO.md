@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `3dae1a2` auf `dev`.
+**Stand:** 2026-08-18, Anker `417aae3` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 77 offen, 3 in Arbeit.
+`[cmd]` 78 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -206,12 +206,13 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-37** | Supplements an den Katalog anschliessen |  |
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
-| **C-69** | Medical-Schema |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
 | **G-42** | AI Coach — zwanzig Tabs offen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
+| **C-72** | Der Import-Pfad fuer Laborbefunde |  |
+| **G-46** | Medical an den Katalog anschliessen |  |
 
 ---
 
@@ -2232,20 +2233,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Kein thailaendisches Sprachpaket in LOINC 2.82.** Die 18
   Thai-Synonyme aus `biomarkerSynonyms.ts` bleiben der einzige Bestand.
 
-- [ ] **C-69: Medical-Schema** (verschoben hinter C-70). Befund aus
-  G-36.
-
-  `[cmd]` **Kein `medical`-Schema** — alle 21 Kacheln sind Attrappe.
-
-  `[cmd]` **Der Spec-Widerspruch gilt:** `SPEC_06` hat 8 `CREATE TABLE`;
-  `UserMedicalInsight` und `UserHealthReport` kommen in `SPEC_02`
-  **4-mal** vor, in `SPEC_06` **0-mal**. `[read]` Haertester Befund des
-  Spec-Audits.
-
-  `[cmd]` `015_medical.sql` im Vorgaengerrepo hat 7 Tabellen, **teils
-  anders benannt als `SPEC_06`.**
-
-  **Setzt C-70 voraus** — ohne den Katalog steht das Schema leer da.
 
 - [ ] **G-39: Zwei Symbole fehlen (`shield`, `file`)** (neu 2026-08-17).
   Befund aus G-36.
@@ -2360,3 +2347,39 @@ Umsetzen angepasst werden.
   `[cmd]` **Und `.v2-card-h` bricht Kartentitel um**, wenn ein langer
   Untertitel auf die Attrappen-Marke trifft. `[read]` Dritter Befund
   dieser Art nach G-23 (Modulkopf) und G-34 (`.v2-btn` ohne `nowrap`).
+
+- [ ] **C-72: Der Import-Pfad fuer Laborbefunde** (neu 2026-08-18).
+  Folgt auf C-69.
+
+  `[cmd]` Das Schema steht: 11.676 Katalogeintraege, `lab_reports` und
+  `lab_result_values` mit `entry_confidence` und `needs_verification`.
+  **Was fehlt, ist der Weg vom PDF zur Zeile.**
+
+  `[cmd]` `SPEC_08_IMPORT_PIPELINE.md` hat **17 KB**.
+
+  `[read]` **Die Vorlage wirbt mit** *„German, English, Thai lab formats
+  supported"* — und `biomarkerSynonyms.ts` im Vorgaengerrepo traegt
+  **457 Synonympaare auf 91 kanonische Namen, davon 18 auf Thai.**
+  **Das ist die Zuordnungstabelle, die ein Import braucht.**
+
+  `[cmd]` Im Katalog stehen `synonyms` je Eintrag aus LOINCs
+  `RELATEDNAMES2` — **pruefen, wie weit die beiden sich decken.**
+
+  **Und `medical.biomarker_catalog` hat 4.593 deutsche Namen** von
+  11.676 — ein deutscher Befund trifft also nicht jeden Marker.
+
+- [ ] **G-46: Medical an den Katalog anschliessen** (neu 2026-08-18).
+  Folgt auf C-69.
+
+  `[cmd]` `/v2/medical` steht seit G-36 mit **21 Kacheln, alle
+  Attrappe** — und seit `140` gibt es das Schema.
+
+  **Die naheliegenden Kacheln:** die Biomarker-Liste (Katalog), der
+  Befund mit seinen Werten, und der **Doppelbereich** — `[cmd]` der
+  Medical-Agent hat ihn belegt: *Glucose 102 ueber Laborgrenze 99 →
+  „High"; HbA1c 5,4 % im Labor-, aber ueber dem Optimalband →
+  „Normal".*
+
+  `[read]` **Keine Bewertung.** Ob ein Wert gut ist, ist eine
+  medizinische Aussage — die Anzeige sagt, **wo er liegt**, nicht was er
+  bedeutet.
