@@ -389,6 +389,13 @@
       "depends_on": ["142"]
     },
     {
+      "id": "144",
+      "path": "supabase/_pipeline/14_medical/144_biomarker_spec_enrichment.ts",
+      "kind": "tsx",
+      "creates": "Medical-Spec-Anreicherung: Panels, deutsche Namen, Kurznamen und belastbar zuordenbare Spec-Referenzbereiche",
+      "depends_on": ["143"]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",

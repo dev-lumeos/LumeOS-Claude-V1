@@ -964,7 +964,8 @@
     "training.exercise_catalog_enrichment": 1407,
     "supplements.supplement_catalog": 44,
     "medical.biomarker_catalog": 11676,
-    "medical.biomarker_reference_ranges": 464,
+    "medical.biomarker_reference_ranges": 560,
+    "medical.biomarker_spec_enrichment": 44,
     "medical.biomarker_aliases": 292
   },
   "mindestzeilen_belege": {
@@ -990,7 +991,8 @@
     "training.exercise_catalog_enrichment": "[cmd] C-83: 1.416 Training-Uebungen gegen media/exercises/katalog/1500+ exercise data.xlsx gematcht; 1.407 sicher anreicherbar, 8 mehrdeutig, 1 fehlend.",
     "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
-    "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit zusammen 464 Referenzbereich-Zeilen; 141 importiert sie als Katalog-Fallback-Kandidaten.",
+    "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzt 96 Spec-basierte Bereichszeilen aus docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md; Summe 560.",
+    "medical.biomarker_spec_enrichment": "[cmd] C-84: SPEC_05_BIOMARKER_CATALOG.md enthaelt 47 extrahierbare Marker; 44 LOINC-Codes liegen im 11.676er Katalog und werden als Spec-Anreicherung neben dem LOINC-Katalog gespeichert.",
     "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt."
   },
   "datenqualitaet": {
@@ -1551,6 +1553,31 @@
         ]
       },
       "grants_herkunft": "140_medical_schema.sql vergibt SELECT an authenticated und service_role ALL; 141_biomarker_katalog.ts fuellt die Katalog-Fallback-Kandidaten.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "biomarker_spec_enrichment",
+      "schritt": "144",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "144_biomarker_spec_enrichment.ts vergibt SELECT an authenticated und service_role ALL explizit.",
       "zeilenschutzart": "oeffentlich"
     },
     {

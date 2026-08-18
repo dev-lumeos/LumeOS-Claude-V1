@@ -263,3 +263,92 @@ Stand: 2026-08-18
 [cmd] `node -e "const fs=require('fs'); const dir='supabase/_pipeline/daten/biomarker-loinc'; let total=0; const seen=new Set(); let licenseOk=0; for (const f of fs.readdirSync(dir).filter(f=>f.endsWith('.json')&&f!=='index.json')) { const d=JSON.parse(fs.readFileSync(dir+'/'+f,'utf8')); if (d.license_notice_required) licenseOk++; for (const r of d.records) { total++; if (seen.has(r.loinc_code)) throw new Error('duplicate '+r.loinc_code); seen.add(r.loinc_code); } } console.log(JSON.stringify({total,unique:seen.size,license_files:licenseOk},null,2))"`: Exit 0; `total` 11.676, `unique` 11.676, `license_files` 8.
 
 [cmd] `pnpm gate`: Exit 0; 8/8 Tasks erfolgreich, keine Fehler.
+
+## C-84: Panels und Spec-Anreicherung
+
+Stand: 2026-08-18
+
+[cmd] Neuer Kettenschritt: `supabase/_pipeline/14_medical/144_biomarker_spec_enrichment.ts`.
+
+[cmd] Der Schritt liest `docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md` reproduzierbar aus dem Markdown-SQL. Keine Marker wurden abgetippt.
+
+[cmd] Live-Lauf: `C-84 OK: 47 Spec-Marker, 44 im LOINC-Katalog, 40 display-nutzbar, 38 mit 96 Spec-Referenzbereichszeilen.`
+
+[cmd] `medical.biomarker_catalog` bleibt bei 11.676 Zeilen. `medical.biomarker_reference_ranges` waechst von 464 auf 560. Neue Tabelle `medical.biomarker_spec_enrichment`: 44 Zeilen.
+
+[cmd] `schema-vollstaendigkeit-pruefen.ts`: Exit 0, `SCHEMA VOLLSTAENDIG`. `testdaten-pruefen.ts`: Exit 0, Medical Katalog/Bereiche/Aliase/Befunde/Werte `11676/560/292/5/140`.
+
+[cmd] `kette-readme-pruefen.ts`: Exit 0, `README/Kette: ok (63 Schritte dokumentiert)`.
+
+[cmd] `pnpm gate`: Exit 1, nicht wegen C-84. Der Web-Build scheitert in `apps/web/src/app/v2/goals/page.tsx:30`, weil `GoalsAnsicht` die Pflicht-Prop `echt` erwartet. `apps/web/` wurde fuer C-84 nicht angefasst.
+
+## Was die Spec hergibt
+
+[cmd] Die Ueberschrift der Spec sagt `100+ Biomarker`; die SQL-Bloecke liefern maschinell extrahierbar 47 Marker.
+
+[cmd] Die Panel-Ueberschriften summieren sich auf 74 Marker: CBC 15, Metabolic 12, Lipid 8, Liver 7, Thyroid 6, Hormones 10, Inflammation 6, Vitamins & Minerals 10. Im SQL stehen davon 47.
+
+[cmd] Extrahierte SQL-Panelzahlen:
+
+| Panel | Spec-SQL | im LOINC-Katalog | display-nutzbar | Bereiche importiert |
+|---|---:|---:|---:|---:|
+| CBC | 5 | 5 | 5 | 5 |
+| Metabolic | 7 | 7 | 7 | 6 |
+| Lipid | 6 | 6 | 5 | 4 |
+| Liver | 6 | 6 | 6 | 6 |
+| Thyroid | 5 | 5 | 3 | 3 |
+| Hormones | 8 | 7 | 7 | 7 |
+| Inflammation | 4 | 4 | 4 | 4 |
+| Vitamins & Minerals | 6 | 4 | 3 | 3 |
+
+[cmd] Jede importierte Spec-Zeile fuehrt `source_file = docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md` und `source_status = spec_ai_generated`.
+
+[read] Die Spec ist eine repo-interne, KI-erzeugte Spec. Die Bereichszahlen werden deshalb als Spec-Herkunft eingetragen, nicht als Labor-, EFSA- oder Fachgesellschaftsquelle.
+
+## Wie viele im LOINC-Katalog liegen
+
+[cmd] 44 von 47 Spec-SQL-Markern liegen im 11.676er LOINC-Zuschnitt.
+
+[cmd] Drei Spec-Codes fehlen im Zuschnitt:
+
+| LOINC | Panel | Spec-Name |
+|---|---|---|
+| `10231-9` | hormone | IGF-1 |
+| `5762-0` | vitamins_minerals | Zinc |
+| `2913-2` | vitamins_minerals | Selenium |
+
+[annahme] Das ist keine Aussage, dass diese Tests in LOINC nicht existieren. Es heisst: Sie liegen nicht im aktuellen C-70b-Zuschnitt mit aktiven, gerankten CLASSTYPE-1/2-Codes nach Domaenenausschluss.
+
+[cmd] Von den 44 vorhandenen Codes sind 38 fuer Bereichsimport akzeptiert. Zwei weitere sind als Display-Zuordnung nutzbar, aber nicht als Bereichs-Fallback, weil die Einheit oder Bezugsbasis nicht passt.
+
+## Wo Spec und Katalog auseinanderlaufen
+
+[cmd] Vier Spec-Zeilen zeigen auf einen LOINC-Code, der einen anderen Test meint. Sie stehen in `biomarker_spec_enrichment` mit `catalog_match_status = identity_mismatch`; ihre Bereiche werden nicht importiert.
+
+| LOINC | Spec | LOINC-Katalog | Grund |
+|---|---|---|---|
+| `1869-7` | Apolipoprotein B | Apolipoprotein A-I | ApoB-Bereich darf nicht auf ApoA1 landen |
+| `3053-6` | Reverse T3 | Triiodothyronine (T3) | Reverse T3 ist nicht Gesamt-T3 |
+| `5385-0` | TPO Antibodies | Thyrotropin receptor Ab | TPO-AK ist nicht TRAb |
+| `2614-6` | Magnesium, RBC | Methemoglobin/Hemoglobin.total | komplett anderer Messwert |
+
+[cmd] Zwei Spec-Zeilen sind inhaltlich derselbe Marker, aber nicht als numeric fallback importiert:
+
+| LOINC | Spec | Abweichung |
+|---|---|---|
+| `10835-7` | Lipoprotein(a) | Spec `nmol/L`, LOINC-Beispieleinheit `mg/dL`; ohne Umrechnung nicht sicher |
+| `62238-1` | Estimated GFR | Spec `mL/min`, LOINC `mL/min/{1.73_m2}`; Bezugsflaeche fehlt |
+
+[read] Das ist dieselbe Fehlerklasse wie GO-00: Ein numerischer Bereich mit falscher Bezugsgoesse sieht plausibel aus und erzeugt spaeter falsche Bewertung. Deshalb werden diese zwei Bereiche nicht als Katalog-Fallback eingespielt.
+
+## Was das fuer C-79 und C-85 bedeutet
+
+[cmd] C-79: Vor C-84 gab es 464 Referenzbereich-Zeilen, davon 54 numerisch und ausgeschlossen. Nach C-84 gibt es 560 Zeilen; 96 davon stammen aus der Spec und sind aktiv. Damit gibt es erstmals LOINC-Codes mit Labor- und Optimalbereich als Zahlen.
+
+[cmd] Die aktiven Spec-Bereiche sind nicht extern validiert. Sie sind besser als eine UI-Attrappe, aber sie tragen ihre Herkunft als `spec_ai_generated`, damit spaeter NHANES, Laborhandbuecher oder Fachgesellschaften gezielt ersetzen koennen.
+
+[cmd] C-85: `common_name` aus der Spec liefert Kurznamen wie `Hgb`, `WBC`, `LDL`, `TSH`, `Vit D`. Diese stehen jetzt in `medical.biomarker_spec_enrichment.common_name`, nicht im LOINC-Masterkatalog.
+
+[cmd] Das System-Marker-Mapping aus `## 1. System-Marker-Mapping` wird als `system_groups` an den Spec-Zeilen gehalten. Es wird nicht zu einem Health Score verrechnet.
+
+[annahme] Fuer die Medical-Anzeige sollte die Oberflaeche zuerst `biomarker_spec_enrichment` fuer die elf Produktpanels/Kurznamen lesen und erst danach auf LOINC-Klassen oder rohe Parent-Panels zurueckfallen. LOINCs `panels`-JSON bleibt fuer Importkontext wertvoll, aber nicht fuer die Produkt-Gruppierung.
