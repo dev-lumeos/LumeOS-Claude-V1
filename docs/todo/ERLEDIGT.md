@@ -6565,3 +6565,59 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Erledigt 2026-08-18 mit G-56.** Gate 8/8, **290 von 290
   Tests.**
+
+- [x] **G-37: Supplements an den Katalog anschliessen** (neu
+  2026-08-17). Folgt auf C-68.
+
+  `[cmd]` `/v2/supplements` steht seit G-33 vollstaendig — elf Tabs, 15
+  von 15 Unterkomponenten, **alle Attrappe.** Seit `130`/`131` gibt es
+  das Schema.
+
+  `[cmd]` **44 Katalogeintraege, 1 Stack mit 4 Positionen, 4 Einnahmen**
+  live. Dazu `daily_intake_summary` als Sicht.
+
+  **Die naheliegenden Tabs:** `Today` (Einnahmen des Tages), `Stack`
+  (Matrix und Liste), `Database` (der Katalog — `[read]` ueber den
+  Kopfknopf erreichbar, nicht in der Leiste, wie die Vorlage es haelt).
+
+  `[cmd]` **`Compliance` braucht mehr Einnahmen** — vier reichen fuer
+  keine Quote. **Cost** braucht Preise; pruef, ob der Katalog sie fuehrt.
+
+  `[read]` **G-32 haengt daran:** `refillUrgent` ist in der Attrappe an
+  einem von neun Eintraegen gesetzt. Sobald echte Bestaende kommen, ist
+  zu entscheiden, **ob es eine Schwelle ist (Bestand unter X Tagen) oder
+  eine Markierung von Hand.** Der Testfall `vitamin-d3` steht bereit.
+
+  `[cmd]` **Erledigt 2026-08-18: vier Tabs statt der drei aus dem
+  Auftrag** — Today, Stack, Database **und Cost**. **14 Kacheln ohne
+  Marke** (Today 4, Stack 1, Database 1, Cost 8), im Browser gezaehlt.
+
+  `[cmd]` Today zeigt **3/4**, naechste Dosis Magnesium 21:30, Herkunft
+  `seed` sichtbar. Database 44 von 44. Cost **20,40 EUR/Monat, 0,68
+  EUR/Tag.**
+
+  ### Zwei Annahmen des Auftrags trafen nicht zu
+
+  `[cmd]` **Cost hat seine Grundlage.** Der Auftrag liess offen, ob der
+  Katalog Preise fuehrt — **er fuehrt `cost_per_serving` auf 44 von 44**,
+  `serving_size` ebenso. **Damit ist der Tab angebunden, ohne eine
+  geschaetzte Zahl.**
+
+  `[cmd]` **„Typical dose" ist auf allen 44 leer** (`typical_dose_min`
+  = 0 von 44). `[read]` *„Die Spalte haette nur Striche gezeigt; sie
+  heisst jetzt „Serving" und zeigt 300 mg, 600 mg, 5 g."*
+
+  ### Was Compliance fehlt — mit Zahl
+
+  `[cmd]` **4 Zeilen an 1 Tag, kein einziges `skipped`.** Gebraucht: **30
+  Tage** (Streifen, Tabelle), **90 Tage** (Heatmap) — bei 4 Positionen
+  also **120 bzw. 360 Zeilen.**
+
+  `[read]` **Die Sicht rechnet `compliance_pct = 100`** — *„genau
+  deshalb bleibt der Tab Attrappe: 100 % aus einem Tag ohne Auslasser
+  ist kein Befund. Der Auslasser fehlt strukturell — ohne `skipped` hat
+  „Last skip · reason" nichts zu zeigen, egal wie viele Tage
+  dazukommen."*
+
+  `[cmd]` Zeilenschutz: `test-user` sieht 0 aktive, 0/0. Gate 8/8, **0
+  Konsolenfehler**, vier Breiten inklusive 375 px.

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `03643e1` auf `dev`.
+**Stand:** 2026-08-18, Anker `5a67903` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 58 offen, 3 in Arbeit.
+`[cmd]` 60 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -185,7 +185,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-25** | Training an echte Daten anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
 | **GO-13** | Fuenf Goals-Kacheln koennen sofort echt werden |  |
-| **G-37** | Supplements an den Katalog anschliessen |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
@@ -193,6 +192,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
 | **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
 | **G-59** | Welche Knoepfe gehoeren in den Modulkopf |  |
+| **G-61** | `refillUrgent` als Schwelle |  |
+| **C-82** | Compliance braucht 120 Zeilen und Auslasser |  |
+| **G-62** | Die 17 Marken in `tabs.tsx` bleiben 17 |  |
 
 ---
 
@@ -1751,27 +1753,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-37: Supplements an den Katalog anschliessen** (neu
-  2026-08-17). Folgt auf C-68.
-
-  `[cmd]` `/v2/supplements` steht seit G-33 vollstaendig — elf Tabs, 15
-  von 15 Unterkomponenten, **alle Attrappe.** Seit `130`/`131` gibt es
-  das Schema.
-
-  `[cmd]` **44 Katalogeintraege, 1 Stack mit 4 Positionen, 4 Einnahmen**
-  live. Dazu `daily_intake_summary` als Sicht.
-
-  **Die naheliegenden Tabs:** `Today` (Einnahmen des Tages), `Stack`
-  (Matrix und Liste), `Database` (der Katalog — `[read]` ueber den
-  Kopfknopf erreichbar, nicht in der Leiste, wie die Vorlage es haelt).
-
-  `[cmd]` **`Compliance` braucht mehr Einnahmen** — vier reichen fuer
-  keine Quote. **Cost** braucht Preise; pruef, ob der Katalog sie fuehrt.
-
-  `[read]` **G-32 haengt daran:** `refillUrgent` ist in der Attrappe an
-  einem von neun Eintraegen gesetzt. Sobald echte Bestaende kommen, ist
-  zu entscheiden, **ob es eine Schwelle ist (Bestand unter X Tagen) oder
-  eine Markierung von Hand.** Der Testfall `vitamin-d3` steht bereit.
 
 
 
@@ -1995,3 +1976,52 @@ Umsetzen angepasst werden.
 
   **Nicht gebaut** — `[read]` *„das ist eine Layout-Entscheidung, kein
   Aufraeumen."* Richtig so.
+
+- [ ] **G-61: `refillUrgent` als Schwelle** (neu 2026-08-18).
+  **Entscheidung fuer Tom.** Vorlage aus G-37.
+
+  `[annahme]` **Der Agent schlaegt eine Schwelle vor, keine
+  Handmarkierung** — mit drei Gruenden:
+
+  `[cmd]` **Die Daten tragen sie** (`low_stock_threshold`, mit passendem
+  Index aus C-68) · `[read]` **eine Handmarkierung veraltet still** ·
+  **und „4 d left" sagt mehr als „unter 7 Stueck".**
+
+  `[cmd]` **`vitamin-d3` loest aus** — 4 Softgels bei Schwelle 7. Der
+  Testfall steht im Register.
+
+  **Offen:** Schwelle je Position oder aus der Reichweite? Und **braucht
+  es zwei Warnstufen?**
+
+- [ ] **C-82: Compliance braucht 120 Zeilen und Auslasser** (neu
+  2026-08-18). Befund aus G-37.
+
+  `[cmd]` **Heute: 4 Einnahmen an 1 Tag, kein `skipped`.** Der Tab
+  rechnet `compliance_pct = 100`.
+
+  `[read]` **Das ist kein Befund, sondern ein Artefakt.** Und der
+  Auslasser fehlt **strukturell** — ohne ihn hat *„Last skip · reason"*
+  nichts zu zeigen, **egal wie viele Tage dazukommen.**
+
+  `[cmd]` **Gebraucht: 30 Tage fuer Streifen und Tabelle, 90 fuer die
+  Heatmap** — bei 4 Positionen **120 bzw. 360 Zeilen**, mit Auslassern.
+
+  `[read]` **Gehoert zu C-78** (zusammenhaengende Seeds): Wer 90 Tage
+  Einnahmen erzeugt, sollte sie an Training und Ernaehrung koppeln —
+  **ein vergessener Tag ist meist ein voller Tag.**
+
+- [ ] **G-62: Die 17 Marken in `tabs.tsx` bleiben 17** (neu 2026-08-18).
+  Befund aus G-37.
+
+  `[cmd]` **Die angebundenen Fassungen sind neue Komponenten, die alten
+  bleiben als Rueckfall.** Das Zaehlen je Datei sieht deshalb
+  unveraendert aus.
+
+  `[read]` **Die neue Pruefung misst stattdessen die Fassungen
+  einzeln** — und wurde in beide Richtungen gegengeprobt: Marke auf
+  echter Fassung faellt, Marke von der Rueckfallfassung entfernt faellt
+  ebenso.
+
+  **Zu klaeren:** Wann fallen die Rueckfallfassungen weg? `[cmd]` Solange
+  beide dastehen, zeigt `v2-attrappen.test.ts` eine Zahl, die nicht mehr
+  die Lage beschreibt.
