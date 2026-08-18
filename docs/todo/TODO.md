@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `e483887` auf `dev`.
+**Stand:** 2026-08-18, Anker `7659a0a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -205,6 +205,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
 | **G-37** | Supplements an den Katalog anschliessen |  |
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
+| **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-73** | Die 107 Muskelgruppen kurieren |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
@@ -212,7 +213,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-42** | AI Coach — zwanzig Tabs offen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
-| **C-72** | Der Import-Pfad fuer Laborbefunde |  |
 | **G-46** | Medical an den Katalog anschliessen |  |
 | **G-47** | Der Umriss fehlt in der Uebernahme |  |
 | **G-48** | Graue Teile heben sich nicht ab |  |
@@ -2182,6 +2182,23 @@ Umsetzen angepasst werden.
   Toms Entwurf ist.** Beim Bau der echten Rechnung ist das die Stelle,
   an der entschieden werden muss.
 
+- [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
+  aus C-72.
+
+  `[cmd]` Von 457 Textpaaren des Vorgaengerrepos sind **292 live**, 6
+  bewusst mehrdeutig — **152 blieben aussen vor, begruendet
+  dokumentiert** in `docs/ssot/107-laborimport.md`.
+
+  **Zu klaeren:** Sind es Marker, die der LOINC-Katalog nicht fuehrt,
+  oder Zuordnungen, die nicht eindeutig waren? `[read]` Im ersten Fall
+  ist es eine Katalogluecke, im zweiten eine Kurationsaufgabe — **zwei
+  verschiedene Antworten.**
+
+  `[cmd]` **Und die deutsche Abdeckung bleibt duenn:** 4.593 deutsche
+  Namen von 11.676 im Katalog. **Ein deutscher Befund trifft nicht jeden
+  Marker** — die 292 Aliase schliessen die Luecke nur dort, wo sie
+  bekannt ist.
+
 - [ ] **C-73: Die 107 Muskelgruppen kurieren** (neu 2026-08-18).
   **Vor G-49.**
 
@@ -2455,25 +2472,6 @@ Umsetzen angepasst werden.
   Untertitel auf die Attrappen-Marke trifft. `[read]` Dritter Befund
   dieser Art nach G-23 (Modulkopf) und G-34 (`.v2-btn` ohne `nowrap`).
 
-- [ ] **C-72: Der Import-Pfad fuer Laborbefunde** (neu 2026-08-18).
-  Folgt auf C-69.
-
-  `[cmd]` Das Schema steht: 11.676 Katalogeintraege, `lab_reports` und
-  `lab_result_values` mit `entry_confidence` und `needs_verification`.
-  **Was fehlt, ist der Weg vom PDF zur Zeile.**
-
-  `[cmd]` `SPEC_08_IMPORT_PIPELINE.md` hat **17 KB**.
-
-  `[read]` **Die Vorlage wirbt mit** *„German, English, Thai lab formats
-  supported"* — und `biomarkerSynonyms.ts` im Vorgaengerrepo traegt
-  **457 Synonympaare auf 91 kanonische Namen, davon 18 auf Thai.**
-  **Das ist die Zuordnungstabelle, die ein Import braucht.**
-
-  `[cmd]` Im Katalog stehen `synonyms` je Eintrag aus LOINCs
-  `RELATEDNAMES2` — **pruefen, wie weit die beiden sich decken.**
-
-  **Und `medical.biomarker_catalog` hat 4.593 deutsche Namen** von
-  11.676 — ein deutscher Befund trifft also nicht jeden Marker.
 
 - [ ] **G-46: Medical an den Katalog anschliessen** (neu 2026-08-18).
   Folgt auf C-69.

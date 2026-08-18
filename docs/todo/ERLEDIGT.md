@@ -3747,6 +3747,55 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` PostgREST sieht `medical` erst nach `supabase stop` und
   `start` — wie bei `goals`.
 
+- [x] **C-72: Der Import-Pfad fuer Laborbefunde** (neu 2026-08-18).
+  Folgt auf C-69.
+
+  `[cmd]` Das Schema steht: 11.676 Katalogeintraege, `lab_reports` und
+  `lab_result_values` mit `entry_confidence` und `needs_verification`.
+  **Was fehlt, ist der Weg vom PDF zur Zeile.**
+
+  `[cmd]` `SPEC_08_IMPORT_PIPELINE.md` hat **17 KB**.
+
+  `[read]` **Die Vorlage wirbt mit** *„German, English, Thai lab formats
+  supported"* — und `biomarkerSynonyms.ts` im Vorgaengerrepo traegt
+  **457 Synonympaare auf 91 kanonische Namen, davon 18 auf Thai.**
+  **Das ist die Zuordnungstabelle, die ein Import braucht.**
+
+  `[cmd]` Im Katalog stehen `synonyms` je Eintrag aus LOINCs
+  `RELATEDNAMES2` — **pruefen, wie weit die beiden sich decken.**
+
+  **Und `medical.biomarker_catalog` hat 4.593 deutsche Namen** von
+  11.676 — ein deutscher Befund trifft also nicht jeden Marker.
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritte `142` und `143`.
+  `medical.biomarker_aliases` mit Kandidaten- und Importfunktionen.
+
+  | | |
+  |---|---|
+  | Textpaare im Vorgaengerrepo | 457, davon 454 aktiv |
+  | eindeutig importierbar | **286** |
+  | bewusst mehrdeutig | 6 |
+  | **live** | **292** |
+  | nicht importiert, begruendet | 152 |
+
+  ### Die drei Faelle sind belegt
+
+  `[cmd]` Live geprueft:
+
+  | | |
+  |---|---|
+  | **Haemoglobin** | → `718-7`, `exact`, Confidence **0,98** |
+  | **Glukose** | → `ambiguous`, **3 Kandidaten**, `needs_verification` |
+  | **Unbekannter Marker X** | → `unknown`, **Rohtext gespeichert** |
+
+  `[read]` **Der dritte Fall war die eigentliche Anforderung.** Tom:
+  *„Wenn Daten importiert werden und wir die nicht in der DB haben,
+  kommt nichts."* — **Der Marker verschwindet nicht, er steht mit
+  `entry_confidence 0.00` und seinem Rohtext da.**
+
+  `[cmd]` Zeilenschutz: Tom sieht 2 Befunde und 6 Werte, Max 0/0,
+  **Fremdimport bricht mit `medical import: user mismatch` ab.**
+
 
 
 ## Erledigt am 2026-08-05
