@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `f715710` auf `dev`.
+**Stand:** 2026-08-18, Anker `07c0663` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 75 offen, 3 in Arbeit.
+`[cmd]` 76 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -189,6 +189,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-24** | JetBrains Mono laden |  |
 | **G-26** | `MuscleBodyMap` nach `packages/ui` |  |
 | **A-17** | Datenherkunft, bevor die Geraete kommen |  |
+| **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **C-65** | Toms Passwort steht nirgends |  |
@@ -1780,6 +1781,36 @@ Umsetzen angepasst werden.
   `[cmd]` **Zu pruefen** — der Fundus nennt HRV und Readiness mit 30
   Fundstellen (`useRecoveryIntel.ts`, `RecoveryIntel.ts` mit 26 KB).
   **Ob dort eine Geraeteanbindung existierte, ist ungeprueft.**
+
+- [ ] **A-18: `theme-v1/uploads/` — die Bruecke zwischen Spec und
+  Entwurf** (neu 2026-08-18). Befund aus der G-42-Vorarbeit.
+
+  `[cmd]` `docs/spezifikation/10-plattform/design-system/theme-v1/uploads/`
+  enthaelt **die Spec-Dateien, die Claude Design bekommen hat** — mit
+  Hash im Namen: `SPEC_10_COMPONENTS-d99c9f3e.md`,
+  `SPEC_04_FEATURES-aadfc7f5.md`, `SPEC_09_SCORING-8a1632fa.md`.
+
+  `[cmd]` **Sie steht in keinem Index** — weder im SSOT noch in der
+  Spezifikation. **Vierter unentdeckter Fundus** nach
+  `referenz/lumeos-2026/`, `docs/ssot/70-spec-audit/` und
+  `apps/web/public/mockup/`.
+
+  ### Warum sie zaehlt
+
+  `[read]` **Tom, 2026-08-18:** *„Das Design wurde aus den Specs und der
+  Vision von Claude Design erstellt, also muss das irgendwo definiert
+  sein."* — **Und es war so.** Alle vier unklaren Buddy-Tabs
+  (`clone`, `bss`, `signature`, `butler`) stehen dort definiert.
+
+  **Damit laesst sich pruefen, ob der Entwurf auf dem aktuellen
+  Spec-Stand beruht** — und was sich seither geaendert hat. `[cmd]` Ein
+  Vergleich der Hash-Dateien gegen `docs/specs/` sagt es Datei fuer
+  Datei.
+
+  **Was zu tun ist:** Bestand aufnehmen, in den Index, und den Abgleich
+  fahren. `[read]` Wo Entwurf und heutige Spec auseinanderlaufen, ist
+  **der Entwurf nicht automatisch veraltet** — bei den TDEE-Formeln war
+  die Vorlage genauer als die Spec (W-6).
 
 - [ ] **A-16: `public/mockup/` als dritten Fundus auswerten** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Der Rest — koennen wir als
