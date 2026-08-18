@@ -1173,6 +1173,37 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "goals",
+      "name": "goal_milestones",
+      "schritt": "113",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "113_goal_milestones_adaptive_tdee.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "training",
       "name": "workout_sessions",
       "schritt": "106",
@@ -1618,6 +1649,21 @@
       "schema": "goals",
       "name": "body_composition_navy",
       "schritt": "112"
+    },
+    {
+      "schema": "goals",
+      "name": "adaptive_tdee",
+      "schritt": "113"
+    },
+    {
+      "schema": "goals",
+      "name": "goal_progress_at",
+      "schritt": "113"
+    },
+    {
+      "schema": "goals",
+      "name": "goal_milestone_status",
+      "schritt": "113"
     },
     {
       "schema": "training",

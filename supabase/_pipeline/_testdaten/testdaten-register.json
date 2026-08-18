@@ -158,5 +158,13 @@
     "date": "2026-08-19",
     "case": "Medical-Import mit eindeutigem, mehrdeutigem und unbekanntem Marker",
     "expected": "medical.import_lab_report_rows erzeugt drei Messwerte: Haemoglobin wird exakt auf 718-7 gemappt, Glukose bleibt ohne Systemkontext mehrdeutig mit Kandidaten, und Unbekannter Marker X wird mit Rohtext und needs_verification gespeichert."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-09-13",
+    "case": "Adaptive TDEE und Meilensteine",
+    "expected": "goals.adaptive_tdee liefert fuer Tom einen belastbaren 14-Tage-Wert neben dem Formelwert. goal_milestone_status zeigt einen erreichten, einen offenen und einen verfehlten Gewichts-Meilenstein; Max' Performance-Meilenstein liefert keinen geratenen Fortschritt."
   }
 ]

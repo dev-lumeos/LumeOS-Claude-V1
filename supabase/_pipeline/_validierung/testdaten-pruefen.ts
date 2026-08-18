@@ -39,6 +39,7 @@ const profiles = numberScalar(`SELECT count(*) FROM public.profiles WHERE id IN 
 const targets = numberScalar(`SELECT count(*) FROM goals.nutrition_targets WHERE user_id IN (${IDS_SQL});`)
 const userGoals = numberScalar(`SELECT count(*) FROM goals.user_goals WHERE user_id IN (${IDS_SQL});`)
 const goalPhases = numberScalar(`SELECT count(*) FROM goals.goal_phases WHERE user_id IN (${IDS_SQL});`)
+const goalMilestones = numberScalar(`SELECT count(*) FROM goals.goal_milestones WHERE user_id IN (${IDS_SQL});`)
 const bodyMeasurements = numberScalar(`SELECT count(*) FROM goals.body_measurements WHERE user_id IN (${IDS_SQL});`)
 const bodyCircumferences = numberScalar(`SELECT count(*) FROM goals.body_circumferences WHERE user_id IN (${IDS_SQL});`)
 const preferences = numberScalar(`SELECT count(*) FROM nutrition.food_preferences WHERE user_id IN (${IDS_SQL});`)
@@ -89,6 +90,7 @@ if (MODE === 'clean') {
   if (targets !== 0) errors.push(`nutrition_targets: ${targets}, erwartet 0`)
   if (userGoals !== 0) errors.push(`user_goals: ${userGoals}, erwartet 0`)
   if (goalPhases !== 0) errors.push(`goal_phases: ${goalPhases}, erwartet 0`)
+  if (goalMilestones !== 0) errors.push(`goal_milestones: ${goalMilestones}, erwartet 0`)
   if (bodyMeasurements !== 0) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 0`)
   if (bodyCircumferences !== 0) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet 0`)
   if (preferences !== 0) errors.push(`food_preferences: ${preferences}, erwartet 0`)
@@ -115,6 +117,7 @@ if (MODE === 'clean') {
   console.log('C-82 Testdaten-Pruefung (clean)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
   console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
+  console.log(`  Meilensteine: ${goalMilestones}`)
   console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
@@ -152,6 +155,7 @@ if (MODE === 'clean') {
   if (targets !== 3) errors.push(`nutrition_targets: ${targets}, erwartet 3`)
   if (userGoals !== 3) errors.push(`user_goals: ${userGoals}, erwartet 3`)
   if (goalPhases !== 3) errors.push(`goal_phases: ${goalPhases}, erwartet 3`)
+  if (goalMilestones !== 4) errors.push(`goal_milestones: ${goalMilestones}, erwartet 4`)
   if (bodyMeasurements !== 43) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 43`)
   if (bodyCircumferences !== 7) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet 7`)
   if (preferences !== 1) errors.push(`food_preferences: ${preferences}, erwartet 1`)
@@ -214,6 +218,67 @@ if (MODE === 'clean') {
        AND count(*) FILTER (WHERE is_primary) = 1
        AND max(priority) <= 3;`)) {
     errors.push('Fall Goals aktiv: Toms zwei aktive Ziele mit genau einem Primary fehlen')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.adaptive_tdee('${tom}'::uuid, DATE '2026-09-13', 14)
+    WHERE status = 'complete'
+      AND reliable
+      AND complete_intake_days = 14
+      AND weight_measurement_count = 14
+      AND source = 'derived_adaptive_tdee'
+      AND formula_tdee_kcal IS NOT NULL
+      AND raw_tdee_kcal IS NOT NULL
+      AND adaptive_tdee_kcal IS NOT NULL
+      AND adaptive_tdee_kcal <> formula_tdee_kcal;`)) {
+    errors.push('Fall Adaptive TDEE: Tom liefert keinen belastbaren 14-Tage-Wert neben dem Formelwert')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.adaptive_tdee('${max}'::uuid, DATE '2026-09-13', 14)
+    WHERE adaptive_tdee_kcal IS NULL
+      AND NOT reliable
+      AND status IN ('insufficient_weight_measurements', 'insufficient_intake_days');`)) {
+    errors.push('Fall Adaptive TDEE ohne Daten: Max bekommt trotz fehlender Gewichtsdaten einen Wert')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.goal_progress_at('30000000-0000-0000-0000-000000000101'::uuid, DATE '2026-09-13')
+    WHERE progress_status = 'measured'
+      AND current_source = 'goals.body_measurements'
+      AND current_value = 85
+      AND measured_at = DATE '2026-09-13';`)) {
+    errors.push('Fall Ziel-Fortschritt: Gewichtsziel liest nicht die echte Koerpermessung')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000101'::uuid, DATE '2026-09-13')
+    WHERE computed_status = 'achieved'
+      AND current_value = 85
+      AND source = 'seed';`)) {
+    errors.push('Fall Meilenstein erreicht: 85-kg-Meilenstein wird nicht erreicht')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000102'::uuid, DATE '2026-09-13')
+    WHERE computed_status = 'open'
+      AND current_value = 85;`)) {
+    errors.push('Fall Meilenstein offen: 86,5-kg-Meilenstein bleibt nicht offen')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000103'::uuid, DATE '2026-09-13')
+    WHERE computed_status = 'missed'
+      AND current_value = 85;`)) {
+    errors.push('Fall Meilenstein verfehlt: verfehlter Meilenstein verschwindet oder gilt als erreicht')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000201'::uuid, DATE '2026-09-13')
+    WHERE computed_status = 'not_implemented_workout_sets'
+      AND current_value IS NULL
+      AND progress_pct IS NULL;`)) {
+    errors.push('Fall Ziel ohne messbare Quelle: Performance-Meilenstein bekommt geratenen Fortschritt')
   }
   if (!hasRows(`
     SELECT 1
@@ -664,6 +729,7 @@ if (MODE === 'clean') {
   console.log('C-82 Testdaten-Pruefung (present)')
   console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
   console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
+  console.log(`  Meilensteine: ${goalMilestones}`)
   console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
