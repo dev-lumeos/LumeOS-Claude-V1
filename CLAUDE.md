@@ -48,6 +48,34 @@ Sperre um 20:51 gesetzt, Codex committete um 20:53.
 *„Nicht committen, nicht stagen — melden."* Das ist schwaecher als eine
 Sperre, aber Codex haelt sich an Textvorgaben.
 
+## Seeds gehoeren auf `dev@lumeos.app`
+
+**Tom, 2026-08-18:** *,Wegwerf-DB ist mir scheissegal, wie und wo er
+anlegt. Danach muessen Seeds in meinen Dev-Account, sonst sehe ich
+nichts."*
+
+`[cmd]` **Der Zustand, der dazu fuehrte:** Saemtliche Testdaten hingen
+an `tom.seed@example.com` — 43 Koerpermessungen, 7 Umfaenge, 2
+Laborbefunde, 6 Messwerte. **Toms Konto hatte davon nichts**, und
+`tom.seed` hat kein Passwort (`encrypted_password IS NULL`), ist also
+nicht anmeldbar.
+
+**Damit war nichts im Browser sichtbar** — weder fuer Tom noch fuer
+einen Agenten, der einen Nachweis fuehren sollte.
+
+**Die Regel, in jedem Datenauftrag:**
+
+> Testdaten laufen in der Wegwerf-Datenbank, wie und wo ist gleich.
+> **Was danach live eingespielt wird, gehoert auf `dev@lumeos.app`.**
+
+`[read]` Muster: `eigenes-konto-fuellen.sql` tut das fuer Nutrition
+bereits. **Was fuer Mahlzeiten gilt, gilt fuer Messungen, Befunde,
+Sitzungen und Check-ins genauso.**
+
+`[cmd]` **Und der Zeilenschutz-Nachweis braucht zwei anmeldbare
+Konten** — einen, der die Daten sieht, und einen, der sie nicht sieht.
+Ein Konto ohne Passwort taugt fuer keines von beidem.
+
 ## Pruefungen als Skript, nicht als Shell-Einzeiler
 
 **Tom, 2026-08-17:** *„So belanglosen Scheiss will ich nicht
