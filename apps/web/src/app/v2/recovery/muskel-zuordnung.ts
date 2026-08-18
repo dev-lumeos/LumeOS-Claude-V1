@@ -1,13 +1,120 @@
 // Recovery-Kuerzel -> Muskel-ID der Koerperkarte.
 //
 // `[cmd]` DIE BEIDEN LISTEN SIND NICHT DECKUNGSGLEICH. Recovery fuehrt
-// 18 Kuerzel (motor.ts:28-34), die uebernommene Karte 21 Gruppen
-// (koerperkarte-pfade.ts) — davon fuenf, die keine Muskeln sind
-// (Kopf, Haare, Haende, Knoechel, Fuesse) und die Figur zeichnen.
+// 18 Kuerzel (motor.ts:28-34), die Karte 39 IDs: **17 einfaerbbare
+// Gruppen**, 6 Nicht-Muskeln (Kniescheibe, Kopf, Haare, Haende,
+// Knoechel, Fuesse) und 16 Injektionsorte. Vollstaendig aufgeschluesselt
+// in `EINORDNUNG` unten — G-44 hat die Zahlen zur Laufzeit gezaehlt und
+// die frueheren „21 Gruppen, fuenf Nicht-Muskeln" berichtigt.
 //
 // **Jede Zeile ist geprueft, keine geraten.** Wo die Karte gruenlicher
 // zeichnet als Recovery unterscheidet, steht der Grund daneben.
 import { MUSKELN } from '@lumeos/ui'
+
+// ---------------------------------------------------------------------
+// EINORDNUNG — was jede ID der Karte ist (G-44)
+// ---------------------------------------------------------------------
+//
+// `[read]` Tom, 2026-08-18: „Recheck, ob alle Muskeln in der Grafik auch
+// in der Liste auftauchen."
+//
+// `[cmd]` DIE KARTE FUEHRT 39 IDs: 23 in `MUSKELN`, 16 in
+// `INJEKTIONS_ORTE`. Zur Laufzeit gezaehlt (`Object.keys`), nicht per
+// grep — an einem `[a-z_]+`-Muster ist in G-26 schon `upper-back`
+// durchgefallen und waere dauerhaft grau geblieben.
+//
+// **Jede der 39 bekommt hier eine Einordnung.** Der Test
+// `karten-ids.test.ts` macht eine fehlende zum Fehler; sonst waechst
+// die Liste still weiter.
+//
+// `[annahme]` ZU TOMS ZAEHLUNG VON 41: die beiden zusaetzlichen sind
+// `label` und `side` — das sind **Eigenschaften** der
+// Injektionsort-Objekte, keine IDs. Aus demselben Grund taucht `both`
+// als vermeintliche ID auf: es ist der WERT von `side` bei
+// beidseitigen Muskeln. In der Zuordnung stand `both` nie; es kommt
+// nur in einem Kommentar vor.
+
+export type Einordnung =
+  /** Eine Muskelgruppe, die eingefaerbt werden kann. */
+  | { art: 'gruppe'; name: string }
+  /** Teilstueck einer Gruppe — ein Injektionsort, keine Flaeche. */
+  | { art: 'teilstueck'; von: string; name: string }
+  /** Zeichnet die Figur, traegt keinen Zustand. */
+  | { art: 'nicht-muskel'; name: string }
+
+export const EINORDNUNG: Record<string, Einordnung> = {
+  // ── 17 Muskelgruppen (einfaerbbar) ────────────────────────────────
+  chest: { art: 'gruppe', name: 'Brust' },
+  abs: { art: 'gruppe', name: 'Bauch' },
+  obliques: { art: 'gruppe', name: 'Seitliche Bauchmuskeln' },
+  biceps: { art: 'gruppe', name: 'Bizeps' },
+  triceps: { art: 'gruppe', name: 'Trizeps' },
+  deltoids: { art: 'gruppe', name: 'Schultern' },
+  trapezius: { art: 'gruppe', name: 'Trapezmuskel' },
+  neck: { art: 'gruppe', name: 'Nacken' },
+  forearm: { art: 'gruppe', name: 'Unterarm' },
+  adductors: { art: 'gruppe', name: 'Adduktoren (Innenseite)' },
+  quadriceps: { art: 'gruppe', name: 'Quadrizeps' },
+  calves: { art: 'gruppe', name: 'Waden' },
+  'upper-back': { art: 'gruppe', name: 'Oberer Ruecken (mit Latissimus)' },
+  'lower-back': { art: 'gruppe', name: 'Unterer Ruecken' },
+  gluteal: { art: 'gruppe', name: 'Gesaess' },
+  hamstring: { art: 'gruppe', name: 'Beinbeuger' },
+  // `[cmd]` DIE EINZIGE GRUPPE OHNE RECOVERY-KUERZEL. Die Karte
+  // zeichnet den Schienbeinmuskel, `MUSCLE_GROUPS_BODYMAP` (motor.ts:28)
+  // fuehrt ihn nicht — deshalb bleibt er grau. **Kein Zuordnungsfehler,
+  // sondern eine Luecke auf der Datenseite.** Ein Kuerzel zu erfinden
+  // hiesse, eine Muskelgruppe zu erfinden, die das Modul nicht misst.
+  tibialis: { art: 'gruppe', name: 'Schienbeinmuskel — ohne Recovery-Kuerzel' },
+  // `knees` zeichnet die Kniescheibe. Sie liegt in `MUSKELN`, ist aber
+  // Knochen, kein Muskel — deshalb `nicht-muskel`, siehe unten.
+
+  // ── Nicht-Muskeln: sie zeichnen die Figur ─────────────────────────
+  // `[cmd]` Sie tragen keinen Zustand und bleiben in der Grundfarbe.
+  // Am Bildschirm gemessen: `var(--surface-2)` bzw. der feste
+  // Hautton. Das ist beabsichtigt — die Gestaltungsfrage dazu steht
+  // im Bericht.
+  knees: { art: 'nicht-muskel', name: 'Kniescheibe' },
+  head: { art: 'nicht-muskel', name: 'Kopf (fester Hautton)' },
+  hair: { art: 'nicht-muskel', name: 'Haare (fester Ton)' },
+  hands: { art: 'nicht-muskel', name: 'Haende' },
+  ankles: { art: 'nicht-muskel', name: 'Knoechel' },
+  feet: { art: 'nicht-muskel', name: 'Fuesse' },
+
+  // ── 16 Injektionsorte: Punkte, keine Flaechen ─────────────────────
+  // `[cmd]` Sie liegen in `INJEKTIONS_ORTE` und werden als Kreis ueber
+  // die Figur gelegt (`InjektionsKarte`), nicht als Flaeche
+  // eingefaerbt. Ein Teilstueck einzufaerben ergaebe einen halben
+  // Muskel — `karten-ids.test.ts` verbietet das.
+  delt_l: { art: 'teilstueck', von: 'deltoids', name: 'Schulter links' },
+  delt_r: { art: 'teilstueck', von: 'deltoids', name: 'Schulter rechts' },
+  pec_l: { art: 'teilstueck', von: 'chest', name: 'Brust links' },
+  pec_r: { art: 'teilstueck', von: 'chest', name: 'Brust rechts' },
+  bicep_l: { art: 'teilstueck', von: 'biceps', name: 'Bizeps links' },
+  bicep_r: { art: 'teilstueck', von: 'biceps', name: 'Bizeps rechts' },
+  quad_l: { art: 'teilstueck', von: 'quadriceps', name: 'Oberschenkel links' },
+  quad_r: { art: 'teilstueck', von: 'quadriceps', name: 'Oberschenkel rechts' },
+  glute_l: { art: 'teilstueck', von: 'gluteal', name: 'Gesaess links' },
+  glute_r: { art: 'teilstueck', von: 'gluteal', name: 'Gesaess rechts' },
+  // `[cmd]` „Ventrogluteal" ist eine anerkannte Injektionsstelle in der
+  // Gesaessregion (vorderer oberer Anteil), **kein Vastus und keine
+  // Wade** — die Vermutung im Auftrag traf nicht zu. Die Vorlage
+  // beschriftet sie selbst so (koerperkarte-pfade.ts:256).
+  vg_l: { art: 'teilstueck', von: 'gluteal', name: 'Ventrogluteal links' },
+  vg_r: { art: 'teilstueck', von: 'gluteal', name: 'Ventrogluteal rechts' },
+  // `[cmd]` Der Latissimus hat KEINE eigene Flaeche — er steckt in
+  // `upper-back` (6 Pfade ueber den ganzen oberen Ruecken). Die beiden
+  // Punkte liegen darueber.
+  lat_l: { art: 'teilstueck', von: 'upper-back', name: 'Latissimus links' },
+  lat_r: { art: 'teilstueck', von: 'upper-back', name: 'Latissimus rechts' },
+  tricep_l: { art: 'teilstueck', von: 'triceps', name: 'Trizeps links' },
+  tricep_r: { art: 'teilstueck', von: 'triceps', name: 'Trizeps rechts' },
+}
+
+/** Die IDs je Art — fuer den Bericht und die Pruefung. */
+export function nachArt(art: Einordnung['art']): string[] {
+  return Object.entries(EINORDNUNG).filter(([, e]) => e.art === art).map(([k]) => k)
+}
 
 /**
  * `null` heisst: die Karte kennt diesen Muskel nicht getrennt.

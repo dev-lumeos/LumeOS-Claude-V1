@@ -43,7 +43,7 @@ Darstellung durch eine gute zu ersetzen. Genau das sagt Toms Satz auch.
 
 | | |
 |---|---|
-| **21 Muskelgruppen** | statt 18 Flächen; anatomische Pfade, nicht Blobs |
+| **23 Flächen-IDs** | davon 17 Muskelgruppen (G-44 nachgezählt), statt 18 Blobs |
 | **Zwei Ansichten** | vorne und hinten, mit eigenen Umrissen |
 | **Fünf Aufrufarten** | Ermüdung · Aktivierung · Injektion · Punkte · kombiniert |
 | **16 Injektionsorte** | mit Prozentkoordinaten je Ansicht |
@@ -139,7 +139,8 @@ gelöscht** — in G-19 war das anders ausgegangen.
 
 ## Die Zuordnung Recovery → Karte
 
-Recovery führt 18 Kürzel, die Karte 21 Gruppen. **Jede Zeile ist
+Recovery führt 18 Kürzel, die Karte 17 einfärbbare Gruppen (G-44
+nachgezählt; hier stand zuerst „21 Gruppen"). **Jede Zeile ist
 geprüft, keine geraten** (`recovery/muskel-zuordnung.ts`).
 
 **17 von 18 kommen an.** Eine Lücke bleibt:
@@ -225,6 +226,166 @@ Komponente fertig vor.**
 
 ---
 
+# Nachtrag G-44 (2026-08-18): Was jede der IDs ist
+
+`[read]` **Tom, 2026-08-18:** *„Es fehlen diverse Aktivierungen von
+Parts, dass man den ganzen Body erkennt. Recheck, ob alle Muskeln in
+der Grafik auch in der Liste auftauchen."*
+
+## Zuerst die Zählung berichtigt
+
+`[cmd]` **Die Karte führt 39 IDs, nicht 41.** Zur Laufzeit gezählt
+(`Object.keys` auf die geladenen Module), nicht per `grep` — genau daran
+ist in G-26 schon `upper-back` durchgefallen.
+
+Die beiden Mehr in der Auftragszählung sind erklärbar:
+
+- **`label` und `side`** sind **Eigenschaften** der
+  Injektionsort-Objekte, keine IDs.
+- **`both` in der Zuordnung** gibt es nicht. Es ist der *Wert* von
+  `side` bei beidseitigen Muskeln und steht nur in einem Kommentar
+  (`muskel-zuordnung.ts:34`). `[cmd]` Nachgesehen: kein Eintrag mit
+  diesem Schlüssel.
+
+## Was jede der 39 IDs ist
+
+Vollständig in `EINORDNUNG` (`recovery/muskel-zuordnung.ts`), hier die
+Zahlen je Art:
+
+| Art | Anzahl | |
+|---|---|---|
+| **Muskelgruppe** | **17** | einfärbbare Flächen |
+| **Teilstück** | **16** | Injektionsorte — Punkte, keine Flächen |
+| **Nicht-Muskel** | **6** | Kniescheibe, Kopf, Haare, Hände, Knöchel, Füße |
+| | **39** | |
+
+### Die 17 Muskelgruppen
+
+`chest` · `abs` · `obliques` · `biceps` · `triceps` · `deltoids` ·
+`trapezius` · `neck` · `forearm` · `adductors` · `quadriceps` ·
+`calves` · `upper-back` · `lower-back` · `gluteal` · `hamstring` ·
+**`tibialis`**
+
+### Die 16 Injektionsorte und ihre Gruppe
+
+| Ort | gehört zu | | Ort | gehört zu |
+|---|---|---|---|---|
+| `delt_l/r` | `deltoids` | | `glute_l/r` | `gluteal` |
+| `pec_l/r` | `chest` | | `vg_l/r` | `gluteal` |
+| `bicep_l/r` | `biceps` | | `lat_l/r` | `upper-back` |
+| `quad_l/r` | `quadriceps` | | `tricep_l/r` | `triceps` |
+
+Zwei Vermutungen aus dem Auftrag ließen sich klären:
+
+- **`vg_*` ist „Ventrogluteal"** — eine anerkannte Injektionsstelle im
+  vorderen oberen Gesäßbereich. `[cmd]` Die Vorlage beschriftet sie
+  selbst so (`koerperkarte-pfade.ts:256`). **Kein Vastus, keine Wade.**
+- **`lat_*` braucht keine Sammelgruppe.** `[cmd]` Der Latissimus hat
+  keine eigene Fläche — er steckt in `upper-back`, das mit sechs Pfaden
+  den ganzen oberen Rücken zeichnet. Die zwei Punkte liegen darüber.
+
+## Der Test, der eine unzugeordnete ID zum Fehler macht
+
+`[cmd]` Der bisherige Test hielt eine **Lückenliste** gegen eine feste
+Erwartung — das fängt nur, was schon als Lücke bekannt ist. Eine neue
+ID in der Karte fällt durch.
+
+`karten-ids.test.ts` dreht die Richtung um: **er geht von den IDs der
+Karte aus** und verlangt für jede einen Eintrag. Drei Prüfungen, jede
+absichtlich zum Fehlschlagen gebracht:
+
+| Prüfung | Gegenprobe |
+|---|---|
+| jede ID ist eingeordnet | neue ID `soleus` eingebaut → *„Diese IDs der Karte sind nicht eingeordnet: soleus"* |
+| die Einordnung erfindet keine IDs | Eintrag `lats` erfunden → *„zeigt auf IDs, die die Karte nicht kennt"* |
+| Recovery zeigt nur auf Gruppen | `chest → pec_l` gesetzt → *„das ist teilstueck, keine Gruppe"* |
+
+Dazu `zaehlen.test.ts`: die Aufteilung 17/16/6 steht fest. `[cmd]`
+Gegenprobe: `hands` zur Gruppe erklärt → zwei Prüfungen fallen.
+
+---
+
+## Was die Karte nicht kann
+
+### `tibialis` — die einzige Gruppe ohne Recovery-Kürzel
+
+`[cmd]` Die Karte **zeichnet** den Schienbeinmuskel,
+`MUSCLE_GROUPS_BODYMAP` (`motor.ts:28`) **führt ihn nicht**. Er bleibt
+deshalb grau.
+
+**Das ist eine Lücke auf der Datenseite, kein Zuordnungsfehler.** Ein
+Kürzel zu ergänzen hieße, eine Muskelgruppe zu erfinden, die das Modul
+nicht misst — dieselbe Überlegung wie bei `abductors`. **Nicht selbst
+entschieden; wenn Recovery den Schienbeinmuskel führen soll, ist das
+eine Produktentscheidung.**
+
+### `abductors` — bleibt eine echte Lücke
+
+`[cmd]` Die Karte kennt nur `adductors` (Innenseite). `[read]` **Nicht
+auf `gluteal` gelegt** — das ist ein anderer Muskel. In G-26 so
+entschieden, bleibt so.
+
+### Am Bildschirm nachgezählt
+
+`[cmd]` `/v2/recovery`, 2026-08-18, 23 gerenderte Muskel-IDs:
+
+| | |
+|---|---|
+| **16 eingefärbt** | alle Gruppen mit Recovery-Kürzel |
+| **5 grau** | `tibialis`, `knees`, `hands`, `ankles`, `feet` |
+| **2 fester Ton** | `head`, `hair` |
+
+Bei 375 / 768 / 1440 px identisch, kein waagerechtes Scrollen.
+
+> **Zwischenfall beim Messen:** Der erste Durchgang zählte **24** IDs
+> und fand `soleus` — die ID aus meiner eigenen Gegenprobe. Die Datei
+> war zurückgesetzt, **der Entwicklungsserver lieferte aber noch den
+> alten Build.** Erst nach erzwungenem Neuübersetzen stimmte die Zahl.
+> `[read]` Derselbe Fehler wie in G-05, wo ein zwei Tage alter Prozess
+> eine ganze Sitzung lang veraltete Zustände lieferte.
+
+---
+
+## Zwei Gestaltungsfragen — gemeldet, nicht entschieden
+
+### 1. Die grauen Teile heben sich nicht ab
+
+`[read]` Toms Anlass war *„dass man den ganzen Body erkennt"*. `[cmd]`
+Gemessen, warum das nicht gelingt:
+
+| | Hintergrund | graues Teil | Unterschied |
+|---|---|---|---|
+| **dunkel** | `oklch(0.223 …)` | `oklch(0.235 …)` | **0,012** |
+| **hell** | `oklch(0.987 …)` | `oklch(0.975 …)` | **0,012** |
+
+**Ein Helligkeitsunterschied von 0,012 ist praktisch unsichtbar.**
+Hände, Füße und Schienbein verschwinden im Kartenhintergrund; die linke
+Hand wirkt abgetrennt. Das ist in beiden Modi gleich.
+
+**Nicht selbst geändert** — die Grundfläche ist `--surface-2`, und jede
+Änderung daran wirkt auf die ganze Oberfläche. Möglich wären: ein
+anderer vorhandener Token für Nicht-Muskeln (`--surface-hover` liegt
+0,02 höher, `--border` 0,045), oder eine dünne Kontur um die
+Nicht-Muskeln. **Beides ist Gestaltung, keine Messung.**
+
+### 2. Der Umriss der Vorlage ist kaputt
+
+`[cmd]` **Der Körperumriss endet bei y=815, die Muskeln reichen bis
+y=1340.** Von der Oberschenkelmitte abwärts hat die Figur **keine
+Kontur** — deshalb lösen sich Beine und Füße auf.
+
+**Der Fehler steckt in der Vorlage, nicht in der Übernahme.** `[cmd]`
+Im Mockup selbst gemessen: dort endet der Umriss sogar schon bei y=435.
+`[cmd]` Von 200 Pfadbefehlen in `UMRISS_VORNE` sind **118 fehlerhaft** —
+`C`-Befehle mit vier statt sechs Zahlen. Der Browser hört an der ersten
+kaputten Stelle stillschweigend auf zu zeichnen.
+
+**Zu reparieren wäre der Pfad in der Mockup-Quelle**, nicht in der
+Übernahme — sonst driftet beides auseinander. Das ist ein eigener
+Auftrag und braucht die Originaldatei der Figur.
+
+---
+
 ## Attrappe bleibt Attrappe
 
 `[cmd]` `recovery` hat **kein Schema für Muskelzustände** —
@@ -239,9 +400,19 @@ Datenlage.
 
 ## Zustand
 
-`[cmd]` `pnpm gate` — 8 von 8 Aufgaben grün, **237 Web-Tests + 7
-Admin-Tests**, kein Fehlschlag. Davon 10 neu (`muskel-zuordnung.test.ts`),
-jeder absichtlich zum Fehlschlagen gebracht, bevor er als Sicherheit gilt.
+`[cmd]` **Stand nach G-44:** 16 Tests in drei Dateien
+(`muskel-zuordnung.test.ts`, `karten-ids.test.ts`, `zaehlen.test.ts`),
+alle grün — jeder absichtlich zum Fehlschlagen gebracht, bevor er als
+Sicherheit gilt.
+
+`[cmd]` **Alle Tests gruen: 252 von 252** (`pnpm test` in `apps/web`,
+2026-08-18) — darin die 16 der Koerperkarte.
+
+`[cmd]` **`pnpm gate` bricht dennoch ab, ausserhalb dieses Auftrags:**
+die Encoding-Pruefung meldet 40 Ersetzungszeichen (U+FFFD) in
+`supabase/README.md`. Die Datei wird gerade von der anderen Seite
+bearbeitet und ist **nicht angefasst**. `[cmd]` Nachgesehen: keine der
+in G-44 geaenderten Dateien traegt ein U+FFFD.
 
 `[cmd]` Am Bildschirm geprüft: `/v2/recovery` bei 375 / 768 / 1440 px,
 Hell- und Dunkelmodus, Klick auf einen Muskel öffnet das richtige
