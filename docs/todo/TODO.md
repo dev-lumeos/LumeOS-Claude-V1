@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `691df33` auf `dev`.
+**Stand:** 2026-08-18, Anker `cc36e02` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 80 offen, 3 in Arbeit.
+`[cmd]` 82 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -204,6 +204,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
 | **G-37** | Supplements an den Katalog anschliessen |  |
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
+| **C-76** | Seed-Befunde fuer Medical |  |
+| **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
 | **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
@@ -2140,6 +2142,72 @@ Umsetzen angepasst werden.
   wirkungslose Division** enthaelt (W-8) — **stehen gelassen, weil es
   Toms Entwurf ist.** Beim Bau der echten Rechnung ist das die Stelle,
   an der entschieden werden muss.
+
+- [ ] **C-76: Seed-Befunde fuer Medical** (neu 2026-08-18). **Fuer
+  Codex, sobald frei.**
+
+  **Tom, 2026-08-18:** *„Die Daten sollen in die DB und nicht irgendeine
+  Auflästung in der UI sein. Fuer eine UI-Auflistung brauchen wir Seed
+  Daten."*
+
+  ### Warum
+
+  `[cmd]` `medical.lab_result_values` hat **sechs Testwerte und keine
+  Zeitreihe.** Deshalb zeigt `/v2/medical` unter der echten Tabelle
+  weiter die Attrappe mit 48 erfundenen Markern samt Verlauf,
+  Sparkline und Bereichsbalken.
+
+  `[read]` **Der G-46-Agent hat das selbst benannt:** *„Bleibt Attrappe:
+  die Tabelle zeigt Zeitreihe, Sparkline und Bereichsbalken.
+  `medical.lab_result_values` fuehrt heute sechs Testwerte und keine
+  Zeitreihe — die Spalten haetten nichts zu zeigen."*
+
+  ### Was gebraucht wird
+
+  **Mehrere Befunde ueber Monate, mit denselben Markern** — dann hat
+  die Ansicht Verlaeufe und die Attrappe kann weg.
+
+  `[Wahrscheinlich]` drei bis vier Befunde ueber sechs Monate fuer
+  `tom.seed`, mit den **48 Markern der Vorlage** (die Vorlage nennt
+  Panels: CBC 5, Metabolic 4, Lipid 5, Liver 6, Kidney 4, Thyroid 4,
+  Hormone 10, Inflammation 3, Vitamins 6, Screening 1).
+
+  `[cmd]` **Mit labor-eigenen Referenzbereichen** —
+  `lab_result_values` traegt `lab_reference_low/high/text/unit/source`.
+  **Der Doppelbereich braucht beide Seiten**, sonst laesst er sich nicht
+  zeigen.
+
+  `[cmd]` **Und mit den drei Zuordnungsfaellen aus C-72:** eindeutig,
+  mehrdeutig, unbekannt — sie sind live belegt und muessen in den
+  Seed-Daten vorkommen, damit die Anzeige sie tragen lernt.
+
+  `[read]` **Ein Verlauf mit erkennbarer Tendenz ist mehr wert als ein
+  flacher** — wie bei den Koerperfettwerten, 11,82 % auf 10,31 % ueber
+  sechs Wochen.
+
+- [ ] **G-51: Der Rohkatalog gehoert nicht auf die Seite** (neu
+  2026-08-18). Korrektur an G-46.
+
+  `[cmd]` `/v2/medical` listet heute **den LOINC-Rohkatalog** — 11.676
+  Eintraege nach Haeufigkeitsrang, erster Eintrag `Specimen Nom
+  (Specimen)`.
+
+  `[read]` **Das ist ein Nachschlagewerk, kein Nutzerinhalt.** Der
+  Auftrag sagte *„die Biomarker-Liste"*, ohne zu klaeren, was das
+  heisst — **der Fehler liegt im Auftrag, nicht in der Umsetzung.**
+
+  **Der Katalog gehoert hinter die Suche**, nicht auf die Startseite.
+  `[read]` Dieselbe Regel wie bei den 7.140 Lebensmitteln: **die
+  Vorlage zeigt vier Zeilen im Tagebuch, nicht den Bestand.**
+
+  ### Zwei Fehler nebenbei
+
+  `[cmd]` **`lab_result_values_read: JWT issued at future`** — die
+  Befundwerte laden gar nicht. `[annahme]` Zeitversatz zwischen Browser
+  und Supabase-Container.
+
+  `[cmd]` **„25 von 0 gezeigt"** — die Zaehlung der Trefferliste ist
+  kaputt.
 
 - [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
   aus C-72.
