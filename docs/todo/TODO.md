@@ -1878,6 +1878,29 @@ Umsetzen angepasst werden.
   sondern eine Flaeche ohne zugeordnete Datenbankgruppe — und
   `abductors` umgekehrt eine Gruppe ohne Flaeche.
 
+  ### Der Klick trennt wieder auf
+
+  **Tom, 2026-08-18:** *„Das heisst, beim Anklicken auf der Grafik
+  muessen dann auch dementsprechend alle Treffer gezeigt werden."*
+
+  `[read]` **Das ist die Gegenprobe zur Verdichtung:** Wenn eine Flaeche
+  mehrere Muskeln zusammenfasst, muss der Klick sie wieder auftrennen —
+  **sonst sieht man eine Farbe und weiss nicht, woraus sie entstand.**
+
+  `[cmd]` **Der Klick-Handler liegt bereits vor:**
+  `setClickHandler((id, type, data) => …)` mit
+  `type = 'muscle' | 'injection' | 'point'`. Er liefert heute die
+  **Flaechen-ID** — er muss die dahinterliegenden Gruppen mitgeben.
+
+  `[cmd]` Die Vorlage sieht das vor: die Muskelkarte in Recovery traegt
+  *„18 groups · click for the calculation"*, und der Tab `Muscle map`
+  zeigt daneben eine **Liste je Muskel mit Stunden, Saetzen, Soreness und
+  Prozentwert.**
+
+  **Damit ist die Kette geschlossen:** Flaeche zeigt den verdichteten
+  Wert → Klick zeigt die Einzelmuskeln → Liste zeigt, wie der Wert
+  zustande kam.
+
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
   Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
