@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `6929158` auf `dev`.
+**Stand:** 2026-08-18, Anker `6afa138` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 79 offen, 3 in Arbeit.
+`[cmd]` 80 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -191,6 +191,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-45** | Supplements — Injektionsorte und Subnavigation |  |
+| **G-49** | Die Liste fuehrt jeden Muskel, die Grafik verdichtet |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **C-65** | Toms Passwort steht nirgends |  |
 | **G-25** | Training an echte Daten anschliessen |  |
@@ -212,7 +213,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
 | **C-72** | Der Import-Pfad fuer Laborbefunde |  |
 | **G-46** | Medical an den Katalog anschliessen |  |
-| **G-47** | Der Koerperumriss der Vorlage ist kaputt |  |
+| **G-47** | Der Umriss fehlt in der Uebernahme |  |
 | **G-48** | Graue Teile heben sich nicht ab |  |
 
 ---
@@ -1835,6 +1836,48 @@ Umsetzen angepasst werden.
   Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
   mit `half_life_hours`.
 
+- [ ] **G-49: Die Liste fuehrt jeden Muskel, die Grafik verdichtet**
+  (neu 2026-08-18). **Toms Vorgabe.**
+
+  **Tom, 2026-08-18:** *„Die Grafik zeigt nur eine Uebersicht, ich sage
+  nicht, wir brauchen da jeden kleinsten Part. Aber unsere Liste muss
+  jeden einzelnen Muskel fuehren und bewerten. Fuer die Grafik fassen
+  wir die einzelnen Muskeln zusammen und legen dementsprechend dem
+  Total/Anzahl zusammenfassender Muskeln die Farbe."*
+
+  ### Die Zahlen
+
+  | | |
+  |---|---|
+  | `training.muscle_groups` | **107 Gruppen** in 7 Regionen |
+  | Karte `MUSCLES` | **15 faerbbare Flaechen** |
+
+  `[cmd]` Verteilung in der Datenbank: **legs 37 · arms 24 · back 17 ·
+  shoulders 10 · core 10 · chest 5.**
+
+  `[cmd]` **Die Datenbank kennt `Deltoids` und `Rear Deltoids`
+  getrennt — die Karte hat eine einzige Flaeche `deltoids`.** Ein
+  Push-Tag und ein Pull-Tag faerben heute denselben Schulterbereich.
+
+  ### Was daraus folgt
+
+  **Die Karte ist eine Ansicht, keine Datenquelle.**
+
+  1. **Die Liste bewertet alle 107** — einzeln, mit eigenem
+     Erholungswert.
+  2. **Die Flaeche bekommt den zusammengefassten Wert** der Muskeln, die
+     auf sie fallen. `[read]` Tom nennt es *„dem Total/Anzahl
+     zusammenfassender Muskeln die Farbe"* — **also ein Mittel, kein
+     Maximum.** Ob gewichtet, ist zu klaeren.
+  3. **Jede der 107 braucht ein Ziel.** Keine ohne Flaeche.
+  4. **Sechs Eintraege bekommen nie Farbe:** `head`, `hair`, `hands`,
+     `feet`, `ankles`, `knees` — **ausdruecklich als Nicht-Muskel
+     markiert**, nicht als fehlende Zuordnung.
+
+  `[read]` **Damit loest sich auch G-44:** `tibialis` ist keine Luecke,
+  sondern eine Flaeche ohne zugeordnete Datenbankgruppe — und
+  `abductors` umgekehrt eine Gruppe ohne Flaeche.
+
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
   Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
@@ -2347,25 +2390,44 @@ Umsetzen angepasst werden.
   medizinische Aussage — die Anzeige sagt, **wo er liegt**, nicht was er
   bedeutet.
 
-- [ ] **G-47: Der Koerperumriss der Vorlage ist kaputt** (neu
-  2026-08-18). **Der eigentliche Grund fuer Toms Anlass.** Befund aus
-  G-44.
+- [ ] **G-47: Der Umriss fehlt in der Uebernahme** (neu 2026-08-18,
+  **Diagnose korrigiert**).
 
-  `[cmd]` **Der Umriss endet bei `y=815`, die Muskeln reichen bis
-  `y=1340`** — **ab Oberschenkelmitte hat die Figur keine Kontur.**
+  ### Die erste Diagnose war falsch
 
-  `[cmd]` **Ursache: 118 von 200 Pfadbefehlen sind fehlerhaft** — `C`
-  mit vier statt sechs Zahlen. **Der Browser hoert an der ersten
-  kaputten Stelle auf.**
+  `[read]` G-44 meldete: *„Der Koerperumriss endet bei y=815 — 118 von
+  200 Pfadbefehlen sind fehlerhaft, C mit vier statt sechs Zahlen. Der
+  Fehler steckt in der Mockup-Quelle."*
 
-  `[read]` **Der Fehler steckt in der Mockup-Quelle, nicht in der
-  Uebernahme** — dort endet der Umriss sogar noch frueher. **Zu
-  reparieren waere `apps/web/public/mockup/components/body_front.svg`.**
+  `[cmd]` **Nachgemessen: die Vorlage ist vollstaendig.**
+  `OUTLINE_FRONT` hat **5.010 Zeichen, 688 Zahlen, y von -30 bis
+  1.351** — bis zu den Fuessen. `OUTLINE_BACK` ebenso, bis 1.370.
 
-  `[read]` **Das erklaert Toms Anlass genauer als die
-  Zuordnungsluecke:** *„Es fehlen diverse Aktivierungen von Parts, dass
-  man den ganzen Body erkennt."* — **Der Body zerfaellt, weil ihm die
-  Kontur fehlt, nicht weil Muskeln fehlen.**
+  `[cmd]` Und **117 `C`-Befehle in einem Pfad mit 688 Zahlen** ist
+  normale SVG-Syntax — mehrere Koordinatentripel hinter einem
+  Buchstaben, wie es jeder Vektoreditor schreibt.
+
+  ### Der eigentliche Fehler
+
+  `[cmd]` **`body_front.svg` wird von der Komponente gar nicht
+  benutzt.** Die Umrisse stehen als `OUTLINE_FRONT` und `OUTLINE_BACK`
+  **in `MuscleBodyMap.js` ab Zeile 285.**
+
+  `[cmd]` **In `koerperkarte-pfade.ts` gibt es sie nicht** — weder unter
+  diesem noch unter einem deutschen Namen.
+
+  `[read]` **Der Agent hat die falsche Datei als Quelle genommen**, dort
+  einen abgeschnittenen Umriss gefunden und daraus geschlossen, die
+  Vorlage sei kaputt. **Tom: *„Bloedsinn, es wurde einfach falsch
+  umgesetzt."***
+
+  ### Und ein zweiter Punkt
+
+  `[cmd]` Das Original arbeitet mit **einem viewBox von 724×1448** und
+  schneidet Vorder- und Rueckansicht ueber `VB_X` heraus — beide liegen
+  in **derselben Koordinatenwelt**, `front` bei x≈0–724, `back` bei
+  x≈724–1448. **Das erklaert, warum `hands` Pfade bei x=100 und x=1336
+  hat.** Wer das anders aufteilt, verschiebt alles.
 
 - [ ] **G-48: Graue Teile heben sich nicht ab** (neu 2026-08-18). Befund
   aus G-44.
