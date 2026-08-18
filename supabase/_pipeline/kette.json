@@ -347,6 +347,20 @@
       "depends_on": ["130"]
     },
     {
+      "id": "140",
+      "path": "supabase/_pipeline/14_medical/140_medical_schema.sql",
+      "kind": "sql",
+      "creates": "Medical-Schema mit LOINC-Katalog, Katalog-Referenzbereichen, Laborbefunden und Messwerten",
+      "depends_on": ["B", "auth_stub"]
+    },
+    {
+      "id": "141",
+      "path": "supabase/_pipeline/14_medical/141_biomarker_katalog.ts",
+      "kind": "tsx",
+      "creates": "LOINC-Masterkatalog aus daten/biomarker-loinc und kuratierte Referenzbereich-Kandidaten",
+      "depends_on": ["140"]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",

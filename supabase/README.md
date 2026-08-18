@@ -112,6 +112,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 120 | `12_recovery/120_recovery_checkins.sql` | Recovery-Userdaten: `checkins` | 1 Tabelle, 1 Funktion, RLS je Operation |
 | 130 | `13_supplements/130_supplements_schema.sql` | Supplements-Schema: `supplement_catalog`, `supplement_interactions`, `user_stacks`, `stack_items`, `intake_logs`, `daily_intake_summary` | 5 Tabellen, 1 Sicht, 2 Funktionen, RLS je Operation |
 | 131 | `13_supplements/131_supplements_katalog.ts` | Standard-Supplement-Katalog aus `daten/supplement-katalog.json` | 44 aktive Supplements |
+| 140 | `14_medical/140_medical_schema.sql` | Medical-Schema: `biomarker_catalog`, `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`, `lab_result_values_read()` | 4 Tabellen, 1 Funktion, RLS je Operation |
+| 141 | `14_medical/141_biomarker_katalog.ts` | LOINC-Masterkatalog aus `daten/biomarker-loinc/` und kuratierte Referenzbereich-Kandidaten aus `biomarker-katalog.json` | 11.676 LOINC-Codes, 464 Referenzbereich-Zeilen |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |

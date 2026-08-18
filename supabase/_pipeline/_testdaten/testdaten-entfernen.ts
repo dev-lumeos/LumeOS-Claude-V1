@@ -49,6 +49,16 @@ deleted_recovery_checkins AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_medical_values AS (
+  DELETE FROM medical.lab_result_values
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_medical_reports AS (
+  DELETE FROM medical.lab_reports
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_supplement_intake_logs AS (
   DELETE FROM supplements.intake_logs
   WHERE user_id IN (${ids})
@@ -123,6 +133,8 @@ SELECT
   (SELECT count(*) FROM deleted_training_exercises) AS training_exercises,
   (SELECT count(*) FROM deleted_training_sessions) AS training_sessions,
   (SELECT count(*) FROM deleted_recovery_checkins) AS recovery_checkins,
+  (SELECT count(*) FROM deleted_medical_reports) AS medical_reports,
+  (SELECT count(*) FROM deleted_medical_values) AS medical_values,
   (SELECT count(*) FROM deleted_supplement_intake_logs) AS supplement_intake_logs,
   (SELECT count(*) FROM deleted_supplement_stack_items) AS supplement_stack_items,
   (SELECT count(*) FROM deleted_supplement_stacks) AS supplement_stacks,

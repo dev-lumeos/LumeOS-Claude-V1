@@ -142,5 +142,13 @@
     "date": "2026-08-18",
     "case": "Supplement-Stack mit Einnahmen und Nachkauf-Fall",
     "expected": "supplements.user_stacks enthaelt einen aktiven Stack mit vier Items; supplements.intake_logs enthaelt drei genommene und eine geplante Einnahme. Vitamin D3 liegt unter der Nachkauf-Schwelle."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-18",
+    "case": "Medical-Laborbefund mit Laborbereich und Katalog-Fallback",
+    "expected": "medical.lab_reports enthaelt einen Befund mit drei LOINC-Werten. Hemoglobin nutzt den labor-eigenen Bereich; Calcium hat keinen Laborbereich und faellt ueber medical.lab_result_values_read auf den Katalogbereich zurueck."
   }
 ]

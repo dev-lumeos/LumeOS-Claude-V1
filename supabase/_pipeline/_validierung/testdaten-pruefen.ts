@@ -59,6 +59,10 @@ const trainingSets = numberScalar(`
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${IDS_SQL});`)
 const recoveryCheckins = numberScalar(`SELECT count(*) FROM recovery.checkins WHERE user_id IN (${IDS_SQL});`)
+const medicalCatalog = numberScalar(`SELECT count(*) FROM medical.biomarker_catalog;`)
+const medicalRanges = numberScalar(`SELECT count(*) FROM medical.biomarker_reference_ranges;`)
+const medicalReports = numberScalar(`SELECT count(*) FROM medical.lab_reports WHERE user_id IN (${IDS_SQL});`)
+const medicalValues = numberScalar(`SELECT count(*) FROM medical.lab_result_values WHERE user_id IN (${IDS_SQL});`)
 const supplementCatalog = numberScalar(`SELECT count(*) FROM supplements.supplement_catalog WHERE is_active;`)
 const supplementStacks = numberScalar(`SELECT count(*) FROM supplements.user_stacks WHERE user_id IN (${IDS_SQL});`)
 const supplementStackItems = numberScalar(`
@@ -95,6 +99,10 @@ if (MODE === 'clean') {
   if (trainingExercises !== 0) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 0`)
   if (trainingSets !== 0) errors.push(`training.workout_sets: ${trainingSets}, erwartet 0`)
   if (recoveryCheckins !== 0) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 0`)
+  if (medicalReports !== 0) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 0`)
+  if (medicalValues !== 0) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 0`)
+  if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
+  if (medicalRanges !== 464) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 464`)
   if (supplementStacks !== 0) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 0`)
   if (supplementStackItems !== 0) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 0`)
   if (supplementIntakeLogs !== 0) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 0`)
@@ -110,6 +118,7 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
+  console.log(`  Medical Katalog/Bereiche/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
@@ -152,6 +161,10 @@ if (MODE === 'clean') {
   if (trainingExercises !== 18) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 18`)
   if (trainingSets !== 60) errors.push(`training.workout_sets: ${trainingSets}, erwartet 60`)
   if (recoveryCheckins !== 36) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 36`)
+  if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
+  if (medicalRanges !== 464) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 464`)
+  if (medicalReports !== 1) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 1`)
+  if (medicalValues !== 3) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 3`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
@@ -501,6 +514,40 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM medical.lab_reports r
+    JOIN medical.lab_result_values v ON v.report_id = r.id
+    JOIN medical.biomarker_catalog c ON c.loinc_code = v.loinc_code
+    WHERE r.user_id = '${tom}'::uuid
+      AND r.report_date = DATE '2026-08-18'
+      AND r.report_time = TIME '09:20'
+      AND r.source = 'seed'
+      AND c.loinc_code = '718-7'
+      AND c.long_common_name = 'Hemoglobin [Mass/volume] in Blood'
+      AND v.marker_name_snapshot = 'Hemoglobin'
+      AND v.unit_snapshot = 'g/dL'
+      AND v.frozen_at IS NOT NULL;`)) {
+    errors.push('Fall Medical Befund: Befundwert ist nicht mit LOINC-Katalog und eingefrorenem Snapshot verbunden')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM medical.lab_result_values_read('${tom}'::uuid, '50000000-0000-0000-0000-000000000101'::uuid)
+    WHERE loinc_code = '718-7'
+      AND reference_source = 'lab_report'
+      AND reference_low = 13.8
+      AND reference_high = 17.2
+      AND reference_unit = 'g/dL';`)) {
+    errors.push('Fall Medical Laborbereich: labor-eigener Referenzbereich gewinnt nicht')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM medical.lab_result_values_read('${tom}'::uuid, '50000000-0000-0000-0000-000000000101'::uuid)
+    WHERE loinc_code = '17861-6'
+      AND reference_source = 'catalog_fallback'
+      AND reference_text = '8.5–10.5 mg/dL';`)) {
+    errors.push('Fall Medical Katalog-Fallback: Calcium ohne Laborbereich nutzt keinen Katalogbereich')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM supplements.user_stacks us
     JOIN supplements.stack_items si ON si.stack_id = us.id
     JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
@@ -577,6 +624,7 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
+  console.log(`  Medical Katalog/Bereiche/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)

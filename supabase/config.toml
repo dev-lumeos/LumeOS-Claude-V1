@@ -13,7 +13,7 @@ port = 54321
 # GO-03: `goals` ergaenzt. Ohne diesen Eintrag existieren Tabelle und
 # Funktionen zwar, sind aber ueber PostgREST nicht erreichbar — die
 # Oberflaeche bekommt PGRST106 statt der Zielwerte.
-schemas = ["public", "graphql_public", "nutrition", "goals", "supplements"]
+schemas = ["public", "graphql_public", "nutrition", "goals", "supplements", "medical"]
 # Extra schemas to add to the search_path of every request.
 extra_search_path = ["public", "extensions"]
 # The maximum number of rows returns from a view, table, or stored procedure. Limits payload size

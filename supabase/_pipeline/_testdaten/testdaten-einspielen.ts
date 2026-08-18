@@ -210,6 +210,35 @@ type SupplementIntakeLogRow = {
   notes: string
 }
 
+type MedicalLabReportRow = {
+  id: string
+  userId: string
+  reportDate: string
+  reportTime: string
+  labName: string
+  title: string
+  source: 'manual' | 'pdf_upload' | 'photo_ocr' | 'lab_import' | 'seed'
+  notes: string
+}
+
+type MedicalLabValueRow = {
+  reportId: string
+  userId: string
+  loincCode: string
+  markerNameSnapshot: string
+  unitSnapshot: string
+  valueNumeric: number
+  valueText: string | null
+  valueOperator: '=' | '<' | '<=' | '>' | '>='
+  labReferenceLow: number | null
+  labReferenceHigh: number | null
+  labReferenceText: string | null
+  labReferenceUnit: string | null
+  labReferenceSource: string | null
+  source: 'manual' | 'pdf_upload' | 'photo_ocr' | 'lab_import' | 'seed'
+  notes: string
+}
+
 type ItemTemplate = {
   blsCode: string
   amountG: number
@@ -779,6 +808,73 @@ const supplementIntakeLogs: SupplementIntakeLogRow[] = [
     notes: 'C-68 Testdaten: geplante Abend-Einnahme',
   },
 ]
+
+const medicalLabReports: MedicalLabReportRow[] = [
+  {
+    id: '50000000-0000-0000-0000-000000000101',
+    userId: '10000000-0000-0000-0000-000000000101',
+    reportDate: '2026-08-18',
+    reportTime: '09:20',
+    labName: 'LumeOS Testlabor',
+    title: 'C-69 Beispielbefund',
+    source: 'seed',
+    notes: 'C-69 Testdaten: ein Laborbefund mit Laborbereich und Katalog-Fallback',
+  },
+]
+
+const medicalLabValues: MedicalLabValueRow[] = [
+  {
+    reportId: '50000000-0000-0000-0000-000000000101',
+    userId: '10000000-0000-0000-0000-000000000101',
+    loincCode: '718-7',
+    markerNameSnapshot: 'Hemoglobin',
+    unitSnapshot: 'g/dL',
+    valueNumeric: 15.2,
+    valueText: null,
+    valueOperator: '=',
+    labReferenceLow: 13.8,
+    labReferenceHigh: 17.2,
+    labReferenceText: null,
+    labReferenceUnit: 'g/dL',
+    labReferenceSource: 'LumeOS Testlabor Befunddruck',
+    source: 'seed',
+    notes: 'Labor-eigener Bereich gewinnt vor Katalog-Fallback',
+  },
+  {
+    reportId: '50000000-0000-0000-0000-000000000101',
+    userId: '10000000-0000-0000-0000-000000000101',
+    loincCode: '17861-6',
+    markerNameSnapshot: 'Calcium',
+    unitSnapshot: 'mg/dL',
+    valueNumeric: 9.4,
+    valueText: null,
+    valueOperator: '=',
+    labReferenceLow: null,
+    labReferenceHigh: null,
+    labReferenceText: null,
+    labReferenceUnit: null,
+    labReferenceSource: null,
+    source: 'seed',
+    notes: 'Kein Laborbereich im Befund; Lesefunktion nutzt Katalog-Fallback',
+  },
+  {
+    reportId: '50000000-0000-0000-0000-000000000101',
+    userId: '10000000-0000-0000-0000-000000000101',
+    loincCode: '2345-7',
+    markerNameSnapshot: 'Glucose',
+    unitSnapshot: 'mg/dL',
+    valueNumeric: 102,
+    valueText: null,
+    valueOperator: '=',
+    labReferenceLow: 70,
+    labReferenceHigh: 99,
+    labReferenceText: null,
+    labReferenceUnit: 'mg/dL',
+    labReferenceSource: 'LumeOS Testlabor Befunddruck',
+    source: 'seed',
+    notes: 'Wert ausserhalb des labor-eigenen Bereichs fuer spaetere Anzeigepruefung',
+  },
+]
 for (const user of USERS) {
   const plan = PLANS[user.email]
   for (const date of daysBetween(START_DATE, END_DATE)) {
@@ -1196,6 +1292,33 @@ const supplementIntakeLogValues = supplementIntakeLogs.map(log => tuple([
   log.actualDoseUnit,
   log.notes,
 ])).join(',\n')
+const medicalLabReportValues = medicalLabReports.map(report => tuple([
+  report.id,
+  report.userId,
+  report.reportDate,
+  report.reportTime,
+  report.labName,
+  report.title,
+  report.source,
+  report.notes,
+])).join(',\n')
+const medicalLabValueValues = medicalLabValues.map(value => tuple([
+  value.reportId,
+  value.userId,
+  value.loincCode,
+  value.markerNameSnapshot,
+  value.unitSnapshot,
+  value.valueNumeric,
+  value.valueText,
+  value.valueOperator,
+  value.labReferenceLow,
+  value.labReferenceHigh,
+  value.labReferenceText,
+  value.labReferenceUnit,
+  value.labReferenceSource,
+  value.source,
+  value.notes,
+])).join(',\n')
 const itemValues = items.map(item => tuple([
   item.mealId,
   item.userId,
@@ -1223,6 +1346,8 @@ WHERE we.workout_session_id = s.id
   AND s.user_id IN (${userIds});
 DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
 DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
+DELETE FROM medical.lab_result_values WHERE user_id IN (${userIds});
+DELETE FROM medical.lab_reports WHERE user_id IN (${userIds});
 DELETE FROM supplements.intake_logs WHERE user_id IN (${userIds});
 DELETE FROM supplements.stack_items si
 USING supplements.user_stacks us
@@ -1522,6 +1647,79 @@ SELECT
   actual_dose, actual_dose_unit, notes
 FROM test_supplement_intake_logs;
 
+CREATE TEMP TABLE test_medical_lab_reports (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  report_date date NOT NULL,
+  report_time time NOT NULL,
+  lab_name text NOT NULL,
+  title text NOT NULL,
+  source text NOT NULL,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_medical_lab_reports VALUES
+${medicalLabReportValues};
+
+INSERT INTO medical.lab_reports (
+  id, user_id, report_date, report_time, lab_name, title, source, notes
+)
+SELECT id, user_id, report_date, report_time, lab_name, title, source, notes
+FROM test_medical_lab_reports;
+
+CREATE TEMP TABLE test_medical_lab_values (
+  report_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  loinc_code text NOT NULL,
+  marker_name_snapshot text NOT NULL,
+  unit_snapshot text NOT NULL,
+  value_numeric numeric NOT NULL,
+  value_text text,
+  value_operator text NOT NULL,
+  lab_reference_low numeric,
+  lab_reference_high numeric,
+  lab_reference_text text,
+  lab_reference_unit text,
+  lab_reference_source text,
+  source text NOT NULL,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_medical_lab_values VALUES
+${medicalLabValueValues};
+
+DO $$
+DECLARE
+  v_missing text;
+BEGIN
+  SELECT string_agg(DISTINCT v.loinc_code, ', ' ORDER BY v.loinc_code)
+    INTO v_missing
+  FROM test_medical_lab_values v
+  LEFT JOIN medical.biomarker_catalog c ON c.loinc_code = v.loinc_code
+  WHERE c.loinc_code IS NULL;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'Testdaten: LOINC-Codes fehlen im Medical-Katalog: %', v_missing;
+  END IF;
+END $$;
+
+INSERT INTO medical.lab_result_values (
+  report_id, user_id, loinc_code,
+  marker_name_snapshot, unit_snapshot,
+  value_numeric, value_text, value_operator,
+  lab_reference_low, lab_reference_high, lab_reference_text,
+  lab_reference_unit, lab_reference_source,
+  source, notes
+)
+SELECT
+  report_id, user_id, loinc_code,
+  marker_name_snapshot, unit_snapshot,
+  value_numeric, value_text, value_operator,
+  lab_reference_low, lab_reference_high, lab_reference_text,
+  lab_reference_unit, lab_reference_source,
+  source, notes
+FROM test_medical_lab_values;
+
 SELECT nutrition.food_preferences_write(
   '10000000-0000-0000-0000-000000000101'::uuid,
   jsonb_build_object(
@@ -1800,6 +1998,8 @@ DECLARE
   v_supplement_stacks integer;
   v_supplement_items integer;
   v_supplement_logs integer;
+  v_medical_reports integer;
+  v_medical_values integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
@@ -1827,6 +2027,8 @@ BEGIN
   JOIN supplements.user_stacks us ON us.id = si.stack_id
   WHERE us.user_id IN (${userIds});
   SELECT count(*) INTO v_supplement_logs FROM supplements.intake_logs WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_medical_reports FROM medical.lab_reports WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_medical_values FROM medical.lab_result_values WHERE user_id IN (${userIds});
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -1847,6 +2049,8 @@ BEGIN
     v_body_measurements, v_body_circumferences;
   RAISE NOTICE 'OK: C-68 Supplements-Testdaten: % Stacks, % Items, % Einnahmen',
     v_supplement_stacks, v_supplement_items, v_supplement_logs;
+  RAISE NOTICE 'OK: C-69 Medical-Testdaten: % Befunde, % Messwerte',
+    v_medical_reports, v_medical_values;
 END $$;
 
 COMMIT;
@@ -1865,4 +2069,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length} Medical-Befunde, ${medicalLabValues.length} Medical-Messwerte.`)
