@@ -143,6 +143,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `108-muskelgruppen.md` | Kuration der Muskelgruppen: **107 → 96**, 89 Eltern-Beziehungen — **`exercise_muscles` unveraendert bei 6.624.** |
 | `110-datenherkunft.md` | Herkunftsspalten in **sieben Messtabellen**, bevor die Geraete kommen. `meal_items` trennt `food_source` von `measurement_source`. |
 | `111-meilensteine-und-tdee.md` | Meilensteine und **adaptive TDEE** — 3.143,2 gegen Formel 3.527,0. **`alpha 0.3` macht den Wert zu 70 % zur Formel** (GO-15). |
+| `114-supplements-angebunden.md` | Vier Tabs lesen echt, **14 Kacheln verlieren die Marke** — `Cost` entgegen der Auftragsannahme dabei, weil alle 44 Katalogeintraege Preise fuehren. **`Compliance` braucht 30 Tage und einen Auslasser**, es liegt einer. `refillUrgent` sollte eine Schwelle sein, keine Handmarkierung. |
 
 **Was als Nächstes zu tun ist:** `docs/todo/TODO.md`
 **Getroffene Entscheidungen:** `docs/spezifikation/90-entscheidungen/`

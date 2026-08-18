@@ -21,6 +21,7 @@ import { Card, Pill, Icon, Tabs, InEntwicklungKnopf, type TabItem } from '@lumeo
 
 import { STACK, EXTENDED_STACK } from './daten'
 import { SuppCtx, type ModalZustand, type ModalTyp } from './kontext'
+import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import {
   SuppToday, SuppStack, SuppDatabase, SuppInteractions, SuppCost,
 } from './tabs'
@@ -34,11 +35,16 @@ import { SuppInjections } from './tab-injektionen'
 import { SuppCatalog, SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
 import { SupplementsModale } from './modale'
 
-/** Die elf Tabs der Vorlage (module-supplements.jsx:240-253). */
-function tabs(): TabItem[] {
+/**
+ * Die elf Tabs der Vorlage (module-supplements.jsx:240-253).
+ *
+ * G-37: Die Zahl an `Stack` kommt aus dem echten Stack, sobald einer
+ * gelesen wurde — sonst aus der Vorlage.
+ */
+function tabs(stackAnzahl: number): TabItem[] {
   return [
     { id: 'today', label: 'Today', icon: 'check' },
-    { id: 'stack', label: 'Stack', icon: 'supplements', count: STACK.length },
+    { id: 'stack', label: 'Stack', icon: 'supplements', count: stackAnzahl },
     { id: 'extended', label: 'Extended', icon: 'medical', count: EXTENDED_STACK.length },
     { id: 'catalog', label: 'Catalog', icon: 'search' },
     { id: 'stacks', label: 'Stacks', icon: 'layers' },
@@ -57,12 +63,28 @@ function tabs(): TabItem[] {
 // mit Herkunftsangabe. `[cmd]` Nachgezaehlt: `tabs()` gibt zwoelf
 // Eintraege, und zu jedem gibt es unten eine Weiche.
 
-export function SupplementsAnsicht() {
+export function SupplementsAnsicht({
+  daten = null, katalog = [],
+}: {
+  daten?: StackDaten | null
+  katalog?: KatalogEintrag[]
+}) {
   const [tab, setTab] = React.useState('today')
   const [modal, setModal] = React.useState<ModalZustand>(null)
-  // Die drei Vorgaben der Vorlage (Zeile 216).
-  const [takenToday, setTakenToday] = React.useState<Record<string, boolean>>({
-    creatine: true, d3k2: true, omega3: true,
+
+  // G-37: Sind echte Daten da, kommt der Anfangszustand aus dem
+  // Protokoll — abgehakt ist, was als `taken` gebucht ist. Ohne Daten
+  // bleiben die drei Vorgaben der Vorlage (Zeile 216).
+  const [takenToday, setTakenToday] = React.useState<Record<string, boolean>>(() => {
+    if (!daten) return { creatine: true, d3k2: true, omega3: true }
+    const heute = daten.einnahmen[0]?.intake_date
+    const ab: Record<string, boolean> = {}
+    for (const e of daten.einnahmen) {
+      if (e.intake_date === heute && e.stack_item_id && e.status === 'taken') {
+        ab[e.stack_item_id] = true
+      }
+    }
+    return ab
   })
 
   const open = React.useCallback((type: ModalTyp, payload?: unknown) => {
@@ -74,9 +96,14 @@ export function SupplementsAnsicht() {
   }, [])
 
   const ctx = React.useMemo(
-    () => ({ takenToday, toggleTaken, open }),
-    [takenToday, toggleTaken, open],
+    () => ({ takenToday, toggleTaken, open, daten, katalog }),
+    [takenToday, toggleTaken, open, daten, katalog],
   )
+
+  // Angebunden oder Vorlage — beide Faelle an einer Stelle entschieden.
+  const stackAnzahl = daten ? daten.positionen.length : STACK.length
+  // `[cmd]` Der juengste Protokolltag; die Vorlage zeigt „Sat · May 16".
+  const heuteText = daten?.einnahmen[0]?.intake_date ?? 'Sat · May 16'
 
 
   return (
@@ -85,9 +112,18 @@ export function SupplementsAnsicht() {
         <div className="v2-module-title-block">
           <div className="v2-module-title-row">
             <span className="v2-module-title">Supplements</span>
-            <Pill>Sat · May 16</Pill>
-            <Pill variant="acc">{STACK.length} active</Pill>
-            <Pill><span className="v2-dot" style={{ background: 'var(--pos)' }} /> Compliance 30d · 94%</Pill>
+            {/* G-37: Datum und Anzahl aus den echten Daten, wo sie
+                vorliegen. Die Quote fehlt bewusst — `[cmd]` das
+                Protokoll deckt EINEN Tag ab; „30d · 94%" waere eine
+                Behauptung ueber 29 Tage, die es nicht gibt. Was sie
+                braeuchte, steht im Bericht. */}
+            <Pill>{heuteText}</Pill>
+            <Pill variant="acc">{stackAnzahl} active</Pill>
+            {daten
+              ? <Pill><span className="v2-dot" style={{ background: 'var(--acc-suppl)' }} />
+                  {daten.protokoll_tage} d logged
+                </Pill>
+              : <Pill><span className="v2-dot" style={{ background: 'var(--pos)' }} /> Compliance 30d · 94%</Pill>}
           </div>
           <div className="v2-module-sub">
             Stack, dosing schedule, interactions, cost · coach-shared
@@ -106,7 +142,7 @@ export function SupplementsAnsicht() {
         </div>
       </div>
 
-      <Tabs items={tabs()} active={tab} onChange={setTab} />
+      <Tabs items={tabs(stackAnzahl)} active={tab} onChange={setTab} />
 
       <SuppCtx.Provider value={ctx}>
         <div style={{ marginTop: 16 }}>

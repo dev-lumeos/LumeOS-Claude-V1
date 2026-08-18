@@ -12,6 +12,8 @@
 // `IconName` seit G-02.
 import * as React from 'react'
 
+import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
+
 export type ModalTyp =
   | 'add' | 'catalogAdd' | 'catalogAddEnh' | 'skip' | 'product'
   | 'interaction' | 'reorder' | 'addLab' | 'addSideEffect'
@@ -27,12 +29,24 @@ export type SuppKontext = {
   takenToday: Record<string, boolean>
   toggleTaken: (id: string) => void
   open: (type: ModalTyp, payload?: unknown) => void
+  /**
+   * G-37: die echten Daten aus `supplements`, oder `null`.
+   *
+   * `[read]` `null` heisst NICHT „leer", sondern „nicht gelesen" —
+   * keine Sitzung oder ein Lesefehler. Die betroffenen Tabs zeigen
+   * dann weiter die Attrappe. Ein leerer Stack ist etwas anderes:
+   * `daten` steht, `positionen` ist leer, und das gehoert angezeigt.
+   */
+  daten: StackDaten | null
+  katalog: KatalogEintrag[]
 }
 
 export const SuppCtx = React.createContext<SuppKontext>({
   takenToday: {},
   toggleTaken: () => {},
   open: () => {},
+  daten: null,
+  katalog: [],
 })
 
 export function useSupp() {

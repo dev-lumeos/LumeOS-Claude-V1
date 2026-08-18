@@ -519,16 +519,25 @@ test('die elf Tabs der Vorlage stehen im Supplements-Modul', () => {
 })
 
 test('das Supplements-Modul kennzeichnet jede Kachel', () => {
-  // Keine Quelle heisst: jede Kachel traegt die Marke. [cmd] Es gibt
-  // kein `supplements`-Schema — wer eine Kachel anbindet, entfernt
-  // `attrappe` und zaehlt die Erwartung herunter.
+  // Keine Quelle heisst: jede Kachel traegt die Marke. Wer eine Kachel
+  // anbindet, entfernt `attrappe` und zaehlt die Erwartung herunter.
   //
   // G-33: die Erwartung steht je Datei. Extended und Compliance sind
   // seit dem Nachziehen eigene Dateien.
+  //
+  // G-37: **Die Zahl in `tabs.tsx` bleibt 17 und heisst jetzt etwas
+  // anderes.** `[cmd]` Today, Stack, Database und Cost sind an das
+  // `supplements`-Schema angebunden; die angebundenen Fassungen tragen
+  // KEINE Marke. Die 17 Marken sitzen seither vollstaendig in den
+  // Rueckfallfassungen (`TodayAttrappe`, `StackMatrix`, `StackList`,
+  // `DatabaseAttrappe`, `CostAttrappe`, `SlotCard`) plus
+  // `SuppInteractions`, das unangebunden bleibt.
+  //
+  // `[read]` Deshalb genuegt das Zaehlen je Datei hier nicht mehr — es
+  // saehe unveraendert aus, obwohl vier Tabs echt geworden sind. Der
+  // Test unten prueft zusaetzlich, dass die angebundenen Fassungen
+  // marken-frei sind.
   const dateien: Array<[string, number]> = [
-    // G-45: 12 -> 17. `SuppCost` hatte zwei Kacheln, die Vorlage
-    // fuehrt fuenf; nachgezogen sind es sieben markierte in dieser
-    // Datei (drei Kennzahlen + vier Kacheln der Vorlage).
     [SUPP, 17],
     [SUPP_EXT, 6],
     [SUPP_COMP, 4],
@@ -540,6 +549,48 @@ test('das Supplements-Modul kennzeichnet jede Kachel', () => {
     assert.equal(mitGrund + ohneGrund, erwartet,
       `${path.basename(datei)}: ${mitGrund + ohneGrund} gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
+  }
+})
+
+/**
+ * G-37: Die angebundenen Fassungen tragen keine Attrappenmarke.
+ *
+ * `[cmd]` Vier Tabs lesen aus `supplements` (C-68): Today, Stack,
+ * Database und Cost. Wer einer dieser Fassungen eine Marke gibt,
+ * behauptet, echte Daten seien erfunden — und wer eine Rueckfall-
+ * fassung entmarkt, behauptet das Gegenteil. Beides faellt hier auf.
+ */
+test('die angebundenen Supplements-Fassungen tragen keine Marke', () => {
+  const quelle = fs.readFileSync(SUPP, 'utf8')
+  // Kein `matchAll`-Spread: das Ziel dieser Uebersetzung ist aelter
+  // als es2015 und braeuchte `--downlevelIteration`.
+  const grenzen: Array<{ name: string; start: number }> = []
+  const muster = /^(?:export )?function (\w+)/gm
+  let treffer: RegExpExecArray | null
+  while ((treffer = muster.exec(quelle)) !== null) {
+    grenzen.push({ name: treffer[1], start: treffer.index })
+  }
+  const block = (name: string) => {
+    const i = grenzen.findIndex(g => g.name === name)
+    assert.ok(i >= 0, `Die Fassung "${name}" fehlt.`)
+    const ende = i + 1 < grenzen.length ? grenzen[i + 1].start : quelle.length
+    return quelle.slice(grenzen[i].start, ende)
+  }
+  const marken = (s: string) =>
+    (s.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length + (s.match(/^\s+attrappe$/gm) ?? []).length
+
+  // Angebunden — keine Marke.
+  for (const name of ['TodayEcht', 'StackMatrixEcht', 'StackListeEcht',
+                      'DatabaseEcht', 'CostEcht']) {
+    assert.equal(marken(block(name)), 0,
+      `"${name}" liest echte Daten und darf keine Attrappenmarke tragen.`)
+  }
+
+  // Rueckfall — Marke muss bleiben, sonst gilt Erfundenes als echt.
+  for (const name of ['TodayAttrappe', 'StackMatrix', 'StackList',
+                      'DatabaseAttrappe', 'CostAttrappe']) {
+    assert.ok(marken(block(name)) > 0,
+      `"${name}" zeigt die Vorlage und muss die Attrappenmarke behalten.`)
   }
 })
 
