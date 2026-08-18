@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `d1cda6d` auf `dev`.
+**Stand:** 2026-08-18, Anker `b855e14` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 76 offen, 3 in Arbeit.
+`[cmd]` 72 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -194,12 +194,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-34** | `.v2-btn` hat kein `white-space: nowrap` |  |
 | **G-35** | Zwoelf Modul-Raster in `goals.css` |  |
 | **G-37** | Supplements an den Katalog anschliessen |  |
-| **C-76** | Seed-Befunde fuer Medical |  |
 | **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
-| **C-79** | 410 von 464 Referenzbereichen sind Text ohne Zahlen |  |
-| **C-80** | `142` ergaenzt Spalten, die `140` nicht kennt |  |
-| **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
@@ -1878,47 +1874,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **C-76: Seed-Befunde fuer Medical** (neu 2026-08-18). **Fuer
-  Codex, sobald frei.**
-
-  **Tom, 2026-08-18:** *„Die Daten sollen in die DB und nicht irgendeine
-  Auflästung in der UI sein. Fuer eine UI-Auflistung brauchen wir Seed
-  Daten."*
-
-  ### Warum
-
-  `[cmd]` `medical.lab_result_values` hat **sechs Testwerte und keine
-  Zeitreihe.** Deshalb zeigt `/v2/medical` unter der echten Tabelle
-  weiter die Attrappe mit 48 erfundenen Markern samt Verlauf,
-  Sparkline und Bereichsbalken.
-
-  `[read]` **Der G-46-Agent hat das selbst benannt:** *„Bleibt Attrappe:
-  die Tabelle zeigt Zeitreihe, Sparkline und Bereichsbalken.
-  `medical.lab_result_values` fuehrt heute sechs Testwerte und keine
-  Zeitreihe — die Spalten haetten nichts zu zeigen."*
-
-  ### Was gebraucht wird
-
-  **Mehrere Befunde ueber Monate, mit denselben Markern** — dann hat
-  die Ansicht Verlaeufe und die Attrappe kann weg.
-
-  `[Wahrscheinlich]` drei bis vier Befunde ueber sechs Monate fuer
-  `tom.seed`, mit den **48 Markern der Vorlage** (die Vorlage nennt
-  Panels: CBC 5, Metabolic 4, Lipid 5, Liver 6, Kidney 4, Thyroid 4,
-  Hormone 10, Inflammation 3, Vitamins 6, Screening 1).
-
-  `[cmd]` **Mit labor-eigenen Referenzbereichen** —
-  `lab_result_values` traegt `lab_reference_low/high/text/unit/source`.
-  **Der Doppelbereich braucht beide Seiten**, sonst laesst er sich nicht
-  zeigen.
-
-  `[cmd]` **Und mit den drei Zuordnungsfaellen aus C-72:** eindeutig,
-  mehrdeutig, unbekannt — sie sind live belegt und muessen in den
-  Seed-Daten vorkommen, damit die Anzeige sie tragen lernt.
-
-  `[read]` **Ein Verlauf mit erkennbarer Tendenz ist mehr wert als ein
-  flacher** — wie bei den Koerperfettwerten, 11,82 % auf 10,31 % ueber
-  sechs Wochen.
 
 - [ ] **G-51: Der Rohkatalog gehoert nicht auf die Seite** (neu
   2026-08-18). Korrektur an G-46.
@@ -1996,66 +1951,9 @@ Umsetzen angepasst werden.
   richtig — die Funktion rechnet, ob sie **richtig** rechnet, ist offen
   (GO-15).
 
-- [ ] **C-79: 410 von 464 Referenzbereichen sind Text ohne Zahlen** (neu
-  2026-08-18). Befund aus G-46.
-
-  `[cmd]` **Nur 54 der 464 Zeilen tragen Zahlen** — und **genau die
-  werden von `lab_result_values_read` als
-  `do_not_import_without_source` ausgeschlossen.**
-
-  `[cmd]` **Kein LOINC-Code hat heute Labor- und Optimalbereich als
-  Zahlen.** Damit ist der Katalogrueckfall in der Praxis Text, und die
-  Anzeige kann keinen Balken zeichnen.
-
-  `[read]` **Die Anzeige geht damit richtig um** — sie liest die drei im
-  Bestand gefundenen Schreibweisen und **laesst Mehrdeutiges als Text
-  stehen, statt eine Grenze zu erfinden.** Aber es bleibt eine
-  Datenluecke.
-
-  **Was zu klaeren ist:** Woher kommen belastbare Zahlen? `[cmd]`
-  **NHANES** liefert sie fuer 38 haeufige Tests **nach Geschlecht und
-  Ethnie** (2,5. und 97,5. Perzentil). Der Rest kommt aus
-  Laborhandbuechern — **Kuration, keine Uebernahme.**
-
-  `[read]` **Und die 54 ausgeschlossenen gehoeren zuerst angesehen:**
-  Warum tragen sie keine Quelle? Wenn sie belastbar sind, fehlt nur der
-  Herkunftsvermerk.
-
-- [ ] **C-80: `142` ergaenzt Spalten, die `140` nicht kennt** (neu
-  2026-08-18). Befund aus G-46.
-
-  `[cmd]` `142_laborimport_matching.sql` fuegt **vier Spalten** hinzu —
-  `match_status`, `match_candidates`, `match_source`, `raw_marker_name`
-  — **die in `140_medical_schema.sql` fehlen.**
-
-  `[read]` **Aufgefallen ist es an einem Fehler:** Der erste
-  Kopierversuch des G-46-Agenten scheiterte an der
-  Pruefbedingung. *„Und dieses Scheitern hat `match_status` als das
-  massgebliche Signal fuer die drei Zustaende sichtbar gemacht"* — die
-  Anzeige liest es jetzt, statt aus `entry_confidence` zu schliessen.
-
-  **Zu pruefen:** Gehoeren die vier nach `140`, oder ist die Trennung
-  gewollt? `[read]` Ein Kettenschritt, der die Tabelle eines frueheren
-  erweitert, ist normal — **aber wer nur `140` liest, kennt das Schema
-  nicht.**
 
 
-- [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
-  aus C-72.
 
-  `[cmd]` Von 457 Textpaaren des Vorgaengerrepos sind **292 live**, 6
-  bewusst mehrdeutig — **152 blieben aussen vor, begruendet
-  dokumentiert** in `docs/ssot/107-laborimport.md`.
-
-  **Zu klaeren:** Sind es Marker, die der LOINC-Katalog nicht fuehrt,
-  oder Zuordnungen, die nicht eindeutig waren? `[read]` Im ersten Fall
-  ist es eine Katalogluecke, im zweiten eine Kurationsaufgabe — **zwei
-  verschiedene Antworten.**
-
-  `[cmd]` **Und die deutsche Abdeckung bleibt duenn:** 4.593 deutsche
-  Namen von 11.676 im Katalog. **Ein deutscher Befund trifft nicht jeden
-  Marker** — die 292 Aliase schliessen die Luecke nur dort, wo sie
-  bekannt ist.
 
 
 - [ ] **C-70: Der Biomarker-Katalog — vollstaendig und belegt** (neu

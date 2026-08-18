@@ -4074,6 +4074,151 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Erledigt 2026-08-18 mit C-81** — `LumeosDev2026`, in
   `37-testkonten.md` eingetragen und per Anmeldung belegt.
 
+- [x] **C-76: Seed-Befunde fuer Medical** (neu 2026-08-18). **Fuer
+  Codex, sobald frei.**
+
+  **Tom, 2026-08-18:** *„Die Daten sollen in die DB und nicht irgendeine
+  Auflästung in der UI sein. Fuer eine UI-Auflistung brauchen wir Seed
+  Daten."*
+
+  ### Warum
+
+  `[cmd]` `medical.lab_result_values` hat **sechs Testwerte und keine
+  Zeitreihe.** Deshalb zeigt `/v2/medical` unter der echten Tabelle
+  weiter die Attrappe mit 48 erfundenen Markern samt Verlauf,
+  Sparkline und Bereichsbalken.
+
+  `[read]` **Der G-46-Agent hat das selbst benannt:** *„Bleibt Attrappe:
+  die Tabelle zeigt Zeitreihe, Sparkline und Bereichsbalken.
+  `medical.lab_result_values` fuehrt heute sechs Testwerte und keine
+  Zeitreihe — die Spalten haetten nichts zu zeigen."*
+
+  ### Was gebraucht wird
+
+  **Mehrere Befunde ueber Monate, mit denselben Markern** — dann hat
+  die Ansicht Verlaeufe und die Attrappe kann weg.
+
+  `[Wahrscheinlich]` drei bis vier Befunde ueber sechs Monate fuer
+  `tom.seed`, mit den **48 Markern der Vorlage** (die Vorlage nennt
+  Panels: CBC 5, Metabolic 4, Lipid 5, Liver 6, Kidney 4, Thyroid 4,
+  Hormone 10, Inflammation 3, Vitamins 6, Screening 1).
+
+  `[cmd]` **Mit labor-eigenen Referenzbereichen** —
+  `lab_result_values` traegt `lab_reference_low/high/text/unit/source`.
+  **Der Doppelbereich braucht beide Seiten**, sonst laesst er sich nicht
+  zeigen.
+
+  `[cmd]` **Und mit den drei Zuordnungsfaellen aus C-72:** eindeutig,
+  mehrdeutig, unbekannt — sie sind live belegt und muessen in den
+  Seed-Daten vorkommen, damit die Anzeige sie tragen lernt.
+
+  `[read]` **Ein Verlauf mit erkennbarer Tendenz ist mehr wert als ein
+  flacher** — wie bei den Koerperfettwerten, 11,82 % auf 10,31 % ueber
+  sechs Wochen.
+
+  `[cmd]` **Erledigt 2026-08-18: 5 Befunde, 140 Werte** ueber sechs
+  Monate (2026-02-18 bis 2026-08-19) — **auf `dev@lumeos.app` und
+  `tom.seed`**, `test-user` bleibt bei 0.
+
+  `[cmd]` **Der Verlauf traegt:** Glukose 88 → 94 → 99 → 102 mg/dL,
+  HbA1c 5,2 → 5,3 → 5,4 → 5,4 %. `[read]` **Und beide Kurven passen
+  zueinander** — steigende Nuechternglukose bei steigendem HbA1c. Genau
+  die Stimmigkeit, die C-78 fuer alle Seeds fordert.
+
+  `[cmd]` **Die drei Importfaelle sind da:** `exact`, `ambiguous`,
+  `unknown` je einmal.
+
+- [x] **C-79: 410 von 464 Referenzbereichen sind Text ohne Zahlen** (neu
+  2026-08-18). Befund aus G-46.
+
+  `[cmd]` **Nur 54 der 464 Zeilen tragen Zahlen** — und **genau die
+  werden von `lab_result_values_read` als
+  `do_not_import_without_source` ausgeschlossen.**
+
+  `[cmd]` **Kein LOINC-Code hat heute Labor- und Optimalbereich als
+  Zahlen.** Damit ist der Katalogrueckfall in der Praxis Text, und die
+  Anzeige kann keinen Balken zeichnen.
+
+  `[read]` **Die Anzeige geht damit richtig um** — sie liest die drei im
+  Bestand gefundenen Schreibweisen und **laesst Mehrdeutiges als Text
+  stehen, statt eine Grenze zu erfinden.** Aber es bleibt eine
+  Datenluecke.
+
+  **Was zu klaeren ist:** Woher kommen belastbare Zahlen? `[cmd]`
+  **NHANES** liefert sie fuer 38 haeufige Tests **nach Geschlecht und
+  Ethnie** (2,5. und 97,5. Perzentil). Der Rest kommt aus
+  Laborhandbuechern — **Kuration, keine Uebernahme.**
+
+  `[read]` **Und die 54 ausgeschlossenen gehoeren zuerst angesehen:**
+  Warum tragen sie keine Quelle? Wenn sie belastbar sind, fehlt nur der
+  Herkunftsvermerk.
+
+  `[cmd]` **Geklaert 2026-08-18.** 464 Zeilen, **54 numerisch — und alle
+  54 tragen `do_not_import_without_source`.** `[read]` Die Deckung ist
+  also vollstaendig: **es gibt keine belastbaren Zahlen, die nur den
+  Herkunftsvermerk vermissen.** Der Ausschluss ist richtig, nicht
+  versehentlich.
+
+  `[cmd]` **0 Codes mit numerischem Labor- UND Optimalbereich.**
+
+  **Was bleibt:** Woher belastbare Zahlen kommen. `[cmd]` **NHANES**
+  liefert sie fuer 38 haeufige Tests nach Geschlecht und Ethnie — der
+  Rest ist Laborhandbuch-Kuration. **Eigener Punkt, wenn er faellig
+  wird.**
+
+- [x] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
+  aus C-72.
+
+  `[cmd]` Von 457 Textpaaren des Vorgaengerrepos sind **292 live**, 6
+  bewusst mehrdeutig — **152 blieben aussen vor, begruendet
+  dokumentiert** in `docs/ssot/107-laborimport.md`.
+
+  **Zu klaeren:** Sind es Marker, die der LOINC-Katalog nicht fuehrt,
+  oder Zuordnungen, die nicht eindeutig waren? `[read]` Im ersten Fall
+  ist es eine Katalogluecke, im zweiten eine Kurationsaufgabe — **zwei
+  verschiedene Antworten.**
+
+  `[cmd]` **Und die deutsche Abdeckung bleibt duenn:** 4.593 deutsche
+  Namen von 11.676 im Katalog. **Ein deutscher Befund trifft nicht jeden
+  Marker** — die 292 Aliase schliessen die Luecke nur dort, wo sie
+  bekannt ist.
+
+  `[cmd]` **Geklaert 2026-08-18.** Die 152 zerfallen in vier Gruppen:
+
+  | | |
+  |---|---|
+  | **115** | ohne LOINC-Ziel — der Katalog fuehrt den Marker nicht |
+  | 18 | ausserhalb der Masterlist |
+  | 17 | Thai und Schreibweisen-Faltung |
+  | **2** | echte Glukose-Mehrdeutigkeit |
+
+  `[read]` **Damit ist die Frage beantwortet:** Es ist ueberwiegend eine
+  **Katalogluecke** (115+18 = 133 von 152), keine Kurationsaufgabe.
+  **Wo kein Ziel existiert, hilft kein Alias.**
+
+- [x] **C-80: `142` ergaenzt Spalten, die `140` nicht kennt** (neu
+  2026-08-18). Befund aus G-46.
+
+  `[cmd]` `142_laborimport_matching.sql` fuegt **vier Spalten** hinzu —
+  `match_status`, `match_candidates`, `match_source`, `raw_marker_name`
+  — **die in `140_medical_schema.sql` fehlen.**
+
+  `[read]` **Aufgefallen ist es an einem Fehler:** Der erste
+  Kopierversuch des G-46-Agenten scheiterte an der
+  Pruefbedingung. *„Und dieses Scheitern hat `match_status` als das
+  massgebliche Signal fuer die drei Zustaende sichtbar gemacht"* — die
+  Anzeige liest es jetzt, statt aus `entry_confidence` zu schliessen.
+
+  **Zu pruefen:** Gehoeren die vier nach `140`, oder ist die Trennung
+  gewollt? `[read]` Ein Kettenschritt, der die Tabelle eines frueheren
+  erweitert, ist normal — **aber wer nur `140` liest, kennt das Schema
+  nicht.**
+
+  `[cmd]` **Erledigt 2026-08-18** — `140_medical_schema.sql` traegt jetzt
+  den Verweis auf die vier Spalten aus `142`. **Kein Umbau, nur der
+  Wegweiser** — wer `140` liest, findet `match_status` und die drei
+  Zustaende.
+
 
 
 ## Erledigt am 2026-08-05
