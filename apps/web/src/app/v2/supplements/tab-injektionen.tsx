@@ -91,7 +91,22 @@ function InjKarte({
       </div>
       <svg viewBox="0 0 100 120" style={{ width: '100%', maxWidth: 210 }} role="img"
            aria-label={view === 'front' ? 'Injektionsorte Vorderseite' : 'Injektionsorte Rueckseite'}>
-        <path d={SILHOUETTE} fill="var(--surface)" stroke="var(--border)" strokeWidth="0.6" />
+        {/* G-57: Fuellung war `--surface` — derselbe Wert wie der Kartengrund
+            (`.v2-card`, v2.css:435). `[cmd]` Abstand 0,000 in beiden Modi: die
+            Figur war nicht schwach sichtbar, sondern exakt unsichtbar, es
+            standen nur die 16 Punkte frei im Raum.
+
+            `[cmd]` `--border-strong` gemessen: 0,155 dunkel / 0,180 hell —
+            der einzige vorhandene Token ueber 0,15 in beiden Modi. Kein neuer
+            Token.
+
+            `[cmd]` Die Kontur faellt mit der Fuellung zusammen: `--border`
+            liegt nur 0,080/0,090 von `--border-strong` entfernt und ist im
+            Nachtmodus DUNKLER als die Fuellung (0,280 gegen 0,360) — die
+            Kontur haette die Figur nach innen abgeschnitten statt sie
+            abzugrenzen. Die Fuellung allein traegt mit 0,155/0,180 mehr, als
+            die Kontur je beigetragen hat. */}
+        <path d={SILHOUETTE} fill="var(--border-strong)" stroke="var(--border-strong)" strokeWidth="0.6" />
         {orte.map(s => {
           const st = ortZustand(s.id)
           const aktiv = gewaehlt === s.id

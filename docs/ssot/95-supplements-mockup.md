@@ -532,3 +532,164 @@ nachgezählt sind es 34, und genau 34 sind übernommen.
 **Die Zahl im Auftragstext war kein Sollwert für das Mockup.**
 
 **Nichts ist committet oder gestaged.**
+
+---
+
+# Nachtrag 2026-08-18 (G-57): die Silhouette im Injections-Tab
+
+**Eine Zeile geändert** — `tab-injektionen.tsx`, die Füllung der
+Silhouette. Die 16 Orte, ihre Logik und der Wegfilter sind nicht
+angefasst.
+
+```
+- <path d={SILHOUETTE} fill="var(--surface)"       stroke="var(--border)"        strokeWidth="0.6" />
++ <path d={SILHOUETTE} fill="var(--border-strong)" stroke="var(--border-strong)" strokeWidth="0.6" />
+```
+
+---
+
+## Was gemessen wurde
+
+### Der Ausgangsbefund stimmt — mit einer Präzisierung
+
+`[cmd]` **Die Füllung war `var(--surface)`, der Kartengrund ist
+`var(--surface)`** (`.v2-card`, `packages/ui/src/styles/v2.css:435`).
+Nach Tokenrechnung ist der Abstand **0,000 in beiden Modi** — genau der
+Befund aus G-55.
+
+`[cmd]` **Am Bildschirm ist der Grund aber nicht der reine Token.** Die
+Karte trägt zusätzlich `v2-attrappe`, und die Marke tönt sie ein.
+Gemessen mit `getComputedStyle` in der laufenden Seite:
+
+| | Token `--surface` | tatsächlich gerendert |
+|---|---|---|
+| dunkel | 0,205 | **0,223** |
+| hell | 1,000 | **0,987** |
+
+`[read]` **Das ändert den Befund nicht, es verschiebt ihn nur:** Der
+Restabstand von 0,018 (dunkel) bzw. 0,013 (hell) kam nicht von der
+Figur, sondern von der Attrappenmarke unter ihr. Sichtbar war davon die
+Kontur, nicht der Körper.
+
+### Vorher und nachher, beide Modi
+
+`[cmd]` Gemessen als OKLCH-Helligkeit gegen den **gerenderten** Grund:
+
+| Modus | vorher | nachher | Faktor |
+|---|---|---|---|
+| **dunkel** | 0,018 | **0,137** | 7,4× |
+| **hell** | 0,013 | **0,167** | 12,3× |
+
+`[cmd]` Nach reiner Tokenrechnung — also ohne die Attrappentönung —
+liefert `--border-strong` auf `--surface` **0,155 dunkel / 0,180 hell**.
+Das sind exakt die Zahlen aus dem Auftrag, und sie treffen zu: die
+Abweichung nach unten stammt allein aus der Marke.
+
+### Die Kontur musste mit
+
+`[cmd]` **Das war nicht im Auftrag und ergab sich aus der Messung.**
+`--border` gegen eine Füllung aus `--border-strong`:
+
+| Modus | `--border` | `--border-strong` | Abstand | Richtung |
+|---|---|---|---|---|
+| dunkel | 0,280 | 0,360 | 0,080 | **Kontur dunkler als Füllung** |
+| hell | 0,910 | 0,820 | 0,090 | Kontur heller als Füllung |
+
+`[read]` **Im Nachtmodus hätte die alte Kontur die Figur nach innen
+abgeschnitten** statt sie abzugrenzen — ein dunkler Saum auf einem
+helleren Körper. Die Füllung allein trägt mit 0,137/0,167 mehr, als die
+Kontur je beigetragen hat. **Deshalb fällt die Kontur mit der Füllung
+zusammen**, statt einen dritten Wert einzuführen.
+
+### Die 16 Punkte bleiben lesbar
+
+`[cmd]` Abstand der Punktfarben zur **neuen** Füllung, schlechtester
+Fall hell `--warn` mit **0,270** — dreimal so viel wie die Figur selbst
+zum Grund hat:
+
+| | dunkel | hell |
+|---|---|---|
+| `--pos` | 0,420 | 0,300 |
+| `--warn` | 0,460 | **0,270** |
+| `--neg` | 0,360 | 0,320 |
+
+`[cmd]` Die Kürzelschrift (`fill: var(--bg)`) auf den Punkten: mindestens
+**0,435**. **Keine Punktfarbe wurde angefasst.**
+
+---
+
+## Warum diese Lösung und nicht die aus G-55
+
+**Sie ist dieselbe — die Bezugsgrösse ist eine andere.**
+
+`[cmd]` G-55 füllt die Körperkarte mit `--surface-2` und konturiert mit
+`--border-strong` (`recovery/koerperkarte.tsx:76-77`). **Das funktioniert
+dort, weil die Recovery-Karte Muskelgruppen einfärbt** — die Figur
+bekommt ihren Halt aus den Farbflächen darin, die Füllung ist nur der
+Untergrund dazwischen.
+
+`[cmd]` **Der Injections-Tab hat keine Flächen, nur 16 Punkte.** Hier
+trägt die Füllung die ganze Figur. `--surface-2` würde dafür nicht
+reichen:
+
+| Füllung auf `--surface` | dunkel | hell |
+|---|---|---|
+| `--surface-2` (wie G-55) | 0,030 | 0,025 |
+| **`--border-strong`** (hier) | **0,155** | **0,180** |
+
+`[read]` **Der G-55-Agent hat richtig nicht umgebaut.** Seine Lösung
+greift hier nicht mit, weil sie eine Kontur-plus-Flächen-Figur
+beschreibt, keine Flächenfigur. Übernommen ist nicht der Wert, sondern
+der Befund: **`--border-strong` ist der einzige vorhandene Token über
+0,15 in beiden Modi.**
+
+**Kein neuer Token.** `[cmd]` `rgba` steht unverändert bei **4** in
+`v2.css`; `lume.css` führt dieselben 57 Tokendefinitionen wie vorher.
+
+---
+
+## Nachweis
+
+`[cmd]` Am Bildschirm geprüft, 2026-08-18, `/v2/supplements` →
+Injections, gegen den laufenden Entwicklungsserver:
+
+| Prüfung | Ergebnis |
+|---|---|
+| Füllung im DOM nach Neuladen | `[cmd]` `oklch(0.36 0.005 270)` — der echte Code, nicht gesetzt |
+| Gerenderter Abstand dunkel | `[cmd]` 0,018 → **0,137** |
+| Gerenderter Abstand hell | `[cmd]` 0,013 → **0,167** |
+| Beide Silhouetten im DOM | `[cmd]` 2 Pfade |
+| **Die 16 Punkte** | `[cmd]` **12 vorne + 4 hinten = 16**, unverändert |
+| **Wegfilter** | `[cmd]` All 16 · **IM 10** · **SubQ 6** — rechnet weiter |
+| Silhouettenpfad | `[cmd]` `SILHOUETTE`-Konstante und `viewBox 0 0 100 120` unberührt |
+| Breiten | `[cmd]` **1440 / 1024 / 768 / 375 px**, beide Silhouetten überall |
+| `pnpm gate` | `[cmd]` **grün, 8 von 8 Aufgaben** |
+| `packages/ui` | `[cmd]` **von diesem Auftrag nicht angefasst** |
+
+### Bildschirmfotos
+
+`[cmd]` Aufgenommen je Modus und Breite, plus der Vorzustand zum
+Vergleich (Füllung testweise auf `--surface` zurückgesetzt, danach
+neu geladen):
+
+| Datei | Inhalt |
+|---|---|
+| `g57-VORHER-dunkel-1440.png` | der Befund: Figur als Geisterkontur, Punkte frei im Raum |
+| `g57-VORHER-hell-1440.png` | hell war die Kontur schwach sichtbar, der Körper nicht |
+| `g57-dunkel-{1440,1024,768,375}.png` | nachher, Nachtmodus |
+| `g57-hell-{1440,1024,768,375}.png` | nachher, Tagmodus |
+
+`[read]` **Der Vorzustand ist mitgemessen und nicht nur behauptet** — in
+G-45 fehlte genau das. Der Unterschied zwischen den beiden
+1440er-Bildern je Modus ist der ganze Auftrag.
+
+### Abstimmung mit G-56
+
+`[cmd]` **`packages/ui` ist von diesem Auftrag unberührt.** Die dort
+offenen Änderungen (`icons.tsx`, `primitives.tsx`, `v2.css`,
+`in-entwicklung.tsx`, `index.ts`, `klassen-uebernehmen.mjs`) lagen beim
+Sitzungsbeginn bereits im Arbeitsbaum und gehören zu G-56. `[cmd]`
+Dasselbe gilt für `supplements/modale.tsx`. **Von G-57 stammt genau eine
+geänderte Datei:** `apps/web/src/app/v2/supplements/tab-injektionen.tsx`.
+
+**Nichts ist committet oder gestaged.**
