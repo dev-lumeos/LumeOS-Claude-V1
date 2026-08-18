@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `f83453f` auf `dev`.
+**Stand:** 2026-08-18, Anker `d1cda6d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 80 offen, 3 in Arbeit.
+`[cmd]` 76 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -159,11 +159,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **E-08** | Deployment nach `main` |  |
 | **E-09** | Preview-Branches erst danach |  |
 | **E-10** | RLS neu bewerten, sobald `main` produktiv wird |  |
-| **E-14** | `image_male_*` zeigt auf `_Female`-Dateien |  |
-| **E-15** | Vier `body_region`-Werte im Altbestand sind anatomisch falsch |  |
-| **E-17** | `Achilles Tendon` ist eine Sehne in `muscle_groups` |  |
-| **E-18** | `none/None` als Muskelgruppe — Restfrage |  |
-| **E-19** | Derselbe Muskel mit `primary` UND `secondary` an einer Übung |  |
+| **E-14** | 26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien |  |
 | **F-01** | Schnittstellenvertrag zuerst |  |
 | **F-02** | Ablageort festlegen |  |
 | **F-03** | obsidian-skills einbinden |  |
@@ -1091,97 +1087,24 @@ dort gibt es `supabase db reset`, kostenlos und beliebig oft.
   9 von 11 `nutrition`-Tabellen ohne RLS, obwohl die Migration es beschreibt.
   Das Muster wiederholt sich über zwei unabhängige Instanzen.*
 
-- [ ] **E-14: `image_male_*` zeigt auf `_Female`-Dateien** (neu
-  2026-08-13, aus E-11) — `[cmd]` Bei **146 Übungen** trägt ein
-  `image_male_*`-Feld einen Pfad auf eine `_Female`-Datei. Beispiel:
-  `Ab Wheel Plank` → `image_male_start = images/Yoga/Ab Wheel Plank_Female.jpeg`.
-  `[cmd]` Die Gegenrichtung (`image_female_*` auf `_Male`) kommt **0×**
-  vor — es ist also keine beidseitige Vertauschung, sondern ein
-  einseitiger Importfehler.
-  **Wirkung:** Wer nach Geschlecht filtert oder die männliche Darstellung
-  zeigt, bekommt in 146 Fällen die weibliche. Das fällt nicht auf, weil
-  ein Bild da ist — nur das falsche.
-  **Geprüft, und es ist keine Vertauschung:** `[cmd]` 2026-08-13 —
-  **in allen 146 Fällen existiert lokal KEINE männliche Datei** (der
-  Pfad mit `_Male` statt `_Female` findet sich 0×). Es wurde also nichts
-  verwechselt; jemand hat die weibliche Aufnahme eingetragen, weil die
-  männliche fehlte. **Eine unmarkierte Notlösung, kein Importfehler.**
+- [ ] **E-14: 26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien**
+  (offen geblieben aus der E-Kuration, 2026-08-18).
 
-  **Damit ist die naheliegende Korrektur die falsche.** Den Pfad
-  „richtigzustellen" geht nicht — es gibt kein Ziel. Zur Wahl stehen:
-  das Feld **leeren** (ehrlich, aber 146 Übungen verlieren ihr
-  Startbild), oder die Belegung **als bewusst kennzeichnen** (etwa ein
-  Feld „Darstellung: weiblich, männlich fehlt"). Beides ist eine
-  Produktentscheidung und hängt an **E-07**.
-  Hängt mit **E-07** zusammen (Lücke weibliche Darstellungen).
+  `[cmd]` **26 Pfade gemessen.** Der Agent hat **keine Bilder erzeugt oder
+  umbenannt**, wie beauftragt.
 
-- [ ] **E-15: Vier `body_region`-Werte im Altbestand sind anatomisch
-  falsch** (neu 2026-08-13, aus E-13) — `[cmd]` Beim Nachpflegen der
-  Lücke aufgefallen, **nicht mitkorrigiert**:
+  `[read]` **Haengt an E-07** - der offenen Frage, ob es weibliche
+  Darstellungen ueberhaupt geben soll. **Solange die nicht entschieden
+  ist, waere jede Umbenennung geraten.**
 
-  | Gruppe | steht auf | anatomisch |
-  |---|---|---|
-  | `Biceps Femoris` | `arms` | Hamstring → `legs` |
-  | `Rectus Femoris` | `core` | Quadrizepskopf → `legs` |
-  | `Tensor Fasciae Latae` | `back` | Hüftmuskel → `legs` |
-  | `Hip Rotators` | `shoulders` | Hüfte → `legs` |
+  **Zwei Wege:** die Pfade auf vorhandene maennliche Dateien zeigen
+  lassen - oder die Bilder besorgen. `[cmd]` Das Vorgaengerrepo hat
+  `fix-exercise-media.ts`; **dort nachsehen, bevor jemand entscheidet.**
 
-  Der Name führt hier in die Irre: „Biceps" Femoris ist kein Armmuskel,
-  „Rectus" Femoris kein Bauchmuskel. `[annahme]` Vermutlich beim Import
-  nach Namensähnlichkeit zugeordnet.
-  **Bewusst nicht nebenbei erledigt:** E-13 war das Füllen der Lücke,
-  nicht das Umschreiben vorhandener Werte. Wer sie ändert, ändert
-  bestehende Filterergebnisse — das gehört entschieden. Klein genug für
-  einen Einzeiler, sobald Tom zustimmt.
 
-- [ ] **E-17: `Achilles Tendon` ist eine Sehne in `muscle_groups`** (neu
-  2026-08-13, aus E-13/Block 26) — `[cmd]` 1 Zuordnung. Sie hat in E-13
-  die Region `legs` bekommen, damit sie nicht durch jeden Regionsfilter
-  fällt. **Geografisch richtig, fachlich falsch:** eine Sehne ist keine
-  Muskelgruppe.
-  **Klein, aber symptomatisch.** Dieselbe Tabelle führt weitere
-  Sammelbegriffe, die keine einzelnen Muskeln sind: `Grip Muscles`,
-  `Fingers Flexors`, `Foot Muscles`, `Neck Muscles`, `Arms`, `Thighs`.
-  Sie bleiben, weil Übungen sie benutzen — aber die Tabelle vermischt
-  damit **anatomische Muskeln** mit **funktionalen Gruppen**.
-  Zu entscheiden: eigene Kennzeichnung (`typ: muskel | gruppe | sehne`),
-  oder bewusst so lassen und im Schema dokumentieren. Erst relevant,
-  wenn eine Oberfläche nach Muskeln filtert; vorher kostet es nichts.
 
-- [ ] **E-18: `none/None` als Muskelgruppe — Restfrage** (neu
-  2026-08-13, aus Block 26) — `[cmd]` Im Seed sind die zwei
-  Platzhalterzeilen entfernt (v100 prüft `platzhalter_none = 0`), und
-  die 14 zugehörigen Zuordnungen entfielen ersatzlos: der Wert bedeutete
-  „keine sekundären Muskeln", also eine **Abwesenheit, als Wert
-  kodiert**.
-  **Was offen bleibt:** ob die 14 betroffenen Übungen fachlich wirklich
-  keine sekundären Muskeln haben oder ob dort nur niemand gepflegt hat.
-  `[cmd]` Alle 14 tragen echte primary-Muskeln, das Fehlen ist also
-  plausibel — belegt ist es nicht. Klärung nur mit einer fachlichen
-  Quelle, nicht aus den Daten.
 
-- [ ] **E-19: Derselbe Muskel mit `primary` UND `secondary` an einer
-  Übung** (neu 2026-08-13, aus E-16/Block 26) — `[cmd]` **35 Fälle im
-  gesamten Bestand**: eine Übung führt dieselbe Muskelgruppe zweimal,
-  einmal als `primary` und einmal als `secondary`.
 
-  **Beim mideus-Merge aufgefallen, aber NICHT von ihm verursacht.** Vier
-  der 35 stammen aus jenem Paar (`Resistance Band Lying Abduction` und
-  drei weitere Abduktionsübungen); die übrigen 31 gab es vorher. Der
-  Primärschlüssel `(exercise_id, muscle_group_id, role)` lässt das zu —
-  fachlich ist es ein Widerspruch: ein Muskel ist an einer Übung
-  entweder Haupt- oder Nebenmuskel, nicht beides.
-
-  **Nicht automatisch zu bereinigen.** Welche Rolle gilt, ist eine
-  fachliche Frage; `primary` zu bevorzugen wäre eine Regel ohne Beleg.
-  `[cmd]` Bei den vier mideus-Fällen trug die *korrekt* geschriebene
-  Zeile durchgängig `primary`, die falsch geschriebene `secondary` —
-  das ist ein Hinweis, aber kein Nachweis für die übrigen 31.
-  **Zu klären:** Reicht der Primärschlüssel, oder braucht es einen
-  UNIQUE auf `(exercise_id, muscle_group_id)` plus eine Entscheidung,
-  welche Rolle bei einem Konflikt gewinnt?
-
----
 
 ## F — Gedächtnisschichten (AMF)
 

@@ -4123,6 +4123,140 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 - [x] Todo- und ADR-Liste angelegt
 
 
+## E - Altbestand Uebungen und Muskelgruppen
+
+- [x] **E-15: Vier `body_region`-Werte im Altbestand sind anatomisch
+  falsch** (neu 2026-08-13, aus E-13) — `[cmd]` Beim Nachpflegen der
+  Lücke aufgefallen, **nicht mitkorrigiert**:
+
+  | Gruppe | steht auf | anatomisch |
+  |---|---|---|
+  | `Biceps Femoris` | `arms` | Hamstring → `legs` |
+  | `Rectus Femoris` | `core` | Quadrizepskopf → `legs` |
+  | `Tensor Fasciae Latae` | `back` | Hüftmuskel → `legs` |
+  | `Hip Rotators` | `shoulders` | Hüfte → `legs` |
+
+  Der Name führt hier in die Irre: „Biceps" Femoris ist kein Armmuskel,
+  „Rectus" Femoris kein Bauchmuskel. `[annahme]` Vermutlich beim Import
+  nach Namensähnlichkeit zugeordnet.
+  **Bewusst nicht nebenbei erledigt:** E-13 war das Füllen der Lücke,
+  nicht das Umschreiben vorhandener Werte. Wer sie ändert, ändert
+  bestehende Filterergebnisse — das gehört entschieden. Klein genug für
+  einen Einzeiler, sobald Tom zustimmt.
+
+  `[cmd]` **Erledigt 2026-08-18 mit Kettenschritt `108`**, 61 Schritte in der Kette.
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `exercises` | 1.416 | **1.416** |
+  | `muscle_groups` | 96 | **95** |
+  | `exercise_muscles` | 6.624 | **6.588** |
+
+  `[cmd]` **Die -36 sind erklaert:** 35 entfernte `secondary`-Doppelrollen
+  plus **eine Achilles-Sehnenzuordnung.** `[read]` Das ist die richtige
+  Richtung - eine Doppelrolle zaehlt doppelt, sobald jemand Belastung je
+  Muskel summiert. **Genau das tut die Muskelkarte.**
+
+  `[cmd]` **Waisen 0, `Achilles Tendon` 0, `none`/`None` 0,
+  Primary+Secondary-Doppelrollen 0.**
+
+- [x] **E-17: `Achilles Tendon` ist eine Sehne in `muscle_groups`** (neu
+  2026-08-13, aus E-13/Block 26) — `[cmd]` 1 Zuordnung. Sie hat in E-13
+  die Region `legs` bekommen, damit sie nicht durch jeden Regionsfilter
+  fällt. **Geografisch richtig, fachlich falsch:** eine Sehne ist keine
+  Muskelgruppe.
+  **Klein, aber symptomatisch.** Dieselbe Tabelle führt weitere
+  Sammelbegriffe, die keine einzelnen Muskeln sind: `Grip Muscles`,
+  `Fingers Flexors`, `Foot Muscles`, `Neck Muscles`, `Arms`, `Thighs`.
+  Sie bleiben, weil Übungen sie benutzen — aber die Tabelle vermischt
+  damit **anatomische Muskeln** mit **funktionalen Gruppen**.
+  Zu entscheiden: eigene Kennzeichnung (`typ: muskel | gruppe | sehne`),
+  oder bewusst so lassen und im Schema dokumentieren. Erst relevant,
+  wenn eine Oberfläche nach Muskeln filtert; vorher kostet es nichts.
+
+  `[cmd]` **Erledigt 2026-08-18 mit Kettenschritt `108`**, 61 Schritte in der Kette.
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `exercises` | 1.416 | **1.416** |
+  | `muscle_groups` | 96 | **95** |
+  | `exercise_muscles` | 6.624 | **6.588** |
+
+  `[cmd]` **Die -36 sind erklaert:** 35 entfernte `secondary`-Doppelrollen
+  plus **eine Achilles-Sehnenzuordnung.** `[read]` Das ist die richtige
+  Richtung - eine Doppelrolle zaehlt doppelt, sobald jemand Belastung je
+  Muskel summiert. **Genau das tut die Muskelkarte.**
+
+  `[cmd]` **Waisen 0, `Achilles Tendon` 0, `none`/`None` 0,
+  Primary+Secondary-Doppelrollen 0.**
+
+- [x] **E-18: `none/None` als Muskelgruppe — Restfrage** (neu
+  2026-08-13, aus Block 26) — `[cmd]` Im Seed sind die zwei
+  Platzhalterzeilen entfernt (v100 prüft `platzhalter_none = 0`), und
+  die 14 zugehörigen Zuordnungen entfielen ersatzlos: der Wert bedeutete
+  „keine sekundären Muskeln", also eine **Abwesenheit, als Wert
+  kodiert**.
+  **Was offen bleibt:** ob die 14 betroffenen Übungen fachlich wirklich
+  keine sekundären Muskeln haben oder ob dort nur niemand gepflegt hat.
+  `[cmd]` Alle 14 tragen echte primary-Muskeln, das Fehlen ist also
+  plausibel — belegt ist es nicht. Klärung nur mit einer fachlichen
+  Quelle, nicht aus den Daten.
+
+  `[cmd]` **Erledigt 2026-08-18 mit Kettenschritt `108`**, 61 Schritte in der Kette.
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `exercises` | 1.416 | **1.416** |
+  | `muscle_groups` | 96 | **95** |
+  | `exercise_muscles` | 6.624 | **6.588** |
+
+  `[cmd]` **Die -36 sind erklaert:** 35 entfernte `secondary`-Doppelrollen
+  plus **eine Achilles-Sehnenzuordnung.** `[read]` Das ist die richtige
+  Richtung - eine Doppelrolle zaehlt doppelt, sobald jemand Belastung je
+  Muskel summiert. **Genau das tut die Muskelkarte.**
+
+  `[cmd]` **Waisen 0, `Achilles Tendon` 0, `none`/`None` 0,
+  Primary+Secondary-Doppelrollen 0.**
+
+- [x] **E-19: Derselbe Muskel mit `primary` UND `secondary` an einer
+  Übung** (neu 2026-08-13, aus E-16/Block 26) — `[cmd]` **35 Fälle im
+  gesamten Bestand**: eine Übung führt dieselbe Muskelgruppe zweimal,
+  einmal als `primary` und einmal als `secondary`.
+
+  **Beim mideus-Merge aufgefallen, aber NICHT von ihm verursacht.** Vier
+  der 35 stammen aus jenem Paar (`Resistance Band Lying Abduction` und
+  drei weitere Abduktionsübungen); die übrigen 31 gab es vorher. Der
+  Primärschlüssel `(exercise_id, muscle_group_id, role)` lässt das zu —
+  fachlich ist es ein Widerspruch: ein Muskel ist an einer Übung
+  entweder Haupt- oder Nebenmuskel, nicht beides.
+
+  **Nicht automatisch zu bereinigen.** Welche Rolle gilt, ist eine
+  fachliche Frage; `primary` zu bevorzugen wäre eine Regel ohne Beleg.
+  `[cmd]` Bei den vier mideus-Fällen trug die *korrekt* geschriebene
+  Zeile durchgängig `primary`, die falsch geschriebene `secondary` —
+  das ist ein Hinweis, aber kein Nachweis für die übrigen 31.
+  **Zu klären:** Reicht der Primärschlüssel, oder braucht es einen
+  UNIQUE auf `(exercise_id, muscle_group_id)` plus eine Entscheidung,
+  welche Rolle bei einem Konflikt gewinnt?
+
+---
+
+  `[cmd]` **Erledigt 2026-08-18 mit Kettenschritt `108`**, 61 Schritte in der Kette.
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `exercises` | 1.416 | **1.416** |
+  | `muscle_groups` | 96 | **95** |
+  | `exercise_muscles` | 6.624 | **6.588** |
+
+  `[cmd]` **Die -36 sind erklaert:** 35 entfernte `secondary`-Doppelrollen
+  plus **eine Achilles-Sehnenzuordnung.** `[read]` Das ist die richtige
+  Richtung - eine Doppelrolle zaehlt doppelt, sobald jemand Belastung je
+  Muskel summiert. **Genau das tut die Muskelkarte.**
+
+  `[cmd]` **Waisen 0, `Achilles Tendon` 0, `none`/`None` 0,
+  Primary+Secondary-Doppelrollen 0.**
+
 ## G — Theme V1
 
 - [x] **G-01: Parallelstruktur und Tokens** (neu 2026-08-15). Der erste
