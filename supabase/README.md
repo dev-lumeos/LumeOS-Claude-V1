@@ -108,6 +108,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 103 | `10_training/103_calvicular_merge.sql` | Calvicular-/Clavicular-Merge | Nachpflege |
 | 104 | `10_training/104_body_region.sql` | `body_region`-Nachpflege fuer Muskelgruppen | Nachpflege |
 | 105 | `10_training/105_mideus_merge.sql` | Mideus-/Medius-Merge | Endbestand 1.416 Uebungen, 107 Muskelgruppen, 58 Geraete, 6.624 Zuordnungen |
+| 107 | `10_training/107_muscle_groups_hierarchy.sql` | Muskelgruppen-Kuration: Anzeigeebene, Hierarchie, Regionskorrekturen, Dubletten-Merge | Endbestand 1.416 Uebungen, 96 Muskelgruppen, 58 Geraete, 6.624 Zuordnungen |
 | 106 | `10_training/106_workout_sessions.sql` | Training-Userdaten: `workout_sessions`, `workout_exercises`, `workout_sets` | 3 Tabellen, 4 Funktionen, RLS je Operation |
 | 120 | `12_recovery/120_recovery_checkins.sql` | Recovery-Userdaten: `checkins` | 1 Tabelle, 1 Funktion, RLS je Operation |
 | 130 | `13_supplements/130_supplements_schema.sql` | Supplements-Schema: `supplement_catalog`, `supplement_interactions`, `user_stacks`, `stack_items`, `intake_logs`, `daily_intake_summary` | 5 Tabellen, 1 Sicht, 2 Funktionen, RLS je Operation |
