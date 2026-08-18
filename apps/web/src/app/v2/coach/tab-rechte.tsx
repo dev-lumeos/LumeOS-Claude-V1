@@ -40,9 +40,8 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE. Ein `coach`-Schema gibt es nicht.
 import * as React from 'react'
-import { Card, Pill, Icon } from '@lumeos/ui'
+import { Card, Pill, Empty, Icon } from '@lumeos/ui'
 
-import { Leer } from './bausteine'
 import {
   ACCESS_LEVELS, COACHES, CONSENT_LOG, LEVEL_COLOR, PERM_EXPIRY,
   PERM_GRANTS, PERM_MODULES, PROPOSALS,
@@ -265,7 +264,7 @@ export function AthleteProposals() {
       <div className="v2-col-gap" style={{ gap: 8, marginBottom: 16 }}>
         {pending.map(p => <ProposalCard key={p.id} p={p} onOpen={() => setSel(p)} />)}
         {pending.length === 0 && (
-          <Leer title="Nothing to review" sub="Your coaches have no open proposals." icon="check" />
+          <Empty title="Nothing to review" sub="Your coaches have no open proposals." icon="check" />
         )}
       </div>
 

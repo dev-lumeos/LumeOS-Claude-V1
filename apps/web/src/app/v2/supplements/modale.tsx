@@ -295,26 +295,21 @@ function LogInjektionFenster({ onClose }: { onClose: () => void }) {
               Override with reason
             </button>
           )}
-          {/* `[cmd]` `InEntwicklungKnopf` kennt kein `disabled`
-              (packages/ui/src/in-entwicklung.tsx:81-88), und
-              packages/ui ist in diesem Auftrag gesperrt. Der gesperrte
-              Zustand der Vorlage ist aber kein Zierrat — er verhindert
-              das Speichern bei verletzter Grenze. Deshalb hier ein
-              echter `<button disabled>`; nur der freigegebene Fall
-              geht durch `InEntwicklungKnopf`. **Gemeldet.** */}
-          {gesperrt ? (
-            <button type="button" className="v2-btn v2-btn-primary" disabled>
-              <Icon name="check" className="v2-ic v2-ic-sm" />Log injection
-            </button>
-          ) : (
-            <InEntwicklungKnopf
-              titel="Log injection"
-              grund={OHNE_SCHEMA}
-              className="v2-btn v2-btn-primary"
-            >
-              <Icon name="check" className="v2-ic v2-ic-sm" />Log injection
-            </InEntwicklungKnopf>
-          )}
+          {/* `[cmd]` SEIT G-56 EIN ZWEIG STATT ZWEI.
+              `InEntwicklungKnopf` kennt jetzt `disabled` — vorher stand
+              hier ein doppelter Zweig, weil `packages/ui` in G-29/G-45
+              gesperrt war und der gesperrte Zustand kein Zierrat ist:
+              er verhindert das Speichern bei ueberschrittener Menge
+              oder laufendem Ruhefenster. Der Knopf oeffnet dann auch
+              das Attrappenfenster nicht. */}
+          <InEntwicklungKnopf
+            titel="Log injection"
+            grund={OHNE_SCHEMA}
+            className="v2-btn v2-btn-primary"
+            disabled={gesperrt}
+          >
+            <Icon name="check" className="v2-ic v2-ic-sm" />Log injection
+          </InEntwicklungKnopf>
         </>
       )}
     >

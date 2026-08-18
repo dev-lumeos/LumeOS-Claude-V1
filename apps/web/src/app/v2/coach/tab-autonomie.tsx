@@ -45,7 +45,6 @@
 import { Card, Pill, Icon, Meter, Row } from '@lumeos/ui'
 
 import { ATTRAPPE } from './ansicht'
-import { PunktPill } from './bausteine'
 import {
   CLIENT_AUTONOMY, AUTONOMY_LADDER, CHECKIN_TEMPLATES, CHECKIN_HISTORY,
 } from './daten'
@@ -289,7 +288,7 @@ export function AthleteCheckins() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{t.name}</span>
-                  {t.active ? <PunktPill variant="pos">active</PunktPill> : <Pill>inactive</Pill>}
+                  {t.active ? <Pill variant="pos" dot>active</Pill> : <Pill>inactive</Pill>}
                   <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
                     {t.cadence}
                   </span>

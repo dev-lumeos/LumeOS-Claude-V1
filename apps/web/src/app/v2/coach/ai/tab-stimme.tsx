@@ -34,7 +34,7 @@
 // aus buddy.css — waagerecht rollend, wie in der Vorlage; acht Phasen
 // mit Pfeilen passen auf keiner Breite nebeneinander. Das Wurzelraster
 // der unteren Haelfte (:106, `1.3fr 1fr` ohne Haltepunkt) ist
-// `v2-buddy-grid-13`, dieselben zwei Spalten plus den 1100px-Haltepunkt,
+// `v2-grid-13`, dieselben zwei Spalten plus den 1100px-Haltepunkt,
 // der aus zwei Spalten eine macht — dieselbe Klasse wie in `BuddyClone`.
 //
 // `[cmd]` `<Icon name="training">` (:72) gibt es in `packages/ui`:
@@ -248,7 +248,7 @@ export function BuddyVoice() {
       </Card>
 
       {/* [cmd] Vorlage :106 — `grid` mit `1.3fr 1fr`, ohne Haltepunkt. */}
-      <div className="v2-buddy-grid-13">
+      <div className="v2-grid-13">
         {/* Mitschrift — module-buddy-voice.jsx:108-129. */}
         <Card
           title="Session transcript"

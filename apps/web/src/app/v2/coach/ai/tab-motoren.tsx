@@ -22,7 +22,7 @@
 //   4. `color-mix(in srgb, …)` -> `in oklch`, wie in jeder V2-Datei.
 //   5. Die sechs Rasterangaben aus dem `style` in Klassen —
 //      `v2-grid-14`, `v2-grid-15`, `v2-g-cols-2` sind geteilt,
-//      `v2-buddy-grid-13`, `v2-buddy-stufen`, `v2-buddy-stabil`,
+//      `v2-grid-13`, `v2-buddy-stufen`, `v2-buddy-stabil`,
 //      `v2-buddy-konfidenz`, `v2-buddy-messung` liegen in buddy.css.
 //      Der Grund ist der Haltepunkt: der Entwurf hat null `@media`.
 //   6. Icon `shield` -> `admin` (siehe unten).
@@ -250,8 +250,8 @@ export function BuddyEngines() {
         </div>
       </Card>
 
-      {/* [cmd] :306 — "1.3fr 1fr", hier `v2-buddy-grid-13`. */}
-      <div className="v2-buddy-grid-13">
+      {/* [cmd] :306 — "1.3fr 1fr", hier `v2-grid-13` (v2.css, seit G-56). */}
+      <div className="v2-grid-13">
         <Card title="Request routing" sub="three paths · cost per request" attrappe={ATTRAPPE}>
           <div className="v2-col-gap" style={{ gap: 8, marginBottom: 14 }}>
             {AI_PATHS.map(p => (

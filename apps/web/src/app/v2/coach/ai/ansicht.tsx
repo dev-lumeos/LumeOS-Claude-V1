@@ -42,7 +42,6 @@ import {
   Card, Pill, Icon, Row, Tabs, type TabItem,
 } from '@lumeos/ui'
 
-import { PunktPill } from './bausteine'
 import {
   BUDDY_PERSONAS, BUDDY_STATES, BUDDY_CHAT_HISTORY,
   BUDDY_INSIGHTS_FEED, BUDDY_MEMORY, BUDDY_DECISIONS,
@@ -114,7 +113,7 @@ export function BuddyAnsicht() {
             <Pill variant="acc">{personaName}</Pill>
             <Pill>{`autonomy · L${autonomy}`}</Pill>
             <Pill variant="acc">{TIER_LABEL[tier]}</Pill>
-            <PunktPill farbe="var(--pos)">idle</PunktPill>
+            <Pill dot="var(--pos)">idle</Pill>
           </div>
           <div className="v2-module-sub">
             {`Persistent AI buddy · knows your data · cross-module aware · ${BUDDY_MEMORY.length} memories`}
@@ -218,7 +217,7 @@ function BuddyChat() {
               {`${personaName} persona · 4 messages`}
             </div>
           </div>
-          <PunktPill variant="pos">online</PunktPill>
+          <Pill variant="pos" dot>online</Pill>
         </div>
 
         <div
@@ -573,9 +572,9 @@ function BuddySettings() {
 function BuddyStatesShowcase() {
   return (
     <Card title="Avatar states" sub="5 states reflect what Buddy is doing" attrappe={ATTRAPPE}>
-      {/* [cmd] `v2-g-cols-5` gibt es in v2.css nicht — modul-lokal in
-          buddy.css, gemeldet fuer G-43. */}
-      <div className="v2-buddy-zustaende">
+      {/* [cmd] Seit G-56 steht `v2-g-cols-5` in v2.css — vorher war es
+          modul-lokal als `v2-buddy-zustaende` nachgebaut. */}
+      <div className="v2-grid v2-g-cols-5" style={{ gap: 12 }}>
         {BUDDY_STATES.map(s => (
           <div
             key={s.id}

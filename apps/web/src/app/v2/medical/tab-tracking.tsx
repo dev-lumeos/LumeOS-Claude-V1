@@ -504,7 +504,7 @@ export function MedInsights() {
       )}
 
       {sub === 'export' && (
-        <div className="v2-med-export">
+        <div className="v2-grid-13">
           <Card title="Doctor export · report structure" sub="6 sections · PDF · legal notice mandatory"
                 attrappe={ATTRAPPE}>
             <div className="v2-col-gap" style={{ gap: 6 }}>

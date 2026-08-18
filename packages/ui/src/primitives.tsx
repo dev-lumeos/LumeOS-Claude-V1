@@ -84,14 +84,76 @@ export type PillProps = {
   variant?: PillVariant
   className?: string
   style?: React.CSSProperties
+  /**
+   * Punkt vor dem Text.
+   *
+   * `true` faerbt ihn wie die Schrift der Pille (`currentColor`), ein
+   * String setzt eine eigene Farbe — `dot="var(--pos)"` an einer Pille
+   * ohne Variante.
+   *
+   * `[cmd]` NACHGETRAGEN IN G-56. Die Vorlage kennt keinen `dot`-Prop:
+   * dort schreiben die Aufrufer `<Pill><span className="dot"/>…</Pill>`
+   * von Hand (shared.jsx:76, module-buddy.jsx:82). Nachgebaut wurde er
+   * modul-lokal in `coach/bausteine.tsx` und `coach/ai/bausteine.tsx` —
+   * **und die beiden Nachbauten waren schon verschieden**: der zweite
+   * hatte eine Farboption, der erste nicht. Genau davor warnt der
+   * Auftrag („Wer sie beim zweiten Modul nachbaut, baut sie falsch").
+   * Diese Fassung kann beides.
+   */
+  dot?: boolean | string
 }
 
-export function Pill({ children, variant, className = '', style }: PillProps) {
+export function Pill({ children, variant, className = '', style, dot }: PillProps) {
   const v = variant ? ` v2-pill-${variant}` : ''
   return (
     <span className={`v2-pill${v} ${className}`.trim()} style={style}>
+      {dot && (
+        // `v2-dot` traegt Groesse und Form (v2.css) — die Farbe kommt
+        // hier dazu, damit der Punkt der Pille folgt statt grau zu
+        // bleiben.
+        <span
+          className="v2-dot"
+          style={{ background: typeof dot === 'string' ? dot : 'currentColor' }}
+        />
+      )}
       {children}
     </span>
+  )
+}
+
+// ---------------------------------------------------------------
+// Empty — der Leerzustand
+// ---------------------------------------------------------------
+
+export type EmptyProps = {
+  /** Was fehlt. Ein Satzfragment, kein Satz. */
+  title: string
+  /** Was zu tun waere, damit etwas dasteht. */
+  sub?: string
+  icon?: IconName
+}
+
+/**
+ * Der Leerzustand einer Kachel.
+ *
+ * `[cmd]` NACHGETRAGEN IN G-56. Die Vorlage ruft `<Empty title sub
+ * icon/>` an fuenf Stellen auf (module-coach.jsx:252,
+ * module-coach-athlete.jsx:283 u. a.), **definiert die Komponente aber
+ * nirgends** — genau wie bei `shield`, `history` und `file`. G-40 hat
+ * sie deshalb als `Leer` modul-lokal nachgebaut.
+ *
+ * `[read]` Die dritte Zaehlregel aus `theme-v1-umsetzung.md`: *„Eigene
+ * Zustaende sind eigene Bildschirme."* Ein Leerzustand ist kein
+ * Sonderfall der Tabelle, sondern eine eigene Ansicht — und wenn jedes
+ * Modul ihn selbst baut, sieht er in jedem Modul anders aus.
+ */
+export function Empty({ title, sub, icon = 'search' }: EmptyProps) {
+  return (
+    <div className="v2-empty">
+      <Icon name={icon} className="v2-ic v2-empty-icon" />
+      <div className="v2-empty-title">{title}</div>
+      {sub && <div className="v2-empty-sub">{sub}</div>}
+    </div>
   )
 }
 

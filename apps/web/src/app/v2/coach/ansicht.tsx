@@ -43,10 +43,9 @@
 // Begriff kommt in `supabase/_pipeline/` in keiner SQL-Datei vor.
 import * as React from 'react'
 import {
-  Card, Pill, Icon, Row, Sparkline, Tabs, type TabItem,
+  Card, Pill, Empty, Icon, Row, Sparkline, Tabs, type TabItem,
 } from '@lumeos/ui'
 
-import { Leer, PunktPill } from './bausteine'
 import {
   COACHES, COACH_NOTES, PENDING_INVITES,
 } from './daten'
@@ -186,7 +185,7 @@ function AthleteOverview() {
           )}
         >
           {PENDING_INVITES.length === 0 ? (
-            <Leer title="No pending invites" sub="Invite a new coach with QR code or link." icon="user" />
+            <Empty title="No pending invites" sub="Invite a new coach with QR code or link." icon="user" />
           ) : (
             <div className="v2-col-gap" style={{ gap: 6 }}>
               {PENDING_INVITES.map(i => (
@@ -311,7 +310,7 @@ function AthleteCoaches() {
                 <Pill style={{ borderColor: `color-mix(in oklch, ${c.color} 35%, var(--border))`, color: c.color }}>
                   {c.type}
                 </Pill>
-                {c.status === 'active' && <PunktPill variant="pos">active</PunktPill>}
+                {c.status === 'active' && <Pill variant="pos" dot>active</Pill>}
                 <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
                   {`since ${c.since}`}
                 </span>

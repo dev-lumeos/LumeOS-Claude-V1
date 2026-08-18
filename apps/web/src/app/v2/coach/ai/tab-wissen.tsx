@@ -499,7 +499,7 @@ export function BuddyRules() {
 //
 // `[cmd]` Das Wurzelraster der Vorlage (:198) ist `grid` mit
 // `gridTemplateColumns: "1.3fr 1fr"` und ohne Haltepunkt. Genommen ist
-// `v2-buddy-grid-13` aus buddy.css — dieselben zwei Spalten, plus den
+// `v2-grid-13` aus buddy.css — dieselben zwei Spalten, plus den
 // 1100px-Haltepunkt, der aus zwei Spalten eine macht. Die kleinen Raster
 // innerhalb der Kacheln (`180px 1fr` in der Wissenszeile) bleiben inline,
 // weil sie nur an dieser einen Stelle stehen.
@@ -548,7 +548,7 @@ const GYMS: Gym[] = [
 
 export function BuddyClone() {
   return (
-    <div className="v2-buddy-grid-13">
+    <div className="v2-grid-13">
       <div className="v2-col-gap" style={{ gap: 14 }}>
         {/* Banner — module-buddy-knowledge.jsx:200-210. */}
         <div

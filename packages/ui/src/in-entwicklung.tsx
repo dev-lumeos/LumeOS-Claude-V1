@@ -79,21 +79,47 @@ export function InEntwicklung({ titel, grund, onClose }: InEntwicklungProps) {
  * Vorlage (`v2-btn`, `v2-btn-primary`, `v2-icon-btn`).
  */
 export function InEntwicklungKnopf({
-  titel, grund, className = 'v2-btn', children, style,
+  titel, grund, className = 'v2-btn', children, style, disabled = false,
 }: {
   titel: string
   grund?: string
   className?: string
   children: React.ReactNode
   style?: React.CSSProperties
+  /**
+   * Der Knopf ist gesperrt — er oeffnet dann NICHTS, auch nicht das
+   * Attrappenfenster.
+   *
+   * `[cmd]` NACHGETRAGEN IN G-56. `[read]` Der Auftrag: *„Ein Knopf,
+   * der eine Grenze nicht durchsetzt, sieht aus wie eine Sicherung und
+   * ist keine."* Im Log-Fenster von Supplements sperrt die Vorlage den
+   * Speichern-Knopf bei ueberschrittener Menge oder laufendem
+   * Ruhefenster. Weil `packages/ui` in G-29/G-45 gesperrt war, steht
+   * dort heute ein doppelter Zweig: ein echter `<button disabled>` fuer
+   * den gesperrten Fall, dieser Knopf nur fuer den freigegebenen
+   * (`supplements/modale.tsx:298-306`). Mit diesem Prop faellt der
+   * Zweig weg.
+   *
+   * Wichtig ist die Reihenfolge: `disabled` schlaegt das Fenster. Ein
+   * gesperrter Knopf, der noch ein Fenster oeffnet, waere genau die
+   * Sicherung, die keine ist.
+   */
+  disabled?: boolean
 }) {
   const [offen, setOffen] = React.useState(false)
   return (
     <>
-      <button type="button" className={className} style={style} onClick={() => setOffen(true)}>
+      <button
+        type="button"
+        className={className}
+        style={style}
+        disabled={disabled}
+        onClick={disabled ? undefined : () => setOffen(true)}
+      >
         {children}
       </button>
-      {offen && <InEntwicklung titel={titel} grund={grund} onClose={() => setOffen(false)} />}
+      {offen && !disabled
+        && <InEntwicklung titel={titel} grund={grund} onClose={() => setOffen(false)} />}
     </>
   )
 }

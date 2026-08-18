@@ -48,14 +48,10 @@
   min-height: 580px;
 }
 
-/* Motoren und Clone: die schmalere Nebenspalte.
- * `[cmd]` module-buddy-engines.jsx:306 und
- * module-buddy-knowledge.jsx:198 — beide "1.3fr 1fr". */
-.v2-buddy-grid-13 {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 14px;
-}
+/* `[cmd]` G-56: `.v2-buddy-grid-13` ist entfallen. Die drei
+ * Aufrufstellen benutzen jetzt `v2-grid-13` aus v2.css —
+ * dasselbe Verhaeltnis 1.3fr/1fr, das vorher in drei Modulen
+ * dreimal einzeln stand (medical, recovery, buddy). */
 
 /* Die Stufenwahl: vier gleiche Spalten.
  * `[cmd]` module-buddy-engines.jsx:225 — "repeat(4, 1fr)".
@@ -98,16 +94,9 @@
   font-size: 11px;
 }
 
-/* Die fuenf Avatarzustaende nebeneinander.
- * `[cmd]` module-buddy.jsx:397 — `grid g-cols-5`. **`v2-g-cols-5` gibt
- * es in v2.css nicht** (nur -2, -3, -4, v2.css:470-472); gemeldet fuer
- * G-43, hier modul-lokal. Unter 1100px zwei Spalten statt fuenf —
- * fuenf Orbs à 96 px passen auf kein Telefon. */
-.v2-buddy-zustaende {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-}
+/* `[cmd]` G-56: `.v2-buddy-zustaende` ist entfallen. Die fuenf
+ * Avatarzustaende benutzen jetzt `v2-g-cols-5` aus v2.css — dieselbe
+ * Regel, samt 1100px-Haltepunkt, nur einmal statt je Modul. */
 
 /* Der Phasenstreifen der Sprachsitzung — waagerecht rollend.
  * `[cmd]` module-buddy-voice.jsx:85. Acht Phasen mit Pfeilen passen
@@ -122,10 +111,8 @@
 
 @media (max-width: 1100px) {
   .v2-buddy-chat { grid-template-columns: 1fr; min-height: 0; }
-  .v2-buddy-grid-13 { grid-template-columns: 1fr; }
   .v2-buddy-stufen { grid-template-columns: 1fr 1fr; }
   .v2-buddy-stabil { grid-template-columns: 1fr; gap: 4px; }
   .v2-buddy-konfidenz { grid-template-columns: 1fr; gap: 4px; }
   .v2-buddy-messung { grid-template-columns: 1fr 1fr; }
-  .v2-buddy-zustaende { grid-template-columns: 1fr 1fr; }
 }
