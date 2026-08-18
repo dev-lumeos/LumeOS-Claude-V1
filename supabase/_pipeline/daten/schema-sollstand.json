@@ -414,9 +414,11 @@
         "notes",
         "created_at",
         "updated_at",
-        "meal_time"
+        "meal_time",
+        "entry_source",
+        "source_detail"
       ],
-      "spalten_herkunft": "[cmd] 2026-08-17 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 052a_meal_time.sql ergaenzt meal_time als lokale Uhrzeit des Essens."
+      "spalten_herkunft": "[cmd] 2026-08-17 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 052a_meal_time.sql ergaenzt meal_time als lokale Uhrzeit des Essens. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt entry_source und source_detail."
     },
     {
       "name": "meal_items",
@@ -471,9 +473,11 @@
         "custom_food_id",
         "portion_name",
         "portion_quantity",
-        "portion_amount_g"
+        "portion_amount_g",
+        "measurement_source",
+        "source_detail"
       ],
-      "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten."
+      "spalten_herkunft": "[cmd] 2026-08-16 gegen information_schema.columns geprueft. 052_diary_foundation.sql erzeugt die Tagebuchspalten, 058_custom_foods.sql ergaenzt custom_food_id, 058a_meal_item_portions.sql ergaenzt die Portions-Snapshot-Spalten. [cmd] 2026-08-18: 017_datenherkunft.sql ergaenzt measurement_source und source_detail."
     },
     {
       "name": "water_logs",

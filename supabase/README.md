@@ -121,6 +121,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
+| 017 | `00_querschnitt/017_datenherkunft.sql` | A-17 Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen | 7 Tabellen ergaenzt, Bestandsdaten `manual` |
 
 **Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,
 `055` braucht `nutrition.touch_updated_at()` aus `052`, `056` braucht

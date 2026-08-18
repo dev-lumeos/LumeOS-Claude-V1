@@ -408,6 +408,13 @@
       "kind": "tsx",
       "creates": "micronutrient_overview_items, micronutrient_snapshot und micronutrient_below_threshold",
       "depends_on": ["059", "110"]
+    },
+    {
+      "id": "017",
+      "path": "supabase/_pipeline/00_querschnitt/017_datenherkunft.sql",
+      "kind": "sql",
+      "creates": "Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen",
+      "depends_on": ["052a", "055", "106", "120", "130", "112", "140"]
     }
   ]
 }
