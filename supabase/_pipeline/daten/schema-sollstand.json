@@ -961,6 +961,7 @@
     "training.muscle_groups": 95,
     "training.equipment": 58,
     "training.exercise_muscles": 6588,
+    "training.exercise_catalog_enrichment": 1407,
     "supplements.supplement_catalog": 44,
     "medical.biomarker_catalog": 11676,
     "medical.biomarker_reference_ranges": 464,
@@ -986,6 +987,7 @@
     "training.muscle_groups": "[cmd] Ist-Stand nach 100-108: 95 Muskelgruppen nach 11 kollisionsfreien Alias-/Dubletten-Merges und Entfernen von Achilles Tendon als Sehne.",
     "training.equipment": "[cmd] Ist-Stand nach 100-105: 58 Geraete.",
     "training.exercise_muscles": "[cmd] Ist-Stand nach 100-108: 6.588 Zuordnungen. 6.624 nach C-73 minus 35 Primary/Secondary-Doppelrollen und minus 1 Achilles-Tendon-Sehnenzuordnung.",
+    "training.exercise_catalog_enrichment": "[cmd] C-83: 1.416 Training-Uebungen gegen media/exercises/katalog/1500+ exercise data.xlsx gematcht; 1.407 sicher anreicherbar, 8 mehrdeutig, 1 fehlend.",
     "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
     "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit zusammen 464 Referenzbereich-Zeilen; 141 importiert sie als Katalog-Fallback-Kandidaten.",
@@ -1202,6 +1204,37 @@
       },
       "grants_herkunft": "113_goal_milestones_adaptive_tdee.sql vergibt authenticated DML und service_role ALL explizit.",
       "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "training",
+      "name": "exercise_catalog_enrichment",
+      "schritt": "109",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "109_exercise_catalog_enrichment.ts vergibt authenticated DML wie die Training-Stammdaten aus 100; RLS begrenzt Schreiben auf public.is_admin(), service_role bekommt ALL fuer den Import.",
+      "zeilenschutzart": "oeffentlich"
     },
     {
       "schema": "training",

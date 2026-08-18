@@ -127,3 +127,59 @@ Stand: 2026-08-18
 [annahme] E-14 beruehrt die Produktfrage aus E-07: Fehlen maennliche Darstellungen, oder sind die Pfadfelder falsch befuellt? Diese Entscheidung gehoert nicht in die Datenbank-Kuration.
 
 [annahme] Die Struktur traegt die drei Ebenen Flaeche -> Gruppe -> Muskel weiterhin. Belegt sind Rotatorenmanschette, Deltoids und Quadrizeps; die eigentliche Zuordnung auf die Kartenflaechen bleibt G-49.
+
+## C-83: Wie viele Uebungen ihre Zeile finden
+
+[cmd] `media/exercises/katalog/1500+ exercise data.xlsx` hat 2.343 Zeilen mit `Exercise`. Gefuellt sind: `Exercise Instructions (step by step)` 1.748, `Exercise Tips` 1.744, `Primary Activating Muscles` 1.743, `Secondary Activating Muscles` 1.743, `Equipment` 1.645 und `Categories` 1.520.
+
+[cmd] Gegen 1.416 `training.exercises` liefert der Match auf den Namen nach Abzug von `_Male`/`_Female`: 1.338 eindeutig eindeutige Zeilen, 77 Namen mit mehreren XLSX-Zeilen und 1 fehlenden Namen. Der fehlende Name ist `MAJOR GROUPS Muscle body`.
+
+[cmd] Die 77 Mehrfachtreffer wurden geprueft: 62 haben in allen relevanten XLSX-Feldern identischen Inhalt, 7 haben genau eine gefuellte Quellzeile und 8 bleiben inhaltlich mehrdeutig. Damit sind 1.407 Uebungen sicher anreicherbar; 8 werden bewusst nicht importiert.
+
+[cmd] Die 8 mehrdeutigen Faelle sind: `Barbell bulgarian split squat`, `Barbell Deadlift High Pull`, `Calf raise leg press machine`, `Calf raise on hack squat machine`, `Resistance Band Calf Press Sitting on Chair`, `Resistance band face pull`, `Resistance Band Kneeling Cross Body Single Straight Arm Supinated Pulldown`, `Resistance Band Lying Hyperextension Abduction`.
+
+[cmd] Die erwarteten Scheitergruende Grossschreibung, doppelte Leerzeichen, Klammern und Bindestriche erklaeren im aktuellen Bestand fast keine DB-Trefferluecke. Nach Normalisierung von Grossschreibung und Leerraum bleibt derselbe eine fehlende DB-Name; der eigentliche Befund sind doppelte Quellzeilen in der XLSX.
+
+## C-83: Was die 462 sind
+
+[cmd] Reproduzierbar mit dieser XLSX und dem aktuellen Bestand: 1.876 normalisierte XLSX-Uebungsnamen nach Suffixabzug, davon 461 nur in der Datei und nicht in `training.exercises`. Diese 461 Schluessel entsprechen 781 XLSX-Zeilen; 217 davon tragen eigene Instructions.
+
+[cmd] Die Differenz zur Ausgangszahl 462 kommt aus der Normalisierung: `training.exercises` hat eine Uebung, die die XLSX nicht findet (`MAJOR GROUPS Muscle body`), waehrend die XLSX nach Leerraum-/Case-Normalisierung 461 zusaetzliche Schluessel hat.
+
+[cmd] Stichproben der XLSX-only-Gruppe sind Varianten und Spezialuebungen wie `180 jump turns`, `4 corners side step`, `abs snails`, zahlreiche `agility ladder ...`-Varianten, `air swing ...`-Varianten und `alternate biceps curl resistance band`.
+
+[annahme] Damit ist nicht entschieden, ob diese 461 absichtlich weggelassen wurden oder beim frueheren Import verloren gingen. Sie werden in C-83 nicht als neue Uebungen angelegt; dafuer braucht es eine eigene Entscheidung, weil sonst der Bestand 1.416 -> 1.877 springen wuerde.
+
+## C-83: Woher `instructions` und `exercise_muscles` heute stammen
+
+[read] `101_training_seed.sql` nennt als Quelle `backup/legacy-v2/training/{exercises,muscle_groups,equipment}.json`, nicht die XLSX. Der Seed befuellt `exercise_muscles` aus den Legacy-Arrays und sagt ausdruecklich: Arrays sind Quelle, Tabelle ist Struktur.
+
+[cmd] Der aktuelle Bestand hat `instructions` bei 1.416/1.416 Uebungen und `tips` bei 1.412/1.416. Fuer `tips` gibt es aus der XLSX keinen fehlenden sicheren Nachtrag.
+
+[cmd] Bei den Instructions gibt es 1 Abweichung: `Band close-grip biceps curl` unterscheidet sich nur in einem Zeichensatzartefakt um die `90`-Grad-Angabe (`90ТА` im Bestand gegen `90А` in der XLSX). Der Schritt ueberschreibt deshalb keine Instructions, sondern speichert `instructions_same_as_exercises=false` fuer diesen Fall.
+
+[cmd] Bei den Tips gibt es 6 Abweichungen: `Band standing rear delt row`, drei `Bench Bulgarian Split Squats`-Varianten, `Doorway biceps curl` und `Dumbbell bicep curl to shoulder press`. Die sichtbaren Unterschiede sind Legacy-/Encoding-Artefakte wie `doesnā€™t` gegen `doesn’t` oder Alttext-Trunkierung. Der Schritt speichert `tips_same_as_exercises=false`, ueberschreibt aber keine Tips.
+
+[annahme] Das spricht dafuer, dass der Legacy-Export aus derselben Exercise-Animatic-Quelle oder einer eng verwandten Fassung stammt. Deshalb wird `instructions`/`tips` nicht ueberschrieben; C-83 speichert nur die zusaetzlichen Quellfelder.
+
+[cmd] `exercise_muscles` bleibt bei 6.588 Zuordnungen. Die XLSX-Muskelspalten werden nicht als neue Zuordnungstabelle eingespielt, sondern als Rohtext in `training.exercise_catalog_enrichment`: 1.403 sichere Matches tragen `Primary Activating Muscles` und 1.403 `Secondary Activating Muscles`.
+
+## C-83: Was fuer deutsche Namen und Filter dasteht
+
+[cmd] Die XLSX liefert keine deutschen Uebungsnamen. Sie liefert aber fuer Muskeln haeufig Alltagsname plus anatomischen Namen in einem Feld, etwa in der Form `Chest (Pectoralis major), Shoulders (Deltoids), Triceps (Triceps brachii)`. Das ist Vorarbeit fuer deutsche Anzeigenamen und Suche, aber noch keine deutsche Kuration.
+
+[cmd] Geraete in der XLSX: 82 Rohwerte, nach konservativer Normalisierung 80. Bereinigt wurden nur belegte Schreibvarianten: `None` und `None (Bodyweight)` -> `None` (zusammen 470 Zeilen), `Ski Ergometer ` -> `Ski Ergometer`, `Ez Bar` -> `EZ Bar`, `chair` -> `Chair`. Kategorien: 4 Rohwerte, nach `bodyweight` -> `Bodyweight` bleiben 3.
+
+[cmd] `training.equipment` hat 58 Eintraege. 25 kanonische XLSX-Geraetewerte stehen nicht in `training.equipment`, darunter `Dumbbells`, `Resistance Band`, `Suspension Trainer`, `Ski Ergometer`, `Cable Machine`, `Box`, `Treadmill` und `Elliptical Machine`. Umgekehrt stehen `Bands`, `Cable` und `Stability Ball` in `training.equipment`, aber nicht als kanonischer XLSX-Wert.
+
+[annahme] Deshalb wird `training.equipment` nicht umgebaut. Die XLSX-Werte werden als `equipment_raw` und `equipment_canonical` in der Anreicherung festgehalten, damit die spaetere Uebungssuche und Filterkurierung eine belegte Quelle haben, ohne bestehende Foreign Keys zu verschieben.
+
+## C-83: Nachweis
+
+[cmd] Der Kettenlauf ueber `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts --database lumeos_kette_c83_full_20260818` lief von leer gruen durch. Schritt 109 meldete: `OK: 1407 XLSX-Anreicherungen, 1416 Uebungen, 6588 Muskelzuordnungen, 0 Waisen, 1 Instruction-Abweichung(en), 6 Tip-Abweichung(en)`.
+
+[cmd] Live nach dem Einspielen: `training.exercises` 1.416, `training.exercise_muscles` 6.588, `training.exercise_catalog_enrichment` 1.407, `enrichment_orphans` 0, `instruction_diff` 1, `tip_diff` 6.
+
+[cmd] `schema-vollstaendigkeit-pruefen.ts` meldete live `SCHEMA VOLLSTAENDIG`, inklusive `training.exercise_catalog_enrichment 1407 / 1407 ok` und `Fremde Tab. 21/21 vollstaendig`.
+
+[cmd] `testdaten-pruefen.ts` meldete live `OK: C-82 Testdaten stimmen.` `pnpm gate` lief gruen: 8/8 Turbo-Tasks erfolgreich.

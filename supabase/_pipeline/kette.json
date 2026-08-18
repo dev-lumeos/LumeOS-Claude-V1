@@ -326,11 +326,18 @@
       "depends_on": ["107"]
     },
     {
+      "id": "109",
+      "path": "supabase/_pipeline/10_training/109_exercise_catalog_enrichment.ts",
+      "kind": "tsx",
+      "creates": "Training-XLSX-Anreicherung fuer sichere Bestandsuebungen: Muskel-Rohtexte, Geraete- und Kategorie-Rohwerte",
+      "depends_on": ["108"]
+    },
+    {
       "id": "106",
       "path": "supabase/_pipeline/10_training/106_workout_sessions.sql",
       "kind": "sql",
       "creates": "Training-Userdaten: workout_sessions, workout_exercises und workout_sets mit RLS",
-      "depends_on": ["108", "auth_stub"]
+      "depends_on": ["109", "auth_stub"]
     },
     {
       "id": "120",
