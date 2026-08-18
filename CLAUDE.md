@@ -93,6 +93,28 @@ Sitzungen und Check-ins genauso.**
 Konten** — einen, der die Daten sieht, und einen, der sie nicht sieht.
 Ein Konto ohne Passwort taugt fuer keines von beidem.
 
+## Eine Sitzung statt tausend Fenster
+
+**Tom, 2026-08-18:** *,Jedes Mal, wenn so ein Terminal aufpoppt, kann ich
+nicht schreiben."*
+
+`[cmd]` **Die Zahlen sagen, woran es lag:** 3.657 Aufrufe von
+`start_process`, **19** von `interact_with_process`. **Jeder Aufruf
+startet ein eigenes `powershell.exe` und reisst unter Windows den Fokus
+weg.**
+
+**Der richtige Weg:** einmal `start_process("python -i -q")`, danach
+alles ueber `interact_with_process` in derselben Sitzung. **Kein neues
+Fenster, und der Zustand bleibt** — Arbeitsverzeichnis, Importe,
+Hilfsfunktionen.
+
+`[read]` Mehrzeiliges geht nur ueber `exec("...")` mit `\n`; die REPL
+bricht sonst an der ersten Leerzeile ab.
+
+**Und die eigenen Werkzeuge nutzen:** `read_file` statt `Get-Content`,
+`list_directory` statt `Get-ChildItem`, `edit_block` statt einer
+Ersetzung per Skript.
+
 ## Pruefungen als Skript, nicht als Shell-Einzeiler
 
 **Tom, 2026-08-17:** *„So belanglosen Scheiss will ich nicht
