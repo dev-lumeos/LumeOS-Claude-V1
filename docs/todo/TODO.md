@@ -2034,10 +2034,21 @@ Umsetzen angepasst werden.
   fuehrt in die Detailansicht, der Daumen nicht. `[read]` Sonst bewertet
   man versehentlich, was man nur ansehen wollte.
 
-  **Zu entscheiden:** Verschwindet eine abgewertete Zeile sofort aus der
-  Liste, oder bleibt sie bis zur naechsten Suche stehen? `[read]`
-  **Sofort verschwinden ist die klare Wirkung — aber ein Fehlklick
-  waere dann nur ueber die Preferences rueckgaengig zu machen.**
+  **Entschieden (Tom, 2026-08-18): Sicherheitsabfrage, dann weg.**
+
+  `[cmd]` **Der Daumen runter in der Liste fragt nach**, danach
+  verschwindet die Zeile. `[read]` **Damit ist beides geloest:** Die
+  Wirkung ist sofort sichtbar, **und ein Fehlklick kann nicht
+  passieren** — sonst waere die Zeile weg, die man zum Korrigieren
+  braucht.
+
+  `[read]` **Der Daumen hoch fragt nicht** — eine Zustimmung ist
+  folgenlos umkehrbar, ein Ausschluss nicht. **Nur die entfernende
+  Richtung braucht die Abfrage.**
+
+  `[cmd]` **Und die Abfrage nennt, was sie tut** — nicht *„Sind Sie
+  sicher?"*, sondern *„Rosenkohl kuenftig nicht mehr anzeigen?"* mit dem
+  Hinweis, wo es rueckgaengig geht (Preferences, Individual foods).
 
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
