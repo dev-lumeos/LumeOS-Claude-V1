@@ -224,4 +224,11 @@ backup/_*.py
 # Toms Design-Auswertung. Eigenes Material, sehr lange Pfade -- bei
 # rekursiven Suchen ausschliessen.
 docs/design-system-analysis/
+
+# LOINC-Bestand, von Tom heruntergeladen (Loinc_2.82, 924 MB).
+# Quelle fuer die abgeleitete Masterlist, nicht Bestandteil des Repos.
+# Bezug: https://loinc.org/downloads (kostenloses Konto noetig).
+# Die Lizenz verlangt einen Urhebervermerk an abgeleiteten Werken --
+# er steht im Kopf von daten/biomarker-loinc-masterlist.json.
+docs/ssot/daten/Loinc_2.82/
 .gstack/
