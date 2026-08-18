@@ -159,6 +159,23 @@ const UMBENANNT = {
         + 'technische Anpassung, nicht weniger Funktion.',
     },
   },
+  'coach-ai': {
+    BuddyOrbModule: {
+      ziel: 'BuddyOrb',
+      warum: 'orb.tsx:29 — derselbe Orb: `state` und `size` als '
+        + 'Requisiten, dieselbe Zustandsfarbtabelle (idle/thinking/'
+        + 'responding/alert/celebrating), dieselben vier SVG-SMIL-'
+        + '`<animate>` mit denselben Dauern (2.4s/1.4s/1s/1.2s/0.6s). '
+        + 'Das `-Module`-Suffix faellt ab, weil er kein Modul ist, '
+        + 'sondern ein Baustein — der Rahmen daneben heisst '
+        + '`BuddyAnsicht`. `[cmd]` EINE Abweichung, und sie ist noetig: '
+        + 'die Vorlage vergibt feste SVG-Kennungen `borb-${state}`, und '
+        + 'der Tab „Avatar states" zeigt alle fuenf Zustaende '
+        + 'gleichzeitig waehrend der Chat `responding` erneut zeigt — '
+        + 'zwei gleiche Kennungen auf einer Seite. Geloest mit '
+        + '`React.useId()`, wie die clipPath-Kollision in G-21.',
+    },
+  },
   dashboard: {
     DashboardModule: {
       ziel: 'DashboardEntwurf',

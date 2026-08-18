@@ -1,0 +1,131 @@
+/* Die Rasterklassen des AI-Coach-Moduls.
+ *
+ * WARUM HIER UND NICHT IN v2.css:
+ * `[read]` Der Auftrag G-42: „packages/ui/ nicht anfassen. In
+ * bausteine.tsx modul-lokal nachbauen, wie G-40 es getan hat."
+ *
+ * `[cmd]` DREI SYMBOLE FEHLEN — gemeldet, nicht ergaenzt (G-43):
+ *   `shield` — module-buddy-engines.jsx:263 (Tiers) und :732 (Safety).
+ *              Ersetzt durch `admin`, dasselbe Schutzschild-Motiv aus
+ *              der Seitenleiste — dieselbe Ersetzung wie in G-36 und
+ *              G-40, damit dasselbe Motiv nicht dreimal anders faellt.
+ *   `file`   — module-buddy-knowledge.jsx:68, die Belegkarte.
+ *              Ersetzt durch `copy`, das Blattmotiv des Satzes —
+ *              dieselbe Ersetzung wie in G-36.
+ *   `arr_r`  — module-buddy.jsx:229, der Sendeknopf. KEIN fehlendes
+ *              Symbol, sondern der bekannte Tippfehler fuer
+ *              `arrow_right`; nicht uebernommen.
+ * Die uebrigen gebrauchten Symbole liegen in icons.tsx: brain, bolt,
+ * training, user, moon, camera, download, edit, check, calendar, bell,
+ * plus, x, coach.
+ *
+ * `[cmd]` KEINE HYDRATIONSFALLE. Gemessen ueber alle vier
+ * Vorlagendateien (1.746 Zeilen): null `Math.random()`, null
+ * `Date.now()`, null `new Date()`, null `Math.sin`/`Math.cos`, null
+ * `setInterval`/`setTimeout`/`requestAnimationFrame`. Jede Zahl steht
+ * fest. Anders als bei Goals (32 Meldungen) und bei Coach (64 QR-Zellen)
+ * war hier nichts zu entschaerfen.
+ *
+ * `[cmd]` Die Bewegung im Modul ist rein deklarativ: vier SVG-SMIL
+ * `<animate>` im Orb und eine CSS-Transition am Heartbeat-Schalter
+ * (`margin .15s`). Beides ist server- wie browserseitig gleich.
+ *
+ * `[cmd]` Die geteilten Raster reichen weitgehend: `v2-grid-14` traegt
+ * Watcher, BSS und Butler, `v2-grid-15` die Interventionen,
+ * `v2-g-cols-2/3` die Kachelreihen, `v2-tbl-wrap` die acht breiten
+ * Tabellen. Uebrig bleiben die sechs Raster unten.
+ *
+ * DIE HALTEPUNKTE: `[cmd]` Der Entwurf hat null @media-Regeln. 1100px
+ * ist derselbe Haltepunkt wie in v2.css.
+ */
+
+/* Chat: feste Spalte fuer die Gespraechsliste, Rest fuer den Verlauf.
+ * `[cmd]` module-buddy.jsx:177 — "280px 1fr", minHeight 580. */
+.v2-buddy-chat {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 14px;
+  min-height: 580px;
+}
+
+/* Motoren und Clone: die schmalere Nebenspalte.
+ * `[cmd]` module-buddy-engines.jsx:306 und
+ * module-buddy-knowledge.jsx:198 — beide "1.3fr 1fr". */
+.v2-buddy-grid-13 {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 14px;
+}
+
+/* Die Stufenwahl: vier gleiche Spalten.
+ * `[cmd]` module-buddy-engines.jsx:225 — "repeat(4, 1fr)".
+ * `v2-g-cols-4` traegt keinen Haltepunkt; vier Preisschilder
+ * nebeneinander sind unter 1100px zu eng. */
+.v2-buddy-stufen {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+/* Die Kennzahlenzeile der Stabilitaet: Name, Balken, Wert.
+ * `[cmd]` module-buddy-engines.jsx:544 — "200px 1fr 90px". */
+.v2-buddy-stabil {
+  display: grid;
+  grid-template-columns: 200px 1fr 90px;
+  gap: 10px;
+  align-items: center;
+  font-size: 11.5px;
+}
+
+/* Die Konfidenzzeile der Signatur.
+ * `[cmd]` module-buddy-engines.jsx:621 — "70px 1fr 44px". */
+.v2-buddy-konfidenz {
+  display: grid;
+  grid-template-columns: 70px 1fr 44px;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Die Messzeile einer Intervention.
+ * `[cmd]` module-buddy-engines.jsx:664 — "auto auto 1fr 44px". */
+.v2-buddy-messung {
+  display: grid;
+  grid-template-columns: auto auto 1fr 44px;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+}
+
+/* Die fuenf Avatarzustaende nebeneinander.
+ * `[cmd]` module-buddy.jsx:397 — `grid g-cols-5`. **`v2-g-cols-5` gibt
+ * es in v2.css nicht** (nur -2, -3, -4, v2.css:470-472); gemeldet fuer
+ * G-43, hier modul-lokal. Unter 1100px zwei Spalten statt fuenf —
+ * fuenf Orbs à 96 px passen auf kein Telefon. */
+.v2-buddy-zustaende {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+/* Der Phasenstreifen der Sprachsitzung — waagerecht rollend.
+ * `[cmd]` module-buddy-voice.jsx:85. Acht Phasen mit Pfeilen passen
+ * auf keiner Breite nebeneinander; die Vorlage rollt, das bleibt so. */
+.v2-buddy-phasen {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 1100px) {
+  .v2-buddy-chat { grid-template-columns: 1fr; min-height: 0; }
+  .v2-buddy-grid-13 { grid-template-columns: 1fr; }
+  .v2-buddy-stufen { grid-template-columns: 1fr 1fr; }
+  .v2-buddy-stabil { grid-template-columns: 1fr; gap: 4px; }
+  .v2-buddy-konfidenz { grid-template-columns: 1fr; gap: 4px; }
+  .v2-buddy-messung { grid-template-columns: 1fr 1fr; }
+  .v2-buddy-zustaende { grid-template-columns: 1fr 1fr; }
+}

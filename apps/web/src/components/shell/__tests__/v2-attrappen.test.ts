@@ -852,23 +852,233 @@ test('das QR-Muster ist fest, nicht zufaellig', () => {
     `Das QR-Muster hat ${zellen} Zellen, die Vorlage zeichnet 8 × 8 = 64.`)
 })
 
-test('der AI Coach nennt seine zwanzig ungebauten Tabs', () => {
-  // [read] G-29 hat den Umgang festgelegt: lieber ganze Tabs als halbe,
-  // und was fehlt, steht in der Oberflaeche — nicht im Bericht allein.
-  // Eine fehlende Kachel sieht sonst aus, als sei sie nicht vorgesehen.
+test('die AI-Coach-Seite zeigt das Modul, nicht mehr den Platzhalter', () => {
+  // GESCHICHTE DIESER PRUEFUNG: In G-40 stand hier das Gegenteil — die
+  // Seite war ein Platzhalter, der seine zwanzig ungebauten Tabs
+  // namentlich nannte, und die Pruefung hielt fest, dass er sie nennt
+  // (G-29: „was fehlt, steht in der Oberflaeche, nicht im Bericht
+  // allein").
   //
-  // [cmd] module-buddy.jsx:26-45 fuehrt zwanzig Tabs. Der Auftrag nannte
-  // zwoelf.
+  // G-42 hat das Modul gebaut. Die alte Pruefung wurde damit
+  // **falsch**, nicht ueberfluessig: sie suchte die Tabnamen in
+  // `ai/page.tsx`, wo jetzt nur noch der Seitenkopf steht. Die
+  // Tabnamen selbst prueft `die zwanzig Tabs der Vorlage stehen im
+  // AI-Coach-Modul` weiter unten, gegen den echten Rahmen.
+  //
+  // Was hier bleibt: dass der Platzhalter wirklich weg ist. Eine Seite,
+  // die beides zeigt — Modul UND Fehlmeldung —, waere schlimmer als
+  // jede von beiden.
   const quelle = fs.readFileSync(COACH_AI, 'utf8')
-  const VORLAGE_BUDDY_TABS = [
-    'Chat', 'Insights feed', 'Memory', 'Decisions', 'Personality',
-    'Avatar states', 'Plan & gate', 'Engines', 'Journey', 'Watcher',
-    'BSS', 'Signature', 'Interventions', 'Safety', 'Butler',
-    'Voice / Live', 'Knowledge', 'Rules', 'Coach overrides', 'Clone & Gym',
-  ]
+  assert.ok(/BuddyAnsicht/.test(quelle),
+    'ai/page.tsx rendert den Rahmen nicht.')
+  assert.ok(!/fehlt noch|NOCH NICHT GEBAUT|Nicht uebernommen/.test(quelle),
+    'ai/page.tsx traegt noch den Platzhaltertext aus G-40.')
+})
+
+// ── Coach · AI Coach / Buddy (G-42) ──────────────────────────────────
+
+const AI_ANSICHT = path.join(process.cwd(), 'src/app/v2/coach/ai/ansicht.tsx')
+const AI_DATEN = path.join(process.cwd(), 'src/app/v2/coach/ai/daten.ts')
+const AI_MOTOREN = path.join(process.cwd(), 'src/app/v2/coach/ai/tab-motoren.tsx')
+const AI_WISSEN = path.join(process.cwd(), 'src/app/v2/coach/ai/tab-wissen.tsx')
+const AI_STIMME = path.join(process.cwd(), 'src/app/v2/coach/ai/tab-stimme.tsx')
+const AI_OVERRIDES = path.join(process.cwd(), 'src/app/v2/coach/ai/tab-overrides.tsx')
+const AI_ORB = path.join(process.cwd(), 'src/app/v2/coach/ai/orb.tsx')
+
+/**
+ * Die zwanzig Tabs der Vorlage (theme-v1/module-buddy.jsx:91-112) — in
+ * dieser Reihenfolge.
+ *
+ * `[cmd]` DER AUFTRAG NANNTE ZWOELF. Gezaehlt sind es zwanzig. Wie bei
+ * Human Coaches (G-40, elf genannt / zehn gezaehlt) gilt die Vorlage,
+ * nicht der Auftragstext.
+ */
+const VORLAGE_BUDDY_TABS = [
+  'Chat', 'Insights feed', 'Memory', 'Decisions', 'Personality',
+  'Avatar states', 'Plan & gate', 'Engines', 'Journey', 'Watcher',
+  'BSS', 'Signature', 'Interventions', 'Safety', 'Butler',
+  'Voice / Live', 'Knowledge', 'Rules', 'Coach overrides', 'Clone & Gym',
+]
+
+test('die zwanzig Tabs der Vorlage stehen im AI-Coach-Modul', () => {
+  const quelle = fs.readFileSync(AI_ANSICHT, 'utf8')
   assert.equal(VORLAGE_BUDDY_TABS.length, 20, 'Die Vorlage fuehrt zwanzig Tabs.')
   for (const tab of VORLAGE_BUDDY_TABS) {
     assert.ok(quelle.includes(`'${tab}'`),
-      `Der ungebaute Tab "${tab}" wird nicht genannt. Weglassen ist keine Meldung.`)
+      `Der Tab "${tab}" fehlt. Die Vorlage fuehrt zwanzig.`)
   }
+})
+
+test('jede Karte des AI-Coach-Moduls traegt eine Marke', () => {
+  // Nicht "so viele wie erwartet", sondern "keine ohne" — wer eine
+  // Karte ergaenzt und die Marke vergisst, faellt hier auf, ohne dass
+  // jemand eine Zahl pflegt.
+  //
+  // `[cmd]` Ein Buddy-Schema gibt es nicht: weder `buddy` noch `coach`
+  // kommt in `supabase/_pipeline/` in einem `CREATE TABLE` vor.
+  for (const datei of [AI_ANSICHT, AI_MOTOREN, AI_WISSEN, AI_STIMME, AI_OVERRIDES]) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const karten = (quelle.match(/<Card\b/g) ?? []).length
+    const marken = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    assert.equal(marken, karten,
+      `${path.basename(datei)}: ${karten} Karten, aber ${marken} Marken.`)
+  }
+})
+
+test('die fuenfzehn Zulieferer des Buddy-Rahmens stehen da', () => {
+  // [cmd] module-buddy.jsx:120-133 ruft fuenfzehn Namen ueber window.*.
+  // Verteilt auf vier Vorlagendateien — und eine davon gehoert Human
+  // Coaches: `BuddyCoachOverrides` ist in module-coach-meta.jsx:161
+  // definiert, nicht in einer Buddy-Datei.
+  const motoren = fs.readFileSync(AI_MOTOREN, 'utf8')
+  const wissen = fs.readFileSync(AI_WISSEN, 'utf8')
+  const stimme = fs.readFileSync(AI_STIMME, 'utf8')
+  const overrides = fs.readFileSync(AI_OVERRIDES, 'utf8')
+
+  for (const n of ['BuddyTiers', 'BuddyEngines', 'BuddyJourney', 'BuddyWatcher',
+                   'BuddyBSS', 'BuddySignature', 'BuddyInterventions',
+                   'BuddySafety', 'BuddyButler']) {
+    assert.ok(new RegExp(`export function ${n}\\b`).test(motoren),
+      `${n} fehlt in tab-motoren.tsx (Vorlage: module-buddy-engines.jsx).`)
+  }
+  for (const n of ['BuddyKnowledge', 'BuddyRules', 'BuddyClone']) {
+    assert.ok(new RegExp(`export function ${n}\\b`).test(wissen),
+      `${n} fehlt in tab-wissen.tsx (Vorlage: module-buddy-knowledge.jsx).`)
+  }
+  assert.ok(/export function BuddyVoice\b/.test(stimme),
+    'BuddyVoice fehlt (Vorlage: module-buddy-voice.jsx).')
+  assert.ok(/export function BuddyCoachOverrides\b/.test(overrides),
+    'BuddyCoachOverrides fehlt (Vorlage: module-coach-meta.jsx:161).')
+})
+
+test('die Buddy-Daten kommen aus der Vorlage, nicht aus dem Gedaechtnis', () => {
+  // Stichproben quer durch die Vorlagendateien. Zahlen, die jemand beim
+  // Abschreiben verrutschen koennte.
+  const quelle = fs.readFileSync(AI_DATEN, 'utf8')
+  // module-buddy.jsx:3-9 — fuenf Persoenlichkeiten.
+  assert.ok(/'scientist'/.test(quelle) && /'zen'/.test(quelle), 'Personas fehlen')
+  // module-buddy-engines.jsx:104-122 — der BSS.
+  assert.ok(/total: 71/.test(quelle), 'Der BSS-Gesamtwert fehlt')
+  // `[cmd]` Die Vorlage schreibt das Malzeichen als × (U+00D7), nicht
+  // als `*` — module-buddy-engines.jsx:107. Wer hier `\*` prueft,
+  // testet eine Formel, die so nirgends steht.
+  assert.ok(/stability_score × 0\.6/.test(quelle), 'Die BSS-Formel fehlt')
+  // module-buddy-engines.jsx:125-140 — Signatur ab acht Wochen.
+  assert.ok(/minWeeks: 8/.test(quelle), 'Die Mindestdauer der Signatur fehlt')
+  assert.ok(/eventCount: 412/.test(quelle), 'Die Ereigniszahl fehlt')
+  // module-buddy-engines.jsx:160 — die Obergrenze der Interventionen.
+  assert.ok(/maxConfrontations: 2/.test(quelle), 'Die Konfrontationsgrenze fehlt')
+})
+
+test('die elf Motoren und die neun Sicherheitsregeln sind vollzaehlig', () => {
+  // [cmd] module-buddy-engines.jsx:45-57 fuehrt elf Motoren,
+  // :163-173 neun Regeln. Beide Zahlen stehen in der Oberflaeche
+  // ("Engines · 11 · deterministic", "Immutable rules · 9") — fehlt
+  // eine Zeile, widerspricht die Tabelle ihrer eigenen Ueberschrift.
+  const quelle = fs.readFileSync(AI_DATEN, 'utf8')
+  const motoren = /export const ENGINES[^=]*=\s*\[([\s\S]*?)\n\]/.exec(quelle)
+  assert.ok(motoren, 'ENGINES nicht gefunden')
+  assert.equal((motoren![1].match(/\{ id:/g) ?? []).length, 11,
+    'Die Vorlage fuehrt elf Motoren.')
+
+  const regeln = /export const SAFETY_RULES[^=]*=\s*\[([\s\S]*?)\n\]/.exec(quelle)
+  assert.ok(regeln, 'SAFETY_RULES nicht gefunden')
+  assert.equal((regeln![1].match(/\{ rule:/g) ?? []).length, 9,
+    'Die Vorlage fuehrt neun Sicherheitsregeln.')
+})
+
+test('das AI-Coach-Modul uebernimmt den Tippfehler arr_r nicht', () => {
+  // [cmd] module-buddy.jsx:229 schreibt `<Icon name="arr_r">` — derselbe
+  // Tippfehler wie in G-20, G-21, G-36 und G-40. `arrow_right` steht in
+  // icons.tsx, `arr_r` nicht.
+  //
+  // Kommentare zaehlen nicht: die Dateien ZITIEREN den Tippfehler, um
+  // die Ersetzung zu belegen.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*\/\//.test(z)).join('\n')
+
+  for (const datei of [AI_ANSICHT, AI_MOTOREN, AI_WISSEN, AI_STIMME, AI_OVERRIDES]) {
+    const quelle = ohneKommentar(fs.readFileSync(datei, 'utf8'))
+    assert.ok(!/arr_r/.test(quelle),
+      `${path.basename(datei)}: `
+      + '`arr_r` ist ein Tippfehler der Vorlage — `arrow_right` benutzen.')
+  }
+})
+
+test('der Buddy-Orb vergibt eigene SVG-Kennungen', () => {
+  // [cmd] module-buddy.jsx:146 vergibt feste Kennungen `borb-${state}`.
+  // Der Tab „Avatar states" zeigt alle fuenf Zustaende gleichzeitig,
+  // und der Chat zeigt `responding` erneut — zwei Elemente mit
+  // derselben Kennung auf einer Seite.
+  //
+  // ANLASS: dieselbe Falle hat in G-21 die Koerperkarte getroffen
+  // (`clipPath` mit fester Kennung, zwei Karten auf einer Seite).
+  // Dieselbe Loesung, und diesmal von vornherein.
+  const quelle = fs.readFileSync(AI_ORB, 'utf8')
+  assert.ok(/useId\(\)/.test(quelle),
+    'orb.tsx: ohne React.useId() kollidieren die Verlaufskennungen.')
+  assert.ok(!/id="borb-/.test(quelle) && !/id="bblur-/.test(quelle),
+    'orb.tsx: feste SVG-Kennungen kollidieren, sobald zwei Orbs '
+    + 'denselben Zustand zeigen.')
+})
+
+test('im AI-Coach-Modul steht kein unberechenbarer Wert', () => {
+  // [cmd] Gemessen ueber die vier Vorlagendateien (1.746 Zeilen): null
+  // Math.random(), null Date.now(), null new Date(), null Math.sin.
+  // Anders als bei Goals (32 Konsolenmeldungen) und bei Coach (64
+  // QR-Zellen) war hier nichts zu entschaerfen — diese Pruefung haelt
+  // fest, dass es so bleibt.
+  //
+  // `[read]` Der Auftrag: „Und Math.sin ist nicht bitgenau: fest heisst
+  // in jeder Engine gleich, nicht bei jedem Aufruf gleich."
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*\/\//.test(z)).join('\n')
+
+  const dateien = [AI_ANSICHT, AI_DATEN, AI_MOTOREN, AI_WISSEN, AI_STIMME,
+                   AI_OVERRIDES, AI_ORB]
+  for (const datei of dateien) {
+    const quelle = ohneKommentar(fs.readFileSync(datei, 'utf8'))
+    for (const muster of [/Math\.random/, /Date\.now/, /new Date\(/, /Math\.sin/, /Math\.cos/]) {
+      assert.ok(!muster.test(quelle),
+        `${path.basename(datei)}: ${muster.source} weicht zwischen Server `
+        + 'und Browser ab oder ist nicht bitgenau.')
+    }
+  }
+})
+
+test('der Befehlsparser der Sprachsitzung erkennt die Vorlagenbeispiele', () => {
+  // [cmd] module-buddy-voice.jsx:16-26 fuehrt neun Muster, jedes mit
+  // einem Beispiel. Der Parser ist das einzige Stueck echter Logik im
+  // Modul — er laeuft im Browser gegen die Eingabe.
+  //
+  // Die Muster stehen in TypeScript doppelt gequotet (`\\d`), damit die
+  // RegExp dasselbe sieht wie in der Vorlage. Wer beim Uebernehmen eine
+  // Ebene verliert, bekommt ein Muster, das nichts mehr trifft — und
+  // das faellt ohne diese Pruefung erst im Browser auf.
+  const quelle = fs.readFileSync(AI_STIMME, 'utf8')
+  const block = /GYM_COMMANDS[^=]*=\s*\[([\s\S]*?)\n\]/.exec(quelle)
+  assert.ok(block, 'GYM_COMMANDS nicht gefunden')
+
+  const muster: Array<[string, string]> = []
+  for (const z of block![1].split('\n')) {
+    const m = /intent: '([^']+)'[\s\S]*?pattern: '((?:[^'\\]|\\.)*)'/.exec(z)
+    if (m) muster.push([m[1], m[2].replace(/\\\\/g, '\\')])
+  }
+  assert.equal(muster.length, 9, `Die Vorlage fuehrt neun Muster, gefunden ${muster.length}.`)
+
+  const treffer = (eingabe: string) => {
+    const t = muster.find(([, p]) => new RegExp(p, 'i').test(eingabe.trim().toLowerCase()))
+    return t ? t[0] : null
+  }
+  assert.equal(treffer('fertig'), 'set_complete', '„fertig" muss den Satz abschliessen')
+  assert.equal(treffer('117.5 kilo'), 'log_weight', 'Gewicht muss erkannt werden')
+  assert.equal(treffer('11 reps'), 'log_reps', 'Wiederholungen muessen erkannt werden')
+  assert.equal(treffer('rpe 8'), 'log_rpe', 'RPE muss erkannt werden')
+  assert.equal(treffer('war schwer'), 'log_rpe', 'Die deutsche Umschreibung muss greifen')
+  assert.equal(treffer('weiter'), 'next_exercise', '„weiter" muss weiterschalten')
+  assert.equal(treffer('banane'), null, 'Unbekanntes darf nichts ausloesen')
 })
