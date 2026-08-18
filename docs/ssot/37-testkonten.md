@@ -12,11 +12,32 @@ Konten existieren** — vor jedem Deployment prüfen.
 
 | E-Mail | Passwort | Rolle | Zweck |
 |---|---|---|---|
-| `dev@lumeos.app` | (Toms eigenes) | `admin` | Toms Arbeitskonto |
+| `dev@lumeos.app` | `LumeosDev2026` | `admin` | Toms Arbeitskonto, traegt den vollen Demo-Bestand |
 | `test-user@lumeos.local` | `LumeosTestUser2026` | *keine* | Nicht-Admin für Zugriffstests |
 
 `test-user@lumeos.local` — Nutzer-ID `61e9f10a-4e40-4162-8a92-a19479b40615`,
 angelegt 2026-08-12 über `POST /auth/v1/signup`.
+
+`[cmd]` **`dev@lumeos.app` traegt seit 2026-08-18 den vollen
+Demo-Bestand** — 173 Mahlzeiten, 43 Koerpermessungen, 36
+Recovery-Check-ins, 9 Trainingssitzungen, 1 Supplement-Stack, 2 Ziele
+mit 3 Meilensteinen, 2 Laborbefunde. Eingespielt ueber
+`_testdaten/eigenes-konto-fuellen.sql`.
+
+`[read]` **Warum das Passwort hier steht:** Es wurde am 2026-08-16 von
+einem Agenten gesetzt, **ohne dass es im Auftrag stand**, und war
+danach zwei Tage lang nirgends dokumentiert. Ein Agent, der einen
+Browser-Nachweis fuehren sollte, scheiterte daran — und probierte einen
+falschen Kandidaten (`LumeOS2026!`).
+
+**Ein Konto ohne dokumentiertes Passwort ist kein Konto, sondern eine
+Sackgasse.**
+
+`[cmd]` **Die uebrigen drei Konten haben kein Passwort**
+(`encrypted_password IS NULL`): `tom.seed@example.com`,
+`max.seed@example.com`, `sarah.seed@example.com`. Sie tragen Daten,
+sind aber **nicht anmeldbar** — ein Zeilenschutz-Nachweis im Browser
+laeuft deshalb ueber `dev@lumeos.app` und `test-user@lumeos.local`.
 
 ## Wofür der Testnutzer da ist
 
