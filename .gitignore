@@ -232,3 +232,6 @@ docs/design-system-analysis/
 # er steht im Kopf von daten/biomarker-loinc-masterlist.json.
 docs/ssot/daten/Loinc_2.82/
 .gstack/
+
+# Cloud-Dump LumeOS-V2 (2,7 MB, Datenquelle wie docs/specs — kein Sollwert)
+backup/lumeos-v2-cloud-*/

@@ -11,6 +11,22 @@ const IDS = [
 ]
 const IDS_SQL = IDS.map(id => `'${id}'`).join(', ')
 const SEP = '\u0001'
+const ANCHOR_DATE = '2026-08-02'
+const START_DATE = process.env.LUMEOS_TESTDATA_START ?? '2026-05-20'
+const NEXT_START_DATE = process.env.LUMEOS_TESTDATA_NEXT_START ?? '2026-08-19'
+const WINDOW_DAYS = Number(process.env.LUMEOS_TESTDATA_DAYS ?? 90)
+function addIsoDays(date: string, days: number): string {
+  const d = new Date(`${date}T00:00:00Z`)
+  d.setUTCDate(d.getUTCDate() + days)
+  return d.toISOString().slice(0, 10)
+}
+function daysOffset(start: string, end: string): number {
+  return Math.round((Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000)
+}
+function relDate(anchorDate: string): string {
+  return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
+}
+const END_DATE = addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1)
 
 function sql(query: string): string[][] {
   return execFileSync('docker', [
@@ -137,10 +153,10 @@ if (MODE === 'clean') {
   const dailyRows = numberScalar(`SELECT count(*) FROM nutrition.daily_summary WHERE user_id IN (${IDS_SQL});`)
   const assessmentRows = numberScalar(`
     SELECT count(*)
-    FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '2026-08-16');`)
+    FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '${relDate('2026-08-16')}');`)
   const assessmentPctRows = numberScalar(`
     SELECT count(*)
-    FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '2026-08-16')
+    FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE reference_pct IS NOT NULL;`)
   const missingCounters = sql(`
     SELECT
@@ -156,17 +172,17 @@ if (MODE === 'clean') {
   if (userGoals !== 3) errors.push(`user_goals: ${userGoals}, erwartet 3`)
   if (goalPhases !== 3) errors.push(`goal_phases: ${goalPhases}, erwartet 3`)
   if (goalMilestones !== 4) errors.push(`goal_milestones: ${goalMilestones}, erwartet 4`)
-  if (bodyMeasurements !== 43) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 43`)
-  if (bodyCircumferences !== 7) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet 7`)
+  if (bodyMeasurements !== 180) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 180`)
+  if (bodyCircumferences < 25) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet mindestens 25`)
   if (preferences !== 1) errors.push(`food_preferences: ${preferences}, erwartet 1`)
   if (preferenceItems !== 3) errors.push(`food_preference_items: ${preferenceItems}, erwartet 3`)
-  if (meals < 120) errors.push(`meals: ${meals}, erwartet mindestens 120`)
-  if (items < 1000) errors.push(`meal_items: ${items}, erwartet mindestens 1000`)
-  if (waterLogs < 120) errors.push(`water_logs: ${waterLogs}, erwartet mindestens 120`)
-  if (trainingSessions !== 9) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet 9`)
-  if (trainingExercises !== 18) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 18`)
-  if (trainingSets !== 60) errors.push(`training.workout_sets: ${trainingSets}, erwartet 60`)
-  if (recoveryCheckins !== 36) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 36`)
+  if (meals < 500) errors.push(`meals: ${meals}, erwartet mindestens 500`)
+  if (items < 5000) errors.push(`meal_items: ${items}, erwartet mindestens 5000`)
+  if (waterLogs < 500) errors.push(`water_logs: ${waterLogs}, erwartet mindestens 500`)
+  if (trainingSessions < 25) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet mindestens 25`)
+  if (trainingExercises < 50) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet mindestens 50`)
+  if (trainingSets < 170) errors.push(`training.workout_sets: ${trainingSets}, erwartet mindestens 170`)
+  if (recoveryCheckins < 160) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet mindestens 160`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
   if (medicalRanges !== 560) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 560`)
   if (medicalAliases !== 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet 292`)
@@ -176,11 +192,11 @@ if (MODE === 'clean') {
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
   if (supplementIntakeLogs !== 4) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 4`)
-  if (maxDays < 42) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 42`)
+  if (maxDays < 170) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 170`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
   if (portionRows === 0) errors.push('keine meal_items mit gespeicherter Portion')
-  if (dailyRows < 42) errors.push(`daily_summary: ${dailyRows}, erwartet mindestens 42`)
+  if (dailyRows < 170) errors.push(`daily_summary: ${dailyRows}, erwartet mindestens 170`)
   if (assessmentRows === 0) errors.push('daily_reference_assessment liefert keine Zeilen')
   if (assessmentPctRows === 0) errors.push('daily_reference_assessment liefert keinen Deckungsgrad')
 
@@ -188,24 +204,24 @@ if (MODE === 'clean') {
   const max = IDS[1]
   const sarah = IDS[2]
 
-  if (numberScalar(`SELECT count(*) FROM goals.zielwerte_am('${tom}'::uuid, DATE '2026-08-02');`) !== 0) {
+  if (numberScalar(`SELECT count(*) FROM goals.zielwerte_am('${tom}'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
     errors.push('Fall Tag ohne Ziel: goals.zielwerte_am liefert vor gueltig_ab trotzdem eine Zeile')
   }
-  if (numberScalar(`SELECT count(*) FROM goals.phase_am('${tom}'::uuid, DATE '2026-08-02');`) !== 0) {
+  if (numberScalar(`SELECT count(*) FROM goals.phase_am('${tom}'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
     errors.push('Fall Tag ohne Phase: goals.phase_am liefert vor erster gueltig_ab trotzdem eine Zeile')
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.phase_am('${tom}'::uuid, DATE '2026-08-10')
+    FROM goals.phase_am('${tom}'::uuid, DATE '${relDate('2026-08-10')}')
     WHERE phase_type = 'maintenance'
-      AND gueltig_ab = DATE '2026-08-03';`)) {
+      AND gueltig_ab = DATE '${relDate('2026-08-03')}';`)) {
     errors.push('Fall Goals Phase vor Wechsel: maintenance am 2026-08-10 fehlt')
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.phase_am('${tom}'::uuid, DATE '2026-08-18')
+    FROM goals.phase_am('${tom}'::uuid, DATE '${relDate('2026-08-18')}')
     WHERE phase_type = 'lean_bulk'
-      AND gueltig_ab = DATE '2026-08-17';`)) {
+      AND gueltig_ab = DATE '${relDate('2026-08-17')}';`)) {
     errors.push('Fall Goals Phasenwechsel: lean_bulk am 2026-08-18 fehlt')
   }
   if (!hasRows(`
@@ -221,7 +237,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.adaptive_tdee('${tom}'::uuid, DATE '2026-09-13', 14)
+    FROM goals.adaptive_tdee('${tom}'::uuid, DATE '${relDate('2026-09-13')}', 14)
     WHERE status = 'complete'
       AND reliable
       AND complete_intake_days = 14
@@ -235,7 +251,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.adaptive_tdee('${max}'::uuid, DATE '2026-09-13', 14)
+    FROM goals.adaptive_tdee('${max}'::uuid, DATE '${relDate('2026-09-13')}', 14)
     WHERE adaptive_tdee_kcal IS NULL
       AND NOT reliable
       AND status IN ('insufficient_weight_measurements', 'insufficient_intake_days');`)) {
@@ -243,16 +259,16 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.goal_progress_at('30000000-0000-0000-0000-000000000101'::uuid, DATE '2026-09-13')
+    FROM goals.goal_progress_at('30000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}')
     WHERE progress_status = 'measured'
       AND current_source = 'goals.body_measurements'
       AND current_value = 85
-      AND measured_at = DATE '2026-09-13';`)) {
+      AND measured_at = DATE '${END_DATE}';`)) {
     errors.push('Fall Ziel-Fortschritt: Gewichtsziel liest nicht die echte Koerpermessung')
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000101'::uuid, DATE '2026-09-13')
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000101'::uuid, DATE '${END_DATE}')
     WHERE computed_status = 'achieved'
       AND current_value = 85
       AND source = 'seed';`)) {
@@ -260,21 +276,21 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000102'::uuid, DATE '2026-09-13')
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000102'::uuid, DATE '${END_DATE}')
     WHERE computed_status = 'open'
       AND current_value = 85;`)) {
     errors.push('Fall Meilenstein offen: 86,5-kg-Meilenstein bleibt nicht offen')
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000103'::uuid, DATE '2026-09-13')
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000103'::uuid, DATE '${END_DATE}')
     WHERE computed_status = 'missed'
       AND current_value = 85;`)) {
     errors.push('Fall Meilenstein verfehlt: verfehlter Meilenstein verschwindet oder gilt als erreicht')
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000201'::uuid, DATE '2026-09-13')
+    FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000201'::uuid, DATE '${END_DATE}')
     WHERE computed_status = 'not_implemented_workout_sets'
       AND current_value IS NULL
       AND progress_pct IS NULL;`)) {
@@ -288,23 +304,23 @@ if (MODE === 'clean') {
              max(measurement_date) AS bis,
              min(weight_kg) AS min_kg,
              max(weight_kg) AS max_kg,
-             max(weight_kg) FILTER (WHERE measurement_date = DATE '2026-09-13') AS latest_kg
+             max(weight_kg) FILTER (WHERE measurement_date = DATE '${END_DATE}') AS latest_kg
       FROM goals.body_measurements
       WHERE user_id = '${tom}'::uuid
     ) m
     JOIN public.profiles p ON p.id = '${tom}'::uuid
-    WHERE m.messungen = 43
-      AND m.von = DATE '2026-08-02'
-      AND m.bis = DATE '2026-09-13'
+    WHERE m.messungen = 180
+      AND m.von = DATE '${relDate('2026-08-02')}'
+      AND m.bis = DATE '${END_DATE}'
       AND m.max_kg - m.min_kg >= 0.8
       AND p.body_weight_kg = m.latest_kg;`)) {
-    errors.push('Fall Koerpermessungen: 43-Tage-Gewichtsverlauf oder Profilgewicht-Sync fehlt')
+    errors.push('Fall Koerpermessungen: 180-Tage-Gewichtsverlauf oder Profilgewicht-Sync fehlt')
   }
   if (!hasRows(`
     SELECT 1
     FROM goals.body_measurements
     WHERE user_id = '${tom}'::uuid
-      AND measurement_date = DATE '2026-09-13'
+      AND measurement_date = DATE '${END_DATE}'
       AND measurement_time = TIME '07:05'
       AND height_cm_snapshot = 185
       AND measurement_source = 'manual'
@@ -318,7 +334,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM goals.body_circumferences
     WHERE user_id = '${tom}'::uuid
-      AND measurement_date = DATE '2026-09-13'
+      AND measurement_date = DATE '${END_DATE}'
       AND measurement_time = TIME '07:10'
       AND neck_cm IS NOT NULL
       AND shoulders_cm IS NOT NULL
@@ -338,7 +354,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM goals.body_composition_navy('${tom}'::uuid, DATE '2026-09-13')
+    FROM goals.body_composition_navy('${tom}'::uuid, DATE '${END_DATE}')
     WHERE method = 'navy_circumference'
       AND source = 'derived_navy'
       AND input_source = 'manual'
@@ -351,31 +367,31 @@ if (MODE === 'clean') {
       AND caution LIKE '%Athleten%';`)) {
     errors.push('Fall Navy-Koerperfett: Wert, Spanne, FFMI oder Herkunft fehlen')
   }
-  if (numberScalar(`SELECT count(*) FROM goals.body_composition_navy('${sarah}'::uuid, DATE '2026-09-13');`) !== 0) {
+  if (numberScalar(`SELECT count(*) FROM goals.body_composition_navy('${sarah}'::uuid, DATE '${END_DATE}');`) !== 0) {
     errors.push('Fall Navy-Koerperfett ohne Umfaenge: Funktion liefert trotz fehlender Eingaben eine Zeile')
   }
   if (!hasRows(`
     WITH first_value AS (
       SELECT body_fat_pct
-      FROM goals.body_composition_navy('${tom}'::uuid, DATE '2026-08-02')
+      FROM goals.body_composition_navy('${tom}'::uuid, DATE '${relDate('2026-08-02')}')
     ),
     last_value AS (
       SELECT body_fat_pct
-      FROM goals.body_composition_navy('${tom}'::uuid, DATE '2026-09-13')
+      FROM goals.body_composition_navy('${tom}'::uuid, DATE '${END_DATE}')
     )
     SELECT 1
     FROM first_value f
     CROSS JOIN last_value l
     WHERE f.body_fat_pct > l.body_fat_pct
       AND f.body_fat_pct - l.body_fat_pct >= 1.0;`)) {
-    errors.push('Fall Navy-Koerperfett Verlauf: ueber 43 Tage ist keine fallende Tendenz sichtbar')
+    errors.push('Fall Navy-Koerperfett Verlauf: ueber 180 Tage ist keine fallende Tendenz sichtbar')
   }
-  if (!hasRows(`SELECT 1 FROM nutrition.daily_summary WHERE user_id = '${tom}'::uuid AND entry_date = DATE '2026-08-02' AND item_count > 0;`)) {
+  if (!hasRows(`SELECT 1 FROM nutrition.daily_summary WHERE user_id = '${tom}'::uuid AND entry_date = DATE '${relDate('2026-08-02')}' AND item_count > 0;`)) {
     errors.push('Fall Tag ohne Ziel: daily_summary fehlt oder hat keine Positionen')
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.daily_reference_assessment('${tom}'::uuid, DATE '2026-08-05')
+    FROM nutrition.daily_reference_assessment('${tom}'::uuid, DATE '${relDate('2026-08-05')}')
     WHERE nutrient_code = 'VITA'
       AND reference_kind = 'UL'
       AND reference_status = 'complete'
@@ -384,7 +400,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '2026-08-04')
+    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '${relDate('2026-08-04')}')
     WHERE (
         nutrient_code = 'NA'
         AND actual_value > 2000
@@ -399,14 +415,14 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '2026-08-06')
+    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '${relDate('2026-08-06')}')
     WHERE reference_status = 'incomplete'
       AND missing_count > 0;`)) {
     errors.push('Fall lueckenhafte Daten: reference_status incomplete fehlt')
   }
   if (numberScalar(`
     SELECT count(*)
-    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '2026-08-09')
+    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '${relDate('2026-08-09')}')
     WHERE nutrient_code IN ('FE', 'CA', 'VITD')
       AND reference_status = 'complete'
       AND reference_direction = 'target'
@@ -415,7 +431,7 @@ if (MODE === 'clean') {
   }
   if (numberScalar(`
     SELECT count(*)
-    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '2026-08-09')
+    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '${relDate('2026-08-09')}')
     WHERE nutrient_code IN ('F18:2CN6', 'F18:3CN3')
       AND reference_kind = 'AI'
       AND reference_direction = 'target'
@@ -427,7 +443,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.daily_reference_assessment('${tom}'::uuid, DATE '2026-08-16')
+    FROM nutrition.daily_reference_assessment('${tom}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE nutrient_code = 'CHORL'
       AND reference_kind = 'NO_REFERENCE'
       AND reference_direction = 'not_applicable'
@@ -437,7 +453,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '2026-08-09')
+    FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '${relDate('2026-08-09')}')
     WHERE total_assessed >= 17
       AND below_count >= 16
       AND below_count <= total_assessed;`)) {
@@ -448,7 +464,7 @@ if (MODE === 'clean') {
     FROM nutrition.daily_summary ds
     JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
     WHERE ds.user_id = '${tom}'::uuid
-      AND ds.entry_date = DATE '2026-08-07'
+      AND ds.entry_date = DATE '${relDate('2026-08-07')}'
       AND ds.enercc / z.kcal * 100 BETWEEN 35 AND 45;`)) {
     errors.push('Fall Kalorien unter Ziel: Zielerreichung liegt nicht bei rund 40 %')
   }
@@ -457,7 +473,7 @@ if (MODE === 'clean') {
     FROM nutrition.daily_summary ds
     JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
     WHERE ds.user_id = '${max}'::uuid
-      AND ds.entry_date = DATE '2026-08-10'
+      AND ds.entry_date = DATE '${relDate('2026-08-10')}'
       AND ds.enercc / z.kcal * 100 > 140;`)) {
     errors.push('Fall Kalorien ueber Ziel: Zielerreichung liegt nicht ueber 140 %')
   }
@@ -465,23 +481,23 @@ if (MODE === 'clean') {
     SELECT 1
     FROM nutrition.daily_summary
     WHERE user_id = '${tom}'::uuid
-      AND entry_date = DATE '2026-08-11'
+      AND entry_date = DATE '${relDate('2026-08-11')}'
       AND meal_count >= 1
       AND item_count = 0
       AND enercc IS NULL;`)) {
     errors.push('Fall leere Mahlzeiten: meal_count >= 1, item_count 0 und NULL-Summen fehlen')
   }
-  if (numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id = '${max}'::uuid AND entry_date = DATE '2026-08-08';`) !== 0) {
+  if (numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id = '${max}'::uuid AND entry_date = DATE '${relDate('2026-08-08')}';`) !== 0) {
     errors.push('Fall Tag ohne Mahlzeit: nutrition.meals enthaelt Zeilen')
   }
-  if (numberScalar(`SELECT count(*) FROM nutrition.daily_summary WHERE user_id = '${max}'::uuid AND entry_date = DATE '2026-08-08';`) !== 0) {
+  if (numberScalar(`SELECT count(*) FROM nutrition.daily_summary WHERE user_id = '${max}'::uuid AND entry_date = DATE '${relDate('2026-08-08')}';`) !== 0) {
     errors.push('Fall Tag ohne Mahlzeit: daily_summary enthaelt eine Zeile')
   }
   if (!hasRows(`
     SELECT 1
     FROM nutrition.daily_summary
     WHERE user_id = '${tom}'::uuid
-      AND entry_date = DATE '2026-08-13'
+      AND entry_date = DATE '${relDate('2026-08-13')}'
       AND item_count >= 20;`)) {
     errors.push('Fall viele Positionen: item_count >= 20 fehlt')
   }
@@ -494,7 +510,7 @@ if (MODE === 'clean') {
       FROM nutrition.meals m
       JOIN nutrition.meal_items mi ON mi.meal_id = m.id
       WHERE m.user_id = '${tom}'::uuid
-        AND m.entry_date = DATE '2026-08-13'
+        AND m.entry_date = DATE '${relDate('2026-08-13')}'
     ) d
     WHERE portioniert > 0 AND gramm > 0;`)) {
     errors.push('Fall gemischte Mengenangaben: Portionen und Gramm kommen nicht gemeinsam vor')
@@ -507,7 +523,7 @@ if (MODE === 'clean') {
         string_agg(to_char(meal_time, 'HH24:MI'), ',' ORDER BY meal_time, created_at, id) AS zeiten
       FROM nutrition.meals
       WHERE user_id = '${tom}'::uuid
-        AND entry_date = DATE '2026-08-14'
+        AND entry_date = DATE '${relDate('2026-08-14')}'
         AND meal_type = 'snack'
     ) d
     WHERE snacks = 2
@@ -524,7 +540,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.daily_reference_assessment('${sarah}'::uuid, DATE '2026-08-16')
+    FROM nutrition.daily_reference_assessment('${sarah}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE reference_status = 'missing_profile';`)) {
     errors.push('Fall Profil unvollstaendig: missing_profile fehlt')
   }
@@ -541,7 +557,7 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.hydration_day('${tom}'::uuid, DATE '2026-08-16')
+    FROM nutrition.hydration_day('${tom}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE log_count > 0
       AND target_ml = 3400
       AND total_ml < target_ml * 0.60
@@ -558,7 +574,7 @@ if (MODE === 'clean') {
     JOIN training.exercises e ON e.id = we.exercise_id
     JOIN training.exercise_muscles em ON em.exercise_id = e.id
     WHERE s.user_id = '${tom}'::uuid
-      AND s.session_date = DATE '2026-08-03'
+      AND s.session_date = DATE '${relDate('2026-08-03')}'
       AND s.started_time = TIME '17:30'
       AND s.ended_time = TIME '18:45'
       AND s.total_sets > 0
@@ -576,16 +592,16 @@ if (MODE === 'clean') {
       FROM training.workout_sessions
       WHERE user_id = '${tom}'::uuid
         AND status = 'completed'
-        AND session_date BETWEEN DATE '2026-08-03' AND DATE '2026-09-06'
+        AND session_date BETWEEN DATE '${relDate('2026-08-03')}' AND DATE '${relDate('2026-09-06')}'
     ) d
-  WHERE tage >= 9;`)) {
+  WHERE tage >= 5;`)) {
     errors.push('Fall Training Verlauf: mehrere Wochen abgeschlossene Sitzungen fehlen')
   }
   if (!hasRows(`
     SELECT 1
     FROM recovery.checkins
     WHERE user_id = '${tom}'::uuid
-      AND entry_date = DATE '2026-08-18'
+      AND entry_date = DATE '${relDate('2026-08-18')}'
       AND checkin_time = TIME '07:18'
       AND hrv_rmssd IS NULL
       AND sleep_quality = 3
@@ -604,9 +620,9 @@ if (MODE === 'clean') {
       FROM recovery.checkins
       WHERE user_id = '${tom}'::uuid
     ) r
-    WHERE checkins >= 35
-      AND von = DATE '2026-08-03'
-      AND bis = DATE '2026-09-07'
+    WHERE checkins >= 160
+      AND von = DATE '${relDate('2026-08-03')}'
+      AND bis >= DATE '${relDate('2026-09-07')}'
       AND ohne_hrv > 0;`)) {
     errors.push('Fall Recovery Verlauf: mehrere Wochen Check-ins mit HRV-losen Zeilen fehlen')
   }
@@ -616,7 +632,7 @@ if (MODE === 'clean') {
     JOIN medical.lab_result_values v ON v.report_id = r.id
     JOIN medical.biomarker_catalog c ON c.loinc_code = v.loinc_code
     WHERE r.user_id = '${tom}'::uuid
-      AND r.report_date = DATE '2026-08-18'
+      AND r.report_date = DATE '${relDate('2026-08-18')}'
       AND r.report_time = TIME '09:20'
       AND r.source = 'seed'
       AND c.loinc_code = '718-7'
@@ -642,8 +658,8 @@ if (MODE === 'clean') {
     ) p
     WHERE reports = 4
       AND marker = 34
-      AND von = DATE '2026-02-18'
-      AND bis = DATE '2026-08-18';`)) {
+      AND von = DATE '${relDate('2026-02-18')}'
+      AND bis = DATE '${relDate('2026-08-18')}';`)) {
     errors.push('Fall Medical Verlaufspanel: vier Befunde mit 34 wiederholten Markern fehlen')
   }
   if (!hasRows(`
@@ -663,9 +679,9 @@ if (MODE === 'clean') {
     )
     SELECT 1
     FROM glucose g1
-    JOIN glucose g2 ON g1.report_date = DATE '2026-02-18' AND g2.report_date = DATE '2026-08-18'
-    JOIN hba1c h1 ON h1.report_date = DATE '2026-02-18'
-    JOIN hba1c h2 ON h2.report_date = DATE '2026-08-18'
+    JOIN glucose g2 ON g1.report_date = DATE '${relDate('2026-02-18')}' AND g2.report_date = DATE '${relDate('2026-08-18')}'
+    JOIN hba1c h1 ON h1.report_date = DATE '${relDate('2026-02-18')}'
+    JOIN hba1c h2 ON h2.report_date = DATE '${relDate('2026-08-18')}'
     WHERE g2.value_numeric > g1.value_numeric
       AND h2.value_numeric >= h1.value_numeric;`)) {
     errors.push('Fall Medical Verlauf: Glukose/HbA1c zeigen keine erkennbare Tendenz')
@@ -693,7 +709,7 @@ if (MODE === 'clean') {
     FROM medical.lab_reports r
     JOIN medical.lab_result_values v ON v.report_id = r.id
     WHERE r.user_id = '${tom}'::uuid
-      AND r.report_date = DATE '2026-08-19'
+      AND r.report_date = DATE '${relDate('2026-08-19')}'
       AND r.report_time = TIME '08:40'
       AND r.title = 'C-72 Importierter Rohbefund'
       AND v.raw_marker_name = 'Hämoglobin'
@@ -708,7 +724,7 @@ if (MODE === 'clean') {
     FROM medical.lab_reports r
     JOIN medical.lab_result_values v ON v.report_id = r.id
     WHERE r.user_id = '${tom}'::uuid
-      AND r.report_date = DATE '2026-08-19'
+      AND r.report_date = DATE '${relDate('2026-08-19')}'
       AND v.raw_marker_name = 'Glukose'
       AND v.loinc_code IS NULL
       AND v.match_status = 'ambiguous'
@@ -721,7 +737,7 @@ if (MODE === 'clean') {
     FROM medical.lab_reports r
     JOIN medical.lab_result_values v ON v.report_id = r.id
     WHERE r.user_id = '${tom}'::uuid
-      AND r.report_date = DATE '2026-08-19'
+      AND r.report_date = DATE '${relDate('2026-08-19')}'
       AND v.raw_marker_name = 'Unbekannter Marker X'
       AND v.marker_name_snapshot = 'Unbekannter Marker X'
       AND v.loinc_code IS NULL
@@ -757,7 +773,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.intake_logs il
     WHERE il.user_id = '${tom}'::uuid
-      AND il.intake_date = DATE '2026-08-18'
+      AND il.intake_date = DATE '${relDate('2026-08-18')}'
       AND il.intake_time = TIME '08:12'
       AND il.status = 'taken'
       AND il.supplement_name_snapshot = 'Vitamin D3'
@@ -769,7 +785,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.daily_intake_summary
     WHERE user_id = '${tom}'::uuid
-      AND intake_date = DATE '2026-08-18'
+      AND intake_date = DATE '${relDate('2026-08-18')}'
       AND total_logged = 4
       AND total_taken = 3
       AND total_planned = 1;`)) {
@@ -777,12 +793,12 @@ if (MODE === 'clean') {
   }
   if (numberScalar(`
     SELECT count(*)
-    FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '2026-08-16');`) !== 8) {
+    FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '${relDate('2026-08-16')}');`) !== 8) {
     errors.push('Fall Micronutrient snapshot: liefert nicht exakt 8 Werte')
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '2026-08-16')
+    FROM nutrition.micronutrient_snapshot('${tom}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE nutrient_code = 'F18:3CN3'
       AND reference_kind = 'GOAL'
       AND reference_pct IS NOT NULL;`)) {
@@ -790,8 +806,8 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
-    FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '2026-08-09') mangel
-    CROSS JOIN nutrition.micronutrient_below_threshold('${tom}'::uuid, DATE '2026-08-16') normal
+    FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '${relDate('2026-08-09')}') mangel
+    CROSS JOIN nutrition.micronutrient_below_threshold('${tom}'::uuid, DATE '${relDate('2026-08-16')}') normal
     WHERE mangel.threshold_pct = 75
       AND normal.threshold_pct = 75
       AND mangel.total_assessed > 0

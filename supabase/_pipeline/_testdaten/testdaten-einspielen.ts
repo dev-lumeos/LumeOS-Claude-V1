@@ -4,9 +4,43 @@ import crypto from 'node:crypto'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
-const START_DATE = '2026-08-02'
-const TARGET_START_DATE = '2026-08-03'
-const END_DATE = '2026-09-13'
+
+function argValue(name: string): string | null {
+  const index = process.argv.indexOf(name)
+  return index >= 0 ? (process.argv[index + 1] ?? null) : null
+}
+
+function addIsoDays(date: string, days: number): string {
+  const d = new Date(`${date}T00:00:00Z`)
+  d.setUTCDate(d.getUTCDate() + days)
+  return d.toISOString().slice(0, 10)
+}
+
+function daysOffset(start: string, end: string): number {
+  return Math.round((Date.parse(`${end}T00:00:00Z`) - Date.parse(`${start}T00:00:00Z`)) / 86_400_000)
+}
+
+const ANCHOR_DATE = '2026-08-02'
+const START_DATE = argValue('--start') ?? '2026-05-20'
+const NEXT_START_DATE = argValue('--next-start') ?? '2026-08-19'
+const WINDOW_DAYS = Number(argValue('--days') ?? 90)
+if (!/^\d{4}-\d{2}-\d{2}$/.test(START_DATE) || !/^\d{4}-\d{2}-\d{2}$/.test(NEXT_START_DATE)) {
+  throw new Error('--start und --next-start muessen YYYY-MM-DD sein')
+}
+if (!Number.isInteger(WINDOW_DAYS) || WINDOW_DAYS <= 0) {
+  throw new Error('--days muss eine positive ganze Zahl sein')
+}
+const WINDOWS = [
+  { start: START_DATE, end: addIsoDays(START_DATE, WINDOW_DAYS - 1) },
+  { start: NEXT_START_DATE, end: addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1) },
+]
+const TARGET_START_DATE = addIsoDays(START_DATE, 1)
+const ALL_DATES = WINDOWS.flatMap(window => daysBetween(window.start, window.end))
+const END_DATE = WINDOWS[WINDOWS.length - 1]!.end
+
+function relDate(anchorDate: string): string {
+  return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
+}
 
 type TestUser = {
   id: string
@@ -408,7 +442,7 @@ const PLANS: Record<string, Record<string, ItemTemplate[]>> = {
 
 const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
   'tom.seed@example.com': {
-    '2026-08-05': {
+    [relDate('2026-08-05')]: {
       breakfast: [
         { blsCode: 'Y273032', amountG: 20 },
         { blsCode: 'C352000', amountG: 75, portionName: '1 Portion roh', portionQuantity: 1, portionAmountG: 75 },
@@ -417,7 +451,7 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
       snack: [],
       dinner: [],
     },
-    '2026-08-07': {
+    [relDate('2026-08-07')]: {
       breakfast: [
         { blsCode: 'C352000', amountG: 250 },
         { blsCode: 'F503100', amountG: 120 },
@@ -426,13 +460,13 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
       snack: [],
       dinner: [],
     },
-    '2026-08-11': {
+    [relDate('2026-08-11')]: {
       breakfast: [],
       lunch: [],
       snack: [],
       dinner: [],
     },
-    '2026-08-13': {
+    [relDate('2026-08-13')]: {
       breakfast: [
         { blsCode: 'C133000', amountG: 80, portionName: '1 Tasse roh', portionQuantity: 1, portionAmountG: 80 },
         { blsCode: 'M141100', amountG: 200 },
@@ -468,7 +502,7 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
     },
   },
   'max.seed@example.com': {
-    '2026-08-04': {
+    [relDate('2026-08-04')]: {
       breakfast: [
         { blsCode: 'R111000', amountG: 6 },
         { blsCode: 'B101000', amountG: 60, portionName: '1 Scheibe', portionQuantity: 2, portionAmountG: 30 },
@@ -477,7 +511,7 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
       snack: [],
       dinner: [],
     },
-    '2026-08-06': {
+    [relDate('2026-08-06')]: {
       breakfast: [
         { blsCode: 'R466000', amountG: 50 },
       ],
@@ -485,8 +519,8 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
       snack: [],
       dinner: [],
     },
-    '2026-08-08': 'skip-day',
-    '2026-08-09': {
+    [relDate('2026-08-08')]: 'skip-day',
+    [relDate('2026-08-09')]: {
       breakfast: [
         { blsCode: 'C352000', amountG: 300 },
         { blsCode: 'S111000', amountG: 200 },
@@ -496,7 +530,7 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
       snack: [],
       dinner: [],
     },
-    '2026-08-10': {
+    [relDate('2026-08-10')]: {
       breakfast: [
         { blsCode: 'Q120000', amountG: 300 },
         { blsCode: 'S111000', amountG: 150 },
@@ -565,8 +599,8 @@ const goalRows: GoalRow[] = [
     targetUnit: 'kg',
     startValue: 85,
     currentValue: 86.2,
-    gueltigAb: '2026-08-03',
-    targetDate: '2026-09-30',
+    gueltigAb: relDate('2026-08-03'),
+    targetDate: addIsoDays(END_DATE, 30),
     status: 'active',
     priority: 1,
     isPrimary: true,
@@ -585,8 +619,8 @@ const goalRows: GoalRow[] = [
     targetUnit: 'kg',
     startValue: 105,
     currentValue: 110,
-    gueltigAb: '2026-08-10',
-    targetDate: '2026-10-31',
+    gueltigAb: relDate('2026-08-10'),
+    targetDate: relDate('2026-10-31'),
     status: 'active',
     priority: 2,
     isPrimary: false,
@@ -605,7 +639,7 @@ const goalRows: GoalRow[] = [
     targetUnit: null,
     startValue: null,
     currentValue: null,
-    gueltigAb: '2026-08-03',
+    gueltigAb: relDate('2026-08-03'),
     targetDate: null,
     status: 'active',
     priority: 1,
@@ -623,9 +657,9 @@ const goalPhaseRows: GoalPhaseRow[] = [
     phaseType: 'maintenance',
     variant: 'baseline',
     parameters: '{"source":"GO-07 testdata","reason":"Startphase vor Lean Bulk"}',
-    gueltigAb: '2026-08-03',
-    projectedEndDate: '2026-08-16',
-    actualEndDate: '2026-08-16',
+    gueltigAb: relDate('2026-08-03'),
+    projectedEndDate: relDate('2026-08-16'),
+    actualEndDate: relDate('2026-08-16'),
     transitionedFrom: null,
     recommendedNext: 'lean_bulk',
     transitionReason: 'Ausgangswoche stabilisieren',
@@ -637,8 +671,8 @@ const goalPhaseRows: GoalPhaseRow[] = [
     phaseType: 'lean_bulk',
     variant: 'moderate',
     parameters: '{"source":"GO-07 testdata","calorie_surplus_kcal":250}',
-    gueltigAb: '2026-08-17',
-    projectedEndDate: '2026-09-30',
+    gueltigAb: relDate('2026-08-17'),
+    projectedEndDate: relDate('2026-09-30'),
     actualEndDate: null,
     transitionedFrom: 'maintenance',
     recommendedNext: 'mini_cut',
@@ -651,7 +685,7 @@ const goalPhaseRows: GoalPhaseRow[] = [
     phaseType: 'maintenance',
     variant: 'performance_placeholder',
     parameters: '{"source":"GO-07 testdata","note":"Phase unabhaengig vom konkreten Ziel"}',
-    gueltigAb: '2026-08-05',
+    gueltigAb: relDate('2026-08-05'),
     projectedEndDate: null,
     actualEndDate: null,
     transitionedFrom: null,
@@ -671,7 +705,7 @@ const goalMilestoneRows: GoalMilestoneRow[] = [
     targetValue: 85,
     targetUnit: 'kg',
     thresholdPct: null,
-    targetDate: '2026-09-13',
+    targetDate: relDate('2026-09-13'),
     status: 'open',
     achievedDate: null,
     achievedValue: null,
@@ -691,7 +725,7 @@ const goalMilestoneRows: GoalMilestoneRow[] = [
     targetValue: 86.5,
     targetUnit: 'kg',
     thresholdPct: null,
-    targetDate: '2026-09-30',
+    targetDate: addIsoDays(END_DATE, 30),
     status: 'open',
     achievedDate: null,
     achievedValue: null,
@@ -711,7 +745,7 @@ const goalMilestoneRows: GoalMilestoneRow[] = [
     targetValue: 86,
     targetUnit: 'kg',
     thresholdPct: null,
-    targetDate: '2026-08-20',
+    targetDate: relDate('2026-08-20'),
     status: 'open',
     achievedDate: null,
     achievedValue: null,
@@ -731,7 +765,7 @@ const goalMilestoneRows: GoalMilestoneRow[] = [
     targetValue: null,
     targetUnit: null,
     thresholdPct: null,
-    targetDate: '2026-09-13',
+    targetDate: relDate('2026-09-13'),
     status: 'open',
     achievedDate: null,
     achievedValue: null,
@@ -743,7 +777,7 @@ const goalMilestoneRows: GoalMilestoneRow[] = [
   },
 ]
 
-const bodyMeasurements: BodyMeasurementRow[] = daysBetween(START_DATE, END_DATE).map((date, index, allDates) => {
+const bodyMeasurements: BodyMeasurementRow[] = ALL_DATES.map((date, index, allDates) => {
   const trend = index / (allDates.length - 1)
   const noise = ((index % 5) - 2) * 0.08
   return {
@@ -759,31 +793,43 @@ const bodyMeasurements: BodyMeasurementRow[] = daysBetween(START_DATE, END_DATE)
 })
 bodyMeasurements[bodyMeasurements.length - 1]!.weightKg = 85
 
-const bodyCircumferences: BodyCircumferenceRow[] = [
-  { date: '2026-08-02', neck: 41.2, shoulders: 123.0, chest: 107.0, armL: 38.4, armR: 38.9, forearmL: 31.6, forearmR: 31.9, waist: 84.0, hip: 97.0, thighL: 59.5, thighR: 60.0, calfL: 38.7, calfR: 39.2 },
-  { date: '2026-08-09', neck: 41.1, shoulders: 123.3, chest: 107.3, armL: 38.5, armR: 39.0, forearmL: 31.7, forearmR: 32.0, waist: 83.8, hip: 96.8, thighL: 59.6, thighR: 60.1, calfL: 38.8, calfR: 39.3 },
-  { date: '2026-08-16', neck: 41.1, shoulders: 123.7, chest: 107.6, armL: 38.6, armR: 39.1, forearmL: 31.8, forearmR: 32.0, waist: 83.4, hip: 96.6, thighL: 59.7, thighR: 60.2, calfL: 38.8, calfR: 39.3 },
-  { date: '2026-08-23', neck: 41.0, shoulders: 124.0, chest: 107.8, armL: 38.7, armR: 39.2, forearmL: 31.8, forearmR: 32.1, waist: 83.0, hip: 96.4, thighL: 59.8, thighR: 60.3, calfL: 38.9, calfR: 39.4 },
-  { date: '2026-08-30', neck: 41.0, shoulders: 124.2, chest: 108.0, armL: 38.8, armR: 39.3, forearmL: 31.9, forearmR: 32.1, waist: 82.7, hip: 96.3, thighL: 59.9, thighR: 60.4, calfL: 38.9, calfR: 39.4 },
-  { date: '2026-09-06', neck: 41.0, shoulders: 124.4, chest: 108.2, armL: 38.9, armR: 39.4, forearmL: 32.0, forearmR: 32.2, waist: 82.4, hip: 96.1, thighL: 60.0, thighR: 60.5, calfL: 39.0, calfR: 39.5 },
-  { date: '2026-09-13', neck: 40.9, shoulders: 124.5, chest: 108.4, armL: 39.0, armR: 39.5, forearmL: 32.0, forearmR: 32.2, waist: 82.0, hip: 96.0, thighL: 60.0, thighR: 60.5, calfL: 39.0, calfR: 39.5 },
-].map(row => ({
+const bodyCircumferences: BodyCircumferenceRow[] = ALL_DATES
+  .filter((date, index) => index % 7 === 0 || date === END_DATE)
+  .map((date, index, rows) => {
+    const trend = rows.length > 1 ? index / (rows.length - 1) : 0
+    return {
+      date,
+      neck: 41.2 - 0.3 * trend,
+      shoulders: 123.0 + 1.5 * trend,
+      chest: 107.0 + 1.4 * trend,
+      armL: 38.4 + 0.6 * trend,
+      armR: 38.9 + 0.6 * trend,
+      forearmL: 31.6 + 0.4 * trend,
+      forearmR: 31.9 + 0.3 * trend,
+      waist: 84.0 - 2.0 * trend,
+      hip: 97.0 - 1.0 * trend,
+      thighL: 59.5 + 0.5 * trend,
+      thighR: 60.0 + 0.5 * trend,
+      calfL: 38.7 + 0.3 * trend,
+      calfR: 39.2 + 0.3 * trend,
+    }
+  }).map(row => ({
   userId: '10000000-0000-0000-0000-000000000101',
   measurementDate: row.date,
   measurementTime: '07:10',
-  neckCm: row.neck,
-  shouldersCm: row.shoulders,
-  chestCm: row.chest,
-  upperArmLeftCm: row.armL,
-  upperArmRightCm: row.armR,
-  forearmLeftCm: row.forearmL,
-  forearmRightCm: row.forearmR,
-  waistCm: row.waist,
-  hipCm: row.hip,
-  thighLeftCm: row.thighL,
-  thighRightCm: row.thighR,
-  calfLeftCm: row.calfL,
-  calfRightCm: row.calfR,
+  neckCm: Number(row.neck.toFixed(1)),
+  shouldersCm: Number(row.shoulders.toFixed(1)),
+  chestCm: Number(row.chest.toFixed(1)),
+  upperArmLeftCm: Number(row.armL.toFixed(1)),
+  upperArmRightCm: Number(row.armR.toFixed(1)),
+  forearmLeftCm: Number(row.forearmL.toFixed(1)),
+  forearmRightCm: Number(row.forearmR.toFixed(1)),
+  waistCm: Number(row.waist.toFixed(1)),
+  hipCm: Number(row.hip.toFixed(1)),
+  thighLeftCm: Number(row.thighL.toFixed(1)),
+  thighRightCm: Number(row.thighR.toFixed(1)),
+  calfLeftCm: Number(row.calfL.toFixed(1)),
+  calfRightCm: Number(row.calfR.toFixed(1)),
   measurementSource: 'manual',
   notes: 'GO-10 Testdaten: woechentliche Umfangsmessung fuer Goals Composition',
 }))
@@ -862,7 +908,7 @@ const supplementIntakeLogs: SupplementIntakeLogRow[] = [
   {
     userId: '10000000-0000-0000-0000-000000000101',
     stackItemId: '41000000-0000-0000-0000-000000000101',
-    intakeDate: '2026-08-18',
+    intakeDate: relDate('2026-08-18'),
     intakeTime: '08:10',
     status: 'taken',
     supplementNameSnapshot: 'Creatine Monohydrate',
@@ -875,7 +921,7 @@ const supplementIntakeLogs: SupplementIntakeLogRow[] = [
   {
     userId: '10000000-0000-0000-0000-000000000101',
     stackItemId: '41000000-0000-0000-0000-000000000102',
-    intakeDate: '2026-08-18',
+    intakeDate: relDate('2026-08-18'),
     intakeTime: '08:12',
     status: 'taken',
     supplementNameSnapshot: 'Vitamin D3',
@@ -888,7 +934,7 @@ const supplementIntakeLogs: SupplementIntakeLogRow[] = [
   {
     userId: '10000000-0000-0000-0000-000000000101',
     stackItemId: '41000000-0000-0000-0000-000000000103',
-    intakeDate: '2026-08-18',
+    intakeDate: relDate('2026-08-18'),
     intakeTime: '12:45',
     status: 'taken',
     supplementNameSnapshot: 'Omega-3 (EPA/DHA)',
@@ -901,7 +947,7 @@ const supplementIntakeLogs: SupplementIntakeLogRow[] = [
   {
     userId: '10000000-0000-0000-0000-000000000101',
     stackItemId: '41000000-0000-0000-0000-000000000104',
-    intakeDate: '2026-08-18',
+    intakeDate: relDate('2026-08-18'),
     intakeTime: '21:30',
     status: 'planned',
     supplementNameSnapshot: 'Magnesium',
@@ -923,10 +969,10 @@ type MedicalPanelMarker = {
 }
 
 const MEDICAL_PANEL_REPORTS = [
-  { id: '50000000-0000-0000-0000-000000000101', reportDate: '2026-02-18', title: 'C-76 Verlaufspanel 1' },
-  { id: '50000000-0000-0000-0000-000000000102', reportDate: '2026-04-18', title: 'C-76 Verlaufspanel 2' },
-  { id: '50000000-0000-0000-0000-000000000103', reportDate: '2026-06-18', title: 'C-76 Verlaufspanel 3' },
-  { id: '50000000-0000-0000-0000-000000000104', reportDate: '2026-08-18', title: 'C-76 Verlaufspanel 4' },
+  { id: '50000000-0000-0000-0000-000000000101', reportDate: relDate('2026-02-18'), title: 'C-76 Verlaufspanel 1' },
+  { id: '50000000-0000-0000-0000-000000000102', reportDate: relDate('2026-04-18'), title: 'C-76 Verlaufspanel 2' },
+  { id: '50000000-0000-0000-0000-000000000103', reportDate: relDate('2026-06-18'), title: 'C-76 Verlaufspanel 3' },
+  { id: '50000000-0000-0000-0000-000000000104', reportDate: relDate('2026-08-18'), title: 'C-76 Verlaufspanel 4' },
 ] as const
 
 const medicalPanelMarkers: MedicalPanelMarker[] = [
@@ -1050,7 +1096,7 @@ const medicalImportRows = [
 ]
 for (const user of USERS) {
   const plan = PLANS[user.email]
-  for (const date of daysBetween(START_DATE, END_DATE)) {
+  for (const date of ALL_DATES) {
     const specialPlan = SPECIAL_DAY_PLANS[user.email]?.[date] ?? null
     if (specialPlan === 'skip-day') continue
     const dayPlan = specialPlan ?? plan
@@ -1072,11 +1118,12 @@ for (const user of USERS) {
   }
 }
 
-const secondSnackId = uuidFrom('tom.seed@example.com:2026-08-14:snack:zweiter-snack')
+const secondSnackDate = relDate('2026-08-14')
+const secondSnackId = uuidFrom(`tom.seed@example.com:${secondSnackDate}:snack:zweiter-snack`)
 meals.push({
   id: secondSnackId,
   userId: '10000000-0000-0000-0000-000000000101',
-  entryDate: '2026-08-14',
+  entryDate: secondSnackDate,
   mealType: 'snack',
   mealTime: '10:14',
   notes: 'C-61/C-59 Testdaten: zweiter Snack am selben Tag',
@@ -1089,7 +1136,7 @@ items.push({
 })
 
 function waterAmountsFor(user: TestUser, date: string): number[] {
-  if (user.email === 'tom.seed@example.com' && date === '2026-08-16') {
+  if (user.email === 'tom.seed@example.com' && date === relDate('2026-08-16')) {
     return [250]
   }
   if (user.email === 'tom.seed@example.com') {
@@ -1102,7 +1149,7 @@ function waterAmountsFor(user: TestUser, date: string): number[] {
 }
 
 for (const user of USERS) {
-  for (const date of daysBetween(START_DATE, END_DATE)) {
+  for (const date of ALL_DATES) {
     if (SPECIAL_DAY_PLANS[user.email]?.[date] === 'skip-day') continue
     waterAmountsFor(user, date).forEach((amountMl, index) => {
       waterLogs.push({
@@ -1193,17 +1240,13 @@ const TRAINING_PLAN: Record<string, TrainingExerciseTemplate[]> = {
   ],
 }
 
-const TRAINING_DAYS = [
-  { date: '2026-08-03', key: 'push', name: 'Push A' },
-  { date: '2026-08-06', key: 'pull', name: 'Pull A' },
-  { date: '2026-08-09', key: 'legs', name: 'Legs A' },
-  { date: '2026-08-17', key: 'push', name: 'Push A' },
-  { date: '2026-08-20', key: 'pull', name: 'Pull A' },
-  { date: '2026-08-23', key: 'legs', name: 'Legs A' },
-  { date: '2026-08-31', key: 'push', name: 'Push A' },
-  { date: '2026-09-03', key: 'pull', name: 'Pull A' },
-  { date: '2026-09-06', key: 'legs', name: 'Legs A' },
-] as const
+const TRAINING_SEQUENCE = ['push', 'pull', 'legs'] as const
+const TRAINING_DAYS = ALL_DATES
+  .filter((_, index) => index % 6 === 1)
+  .map((date, index) => {
+    const key = TRAINING_SEQUENCE[index % TRAINING_SEQUENCE.length]!
+    return { date, key, name: `${key[0]!.toUpperCase()}${key.slice(1)} ${Math.floor(index / 3) + 1}` }
+  })
 
 for (const day of TRAINING_DAYS) {
   const sessionId = uuidFrom(`tom.seed@example.com:training:${day.date}:${day.key}`)
@@ -1243,7 +1286,7 @@ for (const day of TRAINING_DAYS) {
 }
 
 function recoveryCheckinFor(date: string, index: number): RecoveryCheckinRow {
-  if (date === '2026-08-18') {
+  if (date === relDate('2026-08-18')) {
     return {
       userId: '10000000-0000-0000-0000-000000000101',
       entryDate: date,
@@ -1264,7 +1307,7 @@ function recoveryCheckinFor(date: string, index: number): RecoveryCheckinRow {
     }
   }
 
-  const isAfterLegs = ['2026-08-10', '2026-08-24', '2026-09-07'].includes(date)
+  const isAfterLegs = [relDate('2026-08-10'), relDate('2026-08-24'), relDate('2026-09-07')].includes(date)
   return {
     userId: '10000000-0000-0000-0000-000000000101',
     entryDate: date,
@@ -1285,7 +1328,7 @@ function recoveryCheckinFor(date: string, index: number): RecoveryCheckinRow {
   }
 }
 
-daysBetween('2026-08-03', '2026-09-07').forEach((date, index) => {
+ALL_DATES.slice(1, 171).forEach((date, index) => {
   recoveryCheckins.push(recoveryCheckinFor(date, index))
 })
 
@@ -1962,7 +2005,7 @@ SELECT set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000101
 SELECT *
 FROM medical.import_lab_report_rows(
   '10000000-0000-0000-0000-000000000101'::uuid,
-  DATE '2026-08-19',
+  DATE '${relDate('2026-08-19')}',
   TIME '08:40',
   'C-72 Testlabor',
   'C-72 Importierter Rohbefund',
