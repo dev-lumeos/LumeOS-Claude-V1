@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `b4a8a39` auf `dev`.
+**Stand:** 2026-08-18, Anker `94e9687` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 83 offen, 3 in Arbeit.
+`[cmd]` 84 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -206,6 +206,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-76** | Seed-Befunde fuer Medical |  |
 | **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
 | **C-77** | Alle Seeds auf `dev@lumeos.app` nachziehen |  |
+| **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
@@ -2241,6 +2242,57 @@ Umsetzen angepasst werden.
   **Ein Konto ohne Passwort taugt fuer keines von beidem.** Bisher wurde
   RLS gegen `tom.seed` und `max.seed` geprueft — **beide nicht
   anmeldbar**, der Nachweis lief nur ueber SQL.
+
+- [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
+  **Spaeter — wenn die noetigen Tabellen stehen.**
+
+  **Tom, 2026-08-18:** *„Unabhaengige Seeds sind immer problematisch,
+  weil sie nicht korrespondieren und Logiken nicht passen — z. B. Food
+  Logs zeigen High Calories, aber das Gewicht geht ab. … diese Seeds
+  muessen wir ueberarbeiten und am Ende Seeds generieren, die alle
+  zusammen korrespondieren."*
+
+  ### Der Anlass ist gemessen
+
+  `[cmd]` **GO-11 hat es sichtbar gemacht:** Bei 2.372 kcal Zufuhr und
+  **+0,21 kg** ueber 13 Tage kommt ein Rohwert von **2.247,6 kcal**
+  heraus — gegen einen Formelwert von **3.527,0**. **1.279 kcal
+  Abstand.**
+
+  `[read]` **Mahlzeiten und Gewichtsverlauf wurden getrennt
+  generiert.** Der Abstand kann daher stammen — **und solange das so
+  ist, laesst sich keine Formel an diesen Daten pruefen.**
+
+  ### Was daraus folgt
+
+  **Ein Erzeuger, nicht mehrere.** Aus einem Profil und einem
+  Zielverlauf ergeben sich Zufuhr, Gewicht, Training, Erholung und
+  Koerpermessungen — **nicht umgekehrt.**
+
+  **Was zusammenhaengen muss:**
+
+  | | |
+  |---|---|
+  | Zufuhr und Gewicht | Ueberschuss macht schwerer, Defizit leichter |
+  | Training und Erholung | Ein harter Tag senkt die Bereitschaft am naechsten |
+  | Training und Muskelkarte | Was trainiert wurde, ist ermuedet |
+  | Sitzungen und Koerpermessungen | Kraftzuwachs zeigt sich im Umfang |
+  | Supplements und Laborwerte | Vitamin D ueber Monate hebt den Spiegel |
+
+  `[read]` **Der letzte Punkt ist der Sinn des Produkts:** Buddy soll
+  Zusammenhaenge finden. **An Daten ohne Zusammenhang findet er
+  keine** — und schlimmer, er findet falsche.
+
+  ### Wann
+
+  **Nicht jetzt.** `[cmd]` Es fehlen noch Tabellen — Schlafdaten,
+  HRV-Verlauf, Muskelzustaende, Protokolle. **Ein Erzeuger, der auf
+  halbem Schema aufsetzt, wird zweimal gebaut.**
+
+  `[read]` **Bis dahin gilt:** Was an den heutigen Seeds gemessen wird,
+  belegt **die Mechanik, nicht die Formel.** Der GO-11-Bericht sagt es
+  richtig — die Funktion rechnet, ob sie **richtig** rechnet, ist offen
+  (GO-15).
 
 - [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
   aus C-72.
