@@ -411,6 +411,11 @@ test('die fuenf Tabs der Vorlage stehen im Medical-Modul', () => {
 })
 
 test('das Medical-Modul kennzeichnet jede Kachel', () => {
+  // `[cmd]` STAND SEIT G-46: 21 Marken. Zwei Kacheln haben ihre
+  // verloren, weil sie angebunden sind — `BefundTabelle` und
+  // `KatalogSuche` in eigenen Dateien. `tab-biomarker.tsx` behaelt
+  // seine acht: die Entwurfstabelle bleibt Attrappe, weil sie Verlauf
+  // und Sparkline zeigt, fuer die es keine Daten gibt.
   const dateien: Array<[string, number]> = [
     [MEDICAL, 5],
     [path.join(process.cwd(), 'src/app/v2/medical/tab-biomarker.tsx'), 8],
@@ -418,7 +423,12 @@ test('das Medical-Modul kennzeichnet jede Kachel', () => {
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')
-    const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    // `[cmd]` NICHT nur `{ATTRAPPE}`: seit G-46 traegt die
+    // Entwurfstabelle in `tab-biomarker.tsx` einen eigenen
+    // Begruendungssatz (`{ENTWURFSKATALOG}`), weil ihr Grund ein
+    // anderer ist — „Schema da, Spalten leer" statt „kein Schema".
+    // Die alte Regel zaehlte sie nicht mit und meldete 7 statt 8.
+    const mitGrund = (quelle.match(/attrappe=\{[A-Z_][A-Z_0-9]*\}/g) ?? []).length
     const ohneGrund = (quelle.match(/\battrappe(?=>|\s*$)/gm) ?? []).length
     const markiert = mitGrund + ohneGrund
     assert.equal(markiert, erwartet,
@@ -516,7 +526,10 @@ test('das Supplements-Modul kennzeichnet jede Kachel', () => {
   // G-33: die Erwartung steht je Datei. Extended und Compliance sind
   // seit dem Nachziehen eigene Dateien.
   const dateien: Array<[string, number]> = [
-    [SUPP, 12],
+    // G-45: 12 -> 17. `SuppCost` hatte zwei Kacheln, die Vorlage
+    // fuehrt fuenf; nachgezogen sind es sieben markierte in dieser
+    // Datei (drei Kennzahlen + vier Kacheln der Vorlage).
+    [SUPP, 17],
     [SUPP_EXT, 6],
     [SUPP_COMP, 4],
   ]
@@ -1081,4 +1094,155 @@ test('der Befehlsparser der Sprachsitzung erkennt die Vorlagenbeispiele', () => 
   assert.equal(treffer('war schwer'), 'log_rpe', 'Die deutsche Umschreibung muss greifen')
   assert.equal(treffer('weiter'), 'next_exercise', '„weiter" muss weiterschalten')
   assert.equal(treffer('banane'), null, 'Unbekanntes darf nichts ausloesen')
+})
+
+// ── Medical · Anbindung an den Katalog (G-46) ────────────────────────
+
+const MED_BEFUND = path.join(process.cwd(), 'src/app/v2/medical/befund-tabelle.tsx')
+const MED_KATALOG = path.join(process.cwd(), 'src/app/v2/medical/katalog-suche.tsx')
+const MED_LESEN = path.join(process.cwd(), 'src/lib/medical/lesen.ts')
+const MED_LOGIK = path.join(process.cwd(), 'src/lib/medical/befund.ts')
+
+test('die angebundenen Medical-Kacheln tragen keine Marke mehr', () => {
+  // `[read]` Der Auftrag G-46: „Was angebunden ist, verliert die Marke.
+  // Alles andere behaelt sie."
+  //
+  // Diese Pruefung ist das Gegenstueck zur Zaehlung darueber: dort wird
+  // gezaehlt, was BLEIBT, hier wird festgehalten, was GEHT. Ohne sie
+  // koennte jemand die Marke versehentlich wieder anbringen, und die
+  // Zaehlung oben faende das gut, solange die Summe stimmt.
+  for (const datei of [MED_BEFUND, MED_KATALOG]) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    const karten = (quelle.match(/<Card\b/g) ?? []).length
+    assert.ok(karten > 0, `${path.basename(datei)}: keine Karte gefunden.`)
+    assert.ok(!/attrappe=/.test(quelle),
+      `${path.basename(datei)}: traegt eine Attrappenmarke, ist aber angebunden.`)
+  }
+})
+
+test('die Medical-Anzeige bewertet nicht, sie verortet', () => {
+  // `[read]` Der Auftrag: „Ob ein Wert gut ist, ist eine medizinische
+  // Aussage. Die Anzeige sagt, wo er liegt — im Bereich, darueber,
+  // darunter — nicht, was er bedeutet und schon gar nicht, was jemand
+  // tun soll."
+  //
+  // `[cmd]` Die Attrappe fuehrte `Optimal`, `Critical low` und
+  // `Critical high` (daten.ts:33-40). In den angebundenen Dateien
+  // duerfen diese Urteile nicht vorkommen — dieselbe Grenze wie bei
+  // C-49 und GO-14.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*\/\//.test(z)).join('\n')
+
+  // `[cmd]` „Optimalband" ist KEIN Urteil, sondern der Name des
+  // Bereichstyps aus dem Schema (`range_type = 'optimal'`,
+  // `140_medical_schema.sql:99`). Der Urteilsfall waere „Optimal" als
+  // Lage eines Werts — also allein stehend. Eine reine Textsuche nach
+  // „Optimal" trifft beides und meldet die Spaltenueberschrift als
+  // Verstoss; sie ist deshalb auf das allein stehende Wort begrenzt.
+  for (const datei of [MED_BEFUND, MED_LOGIK]) {
+    const quelle = ohneKommentar(fs.readFileSync(datei, 'utf8'))
+    for (const urteil of [/critical_low/, /critical_high/, /\bCritical\b/, /\bOptimal\b/]) {
+      assert.ok(!urteil.test(quelle),
+        `${path.basename(datei)}: ${urteil.source} ist ein Urteil, keine Lage.`)
+    }
+  }
+
+  // Und die Lagen selbst stehen da.
+  const logik = fs.readFileSync(MED_LOGIK, 'utf8')
+  for (const lage of ['im_bereich', 'darueber', 'darunter', 'unbekannt']) {
+    assert.ok(logik.includes(`'${lage}'`), `Die Lage "${lage}" fehlt.`)
+  }
+})
+
+test('der Befundbereich schlaegt den Katalogbereich', () => {
+  // `[read]` Der Auftrag: „Der Befundbereich gewinnt. Jedes Labor fuehrt
+  // eigene Bereiche, und sie stehen auf dem Ausdruck. Der
+  // Katalogbereich ist der Rueckfall."
+  //
+  // `[cmd]` Die Vorrangregel steht in SQL
+  // (`140_medical_schema.sql:240-252`, `COALESCE(v.lab_reference_*,
+  // rr.*)`) und liefert `reference_source` mit. Der Lesepfad darf sie
+  // NICHT ein zweites Mal entscheiden — sonst gaebe es zwei Wahrheiten,
+  // die auseinanderlaufen koennen.
+  const lesen = fs.readFileSync(MED_LESEN, 'utf8')
+  assert.ok(/lab_result_values_read/.test(lesen),
+    'Der Lesepfad ruft die Lesefunktion nicht auf.')
+  assert.ok(!/COALESCE|coalesce/.test(lesen),
+    'Der Lesepfad baut den Bereichsvorrang nach, statt ihn zu benutzen.')
+
+  // Und die Herkunft wird angezeigt, nicht verschluckt.
+  const befund = fs.readFileSync(MED_BEFUND, 'utf8')
+  assert.ok(/reference_source/.test(befund),
+    'Die Anzeige zeigt nicht, woher der Bereich stammt.')
+  assert.ok(/catalog_fallback/.test(befund),
+    'Der Rueckfall ist in der Anzeige nicht als solcher erkennbar.')
+})
+
+test('der Katalog wird durchsucht, nicht geladen', () => {
+  // `[read]` Der Auftrag: „Der Katalog ist die groesste Tabelle im Repo
+  // nach `food_nutrients` — die Anzeige muss suchen, nicht laden."
+  //
+  // `[cmd]` 11.676 Zeilen. Wer sie ohne `limit` holt, merkt es auf einer
+  // schnellen Maschine mit warmem Cache nicht — und auf einem Telefon
+  // im Zug schon.
+  const lesen = fs.readFileSync(MED_LESEN, 'utf8')
+  const suche = /export async function sucheKatalog[\s\S]*?\n\}/.exec(lesen)
+  assert.ok(suche, 'sucheKatalog nicht gefunden.')
+  assert.ok(/\.limit\(/.test(suche![0]),
+    'Die Katalogsuche hat keine Begrenzung — sie wuerde 11.676 Zeilen holen.')
+  assert.ok(/common_test_rank/.test(suche![0]),
+    'Ohne Sortierung nach Rang sind die 25 Treffer beliebig.')
+})
+
+test('ein unbekannter Marker verschwindet nicht', () => {
+  // `[read]` Tom: „Wenn Daten importiert werden und wir die nicht in der
+  // DB haben, kommt nichts." — der Marker steht trotzdem da, mit seinem
+  // Rohtext.
+  //
+  // `[cmd]` Live belegt an den Testdaten: „Unbekannter Marker X",
+  // 42 U/L, ohne LOINC, Confidence 0,00. Die Zeile muss in der Anzeige
+  // ankommen; ein Filter, der sie wegliesse, waere ein Datenverlust,
+  // den niemand bemerkt.
+  const logik = fs.readFileSync(MED_LOGIK, 'utf8')
+  const zuo = /export function zuordnung[\s\S]*?\n\}/.exec(logik)
+  assert.ok(zuo, 'zuordnung() nicht gefunden.')
+  assert.ok(!/return null/.test(zuo![0]),
+    'zuordnung() gibt null zurueck — eine Zeile ohne Zuordnung faellt dann weg.')
+
+  const befund = fs.readFileSync(MED_BEFUND, 'utf8')
+  assert.ok(/marker_name/.test(befund),
+    'Der Rohtext des Markers wird nicht angezeigt.')
+  assert.ok(/ungepr/.test(befund),
+    'Die Anzeige sagt nicht, dass unzugeordnete Werte ungeprueft sind.')
+  // Kein Filter, der nach loinc_code aussortiert.
+  assert.ok(!/filter\([^)]*loinc_code\)/.test(befund),
+    'Die Anzeige filtert nach LOINC — unbekannte Marker verschwaenden.')
+})
+
+test('die Lagerechnung stimmt an den Raendern', () => {
+  // Reine Rechnung, ohne Datenbank — deshalb hier pruefbar.
+  //
+  // `[cmd]` Der belegte Fall aus dem Auftrag: Glucose 102 bei
+  // Laborgrenze 70–99 liegt darueber; im Optimalband 70–85 erst recht.
+  // Und: eine offene Grenze ist kein Ausschluss — `<5,7 %` sagt ueber
+  // die Unterseite nichts.
+  const logik = fs.readFileSync(MED_LOGIK, 'utf8')
+
+  // Die Reihenfolge der Pruefungen ist wesentlich: erst `high`, dann
+  // `low`, sonst meldet ein Bereich mit nur `low` alles als darunter.
+  const lage = /export function lageImBereich[\s\S]*?\n\}/.exec(logik)
+  assert.ok(lage, 'lageImBereich nicht gefunden.')
+  const rumpf = lage![0]
+  assert.ok(rumpf.indexOf('high != null') < rumpf.indexOf('low != null'),
+    'Die Grenzpruefungen stehen in der falschen Reihenfolge.')
+  assert.ok(/return 'unbekannt'/.test(rumpf),
+    'Ohne Bereich muss die Lage `unbekannt` sein, nicht `im_bereich`.')
+
+  // Der Textzerleger kennt die drei Schreibweisen des Bestands.
+  const text = /export function bereichAusText[\s\S]*?\n\}/.exec(logik)
+  assert.ok(text, 'bereichAusText nicht gefunden.')
+  assert.ok(/–—-/.test(text![0]) || /\[.*–.*\]/.test(text![0]),
+    'Der Halbgeviertstrich fehlt — 410 Bereichstexte benutzen ihn.')
 })

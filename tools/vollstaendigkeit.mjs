@@ -147,6 +147,72 @@ const UMBENANNT = {
         + 'sie die Unterscheidung nicht.',
     },
   },
+  supplements: {
+    // `[cmd]` NACHGETRAGEN IN G-45. Die Vorlage fuehrt je Fenster eine
+    // eigene Komponente (`AddSupplementModal`, `LogSkipModal`, …), die
+    // Umsetzung EINEN Verteiler mit `case`-Zweigen — `SupplementsModale`
+    // in `modale.tsx`. Dieselben Fenster, derselbe Ausloeser, andere
+    // Bauform. Ohne diese Zuordnung meldet das Skript neun fehlende
+    // Bauteile, die alle dastehen.
+    //
+    // Geprueft: zu jedem Eintrag hier gibt es in `modale.tsx` einen
+    // `case` mit demselben Zweck.
+    AddSupplementModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'add'` — Name, Dosis, Slot. Die Vorlage "
+        + 'baut dafuer eine eigene Komponente, die Umsetzung einen Zweig '
+        + 'im gemeinsamen Verteiler.',
+    },
+    LogSkipModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'skip'` — die fuenf Gruende der Vorlage.",
+    },
+    LogDoseModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'logDose'` — Menge und Uhrzeit.",
+    },
+    ReorderModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'reorder'` — die knappen Posten mit Meter.",
+    },
+    AddLabResultModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'addLab'` — Marker und Wert.",
+    },
+    AddSideEffectModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'addSideEffect'` — Freitextfeld.",
+    },
+    AddCompoundModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'addCompound'` — Wirkstoff des erweiterten "
+        + 'Protokolls.',
+    },
+    PlanCycleModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'planCycle'` — Zykluslaenge.",
+    },
+    PermissionsModal: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'permissions'` — Sichtbarkeit fuer Coach "
+        + 'und Buddy.',
+    },
+    ProductDetailDrawer: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'product'` — die Vorlage nennt es Drawer, "
+        + 'die Umsetzung zeigt dasselbe als Fenster. `[read]` Ein '
+        + 'seitlich einfahrendes Panel gibt es in packages/ui nicht.',
+    },
+    InteractionDetail: {
+      ziel: 'SupplementsModale',
+      warum: "modale.tsx `case 'interaction'` — Paar und Begruendung.",
+    },
+    LogInjectionModal: {
+      ziel: 'LogInjektionFenster',
+      warum: 'modale.tsx — eigene Komponente, weil sie Zustand braucht '
+        + '(Ort, Menge und Schmerz aendern die Pruefung live). G-45.',
+    },
+  },
   training: {
     TrainingToolLauncher: {
       ziel: 'TrainingModale',

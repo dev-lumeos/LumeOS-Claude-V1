@@ -16,6 +16,9 @@ export type ModalTyp =
   | 'add' | 'catalogAdd' | 'catalogAddEnh' | 'skip' | 'product'
   | 'interaction' | 'reorder' | 'addLab' | 'addSideEffect'
   | 'addCompound' | 'planCycle' | 'permissions' | 'logDose'
+  // G-45: das Fenster des Injections-Tabs
+  // (module-supplements-injection.jsx:389).
+  | 'logInjection'
 
 export type ModalZustand = { type: ModalTyp; payload?: unknown } | null
 

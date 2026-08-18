@@ -28,6 +28,10 @@ import {
 // eigenen Dateien — `tabs.tsx` waere sonst ueber 1.200 Zeilen lang.
 import { SuppExtended } from './tab-extended'
 import { SuppCompliance } from './tab-compliance'
+// G-45: der Injections-Tab mit der Rotationskarte.
+import { SuppInjections } from './tab-injektionen'
+// G-45: die vier Tabs aus -spec.jsx.
+import { SuppCatalog, SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
 import { SupplementsModale } from './modale'
 
 /** Die elf Tabs der Vorlage (module-supplements.jsx:240-253). */
@@ -47,34 +51,11 @@ function tabs(): TabItem[] {
   ]
 }
 
-/** Die Tabs, die aus -spec.jsx und -injection.jsx kommen. */
-const NOCH_NICHT: Record<string, { titel: string; quelle: string; inhalt: string }> = {
-  catalog: {
-    titel: 'Catalog',
-    quelle: 'module-supplements-spec.jsx · SuppCatalogView',
-    inhalt: 'Produktkatalog mit Filtern, Detailfenster und „Add from catalog".',
-  },
-  stacks: {
-    titel: 'Stacks',
-    quelle: 'module-supplements-spec.jsx · SuppStacksView',
-    inhalt: 'Vorgefertigte Zusammenstellungen zum Uebernehmen.',
-  },
-  intel: {
-    titel: 'Intelligence',
-    quelle: 'module-supplements-spec.jsx · SuppIntelligenceView',
-    inhalt: 'Auswertung ueber den Stack — Luecken, Ueberschneidungen, Bloodwork-Bezug.',
-  },
-  inventory: {
-    titel: 'Inventory',
-    quelle: 'module-supplements-spec.jsx · SuppInventoryView',
-    inhalt: 'Bestand, Nachbestellung, Haltbarkeit.',
-  },
-  injection: {
-    titel: 'Injections',
-    quelle: 'module-supplements-injection.jsx · InjectionPlannerView',
-    inhalt: 'Injektionsplanung mit Zyklen und Blutspiegelverlauf.',
-  },
-}
+// G-45: Die Platzhalter-Tabelle ist entfallen — **alle zwoelf Tabs
+// der Vorlage sind gebaut.** Sie fuehrte die fuenf, die aus
+// `-spec.jsx` und `-injection.jsx` kommen, und zeigte je eine Kachel
+// mit Herkunftsangabe. `[cmd]` Nachgezaehlt: `tabs()` gibt zwoelf
+// Eintraege, und zu jedem gibt es unten eine Weiche.
 
 export function SupplementsAnsicht() {
   const [tab, setTab] = React.useState('today')
@@ -97,7 +78,6 @@ export function SupplementsAnsicht() {
     [takenToday, toggleTaken, open],
   )
 
-  const fehlend = NOCH_NICHT[tab]
 
   return (
     <>
@@ -137,19 +117,11 @@ export function SupplementsAnsicht() {
           {tab === 'compliance' && <SuppCompliance />}
           {tab === 'interactions' && <SuppInteractions />}
           {tab === 'cost' && <SuppCost />}
-
-          {fehlend && (
-            <Card
-              title={fehlend.titel}
-              sub="in der Vorlage vorgesehen"
-              attrappe={`Kommt aus ${fehlend.quelle}. Dieser Durchgang hat den Rahmen und seine sieben eigenen Tabs gebaut — dieser Tab fehlt noch.`}
-            >
-              <p className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
-                {fehlend.inhalt}
-              </p>
-              <div className="v2-attrappe-flaeche" style={{ height: 140, marginTop: 10 }} />
-            </Card>
-          )}
+          {tab === 'injection' && <SuppInjections />}
+          {tab === 'catalog' && <SuppCatalog />}
+          {tab === 'stacks' && <SuppStacks />}
+          {tab === 'intel' && <SuppIntelligence />}
+          {tab === 'inventory' && <SuppInventory />}
         </div>
       </SuppCtx.Provider>
 

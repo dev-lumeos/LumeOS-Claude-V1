@@ -151,3 +151,301 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 4px;
 }
+
+/* --- G-45: der Injections-Tab -------------------------------------
+ * [cmd] Alle Regeln stehen in der Vorlage inline
+ * (module-supplements-injection.jsx). Als Klasse sind sie einmal
+ * beschrieben statt bei jedem Rendern gesetzt — und die Haltepunkte
+ * lassen sich ergaenzen: der Entwurf hat keine.
+ * Nur vorhandene Tokens, keine neuen Farbwerte. */
+
+/* Die Kopfleiste: zwei Umschalter plus Knopf.
+ * [cmd] module-supplements-injection.jsx:106. */
+.v2-inj-leiste {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Die zwei Koerperkarten nebeneinander.
+ * [cmd] module-supplements-injection.jsx:151 — `gap: 20`.
+ * Unter 520px duerfen sie umbrechen, sonst wird jede zu schmal,
+ * um die Zweibuchstaben-Kuerzel noch zu lesen. */
+.v2-inj-karten {
+  display: flex;
+  gap: 20px;
+}
+@media (max-width: 520px) {
+  .v2-inj-karten { flex-wrap: wrap; gap: 12px; }
+}
+
+/* Die Legende unter den Karten.
+ * [cmd] module-supplements-injection.jsx:155. */
+.v2-inj-legende {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 12px;
+  font-size: 10px;
+  color: var(--fg-muted);
+  flex-wrap: wrap;
+}
+.v2-inj-punkt {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+/* Der Kasten mit der Nadelempfehlung.
+ * [cmd] module-supplements-injection.jsx:183. */
+.v2-inj-nadel {
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+/* Die Warnung bei ueberbeanspruchten Orten.
+ * [cmd] module-supplements-injection.jsx:206. */
+.v2-inj-warnung {
+  padding: 10px;
+  background: color-mix(in oklch, var(--warn) 6%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--warn) 26%, var(--border));
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+/* Eine Zeile der Wochenlast: Name, Balken, Menge.
+ * [cmd] module-supplements-injection.jsx:281. */
+.v2-inj-last {
+  display: grid;
+  grid-template-columns: 110px 1fr 58px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 5px;
+}
+@media (max-width: 560px) {
+  .v2-inj-last { grid-template-columns: 84px 1fr 52px; }
+}
+.v2-inj-last-balken {
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* Ein Eintrag im Site guide.
+ * [cmd] module-supplements-injection.jsx:342. */
+.v2-inj-ort {
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+.v2-inj-notiz {
+  font-size: 10.5px;
+  padding-left: 28px;
+  line-height: 1.45;
+}
+
+/* Das Zweibuchstaben-Kuerzel vor dem Ortsnamen.
+ * [cmd] module-supplements-injection.jsx:345 (IM, eckig) und
+ * :358 (SubQ, rund mit gestricheltem Rand). */
+.v2-inj-kuerzel {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.v2-inj-kuerzel-im {
+  border-radius: 4px;
+  background: color-mix(in oklch, var(--acc-medic) 18%, transparent);
+  border: 1px solid color-mix(in oklch, var(--acc-medic) 35%, transparent);
+  color: var(--acc-medic);
+}
+.v2-inj-kuerzel-subq {
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--acc-recov) 18%, transparent);
+  border: 1px dashed color-mix(in oklch, var(--acc-recov) 45%, transparent);
+  color: var(--acc-recov);
+}
+
+/* Die Ortsliste im Log-Injection-Fenster.
+ * [cmd] module-supplements-injection.jsx:433 — 210px breit, scrollend.
+ * Hier als Raster ueber die volle Breite: die Vorlage stellt sie neben
+ * die Koerperkarte, im Fenster ist dafuer kein Platz mehr, sobald es
+ * auf 680px begrenzt ist. */
+.v2-inj-wahl {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+@media (max-width: 560px) {
+  .v2-inj-wahl { grid-template-columns: 1fr; }
+}
+.v2-inj-wahl-knopf {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* Die beiden Pruefkaesten unter dem Formular.
+ * [cmd] module-supplements-injection.jsx:481 (rot) und :495 (gruen). */
+.v2-inj-pruefung-rot {
+  padding: 12px;
+  background: color-mix(in oklch, var(--neg) 7%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--neg) 32%, var(--border));
+  border-radius: 7px;
+  margin-bottom: 10px;
+}
+.v2-inj-pruefung-gruen {
+  padding: 10px;
+  background: color-mix(in oklch, var(--pos) 6%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--pos) 26%, var(--border));
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: var(--fg-muted);
+}
+
+/* --- G-45: die vier Tabs aus -spec.jsx ---------------------------- */
+
+/* Die Kopfzeile des Katalogs: Suche, Modus, Zaehler.
+ * [cmd] module-supplements-spec.jsx:264. */
+.v2-supp-katalog-kopf {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.v2-supp-suchsymbol {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--fg-subtle);
+  pointer-events: none;
+}
+
+/* Die Evidenzfilter-Leiste. [cmd] module-supplements-spec.jsx:278. */
+.v2-supp-evidenzfilter {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Das Quadrat mit der Evidenzstufe.
+ * [cmd] module-supplements-spec.jsx:315 — 22x22.
+ * Farbe und Rand haengen an der Stufe und bleiben inline. */
+.v2-supp-grade {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Eine Zeile in „My stacks". [cmd] module-supplements-spec.jsx:515. */
+.v2-supp-stack-zeile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 7px;
+  flex-wrap: wrap;
+}
+
+/* Der graue Hinweiskasten darunter.
+ * [cmd] module-supplements-spec.jsx:534. */
+.v2-supp-hinweis {
+  margin-top: 10px;
+  padding: 10px;
+  background: var(--surface);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--fg-muted);
+  line-height: 1.5;
+}
+
+/* Eine Systemvorlage. [cmd] module-supplements-spec.jsx:541. */
+.v2-supp-vorlage {
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+/* Der zweifarbige Abdeckungsbalken der Lueckenanalyse.
+ * [cmd] module-supplements-spec.jsx:632-635 — Essen, Supplement und
+ * die 80-Prozent-Marke uebereinander. */
+.v2-supp-abdeckung {
+  position: relative;
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 999px;
+}
+.v2-supp-abdeckung-essen,
+.v2-supp-abdeckung-supp {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+}
+.v2-supp-abdeckung-essen { left: 0; background: var(--acc-nutri); }
+.v2-supp-abdeckung-supp { background: var(--acc-suppl); }
+.v2-supp-abdeckung-marke {
+  position: absolute;
+  left: 80%;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--fg-dim);
+}
+
+/* Ein Eintrag bei Redundanzen bzw. Nachbestellung. */
+.v2-supp-doppelt {
+  padding: 10px;
+  background: color-mix(in oklch, var(--acc-goals) 6%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--acc-goals) 26%, var(--border));
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+/* Eine Kategoriezeile im Cost-Tab (G-45).
+ * [cmd] module-supplements.jsx:1011. */
+.v2-supp-kategorie {
+  display: grid;
+  grid-template-columns: 100px 1fr 60px;
+  gap: 10px;
+  align-items: center;
+  font-size: 11px;
+}
+
+/* Ein Sparvorschlag. [cmd] module-supplements.jsx:1033. */
+.v2-supp-vorschlag {
+  padding: 10px;
+  background: color-mix(in oklch, var(--acc-recov) 6%, var(--surface));
+  border: 1px solid color-mix(in oklch, var(--acc-recov) 25%, var(--border));
+  border-radius: 6px;
+}

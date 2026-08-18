@@ -17,7 +17,7 @@
 // Ziel oeffnen ein Modal. Zwei Befunde der Vorlage stehen unten bei
 // ihren Stellen.
 import * as React from 'react'
-import { Card, Pill, Icon, Meter, Ring, InEntwicklungKnopf } from '@lumeos/ui'
+import { Card, Pill, Icon, Meter, Ring, Row, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
 import {
   STACK, SLOTS, DAY_LETTERS, EVIDENCE_PALETTE, SUPPLEMENT_DB,
@@ -496,61 +496,139 @@ export function SuppInteractions() {
 }
 
 // ── COST ───────────────────────────────────────────────────────
+// G-45: NACHGEZOGEN. `[cmd]` Die Vorlage fuehrt hier **fuenf**
+// Kacheln (module-supplements.jsx:936-1046), G-33 hatte **zwei**
+// gebaut — dieselbe Klasse Luecke wie bei `SuppExtended`: der Tab
+// sieht beim Klicken vollstaendig aus, ist es aber nicht.
 export function SuppCost() {
   const monat = STACK.reduce((s, x) => s + x.monthlyCost, 0)
   const jahr = monat * 12
   const teuerste = STACK.slice().sort((a, b) => b.monthlyCost - a.monthlyCost)
-  const max = teuerste[0]?.monthlyCost ?? 1
+  // Die Verlaufszahlen der Vorlage (Zeile 939), letzter Wert gerechnet.
+  const verlauf = [82, 79, 84, 88, 91, 86, 90, 94, 89, 88, 92, monat]
+
+  const kategorien = [
+    { c: 'Performance', ids: ['creatine', 'betaala', 'caffeine'], color: 'var(--acc-train)' },
+    { c: 'Recovery', ids: ['magnesium', 'ashwagandha'], color: 'var(--acc-recov)' },
+    { c: 'Foundation', ids: ['d3k2', 'omega3'], color: 'var(--acc-suppl)' },
+    { c: 'Protein', ids: ['whey'], color: 'var(--acc-nutri)' },
+  ].map(k => ({
+    ...k,
+    v: STACK.filter(s => k.ids.includes(s.id)).reduce((a, b) => a + b.monthlyCost, 0),
+  }))
 
   return (
-    <div className="v2-grid-14">
-      <Card title="Cost per supplement" sub="monthly" attrappe={ATTRAPPE}>
-        {teuerste.map(s => (
-          <div key={s.id} className="v2-supp-cost-row">
-            <span style={{ fontSize: 11.5 }}>{s.name.split(' ')[0]}</span>
-            <Meter value={s.monthlyCost} max={max} color="var(--acc-suppl)" />
-            <span className="v2-num" style={{ fontSize: 11, textAlign: 'right' }}>
-              €{s.monthlyCost.toFixed(2)}
-            </span>
+    <div className="v2-grid v2-grid-14" style={{ gap: 16 }}>
+      <div className="v2-col-gap" style={{ gap: 14 }}>
+        <div className="v2-grid v2-g-cols-3" style={{ gap: 12 }}>
+          <Card style={{ padding: 14 }} attrappe={ATTRAPPE}>
+            <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Monthly</div>
+            <div className="v2-num" style={{ fontSize: 22, fontWeight: 500 }}>€{monat.toFixed(2)}</div>
+            <div className="v2-muted" style={{ fontSize: 11 }}>+ €4.20 vs Apr</div>
+          </Card>
+          <Card style={{ padding: 14 }} attrappe={ATTRAPPE}>
+            <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Annual run-rate</div>
+            <div className="v2-num" style={{ fontSize: 22, fontWeight: 500 }}>€{jahr.toFixed(0)}</div>
+            <div className="v2-muted" style={{ fontSize: 11 }}>12 × current</div>
+          </Card>
+          <Card style={{ padding: 14 }} attrappe={ATTRAPPE}>
+            <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Per active day</div>
+            <div className="v2-num" style={{ fontSize: 22, fontWeight: 500 }}>€{(monat / 30).toFixed(2)}</div>
+            <div className="v2-muted" style={{ fontSize: 11 }}>8 items · ~26 doses</div>
+          </Card>
+        </div>
+
+        <Card title="Cost · 12 months trend" sub="rolling monthly spend" attrappe={ATTRAPPE}>
+          <LineChart
+            h={180}
+            series={[{ data: verlauf, color: 'var(--acc-suppl)' }]}
+            xLabels={['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May']}
+            range={[70, 110]}
+          />
+        </Card>
+
+        <Card title="Spend per supplement · this month" attrappe={ATTRAPPE}>
+          <div className="v2-supp-tbl-wrap">
+            <table className="v2-tbl">
+              <thead>
+                <tr>
+                  <th>Supplement</th>
+                  <th style={{ width: 130 }}>Distribution</th>
+                  <th style={{ width: 80, textAlign: 'right' }}>€/mo</th>
+                  <th style={{ width: 80, textAlign: 'right' }}>€/day*</th>
+                  <th style={{ width: 60, textAlign: 'right' }}>%</th>
+                </tr>
+              </thead>
+              <tbody>
+                {teuerste.map(s => {
+                  const pct = (s.monthlyCost / monat) * 100
+                  // Aktive Tage je Monat: Wochentage × 4,3 (Vorlage Zeile 985).
+                  const aktiveTage = s.days.reduce((sum, d) => sum + d, 0) * 4.3
+                  return (
+                    <tr key={s.id}>
+                      <td>{s.name}</td>
+                      <td><Meter value={pct} color="var(--acc-suppl)" tall /></td>
+                      <td className="v2-num" style={{ textAlign: 'right' }}>€{s.monthlyCost.toFixed(2)}</td>
+                      <td className="v2-num" style={{ textAlign: 'right', color: 'var(--fg-dim)' }}>
+                        €{(s.monthlyCost / aktiveTage).toFixed(2)}
+                      </td>
+                      <td className="v2-num" style={{ textAlign: 'right' }}>{pct.toFixed(1)}%</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
-        ))}
-      </Card>
+          <div className="v2-dim" style={{ fontSize: 10, marginTop: 8 }}>
+            * € per active-day, accounting for non-daily items (whey 5/7, pre-workout 4/7).
+          </div>
+        </Card>
+      </div>
 
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card title="Total" sub="all active items" attrappe={ATTRAPPE}>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 10 }}>
-            <span className="v2-num" style={{ fontSize: 30, fontWeight: 500 }}>€{monat.toFixed(2)}</span>
-            <span className="v2-dim" style={{ fontSize: 12 }}>/ month</span>
-          </div>
-          <div className="v2-row">
-            <span className="v2-row-l">Per year</span>
-            <span className="v2-row-r v2-num">€{jahr.toFixed(2)}</span>
-          </div>
-          <div className="v2-row">
-            <span className="v2-row-l">Per day</span>
-            <span className="v2-row-r v2-num">€{(monat / 30).toFixed(2)}</span>
-          </div>
-          <div className="v2-row">
-            <span className="v2-row-l">Items</span>
-            <span className="v2-row-r v2-num">{STACK.length}</span>
+        <Card title="Category split" attrappe={ATTRAPPE}>
+          <div className="v2-col-gap" style={{ gap: 8 }}>
+            {kategorien.map(k => (
+              <div key={k.c} className="v2-supp-kategorie">
+                <span style={{ color: 'var(--fg-muted)' }}>{k.c}</span>
+                <div style={{ flex: 1 }}>
+                  <Meter value={k.v} max={monat} color={k.color} tall />
+                </div>
+                <span className="v2-num" style={{ textAlign: 'right' }}>€{k.v.toFixed(2)}</span>
+              </div>
+            ))}
           </div>
         </Card>
 
-        <Card title="Cost per evidence grade" sub="where the money goes" attrappe={ATTRAPPE}>
-          {['A', 'B+', 'B', 'C'].map(g => {
-            const posten = STACK.filter(s => s.evidence === g)
-            if (posten.length === 0) return null
-            const summe = posten.reduce((s, x) => s + x.monthlyCost, 0)
-            return (
-              <div key={g} className="v2-row">
-                <span className="v2-row-l">
-                  <Pill style={{ color: (EVIDENCE_PALETTE as Record<string, string>)[g] ?? 'var(--fg-dim)' }}>{g}</Pill>
-                  <span className="v2-dim" style={{ fontSize: 10.5 }}>{posten.length} items</span>
-                </span>
-                <span className="v2-row-r v2-num">€{summe.toFixed(2)}</span>
+        <Card title="If you removed…" sub="cost-per-effect quick reference" attrappe={ATTRAPPE}>
+          <div className="v2-muted" style={{ fontSize: 11.5, marginBottom: 10, lineHeight: 1.55 }}>
+            Hypothetical monthly savings if individual items were dropped. Use with Buddy&apos;s
+            effect analysis for trade-offs.
+          </div>
+          {teuerste.slice(0, 4).map(s => (
+            <Row key={s.id} label={`− ${s.name}`} value={`save €${s.monthlyCost.toFixed(2)}/mo`} />
+          ))}
+        </Card>
+
+        <Card title="Cost optimization · suggestions" attrappe={ATTRAPPE}>
+          <div className="v2-col-gap" style={{ gap: 8 }}>
+            <div className="v2-supp-vorschlag">
+              <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 3 }}>
+                Bulk Nordic Naturals via subscription
               </div>
-            )
-          })}
+              <div className="v2-muted" style={{ fontSize: 11 }}>
+                Save ~€7/mo on Omega-3 with quarterly auto-ship.
+              </div>
+            </div>
+            <div className="v2-supp-vorschlag">
+              <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 3 }}>
+                Switch creatine to 1kg pouch
+              </div>
+              <div className="v2-muted" style={{ fontSize: 11 }}>
+                Per-gram cost drops 22% — save €1.80/mo, ~€22/year.
+              </div>
+            </div>
+          </div>
         </Card>
       </div>
     </div>

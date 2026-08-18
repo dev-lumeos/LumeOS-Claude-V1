@@ -321,3 +321,214 @@ Nachschlagewerk, kein Tagesbereich.
 - **Alle 15 Unterkomponenten vorhanden** — `HalfLifeChart` versteckt →
   rot mit „Die Unterkomponente „HalfLifeChart" der Vorlage fehlt.",
   danach zurückgesetzt.
+
+---
+
+# Nachtrag 2026-08-18 (G-45): die fünf offenen Tabs
+
+`[read]` **Tom, 2026-08-18:** *„Supplements ist nicht fertig als Mockup
+erstellt worden, denn da hat es Injektionsorte mit dieser speziellen
+Map. In Supplements nochmal an den Subnavigationen checken und das
+Mockup duplizieren."*
+
+**Alle zwölf Tabs sind jetzt gebaut.** `[cmd]` Die Zählung steht bei
+**67 von 67**.
+
+---
+
+## Ob `-injection.jsx` ein Tab oder ein Bereich ist
+
+**Es ist ein Tab.** Drei Belege, in dieser Reihenfolge geprüft:
+
+| Beleg | Fundstelle |
+|---|---|
+| `app.jsx` führt **einen** Fall für Supplements | `app.jsx:123` — `case "supplements": return <SupplementsModule />` |
+| Der Rahmen listet `injection` in seiner Tab-Leiste | `module-supplements.jsx:249` — `{ id: "injection", label: "Injections" }` |
+| Der Rahmen rendert ihn im selben Rumpf | `module-supplements.jsx:270` — `{tab === "injection" && <window.InjectionPlannerView />}` |
+
+`[read]` Der Auftrag fragte, ob 36 KB nicht zu viel für einen Tab
+seien. **Sie sind es nicht** — die Datei ist groß, weil der Tab vier
+eigene Unter-Tabs hat (Rotation map · Schedule · Log · Site guide),
+nicht weil er ein eigener Bereich wäre. `-spec.jsx` mit 72 KB trägt
+sogar vier Tabs auf einmal.
+
+**Gegenprobe:** `module-supplements.jsx:286` bindet zusätzlich
+`SuppInjectionLauncher` ein — ein Verteiler für das Log-Fenster, kein
+zweiter Einstiegspunkt.
+
+---
+
+## Die Zählung je Tab
+
+`[cmd]` `node tools/vollstaendigkeit.mjs supplements`, 2026-08-18.
+
+| Tab | Unterkomponenten | Kacheln | Stand |
+|---|---|---|---|
+| Today | 1 | 3 | vorher gebaut |
+| Stack | 2 | — | vorher gebaut |
+| Extended | 8 | 4 | G-33 |
+| **Catalog** | — | 2 | **G-45** |
+| **Stacks** | — | 4 | **G-45** |
+| **Intelligence** | — | 6 | **G-45** |
+| **Inventory** | — | 5 | **G-45** |
+| **Injections** | 2 | 14 | **G-45** |
+| Compliance | 3 | 3 | G-33 |
+| Interactions | — | — | vorher gebaut |
+| **Cost** | — | **5 statt 2** | **G-45 nachgezogen** |
+| Database | — | — | vorher gebaut |
+
+**Elf Modale**, alle als `case`-Zweige eines gemeinsamen Verteilers
+(`SupplementsModale`), plus `LogInjektionFenster` als eigene
+Komponente — es braucht Zustand, weil Ort, Menge und Schmerz die
+Prüfung live ändern.
+
+### Was die Zählung vorher falsch meldete
+
+`[cmd]` Vor diesem Durchgang stand Supplements bei **42 von 67**, und
+die Liste nannte neun fehlende Modale. **Sie waren alle da** — die
+Vorlage baut je Fenster eine eigene Komponente, die Umsetzung einen
+Verteiler mit `case`-Zweigen. Die Umbenennungstabelle in
+`tools/vollstaendigkeit.mjs` kannte diese Bauform nicht.
+
+**Nachgetragen mit Beleg je Eintrag.** Dieselbe Klasse Fehler wie in
+G-26 bei `BodyMap18`: **eine fehlende Zuordnung sieht aus wie ein
+fehlendes Bauteil.**
+
+### Der Rest aus G-33
+
+`[cmd]` **`SuppCost` führte zwei Kacheln, die Vorlage fünf.** Nachgezogen
+sind *Cost · 12 months trend*, *Spend per supplement*, *Category
+split*, *If you removed…* und *Cost optimization*. `[read]` Dieselbe
+Klasse Lücke wie `SuppExtended` — sah beim Klicken vollständig aus.
+
+`[cmd]` **`refillUrgent` steht unverändert** an einem von neun
+Einträgen, gelesen an drei Stellen. **Nicht begradigt**, wie im Auftrag
+verlangt.
+
+---
+
+## Was der Injections-Tab an Daten brauchen wird
+
+`[cmd]` **Das `supplements`-Schema führt seit C-68 fünf Tabellen —
+keine davon für Injektionen.** Weder Orte noch Protokoll noch Plan.
+Alles in diesem Tab ist Attrappe.
+
+### Was fehlt, nach Tabellen sortiert
+
+| Was | Felder aus der Vorlage |
+|---|---|
+| **Injektionsorte** | `id`, `name`, `short`, `route` (im/subq), `max_ml`, `rest_days`, `view`, `x`/`y`, `needle`, `note` |
+| **Protokoll** | `date`, `site_id`, `compound_id`, `ml`, `mg`, `route`, `needle`, `pain` (0–3), `notes` |
+| **Rotationsplan** | `date`, `compound_id`, `ml`, `route`, `suggested_site_id`, `why` |
+
+**Die 16 Orte sind Stammdaten, keine Nutzerdaten** — sie ändern sich
+nicht je Person. Sie gehören in eine Katalogtabelle, wie die
+Nährstoffreferenzen.
+
+### Die Rechnungen, die daran hängen
+
+`[cmd]` Drei, alle aus der Vorlage übernommen:
+
+1. **Ruhefenster** — `rest_days − days_since_last`; über 1 Tag Rest
+   heißt `resting`, 0 oder 1 heißt `soon`, darunter `ready`.
+2. **Überbeanspruchung** — mehr als drei Nutzungen eines Orts in 30
+   Tagen.
+3. **Vorschlag** — `argmax(days_since_last)` über Orte, deren Weg
+   passt, deren Volumengrenze reicht und deren Ruhefenster um ist.
+
+**Alle drei brauchen nur das Protokoll**, keine weitere Tabelle. `[read]`
+Wer die Injektionen anbindet, hat die Logik damit schon.
+
+### Was im Vorgängerrepo danebenliegt
+
+`[read]` Der Auftrag nennt es, hier zur Vollständigkeit:
+`CyclePlanner.tsx`, `BloodLevelChart.tsx`, **28 Fundstellen zu
+Halbwertszeit und Blutspiegelverlauf**, darunter `useBloodLevels.ts`
+mit `half_life_hours`.
+
+`[cmd]` **Für diesen Tab war das nicht nötig** — die Vorlage rechnet
+keinen Blutspiegel, sie plant Orte. Der Blutspiegelverlauf steckt im
+Extended-Tab (`HalfLifeChart`, seit G-33). **Wenn der Injections-Tab
+später einen Verlauf zeigen soll, liegt der Vorgängercode bereit.**
+
+---
+
+## Zwei gemeldete Punkte
+
+### `InjektionsKarte` aus `packages/ui` passt hier nicht
+
+`[cmd]` **Gemessen: nur 8 von 16 Orten decken sich.** Die Vorlage führt
+acht, die es dort nicht gibt (`vglute_*`, `abd_*`, `sq_delt_*`,
+`thigh_sq_*` — die SubQ-Stellen), und sechs Felder je Ort, die dort
+fehlen: `route`, `maxMl`, `restDays`, `needle`, `short`, `note`.
+
+Dazu eine andere Koordinatenwelt: die Vorlage zeichnet in einem
+`viewBox` von **100×120** mit einer einfachen Silhouette, die
+anatomische Figur misst **724×1448**.
+
+**Entscheidung Tom, 2026-08-18:** Vorlage 1:1 im Modul,
+`packages/ui` bleibt unangetastet. `[cmd]` Nachgeprüft: `packages/ui/`
+zeigt keine Änderung.
+
+**`InjektionsKarte` bleibt damit ungenutzt.** Sie ist gebaut,
+exportiert und funktioniert — aber kein Tab ruft sie. Wenn die beiden
+Ortslisten je zusammengeführt werden, ist sie die Grundlage.
+
+### `InEntwicklungKnopf` kennt kein `disabled`
+
+`[cmd]` `packages/ui/src/in-entwicklung.tsx:81-88` — die Prop gibt es
+nicht.
+
+**Das ist im Log-Fenster nicht nebensächlich:** die Vorlage **sperrt**
+den Speichern-Knopf, wenn die Menge über der Ortsgrenze liegt oder das
+Ruhefenster noch läuft. Ein Fenster, das die Grenze anzeigt und
+trotzdem speichern ließe, wäre schlechter als keines.
+
+**Gelöst ohne `packages/ui` anzufassen:** der gesperrte Fall
+rendert einen echten `<button disabled>`, nur der freigegebene geht
+durch `InEntwicklungKnopf`. **Gemeldet** — wenn die Prop dazukommt,
+fällt die Weiche weg.
+
+`[read]` Zusammen mit den aus G-43 bekannten Lücken (`history`,
+`shield`, `Pill` ohne `dot`, kein `Empty`) ist das der fünfte Fall.
+
+---
+
+## Nachweis
+
+`[cmd]` **Am Bildschirm geprüft**, 2026-08-18, `/v2/supplements`:
+
+- **Elf Tabs in der Leiste**, jeder mit eigenem Inhalt — je Tab an
+  einem Merkmal geprüft (*Evidence grading*, *System templates*, *Gap
+  analysis*, *consumption rate*, *Rotation map*, *Category split*).
+- **Die Rotationskarte zeigt 16 Orte** auf zwei Silhouetten,
+  Zweibuchstaben-Kürzel im Punkt, gestrichelter Ring bei SubQ.
+- **Klick funktioniert** — „Quad L" ausgewählt, die Detailkarte zeigt
+  seine Nadel (25G).
+- **Der Wegfilter rechnet:** 6 SubQ + 10 IM = 16.
+- **Hell und dunkel** geprüft, die Karte färbt mit.
+- **375 / 768 / 1440 px** — beide Silhouetten überall, kein Überlauf
+  des Inhalts. `[cmd]` Der Seitenüberlauf bei 375 px kommt aus
+  `.v2-sidebar-nav` (880 px) und betrifft jede v2-Seite; nicht
+  angefasst.
+- `[cmd]` **1 Konsolenfehler** — der bekannte Normalwert. **Keine
+  Hydrationsmeldung.**
+
+`[cmd]` `pnpm gate` — **8 von 8 Aufgaben grün, 269 Web-Tests + 7
+Admin-Tests**, kein Fehlschlag. Davon 11 neu in zwei Dateien
+(`spec-daten.test.ts`, `tabs-vollstaendig.test.ts`), jeder absichtlich
+zum Fehlschlagen gebracht.
+
+`[cmd]` **`rgba` bleibt bei 4**, keine neuen Farbtokens,
+`packages/ui/` unverändert.
+
+### Eine Zahl im Auftrag traf nicht zu
+
+`[cmd]` Der Auftrag nennt **44 Katalogeinträge**. Die stehen in der
+**Datenbank** (Schema seit C-68) — **die Vorlage führt 34**. Der erste
+Entwurf des Tests hat die 44 ungeprüft übernommen und schlug fehl;
+nachgezählt sind es 34, und genau 34 sind übernommen.
+
+**Die Zahl im Auftragstext war kein Sollwert für das Mockup.**
+
+**Nichts ist committet oder gestaged.**
