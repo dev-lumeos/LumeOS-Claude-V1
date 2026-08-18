@@ -101,7 +101,6 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
 | 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen und C-63 `locale` | v090: 17 Prüfungen |
 | 056a | `05_user_tabellen/056a_hydration_day.sql` | Funktion `hydration_day(user_id, date)` mit Tagesziel, Gläserzahl und 14-Tage-Vergleich | 1 Funktion |
-| 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` für Tageswerte gegen Profil und Referenzwerte | 1 Funktion |
 | 100 | `10_training/100_training_schema.sql` | Schema `training` mit `exercises`, `muscle_groups`, `equipment`, `exercise_muscles` | 4 Tabellen |
 | 101 | `10_training/101_training_seed.sql` | Training-Stammdaten aus Legacy-Export | 1.416 Uebungen, 109 Muskelgruppen, 58 Geraete, 6.625 Zuordnungen vor Merge |
 | 102 | `10_training/102_plural_merge.sql` | Plural-Merge fuer Muskelgruppen | Nachpflege |
@@ -122,6 +121,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |
 | 113 | `11_goals/113_goal_milestones_adaptive_tdee.sql` | Goals-Meilensteine und adaptive TDEE aus Kalorienzufuhr plus Gewichtsverlauf | 1 Tabelle, 3 Funktionen, RLS je Operation |
+| 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` fuer Tageswerte gegen Profil, Referenzwerte und Goals-Fettsaeureziele | 1 Funktion |
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
 | 017 | `00_querschnitt/017_datenherkunft.sql` | A-17 Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen | 7 Tabellen ergaenzt, Bestandsdaten `manual` |
 

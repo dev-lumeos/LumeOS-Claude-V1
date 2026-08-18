@@ -413,6 +413,36 @@ if (MODE === 'clean') {
       AND reference_pct < 50;`) !== 3) {
     errors.push('Fall Mikronaehrstoffmangel: FE, CA und VITD liegen nicht alle unter 50 %')
   }
+  if (numberScalar(`
+    SELECT count(*)
+    FROM nutrition.daily_reference_assessment('${max}'::uuid, DATE '2026-08-09')
+    WHERE nutrient_code IN ('F18:2CN6', 'F18:3CN3')
+      AND reference_kind = 'AI'
+      AND reference_direction = 'target'
+      AND reference_status = 'complete'
+      AND reference_basis = 'goals_target_from_energy_percent'
+      AND reference_value_min IS NOT NULL
+      AND reference_pct IS NOT NULL;`) !== 2) {
+    errors.push('Fall essenzielle Fettsaeuren: Linolsaeure und Alpha-Linolensaeure werden nicht gegen Goals-Ziele bewertet')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.daily_reference_assessment('${tom}'::uuid, DATE '2026-08-16')
+    WHERE nutrient_code = 'CHORL'
+      AND reference_kind = 'NO_REFERENCE'
+      AND reference_direction = 'not_applicable'
+      AND reference_status = 'not_applicable'
+      AND reference_pct IS NULL;`)) {
+    errors.push('Fall ohne Referenz: CHORL bleibt nicht sauber NO_REFERENCE ohne Prozentwert')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.micronutrient_below_threshold('${max}'::uuid, DATE '2026-08-09')
+    WHERE total_assessed >= 17
+      AND below_count >= 16
+      AND below_count <= total_assessed;`)) {
+    errors.push('Fall Mikronaehrstoffmangel: Below-threshold-Liste bewertet den Szenariotag nicht plausibel')
+  }
   if (!hasRows(`
     SELECT 1
     FROM nutrition.daily_summary ds

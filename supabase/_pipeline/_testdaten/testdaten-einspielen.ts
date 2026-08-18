@@ -1604,9 +1604,12 @@ ON CONFLICT (id) DO UPDATE SET
   updated_at = now();
 
 INSERT INTO goals.nutrition_targets (
-  user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g, herkunft, tdee, nutrition_goal, notiz
+  user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g,
+  linoleic_acid_g, alpha_linolenic_acid_g,
+  herkunft, tdee, nutrition_goal, notiz
 )
 SELECT id, DATE '${TARGET_START_DATE}', kcal, protein_g, carbs_g, fat_g,
+       ROUND(kcal * 0.04 / 9, 1), ROUND(kcal * 0.005 / 9, 1),
        'formel', tdee, nutrition_goal,
        'C-82 Testdaten aus Vorgängerrepo-Zuschnitt'
 FROM test_users
@@ -1615,6 +1618,8 @@ ON CONFLICT (user_id, gueltig_ab) DO UPDATE SET
   protein_g = EXCLUDED.protein_g,
   carbs_g = EXCLUDED.carbs_g,
   fat_g = EXCLUDED.fat_g,
+  linoleic_acid_g = EXCLUDED.linoleic_acid_g,
+  alpha_linolenic_acid_g = EXCLUDED.alpha_linolenic_acid_g,
   tdee = EXCLUDED.tdee,
   nutrition_goal = EXCLUDED.nutrition_goal,
   notiz = EXCLUDED.notiz,

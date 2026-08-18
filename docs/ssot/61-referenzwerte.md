@@ -833,3 +833,85 @@ Alle übrigen Fettsäuren bleiben `NO_STANDALONE_REFERENCE` oder
 Bestandteil aggregierter BLS-Summen. `[annahme]` Ein Ziel für diese
 Einzelformen würde eine Genauigkeit behaupten, die die Referenzquelle
 nicht setzt.
+
+## C-52/C-53: Nährstoffbewertung vervollständigt
+
+### Warum elf durchfielen
+
+`[cmd]` Ausgang live vor der Reparatur am 2026-08-18: Für Max am
+Mangel-Szenariotag `2026-08-09` lieferte
+`daily_reference_assessment` **25** Zeilen mit Prozentwert, davon **17**
+Target-Zeilen. `micronutrient_below_threshold` stand bei **16/17**.
+
+`[cmd]` Die zwei essenziellen Fettsäuren waren sichtbar, aber nicht
+bewertet:
+
+| Code | Ist | Referenz | Status vor Reparatur |
+|---|---:|---:|---|
+| `F18:2CN6` | 4,010 g | EFSA `AI`, 4 E% | `energy_share`, kein Prozentwert |
+| `F18:3CN3` | 0,386 g | EFSA `AI`, 0,5 E% | `energy_share`, kein Prozentwert |
+
+`[read]` Die im Auftrag genannten elf waren keine elf fehlenden Quellen.
+Sie fielen aus drei verschiedenen Gründen durch:
+
+| Gruppe | Nährstoffe | Grund |
+|---|---|---|
+| Essenzielle Fettsäuren | `F18:2CN6`, `F18:3CN3` | Referenz war `energy_percent`; die Verknüpfung zum Goals-Grammziel fehlte. |
+| Leucin | `LEU` | Bereits seit C-53 in `daily_summary` und vor diesem Lauf vollständig bewertet. |
+| Weitere Aminosäuren | `HIS`, `ILE`, `LYS`, `MET`, `PHE`, `THR`, `TRP`, `VAL` | Bewusst nicht in `daily_summary` aufgenommen; Tom hatte C-53 auf drei Nährstoffe begrenzt. |
+| Niacin-Äquivalent | `NIAEQ` | Rechengröße; `NIA` steht bereits in der Sicht. |
+
+`[cmd]` Reparatur: `059_daily_reference_assessment.sql` liest jetzt nach
+`goals.zielwerte_am`. Deshalb wurde Schritt `059` in `kette.json` nach
+`110` verschoben und hängt nun von `110` ab. Alte Zielzeilen, deren
+`linoleic_acid_g` und `alpha_linolenic_acid_g` noch `NULL` sind, werden
+aus `kcal * 0,04 / 9` und `kcal * 0,005 / 9` aufgelöst; das ist dieselbe
+Formel wie in `goals.berechne_zielwerte`.
+
+`[cmd]` Nach der Live-Reparatur: Für Max am `2026-08-09` stehen **27**
+Zeilen mit Prozentwert, davon **19** Target-Zeilen.
+`micronutrient_below_threshold` steht bei **18/19**.
+
+| Code | Ist | Ziel | Deckung | Status nach Reparatur |
+|---|---:|---:|---:|---|
+| `F18:2CN6` | 4,010 g | 9,800 g | 40,9 % | `complete` |
+| `F18:3CN3` | 0,386 g | 1,200 g | 32,2 % | `complete` |
+
+`[cmd]` Gegenprobe: `CHORL` bleibt `NO_REFERENCE` mit
+`reference_status = not_applicable` und ohne `reference_pct`. Kein
+Nährstoff ohne Referenz wird zu 0 % oder 100 % gemacht.
+
+### Welche Quellen benutzt wurden
+
+`[cmd]` Es wurde **kein neuer Referenzwert** eingetragen. Die Quelle
+bleibt die bestehende EFSA-Zeile aus C-45: `EFSA Dietary Reference
+Values`, Fundstelle `Table 3`, `AI` als Energieanteil.
+
+`[cmd]` Die neue Verknüpfung nutzt nur bestehende Projektwerte:
+`goals.zielwerte_am` liefert das gültige Tagesziel, und
+`goals.berechne_zielwerte` dokumentiert die Umrechnung aus EFSA-E% in
+Gramm. `testdaten-einspielen.ts` setzt die beiden Zielspalten bei neuen
+Seeds direkt, damit der Seed selbst denselben Zustand zeigt wie die
+Bewertung.
+
+### Was weiter unbewertet bleibt und warum
+
+`[cmd]` Weiter unbewertet bleiben die acht nicht ausgewählten
+Aminosäuren `HIS`, `ILE`, `LYS`, `MET`, `PHE`, `THR`, `TRP`, `VAL`.
+Sie haben Referenzwerte, stehen aber nicht in `daily_summary`. Das ist
+kein Quellenfehler, sondern die bewusste C-53-Grenze: drei aufnehmen,
+nicht elf.
+
+`[cmd]` `NIAEQ` bleibt ebenfalls draußen. Grund: Es ist eine
+Rechengröße; `NIA` wird bereits bewertet. Ein zusätzlicher Prozentwert
+für `NIAEQ` würde dieselbe Nährstofffrage doppelt stellen.
+
+`[cmd]` Nachweis: Kettenlauf auf Wegwerf-DB `c52c53_probe` erfolgreich
+in **66 s**, `schema-vollstaendigkeit-pruefen.ts` Exit 0,
+`testdaten-pruefen.ts` Exit 0, `kette-readme-pruefen.ts` Exit 0.
+Live danach: `schema-vollstaendigkeit-pruefen.ts` Exit 0,
+`testdaten-pruefen.ts` Exit 0. `[cmd]` `pnpm gate` war nach dem
+Datenbankeingriff zunächst **8/8**; nach dieser Berichtsergänzung
+scheitert der erneute Lauf in paralleler UI-Arbeit:
+`apps/web/src/app/v2/supplements/ansicht.tsx:68`, `Cannot find name
+'StackDaten'`. Die Supabase-Änderung ist davon nicht betroffen.

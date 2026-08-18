@@ -230,11 +230,31 @@ reference_candidates AS (
 -- Ruecktritt — dieselbe Regel wie bei fehlendem Alter oder Geschlecht.
 -- `[read]` Ein erfundener Nenner waere schlimmer als keine Zahl: er
 -- sieht aus wie eine Messung.
+goals_targets AS (
+  SELECT
+    z.kcal,
+    COALESCE(
+      z.linoleic_acid_g,
+      CASE WHEN z.kcal IS NULL THEN NULL ELSE ROUND(z.kcal * 0.04 / 9, 1) END
+    ) AS linoleic_acid_g,
+    COALESCE(
+      z.alpha_linolenic_acid_g,
+      CASE WHEN z.kcal IS NULL THEN NULL ELSE ROUND(z.kcal * 0.005 / 9, 1) END
+    ) AS alpha_linolenic_acid_g
+  FROM (SELECT 1) seed
+  LEFT JOIN LATERAL goals.zielwerte_am(p_user_id, p_entry_date) z ON true
+),
 aufgeloeste_referenzen AS (
   SELECT
     rc.*,
     p.body_weight_kg,
+    gt.linoleic_acid_g,
+    gt.alpha_linolenic_acid_g,
     CASE
+      WHEN rc.nutrient_code = 'F18:2CN6' AND rc.reference_kind = 'AI'
+        THEN gt.linoleic_acid_g
+      WHEN rc.nutrient_code = 'F18:3CN3' AND rc.reference_kind = 'AI'
+        THEN gt.alpha_linolenic_acid_g
       -- Je Kilogramm Koerpergewicht: mit dem Gewicht multiplizieren.
       -- `[cmd]` Neun der zehn Zeilen stehen in mg/kg, waehrend der
       -- Naehrstoff selbst in g gefuehrt wird (die Aminosaeuren) —
@@ -247,6 +267,8 @@ aufgeloeste_referenzen AS (
       ELSE NULL
     END AS abs_value_min,
     CASE
+      WHEN rc.nutrient_code IN ('F18:2CN6', 'F18:3CN3') AND rc.reference_kind = 'AI'
+        THEN NULL
       WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NOT NULL THEN
         rc.value_max * p.body_weight_kg
         / CASE WHEN rc.unit LIKE 'mg/kg%' THEN 1000 ELSE 1 END
@@ -255,6 +277,12 @@ aufgeloeste_referenzen AS (
     END AS abs_value_max,
     -- Warum ein Wert NICHT als Prozent erscheint. NULL heisst: er darf.
     CASE
+      WHEN rc.nutrient_code = 'F18:2CN6' AND rc.reference_kind = 'AI'
+        AND gt.linoleic_acid_g IS NULL THEN 'missing_goal'
+      WHEN rc.nutrient_code = 'F18:3CN3' AND rc.reference_kind = 'AI'
+        AND gt.alpha_linolenic_acid_g IS NULL THEN 'missing_goal'
+      WHEN rc.nutrient_code IN ('F18:2CN6', 'F18:3CN3') AND rc.reference_kind = 'AI'
+        THEN NULL
       WHEN rc.basis = 'per_kg_bw_per_day' AND p.body_weight_kg IS NULL
         THEN 'missing_weight'
       -- `[read]` E% ist keine Naehrstoffempfehlung, sondern eine
@@ -271,6 +299,7 @@ aufgeloeste_referenzen AS (
     END AS basis_hindernis
   FROM reference_candidates rc
   CROSS JOIN profile_one p
+  CROSS JOIN goals_targets gt
 ),
 selected_references AS (
   SELECT *
@@ -301,7 +330,13 @@ SELECT
     WHEN sr.abs_value_min IS NULL AND sr.abs_value_max IS NULL THEN sr.unit
     ELSE nd.unit
   END AS reference_unit,
-  sr.basis AS reference_basis,
+  CASE
+    WHEN sr.nutrient_code IN ('F18:2CN6', 'F18:3CN3')
+      AND sr.reference_kind = 'AI'
+      AND sr.basis_hindernis IS NULL
+      THEN 'goals_target_from_energy_percent'
+    ELSE sr.basis
+  END AS reference_basis,
   -- GO-00 Teil 2: gerechnet wird gegen den AUFGELOESTEN Wert
   -- (abs_value_*), nicht gegen die rohe Zahl aus der Tabelle.
   -- Steht ein basis_hindernis, gibt es keinen Prozentwert.
@@ -335,6 +370,7 @@ SELECT
     -- die Stelle eines falschen Prozentwerts, nicht an die Stelle von
     -- 'complete' — die Zeile bleibt sichtbar, nur ohne Balken.
     WHEN sr.basis_hindernis = 'missing_weight' THEN 'missing_weight'
+    WHEN sr.basis_hindernis = 'missing_goal' THEN 'missing_goal'
     WHEN sr.basis_hindernis = 'energy_share' THEN 'energy_share'
     WHEN sr.basis_hindernis = 'nutrient_density' THEN 'nutrient_density'
     ELSE 'complete'
@@ -357,6 +393,7 @@ COMMENT ON FUNCTION nutrition.daily_reference_assessment(UUID, DATE) IS
   'C-47: Numerischer Vergleich von daily_summary mit nutrient_reference_values anhand public.profiles. '
   'Fuehrt reference_kind und reference_direction mit; keine Ampel, kein Score, keine Wortbewertung. '
   'C-54: Fuehrt nutrient_display_tier aus nutrient_defs mit, damit die Anzeige Haupt- und Nebenwerte ordnen kann. '
+  'C-52: Bewertet Linolsaeure und Alpha-Linolensaeure gegen die Goals-Grammziele aus EFSA-Energieprozent. '
   'Bei *_missing > 0 bleibt reference_pct NULL, damit eine unvollstaendige Summe nicht als Deckung erscheint.';
 
 GRANT EXECUTE ON FUNCTION nutrition.daily_reference_assessment(UUID, DATE)
