@@ -61,6 +61,7 @@ const trainingSets = numberScalar(`
 const recoveryCheckins = numberScalar(`SELECT count(*) FROM recovery.checkins WHERE user_id IN (${IDS_SQL});`)
 const medicalCatalog = numberScalar(`SELECT count(*) FROM medical.biomarker_catalog;`)
 const medicalRanges = numberScalar(`SELECT count(*) FROM medical.biomarker_reference_ranges;`)
+const medicalAliases = numberScalar(`SELECT count(*) FROM medical.biomarker_aliases;`)
 const medicalReports = numberScalar(`SELECT count(*) FROM medical.lab_reports WHERE user_id IN (${IDS_SQL});`)
 const medicalValues = numberScalar(`SELECT count(*) FROM medical.lab_result_values WHERE user_id IN (${IDS_SQL});`)
 const supplementCatalog = numberScalar(`SELECT count(*) FROM supplements.supplement_catalog WHERE is_active;`)
@@ -103,6 +104,7 @@ if (MODE === 'clean') {
   if (medicalValues !== 0) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 0`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
   if (medicalRanges !== 464) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 464`)
+  if (medicalAliases !== 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet 292`)
   if (supplementStacks !== 0) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 0`)
   if (supplementStackItems !== 0) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 0`)
   if (supplementIntakeLogs !== 0) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 0`)
@@ -118,7 +120,7 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
-  console.log(`  Medical Katalog/Bereiche/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalReports}/${medicalValues}`)
+  console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
@@ -163,8 +165,9 @@ if (MODE === 'clean') {
   if (recoveryCheckins !== 36) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 36`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
   if (medicalRanges !== 464) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 464`)
-  if (medicalReports !== 1) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 1`)
-  if (medicalValues !== 3) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 3`)
+  if (medicalAliases !== 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet 292`)
+  if (medicalReports !== 2) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 2`)
+  if (medicalValues !== 6) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 6`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
@@ -548,6 +551,48 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM medical.lab_reports r
+    JOIN medical.lab_result_values v ON v.report_id = r.id
+    WHERE r.user_id = '${tom}'::uuid
+      AND r.report_date = DATE '2026-08-19'
+      AND r.report_time = TIME '08:40'
+      AND r.title = 'C-72 Importierter Rohbefund'
+      AND v.raw_marker_name = 'Hämoglobin'
+      AND v.loinc_code = '718-7'
+      AND v.match_status = 'exact'
+      AND v.entry_confidence >= 0.95
+      AND NOT v.needs_verification;`)) {
+    errors.push('Fall Medical Import exakt: Hämoglobin wird nicht eindeutig auf 718-7 gemappt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM medical.lab_reports r
+    JOIN medical.lab_result_values v ON v.report_id = r.id
+    WHERE r.user_id = '${tom}'::uuid
+      AND r.report_date = DATE '2026-08-19'
+      AND v.raw_marker_name = 'Glukose'
+      AND v.loinc_code IS NULL
+      AND v.match_status = 'ambiguous'
+      AND v.needs_verification
+      AND jsonb_array_length(v.match_candidates) >= 3;`)) {
+    errors.push('Fall Medical Import mehrdeutig: Glukose bleibt nicht als mehrdeutig mit Kandidaten erhalten')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM medical.lab_reports r
+    JOIN medical.lab_result_values v ON v.report_id = r.id
+    WHERE r.user_id = '${tom}'::uuid
+      AND r.report_date = DATE '2026-08-19'
+      AND v.raw_marker_name = 'Unbekannter Marker X'
+      AND v.marker_name_snapshot = 'Unbekannter Marker X'
+      AND v.loinc_code IS NULL
+      AND v.match_status = 'unknown'
+      AND v.needs_verification
+      AND jsonb_array_length(v.match_candidates) = 0;`)) {
+    errors.push('Fall Medical Import unbekannt: unbekannter Rohmarker wird nicht gespeichert')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM supplements.user_stacks us
     JOIN supplements.stack_items si ON si.stack_id = us.id
     JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
@@ -624,7 +669,7 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
-  console.log(`  Medical Katalog/Bereiche/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalReports}/${medicalValues}`)
+  console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)

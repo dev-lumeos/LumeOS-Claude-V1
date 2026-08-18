@@ -361,6 +361,20 @@
       "depends_on": ["140"]
     },
     {
+      "id": "142",
+      "path": "supabase/_pipeline/14_medical/142_laborimport_matching.sql",
+      "kind": "sql",
+      "creates": "Medical-Laborimport-Zuordnung: Biomarker-Aliase, nullable LOINC fuer unbekannte Werte und Importfunktionen",
+      "depends_on": ["141", "072"]
+    },
+    {
+      "id": "143",
+      "path": "supabase/_pipeline/14_medical/143_biomarker_aliases.ts",
+      "kind": "tsx",
+      "creates": "Kuratierte Biomarker-Aliase aus Vorgaengerrepo und mehrdeutige Glukose-Zuordnungen",
+      "depends_on": ["142"]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",

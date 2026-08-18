@@ -875,6 +875,37 @@ const medicalLabValues: MedicalLabValueRow[] = [
     notes: 'Wert ausserhalb des labor-eigenen Bereichs fuer spaetere Anzeigepruefung',
   },
 ]
+
+const medicalImportRows = [
+  {
+    marker_name: 'Hämoglobin',
+    value_numeric: 15.4,
+    unit: 'g/dL',
+    value_operator: '=',
+    lab_reference_low: 13.5,
+    lab_reference_high: 17.5,
+    lab_reference_unit: 'g/dL',
+    lab_reference_source: 'C-72 Testlabor Befunddruck',
+    notes: 'C-72 Importfall: deutscher Markername eindeutig',
+  },
+  {
+    marker_name: 'Glukose',
+    value_numeric: 102,
+    unit: 'mg/dL',
+    value_operator: '=',
+    lab_reference_text: '70–99 mg/dL',
+    lab_reference_unit: 'mg/dL',
+    lab_reference_source: 'C-72 Testlabor Befunddruck',
+    notes: 'C-72 Importfall: ohne Systemkontext mehrdeutig',
+  },
+  {
+    marker_name: 'Unbekannter Marker X',
+    value_numeric: 42,
+    unit: 'U/L',
+    value_operator: '=',
+    notes: 'C-72 Importfall: Rohmarker bleibt gespeichert',
+  },
+]
 for (const user of USERS) {
   const plan = PLANS[user.email]
   for (const date of daysBetween(START_DATE, END_DATE)) {
@@ -1319,6 +1350,7 @@ const medicalLabValueValues = medicalLabValues.map(value => tuple([
   value.source,
   value.notes,
 ])).join(',\n')
+const medicalImportRowsJson = JSON.stringify(medicalImportRows).replace(/'/g, "''")
 const itemValues = items.map(item => tuple([
   item.mealId,
   item.userId,
@@ -1720,6 +1752,20 @@ SELECT
   source, notes
 FROM test_medical_lab_values;
 
+SET LOCAL ROLE authenticated;
+SELECT set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000101', true);
+SELECT *
+FROM medical.import_lab_report_rows(
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  DATE '2026-08-19',
+  TIME '08:40',
+  'C-72 Testlabor',
+  'C-72 Importierter Rohbefund',
+  'seed',
+  '${medicalImportRowsJson}'::jsonb
+);
+RESET ROLE;
+
 SELECT nutrition.food_preferences_write(
   '10000000-0000-0000-0000-000000000101'::uuid,
   jsonb_build_object(
@@ -2069,4 +2115,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length} Medical-Befunde, ${medicalLabValues.length} Medical-Messwerte.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte.`)

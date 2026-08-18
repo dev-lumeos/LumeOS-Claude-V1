@@ -959,7 +959,8 @@
     "training.exercise_muscles": 6624,
     "supplements.supplement_catalog": 44,
     "medical.biomarker_catalog": 11676,
-    "medical.biomarker_reference_ranges": 464
+    "medical.biomarker_reference_ranges": 464,
+    "medical.biomarker_aliases": 292
   },
   "mindestzeilen_belege": {
     "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
@@ -983,7 +984,8 @@
     "training.exercise_muscles": "[cmd] Ist-Stand nach 100-105: 6.624 Zuordnungen.",
     "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
-    "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit zusammen 464 Referenzbereich-Zeilen; 141 importiert sie als Katalog-Fallback-Kandidaten."
+    "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit zusammen 464 Referenzbereich-Zeilen; 141 importiert sie als Katalog-Fallback-Kandidaten.",
+    "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt."
   },
   "datenqualitaet": {
     "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",
@@ -1544,6 +1546,31 @@
       },
       "grants_herkunft": "140_medical_schema.sql vergibt authenticated DML und service_role ALL explizit.",
       "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "medical",
+      "name": "biomarker_aliases",
+      "schritt": "142/143",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "142_laborimport_matching.sql vergibt SELECT an authenticated und service_role ALL; 143_biomarker_aliases.ts fuellt die Aliaszeilen.",
+      "zeilenschutzart": "oeffentlich"
     }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",
@@ -1632,6 +1659,16 @@
       "schema": "medical",
       "name": "lab_result_values_read",
       "schritt": "140"
+    },
+    {
+      "schema": "medical",
+      "name": "biomarker_marker_candidates",
+      "schritt": "142"
+    },
+    {
+      "schema": "medical",
+      "name": "import_lab_report_rows",
+      "schritt": "142"
     }
   ]
 }

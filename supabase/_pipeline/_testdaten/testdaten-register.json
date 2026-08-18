@@ -150,5 +150,13 @@
     "date": "2026-08-18",
     "case": "Medical-Laborbefund mit Laborbereich und Katalog-Fallback",
     "expected": "medical.lab_reports enthaelt einen Befund mit drei LOINC-Werten. Hemoglobin nutzt den labor-eigenen Bereich; Calcium hat keinen Laborbereich und faellt ueber medical.lab_result_values_read auf den Katalogbereich zurueck."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-19",
+    "case": "Medical-Import mit eindeutigem, mehrdeutigem und unbekanntem Marker",
+    "expected": "medical.import_lab_report_rows erzeugt drei Messwerte: Haemoglobin wird exakt auf 718-7 gemappt, Glukose bleibt ohne Systemkontext mehrdeutig mit Kandidaten, und Unbekannter Marker X wird mit Rohtext und needs_verification gespeichert."
   }
 ]
