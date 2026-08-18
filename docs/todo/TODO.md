@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `c2c4bc4` auf `dev`.
+**Stand:** 2026-08-18, Anker `ef938fd` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 71 offen, 3 in Arbeit.
+`[cmd]` 72 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -191,6 +191,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-93** | Ausschluss-Presets, international recherchiert |  |
 | **G-66** | Der Food-DB-Tab mit Filtern |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
+| **G-67** | Daumen hoch und runter in der Lebensmittel-Detailansicht |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
@@ -1953,6 +1954,65 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Bewertung in der Datenbank, nicht im Browser** — das ist der
   uebernehmbare Teil, plus **Allergene ausschliessen statt abwerten.**
+
+- [ ] **G-67: Daumen hoch und runter in der Lebensmittel-Detailansicht**
+  (neu 2026-08-18). **Setzt G-65 und G-66 voraus.**
+
+  **Tom, 2026-08-18:** *„Bau in die Detailansicht des Foods einen Daumen
+  hoch und Daumen runter ein. Der User kann, wenn er sich ein Resultat
+  anschaut, das gleich klassifizieren fuer sich."*
+
+  ### Warum das den Rest loest
+
+  `[read]` **Der Preferences-Assistent verlangt Vorarbeit** — jemand
+  muss sich hinsetzen und hunderte Lebensmittel bewerten, **bevor die
+  Suche etwas kann.**
+
+  **Der Daumen verlangt nichts.** Man sucht ohnehin, man oeffnet die
+  Detailansicht ohnehin — **und die Bewertung faellt dabei ab.**
+
+  `[cmd]` **Bei 7.140 Lebensmitteln ist das der einzige Weg, der
+  skaliert.** Dieselbe Stelle traegt auch den Add-Knopf; **der Nutzer ist
+  bereits dort und hat bereits eine Meinung.**
+
+  ### Die Datenseite traegt es ohne Aenderung
+
+  `[cmd]` **`food_preference_items`** hat `preference`, `strength`,
+  `food_id` — **und `source`.**
+
+  `[read]` **Die Spalte `source` ist der Kern:** Eine Bewertung aus dem
+  Assistenten ist eine **Absicht**. Ein Daumen beim Suchen ist eine
+  **Gewohnheit**. **Beides zaehlt, aber nicht gleich viel** — und
+  `strength` gibt es dafuer schon.
+
+  **Zu entscheiden:** Gewichtet der Daumen gleich wie der Assistent
+  (±100 nach der Rangfolge in G-65), oder schwaecher? `[read]` **Und
+  was passiert, wenn beide sich widersprechen** — Assistent sagt „mag
+  ich", Daumen sagt das Gegenteil?
+
+  ### Was dazugehoert
+
+  `[cmd]` **Der Zustand muss sichtbar sein**, wenn man dasselbe
+  Lebensmittel wieder oeffnet — sonst weiss niemand, ob er schon
+  bewertet hat.
+
+  `[cmd]` **Und rueckgaengig machen**, mit einem zweiten Klick auf
+  denselben Daumen. `[read]` Die Vorlage im Vorgaengerrepo macht es so:
+  *neutral → like → dislike → neutral.* **Ein Zyklus, keine zwei
+  Knoepfe mit Loeschfunktion.**
+
+  `[cmd]` **Die Wirkung gehoert gezeigt:** Wer etwas abwertet, sollte
+  merken, dass es beim naechsten Suchen weiter unten steht — sonst
+  wirkt der Daumen folgenlos.
+
+  ### Was NICHT dazugehoert
+
+  `[read]` **Kein automatisches Lernen aus dem Verhalten.** Was jemand
+  oft isst, ist keine Zustimmung — es kann Gewohnheit, Preis oder
+  Zeitmangel sein. **Der Daumen ist eine Aussage, das Protokoll nicht.**
+
+  `[cmd]` **Und keine Empfehlung daraus ableiten** — das ist Buddys
+  Aufgabe und braucht C-78 (zusammenhaengende Seeds).
 
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
