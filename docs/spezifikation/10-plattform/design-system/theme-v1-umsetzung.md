@@ -264,6 +264,35 @@ beide Male stand die Messung im Bericht, nicht der Gehorsam.**
 
 ---
 
+### Regel 13 aus G-56: eine abgelaufene Sitzung liefert die Anmeldemaske
+
+`[cmd]` **Die 375-px-Messungen in G-40, G-42 und G-46 waren nicht
+belastbar.** Zwei Ursachen zusammen: **`goto` setzt den Ansichtsbereich
+zurueck**, und **eine abgelaufene Sitzung liefert die Anmeldeseite — die
+keine v2-Huelle hat.**
+
+`[read]` *„Mein erster Lauf heute meldete „kein Ueberlauf" auf allen
+acht — das war achtmal die Anmeldemaske."*
+
+**Vor jeder Messung im Browser gehoert geprueft, dass die Seite die ist,
+die gemessen werden soll.** Ein Titel, eine Kachel, irgendein Merkmal
+der Zielseite.
+
+`[read]` **Dieselbe Fehlerklasse wie der veraltete Dev-Server in G-05
+und G-44:** Die Messung laeuft, liefert eine Zahl, und die Zahl gehoert
+zu etwas anderem.
+
+### Und die Ursache lag woanders
+
+`[cmd]` **Nicht die Sidebar.** Die 880 px stimmen, **aber
+`.v2-sidebar` und `.v2-sidebar-nav` tragen bereits `overflow-x: auto`
+und messen 375/375.** Das breite Element war **`.v2-topbar` mit 606 px,
+`overflow: visible`, in keiner Media-Query.**
+
+`[read]` **Was das Skript zuerst findet, ist nicht die Ursache.**
+
+---
+
 ### Was der Abgleich ergab
 
 | Tab | Vorlage | vorher | jetzt |
