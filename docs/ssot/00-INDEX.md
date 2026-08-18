@@ -144,6 +144,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `110-datenherkunft.md` | Herkunftsspalten in **sieben Messtabellen**, bevor die Geraete kommen. `meal_items` trennt `food_source` von `measurement_source`. |
 | `111-meilensteine-und-tdee.md` | Meilensteine und **adaptive TDEE** — 3.143,2 gegen Formel 3.527,0. **`alpha 0.3` macht den Wert zu 70 % zur Formel** (GO-15). |
 | `114-supplements-angebunden.md` | Vier Tabs lesen echt, **14 Kacheln verlieren die Marke** — `Cost` entgegen der Auftragsannahme dabei, weil alle 44 Katalogeintraege Preise fuehren. **`Compliance` braucht 30 Tage und einen Auslasser**, es liegt einer. `refillUrgent` sollte eine Schwelle sein, keine Handmarkierung. |
+| `115-training-exercises-tab.md` | **Nicht anbindbar, zwei Sperren:** `training` fehlt in `config.toml` (PGRST106) und `exercises` hat RLS an mit **0 Policies** — 0 Zeilen, waehrend die Nachbartabellen normal lesen. Die Kette definiert die Policy, die Datenbank hat sie verloren. Sonst alles gemessen: **Suche unter 1 ms**, 7 Wurzelgruppen (nicht 12), `Type` hat **keine Quelle**, e1RM nur fuer **6 von 1.416**. |
 
 **Was als Nächstes zu tun ist:** `docs/todo/TODO.md`
 **Getroffene Entscheidungen:** `docs/spezifikation/90-entscheidungen/`
