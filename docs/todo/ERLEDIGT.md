@@ -7104,3 +7104,83 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Erledigt 2026-08-18 mit GO-16** — die fuenf Kacheln lesen
   `zielwerte_am` und `berechne_zielwerte`, **Marken 38 → 23.**
+
+- [x] **G-66: Der Food-DB-Tab mit Filtern** (neu 2026-08-18). Nach
+  G-65.
+
+  `[cmd]` **Heute zeigt der Tab einen Satz und einen Link.** Das Mockup
+  zeigt: Suche · **zehn Kategoriepillen** (All, Favorites, Recent, Meat,
+  Fish, Grains, Dairy, Produce, Beverages, Supplements) · Filters-Knopf
+  · Custom food · **Tabelle mit kcal/100g, P, C, F und Add-Knopf.**
+
+  `[read]` **Der G-38-Bericht sagt, warum nichts gebaut wurde:** *„Die
+  Vorlage hat dort zwoelf feste Zeilen, die Umsetzung eine echte
+  BLS-Suche. Nachbauen hiesse, funktionierenden Code durch eine Attrappe
+  zu ersetzen."* **Das war damals richtig und ist jetzt falsch** — die
+  Suche funktioniert, **die Form fehlt.**
+
+  ### Was die Daten hergeben
+
+  `[cmd]` `food_groups` **19** (grob) · `food_categories` **518** (fein)
+  · `food_tags` **17.967 Zuordnungen** auf 14 Definitionen ·
+  `food_aliases` **32.845** · `search_synonyms` **4.877** ·
+  `preparation_kinds` 11.
+
+  `[cmd]` **Die Tags sind regelbasiert:** `high_protein` =
+  `{"op": ">=", "value": 20, "nutrient_code": "PROT625"}`. Darunter
+  **drei Allergen-Tags** (`contains_nuts`, `contains_gluten`,
+  `contains_lactose`) und **`whole_food` / `ultra_processed`.**
+
+  ### Zwei Datenluecken
+
+  `[cmd]` **`category_id` fehlt bei 2.237 von 7.140.**
+  `[cmd]` **`processing_level` steht auf allen 7.140 gleich `raw`** —
+  konstant, als Filter wertlos. **Wie `sort_weight` bei den Uebungen.**
+
+  `[cmd]` **Erledigt 2026-08-18. Neun Pillen, alle gegen SQL geprueft:**
+  All 7.140 · Meat 1.449 · Fish 520 · Grains 883 · Dairy 279 · Produce
+  717 · Fruit 275 · Beverages 119 · Eggs 104.
+
+  ### Drei Entwurfspillen tragen nicht — und was daraus wurde
+
+  `[cmd]` **Favorites** → `food_preference_items`, 6 Eintraege — **das
+  ist C-94.** **Recent** → `meal_items`, 20 verschiedene Lebensmittel —
+  **Verlauf, keine Kategorie.** **Supplements** → **keine Entsprechung,
+  der BLS fuehrt keine Nahrungsergaenzung.**
+
+  `[read]` **Statt drei leerer Pillen stehen sechs weitere echte
+  Wurzeln:** Fruit 275, Eggs 104, Sweets 253, Legumes & nuts 142, Spices
+  97, Fats & oils 65. *„Produce deckte im Entwurf zwei Wurzeln — Gemuese
+  und Obst liegen getrennt vor, also stehen sie getrennt."*
+
+  ### Eine eigene Messung korrigiert
+
+  `[cmd]` **`huhn` zeigt 136, eine naive SQL-Abfrage sagt 31.** *„Die 136
+  sind richtig: `search_synonyms` fuehrt `huhn → {haehnchen}`, und mit
+  dieser Suchgruppe liefert dieselbe RPC exakt 136. Meine erste
+  Vergleichszahl war die naive, nicht die Anwendung."*
+
+  `[cmd]` **Unabhaengig bestaetigt ueber `search_events`** — das
+  Suchprotokoll hat `huhn` mit 136 mitgeschrieben.
+
+  ### Genauer als der Auftrag
+
+  `[read]` *„Der Tab trug vorher keine Marke — er war kein Mockup,
+  sondern ein Verweis. Er verliert also keine Marke, er gewinnt die
+  Form."*
+
+  ### Die 2.237 ohne Kategorie
+
+  `[cmd]` **Sie verschwinden nicht** — `All` zeigt 7.140, nicht 4.903.
+  **Ueber Suche und All erreichbar, nur nicht ueber eine Pille. Nichts
+  erfunden.**
+
+  `[cmd]` **Der strukturelle Befund dahinter:** `food_groups` hat
+  **keinen Fremdschluessel** zu `food_categories` — die Verbindung steht
+  nur als Prosa im `bls_hint` (*„BLS prefixes U,V,W"*). **Wer die 2.237
+  zuordnen will, muss diese Bruecke zuerst bauen.**
+
+  `[cmd]` Suche im Browser **199–304 ms** — ueber Uebungen (142–172) und
+  Biomarkern (130–160), **aber mit Makros je Zeile und
+  Synonymaufloesung.** In SQL ist der **Kategoriefilter mit 495 ms** der
+  langsamste Pfad, nicht die Textsuche.

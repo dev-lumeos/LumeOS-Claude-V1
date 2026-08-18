@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `e3af018` auf `dev`.
+**Stand:** 2026-08-18, Anker `f963c2a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 74 offen, 3 in Arbeit.
+`[cmd]` 76 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -185,7 +185,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **G-65** | Der Preferences-Tab in Nutrition |  |
 | **C-93** | Ausschluss-Presets, international recherchiert |  |
-| **G-66** | Der Food-DB-Tab mit Filtern |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **G-67** | Daumen hoch und runter in der Lebensmittel-Detailansicht |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
@@ -209,6 +208,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
 | **C-96** | `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen |  |
 | **C-97** | Der heutige Tag fehlt im Seed |  |
+| **C-98** | `halal`, `kosher` und `thai_food` sind definiert, aber leer |  |
+| **C-99** | `food_groups` hat keinen Fremdschluessel zu `food_categories` |  |
+| **C-100** | `processing_level` steht auf allen 7.140 gleich `raw` |  |
 
 ---
 
@@ -1800,37 +1802,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Ausbaubar:** `general_exclusions[]` ist ein Textarray — ein
   Preset kommt dazu, ohne Umbau.
 
-- [ ] **G-66: Der Food-DB-Tab mit Filtern** (neu 2026-08-18). Nach
-  G-65.
-
-  `[cmd]` **Heute zeigt der Tab einen Satz und einen Link.** Das Mockup
-  zeigt: Suche · **zehn Kategoriepillen** (All, Favorites, Recent, Meat,
-  Fish, Grains, Dairy, Produce, Beverages, Supplements) · Filters-Knopf
-  · Custom food · **Tabelle mit kcal/100g, P, C, F und Add-Knopf.**
-
-  `[read]` **Der G-38-Bericht sagt, warum nichts gebaut wurde:** *„Die
-  Vorlage hat dort zwoelf feste Zeilen, die Umsetzung eine echte
-  BLS-Suche. Nachbauen hiesse, funktionierenden Code durch eine Attrappe
-  zu ersetzen."* **Das war damals richtig und ist jetzt falsch** — die
-  Suche funktioniert, **die Form fehlt.**
-
-  ### Was die Daten hergeben
-
-  `[cmd]` `food_groups` **19** (grob) · `food_categories` **518** (fein)
-  · `food_tags` **17.967 Zuordnungen** auf 14 Definitionen ·
-  `food_aliases` **32.845** · `search_synonyms` **4.877** ·
-  `preparation_kinds` 11.
-
-  `[cmd]` **Die Tags sind regelbasiert:** `high_protein` =
-  `{"op": ">=", "value": 20, "nutrient_code": "PROT625"}`. Darunter
-  **drei Allergen-Tags** (`contains_nuts`, `contains_gluten`,
-  `contains_lactose`) und **`whole_food` / `ultra_processed`.**
-
-  ### Zwei Datenluecken
-
-  `[cmd]` **`category_id` fehlt bei 2.237 von 7.140.**
-  `[cmd]` **`processing_level` steht auf allen 7.140 gleich `raw`** —
-  konstant, als Filter wertlos. **Wie `sort_weight` bei den Uebungen.**
 
 - [ ] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
   **Setzt G-65 und G-66 voraus.**
@@ -2393,3 +2364,44 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Fuer die Entwicklung ist es stoerend:** Die Kachel zeigt
   heute die Bedingung statt der Zahl, obwohl 180 Tage Daten liegen.
+
+- [ ] **C-98: `halal`, `kosher` und `thai_food` sind definiert, aber
+  leer** (neu 2026-08-18). **Vorarbeit fuer C-93.** Befund aus G-66.
+
+  `[cmd]` **`tag_definitions` fuehrt 14 Eintraege, `food_tags` nur 11.**
+  Ohne Zuordnung: **`halal` 0, `kosher` 0, `thai_food` 0.**
+
+  `[read]` **Jemand hat beim Schemabau an die Ausschluss-Presets
+  gedacht** — die Tags stehen bereit, sie sind nur nicht befuellt.
+  **Das ist die halbe Arbeit von C-93.**
+
+  `[cmd]` **Zum Vergleich, was gefuellt ist:** `low_carb` 4.659,
+  `whole_food` 2.884, `low_fat` 2.648, `vegetarian` 1.751,
+  `high_protein` 1.400, `vegan` 1.377 — **und die drei Allergene**
+  `contains_lactose` 1.021, `contains_gluten` 622, `contains_nuts` 120.
+
+  `[read]` **Vorbehalt aus C-93:** Echtes Halal und Koscher haengen an
+  der **Schlachtung**, die BLS-Daten kennen sie nicht. **Ein Tag kann die
+  Zutat kennzeichnen, nicht die Zubereitung.**
+
+- [ ] **C-99: `food_groups` hat keinen Fremdschluessel zu
+  `food_categories`** (neu 2026-08-18). Befund aus G-66.
+
+  `[cmd]` **Die Verbindung steht nur als Prosa im `bls_hint`** —
+  *„BLS prefixes U,V,W"*. **Deshalb bleiben 2.237 von 7.140
+  Lebensmitteln ohne Gruppe.**
+
+  `[cmd]` **Die Ableitung aus dem BLS-Code ist zweimal gemessen
+  gefallen** — 39 von 100, dann 47 von 100. `[read]` **Raten hilft
+  nicht; es braucht die Bruecke zwischen den 19 Gruppen und den 518
+  Feinkategorien.**
+
+- [ ] **C-100: `processing_level` steht auf allen 7.140 gleich `raw`**
+  (neu 2026-08-18). Befund aus G-66.
+
+  `[cmd]` **Konstant, als Filter wertlos.** `[read]` Dieselbe Lage wie
+  `sort_weight` bei den Uebungen (alle 500).
+
+  **Teilweise abgedeckt:** `whole_food` 2.884 und `ultra_processed` 927
+  als Tags. `[read]` **Zu klaeren, ob die Spalte gefuellt wird oder
+  faellt.**
