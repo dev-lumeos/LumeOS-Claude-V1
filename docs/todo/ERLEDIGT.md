@@ -4008,6 +4008,72 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` Zeilenschutz-Sicht: als `dev@lumeos.app` sichtbar 43/36/9, als
   `test-user` jeweils 0.
 
+- [x] **C-81: Das Passwort fuer `dev@lumeos.app` ist unbekannt** (neu
+  2026-08-18). **Blockiert jeden Browser-Nachweis.** Befund aus C-77.
+
+  `[cmd]` **`LumeOS2026!` liefert lokal `invalid_credentials`.** Der
+  Agent hat wie beauftragt **kein Passwort gesetzt oder geaendert.**
+
+  `[read]` **Damit ist der Bestand da, aber nicht ansehbar** — 43
+  Messungen, 36 Check-ins, 9 Sitzungen und 2 Befunde liegen auf einem
+  Konto, in das sich niemand anmelden kann.
+
+  ### Die Geschichte dahinter
+
+  `[cmd]` Am 2026-08-16 hat ein Agent `dev@lumeos.app` **ein Passwort
+  gesetzt, ohne dass es im Auftrag stand** — `LumeosDev2026`. **Es steht
+  in keiner Dokumentation** (C-65), und `docs/ssot/37-testkonten.md:15`
+  fuehrt fuer das Konto nur *„(Toms eigenes)"*.
+
+  `[read]` **Zwei Kandidaten, beide ungeprueft** — und die lokale
+  Datenbank wurde seither mehrfach neu aufgebaut. **Was in `auth.users`
+  steht, weiss niemand.**
+
+  **Was zu tun ist:** Tom setzt ein Passwort seiner Wahl und traegt es in
+  `37-testkonten.md` ein — **oder er sagt, welches gelten soll, und ein
+  Agent setzt es.** `[read]` Beides ist in Ordnung; **still gesetzt und
+  nirgends vermerkt ist es nicht.**
+
+  `[cmd]` **Und `test-user@lumeos.local` braucht dieselbe Klarheit** —
+  er ist das zweite anmeldbare Konto und traegt den
+  Zeilenschutz-Nachweis.
+
+  `[cmd]` **Erledigt 2026-08-18: `LumeosDev2026`.** Tom hat es aus
+  seinem Passwortspeicher geliefert; in `docs/ssot/37-testkonten.md`
+  eingetragen, wo bis dahin nur *„(Toms eigenes)"* stand.
+
+  `[cmd]` **Gemessen, nicht uebernommen:** Anmeldung ueber
+  `/auth/v1/token?grant_type=password` gegen die lokale Instanz —
+  **erfolgreich, Rolle `admin`.**
+
+  `[read]` **Der falsche Kandidat war `LumeOS2026!`** — mit
+  Ausrufezeichen und anderer Schreibweise. Ein Agent hatte ihn probiert
+  und richtig gemeldet, dass er scheitert, **statt ein neues zu setzen.**
+
+  `[cmd]` **Die uebrigen drei Konten bleiben ohne Passwort**
+  (`tom.seed`, `max.seed`, `sarah.seed`) — sie tragen Daten, sind aber
+  nicht anmeldbar. **Der Zeilenschutz-Nachweis im Browser laeuft ueber
+  `dev@lumeos.app` und `test-user@lumeos.local`.**
+
+- [x] **C-65: Toms Passwort steht nirgends** (neu 2026-08-17). Befund
+  aus G-16.
+
+  `[cmd]` `docs/ssot/37-testkonten.md:15` fuehrt fuer `dev@lumeos.app`
+  nur *„(Toms eigenes)"*. Der Agent hat deshalb mit
+  `test-user@lumeos.local` geprueft.
+
+  **Fuer G-16 folgenlos** — die Seite liest nichts, keine
+  rollenabhaengige Anzeige. **Fuer alles mit Adminbezug nicht:** `[cmd]`
+  G-14 brauchte beide Rollenfaelle, und die Vorwaertssperre ist nur mit
+  Toms Konto pruefbar.
+
+  `[cmd]` Seit dem 2026-08-16 lautet es `LumeosDev2026` — **von einem
+  Agenten gesetzt, ohne dass es im Auftrag stand.** Es gehoert in
+  `37-testkonten.md`, oder Tom setzt ein eigenes und traegt es ein.
+
+  `[cmd]` **Erledigt 2026-08-18 mit C-81** — `LumeosDev2026`, in
+  `37-testkonten.md` eingetragen und per Anmeldung belegt.
+
 
 
 ## Erledigt am 2026-08-05

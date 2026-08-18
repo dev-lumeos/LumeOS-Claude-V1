@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `52e1457` auf `dev`.
+**Stand:** 2026-08-18, Anker `1d76d45` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 85 offen, 3 in Arbeit.
+`[cmd]` 83 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -192,7 +192,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-45** | Supplements — Injektionsorte und Subnavigation |  |
 | **G-49** | Die Liste fuehrt jeden Muskel, die Grafik verdichtet |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
-| **C-65** | Toms Passwort steht nirgends |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **G-27** | `v2-rec-grid-1135` und drei weitere Raster |  |
 | **G-30** | Recovery an die Check-ins anschliessen |  |
@@ -208,7 +207,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-79** | 410 von 464 Referenzbereichen sind Text ohne Zahlen |  |
 | **C-80** | `142` ergaenzt Spalten, die `140` nicht kennt |  |
-| **C-81** | Das Passwort fuer `dev@lumeos.app` ist unbekannt |  |
 | **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
@@ -1933,21 +1931,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **C-65: Toms Passwort steht nirgends** (neu 2026-08-17). Befund
-  aus G-16.
-
-  `[cmd]` `docs/ssot/37-testkonten.md:15` fuehrt fuer `dev@lumeos.app`
-  nur *„(Toms eigenes)"*. Der Agent hat deshalb mit
-  `test-user@lumeos.local` geprueft.
-
-  **Fuer G-16 folgenlos** — die Seite liest nichts, keine
-  rollenabhaengige Anzeige. **Fuer alles mit Adminbezug nicht:** `[cmd]`
-  G-14 brauchte beide Rollenfaelle, und die Vorwaertssperre ist nur mit
-  Toms Konto pruefbar.
-
-  `[cmd]` Seit dem 2026-08-16 lautet es `LumeosDev2026` — **von einem
-  Agenten gesetzt, ohne dass es im Auftrag stand.** Es gehoert in
-  `37-testkonten.md`, oder Tom setzt ein eigenes und traegt es ein.
 
 - [ ] **G-25: Training an echte Daten anschliessen** (neu 2026-08-17).
   Folgt auf C-66.
@@ -2292,35 +2275,6 @@ Umsetzen angepasst werden.
   erweitert, ist normal — **aber wer nur `140` liest, kennt das Schema
   nicht.**
 
-- [ ] **C-81: Das Passwort fuer `dev@lumeos.app` ist unbekannt** (neu
-  2026-08-18). **Blockiert jeden Browser-Nachweis.** Befund aus C-77.
-
-  `[cmd]` **`LumeOS2026!` liefert lokal `invalid_credentials`.** Der
-  Agent hat wie beauftragt **kein Passwort gesetzt oder geaendert.**
-
-  `[read]` **Damit ist der Bestand da, aber nicht ansehbar** — 43
-  Messungen, 36 Check-ins, 9 Sitzungen und 2 Befunde liegen auf einem
-  Konto, in das sich niemand anmelden kann.
-
-  ### Die Geschichte dahinter
-
-  `[cmd]` Am 2026-08-16 hat ein Agent `dev@lumeos.app` **ein Passwort
-  gesetzt, ohne dass es im Auftrag stand** — `LumeosDev2026`. **Es steht
-  in keiner Dokumentation** (C-65), und `docs/ssot/37-testkonten.md:15`
-  fuehrt fuer das Konto nur *„(Toms eigenes)"*.
-
-  `[read]` **Zwei Kandidaten, beide ungeprueft** — und die lokale
-  Datenbank wurde seither mehrfach neu aufgebaut. **Was in `auth.users`
-  steht, weiss niemand.**
-
-  **Was zu tun ist:** Tom setzt ein Passwort seiner Wahl und traegt es in
-  `37-testkonten.md` ein — **oder er sagt, welches gelten soll, und ein
-  Agent setzt es.** `[read]` Beides ist in Ordnung; **still gesetzt und
-  nirgends vermerkt ist es nicht.**
-
-  `[cmd]` **Und `test-user@lumeos.local` braucht dieselbe Klarheit** —
-  er ist das zweite anmeldbare Konto und traegt den
-  Zeilenschutz-Nachweis.
 
 - [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
   aus C-72.
