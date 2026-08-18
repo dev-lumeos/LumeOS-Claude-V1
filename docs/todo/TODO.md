@@ -2244,6 +2244,48 @@ Umsetzen angepasst werden.
   Vorlage** — *„jeder Plan kommt als Vorschlag, den du bestaetigst."*
   **Das ist eine Produktentscheidung, keine technische.**
 
+  ### Toms Vorgabe: zwei Achsen, und die zweite ist gestuft
+
+  **Tom, 2026-08-18:** *„Die Rechte — was ein Coach kann und ob es eine
+  Freigabe des Users braucht — sollte definierbar sein. Einerseits was
+  darf der Coach sehen, andererseits wie autonom soll das laufen. Wenn
+  das Vertrauen in den Coach da ist, will ich doch nicht jede
+  Kleinigkeit bestaetigen muessen — sprich Coach aendert Omega-3-Dosis
+  von 5 auf 10 mg, da interessiert am Ende, was Supplement mir sagt, was
+  ich nehmen soll."*
+
+  | Achse | Frage |
+  |---|---|
+  | **Sicht** | Welche Module, in welcher Tiefe |
+  | **Autonomie** | Darf er aendern, und ab wann ohne Rueckfrage |
+
+  `[cmd]` **Die Vorlage legt beide an** — ein Tab `Permissions` und ein
+  eigener Tab `Autonomy`. **Zwei Achsen, nicht eine.**
+
+  `[cmd]` **Und beim AI Coach ist das Muster gebaut:** *„Autonomie L3 ·
+  kollaborativ — Ich handle bei risikoarmen Entscheidungen
+  selbstaendig, Aenderungen bestaetige ich mit dir. Anhebung auf L4,
+  wenn du bereit bist."* **Vier Stufen, je Coach einstellbar.**
+
+  **Fuer den menschlichen Coach fehlt die Entsprechung** — `[cmd]` das
+  Vorgaengerrepo hat dort nur `edit_auto_accept`, **einen Schalter statt
+  einer Stufe.**
+
+  ### Was daraus zu klaeren ist
+
+  `[cmd]` **Was ist risikoarm?** Toms Beispiel — Omega-3 von 5 auf 10 mg
+  — ist es. `[read]` Eine Testosteron-Dosis oder ein Medikament ist es
+  nicht, und Medical ist im Rechtemodell bereits als **sensibel**
+  markiert.
+
+  **Die Schwelle gehoert definiert, bevor jemand sie baut** — sonst
+  entscheidet sie ein Agent nebenbei.
+
+  `[read]` **Und eine Aenderung ohne Rueckfrage braucht trotzdem eine
+  Spur:** Wer hat was wann geaendert. `[cmd]` Das ist die
+  Widerrufshistorie, die im Vorgaengerrepo **ganz fehlt** — vier
+  Tabellennamen-Varianten durchsucht, nichts gefunden.
+
 - [ ] **G-43: `history` und `shield` fehlen, `Pill` hat kein `dot`**
   (neu 2026-08-18). Befund aus G-40.
 
