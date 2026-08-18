@@ -2014,6 +2014,31 @@ Umsetzen angepasst werden.
   `[cmd]` **Und keine Empfehlung daraus ableiten** — das ist Buddys
   Aufgabe und braucht C-78 (zusammenhaengende Seeds).
 
+  ### Auch in der Trefferliste, nicht nur im Detail
+
+  **Tom, 2026-08-18:** *„Kann ja auch in der Auflistung sein, dass der
+  User etwas sieht, das er nicht mag, und wie in Individual food
+  „dislike −100" machen kann. Etwas als Favorite setzen haben wir ja
+  schon."*
+
+  `[cmd]` **Der Anker steht im Mockup:** Die Tabelle hat eine schmale
+  erste Spalte mit dem Lesezeichen-Symbol fuer Favoriten. **Dort passt
+  die Bewertung daneben** — ohne die Detailansicht zu oeffnen.
+
+  `[read]` **Favorit und Daumen sind nicht dasselbe:** Favorit heisst
+  *„das will ich schnell finden"*, Daumen runter heisst *„das will ich
+  gar nicht sehen"*. **Zwei Absichten, beide Spalten traegt
+  `food_preference_items` bereits.**
+
+  `[cmd]` **Und der Klick darf die Zeile nicht oeffnen** — die Zeile
+  fuehrt in die Detailansicht, der Daumen nicht. `[read]` Sonst bewertet
+  man versehentlich, was man nur ansehen wollte.
+
+  **Zu entscheiden:** Verschwindet eine abgewertete Zeile sofort aus der
+  Liste, oder bleibt sie bis zur naechsten Suche stehen? `[read]`
+  **Sofort verschwinden ist die klare Wirkung — aber ein Fehlklick
+  waere dann nur ueber die Preferences rueckgaengig zu machen.**
+
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
 
