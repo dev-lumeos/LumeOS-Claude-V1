@@ -4577,6 +4577,84 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   und sie verwechselt Marker. **Wer sie ungeprueft einspielt, bekommt
   Methaemoglobin-Bereiche auf Magnesium.**
 
+- [x] **C-90: Geraetegruppen und Disziplin fuer die Uebungssuche** (neu
+  2026-08-18). **Tom-Entscheidungen vom 2026-08-18.** Vorarbeit fuer
+  G-64.
+
+  ### Die Lage
+
+  `[cmd]` **58 flache Geraete**, davon `None` 527 (37 %), Dumbbell 317,
+  Barbell 162 — **der Rest kleinteilig.** `[read]` **Als Klappliste
+  unbenutzbar.**
+
+  `[cmd]` **Keine Disziplin-Spalte.** `category` hat drei Werte (Free
+  Weights, Bodyweight, Resistance) — **das ist Geraetetyp, nicht
+  Trainingsart.**
+
+  ### Das Vorgaengerrepo hat beides fertig
+
+  `[cmd]` `src/modules/training/components/ExerciseSearch.tsx`, 537
+  Zeilen:
+
+  **`EQUIPMENT_GROUPS`** — 19 Geraete in **vier Gruppen, deutsch und
+  englisch**: *Freie Gewichte* (Koerpergewicht, Kurzhantel, Langhantel,
+  Kettlebell, EZ-Stange) · *Kabel & Baender* (Kabelzug,
+  Widerstandsband, Loop-Band, Schlingentrainer) · *Geraete & Baenke*
+  (Multipresse, Hantelbank, Klimmzugstange, Landmine) · *Sonstiges*
+  (Gymnastikball, Medizinball, Faszienrolle, Box, Schlitten,
+  Springseil).
+
+  **`DISCIPLINES`** — sechs Werte: `Strength`, `Cardio`, `Stretching`,
+  `Yoga`, `Bodyweight`, plus `all`.
+
+  `[read]` **Die Gruppen loesen zwei Probleme auf einmal:** aus 58
+  flachen Werten werden vier Gruppen, **und die deutschen Namen sind
+  dabei.**
+
+  ### Toms Entscheidungen
+
+  **1. Geraetegruppen uebernehmen** — ja. `[cmd]` 19 von 58 sind
+  abgedeckt, **der Rest muss zugeordnet werden.**
+
+  **2. Disziplin bauen** — ja. `[cmd]` Neue Spalte, Zuordnung fuer
+  1.416 Uebungen. `[read]` **Ableitbar aus `category` und Geraet — aber
+  jede Ableitung ist eine Behauptung. Was nicht sicher zuzuordnen ist,
+  bleibt leer.**
+
+  **3. `Type` (Compound/Isolation) faellt weg** — `[cmd]` **weder unser
+  Schema noch das Vorgaengerrepo hat es**, das Mockup zeigt es
+  trotzdem. **Die Spalte wird in G-64 nicht gebaut.**
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritt `109a`. **58 von 58
+  Geraeten gruppiert und mit deutschem Namen** — null ohne Gruppe, null
+  ohne Disziplin.
+
+  | Gruppe | Geraete | Uebungen |
+  |---|---|---|
+  | `free_weights` | 8 | **1.056** |
+  | `cables_bands` | 11 | 182 |
+  | `machines_benches` | **29** | 98 |
+  | `other` | 10 | 80 |
+
+  | Disziplin | |
+  |---|---|
+  | Strength | **777** |
+  | Bodyweight | 511 |
+  | Stretching | 108 |
+  | Yoga | 11 |
+  | Cardio | 9 |
+
+  `[cmd]` **`exercises` bleibt 1.416, `exercise_muscles` bleibt 6.588.**
+
+  `[read]` **Die Verteilung ist schief, aber brauchbar:** 8 Geraete
+  tragen 1.056 Uebungen, 29 tragen 98. **Als Filter taugt es**, weil der
+  Nutzer nach der Gruppe greift, nicht nach dem einzelnen Geraet.
+
+  `[cmd]` **Deutsche Namen im Bestand:** *Bauchroller*,
+  *Klimmzugmaschine mit Unterstuetzung*, *Widerstandsband*,
+  *Langhantel*, *Hantelbank*. **UTF-8 per Bytecheck bestaetigt**, 0
+  Ersatzzeichen.
+
 
 
 ## Erledigt am 2026-08-05

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `14fbee8` auf `dev`.
+**Stand:** 2026-08-18, Anker `2f4e152` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 73 offen, 3 in Arbeit.
+`[cmd]` 72 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -184,7 +184,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **C-89** | 26 der 43 Koerpermessungen liegen in der Zukunft |  |
-| **C-90** | Geraetegruppen und Disziplin fuer die Uebungssuche |  |
 | **G-65** | Der Preferences-Tab in Nutrition |  |
 | **C-93** | Ausschluss-Presets, international recherchiert |  |
 | **G-66** | Der Food-DB-Tab mit Filtern |  |
@@ -1717,53 +1716,6 @@ Umsetzen angepasst werden.
   **Gehoert zu C-78** (zusammenhaengende Seeds): **Der Zeitraum muss
   heute enden, nicht in vier Wochen.**
 
-- [ ] **C-90: Geraetegruppen und Disziplin fuer die Uebungssuche** (neu
-  2026-08-18). **Tom-Entscheidungen vom 2026-08-18.** Vorarbeit fuer
-  G-64.
-
-  ### Die Lage
-
-  `[cmd]` **58 flache Geraete**, davon `None` 527 (37 %), Dumbbell 317,
-  Barbell 162 — **der Rest kleinteilig.** `[read]` **Als Klappliste
-  unbenutzbar.**
-
-  `[cmd]` **Keine Disziplin-Spalte.** `category` hat drei Werte (Free
-  Weights, Bodyweight, Resistance) — **das ist Geraetetyp, nicht
-  Trainingsart.**
-
-  ### Das Vorgaengerrepo hat beides fertig
-
-  `[cmd]` `src/modules/training/components/ExerciseSearch.tsx`, 537
-  Zeilen:
-
-  **`EQUIPMENT_GROUPS`** — 19 Geraete in **vier Gruppen, deutsch und
-  englisch**: *Freie Gewichte* (Koerpergewicht, Kurzhantel, Langhantel,
-  Kettlebell, EZ-Stange) · *Kabel & Baender* (Kabelzug,
-  Widerstandsband, Loop-Band, Schlingentrainer) · *Geraete & Baenke*
-  (Multipresse, Hantelbank, Klimmzugstange, Landmine) · *Sonstiges*
-  (Gymnastikball, Medizinball, Faszienrolle, Box, Schlitten,
-  Springseil).
-
-  **`DISCIPLINES`** — sechs Werte: `Strength`, `Cardio`, `Stretching`,
-  `Yoga`, `Bodyweight`, plus `all`.
-
-  `[read]` **Die Gruppen loesen zwei Probleme auf einmal:** aus 58
-  flachen Werten werden vier Gruppen, **und die deutschen Namen sind
-  dabei.**
-
-  ### Toms Entscheidungen
-
-  **1. Geraetegruppen uebernehmen** — ja. `[cmd]` 19 von 58 sind
-  abgedeckt, **der Rest muss zugeordnet werden.**
-
-  **2. Disziplin bauen** — ja. `[cmd]` Neue Spalte, Zuordnung fuer
-  1.416 Uebungen. `[read]` **Ableitbar aus `category` und Geraet — aber
-  jede Ableitung ist eine Behauptung. Was nicht sicher zuzuordnen ist,
-  bleibt leer.**
-
-  **3. `Type` (Compound/Isolation) faellt weg** — `[cmd]` **weder unser
-  Schema noch das Vorgaengerrepo hat es**, das Mockup zeigt es
-  trotzdem. **Die Spalte wird in G-64 nicht gebaut.**
 
 - [ ] **G-65: Der Preferences-Tab in Nutrition** (neu 2026-08-18).
   **Ersetzt G-11a.** Datenseite vollstaendig fertig.
