@@ -48,6 +48,23 @@ Sperre um 20:51 gesetzt, Codex committete um 20:53.
 *„Nicht committen, nicht stagen — melden."* Das ist schwaecher als eine
 Sperre, aber Codex haelt sich an Textvorgaben.
 
+## Der SSOT-Index wird vom Orchestrator gepflegt
+
+`[cmd]` Am 2026-08-18 standen **16 von 86 Berichten nicht in
+`docs/ssot/00-INDEX.md`** — alle von Codex.
+
+`[read]` **Der Grund ist strukturell, kein Versaeumnis:** Claude Code
+traegt die Indexzeile ein, weil es im Auftrag steht und er die Datei
+ohnehin anfasst. **Codex arbeitet in `supabase/` und beruehrt
+`docs/ssot/` nur fuer seinen eigenen Bericht.**
+
+**Der Index ist laut dieser Datei der Einstieg** — ein Bericht, der
+nicht darin steht, existiert fuer die naechste Sitzung nicht.
+
+**Deshalb:** Der Orchestrator traegt ihn nach, wenn er den Bericht
+committet. **Eine Zeile mit dem Befund, nicht mit dem Dateinamen** —
+der steht schon in der ersten Spalte.
+
 ## Seeds gehoeren auf `dev@lumeos.app`
 
 **Tom, 2026-08-18:** *,Wegwerf-DB ist mir scheissegal, wie und wo er
