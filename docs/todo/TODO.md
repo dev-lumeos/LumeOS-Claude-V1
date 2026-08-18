@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `c31a73c` auf `dev`.
+**Stand:** 2026-08-18, Anker `912828a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 61 offen, 3 in Arbeit.
+`[cmd]` 63 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -180,7 +180,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
-| **G-60** | Medical — das Mockup an die Daten binden |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **GO-09** | Zieluebersicht in `/v2/goals` |  |
@@ -196,6 +195,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-61** | `refillUrgent` als Schwelle |  |
 | **C-82** | Compliance braucht 120 Zeilen und Auslasser |  |
 | **G-62** | Die 17 Marken in `tabs.tsx` bleiben 17 |  |
+| **C-84** | Die elf Panels gibt es in keiner Quelle |  |
+| **C-85** | Kurznamen fehlen bei 11 von 35 |  |
+| **G-63** | Vier Felder liegen ungenutzt |  |
 
 ---
 
@@ -1598,56 +1600,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-60: Medical — das Mockup an die Daten binden** (neu
-  2026-08-18). **Ersetzt G-51.** Korrektur an G-46.
-
-  **Tom, 2026-08-18:** *„Am Ende will ich das Mockup mit all seinen
-  Funktionen mit Daten angebunden haben — da gehoeren die Popups,
-  Filter etc., was immer auch im Mockup drin ist, auch dazu. Und nichts
-  neu Erfundenes ohne Absprache mit mir."*
-
-  ### Was heute auf der Seite steht
-
-  `[cmd]` **Drei Listen untereinander:** 140 Werte als Flachliste ·
-  11.676 Katalogeintraege · **die Attrappe** — und nur die letzte zeigt
-  Panels, Verlauf, Bereichsbalken und *„Non-optimal only"*.
-
-  `[read]` **Der Fehler lag im Auftrag.** G-46 sagte *„die
-  Biomarker-Liste und der Befund"* — zwei Dinge, die im Mockup so nicht
-  vorkommen. **Der Agent hat gebaut, was verlangt war.**
-
-  ### Der Ablauf, der ab jetzt gilt
-
-  > **Mockup → Abgleich mit altem Repo und Specs → Tabellen definieren
-  > → Seeds erzeugen → Auftrag: dieses Mockup an diese Daten binden.**
-
-  **Und: Wenn eine Tabellenspalte fehlt oder etwas dazugehoert, kommt es
-  vor dem Auftrag zu Tom** — besprochen, dann gebaut.
-
-  ### Zwei Punkte, mit Tom geklaert (2026-08-18)
-
-  `[cmd]` **Evidenzgrad (`ev A+` / `ev A`) faellt weg** — die Attrappe
-  zeigt ihn, **die Daten haben ihn nicht.** Tom: *„Wir haben die Daten
-  fuer diese Evidence nicht, also weg."*
-
-  `[cmd]` **`match_status` gehoert nicht in die Liste, sondern in den
-  Import-Tab.** `[read]` Beim Hochladen ist er nuetzlich — *„138 von
-  140 zugeordnet, 2 unklar"*. **In der Liste ist er Testmaterial:** die
-  zwei Faelle wurden erzeugt, damit der Importpfad pruefbar ist.
-
-  ### Was zu bauen ist
-
-  **Eine Liste statt drei**, in der Form der Attrappe: **Panel-Filter**
-  (CBC 5, Metabolic 4, Lipid 5, Liver 6, Kidney 4, Thyroid 4, Hormone
-  10, Inflammation 3, Vitamins 6, Screening 1) · **Verlauf ueber die
-  fuenf Befunde** · **Bereichsbalken** statt Textspalte · **„Nur
-  nicht-optimal"** · die Popups, die das Mockup hat.
-
-  `[cmd]` **Die Daten sind da:** 140 Werte, 5 Befunde, 2026-02-18 bis
-  2026-08-19, mit Verlauf (Glukose 88 → 102, HbA1c 5,2 → 5,4).
-
-  `[cmd]` **Der Katalog gehoert hinter die Suche**, nicht auf die Seite —
-  wie die 7.140 Lebensmittel, wo das Tagebuch vier Zeilen zeigt.
 
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
@@ -2076,3 +2028,57 @@ Umsetzen angepasst werden.
   **Zu klaeren:** Wann fallen die Rueckfallfassungen weg? `[cmd]` Solange
   beide dastehen, zeigt `v2-attrappen.test.ts` eine Zahl, die nicht mehr
   die Lage beschreibt.
+
+- [ ] **C-84: Die elf Panels gibt es in keiner Quelle** (neu
+  2026-08-18). **Befund aus G-60, blockiert den Health score.**
+
+  `[cmd]` **Vier Stellen geprueft:**
+
+  | | |
+  |---|---|
+  | `loinc_class` | **4 Gruppen**, 31 von 35 sind `CHEM` |
+  | `panel_type` | **bei 11.421 von 11.676 leer**, kein benutzter Marker traegt einen |
+  | `panels` (JSONB) | **Kreatinin haengt in 33 Elternpanels**, darunter Tiermedizin |
+  | `curated_slug` | Markerschluessel, keine Gruppe |
+
+  `[cmd]` **Auch das Vorgaengerrepo hat es nicht** — `category` ist dort
+  **Probenmaterial** (blood/hormone/vitamin), keine Panelgliederung.
+
+  `[read]` **Die Attrappe zeigt CBC 5, Metabolic 4, Lipid 5, Liver 6,
+  Kidney 4, Thyroid 4, Hormone 10, Inflammation 3, Vitamins 6, Screening
+  1** — **das ist eine kuratierte Gliederung, die niemand gebaut hat.**
+
+  `[cmd]` **Das blockiert den Health score:** Er wiegt fuenf Systeme und
+  braucht dieselbe Zuordnung.
+
+  **Woher sie kommen koennte:** `[cmd]` `SPEC_05_BIOMARKER_CATALOG.md`
+  fuehrt **74 Marker in acht Panels** — aus der Spec waren nur 47
+  SQL-Zeilen greifbar (C-70). **Das ist die naechste Stelle zum
+  Nachsehen.**
+
+- [ ] **C-85: Kurznamen fehlen bei 11 von 35** (neu 2026-08-18). Befund
+  aus G-60.
+
+  `[cmd]` **`short_name` im Katalog ist ein Kodierkuerzel** — `718-7`
+  wird zu `Hgb Bld-mCnc`. **Unbrauchbar als Anzeige.**
+
+  `[cmd]` **`biomarker_aliases.canonical_name` deckt 24 der 35 ab** —
+  elf bleiben ohne.
+
+  `[read]` **Die Attrappe zeigt `TT`, `GLU`, `HbA1c`** — Trainings- und
+  Laborjargon. **Das ist Kuration, keine Ableitung.**
+
+- [ ] **G-63: Vier Felder liegen ungenutzt** (neu 2026-08-18). Befund
+  aus G-60.
+
+  `[cmd]` **`reference_source`** — 138 Befund, 1 Katalog, 1 keiner.
+  `[read]` **Mit der alten Liste weggefallen: dass ein Bereich ein
+  Rueckfall ist, sieht man heute nicht mehr.** In G-46 war das
+  ausdruecklich gebaut (*Quelle `Katalog`, als solcher beschriftet*).
+
+  `[cmd]` Ebenso ungenutzt: **`lab_name`** je Zeile, **`fasting_status`**,
+  **`report_time`**.
+
+  `[read]` **Die Attrappe zeigt sie nicht**, deshalb wurden sie
+  weggelassen — richtig nach der Regel. **Aber `fasting_status` aendert
+  die Beurteilung eines Glukosewerts**, und das gehoert entschieden.

@@ -6621,3 +6621,81 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` Zeilenschutz: `test-user` sieht 0 aktive, 0/0. Gate 8/8, **0
   Konsolenfehler**, vier Breiten inklusive 375 px.
+
+- [x] **G-60: Medical — das Mockup an die Daten binden** (neu
+  2026-08-18). **Ersetzt G-51.** Korrektur an G-46.
+
+  **Tom, 2026-08-18:** *„Am Ende will ich das Mockup mit all seinen
+  Funktionen mit Daten angebunden haben — da gehoeren die Popups,
+  Filter etc., was immer auch im Mockup drin ist, auch dazu. Und nichts
+  neu Erfundenes ohne Absprache mit mir."*
+
+  ### Was heute auf der Seite steht
+
+  `[cmd]` **Drei Listen untereinander:** 140 Werte als Flachliste ·
+  11.676 Katalogeintraege · **die Attrappe** — und nur die letzte zeigt
+  Panels, Verlauf, Bereichsbalken und *„Non-optimal only"*.
+
+  `[read]` **Der Fehler lag im Auftrag.** G-46 sagte *„die
+  Biomarker-Liste und der Befund"* — zwei Dinge, die im Mockup so nicht
+  vorkommen. **Der Agent hat gebaut, was verlangt war.**
+
+  ### Der Ablauf, der ab jetzt gilt
+
+  > **Mockup → Abgleich mit altem Repo und Specs → Tabellen definieren
+  > → Seeds erzeugen → Auftrag: dieses Mockup an diese Daten binden.**
+
+  **Und: Wenn eine Tabellenspalte fehlt oder etwas dazugehoert, kommt es
+  vor dem Auftrag zu Tom** — besprochen, dann gebaut.
+
+  ### Zwei Punkte, mit Tom geklaert (2026-08-18)
+
+  `[cmd]` **Evidenzgrad (`ev A+` / `ev A`) faellt weg** — die Attrappe
+  zeigt ihn, **die Daten haben ihn nicht.** Tom: *„Wir haben die Daten
+  fuer diese Evidence nicht, also weg."*
+
+  `[cmd]` **`match_status` gehoert nicht in die Liste, sondern in den
+  Import-Tab.** `[read]` Beim Hochladen ist er nuetzlich — *„138 von
+  140 zugeordnet, 2 unklar"*. **In der Liste ist er Testmaterial:** die
+  zwei Faelle wurden erzeugt, damit der Importpfad pruefbar ist.
+
+  ### Was zu bauen ist
+
+  **Eine Liste statt drei**, in der Form der Attrappe: **Panel-Filter**
+  (CBC 5, Metabolic 4, Lipid 5, Liver 6, Kidney 4, Thyroid 4, Hormone
+  10, Inflammation 3, Vitamins 6, Screening 1) · **Verlauf ueber die
+  fuenf Befunde** · **Bereichsbalken** statt Textspalte · **„Nur
+  nicht-optimal"** · die Popups, die das Mockup hat.
+
+  `[cmd]` **Die Daten sind da:** 140 Werte, 5 Befunde, 2026-02-18 bis
+  2026-08-19, mit Verlauf (Glukose 88 → 102, HbA1c 5,2 → 5,4).
+
+  `[cmd]` **Der Katalog gehoert hinter die Suche**, nicht auf die Seite —
+  wie die 7.140 Lebensmittel, wo das Tagebuch vier Zeilen zeigt.
+
+  `[cmd]` **Erledigt 2026-08-18: eine Liste in der Form der Attrappe,
+  mit echten Daten.** `marker-liste.tsx`, `marker-modal.tsx`,
+  `lib/medical/reihe.ts` — **die Faltung von 140 flachen Werten auf 37
+  Marker.**
+
+  | | |
+  |---|---|
+  | Panelfilter | All 37, CHEM 31, HEM/BC 2, Unmapped 2, … — Klick auf HEM/BC liefert 2 Zeilen |
+  | Verlauf | **Glukose +15,9 %** (88→94→99→102), HbA1c +3,8 % |
+  | „Non-optimal only" | **37 → 6** |
+  | Popup | echte Kurve, Achse 02-18 bis 08-18, Messtabelle |
+  | Marken | **20 statt 21**, Biomarkers-Tab **0** |
+  | Gate | 8/8, **306 Tests**, **0 Konsolenfehler** (G-46 hatte 1) |
+  | Breiten | 375/768/1024/1440 ohne Seitenueberlauf |
+
+  `[cmd]` **`befund-tabelle.tsx` und die Entwurfstabelle sind weg.**
+  `match_status` ist **in den Import-Tab gezogen** — dort steht *„138 von
+  140 Werten zugeordnet"* mit den zwei offenen Faellen. **Der Katalog
+  klappt hinter einem Knopf aus.**
+
+  ### Die Begriffspruefung war die verlangte
+
+  `[read]` *„High/Low/Normal leisten dasselbe wie die G-46-Woerter —
+  genommen als Above range / Below range / In range. **Optimal nicht: es
+  benennt keine Lage, und in der Attrappe steht es in einer Reihe mit
+  Critical low / Critical high, also auf derselben Urteilsskala.**"*
