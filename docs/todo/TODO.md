@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `b851426` auf `dev`.
+**Stand:** 2026-08-18, Anker `c2c4bc4` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 68 offen, 3 in Arbeit.
+`[cmd]` 71 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -174,7 +174,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
 | **G-07** | Umschalten |  |
-| **G-11a** | Preferences — die Oberflaeche |  |
 | **C-62** | `hard` auf Allergene ist kein Sicherheitsversprechen |  |
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
@@ -188,6 +187,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **C-89** | 26 der 43 Koerpermessungen liegen in der Zukunft |  |
 | **C-90** | Geraetegruppen und Disziplin fuer die Uebungssuche |  |
+| **G-65** | Der Preferences-Tab in Nutrition |  |
+| **C-93** | Ausschluss-Presets, international recherchiert |  |
+| **G-66** | Der Food-DB-Tab mit Filtern |  |
+| **C-94** | Die Suche wendet die Vorlieben an |  |
 | **C-78** | Zusammenhaengende Seeds erzeugen |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
 | **C-75** | BSS und Voice sind Neubau |  |
@@ -1446,28 +1449,6 @@ Umsetzen angepasst werden.
   Theme V1 auch dort gilt.
 
 
-- [ ] **G-11a: Preferences — die Oberflaeche** (neu 2026-08-17).
-  Datenseite erledigt.
-
-  `[cmd]` **Erledigt 2026-08-17**, Kettenschritt `074`:
-  `nutrition.food_preferences_read` und `food_preferences_write`, beide
-  live. Testdaten: Tom hat 1 Praeferenzzeile und 3 Eintraege — **`hard`
-  Nuesse, `soft` Kekse, `boost` Weisser Reis.**
-
-  `[cmd]` Zeilenschutz in beide Richtungen belegt: eigene Zeile lesen 1,
-  fremde 0; eigener Schreibzugriff ok, fremder blockiert mit `42501`.
-
-  `[cmd]` **`food_search` blieb unveraendert** — wie beauftragt. Wo die
-  vier Stufen ansetzen muessten, steht im Bericht.
-
-  **Was offen ist:** die Oberflaeche im Tab `Preferences`. `[cmd]` Die
-  Designvorlage hat dafuer **keinen Inhalt** — nur den
-  Navigationseintrag. `[cmd]` Das Vorgaengerrepo hat
-  `FoodPreferences.tsx` mit **48 KB**.
-
-  **Und die Wirkung auf die Suche ist ein eigener Schritt** — sie
-  greift erst, wenn `food_search` die Praeferenzen liest.
-
 - [ ] **C-62: `hard` auf Allergene ist kein Sicherheitsversprechen**
   (neu 2026-08-17). Befund aus G-11a.
 
@@ -1817,6 +1798,161 @@ Umsetzen angepasst werden.
   **3. `Type` (Compound/Isolation) faellt weg** — `[cmd]` **weder unser
   Schema noch das Vorgaengerrepo hat es**, das Mockup zeigt es
   trotzdem. **Die Spalte wird in G-64 nicht gebaut.**
+
+- [ ] **G-65: Der Preferences-Tab in Nutrition** (neu 2026-08-18).
+  **Ersetzt G-11a.** Datenseite vollstaendig fertig.
+
+  **Tom, 2026-08-18:** *„Die Preferences aus dem alten Repo waren
+  genial, bis ins Detail runter konnte man sagen, was man sehr gern hat
+  oder nichts isst — und die Suche hat das dementsprechend umgesetzt.
+  Mir als User werden Sachen aufgelistet und ich entscheide, was ich
+  ueberhaupt sehen will und in welcher Reihenfolge."*
+
+  ### Das Mockup zeigt fast alles
+
+  `[cmd]` Sechs Kacheln: **Diet type** (8 Formen, *hard filter, applies
+  before all scoring*) · **Allergies** (14 Eintraege, *hard exclusion,
+  no scoring override*) · **Categories** (±50) · **Tag preferences**
+  (±30) · **Individual foods** (±100) · **Priority order.**
+
+  **Die Rangfolge ist der Kern:**
+
+  | | |
+  |---|---|
+  | 1 Allergen | **hard exclude** |
+  | 2 Diet type | **hard exclude** |
+  | 3 Food | ±100 |
+  | 4 Category | ±50 |
+  | 5 Tag | ±30 |
+  | 6 Prefix match | +20 |
+
+  `[read]` *„Specific beats general — a liked food overrides a disliked
+  category."* **Das ist besser als die alte Formel**, wo Likes ueber
+  Textmuster gesucht und Allergene nur abgewertet wurden.
+
+  ### Die Datenseite ist fertig
+
+  `[cmd]` **`food_preferences` traegt 14 Spalten:** `diet_type`,
+  `allergies[]`, `intolerances[]`, `general_exclusions[]`,
+  `preferred_cuisines[]`, `meals_per_day`, `snacks_per_day`,
+  `cooking_skill`, `prep_time_max_min`, `budget_level`, `meal_prep_ok`,
+  `planner_notes`.
+
+  `[cmd]` **`food_preference_items` traegt fuenf Zielarten:** `food_id`,
+  `category_id`, `tag_code`, `cuisine_code`,
+  **`exclusion_preset_code`** — dazu `preference` und `strength`.
+
+  `[cmd]` **Testdaten liegen auf beiden Konten:** Baumnuesse als
+  Allergie, Laktose als Unvertraeglichkeit, `ultra_processed`
+  ausgeschlossen, mediterran bevorzugt.
+
+  ### Was das Mockup nicht hat: Ausschluss-Presets
+
+  **Tom:** *„Sowas wie keine Innereien waere fuer mich persoenlich top,
+  denn esse ich nicht — oder Lamm ausgrenzen."*
+
+  `[cmd]` **Bei 7.140 Lebensmitteln gibt es Leber vom Rind, Schwein,
+  Kalb, Huhn, Gans** — fuenf Eintraege, die einzeln wegzuklicken waeren.
+  **Ein Preset trifft alle.**
+
+  `[cmd]` **Vorlage im Vorgaengerrepo:** `GLOBAL_EXCLUSIONS` mit *„Keine
+  Innereien — Leber, Herz, Niere, Zunge, egal welches Tier"*, mit
+  `affectedFoodIds` und Symbol.
+
+- [ ] **C-93: Ausschluss-Presets, international recherchiert** (neu
+  2026-08-18). Datenseite fuer G-65.
+
+  `[cmd]` **Rund vier Milliarden Menschen folgen einer religioes
+  begruendeten Ernaehrungseinschraenkung** — das ist kein Randfall.
+
+  ### Religioes
+
+  | Preset | schliesst aus |
+  |---|---|
+  | **Halal-konform** (islamisch) | Schwein, Blut, Alkohol |
+  | **Koscher-konform** (juedisch, `kashrut`) | Schwein, Schalentiere, Fleisch-Milch-Mischung |
+  | **Kein Rindfleisch** (hinduistisch) | Rind |
+  | **Jain** | zusaetzlich alle Wurzelgemuese — Kartoffeln, Karotten, Rote Bete, Zwiebeln, Knoblauch |
+
+  `[read]` **Vorbehalt, der sichtbar sein muss:** Echtes Halal und
+  Koscher haengen an der **Schlachtung**, die BLS-Daten nicht kennen.
+  **Das Preset kann die Zutat ausschliessen, nicht die Zubereitung
+  pruefen.** Und die Praxis ist verschieden — mancher folgt strenger
+  Regel, mancher meidet nur Schwein.
+
+  ### Persoenlich
+
+  Keine Innereien · Kein Lamm/Schaf · Kein Wild · Keine
+  Meeresfruechte · Kein rohes Fleisch/Fisch · Kein Alkohol.
+
+  ### Laktose gehoert NICHT hierher
+
+  `[cmd]` **Global 68 %** — Asien ohne Nahost 64 %, Naher Osten 70 %,
+  Nord-/West-/Suedeuropa 28 %; **von 58 % in Pakistan bis 100 % in
+  Suedkorea.**
+
+  `[read]` **Aber reifer Hartkaese ist nahezu laktosefrei** — ein
+  Preset *„keine Milchprodukte"* traefe zu breit. **Das gehoert unter
+  Unvertraeglichkeit mit Abstufung**, wo es bereits sitzt
+  (`intolerances[]`).
+
+  `[cmd]` **Ausbaubar:** `general_exclusions[]` ist ein Textarray — ein
+  Preset kommt dazu, ohne Umbau.
+
+- [ ] **G-66: Der Food-DB-Tab mit Filtern** (neu 2026-08-18). Nach
+  G-65.
+
+  `[cmd]` **Heute zeigt der Tab einen Satz und einen Link.** Das Mockup
+  zeigt: Suche · **zehn Kategoriepillen** (All, Favorites, Recent, Meat,
+  Fish, Grains, Dairy, Produce, Beverages, Supplements) · Filters-Knopf
+  · Custom food · **Tabelle mit kcal/100g, P, C, F und Add-Knopf.**
+
+  `[read]` **Der G-38-Bericht sagt, warum nichts gebaut wurde:** *„Die
+  Vorlage hat dort zwoelf feste Zeilen, die Umsetzung eine echte
+  BLS-Suche. Nachbauen hiesse, funktionierenden Code durch eine Attrappe
+  zu ersetzen."* **Das war damals richtig und ist jetzt falsch** — die
+  Suche funktioniert, **die Form fehlt.**
+
+  ### Was die Daten hergeben
+
+  `[cmd]` `food_groups` **19** (grob) · `food_categories` **518** (fein)
+  · `food_tags` **17.967 Zuordnungen** auf 14 Definitionen ·
+  `food_aliases` **32.845** · `search_synonyms` **4.877** ·
+  `preparation_kinds` 11.
+
+  `[cmd]` **Die Tags sind regelbasiert:** `high_protein` =
+  `{"op": ">=", "value": 20, "nutrient_code": "PROT625"}`. Darunter
+  **drei Allergen-Tags** (`contains_nuts`, `contains_gluten`,
+  `contains_lactose`) und **`whole_food` / `ultra_processed`.**
+
+  ### Zwei Datenluecken
+
+  `[cmd]` **`category_id` fehlt bei 2.237 von 7.140.**
+  `[cmd]` **`processing_level` steht auf allen 7.140 gleich `raw`** —
+  konstant, als Filter wertlos. **Wie `sort_weight` bei den Uebungen.**
+
+- [ ] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
+  **Setzt G-65 und G-66 voraus.**
+
+  **Tom:** *„Und die Suche hat das dementsprechend umgesetzt."*
+
+  `[cmd]` **Die Rangfolge steht im Mockup** (siehe G-65): Allergen und
+  Diet type schliessen hart aus, dann Food ±100, Category ±50, Tag
+  ±30, Prefix +20.
+
+  ### Was aus dem Vorgaengerrepo uebernehmbar ist
+
+  `[cmd]` `foods-smart-search.ts`, 380 Zeilen, mit eigenem Test:
+  *„Database-level preference scoring · Auto-exclude allergens ·
+  Diet-type filtering · <200ms target."*
+
+  `[read]` **Die Struktur ja, der Code nein.** Dort werden Vorlieben als
+  **Textmuster** verglichen (`LOWER(name_de) LIKE '%haehnchen%'`), bei
+  uns liegen sie als **Verweise** vor. Und `dietType === 'keto'` prueft
+  `foods.carbs_g` — **eine Spalte, die wir nicht haben.**
+
+  `[cmd]` **Bewertung in der Datenbank, nicht im Browser** — das ist der
+  uebernehmbare Teil, plus **Allergene ausschliessen statt abwerten.**
 
 - [ ] **C-78: Zusammenhaengende Seeds erzeugen** (neu 2026-08-18).
   **Spaeter — wenn die noetigen Tabellen stehen.**
