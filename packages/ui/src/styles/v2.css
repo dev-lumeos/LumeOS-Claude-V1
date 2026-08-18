@@ -1752,12 +1752,26 @@ select.v2-feld { cursor: pointer; }
   gap: 16px;
   align-items: start;
 }
+/* G-56: das vierte Verhaeltnis. [cmd] 1.3fr/1fr stand dreimal
+   modul-lokal — medical.css:70 (Export), recovery.css:45 (Check-in,
+   Protocols) und buddy.css:56 (Engines, Clone). Dieselbe Zahl, drei
+   Dateien, drei Haltepunkte, die auseinanderlaufen konnten. Recovery
+   behaelt seine Klasse vorerst: dort arbeitet gerade ein anderer
+   Agent (Koerperkarte), und zwei Haende in einer Datei sind der Weg
+   zum Konflikt. Sie zeigt jetzt auf dieselbe Regel. */
+.v2-grid-13 {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
 .v2-span-2 { grid-column: span 2; }
 
 @media (max-width: 1100px) {
   .v2-grid-14, .v2-dash-grid,
   .v2-grid-15, .v2-diary-grid,
-  .v2-grid-21 { grid-template-columns: 1fr; }
+  .v2-grid-21,
+  .v2-grid-13 { grid-template-columns: 1fr; }
   .v2-span-2 { grid-column: auto; }
 }
 
@@ -1946,4 +1960,119 @@ select.v2-feld { cursor: pointer; }
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+/* ============================================================
+   G-56 — die Reste aus zwoelf Modulauftraegen.
+   ============================================================ */
+
+/* --- Fuenf gleiche Spalten --------------------------------------
+   [cmd] Der Entwurf bringt .g-cols-2/-3/-4 mit, aber kein -5. Die
+   Buddy-Vorlage benutzt `grid g-cols-5` fuer die fuenf Avatarzustaende
+   (module-buddy.jsx:397); G-42 hat es modul-lokal nachgebaut.
+   Hier steht es zentral, mit demselben 1100px-Haltepunkt wie die
+   uebrigen geteilten Raster — fuenf Kacheln nebeneinander sind auf
+   einem Telefon unter 70px breit. */
+.v2-g-cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+@media (max-width: 1100px) {
+  .v2-g-cols-5 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- Der Leerzustand -------------------------------------------
+   [cmd] Zur Komponente `Empty` (primitives.tsx). Die Vorlage ruft
+   sie fuenfmal auf, definiert sie aber nicht — G-40 hat sie als
+   `Leer` modul-maessig nachgebaut, mit Inline-Stilen. Als Klasse
+   steht sie einmal da statt in jedem Modul neu. */
+.v2-empty {
+  text-align: center;
+  padding: 32px 20px;
+}
+.v2-empty-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--fg-dim);
+  margin: 0 auto 10px;
+}
+.v2-empty-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.v2-empty-sub {
+  font-size: 11.5px;
+  color: var(--fg-dim);
+}
+
+/* --- Knopfbeschriftungen brechen nicht --------------------------
+   [cmd] `.v2-btn` hat eine feste Hoehe von 26px, aber kein
+   `white-space`. Eine zweizeilige Beschriftung bricht deshalb
+   INNERHALB des Knopfes um, waehrend die Hoehe bei 26px bleibt — der
+   Text steht dann halb ausserhalb. Gemessen in G-23 an „Doctor
+   export" und „Import lab" im Medical-Kopf.
+
+   Nicht in der Entwurfsdatei geaendert, sondern hier: der Entwurf
+   ist die Quelle, und dort steht dieselbe Luecke. */
+.v2-btn,
+.v2-btn-sm,
+.v2-btn-primary,
+.v2-btn-ghost {
+  white-space: nowrap;
+}
+
+/* --- Kartenkopf: Titel vor Untertitel ---------------------------
+   [cmd] `.v2-card-h` ist eine Flexzeile ohne Schrumpfregel. Trifft
+   ein langer `sub` auf die Attrappenmarke, schrumpft der TITEL und
+   bricht um — gemessen in G-40 an „Coaching balance" und „Trust
+   circle".
+
+   Der Titel darf nicht schrumpfen, der Untertitel schon; die Marke
+   behaelt ihre Groesse. */
+.v2-card-title { flex-shrink: 0; }
+.v2-card-sub {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- Die Kopfzeile schiebt die Seite nicht auf ------------------
+   [cmd] GEMESSEN IN G-56, und die Ursache ist eine andere als
+   angenommen: bei 375px ist `.v2-app` 606px breit, aber die
+   Seitenleiste ist es NICHT — sie rollt bereits in sich
+   (`.v2-sidebar` und `.v2-sidebar-nav` haben overflow-x: auto,
+   nav.scrollWidth 880px bei clientWidth 251px). Breit ist
+   `.v2-topbar`: 606px, `overflow: visible`, keine Umbruchregel.
+   Sie besteht aus Brotkrume (242px) und Aktionen (336px).
+
+   Die Aktionen bleiben vollstaendig — es sind Schalter, keine
+   Zierde. Die Brotkrume schrumpft und schneidet ab: sie sagt, wo man
+   ist, und das steht auch in der Seitenleiste. */
+@media (max-width: 1023px) {
+  .v2-topbar {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .v2-topbar::-webkit-scrollbar { display: none; }
+  .v2-breadcrumb {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .v2-topbar-actions { flex-shrink: 0; }
+}
+
+/* --- Der Modulkopf bricht kontrolliert um -----------------------
+   [cmd] Sechs Aktionsknoepfe plus Datumsnavigation passen bei 1600px
+   nicht in eine Zeile (G-34). `.v2-module-header` ist eine
+   Flexzeile ohne `flex-wrap`; die Knoepfe quetschen sich dann
+   gegenseitig, statt in die naechste Zeile zu gehen.
+
+   [read] WELCHE Knoepfe in den Kopf gehoeren, entscheidet Tom — das
+   steht im Bericht. Diese Regel aendert nichts an ihrer Zahl, sie
+   sorgt nur dafuer, dass sie lesbar bleiben, solange es sechs sind. */
+.v2-module-header { flex-wrap: wrap; }
+.v2-module-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }

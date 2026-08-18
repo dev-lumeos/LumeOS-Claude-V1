@@ -63,16 +63,10 @@
   .v2-med-wirksamkeit { grid-template-columns: 1fr; }
 }
 
-/* --- Der Export-Zweispalter (Insights) --------------------------
- * [cmd] module-medical-v2.jsx:763 — 1.3fr/1fr. */
-.v2-med-export {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 14px;
-  align-items: start;
-}
+/* `[cmd]` G-56: `.v2-med-export` ist entfallen — der Export-Tab
+ * benutzt jetzt `v2-grid-13` aus v2.css. Dasselbe Verhaeltnis
+ * 1.3fr/1fr stand vorher in drei Modulen einzeln. */
 @media (max-width: 1100px) {
-  .v2-med-export { grid-template-columns: 1fr; }
 }
 
 /* --- Severity/Impact nebeneinander (Tracking) -------------------
