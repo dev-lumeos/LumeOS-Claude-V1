@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-17, Anker `01a4f3a` auf `dev`.
+**Stand:** 2026-08-18, Anker `f715710` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 73 offen, 3 in Arbeit.
+`[cmd]` 75 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -206,8 +206,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **C-69** | Medical-Schema |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
-| **G-40** | Coach als Mockup — zwei Unterbereiche |  |
 | **G-41** | Bei 375 px scrollt jede v2-Seite waagerecht |  |
+| **G-42** | AI Coach — zwanzig Tabs offen |  |
+| **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
+| **G-43** | `history` und `shield` fehlen, `Pill` hat kein `dot` |  |
 
 ---
 
@@ -2195,39 +2197,6 @@ Umsetzen angepasst werden.
   **`arr_r` nicht uebernommen** — ein Test haelt das fest.
 
 
-- [ ] **G-40: Coach als Mockup — zwei Unterbereiche** (neu 2026-08-17).
-  **Nachtraeglich angelegt.**
-
-  **Tom, 2026-08-17:** *„Coach Hauptnavigationspunkt mit 2 Subnav: Human
-  Coaches und AI Coach. Zwei Subnav, weil die optional verfuegbar sein
-  werden."*
-
-  | | |
-  |---|---|
-  | `Coach` → `Human Coaches` | `COACH-HUMAN`, elf Tabs |
-  | `Coach` → `AI Coach` | `COACH-AI`, zwoelf Tabs |
-
-  **Die Sub-Navigation ist hier richtig.** `[read]` Bei Nutrition war
-  sie falsch — dort standen zwei Seiten, wo die Vorlage Tabs fuehrt.
-  **Hier sind es zwei eigenstaendige Bereiche unter einem Menuepunkt**,
-  die spaeter einzeln buchbar sein werden.
-
-  `[read]` **Tom zum AI Coach:** *„Der AI Coach ist ein Teil von
-  Buddy-Logik. Der effektive Endausbau, welcher DER BUDDY als App sein
-  wird, wird viel umfangreicher sein."* — **Das Modul, nicht der
-  Endausbau.**
-
-  `[cmd]` **306 KB, das groesste bisher:** Human Coaches 197 KB in sechs
-  Dateien (`-gaps.jsx` mit 34 KB ist ein Name, den es sonst nirgends
-  gibt), AI Coach 109 KB in vier.
-
-  `[cmd]` **Coach Portal gehoert nicht dazu** — es steht unter
-  `WORKSPACES` als externer Link, seit G-02 so entschieden.
-
-  **Danebenliegend:** `[cmd]` zwei vollstaendige Specsaetze
-  (`HumanCoach` mit **`SPEC_11_UI_DESIGN.md`, das es bei keinem anderen
-  Modul gibt**, und `BuddyandAICoach`), **84 Fundstellen im
-  Vorgaengerrepo**, vier Migrationen.
 
 - [ ] **G-41: Bei 375 px scrollt jede v2-Seite waagerecht** (neu
   2026-08-17). Randbefund aus G-38.
@@ -2243,3 +2212,49 @@ Umsetzen angepasst werden.
   Oberflaeche uebernommen wurden — **der Entwurf hat null
   `@media`-Regeln.** Unter 1.280 px wurde die Kontextspalte
   ausgeblendet; **die Sidebar blieb unberuehrt.**
+
+- [ ] **G-42: AI Coach — zwanzig Tabs offen** (neu 2026-08-18). Rest aus
+  G-40.
+
+  `[cmd]` `/v2/coach/ai` existiert und **nennt alle zwanzig fehlenden
+  Tabs auf dem Bildschirm** — 41 Posten aus `module-buddy.jsx` und drei
+  Begleitdateien (109 KB).
+
+  `[read]` **Tom, 2026-08-17:** *„Der AI Coach ist ein Teil von
+  Buddy-Logik. Der effektive Endausbau, welcher DER BUDDY als App sein
+  wird, wird viel umfangreicher sein."* — **Das Modul, nicht der
+  Endausbau.**
+
+- [ ] **C-71: Das Rechtemodell des Vorgaengerrepos** (neu 2026-08-18).
+  **Eine Produktentscheidung darin.** Befund aus G-40.
+
+  `[cmd]` **20 Migrationen, 2.316 Zeilen.** `coach_client_permissions`
+  traegt **dieselben sieben Module wie die Vorlage** und markiert
+  Medical als sensibel.
+
+  **Drei Luecken vor einer Anbindung:**
+
+  - `[cmd]` **Zwei Zugriffsstufen dort, drei in der Vorlage.**
+  - `[cmd]` **Keine Widerrufshistorie** — vier Tabellennamen-Varianten
+    durchsucht, nichts gefunden.
+  - `[cmd]` **`edit_auto_accept`**, im Kommentar: *„Changes applied
+    without client confirmation."*
+
+  `[read]` **Der letzte Punkt widerspricht dem Kernversprechen der
+  Vorlage** — *„jeder Plan kommt als Vorschlag, den du bestaetigst."*
+  **Das ist eine Produktentscheidung, keine technische.**
+
+- [ ] **G-43: `history` und `shield` fehlen, `Pill` hat kein `dot`**
+  (neu 2026-08-18). Befund aus G-40.
+
+  `[cmd]` **`shield` zum zweiten Mal** (G-36 und G-40), **beide Male an
+  einer Datenschutz-Ueberschrift** — die naheliegendste Ergaenzung.
+
+  `[cmd]` Dazu: `Pill` hat kein `dot`, und es gibt **keinen
+  `Empty`-Baustein**. Beide in `coach/bausteine.tsx` modul-lokal
+  nachgebaut. `[read]` Wer sie beim zweiten Modul nachbaut, baut sie
+  falsch — dieselbe Regel wie bei den Shell-Bausteinen in G-02.
+
+  `[cmd]` **Und `.v2-card-h` bricht Kartentitel um**, wenn ein langer
+  Untertitel auf die Attrappen-Marke trifft. `[read]` Dritter Befund
+  dieser Art nach G-23 (Modulkopf) und G-34 (`.v2-btn` ohne `nowrap`).

@@ -4787,3 +4787,64 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Diagrammdaten und haette Laerm statt Sicherheit erzeugt.
 
   `[cmd]` Alle vier neuen Tests zum Fehlschlagen gebracht.
+
+- [x] **G-40: Coach als Mockup — zwei Unterbereiche** (neu 2026-08-17).
+  **Nachtraeglich angelegt.**
+
+  **Tom, 2026-08-17:** *„Coach Hauptnavigationspunkt mit 2 Subnav: Human
+  Coaches und AI Coach. Zwei Subnav, weil die optional verfuegbar sein
+  werden."*
+
+  | | |
+  |---|---|
+  | `Coach` → `Human Coaches` | `COACH-HUMAN`, elf Tabs |
+  | `Coach` → `AI Coach` | `COACH-AI`, zwoelf Tabs |
+
+  **Die Sub-Navigation ist hier richtig.** `[read]` Bei Nutrition war
+  sie falsch — dort standen zwei Seiten, wo die Vorlage Tabs fuehrt.
+  **Hier sind es zwei eigenstaendige Bereiche unter einem Menuepunkt**,
+  die spaeter einzeln buchbar sein werden.
+
+  `[read]` **Tom zum AI Coach:** *„Der AI Coach ist ein Teil von
+  Buddy-Logik. Der effektive Endausbau, welcher DER BUDDY als App sein
+  wird, wird viel umfangreicher sein."* — **Das Modul, nicht der
+  Endausbau.**
+
+  `[cmd]` **306 KB, das groesste bisher:** Human Coaches 197 KB in sechs
+  Dateien (`-gaps.jsx` mit 34 KB ist ein Name, den es sonst nirgends
+  gibt), AI Coach 109 KB in vier.
+
+  `[cmd]` **Coach Portal gehoert nicht dazu** — es steht unter
+  `WORKSPACES` als externer Link, seit G-02 so entschieden.
+
+  **Danebenliegend:** `[cmd]` zwei vollstaendige Specsaetze
+  (`HumanCoach` mit **`SPEC_11_UI_DESIGN.md`, das es bei keinem anderen
+  Modul gibt**, und `BuddyandAICoach`), **84 Fundstellen im
+  Vorgaengerrepo**, vier Migrationen.
+
+  `[cmd]` **Human Coaches erledigt 2026-08-18: 60 von 60 Posten, alle
+  zehn Tabs**, mit `tools/vollstaendigkeit.mjs` belegt. Gate 8/8, 44
+  Tests (neun neue), **null Konsolenfehler und null
+  Hydrationsabweichungen** ueber alle zehn Tabs.
+
+  **AI Coach offen: 41 Posten.** `[read]` Die Seite existiert und
+  **nennt alle zwanzig fehlenden Tabs auf dem Bildschirm, statt 404 zu
+  liefern** — nach dem Muster aus G-29. 306 KB Vorlage ueber beide
+  Unterbereiche waren fuer eine Lieferung zu viel.
+
+  ### Meine Tab-Zahlen waren beide falsch
+
+  `[cmd]` Der Auftrag nannte elf und zwoelf. **Gemessen sind es zehn**
+  (`module-coach.jsx:183-194`) **und zwanzig**
+  (`module-buddy.jsx:26-45`). Beide jetzt durch Tests festgehalten.
+
+  ### `-gaps.jsx` heisst „Lueckenschliesser", nicht „Betreuungsluecken"
+
+  `[cmd]` Die Datei sagt es im eigenen Kopf. Sie haelt **elf
+  Komponenten, die Loecher in der Hauptdatei stopfen** — und **zehn der
+  elf gehoeren zum Coach-Portal, nicht zum Athletenbereich.**
+
+  `[cmd]` **Das Portal ist nur ueber `const side = "athlete"` in
+  `module-coach.jsx:137` erreichbar — fest verdrahtet.** Damit liegt
+  **der gesamte Trainer-Arbeitsplatz in der Datei und ist
+  unerreichbar.** Als `bekanntOffen` mit Gruenden vermerkt.
