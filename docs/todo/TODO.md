@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `cc36e02` auf `dev`.
+**Stand:** 2026-08-18, Anker `3bbeb09` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 82 offen, 3 in Arbeit.
+`[cmd]` 83 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -206,6 +206,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-11** | Meilensteine und Fortschritt je Ziel |  |
 | **C-76** | Seed-Befunde fuer Medical |  |
 | **G-51** | Der Rohkatalog gehoert nicht auf die Seite |  |
+| **C-77** | Alle Seeds auf `dev@lumeos.app` nachziehen |  |
 | **C-74** | 152 Aliaspaare nicht importiert |  |
 | **C-70** | Der Biomarker-Katalog — vollstaendig und belegt |  |
 | **G-39** | Zwei Symbole fehlen (`shield`, `file`) |  |
@@ -2208,6 +2209,53 @@ Umsetzen angepasst werden.
 
   `[cmd]` **„25 von 0 gezeigt"** — die Zaehlung der Trefferliste ist
   kaputt.
+
+- [ ] **C-77: Alle Seeds auf `dev@lumeos.app` nachziehen** (neu
+  2026-08-18). **Fuer Codex, hohe Prioritaet.**
+
+  **Tom, 2026-08-18:** *„Wegwerf-DB ist mir scheissegal, wie und wo er
+  anlegt. Danach muessen Seeds in meinen Dev-Account, sonst sehe ich
+  nichts."*
+
+  ### Gemessen
+
+  | Konto | Mahlzeiten | Messungen | Befunde | anmeldbar |
+  |---|---|---|---|---|
+  | **`dev@lumeos.app`** | 173 | **0** | **0** | ja |
+  | `tom.seed@example.com` | 173 | 43 | 2 | **nein** |
+  | `test-user@lumeos.local` | 1 | 0 | 2 | ja |
+
+  `[cmd]` **Nur Mahlzeiten sind auf Toms Konto** — weil
+  `eigenes-konto-fuellen.sql` genau das tut. **Alles seither liegt bei
+  `tom.seed`**, und dieses Konto hat **kein Passwort**
+  (`encrypted_password IS NULL`), ist also nicht anmeldbar.
+
+  `[read]` **Damit war nichts im Browser sichtbar** — weder fuer Tom
+  noch fuer einen Agenten, der einen Nachweis fuehren sollte. Der
+  G-46-Agent hat es beim Versuch gemerkt und gefragt.
+
+  ### Was nachzuziehen ist
+
+  `[cmd]` **43 Koerpermessungen, 7 Umfaenge** (GO-10/GO-14) · **36
+  Recovery-Check-ins** (C-67) · **9 Trainingssitzungen, 18 Uebungen, 60
+  Saetze** (C-66) · **1 Supplement-Stack mit 4 Positionen und 4
+  Einnahmen** (C-68) · **Ziele und Phasen** (GO-07) · **Laborbefunde**
+  (C-69, dann C-76).
+
+  `[read]` **`eigenes-konto-fuellen.sql` ist das Muster** — es
+  erweitern, nicht daneben ein zweites Skript bauen.
+
+  `[cmd]` **Und die zwei Kopien auf `test-user` wegraeumen**, die der
+  G-46-Agent fuer seinen Nachweis angelegt hat — `test-user` ist ein
+  Pruefkonto, kein Demokonto.
+
+  ### Warum es mehr ist als Bequemlichkeit
+
+  `[read]` **Der Zeilenschutz-Nachweis braucht zwei anmeldbare
+  Konten** — einen, der die Daten sieht, und einen, der sie nicht sieht.
+  **Ein Konto ohne Passwort taugt fuer keines von beidem.** Bisher wurde
+  RLS gegen `tom.seed` und `max.seed` geprueft — **beide nicht
+  anmeldbar**, der Nachweis lief nur ueber SQL.
 
 - [ ] **C-74: 152 Aliaspaare nicht importiert** (neu 2026-08-18). Rest
   aus C-72.
