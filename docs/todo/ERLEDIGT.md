@@ -257,6 +257,77 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   nicht wirkt. Nur Neues dort wird ignoriert; ein neuer Projekt-Skill
   braucht `git add -f`.
 
+- [x] **A-17: Datenherkunft, bevor die Geraete kommen** (neu
+  2026-08-17). **Architekturpunkt, betrifft alle Messtabellen.**
+
+  **Tom, 2026-08-17:** *„Als Ausbaustufe bedenken: wir werden
+  Anbindungen fuer alle Gadgets anbieten, sprich wir werden viele Daten
+  kriegen."*
+
+  ### Drei Dinge aendern sich
+
+  **1. Die Herkunft muss am Wert stehen.** `[cmd]` Heute weiss niemand,
+  ob ein Gewicht getippt oder von einer Waage kam.
+
+  `[read]` **Und das ist keine Formalie:** Eine BIA-Waage und die
+  Navy-Formel liefern fuer denselben Menschen **8 bis 10 Prozentpunkte
+  Unterschied**. Die Empfehlung aus der Recherche lautet ausdruecklich:
+  *niemals BIA gegen Navy vergleichen, nur BIA gegen BIA.* **Ein Verlauf
+  aus gemischten Quellen zeigt Spruenge, die niemand erlebt hat.**
+
+  **2. Die Menge aendert die Struktur.** `[cmd]` `recovery.checkins`
+  haelt heute einen Eintrag je Tag — 36 Zeilen. **Ein Wearable liefert
+  HRV im Minutentakt.** Das ist eine andere Tabelle mit anderen Indizes,
+  und die Tagesansicht liest dann eine Verdichtung, keine Rohwerte.
+
+  **3. Konflikte werden zur Regel.** Zwei Quellen, ein Tag, zwei Werte.
+  **Wer gewinnt, muss festgelegt sein, bevor es passiert** — nicht,
+  wenn der erste Nutzer sich beschwert.
+
+  ### Was jetzt schon zu tun ist
+
+  **Jede neue Messtabelle traegt eine Herkunft**, auch solange nur
+  `manuell` vorkommt. `[cmd]` Betroffen: `body_measurements`,
+  `body_circumferences`, `recovery.checkins`,
+  `training.workout_sessions`, `nutrition.water_logs`.
+
+  `[read]` **Nachtraeglich ist es teuer:** Eine Spalte hinzufuegen ist
+  billig, aber tausend Zeilen ohne Herkunft bleiben fuer immer
+  uneindeutig — `[cmd]` genau die Lage, die bei `locale` vermieden
+  wurde, wo `NULL` von `de` unterscheidbar bleiben musste.
+
+  ### Was das Vorgaengerrepo dazu hat
+
+  `[cmd]` **Zu pruefen** — der Fundus nennt HRV und Readiness mit 30
+  Fundstellen (`useRecoveryIntel.ts`, `RecoveryIntel.ts` mit 26 KB).
+  **Ob dort eine Geraeteanbindung existierte, ist ungeprueft.**
+
+  `[cmd]` **Erledigt 2026-08-18**, Kettenschritt `017`, **59 Schritte**
+  in der Kette. **Sieben Tabellen**, alle Bestandszeilen auf `manual`,
+  **Zeilenzahlen unveraendert**: `meals` 687, `meal_items` 2.099,
+  `water_logs` 299, `checkins` 36, `workout_sessions` 9, `workout_sets`
+  60, `intake_logs` 4.
+
+  `[cmd]` Erlaubt sind `manual`, `device`, `import`, `admin`, `seed` —
+  **dem Goals-Muster gefolgt**, das GO-14 gesetzt hat. Der abgeleitete
+  Navy-Wert liefert weiter `source = derived_navy`.
+
+  ### Die Benennung ist genauer als beauftragt
+
+  `[cmd]` Die Spalten heissen **`entry_source`** und
+  **`measurement_source`**, nicht `source`. Und `meal_items` traegt
+  **`food_source` neben `measurement_source`**:
+
+  `[read]` *„Herkunft des Mahlzeit-Containers. Nicht verwechseln mit
+  `meal_items.food_source`."* — **Die Herkunft des Lebensmittels ist
+  etwas anderes als die der Mengenangabe.** `workout_sets` hat
+  zusaetzlich `logged_via` fuer den Bedienweg (`manual`/`voice`/`auto`).
+
+  `[read]` **Der Orchestrator suchte nach `source` und fand nichts** —
+  ein Beleg dafuer, dass eine Pruefung am erwarteten Namen scheitert,
+  nicht an der Sache. *Aus der Existenz einer Sache folgt nicht ihre
+  Funktion — und aus ihrem Fehlen unter einem Namen nicht ihr Fehlen.*
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
