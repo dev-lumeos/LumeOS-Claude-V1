@@ -138,6 +138,16 @@ test('die zehn Tabs der Vorlage stehen im Training-Modul', () => {
 })
 
 test('das Training-Modul kennzeichnet jede Kachel', () => {
+  // `[cmd]` **DIESE ZAHLEN AENDERN SICH SEIT G-69 NICHT MEHR, obwohl
+  // fuenf Tabs echt sind.** Der Grund: die Entwurfskacheln bleiben als
+  // RUECKFALL stehen (`verlauf ? <Echt/> : <Entwurf/>`) — dasselbe
+  // Muster wie G-64 beim Exercises-Tab. Ohne Sitzungen zeigt die Seite
+  // den Entwurf samt Marke, statt eine leere echte Kachel, die wie ein
+  // Befund aussaehe und doch nur ein fehlendes Cookie waere.
+  //
+  // **Was tatsaechlich gerendert wird, prueft der Test darunter** —
+  // diese Zaehlung allein wuerde die Anbindung nicht bemerken.
+  //
   // Keine Quelle heisst: jede Kachel traegt die Marke. Wer eine
   // anbindet, entfernt `attrappe` und zaehlt die Erwartung herunter —
   // dann faellt hier auf, dass es passiert ist.
@@ -161,6 +171,144 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
       `${path.basename(datei)}: ${markiert} Kacheln gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
   }
+})
+
+// ── Training · Sitzungen angebunden (G-69) ───────────────────────────
+
+const TRAIN_VERLAUF = path.join(process.cwd(), 'src/app/v2/training/tab-verlauf.tsx')
+const TRAIN_LESEN = path.join(process.cwd(), 'src/lib/training/sitzungen-read.ts')
+const TRAIN_AUSW = path.join(process.cwd(), 'src/lib/training/auswertung.ts')
+
+test('fuenf Training-Tabs zeigen echte Sitzungen', () => {
+  // `[read]` Der Auftrag G-69: die Tabs, die Sitzungen brauchen.
+  // Gebaut sind History, Progression, Standards, Kalender und die
+  // Serie — je mit Rueckfall auf den Entwurf.
+  const ansicht = fs.readFileSync(TRAINING, 'utf8')
+  for (const [tab, echt] of [
+    ['history', 'TrainingVerlauf'],
+    ['progress', 'TrainingKraftverlauf'],
+    ['standards', 'TrainingStandards'],
+    ['calendar', 'TrainingKalender'],
+  ] as Array<[string, string]>) {
+    const muster = new RegExp(
+      `tab === '${tab}'[\\s\\S]{0,200}verlauf \\? <${echt}`)
+    assert.ok(muster.test(ansicht),
+      `Der Tab "${tab}" zeigt ${echt} nicht mit Rueckfall.`)
+  }
+  // Die Serie sitzt im Today-Tab, nicht an einem eigenen.
+  assert.ok(/verlauf \? \(\s*<TrainingSerie/.test(ansicht),
+    'Die Serie ist nicht angebunden.')
+
+  // Die angebundene Datei traegt keine Marke.
+  const verlauf = fs.readFileSync(TRAIN_VERLAUF, 'utf8')
+  assert.ok((verlauf.match(/<Card\b/g) ?? []).length > 0, 'Keine Karte gefunden.')
+  assert.ok(!/attrappe=/.test(verlauf),
+    'tab-verlauf.tsx traegt eine Attrappenmarke, ist aber angebunden.')
+})
+
+test('Training trennt absolviert von geplant — und nicht ueber status', () => {
+  // `[cmd]` **`workout_sessions.status` taugt dafuer nicht:** die
+  // Pruefbedingung erlaubt `planned|active|completed|cancelled`, aber
+  // alle 30 Sitzungen stehen auf `completed` — auch die 15 in der
+  // Zukunft (gemessen 2026-08-18). Massgeblich ist das Datum.
+  //
+  // `[read]` Tom zu G-69: *„Volumen, Streak, 1RM und Fortschritt
+  // zaehlen nur bis heute. Kalender und Plan zeigen alle."*
+  const lesen = fs.readFileSync(TRAIN_LESEN, 'utf8')
+  assert.ok(/absolviert: datum !== '' && datum <= stichtag/.test(lesen),
+    'absolviert wird nicht aus dem Datum abgeleitet.')
+  // `status` kommt trotzdem mit — wer beide vergleicht, sieht die
+  // Abweichung. Sie zu verschweigen waere die schlechtere Loesung.
+  assert.ok(/status: text\(z\.status\)/.test(lesen),
+    'Der status der Tabelle wird verschluckt statt mitgeliefert.')
+
+  // Die Rechnungen filtern auf `absolviert`.
+  const ausw = fs.readFileSync(TRAIN_AUSW, 'utf8')
+  for (const fn of ['volumenJeMuskel', 'serie', 'kraftverlauf', 'kennzahlen']) {
+    const rumpf = new RegExp(`export function ${fn}[\\s\\S]*?\\n\\}`).exec(ausw)
+    assert.ok(rumpf, `${fn} nicht gefunden.`)
+    assert.ok(/absolviert/.test(rumpf![0]),
+      `${fn} rechnet ueber geplante Sitzungen mit — das behauptet Leistung.`)
+  }
+
+  // Und die Anzeige zeichnet den Unterschied eindeutig aus, nicht nur
+  // ueber Helligkeit. `[read]` Tom: „nicht nur eine blassere Farbe."
+  const verlauf = fs.readFileSync(TRAIN_VERLAUF, 'utf8')
+  assert.ok(/geplant/.test(verlauf) && /absolviert/.test(verlauf),
+    'Die Anzeige benennt geplant und absolviert nicht.')
+})
+
+test('Training erfindet keine Schwellen', () => {
+  // `[read]` Der Auftrag: „Volume landmarks (MEV, MAV, MRV) sind
+  // Schwellen aus der Literatur — wenn keine Quelle im Repo liegt,
+  // bleibt die Kachel Attrappe." `[cmd]` Es liegt keine.
+  const ansicht = fs.readFileSync(TRAINING, 'utf8')
+  assert.ok(/tab === 'landmarks' && <TrainingLandmarksView \/>/.test(ansicht),
+    'Volume landmarks ist angebunden — dafuer fehlt die Quelle.')
+
+  // Dasselbe fuer die Einstufung in den Standards: die Vorlage vergibt
+  // Beginner/Novice/Intermediate/Elite gegen eigene Schwellen. Das ist
+  // eine Bewertung eines Menschen und kommt nicht mit.
+  const ohneKommentar = (s: string) => s
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .split('\n').filter(z => !/^\s*(\/\/|\*)/.test(z)).join('\n')
+
+  const verlauf = ohneKommentar(fs.readFileSync(TRAIN_VERLAUF, 'utf8'))
+    // Die Erklaerung, warum sie fehlen, nennt sie beim Namen.
+    .replace(/Beginner<\/span>[\s\S]*?Elite<\/span>/g, '')
+  for (const klasse of [/'Novice'/, /'Intermediate'/, /'Elite'/, /'Beginner'/]) {
+    assert.ok(!klasse.test(verlauf),
+      `${klasse.source} ist eine Einstufung ohne belegte Quelle.`)
+  }
+
+  const ausw = ohneKommentar(fs.readFileSync(TRAIN_AUSW, 'utf8'))
+  for (const wort of [/\bMEV\b/, /\bMAV\b/, /\bMRV\b/]) {
+    assert.ok(!wort.test(ausw),
+      `${wort.source} steht in der Rechnung — ohne Quelle ist die Zahl erfunden.`)
+  }
+})
+
+test('Training umgeht die zwei PostgREST-Fallen aus G-64', () => {
+  // `[cmd]` **Falle 1:** PostgREST deckelt bei 1.000 Zeilen. Bei 200
+  // Saetzen trifft das noch nicht — nach dem naechsten Seedlauf schon.
+  // `[cmd]` **Falle 2:** `.in(...)` kippt ueber rund 200 IDs und
+  // schweigt: leere Liste statt Fehler.
+  const lesen = fs.readFileSync(TRAIN_LESEN, 'utf8')
+
+  // Jede Abfrage begrenzt ausdruecklich.
+  const abfragen = (lesen.match(/\.from\(/g) ?? []).length
+  const limits = (lesen.match(/\.limit\(/g) ?? []).length
+  assert.ok(limits >= abfragen - 1,
+    `${abfragen} Abfragen, aber nur ${limits} Begrenzungen — PostgREST deckelt still.`)
+
+  // Verbund statt ID-Liste bei Uebungen und Saetzen.
+  assert.ok(/workout_sessions!inner/.test(lesen),
+    'workout_exercises filtert nicht ueber den Verbund.')
+  assert.ok(/workout_exercises!inner\(workout_sessions!inner/.test(lesen),
+    'workout_sets filtert nicht ueber den Verbund.')
+
+  // Und jeder Abfragefehler wirft — genau das hat den Fall in G-64
+  // so lange verdeckt.
+  const werfer = (lesen.match(/if \(error\) throw/g) ?? []).length
+  assert.ok(werfer >= 5,
+    `Nur ${werfer} Abfragen werfen bei Fehlern — ein Fehler darf nicht als „nichts gefunden" durchgehen.`)
+})
+
+test('Training rechnet das Koerpergewicht mit Stichtag', () => {
+  // `[read]` Tom zu G-69: „Standards braucht das Koerpergewicht mit
+  // Stichtag. Nimm den zum Sitzungsdatum, nicht den heutigen — sonst
+  // verschiebt sich das Verhaeltnis rueckwirkend."
+  const lesen = fs.readFileSync(TRAIN_LESEN, 'utf8')
+  const fn = /export async function ladeGewichtAm[\s\S]*?\n\}/.exec(lesen)
+  assert.ok(fn, 'ladeGewichtAm nicht gefunden.')
+  assert.ok(/body_measurements/.test(fn![0]),
+    'Das Gewicht kommt nicht aus dem Messverlauf.')
+  assert.ok(/\.lte\('measurement_date', stichtag\)/.test(fn![0]),
+    'Das Gewicht wird nicht am Stichtag geschnitten.')
+  // NICHT aus profiles: das ist ein Stand ohne Datum.
+  assert.ok(!/profiles/.test(fn![0]),
+    'Das Gewicht kommt aus profiles — dieser Wert traegt kein Datum.')
 })
 
 test('die vier Ansichten der Spec-Vorlage stehen da', () => {

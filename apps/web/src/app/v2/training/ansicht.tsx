@@ -44,8 +44,13 @@ import {
 } from './tabs-spec'
 import { TrainingOfflineView, TrainingHRAnalysis } from './tabs-offline-hr'
 import { TrainingBodyStatsCorrelation } from './tabs-extras'
-// G-64: der einzige Tab mit echten Daten.
+// G-64: der Exercises-Tab.
 import { TrainingUebungen } from './tab-uebungen'
+// G-69: History, Progression, Standards, Kalender, Serie.
+import {
+  TrainingVerlauf, TrainingKraftverlauf, TrainingStandards,
+  TrainingSerie, TrainingKalender, type VerlaufDaten,
+} from './tab-verlauf'
 import type {
   Uebung, GeraeteGruppe, MuskelWurzel,
 } from '../../../lib/training/uebungen-read'
@@ -87,12 +92,18 @@ function tabs(uebungen: number): TabItem[] {
 export function TrainingAnsicht({
   uebungenStart = [], uebungenGesamt = 0,
   geraeteGruppen = [], disziplinen = [], muskelBaum = [],
+  verlauf = null,
 }: {
   uebungenStart?: Uebung[]
   uebungenGesamt?: number
   geraeteGruppen?: GeraeteGruppe[]
   disziplinen?: Array<{ name: string; anzahl: number }>
   muskelBaum?: MuskelWurzel[]
+  /**
+   * Die Sitzungsdaten (G-69). `null` heisst: nicht angemeldet oder
+   * Ladefehler — dann bleibt der Entwurf stehen, mit seiner Marke.
+   */
+  verlauf?: VerlaufDaten | null
 } = {}) {
   const [tab, setTab] = React.useState('today')
   const [liveOpen, setLiveOpen] = React.useState(false)
@@ -137,9 +148,17 @@ export function TrainingAnsicht({
 
       <Tabs items={tabs(uebungenGesamt)} active={tab} onChange={setTab} />
 
-      {tab === 'today' && <TrainingToday onStart={() => setLiveOpen(true)} />}
+      {tab === 'today' && (
+        <TrainingToday onStart={() => setLiveOpen(true)} verlauf={verlauf} />
+      )}
       {tab === 'plan' && <TrainingPlan />}
-      {tab === 'history' && <TrainingHistory />}
+      {/* `[cmd]` SEIT G-69 ECHT, mit demselben Rueckfall wie G-64:
+          ohne Sitzungen bleibt der Entwurf stehen — samt Marke. Eine
+          leere echte Kachel saehe aus wie ein Befund und waere doch
+          nur ein fehlendes Cookie. */}
+      {tab === 'history' && (
+        verlauf ? <TrainingVerlauf d={verlauf} /> : <TrainingHistory />
+      )}
       {tab === 'library' && (
         uebungenGesamt > 0
           ? (
@@ -154,10 +173,20 @@ export function TrainingAnsicht({
           // Ohne Katalog bleibt der Entwurf stehen — mit seiner Marke.
           : <TrainingLibrary />
       )}
-      {tab === 'progress' && <TrainingProgressionView />}
+      {tab === 'progress' && (
+        verlauf ? <TrainingKraftverlauf d={verlauf} /> : <TrainingProgressionView />
+      )}
+      {/* `[read]` BLEIBT ATTRAPPE, mit Grund: MEV, MAV und MRV sind
+          Schwellen aus der Literatur, und im Repo liegt keine belegte
+          Quelle. Der Auftrag: „wenn keine Quelle im Repo liegt, bleibt
+          die Kachel Attrappe." */}
       {tab === 'landmarks' && <TrainingLandmarksView />}
-      {tab === 'standards' && <TrainingStandardsView />}
-      {tab === 'calendar' && <TrainingCalendarView />}
+      {tab === 'standards' && (
+        verlauf ? <TrainingStandards d={verlauf} /> : <TrainingStandardsView />
+      )}
+      {tab === 'calendar' && (
+        verlauf ? <TrainingKalender d={verlauf} /> : <TrainingCalendarView />
+      )}
       {tab === 'hrzones' && <TrainingHRAnalysis />}
       {tab === 'offline' && <TrainingOfflineView />}
 
@@ -169,7 +198,11 @@ export function TrainingAnsicht({
 
 // --- TODAY -------------------------------------------------------
 // [cmd] module-training.jsx:62-203.
-function TrainingToday({ onStart }: { onStart: () => void }) {
+function TrainingToday({ onStart, verlauf }: {
+  onStart: () => void
+  /** G-69: echt, wenn Sitzungen geladen sind. */
+  verlauf?: VerlaufDaten | null
+}) {
   const session = {
     name: 'Push B',
     sub: 'Chest, Shoulders, Triceps',
@@ -282,33 +315,84 @@ function TrainingToday({ onStart }: { onStart: () => void }) {
           ))}
         </Card>
 
-        <Card title="Weekly volume" sub="Sets per muscle · target band" attrappe={ATTRAPPE}>
-          <div className="v2-col-gap" style={{ gap: 8 }}>
-            {[
-              { m: 'Chest', done: 14, target: 16, color: 'var(--acc-train)' },
-              { m: 'Back', done: 18, target: 18, color: 'var(--acc-train)' },
-              { m: 'Shoulders', done: 10, target: 14, color: 'var(--acc-train)' },
-              { m: 'Quads', done: 18, target: 16, color: 'var(--pos)' },
-              { m: 'Hamstrings', done: 9, target: 12, color: 'var(--acc-train)' },
-              { m: 'Arms', done: 14, target: 14, color: 'var(--acc-train)' },
-            ].map(v => (
-              <div key={v.m} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 64px', gap: 10, alignItems: 'center', fontSize: 11 }}>
-                <span style={{ color: 'var(--fg-muted)' }}>{v.m}</span>
-                <div style={{ position: 'relative', height: 14, background: 'var(--surface-2)', borderRadius: 3 }}>
-                  <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${Math.min((v.done / 24) * 100, 100)}%`, background: v.color, opacity: 0.85, borderRadius: 3 }} />
-                  <div style={{ position: 'absolute', left: `${(v.target / 24) * 100}%`, top: -2, bottom: -2, width: 1, background: 'var(--fg)' }} />
+        {/* `[cmd]` ECHT SEIT G-69 — aber OHNE das Zielband der Vorlage.
+            Die zeigt „14 / 16 Saetze" gegen einen Sollwert je Muskel;
+            `[read]` diese Sollwerte sind dieselbe Klasse wie MEV/MAV/MRV
+            — Schwellen aus der Literatur, fuer die im Repo keine belegte
+            Quelle liegt. Gezeigt sind die Saetze, nicht ein Soll. */}
+        {verlauf && verlauf.muskelVolumen.length > 0 ? (
+          <Card
+            title="Saetze je Muskelgruppe"
+            sub={`${verlauf.kennzahlen.sitzungen_absolviert} absolvierte Sitzungen`}
+          >
+            <div className="v2-col-gap" style={{ gap: 8 }}>
+              {verlauf.muskelVolumen.map(v => {
+                const max = Math.max(...verlauf.muskelVolumen.map(x => x.saetze), 1)
+                return (
+                  <div key={v.muskel} style={{
+                    display: 'grid', gridTemplateColumns: '90px 1fr 44px',
+                    gap: 10, alignItems: 'center', fontSize: 11,
+                  }}>
+                    <span style={{
+                      color: 'var(--fg-muted)', whiteSpace: 'nowrap',
+                      overflow: 'hidden', textOverflow: 'ellipsis',
+                    }}>{v.muskel}</span>
+                    <div style={{
+                      position: 'relative', height: 14,
+                      background: 'var(--surface-2)', borderRadius: 3,
+                    }}>
+                      <div style={{
+                        position: 'absolute', left: 0, top: 0, bottom: 0,
+                        width: `${(v.saetze / max) * 100}%`,
+                        background: 'var(--acc-train)', opacity: 0.85, borderRadius: 3,
+                      }} />
+                    </div>
+                    <span className="v2-num" style={{ textAlign: 'right', fontSize: 11 }}>
+                      {v.saetze}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="v2-divider" />
+            <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
+              Ohne Zielband: Sollwerte je Muskel sind Schwellen aus der Literatur,
+              und im Repo liegt keine belegte Quelle dafuer.
+            </div>
+          </Card>
+        ) : (
+          <Card title="Weekly volume" sub="Sets per muscle · target band" attrappe={ATTRAPPE}>
+            <div className="v2-col-gap" style={{ gap: 8 }}>
+              {[
+                { m: 'Chest', done: 14, target: 16, color: 'var(--acc-train)' },
+                { m: 'Back', done: 18, target: 18, color: 'var(--acc-train)' },
+                { m: 'Shoulders', done: 10, target: 14, color: 'var(--acc-train)' },
+                { m: 'Quads', done: 18, target: 16, color: 'var(--pos)' },
+                { m: 'Hamstrings', done: 9, target: 12, color: 'var(--acc-train)' },
+                { m: 'Arms', done: 14, target: 14, color: 'var(--acc-train)' },
+              ].map(v => (
+                <div key={v.m} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 64px', gap: 10, alignItems: 'center', fontSize: 11 }}>
+                  <span style={{ color: 'var(--fg-muted)' }}>{v.m}</span>
+                  <div style={{ position: 'relative', height: 14, background: 'var(--surface-2)', borderRadius: 3 }}>
+                    <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${Math.min((v.done / 24) * 100, 100)}%`, background: v.color, opacity: 0.85, borderRadius: 3 }} />
+                    <div style={{ position: 'absolute', left: `${(v.target / 24) * 100}%`, top: -2, bottom: -2, width: 1, background: 'var(--fg)' }} />
+                  </div>
+                  <span className="v2-num" style={{ textAlign: 'right', fontSize: 11 }}>
+                    {v.done}<span className="v2-dim"> / {v.target}</span>
+                  </span>
                 </div>
-                <span className="v2-num" style={{ textAlign: 'right', fontSize: 11 }}>
-                  {v.done}<span className="v2-dim"> / {v.target}</span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </Card>
+              ))}
+            </div>
+          </Card>
+        )}
 
-        <Card title="Streak" sub="last 12 weeks" attrappe={ATTRAPPE}>
-          <StreakHeatmap />
-        </Card>
+        {verlauf ? (
+          <TrainingSerie d={verlauf} />
+        ) : (
+          <Card title="Streak" sub="last 12 weeks" attrappe={ATTRAPPE}>
+            <StreakHeatmap />
+          </Card>
+        )}
       </div>
     </div>
   )

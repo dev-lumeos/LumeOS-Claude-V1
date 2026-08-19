@@ -13,13 +13,22 @@
 // weiterhin nur das Modal des Entwurfs.
 import type { Metadata } from 'next'
 
+import { heute } from '../../../lib/datum'
 import {
   getUebungen, getGeraeteGruppen, getDisziplinen, getMuskelBaum,
 } from '../../../lib/training/uebungen-read'
 import type {
   Uebung, GeraeteGruppe, MuskelWurzel,
 } from '../../../lib/training/uebungen-read'
+import {
+  angemeldeteNutzerin, ladeGewichtAm, ladeMuskelWurzeln, ladeSaetze,
+  ladeSitzungen, ladeSitzungsUebungen,
+} from '../../../lib/training/sitzungen-read'
+import {
+  kennzahlen, kraftverlauf, serie, volumenJeMuskel,
+} from '../../../lib/training/auswertung'
 import { TrainingAnsicht } from './ansicht'
+import type { VerlaufDaten } from './tab-verlauf'
 
 export const metadata: Metadata = {
   title: 'Training · LumeOS',
@@ -50,6 +59,50 @@ export default async function V2TrainingPage() {
   try { disziplinen = await getDisziplinen() } catch { disziplinen = [] }
   try { muskelBaum = await getMuskelBaum() } catch { muskelBaum = [] }
 
+  // G-69: Sitzungen, Uebungen, Saetze — und die Rechnungen darauf.
+  //
+  // `[read]` **Der Stichtag ist das echte Heute** (`lib/datum.ts`,
+  // ueber Mittag gerechnet). Er trennt absolviert von geplant: Tom zu
+  // G-69: *„Volumen, Streak, 1RM und Fortschritt zaehlen nur bis heute
+  // — Kalender und Plan zeigen alle."*
+  //
+  // Ein eigener `try`, wie bei den vier darueber: faellt der
+  // Sitzungspfad aus, bleibt der Katalog gueltig und die
+  // Entwurfskacheln stehen mit ihrer Marke.
+  const stichtag = heute()
+  let verlauf: VerlaufDaten | null = null
+
+  try {
+    const userId = await angemeldeteNutzerin()
+    const [sitzungen, uebungen, saetze] = await Promise.all([
+      ladeSitzungen(userId, stichtag),
+      ladeSitzungsUebungen(userId),
+      ladeSaetze(userId),
+    ])
+
+    if (sitzungen.length > 0) {
+      const exerciseIds = Array.from(new Set(
+        uebungen.map(u => u.exercise_id).filter((v): v is string => !!v),
+      ))
+      const [muskeln, gewicht] = await Promise.all([
+        ladeMuskelWurzeln(exerciseIds),
+        ladeGewichtAm(userId, stichtag),
+      ])
+
+      verlauf = {
+        stichtag,
+        sitzungen,
+        kennzahlen: kennzahlen(sitzungen, uebungen, saetze),
+        muskelVolumen: volumenJeMuskel(sitzungen, uebungen, muskeln),
+        kraft: kraftverlauf(sitzungen, uebungen, saetze),
+        serie: serie(sitzungen, stichtag),
+        gewicht,
+      }
+    }
+  } catch {
+    verlauf = null
+  }
+
   return (
     <TrainingAnsicht
       uebungenStart={start}
@@ -57,6 +110,7 @@ export default async function V2TrainingPage() {
       geraeteGruppen={geraeteGruppen}
       disziplinen={disziplinen}
       muskelBaum={muskelBaum}
+      verlauf={verlauf}
     />
   )
 }
