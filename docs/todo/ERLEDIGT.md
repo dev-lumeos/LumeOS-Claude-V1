@@ -5133,6 +5133,49 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Variantenmessung: 0 weitere Befunde** bei
   `equipment_group_de/en`, `muscle_groups.name`, `food_groups.label_de`.
 
+- [x] **C-99: `food_groups` hat keinen Fremdschluessel zu
+  `food_categories`** (neu 2026-08-18). Befund aus G-66.
+
+  `[cmd]` **Die Verbindung steht nur als Prosa im `bls_hint`** —
+  *„BLS prefixes U,V,W"*. **Deshalb bleiben 2.237 von 7.140
+  Lebensmitteln ohne Gruppe.**
+
+  `[cmd]` **Die Ableitung aus dem BLS-Code ist zweimal gemessen
+  gefallen** — 39 von 100, dann 47 von 100. `[read]` **Raten hilft
+  nicht; es braucht die Bruecke zwischen den 19 Gruppen und den 518
+  Feinkategorien.**
+
+  `[cmd]` **Erledigt 2026-08-19.** Die Bruecke ist eine **n:1-Zuordnung
+  auf Kategorieebene:** `food_categories.food_group_code →
+  food_groups(code)`. **`foods` bleibt unveraendert bei 7.140.**
+
+  | | |
+  |---|---|
+  | vorher gruppiert | 4.903 von 7.140 |
+  | **nachher** | **7.067** |
+  | neu zugeordnet | **2.164** |
+  | bewusst leer | **73**, alle U/V |
+
+  `[cmd]` **Zwei Gruppen wachsen stark:** `getraenke` 119 → 233,
+  **`fertiggerichte-zubereitungen` 0 → 2.050.**
+
+  `[cmd]` **Die alten Hauptpillen bleiben stabil** — Meat 1.449, Fish
+  520, Grains 883, Dairy 279, Produce 717, Fruit 275, Eggs 104.
+
+  ### Der Rueckfall ist der Kern
+
+  `[cmd]` **`073_suchfilter.sql` nutzt zuerst die Bruecke** und faellt
+  **nur bei fehlender Kategorie-Zuordnung auf den BLS-Praefix zurueck.**
+
+  `[read]` **430 von 518 Kategorien tragen einen `food_group_code`** —
+  die 2.050 Fertiggerichte laufen ueber den Praefix. **Wer nur die
+  Bruecke misst, zaehlt 5.017 und haelt den Bericht fuer falsch.** Der
+  Orchestrator hat genau das getan.
+
+  `[read]` **Und die Struktur ist begruendet:** *„Die 19 Gruppen sind
+  Anzeigegruppen, die 518 BLS-Kategorien die Systematik — das ist eine
+  n:1-Beziehung, kein Fremdschluessel auf `foods`."*
+
 
 
 ## Erledigt am 2026-08-05

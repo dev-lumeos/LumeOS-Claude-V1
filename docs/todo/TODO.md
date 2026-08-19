@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `631d19b` auf `dev`.
+**Stand:** 2026-08-18, Anker `2779db6` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -204,13 +204,13 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-18** | `user_goals.progress_pct` gegen `goal_progress_at()` |  |
 | **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
-| **C-99** | `food_groups` hat keinen Fremdschluessel zu `food_categories` |  |
 | **C-102** | `milch` findet Joghurt statt Milch |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
+| **A-19** | Zwei README-Abweichungen in der Kette |  |
 
 ---
 
@@ -2218,17 +2218,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **C-99: `food_groups` hat keinen Fremdschluessel zu
-  `food_categories`** (neu 2026-08-18). Befund aus G-66.
-
-  `[cmd]` **Die Verbindung steht nur als Prosa im `bls_hint`** —
-  *„BLS prefixes U,V,W"*. **Deshalb bleiben 2.237 von 7.140
-  Lebensmitteln ohne Gruppe.**
-
-  `[cmd]` **Die Ableitung aus dem BLS-Code ist zweimal gemessen
-  gefallen** — 39 von 100, dann 47 von 100. `[read]` **Raten hilft
-  nicht; es braucht die Bruecke zwischen den 19 Gruppen und den 518
-  Feinkategorien.**
 
 - [ ] **C-102: `milch` findet Joghurt statt Milch** (neu 2026-08-19).
   Rest aus C-100.
@@ -2341,3 +2330,17 @@ Umsetzen angepasst werden.
   Essensplaenen**, die es nicht gibt.
 
   **Zu entscheiden:** Kachel dazu, oder liegenlassen bis Meal plans?
+
+- [ ] **A-19: Zwei README-Abweichungen in der Kette** (neu 2026-08-19).
+  Meldung aus C-99.
+
+  `[cmd]` **`kette-readme-pruefen.ts` meldet Abweichungen bei `018` und
+  `032`** — den Kettenschritten aus C-93 (Ausschluss-Presets und
+  Halal/Koscher-Tags).
+
+  `[read]` **Der C-99-Agent hat sie gemeldet und nicht nebenbei
+  repariert** — richtig so: *„023a ist dort nicht das Problem."*
+
+  `[cmd]` **Vermutlich hat der C-93-Agent `supabase/README.md` nicht
+  vollstaendig nachgezogen.** Kleine Sache, aber der Pruefer bleibt gelb,
+  bis sie behoben ist.
