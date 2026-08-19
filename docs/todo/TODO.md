@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `f963c2a` auf `dev`.
+**Stand:** 2026-08-18, Anker `c67f6ba` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 76 offen, 3 in Arbeit.
+`[cmd]` 75 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -207,7 +207,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
 | **C-96** | `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen |  |
-| **C-97** | Der heutige Tag fehlt im Seed |  |
 | **C-98** | `halal`, `kosher` und `thai_food` sind definiert, aber leer |  |
 | **C-99** | `food_groups` hat keinen Fremdschluessel zu `food_categories` |  |
 | **C-100** | `processing_level` steht auf allen 7.140 gleich `raw` |  |
@@ -2346,24 +2345,6 @@ Umsetzen angepasst werden.
   `equipment_group` statt der Beschriftung — **richtig so, aber die
   Ursache bleibt.**
 
-- [ ] **C-97: Der heutige Tag fehlt im Seed** (neu 2026-08-18). Randfall
-  aus C-78.
-
-  `[cmd]` **Die Mahlzeiten enden am Vortag.** Deshalb liefert
-  `adaptive_tdee` **fuer heute `insufficient_intake_days`** (13 von 14),
-  **fuer gestern `complete`** (14 von 14, 3.121,9 kcal).
-
-  `[read]` **Zwei Lesarten, und beide sind vertretbar:**
-
-  **Der Seed ist richtig** — ein Nutzer hat heute noch nicht alle
-  Mahlzeiten erfasst, der Tag laeuft. **Dann muss die Funktion ihr
-  Fenster bis gestern legen**, nicht bis zum Stichtag.
-
-  **Oder der Seed liefert heute mit** — dann rechnet die Funktion
-  sofort, aber der laufende Tag zaehlt als vollstaendig.
-
-  `[cmd]` **Fuer die Entwicklung ist es stoerend:** Die Kachel zeigt
-  heute die Bedingung statt der Zahl, obwohl 180 Tage Daten liegen.
 
 - [ ] **C-98: `halal`, `kosher` und `thai_food` sind definiert, aber
   leer** (neu 2026-08-18). **Vorarbeit fuer C-93.** Befund aus G-66.

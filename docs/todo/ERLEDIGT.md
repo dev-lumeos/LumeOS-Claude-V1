@@ -4782,6 +4782,46 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   170 Check-ins statt 9 und 36. **Zu pruefen, ob die Einnahmen
   mitgewachsen sind und Auslasser enthalten.**
 
+- [x] **C-97: Der heutige Tag fehlt im Seed** (neu 2026-08-18). Randfall
+  aus C-78.
+
+  `[cmd]` **Die Mahlzeiten enden am Vortag.** Deshalb liefert
+  `adaptive_tdee` **fuer heute `insufficient_intake_days`** (13 von 14),
+  **fuer gestern `complete`** (14 von 14, 3.121,9 kcal).
+
+  `[read]` **Zwei Lesarten, und beide sind vertretbar:**
+
+  **Der Seed ist richtig** — ein Nutzer hat heute noch nicht alle
+  Mahlzeiten erfasst, der Tag laeuft. **Dann muss die Funktion ihr
+  Fenster bis gestern legen**, nicht bis zum Stichtag.
+
+  **Oder der Seed liefert heute mit** — dann rechnet die Funktion
+  sofort, aber der laufende Tag zaehlt als vollstaendig.
+
+  `[cmd]` **Fuer die Entwicklung ist es stoerend:** Die Kachel zeigt
+  heute die Bedingung statt der Zahl, obwohl 180 Tage Daten liegen.
+
+  `[cmd]` **Erledigt 2026-08-19.** Das erste Seed-Fenster endet jetzt bei
+  `start + days`, **der laufende Tag ist enthalten.**
+
+  | | |
+  |---|---|
+  | Mahlzeiten je Konto | 721 → **725** |
+  | Wassereintraege | **361** |
+  | Koerpermessungen | **181** |
+  | heute | 4 Mahlzeiten, 2 Wasser, 1 Check-in, 1 Messung, **0 Trainingssitzungen** |
+
+  `[cmd]` **`adaptive_tdee(current_date)` ist `complete`**, 14 von 14 —
+  adaptiv **3.192,9** gegen Formel 3.527,0, Delta **−334,1**.
+
+  `[cmd]` **Und die Luecke kommt nicht wieder:** am Folgetag liegen
+  ebenfalls 4 Mahlzeiten. **Am 2026-08-19 gegengeprueft**, nachdem der
+  Tag gewechselt hatte.
+
+  `[read]` **0 Trainingssitzungen heute ist richtig** — 30 Sitzungen
+  ueber 180 Tage, niemand trainiert taeglich. Der Erzeuger macht daraus
+  keinen Zwang.
+
 
 
 ## Erledigt am 2026-08-05
