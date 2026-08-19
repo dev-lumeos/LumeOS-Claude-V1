@@ -4861,6 +4861,74 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `sort_weight` 980; Vollmilch frisch bleibt bei 510. **Das ist ein
   Ranking-/Intent-Thema, nicht mehr der Pulver-Abzug.**"*
 
+- [x] **C-101: Die Seeds haben keine Varianz** (neu 2026-08-19).
+  **Nachtrag zu C-78, hohe Prioritaet.**
+
+  **Tom, 2026-08-19:** *„Diary — wenn ich den Tag wechsle, aendert sich
+  nichts in der Anzeige."*
+
+  ### Gemessen
+
+  `[cmd]` **Jeder Tag traegt exakt dieselben 13 Positionen, 1.786 g,
+  ueber 180 Tage.** Dieselben zwoelf Lebensmittel, dieselben Mengen.
+
+  `[cmd]` **17 verschiedene Lebensmittel im gesamten Bestand** — bei
+  7.140 im Katalog.
+
+  `[read]` **Die Anzeige wechselt korrekt, es gibt nur nichts zu
+  wechseln.**
+
+  ### Was das fuer C-78 bedeutet
+
+  `[read]` **Die Kopplung stimmt** — `adaptive_tdee` rechnet, die Bilanz
+  geht auf. **Aber sie geht auf, weil nichts schwankt.** Eine Formel
+  gegen konstante Zufuhr zu pruefen, beweist wenig.
+
+  `[cmd]` **Und die Fallliste aus dem Auftrag ist nicht umgesetzt:** *zu
+  wenig und zu viel gegessen · zu wenig und zu viel Protein · zu wenig
+  und zu viel Fett · ein paar Mikros in beide Richtungen.* **Bei
+  konstanten 1.786 g gibt es keinen einzigen dieser Faelle.**
+
+  ### Was zu tun ist
+
+  **Die Mengen und die Auswahl schwanken lassen** — der Verlauf muss
+  ueber Wochen eine Tendenz tragen, aber der einzelne Tag darf abweichen.
+
+  `[read]` **Ein echter Nutzer isst nicht 180 Tage dasselbe.** Und der
+  Bericht soll zeigen, an welchem Tag welcher Fall liegt — **das war
+  bereits verlangt und ist nicht geliefert worden.**
+
+  `[cmd]` **Die Kopplung muss erhalten bleiben:** Zufuhr minus Verbrauch
+  ergibt die Gewichtsaenderung. **Schwankung um den Mittelwert, nicht
+  Zufall.**
+
+  `[cmd]` **Und die uebrigen Module gehoeren mit geprueft** —
+  Trainingssaetze, Check-ins, Supplement-Einnahmen: **schwanken die, oder
+  sind sie ebenso konstant?**
+
+  `[cmd]` **Erledigt 2026-08-19.**
+
+  | | vorher | nachher |
+  |---|---|---|
+  | Tagesgramm | **1.786 an jedem Tag** | 95 bis 2.279, **155 verschiedene Werte** |
+  | Tageskalorien | konstant | 291,5 bis 4.016,6, **179 verschiedene** |
+  | Lebensmittel | **17** | **49** |
+  | Trainingssaetze | identisch | **194 verschiedene Signaturen bei 200 Saetzen** |
+
+  `[cmd]` **Die Bilanz haelt:** `adaptive_tdee(current_date)` ist
+  `complete`, 14 von 14, adaptiv **3.222,6**, Abstand **−304,4**.
+
+  `[cmd]` **Die Rueckrechnung geht auf:** 2.470,9 − 2.512,4 = −41,5
+  kcal, **passend zu −0,070 kg × 7.700 ÷ 13 = −41,5.**
+
+  `[cmd]` **Die Falltabelle steht im Bericht** — Protein, Fett und
+  Kohlenhydrate je niedrig und hoch, plus die bestehenden
+  Szenariofaelle. **Recovery war bereits variiert.**
+
+  `[read]` **Ehrlich beim Rest:** *„Supplements bleiben ein punktueller
+  Szenario-Seed, keine Wochen-Compliance-Historie."* — **C-82 ist damit
+  nicht erledigt.**
+
 
 
 ## Erledigt am 2026-08-05

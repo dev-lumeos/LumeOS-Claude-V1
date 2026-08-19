@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `8e43995` auf `dev`.
+**Stand:** 2026-08-18, Anker `25fc7a1` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -184,7 +184,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **G-65** | Der Preferences-Tab in Nutrition |  |
-| **C-101** | Die Seeds haben keine Varianz |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
 | **C-93** | Ausschluss-Presets, international recherchiert |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
@@ -215,6 +214,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-103** | Alle 30 Trainingssitzungen stehen auf `completed` |  |
 | **C-104** | Die e1RM-Kurven sind flach |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
+| **C-106** | Die Tagesmengen wechseln streng ab |  |
 
 ---
 
@@ -1766,50 +1766,6 @@ Umsetzen angepasst werden.
   Innereien — Leber, Herz, Niere, Zunge, egal welches Tier"*, mit
   `affectedFoodIds` und Symbol.
 
-- [ ] **C-101: Die Seeds haben keine Varianz** (neu 2026-08-19).
-  **Nachtrag zu C-78, hohe Prioritaet.**
-
-  **Tom, 2026-08-19:** *„Diary — wenn ich den Tag wechsle, aendert sich
-  nichts in der Anzeige."*
-
-  ### Gemessen
-
-  `[cmd]` **Jeder Tag traegt exakt dieselben 13 Positionen, 1.786 g,
-  ueber 180 Tage.** Dieselben zwoelf Lebensmittel, dieselben Mengen.
-
-  `[cmd]` **17 verschiedene Lebensmittel im gesamten Bestand** — bei
-  7.140 im Katalog.
-
-  `[read]` **Die Anzeige wechselt korrekt, es gibt nur nichts zu
-  wechseln.**
-
-  ### Was das fuer C-78 bedeutet
-
-  `[read]` **Die Kopplung stimmt** — `adaptive_tdee` rechnet, die Bilanz
-  geht auf. **Aber sie geht auf, weil nichts schwankt.** Eine Formel
-  gegen konstante Zufuhr zu pruefen, beweist wenig.
-
-  `[cmd]` **Und die Fallliste aus dem Auftrag ist nicht umgesetzt:** *zu
-  wenig und zu viel gegessen · zu wenig und zu viel Protein · zu wenig
-  und zu viel Fett · ein paar Mikros in beide Richtungen.* **Bei
-  konstanten 1.786 g gibt es keinen einzigen dieser Faelle.**
-
-  ### Was zu tun ist
-
-  **Die Mengen und die Auswahl schwanken lassen** — der Verlauf muss
-  ueber Wochen eine Tendenz tragen, aber der einzelne Tag darf abweichen.
-
-  `[read]` **Ein echter Nutzer isst nicht 180 Tage dasselbe.** Und der
-  Bericht soll zeigen, an welchem Tag welcher Fall liegt — **das war
-  bereits verlangt und ist nicht geliefert worden.**
-
-  `[cmd]` **Die Kopplung muss erhalten bleiben:** Zufuhr minus Verbrauch
-  ergibt die Gewichtsaenderung. **Schwankung um den Mittelwert, nicht
-  Zufall.**
-
-  `[cmd]` **Und die uebrigen Module gehoeren mit geprueft** —
-  Trainingssaetze, Check-ins, Supplement-Einnahmen: **schwanken die, oder
-  sind sie ebenso konstant?**
 
 - [ ] **G-70: Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab**
   (neu 2026-08-19). **Nach G-65 und C-94.**
@@ -2576,3 +2532,21 @@ Umsetzen angepasst werden.
   `[read]` **Es sind Schwellen aus der Trainingsliteratur** — sie
   brauchen eine Quelle, wie die Referenzbereiche bei den Naehrstoffen
   (C-45) und den Biomarkern (C-84). **Keine erfundene Zahl.**
+
+- [ ] **C-106: Die Tagesmengen wechseln streng ab** (neu 2026-08-19).
+  Beobachtung zu C-101.
+
+  `[cmd]` **Gemessen ueber zwanzig Tage:** 1.569 · 2.193 · 1.530 · 2.020
+  · 1.578 · 2.224 · 1.546 · 2.199 — **ein Saegezahn, niedrig und hoch
+  im Wechsel.**
+
+  `[read]` **Es ist Varianz, und der Tageswechsel zeigt jetzt etwas** —
+  das war das Ziel. **Aber niemand isst abwechselnd 1.500 und 2.200 g.**
+
+  `[cmd]` **Und die Zahl der Lebensmittel je Tag bleibt bei 12** — die
+  Auswahl wechselt, die Anzahl nicht.
+
+  `[read]` **Nicht dringend** — erst wenn jemand Wochenmuster oder
+  Trends prueft, faellt es auf. **Dann gehoert eine Wochenstruktur
+  hinein:** Trainingstage anders als Ruhetage, Wochenende anders als
+  Werktag.
