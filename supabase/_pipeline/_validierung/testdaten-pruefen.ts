@@ -27,6 +27,7 @@ function relDate(anchorDate: string): string {
   return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
 }
 const END_DATE = addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1)
+const TODAY_DATE = addIsoDays(START_DATE, WINDOW_DAYS)
 
 function sql(query: string): string[][] {
   return execFileSync('docker', [
@@ -172,7 +173,7 @@ if (MODE === 'clean') {
   if (userGoals !== 3) errors.push(`user_goals: ${userGoals}, erwartet 3`)
   if (goalPhases !== 3) errors.push(`goal_phases: ${goalPhases}, erwartet 3`)
   if (goalMilestones !== 4) errors.push(`goal_milestones: ${goalMilestones}, erwartet 4`)
-  if (bodyMeasurements !== 180) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 180`)
+  if (bodyMeasurements !== 181) errors.push(`body_measurements: ${bodyMeasurements}, erwartet 181`)
   if (bodyCircumferences < 25) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet mindestens 25`)
   if (preferences !== 1) errors.push(`food_preferences: ${preferences}, erwartet 1`)
   if (preferenceItems !== 3) errors.push(`food_preference_items: ${preferenceItems}, erwartet 3`)
@@ -203,6 +204,43 @@ if (MODE === 'clean') {
   const tom = IDS[0]
   const max = IDS[1]
   const sarah = IDS[2]
+
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.meals
+    WHERE user_id = '${tom}'::uuid
+      AND entry_date = DATE '${TODAY_DATE}'
+    GROUP BY user_id, entry_date
+    HAVING count(*) = 4;`)) {
+    errors.push(`Fall heutiger Tag: Tom hat am ${TODAY_DATE} nicht genau 4 Mahlzeiten`)
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.water_logs
+    WHERE user_id = '${tom}'::uuid
+      AND entry_date = DATE '${TODAY_DATE}'
+    GROUP BY user_id, entry_date
+    HAVING count(*) > 0;`)) {
+    errors.push(`Fall heutiger Tag: Tom hat am ${TODAY_DATE} keinen Wassereintrag`)
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM recovery.checkins
+    WHERE user_id = '${tom}'::uuid
+      AND entry_date = DATE '${TODAY_DATE}';`)) {
+    errors.push(`Fall heutiger Tag: Tom hat am ${TODAY_DATE} keinen Recovery-Check-in`)
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM goals.adaptive_tdee('${tom}'::uuid, DATE '${TODAY_DATE}', 14)
+    WHERE status = 'complete'
+      AND reliable
+      AND complete_intake_days = 14
+      AND weight_measurement_count = 14
+      AND adaptive_tdee_kcal IS NOT NULL
+      AND formula_tdee_kcal IS NOT NULL;`)) {
+    errors.push(`Fall heutiger Tag: adaptive_tdee ist am ${TODAY_DATE} nicht complete`)
+  }
 
   if (numberScalar(`SELECT count(*) FROM goals.zielwerte_am('${tom}'::uuid, DATE '${relDate('2026-08-02')}');`) !== 0) {
     errors.push('Fall Tag ohne Ziel: goals.zielwerte_am liefert vor gueltig_ab trotzdem eine Zeile')
@@ -309,12 +347,12 @@ if (MODE === 'clean') {
       WHERE user_id = '${tom}'::uuid
     ) m
     JOIN public.profiles p ON p.id = '${tom}'::uuid
-    WHERE m.messungen = 180
+    WHERE m.messungen = 181
       AND m.von = DATE '${relDate('2026-08-02')}'
       AND m.bis = DATE '${END_DATE}'
       AND m.max_kg - m.min_kg >= 0.8
       AND p.body_weight_kg = m.latest_kg;`)) {
-    errors.push('Fall Koerpermessungen: 180-Tage-Gewichtsverlauf oder Profilgewicht-Sync fehlt')
+    errors.push('Fall Koerpermessungen: 181-Tage-Gewichtsverlauf oder Profilgewicht-Sync fehlt')
   }
   if (!hasRows(`
     SELECT 1

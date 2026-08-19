@@ -31,7 +31,7 @@ if (!Number.isInteger(WINDOW_DAYS) || WINDOW_DAYS <= 0) {
   throw new Error('--days muss eine positive ganze Zahl sein')
 }
 const WINDOWS = [
-  { start: START_DATE, end: addIsoDays(START_DATE, WINDOW_DAYS - 1) },
+  { start: START_DATE, end: addIsoDays(START_DATE, WINDOW_DAYS) },
   { start: NEXT_START_DATE, end: addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1) },
 ]
 const TARGET_START_DATE = addIsoDays(START_DATE, 1)
