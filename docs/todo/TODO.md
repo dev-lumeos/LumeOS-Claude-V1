@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `25fc7a1` auf `dev`.
+**Stand:** 2026-08-18, Anker `c2bcbff` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 80 offen, 3 in Arbeit.
+`[cmd]` 78 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -211,8 +211,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-98** | `halal`, `kosher` und `thai_food` sind definiert, aber leer |  |
 | **C-99** | `food_groups` hat keinen Fremdschluessel zu `food_categories` |  |
 | **C-102** | `milch` findet Joghurt statt Milch |  |
-| **C-103** | Alle 30 Trainingssitzungen stehen auf `completed` |  |
-| **C-104** | Die e1RM-Kurven sind flach |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 
@@ -2487,39 +2485,7 @@ Umsetzen angepasst werden.
   abwertet, sieht ihn nicht mehr oben. **Erst Preferences bauen, dann
   neu messen.**
 
-- [ ] **C-103: Alle 30 Trainingssitzungen stehen auf `completed`** (neu
-  2026-08-19). **Befund aus G-69, Datenfrage.**
 
-  `[cmd]` **Der Status traegt die Trennung nicht.** Es gibt ihn —
-  `planned | active | completed | cancelled` — **und alle 30 Sitzungen
-  stehen auf `completed`, davon 14 in der Zukunft, die spaeteste am
-  2026-11-11.**
-
-  `[read]` *„Eine Sitzung am 12. November kann nicht abgeschlossen
-  sein."*
-
-  `[cmd]` **Die Anzeige nimmt deshalb das Datum** — durchgezogen
-  absolviert, gestrichelt geplant. **Der `status` kommt trotzdem im
-  Lesepfad mit, damit die Abweichung sichtbar bleibt.**
-
-  `[annahme]` **Vermutlich setzt C-78 pauschal `completed`.**
-
-  **Zu tun:** Der Erzeuger setzt `planned` fuer alles nach heute.
-  `[read]` **Gehoert zu C-101** — wer die Varianz einbaut, kann den
-  Status gleich mitsetzen.
-
-- [ ] **C-104: Die e1RM-Kurven sind flach** (neu 2026-08-19). Befund aus
-  G-69.
-
-  `[cmd]` **0 % Aenderung ueber den ganzen Verlauf** — *„C-78 legt je
-  Uebung identische Gewichte an. Kein Anzeigefehler, ein Seedmuster ohne
-  Progression."*
-
-  `[read]` **Dieselbe Ursache wie C-101** (1.786 g an jedem Tag). **Ein
-  Trainingsverlauf ohne Steigerung zeigt nichts, was Progression heisst**
-  — und genau das ist der Tab.
-
-  `[cmd]` **Gehoert in denselben Durchgang wie C-101.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.

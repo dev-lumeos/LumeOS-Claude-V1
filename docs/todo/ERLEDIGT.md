@@ -4929,6 +4929,58 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Szenario-Seed, keine Wochen-Compliance-Historie."* — **C-82 ist damit
   nicht erledigt.**
 
+- [x] **C-103: Alle 30 Trainingssitzungen stehen auf `completed`** (neu
+  2026-08-19). **Befund aus G-69, Datenfrage.**
+
+  `[cmd]` **Der Status traegt die Trennung nicht.** Es gibt ihn —
+  `planned | active | completed | cancelled` — **und alle 30 Sitzungen
+  stehen auf `completed`, davon 14 in der Zukunft, die spaeteste am
+  2026-11-11.**
+
+  `[read]` *„Eine Sitzung am 12. November kann nicht abgeschlossen
+  sein."*
+
+  `[cmd]` **Die Anzeige nimmt deshalb das Datum** — durchgezogen
+  absolviert, gestrichelt geplant. **Der `status` kommt trotzdem im
+  Lesepfad mit, damit die Abweichung sichtbar bleibt.**
+
+  `[annahme]` **Vermutlich setzt C-78 pauschal `completed`.**
+
+  **Zu tun:** Der Erzeuger setzt `planned` fuer alles nach heute.
+  `[read]` **Gehoert zu C-101** — wer die Varianz einbaut, kann den
+  Status gleich mitsetzen.
+
+  `[cmd]` **Erledigt 2026-08-19.** `completed` **15**, `planned` **14**,
+  `cancelled` **1** — **null `completed` nach heute.**
+
+  `[read]` **Der `cancelled`-Fall kam dazu** — die Fallliste aus C-78
+  nennt *„eine Sitzung, die abgebrochen wurde"*, und sie fehlte.
+
+- [x] **C-104: Die e1RM-Kurven sind flach** (neu 2026-08-19). Befund aus
+  G-69.
+
+  `[cmd]` **0 % Aenderung ueber den ganzen Verlauf** — *„C-78 legt je
+  Uebung identische Gewichte an. Kein Anzeigefehler, ein Seedmuster ohne
+  Progression."*
+
+  `[read]` **Dieselbe Ursache wie C-101** (1.786 g an jedem Tag). **Ein
+  Trainingsverlauf ohne Steigerung zeigt nichts, was Progression heisst**
+  — und genau das ist der Tab.
+
+  `[cmd]` **Gehoert in denselben Durchgang wie C-101.**
+
+  `[cmd]` **Erledigt 2026-08-19. Die Kurven steigen:**
+
+  | | von | bis | |
+  |---|---|---|---|
+  | Bench | 95,3 | **99,3 kg** | +4,2 % |
+  | Deadlift | 131,1 | **138,0 kg** | +5,3 % |
+  | Squat | 118,4 | **126,0 kg** | +6,4 % |
+
+  `[read]` **Und die Bestwerte stehen am Ende, nicht am Anfang** — das
+  war die Auflage. **Die Raten sind plausibel:** 4 bis 6 % ueber drei
+  Monate, kein Anfaengersprung.
+
 
 
 ## Erledigt am 2026-08-05
