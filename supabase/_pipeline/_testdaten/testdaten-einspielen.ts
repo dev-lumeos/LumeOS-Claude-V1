@@ -37,6 +37,7 @@ const WINDOWS = [
 const TARGET_START_DATE = addIsoDays(START_DATE, 1)
 const ALL_DATES = WINDOWS.flatMap(window => daysBetween(window.start, window.end))
 const END_DATE = WINDOWS[WINDOWS.length - 1]!.end
+const TODAY_DATE = argValue('--today') ?? NEXT_START_DATE
 
 function relDate(anchorDate: string): string {
   return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
@@ -83,6 +84,7 @@ type TrainingSessionRow = {
   startedTime: string
   endedTime: string
   name: string
+  status: 'planned' | 'active' | 'completed' | 'cancelled'
   location: string
   notes: string
 }
@@ -1102,11 +1104,11 @@ const supplementStackItems: SupplementStackItemRow[] = [
     doseUnit: 'g',
     frequency: 'daily',
     timing: 'morning',
-    stockRemaining: 180,
+    stockRemaining: 30,
     stockUnit: 'g',
-    lowStockThreshold: 50,
+    lowStockThreshold: 30,
     sortOrder: 1,
-    notes: 'Baseline-Supplement',
+    notes: 'C-82 Szenario: Refill-Hinweis bei etwa einem Monat Reichweite',
   },
   {
     id: '41000000-0000-0000-0000-000000000102',
@@ -1130,11 +1132,11 @@ const supplementStackItems: SupplementStackItemRow[] = [
     doseUnit: 'g',
     frequency: 'daily',
     timing: 'with_meal',
-    stockRemaining: 30,
+    stockRemaining: 14,
     stockUnit: 'softgels',
-    lowStockThreshold: 10,
+    lowStockThreshold: 14,
     sortOrder: 3,
-    notes: 'Mit Mahlzeit',
+    notes: 'C-82 Szenario: Refill-Warnung bei etwa zwei Wochen Reichweite',
   },
   {
     id: '41000000-0000-0000-0000-000000000104',
@@ -1153,59 +1155,74 @@ const supplementStackItems: SupplementStackItemRow[] = [
 ]
 
 const supplementIntakeLogs: SupplementIntakeLogRow[] = [
-  {
-    userId: '10000000-0000-0000-0000-000000000101',
-    stackItemId: '41000000-0000-0000-0000-000000000101',
-    intakeDate: relDate('2026-08-18'),
-    intakeTime: '08:10',
-    status: 'taken',
-    supplementNameSnapshot: 'Creatine Monohydrate',
-    doseSnapshot: 5,
-    doseUnitSnapshot: 'g',
-    actualDose: 5,
-    actualDoseUnit: 'g',
-    notes: 'C-68 Testdaten: eingenommen, Snapshot bleibt auch bei Stack-Aenderung',
-  },
-  {
-    userId: '10000000-0000-0000-0000-000000000101',
-    stackItemId: '41000000-0000-0000-0000-000000000102',
-    intakeDate: relDate('2026-08-18'),
-    intakeTime: '08:12',
-    status: 'taken',
-    supplementNameSnapshot: 'Vitamin D3',
-    doseSnapshot: 5000,
-    doseUnitSnapshot: 'IU',
-    actualDose: 5000,
-    actualDoseUnit: 'IU',
-    notes: 'C-68 Testdaten: Low-Stock-Item wurde genommen',
-  },
-  {
-    userId: '10000000-0000-0000-0000-000000000101',
-    stackItemId: '41000000-0000-0000-0000-000000000103',
-    intakeDate: relDate('2026-08-18'),
-    intakeTime: '12:45',
-    status: 'taken',
-    supplementNameSnapshot: 'Omega-3 (EPA/DHA)',
-    doseSnapshot: 2,
-    doseUnitSnapshot: 'g',
-    actualDose: 2,
-    actualDoseUnit: 'g',
-    notes: 'C-68 Testdaten: Einnahme mit Mahlzeit',
-  },
-  {
-    userId: '10000000-0000-0000-0000-000000000101',
-    stackItemId: '41000000-0000-0000-0000-000000000104',
-    intakeDate: relDate('2026-08-18'),
-    intakeTime: '21:30',
-    status: 'planned',
-    supplementNameSnapshot: 'Magnesium',
-    doseSnapshot: 400,
-    doseUnitSnapshot: 'mg',
-    actualDose: null,
-    actualDoseUnit: null,
-    notes: 'C-68 Testdaten: geplante Abend-Einnahme',
-  },
 ]
+
+const SUPPLEMENT_LOG_DAYS = daysBetween(addIsoDays(TODAY_DATE, -89), TODAY_DATE)
+const SUPPLEMENT_SKIP_DAYS = new Set([
+  addIsoDays(TODAY_DATE, -84),
+  addIsoDays(TODAY_DATE, -71),
+  addIsoDays(TODAY_DATE, -58),
+  addIsoDays(TODAY_DATE, -45),
+  addIsoDays(TODAY_DATE, -32),
+  addIsoDays(TODAY_DATE, -19),
+  addIsoDays(TODAY_DATE, -6),
+  relDate('2026-08-18'),
+])
+const SUPPLEMENT_LOG_TEMPLATES = [
+  {
+    stackItemId: '41000000-0000-0000-0000-000000000101',
+    time: '08:10',
+    name: 'Creatine Monohydrate',
+    dose: 5,
+    unit: 'g',
+    note: 'C-82 Testdaten: Kreatin-Tagesprotokoll fuer Compliance-Historie',
+  },
+  {
+    stackItemId: '41000000-0000-0000-0000-000000000102',
+    time: '08:12',
+    name: 'Vitamin D3',
+    dose: 5000,
+    unit: 'IU',
+    note: 'C-82 Testdaten: Vitamin-D3-Tagesprotokoll mit urgent Refill',
+  },
+  {
+    stackItemId: '41000000-0000-0000-0000-000000000103',
+    time: '12:45',
+    name: 'Omega-3 (EPA/DHA)',
+    dose: 2,
+    unit: 'g',
+    note: 'C-82 Testdaten: Omega-3-Tagesprotokoll mit 2-Wochen-Reichweite',
+  },
+  {
+    stackItemId: '41000000-0000-0000-0000-000000000104',
+    time: '21:30',
+    name: 'Magnesium',
+    dose: 400,
+    unit: 'mg',
+    note: 'C-82 Testdaten: Magnesium-Tagesprotokoll',
+  },
+] as const
+
+for (const date of SUPPLEMENT_LOG_DAYS) {
+  const skipped = SUPPLEMENT_SKIP_DAYS.has(date)
+  for (const template of SUPPLEMENT_LOG_TEMPLATES) {
+    supplementIntakeLogs.push({
+      userId: '10000000-0000-0000-0000-000000000101',
+      stackItemId: template.stackItemId,
+      intakeDate: date,
+      intakeTime: template.time,
+      status: skipped ? 'skipped' : 'taken',
+      supplementNameSnapshot: template.name,
+      doseSnapshot: template.dose,
+      doseUnitSnapshot: template.unit,
+      actualDose: skipped ? null : template.dose,
+      actualDoseUnit: skipped ? null : template.unit,
+      notes: skipped
+        ? 'C-82 Szenario: voller Supplement-Tag ausgelassen, gekoppelt an harte Trainings-/Erholungsphase'
+        : template.note,
+    })
+  }
+}
 
 type MedicalPanelMarker = {
   loincCode: string
@@ -1495,9 +1512,43 @@ const TRAINING_DAYS = ALL_DATES
     const key = TRAINING_SEQUENCE[index % TRAINING_SEQUENCE.length]!
     return { date, key, name: `${key[0]!.toUpperCase()}${key.slice(1)} ${Math.floor(index / 3) + 1}`, index }
   })
+const CANCELLED_TRAINING_INDEX = 13
+const COMPLETED_TRAINING_DAYS = TRAINING_DAYS
+  .filter(day => day.date <= TODAY_DATE && day.index !== CANCELLED_TRAINING_INDEX)
+const COMPLETED_OCCURRENCES = new Map<string, number>()
+for (const day of COMPLETED_TRAINING_DAYS) {
+  for (const template of TRAINING_PLAN[day.key]) {
+    COMPLETED_OCCURRENCES.set(
+      template.exerciseName,
+      (COMPLETED_OCCURRENCES.get(template.exerciseName) ?? 0) + 1,
+    )
+  }
+}
+const seenCompletedOccurrences = new Map<string, number>()
+
+const E1RM_PROGRESS_TARGETS: Record<string, { target: number; gainPct: number }> = {
+  'Barbell Bench Press': { target: 99.3, gainPct: 0.04 },
+  'Barbell  squat back POV': { target: 126.0, gainPct: 0.06 },
+  'Band Deadlift': { target: 138.0, gainPct: 0.05 },
+}
+
+function e1rm(weightKg: number, reps: number): number {
+  return weightKg / (1.0278 - 0.0278 * reps)
+}
+
+function weightForE1rm(targetE1rm: number, reps: number): number {
+  return targetE1rm * (1.0278 - 0.0278 * reps)
+}
+
+function sessionStatus(day: { date: string; index: number }): TrainingSessionRow['status'] {
+  if (day.date > TODAY_DATE) return 'planned'
+  if (day.index === CANCELLED_TRAINING_INDEX) return 'cancelled'
+  return 'completed'
+}
 
 for (const day of TRAINING_DAYS) {
   const sessionId = uuidFrom(`tom.seed@example.com:training:${day.date}:${day.key}`)
+  const status = sessionStatus(day)
   trainingSessions.push({
     id: sessionId,
     userId: '10000000-0000-0000-0000-000000000101',
@@ -1505,8 +1556,13 @@ for (const day of TRAINING_DAYS) {
     startedTime: '17:30',
     endedTime: '18:45',
     name: day.name,
+    status,
     location: 'Gym',
-    notes: 'C-66 Testdaten: mehrere Wochen Training mit echten Uebungen und Saetzen',
+    notes: status === 'planned'
+      ? 'C-103 Testdaten: zukuenftige Sitzung geplant, nicht abgeschlossen'
+      : status === 'cancelled'
+        ? 'C-103 Szenario: abgebrochene/ausgefallene Sitzung'
+        : 'C-66/C-104 Testdaten: abgeschlossene Sitzung mit progressiver e1RM-Kurve',
   })
 
   TRAINING_PLAN[day.key].forEach((template, exerciseIndex) => {
@@ -1520,13 +1576,28 @@ for (const day of TRAINING_DAYS) {
       plannedReps: template.plannedReps,
       plannedWeightKg: template.plannedWeightKg,
     })
-    const progressionKg = Math.floor(day.index / 3) * 2.5
+    if (status !== 'completed') return
+    const occurrence = seenCompletedOccurrences.get(template.exerciseName) ?? 0
+    seenCompletedOccurrences.set(template.exerciseName, occurrence + 1)
+    const occurrenceCount = COMPLETED_OCCURRENCES.get(template.exerciseName) ?? 1
+    const progressShare = occurrenceCount > 1 ? occurrence / (occurrenceCount - 1) : 1
+    const target = E1RM_PROGRESS_TARGETS[template.exerciseName]
+    const templateBestE1rm = Math.max(...template.sets.map(set => e1rm(set.weightKg, set.reps)))
+    const progressionKg = progressShare * 2
     template.sets.forEach((set, setIndex) => {
+      let reps = Math.max(1, set.reps + ((day.index + setIndex) % 3 === 0 ? 1 : 0))
+      let weightKg = set.weightKg + progressionKg + ((day.index + setIndex) % 2) * 0.75
+      if (target) {
+        reps = set.reps
+        const setShare = e1rm(set.weightKg, set.reps) / templateBestE1rm
+        const currentTarget = target.target * (1 - target.gainPct + target.gainPct * progressShare)
+        weightKg = weightForE1rm(currentTarget * setShare, reps)
+      }
       trainingSets.push({
         workoutExerciseId: exerciseId,
         setNumber: setIndex + 1,
-        reps: Math.max(1, set.reps + ((day.index + setIndex) % 3 === 0 ? 1 : 0)),
-        weightKg: Number((set.weightKg + progressionKg + ((day.index + setIndex) % 2) * 1.25).toFixed(2)),
+        reps,
+        weightKg: Number(weightKg.toFixed(2)),
         rpe: Number(Math.min(10, set.rpe + ((day.index + setIndex) % 4 === 0 ? 0.5 : 0)).toFixed(1)),
         setType: set.setType ?? 'working',
       })
@@ -1620,6 +1691,7 @@ const trainingSessionValues = trainingSessions.map(session => tuple([
   session.startedTime,
   session.endedTime,
   session.name,
+  session.status,
   session.location,
   session.notes,
 ])).join(',\n')
@@ -2415,6 +2487,7 @@ CREATE TEMP TABLE test_training_sessions (
   started_time time NOT NULL,
   ended_time time NOT NULL,
   name text NOT NULL,
+  status text NOT NULL,
   location text NOT NULL,
   notes text NOT NULL
 ) ON COMMIT DROP;
@@ -2425,7 +2498,7 @@ ${trainingSessionValues};
 INSERT INTO training.workout_sessions (
   id, user_id, session_date, started_time, ended_time, name, status, location, notes, duration_minutes
 )
-SELECT id, user_id, session_date, started_time, ended_time, name, 'completed', location, notes, 75
+SELECT id, user_id, session_date, started_time, ended_time, name, status, location, notes, 75
 FROM test_training_sessions;
 
 CREATE TEMP TABLE test_training_exercises (

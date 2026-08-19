@@ -27,7 +27,7 @@ function relDate(anchorDate: string): string {
   return addIsoDays(START_DATE, daysOffset(ANCHOR_DATE, anchorDate))
 }
 const END_DATE = addIsoDays(NEXT_START_DATE, WINDOW_DAYS - 1)
-const TODAY_DATE = addIsoDays(START_DATE, WINDOW_DAYS)
+const TODAY_DATE = NEXT_START_DATE
 
 function sql(query: string): string[][] {
   return execFileSync('docker', [
@@ -76,6 +76,12 @@ const trainingSets = numberScalar(`
   JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${IDS_SQL});`)
+const trainingStatusRows = sql(`
+  SELECT status, count(*)::text
+  FROM training.workout_sessions
+  WHERE user_id IN (${IDS_SQL})
+  GROUP BY status
+  ORDER BY status;`)
 const recoveryCheckins = numberScalar(`SELECT count(*) FROM recovery.checkins WHERE user_id IN (${IDS_SQL});`)
 const medicalCatalog = numberScalar(`SELECT count(*) FROM medical.biomarker_catalog;`)
 const medicalRanges = numberScalar(`SELECT count(*) FROM medical.biomarker_reference_ranges;`)
@@ -90,6 +96,14 @@ const supplementStackItems = numberScalar(`
   JOIN supplements.user_stacks us ON us.id = si.stack_id
   WHERE us.user_id IN (${IDS_SQL});`)
 const supplementIntakeLogs = numberScalar(`SELECT count(*) FROM supplements.intake_logs WHERE user_id IN (${IDS_SQL});`)
+const supplementCompliance30d = Number(sql(`
+  SELECT round(
+    sum(total_taken)::numeric / NULLIF(sum(total_taken + total_skipped), 0) * 100,
+    1
+  )::text
+  FROM supplements.daily_intake_summary
+  WHERE user_id = '${IDS[0]}'::uuid
+    AND intake_date BETWEEN DATE '${addIsoDays(TODAY_DATE, -29)}' AND DATE '${TODAY_DATE}';`)[0]?.[0] ?? 0)
 const maxDays = numberScalar(`
   SELECT COALESCE(max(tage), 0)
   FROM (
@@ -200,7 +214,7 @@ if (MODE === 'clean') {
   if (waterLogs < 500) errors.push(`water_logs: ${waterLogs}, erwartet mindestens 500`)
   if (trainingSessions < 25) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet mindestens 25`)
   if (trainingExercises < 50) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet mindestens 50`)
-  if (trainingSets < 170) errors.push(`training.workout_sets: ${trainingSets}, erwartet mindestens 170`)
+  if (trainingSets < 85) errors.push(`training.workout_sets: ${trainingSets}, erwartet mindestens 85 abgeschlossene Satzzeilen`)
   if (recoveryCheckins < 160) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet mindestens 160`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
   if (medicalRanges !== 560) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 560`)
@@ -210,7 +224,7 @@ if (MODE === 'clean') {
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
-  if (supplementIntakeLogs !== 4) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 4`)
+  if (supplementIntakeLogs !== 360) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 360`)
   if (maxDays < 170) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 170`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
@@ -710,6 +724,56 @@ if (MODE === 'clean') {
   WHERE tage >= 5;`)) {
     errors.push('Fall Training Verlauf: mehrere Wochen abgeschlossene Sitzungen fehlen')
   }
+  if (numberScalar(`
+    SELECT count(*)
+    FROM training.workout_sessions
+    WHERE user_id = '${tom}'::uuid
+      AND status = 'completed'
+      AND session_date > DATE '${TODAY_DATE}';`) !== 0) {
+    errors.push('Fall Training Status: completed-Sitzungen nach heute vorhanden')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM training.workout_sessions
+    WHERE user_id = '${tom}'::uuid
+      AND status = 'cancelled'
+      AND session_date <= DATE '${TODAY_DATE}';`)) {
+    errors.push('Fall Training Status: cancelled-Sitzung fehlt')
+  }
+  if (!hasRows(`
+    WITH future AS (
+      SELECT
+        count(*) AS total,
+        count(*) FILTER (WHERE status = 'planned') AS planned
+      FROM training.workout_sessions
+      WHERE user_id = '${tom}'::uuid
+        AND session_date > DATE '${TODAY_DATE}'
+    )
+    SELECT 1 FROM future WHERE total > 0 AND total = planned;`)) {
+    errors.push('Fall Training Status: Zukunftssitzungen sind nicht vollstaendig planned')
+  }
+  if (!hasRows(`
+    WITH bench AS (
+      SELECT s.session_date, max(ws.estimated_1rm) AS best_1rm
+      FROM training.workout_sessions s
+      JOIN training.workout_exercises we ON we.workout_session_id = s.id
+      JOIN training.workout_sets ws ON ws.workout_exercise_id = we.id
+      WHERE s.user_id = '${tom}'::uuid
+        AND s.status = 'completed'
+        AND we.exercise_name = 'Barbell Bench Press'
+      GROUP BY s.session_date
+    ),
+    edge AS (
+      SELECT
+        (SELECT best_1rm FROM bench ORDER BY session_date ASC LIMIT 1) AS first_1rm,
+        (SELECT best_1rm FROM bench ORDER BY session_date DESC LIMIT 1) AS last_1rm
+    )
+    SELECT 1
+    FROM edge
+    WHERE last_1rm > first_1rm * 1.035
+      AND round(last_1rm, 1) = 99.3;`)) {
+    errors.push('Fall Training e1RM: Bankdruecken steigt nicht plausibel bis 99,3 kg')
+  }
   if (!hasRows(`
     SELECT 1
     FROM recovery.checkins
@@ -888,7 +952,7 @@ if (MODE === 'clean') {
     WHERE il.user_id = '${tom}'::uuid
       AND il.intake_date = DATE '${relDate('2026-08-18')}'
       AND il.intake_time = TIME '08:12'
-      AND il.status = 'taken'
+      AND il.status = 'skipped'
       AND il.supplement_name_snapshot = 'Vitamin D3'
       AND il.dose_snapshot = 5000
       AND il.dose_unit_snapshot = 'IU';`)) {
@@ -900,9 +964,27 @@ if (MODE === 'clean') {
     WHERE user_id = '${tom}'::uuid
       AND intake_date = DATE '${relDate('2026-08-18')}'
       AND total_logged = 4
-      AND total_taken = 3
-      AND total_planned = 1;`)) {
-    errors.push('Fall Supplements Tagesuebersicht: 3 genommen und 1 geplant fehlen')
+      AND total_skipped = 4
+      AND compliance_pct = 0;`)) {
+    errors.push('Fall Supplements Tagesuebersicht: voller ausgelassener Tag fehlt')
+  }
+  if (!(supplementCompliance30d > 0 && supplementCompliance30d < 100)) {
+    errors.push(`Fall Supplements Compliance: 30-Tage-Compliance ${supplementCompliance30d}, erwartet unter 100 und ueber 0`)
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.user_stacks us
+    JOIN supplements.stack_items si ON si.stack_id = us.id
+    JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
+    WHERE us.user_id = '${tom}'::uuid
+      AND (
+        (c.slug = 'creatine-monohydrate' AND si.stock_remaining = 30 AND si.low_stock_threshold = 30)
+        OR (c.slug = 'omega-3-epa-dha' AND si.stock_remaining = 14 AND si.low_stock_threshold = 14)
+        OR (c.slug = 'vitamin-d3' AND si.stock_remaining = 4 AND si.low_stock_threshold = 7)
+      )
+    GROUP BY us.user_id
+    HAVING count(DISTINCT c.slug) = 3;`)) {
+    errors.push('Fall Supplements Refill-Stufen: 1 Monat, 2 Wochen und 1 Woche fehlen')
   }
   if (numberScalar(`
     SELECT count(*)
@@ -937,9 +1019,11 @@ if (MODE === 'clean') {
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
+  console.log(`  Training Status: ${trainingStatusRows.map(([status, count]) => `${status}:${count}`).join(', ')}`)
   console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
+  console.log(`  Supplements Compliance 30d: ${supplementCompliance30d}%`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
   console.log(`  Verschiedene Lebensmittel: ${distinctFoods}`)

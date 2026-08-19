@@ -182,3 +182,59 @@ pnpm exec tsx supabase/_pipeline/_testdaten/testdaten-einspielen.ts --start 2026
 `[cmd]` Supplements sind kein Tagesverlauf, sondern ein punktueller Szenario-Seed: 4 Einnahmezeilen, 4 unterschiedliche Logs. Das reicht für `planned`/`taken` und Low-Stock, aber nicht für Compliance-Verläufe über Wochen.
 
 `[cmd]` Nachweis C-101: Kettenlauf auf Wegwerf-DB `c101_seedcheck` mit `--keep-database`, Testdatenlauf und `testdaten-pruefen.ts` Exit 0; danach Wegwerf-DB verworfen. Live-Lauf auf `postgres`, Kopie nach `dev@lumeos.app`, `testdaten-pruefen.ts` Exit 0, `schema-vollstaendigkeit-pruefen.ts` Exit 0.
+
+## C-103 — Wie der Status jetzt verteilt ist
+
+`[cmd]` Vor C-103 standen alle 30 Trainingssitzungen auf `completed`, auch 14 Sitzungen nach `2026-08-19`. Das war als Seed fachlich falsch: Eine Sitzung in der Zukunft kann geplant sein, aber nicht abgeschlossen.
+
+`[cmd]` Live auf `dev@lumeos.app` nach dem Lauf:
+
+| Status | Sitzungen |
+|---|---:|
+| `completed` | 15 |
+| `cancelled` | 1 |
+| `planned` | 14 |
+
+`[cmd]` `completed` nach `2026-08-19`: 0. Zukünftige Sitzungen behalten die geplante Übungsliste, bekommen aber keine absolvierten Satzzeilen. Die abgebrochene Sitzung liegt als `cancelled` im Zeitraum und ist damit im Trainingstab prüfbar.
+
+`[read]` Das trennt Planung von Historie. `workout_sets` bleiben ein Protokoll absolvierter Sätze; für `planned` und `cancelled` werden deshalb keine Sätze erfunden.
+
+## C-104 — Welche Steigerungsrate angenommen wurde
+
+`[annahme]` Für einen fortgeschrittenen Nutzer ist über etwa drei Monate eine kleine, sichtbare Steigerung plausibel: Bankdrücken rund 4 %, Kreuzheben rund 5 %, Kniebeuge rund 6 %. Das erzeugt einen Verlauf, ohne 30 kg Fortschritt in ein Quartal zu behaupten.
+
+`[cmd]` Live gemessen auf `dev@lumeos.app`:
+
+| Übung | Anfang | Ende | Steigerung |
+|---|---:|---:|---:|
+| `Barbell Bench Press` | 95,3 kg am 2026-05-21 | 99,3 kg am 2026-08-19 | +4,2 % |
+| `Band Deadlift` | 131,1 kg am 2026-06-02 | 138,0 kg am 2026-08-13 | +5,3 % |
+| `Barbell  squat back POV` | 118,4 kg am 2026-06-02 | 126,0 kg am 2026-08-13 | +6,4 % |
+
+`[cmd]` Die Endwerte sind die gemessenen Bestwerte aus dem Befund: Bench 99,3 · Deadlift 138,0 · Squat 126,0. Sie liegen jetzt am Ende der Kurve, nicht am Anfang.
+
+## C-82 — Was Compliance jetzt zeigt
+
+`[cmd]` Vor C-82 gab es 4 Einnahmen an einem Tag und kein `skipped`; `daily_intake_summary` konnte daraus nur 100 % rechnen.
+
+`[cmd]` Der Seed trägt jetzt 90 Tage Supplement-Historie für vier Stack-Positionen: 360 `intake_logs`, davon im letzten 30-Tage-Fenster 112 `taken` und 8 `skipped`. Die 30-Tage-Compliance liegt bei 93,3 %.
+
+`[read]` Ausgelassene Supplementtage sind als volle Tage modelliert, nicht als einzelne zufällige Kapseln. Das entspricht dem typischen Fall: ein harter Trainings-/Erholungstag verschiebt die Routine, und der ganze Stack bleibt liegen.
+
+`[cmd]` Die Nachfüllstufen sind im Bestand sichtbar:
+
+| Stufe | Präparat | Rest | Schwelle | Reichweite |
+|---|---|---:|---:|---:|
+| dringend, unter 1 Woche | `vitamin-d3` | 4 | 7 | 4 Tage |
+| Warnung, 2 Wochen | `omega-3-epa-dha` | 14 | 14 | 14 Tage |
+| Hinweis, 1 Monat | `creatine-monohydrate` | 30 | 30 | 30 Tage |
+
+`[cmd]` `magnesium` bleibt bewusst ausserhalb der drei Stufen: 24 Tage Rest bei Schwelle 10.
+
+## Was weiter fehlt
+
+`[read]` C-106 bleibt offen: Der Sägezahn der Ernährungstage wurde nicht nebenbei geglättet. C-101 liefert Varianz, C-103/C-104/C-82 liefern Status, Progression und Supplement-Historie; die gröbere Wochenform der Ernährung ist ein eigener Punkt.
+
+`[cmd]` `goals.adaptive_tdee(dev@lumeos.app, current_date, 14)` bleibt `complete`: 14 von 14 Zufuhrtagen, 14 Gewichtsmessungen, adaptiv 3.222,6 kcal gegen Formel 3.527,0 kcal, Abstand -304,4 kcal. Die C-78-Kopplung wurde nicht aufgegeben.
+
+`[cmd]` Nachweis C-103/C-104/C-82: Kettenlauf auf Wegwerf-DB `c103_seedcheck`, Testdatenlauf und `testdaten-pruefen.ts` Exit 0; `schema-vollstaendigkeit-pruefen.ts` Exit 0. Live-Lauf auf `postgres`, Kopie nach `dev@lumeos.app`, `testdaten-pruefen.ts` Exit 0, `schema-vollstaendigkeit-pruefen.ts` Exit 0.

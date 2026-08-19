@@ -109,7 +109,7 @@
     "user_id": "10000000-0000-0000-0000-000000000101",
     "date": "2026-08-03 bis 2026-09-06",
     "case": "Trainingssitzungen mit mehreren Wochen Verlauf",
-    "expected": "training.workout_sessions enthaelt neun abgeschlossene Sitzungen mit echten Uebungen aus training.exercises, mehreren Saetzen, berechnetem Volumen und estimated_1rm."
+    "expected": "training.workout_sessions enthaelt abgeschlossene, geplante und eine abgebrochene Sitzung. Zukuenftige Sitzungen stehen auf planned; completed-Sitzungen liefern echte Uebungen, Saetze, Volumen und eine steigende e1RM-Kurve."
   },
   {
     "user": "Tom Miller",
@@ -139,9 +139,9 @@
     "user": "Tom Miller",
     "email": "tom.seed@example.com",
     "user_id": "10000000-0000-0000-0000-000000000101",
-    "date": "2026-08-18",
-    "case": "Supplement-Stack mit Einnahmen und Nachkauf-Fall",
-    "expected": "supplements.user_stacks enthaelt einen aktiven Stack mit vier Items; supplements.intake_logs enthaelt drei genommene und eine geplante Einnahme. Vitamin D3 liegt unter der Nachkauf-Schwelle."
+    "date": "2026-05-22 bis 2026-08-19",
+    "case": "Supplement-Compliance und Nachfuellstufen",
+    "expected": "supplements.user_stacks enthaelt einen aktiven Stack mit vier Items; supplements.intake_logs enthaelt 90 Tage mit genommenen und ausgelassenen Einnahmen. Die 30-Tage-Compliance liegt unter 100 Prozent; Kreatin, Omega-3 und Vitamin D3 bilden die Reichweiten 1 Monat, 2 Wochen und 1 Woche ab."
   },
   {
     "user": "Tom Miller",
