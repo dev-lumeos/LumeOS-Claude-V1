@@ -238,3 +238,35 @@ Stand: 2026-08-18
 [cmd] `training.exercises` bleibt bei 1.416 und `training.exercise_muscles` bei 6.588. Der Wegwerf-Kettenlauf `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts --database lumeos_kette_c90_utf8_20260818` lief gruen; Schritt 109a meldete `OK: 58 Geraete gruppiert, 58 deutsche Namen, 1416 Disziplinen, 6588 Muskelzuordnungen, Sonstiges 10 Geraete/80 Uebungen`.
 
 [cmd] Live danach: `schema-vollstaendigkeit-pruefen.ts` meldete `SCHEMA VOLLSTAENDIG`, `testdaten-pruefen.ts` meldete `OK: C-82 Testdaten stimmen`, `kette-readme-pruefen.ts` meldete `README/Kette: ok (64 Schritte dokumentiert)`, und `pnpm gate` lief gruen mit 8/8 Tasks.
+
+## C-96: Was in der Kettendatei stand
+
+[cmd] `supabase/_pipeline/10_training/109a_equipment_groups_disciplines.sql` trug in genau einer Mapping-Zeile `Geraete & Baenke` statt `Geräte & Bänke`: `Chest Press Machine` -> `machines_benches`.
+
+[cmd] Der fehlerhafte Byteinhalt der Gruppenbeschriftung war `476572616574652026204261656e6b65`. Die korrigierte Zeile enthält jetzt fuer `Geräte & Bänke` `476572c3a4746520262042c3a46e6b65`; beide Umlaute stehen damit als UTF-8 `c3a4` in der Quelle.
+
+[read] Der Fehler war kein kaputtes Encoding: `Geraete & Baenke` ist gueltiges UTF-8. Deshalb konnte `tools/encoding-pruefen.mjs` ihn nicht sehen. Gefehlt hat eine Konsistenzpruefung ueber stabile Gruppenschluessel.
+
+[cmd] Der Kettenlauf gegen die Wegwerf-Datenbank `c96_labelcheck` lief ueber `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts --database c96_labelcheck --keep-database` gruen durch. Danach stand `machines_benches` bei genau einer deutschen Beschriftung: `Geräte & Bänke`, Hex `476572c3a4746520262042c3a46e6b65`, 29 Zeilen.
+
+## C-96: Welche anderen Stellen betroffen sind
+
+[cmd] Die Variantenmessung ueber die Gruppenspalten in der Wegwerf-Datenbank fand 0 weitere gefaltete Schreibvarianten.
+
+| Bereich | Zeilen | stabile Schluessel | Label/Namen | Befunde |
+|---|---:|---:|---:|---:|
+| `training.equipment.equipment_group_de/en` | 58 | 4 | 4 de / 4 en | 0 |
+| `training.muscle_groups.name` | 95 | - | 95 | 0 |
+| `nutrition.food_groups.label_de` | 19 | 19 | 19 | 0 |
+
+[cmd] Die Messung gruppierte deutsche Beschriftungen nach gefalteter Form (`ä` -> `ae`, `ö` -> `oe`, `ü` -> `ue`, `ß` -> `ss`). Damit haette sie den alten Fall `Geraete & Baenke` neben `Geräte & Bänke` gemeldet.
+
+[annahme] Fuer Muskelgruppen gibt es im aktuellen Schema kein getrenntes Anzeigenlabel neben `name`; deshalb wurde dort auf gefaltete Namensdubletten gemessen, nicht auf eine Schluessel-Label-Paarung wie bei den Geraeten.
+
+## C-96: Ob die Pruefung ins Gate kann
+
+[cmd] `tools/gruppenlabel-pruefen.mjs` wurde als eigene Gate-Pruefung neben `encoding-pruefen.mjs` ergaenzt. `node tools/gruppenlabel-pruefen.mjs` meldet: `118 Labels in 10 Gruppen/Faltungen geprueft, sauber.`
+
+[read] Die Pruefung gehoert nicht direkt in `encoding-pruefen.mjs`, weil sie inhaltlich etwas anderes tut: Sie prueft nicht Bytegueltigkeit, sondern ob dieselbe kuratierte Gruppe verschieden beschriftet wurde.
+
+[annahme] Der erste Zuschnitt prueft die belegte Fehlerklasse in `109a_equipment_groups_disciplines.sql` fuer `equipment_group_de` und `equipment_group_en`. Weitere kuratierte Gruppendateien koennen nach demselben Muster ergaenzt werden, sobald sie stabile Schluessel plus Beschriftung fuehren.

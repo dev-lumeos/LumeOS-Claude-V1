@@ -83,7 +83,7 @@ WITH mapping(name, name_de, equipment_group, equipment_group_de, equipment_group
     ('Cable Pulley Machine, Rope Attachment', 'Kabelzug mit Seilgriff', 'cables_bands', 'Kabel & Bänder', 'Cables & Bands'),
     ('Cable Row Machine', 'Kabel-Rudergerät', 'cables_bands', 'Kabel & Bänder', 'Cables & Bands'),
     ('Chair', 'Stuhl', 'other', 'Sonstiges', 'Other'),
-    ('Chest Press Machine', 'Brustpresse', 'machines_benches', 'Geraete & Baenke', 'Machines & Benches'),
+    ('Chest Press Machine', 'Brustpresse', 'machines_benches', 'Geräte & Bänke', 'Machines & Benches'),
     ('Couch', 'Couch', 'other', 'Sonstiges', 'Other'),
     ('Crossover machine', 'Kabel-Crossover', 'cables_bands', 'Kabel & Bänder', 'Cables & Bands'),
     ('Dip Pull Up Station', 'Dip- und Klimmzugstation', 'machines_benches', 'Geräte & Bänke', 'Machines & Benches'),
