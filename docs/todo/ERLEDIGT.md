@@ -7535,3 +7535,136 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Biomarkern (130–160), **aber mit Makros je Zeile und
   Synonymaufloesung.** In SQL ist der **Kategoriefilter mit 495 ms** der
   langsamste Pfad, nicht die Textsuche.
+
+- [x] **G-67: Daumen hoch und runter in der Lebensmittel-Detailansicht**
+  (neu 2026-08-18). **Setzt G-65 und G-66 voraus.**
+
+  **Tom, 2026-08-18:** *„Bau in die Detailansicht des Foods einen Daumen
+  hoch und Daumen runter ein. Der User kann, wenn er sich ein Resultat
+  anschaut, das gleich klassifizieren fuer sich."*
+
+  ### Warum das den Rest loest
+
+  `[read]` **Der Preferences-Assistent verlangt Vorarbeit** — jemand
+  muss sich hinsetzen und hunderte Lebensmittel bewerten, **bevor die
+  Suche etwas kann.**
+
+  **Der Daumen verlangt nichts.** Man sucht ohnehin, man oeffnet die
+  Detailansicht ohnehin — **und die Bewertung faellt dabei ab.**
+
+  `[cmd]` **Bei 7.140 Lebensmitteln ist das der einzige Weg, der
+  skaliert.** Dieselbe Stelle traegt auch den Add-Knopf; **der Nutzer ist
+  bereits dort und hat bereits eine Meinung.**
+
+  ### Die Datenseite traegt es ohne Aenderung
+
+  `[cmd]` **`food_preference_items`** hat `preference`, `strength`,
+  `food_id` — **und `source`.**
+
+  `[read]` **Die Spalte `source` ist der Kern:** Eine Bewertung aus dem
+  Assistenten ist eine **Absicht**. Ein Daumen beim Suchen ist eine
+  **Gewohnheit**. **Beides zaehlt, aber nicht gleich viel** — und
+  `strength` gibt es dafuer schon.
+
+  **Zu entscheiden:** Gewichtet der Daumen gleich wie der Assistent
+  (±100 nach der Rangfolge in G-65), oder schwaecher? `[read]` **Und
+  was passiert, wenn beide sich widersprechen** — Assistent sagt „mag
+  ich", Daumen sagt das Gegenteil?
+
+  ### Was dazugehoert
+
+  `[cmd]` **Der Zustand muss sichtbar sein**, wenn man dasselbe
+  Lebensmittel wieder oeffnet — sonst weiss niemand, ob er schon
+  bewertet hat.
+
+  `[cmd]` **Und rueckgaengig machen**, mit einem zweiten Klick auf
+  denselben Daumen. `[read]` Die Vorlage im Vorgaengerrepo macht es so:
+  *neutral → like → dislike → neutral.* **Ein Zyklus, keine zwei
+  Knoepfe mit Loeschfunktion.**
+
+  `[cmd]` **Die Wirkung gehoert gezeigt:** Wer etwas abwertet, sollte
+  merken, dass es beim naechsten Suchen weiter unten steht — sonst
+  wirkt der Daumen folgenlos.
+
+  ### Was NICHT dazugehoert
+
+  `[read]` **Kein automatisches Lernen aus dem Verhalten.** Was jemand
+  oft isst, ist keine Zustimmung — es kann Gewohnheit, Preis oder
+  Zeitmangel sein. **Der Daumen ist eine Aussage, das Protokoll nicht.**
+
+  `[cmd]` **Und keine Empfehlung daraus ableiten** — das ist Buddys
+  Aufgabe und braucht C-78 (zusammenhaengende Seeds).
+
+  ### Auch in der Trefferliste, nicht nur im Detail
+
+  **Tom, 2026-08-18:** *„Kann ja auch in der Auflistung sein, dass der
+  User etwas sieht, das er nicht mag, und wie in Individual food
+  „dislike −100" machen kann. Etwas als Favorite setzen haben wir ja
+  schon."*
+
+  `[cmd]` **Der Anker steht im Mockup:** Die Tabelle hat eine schmale
+  erste Spalte mit dem Lesezeichen-Symbol fuer Favoriten. **Dort passt
+  die Bewertung daneben** — ohne die Detailansicht zu oeffnen.
+
+  `[read]` **Favorit und Daumen sind nicht dasselbe:** Favorit heisst
+  *„das will ich schnell finden"*, Daumen runter heisst *„das will ich
+  gar nicht sehen"*. **Zwei Absichten, beide Spalten traegt
+  `food_preference_items` bereits.**
+
+  `[cmd]` **Und der Klick darf die Zeile nicht oeffnen** — die Zeile
+  fuehrt in die Detailansicht, der Daumen nicht. `[read]` Sonst bewertet
+  man versehentlich, was man nur ansehen wollte.
+
+  **Entschieden (Tom, 2026-08-18): Sicherheitsabfrage, dann weg.**
+
+  `[cmd]` **Der Daumen runter in der Liste fragt nach**, danach
+  verschwindet die Zeile. `[read]` **Damit ist beides geloest:** Die
+  Wirkung ist sofort sichtbar, **und ein Fehlklick kann nicht
+  passieren** — sonst waere die Zeile weg, die man zum Korrigieren
+  braucht.
+
+  `[read]` **Der Daumen hoch fragt nicht** — eine Zustimmung ist
+  folgenlos umkehrbar, ein Ausschluss nicht. **Nur die entfernende
+  Richtung braucht die Abfrage.**
+
+  `[cmd]` **Und die Abfrage nennt, was sie tut** — nicht *„Sind Sie
+  sicher?"*, sondern *„Rosenkohl kuenftig nicht mehr anzeigen?"* mit dem
+  Hinweis, wo es rueckgaengig geht (Preferences, Individual foods).
+
+  `[cmd]` **Erledigt 2026-08-19. Beide Stellen** — erste Spalte der
+  Trefferliste (die G-66 dafuer freigelassen hatte) **und** die
+  Detailansicht der Suche.
+
+  `[cmd]` **Die Symbole sind `✓` und `✗`** — `packages/ui` fuehrt kein
+  `thumb_up`. `[read]` *„Genommen sind genau die Zeichen, die das
+  Vorgaengerrepo benutzt (`FoodPreferences.tsx:709`). Keine Notloesung,
+  sondern die dort getroffene Entscheidung."* **Der Zyklus stammt aus
+  derselben Datei, Zeile 695.**
+
+  `[cmd]` **Die Abfrage nennt das Lebensmittel:** *„Walnuss kuenftig
+  nicht mehr anzeigen?"* mit dem Hinweis auf Preferences · Individual
+  foods. **Gemessen: Abbrechen schreibt nichts, Bestaetigen entfernt die
+  Zeile (50 → 49), nach Neuladen bleibt beides stehen.**
+
+  ### `source` und `strength`
+
+  `[cmd]` **`source = 'search_thumb'`** — die Spalte hat keine
+  CHECK-Bedingung, **die Trennung kostet keine Schemaaenderung.** Live
+  belegt: `search_thumb/liked` steht neben `settings/liked`,
+  `settings/disliked`, `settings/hard_exclude`.
+
+  `[cmd]` **Der Daumen wiegt schwaecher:** `like`/`soft_dislike` statt
+  `boost`/`hard_exclude`. `[read]` **Drei Gruende:** *„der Aufwand sagt
+  etwas ueber die Absicht; der Fehlklick ist in einer 50-Zeilen-Liste
+  wahrscheinlicher; und `hard_exclude` ist die Stufe, die auch fuer
+  Allergene gilt — die sollte ein Listenklick nicht erreichen."*
+
+  ### Bei Widerspruch gewinnt das Spaetere
+
+  `[cmd]` **Und das ist nicht nur vereinbart, sondern erzwungen** —
+  `uq_food_pref_items_user_food`: **je Nutzer und Lebensmittel nur eine
+  Zeile.**
+
+  `[read]` *„Wer seine Meinung aendert, hat sich nicht geirrt; ein
+  System, das die aeltere Aussage gewinnen liesse, wuerde die Korrektur
+  verweigern."*
