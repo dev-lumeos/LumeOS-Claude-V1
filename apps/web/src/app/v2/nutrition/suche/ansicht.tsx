@@ -21,6 +21,9 @@ import type {
   NutritionFoodSearchRow,
   NutritionFoodNutrientRow,
 } from '../../../../lib/nutrition/food-search'
+// G-67: der Daumen an der Detailansicht.
+import { DaumenKnoepfe, type Daumen } from '../daumen'
+import { daumenLesen } from '../daumen-aktion'
 
 type Zustand =
   | { art: 'leer' }
@@ -43,6 +46,8 @@ export function SucheAnsicht() {
   const [eingabe, setEingabe] = React.useState('')
   const [zustand, setZustand] = React.useState<Zustand>({ art: 'leer' })
   const [gewaehlt, setGewaehlt] = React.useState<string | undefined>()
+  // G-67: der Daumenstand des gewaehlten Lebensmittels.
+  const [daumen, setDaumen] = React.useState<Record<string, Daumen>>({})
   const [reiter, setReiter] = React.useState('naehrwerte')
 
   // Laufende Anfrage abbrechen, wenn eine neue startet: sonst kann eine
@@ -94,6 +99,17 @@ export function SucheAnsicht() {
   const payload = zustand.art === 'fertig' ? zustand.payload : null
   const treffer = payload?.foods ?? []
   const detail = payload?.selected_food ?? null
+
+  // G-67: den Daumenstand des gewaehlten Lebensmittels nachladen.
+  const detailId = detail?.id
+  React.useEffect(() => {
+    if (!detailId) return
+    let verworfen = false
+    void daumenLesen([detailId]).then(stand => {
+      if (!verworfen) setDaumen(d => ({ ...d, ...stand }))
+    })
+    return () => { verworfen = true }
+  }, [detailId])
 
   return (
     <>
@@ -201,6 +217,27 @@ export function SucheAnsicht() {
 
           {detail && payload && (
             <>
+              {/* G-67: der Daumen an der Detailansicht. Tom: „Der User
+                  kann, wenn er sich ein Resultat anschaut, das gleich
+                  klassifizieren fuer sich." */}
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 10,
+                marginBottom: 12, flexWrap: 'wrap',
+              }}>
+                <DaumenKnoepfe
+                  foodId={detail.id}
+                  name={detail.name_display_de || detail.name_de}
+                  zustand={daumen[detail.id] ?? 'neutral'}
+                  onGesetzt={neu => setDaumen(d => ({ ...d, [detail.id]: neu }))}
+                  gross
+                />
+                <span className="v2-muted" style={{ fontSize: 11.5 }}>
+                  {daumen[detail.id] === 'liked' ? 'Mag ich'
+                    : daumen[detail.id] === 'disliked' ? 'Mag ich nicht'
+                      : 'Noch nicht bewertet'}
+                </span>
+              </div>
+
               <div className="v2-grid v2-g-cols-4" style={{ marginBottom: 12 }}>
                 {([
                   ['Energie', detail.enercc, 'kcal'],

@@ -27,6 +27,9 @@ import { Card, Pill, Icon, InEntwicklungKnopf } from '@lumeos/ui'
 import type {
   NutritionFoodSearchPayload, NutritionFoodSearchRow,
 } from '../../../lib/nutrition/food-search'
+// G-67: der Daumen in der Trefferliste.
+import { DaumenKnoepfe, type Daumen } from './daumen'
+import { daumenLesen } from './daumen-aktion'
 
 /**
  * Die Pillen des Entwurfs, auf die Kategoriewurzeln abgebildet.
@@ -82,6 +85,24 @@ export function NutritionFoodsTab({
   const [fehler, setFehler] = React.useState<string | null>(null)
   const [dauerMs, setDauerMs] = React.useState<number | null>(null)
 
+  // G-67: der Daumenstand je Lebensmittel, und was nach dem Abwerten
+  // ausgeblendet ist.
+  const [daumen, setDaumen] = React.useState<Record<string, Daumen>>({})
+  const [ausgeblendet, setAusgeblendet] = React.useState<Set<string>>(new Set())
+
+  const daumenGesetzt = React.useCallback((foodId: string, neu: Daumen) => {
+    setDaumen(d => ({ ...d, [foodId]: neu }))
+    // `[read]` Tom: „Sicherheitsabfrage, dann weg." Die Zeile
+    // verschwindet erst nach dem Bestaetigen — die Abfrage sitzt im
+    // Knopf, hier kommt nur noch das Ergebnis an.
+    setAusgeblendet(s => {
+      const n = new Set(s)
+      if (neu === 'disliked') n.add(foodId)
+      else n.delete(foodId)
+      return n
+    })
+  }, [])
+
   const ersterLauf = React.useRef(true)
   const laufend = React.useRef<AbortController | null>(null)
 
@@ -118,8 +139,31 @@ export function NutritionFoodsTab({
     return () => clearTimeout(zeit)
   }, [suche, kategorie])
 
-  const zeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
+  const alleZeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
+  // Abgewertete Zeilen verschwinden aus der Liste — aber erst nach dem
+  // Bestaetigen, und nur bis zum naechsten Laden: dann kommen sie gar
+  // nicht mehr, sobald C-94 die Suche filtert. Bis dahin ist das
+  // Ausblenden die sichtbare Wirkung.
+  const zeilen = alleZeilen.filter(f => !ausgeblendet.has(f.id))
   const gesamt = payload?.total ?? 0
+
+  // G-67: den Daumenstand zu den sichtbaren Treffern nachladen.
+  // `[read]` Ohne ihn saehe jede Zeile unbewertet aus, auch wenn sie es
+  // nicht ist — der Auftrag verlangt ausdruecklich, dass der Zustand
+  // beim Wiederoeffnen dasteht.
+  React.useEffect(() => {
+    const ids = alleZeilen.map(f => f.id)
+    if (ids.length === 0) return
+    let verworfen = false
+    void daumenLesen(ids).then(stand => {
+      if (verworfen) return
+      setDaumen(stand)
+      // Was schon abgewertet ist, gehoert beim Laden gleich ausgeblendet.
+      setAusgeblendet(new Set(
+        Object.entries(stand).filter(([, v]) => v === 'disliked').map(([k]) => k)))
+    })
+    return () => { verworfen = true }
+  }, [payload])
 
   return (
     <div style={{ marginTop: 16 }}>
@@ -200,7 +244,11 @@ export function NutritionFoodsTab({
           <table className="v2-tbl">
             <thead>
               <tr>
-                <th style={{ width: 30 }} />
+                {/* G-67: die schmale erste Spalte des Entwurfs traegt
+                    jetzt den Daumen. Sie war fuer das Lesezeichen
+                    gedacht; Favorit und Daumen sind zwei Absichten,
+                    und `food_preference_items` traegt beide. */}
+                <th style={{ width: 58 }} />
                 <th>Food</th>
                 <th style={{ width: 70 }}>Source</th>
                 <th style={{ width: 90, textAlign: 'right' }}>kcal/100g</th>
@@ -215,11 +263,14 @@ export function NutritionFoodsTab({
                 const k = zahl(f.enercc)
                 return (
                   <tr key={f.id}>
-                    {/* `[read]` Die Stern-Spalte des Entwurfs bleibt
-                        leer: der Daumen ist G-67, die Preferences sind
-                        C-94. Die Spalte steht, damit die Form stimmt,
-                        wenn sie gefuellt wird. */}
-                    <td />
+                    <td>
+                      <DaumenKnoepfe
+                        foodId={f.id}
+                        name={f.name_display_de || f.name_de}
+                        zustand={daumen[f.id] ?? 'neutral'}
+                        onGesetzt={neu => daumenGesetzt(f.id, neu)}
+                      />
+                    </td>
                     <td>
                       <div style={{ fontSize: 12.5, fontWeight: 500 }}>
                         {f.name_display_de || f.name_de}
