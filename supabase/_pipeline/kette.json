@@ -130,6 +130,20 @@
       "depends_on": ["020b"]
     },
     {
+      "id": "018",
+      "path": "supabase/_pipeline/015_kataloge/018_ausschluss_presets.sql",
+      "kind": "sql",
+      "creates": "exclusion_presets, exclusion_preset_rules und die Sicht exclusion_preset_matches — benannte Ausschlussregeln fuer die Lebensmittelsuche",
+      "depends_on": ["020b", "027"]
+    },
+    {
+      "id": "032",
+      "path": "supabase/_pipeline/_ableitung/032-halal-koscher-tags.sql",
+      "kind": "sql",
+      "creates": "halal- und kosher-Zuordnungen aus den Presets; die Definitionen aus C-98 waren leer",
+      "depends_on": ["018"]
+    },
+    {
       "id": "028",
       "path": "supabase/_pipeline/_ableitung/028_kuratierte-aliase.ts",
       "kind": "tsx",
