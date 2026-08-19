@@ -98,3 +98,81 @@ bleibt.
 Der BLS-Code trägt Warengruppe und Zubereitung an festen Stellen, und
 `sort_weight` hat beides bereits übersetzt. Zwei Systeme, die um dieselbe
 Sortierung konkurrieren, sind schlechter als eines.
+
+## C-99: Wo die 2.237 liegen
+
+[cmd] Vor C-99 waren 4.903 von 7.140 Lebensmitteln mit `foods.category_id` verbunden; 2.237 waren leer. Die leeren Zeilen lagen nicht breit gestreut, sondern in wenigen Bloecken:
+
+| Praefix | leer | Befund |
+|---|---:|---|
+| `X` | 1.165 | zusammengesetzte Gerichte |
+| `Y` | 885 | Menuekomponenten / zubereitete Gerichte |
+| `N` | 114 | alkoholfreie Getraenke, Wasser, Kaffee, Tee, Softdrinks |
+| `V` | 56 | Schnecken, Pferd/Ziege/Kaninchen, Wildgefluegel, Pasteten, Gefluegel-Konserve |
+| `U` | 17 | Fleisch-Konserven, Suppen, Fonds, Saucen |
+
+[read] Das ist keine gleichmaessige Streuung. `N`, `X` und `Y` sind fehlende sichere Bruecken auf vorhandene Kategorien; `U`/`V` mischen Rohware, Wild, Brotaufstrich, Konserve, Suppe und Sauce und bleiben deshalb leer.
+
+## C-99: Was die 4.903 ueber die Systematik sagen
+
+[cmd] Die 4.903 bereits kategorisierten Lebensmittel belegten 32 `food_categories`; keine dieser Kategorien enthielt mehr als einen BLS-Praefix. Der bestehende Bestand ist damit als Massstab geeignet.
+
+[cmd] Der gelernte Abgleich Praefix -> Anzeigegruppe reproduziert die 4.903 vollstaendig: `scope_foods = 4903`, `category_present = 4903`, `group_resolved = 4903`.
+
+| Praefix | Gruppe | Zeilen |
+|---|---|---:|
+| `B` | Brot & Backwaren | 186 |
+| `C` | Getreide & Staerke | 231 |
+| `D` | Suesswaren & Gebaeck | 466 |
+| `E` | Eier | 104 |
+| `F` | Obst | 275 |
+| `G` | Gemuese | 560 |
+| `H` | Nuesse & Samen | 142 |
+| `K` | Kartoffeln & Huelsenfruechte | 157 |
+| `M` | Milch & Kaese | 279 |
+| `P` | Getraenke | 119 |
+| `Q` | Fette & Oele | 65 |
+| `R` | Wuerzmittel & Zutaten | 97 |
+| `S` | Suesswaren | 253 |
+| `T` | Fisch & Meerestiere | 520 |
+| `U` | Fleisch | 668 |
+| `V` | Gefluegel | 406 |
+| `W` | Wurstwaren | 375 |
+
+[read] Genau hier war die reine Praefixregel zu grob: Die Anzeigegruppe `Getraenke` muss `N` und `P` tragen koennen; `Fette & Oele` haengt an Kategorie `fette-oele`, obwohl die belegten Foods den Praefix `Q` tragen; `Wuerzmittel & Zutaten` nimmt die `R`-Foods auf. Deshalb gehoert die Bruecke an `food_categories`, nicht als zweite geratene Praefixregel an `foods`.
+
+## C-99: Wie die Regel gegen sie abschneidet
+
+[cmd] Gebaut wurde `supabase/_pipeline/02_human_layer/023a_food_group_category_bridge.sql`. Strukturentscheidung: `food_categories.food_group_code` zeigt per Fremdschluessel auf `nutrition.food_groups(code)`. Das ist n:1: viele Feinkategorien gehoeren zu einer Anzeigegruppe.
+
+[cmd] Der Schritt setzt 430 von 518 Kategorien auf eine `food_group_code`. Mischwurzeln bleiben bewusst leer, wenn eine einzige Anzeigegruppe falsch waere, etwa `fleisch-gefluegel`, `getreide-brot-pasta` und `fertiggerichte-zubereitungen`.
+
+[cmd] Auf die 2.237 vorher leeren Foods wurden 2.164 sicher angewandt: `N` -> `getraenke` (114), `X`/`Y` -> `fertiggerichte-zubereitungen` (2.050). Danach stehen 7.067 von 7.140 Foods mit Kategorie, 73 bleiben leer.
+
+[cmd] `food_search` liest bei `p_groups` jetzt zuerst `food_categories.food_group_code` und nutzt den BLS-Praefix nur als Rueckfall, wenn die Kategorie keine eindeutige Gruppe traegt. Die Bedingung wurde an beiden Stellen der Funktion nachgezogen: Trefferseite und Gesamtzahl.
+
+[cmd] Die Food-DB-Pillenzahlen nach dem Live-Einspielen:
+
+| Pille / Wurzel | vorher | nachher | Differenz |
+|---|---:|---:|---:|
+| Meat / `fleisch-gefluegel` | 1.449 | 1.449 | 0 |
+| Fish / `fisch-meeresfruechte` | 520 | 520 | 0 |
+| Grains / `getreide-brot-pasta` | 883 | 883 | 0 |
+| Dairy / `milch-kaese` | 279 | 279 | 0 |
+| Produce / `gemuese` | 717 | 717 | 0 |
+| Fruit / `obst` | 275 | 275 | 0 |
+| Beverages / `getraenke` | 119 | 233 | +114 |
+| Eggs / `eier` | 104 | 104 | 0 |
+| `fertiggerichte-zubereitungen` | 0 | 2.050 | +2.050 |
+
+[cmd] Die 19 `food_groups` sind danach ebenfalls voll belegt: B 186, C 231, D 466, E 104, F 275, G 560, H 142, K 157, M 279, N 65, P 233, Q 97, S 253, T 520, U 685, V 462, W 375, X 1.165, Y 885.
+
+## C-99: Was ohne Gruppe bleibt
+
+[cmd] Leer bleiben 73 Foods: `U` 17 und `V` 56.
+
+[read] Diese 73 sind bewusst nicht geraten. `U9` enthaelt Fleischkonserven, Ochsenschwanzsuppe, Fleischfond, Bratensosse, Meerrettichsosse und Sauce Hollandaise. `V` enthaelt Schnecken, Pferd, Ziege, Kaninchen, Wildgefluegel, Brotaufstriche, Pasteten und Gefluegel-Konserven.
+
+[annahme] Fuer diese Reste braucht es eine eigene Kategorie-Kuration nach Namen und Zielkategorien. Eine pauschale Zuordnung zu Fleisch/Gefluegel oder Fertiggerichten waere genau die Art Regel, die bei den zwei frueheren Praefixversuchen gefallen ist.
+
+[cmd] Nachweis: Kettenlauf auf Wegwerf-Datenbank `c99_bridge` lief gruen; `023a` meldete `OK: 430 Kategorien mit food_group_code, 7067 Foods kategorisiert, 73 bewusst leer`. `schema-vollstaendigkeit-pruefen.ts` meldete auf Wegwerf und live Exit 0 mit `Fremdschl. 17/17 vorhanden`. `testdaten-pruefen.ts` meldete live `OK: C-82 Testdaten stimmen`. `pnpm gate` lief gruen.

@@ -88,6 +88,13 @@
       "depends_on": ["030"]
     },
     {
+      "id": "023a",
+      "path": "supabase/_pipeline/02_human_layer/023a_food_group_category_bridge.sql",
+      "kind": "sql",
+      "creates": "Bruecke food_categories.food_group_code -> food_groups und sichere Kategorie-Nachzuege fuer N/X/Y",
+      "depends_on": ["021", "023"]
+    },
+    {
       "id": "024",
       "path": "supabase/_pipeline/02_human_layer/024_suchsynonyme.sql",
       "kind": "sql",
@@ -106,7 +113,7 @@
       "path": "supabase/_pipeline/07_lesefunktionen/073_suchfilter.sql",
       "kind": "sql",
       "creates": "food_search und Such-Rangfunktionen",
-      "depends_on": ["071", "072"]
+      "depends_on": ["071", "072", "023a"]
     },
     {
       "id": "025",

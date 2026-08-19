@@ -810,6 +810,12 @@
       "schritt": "Baseline"
     },
     {
+      "name": "food_categories_food_group_code_fkey",
+      "tabelle": "food_categories",
+      "zeigt_auf": "food_groups",
+      "schritt": "023a"
+    },
+    {
       "name": "food_preference_items_food_id_fkey",
       "tabelle": "food_preference_items",
       "zeigt_auf": "foods",

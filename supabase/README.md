@@ -75,6 +75,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 021 | `02_human_layer/021_wild_category_apply.sql` | **Kategoriezuweisung `V2%` → `wild`** | `affected_rows = 49` |
 | 022 | `02_human_layer/022_alias_ableitung.sql` | abgeleitete Aliase | 32.522 gesamt |
 | 023 | `02_human_layer/023_zubereitung_ableitung.sql` | `preparation_kinds` (11), `food_groups` (19) | 11 / 19 |
+| 023a | `02_human_layer/023a_food_group_category_bridge.sql` | `food_categories.food_group_code` als Bruecke zu `food_groups`; sichere Kategorie-Nachzuege fuer N/X/Y | 7.067 kategorisiert, 73 bewusst leer |
 | 024 | `02_human_layer/024_suchsynonyme.sql` | `search_synonyms` | 4.877, davon 21 von Hand |
 | 025 | `_ableitung/anzeigenamen-einspielen.ts` | kuratierte `name_display_de`/`name_display_en` aus `daten/anzeigenamen.jsonl` | 7.140 Anzeigenamen, 33 `sicher=false` sichtbar im Lauf |
 | 026 | `_ableitung/anzeigenamen-nebennamen-aliase.ts` | kuratierte `nebennamen` als `food_aliases.source='curated_nebenname'` | 576 Foods mit Nebennamen, 663 kuratierte Namen vor Deduplikation |

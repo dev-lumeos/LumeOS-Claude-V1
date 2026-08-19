@@ -388,10 +388,26 @@ matching_foods AS (
           )
       )
     )
-    -- Warengruppe: erster Buchstabe des BLS-Codes.
+    -- Warengruppe: C-99 nutzt die Bruecke food_categories -> food_groups.
+    -- Der Praefix bleibt Rueckfall fuer Kategorien ohne eindeutige
+    -- Gruppe, z.B. X/Y unter der gemischten Fertiggerichte-Wurzel.
     AND (
       p_groups IS NULL OR cardinality(p_groups) = 0
-      OR substr(f.bls_code, 1, 1) = ANY(p_groups)
+      OR EXISTS (
+        SELECT 1
+        FROM nutrition.food_categories fcg
+        WHERE fcg.id = f.category_id
+          AND fcg.food_group_code = ANY(p_groups)
+      )
+      OR (
+        NOT EXISTS (
+          SELECT 1
+          FROM nutrition.food_categories fcg
+          WHERE fcg.id = f.category_id
+            AND fcg.food_group_code IS NOT NULL
+        )
+        AND substr(f.bls_code, 1, 1) = ANY(p_groups)
+      )
     )
     -- Nur Grundnahrungsmittel: [cmd] X und Y sind zusammengesetzte
     -- Gerichte (2.050 Eintraege, sort_weight durchgaengig 0).
@@ -399,7 +415,13 @@ matching_foods AS (
       NOT COALESCE(p_basics_only, false)
       OR NOT EXISTS (
         SELECT 1 FROM nutrition.food_groups fg
-        WHERE fg.code = substr(f.bls_code, 1, 1) AND fg.ist_gericht
+        WHERE fg.code = COALESCE(
+            (SELECT fcg.food_group_code
+             FROM nutrition.food_categories fcg
+             WHERE fcg.id = f.category_id),
+            substr(f.bls_code, 1, 1)
+          )
+          AND fg.ist_gericht
       )
     )
   ORDER BY
@@ -586,13 +608,33 @@ all_matching_food_ids AS (
     )
     AND (
       p_groups IS NULL OR cardinality(p_groups) = 0
-      OR substr(f.bls_code, 1, 1) = ANY(p_groups)
+      OR EXISTS (
+        SELECT 1
+        FROM nutrition.food_categories fcg
+        WHERE fcg.id = f.category_id
+          AND fcg.food_group_code = ANY(p_groups)
+      )
+      OR (
+        NOT EXISTS (
+          SELECT 1
+          FROM nutrition.food_categories fcg
+          WHERE fcg.id = f.category_id
+            AND fcg.food_group_code IS NOT NULL
+        )
+        AND substr(f.bls_code, 1, 1) = ANY(p_groups)
+      )
     )
     AND (
       NOT COALESCE(p_basics_only, false)
       OR NOT EXISTS (
         SELECT 1 FROM nutrition.food_groups fg
-        WHERE fg.code = substr(f.bls_code, 1, 1) AND fg.ist_gericht
+        WHERE fg.code = COALESCE(
+            (SELECT fcg.food_group_code
+             FROM nutrition.food_categories fcg
+             WHERE fcg.id = f.category_id),
+            substr(f.bls_code, 1, 1)
+          )
+          AND fg.ist_gericht
       )
     )
 ),
