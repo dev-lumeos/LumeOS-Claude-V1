@@ -152,6 +152,24 @@ if (MODE === 'clean') {
       AND (nutrients IS NULL OR nutrients = '{}'::jsonb);`)
   const portionRows = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL}) AND portion_name IS NOT NULL;`)
   const dailyRows = numberScalar(`SELECT count(*) FROM nutrition.daily_summary WHERE user_id IN (${IDS_SQL});`)
+  const distinctFoods = numberScalar(`
+    SELECT count(DISTINCT mi.food_id)
+    FROM nutrition.meals m
+    JOIN nutrition.meal_items mi ON mi.meal_id = m.id
+    WHERE m.user_id IN (${IDS_SQL});`)
+  const tomDistinctDailyGrams = numberScalar(`
+    SELECT count(DISTINCT grams)
+    FROM (
+      SELECT m.entry_date, sum(mi.amount_g)::numeric(10,1) AS grams
+      FROM nutrition.meals m
+      JOIN nutrition.meal_items mi ON mi.meal_id = m.id
+      WHERE m.user_id = '${IDS[0]}'::uuid
+      GROUP BY m.entry_date
+    ) d;`)
+  const tomDistinctDailyKcal = numberScalar(`
+    SELECT count(DISTINCT round(enercc, 1))
+    FROM nutrition.daily_summary
+    WHERE user_id = '${IDS[0]}'::uuid;`)
   const assessmentRows = numberScalar(`
     SELECT count(*)
     FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '${relDate('2026-08-16')}');`)
@@ -198,6 +216,9 @@ if (MODE === 'clean') {
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
   if (portionRows === 0) errors.push('keine meal_items mit gespeicherter Portion')
   if (dailyRows < 170) errors.push(`daily_summary: ${dailyRows}, erwartet mindestens 170`)
+  if (distinctFoods < 40) errors.push(`verschiedene Lebensmittel: ${distinctFoods}, erwartet mindestens 40`)
+  if (tomDistinctDailyGrams < 60) errors.push(`Tom Tagesgramm-Varianten: ${tomDistinctDailyGrams}, erwartet mindestens 60`)
+  if (tomDistinctDailyKcal < 60) errors.push(`Tom Tageskalorien-Varianten: ${tomDistinctDailyKcal}, erwartet mindestens 60`)
   if (assessmentRows === 0) errors.push('daily_reference_assessment liefert keine Zeilen')
   if (assessmentPctRows === 0) errors.push('daily_reference_assessment liefert keinen Deckungsgrad')
 
@@ -514,6 +535,60 @@ if (MODE === 'clean') {
       AND ds.entry_date = DATE '${relDate('2026-08-10')}'
       AND ds.enercc / z.kcal * 100 > 140;`)) {
     errors.push('Fall Kalorien ueber Ziel: Zielerreichung liegt nicht ueber 140 %')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.daily_summary ds
+    JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
+    WHERE ds.user_id = '${tom}'::uuid
+      AND ds.entry_date = DATE '${relDate('2026-08-21')}'
+      AND ds.prot625 / z.protein_g * 100 < 50;`)) {
+    errors.push('Fall Protein unter Ziel: Protein liegt nicht unter 50 %')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.daily_summary ds
+    JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
+    WHERE ds.user_id = '${tom}'::uuid
+      AND ds.entry_date = DATE '${relDate('2026-08-22')}'
+      AND ds.prot625 / z.protein_g * 100 > 140;`)) {
+    errors.push('Fall Protein ueber Ziel: Protein liegt nicht ueber 140 %')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.daily_summary ds
+    JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
+    WHERE ds.user_id = '${tom}'::uuid
+      AND ds.entry_date = DATE '${relDate('2026-08-23')}'
+      AND ds.fat / z.fat_g * 100 < 50;`)) {
+    errors.push('Fall Fett unter Ziel: Fett liegt nicht unter 50 %')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.daily_summary ds
+    JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
+    WHERE ds.user_id = '${tom}'::uuid
+      AND ds.entry_date = DATE '${relDate('2026-08-24')}'
+      AND ds.fat / z.fat_g * 100 > 140;`)) {
+    errors.push('Fall Fett ueber Ziel: Fett liegt nicht ueber 140 %')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.daily_summary ds
+    JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
+    WHERE ds.user_id = '${tom}'::uuid
+      AND ds.entry_date = DATE '${relDate('2026-08-25')}'
+      AND ds.cho / z.carbs_g * 100 < 50;`)) {
+    errors.push('Fall Kohlenhydrate unter Ziel: Kohlenhydrate liegen nicht unter 50 %')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.daily_summary ds
+    JOIN goals.zielwerte_am(ds.user_id, ds.entry_date) z ON true
+    WHERE ds.user_id = '${tom}'::uuid
+      AND ds.entry_date = DATE '${relDate('2026-08-26')}'
+      AND ds.cho / z.carbs_g * 100 > 140;`)) {
+    errors.push('Fall Kohlenhydrate ueber Ziel: Kohlenhydrate liegen nicht ueber 140 %')
   }
   if (!hasRows(`
     SELECT 1
@@ -867,6 +942,8 @@ if (MODE === 'clean') {
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
+  console.log(`  Verschiedene Lebensmittel: ${distinctFoods}`)
+  console.log(`  Tom Tagesgramm-/Kalorien-Varianten: ${tomDistinctDailyGrams}/${tomDistinctDailyKcal}`)
   console.log(`  daily_summary Zeilen: ${dailyRows}`)
   console.log(`  daily_reference_assessment: ${assessmentRows} Zeilen, ${assessmentPctRows} mit Prozentwert`)
   console.log(`  Fehlzaehler-Summen ENERCC/VITA/FE: ${missingCounters.join('/')}`)

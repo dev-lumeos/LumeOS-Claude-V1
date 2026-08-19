@@ -116,3 +116,69 @@ pnpm exec tsx supabase/_pipeline/_testdaten/testdaten-einspielen.ts --start 2026
 `[cmd]` `pnpm exec tsx supabase/_pipeline/_validierung/testdaten-pruefen.ts`: Exit 0.
 
 `[cmd]` `pnpm exec tsx supabase/_pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts`: Exit 0.
+
+## C-101 — Wie die Streuung entsteht
+
+`[cmd]` Vor C-101 trug jeder normale Tag dieselben 13 Positionen, 1.786 g und dieselben zwölf Lebensmittel; über den gesamten Seed-Bestand kamen nur 17 verschiedene Lebensmittel vor. Die Anzeige wechselte korrekt, aber die Daten boten nichts zum Wechseln.
+
+`[cmd]` Der Erzeuger variiert jetzt deterministisch, nicht zufällig:
+
+| Mechanik | Wirkung |
+|---|---|
+| Lebensmittelrotation | Austausch innerhalb belegter BLS-Codes, z. B. Obst, Getreide, Proteinquelle, Gemüse, Milchprodukt |
+| Tagesfaktor | kleine Schwankung um den Mittelwert |
+| Mahlzeitenfaktor | Frühstück, Mittag, Snack und Abendessen schwanken unabhängig |
+| Positionsfaktor | verhindert gleiche Tagesgramm-Summen trotz ähnlicher Struktur |
+| Szenariotage | explizite Tage für Makros unter/über Ziel |
+
+`[read]` Die Kopplung aus C-78 bleibt erhalten: Gewicht und Zufuhr werden nicht unabhängig neu erfunden. Die Streuung liegt um den Verlauf, nicht statt des Verlaufs.
+
+`[cmd]` Live auf `dev@lumeos.app` nach dem Lauf:
+
+| Kennzahl | Minimum | Mittel | Maximum | verschiedene Werte |
+|---|---:|---:|---:|---:|
+| Tagesgramm | 95,0 g | 1.789,2 g | 2.279,0 g | 155 |
+| Tageskalorien | 291,5 kcal | 2.397,8 kcal | 4.016,6 kcal | 179 |
+
+`[cmd]` Unterschiedliche Lebensmittel: 49 auf `dev@lumeos.app`; 50 über die drei Seed-Nutzer. Die Zahl ist bewusst weit unter 7.140, aber hoch genug, dass Tage im Diary sichtbar verschieden sind.
+
+## Wo welcher Fall liegt
+
+`[cmd]` Die Makrofälle liegen jetzt auf `dev@lumeos.app`, nicht nur auf einem nicht anmeldbaren Seed-Nutzer:
+
+| Fall | Datum | Ist | Ziel | Anteil |
+|---|---|---:|---:|---:|
+| Protein niedrig | 2026-06-08 | 36,1 g | 170,0 g | 21,3 % |
+| Protein hoch | 2026-06-09 | 242,6 g | 170,0 g | 142,7 % |
+| Fett niedrig | 2026-06-10 | 16,5 g | 75,0 g | 22,0 % |
+| Fett hoch | 2026-06-11 | 202,3 g | 75,0 g | 269,7 % |
+| Kohlenhydrate niedrig | 2026-06-12 | 27,0 g | 313,0 g | 8,6 % |
+| Kohlenhydrate hoch | 2026-06-13 | 517,3 g | 313,0 g | 165,3 % |
+
+`[cmd]` Die älteren Szenariotage aus C-78/C-97 bleiben bestehen: Mikronährstoffmangel, Vitamin A über UL, Salz/Natrium hoch, lückenhafte Nährwerte, leere Mahlzeiten, Tag ohne Mahlzeit, viele Positionen, zwei Snacks und Hydration unter Ziel laufen weiter durch `testdaten-pruefen.ts`.
+
+## Dass die Bilanz weiter aufgeht
+
+`[cmd]` `goals.adaptive_tdee(dev@lumeos.app, current_date, 14)` bleibt `complete`: 14 von 14 Zufuhrtagen und 14 Gewichtsmessungen.
+
+| Wert | Zahl |
+|---|---:|
+| Ø Zufuhr im Fenster | 2.470,9 kcal |
+| Formel-TDEE | 3.527,0 kcal |
+| Raw TDEE aus Verlauf | 2.512,4 kcal |
+| Adaptive TDEE | 3.222,6 kcal |
+| Abstand adaptive zu Formel | -304,4 kcal |
+| Gewicht | 84,40 kg → 84,33 kg |
+| Gewichtsdelta | -0,070 kg |
+
+`[cmd]` Rückrechnung: `-0,070 kg × 7.700 / 13 Tage = -41,5 kcal/Tag`. `2.470,9 - 2.512,4 = -41,5 kcal/Tag`. Die Bilanz geht weiter auf, jetzt mit bewegter Zufuhr.
+
+## Wie es in den übrigen Modulen aussieht
+
+`[cmd]` Training war ebenfalls zu flach bei den Satzwerten. C-101 variiert jetzt Gewicht, Wiederholungen und RPE entlang der 30 Sitzungen: 200 Sätze, 194 unterschiedliche Satzsignaturen.
+
+`[cmd]` Recovery hatte bereits Streuung: 170 Check-ins, 48 unterschiedliche Kombinationen aus Schlafdauer, Schlafqualität, Energie und HRV. Der schlechte manuelle Check-in ohne HRV bleibt erhalten.
+
+`[cmd]` Supplements sind kein Tagesverlauf, sondern ein punktueller Szenario-Seed: 4 Einnahmezeilen, 4 unterschiedliche Logs. Das reicht für `planned`/`taken` und Low-Stock, aber nicht für Compliance-Verläufe über Wochen.
+
+`[cmd]` Nachweis C-101: Kettenlauf auf Wegwerf-DB `c101_seedcheck` mit `--keep-database`, Testdatenlauf und `testdaten-pruefen.ts` Exit 0; danach Wegwerf-DB verworfen. Live-Lauf auf `postgres`, Kopie nach `dev@lumeos.app`, `testdaten-pruefen.ts` Exit 0, `schema-vollstaendigkeit-pruefen.ts` Exit 0.

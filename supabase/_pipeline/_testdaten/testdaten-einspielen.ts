@@ -500,6 +500,125 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
         { blsCode: 'Q120000', amountG: 10 },
       ],
     },
+    [relDate('2026-08-21')]: {
+      breakfast: [
+        { blsCode: 'C133000', amountG: 90 },
+        { blsCode: 'F110100', amountG: 180 },
+      ],
+      lunch: [
+        { blsCode: 'C352000', amountG: 160 },
+        { blsCode: 'G620132', amountG: 200 },
+        { blsCode: 'Q120000', amountG: 20 },
+      ],
+      snack: [
+        { blsCode: 'F503100', amountG: 180 },
+        { blsCode: 'S111000', amountG: 30 },
+      ],
+      dinner: [
+        { blsCode: 'K420100', amountG: 350 },
+        { blsCode: 'G561100', amountG: 180 },
+        { blsCode: 'Q120000', amountG: 15 },
+      ],
+    },
+    [relDate('2026-08-22')]: {
+      breakfast: [
+        { blsCode: 'E111100', amountG: 232, portionName: '1 Ei (Größe M)', portionQuantity: 4, portionAmountG: 58 },
+        { blsCode: 'M710100', amountG: 300 },
+      ],
+      lunch: [
+        { blsCode: 'V416100', amountG: 300 },
+        { blsCode: 'C351000', amountG: 80 },
+        { blsCode: 'G312132', amountG: 200 },
+      ],
+      snack: [
+        { blsCode: 'M713100', amountG: 300 },
+      ],
+      dinner: [
+        { blsCode: 'T121100', amountG: 260 },
+        { blsCode: 'G211100', amountG: 200 },
+        { blsCode: 'Q120000', amountG: 10 },
+      ],
+    },
+    [relDate('2026-08-23')]: {
+      breakfast: [
+        { blsCode: 'C133000', amountG: 80 },
+        { blsCode: 'M141100', amountG: 250 },
+      ],
+      lunch: [
+        { blsCode: 'V416100', amountG: 250 },
+        { blsCode: 'C352000', amountG: 140 },
+        { blsCode: 'G311132', amountG: 200 },
+      ],
+      snack: [
+        { blsCode: 'M713100', amountG: 250 },
+        { blsCode: 'F110100', amountG: 150 },
+      ],
+      dinner: [
+        { blsCode: 'T204100', amountG: 220 },
+        { blsCode: 'K110100', amountG: 300 },
+        { blsCode: 'G520100', amountG: 180 },
+      ],
+    },
+    [relDate('2026-08-24')]: {
+      breakfast: [
+        { blsCode: 'E111100', amountG: 174, portionName: '1 Ei (Größe M)', portionQuantity: 3, portionAmountG: 58 },
+        { blsCode: 'F502100', amountG: 150 },
+      ],
+      lunch: [
+        { blsCode: 'T410100', amountG: 250 },
+        { blsCode: 'C351000', amountG: 90 },
+        { blsCode: 'Q120000', amountG: 35 },
+      ],
+      snack: [
+        { blsCode: 'H120100', amountG: 60 },
+        { blsCode: 'M713500', amountG: 200 },
+      ],
+      dinner: [
+        { blsCode: 'V122100', amountG: 220 },
+        { blsCode: 'K420100', amountG: 220 },
+        { blsCode: 'Q120000', amountG: 25 },
+      ],
+    },
+    [relDate('2026-08-25')]: {
+      breakfast: [
+        { blsCode: 'E111100', amountG: 174, portionName: '1 Ei (Größe M)', portionQuantity: 3, portionAmountG: 58 },
+        { blsCode: 'M711100', amountG: 250 },
+      ],
+      lunch: [
+        { blsCode: 'V416100', amountG: 240 },
+        { blsCode: 'G211100', amountG: 240 },
+        { blsCode: 'Q120000', amountG: 20 },
+      ],
+      snack: [
+        { blsCode: 'M713100', amountG: 250 },
+      ],
+      dinner: [
+        { blsCode: 'T410100', amountG: 220 },
+        { blsCode: 'G582100', amountG: 250 },
+        { blsCode: 'Q120000', amountG: 15 },
+      ],
+    },
+    [relDate('2026-08-26')]: {
+      breakfast: [
+        { blsCode: 'C133000', amountG: 130 },
+        { blsCode: 'F503100', amountG: 180 },
+        { blsCode: 'S111000', amountG: 25 },
+      ],
+      lunch: [
+        { blsCode: 'C352000', amountG: 220 },
+        { blsCode: 'G620132', amountG: 180 },
+        { blsCode: 'V416100', amountG: 120 },
+      ],
+      snack: [
+        { blsCode: 'B101000', amountG: 120, portionName: '1 Scheibe', portionQuantity: 4, portionAmountG: 30 },
+        { blsCode: 'F130100', amountG: 180 },
+      ],
+      dinner: [
+        { blsCode: 'C119200', amountG: 180 },
+        { blsCode: 'G760132', amountG: 180 },
+        { blsCode: 'Q120000', amountG: 10 },
+      ],
+    },
   },
   'max.seed@example.com': {
     [relDate('2026-08-04')]: {
@@ -541,7 +660,136 @@ const SPECIAL_DAY_PLANS: Record<string, Record<string, SpecialDayPlan>> = {
       snack: [],
       dinner: [],
     },
+    [relDate('2026-08-23')]: {
+      breakfast: [
+        { blsCode: 'C133000', amountG: 80 },
+        { blsCode: 'M141100', amountG: 250 },
+      ],
+      lunch: [
+        { blsCode: 'V416100', amountG: 250 },
+        { blsCode: 'C352000', amountG: 140 },
+        { blsCode: 'G311132', amountG: 200 },
+      ],
+      snack: [
+        { blsCode: 'M713100', amountG: 250 },
+        { blsCode: 'F110100', amountG: 150 },
+      ],
+      dinner: [
+        { blsCode: 'T204100', amountG: 220 },
+        { blsCode: 'K110100', amountG: 300 },
+        { blsCode: 'G520100', amountG: 180 },
+      ],
+    },
+    [relDate('2026-08-24')]: {
+      breakfast: [
+        { blsCode: 'E111100', amountG: 174, portionName: '1 Ei (Größe M)', portionQuantity: 3, portionAmountG: 58 },
+        { blsCode: 'F502100', amountG: 150 },
+      ],
+      lunch: [
+        { blsCode: 'T410100', amountG: 250 },
+        { blsCode: 'C351000', amountG: 90 },
+        { blsCode: 'Q120000', amountG: 35 },
+      ],
+      snack: [
+        { blsCode: 'H120100', amountG: 60 },
+        { blsCode: 'M713500', amountG: 200 },
+      ],
+      dinner: [
+        { blsCode: 'V122100', amountG: 220 },
+        { blsCode: 'K420100', amountG: 220 },
+        { blsCode: 'Q120000', amountG: 25 },
+      ],
+    },
+    [relDate('2026-08-25')]: {
+      breakfast: [
+        { blsCode: 'E111100', amountG: 174, portionName: '1 Ei (Größe M)', portionQuantity: 3, portionAmountG: 58 },
+        { blsCode: 'M711100', amountG: 250 },
+      ],
+      lunch: [
+        { blsCode: 'V416100', amountG: 240 },
+        { blsCode: 'G211100', amountG: 240 },
+        { blsCode: 'Q120000', amountG: 20 },
+      ],
+      snack: [
+        { blsCode: 'M713100', amountG: 250 },
+      ],
+      dinner: [
+        { blsCode: 'T410100', amountG: 220 },
+        { blsCode: 'G582100', amountG: 250 },
+        { blsCode: 'Q120000', amountG: 15 },
+      ],
+    },
+    [relDate('2026-08-26')]: {
+      breakfast: [
+        { blsCode: 'C133000', amountG: 130 },
+        { blsCode: 'F503100', amountG: 180 },
+        { blsCode: 'S111000', amountG: 25 },
+      ],
+      lunch: [
+        { blsCode: 'C352000', amountG: 220 },
+        { blsCode: 'G620132', amountG: 180 },
+        { blsCode: 'V416100', amountG: 120 },
+      ],
+      snack: [
+        { blsCode: 'B101000', amountG: 120, portionName: '1 Scheibe', portionQuantity: 4, portionAmountG: 30 },
+        { blsCode: 'F130100', amountG: 180 },
+      ],
+      dinner: [
+        { blsCode: 'C119200', amountG: 180 },
+        { blsCode: 'G760132', amountG: 180 },
+        { blsCode: 'Q120000', amountG: 10 },
+      ],
+    },
   },
+}
+
+const FOOD_ROTATIONS: Record<string, string[]> = {
+  C133000: ['C133000', 'B101000', 'B710500', 'B491000'],
+  F503100: ['F503100', 'F110100', 'F130100', 'F304100', 'F514100', 'F516100', 'F603100'],
+  E111100: ['E111100'],
+  V416100: ['V416100', 'T121100', 'T204100', 'T410100', 'V122100'],
+  C351000: ['C351000', 'C352000', 'C119100', 'C119200', 'K110100', 'K420100'],
+  G312132: ['G312132', 'G311132', 'G620132', 'G760132', 'G710132', 'G582132'],
+  Q120000: ['Q120000'],
+  M713100: ['M713100', 'M710100', 'M711100', 'M141100', 'M111300'],
+  B101000: ['B101000', 'B710500', 'B491000'],
+  T410052: ['T410052', 'T121100', 'T204100', 'V416100', 'V122100'],
+  K420100: ['K420100', 'K110100', 'C119132', 'C352000'],
+  G211100: ['G211100', 'G561100', 'G520100', 'G541100', 'G322100'],
+  M141100: ['M141100', 'M713100', 'M710100', 'M711100'],
+  K110100: ['K110100', 'K420100', 'C119132', 'C352000'],
+  C352000: ['C352000', 'C351000', 'C119100', 'C119200'],
+}
+
+const DAY_SCALE = [0.88, 1.06, 0.96, 1.12, 0.92, 1.04, 1.0, 1.15, 0.9, 1.08, 0.98, 1.02]
+const MEAL_SCALE: Record<string, number[]> = {
+  breakfast: [0.9, 1.1, 1.0, 1.05],
+  lunch: [1.05, 0.95, 1.12, 0.9],
+  snack: [0.8, 1.2, 0.9, 1.1],
+  dinner: [1.1, 0.9, 1.05, 0.95],
+}
+
+function rotatedTemplate(template: ItemTemplate, offset: number, dayScale: number, mealScale: number): ItemTemplate {
+  const rotation = FOOD_ROTATIONS[template.blsCode] ?? [template.blsCode]
+  const blsCode = rotation[offset % rotation.length]!
+  const itemScale = 1 + (((offset * 37) % 17) - 8) * 0.0125
+  const amountG = Math.max(1, Math.round(template.amountG * dayScale * mealScale * itemScale))
+  const next: ItemTemplate = { blsCode, amountG }
+
+  return next
+}
+
+function variedDayPlan(plan: DayPlan, user: TestUser, date: string): DayPlan {
+  const dayIndex = daysOffset(START_DATE, date)
+  const userOffset = USERS.findIndex(seedUser => seedUser.email === user.email) * 3
+  const dayScale = DAY_SCALE[(dayIndex + userOffset) % DAY_SCALE.length]!
+
+  return Object.fromEntries(MEAL_TYPES.map((mealType, mealIndex) => {
+    const mealScale = MEAL_SCALE[mealType][(dayIndex + mealIndex + userOffset) % MEAL_SCALE[mealType].length]!
+    const templates = plan[mealType].map((template, itemIndex) =>
+      rotatedTemplate(template, dayIndex + mealIndex + itemIndex + userOffset, dayScale, mealScale))
+    return [mealType, templates]
+  })) as DayPlan
 }
 
 function uuidFrom(label: string): string {
@@ -572,7 +820,7 @@ function daysBetween(start: string, end: string): string[] {
 function lit(value: string | number | boolean | null): string {
   if (value === null) return 'NULL'
   if (typeof value === 'boolean') return value ? 'true' : 'false'
-  if (typeof value === 'number') return Number.isInteger(value) ? String(value) : value.toFixed(3)
+  if (typeof value === 'number') return Number.isInteger(value) ? String(value) : value.toFixed(6)
   return `'${value.replace(/'/g, "''")}'`
 }
 
@@ -1099,7 +1347,7 @@ for (const user of USERS) {
   for (const date of ALL_DATES) {
     const specialPlan = SPECIAL_DAY_PLANS[user.email]?.[date] ?? null
     if (specialPlan === 'skip-day') continue
-    const dayPlan = specialPlan ?? plan
+    const dayPlan = specialPlan ?? variedDayPlan(plan, user, date)
 
     for (const mealType of MEAL_TYPES) {
       const mealId = uuidFrom(`${user.email}:${date}:${mealType}`)
@@ -1245,7 +1493,7 @@ const TRAINING_DAYS = ALL_DATES
   .filter((_, index) => index % 6 === 1)
   .map((date, index) => {
     const key = TRAINING_SEQUENCE[index % TRAINING_SEQUENCE.length]!
-    return { date, key, name: `${key[0]!.toUpperCase()}${key.slice(1)} ${Math.floor(index / 3) + 1}` }
+    return { date, key, name: `${key[0]!.toUpperCase()}${key.slice(1)} ${Math.floor(index / 3) + 1}`, index }
   })
 
 for (const day of TRAINING_DAYS) {
@@ -1272,13 +1520,14 @@ for (const day of TRAINING_DAYS) {
       plannedReps: template.plannedReps,
       plannedWeightKg: template.plannedWeightKg,
     })
+    const progressionKg = Math.floor(day.index / 3) * 2.5
     template.sets.forEach((set, setIndex) => {
       trainingSets.push({
         workoutExerciseId: exerciseId,
         setNumber: setIndex + 1,
-        reps: set.reps,
-        weightKg: set.weightKg,
-        rpe: set.rpe,
+        reps: Math.max(1, set.reps + ((day.index + setIndex) % 3 === 0 ? 1 : 0)),
+        weightKg: Number((set.weightKg + progressionKg + ((day.index + setIndex) % 2) * 1.25).toFixed(2)),
+        rpe: Number(Math.min(10, set.rpe + ((day.index + setIndex) % 4 === 0 ? 0.5 : 0)).toFixed(1)),
         setType: set.setType ?? 'working',
       })
     })
