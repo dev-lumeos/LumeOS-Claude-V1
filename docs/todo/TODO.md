@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `2779db6` auf `dev`.
+**Stand:** 2026-08-18, Anker `827f19f` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 76 offen, 3 in Arbeit.
+`[cmd]` 80 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -184,6 +184,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
+| **C-107** | Der Supplement-Katalog und was ihm fehlt |  |
+| **C-108** | Wechselwirkungen — nennen ja, bewerten nein |  |
+| **C-109** | Die Injektions-Grenzwerte sind unbelegt |  |
+| **C-110** | Cost-Rest und Compliance-Notizen |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
 | **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
@@ -1781,6 +1785,86 @@ Umsetzen angepasst werden.
   zeigt, dann gibt man auch die Moeglichkeit, die alle anzuschauen."*
 
 
+
+- [ ] **C-107: Der Supplement-Katalog und was ihm fehlt** (neu
+  2026-08-19). Befund aus der F-02-Bestandsaufnahme
+  (`docs/ssot/121-supplements-bestandsaufnahme.md`).
+
+  ### Die gedachte Importquelle existiert nicht
+
+  `[cmd]` **`SPEC_08_IMPORT_PIPELINE` (17 KB) sagt selbst *„kuratiert,
+  keine automatisierte Uebernahme"*** — und ist Seed-SQL fuer **nur 18
+  Praeparate.**
+
+  `[cmd]` **Die echte Kandidatenliste ist die Mini-PC-CSV: 702
+  Datensaetze** — **nicht 1.302, wie der Kommentar im Importskript
+  behauptet.** Davon **200 Enhanced/PED** (Steroide, SARMs, Peptide), 40
+  unkuratierte Kategorien, **0 mit Quellenangabe.**
+
+  ### Konkreter als die Stueckzahl
+
+  `[cmd]` **Dem 44er-Katalog fehlen `nutrients_provided` auf 33
+  Eintraegen** und **vier Gap-Analysis-Codes** — darunter `FAPUN3`:
+  *„Omega-3 ist da, traegt aber den Code nicht."*
+
+  `[read]` **Damit ist der Gap-Score der Spec heute nicht rechenbar.**
+  **Das wiegt schwerer als die Katalogzahl** — 44 Eintraege ohne
+  Naehrstoffbezug tragen weniger als 20 mit.
+
+- [ ] **C-108: Wechselwirkungen — nennen ja, bewerten nein** (neu
+  2026-08-19). Befund aus F-02.
+
+  `[cmd]` **Die Tabelle ist voll ausgestaltet** (Severity, Timing,
+  `blocks_intake`) **und bewusst leer** (C-68).
+
+  `[cmd]` **Zum Befuellen liegen bereit:** 28 CSV-Zeilen (alle
+  Supplement×Supplement, plausibel, **aber unbelegt**) und 12
+  Spec-Zeilen — **6 davon Supplement×Medikament** (Warfarin, SSRIs,
+  Pille) **und brauchen ein Medikationsmodell, das Medical nicht
+  fuehrt.**
+
+  `[read]` **Die Grenze, wie F-02 sie zieht:** *„Nennen = kuratierte
+  Zeile zeigen, wenn beide Seiten im Stack — genau so tat es der
+  Vorgaenger in `intelligence.ts`. Bewerten (Score, Blockade,
+  Zeitplan-Urteile wie im Mockup: „your current schedule is fine")
+  bleibt draussen."*
+
+  `[cmd]` **Warnschuss:** `SPEC_05` fuehrt eine **Severity `high`, die es
+  im Schema gar nicht gibt.** `[read]` Dritter Beleg dafuer, dass die
+  Specs nicht stimmen (nach C-84 und C-92).
+
+- [ ] **C-109: Die Injektions-Grenzwerte sind unbelegt** (neu
+  2026-08-19). Befund aus F-02. **Entscheidung fuer Tom.**
+
+  `[cmd]` **Der 17-KB-Change-Request ist deckungsgleich mit dem
+  G-45-Mockup.** **Drei Objekte reichen:** `injection_sites` als
+  Stammdaten, `injection_logs`, **Schedule abgeleitet — keine
+  Tabelle.** Enhanced ist keine Voraussetzung.
+
+  `[cmd]` **Aus Daten kommen:** Ruhefenster-Zustand,
+  Ueberbeanspruchung, Ortsvorschlag — **reine Arithmetik ueber das
+  eigene Protokoll.**
+
+  `[cmd]` **Aussagen sind die 16×3 Grenzwerte selbst** — `max_ml`,
+  `rest_days`, Nadelstaerke. **Der CR nennt sie *„conservative
+  defaults"*, belegt ist im Repo keine einzige Zahl.**
+
+  `[read]` **Vor dem Seeden: Quelle je Wert oder Toms Abnahme.**
+  **Dieselbe Regel wie bei MEV/MAV/MRV (C-105) und den
+  Naehrstoff-Referenzwerten (C-45).**
+
+- [ ] **C-110: Cost-Rest und Compliance-Notizen** (neu 2026-08-19).
+  Befund aus F-02.
+
+  `[cmd]` **Compliance ist anbindbar** — 90 Tage, 8 `skipped` im
+  30-Tage-Fenster, 93,3 % (C-82/C-103). **Offen nur, ob die
+  `skipped`-Zeilen `notes` tragen** — nirgends gemessen.
+
+  `[cmd]` **Bei Cost fehlen:** Trend (**3 ehrliche Monatspunkte statt
+  12**) und *„If you removed…"* (**reine Subtraktion**).
+
+  `[read]` **`Cost optimization` bleibt Beratung, keine Rechnung** —
+  draussen.
 
 - [ ] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
   **Setzt G-65 und G-66 voraus.**
