@@ -24,6 +24,12 @@ import type { NutritionFoodSearchPayload } from '../../../lib/nutrition/food-sea
 import { createSessionClient } from '@lumeos/shared/session'
 import { isAdminFromAppMetadata } from '@lumeos/shared/auth/role'
 
+import {
+  angemeldeteNutzerin, ladeKategorien, ladePresets, ladeTags, ladeVorlieben,
+  leererStand,
+} from '../../../lib/nutrition/vorlieben-lesen'
+import type { VorliebenDaten } from './tab-vorlieben'
+
 import { datumOderHeute } from '../../../lib/datum'
 import { TagebuchAnsicht } from './ansicht'
 
@@ -124,11 +130,37 @@ export default async function V2NutritionPage({
     }
   }
 
+  // G-65: die Vorlieben. Nur laden, wenn der Tab gezeigt wird — wie
+  // beim Food-DB-Tab darueber. Drei Abfragen, ein `try`: der
+  // Kategorien- und Merkmalskatalog sind ohne den Stand nutzlos, und
+  // umgekehrt.
+  let vorlieben: VorliebenDaten | null = null
+  if (tab === 'prefs') {
+    try {
+      const userId = await angemeldeteNutzerin()
+      const [stand, kategorien, tags, presets] = await Promise.all([
+        ladeVorlieben(userId),
+        ladeKategorien(),
+        ladeTags(),
+        ladePresets(),
+      ])
+      vorlieben = { stand, kategorien, tags, presets, ladefehler: null }
+    } catch (e) {
+      // Ohne Sitzung ist der Leerzustand richtig, kein Fehlerkasten:
+      // „noch nichts eingestellt" ist ein gueltiger Zustand.
+      vorlieben = {
+        stand: leererStand(), kategorien: [], tags: [], presets: [],
+        ladefehler: e instanceof Error ? e.message : String(e),
+      }
+    }
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
       tab={tab}
       istAdmin={istAdmin}
+      vorlieben={vorlieben}
       wasser={wasser}
       summe={summe}
       bewertung={bewertung}
