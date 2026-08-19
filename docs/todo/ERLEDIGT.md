@@ -4822,6 +4822,45 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   ueber 180 Tage, niemand trainiert taeglich. Der Erzeuger macht daraus
   keinen Zwang.
 
+- [x] **C-100: `processing_level` steht auf allen 7.140 gleich `raw`**
+  (neu 2026-08-18). Befund aus G-66.
+
+  `[cmd]` **Konstant, als Filter wertlos.** `[read]` Dieselbe Lage wie
+  `sort_weight` bei den Uebungen (alle 500).
+
+  **Teilweise abgedeckt:** `whole_food` 2.884 und `ultra_processed` 927
+  als Tags. `[read]` **Zu klaeren, ob die Spalte gefuellt wird oder
+  faellt.**
+
+  `[cmd]` **Erledigt 2026-08-19.** `processing_level` traegt jetzt **acht
+  Stufen statt einer:**
+
+  | | |
+  |---|---|
+  | `raw` | 3.251 |
+  | `cooked` | 2.346 |
+  | **`ultra_processed`** | **927** |
+  | `minimally_processed` | 254 |
+  | `canned` · `dried` · `fermented` · `smoked` | 185 · 77 · 63 · 37 |
+
+  `[cmd]` **`ultra_processed` deckt exakt die 927 kuratierten Tags ab** —
+  keine zweite Wahrheit.
+
+  ### Der Abzug feuert
+
+  `[cmd]` **Magermilchpulver faellt von 1000 auf 780**, frische Vollmilch
+  steht als `minimally_processed` bei 510.
+
+  `[cmd]` **Der MealCam-Massstab steigt von 33 auf 34 von 37** auf Platz
+  1, **35 in den Top 3.**
+
+  ### Ehrlich beim Rest
+
+  `[read]` *„`milch` traegt weiterhin nicht, aber der Fehler ist nicht
+  mehr Magermilchpulver. Gewinner ist jetzt Joghurt (0,5 % Fett) mit
+  `sort_weight` 980; Vollmilch frisch bleibt bei 510. **Das ist ein
+  Ranking-/Intent-Thema, nicht mehr der Pulver-Abzug.**"*
+
 
 
 ## Erledigt am 2026-08-05

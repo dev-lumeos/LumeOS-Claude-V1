@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `71d6500` auf `dev`.
+**Stand:** 2026-08-18, Anker `5e8e18a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -210,7 +210,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-96** | `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen |  |
 | **C-98** | `halal`, `kosher` und `thai_food` sind definiert, aber leer |  |
 | **C-99** | `food_groups` hat keinen Fremdschluessel zu `food_categories` |  |
-| **C-100** | `processing_level` steht auf allen 7.140 gleich `raw` |  |
+| **C-102** | `milch` findet Joghurt statt Milch |  |
 
 ---
 
@@ -2423,12 +2423,30 @@ Umsetzen angepasst werden.
   nicht; es braucht die Bruecke zwischen den 19 Gruppen und den 518
   Feinkategorien.**
 
-- [ ] **C-100: `processing_level` steht auf allen 7.140 gleich `raw`**
-  (neu 2026-08-18). Befund aus G-66.
+- [ ] **C-102: `milch` findet Joghurt statt Milch** (neu 2026-08-19).
+  Rest aus C-100.
 
-  `[cmd]` **Konstant, als Filter wertlos.** `[read]` Dieselbe Lage wie
-  `sort_weight` bei den Uebungen (alle 500).
+  `[cmd]` **Der Pulver-Abzug wirkt** — Magermilchpulver ist von 1000 auf
+  780 gefallen. **Aber `milch` traegt weiter nicht:** Gewinner ist
+  **Joghurt (0,5 % Fett) mit 980**, Vollmilch frisch bleibt bei **510.**
 
-  **Teilweise abgedeckt:** `whole_food` 2.884 und `ultra_processed` 927
-  als Tags. `[read]` **Zu klaeren, ob die Spalte gefuellt wird oder
-  faellt.**
+  `[read]` **Der C-100-Agent nennt es richtig:** *„ein Ranking-/Intent-
+  Thema, nicht mehr der Pulver-Abzug."*
+
+  `[cmd]` **Die Ursache steht in `51-sortweight-formel.md`:** *„Ein
+  Getraenk, das zu 87 % aus Wasser besteht, kann gegen ein Pulver keine
+  Naehrwertpunkte gewinnen."* **Joghurt hat mehr Protein je 100 g als
+  Milch — die Formel belohnt Dichte.**
+
+  `[read]` **Zwei Wege, beide noch nicht entschieden:**
+
+  **Trinkform vor Pulverform** — der Vorschlag aus dem Bericht, *„die
+  steht nicht in der Spec und wurde nicht erfunden."*
+
+  **Oder Haeufigkeit statt Dichte** — `meal_items` protokolliert, was
+  gegessen wird. `[cmd]` **Cronometer sortiert nach zuletzt und am
+  haeufigsten benutzt.**
+
+  `[read]` **Und G-65 loest es womoeglich von selbst:** Wer `Joghurt`
+  abwertet, sieht ihn nicht mehr oben. **Erst Preferences bauen, dann
+  neu messen.**
