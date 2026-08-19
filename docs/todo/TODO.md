@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `5ccc8fd` auf `dev`.
+**Stand:** 2026-08-18, Anker `631d19b` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -183,7 +183,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
-| **G-65** | Der Preferences-Tab in Nutrition |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
@@ -211,6 +210,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
 | **A-18** | Berichtsnummern kollidieren |  |
+| **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
 
 ---
 
@@ -1702,65 +1702,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-65: Der Preferences-Tab in Nutrition** (neu 2026-08-18).
-  **Ersetzt G-11a.** Datenseite vollstaendig fertig.
-
-  **Tom, 2026-08-18:** *„Die Preferences aus dem alten Repo waren
-  genial, bis ins Detail runter konnte man sagen, was man sehr gern hat
-  oder nichts isst — und die Suche hat das dementsprechend umgesetzt.
-  Mir als User werden Sachen aufgelistet und ich entscheide, was ich
-  ueberhaupt sehen will und in welcher Reihenfolge."*
-
-  ### Das Mockup zeigt fast alles
-
-  `[cmd]` Sechs Kacheln: **Diet type** (8 Formen, *hard filter, applies
-  before all scoring*) · **Allergies** (14 Eintraege, *hard exclusion,
-  no scoring override*) · **Categories** (±50) · **Tag preferences**
-  (±30) · **Individual foods** (±100) · **Priority order.**
-
-  **Die Rangfolge ist der Kern:**
-
-  | | |
-  |---|---|
-  | 1 Allergen | **hard exclude** |
-  | 2 Diet type | **hard exclude** |
-  | 3 Food | ±100 |
-  | 4 Category | ±50 |
-  | 5 Tag | ±30 |
-  | 6 Prefix match | +20 |
-
-  `[read]` *„Specific beats general — a liked food overrides a disliked
-  category."* **Das ist besser als die alte Formel**, wo Likes ueber
-  Textmuster gesucht und Allergene nur abgewertet wurden.
-
-  ### Die Datenseite ist fertig
-
-  `[cmd]` **`food_preferences` traegt 14 Spalten:** `diet_type`,
-  `allergies[]`, `intolerances[]`, `general_exclusions[]`,
-  `preferred_cuisines[]`, `meals_per_day`, `snacks_per_day`,
-  `cooking_skill`, `prep_time_max_min`, `budget_level`, `meal_prep_ok`,
-  `planner_notes`.
-
-  `[cmd]` **`food_preference_items` traegt fuenf Zielarten:** `food_id`,
-  `category_id`, `tag_code`, `cuisine_code`,
-  **`exclusion_preset_code`** — dazu `preference` und `strength`.
-
-  `[cmd]` **Testdaten liegen auf beiden Konten:** Baumnuesse als
-  Allergie, Laktose als Unvertraeglichkeit, `ultra_processed`
-  ausgeschlossen, mediterran bevorzugt.
-
-  ### Was das Mockup nicht hat: Ausschluss-Presets
-
-  **Tom:** *„Sowas wie keine Innereien waere fuer mich persoenlich top,
-  denn esse ich nicht — oder Lamm ausgrenzen."*
-
-  `[cmd]` **Bei 7.140 Lebensmitteln gibt es Leber vom Rind, Schwein,
-  Kalb, Huhn, Gans** — fuenf Eintraege, die einzeln wegzuklicken waeren.
-  **Ein Preset trifft alle.**
-
-  `[cmd]` **Vorlage im Vorgaengerrepo:** `GLOBAL_EXCLUSIONS` mit *„Keine
-  Innereien — Leber, Herz, Niere, Zunge, egal welches Tier"*, mit
-  `affectedFoodIds` und Symbol.
 
 
 - [ ] **G-70: Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab**
@@ -2382,3 +2323,21 @@ Umsetzen angepasst werden.
   **Zu klaeren:** Vergibt der Orchestrator die Nummer im Auftrag? `[cmd]`
   **Umbenennen der bereits committeten waere riskant** — sie stehen im
   Index und in Querverweisen.
+
+- [ ] **G-72: Acht Spalten ohne Wirkung und ohne Kachel** (neu
+  2026-08-19). **Entscheidung fuer Tom.** Rest aus G-65.
+
+  `[cmd]` **`cooking_skill`, `prep_time_max_min`, `budget_level`,
+  `meals_per_day`, `snacks_per_day`, `meal_prep_ok`,
+  `preferred_cuisines`, `planner_notes`** — gespeichert, ohne Wirkung,
+  **und das Mockup hat fuer keine eine Stelle.**
+
+  `[read]` **Der Agent hat richtig gemeldet statt gebaut:** *„Der
+  Auftrag sagte „Zeigen ja" — aber das Mockup hat fuer keine eine
+  Stelle, und eine zu erfinden waere eine doppelte Erfindung."*
+
+  `[cmd]` **Sie stammen aus Schritt 3 des Vorgaenger-Assistenten** —
+  Kochen & Alltag. **Und sie wirken erst mit Rezepten und
+  Essensplaenen**, die es nicht gibt.
+
+  **Zu entscheiden:** Kachel dazu, oder liegenlassen bis Meal plans?

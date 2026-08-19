@@ -7668,3 +7668,107 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` *„Wer seine Meinung aendert, hat sich nicht geirrt; ein
   System, das die aeltere Aussage gewinnen liesse, wuerde die Korrektur
   verweigern."*
+
+- [x] **G-65: Der Preferences-Tab in Nutrition** (neu 2026-08-18).
+  **Ersetzt G-11a.** Datenseite vollstaendig fertig.
+
+  **Tom, 2026-08-18:** *„Die Preferences aus dem alten Repo waren
+  genial, bis ins Detail runter konnte man sagen, was man sehr gern hat
+  oder nichts isst — und die Suche hat das dementsprechend umgesetzt.
+  Mir als User werden Sachen aufgelistet und ich entscheide, was ich
+  ueberhaupt sehen will und in welcher Reihenfolge."*
+
+  ### Das Mockup zeigt fast alles
+
+  `[cmd]` Sechs Kacheln: **Diet type** (8 Formen, *hard filter, applies
+  before all scoring*) · **Allergies** (14 Eintraege, *hard exclusion,
+  no scoring override*) · **Categories** (±50) · **Tag preferences**
+  (±30) · **Individual foods** (±100) · **Priority order.**
+
+  **Die Rangfolge ist der Kern:**
+
+  | | |
+  |---|---|
+  | 1 Allergen | **hard exclude** |
+  | 2 Diet type | **hard exclude** |
+  | 3 Food | ±100 |
+  | 4 Category | ±50 |
+  | 5 Tag | ±30 |
+  | 6 Prefix match | +20 |
+
+  `[read]` *„Specific beats general — a liked food overrides a disliked
+  category."* **Das ist besser als die alte Formel**, wo Likes ueber
+  Textmuster gesucht und Allergene nur abgewertet wurden.
+
+  ### Die Datenseite ist fertig
+
+  `[cmd]` **`food_preferences` traegt 14 Spalten:** `diet_type`,
+  `allergies[]`, `intolerances[]`, `general_exclusions[]`,
+  `preferred_cuisines[]`, `meals_per_day`, `snacks_per_day`,
+  `cooking_skill`, `prep_time_max_min`, `budget_level`, `meal_prep_ok`,
+  `planner_notes`.
+
+  `[cmd]` **`food_preference_items` traegt fuenf Zielarten:** `food_id`,
+  `category_id`, `tag_code`, `cuisine_code`,
+  **`exclusion_preset_code`** — dazu `preference` und `strength`.
+
+  `[cmd]` **Testdaten liegen auf beiden Konten:** Baumnuesse als
+  Allergie, Laktose als Unvertraeglichkeit, `ultra_processed`
+  ausgeschlossen, mediterran bevorzugt.
+
+  ### Was das Mockup nicht hat: Ausschluss-Presets
+
+  **Tom:** *„Sowas wie keine Innereien waere fuer mich persoenlich top,
+  denn esse ich nicht — oder Lamm ausgrenzen."*
+
+  `[cmd]` **Bei 7.140 Lebensmitteln gibt es Leber vom Rind, Schwein,
+  Kalb, Huhn, Gans** — fuenf Eintraege, die einzeln wegzuklicken waeren.
+  **Ein Preset trifft alle.**
+
+  `[cmd]` **Vorlage im Vorgaengerrepo:** `GLOBAL_EXCLUSIONS` mit *„Keine
+  Innereien — Leber, Herz, Niere, Zunge, egal welches Tier"*, mit
+  `affectedFoodIds` und Symbol.
+
+  `[cmd]` **Erledigt 2026-08-19. Alle sechs Kacheln verlieren die
+  Marke**, eine siebte kommt dazu — die Ausschluss-Kachel. Gate 8/8,
+  **351 Tests.**
+
+  `[cmd]` **Die Datenseite war fertig** — `food_preferences_read/_write`
+  seit C-87. *„Ich habe sie benutzt, nicht nachgebaut; ein Test haelt
+  fest, dass daneben kein zweiter Schreibweg steht."*
+
+  `[cmd]` **Schreiben dreimal geprueft** (Diet type, Kategorie, Preset) —
+  nach Neuladen noch da, **bestehende Items ueberlebten.** Zeilenschutz:
+  `test-user` sieht 0, Quergriff auf die dev-ID liefert 0.
+
+  ### Der gefaehrlichste Fund
+
+  `[cmd]` **Die Testdaten setzen „Kekse & Plaetzchen"** — einen **Enkel**
+  von *SUeSSES & SNACKS*. **Die Kachel zeigt nur Wurzeln, also waere die
+  Vorliebe unsichtbar gewesen.**
+
+  `[read]` **Und weil `food_preferences_write` die Items ersetzt, haette
+  die naechste beliebige Aenderung sie still geloescht.** Geloest mit
+  einer eigenen Zeile *„Gesetzt · Unterkategorien"*; ein Test haelt es
+  fest.
+
+  `[cmd]` *„Gefunden nur, weil ich die Testdaten im Browser nachgezaehlt
+  habe."*
+
+  ### C-93 wurde mitten im Auftrag fertig
+
+  `[read]` *„Beim Messen gab es keine Preset-Tabelle — die Kachel bekam
+  den Leerzustand mit deinem Wortlaut. Vor dem Bericht lagen 11 Presets
+  vor."* **Die Kachel bietet sie jetzt in zwei Gruppen an; der
+  Schlachtungs-Vorbehalt kommt aus `caveat_de`, nicht aus dem Code** —
+  **an einer Stelle statt an zweien.** Der Leerzustand bleibt als
+  Rueckfall.
+
+  ### Zwei besprochene Abweichungen vom Mockup
+
+  `[cmd]` **20 Allergene in drei Stufen statt 14 an/aus** — sonst waere
+  `intolerances[]` nicht bedienbar. **Milcheiweiss und Laktose bleiben
+  getrennt.**
+
+  `[cmd]` **Kategorien aus dem Katalog** (13 Wurzeln) statt fester
+  Achterliste.
