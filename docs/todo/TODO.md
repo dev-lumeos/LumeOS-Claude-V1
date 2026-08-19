@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `c2bcbff` auf `dev`.
+**Stand:** 2026-08-18, Anker `3c7a129` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 78 offen, 3 in Arbeit.
+`[cmd]` 76 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -185,7 +185,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **G-65** | Der Preferences-Tab in Nutrition |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
-| **C-93** | Ausschluss-Presets, international recherchiert |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **G-67** | Daumen hoch und runter in der Lebensmittel-Detailansicht |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
@@ -208,7 +207,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
 | **C-96** | `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen |  |
-| **C-98** | `halal`, `kosher` und `thai_food` sind definiert, aber leer |  |
 | **C-99** | `food_groups` hat keinen Fremdschluessel zu `food_categories` |  |
 | **C-102** | `milch` findet Joghurt statt Milch |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -1841,45 +1839,6 @@ Umsetzen angepasst werden.
   Weiterblaettern, kein Nachladen. **Tom:** *„Wenn man Treffer 279
   zeigt, dann gibt man auch die Moeglichkeit, die alle anzuschauen."*
 
-- [ ] **C-93: Ausschluss-Presets, international recherchiert** (neu
-  2026-08-18). Datenseite fuer G-65.
-
-  `[cmd]` **Rund vier Milliarden Menschen folgen einer religioes
-  begruendeten Ernaehrungseinschraenkung** — das ist kein Randfall.
-
-  ### Religioes
-
-  | Preset | schliesst aus |
-  |---|---|
-  | **Halal-konform** (islamisch) | Schwein, Blut, Alkohol |
-  | **Koscher-konform** (juedisch, `kashrut`) | Schwein, Schalentiere, Fleisch-Milch-Mischung |
-  | **Kein Rindfleisch** (hinduistisch) | Rind |
-  | **Jain** | zusaetzlich alle Wurzelgemuese — Kartoffeln, Karotten, Rote Bete, Zwiebeln, Knoblauch |
-
-  `[read]` **Vorbehalt, der sichtbar sein muss:** Echtes Halal und
-  Koscher haengen an der **Schlachtung**, die BLS-Daten nicht kennen.
-  **Das Preset kann die Zutat ausschliessen, nicht die Zubereitung
-  pruefen.** Und die Praxis ist verschieden — mancher folgt strenger
-  Regel, mancher meidet nur Schwein.
-
-  ### Persoenlich
-
-  Keine Innereien · Kein Lamm/Schaf · Kein Wild · Keine
-  Meeresfruechte · Kein rohes Fleisch/Fisch · Kein Alkohol.
-
-  ### Laktose gehoert NICHT hierher
-
-  `[cmd]` **Global 68 %** — Asien ohne Nahost 64 %, Naher Osten 70 %,
-  Nord-/West-/Suedeuropa 28 %; **von 58 % in Pakistan bis 100 % in
-  Suedkorea.**
-
-  `[read]` **Aber reifer Hartkaese ist nahezu laktosefrei** — ein
-  Preset *„keine Milchprodukte"* traefe zu breit. **Das gehoert unter
-  Unvertraeglichkeit mit Abstufung**, wo es bereits sitzt
-  (`intolerances[]`).
-
-  `[cmd]` **Ausbaubar:** `general_exclusions[]` ist ein Textarray — ein
-  Preset kommt dazu, ohne Umbau.
 
 
 - [ ] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
@@ -2426,24 +2385,6 @@ Umsetzen angepasst werden.
   Ursache bleibt.**
 
 
-- [ ] **C-98: `halal`, `kosher` und `thai_food` sind definiert, aber
-  leer** (neu 2026-08-18). **Vorarbeit fuer C-93.** Befund aus G-66.
-
-  `[cmd]` **`tag_definitions` fuehrt 14 Eintraege, `food_tags` nur 11.**
-  Ohne Zuordnung: **`halal` 0, `kosher` 0, `thai_food` 0.**
-
-  `[read]` **Jemand hat beim Schemabau an die Ausschluss-Presets
-  gedacht** — die Tags stehen bereit, sie sind nur nicht befuellt.
-  **Das ist die halbe Arbeit von C-93.**
-
-  `[cmd]` **Zum Vergleich, was gefuellt ist:** `low_carb` 4.659,
-  `whole_food` 2.884, `low_fat` 2.648, `vegetarian` 1.751,
-  `high_protein` 1.400, `vegan` 1.377 — **und die drei Allergene**
-  `contains_lactose` 1.021, `contains_gluten` 622, `contains_nuts` 120.
-
-  `[read]` **Vorbehalt aus C-93:** Echtes Halal und Koscher haengen an
-  der **Schlachtung**, die BLS-Daten kennen sie nicht. **Ein Tag kann die
-  Zutat kennzeichnen, nicht die Zubereitung.**
 
 - [ ] **C-99: `food_groups` hat keinen Fremdschluessel zu
   `food_categories`** (neu 2026-08-18). Befund aus G-66.

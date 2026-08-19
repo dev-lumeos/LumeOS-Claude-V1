@@ -4981,6 +4981,121 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   war die Auflage. **Die Raten sind plausibel:** 4 bis 6 % ueber drei
   Monate, kein Anfaengersprung.
 
+- [x] **C-93: Ausschluss-Presets, international recherchiert** (neu
+  2026-08-18). Datenseite fuer G-65.
+
+  `[cmd]` **Rund vier Milliarden Menschen folgen einer religioes
+  begruendeten Ernaehrungseinschraenkung** — das ist kein Randfall.
+
+  ### Religioes
+
+  | Preset | schliesst aus |
+  |---|---|
+  | **Halal-konform** (islamisch) | Schwein, Blut, Alkohol |
+  | **Koscher-konform** (juedisch, `kashrut`) | Schwein, Schalentiere, Fleisch-Milch-Mischung |
+  | **Kein Rindfleisch** (hinduistisch) | Rind |
+  | **Jain** | zusaetzlich alle Wurzelgemuese — Kartoffeln, Karotten, Rote Bete, Zwiebeln, Knoblauch |
+
+  `[read]` **Vorbehalt, der sichtbar sein muss:** Echtes Halal und
+  Koscher haengen an der **Schlachtung**, die BLS-Daten nicht kennen.
+  **Das Preset kann die Zutat ausschliessen, nicht die Zubereitung
+  pruefen.** Und die Praxis ist verschieden — mancher folgt strenger
+  Regel, mancher meidet nur Schwein.
+
+  ### Persoenlich
+
+  Keine Innereien · Kein Lamm/Schaf · Kein Wild · Keine
+  Meeresfruechte · Kein rohes Fleisch/Fisch · Kein Alkohol.
+
+  ### Laktose gehoert NICHT hierher
+
+  `[cmd]` **Global 68 %** — Asien ohne Nahost 64 %, Naher Osten 70 %,
+  Nord-/West-/Suedeuropa 28 %; **von 58 % in Pakistan bis 100 % in
+  Suedkorea.**
+
+  `[read]` **Aber reifer Hartkaese ist nahezu laktosefrei** — ein
+  Preset *„keine Milchprodukte"* traefe zu breit. **Das gehoert unter
+  Unvertraeglichkeit mit Abstufung**, wo es bereits sitzt
+  (`intolerances[]`).
+
+  `[cmd]` **Ausbaubar:** `general_exclusions[]` ist ein Textarray — ein
+  Preset kommt dazu, ohne Umbau.
+
+  `[cmd]` **Erledigt 2026-08-19: 11 Presets, 33 Regeln, 3.767
+  aufgeloeste Zuordnungen.** `food_tags` 17.967 → **30.797**, `foods`
+  unveraendert bei 7.140.
+
+  | Preset | Regel | Treffer |
+  |---|---|---|
+  | `halal` · `kosher` | Schwein + Blut (+ Schalentiere) | **761 · 689** |
+  | `no_pork` | Kategorie + Muster − 3 Gegenmuster | **630** |
+  | `jain` | Kategorie und Muster | 463 |
+  | `no_raw_animal` | `raw` und Praefix U/V/W/T | 389 |
+  | `no_beef` · `no_lamb` · `no_offal` | Kategorie | 298 · 191 · **131** |
+  | `no_alcohol` | **BLS-Praefix P** | 119 |
+  | `no_game` · `no_seafood` | Kategorie | 49 · 47 |
+
+  `[cmd]` **Toms Beispiel geprueft** — alle Lebern sind drin: Rind 4,
+  Schwein 4, Kalb 4, Gans 2, dazu Hammel, Lamm, Ente, Haehnchen.
+  **Die Selbstpruefung im Kettenschritt bricht ab, wenn eine fehlt.**
+
+  ### Das Schwein-Muster brauchte Messung
+
+  `[cmd]` **Naiv trifft es 657, davon 32 falsch:** Wildschwein (15),
+  Rindsbratwurst und Gefluegelsalami (16), vegetarische Bratwurst (1).
+
+  `[read]` **Drei Gegenmuster entfernen sie** — *„das dritte greift nur,
+  wenn „schwein" nicht im Namen steht, damit „Schwein/Rind gemischt"
+  getroffen bleibt."* **Ergebnis: 630 Treffer, 0 Fehltreffer.**
+
+  ### Was kein Preset trifft
+
+  `[cmd]` **231 Wurstwaren ohne Tierart im Namen** — Fleischwurst,
+  Cabanossi, Knackwurst, Fleischkaese.
+
+  `[read]` *„In der Praxis fast alles Schwein, aber die Daten sagen es
+  nicht. Steht als Vorbehalt am Preset statt als geratene Regel; das
+  Ableiten aus dem Namen ist in diesem Repo schon zweimal gemessen
+  gescheitert."*
+
+  ### Der Vorbehalt haengt an der Zeile
+
+  `[cmd]` **`halal` und `kosher` hatten seit C-98 null Zuordnungen**,
+  jetzt 6.379 und 6.451.
+
+  `[read]` **Der Satz, der zaehlt:** *„Das Tag sagt „enthaelt keine
+  Zutat, die diese Regel ausschliesst" — nicht „ist halal"."* Die
+  Schlachtung steht nicht in den Daten, **bei `kashrut` auch nicht die
+  Trennung von Fleisch und Milch.**
+
+  `[cmd]` **Der Vorbehalt haengt als `caveat_de` an der Preset-Zeile**
+  und wird in G-65 angezeigt; **die Konfidenz steht auf 0,60, nicht 1,0.**
+
+  `[cmd]` **Beide Schritte sind idempotent** — zweimal gelaufen,
+  identische Zahlen.
+
+- [x] **C-98: `halal`, `kosher` und `thai_food` sind definiert, aber
+  leer** (neu 2026-08-18). **Vorarbeit fuer C-93.** Befund aus G-66.
+
+  `[cmd]` **`tag_definitions` fuehrt 14 Eintraege, `food_tags` nur 11.**
+  Ohne Zuordnung: **`halal` 0, `kosher` 0, `thai_food` 0.**
+
+  `[read]` **Jemand hat beim Schemabau an die Ausschluss-Presets
+  gedacht** — die Tags stehen bereit, sie sind nur nicht befuellt.
+  **Das ist die halbe Arbeit von C-93.**
+
+  `[cmd]` **Zum Vergleich, was gefuellt ist:** `low_carb` 4.659,
+  `whole_food` 2.884, `low_fat` 2.648, `vegetarian` 1.751,
+  `high_protein` 1.400, `vegan` 1.377 — **und die drei Allergene**
+  `contains_lactose` 1.021, `contains_gluten` 622, `contains_nuts` 120.
+
+  `[read]` **Vorbehalt aus C-93:** Echtes Halal und Koscher haengen an
+  der **Schlachtung**, die BLS-Daten kennen sie nicht. **Ein Tag kann die
+  Zutat kennzeichnen, nicht die Zubereitung.**
+
+  `[cmd]` **Erledigt 2026-08-19 mit C-93** — `halal` 6.379, `kosher`
+  6.451. **`thai_food` bleibt leer** und ist keine Ausschlussregel.
+
 
 
 ## Erledigt am 2026-08-05
