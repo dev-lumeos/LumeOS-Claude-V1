@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `c67f6ba` auf `dev`.
+**Stand:** 2026-08-18, Anker `71d6500` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 75 offen, 3 in Arbeit.
+`[cmd]` 76 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -184,6 +184,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **G-65** | Der Preferences-Tab in Nutrition |  |
+| **C-101** | Die Seeds haben keine Varianz |  |
 | **C-93** | Ausschluss-Presets, international recherchiert |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **G-67** | Daumen hoch und runter in der Lebensmittel-Detailansicht |  |
@@ -1760,6 +1761,51 @@ Umsetzen angepasst werden.
   `[cmd]` **Vorlage im Vorgaengerrepo:** `GLOBAL_EXCLUSIONS` mit *„Keine
   Innereien — Leber, Herz, Niere, Zunge, egal welches Tier"*, mit
   `affectedFoodIds` und Symbol.
+
+- [ ] **C-101: Die Seeds haben keine Varianz** (neu 2026-08-19).
+  **Nachtrag zu C-78, hohe Prioritaet.**
+
+  **Tom, 2026-08-19:** *„Diary — wenn ich den Tag wechsle, aendert sich
+  nichts in der Anzeige."*
+
+  ### Gemessen
+
+  `[cmd]` **Jeder Tag traegt exakt dieselben 13 Positionen, 1.786 g,
+  ueber 180 Tage.** Dieselben zwoelf Lebensmittel, dieselben Mengen.
+
+  `[cmd]` **17 verschiedene Lebensmittel im gesamten Bestand** — bei
+  7.140 im Katalog.
+
+  `[read]` **Die Anzeige wechselt korrekt, es gibt nur nichts zu
+  wechseln.**
+
+  ### Was das fuer C-78 bedeutet
+
+  `[read]` **Die Kopplung stimmt** — `adaptive_tdee` rechnet, die Bilanz
+  geht auf. **Aber sie geht auf, weil nichts schwankt.** Eine Formel
+  gegen konstante Zufuhr zu pruefen, beweist wenig.
+
+  `[cmd]` **Und die Fallliste aus dem Auftrag ist nicht umgesetzt:** *zu
+  wenig und zu viel gegessen · zu wenig und zu viel Protein · zu wenig
+  und zu viel Fett · ein paar Mikros in beide Richtungen.* **Bei
+  konstanten 1.786 g gibt es keinen einzigen dieser Faelle.**
+
+  ### Was zu tun ist
+
+  **Die Mengen und die Auswahl schwanken lassen** — der Verlauf muss
+  ueber Wochen eine Tendenz tragen, aber der einzelne Tag darf abweichen.
+
+  `[read]` **Ein echter Nutzer isst nicht 180 Tage dasselbe.** Und der
+  Bericht soll zeigen, an welchem Tag welcher Fall liegt — **das war
+  bereits verlangt und ist nicht geliefert worden.**
+
+  `[cmd]` **Die Kopplung muss erhalten bleiben:** Zufuhr minus Verbrauch
+  ergibt die Gewichtsaenderung. **Schwankung um den Mittelwert, nicht
+  Zufall.**
+
+  `[cmd]` **Und die uebrigen Module gehoeren mit geprueft** —
+  Trainingssaetze, Check-ins, Supplement-Einnahmen: **schwanken die, oder
+  sind sie ebenso konstant?**
 
 - [ ] **C-93: Ausschluss-Presets, international recherchiert** (neu
   2026-08-18). Datenseite fuer G-65.
