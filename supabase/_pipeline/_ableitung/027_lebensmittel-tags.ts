@@ -171,6 +171,69 @@ BEGIN
   DELETE FROM nutrition.tag_definitions
   WHERE code = ANY (${obsoleteArray});
 
+  CREATE TEMP TABLE tmp_processing_level ON COMMIT DROP AS
+  WITH tag_flags AS (
+    SELECT f.id AS food_id,
+           f.bls_code,
+           nutrition.search_fold(f.name_de) AS name_folded,
+           EXISTS (
+             SELECT 1
+             FROM nutrition.food_tags ft
+             WHERE ft.food_id = f.id
+               AND ft.tag_code = 'ultra_processed'
+           ) AS is_ultra_processed
+    FROM nutrition.foods f
+  )
+  SELECT food_id,
+         CASE
+           WHEN is_ultra_processed THEN 'ultra_processed'
+           WHEN name_folded ~ '\\m(geraeuchert|rauch)\\M' THEN 'smoked'
+           WHEN name_folded ~ '\\mkonserve\\M' THEN 'canned'
+           WHEN name_folded ~ '\\m(getrocknet|trocken)\\M' THEN 'dried'
+           WHEN name_folded ~ '\\m(fermentiert|sauerkraut|kimchi|joghurt|kefir)\\M' THEN 'fermented'
+           WHEN name_folded ~ '\\m(gebraten|gekocht|gegrillt|gebacken|geduenstet|geschmort|frittiert|pochiert|paniert)\\M' THEN 'cooked'
+           WHEN name_folded ~ '\\mtiefgefroren\\M' THEN 'minimally_processed'
+           WHEN name_folded ~ '\\m(geschaelt|zerkleinert|passiert|pasteurisiert|homogenisiert|flocken|mehl|griess|schrot|graupen|saft|nektar)\\M' THEN 'minimally_processed'
+           ELSE 'raw'
+         END AS processing_level,
+         CASE
+           WHEN is_ultra_processed THEN 'tag:ultra_processed'
+           WHEN name_folded ~ '\\m(geraeuchert|rauch)\\M' THEN 'name:geraeuchert'
+           WHEN name_folded ~ '\\mkonserve\\M' THEN 'name:konserve'
+           WHEN name_folded ~ '\\m(getrocknet|trocken)\\M' THEN 'name:getrocknet'
+           WHEN name_folded ~ '\\m(fermentiert|sauerkraut|kimchi|joghurt|kefir)\\M' THEN 'name:fermentiert'
+           WHEN name_folded ~ '\\m(gebraten|gekocht|gegrillt|gebacken|geduenstet|geschmort|frittiert|pochiert|paniert)\\M' THEN 'name:gekocht-gebraten'
+           WHEN name_folded ~ '\\mtiefgefroren\\M' THEN 'name:tiefgefroren'
+           WHEN name_folded ~ '\\m(geschaelt|zerkleinert|passiert|pasteurisiert|homogenisiert|flocken|mehl|griess|schrot|graupen|saft|nektar)\\M' THEN 'name:minimal'
+           ELSE 'default:raw'
+         END AS rule
+  FROM tag_flags;
+
+  UPDATE nutrition.foods f
+  SET processing_level = p.processing_level
+  FROM tmp_processing_level p
+  WHERE p.food_id = f.id;
+
+  RAISE NOTICE 'processing_level nach C-100: %',
+    (
+      SELECT string_agg(processing_level || '=' || anzahl, ', ' ORDER BY processing_level)
+      FROM (
+        SELECT processing_level, COUNT(*) AS anzahl
+        FROM tmp_processing_level
+        GROUP BY processing_level
+      ) x
+    );
+
+  RAISE NOTICE 'processing_level-Regeln nach C-100: %',
+    (
+      SELECT string_agg(rule || '=' || anzahl, ', ' ORDER BY rule)
+      FROM (
+        SELECT rule, COUNT(*) AS anzahl
+        FROM tmp_processing_level
+        GROUP BY rule
+      ) x
+    );
+
   SELECT COUNT(*) INTO v_foods FROM nutrition.foods;
   IF v_foods <> ${EXPECTED_FOODS} THEN
     RAISE EXCEPTION 'nutrition.foods: % Zeilen, erwartet ${EXPECTED_FOODS}', v_foods;
@@ -195,3 +258,16 @@ COMMIT;
 const { rows, taggedFoods, assignments } = readRows()
 console.log(`${INPUT}: ${taggedFoods} Foods mit Tags, ${assignments} kuratierte Tagzuordnungen`)
 runPsql(rows)
+
+const refresh = spawnSync(
+  process.execPath,
+  ['node_modules/tsx/dist/cli.cjs', 'supabase/_pipeline/_ableitung/sortweight-berechnen.ts', '--anwenden'],
+  { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 },
+)
+if (refresh.error) {
+  console.error(refresh.error)
+  process.exit(1)
+}
+if (refresh.stdout) process.stdout.write(refresh.stdout)
+if (refresh.stderr) process.stderr.write(refresh.stderr)
+if (refresh.status !== 0) process.exit(refresh.status ?? 1)

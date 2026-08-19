@@ -51,8 +51,8 @@
     {
       "name": "ultra_processed", "wert": -250,
       "bedingung": "processing_level = 'ultra_processed'",
-      "wirkt": false,
-      "grund_unwirksam": "[cmd] Die Spalte traegt fuer alle 7.140 Eintraege den Wert 'raw', auch fuer Bechamelsauce. Der Abzug kann nicht feuern."
+      "wirkt": true,
+      "grund_wirksam": "C-100 fuellt processing_level nach dem kuratierten Tag-Import. [cmd] 927 Eintraege tragen danach ultra_processed; der Abzug wird im Sortweight-Refresh aus 027 angewendet."
     },
     {
       "name": "fertiggericht", "wert": -300, "bedingung": "warengruppe in X,Y",

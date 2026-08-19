@@ -126,7 +126,7 @@
       "id": "027",
       "path": "supabase/_pipeline/_ableitung/027_lebensmittel-tags.ts",
       "kind": "tsx",
-      "creates": "Kuratierte C-44-Tags, ohne Makro-Tags aus 020 zu loeschen",
+      "creates": "Kuratierte C-44-Tags, processing_level nach C-100 und Sortweight-Refresh, ohne Makro-Tags aus 020 zu loeschen",
       "depends_on": ["020b"]
     },
     {

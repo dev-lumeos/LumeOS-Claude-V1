@@ -6,9 +6,10 @@
 // voraussetzt, das der Bestand nicht hergibt, steht das im Bericht
 // (docs/ssot/51-sortweight-formel.md), nicht stillschweigend geloest.
 //
-// DIESES SKRIPT SCHREIBT NICHT. Es berechnet und legt das Ergebnis in
-// einer TEMPORAEREN Tabelle ab (nutrition._sortweight_neu), damit
-// verglichen werden kann. Kein UPDATE auf nutrition.foods.
+// Standardlauf: kein UPDATE auf nutrition.foods. Das Ergebnis landet in
+// nutrition._sortweight_neu, damit verglichen werden kann.
+// Mit --anwenden aktualisiert das Skript nutrition.foods.sort_weight aus
+// dieser Hilfstabelle; das nutzt 027 nach dem Setzen von processing_level.
 //
 // AUFRUF:
 //   pnpm exec tsx supabase/_pipeline/_ableitung/sortweight-berechnen.ts
@@ -41,6 +42,7 @@ const falte = (s: string) => s.toLowerCase()
 const roh = sql(`
   SELECT f.bls_code,
          replace(coalesce(f.name_de,''), chr(1), ' '),
+         coalesce(f.processing_level, 'raw'),
          coalesce(f.sort_weight,0)::text,
          coalesce(n.prot::text,''), coalesce(n.fat::text,''),
          coalesce(n.fibt::text,''), coalesce(n.n3::text,'')
@@ -56,6 +58,7 @@ const roh = sql(`
 
 type Food = {
   code: string; name: string; alt: number
+  processingLevel: string
   prot: number | null; fat: number | null; fibt: number | null; n3: number | null
   wg: string; zub: string; gefaltet: string
 }
@@ -63,8 +66,8 @@ type Food = {
 const zahl = (s: string) => (s === '' ? null : Number(s))
 
 const foods: Food[] = roh.map(r => ({
-  code: r[0], name: r[1], alt: Number(r[2]),
-  prot: zahl(r[3]), fat: zahl(r[4]), fibt: zahl(r[5]), n3: zahl(r[6]),
+  code: r[0], name: r[1], processingLevel: r[2], alt: Number(r[3]),
+  prot: zahl(r[4]), fat: zahl(r[5]), fibt: zahl(r[6]), n3: zahl(r[7]),
   wg: r[0][0], zub: r[0].slice(4, 7), gefaltet: falte(r[1]),
 }))
 
@@ -157,8 +160,8 @@ function berechne(f: Food): { wert: number; basis: number; teile: Beitrag[] } {
   if (grundform) teile.push({ name: 'grundform', wert: F.zubereitung.grundform_bonus })
 
   // --- Abzuege ---
-  // ultra_processed entfaellt: `[cmd]` die Spalte ist durchgaengig 'raw'.
-  //
+  if (f.processingLevel === 'ultra_processed') teile.push({ name: 'ultra_processed', wert: -250 })
+
   // FEHLER 1 der Spec, behoben 2026-08-16: die Abzuege
   // "Fertiggericht -300" (X/Y) und "Alkohol -300" (P) sind GESTRICHEN.
   // Doppelbestrafung — die Basis kodiert die Warengruppe bereits
@@ -213,7 +216,18 @@ if (!process.argv.includes('--nur-rechnen')) {
   fs.unlinkSync(skript)
   const n = sql(`SELECT count(*) FROM nutrition._sortweight_neu;`)[0][0]
   fs.unlinkSync(tmp)
-  console.log(`nutrition._sortweight_neu geschrieben: ${n} Zeilen (Hilfstabelle, kein UPDATE auf foods)`)
+  console.log(`nutrition._sortweight_neu geschrieben: ${n} Zeilen`)
+}
+
+if (process.argv.includes('--anwenden')) {
+  execFileSync('docker',
+    ['exec', C, 'psql', '-U', 'postgres', '-d', DB, '-q', '-v', 'ON_ERROR_STOP=1', '-c',
+      `UPDATE nutrition.foods f
+       SET sort_weight = s.neu
+       FROM nutrition._sortweight_neu s
+       WHERE s.bls_code = f.bls_code;`],
+    { encoding: 'utf8' })
+  console.log('nutrition.foods.sort_weight aktualisiert aus nutrition._sortweight_neu')
 }
 
 // ---- Kennzahlen ----

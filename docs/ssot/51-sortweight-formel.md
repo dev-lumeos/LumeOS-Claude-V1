@@ -803,3 +803,90 @@ Messwerkzeug, kein Bestandteil.
   `Gänseleber in Aspik` 640, `Schweinekümmelmagen` 640,
   `Kalb Nierenfett` 630).
 
+## C-100 — Nach welchen Regeln der Verarbeitungsgrad entsteht
+
+`[cmd]` Vor C-100 trugen alle 7.140 Lebensmittel `processing_level = 'raw'`; der `ultra_processed`-Abzug von -250 konnte deshalb nicht feuern.
+
+`[cmd]` Die Zuordnung läuft in `027_lebensmittel-tags.ts`, weil dort die kuratierten C-44-Tags verfügbar sind. `020_food_human_layer.sql` läuft früher und kann diese Tags noch nicht lesen. Nach dem Setzen von `processing_level` ruft `027` `sortweight-berechnen.ts --anwenden` auf; damit wird die bestehende Formel auf den neuen Datenstand angewendet, ohne eine zweite Sortierlogik einzuführen.
+
+`[cmd]` Regelverteilung live:
+
+| Regel | `processing_level` | Einträge |
+|---|---|---:|
+| `tag:ultra_processed` | `ultra_processed` | 927 |
+| `name:gekocht-gebraten` | `cooked` | 2.346 |
+| `name:tiefgefroren` | `minimally_processed` | 190 |
+| `name:konserve` | `canned` | 185 |
+| `name:getrocknet` | `dried` | 77 |
+| `name:fermentiert` | `fermented` | 63 |
+| `name:minimal` | `minimally_processed` | 64 |
+| `name:geraeuchert` | `smoked` | 37 |
+| `default:raw` | `raw` | 3.251 |
+
+`[cmd]` Verteilung je Wert:
+
+| `processing_level` | Einträge |
+|---|---:|
+| `raw` | 3.251 |
+| `cooked` | 2.346 |
+| `ultra_processed` | 927 |
+| `minimally_processed` | 254 |
+| `canned` | 185 |
+| `dried` | 77 |
+| `fermented` | 63 |
+| `smoked` | 37 |
+
+`[cmd]` Gegenprüfung gegen C-44: 927 `ultra_processed`-Tags, 927 `processing_level='ultra_processed'`, 927 Überschneidung, 0 verlorene Tags, 0 zusätzliche Ultra-Fälle. Die kuratierte NOVA-Entscheidung wird also vollständig übernommen.
+
+`[annahme]` Magermilchpulver, Buttermilchpulver, Sahnepulver und Süßmolkenpulver werden nicht als bloß `dried` geführt, obwohl sie technisch getrocknet sind. Sie tragen aus C-44 den belegten Tag `ultra_processed`; dieser ist hier vorrangig. Sonst würde genau der gebaute Abzug nicht greifen und der dokumentierte Pulverfehler bliebe bestehen.
+
+## Was `raw` bleibt
+
+`[cmd]` 3.251 Einträge bleiben `raw`. Das ist der BLS-Normalfall: keine kuratierte Hochverarbeitung und kein belegtes Wort für Kochen, Räuchern, Trocknen, Konserve, Fermentation, Tiefkühlung oder minimale Verarbeitung.
+
+`[read]` Was keine Regel trifft, bleibt `raw`, weil ein falscher Verarbeitungsgrad schlechter ist als der Vorgabewert. Das gilt besonders bei Namen ohne klare Prozessangabe; aus dem Fehlen eines Wortes wird keine positive Aussage über NOVA abgeleitet.
+
+## Was der Abzug bewirkt
+
+`[cmd]` `sortweight-berechnen.ts --anwenden` nach C-100:
+
+| Kennzahl | vor C-100 | nach C-100 |
+|---|---:|---:|
+| `processing_level='ultra_processed'` | 0 | 927 |
+| Sortweight-Mittelwert | 413 | 387 |
+| Einträge auf 1000 | 123 | 121 |
+| Einträge auf 0 | 145 | 447 |
+| Sortweight-Stufen | 95 | 95 |
+| MealCam-Maßstab Platz 1 | 34 / 37 | 34 / 37 |
+| MealCam-Maßstab Top 3 | 35 / 37 | 35 / 37 |
+
+`[cmd]` Die größten Abstiege sind exakt der erwartete -250-Abzug, z. B. `Y8A4100` Schokoladenpudding aus Pulver `360 → 110`, `W985000` Fleischsalat mit Mayonnaise `600 → 350` und mehrere Pasteten `290 → 40`.
+
+`[cmd]` `foods` bleibt bei 7.140.
+
+## Ob `milch` jetzt trägt
+
+`[cmd]` Nein. `milch` ist im MealCam-Maßstab weiterhin FEHL, aber der Fehler hat sich verschoben: Nicht mehr Magermilchpulver steht oben, sondern `M141100` Joghurt aus entrahmter Milch mit `sort_weight 980`.
+
+`[cmd]` Die Pulverfälle sind repariert:
+
+| Code | Name | `processing_level` | `sort_weight` |
+|---|---|---|---:|
+| `M881000` | Milchpulver mit hohem Fettgehalt (Sahnepulver, Rahmpulver) | `ultra_processed` | 610 |
+| `M884000` | Magermilchpulver | `ultra_processed` | 780 |
+| `M886000` | Buttermilchpulver | `ultra_processed` | 730 |
+| `M887000` | Süßmolkenpulver | `ultra_processed` | 530 |
+
+`[cmd]` Der neue `milch`-Fehler ist kein Verarbeitungsgrad-Problem mehr: `M141100` ist ein Core-Code und bekommt Protein-/Lean-Protein-Boni; `M111300` Vollmilch frisch 3,5 % bleibt bei 510. Eine weitere Korrektur wäre eine andere Entscheidung, etwa Suchintention „Trinkmilch vor Joghurt/Pulver“, und gehört nicht in C-100.
+
+## Nachweis C-100
+
+`[cmd]` `pnpm exec tsx supabase/_pipeline/_ableitung/027_lebensmittel-tags.ts`: Exit 0; 8.702 kuratierte Tagzuordnungen, 927 `ultra_processed`, Sortweight-Refresh angewendet.
+
+`[cmd]` `pnpm exec tsx supabase/_pipeline/kette-ausfuehren.ts`: Exit 0 auf Wegwerf-Datenbank `lumeos_kette_20260819001236`, Schema-Backup `backup/schema/20260819001236_c43_vor_kettenlauf.sql`.
+
+`[cmd]` `pnpm exec tsx supabase/_pipeline/_validierung/schema-vollstaendigkeit-pruefen.ts`: Exit 0.
+
+`[cmd]` `pnpm exec tsx supabase/_pipeline/_validierung/testdaten-pruefen.ts`: Exit 0.
+
+`[cmd]` `pnpm exec tsx supabase/_pipeline/_validierung/kette-readme-pruefen.ts`: Exit 0.

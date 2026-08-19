@@ -6015,10 +6015,10 @@ WHERE category_id IS NULL;
 --   * SPEC_08 zog X/Y zusaetzlich -300 ab, obwohl die Basis die
 --     Warengruppe schon kodiert (Doppelbestrafung, siehe unten).
 --
--- DREI REGELN DER SPEC SIND UNWIRKSAM ODER GESTRICHEN:
---   * ultra_processed (-250): `[cmd]` nutrition.foods.processing_level
---     traegt fuer alle 7.140 Eintraege den Wert 'raw', auch fuer
---     Bechamelsauce. Der Abzug kann nicht feuern.
+-- ZWEI REGELN DER SPEC SIND GESTRICHEN; EINE GREIFT ERST SPAETER:
+--   * ultra_processed (-250): 020 laeuft vor dem kuratierten Tag-Import.
+--     C-100 fuellt processing_level in 027_lebensmittel-tags.ts und
+--     aktualisiert sort_weight danach ueber sortweight-berechnen.ts.
 --   * fertiggericht (-300, X/Y) und alkohol (-300, P): GESTRICHEN.
 --     Doppelbestrafung — die Basis kodiert die Warengruppe bereits
 --     (X 200, Y 240, P 180). `[cmd]` Mit dem Abzug standen alle 119
