@@ -5096,6 +5096,43 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Erledigt 2026-08-19 mit C-93** — `halal` 6.379, `kosher`
   6.451. **`thai_food` bleibt leer** und ist keine Ausschlussregel.
 
+- [x] **C-96: `Geraete & Baenke` ohne Umlaute — Kettendatei nachziehen**
+  (neu 2026-08-18). Befund aus G-64.
+
+  `[cmd]` **Eine von 29 Zeilen trug `Geraete & Baenke` statt `Geräte &
+  Bänke`** — per Hex-Dump belegt:
+  `476572616574652026204261656e6b65` gegen `c3a4` bei den uebrigen 28.
+
+  `[cmd]` **Live korrigiert am 2026-08-18**, Gruppe jetzt 29 statt 28+1.
+  **Aber `109a_equipment_groups_disciplines.sql` traegt den Fehler
+  weiter** — beim naechsten Kettenlauf kommt er zurueck.
+
+  `[read]` **Fuenfte Fundstelle derselben Encoding-Klasse.** Der
+  G-64-Agent hat es umgangen ueber den stabilen Schluessel
+  `equipment_group` statt der Beschriftung — **richtig so, aber die
+  Ursache bleibt.**
+
+  `[cmd]` **Erledigt 2026-08-19.** Die Kettendatei traegt jetzt
+  `Geräte & Bänke` — Hex `476572c3a4746520262042c3a46e6b65`.
+
+  ### Und die Pruefung ist neu
+
+  `[cmd]` **`tools/gruppenlabel-pruefen.mjs` haengt im Gate.** Sie prueft
+  etwas anderes als `encoding-pruefen.mjs`: *„`Geraete & Baenke` ist
+  gueltiges UTF-8, aber neben derselben gefalteten Form eine falsche
+  Umschrift derselben Anzeigegruppe."*
+
+  `[cmd]` **Sie liest die Kettendatei, nicht die Datenbank** — **dort
+  entsteht der Fehler, dort faellt er auf, bevor er eingespielt wird.**
+
+  `[cmd]` **In beide Richtungen gegengeprobt:** mit eingebautem Fehler
+  **Exit 1**, mit Zeilennummern beider Schreibweisen (28 gegen 1); ohne
+  Fehler Exit 0, *„118 Labels in 10 Gruppen/Faltungen geprueft,
+  sauber."*
+
+  `[cmd]` **Variantenmessung: 0 weitere Befunde** bei
+  `equipment_group_de/en`, `muscle_groups.name`, `food_groups.label_de`.
+
 
 
 ## Erledigt am 2026-08-05
