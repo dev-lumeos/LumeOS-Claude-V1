@@ -78,7 +78,7 @@ Orchestrator hat sie selbst nicht befolgt** und in jedem Pruefskript
 
 ### Die Hilfsfunktion liegt bereit
 
-`[cmd]` **`backup/_lauf.py`** mit `lauf()`, `git()` und `psql()`.
+`[cmd]` **`tools/lauf.py`** mit `lauf()`, `git()` und `psql()`.
 **Benutzung:**
 
 ```python
