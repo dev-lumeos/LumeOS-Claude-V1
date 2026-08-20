@@ -297,6 +297,15 @@ if (MODE === 'clean') {
     SELECT count(DISTINCT round(enercc, 1))
     FROM nutrition.daily_summary
     WHERE user_id = '${IDS[0]}'::uuid;`)
+  const tomDistinctDailyItemCounts = numberScalar(`
+    SELECT count(DISTINCT item_count)
+    FROM (
+      SELECT m.entry_date, count(mi.id)::integer AS item_count
+      FROM nutrition.meals m
+      LEFT JOIN nutrition.meal_items mi ON mi.meal_id = m.id
+      WHERE m.user_id = '${IDS[0]}'::uuid
+      GROUP BY m.entry_date
+    ) d;`)
   const assessmentRows = numberScalar(`
     SELECT count(*)
     FROM nutrition.daily_reference_assessment('${IDS[0]}'::uuid, DATE '${relDate('2026-08-16')}');`)
@@ -391,6 +400,7 @@ if (MODE === 'clean') {
   if (distinctFoods < 40) errors.push(`verschiedene Lebensmittel: ${distinctFoods}, erwartet mindestens 40`)
   if (tomDistinctDailyGrams < 60) errors.push(`Tom Tagesgramm-Varianten: ${tomDistinctDailyGrams}, erwartet mindestens 60`)
   if (tomDistinctDailyKcal < 60) errors.push(`Tom Tageskalorien-Varianten: ${tomDistinctDailyKcal}, erwartet mindestens 60`)
+  if (tomDistinctDailyItemCounts < 4) errors.push(`Tom Positionszahl-Varianten: ${tomDistinctDailyItemCounts}, erwartet mindestens 4`)
   if (assessmentRows === 0) errors.push('daily_reference_assessment liefert keine Zeilen')
   if (assessmentPctRows === 0) errors.push('daily_reference_assessment liefert keinen Deckungsgrad')
 
@@ -1344,7 +1354,7 @@ if (MODE === 'clean') {
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
   console.log(`  Verschiedene Lebensmittel: ${distinctFoods}`)
-  console.log(`  Tom Tagesgramm-/Kalorien-Varianten: ${tomDistinctDailyGrams}/${tomDistinctDailyKcal}`)
+  console.log(`  Tom Tagesgramm-/Kalorien-/Positionszahl-Varianten: ${tomDistinctDailyGrams}/${tomDistinctDailyKcal}/${tomDistinctDailyItemCounts}`)
   console.log(`  daily_summary Zeilen: ${dailyRows}`)
   console.log(`  daily_reference_assessment: ${assessmentRows} Zeilen, ${assessmentPctRows} mit Prozentwert`)
   console.log(`  Fehlzaehler-Summen ENERCC/VITA/FE: ${missingCounters.join('/')}`)

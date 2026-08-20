@@ -855,12 +855,51 @@ const FOOD_ROTATIONS: Record<string, string[]> = {
   C352000: ['C352000', 'C351000', 'C119100', 'C119200'],
 }
 
-const DAY_SCALE = [0.88, 1.06, 0.96, 1.12, 0.92, 1.04, 1.0, 1.15, 0.9, 1.08, 0.98, 1.02]
+const WEEKDAY_SCALE = [0.96, 0.99, 1.03, 1.01, 1.04, 0.98, 1.02]
+const WEEK_BLOCK_SCALE = [0.98, 1.00, 1.02, 1.01, 0.99]
 const MEAL_SCALE: Record<string, number[]> = {
-  breakfast: [0.9, 1.1, 1.0, 1.05],
-  lunch: [1.05, 0.95, 1.12, 0.9],
-  snack: [0.8, 1.2, 0.9, 1.1],
-  dinner: [1.1, 0.9, 1.05, 0.95],
+  breakfast: [0.96, 1.00, 1.03, 1.01, 1.04, 0.98, 1.02],
+  lunch: [0.98, 1.03, 1.06, 1.02, 1.05, 1.00, 1.04],
+  snack: [0.94, 0.98, 1.02, 0.97, 1.03, 1.00, 0.96],
+  dinner: [1.00, 1.02, 1.05, 1.03, 1.06, 1.01, 1.04],
+}
+const EXTRA_ITEMS: Record<string, ItemTemplate> = {
+  breakfast: { blsCode: 'F503100', amountG: 70 },
+  lunch: { blsCode: 'G312132', amountG: 90 },
+  snack: { blsCode: 'B101000', amountG: 30, portionName: '1 Scheibe', portionQuantity: 1, portionAmountG: 30 },
+  dinner: { blsCode: 'G211100', amountG: 90 },
+}
+
+function globalDayIndex(date: string): number {
+  const index = ALL_DATES.indexOf(date)
+  return index >= 0 ? index : daysOffset(START_DATE, date)
+}
+
+function dayScaleFor(user: TestUser, date: string): number {
+  const dayIndex = globalDayIndex(date)
+  const dow = new Date(`${date}T00:00:00Z`).getUTCDay()
+  const weekIndex = Math.floor(dayIndex / 7)
+  const userOffset = USERS.findIndex(seedUser => seedUser.email === user.email)
+  const hasTraining = dayIndex % 6 === 1
+  const afterTraining = dayIndex > 0 && (dayIndex - 1) % 6 === 1
+  const trainingScale = hasTraining ? 1.08 : afterTraining ? 1.04 : 1.00
+  const userScale = 1 + userOffset * 0.015
+
+  return WEEKDAY_SCALE[dow]! * WEEK_BLOCK_SCALE[(weekIndex + userOffset) % WEEK_BLOCK_SCALE.length]! * trainingScale * userScale
+}
+
+function templatesForMeal(templates: ItemTemplate[], mealType: string, dayIndex: number, mealIndex: number, userOffset: number): ItemTemplate[] {
+  const next = [...templates]
+  const marker = dayIndex + mealIndex + userOffset
+
+  if (next.length > 1 && marker % 8 === 3) {
+    next.pop()
+  }
+  if (marker % 9 === 4) {
+    next.push(EXTRA_ITEMS[mealType]!)
+  }
+
+  return next
 }
 
 function rotatedTemplate(template: ItemTemplate, offset: number, dayScale: number, mealScale: number): ItemTemplate {
@@ -874,13 +913,15 @@ function rotatedTemplate(template: ItemTemplate, offset: number, dayScale: numbe
 }
 
 function variedDayPlan(plan: DayPlan, user: TestUser, date: string): DayPlan {
-  const dayIndex = daysOffset(START_DATE, date)
+  const dayIndex = globalDayIndex(date)
   const userOffset = USERS.findIndex(seedUser => seedUser.email === user.email) * 3
-  const dayScale = DAY_SCALE[(dayIndex + userOffset) % DAY_SCALE.length]!
+  const dow = new Date(`${date}T00:00:00Z`).getUTCDay()
+  const dayScale = dayScaleFor(user, date)
 
   return Object.fromEntries(MEAL_TYPES.map((mealType, mealIndex) => {
-    const mealScale = MEAL_SCALE[mealType][(dayIndex + mealIndex + userOffset) % MEAL_SCALE[mealType].length]!
-    const templates = plan[mealType].map((template, itemIndex) =>
+    const mealScale = MEAL_SCALE[mealType][dow]!
+    const mealTemplates = templatesForMeal(plan[mealType], mealType, dayIndex, mealIndex, userOffset)
+    const templates = mealTemplates.map((template, itemIndex) =>
       rotatedTemplate(template, dayIndex + mealIndex + itemIndex + userOffset, dayScale, mealScale))
     return [mealType, templates]
   })) as DayPlan
@@ -1626,7 +1667,7 @@ items.push({
 
 function waterAmountsFor(user: TestUser, date: string): number[] {
   if (user.email === 'tom.seed@example.com' && date === relDate('2026-08-16')) {
-    return [250]
+    return [100]
   }
   if (user.email === 'tom.seed@example.com') {
     return [1000, 750]
