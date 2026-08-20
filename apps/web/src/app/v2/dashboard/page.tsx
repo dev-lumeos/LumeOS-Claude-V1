@@ -1,18 +1,24 @@
-// Dashboard der Oberflaeche v2 — der uebernommene Entwurf, teilweise
-// angebunden.
+// Dashboard der Oberflaeche v2 — angebunden (G-100).
 //
-// `[read]` Der Auftrag: das ganze Template als Mockup hereinholen und
-// dann anbinden. Angebunden ist bisher **eine** Kachel — „Macros ·
-// today" aus `daily_summary` und `goals.zielwerte_am`. Sie traegt
-// deshalb als einzige keine Attrappenmarke mehr.
+// `[read]` Bis G-100 war das Dashboard das **einzige Modul, das nie
+// angebunden wurde** — und die erste Seite, die ein Nutzer sieht. Alle
+// sieben Fachmodule tragen inzwischen echte Daten; das Dashboard holt
+// sie hier zusammen.
 //
-// Die uebrigen elf Kacheln zeigen die Entwurfszahlen und behalten die
-// Marke, bis ihre Quelle da ist (Recovery, Training, Schlaf).
+// **DIE SEITE ZERFAELLT IN ZWEI TEILE:**
+//
+//   1. `dashboard-echt.tsx` — was eine Quelle hat. Ohne Marke.
+//   2. `entwurf.tsx` — was der Entwurf zeigt, ohne dass es eine
+//      Groesse dafuer gibt. **Mit Marke, unveraendert.**
+//
+// `[read]` Der Entwurf bleibt stehen und wird nicht geloescht: Er ist
+// die Vorlage, an der sich der naechste Schritt misst. Was daran heute
+// nicht baubar ist, steht im Bericht 149 mit Begruendung.
 import type { Metadata } from 'next'
 
-import { getDailySummary } from '../../../lib/nutrition/diary-summary-read'
-import { getZielwerteAm } from '../../../lib/profile/zielwerte-read'
-import { DashboardEntwurf, type EchteMakros } from './entwurf'
+import { ladeDashboard, type DashboardDaten } from '../../../lib/dashboard/lesen'
+import { DashboardEcht } from './dashboard-echt'
+import { DashboardEntwurfRest } from './entwurf-rest'
 
 export const metadata: Metadata = {
   title: 'Dashboard · LumeOS',
@@ -37,23 +43,30 @@ export default async function V2DashboardPage({
     ? searchParams!.datum!
     : heute()
 
-  // Faellt das Lesen aus, bleibt der Entwurf stehen — mit Marke. Eine
-  // halb gefuellte Kachel ohne Marke waere schlechter als der Entwurf.
-  let echteMakros: EchteMakros | null = null
+  // `[read]` Faellt das Lesen ganz aus, zeigt die Seite leere Kacheln
+  // mit Grund — nicht die Entwurfszahlen. Eine erfundene Zahl ohne
+  // Marke waere schlechter als ein Strich.
+  let daten: DashboardDaten | null = null
+  let fehler: string | null = null
   try {
-    const summe = await getDailySummary(datum)
-    const ziele = await getZielwerteAm(datum)
-    if (summe) {
-      echteMakros = {
-        kcal: { cur: summe.macros.enercc.value, tgt: ziele?.kcal ?? null },
-        protein: { cur: summe.macros.prot625.value, tgt: ziele?.protein_g ?? null },
-        carbs: { cur: summe.macros.cho.value, tgt: ziele?.carbs_g ?? null },
-        fat: { cur: summe.macros.fat.value, tgt: ziele?.fat_g ?? null },
-      }
-    }
-  } catch {
-    echteMakros = null
+    daten = await ladeDashboard(datum)
+  } catch (e) {
+    fehler = e instanceof Error ? e.message : String(e)
   }
 
-  return <DashboardEntwurf echteMakros={echteMakros} />
+  return (
+    <>
+      {fehler !== null && (
+        <div className="v2-insight v2-neg" style={{ marginBottom: 16 }}>
+          <div className="v2-insight-mark" />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="v2-insight-title">Dashboard nicht gelesen</div>
+            <div className="v2-insight-body">{fehler}</div>
+          </div>
+        </div>
+      )}
+      {daten && <DashboardEcht d={daten} />}
+      <DashboardEntwurfRest />
+    </>
+  )
 }
