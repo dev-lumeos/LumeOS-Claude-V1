@@ -44,6 +44,7 @@ import {
 } from './daten'
 import type { BefundWert, KatalogTreffer } from '../../../lib/medical/lesen'
 import type { MarkerReihe } from '../../../lib/medical/reihe'
+import { zaehleLagen } from '../../../lib/medical/lagezaehlung'
 import { MedicalKontext, useMedical, type ModalZustand } from './kontext'
 import { MedicalModale } from './modale'
 import { MedBiomarkers, MedImport } from './tab-biomarker'
@@ -110,9 +111,11 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
   const [tab, setTab] = React.useState('dashboard')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
 
-  const overall = React.useMemo(() => calcOverallHealthScore(), [])
-  const alerts = React.useMemo(() => generateAlerts(), [])
-  const criticals = alerts.filter(a => a.severity === 'critical').length
+  // G-84: die echte Lagezaehlung. `[cmd]` Sie summiert, was die Liste
+  // je Zeile ohnehin zeigt — `zuReihen` hat je Marker die juengste
+  // Messung gewaehlt und `lage`/`optimalLage` daran gerechnet. Hier
+  // wird nichts neu bestimmt.
+  const lagen = React.useMemo(() => zaehleLagen(echt.reihen), [echt.reihen])
 
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
@@ -132,32 +135,67 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
               color: 'var(--acc-medic)',
               background: 'color-mix(in oklch, var(--acc-medic) 6%, transparent)',
             }}>Local-first · encrypted</Pill>
-            <Pill>
-              <span className="v2-dot" style={{
-                background: overall.score >= 85 ? 'var(--pos)'
-                  : overall.score >= 70 ? 'var(--acc-recov)' : 'var(--warn)',
-              }} />
-              Health score {overall.score}
-            </Pill>
-            {alerts.length > 0 && (
-              <Pill variant={criticals ? 'neg' : 'warn'}>
-                {alerts.length} alert{alerts.length === 1 ? '' : 's'}
+            {/* ── G-84 · DIE LAGEZAEHLUNG IST ECHT ──────────────────
+                `[cmd]` Vorher standen hier `Health score 87` aus
+                `calcOverallHealthScore()` und `6 alerts` aus
+                `generateAlerts()` — beide ueber den erfundenen
+                Katalog gerechnet, beide ohne Bezug zu den Befunden
+                der angemeldeten Nutzerin.
+
+                **Zwei Zahlen, nicht eine.** `[read]` Tom zu G-84:
+                *„Ein Laborbereich ist die Referenz des Labors — die
+                steht auf dem Befund. Ein Optimalband ist eine
+                Empfehlung aus der Literatur. Sie zu addieren macht
+                aus einer Messung und einer Meinung eine Zahl."*
+
+                **Und das Wort „Alert" faellt weg.** `[read]` Tom:
+                *„Es sagt ‚etwas stimmt nicht' — das ist ein Urteil.
+                ‚1 ueber dem Bereich' sagt dasselbe ohne Wertung."*
+                Die Unterzeile schreibt selbst „no diagnosis, no
+                therapy advice"; ein Alarmwort daneben widerspraeche
+                ihr. */}
+            {lagen.ausserhalb_bereich > 0 && (
+              <Pill variant="warn">
+                {lagen.ausserhalb_bereich} outside lab range
+              </Pill>
+            )}
+            {lagen.ausserhalb_optimal > 0 && (
+              <Pill>
+                {lagen.ausserhalb_optimal} outside optimal band
               </Pill>
             )}
           </div>
-          {/* `[cmd]` Die Zahl ist seit G-60 echt: die Marker der
-              angemeldeten Nutzerin, nicht die 48 der Vorlage.
-              `Health score` und `alerts` daneben sind es NICHT — sie
-              stammen aus `calcOverallHealthScore()` und
-              `generateAlerts()` ueber den erfundenen Katalog.
-              `[read]` Der Auftrag: *„Wo die Attrappe etwas zeigt, das
-              die Daten nicht hergeben — sag es, erfinde nichts."*
-              Beide stehen im Bericht; ein Gesundheitswert waere
-              ausserdem genau die Bewertung, die die Anzeige nicht
-              abgibt. */}
+          {/* `[cmd]` **`Health score` ist ersatzlos weg, nicht als
+              Attrappe stehengeblieben.** Er wiegt fuenf Systeme und
+              braucht dafuer eine Gruppierung der Marker. Gemessen am
+              2026-08-20: **23 der 37 Marker lassen sich ueber
+              `medical.biomarker_spec_enrichment` zuordnen, 14 nicht**
+              — darunter LDL und ApoB.
+
+              `[read]` Toms Entscheidung: *„Ein Gesundheitswert, der
+              die beiden wichtigsten Lipidmarker stillschweigend
+              auslaesst, ist schlechter als keiner — er sieht aus wie
+              ein Gesamtbild und ist ein Ausschnitt."* Die Gewichtung
+              waere ausserdem eine zweite, ungetroffene Entscheidung.
+
+              Zahlen und Gruende: docs/ssot/134-medical-score.md */}
           <div className="v2-module-sub">
             {echt.reihen.length} biomarkers · LOINC-mapped · dual-range (lab + optimal) · no diagnosis, no therapy advice
           </div>
+          {/* `[read]` **Die Bruecke zum Filter.** Toms Auflage zu
+              G-84: *„Wenn der Kopf 1 und 5 zeigt und der Filter
+              ‚Non-optimal only · 6', muss erkennbar sein, dass es
+              dieselben sechs sind."* Deshalb steht die Summe hier
+              ausgeschrieben, mit dem Namen des Filters. */}
+          {lagen.auffaellig > 0 && (
+            <div className="v2-module-sub" style={{ opacity: 0.75 }}>
+              {lagen.ausserhalb_bereich} + {lagen.ausserhalb_optimal} ={' '}
+              {lagen.auffaellig} marker{lagen.auffaellig === 1 ? '' : 's'} —
+              {' '}die gleichen, die „Non-optimal only" in Biomarkers zeigt
+              {lagen.ohne_bereich > 0
+                && ` · ${lagen.ohne_bereich} ohne hinterlegten Bereich`}
+            </div>
+          )}
         </div>
         <div className="v2-module-actions">
           <button type="button" className="v2-btn" onClick={() => kontext.open({ typ: 'export' })}>
