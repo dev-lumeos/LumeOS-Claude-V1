@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `fc2c1f1` auf `dev`.
+**Stand:** 2026-08-18, Anker `7f2c490` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 95 offen, 1 in Arbeit.
+`[cmd]` 94 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -227,7 +227,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **C-135** | Die Zielhistorie fehlt in den Seeds |  |
-| **G-81** | Registerkarten wechseln im Browser nicht |  |
 
 ---
 
@@ -2798,19 +2797,32 @@ Umsetzen angepasst werden.
   in Richtung Gamification gehen."* **Die Historie ist die Grundlage
   dafuer.**
 
-- [ ] **G-81: Registerkarten wechseln im Browser nicht** (neu
-  2026-08-19). Befund aus G-79.
+- [x] **G-81: Registerkarten wechseln nicht — der Build-Cache war
+  kaputt** (2026-08-19). Befund aus G-79, **behoben.**
 
-  `[cmd]` **Gegengeprueft an `/v2/recovery`, dort genauso** — **die
-  Ursache sind 404-Antworten des Entwicklungsservers auf RSC-Anfragen.**
+  `[cmd]` **Der Server antwortete mit 200**, lieferte aber 404 auf
+  RSC-Anfragen, und die Bildschirmfotos zeigten die Seite unformatiert.
 
-  `[read]` **Nicht an einem Auftrag gelegen**, sondern an der
-  Entwicklungsumgebung. **Der G-79-Agent hat den Timeline-Nachweis
-  deshalb ueber die Vorgabe-Registerkarte gefuehrt.**
+  `[cmd]` **Behoben durch:** Server beenden → **`apps/web/.next` und
+  `node_modules/.cache` loeschen** → neu starten. **Danach 200 mit
+  Stilen**, im Browser bestaetigt.
 
-  `[cmd]` **Dazu:** *„Die Bildschirmfotos zeigen die Seite unformatiert,
-  obwohl der DOM die Stile traegt."*
+  `[read]` **Die Ursache:** Drei Agenten haben gleichzeitig Dateien
+  geaendert, der Entwicklungsserver hat sich verschluckt. **Kein
+  Codefehler.**
 
-  `[read]` **Das trifft die Nachweisregel:** Wenn das Bild nicht taugt,
-  faellt die einzige Pruefung weg, die stille Fehler findet (G-78).
-  **Gehoert geklaert, bevor es einen Bericht falsch aussehen laesst.**
+  ### Was dabei auffiel
+
+  `[cmd]` **Die Pruefung ohne Cookie landet auf der Anmeldeseite** — 22
+  KB, kein v2-CSS. **Genau Regel 13** aus G-56: *„Eine abgelaufene
+  Sitzung liefert die Anmeldeseite, die keine v2-Huelle hat."*
+
+  `[read]` **Der Orchestrator ist erst darauf hereingefallen** — er
+  mass *„0 CSS-Dateien"* und hielt den Server fuer kaputt. **Der Titel
+  `Anmelden — LumeOS` hat es aufgeklaert.**
+
+  ### Merksatz fuer die naechste Runde
+
+  **Wenn die Oberflaeche unformatiert aussieht oder Registerkarten nicht
+  wechseln:** `[cmd]` **erst `.next` loeschen und neu starten**, bevor
+  jemand den Code sucht.
