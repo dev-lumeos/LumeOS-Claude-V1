@@ -66,6 +66,36 @@ nicht darin steht, existiert fuer die naechste Sitzung nicht.
 committet. **Eine Zeile mit dem Befund, nicht mit dem Dateinamen** —
 der steht schon in der ersten Spalte.
 
+## Keine Terminalfenster — und der Orchestrator haelt sich selbst daran
+
+**Tom, 2026-08-19:** *,Diese scheiss Terminalfenster poppen immer noch
+ueberall auf."*
+
+`[cmd]` **Die Regel stand seit dem 2026-08-18 hier** — `shell=False`,
+`shlex.split`, `STARTF_USESHOWWINDOW`, `CREATE_NO_WINDOW`. **Der
+Orchestrator hat sie selbst nicht befolgt** und in jedem Pruefskript
+`subprocess.run(..., shell=True)` benutzt.
+
+### Die Hilfsfunktion liegt bereit
+
+`[cmd]` **`backup/_lauf.py`** mit `lauf()`, `git()` und `psql()`.
+**Benutzung:**
+
+```python
+import sys; sys.path.insert(0, r"D:\GitHub\LumeOS-Claude-V1\backup")
+from _lauf import lauf, git, psql
+
+print(git("status", "--short"))
+print(psql("select count(*) from nutrition.foods;"))
+print(lauf(["node", "--version"]))
+```
+
+`[cmd]` **Gegengeprobt am 2026-08-19** — drei Aufrufe, kein Fenster.
+
+`[read]` **Kein `shell=True`, keine Zeichenkette an die Shell.** Wer
+einen Befehl braucht, der nicht ueber `lauf()` geht, **erweitert die
+Datei statt danebenzuschreiben.**
+
 ## Der Dev-Server und das Gate teilen sich nichts — wenn man es laesst
 
 **Tom, 2026-08-19:** *,Irgendeiner schiesst immer den Server ab, geht
