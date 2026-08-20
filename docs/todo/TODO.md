@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `e14ddf9` auf `dev`.
+**Stand:** 2026-08-18, Anker `48e9664` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 126 offen, 1 in Arbeit.
+`[cmd]` 125 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -153,6 +153,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
 | **C-48** | Die Tagesbilanz sichtbar machen |  |
 | **C-49** | Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach |  |
+| **C-161** | `parent_code` in `nutrient_defs` |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -217,7 +218,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
 | **G-85** | Der Health score haengt an zwei Unbekannten |  |
-| **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
 | **A-23** | `lint` bricht repoweit ab |  |
 | **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
 | **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
@@ -254,7 +254,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-159** | Sieben Regelpfade zeigen auf Schemata, die es nicht gibt |  |
 | **G-118** | Der Extended-Code liegt im Buendel |  |
 | **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
-| **G-124** | Die Medikamentenkachel braucht zehn Ueberwachungsspalten |  |
+| **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
+| **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
 | **G-120** | `updateWaterLogAmount` liegt fertig und ungenutzt |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 
@@ -3266,6 +3267,26 @@ Umsetzen angepasst werden.
   `[read]` **Nicht behoben, weil `packages/ui` gesperrt war** — der
   G-100-Agent hat es gemeldet. **Ein eigener kleiner Auftrag, sobald
   niemand dort arbeitet.**
+
+  `[cmd]` **Bestaetigt 2026-08-20 mit G-123:** *„Die zwei SVG-Fehler
+  erscheinen genau auf den drei Tabs mit Muskelkarte."*
+
+  | | Fehler | SVG | Hydration |
+  |---|---|---|---|
+  | `today` / `checkin` / `muscles` | **4** | 2 | 2 |
+  | die uebrigen sechs Tabs | 2 | 0 | 2 |
+
+  `[read]` **Es gibt keinen unbekannten dritten** — der Orchestrator
+  hatte fuenf gezaehlt, **es sind vier.** Und Medical hat auch nur zwei;
+  *„der dritte war ein abgebrochener RSC-Vorablauf, nicht
+  reproduzierbar."*
+
+  `[cmd]` **Ein eigener Zaehlversuch ist gescheitert und steht im
+  Bericht:** *„Mein Pfadpruefer meldete 291 Fehler, weil SVG
+  wiederholte Parametersaetze ohne Befehlsbuchstaben erlaubt. **Fuer SVG
+  ist der Browser die Messung**."*
+
+  **Die zwei echten bleiben offen** — sie liegen in `packages/ui`.
 
 - [ ] **G-106: Der Readiness-Komposit waere ein zweiter Gesamtwert**
   (neu 2026-08-20). Befund aus G-100. **Gemeldet statt gebaut.**

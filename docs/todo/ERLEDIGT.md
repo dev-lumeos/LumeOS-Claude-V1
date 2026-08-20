@@ -10018,3 +10018,96 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Zeilenschutz:** ein DELETE auf eine fremde Id gibt **404
   NOT_FOUND**, die Zeilen bleiben.
+
+- [x] **G-113: Die Naehrstoffordnung braucht Klappen und Zeitfilter** —
+  **erledigt 2026-08-20 (G-117 Teil 1, G-121 Teil 2):** `[cmd]` Teil 1:
+  12 von 12 Gruppen standardmaessig zu. Teil 2: **Zeitfenster
+  1/7/14/30/45/60/90 in der Adresse** (`?fenster=`), ein Pfad ueber
+  `nutrient_summary_window` (C-157) — 30 Tage 35,4 ms, 90 Tage 91,8 ms
+  Serverzeit; Tag zeigt die Summe, Fenster den Schnitt je
+  protokolliertem Tag, beides angeschrieben. Belege:
+  `docs/ssot/161-naehrstoffanzeige.md`.
+
+- [x] **G-114: `daily_summary` fuehrt nur 33 der 138 Naehrstoffe** —
+  **erledigt 2026-08-20 (C-157 + G-121):** Die „Zu klaeren"-Frage
+  (138 Spalten oder je Abfrage rechnen?) hat Codex mit der **langen
+  Form** entschieden: `daily_nutrient_summary_long` je
+  Nutzer/Tag/Naehrstoff statt 276 Spalten. `[cmd]` G-121 hat die
+  Anzeige umgestellt — **alle 138 tragen Werte** (STARCH 188,1 g aus
+  11 von 14 Positionen statt Strich, Aminosaeuren und Fettsaeuren
+  komplett). `daily_summary` bleibt als breite Kompatibilitaetssicht
+  fuer das Diary stehen.
+
+
+- [x] **G-123: Recovery, `supplements`-Tab und zwei Reste**
+  (erledigt 2026-08-20, Bericht `docs/ssot/162-recovery-rest.md`).
+
+  **Teil A — die Konsolenfehler sind vollstaendig zugeordnet.**
+  `[cmd]` **Es sind vier, nicht fuenf**, und **es gibt keinen
+  unbekannten dritten.** Je Tab gemessen (seit G-117 moeglich):
+  **alle neun Recovery-Tabs haben 2 Hydrationswarnungen**; die drei
+  mit Muskelkarte (`today`, `checkin`, `muscles`) dazu **die 2
+  bekannten SVG-Fehler** aus G-105. **Die Spalte „sonst“ ist ueberall
+  null.**
+
+  `[read]` **Ein eigener Zaehlversuch ist gescheitert und steht im
+  Bericht**, damit ihn niemand wiederholt: ein selbstgebauter
+  Pfadpruefer meldete **291** unvollstaendige Befehle. Er war falsch
+  — SVG erlaubt wiederholte Parametersaetze ohne neuen
+  Befehlsbuchstaben. **Fuer SVG ist der Browser die Messung.**
+
+  **Teil A — der gemessene Folgetagsunterschied.** `[cmd]`
+  `next_day_score_delta` (C-153) war auf **89 von 89** Zeilen
+  gefuellt **und wurde nicht gezeigt** — die Kachel las
+  `next_day_effect`, die Selbsteinschaetzung 1–10.
+
+  `[cmd]` **Jetzt steht er je Art:** Sauna **+2,76**, Dehnen +0,13,
+  Massage +0,05, Eisbad **−0,07**. Genau Toms Satz: *„wer am Montag
+  in die Sauna geht, sieht am Dienstag den Unterschied.“*
+
+  `[read]` **Ohne Urteil** (G-76 gilt): Es steht nicht da, dass Sauna
+  besser sei — nur, wie gerechnet wurde. Nur gefuellte Werte werden
+  gemittelt; eine fehlende Messung ist keine Null.
+
+  **Teil B — `supplements` war das letzte `useState`-Modul.**
+  `[cmd]` Die beschriebene Zwei-Zeilen-Aenderung; **fuenf Tabs ueber
+  `?tab=` gegengeprueft.** `[read]` Das hat Teil A erst moeglich
+  gemacht — ohne Tab-Adressen liesse sich nicht zeigen, dass die
+  SVG-Fehler nur an der Muskelkarte haengen.
+
+  **Teil C — aus zwei Sperrbegruendungen wurden siebzehn.** `[cmd]`
+  Nach den zwei genannten habe ich **alle** `grund=`-Texte in
+  `apps/web/src/app/v2/` gegen `information_schema` geprueft (145
+  Tabellen).
+
+  **Neun nennen eine Tabelle, die es gibt** — `user_medications`
+  (2 Zeilen), `goal_phases` (5), **`user_goals` (11, mit
+  Schreibweg)**, `body_measurements` (362), `lab_result_values`
+  (280), `modality_log` (178), `checkins` (340), `exercises`
+  (1.416). **Zwei behaupteten sogar, das Schema `recovery` gebe es
+  nicht** — auf einer Seite, deren Kopf *„aus `recovery.scores`“*
+  schreibt und 170 Tage anzeigt.
+
+  **Acht stimmen halb:** die Tabelle fehlt wirklich
+  (`medical.symptoms`, `biomarker_results`, `hrv_readings`,
+  `protocols`, `training.routines`, `blocks`), **aber der Zusatz
+  „das Schema gibt es noch nicht“ ist falsch** — `medical` fuehrt 11
+  Tabellen, `training` 8, `recovery` 3. Zweimal hiess es, das Modul
+  `/v2/medical` gebe es nicht. `[read]` **Diese sind gefaehrlicher
+  als die ersten neun**, weil wer den ersten Teil prueft ihn
+  bestaetigt findet und den zweiten mitglaubt.
+
+  `[cmd]` **Alle Sperren bleiben richtig** — gemessen hat keine der
+  fuenf Tabellen einen Schreibweg. `[read]` **Der Unterschied ist
+  nicht kosmetisch:** *„Die Tabelle gibt es nicht“* schickt den
+  naechsten Agenten zu Codex ins Schema, *„der Schreibweg fehlt“*
+  sagt ihm, dass die Arbeit in `apps/web` liegt.
+
+  **G-120 nur gemeldet**, nicht gebaut — `nutrition` gehoert Fable.
+
+  `[cmd]` **447 Tests gruen**, Typecheck sauber. Attrappen gerendert:
+  Recovery **4**, Supplements **1**. **Zeilenschutz:** `test-user`
+  sieht kein +2,76 und **6 statt 4 Attrappen** — ohne Modalitaeten
+  faellt die Kachel auf den Entwurf zurueck, mit Marke.
+
+  **Offen geblieben:** G-122 und G-124.

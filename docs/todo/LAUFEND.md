@@ -14,7 +14,7 @@ wissen, welcher Agent noch laeuft."*
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
 | **Codex** | **C-158** Naehrstoffcodes je Substanz | `supabase/` | 2026-08-20 |
-| **Fable** | *frei* | | |
+| **Fable** | **G-121** Naehrstoffanzeige, lange Sicht + Zeitfenster | `apps/web/v2/nutrition` | 2026-08-20 |
 | **Claude Code** | *frei* | | |
 
 ---
@@ -24,7 +24,7 @@ wissen, welcher Agent noch laeuft."*
 | Auftrag | Bereich | blockiert von |
 |---|---|---|
 | **C-161** Naehrstoffbaum (`parent_code`) | `supabase/` | Codex besetzt |
-| **G-121** Naehrstoff-Detail nach Mockup | `apps/web` | C-161 |
+| **G-122** Naehrstoff-Detailmodal | `apps/web` | C-161 |
 | **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC) | `supabase/` | Codex besetzt |
 | **G-119** `supplements` auf `tab-url.ts` | `apps/web` | \u2014 |
 
