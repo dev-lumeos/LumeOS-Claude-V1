@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `5821271` auf `dev`.
+**Stand:** 2026-08-18, Anker `0480f0c` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
