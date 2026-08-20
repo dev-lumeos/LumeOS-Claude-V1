@@ -49,6 +49,9 @@ import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { RecoveryModale } from './modale'
 // G-55: die erfassten Check-ins.
 import type { CheckinStand } from '../../../lib/recovery/checkin-read'
+// G-76: der Erholungswert aus dem Check-in.
+import { berechneScore } from '../../../lib/recovery/score'
+import { ScoreKachel } from './score-kachel'
 import { CheckinStreifen } from './checkin-streifen'
 import { RecCheckin } from './tab-checkin'
 import { RecMuscleMap, RecHRV, RecSleep } from './tab-messwerte'
@@ -85,6 +88,13 @@ export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
   const ot = React.useMemo(() => evaluateOvertraining(), [])
   const pending = React.useMemo(() => recoveryPendingActions(), [])
 
+  // G-76: Der Erholungswert aus dem juengsten echten Check-in. `null`,
+  // wenn keiner vorliegt — dann bleiben Kopf und Kachel beim Entwurf.
+  const echterScore = React.useMemo(() => {
+    const e = berechneScore(checkins?.neuster ?? null)
+    return e.score === null ? null : e
+  }, [checkins])
+
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
     close: () => setModal(null),
@@ -101,16 +111,37 @@ export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
         <div className="v2-module-title-block">
           <div className="v2-module-title-row">
             <span className="v2-module-title">Recovery</span>
-            <Pill style={{
-              borderColor: `color-mix(in oklch, ${rd.c} 35%, var(--border))`,
-              color: rd.c,
-              background: `color-mix(in oklch, ${rd.c} 7%, transparent)`,
-            }}>Score {sc.score} · {rd.label}</Pill>
-            <Pill><span className="v2-dot" style={{ background: 'var(--pos)' }} />Check-in {CHECKIN.logged_at}</Pill>
+            {/* G-76: Der Kopf zeigt die ZAHL aus dem echten Check-in,
+                ohne Einordnung. `[read]` Vorher stand hier
+                „Score 88 · Good" aus dem Entwurf — `Good` ist eine
+                Readiness-Stufe der `SPEC_09` und damit Urteilssprache.
+                Ohne echten Check-in bleibt die Entwurfspille stehen. */}
+            {echterScore
+              ? (
+                <Pill style={{
+                  borderColor: 'color-mix(in oklch, var(--acc-recov) 35%, var(--border))',
+                  color: 'var(--acc-recov)',
+                  background: 'color-mix(in oklch, var(--acc-recov) 7%, transparent)',
+                }}>Score {echterScore.score}</Pill>
+              )
+              : (
+                <Pill style={{
+                  borderColor: `color-mix(in oklch, ${rd.c} 35%, var(--border))`,
+                  color: rd.c,
+                  background: `color-mix(in oklch, ${rd.c} 7%, transparent)`,
+                }}>Score {sc.score} · {rd.label}</Pill>
+              )}
+            <Pill><span className="v2-dot" style={{ background: 'var(--pos)' }} />
+              Check-in {checkins?.neuster?.checkin_time?.slice(0, 5) ?? CHECKIN.logged_at}
+            </Pill>
             {ot.severity !== 'normal' && <Pill variant="warn">{ot.count} OT signals</Pill>}
           </div>
           <div className="v2-module-sub">
-            {rd.advice} · score mode: {modus} · {pending.length} pending action{pending.length === 1 ? '' : 's'}
+            {echterScore
+              ? <>manual mode · {echterScore.gewichtBasis} von 100 Gewichtspunkten
+                  gerechnet · {pending.length} pending action{pending.length === 1 ? '' : 's'}</>
+              : <>{rd.advice} · score mode: {modus} · {pending.length} pending
+                  action{pending.length === 1 ? '' : 's'}</>}
           </div>
         </div>
         <div className="v2-module-actions">
@@ -150,6 +181,12 @@ function RecToday({ checkins }: { checkins?: CheckinStand }) {
 
   const recoveryValues = React.useMemo(() => muskelwerte(), [])
 
+  // G-76: derselbe Wert wie im Kopf — einmal gerechnet, weitergereicht.
+  const echterScore = React.useMemo(() => {
+    const e = berechneScore(checkins?.neuster ?? null)
+    return e.score === null ? null : e
+  }, [checkins])
+
   return (
     <div className="v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
@@ -157,6 +194,15 @@ function RecToday({ checkins }: { checkins?: CheckinStand }) {
             weil sie den Unterschied zum Rest sichtbar macht — alles
             darunter traegt die Attrappenmarke. */}
         <CheckinStreifen stand={checkins} />
+
+        {/* G-76: Der Erholungswert aus dem juengsten Check-in. Liegt
+            keiner vor, bleibt die Entwurfskachel darunter stehen —
+            mit ihrer Marke. */}
+        {echterScore && checkins?.neuster && (
+          <ScoreKachel ergebnis={echterScore} zeile={checkins.neuster} />
+        )}
+
+        {!echterScore && (
         <Card attrappe={ATTRAPPE}>
           <div className="v2-rec-score-kopf">
             <Ring value={sc.score} max={100} color={rd.c} label={rd.level} size={140} stroke={10} />
@@ -221,6 +267,7 @@ function RecToday({ checkins }: { checkins?: CheckinStand }) {
             </div>
           </div>
         </Card>
+        )}
 
         <Card
           title="Muscle readiness" sub="18 groups · click for the calculation"

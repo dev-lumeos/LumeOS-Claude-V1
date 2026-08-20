@@ -127,12 +127,17 @@ export function CheckinStreifen({ stand }: { stand?: CheckinStand }) {
         </>
       )}
 
+      {/* G-76: Der Satz stand hier bis heute anders — „kein
+          Erholungswert daraus gerechnet". Seit G-76 wird einer
+          gerechnet, und ein Hinweis, der das Gegenteil behauptet,
+          waere schlechter als keiner. */}
       <div className="v2-divider" />
       <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
-        `[read]` Hier steht, was erfasst wurde — <strong>kein Erholungswert
-        daraus gerechnet</strong>. Der ist `SPEC_09` und hat dieselbe offene
-        Frage wie C-49: welche Gewichtung gilt. Der Ring oben bleibt
-        deshalb Attrappe.
+        `[read]` Hier steht, was erfasst wurde. Der Erholungswert darunter
+        rechnet daraus die <strong>Manual-Gewichte</strong> (30/15/15/10/15/10/5)
+        — <strong>eine Zahl, keine Einordnung</strong>. Die Readiness-Stufen
+        aus `SPEC_09` („Optimal", „Vorsicht") sind Urteilssprache und
+        bleiben offen, bis Tom sie entschieden hat.
       </div>
     </Card>
   )
