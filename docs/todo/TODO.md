@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `158727d` auf `dev`.
+**Stand:** 2026-08-18, Anker `08803ce` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -198,8 +198,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-75** | BSS und Voice sind Neubau |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
 | **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
-| **G-61** | `refillUrgent` als Schwelle |  |
-| **G-62** | Die 17 Marken in `tabs.tsx` bleiben 17 |  |
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
 | **G-63** | Vier Felder liegen ungenutzt |  |
 | **C-86** | 8 mehrdeutige Uebungen und 1 ohne DB-Namen |  |
@@ -223,6 +221,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-120** | Drei Sperren in `food_search` |  |
 | **C-121** | Die Suche ist langsamer geworden |  |
 | **G-75** | Die alte Oberflaeche nennt den BLS ebenfalls |  |
+| **G-77** | Streaks bei 32 Auslassern |  |
+| **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 
 ---
 
@@ -2230,49 +2230,8 @@ Umsetzen angepasst werden.
   Kontrastmessung. `[cmd]` Sieben von acht Modulen sind noch Attrappe.
 
 
-- [ ] **G-61: `refillUrgent` als Schwelle** (neu 2026-08-18).
-  **Entscheidung fuer Tom.** Vorlage aus G-37.
-
-  `[annahme]` **Der Agent schlaegt eine Schwelle vor, keine
-  Handmarkierung** — mit drei Gruenden:
-
-  `[cmd]` **Die Daten tragen sie** (`low_stock_threshold`, mit passendem
-  Index aus C-68) · `[read]` **eine Handmarkierung veraltet still** ·
-  **und „4 d left" sagt mehr als „unter 7 Stueck".**
-
-  `[cmd]` **`vitamin-d3` loest aus** — 4 Softgels bei Schwelle 7. Der
-  Testfall steht im Register.
-
-  **Entschieden (Tom, 2026-08-18): drei Stufen aus der Reichweite.**
-
-  | Reichweite | |
-  |---|---|
-  | **1 Monat** | Hinweis |
-  | **2 Wochen** | Warnung — bestellen |
-  | **1 Woche** | dringend — bestellen |
-
-  `[read]` **Aus der Reichweite, nicht je Position** — *„4 d left" sagt
-  mehr als „unter 7 Stueck"*, und eine Schwelle je Position muesste
-  gepflegt werden. `[cmd]` Die Reichweite ergibt sich aus Bestand und
-  Tagesdosis; `low_stock_threshold` bleibt als Rueckfall, wo keine
-  Tagesdosis bekannt ist.
 
 
-- [ ] **G-62: Die 17 Marken in `tabs.tsx` bleiben 17** (neu 2026-08-18).
-  Befund aus G-37.
-
-  `[cmd]` **Die angebundenen Fassungen sind neue Komponenten, die alten
-  bleiben als Rueckfall.** Das Zaehlen je Datei sieht deshalb
-  unveraendert aus.
-
-  `[read]` **Die neue Pruefung misst stattdessen die Fassungen
-  einzeln** — und wurde in beide Richtungen gegengeprobt: Marke auf
-  echter Fassung faellt, Marke von der Rueckfallfassung entfernt faellt
-  ebenso.
-
-  **Zu klaeren:** Wann fallen die Rueckfallfassungen weg? `[cmd]` Solange
-  beide dastehen, zeigt `v2-attrappen.test.ts` eine Zahl, die nicht mehr
-  die Lage beschreibt.
 
 
 - [ ] **C-85: Kurznamen fehlen bei 11 von 35** (neu 2026-08-18). Befund
@@ -2691,3 +2650,33 @@ Umsetzen angepasst werden.
 
   `[read]` **Kleine Sache**, aber sie gehoert mit weg, wenn die alte
   Oberflaeche bleibt — **oder die Frage lautet, ob sie bleibt.**
+
+- [ ] **G-77: Streaks bei 32 Auslassern** (neu 2026-08-19). Befund aus
+  G-74.
+
+  `[cmd]` **Der Agent hat sie nicht gebaut und begruendet:** *„Bei 32
+  Auslassern reisst jede Serie — eine Zahl ohne Aussage."*
+
+  `[read]` **Das Mockup zeigt eine Streak-Kachel.** Bei 93,1 %
+  Compliance ueber 90 Tage ist die laengste ununterbrochene Serie
+  vermutlich wenige Tage lang.
+
+  **Zu klaeren:** Zeigt die Kachel die laengste Serie, die aktuelle, oder
+  faellt sie weg? `[read]` **Eine Serie, die staendig reisst, motiviert
+  nicht — sie beschaemt.**
+
+- [ ] **G-78: Ein Fehler, den nur der Browser zeigte** (neu
+  2026-08-19). **Merkposten, kein Auftrag.**
+
+  `[cmd]` **HTTP 500:** *„Ein Wert-Import aus `stack-read.ts` (das
+  `next/headers` laedt) zog das Server-I/O ins Browserbuendel. **Der
+  Typecheck war gruen.**"*
+
+  `[read]` **Dritter Fall derselben Klasse:** In G-69 standen die
+  Uebungsnamen im DOM und waren unsichtbar (*„ein Test auf „Name steht
+  im DOM" waere gruen gewesen"*), in G-64 kippte `.in()` ueber 200 IDs
+  **und schwieg.**
+
+  `[cmd]` **Was daraus folgt:** Das Bildschirmfoto ist kein Beiwerk —
+  **es ist die einzige Pruefung, die diese Klasse findet.** Steht schon
+  als Nachweis in jedem Auftrag; **hier ist der dritte Beleg.**

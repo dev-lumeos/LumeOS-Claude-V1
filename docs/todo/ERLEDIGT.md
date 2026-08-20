@@ -8264,3 +8264,74 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Gebaut ist ein Drei-Spalten-Raster:** 0 px Abweichung, keine
   Ueberlappung.
+
+- [x] **G-61: `refillUrgent` als Schwelle** (neu 2026-08-18).
+  **Entscheidung fuer Tom.** Vorlage aus G-37.
+
+  `[annahme]` **Der Agent schlaegt eine Schwelle vor, keine
+  Handmarkierung** — mit drei Gruenden:
+
+  `[cmd]` **Die Daten tragen sie** (`low_stock_threshold`, mit passendem
+  Index aus C-68) · `[read]` **eine Handmarkierung veraltet still** ·
+  **und „4 d left" sagt mehr als „unter 7 Stueck".**
+
+  `[cmd]` **`vitamin-d3` loest aus** — 4 Softgels bei Schwelle 7. Der
+  Testfall steht im Register.
+
+  **Entschieden (Tom, 2026-08-18): drei Stufen aus der Reichweite.**
+
+  | Reichweite | |
+  |---|---|
+  | **1 Monat** | Hinweis |
+  | **2 Wochen** | Warnung — bestellen |
+  | **1 Woche** | dringend — bestellen |
+
+  `[read]` **Aus der Reichweite, nicht je Position** — *„4 d left" sagt
+  mehr als „unter 7 Stueck"*, und eine Schwelle je Position muesste
+  gepflegt werden. `[cmd]` Die Reichweite ergibt sich aus Bestand und
+  Tagesdosis; `low_stock_threshold` bleibt als Rueckfall, wo keine
+  Tagesdosis bekannt ist.
+
+  `[cmd]` **Erledigt 2026-08-19. Alle drei Stufen loesen aus:** D3 **4
+  Tage** (dringend), Omega-3 **14** (bestellen), Magnesium 24 und
+  Kreatin 30 (im Blick). Kopfzahlen: 4 Positionen, 2 bestellen, **61,20
+  € Nachkauf.**
+
+  ### Die Einheit entscheidet, nicht die Stueckzahl
+
+  `[cmd]` **Der Agent hat einen Fehler in meiner Auftragszahl
+  gefunden:** *„Die alte Formel teilte immer durch Portionen und meldete
+  30 statt 6 Tage."* **`stock_unit` war `g`, die Tagesdosis 5 g.**
+
+  `[read]` **Die Regel jetzt:** gleiche Einheit → Bestand ÷ Dosis ·
+  ungleiche Einheit (Stueck gegen mg/IU) → 1 Stueck = 1 Portion.
+
+  `[cmd]` **Und C-122 hat den Seed nachgezogen** — Kreatin auf 150 g,
+  damit die Monatsstufe auch feuert.
+
+- [x] **G-62: Die 17 Marken in `tabs.tsx` bleiben 17** (neu 2026-08-18).
+  Befund aus G-37.
+
+  `[cmd]` **Die angebundenen Fassungen sind neue Komponenten, die alten
+  bleiben als Rueckfall.** Das Zaehlen je Datei sieht deshalb
+  unveraendert aus.
+
+  `[read]` **Die neue Pruefung misst stattdessen die Fassungen
+  einzeln** — und wurde in beide Richtungen gegengeprobt: Marke auf
+  echter Fassung faellt, Marke von der Rueckfallfassung entfernt faellt
+  ebenso.
+
+  **Zu klaeren:** Wann fallen die Rueckfallfassungen weg? `[cmd]` Solange
+  beide dastehen, zeigt `v2-attrappen.test.ts` eine Zahl, die nicht mehr
+  die Lage beschreibt.
+
+  `[cmd]` **Erledigt 2026-08-19.** `attrappe={RUECKFALL}` statt
+  `{ATTRAPPE}` an den **sechs abgeloesten Fassungen**. `tabs.tsx` zeigt
+  jetzt **1 echte Attrappe gegen 16 Rueckfallfassungen** statt pauschal
+  17.
+
+  `[read]` **Und die Trennung ist mehr als Kosmetik:** *„Ein zweiter
+  Test haelt fest, dass die Marke am richtigen Ort sitzt:
+  `SuppInteractions` behaelt `ATTRAPPE` (keine echte Fassung daneben),
+  die sechs abgeloesten tragen nur `RUECKFALL`. **Ohne diesen zweiten
+  Test waere die Trennung Kosmetik.**"*
