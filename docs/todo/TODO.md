@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `3d3f7c9` auf `dev`.
+**Stand:** 2026-08-18, Anker `a5c5c9d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 124 offen, 1 in Arbeit.
+`[cmd]` 125 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -257,6 +257,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-116** | Generelle Ausschluesse bewerten mit 0, statt zu filtern |  |
 | **C-159** | Sieben Regelpfade zeigen auf Schemata, die es nicht gibt |  |
 | **G-118** | Der Extended-Code liegt im Buendel |  |
+| **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
 
 ---
 
@@ -913,6 +914,23 @@ eigene Nummern angelegt (A-18: die Nummer vergibt der Orchestrator).
   Paket ziehen, sobald `apps/web` frei ist.
 - [ ] **Coach-Passwort:** `coach@lumeos.app` / `LumeosCoach2026` aus
   dem Seed — Tom ändert es bei Bedarf.
+### G-117-Folgepunkte (Tab-Zustand/Wasser, 2026-08-20) — Nummern vergibt der Orchestrator
+
+Quelle und Belege: `docs/ssot/158-tab-zustand.md`.
+
+- [ ] **Supplements-Tab auf `useTabParam` umstellen** — das einzige
+  Modul, dessen Tab noch in `useState` liegt (fremder Arbeitsbereich
+  bei G-117); Zwei-Zeilen-Aenderung nach dem Muster der sechs anderen
+  (`lib/tab-url.ts`).
+- [ ] **Wassereintrag korrigieren statt loeschen+neu:**
+  `updateWaterLogAmount` (Codex) liegt fertig und ungenutzt — ein
+  Stift-Knopf neben dem Papierkorb waere der vollstaendige
+  Fehlklick-Weg.
+- [ ] **`tools/schuss.mjs` Git-Bash-fest machen:** Pfade ohne `?`
+  werden von MSYS umgewandelt (`/v2/nutrition` → `C:/Program
+  Files/Git/...`); `MSYS_NO_PATHCONV=1` im Skriptkopf setzen oder
+  dokumentieren.
+
 ### G-104-Folgepunkte (Preferences, 2026-08-20) — Nummern vergibt der Orchestrator
 
 Quelle und Belege: `docs/ssot/154-preferences.md`.
@@ -3745,3 +3763,24 @@ Umsetzen angepasst werden.
   **Zu klaeren:** Reicht das Gate, oder soll der Code gar nicht erst zum
   Browser? `[read]` **Es geht um PED-Protokolle** — die Frage ist
   nicht rein technisch.
+
+- [ ] **C-160: Der Bewertungshorizont je Naehrstoff ist leer** (neu
+  2026-08-20). **Fuer den Rechercheweg.** Rest aus C-157.
+
+  `[cmd]` **Die Felder stehen:** `assessment_horizon_days`, `_source`,
+  `_notes` an `nutrient_defs`. **138 Zeilen, alle leer.**
+
+  `[read]` **Was gebraucht wird, mit Quelle:**
+
+  | | |
+  |---|---|
+  | Vitamin D, B12, Eisen, Folat | **Speicher — Wochen bis Monate** |
+  | Vitamin C, B1, B2 | wasserloeslich — **Tage** |
+  | Natrium, Kalium, Wasser | tagesaktuell |
+
+  `[cmd]` **EFSA und DGE unterscheiden Tagesbedarf von Zufuhr ueber die
+  Zeit** — das ist eine Recherche, keine Erfindung.
+
+  `[read]` **Und die Wirkung ist konkret:** Die Anzeige zeigt dann von
+  selbst das passende Fenster — **Vitamin D ueber 90 Tage, Natrium ueber
+  einen.**
