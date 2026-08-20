@@ -18,7 +18,9 @@ port = 54321
 # nur unerreichbar. Jedes Schema braucht hier eine Zeile.
 # G-64: `training` ergaenzt. Wie bei `recovery` beim eigenen Auftrag
 # vergessen — der Exercises-Tab bekam PGRST106 statt der 1.416 Uebungen.
-schemas = ["public", "graphql_public", "nutrition", "goals", "supplements", "medical", "recovery", "training"]
+# C-148: `coach` ergaenzt. Ohne diesen Eintrag sind die sechs Tabellen
+# aus C-119 vorhanden und geschuetzt, aber ueber PostgREST unsichtbar.
+schemas = ["public", "graphql_public", "nutrition", "goals", "supplements", "medical", "recovery", "training", "coach"]
 # Extra schemas to add to the search_path of every request.
 extra_search_path = ["public", "extensions"]
 # The maximum number of rows returns from a view, table, or stored procedure. Limits payload size

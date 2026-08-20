@@ -35,6 +35,7 @@ const ENDUNGEN = new Set([
 // hier und nicht nur im Auftrag.
 const AUS_ORDNER = new Set([
   'node_modules', '.next', '.next-gate', '.git', '.turbo',
+  'dist', 'build', 'out', 'coverage',
   'referenz', '_archive', 'media',
   'design-system', 'design-system-analysis',
   // `[cmd]` `temp/` steht in .gitignore und enthaelt fremdes Material
@@ -102,6 +103,7 @@ function* dateien(dir) {
     const p = path.join(dir, e.name)
     const rel = path.relative(WURZEL, p).replace(/\\/g, '/')
     if (e.isDirectory()) {
+      if (e.name.startsWith('.next')) continue
       if (AUS_ORDNER.has(e.name)) continue
       if (AUS_PFADE.some(a => rel === a || rel.startsWith(`${a}/`))) continue
       yield* dateien(p)

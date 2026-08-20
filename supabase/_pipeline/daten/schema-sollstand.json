@@ -1611,6 +1611,130 @@
     },
     {
       "schema": "training",
+      "name": "muscle_groups",
+      "schritt": "100",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "100_training_schema.sql vergibt authenticated DML und service_role ALL; RLS begrenzt Schreiben auf public.is_admin().",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "training",
+      "name": "equipment",
+      "schritt": "100",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "100_training_schema.sql vergibt authenticated DML und service_role ALL; RLS begrenzt Schreiben auf public.is_admin().",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "training",
+      "name": "exercises",
+      "schritt": "100",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "100_training_schema.sql vergibt authenticated DML und service_role ALL; RLS begrenzt Schreiben auf public.is_admin().",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "training",
+      "name": "exercise_muscles",
+      "schritt": "100",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "100_training_schema.sql vergibt authenticated DML und service_role ALL; RLS begrenzt Schreiben auf public.is_admin().",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "training",
       "name": "exercise_catalog_enrichment",
       "schritt": "109",
       "rls": true,

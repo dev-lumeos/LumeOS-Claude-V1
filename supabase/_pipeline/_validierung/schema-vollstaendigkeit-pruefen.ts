@@ -24,6 +24,7 @@ import fs from 'node:fs'
 
 const C = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
+const SOLL_PATH = process.argv[2] ?? 'supabase/_pipeline/daten/schema-sollstand.json'
 const SEP = ''
 
 function sql(text: string): string[][] {
@@ -34,7 +35,7 @@ function sql(text: string): string[][] {
 }
 
 const SOLL = JSON.parse(
-  fs.readFileSync('supabase/_pipeline/daten/schema-sollstand.json', 'utf8'))
+  fs.readFileSync(SOLL_PATH, 'utf8'))
 
 const istTabellen = new Set(sql(
   `SELECT table_name FROM information_schema.tables
@@ -47,7 +48,7 @@ const istFunktionen = new Set(sql(
    WHERE n.nspname='nutrition';`).map(r => r[0]))
 
 console.log('Schema-Vollstaendigkeit — Datenbank:', DB)
-console.log('Sollliste: supabase/_pipeline/daten/schema-sollstand.json (von Hand gepflegt)')
+console.log(`Sollliste: ${SOLL_PATH} (von Hand gepflegt)`)
 console.log('')
 
 const fehler: string[] = []
@@ -468,6 +469,33 @@ if (istTabellen.has('nutrient_reference_values') && istTabellen.has('nutrient_de
 // Blickfeld.
 if (Array.isArray(SOLL.fremde_schemata) && SOLL.fremde_schemata.length) {
   let fremdOk = 0
+  const erwarteteFremdeTabellen = new Set<string>()
+  const fremdeSchemaNamen = new Set<string>()
+  for (const t of SOLL.fremde_schemata) {
+    erwarteteFremdeTabellen.add(`${t.schema}.${t.name}`)
+    fremdeSchemaNamen.add(t.schema)
+  }
+
+  if (fremdeSchemaNamen.size) {
+    const schemaSql = [...fremdeSchemaNamen].map(s => `'${s}'`).join(',')
+    for (const [voll] of sql(
+      `SELECT table_schema||'.'||table_name
+       FROM information_schema.tables
+       WHERE table_type='BASE TABLE'
+         AND table_schema IN (${schemaSql})
+       ORDER BY 1;`)) {
+      const name = voll.split('.').pop() ?? voll
+      const bekannt =
+        erwarteteFremdeTabellen.has(voll) ||
+        SOLL.nicht_erwartet?.[voll] ||
+        SOLL.nicht_erwartet?.[name]
+      if (!bekannt) {
+        fehler.push(`Tabelle: ${voll} steht da, aber NICHT in fremde_schemata` +
+          ` — schema-sollstand.json ist unvollstaendig`)
+      }
+    }
+  }
+
   for (const t of SOLL.fremde_schemata) {
     const voll = `${t.schema}.${t.name}`
 
