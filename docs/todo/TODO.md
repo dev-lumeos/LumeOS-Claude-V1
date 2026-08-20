@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `23aeb7e` auf `dev`.
+**Stand:** 2026-08-18, Anker `a017c7b` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 101 offen, 1 in Arbeit.
+`[cmd]` 103 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -219,6 +219,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-141** | Glukose steht zweimal in der Liste |  |
 | **C-142** | Die Sperrbegruendung nennt eine Tabelle, die es gibt |  |
 | **A-23** | `lint` bricht repoweit ab |  |
+| **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
+| **C-144** | `immediate_effect` ist 1–10, `next_day_effect` fehlt |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2754,6 +2756,57 @@ Umsetzen angepasst werden.
   `[cmd]` **Der G-84-Agent hat Typecheck und Tests ohne Cache
   erzwungen** — 3 von 3, 393 gruen. **Das gehoert zur Nachweisregel.**
 
+- [ ] **C-143: Die zwei Erholungsrechnungen weichen ab** (neu
+  2026-08-19). **Befund aus G-82, gemessen ueber fuenf Tage.**
+
+  | Tag | Tabelle | `score.ts` | Diff |
+  |---|---|---|---|
+  | 2026-06-05 | **43,0** | 36 | **−7,0** |
+  | 2026-07-15 | 83,8 | 83 | −0,8 |
+  | 2026-09-01 / 10-20 / 11-06 | **79,4** | 82 | **+2,6** |
+
+  `[cmd]` **C-125s Referenztag stimmt (43,0), G-76s nicht:** *„Die
+  Tabelle sagt 79,4, nicht 82. **Die 82 war nie gespeichert**, sondern
+  das, was die Browserrechnung an dem Tag ergab."*
+
+  ### Die Ursache sind nicht die Gewichte
+
+  `[read]` *„Der Kern ist identisch — der Unterschied ist, **wie viele
+  Anteile zaehlen**: `score.ts` rechnet fuenf von sieben (Basis 75), die
+  Tabelle alle sieben mit Rueckfallwerten (Basis 100)."*
+
+  `[cmd]` **Die Tabelle ist die bessere Zahl:** *„Sie nutzt den
+  gemessenen ACWR auf **118 von 170 Tagen**, die `score.ts`
+  wegwirft."*
+
+  ### Und die Anzeige liest jetzt die Tabelle
+
+  `[cmd]` **`score.ts` bleibt** — aber der Auftrag ging von einer
+  falschen Annahme aus: *„Die Live-Vorschau benutzte sie nie."*
+
+  `[cmd]` **`tab-checkin.tsx` rechnete mit der Entwurfsformel** — eigene
+  Gewichte, **HRV aus der Attrappe, `0.88 * 10` als erfundene
+  Ernaehrung**, `readinessFor` als Urteilssprache.
+
+  `[read]` **Nach dem Umbau haette `score.ts` null Aufrufer gehabt** —
+  derselbe Fall wie `InjektionsKarte` (G-53). **Jetzt an die Vorschau
+  gebunden, mit genannter Basis** und dem Hinweis, dass sie bewusst
+  nicht die gespeicherte Zahl ist.
+
+  **Offen:** `[read]` Ob die Vorschau ueberhaupt eine zweite Zahl zeigen
+  soll, oder ob sie nach dem Speichern die gespeicherte nachreicht.
+
+- [ ] **C-144: `immediate_effect` ist 1–10, `next_day_effect` fehlt**
+  (neu 2026-08-19). Kleiner Befund aus G-82.
+
+  `[cmd]` **`121_recovery_scores_modalities.sql:216`** — die Werte
+  liegen bei **6–8 auf einer 1–10-Skala**, die Anzeige nahm 1–5 an.
+  **Korrigiert.**
+
+  `[cmd]` **`next_day_effect` fehlte ganz** — der Entwurf nennt
+  `next_day_score_delta` als Sinn des Modalitaeten-Protokolls.
+  **Nachzutragen.**
+
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
 
@@ -2999,6 +3052,16 @@ Umsetzen angepasst werden.
   **Wenn die Oberflaeche unformatiert aussieht oder Registerkarten nicht
   wechseln:** `[cmd]` **erst `.next` loeschen und neu starten**, bevor
   jemand den Code sucht.
+
+  ### Ergaenzung aus G-82 (2026-08-19)
+
+  `[cmd]` **Wer `.next` raeumt, startet den Server neu.** Der G-82-Agent
+  hat es teuer gelernt: *„Nach dem Raeumen von `.next` lieferte der
+  laufende Server 404 fuer jeden Chunk, die Anmeldung hydrierte nicht
+  und **schickte die Zugangsdaten per GET in die URL**."*
+
+  `[read]` **Das Letzte ist der ernste Teil** — ein Passwort in der
+  Adresszeile landet im Verlauf und in jedem Protokoll.
 
 - [ ] **C-138: Der Kimi-Waechter stand auf genau 56** (neu 2026-08-19).
   **Merkposten aus C-131.**
