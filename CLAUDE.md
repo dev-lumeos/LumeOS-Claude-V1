@@ -66,6 +66,56 @@ nicht darin steht, existiert fuer die naechste Sitzung nicht.
 committet. **Eine Zeile mit dem Befund, nicht mit dem Dateinamen** —
 der steht schon in der ersten Spalte.
 
+## Vor jedem Auftrag: nachsehen, nicht annehmen
+
+**Tom, 2026-08-19:** *,Nicht vergessen — immer Specs und das alte Repo
+miteinbeziehen und nicht planlos in irgendeine Richtung gehen, und
+allfaellig brainstormen mit mir."*
+
+`[cmd]` **Zwei Auftraege sind am 2026-08-19 daran gescheitert.**
+
+**G-79:** Der Auftrag fragte, ob `user_goals` Spalten fuer Prioritaet und
+Status habe. `[read]` *,Die Frage war falsch gestellt — beide Spalten
+gibt es schon, und `lesen.ts:223` sortiert laengst danach. **Es fehlte
+nur der Weg, die Zahl zu setzen.**"
+
+**G-82:** Der Auftrag nannte `score.ts` die Live-Vorschau. `[read]`
+*,Die Live-Vorschau benutzte sie nie."* **`tab-checkin.tsx` rechnete mit
+der Entwurfsformel — HRV aus der Attrappe, `0.88 * 10` als erfundene
+Ernaehrung.** **Nach dem Umbau haette `score.ts` null Aufrufer gehabt.**
+
+`[cmd]` **Dazu die falschen Zahlen:** ,erreicht, offen, verfehlt" bei
+den Meilensteinen (alle drei `open`), ,Kreatin 30 Tage" (`stock_unit`
+ist `g`, also 6), ,fuenf LOINC-Abweichungen, ein Auftrag von zwanzig
+Minuten" (bei Glukose und Vitamin D messen die Codes nicht dasselbe).
+
+### Die vier Quellen, in dieser Reihenfolge
+
+**1. Der Code** — was existiert schon? `[cmd]` Spalten, Funktionen,
+Aufrufer. **Ein `rg` kostet Sekunden.**
+
+**2. Die Daten** — was steht drin? `[cmd]` Zahlen im Auftrag tragen
+ihren Stichtag und sind **gemessen**, nicht aus einem alten Bericht
+uebernommen.
+
+**3. `docs/specs/`** — was war gedacht? `[read]` **Pruefend lesen:** Die
+Fehlerliste (A-20) zaehlt sieben Funde.
+
+**4. `referenz/lumeos-2026/`** — wie wurde es geloest? `[read]` Struktur
+uebernehmen, Code nie. **Und nachsehen, warum es ersetzt wurde** — F-04
+hat es beim Coach beantwortet: *,Der Klient hatte keine Stimme."*
+
+### Und bei Unklarheit fragen
+
+`[read]` **Ein Auftrag, der auf einer Annahme steht, kostet den Agenten
+einen halben Durchgang** — er misst dann erst, was der Orchestrator
+haette messen sollen.
+
+`[cmd]` **Besser vorher brainstormen.** Toms Entscheidungen sind
+schneller als eine falsche Richtung: Permissions gegen Autonomy, der
+Erfahrungsgrad, `alpha = 1` — **alle drei kamen in einem Satz, und alle
+drei haetten sonst falsch gebaut werden koennen.**
+
 ## Eine Zahl ohne Stichtag ist keine Zahl
 
 **Tom, 2026-08-18:** *,Es geht nicht darum, was der User macht. Es geht
