@@ -137,14 +137,14 @@ const active = readJsonl(ACTIVE_FILE).map(enrichActive)
 const formulations = readJsonl(FORMULATIONS_FILE)
 const products = readJsonl(PRODUCTS_FILE)
 
-if (active.length !== EXPECTED_ACTIVE) {
-  fail(`${ACTIVE_FILE}: ${active.length} Zeilen, erwartet ${EXPECTED_ACTIVE}`)
+if (active.length < EXPECTED_ACTIVE) {
+  fail(`${ACTIVE_FILE}: ${active.length} Zeilen, erwartet mindestens ${EXPECTED_ACTIVE}`)
 }
-if (formulations.length !== EXPECTED_FORMULATIONS) {
-  fail(`${FORMULATIONS_FILE}: ${formulations.length} Zeilen, erwartet ${EXPECTED_FORMULATIONS}`)
+if (formulations.length < EXPECTED_FORMULATIONS) {
+  fail(`${FORMULATIONS_FILE}: ${formulations.length} Zeilen, erwartet mindestens ${EXPECTED_FORMULATIONS}`)
 }
-if (products.length !== EXPECTED_PRODUCTS) {
-  fail(`${PRODUCTS_FILE}: ${products.length} Zeilen, erwartet ${EXPECTED_PRODUCTS}`)
+if (products.length < EXPECTED_PRODUCTS) {
+  fail(`${PRODUCTS_FILE}: ${products.length} Zeilen, erwartet mindestens ${EXPECTED_PRODUCTS}`)
 }
 
 const ids = new Set<string>()

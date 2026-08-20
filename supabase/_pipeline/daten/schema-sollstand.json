@@ -969,6 +969,7 @@
     "training.exercise_muscles": 6588,
     "training.exercise_catalog_enrichment": 1407,
     "supplements.supplement_catalog": 44,
+    "supplements.substance_aliases": 1132,
     "medical.biomarker_catalog": 11676,
     "medical.biomarker_reference_ranges": 560,
     "medical.biomarker_spec_enrichment": 44,
@@ -999,13 +1000,14 @@
     "training.exercise_muscles": "[cmd] Ist-Stand nach 100-108: 6.588 Zuordnungen. 6.624 nach C-73 minus 35 Primary/Secondary-Doppelrollen und minus 1 Achilles-Tendon-Sehnenzuordnung.",
     "training.exercise_catalog_enrichment": "[cmd] C-83: 1.416 Training-Uebungen gegen media/exercises/katalog/1500+ exercise data.xlsx gematcht; 1.407 sicher anreicherbar, 8 mehrdeutig, 1 fehlend.",
     "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein.",
+    "supplements.substance_aliases": "[cmd] C-131: 132_substance_alias_bridge.ts erzeugt 1.132 eindeutige Aliaszeilen aus 44 LumeOS-Supplements, 320 F-05-Kandidaten und 237 Kimi-Substanzen.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
     "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzt 96 Spec-basierte Bereichszeilen aus docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md; Summe 560.",
     "medical.biomarker_spec_enrichment": "[cmd] C-84: SPEC_05_BIOMARKER_CATALOG.md enthaelt 47 extrahierbare Marker; 44 LOINC-Codes liegen im 11.676er Katalog und werden als Spec-Anreicherung neben dem LOINC-Katalog gespeichert.",
     "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt.",
-    "medical.medication_active_substances": "[cmd] C-130: backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications/medication_active_substances.jsonl fuehrt 56 Wirkstoffe; 146_medications_katalog.ts bricht bei abweichender Zahl ab.",
-    "medical.medication_formulations": "[cmd] C-130: backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications/medication_formulations.jsonl fuehrt 119 Formulierungen; 146_medications_katalog.ts bricht bei abweichender Zahl ab.",
-    "medical.medication_products": "[cmd] C-130: backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications/medication_products.jsonl fuehrt 124 Produkte; 146_medications_katalog.ts bricht bei abweichender Zahl ab."
+    "medical.medication_active_substances": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 56 Wirkstoffe; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
+    "medical.medication_formulations": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 119 Formulierungen; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
+    "medical.medication_products": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 124 Produkte; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist."
   },
   "datenqualitaet": {
     "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",
@@ -1639,6 +1641,31 @@
     },
     {
       "schema": "supplements",
+      "name": "substance_aliases",
+      "schritt": "132",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "132_substance_alias_bridge.ts vergibt SELECT an authenticated und service_role ALL explizit.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
       "name": "supplement_interactions",
       "schritt": "130",
       "rls": true,
@@ -2191,6 +2218,11 @@
       "schema": "supplements",
       "name": "refresh_stack_item_count",
       "schritt": "130"
+    },
+    {
+      "schema": "supplements",
+      "name": "platform_input_status",
+      "schritt": "146a"
     },
     {
       "schema": "medical",

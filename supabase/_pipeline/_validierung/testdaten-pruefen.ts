@@ -96,6 +96,12 @@ const medicationProducts = numberScalar(`SELECT count(*) FROM medical.medication
 const userMedications = numberScalar(`SELECT count(*) FROM medical.user_medications WHERE user_id IN (${IDS_SQL});`)
 const userConditions = numberScalar(`SELECT count(*) FROM medical.user_conditions WHERE user_id IN (${IDS_SQL});`)
 const supplementCatalog = numberScalar(`SELECT count(*) FROM supplements.supplement_catalog WHERE is_active;`)
+const substanceAliases = numberScalar(`SELECT count(*) FROM supplements.substance_aliases;`)
+const substanceLocalKimiMatches = numberScalar(`
+  SELECT count(*)
+  FROM supplements.substance_alias_matches
+  WHERE (catalog_a = 'kimi_substance' AND catalog_b = 'lumeos_supplement_catalog')
+     OR (catalog_a = 'lumeos_supplement_catalog' AND catalog_b = 'kimi_substance');`)
 const supplementStacks = numberScalar(`SELECT count(*) FROM supplements.user_stacks WHERE user_id IN (${IDS_SQL});`)
 const supplementStackItems = numberScalar(`
   SELECT count(*)
@@ -156,6 +162,8 @@ if (MODE === 'clean') {
   if (supplementStackItems !== 0) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 0`)
   if (supplementIntakeLogs !== 0) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 0`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
+  if (substanceAliases < 1100) errors.push(`supplements.substance_aliases: ${substanceAliases}, erwartet mindestens 1100`)
+  if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
   if (foods !== 7140) errors.push(`foods: ${foods}, erwartet 7140`)
   if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
 
@@ -244,6 +252,8 @@ if (MODE === 'clean') {
   if (userMedications !== 1) errors.push(`medical.user_medications: ${userMedications}, erwartet 1`)
   if (userConditions !== 1) errors.push(`medical.user_conditions: ${userConditions}, erwartet 1`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
+  if (substanceAliases < 1100) errors.push(`supplements.substance_aliases: ${substanceAliases}, erwartet mindestens 1100`)
+  if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
   if (supplementIntakeLogs !== 360) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 360`)
@@ -1023,6 +1033,23 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM supplements.stack_item_substance_matches m
+    JOIN supplements.user_stacks us ON us.user_id = m.user_id
+    WHERE m.user_id = '${tom}'::uuid
+      AND m.supplement_slug = 'creatine-monohydrate'
+      AND m.kimi_substance_id = 'sub_9f9bb8c160'
+      AND us.is_active;`)) {
+    errors.push('Fall Supplements Substanzbruecke: Kreatin-Stack-Item trifft Kimi-Substanz nicht')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.platform_input_status('${tom}'::uuid, DATE '${TODAY_DATE}')
+    WHERE input_path = 'sleep.sleep_latency_min'
+      AND input_status = 'missing_input';`)) {
+    errors.push('Fall missing_input: sleep.sleep_latency_min wird nicht als fehlender Eingang gemeldet')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM supplements.user_stacks us
     JOIN supplements.stack_items si ON si.stack_id = us.id
     JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
@@ -1108,6 +1135,7 @@ if (MODE === 'clean') {
   console.log(`  Recovery Check-ins/Scores/Modalitaeten: ${recoveryCheckins}/${recoveryScores}/${recoveryModalities}`)
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
+  console.log(`  Supplements Substanzaliase/LumeOS-Kimi-Treffer: ${substanceAliases}/${substanceLocalKimiMatches}`)
   console.log(`  Supplements Compliance 30d: ${supplementCompliance30d}%`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)

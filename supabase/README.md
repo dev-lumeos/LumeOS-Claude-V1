@@ -120,6 +120,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 121 | `12_recovery/121_recovery_scores_modalities.sql` | Recovery-Score-Schnappschuesse und Modalitaeten: `scores`, `modality_log`, zentrale Konstanten | 2 Tabellen, 7 Funktionen, RLS je Operation |
 | 130 | `13_supplements/130_supplements_schema.sql` | Supplements-Schema: `supplement_catalog`, `supplement_interactions`, `user_stacks`, `stack_items`, `intake_logs`, `daily_intake_summary` | 5 Tabellen, 1 Sicht, 2 Funktionen, RLS je Operation |
 | 131 | `13_supplements/131_supplements_katalog.ts` | Standard-Supplement-Katalog aus `daten/supplement-katalog.json` | 44 aktive Supplements |
+| 132 | `13_supplements/132_substance_alias_bridge.ts` | Substanz-Aliasbrücke zwischen LumeOS-Supplements, F-05-Kandidaten und Kimi-Substanzen | 1.132 Aliaszeilen, mindestens 16 LumeOS↔Kimi-Treffer |
 | 140 | `14_medical/140_medical_schema.sql` | Medical-Schema: `biomarker_catalog`, `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`, `lab_result_values_read()` | 4 Tabellen, 1 Funktion, RLS je Operation |
 | 141 | `14_medical/141_biomarker_katalog.ts` | LOINC-Masterkatalog aus `daten/biomarker-loinc/` und kuratierte Referenzbereich-Kandidaten aus `biomarker-katalog.json` | 11.676 LOINC-Codes, 464 Referenzbereich-Zeilen |
 | 142 | `14_medical/142_laborimport_matching.sql` | Laborimport-Zuordnung: `biomarker_aliases`, Importfunktionen und Match-Status an Messwerten | 1 Tabelle, 2 Funktionen, unbekannte Marker bleiben speicherbar |
@@ -127,6 +128,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 144 | `14_medical/144_biomarker_spec_enrichment.ts` | Spec-Extraktion fuer Medical-Panels, deutsche Namen, Kurznamen und nutzbare numerische Bereichszeilen | 44 Spec-Marker im LOINC-Katalog, 40 display-nutzbar, 560 Referenzbereich-Zeilen gesamt |
 | 145 | `14_medical/145_medications_schema.sql` | Medikamente und Conditions: Katalogtabellen, `user_medications`, `user_conditions` | 5 Tabellen, RLS je Operation auf Nutzerdaten |
 | 146 | `14_medical/146_medications_katalog.ts` | Kimi-Medikamentenkatalog aus `backup/kimi-research/.../data/medications/` | 56 Wirkstoffe, 119 Formulierungen, 124 Produkte |
+| 146a | `13_supplements/132a_rule_input_status.sql` | Regel-Eingangsdiagnose für Kimi-Regeln: fehlende Pfade werden als `missing_input` gemeldet | 1 Funktion, kein Regelimport |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |

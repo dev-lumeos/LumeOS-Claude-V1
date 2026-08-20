@@ -403,6 +403,13 @@
       "depends_on": ["130"]
     },
     {
+      "id": "132",
+      "path": "supabase/_pipeline/13_supplements/132_substance_alias_bridge.ts",
+      "kind": "tsx",
+      "creates": "Substanz-Aliasbruecke zwischen LumeOS-Supplements, F-05-Kandidaten und Kimi-Substanzen",
+      "depends_on": ["131"]
+    },
+    {
       "id": "140",
       "path": "supabase/_pipeline/14_medical/140_medical_schema.sql",
       "kind": "sql",
@@ -450,6 +457,13 @@
       "kind": "tsx",
       "creates": "Kimi-Medikamentenkatalog: 56 Wirkstoffe, 119 Formulierungen und 124 Produkte",
       "depends_on": ["145"]
+    },
+    {
+      "id": "146a",
+      "path": "supabase/_pipeline/13_supplements/132a_rule_input_status.sql",
+      "kind": "sql",
+      "creates": "Regel-Eingangsdiagnose: fehlende Kimi-Regelpfade als missing_input statt stilles false",
+      "depends_on": ["132", "053", "106", "121", "146"]
     },
     {
       "id": "110",
