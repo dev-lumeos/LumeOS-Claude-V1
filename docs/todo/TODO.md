@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `6f8caf6` auf `dev`.
+**Stand:** 2026-08-18, Anker `0eb3264` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 92 offen, 1 in Arbeit.
+`[cmd]` 94 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -212,6 +212,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-132** | `missing_input` fuer Regeln |  |
 | **C-133** | Die Warn- und Gap-Regeln uebernehmen |  |
 | **C-134** | Die Substanzen der drei Bestaende zusammenfuehren |  |
+| **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
+| **C-137** | `MAOI` fehlt im Wirkstoffbestand |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2558,6 +2560,41 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Und der F-02-Befund gehoert geprueft:** 33 der 44 haben kein
   `nutrients_provided`, vier Gap-Codes fehlen. **Liefert Kimi sie?**
+
+- [ ] **C-136: Medikamente und Conditions brauchen die
+  Coach-Freigabeschicht** (neu 2026-08-19). Meldung aus C-130.
+
+  `[cmd]` **Der C-130-Agent hat es gemeldet:** *„Medical nutzt hier wie
+  `lab_result_values` RLS/GRANTs; **eine zusaetzliche
+  Spaltenverschluesselung oder Coach-Freigabeschicht ist nicht
+  gebaut.**"*
+
+  `[read]` **Medikamente und Diagnosen sind sensibler als Laborwerte.**
+  Wer HIV, Epilepsie oder eine Krebserkrankung eingetragen hat, hat
+  etwas anderes preisgegeben als einen Cholesterinwert.
+
+  `[cmd]` **Und die Freigabeschicht existiert seit C-119** —
+  `coach.client_permissions` mit sieben Modulen und drei Stufen.
+  **Sie greift auf diese Tabellen noch nicht.**
+
+  **Zu klaeren:** `[cmd]` Reicht die Modulstufe *medical*, oder brauchen
+  Medikamente und Conditions eine eigene? `[read]` **Ein Coach, der
+  Blutwerte sehen darf, muss nicht die Diagnosen sehen.**
+
+  `[cmd]` **Dazu:** Die Produktentscheidung aus dem Umsetzungsplan sagt
+  *„Medizinische Daten verschluesselt gespeichert"* — **das ist bei
+  `lab_result_values` bereits nicht umgesetzt**, hier also kein neuer
+  Rueckstand, aber ein groesserer.
+
+- [ ] **C-137: `MAOI` fehlt im Wirkstoffbestand** (neu 2026-08-19).
+  Kleiner Rest aus C-130.
+
+  `[cmd]` **6 von 7 Feldvertragsklassen sind vorhanden** — `MAOI`
+  fehlt. *„Im Bestand, nicht in der Struktur."*
+
+  `[read]` **Nicht dringend:** MAO-Hemmer sind selten verordnet. **Aber
+  ihre Wechselwirkungen sind heftig** — Tyramin, SSRIs, Sympathomimetika.
+  **Wenn Kimi die naechsten tausend liefert, sollte es dabei sein.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
