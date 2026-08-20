@@ -6048,6 +6048,53 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   verschwunden) und C-96. **Die Kette definiert sie, die Datenbank
   verliert sie.**
 
+- [x] **C-54 (Wortlaut):** (neu 2026-08-16). **Tom, 2026-08-16:** *„Es gibt Hauptmakros und
+  Nebenmakros — auch das findest du im alten Repo, und ich wiederhole
+  mich zum tausendsten Mal."*
+
+  `[cmd]` **Die Struktur existiert seit dem BLS-Import und wird nirgends
+  benutzt:** `nutrition.nutrient_defs.display_tier`.
+
+  | Stufe | Anzahl | Beispiele |
+  |---|---|---|
+  | **1** | 31 | Energie, Protein, Fett, Kohlenhydrate, Ballaststoffe, Zucker, gesättigte Fettsäuren, Salz |
+  | **2** | 47 | Linsäure, Alpha-Linolensäure, Leucin |
+  | **3** | 60 | der Rest |
+
+  **Das ist die Haupt-/Nebenmakro-Unterscheidung.** `[cmd]` Die
+  Designvorlage zeigt sie bereits: im Diary die vier Hauptwerte mit
+  Ringen, darunter `Ballaststoffe · Zucker · gesättigte Fettsäuren ·
+  Salz · Wasser` als Zeilen ohne Ring — alles Stufe 1.
+
+  **Zwei offene Fragen lösen sich damit:**
+
+  - `[cmd]` Linsäure und Alpha-Linolensäure zeigen heute **3,43 g und
+    0,21 g ohne Bezug**, obwohl seit `d438ca4` Zielwerte existieren
+    (13,2 g und 1,7 g). Sie sind Stufe 2 — sie gehören unter die
+    Hauptmakros, nicht in die Mikronährstoffliste.
+  - Die Nährstoffliste bekommt eine Ordnung, **die nicht erfunden ist.**
+
+  **Was zu tun ist:** `display_tier` in `daily_summary` oder in der
+  Leseschicht verfügbar machen und die Anzeige danach gliedern.
+  `[cmd]` Die Spalte steht in `nutrient_defs`, nicht in der Tagessicht.
+
+  **Zu prüfen, bevor gebaut wird:** `[cmd]` 31 Einträge in Stufe 1 —
+  das sind mehr als die acht, die `daily_summary` als Makros führt. Sieh
+  nach, welche das sind und ob die Einstufung trägt.
+
+  `[cmd]` **Erledigt 2026-08-20 mit G-101.** **138 Naehrstoffe in 12
+  Gruppen** — statt der 79 erfundenen Eintraege des Entwurfs. **Alle elf
+  Kohlenhydrate mit Einrueckung**, Zucker gesamt auf Stufe 1.
+
+  ### Die Falle steckte in den Daten
+
+  `[read]` *„`SUGAR` hat Stufe 1, aber `sort_index` 73 — **seine Kinder
+  beginnen bei 65.** Ein einzelner Durchlauf haette die ersten sechs
+  verloren."* **Fuenf Tests halten es fest.**
+
+  `[cmd]` **Und die Ordnung wurde bereits gelesen** — *„neunmal, aber
+  nur in `/nutrition/local-schema`, nie in v2."*
+
 
 
 ## Erledigt am 2026-08-05
