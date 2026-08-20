@@ -317,9 +317,10 @@ export function NutritionFoodsTab({
 
   const alleZeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
   // Abgewertete Zeilen verschwinden aus der Liste — aber erst nach dem
-  // Bestaetigen, und nur bis zum naechsten Laden: dann kommen sie gar
-  // nicht mehr, sobald C-94 die Suche filtert. Bis dahin ist das
-  // Ausblenden die sichtbare Wirkung.
+  // Bestaetigen, und nur bis zum naechsten Laden. `[read]` C-94 KANN
+  // diese Liste laengst filtern (prefs=1 an der Route); sie tut es
+  // BEWUSST nicht: das hier ist ein Katalog, und ein Katalog, dem
+  // Eintraege fehlen, ist kaputt (G-13-Entscheidung, G-104 geprueft).
   const zeilen = alleZeilen
     .filter(f => !ausgeblendet.has(f.id))
     // G-73: Allergene ausblenden. Wirkt auf die geladene Seite —

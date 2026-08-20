@@ -58,9 +58,11 @@ test('gesetzte Unterkategorien bleiben sichtbar', () => {
 })
 
 test('die Vorlieben werden immer vollstaendig geschrieben', () => {
-  // `[cmd]` `food_preferences_write` **ersetzt** die Items atomar. Wer
-  // nur die Aenderung schickt, loescht den Rest — deshalb haelt der Tab
-  // den ganzen Stand und sendet ihn als Ganzes.
+  // `[cmd]` `food_preferences_write` (C-156) fuehrt schluesselbasiert
+  // zusammen und ersetzt dabei den `settings`-Satz: was der Tab nicht
+  // mitschickt, gilt als entfernt. Deshalb haelt der Tab den ganzen
+  // Stand — seit G-104 in einem SYNCHRONEN Ref, damit zwei schnelle
+  // Klicks sich nicht gegenseitig ueberschreiben.
   const a = fs.readFileSync(AKTION, 'utf8')
   assert.ok(/food_preferences_write/.test(a), 'Die Schreibfunktion wird nicht benutzt.')
   // Kein direkter Tabellenzugriff daneben — sonst gaebe es zwei Wege
@@ -72,8 +74,43 @@ test('die Vorlieben werden immer vollstaendig geschrieben', () => {
   }
 
   const tab = fs.readFileSync(TAB, 'utf8')
-  assert.ok(/speichern\(naechsterGrund, naechsteItems\)|speichern\(g, naechste\)/.test(tab),
-    'Es wird nicht der ganze Stand geschickt.')
+  assert.ok(/speichern\(naechster, s0\.items\)/.test(tab)
+    && /speichern\(s0\.grund, naechste\)/.test(tab),
+    'Es wird nicht der ganze Stand aus dem Ref geschickt.')
+  assert.ok(/standRef\.current/.test(tab),
+    'Die Klicks rechnen nicht auf dem synchronen Stand (G-104).')
+  assert.ok(/ketteRef/.test(tab),
+    'Die Schreiblaeufe sind nicht serialisiert (G-104).')
+})
+
+test('Daumen-Zeilen laufen ueber den Daumen-Weg', () => {
+  // `[cmd]` G-104 gemessen: C-156 loescht beim Kachel-Lauf nur
+  // `source='settings'`. Eine hier entfernte Daumen-Zeile fiele aus
+  // dem Satz, bliebe aber in der Datenbank und waere nach dem Neuladen
+  // wieder da. Deshalb schreibt die Kachel Daumen-Zeilen ueber
+  // `daumenSpeichern` (gezielte Einzelzeile) — dieselbe Bedienung,
+  // zwei Schreibwege unter der Haube.
+  const tab = fs.readFileSync(TAB, 'utf8')
+  assert.ok(/daumenSpeichern/.test(tab),
+    'Die Kachel kennt den Daumen-Weg nicht.')
+  assert.ok(/quelle && quelle !== 'settings'/.test(tab),
+    'Die Herkunftsweiche fehlt — Daumen-Zeilen waeren unloeschbar.')
+})
+
+test('ein Klickmuster: tippen schaltet weiter, der Wert steht am Element', () => {
+  // `[read]` Tom, G-104: drei Klickmuster waren „allgemein unlogisch
+  // zu bedienen". Jetzt: Zyklusknopf mit Wert (+50/−50, +100/−100),
+  // Merkmale mit ±30 im Knopf, Allergene mit Stufenwort in der Pille.
+  const q = fs.readFileSync(TAB, 'utf8')
+  assert.ok(/const zyklus = /.test(q), 'Der Zyklus fehlt.')
+  assert.ok(/v2-prefs-zyklus/.test(q), 'Der Zustandsknopf fehlt.')
+  assert.ok(!/NEIGUNGEN\.map/.test(q),
+    'Die drei unbeschrifteten Schalter sind wieder da.')
+  assert.ok(/\+30 /.test(q) && /−30 /.test(q),
+    'Die Merkmalswerte stehen nicht am Element.')
+  // Und die Kachel nimmt selbst auf — vorher zeigte sie nur an.
+  assert.ok(/Lebensmittel suchen/.test(q),
+    'Individual foods hat keinen Aufnahmeweg.')
 })
 
 test('der Lesepfad baut die Funktion nicht nach', () => {
@@ -87,13 +124,18 @@ test('der Lesepfad baut die Funktion nicht nach', () => {
     'Die Items werden an der Funktion vorbei gelesen.')
 })
 
-test('die Rangfolge verspricht keine Wirkung, die es nicht gibt', () => {
-  // `[cmd]` `nutrition.food_search` hat **keinen Nutzerparameter** —
-  // die Rangfolge ist gespeichert, wirkt aber nicht. Das muss in der
-  // Kachel stehen, sonst verspricht sie etwas.
+test('die Rangfolge sagt, wo sie wirkt — und wo bewusst nicht', () => {
+  // `[cmd]` Der alte Wortlaut („wirkt aber noch nicht in der Suche")
+  // stimmte seit C-94 nicht mehr — G-104 hat ihn ersetzt: die
+  // Rangfolge wirkt beim Erfassen (G-13, prefs=1), die Kataloge
+  // zeigen bewusst alles. Beide Haelften muessen dastehen.
   const q = fs.readFileSync(TAB, 'utf8')
-  assert.ok(/wirkt aber noch nicht in/.test(q),
-    'Die Kachel sagt nicht, dass die Rangfolge noch nicht wirkt.')
+  assert.ok(!/wirkt aber noch nicht in/.test(q),
+    'Der veraltete Wortlaut ist wieder da.')
+  assert.ok(/wirkt beim Erfassen/.test(q),
+    'Die Kachel sagt nicht, wo die Rangfolge wirkt.')
+  assert.ok(/bewusst/.test(q) && /Kataloge/.test(q),
+    'Die Katalog-Ausnahme fehlt — die Kachel verspraeche zu viel.')
 })
 
 test('der Schlachtungs-Vorbehalt steht in der Anzeige', () => {

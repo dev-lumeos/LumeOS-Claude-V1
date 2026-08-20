@@ -41,6 +41,24 @@
   border: 0;
 }
 
+/* G-104: EIN Zustandsknopf je Zeile — tippen schaltet weiter, der
+ * Wert steht drauf (+50/−50, +100/−100). Ersetzt die drei
+ * unbeschrifteten 22px-Schalter im Preferences-Tab. */
+.v2-prefs-zyklus {
+  min-width: 44px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  border: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
 /* --- Ein geplanter Eintrag im Meal-Plans-Tab ---------------------
  * [cmd] module-nutrition-spec.jsx:389 — Rahmen und Flaeche faerben
  * sich nach Zustand, deshalb bleiben Farbe und Randart inline. */

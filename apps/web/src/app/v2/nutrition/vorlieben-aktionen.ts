@@ -14,9 +14,14 @@
 // der Sitzung, der Zeilenschutz greift wie bei einem direkten
 // Tabellenzugriff. Kein Service-Schluessel.
 //
-// **DIE ITEMS WERDEN IMMER VOLLSTAENDIG GESCHICKT.** Die Funktion
-// ersetzt sie; wer nur eine Aenderung schickt, loescht den Rest. Der
-// Tab haelt deshalb den ganzen Stand und sendet ihn als Ganzes.
+// **DIE ITEMS WERDEN IMMER VOLLSTAENDIG GESCHICKT.** `[cmd]` Seit
+// C-156 fuehrt die Funktion schluesselbasiert zusammen und ersetzt
+// dabei nur den `settings`-Satz: ein nicht mitgeschicktes
+// settings-Item gilt als entfernt, Eintraege anderer Herkunft
+// (`search_thumb`) bleiben stehen — auch ihre `source` ueberlebt ein
+// Update. Und sie MELDET, wenn sie weniger schrieb als geschickt
+// wurde, statt eines stillen ok (G-79-Muster). Der Tab haelt deshalb
+// weiter den ganzen Stand und sendet ihn als Ganzes.
 
 import { createSessionClient } from '@lumeos/shared/session'
 
