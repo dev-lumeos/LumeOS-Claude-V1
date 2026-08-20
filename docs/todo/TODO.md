@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `022f2ce` auf `dev`.
+**Stand:** 2026-08-18, Anker `b08777d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 123 offen, 1 in Arbeit.
+`[cmd]` 122 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -232,7 +232,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
-| **G-104** | Preferences von Grund auf pruefen — bedienbar, und es muss wirken |  |
 | **G-105** | Zwei abgeschnittene SVG-Pfade in `packages/ui` |  |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-111** | Der Tab-Zustand steht nicht in der URL |  |
@@ -240,7 +239,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-113** | Die Naehrstoffordnung braucht Klappen und Zeitfilter |  |
 | **G-114** | `daily_summary` fuehrt nur 33 der 138 Naehrstoffe |  |
 | **G-115** | Die Wassereintraege haben keine Historie |  |
-| **G-103** | Der Preferences-Tab speichert nicht und ist schwer zu bedienen |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -256,6 +254,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
 | **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
 | **C-158** | Der Gap-Score braucht maschinenlesbare Naehrstoffcodes |  |
+| **G-116** | `ultra_processed` filtert hart, ohne es zu zeigen |  |
 
 ---
 
@@ -3156,85 +3155,6 @@ Umsetzen angepasst werden.
   `meal_prep_ok` haben kein Gegenstueck im Rezeptschema. **Entweder
   kommen die Felder dazu, oder die Spalten fallen weg.**
 
-- [ ] **G-104: Preferences von Grund auf pruefen — bedienbar, und es
-  muss wirken** (neu 2026-08-20). **Toms Vorgabe, umfasst G-103.**
-
-  **Tom, 2026-08-20:** *„Ein Todo erfassen, um das alles nochmal zu
-  pruefen und bedienbar machen — und vor allem, dass es dann auch
-  wirkt."*
-
-  ### Drei Stufen, in dieser Reihenfolge
-
-  **1. Es muss speichern.** `[cmd]` Jede der sechs Kacheln, einzeln
-  gepruft: setzen → neu laden → steht noch da. **Und die Antwort des
-  Schreibwegs wird geprueft**, nicht nur abgeschickt.
-
-  `[read]` **G-79 hat den Fall gefunden:** *„PostgREST meldet `ok` bei
-  einem `update`, das der Zeilenschutz leergefiltert hat."* **Behoben mit
-  `.select('id')` und einer Pruefung auf null Zeilen** — dasselbe
-  gehoert hierher.
-
-  **2. Es muss bedienbar sein.** `[cmd]` **Ein Klickmuster, nicht
-  drei.**
-
-  `[read]` **Heute:** Kategorien mit vier unbeschrifteten Knoepfen,
-  Allergene mit Zaehlklicks (1× Sensibel, 2× Allergie, 3× weg), Tags mit
-  Zyklus. **Was ein Klick bewirkt, steht nur als Text in der
-  Kopfzeile.**
-
-  `[cmd]` **`Individual foods` nimmt gar nichts auf** — die Kachel zeigt
-  einen Eintrag und hat keinen Weg, einen zweiten zu setzen.
-
-  **3. Es muss wirken.** `[cmd]` **Und zwar ueberall, wo Lebensmittel
-  erscheinen:**
-
-  | | |
-  |---|---|
-  | Food-DB-Trefferliste | C-94 gebaut |
-  | Erfassungsdialog | **G-13 gebaut** — `mandel` 64 → 0 |
-  | Suchseite | zu pruefen |
-  | Planner und Rezepte | **zu pruefen** |
-  | MealCam-Vorschlaege | zu pruefen |
-
-  `[read]` **Der Hinweis im Tab selbst sagt es:** *„Die Reihenfolge ist
-  hinterlegt, **wirkt aber noch nicht in der Suche** — die Suchfunktion
-  kennt die Vorlieben bisher nicht."* **Das stimmt seit C-94 nicht mehr
-  und gehoert berichtigt.**
-
-  ### Was dabei zu pruefen ist
-
-  `[cmd]` **`food_preferences_write` loescht alles und schreibt neu**
-  (G-71). **Deshalb schreibt der Daumen nicht darueber** — *„ein
-  einzelner Klick haette sonst jede andere Vorliebe geloescht."*
-
-  `[read]` **Das ist der wahrscheinliche Grund fuer den Datenverlust.**
-  **Zu klaeren:** Bleibt die Loesch-und-Neuschreib-Bauweise, oder wird
-  je Kachel geschrieben?
-
-  `[cmd]` **Und `source` muss ueberleben** — G-71: *„aus `search_thumb`
-  wurde `settings`."* **Ohne die Herkunft faellt die Unterscheidung
-  zwischen Assistent und Daumen weg.**
-
-  ### Was schon geklaert ist — nicht neu entscheiden
-
-  `[cmd]` **20 Allergene in drei Stufen** (Toms Entscheidung, G-65) ·
-  **Kategorien aus dem Katalog**, 13 Wurzeln plus gesetzte
-  Unterkategorien · **11 Ausschluss-Presets** mit Vorbehalt aus
-  `caveat_de` (C-93) · **die Rangfolge** 1 Allergen, 2 Diet type, 3 Food
-  ±100, 4 Category ±50, 5 Tag ±30, 6 Prefix +20.
-
-  `[read]` **Und der Warnhinweis bleibt** — 120 von 7.140 nusshaltig
-  markiert, *„die Zutatenliste bleibt massgeblich."*
-
-  ### Der Nachweis
-
-  `[cmd]` **Je Kachel: setzen, neu laden, und an einer zweiten Stelle
-  wirken sehen.** `[read]` **Ein Beispiel je Stufe:** eine Kategorie
-  abwerten und sie in der Trefferliste tiefer finden; ein Allergen
-  setzen und es verschwinden sehen; ein Lebensmittel aufwerten und es
-  oben finden.
-
-  `[cmd]` **Umfasst G-103** — dort stehen die Einzelbefunde.
 
 - [ ] **G-105: Zwei abgeschnittene SVG-Pfade in `packages/ui`** (neu
   2026-08-20). Befund aus G-100. **Klein, aber alt.**
@@ -3369,60 +3289,6 @@ Umsetzen angepasst werden.
   **Anzeigen und loeschen koennen** — wie beim Daumen mit
   Sicherheitsabfrage (G-67).
 
-- [ ] **G-103: Der Preferences-Tab speichert nicht und ist schwer zu
-  bedienen** (neu 2026-08-20). **Toms Befund, hohe Prioritaet.**
-
-  **Tom, 2026-08-20:** *„Preferences speichert Einstellungen nicht.
-  Individual Foods kann man nichts setzen. Allgemein unlogisch zu
-  bedienen."*
-
-  ### Drei getrennte Fehler
-
-  `[cmd]` **1. Es speichert nicht.** `[read]` G-65 hat das Schreiben
-  dreimal geprueft — *„nach Neuladen noch da, bestehende Items
-  ueberlebten."* **Etwas hat es seither gebrochen.**
-
-  **Verdacht:** G-71 haelt fest, dass `food_preferences_write` **alles
-  loescht und neu schreibt.** `[cmd]` Und G-67 hat deshalb den Daumen
-  bewusst nicht ueber diese RPC gefuehrt — *„ein einzelner Klick haette
-  sonst jede andere Vorliebe geloescht."*
-
-  `[cmd]` **2. `Individual foods` nimmt nichts auf.** Die Kachel zeigt
-  einen Eintrag (*Weisser Reis (roh), +100*), **aber es gibt keinen Weg,
-  einen weiteren zu setzen.**
-
-  `[read]` **Der Weg dahin ist der Daumen** (G-67) — in der Trefferliste
-  und der Detailansicht. **Aber der Tab selbst braucht auch einen**,
-  sonst ist die Kachel eine Anzeige ohne Bedienung.
-
-  `[cmd]` **3. Die Bedienung ist nicht selbsterklaerend.**
-
-  `[read]` **Woran es liegt, sichtbar im Bildschirmfoto:**
-
-  **Die Kategorien haben vier Knoepfe je Zeile** (`− + · −`) ohne
-  Beschriftung. **Was `+` und `−` bewirken, steht nur in der
-  Kopfzeile** (*like +50 · dislike −50*).
-
-  **Die Allergene brauchen Mehrfachklicks** — *„1× tippen = Sensibel,
-  2× = Allergie, 3× = entfernen"*. **Das steht als Text daneben, ist
-  aber nicht ablesbar.**
-
-  **Die Tag-Merkmale ebenso** — *„Tippen wechselt zwischen mag ich, mag
-  ich nicht und egal."*
-
-  `[read]` **Drei verschiedene Klickmuster in einem Tab** — Kategorien
-  mit Knoepfen, Allergene mit Zaehlklicks, Tags mit Zyklus. **Das ist
-  der Kern des Problems.**
-
-  ### Was zuerst zu messen ist
-
-  `[cmd]` **Ob `food_preferences_write` ueberhaupt gerufen wird** — und
-  ob die Antwort geprueft wird. `[read]` **G-79 hat denselben Fall
-  gefunden:** *„PostgREST meldet `ok` bei einem `update`, das der
-  Zeilenschutz leergefiltert hat."*
-
-  `[cmd]` **Und ob die Aenderung ueberhaupt bis zum Schreibweg kommt** —
-  oder nur im Browserzustand haengenbleibt.
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
@@ -3741,3 +3607,21 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Und die Einheitenfalle gehoert mit** — C-149: Vitamin D
   steht im Supplement in IU, im Mikro-Pfad in µg. **Faktor 40.**
+
+- [ ] **G-116: `ultra_processed` filtert hart, ohne es zu zeigen** (neu
+  2026-08-20). **Entscheidung fuer Tom.** Befund aus G-104.
+
+  `[cmd]` **Gemessen:** `schokolade` **163 → 1.** *„Kommt vom
+  Seed-Ausschluss `ultra_processed`, der ueber die Tag-Schiene hart
+  filtert — **korrekt, aber an der Pille nicht ablesbar**."*
+
+  `[read]` **Der Nutzer sieht 1 von 163 und weiss nicht, warum.** Bei
+  Allergenen steht es an der Kachel; **bei den generellen Ausschluessen
+  nicht.**
+
+  **Zu entscheiden:** Soll ein Ausschluss ueber `general_exclusions[]`
+  genauso hart wirken wie ein Allergen — oder nur abwerten?
+
+  `[read]` **Die Rangfolge sagt heute: Allergen und Diet type sind
+  `hard exclude`, alles andere ±Punkte.** `ultra_processed` liegt
+  dazwischen und verhaelt sich wie ein Allergen.

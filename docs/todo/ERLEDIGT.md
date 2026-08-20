@@ -9666,3 +9666,195 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Und der Schreibweg meldet sichtbar**, wenn nichts
   geschrieben wurde — statt eines stillen `ok`. **Das war G-79s
   Fund.**
+
+- [x] **G-104: Preferences von Grund auf pruefen — bedienbar, und es
+  muss wirken** (neu 2026-08-20). **Toms Vorgabe, umfasst G-103.**
+
+  **Tom, 2026-08-20:** *„Ein Todo erfassen, um das alles nochmal zu
+  pruefen und bedienbar machen — und vor allem, dass es dann auch
+  wirkt."*
+
+  ### Drei Stufen, in dieser Reihenfolge
+
+  **1. Es muss speichern.** `[cmd]` Jede der sechs Kacheln, einzeln
+  gepruft: setzen → neu laden → steht noch da. **Und die Antwort des
+  Schreibwegs wird geprueft**, nicht nur abgeschickt.
+
+  `[read]` **G-79 hat den Fall gefunden:** *„PostgREST meldet `ok` bei
+  einem `update`, das der Zeilenschutz leergefiltert hat."* **Behoben mit
+  `.select('id')` und einer Pruefung auf null Zeilen** — dasselbe
+  gehoert hierher.
+
+  **2. Es muss bedienbar sein.** `[cmd]` **Ein Klickmuster, nicht
+  drei.**
+
+  `[read]` **Heute:** Kategorien mit vier unbeschrifteten Knoepfen,
+  Allergene mit Zaehlklicks (1× Sensibel, 2× Allergie, 3× weg), Tags mit
+  Zyklus. **Was ein Klick bewirkt, steht nur als Text in der
+  Kopfzeile.**
+
+  `[cmd]` **`Individual foods` nimmt gar nichts auf** — die Kachel zeigt
+  einen Eintrag und hat keinen Weg, einen zweiten zu setzen.
+
+  **3. Es muss wirken.** `[cmd]` **Und zwar ueberall, wo Lebensmittel
+  erscheinen:**
+
+  | | |
+  |---|---|
+  | Food-DB-Trefferliste | C-94 gebaut |
+  | Erfassungsdialog | **G-13 gebaut** — `mandel` 64 → 0 |
+  | Suchseite | zu pruefen |
+  | Planner und Rezepte | **zu pruefen** |
+  | MealCam-Vorschlaege | zu pruefen |
+
+  `[read]` **Der Hinweis im Tab selbst sagt es:** *„Die Reihenfolge ist
+  hinterlegt, **wirkt aber noch nicht in der Suche** — die Suchfunktion
+  kennt die Vorlieben bisher nicht."* **Das stimmt seit C-94 nicht mehr
+  und gehoert berichtigt.**
+
+  ### Was dabei zu pruefen ist
+
+  `[cmd]` **`food_preferences_write` loescht alles und schreibt neu**
+  (G-71). **Deshalb schreibt der Daumen nicht darueber** — *„ein
+  einzelner Klick haette sonst jede andere Vorliebe geloescht."*
+
+  `[read]` **Das ist der wahrscheinliche Grund fuer den Datenverlust.**
+  **Zu klaeren:** Bleibt die Loesch-und-Neuschreib-Bauweise, oder wird
+  je Kachel geschrieben?
+
+  `[cmd]` **Und `source` muss ueberleben** — G-71: *„aus `search_thumb`
+  wurde `settings`."* **Ohne die Herkunft faellt die Unterscheidung
+  zwischen Assistent und Daumen weg.**
+
+  ### Was schon geklaert ist — nicht neu entscheiden
+
+  `[cmd]` **20 Allergene in drei Stufen** (Toms Entscheidung, G-65) ·
+  **Kategorien aus dem Katalog**, 13 Wurzeln plus gesetzte
+  Unterkategorien · **11 Ausschluss-Presets** mit Vorbehalt aus
+  `caveat_de` (C-93) · **die Rangfolge** 1 Allergen, 2 Diet type, 3 Food
+  ±100, 4 Category ±50, 5 Tag ±30, 6 Prefix +20.
+
+  `[read]` **Und der Warnhinweis bleibt** — 120 von 7.140 nusshaltig
+  markiert, *„die Zutatenliste bleibt massgeblich."*
+
+  ### Der Nachweis
+
+  `[cmd]` **Je Kachel: setzen, neu laden, und an einer zweiten Stelle
+  wirken sehen.** `[read]` **Ein Beispiel je Stufe:** eine Kategorie
+  abwerten und sie in der Trefferliste tiefer finden; ein Allergen
+  setzen und es verschwinden sehen; ein Lebensmittel aufwerten und es
+  oben finden.
+
+  `[cmd]` **Umfasst G-103** — dort stehen die Einzelbefunde.
+
+  `[cmd]` **Erledigt 2026-08-20.** Alle sechs Kacheln halten *setzen →
+  neu laden*, **441 Tests**, 0 Attrappen im Tab.
+
+  ### Toms Befund traf einen aelteren Stand
+
+  `[read]` *„Es speicherte bei Messbeginn bereits — dein Befund traf den
+  Stand vor C-156; **die alte RPC-Fassung ersetzte den ganzen Bestand,
+  das war der Kern**."*
+
+  ### Zwei echte Restbugs, die niemand gesucht hatte
+
+  `[cmd]` **Schnelle Klicks kreuzten sich:** *„Der zweite sendete den
+  Stand vor dem ersten und **loeschte ihn**."* **Behoben mit synchronem
+  Stand-Ref und serialisierten Schreiblaeufen** — nur die juengste
+  Antwort gilt.
+
+  `[cmd]` **Daumen-Zeilen waren ueber die Kachel unloeschbar:** *„C-156
+  raeumt nur `settings`, **die Zeile kam nach dem Reload wieder**."*
+  **Behoben ueber eine Herkunftsweiche.**
+
+  `[read]` **Beides faellt nur beim Benutzen auf, nicht beim Testen.**
+
+  ### Ein Schreibweg oder zwei — begruendet zwei
+
+  `[read]` *„Die RPC ist ein Satz-Vertrag; **ein Einzelzeilen-Aufruf
+  wuerde alle Einstellungen loeschen**. Es bleiben zwei Wege unter einer
+  Bedienung, per Test festgehalten."*
+
+  ### Ein Klickmuster
+
+  `[cmd]` **Ueberall gilt: tippen schaltet weiter, der Wert steht am
+  Element.** Kategorien mit **einem Zyklusknopf** (— → +50 → −50) statt
+  vier unbeschrifteter, Merkmale mit ±30 im Knopf, Allergene mit dem
+  Stufenwort in der Pille.
+
+  `[cmd]` **`Individual foods` nimmt selbst auf** — Suchfeld in der
+  Kachel, **bewusst ungefiltert:** *„wer abwerten will, muss finden."*
+
+  `[cmd]` **Nebenbei behoben:** *„Ein Klick auf ein ⊘-Merkmal machte aus
+  dem Allergie-Ausschluss ein „mag ich"."*
+
+  ### Die Wirkung ist gemessen
+
+  `[cmd]` **Erfassungsdialog:** `mandel` **64 → 0.**
+  **Kategorie-Abwertung:** *„„Honig" (SUeSSES) faellt von Rang 1 aus den
+  Top-8, „Honigmelone" (OBST) uebernimmt."*
+
+  `[read]` **Und drei Orte bleiben bewusst ungefiltert** — Suchseite,
+  Food DB, Startliste: **Katalog- und Bewertungsorte.** Dokumentiert
+  statt umgebaut.
+
+  `[cmd]` **Der veraltete Hinweis ist ersetzt** — samt dem Test, der ihn
+  festschrieb.
+
+- [x] **G-103: Der Preferences-Tab speichert nicht und ist schwer zu
+  bedienen** (neu 2026-08-20). **Toms Befund, hohe Prioritaet.**
+
+  **Tom, 2026-08-20:** *„Preferences speichert Einstellungen nicht.
+  Individual Foods kann man nichts setzen. Allgemein unlogisch zu
+  bedienen."*
+
+  ### Drei getrennte Fehler
+
+  `[cmd]` **1. Es speichert nicht.** `[read]` G-65 hat das Schreiben
+  dreimal geprueft — *„nach Neuladen noch da, bestehende Items
+  ueberlebten."* **Etwas hat es seither gebrochen.**
+
+  **Verdacht:** G-71 haelt fest, dass `food_preferences_write` **alles
+  loescht und neu schreibt.** `[cmd]` Und G-67 hat deshalb den Daumen
+  bewusst nicht ueber diese RPC gefuehrt — *„ein einzelner Klick haette
+  sonst jede andere Vorliebe geloescht."*
+
+  `[cmd]` **2. `Individual foods` nimmt nichts auf.** Die Kachel zeigt
+  einen Eintrag (*Weisser Reis (roh), +100*), **aber es gibt keinen Weg,
+  einen weiteren zu setzen.**
+
+  `[read]` **Der Weg dahin ist der Daumen** (G-67) — in der Trefferliste
+  und der Detailansicht. **Aber der Tab selbst braucht auch einen**,
+  sonst ist die Kachel eine Anzeige ohne Bedienung.
+
+  `[cmd]` **3. Die Bedienung ist nicht selbsterklaerend.**
+
+  `[read]` **Woran es liegt, sichtbar im Bildschirmfoto:**
+
+  **Die Kategorien haben vier Knoepfe je Zeile** (`− + · −`) ohne
+  Beschriftung. **Was `+` und `−` bewirken, steht nur in der
+  Kopfzeile** (*like +50 · dislike −50*).
+
+  **Die Allergene brauchen Mehrfachklicks** — *„1× tippen = Sensibel,
+  2× = Allergie, 3× = entfernen"*. **Das steht als Text daneben, ist
+  aber nicht ablesbar.**
+
+  **Die Tag-Merkmale ebenso** — *„Tippen wechselt zwischen mag ich, mag
+  ich nicht und egal."*
+
+  `[read]` **Drei verschiedene Klickmuster in einem Tab** — Kategorien
+  mit Knoepfen, Allergene mit Zaehlklicks, Tags mit Zyklus. **Das ist
+  der Kern des Problems.**
+
+  ### Was zuerst zu messen ist
+
+  `[cmd]` **Ob `food_preferences_write` ueberhaupt gerufen wird** — und
+  ob die Antwort geprueft wird. `[read]` **G-79 hat denselben Fall
+  gefunden:** *„PostgREST meldet `ok` bei einem `update`, das der
+  Zeilenschutz leergefiltert hat."*
+
+  `[cmd]` **Und ob die Aenderung ueberhaupt bis zum Schreibweg kommt** —
+  oder nur im Browserzustand haengenbleibt.
+
+  `[cmd]` **Erledigt 2026-08-20 mit G-104** — dort stehen die
+  Einzelbefunde und ihre Behebung.
