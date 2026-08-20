@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `031b92e` auf `dev`.
+**Stand:** 2026-08-18, Anker `f8dca8f` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 88 offen, 1 in Arbeit.
+`[cmd]` 89 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -173,7 +173,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
 | **G-07** | Umschalten |  |
-| **C-62** | `hard` auf Allergene ist kein Sicherheitsversprechen |  |
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
@@ -201,7 +200,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
 | **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
-| **G-59** | Der Modulkopf — entschieden |  |
 | **G-61** | `refillUrgent` als Schwelle |  |
 | **G-62** | Die 17 Marken in `tabs.tsx` bleiben 17 |  |
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
@@ -221,6 +219,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
 | **A-19** | Zwei README-Abweichungen in der Kette |  |
 | **C-117** | `milch` traegt auch mit Vorlieben nicht |  |
+| **C-120** | Drei Sperren in `food_search` |  |
+| **C-121** | Die Suche ist langsamer geworden |  |
+| **G-75** | Die alte Oberflaeche nennt den BLS ebenfalls |  |
 
 ---
 
@@ -1297,31 +1298,6 @@ Umsetzen angepasst werden.
   Theme V1 auch dort gilt.
 
 
-- [ ] **C-62: `hard` auf Allergene ist kein Sicherheitsversprechen**
-  (neu 2026-08-17). Befund aus G-11a.
-
-  `[read]` Aus dem Bericht: *„`hard` auf Allergene ist technisch ein
-  harter Ausschluss, aber fachlich kein Sicherheitsversprechen, weil
-  `contains_nuts` nur 120 von 7.140 Foods markiert. Unmarkiert heisst
-  ungeprueft, nicht nussfrei."*
-
-  `[read]` Das ist die Kehrseite der richtigen Entscheidung aus C-44:
-  Allergene wurden **umgekehrt** markiert, weil „enthaelt Nuesse"
-  belegbar ist und „enthaelt keine" nicht.
-
-  **Ein Ausschluss auf dieser Grundlage wirkt in beide Richtungen
-  falsch:** Er blendet aus, was markiert ist — und zeigt alles, was nur
-  nicht markiert wurde.
-
-  **Zu entscheiden, bevor die Oberflaeche Allergien anbietet:**
-  - Sagt die Anzeige, dass die Markierung unvollstaendig ist?
-  - Oder wird `hard` erst angeboten, wenn die Abdeckung reicht?
-  - `[cmd]` Wie viele Lebensmittel muessten markiert sein, damit es
-    traegt? **Das ist eine Kurationsfrage in der Groessenordnung der
-    Anzeigenamen.**
-
-  `[read]` Eine Allergikerin, die sich auf einen Filter verlaesst, der
-  nur 120 von 7.140 kennt, ist schlechter dran als ohne Filter.
 
 - [ ] **G-11: Die restlichen Nutrition-Tabs anbinden** (neu 2026-08-16).
   Setzt G-08 voraus.
@@ -2310,50 +2286,6 @@ Umsetzen angepasst werden.
   **Betrifft G-56** (die `packages/ui`-Reste) und jede kuenftige
   Kontrastmessung. `[cmd]` Sieben von acht Modulen sind noch Attrappe.
 
-- [ ] **G-59: Der Modulkopf — entschieden** (neu gefasst 2026-08-19).
-  **Toms Vorgaben vom 2026-08-19.**
-
-  ### Drei Aenderungen
-
-  `[cmd]` **1. Die Datumsnavigation wird zentriert** — `‹ Heute ›`
-  steht heute rechts neben den Aktionsknoepfen.
-
-  `[cmd]` **2. Das Datum links faellt weg** — *„Donnerstag, 20. August
-  2026"* als Pille neben dem Modulnamen. **Tom:** *„datum links kann
-  raus, haben wir ja in der Mitte."*
-
-  `[cmd]` **3. `BLS 4.0 · Max Rubner-Institut` faellt aus der
-  Kopfzeile.** **Tom:** *„wir muessen der Konkurrenz ja nicht mitteilen,
-  mit was fuer Daten wir arbeiten, und der User hat eh keinen Plan, was
-  das ist."*
-
-  ### Die Quelle bleibt, nur nicht im Kopf
-
-  **Tom, 2026-08-19:** *„ok als Quelle, aber das heisst nicht, dass wir
-  es im Header so provokant publizieren muessen."*
-
-  `[cmd]` **Die `BLS`-Marke in der Trefferliste bleibt** — Spalte
-  `SOURCE`. `[read]` **Dort trennt sie Katalog von eigenen
-  Lebensmitteln** (`foods_custom`), und das wird gebraucht, sobald es
-  eigene gibt.
-
-  ### Vor dem Bauen zu pruefen: die Lizenz
-
-  `[read]` **Der BLS koennte eine Quellenangabe verlangen** — wie
-  LOINC. `[cmd]` **Dort steht der Urhebervermerk in jeder der acht
-  Datendateien, nicht in der Oberflaeche** (C-70).
-
-  **Dasselbe waere hier moeglich:** Vermerk in den Datendateien, die
-  Seite sagt es nicht. `[cmd]` **Das gehoert geprueft, bevor es
-  ueberall verschwindet** — nicht nur der Kopf, auch
-  `/v2/nutrition/suche` nennt *„Volltextsuche ueber den BLS-Bestand"*.
-
-  ### Der urspruengliche Vorschlag bleibt liegen
-
-  `[read]` **G-56 schlug vor:** *„Die Datumsnavigation ist ein Zustand,
-  keine Aktion, und saesse besser unter dem Kopf auf
-  Tab-Leisten-Hoehe."* **Tom hat sich fuer zentrieren entschieden** —
-  der Umbruch ist damit entschaerft, ohne die Zeile zu verlassen.
 
 - [ ] **G-61: `refillUrgent` als Schwelle** (neu 2026-08-18).
   **Entscheidung fuer Tom.** Vorlage aus G-37.
@@ -2687,3 +2619,47 @@ Umsetzen angepasst werden.
   `[read]` **Die zwei Wege aus C-102 stehen weiter offen:** *Trinkform
   vor Pulverform* als Regel, **oder Haeufigkeit statt Dichte** —
   `meal_items` protokolliert, was gegessen wird.
+
+- [ ] **C-120: Drei Sperren in `food_search`** (neu 2026-08-19). Befund
+  aus G-73.
+
+  `[cmd]` **Alle drei in der Suchfunktion, die C-94 gesperrt hat:**
+
+  | | |
+  |---|---|
+  | **`p_tag_code` ist Singular** | kein ODER/UND, nur Einfachauswahl |
+  | **kein Ausschluss-Parameter** | die Allergen-Schalter wirken **nur auf der angezeigten Seite** — und sagen das an |
+  | **kein `processing_level`** | die acht Stufen aus C-100 sind **nicht filterbar** |
+
+  `[read]` **Der G-73-Agent hat sie gemeldet statt umgangen** — richtig,
+  denn ein zweiter Suchweg neben `food_search` waere die schlechtere
+  Loesung.
+
+  `[cmd]` **Und ein Befund, der die Bauform bestimmt hat:** *„jeder
+  vegane Eintrag traegt auch `vegetarian` (Schnittmenge 0) — „vegan ODER
+  vegetarisch" waere also eine Scheinwahl."*
+
+- [ ] **C-121: Die Suche ist langsamer geworden** (neu 2026-08-19).
+  Befund aus G-73.
+
+  `[cmd]` **330–492 ms gegen 199–304 ms in G-66** — **aber nicht durch
+  den Umbau.** In SQL gemessen braucht die RPC allein **366–406 ms**,
+  und **bei `limit 25` genauso lange wie bei `limit 50`.**
+
+  `[annahme]` *„Die Funktion ist seit G-66 um die Presets (C-93) und die
+  Vorlieben-Auswertung (C-94) gewachsen; das zu belegen hiesse sie zu
+  zerlegen — eigener Auftrag."*
+
+  `[read]` **Dass `limit 25` und `limit 50` gleich lange brauchen, ist
+  der Hinweis:** Die Arbeit faellt vor dem Begrenzen an. **Zum
+  Vergleich:** Uebungen 142–172 ms ueber 1.416, Biomarker 130–160 ms
+  ueber 11.676.
+
+- [ ] **G-75: Die alte Oberflaeche nennt den BLS ebenfalls** (neu
+  2026-08-19). Meldung aus G-73.
+
+  `[cmd]` **`/nutrition` ohne `/v2`** — ausserhalb des Auftrags, deshalb
+  nicht angefasst.
+
+  `[read]` **Kleine Sache**, aber sie gehoert mit weg, wenn die alte
+  Oberflaeche bleibt — **oder die Frage lautet, ob sie bleibt.**

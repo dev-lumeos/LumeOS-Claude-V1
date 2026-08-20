@@ -5282,6 +5282,42 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   vorhanden), **nicht die Zahlen.** `[read]` **Derselbe Messfehler wie
   bei C-99**, wo die Bruecke 5.017 zeigte und der Gesamtpfad 7.067.
 
+- [x] **C-62: `hard` auf Allergene ist kein Sicherheitsversprechen**
+  (neu 2026-08-17). Befund aus G-11a.
+
+  `[read]` Aus dem Bericht: *„`hard` auf Allergene ist technisch ein
+  harter Ausschluss, aber fachlich kein Sicherheitsversprechen, weil
+  `contains_nuts` nur 120 von 7.140 Foods markiert. Unmarkiert heisst
+  ungeprueft, nicht nussfrei."*
+
+  `[read]` Das ist die Kehrseite der richtigen Entscheidung aus C-44:
+  Allergene wurden **umgekehrt** markiert, weil „enthaelt Nuesse"
+  belegbar ist und „enthaelt keine" nicht.
+
+  **Ein Ausschluss auf dieser Grundlage wirkt in beide Richtungen
+  falsch:** Er blendet aus, was markiert ist — und zeigt alles, was nur
+  nicht markiert wurde.
+
+  **Zu entscheiden, bevor die Oberflaeche Allergien anbietet:**
+  - Sagt die Anzeige, dass die Markierung unvollstaendig ist?
+  - Oder wird `hard` erst angeboten, wenn die Abdeckung reicht?
+  - `[cmd]` Wie viele Lebensmittel muessten markiert sein, damit es
+    traegt? **Das ist eine Kurationsfrage in der Groessenordnung der
+    Anzeigenamen.**
+
+  `[read]` Eine Allergikerin, die sich auf einen Filter verlaesst, der
+  nur 120 von 7.140 kennt, ist schlechter dran als ohne Filter.
+
+  `[cmd]` **Erledigt 2026-08-19.** Der Hinweis steht in `Allergies` und
+  **sagt drei Dinge statt *„ohne Gewaehr"*:**
+
+  **was wirkt** (Ausschluss, nicht Abwertung) · **wo die Grenze liegt**
+  (120 von 7.140 nusshaltig, 622 Gluten, 1.021 Laktose) · **dass die
+  Zutatenliste massgeblich bleibt.**
+
+  `[read]` **Und das Ausschliessen greift seit C-94** — Toms Vorgabe
+  *„`contains_nuts` hat Nuts drin, also muss es raus"* ist erfuellt.
+
 
 
 ## Erledigt am 2026-08-05
@@ -8045,3 +8081,76 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   **Die Nachfolger tragen den Rest:** GO-17 (Meilenstein-Kachel und
   Historie), GO-18 (`progress_pct`), GO-19 (ungenutzte Spalten), GO-20
   (Prioritaeten, Bearbeiten, abgelaufene Ziele).
+
+- [x] **G-59: Der Modulkopf — entschieden** (neu gefasst 2026-08-19).
+  **Toms Vorgaben vom 2026-08-19.**
+
+  ### Drei Aenderungen
+
+  `[cmd]` **1. Die Datumsnavigation wird zentriert** — `‹ Heute ›`
+  steht heute rechts neben den Aktionsknoepfen.
+
+  `[cmd]` **2. Das Datum links faellt weg** — *„Donnerstag, 20. August
+  2026"* als Pille neben dem Modulnamen. **Tom:** *„datum links kann
+  raus, haben wir ja in der Mitte."*
+
+  `[cmd]` **3. `BLS 4.0 · Max Rubner-Institut` faellt aus der
+  Kopfzeile.** **Tom:** *„wir muessen der Konkurrenz ja nicht mitteilen,
+  mit was fuer Daten wir arbeiten, und der User hat eh keinen Plan, was
+  das ist."*
+
+  ### Die Quelle bleibt, nur nicht im Kopf
+
+  **Tom, 2026-08-19:** *„ok als Quelle, aber das heisst nicht, dass wir
+  es im Header so provokant publizieren muessen."*
+
+  `[cmd]` **Die `BLS`-Marke in der Trefferliste bleibt** — Spalte
+  `SOURCE`. `[read]` **Dort trennt sie Katalog von eigenen
+  Lebensmitteln** (`foods_custom`), und das wird gebraucht, sobald es
+  eigene gibt.
+
+  ### Vor dem Bauen zu pruefen: die Lizenz
+
+  `[read]` **Der BLS koennte eine Quellenangabe verlangen** — wie
+  LOINC. `[cmd]` **Dort steht der Urhebervermerk in jeder der acht
+  Datendateien, nicht in der Oberflaeche** (C-70).
+
+  **Dasselbe waere hier moeglich:** Vermerk in den Datendateien, die
+  Seite sagt es nicht. `[cmd]` **Das gehoert geprueft, bevor es
+  ueberall verschwindet** — nicht nur der Kopf, auch
+  `/v2/nutrition/suche` nennt *„Volltextsuche ueber den BLS-Bestand"*.
+
+  ### Der urspruengliche Vorschlag bleibt liegen
+
+  `[read]` **G-56 schlug vor:** *„Die Datumsnavigation ist ein Zustand,
+  keine Aktion, und saesse besser unter dem Kopf auf
+  Tab-Leisten-Hoehe."* **Tom hat sich fuer zentrieren entschieden** —
+  der Umbruch ist damit entschaerft, ohne die Zeile zu verlassen.
+
+  `[cmd]` **Erledigt 2026-08-19.** Datum zentriert, Datumspille links
+  weg, `BLS 4.0 · Max Rubner-Institut` **an vier Stellen entfernt.**
+
+  ### Die Lizenzfrage wurde vorher geklaert
+
+  `[cmd]` **Die BLS-Dokumentation nennt in 9.2 eine empfohlene
+  Zitierweise** (fuer wissenschaftliche Publikationen) **und in 9.3, dass
+  der Bestand *„kostenfrei und ohne Lizenzbarrieren"* bereitsteht,
+  ausdruecklich fuer App-Entwicklung.** **Keine Pflicht zur Nennung in
+  der Oberflaeche.**
+
+  `[annahme]` **Ein Vorbehalt:** *„Das PDF nutzt eine eigene
+  Schriftkodierung. Ueberschriften und Zitierweise sind im Klartext
+  lesbar, der Fliesstext von 9.3 nur bruchstueckhaft — dafuer stuetze
+  ich mich auf `45-bls-dokumentation.md`. Beide sagen dasselbe."*
+
+  `[cmd]` **Die `SOURCE`-Spalte bleibt** — Toms Vorgabe.
+
+  ### Die Zentrierung brauchte drei Anlaeufe
+
+  `[read]` *„`flex: 1` lag 71 px daneben, `position: absolute` traf
+  exakt, ueberlappte aber die Knoepfe und wurde abgeschnitten. Und sie
+  griff zunaechst gar nicht — **`v2.css:1064` setzt `position:
+  relative` auf jedes Kopf-Kind und schlaegt eine einzelne Klasse.**"*
+
+  `[cmd]` **Gebaut ist ein Drei-Spalten-Raster:** 0 px Abweichung, keine
+  Ueberlappung.
