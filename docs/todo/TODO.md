@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `a017c7b` auf `dev`.
+**Stand:** 2026-08-18, Anker `b1a97a8` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 103 offen, 1 in Arbeit.
+`[cmd]` 100 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -192,7 +192,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-111** | Recovery — neun Entscheidungen und drei Formelfehler |  |
 | **C-112** | Buddy, Coach und Marketplace — elf Entscheidungen |  |
 | **C-113** | Enhanced Mode — entschieden |  |
-| **C-118** | Erfahrungsgrad des Nutzers |  |
 | **C-114** | Was das Vorgaengerrepo beim Coach falsch machte |  |
 | **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
 | **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
@@ -233,8 +232,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-75** | Die alte Oberflaeche nennt den BLS ebenfalls |  |
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
-| **C-135** | Die Zielhistorie fehlt in den Seeds |  |
-| **C-138** | Der Kimi-Waechter stand auf genau 56 |  |
 | **C-139** | Die 503 Wirkstoffe sind nicht importierbar |  |
 
 ---
@@ -1998,54 +1995,6 @@ Umsetzen angepasst werden.
   waere Beratung. **Marketplace *„TRT protocol consultation"*** → dieselbe
   Frage, gehoert zu C-112.
 
-- [ ] **C-118: Erfahrungsgrad des Nutzers** (neu 2026-08-19). **Toms
-  Vorgabe.** Voraussetzung fuer C-113.
-
-  **Tom:** *„Ich stelle mir vor, es ist nur fuer bestimmte Level-User
-  aktivierbar — sprich, wir brauchen in Settings und Onboarding eine
-  Deklaration des Users, welches Level er hat."*
-
-  `[cmd]` **Vier Stufen: Beginner · Advanced · Pro · Elite.** Toms
-  Entscheidung: *„starten wir mal damit, ist ja jederzeit ausbaubar."*
-
-  `[cmd]` **Ort: `public.profiles`** — dort stehen bereits Alter,
-  Geschlecht, Aktivitaetsniveau. `[read]` **Es ist eine Eigenschaft des
-  Nutzers, kein Modulwert.**
-
-  `[cmd]` **In Onboarding und Settings**, beide Stellen.
-
-  ### Nicht zu verwechseln mit der Autonomy-Stufe
-
-  `[read]` **Getrennt, ausdruecklich (Tom, 2026-08-19).** Der
-  Erfahrungsgrad ist **Selbstauskunft** des Nutzers; die Autonomy-Stufe
-  aus C-71 ist **Fremdeinschaetzung** durch den Coach. **Beide
-  beschreiben Reife, aber aus verschiedenen Richtungen.**
-
-  `[read]` **Und der Erfahrungsgrad wirkt weiter als Supplements** — er
-  koennte Trainingsstandards, Volumenempfehlungen und die Ansprache
-  beeinflussen. **Erst einmal nur als Feld, ohne Wirkung.**
-
-  `[cmd]` **Teilweise erledigt 2026-08-19 mit G-80.** Die Kachel steht in
-  `/v2/settings` — **vier Stufen mit Erklaerung, Auswahl gesperrt.**
-
-  `[cmd]` **Die Spalte fehlt weiter in `public.profiles`** — gemessen:
-  nur `activity_level`. **Der Hinweis sagt, dass sich die Angabe noch
-  nicht speichern laesst**, ohne Punktnummer.
-
-  `[read]` **Dasselbe Muster wie G-65 bei den Presets:** Die Form steht,
-  der naechste Durchgang findet sie vor. **Und keine Attrappenmarke** —
-  ein Leerzustand ist kein Attrappenzustand.
-
-  **Offen:** nur die Spalte in `profiles`. `[cmd]` **Codex-Auftrag**,
-  klein.
-
-  `[cmd]` **Onboarding gibt es nicht** — der G-80-Agent hat es gemessen:
-  *„die einzige Datei ist der Klienten-Assistent im Coach-Modul. Der
-  zweite Ort aus deinem Satz ist heute nicht baubar."*
-
-  `[read]` **Und die Trennung ist besser begruendet als im Auftrag:**
-  *„`activity_level` ist etwas anderes — ein Anfaenger kann
-  `very_active` sein."*
 
 - [ ] **C-114: Was das Vorgaengerrepo beim Coach falsch machte** (neu
   2026-08-19). **Vier Entscheidungen fuer Tom.** Aus der F-04-Recherche
@@ -2997,31 +2946,6 @@ Umsetzen angepasst werden.
   **es ist die einzige Pruefung, die diese Klasse findet.** Steht schon
   als Nachweis in jedem Auftrag; **hier ist der dritte Beleg.**
 
-- [ ] **C-135: Die Zielhistorie fehlt in den Seeds** (neu 2026-08-19).
-  **Datenauftrag, Befund aus G-79.**
-
-  `[cmd]` **Kein Ziel traegt einen abgeschlossenen Status** — die Kachel
-  *„Abgeschlossene Ziele"* ist leer, **und das ist der Befund.**
-
-  `[cmd]` **Und die Meilensteine widersprechen dem Auftragstext:** Er
-  nannte *„erreicht, offen, verfehlt"* — **gemessen sind alle drei
-  `open`, zwei davon ueberfaellig** (7. Juni, 1. Juli).
-
-  `[read]` **Der Orchestrator hatte die Zahlen aus dem GO-11-Bericht
-  uebernommen, ohne nachzusehen** — dieselbe Sorte Fehler wie bei den 44
-  Katalogeintraegen (G-45) und den 12 Wurzelgruppen (G-64).
-
-  **Tom, 2026-08-18:** *„Dann macht man einfach einen Seed mit
-  abgelaufenen Goals, die in Meilensteine landen (im Sinne von
-  History)."*
-
-  `[cmd]` **Was gebraucht wird:** abgeschlossene Ziele mit Status
-  **erreicht, nicht erreicht, abgebrochen** — und Meilensteine, die
-  diese drei Zustaende tatsaechlich tragen.
-
-  `[read]` **Und Toms Ausblick gehoert dazu:** *„Kann spaeter auch etwas
-  in Richtung Gamification gehen."* **Die Historie ist die Grundlage
-  dafuer.**
 
 - [x] **G-81: Registerkarten wechseln nicht — der Build-Cache war
   kaputt** (2026-08-19). Befund aus G-79, **behoben.**
@@ -3063,25 +2987,6 @@ Umsetzen angepasst werden.
   `[read]` **Das Letzte ist der ernste Teil** — ein Passwort in der
   Adresszeile landet im Verlauf und in jedem Protokoll.
 
-- [ ] **C-138: Der Kimi-Waechter stand auf genau 56** (neu 2026-08-19).
-  **Merkposten aus C-131.**
-
-  `[cmd]` **Der Kettenlauf war blockiert**, weil
-  `146_medications_katalog.ts` **exakt 56 Wirkstoffe erwartete** — die
-  Quelle ist inzwischen auf **503** gewachsen.
-
-  `[cmd]` **Auf *„mindestens 56"* geaendert.** `[read]` **Richtig, aber
-  es zeigt ein Muster:** Ein Waechter auf eine feste Zahl bricht, sobald
-  die Quelle waechst. **Und die Quelle soll wachsen** — Tom hat tausende
-  Medikamente angekuendigt.
-
-  **Zu pruefen:** `[cmd]` Wo stehen noch feste Zahlen als Erwartung?
-  `schema-sollstand.json` fuehrt Zeilenzahlen je Tabelle — **dieselbe
-  Falle.**
-
-  `[read]` **Die Gegenregel:** *Pruefung ohne Erwartung misst nichts* —
-  **aber eine Erwartung auf die Kommastelle misst die Quelle, nicht das
-  Ergebnis.**
 
 - [ ] **C-139: Die 503 Wirkstoffe sind nicht importierbar** (neu
   2026-08-19). **Rueckmeldung an den Rechercheweg (A-21).**
