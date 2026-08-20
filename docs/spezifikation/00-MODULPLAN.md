@@ -1,7 +1,7 @@
 # Modulplan — Reihenfolge und Vorgehen
 
-`[cmd]` **Stand:** 2026-08-18, 75 offen, 182 erledigt, 64
-Kettenschritte, 44 Commits vor `origin/dev`.
+`[cmd]` **Stand:** 2026-08-19, 89 offen, 200 erledigt, 68
+Kettenschritte, 92 Commits vor `origin/dev`.
 
 **Tom, 2026-08-18:** *„Zuerst Grundlagen und danach jedes Modul
 strukturiert bewerten: was braucht das Feature von wo — und daraus
@@ -11,17 +11,17 @@ ergibt sich dann die nächste TODO-Liste mit Reihenfolge."*
 
 ## Das Verfahren je Modul
 
-Vier Schritte, in dieser Reihenfolge. **Kein Schritt wird übersprungen.**
+Vier Schritte. **Kein Schritt wird übersprungen.**
 
 **1. Bestandsaufnahme** — Was zeigt das Mockup? Tabs, Kacheln, Filter,
-Popups. `[cmd]` `tools/vollstaendigkeit.mjs` zählt, die Zählregeln in
-`theme-v1-umsetzung.md` sagen wie.
+Popups.
 
 **2. Abgleich** — Was sagen `docs/specs/` und `referenz/lumeos-2026/`?
-**Vor jeder Einstufung als „fehlt" wird dort nachgesehen.**
+`[cmd]` **Und: prüfend lesen.** Die Spec-Fehlerliste (A-20) zählt
+inzwischen **sieben Funde** — Marker verwechselt, Formeln falsch, Skalen
+invertiert, Zahlen erfunden.
 
-**3. Datenlage** — Welche Tabellen und Spalten braucht das Modul, was
-existiert? **Fehlt etwas: erst Schema, dann Seeds, dann Anbindung.**
+**3. Datenlage** — Welche Tabellen und Spalten, was existiert?
 
 **4. Anbindung** — Das Mockup bekommt echte Daten.
 
@@ -29,114 +29,101 @@ existiert? **Fehlt etwas: erst Schema, dann Seeds, dann Anbindung.**
 > Daten kommt, wird gemeldet, nicht ersetzt.**
 
 `[read]` **Und wenn eine Spalte fehlt oder etwas dazugehört: erst mit
-Tom reden, dann bauen.** — Diese Regel ist am 2026-08-18 entstanden,
-nachdem G-46 drei Listen gebaut hatte, wo eine hingehörte.
+Tom reden, dann bauen.**
 
 ---
 
 ## Wo die Module stehen
 
-| Modul | Mockup | Schema | Seeds | Angebunden |
-|---|---|---|---|---|
-| **Nutrition** | vollständig | 22 Tabellen, 7.140 Lebensmittel | 173 Mahlzeiten | Diary, Nutrients |
-| **Medical** | vollständig | 5 Tabellen, 11.676 Marker, 560 Bereiche | 140 Werte, 5 Befunde | **Markerliste, Import** |
-| **Supplements** | vollständig | 6 Tabellen, 44 Katalog | 4 Einnahmen | **4 Tabs** |
-| **Goals** | vollständig | 6 Tabellen, 11 Funktionen | 43 Messungen | **5 von 10 Tabs** |
-| **Recovery** | vollständig | **1 Tabelle** | 36 Check-ins | Muskelkarte, Check-ins |
-| **Training** | vollständig | 7 Tabellen, 1.416 Übungen | 9 Sitzungen, 60 Sätze | *läuft (G-64)* |
-| **Coach** | vollständig | **keins** | — | **nichts** |
-| **Dashboard** | vollständig | liest aus allen | — | teilweise |
+| Modul | Schema | Bestand | Angebunden |
+|---|---|---|---|
+| **Nutrition** | 22 Tabellen | 7.140 Lebensmittel, **30.797 Tags**, 11 Presets | **Diary, Nutrients, Food DB, Preferences, Suche mit Vorlieben** |
+| **Medical** | 5 Tabellen | 11.676 Marker, **560 Bereiche** | Markerliste, Import |
+| **Training** | 7 Tabellen | 1.416 Übungen, 58 Geräte, 95 Muskelgruppen | **Exercises + 5 Sitzungs-Tabs** |
+| **Goals** | 6 Tabellen, 11 Funktionen | 180 Messungen | **5 von 10 Tabs** |
+| **Supplements** | 6 Tabellen | 44 Katalog | 4 Tabs |
+| **Recovery** | **1 Tabelle** | 340 Check-ins | Muskelkarte, Check-ins |
+| **Coach** | **keins** | — | **nichts** |
+| **Marketplace** | **keins** | — | **nichts** |
 
 ---
 
-## Stufe 0 — Grundlagen
+## Stufe 0 — Grundlagen: erledigt
 
-**Erledigt am 2026-08-18:**
+`[cmd]` **C-83** Übungskatalog · **C-84** Biomarker aus der Spec ·
+**C-90** Gerätegruppen und Disziplin · **C-78 + C-97 + C-101 + C-103**
+zusammenhängende Seeds über ±90 Tage mit Varianz · **C-99**
+Kategorienbrücke.
 
-`[cmd]` **C-83** — Übungskatalog angereichert, 1.407 Zeilen.
-`[cmd]` **C-90** — 58 Geräte gruppiert, Disziplin auf allen 1.416.
-`[cmd]` **C-84** — Biomarker aus der Spec, 560 Referenzbereiche.
-
-**Offen:**
-
-`[cmd]` **C-78 — Zusammenhängende Seeds.** `[read]` **Der wichtigste
-verbleibende Grundlagenpunkt.** Solange Zufuhr und Gewicht getrennt
-erzeugt werden, lässt sich **keine Formel prüfen** — GO-11 hat 1.279
-kcal Abstand gemessen, GO-16 stolperte über 26 Messungen in der Zukunft
-und 13 von 14 Zufuhrtagen. **Blockiert jede Bewertung und Buddy.**
-
-`[cmd]` **C-89** — 26 Körpermessungen liegen in der Zukunft. Teilmenge
-von C-78, aber sofort behebbar.
+`[read]` **Die Seeds sind der wichtigste Gewinn:** `adaptive_tdee`
+rechnet `complete`, die Rückrechnung geht auf, und der Tageswechsel im
+Diary zeigt etwas.
 
 ---
 
-## Stufe 1 — Anbindung
+## Vier Entwürfe liegen vor
 
-**Nutrition** hat am 2026-08-18 eine eigene Kette bekommen:
+`[cmd]` Sie ersetzen das Entdecken beim Bauen:
 
-**C-93** Ausschluss-Presets → **G-65** Preferences-Tab → **G-66**
-Food-DB mit Filtern → **G-67** Daumen in Liste und Detail → **C-94**
-Suche wendet die Vorlieben an.
-
-`[read]` **G-67 ist der Punkt, der den Rest trägt:** Der Assistent
-verlangt Vorarbeit, der Daumen verlangt nichts — **bei 7.140
-Lebensmitteln ist das der einzige Weg, der skaliert.**
-
-**Training:** G-64 läuft. Danach Sitzungen und Sätze.
-
-**Goals:** fünf Tabs stehen. Offen: GO-17 (Meilenstein-Kachel), GO-18
-(zwei Wahrheiten am selben Ziel), GO-19 (was die Daten hergeben und das
-Mockup nicht zeigt).
-
-**Recovery:** `[cmd]` **Eine Tabelle.** Alles ausser Check-ins und
-Muskelkarte braucht Schema — Schlaf, HRV, Modalitäten, Protokolle,
-Übertraining. `SPEC_06` nennt zehn Tabellen.
+| | |
+|---|---|
+| **Recovery** | 567 Zeilen — fünf neue Strukturen, **drei Formelfehler**, neun Entscheidungen |
+| **Supplements** | 344 Zeilen — Katalog, Wechselwirkungen, Injektionen |
+| **Buddy/Coach/Market** | 680 Zeilen — Rechtemodell, 16 Buddy-Tabellen, **acht Rechtsfragen** |
+| **Coach-Recherche** | 477 Zeilen — Vorgängerrepo und Markt |
+| **Substanzkatalog** | 320 Substanzen als Kandidat |
 
 ---
 
-## Stufe 2 — Was Schema braucht
+## Was jetzt gebaut werden kann
 
-**Coach.** `[cmd]` Kein Schema, zwei vollständige Mockups. `[read]`
-**Und eine Produktentscheidung davor:** C-71, die zwei Achsen Sicht und
-Autonomie. `[cmd]` Die Vorlage sitzt im Vorgängerrepo in
-`SettingsView.tsx` — **der Nutzer verwaltet je Coach, was der sehen
-darf, von seiner Seite aus.**
+**Kleine Punkte, alle entschieden:**
 
-**Recovery-Rest**, **C-75** (BSS und Voice, Neubau).
+`[cmd]` **GO-18** `progress_pct` per Trigger · **G-61** drei
+Nachfüllstufen · **GO-15** Alpha auf 1,0 · **G-62** Rückfallfassungen
+markieren · **C-62** Warnhinweis bei Allergenen · **G-59** Kopfzeile.
+
+**Größere Blöcke:**
+
+**C-71 + C-95** — **Permissions und Autonomy sind zwei verschiedene
+Sachen.** Der Nutzer setzt, was der Coach sehen und ohne Bestätigung
+ändern darf. Der Coach setzt den Level seines Athleten (fünf Stufen).
+`[read]` **Blockiert Coach und Buddy.**
+
+**C-113 + C-118** — Enhanced Mode: planen, protokollieren, warnen.
+**Keine Empfehlung.** Dazu der Erfahrungsgrad (Beginner, Advanced, Pro,
+Elite) in `profiles`.
+
+**Recovery** nach dem Entwurf: Score → Modalitäten → Muskelkarte → HRV →
+Protokolle → Übertraining.
+
+**G-70** — sortierbare Spalten, Herkunfts-Filter, **Blätterfunktion**
+(heute zeigt der Food-DB-Tab 50 von 279).
 
 ---
 
-## Stufe 3 — Was auf allem aufsetzt
+## Was wartet
 
-**Dashboard** — liest aus allen Modulen. `[read]` Solange die darunter
-Attrappe sind, ist jede Kachel eine Behauptung.
+`[cmd]` **C-116** — der Substanzkatalog, bis Kimi3 die vollständige
+Supplement- und Medikamentenliste liefert.
 
-**Buddy** — *„Buddy IST das Produkt"*. `[read]` Er findet
-Zusammenhänge. **An Daten ohne Zusammenhang findet er keine, und
-schlimmer: er findet falsche.** Setzt C-78 voraus.
+`[cmd]` **G-72** — acht Spalten ohne Kachel, bis Meal plans kommt.
 
----
+`[cmd]` **Marketplace** — *„braucht vorher den Anwalt."*
 
-## Was quer liegt
-
-`[cmd]` **Die Suchqualität** (C-20 bis C-36, neun Punkte) liegt seit
-Tagen. `[read]` **Bei den Übungen steht dieselbe Aufgabe erneut an** —
-`bench` findet 78, `squat` 120, **aber `ohp` findet 0 und `rdl` findet
-1.** Abkürzungen, nicht Wörter.
-
-`[cmd]` **Fünf Entscheidungen liegen bei Tom:** G-59 (Modulkopf,
-zurückgestellt) · G-61 (`refillUrgent` als Schwelle) · GO-15 (`alpha
-0.3`) · GO-17 (Meilenstein-Kachel) · C-71 (Coach-Rechte).
+`[read]` **Und die Suchqualität** (C-20 bis C-36) liegt weiter. **C-117
+zeigt, warum sie nicht erledigt ist:** `milch` findet Joghurt, weil die
+Formel Nährstoffdichte belohnt. **Der Pulverabzug hat den ersten Fehler
+behoben, nicht den zweiten.**
 
 ---
 
 ## Warum diese Reihenfolge
 
 `[read]` **Jedes Modul wird von unten nach oben fertig, statt dass acht
-halb dastehen.** Bisher wurde nach Verfügbarkeit verteilt — das hat acht
-Mockups gebracht und zwei Anbindungen; **an einem Tag mit Reihenfolge
-wurden es sechs.**
+halb dastehen.** In zwei Tagen mit Reihenfolge: **Nutrition fast
+komplett, Training angebunden, Goals zur Hälfte, vier Entwürfe für den
+Rest.**
 
-`[cmd]` **Und die Grundlagen blockieren mehrere Module gleichzeitig.**
-Drei sind gefallen, **C-78 steht noch** — und ohne ihn misst jede Formel
-Zahlen, die zu etwas anderem gehören.
+`[cmd]` **Und die Grundlagen sind gefallen** — was jetzt gebaut wird,
+steht auf gemessenen Daten statt auf Annahmen.

@@ -328,6 +328,59 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   nicht an der Sache. *Aus der Existenz einer Sache folgt nicht ihre
   Funktion — und aus ihrem Fehlen unter einem Namen nicht ihr Fehlen.*
 
+- [x] **A-11: Specs laufend zu SSOT konsolidieren** (neu 2026-08-14).
+  Arbeitsregel, kein Bauauftrag. **Ablauf und Register stehen seit dem
+  2026-08-14 in `docs/spezifikation/00-KONSOLIDIERUNG.md`.**
+
+  **Toms Festlegung (2026-08-14):** Die Specs sind **Grundlage der
+  Diskussion** darüber, was verbindlich gilt. Sie werden laufend
+  konsolidiert — nicht in einem Zug, sondern jeweils dann, wenn an einem
+  Bereich gearbeitet wird. Das Verfahren muss für jeden gleich
+  funktionieren, auch für einen fremden Agenten.
+
+  `[read]` **Das Verfahren war bereits vollständig beschrieben** und
+  wurde nur nicht angewandt: `docs/spezifikation/00-INDEX.md` (Stand
+  2026-08-02) legt die Rollen der Ordner fest, den Pflicht-Statuskopf,
+  die vier Regeln aus dem Spec-Audit und die Reihenfolge — und benennt
+  Nutrition als Kandidaten mit offenem Gate. Es fehlte kein Prozess,
+  sondern der Nachweis, wie weit er angewandt ist.
+
+  **Die Ablagefrage ist damit beantwortet, nicht offen:** `[read]`
+  Regel 2 dort lautet „Ist und Soll getrennt". Produktentscheidungen
+  gehen nach `docs/spezifikation/`, Messungen und Code-Befunde nach
+  `docs/ssot/`, offene Punkte in diese Datei. Eine Produktentscheidung
+  ist Soll, auch wenn sie vor Monaten getroffen wurde.
+
+  **Was neu entstanden ist**, und mehr soll es nicht werden:
+  - `docs/spezifikation/00-KONSOLIDIERUNG.md` — vier Schritte, vier
+    Zustände (`offen` · `gelesen` · `aufgeloest` · `verworfen`), ein
+    Register über `[cmd]` **84 Dateien** (45 Specs, 39 Brainstorm).
+  - `CLAUDE.md` nachgezogen: Altbestand wird **mitgelesen**, ist aber nie
+    Current Truth; in `docs/specs/` wird nicht geschrieben.
+  - `[read]` Der Steuersatz `BLOCKED_BY_PRODUCT_GATE` im Kopf von
+    `docs/specs/Nutrition/INDEX.md` ist als überholt gekennzeichnet — er
+    stammt aus dem abgelegten Governance-Modell und hätte beim nächsten
+    Lesen jemanden angehalten.
+
+  **Die Grenze, die dabei gilt:** kein Freigabelauf, keine Risikoklassen,
+  keine Warteschlange, keine Werkzeuge. Der Altbestand hat 1,5 MB
+  Spezifikation und nichts Gebautes hervorgebracht, die frühere
+  Governance-Maschinerie 476 Dateien. Wenn das Register anfängt, Pflege
+  zu kosten, ist es falsch gebaut.
+
+  **Offen bleibt nur die Anwendung.** `[cmd]` Drei von 84 Dateien sind
+  eingetragen — die beiden, aus denen C-34 entstanden ist, plus die
+  Entscheidungssammlung. Der Punkt bleibt dauerhaft in Arbeit; er wird
+  nicht abgeschlossen, sondern angewandt.
+
+  `[cmd]` **Geschlossen 2026-08-19.** Der Konsolidierungsteil ist durch
+  **A-20** ersetzt.
+
+  `[read]` **Die Lage hat sich gedreht:** Sechs gemessene Spec-Fehler
+  spaeter hiesse Konsolidieren, Falsches zu uebernehmen. **Jeder Entwurf
+  prueft und meldet stattdessen** — so haben es die vier
+  Fable-Auftraege gehalten.
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
@@ -7868,3 +7921,127 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Kategorien aus dem Katalog** (13 Wurzeln) statt fester
   Achterliste.
+
+- [x] **GO-01 bis GO-17: Goals** (neu 2026-08-15). **Block A zu vier
+  Fünfteln erledigt.**
+
+  `[cmd]` **Erledigt 2026-08-15:**
+
+  | | |
+  |---|---|
+  | **GO-01** Profilpflege | `/v2/settings`, sechs Felder, 0/6 → 6/6, Zeilenschutz beidseitig belegt |
+  | **GO-02** Zielzuordnung | `daten/zielrichtung-kalorienzuschlag.json` |
+  | **GO-03** Zieltabelle | `goals.nutrition_targets` mit `gueltig_ab` |
+  | **GO-04** Berechnung | `goals.berechne_zielwerte` — BMR 1.746,5 · TDEE 2.707,1 · **2.977,8 kcal** · 156,8 g Protein |
+  | **GO-05** Ringe | mit C-03 angeschlossen, `goals.zielwerte_am` als Nenner |
+
+  **Der Vorgänger hatte GO-02 nicht gelöst, sondern viermal verschieden
+  beantwortet:** `[cmd]` `calculateTDEE.ts` nimmt die Trainingsfrequenz
+  und rechnet Prozent, `useTDEE.ts` nimmt `activity_level` und rechnet
+  absolute kcal, eine dritte Stelle führt ein viertes Zielvokabular.
+  **Der Fundus muss das sagen**, sonst liest es beim nächsten Mal wieder
+  jemand als gelöst.
+
+  **Drei Stellen bewusst nicht übernommen:** `[cmd]`
+  `getFullYear() - Geburtsjahr` ignoriert den Geburtstag (für den
+  1.12.1990 sagt der Vorgänger 36, die neue Funktion 35). Der Rückfall
+  `|| 1.55`. Und `targetCalories: 0` — *eine 0 im Kalorienziel ist keine
+  Fehlermeldung, sondern eine Behauptung.*
+
+  `[cmd]` **`health` bleibt offen** mit `null` und Status `OFFEN`. Der
+  Vorgänger kennt die Zielrichtung nicht; 0,0 wäre eine stille
+  Entscheidung gewesen.
+
+  `[cmd]` **Das Gültigkeitsdatum belegt:** 20.08. liefert 2.978, 15.09.
+  liefert 2.200, 01.08. liefert **keine Zeile** — nicht das älteste Ziel
+  als Näherung.
+
+  **Offen bleibt Block B (GO-06 … GO-12) und Block C (GO-13 … GO-17).**
+  `[cmd]` Block C ist seit den Testdaten prüfbar — 14 Tage je Nutzer —
+  aber fachlich weiterhin auf echte Verläufe angewiesen.
+  **Plan: `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md`**
+  — 353 Zeilen, mit Quellenregister, gemessenem Ist-Zustand, neun
+  Widersprüchen und der Abgrenzung, was **nicht** gebaut wird.
+
+  `[read]` Goals ist der Massstab, an dem Buddy seine Empfehlungen misst
+  — **keine eigenständige Dateneingabe.** `[cmd]` Die Vision nennt
+  „Goals" einmal, „Buddy" 22-mal; Prinzip 1 lautet *„Buddy IST das
+  Produkt"*. Die Spec nennt Goals „Betriebssystem-Kern" — das trägt die
+  Vision so nicht.
+
+  **Der Blocker ist nicht das fehlende Schema.** `[cmd]` Die sechs
+  Profilspalten für die TDEE-Formel existieren seit dem 2026-08-15 und
+  sind bei **beiden** Nutzern leer — 0 von 2. Nichts füllt sie. Deshalb
+  steht Profilpflege als GO-01 vor allem anderen; sie braucht kein neues
+  Schema.
+
+  **Block A — die Ringe füllen** (GO-01 … GO-05): Profilpflege ·
+  Makro-Regel entscheiden · `goals`-Zieltabelle mit vier Zahlen · TDEE
+  als reine Funktion · Ringe anschliessen.
+  `[cmd]` Danach zeigt `/v2/nutrition` gefüllte Ringe statt leerer.
+
+  **Block B — Goals als Modul** (GO-06 … GO-12): Zielvokabular
+  vereinheitlichen, `user_goals` und `goal_phases`, Phasenparameter,
+  Zielübersicht, Körpermessungen, Meilensteine, Onboarding.
+
+  **Block C — nicht terminierbar** (GO-13 … GO-17): `[cmd]` Die adaptive
+  TDEE braucht **zwei volle Wochen** Gewichts- und Kaloriendaten;
+  `meals` hat 0 Zeilen und es gibt keinen Schreibpfad. Ein Datum dafür
+  wäre erfunden.
+
+  **Entscheidungen Toms, 2026-08-15:** Die Zieltabelle gehört in ein
+  eigenes `goals`-Schema, nicht nach `nutrition`. Der Plan liegt unter
+  `30-module/core/`, nicht unter `40-…` (das ist für Lieferungen
+  reserviert).
+
+  **Die Rangfolge der Quellen ist nicht die übliche:**
+
+  | | | |
+  |---|---|---|
+  | 1. Vorgängerrepo | `referenz/lumeos-2026/` | die **Rechenwege** |
+  | 2. Designvorlage | `theme-v1/module-goals*.jsx` | der **Umfang** |
+  | 3. Spec | `docs/specs/Goals/` | die **Absicht** |
+
+  `[cmd]` **Die Formeln existieren als laufender Code:**
+  `referenz/lumeos-2026/src/modules/onboarding/utils/calculateTDEE.ts`
+  liefert `tdee`, `targetCalories`, `proteinG`, `fatG`, `carbsG` — und
+  beantwortet zwei der gemeldeten Lücken: **Mifflin-St Jeor mit
+  angewandtem Aktivitätsfaktor** (die Spec-Formel liefert BMR und liegt
+  um Faktor 1,2–1,9 zu niedrig) und **Kohlenhydrate als Restgrösse**
+  (steht in keiner Goals-Spec).
+
+  `[cmd]` Die Spec ist die schwächste Quelle: KI-erzeugt, und
+  `BrainstormDocs/Goals/new/` ist byte-identisch — an dieser Stelle eine
+  Kopie, keine Synthese. `[cmd]` `DATABASE.md` ist nicht ausführbar wie
+  abgedruckt (`UNIQUE (…) WHERE` gibt es in PostgreSQL nicht).
+
+  **Drei Korrekturen am Plan, beim Bauen von GO-01 sichtbar geworden:**
+
+  - **Eine vierte Entscheidung gehört nach Block A.** `[cmd]`
+    `nutrition_goal` kennt sechs Werte, die Phasenmodelle neun —
+    `performance` und `health` haben dort **keine Entsprechung**. Ohne
+    diese Abbildung weiss GO-04 nicht, ob Defizit oder Überschuss. Das
+    ist das Vorzeichen, keine Feinheit. Der Plan ordnete es GO-06 zu.
+  - **GO-03 braucht ein Gültigkeitsdatum.** Sonst ist später nicht
+    sagbar, gegen welches Ziel ein vergangener Tag lief — das Tagebuch
+    zeigte rückwirkend falsche Deckungsgrade, sobald jemand die Phase
+    wechselt.
+  - **Zwischen GO-04 und GO-05 fehlt ein Schritt:** Was zeigt das
+    Tagebuch bei halbem Profil? Heute sagt es „keine Ziele". Es muss
+    sagen, **was fehlt und wohin man geht** — dieselbe Logik wie beim
+    Ring, der nicht lügen soll.
+
+  `[cmd]` Ausserdem: GO-04 ist kleiner als gedacht (zwei Formeln, alle
+  Eingaben liegen vor), GO-03 grösser.
+
+  **Offene Entscheidungen vor Block B:** vier verschiedene
+  Zielvokabulare ohne Abbildung (6 / 12 / 9 / 4 Werte) und derselbe
+  Anpassungsalgorithmus zweimal mit unterschiedlichen Schwellen.
+
+  `[cmd]` **Geschlossen 2026-08-19 als ueberholt.** Fuenf von zehn Tabs
+  lesen echt (GO-16), Ziele, Phasen, Meilensteine, adaptiver TDEE und
+  Koerperfett sind gebaut.
+
+  **Die Nachfolger tragen den Rest:** GO-17 (Meilenstein-Kachel und
+  Historie), GO-18 (`progress_pct`), GO-19 (ungenutzte Spalten), GO-20
+  (Prioritaeten, Bearbeiten, abgelaufene Ziele).
