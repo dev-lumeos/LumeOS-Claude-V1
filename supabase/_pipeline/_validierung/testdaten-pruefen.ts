@@ -686,7 +686,7 @@ if (MODE === 'clean') {
     SELECT 1
     FROM nutrition.hydration_day('${tom}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE log_count > 0
-      AND target_ml = 3400
+      AND target_ml = 2762
       AND total_ml < target_ml * 0.60
       AND avg_14d_days = 14
       AND avg_14d_total_ml > total_ml
@@ -978,7 +978,7 @@ if (MODE === 'clean') {
     JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
     WHERE us.user_id = '${tom}'::uuid
       AND (
-        (c.slug = 'creatine-monohydrate' AND si.stock_remaining = 30 AND si.low_stock_threshold = 30)
+        (c.slug = 'creatine-monohydrate' AND si.stock_remaining = 150 AND si.low_stock_threshold = 150)
         OR (c.slug = 'omega-3-epa-dha' AND si.stock_remaining = 14 AND si.low_stock_threshold = 14)
         OR (c.slug = 'vitamin-d3' AND si.stock_remaining = 4 AND si.low_stock_threshold = 7)
       )

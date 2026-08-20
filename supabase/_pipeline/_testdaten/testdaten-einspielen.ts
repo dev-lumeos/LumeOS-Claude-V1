@@ -329,7 +329,7 @@ const USERS: TestUser[] = [
     biologicalSex: 'male',
     heightCm: 185,
     bodyWeightKg: 85,
-    activityLevel: 'very_active',
+    activityLevel: 'light',
     nutritionGoal: 'gain_muscle',
     kcal: 2500,
     proteinG: 170,
@@ -1104,11 +1104,11 @@ const supplementStackItems: SupplementStackItemRow[] = [
     doseUnit: 'g',
     frequency: 'daily',
     timing: 'morning',
-    stockRemaining: 30,
+    stockRemaining: 150,
     stockUnit: 'g',
-    lowStockThreshold: 30,
+    lowStockThreshold: 150,
     sortOrder: 1,
-    notes: 'C-82 Szenario: Refill-Hinweis bei etwa einem Monat Reichweite',
+    notes: 'Monats-Hinweis: Bestand reicht bei 5 g pro Tag etwa 30 Tage',
   },
   {
     id: '41000000-0000-0000-0000-000000000102',
@@ -1168,6 +1168,12 @@ const SUPPLEMENT_SKIP_DAYS = new Set([
   addIsoDays(TODAY_DATE, -6),
   relDate('2026-08-18'),
 ])
+const SUPPLEMENT_SKIP_NOTES = [
+  'vergessen',
+  'unterwegs',
+  'keine Lust',
+  'nach spaetem Training ausgelassen',
+] as const
 const SUPPLEMENT_LOG_TEMPLATES = [
   {
     stackItemId: '41000000-0000-0000-0000-000000000101',
@@ -1205,6 +1211,7 @@ const SUPPLEMENT_LOG_TEMPLATES = [
 
 for (const date of SUPPLEMENT_LOG_DAYS) {
   const skipped = SUPPLEMENT_SKIP_DAYS.has(date)
+  const skipNote = SUPPLEMENT_SKIP_NOTES[Math.abs(daysOffset(TODAY_DATE, date)) % SUPPLEMENT_SKIP_NOTES.length]!
   for (const template of SUPPLEMENT_LOG_TEMPLATES) {
     supplementIntakeLogs.push({
       userId: '10000000-0000-0000-0000-000000000101',
@@ -1217,9 +1224,7 @@ for (const date of SUPPLEMENT_LOG_DAYS) {
       doseUnitSnapshot: template.unit,
       actualDose: skipped ? null : template.dose,
       actualDoseUnit: skipped ? null : template.unit,
-      notes: skipped
-        ? 'C-82 Szenario: voller Supplement-Tag ausgelassen, gekoppelt an harte Trainings-/Erholungsphase'
-        : template.note,
+      notes: skipped ? skipNote : template.note,
     })
   }
 }
