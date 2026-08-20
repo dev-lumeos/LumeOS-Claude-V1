@@ -22,12 +22,20 @@
 // Datenbank das traegt: wenn es einen Status gibt, nimm ihn; wenn
 // nicht, melde es."*
 //
-// `[cmd]` **Es gibt einen `status`, und er traegt es NICHT.** Die
-// Pruefbedingung erlaubt `planned | active | completed | cancelled`,
-// aber **alle 30 Sitzungen stehen auf `completed`, auch die 15 in der
-// Zukunft** (gemessen 2026-08-18). Der Status kann die Unterscheidung
-// heute nicht liefern; das einzige belastbare Merkmal ist
-// `session_date` gegen den Stichtag. **Gemeldet im Bericht.**
+// `[cmd]` **Zu G-69 gab es einen `status`, und er trug es NICHT.**
+// Die Pruefbedingung erlaubt `planned | active | completed |
+// cancelled`, aber **alle 30 Sitzungen standen auf `completed`, auch
+// die 15 in der Zukunft** (gemessen 2026-08-18).
+//
+// `[cmd]` **Seit G-86 traegt er es** — gemessen am 2026-08-20: 15
+// `completed`, 14 `planned` (bis 2026-11-11), 1 `cancelled`. Der Seed
+// hat sich dazwischen geaendert.
+//
+// `[read]` **`absolviert` bleibt trotzdem am Datum.** Beides sagt
+// etwas anderes: der Status sagt, was die Sitzung sein soll, das
+// Datum sagt, ob ihr Tag vorbei ist. Eine `planned`-Sitzung in der
+// Vergangenheit ist ausgefallen und darf nicht als Leistung zaehlen —
+// genau das verhindert der Datumsschnitt.
 //
 // `[read]` Deshalb fuehrt `Sitzung` BEIDES: `status` unveraendert aus
 // der Tabelle und `absolviert` aus dem Datum. Wer sie vergleicht,

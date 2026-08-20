@@ -54,6 +54,9 @@ import {
 import type {
   Uebung, GeraeteGruppe, MuskelWurzel,
 } from '../../../lib/training/uebungen-read'
+// G-86: die Bereitschaft aus `recovery.scores` und die Wochenzeile.
+import type { ReadinessStand } from '../../../lib/training/readiness-read'
+import type { Wochentag } from '../../../lib/training/auswertung'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -92,7 +95,7 @@ function tabs(uebungen: number): TabItem[] {
 export function TrainingAnsicht({
   uebungenStart = [], uebungenGesamt = 0,
   geraeteGruppen = [], disziplinen = [], muskelBaum = [],
-  verlauf = null,
+  verlauf = null, readiness = null,
 }: {
   uebungenStart?: Uebung[]
   uebungenGesamt?: number
@@ -104,6 +107,11 @@ export function TrainingAnsicht({
    * Ladefehler — dann bleibt der Entwurf stehen, mit seiner Marke.
    */
   verlauf?: VerlaufDaten | null
+  /**
+   * G-86: die Bereitschaft aus `recovery.scores`. `null` heisst: keine
+   * Score-Zeile — dann bleibt der Entwurf stehen, mit seiner Marke.
+   */
+  readiness?: ReadinessStand | null
 } = {}) {
   const [tab, setTab] = React.useState('today')
   const [liveOpen, setLiveOpen] = React.useState(false)
@@ -149,7 +157,8 @@ export function TrainingAnsicht({
       <Tabs items={tabs(uebungenGesamt)} active={tab} onChange={setTab} />
 
       {tab === 'today' && (
-        <TrainingToday onStart={() => setLiveOpen(true)} verlauf={verlauf} />
+        <TrainingToday onStart={() => setLiveOpen(true)} verlauf={verlauf}
+                       readiness={readiness} />
       )}
       {tab === 'plan' && <TrainingPlan />}
       {/* `[cmd]` SEIT G-69 ECHT, mit demselben Rueckfall wie G-64:
@@ -198,10 +207,12 @@ export function TrainingAnsicht({
 
 // --- TODAY -------------------------------------------------------
 // [cmd] module-training.jsx:62-203.
-function TrainingToday({ onStart, verlauf }: {
+function TrainingToday({ onStart, verlauf, readiness }: {
   onStart: () => void
   /** G-69: echt, wenn Sitzungen geladen sind. */
   verlauf?: VerlaufDaten | null
+  /** G-86: echt, wenn eine Score-Zeile vorliegt. */
+  readiness?: ReadinessStand | null
 }) {
   const session = {
     name: 'Push B',
@@ -284,36 +295,56 @@ function TrainingToday({ onStart, verlauf }: {
           </div>
         </Card>
 
-        <Card title="This week" sub="Coach plan · 5 of 6 sessions" attrappe={ATTRAPPE}>
-          <WeekStrip />
-        </Card>
+        {/* G-86: „This week" aus `workout_sessions`. Ohne Sitzungen
+            bleibt der Entwurf stehen, mit seiner Marke. */}
+        {verlauf && verlauf.woche.some(t => t.sitzung) ? (
+          <Card
+            title="Diese Woche"
+            sub={(() => {
+              const w = verlauf.woche
+              const a = w.filter(t => t.zustand === 'absolviert' || t.zustand === 'heute').length
+              const g = w.filter(t => t.sitzung).length
+              return `${a} von ${g} Sitzungen · ${w[0].datum} bis ${w[6].datum}`
+            })()}
+          >
+            <WochenStreifen tage={verlauf.woche} />
+          </Card>
+        ) : (
+          <Card title="This week" sub="Coach plan · 5 of 6 sessions" attrappe={ATTRAPPE}>
+            <WeekStrip />
+          </Card>
+        )}
       </div>
 
       <div className="v2-col-gap" style={{ gap: 16 }}>
-        <Card title="Training readiness" sub="Composite" attrappe={ATTRAPPE}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
-            <Ring value={84} max={100} color="var(--acc-train)" label="ready" size={92} stroke={7} />
-            <div style={{ flex: 1 }}>
-              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Good to go</div>
-              <div style={{ fontSize: 11, color: 'var(--fg-muted)', lineHeight: 1.45 }}>
-                Normal training. Focus on progressive overload — consider attempting 120kg ×3 on bench.
+        {readiness && readiness.zeilen.length > 0 ? (
+          <ReadinessKachel stand={readiness} />
+        ) : (
+          <Card title="Training readiness" sub="Composite" attrappe={ATTRAPPE}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+              <Ring value={84} max={100} color="var(--acc-train)" label="ready" size={92} stroke={7} />
+              <div style={{ flex: 1 }}>
+                <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Good to go</div>
+                <div style={{ fontSize: 11, color: 'var(--fg-muted)', lineHeight: 1.45 }}>
+                  Normal training. Focus on progressive overload — consider attempting 120kg ×3 on bench.
+                </div>
               </div>
             </div>
-          </div>
-          {([
-            ['Recovery', 82, 'var(--acc-recov)'],
-            ['Sleep quality', 84, 'var(--acc-recov)'],
-            ['Soreness — chest', 78, 'var(--acc-train)'],
-            ['Nutrition', 88, 'var(--acc-nutri)'],
-            ['Mood', 90, 'var(--acc-buddy)'],
-          ] as Array<[string, number, string]>).map(([k, v, c]) => (
-            <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 11, marginBottom: 6 }}>
-              <span style={{ width: 110, color: 'var(--fg-muted)' }}>{k}</span>
-              <div style={{ flex: 1 }}><Meter value={v} color={c} /></div>
-              <span className="v2-num" style={{ width: 28, textAlign: 'right' }}>{v}</span>
-            </div>
-          ))}
-        </Card>
+            {([
+              ['Recovery', 82, 'var(--acc-recov)'],
+              ['Sleep quality', 84, 'var(--acc-recov)'],
+              ['Soreness — chest', 78, 'var(--acc-train)'],
+              ['Nutrition', 88, 'var(--acc-nutri)'],
+              ['Mood', 90, 'var(--acc-buddy)'],
+            ] as Array<[string, number, string]>).map(([k, v, c]) => (
+              <div key={k} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 11, marginBottom: 6 }}>
+                <span style={{ width: 110, color: 'var(--fg-muted)' }}>{k}</span>
+                <div style={{ flex: 1 }}><Meter value={v} color={c} /></div>
+                <span className="v2-num" style={{ width: 28, textAlign: 'right' }}>{v}</span>
+              </div>
+            ))}
+          </Card>
+        )}
 
         {/* `[cmd]` ECHT SEIT G-69 — aber OHNE das Zielband der Vorlage.
             Die zeigt „14 / 16 Saetze" gegen einen Sollwert je Muskel;
@@ -394,6 +425,154 @@ function TrainingToday({ onStart, verlauf }: {
           </Card>
         )}
       </div>
+    </div>
+  )
+}
+
+/**
+ * „Training readiness" aus `recovery.scores` (G-86).
+ *
+ * `[read]` **Die Kachel steht in Training, die Zahlen kommen aus
+ * Recovery.** Gerechnet wird nichts — C-125 hat die fuenf Anteile je
+ * Tag gespeichert, hier werden sie gelesen. Das ist dieselbe Linie
+ * wie bei der Muskelkarte, die ueber `training.workout_sets` liest.
+ *
+ * `[cmd]` **Kein Urteil.** Die Vorlage schreibt „Good to go" und
+ * einen Ratschlag daneben; beides sind Readiness-Stufen der
+ * `SPEC_09` und damit Entscheidungspunkt E3. G-76 und G-82 haben sie
+ * aus Recovery entfernt — hier kommen sie nicht wieder herein. Statt
+ * der Deutung steht da, woher die Zahl stammt.
+ */
+function ReadinessKachel({ stand }: { stand: ReadinessStand }) {
+  const FARBE: Record<string, string> = {
+    recovery: 'var(--acc-recov)',
+    sleep: 'var(--acc-recov)',
+    soreness: 'var(--acc-train)',
+    nutrition: 'var(--acc-nutri)',
+    mood: 'var(--acc-buddy)',
+  }
+  return (
+    <Card title="Training readiness" sub={`aus recovery.scores · ${stand.entry_date}`}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+        <Ring value={stand.score} max={100} color="var(--acc-train)"
+              label="score" size={92} stroke={7} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div className="v2-num" style={{ fontSize: 20, lineHeight: 1, marginBottom: 6 }}>
+            {stand.score.toFixed(1)}
+          </div>
+          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
+            Derselbe Wert wie im Recovery-Modul — nicht neu gerechnet,
+            sondern die gespeicherte Zeile des Tages.
+          </div>
+        </div>
+      </div>
+      {stand.zeilen.map(z => (
+        <div key={z.code} style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          fontSize: 11, marginBottom: 6,
+        }}>
+          {/* `[cmd]` Bei 120 px brach „Muskelkater — back, chest" ab.
+              Die Muskelnamen kommen aus dem Check-in und sind nicht
+              vorhersehbar lang; die Spalte waechst deshalb mit, statt
+              den Namen abzuschneiden. */}
+          <span style={{
+            flex: '0 1 auto', minWidth: 96, maxWidth: 190,
+            color: 'var(--fg-muted)', lineHeight: 1.3,
+          }} title={z.label}>{z.label}</span>
+          <div style={{ flex: 1 }}>
+            {/* `[read]` Ein Rueckfallwert wird blass gezeigt — er ist
+                eine Zahl, aber keine Messung. */}
+            <div style={{ opacity: z.rueckfall ? 0.45 : 1 }}>
+              <Meter value={z.wert ?? 0} color={FARBE[z.code] ?? 'var(--acc-train)'} />
+            </div>
+          </div>
+          <span className="v2-num" style={{ width: 32, textAlign: 'right' }}>
+            {z.wert === null ? '—' : Math.round(z.wert)}
+          </span>
+        </div>
+      ))}
+      {stand.zeilen.some(z => z.rueckfall) && (
+        <>
+          <div className="v2-divider" />
+          <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45 }}>
+            {stand.zeilen.filter(z => z.rueckfall).map(z => (
+              <div key={z.code}>
+                <strong>{z.label}</strong> ist ein Rückfallwert
+                {' '}(<span className="v2-mono">{z.rueckfall}</span>) — auf allen
+                {' '}Tagen gleich, weil der Check-in keine Ernährung führt.
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </Card>
+  )
+}
+
+/**
+ * „This week" aus `workout_sessions` (G-86).
+ *
+ * `[cmd]` **Hier entscheidet `status`, nicht das Datum.** G-69 musste
+ * sich aufs Datum stuetzen, weil damals alle 30 Sitzungen auf
+ * `completed` standen. Gemessen am 2026-08-20: 15 `completed`, 14
+ * `planned`, 1 `cancelled` — der Status traegt es jetzt.
+ */
+function WochenStreifen({ tage }: { tage: Wochentag[] }) {
+  const FARBE: Record<Wochentag['zustand'], string> = {
+    heute: 'var(--acc-train)',
+    absolviert: 'var(--pos)',
+    geplant: 'var(--fg-dim)',
+    abgesagt: 'var(--neg)',
+    ruhe: 'var(--fg-dim)',
+  }
+  const WORT: Record<Wochentag['zustand'], string> = {
+    heute: 'heute', absolviert: 'absolviert', geplant: 'geplant',
+    abgesagt: 'abgesagt', ruhe: 'Ruhetag',
+  }
+  return (
+    <div className="v2-train-week">
+      {tage.map(d => (
+        <div key={d.datum} style={{
+          padding: 10,
+          background: d.zustand === 'heute'
+            ? 'color-mix(in oklch, var(--acc-train) 10%, var(--surface))'
+            : 'var(--surface)',
+          border: `1px solid ${d.zustand === 'heute'
+            ? 'color-mix(in oklch, var(--acc-train) 40%, var(--border))'
+            : 'var(--border)'}`,
+          borderRadius: 6, fontSize: 11, minHeight: 80,
+        }}>
+          <div style={{
+            display: 'flex', justifyContent: 'space-between',
+            marginBottom: 6, alignItems: 'baseline',
+          }}>
+            <span className="v2-eyebrow">{d.kuerzel}</span>
+            <span className="v2-num v2-dim" style={{ fontSize: 10 }}>{d.tag}</span>
+          </div>
+          {d.sitzung ? (
+            <>
+              <div style={{
+                fontWeight: 500, marginBottom: 4,
+                textDecoration: d.zustand === 'abgesagt' ? 'line-through' : 'none',
+              }}>{d.sitzung.name ?? 'Sitzung'}</div>
+              <div className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
+                {/* `[read]` Volumen nur, wo es eines gibt: geplante
+                    Sitzungen tragen 0 kg, und eine 0 sieht aus wie ein
+                    Ergebnis. */}
+                {Number(d.sitzung.total_volume_kg) > 0
+                  ? `${(Number(d.sitzung.total_volume_kg) / 1000).toFixed(1)} t`
+                  : `${d.sitzung.total_sets ?? 0} Sätze`}
+              </div>
+            </>
+          ) : (
+            <div className="v2-dim" style={{ fontSize: 10.5 }}>—</div>
+          )}
+          <div style={{
+            marginTop: 6, fontSize: 9, color: FARBE[d.zustand],
+            fontFamily: 'var(--font-mono)',
+          }}>{WORT[d.zustand]}</div>
+        </div>
+      ))}
     </div>
   )
 }

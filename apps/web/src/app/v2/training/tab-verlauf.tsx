@@ -12,9 +12,16 @@
 // absolviert, nicht nur eine blassere Farbe."* Deshalb traegt jede
 // kuenftige Sitzung eine Pille `geplant`, nicht nur einen helleren Ton.
 //
-// `[cmd]` **Der `status` der Tabelle taugt dafuer nicht:** alle 30
-// Sitzungen stehen auf `completed`, auch die 15 in der Zukunft.
-// Massgeblich ist das Datum. Im Bericht.
+// `[cmd]` **Zu G-69 taugte der `status` dafuer nicht:** alle 30
+// Sitzungen standen auf `completed`, auch die 15 in der Zukunft.
+// Massgeblich war das Datum.
+//
+// `[cmd]` **Das gilt seit G-86 nicht mehr** — gemessen am 2026-08-20:
+// 15 `completed`, 14 `planned`, 1 `cancelled`. Der Seed hat sich
+// geaendert. **Diese Datei rechnet weiter ueber das Datum**, weil
+// `absolviert` daran haengt und beide Wege hier dasselbe Ergebnis
+// geben; die Kachel „Diese Woche" (G-86) benutzt den Status, weil sie
+// `cancelled` von `planned` unterscheiden muss.
 //
 // **KEINE BEWERTUNG.** `[read]` Der Auftrag: *„Keine Bewertung, ob
 // jemand gut trainiert."* Die Vorlage stuft in `Beginner`, `Novice`,
@@ -24,7 +31,7 @@ import * as React from 'react'
 import { Card, Pill, LineChart, Meter, Row, Sparkline } from '@lumeos/ui'
 
 import type {
-  Kennzahlen, Kraftverlauf, MuskelVolumen, Serie,
+  Kennzahlen, Kraftverlauf, MuskelVolumen, Serie, Wochentag,
 } from '../../../lib/training/auswertung'
 import { kraftVerhaeltnis } from '../../../lib/training/auswertung'
 import type { Sitzung } from '../../../lib/training/sitzungen-read'
@@ -37,6 +44,8 @@ export type VerlaufDaten = {
   kraft: Kraftverlauf[]
   serie: Serie
   gewicht: { weight_kg: number; measurement_date: string } | null
+  /** G-86: die sieben Tage um den Stichtag, fuer „This week". */
+  woche: Wochentag[]
 }
 
 function z(n: number | null | undefined, stellen = 1): string {

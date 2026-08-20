@@ -25,8 +25,11 @@ import {
   ladeSitzungen, ladeSitzungsUebungen,
 } from '../../../lib/training/sitzungen-read'
 import {
-  kennzahlen, kraftverlauf, serie, volumenJeMuskel,
+  kennzahlen, kraftverlauf, serie, volumenJeMuskel, woche,
 } from '../../../lib/training/auswertung'
+// G-86: die Bereitschaft kommt aus `recovery.scores`, nicht aus Training.
+import { ladeReadiness } from '../../../lib/training/readiness-read'
+import type { ReadinessStand } from '../../../lib/training/readiness-read'
 import { TrainingAnsicht } from './ansicht'
 import type { VerlaufDaten } from './tab-verlauf'
 
@@ -97,11 +100,19 @@ export default async function V2TrainingPage() {
         kraft: kraftverlauf(sitzungen, uebungen, saetze),
         serie: serie(sitzungen, stichtag),
         gewicht,
+        // G-86: die sieben Tage um den Stichtag, fuer „This week".
+        woche: woche(sitzungen, stichtag),
       }
     }
   } catch {
     verlauf = null
   }
+
+  // G-86: eigener `try` — faellt Recovery aus, bleibt Training gueltig.
+  // `[read]` Die Kachel steht in Training, die Zahlen stehen in
+  // Recovery; ein Fehler dort darf den Katalog nicht mitreissen.
+  let readiness: ReadinessStand | null = null
+  try { readiness = await ladeReadiness() } catch { readiness = null }
 
   return (
     <TrainingAnsicht
@@ -111,6 +122,7 @@ export default async function V2TrainingPage() {
       disziplinen={disziplinen}
       muskelBaum={muskelBaum}
       verlauf={verlauf}
+      readiness={readiness}
     />
   )
 }

@@ -293,3 +293,65 @@ export function kennzahlen(
       : null,
   }
 }
+
+// ── Die Woche (G-86) ─────────────────────────────────────────────
+
+export type Wochentag = {
+  /** `YYYY-MM-DD`. */
+  datum: string
+  /** Mo…So, zwei Buchstaben — die Vorlage schreibt Mon/Tue/… */
+  kuerzel: string
+  /** Tag im Monat, wie die Vorlage ihn zeigt. */
+  tag: number
+  /** Die Sitzung dieses Tages, oder `null` — dann Ruhetag. */
+  sitzung: Sitzung | null
+  /** `heute` | `absolviert` | `geplant` | `ruhe` | `abgesagt`. */
+  zustand: 'heute' | 'absolviert' | 'geplant' | 'ruhe' | 'abgesagt'
+}
+
+const KUERZEL = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+
+/**
+ * Die sieben Tage der Woche um den Stichtag — Kachel „This week".
+ *
+ * `[cmd]` **Hier zaehlt `status`, nicht das Datum.** G-69 musste sich
+ * aufs Datum stuetzen, weil damals *alle* 30 Sitzungen auf
+ * `completed` standen, auch die zukuenftigen. **Das gilt nicht mehr:**
+ * gemessen am 2026-08-20 stehen 15 auf `completed`, 14 auf `planned`,
+ * 1 auf `cancelled`. Der Seed hat sich geaendert.
+ *
+ * `[read]` **Beides zusammen ist richtig:** `status` sagt, was die
+ * Sitzung sein soll, der Stichtag sagt, ob ihr Tag schon vorbei ist.
+ * Eine `planned`-Sitzung in der Vergangenheit ist ausgefallen, keine
+ * absolvierte — deshalb entscheidet der Status, und das Datum
+ * markiert nur den heutigen Tag.
+ */
+export function woche(sitzungen: Sitzung[], stichtag: string): Wochentag[] {
+  const start = wochenanfang(stichtag)
+  const jeDatum = new Map<string, Sitzung>()
+  for (const s of sitzungen) {
+    // Bei mehreren Sitzungen am selben Tag gewinnt die erste; die
+    // Kachel der Vorlage hat je Tag genau einen Platz.
+    if (!jeDatum.has(s.session_date)) jeDatum.set(s.session_date, s)
+  }
+
+  const tage: Wochentag[] = []
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(`${start}T12:00:00`)
+    d.setDate(d.getDate() + i)
+    const m = String(d.getMonth() + 1).padStart(2, '0')
+    const t = String(d.getDate()).padStart(2, '0')
+    const datum = `${d.getFullYear()}-${m}-${t}`
+    const s = jeDatum.get(datum) ?? null
+
+    let zustand: Wochentag['zustand']
+    if (!s) zustand = 'ruhe'
+    else if (s.status === 'cancelled') zustand = 'abgesagt'
+    else if (datum === stichtag) zustand = 'heute'
+    else if (s.status === 'planned') zustand = 'geplant'
+    else zustand = 'absolviert'
+
+    tage.push({ datum, kuerzel: KUERZEL[i], tag: d.getDate(), sitzung: s, zustand })
+  }
+  return tage
+}
