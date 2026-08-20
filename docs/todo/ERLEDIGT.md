@@ -5407,6 +5407,71 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `{CYP2C9_substrate, anticoagulant:warfarin, anticoagulant_vka}` —
   **die Vitamin-K-Regel liesse sich jetzt pruefen.**
 
+- [x] **C-131: Substanzstabile ID- und Aliasschicht** (neu 2026-08-19).
+  Zweiter Schritt aus C-129.
+
+  `[cmd]` **Drei Bestaende, kaum Ueberlappung:** unsere 44, F-05 mit
+  320, Kimi mit 237. **16 direkte Treffer gegen unsere 44, 53 gegen
+  F-05.**
+
+  `[read]` **Ohne gemeinsame ID laufen drei Kataloge nebeneinander** —
+  dieselbe Lage wie bei den Wechselwirkungen (28 CSV gegen 12 Spec) und
+  den Referenzbereichen (464 gegen 96).
+
+  `[cmd]` **Kimi liefert `aliases.json`** — pruefen, ob sie als Bruecke
+  taugt.
+
+  `[cmd]` **Erledigt 2026-08-19.** `supplements.substance_aliases` traegt
+  **1.132 Zeilen.**
+
+  | Bestandspaar | Treffer |
+  |---|---|
+  | LumeOS ↔ Kimi | **27** |
+  | F-05 ↔ Kimi | **100** |
+  | LumeOS ↔ F-05 | 23 |
+  | Kimi mit irgendeinem Treffer | **58 von 237** |
+  | **Kimi ohne Entsprechung** | **179** |
+
+  `[read]` **Die 179 sind der eigentliche Befund:** Drei Viertel des
+  Kimi-Bestands haben bei uns keine Entsprechung. **Das ist kein
+  Dublettenproblem, sondern ein Zuwachs.**
+
+- [x] **C-132: `missing_input` fuer Regeln** (neu 2026-08-19). Dritter
+  Schritt aus C-129.
+
+  `[read]` **Der wichtigste Punkt des ganzen Bestands:** Eine Regel, die
+  auf fehlende Daten trifft, **darf nicht stumm durchfallen.**
+
+  `[cmd]` **Gemessen: 18 von 29 Warnregeln sind teilweise auswertbar**,
+  10 von 15 Gap-Regeln. **Teilweise heisst heute: sie feuern nicht, und
+  niemand erfaehrt warum.**
+
+  `[read]` **Dieselbe Regel wie `NO_REFERENCE` bei den Naehrstoffen und
+  `insufficient_intake_days` beim TDEE:** Fehlen ist ein Zustand, kein
+  Nichtereignis.
+
+  `[cmd]` **Erledigt 2026-08-19** — und die Lage hat sich stark
+  gedreht:
+
+  | | vorher (C-128) | nachher |
+  |---|---|---|
+  | `warning_rules` (29) | 0 voll | **22 auswertbar**, 3 teilweise, 4 blockiert |
+  | `nutrient_gap_rules` (15) | 1 voll | 2 auswertbar, 3 teilweise, **10 blockiert** |
+  | `medication_rules` (20) | **0, alle blockiert** | **18 auswertbar**, 2 teilweise, **0 blockiert** |
+  | **gesamt** | 1 von 64 | **42 auswertbar** |
+
+  `[read]` **Die Medikamentenregeln waren der groesste Gewinn** — C-130
+  hat `medical.user_medications` gebaut, und damit fielen alle 20
+  Blockaden.
+
+  `[cmd]` **Die Gap-Regeln bleiben zurueck** — 10 von 15 blockiert.
+  `[read]` **Sie brauchen Naehrwertfelder**, die Nutrition so nicht
+  fuehrt: `fish_servings_week`, `dairy_servings_day`.
+
+  `[cmd]` **`kimi-rule-input-audit.ts` haengt in der Validierung** —
+  **die Zahl wird bei jedem Lauf neu gemessen**, statt in einem Bericht
+  zu veralten.
+
 
 
 ## Erledigt am 2026-08-05

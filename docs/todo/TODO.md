@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `6cab249` auf `dev`.
+**Stand:** 2026-08-18, Anker `9c33576` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -211,8 +211,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-126** | E2 braucht Toms Bestaetigung |  |
 | **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
-| **C-131** | Substanzstabile ID- und Aliasschicht |  |
-| **C-132** | `missing_input` fuer Regeln |  |
 | **C-133** | Die Warn- und Gap-Regeln uebernehmen |  |
 | **C-134** | Die Substanzen der drei Bestaende zusammenfuehren |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
@@ -230,6 +228,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **C-135** | Die Zielhistorie fehlt in den Seeds |  |
+| **C-138** | Der Kimi-Waechter stand auf genau 56 |  |
+| **C-139** | Die 503 Wirkstoffe sind nicht importierbar |  |
 
 ---
 
@@ -2611,33 +2611,7 @@ Umsetzen angepasst werden.
   Struktur muss sie tragen**, der erste Import nur die 56.
 
 
-- [ ] **C-131: Substanzstabile ID- und Aliasschicht** (neu 2026-08-19).
-  Zweiter Schritt aus C-129.
 
-  `[cmd]` **Drei Bestaende, kaum Ueberlappung:** unsere 44, F-05 mit
-  320, Kimi mit 237. **16 direkte Treffer gegen unsere 44, 53 gegen
-  F-05.**
-
-  `[read]` **Ohne gemeinsame ID laufen drei Kataloge nebeneinander** —
-  dieselbe Lage wie bei den Wechselwirkungen (28 CSV gegen 12 Spec) und
-  den Referenzbereichen (464 gegen 96).
-
-  `[cmd]` **Kimi liefert `aliases.json`** — pruefen, ob sie als Bruecke
-  taugt.
-
-- [ ] **C-132: `missing_input` fuer Regeln** (neu 2026-08-19). Dritter
-  Schritt aus C-129.
-
-  `[read]` **Der wichtigste Punkt des ganzen Bestands:** Eine Regel, die
-  auf fehlende Daten trifft, **darf nicht stumm durchfallen.**
-
-  `[cmd]` **Gemessen: 18 von 29 Warnregeln sind teilweise auswertbar**,
-  10 von 15 Gap-Regeln. **Teilweise heisst heute: sie feuern nicht, und
-  niemand erfaehrt warum.**
-
-  `[read]` **Dieselbe Regel wie `NO_REFERENCE` bei den Naehrstoffen und
-  `insufficient_intake_days` beim TDEE:** Fehlen ist ein Zustand, kein
-  Nichtereignis.
 
 - [ ] **C-133: Die Warn- und Gap-Regeln uebernehmen** (neu 2026-08-19).
   **Setzt C-130, C-131 und C-132 voraus.**
@@ -2949,3 +2923,51 @@ Umsetzen angepasst werden.
   **Wenn die Oberflaeche unformatiert aussieht oder Registerkarten nicht
   wechseln:** `[cmd]` **erst `.next` loeschen und neu starten**, bevor
   jemand den Code sucht.
+
+- [ ] **C-138: Der Kimi-Waechter stand auf genau 56** (neu 2026-08-19).
+  **Merkposten aus C-131.**
+
+  `[cmd]` **Der Kettenlauf war blockiert**, weil
+  `146_medications_katalog.ts` **exakt 56 Wirkstoffe erwartete** — die
+  Quelle ist inzwischen auf **503** gewachsen.
+
+  `[cmd]` **Auf *„mindestens 56"* geaendert.** `[read]` **Richtig, aber
+  es zeigt ein Muster:** Ein Waechter auf eine feste Zahl bricht, sobald
+  die Quelle waechst. **Und die Quelle soll wachsen** — Tom hat tausende
+  Medikamente angekuendigt.
+
+  **Zu pruefen:** `[cmd]` Wo stehen noch feste Zahlen als Erwartung?
+  `schema-sollstand.json` fuehrt Zeilenzahlen je Tabelle — **dieselbe
+  Falle.**
+
+  `[read]` **Die Gegenregel:** *Pruefung ohne Erwartung misst nichts* —
+  **aber eine Erwartung auf die Kommastelle misst die Quelle, nicht das
+  Ergebnis.**
+
+- [ ] **C-139: Die 503 Wirkstoffe sind nicht importierbar** (neu
+  2026-08-19). **Rueckmeldung an den Rechercheweg (A-21).**
+
+  `[cmd]` **Gemessen am 2026-08-19:** Von 56 auf 503 gewachsen — **dabei
+  fielen alle sieben Feldvertragsklassen weg.**
+
+  | | in den 503 |
+  |---|---|
+  | `anticoagulant:warfarin`, `SSRI`, `RAAS_inhibitor` | **je 0** |
+  | `CYP3A4_substrate`, `sedative`, `antidiabetic`, `MAOI` | **je 0** |
+  | `unclassified` | **224 von 503** |
+  | verschiedene Klassen | **171** |
+
+  `[cmd]` **Und die Kennungen bestaetigen es:** `ATC` und `CAS` stehen
+  auf **genau 56** — den alten. Die 447 neuen tragen `RxNorm` (447) und
+  `UNII` (425), **aber kein ATC.**
+
+  `[read]` **Deshalb steht der Import weiter auf 56.** Die 29 Warnregeln
+  pruefen `drug_class` — **gegen die 503 liefen sie ins Leere.**
+
+  `[read]` **ATC waere die Loesung:** Warfarin ist `B01AA03`, `B01A` ist
+  die Antithrombotika-Gruppe; Sertralin `N06AB06`, `N06AB` sind die
+  SSRI. **Mit vollstaendigem ATC ist die Zuordnung mechanisch
+  ableitbar.**
+
+  `[cmd]` **Die Rueckmeldung ist formuliert und an ChatGPT uebergeben**
+  (2026-08-19), zusammen mit vier Vorschlaegen fuer den QA-Lauf.
