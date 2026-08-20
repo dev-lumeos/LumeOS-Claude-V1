@@ -99,6 +99,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 072 | `07_lesefunktionen/072_normalisierung.sql` | `search_fold`, Ausdrucksindex | — |
 | 073 | `07_lesefunktionen/073_suchfilter.sql` | `food_search` samt Rangfunktionen | 1 Signatur |
 | 074 | `07_lesefunktionen/074_preferences_api.sql` | `food_preferences_read()` und `food_preferences_write()` fuer Nutrition-Preferences, ohne `food_search` zu veraendern | 2 Funktionen |
+| 075 | `07_lesefunktionen/075_preference_search_application.sql` | `food_search` mit optionaler Nutzer-Praeferenzanwendung; `p_user_id = NULL` bleibt ungefiltert | 1 Signatur, hard/strong/soft/boost wirksam |
 | 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
 | 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen und C-63 `locale` | v090: 17 Prüfungen |
 | 056a | `05_user_tabellen/056a_hydration_day.sql` | Funktion `hydration_day(user_id, date)` mit Tagesziel, Gläserzahl und 14-Tage-Vergleich | 1 Funktion |

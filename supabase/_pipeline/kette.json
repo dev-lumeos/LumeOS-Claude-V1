@@ -270,6 +270,13 @@
       "depends_on": ["054", "060"]
     },
     {
+      "id": "075",
+      "path": "supabase/_pipeline/07_lesefunktionen/075_preference_search_application.sql",
+      "kind": "sql",
+      "creates": "food_search mit optionaler Nutzer-Praeferenzanwendung: hard exclude, strong avoid, soft dislike und boost",
+      "depends_on": ["073", "074", "018", "032"]
+    },
+    {
       "id": "080",
       "path": "supabase/_pipeline/08_bereinigung/080_public_bereinigen.sql",
       "kind": "sql",
