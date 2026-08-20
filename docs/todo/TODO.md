@@ -217,7 +217,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
 | **G-85** | Der Health score haengt an zwei Unbekannten |  |
-| **C-142** | Die Sperrbegruendung nennt eine Tabelle, die es gibt |  |
+| **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
 | **A-23** | `lint` bricht repoweit ab |  |
 | **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
 | **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
@@ -235,8 +235,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-105** | Zwei abgeschnittene SVG-Pfade in `packages/ui` |  |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
-| **G-113** | Die Naehrstoffordnung braucht Klappen und Zeitfilter |  |
-| **G-114** | `daily_summary` fuehrt nur 33 der 138 Naehrstoffe |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -256,7 +254,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-159** | Sieben Regelpfade zeigen auf Schemata, die es nicht gibt |  |
 | **G-118** | Der Extended-Code liegt im Buendel |  |
 | **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
-| **G-119** | `supplements` ist das letzte Modul mit `useState`-Tab |  |
+| **G-124** | Die Medikamentenkachel braucht zehn Ueberwachungsspalten |  |
 | **G-120** | `updateWaterLogAmount` liegt fertig und ungenutzt |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 
@@ -931,6 +929,27 @@ Quelle und Belege: `docs/ssot/158-tab-zustand.md`.
   werden von MSYS umgewandelt (`/v2/nutrition` → `C:/Program
   Files/Git/...`); `MSYS_NO_PATHCONV=1` im Skriptkopf setzen oder
   dokumentieren.
+
+### G-121-Folgepunkte (Naehrstoffanzeige, 2026-08-20) — Nummern vergibt der Orchestrator
+
+Quelle und Belege: `docs/ssot/161-naehrstoffanzeige.md`.
+
+- [ ] **Die Ziele haengen am Stichtag:** `daily_reference_assessment`
+  liefert an einem Tag ohne Eintraege keine Zeilen — ein Zeitfenster,
+  das auf einem leeren Tag endet, zeigt Werte, aber keine Ziele.
+  Entweder die Referenzauswahl vom Tagesprotokoll entkoppeln (Codex)
+  oder in der Anzeige auf den letzten protokollierten Tag ausweichen.
+- [ ] **FAT und CHO haben nur Energie-Anteils-Referenzen** (`RI`,
+  `E%`, Richtung `range`, ohne Grammzahl) — die Zielspalte zeigt dort
+  bewusst einen Strich. Eine E%-Anzeige waere eine eigene Rechnung
+  (Energie des Tages noetig); Produktfrage.
+- [ ] **`test-user@lumeos.local` traegt eine Mahlzeit** (2026-08-16,
+  aus einem frueheren Nachweis) — Nullzustands-Messungen muessen sie
+  erst abraeumen oder einrechnen.
+- [ ] **C-161 (Codex): `parent_code` in `nutrient_defs`** — darauf
+  warten das Detail-Modal der Vorlage (Andockpunkt `waehlen` liegt in
+  den Zeilen) und der dann echte Trend je Naehrstoff aus der langen
+  Form.
 
 ### G-104-Folgepunkte (Preferences, 2026-08-20) — Nummern vergibt der Orchestrator
 
@@ -2911,7 +2930,26 @@ Umsetzen angepasst werden.
   Dashboard-Kachel markiert.
 
 
-- [ ] **C-142: Die Sperrbegruendung nennt eine Tabelle, die es gibt**
+- [x] **C-142: Die Sperrbegruendung nennt eine Tabelle, die es gibt**
+
+  **ERLEDIGT 2026-08-20** (G-123) — Bericht
+  `docs/ssot/162-recovery-rest.md`.
+
+  `[cmd]` **Es waren nicht zwei, sondern siebzehn.** Nach den zwei
+  genannten wurden alle `grund=`-Texte in `apps/web/src/app/v2/` gegen
+  `information_schema` geprueft (145 Tabellen).
+
+  **Neun nennen eine Tabelle, die es gibt** — darunter
+  `goals.user_goals` (11 Zeilen, **Schreibweg existiert**) und zweimal
+  *„das Schema `recovery` gibt es noch nicht"* auf einer Seite, die 170
+  Tage anzeigt.
+
+  **Acht stimmen halb:** die Tabelle fehlt wirklich, der Zusatz nicht
+  — `medical` fuehrt 11 Tabellen, `training` 8, `recovery` 3. Zweimal
+  hiess es, `/v2/medical` gebe es nicht.
+
+  `[read]` **Alle Sperren bleiben richtig** — gemessen fehlt jedes Mal
+  der Schreibweg. Was daraus folgt, steht als G-122 und G-124.
   (neu 2026-08-19). Befund aus G-84.
 
   `[cmd]` **`medical.user_medications` existiert** — 2 Zeilen, 124
@@ -3265,60 +3303,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Und der Ausschluss fehlt ganz** — C-120: *„kein
   Ausschluss-Parameter, die Allergen-Schalter wirken nur auf der
   angezeigten Seite."*
-
-- [ ] **G-113: Die Naehrstoffordnung braucht Klappen und Zeitfilter**
-  (neu 2026-08-20). Toms Befund zu G-101.
-
-  **Tom:** *„Schoen, dass nun alles da ist, aber das sollte schon alles
-  ein- und ausklappbar sein und standard eingeklappt."* Und: *„Nutrients
-  hat keine Zeitfilter, ein Tag interessiert niemanden — da muss 1 fuer
-  heute / 7 / 14 / 30 / 45 / 60 / 90 rein."*
-
-  `[cmd]` **12 Gruppen, 138 Naehrstoffe** — die Fettsaeuren allein 36
-  Zeilen. **Alles offen ist unlesbar.**
-
-  `[read]` **Und der Zeitfilter ist der wichtigere Teil:** Ein
-  Tagesmangel sagt nichts, **ein Schnitt ueber 30 Tage schon.** `[cmd]`
-  Der Auftrag G-101 nannte die Filter (*Today / 7d / 30d / 90d*) — sie
-  wurden nicht gebaut.
-
-  `[cmd]` **Teil 1 erledigt 2026-08-20 mit G-117.** **12 von 12 Gruppen
-  zu**, der Kopf traegt weiter *„N Eintraege · M mit Wert"*.
-
-  `[read]` *„Die Klappmechanik gab es seit G-101, nur der Standard war
-  „erste Gruppe offen"."*
-
-  `[cmd]` **Teil 2 — die Zeitfilter (1/7/14/30/45/60/90) — ist jetzt
-  baubar:** C-157 hat `nutrient_summary_window` geliefert, **30 Tage in
-  34 ms.** **Der Platz ist im Code markiert.**
-
-- [ ] **G-114: `daily_summary` fuehrt nur 33 der 138 Naehrstoffe** (neu
-  2026-08-20). **Der Grund fuer Toms Zweifel.**
-
-  **Tom:** *„Ob da wirklich alle Daten angezeigt werden, bezweifle ich —
-  ich denke, unsere Foods haben sehr wohl Aminosaeuren drin."*
-
-  `[cmd]` **Er hat recht. Gemessen:**
-
-  | Gruppe | Codes | Zeilen in `food_nutrients` |
-  |---|---|---|
-  | Fettsaeuren | 36 | **212.242** |
-  | **Aminosaeuren** | **19** | **131.584** |
-  | Fettloesliche Vitamine | 17 | 109.304 |
-  | Elemente | 16 | 105.918 |
-  | Wasserloesliche Vitamine | 12 | 83.696 |
-
-  `[cmd]` **7.107 von 7.140 Lebensmitteln tragen Aminosaeurewerte.**
-
-  `[read]` **Die Werte liegen je Lebensmittel vor** — **`daily_summary`
-  summiert sie nur nicht auf.** Der G-101-Bericht sagt es selbst:
-  *„`daily_summary` fuehrt keine Spalte dafuer."*
-
-  **Zu klaeren:** Waechst `daily_summary` auf 138 Spalten, oder wird
-  je Abfrage aus `meal_items` gerechnet? `[read]` **Das ist eine
-  Codex-Frage** — 105 fehlende Spalten sind kein Anzeigeproblem.
-
-
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
@@ -3757,7 +3741,54 @@ Umsetzen angepasst werden.
   selbst das passende Fenster — **Vitamin D ueber 90 Tage, Natrium ueber
   einen.**
 
-- [ ] **G-119: `supplements` ist das letzte Modul mit `useState`-Tab**
+- [ ] **G-122: Fuenf Tabellen mit Daten haben keinen Schreibweg**
+  (neu 2026-08-20, aus G-123).
+
+  `[cmd]` **Gemessen: gelesen ja, geschrieben nie.**
+
+  | Tabelle | Zeilen | gesperrter Knopf |
+  |---|---|---|
+  | `training.exercises` | **1.416** | „Eigene Uebung" |
+  | `goals.body_measurements` | **362** | Gewicht, Umfaenge |
+  | `recovery.checkins` | **340** | „Check-in" |
+  | `medical.lab_result_values` | **280** | „Eigener Messwert" |
+  | `recovery.modality_log` | **178** | „Log modality" |
+
+  `[read]` **Zwei brauchen vorher eine Entscheidung:** Bei der eigenen
+  Uebung die Abgrenzung (der Katalog ist geteilt, eine eigene waere es
+  nicht), beim eigenen Messwert die Unterscheidung von einem
+  Laborbefund.
+
+- [ ] **G-124: Die Medikamentenkachel braucht zehn Spalten**
+  (neu 2026-08-20, aus G-123).
+
+  `[cmd]` **`medical.user_medications` gibt es seit C-130** (21
+  Spalten, 2 Zeilen) — **aber keine der zehn, die die Kachel zeigt:**
+  `monitoring`, `monitoring_frequency`, `last_test`, `next_due`,
+  `monitoring_overdue`, `targets`, `side_effects`, `physician`, `rx`,
+  `prescription_ref`.
+
+  `[cmd]` **Vier der sechs Warnungen im Medical-Kopf** speisen sich aus
+  `next_due` und `monitoring_overdue`.
+
+  `[read]` **Ein Schreibweg allein genuegt hier nicht** — er wuerde
+  Medikamente speichern, waehrend die Kachel darueber weiter erfundene
+  Ueberwachungsdaten zeigt.
+
+- [x] **G-119: `supplements` ist das letzte Modul mit `useState`-Tab**
+
+  **ERLEDIGT 2026-08-20** (G-123) — Bericht
+  `docs/ssot/162-recovery-rest.md`.
+
+  `[cmd]` **Die beschriebene Zwei-Zeilen-Aenderung**: Import und
+  `useTabParam('today')`. **Fuenf Tabs ueber die Adresse
+  gegengeprueft** — `interactions`, `extended`, `compliance`, `cost`,
+  `catalog`.
+
+  `[read]` **Damit sind alle Module umgestellt** — und genau das hat
+  die Fehlersuche in Teil A moeglich gemacht: ohne `?tab=` haette sich
+  nicht zeigen lassen, dass die zwei SVG-Fehler nur auf den drei Tabs
+  mit Muskelkarte auftreten.
   (neu 2026-08-20). Rest aus G-117.
 
   `[cmd]` **Sechs Module nutzen `lib/tab-url.ts`**, Nutrition hatte das

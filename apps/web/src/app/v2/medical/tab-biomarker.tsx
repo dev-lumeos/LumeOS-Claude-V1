@@ -306,7 +306,7 @@ export function MedImport({ echt }: { echt: EchteDaten }) {
             <input aria-label="Notes" placeholder="Context, symptoms at time of test…"
                    style={{ ...FELD, marginBottom: 14 }} />
             <InEntwicklungKnopf titel="Save value" className="v2-btn v2-btn-primary"
-                                grund="Eigene Messwerte brauchen eine Tabelle medical.biomarker_results — das Schema gibt es noch nicht.">
+                                grund="Eigene Messwerte brauchen eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `medical.lab_result_values` (280 Zeilen); ein eigener Schreibweg fehlt.">
               <Icon name="check" className="v2-ic v2-ic-sm" />Save value
             </InEntwicklungKnopf>
           </div>

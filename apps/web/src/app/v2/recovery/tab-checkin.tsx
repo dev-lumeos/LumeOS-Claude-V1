@@ -178,7 +178,7 @@ export function RecCheckin() {
         <div style={{ display: 'flex', gap: 6, marginTop: 12 }}>
           <InEntwicklungKnopf
             titel="Save check-in" className="v2-btn v2-btn-primary"
-            grund="Der Check-in braucht eine Tabelle recovery.checkins — das Schema recovery gibt es noch nicht."
+            grund="`recovery.checkins` gibt es (29 Spalten, 340 Zeilen live) und der Score rechnet daraus. Was fehlt, ist der Schreibweg."
             style={{ flex: 1, justifyContent: 'center' }}
           >
             <Icon name="check" className="v2-ic v2-ic-sm" />Save check-in · recalculates score

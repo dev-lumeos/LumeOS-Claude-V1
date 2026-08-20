@@ -159,7 +159,7 @@ function ExtendedHeader() {
         <Icon name="bookmark" className="v2-ic v2-ic-sm" />Disclosure
       </InEntwicklungKnopf>
       <InEntwicklungKnopf titel="Open Medical"
-                          grund="Das Modul `/v2/medical` gibt es noch nicht."
+                          grund="Die Verknuepfung mit Medical ist nicht gebaut — das Modul selbst gibt es (`/v2/medical`, 140 Werte)."
                           className="v2-btn">
         <Icon name="medical" className="v2-ic v2-ic-sm" />Open Medical →
       </InEntwicklungKnopf>
@@ -315,7 +315,7 @@ function BloodworkPanel() {
       attrappe={ATTRAPPE}
       actions={
         <InEntwicklungKnopf titel="Open Medical"
-                            grund="Das Modul `/v2/medical` gibt es noch nicht."
+                            grund="Die Verknuepfung mit Medical ist nicht gebaut — das Modul selbst gibt es (`/v2/medical`, 140 Werte)."
                             className="v2-btn v2-btn-ghost v2-btn-sm">
           Open Medical <Icon name="arrow_right" className="v2-ic v2-ic-sm" />
         </InEntwicklungKnopf>

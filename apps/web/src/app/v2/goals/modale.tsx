@@ -129,7 +129,7 @@ function NewGoalModal({ onClose }: { onClose: () => void }) {
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
                 <InEntwicklungKnopf titel="Create goal" className="v2-btn v2-btn-primary"
-                                    grund="Ziele brauchen goals.user_goals — die Tabelle gibt es noch nicht (GO-07).">
+                                    grund="`goals.user_goals` gibt es (23 Spalten, 11 Zeilen live), und geschrieben wird sie bereits — `lib/goals/schreiben.ts` setzt Prioritaet und Status. Was fehlt, ist nur das ANLEGEN: es gibt genau drei aktive Plaetze (`user_goals_check1` 1–3 und `uq_user_goals_active_slot`), und welcher beim Anlegen frei wird, ist eine Produktentscheidung.">
                   <Icon name="check" className="v2-ic v2-ic-sm" />Create goal
                 </InEntwicklungKnopf>
               </>
@@ -316,7 +316,7 @@ function LogWeightModal({ onClose }: { onClose: () => void }) {
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
                 <InEntwicklungKnopf titel="Log" className="v2-btn v2-btn-primary"
-                                    grund="Gewichtsverlauf braucht goals.body_measurements — die Tabelle gibt es noch nicht (GO-10).">
+                                    grund="`goals.body_measurements` gibt es (17 Spalten, 362 Zeilen live) und wird gelesen. Was fehlt, ist der Schreibweg — eine eigene Messung eintragen kann die Oberflaeche noch nicht.">
                   <Icon name="check" className="v2-ic v2-ic-sm" />Log
                 </InEntwicklungKnopf>
               </>
@@ -353,7 +353,7 @@ function LogMeasureModal({ onClose }: { onClose: () => void }) {
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
                 <InEntwicklungKnopf titel="Save measurements" className="v2-btn v2-btn-primary"
-                                    grund="Umfaenge brauchen goals.body_measurements — die Tabelle gibt es noch nicht (GO-10).">
+                                    grund="`goals.body_measurements` gibt es (17 Spalten, 362 Zeilen live) und traegt auch die Umfaenge. Was fehlt, ist der Schreibweg.">
                   <Icon name="check" className="v2-ic v2-ic-sm" />Save measurements
                 </InEntwicklungKnopf>
               </>

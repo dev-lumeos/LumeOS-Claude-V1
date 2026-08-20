@@ -19,6 +19,8 @@
 import * as React from 'react'
 import { Card, Pill, Icon, Tabs, InEntwicklungKnopf, type TabItem } from '@lumeos/ui'
 
+// G-123: der Tab-Hook aus G-117.
+import { useTabParam } from '../../../lib/tab-url'
 import { STACK, EXTENDED_STACK } from './daten'
 import { SuppCtx, type ModalZustand, type ModalTyp } from './kontext'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
@@ -102,7 +104,16 @@ export function SupplementsAnsicht({
    */
   heute?: string | null
 }) {
-  const [tab, setTab] = React.useState('today')
+  // G-123: Tab in der Adresse — Drop-in aus lib/tab-url (G-117).
+  //
+  // `[cmd]` **`supplements` war das letzte Modul mit `useState`**
+  // (G-119). Sechs andere waren seit G-117 umgestellt, Nutrition hatte
+  // das Muster schon seit G-38.
+  //
+  // `[read]` Zwei Wirkungen: der Tab ueberlebt eine Navigation und ist
+  // verlinkbar — und `tools/schuss.mjs` kann einzelne Tabs messen,
+  // statt immer nur den ersten zu sehen.
+  const [tab, setTab] = useTabParam('today')
   const [modal, setModal] = React.useState<ModalZustand>(null)
 
   // G-74: Der Stichtag der Rechnungen. Kommt serverseitig; ohne ihn

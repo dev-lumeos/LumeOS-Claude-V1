@@ -693,7 +693,7 @@ export function PhaseEditorModal({ phaseId, onClose }: { phaseId: string; onClos
             <Icon name="copy" className="v2-ic v2-ic-sm" />Save as my template
           </InEntwicklungKnopf>
           <InEntwicklungKnopf titel="Apply to my plan" className="v2-btn v2-btn-primary"
-                              grund="Eigene Phasenparameter brauchen goals.goal_phases — die Tabelle gibt es noch nicht (GO-07).">
+                              grund="`goals.goal_phases` gibt es seit GO-07 (14 Spalten, 5 Zeilen live) und `parameters` ist ein jsonb, das eigene Werte aufnimmt. Was fehlt, ist der SCHREIBWEG: gelesen wird ueber `goals.phase_am`, geschrieben wird nirgends.">
             <Icon name="check" className="v2-ic v2-ic-sm" />Apply to my plan
           </InEntwicklungKnopf>
         </div>

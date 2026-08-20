@@ -139,7 +139,7 @@ export function ModalitaetenKachel({ stand }: { stand: ModalitaetenStand }) {
       <div className="v2-col-gap" style={{ gap: 4 }}>
         {stand.jeArt.map(a => (
           <div key={a.art} style={{
-            display: 'grid', gridTemplateColumns: '110px 1fr 60px',
+            display: 'grid', gridTemplateColumns: '110px 1fr 60px 68px',
             alignItems: 'center', gap: 8, fontSize: 11.5,
           }}>
             <span style={{ color: 'var(--fg-muted)' }}>{label(a.art)}</span>
@@ -153,8 +153,39 @@ export function ModalitaetenKachel({ stand }: { stand: ModalitaetenStand }) {
             <span className="v2-num v2-dim" style={{ textAlign: 'right', fontSize: 10.5 }}>
               {a.anzahl}{a.minutenSchnitt != null ? ` · ${a.minutenSchnitt}′` : ''}
             </span>
+            {/*
+              G-123, C-153: der GEMESSENE Unterschied am Folgetag.
+
+              `[read]` **Kein Urteil, kein Vorzeichen als Wertung.** Die
+              Zahl steht da, wie sie gerechnet wurde: Erholungswert am
+              Tag danach minus Erholungswert am Tag selbst, gemittelt.
+              Ob +2,8 „gut" ist, sagt die Kachel nicht.
+            */}
+            <span
+              className="v2-num"
+              style={{
+                textAlign: 'right', fontSize: 10.5,
+                color: a.deltaSchnitt == null
+                  ? 'var(--fg-dim)'
+                  : a.deltaSchnitt > 0 ? 'var(--pos)' : 'var(--fg-muted)',
+              }}
+              title={a.deltaSchnitt == null
+                ? 'Kein Folgetagswert erfasst'
+                : `Schnitt aus ${a.mitDelta} Messung${a.mitDelta === 1 ? '' : 'en'}`}
+            >
+              {a.deltaSchnitt == null
+                ? '—'
+                : `${a.deltaSchnitt > 0 ? '+' : ''}${a.deltaSchnitt.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            </span>
           </div>
         ))}
+      </div>
+      <div className="v2-dim" style={{ fontSize: 10, marginTop: 6, lineHeight: 1.45 }}>
+        Die rechte Spalte ist der <strong>gemessene</strong> Unterschied
+        des Erholungswerts am Folgetag (C-153) — Tag danach minus Tag
+        selbst, über alle erfassten Fälle gemittelt.{' '}
+        <span className="v2-mono">next_day_score_delta</span>, nicht die
+        Selbsteinschätzung.
       </div>
 
       {/* `[read]` Der Hinweis steht DA, wo die Null steht. */}

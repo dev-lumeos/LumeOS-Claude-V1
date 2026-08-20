@@ -31,6 +31,32 @@ const FELD_MONO: React.CSSProperties = {
 
 // ═══ TAB 4 · TRACKING ════════════════════════════════════════════
 // [cmd] module-medical-v2.jsx:471-629.
+/**
+ * Warum „Add medication" noch gesperrt ist (G-123, berichtigt C-142).
+ *
+ * `[cmd]` **Die alte Begruendung war falsch.** Sie nannte
+ * `medical.medications` — *„das Schema gibt es noch nicht."*
+ * **`medical.user_medications` gibt es seit C-130**, mit 21 Spalten und
+ * 2 Zeilen live.
+ *
+ * `[cmd]` **Was wirklich fehlt, sind die Ueberwachungsspalten.** Die
+ * Kachel der Vorlage zeigt je Medikament `monitoring`,
+ * `monitoring_frequency`, `last_test`, `next_due`,
+ * `monitoring_overdue`, `targets`, `side_effects`, `physician` und
+ * `rx` — **keine einzige davon steht in der Tabelle** (gegen
+ * `information_schema` geprueft, 2026-08-20).
+ *
+ * `[read]` Aus `next_due` und `monitoring_overdue` speisen sich vier
+ * der sechs Warnungen im Kopf des Moduls. **Ohne sie waere ein
+ * Schreibweg zwar moeglich, die Kachel darueber aber weiter erfunden.**
+ */
+const MEDIKAMENT_GRUND =
+  '`medical.user_medications` gibt es seit C-130 (21 Spalten, 2 Zeilen). '
+  + 'Was fehlt, sind die Ueberwachungsspalten der Kachel: monitoring, '
+  + 'monitoring_frequency, last_test, next_due, monitoring_overdue, targets, '
+  + 'side_effects, physician, rx — keine davon ist in der Tabelle. Aus '
+  + 'next_due und monitoring_overdue kommen vier der sechs Warnungen.'
+
 export function MedTracking() {
   const { open } = useMedical()
   const [sub, setSub] = React.useState<string>('symptoms')
@@ -61,7 +87,7 @@ export function MedTracking() {
         )}
         {sub === 'medications' && (
           <InEntwicklungKnopf titel="Add medication" className="v2-btn v2-btn-primary"
-                              grund="Medikamente brauchen eine Tabelle medical.medications — das Schema gibt es noch nicht.">
+                              grund={MEDIKAMENT_GRUND}>
             <Icon name="plus" className="v2-ic v2-ic-sm" />Add medication
           </InEntwicklungKnopf>
         )}
@@ -586,7 +612,7 @@ export function MedInsights() {
               <InEntwicklungKnopf titel="CSV" className="v2-btn v2-btn-sm" style={{ flex: 1 }}>CSV</InEntwicklungKnopf>
             </div>
             <InEntwicklungKnopf titel="Generate report" className="v2-btn v2-btn-primary"
-                                grund="Der Arztbericht braucht echte Messwerte — das Schema medical gibt es noch nicht."
+                                grund="Der Arztbericht braucht einen Ausgabeweg (PDF). Die Messwerte liegen vor — `medical.lab_result_values`, 280 Zeilen."
                                 style={{ width: '100%', justifyContent: 'center' }}>
               <Icon name="download" className="v2-ic v2-ic-sm" />Generate report
             </InEntwicklungKnopf>

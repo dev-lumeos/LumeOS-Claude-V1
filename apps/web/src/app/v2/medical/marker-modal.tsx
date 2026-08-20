@@ -98,7 +98,7 @@ export function MarkerReihenModal({ r, onClose }: { r: MarkerReihe; onClose: () 
           <InEntwicklungKnopf
             titel="Add value"
             className="v2-btn"
-            grund="Eigene Messwerte brauchen einen Schreibpfad in medical.lab_result_values — den gibt es noch nicht."
+            grund="`medical.lab_result_values` gibt es (27 Spalten, 280 Zeilen live) und wird gelesen. Was fehlt, ist der Schreibweg — und die Frage, wie ein selbst eingetragener Wert von einem Laborbefund zu unterscheiden ist."
           >
             <Icon name="plus" className="v2-ic v2-ic-sm" />Add value
           </InEntwicklungKnopf>

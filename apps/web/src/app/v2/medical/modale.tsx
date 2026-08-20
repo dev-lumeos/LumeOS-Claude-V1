@@ -422,7 +422,7 @@ function LogSymptomModal({ onClose }: { onClose: () => void }) {
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
               <InEntwicklungKnopf titel="Log symptom" className="v2-btn v2-btn-primary"
-                                  grund="Symptome brauchen eine Tabelle medical.symptoms — das Schema gibt es noch nicht.">
+                                  grund="Symptome brauchen eine Tabelle medical.symptoms — die gibt es nicht. Das Schema `medical` steht (11 Tabellen), diese eine fehlt.">
                 <Icon name="check" className="v2-ic v2-ic-sm" />Log symptom
               </InEntwicklungKnopf>
             </>
@@ -660,7 +660,7 @@ function OCRReviewModal({ onClose }: { onClose: () => void }) {
                 {auto.length + review.length} values will be saved
               </span>
               <InEntwicklungKnopf titel="Confirm + save" className="v2-btn v2-btn-primary"
-                                  grund="Der Import braucht eine Tabelle medical.biomarker_results — das Schema gibt es noch nicht.">
+                                  grund="Der Import braucht eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `medical.lab_result_values` (280 Zeilen); ein eigener Schreibweg fehlt.">
                 <Icon name="check" className="v2-ic v2-ic-sm" />Confirm + save
               </InEntwicklungKnopf>
             </>
@@ -748,7 +748,7 @@ function ManualEntryModal({ onClose }: { onClose: () => void }) {
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
               <InEntwicklungKnopf titel="Save value" className="v2-btn v2-btn-primary"
-                                  grund="Eigene Messwerte brauchen eine Tabelle medical.biomarker_results — das Schema gibt es noch nicht.">
+                                  grund="Eigene Messwerte brauchen eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `medical.lab_result_values` (280 Zeilen); ein eigener Schreibweg fehlt.">
                 <Icon name="check" className="v2-ic v2-ic-sm" />Save value
               </InEntwicklungKnopf>
             </>
@@ -795,7 +795,7 @@ function DoctorExportModal({ onClose }: { onClose: () => void }) {
                 <Icon name="share" className="v2-ic v2-ic-sm" />Share link (30d)
               </InEntwicklungKnopf>
               <InEntwicklungKnopf titel="Generate PDF" className="v2-btn v2-btn-primary"
-                                  grund="Der Arztbericht braucht echte Messwerte — das Schema medical gibt es noch nicht.">
+                                  grund="Der Arztbericht braucht einen Ausgabeweg (PDF). Die Messwerte liegen vor — `medical.lab_result_values`, 280 Zeilen.">
                 <Icon name="download" className="v2-ic v2-ic-sm" />Generate PDF
               </InEntwicklungKnopf>
             </>

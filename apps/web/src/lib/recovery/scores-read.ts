@@ -176,6 +176,15 @@ export type Modalitaet = {
   next_day_effect: number | null
   bonus_value: number
   bonus_source: string | null
+  /**
+   * Der GEMESSENE Unterschied am Folgetag (C-153).
+   *
+   * `[read]` **Nicht zu verwechseln mit `next_day_effect`:** das ist
+   * die Selbsteinschaetzung 1–10 („wie ging es dir tags darauf"),
+   * dies hier die Differenz der beiden Erholungswerte. **Die eine ist
+   * ein Gefuehl, die andere eine Rechnung.**
+   */
+  next_day_score_delta: number | null
 }
 
 export type ModalitaetenStand = {
@@ -184,14 +193,24 @@ export type ModalitaetenStand = {
   /** Alle geladenen, juengste zuerst. */
   zeilen: Modalitaet[]
   gesamt: number
-  /** Wie oft je Art — fuer die Uebersicht. */
-  jeArt: Array<{ art: string; anzahl: number; minutenSchnitt: number | null }>
+  /**
+   * Wie oft je Art, mit Dauer und dem GEMESSENEN Folgetagsunterschied.
+   *
+   * `[cmd]` G-123: `deltaSchnitt` kommt aus `next_day_score_delta`
+   * (C-153) — auf `dev` etwa Sauna **+2,76**, Eisbad **−0,07**.
+   */
+  jeArt: Array<{
+    art: string; anzahl: number; minutenSchnitt: number | null
+    deltaSchnitt: number | null; mitDelta: number
+  }>
   fehler: string | null
 }
 
 const MOD_SPALTEN = [
   'entry_date', 'logged_time', 'modality_type', 'duration_min', 'detail',
   'immediate_effect', 'next_day_effect', 'bonus_value', 'bonus_source',
+  // G-123: seit C-153 gefuellt (89 von 89 auf `dev`).
+  'next_day_score_delta',
 ].join(',')
 
 /**
@@ -237,15 +256,25 @@ export async function ladeModalitaeten(grenze = 120): Promise<ModalitaetenStand>
         next_day_effect: zahl(roh.next_day_effect),
         bonus_value: zahl(roh.bonus_value) ?? 0,
         bonus_source: (roh.bonus_source as string) ?? null,
+        next_day_score_delta: zahl(roh.next_day_score_delta),
       }
     })
 
     const juengster = zeilen[0]?.entry_date ?? null
-    const zaehler = new Map<string, { n: number; min: number; mitMin: number }>()
+    const zaehler = new Map<string, {
+      n: number; min: number; mitMin: number; delta: number; mitDelta: number
+    }>()
     for (const z of zeilen) {
-      const e = zaehler.get(z.modality_type) ?? { n: 0, min: 0, mitMin: 0 }
+      const e = zaehler.get(z.modality_type)
+        ?? { n: 0, min: 0, mitMin: 0, delta: 0, mitDelta: 0 }
       e.n += 1
       if (z.duration_min != null) { e.min += z.duration_min; e.mitMin += 1 }
+      // `[read]` Nur die gefuellten mitteln — eine fehlende Messung ist
+      // keine Null, sondern eine fehlende Messung.
+      if (z.next_day_score_delta != null) {
+        e.delta += z.next_day_score_delta
+        e.mitDelta += 1
+      }
       zaehler.set(z.modality_type, e)
     }
 
@@ -258,6 +287,10 @@ export async function ladeModalitaeten(grenze = 120): Promise<ModalitaetenStand>
           art,
           anzahl: e.n,
           minutenSchnitt: e.mitMin > 0 ? Math.round(e.min / e.mitMin) : null,
+          deltaSchnitt: e.mitDelta > 0
+            ? Math.round((e.delta / e.mitDelta) * 100) / 100
+            : null,
+          mitDelta: e.mitDelta,
         }))
         .sort((a, b) => b.anzahl - a.anzahl),
       fehler: null,

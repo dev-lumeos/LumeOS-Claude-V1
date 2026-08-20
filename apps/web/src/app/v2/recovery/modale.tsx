@@ -134,7 +134,7 @@ function HRVMeasureModal({ onClose }: { onClose: () => void }) {
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Discard</button>
                 <InEntwicklungKnopf titel="Save · 64 ms" className="v2-btn v2-btn-primary"
-                                    grund="Messwerte brauchen eine Tabelle recovery.hrv_readings — das Schema recovery gibt es noch nicht.">
+                                    grund="Messwerte brauchen eine Tabelle recovery.hrv_readings — die gibt es nicht. HRV steht heute in `recovery.checkins.hrv_rmssd` (43 von 170 Tagen).">
                   <Icon name="check" className="v2-ic v2-ic-sm" />Save · 64 ms
                 </InEntwicklungKnopf>
               </>
@@ -259,7 +259,7 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
               <InEntwicklungKnopf titel={`Log · +${MODALITY_BONUS[type]} bonus`} className="v2-btn v2-btn-primary"
-                                  grund="Modalitaeten brauchen eine Tabelle recovery.modality_log — das Schema recovery gibt es noch nicht.">
+                                  grund="`recovery.modality_log` gibt es (17 Spalten, 178 Zeilen live) und die Kachel liest sie. Was fehlt, ist der Schreibweg.">
                 <Icon name="check" className="v2-ic v2-ic-sm" />Log · +{MODALITY_BONUS[type]} bonus
               </InEntwicklungKnopf>
             </>
@@ -486,7 +486,7 @@ function ProtocolDetailModal({ p, onClose }: { p: Protocol; onClose: () => void 
                 )
                 : (
                   <InEntwicklungKnopf titel="Activate protocol" className="v2-btn v2-btn-primary"
-                                      grund="Protokolle brauchen eine Tabelle recovery.protocols — das Schema recovery gibt es noch nicht.">
+                                      grund="Protokolle brauchen eine Tabelle recovery.protocols — die gibt es nicht. Das Schema `recovery` steht (3 Tabellen), diese eine fehlt.">
                     <Icon name="play" className="v2-ic v2-ic-sm" />Activate protocol
                   </InEntwicklungKnopf>
                 )}
