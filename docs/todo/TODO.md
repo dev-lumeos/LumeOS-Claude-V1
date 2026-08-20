@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `74116e4` auf `dev`.
+**Stand:** 2026-08-18, Anker `9b65cb1` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -223,7 +223,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
 | **G-88** | Die Sitzungskarte auf `Today` |  |
 | **A-24** | Attrappenmarken sind kein brauchbares Mass |  |
-| **GO-21** | Taille:Huefte hat eine belegte Schwelle |  |
+| **GO-21** | Taille:Huefte mit Geschlechtsbezug |  |
 | **C-146** | `phase_am()` liefert 8 von 14 Spalten |  |
 | **G-89** | Die Idealwerte stehen nur in Begleitdateien |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -1422,6 +1422,23 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Vorschlag: C-105 und C-124 als ein Auftrag** — dieselbe
   Literatur, dieselben Zeitschriften, **zusammen fuenf Kacheln.**
+
+  ### Klasse A — Nachtrag 2026-08-19
+
+  `[cmd]` **G-89: Koerperproportionen.** 1.618, V-Taper und der
+  Reeves-Wert stehen nur in `theme-v1/uploads/` — **Begleitdateien, keine
+  Spezifikation.** *„`daten.ts:438` gibt fest 88 zurueck."*
+
+  `[read]` **Zu recherchieren:** Gibt es belegte Referenzwerte fuer
+  Koerperproportionen im Kraftsport — oder ist das durchweg Tradition
+  ohne Datengrundlage? **Beide Antworten sind brauchbar.** WHO 2008 zu
+  Taille:Huefte zeigt, dass es fuer manche Verhaeltnisse Belege gibt.
+
+  `[cmd]` **C-145: Trainingsplanung.** *„Bloecke, Wochen mit Phasenzweck,
+  Routinen mit Herkunft"* — **welche Strukturen sind in der
+  Trainingsliteratur ueblich?** Periodisierung, Mesozyklen,
+  Undulating gegen Block. `[read]` **Das entscheidet das Schema**, und
+  ein falsches Schema kostet mehr als die Recherche.
 
   ### Klasse B — Datenluecken im bestehenden Format
 
@@ -2818,20 +2835,26 @@ Umsetzen angepasst werden.
   (G-79) und *„Kreatin 30 Tage"* (G-74). **Und *„200 Saetze"* war auch
   falsch: es sind 101.**
 
-- [ ] **GO-21: Taille:Huefte hat eine belegte Schwelle** (neu
-  2026-08-19). **Entscheidung fuer Tom.** Befund aus G-87.
+- [ ] **GO-21: Taille:Huefte mit Geschlechtsbezug** (entschieden
+  2026-08-19). Befund aus G-87.
 
-  `[cmd]` **Der einzige Kandidat mit Quelle:** WHO 2008 — **unter 0,90
-  bei Maennern, unter 0,80 bei Frauen.** Im Vorgaengerrepo hinterlegt.
+  **Tom, 2026-08-19: mit Geschlechtsbezug zeigen.**
 
-  `[cmd]` **Toms Wert am 2026-08-19: 0,860.**
+  `[cmd]` **Die Quelle:** WHO 2008 — **unter 0,90 bei Maennern, unter
+  0,80 bei Frauen.** Im Vorgaengerrepo hinterlegt.
 
-  `[read]` **Der Agent hat sie bewusst nicht gebaut:** *„Ein Grenzwert,
-  der Geschlecht voraussetzt, ist eine Produktentscheidung."*
+  `[cmd]` **Toms Wert am 2026-08-19: 0,860** — unter der Maennerschwelle.
 
-  **Zu entscheiden:** Zeigen mit Geschlechtsbezug, zeigen ohne, oder
-  weglassen? `[cmd]` **`public.profiles` traegt das Geschlecht** —
-  technisch geht es.
+  `[cmd]` **`public.profiles` traegt das Geschlecht**, technisch geht
+  es.
+
+  `[read]` **Und die Sprachregel gilt:** *„Unter dem Grenzwert"* ist eine
+  Lage, *„gesund"* ein Urteil. **Mit Quelle und Jahr daneben**, wie bei
+  den Biomarker-Bereichen.
+
+  **Was fehlt:** `[read]` Was, wenn das Geschlecht nicht gesetzt ist?
+  **Dann keine Schwelle, nur das Verhaeltnis** — wie `fasting_status`,
+  das nur erscheint, wenn es belegt ist.
 
 - [ ] **C-146: `phase_am()` liefert 8 von 14 Spalten** (neu
   2026-08-19). Befund aus G-87.
