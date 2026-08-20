@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `b850321` auf `dev`.
+**Stand:** 2026-08-18, Anker `5a10abd` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -202,7 +202,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
 | **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
-| **G-59** | Welche Knoepfe gehoeren in den Modulkopf |  |
+| **G-59** | Der Modulkopf — entschieden |  |
 | **G-61** | `refillUrgent` als Schwelle |  |
 | **G-62** | Die 17 Marken in `tabs.tsx` bleiben 17 |  |
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
@@ -2263,7 +2263,17 @@ Umsetzen angepasst werden.
   geschlossen** — 16 Eintraege mit `nutrients_provided`. **Aber das ist
   die Recherche-Datei, nicht der Live-Katalog.**
 
-  `[read]` **Was zu entscheiden ist:** Wie viel des Bestands wird
+  `[read]` **Zurueckgestellt (Tom, 2026-08-19):** *„onhold. Kimi3 macht im
+  Moment nichts anderes als Daten sammeln, du kriegst bald eine
+  komplette Supplementliste detailliert und eine Medikamentenliste
+  detailliert."*
+
+  `[read]` **Die Medikamentenliste ist der interessantere Teil** —
+  C-108 hat gemessen, dass **6 der 12 Spec-Wechselwirkungen
+  Supplement×Medikament sind** (Warfarin, SSRIs, Pille) **und ein
+  Medikationsmodell brauchen, das Medical nicht fuehrt.**
+
+  **Alt:** Wie viel des Bestands wird
   uebernommen? **320 Zeilen ohne Kuration sind kein Katalog** — und
   200 davon sind PED, was C-113 beruehrt.
 
@@ -2468,19 +2478,50 @@ Umsetzen angepasst werden.
   **Betrifft G-56** (die `packages/ui`-Reste) und jede kuenftige
   Kontrastmessung. `[cmd]` Sieben von acht Modulen sind noch Attrappe.
 
-- [ ] **G-59: Welche Knoepfe gehoeren in den Modulkopf** (neu
-  2026-08-18). **Entscheidung fuer Tom.** Rest aus G-56.
+- [ ] **G-59: Der Modulkopf — entschieden** (neu gefasst 2026-08-19).
+  **Toms Vorgaben vom 2026-08-19.**
 
-  `[cmd]` Der Umbruch ist entschaerft, **aber die Frage bleibt:** sechs
-  Aktionsknoepfe plus Datumsnavigation gegen **vier in der Vorlage.**
+  ### Drei Aenderungen
 
-  `[read]` **Der Vorschlag des Agenten:** *„Die Datumsnavigation ist ein
-  Zustand, keine Aktion, und saesse besser unter dem Kopf auf
-  Tab-Leisten-Hoehe — das braechte die Zeile bei 1600 px zurueck auf
-  eine."*
+  `[cmd]` **1. Die Datumsnavigation wird zentriert** — `‹ Heute ›`
+  steht heute rechts neben den Aktionsknoepfen.
 
-  **Nicht gebaut** — `[read]` *„das ist eine Layout-Entscheidung, kein
-  Aufraeumen."* Richtig so.
+  `[cmd]` **2. Das Datum links faellt weg** — *„Donnerstag, 20. August
+  2026"* als Pille neben dem Modulnamen. **Tom:** *„datum links kann
+  raus, haben wir ja in der Mitte."*
+
+  `[cmd]` **3. `BLS 4.0 · Max Rubner-Institut` faellt aus der
+  Kopfzeile.** **Tom:** *„wir muessen der Konkurrenz ja nicht mitteilen,
+  mit was fuer Daten wir arbeiten, und der User hat eh keinen Plan, was
+  das ist."*
+
+  ### Die Quelle bleibt, nur nicht im Kopf
+
+  **Tom, 2026-08-19:** *„ok als Quelle, aber das heisst nicht, dass wir
+  es im Header so provokant publizieren muessen."*
+
+  `[cmd]` **Die `BLS`-Marke in der Trefferliste bleibt** — Spalte
+  `SOURCE`. `[read]` **Dort trennt sie Katalog von eigenen
+  Lebensmitteln** (`foods_custom`), und das wird gebraucht, sobald es
+  eigene gibt.
+
+  ### Vor dem Bauen zu pruefen: die Lizenz
+
+  `[read]` **Der BLS koennte eine Quellenangabe verlangen** — wie
+  LOINC. `[cmd]` **Dort steht der Urhebervermerk in jeder der acht
+  Datendateien, nicht in der Oberflaeche** (C-70).
+
+  **Dasselbe waere hier moeglich:** Vermerk in den Datendateien, die
+  Seite sagt es nicht. `[cmd]` **Das gehoert geprueft, bevor es
+  ueberall verschwindet** — nicht nur der Kopf, auch
+  `/v2/nutrition/suche` nennt *„Volltextsuche ueber den BLS-Bestand"*.
+
+  ### Der urspruengliche Vorschlag bleibt liegen
+
+  `[read]` **G-56 schlug vor:** *„Die Datumsnavigation ist ein Zustand,
+  keine Aktion, und saesse besser unter dem Kopf auf
+  Tab-Leisten-Hoehe."* **Tom hat sich fuer zentrieren entschieden** —
+  der Umbruch ist damit entschaerft, ohne die Zeile zu verlassen.
 
 - [ ] **G-61: `refillUrgent` als Schwelle** (neu 2026-08-18).
   **Entscheidung fuer Tom.** Vorlage aus G-37.
