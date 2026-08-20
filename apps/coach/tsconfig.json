@@ -1,0 +1,60 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "target": "es2017",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "incremental": false,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@lumeos/shared": [
+        "../../packages/shared/src/index.ts"
+      ],
+      "@lumeos/shared/session": [
+        "../../packages/shared/src/supabase/session.ts"
+      ],
+      "@lumeos/shared/auth/safe-redirect": [
+        "../../packages/shared/src/auth/safe-redirect.ts"
+      ],
+      "@lumeos/shared/cookie-name": [
+        "../../packages/shared/src/supabase/cookie-name.ts"
+      ],
+      "@lumeos/ui": [
+        "../../packages/ui/src/index.ts"
+      ],
+      "next/headers": [
+        "./node_modules/next/headers.d.ts"
+      ]
+    },
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next-gate/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

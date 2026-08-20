@@ -1,0 +1,215 @@
+/* Coach-Portal — eigene Klassen unter "cp-", damit keine Regel die
+   v2-Bausteine aus @lumeos/ui trifft. */
+
+.cp-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 20px 48px;
+}
+
+.cp-kopf {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 6px 0 14px;
+}
+
+.cp-kopf h1 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.cp-kopf .cp-konto {
+  margin-left: auto;
+  color: var(--fg-subtle);
+  font-size: 11px;
+}
+
+/* Tab-Leiste als Links: serverseitig gerendert, kein Client-JS. */
+.cp-tabs {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 14px;
+}
+
+.cp-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.cp-tab:hover { color: var(--fg); background: var(--surface-hover); }
+
+.cp-tab.cp-aktiv {
+  color: var(--fg);
+  border-bottom-color: var(--acc);
+}
+
+.cp-zaehler {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: var(--surface-2);
+  border-radius: 999px;
+  padding: 1px 6px;
+}
+
+.cp-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.cp-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cp-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cp-grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.cp-grid-15 { grid-template-columns: 1.5fr 1fr; }
+
+@media (max-width: 900px) {
+  .cp-grid-2, .cp-grid-3, .cp-grid-4, .cp-grid-15 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.cp-tabelle-huelle { overflow-x: auto; }
+
+.cp-tabelle {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.cp-tabelle th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cp-tabelle td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.cp-tabelle tr:hover td { background: var(--surface-hover); }
+
+.cp-stapel { display: flex; flex-direction: column; gap: 14px; }
+.cp-zeile { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.cp-formular label {
+  display: block;
+  font-size: 11px;
+  color: var(--fg-muted);
+  margin-bottom: 8px;
+}
+
+.cp-formular input,
+.cp-formular select,
+.cp-formular textarea {
+  display: block;
+  width: 100%;
+  margin-top: 3px;
+  padding: 7px 9px;
+  font: inherit;
+  font-size: 12px;
+  color: var(--fg);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-sizing: border-box;
+}
+
+.cp-knopf {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--fg);
+}
+
+.cp-knopf:hover { background: var(--surface-hover); }
+
+.cp-knopf-primaer {
+  background: var(--acc);
+  border-color: var(--acc);
+  color: var(--bg);
+}
+
+.cp-hinweis {
+  font-size: 11px;
+  color: var(--fg-subtle);
+  margin: 6px 0 0;
+}
+
+.cp-monospace { font-family: var(--font-mono); }
+
+.cp-diff {
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Anmeldung */
+.coach-login {
+  max-width: 22rem;
+  margin: 4rem auto;
+  padding: 0 1.5rem;
+}
+
+.coach-login h1 { font-size: 1.15rem; margin: 0 0 1rem; }
+
+.coach-login label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 12px;
+  color: var(--fg-muted);
+}
+
+.coach-login input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  font: inherit;
+  color: var(--fg);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-sizing: border-box;
+}
+
+.coach-login button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font: inherit;
+  border-radius: var(--radius-sm);
+  background: var(--acc);
+  color: var(--bg);
+  cursor: pointer;
+}
+
+.coach-login-fehler { color: var(--neg); font-size: 12px; margin: 0 0 0.75rem; }
+.coach-login-hinweis { margin-top: 1rem; color: var(--fg-subtle); font-size: 0.8rem; }
