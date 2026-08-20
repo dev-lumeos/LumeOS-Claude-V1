@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `b08777d` auf `dev`.
+**Stand:** 2026-08-18, Anker `608a46d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -226,7 +226,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-21** | Taille:Huefte mit Geschlechtsbezug |  |
 | **C-146** | `phase_am()` liefert 8 von 14 Spalten |  |
 | **G-89** | Die Idealwerte stehen nur in Begleitdateien |  |
-| **G-92** | Das Extended-Gate schuetzt nichts |  |
+| **G-117** | Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad |  |
 | **C-149** | Vitamin D in IU gegen µg |  |
 | **G-95** | Sieben Module, aber nicht dieselben sieben |  |
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
@@ -254,7 +254,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
 | **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
 | **C-158** | Der Gap-Score braucht maschinenlesbare Naehrstoffcodes |  |
-| **G-116** | `ultra_processed` filtert hart, ohne es zu zeigen |  |
+| **G-116** | Generelle Ausschluesse bewerten mit 0, statt zu filtern |  |
 
 ---
 
@@ -3071,7 +3071,45 @@ Umsetzen angepasst werden.
   waere eine Bewertung.
 
 
-- [ ] **G-92: Das Extended-Gate schuetzt nichts** (neu 2026-08-20).
+- [ ] **G-117: Der Extended-Code liegt im Buendel, auch ohne
+  Erfahrungsgrad** (neu 2026-08-20, aus G-110).
+
+  `[cmd]` **Das Gate haelt die Daten, nicht den Code.** Gemessen: bei
+  statischem Import steht „Active protocols" in **einem von sieben**
+  JS-Chunks der Seite — auch fuer jemanden, dessen Grad nicht reicht.
+
+  `[cmd]` **Ein `dynamic({ ssr: false })` behebt es** (der Chunk war
+  danach nicht mehr im Seitenmanifest) — **und macht den Tab leer:** er
+  zeigte gar nichts mehr, auch nicht den Ladehinweis. **Zurueckgenommen.**
+
+  `[read]` **Wie schwer es wiegt:** Die Protokolle selbst kommen NICHT
+  mit — nur die Attrappenzahlen des Entwurfs. Wer den Code liest,
+  erfaehrt nichts ueber den Nutzer. **Sobald Extended echte Daten
+  fuehrt, wird es ernst.**
+
+- [x] **G-92: Das Extended-Gate schuetzt nichts** (neu 2026-08-20).
+
+  **ERLEDIGT 2026-08-20** (G-110) — Bericht
+  `docs/ssot/156-supplements-interactions.md`.
+
+  `[cmd]` **Das innere `useState`-Gate ist entfernt.** Die Entscheidung
+  faellt jetzt in `ansicht.tsx` gegen `profiles.experience_level`
+  (C-140) — **bevor `SuppExtended` gerendert wird.**
+
+  `[cmd]` **Stufe fuer Stufe gemessen** (der Grad danach wieder auf
+  NULL):
+
+  | Grad | Gate | Protokolle |
+  |---|---|---|
+  | (NULL) | **ja** | 0 |
+  | beginner | **ja** | 0 |
+  | advanced / pro / elite | nein | **1** |
+
+  `[read]` **Und ein Weg hinaus:** Die Kachel in `/v2/settings` ist
+  entsperrt — sie stand seit G-80 mit *„gibt es kein Feld dafuer"*,
+  **was bis C-140 stimmte.**
+
+  **Offen geblieben:** der Code im Buendel (G-117).
   **Befund aus G-91, ernst.**
 
   `[cmd]` **Es ist ein blosses `useState`.** *„Wer klickt, sieht die
@@ -3585,28 +3623,56 @@ Umsetzen angepasst werden.
   `[cmd]` **Er braucht die Autonomy-Wirkungsregeln** — und die haengen
   an T-Entscheidungen. **Eigener Auftrag, nach Toms Antworten.**
 
-- [ ] **C-158: Der Gap-Score braucht maschinenlesbare
-  Naehrstoffcodes** (neu 2026-08-20). Befund aus C-134. **Fuer den
-  Rechercheweg (A-22).**
+- [ ] **C-158: Der Gap-Score braucht Naehrstoffcodes je Substanz** (neu
+  gefasst 2026-08-20). **Codex-Auftrag, nicht Kimi.**
 
-  `[cmd]` **Gemessen:** *„Kimi liefert keine maschinenlesbaren
-  Gap-Codes, auch nicht `FAPUN3`."* **`nutrients_provided` steht
-  weiterhin auf 11 von 44.**
+  ### Der Import ist erledigt
 
-  `[read]` **Damit sind 15 `nutrient_gap_rules` blockiert** — sie
-  fragen, welchen Naehrstoff ein Supplement liefert, **und der Bestand
-  sagt es nur in Prosa.**
+  `[cmd]` **567 Substanzen liegen im Katalog** (C-134). **Was fehlt, ist
+  nicht der Bestand, sondern die Verbindung:** Ein Eintrag *„Vitamin D3
+  5000 IU"* traegt den Namen, **aber kein Feld sagt `VITD = 125 µg`.**
 
-  `[cmd]` **Was gebraucht wird:** je Substanz ein Feld mit
-  **BLS-Naehrstoffcodes** — `VITD` fuer Vitamin D3, `FAPUN3` fuer
-  Omega-3, `MG` fuer Magnesium. **Mit Menge je Portion und Einheit.**
+  `[cmd]` **Deshalb bleiben 15 `nutrient_gap_rules` blockiert** — sie
+  fragen *„deckt ein Supplement die Luecke bei Magnesium?"*, **und der
+  Bestand antwortet in Prosa.**
 
-  `[read]` **Die Gegenseite steht:** `nutrient_defs` fuehrt **138
-  Codes**, `nutrient_reference_values` die Schwellen. **Es fehlt nur die
-  Verbindung vom Supplement zum Code.**
+  ### Warum Codex und nicht der Rechercheweg
 
-  `[cmd]` **Und die Einheitenfalle gehoert mit** — C-149: Vitamin D
-  steht im Supplement in IU, im Mikro-Pfad in µg. **Faktor 40.**
+  **Tom, 2026-08-20:** *„Kimi hat nur seine Sachen im Kontext. Wenn du
+  Repo- oder DB-Sachen mit ihm abarbeiten willst, musst du ihm den
+  Kontext dazu geben — oder wir lassen das Codex machen, der hat Repo-
+  und DB-Zugriff."*
+
+  `[cmd]` **Die 138 BLS-Codes stehen in `nutrient_defs`** — mit Namen,
+  Einheiten und Gruppen. **Kimi muesste sie erst bekommen und wuerde
+  dann raten, welcher zu *„Vitamin D3"* gehoert.**
+
+  `[read]` **Codex hat beides** — die Codes und die 567 Substanzen.
+  **Er kann zuordnen statt raten.**
+
+  `[cmd]` **Und der Umfang ist klein:** Von 567 tragen die meisten gar
+  keinen Naehrstoff — Peptide, SARMs, Botanicals. **Es geht um
+  Vitamine, Mineralien und Aminosaeuren**, etwa 60 Eintraege.
+
+  ### Der erste Schritt ist messen
+
+  `[cmd]` **Pruefen, ob die Mengen schon im Bestand stehen** —
+  `dosing.official_label_dose`, `studied_dose_ranges`, oder
+  `products.jsonl` (50 Eintraege). **Wenn ja, braucht es Kimi gar
+  nicht.**
+
+  `[read]` **Wenn nein: melden** — dann geht eine gezielte Frage an den
+  Rechercheweg, **mit den 138 Codes im Anhang.**
+
+  ### Die Einheitenfalle gehoert dazu
+
+  `[cmd]` **C-149:** Vitamin D steht im Supplement in **IU**, im
+  Naehrstoffpfad in **µg**. **Naiv addiert: 33.430 % statt 930 %,
+  Faktor 40.**
+
+  `[read]` **Ein Umrechnungsfaktor liegt nirgends im Repo.** **1 µg
+  Vitamin D3 sind 40 IU** — aber der Faktor gehoert belegt, nicht aus
+  dem Kopf.
 
 - [ ] **G-116: Generelle Ausschluesse bewerten mit 0, statt zu
   filtern** (entschieden 2026-08-20). Befund aus G-104.
@@ -3644,4 +3710,3 @@ Umsetzen angepasst werden.
 
   `[read]` **Die Allergene bleiben hart** — G-67 hat es begruendet:
   *„`hard_exclude` ist die Stufe, die auch fuer Allergene gilt."*
-
