@@ -455,8 +455,8 @@
       "id": "113",
       "path": "supabase/_pipeline/11_goals/113_goal_milestones_adaptive_tdee.sql",
       "kind": "sql",
-      "creates": "Goals-Meilensteine und adaptive TDEE-Funktionen aus Kalorienzufuhr plus Gewichtsverlauf",
-      "depends_on": ["053", "110", "112", "auth_stub"]
+      "creates": "Goals-Meilensteine, adaptive TDEE mit alpha=1 und Fortschritts-Trigger fuer Koerper- und Trainingswerte",
+      "depends_on": ["053", "106", "110", "112", "auth_stub"]
     },
     {
       "id": "059",
@@ -478,6 +478,13 @@
       "kind": "sql",
       "creates": "Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen",
       "depends_on": ["052a", "055", "106", "120", "130", "112", "140"]
+    },
+    {
+      "id": "150",
+      "path": "supabase/_pipeline/15_coach/150_coach_permissions_autonomy.sql",
+      "kind": "sql",
+      "creates": "Coach-Rechtemodell: client_permissions, client_autonomy, Widerrufshistorie, Pending Actions und Action Log",
+      "depends_on": ["017", "113", "auth_stub"]
     }
   ]
 }

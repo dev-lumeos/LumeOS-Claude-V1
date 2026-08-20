@@ -1214,6 +1214,182 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "coach",
+      "name": "client_permissions",
+      "schritt": "150",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "client_autonomy",
+      "schritt": "150",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "permission_change_log",
+      "schritt": "150",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated SELECT/INSERT, aber kein UPDATE/DELETE; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "autonomy_change_log",
+      "schritt": "150",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated SELECT/INSERT, aber kein UPDATE/DELETE; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "pending_actions",
+      "schritt": "150",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "action_log",
+      "schritt": "150",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "150_coach_permissions_autonomy.sql vergibt authenticated SELECT/INSERT/UPDATE fuer Undo-Snapshot, aber kein DELETE; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "training",
       "name": "exercise_catalog_enrichment",
       "schritt": "109",
@@ -1724,6 +1900,16 @@
     {
       "schema": "goals",
       "name": "goal_progress_at",
+      "schritt": "113"
+    },
+    {
+      "schema": "goals",
+      "name": "refresh_user_goal_progress",
+      "schritt": "113"
+    },
+    {
+      "schema": "goals",
+      "name": "refresh_user_goals_progress_for_user",
       "schritt": "113"
     },
     {

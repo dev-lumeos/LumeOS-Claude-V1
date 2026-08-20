@@ -364,7 +364,7 @@ if (MODE === 'clean') {
   if (!hasRows(`
     SELECT 1
     FROM goals.goal_milestone_status('32000000-0000-0000-0000-000000000201'::uuid, DATE '${END_DATE}')
-    WHERE computed_status = 'not_implemented_workout_sets'
+    WHERE computed_status = 'not_measurable'
       AND current_value IS NULL
       AND progress_pct IS NULL;`)) {
     errors.push('Fall Ziel ohne messbare Quelle: Performance-Meilenstein bekommt geratenen Fortschritt')

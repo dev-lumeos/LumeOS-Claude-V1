@@ -2,10 +2,21 @@ BEGIN;
 
 CREATE SCHEMA IF NOT EXISTS goals;
 
-ALTER TABLE goals.user_goals
-  DROP CONSTRAINT IF EXISTS user_goals_id_user_uq;
-ALTER TABLE goals.user_goals
-  ADD CONSTRAINT user_goals_id_user_uq UNIQUE (id, user_id);
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint c
+    JOIN pg_class t ON t.oid = c.conrelid
+    JOIN pg_namespace n ON n.oid = t.relnamespace
+    WHERE n.nspname = 'goals'
+      AND t.relname = 'user_goals'
+      AND c.conname = 'user_goals_id_user_uq'
+  ) THEN
+    ALTER TABLE goals.user_goals
+      ADD CONSTRAINT user_goals_id_user_uq UNIQUE (id, user_id);
+  END IF;
+END $$;
 
 CREATE TABLE IF NOT EXISTS goals.goal_milestones (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -99,7 +110,7 @@ WITH params AS (
     p_stichtag AS period_end,
     GREATEST(p_window_days, 1)::integer AS window_days,
     (p_stichtag - (GREATEST(p_window_days, 1)::integer - 1))::date AS period_start,
-    0.3::numeric AS alpha,
+    1.0::numeric AS alpha,
     7700::numeric AS kcal_per_kg
 ),
 intake AS (
@@ -213,7 +224,7 @@ SELECT
     ELSE 'complete'
   END AS status,
   'derived_adaptive_tdee'::text AS source,
-  'rolling_14d_intake_weight_delta_ema_formula_baseline'::text AS method,
+  'rolling_14d_intake_weight_delta_alpha_1_formula_baseline'::text AS method,
   c.alpha,
   c.kcal_per_kg
 FROM calc c;
@@ -264,13 +275,54 @@ body_value AS (
   WHERE g.goal_type = 'body_composition'
     AND g.target_unit = 'kg'
 ),
+performance_map AS (
+  SELECT
+    g.*,
+    CASE
+      WHEN g.goal_type = 'performance'
+       AND g.target_unit = 'kg'
+       AND lower(g.title) LIKE '%bankdruecken%' THEN 'Barbell Bench Press'
+      ELSE NULL
+    END AS exercise_name
+  FROM goal_row g
+),
+performance_value AS (
+  SELECT
+    max(ws.estimated_1rm)::numeric AS value,
+    max(s.session_date)::date AS measured_at
+  FROM performance_map g
+  JOIN training.workout_sessions s
+    ON s.user_id = g.user_id
+   AND s.session_date <= p_stichtag
+   AND s.status = 'completed'
+  JOIN training.workout_exercises we
+    ON we.workout_session_id = s.id
+   AND we.exercise_name = g.exercise_name
+  JOIN training.workout_sets ws
+    ON ws.workout_exercise_id = we.id
+   AND ws.estimated_1rm IS NOT NULL
+  WHERE g.exercise_name IS NOT NULL
+),
 selected_value AS (
   SELECT
-    CASE WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' THEN bv.value ELSE NULL END AS current_value,
-    CASE WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' AND bv.value IS NOT NULL THEN 'goals.body_measurements' ELSE NULL END AS current_source,
-    CASE WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' THEN bv.measured_at ELSE NULL END AS measured_at
+    CASE
+      WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' THEN bv.value
+      WHEN g.goal_type = 'performance' AND g.target_unit = 'kg' THEN pv.value
+      ELSE NULL
+    END AS current_value,
+    CASE
+      WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' AND bv.value IS NOT NULL THEN 'goals.body_measurements'
+      WHEN g.goal_type = 'performance' AND g.target_unit = 'kg' AND pv.value IS NOT NULL THEN 'training.workout_sets.estimated_1rm'
+      ELSE NULL
+    END AS current_source,
+    CASE
+      WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' THEN bv.measured_at
+      WHEN g.goal_type = 'performance' AND g.target_unit = 'kg' THEN pv.measured_at
+      ELSE NULL
+    END AS measured_at
   FROM goal_row g
   LEFT JOIN body_value bv ON true
+  LEFT JOIN performance_value pv ON true
 )
 SELECT
   g.id AS goal_id,
@@ -290,13 +342,153 @@ SELECT
   CASE
     WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' AND v.current_value IS NULL THEN 'no_measurement'
     WHEN g.goal_type = 'body_composition' AND g.target_unit = 'kg' THEN 'measured'
-    WHEN g.goal_type = 'performance' THEN 'not_implemented_workout_sets'
+    WHEN g.goal_type = 'performance' AND g.target_unit = 'kg' AND v.current_value IS NULL THEN 'no_workout_sets'
+    WHEN g.goal_type = 'performance' AND g.target_unit = 'kg' THEN 'measured'
+    WHEN g.goal_type = 'performance' THEN 'not_measurable'
     ELSE 'not_measurable'
   END AS progress_status,
   v.measured_at
 FROM goal_row g
 CROSS JOIN selected_value v;
 $$;
+
+DROP FUNCTION IF EXISTS goals.refresh_user_goal_progress(uuid, date);
+CREATE FUNCTION goals.refresh_user_goal_progress(
+  p_goal_id uuid,
+  p_stichtag date DEFAULT CURRENT_DATE
+)
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+DECLARE
+  v_progress record;
+BEGIN
+  SELECT *
+  INTO v_progress
+  FROM goals.goal_progress_at(p_goal_id, p_stichtag)
+  LIMIT 1;
+
+  IF NOT FOUND OR v_progress.progress_status IS DISTINCT FROM 'measured' THEN
+    RETURN false;
+  END IF;
+
+  UPDATE goals.user_goals
+  SET
+    current_value = v_progress.current_value,
+    progress_pct = COALESCE(v_progress.progress_pct, 0),
+    updated_at = now()
+  WHERE id = p_goal_id
+    AND auto_update;
+
+  RETURN FOUND;
+END;
+$$;
+
+DROP FUNCTION IF EXISTS goals.refresh_user_goals_progress_for_user(uuid, date);
+CREATE FUNCTION goals.refresh_user_goals_progress_for_user(
+  p_user_id uuid,
+  p_stichtag date DEFAULT CURRENT_DATE
+)
+RETURNS integer
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+DECLARE
+  v_goal record;
+  v_count integer := 0;
+BEGIN
+  FOR v_goal IN
+    SELECT id
+    FROM goals.user_goals
+    WHERE user_id = p_user_id
+      AND auto_update
+      AND status IN ('active', 'paused')
+  LOOP
+    IF goals.refresh_user_goal_progress(v_goal.id, p_stichtag) THEN
+      v_count := v_count + 1;
+    END IF;
+  END LOOP;
+
+  RETURN v_count;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION goals.refresh_goal_progress_from_body_measurement()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+BEGIN
+  IF TG_OP IN ('INSERT', 'UPDATE') THEN
+    PERFORM goals.refresh_user_goals_progress_for_user(NEW.user_id, CURRENT_DATE);
+  END IF;
+
+  IF TG_OP IN ('UPDATE', 'DELETE') AND (TG_OP = 'DELETE' OR OLD.user_id IS DISTINCT FROM NEW.user_id) THEN
+    PERFORM goals.refresh_user_goals_progress_for_user(OLD.user_id, CURRENT_DATE);
+  END IF;
+
+  RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION goals.refresh_goal_progress_from_workout_set()
+RETURNS trigger
+LANGUAGE plpgsql
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+DECLARE
+  v_new_user_id uuid;
+  v_old_user_id uuid;
+BEGIN
+  IF TG_OP IN ('INSERT', 'UPDATE') THEN
+    SELECT s.user_id
+    INTO v_new_user_id
+    FROM training.workout_exercises we
+    JOIN training.workout_sessions s ON s.id = we.workout_session_id
+    WHERE we.id = NEW.workout_exercise_id;
+
+    IF v_new_user_id IS NOT NULL THEN
+      PERFORM goals.refresh_user_goals_progress_for_user(v_new_user_id, CURRENT_DATE);
+    END IF;
+  END IF;
+
+  IF TG_OP IN ('UPDATE', 'DELETE') THEN
+    SELECT s.user_id
+    INTO v_old_user_id
+    FROM training.workout_exercises we
+    JOIN training.workout_sessions s ON s.id = we.workout_session_id
+    WHERE we.id = OLD.workout_exercise_id;
+
+    IF v_old_user_id IS NOT NULL AND v_old_user_id IS DISTINCT FROM v_new_user_id THEN
+      PERFORM goals.refresh_user_goals_progress_for_user(v_old_user_id, CURRENT_DATE);
+    END IF;
+  END IF;
+
+  RETURN COALESCE(NEW, OLD);
+END;
+$$;
+
+DROP TRIGGER IF EXISTS body_measurements_refresh_user_goal_progress ON goals.body_measurements;
+CREATE TRIGGER body_measurements_refresh_user_goal_progress
+  AFTER INSERT OR UPDATE OR DELETE ON goals.body_measurements
+  FOR EACH ROW EXECUTE FUNCTION goals.refresh_goal_progress_from_body_measurement();
+
+DROP TRIGGER IF EXISTS workout_sets_refresh_user_goal_progress ON training.workout_sets;
+CREATE TRIGGER workout_sets_refresh_user_goal_progress
+  AFTER INSERT OR UPDATE OR DELETE ON training.workout_sets
+  FOR EACH ROW EXECUTE FUNCTION goals.refresh_goal_progress_from_workout_set();
+
+SELECT goals.refresh_user_goals_progress_for_user(user_id, CURRENT_DATE)
+FROM (
+  SELECT DISTINCT user_id
+  FROM goals.user_goals
+  WHERE auto_update
+) seed_users;
 
 DROP FUNCTION IF EXISTS goals.goal_milestone_status(uuid, date);
 CREATE FUNCTION goals.goal_milestone_status(
@@ -384,6 +576,8 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON goals.goal_milestones TO authenticated;
 GRANT ALL ON goals.goal_milestones TO service_role;
 GRANT EXECUTE ON FUNCTION goals.adaptive_tdee(uuid, date, integer) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION goals.goal_progress_at(uuid, date) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION goals.refresh_user_goal_progress(uuid, date) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION goals.refresh_user_goals_progress_for_user(uuid, date) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION goals.goal_milestone_status(uuid, date) TO authenticated, service_role;
 
 ALTER TABLE goals.goal_milestones ENABLE ROW LEVEL SECURITY;
@@ -407,9 +601,13 @@ CREATE POLICY goal_milestones_delete ON goals.goal_milestones
 COMMENT ON TABLE goals.goal_milestones IS
   'Gesetzte Ziel-Meilensteine. Fortschritt wird daneben aus echten Messquellen berechnet.';
 COMMENT ON FUNCTION goals.adaptive_tdee(uuid, date, integer) IS
-  'Adaptiver TDEE aus tatsaechlicher Kalorienzufuhr und Gewichtsentwicklung. Formelwert bleibt als Baseline erhalten.';
+  'Adaptiver TDEE aus tatsaechlicher Kalorienzufuhr und Gewichtsentwicklung. Alpha ist 1.0; der Formelwert bleibt als Baseline erhalten.';
 COMMENT ON FUNCTION goals.goal_progress_at(uuid, date) IS
   'Fortschritt eines Zieles am Stichtag gegen echte Messquellen. Nicht messbare Zielarten liefern einen Status statt geratenem Fortschritt.';
+COMMENT ON FUNCTION goals.refresh_user_goal_progress(uuid, date) IS
+  'Pflegt den Snapshot user_goals.progress_pct aus goal_progress_at() fuer ein messbares Ziel.';
+COMMENT ON FUNCTION goals.refresh_user_goals_progress_for_user(uuid, date) IS
+  'Pflegt messbare Ziel-Snapshots eines Nutzers nach Aenderungen an Koerper- oder Trainingsmessungen.';
 COMMENT ON FUNCTION goals.goal_milestone_status(uuid, date) IS
   'Berechneter Status eines gesetzten Meilensteins am Stichtag.';
 

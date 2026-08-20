@@ -80,6 +80,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 025 | `_ableitung/anzeigenamen-einspielen.ts` | kuratierte `name_display_de`/`name_display_en` aus `daten/anzeigenamen.jsonl` | 7.140 Anzeigenamen, 33 `sicher=false` sichtbar im Lauf |
 | 026 | `_ableitung/anzeigenamen-nebennamen-aliase.ts` | kuratierte `nebennamen` als `food_aliases.source='curated_nebenname'` | 576 Foods mit Nebennamen, 663 kuratierte Namen vor Deduplikation |
 | 027 | `_ableitung/027_lebensmittel-tags.ts` | kuratierte C-44-Tags aus `daten/lebensmittel-tags.jsonl`, `processing_level` nach C-100 und Sortweight-Refresh, ohne die Makro-Tags aus `020` zu löschen | 5.150 Foods, 8.702 Tags; `processing_level`: 927 hochverarbeitet |
+| 018 | `015_kataloge/018_ausschluss_presets.sql` | `exclusion_presets`, `exclusion_preset_rules` und `exclusion_preset_matches` fuer benannte Ausschlussregeln der Lebensmittelsuche | 11 Presets, Regelbasis fuer halal/kosher/no_pork |
+| 032 | `_ableitung/032-halal-koscher-tags.sql` | halal- und kosher-Zuordnungen aus den Presets | halal/kosher-Tags aus Ausschlussregeln |
 | 028 | `_ableitung/028_kuratierte-aliase.ts` | kuratierte Suchbegriffe und Sortenaliase aus `daten/reis-alias-kuration.json` als `food_aliases.source='curated_suchbegriff'` | 13 Zuordnungen vor Deduplikation |
 | 029 | `_ableitung/029_portionen-einspielen.ts` | `foods_portions` mit kuratierten Haushaltsportionen aus `daten/portionen.json`; Gramm bleibt kanonisch | 23.402 Portionszeilen für 7.048 Foods, 92 ohne Portion |
 | **052** | `05_user_tabellen/052_diary_foundation.sql` | **`meals`, `meal_items`**, `touch_updated_at()`, `meal_items_owner_guard()`, 4 Trigger, 8 Policies | 2 Tabellen |
@@ -125,10 +127,11 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |
-| 113 | `11_goals/113_goal_milestones_adaptive_tdee.sql` | Goals-Meilensteine und adaptive TDEE aus Kalorienzufuhr plus Gewichtsverlauf | 1 Tabelle, 3 Funktionen, RLS je Operation |
+| 113 | `11_goals/113_goal_milestones_adaptive_tdee.sql` | Goals-Meilensteine, adaptive TDEE mit `alpha = 1` und Fortschritts-Trigger fuer Koerper- und Trainingswerte | 1 Tabelle, 5 Funktionen, 2 Trigger, RLS je Operation |
 | 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` fuer Tageswerte gegen Profil, Referenzwerte und Goals-Fettsaeureziele | 1 Funktion |
 | 059a | `_ableitung/030_mikro-uebersicht.ts` | Kuratierte Mikro-Overview-Auswahl, `micronutrient_snapshot()` und `micronutrient_below_threshold()` | 8 Auswahlzeilen, 2 Funktionen |
 | 017 | `00_querschnitt/017_datenherkunft.sql` | A-17 Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen | 7 Tabellen ergaenzt, Bestandsdaten `manual` |
+| 150 | `15_coach/150_coach_permissions_autonomy.sql` | Coach-Rechtemodell: `client_permissions`, `client_autonomy`, Widerrufshistorie, Pending Actions und Action Log | 6 Tabellen, 19 Policies, RLS je Operation |
 
 **Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,
 `055` braucht `nutrition.touch_updated_at()` aus `052`, `056` braucht
