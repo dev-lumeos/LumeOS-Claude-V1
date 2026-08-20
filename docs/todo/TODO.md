@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `180cd21` auf `dev`.
+**Stand:** 2026-08-18, Anker `ec3d21b` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 112 offen, 1 in Arbeit.
+`[cmd]` 114 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -232,6 +232,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-25** | Der Encoding-Pruefer scannt Build-Verzeichnisse |  |
 | **G-93** | Sieben Module, aber nicht dieselben sieben |  |
 | **G-94** | Der Bestaetigungspfad wechselt nur den Zustand |  |
+| **C-151** | Das Coach-Portal — neun Entscheidungen |  |
+| **C-152** | `schema-sollstand.json` fuehrt vier Training-Tabellen nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2986,6 +2988,81 @@ Umsetzen angepasst werden.
   `[cmd]` **Drei Luecken benannt:** der Verfall gehoert in die Datenbank
   · `action_log` bleibt ungenutzt · **Eintraege koennen ohnehin nur aus
   dem Coach-Portal kommen** — das es noch nicht gibt.
+
+- [ ] **C-151: Das Coach-Portal — neun Entscheidungen** (neu
+  2026-08-20). **Entscheidungen fuer Tom.** Aus F-06
+  (`docs/spezifikation/30-module/addon/01-entwurf-coach-portal.md`,
+  519 Zeilen).
+
+  ### Was das Portal ist
+
+  `[cmd]` **16 Tabs aus sechs Dateien** (`module-coach.jsx:923–940`).
+  **`-gaps` ist die Modal- und Detailebene** (10 von 11 Portal-Modalen),
+  **`-portal-v2` und `-portal-workflows` sind zwei Teile, keine zwei
+  Fassungen.**
+
+  `[cmd]` **Von 16 Tabs sind zwei datenseitig gedeckt** — Autonomy und
+  Consent.
+
+  `[read]` **Die sechs C-119-Tabellen tragen die Governance; die
+  Arbeitsobjekte fehlen** — Beziehung, Check-ins, Programme,
+  Nachrichten, Alerts. **Selbst die Coach-Klient-Beziehung existiert nur
+  implizit.**
+
+  ### Der eigentliche Blocker ist der Lesepfad
+
+  `[cmd]` **Kein Modulschema referenziert `client_permissions`** —
+  gegrept. **Auch mit `full`-Freigabe liest ein Coach heute null
+  Zeilen.**
+
+  `[read]` **Das ist mehr als eine fehlende Tabelle:** Die Freigabe ist
+  gebaut (C-119) und wirkt nirgends. **Jedes Modul muss sie kennen.**
+
+  `[cmd]` **Und was `summary` je Modul zeigt, ist nirgends definiert**
+  (T4).
+
+  ### Zwei harte Belege aus dem Vorgaengerrepo
+
+  `[cmd]` **`coach-actions.ts` prueft nie die Permissions.**
+
+  `[cmd]` **Die Check-in-Auto-Analyse schrieb zwei Spalten, die in
+  keiner der 73 Migrationen existieren** — *„sie war produktiv stumm
+  kaputt."*
+
+  `[read]` **Daraus die Entwurfsregel:** ein Durchsetzungspunkt
+  (`pending_actions`), **Schema-Tests statt `catch {}`.**
+
+  ### Als eigene App traegt das Admin-Vorbild
+
+  `[cmd]` **Port 3220, `NEXT_PUBLIC_AUTH_COOKIE_SCOPE=coach` ergibt
+  `sb-127-coach-auth-token`** — **ohne Codeaenderung**, gemessen.
+
+  `[cmd]` **Empfehlung: ein Konto, zwei Sitzungen**, Coach-Rolle per
+  `app_metadata` nach dem `is_admin()`-Muster. **Als T1/T2 vorgelegt,
+  nicht entschieden.**
+
+  ### Neun Entscheidungen (T1–T9)
+
+  Konto und Rolle · **`summary`-Definition** · **siebtes Modul: `buddy`
+  gegen `body_metrics`** (auch G-93) · **Bewertung von Menschen im
+  Portal** · Revenue und Team raus aus V1.
+
+  `[cmd]` **E1, E2 und E6 aus F-03 sind durch C-119 und G-90 bereits
+  entschieden** und im Entwurf als geschlossen markiert.
+
+  ### Und der Check-in-Review hat keinen Screen
+
+  `[read]` **Die groesste Zeitsenke im Traineralltag** (F-04: *2–3
+  gegen 10–15 Minuten je Klient*) — **fuer sie existiert kein
+  funktionaler Mockup-Screen, nur die Workflow-Beschreibung.**
+
+- [ ] **C-152: `schema-sollstand.json` fuehrt vier Training-Tabellen
+  nicht** (neu 2026-08-20). Nebenbefund aus F-06.
+
+  `[cmd]` **Aus `100_training_schema.sql`**, gemessen.
+
+  `[read]` **Dieselbe Klasse wie C-88:** Eine Pruefung, die nicht alles
+  kennt, meldet keinen Fehler — **sie schweigt.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
