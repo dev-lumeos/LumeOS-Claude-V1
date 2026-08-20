@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS goals.user_goals (
   target_date     DATE,
 
   status          TEXT NOT NULL DEFAULT 'active'
-    CHECK (status IN ('active','paused','achieved','abandoned','on_hold')),
+    CHECK (status IN ('active','paused','achieved','missed','abandoned','on_hold')),
   priority        SMALLINT NOT NULL DEFAULT 5 CHECK (priority BETWEEN 1 AND 10),
   is_primary      BOOLEAN NOT NULL DEFAULT false,
 
@@ -73,6 +73,16 @@ COMMENT ON TABLE goals.user_goals IS
   'Konkrete Nutzerziele. Maximal drei aktive Ziele werden ueber aktive Prioritaets-Slots 1-3 erzwungen.';
 COMMENT ON COLUMN goals.user_goals.gueltig_ab IS
   'Lokales Datum, ab dem das Ziel gilt. Tage davor bekommen nicht rueckwirkend dieses Ziel.';
+COMMENT ON COLUMN goals.user_goals.status IS
+  'active/paused/on_hold fuer laufende Ziele, achieved/missed/abandoned fuer die Historie. Abgeschlossene Ziele belegen keinen aktiven Slot.';
+
+-- C-140: bestehende Datenbanken hatten den urspruenglichen CHECK ohne
+-- missed. CREATE TABLE IF NOT EXISTS wuerde ihn nicht nachziehen.
+ALTER TABLE goals.user_goals
+  DROP CONSTRAINT IF EXISTS user_goals_status_check;
+ALTER TABLE goals.user_goals
+  ADD CONSTRAINT user_goals_status_check
+  CHECK (status IN ('active','paused','achieved','missed','abandoned','on_hold'));
 
 -- -------------------------------------------------------------
 -- 2. Phasen, unabhaengig vom konkreten Ziel waehlbar.

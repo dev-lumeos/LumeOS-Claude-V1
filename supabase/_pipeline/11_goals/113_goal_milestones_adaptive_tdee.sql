@@ -542,7 +542,7 @@ SELECT
   m.target_date,
   m.status AS stored_status,
   CASE
-    WHEN m.status IN ('achieved', 'abandoned') THEN m.status
+    WHEN m.status IN ('achieved', 'missed', 'abandoned') THEN m.status
     WHEN p.progress_status IS DISTINCT FROM 'measured' THEN p.progress_status
     WHEN m.milestone_type = 'absolute_value'
       AND g.start_value IS NOT NULL

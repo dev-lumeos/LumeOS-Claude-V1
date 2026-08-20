@@ -12,10 +12,11 @@ const DB = process.env.PGDATABASE ?? 'postgres'
 const SPEC = 'docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md'
 const SPEC_SOURCE = 'docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md'
 const EXPECTED_SPEC_MARKERS = 47
-const EXPECTED_PRESENT_IN_CATALOG = 44
-const EXPECTED_DISPLAY_USABLE = 40
-const EXPECTED_RANGE_MARKERS = 38
-const EXPECTED_RANGE_ROWS = 96
+const EXPECTED_DIRECT_PRESENT_IN_CATALOG = 44
+const EXPECTED_PRESENT_IN_CATALOG = 49
+const EXPECTED_DISPLAY_USABLE = 45
+const EXPECTED_RANGE_MARKERS = 40
+const EXPECTED_RANGE_ROWS = 100
 
 type SpecMarker = {
   loinc_code: string
@@ -50,6 +51,7 @@ type CatalogRow = {
 }
 
 type EnrichmentRow = SpecMarker & {
+  source_status: 'spec_ai_generated' | 'spec_loinc_alias_c140'
   catalog_match_status: 'accepted' | 'identity_mismatch' | 'unit_mismatch'
   catalog_mismatch_reason: string | null
   catalog_long_common_name: string
@@ -84,6 +86,38 @@ const IDENTITY_MISMATCH: Record<string, string> = {
 const UNIT_MISMATCH_NOT_IMPORTED: Record<string, string> = {
   '62238-1': 'Spec nutzt mL/min, LOINC-Katalog mL/min/{1.73_m2}; Bezugsflaeche fehlt.',
   '10835-7': 'Spec nutzt nmol/L, LOINC-Katalog mg/dL; ohne Umrechnung kein sicherer Fallback.',
+}
+
+const LOINC_DISPLAY_ALIASES: Record<string, {
+  target: string
+  reason: string
+  importRanges: boolean
+}> = {
+  '2345-7': {
+    target: '1558-6',
+    reason: 'C-140/G-84: Befunddaten nutzen den spezifischen Fasting-Glucose-Code 1558-6 statt der Spec-Zeile 2345-7.',
+    importRanges: false,
+  },
+  '2089-1': {
+    target: '13457-7',
+    reason: 'C-140/G-84: Befunddaten nutzen LDL berechnet 13457-7 statt der Spec-Zeile 2089-1.',
+    importRanges: true,
+  },
+  '20570-8': {
+    target: '4544-3',
+    reason: 'C-140/G-84: Befunddaten nutzen Haematokrit per automatischem Blutbild 4544-3 statt berechnet 20570-8.',
+    importRanges: true,
+  },
+  '1989-3': {
+    target: '14635-7',
+    reason: 'C-140/G-84: Befunddaten nutzen 25-OH-Vitamin-D3 14635-7; nur Gruppierung, weil LOINC nmol/L und Seed ng/mL auseinanderlaufen.',
+    importRanges: false,
+  },
+  '2614-6': {
+    target: '2601-3',
+    reason: 'C-140/G-84: Befunddaten nutzen Magnesium 2601-3 statt der falschen Spec-Zeile 2614-6.',
+    importRanges: false,
+  },
 }
 
 function fail(message: string): never {
@@ -319,10 +353,58 @@ function slug(value: string): string {
     .replace(/^_+|_+$/g, '')
 }
 
+function appendRanges(ranges: RangeRow[], marker: SpecMarker): void {
+  const base = {
+    loinc_code: marker.loinc_code,
+    curated_slug: slug(marker.name),
+    canonical_name_en: marker.name,
+    unit: marker.unit,
+  }
+
+  ranges.push({
+    ...base,
+    range_type: 'lab',
+    sex: 'all',
+    min_value: marker.lab_range_min,
+    max_value: marker.lab_range_max,
+  })
+  ranges.push({
+    ...base,
+    range_type: 'optimal',
+    sex: 'all',
+    min_value: marker.optimal_range_min,
+    max_value: marker.optimal_range_max,
+  })
+
+  for (const sex of ['male', 'female'] as const) {
+    const sexRange = marker.gender_specific_ranges?.[sex]
+    if (!sexRange) continue
+    if ('lab_min' in sexRange || 'lab_max' in sexRange) {
+      ranges.push({
+        ...base,
+        range_type: 'lab',
+        sex,
+        min_value: sexRange.lab_min ?? marker.lab_range_min,
+        max_value: sexRange.lab_max ?? marker.lab_range_max,
+      })
+    }
+    if ('optimal_min' in sexRange || 'optimal_max' in sexRange) {
+      ranges.push({
+        ...base,
+        range_type: 'optimal',
+        sex,
+        min_value: sexRange.optimal_min ?? marker.optimal_range_min,
+        max_value: sexRange.optimal_max ?? marker.optimal_range_max,
+      })
+    }
+  }
+}
+
 function buildRows(markers: SpecMarker[], catalog: Map<string, CatalogRow>): { enrichment: EnrichmentRow[]; ranges: RangeRow[]; missing: SpecMarker[] } {
   const enrichment: EnrichmentRow[] = []
   const ranges: RangeRow[] = []
   const missing: SpecMarker[] = []
+  const markerByCode = new Map(markers.map(marker => [marker.loinc_code, marker]))
 
   for (const marker of markers) {
     const catalogRow = catalog.get(marker.loinc_code)
@@ -346,6 +428,7 @@ function buildRows(markers: SpecMarker[], catalog: Map<string, CatalogRow>): { e
 
     enrichment.push({
       ...marker,
+      source_status: 'spec_ai_generated',
       catalog_match_status: status,
       catalog_mismatch_reason: reason,
       catalog_long_common_name: catalogRow.long_common_name,
@@ -361,49 +444,41 @@ function buildRows(markers: SpecMarker[], catalog: Map<string, CatalogRow>): { e
 
     if (status !== 'accepted') continue
 
-    const base = {
-      loinc_code: marker.loinc_code,
-      curated_slug: slug(marker.name),
-      canonical_name_en: marker.name,
-      unit: marker.unit,
-    }
+    appendRanges(ranges, marker)
+  }
 
-    ranges.push({
-      ...base,
-      range_type: 'lab',
-      sex: 'all',
-      min_value: marker.lab_range_min,
-      max_value: marker.lab_range_max,
-    })
-    ranges.push({
-      ...base,
-      range_type: 'optimal',
-      sex: 'all',
-      min_value: marker.optimal_range_min,
-      max_value: marker.optimal_range_max,
+  for (const [specCode, alias] of Object.entries(LOINC_DISPLAY_ALIASES)) {
+    const marker = markerByCode.get(specCode)
+    const catalogRow = catalog.get(alias.target)
+    if (!marker) fail(`C-140 LOINC-Alias: Spec-Code ${specCode} fehlt`)
+    if (!catalogRow) fail(`C-140 LOINC-Alias: Zielcode ${alias.target} fehlt im Katalog`)
+
+    const aliasMarker: SpecMarker = { ...marker, loinc_code: alias.target }
+    const compatible = unitCompatible(marker.unit, catalogRow.example_ucum_units ?? catalogRow.example_units)
+    const status: EnrichmentRow['catalog_match_status'] =
+      alias.importRanges && compatible ? 'accepted' : 'unit_mismatch'
+    const reason = status === 'accepted'
+      ? alias.reason
+      : `${alias.reason} Kein Bereichsimport: Spec-Einheit ${marker.unit}, LOINC-Beispieleinheit ${catalogRow.example_ucum_units ?? catalogRow.example_units}.`
+
+    enrichment.push({
+      ...aliasMarker,
+      source_status: 'spec_loinc_alias_c140',
+      catalog_match_status: status,
+      catalog_mismatch_reason: reason,
+      catalog_long_common_name: catalogRow.long_common_name,
+      catalog_short_name: catalogRow.short_name,
+      catalog_display_name: catalogRow.display_name,
+      catalog_component: catalogRow.component,
+      catalog_unit: catalogRow.example_ucum_units ?? catalogRow.example_units,
+      catalog_class: catalogRow.loinc_class,
+      catalog_system: catalogRow.system,
+      display_usable: true,
+      ranges_imported: status === 'accepted',
     })
 
-    for (const sex of ['male', 'female'] as const) {
-      const sexRange = marker.gender_specific_ranges?.[sex]
-      if (!sexRange) continue
-      if ('lab_min' in sexRange || 'lab_max' in sexRange) {
-        ranges.push({
-          ...base,
-          range_type: 'lab',
-          sex,
-          min_value: sexRange.lab_min ?? marker.lab_range_min,
-          max_value: sexRange.lab_max ?? marker.lab_range_max,
-        })
-      }
-      if ('optimal_min' in sexRange || 'optimal_max' in sexRange) {
-        ranges.push({
-          ...base,
-          range_type: 'optimal',
-          sex,
-          min_value: sexRange.optimal_min ?? marker.optimal_range_min,
-          max_value: sexRange.optimal_max ?? marker.optimal_range_max,
-        })
-      }
+    if (status === 'accepted') {
+      appendRanges(ranges, aliasMarker)
     }
   }
 
@@ -453,7 +528,7 @@ CREATE TABLE IF NOT EXISTS medical.biomarker_spec_enrichment (
 COMMENT ON TABLE medical.biomarker_spec_enrichment IS
   'C-84: reproduzierbar aus docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md extrahierte Panel-, Kurzname- und Bereichsmetadaten neben dem LOINC-Katalog.';
 COMMENT ON COLUMN medical.biomarker_spec_enrichment.source_status IS
-  'Die Quelle ist die repo-interne, KI-erzeugte Spec. Werte sind nicht als externe Laborquelle belegt.';
+  'spec_ai_generated = repo-interne, KI-erzeugte Spec; spec_loinc_alias_c140 = dieselbe Spec-Zeile auf einen belegten Daten-LOINC gespiegelt. Werte sind nicht als externe Laborquelle belegt.';
 COMMENT ON COLUMN medical.biomarker_spec_enrichment.catalog_match_status IS
   'accepted = LOINC-Code und Einheit nutzbar; identity_mismatch = Spec-Code zeigt auf anderen Test; unit_mismatch = Bereich nicht als Fallback importiert.';
 
@@ -526,7 +601,7 @@ INSERT INTO medical.biomarker_spec_enrichment (
 SELECT
   row->>'loinc_code',
   '${SPEC_SOURCE.replace(/'/g, "''")}',
-  'spec_ai_generated',
+  COALESCE(NULLIF(row->>'source_status', ''), 'spec_ai_generated'),
   row->>'name',
   row->>'name_de',
   row->>'common_name',
@@ -625,8 +700,8 @@ BEGIN
   IF v_spec_ranges <> ${EXPECTED_RANGE_ROWS} THEN
     RAISE EXCEPTION 'Spec-Referenzbereiche: % statt ${EXPECTED_RANGE_ROWS}', v_spec_ranges;
   END IF;
-  IF v_total_ranges <> 560 THEN
-    RAISE EXCEPTION 'biomarker_reference_ranges gesamt: % statt 560', v_total_ranges;
+  IF v_total_ranges <> 564 THEN
+    RAISE EXCEPTION 'biomarker_reference_ranges gesamt: % statt 564', v_total_ranges;
   END IF;
 
   SELECT COUNT(DISTINCT loinc_code) INTO v_loinc FROM medical.biomarker_spec_enrichment;
@@ -648,13 +723,16 @@ if (markers.length !== EXPECTED_SPEC_MARKERS) {
   fail(`${SPEC}: ${markers.length} Marker statt ${EXPECTED_SPEC_MARKERS}`)
 }
 
-const catalog = readCatalog(markers.map(row => row.loinc_code))
+const catalog = readCatalog([
+  ...markers.map(row => row.loinc_code),
+  ...Object.values(LOINC_DISPLAY_ALIASES).map(alias => alias.target),
+])
 const { enrichment, ranges, missing } = buildRows(markers, catalog)
 const displayUsable = enrichment.filter(row => row.display_usable).length
 const rangeMarkers = enrichment.filter(row => row.ranges_imported).length
 
-if (missing.length !== EXPECTED_SPEC_MARKERS - EXPECTED_PRESENT_IN_CATALOG) {
-  fail(`LOINC-fehlend: ${missing.length}, erwartet ${EXPECTED_SPEC_MARKERS - EXPECTED_PRESENT_IN_CATALOG}`)
+if (missing.length !== EXPECTED_SPEC_MARKERS - EXPECTED_DIRECT_PRESENT_IN_CATALOG) {
+  fail(`LOINC-fehlend: ${missing.length}, erwartet ${EXPECTED_SPEC_MARKERS - EXPECTED_DIRECT_PRESENT_IN_CATALOG}`)
 }
 if (enrichment.length !== EXPECTED_PRESENT_IN_CATALOG) {
   fail(`Spec-Marker im Katalog: ${enrichment.length}, erwartet ${EXPECTED_PRESENT_IN_CATALOG}`)

@@ -103,7 +103,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 074 | `07_lesefunktionen/074_preferences_api.sql` | `food_preferences_read()` und `food_preferences_write()` fuer Nutrition-Preferences, ohne `food_search` zu veraendern | 2 Funktionen |
 | 075 | `07_lesefunktionen/075_preference_search_application.sql` | `food_search` mit optionaler Nutzer-Praeferenzanwendung; `p_user_id = NULL` bleibt ungefiltert | 1 Signatur, hard/strong/soft/boost wirksam |
 | 080 | `08_bereinigung/080_public_bereinigen.sql` | Bereinigung alter Governance-Objekte in `public` | idempotent |
-| 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen und C-63 `locale` | v090: 17 Prüfungen |
+| 090 | `09_identitaet/090_profile.sql` | `public.profiles` + Trigger auf `auth.users`, C-47-Profilachsen, C-63 `locale` und C-140 `experience_level` | v090: 18 Prüfungen |
 | 056a | `05_user_tabellen/056a_hydration_day.sql` | Funktion `hydration_day(user_id, date)` mit Tagesziel, Gläserzahl und 14-Tage-Vergleich | 1 Funktion |
 | 100 | `10_training/100_training_schema.sql` | Schema `training` mit `exercises`, `muscle_groups`, `equipment`, `exercise_muscles` | 4 Tabellen |
 | 101 | `10_training/101_training_seed.sql` | Training-Stammdaten aus Legacy-Export | 1.416 Uebungen, 109 Muskelgruppen, 58 Geraete, 6.625 Zuordnungen vor Merge |
@@ -125,12 +125,12 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 141 | `14_medical/141_biomarker_katalog.ts` | LOINC-Masterkatalog aus `daten/biomarker-loinc/` und kuratierte Referenzbereich-Kandidaten aus `biomarker-katalog.json` | 11.676 LOINC-Codes, 464 Referenzbereich-Zeilen |
 | 142 | `14_medical/142_laborimport_matching.sql` | Laborimport-Zuordnung: `biomarker_aliases`, Importfunktionen und Match-Status an Messwerten | 1 Tabelle, 2 Funktionen, unbekannte Marker bleiben speicherbar |
 | 143 | `14_medical/143_biomarker_aliases.ts` | Biomarker-Aliase aus dem Vorgaengerrepo und kuratierte Mehrdeutigkeitszeilen | 292 Aliaszeilen, davon 6 bewusst mehrdeutig |
-| 144 | `14_medical/144_biomarker_spec_enrichment.ts` | Spec-Extraktion fuer Medical-Panels, deutsche Namen, Kurznamen und nutzbare numerische Bereichszeilen | 44 Spec-Marker im LOINC-Katalog, 40 display-nutzbar, 560 Referenzbereich-Zeilen gesamt |
+| 144 | `14_medical/144_biomarker_spec_enrichment.ts` | Spec-Extraktion fuer Medical-Panels, deutsche Namen, Kurznamen und nutzbare numerische Bereichszeilen | 49 Spec-/Alias-Marker im LOINC-Katalog, 45 display-nutzbar, 564 Referenzbereich-Zeilen gesamt |
 | 145 | `14_medical/145_medications_schema.sql` | Medikamente und Conditions: Katalogtabellen, `user_medications`, `user_conditions` | 5 Tabellen, RLS je Operation auf Nutzerdaten |
 | 146 | `14_medical/146_medications_katalog.ts` | Kimi-Medikamentenkatalog aus `backup/kimi-research/.../data/medications/` | 56 Wirkstoffe, 119 Formulierungen, 124 Produkte |
 | 146a | `13_supplements/132a_rule_input_status.sql` | Regel-Eingangsdiagnose für Kimi-Regeln: fehlende Pfade werden als `missing_input` gemeldet | 1 Funktion, kein Regelimport |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
-| 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
+| 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am`; Zielhistorie kennt `achieved`, `missed`, `abandoned` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |
 | 113 | `11_goals/113_goal_milestones_adaptive_tdee.sql` | Goals-Meilensteine, adaptive TDEE mit `alpha = 1` und Fortschritts-Trigger fuer Koerper- und Trainingswerte | 1 Tabelle, 5 Funktionen, 2 Trigger, RLS je Operation |
 | 059 | `05_user_tabellen/059_daily_reference_assessment.sql` | Funktion `daily_reference_assessment()` fuer Tageswerte gegen Profil, Referenzwerte und Goals-Fettsaeureziele | 1 Funktion |
@@ -197,7 +197,7 @@ Referenz und für Weiterentwicklung):
 | 060 | `06_zugriff/060_zugriffsschicht.sql` | pg_trgm, 2 Trigram-Indizes, Grants, RLS/Policies auf allen 11 Tabellen — **live seit 2026-08-02** |
 | 061 | `06_zugriff/061_rollen_admin.sql` | **`public.is_admin()`** (liest nur den JWT-Claim `app_metadata->>role`, Standard `false`) + SELECT-Grant und je 1 SELECT-Policy auf die beiden Curation-Tabellen — **live seit 2026-08-06** (C.3). Keine Schreib-Policies. Rollen werden **nicht** von der Kette vergeben, siehe Dateikopf. v061: 15 Prüfungen |
 | 070 | `07_lesefunktionen/070_lesefunktionen.sql` | 6 RPC-Funktionen (`search_fold`, `food_search`, `food_categories_tree`, `preference_search_preview` mit 14 Argumenten, `curation_overview`, `schema_debug`) — v070: 18 Prüfungen |
-| 090 | `09_identitaet/090_profile.sql` | **`public.profiles` + Trigger `on_auth_user_created` auf `auth.users`** (die Anmeldung), C-47-Profilachsen, C-63 `locale`, 4 Policies — v090: 17 Prüfungen |
+| 090 | `09_identitaet/090_profile.sql` | **`public.profiles` + Trigger `on_auth_user_created` auf `auth.users`** (die Anmeldung), C-47-Profilachsen, C-63 `locale`, C-140 `experience_level`, 4 Policies — v090: 18 Prüfungen |
 
 **`020` läuft zweimal:** Es legt Strukturen an *und* enthält die Ableitungen,
 die gegen `food_nutrients` arbeiten — also gegen Daten, die erst `030`

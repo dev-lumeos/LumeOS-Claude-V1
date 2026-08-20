@@ -12,7 +12,8 @@ WITH checks(pruefung, soll, ist) AS (
           WHERE n.nspname = 'public' AND c.relname = 'profiles'
             AND c.relkind = 'r')::text
 
-  -- Spalten: id/created_at/updated_at plus C-47-Profilachsen und C-63 locale.
+  -- Spalten: id/created_at/updated_at plus C-47-Profilachsen,
+  -- C-63 locale und C-118/C-140 experience_level.
   UNION ALL
   SELECT 'spalte id uuid not null', '1',
          (SELECT count(*) FROM information_schema.columns
@@ -28,11 +29,11 @@ WITH checks(pruefung, soll, ist) AS (
             AND is_nullable = 'NO' AND column_default IS NOT NULL)::text
 
   UNION ALL
-  SELECT 'spaltenzahl profiles', '14',
+  SELECT 'spaltenzahl profiles', '15',
          (SELECT count(*) FROM information_schema.columns
           WHERE table_schema = 'public' AND table_name = 'profiles')::text
   UNION ALL
-  SELECT 'profilachsen nullable vorhanden', '11',
+  SELECT 'profilachsen nullable vorhanden', '12',
          (SELECT count(*) FROM information_schema.columns
           WHERE table_schema = 'public' AND table_name = 'profiles'
             AND column_name IN (
@@ -46,11 +47,12 @@ WITH checks(pruefung, soll, ist) AS (
               'pregnancy_ended_on',
               'lactation_started_on',
               'lactation_ended_on',
-              'locale'
+              'locale',
+              'experience_level'
             )
             AND is_nullable = 'YES')::text
   UNION ALL
-  SELECT 'profil-check-constraints c47/c63', '9',
+  SELECT 'profil-check-constraints c47/c63/c140', '10',
          (SELECT count(*) FROM pg_constraint
           WHERE conrelid = 'public.profiles'::regclass
             AND conname IN (
@@ -60,6 +62,7 @@ WITH checks(pruefung, soll, ist) AS (
               'profiles_body_weight_kg_check',
               'profiles_activity_level_check',
               'profiles_nutrition_goal_check',
+              'profiles_experience_level_check',
               'profiles_locale_check',
               'profiles_pregnancy_period_check',
               'profiles_lactation_period_check'
@@ -69,6 +72,13 @@ WITH checks(pruefung, soll, ist) AS (
          (SELECT count(*) FROM information_schema.columns
           WHERE table_schema = 'public' AND table_name = 'profiles'
             AND column_name = 'locale'
+            AND column_default IS NULL
+            AND is_nullable = 'YES')::text
+  UNION ALL
+  SELECT 'experience_level ohne default', '1',
+         (SELECT count(*) FROM information_schema.columns
+          WHERE table_schema = 'public' AND table_name = 'profiles'
+            AND column_name = 'experience_level'
             AND column_default IS NULL
             AND is_nullable = 'YES')::text
 
