@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `0a68836` auf `dev`.
+**Stand:** 2026-08-18, Anker `408f226` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 119 offen, 1 in Arbeit.
+`[cmd]` 118 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -172,7 +172,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-107** | Der Mikronaehrstoff-Trend braucht eine Referenz je Tag |  |
 | **G-108** | Die Filter des Nutrients-Tabs |  |
 | **G-109** | Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu |  |
-| **C-54** | ? |  |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
 | **G-07** | Umschalten |  |
@@ -3257,6 +3256,107 @@ Umsetzen angepasst werden.
 
   **Zu entscheiden:** Faellt die Kachel weg, oder zeigt sie den
   vorhandenen Erholungswert?
+
+- [ ] **G-111: Der Tab-Zustand steht nicht in der URL** (neu
+  2026-08-20). **Eine Ursache, zwei Symptome. Hohe Prioritaet.**
+
+  **Tom, 2026-08-20:** *„Tagwechsel springt auf Diary, das muss in der
+  Ansicht bleiben."* Und: *„Calorie balance / Micronutrient trend / Macro
+  split immer noch nicht angebunden."*
+
+  ### Gemessen
+
+  `[cmd]` **Der Code ist da:** `ansicht.tsx:33` importiert
+  `KalorienbilanzKachel` und `MakroschnittKachel`, **`tab ===
+  'insights'` existiert.**
+
+  `[cmd]` **Aber `?tab=insights` liefert Diary** — im HTML kommen
+  *Calorie balance*, *Bilanz*, *Makroschnitt* **je 0 Mal vor.**
+
+  `[read]` **Der Tab ist reiner `useState`.** Deshalb:
+
+  **1.** Wer den Tag wechselt, laedt neu — **und landet auf Diary.**
+  **2.** Was in Insights gebaut wurde, **sieht niemand**, wenn er nicht
+  von Hand hinklickt. **G-101 hat es gebaut und Tom hat es nie
+  gesehen.**
+
+  **Zu tun:** Tab in die URL, wie das Datum. `[read]` **Dann ist er
+  teilbar, ueberlebt den Neuladen und ist von aussen messbar** — das
+  betrifft jedes Modul, nicht nur Nutrition.
+
+- [ ] **G-112: Der Food-DB-Filter laesst nur einen Wert zu** (neu
+  2026-08-20). Toms Befund.
+
+  **Tom:** *„Foodsdb-Filter ist immer nur einer waehlbar, da muss auch
+  eine Kombination ueber Gruppen filtern."*
+
+  `[cmd]` **Die Ursache steht in C-120:** *„`p_tag_code` ist Singular —
+  kein ODER/UND, nur Einfachauswahl."*
+
+  `[read]` **Das ist eine Schemafrage, keine Anzeigefrage.**
+  `food_search` muesste mehrere Tags entgegennehmen — **ODER innerhalb
+  einer Gruppe, UND zwischen den Gruppen**, wie die Recherche zu
+  Faceted Search es vorgibt.
+
+  `[cmd]` **Und der Ausschluss fehlt ganz** — C-120: *„kein
+  Ausschluss-Parameter, die Allergen-Schalter wirken nur auf der
+  angezeigten Seite."*
+
+- [ ] **G-113: Die Naehrstoffordnung braucht Klappen und Zeitfilter**
+  (neu 2026-08-20). Toms Befund zu G-101.
+
+  **Tom:** *„Schoen, dass nun alles da ist, aber das sollte schon alles
+  ein- und ausklappbar sein und standard eingeklappt."* Und: *„Nutrients
+  hat keine Zeitfilter, ein Tag interessiert niemanden — da muss 1 fuer
+  heute / 7 / 14 / 30 / 45 / 60 / 90 rein."*
+
+  `[cmd]` **12 Gruppen, 138 Naehrstoffe** — die Fettsaeuren allein 36
+  Zeilen. **Alles offen ist unlesbar.**
+
+  `[read]` **Und der Zeitfilter ist der wichtigere Teil:** Ein
+  Tagesmangel sagt nichts, **ein Schnitt ueber 30 Tage schon.** `[cmd]`
+  Der Auftrag G-101 nannte die Filter (*Today / 7d / 30d / 90d*) — sie
+  wurden nicht gebaut.
+
+- [ ] **G-114: `daily_summary` fuehrt nur 33 der 138 Naehrstoffe** (neu
+  2026-08-20). **Der Grund fuer Toms Zweifel.**
+
+  **Tom:** *„Ob da wirklich alle Daten angezeigt werden, bezweifle ich —
+  ich denke, unsere Foods haben sehr wohl Aminosaeuren drin."*
+
+  `[cmd]` **Er hat recht. Gemessen:**
+
+  | Gruppe | Codes | Zeilen in `food_nutrients` |
+  |---|---|---|
+  | Fettsaeuren | 36 | **212.242** |
+  | **Aminosaeuren** | **19** | **131.584** |
+  | Fettloesliche Vitamine | 17 | 109.304 |
+  | Elemente | 16 | 105.918 |
+  | Wasserloesliche Vitamine | 12 | 83.696 |
+
+  `[cmd]` **7.107 von 7.140 Lebensmitteln tragen Aminosaeurewerte.**
+
+  `[read]` **Die Werte liegen je Lebensmittel vor** — **`daily_summary`
+  summiert sie nur nicht auf.** Der G-101-Bericht sagt es selbst:
+  *„`daily_summary` fuehrt keine Spalte dafuer."*
+
+  **Zu klaeren:** Waechst `daily_summary` auf 138 Spalten, oder wird
+  je Abfrage aus `meal_items` gerechnet? `[read]` **Das ist eine
+  Codex-Frage** — 105 fehlende Spalten sind kein Anzeigeproblem.
+
+- [ ] **G-115: Die Wassereintraege haben keine Historie** (neu
+  2026-08-20). Toms Befund.
+
+  **Tom:** *„Hydration-Eintraege: keine History, ich kann nichts
+  anschauen oder womoeglich einen Fehlklick korrigieren."*
+
+  `[cmd]` **`water_logs` traegt 181 Eintraege je Konto** — die Daten
+  sind da, **die Liste fehlt.**
+
+  `[read]` **Und der Fehlklick ist das eigentliche Argument:** Wer
+  versehentlich 500 ml statt 250 tippt, **hat keinen Weg zurueck.**
+  **Anzeigen und loeschen koennen** — wie beim Daumen mit
+  Sicherheitsabfrage (G-67).
 
 - [ ] **G-103: Der Preferences-Tab speichert nicht und ist schwer zu
   bedienen** (neu 2026-08-20). **Toms Befund, hohe Prioritaet.**
