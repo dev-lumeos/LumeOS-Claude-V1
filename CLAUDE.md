@@ -165,6 +165,23 @@ raeumen, neu starten — in dieser Reihenfolge.** Wer nur raeumt, bekommt
 404 fuer jeden Chunk, **und die Anmeldung schickt die Zugangsdaten per
 GET in die URL** (G-82).
 
+### Wer arbeitet woran: `docs/todo/LAUFEND.md`
+
+**Tom, 2026-08-20:** *,Du hast es nicht mal mehr im Griff zu wissen,
+welcher Agent noch laeuft — nicht mal den simpelsten Scheiss
+orchestrierst du richtig, wie eine laufende Todoliste, wo du
+nachschauen kannst, was wo laeuft."*
+
+`[cmd]` **`docs/todo/LAUFEND.md` fuehrt drei Tabellen:** wer gerade
+arbeitet, was auf einen freien Agenten wartet, **und welcher Bereich
+wem gehoert.**
+
+**Vor jedem neuen Auftrag: nachsehen.**
+**Nach jedem Bericht: Zeile streichen.**
+
+`[read]` **Der Orchestrator hat es bis dahin im Kopf gefuehrt und sich
+geirrt** — einen Auftrag an einen besetzten Agenten geschrieben.
+
 ## Nach jedem Bericht: nachtragen, ungefragt
 
 **Tom, 2026-08-19:** *,Und Todolisten, Docs und SSOT nachtragen — das
