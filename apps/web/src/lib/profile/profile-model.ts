@@ -47,6 +47,47 @@ export const ACTIVITY_LEVEL_INFO: Record<ActivityLevel, {
   very_active: { label: 'Sehr aktiv',    hint: 'Taeglich hart, koerperliche Arbeit', factor: 1.9 },
 }
 
+/**
+ * Der Erfahrungsgrad (C-118, G-80).
+ *
+ * **Tom, 2026-08-19:** *„Wir brauchen in Settings und Onboarding eine
+ * Deklaration des Users, welches Level er hat."* Und zur Zahl der
+ * Stufen: *„starten wir mal damit, ist ja jederzeit ausbaubar."*
+ *
+ * `[cmd]` **DIE SPALTE GIBT ES NOCH NICHT.** `public.profiles` fuehrt
+ * 14 Spalten; keine davon nimmt einen Erfahrungsgrad auf.
+ * `activity_level` ist etwas anderes — es beschreibt, **wieviel**
+ * jemand sich bewegt (und traegt einen TDEE-Faktor), nicht **wie
+ * erfahren** er dabei ist. Ein Anfaenger kann `very_active` sein.
+ *
+ * **Diese Liste steht hier trotzdem**, weil die vier Stufen Toms
+ * Entscheidung sind und keine Erfindung dieser Sitzung. Wer die Spalte
+ * anlegt, findet sie vor.
+ *
+ * `[read]` **Nicht zu verwechseln mit der Autonomy-Stufe (C-71).**
+ * Beide beschreiben Reife, aber aus verschiedenen Richtungen:
+ *
+ *   Erfahrungsgrad — **Selbstauskunft.** Was die Nutzerin ueber sich
+ *                    sagt, bevor das System etwas ueber sie weiss.
+ *   Autonomy       — **Fremdeinschaetzung.** Was das System aus dem
+ *                    Verhalten ableitet.
+ *
+ * Sie koennen auseinanderfallen, und dann ist die Abweichung die
+ * Aussage. Wer sie zusammenlegt, verliert beide.
+ */
+export const EXPERIENCE_LEVELS = ['beginner', 'advanced', 'pro', 'elite'] as const
+export type ExperienceLevel = (typeof EXPERIENCE_LEVELS)[number]
+
+export const EXPERIENCE_LEVEL_INFO: Record<ExperienceLevel, {
+  label: string
+  hint: string
+}> = {
+  beginner: { label: 'Beginner', hint: 'Erste Schritte — Grundlagen und Technik' },
+  advanced: { label: 'Advanced', hint: 'Mehrere Jahre Erfahrung, eigene Routine' },
+  pro:      { label: 'Pro',      hint: 'Strukturierte Periodisierung, Wettkampfnaehe' },
+  elite:    { label: 'Elite',    hint: 'Leistungssport, Betreuung im Team' },
+}
+
 export const NUTRITION_GOAL_LABEL: Record<NutritionGoal, string> = {
   lose_weight:   'Abnehmen',
   maintain:      'Halten',

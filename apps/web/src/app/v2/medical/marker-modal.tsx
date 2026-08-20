@@ -29,7 +29,7 @@
 // `Below range` sagen, WO der Wert liegt. `Optimal` und `Critical`
 // der Attrappe sind Urteile und kommen hier nicht vor.
 import * as React from 'react'
-import { Card, Icon, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
+import { Card, Icon, LineChart, Pill, InEntwicklungKnopf } from '@lumeos/ui'
 
 import type { Lage } from '../../../lib/medical/befund'
 import { balkenSkala, type MarkerReihe } from '../../../lib/medical/reihe'
@@ -263,25 +263,77 @@ export function MarkerReihenModal({ r, onClose }: { r: MarkerReihe; onClose: () 
         <div className="v2-tbl-wrap">
           <table className="v2-tbl">
             <thead>
+              {/* G-80: **Labor und Uhrzeit stehen jetzt da.** `[read]`
+                  Der Befund aus G-63: *„Wer mehrere Befunde hat, sieht
+                  heute nicht, von welchem Labor sie stammen."* `[cmd]`
+                  Zwei Labore im Bestand ueber fuenf Befunde, und
+                  Labore messen verschieden. Die Popup-Tabelle ist die
+                  Stelle dafuer — die Liste zeigt je Marker eine Zeile,
+                  hier steht jede Messung einzeln. */}
               <tr>
-                <th style={{ width: 120 }}>Date</th>
-                <th style={{ textAlign: 'right' }}>Value</th>
+                <th style={{ width: 110 }}>Date</th>
+                <th style={{ textAlign: 'right', width: 110 }}>Value</th>
+                <th>Labor</th>
+                <th style={{ width: 90 }}>Bereich</th>
               </tr>
             </thead>
             <tbody>
               {r.messungen.slice().reverse().map(m => (
                 <tr key={m.id}>
-                  <td className="v2-num v2-muted">{m.datum}</td>
+                  <td className="v2-num v2-muted">
+                    {m.datum}
+                    {/* Die Uhrzeit als Unterzeile: sie gehoert zum
+                        Datum, nicht in eine eigene Spalte. */}
+                    {m.report_time && (
+                      <div className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
+                        {m.report_time.slice(0, 5)}
+                      </div>
+                    )}
+                  </td>
                   <td className="v2-num" style={{ textAlign: 'right' }}>
                     {m.wert != null
                       ? `${m.operator !== '=' ? m.operator : ''}${zahl(m.wert)} ${r.einheit}`
                       : (m.wertText ?? '—')}
+                    {/* `[cmd]` NUR wenn er etwas sagt: auf allen 140
+                        Zeilen steht heute `unknown`, und das ist keine
+                        Angabe, sondern deren Fehlen. Sobald ein Import
+                        `fasting`/`non_fasting` liefert, steht es hier. */}
+                    {m.fasting_status === 'fasting' && (
+                      <div className="v2-dim" style={{ fontSize: 9.5 }}>nüchtern</div>
+                    )}
+                    {m.fasting_status === 'non_fasting' && (
+                      <div className="v2-dim" style={{ fontSize: 9.5 }}>nicht nüchtern</div>
+                    )}
+                  </td>
+                  <td className="v2-muted" style={{ fontSize: 11 }}>
+                    {m.lab_name ?? <span className="v2-dim">—</span>}
+                  </td>
+                  <td>
+                    {m.reference_source === 'catalog_fallback'
+                      ? <Pill>Katalog</Pill>
+                      : m.reference_source === 'lab_report'
+                        ? <span className="v2-dim" style={{ fontSize: 10.5 }}>Befund</span>
+                        : <span className="v2-dim" style={{ fontSize: 10.5 }}>—</span>}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        {/* Was die Herkunftsspalte bedeutet — einmal, statt an jeder
+            Zeile. `[read]` G-46: „dass er ein Rueckfall ist, muss
+            sichtbar sein." */}
+        {r.messungen.some(m => m.reference_source === 'catalog_fallback') && (
+          <>
+            <div className="v2-divider" />
+            <div className="v2-muted" style={{ fontSize: 11, lineHeight: 1.5, padding: '0 14px 12px' }}>
+              <strong>Katalog</strong>
+              {' heisst: der Befund hat keinen eigenen Bereich mitgeliefert, '}
+              {'und der Bereich stammt aus dem Biomarker-Katalog. Jedes Labor '}
+              {'fuehrt eigene Bereiche — der des Befunds gilt, wo es einen gibt.'}
+            </div>
+          </>
+        )}
       </Card>
     </MMod>
   )

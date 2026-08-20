@@ -15,6 +15,9 @@ import {
   ACTIVITY_LEVEL_INFO,
   BIOLOGICAL_SEXES,
   BIOLOGICAL_SEX_LABEL,
+  // G-80: die vier Stufen des Erfahrungsgrads (C-118).
+  EXPERIENCE_LEVELS,
+  EXPERIENCE_LEVEL_INFO,
   HEIGHT_MAX,
   HEIGHT_MIN,
   NUTRITION_GOALS,
@@ -266,6 +269,58 @@ export function ProfilFormular({
               {feldfehler.activity_level && (
                 <div className="v2-feldfehler">{feldfehler.activity_level}</div>
               )}
+            </Card>
+
+            {/* ── ERFAHRUNGSGRAD (C-118, G-80) ─────────────────────
+                **Tom, 2026-08-19:** *„Wir brauchen in Settings und
+                Onboarding eine Deklaration des Users, welches Level er
+                hat."*
+
+                `[cmd]` **DIE SPALTE GIBT ES NOCH NICHT.**
+                `public.profiles` fuehrt 14 Spalten, keine davon nimmt
+                den Grad auf. Die Kachel steht trotzdem: **die Form ist
+                da, die Auswahl gesperrt** — dasselbe Muster wie die
+                Ausschluss-Kachel in G-65, als der Preset-Katalog noch
+                fehlte. Sie war zwei Stunden spaeter bedienbar, ohne
+                dass jemand sie neu bauen musste.
+
+                `[read]` **Keine Attrappenmarke:** die sagt „hier stehen
+                erfundene Zahlen". Hier stehen keine — es steht nur
+                nichts. Ein Leerzustand ist kein Attrappenzustand.
+
+                `[read]` Neben `activity_level`, weil beide dasselbe
+                Feld beschreiben und doch verschiedenes messen: wieviel
+                gegen wie erfahren. */}
+            <Card title="Erfahrungsgrad" sub="Selbsteinschätzung">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {EXPERIENCE_LEVELS.map(stufe => {
+                  const info = EXPERIENCE_LEVEL_INFO[stufe]
+                  return (
+                    <button
+                      key={stufe}
+                      type="button"
+                      className="v2-wahl"
+                      disabled
+                      aria-disabled="true"
+                      style={{ cursor: 'not-allowed', opacity: 0.65 }}
+                    >
+                      <span className="v2-wahl-punkt" />
+                      <span style={{ flex: 1, minWidth: 0 }}>
+                        <span className="v2-wahl-titel">{info.label}</span>
+                        <span className="v2-wahl-hinweis">{info.hint}</span>
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+              <p className="v2-hinweis">
+                <Icon name="alert" className="v2-ic v2-ic-sm" />
+                <span>
+                  Die Angabe lässt sich noch nicht speichern — im Profil gibt es
+                  kein Feld dafür. Sobald es da ist, steht die Auswahl hier
+                  bereit.
+                </span>
+              </p>
             </Card>
 
             {/* Nur bei `female`. Der Block wird AUSGEBLENDET, nicht

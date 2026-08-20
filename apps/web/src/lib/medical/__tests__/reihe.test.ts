@@ -43,6 +43,11 @@ function wert(teil: Partial<BefundWert> & { id: string; report_date: string }): 
 
 const messung = (wert: number | null, datum: string): Messung => ({
   id: `m-${datum}`, datum, wert, wertText: null, operator: '=', reportId: `r-${datum}`,
+  // G-80: die vier Felder gehoeren seither zur Messung. Fuer die
+  // Trendrechnung sind sie ohne Belang — sie stehen hier, damit der
+  // Typ vollstaendig ist.
+  reference_source: 'lab_report', lab_name: null, report_time: null,
+  fasting_status: null,
 })
 
 test('vier Messungen eines Markers werden EINE Reihe', () => {

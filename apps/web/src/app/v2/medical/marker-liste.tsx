@@ -292,6 +292,24 @@ export function MarkerListe({ reihen, befunde }: { reihen: MarkerReihe[]; befund
                         {r.bereich
                           ? bereichText(r.bereich.low, r.bereich.high, r.bereich.text)
                           : <span className="v2-dim">—</span>}
+                        {/* G-80: **Die Herkunft steht wieder da.**
+                            `[read]` G-46 hatte sie ausdruecklich gebaut
+                            („Quelle `Katalog`, als solcher beschriftet"),
+                            und sie fiel mit der Flachliste weg (G-60).
+                            `[cmd]` Ein Rueckfall im Bestand: Calcium.
+                            Als Unterzeile statt eigener Spalte — die
+                            Vorlage hat dafuer keine, und 138 von 140
+                            Zeilen zeigten „Befund" ohne Aussagewert. */}
+                        {r.aktuell.reference_source === 'catalog_fallback' && (
+                          <div style={{ marginTop: 2 }}>
+                            <Pill>Katalog</Pill>
+                          </div>
+                        )}
+                        {r.aktuell.reference_source === 'none' && r.bereich == null && (
+                          <div className="v2-dim" style={{ fontSize: 9.5, marginTop: 2 }}>
+                            kein Bereich
+                          </div>
+                        )}
                       </td>
                       <td>
                         <span style={{ color: LAGE_FARBE[r.lage], fontSize: 11.5 }}>

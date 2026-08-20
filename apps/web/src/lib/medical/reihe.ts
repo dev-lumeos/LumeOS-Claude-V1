@@ -47,6 +47,24 @@ export type Messung = {
   wertText: string | null
   operator: string
   reportId: string
+  /**
+   * G-80: die vier Felder, die bis dahin ungenutzt dastanden.
+   *
+   * `[read]` Der Befund aus G-63: *„Dass ein Bereich ein Rückfall ist,
+   * sieht man heute nicht mehr."* In G-46 war die Herkunftsspalte
+   * ausdrücklich gebaut und fiel mit der Flachliste weg (G-60).
+   */
+  reference_source: 'lab_report' | 'catalog_fallback' | 'none'
+  /** Welches Labor gemessen hat. `[cmd]` Zwei im Bestand. */
+  lab_name: string | null
+  /** Uhrzeit des Befunds. `[cmd]` Auf allen fünf gefüllt. */
+  report_time: string | null
+  /**
+   * `[cmd]` **Auf allen 140 Zeilen `unknown`.** Die Anzeige zeigt ihn
+   * deshalb nur, wenn er etwas sagt — `unknown` ist keine Angabe,
+   * sondern deren Fehlen.
+   */
+  fasting_status: string | null
 }
 
 /**
@@ -111,6 +129,12 @@ export function zuReihen(
       wertText: w.value_text,
       operator: w.value_operator,
       reportId: w.report_id,
+      // G-80: durchgereicht, nicht neu gelesen — `lab_result_values_read`
+      // liefert alle vier bereits mit.
+      reference_source: w.reference_source,
+      lab_name: w.lab_name,
+      report_time: w.report_time,
+      fasting_status: w.fasting_status ?? null,
     }))
     const jung = sortiert[sortiert.length - 1]
     const bereich = gueltigerBereich(jung)

@@ -100,6 +100,13 @@ export type ZeilenZusatz = {
   match_status: string | null
   match_candidates: MatchKandidat[]
   raw_marker_name: string | null
+  /**
+   * G-80: Ob die Nutzerin nuechtern war.
+   *
+   * `[cmd]` **Auf allen 140 Zeilen `unknown`.** Die Pruefbedingung
+   * erlaubt `fasting` | `non_fasting` | `unknown`.
+   */
+  fasting_status: string | null
 }
 
 export type BefundWert = BefundZeile & Partial<ZeilenZusatz> & {
@@ -142,8 +149,14 @@ export async function ladeBefundwerte(userId: string): Promise<BefundWert[]> {
   // Zusatzfelder je Wert-Id. Ein Zugriff, kein N+1.
   const { data: zusatz } = await db
     .from('lab_result_values')
+    // G-80: `fasting_status` kommt hier mit — **die Lesefunktion
+    // liefert ihn NICHT.** `[cmd]` Geprueft gegen
+    // `pg_get_function_result`: sie gibt `report_time`, `lab_name` und
+    // `reference_source`, aber keinen Nuechternzustand. Dieser Zugriff
+    // besteht ohnehin fuer die Zuordnungsfelder; eine Spalte mehr
+    // kostet keine zusaetzliche Abfrage.
     .select('id, entry_confidence, needs_verification, match_status, '
-      + 'match_candidates, raw_marker_name')
+      + 'match_candidates, raw_marker_name, fasting_status')
     .in('id', zeilen.map(z => z.id))
 
   const nachId = new Map<string, ZeilenZusatz>()
@@ -156,6 +169,7 @@ export async function ladeBefundwerte(userId: string): Promise<BefundWert[]> {
       match_status: z.match_status ?? null,
       match_candidates: Array.isArray(z.match_candidates) ? z.match_candidates : [],
       raw_marker_name: z.raw_marker_name ?? null,
+      fasting_status: z.fasting_status ?? null,
     })
   }
 
