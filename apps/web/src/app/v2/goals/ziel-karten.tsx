@@ -23,6 +23,11 @@ import * as React from 'react'
 import { Card, Icon, Pill, Row } from '@lumeos/ui'
 
 import type { Meilenstein, ZielFortschritt } from '../../../lib/goals/lesen'
+// G-79: Bearbeiten, Prioritaet, Historie.
+import { ZielEditor } from './ziel-editor'
+import {
+  ABGESCHLOSSEN, STATUS_LABEL, type ZielStatus,
+} from '../../../lib/goals/ziel-regeln'
 
 /**
  * Was `progress_status` sagt — die Funktion über sich selbst, nicht
@@ -69,7 +74,12 @@ function bisFrist(frist: string | null, stichtag: string): string {
   return tage > 0 ? `noch ${tage} Tage` : `${Math.abs(tage)} Tage vorbei`
 }
 
-function ZielKarte({ g, stichtag }: { g: ZielFortschritt; stichtag: string }) {
+function ZielKarte({ g, stichtag, onBearbeiten }: {
+  g: ZielFortschritt
+  stichtag: string
+  /** G-79: `undefined` blendet den Stift aus (z. B. in der Historie). */
+  onBearbeiten?: () => void
+}) {
   const farbe = 'var(--acc-goals)'
   const pct = g.progress_pct
   const gerechnet = g.progress_status === 'measured'
@@ -97,10 +107,23 @@ function ZielKarte({ g, stichtag }: { g: ZielFortschritt; stichtag: string }) {
               {(g.goal_type ?? '').replace(/_/g, ' ')}
             </span>
             {g.is_primary && <Pill variant="acc">primaer</Pill>}
-            {g.status && g.status !== 'active' && <Pill>{g.status}</Pill>}
+            {/* G-79: die Rangzahl steht sichtbar — sie bestimmt die
+                Reihenfolge dieser Liste. Bis heute stand nur die
+                Marke `primaer` da, ohne Rang. */}
+            {g.priority != null && <Pill>Prio {g.priority}</Pill>}
+            {g.status && g.status !== 'active' && (
+              <Pill>{STATUS_LABEL[g.status as ZielStatus] ?? g.status}</Pill>
+            )}
             <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
               {`Frist ${g.target_date ?? '—'} · ${bisFrist(g.target_date, stichtag)}`}
             </span>
+            {onBearbeiten && (
+              <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                      aria-label={`${g.title} bearbeiten`}
+                      onClick={onBearbeiten}>
+                <Icon name="edit" className="v2-ic v2-ic-sm" />
+              </button>
+            )}
           </div>
 
           <div style={{
@@ -168,10 +191,19 @@ export function ZielKarten({ ziele, meilensteine, stichtag }: {
   const abweichend = meilensteine.filter(
     m => m.stored_status && m.computed_status && m.stored_status !== m.computed_status)
 
+  // G-79: welches Ziel gerade bearbeitet wird.
+  const [bearbeitet, setBearbeitet] = React.useState<string | null>(null)
+
+  // `[read]` Abgeschlossene Ziele gehoeren in die Historie, nicht in
+  // die Uebersicht. Die Trennung ist der Status, nicht ein Datum:
+  // `achieved` und `abandoned` sind abgeschlossen, `paused` nicht.
+  const aktive = ziele.filter(g => !ABGESCHLOSSEN.includes(g.status as ZielStatus))
+  const beendete = ziele.filter(g => ABGESCHLOSSEN.includes(g.status as ZielStatus))
+
   return (
     <div className="v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        {ziele.length === 0 ? (
+        {aktive.length === 0 ? (
           <Card title="Ziele">
             <div style={{ padding: '24px 8px', textAlign: 'center' }}>
               <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>
@@ -183,7 +215,34 @@ export function ZielKarten({ ziele, meilensteine, stichtag }: {
             </div>
           </Card>
         ) : (
-          ziele.map(g => <ZielKarte key={g.goal_id} g={g} stichtag={stichtag} />)
+          aktive.map(g => (
+            bearbeitet === g.goal_id
+              ? (
+                <ZielEditor key={g.goal_id} ziel={g}
+                            onFertig={() => setBearbeitet(null)} />
+              )
+              : (
+                <ZielKarte key={g.goal_id} g={g} stichtag={stichtag}
+                           onBearbeiten={() => setBearbeitet(g.goal_id)} />
+              )
+          ))
+        )}
+
+        {/* G-79: die Historie. **Tom:** „Dann macht man einfach einen
+            Seed mit abgelaufenen Goals, die in Meilensteine landen (im
+            Sinne von History)." `[cmd]` Heute traegt kein Ziel einen
+            abgeschlossenen Status — die Kachel erscheint erst, wenn
+            eines `achieved` oder `abandoned` ist. Sie zeigt dann, was
+            war, ohne Stift: Vergangenes wird nicht bearbeitet. */}
+        {beendete.length > 0 && (
+          <Card title="Abgeschlossene Ziele"
+                sub={`${beendete.length} · erreicht oder abgebrochen`}>
+            <div className="v2-col-gap" style={{ gap: 10 }}>
+              {beendete.map(g => (
+                <ZielKarte key={g.goal_id} g={g} stichtag={stichtag} />
+              ))}
+            </div>
+          </Card>
         )}
       </div>
 

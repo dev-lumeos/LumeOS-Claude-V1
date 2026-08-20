@@ -50,6 +50,8 @@ import { ACTIVE_GOALS, COMPLETED_GOALS } from './daten'
 import { GoalsKontext, type ModalZustand } from './kontext'
 import { GoalsModale } from './modale'
 import { GoalsPhaseView, GoalsTDEEView, GoalsCrossModuleView } from './tab-phase'
+// G-79: die echte Zeitachse.
+import { TimelineTab as ZeitachseTab } from './tab-timeline'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
 import { CompositionTab, type CompDaten } from './tab-composition'
 import { KoerperMetriken, KoerperUmfaenge } from './tab-koerper'
@@ -201,7 +203,17 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
 
       {tab === 'phase' && <GoalsPhaseView />}
       {tab === 'cross' && <GoalsCrossModuleView />}
-      {tab === 'timeline' && <TimelineTab />}
+      {/* G-79: echte Zeitachse aus Zielen, Phasen und
+          Meilensteinen. Der Entwurf bleibt als Rueckfall, wenn
+          nichts mit Datum vorliegt. */}
+      {tab === 'timeline' && (
+        (echt.ziele.length + echt.meilensteine.length) > 0
+          ? (
+            <ZeitachseTab ziele={echt.ziele} phase={echt.phase}
+                          meilensteine={echt.meilensteine} stichtag={echt.stichtag} />
+          )
+          : <TimelineTab />
+      )}
       {tab === 'physique' && <GoalsPhysiqueView />}
       {tab === 'poses' && <GoalsPosesView />}
 

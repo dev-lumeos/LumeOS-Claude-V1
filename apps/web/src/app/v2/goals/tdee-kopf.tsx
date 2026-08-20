@@ -141,9 +141,16 @@ export function TdeeKopf({ t }: { t: AdaptiverTdee | null }) {
       <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
         {t.alpha != null ? (
           <>
-            {`EMA-Glaettung α = ${t.alpha}: der adaptive Wert uebernimmt je Schritt `}
-            {`${Math.round(t.alpha * 100)} % aus der Messung und behaelt `}
-            {`${Math.round((1 - t.alpha) * 100)} % des Vorwerts — er bleibt damit nahe an der Formel. `}
+            {/* G-79: Der Satz endete bis hierher mit „er bleibt damit
+                nahe an der Formel". `[cmd]` Seit C-119 ist
+                `alpha = 1,0` — der adaptive Wert IST die Messung, und
+                von einer Glaettung bleibt nichts. Der Zusatz stimmte
+                nur fuer alpha < 1 und ist deshalb weg. */}
+            {t.alpha >= 1
+              ? `EMA-Glaettung α = ${t.alpha}: keine Glaettung — der adaptive Wert ist der gemessene. `
+              : `EMA-Glaettung α = ${t.alpha}: der adaptive Wert uebernimmt je Schritt `
+                + `${Math.round(t.alpha * 100)} % aus der Messung und behaelt `
+                + `${Math.round((1 - t.alpha) * 100)} % des Vorwerts. `}
           </>
         ) : null}
         {`Energiedichte ${z(t.kcal_per_kg)} kcal/kg · Zeitraum ${t.period_start ?? '—'} bis ${t.period_end ?? '—'} · `}
