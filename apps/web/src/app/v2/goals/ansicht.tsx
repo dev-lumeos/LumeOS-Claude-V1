@@ -41,6 +41,7 @@
 // Teil des Adaptive-TDEE-Tabs. Gruende je Kachel in
 // docs/ssot/116-goals-anbindung.md.
 import * as React from 'react'
+import { useTabParam } from '../../../lib/tab-url'
 import { Card, Pill, Icon, Tabs, type TabItem } from '@lumeos/ui'
 
 // `[cmd]` Von den neun Importen aus `daten.ts` sind seit GO-16 zwei
@@ -117,7 +118,8 @@ export type EchteDaten = {
 }
 
 export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
-  const [tab, setTab] = React.useState('goals')
+  // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
+  const [tab, setTab] = useTabParam('goals')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
 
   const comp: CompDaten = {

@@ -32,6 +32,8 @@ const SPALTEN = [
   'height_cm',
   'body_weight_kg',
   'activity_level',
+  // G-110: seit C-140 vorhanden, seither angeschlossen.
+  'experience_level',
   'nutrition_goal',
   'pregnancy_started_on',
   'pregnancy_ended_on',

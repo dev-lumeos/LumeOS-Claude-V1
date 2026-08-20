@@ -34,10 +34,11 @@ function zahl(v: number | null, einheit: string | null): string {
 }
 
 export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
-  const [offen, setOffen] = React.useState<Set<string>>(
-    // Die erste Gruppe offen, damit der Tab nicht leer wirkt.
-    () => new Set(d.gruppen.slice(0, 1).map(g => g.name)),
-  )
+  // G-117, Tom: „standard eingeklappt". Alle 12 Gruppen zu — die
+  // Kopfzeile je Gruppe traegt Zahl und Trefferzahl, der Tab wirkt
+  // damit nicht leer, sondern aufgeraeumt. (Vorher war die erste
+  // Gruppe offen.)
+  const [offen, setOffen] = React.useState<Set<string>>(() => new Set())
 
   if (d.fehler) {
     return (
@@ -49,6 +50,12 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
 
   return (
     <div className="v2-col-gap" style={{ gap: 14 }}>
+      {/* G-117: HIER kommt spaeter der Zeitfilter hin (1/7/14/30/45/
+          60/90 Tage) — er haengt an C-157 (lange Form der Tageswerte,
+          Codex) und wird bewusst NICHT vorgebaut: ein Filter, der nur
+          einen Zeitraum kann, waere eine Attrappe. Die Klappen darunter
+          sind davon unabhaengig — der Filter aendert nur die Werte je
+          Zeile, nicht die Gliederung. */}
       <Card title="Naehrstoffordnung" sub={`${d.gesamt} Naehrstoffe in ${d.gruppen.length} Gruppen`}>
         <p className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
           Die Gliederung kommt aus <span className="v2-mono">nutrient_defs</span>:

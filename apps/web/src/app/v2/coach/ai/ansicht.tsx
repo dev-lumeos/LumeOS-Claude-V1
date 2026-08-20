@@ -38,6 +38,7 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE. Ein Buddy-Schema gibt es nicht.
 import * as React from 'react'
+import { useTabParam } from '../../../../lib/tab-url'
 import {
   Card, Pill, Icon, Row, Tabs, type TabItem,
 } from '@lumeos/ui'
@@ -89,7 +90,8 @@ function tabs(): TabItem[] {
 }
 
 export function BuddyAnsicht() {
-  const [tab, setTab] = React.useState('chat')
+  // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
+  const [tab, setTab] = useTabParam('chat')
   const [persona, setPersona] = React.useState('friend')
   const [autonomy, setAutonomy] = React.useState(3)
   const [tier, setTier] = React.useState('pro')

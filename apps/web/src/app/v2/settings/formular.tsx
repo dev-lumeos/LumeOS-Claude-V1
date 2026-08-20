@@ -43,6 +43,7 @@ function zuFormwerten(p: StoredProfile): Formwerte {
     height_cm: p.height_cm === null ? '' : String(p.height_cm),
     body_weight_kg: p.body_weight_kg === null ? '' : String(p.body_weight_kg),
     activity_level: p.activity_level ?? '',
+    experience_level: p.experience_level ?? '',
     nutrition_goal: p.nutrition_goal ?? '',
     pregnancy_started_on: p.pregnancy_started_on ?? '',
     pregnancy_ended_on: p.pregnancy_ended_on ?? '',
@@ -295,14 +296,20 @@ export function ProfilFormular({
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {EXPERIENCE_LEVELS.map(stufe => {
                   const info = EXPERIENCE_LEVEL_INFO[stufe]
+                  const gewaehlt = werte.experience_level === stufe
                   return (
                     <button
                       key={stufe}
                       type="button"
                       className="v2-wahl"
-                      disabled
-                      aria-disabled="true"
-                      style={{ cursor: 'not-allowed', opacity: 0.65 }}
+                      aria-pressed={gewaehlt}
+                      style={gewaehlt ? {
+                        borderColor: 'color-mix(in oklch, var(--acc) 45%, var(--border))',
+                        background: 'color-mix(in oklch, var(--acc) 8%, transparent)',
+                      } : undefined}
+                      // Ein zweiter Klick nimmt die Angabe zurueck —
+                      // „nicht angegeben" ist ein gueltiger Zustand.
+                      onClick={() => setze('experience_level', gewaehlt ? '' : stufe)}
                     >
                       <span className="v2-wahl-punkt" />
                       <span style={{ flex: 1, minWidth: 0 }}>
@@ -313,13 +320,21 @@ export function ProfilFormular({
                   )
                 })}
               </div>
-              <p className="v2-hinweis">
-                <Icon name="alert" className="v2-ic v2-ic-sm" />
-                <span>
-                  Die Angabe lässt sich noch nicht speichern — im Profil gibt es
-                  kein Feld dafür. Sobald es da ist, steht die Auswahl hier
-                  bereit.
-                </span>
+              {/* `[cmd]` G-110: Seit C-140 gibt es
+                  `profiles.experience_level` — die Auswahl ist
+                  entsperrt und wird gespeichert.
+
+                  `[read]` **Sie ist Selbstauskunft, keine
+                  Fremdeinschaetzung** (C-71): was die Nutzerin ueber
+                  sich sagt, nicht was das System aus ihrem Verhalten
+                  ableitet. Deshalb waehlt sie hier selbst — und kann
+                  die Angabe mit einem zweiten Klick wieder
+                  zuruecknehmen. */}
+              <p className="v2-muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5 }}>
+                Die Angabe schaltet Flaechen frei, die Erfahrung
+                voraussetzen — etwa <strong>Supplements · Extended</strong>{' '}
+                ab <em>{EXPERIENCE_LEVEL_INFO.advanced.label}</em>. Sie
+                lässt sich jederzeit ändern.
               </p>
             </Card>
 

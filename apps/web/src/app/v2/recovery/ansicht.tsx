@@ -31,6 +31,7 @@
 // kommt in `supabase/_pipeline/` in keiner SQL-Datei vor. Es ist nichts
 // anzubinden.
 import * as React from 'react'
+import { useTabParam } from '../../../lib/tab-url'
 import {
   Card, Pill, Icon, Ring, Meter, Row, Tabs, InEntwicklungKnopf,
   ErmuedungsKarte, type TabItem,
@@ -87,7 +88,8 @@ export function RecoveryAnsicht({
   scores?: ScoreStand
   modalitaeten?: ModalitaetenStand
 }) {
-  const [tab, setTab] = React.useState('today')
+  // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
+  const [tab, setTab] = useTabParam('today')
   const [modus, setModus] = React.useState<ScoreModus>('hrv')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
 

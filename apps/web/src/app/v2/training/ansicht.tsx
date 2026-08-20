@@ -31,6 +31,7 @@
 // nichts anzubinden. Welche Kachel als erste echte Daten bekommen
 // koennte, steht in docs/ssot/91-training-mockup.md.
 import * as React from 'react'
+import { useTabParam } from '../../../lib/tab-url'
 import {
   Card, Pill, Icon, Ring, Meter, LineChart, Row, Tabs,
   InEntwicklungKnopf, type TabItem,
@@ -113,7 +114,8 @@ export function TrainingAnsicht({
    */
   readiness?: ReadinessStand | null
 } = {}) {
-  const [tab, setTab] = React.useState('today')
+  // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
+  const [tab, setTab] = useTabParam('today')
   const [liveOpen, setLiveOpen] = React.useState(false)
   const [modal, setModal] = React.useState<{ typ: ModalTyp; nutzlast?: unknown } | null>(null)
 

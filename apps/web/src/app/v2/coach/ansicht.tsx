@@ -42,6 +42,7 @@
 // `[cmd]` ALLES IST ATTRAPPE. Ein `coach`-Schema gibt es nicht — der
 // Begriff kommt in `supabase/_pipeline/` in keiner SQL-Datei vor.
 import * as React from 'react'
+import { useTabParam } from '../../../lib/tab-url'
 import {
   Card, Pill, Empty, Icon, Row, Sparkline, Tabs, type TabItem,
 } from '@lumeos/ui'
@@ -84,7 +85,8 @@ function tabs(): TabItem[] {
 }
 
 export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
-  const [tab, setTab] = React.useState('overview')
+  // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
+  const [tab, setTab] = useTabParam('overview')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
 
   const kontext = React.useMemo(() => ({

@@ -18,7 +18,7 @@
 // zusaetzlicher Knopf daneben. Tom will das Wort AN der Stelle des
 // Datums — eine Sache weniger auf dem Bildschirm.
 import * as React from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { Icon } from '@lumeos/ui'
 
@@ -41,13 +41,18 @@ export function Datumsnavigation({
 }) {
   const t = useTranslations('Nutrition')
   const router = useRouter()
+  const suche = useSearchParams()
 
   const zurueckErlaubt = true
   const vorwaertsErlaubt = istAdmin || !istHeute(datum)
   const heuteAngezeigt = istHeute(datum)
 
   function gehe(ziel: string) {
-    router.push(`/v2/nutrition?datum=${ziel}` as never)
+    // G-117: die uebrigen Parameter BLEIBEN — vorher warf der
+    // Tagwechsel `?tab=` weg und sprang damit auf Diary (Toms Befund).
+    const p = new URLSearchParams(suche?.toString() ?? '')
+    p.set('datum', ziel)
+    router.push(`/v2/nutrition?${p.toString()}` as never)
   }
 
   return (

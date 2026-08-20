@@ -23,6 +23,7 @@ import * as React from 'react'
 import { Card, Icon } from '@lumeos/ui'
 
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
+import type { StoredWaterLog } from '../../../lib/nutrition/water-model'
 
 /**
  * Die Schnellmengen der Kachel (G-101).
@@ -55,7 +56,44 @@ export function HydrationKachel({
   const [frisch, setFrisch] = React.useState<HydrationDay | null>(null)
   /** Die freie Eingabe in ml (G-101). */
   const [eigene, setEigene] = React.useState('')
+  // G-117: die Historie des Tages — Toms Fehlklick-Argument: „ich kann
+  // nichts anschauen oder womoeglich einen Fehlklick korrigieren."
+  const [zeigeListe, setZeigeListe] = React.useState(false)
+  const [eintraege, setEintraege] = React.useState<StoredWaterLog[] | null>(null)
+  const [loeschKandidat, setLoeschKandidat] = React.useState<StoredWaterLog | null>(null)
   const tag = frisch ?? geladen
+
+  const ladeListe = React.useCallback(async () => {
+    try {
+      const a = await fetch(`/api/nutrition/water?datum=${datum}&liste=1`)
+      const daten = await a.json()
+      if (!a.ok) throw new Error(daten?.error ?? 'Liste nicht lesbar.')
+      setEintraege(daten.eintraege as StoredWaterLog[])
+      setFrisch(daten.tag as HydrationDay)
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    }
+  }, [datum])
+
+  async function loeschen(eintrag: StoredWaterLog) {
+    setLaeuft(true)
+    setFehler(null)
+    try {
+      const a = await fetch(
+        `/api/nutrition/water?id=${encodeURIComponent(eintrag.id)}&datum=${datum}`,
+        { method: 'DELETE' },
+      )
+      const daten = await a.json()
+      if (!a.ok) throw new Error(daten?.error ?? 'Loeschen fehlgeschlagen.')
+      setEintraege(daten.eintraege as StoredWaterLog[])
+      setFrisch(daten.tag as HydrationDay)
+      setLoeschKandidat(null)
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaeuft(false)
+    }
+  }
 
   if (!tag) {
     return (
@@ -99,6 +137,8 @@ export function HydrationKachel({
       if (!a.ok) throw new Error(daten?.error ?? 'Eintrag fehlgeschlagen.')
       setFrisch(daten.tag as HydrationDay)
       if (quelle === 'manual') setEigene('')
+      // G-117: die offene Historie zeigt den neuen Eintrag sofort.
+      if (zeigeListe) void ladeListe()
     } catch (e) {
       setFehler(e instanceof Error ? e.message : String(e))
     } finally {
@@ -229,6 +269,98 @@ export function HydrationKachel({
             Eintragen
           </button>
         </span>
+      </div>
+
+      {/* G-117: die Historie des Tages — ansehen und Fehlklicks
+          korrigieren. Loeschen mit Sicherheitsabfrage nach dem
+          Daumen-Muster (G-67): sie NENNT den Eintrag, statt nur
+          „wirklich?" zu fragen. */}
+      <div style={{ marginTop: 10 }}>
+        <button
+          type="button"
+          className="v2-btn v2-btn-sm"
+          aria-expanded={zeigeListe}
+          onClick={() => {
+            const naechster = !zeigeListe
+            setZeigeListe(naechster)
+            if (naechster && eintraege === null) void ladeListe()
+          }}
+        >
+          <Icon name="refresh" className="v2-ic v2-ic-sm" />
+          {zeigeListe ? 'Eintraege verbergen' : 'Eintraege ansehen'}
+        </button>
+
+        {zeigeListe && (
+          eintraege === null ? (
+            <p className="v2-dim" style={{ fontSize: 11, marginTop: 8 }}>laedt …</p>
+          ) : eintraege.length === 0 ? (
+            <p className="v2-dim" style={{ fontSize: 11, marginTop: 8 }}>
+              Fuer diesen Tag ist nichts Getrunkenes erfasst — der Balken
+              oben kann trotzdem gefuellt sein (Wasser aus Lebensmitteln).
+            </p>
+          ) : (
+            <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {eintraege.map(e => {
+                const zeit = e.logged_at
+                  ? new Date(e.logged_at).toLocaleTimeString('de-DE', {
+                      hour: '2-digit', minute: '2-digit',
+                    })
+                  : '—'
+                const quelle = e.source === 'quick_add'
+                  ? 'Schnellknopf'
+                  : e.source === 'manual' ? 'Eingabe' : e.source
+                return loeschKandidat?.id === e.id ? (
+                  <div
+                    key={e.id} role="alertdialog"
+                    aria-label={`${ml(e.amount_ml)} ml loeschen?`}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
+                      padding: '6px 10px', borderRadius: 6, fontSize: 11.5,
+                      border: '1px solid color-mix(in oklch, var(--neg) 40%, var(--border))',
+                      background: 'color-mix(in oklch, var(--neg) 7%, transparent)',
+                    }}
+                  >
+                    <span style={{ flex: 1 }}>
+                      <strong>{ml(e.amount_ml)} ml</strong> von {zeit} loeschen?
+                      Das laesst sich nicht rueckgaengig machen.
+                    </span>
+                    <button
+                      type="button" className="v2-btn v2-btn-sm"
+                      disabled={laeuft}
+                      style={{ color: 'var(--neg)' }}
+                      onClick={() => void loeschen(e)}
+                    >Loeschen</button>
+                    <button
+                      type="button" className="v2-btn v2-btn-sm"
+                      onClick={() => setLoeschKandidat(null)}
+                    >Abbrechen</button>
+                  </div>
+                ) : (
+                  <div
+                    key={e.id}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      padding: '5px 10px', borderRadius: 6, fontSize: 11.5,
+                      background: 'var(--surface)', border: '1px solid var(--border)',
+                    }}
+                  >
+                    <span className="v2-num" style={{ color: 'var(--fg-subtle)', width: 38 }}>{zeit}</span>
+                    <span className="v2-num" style={{ fontWeight: 600 }}>{ml(e.amount_ml)} ml</span>
+                    <span className="v2-dim" style={{ fontSize: 10.5 }}>{quelle}</span>
+                    <button
+                      type="button" className="v2-icon-btn"
+                      style={{ marginLeft: 'auto' }}
+                      aria-label={`${ml(e.amount_ml)} ml von ${zeit} loeschen`}
+                      onClick={() => setLoeschKandidat(e)}
+                    >
+                      <Icon name="trash" className="v2-ic v2-ic-sm" />
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          )
+        )}
       </div>
 
       {/* Regel wie bei den Naehrstoffen: ein Fehlzaehler ueber null

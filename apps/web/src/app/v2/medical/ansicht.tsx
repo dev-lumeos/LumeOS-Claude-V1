@@ -33,6 +33,7 @@
 //
 // `[cmd]` ALLES IST ATTRAPPE. Ein `medical`-Schema gibt es nicht.
 import * as React from 'react'
+import { useTabParam } from '../../../lib/tab-url'
 import {
   Card, Pill, Icon, Ring, Meter, Row, Tabs, type TabItem,
 } from '@lumeos/ui'
@@ -108,7 +109,8 @@ export type EchteDaten = {
 }
 
 export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
-  const [tab, setTab] = React.useState('dashboard')
+  // G-117: Tab in der Adresse — Drop-in aus lib/tab-url.
+  const [tab, setTab] = useTabParam('dashboard')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
 
   // G-84: die echte Lagezaehlung. `[cmd]` Sie summiert, was die Liste

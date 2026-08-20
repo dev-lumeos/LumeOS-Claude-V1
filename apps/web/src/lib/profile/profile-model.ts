@@ -54,15 +54,16 @@ export const ACTIVITY_LEVEL_INFO: Record<ActivityLevel, {
  * Deklaration des Users, welches Level er hat."* Und zur Zahl der
  * Stufen: *„starten wir mal damit, ist ja jederzeit ausbaubar."*
  *
- * `[cmd]` **DIE SPALTE GIBT ES NOCH NICHT.** `public.profiles` fuehrt
- * 14 Spalten; keine davon nimmt einen Erfahrungsgrad auf.
+ * `[cmd]` **SEIT C-140 GIBT ES DIE SPALTE** —
+ * `public.profiles.experience_level`, `text`, nullable, ohne Default,
+ * mit CHECK auf genau diese vier Werte. **G-110 hat sie angeschlossen.**
+ *
+ * `[cmd]` **Sie steht auf allen 7 Profilen auf NULL** (gemessen
+ * 2026-08-20): angelegt, aber nie gesetzt.
+ *
  * `activity_level` ist etwas anderes — es beschreibt, **wieviel**
  * jemand sich bewegt (und traegt einen TDEE-Faktor), nicht **wie
  * erfahren** er dabei ist. Ein Anfaenger kann `very_active` sein.
- *
- * **Diese Liste steht hier trotzdem**, weil die vier Stufen Toms
- * Entscheidung sind und keine Erfindung dieser Sitzung. Wer die Spalte
- * anlegt, findet sie vor.
  *
  * `[read]` **Nicht zu verwechseln mit der Autonomy-Stufe (C-71).**
  * Beide beschreiben Reife, aber aus verschiedenen Richtungen:
@@ -155,6 +156,8 @@ export const profileWriteSchema = z.object({
   ),
 
   activity_level: z.preprocess(leerZuNull, z.enum(ACTIVITY_LEVELS).nullable()),
+  // G-110: Selbstauskunft, seit C-140 speicherbar.
+  experience_level: z.preprocess(leerZuNull, z.enum(EXPERIENCE_LEVELS).nullable()),
   nutrition_goal: z.preprocess(leerZuNull, z.enum(NUTRITION_GOALS).nullable()),
 
   // Zeitraeume, keine Eigenschaften. `[cmd]` So sind sie angelegt:
@@ -199,6 +202,7 @@ export type StoredProfile = {
   height_cm: number | null
   body_weight_kg: number | null
   activity_level: ActivityLevel | null
+  experience_level: ExperienceLevel | null
   nutrition_goal: NutritionGoal | null
   pregnancy_started_on: string | null
   pregnancy_ended_on: string | null
@@ -212,6 +216,7 @@ export const EMPTY_PROFILE: StoredProfile = {
   height_cm: null,
   body_weight_kg: null,
   activity_level: null,
+  experience_level: null,
   nutrition_goal: null,
   pregnancy_started_on: null,
   pregnancy_ended_on: null,
@@ -246,6 +251,7 @@ export function parseStoredProfile(row: unknown): StoredProfile {
     height_cm: zahlOderNull(r.height_cm),
     body_weight_kg: zahlOderNull(r.body_weight_kg),
     activity_level: ausListe(r.activity_level, ACTIVITY_LEVELS),
+    experience_level: ausListe(r.experience_level, EXPERIENCE_LEVELS),
     nutrition_goal: ausListe(r.nutrition_goal, NUTRITION_GOALS),
     pregnancy_started_on: textOderNull(r.pregnancy_started_on),
     pregnancy_ended_on: textOderNull(r.pregnancy_ended_on),
