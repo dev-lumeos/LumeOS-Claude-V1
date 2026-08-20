@@ -96,6 +96,31 @@ print(lauf(["node", "--version"]))
 einen Befehl braucht, der nicht ueber `lauf()` geht, **erweitert die
 Datei statt danebenzuschreiben.**
 
+### Bildschirmfotos: `tools/schuss.mjs`, nicht gstack
+
+**Tom, 2026-08-20:** *,Wieso haben die kein Playwright?"*
+
+`[cmd]` **Sie haetten.** `@playwright/test` 1.41.2 steht in der
+Wurzel-`package.json`, `chromium_headless_shell` liegt im Cache.
+**Es wurde nie benutzt** — stattdessen startete ein Agent einen
+Bun-Browser, der auf jedem Aufruf ein Fenster oeffnete.
+
+`[cmd]` **`tools/schuss.mjs`** meldet sich selbst an, wartet auf
+`networkidle` und liefert **Bild, Attrappenzahl und Konsolenfehler in
+einem Aufruf:**
+
+```bash
+node tools/schuss.mjs /v2/nutrition backup/x.png
+node tools/schuss.mjs /v2/nutrition backup/x-375.png --breite 375 --dunkel
+```
+
+`[cmd]` **Gegengeprobt am 2026-08-20:** angemeldet, Titel `Tagebuch ·
+LumeOS`, 288 KB Vollseite, **7 Attrappen, 2 Konsolenfehler** — **kein
+Fenster.**
+
+`[read]` **Damit faellt auch A-24 weg:** Die Markenzahl kommt aus der
+gerenderten Seite, nicht aus Textmarken im Quelltext.
+
 ## Der Dev-Server und das Gate teilen sich nichts — wenn man es laesst
 
 **Tom, 2026-08-19:** *,Irgendeiner schiesst immer den Server ab, geht
