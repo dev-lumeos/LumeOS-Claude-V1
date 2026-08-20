@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `545fd58` auf `dev`.
+**Stand:** 2026-08-18, Anker `09505cf` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 86 offen, 1 in Arbeit.
+`[cmd]` 88 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -209,6 +209,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
 | **C-102** | `milch` findet Joghurt statt Milch |  |
+| **C-123** | Recovery — die neun Entscheidungen |  |
+| **C-124** | Recovery-Recherche — Modalitaeten und Schwellen |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2424,6 +2426,72 @@ Umsetzen angepasst werden.
   neu messen.**
 
 
+
+- [ ] **C-123: Recovery — die neun Entscheidungen** (neu 2026-08-19).
+  **Von Tom entschieden am 2026-08-19.** Grundlage fuer die Bauauftraege.
+
+  | | Entscheidung |
+  |---|---|
+  | **E1** | **Nur `manual`.** *Die Wearables kommen spaeter.* |
+  | **E2** | Soreness: **nur gemeldete Muskeln > 0** |
+  | **E3** | **Sechs Readiness-Stufen**, Texte einzeln abnehmen |
+  | **E4** | **siehe unten** |
+  | **E5** | **Recherchieren** statt setzen |
+  | **E6** | **Stress-Score bauen** — nicht zurueckstellen |
+  | **E7** | **Eine Erholungskurve** |
+  | **E8** | **Recherchieren** |
+  | **E9** | Naehrstoff-Term: **Rueckfall 70**, als Rueckfall markiert |
+
+  ### E4 — die wichtigste Praezisierung
+
+  **Tom:** *„Wichtig: Wir bewerten nur Fakten. Die Empfehlung sehe ich
+  als angebracht, wenn die Datenlage dem entspricht — **aber nicht wegen
+  eines Uebertrainingssymptoms.**"*
+
+  `[read]` **Der Arzt-Hinweis haengt an mehreren Signalen ueber Zeit**,
+  nicht an einem Ausschlag. **Ein schlechter Tag ist kein Befund.**
+
+  `[cmd]` **Was daraus folgt:** Die neun Signale werden gezaehlt und
+  gezeigt — **die Empfehlung erscheint erst, wenn mehrere ueber mehrere
+  Tage zusammenkommen.** Wie viele und wie lange, muss die Recherche
+  aus E5/E8 mitbeantworten.
+
+  ### E6 weicht vom Vorschlag ab
+
+  `[cmd]` **Der Entwurf schlug zurueckstellen vor, Tom sagt bauen.**
+  `[read]` Stress steht im Check-in und wirkt auf die Erholung — ihn
+  wegzulassen hiesse, einen erfassten Wert unbenutzt zu lassen.
+
+- [ ] **C-124: Recovery-Recherche — Modalitaeten und Schwellen** (neu
+  2026-08-19). **E5 und E8 aus C-123.**
+
+  **Tom, 2026-08-19:** *„Womoeglich gibt ein Research Aufklaerung, wir
+  sind nicht die Ersten, die sowas bauen."*
+
+  ### E5 — Modalitaeten-Bonuswerte
+
+  `[cmd]` **Sauna, Massage, Eisbad, Dehnen** — je ein Bonuspunkt im
+  Score. **Keine Quelle im Repo.**
+
+  `[read]` **Was zu suchen ist:** Belegt die Sportwissenschaft eine
+  messbare Wirkung auf die Erholung — und in welcher
+  Groessenordnung? **Kaltwasserimmersion ist gut untersucht, Sauna
+  teilweise, Massage strittig.**
+
+  ### E8 — Motivations-Schwelle
+
+  `[cmd]` **Das Uebertrainings-Signal feuert bei niedriger Motivation.**
+  Die Schwelle stammt aus einer anderen Skala: `[annahme]` **≤ 5 von 10,
+  umgerechnet, nicht belegt.**
+
+  `[read]` **Und die E4-Frage gehoert dazu:** Wie viele Signale ueber wie
+  viele Tage rechtfertigen einen Arzt-Hinweis? **Uebertraining hat eine
+  Forschungsliteratur** — REST-Q, RESTQ-Sport, die Uebertrainings-Syndrom-
+  Kriterien.
+
+  `[read]` **Was nicht gesucht wird:** eine Diagnoseregel. **Nur die
+  Frage, ab wann eine Haeufung so ungewoehnlich ist, dass ein Hinweis
+  angebracht ist.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
