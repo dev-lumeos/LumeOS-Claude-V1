@@ -35,6 +35,7 @@ import { SuppInjections } from './tab-injektionen'
 import { SuppCatalog, SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
 // G-74: Inventory und Compliance mit echten Werten.
 import { ComplianceEcht, InventoryEcht } from './tab-inventory-echt'
+import { KatalogEcht } from './tab-katalog-echt'
 import { SupplementsModale } from './modale'
 
 /**
@@ -178,7 +179,15 @@ export function SupplementsAnsicht({
           {tab === 'interactions' && <SuppInteractions />}
           {tab === 'cost' && <SuppCost />}
           {tab === 'injection' && <SuppInjections />}
-          {tab === 'catalog' && <SuppCatalog />}
+          {/* `[cmd]` G-91: Catalog liest `supplement_catalog` — 44
+              Eintraege, `evidence_grade` auf allen gefuellt. Ohne
+              Katalog bleibt der Entwurf mit seiner Marke, dasselbe
+              Muster wie bei Compliance und Inventory. */}
+          {tab === 'catalog' && (
+            katalog.length > 0
+              ? <KatalogEcht katalog={katalog} daten={daten} />
+              : <SuppCatalog />
+          )}
           {tab === 'stacks' && <SuppStacks />}
           {tab === 'intel' && <SuppIntelligence />}
           {/* `[cmd]` G-74: Inventory rechnet die Reichweite aus
