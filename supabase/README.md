@@ -120,7 +120,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 121 | `12_recovery/121_recovery_scores_modalities.sql` | Recovery-Score-Schnappschuesse und Modalitaeten: `scores`, `modality_log`, zentrale Konstanten | 2 Tabellen, 7 Funktionen, RLS je Operation |
 | 130 | `13_supplements/130_supplements_schema.sql` | Supplements-Schema: `supplement_catalog`, `supplement_interactions`, `user_stacks`, `stack_items`, `intake_logs`, `daily_intake_summary` | 5 Tabellen, 1 Sicht, 2 Funktionen, RLS je Operation |
 | 131 | `13_supplements/131_supplements_katalog.ts` | Standard-Supplement-Katalog aus `daten/supplement-katalog.json` | 44 aktive Supplements |
-| 132 | `13_supplements/132_substance_alias_bridge.ts` | Substanz-Aliasbrücke zwischen LumeOS-Supplements, F-05-Kandidaten und Kimi-Substanzen | 1.132 Aliaszeilen, mindestens 16 LumeOS↔Kimi-Treffer |
+| 132 | `13_supplements/132_substance_alias_bridge.ts` | Substanz-Aliasbrücke zwischen LumeOS-Supplements, F-05-Kandidaten und Kimi-Substanzen | `crawl_022`: 291 Kimi-Substanzen, mindestens 16 LumeOS↔Kimi-Treffer |
+| 134 | `13_supplements/134_substance_catalog.ts` | Konsolidierter Substanzkatalog aus Kimi, LumeOS und F-05 mit Herkunft je Zeile | 567 Substanzen, 667 Herkunftszeilen |
 | 140 | `14_medical/140_medical_schema.sql` | Medical-Schema: `biomarker_catalog`, `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`, `lab_result_values_read()` | 4 Tabellen, 1 Funktion, RLS je Operation |
 | 141 | `14_medical/141_biomarker_katalog.ts` | LOINC-Masterkatalog aus `daten/biomarker-loinc/` und kuratierte Referenzbereich-Kandidaten aus `biomarker-katalog.json` | 11.676 LOINC-Codes, 464 Referenzbereich-Zeilen |
 | 142 | `14_medical/142_laborimport_matching.sql` | Laborimport-Zuordnung: `biomarker_aliases`, Importfunktionen und Match-Status an Messwerten | 1 Tabelle, 2 Funktionen, unbekannte Marker bleiben speicherbar |

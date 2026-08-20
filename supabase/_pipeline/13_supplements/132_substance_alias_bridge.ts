@@ -11,7 +11,11 @@ const DB = process.env.PGDATABASE ?? 'postgres'
 
 const KIMI_BASE = 'backup/kimi-research/Kimi_Agent/supplement_performance_database/data'
 const KIMI_ALIASES = path.join(KIMI_BASE, 'indexes', 'aliases.json')
-const KIMI_INDEX = path.join(KIMI_BASE, 'indexes', 'ingredient_index.json')
+const KIMI_SUBSTANCE_FILES = [
+  path.join(KIMI_BASE, 'substances', 'supplements.jsonl'),
+  path.join(KIMI_BASE, 'substances', 'peptides.jsonl'),
+  path.join(KIMI_BASE, 'substances', 'performance_compounds.jsonl'),
+] as const
 const LOCAL_CATALOG = 'supabase/_pipeline/daten/supplement-katalog.json'
 const F05_CATALOG = 'supabase/_pipeline/daten/substanz-katalog.json'
 
@@ -37,6 +41,20 @@ function readJson(file: string): JsonObject {
   return JSON.parse(fs.readFileSync(file, 'utf8')) as JsonObject
 }
 
+function readJsonl(file: string): JsonObject[] {
+  if (!fs.existsSync(file)) fail(`${file} fehlt. C-131/C-134 braucht den Kimi-Bestand.`)
+  return fs.readFileSync(file, 'utf8')
+    .split(/\r?\n/)
+    .filter(Boolean)
+    .map((line, index) => {
+      try {
+        return JSON.parse(line) as JsonObject
+      } catch (error) {
+        fail(`${file}:${index + 1}: JSON ungueltig (${String(error)})`)
+      }
+    })
+}
+
 function fold(value: unknown): string {
   return String(value ?? '')
     .toLowerCase()
@@ -60,7 +78,8 @@ function add(rows: AliasRow[], row: AliasRow): void {
 const local = readJson(LOCAL_CATALOG) as JsonObject & { supplements?: JsonObject[] }
 const f05 = readJson(F05_CATALOG) as JsonObject & { substances?: JsonObject[] }
 const kimiAliases = readJson(KIMI_ALIASES) as Record<string, string>
-const kimiIndex = readJson(KIMI_INDEX) as Record<string, JsonObject>
+const kimiRows = KIMI_SUBSTANCE_FILES.flatMap(file => readJsonl(file))
+const kimiIndex = Object.fromEntries(kimiRows.map(item => [String(item.id ?? ''), item])) as Record<string, JsonObject>
 
 if (!Array.isArray(local.supplements) || local.supplements.length !== 44) {
   fail(`${LOCAL_CATALOG}: 44 Supplements erwartet`)
@@ -68,8 +87,8 @@ if (!Array.isArray(local.supplements) || local.supplements.length !== 44) {
 if (!Array.isArray(f05.substances) || f05.substances.length !== 320) {
   fail(`${F05_CATALOG}: 320 Substanzkandidaten erwartet`)
 }
-if (Object.keys(kimiIndex).length !== 237) {
-  fail(`${KIMI_INDEX}: 237 Kimi-Substanzen erwartet`)
+if (Object.keys(kimiIndex).length !== 291) {
+  fail(`Kimi crawl_022: ${Object.keys(kimiIndex).length} Kimi-Substanzen, erwartet 291`)
 }
 
 const rows: AliasRow[] = []
@@ -106,16 +125,27 @@ for (const item of f05.substances) {
 }
 
 for (const [id, item] of Object.entries(kimiIndex)) {
-  const label = String(item.name ?? id)
+  const label = String(item.canonical_name ?? item.name ?? id)
   add(rows, {
     catalog: 'kimi_substance',
     entity_id: id,
     entity_label: label,
     alias: label,
-    source: 'kimi_ingredient_index',
-    source_ref: `${KIMI_INDEX}#${id}`,
+    source: 'kimi_crawl_022',
+    source_ref: `crawl_022#${id}`,
     raw: item,
   })
+  for (const alias of Array.isArray(item.aliases) ? item.aliases : []) {
+    add(rows, {
+      catalog: 'kimi_substance',
+      entity_id: id,
+      entity_label: label,
+      alias: String(alias),
+      source: 'kimi_crawl_022',
+      source_ref: `crawl_022#${id}:aliases`,
+      raw: { alias, target_id: id },
+    })
+  }
 }
 
 for (const [alias, id] of Object.entries(kimiAliases)) {
@@ -123,7 +153,7 @@ for (const [alias, id] of Object.entries(kimiAliases)) {
   add(rows, {
     catalog: 'kimi_substance',
     entity_id: id,
-    entity_label: String(item.name ?? id),
+    entity_label: String(item.canonical_name ?? item.name ?? id),
     alias,
     source: 'kimi_aliases',
     source_ref: `${KIMI_ALIASES}#${alias}`,
@@ -190,7 +220,7 @@ ${payload}
 \\.
 
 DELETE FROM supplements.substance_aliases
-WHERE source IN ('lumeos_supplement_catalog', 'f05_substance_catalog', 'kimi_ingredient_index', 'kimi_aliases');
+WHERE source IN ('lumeos_supplement_catalog', 'f05_substance_catalog', 'kimi_ingredient_index', 'kimi_crawl_022', 'kimi_aliases');
 
 INSERT INTO supplements.substance_aliases (
   catalog, entity_id, entity_label, alias, alias_folded, source, source_ref, raw
@@ -305,8 +335,8 @@ BEGIN
   IF v_aliases <> ${unique.length} THEN
     RAISE EXCEPTION 'substance_aliases: % Zeilen, erwartet ${unique.length}', v_aliases;
   END IF;
-  IF v_kimi <> 237 THEN
-    RAISE EXCEPTION 'substance_aliases: % Kimi-Substanzen, erwartet 237', v_kimi;
+  IF v_kimi <> 291 THEN
+    RAISE EXCEPTION 'substance_aliases: % Kimi-Substanzen, erwartet 291', v_kimi;
   END IF;
   IF v_local_kimi < 16 THEN
     RAISE EXCEPTION 'substance_alias_matches: nur % LumeOS-Kimi-Treffer, erwartet mindestens 16', v_local_kimi;
@@ -331,4 +361,4 @@ if (result.stdout) process.stdout.write(result.stdout)
 if (result.stderr) process.stderr.write(result.stderr)
 if (result.status !== 0) process.exit(result.status ?? 1)
 
-console.log(`C-131: ${unique.length} Aliaszeilen aus 44 + 320 + 237 Eintraegen`)
+console.log(`C-131/C-134: ${unique.length} Aliaszeilen aus 44 + 320 + 291 Eintraegen`)

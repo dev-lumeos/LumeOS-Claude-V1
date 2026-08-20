@@ -410,6 +410,13 @@
       "depends_on": ["131"]
     },
     {
+      "id": "134",
+      "path": "supabase/_pipeline/13_supplements/134_substance_catalog.ts",
+      "kind": "tsx",
+      "creates": "Konsolidierter Substanzkatalog aus Kimi crawl_022, LumeOS-Supplements und F-05-Kandidaten mit Herkunft je Zeile",
+      "depends_on": ["132"]
+    },
+    {
       "id": "140",
       "path": "supabase/_pipeline/14_medical/140_medical_schema.sql",
       "kind": "sql",
@@ -463,7 +470,7 @@
       "path": "supabase/_pipeline/13_supplements/132a_rule_input_status.sql",
       "kind": "sql",
       "creates": "Regel-Eingangsdiagnose: fehlende Kimi-Regelpfade als missing_input statt stilles false",
-      "depends_on": ["132", "053", "106", "121", "146"]
+      "depends_on": ["134", "053", "106", "121", "146"]
     },
     {
       "id": "133",
