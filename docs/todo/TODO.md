@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `81984ae` auf `dev`.
+**Stand:** 2026-08-18, Anker `f672f25` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 117 offen, 1 in Arbeit.
+`[cmd]` 113 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -184,7 +184,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-94** | `erfassen.tsx` ist toter Code |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
-| **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
 | **C-107** | Der Supplement-Katalog und was ihm fehlt |  |
 | **C-108** | Wechselwirkungen — nennen ja, bewerten nein |  |
@@ -227,14 +226,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **GO-21** | Taille:Huefte mit Geschlechtsbezug |  |
 | **C-146** | `phase_am()` liefert 8 von 14 Spalten |  |
 | **G-89** | Die Idealwerte stehen nur in Begleitdateien |  |
-| **C-148** | `coach` fehlt in `config.toml` |  |
 | **G-92** | Das Extended-Gate schuetzt nichts |  |
 | **C-149** | Vitamin D in IU gegen µg |  |
-| **A-25** | Der Encoding-Pruefer scannt Build-Verzeichnisse |  |
 | **G-95** | Sieben Module, aber nicht dieselben sieben |  |
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **C-151** | Das Coach-Portal — neun Entscheidungen |  |
-| **C-152** | `schema-sollstand.json` fuehrt vier Training-Tabellen nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -1706,17 +1702,6 @@ Umsetzen angepasst werden.
   Schema-Vollstaendigkeitspruefung hat es nicht gemeldet** — sie prueft
   Tabellen und Spalten, offenbar nicht Policies.
 
-- [ ] **C-88: Jedes neue Schema braucht eine Zeile in `config.toml`**
-  (neu 2026-08-18). **Dritter Fall.**
-
-  `[cmd]` **`goals` (GO-03), `recovery` (C-67), `training` (G-64)** —
-  jedes Mal beim eigenen Auftrag vergessen, jedes Mal erst beim
-  Anbinden aufgefallen: `PGRST106: Invalid schema`.
-
-  `[read]` **Die Datei traegt inzwischen drei Kommentare, die es
-  erklaeren** — und es passiert trotzdem. **Eine Pruefung waere billiger
-  als der vierte Fall:** Jedes Schema in `schema-sollstand.json` gegen
-  die Liste in `config.toml`.
 
 
 
@@ -2959,26 +2944,6 @@ Umsetzen angepasst werden.
   Verhaeltnisse selbst sind Arithmetik und stehen** — die Einstufung
   waere eine Bewertung.
 
-- [ ] **C-148: `coach` fehlt in `config.toml`** (neu 2026-08-20).
-  **Vierter Fall, und diesmal hat er 40 Minuten gekostet.**
-
-  `[cmd]` **Angemeldet gemessen:** `Invalid schema: coach` — *„dieselbe
-  Meldung wie ein Schema, das es gar nicht gibt, waehrend `recovery`
-  (170), `training` (1.416) und `goals` (181) im selben Lauf lesen."*
-
-  `[cmd]` **Die Tabellen existieren seit C-119.** Es fehlt die
-  Konfiguration, **und die ist kein SQL.**
-
-  `[read]` **C-88 haelt seit dem 2026-08-18 fest:** *„goals (GO-03),
-  recovery (C-67), training (G-64) — jedes Mal PGRST106."* **Die
-  Pruefung `schema-sollstand.json` gegen `config.toml` steht seither als
-  offener Punkt.**
-
-  `[cmd]` **Und C-119 hat es nicht erwaehnt**, obwohl der Auftrag sechs
-  Tabellen anlegte.
-
-  **Zu tun:** Eintrag nachziehen — **und C-88 endlich bauen.** `[read]`
-  **Die Pruefung haette heute vier Faelle verhindert.**
 
 - [ ] **G-92: Das Extended-Gate schuetzt nichts** (neu 2026-08-20).
   **Befund aus G-91, ernst.**
@@ -3011,21 +2976,6 @@ Umsetzen angepasst werden.
   `nutrition.micronutrient_snapshot` hat 8 echte Zeilen, **7 der 8 Codes
   kommen in `nutrients_provided` vor.**
 
-- [ ] **A-25: Der Encoding-Pruefer scannt Build-Verzeichnisse** (neu
-  2026-08-20). Befund aus G-90 und G-91.
-
-  `[cmd]` **`tools/encoding-pruefen.mjs` nimmt `.next*` nicht aus.**
-  Fuenf `U+FFFD` in erzeugten Vendor-Chunks unter `.next-g90`
-  **faerbten das Gate rot, obwohl keine Quelldatei betroffen war.**
-
-  `[read]` **Der G-90-Agent hat den Grund benannt:** *„`.next` und
-  `.next-gate` sind die einzigen zwei vorgesehenen Namen."*
-
-  `[cmd]` **Das trifft jeden, der auf einen eigenen Port ausweicht** —
-  und genau das ist die Loesung fuer parallele UI-Arbeit.
-
-  **Zu tun:** `.next*` ausnehmen. `[read]` **Erzeugte Dateien sind keine
-  Quelldateien.**
 
 - [ ] **G-95: Sieben Module, aber nicht dieselben sieben** (neu
   2026-08-20). Befund aus G-90.
@@ -3116,13 +3066,6 @@ Umsetzen angepasst werden.
   gegen 10–15 Minuten je Klient*) — **fuer sie existiert kein
   funktionaler Mockup-Screen, nur die Workflow-Beschreibung.**
 
-- [ ] **C-152: `schema-sollstand.json` fuehrt vier Training-Tabellen
-  nicht** (neu 2026-08-20). Nebenbefund aus F-06.
-
-  `[cmd]` **Aus `100_training_schema.sql`**, gemessen.
-
-  `[read]` **Dieselbe Klasse wie C-88:** Eine Pruefung, die nicht alles
-  kennt, meldet keinen Fehler — **sie schweigt.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.

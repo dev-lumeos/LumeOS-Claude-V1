@@ -381,6 +381,26 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   prueft und meldet stattdessen** — so haben es die vier
   Fable-Auftraege gehalten.
 
+- [x] **A-25: Der Encoding-Pruefer scannt Build-Verzeichnisse** (neu
+  2026-08-20). Befund aus G-90 und G-91.
+
+  `[cmd]` **`tools/encoding-pruefen.mjs` nimmt `.next*` nicht aus.**
+  Fuenf `U+FFFD` in erzeugten Vendor-Chunks unter `.next-g90`
+  **faerbten das Gate rot, obwohl keine Quelldatei betroffen war.**
+
+  `[read]` **Der G-90-Agent hat den Grund benannt:** *„`.next` und
+  `.next-gate` sind die einzigen zwei vorgesehenen Namen."*
+
+  `[cmd]` **Das trifft jeden, der auf einen eigenen Port ausweicht** —
+  und genau das ist die Loesung fuer parallele UI-Arbeit.
+
+  **Zu tun:** `.next*` ausnehmen. `[read]` **Erzeugte Dateien sind keine
+  Quelldateien.**
+
+  `[cmd]` **Erledigt 2026-08-20.** Der Pruefer laesst jetzt **`.next*`,
+  `dist`, `build`, `out`, `coverage`** aus. **Mit vorhandenen
+  `.next-gate`-Verzeichnissen laeuft er sauber.**
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
@@ -5589,6 +5609,74 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Erledigt 2026-08-19 mit C-140.** Der Waechter auf *„genau
   56"* ist auf eine Untergrenze umgestellt.
+
+- [x] **C-88: Jedes neue Schema braucht eine Zeile in `config.toml`**
+  (neu 2026-08-18). **Dritter Fall.**
+
+  `[cmd]` **`goals` (GO-03), `recovery` (C-67), `training` (G-64)** —
+  jedes Mal beim eigenen Auftrag vergessen, jedes Mal erst beim
+  Anbinden aufgefallen: `PGRST106: Invalid schema`.
+
+  `[read]` **Die Datei traegt inzwischen drei Kommentare, die es
+  erklaeren** — und es passiert trotzdem. **Eine Pruefung waere billiger
+  als der vierte Fall:** Jedes Schema in `schema-sollstand.json` gegen
+  die Liste in `config.toml`.
+
+  `[cmd]` **Erledigt 2026-08-20 mit A-26 — nach vier Faellen.**
+  goals (GO-03), recovery (C-67), training (G-64), **coach (C-148)**.
+
+  `[cmd]` **`tools/schemafreigabe-pruefen.mjs` haengt im Gate:**
+  *„9 config-Schemata geprueft; 7 Anwendungsschemata freigegeben."*
+
+  `[cmd]` **In beide Richtungen belegt:** gruen im Normalfall, **rot
+  ohne `coach`, rot bei einem Extra-Schema `ghost`.**
+
+  `[read]` **Damit ist die Regel maschinell** statt in einem Absatz —
+  wie `gruppenlabel-pruefen.mjs` nach C-96.
+
+- [x] **C-148: `coach` fehlt in `config.toml`** (neu 2026-08-20).
+  **Vierter Fall, und diesmal hat er 40 Minuten gekostet.**
+
+  `[cmd]` **Angemeldet gemessen:** `Invalid schema: coach` — *„dieselbe
+  Meldung wie ein Schema, das es gar nicht gibt, waehrend `recovery`
+  (170), `training` (1.416) und `goals` (181) im selben Lauf lesen."*
+
+  `[cmd]` **Die Tabellen existieren seit C-119.** Es fehlt die
+  Konfiguration, **und die ist kein SQL.**
+
+  `[read]` **C-88 haelt seit dem 2026-08-18 fest:** *„goals (GO-03),
+  recovery (C-67), training (G-64) — jedes Mal PGRST106."* **Die
+  Pruefung `schema-sollstand.json` gegen `config.toml` steht seither als
+  offener Punkt.**
+
+  `[cmd]` **Und C-119 hat es nicht erwaehnt**, obwohl der Auftrag sechs
+  Tabellen anlegte.
+
+  **Zu tun:** Eintrag nachziehen — **und C-88 endlich bauen.** `[read]`
+  **Die Pruefung haette heute vier Faelle verhindert.**
+
+  `[cmd]` **Erledigt 2026-08-20.** `coach` ist freigegeben, **`supabase
+  stop && start` war noetig.**
+
+  `[cmd]` **REST-Nachweis:** angemeldet als `dev@lumeos.app` liefert
+  `coach.client_permissions` **1 Zeile, kein PGRST106.**
+
+  `[read]` **Damit liest G-90 sofort echt** — die Oberflaeche stand
+  seit heute frueh und wartete nur darauf.
+
+- [x] **C-152: `schema-sollstand.json` fuehrt vier Training-Tabellen
+  nicht** (neu 2026-08-20). Nebenbefund aus F-06.
+
+  `[cmd]` **Aus `100_training_schema.sql`**, gemessen.
+
+  `[read]` **Dieselbe Klasse wie C-88:** Eine Pruefung, die nicht alles
+  kennt, meldet keinen Fehler — **sie schweigt.**
+
+  `[cmd]` **Erledigt 2026-08-20.** `schema-sollstand.json` fuehrt jetzt
+  **40 statt 36 fremde Tabellen** — ergaenzt: `training.muscle_groups`,
+  `equipment`, `exercises`, `exercise_muscles`.
+
+  `[cmd]` **Schemapruefung auf Wegwerf-DB: 40 von 40, Exit 0.**
 
 
 
