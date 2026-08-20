@@ -29,6 +29,8 @@ import {
   leererStand,
 } from '../../../lib/nutrition/vorlieben-lesen'
 import type { VorliebenDaten } from './tab-vorlieben'
+// G-97: der Wochenplan aus den C-150-Tabellen.
+import { ladePlan, type PlanDaten } from '../../../lib/nutrition/plan-lesen'
 
 import { datumOderHeute } from '../../../lib/datum'
 import { TagebuchAnsicht } from './ansicht'
@@ -155,10 +157,24 @@ export default async function V2NutritionPage({
     }
   }
 
+  // G-97: der Wochenplan. Nur laden, wenn der Tab gezeigt wird — wie
+  // bei Food-DB und Vorlieben darueber. `[read]` Faellt er aus, bleibt
+  // `plan` null und der Entwurf steht mit seiner Marke da; die uebrige
+  // Seite ist davon nicht betroffen.
+  let plan: PlanDaten | null = null
+  if (tab === 'planner') {
+    try {
+      plan = await ladePlan()
+    } catch {
+      plan = null
+    }
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
       tab={tab}
+      plan={plan}
       istAdmin={istAdmin}
       vorlieben={vorlieben}
       wasser={wasser}

@@ -38,6 +38,9 @@ import { FoodPreferencesTab } from './tab-prefs'
 // G-65: derselbe Tab mit echten Daten.
 import { VorliebenTab, type VorliebenDaten } from './tab-vorlieben'
 import { NutritionPlannerTab } from './tab-planner'
+// G-97: der Planner mit echten Daten (C-150).
+import { PlannerEchtTab } from './tab-planner-echt'
+import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
 // G-66: der Food-DB-Tab in der Form des Entwurfs.
 import { NutritionFoodsTab } from './tab-foods'
 import type { NutritionFoodSearchPayload } from '../../../lib/nutrition/food-search'
@@ -98,7 +101,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
-  istAdmin = false, foodsStart = null, vorlieben = null,
+  istAdmin = false, foodsStart = null, vorlieben = null, plan = null,
 }: {
   datum: string
   tab: string
@@ -116,6 +119,8 @@ export async function TagebuchAnsicht({
   foodsStart?: NutritionFoodSearchPayload | null
   /** G-65: die Vorlieben, wenn der Tab gezeigt wird. */
   vorlieben?: VorliebenDaten | null
+  /** G-97: der Wochenplan, wenn der Planner-Tab gezeigt wird. */
+  plan?: PlanDaten | null
 }) {
   // A-14: Serverkomponente — `getTranslations`, nicht `useTranslations`.
   const t = await getTranslations('Nutrition')
@@ -190,7 +195,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} />
       )}
       {tab === 'diary' && (
       <>
@@ -451,13 +456,14 @@ export async function TagebuchAnsicht({
  * eingebaut.
  */
 function AndererTab({
-  tab, foodsStart, vorlieben,
+  tab, foodsStart, vorlieben, plan,
 }: {
   tab: string
   /** G-66: die erste Trefferseite, serverseitig geladen. */
   foodsStart?: NutritionFoodSearchPayload | null
   /** G-65: der gespeicherte Vorliebenstand. */
   vorlieben?: VorliebenDaten | null
+  plan?: PlanDaten | null
 }) {
   const inhalt: Record<string, { titel: string; braucht: string }> = {
     insights: {
@@ -504,7 +510,15 @@ function AndererTab({
     )
   }
   if (tab === 'planner') {
-    return <div style={{ marginTop: 16 }}><NutritionPlannerTab /></div>
+    // `[cmd]` SEIT G-97 ECHT, sobald ein Plan gelesen wurde. Dasselbe
+    // Muster wie bei `prefs` (G-65): ohne Sitzung oder ohne Plan bleibt
+    // der Entwurf mit seiner Marke stehen — eine leere echte Flaeche
+    // saehe aus wie ein Befund und waere doch nur ein fehlendes Cookie.
+    return (
+      <div style={{ marginTop: 16 }}>
+        {plan ? <PlannerEchtTab d={plan} /> : <NutritionPlannerTab />}
+      </div>
+    )
   }
 
   if (tab === 'foods') {
