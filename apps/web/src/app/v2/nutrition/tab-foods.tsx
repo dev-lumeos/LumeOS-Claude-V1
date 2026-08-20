@@ -61,6 +61,120 @@ const PILLEN: Array<{ label: string; slug: string | null }> = [
   { label: 'Spices', slug: 'wuerzmittel-gewuerze' },
 ]
 
+/** Zeilen je Seite. `[read]` 50 wie bisher — nur jetzt blaetterbar. */
+const SEITE_GROESSE = 50
+
+/** Die Sortierungen, die `nutrition.food_search` kennt. */
+type Sortierung = 'relevance' | 'protein_desc' | 'kcal_asc' | 'name_asc'
+
+/**
+ * Die Filtergruppen (G-73).
+ *
+ * `[cmd]` Alle Zahlen am 2026-08-20 gegen `nutrition.food_tags`
+ * gemessen. Sie stehen an der Option, damit niemand zwei Filter
+ * kombiniert, die zusammen null Treffer ergeben.
+ *
+ * `[cmd]` **`halal`, `kosher` und `thai_food` fehlen bewusst** — die
+ * ersten beiden sind Presets (C-93), `thai_food` hat null Zuordnungen.
+ *
+ * `[read]` **Die Allergene schalten anders:** man sucht *ohne*
+ * Laktose, nicht *mit*. Sie stehen deshalb in einer eigenen Gruppe mit
+ * eigener Beschriftung — die Zahl daneben ist die Zahl der
+ * MARKIERTEN, nicht die der uebrigbleibenden.
+ */
+const FILTERGRUPPEN: Array<{
+  titel: string
+  art: 'auswahl' | 'ausschluss'
+  optionen: Array<{ code: string; label: string; anzahl: number }>
+}> = [
+  {
+    titel: 'Ernährungsform',
+    art: 'auswahl',
+    optionen: [
+      // `[cmd]` Jeder vegane Eintrag traegt auch `vegetarian` — die
+      // 1.377 sind eine Teilmenge der 1.751. Deshalb stehen sie
+      // nebeneinander und nicht als „oder".
+      { code: 'vegan', label: 'Vegan', anzahl: 1377 },
+      { code: 'vegetarian', label: 'Vegetarisch', anzahl: 1751 },
+    ],
+  },
+  {
+    titel: 'Nährwert',
+    art: 'auswahl',
+    optionen: [
+      { code: 'high_protein', label: 'Proteinreich', anzahl: 1400 },
+      { code: 'low_carb', label: 'Low-Carb', anzahl: 4659 },
+      { code: 'low_fat', label: 'Fettarm', anzahl: 2648 },
+      { code: 'high_fiber', label: 'Ballaststoffreich', anzahl: 558 },
+    ],
+  },
+  {
+    titel: 'Verarbeitung',
+    art: 'auswahl',
+    optionen: [
+      { code: 'whole_food', label: 'Grundnahrungsmittel', anzahl: 2884 },
+      { code: 'ultra_processed', label: 'Hochverarbeitet', anzahl: 927 },
+    ],
+  },
+]
+
+/**
+ * Die Allergene — Ausschluss, nicht Auswahl.
+ *
+ * `[read]` Man sucht *ohne* Laktose. Das ist die umgekehrte Schaltung
+ * der Gruppen oben, und es geht **nicht ueber die Suchfunktion**:
+ * `nutrition.food_search` nimmt `p_tag_code` als AUSWAHL entgegen, es
+ * gibt keinen Parameter fuer „ohne". Ausschliessen kann die Funktion
+ * nur ueber die gespeicherten Vorlieben (C-94, `hard_exclude`).
+ *
+ * `[cmd]` Deshalb wirkt dieser Schalter auf die geladene Seite, nicht
+ * auf den ganzen Bestand — die Trefferzahl daneben sagt das an. Wer
+ * dauerhaft ohne Laktose sucht, setzt es unter Preferences; dann
+ * greift C-94 ueber alle 7.140.
+ */
+const ALLERGEN_AUSSCHLUSS: Array<{ code: string; label: string; anzahl: number }> = [
+  { code: 'contains_lactose', label: 'Ohne Laktose', anzahl: 1021 },
+  { code: 'contains_gluten', label: 'Ohne Gluten', anzahl: 622 },
+  { code: 'contains_nuts', label: 'Ohne Nüsse', anzahl: 120 },
+]
+
+/**
+ * Eine sortierbare Spaltenueberschrift.
+ *
+ * `[read]` Ein Klick setzt die Sortierung, ein zweiter nimmt sie
+ * zurueck auf `relevance`. Die Suchfunktion kennt je Spalte nur EINE
+ * Richtung (`kcal_asc`, `protein_desc`) — deshalb kein Umkehren,
+ * sondern an/aus. Ein Pfeil, der eine Richtung verspricht, die die
+ * Datenbank nicht liefert, waere schlimmer als keiner.
+ */
+function SortKopf({
+  label, wert, aktiv, setzen,
+}: {
+  label: string
+  wert: Sortierung
+  aktiv: Sortierung
+  setzen: (s: Sortierung) => void
+}) {
+  const an = aktiv === wert
+  return (
+    <button
+      type="button"
+      aria-pressed={an}
+      title={an ? 'Sortierung aufheben' : `Nach ${label} sortieren`}
+      onClick={() => setzen(an ? 'relevance' : wert)}
+      style={{
+        background: 'none', border: 0, padding: 0, cursor: 'pointer',
+        font: 'inherit', color: an ? 'var(--acc-nutri)' : 'inherit',
+        display: 'inline-flex', alignItems: 'center', gap: 3,
+      }}
+    >
+      {label}
+      {an && <Icon name={wert === 'kcal_asc' ? 'arrow_up' : 'arrow_down'}
+                   className="v2-ic v2-ic-sm" />}
+    </button>
+  )
+}
+
 function zahl(text: string): number | null {
   const n = Number(text)
   return Number.isFinite(n) ? n : null
@@ -84,6 +198,14 @@ export function NutritionFoodsTab({
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
   const [dauerMs, setDauerMs] = React.useState<number | null>(null)
+
+  // G-73: Filterleiste, Blaettern und Sortierung.
+  const [filterOffen, setFilterOffen] = React.useState(false)
+  const [tag, setTag] = React.useState<string | null>(null)
+  const [seite, setSeite] = React.useState(0)
+  const [sortierung, setSortierung] = React.useState<Sortierung>('relevance')
+  /** Allergene, die auf der geladenen Seite ausgeblendet werden. */
+  const [ohne, setOhne] = React.useState<Set<string>>(new Set())
 
   // G-67: der Daumenstand je Lebensmittel, und was nach dem Abwerten
   // ausgeblendet ist.
@@ -119,8 +241,14 @@ export function NutritionFoodsTab({
       setLaeuft(true)
       setFehler(null)
       const start = performance.now()
-      const params = new URLSearchParams({ q: suche, limit: '50' })
+      const params = new URLSearchParams({
+        q: suche,
+        limit: String(SEITE_GROESSE),
+        offset: String(seite * SEITE_GROESSE),
+        sort: sortierung,
+      })
       if (kategorie) params.set('category', kategorie)
+      if (tag) params.set('tag', tag)
       try {
         const antwort = await fetch(`/api/nutrition/foods?${params.toString()}`,
           { signal: ctrl.signal })
@@ -137,15 +265,33 @@ export function NutritionFoodsTab({
       }
     }, 180)
     return () => clearTimeout(zeit)
-  }, [suche, kategorie])
+  }, [suche, kategorie, tag, seite, sortierung])
+
+  // Jede Filteraenderung beginnt wieder auf Seite 1 — sonst stuende
+  // man nach dem Filtern auf einer Seite, die es nicht mehr gibt.
+  React.useEffect(() => { setSeite(0) }, [suche, kategorie, tag, sortierung])
 
   const alleZeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
   // Abgewertete Zeilen verschwinden aus der Liste — aber erst nach dem
   // Bestaetigen, und nur bis zum naechsten Laden: dann kommen sie gar
   // nicht mehr, sobald C-94 die Suche filtert. Bis dahin ist das
   // Ausblenden die sichtbare Wirkung.
-  const zeilen = alleZeilen.filter(f => !ausgeblendet.has(f.id))
+  const zeilen = alleZeilen
+    .filter(f => !ausgeblendet.has(f.id))
+    // G-73: Allergene ausblenden. Wirkt auf die geladene Seite —
+    // Begruendung an `ALLERGEN_AUSSCHLUSS`.
+    .filter(f => ohne.size === 0 || !f.tags.some(t => ohne.has(t)))
   const gesamt = payload?.total ?? 0
+  const seiten = Math.max(1, Math.ceil(gesamt / SEITE_GROESSE))
+  // Die Groesse des GANZEN Katalogs — aus dem ersten, ungefilterten
+  // Laden. `gesamt` aendert sich beim Tippen und taugt nicht fuer den
+  // Platzhalter.
+  const katalogGroesse = start?.total ?? 0
+  const aktiveFilter = (tag ? 1 : 0) + ohne.size
+  const filterZuruecksetzen = React.useCallback(() => {
+    setTag(null)
+    setOhne(new Set())
+  }, [])
 
   // G-67: den Daumenstand zu den sichtbaren Treffern nachladen.
   // `[read]` Ohne ihn saehe jede Zeile unbewertet aus, auch wenn sie es
@@ -175,20 +321,33 @@ export function NutritionFoodsTab({
             aria-label="Search foods"
             value={suche}
             onChange={e => setSuche(e.target.value)}
-            placeholder="Search across 7,140 foods · BLS (Bundeslebensmittelschlüssel)"
+            // G-73: „· BLS (Bundeslebensmittelschluessel)" entfernt,
+            // wie im Kopf, in der Suche und im Erfassungsfenster.
+            placeholder={katalogGroesse > 0
+              ? `Search across ${katalogGroesse.toLocaleString('en-US')} foods`
+              : 'Search foods'}
             style={{
               width: '100%', height: 32, background: 'var(--surface)', border: '1px solid var(--border)',
               borderRadius: 6, padding: '0 12px 0 30px', fontSize: 12, outline: 'none', color: 'var(--fg)',
             }}
           />
         </div>
-        {/* `[read]` `Filters` bleibt ohne Ziel: die Facetten der Suche
-            (Zubereitung, Gruppen, Tags) sind auf der eigenen Seite
-            gebaut. Ein zweiter Satz Filter hier waere eine zweite
-            Wahrheit. */}
-        <InEntwicklungKnopf titel="Filters" className="v2-btn">
+        {/* G-73, Tom 2026-08-18: „Wir haben so viel Platz — lass die
+            Filter einfach logisch darunter aufbauen, und der
+            Filterknopf ist das Setup zum Filter ein- oder
+            ausblenden." */}
+        <button
+          type="button"
+          className={filterOffen ? 'v2-btn v2-btn-primary' : 'v2-btn'}
+          aria-expanded={filterOffen}
+          aria-controls="v2-food-filter"
+          onClick={() => setFilterOffen(o => !o)}
+        >
           <Icon name="filter" className="v2-ic v2-ic-sm" /> Filters
-        </InEntwicklungKnopf>
+          {aktiveFilter > 0 && (
+            <span className="v2-num" style={{ marginLeft: 6 }}>{aktiveFilter}</span>
+          )}
+        </button>
         <InEntwicklungKnopf titel="Custom food" className="v2-btn v2-btn-primary">
           <Icon name="plus" className="v2-ic v2-ic-sm" /> Custom food
         </InEntwicklungKnopf>
@@ -210,6 +369,109 @@ export function NutritionFoodsTab({
         })}
       </div>
 
+      {/* G-73: die Filter stehen darunter, nicht hinter dem Knopf.
+          Auf 375 px wird daraus ein Vollbild-Fenster (nutrition.css). */}
+      {filterOffen && (
+        <div id="v2-food-filter" className="v2-food-filter">
+          <div className="v2-food-filter-kopf">
+            <span style={{ fontSize: 12.5, fontWeight: 600 }}>Filter</span>
+            {aktiveFilter > 0 && (
+              <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                      onClick={filterZuruecksetzen}>
+                Zurücksetzen
+              </button>
+            )}
+            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                    style={{ marginLeft: 'auto' }}
+                    onClick={() => setFilterOffen(false)}>
+              <Icon name="x" className="v2-ic v2-ic-sm" />
+              <span className="v2-food-filter-schliessen-text">Schliessen</span>
+            </button>
+          </div>
+
+          <div className="v2-food-filter-gruppen">
+            {FILTERGRUPPEN.map(g => (
+              <div key={g.titel}>
+                <div className="v2-eyebrow" style={{ marginBottom: 6 }}>{g.titel}</div>
+                <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                  {g.optionen.map(o => {
+                    const aktiv = tag === o.code
+                    return (
+                      <button
+                        key={o.code} type="button"
+                        aria-pressed={aktiv}
+                        className="v2-pill"
+                        style={{
+                          cursor: 'pointer', padding: '4px 10px', fontSize: 11,
+                          borderColor: aktiv
+                            ? 'color-mix(in oklch, var(--acc-nutri) 45%, var(--border))'
+                            : 'var(--border)',
+                          color: aktiv ? 'var(--acc-nutri)' : 'var(--fg-muted)',
+                          background: aktiv
+                            ? 'color-mix(in oklch, var(--acc-nutri) 10%, transparent)'
+                            : 'var(--surface)',
+                        }}
+                        onClick={() => setTag(aktiv ? null : o.code)}
+                      >
+                        {o.label}
+                        <span className="v2-num v2-dim" style={{ marginLeft: 5, fontSize: 10 }}>
+                          {o.anzahl.toLocaleString('de-DE')}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+
+            {/* Die Allergene schalten umgekehrt — „ohne" statt „mit". */}
+            <div>
+              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+                Allergene ausschliessen
+              </div>
+              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
+                {ALLERGEN_AUSSCHLUSS.map(o => {
+                  const aktiv = ohne.has(o.code)
+                  return (
+                    <button
+                      key={o.code} type="button"
+                      aria-pressed={aktiv}
+                      className="v2-pill"
+                      style={{
+                        cursor: 'pointer', padding: '4px 10px', fontSize: 11,
+                        borderColor: aktiv
+                          ? 'color-mix(in oklch, var(--neg) 45%, var(--border))'
+                          : 'var(--border)',
+                        color: aktiv ? 'var(--neg)' : 'var(--fg-muted)',
+                        background: aktiv
+                          ? 'color-mix(in oklch, var(--neg) 10%, transparent)'
+                          : 'var(--surface)',
+                      }}
+                      onClick={() => setOhne(s => {
+                        const n = new Set(s)
+                        if (n.has(o.code)) n.delete(o.code)
+                        else n.add(o.code)
+                        return n
+                      })}
+                    >
+                      {o.label}
+                      <span className="v2-num v2-dim" style={{ marginLeft: 5, fontSize: 10 }}>
+                        {o.anzahl.toLocaleString('de-DE')}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+              <div className="v2-dim" style={{ fontSize: 10, marginTop: 5, lineHeight: 1.4 }}>
+                Blendet auf der angezeigten Seite aus. Dauerhaft und über den
+                ganzen Bestand wirkt der Ausschluss über
+                {' '}<strong>Preferences · Allergies</strong>.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div style={{
         display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12, flexWrap: 'wrap',
       }}>
@@ -220,9 +482,13 @@ export function NutritionFoodsTab({
         {dauerMs != null && !laeuft && (
           <span className="v2-dim v2-mono" style={{ fontSize: 10 }}>{dauerMs} ms</span>
         )}
-        {zeilen.length < gesamt && (
-          <span className="v2-dim" style={{ fontSize: 10.5 }}>
-            zeigt die ersten {zeilen.length}
+        {/* G-73, Tom: „Wenn man Treffer 279 zeigt, dann gibt man auch
+            die Moeglichkeit, die alle anzuschauen." Statt „die ersten
+            50" steht hier, WELCHE 50 — und die Knoepfe daneben. */}
+        {gesamt > 0 && (
+          <span className="v2-dim v2-num" style={{ fontSize: 10.5 }}>
+            {(seite * SEITE_GROESSE + 1).toLocaleString('de-DE')}–
+            {Math.min((seite + 1) * SEITE_GROESSE, gesamt).toLocaleString('de-DE')}
           </span>
         )}
         <Link href={'/v2/nutrition/suche' as Route} className="v2-link"
@@ -251,8 +517,20 @@ export function NutritionFoodsTab({
                 <th style={{ width: 58 }} />
                 <th>Food</th>
                 <th style={{ width: 70 }}>Source</th>
-                <th style={{ width: 90, textAlign: 'right' }}>kcal/100g</th>
-                <th style={{ width: 60, textAlign: 'right' }}>P</th>
+                {/* G-73: kcal und P sortieren. `[cmd]` Die Suchfunktion
+                    kennt vier Sortierungen — `relevance`, `kcal_asc`,
+                    `protein_desc`, `name_asc`. **C und F haben keine**,
+                    deshalb bleiben sie unsortierbare Ueberschriften;
+                    eine Sortierung im Browser waere nur die geladene
+                    Seite und damit eine Falschaussage. */}
+                <th style={{ width: 90, textAlign: 'right' }}>
+                  <SortKopf label="kcal/100g" wert="kcal_asc"
+                            aktiv={sortierung} setzen={setSortierung} />
+                </th>
+                <th style={{ width: 60, textAlign: 'right' }}>
+                  <SortKopf label="P" wert="protein_desc"
+                            aktiv={sortierung} setzen={setSortierung} />
+                </th>
                 <th style={{ width: 60, textAlign: 'right' }}>C</th>
                 <th style={{ width: 60, textAlign: 'right' }}>F</th>
                 <th style={{ width: 80, textAlign: 'right' }}>Action</th>
@@ -306,6 +584,29 @@ export function NutritionFoodsTab({
         {zeilen.length === 0 && !laeuft && !fehler && (
           <div className="v2-muted" style={{ fontSize: 12, padding: '14px 0', textAlign: 'center' }}>
             Kein Lebensmittel passt zu dieser Auswahl.
+          </div>
+        )}
+
+        {/* G-73: Blaettern. `[cmd]` `nutrition.food_search` nimmt
+            `p_offset` — gemessen: Offset 0 liefert „Tofu", Offset 50
+            „Rind Oberschale, roh". */}
+        {seiten > 1 && (
+          <div className="v2-food-blaettern">
+            <button type="button" className="v2-btn v2-btn-sm"
+                    disabled={seite === 0 || laeuft}
+                    onClick={() => setSeite(s => Math.max(0, s - 1))}>
+              <Icon name="chevron_left" className="v2-ic v2-ic-sm" />
+              Zurück
+            </button>
+            <span className="v2-num v2-dim" style={{ fontSize: 11 }}>
+              Seite {(seite + 1).toLocaleString('de-DE')} von {seiten.toLocaleString('de-DE')}
+            </span>
+            <button type="button" className="v2-btn v2-btn-sm"
+                    disabled={seite + 1 >= seiten || laeuft}
+                    onClick={() => setSeite(s => Math.min(seiten - 1, s + 1))}>
+              Weiter
+              <Icon name="chevron_right" className="v2-ic v2-ic-sm" />
+            </button>
           </div>
         )}
       </Card>

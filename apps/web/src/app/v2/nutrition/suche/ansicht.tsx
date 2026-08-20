@@ -130,7 +130,12 @@ export function SucheAnsicht() {
       />
 
       <div className="v2-grid v2-g-cols-2" style={{ marginTop: 16, alignItems: 'start' }}>
-        <Card title="Suche" sub="Bestand: BLS 4.0">
+        {/* G-73: „Bestand: BLS 4.0" entfernt — Tom, 2026-08-19: „wir
+            muessen der Konkurrenz ja nicht mitteilen, mit was fuer
+            Daten wir arbeiten, und der User hat eh keinen Plan, was
+            das ist." Kein Ersatztext: die Trefferzahl steht schon in
+            der Kopfzeile darueber. */}
+        <Card title="Suche">
           <form onSubmit={absenden} style={{ display: 'flex', gap: 8 }}>
             <input
               className="v2-feld"

@@ -549,7 +549,8 @@ function HinzufuegenModal({
             className="v2-feld"
             value={frage}
             autoFocus
-            placeholder="Lebensmittel suchen — BLS 4.0"
+            // G-73: „— BLS 4.0" entfernt, wie im Kopf und in der Suche.
+            placeholder="Lebensmittel suchen"
             onChange={e => { setFrage(e.target.value); setGewaehlt(null) }}
           />
 

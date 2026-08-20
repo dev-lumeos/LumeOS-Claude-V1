@@ -95,6 +95,27 @@ const ALLERGENE: Array<{ id: string; label: string; eu14: boolean }> = [
 type Stufe = 'neutral' | 'sensibel' | 'allergie'
 
 const NEIGUNGEN = ['liked', 'neutral', 'disliked'] as const
+
+/**
+ * Wie viele Lebensmittel eine Allergenmarkierung tragen (G-73).
+ *
+ * `[cmd]` Gemessen am 2026-08-20 gegen `nutrition.food_tags`:
+ * `contains_nuts` 120 · `contains_gluten` 622 ·
+ * `contains_lactose` 1.021 von 7.140.
+ *
+ * `[read]` **Fest eingetragen, mit Stichtag — und das ist Absicht.**
+ * Die Zahlen im Warnhinweis duerfen nicht bei jedem Seitenaufruf
+ * nachgeladen werden: der Hinweis muss auch dann stehen, wenn die
+ * Abfrage ausfaellt. Wer die Kuration erweitert, zieht sie hier nach;
+ * die Groessenordnung („ein Bruchteil") bleibt bis dahin richtig.
+ */
+const ALLERGEN_MARKIERT = {
+  nuts: 120,
+  gluten: 622,
+  lactose: 1021,
+  gesamt: 7140,
+  stand: '2026-08-20',
+} as const
 type Neigung = (typeof NEIGUNGEN)[number]
 
 function farbe(n: Neigung | Stufe): string {
@@ -481,6 +502,52 @@ export function VorliebenTab({ d }: { d: VorliebenDaten }) {
               häufige Unverträglichkeiten. Milcheiweiß und Laktose stehen
               getrennt — eine Kuhmilchallergie richtet sich gegen das Eiweiß,
               eine Laktoseintoleranz gegen den Zucker.
+            </div>
+
+            {/* G-73, Tom 2026-08-19: „Ja, unbedingt einen Warnhinweis —
+                aber auch von unserer Seite: `contains_nuts` hat Nuts
+                drin, also muss es raus aus der Resultatsliste."
+
+                `[cmd]` Das Ausschliessen greift seit C-94. Die Luecke
+                ist die Markierung: `contains_nuts` traegt 120 von
+                7.140 Lebensmitteln (1,7 %), `contains_gluten` 622
+                (8,7 %), `contains_lactose` 1.021 (14,3 %).
+
+                `[read]` Der Hinweis sagt deshalb DREI Dinge und nicht
+                „ohne Gewaehr": was wirkt, was die Grenze ist, und was
+                massgeblich bleibt. */}
+            <div
+              role="note"
+              style={{
+                marginTop: 12,
+                padding: '10px 12px',
+                borderRadius: 'var(--radius-sm)',
+                border: '1px solid color-mix(in oklch, var(--warn) 35%, var(--border))',
+                background: 'color-mix(in oklch, var(--warn) 7%, transparent)',
+              }}
+            >
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5,
+              }}>
+                <Icon name="alert" className="v2-ic v2-ic-sm"
+                      style={{ color: 'var(--warn)' }} />
+                <span style={{ fontSize: 11.5, fontWeight: 600, color: 'var(--warn)' }}>
+                  Was der Ausschluss leistet — und was nicht
+                </span>
+              </div>
+              <div style={{ fontSize: 10.5, lineHeight: 1.5, color: 'var(--fg-muted)' }}>
+                Als <strong>Allergie</strong> markierte Stoffe werden aus der
+                Trefferliste <strong>entfernt</strong>, nicht nur abgewertet.
+                Grundlage ist eine <strong>kuratierte Markierung</strong> im
+                Lebensmittelkatalog — sie ist <strong>nicht vollständig</strong>:
+                derzeit sind {ALLERGEN_MARKIERT.nuts} von {ALLERGEN_MARKIERT.gesamt} Einträgen
+                als nusshaltig erfasst, {ALLERGEN_MARKIERT.gluten} als glutenhaltig,
+                {' '}{ALLERGEN_MARKIERT.lactose} als laktosehaltig. Ein Lebensmittel
+                ohne Markierung wird <strong>nicht</strong> ausgeschlossen, auch
+                wenn es den Stoff enthält.
+                {' '}<strong>Bei einer Allergie bleibt die Zutatenliste auf der
+                Verpackung massgeblich.</strong>
+              </div>
             </div>
           </Card>
 

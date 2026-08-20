@@ -132,33 +132,44 @@ export async function TagebuchAnsicht({
 
   return (
     <>
-      {/* Kopfzeile wie in der Vorlage: Titel, Datum, „138-nutrient
-          tracking", Herkunftszeile, Aktionen rechts.
-          [cmd] Die Vorlage nennt „BLS 4.0 · Max Rubner-Institut" — das
-          ist die Quelle, die auch hier liegt. */}
       {/* [cmd] module-nutrition.jsx:9-26 — `module-header
           module-hero-lite` mit Titelblock links und Aktionen rechts.
           NICHT `ModuleHero` aus G-02: der ist ein anderer Kopf mit
           Medaillon und Kennzahlenblock, den die Vorlage hier nicht hat.
-          Er quetschte den Titelblock in eine schmale Spalte. */}
-      <div className="v2-module-header v2-module-hero-lite">
+          Er quetschte den Titelblock in eine schmale Spalte.
+
+          G-73, Tom 2026-08-19 — drei Aenderungen:
+            1. `‹ Heute ›` steht MITTIG, nicht mehr rechts bei den
+               Aktionsknoepfen.
+            2. Die Datumspille links ist weg — „haben wir ja in der
+               Mitte."
+            3. `BLS 4.0 · Max Rubner-Institut` ist aus dem Untertitel
+               heraus. `[read]` Geprueft, bevor entfernt wurde: die
+               BLS-Dokumentation nennt in Kapitel 9.2 eine EMPFOHLENE
+               Zitierweise und stellt den Bestand in 9.3 „kostenfrei
+               und ohne Lizenzbarrieren" bereit — es gibt keine
+               Pflicht zur Nennung in der Oberflaeche. Die Herkunft
+               bleibt in der Trefferliste (Spalte `SOURCE`) und in
+               docs/ssot/45-bls-dokumentation.md. */}
+      <div className="v2-module-header v2-module-hero-lite v2-nutri-kopf">
         <div className="v2-module-title-block">
           <div className="v2-module-title-row">
             <span className="v2-module-title">Nutrition</span>
-            <Pill>{tagText(datum)}</Pill>
             <Pill variant="acc">138-nutrient tracking</Pill>
           </div>
           <div className="v2-module-sub">
             {t('untertitel')}
           </div>
         </div>
-        <div className="v2-module-actions">
-          {/* Reihenfolge der Vorlage: ‹ › Quick-add, Recalc macros,
-              Find food, MealCam. Die drei ohne Ziel oeffnen das Modal
-              „in Entwicklung"; „Find food" fuehrt auf die gebaute Suche. */}
-          {/* G-14: `‹ Heute ›` als Einheit. Vorher zwei blasse Pfeile
-              hier — sichtbar erst, wenn man wusste, dass es sie gibt. */}
+
+        {/* G-14: `‹ Heute ›` als Einheit. Vorher zwei blasse Pfeile
+            hier — sichtbar erst, wenn man wusste, dass es sie gibt.
+            G-73: eigene Spalte in der Mitte. */}
+        <div className="v2-nutri-kopf-mitte">
           <Datumsnavigation datum={datum} istAdmin={istAdmin} />
+        </div>
+
+        <div className="v2-module-actions">
           {/* G-38: Quick-add und MealCam oeffnen jetzt die Fenster der
               Vorlage statt „in Entwicklung". Sie stehen in einer
               Client-Insel, weil diese Ansicht eine async
