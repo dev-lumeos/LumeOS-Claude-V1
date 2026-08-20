@@ -13,6 +13,7 @@
 import type { Metadata } from 'next'
 
 import './supplements.css'
+import { heute } from '../../../lib/datum'
 import { getStackDaten, getKatalog } from '../../../lib/supplements/stack-read'
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
 import { SupplementsAnsicht } from './ansicht'
@@ -42,5 +43,9 @@ export default async function V2SupplementsPage() {
     katalog = []
   }
 
-  return <SupplementsAnsicht daten={daten} katalog={katalog} />
+  // G-74: Compliance und Inventory rechnen gegen ein Datum. Es kommt
+  // aus `lib/datum.ts` (ueber Mittag gerechnet) und wird SERVERSEITIG
+  // bestimmt — `new Date()` in der Komponente ergaebe im Browser einen
+  // anderen Wert als beim Rendern und zerlegte die Hydration.
+  return <SupplementsAnsicht daten={daten} katalog={katalog} heute={heute()} />
 }

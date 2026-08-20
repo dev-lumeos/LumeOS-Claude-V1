@@ -33,6 +33,8 @@ import { SuppCompliance } from './tab-compliance'
 import { SuppInjections } from './tab-injektionen'
 // G-45: die vier Tabs aus -spec.jsx.
 import { SuppCatalog, SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
+// G-74: Inventory und Compliance mit echten Werten.
+import { ComplianceEcht, InventoryEcht } from './tab-inventory-echt'
 import { SupplementsModale } from './modale'
 
 /**
@@ -64,13 +66,28 @@ function tabs(stackAnzahl: number): TabItem[] {
 // Eintraege, und zu jedem gibt es unten eine Weiche.
 
 export function SupplementsAnsicht({
-  daten = null, katalog = [],
+  daten = null, katalog = [], heute: heuteProp = null,
 }: {
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
+  /**
+   * G-74: Das echte Heute, serverseitig aus `lib/datum.ts`.
+   *
+   * `[read]` Compliance und Inventory rechnen dagegen. `null` heisst:
+   * kein Datum uebergeben — dann faellt die Rechnung auf den juengsten
+   * Protokolltag zurueck, statt `new Date()` im Browser zu rufen.
+   */
+  heute?: string | null
 }) {
   const [tab, setTab] = React.useState('today')
   const [modal, setModal] = React.useState<ModalZustand>(null)
+
+  // G-74: Der Stichtag der Rechnungen. Kommt serverseitig; ohne ihn
+  // der juengste Protokolltag — **nie `new Date()`**, das zerlegte die
+  // Hydration und rechnete im Browser anders als beim Rendern.
+  const stichtag = heuteProp
+    ?? daten?.einnahmen.map(e => e.intake_date).sort().pop()
+    ?? '1970-01-01'
 
   // G-37: Sind echte Daten da, kommt der Anfangszustand aus dem
   // Protokoll — abgehakt ist, was als `taken` gebucht ist. Ohne Daten
@@ -150,14 +167,28 @@ export function SupplementsAnsicht({
           {tab === 'stack' && <SuppStack />}
           {tab === 'extended' && <SuppExtended />}
           {tab === 'database' && <SuppDatabase />}
-          {tab === 'compliance' && <SuppCompliance />}
+          {/* `[cmd]` G-74: Compliance liest echt, sobald ein Protokoll
+              vorliegt. Ohne Daten bleibt der Entwurf mit seiner Marke —
+              dasselbe Muster wie bei Today, Stack, Database und Cost. */}
+          {tab === 'compliance' && (
+            daten && daten.einnahmen.length > 0
+              ? <ComplianceEcht d={daten} heute={stichtag} />
+              : <SuppCompliance />
+          )}
           {tab === 'interactions' && <SuppInteractions />}
           {tab === 'cost' && <SuppCost />}
           {tab === 'injection' && <SuppInjections />}
           {tab === 'catalog' && <SuppCatalog />}
           {tab === 'stacks' && <SuppStacks />}
           {tab === 'intel' && <SuppIntelligence />}
-          {tab === 'inventory' && <SuppInventory />}
+          {/* `[cmd]` G-74: Inventory rechnet die Reichweite aus
+              `stock_remaining` gegen die Tagesdosis. Ohne Positionen
+              bleibt der Entwurf stehen. */}
+          {tab === 'inventory' && (
+            daten && daten.positionen.length > 0
+              ? <InventoryEcht d={daten} heute={stichtag} />
+              : <SuppInventory />
+          )}
         </div>
       </SuppCtx.Provider>
 

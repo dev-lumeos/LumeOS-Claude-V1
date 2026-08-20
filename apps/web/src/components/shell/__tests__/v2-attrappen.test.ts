@@ -851,31 +851,90 @@ test('das Supplements-Modul kennzeichnet jede Kachel', () => {
   // G-33: die Erwartung steht je Datei. Extended und Compliance sind
   // seit dem Nachziehen eigene Dateien.
   //
-  // G-37: **Die Zahl in `tabs.tsx` bleibt 17 und heisst jetzt etwas
-  // anderes.** `[cmd]` Today, Stack, Database und Cost sind an das
-  // `supplements`-Schema angebunden; die angebundenen Fassungen tragen
-  // KEINE Marke. Die 17 Marken sitzen seither vollstaendig in den
-  // Rueckfallfassungen (`TodayAttrappe`, `StackMatrix`, `StackList`,
-  // `DatabaseAttrappe`, `CostAttrappe`, `SlotCard`) plus
-  // `SuppInteractions`, das unangebunden bleibt.
+  // **G-74: DIE ZAHL IN `tabs.tsx` IST JETZT ZWEIGETEILT.**
   //
-  // `[read]` Deshalb genuegt das Zaehlen je Datei hier nicht mehr — es
-  // saehe unveraendert aus, obwohl vier Tabs echt geworden sind. Der
-  // Test unten prueft zusaetzlich, dass die angebundenen Fassungen
-  // marken-frei sind.
-  const dateien: Array<[string, number]> = [
-    [SUPP, 17],
-    [SUPP_EXT, 6],
-    [SUPP_COMP, 4],
+  // `[cmd]` Bis G-73 stand hier pauschal 17 — und die Zahl blieb
+  // gleich, obwohl vier Tabs echt lesen: die abgeloesten Fassungen
+  // bleiben als Rueckfall stehen. **Der Zaehler zeigte damit eine Zahl,
+  // die die Lage nicht mehr beschrieb.**
+  //
+  // `[read]` **Tom, 2026-08-19:** *„Im Code ausdokumentieren, sprich
+  // den Code als alten Mockup-Code markieren, falls wir spaeter was
+  // brauchen."* Die Rueckfallfassungen tragen deshalb seit G-74
+  // `attrappe={RUECKFALL}` statt `{ATTRAPPE}` — maschinenlesbar, nicht
+  // nur als Kommentar.
+  //
+  // **Was die zwei Zahlen bedeuten:**
+  //   `attrappe`  — noch nie angebunden, die Zahlen sind erfunden.
+  //   `RUECKFALL` — abgeloest, aber aufgehoben; daneben steht eine
+  //                 angebundene Fassung.
+  const dateien: Array<[string, number, number]> = [
+    // Datei, echte Attrappen, Rueckfallfassungen
+    [SUPP, 1, 16],
+    [SUPP_EXT, 6, 0],
+    [SUPP_COMP, 4, 0],
   ]
-  for (const [datei, erwartet] of dateien) {
+  for (const [datei, erwarteteAttrappen, erwarteteRueckfaelle] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')
     const mitGrund = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
     const ohneGrund = (quelle.match(/^\s+attrappe$/gm) ?? []).length
-    assert.equal(mitGrund + ohneGrund, erwartet,
-      `${path.basename(datei)}: ${mitGrund + ohneGrund} gekennzeichnet, erwartet ${erwartet}. ` +
-      'Angebunden? Dann die Erwartung hier senken.')
+    const rueckfall = (quelle.match(/attrappe=\{RUECKFALL\}/g) ?? []).length
+
+    assert.equal(mitGrund + ohneGrund, erwarteteAttrappen,
+      `${path.basename(datei)}: ${mitGrund + ohneGrund} echte Attrappen, `
+      + `erwartet ${erwarteteAttrappen}. Angebunden? Dann die Erwartung hier senken.`)
+    assert.equal(rueckfall, erwarteteRueckfaelle,
+      `${path.basename(datei)}: ${rueckfall} Rueckfallfassungen, `
+      + `erwartet ${erwarteteRueckfaelle}. Geloescht? Dann die Erwartung hier senken.`)
   }
+})
+
+/**
+ * G-74: Die Rueckfallmarke sitzt genau an den abgeloesten Fassungen.
+ *
+ * `[cmd]` Sonst waere die Trennung Kosmetik: wer `RUECKFALL` an eine
+ * nie angebundene Kachel schriebe, behauptete, daneben stehe eine
+ * echte Fassung. Und wer eine abgeloeste Fassung auf `ATTRAPPE`
+ * zuruecksetzt, macht den Zaehler wieder blind.
+ */
+test('die Rueckfallmarke sitzt an den abgeloesten Fassungen', () => {
+  const quelle = fs.readFileSync(SUPP, 'utf8')
+  const grenzen: Array<{ name: string; start: number }> = []
+  const muster = /^(?:export )?function (\w+)/gm
+  let treffer: RegExpExecArray | null
+  while ((treffer = muster.exec(quelle)) !== null) {
+    grenzen.push({ name: treffer[1], start: treffer.index })
+  }
+  const block = (name: string) => {
+    const i = grenzen.findIndex(g => g.name === name)
+    assert.ok(i >= 0, `Die Fassung "${name}" fehlt.`)
+    const ende = i + 1 < grenzen.length ? grenzen[i + 1].start : quelle.length
+    return quelle.slice(grenzen[i].start, ende)
+  }
+  const zaehl = (s: string, re: RegExp) => (s.match(re) ?? []).length
+
+  // Die sechs Rueckfallfassungen tragen NUR die Rueckfallmarke.
+  for (const name of ['TodayAttrappe', 'SlotCard', 'StackMatrix', 'StackList',
+                      'DatabaseAttrappe', 'CostAttrappe']) {
+    const b = block(name)
+    assert.ok(zaehl(b, /attrappe=\{RUECKFALL\}/g) > 0,
+      `"${name}" ist eine abgeloeste Fassung und braucht die Rueckfallmarke.`)
+    assert.equal(zaehl(b, /attrappe=\{ATTRAPPE\}/g) + zaehl(b, /^\s+attrappe$/gm), 0,
+      `"${name}" traegt noch die alte Marke — der Zaehler kann dann nicht trennen.`)
+  }
+
+  // `SuppInteractions` ist NICHT abgeloest: keine angebundene Fassung
+  // daneben, also die echte Attrappenmarke.
+  const inter = block('SuppInteractions')
+  assert.ok(zaehl(inter, /attrappe=\{ATTRAPPE\}/g) > 0,
+    'SuppInteractions ist unangebunden und behaelt die Attrappenmarke.')
+  assert.equal(zaehl(inter, /attrappe=\{RUECKFALL\}/g), 0,
+    'SuppInteractions hat keine angebundene Fassung — die Rueckfallmarke waere falsch.')
+
+  // Und die Marke sagt, was sie bedeutet.
+  assert.ok(/const RUECKFALL = /.test(quelle), 'Die Rueckfallmarke ist nicht definiert.')
+  assert.ok(/Rueckfallfassung/.test(quelle),
+    'Der Begruendungssatz nennt die Rueckfallfassung nicht beim Namen.')
 })
 
 /**
@@ -902,8 +961,14 @@ test('die angebundenen Supplements-Fassungen tragen keine Marke', () => {
     const ende = i + 1 < grenzen.length ? grenzen[i + 1].start : quelle.length
     return quelle.slice(grenzen[i].start, ende)
   }
+  // `[cmd]` G-74: **beide** Marken zaehlen als „markiert". Die
+  // Rueckfallfassungen tragen seither `{RUECKFALL}` statt `{ATTRAPPE}`;
+  // welche von beiden wo sitzt, prueft der Test darunter. Hier geht es
+  // nur darum, dass Erfundenes ueberhaupt gekennzeichnet ist.
   const marken = (s: string) =>
-    (s.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length + (s.match(/^\s+attrappe$/gm) ?? []).length
+    (s.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
+    + (s.match(/attrappe=\{RUECKFALL\}/g) ?? []).length
+    + (s.match(/^\s+attrappe$/gm) ?? []).length
 
   // Angebunden — keine Marke.
   for (const name of ['TodayEcht', 'StackMatrixEcht', 'StackListeEcht',
@@ -916,7 +981,7 @@ test('die angebundenen Supplements-Fassungen tragen keine Marke', () => {
   for (const name of ['TodayAttrappe', 'StackMatrix', 'StackList',
                       'DatabaseAttrappe', 'CostAttrappe']) {
     assert.ok(marken(block(name)) > 0,
-      `"${name}" zeigt die Vorlage und muss die Attrappenmarke behalten.`)
+      `"${name}" zeigt die Vorlage und muss eine Marke behalten.`)
   }
 })
 

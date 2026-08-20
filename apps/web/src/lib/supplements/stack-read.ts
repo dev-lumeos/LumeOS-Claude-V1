@@ -96,23 +96,69 @@ function zahl(v: unknown): number | null {
  * `cost_per_serving` — die Rechnung geht also auf. Sie bleibt
  * trotzdem defensiv: fehlt eine der Zahlen, ist das Ergebnis `null`
  * und die Anzeige zeigt einen Strich statt einer erfundenen Zahl.
+ *
+ * **DIE REICHWEITE HAENGT AN DER EINHEIT — G-74, gemessen.**
+ *
+ * `[cmd]` `stock_unit` sagt bei den vier Positionen zweierlei:
+ *
+ *   Kreatin     30 **g**        bei 5 g/Tag  → **6 Tage**
+ *   Vitamin D3   4 **softgels** bei 5000 IU  → **4 Tage**
+ *   Omega-3     14 **softgels** bei 2 g      → **14 Tage**
+ *   Magnesium   24 **capsules** bei 400 mg   → **24 Tage**
+ *
+ * **Die Regel folgt daraus:**
+ *   - `stock_unit == dose_unit` → der Bestand ist in **Dosiseinheit**
+ *     gefuehrt, also `Bestand ÷ Tagesdosis`.
+ *   - sonst → der Bestand ist in **Stueck** gefuehrt (softgels,
+ *     capsules, tablets), und ein Stueck ist eine Portion, also
+ *     `Bestand ÷ Portionen pro Tag`.
+ *
+ * `[read]` **Vorher rechnete diese Funktion immer die zweite Variante**
+ * und meldete fuer Kreatin 30 Tage statt 6 — die Zahl stand auch so im
+ * Auftragstext. Tom dazu: *„`stock_unit` sagt `g`, und die Tagesdosis
+ * sagt 5 g. Die Spalten sind eindeutig — sie zu ignorieren, weil eine
+ * Auftragszahl anders klingt, waere der Fehler."*
  */
 export function ableiten(
   dose: number,
   stock: number | null,
   schwelle: number | null,
   k: { serving_size: number | null; cost_per_serving: number | null } | null,
+  doseUnit?: string | null,
+  stockUnit?: string | null,
 ): Pick<StackPosition, 'portionen_pro_tag' | 'kosten_pro_tag' | 'tage_bis_leer' | 'unter_schwelle'> {
   const portion = k?.serving_size ?? null
   const proTag = portion != null && portion > 0 ? dose / portion : null
   const preis = k?.cost_per_serving ?? null
+
+  // Einheitenvergleich ohne Gross-/Kleinschreibung und Leerraum: die
+  // Spalten sind Freitext, `g` und `G` waeren sonst zwei Einheiten.
+  const gleich = (a?: string | null, b?: string | null) =>
+    a != null && b != null && a.trim().toLowerCase() === b.trim().toLowerCase()
+
+  let tage: number | null = null
+  if (stock != null) {
+    if (gleich(doseUnit, stockUnit)) {
+      // Bestand in Dosiseinheit — Kreatin: 30 g ÷ 5 g = 6.
+      tage = dose > 0 ? stock / dose : null
+    } else if (proTag != null && proTag > 0) {
+      // Bestand in Stueck — D3: 4 softgels ÷ 1 Portion = 4.
+      tage = stock / proTag
+    }
+  }
+
   return {
     portionen_pro_tag: proTag,
     kosten_pro_tag: proTag != null && preis != null ? proTag * preis : null,
-    tage_bis_leer: stock != null && proTag != null && proTag > 0 ? stock / proTag : null,
+    tage_bis_leer: tage,
     unter_schwelle: stock != null && schwelle != null ? stock <= schwelle : null,
   }
 }
+
+// `[cmd]` **`nachfuellstufe` steht in `auswertung.ts`, nicht hier.**
+// Diese Datei importiert `next/headers`; wer die Stufenrechnung von
+// hier holt, zieht das ganze I/O-Modul ins Browserbuendel — die Seite
+// antwortet dann mit HTTP 500. Gemessen beim Bau von G-74.
 
 /**
  * Der aktive Stack samt Katalog und Protokoll.
@@ -195,7 +241,12 @@ export async function getStackDaten(): Promise<StackDaten | null> {
         stock_unit: (roh.stock_unit as string) ?? null,
         low_stock_threshold: schwelle,
         katalog,
-        ...ableiten(dose, stock, schwelle, katalog),
+        // Die Einheiten entscheiden ueber die Reichweite — siehe
+        // `ableiten`. Ohne sie rechnete Kreatin 30 statt 6 Tage.
+        ...ableiten(
+          dose, stock, schwelle, katalog,
+          String(roh.dose_unit ?? ''), (roh.stock_unit as string) ?? null,
+        ),
       }
     })
   }

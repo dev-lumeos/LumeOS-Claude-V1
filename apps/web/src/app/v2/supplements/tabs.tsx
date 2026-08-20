@@ -24,6 +24,8 @@ import {
   INTERACTIONS, EXTENDED_STACK, EXTENDED_LABS, type StackItem,
 } from './daten'
 import { useSupp } from './kontext'
+// G-74: die zwei Kostenkacheln, die das Protokoll brauchen.
+import { CostErgaenzung } from './tab-inventory-echt'
 
 /** `[cmd]` Feste Vorfuehrwerte der Vorlage (Zeile 190/191) — Sa, 13:30.
     Kein `new Date()`: die Vorlage will ein reproduzierbares Bild, und
@@ -32,6 +34,32 @@ const TODAY_DOW = 5
 const NOW_HOUR = 13.5
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Es gibt kein `supplements`-Schema — die Zahlen sind erfunden.'
+
+/**
+ * Die Marke der **Rueckfallfassungen** (G-74).
+ *
+ * **Tom, 2026-08-19:** *„Im Code ausdokumentieren, sprich den Code als
+ * alten Mockup-Code markieren, falls wir spaeter was brauchen."*
+ *
+ * `[cmd]` **Warum eine zweite Marke und nicht nur ein Kommentar:** Der
+ * Zaehler in `v2-attrappen.test.ts` zaehlte bis G-74 pauschal 17 — die
+ * Zahl blieb gleich, obwohl vier Tabs echt lesen, weil die alten
+ * Fassungen daneben stehenbleiben. **Ein Kommentar fuer Menschen haette
+ * daran nichts geaendert.** `RUECKFALL` ist maschinenlesbar: der
+ * Zaehler trennt jetzt „noch nie angebunden" von „abgeloest, aber
+ * aufgehoben".
+ *
+ * `[read]` **Goals hat es anders gemacht** — dort wurden die
+ * Attrappenfassungen geloescht (`ansicht.tsx` 772 → 315 Zeilen). Hier
+ * bleiben sie: der dritte Weg, stehenlassen und erkennbar machen.
+ *
+ * **Wer eine Rueckfallfassung wieder braucht**, findet sie an dieser
+ * Marke. Wer sie loeschen will, sieht an ihr, dass es eine bewusste
+ * Aufbewahrung war und kein vergessener Code.
+ */
+const RUECKFALL = 'Rueckfallfassung: der urspruengliche Entwurf. Die angebundene '
+  + 'Fassung steht daneben und wird gezeigt, sobald Daten vorliegen — '
+  + 'diese hier bleibt als Vorlage aufgehoben (G-74).'
 
 // ── CheckCircle ────────────────────────────────────────────────
 type Status = 'taken' | 'due' | 'planned' | 'skip'
@@ -275,7 +303,7 @@ function TodayAttrappe() {
   return (
     <div className="v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card attrappe={ATTRAPPE}>
+        <Card attrappe={RUECKFALL}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
             <Ring value={takenCount} max={dueToday} color="var(--acc-suppl)" label="taken" size={88} stroke={7} />
             <div style={{ flex: 1, minWidth: 180 }}>
@@ -310,7 +338,7 @@ function TodayAttrappe() {
         <Card
           title="Next dose"
           sub={nextItem?.brand}
-          attrappe={ATTRAPPE}
+          attrappe={RUECKFALL}
           actions={
             <InEntwicklungKnopf titel="Skip" className="v2-btn v2-btn-ghost v2-btn-sm">
               Skip <Icon name="chevron_down" className="v2-ic v2-ic-sm" />
@@ -334,7 +362,7 @@ function TodayAttrappe() {
         <Card
           title="Refills"
           sub="next 14 days"
-          attrappe={ATTRAPPE}
+          attrappe={RUECKFALL}
           actions={
             <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
                     onClick={() => open('reorder', nachfuellen)}>
@@ -367,7 +395,7 @@ function TodayAttrappe() {
           </div>
         </Card>
 
-        <Card title="Active cycles" sub="time-bound items" attrappe={ATTRAPPE}>
+        <Card title="Active cycles" sub="time-bound items" attrappe={RUECKFALL}>
           {[
             { n: 'Ashwagandha (KSM-66)', s: '8w on / 2w off', r: 'Wk 5 of 8', c: 'var(--acc-suppl)', warn: true },
             { n: 'Caffeine', s: '8w on / 2w off', r: 'Wk 6 of 8', c: 'var(--acc-suppl)', warn: false },
@@ -406,7 +434,10 @@ function SlotCard({
   return (
     <Card
       className="v2-card-tight"
-      attrappe
+      // G-74: `SlotCard` wird nur von `TodayAttrappe` benutzt und ist
+      // damit selbst Rueckfall. Die blosse Marke der Vorlage bekommt
+      // deshalb denselben Begruendungssatz wie die uebrigen.
+      attrappe={RUECKFALL}
       style={{
         padding: 0,
         border: isCurrent ? '1px solid color-mix(in oklch, var(--acc-suppl) 35%, var(--border))' : undefined,
@@ -640,7 +671,7 @@ function StackListeEcht() {
 function StackMatrix() {
   const { open } = useSupp()
   return (
-    <Card attrappe={ATTRAPPE}>
+    <Card attrappe={RUECKFALL}>
       <div className="v2-supp-tbl-wrap">
         <table className="v2-tbl">
           <thead>
@@ -705,7 +736,7 @@ function StackList() {
   return (
     <div className="v2-grid v2-g-cols-2" style={{ gap: 14 }}>
       {STACK.map(s => (
-        <Card key={s.id} title={s.name} sub={s.brand} attrappe={ATTRAPPE}>
+        <Card key={s.id} title={s.name} sub={s.brand} attrappe={RUECKFALL}>
           <div className="v2-grid v2-g-cols-3" style={{ gap: 10, marginBottom: 10 }}>
             <div>
               <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Dose</div>
@@ -873,7 +904,7 @@ function DatabaseAttrappe() {
         </InEntwicklungKnopf>
       </div>
 
-      <Card attrappe={ATTRAPPE}>
+      <Card attrappe={RUECKFALL}>
         <div className="v2-supp-tbl-wrap">
           <table className="v2-tbl">
             <thead>
@@ -1078,12 +1109,24 @@ function CostEcht() {
           </div>
         </Card>
 
+        {/* `[cmd]` G-74: „If you removed…" um den Rest und den Anteil
+            erweitert — reine Subtraktion, wie der Auftrag sagt. Was ein
+            Praeparat BRINGT, sagt die Tabelle nicht; `Cost
+            optimization` der Vorlage bleibt draussen, weil es Beratung
+            waere. */}
         <Card title="If you removed…" sub="monthly saving per item">
           {teuerste.slice(0, 4).map(p => (
             <Row key={p.id} label={`− ${p.name}`}
                  value={`save €${((p.kosten_pro_tag ?? 0) * 30).toFixed(2)}/mo`} />
           ))}
         </Card>
+      </div>
+
+      {/* G-74: der Kostenverlauf aus dem Protokoll und die vollstaendige
+          Subtraktionstabelle. Beide brauchen die Einnahmen, nicht nur
+          die Positionen — deshalb eine eigene Datei. */}
+      <div className="v2-grid-14" style={{ marginTop: 14 }}>
+        <CostErgaenzung d={d} />
       </div>
     </div>
   )
@@ -1110,24 +1153,24 @@ function CostAttrappe() {
     <div className="v2-grid v2-grid-14" style={{ gap: 16 }}>
       <div className="v2-col-gap" style={{ gap: 14 }}>
         <div className="v2-grid v2-g-cols-3" style={{ gap: 12 }}>
-          <Card style={{ padding: 14 }} attrappe={ATTRAPPE}>
+          <Card style={{ padding: 14 }} attrappe={RUECKFALL}>
             <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Monthly</div>
             <div className="v2-num" style={{ fontSize: 22, fontWeight: 500 }}>€{monat.toFixed(2)}</div>
             <div className="v2-muted" style={{ fontSize: 11 }}>+ €4.20 vs Apr</div>
           </Card>
-          <Card style={{ padding: 14 }} attrappe={ATTRAPPE}>
+          <Card style={{ padding: 14 }} attrappe={RUECKFALL}>
             <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Annual run-rate</div>
             <div className="v2-num" style={{ fontSize: 22, fontWeight: 500 }}>€{jahr.toFixed(0)}</div>
             <div className="v2-muted" style={{ fontSize: 11 }}>12 × current</div>
           </Card>
-          <Card style={{ padding: 14 }} attrappe={ATTRAPPE}>
+          <Card style={{ padding: 14 }} attrappe={RUECKFALL}>
             <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Per active day</div>
             <div className="v2-num" style={{ fontSize: 22, fontWeight: 500 }}>€{(monat / 30).toFixed(2)}</div>
             <div className="v2-muted" style={{ fontSize: 11 }}>8 items · ~26 doses</div>
           </Card>
         </div>
 
-        <Card title="Cost · 12 months trend" sub="rolling monthly spend" attrappe={ATTRAPPE}>
+        <Card title="Cost · 12 months trend" sub="rolling monthly spend" attrappe={RUECKFALL}>
           <LineChart
             h={180}
             series={[{ data: verlauf, color: 'var(--acc-suppl)' }]}
@@ -1136,7 +1179,7 @@ function CostAttrappe() {
           />
         </Card>
 
-        <Card title="Spend per supplement · this month" attrappe={ATTRAPPE}>
+        <Card title="Spend per supplement · this month" attrappe={RUECKFALL}>
           <div className="v2-supp-tbl-wrap">
             <table className="v2-tbl">
               <thead>
@@ -1175,7 +1218,7 @@ function CostAttrappe() {
       </div>
 
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card title="Category split" attrappe={ATTRAPPE}>
+        <Card title="Category split" attrappe={RUECKFALL}>
           <div className="v2-col-gap" style={{ gap: 8 }}>
             {kategorien.map(k => (
               <div key={k.c} className="v2-supp-kategorie">
@@ -1189,7 +1232,7 @@ function CostAttrappe() {
           </div>
         </Card>
 
-        <Card title="If you removed…" sub="cost-per-effect quick reference" attrappe={ATTRAPPE}>
+        <Card title="If you removed…" sub="cost-per-effect quick reference" attrappe={RUECKFALL}>
           <div className="v2-muted" style={{ fontSize: 11.5, marginBottom: 10, lineHeight: 1.55 }}>
             Hypothetical monthly savings if individual items were dropped. Use with Buddy&apos;s
             effect analysis for trade-offs.
@@ -1199,7 +1242,7 @@ function CostAttrappe() {
           ))}
         </Card>
 
-        <Card title="Cost optimization · suggestions" attrappe={ATTRAPPE}>
+        <Card title="Cost optimization · suggestions" attrappe={RUECKFALL}>
           <div className="v2-col-gap" style={{ gap: 8 }}>
             <div className="v2-supp-vorschlag">
               <div style={{ fontSize: 12, fontWeight: 500, marginBottom: 3 }}>
