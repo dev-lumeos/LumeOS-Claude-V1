@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `41307de` auf `dev`.
+**Stand:** 2026-08-18, Anker `b850321` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 86 offen, 3 in Arbeit.
+`[cmd]` 87 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -190,7 +190,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-110** | Cost-Rest und Compliance-Notizen |  |
 | **C-111** | Recovery — neun Entscheidungen und drei Formelfehler |  |
 | **C-112** | Buddy, Coach und Marketplace — elf Entscheidungen |  |
-| **C-113** | Enhanced Mode — dreimal dasselbe PED-Thema, nirgends eingeordnet |  |
+| **C-113** | Enhanced Mode — entschieden |  |
+| **C-118** | Erfahrungsgrad des Nutzers |  |
 | **C-114** | Was das Vorgaengerrepo beim Coach falsch machte |  |
 | **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
 | **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
@@ -2036,25 +2037,74 @@ Umsetzen angepasst werden.
   dazu schlaegt nachgerechnet fehl.** `[read]` Fuenfter Spec-Fehler in
   Folge.
 
-- [ ] **C-113: Enhanced Mode — dreimal dasselbe PED-Thema, nirgends
-  eingeordnet** (neu 2026-08-19). **Eine einzige Entscheidung fuer Tom
-  (E9 aus F-03).**
+- [ ] **C-113: Enhanced Mode — entschieden** (neu gefasst 2026-08-19).
+  **Toms Vorgaben vom 2026-08-19.**
 
-  `[cmd]` **Drei Stellen, ohne Verbindung:**
+  **Tom:** *„Ist ein Feature im Supplement-Modul, das wir spaeter
+  definieren, wann es aktiv ist — im Moment bauen wir es. Am Ende geben
+  wir dem User nur die Moeglichkeit, seinen Konsum zu planen, zu
+  protokollieren, moduluebergreifende Analysen fuer Warnings zu geben.
+  **Wir werden nicht Empfehlungen oder Papa spielen fuer diese User.**"*
+
+  ### Was gebaut wird
 
   | | |
   |---|---|
-  | Coach | *„Enhanced Mode"* **mit Blutbild-Pflicht** |
-  | Buddy | geseedete Injektions-Erinnerung `pin_day_missed`, **`cycle_consulting` als Bezahlfeature** |
-  | Marketplace | *„TRT protocol consultation"* von *„Dr. Kessler"* |
+  | **Planen** | Zyklus, Zeitplan, Injektionsorte |
+  | **Protokollieren** | was genommen wurde, wann, wo |
+  | **Warnungen** | **moduluebergreifend** — Supplements gegen Medical gegen Recovery |
 
-  `[read]` **Dreimal PED, dreimal anders gedacht, nirgends
-  eingeordnet.** `[cmd]` Und F-02 hat parallel gemessen: **200 von 702
-  Datensaetzen der Mini-PC-CSV sind Enhanced/PED** — Steroide, SARMs,
-  Peptide.
+  `[read]` **Was nicht gebaut wird:** Dosierungsempfehlung,
+  Zyklusaufbau, PCT-Protokoll, Kombinationsvorschlag. **Dieselbe Linie
+  wie bei den Wechselwirkungen (C-108):** nennen ja, bewerten nein.
 
-  `[read]` **Das beruehrt Recht, Haftung und Produktausrichtung
-  zugleich.** Eine Entscheidung, nicht drei.
+  ### Blutcheck: Empfehlung ja, Pflicht nein
+
+  **Tom:** *„Eine Empfehlung fuer Blutchecks muss sicher rein, aber hart
+  abhaengig machen will ich nicht. Denn ich denke, diverse Pros werden
+  Blutbilder monatlich machen, aber die wollen sie nicht online
+  haben."*
+
+  `[read]` **Das ist begruendet:** Eine Pflicht wuerde genau die Nutzer
+  ausschliessen, die am sorgfaeltigsten arbeiten — **und sie nicht
+  sicherer machen, sondern woanders hintreiben.**
+
+  `[cmd]` **Damit faellt die Blutbild-Pflicht aus dem Coach-Mockup weg**
+  — sie wird zur Empfehlung.
+
+  ### Die drei Fundstellen sind damit eingeordnet
+
+  `[cmd]` **Coach-Blutbildpflicht** → wird Empfehlung.
+  **Buddys `cycle_consulting` als Bezahlfeature** → faellt weg, das
+  waere Beratung. **Marketplace *„TRT protocol consultation"*** → dieselbe
+  Frage, gehoert zu C-112.
+
+- [ ] **C-118: Erfahrungsgrad des Nutzers** (neu 2026-08-19). **Toms
+  Vorgabe.** Voraussetzung fuer C-113.
+
+  **Tom:** *„Ich stelle mir vor, es ist nur fuer bestimmte Level-User
+  aktivierbar — sprich, wir brauchen in Settings und Onboarding eine
+  Deklaration des Users, welches Level er hat."*
+
+  `[cmd]` **Vier Stufen: Beginner · Advanced · Pro · Elite.** Toms
+  Entscheidung: *„starten wir mal damit, ist ja jederzeit ausbaubar."*
+
+  `[cmd]` **Ort: `public.profiles`** — dort stehen bereits Alter,
+  Geschlecht, Aktivitaetsniveau. `[read]` **Es ist eine Eigenschaft des
+  Nutzers, kein Modulwert.**
+
+  `[cmd]` **In Onboarding und Settings**, beide Stellen.
+
+  ### Nicht zu verwechseln mit der Autonomy-Stufe
+
+  `[read]` **Getrennt, ausdruecklich (Tom, 2026-08-19).** Der
+  Erfahrungsgrad ist **Selbstauskunft** des Nutzers; die Autonomy-Stufe
+  aus C-71 ist **Fremdeinschaetzung** durch den Coach. **Beide
+  beschreiben Reife, aber aus verschiedenen Richtungen.**
+
+  `[read]` **Und der Erfahrungsgrad wirkt weiter als Supplements** — er
+  koennte Trainingsstandards, Volumenempfehlungen und die Ansprache
+  beeinflussen. **Erst einmal nur als Feld, ohne Wirkung.**
 
 - [ ] **C-114: Was das Vorgaengerrepo beim Coach falsch machte** (neu
   2026-08-19). **Vier Entscheidungen fuer Tom.** Aus der F-04-Recherche
