@@ -5176,6 +5176,59 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Anzeigegruppen, die 518 BLS-Kategorien die Systematik — das ist eine
   n:1-Beziehung, kein Fremdschluessel auf `foods`."*
 
+- [x] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
+  **Setzt G-65 und G-66 voraus.**
+
+  **Tom:** *„Und die Suche hat das dementsprechend umgesetzt."*
+
+  `[cmd]` **Die Rangfolge steht im Mockup** (siehe G-65): Allergen und
+  Diet type schliessen hart aus, dann Food ±100, Category ±50, Tag
+  ±30, Prefix +20.
+
+  ### Was aus dem Vorgaengerrepo uebernehmbar ist
+
+  `[cmd]` `foods-smart-search.ts`, 380 Zeilen, mit eigenem Test:
+  *„Database-level preference scoring · Auto-exclude allergens ·
+  Diet-type filtering · <200ms target."*
+
+  `[read]` **Die Struktur ja, der Code nein.** Dort werden Vorlieben als
+  **Textmuster** verglichen (`LOWER(name_de) LIKE '%haehnchen%'`), bei
+  uns liegen sie als **Verweise** vor. Und `dietType === 'keto'` prueft
+  `foods.carbs_g` — **eine Spalte, die wir nicht haben.**
+
+  `[cmd]` **Bewertung in der Datenbank, nicht im Browser** — das ist der
+  uebernehmbare Teil, plus **Allergene ausschliessen statt abwerten.**
+
+  `[cmd]` **Erledigt 2026-08-19.** `nutrition.food_search` hat jetzt
+  **`p_user_id` als 15. Argument mit `DEFAULT NULL`** — selbst
+  nachgemessen.
+
+  `[cmd]` **Ohne Nutzer bleibt die Suche unveraendert.** Mit Nutzer
+  greifen **`hard`, `strong`, `soft`, `boost`**: `hard_exclude` entfernt
+  Treffer, **`soft_dislike` bleibt sichtbar und wird abgewertet** —
+  genau die Trennung aus G-67.
+
+  `[cmd]` **`dev`: `walnuss` faellt wegen `contains_nuts` auf 0
+  Treffer.** `test-user`: ungefiltert, 6 Treffer.
+
+  `[cmd]` **Die Ausschluesse ueberschneiden sich stark:** halal 761,
+  kosher 689, no_pork 630 — **Union nur 808 von 7.140.** 6.332 bleiben.
+
+  `[cmd]` **Laufzeit ohne Nutzer:** leer 363,4 ms, `spinat` 254,1,
+  `reis` 253,4, `huehnerbrust` 339,1. **Abdeckung: 116 von 151 auf Platz
+  1**, 138 in den Top 3, 146 in den Top 10. **MealCam bleibt 34/37.**
+
+  ### Was der Orchestrator nicht nachstellen konnte
+
+  `[read]` **Die Trefferzahlen liessen sich per SQL nicht
+  reproduzieren** — roh aufgerufen liefert `walnuss` fuer alle drei
+  Faelle 1. **Die Anwendung uebergibt `p_token_groups` mit aufgeloesten
+  Synonymen; der rohe Aufruf tut das nicht.**
+
+  `[cmd]` **Belegt ist die Struktur** (15 Argumente, `p_user_id`
+  vorhanden), **nicht die Zahlen.** `[read]` **Derselbe Messfehler wie
+  bei C-99**, wo die Bruecke 5.017 zeigte und der Gesamtpfad 7.067.
+
 
 
 ## Erledigt am 2026-08-05

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `386b8d6` auf `dev`.
+**Stand:** 2026-08-18, Anker `d4b89b6` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -194,7 +194,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-114** | Was das Vorgaengerrepo beim Coach falsch machte |  |
 | **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
 | **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
-| **C-94** | Die Suche wendet die Vorlieben an |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
 | **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
 | **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
@@ -221,6 +220,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
 | **A-19** | Zwei README-Abweichungen in der Kette |  |
+| **C-117** | `milch` traegt auch mit Vorlieben nicht |  |
 
 ---
 
@@ -2199,28 +2199,6 @@ Umsetzen angepasst werden.
   uebernommen? **320 Zeilen ohne Kuration sind kein Katalog** — und
   200 davon sind PED, was C-113 beruehrt.
 
-- [ ] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
-  **Setzt G-65 und G-66 voraus.**
-
-  **Tom:** *„Und die Suche hat das dementsprechend umgesetzt."*
-
-  `[cmd]` **Die Rangfolge steht im Mockup** (siehe G-65): Allergen und
-  Diet type schliessen hart aus, dann Food ±100, Category ±50, Tag
-  ±30, Prefix +20.
-
-  ### Was aus dem Vorgaengerrepo uebernehmbar ist
-
-  `[cmd]` `foods-smart-search.ts`, 380 Zeilen, mit eigenem Test:
-  *„Database-level preference scoring · Auto-exclude allergens ·
-  Diet-type filtering · <200ms target."*
-
-  `[read]` **Die Struktur ja, der Code nein.** Dort werden Vorlieben als
-  **Textmuster** verglichen (`LOWER(name_de) LIKE '%haehnchen%'`), bei
-  uns liegen sie als **Verweise** vor. Und `dietType === 'keto'` prueft
-  `foods.carbs_g` — **eine Spalte, die wir nicht haben.**
-
-  `[cmd]` **Bewertung in der Datenbank, nicht im Browser** — das ist der
-  uebernehmbare Teil, plus **Allergene ausschliessen statt abwerten.**
 
 
 - [ ] **GO-20: Ziele brauchen Prioritaeten, Bearbeiten und Historie**
@@ -2761,3 +2739,23 @@ Umsetzen angepasst werden.
   `[cmd]` **Vermutlich hat der C-93-Agent `supabase/README.md` nicht
   vollstaendig nachgezogen.** Kleine Sache, aber der Pruefer bleibt gelb,
   bis sie behoben ist.
+
+- [ ] **C-117: `milch` traegt auch mit Vorlieben nicht** (neu
+  2026-08-19). Rest aus C-94, **ersetzt C-102 nicht, praezisiert es.**
+
+  `[cmd]` **Gemessen nach C-94:** MealCam gewinnt weiterhin mit
+  **Joghurt (0,5 % Fett)**, Soll bleibt **Vollmilch.**
+
+  `[read]` **Damit ist die Hoffnung aus C-102 widerlegt:** *„G-65 loest
+  es womoeglich von selbst — wer Joghurt abwertet, sieht ihn nicht mehr
+  oben."* **Die Vorlieben greifen, aber sie loesen die Rangfrage
+  nicht** — weil niemand Joghurt abgewertet hat und es auch niemand
+  tun sollte.
+
+  `[cmd]` **Die Ursache bleibt die Formel:** Joghurt hat mehr Protein je
+  100 g als Milch, und `sort_weight` belohnt Dichte. **Der Pulverabzug
+  aus C-100 hat den ersten Fehler behoben, nicht den zweiten.**
+
+  `[read]` **Die zwei Wege aus C-102 stehen weiter offen:** *Trinkform
+  vor Pulverform* als Regel, **oder Haeufigkeit statt Dichte** —
+  `meal_items` protokolliert, was gegessen wird.
