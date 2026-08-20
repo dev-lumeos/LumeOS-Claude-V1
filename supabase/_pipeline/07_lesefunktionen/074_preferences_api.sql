@@ -195,6 +195,9 @@ SECURITY INVOKER
 AS $function$
 DECLARE
   v_items jsonb := COALESCE(p_items, '[]'::jsonb);
+  v_preference_rows integer;
+  v_item_count integer;
+  v_touched_items integer;
 BEGIN
   IF p_user_id IS NULL THEN
     RAISE EXCEPTION 'food_preferences_write: p_user_id is required';
@@ -253,34 +256,33 @@ BEGIN
     planner_notes = EXCLUDED.planner_notes,
     updated_at = now();
 
-  DELETE FROM nutrition.food_preference_items
-  WHERE user_id = p_user_id;
+  GET DIAGNOSTICS v_preference_rows = ROW_COUNT;
+  IF v_preference_rows <> 1 THEN
+    RAISE EXCEPTION 'food_preferences_write: no preference row written for %', p_user_id;
+  END IF;
 
-  INSERT INTO nutrition.food_preference_items (
-    user_id,
-    preference,
-    strength,
-    target_type,
-    food_id,
-    category_id,
-    tag_code,
-    cuisine_code,
-    exclusion_preset_code,
-    catalog_item_code,
-    source
-  )
+  IF to_regclass('pg_temp.food_preferences_write_items') IS NOT NULL THEN
+    DROP TABLE pg_temp.food_preferences_write_items;
+  END IF;
+  CREATE TEMP TABLE food_preferences_write_items ON COMMIT DROP AS
   SELECT
-    p_user_id,
+    row_number() OVER () AS item_no,
     x.preference,
-    COALESCE(x.strength, 'neutral'),
+    COALESCE(x.strength, 'neutral') AS strength,
     x.target_type,
     x.food_id,
     x.category_id,
-    NULLIF(x.tag_code, ''),
-    NULLIF(x.cuisine_code, ''),
-    NULLIF(x.exclusion_preset_code, ''),
-    NULLIF(x.catalog_item_code, ''),
-    COALESCE(NULLIF(x.source, ''), 'user')
+    NULLIF(x.tag_code, '') AS tag_code,
+    NULLIF(x.cuisine_code, '') AS cuisine_code,
+    NULLIF(x.exclusion_preset_code, '') AS exclusion_preset_code,
+    NULLIF(x.catalog_item_code, '') AS catalog_item_code,
+    COALESCE(NULLIF(x.source, ''), 'user') AS source,
+    concat_ws(':',
+      x.target_type,
+      COALESCE(x.food_id::text, x.category_id::text, NULLIF(x.tag_code, ''),
+        NULLIF(x.cuisine_code, ''), NULLIF(x.exclusion_preset_code, ''),
+        NULLIF(x.catalog_item_code, ''))
+    ) AS item_key
   FROM jsonb_to_recordset(v_items) AS x(
     preference text,
     strength text,
@@ -294,14 +296,104 @@ BEGIN
     source text
   );
 
+  SELECT COUNT(*) INTO v_item_count FROM pg_temp.food_preferences_write_items;
+  IF EXISTS (
+    SELECT 1
+    FROM pg_temp.food_preferences_write_items
+    GROUP BY item_key
+    HAVING COUNT(*) > 1
+  ) THEN
+    RAISE EXCEPTION 'food_preferences_write: duplicate preference item in payload';
+  END IF;
+
+  -- C-156: Einstellungen ersetzen nur Einstellungen. Ein Daumen- oder
+  -- Suchtreffer-Eintrag, den die Oberflaeche nicht mitsendet, darf nicht
+  -- durch einen Kachel-Speicherlauf verschwinden.
+  DELETE FROM nutrition.food_preference_items existing
+  WHERE existing.user_id = p_user_id
+    AND existing.source = 'settings'
+    AND NOT EXISTS (
+      SELECT 1
+      FROM pg_temp.food_preferences_write_items incoming
+      WHERE incoming.target_type = existing.target_type
+        AND COALESCE(incoming.food_id, '00000000-0000-0000-0000-000000000000'::uuid)
+          = COALESCE(existing.food_id, '00000000-0000-0000-0000-000000000000'::uuid)
+        AND COALESCE(incoming.category_id, '00000000-0000-0000-0000-000000000000'::uuid)
+          = COALESCE(existing.category_id, '00000000-0000-0000-0000-000000000000'::uuid)
+        AND COALESCE(incoming.tag_code, '') = COALESCE(existing.tag_code, '')
+        AND COALESCE(incoming.cuisine_code, '') = COALESCE(existing.cuisine_code, '')
+        AND COALESCE(incoming.exclusion_preset_code, '') = COALESCE(existing.exclusion_preset_code, '')
+        AND COALESCE(incoming.catalog_item_code, '') = COALESCE(existing.catalog_item_code, '')
+    );
+
+  WITH updated AS (
+    UPDATE nutrition.food_preference_items existing
+       SET preference = incoming.preference,
+           strength = incoming.strength,
+           source = COALESCE(NULLIF(existing.source, ''), incoming.source)
+      FROM pg_temp.food_preferences_write_items incoming
+     WHERE existing.user_id = p_user_id
+       AND incoming.target_type = existing.target_type
+       AND COALESCE(incoming.food_id, '00000000-0000-0000-0000-000000000000'::uuid)
+         = COALESCE(existing.food_id, '00000000-0000-0000-0000-000000000000'::uuid)
+       AND COALESCE(incoming.category_id, '00000000-0000-0000-0000-000000000000'::uuid)
+         = COALESCE(existing.category_id, '00000000-0000-0000-0000-000000000000'::uuid)
+       AND COALESCE(incoming.tag_code, '') = COALESCE(existing.tag_code, '')
+       AND COALESCE(incoming.cuisine_code, '') = COALESCE(existing.cuisine_code, '')
+       AND COALESCE(incoming.exclusion_preset_code, '') = COALESCE(existing.exclusion_preset_code, '')
+       AND COALESCE(incoming.catalog_item_code, '') = COALESCE(existing.catalog_item_code, '')
+    RETURNING incoming.item_no
+  ), inserted AS (
+    INSERT INTO nutrition.food_preference_items (
+      user_id,
+      preference,
+      strength,
+      target_type,
+      food_id,
+      category_id,
+      tag_code,
+      cuisine_code,
+      exclusion_preset_code,
+      catalog_item_code,
+      source
+    )
+    SELECT
+      p_user_id,
+      incoming.preference,
+      incoming.strength,
+      incoming.target_type,
+      incoming.food_id,
+      incoming.category_id,
+      incoming.tag_code,
+      incoming.cuisine_code,
+      incoming.exclusion_preset_code,
+      incoming.catalog_item_code,
+      incoming.source
+    FROM pg_temp.food_preferences_write_items incoming
+    WHERE NOT EXISTS (
+      SELECT 1
+      FROM updated u
+      WHERE u.item_no = incoming.item_no
+    )
+    RETURNING 1
+  )
+  SELECT (SELECT COUNT(*) FROM updated) + (SELECT COUNT(*) FROM inserted)
+    INTO v_touched_items;
+
+  IF v_touched_items <> v_item_count THEN
+    RAISE EXCEPTION 'food_preferences_write: wrote % of % preference items',
+      v_touched_items, v_item_count;
+  END IF;
+
   RETURN nutrition.food_preferences_read(p_user_id);
 END;
 $function$;
 
 COMMENT ON FUNCTION nutrition.food_preferences_write(uuid, jsonb, jsonb) IS
-  'G-11a: schreibt Basis-Praeferenzen und ersetzt die Preference-Items '
-  'atomar. SECURITY INVOKER: Tabellenrechte, Checks, FKs und RLS bleiben '
-  'die Zugriffskontrolle.';
+  'C-156: schreibt Basis-Praeferenzen und fuehrt Preference-Items '
+  'key-basiert zusammen. Nur source=settings wird durch die Einstellungsseite '
+  'ersetzt; search_thumb und andere Herkuenfte bleiben erhalten. '
+  'SECURITY INVOKER: Tabellenrechte, Checks, FKs und RLS bleiben die Zugriffskontrolle.';
 
 REVOKE ALL ON FUNCTION nutrition.food_preferences_read(uuid) FROM PUBLIC, anon;
 REVOKE ALL ON FUNCTION nutrition.food_preferences_write(uuid, jsonb, jsonb) FROM PUBLIC, anon;

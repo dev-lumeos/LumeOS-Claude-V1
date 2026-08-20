@@ -4,6 +4,20 @@ import crypto from 'node:crypto'
 
 const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-V1'
 const DB = process.env.PGDATABASE ?? 'postgres'
+const ALLOWED_ARGS = new Set(['--start', '--next-start', '--days', '--today'])
+
+for (let index = 2; index < process.argv.length; index += 1) {
+  const arg = process.argv[index]!
+  if (!arg.startsWith('--')) continue
+  if (!ALLOWED_ARGS.has(arg)) {
+    throw new Error(`Unbekannter Parameter: ${arg}`)
+  }
+  const value = process.argv[index + 1]
+  if (!value || value.startsWith('--')) {
+    throw new Error(`${arg} braucht einen Wert`)
+  }
+  index += 1
+}
 
 function argValue(name: string): string | null {
   const index = process.argv.indexOf(name)
@@ -2482,22 +2496,22 @@ DELETE FROM nutrition.recipes WHERE user_id IN (${userIds});
 DELETE FROM nutrition.water_logs WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meals WHERE user_id IN (${userIds});
-DELETE FROM coach.action_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.pending_actions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.permission_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.autonomy_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.alerts WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.messages WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.checkins WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.checkin_templates WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.relationship_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.action_log WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.pending_actions WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.permission_change_log WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.autonomy_change_log WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.alerts WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.messages WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.checkins WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.checkin_templates WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.relationship_change_log WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
 ALTER TABLE coach.relationships DISABLE TRIGGER relationships_change_log;
-DELETE FROM coach.relationships WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.relationships WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
 ALTER TABLE coach.relationships ENABLE TRIGGER relationships_change_log;
 ALTER TABLE coach.client_permissions DISABLE TRIGGER client_permissions_change_log;
 ALTER TABLE coach.client_autonomy DISABLE TRIGGER client_autonomy_change_log;
-DELETE FROM coach.client_permissions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
-DELETE FROM coach.client_autonomy WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.client_permissions WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
+DELETE FROM coach.client_autonomy WHERE coach_id = ${lit(COACH_USER.id)}::uuid OR client_id = ${lit(COACH_USER.id)}::uuid;
 ALTER TABLE coach.client_permissions ENABLE TRIGGER client_permissions_change_log;
 ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 DELETE FROM training.workout_sets ws
@@ -2532,7 +2546,6 @@ DELETE FROM goals.goal_phases WHERE user_id IN (${userIds});
 DELETE FROM goals.user_goals WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
 DELETE FROM public.profiles WHERE id IN (${allSeedUserIds});
-DELETE FROM auth.users WHERE id IN (${allSeedUserIds});
 
 CREATE TEMP TABLE test_users (
   id uuid PRIMARY KEY,
@@ -2562,7 +2575,10 @@ SELECT
   email,
   jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email'), 'full_name', display_name, 'seed', 'c82_testdaten'),
   now()
-FROM test_users;
+FROM test_users
+ON CONFLICT (id) DO UPDATE SET
+  email = EXCLUDED.email,
+  raw_app_meta_data = EXCLUDED.raw_app_meta_data;
 
 INSERT INTO auth.users (
   id, email, raw_app_meta_data, created_at
@@ -2572,7 +2588,10 @@ VALUES (
   ${lit(COACH_USER.email)},
   jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email'), 'full_name', ${lit(COACH_USER.displayName)}, 'seed', 'c147_coach'),
   now()
-);
+)
+ON CONFLICT (id) DO UPDATE SET
+  email = EXCLUDED.email,
+  raw_app_meta_data = EXCLUDED.raw_app_meta_data;
 
 INSERT INTO public.profiles (
   id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level, nutrition_goal

@@ -376,21 +376,20 @@ if (MODE === 'clean') {
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
   if (supplementIntakeLogs !== 360) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 360`)
-  // F-07: Max traegt eine zweite Permissions-/Autonomy-Zeile (nur
-  // Training/Recovery summary); dazu Beziehungen, Check-ins,
-  // Nachrichten und Alerts fuer das Portal.
-  if (coachPermissions !== 2) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet 2`)
-  if (coachAutonomy !== 2) errors.push(`coach.client_autonomy: ${coachAutonomy}, erwartet 2`)
+  // F-07/C-156: Der Seed-Basisbestand muss vorhanden sein; stabile
+  // coach@-Portalbeziehungen duerfen zusaetzlich danebenliegen.
+  if (coachPermissions < 2) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet mindestens 2`)
+  if (coachAutonomy < 2) errors.push(`coach.client_autonomy: ${coachAutonomy}, erwartet mindestens 2`)
   if (coachPendingActions !== 1) errors.push(`coach.pending_actions: ${coachPendingActions}, erwartet 1`)
   if (coachActionLog !== 1) errors.push(`coach.action_log: ${coachActionLog}, erwartet 1`)
   if (coachPermissionLogs < 3) errors.push(`coach.permission_change_log: ${coachPermissionLogs}, erwartet mindestens 3`)
   if (coachAutonomyLogs < 3) errors.push(`coach.autonomy_change_log: ${coachAutonomyLogs}, erwartet mindestens 3`)
-  if (coachRelationships !== 3) errors.push(`coach.relationships: ${coachRelationships}, erwartet 3 (aktiv/aktiv/eingeladen)`)
+  if (coachRelationships < 3) errors.push(`coach.relationships: ${coachRelationships}, erwartet mindestens 3 (aktiv/aktiv/eingeladen)`)
   if (coachRelationshipLogs < 3) errors.push(`coach.relationship_change_log: ${coachRelationshipLogs}, erwartet mindestens 3`)
   if (coachCheckinTemplates !== 1) errors.push(`coach.checkin_templates: ${coachCheckinTemplates}, erwartet 1`)
   if (coachCheckins !== 3) errors.push(`coach.checkins: ${coachCheckins}, erwartet 3 (reviewed/submitted/pending)`)
-  if (coachMessages !== 3) errors.push(`coach.messages: ${coachMessages}, erwartet 3`)
-  if (coachAlerts !== 3) errors.push(`coach.alerts: ${coachAlerts}, erwartet 3`)
+  if (coachMessages < 3) errors.push(`coach.messages: ${coachMessages}, erwartet mindestens 3`)
+  if (coachAlerts < 3) errors.push(`coach.alerts: ${coachAlerts}, erwartet mindestens 3`)
   if (coachPermissionVariants < 3) errors.push(`Coach-Permissions unterscheiden sich nicht genug: ${coachPermissionVariants} Sichtbarkeitswerte`)
   if (maxDays < 170) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 170`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
