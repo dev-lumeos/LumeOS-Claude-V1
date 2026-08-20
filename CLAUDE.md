@@ -66,6 +66,50 @@ nicht darin steht, existiert fuer die naechste Sitzung nicht.
 committet. **Eine Zeile mit dem Befund, nicht mit dem Dateinamen** —
 der steht schon in der ersten Spalte.
 
+## Der Dev-Server und das Gate teilen sich nichts — wenn man es laesst
+
+**Tom, 2026-08-19:** *,Irgendeiner schiesst immer den Server ab, geht
+das nicht ohne?"*
+
+**Ja. Die Trennung existiert seit dem 2026-08-06 (B-18).**
+
+`[cmd]` **`apps/web/next.config.js` liest `LUMEOS_DIST_DIR`.** Das Gate
+setzt `.next-gate`, **der Dev-Server bleibt auf `.next`.** Beide
+Verzeichnisse stehen nebeneinander, **keiner raeumt das des anderen
+ab.**
+
+`[cmd]` **Und die zweite Ursache ist auch geloest:** `turbo.json` setzt
+`dependsOn: ["^build", "build"]` bei `typecheck` — **sonst liefen
+Typecheck und Build desselben Pakets gleichzeitig.** *,6 von 6 Laeufen
+gruen bei laufendem Dev-Server."*
+
+### Was Agenten trotzdem taten
+
+`[cmd]` **Der G-87-Agent rief `next build` direkt auf** — ohne die
+Variable, **also in `.next`.** *,Mein `next build` hatte dem
+Entwicklungsserver die Chunks weggeschrieben."*
+
+`[cmd]` **Und der Orchestrator schrieb in drei Auftraegen
+*,`.next` loeschen und neu starten"*** — **also genau das Verzeichnis
+anfassen, das der Dev-Server benutzt.** Der Rat war falsch.
+
+### Die Regeln
+
+**Nie `.next` loeschen.** `[read]` Es ist die Notloesung, nicht der
+erste Griff.
+
+**Nie `next build` direkt aufrufen.** `[cmd]` Nur `pnpm gate` oder
+`pnpm --filter @lumeos/web build` — **die setzen die Variable.**
+
+**Wenn die Oberflaeche kaputt aussieht:** `[cmd]` **erst pruefen, ob
+jemand die Trennung umgangen hat.** `[read]` Ein Build in `.next` ist
+die wahrscheinlichere Ursache als ein kaputter Cache.
+
+**Und wenn wirklich geraeumt werden muss:** `[cmd]` **Server beenden,
+raeumen, neu starten — in dieser Reihenfolge.** Wer nur raeumt, bekommt
+404 fuer jeden Chunk, **und die Anmeldung schickt die Zugangsdaten per
+GET in die URL** (G-82).
+
 ## Nach jedem Bericht: nachtragen, ungefragt
 
 **Tom, 2026-08-19:** *,Und Todolisten, Docs und SSOT nachtragen — das
