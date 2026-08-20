@@ -25,16 +25,19 @@
 \endif
 \set quelle_email '''tom.seed@example.com'''
 \set pruefkonto_email '''test-user@lumeos.local'''
+\set coach_email '''coach.seed@example.com'''
 
 BEGIN;
 
 SELECT id AS ziel_id FROM auth.users WHERE email = :ziel_email \gset
 SELECT id AS quelle_id FROM auth.users WHERE email = :quelle_email \gset
 SELECT id AS pruefkonto_id FROM auth.users WHERE email = :pruefkonto_email \gset
+SELECT id AS coach_id FROM auth.users WHERE email = :coach_email \gset
 
 \set ziel :ziel_id
 \set quelle :quelle_id
 \set pruefkonto :pruefkonto_id
+\set coach :coach_id
 
 SELECT 1 / CASE WHEN :'ziel'::uuid = :'quelle'::uuid THEN 0 ELSE 1 END
   AS ziel_ist_nicht_quelle;
@@ -44,7 +47,21 @@ DELETE FROM medical.user_conditions WHERE user_id = :'pruefkonto'::uuid;
 DELETE FROM medical.user_medications WHERE user_id = :'pruefkonto'::uuid;
 DELETE FROM medical.lab_reports WHERE user_id = :'pruefkonto'::uuid;
 
+DELETE FROM coach.action_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.pending_actions WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.permission_change_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.autonomy_change_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.client_permissions WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.client_autonomy WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+
 -- Wiederholbar: erst Demo-Daten des Zielkontos raeumen, dann neu kopieren.
+DELETE FROM coach.action_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.pending_actions WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.permission_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.autonomy_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.client_permissions WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.client_autonomy WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+
 DELETE FROM medical.user_conditions WHERE user_id = :'ziel'::uuid;
 DELETE FROM medical.user_medications WHERE user_id = :'ziel'::uuid;
 DELETE FROM medical.lab_reports WHERE user_id = :'ziel'::uuid;
@@ -82,6 +99,97 @@ DELETE FROM nutrition.food_preferences WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.water_logs WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.meal_items WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.meals WHERE user_id = :'ziel'::uuid;
+
+-- Coach-Demo: explizit neu aufbauen, damit die Trigger die Historie
+-- fuer das echte Dev-Konto erzeugen. test-user bleibt ohne Coach.
+INSERT INTO coach.client_permissions (
+  coach_id, client_id,
+  nutrition_visibility, training_visibility, recovery_visibility, goals_visibility,
+  supplements_visibility, medical_visibility, buddy_visibility,
+  nutrition_auto_apply, training_auto_apply, recovery_auto_apply, goals_auto_apply,
+  supplements_auto_apply, medical_auto_apply, buddy_auto_apply,
+  client_note, changed_by
+)
+VALUES (
+  :'coach'::uuid, :'ziel'::uuid,
+  'summary', 'summary', 'none', 'summary',
+  'none', 'none', 'none',
+  false, false, false, false,
+  false, false, false,
+  'C-147 Dev-Kopie: Ausgangszustand vor differenzierten Coach-Rechten',
+  :'ziel'::uuid
+);
+
+UPDATE coach.client_permissions
+SET nutrition_visibility = 'full',
+    training_visibility = 'full',
+    recovery_visibility = 'summary',
+    goals_visibility = 'full',
+    supplements_visibility = 'summary',
+    medical_visibility = 'none',
+    buddy_visibility = 'summary',
+    training_auto_apply = true,
+    client_note = 'C-147 Dev-Kopie: Training offen, Medical gesperrt, Nutrition mit Bestaetigung',
+    changed_by = :'ziel'::uuid
+WHERE coach_id = :'coach'::uuid
+  AND client_id = :'ziel'::uuid;
+
+INSERT INTO coach.client_autonomy (
+  coach_id, client_id,
+  nutrition_level, training_level, recovery_level, goals_level,
+  supplements_level, medical_level, buddy_level, safety_level,
+  coach_note, changed_by
+)
+VALUES (
+  :'coach'::uuid, :'ziel'::uuid,
+  2, 2, 2, 2, 2, 2, 2, 1,
+  'C-147 Dev-Kopie: Ausgangszustand fuer Autonomy-Historie',
+  :'coach'::uuid
+);
+
+UPDATE coach.client_autonomy
+SET nutrition_level = 3,
+    training_level = 4,
+    recovery_level = 2,
+    goals_level = 3,
+    supplements_level = 2,
+    medical_level = 1,
+    buddy_level = 3,
+    safety_level = 2,
+    coach_note = 'C-147 Dev-Kopie: Coach setzt differenzierte Reifegrade je Modul',
+    changed_by = :'coach'::uuid
+WHERE coach_id = :'coach'::uuid
+  AND client_id = :'ziel'::uuid;
+
+INSERT INTO coach.pending_actions (
+  coach_id, client_id, module, action_type, preview, payload,
+  status, expires_at, created_by
+)
+VALUES (
+  :'coach'::uuid,
+  :'ziel'::uuid,
+  'nutrition',
+  'adjust_macro_targets',
+  '{"title":"Protein leicht anheben","summary":"Coach schlaegt +10 g Protein am Trainingstag vor"}'::jsonb,
+  '{"protein_g_delta":10,"reason":"C-147 Pending Action mit Nutzerbestaetigung"}'::jsonb,
+  'pending',
+  now() + interval '10 minutes',
+  :'coach'::uuid
+);
+
+INSERT INTO coach.action_log (
+  coach_id, client_id, module, action_type,
+  payload_snapshot, undo_data, executed_by
+)
+VALUES (
+  :'coach'::uuid,
+  :'ziel'::uuid,
+  'training',
+  'adjust_training_day',
+  '{"day":"upper","change":"Bench-Topset priorisiert"}'::jsonb,
+  '{"restore":{"day":"upper","change":"vorherige Uebungsreihenfolge"}}'::jsonb,
+  :'coach'::uuid
+);
 
 -- 1. Profil: die Felder, an denen Referenzwerte und Formeln haengen.
 -- locale bleibt unberuehrt, weil es die echte Browser-/Nutzerwahl ist.
@@ -532,6 +640,18 @@ counts AS (
   FROM users u LEFT JOIN medical.user_medications um ON um.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'user_conditions', count(uc.*)
   FROM users u LEFT JOIN medical.user_conditions uc ON uc.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'coach_client_permissions', count(cp.*)
+  FROM users u LEFT JOIN coach.client_permissions cp ON cp.client_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'coach_client_autonomy', count(ca.*)
+  FROM users u LEFT JOIN coach.client_autonomy ca ON ca.client_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'coach_pending_actions', count(pa.*)
+  FROM users u LEFT JOIN coach.pending_actions pa ON pa.client_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'coach_action_log', count(al.*)
+  FROM users u LEFT JOIN coach.action_log al ON al.client_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'coach_permission_change_log', count(pcl.*)
+  FROM users u LEFT JOIN coach.permission_change_log pcl ON pcl.client_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'coach_autonomy_change_log', count(acl.*)
+  FROM users u LEFT JOIN coach.autonomy_change_log acl ON acl.client_id = u.id GROUP BY u.email
 )
 SELECT email, table_name, rows
 FROM counts

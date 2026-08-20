@@ -169,21 +169,29 @@ CREATE FUNCTION goals.phase_am(
 )
 RETURNS TABLE (
   phase_id UUID,
+  user_id UUID,
   goal_id UUID,
   phase_type TEXT,
   variant TEXT,
   parameters JSONB,
   gueltig_ab DATE,
   projected_end_date DATE,
-  actual_end_date DATE
+  actual_end_date DATE,
+  transitioned_from TEXT,
+  recommended_next TEXT,
+  transition_reason TEXT,
+  created_at TIMESTAMPTZ,
+  updated_at TIMESTAMPTZ
 )
 LANGUAGE sql
 STABLE
 SECURITY INVOKER
 SET search_path = ''
 AS $$
-  SELECT gp.id, gp.goal_id, gp.phase_type, gp.variant, gp.parameters,
-         gp.gueltig_ab, gp.projected_end_date, gp.actual_end_date
+  SELECT gp.id, gp.user_id, gp.goal_id, gp.phase_type, gp.variant, gp.parameters,
+         gp.gueltig_ab, gp.projected_end_date, gp.actual_end_date,
+         gp.transitioned_from, gp.recommended_next, gp.transition_reason,
+         gp.created_at, gp.updated_at
   FROM goals.goal_phases gp
   WHERE gp.user_id = p_user_id
     AND gp.gueltig_ab <= p_stichtag

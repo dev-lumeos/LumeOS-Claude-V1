@@ -118,7 +118,9 @@ type TrainingSetRow = {
   reps: number
   weightKg: number
   rpe: number
+  rir: number
   setType: 'working' | 'warmup'
+  isPr: boolean
 }
 
 type RecoveryCheckinRow = {
@@ -383,6 +385,12 @@ const USERS: TestUser[] = [
     tdee: 2250,
   },
 ]
+
+const COACH_USER = {
+  id: '10000000-0000-0000-0000-000000000901',
+  email: 'coach.seed@example.com',
+  displayName: 'Coach Seed',
+}
 
 const PLANS: Record<string, Record<string, ItemTemplate[]>> = {
   'tom.seed@example.com': {
@@ -1670,6 +1678,7 @@ for (const day of COMPLETED_TRAINING_DAYS) {
   }
 }
 const seenCompletedOccurrences = new Map<string, number>()
+const bestE1rmByExercise = new Map<string, number>()
 
 const E1RM_PROGRESS_TARGETS: Record<string, { target: number; gainPct: number }> = {
   'Barbell Bench Press': { target: 99.3, gainPct: 0.04 },
@@ -1738,13 +1747,22 @@ for (const day of TRAINING_DAYS) {
         const currentTarget = target.target * (1 - target.gainPct + target.gainPct * progressShare)
         weightKg = weightForE1rm(currentTarget * setShare, reps)
       }
+      const roundedWeightKg = Number(weightKg.toFixed(2))
+      const rpe = Number(Math.min(10, set.rpe + ((day.index + setIndex) % 4 === 0 ? 0.5 : 0)).toFixed(1))
+      const rir = Math.max(0, Math.min(10, Math.round(10 - rpe)))
+      const currentE1rm = e1rm(roundedWeightKg, reps)
+      const previousBest = bestE1rmByExercise.get(template.exerciseName) ?? 0
+      const isPr = (set.setType ?? 'working') === 'working' && currentE1rm > previousBest + 0.05
+      if (isPr || currentE1rm > previousBest) bestE1rmByExercise.set(template.exerciseName, currentE1rm)
       trainingSets.push({
         workoutExerciseId: exerciseId,
         setNumber: setIndex + 1,
         reps,
-        weightKg: Number(weightKg.toFixed(2)),
-        rpe: Number(Math.min(10, set.rpe + ((day.index + setIndex) % 4 === 0 ? 0.5 : 0)).toFixed(1)),
+        weightKg: roundedWeightKg,
+        rpe,
+        rir,
         setType: set.setType ?? 'working',
+        isPr,
       })
     })
   })
@@ -1855,6 +1873,7 @@ ALL_DATES.slice(1, 171).forEach((date, index) => {
 })
 
 const userIds = USERS.map(user => lit(user.id)).join(', ')
+const allSeedUserIds = [...USERS.map(user => lit(user.id)), lit(COACH_USER.id)].join(', ')
 const userValues = USERS.map(user => tuple([
   user.id,
   user.email,
@@ -1912,7 +1931,9 @@ const trainingSetValues = trainingSets.map(set => tuple([
   set.reps,
   set.weightKg,
   set.rpe,
+  set.rir,
   set.setType,
+  set.isPr,
 ])).join(',\n')
 const recoveryCheckinValues = recoveryCheckins.map(checkin => tuple([
   checkin.userId,
@@ -2107,6 +2128,12 @@ BEGIN;
 DELETE FROM nutrition.water_logs WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meals WHERE user_id IN (${userIds});
+DELETE FROM coach.action_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.pending_actions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.permission_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.autonomy_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.client_permissions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.client_autonomy WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
 DELETE FROM training.workout_sets ws
 USING training.workout_exercises we, training.workout_sessions s
 WHERE ws.workout_exercise_id = we.id
@@ -2138,8 +2165,8 @@ DELETE FROM goals.goal_milestones WHERE user_id IN (${userIds});
 DELETE FROM goals.goal_phases WHERE user_id IN (${userIds});
 DELETE FROM goals.user_goals WHERE user_id IN (${userIds});
 DELETE FROM goals.nutrition_targets WHERE user_id IN (${userIds});
-DELETE FROM public.profiles WHERE id IN (${userIds});
-DELETE FROM auth.users WHERE id IN (${userIds});
+DELETE FROM public.profiles WHERE id IN (${allSeedUserIds});
+DELETE FROM auth.users WHERE id IN (${allSeedUserIds});
 
 CREATE TEMP TABLE test_users (
   id uuid PRIMARY KEY,
@@ -2171,6 +2198,16 @@ SELECT
   now()
 FROM test_users;
 
+INSERT INTO auth.users (
+  id, email, raw_app_meta_data, created_at
+)
+VALUES (
+  ${lit(COACH_USER.id)}::uuid,
+  ${lit(COACH_USER.email)},
+  jsonb_build_object('provider', 'email', 'providers', jsonb_build_array('email'), 'full_name', ${lit(COACH_USER.displayName)}, 'seed', 'c147_coach'),
+  now()
+);
+
 INSERT INTO public.profiles (
   id, birth_date, biological_sex, height_cm, body_weight_kg, activity_level, nutrition_goal
 )
@@ -2184,6 +2221,103 @@ ON CONFLICT (id) DO UPDATE SET
   activity_level = EXCLUDED.activity_level,
   nutrition_goal = EXCLUDED.nutrition_goal,
   updated_at = now();
+
+INSERT INTO public.profiles (id)
+VALUES (${lit(COACH_USER.id)}::uuid)
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO coach.client_permissions (
+  id, coach_id, client_id,
+  nutrition_visibility, training_visibility, recovery_visibility, goals_visibility,
+  supplements_visibility, medical_visibility, buddy_visibility,
+  nutrition_auto_apply, training_auto_apply, recovery_auto_apply, goals_auto_apply,
+  supplements_auto_apply, medical_auto_apply, buddy_auto_apply,
+  client_note, changed_by
+)
+VALUES (
+  '60000000-0000-0000-0000-000000000101'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'summary', 'summary', 'none', 'summary',
+  'none', 'none', 'none',
+  false, false, false, false,
+  false, false, false,
+  'C-147 Seed: Ausgangszustand vor differenzierten Coach-Rechten',
+  '10000000-0000-0000-0000-000000000101'::uuid
+);
+
+UPDATE coach.client_permissions
+SET nutrition_visibility = 'full',
+    training_visibility = 'full',
+    recovery_visibility = 'summary',
+    goals_visibility = 'full',
+    supplements_visibility = 'summary',
+    medical_visibility = 'none',
+    buddy_visibility = 'summary',
+    training_auto_apply = true,
+    client_note = 'C-147 Seed: Training offen, Medical gesperrt, Nutrition mit Bestaetigung',
+    changed_by = '10000000-0000-0000-0000-000000000101'::uuid
+WHERE id = '60000000-0000-0000-0000-000000000101'::uuid;
+
+INSERT INTO coach.client_autonomy (
+  id, coach_id, client_id,
+  nutrition_level, training_level, recovery_level, goals_level,
+  supplements_level, medical_level, buddy_level, safety_level,
+  coach_note, changed_by
+)
+VALUES (
+  '60000000-0000-0000-0000-000000000102'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  2, 2, 2, 2, 2, 2, 2, 1,
+  'C-147 Seed: Ausgangszustand fuer Autonomy-Historie',
+  ${lit(COACH_USER.id)}::uuid
+);
+
+UPDATE coach.client_autonomy
+SET nutrition_level = 3,
+    training_level = 4,
+    recovery_level = 2,
+    goals_level = 3,
+    supplements_level = 2,
+    medical_level = 1,
+    buddy_level = 3,
+    safety_level = 2,
+    coach_note = 'C-147 Seed: Coach setzt differenzierte Reifegrade je Modul',
+    changed_by = ${lit(COACH_USER.id)}::uuid
+WHERE id = '60000000-0000-0000-0000-000000000102'::uuid;
+
+INSERT INTO coach.pending_actions (
+  id, coach_id, client_id, module, action_type, preview, payload,
+  status, expires_at, created_by
+)
+VALUES (
+  '60000000-0000-0000-0000-000000000103'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'nutrition',
+  'adjust_macro_targets',
+  '{"title":"Protein leicht anheben","summary":"Coach schlaegt +10 g Protein am Trainingstag vor"}'::jsonb,
+  '{"protein_g_delta":10,"reason":"C-147 Pending Action mit Nutzerbestaetigung"}'::jsonb,
+  'pending',
+  now() + interval '10 minutes',
+  ${lit(COACH_USER.id)}::uuid
+);
+
+INSERT INTO coach.action_log (
+  id, coach_id, client_id, module, action_type,
+  payload_snapshot, undo_data, executed_by
+)
+VALUES (
+  '60000000-0000-0000-0000-000000000104'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'training',
+  'adjust_training_day',
+  '{"day":"upper","change":"Bench-Topset priorisiert"}'::jsonb,
+  '{"restore":{"day":"upper","change":"vorherige Uebungsreihenfolge"}}'::jsonb,
+  ${lit(COACH_USER.id)}::uuid
+);
 
 INSERT INTO goals.nutrition_targets (
   user_id, gueltig_ab, kcal, protein_g, carbs_g, fat_g,
@@ -2824,16 +2958,18 @@ CREATE TEMP TABLE test_training_sets (
   reps integer NOT NULL,
   weight_kg numeric NOT NULL,
   rpe numeric NOT NULL,
-  set_type text NOT NULL
+  rir smallint NOT NULL,
+  set_type text NOT NULL,
+  is_pr boolean NOT NULL
 ) ON COMMIT DROP;
 
 INSERT INTO test_training_sets VALUES
 ${trainingSetValues};
 
 INSERT INTO training.workout_sets (
-  workout_exercise_id, set_number, reps, weight_kg, rpe, set_type, completed_at
+  workout_exercise_id, set_number, reps, weight_kg, rpe, rir, set_type, completed_at, is_pr
 )
-SELECT workout_exercise_id, set_number, reps, weight_kg, rpe, set_type, now()
+SELECT workout_exercise_id, set_number, reps, weight_kg, rpe, rir, set_type, now(), is_pr
 FROM test_training_sets;
 
 CREATE TEMP TABLE test_recovery_checkins (
@@ -2924,6 +3060,14 @@ DECLARE
   v_medical_values integer;
   v_medical_medications integer;
   v_medical_conditions integer;
+  v_coach_permissions integer;
+  v_coach_autonomy integer;
+  v_coach_pending integer;
+  v_coach_actions integer;
+  v_permission_logs integer;
+  v_autonomy_logs integer;
+  v_sets_with_rir integer;
+  v_pr_sets integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
@@ -2957,6 +3101,24 @@ BEGIN
   SELECT count(*) INTO v_medical_values FROM medical.lab_result_values WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_medical_medications FROM medical.user_medications WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_medical_conditions FROM medical.user_conditions WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_coach_permissions FROM coach.client_permissions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+  SELECT count(*) INTO v_coach_autonomy FROM coach.client_autonomy WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+  SELECT count(*) INTO v_coach_pending FROM coach.pending_actions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+  SELECT count(*) INTO v_coach_actions FROM coach.action_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+  SELECT count(*) INTO v_permission_logs FROM coach.permission_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+  SELECT count(*) INTO v_autonomy_logs FROM coach.autonomy_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+  SELECT count(*) INTO v_sets_with_rir
+  FROM training.workout_sets ws
+  JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${userIds})
+    AND ws.rir IS NOT NULL;
+  SELECT count(*) INTO v_pr_sets
+  FROM training.workout_sets ws
+  JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${userIds})
+    AND ws.is_pr;
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -2969,6 +3131,8 @@ BEGIN
     v_users, v_meals, v_items, v_water, v_max_days;
   RAISE NOTICE 'OK: C-66 Training-Testdaten: % Sitzungen, % Uebungen, % Saetze',
     v_training_sessions, v_training_exercises, v_training_sets;
+  RAISE NOTICE 'OK: C-147 Training-Saetze: % Saetze mit RIR, % PR-Saetze',
+    v_sets_with_rir, v_pr_sets;
   RAISE NOTICE 'OK: C-125 Recovery-Testdaten: % Check-ins, % Scores, % Modalitaeten',
     v_recovery_checkins, v_recovery_scores, v_recovery_modalities;
   RAISE NOTICE 'OK: GO-07 Goals-Testdaten: % Ziele, % Phasen',
@@ -2981,6 +3145,9 @@ BEGIN
     v_medical_reports, v_medical_values;
   RAISE NOTICE 'OK: C-130 Medical-Testdaten: % Medikamente, % Conditions',
     v_medical_medications, v_medical_conditions;
+  RAISE NOTICE 'OK: C-147 Coach-Testdaten: % Permissions, % Autonomy, % Pending, % Actions, %/% Logs',
+    v_coach_permissions, v_coach_autonomy, v_coach_pending, v_coach_actions,
+    v_permission_logs, v_autonomy_logs;
 END $$;
 
 COMMIT;
@@ -2999,4 +3166,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer plus 1 Coach, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition, 1 Coach-Beziehung.`)

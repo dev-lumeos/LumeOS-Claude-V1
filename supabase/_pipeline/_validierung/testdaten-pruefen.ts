@@ -9,6 +9,7 @@ const IDS = [
   '10000000-0000-0000-0000-000000000102',
   '10000000-0000-0000-0000-000000000103',
 ]
+const COACH_ID = '10000000-0000-0000-0000-000000000901'
 const IDS_SQL = IDS.map(id => `'${id}'`).join(', ')
 const SEP = '\u0001'
 const ANCHOR_DATE = '2026-08-02'
@@ -52,6 +53,7 @@ function hasRows(query: string): boolean {
 
 const errors: string[] = []
 const users = numberScalar(`SELECT count(*) FROM auth.users WHERE id IN (${IDS_SQL});`)
+const coachUsers = numberScalar(`SELECT count(*) FROM auth.users WHERE id = '${COACH_ID}'::uuid;`)
 const profiles = numberScalar(`SELECT count(*) FROM public.profiles WHERE id IN (${IDS_SQL});`)
 const targets = numberScalar(`SELECT count(*) FROM goals.nutrition_targets WHERE user_id IN (${IDS_SQL});`)
 const userGoals = numberScalar(`SELECT count(*) FROM goals.user_goals WHERE user_id IN (${IDS_SQL});`)
@@ -83,6 +85,28 @@ const trainingSets = numberScalar(`
   JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${IDS_SQL});`)
+const trainingSetsWithRir = numberScalar(`
+  SELECT count(*)
+  FROM training.workout_sets ws
+  JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${IDS_SQL})
+    AND ws.rir IS NOT NULL;`)
+const trainingPrSets = numberScalar(`
+  SELECT count(*)
+  FROM training.workout_sets ws
+  JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  WHERE s.user_id IN (${IDS_SQL})
+    AND ws.is_pr;`)
+const trainingPrExercises = numberScalar(`
+  SELECT count(DISTINCT e.name)
+  FROM training.workout_sets ws
+  JOIN training.workout_exercises we ON we.id = ws.workout_exercise_id
+  JOIN training.workout_sessions s ON s.id = we.workout_session_id
+  JOIN training.exercises e ON e.id = we.exercise_id
+  WHERE s.user_id IN (${IDS_SQL})
+    AND ws.is_pr;`)
 const trainingStatusRows = sql(`
   SELECT status, count(*)::text
   FROM training.workout_sessions
@@ -116,6 +140,26 @@ const supplementStackItems = numberScalar(`
   JOIN supplements.user_stacks us ON us.id = si.stack_id
   WHERE us.user_id IN (${IDS_SQL});`)
 const supplementIntakeLogs = numberScalar(`SELECT count(*) FROM supplements.intake_logs WHERE user_id IN (${IDS_SQL});`)
+const coachPermissions = numberScalar(`SELECT count(*) FROM coach.client_permissions WHERE client_id IN (${IDS_SQL});`)
+const coachAutonomy = numberScalar(`SELECT count(*) FROM coach.client_autonomy WHERE client_id IN (${IDS_SQL});`)
+const coachPendingActions = numberScalar(`SELECT count(*) FROM coach.pending_actions WHERE client_id IN (${IDS_SQL});`)
+const coachActionLog = numberScalar(`SELECT count(*) FROM coach.action_log WHERE client_id IN (${IDS_SQL});`)
+const coachPermissionLogs = numberScalar(`SELECT count(*) FROM coach.permission_change_log WHERE client_id IN (${IDS_SQL});`)
+const coachAutonomyLogs = numberScalar(`SELECT count(*) FROM coach.autonomy_change_log WHERE client_id IN (${IDS_SQL});`)
+const coachPermissionVariants = numberScalar(`
+  SELECT count(DISTINCT visibility)
+  FROM coach.client_permissions cp
+  CROSS JOIN LATERAL (VALUES
+    (cp.nutrition_visibility),
+    (cp.training_visibility),
+    (cp.recovery_visibility),
+    (cp.goals_visibility),
+    (cp.supplements_visibility),
+    (cp.medical_visibility),
+    (cp.buddy_visibility)
+  ) v(visibility)
+  WHERE cp.coach_id = '${COACH_ID}'::uuid
+    AND cp.client_id = '${IDS[0]}'::uuid;`)
 const supplementCompliance30d = Number(sql(`
   SELECT round(
     sum(total_taken)::numeric / NULLIF(sum(total_taken + total_skipped), 0) * 100,
@@ -137,6 +181,7 @@ if (MODE === 'clean') {
   const foods = numberScalar(`SELECT count(*) FROM nutrition.foods;`)
   const nutrients = numberScalar(`SELECT count(*) FROM nutrition.food_nutrients;`)
   if (users !== 0) errors.push(`auth.users: ${users}, erwartet 0`)
+  if (coachUsers !== 0) errors.push(`coach auth.users: ${coachUsers}, erwartet 0`)
   if (profiles !== 0) errors.push(`profiles: ${profiles}, erwartet 0`)
   if (targets !== 0) errors.push(`nutrition_targets: ${targets}, erwartet 0`)
   if (userGoals !== 0) errors.push(`user_goals: ${userGoals}, erwartet 0`)
@@ -168,6 +213,12 @@ if (MODE === 'clean') {
   if (supplementStacks !== 0) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 0`)
   if (supplementStackItems !== 0) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 0`)
   if (supplementIntakeLogs !== 0) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 0`)
+  if (coachPermissions !== 0) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet 0`)
+  if (coachAutonomy !== 0) errors.push(`coach.client_autonomy: ${coachAutonomy}, erwartet 0`)
+  if (coachPendingActions !== 0) errors.push(`coach.pending_actions: ${coachPendingActions}, erwartet 0`)
+  if (coachActionLog !== 0) errors.push(`coach.action_log: ${coachActionLog}, erwartet 0`)
+  if (coachPermissionLogs !== 0) errors.push(`coach.permission_change_log: ${coachPermissionLogs}, erwartet 0`)
+  if (coachAutonomyLogs !== 0) errors.push(`coach.autonomy_change_log: ${coachAutonomyLogs}, erwartet 0`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (substanceAliases < 1100) errors.push(`supplements.substance_aliases: ${substanceAliases}, erwartet mindestens 1100`)
   if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
@@ -175,7 +226,7 @@ if (MODE === 'clean') {
   if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
 
   console.log('C-82 Testdaten-Pruefung (clean)')
-  console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
+  console.log(`  Nutzer/Coach/Profile/Ziele: ${users}/${coachUsers}/${profiles}/${targets}`)
   console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
   console.log(`  Meilensteine: ${goalMilestones}`)
   console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
@@ -186,6 +237,7 @@ if (MODE === 'clean') {
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Medical Medikamente Wirkstoffe/Formulierungen/Produkte/User/Conditions: ${medicationActiveSubstances}/${medicationFormulations}/${medicationProducts}/${userMedications}/${userConditions}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
+  console.log(`  Coach Permissions/Autonomy/Pending/Actions/Logs: ${coachPermissions}/${coachAutonomy}/${coachPendingActions}/${coachActionLog}/${coachPermissionLogs + coachAutonomyLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
   const frozenMissing = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL}) AND frozen_at IS NULL;`)
@@ -230,6 +282,7 @@ if (MODE === 'clean') {
     WHERE user_id IN (${IDS_SQL});`)[0] ?? ['0', '0', '0']
 
   if (users !== 3) errors.push(`auth.users: ${users}, erwartet 3`)
+  if (coachUsers !== 1) errors.push(`coach auth.users: ${coachUsers}, erwartet 1`)
   if (profiles !== 3) errors.push(`profiles: ${profiles}, erwartet 3`)
   if (targets !== 3) errors.push(`nutrition_targets: ${targets}, erwartet 3`)
   if (userGoals !== 6) errors.push(`user_goals: ${userGoals}, erwartet 6`)
@@ -252,6 +305,9 @@ if (MODE === 'clean') {
   if (trainingSessions < 25) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet mindestens 25`)
   if (trainingExercises < 50) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet mindestens 50`)
   if (trainingSets < 85) errors.push(`training.workout_sets: ${trainingSets}, erwartet mindestens 85 abgeschlossene Satzzeilen`)
+  if (trainingSetsWithRir !== trainingSets) errors.push(`training.workout_sets mit rir: ${trainingSetsWithRir}/${trainingSets}`)
+  if (trainingPrSets < 5) errors.push(`training.workout_sets is_pr: ${trainingPrSets}, erwartet mindestens 5`)
+  if (trainingPrExercises < 3) errors.push(`Uebungen mit PR-Satz: ${trainingPrExercises}, erwartet mindestens 3`)
   if (recoveryCheckins < 160) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet mindestens 160`)
   if (recoveryScores < 160) errors.push(`recovery.scores: ${recoveryScores}, erwartet mindestens 160`)
   if (recoveryModalities < 50) errors.push(`recovery.modality_log: ${recoveryModalities}, erwartet mindestens 50`)
@@ -271,6 +327,13 @@ if (MODE === 'clean') {
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
   if (supplementIntakeLogs !== 360) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 360`)
+  if (coachPermissions !== 1) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet 1`)
+  if (coachAutonomy !== 1) errors.push(`coach.client_autonomy: ${coachAutonomy}, erwartet 1`)
+  if (coachPendingActions !== 1) errors.push(`coach.pending_actions: ${coachPendingActions}, erwartet 1`)
+  if (coachActionLog !== 1) errors.push(`coach.action_log: ${coachActionLog}, erwartet 1`)
+  if (coachPermissionLogs < 2) errors.push(`coach.permission_change_log: ${coachPermissionLogs}, erwartet mindestens 2`)
+  if (coachAutonomyLogs < 2) errors.push(`coach.autonomy_change_log: ${coachAutonomyLogs}, erwartet mindestens 2`)
+  if (coachPermissionVariants < 3) errors.push(`Coach-Permissions unterscheiden sich nicht genug: ${coachPermissionVariants} Sichtbarkeitswerte`)
   if (maxDays < 170) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 170`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
   if (nutrientSnapshotsMissing !== 0) errors.push(`${nutrientSnapshotsMissing} meal_items ohne nutrient-Snapshot`)
@@ -1138,7 +1201,7 @@ if (MODE === 'clean') {
   }
 
   console.log('C-82 Testdaten-Pruefung (present)')
-  console.log(`  Nutzer/Profile/Ziele: ${users}/${profiles}/${targets}`)
+  console.log(`  Nutzer/Coach/Profile/Ziele: ${users}/${coachUsers}/${profiles}/${targets}`)
   console.log(`  Goals/Phasen: ${userGoals}/${goalPhases}`)
   console.log(`  Meilensteine: ${goalMilestones}`)
   console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
@@ -1146,11 +1209,13 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Training Status: ${trainingStatusRows.map(([status, count]) => `${status}:${count}`).join(', ')}`)
+  console.log(`  Training RIR/PR-Saetze/PR-Uebungen: ${trainingSetsWithRir}/${trainingPrSets}/${trainingPrExercises}`)
   console.log(`  Recovery Check-ins/Scores/Modalitaeten: ${recoveryCheckins}/${recoveryScores}/${recoveryModalities}`)
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  Supplements Substanzaliase/LumeOS-Kimi-Treffer: ${substanceAliases}/${substanceLocalKimiMatches}`)
   console.log(`  Supplements Compliance 30d: ${supplementCompliance30d}%`)
+  console.log(`  Coach Permissions/Autonomy/Pending/Actions/Logs: ${coachPermissions}/${coachAutonomy}/${coachPendingActions}/${coachActionLog}/${coachPermissionLogs + coachAutonomyLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)
   console.log(`  Portionierte Items: ${portionRows}`)
   console.log(`  Verschiedene Lebensmittel: ${distinctFoods}`)
