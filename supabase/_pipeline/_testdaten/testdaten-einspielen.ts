@@ -324,6 +324,77 @@ type ItemRow = ItemTemplate & {
   userId: string
 }
 
+type RecipeRow = {
+  id: string
+  userId: string
+  nameDe: string
+  description: string
+  instructions: string
+  cuisineCode: string
+  cookingSkill: 'beginner' | 'intermediate' | 'advanced'
+  prepTimeMin: number
+  cookTimeMin: number
+  servings: number
+  tags: string
+}
+
+type RecipeIngredientRow = {
+  recipeId: string
+  userId: string
+  sortOrder: number
+  blsCode: string
+  amountG: number
+  portionName?: string
+  portionQuantity?: number
+  portionAmountG?: number
+}
+
+type MealPlanRow = {
+  id: string
+  userId: string
+  name: string
+  description: string
+  targetKcal: number
+  targetProteinG: number
+  targetCarbsG: number
+  targetFatG: number
+  isActive: boolean
+}
+
+type MealPlanWeekRow = {
+  id: string
+  planId: string
+  userId: string
+  weekStart: string
+  name: string
+}
+
+type MealPlanDayRow = {
+  id: string
+  weekId: string
+  userId: string
+  planDate: string
+  dayIndex: number
+  notes: string | null
+}
+
+type MealPlanEntryRow = {
+  dayId: string
+  userId: string
+  mealType: (typeof MEAL_TYPES)[number]
+  plannedTime: string
+  slotOrder: number
+  entryType: 'recipe' | 'bls'
+  recipeId?: string
+  blsCode?: string
+  amountG?: number
+  plannedServings?: number
+  portionName?: string
+  portionQuantity?: number
+  portionAmountG?: number
+  note?: string
+}
+
 type DayPlan = Record<string, ItemTemplate[]>
 type SpecialDayPlan = DayPlan | 'skip-day'
 
@@ -1872,6 +1943,177 @@ ALL_DATES.slice(1, 171).forEach((date, index) => {
   pushRecoveryModalities(date, index)
 })
 
+const TOM_ID = '10000000-0000-0000-0000-000000000101'
+const RECIPE_IDS = {
+  oats: uuidFrom('tom.seed@example.com:recipe:banana-yogurt-oats'),
+  chickenRice: uuidFrom('tom.seed@example.com:recipe:chicken-rice-bowl'),
+  salmonSweetPotato: uuidFrom('tom.seed@example.com:recipe:salmon-sweet-potato'),
+}
+const MEAL_PLAN_ID = uuidFrom('tom.seed@example.com:meal-plan:aufbau-woche')
+const FILLED_WEEK_ID = uuidFrom('tom.seed@example.com:meal-plan-week:filled')
+const EMPTY_WEEK_ID = uuidFrom('tom.seed@example.com:meal-plan-week:empty')
+const FILLED_WEEK_START = relDate('2026-08-31')
+const EMPTY_WEEK_START = relDate('2026-09-14')
+const COPIED_WEEK_START = relDate('2026-09-21')
+
+const recipeRows: RecipeRow[] = [
+  {
+    id: RECIPE_IDS.oats,
+    userId: TOM_ID,
+    nameDe: 'Banane-Joghurt-Haferflocken',
+    description: 'C-150 Rezept: schneller Aufbau-Fruehstueckstest',
+    instructions: 'Haferflocken mit Joghurt verruehren, Banane schneiden, zehn Minuten quellen lassen.',
+    cuisineCode: 'mediterranean',
+    cookingSkill: 'beginner',
+    prepTimeMin: 10,
+    cookTimeMin: 0,
+    servings: 1,
+    tags: '{quick,breakfast,high_protein}',
+  },
+  {
+    id: RECIPE_IDS.chickenRice,
+    userId: TOM_ID,
+    nameDe: 'Huhn-Reis-Bowl',
+    description: 'C-150 Rezept: mittlerer Meal-Prep-Fall mit preferred_cuisines',
+    instructions: 'Reis kochen, Huhn braten, Brokkoli garen und mit Olivenoel abschmecken.',
+    cuisineCode: 'asian',
+    cookingSkill: 'intermediate',
+    prepTimeMin: 25,
+    cookTimeMin: 20,
+    servings: 2,
+    tags: '{meal_prep,lunch,high_protein}',
+  },
+  {
+    id: RECIPE_IDS.salmonSweetPotato,
+    userId: TOM_ID,
+    nameDe: 'Lachs mit Suesskartoffel und Spinat',
+    description: 'C-150 Rezept: laengerer Dinner-Fall fuer Filtergrenzen',
+    instructions: 'Suesskartoffel garen, Lachs duensten, Spinat kurz erhitzen.',
+    cuisineCode: 'nordic',
+    cookingSkill: 'advanced',
+    prepTimeMin: 45,
+    cookTimeMin: 25,
+    servings: 2,
+    tags: '{dinner,omega3,advanced}',
+  },
+]
+
+const recipeIngredientRows: RecipeIngredientRow[] = [
+  { recipeId: RECIPE_IDS.oats, userId: TOM_ID, sortOrder: 1, blsCode: 'C133000', amountG: 80, portionName: '1 Tasse roh', portionQuantity: 1, portionAmountG: 80 },
+  { recipeId: RECIPE_IDS.oats, userId: TOM_ID, sortOrder: 2, blsCode: 'M141100', amountG: 250 },
+  { recipeId: RECIPE_IDS.oats, userId: TOM_ID, sortOrder: 3, blsCode: 'F503100', amountG: 120 },
+  { recipeId: RECIPE_IDS.chickenRice, userId: TOM_ID, sortOrder: 1, blsCode: 'V416100', amountG: 440 },
+  { recipeId: RECIPE_IDS.chickenRice, userId: TOM_ID, sortOrder: 2, blsCode: 'C351000', amountG: 190 },
+  { recipeId: RECIPE_IDS.chickenRice, userId: TOM_ID, sortOrder: 3, blsCode: 'G312132', amountG: 440 },
+  { recipeId: RECIPE_IDS.chickenRice, userId: TOM_ID, sortOrder: 4, blsCode: 'Q120000', amountG: 30, portionName: '1 EL', portionQuantity: 2, portionAmountG: 15 },
+  { recipeId: RECIPE_IDS.salmonSweetPotato, userId: TOM_ID, sortOrder: 1, blsCode: 'T410052', amountG: 360 },
+  { recipeId: RECIPE_IDS.salmonSweetPotato, userId: TOM_ID, sortOrder: 2, blsCode: 'K420100', amountG: 600 },
+  { recipeId: RECIPE_IDS.salmonSweetPotato, userId: TOM_ID, sortOrder: 3, blsCode: 'G211100', amountG: 240 },
+  { recipeId: RECIPE_IDS.salmonSweetPotato, userId: TOM_ID, sortOrder: 4, blsCode: 'Q120000', amountG: 20 },
+]
+
+const mealPlanRows: MealPlanRow[] = [{
+  id: MEAL_PLAN_ID,
+  userId: TOM_ID,
+  name: 'Aufbau-Wochenplan',
+  description: 'C-150 Seed: eine gefuellte, eine leere und eine kopierte Woche',
+  targetKcal: 2500,
+  targetProteinG: 170,
+  targetCarbsG: 313,
+  targetFatG: 75,
+  isActive: true,
+}]
+
+const mealPlanWeekRows: MealPlanWeekRow[] = [
+  {
+    id: FILLED_WEEK_ID,
+    planId: MEAL_PLAN_ID,
+    userId: TOM_ID,
+    weekStart: FILLED_WEEK_START,
+    name: 'Gefuellte Aufbauwoche',
+  },
+  {
+    id: EMPTY_WEEK_ID,
+    planId: MEAL_PLAN_ID,
+    userId: TOM_ID,
+    weekStart: EMPTY_WEEK_START,
+    name: 'Leere Planwoche',
+  },
+]
+
+const mealPlanDayRows: MealPlanDayRow[] = [
+  ...Array.from({ length: 7 }, (_, index) => ({
+    id: uuidFrom(`tom.seed@example.com:meal-plan-day:filled:${index + 1}`),
+    weekId: FILLED_WEEK_ID,
+    userId: TOM_ID,
+    planDate: addIsoDays(FILLED_WEEK_START, index),
+    dayIndex: index + 1,
+    notes: index === 2 ? 'C-150 Testfall: geplanter Tag fuer Tagebuch-Uebernahme' : null,
+  })),
+  ...Array.from({ length: 7 }, (_, index) => ({
+    id: uuidFrom(`tom.seed@example.com:meal-plan-day:empty:${index + 1}`),
+    weekId: EMPTY_WEEK_ID,
+    userId: TOM_ID,
+    planDate: addIsoDays(EMPTY_WEEK_START, index),
+    dayIndex: index + 1,
+    notes: 'C-150 Testfall: leere Woche bleibt leer',
+  })),
+]
+
+const mealPlanEntryRows: MealPlanEntryRow[] = mealPlanDayRows
+  .filter(day => day.weekId === FILLED_WEEK_ID)
+  .flatMap((day, index) => [
+    {
+      dayId: day.id,
+      userId: TOM_ID,
+      mealType: 'breakfast',
+      plannedTime: '07:30',
+      slotOrder: 1,
+      entryType: 'recipe',
+      recipeId: RECIPE_IDS.oats,
+      plannedServings: index % 3 === 0 ? 1.25 : 1,
+      note: 'Rezept-Fruehstueck',
+    },
+    {
+      dayId: day.id,
+      userId: TOM_ID,
+      mealType: 'lunch',
+      plannedTime: '12:30',
+      slotOrder: 1,
+      entryType: 'recipe',
+      recipeId: RECIPE_IDS.chickenRice,
+      plannedServings: index % 2 === 0 ? 1 : 0.75,
+      note: 'Meal-Prep-Bowl',
+    },
+    {
+      dayId: day.id,
+      userId: TOM_ID,
+      mealType: 'snack',
+      plannedTime: '16:00',
+      slotOrder: 1,
+      entryType: 'bls',
+      blsCode: index % 2 === 0 ? 'M713100' : 'B101000',
+      amountG: index % 2 === 0 ? 250 : 60,
+      portionName: index % 2 === 0 ? undefined : '1 Scheibe',
+      portionQuantity: index % 2 === 0 ? undefined : 2,
+      portionAmountG: index % 2 === 0 ? undefined : 30,
+      note: 'Direktes Lebensmittel im Plan',
+    },
+    {
+      dayId: day.id,
+      userId: TOM_ID,
+      mealType: 'dinner',
+      plannedTime: '19:30',
+      slotOrder: 1,
+      entryType: index % 2 === 0 ? 'recipe' : 'bls',
+      recipeId: index % 2 === 0 ? RECIPE_IDS.salmonSweetPotato : undefined,
+      plannedServings: index % 2 === 0 ? 1 : undefined,
+      blsCode: index % 2 === 0 ? undefined : 'T410052',
+      amountG: index % 2 === 0 ? undefined : 180,
+      note: index % 2 === 0 ? 'Rezept-Dinner' : 'Direkter Lachs im Plan',
+    },
+  ])
+
 const userIds = USERS.map(user => lit(user.id)).join(', ')
 const allSeedUserIds = [...USERS.map(user => lit(user.id)), lit(COACH_USER.id)].join(', ')
 const userValues = USERS.map(user => tuple([
@@ -2121,10 +2363,81 @@ const itemValues = items.map(item => tuple([
   item.portionQuantity ?? null,
   item.portionAmountG ?? null,
 ])).join(',\n')
+const recipeValues = recipeRows.map(recipe => tuple([
+  recipe.id,
+  recipe.userId,
+  recipe.nameDe,
+  recipe.description,
+  recipe.instructions,
+  recipe.cuisineCode,
+  recipe.cookingSkill,
+  recipe.prepTimeMin,
+  recipe.cookTimeMin,
+  recipe.servings,
+  recipe.tags,
+])).join(',\n')
+const recipeIngredientValues = recipeIngredientRows.map(ingredient => tuple([
+  ingredient.recipeId,
+  ingredient.userId,
+  ingredient.sortOrder,
+  ingredient.blsCode,
+  ingredient.amountG,
+  ingredient.portionName ?? null,
+  ingredient.portionQuantity ?? null,
+  ingredient.portionAmountG ?? null,
+])).join(',\n')
+const mealPlanValues = mealPlanRows.map(plan => tuple([
+  plan.id,
+  plan.userId,
+  plan.name,
+  plan.description,
+  plan.targetKcal,
+  plan.targetProteinG,
+  plan.targetCarbsG,
+  plan.targetFatG,
+  plan.isActive,
+])).join(',\n')
+const mealPlanWeekValues = mealPlanWeekRows.map(week => tuple([
+  week.id,
+  week.planId,
+  week.userId,
+  week.weekStart,
+  week.name,
+])).join(',\n')
+const mealPlanDayValues = mealPlanDayRows.map(day => tuple([
+  day.id,
+  day.weekId,
+  day.userId,
+  day.planDate,
+  day.dayIndex,
+  day.notes,
+])).join(',\n')
+const mealPlanEntryValues = mealPlanEntryRows.map(entry => tuple([
+  entry.dayId,
+  entry.userId,
+  entry.mealType,
+  entry.plannedTime,
+  entry.slotOrder,
+  entry.entryType,
+  entry.recipeId ?? null,
+  entry.blsCode ?? null,
+  entry.amountG ?? null,
+  entry.plannedServings ?? null,
+  entry.portionName ?? null,
+  entry.portionQuantity ?? null,
+  entry.portionAmountG ?? null,
+  entry.note ?? null,
+])).join(',\n')
 
 const sql = `
 BEGIN;
 
+DELETE FROM nutrition.meal_plan_entries WHERE user_id IN (${userIds});
+DELETE FROM nutrition.meal_plan_days WHERE user_id IN (${userIds});
+DELETE FROM nutrition.meal_plan_weeks WHERE user_id IN (${userIds});
+DELETE FROM nutrition.meal_plans WHERE user_id IN (${userIds});
+DELETE FROM nutrition.recipe_ingredients WHERE user_id IN (${userIds});
+DELETE FROM nutrition.recipes WHERE user_id IN (${userIds});
 DELETE FROM nutrition.water_logs WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meal_items WHERE user_id IN (${userIds});
 DELETE FROM nutrition.meals WHERE user_id IN (${userIds});
@@ -2132,8 +2445,12 @@ DELETE FROM coach.action_log WHERE coach_id IN (${allSeedUserIds}) OR client_id 
 DELETE FROM coach.pending_actions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
 DELETE FROM coach.permission_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
 DELETE FROM coach.autonomy_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+ALTER TABLE coach.client_permissions DISABLE TRIGGER client_permissions_change_log;
+ALTER TABLE coach.client_autonomy DISABLE TRIGGER client_autonomy_change_log;
 DELETE FROM coach.client_permissions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
 DELETE FROM coach.client_autonomy WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+ALTER TABLE coach.client_permissions ENABLE TRIGGER client_permissions_change_log;
+ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 DELETE FROM training.workout_sets ws
 USING training.workout_exercises we, training.workout_sessions s
 WHERE ws.workout_exercise_id = we.id
@@ -2790,6 +3107,186 @@ SELECT nutrition.food_preferences_write(
   )
 );
 
+CREATE TEMP TABLE test_recipes (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  name_de text NOT NULL,
+  description text NOT NULL,
+  instructions text NOT NULL,
+  cuisine_code text NOT NULL,
+  cooking_skill text NOT NULL,
+  prep_time_min integer NOT NULL,
+  cook_time_min integer NOT NULL,
+  servings numeric NOT NULL,
+  tags text[] NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_recipes VALUES
+${recipeValues};
+
+INSERT INTO nutrition.recipes (
+  id, user_id, name_de, description, instructions, cuisine_code,
+  cooking_skill, prep_time_min, cook_time_min, servings, tags,
+  measurement_source, source_detail
+)
+SELECT
+  id, user_id, name_de, description, instructions, cuisine_code,
+  cooking_skill, prep_time_min, cook_time_min, servings, tags,
+  'seed', 'C-150 Testdaten Rezepte'
+FROM test_recipes;
+
+CREATE TEMP TABLE test_recipe_ingredients (
+  recipe_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  sort_order integer NOT NULL,
+  bls_code text NOT NULL,
+  amount_g numeric NOT NULL,
+  portion_name text,
+  portion_quantity numeric,
+  portion_amount_g numeric
+) ON COMMIT DROP;
+
+INSERT INTO test_recipe_ingredients VALUES
+${recipeIngredientValues};
+
+DO $$
+DECLARE
+  v_missing text;
+BEGIN
+  SELECT string_agg(DISTINCT i.bls_code, ', ' ORDER BY i.bls_code)
+    INTO v_missing
+  FROM test_recipe_ingredients i
+  LEFT JOIN nutrition.foods f ON f.bls_code = i.bls_code
+  WHERE f.id IS NULL;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'C-150 Rezept-Testdaten: BLS-Codes fehlen im Bestand: %', v_missing;
+  END IF;
+END $$;
+
+INSERT INTO nutrition.recipe_ingredients (
+  recipe_id, user_id, sort_order, food_source, food_id, food_name_snapshot,
+  amount_g, portion_name, portion_quantity, portion_amount_g
+)
+SELECT
+  i.recipe_id, i.user_id, i.sort_order, 'bls', f.id,
+  COALESCE(NULLIF(f.name_display_de, ''), f.name_de),
+  i.amount_g, i.portion_name, i.portion_quantity, i.portion_amount_g
+FROM test_recipe_ingredients i
+JOIN nutrition.foods f ON f.bls_code = i.bls_code;
+
+CREATE TEMP TABLE test_meal_plans (
+  id uuid PRIMARY KEY,
+  user_id uuid NOT NULL,
+  name text NOT NULL,
+  description text NOT NULL,
+  target_kcal numeric NOT NULL,
+  target_protein_g numeric NOT NULL,
+  target_carbs_g numeric NOT NULL,
+  target_fat_g numeric NOT NULL,
+  is_active boolean NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_meal_plans VALUES
+${mealPlanValues};
+
+INSERT INTO nutrition.meal_plans (
+  id, user_id, name, description, target_kcal, target_protein_g,
+  target_carbs_g, target_fat_g, is_active, measurement_source, source_detail
+)
+SELECT
+  id, user_id, name, description, target_kcal, target_protein_g,
+  target_carbs_g, target_fat_g, is_active, 'seed', 'C-150 Testdaten Wochenplan'
+FROM test_meal_plans;
+
+CREATE TEMP TABLE test_meal_plan_weeks (
+  id uuid PRIMARY KEY,
+  plan_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  week_start date NOT NULL,
+  name text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_meal_plan_weeks VALUES
+${mealPlanWeekValues};
+
+INSERT INTO nutrition.meal_plan_weeks (
+  id, plan_id, user_id, week_start, name
+)
+SELECT id, plan_id, user_id, week_start, name
+FROM test_meal_plan_weeks;
+
+CREATE TEMP TABLE test_meal_plan_days (
+  id uuid PRIMARY KEY,
+  week_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  plan_date date NOT NULL,
+  day_index smallint NOT NULL,
+  notes text
+) ON COMMIT DROP;
+
+INSERT INTO test_meal_plan_days VALUES
+${mealPlanDayValues};
+
+INSERT INTO nutrition.meal_plan_days (
+  id, week_id, user_id, plan_date, day_index, notes
+)
+SELECT id, week_id, user_id, plan_date, day_index, notes
+FROM test_meal_plan_days;
+
+CREATE TEMP TABLE test_meal_plan_entries (
+  day_id uuid NOT NULL,
+  user_id uuid NOT NULL,
+  meal_type text NOT NULL,
+  planned_time time NOT NULL,
+  slot_order integer NOT NULL,
+  entry_type text NOT NULL,
+  recipe_id uuid,
+  bls_code text,
+  amount_g numeric,
+  planned_servings numeric,
+  portion_name text,
+  portion_quantity numeric,
+  portion_amount_g numeric,
+  note text
+) ON COMMIT DROP;
+
+INSERT INTO test_meal_plan_entries VALUES
+${mealPlanEntryValues};
+
+DO $$
+DECLARE
+  v_missing text;
+BEGIN
+  SELECT string_agg(DISTINCT e.bls_code, ', ' ORDER BY e.bls_code)
+    INTO v_missing
+  FROM test_meal_plan_entries e
+  LEFT JOIN nutrition.foods f ON f.bls_code = e.bls_code
+  WHERE e.bls_code IS NOT NULL
+    AND f.id IS NULL;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'C-150 Wochenplan-Testdaten: BLS-Codes fehlen im Bestand: %', v_missing;
+  END IF;
+END $$;
+
+INSERT INTO nutrition.meal_plan_entries (
+  day_id, user_id, meal_type, planned_time, slot_order, entry_type,
+  recipe_id, food_id, amount_g, planned_servings,
+  portion_name, portion_quantity, portion_amount_g, note
+)
+SELECT
+  e.day_id, e.user_id, e.meal_type, e.planned_time, e.slot_order, e.entry_type,
+  e.recipe_id, f.id, e.amount_g, e.planned_servings,
+  e.portion_name, e.portion_quantity, e.portion_amount_g, e.note
+FROM test_meal_plan_entries e
+LEFT JOIN nutrition.foods f ON f.bls_code = e.bls_code;
+
+SELECT nutrition.copy_meal_plan_week(
+  ${lit(FILLED_WEEK_ID)}::uuid,
+  DATE ${lit(COPIED_WEEK_START)}
+);
+
 CREATE TEMP TABLE test_meals (
   id uuid PRIMARY KEY,
   user_id uuid NOT NULL,
@@ -3043,6 +3540,11 @@ DECLARE
   v_meals integer;
   v_items integer;
   v_water integer;
+  v_recipes integer;
+  v_recipe_ingredients integer;
+  v_meal_plans integer;
+  v_meal_plan_weeks integer;
+  v_meal_plan_entries integer;
   v_training_sessions integer;
   v_training_exercises integer;
   v_training_sets integer;
@@ -3074,6 +3576,11 @@ BEGIN
   SELECT count(*) INTO v_meals FROM nutrition.meals WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_items FROM nutrition.meal_items WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_water FROM nutrition.water_logs WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_recipes FROM nutrition.recipes WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_recipe_ingredients FROM nutrition.recipe_ingredients WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_meal_plans FROM nutrition.meal_plans WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_meal_plan_weeks FROM nutrition.meal_plan_weeks WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_meal_plan_entries FROM nutrition.meal_plan_entries WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_training_sessions FROM training.workout_sessions WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_training_exercises
   FROM training.workout_exercises we
@@ -3129,6 +3636,8 @@ BEGIN
 
   RAISE NOTICE 'OK: C-82 Testdaten: % Nutzer, % Mahlzeiten, % Positionen, % Wassereintraege, max % Tage',
     v_users, v_meals, v_items, v_water, v_max_days;
+  RAISE NOTICE 'OK: C-150 Rezept-/Plan-Testdaten: % Rezepte, % Zutaten, % Plaene, % Wochen, % Planeintraege',
+    v_recipes, v_recipe_ingredients, v_meal_plans, v_meal_plan_weeks, v_meal_plan_entries;
   RAISE NOTICE 'OK: C-66 Training-Testdaten: % Sitzungen, % Uebungen, % Saetze',
     v_training_sessions, v_training_exercises, v_training_sets;
   RAISE NOTICE 'OK: C-147 Training-Saetze: % Saetze mit RIR, % PR-Saetze',
@@ -3166,4 +3675,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer plus 1 Coach, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition, 1 Coach-Beziehung.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer plus 1 Coach, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${recipeRows.length} Rezepte, ${recipeIngredientRows.length} Rezeptzutaten, ${mealPlanRows.length} Wochenplan, ${mealPlanWeekRows.length + 1} Planwochen, ${mealPlanEntryRows.length * 2} Planeintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition, 1 Coach-Beziehung.`)

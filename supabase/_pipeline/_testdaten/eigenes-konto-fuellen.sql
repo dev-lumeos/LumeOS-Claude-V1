@@ -51,16 +51,24 @@ DELETE FROM coach.action_log WHERE client_id = :'pruefkonto'::uuid OR coach_id =
 DELETE FROM coach.pending_actions WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
 DELETE FROM coach.permission_change_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
 DELETE FROM coach.autonomy_change_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+ALTER TABLE coach.client_permissions DISABLE TRIGGER client_permissions_change_log;
+ALTER TABLE coach.client_autonomy DISABLE TRIGGER client_autonomy_change_log;
 DELETE FROM coach.client_permissions WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
 DELETE FROM coach.client_autonomy WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+ALTER TABLE coach.client_permissions ENABLE TRIGGER client_permissions_change_log;
+ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 
 -- Wiederholbar: erst Demo-Daten des Zielkontos raeumen, dann neu kopieren.
 DELETE FROM coach.action_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
 DELETE FROM coach.pending_actions WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
 DELETE FROM coach.permission_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
 DELETE FROM coach.autonomy_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+ALTER TABLE coach.client_permissions DISABLE TRIGGER client_permissions_change_log;
+ALTER TABLE coach.client_autonomy DISABLE TRIGGER client_autonomy_change_log;
 DELETE FROM coach.client_permissions WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
 DELETE FROM coach.client_autonomy WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+ALTER TABLE coach.client_permissions ENABLE TRIGGER client_permissions_change_log;
+ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 
 DELETE FROM medical.user_conditions WHERE user_id = :'ziel'::uuid;
 DELETE FROM medical.user_medications WHERE user_id = :'ziel'::uuid;
@@ -96,6 +104,12 @@ DELETE FROM goals.nutrition_targets WHERE user_id = :'ziel'::uuid;
 
 DELETE FROM nutrition.food_preference_items WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.food_preferences WHERE user_id = :'ziel'::uuid;
+DELETE FROM nutrition.meal_plan_entries WHERE user_id = :'ziel'::uuid;
+DELETE FROM nutrition.meal_plan_days WHERE user_id = :'ziel'::uuid;
+DELETE FROM nutrition.meal_plan_weeks WHERE user_id = :'ziel'::uuid;
+DELETE FROM nutrition.meal_plans WHERE user_id = :'ziel'::uuid;
+DELETE FROM nutrition.recipe_ingredients WHERE user_id = :'ziel'::uuid;
+DELETE FROM nutrition.recipes WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.water_logs WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.meal_items WHERE user_id = :'ziel'::uuid;
 DELETE FROM nutrition.meals WHERE user_id = :'ziel'::uuid;
@@ -293,6 +307,104 @@ SELECT
   catalog_item_code, source
 FROM nutrition.food_preference_items
 WHERE user_id = :'quelle'::uuid;
+
+-- 5b. Rezepte und Wochenplaene. Auch hier wird kopiert, nicht neu
+-- gerechnet; die Nahrwerte bleiben in Rezepten/Plan aus Zutaten
+-- ableitbar und werden erst bei meal_items eingefroren.
+CREATE TEMP TABLE recipe_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
+CREATE TEMP TABLE meal_plan_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
+CREATE TEMP TABLE meal_plan_week_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
+CREATE TEMP TABLE meal_plan_day_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
+
+INSERT INTO recipe_map (neu, alt)
+SELECT gen_random_uuid(), id
+FROM nutrition.recipes
+WHERE user_id = :'quelle'::uuid;
+
+INSERT INTO nutrition.recipes (
+  id, user_id, name_de, name_en, description, instructions, cuisine_code,
+  cooking_skill, prep_time_min, cook_time_min, servings, is_favorite,
+  tags, measurement_source, source_detail
+)
+SELECT
+  rm.neu, :'ziel'::uuid, name_de, name_en, description, instructions,
+  cuisine_code, cooking_skill, prep_time_min, cook_time_min, servings,
+  is_favorite, tags, 'seed', 'Kopie aus tom.seed@example.com'
+FROM nutrition.recipes r
+JOIN recipe_map rm ON rm.alt = r.id;
+
+INSERT INTO nutrition.recipe_ingredients (
+  id, recipe_id, user_id, sort_order, food_source, food_id, custom_food_id,
+  food_name_snapshot, amount_g, portion_name, portion_quantity,
+  portion_amount_g, notes
+)
+SELECT
+  gen_random_uuid(), rm.neu, :'ziel'::uuid, sort_order, food_source,
+  food_id, custom_food_id, food_name_snapshot, amount_g, portion_name,
+  portion_quantity, portion_amount_g, notes
+FROM nutrition.recipe_ingredients ri
+JOIN recipe_map rm ON rm.alt = ri.recipe_id
+WHERE ri.user_id = :'quelle'::uuid;
+
+INSERT INTO meal_plan_map (neu, alt)
+SELECT gen_random_uuid(), id
+FROM nutrition.meal_plans
+WHERE user_id = :'quelle'::uuid;
+
+INSERT INTO nutrition.meal_plans (
+  id, user_id, name, description, target_kcal, target_protein_g,
+  target_carbs_g, target_fat_g, is_active, measurement_source, source_detail
+)
+SELECT
+  mpm.neu, :'ziel'::uuid, name, description, target_kcal,
+  target_protein_g, target_carbs_g, target_fat_g, is_active,
+  'seed', 'Kopie aus tom.seed@example.com'
+FROM nutrition.meal_plans mp
+JOIN meal_plan_map mpm ON mpm.alt = mp.id;
+
+INSERT INTO meal_plan_week_map (neu, alt)
+SELECT gen_random_uuid(), id
+FROM nutrition.meal_plan_weeks
+WHERE user_id = :'quelle'::uuid;
+
+INSERT INTO nutrition.meal_plan_weeks (
+  id, plan_id, user_id, week_start, name, copied_from_week_id
+)
+SELECT
+  mpwm.neu, mpm.neu, :'ziel'::uuid, w.week_start, w.name, src.neu
+FROM nutrition.meal_plan_weeks w
+JOIN meal_plan_week_map mpwm ON mpwm.alt = w.id
+JOIN meal_plan_map mpm ON mpm.alt = w.plan_id
+LEFT JOIN meal_plan_week_map src ON src.alt = w.copied_from_week_id;
+
+INSERT INTO meal_plan_day_map (neu, alt)
+SELECT gen_random_uuid(), id
+FROM nutrition.meal_plan_days
+WHERE user_id = :'quelle'::uuid;
+
+INSERT INTO nutrition.meal_plan_days (
+  id, week_id, user_id, plan_date, day_index, notes
+)
+SELECT
+  mpdm.neu, mpwm.neu, :'ziel'::uuid, d.plan_date, d.day_index, d.notes
+FROM nutrition.meal_plan_days d
+JOIN meal_plan_day_map mpdm ON mpdm.alt = d.id
+JOIN meal_plan_week_map mpwm ON mpwm.alt = d.week_id;
+
+INSERT INTO nutrition.meal_plan_entries (
+  id, day_id, user_id, meal_type, planned_time, slot_order, entry_type,
+  recipe_id, food_id, custom_food_id, amount_g, planned_servings,
+  portion_name, portion_quantity, portion_amount_g, note
+)
+SELECT
+  gen_random_uuid(), mpdm.neu, :'ziel'::uuid, e.meal_type, e.planned_time,
+  e.slot_order, e.entry_type, rm.neu, e.food_id, e.custom_food_id,
+  e.amount_g, e.planned_servings, e.portion_name, e.portion_quantity,
+  e.portion_amount_g, e.note
+FROM nutrition.meal_plan_entries e
+JOIN meal_plan_day_map mpdm ON mpdm.alt = e.day_id
+LEFT JOIN recipe_map rm ON rm.alt = e.recipe_id
+WHERE e.user_id = :'quelle'::uuid;
 
 -- 6. Goals: Ziele, Phasen und Meilensteine.
 CREATE TEMP TABLE goal_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
@@ -592,6 +704,18 @@ counts AS (
   FROM users u LEFT JOIN nutrition.food_preferences fp ON fp.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'food_preference_items', count(fpi.*)
   FROM users u LEFT JOIN nutrition.food_preference_items fpi ON fpi.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'recipes', count(r.*)
+  FROM users u LEFT JOIN nutrition.recipes r ON r.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'recipe_ingredients', count(ri.*)
+  FROM users u LEFT JOIN nutrition.recipe_ingredients ri ON ri.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'meal_plans', count(mp.*)
+  FROM users u LEFT JOIN nutrition.meal_plans mp ON mp.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'meal_plan_weeks', count(mpw.*)
+  FROM users u LEFT JOIN nutrition.meal_plan_weeks mpw ON mpw.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'meal_plan_days', count(mpd.*)
+  FROM users u LEFT JOIN nutrition.meal_plan_days mpd ON mpd.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'meal_plan_entries', count(mpe.*)
+  FROM users u LEFT JOIN nutrition.meal_plan_entries mpe ON mpe.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'nutrition_targets', count(nt.*)
   FROM users u LEFT JOIN goals.nutrition_targets nt ON nt.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'user_goals', count(ug.*)

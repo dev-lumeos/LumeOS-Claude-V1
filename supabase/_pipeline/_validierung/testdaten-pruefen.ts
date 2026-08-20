@@ -70,6 +70,12 @@ const bodyMeasurements = numberScalar(`SELECT count(*) FROM goals.body_measureme
 const bodyCircumferences = numberScalar(`SELECT count(*) FROM goals.body_circumferences WHERE user_id IN (${IDS_SQL});`)
 const preferences = numberScalar(`SELECT count(*) FROM nutrition.food_preferences WHERE user_id IN (${IDS_SQL});`)
 const preferenceItems = numberScalar(`SELECT count(*) FROM nutrition.food_preference_items WHERE user_id IN (${IDS_SQL});`)
+const recipes = numberScalar(`SELECT count(*) FROM nutrition.recipes WHERE user_id IN (${IDS_SQL});`)
+const recipeIngredients = numberScalar(`SELECT count(*) FROM nutrition.recipe_ingredients WHERE user_id IN (${IDS_SQL});`)
+const mealPlans = numberScalar(`SELECT count(*) FROM nutrition.meal_plans WHERE user_id IN (${IDS_SQL});`)
+const mealPlanWeeks = numberScalar(`SELECT count(*) FROM nutrition.meal_plan_weeks WHERE user_id IN (${IDS_SQL});`)
+const mealPlanDays = numberScalar(`SELECT count(*) FROM nutrition.meal_plan_days WHERE user_id IN (${IDS_SQL});`)
+const mealPlanEntries = numberScalar(`SELECT count(*) FROM nutrition.meal_plan_entries WHERE user_id IN (${IDS_SQL});`)
 const meals = numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id IN (${IDS_SQL});`)
 const items = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL});`)
 const waterLogs = numberScalar(`SELECT count(*) FROM nutrition.water_logs WHERE user_id IN (${IDS_SQL});`)
@@ -191,6 +197,12 @@ if (MODE === 'clean') {
   if (bodyCircumferences !== 0) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet 0`)
   if (preferences !== 0) errors.push(`food_preferences: ${preferences}, erwartet 0`)
   if (preferenceItems !== 0) errors.push(`food_preference_items: ${preferenceItems}, erwartet 0`)
+  if (recipes !== 0) errors.push(`recipes: ${recipes}, erwartet 0`)
+  if (recipeIngredients !== 0) errors.push(`recipe_ingredients: ${recipeIngredients}, erwartet 0`)
+  if (mealPlans !== 0) errors.push(`meal_plans: ${mealPlans}, erwartet 0`)
+  if (mealPlanWeeks !== 0) errors.push(`meal_plan_weeks: ${mealPlanWeeks}, erwartet 0`)
+  if (mealPlanDays !== 0) errors.push(`meal_plan_days: ${mealPlanDays}, erwartet 0`)
+  if (mealPlanEntries !== 0) errors.push(`meal_plan_entries: ${mealPlanEntries}, erwartet 0`)
   if (meals !== 0) errors.push(`meals: ${meals}, erwartet 0`)
   if (items !== 0) errors.push(`meal_items: ${items}, erwartet 0`)
   if (waterLogs !== 0) errors.push(`water_logs: ${waterLogs}, erwartet 0`)
@@ -231,6 +243,7 @@ if (MODE === 'clean') {
   console.log(`  Meilensteine: ${goalMilestones}`)
   console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
+  console.log(`  Rezepte/Zutaten/Plaene/Wochen/Tage/Eintraege: ${recipes}/${recipeIngredients}/${mealPlans}/${mealPlanWeeks}/${mealPlanDays}/${mealPlanEntries}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins/Scores/Modalitaeten: ${recoveryCheckins}/${recoveryScores}/${recoveryModalities}`)
@@ -299,6 +312,12 @@ if (MODE === 'clean') {
   if (bodyCircumferences < 25) errors.push(`body_circumferences: ${bodyCircumferences}, erwartet mindestens 25`)
   if (preferences !== 1) errors.push(`food_preferences: ${preferences}, erwartet 1`)
   if (preferenceItems !== 3) errors.push(`food_preference_items: ${preferenceItems}, erwartet 3`)
+  if (recipes !== 3) errors.push(`recipes: ${recipes}, erwartet 3`)
+  if (recipeIngredients !== 11) errors.push(`recipe_ingredients: ${recipeIngredients}, erwartet 11`)
+  if (mealPlans !== 1) errors.push(`meal_plans: ${mealPlans}, erwartet 1`)
+  if (mealPlanWeeks !== 3) errors.push(`meal_plan_weeks: ${mealPlanWeeks}, erwartet 3`)
+  if (mealPlanDays !== 21) errors.push(`meal_plan_days: ${mealPlanDays}, erwartet 21`)
+  if (mealPlanEntries !== 56) errors.push(`meal_plan_entries: ${mealPlanEntries}, erwartet 56`)
   if (meals < 500) errors.push(`meals: ${meals}, erwartet mindestens 500`)
   if (items < 5000) errors.push(`meal_items: ${items}, erwartet mindestens 5000`)
   if (waterLogs < 500) errors.push(`water_logs: ${waterLogs}, erwartet mindestens 500`)
@@ -793,6 +812,56 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM nutrition.recipes r
+    JOIN nutrition.recipe_nutrition(r.id) rn ON rn.recipe_id = r.id
+    WHERE r.user_id = '${tom}'::uuid
+      AND r.name_de = 'Huhn-Reis-Bowl'
+      AND r.cuisine_code = 'asian'
+      AND r.cooking_skill = 'intermediate'
+      AND r.prep_time_min = 25
+      AND rn.ingredient_count = 4
+      AND rn.enercc > 0
+      AND rn.prot625 > 0;`)) {
+    errors.push('Fall C-150 Rezept: Huhn-Reis-Bowl mit Zutaten und gerechneten Naehrwerten fehlt')
+  }
+  if (!hasRows(`
+    WITH weeks AS (
+      SELECT
+        count(*) FILTER (WHERE copied_from_week_id IS NULL AND name = 'Gefuellte Aufbauwoche') AS filled_weeks,
+        count(*) FILTER (WHERE copied_from_week_id IS NULL AND name = 'Leere Planwoche') AS empty_weeks,
+        count(*) FILTER (WHERE copied_from_week_id IS NOT NULL) AS copied_weeks
+      FROM nutrition.meal_plan_weeks
+      WHERE user_id = '${tom}'::uuid
+    ),
+    entry_counts AS (
+      SELECT
+        count(e.id) FILTER (WHERE w.copied_from_week_id IS NULL AND w.name = 'Gefuellte Aufbauwoche') AS filled_entries,
+        count(e.id) FILTER (WHERE w.copied_from_week_id IS NULL AND w.name = 'Leere Planwoche') AS empty_entries,
+        count(e.id) FILTER (WHERE w.copied_from_week_id IS NOT NULL) AS copied_entries
+      FROM nutrition.meal_plan_weeks w
+      JOIN nutrition.meal_plan_days d ON d.week_id = w.id
+      LEFT JOIN nutrition.meal_plan_entries e ON e.day_id = d.id
+      WHERE w.user_id = '${tom}'::uuid
+    )
+    SELECT 1
+    FROM weeks, entry_counts
+    WHERE filled_weeks = 1
+      AND empty_weeks = 1
+      AND copied_weeks = 1
+      AND filled_entries = 28
+      AND empty_entries = 0
+      AND copied_entries = 28;`)) {
+    errors.push('Fall C-150 Wochenplan: gefuellte/leere/kopierte Woche stimmt nicht')
+  }
+  if (numberScalar(`
+    SELECT count(*)
+    FROM nutrition.meal_plans mp
+    JOIN auth.users u ON u.id = mp.user_id
+    WHERE u.email = 'test-user@lumeos.local';`) !== 0) {
+    errors.push('Fall C-150 RLS-Gegenkonto: test-user hat Wochenplaene, erwartet keine')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM nutrition.hydration_day('${tom}'::uuid, DATE '${relDate('2026-08-16')}')
     WHERE log_count > 0
       AND target_ml = 2762
@@ -1206,6 +1275,7 @@ if (MODE === 'clean') {
   console.log(`  Meilensteine: ${goalMilestones}`)
   console.log(`  Koerpermessungen/Umfaenge: ${bodyMeasurements}/${bodyCircumferences}`)
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
+  console.log(`  Rezepte/Zutaten/Plaene/Wochen/Tage/Eintraege: ${recipes}/${recipeIngredients}/${mealPlans}/${mealPlanWeeks}/${mealPlanDays}/${mealPlanEntries}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Training Status: ${trainingStatusRows.map(([status, count]) => `${status}:${count}`).join(', ')}`)

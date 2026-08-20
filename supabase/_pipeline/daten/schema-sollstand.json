@@ -610,6 +610,186 @@
         ]
       },
       "grants_herkunft": "030_mikro-uebersicht.ts"
+    },
+    {
+      "name": "recipes",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "recipe_ingredients",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "meal_plans",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "meal_plan_weeks",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "meal_plan_days",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "meal_plan_entries",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
     }
   ],
   "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
@@ -944,6 +1124,38 @@
     {
       "name": "food_preferences_write",
       "schritt": "074"
+    },
+    {
+      "name": "food_nutrient_snapshot",
+      "schritt": "058b"
+    },
+    {
+      "name": "recipe_ingredients_owner_guard",
+      "schritt": "058b"
+    },
+    {
+      "name": "meal_plan_weeks_owner_guard",
+      "schritt": "058b"
+    },
+    {
+      "name": "meal_plan_days_owner_guard",
+      "schritt": "058b"
+    },
+    {
+      "name": "meal_plan_entries_owner_guard",
+      "schritt": "058b"
+    },
+    {
+      "name": "recipe_nutrition",
+      "schritt": "058b"
+    },
+    {
+      "name": "copy_meal_plan_week",
+      "schritt": "058b"
+    },
+    {
+      "name": "meal_plan_day_to_diary",
+      "schritt": "058b"
     }
   ],
   "mindestzeilen": {

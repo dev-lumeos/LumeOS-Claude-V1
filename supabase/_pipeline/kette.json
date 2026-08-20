@@ -515,11 +515,18 @@
       "depends_on": ["052a", "055", "106", "120", "130", "112", "140"]
     },
     {
+      "id": "058b",
+      "path": "supabase/_pipeline/05_user_tabellen/058b_recipes_meal_plans.sql",
+      "kind": "sql",
+      "creates": "Rezepte, Rezeptzutaten, Wochenplaene und Uebernahmefunktionen fuer geplante Tage",
+      "depends_on": ["017", "029", "058", "058a", "090"]
+    },
+    {
       "id": "150",
       "path": "supabase/_pipeline/15_coach/150_coach_permissions_autonomy.sql",
       "kind": "sql",
       "creates": "Coach-Rechtemodell: client_permissions, client_autonomy, Widerrufshistorie, Pending Actions und Action Log",
-      "depends_on": ["017", "113", "auth_stub"]
+      "depends_on": ["017", "058b", "113", "auth_stub"]
     }
   ]
 }
