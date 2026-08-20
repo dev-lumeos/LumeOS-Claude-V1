@@ -331,6 +331,21 @@ export type Phase = {
   gueltig_ab: string | null
   projected_end_date: string | null
   actual_end_date: string | null
+  /**
+   * Die drei Übergangsspalten — **nicht aus `phase_am()`**.
+   *
+   * `[cmd]` Die Funktion liefert 8 der 14 Spalten von
+   * `goals.goal_phases`; `transitioned_from`, `recommended_next` und
+   * `transition_reason` fehlen in ihrer Signatur (geprüft gegen
+   * `pg_get_function_result`). Sie werden deshalb nachgelesen, statt
+   * die Funktion zu ändern — **das Schema gehört Codex.**
+   *
+   * `[read]` Dasselbe Muster wie in `lib/medical/lesen.ts` (G-80), wo
+   * `fasting_status` aus demselben Grund nachgelesen wird.
+   */
+  transitioned_from: string | null
+  recommended_next: string | null
+  transition_reason: string | null
 }
 
 export async function ladePhase(userId: string, stichtag: string): Promise<Phase | null> {
@@ -340,8 +355,25 @@ export async function ladePhase(userId: string, stichtag: string): Promise<Phase
 
   const r = (Array.isArray(data) ? data[0] : null) as Record<string, unknown> | null
   if (!r) return null
+
+  const phaseId = text(r.phase_id) ?? ''
+  // Die drei Spalten je Zeile nachlesen. Der Zeilenschutz greift auch
+  // hier — die Abfrage läuft mit derselben Identität wie die Funktion.
+  let uebergang: Record<string, unknown> = {}
+  if (phaseId) {
+    const { data: z, error: zFehler } = await goalsDb()
+      .from('goal_phases')
+      .select('transitioned_from, recommended_next, transition_reason')
+      .eq('id', phaseId)
+      .maybeSingle()
+    // `[read]` Werfen, nicht schlucken — eine der zwei Fallen aus G-64:
+    // ein stiller Fehler sähe aus wie „kein Übergang hinterlegt".
+    if (zFehler) throw new GoalsLeseFehler('READ_FAILED', `goal_phases: ${zFehler.message}`)
+    uebergang = (z ?? {}) as Record<string, unknown>
+  }
+
   return {
-    phase_id: text(r.phase_id) ?? '',
+    phase_id: phaseId,
     goal_id: text(r.goal_id),
     phase_type: text(r.phase_type),
     variant: text(r.variant),
@@ -350,6 +382,9 @@ export async function ladePhase(userId: string, stichtag: string): Promise<Phase
     gueltig_ab: text(r.gueltig_ab),
     projected_end_date: text(r.projected_end_date),
     actual_end_date: text(r.actual_end_date),
+    transitioned_from: text(uebergang.transitioned_from),
+    recommended_next: text(uebergang.recommended_next),
+    transition_reason: text(uebergang.transition_reason),
   }
 }
 

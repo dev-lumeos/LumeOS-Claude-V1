@@ -53,6 +53,8 @@ import { GoalsPhaseView, GoalsTDEEView, GoalsCrossModuleView } from './tab-phase
 // G-79: die echte Zeitachse.
 import { TimelineTab as ZeitachseTab } from './tab-timeline'
 import { GoalsPhysiqueView, GoalsPosesView } from './tab-physique'
+import { PhaseEcht } from './phase-echt'
+import { PhysiqueEcht } from './physique-echt'
 import { CompositionTab, type CompDaten } from './tab-composition'
 import { KoerperMetriken, KoerperUmfaenge } from './tab-koerper'
 import { ZielKarten } from './ziel-karten'
@@ -176,7 +178,11 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           ersetzt sie, statt eine leere Kachel zu zeigen — sonst saehe
           „keine Ziele" wie ein Befund aus und waere doch nur ein
           fehlendes Cookie. */}
-      {echt.ladefehler && ['goals', 'metrics', 'measure', 'comp', 'tdee'].includes(tab) ? (
+      {/* G-87: `phase` und `physique` stehen jetzt mit in der Liste —
+          sonst sähe eine fehlende Phase nach „keine Phase" aus und
+          wäre doch nur ein fehlendes Cookie. */}
+      {echt.ladefehler
+        && ['goals', 'metrics', 'measure', 'comp', 'tdee', 'phase', 'physique'].includes(tab) ? (
         <Card title="Goals" sub="konnten nicht geladen werden">
           <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
             {echt.ladefehler}
@@ -198,10 +204,29 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
             <KoerperUmfaenge saetze={echt.umfaenge} stichtag={echt.stichtag} />
           )}
           {tab === 'comp' && <CompositionTab d={comp} />}
+
+          {/* G-87: die laufende Phase aus `goals.goal_phases`, ueber
+              `phase_am()`. Der Entwurf bleibt als Rueckfall, wenn
+              keine Phase gilt — dasselbe Muster wie bei der Zeitachse
+              (G-79). */}
+          {tab === 'phase' && (
+            echt.phase
+              ? <PhaseEcht phase={echt.phase} stichtag={echt.stichtag} />
+              : <GoalsPhaseView />
+          )}
+
+          {/* G-87: die Verhaeltnisse aus `goals.body_circumferences`.
+              **Die Einstufungen bleiben im Entwurf** — „golden target
+              1.618", V-Taper und Steve Reeves haben keine Quelle
+              ausserhalb der Entwurfs-Begleitdateien. */}
+          {tab === 'physique' && (
+            echt.umfaenge.length > 0
+              ? <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} />
+              : <GoalsPhysiqueView />
+          )}
         </>
       )}
 
-      {tab === 'phase' && <GoalsPhaseView />}
       {tab === 'cross' && <GoalsCrossModuleView />}
       {/* G-79: echte Zeitachse aus Zielen, Phasen und
           Meilensteinen. Der Entwurf bleibt als Rueckfall, wenn
@@ -214,7 +239,6 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
           )
           : <TimelineTab />
       )}
-      {tab === 'physique' && <GoalsPhysiqueView />}
       {tab === 'poses' && <GoalsPosesView />}
 
       <GoalsModale modal={modal} onClose={kontext.close} />
