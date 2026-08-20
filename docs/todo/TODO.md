@@ -2526,20 +2526,32 @@ Umsetzen angepasst werden.
   `[read]` **Absichtlich weggelassen oder beim Import verloren — das
   sind zwei verschiedene Antworten.**
 
-- [ ] **C-91: Drei Marker fehlen im LOINC-Zuschnitt** (neu 2026-08-18).
-  Rest aus C-84.
+- [ ] **C-91: Die Spec nennt LOINC-Codes, die nicht die ueblichen sind**
+  (neu gefasst 2026-08-19). **Nicht dringend.**
 
-  `[cmd]` **`10231-9` IGF-1, `5762-0` Zink, `2913-2` Selen** stehen in
-  der Spec, **aber nicht im 11.676er Zuschnitt.**
+  ### Der urspruengliche Befund war falsch gestellt
 
-  `[read]` **Der Zuschnitt war `CLASSTYPE 1/2` mit `COMMON_TEST_RANK`** —
-  wer keinen Haeufigkeitsrang hat, fiel raus. **Drei Marker, die ein
-  Sportler misst, sind darunter.**
+  `[cmd]` C-84 meldete *„IGF-1, Zink und Selen fehlen im Zuschnitt"*.
+  **Gemessen: alle drei sind da, unter anderen Codes.**
 
-  **Zu klaeren:** Nachziehen aus der vollen LOINC-Tabelle (97.314 aktive
-  Codes), oder den Zuschnitt weiten? `[cmd]` Der Quellordner ist
-  ignoriert, **aber `109`/`144` zeigen, dass reproduzierbares Lesen
-  funktioniert.**
+  | | Spec | im Katalog |
+  |---|---|---|
+  | IGF-1 | `10231-9` | **`2484-4`** — live in Toms Befundliste, 286 ng/mL |
+  | Zink | `5762-0` | **`14955-9`** (Serum/Plasma), `10918-1`, +4 weitere |
+  | Selen | `2913-2` | **`5722-4`** (Blut), `5723-2` (Erythrozyten), +3 |
+
+  `[read]` **Die Marker fehlen nicht — die Spec nennt Codes, die nicht
+  die ueblichen sind.** Vermutlich veraltet oder falsch abgeschrieben.
+
+  `[cmd]` **Sechster Spec-Fehler in Folge** — nach
+  Magnesium/Methaemoglobin (C-84), C-92, der Severity ohne Schema
+  (C-108), den drei Recovery-Formelfehlern (C-111) und der BSS-Formel
+  (C-112).
+
+  **Was bleibt:** `[read]` **Wenn ein Labor mit `10231-9` liefert,
+  trifft der Import ins Leere.** `[cmd]` Ein Alias-Eintrag in
+  `biomarker_aliases` waere die kleine Loesung — **292 Aliase liegen
+  dort bereits.**
 
 - [ ] **C-92: Die Spec verwechselt Marker** (neu 2026-08-18). **Befund
   aus C-84, betrifft jede weitere Spec-Uebernahme.**
