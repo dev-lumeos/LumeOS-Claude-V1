@@ -244,7 +244,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
-| **A-28** | Der Attrappen-Test blockiert das Gate |  |
+| **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen (6 sichtbar gegen 10 Klassen) |  |
+| **G-98** | Meal plans braucht Zustand am Planeintrag und Herkunft am Tagebuch |  |
+| **G-99** | Drei der acht Planner-Spalten bleiben wirkungslos (`recipes` hat kein Preisfeld) |  |
 
 ---
 
@@ -1590,6 +1592,85 @@ Umsetzen angepasst werden.
   `[read]` **Eine Zeile je Stelle:** `f.name_display_de || f.name_de`.
   Der Rueckfall bleibt noetig, weil nicht jeder Eintrag einen
   Anzeigenamen hat.
+
+- [x] **G-97: Planner an die C-150-Tabellen anschliessen**
+  (neu 2026-08-20, **erledigt 2026-08-20** — Bericht
+  `docs/ssot/147-meal-plans.md`).
+
+  `[cmd]` **Der Planner liest echt:** Plan „Aufbau-Wochenplan"
+  (2.500 kcal / 170 g P), drei Wochen — gefuellt 28, leer 0, kopiert 28
+  —, angezeigt **18.6.–24.6. mit 28 kcal-Zellen**, Attrappenmarken im
+  Tab **0**.
+
+  `[cmd]` **Die kcal sind gerechnet**, nicht wie im Entwurf gewuerfelt:
+  `recipe_nutrition` und `food_nutrient_snapshot` (C-150). Sichtbar an
+  der Skalierung — 493 kcal bei 1×, **617 bei 1,25×**.
+
+  `[cmd]` **Zwei der acht G-72-Spalten wirken jetzt**
+  (`meals_per_day`, `snacks_per_day` bestimmen die Rasterzeilen), drei
+  sind sichtbar vergleichbar, **drei bleiben wirkungslos** — Details in
+  G-99.
+
+  **Kein Generator gebaut**, wie verlangt.
+
+- [ ] **G-98: Meal plans braucht einen Zustand und eine Herkunft**
+  (neu 2026-08-20, aus G-97). **Schemafrage — Codex.**
+
+  `[cmd]` **`MealPlansView` IST im Mockup definiert**, entgegen der
+  Annahme in G-97 und C-150: `module-nutrition-spec.jsx:334`. **Beide
+  suchten in `module-nutrition.jsx`**, die es ueber die Dateigrenze
+  hinweg als `window.MealPlansView` aufruft.
+
+  **Der Tab hat also eine Vorlage. Ihm fehlen die Daten:**
+
+  `[cmd]` **1. Ein Zustand je Planeintrag.** `meal_plan_entries` fuehrt
+  keine Spalte fuer `confirmed`/`deviated`/`skipped`/`pending`. Die
+  Kachel „Today's ghost entries" und die 7-Tage-Compliance rechnen
+  genau darueber.
+
+  `[cmd]` **2. Eine Herkunft am Tagebuch.** `meals` und `meal_items`
+  tragen **keinen Verweis auf einen Planeintrag**. Ohne ihn ist nicht
+  entscheidbar, ob ein erfasster Eintrag der geplante war.
+
+  `[read]` **Zusammen heisst das: Compliance ist heute nicht
+  ableitbar, auch nicht naeherungsweise.** Die beiden Punkte gehoeren
+  zusammen entschieden — ein Zustand ohne Herkunft bliebe Handarbeit.
+
+  `[cmd]` **3. Lebenszyklus und Urheberschaft.** Der Entwurf zeigt
+  *„Day 3 of 7 · started May 14"* und die Quellen `coach`/`user`/
+  `marketplace`/`buddy`. `meal_plans` fuehrt weder Startdatum noch
+  Laufzeit noch Urheber; `measurement_source` meint die Messherkunft.
+
+  `[read]` **4. Die Einkaufsliste waere OHNE Schemaaenderung baubar** —
+  `[cmd]` **72 von 112** Planeintraegen haengen an Rezepten mit Mengen.
+  Es fehlt nur eine Kategorie je Lebensmittel („Fleisch & Fisch") und
+  die Umrechnung in Einkaufseinheiten. **Der guenstigste der vier
+  Punkte.**
+
+- [ ] **G-99: Drei der acht Planner-Spalten bleiben wirkungslos**
+  (neu 2026-08-20, aus G-97).
+
+  `[cmd]` **Gemessen am 2026-08-20:**
+
+  | Spalte | Wert bei `dev` | Zustand |
+  |---|---|---|
+  | `meals_per_day` | 4 | **wirkt** — Rasterzeilen |
+  | `snacks_per_day` | 1 | **wirkt** — Snackreihe |
+  | `cooking_skill` | `advanced` | sichtbar je Rezept |
+  | `prep_time_max_min` | 30 | sichtbar vergleichbar |
+  | `preferred_cuisines` | `{mediterranean}` | sichtbar je Rezept |
+  | `budget_level` | `medium` | **wirkungslos** |
+  | `meal_prep_ok` | `true` | **wirkungslos** |
+  | `planner_notes` | Testtext | **wirkungslos** |
+
+  `[cmd]` **Der Grund ist kein Anzeigefehler:** `nutrition.recipes`
+  fuehrt **kein Preis- und kein Vorkochfeld** — gegen
+  `information_schema` geprueft. Von den acht Spalten hat **nur
+  `cooking_skill`** eine Entsprechung an `recipes`.
+
+  `[read]` **„Sichtbar" ist nicht „filtert".** Die drei mittleren lassen
+  sich vergleichen; ein Filter waere eine Rezeptauswahl und gehoert zum
+  Schreibpfad.
 
 - [ ] **G-94: `erfassen.tsx` ist toter Code** (neu 2026-08-20, aus
   G-13).
@@ -3066,6 +3147,34 @@ Umsetzen angepasst werden.
   funktionaler Mockup-Screen, nur die Workflow-Beschreibung.**
 
 
+- [ ] **G-98: Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten**
+  (neu 2026-08-20). Befund aus G-97.
+
+  `[cmd]` **`MealPlansView` ist definiert** —
+  `module-nutrition-spec.jsx:334`. **Auftrag und C-150 sagten beide das
+  Gegenteil** — *„beide suchten in der anderen Mockup-Datei."*
+
+  `[read]` **Der Orchestrator hat nur `module-nutrition.jsx` gelesen**
+  und daraus geschlossen, es gebe keine Vorlage. **Es gibt drei
+  Nutrition-Mockups.**
+
+  `[cmd]` **Was dem Tab fehlt:** *„kein Zustand am Planeintrag, keine
+  Herkunft am Tagebuch → **Compliance ist nicht ableitbar**."*
+
+  `[read]` **Ein Essensplan-Tab zeigt, wie gut man sich an den Plan
+  gehalten hat.** Ohne Zustand und Herkunft ist das nicht rechenbar.
+
+- [ ] **G-99: Drei der acht G-72-Spalten bleiben wirkungslos** (neu
+  2026-08-20). Befund aus G-97.
+
+  `[cmd]` **Gemessen:** *„Zwei wirken, drei sind sichtbar vergleichbar,
+  drei bleiben wirkungslos — `recipes` hat kein Preis- und kein
+  Vorkochfeld."*
+
+  `[read]` **Damit ist G-72 teilweise beantwortet:** `budget_level` und
+  `meal_prep_ok` haben kein Gegenstueck im Rezeptschema. **Entweder
+  kommen die Felder dazu, oder die Spalten fallen weg.**
+
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
 
@@ -3318,20 +3427,56 @@ Umsetzen angepasst werden.
   **Zu tun:** Test auf den gemessenen Stand ziehen — **oder ihn durch
   die gerenderte Zaehlung ersetzen.**
 
-- [ ] **A-28: Der Attrappen-Test blockiert das Gate** (neu 2026-08-20).
-  **Zusammenfuehrung von A-27.**
+- [x] **A-28: Der Attrappen-Test blockiert das Gate**
+  (neu 2026-08-20, **erledigt 2026-08-20** — Bericht
+  `docs/ssot/147-meal-plans.md`).
 
-  `[cmd]` **Zwei rote Tests, beide auf `supplements/tabs.tsx`** — der
-  G-13-Agent misst *„0 statt 16 `RUECKFALL`-Marken"*, Codex meldete
-  *„erwartet 1, findet 17"*.
+  **Der Test war richtig. Die Datei war falsch.** `[cmd]` Der
+  Arbeitsstand von `supplements/tabs.tsx` war **eine ganze Fassung VOR
+  G-91**, nicht nur zurueckgedrehte Marken:
 
-  `[read]` **Der Stand ist uncommittet und stammt von G-91** — zwei
-  Agenten haben nacheinander gezaehlt, keiner hat den Test nachgezogen.
+  | | HEAD | Arbeitsstand |
+  |---|---|---|
+  | `attrappe={RUECKFALL}` | **16** | 0 |
+  | `attrappe={ATTRAPPE}` | 1 | **16** |
+  | Import `CostErgaenzung` | da | **geloescht** |
+  | Katalogspalte | `Serving` | **`Typical dose`** |
 
-  `[cmd]` **A-24 haelt fest, dass Textmarken kein Mass sind.** Und
-  `tools/schuss.mjs` misst seit heute die **gerenderte** Seite — in
-  einem Aufruf, mit Attrappenzahl und Konsolenfehlern.
+  `[cmd]` **Die letzte Zeile ist der Beweis:** G-91 hat `Typical dose`
+  entfernt, weil `typical_dose_min/_max` **auf allen 44 Eintraegen leer**
+  sind. Der Arbeitsstand haette eine Spalte voller Striche
+  zurueckgebracht.
 
-  **Zu tun:** Test auf den gemessenen Stand ziehen, **oder ihn durch die
-  gerenderte Zaehlung ersetzen.** `[read]` **Das Zweite waere die
-  Loesung, nicht die Reparatur.**
+  **Deshalb wurde der Test NICHT nachgezogen** — er beschrieb den
+  richtigen Zustand. `[cmd]` Der Stand ist **gestasht, nicht verworfen**
+  (`stash@{0}`). Danach: 1 + 16, Marke je Fassung richtig, **76 Tests
+  gruen**, gerendert **1 Attrappe statt 17**.
+
+  `[read]` **Die vorgeschlagene Loesung waere falsch gewesen.** Wer den
+  Test „auf den gemessenen Stand gezogen" haette, haette den
+  Rueckschritt festgeschrieben — **und den Zaehler wieder blind
+  gemacht**, wovor G-74 ausdruecklich warnt.
+
+  `[read]` **Der Vorschlag, auf die gerenderte Zaehlung umzustellen,
+  bleibt offen und richtig** — er steht als eigener Punkt (A-29), weil
+  er den Test ERSETZT und nicht repariert.
+
+- [ ] **A-29: Der Attrappen-Test koennte die gerenderte Seite zaehlen**
+  (neu 2026-08-20, aus A-28).
+
+  `[cmd]` **Der Test liest Quelltext** (`v2-attrappen.test.ts` zaehlt
+  `attrappe={ATTRAPPE}` je Datei). **A-24 haelt fest, dass Textmarken
+  kein Mass sind** — und `tools/schuss.mjs` misst die gerenderte Seite
+  in einem Aufruf.
+
+  `[cmd]` **Die zwei Zaehlweisen gehen auseinander**, gemessen am
+  2026-08-20 auf `/v2/nutrition?tab=plans`: **6 sichtbare Marken gegen
+  10 `v2-attrappe`-Klassen** im HTML, weil die Klasse auch an
+  Unterelementen haengt.
+
+  `[read]` **Beide Zahlen sind richtig, sie messen Verschiedenes.**
+  Wer umstellt, entscheidet damit auch, **welche der beiden die
+  verbindliche ist** — und muss die Erwartungen aller Module neu setzen.
+
+  `[cmd]` **Der Test braucht dann einen laufenden Dev-Server.** Heute
+  laeuft er ohne. Das ist der eigentliche Preis, nicht der Umbau.

@@ -8904,3 +8904,79 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   nicht `base64-`-praefixiert** — `@supabase/ssr` ist hier **0.1.0**.
 
   **Offen geblieben:** der Namensteil (G-93) und die tote Datei (G-94).
+
+
+- [x] **A-28: Der Attrappen-Test blockiert das Gate**
+  (erledigt 2026-08-20, Bericht `docs/ssot/147-meal-plans.md`).
+
+  **Der Test war richtig. Die Datei war falsch.** `[cmd]` Der
+  Arbeitsstand von `apps/web/src/app/v2/supplements/tabs.tsx` war **eine
+  ganze Fassung VOR G-91**, nicht nur zurueckgedrehte Marken: 16
+  `RUECKFALL` zu 0, dazu der Import von `CostErgaenzung` geloescht und
+  die Katalogspalte `Serving` wieder auf **`Typical dose`** gesetzt.
+
+  `[cmd]` **Die Spalte ist der Beweis, dass es ein Rueckschritt war:**
+  G-91 hat sie entfernt, weil `typical_dose_min/_max` **auf allen 44
+  Katalogeintraegen leer** sind.
+
+  `[read]` **Der Test wurde deshalb NICHT nachgezogen.** Der Vorschlag
+  im Punkt — *„Test auf den gemessenen Stand ziehen"* — haette den
+  Rueckschritt festgeschrieben und den Zaehler wieder blind gemacht,
+  wovor G-74 warnt.
+
+  `[cmd]` Der Stand ist **gestasht, nicht verworfen** (`stash@{0}`).
+  Danach: **1 `ATTRAPPE` + 16 `RUECKFALL`**, Marke je Fassung richtig
+  (`SuppInteractions` behaelt `ATTRAPPE`), **76 Tests gruen**,
+  gerendert **1 Attrappe statt 17**.
+
+  **Offen geblieben:** die Umstellung auf die gerenderte Zaehlung
+  (A-29) — sie ersetzt den Test, statt ihn zu reparieren.
+
+- [x] **G-97: Planner an die C-150-Tabellen anschliessen**
+  (erledigt 2026-08-20, Bericht `docs/ssot/147-meal-plans.md`).
+
+  `[cmd]` **Der Planner liest echt.** Plan „Aufbau-Wochenplan" mit
+  **2.500 kcal / 170 g P / 313 g KH / 75 g F**, drei Wochen (gefuellt
+  28, leer 0, kopiert 28), angezeigt **18.6.–24.6. mit 28
+  kcal-Zellen**, **0 Attrappenmarken im Tab**.
+
+  `[cmd]` **Die kcal sind gerechnet, nicht gewuerfelt.** Der Entwurf
+  hatte `Math.round(400 + Math.random() * 400)`; jetzt rechnen
+  `recipe_nutrition` (Rezepte) und `food_nutrient_snapshot`
+  (BLS-Eintraege), beide aus C-150. Sichtbar an der Skalierung:
+  **493 kcal bei 1×, 617 bei 1,25×**; Huhn-Reis-Bowl 789 bei 1×, 592
+  bei 0,75×.
+
+  `[read]` **Drei bewusste Abweichungen vom Entwurf:** hervorgehoben ist
+  **heute** statt des fest verdrahteten Samstags (`di === 5`); **leere
+  Zellen bleiben leer**, weil echte Plaene Luecken haben; und die
+  Zeilenzahl kommt aus den Vorlieben statt fest vier zu sein.
+
+  `[cmd]` **Kein Generator**, wie im Auftrag verlangt. `Copy week` und
+  `New recipe` tragen die Entwicklungsmarke: die Funktionen stehen in
+  der Datenbank und sind dort gegengeprueft, **der Schreibpfad im
+  Browser fehlt.**
+
+  `[cmd]` **Eigener Fehler, beim Messen gefunden:** Die erste Fassung
+  zog die Snacks von `meals_per_day` ab und schrieb dann *„4 Mahlzeiten
+  je Tag, davon 1 Snack"* ueber ein Raster mit vier Reihen — ein Satz,
+  der sich selbst widerspricht. **Die DB-Vorgaben entscheiden es:**
+  `meals_per_day DEFAULT 3` UND `snacks_per_day DEFAULT 1` heisst,
+  **beide zaehlen getrennt.** Sechs Tests halten es fest.
+
+  `[cmd]` **HTTP 500 bei gruenem Typecheck erneut ausgeloest** — ein
+  WERT-Import aus einer `'use client'`-Datei zog `next/headers` ins
+  Browserbuendel, derselbe Fehler wie in G-74 und G-79. Behoben durch
+  `plan-model.ts` ohne Serverbezug; **Typen duerfen aus dem Lesepfad
+  kommen, Werte nicht.**
+
+  `[cmd]` **Zeilenschutz ueber vier Ebenen** (`meal_plans` → `weeks` →
+  `days` → `entries`), ohne eigenen `user_id`-Filter: `test-user` sieht
+  **„Noch kein Wochenplan"**, `dev` das Raster.
+
+  `[cmd]` **Gate fuer `@lumeos/web` 3/3 gruen.** `pnpm gate` als Ganzes
+  ist rot an **`apps/coach`** — Fables neues Paket, untracked, ohne
+  `node_modules`, nicht im Lockfile. Nicht angefasst.
+
+  **Offen geblieben:** der zweite Tab (G-98) und die drei wirkungslosen
+  Spalten (G-99).
