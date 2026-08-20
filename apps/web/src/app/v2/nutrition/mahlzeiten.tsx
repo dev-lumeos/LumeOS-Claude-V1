@@ -61,6 +61,64 @@ type Mahlzeit = {
 
 type Portion = { name_de: string; amount_g: number; is_default: boolean }
 
+/**
+ * Die Filter des Erfassungsdialogs (G-13).
+ *
+ * `[read]` BEWUSST WENIGER ALS IM FOOD-DB-REGISTER. Dort sind es neun
+ * Pillen plus dreizehn Kategorien — das ist ein Katalog, den man
+ * durchstoebert. Hier sucht jemand ein Lebensmittel, das er GERADE
+ * GEGESSEN hat; er kennt dessen Namen und tippt ihn. Ein Filterband,
+ * das breiter ist als die Trefferliste, steht dabei im Weg.
+ *
+ * `[cmd]` Geblieben sind die vier, die eine Mahlzeit wirklich
+ * einschraenken. Alle Zahlen am 2026-08-20 gegen `nutrition.food_tags`
+ * gemessen — dieselben Werte, die G-73 nennt.
+ *
+ * `[cmd]` Es ist EINFACHAUSWAHL, weil `food_search` `p_tag_code` im
+ * Singular nimmt (C-120): kein ODER, kein UND, kein Ausschluss. Zwei
+ * Filter gleichzeitig kann die Funktion nicht, und danebengebaut wird
+ * hier nicht.
+ */
+const FILTER: Array<{ code: string; label: string; anzahl: number }> = [
+  { code: 'vegetarian', label: 'Vegetarisch', anzahl: 1751 },
+  { code: 'vegan', label: 'Vegan', anzahl: 1377 },
+  { code: 'high_protein', label: 'Proteinreich', anzahl: 1400 },
+  { code: 'whole_food', label: 'Grundnahrungsmittel', anzahl: 2884 },
+]
+
+/**
+ * Die Sortierungen, die `nutrition.food_search` kennt.
+ *
+ * `[read]` `kcal_asc` und `name_asc` fehlen absichtlich. Wer erfasst,
+ * was er gegessen hat, sucht nicht das kalorienaermste Lebensmittel —
+ * er sucht SEINES. Relevanz ist die richtige Vorgabe, und Protein ist
+ * die eine Frage, die beim Erfassen wirklich gestellt wird.
+ */
+const SORTIERUNGEN: Array<{ code: 'relevance' | 'protein_desc'; label: string }> = [
+  { code: 'relevance', label: 'Relevanz' },
+  { code: 'protein_desc', label: 'Protein' },
+]
+
+/**
+ * Der Stil einer Filterpille — uebernommen aus `tab-foods.tsx` (G-73),
+ * damit beide Flaechen gleich aussehen.
+ *
+ * `[read]` Ueber `color-mix` gegen die Themenvariablen, nicht mit
+ * festen Farben: so traegt dieselbe Pille hell wie dunkel.
+ */
+function pillenStil(aktiv: boolean): React.CSSProperties {
+  return {
+    cursor: 'pointer', padding: '4px 10px', fontSize: 11,
+    borderColor: aktiv
+      ? 'color-mix(in oklch, var(--acc-nutri) 45%, var(--border))'
+      : 'var(--border)',
+    color: aktiv ? 'var(--acc-nutri)' : 'var(--fg-muted)',
+    background: aktiv
+      ? 'color-mix(in oklch, var(--acc-nutri) 10%, transparent)'
+      : 'var(--surface)',
+  }
+}
+
 /** Die Suche liefert numeric als Zeichenkette (PostgREST). */
 function n(v: string | null | undefined): string {
   const x = v === null || v === undefined ? NaN : Number(v)
@@ -425,6 +483,11 @@ function HinzufuegenModal({
   const [menge, setMenge] = React.useState('100')
   const [laeuft, setLaeuft] = React.useState(false)
   const [fehler, setFehler] = React.useState<string | null>(null)
+  // G-13: Filter, Sortierung und die Wirkung der Vorlieben.
+  const [tag, setTag] = React.useState<string | null>(null)
+  const [sortierung, setSortierung] = React.useState<'relevance' | 'protein_desc'>('relevance')
+  const [verborgen, setVerborgen] = React.useState<number | null>(null)
+  const [vorliebenAktiv, setVorliebenAktiv] = React.useState(false)
 
   React.useEffect(() => {
     const auf = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -439,9 +502,25 @@ function HinzufuegenModal({
     const t = setTimeout(async () => {
       setSucht(true)
       try {
-        const a = await fetch(`/api/nutrition/foods?q=${encodeURIComponent(frage)}&limit=12`)
+        const params = new URLSearchParams({
+          q: frage,
+          limit: '12',
+          sort: sortierung,
+          // `[read]` DIE VORLIEBEN GELTEN HIER (C-94). Ohne diesen
+          // Schalter sucht die Route den ganzen Katalog — dann stuenden
+          // Nuesse in der Liste, obwohl sie als Allergie hinterlegt
+          // sind. Die Kennung schickt der Browser NICHT mit; sie kommt
+          // serverseitig aus der Sitzung.
+          prefs: '1',
+        })
+        if (tag) params.set('tag', tag)
+        const a = await fetch(`/api/nutrition/foods?${params.toString()}`)
         const d = await a.json()
-        if (!weg) setTreffer(a.ok ? (d.foods ?? []) : [])
+        if (!weg) {
+          setTreffer(a.ok ? (d.foods ?? []) : [])
+          setVerborgen(typeof d.preferences_hidden === 'number' ? d.preferences_hidden : null)
+          setVorliebenAktiv(d.preferences_applied === true)
+        }
       } catch {
         if (!weg) setTreffer([])
       } finally {
@@ -449,7 +528,7 @@ function HinzufuegenModal({
       }
     }, 250)
     return () => { weg = true; clearTimeout(t) }
-  }, [frage, gewaehlt])
+  }, [frage, gewaehlt, tag, sortierung])
 
   async function waehle(f: NutritionFoodSearchRow) {
     setGewaehlt(f)
@@ -554,7 +633,108 @@ function HinzufuegenModal({
             onChange={e => { setFrage(e.target.value); setGewaehlt(null) }}
           />
 
+          {!gewaehlt && (
+            <div style={{
+              display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4,
+              marginTop: 8,
+            }}>
+              <Icon name="filter" className="v2-ic v2-ic-sm v2-dim" />
+              {FILTER.map(f => {
+                const an = tag === f.code
+                return (
+                  <button
+                    key={f.code}
+                    type="button"
+                    className="v2-pill"
+                    aria-pressed={an}
+                    style={pillenStil(an)}
+                    // `[cmd]` Die Zahl steht am Filter, damit niemand
+                    // raet, wie gross die Einschraenkung ist.
+                    title={`${f.anzahl.toLocaleString('de-DE')} Lebensmittel`}
+                    onClick={() => setTag(an ? null : f.code)}
+                  >
+                    {f.label}
+                    <span className="v2-num v2-dim" style={{ marginLeft: 5, fontSize: 10 }}>
+                      {f.anzahl.toLocaleString('de-DE')}
+                    </span>
+                  </button>
+                )
+              })}
+              {/*
+                `[read]` Eigene Zeile statt `marginLeft: auto`: bei vier
+                Filtern bleibt rechts kein Platz, die Sortierung bricht
+                ohnehin um — und `auto` wirkt nach einem Umbruch nicht
+                mehr. Lieber ein bewusster Umbruch als ein zufaelliger.
+              */}
+              <span style={{
+                flexBasis: '100%', display: 'flex', gap: 4,
+                justifyContent: 'flex-end',
+              }}>
+                <span className="v2-eyebrow" style={{ marginRight: 'auto' }}>
+                  Sortierung
+                </span>
+                {SORTIERUNGEN.map(s => (
+                  <button
+                    key={s.code}
+                    type="button"
+                    className="v2-pill"
+                    aria-pressed={sortierung === s.code}
+                    style={pillenStil(sortierung === s.code)}
+                    title={`Nach ${s.label} sortieren`}
+                    onClick={() => setSortierung(s.code)}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </span>
+            </div>
+          )}
+
           {sucht && <p className="v2-muted" style={{ fontSize: 12, marginTop: 10 }}>Sucht …</p>}
+
+          {/*
+            `[read]` WARUM DIESER HINWEIS SEIN MUSS: `[cmd]` „mandel"
+            liefert fuer `dev@lumeos.app` **0 von 64** Treffern, weil 63
+            davon `contains_nuts` tragen und die Nussallergie hart
+            ausschliesst. Ohne den Hinweis sieht das aus, als kenne die
+            Datenbank keine Mandeln — und der Nutzer sucht weiter.
+          */}
+          {!gewaehlt && !sucht && verborgen !== null && verborgen > 0 && (
+            <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 10 }}>
+              {treffer.length === 0 ? 'Kein Treffer — ' : ''}
+              {verborgen} {verborgen === 1 ? 'Eintrag ist' : 'Eintraege sind'} durch
+              deine Vorlieben ausgeblendet.
+            </p>
+          )}
+
+          {!gewaehlt && !sucht && verborgen === null
+            && frage.trim().length >= 2 && treffer.length === 0 && (
+            <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 10 }}>
+              Kein Treffer{tag ? ' mit diesem Filter' : ''}
+              {/*
+                `[read]` Wenn die Vorlieben griffen und trotzdem nichts
+                verborgen ist, liegt es NICHT an ihnen — das gehoert
+                dazugesagt, sonst sucht jemand den Fehler bei seinen
+                Einstellungen.
+              */}
+              {vorliebenAktiv ? ' — auch ohne deine Vorlieben nicht' : ''}.
+              {tag && (
+                <>
+                  {' '}
+                  <button
+                    type="button"
+                    onClick={() => setTag(null)}
+                    style={{
+                      background: 'none', border: 0, padding: 0, font: 'inherit',
+                      cursor: 'pointer', color: 'var(--acc-nutri)',
+                    }}
+                  >
+                    Filter aufheben
+                  </button>
+                </>
+              )}
+            </p>
+          )}
 
           {!gewaehlt && treffer.length > 0 && (
             <div className="v2-col-gap" style={{ gap: 6, marginTop: 10 }}>

@@ -19,9 +19,22 @@ export async function GET(request: NextRequest) {
   const limit = Number.parseInt(request.nextUrl.searchParams.get('limit') ?? '', 10)
   const offset = Number.parseInt(request.nextUrl.searchParams.get('offset') ?? '', 10)
   const sort = request.nextUrl.searchParams.get('sort') ?? ''
+  // Vorlieben anwenden (C-94) — `prefs=1` schaltet sie ein.
+  //
+  // `[read]` Die Kennung selbst steht NICHT in der Adresse: sie kommt
+  // aus der Sitzung (getLocalFoodSearch). Dieser Schalter waehlt nur
+  // zwischen „meine Vorlieben" und „ganzer Katalog" — er kann keine
+  // fremden Vorlieben anfordern.
+  //
+  // `[read]` AUS ist die Vorgabe, weil dieselbe Route den Katalog im
+  // Food-DB-Register bedient (G-73). Der Erfassungsdialog schaltet
+  // ein; wer nichts sagt, bekommt weiter den ganzen Bestand.
+  const applyPreferences = request.nextUrl.searchParams.get('prefs') === '1'
 
   try {
-    const payload = await getLocalFoodSearch(query, foodId, { category, categoryId, tag, limit, offset, sort })
+    const payload = await getLocalFoodSearch(query, foodId, {
+      category, categoryId, tag, limit, offset, sort, applyPreferences,
+    })
     const selectedIndex = foodId
       ? payload.foods.findIndex(food => food.id === foodId)
       : -1

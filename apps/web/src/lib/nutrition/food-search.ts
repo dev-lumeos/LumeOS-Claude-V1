@@ -5,6 +5,7 @@
 // Payload-Validierung und die URL-Helfer der Foods-Seite.
 
 import { NUTRITION_DB_SOURCE, isDbUnavailableMessage, nutritionRpc } from '@lumeos/shared/nutrition/db'
+import { createSessionClient } from '@lumeos/shared/session'
 import { buildFoodSearchTokenGroups } from './such-zerlegung'
 
 const LABEL_POLICY = 'bls_source_label_not_final_display_name'
@@ -79,6 +80,24 @@ export type NutritionFoodSearchPayload = {
   nutrients: NutritionFoodNutrientRow[]
   categories: NutritionFoodCategoryFacet[]
   tags: NutritionFoodTagFacet[]
+  /**
+   * Wurden die gespeicherten Vorlieben angewendet (C-94)?
+   *
+   * `[read]` Die Oberflaeche braucht das, um eine leere Liste zu
+   * ERKLAEREN. `[cmd]` „mandel" liefert fuer `dev@lumeos.app` **0 von
+   * 64** Treffern, weil 63 davon `contains_nuts` tragen — ohne diesen
+   * Hinweis sieht das aus, als kenne die Datenbank keine Mandeln.
+   */
+  preferences_applied: boolean
+  /**
+   * Wieviele Treffer die Vorlieben verbergen: die Differenz zur
+   * gleichen Suche ohne Vorlieben.
+   *
+   * `null`, solange sie nicht angewendet wurden — dann gibt es nichts
+   * zu vergleichen, und eine 0 waere eine Aussage, die niemand gemessen
+   * hat.
+   */
+  preferences_hidden: number | null
 }
 
 export const NUTRITION_SEARCH_SESSION_COOKIE = 'lumeos-nutrition-search-session'
@@ -162,6 +181,21 @@ export type FoodSearchRpcArgs = {
   p_preparations: string[]
   p_groups: string[]
   p_basics_only: boolean
+  /**
+   * Die angemeldete Nutzerin — dafuer wendet `food_search` seit C-94 die
+   * gespeicherten Vorlieben an (`hard_exclude` schliesst aus, `liked`
+   * hebt an).
+   *
+   * `[cmd]` NULL behaelt die ungefilterte Suche — so steht es im
+   * Funktionskommentar von 075: *„p_user_id NULL behaelt die
+   * ungefilterte Suche"*.
+   *
+   * `[read]` DER WERT KOMMT AUS DER SITZUNG, NIE AUS DER ANFRAGE. Wer
+   * ihn als Parameter durchreichen liesse, koennte eine fremde Kennung
+   * schicken und aus dem Unterschied der Trefferzahlen fremde
+   * Allergien ablesen — die Vorlieben sind Gesundheitsdaten.
+   */
+  p_user_id: string | null
 }
 
 export class LocalFoodSearchError extends Error {
@@ -303,6 +337,7 @@ export function buildFoodSearchRpcArgs(
     preparations?: string[]
     groups?: string[]
     basicsOnly?: boolean
+    userId?: string | null
   } = {},
 ): FoodSearchRpcArgs {
   return {
@@ -324,6 +359,7 @@ export function buildFoodSearchRpcArgs(
     p_preparations: (options.preparations ?? []).map(c => c.trim()).filter(Boolean),
     p_groups: (options.groups ?? []).map(c => c.trim().toUpperCase()).filter(Boolean),
     p_basics_only: options.basicsOnly === true,
+    p_user_id: options.userId?.trim() ? options.userId.trim() : null,
   }
 }
 
@@ -466,6 +502,10 @@ export function parseFoodSearchPayload(input: unknown): NutritionFoodSearchPaylo
     nutrients,
     categories,
     tags,
+    // Die Datenbankfunktion meldet beides nicht — es entsteht erst im
+    // Aufruf (getLocalFoodSearch). Hier steht der ehrliche Grundwert.
+    preferences_applied: false,
+    preferences_hidden: null,
   }
 }
 
@@ -537,6 +577,26 @@ export async function getFoodGroupFacets(): Promise<NutritionFoodGroupFacet[]> {
   }
 }
 
+/**
+ * Die Kennung der angemeldeten Nutzerin fuer `p_user_id`.
+ *
+ * `[read]` Sie wird HIER gelesen und nicht von der Route
+ * durchgereicht: die Vorlieben sind Gesundheitsdaten, und eine Kennung
+ * aus der Anfrage waere eine fremde Kennung, sobald es jemand
+ * versucht. Der Sitzungsclient kennt nur die eigene.
+ *
+ * Schlaegt der Aufruf fehl, bleibt es bei `null` — dann sucht die
+ * Funktion ungefiltert weiter, statt dass die Suche ausfaellt.
+ */
+async function angemeldeteKennung(): Promise<string | null> {
+  try {
+    const { data } = await createSessionClient().auth.getUser()
+    return data.user?.id ?? null
+  } catch {
+    return null
+  }
+}
+
 export async function getLocalFoodSearch(
   query: string,
   selectedFoodId?: string,
@@ -550,9 +610,28 @@ export async function getLocalFoodSearch(
     preparations?: string[]
     groups?: string[]
     basicsOnly?: boolean
+    /**
+     * Vorlieben anwenden (C-94). Vorgabe: NEIN.
+     *
+     * `[read]` DIE VORGABE IST BEWUSST AUS. Vier Stellen rufen diese
+     * Funktion; drei davon sind Kataloge — das Food-DB-Register
+     * (G-73), die Foods-Seite und die Startliste in
+     * `v2/nutrition/page.tsx`. Ein Katalog, dem Eintraege fehlen, ist
+     * kaputt, nicht hilfreich.
+     *
+     * `[cmd]` Bei der Startliste kaeme es zusaetzlich darauf an: sie
+     * sucht mit LEERER Anfrage, und bei leerer Anfrage schliesst
+     * `food_search` auch `strong_avoid` aus (075, Zeile 455) — der
+     * Filter wirkt dort also breiter als anderswo.
+     *
+     * `[read]` Der Erfassungsdialog ist etwas anderes: was dort
+     * ausgewaehlt wird, wird gegessen. Er schaltet es ein.
+     */
+    applyPreferences?: boolean
   } = {},
 ): Promise<NutritionFoodSearchPayload> {
-  const args = buildFoodSearchRpcArgs(query, selectedFoodId, options)
+  const userId = options.applyPreferences === true ? await angemeldeteKennung() : null
+  const args = buildFoodSearchRpcArgs(query, selectedFoodId, { ...options, userId })
 
   try {
     const { data, error } = await nutritionRpc().rpc('food_search', args)
@@ -562,7 +641,14 @@ export async function getLocalFoodSearch(
         error.message,
       )
     }
-    return parseFoodSearchPayload(data)
+    const payload = parseFoodSearchPayload(data)
+    if (!userId) return payload
+
+    return {
+      ...payload,
+      preferences_applied: true,
+      preferences_hidden: await verborgeneTreffer(args, payload.total),
+    }
   } catch (error) {
     if (error instanceof LocalFoodSearchError) throw error
     const message = error instanceof Error ? error.message : String(error)
@@ -570,6 +656,37 @@ export async function getLocalFoodSearch(
       isDbUnavailableMessage(message) ? 'LOCAL_DB_UNAVAILABLE' : 'LOCAL_FOOD_QUERY_FAILED',
       message,
     )
+  }
+}
+
+/**
+ * Wieviele Treffer die Vorlieben verbergen — dieselbe Suche noch einmal
+ * mit `p_user_id = NULL`.
+ *
+ * `[read]` DAS KOSTET EINEN ZWEITEN AUFRUF, deshalb nur dann, wenn die
+ * Antwort auch gebraucht wird: bei einer leeren oder auffallend kurzen
+ * Trefferliste. Wer 40 Treffer sieht, fragt nicht nach den fehlenden;
+ * wer keinen sieht, fragt sofort.
+ *
+ * Schlaegt der zweite Aufruf fehl, ist die Antwort `null` — die Suche
+ * selbst ist da laengst geglueckt und wird davon nicht mit
+ * heruntergerissen.
+ */
+const HINWEIS_SCHWELLE = 5
+
+async function verborgeneTreffer(
+  args: FoodSearchRpcArgs,
+  gefiltert: number,
+): Promise<number | null> {
+  if (gefiltert > HINWEIS_SCHWELLE) return null
+  try {
+    const { data, error } = await nutritionRpc()
+      .rpc('food_search', { ...args, p_user_id: null, p_limit: 1 })
+    if (error) return null
+    const differenz = parseFoodSearchPayload(data).total - gefiltert
+    return differenz > 0 ? differenz : null
+  } catch {
+    return null
   }
 }
 
