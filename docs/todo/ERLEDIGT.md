@@ -8692,3 +8692,67 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   messen wollte** — `fasting_status` sagt, **ob der Patient nuechtern
   war.** Bei einem Wert ohne Fasting-Code waere die Angabe die einzige
   Quelle. **Schemafrage fuer den Importpfad, keine Anzeigefrage.**
+
+
+- [x] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik**
+  (erledigt 2026-08-20, Bericht `docs/ssot/144-erfassungsdialog.md`).
+
+  **Tom, 2026-08-17:** *„Add food — da muss unsere ganze Logik rein mit
+  Filter und Suche und Alias und richtige Begriffe wie weisser Reis
+  anstatt Reis poliert."*
+
+  **Der Auftrag beschrieb die falsche Datei.** `[cmd]` `erfassen.tsx`
+  (477 Zeilen) hat **null Importeure**; der ausgelieferte Dialog ist
+  `HinzufuegenModal` in `mahlzeiten.tsx:410`. Die Befunde des Auftrags
+  stimmten trotzdem — beide Dateien riefen die Suche ohne jeden
+  Parameter auf.
+
+  **Die Vorlieben gelten jetzt (C-94).** `[cmd]` `p_user_id` fehlte an
+  **drei** Stellen, nicht an einer: Argumenttyp, `getLocalFoodSearch`,
+  Route. **Die Kennung kommt aus der Sitzung, nie aus der Anfrage** —
+  ein durchgereichter Parameter haette aus dem Unterschied der
+  Trefferzahlen fremde Allergien verraten.
+
+  `[cmd]` **Gemessen 2026-08-20 fuer `dev@lumeos.app`:** „mandel"
+  **64 → 0**, „erdnuss" 10 → 0, „walnuss" 6 → 0, „nuss" 125 → 42.
+  Ursache ist `hard_exclude` auf `contains_nuts`; **63 der 64
+  Mandel-Treffer tragen den Tag** — die Null ist richtig.
+
+  `[read]` **Eine leere Liste ohne Begruendung ist ein Fehler in der
+  Oberflaeche.** Die Route meldet deshalb `preferences_applied` und
+  `preferences_hidden`, der Dialog schreibt *„Kein Treffer — 64
+  Eintraege sind durch deine Vorlieben ausgeblendet."* Der Zweitaufruf
+  laeuft nur bis 5 Treffer; `total` ist limitunabhaengig, deshalb
+  `p_limit: 1`.
+
+  `[cmd]` **Vier Filter, 4/4 gegen SQL:** vegetarian 1.751, vegan
+  1.377, high_protein 1.400, whole_food 2.884. Zwei Sortierungen —
+  „kaese" fuehrt nach Relevanz mit 0,2 g P, nach Protein mit **35,6 g**.
+
+  `[read]` **Weggelassen und begruendet:** 13 Kategoriepillen, fuenf
+  Tag-Filter, `kcal_asc`/`name_asc`, und der Allergen-Ausschluss aus
+  G-73 — **letzterer waere hier der schlechtere von zwei Wegen**, weil
+  C-94 dasselbe ueber alle 7.140 leistet.
+
+  `[cmd]` **Der Katalog bleibt ungefiltert:** Vorgabe AUS, `prefs=1`
+  schaltet ein. Drei der vier Aufrufer sind Kataloge; bei der **leeren**
+  Anfrage der Startliste schloesse `food_search` zusaetzlich
+  `strong_avoid` aus (075:455).
+
+  `[cmd]` **Zeilenschutz:** `test-user@lumeos.local` (0 Vorlieben) sieht
+  **64/125**, wo `dev` 0/42 sieht.
+
+  `[cmd]` **Gate 5/7.** Die zwei roten Tests (107/108) lesen
+  ausschliesslich `supplements/tabs.tsx`, dessen uneingecheckter
+  Arbeitsstand **0 statt 16** `RUECKFALL`-Marken traegt — nicht aus
+  diesem Auftrag. Typecheck sauber, vier Breiten fotografiert (1440,
+  1280, 768, **375**), hell und dunkel.
+
+  **Nachweis ohne Konsolenfenster** (Tom, 2026-08-20: *„Keine
+  Konsolenfenster. Punkt."*): gstack-Browser gestoppt, `tools/lauf.py`
+  um `npx`/`pnpm`/`node`/`hole` und `tools/schuss.mjs` um
+  `--klick`/`--tippe` **erweitert statt danebengeschrieben**.
+  `[cmd]` Die HTTP-Anmeldung braucht `sb-127-auth-token` als **JSON,
+  nicht `base64-`-praefixiert** — `@supabase/ssr` ist hier **0.1.0**.
+
+  **Offen geblieben:** der Namensteil (G-93) und die tote Datei (G-94).

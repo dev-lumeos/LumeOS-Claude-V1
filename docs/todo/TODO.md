@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `ebd9f6e` auf `dev`.
+**Stand:** 2026-08-18, Anker `81984ae` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 115 offen, 1 in Arbeit.
+`[cmd]` 117 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -180,7 +180,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-83** | Es gibt kein Onboarding |  |
-| **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
+| **G-93** | Der Anzeigename fehlt im laufenden Erfassungsdialog |  |
+| **G-94** | `erfassen.tsx` ist toter Code |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **C-88** | Jedes neue Schema braucht eine Zeile in `config.toml` |  |
@@ -230,8 +231,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-92** | Das Extended-Gate schuetzt nichts |  |
 | **C-149** | Vitamin D in IU gegen µg |  |
 | **A-25** | Der Encoding-Pruefer scannt Build-Verzeichnisse |  |
-| **G-93** | Sieben Module, aber nicht dieselben sieben |  |
-| **G-94** | Der Bestaetigungspfad wechselt nur den Zustand |  |
+| **G-95** | Sieben Module, aber nicht dieselben sieben |  |
+| **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **C-151** | Das Coach-Portal — neun Entscheidungen |  |
 | **C-152** | `schema-sollstand.json` fuehrt vier Training-Tabellen nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -248,6 +249,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **C-139** | Die 503 Wirkstoffe sind nicht importierbar |  |
 | **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
+| **A-28** | Der Attrappen-Test blockiert das Gate |  |
 
 ---
 
@@ -1551,10 +1553,67 @@ Umsetzen angepasst werden.
   `very_active` gegen 0,58 Trainings je Woche, **1.030 kcal Abstand
   zwischen Formel und Messung.**
 
-- [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
-  2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
-  Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
-  weisser Reis anstatt Reis poliert."*
+- [x] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik**
+  (neu 2026-08-17, **erledigt 2026-08-20** — Bericht
+  `docs/ssot/144-erfassungsdialog.md`).
+
+  **Gebaut:** Vorlieben (C-94) gelten jetzt beim Erfassen — `p_user_id`
+  aus der SITZUNG, nicht aus der Anfrage. `[cmd]` Fuer `dev@lumeos.app`
+  faellt „mandel" von **64 auf 0** (Nussallergie, 63 der 64 Treffer
+  tragen `contains_nuts`), „nuss" von 125 auf 42. **Dazu der Satz, der
+  die leere Liste erklaert** („64 Eintraege sind durch deine Vorlieben
+  ausgeblendet") — sonst sieht das wie ein Datenbankfehler aus.
+  **Vier Filter, 4/4 gegen SQL geprueft** (1.751 / 1.377 / 1.400 /
+  2.884), zwei Sortierungen. **Zeilenschutz:** `test-user` sieht
+  64/125, wo `dev` 0/42 sieht.
+
+  `[cmd]` **Der Auftrag nannte die falsche Datei:** `erfassen.tsx` hat
+  **null Importeure**; gebaut wurde in `mahlzeiten.tsx`
+  (`HinzufuegenModal`).
+
+  **OFFEN GEBLIEBEN — der Namensteil, siehe G-93.**
+
+- [ ] **G-93: Der Anzeigename fehlt im laufenden Erfassungsdialog**
+  (neu 2026-08-20, aus G-13).
+
+  **Tom, 2026-08-17:** *„richtige Begriffe wie weisser Reis anstatt
+  Reis poliert."*
+
+  `[cmd]` **Der Punkt galt weiter, nur nicht dort, wo G-13 ihn suchte.**
+  Der G-13-Auftrag hielt ihn fuer erledigt — **erledigt ist er in
+  `erfassen.tsx`, und die Datei wird nicht ausgeliefert.**
+
+  `[cmd]` **Die laufende Fassung `mahlzeiten.tsx` zeigt `name_de` an
+  drei Stellen:** **750** (Trefferliste), **766** (Auswahlkopf), **535**
+  (was nach der Auswahl im Suchfeld steht).
+
+  `[cmd]` **5.014 von 7.140** Eintraegen tragen einen abweichenden
+  `name_display_de` — gemessen 2026-08-20, **nicht 2.870 wie frueher
+  notiert.** `food_search` liefert beide Felder, `food-search.ts` kennt
+  beide.
+
+  `[read]` **Eine Zeile je Stelle:** `f.name_display_de || f.name_de`.
+  Der Rueckfall bleibt noetig, weil nicht jeder Eintrag einen
+  Anzeigenamen hat.
+
+- [ ] **G-94: `erfassen.tsx` ist toter Code** (neu 2026-08-20, aus
+  G-13).
+
+  `[cmd]` **477 Zeilen, null Importeure** —
+  `grep -rn "from './erfassen'" apps/web/src/` findet nichts. Die Datei
+  traegt eine vollstaendige zweite Fassung des Erfassungsdialogs, samt
+  eigener CSS-Klasse `v2-suchblock`, die in keiner ausgelieferten Seite
+  vorkommt.
+
+  `[read]` **Sie hat einen Auftrag gekostet:** G-13 beschrieb sie als
+  den Dialog, und die Befunde stimmten sogar — nur ohne Wirkung.
+  **Loeschen oder anschliessen**, aber nicht so stehen lassen.
+
+  `[read]` Vor dem Loeschen nachsehen, ob sie etwas kann, was
+  `mahlzeiten.tsx` nicht kann (sie fuehrt z. B. `MEAL_TYPES` als
+  Anlege-Knoepfe).
+
+  **Alter Wortlaut des Punktes, zur Herkunft:**
 
   **Der Dialog zeigt den falschen Namen.** `[cmd]` Er zeigt
   `Reis poliert, roh` — das ist `name_de`, der amtliche BLS-Wortlaut.
@@ -2968,7 +3027,7 @@ Umsetzen angepasst werden.
   **Zu tun:** `.next*` ausnehmen. `[read]` **Erzeugte Dateien sind keine
   Quelldateien.**
 
-- [ ] **G-93: Sieben Module, aber nicht dieselben sieben** (neu
+- [ ] **G-95: Sieben Module, aber nicht dieselben sieben** (neu
   2026-08-20). Befund aus G-90.
 
   `[cmd]` **Mockup und Schema fuehren beide sieben Module** — aber
@@ -2980,7 +3039,7 @@ Umsetzen angepasst werden.
   **Zu klaeren:** Welche sieben gelten? `[read]` **`buddy` passt zum
   F-03-Entwurf** — dort steht Buddy als Spalte in derselben Matrix.
 
-- [ ] **G-94: Der Bestaetigungspfad wechselt nur den Zustand** (neu
+- [ ] **G-96: Der Bestaetigungspfad wechselt nur den Zustand** (neu
   2026-08-20). Befund aus G-90.
 
   `[cmd]` **Gebaut ist der Zustandswechsel, nicht die Ausfuehrung:**
@@ -3343,3 +3402,21 @@ Umsetzen angepasst werden.
 
   **Zu tun:** Test auf den gemessenen Stand ziehen — **oder ihn durch
   die gerenderte Zaehlung ersetzen.**
+
+- [ ] **A-28: Der Attrappen-Test blockiert das Gate** (neu 2026-08-20).
+  **Zusammenfuehrung von A-27.**
+
+  `[cmd]` **Zwei rote Tests, beide auf `supplements/tabs.tsx`** — der
+  G-13-Agent misst *„0 statt 16 `RUECKFALL`-Marken"*, Codex meldete
+  *„erwartet 1, findet 17"*.
+
+  `[read]` **Der Stand ist uncommittet und stammt von G-91** — zwei
+  Agenten haben nacheinander gezaehlt, keiner hat den Test nachgezogen.
+
+  `[cmd]` **A-24 haelt fest, dass Textmarken kein Mass sind.** Und
+  `tools/schuss.mjs` misst seit heute die **gerenderte** Seite — in
+  einem Aufruf, mit Attrappenzahl und Konsolenfehlern.
+
+  **Zu tun:** Test auf den gemessenen Stand ziehen, **oder ihn durch die
+  gerenderte Zaehlung ersetzen.** `[read]` **Das Zweite waere die
+  Loesung, nicht die Reparatur.**
