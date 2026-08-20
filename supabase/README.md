@@ -129,6 +129,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 145 | `14_medical/145_medications_schema.sql` | Medikamente und Conditions: Katalogtabellen, `user_medications`, `user_conditions` | 5 Tabellen, RLS je Operation auf Nutzerdaten |
 | 146 | `14_medical/146_medications_katalog.ts` | Kimi-Medikamentenkatalog aus `backup/kimi-research/.../data/medications/` | 56 Wirkstoffe, 119 Formulierungen, 124 Produkte |
 | 146a | `13_supplements/132a_rule_input_status.sql` | Regel-Eingangsdiagnose für Kimi-Regeln: fehlende Pfade werden als `missing_input` gemeldet | 1 Funktion, kein Regelimport |
+| 133 | `13_supplements/133_kimi_rules.ts` | Kimi-Warn-, Gap- und Medikamentenregeln als Katalogdaten, plus dreistufige Regelauswertung | 29 Warnregeln, 15 Gap-Regeln, 20 Medikamentenregeln |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am`; Zielhistorie kennt `achieved`, `missed`, `abandoned` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |
@@ -138,6 +139,10 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 017 | `00_querschnitt/017_datenherkunft.sql` | A-17 Herkunftsspalten fuer User-Messdaten vor Geraeteanbindungen | 7 Tabellen ergaenzt, Bestandsdaten `manual` |
 | 058b | `05_user_tabellen/058b_recipes_meal_plans.sql` | Rezepte, Rezeptzutaten, Wochenplaene und Uebernahmefunktionen; Naehrwerte bleiben aus Zutaten berechnet und werden erst in `meal_items` eingefroren | 6 Tabellen, 4 Funktionen, RLS je Operation |
 | 150 | `15_coach/150_coach_permissions_autonomy.sql` | Coach-Rechtemodell: `client_permissions`, `client_autonomy`, Widerrufshistorie, Pending Actions und Action Log | 6 Tabellen, 19 Policies, RLS je Operation |
+| 151 | `15_coach/151_coach_relationships.sql` | Coach-Beziehung mit Anbahnung, Annahme, Ende und Historie: `relationships`, `relationship_change_log` | 2 Tabellen, 5 Policies, kein DELETE |
+| 152 | `15_coach/152_coach_lesepfad.sql` | Coach-Lesepfad: `coach.hat_sicht()` als eine Sichtregel, full-Policies auf den Nutzerdaten der sechs Module, summary-Funktionen je Modul | 22 `coach_read`-Policies, 7 Funktionen |
+| 153 | `15_coach/153_coach_checkins.sql` | Check-in-Vorlagen und -Instanzen mit Statusmaschine `pending/submitted/reviewed/missed`; Analyse rechnet die Anwendung, nicht die DB | 2 Tabellen, 7 Policies |
+| 154 | `15_coach/154_coach_messages_alerts.sql` | Nachrichten Coach↔Klient und Alerts als Arbeitsliste — beide RLS, Alerts bewusst ohne Schweregrad | 2 Tabellen, 6 Policies |
 
 **Reihenfolge innerhalb von 05:** `[cmd]` `053` braucht `meals` aus `052`,
 `055` braucht `nutrition.touch_updated_at()` aus `052`, `056` braucht

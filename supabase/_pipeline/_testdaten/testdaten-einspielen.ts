@@ -2445,6 +2445,14 @@ DELETE FROM coach.action_log WHERE coach_id IN (${allSeedUserIds}) OR client_id 
 DELETE FROM coach.pending_actions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
 DELETE FROM coach.permission_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
 DELETE FROM coach.autonomy_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.alerts WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.messages WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.checkins WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.checkin_templates WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+DELETE FROM coach.relationship_change_log WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+ALTER TABLE coach.relationships DISABLE TRIGGER relationships_change_log;
+DELETE FROM coach.relationships WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
+ALTER TABLE coach.relationships ENABLE TRIGGER relationships_change_log;
 ALTER TABLE coach.client_permissions DISABLE TRIGGER client_permissions_change_log;
 ALTER TABLE coach.client_autonomy DISABLE TRIGGER client_autonomy_change_log;
 DELETE FROM coach.client_permissions WHERE coach_id IN (${allSeedUserIds}) OR client_id IN (${allSeedUserIds});
@@ -2633,6 +2641,222 @@ VALUES (
   'adjust_training_day',
   '{"day":"upper","change":"Bench-Topset priorisiert"}'::jsonb,
   '{"restore":{"day":"upper","change":"vorherige Uebungsreihenfolge"}}'::jsonb,
+  ${lit(COACH_USER.id)}::uuid
+);
+
+-- ------------------------------------------------------------------
+-- F-07: Beziehungen, Rechte fuer den zweiten Athleten, Check-ins,
+-- Nachrichten und Alerts. Drei Athleten in drei Zustaenden:
+--   tom.seed   aktiv, differenzierte Rechte (C-147)
+--   max.seed   aktiv, nur summary auf Training/Recovery
+--   sarah.seed eingeladen, noch keine Rechte
+-- Daten relativ zu current_date — der Vorrat altert nicht (C-78-Regel).
+-- ------------------------------------------------------------------
+
+INSERT INTO coach.relationships (
+  id, coach_id, client_id, status, invited_by, invite_note, started_at, changed_by
+)
+VALUES
+(
+  '60000000-0000-0000-0000-000000000201'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'active',
+  ${lit(COACH_USER.id)}::uuid,
+  'F-07 Seed: aktive Beziehung seit 120 Tagen',
+  now() - interval '120 days',
+  ${lit(COACH_USER.id)}::uuid
+),
+(
+  '60000000-0000-0000-0000-000000000202'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000102'::uuid,
+  'active',
+  ${lit(COACH_USER.id)}::uuid,
+  'F-07 Seed: aktive Beziehung seit 45 Tagen',
+  now() - interval '45 days',
+  ${lit(COACH_USER.id)}::uuid
+),
+(
+  '60000000-0000-0000-0000-000000000203'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000103'::uuid,
+  'invited',
+  ${lit(COACH_USER.id)}::uuid,
+  'F-07 Seed: Einladung offen, keine Rechte',
+  NULL,
+  ${lit(COACH_USER.id)}::uuid
+);
+
+INSERT INTO coach.client_permissions (
+  id, coach_id, client_id,
+  nutrition_visibility, training_visibility, recovery_visibility, goals_visibility,
+  supplements_visibility, medical_visibility, buddy_visibility,
+  client_note, changed_by
+)
+VALUES (
+  '60000000-0000-0000-0000-000000000204'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000102'::uuid,
+  'none', 'summary', 'summary', 'none',
+  'none', 'none', 'none',
+  'F-07 Seed: Max gibt nur Training und Recovery als Zusammenfassung frei',
+  '10000000-0000-0000-0000-000000000102'::uuid
+);
+
+INSERT INTO coach.client_autonomy (
+  id, coach_id, client_id,
+  nutrition_level, training_level, recovery_level, goals_level,
+  supplements_level, medical_level, buddy_level, safety_level,
+  coach_note, changed_by
+)
+VALUES (
+  '60000000-0000-0000-0000-000000000205'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000102'::uuid,
+  2, 2, 2, 2, 2, 2, 2, 1,
+  'F-07 Seed: Ausgangszustand fuer den zweiten Athleten',
+  ${lit(COACH_USER.id)}::uuid
+);
+
+INSERT INTO coach.checkin_templates (
+  id, coach_id, client_id, name, cadence, fields, changed_by
+)
+VALUES (
+  '60000000-0000-0000-0000-000000000206'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'Woechentlicher Standard',
+  'weekly',
+  '[
+    {"key":"gewicht_kg","label":"Gewicht (kg)","typ":"zahl"},
+    {"key":"energie","label":"Energie (1-10)","typ":"zahl"},
+    {"key":"schlaf","label":"Schlaf (1-10)","typ":"zahl"},
+    {"key":"training_verlauf","label":"Wie lief das Training?","typ":"text"},
+    {"key":"fragen","label":"Offene Fragen","typ":"text"}
+  ]'::jsonb,
+  ${lit(COACH_USER.id)}::uuid
+);
+
+INSERT INTO coach.checkins (
+  id, coach_id, client_id, template_id, due_date, status,
+  auto_data, client_data, client_note, coach_feedback, coach_notes,
+  submitted_at, reviewed_at, changed_by
+)
+VALUES
+(
+  '60000000-0000-0000-0000-000000000207'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  '60000000-0000-0000-0000-000000000206'::uuid,
+  current_date - 8,
+  'reviewed',
+  '{"training":{"freigegeben":true,"einheiten_30d":9,"letzte_einheit_tage":2},"nutrition":{"freigegeben":true,"kcal_schnitt":2431}}'::jsonb,
+  '{"gewicht_kg":85.4,"energie":7,"schlaf":7,"training_verlauf":"Bank fuehlte sich schwer an, Rest gut.","fragen":"Refeed am Samstag ok?"}'::jsonb,
+  'Woche war stressig im Job.',
+  'Gute Woche. Refeed Samstag passt — Protein halten. Bank beobachten wir.',
+  'Bank-Topset stagniert zweite Woche, beim naechsten Block adressieren.',
+  now() - interval '8 days',
+  now() - interval '7 days',
+  ${lit(COACH_USER.id)}::uuid
+),
+(
+  '60000000-0000-0000-0000-000000000208'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  '60000000-0000-0000-0000-000000000206'::uuid,
+  current_date - 1,
+  'submitted',
+  '{"training":{"freigegeben":true,"einheiten_30d":10,"letzte_einheit_tage":1},"nutrition":{"freigegeben":true,"kcal_schnitt":2405}}'::jsonb,
+  '{"gewicht_kg":84.9,"energie":6,"schlaf":6,"training_verlauf":"Deadlift-PR, sonst solide.","fragen":"Schlaf ist schlechter geworden, Ideen?"}'::jsonb,
+  NULL,
+  NULL,
+  NULL,
+  now() - interval '1 day',
+  NULL,
+  '10000000-0000-0000-0000-000000000101'::uuid
+),
+(
+  '60000000-0000-0000-0000-000000000209'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  '60000000-0000-0000-0000-000000000206'::uuid,
+  current_date + 6,
+  'pending',
+  '{}'::jsonb,
+  '{}'::jsonb,
+  NULL, NULL, NULL,
+  NULL, NULL,
+  ${lit(COACH_USER.id)}::uuid
+);
+
+INSERT INTO coach.messages (
+  id, coach_id, client_id, sender_id, body, sent_at, read_at
+)
+VALUES
+(
+  '60000000-0000-0000-0000-000000000210'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  'Check-in ist reviewt — Feedback steht drin. Meld dich bei Fragen.',
+  now() - interval '7 days',
+  now() - interval '7 days' + interval '3 hours'
+),
+(
+  '60000000-0000-0000-0000-000000000211'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'Danke! Refeed hat gut getan. Neuer Check-in ist eingereicht.',
+  now() - interval '1 day',
+  NULL
+),
+(
+  '60000000-0000-0000-0000-000000000212'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000102'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  'Willkommen an Bord — sobald du magst, schalte weitere Module frei.',
+  now() - interval '44 days',
+  NULL
+);
+
+INSERT INTO coach.alerts (
+  id, coach_id, client_id, module, title, detail, metric, status, created_by
+)
+VALUES
+(
+  '60000000-0000-0000-0000-000000000213'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'general',
+  'Check-in eingereicht, Review offen',
+  'Der Check-in vom Vortag wartet auf eine Antwort.',
+  jsonb_build_object('eingereicht_vor_tagen', 1),
+  'open',
+  ${lit(COACH_USER.id)}::uuid
+),
+(
+  '60000000-0000-0000-0000-000000000214'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'nutrition',
+  'Kalorienschnitt 7 Tage unter Ziel',
+  'Schnitt 2.405 kcal gegen Ziel 2.500 kcal ueber die letzten 7 Tage.',
+  '{"kcal_schnitt_7d":2405,"kcal_ziel":2500}'::jsonb,
+  'open',
+  ${lit(COACH_USER.id)}::uuid
+),
+(
+  '60000000-0000-0000-0000-000000000215'::uuid,
+  ${lit(COACH_USER.id)}::uuid,
+  '10000000-0000-0000-0000-000000000102'::uuid,
+  'recovery',
+  'Recovery-Schnitt gegenueber Vorwoche gefallen',
+  '7-Tage-Schnitt 62 gegen 70 in der Vorwoche.',
+  '{"score_schnitt_7d":62,"score_vorwoche":70}'::jsonb,
+  'read',
   ${lit(COACH_USER.id)}::uuid
 );
 
@@ -3657,6 +3881,37 @@ BEGIN
   RAISE NOTICE 'OK: C-147 Coach-Testdaten: % Permissions, % Autonomy, % Pending, % Actions, %/% Logs',
     v_coach_permissions, v_coach_autonomy, v_coach_pending, v_coach_actions,
     v_permission_logs, v_autonomy_logs;
+END $$;
+
+DO $$
+DECLARE
+  v_relationships integer;
+  v_rel_logs integer;
+  v_templates integer;
+  v_checkins integer;
+  v_messages integer;
+  v_alerts integer;
+BEGIN
+  SELECT count(*) INTO v_relationships FROM coach.relationships WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
+  SELECT count(*) INTO v_rel_logs FROM coach.relationship_change_log WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
+  SELECT count(*) INTO v_templates FROM coach.checkin_templates WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
+  SELECT count(*) INTO v_checkins FROM coach.checkins WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
+  SELECT count(*) INTO v_messages FROM coach.messages WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
+  SELECT count(*) INTO v_alerts FROM coach.alerts WHERE coach_id = ${lit(COACH_USER.id)}::uuid;
+
+  IF v_relationships <> 3 THEN
+    RAISE EXCEPTION 'F-07: % Beziehungen statt 3', v_relationships;
+  END IF;
+  IF v_rel_logs < 3 THEN
+    RAISE EXCEPTION 'F-07: % Beziehungs-Logzeilen statt >= 3', v_rel_logs;
+  END IF;
+  IF v_templates <> 1 OR v_checkins <> 3 OR v_messages <> 3 OR v_alerts <> 3 THEN
+    RAISE EXCEPTION 'F-07: Vorlagen %, Check-ins %, Nachrichten %, Alerts % — erwartet 1/3/3/3',
+      v_templates, v_checkins, v_messages, v_alerts;
+  END IF;
+
+  RAISE NOTICE 'OK: F-07 Coach-Portal-Testdaten: % Beziehungen, % Vorlagen, % Check-ins, % Nachrichten, % Alerts',
+    v_relationships, v_templates, v_checkins, v_messages, v_alerts;
 END $$;
 
 COMMIT;

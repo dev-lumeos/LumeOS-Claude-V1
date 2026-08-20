@@ -139,6 +139,10 @@ const substanceLocalKimiMatches = numberScalar(`
   FROM supplements.substance_alias_matches
   WHERE (catalog_a = 'kimi_substance' AND catalog_b = 'lumeos_supplement_catalog')
      OR (catalog_a = 'lumeos_supplement_catalog' AND catalog_b = 'kimi_substance');`)
+const ruleCatalog = numberScalar(`SELECT count(*) FROM supplements.rule_catalog;`)
+const ruleWarning = numberScalar(`SELECT count(*) FROM supplements.rule_catalog WHERE rule_type = 'warning';`)
+const ruleGap = numberScalar(`SELECT count(*) FROM supplements.rule_catalog WHERE rule_type = 'nutrient_gap';`)
+const ruleMedication = numberScalar(`SELECT count(*) FROM supplements.rule_catalog WHERE rule_type = 'medication';`)
 const supplementStacks = numberScalar(`SELECT count(*) FROM supplements.user_stacks WHERE user_id IN (${IDS_SQL});`)
 const supplementStackItems = numberScalar(`
   SELECT count(*)
@@ -152,6 +156,12 @@ const coachPendingActions = numberScalar(`SELECT count(*) FROM coach.pending_act
 const coachActionLog = numberScalar(`SELECT count(*) FROM coach.action_log WHERE client_id IN (${IDS_SQL});`)
 const coachPermissionLogs = numberScalar(`SELECT count(*) FROM coach.permission_change_log WHERE client_id IN (${IDS_SQL});`)
 const coachAutonomyLogs = numberScalar(`SELECT count(*) FROM coach.autonomy_change_log WHERE client_id IN (${IDS_SQL});`)
+const coachRelationships = numberScalar(`SELECT count(*) FROM coach.relationships WHERE client_id IN (${IDS_SQL});`)
+const coachRelationshipLogs = numberScalar(`SELECT count(*) FROM coach.relationship_change_log WHERE client_id IN (${IDS_SQL});`)
+const coachCheckinTemplates = numberScalar(`SELECT count(*) FROM coach.checkin_templates WHERE client_id IN (${IDS_SQL});`)
+const coachCheckins = numberScalar(`SELECT count(*) FROM coach.checkins WHERE client_id IN (${IDS_SQL});`)
+const coachMessages = numberScalar(`SELECT count(*) FROM coach.messages WHERE client_id IN (${IDS_SQL});`)
+const coachAlerts = numberScalar(`SELECT count(*) FROM coach.alerts WHERE client_id IN (${IDS_SQL});`)
 const coachPermissionVariants = numberScalar(`
   SELECT count(DISTINCT visibility)
   FROM coach.client_permissions cp
@@ -231,9 +241,16 @@ if (MODE === 'clean') {
   if (coachActionLog !== 0) errors.push(`coach.action_log: ${coachActionLog}, erwartet 0`)
   if (coachPermissionLogs !== 0) errors.push(`coach.permission_change_log: ${coachPermissionLogs}, erwartet 0`)
   if (coachAutonomyLogs !== 0) errors.push(`coach.autonomy_change_log: ${coachAutonomyLogs}, erwartet 0`)
+  if (coachRelationships !== 0) errors.push(`coach.relationships: ${coachRelationships}, erwartet 0`)
+  if (coachRelationshipLogs !== 0) errors.push(`coach.relationship_change_log: ${coachRelationshipLogs}, erwartet 0`)
+  if (coachCheckinTemplates !== 0) errors.push(`coach.checkin_templates: ${coachCheckinTemplates}, erwartet 0`)
+  if (coachCheckins !== 0) errors.push(`coach.checkins: ${coachCheckins}, erwartet 0`)
+  if (coachMessages !== 0) errors.push(`coach.messages: ${coachMessages}, erwartet 0`)
+  if (coachAlerts !== 0) errors.push(`coach.alerts: ${coachAlerts}, erwartet 0`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (substanceAliases < 1100) errors.push(`supplements.substance_aliases: ${substanceAliases}, erwartet mindestens 1100`)
   if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
+  if (ruleCatalog !== 64) errors.push(`supplements.rule_catalog: ${ruleCatalog}, erwartet 64`)
   if (foods !== 7140) errors.push(`foods: ${foods}, erwartet 7140`)
   if (nutrients !== 869501) errors.push(`food_nutrients: ${nutrients}, erwartet 869501`)
 
@@ -250,6 +267,7 @@ if (MODE === 'clean') {
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Medical Medikamente Wirkstoffe/Formulierungen/Produkte/User/Conditions: ${medicationActiveSubstances}/${medicationFormulations}/${medicationProducts}/${userMedications}/${userConditions}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
+  console.log(`  Supplements Regeln warning/gap/medication: ${ruleWarning}/${ruleGap}/${ruleMedication}`)
   console.log(`  Coach Permissions/Autonomy/Pending/Actions/Logs: ${coachPermissions}/${coachAutonomy}/${coachPendingActions}/${coachActionLog}/${coachPermissionLogs + coachAutonomyLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
@@ -343,15 +361,27 @@ if (MODE === 'clean') {
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (substanceAliases < 1100) errors.push(`supplements.substance_aliases: ${substanceAliases}, erwartet mindestens 1100`)
   if (substanceLocalKimiMatches < 16) errors.push(`supplements.substance_alias_matches LumeOS-Kimi: ${substanceLocalKimiMatches}, erwartet mindestens 16`)
+  if (ruleWarning !== 29) errors.push(`supplements.rule_catalog warning: ${ruleWarning}, erwartet 29`)
+  if (ruleGap !== 15) errors.push(`supplements.rule_catalog nutrient_gap: ${ruleGap}, erwartet 15`)
+  if (ruleMedication !== 20) errors.push(`supplements.rule_catalog medication: ${ruleMedication}, erwartet 20`)
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
   if (supplementIntakeLogs !== 360) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 360`)
-  if (coachPermissions !== 1) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet 1`)
-  if (coachAutonomy !== 1) errors.push(`coach.client_autonomy: ${coachAutonomy}, erwartet 1`)
+  // F-07: Max traegt eine zweite Permissions-/Autonomy-Zeile (nur
+  // Training/Recovery summary); dazu Beziehungen, Check-ins,
+  // Nachrichten und Alerts fuer das Portal.
+  if (coachPermissions !== 2) errors.push(`coach.client_permissions: ${coachPermissions}, erwartet 2`)
+  if (coachAutonomy !== 2) errors.push(`coach.client_autonomy: ${coachAutonomy}, erwartet 2`)
   if (coachPendingActions !== 1) errors.push(`coach.pending_actions: ${coachPendingActions}, erwartet 1`)
   if (coachActionLog !== 1) errors.push(`coach.action_log: ${coachActionLog}, erwartet 1`)
-  if (coachPermissionLogs < 2) errors.push(`coach.permission_change_log: ${coachPermissionLogs}, erwartet mindestens 2`)
-  if (coachAutonomyLogs < 2) errors.push(`coach.autonomy_change_log: ${coachAutonomyLogs}, erwartet mindestens 2`)
+  if (coachPermissionLogs < 3) errors.push(`coach.permission_change_log: ${coachPermissionLogs}, erwartet mindestens 3`)
+  if (coachAutonomyLogs < 3) errors.push(`coach.autonomy_change_log: ${coachAutonomyLogs}, erwartet mindestens 3`)
+  if (coachRelationships !== 3) errors.push(`coach.relationships: ${coachRelationships}, erwartet 3 (aktiv/aktiv/eingeladen)`)
+  if (coachRelationshipLogs < 3) errors.push(`coach.relationship_change_log: ${coachRelationshipLogs}, erwartet mindestens 3`)
+  if (coachCheckinTemplates !== 1) errors.push(`coach.checkin_templates: ${coachCheckinTemplates}, erwartet 1`)
+  if (coachCheckins !== 3) errors.push(`coach.checkins: ${coachCheckins}, erwartet 3 (reviewed/submitted/pending)`)
+  if (coachMessages !== 3) errors.push(`coach.messages: ${coachMessages}, erwartet 3`)
+  if (coachAlerts !== 3) errors.push(`coach.alerts: ${coachAlerts}, erwartet 3`)
   if (coachPermissionVariants < 3) errors.push(`Coach-Permissions unterscheiden sich nicht genug: ${coachPermissionVariants} Sichtbarkeitswerte`)
   if (maxDays < 170) errors.push(`max Tage je Nutzer: ${maxDays}, erwartet mindestens 170`)
   if (frozenMissing !== 0) errors.push(`${frozenMissing} meal_items ohne frozen_at`)
@@ -1196,6 +1226,30 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM supplements.rule_assessment('${tom}'::uuid, DATE '${TODAY_DATE}')
+    WHERE rule_id = 'wr_anticoag_stack'
+      AND evaluation_state = 'fulfilled'
+      AND recommended_action_type = 'physician_referral';`)) {
+    errors.push('Fall Regeln: wr_anticoag_stack feuert fuer Warfarin + Omega-3 nicht')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.rule_assessment('${tom}'::uuid, DATE '${TODAY_DATE}')
+    WHERE rule_id = 'wr_warfarin_vitk'
+      AND evaluation_state = 'not_fulfilled'
+      AND cardinality(missing_inputs) = 0;`)) {
+    errors.push('Fall Regeln: wr_warfarin_vitk ist nicht sauber nicht_erfuellt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM supplements.rule_assessment('${tom}'::uuid, DATE '${TODAY_DATE}')
+    WHERE rule_id = 'wr_lab_biotin'
+      AND evaluation_state = 'missing_input'
+      AND 'medical.lab_draw_scheduled_within_days' = ANY(missing_inputs);`)) {
+    errors.push('Fall Regeln: wr_lab_biotin meldet fehlenden Laborabnahme-Eingang nicht')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM supplements.user_stacks us
     JOIN supplements.stack_items si ON si.stack_id = us.id
     JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
@@ -1284,6 +1338,7 @@ if (MODE === 'clean') {
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  Supplements Substanzaliase/LumeOS-Kimi-Treffer: ${substanceAliases}/${substanceLocalKimiMatches}`)
+  console.log(`  Supplements Regeln warning/gap/medication: ${ruleWarning}/${ruleGap}/${ruleMedication}`)
   console.log(`  Supplements Compliance 30d: ${supplementCompliance30d}%`)
   console.log(`  Coach Permissions/Autonomy/Pending/Actions/Logs: ${coachPermissions}/${coachAutonomy}/${coachPendingActions}/${coachActionLog}/${coachPermissionLogs + coachAutonomyLogs}`)
   console.log(`  Max. Tage je Nutzer: ${maxDays}`)

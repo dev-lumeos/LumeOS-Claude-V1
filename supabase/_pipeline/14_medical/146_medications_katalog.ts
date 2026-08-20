@@ -11,6 +11,8 @@ const CONTAINER = process.env.LUMEOS_DB_CONTAINER ?? 'supabase_db_LumeOS-Claude-
 const DB = process.env.PGDATABASE ?? 'postgres'
 const SOURCE_DIR =
   'backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications'
+const TRAIT_MAPPING_FILE =
+  'backup/kimi-research/Kimi_Agent/supplement_performance_database/data/platform/rule_trait_mapping.json'
 const ACTIVE_FILE = 'medication_active_substances.jsonl'
 const FORMULATIONS_FILE = 'medication_formulations.jsonl'
 const PRODUCTS_FILE = 'medication_products.jsonl'
@@ -19,6 +21,10 @@ const EXPECTED_FORMULATIONS = 119
 const EXPECTED_PRODUCTS = 124
 
 type JsonObject = Record<string, unknown>
+type TraitMapping = {
+  class_to_rule_traits?: Record<string, string[]>
+  name_to_rule_traits?: Record<string, string[]>
+}
 
 function fail(message: string): never {
   console.error(message)
@@ -41,6 +47,13 @@ function readJsonl(fileName: string): JsonObject[] {
         fail(`${file}:${index + 1}: JSON ungueltig (${String(error)})`)
       }
     })
+}
+
+function readJson(file: string): JsonObject {
+  if (!fs.existsSync(file)) {
+    fail(`${file} fehlt. C-133/C-130 braucht die Kimi-Trait-Bruecke fuer Medikamentenregeln.`)
+  }
+  return JSON.parse(fs.readFileSync(file, 'utf8')) as JsonObject
 }
 
 function asTextArray(value: unknown): string[] {
@@ -68,28 +81,36 @@ function cypProfile(row: JsonObject): string[] {
 
 function normalizedDrugClass(row: JsonObject): string[] {
   const raw = asTextArray(row.drug_class)
+  const mapping = traitMapping()
   const classes = new Set(raw)
   const name = String(row.canonical_name ?? '').toLowerCase()
 
-  if (raw.includes('anticoagulant_vka') && name.includes('warfarin')) {
-    classes.add('anticoagulant:warfarin')
+  for (const rawClass of raw) {
+    for (const trait of mapping.class_to_rule_traits?.[rawClass] ?? []) {
+      classes.add(trait)
+    }
   }
-  if (raw.includes('ssri')) classes.add('SSRI')
-  if (raw.some(value => value === 'ace_inhibitor' || value === 'arb')) {
-    classes.add('RAAS_inhibitor')
+  for (const [needle, traits] of Object.entries(mapping.name_to_rule_traits ?? {})) {
+    if (name.includes(needle)) {
+      for (const trait of traits) classes.add(trait)
+    }
   }
-  if (raw.includes('benzodiazepine')) classes.add('sedative')
-  if (raw.some(value => [
-    'biguanide',
-    'insulin',
-    'glp1_agonist',
-    'sglt2_inhibitor',
-    'sulfonylurea',
-  ].includes(value))) {
-    classes.add('antidiabetic')
-  }
+
+  // rule_trait_mapping.json maps class names only. CYP rule traits come
+  // exclusively from the record's cyp object, never from class names.
   for (const cyp of cypProfile(row)) classes.add(cyp)
   return [...classes].sort()
+}
+
+let cachedTraitMapping: TraitMapping | null = null
+function traitMapping(): TraitMapping {
+  if (cachedTraitMapping) return cachedTraitMapping
+  const raw = readJson(TRAIT_MAPPING_FILE) as TraitMapping
+  cachedTraitMapping = {
+    class_to_rule_traits: raw.class_to_rule_traits ?? {},
+    name_to_rule_traits: raw.name_to_rule_traits ?? {},
+  }
+  return cachedTraitMapping
 }
 
 function enrichActive(row: JsonObject): JsonObject {

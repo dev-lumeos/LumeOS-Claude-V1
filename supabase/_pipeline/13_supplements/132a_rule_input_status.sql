@@ -32,6 +32,10 @@ DECLARE
   v_conditions integer;
   v_labs integer;
   v_daily integer;
+  v_age integer;
+  v_profile_weight numeric;
+  v_profile_sex text;
+  v_pregnancy_planned boolean;
   v_training_week integer;
   v_acwr numeric;
 BEGIN
@@ -71,6 +75,21 @@ BEGIN
   FROM nutrition.daily_summary
   WHERE user_id = p_user_id
     AND entry_date = p_entry_date;
+
+  SELECT
+    date_part('year', age(p_entry_date, birth_date))::integer,
+    body_weight_kg,
+    biological_sex,
+    CASE
+      WHEN pregnancy_started_on IS NOT NULL
+       AND pregnancy_started_on <= p_entry_date
+       AND (pregnancy_ended_on IS NULL OR pregnancy_ended_on >= p_entry_date)
+      THEN true
+      ELSE false
+    END
+  INTO v_age, v_profile_weight, v_profile_sex, v_pregnancy_planned
+  FROM public.profiles
+  WHERE id = p_user_id;
 
   SELECT count(*) INTO v_training_week
   FROM training.workout_sessions
@@ -192,6 +211,122 @@ BEGIN
       ), '{}'::jsonb)
     ),
     (
+      'nutrition.protein_intake_g_per_kg',
+      CASE
+        WHEN v_daily = 0 THEN 'no_data'
+        WHEN v_profile_weight IS NULL THEN 'missing_input'
+        WHEN EXISTS (
+          SELECT 1 FROM nutrition.daily_summary
+          WHERE user_id = p_user_id AND entry_date = p_entry_date
+            AND prot625_missing = 0
+        ) THEN 'available'
+        ELSE 'incomplete'
+      END,
+      CASE
+        WHEN v_daily = 0 THEN 'no daily_summary row'
+        WHEN v_profile_weight IS NULL THEN 'profile body_weight_kg missing'
+        WHEN EXISTS (
+          SELECT 1 FROM nutrition.daily_summary
+          WHERE user_id = p_user_id AND entry_date = p_entry_date
+            AND prot625_missing = 0
+        ) THEN NULL
+        ELSE 'protein has missing counter'
+      END,
+      COALESCE((
+        SELECT jsonb_build_object(
+          'protein_g', prot625,
+          'body_weight_kg', v_profile_weight,
+          'protein_g_per_kg',
+          CASE WHEN v_profile_weight > 0 THEN round(prot625 / v_profile_weight, 3) ELSE NULL END,
+          'missing', prot625_missing
+        )
+        FROM nutrition.daily_summary
+        WHERE user_id = p_user_id AND entry_date = p_entry_date
+      ), jsonb_build_object('body_weight_kg', v_profile_weight))
+    ),
+    (
+      'nutrition.d_vitamin_dietary_low',
+      CASE
+        WHEN v_daily = 0 THEN 'no_data'
+        WHEN EXISTS (
+          SELECT 1 FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
+          WHERE nutrient_code = 'VITD'
+            AND reference_status = 'complete'
+            AND reference_pct IS NOT NULL
+        ) THEN 'available'
+        ELSE 'partial'
+      END,
+      CASE
+        WHEN v_daily = 0 THEN 'no daily_summary row'
+        WHEN EXISTS (
+          SELECT 1 FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
+          WHERE nutrient_code = 'VITD'
+            AND reference_status = 'complete'
+            AND reference_pct IS NOT NULL
+        ) THEN NULL
+        ELSE 'vitamin D assessment not complete for day'
+      END,
+      COALESCE((
+        SELECT jsonb_build_object('reference_pct', reference_pct, 'reference_status', reference_status)
+        FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
+        WHERE nutrient_code = 'VITD'
+        LIMIT 1
+      ), '{}'::jsonb)
+    ),
+    (
+      'nutrition.magnesium_dietary_low',
+      CASE
+        WHEN v_daily = 0 THEN 'no_data'
+        WHEN EXISTS (
+          SELECT 1 FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
+          WHERE nutrient_code = 'MG'
+            AND reference_status = 'complete'
+            AND reference_pct IS NOT NULL
+        ) THEN 'available'
+        ELSE 'partial'
+      END,
+      CASE
+        WHEN v_daily = 0 THEN 'no daily_summary row'
+        WHEN EXISTS (
+          SELECT 1 FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
+          WHERE nutrient_code = 'MG'
+            AND reference_status = 'complete'
+            AND reference_pct IS NOT NULL
+        ) THEN NULL
+        ELSE 'magnesium assessment not complete for day'
+      END,
+      COALESCE((
+        SELECT jsonb_build_object('reference_pct', reference_pct, 'reference_status', reference_status)
+        FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
+        WHERE nutrient_code = 'MG'
+        LIMIT 1
+      ), '{}'::jsonb)
+    ),
+    (
+      'nutrition.caffeine_mg_day',
+      'partial',
+      'caffeine is not a dedicated daily_summary nutrient; only indirect food records exist',
+      '{}'::jsonb
+    ),
+    (
+      'profile.age',
+      CASE WHEN v_age IS NULL THEN 'missing_input' ELSE 'available' END,
+      CASE WHEN v_age IS NULL THEN 'profile birth_date missing' ELSE NULL END,
+      jsonb_build_object('age', v_age)
+    ),
+    (
+      'profile.sex',
+      CASE WHEN v_profile_sex IS NULL THEN 'missing_input' ELSE 'available' END,
+      CASE WHEN v_profile_sex IS NULL THEN 'profile biological_sex missing' ELSE NULL END,
+      jsonb_build_object('sex', v_profile_sex)
+    ),
+    (
+      'profile.pregnancy_planned',
+      'available',
+      NULL,
+      jsonb_build_object('pregnancy_planned', v_pregnancy_planned)
+    ),
+    (
       'training.resistance_sessions_per_week',
       CASE WHEN v_training_week > 0 THEN 'available' ELSE 'no_data' END,
       CASE WHEN v_training_week > 0 THEN NULL ELSE 'no completed training sessions in 7 day window' END,
@@ -228,6 +363,12 @@ BEGIN
       '{}'::jsonb
     ),
     (
+      'nutrition.daily.dairy_servings_day',
+      'missing_input',
+      'dairy servings are not derived from meal_items',
+      '{}'::jsonb
+    ),
+    (
       'profile.athlete_tested_pool',
       'missing_input',
       'profile has no athlete_tested_pool field',
@@ -249,6 +390,18 @@ BEGIN
       'supplements.computed.stimulant_load_mg_caffeine_equiv',
       'missing_input',
       'stimulant equivalence computation is not built',
+      '{}'::jsonb
+    ),
+    (
+      'sleep.quality_score',
+      'missing_input',
+      'sleep schema is not built',
+      '{}'::jsonb
+    ),
+    (
+      'sleep.tracked_nights',
+      'missing_input',
+      'sleep schema is not built',
       '{}'::jsonb
     );
 END;

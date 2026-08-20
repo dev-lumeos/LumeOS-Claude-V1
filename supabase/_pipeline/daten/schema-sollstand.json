@@ -1182,6 +1182,7 @@
     "training.exercise_catalog_enrichment": 1407,
     "supplements.supplement_catalog": 44,
     "supplements.substance_aliases": 1132,
+    "supplements.rule_catalog": 64,
     "medical.biomarker_catalog": 11676,
     "medical.biomarker_reference_ranges": 564,
     "medical.biomarker_spec_enrichment": 49,
@@ -1213,6 +1214,7 @@
     "training.exercise_catalog_enrichment": "[cmd] C-83: 1.416 Training-Uebungen gegen media/exercises/katalog/1500+ exercise data.xlsx gematcht; 1.407 sicher anreicherbar, 8 mehrdeutig, 1 fehlend.",
     "supplements.supplement_catalog": "[cmd] referenz/lumeos-2026/supabase/seed.disabled/seed_supplements.sql enthaelt 44 Standard-Supplements; 131_supplements_katalog.ts spielt diese 44 ein.",
     "supplements.substance_aliases": "[cmd] C-131: 132_substance_alias_bridge.ts erzeugt 1.132 eindeutige Aliaszeilen aus 44 LumeOS-Supplements, 320 F-05-Kandidaten und 237 Kimi-Substanzen.",
+    "supplements.rule_catalog": "[cmd] C-133: 133_kimi_rules.ts importiert 29 warning_rules, 15 nutrient_gap_rules und 20 medication_rules aus backup/kimi-research/.../data/platform; Summe 64.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
     "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzte 96 Spec-basierte Bereichszeilen; C-140 spiegelt nur zwei belastbare LOINC-Abweichungen mit Bereich (LDL 13457-7, Haematokrit 4544-3) und ergaenzt dadurch 4 Zeilen. Summe 564.",
     "medical.biomarker_spec_enrichment": "[cmd] C-84: SPEC_05_BIOMARKER_CATALOG.md enthaelt 47 extrahierbare Marker; 44 LOINC-Codes liegen direkt im 11.676er Katalog. C-140 ergaenzt 5 belegte Gruppierungsalias-Zeilen fuer G-84-Abweichungen; Summe 49.",
@@ -1610,6 +1612,180 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "coach",
+      "name": "relationships",
+      "schritt": "151",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "151_coach_relationships.sql vergibt authenticated SELECT/INSERT/UPDATE, bewusst kein DELETE — Beziehungen enden, sie verschwinden nicht; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "relationship_change_log",
+      "schritt": "151",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "151_coach_relationships.sql vergibt authenticated SELECT/INSERT, aber kein UPDATE/DELETE; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "checkin_templates",
+      "schritt": "153",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "153_coach_checkins.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "checkins",
+      "schritt": "153",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "153_coach_checkins.sql vergibt authenticated SELECT/INSERT/UPDATE, bewusst kein DELETE — ein verpasster Check-in ist ein Befund; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "messages",
+      "schritt": "154",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "154_coach_messages_alerts.sql vergibt authenticated SELECT/INSERT/UPDATE (read_at durch die Empfaengerseite), kein DELETE; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "coach",
+      "name": "alerts",
+      "schritt": "154",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "154_coach_messages_alerts.sql vergibt authenticated SELECT/INSERT/UPDATE, kein DELETE; service_role ALL.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "training",
       "name": "muscle_groups",
       "schritt": "100",
@@ -1998,6 +2174,31 @@
         ]
       },
       "grants_herkunft": "132_substance_alias_bridge.ts vergibt SELECT an authenticated und service_role ALL explizit.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "rule_catalog",
+      "schritt": "133",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "133_kimi_rules.ts vergibt SELECT an authenticated und service_role ALL explizit; Regeln sind Katalogdaten, keine Nutzerdaten.",
       "zeilenschutzart": "oeffentlich"
     },
     {
@@ -2559,6 +2760,11 @@
       "schema": "supplements",
       "name": "platform_input_status",
       "schritt": "146a"
+    },
+    {
+      "schema": "supplements",
+      "name": "rule_assessment",
+      "schritt": "133"
     },
     {
       "schema": "medical",

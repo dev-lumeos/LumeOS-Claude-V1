@@ -466,6 +466,13 @@
       "depends_on": ["132", "053", "106", "121", "146"]
     },
     {
+      "id": "133",
+      "path": "supabase/_pipeline/13_supplements/133_kimi_rules.ts",
+      "kind": "tsx",
+      "creates": "Kimi-Warn-, Gap- und Medikamentenregeln als Katalogdaten plus dreistufige Regelauswertung",
+      "depends_on": ["146a"]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",
@@ -527,6 +534,34 @@
       "kind": "sql",
       "creates": "Coach-Rechtemodell: client_permissions, client_autonomy, Widerrufshistorie, Pending Actions und Action Log",
       "depends_on": ["017", "058b", "113", "auth_stub"]
+    },
+    {
+      "id": "151",
+      "path": "supabase/_pipeline/15_coach/151_coach_relationships.sql",
+      "kind": "sql",
+      "creates": "Coach-Beziehung mit Anbahnung, Annahme, Ende und Historie: relationships, relationship_change_log",
+      "depends_on": ["150"]
+    },
+    {
+      "id": "152",
+      "path": "supabase/_pipeline/15_coach/152_coach_lesepfad.sql",
+      "kind": "sql",
+      "creates": "Coach-Lesepfad: hat_sicht() als eine Sichtregel, 22 full-Policies auf den Nutzerdaten der sechs Module, 6 summary-Funktionen",
+      "depends_on": ["150", "110", "111", "121", "145"]
+    },
+    {
+      "id": "153",
+      "path": "supabase/_pipeline/15_coach/153_coach_checkins.sql",
+      "kind": "sql",
+      "creates": "Check-in-Vorlagen und -Instanzen mit Statusmaschine pending/submitted/reviewed/missed",
+      "depends_on": ["150"]
+    },
+    {
+      "id": "154",
+      "path": "supabase/_pipeline/15_coach/154_coach_messages_alerts.sql",
+      "kind": "sql",
+      "creates": "Nachrichten Coach-Klient und Alerts als Arbeitsliste, beide mit RLS, Alerts ohne Schweregrad",
+      "depends_on": ["150"]
     }
   ]
 }

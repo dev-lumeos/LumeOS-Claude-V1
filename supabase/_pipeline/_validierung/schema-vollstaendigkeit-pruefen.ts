@@ -307,7 +307,11 @@ for (const t of SOLL.tabellen) {
     // INSERT-Policies tragen die Bedingung in with_check, nicht in qual.
     const ausdruck = (using + ' ' + check).trim()
     const leerOderWahr = ausdruck === '' || /^true$/i.test(ausdruck)
-    const nenntUid = /auth\.uid\(\)/.test(ausdruck)
+    // F-07: coach.hat_sicht(user_id, modul, stufe) prueft auth.uid()
+    // IN der Funktion (152, eine Sichtregel an einer Stelle). Eine
+    // Policy, die sie ruft, ist auf den angemeldeten Coach begrenzt —
+    // sie faellt nicht unter "zeigt jedem alles".
+    const nenntUid = /auth\.uid\(\)/.test(ausdruck) || /coach\.hat_sicht\(/.test(ausdruck)
     const nenntAdmin = /is_admin\(\)/.test(ausdruck)
 
     if (art === 'eigene_zeilen' && (leerOderWahr || !nenntUid)) {

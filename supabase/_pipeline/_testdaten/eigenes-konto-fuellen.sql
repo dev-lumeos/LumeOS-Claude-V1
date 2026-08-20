@@ -47,6 +47,14 @@ DELETE FROM medical.user_conditions WHERE user_id = :'pruefkonto'::uuid;
 DELETE FROM medical.user_medications WHERE user_id = :'pruefkonto'::uuid;
 DELETE FROM medical.lab_reports WHERE user_id = :'pruefkonto'::uuid;
 
+DELETE FROM coach.alerts WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.messages WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.checkins WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.checkin_templates WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+DELETE FROM coach.relationship_change_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+ALTER TABLE coach.relationships DISABLE TRIGGER relationships_change_log;
+DELETE FROM coach.relationships WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
+ALTER TABLE coach.relationships ENABLE TRIGGER relationships_change_log;
 DELETE FROM coach.action_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
 DELETE FROM coach.pending_actions WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
 DELETE FROM coach.permission_change_log WHERE client_id = :'pruefkonto'::uuid OR coach_id = :'pruefkonto'::uuid;
@@ -59,6 +67,17 @@ ALTER TABLE coach.client_permissions ENABLE TRIGGER client_permissions_change_lo
 ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 
 -- Wiederholbar: erst Demo-Daten des Zielkontos raeumen, dann neu kopieren.
+-- F-07: Die Portal-Arbeitsdaten (Beziehungen, Check-ins, Nachrichten,
+-- Alerts) werden hier MIT geraeumt — wer dieses Skript laufen laesst,
+-- laesst danach coach-portal-fuellen.sql erneut laufen.
+DELETE FROM coach.alerts WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.messages WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.checkins WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.checkin_templates WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.relationship_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+ALTER TABLE coach.relationships DISABLE TRIGGER relationships_change_log;
+DELETE FROM coach.relationships WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+ALTER TABLE coach.relationships ENABLE TRIGGER relationships_change_log;
 DELETE FROM coach.action_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
 DELETE FROM coach.pending_actions WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
 DELETE FROM coach.permission_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
