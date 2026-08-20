@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `d4b89b6` auf `dev`.
+**Stand:** 2026-08-18, Anker `41307de` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -196,7 +196,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
 | **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
-| **C-71** | Das Rechtemodell des Vorgaengerrepos |  |
+| **C-71** | Permissions und Autonomy sind zwei verschiedene Sachen |  |
 | **C-75** | BSS und Voice sind Neubau |  |
 | **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
@@ -207,7 +207,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
 | **G-63** | Vier Felder liegen ungenutzt |  |
 | **C-86** | 8 mehrdeutige Uebungen und 1 ohne DB-Namen |  |
-| **C-91** | Drei Marker fehlen im LOINC-Zuschnitt |  |
+| **C-91** | Die Spec nennt LOINC-Codes, die nicht die ueblichen sind |  |
 | **C-92** | Die Spec verwechselt Marker |  |
 | **GO-17** | Meilenstein-Kachel ohne Stelle im Mockup |  |
 | **GO-18** | `user_goals.progress_pct` gegen `goal_progress_at()` |  |
@@ -1863,7 +1863,25 @@ Umsetzen angepasst werden.
   `[cmd]` **Was die Literatur nicht liefert:** `rest_days` und
   **Nadelempfehlung je Ort** — die bleiben *„conservative defaults"*.
 
-  `[read]` **Vor dem Seeden dieser beiden: Quelle oder Toms Abnahme.**
+  **Entschieden (Tom, 2026-08-19): wissenschaftliche Quellen suchen.**
+  `[read]` **Keine Abnahme aus dem Bauch** — fuer `rest_days` und
+  Nadelstaerke je Ort gibt es Pflege- und Fachliteratur, wie fuer die
+  Volumina.
+
+  ### Und die Grafik gehoert getauscht
+
+  **Tom, 2026-08-19:** *„Bei Injections muessen noch die neuen Grafiken
+  rein."*
+
+  `[cmd]` **Der Tab zeigt heute die einfache Silhouette der Vorlage**
+  (viewBox 100×120), in G-57 sichtbar gemacht. **Gemeint ist die
+  vollstaendige Figur** wie in `MuscleBodyMap_test.html` — mit Anatomie,
+  wie sie die Koerperkarte seit G-55 traegt.
+
+  `[cmd]` **G-53 haengt daran:** `InjektionsKarte` in `packages/ui` hat
+  keinen Aufrufer, **weil die Vorlage sechs Felder je Ort fuehrt, die
+  der Baustein nicht hat.** Beim Grafiktausch entscheidet sich, ob sie
+  bleibt oder faellt.
   **Dieselbe Regel wie bei MEV/MAV/MRV (C-105) und den
   Naehrstoff-Referenzwerten (C-45).**
 
@@ -2282,71 +2300,46 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **C-71: Das Rechtemodell des Vorgaengerrepos** (neu 2026-08-18).
-  **Eine Produktentscheidung darin.** Befund aus G-40.
+- [ ] **C-71: Permissions und Autonomy sind zwei verschiedene Sachen**
+  (neu gefasst 2026-08-19). **Toms Klarstellung.**
 
-  `[cmd]` **20 Migrationen, 2.316 Zeilen.** `coach_client_permissions`
-  traegt **dieselben sieben Module wie die Vorlage** und markiert
-  Medical als sensibel.
+  **Tom, 2026-08-19:** *„In Permissions setzt der User, was der Coach
+  sehen darf und wie autonom es sein soll. Unter Autonomy setzt der
+  Coach den Level seines Users, welches Autonomy definiert. Das sind
+  zwei verschiedene Sachen."*
 
-  **Drei Luecken vor einer Anbindung:**
+  ### Zwei Achsen, zwei Orte, zwei Akteure
 
-  - `[cmd]` **Zwei Zugriffsstufen dort, drei in der Vorlage.**
-  - `[cmd]` **Keine Widerrufshistorie** — vier Tabellennamen-Varianten
-    durchsucht, nichts gefunden.
-  - `[cmd]` **`edit_auto_accept`**, im Kommentar: *„Changes applied
-    without client confirmation."*
+  | | wer setzt | was |
+  |---|---|---|
+  | **Permissions** | **der Nutzer** | was der Coach **sehen** darf · und ob er **ohne Bestaetigung aendern** darf (je Modul) |
+  | **Autonomy** | **der Coach** | den **Level seines Athleten** — wie selbstaendig der arbeiten darf |
 
-  `[read]` **Der letzte Punkt widerspricht dem Kernversprechen der
-  Vorlage** — *„jeder Plan kommt als Vorschlag, den du bestaetigst."*
-  **Das ist eine Produktentscheidung, keine technische.**
+  `[read]` **Das erklaert `056_coach_autonomy` mit den fuenf Stufen:**
+  Sie beschreiben nicht die Coach-Rechte, sondern **die Reife des
+  Athleten.** Ein Anfaenger bekommt engere Fuehrung, ein
+  Fortgeschrittener entscheidet mehr selbst.
 
-  ### Toms Vorgabe: zwei Achsen, und die zweite ist gestuft
+  `[cmd]` **Und der Tab `Autonomie` in `/v2/coach/human` ist genau
+  das** — die Coach-Sicht auf seiner Plattform, **nicht die
+  Nutzerrechte.** Der Orchestrator hatte beides in einen Topf geworfen.
 
-  **Tom, 2026-08-18:** *„Die Rechte — was ein Coach kann und ob es eine
-  Freigabe des Users braucht — sollte definierbar sein. Einerseits was
-  darf der Coach sehen, andererseits wie autonom soll das laufen. Wenn
-  das Vertrauen in den Coach da ist, will ich doch nicht jede
-  Kleinigkeit bestaetigen muessen — sprich Coach aendert Omega-3-Dosis
-  von 5 auf 10 mg, da interessiert am Ende, was Supplement mir sagt, was
-  ich nehmen soll."*
+  ### Entschieden
 
-  | Achse | Frage |
-  |---|---|
-  | **Sicht** | Welche Module, in welcher Tiefe |
-  | **Autonomie** | Darf er aendern, und ab wann ohne Rueckfrage |
+  `[cmd]` **Fuenf Stufen des Vorgaengers** fuer die Autonomy-Achse —
+  Toms Entscheidung 2026-08-19.
 
-  `[cmd]` **Die Vorlage legt beide an** — ein Tab `Permissions` und ein
-  eigener Tab `Autonomy`. **Zwei Achsen, nicht eine.**
+  `[cmd]` **Fuer Permissions bleibt es bei C-95:** je Modul zweiwertig,
+  mit oder ohne Bestaetigung.
 
-  `[cmd]` **Und beim AI Coach ist das Muster gebaut:** *„Autonomie L3 ·
-  kollaborativ — Ich handle bei risikoarmen Entscheidungen
-  selbstaendig, Aenderungen bestaetige ich mit dir. Anhebung auf L4,
-  wenn du bereit bist."* **Vier Stufen, je Coach einstellbar.**
+  `[read]` **Was aus der F-04-Recherche uebernommen wird:** das Muster
+  von `coach_pending_actions` — Vorschau, 10-Minuten-Verfall,
+  `confirmed_at`, daneben ein Log mit Undo. **Die Tabelle nicht** —
+  *„hartkodierte Default-User-UUID, keine Akteursspalte, keine RLS."*
 
-  **Fuer den menschlichen Coach fehlt die Entsprechung** — `[cmd]` das
-  Vorgaengerrepo hat dort nur `edit_auto_accept`, **einen Schalter statt
-  einer Stufe.**
-
-  ### Was daraus zu klaeren ist
-
-  `[cmd]` **Was ist risikoarm?** Toms Beispiel — Omega-3 von 5 auf 10 mg
-  — ist es. `[read]` Eine Testosteron-Dosis oder ein Medikament ist es
-  nicht, und Medical ist im Rechtemodell bereits als **sensibel**
-  markiert.
-
-  **Die Schwelle gehoert definiert, bevor jemand sie baut** — sonst
-  entscheidet sie ein Agent nebenbei.
-
-  `[read]` **Und eine Aenderung ohne Rueckfrage braucht trotzdem eine
-  Spur:** Wer hat was wann geaendert. `[cmd]` Das ist die
-  Widerrufshistorie, die im Vorgaengerrepo **ganz fehlt** — vier
-  Tabellennamen-Varianten durchsucht, nichts gefunden.
-
-
-
-
-
+  `[cmd]` **Und die Widerrufshistorie wird gebraucht** — F-03 sagt ja
+  mit Begruendung, F-04 misst, dass sie fehlt: **das dokumentierte
+  `coach_client_autonomy_log` hat keine Migration.**
 
 - [ ] **C-75: BSS und Voice sind Neubau** (neu 2026-08-18). Befund aus
   G-42.
