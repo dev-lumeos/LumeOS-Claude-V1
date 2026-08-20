@@ -972,7 +972,10 @@
     "medical.biomarker_catalog": 11676,
     "medical.biomarker_reference_ranges": 560,
     "medical.biomarker_spec_enrichment": 44,
-    "medical.biomarker_aliases": 292
+    "medical.biomarker_aliases": 292,
+    "medical.medication_active_substances": 56,
+    "medical.medication_formulations": 119,
+    "medical.medication_products": 124
   },
   "mindestzeilen_belege": {
     "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
@@ -999,7 +1002,10 @@
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
     "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzt 96 Spec-basierte Bereichszeilen aus docs/specs/Medical/SPEC_05_BIOMARKER_CATALOG.md; Summe 560.",
     "medical.biomarker_spec_enrichment": "[cmd] C-84: SPEC_05_BIOMARKER_CATALOG.md enthaelt 47 extrahierbare Marker; 44 LOINC-Codes liegen im 11.676er Katalog und werden als Spec-Anreicherung neben dem LOINC-Katalog gespeichert.",
-    "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt."
+    "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt.",
+    "medical.medication_active_substances": "[cmd] C-130: backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications/medication_active_substances.jsonl fuehrt 56 Wirkstoffe; 146_medications_katalog.ts bricht bei abweichender Zahl ab.",
+    "medical.medication_formulations": "[cmd] C-130: backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications/medication_formulations.jsonl fuehrt 119 Formulierungen; 146_medications_katalog.ts bricht bei abweichender Zahl ab.",
+    "medical.medication_products": "[cmd] C-130: backup/kimi-research/Kimi_Agent/supplement_performance_database/data/medications/medication_products.jsonl fuehrt 124 Produkte; 146_medications_katalog.ts bricht bei abweichender Zahl ab."
   },
   "datenqualitaet": {
     "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",
@@ -1910,6 +1916,143 @@
       },
       "grants_herkunft": "142_laborimport_matching.sql vergibt SELECT an authenticated und service_role ALL; 143_biomarker_aliases.ts fuellt die Aliaszeilen.",
       "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_active_substances",
+      "schritt": "145/146",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "145_medications_schema.sql vergibt SELECT an authenticated und service_role ALL; 146_medications_katalog.ts fuellt den Wirkstoffkatalog.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_formulations",
+      "schritt": "145/146",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "145_medications_schema.sql vergibt SELECT an authenticated und service_role ALL; 146_medications_katalog.ts fuellt die Formulierungen.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "medication_products",
+      "schritt": "145/146",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "145_medications_schema.sql vergibt SELECT an authenticated und service_role ALL; 146_medications_katalog.ts fuellt die Produkte.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "medical",
+      "name": "user_medications",
+      "schritt": "145",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "145_medications_schema.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "medical",
+      "name": "user_conditions",
+      "schritt": "145",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "145_medications_schema.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
     }
   ],
   "_fremde_funktionen": "GO-04: Funktionen ausserhalb nutrition. Dieselbe Luecke wie oben.",

@@ -1992,6 +1992,8 @@ DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
 DELETE FROM recovery.modality_log WHERE user_id IN (${userIds});
 DELETE FROM recovery.scores WHERE user_id IN (${userIds});
 DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
+DELETE FROM medical.user_conditions WHERE user_id IN (${userIds});
+DELETE FROM medical.user_medications WHERE user_id IN (${userIds});
 DELETE FROM medical.lab_result_values WHERE user_id IN (${userIds});
 DELETE FROM medical.lab_reports WHERE user_id IN (${userIds});
 DELETE FROM supplements.intake_logs WHERE user_id IN (${userIds});
@@ -2409,6 +2411,61 @@ SELECT
   source, notes
 FROM test_medical_lab_values;
 
+DO $$
+DECLARE
+  v_warfarin text;
+BEGIN
+  SELECT id INTO v_warfarin
+  FROM medical.medication_active_substances
+  WHERE 'anticoagulant:warfarin' = ANY(drug_class)
+  ORDER BY canonical_name
+  LIMIT 1;
+
+  IF v_warfarin IS NULL THEN
+    RAISE EXCEPTION 'C-130 Testdaten: Warfarin fehlt im Medikamentenkatalog';
+  END IF;
+END $$;
+
+INSERT INTO medical.user_medications (
+  user_id, active_substance_id, name, drug_class, cyp_profile,
+  dose_amount, dose_unit, doses_per_day, route, start_date,
+  is_active, indication, notes, measurement_source, source_detail
+)
+SELECT
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  s.id,
+  s.canonical_name,
+  s.drug_class,
+  s.cyp_profile,
+  5,
+  'mg',
+  1,
+  'oral',
+  DATE '${relDate('2026-08-15')}',
+  true,
+  'C-130 Szenario: Warfarin fuer spaetere Vitamin-K-Regel',
+  'Seed-Medikation fuer Regelpruefung, keine Dosierungsempfehlung',
+  'seed',
+  'C-130 Testdaten aus Kimi-Medikamentenkatalog'
+FROM medical.medication_active_substances s
+WHERE 'anticoagulant:warfarin' = ANY(s.drug_class)
+ORDER BY s.canonical_name
+LIMIT 1;
+
+INSERT INTO medical.user_conditions (
+  user_id, condition_code, status, start_date, notes,
+  measurement_source, source_detail
+)
+VALUES (
+  '10000000-0000-0000-0000-000000000101'::uuid,
+  'hypertension',
+  'active',
+  DATE '${relDate('2026-08-10')}',
+  'C-130 Szenario fuer Conditions-Feldvertrag',
+  'seed',
+  'C-130 Testdaten, keine Krankengeschichte'
+);
+
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000101', true);
 SELECT *
@@ -2736,6 +2793,8 @@ DECLARE
   v_supplement_logs integer;
   v_medical_reports integer;
   v_medical_values integer;
+  v_medical_medications integer;
+  v_medical_conditions integer;
   v_max_days integer;
 BEGIN
   SELECT count(*) INTO v_users FROM auth.users WHERE id IN (${userIds});
@@ -2767,6 +2826,8 @@ BEGIN
   SELECT count(*) INTO v_supplement_logs FROM supplements.intake_logs WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_medical_reports FROM medical.lab_reports WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_medical_values FROM medical.lab_result_values WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_medical_medications FROM medical.user_medications WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_medical_conditions FROM medical.user_conditions WHERE user_id IN (${userIds});
   SELECT max(tage) INTO v_max_days
   FROM (
     SELECT user_id, count(DISTINCT entry_date)::integer AS tage
@@ -2789,6 +2850,8 @@ BEGIN
     v_supplement_stacks, v_supplement_items, v_supplement_logs;
   RAISE NOTICE 'OK: C-69 Medical-Testdaten: % Befunde, % Messwerte',
     v_medical_reports, v_medical_values;
+  RAISE NOTICE 'OK: C-130 Medical-Testdaten: % Medikamente, % Conditions',
+    v_medical_medications, v_medical_conditions;
 END $$;
 
 COMMIT;
@@ -2807,4 +2870,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte, 1 Medical-Medikation, 1 Medical-Condition.`)

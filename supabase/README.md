@@ -125,6 +125,8 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 142 | `14_medical/142_laborimport_matching.sql` | Laborimport-Zuordnung: `biomarker_aliases`, Importfunktionen und Match-Status an Messwerten | 1 Tabelle, 2 Funktionen, unbekannte Marker bleiben speicherbar |
 | 143 | `14_medical/143_biomarker_aliases.ts` | Biomarker-Aliase aus dem Vorgaengerrepo und kuratierte Mehrdeutigkeitszeilen | 292 Aliaszeilen, davon 6 bewusst mehrdeutig |
 | 144 | `14_medical/144_biomarker_spec_enrichment.ts` | Spec-Extraktion fuer Medical-Panels, deutsche Namen, Kurznamen und nutzbare numerische Bereichszeilen | 44 Spec-Marker im LOINC-Katalog, 40 display-nutzbar, 560 Referenzbereich-Zeilen gesamt |
+| 145 | `14_medical/145_medications_schema.sql` | Medikamente und Conditions: Katalogtabellen, `user_medications`, `user_conditions` | 5 Tabellen, RLS je Operation auf Nutzerdaten |
+| 146 | `14_medical/146_medications_katalog.ts` | Kimi-Medikamentenkatalog aus `backup/kimi-research/.../data/medications/` | 56 Wirkstoffe, 119 Formulierungen, 124 Produkte |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
 | 111 | `11_goals/111_goals_ziele_phasen.sql` | Goals-Userdaten: `user_goals`, `goal_phases`, `phase_am` | 2 Tabellen, 1 Funktion, RLS je Operation |
 | 112 | `11_goals/112_body_measurements.sql` | Goals-Koerperdaten: `body_measurements`, `body_circumferences` und Profilgewicht-Sync | 2 Tabellen, 3 Funktionen, RLS je Operation |

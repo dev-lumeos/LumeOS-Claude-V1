@@ -438,6 +438,20 @@
       "depends_on": ["143"]
     },
     {
+      "id": "145",
+      "path": "supabase/_pipeline/14_medical/145_medications_schema.sql",
+      "kind": "sql",
+      "creates": "Medical-Medikamente und Conditions: Katalogtabellen, user_medications und user_conditions mit RLS",
+      "depends_on": ["140", "auth_stub"]
+    },
+    {
+      "id": "146",
+      "path": "supabase/_pipeline/14_medical/146_medications_katalog.ts",
+      "kind": "tsx",
+      "creates": "Kimi-Medikamentenkatalog: 56 Wirkstoffe, 119 Formulierungen und 124 Produkte",
+      "depends_on": ["145"]
+    },
+    {
       "id": "110",
       "path": "supabase/_pipeline/11_goals/110_goals_zielwerte.sql",
       "kind": "sql",

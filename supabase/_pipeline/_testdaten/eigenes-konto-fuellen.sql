@@ -40,9 +40,13 @@ SELECT 1 / CASE WHEN :'ziel'::uuid = :'quelle'::uuid THEN 0 ELSE 1 END
   AS ziel_ist_nicht_quelle;
 
 -- G-46-Nachweisreste: test-user ist Pruefkonto, kein Demokonto.
+DELETE FROM medical.user_conditions WHERE user_id = :'pruefkonto'::uuid;
+DELETE FROM medical.user_medications WHERE user_id = :'pruefkonto'::uuid;
 DELETE FROM medical.lab_reports WHERE user_id = :'pruefkonto'::uuid;
 
 -- Wiederholbar: erst Demo-Daten des Zielkontos raeumen, dann neu kopieren.
+DELETE FROM medical.user_conditions WHERE user_id = :'ziel'::uuid;
+DELETE FROM medical.user_medications WHERE user_id = :'ziel'::uuid;
 DELETE FROM medical.lab_reports WHERE user_id = :'ziel'::uuid;
 
 DELETE FROM supplements.intake_logs WHERE user_id = :'ziel'::uuid;
@@ -438,6 +442,30 @@ FROM medical.lab_result_values lv
 JOIN lab_report_map lrm ON lrm.alt = lv.report_id
 WHERE lv.user_id = :'quelle'::uuid;
 
+INSERT INTO medical.user_medications (
+  id, user_id, active_substance_id, product_id, name, drug_class,
+  cyp_profile, dose_amount, dose_unit, doses_per_day, route, start_date,
+  end_date, is_active, indication, notes, measurement_source,
+  source_detail, frozen_at
+)
+SELECT
+  gen_random_uuid(), :'ziel'::uuid, active_substance_id, product_id, name,
+  drug_class, cyp_profile, dose_amount, dose_unit, doses_per_day, route,
+  start_date, end_date, is_active, indication, notes, 'seed',
+  'Kopie aus tom.seed@example.com', frozen_at
+FROM medical.user_medications
+WHERE user_id = :'quelle'::uuid;
+
+INSERT INTO medical.user_conditions (
+  id, user_id, condition_code, status, start_date, end_date, notes,
+  measurement_source, source_detail
+)
+SELECT
+  gen_random_uuid(), :'ziel'::uuid, condition_code, status, start_date,
+  end_date, notes, 'seed', 'Kopie aus tom.seed@example.com'
+FROM medical.user_conditions
+WHERE user_id = :'quelle'::uuid;
+
 COMMIT;
 
 WITH users AS (
@@ -500,6 +528,10 @@ counts AS (
   FROM users u LEFT JOIN medical.lab_reports lr ON lr.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'lab_result_values', count(lv.*)
   FROM users u LEFT JOIN medical.lab_result_values lv ON lv.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'user_medications', count(um.*)
+  FROM users u LEFT JOIN medical.user_medications um ON um.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'user_conditions', count(uc.*)
+  FROM users u LEFT JOIN medical.user_conditions uc ON uc.user_id = u.id GROUP BY u.email
 )
 SELECT email, table_name, rows
 FROM counts

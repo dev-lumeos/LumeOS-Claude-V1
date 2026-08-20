@@ -90,6 +90,11 @@ const medicalRanges = numberScalar(`SELECT count(*) FROM medical.biomarker_refer
 const medicalAliases = numberScalar(`SELECT count(*) FROM medical.biomarker_aliases;`)
 const medicalReports = numberScalar(`SELECT count(*) FROM medical.lab_reports WHERE user_id IN (${IDS_SQL});`)
 const medicalValues = numberScalar(`SELECT count(*) FROM medical.lab_result_values WHERE user_id IN (${IDS_SQL});`)
+const medicationActiveSubstances = numberScalar(`SELECT count(*) FROM medical.medication_active_substances;`)
+const medicationFormulations = numberScalar(`SELECT count(*) FROM medical.medication_formulations;`)
+const medicationProducts = numberScalar(`SELECT count(*) FROM medical.medication_products;`)
+const userMedications = numberScalar(`SELECT count(*) FROM medical.user_medications WHERE user_id IN (${IDS_SQL});`)
+const userConditions = numberScalar(`SELECT count(*) FROM medical.user_conditions WHERE user_id IN (${IDS_SQL});`)
 const supplementCatalog = numberScalar(`SELECT count(*) FROM supplements.supplement_catalog WHERE is_active;`)
 const supplementStacks = numberScalar(`SELECT count(*) FROM supplements.user_stacks WHERE user_id IN (${IDS_SQL});`)
 const supplementStackItems = numberScalar(`
@@ -139,9 +144,14 @@ if (MODE === 'clean') {
   if (recoveryCheckins !== 0) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 0`)
   if (medicalReports !== 0) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 0`)
   if (medicalValues !== 0) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 0`)
+  if (userMedications !== 0) errors.push(`medical.user_medications: ${userMedications}, erwartet 0`)
+  if (userConditions !== 0) errors.push(`medical.user_conditions: ${userConditions}, erwartet 0`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
   if (medicalRanges !== 560) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 560`)
   if (medicalAliases !== 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet 292`)
+  if (medicationActiveSubstances !== 56) errors.push(`medical.medication_active_substances: ${medicationActiveSubstances}, erwartet 56`)
+  if (medicationFormulations !== 119) errors.push(`medical.medication_formulations: ${medicationFormulations}, erwartet 119`)
+  if (medicationProducts !== 124) errors.push(`medical.medication_products: ${medicationProducts}, erwartet 124`)
   if (supplementStacks !== 0) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 0`)
   if (supplementStackItems !== 0) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 0`)
   if (supplementIntakeLogs !== 0) errors.push(`supplements.intake_logs: ${supplementIntakeLogs}, erwartet 0`)
@@ -159,6 +169,7 @@ if (MODE === 'clean') {
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Recovery Check-ins/Scores/Modalitaeten: ${recoveryCheckins}/${recoveryScores}/${recoveryModalities}`)
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
+  console.log(`  Medical Medikamente Wirkstoffe/Formulierungen/Produkte/User/Conditions: ${medicationActiveSubstances}/${medicationFormulations}/${medicationProducts}/${userMedications}/${userConditions}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
 } else {
@@ -227,6 +238,11 @@ if (MODE === 'clean') {
   if (medicalAliases !== 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet 292`)
   if (medicalReports !== 5) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 5`)
   if (medicalValues !== 140) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 140`)
+  if (medicationActiveSubstances !== 56) errors.push(`medical.medication_active_substances: ${medicationActiveSubstances}, erwartet 56`)
+  if (medicationFormulations !== 119) errors.push(`medical.medication_formulations: ${medicationFormulations}, erwartet 119`)
+  if (medicationProducts !== 124) errors.push(`medical.medication_products: ${medicationProducts}, erwartet 124`)
+  if (userMedications !== 1) errors.push(`medical.user_medications: ${userMedications}, erwartet 1`)
+  if (userConditions !== 1) errors.push(`medical.user_conditions: ${userConditions}, erwartet 1`)
   if (supplementCatalog < 44) errors.push(`supplements.supplement_catalog: ${supplementCatalog}, erwartet mindestens 44`)
   if (supplementStacks !== 1) errors.push(`supplements.user_stacks: ${supplementStacks}, erwartet 1`)
   if (supplementStackItems !== 4) errors.push(`supplements.stack_items: ${supplementStackItems}, erwartet 4`)
@@ -958,6 +974,39 @@ if (MODE === 'clean') {
       AND v.needs_verification
       AND jsonb_array_length(v.match_candidates) = 0;`)) {
     errors.push('Fall Medical Import unbekannt: unbekannter Rohmarker wird nicht gespeichert')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM medical.user_medications um
+    JOIN medical.medication_active_substances s ON s.id = um.active_substance_id
+    WHERE um.user_id = '${tom}'::uuid
+      AND um.name = 'Warfarin'
+      AND 'anticoagulant:warfarin' = ANY(um.drug_class)
+      AND 'CYP2C9_substrate' = ANY(um.cyp_profile)
+      AND um.dose_amount = 5
+      AND um.dose_unit = 'mg'
+      AND um.doses_per_day = 1
+      AND um.measurement_source = 'seed'
+      AND um.frozen_at IS NOT NULL
+      AND um.drug_class = s.drug_class
+      AND um.cyp_profile = s.cyp_profile;`)) {
+    errors.push('Fall Medical Medikation: Warfarin-Snapshot mit drug_class/cyp_profile fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM medical.user_conditions
+    WHERE user_id = '${tom}'::uuid
+      AND condition_code = 'hypertension'
+      AND status = 'active'
+      AND measurement_source = 'seed';`)) {
+    errors.push('Fall Medical Conditions: hypertension-Condition fuer Tom fehlt')
+  }
+  if (numberScalar(`
+    SELECT count(*)
+    FROM medical.user_medications um
+    JOIN auth.users u ON u.id = um.user_id
+    WHERE u.email = 'test-user@lumeos.local';`) !== 0) {
+    errors.push('Fall Medical Medikation: test-user hat Medikation, erwartet keine')
   }
   if (!hasRows(`
     SELECT 1
