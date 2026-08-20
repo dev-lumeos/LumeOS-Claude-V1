@@ -9933,3 +9933,88 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Regel und keine Merkmale aus `matched_context`.**
 
   **Offen geblieben:** G-117.
+
+- [x] **G-111: Der Tab-Zustand steht nicht in der URL** (neu
+  2026-08-20). **Eine Ursache, zwei Symptome. Hohe Prioritaet.**
+
+  **Tom, 2026-08-20:** *„Tagwechsel springt auf Diary, das muss in der
+  Ansicht bleiben."* Und: *„Calorie balance / Micronutrient trend / Macro
+  split immer noch nicht angebunden."*
+
+  ### Gemessen
+
+  `[cmd]` **Der Code ist da:** `ansicht.tsx:33` importiert
+  `KalorienbilanzKachel` und `MakroschnittKachel`, **`tab ===
+  'insights'` existiert.**
+
+  `[cmd]` **Aber `?tab=insights` liefert Diary** — im HTML kommen
+  *Calorie balance*, *Bilanz*, *Makroschnitt* **je 0 Mal vor.**
+
+  `[read]` **Der Tab ist reiner `useState`.** Deshalb:
+
+  **1.** Wer den Tag wechselt, laedt neu — **und landet auf Diary.**
+  **2.** Was in Insights gebaut wurde, **sieht niemand**, wenn er nicht
+  von Hand hinklickt. **G-101 hat es gebaut und Tom hat es nie
+  gesehen.**
+
+  **Zu tun:** Tab in die URL, wie das Datum. `[read]` **Dann ist er
+  teilbar, ueberlebt den Neuladen und ist von aussen messbar** — das
+  betrifft jedes Modul, nicht nur Nutrition.
+
+  `[cmd]` **Erledigt 2026-08-20 mit G-117 — und die Diagnose war
+  falsch.**
+
+  `[read]` *„`?tab=insights` lieferte zum Messzeitpunkt laengst Insights
+  — Calorie balance ×2, Makroschnitt ×1 im HTML. **Die G-111-Messung war
+  nicht mehr reproduzierbar, plausibel der haengende Server aus
+  G-109**."*
+
+  `[cmd]` **Der echte Taeter war die Datumsnavigation:** *„Sie baute die
+  Adresse mit `?datum=` neu und **warf `?tab=` dabei weg**."*
+
+  `[read]` **Der Orchestrator hat aus einer Messung am haengenden Server
+  auf einen Konstruktionsfehler geschlossen.** Der Fehler war real, aber
+  anderswo.
+
+  ### Was gebaut wurde
+
+  `[cmd]` **Eine Stelle: `lib/tab-url.ts`**, Drop-in fuer `useState`.
+  **Sechs Module umgestellt** — Training, Recovery, Goals, Medical,
+  Coach, Coach/AI. **Nutrition hatte das Muster, Dashboard hat keine
+  Tabs.**
+
+  `[cmd]` **Gemessen:** `?tab=history` direkt · Klick schreibt
+  `?tab=library` · Neuladen haelt · **Tagwechsel ergibt
+  `?tab=insights&datum=2026-08-19`.**
+
+  `[read]` **Und damit kann `schuss.mjs` erstmals einzelne Tabs
+  messen** — im selben Auftrag gleich benutzt.
+
+- [x] **G-115: Die Wassereintraege haben keine Historie** (neu
+  2026-08-20). Toms Befund.
+
+  **Tom:** *„Hydration-Eintraege: keine History, ich kann nichts
+  anschauen oder womoeglich einen Fehlklick korrigieren."*
+
+  `[cmd]` **`water_logs` traegt 181 Eintraege je Konto** — die Daten
+  sind da, **die Liste fehlt.**
+
+  `[read]` **Und der Fehlklick ist das eigentliche Argument:** Wer
+  versehentlich 500 ml statt 250 tippt, **hat keinen Weg zurueck.**
+  **Anzeigen und loeschen koennen** — wie beim Daumen mit
+  Sicherheitsabfrage (G-67).
+
+  `[cmd]` **Erledigt 2026-08-20 mit G-117.** **361 Wassereintraege**, die
+  Kachel zeigt **Zeit · Menge · Quelle** je Eintrag.
+
+  `[read]` **Der Servercode lag komplett vor** — `listOwnWaterLogs`,
+  `removeWaterLog` mit der G-79-Nullzeilenpruefung, **sogar
+  `updateWaterLogAmount`.** *„Es fehlten nur HTTP-Verb und
+  Oberflaeche."*
+
+  `[cmd]` **Und die Abfrage nennt den Eintrag** — *„750 ml von 20:00
+  loeschen?"* statt *„wirklich?"*. **Kreis gemessen: 2 → 3 → 2 → nach
+  Neuladen 2.**
+
+  `[cmd]` **Zeilenschutz:** ein DELETE auf eine fremde Id gibt **404
+  NOT_FOUND**, die Zeilen bleiben.

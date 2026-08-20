@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `a5c5c9d` auf `dev`.
+**Stand:** 2026-08-18, Anker `e14ddf9` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 125 offen, 1 in Arbeit.
+`[cmd]` 126 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -234,11 +234,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **G-105** | Zwei abgeschnittene SVG-Pfade in `packages/ui` |  |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
-| **G-111** | Der Tab-Zustand steht nicht in der URL |  |
 | **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
 | **G-113** | Die Naehrstoffordnung braucht Klappen und Zeitfilter |  |
 | **G-114** | `daily_summary` fuehrt nur 33 der 138 Naehrstoffe |  |
-| **G-115** | Die Wassereintraege haben keine Historie |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -258,6 +256,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-159** | Sieben Regelpfade zeigen auf Schemata, die es nicht gibt |  |
 | **G-118** | Der Extended-Code liegt im Buendel |  |
 | **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
+| **G-119** | `supplements` ist das letzte Modul mit `useState`-Tab |  |
+| **G-120** | `updateWaterLogAmount` liegt fertig und ungenutzt |  |
+| **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 
 ---
 
@@ -3246,32 +3247,6 @@ Umsetzen angepasst werden.
   **Zu entscheiden:** Faellt die Kachel weg, oder zeigt sie den
   vorhandenen Erholungswert?
 
-- [ ] **G-111: Der Tab-Zustand steht nicht in der URL** (neu
-  2026-08-20). **Eine Ursache, zwei Symptome. Hohe Prioritaet.**
-
-  **Tom, 2026-08-20:** *„Tagwechsel springt auf Diary, das muss in der
-  Ansicht bleiben."* Und: *„Calorie balance / Micronutrient trend / Macro
-  split immer noch nicht angebunden."*
-
-  ### Gemessen
-
-  `[cmd]` **Der Code ist da:** `ansicht.tsx:33` importiert
-  `KalorienbilanzKachel` und `MakroschnittKachel`, **`tab ===
-  'insights'` existiert.**
-
-  `[cmd]` **Aber `?tab=insights` liefert Diary** — im HTML kommen
-  *Calorie balance*, *Bilanz*, *Makroschnitt* **je 0 Mal vor.**
-
-  `[read]` **Der Tab ist reiner `useState`.** Deshalb:
-
-  **1.** Wer den Tag wechselt, laedt neu — **und landet auf Diary.**
-  **2.** Was in Insights gebaut wurde, **sieht niemand**, wenn er nicht
-  von Hand hinklickt. **G-101 hat es gebaut und Tom hat es nie
-  gesehen.**
-
-  **Zu tun:** Tab in die URL, wie das Datum. `[read]` **Dann ist er
-  teilbar, ueberlebt den Neuladen und ist von aussen messbar** — das
-  betrifft jedes Modul, nicht nur Nutrition.
 
 - [ ] **G-112: Der Food-DB-Filter laesst nur einen Wert zu** (neu
   2026-08-20). Toms Befund.
@@ -3307,6 +3282,16 @@ Umsetzen angepasst werden.
   Der Auftrag G-101 nannte die Filter (*Today / 7d / 30d / 90d*) — sie
   wurden nicht gebaut.
 
+  `[cmd]` **Teil 1 erledigt 2026-08-20 mit G-117.** **12 von 12 Gruppen
+  zu**, der Kopf traegt weiter *„N Eintraege · M mit Wert"*.
+
+  `[read]` *„Die Klappmechanik gab es seit G-101, nur der Standard war
+  „erste Gruppe offen"."*
+
+  `[cmd]` **Teil 2 — die Zeitfilter (1/7/14/30/45/60/90) — ist jetzt
+  baubar:** C-157 hat `nutrient_summary_window` geliefert, **30 Tage in
+  34 ms.** **Der Platz ist im Code markiert.**
+
 - [ ] **G-114: `daily_summary` fuehrt nur 33 der 138 Naehrstoffe** (neu
   2026-08-20). **Der Grund fuer Toms Zweifel.**
 
@@ -3333,19 +3318,6 @@ Umsetzen angepasst werden.
   je Abfrage aus `meal_items` gerechnet? `[read]` **Das ist eine
   Codex-Frage** — 105 fehlende Spalten sind kein Anzeigeproblem.
 
-- [ ] **G-115: Die Wassereintraege haben keine Historie** (neu
-  2026-08-20). Toms Befund.
-
-  **Tom:** *„Hydration-Eintraege: keine History, ich kann nichts
-  anschauen oder womoeglich einen Fehlklick korrigieren."*
-
-  `[cmd]` **`water_logs` traegt 181 Eintraege je Konto** — die Daten
-  sind da, **die Liste fehlt.**
-
-  `[read]` **Und der Fehlklick ist das eigentliche Argument:** Wer
-  versehentlich 500 ml statt 250 tippt, **hat keinen Weg zurueck.**
-  **Anzeigen und loeschen koennen** — wie beim Daumen mit
-  Sicherheitsabfrage (G-67).
 
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
@@ -3784,3 +3756,29 @@ Umsetzen angepasst werden.
   `[read]` **Und die Wirkung ist konkret:** Die Anzeige zeigt dann von
   selbst das passende Fenster — **Vitamin D ueber 90 Tage, Natrium ueber
   einen.**
+
+- [ ] **G-119: `supplements` ist das letzte Modul mit `useState`-Tab**
+  (neu 2026-08-20). Rest aus G-117.
+
+  `[cmd]` **Sechs Module nutzen `lib/tab-url.ts`**, Nutrition hatte das
+  Muster — **`supplements` nicht.** *„Fremder Bereich, gemeldet —
+  dieselbe Zwei-Zeilen-Aenderung."*
+
+- [ ] **G-120: `updateWaterLogAmount` liegt fertig und ungenutzt** (neu
+  2026-08-20). Rest aus G-117.
+
+  `[cmd]` **Der Schreibweg existiert**, nur der Knopf fehlt. `[read]`
+  *„Ein Stift-Knopf waere der vollstaendige Korrekturweg."*
+
+  `[read]` **Dritter Fall dieser Art** — nach `InjektionsKarte` (G-53)
+  und `score.ts` (G-82): **gebaut und nie gerufen.**
+
+- [ ] **A-29: `schuss.mjs` und die Git-Bash-Pfadumwandlung** (neu
+  2026-08-20). Werkzeugfund aus G-117.
+
+  `[cmd]` *„`schuss.mjs`-Pfade ohne `?` fallen der
+  Git-Bash-Pfadumwandlung zum Opfer — **`MSYS_NO_PATHCONV=1` loest
+  es**."*
+
+  `[read]` **Gehoert in die Datei selbst oder in `CLAUDE.md`**, sonst
+  faellt der naechste Agent darauf herein.
