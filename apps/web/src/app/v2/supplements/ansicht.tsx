@@ -27,7 +27,22 @@ import {
 } from './tabs'
 // G-33: die beiden Tabs mit den meisten Unterkomponenten stehen in
 // eigenen Dateien — `tabs.tsx` waere sonst ueber 1.200 Zeilen lang.
+// G-110: statisch importiert — der Schutz liegt auf dem Server.
+//
+// `[cmd]` **Ein Versuch mit `dynamic({ ssr: false })` ist
+// zurueckgenommen:** der Tab rendert damit gar nichts mehr, auch nicht
+// den Ladehinweis (gemessen 2026-08-20). Der Gewinn waere gewesen,
+// dass der Code nicht im Buendel steht; der Preis war ein Tab, der
+// niemandem mehr etwas zeigt.
+//
+// `[read]` **Das Gate haelt trotzdem:** `SuppExtended` wird nur
+// gerendert, wenn der Grad reicht — der Code liegt im Buendel, die
+// Daten kommen nicht. Als Befund aufgenommen (G-111).
 import { SuppExtended } from './tab-extended'
+// G-110: das Regelwerk (C-133) und das echte Gate.
+import { InteractionsEchtTab, RegelHinweis } from './tab-interactions-echt'
+import { ExtendedGesperrt } from './extended-gate'
+import type { RegelStand, GateStand } from '../../../lib/supplements/regeln-read'
 import { SuppCompliance } from './tab-compliance'
 // G-45: der Injections-Tab mit der Rotationskarte.
 import { SuppInjections } from './tab-injektionen'
@@ -44,7 +59,7 @@ import { SupplementsModale } from './modale'
  * G-37: Die Zahl an `Stack` kommt aus dem echten Stack, sobald einer
  * gelesen wurde — sonst aus der Vorlage.
  */
-function tabs(stackAnzahl: number): TabItem[] {
+function tabs(stackAnzahl: number, regelAnzahl: number | null): TabItem[] {
   return [
     { id: 'today', label: 'Today', icon: 'check' },
     { id: 'stack', label: 'Stack', icon: 'supplements', count: stackAnzahl },
@@ -55,7 +70,10 @@ function tabs(stackAnzahl: number): TabItem[] {
     { id: 'inventory', label: 'Inventory', icon: 'marketplace' },
     { id: 'injection', label: 'Injections', icon: 'medical' },
     { id: 'compliance', label: 'Compliance', icon: 'calendar' },
-    { id: 'interactions', label: 'Interactions', icon: 'sparkles', count: 3 },
+    // G-110: die Zahl ist jetzt die der ZUTREFFENDEN Regeln, nicht
+    // die drei Zeilen des Entwurfs.  heisst: nicht gelesen.
+    { id: 'interactions', label: 'Interactions', icon: 'sparkles',
+      count: regelAnzahl ?? undefined },
     { id: 'cost', label: 'Cost', icon: 'trend_up' },
   ]
 }
@@ -67,10 +85,14 @@ function tabs(stackAnzahl: number): TabItem[] {
 // Eintraege, und zu jedem gibt es unten eine Weiche.
 
 export function SupplementsAnsicht({
-  daten = null, katalog = [], heute: heuteProp = null,
+  daten = null, katalog = [], heute: heuteProp = null, regeln = null, gate = null,
 }: {
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
+  /** G-110: die 64 Regeln des Tages (C-133). */
+  regeln?: RegelStand | null
+  /** G-110: der Erfahrungsgrad, der Extended oeffnet. */
+  gate?: GateStand | null
   /**
    * G-74: Das echte Heute, serverseitig aus `lib/datum.ts`.
    *
@@ -160,13 +182,18 @@ export function SupplementsAnsicht({
         </div>
       </div>
 
-      <Tabs items={tabs(stackAnzahl)} active={tab} onChange={setTab} />
+      <Tabs items={tabs(stackAnzahl, regeln?.erfuellt ?? null)} active={tab} onChange={setTab} />
 
       <SuppCtx.Provider value={ctx}>
         <div style={{ marginTop: 16 }}>
           {tab === 'today' && <SuppToday />}
           {tab === 'stack' && <SuppStack />}
-          {tab === 'extended' && <SuppExtended />}
+          {tab === 'extended' && (
+            // G-110: Das Gate entscheidet SERVERSEITIG. Reicht der
+            // Grad nicht, wird `SuppExtended` gar nicht gerendert —
+            // vorher war es ein `useState` im Browser (G-92).
+            gate?.offen ? <SuppExtended /> : <ExtendedGesperrt g={gate ?? { grad: null, offen: false, fehler: null }} />
+          )}
           {tab === 'database' && <SuppDatabase />}
           {/* `[cmd]` G-74: Compliance liest echt, sobald ein Protokoll
               vorliegt. Ohne Daten bleibt der Entwurf mit seiner Marke —
@@ -176,7 +203,11 @@ export function SupplementsAnsicht({
               ? <ComplianceEcht d={daten} heute={stichtag} />
               : <SuppCompliance />
           )}
-          {tab === 'interactions' && <SuppInteractions />}
+          {tab === 'interactions' && (
+            regeln && regeln.regeln.length > 0
+              ? <><InteractionsEchtTab d={regeln} /><RegelHinweis /></>
+              : <SuppInteractions />
+          )}
           {tab === 'cost' && <SuppCost />}
           {tab === 'injection' && <SuppInjections />}
           {/* `[cmd]` G-91: Catalog liest `supplement_catalog` — 44

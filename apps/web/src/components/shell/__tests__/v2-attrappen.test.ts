@@ -34,6 +34,8 @@ const SUPP_DATEN = path.join(process.cwd(), 'src/app/v2/supplements/daten.ts')
 const SUPP_MODALE = path.join(process.cwd(), 'src/app/v2/supplements/modale.tsx')
 const SUPP_EXT = path.join(process.cwd(), 'src/app/v2/supplements/tab-extended.tsx')
 const SUPP_COMP = path.join(process.cwd(), 'src/app/v2/supplements/tab-compliance.tsx')
+// G-110: das echte Gate von Extended (loest `ExtendedGate` ab).
+const SUPP_GATE = path.join(process.cwd(), 'src/app/v2/supplements/extended-gate.tsx')
 const RECOVERY = path.join(process.cwd(), 'src/app/v2/recovery/ansicht.tsx')
 const RECOVERY_MOTOR = path.join(process.cwd(), 'src/app/v2/recovery/motor.ts')
 const GOALS = path.join(process.cwd(), 'src/app/v2/goals/ansicht.tsx')
@@ -994,10 +996,19 @@ test('die Unterkomponenten der Vorlage sind alle da', () => {
   // [cmd] G-33: der erste Durchgang baute die Tab-RUEMPFE und liess elf
   // Unterkomponenten weg — 530 Zeilen Vorlage. Der Rumpf ist nicht das
   // Modul. Dieser Test haelt die Liste fest.
-  const alles = [SUPP, SUPP_EXT, SUPP_COMP, SUPP_RAHMEN, SUPP_MODALE]
+  const alles = [SUPP, SUPP_EXT, SUPP_COMP, SUPP_RAHMEN, SUPP_MODALE, SUPP_GATE]
     .map(f => fs.readFileSync(f, 'utf8')).join(String.fromCharCode(10))
+  //
+  // **G-110: `ExtendedGate` heisst jetzt `ExtendedGesperrt`.** `[cmd]`
+  // Die alte Fassung war ein `useState`-Gate, das nichts schuetzte
+  // (G-92: *„Wer klickt, sieht die Protokolle"*). Sie ist ERSETZT, nicht
+  // weggelassen: das neue Gate steht in `extended-gate.tsx` und
+  // entscheidet gegen `profiles.experience_level`.
+  //
+  // `[read]` Der Test bleibt streng — er prueft weiter, dass eine
+  // Aufklaerungsflaeche existiert, nur unter ihrem neuen Namen.
   for (const k of [
-    'ExtendedGate', 'ExtendedHeader', 'ExtendedCompoundCard', 'CycleTimeline',
+    'ExtendedGesperrt', 'ExtendedHeader', 'ExtendedCompoundCard', 'CycleTimeline',
     'BloodworkPanel', 'SideEffectLog', 'HalfLifeChart', 'ExtendedDrawer',
     'ComplianceHeatmap', 'ComplianceStrip', 'CalendarView',
     'SlotCard', 'CheckCircle', 'StackMatrix', 'StackList',

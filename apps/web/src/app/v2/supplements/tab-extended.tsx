@@ -13,10 +13,14 @@
 // klein aus; der Inhalt haengt an dem, was er aufruft. Das ist die
 // Falle, die im Bericht steht.
 //
-// `[read]` `ExtendedGate` ist ein EIGENER ZUSTAND: der Tab zeigt vor
-// der Freischaltung eine Aufklaerungsseite. Wer sie weglaesst, baut
-// einen Tab, der sofort Hormonprotokolle zeigt — genau das, was die
-// Vorlage verhindern will.
+// `[cmd]` **G-110: Der Tab hat KEIN eigenes Gate mehr.** Hier stand
+// `ExtendedGate` mit einem `useState` — G-92 hat es gemessen:
+// *„schuetzt nichts. Wer klickt, sieht die Protokolle."*
+//
+// `[read]` Die Aufklaerung und die Entscheidung stehen jetzt in
+// `extended-gate.tsx` und fallen in `ansicht.tsx` gegen
+// `profiles.experience_level` (C-140) — **bevor diese Datei gerendert
+// wird.**
 import * as React from 'react'
 import { Card, Pill, Icon, Row, Meter, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
@@ -36,10 +40,20 @@ const z = (v: unknown) => {
 
 export function SuppExtended() {
   const { open } = useSupp()
-  const [unlocked, setUnlocked] = React.useState(false)
   const [drawer, setDrawer] = React.useState<string | null>(null)
 
-  if (!unlocked) return <ExtendedGate onUnlock={() => setUnlocked(true)} />
+  // G-110: DAS INNERE GATE IST WEG.
+  //
+  // `[cmd]` Hier stand `const [unlocked, setUnlocked] =
+  // React.useState(false)` und darunter `if (!unlocked) return
+  // <ExtendedGate …>`. **G-92 hat es gemessen:** *„Sein Gate ist ein
+  // blosses `useState` und schuetzt nichts. Wer klickt, sieht die
+  // Protokolle."*
+  //
+  // `[read]` **Das Gate faellt jetzt eine Ebene hoeher** — in
+  // `ansicht.tsx`, gegen den gespeicherten Erfahrungsgrad. Wer hierher
+  // kommt, hat ihn; ein zweites Gate an dieser Stelle waere entweder
+  // Zierrat oder eine zweite Wahrheit.
 
   const liste = EXTENDED_STACK as Compound[]
   const offen = liste.find(c => t(c.id) === drawer)
@@ -109,60 +123,6 @@ export function SuppExtended() {
 
       {offen && <ExtendedDrawer compound={offen} onClose={() => setDrawer(null)} />}
     </>
-  )
-}
-
-// ── Gate ───────────────────────────────────────────────────────
-function ExtendedGate({ onUnlock }: { onUnlock: () => void }) {
-  return (
-    <div style={{ maxWidth: 520, margin: '60px auto 0', textAlign: 'center' }}>
-      <div style={{
-        width: 56, height: 56, borderRadius: 14,
-        background: 'color-mix(in oklch, var(--acc-medic) 12%, var(--surface))',
-        border: '1px solid color-mix(in oklch, var(--acc-medic) 30%, var(--border))',
-        color: 'var(--acc-medic)', display: 'grid', placeItems: 'center',
-        margin: '0 auto 16px',
-      }}>
-        <Icon name="medical" className="v2-ic" style={{ width: 24, height: 24 }} />
-      </div>
-      <div style={{ fontSize: 20, fontWeight: 600, letterSpacing: '-0.02em', marginBottom: 8 }}>
-        Extended supplements — gated
-      </div>
-      <div className="v2-muted" style={{ fontSize: 13, lineHeight: 1.55, marginBottom: 24 }}>
-        This surface tracks prescription hormones, peptides, and research
-        compounds. It is a personal log of what you and your physician
-        already manage — LumeOS does not prescribe, advise, or distribute.
-        Visibility to coaches is opt-in per coach and per compound.
-      </div>
-      <div style={{
-        textAlign: 'left', border: '1px solid var(--border)',
-        background: 'var(--surface)', borderRadius: 8, padding: 16, marginBottom: 16,
-      }}>
-        <div className="v2-eyebrow" style={{ marginBottom: 10 }}>Before you unlock</div>
-        <div className="v2-col-gap" style={{ gap: 6, fontSize: 12, color: 'var(--fg-muted)' }}>
-          {[
-            'You are tracking, not seeking advice. LumeOS will not suggest dosing.',
-            'Each compound requires a physician name and (optional) prescription reference.',
-            'Coach visibility is locked off by default. You opt in per coach.',
-            'Bloodwork from Medical syncs here. Out-of-range markers raise warnings, not prompts to act.',
-          ].map(satz => (
-            <div key={satz} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-              <Icon name="check" className="v2-ic v2-ic-sm"
-                    style={{ color: 'var(--pos)', marginTop: 2, flexShrink: 0 }} />
-              {satz}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
-        <button type="button" className="v2-btn v2-btn-primary" onClick={onUnlock}>
-          I understand · unlock
-        </button>
-        <InEntwicklungKnopf titel="Read disclosure" className="v2-btn v2-btn-ghost">
-          Read disclosure
-        </InEntwicklungKnopf>
-      </div>
-    </div>
   )
 }
 

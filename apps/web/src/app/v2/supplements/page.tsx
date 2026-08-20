@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   title: 'Supplements · LumeOS',
 }
 
+// G-110: das Regelwerk (C-133) und das Gate von Extended.
+import { ladeRegeln, ladeGate, type RegelStand, type GateStand } from '../../../lib/supplements/regeln-read'
+
 export const dynamic = 'force-dynamic'
 
 export default async function V2SupplementsPage() {
@@ -47,5 +50,26 @@ export default async function V2SupplementsPage() {
   // aus `lib/datum.ts` (ueber Mittag gerechnet) und wird SERVERSEITIG
   // bestimmt — `new Date()` in der Komponente ergaebe im Browser einen
   // anderen Wert als beim Rendern und zerlegte die Hydration.
-  return <SupplementsAnsicht daten={daten} katalog={katalog} heute={heute()} />
+  // G-110: Regelwerk und Gate. Beide eigen abgefangen — faellt das
+  // eine aus, bleibt das andere gueltig.
+  const stichtag = heute()
+  let regeln: RegelStand | null = null
+  let gate: GateStand | null = null
+  try {
+    regeln = await ladeRegeln(stichtag)
+  } catch {
+    regeln = null
+  }
+  try {
+    gate = await ladeGate()
+  } catch {
+    gate = null
+  }
+
+  return (
+    <SupplementsAnsicht
+      daten={daten} katalog={katalog} heute={stichtag}
+      regeln={regeln} gate={gate}
+    />
+  )
 }
