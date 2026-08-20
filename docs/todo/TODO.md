@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `f4d51b1` auf `dev`.
+**Stand:** 2026-08-18, Anker `74116e4` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 103 offen, 1 in Arbeit.
+`[cmd]` 106 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -223,6 +223,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
 | **G-88** | Die Sitzungskarte auf `Today` |  |
 | **A-24** | Attrappenmarken sind kein brauchbares Mass |  |
+| **GO-21** | Taille:Huefte hat eine belegte Schwelle |  |
+| **C-146** | `phase_am()` liefert 8 von 14 Spalten |  |
+| **G-89** | Die Idealwerte stehen nur in Begleitdateien |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2814,6 +2817,56 @@ Umsetzen angepasst werden.
   `[cmd]` **Dritter Fall heute** — nach *„erreicht, offen, verfehlt"*
   (G-79) und *„Kreatin 30 Tage"* (G-74). **Und *„200 Saetze"* war auch
   falsch: es sind 101.**
+
+- [ ] **GO-21: Taille:Huefte hat eine belegte Schwelle** (neu
+  2026-08-19). **Entscheidung fuer Tom.** Befund aus G-87.
+
+  `[cmd]` **Der einzige Kandidat mit Quelle:** WHO 2008 — **unter 0,90
+  bei Maennern, unter 0,80 bei Frauen.** Im Vorgaengerrepo hinterlegt.
+
+  `[cmd]` **Toms Wert am 2026-08-19: 0,860.**
+
+  `[read]` **Der Agent hat sie bewusst nicht gebaut:** *„Ein Grenzwert,
+  der Geschlecht voraussetzt, ist eine Produktentscheidung."*
+
+  **Zu entscheiden:** Zeigen mit Geschlechtsbezug, zeigen ohne, oder
+  weglassen? `[cmd]` **`public.profiles` traegt das Geschlecht** —
+  technisch geht es.
+
+- [ ] **C-146: `phase_am()` liefert 8 von 14 Spalten** (neu
+  2026-08-19). Befund aus G-87.
+
+  `[cmd]` **Es fehlen `transitioned_from`, `recommended_next`,
+  `transition_reason`** — genau die drei, die den Phasenwechsel
+  beschreiben.
+
+  `[read]` **Der Agent hat sie nachgelesen statt die Funktion zu
+  aendern** — *„das Schema gehoert Codex."* **Richtig, aber ein zweiter
+  Leseweg neben der Funktion ist auf Dauer schlecht.**
+
+  `[cmd]` **Dazu:** Die Sperrbegruendung am Knopf *„Switch to …"* nennt
+  `goals.goal_phases` als fehlend — **die Tabelle gibt es seit GO-07.**
+  `[read]` **Dieselbe Klasse wie C-142** bei den Medikamenten: eine
+  Begruendung, die etwas Falsches sagt.
+
+- [ ] **G-89: Die Idealwerte stehen nur in Begleitdateien** (neu
+  2026-08-19). Befund aus G-87.
+
+  `[cmd]` **1.618, V-Taper und Steve Reeves stehen ausschliesslich in
+  `theme-v1/uploads/`** — Begleitdateien des Entwurfs, **keine
+  Spezifikation.**
+
+  `[cmd]` **Und der Reeves-Wert ist gar keine Rechnung:**
+  *„`daten.ts:438` gibt fest 88 zurueck."*
+
+  `[read]` **Auch die Farbe faellt weg, mit gutem Grund:** *„Die Vorlage
+  faerbt eine wachsende Taille rot und einen wachsenden Arm gruen —
+  welche Richtung erwuenscht ist, haengt vom Ziel ab."* **In einer
+  Aufbauphase ist eine wachsende Taille normal.**
+
+  **Zu klaeren:** Braucht es Idealwerte ueberhaupt? `[read]` **Die
+  Verhaeltnisse selbst sind Arithmetik und stehen** — die Einstufung
+  waere eine Bewertung.
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
