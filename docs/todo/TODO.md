@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `97f102a` auf `dev`.
+**Stand:** 2026-08-18, Anker `6cab249` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 95 offen, 1 in Arbeit.
+`[cmd]` 97 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -175,6 +175,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-07** | Umschalten |  |
 | **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
+| **A-21** | Kimi-K3-Schwarm als Rechercheweg |  |
+| **A-22** | Was an Kimi gehen kann — klassifiziert |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-83** | Es gibt kein Onboarding |  |
@@ -1353,6 +1355,81 @@ Umsetzen angepasst werden.
 
 
 
+
+- [ ] **A-21: Kimi-K3-Schwarm als Rechercheweg** (neu 2026-08-19).
+  **Merkposten, kein Auftrag.**
+
+  `[cmd]` **Aufstellung seit 2026-08-19:** ChatGPT als Orchestrator,
+  Kimi K3 im Schwarm als Rechercheure. **Liefert schnell und
+  belegt.**
+
+  ### Wie die Uebergabe laeuft
+
+  `[cmd]` **Kein Repozugriff.** Er liefert **ein ZIP mit allen Daten
+  darin**, das unter `backup/kimi-research/` landet — in `.gitignore`,
+  wie der Cloud-Dump und der LOINC-Quellordner.
+
+  `[read]` **Was daraus folgt fuer die Auftragsform:** Er kennt unsere
+  Schemata nicht. **Jeder Auftrag muss das Zielformat mitliefern** —
+  Feldnamen, Einheiten, wie eine Quelle notiert wird. **Sonst kommt ein
+  guter Bestand in einer Sprache, die wir uebersetzen muessen** (siehe
+  unten).
+
+  ### Die Qualitaet ist gemessen besser als unsere Specs
+
+  `[cmd]` **Der erste Bestand:** 1.035 Quellen, **9 gespeicherte
+  Konflikte**, Evidenzgrade A–F, Validierungsbericht mit 0 Fehlern.
+
+  `[read]` **Unsere KI-erzeugten Specs haben in derselben Zeit sieben
+  inhaltliche Fehler produziert** (A-20). **Der Unterschied liegt am
+  Verfahren:** Dort werden Konflikte festgehalten statt weggeglaettet,
+  und jede Aussage traegt ihre Quelle.
+
+  ### Und der Bruch beim Wachstum ist die Lehre
+
+  `[cmd]` **Von 56 auf 503 Wirkstoffe** — dabei fielen **alle sieben
+  Feldvertragsklassen weg** (`anticoagulant:warfarin`, `SSRI`, …), **224
+  von 503 stehen auf `unclassified`**, und **ATC steht auf genau den
+  alten 56.**
+
+  `[read]` **Deshalb gehoert in jeden Auftrag:** das Zielvokabular
+  ausdruecklich, **und die Bitte, es bei jeder Erweiterung zu
+  halten.**
+
+- [ ] **A-22: Was an Kimi gehen kann — klassifiziert** (neu
+  2026-08-19). **Auftraege schreiben, sobald er frei ist.**
+
+  ### Klasse A — Fachliteratur, klar umrissen
+
+  `[read]` **Zahlen, die im Repo als *„conservative defaults"* stehen und
+  niemand belegen kann. Jede blockiert eine Kachel.**
+
+  | | |
+  |---|---|
+  | **C-105** | **MEV/MAV/MRV** — blockiert dreifach: Volume landmarks, Zielband *14/16 Saetze*, Einstufung Beginner…Elite |
+  | **C-124 (E5)** | **Modalitaeten-Bonuswerte** — Sauna, Massage, Eisbad, Dehnen |
+  | **C-124 (E8)** | **Motivations-Schwelle** · und: ab wie vielen Signalen ueber wie viele Tage ist ein Arzt-Hinweis angebracht? |
+  | **C-109** | **`rest_days` und Nadelstaerke je Injektionsort** — die Volumina hat F-05 belegt |
+
+  `[cmd]` **Vorschlag: C-105 und C-124 als ein Auftrag** — dieselbe
+  Literatur, dieselben Zeitschriften, **zusammen fuenf Kacheln.**
+
+  ### Klasse B — Datenluecken im bestehenden Format
+
+  `[cmd]` **Die 9 Marker aus G-84** — ApoB, PSA, Zink, FSH, IGF-1,
+  Prolaktin, Calcium. **Mit LOINC-Code, Einheit, Referenzbereich,
+  Quelle.** `[read]` **Der einfachste Auftrag:** Das Format steht (C-84
+  hat 560 Bereiche gebaut), es fehlen neun Zeilen.
+
+  `[cmd]` **C-108** — die **6 Supplement×Medikament-Wechselwirkungen**
+  (Warfarin, SSRIs, Pille). **Unsere 28 CSV-Zeilen sind unbelegt.**
+
+  ### Klasse C — geht nicht an Kimi
+
+  `[cmd]` **C-71, C-123** — Toms Entscheidungen, keine Recherche.
+  **C-114, C-115** — von Fable erledigt. **C-116** — wartet auf Kimis
+  eigene Lieferung. **C-127, E-14, G-70** — Befunde im Repo, keine
+  Aussenfrage.
 
 - [ ] **A-18: `theme-v1/uploads/` — die Bruecke zwischen Spec und
   Entwurf** (neu 2026-08-18). Befund aus der G-42-Vorarbeit.
