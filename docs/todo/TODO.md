@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `4d7c2d3` auf `dev`.
+**Stand:** 2026-08-18, Anker `bdb6bd2` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 114 offen, 1 in Arbeit.
+`[cmd]` 115 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -183,6 +183,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-93** | Der Anzeigename fehlt im laufenden Erfassungsdialog |  |
 | **G-98** | Meal plans braucht einen Zustand und eine Herkunft |  |
 | **G-99** | Drei der acht Planner-Spalten bleiben wirkungslos |  |
+| **G-101** | Der Aktivitaetsstrom des Dashboards waere baubar (sechs Abfragen) |  |
+| **G-102** | Zwei SVG-Pfade der Muskelkarte sind abgeschnitten (2 Konsolenfehler) |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
@@ -229,6 +231,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
+| **G-104** | Preferences von Grund auf pruefen — bedienbar, und es muss wirken |  |
 | **G-103** | Der Preferences-Tab speichert nicht und ist schwer zu bedienen |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -1684,6 +1687,70 @@ Umsetzen angepasst werden.
   die Umrechnung in Einkaufseinheiten. **Der guenstigste der vier
   Punkte.**
 
+- [x] **G-100: Das Dashboard an die Module anschliessen**
+  (neu 2026-08-20, **erledigt 2026-08-20** — Bericht
+  `docs/ssot/149-dashboard.md`).
+
+  `[cmd]` **Attrappen gerendert 11 → 6.** Das Dashboard war das
+  einzige nie angebundene Modul und die erste Seite, die ein Nutzer
+  sieht.
+
+  `[cmd]` **Gemessen fuer den 2026-08-20:** Recovery **83,9** (Schnitt
+  der sieben Tage davor 80,7), Schlaf **7,8 h**, Kalorien
+  **2.727/2.500**, Training **15/14**, **3 von 41 PRs**, Medical
+  **2 + 5**, Supplements **93,5 %**.
+
+  `[read]` **Nichts neu gerechnet** — Medical laeuft ueber dieselbe
+  Kette wie sein Modul (G-84), die Tagesziele ueber `getZielwerteAm`.
+
+  `[cmd]` **Der Stichtag statt der juengsten Zeile:** Die Seeds laufen
+  bis 2026-11-06; `ladeScores()` haette einen Novemberwert als „heute"
+  gezeigt.
+
+  **Gemeldet statt gebaut:** der Readiness-Komposit und *„Push hard"*,
+  Body battery (**gibt es im Schema nicht**), Block/Woche/Coach bei
+  „Tonight", die Dauer je Ereignis beim Tagesverlauf.
+
+  **Offen geblieben:** G-101 und G-102.
+
+- [ ] **G-101: Der Aktivitaetsstrom des Dashboards** (neu 2026-08-20,
+  aus G-100).
+
+  `[cmd]` **Er waere baubar** — anders als der Tagesverlauf braucht er
+  keine Dauer, nur Zeitpunkt, Modul und einen Satz. Die Zeitpunkte
+  liegen vollstaendig vor: `meals.meal_time` **725/725**,
+  `intake_logs.intake_time` **360/360**,
+  `workout_sessions.started_time` **30/30**.
+
+  `[read]` **Was fehlt, ist eine Entscheidung, keine Spalte:** Es gibt
+  keine gemeinsame Ereignistabelle. Sechs Abfragen je Seitenaufruf,
+  nach Zeit gemischt — **oder** eine Sicht in der Datenbank, die das
+  einmal tut. Das Zweite waere die Loesung, das Erste die Abkuerzung.
+
+- [ ] **G-102: Zwei SVG-Pfade der Muskelkarte sind abgeschnitten**
+  (neu 2026-08-20, aus G-100). **`packages/ui`.**
+
+  `[cmd]` **Zwei Konsolenfehler auf jeder Recovery-Seite:**
+  `<path> attribute d: Expected number`.
+
+  `[cmd]` **Kein Encoding-Problem**, obwohl die Meldung so aussieht:
+  `packages/ui/src/koerperkarte-pfade.ts` enthaelt **0 Ersatzzeichen
+  (U+FFFD)** — das `?` in der Konsole ist die Konsole.
+
+  `[cmd]` **Es sind abgeschnittene Pfaddaten.** Ein `C` braucht sechs
+  Zahlen:
+
+  ```
+  … C 89.50 823.53 109.24 767.88 A 0.37 …   ← vier, dann folgt A
+  … C 1039.32 221.19 C 1041.33 230.61 …     ← zwei, dann folgt C
+  ```
+
+  `[cmd]` **Unveraendert seit `3dae1a2`** — die Daten kamen so ins
+  Repo. Die Karte zeichnet; nur diese zwei Teilstuecke fehlen.
+
+  `[read]` In G-100 nicht behoben, weil `packages/ui` dort gesperrt
+  war.
+
 - [ ] **G-99: Drei der acht Planner-Spalten bleiben wirkungslos**
   (neu 2026-08-20, aus G-97).
 
@@ -3127,6 +3194,38 @@ Umsetzen angepasst werden.
   oben finden.
 
   `[cmd]` **Umfasst G-103** — dort stehen die Einzelbefunde.
+
+- [ ] **G-105: Zwei abgeschnittene SVG-Pfade in `packages/ui`** (neu
+  2026-08-20). Befund aus G-100. **Klein, aber alt.**
+
+  `[cmd]` **Kein Encoding-Problem** — *„die Datei enthaelt 0
+  Ersatzzeichen. Es sind **abgeschnittene Pfaddaten**: ein `C` mit vier
+  statt sechs Zahlen, ein zweiter mit zwei."*
+
+  `[cmd]` **Seit `3dae1a2` unveraendert** — sie erzeugen die zwei
+  Konsolenfehler, die auf jeder Seite mit Muskelkarte stehen.
+
+  `[read]` **Nicht behoben, weil `packages/ui` gesperrt war** — der
+  G-100-Agent hat es gemeldet. **Ein eigener kleiner Auftrag, sobald
+  niemand dort arbeitet.**
+
+- [ ] **G-106: Der Readiness-Komposit waere ein zweiter Gesamtwert**
+  (neu 2026-08-20). Befund aus G-100. **Gemeldet statt gebaut.**
+
+  `[cmd]` **Der Entwurf rechnet aus fuenf Anteilen einen Wert und
+  schreibt *„Push hard"* daneben.**
+
+  `[read]` **Zwei Gruende, warum er draussen blieb:** *„`recovery.scores`
+  fuehrt bereits einen Gesamtwert mit sieben Anteilen (G-82) — **zwei
+  Gesamtwerte nebeneinander waeren schlimmer als einer**."* Und *„Push
+  hard"* ist Urteilssprache, wie *„Good"* (G-76) und *„Optimal"*
+  (G-60).
+
+  `[cmd]` **`Body battery` gibt es im Schema nicht** — *„keine Spalte
+  `batter*` irgendwo."*
+
+  **Zu entscheiden:** Faellt die Kachel weg, oder zeigt sie den
+  vorhandenen Erholungswert?
 
 - [ ] **G-103: Der Preferences-Tab speichert nicht und ist schwer zu
   bedienen** (neu 2026-08-20). **Toms Befund, hohe Prioritaet.**
