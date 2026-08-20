@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `1665f44` auf `dev`.
+**Stand:** 2026-08-18, Anker `933d75d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 83 offen, 3 in Arbeit.
+`[cmd]` 85 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -191,6 +191,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-111** | Recovery — neun Entscheidungen und drei Formelfehler |  |
 | **C-112** | Buddy, Coach und Marketplace — elf Entscheidungen |  |
 | **C-113** | Enhanced Mode — dreimal dasselbe PED-Thema, nirgends eingeordnet |  |
+| **C-114** | Was das Vorgaengerrepo beim Coach falsch machte |  |
+| **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
 | **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
@@ -2026,6 +2028,100 @@ Umsetzen angepasst werden.
 
   `[read]` **Das beruehrt Recht, Haftung und Produktausrichtung
   zugleich.** Eine Entscheidung, nicht drei.
+
+- [ ] **C-114: Was das Vorgaengerrepo beim Coach falsch machte** (neu
+  2026-08-19). **Vier Entscheidungen fuer Tom.** Aus der F-04-Recherche
+  (`docs/spezifikation/recherche-coach-portale.md`, 477 Zeilen).
+
+  ### `056_coach_autonomy` — die Mechanik trug, die Governance nicht
+
+  `[cmd]` **Fuenf Stufen je Modul** (Training, Nutrition, Recovery,
+  Supplements; Vorgabe 2) **plus `safety_level` 1–3**, im Buddy-Code
+  real durchgesetzt.
+
+  `[read]` **Aber:** *„Die Stufen setzt der Coach selbst per `PUT`, ohne
+  Bestaetigung des Klienten — genau umgekehrt zu Toms
+  C-95-Vorgabe."*
+
+  `[cmd]` **Und es existieren vier konkurrierende
+  Autonomie-Repraesentationen** — zwei davon (`coach_autonomy_settings`,
+  `client_autonomy`) **werden vom Code benutzt, obwohl keine Migration
+  sie je anlegt.**
+
+  ### `coach_pending_actions` ist Toms Muster — aber nicht uebernehmbar
+
+  `[cmd]` **Vorschau, 10-Minuten-Verfall, `confirmed_at`**, daneben
+  `coach_action_log` mit Undo. **Genau *„mit Bestaetigung des Users"*.**
+
+  `[read]` **Gebaut fuer den Einzelnutzer-Betrieb:** *„hartkodierte
+  Default-User-UUID, keine Akteursspalte, keine RLS. Muster
+  uebernehmbar, Tabelle nicht."*
+
+  ### Die Widerrufsfrage ist praeziser als C-71 sagte
+
+  `[cmd]` **`user_preference_audit` (043) existiert** — alt, neu,
+  Quelle, Grund. **Aktionen haben mit `coach_action_log` und
+  `intervention_log` eine Spur.**
+
+  `[cmd]` **Fuer Rechte- und Autonomie-Aenderungen gibt es nichts** —
+  **und das dokumentierte `coach_client_autonomy_log` hat nachweislich
+  keine Migration.**
+
+  `[read]` *„Das Wissen lag vor, kam aber nie in die Datenbank."*
+
+  ### Was trotzdem fehlte — der Grund fuer den Neubau
+
+  `[cmd]` **Der Klient hatte keine Stimme** — *„Seed vergibt sogar
+  Medical-Einwilligung per Skript."*
+
+  `[cmd]` **RLS war auf den Coach-Tabellen Attrappe** — `USING (true)`
+  oder ganz fehlend.
+
+  `[read]` **Und es gab keinen Mechanismus, der eine neue Antwort
+  zwang, die alte abzuloesen** — *„jede Welle baute neu."*
+
+- [ ] **C-115: Was der Markt kann und was LumeOS eigen ist** (neu
+  2026-08-19). Aus F-04.
+
+  ### Der Kernbefund haelt
+
+  `[cmd]` **Niemand hat Supplements, Blutwerte oder Recovery als
+  Coaching-Gegenstand** — auch Stand August 2026 nicht. **Die eigene
+  Recherche von Februar 2026 stimmt darin weiter.**
+
+  ### Was veraltet war
+
+  `[cmd]` **Preise:** reale Endkosten **40–60 % ueber Werbepreis.**
+  CoachRx fehlte ganz — jetzt 25/67/169 $.
+
+  `[cmd]` **AI-Check-in-Analyse ist inzwischen Marktware** — My PT Hub
+  verkauft sie als Zusatz. **Im Februar war sie noch ein unerfuellter
+  Trainerwunsch.**
+
+  `[cmd]` **Groesste Zeitsenke im Traineralltag:** der Check-in-Review —
+  **2–3 Minuten je Klient gegen 10–15.**
+
+  ### Rechte und Geld
+
+  `[cmd]` **Kein Marktplayer hat ein klientenseitiges
+  Sicht-/Autonomie-Modell** — `[read]` **Art. 9 DSGVO verlangt aber
+  genau die Richtung, die Tom vorgibt.**
+
+  `[cmd]` **Der Markt faehrt Abo + Stripe + Provision, ohne eigenes
+  Guthaben.** `[read]` **Die Wallet aus `048` waere eigenes Terrain mit
+  ungepruefter Regulierungslast** — deckt sich mit dem F-03-Befund zur
+  E-Geld-Konstruktion.
+
+  ### Vier Entscheidungen vorgelegt
+
+  **Stufigkeit** (fuenf Stufen oder Toms zweiwertiges Modell) ·
+  **Sichtstufen** (2 oder 3) · **Wallet ja oder nein** ·
+  **Provisionsmodell.**
+
+  `[read]` **Und die Luecken stehen benannt:** keine Reddit-Rohquellen
+  erreichbar, keine PSD2-Rechtspruefung, Apps nicht selbst bedient.
+  **Widersprueche ebenfalls** — TrueCoach 107 gegen 137 $, My PT Hub 105
+  gegen 59 $.
 
 - [ ] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
   **Setzt G-65 und G-66 voraus.**
