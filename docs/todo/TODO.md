@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `73fdea7` auf `dev`.
+**Stand:** 2026-08-18, Anker `9961ba7` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 91 offen, 1 in Arbeit.
+`[cmd]` 96 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -212,6 +212,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-126** | E2 braucht Toms Bestaetigung |  |
 | **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
+| **C-130** | `medical.medications` und Conditions |  |
+| **C-131** | Substanzstabile ID- und Aliasschicht |  |
+| **C-132** | `missing_input` fuer Regeln |  |
+| **C-133** | Die Warn- und Gap-Regeln uebernehmen |  |
+| **C-134** | Die Substanzen der drei Bestaende zusammenfuehren |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2551,6 +2556,85 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Und tausende Medikamente kommen** — im selben Format. **Die
   Struktur muss sie tragen**, der erste Import nur die 56.
+
+- [ ] **C-130: `medical.medications` und Conditions** (neu 2026-08-19).
+  **Erster Schritt aus C-129, blockiert 20 Regeln.**
+
+  `[cmd]` **Die Tabelle gibt es nicht** — Medical fuehrt Befunde, keine
+  Medikamente. **Alle 20 Medikamentenregeln des Kimi-Bestands sind
+  dadurch blockiert.**
+
+  **Tom, 2026-08-19:** *„LumeOS/Buddy muss auch wissen, was der User
+  fuer Medikamente nimmt — also brauchen wir die Daten fuer den User zum
+  Erfassen der Medikamente."*
+
+  `[cmd]` **Was der Feldvertrag erwartet:** `name`, **`drug_class`**
+  (`anticoagulant:warfarin`, `SSRI`, `RAAS_inhibitor`,
+  `CYP3A4_substrate`, `sedative`, `antidiabetic`, `MAOI`),
+  **`cyp_profile[]`.**
+
+  `[cmd]` **Dazu 15 Conditions:** Bluthochdruck, CKD, Diabetes,
+  Schwangerschaft (und geplant), Lebererkrankung, Angst, Arrhythmie,
+  Haemochromatose, hormonsensitiver Krebs, Nierensteine,
+  Autoimmunthyreoiditis, Transplantation, HIV, Epilepsie.
+
+- [ ] **C-131: Substanzstabile ID- und Aliasschicht** (neu 2026-08-19).
+  Zweiter Schritt aus C-129.
+
+  `[cmd]` **Drei Bestaende, kaum Ueberlappung:** unsere 44, F-05 mit
+  320, Kimi mit 237. **16 direkte Treffer gegen unsere 44, 53 gegen
+  F-05.**
+
+  `[read]` **Ohne gemeinsame ID laufen drei Kataloge nebeneinander** —
+  dieselbe Lage wie bei den Wechselwirkungen (28 CSV gegen 12 Spec) und
+  den Referenzbereichen (464 gegen 96).
+
+  `[cmd]` **Kimi liefert `aliases.json`** — pruefen, ob sie als Bruecke
+  taugt.
+
+- [ ] **C-132: `missing_input` fuer Regeln** (neu 2026-08-19). Dritter
+  Schritt aus C-129.
+
+  `[read]` **Der wichtigste Punkt des ganzen Bestands:** Eine Regel, die
+  auf fehlende Daten trifft, **darf nicht stumm durchfallen.**
+
+  `[cmd]` **Gemessen: 18 von 29 Warnregeln sind teilweise auswertbar**,
+  10 von 15 Gap-Regeln. **Teilweise heisst heute: sie feuern nicht, und
+  niemand erfaehrt warum.**
+
+  `[read]` **Dieselbe Regel wie `NO_REFERENCE` bei den Naehrstoffen und
+  `insufficient_intake_days` beim TDEE:** Fehlen ist ein Zustand, kein
+  Nichtereignis.
+
+- [ ] **C-133: Die Warn- und Gap-Regeln uebernehmen** (neu 2026-08-19).
+  **Setzt C-130, C-131 und C-132 voraus.**
+
+  `[cmd]` **29 Warnregeln, 15 Gap-Regeln, 20 Medikamentenregeln** — mit
+  deutschen Texten und `message_key` fuer die Uebersetzung.
+
+  `[read]` **Die Policy deckt sich mit C-113:** *„Legal supplements may be
+  suggested against gaps; enhanced/illegal/Rx substances are
+  warning-only with physician referral — never recommended, never
+  dosed."*
+
+  `[cmd]` **Und `self_declared_enhanced` ist im Feldvertrag** —
+  *„triggers warning_only flow"*. **Das ist Toms Enhanced Mode als
+  Feld.**
+
+- [ ] **C-134: Die Substanzen der drei Bestaende zusammenfuehren** (neu
+  2026-08-19). **Setzt C-131 voraus.**
+
+  `[cmd]` **44 live, 320 aus F-05, 237 aus Kimi** — mit 38 Feldern je
+  Kimi-Substanz, darunter getrennte Dosisfelder: `official_label_dose`,
+  `guideline_dose`, `tolerable_upper_intake_level`,
+  `studied_dose_ranges`, `anecdotal_dose_ranges`.
+
+  `[read]` **Die Trennung ist genau Toms Vorgabe:** *„Die
+  Dosisempfehlungen und Grenzen sollten wir haben — nicht um zu
+  empfehlen, eher als Massstab."*
+
+  `[cmd]` **Und der F-02-Befund gehoert geprueft:** 33 der 44 haben kein
+  `nutrients_provided`, vier Gap-Codes fehlen. **Liefert Kimi sie?**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
