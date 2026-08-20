@@ -140,6 +140,18 @@ type RecoveryCheckinRow = {
   notes: string
 }
 
+type RecoveryModalityLogRow = {
+  userId: string
+  entryDate: string
+  loggedTime: string
+  modalityType: 'sauna' | 'cold_plunge' | 'massage' | 'stretching'
+  durationMin: number
+  detail: string
+  immediateEffect: number
+  nextDayEffect: number
+  notes: string
+}
+
 type GoalRow = {
   id: string
   userId: string
@@ -837,6 +849,7 @@ const trainingSessions: TrainingSessionRow[] = []
 const trainingExercises: TrainingExerciseRow[] = []
 const trainingSets: TrainingSetRow[] = []
 const recoveryCheckins: RecoveryCheckinRow[] = []
+const recoveryModalities: RecoveryModalityLogRow[] = []
 const goalRows: GoalRow[] = [
   {
     id: '30000000-0000-0000-0000-000000000101',
@@ -1653,8 +1666,65 @@ function recoveryCheckinFor(date: string, index: number): RecoveryCheckinRow {
   }
 }
 
+function pushRecoveryModalities(date: string, index: number): void {
+  const userId = '10000000-0000-0000-0000-000000000101'
+  if (index % 9 === 0) {
+    recoveryModalities.push({
+      userId,
+      entryDate: date,
+      loggedTime: '19:15',
+      modalityType: 'sauna',
+      durationMin: 18 + (index % 4) * 4,
+      detail: '2 Durchgaenge, moderat',
+      immediateEffect: 7 + (index % 2),
+      nextDayEffect: 6 + (index % 3),
+      notes: 'C-125 Seed: Sauna-Modalitaet, Bonuswert wartet auf C-124',
+    })
+  }
+  if (index % 13 === 4) {
+    recoveryModalities.push({
+      userId,
+      entryDate: date,
+      loggedTime: '18:40',
+      modalityType: 'massage',
+      durationMin: 45 + (index % 3) * 10,
+      detail: 'Sportmassage Beine/Ruecken',
+      immediateEffect: 8,
+      nextDayEffect: 7 + (index % 2),
+      notes: 'C-125 Seed: Massage-Modalitaet, Bonuswert wartet auf C-124',
+    })
+  }
+  if (index % 11 === 6) {
+    recoveryModalities.push({
+      userId,
+      entryDate: date,
+      loggedTime: '07:45',
+      modalityType: 'cold_plunge',
+      durationMin: 3 + (index % 3),
+      detail: 'Eisbad nach Training',
+      immediateEffect: 6,
+      nextDayEffect: 6 + (index % 2),
+      notes: 'C-125 Seed: Eisbad-Modalitaet, Bonuswert wartet auf C-124',
+    })
+  }
+  if (index % 4 === 2) {
+    recoveryModalities.push({
+      userId,
+      entryDate: date,
+      loggedTime: '21:05',
+      modalityType: 'stretching',
+      durationMin: 10 + (index % 5) * 3,
+      detail: 'Mobility und Dehnen vor dem Schlafen',
+      immediateEffect: 6 + (index % 3),
+      nextDayEffect: 5 + (index % 3),
+      notes: 'C-125 Seed: Dehnen-Modalitaet, Bonuswert wartet auf C-124',
+    })
+  }
+}
+
 ALL_DATES.slice(1, 171).forEach((date, index) => {
   recoveryCheckins.push(recoveryCheckinFor(date, index))
+  pushRecoveryModalities(date, index)
 })
 
 const userIds = USERS.map(user => lit(user.id)).join(', ')
@@ -1734,6 +1804,17 @@ const recoveryCheckinValues = recoveryCheckins.map(checkin => tuple([
   checkin.screenTimeBeforeBed,
   checkin.hrvRmssd,
   checkin.notes,
+])).join(',\n')
+const recoveryModalityValues = recoveryModalities.map(modality => tuple([
+  modality.userId,
+  modality.entryDate,
+  modality.loggedTime,
+  modality.modalityType,
+  modality.durationMin,
+  modality.detail,
+  modality.immediateEffect,
+  modality.nextDayEffect,
+  modality.notes,
 ])).join(',\n')
 const goalValues = goalRows.map(goal => tuple([
   goal.id,
@@ -1908,6 +1989,8 @@ USING training.workout_sessions s
 WHERE we.workout_session_id = s.id
   AND s.user_id IN (${userIds});
 DELETE FROM training.workout_sessions WHERE user_id IN (${userIds});
+DELETE FROM recovery.modality_log WHERE user_id IN (${userIds});
+DELETE FROM recovery.scores WHERE user_id IN (${userIds});
 DELETE FROM recovery.checkins WHERE user_id IN (${userIds});
 DELETE FROM medical.lab_result_values WHERE user_id IN (${userIds});
 DELETE FROM medical.lab_reports WHERE user_id IN (${userIds});
@@ -2602,6 +2685,36 @@ SELECT
   alcohol_units, caffeine_mg, screen_time_before_bed, hrv_rmssd, notes
 FROM test_recovery_checkins;
 
+CREATE TEMP TABLE test_recovery_modalities (
+  user_id uuid NOT NULL,
+  entry_date date NOT NULL,
+  logged_time time NOT NULL,
+  modality_type text NOT NULL,
+  duration_min integer NOT NULL,
+  detail text NOT NULL,
+  immediate_effect smallint NOT NULL,
+  next_day_effect smallint NOT NULL,
+  notes text NOT NULL
+) ON COMMIT DROP;
+
+INSERT INTO test_recovery_modalities VALUES
+${recoveryModalityValues};
+
+INSERT INTO recovery.modality_log (
+  user_id, entry_date, logged_time, modality_type, duration_min,
+  detail, immediate_effect, next_day_effect, bonus_value, bonus_source,
+  notes, measurement_source, source_detail
+)
+SELECT
+  user_id, entry_date, logged_time, modality_type, duration_min,
+  detail, immediate_effect, next_day_effect,
+  recovery.modality_bonus_value(modality_type), 'pending_c124_e5',
+  notes, 'seed', 'C-125 Testdaten Modalitaeten'
+FROM test_recovery_modalities;
+
+SELECT recovery.refresh_scores_for_user(id)
+FROM (VALUES ${USERS.map(user => `('${user.id}'::uuid)`).join(', ')}) seed_users(id);
+
 DO $$
 DECLARE
   v_users integer;
@@ -2612,6 +2725,8 @@ DECLARE
   v_training_exercises integer;
   v_training_sets integer;
   v_recovery_checkins integer;
+  v_recovery_scores integer;
+  v_recovery_modalities integer;
   v_user_goals integer;
   v_goal_phases integer;
   v_body_measurements integer;
@@ -2638,6 +2753,8 @@ BEGIN
   JOIN training.workout_sessions s ON s.id = we.workout_session_id
   WHERE s.user_id IN (${userIds});
   SELECT count(*) INTO v_recovery_checkins FROM recovery.checkins WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_recovery_scores FROM recovery.scores WHERE user_id IN (${userIds});
+  SELECT count(*) INTO v_recovery_modalities FROM recovery.modality_log WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_user_goals FROM goals.user_goals WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_goal_phases FROM goals.goal_phases WHERE user_id IN (${userIds});
   SELECT count(*) INTO v_body_measurements FROM goals.body_measurements WHERE user_id IN (${userIds});
@@ -2662,8 +2779,8 @@ BEGIN
     v_users, v_meals, v_items, v_water, v_max_days;
   RAISE NOTICE 'OK: C-66 Training-Testdaten: % Sitzungen, % Uebungen, % Saetze',
     v_training_sessions, v_training_exercises, v_training_sets;
-  RAISE NOTICE 'OK: C-67 Recovery-Testdaten: % Check-ins',
-    v_recovery_checkins;
+  RAISE NOTICE 'OK: C-125 Recovery-Testdaten: % Check-ins, % Scores, % Modalitaeten',
+    v_recovery_checkins, v_recovery_scores, v_recovery_modalities;
   RAISE NOTICE 'OK: GO-07 Goals-Testdaten: % Ziele, % Phasen',
     v_user_goals, v_goal_phases;
   RAISE NOTICE 'OK: GO-10 Koerpermessungen-Testdaten: % Gewicht/KFA, % Umfaenge',
@@ -2690,4 +2807,4 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 
-console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte.`)
+console.log(`C-82 Testdaten eingespielt in Datenbank ${DB}: ${USERS.length} Nutzer, ${meals.length} Mahlzeiten, ${items.length} Positionen, ${waterLogs.length} Wassereintraege, ${trainingSessions.length} Trainingssitzungen, ${trainingExercises.length} Trainingsuebungen, ${trainingSets.length} Saetze, ${recoveryCheckins.length} Recovery-Check-ins, ${recoveryModalities.length} Recovery-Modalitaeten, ${goalRows.length} Ziele, ${goalPhaseRows.length} Phasen, ${goalMilestoneRows.length} Meilensteine, ${bodyMeasurements.length} Koerpermessungen, ${bodyCircumferences.length} Umfangsmessungen, ${supplementStacks.length} Supplement-Stacks, ${supplementStackItems.length} Supplement-Items, ${supplementIntakeLogs.length} Supplement-Einnahmen, ${medicalLabReports.length + 1} Medical-Befunde, ${medicalLabValues.length + medicalImportRows.length} Medical-Messwerte.`)

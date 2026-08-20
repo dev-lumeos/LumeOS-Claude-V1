@@ -123,6 +123,14 @@
     "user": "Tom Miller",
     "email": "tom.seed@example.com",
     "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "2026-08-18",
+    "case": "Recovery Score im manual mode",
+    "expected": "recovery.scores enthaelt einen manual Score-Schnappschuss ohne hrv_score, mit nutrition_source fallback_c123_e9 und Soreness aus genau drei gemeldeten Muskeln. recovery.modality_log enthaelt Sauna, Massage, Eisbad und Dehnen mit bonus_source pending_c124_e5."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
     "date": "2026-08-02, 2026-08-10, 2026-08-18",
     "case": "Goals und Phasen mit gueltig_ab und Phasenwechsel",
     "expected": "goals.phase_am liefert am 2026-08-02 keine Zeile, am 2026-08-10 maintenance und am 2026-08-18 lean_bulk. Tom hat zwei aktive Ziele, genau eines davon primary."

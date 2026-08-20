@@ -83,6 +83,8 @@ const trainingStatusRows = sql(`
   GROUP BY status
   ORDER BY status;`)
 const recoveryCheckins = numberScalar(`SELECT count(*) FROM recovery.checkins WHERE user_id IN (${IDS_SQL});`)
+const recoveryScores = numberScalar(`SELECT count(*) FROM recovery.scores WHERE user_id IN (${IDS_SQL});`)
+const recoveryModalities = numberScalar(`SELECT count(*) FROM recovery.modality_log WHERE user_id IN (${IDS_SQL});`)
 const medicalCatalog = numberScalar(`SELECT count(*) FROM medical.biomarker_catalog;`)
 const medicalRanges = numberScalar(`SELECT count(*) FROM medical.biomarker_reference_ranges;`)
 const medicalAliases = numberScalar(`SELECT count(*) FROM medical.biomarker_aliases;`)
@@ -132,6 +134,8 @@ if (MODE === 'clean') {
   if (trainingSessions !== 0) errors.push(`training.workout_sessions: ${trainingSessions}, erwartet 0`)
   if (trainingExercises !== 0) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet 0`)
   if (trainingSets !== 0) errors.push(`training.workout_sets: ${trainingSets}, erwartet 0`)
+  if (recoveryModalities !== 0) errors.push(`recovery.modality_log: ${recoveryModalities}, erwartet 0`)
+  if (recoveryScores !== 0) errors.push(`recovery.scores: ${recoveryScores}, erwartet 0`)
   if (recoveryCheckins !== 0) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet 0`)
   if (medicalReports !== 0) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 0`)
   if (medicalValues !== 0) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 0`)
@@ -153,7 +157,7 @@ if (MODE === 'clean') {
   console.log(`  Preferences/Items: ${preferences}/${preferenceItems}`)
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
-  console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
+  console.log(`  Recovery Check-ins/Scores/Modalitaeten: ${recoveryCheckins}/${recoveryScores}/${recoveryModalities}`)
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  foods/food_nutrients: ${foods}/${nutrients}`)
@@ -216,6 +220,8 @@ if (MODE === 'clean') {
   if (trainingExercises < 50) errors.push(`training.workout_exercises: ${trainingExercises}, erwartet mindestens 50`)
   if (trainingSets < 85) errors.push(`training.workout_sets: ${trainingSets}, erwartet mindestens 85 abgeschlossene Satzzeilen`)
   if (recoveryCheckins < 160) errors.push(`recovery.checkins: ${recoveryCheckins}, erwartet mindestens 160`)
+  if (recoveryScores < 160) errors.push(`recovery.scores: ${recoveryScores}, erwartet mindestens 160`)
+  if (recoveryModalities < 50) errors.push(`recovery.modality_log: ${recoveryModalities}, erwartet mindestens 50`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
   if (medicalRanges !== 560) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 560`)
   if (medicalAliases !== 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet 292`)
@@ -789,6 +795,36 @@ if (MODE === 'clean') {
   }
   if (!hasRows(`
     SELECT 1
+    FROM recovery.scores
+    WHERE user_id = '${tom}'::uuid
+      AND entry_date = DATE '${relDate('2026-08-18')}'
+      AND mode = 'manual'
+      AND algorithm_version = 'manual_v1_c125'
+      AND hrv_score IS NULL
+      AND hrv_source = 'not_used_manual_mode'
+      AND nutrition_score = 70
+      AND nutrition_source = 'fallback_c123_e9'
+      AND modality_bonus = 0
+      AND soreness_reported_count = 3
+      AND soreness_avg_used BETWEEN 2.32 AND 2.34
+      AND soreness_score BETWEEN 22.1 AND 22.3
+      AND score BETWEEN 40 AND 80;`)) {
+    errors.push('Fall Recovery Score: Manual-Score ohne HRV oder E2-Soreness-Regel fehlt')
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM recovery.modality_log
+    WHERE user_id = '${tom}'::uuid
+      AND modality_type IN ('sauna','massage','cold_plunge','stretching')
+      AND bonus_source = 'pending_c124_e5'
+      AND bonus_value = 0
+    GROUP BY user_id
+    HAVING count(DISTINCT modality_type) = 4
+       AND count(*) >= 50;`)) {
+    errors.push('Fall Recovery Modalitaeten: Sauna, Massage, Eisbad und Dehnen mit pending-Bonus fehlen')
+  }
+  if (!hasRows(`
+    SELECT 1
     FROM (
       SELECT count(*) AS checkins,
              min(entry_date) AS von,
@@ -1020,7 +1056,7 @@ if (MODE === 'clean') {
   console.log(`  Meals/Items/Water: ${meals}/${items}/${waterLogs}`)
   console.log(`  Training Sessions/Exercises/Sets: ${trainingSessions}/${trainingExercises}/${trainingSets}`)
   console.log(`  Training Status: ${trainingStatusRows.map(([status, count]) => `${status}:${count}`).join(', ')}`)
-  console.log(`  Recovery Check-ins: ${recoveryCheckins}`)
+  console.log(`  Recovery Check-ins/Scores/Modalitaeten: ${recoveryCheckins}/${recoveryScores}/${recoveryModalities}`)
   console.log(`  Medical Katalog/Bereiche/Aliase/Befunde/Werte: ${medicalCatalog}/${medicalRanges}/${medicalAliases}/${medicalReports}/${medicalValues}`)
   console.log(`  Supplements Katalog/Stacks/Items/Logs: ${supplementCatalog}/${supplementStacks}/${supplementStackItems}/${supplementIntakeLogs}`)
   console.log(`  Supplements Compliance 30d: ${supplementCompliance30d}%`)

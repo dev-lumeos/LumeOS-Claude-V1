@@ -1545,6 +1545,68 @@
       "zeilenschutzart": "eigene_zeilen"
     },
     {
+      "schema": "recovery",
+      "name": "scores",
+      "schritt": "121",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "121_recovery_scores_modalities.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "recovery",
+      "name": "modality_log",
+      "schritt": "121",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "121_recovery_scores_modalities.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
       "schema": "supplements",
       "name": "supplement_catalog",
       "schritt": "130/131",
@@ -1941,6 +2003,41 @@
       "schema": "recovery",
       "name": "touch_updated_at",
       "schritt": "120"
+    },
+    {
+      "schema": "recovery",
+      "name": "scoring_constants",
+      "schritt": "121"
+    },
+    {
+      "schema": "recovery",
+      "name": "modality_bonus_value",
+      "schritt": "121"
+    },
+    {
+      "schema": "recovery",
+      "name": "training_load_score",
+      "schritt": "121"
+    },
+    {
+      "schema": "recovery",
+      "name": "acwr_for_day",
+      "schritt": "121"
+    },
+    {
+      "schema": "recovery",
+      "name": "refresh_modality_deltas",
+      "schritt": "121"
+    },
+    {
+      "schema": "recovery",
+      "name": "recalculate_score",
+      "schritt": "121"
+    },
+    {
+      "schema": "recovery",
+      "name": "refresh_scores_for_user",
+      "schritt": "121"
     },
     {
       "schema": "supplements",

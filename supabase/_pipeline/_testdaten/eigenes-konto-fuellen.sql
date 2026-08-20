@@ -62,6 +62,8 @@ WHERE we.workout_session_id = s.id
   AND s.user_id = :'ziel'::uuid;
 DELETE FROM training.workout_sessions WHERE user_id = :'ziel'::uuid;
 
+DELETE FROM recovery.modality_log WHERE user_id = :'ziel'::uuid;
+DELETE FROM recovery.scores WHERE user_id = :'ziel'::uuid;
 DELETE FROM recovery.checkins WHERE user_id = :'ziel'::uuid;
 
 DELETE FROM goals.body_circumferences WHERE user_id = :'ziel'::uuid;
@@ -277,6 +279,19 @@ SELECT
 FROM recovery.checkins
 WHERE user_id = :'quelle'::uuid;
 
+INSERT INTO recovery.modality_log (
+  id, user_id, entry_date, logged_time, modality_type, duration_min,
+  detail, immediate_effect, next_day_effect, bonus_value, bonus_source,
+  next_day_score_delta, notes, measurement_source, source_detail
+)
+SELECT
+  gen_random_uuid(), :'ziel'::uuid, entry_date, logged_time, modality_type,
+  duration_min, detail, immediate_effect, next_day_effect, bonus_value,
+  bonus_source, next_day_score_delta, notes, 'seed',
+  'Kopie aus tom.seed@example.com'
+FROM recovery.modality_log
+WHERE user_id = :'quelle'::uuid;
+
 -- 9. Training.
 CREATE TEMP TABLE workout_session_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
 CREATE TEMP TABLE workout_exercise_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
@@ -331,6 +346,8 @@ SELECT
   'seed', 'Kopie aus tom.seed@example.com'
 FROM training.workout_sets ws
 JOIN workout_exercise_map wem ON wem.alt = ws.workout_exercise_id;
+
+SELECT recovery.refresh_scores_for_user(:'ziel'::uuid);
 
 -- 10. Supplements.
 CREATE TEMP TABLE stack_map (neu uuid, alt uuid PRIMARY KEY) ON COMMIT DROP;
@@ -453,6 +470,10 @@ counts AS (
   FROM users u LEFT JOIN goals.body_circumferences bc ON bc.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'recovery_checkins', count(rc.*)
   FROM users u LEFT JOIN recovery.checkins rc ON rc.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'recovery_scores', count(rs.*)
+  FROM users u LEFT JOIN recovery.scores rs ON rs.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'recovery_modalities', count(rm.*)
+  FROM users u LEFT JOIN recovery.modality_log rm ON rm.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'workout_sessions', count(ws.*)
   FROM users u LEFT JOIN training.workout_sessions ws ON ws.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'workout_exercises', count(we.*)

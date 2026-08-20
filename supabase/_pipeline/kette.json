@@ -382,6 +382,13 @@
       "depends_on": ["B", "auth_stub"]
     },
     {
+      "id": "121",
+      "path": "supabase/_pipeline/12_recovery/121_recovery_scores_modalities.sql",
+      "kind": "sql",
+      "creates": "Recovery-Score-Schnappschuesse und modality_log mit zentralen Konstanten fuer C-124",
+      "depends_on": ["106", "120", "auth_stub"]
+    },
+    {
       "id": "130",
       "path": "supabase/_pipeline/13_supplements/130_supplements_schema.sql",
       "kind": "sql",

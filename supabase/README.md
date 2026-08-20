@@ -117,6 +117,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 109a | `10_training/109a_equipment_groups_disciplines.sql` | Geraetegruppen, deutsche Geraetenamen und Disziplinen fuer die Uebungssuche | 58 Geraete gruppiert, 1.416 Disziplinen gesetzt, 6.588 Muskelzuordnungen unveraendert |
 | 106 | `10_training/106_workout_sessions.sql` | Training-Userdaten: `workout_sessions`, `workout_exercises`, `workout_sets` | 3 Tabellen, 4 Funktionen, RLS je Operation |
 | 120 | `12_recovery/120_recovery_checkins.sql` | Recovery-Userdaten: `checkins` | 1 Tabelle, 1 Funktion, RLS je Operation |
+| 121 | `12_recovery/121_recovery_scores_modalities.sql` | Recovery-Score-Schnappschuesse und Modalitaeten: `scores`, `modality_log`, zentrale Konstanten | 2 Tabellen, 7 Funktionen, RLS je Operation |
 | 130 | `13_supplements/130_supplements_schema.sql` | Supplements-Schema: `supplement_catalog`, `supplement_interactions`, `user_stacks`, `stack_items`, `intake_logs`, `daily_intake_summary` | 5 Tabellen, 1 Sicht, 2 Funktionen, RLS je Operation |
 | 131 | `13_supplements/131_supplements_katalog.ts` | Standard-Supplement-Katalog aus `daten/supplement-katalog.json` | 44 aktive Supplements |
 | 140 | `14_medical/140_medical_schema.sql` | Medical-Schema: `biomarker_catalog`, `biomarker_reference_ranges`, `lab_reports`, `lab_result_values`, `lab_result_values_read()` | 4 Tabellen, 1 Funktion, RLS je Operation |

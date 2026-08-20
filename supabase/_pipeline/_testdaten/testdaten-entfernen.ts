@@ -44,6 +44,16 @@ deleted_training_sessions AS (
   WHERE user_id IN (${ids})
   RETURNING 1
 ),
+deleted_recovery_modalities AS (
+  DELETE FROM recovery.modality_log
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
+deleted_recovery_scores AS (
+  DELETE FROM recovery.scores
+  WHERE user_id IN (${ids})
+  RETURNING 1
+),
 deleted_recovery_checkins AS (
   DELETE FROM recovery.checkins
   WHERE user_id IN (${ids})
@@ -132,6 +142,8 @@ SELECT
   (SELECT count(*) FROM deleted_training_sets) AS training_sets,
   (SELECT count(*) FROM deleted_training_exercises) AS training_exercises,
   (SELECT count(*) FROM deleted_training_sessions) AS training_sessions,
+  (SELECT count(*) FROM deleted_recovery_modalities) AS recovery_modalities,
+  (SELECT count(*) FROM deleted_recovery_scores) AS recovery_scores,
   (SELECT count(*) FROM deleted_recovery_checkins) AS recovery_checkins,
   (SELECT count(*) FROM deleted_medical_reports) AS medical_reports,
   (SELECT count(*) FROM deleted_medical_values) AS medical_values,

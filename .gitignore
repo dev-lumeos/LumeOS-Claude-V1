@@ -235,3 +235,6 @@ docs/ssot/daten/Loinc_2.82/
 
 # Cloud-Dump LumeOS-V2 (2,7 MB, Datenquelle wie docs/specs — kein Sollwert)
 backup/lumeos-v2-cloud-*/
+
+# Kimi-Recherchebestand (2,5 MB, Datenquelle wie docs/specs — kein Sollwert)
+backup/kimi-research/
