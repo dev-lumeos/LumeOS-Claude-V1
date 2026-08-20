@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `b1a97a8` auf `dev`.
+**Stand:** 2026-08-18, Anker `f4d51b1` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 100 offen, 1 in Arbeit.
+`[cmd]` 103 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -220,6 +220,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-23** | `lint` bricht repoweit ab |  |
 | **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
 | **C-144** | `immediate_effect` ist 1–10, `next_day_effect` fehlt |  |
+| **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
+| **G-88** | Die Sitzungskarte auf `Today` |  |
+| **A-24** | Attrappenmarken sind kein brauchbares Mass |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2755,6 +2758,62 @@ Umsetzen angepasst werden.
   `[cmd]` **`next_day_effect` fehlte ganz** — der Entwurf nennt
   `next_day_score_delta` als Sinn des Modalitaeten-Protokolls.
   **Nachzutragen.**
+
+- [ ] **C-145: `Plan` braucht ein Schema, keine Anzeige** (neu
+  2026-08-19). **Befund aus G-86, eindeutig gemessen.**
+
+  `[cmd]` **Von elf Feldern, die die zwei Kacheln brauchen, fuehrt
+  `workout_sessions` keines.**
+
+  `[read]` **Der entscheidende Punkt:** *„`name` traegt 30 Sitzungen mit
+  30 verschiedenen Namen, jeder genau einmal — **eine Routine ist etwas
+  Wiederverwendbares, hier wiederholt sich nichts.**"*
+
+  `[read]` **Und die Abgrenzung zum Kalender sitzt:** *„Der Kalender
+  zeigt datierte Sitzungen, **Plan zeigt die Struktur darueber** —
+  Bloecke, Wochen mit Phasenzweck, Routinen mit Herkunft. Fehlendes
+  Schema, kein Anzeigeproblem."*
+
+  `[cmd]` **Was es braeuchte:** Routinen als eigene Objekte,
+  Bloecke/Wochen, und eine Verbindung von der Sitzung zur Routine.
+
+- [ ] **G-88: Die Sitzungskarte auf `Today`** (neu 2026-08-19).
+  **Entscheidung fuer Tom.** Rest aus G-86.
+
+  `[cmd]` **Teilweise baubar:** `planned_sets`, `planned_reps`,
+  `planned_weight_kg` stehen auf **60 von 60** — **aber `rir` und
+  `is_pr` sind 0 von 101.** Zwei von fuenf Spalten fehlen.
+
+  `[read]` **Der Agent hat sie ganz beim Entwurf gelassen statt halb
+  gefuellt** — richtig. **Zu entscheiden:** drei von fuenf zeigen und
+  zwei weglassen, oder warten, bis die Seeds `rir` und `is_pr`
+  liefern?
+
+  `[cmd]` **Die Spalten existieren** — `workout_sets` traegt `rpe`,
+  `rir`, `set_type`, `rest_seconds`, `logged_via`. **Sie sind nur
+  leer.**
+
+- [ ] **A-24: Attrappenmarken sind kein brauchbares Mass** (neu
+  2026-08-19). **Befund aus G-86.**
+
+  `[cmd]` **Der Auftrag nannte *„Marken 40 → 24"* und 15/14/10/3 je
+  Datei** — gemessen sind es **11/17/9/1 = 38**, im Browser gezaehlt
+  **22**.
+
+  `[read]` *„Die Textmarken sind ohnehin kein brauchbares Mass“* — seit
+  G-74 gibt es `RUECKFALL` neben `ATTRAPPE`, **und eine Datei kann
+  beide tragen.**
+
+  `[cmd]` **Was zaehlt, ist die gerenderte Seite:** Today 1,
+  History/Progression/Standards/Calendar 0.
+
+  `[read]` **Fuer den Orchestrator:** Keine Markenzahl mehr aus einem
+  alten Bericht uebernehmen. **Entweder im Browser zaehlen lassen oder
+  weglassen.**
+
+  `[cmd]` **Dritter Fall heute** — nach *„erreicht, offen, verfehlt"*
+  (G-79) und *„Kreatin 30 Tage"* (G-74). **Und *„200 Saetze"* war auch
+  falsch: es sind 101.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
