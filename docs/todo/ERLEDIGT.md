@@ -1104,6 +1104,27 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   benutzt wird, ist keine Vorsorge. `backup/data/` gab es seit dem
   2026-08-01.*
 
+- [x] **B-26: `testdaten-einspielen.ts` ignoriert unbekannte Flags**
+  (neu 2026-08-20). **Beinahe-Unfall aus F-07, folgenlos.**
+
+  `[cmd]` *„Ein Lauf ging gegen live und wurde durch die
+  Ein-Transaktions-Bauweise komplett zurueckgerollt — gemessen: **725
+  Mahlzeiten unversehrt**."*
+
+  `[read]` **Die Bauweise hat gerettet, was ein Tippfehler gekostet
+  haette.** **Aber ein Skript, das ein unbekanntes Flag stillschweigend
+  verwirft, ist eine Falle** — dieselbe Klasse wie `.in()`, das ueber
+  200 IDs schweigt (G-64).
+
+  **Zu tun:** unbekannte Flags ablehnen, nicht ignorieren.
+
+  `[cmd]` **Erledigt 2026-08-20 mit C-156.** `--bogus` bricht ab:
+  *„Unbekannter Parameter."*
+
+  `[cmd]` **Und die Seed-Nutzer werden stabil per Upsert gehalten** —
+  **Coach-Beziehungen: 3 vor dem Seed, 3 danach, 3 nach der
+  Dev-Kopie.** Die FK-Kaskade greift nicht mehr.
+
 ## C — Produkt: apps/web
 
 - [x] **C-11: Stammdaten-Reads auf den Session-Client** — **erledigt: war
@@ -6002,6 +6023,31 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   **Die neun Entscheidungen T1–T9 bleiben offen.**
 
+- [x] **C-154: Vier Policy-Abweichungen bei den Training-Stammdaten**
+  (neu 2026-08-20). Befund aus C-153.
+
+  `[cmd]` **Die Live-Schemapruefung ist nicht gruen** — *„vier
+  bestehende Training-Stammdaten-Policy-Abweichungen aus Schritt 100.
+  **Die Wegwerf-DB aus dem Kettenlauf hat diese Abweichung nicht.**"*
+
+  `[read]` **Das ist Drift** — dieselbe Klasse wie C-87, wo
+  `exercises_select` aus der Datenbank verschwunden war, **obwohl es in
+  der Kette definiert ist.**
+
+  `[cmd]` **Der C-153-Agent hat es gemeldet statt nebenbei repariert.**
+  **Zu klaeren, ob ein Neuaufbau reicht oder ob etwas die Policies
+  entfernt.**
+
+  `[cmd]` **Erledigt 2026-08-20 mit C-156.** *„Die vier
+  Training-Policy-Abweichungen waren Live-Drift, **nach erneutem Schritt
+  100 sind 12 Admin-Policies da**."*
+
+  `[cmd]` **Nachgemessen: 35 Policies im `training`-Schema.**
+
+  `[read]` **Dritter Driftfall** — nach C-87 (`exercises_select`
+  verschwunden) und C-96. **Die Kette definiert sie, die Datenbank
+  verliert sie.**
+
 
 
 ## Erledigt am 2026-08-05
@@ -9296,3 +9342,235 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Teilweise erledigt mit F-07** — der Zustandswechsel steht,
   **der Ausfuehrer fehlt weiter (G-102).**
+
+
+- [x] **G-100: Das Dashboard an die Module anschliessen**
+  (erledigt 2026-08-20, Bericht `docs/ssot/149-dashboard.md`).
+
+  `[cmd]` **Attrappen gerendert 11 → 6.** Das Dashboard war das
+  **einzige nie angebundene Modul** — und die erste Seite, die ein
+  Nutzer sieht.
+
+  `[cmd]` **Gemessen fuer den 2026-08-20, als `dev@lumeos.app`:**
+  Recovery **83,9** (Schnitt der sieben Tage davor **80,7**), Schlaf
+  **7,8 h** bei Qualitaet 8/10, Kalorien **2.727 von 2.500**, Training
+  **15 absolviert · 14 geplant**, **3 von 41 Bestleistungen**, Medical
+  **2 ausserhalb Labor · 5 nur ausserhalb Optimal**, Supplements
+  **93,5 %** (116 genommen, 8 ausgelassen).
+
+  `[read]` **Nichts davon ist neu gerechnet.** Die Medical-Zahlen
+  laufen ueber dieselbe Kette wie das Medical-Modul (`ladeBefundwerte`
+  → `zuReihen` → `zaehleLagen`, G-84), die Tagesziele ueber
+  `getZielwerteAm` wie im Nutrition-Modul — **eine zweite Leseroutine
+  waere eine zweite Wahrheit.**
+
+  `[cmd]` **Der Stichtag entscheidet, nicht die juengste Zeile.** Die
+  Seeds reichen ±90 Tage in die Zukunft (C-78): `recovery.scores`
+  laeuft bis 2026-11-06. `ladeScores()` haette einen Novemberwert als
+  „heute" gezeigt.
+
+  `[cmd]` **Die erfundenen Zahlen sind aus dem HTML verschwunden** —
+  „2,142 TSS", „1,847", „Streak 23d", „Sat · May 16": **0 Treffer.**
+
+  **Zahlen ja, Urteile nein — was gemeldet und nicht gebaut wurde:**
+
+  `[cmd]` **Der Readiness-Komposit.** Der Entwurf rechnet aus fuenf
+  Anteilen einen Wert von 84 und schreibt *„Push hard"* und *„green
+  light"* daneben. `recovery.scores` fuehrt bereits einen Gesamtwert
+  mit **sieben** Anteilen und eigener Gewichtung (G-82) — **zwei
+  Gesamtwerte nebeneinander waeren schlimmer als einer**, und die
+  Gewichtung des Entwurfs ist nirgends entschieden.
+
+  `[cmd]` **„Body battery" gibt es im Schema nicht** — gegen
+  `information_schema` geprueft, keine Spalte `batter*` oder
+  `body_energy` in irgendeinem Schema.
+
+  **Zwei eigene Fehlannahmen, beim Messen korrigiert:**
+
+  `[cmd]` **1. „Tonight" ist zum grossen Teil baubar.** Ich schrieb
+  zuerst, `workout_sessions` fuehre keines der Felder — es fuehrt die
+  meisten: `started_time`, `duration_minutes`, `location`,
+  `total_sets`, `total_volume_kg`, **alle auf allen 30 Sitzungen
+  gesetzt.** Angebunden sind jetzt Zeit (17:30), Dauer (75 min) und Ort
+  (Gym); es fehlen **Block, Woche und die Zuweisung** (G-86), und
+  `total_sets` steht bei geplanten Sitzungen auf **0**.
+
+  `[cmd]` **2. Beim Tagesverlauf fehlen nicht die Uhrzeiten**, die gibt
+  es vollstaendig (**725/725, 360/360, 30/30**) — es fehlt die **DAUER
+  je Ereignis.** Eine Mahlzeit hat keinen Endzeitpunkt; eine geratene
+  Balkenlaenge waere eine erfundene Zahl in einer Zeitachse, die
+  praezise aussieht.
+
+  **Zwei Zahlen des Auftrags stimmen nicht mehr:**
+
+  `[cmd]` **Medical ist 2 + 5, nicht 2 + 4.** Das Dashboard stimmt mit
+  dem Modul ueberein — die Medical-Seite schreibt selbst *„2 + 5 = 7
+  marker"*. Die 4 stammt aus G-84; seither sind Daten dazugekommen.
+
+  `[cmd]` **Recovery hat 4 Konsolenfehler, nicht 5** — zwei davon die
+  Hydrationswarnung, die **jede** Seite hat.
+
+  `[cmd]` **Die zwei SVG-Fehler sind kein Encoding-Problem:**
+  `koerperkarte-pfade.ts` enthaelt **0 Ersatzzeichen (U+FFFD)**. Es sind
+  **abgeschnittene Pfaddaten** — ein `C`-Befehl mit vier statt sechs
+  Zahlen, ein zweiter mit zwei. Unveraendert seit `3dae1a2`. Nicht
+  behoben, weil `packages/ui` gesperrt war (G-102).
+
+  `[cmd]` **Zeilenschutz:** `test-user@lumeos.local` sieht ueberall `—`
+  und 0, **keine einzige fremde Zahl.** Die Makroziele sieht er
+  trotzdem — **aber seine eigenen** (2.978 aus seinem Profil gegen
+  2.500 bei `dev`): kein Leck, eine Formel, die fuer jedes Profil
+  rechnet.
+
+  `[cmd]` **424 Tests gruen**, Typecheck sauber, Build erfolgreich
+  (Route 2 kB → **4,47 kB**). Gate als Ganzes rot an **`apps/coach`**
+  (Fable: fehlt im Lockfile, kein `node_modules`) — nicht angefasst.
+
+  `[cmd]` **Der Dev-Server hing** und kompilierte die Route 20 Minuten
+  lang nicht neu. **Ursache zuerst geprueft**, wie Tom es vorgibt: kein
+  fremdes Build-Verzeichnis, `.next-gate` (17:24) sauber getrennt von
+  `.next` (16:09). Nach Freigabe **beendet und neu gestartet — `.next`
+  nicht geloescht**; die neue Seite stand beim ersten Aufruf.
+
+  **Offen geblieben:** der Aktivitaetsstrom (G-101) und die zwei
+  SVG-Pfade (G-102).
+
+
+- [x] **G-101: Micronutrients, Hydration, Filter und die
+  Naehrstoffordnung** (erledigt 2026-08-20, Bericht
+  `docs/ssot/152-nutrition-feinschliff-2.md`).
+
+  **Teil A — der Filter griff die ganze Zeit.** `[cmd]` In drei
+  Schichten gemessen: `food_search` direkt, die Route und der Tab im
+  Browser liefern **ohne Suchbegriff je 7.140 → 1.400**. Und die Liste
+  wechselte auch — **Avocado und Banane verschwinden** nach dem Klick
+  auf „Proteinreich".
+
+  `[cmd]` **Was fehlte, war die Anzeige.** Mit geschlossenem Filterband
+  kam das Wort „Proteinreich" auf der ganzen Seite **null Mal** vor;
+  sichtbar blieb eine kleine `1` am Knopf. Dazu schiebt das Filterband
+  die Liste nach unten aus dem Bild. **Beides zusammen ergibt genau
+  Toms Satz** — und den zweiten Teil davon: *„die angezeigte Liste
+  filtermaessig anzeigen."*
+
+  `[cmd]` **Jetzt steht „Gefiltert nach · Proteinreich ✕" ueber der
+  Liste**, je Filter abwaehlbar, dazu „Alle aufheben".
+
+  **Teil B — die Naehrstoffordnung (C-54).** `[cmd]` **138 Naehrstoffe
+  in 12 Gruppen** statt der **79 erfundenen Eintraege in 8 Gruppen**
+  des Entwurfs. Alle elf Kohlenhydrate mit Einrueckung: `Zucker
+  gesamt` auf Stufe 1, Galactose und Maltose auf Stufe 3.
+
+  `[cmd]` **Die Falle steckte in den Daten:** `SUGAR` hat Stufe 1, aber
+  `sort_index` **73** — seine Kinder beginnen bei 65. Ein einzelner
+  Durchlauf haette **die ersten sechs verloren**; fuenf Tests halten es
+  fest.
+
+  `[cmd]` **Ehrlich dabei: 33 von 138** tragen fuer den Tag einen Wert
+  — `daily_summary` fuehrt 28 Mikronaehrstoffe als Spalten, nicht alle
+  138.
+
+  **Teil C — Diary.** `[cmd]` `micronutrient_snapshot` und
+  `micronutrient_below_threshold` angebunden. **Der Auftrag nannte den
+  Namen falsch, aber anders als vermutet:**
+  `micronutrient_overview_items` ist die **Konfiguration** (8 Zeilen),
+  die Funktionen heissen wie gesucht.
+
+  `[read]` **Vitamin C zeigt bewusst keinen Prozentwert** — die
+  Funktion meldet `incomplete`, die Kachel schreibt „Tagessumme
+  unvollstaendig" statt einer Zahl. **Und die 80 % heissen an der
+  Kachel Anzeigegrenze, keine medizinische**; der Entwurf faerbte alles
+  `warn`, das waere ein Urteil.
+
+  `[cmd]` **Hydration: 100/250/500 ml plus freie Eingabe.** Der
+  Schreibweg lag vollstaendig vor (361 Eintraege, 315,1 L) — es gab nur
+  **einen** Knopf. Gegen die Route geprueft: 4× HTTP 201, Summe waechst,
+  **Testdaten wieder entfernt** (2 Eintraege / 1.750 ml vorher wie
+  nachher).
+
+  **Teil D — Insights.** `[cmd]` Kalorienbilanz **−47,4 kcal je Tag**
+  (2.487,4 gegen 2.534,8, Konfidenz hoch, 14 von 14 Tagen
+  vollstaendig), `alpha = 1,0` **angezeigt statt verschwiegen** (GO-15).
+  Makroschnitt **27,7 / 47,6 / 24,7 %**.
+
+  `[read]` **Ohne die „Target ratio 28/47/25" des Entwurfs** — diese
+  Zahlen sind nirgends entschieden. `zielwerte_am` fuehrt Gramm, keine
+  Quote.
+
+  `[cmd]` **Micronutrient trend nicht gebaut:** die Werte liegen je Tag
+  vor, aber `daily_reference_assessment` rechnet **einen Tag auf
+  einmal** — 30 Aufrufe je Seitenaufruf waeren eine Entscheidung
+  (G-107).
+
+  **Zwei eigene Aussagen berichtigt:** `display_tier` wird sehr wohl
+  gelesen — **neunmal**, aber nur in der aelteren Flaeche
+  `/nutrition/local-schema`; und `nutrient-baum.ts` hat **zwei
+  Aufrufer**, ist also kein toter Code.
+
+  `[cmd]` **Attrappen gerendert: Diary 7 → 5**, Nutrients 1, Insights
+  4, Food DB 1. **434 Tests gruen** (vorher 424), Typecheck sauber,
+  Build erfolgreich.
+
+  `[cmd]` **Zeilenschutz:** `test-user@lumeos.local` sieht keinen der
+  Werte von `dev`. **Der Naehrstoffkatalog ist geteilt** (138 fuer
+  beide, wie die Lebensmitteldatenbank), **die messbaren Werte nicht:
+  33 gegen 0.**
+
+  `[cmd]` **`tools/schuss.mjs` um `--zaehle` und `--zaehleSel`
+  erweitert** — die feste Wortliste aus G-13 trug die Begriffe eines
+  einzelnen Auftrags und stand jedem anderen im Weg. **Genau damit ist
+  der Filterbefund belegt worden.**
+
+  `[cmd]` **Der Dev-Server hing zum zweiten Mal an einem Tag** —
+  Ursache vorher geprueft (kein fremdes Build-Verzeichnis, Trennung
+  intakt), dann beendet und neu gestartet, `.next` nicht geloescht
+  (G-109).
+
+  **Offen geblieben:** G-107, G-108, G-109.
+
+- [x] **C-54: `display_tier` als Ordnung der Anzeige benutzen**
+  (erledigt 2026-08-20, im Zuge von G-101 — Bericht
+  `docs/ssot/152-nutrition-feinschliff-2.md`).
+
+  **Tom, 2026-08-16:** *„Es gibt Hauptmakros und Nebenmakros — auch das
+  findest du im alten Repo, und ich wiederhole mich zum tausendsten
+  Mal."*
+
+  `[cmd]` **Die Zahlen des Punktes bestaetigt: 31 / 47 / 60.** Der
+  Nutrients-Tab liest die Stufen jetzt und rueckt danach ein.
+
+  `[cmd]` **Berichtigung zum Punkt:** *„existiert seit dem BLS-Import
+  und wird nirgends benutzt"* stimmt nur fuer die v2-Oberflaeche —
+  `/nutrition/local-schema` liest die Spalte in **neun Dateien**.
+
+  **Offen geblieben:** die Filter des Tabs (G-108).
+
+- [x] **G-71: `food_preferences_write` ueberschreibt die Herkunft** (neu
+  2026-08-19). **Befund aus G-67, betrifft G-65.**
+
+  `[cmd]` **Gemessen waehrend der Sitzung:** Aus `search_thumb` wurde
+  `settings`. **Ursache:** `food_preferences_write` macht
+  `DELETE ... WHERE user_id = ...` und schreibt alles neu, **und
+  `vorlieben-aktionen.ts:103` setzt `source` fest auf `'settings'`** —
+  obwohl `vorlieben-lesen.ts:154` die Spalte einliest.
+
+  `[read]` **Inhaltlich geht nichts verloren, nur die Herkunft.** Aber
+  sie ist der Grund, warum der Daumen schwaecher wiegt als der Assistent
+  — **ohne sie faellt die Unterscheidung.**
+
+  `[cmd]` **Deshalb schreibt der Daumen nicht ueber diese RPC** — *„ein
+  einzelner Klick haette sonst jede andere Vorliebe geloescht."*
+
+  **Vorschlag des G-67-Agenten:** beim Speichern die vorhandene `source`
+  je Zeile uebernehmen.
+
+  `[cmd]` **Erledigt 2026-08-20 mit C-156.** `food_preferences_write`
+  **loescht die Items nicht mehr, sondern fuehrt sie schluesselbasiert
+  zusammen** — **`source` bleibt erhalten.**
+
+  `[read]` **Damit faellt der Grund weg, warum der Daumen nicht ueber
+  diese RPC schreibt** (G-67). **Zu pruefen, ob er es jetzt kann.**
+
+  `[cmd]` **Und der Schreibweg meldet sichtbar**, wenn nichts
+  geschrieben wurde — statt eines stillen `ok`. **Das war G-79s
+  Fund.**

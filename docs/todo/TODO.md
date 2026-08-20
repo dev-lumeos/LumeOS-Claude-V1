@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `bdb6bd2` auf `dev`.
+**Stand:** 2026-08-18, Anker `0a68836` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 115 offen, 1 in Arbeit.
+`[cmd]` 119 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -169,7 +169,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **F-07** | Berechtigungen |  |
 | **F-08** | Werkstatt-Inventar |  |
 | **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
-| **C-54** | `display_tier` als Ordnung der Anzeige benutzen |  |
+| **G-107** | Der Mikronaehrstoff-Trend braucht eine Referenz je Tag |  |
+| **G-108** | Die Filter des Nutrients-Tabs |  |
+| **G-109** | Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu |  |
+| **C-54** | ? |  |
 | **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
 | **G-06** | Die übrigen Module nach Datenlage |  |
 | **G-07** | Umschalten |  |
@@ -182,9 +185,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-83** | Es gibt kein Onboarding |  |
 | **G-93** | Der Anzeigename fehlt im laufenden Erfassungsdialog |  |
 | **G-98** | Meal plans braucht einen Zustand und eine Herkunft |  |
+| **G-101** | Der Aktivitaetsstrom des Dashboards |  |
+| **G-102** | Zwei SVG-Pfade der Muskelkarte sind abgeschnitten |  |
 | **G-99** | Drei der acht Planner-Spalten bleiben wirkungslos |  |
-| **G-101** | Der Aktivitaetsstrom des Dashboards waere baubar (sechs Abfragen) |  |
-| **G-102** | Zwei SVG-Pfade der Muskelkarte sind abgeschnitten (2 Konsolenfehler) |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
@@ -232,9 +235,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **G-104** | Preferences von Grund auf pruefen — bedienbar, und es muss wirken |  |
+| **G-105** | Zwei abgeschnittene SVG-Pfade in `packages/ui` |  |
+| **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-103** | Der Preferences-Tab speichert nicht und ist schwer zu bedienen |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
-| **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
 | **A-19** | Zwei README-Abweichungen in der Kette |  |
@@ -246,9 +250,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
 | **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
-| **C-154** | Vier Policy-Abweichungen bei den Training-Stammdaten |  |
 | **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
-| **B-26** | `testdaten-einspielen.ts` ignoriert unbekannte Flags |  |
 | **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
 
 ---
@@ -1268,8 +1270,70 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 
 
-- [ ] **C-54: `display_tier` als Ordnung der Anzeige benutzen** (neu
-  2026-08-16). **Tom, 2026-08-16:** *„Es gibt Hauptmakros und
+- [ ] **G-107: Der Mikronaehrstoff-Trend braucht eine Referenz je Tag**
+  (neu 2026-08-20, aus G-101).
+
+  `[cmd]` **Die Werte liegen je Tag vor** — `daily_summary` fuehrt 28
+  Mikronaehrstoffe als Spalten. Ein Trend waere rechenbar.
+
+  `[cmd]` **Was fehlt, ist die Referenz je Tag.**
+  `daily_reference_assessment` rechnet **einen Tag auf einmal**; ein
+  Trend ueber 30 Tage braeuchte 30 Aufrufe je Seitenaufruf.
+
+  `[read]` **Zwei Wege:** eine Sammelfunktion in der Datenbank (die
+  bessere), oder die Referenz einmal holen und ueber den Zeitraum
+  konstant halten (die billigere — sie unterschlaegt aber, dass sich
+  Profilwerte aendern koennen).
+
+- [ ] **G-108: Die Filter des Nutrients-Tabs** (neu 2026-08-20, aus
+  G-101).
+
+  `[cmd]` Der Entwurf zeigt `Today · 7d avg · 30d avg · 90d avg` und
+  `All · Out of range · Deficient only`. **Die Ordnung steht seit
+  G-101, die Filter fehlen.**
+
+  `[read]` Die Zeitraeume haengen an derselben Frage wie G-107; „Out of
+  range" braucht je Naehrstoff die persoenliche Referenz.
+
+- [ ] **G-109: Der Dev-Server kompiliert geaenderte Routen wiederholt
+  nicht neu** (neu 2026-08-20, aus G-100 und G-101).
+
+  `[cmd]` **Zweimal am 2026-08-20**, bei verschiedenen Routen
+  (`/v2/dashboard`, `/v2/nutrition?tab=insights`). Der Watcher meldet
+  nichts, die Seite liefert den alten Stand — und `pnpm --filter
+  @lumeos/web build` laeuft dabei sauber durch.
+
+  `[cmd]` **Beide Male geprueft und ausgeschlossen:** kein fremdes
+  Build-Verzeichnis, `.next-gate` sauber getrennt von `.next`. **Die
+  B-18-Trennung war intakt.**
+
+  `[read]` **Ein Neustart je Vorfall behebt es** (beenden, starten,
+  `.next` bleibt) — kostet aber jedes Mal Zeit und eine Ruecksprache.
+  **Die Ursache ist nicht gefunden.**
+
+- [x] **C-54: `display_tier` als Ordnung der Anzeige benutzen**
+  (neu 2026-08-16, **erledigt 2026-08-20** — Bericht
+  `docs/ssot/152-nutrition-feinschliff-2.md`).
+
+  `[cmd]` **Der Nutrients-Tab liest jetzt die Stufen.** 138
+  Naehrstoffe in 12 Gruppen statt der 79 erfundenen Eintraege des
+  Entwurfs; die Einrueckung folgt `display_tier`. Die Zahlen des
+  Punktes bestaetigt: **31 / 47 / 60**.
+
+  `[cmd]` **Die Falle steckte in den Daten:** `SUGAR` hat Stufe 1,
+  aber `sort_index` **73** — seine Kinder beginnen bei 65. Ein
+  einzelner Durchlauf haette die ersten sechs verloren; **fuenf Tests
+  halten es fest.**
+
+  `[cmd]` **Berichtigung zum Punkt:** `display_tier` wurde sehr wohl
+  schon benutzt — **neunmal in `/nutrition/local-schema`**, nur nie in
+  der v2-Oberflaeche.
+
+  **Offen geblieben:** die Filter des Tabs (G-108).
+
+  **Alter Wortlaut:**
+
+- [ ] **C-54 (Wortlaut):** (neu 2026-08-16). **Tom, 2026-08-16:** *„Es gibt Hauptmakros und
   Nebenmakros — auch das findest du im alten Repo, und ich wiederhole
   mich zum tausendsten Mal."*
 
@@ -3295,24 +3359,6 @@ Umsetzen angepasst werden.
   (C-45) und den Biomarkern (C-84). **Keine erfundene Zahl.**
 
 
-- [ ] **G-71: `food_preferences_write` ueberschreibt die Herkunft** (neu
-  2026-08-19). **Befund aus G-67, betrifft G-65.**
-
-  `[cmd]` **Gemessen waehrend der Sitzung:** Aus `search_thumb` wurde
-  `settings`. **Ursache:** `food_preferences_write` macht
-  `DELETE ... WHERE user_id = ...` und schreibt alles neu, **und
-  `vorlieben-aktionen.ts:103` setzt `source` fest auf `'settings'`** —
-  obwohl `vorlieben-lesen.ts:154` die Spalte einliest.
-
-  `[read]` **Inhaltlich geht nichts verloren, nur die Herkunft.** Aber
-  sie ist der Grund, warum der Daumen schwaecher wiegt als der Assistent
-  — **ohne sie faellt die Unterscheidung.**
-
-  `[cmd]` **Deshalb schreibt der Daumen nicht ueber diese RPC** — *„ein
-  einzelner Klick haette sonst jede andere Vorliebe geloescht."*
-
-  **Vorschlag des G-67-Agenten:** beim Speichern die vorhandene `source`
-  je Zeile uebernehmen.
 
 - [ ] **A-18: Berichtsnummern kollidieren** (neu 2026-08-19).
 
@@ -3571,20 +3617,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Der Test braucht dann einen laufenden Dev-Server.** Heute
   laeuft er ohne. Das ist der eigentliche Preis, nicht der Umbau.
 
-- [ ] **C-154: Vier Policy-Abweichungen bei den Training-Stammdaten**
-  (neu 2026-08-20). Befund aus C-153.
-
-  `[cmd]` **Die Live-Schemapruefung ist nicht gruen** — *„vier
-  bestehende Training-Stammdaten-Policy-Abweichungen aus Schritt 100.
-  **Die Wegwerf-DB aus dem Kettenlauf hat diese Abweichung nicht.**"*
-
-  `[read]` **Das ist Drift** — dieselbe Klasse wie C-87, wo
-  `exercises_select` aus der Datenbank verschwunden war, **obwohl es in
-  der Kette definiert ist.**
-
-  `[cmd]` **Der C-153-Agent hat es gemeldet statt nebenbei repariert.**
-  **Zu klaeren, ob ein Neuaufbau reicht oder ob etwas die Policies
-  entfernt.**
 
 - [ ] **C-155: Zwei Befunde in `@supabase/ssr` 0.1.0** (neu
   2026-08-20). Befund aus F-07.
@@ -3596,19 +3628,6 @@ Umsetzen angepasst werden.
   `[read]` **`apps/admin` nutzt denselben Pfad und sollte geprueft
   werden** — der F-07-Agent hat es gemeldet statt nebenbei angefasst.
 
-- [ ] **B-26: `testdaten-einspielen.ts` ignoriert unbekannte Flags**
-  (neu 2026-08-20). **Beinahe-Unfall aus F-07, folgenlos.**
-
-  `[cmd]` *„Ein Lauf ging gegen live und wurde durch die
-  Ein-Transaktions-Bauweise komplett zurueckgerollt — gemessen: **725
-  Mahlzeiten unversehrt**."*
-
-  `[read]` **Die Bauweise hat gerettet, was ein Tippfehler gekostet
-  haette.** **Aber ein Skript, das ein unbekanntes Flag stillschweigend
-  verwirft, ist eine Falle** — dieselbe Klasse wie `.in()`, das ueber
-  200 IDs schweigt (G-64).
-
-  **Zu tun:** unbekannte Flags ablehnen, nicht ignorieren.
 
 - [ ] **G-102: Der Ausfuehrer fuer bestaetigte Vorschlaege** (neu
   2026-08-20). Aus F-07, bewusst nicht gebaut.
