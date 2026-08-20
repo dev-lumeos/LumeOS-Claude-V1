@@ -5738,6 +5738,73 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **`ATC` steht weiter auf 56 von 498** — offen, **aber nicht
   mehr noetig**, weil die Zuordnungstabelle die Luecke schliesst.
 
+- [x] **C-133: Die Warn- und Gap-Regeln uebernehmen** (neu 2026-08-19).
+  **Setzt C-130, C-131 und C-132 voraus.**
+
+  `[cmd]` **29 Warnregeln, 15 Gap-Regeln, 20 Medikamentenregeln** — mit
+  deutschen Texten und `message_key` fuer die Uebersetzung.
+
+  `[read]` **Die Policy deckt sich mit C-113:** *„Legal supplements may be
+  suggested against gaps; enhanced/illegal/Rx substances are
+  warning-only with physician referral — never recommended, never
+  dosed."*
+
+  `[cmd]` **Und `self_declared_enhanced` ist im Feldvertrag** —
+  *„triggers warning_only flow"*. **Das ist Toms Enhanced Mode als
+  Feld.**
+
+  `[cmd]` **Erledigt 2026-08-20.** `supplements.rule_catalog` traegt
+  **64 Regeln in sieben Arten:**
+
+  | | |
+  |---|---|
+  | `interaction` | **21** |
+  | `nutrient_gap` | 15 |
+  | `safety` | 9 |
+  | `monitoring` · `information` | 6 · 5 |
+  | `lab_interference` · `lab_monitoring` | 4 · 4 |
+
+  ### Die drei Zustaende sind belegt
+
+  `[cmd]` **`supplements.rule_assessment(user_id, entry_date)`** — auf
+  `dev@lumeos.app`: **1 `fulfilled`, 50 `not_fulfilled`, 13
+  `missing_input`.**
+
+  | Regel | Zustand | |
+  |---|---|---|
+  | `wr_anticoag_stack` | **`fulfilled`** | `physician_referral` |
+  | `wr_warfarin_vitk` | `not_fulfilled` | |
+  | `wr_lab_biotin` | **`missing_input`** | `supplements.daily_total_mg`, `medical.lab_draw_scheduled_within_days` |
+
+  `[read]` **Der Warfarin-Fall trifft** — eine echte Warnung aus echten
+  Daten, weil C-130 den Wirkstoff gesetzt hat.
+
+  `[read]` **Und `missing_input` nennt die Pfade beim Namen** statt still
+  durchzufallen. **Das war C-132s Kern:** Fehlen ist ein Zustand, kein
+  Nichtereignis.
+
+  ### Die Trait-Bruecke greift
+
+  `[cmd]` **`146_medications_katalog.ts` nutzt `rule_trait_mapping.json`**
+  — **498 Wirkstoffe, Trait-Abdeckung fuer alle sieben
+  Feldvertragsklassen.**
+
+  `[cmd]` **Und die Ausnahme wird eingehalten:** *„CYP-Traits kommen
+  weiterhin nur aus echten `cyp`-Feldern."*
+
+- [x] **C-137: `MAOI` fehlt im Wirkstoffbestand** (neu 2026-08-19).
+  Kleiner Rest aus C-130.
+
+  `[cmd]` **6 von 7 Feldvertragsklassen sind vorhanden** — `MAOI`
+  fehlt. *„Im Bestand, nicht in der Struktur."*
+
+  `[read]` **Nicht dringend:** MAO-Hemmer sind selten verordnet. **Aber
+  ihre Wechselwirkungen sind heftig** — Tyramin, SSRIs, Sympathomimetika.
+  **Wenn Kimi die naechsten tausend liefert, sollte es dabei sein.**
+
+  `[cmd]` **Erledigt 2026-08-20:** Der neue Bestand fuehrt `maoi`,
+  und `rule_trait_mapping.json` bildet es auf `MAOI` ab.
+
 
 
 ## Erledigt am 2026-08-05

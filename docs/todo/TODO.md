@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `f1cb2bc` auf `dev`.
+**Stand:** 2026-08-18, Anker `288928f` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 112 offen, 1 in Arbeit.
+`[cmd]` 114 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -181,6 +181,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
 | **G-83** | Es gibt kein Onboarding |  |
 | **G-93** | Der Anzeigename fehlt im laufenden Erfassungsdialog |  |
+| **G-98** | Meal plans braucht einen Zustand und eine Herkunft |  |
+| **G-99** | Drei der acht Planner-Spalten bleiben wirkungslos |  |
 | **G-94** | `erfassen.tsx` ist toter Code |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
@@ -210,10 +212,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-126** | E2 braucht Toms Bestaetigung |  |
 | **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
-| **C-133** | Die Warn- und Gap-Regeln uebernehmen |  |
 | **C-134** | Die Substanzen der drei Bestaende zusammenfuehren |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
-| **C-137** | `MAOI` fehlt im Wirkstoffbestand |  |
 | **G-85** | Der Health score haengt an zwei Unbekannten |  |
 | **C-141** | Glukose steht zweimal in der Liste |  |
 | **C-142** | Die Sperrbegruendung nennt eine Tabelle, die es gibt |  |
@@ -231,6 +231,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-95** | Sieben Module, aber nicht dieselben sieben |  |
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **C-151** | Das Coach-Portal — neun Entscheidungen |  |
+| **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
+| **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -244,9 +246,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
-| **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen (6 sichtbar gegen 10 Klassen) |  |
-| **G-98** | Meal plans braucht Zustand am Planeintrag und Herkunft am Tagebuch |  |
-| **G-99** | Drei der acht Planner-Spalten bleiben wirkungslos (`recipes` hat kein Preisfeld) |  |
+| **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
 
 ---
 
@@ -2724,20 +2724,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **C-133: Die Warn- und Gap-Regeln uebernehmen** (neu 2026-08-19).
-  **Setzt C-130, C-131 und C-132 voraus.**
-
-  `[cmd]` **29 Warnregeln, 15 Gap-Regeln, 20 Medikamentenregeln** — mit
-  deutschen Texten und `message_key` fuer die Uebersetzung.
-
-  `[read]` **Die Policy deckt sich mit C-113:** *„Legal supplements may be
-  suggested against gaps; enhanced/illegal/Rx substances are
-  warning-only with physician referral — never recommended, never
-  dosed."*
-
-  `[cmd]` **Und `self_declared_enhanced` ist im Feldvertrag** —
-  *„triggers warning_only flow"*. **Das ist Toms Enhanced Mode als
-  Feld.**
 
 - [ ] **C-134: Die Substanzen der drei Bestaende zusammenfuehren** (neu
   2026-08-19). **Setzt C-131 voraus.**
@@ -2779,15 +2765,6 @@ Umsetzen angepasst werden.
   `lab_result_values` bereits nicht umgesetzt**, hier also kein neuer
   Rueckstand, aber ein groesserer.
 
-- [ ] **C-137: `MAOI` fehlt im Wirkstoffbestand** (neu 2026-08-19).
-  Kleiner Rest aus C-130.
-
-  `[cmd]` **6 von 7 Feldvertragsklassen sind vorhanden** — `MAOI`
-  fehlt. *„Im Bestand, nicht in der Struktur."*
-
-  `[read]` **Nicht dringend:** MAO-Hemmer sind selten verordnet. **Aber
-  ihre Wechselwirkungen sind heftig** — Tyramin, SSRIs, Sympathomimetika.
-  **Wenn Kimi die naechsten tausend liefert, sollte es dabei sein.**
 
 - [ ] **G-85: Der Health score haengt an zwei Unbekannten** (neu
   2026-08-19). Befund aus G-84. **Der Score ist ersatzlos aus dem Kopf
