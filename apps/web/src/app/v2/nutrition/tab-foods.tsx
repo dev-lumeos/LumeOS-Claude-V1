@@ -132,6 +132,50 @@ const FILTERGRUPPEN: Array<{
  * dauerhaft ohne Laktose sucht, setzt es unter Preferences; dann
  * greift C-94 ueber alle 7.140.
  */
+/**
+ * Die Beschriftung eines Tag-Codes (G-101).
+ *
+ * `[read]` Der Code steht im Zustand, aber `high_protein` ist nichts,
+ * was man einem Nutzer hinschreibt. Die Gruppen fuehren die
+ * Beschriftung ohnehin — hier wird sie nur gefunden.
+ */
+function filterLabel(code: string): string {
+  for (const g of FILTERGRUPPEN) {
+    const o = g.optionen.find(x => x.code === code)
+    if (o) return o.label
+  }
+  return code
+}
+
+/** Ein gesetzter Filter ueber der Liste, mit Weg-Knopf (G-101). */
+function FilterChip({ label, onWeg }: { label: string; onWeg: () => void }) {
+  return (
+    <span
+      className="v2-pill"
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: 4,
+        padding: '3px 6px 3px 10px', fontSize: 11,
+        borderColor: 'color-mix(in oklch, var(--acc-nutri) 45%, var(--border))',
+        color: 'var(--acc-nutri)',
+        background: 'color-mix(in oklch, var(--acc-nutri) 10%, transparent)',
+      }}
+    >
+      {label}
+      <button
+        type="button"
+        aria-label={`Filter ${label} aufheben`}
+        onClick={onWeg}
+        style={{
+          background: 'none', border: 0, padding: 0, cursor: 'pointer',
+          color: 'inherit', display: 'inline-flex', alignItems: 'center',
+        }}
+      >
+        <Icon name="x" className="v2-ic v2-ic-sm" />
+      </button>
+    </span>
+  )
+}
+
 const ALLERGEN_AUSSCHLUSS: Array<{ code: string; label: string; anzahl: number }> = [
   { code: 'contains_lactose', label: 'Ohne Laktose', anzahl: 1021 },
   { code: 'contains_gluten', label: 'Ohne Gluten', anzahl: 622 },
@@ -496,6 +540,52 @@ export function NutritionFoodsTab({
           Detailsuche mit Nährwerten →
         </Link>
       </div>
+
+      {/*
+        G-101, Tom 2026-08-20: „die angezeigte Liste filtermaessig
+        anzeigen."
+
+        `[cmd]` **Der Filter griff — man sah es nur nicht.** Gemessen
+        am 2026-08-20: nach einem Klick auf „Proteinreich" steht die
+        Trefferzahl auf 1.400, Avocado und Banane verschwinden aus der
+        Liste. **Aber sobald das Filterband zu ist, kommt das Wort
+        „Proteinreich" auf der ganzen Seite null Mal vor** — nur eine
+        kleine `1` am Knopf.
+
+        `[read]` Wer eine gefilterte Liste sieht, ohne zu wissen wonach,
+        haelt sie fuer die ganze. Deshalb stehen die gesetzten Filter
+        jetzt ueber der Liste — mit ihrem Namen, und jeder einzeln
+        abwaehlbar.
+      */}
+      {aktiveFilter > 0 && (
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 6,
+          marginBottom: 12, flexWrap: 'wrap',
+        }}>
+          <span className="v2-eyebrow">Gefiltert nach</span>
+          {tag && (
+            <FilterChip
+              label={filterLabel(tag)}
+              onWeg={() => setTag(null)}
+            />
+          )}
+          {Array.from(ohne).map(code => (
+            <FilterChip
+              key={code}
+              label={ALLERGEN_AUSSCHLUSS.find(a => a.code === code)?.label ?? code}
+              onWeg={() => setOhne(s => {
+                const n = new Set(s)
+                n.delete(code)
+                return n
+              })}
+            />
+          ))}
+          <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
+                  onClick={filterZuruecksetzen}>
+            Alle aufheben
+          </button>
+        </div>
+      )}
 
       {fehler && (
         <Card style={{ marginBottom: 12 }}>

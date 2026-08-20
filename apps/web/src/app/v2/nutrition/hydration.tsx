@@ -23,7 +23,19 @@ import * as React from 'react'
 import { Card, Icon } from '@lumeos/ui'
 
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
-import { WATER_QUICK_AMOUNTS_ML } from '../../../lib/nutrition/water-model'
+
+/**
+ * Die Schnellmengen der Kachel (G-101).
+ *
+ * `[read]` **Tom, 2026-08-20:** *„Hydration erweitern 100ml/250ml/500ml
+ * manuelle Eingabe."*
+ *
+ * `[cmd]` **Nicht `WATER_QUICK_AMOUNTS_ML`** — die Konstante fuehrt
+ * `[250, 500, 750, 1000]` aus SPEC_04 und wird auch anderswo gelesen.
+ * Toms Mengen sind andere, und eine geteilte Konstante fuer zwei
+ * verschiedene Absichten waere die schlechtere Loesung.
+ */
+const SCHNELLMENGEN = [100, 250, 500] as const
 
 const FARBE_GETRUNKEN = 'var(--acc-nutri)'
 const FARBE_ESSEN = 'color-mix(in oklch, var(--acc-nutri) 40%, var(--surface-2))'
@@ -41,6 +53,8 @@ export function HydrationKachel({
   // Nach dem Nachtragen kommt der neu gerechnete Tag aus der Antwort —
   // kein zweiter Aufruf, keine eigene Rechnung im Browser.
   const [frisch, setFrisch] = React.useState<HydrationDay | null>(null)
+  /** Die freie Eingabe in ml (G-101). */
+  const [eigene, setEigene] = React.useState('')
   const tag = frisch ?? geladen
 
   if (!tag) {
@@ -72,18 +86,19 @@ export function HydrationKachel({
     : 0
   const glaeserGesamt = Math.min(tag.glasses_total, glaeserZiel)
 
-  async function nachtragen(menge: number) {
+  async function nachtragen(menge: number, quelle: 'quick_add' | 'manual' = 'quick_add') {
     setLaeuft(true)
     setFehler(null)
     try {
       const a = await fetch('/api/nutrition/water', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ entry_date: datum, amount_ml: menge, source: 'quick_add' }),
+        body: JSON.stringify({ entry_date: datum, amount_ml: menge, source: quelle }),
       })
       const daten = await a.json()
       if (!a.ok) throw new Error(daten?.error ?? 'Eintrag fehlgeschlagen.')
       setFrisch(daten.tag as HydrationDay)
+      if (quelle === 'manual') setEigene('')
     } catch (e) {
       setFehler(e instanceof Error ? e.message : String(e))
     } finally {
@@ -91,21 +106,13 @@ export function HydrationKachel({
     }
   }
 
+  const eigeneMenge = Number(eigene.replace(',', '.'))
+  const eigeneGueltig = Number.isFinite(eigeneMenge) && eigeneMenge > 0
+
   return (
     <Card
       title="Hydration"
       sub="Today"
-      actions={
-        <button
-          type="button"
-          className="v2-btn v2-btn-ghost"
-          style={{ height: 22, fontSize: 11, padding: '0 8px' }}
-          disabled={laeuft}
-          onClick={() => nachtragen(WATER_QUICK_AMOUNTS_ML[0])}
-        >
-          <Icon name="plus" className="v2-ic v2-ic-sm" /> +{WATER_QUICK_AMOUNTS_ML[0]}ml
-        </button>
-      }
     >
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 8 }}>
         <span className="v2-num" style={{ fontSize: 28, fontWeight: 500 }}>
@@ -167,6 +174,61 @@ export function HydrationKachel({
         ) : tag.avg_14d_total_ml !== null ? (
           <span className="v2-num">14d avg {ml(tag.avg_14d_total_ml)} ml</span>
         ) : null}
+      </div>
+
+      {/*
+        G-101, Tom 2026-08-20: „Hydration erweitern 100ml/250ml/500ml
+        manuelle Eingabe."
+
+        `[cmd]` Der Schreibweg lag bereits vollstaendig vor
+        (`/api/nutrition/water`, `addWaterLog`, 181 Eintraege) — es gab
+        nur **einen** Knopf, und der trug die erste Menge aus
+        `WATER_QUICK_AMOUNTS_ML` (250 ml).
+
+        `[read]` Die Konstante bleibt unangetastet: sie kommt aus
+        SPEC_04 und wird auch anderswo gelesen. Die drei Mengen hier
+        sind Toms, und die freie Eingabe steht daneben — beides
+        schreibt in denselben Pfad, nur mit anderer `source`.
+      */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 6,
+        marginTop: 12, flexWrap: 'wrap',
+      }}>
+        {SCHNELLMENGEN.map(menge => (
+          <button
+            key={menge}
+            type="button"
+            className="v2-btn"
+            disabled={laeuft}
+            onClick={() => void nachtragen(menge)}
+          >
+            <Icon name="plus" className="v2-ic v2-ic-sm" />{menge} ml
+          </button>
+        ))}
+        <span style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }}>
+          <input
+            className="v2-feld"
+            style={{ width: 78, textAlign: 'right' }}
+            inputMode="decimal"
+            placeholder="ml"
+            aria-label="Menge in Millilitern"
+            value={eigene}
+            disabled={laeuft}
+            onChange={e => setEigene(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && eigeneGueltig) void nachtragen(eigeneMenge, 'manual')
+            }}
+          />
+          <button
+            type="button"
+            className="v2-btn v2-btn-primary"
+            disabled={laeuft || !eigeneGueltig}
+            title={eigeneGueltig ? undefined : 'Menge groesser als 0 eingeben'}
+            onClick={() => void nachtragen(eigeneMenge, 'manual')}
+          >
+            Eintragen
+          </button>
+        </span>
       </div>
 
       {/* Regel wie bei den Naehrstoffen: ein Fehlzaehler ueber null

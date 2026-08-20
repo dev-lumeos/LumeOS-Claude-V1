@@ -23,6 +23,15 @@ import {
   PreWorkoutOptimizer, MicronutrientSnapshot, BelowThreshold,
 } from './diary-entwurf'
 import { HydrationKachel } from './hydration'
+// G-101: die zwei Mikronaehrstoff-Kacheln mit echten Werten.
+import { MikroSchnappschuss, UnterSchwelle } from './mikro-kacheln'
+import type { MikroStand } from '../../../lib/nutrition/mikro-read'
+// G-101/C-54: die Naehrstoffordnung aus display_tier.
+import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
+import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
+// G-101: zwei Insights-Kacheln mit echten Zahlen.
+import { KalorienbilanzKachel, MakroschnittKachel } from './insights-echt'
+import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
 import { NutrientAnalysisView } from './nutrients-entwurf'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
@@ -101,7 +110,7 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
-  istAdmin = false, foodsStart = null, vorlieben = null, plan = null,
+  istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
 }: {
   datum: string
   tab: string
@@ -121,6 +130,12 @@ export async function TagebuchAnsicht({
   vorlieben?: VorliebenDaten | null
   /** G-97: der Wochenplan, wenn der Planner-Tab gezeigt wird. */
   plan?: PlanDaten | null
+  /** G-101: Mikronaehrstoffe und Schwellenunterschreitungen. */
+  mikro?: MikroStand | null
+  /** G-101/C-54: die Naehrstoffordnung, wenn der Tab gezeigt wird. */
+  ordnung?: NaehrstoffOrdnung | null
+  /** G-101: Kalorienbilanz und Makroschnitt. */
+  einsichten?: InsightsStand | null
 }) {
   // A-14: Serverkomponente — `getTranslations`, nicht `useTranslations`.
   const t = await getTranslations('Nutrition')
@@ -195,7 +210,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} />
       )}
       {tab === 'diary' && (
       <>
@@ -355,8 +370,16 @@ export async function TagebuchAnsicht({
             zwei Farben, weil die Vorlage die beiden Herkuenfte nicht
             unterscheidet. */}
         <HydrationKachel tag={wasser ?? null} datum={datum} />
-        <MicronutrientSnapshot />
-        <BelowThreshold />
+        {/* G-101: angebunden an `micronutrient_snapshot` und
+            `micronutrient_below_threshold`. Ohne Daten bleibt der
+            Entwurf mit seiner Marke stehen — dasselbe Muster wie bei
+            den Vorlieben (G-65). */}
+        {mikro && mikro.zeilen.length > 0
+          ? <MikroSchnappschuss d={mikro} />
+          : <MicronutrientSnapshot />}
+        {mikro && mikro.zeilen.length > 0
+          ? <UnterSchwelle d={mikro} />
+          : <BelowThreshold />}
 
         <Card
           title={t('deckungTitel')}
@@ -456,7 +479,7 @@ export async function TagebuchAnsicht({
  * eingebaut.
  */
 function AndererTab({
-  tab, foodsStart, vorlieben, plan,
+  tab, foodsStart, vorlieben, plan, ordnung, einsichten,
 }: {
   tab: string
   /** G-66: die erste Trefferseite, serverseitig geladen. */
@@ -464,6 +487,10 @@ function AndererTab({
   /** G-65: der gespeicherte Vorliebenstand. */
   vorlieben?: VorliebenDaten | null
   plan?: PlanDaten | null
+  /** G-101/C-54: die Naehrstoffordnung. */
+  ordnung?: NaehrstoffOrdnung | null
+  /** G-101: Kalorienbilanz und Makroschnitt. */
+  einsichten?: InsightsStand | null
 }) {
   const inhalt: Record<string, { titel: string; braucht: string }> = {
     insights: {
@@ -486,14 +513,36 @@ function AndererTab({
 
   // Der Naehrstoffbaum der Vorlage — vollstaendig uebernommen.
   if (tab === 'nutrients') {
-    return <div style={{ marginTop: 16 }}><NutrientAnalysisView /></div>
+    // G-101: die echte Ordnung, sobald sie gelesen ist. Ohne
+    // sie bleibt der Entwurf stehen — 79 erfundene Eintraege, aber mit
+    // Marke; dasselbe Muster wie bei den Vorlieben (G-65).
+    return (
+      <div style={{ marginTop: 16 }}>
+        {ordnung && ordnung.gruppen.length > 0
+          ? <NaehrstoffOrdnungTab d={ordnung} />
+          : <NutrientAnalysisView />}
+      </div>
+    )
   }
 
   // G-38: vier Tabs, die bis hierher nur einen Platzhalter zeigten.
   // Sie sind nach der Vorlage gebaut und weiterhin Attrappe — jede
   // Kachel traegt den Hinweis, woran die Anbindung haengt.
   if (tab === 'insights') {
-    return <div style={{ marginTop: 16 }}><NutritionInsightsTab /></div>
+    // G-101: zwei der drei Kacheln lesen echt. Der Rest des Entwurfs
+    // steht darunter, mit Marke — der Mikronaehrstoff-Trend braucht
+    // eine Referenz je Tag, siehe Bericht 152.
+    return (
+      <div style={{ marginTop: 16 }}>
+        {einsichten && (einsichten.bilanz || einsichten.makros) && (
+          <div className="v2-grid v2-g-cols-2" style={{ gap: 16, marginBottom: 16 }}>
+            <KalorienbilanzKachel d={einsichten} />
+            <MakroschnittKachel d={einsichten} />
+          </div>
+        )}
+        <NutritionInsightsTab />
+      </div>
+    )
   }
   if (tab === 'plans') {
     return <div style={{ marginTop: 16 }}><MealPlansTab /></div>

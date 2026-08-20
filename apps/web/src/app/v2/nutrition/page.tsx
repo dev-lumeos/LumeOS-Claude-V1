@@ -31,6 +31,12 @@ import {
 import type { VorliebenDaten } from './tab-vorlieben'
 // G-97: der Wochenplan aus den C-150-Tabellen.
 import { ladePlan, type PlanDaten } from '../../../lib/nutrition/plan-lesen'
+// G-101: die zwei Mikronaehrstoff-Kacheln des Diary.
+import { ladeMikro, type MikroStand } from '../../../lib/nutrition/mikro-read'
+// G-101/C-54: die Naehrstoffordnung aus display_tier.
+import { ladeOrdnung, type NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
+// G-101: Kalorienbilanz und Makroschnitt fuer die Insights.
+import { ladeInsights, type InsightsStand } from '../../../lib/nutrition/insights-read'
 
 import { datumOderHeute } from '../../../lib/datum'
 import { TagebuchAnsicht } from './ansicht'
@@ -170,11 +176,45 @@ export default async function V2NutritionPage({
     }
   }
 
+  // G-101: Mikronaehrstoffe — nur fuer das Tagebuch, wie Plan und
+  // Vorlieben auch. Faellt es aus, bleibt der Entwurf mit Marke stehen.
+  let mikro: MikroStand | null = null
+  if (tab === 'diary') {
+    try {
+      mikro = await ladeMikro(datum)
+    } catch {
+      mikro = null
+    }
+  }
+
+  // G-101/C-54: die Naehrstoffordnung. Nur fuer den Nutrients-Tab.
+  let ordnung: NaehrstoffOrdnung | null = null
+  if (tab === 'nutrients') {
+    try {
+      ordnung = await ladeOrdnung(datum)
+    } catch {
+      ordnung = null
+    }
+  }
+
+  // G-101: die zwei Insights-Kacheln. Nur fuer den Insights-Tab.
+  let einsichten: InsightsStand | null = null
+  if (tab === 'insights') {
+    try {
+      einsichten = await ladeInsights(datum)
+    } catch {
+      einsichten = null
+    }
+  }
+
   return (
     <TagebuchAnsicht
       datum={datum}
       tab={tab}
       plan={plan}
+      mikro={mikro}
+      ordnung={ordnung}
+      einsichten={einsichten}
       istAdmin={istAdmin}
       vorlieben={vorlieben}
       wasser={wasser}

@@ -44,6 +44,9 @@ function alle(schalter, felder = 1) {
 
 const klicks = alle('--klick').map(([sel]) => sel).filter(Boolean)
 const tippen = alle('--tippe', 2).filter(([sel, text]) => sel && text)
+// G-101: was nachgezaehlt werden soll — Text bzw. Elemente.
+const woerter = alle('--zaehle').map(([w]) => w).filter(Boolean)
+const selektoren = alle('--zaehleSel').map(([s]) => s).filter(Boolean)
 
 const BASIS = process.env.LUMEOS_BASIS ?? 'http://127.0.0.1:3200'
 const KONTO = process.env.LUMEOS_KONTO ?? 'dev@lumeos.app'
@@ -94,11 +97,18 @@ try {
 
   // G-13: was im Bild wirklich zu sehen ist — sonst belegt ein Foto
   // nur, dass etwas gerendert wurde, nicht was.
+  //
+  // G-101: die feste Wortliste ist durch `--zaehle` ersetzt. `[read]`
+  // Sie stammte aus einem einzelnen Auftrag und stand jedem anderen im
+  // Weg; jetzt sagt der Aufrufer, was er nachgezaehlt haben will.
   const sichtbar = {}
-  for (const text of ['Vegetarisch', 'Vegan', 'Proteinreich',
-                      'Grundnahrungsmittel', 'Relevanz', 'Protein',
-                      'Vorlieben ausgeblendet', 'Kein Treffer']) {
-    sichtbar[text] = await seite.getByText(text, { exact: false }).count()
+  for (const wort of woerter) {
+    sichtbar[wort] = await seite.getByText(wort, { exact: false }).count()
+  }
+  // `--zaehleSel` zaehlt Elemente statt Text — z. B. Tabellenzeilen.
+  const zaehler = {}
+  for (const sel of selektoren) {
+    zaehler[sel] = await seite.locator(sel).count()
   }
   const treffer = await seite.locator('.v2-wahl').count()
 
@@ -106,7 +116,9 @@ try {
     ziel, pfad, breite, modus: dunkel ? 'dunkel' : 'hell',
     titel, attrappen: marken, konsolenfehler: fehler.length,
     fehler: fehler.slice(0, 5),
-    ...(klicks.length || tippen.length ? { sichtbar, treffer } : {}),
+    ...(woerter.length ? { sichtbar } : {}),
+    ...(selektoren.length ? { zaehler } : {}),
+    ...(klicks.length || tippen.length ? { treffer } : {}),
   }, null, 2))
 } finally {
   await browser.close()
