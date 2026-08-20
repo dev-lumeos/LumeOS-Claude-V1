@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `933d75d` auf `dev`.
+**Stand:** 2026-08-18, Anker `386b8d6` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 85 offen, 3 in Arbeit.
+`[cmd]` 86 offen, 3 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -193,6 +193,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-113** | Enhanced Mode — dreimal dasselbe PED-Thema, nirgends eingeordnet |  |
 | **C-114** | Was das Vorgaengerrepo beim Coach falsch machte |  |
 | **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
+| **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
 | **C-94** | Die Suche wendet die Vorlieben an |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
 | **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
@@ -1854,7 +1855,15 @@ Umsetzen angepasst werden.
   `rest_days`, Nadelstaerke. **Der CR nennt sie *„conservative
   defaults"*, belegt ist im Repo keine einzige Zahl.**
 
-  `[read]` **Vor dem Seeden: Quelle je Wert oder Toms Abnahme.**
+  `[cmd]` **Teilweise erledigt durch F-05 (2026-08-19):** Die
+  IM-Volumina sind aus Pflegeliteratur belegt — **Deltoid 1–2 ml, Vastus
+  1–5 ml, Ventrogluteal bis 3 ml.** *„Die haengen damit nicht mehr an
+  deiner Abnahme."*
+
+  `[cmd]` **Was die Literatur nicht liefert:** `rest_days` und
+  **Nadelempfehlung je Ort** — die bleiben *„conservative defaults"*.
+
+  `[read]` **Vor dem Seeden dieser beiden: Quelle oder Toms Abnahme.**
   **Dieselbe Regel wie bei MEV/MAV/MRV (C-105) und den
   Naehrstoff-Referenzwerten (C-45).**
 
@@ -2122,6 +2131,73 @@ Umsetzen angepasst werden.
   erreichbar, keine PSD2-Rechtspruefung, Apps nicht selbst bedient.
   **Widersprueche ebenfalls** — TrueCoach 107 gegen 137 $, My PT Hub 105
   gegen 59 $.
+
+- [ ] **C-116: Der Substanzkatalog — 320 Zeilen als Kandidat** (neu
+  2026-08-19). Aus F-05
+  (`docs/spezifikation/substanz-katalog-recherche.md`,
+  `supabase/_pipeline/daten/substanz-katalog.json`).
+
+  `[cmd]` **320 Substanzen, 207 KB, ein Stueck.** Status
+  **`curation_candidate_not_import_ready`**, `sources`-Register mit
+  Pruefdatum, **je Zeile eine Quellenkennung.**
+
+  | Klasse | |
+  |---|---|
+  | injizierbare AAS | **35** |
+  | orale 17aa-Steroide | 25 |
+  | Peptide | **26** |
+  | SARMs | 19 |
+  | GH und Sekretagoga | 15 |
+  | dazu | SERM, AI, Insulin, Diuretika, Schilddruese |
+
+  `[cmd]` **Vitamine und Mineralstoffe mit belegten EFSA/DRI-Obergrenzen**
+  — **Vitamin B6 auf 12 mg gesenkt, Selen auf 255 µg.**
+
+  `[read]` **Botanicals, Nootropika und Anti-Aging (124 Zeilen) bewusst
+  nur als Namensbestand** — *„Kuratierung lohnt erst, wenn das Modul sie
+  zeigt."*
+
+  ### Neun Ueberwachungsprofile docken an Medical an
+
+  `[cmd]` **Ihre Marker treffen Medicals 560 Referenzbereiche.**
+
+  `[read]` **Der Kreatinin-Hinweis ist explizit drin:** *„Kreatin und
+  Muskelmasse heben Serum-Kreatinin ohne Nierenschaden, eGFR wirkt
+  faelschlich niedrig, **Cystatin C ist der muskelunabhaengige
+  Marker**."* — Genau die Fehldeutung, die im Auftrag stand.
+
+  ### Rechtslage laenderweise, mit zwei Wackelstellen
+
+  `[cmd]` **DE, US und TH je `legal_framework`.** **Schaerfster
+  Kontrast:** anabole Steroide sind **in Thailand ueber die
+  *„dangerous drug"*-Kategorie in der Apotheke**, in DE und US
+  kontrolliert.
+
+  `[cmd]` **Zwei Wackelstellen vermerkt statt geglaettet:** der
+  US-Peptid-Status ist **seit Februar 2026 im Umbruch**
+  (HHS-Ankuendigung, noch nicht formal), und **die
+  AntiDopG-Mengenschwellen stehen je Stoff in der DmMV** — Rahmenwerk
+  genannt, nicht jede Einzelschwelle recherchiert.
+
+  ### Was unbelegt bleibt
+
+  `[cmd]` **Alle 151 Halbwertszeiten stammen unbelegt aus dem
+  Vorgaenger-Export** — sie tragen `half_life_source: "minipc_csv"` plus
+  Vermerk.
+
+  `[cmd]` **PED- und Peptid-Dosen bleiben leer** — nie am Menschen
+  belegt, und eine Angabe waere eine medizinische Aussage. `[read]`
+  **Leeres Feld plus Grund, keine Forenzahl.**
+
+  ### Der Uebertrag ist ein eigener Auftrag
+
+  `[cmd]` **Die 44er-Naehrstoffluecke aus F-02 ist im Sammelbestand
+  geschlossen** — 16 Eintraege mit `nutrients_provided`. **Aber das ist
+  die Recherche-Datei, nicht der Live-Katalog.**
+
+  `[read]` **Was zu entscheiden ist:** Wie viel des Bestands wird
+  uebernommen? **320 Zeilen ohne Kuration sind kein Katalog** — und
+  200 davon sind PED, was C-113 beruehrt.
 
 - [ ] **C-94: Die Suche wendet die Vorlieben an** (neu 2026-08-18).
   **Setzt G-65 und G-66 voraus.**
