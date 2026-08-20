@@ -9858,3 +9858,78 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Erledigt 2026-08-20 mit G-104** — dort stehen die
   Einzelbefunde und ihre Behebung.
+
+
+- [x] **G-110: Interactions und Extended** (erledigt 2026-08-20,
+  Bericht `docs/ssot/156-supplements-interactions.md`).
+
+  **Teil A — Interactions liest das Regelwerk.** `[cmd]` G-91 hatte
+  den Tab als blockiert gemeldet; C-133 hat das aufgehoben. Gemessen
+  fuer `dev@lumeos.app`: **1 zutreffend, 50 nicht zutreffend, 13 ohne
+  Daten** — genau die Zahlen des Auftrags.
+
+  `[cmd]` **`wr_anticoag_stack` zeigt, worauf sie getroffen hat** —
+  `anticoagulant_vka`, `anticoagulant:warfarin`, `CYP2C9_substrate`,
+  `hypertension` aus `matched_context`. **`wr_lab_biotin` nennt beide
+  fehlenden Pfade.**
+
+  `[read]` **Die Grenze steht im Text der Kachel** (C-108, F-02):
+  *„Hinweis, keine Bewertung — LumeOS gibt keine Dosierung vor, sperrt
+  nichts und rechnet daraus keine Note.“* **Kein Score, keine Blockade,
+  keine Zeitplan-Urteile.** `physician_referral` (33 Regeln) erscheint
+  als Wort, nicht als Handlung.
+
+  **Teil B — `missing_input` ist sichtbar.** `[cmd]` Alle 13 stehen
+  einzeln da, mit ihren Pfaden. Der Satz darueber ist der Kern von
+  C-132: *„weder zutreffend noch ausgeschlossen — es fehlen Angaben.“*
+
+  `[cmd]` **Sieben der zwoelf Pfade haengen an Quellen, die es nicht
+  gibt** — gegen das Schema geprueft: kein Schema `sleep`, kein
+  `location`, keine Symptomtabelle, kein `training.high_impact`, keine
+  Spalte `profile.indoor_dominant`. **Das ist die Landkarte dessen, was
+  noch fehlt**, nicht ein Fehler der Regeln.
+
+  **Teil C — das Gate schuetzt jetzt wirklich.** `[cmd]` G-92:
+  *„Sein Gate ist ein blosses `useState` und schuetzt nichts. Wer
+  klickt, sieht die Protokolle.“* **Bestaetigt und entfernt.**
+
+  `[cmd]` **Die Entscheidung faellt serverseitig** gegen
+  `profiles.experience_level` (C-140, `text`, nullable, CHECK auf vier
+  Werte, **auf allen 7 Profilen NULL**). Stufe fuer Stufe gemessen,
+  danach wieder auf NULL gesetzt:
+
+  | Grad | Gate | Protokolle | Half-life |
+  |---|---|---|---|
+  | (NULL) | **ja** | 0 | 0 |
+  | beginner | **ja** | 0 | 0 |
+  | advanced / pro / elite | nein | **1** | **6** |
+
+  `[read]` **Und ein Weg hinaus** — ein gesperrter Bereich ohne
+  Ausweg ist eine Sackgasse. Die Settings-Kachel ist entsperrt; sie
+  stand seit G-80 mit *„gibt es kein Feld dafuer“*, **was bis C-140
+  stimmte.** Der Grad ist **Selbstauskunft** (C-71), nicht die
+  Autonomy-Stufe.
+
+  **Ein Versuch, zurueckgenommen:** `[cmd]` Ein `dynamic({ ssr: false })`
+  hielt den Extended-Code aus dem Seitenbuendel — **und machte den Tab
+  leer**, auch der Ladehinweis fehlte. Der Gewinn war kleiner als der
+  Preis (G-117).
+
+  **Drei Zahlen des Auftrags berichtigt:** `[cmd]` Die sieben Arten
+  sind `rule_kind`, nicht `rule_type` (der hat **drei**: warning 29,
+  medication 20, nutrient_gap 15). Und der Attrappen-Test steht bei
+  **16 `RUECKFALL` + 1 `ATTRAPPE`**, nicht 18/2 — **die 18 sind
+  `tab-spec.tsx`.**
+
+  `[cmd]` **Eine Testerwartung nachgezogen, und zwar bewusst:** Der
+  Test verlangte die Unterkomponente `ExtendedGate`. Sie ist **ersetzt,
+  nicht weggelassen** — das neue Gate heisst `ExtendedGesperrt`. Der
+  Test prueft jetzt diesen Namen und liest die neue Datei mit; er bleibt
+  streng.
+
+  `[cmd]` **441 Tests gruen** (vorher 434), Typecheck sauber, Attrappen
+  gerendert **1**. **Zeilenschutz:** `test-user` sieht den Katalog
+  (64 Regeln, wie die Lebensmitteldatenbank), aber **keine zutreffende
+  Regel und keine Merkmale aus `matched_context`.**
+
+  **Offen geblieben:** G-117.

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `608a46d` auf `dev`.
+**Stand:** 2026-08-18, Anker `3d3f7c9` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 122 offen, 1 in Arbeit.
+`[cmd]` 124 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -253,8 +253,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
 | **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
 | **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
-| **C-158** | Der Gap-Score braucht maschinenlesbare Naehrstoffcodes |  |
+| **C-158** | Der Gap-Score braucht Naehrstoffcodes je Substanz |  |
 | **G-116** | Generelle Ausschluesse bewerten mit 0, statt zu filtern |  |
+| **C-159** | Sieben Regelpfade zeigen auf Schemata, die es nicht gibt |  |
+| **G-118** | Der Extended-Code liegt im Buendel |  |
 
 ---
 
@@ -3710,3 +3712,36 @@ Umsetzen angepasst werden.
 
   `[read]` **Die Allergene bleiben hart** — G-67 hat es begruendet:
   *„`hard_exclude` ist die Stufe, die auch fuer Allergene gilt."*
+
+- [ ] **C-159: Sieben Regelpfade zeigen auf Schemata, die es nicht
+  gibt** (neu 2026-08-20). **Die Landkarte dessen, was fehlt.** Befund
+  aus G-110.
+
+  `[cmd]` **Von zwoelf `missing_input`-Pfaden haengen sieben an Quellen
+  ohne Tabelle:**
+
+  | | |
+  |---|---|
+  | **kein Schema `sleep`** | Recovery-Entwurf: `sleep_data` zurueckgestellt bis Wearable-Import |
+  | **kein `location`** | nirgends im Repo |
+  | **keine Symptomtabelle** | G-84: *„fuer Symptome gibt es keine Tabelle im ganzen Schema"* |
+  | **kein `training.high_impact`** | im Feldvertrag genannt, nicht gebaut |
+
+  `[read]` **Das ist wertvoller als eine Liste fehlender Felder** — es
+  sagt, **welche Module die Regel-Engine noch nicht erreicht.**
+
+  `[cmd]` **Und es deckt sich mit F-06:** *„Die Arbeitsobjekte haben keine
+  Tabelle."* **Dieselbe Luecke aus anderer Richtung gemessen.**
+
+- [ ] **G-118: Der Extended-Code liegt im Buendel** (neu 2026-08-20).
+  Rest aus G-110.
+
+  `[cmd]` **Das Gate haelt** — serverseitig gegen `experience_level`.
+  **Aber der Code wird trotzdem ausgeliefert.**
+
+  `[read]` *„Ein `dynamic({ssr:false})` hielt ihn heraus — und machte den
+  Tab leer."* **Der Agent hat es zurueckgenommen, richtig.**
+
+  **Zu klaeren:** Reicht das Gate, oder soll der Code gar nicht erst zum
+  Browser? `[read]` **Es geht um PED-Protokolle** — die Frage ist
+  nicht rein technisch.
