@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `0480f0c` auf `dev`.
+**Stand:** 2026-08-18, Anker `54bd3e0` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 89 offen, 1 in Arbeit.
+`[cmd]` 86 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -194,10 +194,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
 | **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
 | **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
-| **C-95** | Coach-Rechte je Modul, mit oder ohne Bestaetigung |  |
 | **C-71** | Permissions und Autonomy sind zwei verschiedene Sachen |  |
 | **C-75** | BSS und Voice sind Neubau |  |
-| **GO-15** | `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
 | **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
 | **G-61** | `refillUrgent` als Schwelle |  |
@@ -208,7 +206,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-91** | Die Spec nennt LOINC-Codes, die nicht die ueblichen sind |  |
 | **C-92** | Die Spec verwechselt Marker |  |
 | **GO-17** | Meilenstein-Kachel ohne Stelle im Mockup |  |
-| **GO-18** | `user_goals.progress_pct` gegen `goal_progress_at()` |  |
 | **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
 | **C-102** | `milch` findet Joghurt statt Milch |  |
@@ -2121,39 +2118,6 @@ Umsetzen angepasst werden.
   **Zu bauen:** Rangspalte · Bearbeiten · Abschlussstatus ·
   Seed mit abgelaufenen Zielen · **Timeline-Zeilen anwaehlbar.**
 
-- [ ] **C-95: Coach-Rechte je Modul, mit oder ohne Bestaetigung** (neu
-  2026-08-18). **Ersetzt den offenen Teil von C-71.**
-
-  **Tom, 2026-08-18:** *„Coach-Autonomie: alles, was der User selber
-  nicht beurteilen kann. Das muss neu rein in Permissions pro Modul.
-  Beginnen wir einfachheitshalber: Coach darf aendern ohne Bestaetigung
-  oder mit Bestaetigung des Users. Gehen wir tiefer rein spaeter."*
-
-  ### Die Korrektur
-
-  `[cmd]` **Der Tab `Autonomie` in `/v2/coach/human` ist etwas
-  anderes** — **die Coach-Sicht auf seiner Plattform**, nicht die
-  Rechte, die der Nutzer vergibt. `[read]` Der Orchestrator hatte es
-  falsch verortet.
-
-  ### Was zu bauen ist
-
-  **Je Modul zwei Werte:** *ohne Bestaetigung* oder *mit Bestaetigung
-  des Nutzers.*
-
-  `[cmd]` **Module:** Nutrition, Training, Recovery, Goals,
-  Supplements, Medical.
-
-  `[read]` **Die Begruendung ist der Kern:** Ein Coach entscheidet, was
-  der Nutzer fachlich nicht beurteilen kann. **Der Nutzer entscheidet,
-  ob er das ohne Rueckfrage geschehen laesst** — je Modul verschieden,
-  weil das Vertrauen verschieden ist.
-
-  `[cmd]` **Feiner spaeter** — Toms Vorgabe. **Nicht vorbauen.**
-
-  `[read]` **Und die Vorlage sitzt im Vorgaengerrepo:**
-  `SettingsView.tsx` fuehrt eine `CoachPermissionsSection`, aufklappbar
-  je Coach, mit `/api/human-coach/permissions/my-coaches`.
 
 
 
@@ -2232,31 +2196,6 @@ Umsetzen angepasst werden.
   anstehen — **beide Male geht es um dieselbe Frage: wie fein wird
   abgestuft.**
 
-- [ ] **GO-15: `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel**
-  (neu 2026-08-18). **Entscheidung fuer Tom.** Befund aus GO-11.
-
-  `[cmd]` Die Funktion mischt Rohwert und Formel per EMA:
-  `0,3 × 2.247,6 + 0,7 × 3.527,0 = 3.143,2`.
-
-  **Das heisst: der ausgewiesene „adaptive" Wert stammt zu 70 % aus der
-  Formel, die er ersetzen soll.**
-
-  `[cmd]` **Und der Abstand ist gross:** Rohwert 2.247,6 gegen Formel
-  3.527,0 — **1.279 kcal.** Bei 2.372 kcal Zufuhr und leichter Zunahme
-  ist ein Verbrauch von 3.527 nicht plausibel.
-
-  `[read]` **Die Daempfung ist bei wenig Daten richtig — aber hier steht
-  `complete` und `confidence high`.** Wenn der Messwert bei hoher
-  Verlaesslichkeit trotzdem zu 30 % zaehlt, ist „adaptiv" ein Etikett.
-
-  `[annahme]` **Ein von der Verlaesslichkeit abhaengiges Alpha** waere
-  der naheliegende Weg — wenig Daten heisst nah an der Formel, viele
-  Daten heisst nah an der Messung.
-
-  `[cmd]` **Vorbehalt:** Die Testdaten sind erzeugt. **Mahlzeiten und
-  Gewichtsverlauf wurden getrennt generiert** und muessen nicht
-  zueinander passen — der Abstand von 1.279 kcal kann daher
-  stammen. **Vor einer Aenderung an Alpha gehoert das geprueft.**
 
 
 - [ ] **G-53: `InjektionsKarte` in `packages/ui` hat keinen Aufrufer**
@@ -2430,24 +2369,6 @@ Umsetzen angepasst werden.
   Vorgabe — aber drei gebaute Meilensteine ohne Anzeige waeren tote
   Daten. **Tom entscheidet: Form behalten, aendern, oder Kachel weg.**
 
-- [ ] **GO-18: `user_goals.progress_pct` gegen `goal_progress_at()`**
-  (neu 2026-08-18). Befund aus GO-16.
-
-  `[cmd]` **Die Spalte sagt 40,00 %, die Funktion rechnet 0,0 %.**
-
-  `[read]` **Zwei Wahrheiten am selben Ziel.** Die Anzeige zeigt den
-  gerechneten Wert und nennt die Herkunft — richtig so. **Aber eine
-  Spalte, die nicht stimmt, wird irgendwann von jemandem gelesen.**
-
-  **Entschieden (Tom, 2026-08-18): pflegen, wenn moeglich.**
-
-  `[cmd]` **Ein Trigger auf `body_measurements` und `workout_sets`**, der
-  `progress_pct` nachzieht. `[read]` **Wenn es nicht geht, faellt die
-  Spalte weg** — zwei Wahrheiten sind schlechter als eine.
-
-  **Alt:** Wird `progress_pct` gepflegt oder faellt sie weg?
-  `[cmd]` Wenn sie bleibt, braucht sie einen Trigger; wenn nicht, gehoert
-  sie geloescht.
 
 - [ ] **GO-19: Was die Daten hergeben und das Mockup nicht zeigt** (neu
   2026-08-18). Befund aus GO-16.

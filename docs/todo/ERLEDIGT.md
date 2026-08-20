@@ -5318,6 +5318,53 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Und das Ausschliessen greift seit C-94** — Toms Vorgabe
   *„`contains_nuts` hat Nuts drin, also muss es raus"* ist erfuellt.
 
+- [x] **C-95: Coach-Rechte je Modul, mit oder ohne Bestaetigung** (neu
+  2026-08-18). **Ersetzt den offenen Teil von C-71.**
+
+  **Tom, 2026-08-18:** *„Coach-Autonomie: alles, was der User selber
+  nicht beurteilen kann. Das muss neu rein in Permissions pro Modul.
+  Beginnen wir einfachheitshalber: Coach darf aendern ohne Bestaetigung
+  oder mit Bestaetigung des Users. Gehen wir tiefer rein spaeter."*
+
+  ### Die Korrektur
+
+  `[cmd]` **Der Tab `Autonomie` in `/v2/coach/human` ist etwas
+  anderes** — **die Coach-Sicht auf seiner Plattform**, nicht die
+  Rechte, die der Nutzer vergibt. `[read]` Der Orchestrator hatte es
+  falsch verortet.
+
+  ### Was zu bauen ist
+
+  **Je Modul zwei Werte:** *ohne Bestaetigung* oder *mit Bestaetigung
+  des Nutzers.*
+
+  `[cmd]` **Module:** Nutrition, Training, Recovery, Goals,
+  Supplements, Medical.
+
+  `[read]` **Die Begruendung ist der Kern:** Ein Coach entscheidet, was
+  der Nutzer fachlich nicht beurteilen kann. **Der Nutzer entscheidet,
+  ob er das ohne Rueckfrage geschehen laesst** — je Modul verschieden,
+  weil das Vertrauen verschieden ist.
+
+  `[cmd]` **Feiner spaeter** — Toms Vorgabe. **Nicht vorbauen.**
+
+  `[read]` **Und die Vorlage sitzt im Vorgaengerrepo:**
+  `SettingsView.tsx` fuehrt eine `CoachPermissionsSection`, aufklappbar
+  je Coach, mit `/api/human-coach/permissions/my-coaches`.
+
+  `[cmd]` **Erledigt 2026-08-19 mit C-119.** Sechs Tabellen im
+  `coach`-Schema: `client_permissions`, `client_autonomy`,
+  `pending_actions`, `action_log`, **`permission_change_log`**,
+  **`autonomy_change_log`**.
+
+  `[cmd]` **Zeilenschutz beidseitig belegt:** Klient darf Permissions
+  aendern, Coach nicht; Coach darf Autonomy aendern; ein dritter Nutzer
+  sieht 0 Zeilen.
+
+  `[cmd]` **Die Widerrufshistorie schreibt** — Insert und Update ergeben
+  je zwei Logzeilen. `[read]` **Das war die Luecke des
+  Vorgaengerrepos.**
+
 
 
 ## Erledigt am 2026-08-05
@@ -5500,6 +5547,69 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Waisen 0, `Achilles Tendon` 0, `none`/`None` 0,
   Primary+Secondary-Doppelrollen 0.**
+
+## GO - Goals & Body
+
+- [x] **GO-15: `alpha 0.3` macht den adaptiven Wert zu 70 % zur Formel**
+  (neu 2026-08-18). **Entscheidung fuer Tom.** Befund aus GO-11.
+
+  `[cmd]` Die Funktion mischt Rohwert und Formel per EMA:
+  `0,3 × 2.247,6 + 0,7 × 3.527,0 = 3.143,2`.
+
+  **Das heisst: der ausgewiesene „adaptive" Wert stammt zu 70 % aus der
+  Formel, die er ersetzen soll.**
+
+  `[cmd]` **Und der Abstand ist gross:** Rohwert 2.247,6 gegen Formel
+  3.527,0 — **1.279 kcal.** Bei 2.372 kcal Zufuhr und leichter Zunahme
+  ist ein Verbrauch von 3.527 nicht plausibel.
+
+  `[read]` **Die Daempfung ist bei wenig Daten richtig — aber hier steht
+  `complete` und `confidence high`.** Wenn der Messwert bei hoher
+  Verlaesslichkeit trotzdem zu 30 % zaehlt, ist „adaptiv" ein Etikett.
+
+  `[annahme]` **Ein von der Verlaesslichkeit abhaengiges Alpha** waere
+  der naheliegende Weg — wenig Daten heisst nah an der Formel, viele
+  Daten heisst nah an der Messung.
+
+  `[cmd]` **Vorbehalt:** Die Testdaten sind erzeugt. **Mahlzeiten und
+  Gewichtsverlauf wurden getrennt generiert** und muessen nicht
+  zueinander passen — der Abstand von 1.279 kcal kann daher
+  stammen. **Vor einer Aenderung an Alpha gehoert das geprueft.**
+
+  `[cmd]` **Erledigt 2026-08-19: `alpha = 1,0`.** Der ausgewiesene Wert
+  ist jetzt der gemessene — **2.497,4 kcal**, kein Anteil mehr aus der
+  Formel.
+
+  `[read]` **Toms Begruendung:** *Ich denke nicht, dass es ein Alpha
+  braucht fuer eine Formel, die weltweit verwendet wird.*
+
+  `[cmd]` **Der Abstand wird dadurch sichtbar statt gedaempft:**
+  **−1.029,6 kcal** gegen die Formel (3.527,0). Mit `alpha = 0,3` waren
+  es −304,4 — **derselbe Sachverhalt, nur verdeckt.**
+
+- [x] **GO-18: `user_goals.progress_pct` gegen `goal_progress_at()`**
+  (neu 2026-08-18). Befund aus GO-16.
+
+  `[cmd]` **Die Spalte sagt 40,00 %, die Funktion rechnet 0,0 %.**
+
+  `[read]` **Zwei Wahrheiten am selben Ziel.** Die Anzeige zeigt den
+  gerechneten Wert und nennt die Herkunft — richtig so. **Aber eine
+  Spalte, die nicht stimmt, wird irgendwann von jemandem gelesen.**
+
+  **Entschieden (Tom, 2026-08-18): pflegen, wenn moeglich.**
+
+  `[cmd]` **Ein Trigger auf `body_measurements` und `workout_sets`**, der
+  `progress_pct` nachzieht. `[read]` **Wenn es nicht geht, faellt die
+  Spalte weg** — zwei Wahrheiten sind schlechter als eine.
+
+  **Alt:** Wird `progress_pct` gepflegt oder faellt sie weg?
+  `[cmd]` Wenn sie bleibt, braucht sie einen Trigger; wenn nicht, gehoert
+  sie geloescht.
+
+  `[cmd]` **Erledigt 2026-08-19 per Trigger.** `progress_pct` stimmt
+  jetzt mit `goal_progress_at()` ueberein — beide Ziele auf 0,00.
+
+  `[read]` **Die Spalte bleibt und wird gepflegt** — Toms Entscheidung.
 
 ## G — Theme V1
 
