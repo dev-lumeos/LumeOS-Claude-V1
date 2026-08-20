@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `ec3d21b` auf `dev`.
+**Stand:** 2026-08-18, Anker `ebd9f6e` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 114 offen, 1 in Arbeit.
+`[cmd]` 115 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -247,6 +247,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **C-139** | Die 503 Wirkstoffe sind nicht importierbar |  |
+| **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
 
 ---
 
@@ -3323,3 +3324,22 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Die Rueckmeldung ist formuliert und an ChatGPT uebergeben**
   (2026-08-19), zusammen mit vier Vorschlaegen fuer den QA-Lauf.
+
+- [ ] **A-27: Zwei Agenten, zwei Attrappen-Erwartungen** (neu
+  2026-08-20). **Das Gate ist rot.**
+
+  `[cmd]` **`v2-attrappen.test.ts` scheitert zweimal:** *„Supplements
+  erwartet 1 Attrappenmarke, findet 17"* und *„`TodayAttrappe` braucht
+  laut Test eine Rueckfallmarke."*
+
+  `[read]` **Die Ursache ist der Parallelbetrieb:** G-74 hat die
+  Rueckfallfassungen markiert und den Test auf 1 gesetzt. **G-91 hat
+  danach den Catalog-Tab gebaut** — und die Zaehlung stimmt nicht mehr.
+
+  `[cmd]` **A-24 haelt fest, dass Textmarken kein brauchbares Mass
+  sind.** `[read]` **Und `tools/schuss.mjs` misst seit heute die
+  gerenderte Seite** — 7 Attrappen auf `/v2/nutrition`, in einem
+  Aufruf.
+
+  **Zu tun:** Test auf den gemessenen Stand ziehen — **oder ihn durch
+  die gerenderte Zaehlung ersetzen.**
