@@ -45,6 +45,9 @@
 import { Card, Pill, Icon, Meter, Row } from '@lumeos/ui'
 
 import { ATTRAPPE } from './ansicht'
+// G-90: die echte Einstufung und ihre Historie.
+import { AutonomieEcht, HistorieEcht } from './rechte-echt'
+import type { CoachRechteStand } from '../../../lib/coach/rechte-read'
 import {
   CLIENT_AUTONOMY, AUTONOMY_LADDER, CHECKIN_TEMPLATES, CHECKIN_HISTORY,
 } from './daten'
@@ -52,7 +55,33 @@ import {
 // ── Autonomy · client side ───────────────────────────────────────────
 // [cmd] module-coach-athlete.jsx:397-500.
 
-export function AthleteAutonomy() {
+// **G-90: Der Tab liest — und setzt NICHTS.**
+//
+// `[read]` Tom, 2026-08-19: *„Unter Autonomy setzt der Coach den Level
+// seines Users."* **Der Tab `Autonomie` ist die Coach-Sicht auf seiner
+// Plattform** — hier sieht der Klient, wie er eingestuft wurde, und
+// von wem. Bedienelemente gibt es deshalb keine.
+//
+// `[cmd]` Das Schema erzwingt es: `client_autonomy` nimmt Schreib-
+// zugriffe nur von `coach_id`. Ein Regler hier waere wirkungslos.
+export function AthleteAutonomy({ stand }: { stand?: CoachRechteStand }) {
+  if (stand) {
+    return (
+      <div className="v2-col-gap" style={{ gap: 14 }}>
+        <AutonomieEcht stand={stand} />
+        <HistorieEcht
+          titel="Historie der Einstufungen"
+          zeilen={stand.autonomieLog}
+          leerText="Jede Änderung der Stufe erscheint hier — mit Alt- und Neuwert."
+        />
+      </div>
+    )
+  }
+  return <AutonomyEntwurf />
+}
+
+/** Der uebernommene Entwurf — nur noch Rueckfall. */
+function AutonomyEntwurf() {
   const a = CLIENT_AUTONOMY
   const cur = AUTONOMY_LADDER.find(l => l.lvl === a.level)
 

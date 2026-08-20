@@ -54,6 +54,13 @@ import { CoachModale } from './modale'
 import { AthleteAutonomy, AthleteCheckins } from './tab-autonomie'
 import { CoachOnboardingWizard } from './tab-onboarding'
 import { AthletePermissionsV2, AthleteProposals } from './tab-rechte'
+// G-90: die echten Rechte, Autonomy und beide Historien.
+//
+// `[cmd]` **Nur ein Typ-Import.** `rechte-read.ts` zieht ueber
+// `createSessionClient` das Modul `next/headers` nach; ein Wert-Import
+// von hier aus holte Server-I/O ins Browserbuendel — Typpruefung
+// gruen, jede Seite HTTP 500 (G-74, G-79).
+import type { CoachRechteStand } from '../../../lib/coach/rechte-read'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -76,7 +83,7 @@ function tabs(): TabItem[] {
   ]
 }
 
-export function CoachAnsicht() {
+export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
   const [tab, setTab] = React.useState('overview')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
 
@@ -120,9 +127,9 @@ export function CoachAnsicht() {
 
       {tab === 'overview' && <AthleteOverview />}
       {tab === 'coaches' && <AthleteCoaches />}
-      {tab === 'permissions' && <AthletePermissionsV2 />}
-      {tab === 'proposals' && <AthleteProposals />}
-      {tab === 'autonomy' && <AthleteAutonomy />}
+      {tab === 'permissions' && <AthletePermissionsV2 stand={stand} />}
+      {tab === 'proposals' && <AthleteProposals stand={stand} />}
+      {tab === 'autonomy' && <AthleteAutonomy stand={stand} />}
       {tab === 'checkins' && <AthleteCheckins />}
       {tab === 'messages' && <AthleteMessages />}
       {tab === 'notes' && <AthleteNotes />}

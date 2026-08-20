@@ -13,9 +13,22 @@
 // Nutrition, wo die Vorlage Tabs fuehrte und die Unterteilung falsch
 // war.
 //
-// DIESE SEITE LIEST NICHTS. `[cmd]` Ein `coach`-Schema gibt es nicht —
-// der Begriff kommt in `supabase/_pipeline/` in keiner SQL-Datei vor.
-// Es ist nichts anzubinden, also wird nichts geladen.
+// **G-90: Diese Seite liest.** `[cmd]` Bis hierher stand hier, ein
+// `coach`-Schema gebe es nicht. **Das stimmt seit C-119 nicht mehr:**
+// `supabase/_pipeline/15_coach/150_coach_permissions_autonomy.sql`
+// legt sechs Tabellen an — Rechte, Autonomy, zwei Aenderungslogs,
+// wartende Aktionen und ein Aktionslog.
+//
+// `[cmd]` **Lesbar sind sie heute trotzdem nicht:** `coach` ist nicht
+// fuer PostgREST freigegeben. Gemessen am 2026-08-20, angemeldet:
+// `Invalid schema: coach`, waehrend `recovery`, `training` und `goals`
+// im selben Lauf lesen. Die Freigabe gehoert in die
+// Supabase-Konfiguration und damit zu Codex — gemeldet im Bericht 139.
+//
+// `[read]` **Der Leseweg ist trotzdem gebaut** (Muster G-65): faellt
+// die Abfrage aus, zeigt die Oberflaeche einen Leerzustand mit Grund
+// statt einer Attrappe. Sobald das Schema freigegeben ist, stehen die
+// Zeilen da, ohne dass hier etwas zu aendern waere.
 //
 // `[cmd]` Der Coach Portal gehoert NICHT hierher: er steht seit G-02
 // unter WORKSPACES als externer Link auf coach.lumeos.app
@@ -24,6 +37,7 @@
 // docs/ssot/102-coach-mockup.md.
 import type { Metadata } from 'next'
 
+import { ladeCoachRechte } from '../../../../lib/coach/rechte-read'
 import { CoachAnsicht } from '../ansicht'
 import '../coach.css'
 
@@ -31,6 +45,9 @@ export const metadata: Metadata = {
   title: 'Human Coaches · LumeOS',
 }
 
-export default function V2CoachHumanPage() {
-  return <CoachAnsicht />
+export const dynamic = 'force-dynamic'
+
+export default async function V2CoachHumanPage() {
+  const stand = await ladeCoachRechte()
+  return <CoachAnsicht stand={stand} />
 }

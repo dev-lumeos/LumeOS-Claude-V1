@@ -48,10 +48,40 @@ import {
   type Grants, type Proposal,
 } from './daten'
 import { ATTRAPPE } from './ansicht'
+// G-90: die echten Kacheln. Liegt eine Zeile vor, ersetzen sie den
+// Entwurf; sonst steht der Leerzustand da, und der Entwurf bleibt weg.
+import { RechteEcht, HistorieEcht, WartendEcht } from './rechte-echt'
+import type { CoachRechteStand } from '../../../lib/coach/rechte-read'
 
 // ═══ TAB · PERMISSIONS ═══════════════════════════════════════════
 // [cmd] module-coach-athlete.jsx:143-262.
-export function AthletePermissionsV2() {
+//
+// **G-90: Der Tab liest.** `[cmd]` Bis hierher war er ganz Attrappe,
+// weil es kein `coach`-Schema gab. Seit C-119 gibt es sechs Tabellen.
+// **Erreichbar sind sie heute nicht** (`coach` ist nicht fuer
+// PostgREST freigegeben) — deshalb steht der Leerzustand da, mit dem
+// Grund. Kein Attrappenmuster: Muster G-65.
+export function AthletePermissionsV2({ stand }: { stand?: CoachRechteStand }) {
+  // `[read]` Der Entwurf bleibt nur, solange gar nichts geladen wurde
+  // (kein Prop). Sobald die Seite liest — auch wenn sie nichts findet
+  // —, gilt der echte Weg mit seinem Leerzustand.
+  if (stand) {
+    return (
+      <div className="v2-col-gap" style={{ gap: 14 }}>
+        <RechteEcht stand={stand} />
+        <HistorieEcht
+          titel="Historie der Freigaben"
+          zeilen={stand.rechteLog}
+          leerText="Jede Freigabe und jede Rücknahme erscheint hier — mit Alt- und Neuwert."
+        />
+      </div>
+    )
+  }
+  return <PermissionsEntwurf />
+}
+
+/** Der uebernommene Entwurf — nur noch Rueckfall. */
+function PermissionsEntwurf() {
   const [grants, setGrants] = React.useState<Grants>(PERM_GRANTS)
   const set = (coachId: string, mod: string, val: string) =>
     setGrants(g => ({ ...g, [coachId]: { ...g[coachId], [mod]: val } }))
@@ -232,7 +262,18 @@ export function AthletePermissionsV2() {
 
 // ═══ TAB · PROPOSALS ═════════════════════════════════════════════
 // [cmd] module-coach-athlete.jsx:265-312. „Proposal inbox".
-export function AthleteProposals() {
+//
+// **G-90: Der Bestaetigungspfad ist `coach.pending_actions`** —
+// Vorschau, 10-Minuten-Verfall, `confirmed_at`. Das Muster stammt aus
+// dem Vorgaengerrepo (022) und ist dort fuer den Einzelnutzer gebaut
+// gewesen; hier traegt es Coach und Klient und echte Zeilenrechte.
+export function AthleteProposals({ stand }: { stand?: CoachRechteStand }) {
+  if (stand) return <WartendEcht stand={stand} />
+  return <ProposalsEntwurf />
+}
+
+/** Der uebernommene Entwurf — nur noch Rueckfall. */
+function ProposalsEntwurf() {
   const [sel, setSel] = React.useState<Proposal | null>(null)
   const pending = PROPOSALS.filter(p => p.status === 'pending')
   const decided = PROPOSALS.filter(p => p.status !== 'pending')
