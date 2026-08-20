@@ -373,7 +373,12 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
   // anbindet, entfernt `attrappe` und zaehlt die Erwartung herunter.
   const dateien: Array<[string, number]> = [
     [RECOVERY, 5],
-    [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 4],
+    // G-82: 4 -> 3. Die „Live score preview" trug die Marke, weil sie
+    // mit der Entwurfsformel rechnete — eigene Gewichte, ein HRV-Term
+    // aus `CHECKIN` und `0.88 * 10` als feste Ernaehrung. Sie rechnet
+    // jetzt mit `lib/recovery/score.ts`, also aus dem Formular und mit
+    // den Manual-Gewichten. Die uebrigen drei bleiben Attrappe.
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 3],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 10],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 17],
   ]

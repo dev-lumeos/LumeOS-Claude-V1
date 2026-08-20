@@ -49,9 +49,12 @@ import { alsErmuedung, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { RecoveryModale } from './modale'
 // G-55: die erfassten Check-ins.
 import type { CheckinStand } from '../../../lib/recovery/checkin-read'
-// G-76: der Erholungswert aus dem Check-in.
-import { berechneScore } from '../../../lib/recovery/score'
-import { ScoreKachel } from './score-kachel'
+// G-82: der Erholungswert kommt aus `recovery.scores`, nicht mehr aus
+// einer Browserrechnung. `lib/recovery/score.ts` (G-76) bleibt — aber
+// nur noch als Vorschau im Check-in-Entwurf, nicht mehr hier.
+import type { ScoreStand, ModalitaetenStand } from '../../../lib/recovery/scores-read'
+import { ScoreKachel, ScoreVerlauf } from './score-kachel'
+import { ModalitaetenKachel } from './modalitaeten-kachel'
 import { CheckinStreifen } from './checkin-streifen'
 import { RecCheckin } from './tab-checkin'
 import { RecMuscleMap, RecHRV, RecSleep } from './tab-messwerte'
@@ -77,7 +80,13 @@ function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem
   ]
 }
 
-export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
+export function RecoveryAnsicht({
+  checkins, scores, modalitaeten,
+}: {
+  checkins?: CheckinStand
+  scores?: ScoreStand
+  modalitaeten?: ModalitaetenStand
+}) {
   const [tab, setTab] = React.useState('today')
   const [modus, setModus] = React.useState<ScoreModus>('hrv')
   const [modal, setModal] = React.useState<ModalZustand | null>(null)
@@ -88,12 +97,16 @@ export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
   const ot = React.useMemo(() => evaluateOvertraining(), [])
   const pending = React.useMemo(() => recoveryPendingActions(), [])
 
-  // G-76: Der Erholungswert aus dem juengsten echten Check-in. `null`,
-  // wenn keiner vorliegt — dann bleiben Kopf und Kachel beim Entwurf.
-  const echterScore = React.useMemo(() => {
-    const e = berechneScore(checkins?.neuster ?? null)
-    return e.score === null ? null : e
-  }, [checkins])
+  // G-82: Die juengste Zeile aus `recovery.scores`. `null`, wenn keine
+  // vorliegt — dann bleiben Kopf und Kachel beim Entwurf.
+  //
+  // `[cmd]` **Hier wurde vorher gerechnet, und zwar anders.** G-76 rief
+  // `berechneScore` und kam ueber fuenf gemessene Tage auf −7,0 bis
+  // +2,6 gegenueber der Tabelle. Der Grund: die Browserrechnung liess
+  // Trainingslast und Ernaehrung ganz weg (Basis 75), die Tabelle
+  // fuellt beide mit Rueckfallwerten (Basis 100) und benutzt den
+  // gemessenen ACWR, wo es einen gibt — auf 118 von 170 Tagen.
+  const echterScore = scores?.neuster ?? null
 
   const kontext = React.useMemo(() => ({
     open: (m: ModalZustand) => setModal(m),
@@ -111,18 +124,18 @@ export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
         <div className="v2-module-title-block">
           <div className="v2-module-title-row">
             <span className="v2-module-title">Recovery</span>
-            {/* G-76: Der Kopf zeigt die ZAHL aus dem echten Check-in,
-                ohne Einordnung. `[read]` Vorher stand hier
-                „Score 88 · Good" aus dem Entwurf — `Good` ist eine
-                Readiness-Stufe der `SPEC_09` und damit Urteilssprache.
-                Ohne echten Check-in bleibt die Entwurfspille stehen. */}
+            {/* G-76/G-82: Der Kopf zeigt die ZAHL aus der Tabelle, ohne
+                Einordnung. `[read]` Vorher stand hier „Score 88 · Good"
+                aus dem Entwurf — `Good` ist eine Readiness-Stufe der
+                `SPEC_09` und damit Urteilssprache. Ohne echte Zeile
+                bleibt die Entwurfspille stehen. */}
             {echterScore
               ? (
                 <Pill style={{
                   borderColor: 'color-mix(in oklch, var(--acc-recov) 35%, var(--border))',
                   color: 'var(--acc-recov)',
                   background: 'color-mix(in oklch, var(--acc-recov) 7%, transparent)',
-                }}>Score {echterScore.score}</Pill>
+                }}>Score {echterScore.score.toFixed(1)}</Pill>
               )
               : (
                 <Pill style={{
@@ -137,9 +150,15 @@ export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
             {ot.severity !== 'normal' && <Pill variant="warn">{ot.count} OT signals</Pill>}
           </div>
           <div className="v2-module-sub">
+            {/* G-82: Statt „x von 100 Gewichtspunkten gerechnet" steht
+                hier, WOHER die Zahl kommt — die Tabelle rechnet immer
+                alle 100, aber nicht immer aus gemessenen Werten. Die
+                Zahl der Rueckfaelle sagt, wie viel davon gestuetzt ist. */}
             {echterScore
-              ? <>manual mode · {echterScore.gewichtBasis} von 100 Gewichtspunkten
-                  gerechnet · {pending.length} pending action{pending.length === 1 ? '' : 's'}</>
+              ? <>aus <span className="v2-mono">recovery.scores</span> · {echterScore.mode} mode
+                  {' · '}{echterScore.entry_date}
+                  {scores && scores.gesamt > 1 ? ` · ${scores.gesamt} Tage erfasst` : ''}
+                  {' · '}{pending.length} pending action{pending.length === 1 ? '' : 's'}</>
               : <>{rd.advice} · score mode: {modus} · {pending.length} pending
                   action{pending.length === 1 ? '' : 's'}</>}
           </div>
@@ -159,7 +178,9 @@ export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
 
       <Tabs items={tabs(18, TODAY_MODALITIES.length, ot.count)} active={tab} onChange={setTab} />
 
-      {tab === 'today' && <RecToday checkins={checkins} />}
+      {tab === 'today' && (
+        <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
+      )}
       {tab === 'checkin' && <RecCheckin />}
       {tab === 'muscles' && <RecMuscleMap />}
       {tab === 'hrv' && <RecHRV />}
@@ -176,16 +197,19 @@ export function RecoveryAnsicht({ checkins }: { checkins?: CheckinStand }) {
 
 // ═══ TODAY ═══════════════════════════════════════════════════════
 // [cmd] module-recovery-v2.jsx:99-242.
-function RecToday({ checkins }: { checkins?: CheckinStand }) {
+function RecToday({
+  checkins, scores, modalitaeten,
+}: {
+  checkins?: CheckinStand
+  scores?: ScoreStand
+  modalitaeten?: ModalitaetenStand
+}) {
   const { open, modus, setModus, sc, rd, ot, pending, zeigeTab } = useRecovery()
 
   const recoveryValues = React.useMemo(() => muskelwerte(), [])
 
-  // G-76: derselbe Wert wie im Kopf — einmal gerechnet, weitergereicht.
-  const echterScore = React.useMemo(() => {
-    const e = berechneScore(checkins?.neuster ?? null)
-    return e.score === null ? null : e
-  }, [checkins])
+  // G-82: dieselbe Zeile wie im Kopf — einmal gelesen, weitergereicht.
+  const echterScore = scores?.neuster ?? null
 
   return (
     <div className="v2-grid-15">
@@ -195,11 +219,20 @@ function RecToday({ checkins }: { checkins?: CheckinStand }) {
             darunter traegt die Attrappenmarke. */}
         <CheckinStreifen stand={checkins} />
 
-        {/* G-76: Der Erholungswert aus dem juengsten Check-in. Liegt
-            keiner vor, bleibt die Entwurfskachel darunter stehen —
-            mit ihrer Marke. */}
-        {echterScore && checkins?.neuster && (
-          <ScoreKachel ergebnis={echterScore} zeile={checkins.neuster} />
+        {/* G-82: Der Erholungswert aus `recovery.scores`. Liegt keine
+            Zeile vor, bleibt die Entwurfskachel darunter stehen — mit
+            ihrer Marke. `[read]` Der Check-in kommt nur noch fuer die
+            Rohwerte daneben (HRV, Schlafqualitaet) mit; gerechnet wird
+            aus ihm nichts mehr. */}
+        {echterScore && (
+          <ScoreKachel zeile={echterScore} checkin={checkins?.neuster ?? null} />
+        )}
+
+        {/* G-82: Die Kurve — der Grund, aus dem die Tabelle gelesen
+            wird. `[cmd]` 170 Tage; im Browser waere jeder davon ein
+            eigener Check-in-Abruf. */}
+        {scores && scores.verlauf.length > 1 && (
+          <ScoreVerlauf verlauf={scores.verlauf} gesamt={scores.gesamt} />
         )}
 
         {!echterScore && (
@@ -325,6 +358,14 @@ function RecToday({ checkins }: { checkins?: CheckinStand }) {
           </Card>
         )}
 
+        {/* G-82: Kachel #4 des Entwurfs, an `recovery.modality_log`
+            gebunden. `[cmd]` 89 Zeilen, vier Arten. Liegt nichts vor,
+            bleibt die Entwurfskachel darunter mit ihrer Marke. */}
+        {modalitaeten && modalitaeten.gesamt > 0 && (
+          <ModalitaetenKachel stand={modalitaeten} />
+        )}
+
+        {!(modalitaeten && modalitaeten.gesamt > 0) && (
         <Card
           title="Today's modalities" sub={`bonus +${sc.bonus.capped} of ${MAX_DAILY_BONUS} max`}
           attrappe={ATTRAPPE}
@@ -363,6 +404,7 @@ function RecToday({ checkins }: { checkins?: CheckinStand }) {
             </div>
           )}
         </Card>
+        )}
 
         <Card title="Overtraining watch" sub={`${ot.count} of 8 signals · ${ot.severity}`} attrappe={ATTRAPPE}>
           <div style={{ display: 'flex', gap: 3, marginBottom: 10 }}>

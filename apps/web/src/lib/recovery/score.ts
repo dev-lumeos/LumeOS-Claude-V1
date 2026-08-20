@@ -227,3 +227,34 @@ export function berechneScore(z: CheckinZeile | null): ScoreErgebnis {
 function anteilPunkte(anteil: number | null, gewicht: number): number | null {
   return anteil === null ? null : anteil * gewicht
 }
+
+/**
+ * Die Vorschau waehrend des Check-ins — **der verbliebene Zweck dieser
+ * Datei** (G-82).
+ *
+ * `[cmd]` Die Anzeige auf `Today` liest seit G-82 aus
+ * `recovery.scores`; diese Datei rechnet dort nichts mehr. **Sie bleibt
+ * fuer den einen Fall, den die Tabelle nicht bedienen kann:** waehrend
+ * getippt wird, gibt es noch keine Zeile. Der Wert soll sich mit jedem
+ * Regler bewegen, und dafuer muss im Browser gerechnet werden.
+ *
+ * `[read]` **Die Vorschau ist deshalb bewusst nicht dieselbe Zahl wie
+ * die gespeicherte.** Sie rechnet aus dem, was im Formular steht — ohne
+ * Trainingslast und ohne Ernaehrung, weil beide nicht im Formular
+ * stehen. Der Speichervorgang fuellt sie aus anderen Quellen. Wer die
+ * zwei nebeneinanderlegt, muss das wissen; die Kachel sagt es.
+ */
+export function vorschauScore(eingabe: {
+  sleep_quality: number | null
+  sleep_hours: number | null
+  subjective_feeling: number | null
+  mood: string
+  soreness: Record<string, number>
+}): ScoreErgebnis {
+  return berechneScore({
+    ...eingabe,
+    // Die uebrigen Spalten spielen fuer die Rechnung keine Rolle —
+    // `berechneScore` liest genau die fuenf oben.
+    entry_date: '', checkin_time: null, hrv_rmssd: null,
+  } as unknown as CheckinZeile)
+}

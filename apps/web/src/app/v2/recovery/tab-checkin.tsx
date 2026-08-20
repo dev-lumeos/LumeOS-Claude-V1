@@ -20,12 +20,13 @@ import { Card, Pill, Icon, Ring, InEntwicklungKnopf, Koerperkarte } from '@lumeo
 
 import {
   CHECKIN, MOOD_META, MOOD_MULTIPLIER, MUSCLE_LABEL, MUSCLE_STATE,
-  READINESS_LEVELS, ACWR_DATA, TODAY_MODALITIES,
-  calcTrainingLoadScore, calcModalityBonus, calcHRVScore, readinessFor,
+  READINESS_LEVELS,
 } from './motor'
 // G-26: die anatomische Karte kommt jetzt aus packages/ui.
 import { katerAlsMuskeln, RECOVERY_ZU_KARTE, KARTE_ZU_RECOVERY } from './muskel-zuordnung'
 import { ATTRAPPE } from './ansicht'
+// G-82: die Vorschau rechnet mit denselben Gewichten wie alles andere.
+import { vorschauScore } from '../../../lib/recovery/score'
 
 /** Die zehn Gesichter der Vorlage. [cmd] module-recovery-v2.jsx:254. */
 const EMOJI = ['😫', '😣', '😕', '😐', '🙂', '😌', '😊', '😃', '😁', '🤩']
@@ -186,7 +187,8 @@ export function RecCheckin() {
       </Card>
 
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <LiveVorschau hours={hours} quality={quality} feeling={feeling} soreness={soreness} />
+        <LiveVorschau hours={hours} quality={quality} feeling={feeling}
+                      soreness={soreness} mood={mood} />
 
         <Card title="Readiness levels" sub="score → training recommendation" attrappe={ATTRAPPE}>
           {READINESS_LEVELS.map((l, i) => (
@@ -214,37 +216,55 @@ export function RecCheckin() {
 }
 
 /**
- * Die Live-Vorschau.
+ * Die Live-Vorschau — **der verbliebene Zweck von `score.ts`** (G-82).
  *
- * `[cmd]` module-recovery-v2.jsx:335-355. Die Vorlage rechnet hier den
- * `hrv`-Modus NACH — nicht ueber `calcRecoveryScore`, sondern als
- * eigener Ausdruck, weil Schlaf, Gefuehl und Muskelkater aus dem
- * Formular kommen und nicht aus `CHECKIN`. Die Gewichte sind dieselben
- * (15/15/25/10/10/15/10); uebernommen wie sie dasteht.
+ * `[cmd]` **Vorher stand hier die Formel des Entwurfs**
+ * (module-recovery-v2.jsx:335-355): eigene Gewichte 15/15/25/10/10/15/10
+ * statt der 30/15/15/10/15/10/5 des stabilen Kerns, ein HRV-Term aus
+ * `CHECKIN` statt aus dem Formular, `0.88 * 10` als feste Ernaehrung —
+ * **eine erfundene Zahl** — und `readinessFor`, also genau die
+ * Urteilssprache, die G-76 aus der Kachel entfernt hat.
+ *
+ * `[read]` **Jetzt rechnet sie mit `berechneScore`**, also mit
+ * denselben Gewichten wie alles andere, und nennt kein Urteil. Was
+ * nicht im Formular steht, zaehlt nicht mit — statt es zu erfinden.
+ * Die Kachel sagt darunter, welche Anteile das sind und dass der
+ * gespeicherte Wert deshalb hoeher ausfaellt.
  */
-function LiveVorschau({ hours, quality, feeling, soreness }: {
-  hours: number; quality: number; feeling: number; soreness: Record<string, number>
+function LiveVorschau({ hours, quality, feeling, soreness, mood }: {
+  hours: number; quality: number; feeling: number
+  soreness: Record<string, number>; mood: string
 }) {
-  const werte = Object.values(soreness)
-  const sor = werte.length ? werte.reduce((s, v) => s + v, 0) / werte.length : 0
-  const tls = calcTrainingLoadScore(ACWR_DATA.acwr)
-  const bonus = calcModalityBonus(TODAY_MODALITIES)
-  const hrv = calcHRVScore(CHECKIN.hrv_rmssd)
-  const val = (quality / 10) * 15 + (Math.min(hours, 8) / 8) * 15 + (hrv.score / 100) * 25
-    + (feeling / 10) * 10 + (1 - sor / 3) * 10 + tls * 15 + 0.88 * 10
-  const total = Math.round(Math.min(100, val + bonus.capped))
-  const rd = readinessFor(total)
+  const v = React.useMemo(() => vorschauScore({
+    sleep_quality: quality, sleep_hours: hours, subjective_feeling: feeling,
+    mood, soreness,
+  }), [quality, hours, feeling, mood, soreness])
+
+  const offen = v.teile.filter(t => t.punkte === null)
 
   return (
-    <Card title="Live score preview" sub="updates as you edit" attrappe={ATTRAPPE}>
+    <Card title="Vorschau" sub="rechnet mit, während du eingibst">
       <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <Ring value={total} max={100} color={rd.c} label={rd.level} size={96} stroke={7} />
+        <Ring value={v.score ?? 0} max={100} color="var(--acc-recov)"
+              label="score" size={96} stroke={7} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 600, color: rd.c, marginBottom: 3 }}>{rd.label}</div>
-          <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.45 }}>{rd.advice}</div>
-          <div className="v2-dim v2-mono" style={{ fontSize: 10, marginTop: 6 }}>
-            avg soreness {sor.toFixed(2)}/3 · bonus +{bonus.capped}
+          {/* `[read]` Die Zahl, kein Urteil — dieselbe Regel wie in der
+              Kachel auf `Today`. */}
+          <div className="v2-num" style={{
+            fontSize: 22, lineHeight: 1, color: 'var(--acc-recov)', marginBottom: 6,
+          }}>
+            {v.score ?? '—'}
           </div>
+          <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.45 }}>
+            {v.gewichtBasis} von 100 Gewichtspunkten aus dem Formular.
+          </div>
+          {offen.length > 0 && (
+            <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 6, lineHeight: 1.45 }}>
+              Nicht dabei: {offen.map(t => `${t.label} (${t.roh})`).join(' · ')}.
+              Beim Speichern werden sie ergänzt — der gespeicherte Wert
+              weicht deshalb ab.
+            </div>
+          )}
         </div>
       </div>
     </Card>
