@@ -3047,6 +3047,61 @@ Umsetzen angepasst werden.
   `meal_prep_ok` haben kein Gegenstueck im Rezeptschema. **Entweder
   kommen die Felder dazu, oder die Spalten fallen weg.**
 
+- [ ] **G-103: Der Preferences-Tab speichert nicht und ist schwer zu
+  bedienen** (neu 2026-08-20). **Toms Befund, hohe Prioritaet.**
+
+  **Tom, 2026-08-20:** *„Preferences speichert Einstellungen nicht.
+  Individual Foods kann man nichts setzen. Allgemein unlogisch zu
+  bedienen."*
+
+  ### Drei getrennte Fehler
+
+  `[cmd]` **1. Es speichert nicht.** `[read]` G-65 hat das Schreiben
+  dreimal geprueft — *„nach Neuladen noch da, bestehende Items
+  ueberlebten."* **Etwas hat es seither gebrochen.**
+
+  **Verdacht:** G-71 haelt fest, dass `food_preferences_write` **alles
+  loescht und neu schreibt.** `[cmd]` Und G-67 hat deshalb den Daumen
+  bewusst nicht ueber diese RPC gefuehrt — *„ein einzelner Klick haette
+  sonst jede andere Vorliebe geloescht."*
+
+  `[cmd]` **2. `Individual foods` nimmt nichts auf.** Die Kachel zeigt
+  einen Eintrag (*Weisser Reis (roh), +100*), **aber es gibt keinen Weg,
+  einen weiteren zu setzen.**
+
+  `[read]` **Der Weg dahin ist der Daumen** (G-67) — in der Trefferliste
+  und der Detailansicht. **Aber der Tab selbst braucht auch einen**,
+  sonst ist die Kachel eine Anzeige ohne Bedienung.
+
+  `[cmd]` **3. Die Bedienung ist nicht selbsterklaerend.**
+
+  `[read]` **Woran es liegt, sichtbar im Bildschirmfoto:**
+
+  **Die Kategorien haben vier Knoepfe je Zeile** (`− + · −`) ohne
+  Beschriftung. **Was `+` und `−` bewirken, steht nur in der
+  Kopfzeile** (*like +50 · dislike −50*).
+
+  **Die Allergene brauchen Mehrfachklicks** — *„1× tippen = Sensibel,
+  2× = Allergie, 3× = entfernen"*. **Das steht als Text daneben, ist
+  aber nicht ablesbar.**
+
+  **Die Tag-Merkmale ebenso** — *„Tippen wechselt zwischen mag ich, mag
+  ich nicht und egal."*
+
+  `[read]` **Drei verschiedene Klickmuster in einem Tab** — Kategorien
+  mit Knoepfen, Allergene mit Zaehlklicks, Tags mit Zyklus. **Das ist
+  der Kern des Problems.**
+
+  ### Was zuerst zu messen ist
+
+  `[cmd]` **Ob `food_preferences_write` ueberhaupt gerufen wird** — und
+  ob die Antwort geprueft wird. `[read]` **G-79 hat denselben Fall
+  gefunden:** *„PostgREST meldet `ok` bei einem `update`, das der
+  Zeilenschutz leergefiltert hat."*
+
+  `[cmd]` **Und ob die Aenderung ueberhaupt bis zum Schreibweg kommt** —
+  oder nur im Browserzustand haengenbleibt.
+
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
 
