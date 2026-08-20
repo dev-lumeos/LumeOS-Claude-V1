@@ -27,14 +27,27 @@ _SI.wShowWindow = 0
 _FLAGS = subprocess.CREATE_NO_WINDOW
 
 
+def _aufloesen(name):
+    """Windows: npm/pnpm/npx sind .cmd-Skripte, keine .exe.
+
+    subprocess mit shell=False findet sie nur ueber den vollen Pfad.
+    Das war der Grund, warum `pnpm dev` und `npx tsx` mit WinError 2
+    scheiterten (2026-08-20).
+    """
+    import shutil
+    return shutil.which(name + ".cmd") or shutil.which(name) or name
+
+
 def lauf(befehl, cwd=REPO):
     """Fuehrt einen Befehl ohne Konsolenfenster aus.
 
     `befehl` als Liste (bevorzugt) oder als Zeichenkette, die mit
     shlex zerlegt wird. Niemals shell=True.
     """
-    argv = befehl if isinstance(befehl, (list, tuple)) else shlex.split(befehl)
-    r = subprocess.run(list(argv), cwd=cwd, capture_output=True,
+    argv = list(befehl if isinstance(befehl, (list, tuple)) else shlex.split(befehl))
+    if argv and argv[0] in ("npm", "npx", "pnpm", "yarn", "tsx"):
+        argv[0] = _aufloesen(argv[0])
+    r = subprocess.run(argv, cwd=cwd, capture_output=True,
                        startupinfo=_SI, creationflags=_FLAGS, shell=False)
     return (r.stdout + r.stderr).decode("utf-8", "replace").strip()
 
