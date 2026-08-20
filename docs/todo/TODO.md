@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `09505cf` auf `dev`.
+**Stand:** 2026-08-18, Anker `158727d` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 88 offen, 1 in Arbeit.
+`[cmd]` 90 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -211,6 +211,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-102** | `milch` findet Joghurt statt Milch |  |
 | **C-123** | Recovery — die neun Entscheidungen |  |
 | **C-124** | Recovery-Recherche — Modalitaeten und Schwellen |  |
+| **C-126** | E2 braucht Toms Bestaetigung |  |
+| **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2492,6 +2494,43 @@ Umsetzen angepasst werden.
   `[read]` **Was nicht gesucht wird:** eine Diagnoseregel. **Nur die
   Frage, ab wann eine Haeufung so ungewoehnlich ist, dass ein Hinweis
   angebracht ist.**
+
+- [ ] **C-126: E2 braucht Toms Bestaetigung** (neu 2026-08-19). Befund
+  aus G-76.
+
+  `[cmd]` **Der G-76-Agent hat V/S genommen** — Mittel **nur ueber die
+  gemeldeten Muskeln** — und begruendet es mit den Daten:
+
+  `[read]` *„Das JSONB fuehrt hoechstens fuenf Muskeln, nie 18 und nie ein
+  leeres Objekt (0 von 340). Ueber 18 zu mitteln hiesse, 13 Nullen zu
+  erfinden."*
+
+  `[cmd]` **Und er nennt das Gegenargument des Entwurfs:** *„die Karte
+  belegt 18 Gruppen vor — das ist eine Aussage ueber die Oberflaeche,
+  nicht ueber die Daten. Tom muss es bestaetigen."*
+
+  `[read]` **Die Frage praktisch:** Wer Kater 3 an einem Muskel meldet,
+  hat nach V/S denselben Soreness-Wert wie jemand mit Kater 3 an fuenf
+  Muskeln. **Ist das richtig, oder soll die Zahl der betroffenen
+  Muskeln mitzaehlen?**
+
+- [ ] **C-127: Drei Wearable-Spalten sind leer** (neu 2026-08-19).
+  Befund aus G-76.
+
+  `[cmd]` **`resting_hr`, `spo2_pct`, `respiratory_rate` — je 0 von
+  340.** Und **127 von 170 Check-ins haben kein HRV.**
+
+  `[read]` **Das bestaetigt E1** (nur `manual`) und zeigt, warum: **Ohne
+  Wearable-Anbindung gibt es keine Quelle.** A-17 hat die
+  Herkunftsspalten gebaut, damit sie spaeter kommen kann.
+
+  `[cmd]` **Der Score rechnet deshalb 75 von 100 Gewichtspunkten** —
+  *„die zwei offenen stehen sichtbar in der Zusammensetzung mit Grund
+  („braucht ACWR", „nicht im Check-in") statt still zu verschwinden."*
+
+  `[read]` **Richtig so** — fehlende Anteile zaehlen weder als null noch
+  als voll. **Aber die Zahl 82 bedeutet dann etwas anderes als 82 von
+  100.** Zu klaeren, ob die Anzeige das deutlich genug sagt.
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
