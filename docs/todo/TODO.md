@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `884a0ef` auf `dev`.
+**Stand:** 2026-08-18, Anker `4d7c2d3` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 113 offen, 1 in Arbeit.
+`[cmd]` 114 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -229,6 +229,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
+| **G-103** | Der Preferences-Tab speichert nicht und ist schwer zu bedienen |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
 | **A-18** | Berichtsnummern kollidieren |  |
@@ -3046,6 +3047,86 @@ Umsetzen angepasst werden.
   `[read]` **Damit ist G-72 teilweise beantwortet:** `budget_level` und
   `meal_prep_ok` haben kein Gegenstueck im Rezeptschema. **Entweder
   kommen die Felder dazu, oder die Spalten fallen weg.**
+
+- [ ] **G-104: Preferences von Grund auf pruefen — bedienbar, und es
+  muss wirken** (neu 2026-08-20). **Toms Vorgabe, umfasst G-103.**
+
+  **Tom, 2026-08-20:** *„Ein Todo erfassen, um das alles nochmal zu
+  pruefen und bedienbar machen — und vor allem, dass es dann auch
+  wirkt."*
+
+  ### Drei Stufen, in dieser Reihenfolge
+
+  **1. Es muss speichern.** `[cmd]` Jede der sechs Kacheln, einzeln
+  gepruft: setzen → neu laden → steht noch da. **Und die Antwort des
+  Schreibwegs wird geprueft**, nicht nur abgeschickt.
+
+  `[read]` **G-79 hat den Fall gefunden:** *„PostgREST meldet `ok` bei
+  einem `update`, das der Zeilenschutz leergefiltert hat."* **Behoben mit
+  `.select('id')` und einer Pruefung auf null Zeilen** — dasselbe
+  gehoert hierher.
+
+  **2. Es muss bedienbar sein.** `[cmd]` **Ein Klickmuster, nicht
+  drei.**
+
+  `[read]` **Heute:** Kategorien mit vier unbeschrifteten Knoepfen,
+  Allergene mit Zaehlklicks (1× Sensibel, 2× Allergie, 3× weg), Tags mit
+  Zyklus. **Was ein Klick bewirkt, steht nur als Text in der
+  Kopfzeile.**
+
+  `[cmd]` **`Individual foods` nimmt gar nichts auf** — die Kachel zeigt
+  einen Eintrag und hat keinen Weg, einen zweiten zu setzen.
+
+  **3. Es muss wirken.** `[cmd]` **Und zwar ueberall, wo Lebensmittel
+  erscheinen:**
+
+  | | |
+  |---|---|
+  | Food-DB-Trefferliste | C-94 gebaut |
+  | Erfassungsdialog | **G-13 gebaut** — `mandel` 64 → 0 |
+  | Suchseite | zu pruefen |
+  | Planner und Rezepte | **zu pruefen** |
+  | MealCam-Vorschlaege | zu pruefen |
+
+  `[read]` **Der Hinweis im Tab selbst sagt es:** *„Die Reihenfolge ist
+  hinterlegt, **wirkt aber noch nicht in der Suche** — die Suchfunktion
+  kennt die Vorlieben bisher nicht."* **Das stimmt seit C-94 nicht mehr
+  und gehoert berichtigt.**
+
+  ### Was dabei zu pruefen ist
+
+  `[cmd]` **`food_preferences_write` loescht alles und schreibt neu**
+  (G-71). **Deshalb schreibt der Daumen nicht darueber** — *„ein
+  einzelner Klick haette sonst jede andere Vorliebe geloescht."*
+
+  `[read]` **Das ist der wahrscheinliche Grund fuer den Datenverlust.**
+  **Zu klaeren:** Bleibt die Loesch-und-Neuschreib-Bauweise, oder wird
+  je Kachel geschrieben?
+
+  `[cmd]` **Und `source` muss ueberleben** — G-71: *„aus `search_thumb`
+  wurde `settings`."* **Ohne die Herkunft faellt die Unterscheidung
+  zwischen Assistent und Daumen weg.**
+
+  ### Was schon geklaert ist — nicht neu entscheiden
+
+  `[cmd]` **20 Allergene in drei Stufen** (Toms Entscheidung, G-65) ·
+  **Kategorien aus dem Katalog**, 13 Wurzeln plus gesetzte
+  Unterkategorien · **11 Ausschluss-Presets** mit Vorbehalt aus
+  `caveat_de` (C-93) · **die Rangfolge** 1 Allergen, 2 Diet type, 3 Food
+  ±100, 4 Category ±50, 5 Tag ±30, 6 Prefix +20.
+
+  `[read]` **Und der Warnhinweis bleibt** — 120 von 7.140 nusshaltig
+  markiert, *„die Zutatenliste bleibt massgeblich."*
+
+  ### Der Nachweis
+
+  `[cmd]` **Je Kachel: setzen, neu laden, und an einer zweiten Stelle
+  wirken sehen.** `[read]` **Ein Beispiel je Stufe:** eine Kategorie
+  abwerten und sie in der Trefferliste tiefer finden; ein Allergen
+  setzen und es verschwinden sehen; ein Lebensmittel aufwerten und es
+  oben finden.
+
+  `[cmd]` **Umfasst G-103** — dort stehen die Einzelbefunde.
 
 - [ ] **G-103: Der Preferences-Tab speichert nicht und ist schwer zu
   bedienen** (neu 2026-08-20). **Toms Befund, hohe Prioritaet.**
