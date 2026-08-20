@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `408f226` auf `dev`.
+**Stand:** 2026-08-18, Anker `022f2ce` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 118 offen, 1 in Arbeit.
+`[cmd]` 123 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -215,7 +215,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-126** | E2 braucht Toms Bestaetigung |  |
 | **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
-| **C-134** | Die Substanzen der drei Bestaende zusammenfuehren |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
 | **G-85** | Der Health score haengt an zwei Unbekannten |  |
 | **C-142** | Die Sperrbegruendung nennt eine Tabelle, die es gibt |  |
@@ -236,6 +235,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-104** | Preferences von Grund auf pruefen — bedienbar, und es muss wirken |  |
 | **G-105** | Zwei abgeschnittene SVG-Pfade in `packages/ui` |  |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
+| **G-111** | Der Tab-Zustand steht nicht in der URL |  |
+| **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
+| **G-113** | Die Naehrstoffordnung braucht Klappen und Zeitfilter |  |
+| **G-114** | `daily_summary` fuehrt nur 33 der 138 Naehrstoffe |  |
+| **G-115** | Die Wassereintraege haben keine Historie |  |
 | **G-103** | Der Preferences-Tab speichert nicht und ist schwer zu bedienen |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
@@ -251,6 +255,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
 | **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
 | **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
+| **C-158** | Der Gap-Score braucht maschinenlesbare Naehrstoffcodes |  |
 
 ---
 
@@ -907,6 +912,26 @@ eigene Nummern angelegt (A-18: die Nummer vergibt der Orchestrator).
   Paket ziehen, sobald `apps/web` frei ist.
 - [ ] **Coach-Passwort:** `coach@lumeos.app` / `LumeosCoach2026` aus
   dem Seed — Tom ändert es bei Bedarf.
+### G-104-Folgepunkte (Preferences, 2026-08-20) — Nummern vergibt der Orchestrator
+
+Quelle und Belege: `docs/ssot/154-preferences.md`.
+
+- [ ] **`ultra_processed` filtert haerter, als die Kachel sagt:**
+  `[cmd]` Ein General-Ausschluss mit Tag-Entsprechung wirkt hart wie
+  ein Allergen (075:382-390) — `schokolade` 163 → 1. Entweder ein
+  Wirkungshinweis an der Pille oder Toms Entscheidung, ob ein
+  Verarbeitungsmerkmal hart ausschliessen soll.
+- [ ] **Intoleranz-Stufe erklaeren:** „Sensibel" schliesst nur bei
+  leerer Anfrage aus, sonst −25 (`[cmd]` 075:453-455) — gewollt, aber
+  fuer den Nutzer nirgends gesagt.
+- [ ] **Rezept-/Planner-Zutatensuche:** sobald G-97 dort ein Suchfeld
+  bekommt, `prefs=1` mitentscheiden (Erfassungs-Grundsatz spricht
+  fuer an).
+- [ ] **Food-DB-Katalog:** sichtbarer „mit meinen
+  Vorlieben"-Schalter (serverseitig) statt der
+  G-73-Client-Ausblendung — Produktfrage, in G-104 bewusst nicht
+  umgebaut.
+
 - [ ] **Seed-Neulauf reisst die Portal-Athleten aus den Seed-Konten:**
   `[cmd]` `max.seed`/`sarah.seed` werden beim Auffrischen neu angelegt,
   ihre Beziehungen zu `coach@lumeos.app` sterben per FK-Kaskade — das
@@ -2811,20 +2836,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **C-134: Die Substanzen der drei Bestaende zusammenfuehren** (neu
-  2026-08-19). **Setzt C-131 voraus.**
-
-  `[cmd]` **44 live, 320 aus F-05, 237 aus Kimi** — mit 38 Feldern je
-  Kimi-Substanz, darunter getrennte Dosisfelder: `official_label_dose`,
-  `guideline_dose`, `tolerable_upper_intake_level`,
-  `studied_dose_ranges`, `anecdotal_dose_ranges`.
-
-  `[read]` **Die Trennung ist genau Toms Vorgabe:** *„Die
-  Dosisempfehlungen und Grenzen sollten wir haben — nicht um zu
-  empfehlen, eher als Massstab."*
-
-  `[cmd]` **Und der F-02-Befund gehoert geprueft:** 33 der 44 haben kein
-  `nutrients_provided`, vier Gap-Codes fehlen. **Liefert Kimi sie?**
 
 - [ ] **C-136: Medikamente und Conditions brauchen die
   Coach-Freigabeschicht** (neu 2026-08-19). Meldung aus C-130.
@@ -3707,3 +3718,26 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Er braucht die Autonomy-Wirkungsregeln** — und die haengen
   an T-Entscheidungen. **Eigener Auftrag, nach Toms Antworten.**
+
+- [ ] **C-158: Der Gap-Score braucht maschinenlesbare
+  Naehrstoffcodes** (neu 2026-08-20). Befund aus C-134. **Fuer den
+  Rechercheweg (A-22).**
+
+  `[cmd]` **Gemessen:** *„Kimi liefert keine maschinenlesbaren
+  Gap-Codes, auch nicht `FAPUN3`."* **`nutrients_provided` steht
+  weiterhin auf 11 von 44.**
+
+  `[read]` **Damit sind 15 `nutrient_gap_rules` blockiert** — sie
+  fragen, welchen Naehrstoff ein Supplement liefert, **und der Bestand
+  sagt es nur in Prosa.**
+
+  `[cmd]` **Was gebraucht wird:** je Substanz ein Feld mit
+  **BLS-Naehrstoffcodes** — `VITD` fuer Vitamin D3, `FAPUN3` fuer
+  Omega-3, `MG` fuer Magnesium. **Mit Menge je Portion und Einheit.**
+
+  `[read]` **Die Gegenseite steht:** `nutrient_defs` fuehrt **138
+  Codes**, `nutrient_reference_values` die Schwellen. **Es fehlt nur die
+  Verbindung vom Supplement zum Code.**
+
+  `[cmd]` **Und die Einheitenfalle gehoert mit** — C-149: Vitamin D
+  steht im Supplement in IU, im Mikro-Pfad in µg. **Faktor 40.**

@@ -6095,6 +6095,51 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Und die Ordnung wurde bereits gelesen** — *„neunmal, aber
   nur in `/nutrition/local-schema`, nie in v2."*
 
+- [x] **C-134: Die Substanzen der drei Bestaende zusammenfuehren** (neu
+  2026-08-19). **Setzt C-131 voraus.**
+
+  `[cmd]` **44 live, 320 aus F-05, 237 aus Kimi** — mit 38 Feldern je
+  Kimi-Substanz, darunter getrennte Dosisfelder: `official_label_dose`,
+  `guideline_dose`, `tolerable_upper_intake_level`,
+  `studied_dose_ranges`, `anecdotal_dose_ranges`.
+
+  `[read]` **Die Trennung ist genau Toms Vorgabe:** *„Die
+  Dosisempfehlungen und Grenzen sollten wir haben — nicht um zu
+  empfehlen, eher als Massstab."*
+
+  `[cmd]` **Und der F-02-Befund gehoert geprueft:** 33 der 44 haben kein
+  `nutrients_provided`, vier Gap-Codes fehlen. **Liefert Kimi sie?**
+
+  `[cmd]` **Erledigt 2026-08-20.** **567 Eintraege, 667
+  Herkunftszeilen.**
+
+  | Herkunft | |
+  |---|---|
+  | Kimi Supplements | 154 |
+  | Kimi Peptides · Performance | 62 · 75 |
+  | **F-05-Kandidaten** | **248** |
+  | lokale LumeOS-Eintraege | 28 |
+
+  `[cmd]` **Die Ueberschneidung ist klein:** von den lokalen 44 sind
+  **16 eindeutig auf Kimi gemappt**, 28 bleiben eigen. Von F-05: **72
+  gemappt, 248 eigen.**
+
+  `[read]` **Das bestaetigt C-129:** drei verschiedene Ausschnitte, kaum
+  Dubletten.
+
+  `[cmd]` **Und der Stack ist unversehrt** — 4 Positionen, 360
+  Einnahmen, Compliance 93,3 %.
+
+  ### Der Gap-Score bleibt blockiert
+
+  `[cmd]` **`nutrients_provided`: vorher 11 von 44, nachher weiterhin
+  11.** *„Kimi liefert keine maschinenlesbaren Gap-Codes, auch nicht
+  `FAPUN3`."*
+
+  `[read]` **Damit ist C-107 nicht geloest** — 15
+  `nutrient_gap_rules` warten weiter. **Das gehoert in die naechste
+  Rueckmeldung an den Rechercheweg.**
+
 
 
 ## Erledigt am 2026-08-05
