@@ -190,6 +190,26 @@ explizite `cookies`-Implementierung plus `auth.storageKey =
 cookieOptions.name`. `packages/shared` blieb unveraendert (web und
 admin haengen daran, G-13 laeuft dort).
 
+### Nachtrag (2026-08-20, abends): „Kein Coach-Zugang" nach Seed-Auffrischung
+
+`[cmd]` Tom stand nach der Anmeldung vor der Absage. Ursache gemessen:
+Nach dem F-07-Einspielen lief die Standard-Seed-Auffrischung —
+`coach.seed` hatte wieder 3 Beziehungen, **`coach@lumeos.app` stand auf
+0.** Zwei Wege: (1) Der Aufraeumteil von `eigenes-konto-fuellen.sql`
+raeumte pauschal ALLE Coach-Zeilen des Dev-Kontos ab, auch die des
+Portal-Coaches — **mein Fehler in der ersten Fassung**, die
+„Reihenfolge beachten"-Doku war zu schwach. (2) Ein Seed-Neulauf legt
+`max.seed`/`sarah.seed` neu an; deren Beziehungen sterben per
+FK-Kaskade — unvermeidbar.
+
+**Fix:** Der Aufraeumteil ist jetzt auf den Seed-Coach begrenzt
+(`AND coach_id = coach.seed`) — die `coach@lumeos.app -> dev`-Beziehung
+ueberlebt jede Auffrischung, **die Absage kann so nicht wiederkehren**
+(schlimmstenfalls zeigt das Portal nach einem Neulauf 1 statt 3
+Athleten, bis `coach-portal-fuellen.sql` erneut laeuft — Folgepunkt im
+TODO). `[cmd]` Live neu eingespielt, Kontrollzaehlung 3/2/2/1/1/3/3/3,
+Kopflos-Anmeldung als `coach@lumeos.app` zeigt das Portal wieder.
+
 ### Werkzeugbefunde am Rand
 
 - `[cmd]` **`kette-ausfuehren.ts` scheitert unter Git-Bash am `tar`**

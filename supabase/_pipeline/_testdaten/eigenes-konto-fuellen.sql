@@ -67,25 +67,29 @@ ALTER TABLE coach.client_permissions ENABLE TRIGGER client_permissions_change_lo
 ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 
 -- Wiederholbar: erst Demo-Daten des Zielkontos raeumen, dann neu kopieren.
--- F-07: Die Portal-Arbeitsdaten (Beziehungen, Check-ins, Nachrichten,
--- Alerts) werden hier MIT geraeumt — wer dieses Skript laufen laesst,
--- laesst danach coach-portal-fuellen.sql erneut laufen.
-DELETE FROM coach.alerts WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.messages WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.checkins WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.checkin_templates WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.relationship_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+-- F-07, zweite Fassung: Die Coach-Raeumung ist auf DEN SEED-COACH
+-- begrenzt. Die erste Fassung raeumte pauschal alles, woran das
+-- Zielkonto haengt — und loeschte damit auch die Beziehung des echten
+-- Portal-Coaches (coach@lumeos.app -> dev), sobald jemand die Seeds
+-- auffrischte. [cmd] Genau so gemessen am 2026-08-20: Tom stand nach
+-- der Auffrischung vor "Kein Coach-Zugang". Dieses Skript besitzt nur
+-- die coach.seed-Beziehung; fremde Coaches bleiben unberuehrt.
+DELETE FROM coach.alerts WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.messages WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.checkins WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.checkin_templates WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.relationship_change_log WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
 ALTER TABLE coach.relationships DISABLE TRIGGER relationships_change_log;
-DELETE FROM coach.relationships WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.relationships WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
 ALTER TABLE coach.relationships ENABLE TRIGGER relationships_change_log;
-DELETE FROM coach.action_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.pending_actions WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.permission_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.autonomy_change_log WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.action_log WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.pending_actions WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.permission_change_log WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.autonomy_change_log WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
 ALTER TABLE coach.client_permissions DISABLE TRIGGER client_permissions_change_log;
 ALTER TABLE coach.client_autonomy DISABLE TRIGGER client_autonomy_change_log;
-DELETE FROM coach.client_permissions WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
-DELETE FROM coach.client_autonomy WHERE client_id = :'ziel'::uuid OR coach_id = :'ziel'::uuid;
+DELETE FROM coach.client_permissions WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
+DELETE FROM coach.client_autonomy WHERE client_id = :'ziel'::uuid AND coach_id = :'coach'::uuid;
 ALTER TABLE coach.client_permissions ENABLE TRIGGER client_permissions_change_log;
 ALTER TABLE coach.client_autonomy ENABLE TRIGGER client_autonomy_change_log;
 

@@ -516,4 +516,4 @@ statt globalem Auto-Accept (Spalten gebaut), **E6** eigene App
 | Cookie-Ableitung `sb-127-<scope>-auth-token` | `packages/shared/src/supabase/cookie-name.ts:58–74` gelesen |
 | Admin-Vorbild: Port 3210, Gate-Build | `apps/admin/package.json:6–8` gelesen |
 | `apps/coach` = `src/.gitkeep`, App-Registereintrag | Verzeichnis gelistet; `docs/spezifikation/00-INDEX.md:70` |
-| Modulschemata für das Mapping | `schema-sollstand.json` (Agenten-Auszug, Stichprobe `coach`-Block `:1421–1593` gedeckt durch eigenes SQL-Lesen); Training-Registerlücke: `100_training_schema.sql` legt 4 Tabellen an, die im Sollstand fehlen `[annahme]` |
+| Modulschemata für das Mapping | `schema-sollstand.json` (Agenten-Auszug, Stichprobe `coach`-Block `:1421–1593` gedeckt durch eigenes SQL-Lesen). **Korrektur F-07 (2026-08-20):** Die hier ursprünglich `[annahme]` gemeldete Training-Registerlücke **gibt es nicht** — die vier Katalogtabellen stehen im Sollstand unter `fremde_schemata` (`[cmd]` selbst gelesen); der Agent hatte nur `tabellen[]` gezählt |

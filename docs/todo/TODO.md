@@ -902,6 +902,12 @@ eigene Nummern angelegt (A-18: die Nummer vergibt der Orchestrator).
   Paket ziehen, sobald `apps/web` frei ist.
 - [ ] **Coach-Passwort:** `coach@lumeos.app` / `LumeosCoach2026` aus
   dem Seed — Tom ändert es bei Bedarf.
+- [ ] **Seed-Neulauf reisst die Portal-Athleten aus den Seed-Konten:**
+  `[cmd]` `max.seed`/`sarah.seed` werden beim Auffrischen neu angelegt,
+  ihre Beziehungen zu `coach@lumeos.app` sterben per FK-Kaskade — das
+  Portal zeigt dann 1 statt 3 Athleten (die `dev`-Beziehung überlebt
+  seit dem Fix vom 2026-08-20). Entweder `coach-portal-fuellen.sql` an
+  den Auffrisch-Ablauf anhängen oder in den Seed-Erzeuger ziehen.
 
 ## D — Datenbank & Specs
 
