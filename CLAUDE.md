@@ -66,6 +66,44 @@ nicht darin steht, existiert fuer die naechste Sitzung nicht.
 committet. **Eine Zeile mit dem Befund, nicht mit dem Dateinamen** —
 der steht schon in der ersten Spalte.
 
+## Nach jedem Bericht: nachtragen, ungefragt
+
+**Tom, 2026-08-19:** *,Und Todolisten, Docs und SSOT nachtragen — das
+ist dein automatischer Job."*
+
+`[cmd]` **Am 2026-08-19 fehlten vier Indexzeilen** — 123, 126, 128, 131.
+**Gefunden hat sie ein Agent, nicht der Orchestrator.**
+
+### Was nach jedem Bericht geschieht
+
+**1. Pruefen, nicht glauben.** `[cmd]` Die tragenden Zahlen selbst
+messen. **Ein Bericht ist eine Behauptung, bis der Befehl gelaufen ist.**
+
+**2. Committen** — ein logischer Change, `git diff --cached
+--name-only` vorher lesen.
+
+**3. Den Punkt schliessen** in `docs/todo/TODO.md`, mit dem Abschluss
+nach `ERLEDIGT.md`. `[read]` **Mit den gemessenen Zahlen, nicht mit der
+Zusammenfassung.**
+
+**4. Neue Befunde anlegen** — jeder Fund, den der Bericht nennt und der
+nicht erledigt ist, **wird ein Punkt.** Sonst geht er verloren.
+
+**5. Die Indexzeile setzen** in `docs/ssot/00-INDEX.md`. `[cmd]`
+**Pruefen, ob alle Berichte drinstehen** — nicht nur der neue.
+
+**6. Bei Bedarf `CLAUDE.md` und den Modulplan** — wenn eine Regel
+entstanden ist oder sich der Stand verschoben hat.
+
+`[read]` **Nichts davon ist eine Nachfrage wert.** Es geschieht, sobald
+ein Bericht eintrifft.
+
+### Die Nummer vergibt der Orchestrator
+
+`[cmd]` **116 bis 119 waren doppelt belegt** (A-18), weil fuenf Agenten
+gleichzeitig die naechste freie Zahl nahmen. **Seither steht die Nummer
+im Auftrag.**
+
 ## Vor jedem Auftrag: nachsehen, nicht annehmen
 
 **Tom, 2026-08-19:** *,Nicht vergessen — immer Specs und das alte Repo
