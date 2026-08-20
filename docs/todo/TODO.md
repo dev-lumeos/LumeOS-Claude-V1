@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `0eb3264` auf `dev`.
+**Stand:** 2026-08-18, Anker `97f102a` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 94 offen, 1 in Arbeit.
+`[cmd]` 95 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -177,6 +177,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-17** | Datum beim Modulwechsel mitgeben |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
+| **G-83** | Es gibt kein Onboarding |  |
 | **G-13** | Der Add-Food-Dialog braucht die ganze Suchlogik |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
@@ -1416,6 +1417,28 @@ Umsetzen angepasst werden.
 
 
 
+- [ ] **G-83: Es gibt kein Onboarding** (neu 2026-08-19). Befund aus
+  G-80.
+
+  `[cmd]` **Gemessen:** *„Die einzige Datei ist der Klienten-Assistent im
+  Coach-Modul."* **Ein Onboarding fuer den Nutzer existiert nicht.**
+
+  `[read]` **Das betrifft mehr als den Erfahrungsgrad (C-118).** Wer sich
+  neu anmeldet, hat kein Profil, keine Vorlieben, keine Ziele — **und
+  die Anwendung fragt ihn nichts.**
+
+  `[cmd]` **Was beim ersten Start gebraucht wuerde:** Alter, Geschlecht,
+  Groesse, Gewicht, Aktivitaetsniveau (fuer die TDEE-Formel) ·
+  Erfahrungsgrad · die vier Preferences-Schritte · ein erstes Ziel.
+
+  `[read]` **Das Vorgaengerrepo hatte es als vierstufigen Assistenten**
+  (`FoodPreferences.tsx`) — **aber der war der Preferences-Tab, kein
+  Onboarding.**
+
+  `[cmd]` **Und C-122 hat gezeigt, was ohne Profilangaben passiert:**
+  `very_active` gegen 0,58 Trainings je Woche, **1.030 kcal Abstand
+  zwischen Formel und Messung.**
+
 - [ ] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik** (neu
   2026-08-17). **Tom, 2026-08-17:** *„Add food — da muss unsere ganze
   Logik rein mit Filter und Suche und Alias und richtige Begriffe wie
@@ -1930,8 +1953,16 @@ Umsetzen angepasst werden.
   der naechste Durchgang findet sie vor. **Und keine Attrappenmarke** —
   ein Leerzustand ist kein Attrappenzustand.
 
-  **Offen:** die Spalte in `profiles`, dazu Onboarding. `[cmd]`
-  **Codex-Auftrag**, klein.
+  **Offen:** nur die Spalte in `profiles`. `[cmd]` **Codex-Auftrag**,
+  klein.
+
+  `[cmd]` **Onboarding gibt es nicht** — der G-80-Agent hat es gemessen:
+  *„die einzige Datei ist der Klienten-Assistent im Coach-Modul. Der
+  zweite Ort aus deinem Satz ist heute nicht baubar."*
+
+  `[read]` **Und die Trennung ist besser begruendet als im Auftrag:**
+  *„`activity_level` ist etwas anderes — ein Anfaenger kann
+  `very_active` sein."*
 
 - [ ] **C-114: Was das Vorgaengerrepo beim Coach falsch machte** (neu
   2026-08-19). **Vier Entscheidungen fuer Tom.** Aus der F-04-Recherche
