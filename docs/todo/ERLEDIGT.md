@@ -5884,6 +5884,124 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   waere jede Zusammenlegung eine Annahme — **und die Bereiche
   unterscheiden sich.**
 
+- [x] **C-151: Das Coach-Portal — neun Entscheidungen** (neu
+  2026-08-20). **Entscheidungen fuer Tom.** Aus F-06
+  (`docs/spezifikation/30-module/addon/01-entwurf-coach-portal.md`,
+  519 Zeilen).
+
+  ### Was das Portal ist
+
+  `[cmd]` **16 Tabs aus sechs Dateien** (`module-coach.jsx:923–940`).
+  **`-gaps` ist die Modal- und Detailebene** (10 von 11 Portal-Modalen),
+  **`-portal-v2` und `-portal-workflows` sind zwei Teile, keine zwei
+  Fassungen.**
+
+  `[cmd]` **Von 16 Tabs sind zwei datenseitig gedeckt** — Autonomy und
+  Consent.
+
+  `[read]` **Die sechs C-119-Tabellen tragen die Governance; die
+  Arbeitsobjekte fehlen** — Beziehung, Check-ins, Programme,
+  Nachrichten, Alerts. **Selbst die Coach-Klient-Beziehung existiert nur
+  implizit.**
+
+  ### Der eigentliche Blocker ist der Lesepfad
+
+  `[cmd]` **Kein Modulschema referenziert `client_permissions`** —
+  gegrept. **Auch mit `full`-Freigabe liest ein Coach heute null
+  Zeilen.**
+
+  `[read]` **Das ist mehr als eine fehlende Tabelle:** Die Freigabe ist
+  gebaut (C-119) und wirkt nirgends. **Jedes Modul muss sie kennen.**
+
+  `[cmd]` **Und was `summary` je Modul zeigt, ist nirgends definiert**
+  (T4).
+
+  ### Zwei harte Belege aus dem Vorgaengerrepo
+
+  `[cmd]` **`coach-actions.ts` prueft nie die Permissions.**
+
+  `[cmd]` **Die Check-in-Auto-Analyse schrieb zwei Spalten, die in
+  keiner der 73 Migrationen existieren** — *„sie war produktiv stumm
+  kaputt."*
+
+  `[read]` **Daraus die Entwurfsregel:** ein Durchsetzungspunkt
+  (`pending_actions`), **Schema-Tests statt `catch {}`.**
+
+  ### Als eigene App traegt das Admin-Vorbild
+
+  `[cmd]` **Port 3220, `NEXT_PUBLIC_AUTH_COOKIE_SCOPE=coach` ergibt
+  `sb-127-coach-auth-token`** — **ohne Codeaenderung**, gemessen.
+
+  `[cmd]` **Empfehlung: ein Konto, zwei Sitzungen**, Coach-Rolle per
+  `app_metadata` nach dem `is_admin()`-Muster. **Als T1/T2 vorgelegt,
+  nicht entschieden.**
+
+  ### Neun Entscheidungen (T1–T9)
+
+  Konto und Rolle · **`summary`-Definition** · **siebtes Modul: `buddy`
+  gegen `body_metrics`** (auch G-93) · **Bewertung von Menschen im
+  Portal** · Revenue und Team raus aus V1.
+
+  `[cmd]` **E1, E2 und E6 aus F-03 sind durch C-119 und G-90 bereits
+  entschieden** und im Entwurf als geschlossen markiert.
+
+  ### Und der Check-in-Review hat keinen Screen
+
+  `[read]` **Die groesste Zeitsenke im Traineralltag** (F-04: *2–3
+  gegen 10–15 Minuten je Klient*) — **fuer sie existiert kein
+  funktionaler Mockup-Screen, nur die Workflow-Beschreibung.**
+
+  `[cmd]` **Gebaut 2026-08-20 mit F-07.** Die Anwendung laeuft auf
+  **`http://127.0.0.1:3220`**, Konto `coach@lumeos.app`.
+
+  | | |
+  |---|---|
+  | `coach`-Schema | **6 → 12 Tabellen** (Schritte 151–154) |
+  | `coach_read`-Policies | **22 ueber sechs Module** |
+  | Tabs datengetragen | **8 von 16**, 8 Leerzustaende mit Ursache |
+  | Bilder | **71**, 0 Attrappen, 0 Konsolenfehler |
+  | Kette | **80 Schritte**, Exit 0 |
+
+  ### Der Lesepfad greift in der Datenbank
+
+  `[cmd]` **Eine Sichtregel (`coach.hat_sicht`), sechs
+  `summary`-Funktionen** — **Medical zeigt nur Existenz und Datum, nie
+  Werte.**
+
+  `[cmd]` **`coach-lesepfad-pruefen.sql` besteht mit neun Punkten**, auf
+  Wegwerf-DB und live: *„`full` liest 725 Mahlzeiten und 101 Saetze,
+  `summary` liefert 0 Zeilen plus Aggregat, `none` nichts, ein Dritter
+  nichts, **der Eigentuemer bleibt unversehrt**."*
+
+  `[read]` **Damit ist der Befund aus F-06 behoben** — *„Kein
+  Modulschema referenziert `client_permissions`."*
+
+  ### Drei Athleten in drei Zustaenden
+
+  `[cmd]` `dev@lumeos.app` aktiv mit differenzierten Rechten ·
+  `max.seed` aktiv mit **nur `summary`** auf Training und Recovery ·
+  `sarah.seed` **eingeladen ohne Rechte.**
+
+  `[read]` **Das ist der Unterschied zu einem Portal mit einem
+  Klienten** — die Sichtstufen sind an echten Faellen belegt.
+
+  ### Und die Wirkung ist ueber die laufende App gemessen
+
+  `[cmd]` **Autonomy speichern → Historie 3 → 4 Zeilen** — **der aus
+  G-90 ausstehende Nachweis.** Review → `reviewed` 1 → 2. Nicht-Coach
+  → Absage.
+
+  ### Was bewusst nicht gebaut wurde
+
+  `[cmd]` **Der Ausfuehrer fuer bestaetigte Vorschlaege** (braucht die
+  Autonomy-Wirkungsregeln) · **kein Einladungs-UI** (T3) · **keine
+  Regel- oder Programmtabellen** (E4).
+
+  `[read]` **Und keine Personen-Scores, keine Ampeln** — T5 liegt bei
+  Tom, bis dahin gilt die konservative Variante.
+
+  **Die neun Entscheidungen T1–T9 bleiben offen.**
+
 
 
 ## Erledigt am 2026-08-05
@@ -9126,3 +9244,55 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   **Offen geblieben:** der zweite Tab (G-98) und die drei wirkungslosen
   Spalten (G-99).
+
+- [x] **G-94: `erfassen.tsx` ist toter Code** (neu 2026-08-20, aus
+  G-13).
+
+  `[cmd]` **477 Zeilen, null Importeure** —
+  `grep -rn "from './erfassen'" apps/web/src/` findet nichts. Die Datei
+  traegt eine vollstaendige zweite Fassung des Erfassungsdialogs, samt
+  eigener CSS-Klasse `v2-suchblock`, die in keiner ausgelieferten Seite
+  vorkommt.
+
+  `[read]` **Sie hat einen Auftrag gekostet:** G-13 beschrieb sie als
+  den Dialog, und die Befunde stimmten sogar — nur ohne Wirkung.
+  **Loeschen oder anschliessen**, aber nicht so stehen lassen.
+
+  `[read]` Vor dem Loeschen nachsehen, ob sie etwas kann, was
+  `mahlzeiten.tsx` nicht kann (sie fuehrt z. B. `MEAL_TYPES` als
+  Anlege-Knoepfe).
+
+  **Alter Wortlaut des Punktes, zur Herkunft:**
+
+  **Der Dialog zeigt den falschen Namen.** `[cmd]` Er zeigt
+  `Reis poliert, roh` — das ist `name_de`, der amtliche BLS-Wortlaut.
+  **`name_display_de` sagt `Weisser Reis (roh)`.**
+
+  `[cmd]` `food_search` liefert **beide Felder**, und
+  `lib/nutrition/food-search.ts` kennt beide — **der Dialog greift auf
+  das falsche zu.** Ein Anzeigefehler, keine fehlende Datenbasis.
+  `[read]` Damit ist die Arbeit von C-39 und C-41 unsichtbar: 7.140
+  Anzeigenamen, davon 2.870 abweichend vom amtlichen Namen.
+
+  **Was sonst fehlt:** `[cmd]` `food_search` nimmt `p_category_slug`,
+  `p_category_id`, `p_tag_code` und `p_sort` entgegen — der Dialog
+  nutzt nichts davon.
+
+  | | |
+  |---|---|
+  | Filter nach Kategorie | `[cmd]` 518 Kategorien |
+  | Filter nach Tag | `[cmd]` 11 vergebene — `whole_food` 2.884, `vegan` 1.377 |
+  | Aliase | `[cmd]` 32.845 in vier Herkuenften |
+  | Sortierung | `sort_weight`, 95 Stufen |
+
+  `[cmd]` Die Suchseite unter `Food DB` nutzt einen Teil davon; **der
+  Dialog faengt bei null an.**
+
+  **Portionen als Vorwahl:** `[cmd]` Heute zeigt die Auswahl
+  `100 g (100 g) · Vorgabe` — **das ist C-60 und wird in den Daten
+  behoben.** Der Dialog zeigt nur die Vorgabe; stimmt sie, stimmt die
+  Vorauswahl. `[read]` Tom: *„die Darstellung danach in der View in
+  Gramm ist korrekt."*
+
+  `[cmd]` **Teilweise erledigt mit F-07** — der Zustandswechsel steht,
+  **der Ausfuehrer fehlt weiter (G-102).**

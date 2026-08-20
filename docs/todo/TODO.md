@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `4518718` auf `dev`.
+**Stand:** 2026-08-18, Anker `884a0ef` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 112 offen, 1 in Arbeit.
+`[cmd]` 113 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -183,7 +183,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-93** | Der Anzeigename fehlt im laufenden Erfassungsdialog |  |
 | **G-98** | Meal plans braucht einen Zustand und eine Herkunft |  |
 | **G-99** | Drei der acht Planner-Spalten bleiben wirkungslos |  |
-| **G-94** | `erfassen.tsx` ist toter Code |  |
 | **G-25** | Training an echte Daten anschliessen |  |
 | **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
 | **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
@@ -228,7 +227,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-149** | Vitamin D in IU gegen µg |  |
 | **G-95** | Sieben Module, aber nicht dieselben sieben |  |
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
-| **C-151** | Das Coach-Portal — neun Entscheidungen |  |
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -245,6 +243,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
 | **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
 | **C-154** | Vier Policy-Abweichungen bei den Training-Stammdaten |  |
+| **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
+| **B-26** | `testdaten-einspielen.ts` ignoriert unbekannte Flags |  |
+| **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
 
 ---
 
@@ -1701,54 +1702,6 @@ Umsetzen angepasst werden.
   sich vergleichen; ein Filter waere eine Rezeptauswahl und gehoert zum
   Schreibpfad.
 
-- [ ] **G-94: `erfassen.tsx` ist toter Code** (neu 2026-08-20, aus
-  G-13).
-
-  `[cmd]` **477 Zeilen, null Importeure** —
-  `grep -rn "from './erfassen'" apps/web/src/` findet nichts. Die Datei
-  traegt eine vollstaendige zweite Fassung des Erfassungsdialogs, samt
-  eigener CSS-Klasse `v2-suchblock`, die in keiner ausgelieferten Seite
-  vorkommt.
-
-  `[read]` **Sie hat einen Auftrag gekostet:** G-13 beschrieb sie als
-  den Dialog, und die Befunde stimmten sogar — nur ohne Wirkung.
-  **Loeschen oder anschliessen**, aber nicht so stehen lassen.
-
-  `[read]` Vor dem Loeschen nachsehen, ob sie etwas kann, was
-  `mahlzeiten.tsx` nicht kann (sie fuehrt z. B. `MEAL_TYPES` als
-  Anlege-Knoepfe).
-
-  **Alter Wortlaut des Punktes, zur Herkunft:**
-
-  **Der Dialog zeigt den falschen Namen.** `[cmd]` Er zeigt
-  `Reis poliert, roh` — das ist `name_de`, der amtliche BLS-Wortlaut.
-  **`name_display_de` sagt `Weisser Reis (roh)`.**
-
-  `[cmd]` `food_search` liefert **beide Felder**, und
-  `lib/nutrition/food-search.ts` kennt beide — **der Dialog greift auf
-  das falsche zu.** Ein Anzeigefehler, keine fehlende Datenbasis.
-  `[read]` Damit ist die Arbeit von C-39 und C-41 unsichtbar: 7.140
-  Anzeigenamen, davon 2.870 abweichend vom amtlichen Namen.
-
-  **Was sonst fehlt:** `[cmd]` `food_search` nimmt `p_category_slug`,
-  `p_category_id`, `p_tag_code` und `p_sort` entgegen — der Dialog
-  nutzt nichts davon.
-
-  | | |
-  |---|---|
-  | Filter nach Kategorie | `[cmd]` 518 Kategorien |
-  | Filter nach Tag | `[cmd]` 11 vergebene — `whole_food` 2.884, `vegan` 1.377 |
-  | Aliase | `[cmd]` 32.845 in vier Herkuenften |
-  | Sortierung | `sort_weight`, 95 Stufen |
-
-  `[cmd]` Die Suchseite unter `Food DB` nutzt einen Teil davon; **der
-  Dialog faengt bei null an.**
-
-  **Portionen als Vorwahl:** `[cmd]` Heute zeigt die Auswahl
-  `100 g (100 g) · Vorgabe` — **das ist C-60 und wird in den Daten
-  behoben.** Der Dialog zeigt nur die Vorgabe; stimmt sie, stimmt die
-  Vorauswahl. `[read]` Tom: *„die Darstellung danach in der View in
-  Gramm ist korrekt."*
 
 
 
@@ -3058,72 +3011,6 @@ Umsetzen angepasst werden.
   · `action_log` bleibt ungenutzt · **Eintraege koennen ohnehin nur aus
   dem Coach-Portal kommen** — das es noch nicht gibt.
 
-- [ ] **C-151: Das Coach-Portal — neun Entscheidungen** (neu
-  2026-08-20). **Entscheidungen fuer Tom.** Aus F-06
-  (`docs/spezifikation/30-module/addon/01-entwurf-coach-portal.md`,
-  519 Zeilen).
-
-  ### Was das Portal ist
-
-  `[cmd]` **16 Tabs aus sechs Dateien** (`module-coach.jsx:923–940`).
-  **`-gaps` ist die Modal- und Detailebene** (10 von 11 Portal-Modalen),
-  **`-portal-v2` und `-portal-workflows` sind zwei Teile, keine zwei
-  Fassungen.**
-
-  `[cmd]` **Von 16 Tabs sind zwei datenseitig gedeckt** — Autonomy und
-  Consent.
-
-  `[read]` **Die sechs C-119-Tabellen tragen die Governance; die
-  Arbeitsobjekte fehlen** — Beziehung, Check-ins, Programme,
-  Nachrichten, Alerts. **Selbst die Coach-Klient-Beziehung existiert nur
-  implizit.**
-
-  ### Der eigentliche Blocker ist der Lesepfad
-
-  `[cmd]` **Kein Modulschema referenziert `client_permissions`** —
-  gegrept. **Auch mit `full`-Freigabe liest ein Coach heute null
-  Zeilen.**
-
-  `[read]` **Das ist mehr als eine fehlende Tabelle:** Die Freigabe ist
-  gebaut (C-119) und wirkt nirgends. **Jedes Modul muss sie kennen.**
-
-  `[cmd]` **Und was `summary` je Modul zeigt, ist nirgends definiert**
-  (T4).
-
-  ### Zwei harte Belege aus dem Vorgaengerrepo
-
-  `[cmd]` **`coach-actions.ts` prueft nie die Permissions.**
-
-  `[cmd]` **Die Check-in-Auto-Analyse schrieb zwei Spalten, die in
-  keiner der 73 Migrationen existieren** — *„sie war produktiv stumm
-  kaputt."*
-
-  `[read]` **Daraus die Entwurfsregel:** ein Durchsetzungspunkt
-  (`pending_actions`), **Schema-Tests statt `catch {}`.**
-
-  ### Als eigene App traegt das Admin-Vorbild
-
-  `[cmd]` **Port 3220, `NEXT_PUBLIC_AUTH_COOKIE_SCOPE=coach` ergibt
-  `sb-127-coach-auth-token`** — **ohne Codeaenderung**, gemessen.
-
-  `[cmd]` **Empfehlung: ein Konto, zwei Sitzungen**, Coach-Rolle per
-  `app_metadata` nach dem `is_admin()`-Muster. **Als T1/T2 vorgelegt,
-  nicht entschieden.**
-
-  ### Neun Entscheidungen (T1–T9)
-
-  Konto und Rolle · **`summary`-Definition** · **siebtes Modul: `buddy`
-  gegen `body_metrics`** (auch G-93) · **Bewertung von Menschen im
-  Portal** · Revenue und Team raus aus V1.
-
-  `[cmd]` **E1, E2 und E6 aus F-03 sind durch C-119 und G-90 bereits
-  entschieden** und im Entwurf als geschlossen markiert.
-
-  ### Und der Check-in-Review hat keinen Screen
-
-  `[read]` **Die groesste Zeitsenke im Traineralltag** (F-04: *2–3
-  gegen 10–15 Minuten je Klient*) — **fuer sie existiert kein
-  funktionaler Mockup-Screen, nur die Workflow-Beschreibung.**
 
 
 - [ ] **G-98: Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten**
@@ -3457,3 +3344,39 @@ Umsetzen angepasst werden.
   `[cmd]` **Der C-153-Agent hat es gemeldet statt nebenbei repariert.**
   **Zu klaeren, ob ein Neuaufbau reicht oder ob etwas die Policies
   entfernt.**
+
+- [ ] **C-155: Zwei Befunde in `@supabase/ssr` 0.1.0** (neu
+  2026-08-20). Befund aus F-07.
+
+  `[cmd]` *„Browser-Client crasht bei `cookieOptions` ohne `cookies`;
+  `storageKey` nur im `ServerClient`."* **Lokal umgangen,
+  `packages/shared` unangetastet.**
+
+  `[read]` **`apps/admin` nutzt denselben Pfad und sollte geprueft
+  werden** — der F-07-Agent hat es gemeldet statt nebenbei angefasst.
+
+- [ ] **B-26: `testdaten-einspielen.ts` ignoriert unbekannte Flags**
+  (neu 2026-08-20). **Beinahe-Unfall aus F-07, folgenlos.**
+
+  `[cmd]` *„Ein Lauf ging gegen live und wurde durch die
+  Ein-Transaktions-Bauweise komplett zurueckgerollt — gemessen: **725
+  Mahlzeiten unversehrt**."*
+
+  `[read]` **Die Bauweise hat gerettet, was ein Tippfehler gekostet
+  haette.** **Aber ein Skript, das ein unbekanntes Flag stillschweigend
+  verwirft, ist eine Falle** — dieselbe Klasse wie `.in()`, das ueber
+  200 IDs schweigt (G-64).
+
+  **Zu tun:** unbekannte Flags ablehnen, nicht ignorieren.
+
+- [ ] **G-102: Der Ausfuehrer fuer bestaetigte Vorschlaege** (neu
+  2026-08-20). Aus F-07, bewusst nicht gebaut.
+
+  `[cmd]` **`pending_actions` traegt Vorschau, Verfall und
+  `confirmed_at`** — **aber niemand wendet den `payload` an.**
+
+  `[read]` **Das war schon G-94s Befund:** *„`payload` beschreibt, was
+  geschehen soll, niemand wendet es an."*
+
+  `[cmd]` **Er braucht die Autonomy-Wirkungsregeln** — und die haengen
+  an T-Entscheidungen. **Eigener Auftrag, nach Toms Antworten.**
