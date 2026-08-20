@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `9961ba7` auf `dev`.
+**Stand:** 2026-08-18, Anker `fc2c1f1` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 96 offen, 1 in Arbeit.
+`[cmd]` 95 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -193,7 +193,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-114** | Was das Vorgaengerrepo beim Coach falsch machte |  |
 | **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
 | **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
-| **GO-20** | Ziele brauchen Prioritaeten, Bearbeiten und Historie |  |
 | **C-71** | Permissions und Autonomy sind zwei verschiedene Sachen |  |
 | **C-75** | BSS und Voice sind Neubau |  |
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
@@ -203,8 +202,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-86** | 8 mehrdeutige Uebungen und 1 ohne DB-Namen |  |
 | **C-91** | Die Spec nennt LOINC-Codes, die nicht die ueblichen sind |  |
 | **C-92** | Die Spec verwechselt Marker |  |
-| **GO-17** | Meilenstein-Kachel ohne Stelle im Mockup |  |
-| **GO-19** | Was die Daten hergeben und das Mockup nicht zeigt |  |
 | **G-68** | `e1RM` deckt 6 von 1.416 |  |
 | **C-102** | `milch` findet Joghurt statt Milch |  |
 | **C-123** | Recovery — die neun Entscheidungen |  |
@@ -229,6 +226,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-75** | Die alte Oberflaeche nennt den BLS ebenfalls |  |
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
+| **C-135** | Die Zielhistorie fehlt in den Seeds |  |
+| **G-81** | Registerkarten wechseln im Browser nicht |  |
 
 ---
 
@@ -2094,39 +2093,6 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **GO-20: Ziele brauchen Prioritaeten, Bearbeiten und Historie**
-  (neu 2026-08-18). **Toms Vorgaben.**
-
-  **Tom, 2026-08-18:** *„Goals brauchen noch Prioritaeten, die man
-  festlegen kann — das bildet dann auch die Reihenfolge. Bestehende
-  muessen auch editierbar sein."*
-
-  ### Drei Dinge
-
-  **1. Prioritaet je Ziel** — sie bestimmt die Reihenfolge in der
-  Uebersicht. `[cmd]` Heute traegt ein Ziel die Marke `primaer`, aber
-  keine Rangzahl.
-
-  **2. Bestehende Ziele bearbeiten.** `[cmd]` Heute gibt es nur `New
-  goal` im Kopf.
-
-  **3. Abgelaufene Ziele mit Status** — **erreicht, nicht erreicht,
-  abgebrochen.**
-
-  `[read]` **Toms Beobachtung:** *„Ich sehe 2 Goals, die definiert
-  — Meilensteine? Erreichte Goals? Dann macht man einfach einen Seed mit
-  abgelaufenen Goals, die in Meilensteine landen (im Sinne von
-  History)."*
-
-  `[cmd]` **Heute sind die drei Meilensteine Zwischenziele auf dem Weg**
-  — 86 kg bis 20. August, 85 kg, 86,5 kg. **Keine Historie.**
-
-  `[read]` **Und die Timeline waere der bessere Ort:** *„Wenn wir uns
-  Timeline anschauen, das wuerde das schon von sich aus darstellen — da
-  muesste aber jede Zeile anwaehlbar sein fuer Details."*
-
-  **Zu bauen:** Rangspalte · Bearbeiten · Abschlussstatus ·
-  Seed mit abgelaufenen Zielen · **Timeline-Zeilen anwaehlbar.**
 
 
 
@@ -2327,28 +2293,8 @@ Umsetzen angepasst werden.
   C-84-Agent hat ihn gefahren — **das gehoert zur Regel, nicht zum
   Zufall.**
 
-- [ ] **GO-17: Meilenstein-Kachel ohne Stelle im Mockup** (neu
-  2026-08-18). **Entscheidung fuer Tom.** Rest aus GO-16.
-
-  `[cmd]` **Der Agent hat eine Kachel hinzugefuegt, die das Mockup nicht
-  hat** — und es gemeldet: *„GO-11 hat drei Szenarien angelegt, die
-  sonst unsichtbar blieben. Wenn die Form nicht passt, sag Bescheid."*
-
-  `[read]` **Das ist der Grenzfall der Regel.** Das Mockup ist die
-  Vorgabe — aber drei gebaute Meilensteine ohne Anzeige waeren tote
-  Daten. **Tom entscheidet: Form behalten, aendern, oder Kachel weg.**
 
 
-- [ ] **GO-19: Was die Daten hergeben und das Mockup nicht zeigt** (neu
-  2026-08-18). Befund aus GO-16.
-
-  `[cmd]` **`goal_phases.transitioned_from`, `recommended_next`,
-  `parameters`** — *„der echte Kern des Phase-Tabs"*, so der Agent.
-  Dazu `motivation_reason`, `measurement_source`, `height_cm_snapshot`.
-
-  `[read]` **Eine Phase, die weiss, woher sie kommt und was als
-  naechstes empfohlen ist, ist mehr als ein Etikett.** Das Mockup zeigt
-  nur den Namen.
 
 - [ ] **G-68: `e1RM` deckt 6 von 1.416** (neu 2026-08-18). Meldung aus
   G-64.
@@ -2825,3 +2771,46 @@ Umsetzen angepasst werden.
   `[cmd]` **Was daraus folgt:** Das Bildschirmfoto ist kein Beiwerk —
   **es ist die einzige Pruefung, die diese Klasse findet.** Steht schon
   als Nachweis in jedem Auftrag; **hier ist der dritte Beleg.**
+
+- [ ] **C-135: Die Zielhistorie fehlt in den Seeds** (neu 2026-08-19).
+  **Datenauftrag, Befund aus G-79.**
+
+  `[cmd]` **Kein Ziel traegt einen abgeschlossenen Status** — die Kachel
+  *„Abgeschlossene Ziele"* ist leer, **und das ist der Befund.**
+
+  `[cmd]` **Und die Meilensteine widersprechen dem Auftragstext:** Er
+  nannte *„erreicht, offen, verfehlt"* — **gemessen sind alle drei
+  `open`, zwei davon ueberfaellig** (7. Juni, 1. Juli).
+
+  `[read]` **Der Orchestrator hatte die Zahlen aus dem GO-11-Bericht
+  uebernommen, ohne nachzusehen** — dieselbe Sorte Fehler wie bei den 44
+  Katalogeintraegen (G-45) und den 12 Wurzelgruppen (G-64).
+
+  **Tom, 2026-08-18:** *„Dann macht man einfach einen Seed mit
+  abgelaufenen Goals, die in Meilensteine landen (im Sinne von
+  History)."*
+
+  `[cmd]` **Was gebraucht wird:** abgeschlossene Ziele mit Status
+  **erreicht, nicht erreicht, abgebrochen** — und Meilensteine, die
+  diese drei Zustaende tatsaechlich tragen.
+
+  `[read]` **Und Toms Ausblick gehoert dazu:** *„Kann spaeter auch etwas
+  in Richtung Gamification gehen."* **Die Historie ist die Grundlage
+  dafuer.**
+
+- [ ] **G-81: Registerkarten wechseln im Browser nicht** (neu
+  2026-08-19). Befund aus G-79.
+
+  `[cmd]` **Gegengeprueft an `/v2/recovery`, dort genauso** — **die
+  Ursache sind 404-Antworten des Entwicklungsservers auf RSC-Anfragen.**
+
+  `[read]` **Nicht an einem Auftrag gelegen**, sondern an der
+  Entwicklungsumgebung. **Der G-79-Agent hat den Timeline-Nachweis
+  deshalb ueber die Vorgabe-Registerkarte gefuehrt.**
+
+  `[cmd]` **Dazu:** *„Die Bildschirmfotos zeigen die Seite unformatiert,
+  obwohl der DOM die Stile traegt."*
+
+  `[read]` **Das trifft die Nachweisregel:** Wenn das Bild nicht taugt,
+  faellt die einzige Pruefung weg, die stille Fehler findet (G-78).
+  **Gehoert geklaert, bevor es einen Bericht falsch aussehen laesst.**

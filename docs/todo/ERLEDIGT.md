@@ -5611,6 +5611,104 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[read]` **Die Spalte bleibt und wird gepflegt** — Toms Entscheidung.
 
+- [x] **GO-20: Ziele brauchen Prioritaeten, Bearbeiten und Historie**
+  (neu 2026-08-18). **Toms Vorgaben.**
+
+  **Tom, 2026-08-18:** *„Goals brauchen noch Prioritaeten, die man
+  festlegen kann — das bildet dann auch die Reihenfolge. Bestehende
+  muessen auch editierbar sein."*
+
+  ### Drei Dinge
+
+  **1. Prioritaet je Ziel** — sie bestimmt die Reihenfolge in der
+  Uebersicht. `[cmd]` Heute traegt ein Ziel die Marke `primaer`, aber
+  keine Rangzahl.
+
+  **2. Bestehende Ziele bearbeiten.** `[cmd]` Heute gibt es nur `New
+  goal` im Kopf.
+
+  **3. Abgelaufene Ziele mit Status** — **erreicht, nicht erreicht,
+  abgebrochen.**
+
+  `[read]` **Toms Beobachtung:** *„Ich sehe 2 Goals, die definiert
+  — Meilensteine? Erreichte Goals? Dann macht man einfach einen Seed mit
+  abgelaufenen Goals, die in Meilensteine landen (im Sinne von
+  History)."*
+
+  `[cmd]` **Heute sind die drei Meilensteine Zwischenziele auf dem Weg**
+  — 86 kg bis 20. August, 85 kg, 86,5 kg. **Keine Historie.**
+
+  `[read]` **Und die Timeline waere der bessere Ort:** *„Wenn wir uns
+  Timeline anschauen, das wuerde das schon von sich aus darstellen — da
+  muesste aber jede Zeile anwaehlbar sein fuer Details."*
+
+  **Zu bauen:** Rangspalte · Bearbeiten · Abschlussstatus ·
+  Seed mit abgelaufenen Zielen · **Timeline-Zeilen anwaehlbar.**
+
+  `[cmd]` **Erledigt 2026-08-19 — und der Auftrag war falsch gestellt.**
+
+  `[read]` *„Beide Spalten gibt es schon (`priority smallint`, `status
+  text`), und `lesen.ts:223` sortiert laengst danach. **Es fehlte nur der
+  Weg, die Zahl zu setzen.**"*
+
+  ### Die eigentliche Regel stand in der Datenbank
+
+  `[cmd]` **`user_goals_check1`** (aktiv = Prioritaet 1–3) **und
+  `uq_user_goals_active_slot`** (eindeutig je Nutzer) ergeben zusammen
+  **genau drei aktive Plaetze, jeden einmal.**
+
+  `[read]` *„Den zweiten Teil habe ich erst gefunden, als das
+  Zuruecksetzen der Testdaten mit `duplicate key` abbrach."* **Beide
+  Regeln sind jetzt in der Oberflaeche abgebildet, mit Klartext statt
+  Postgres-Meldung.**
+
+  ### Zwei stille Fehler
+
+  `[cmd]` **Ein Wert-Import aus einer `'use client'`-Datei zog
+  `next/headers` ins Browserbuendel** — **Typecheck gruen, HTTP 500 auf
+  jeder Seite, auch `/login`.** `[read]` **Dieselbe Klasse wie G-74** —
+  vierter Fall.
+
+  `[cmd]` **PostgREST meldet `ok` bei einem `update`, das der
+  Zeilenschutz leergefiltert hat.** *„Der Editor schloss sich, nichts war
+  gespeichert."* Behoben mit `.select('id')` und einer Pruefung auf null
+  Zeilen.
+
+  `[read]` **Das ist der gefaehrlichere von beiden** — er faellt nicht
+  auf, solange man seine eigenen Daten bearbeitet.
+
+  ### Timeline
+
+  `[cmd]` **8 anwaehlbare Zeilen** — 2 Ziele, 1 Phase, 3 Meilensteine.
+  **Jede ein `<button>` mit `aria-expanded`**, per Tastatur erreichbar.
+  **Kein Tempo-Urteil.**
+
+- [x] **GO-17: Meilenstein-Kachel ohne Stelle im Mockup** (neu
+  2026-08-18). **Entscheidung fuer Tom.** Rest aus GO-16.
+
+  `[cmd]` **Der Agent hat eine Kachel hinzugefuegt, die das Mockup nicht
+  hat** — und es gemeldet: *„GO-11 hat drei Szenarien angelegt, die
+  sonst unsichtbar blieben. Wenn die Form nicht passt, sag Bescheid."*
+
+  `[read]` **Das ist der Grenzfall der Regel.** Das Mockup ist die
+  Vorgabe — aber drei gebaute Meilensteine ohne Anzeige waeren tote
+  Daten. **Tom entscheidet: Form behalten, aendern, oder Kachel weg.**
+
+  `[cmd]` **Erledigt 2026-08-19 mit G-79.**
+
+- [x] **GO-19: Was die Daten hergeben und das Mockup nicht zeigt** (neu
+  2026-08-18). Befund aus GO-16.
+
+  `[cmd]` **`goal_phases.transitioned_from`, `recommended_next`,
+  `parameters`** — *„der echte Kern des Phase-Tabs"*, so der Agent.
+  Dazu `motivation_reason`, `measurement_source`, `height_cm_snapshot`.
+
+  `[read]` **Eine Phase, die weiss, woher sie kommt und was als
+  naechstes empfohlen ist, ist mehr als ein Etikett.** Das Mockup zeigt
+  nur den Namen.
+
+  `[cmd]` **Erledigt 2026-08-19 mit G-79.**
+
 ## G — Theme V1
 
 - [x] **G-01: Parallelstruktur und Tokens** (neu 2026-08-15). Der erste
