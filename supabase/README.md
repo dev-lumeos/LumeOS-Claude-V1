@@ -87,6 +87,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | **052** | `05_user_tabellen/052_diary_foundation.sql` | **`meals`, `meal_items`**, `touch_updated_at()`, `meal_items_owner_guard()`, 4 Trigger, 8 Policies | 2 Tabellen |
 | **052a** | `05_user_tabellen/052a_meal_time.sql` | `meals.meal_time`, Sortierindizes und Wegfall des Unique-Index auf Nutzer/Tag/Typ | mehrere Mahlzeiten je Typ speicherbar |
 | **053** | `05_user_tabellen/053_daily_summary.sql` | Sicht **`daily_summary`** | 1 Sicht |
+| **059b** | `05_user_tabellen/059b_daily_nutrient_summary_long.sql` | Lange Tagesbilanz **`daily_nutrient_summary_long`** und Zeitfensterfunktion `nutrient_summary_window()` fuer alle 138 Naehrstoffe | 1 Sicht, 1 Funktion |
 | **054** | `05_user_tabellen/054_preference_uniques.sql` | Eindeutigkeitsregeln auf `food_preference_items` | — |
 | **055** | `05_user_tabellen/055_water_logs.sql` | **`water_logs`** + Policies | 1 Tabelle |
 | **056** | `05_user_tabellen/056_hydration_summary.sql` | Sicht **`hydration_summary`** | 1 Sicht |

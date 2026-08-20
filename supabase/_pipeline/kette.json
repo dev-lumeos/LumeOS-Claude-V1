@@ -522,6 +522,13 @@
       "depends_on": ["059", "110"]
     },
     {
+      "id": "059b",
+      "path": "supabase/_pipeline/05_user_tabellen/059b_daily_nutrient_summary_long.sql",
+      "kind": "sql",
+      "creates": "daily_nutrient_summary_long und nutrient_summary_window als lange Bilanz fuer alle 138 Naehrstoffe",
+      "depends_on": ["015", "053"]
+    },
+    {
       "id": "017",
       "path": "supabase/_pipeline/00_querschnitt/017_datenherkunft.sql",
       "kind": "sql",

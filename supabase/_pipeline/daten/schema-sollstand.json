@@ -892,6 +892,26 @@
       "spalten_herkunft": "C-37, 2026-08-15: aus dem SELECT-Block von 053 gelesen, nicht aus der laufenden Datenbank. 22 Spalten aus C-04 (unveraendert) plus 48 aus C-37 (24 Mikros und ihre Fehlzaehler). C-53, 2026-08-16: F18:2CN6 und F18:3CN3 als vier Spalten am Ende angehaengt; LEU war bereits vorhanden."
     },
     {
+      "name": "daily_nutrient_summary_long",
+      "schritt": "059b",
+      "security_invoker": true,
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "059b vergibt SELECT; service_role erhaelt zusaetzlich ALL aus den DEFAULT PRIVILEGES in 060 3e — [cmd] \"ON TABLES\" umfasst in Postgres auch Sichten"
+    },
+    {
       "name": "hydration_summary",
       "schritt": "056",
       "security_invoker": true,
@@ -1108,6 +1128,10 @@
     {
       "name": "daily_reference_assessment",
       "schritt": "059"
+    },
+    {
+      "name": "nutrient_summary_window",
+      "schritt": "059b"
     },
     {
       "name": "micronutrient_snapshot",
