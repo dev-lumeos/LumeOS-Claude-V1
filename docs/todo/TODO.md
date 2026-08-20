@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `9c33576` auf `dev`.
+**Stand:** 2026-08-18, Anker `23aeb7e` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 97 offen, 1 in Arbeit.
+`[cmd]` 101 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -215,6 +215,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-134** | Die Substanzen der drei Bestaende zusammenfuehren |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
 | **C-137** | `MAOI` fehlt im Wirkstoffbestand |  |
+| **G-85** | Der Health score haengt an zwei Unbekannten |  |
+| **C-141** | Glukose steht zweimal in der Liste |  |
+| **C-142** | Die Sperrbegruendung nennt eine Tabelle, die es gibt |  |
+| **A-23** | `lint` bricht repoweit ab |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
@@ -2677,6 +2681,78 @@ Umsetzen angepasst werden.
   `[read]` **Nicht dringend:** MAO-Hemmer sind selten verordnet. **Aber
   ihre Wechselwirkungen sind heftig** — Tyramin, SSRIs, Sympathomimetika.
   **Wenn Kimi die naechsten tausend liefert, sollte es dabei sein.**
+
+- [ ] **G-85: Der Health score haengt an zwei Unbekannten** (neu
+  2026-08-19). Befund aus G-84. **Der Score ist ersatzlos aus dem Kopf
+  entfernt.**
+
+  `[cmd]` **Vorher:** `Health score 87` und `6 alerts` — **beide aus dem
+  Entwurfskatalog.** *„Dass die 6 zufaellig stimmte, haette sich bei
+  keinem neuen Befund bewegt."*
+
+  ### Erste Unbekannte: die Gruppierung
+
+  `[cmd]` **23 von 37 Markern gruppierbar**, 47 von 140 Werten fielen
+  heraus. **5 LOINC-Abweichungen** und **9 echte Luecken** (ApoB, PSA,
+  Zink, FSH, IGF-1, Prolaktin, Calcium + 2 Rohmarker).
+
+  `[read]` **Der Orchestrator nannte die fuenf *„einen Codex-Auftrag von
+  zwanzig Minuten"* — falsch.** Der Bericht korrigiert: **bei Glukose und
+  Vitamin D messen die Codes nicht dasselbe.** `1558-6` ist *Fasting*
+  Glukose, `2345-7` nicht. **Keine Aliasfrage, eine inhaltliche.**
+
+  ### Zweite Unbekannte: die Gewichtung
+
+  `[cmd]` **`.25/.25/.20/.15/.15` steht nur in `daten.ts`** — keine
+  Quelle. **Und die 8 DB-Kategorien passen nicht auf die 5 Systeme.**
+
+  `[read]` **Zwei Unbekannte in einer Zahl** — deshalb bleibt die
+  Dashboard-Kachel markiert.
+
+- [ ] **C-141: Glukose steht zweimal in der Liste** (neu 2026-08-19).
+  Befund aus G-84. **Identitaetsfrage, keine Zaehlung.**
+
+  `[cmd]` **Ein Rohmarker ohne LOINC** (*Glucose [Mass/volume]…*,
+  2026-06-06) **faellt auf Namensschluesselung zurueck.**
+
+  `[read]` **Folge:** *„Der Kopf sagt darum „2", wo ein Mensch einen
+  erhoehten Wert hat, an zwei Tagen gemessen."*
+
+  `[cmd]` **Nicht zusammengelegt** — der Agent hat es richtig gemeldet
+  statt entschieden. **Zwei Zeilen zu einer zu machen ist eine
+  Identitaetsentscheidung.**
+
+  `[read]` **Und C-84 hat dieselbe Klasse gefunden:** Die Spec
+  verwechselte Magnesium RBC mit Methaemoglobin. **Der
+  Identitaetsabgleich gegen LOINC ist seither Pflicht** — hier fehlt der
+  Code ganz.
+
+- [ ] **C-142: Die Sperrbegruendung nennt eine Tabelle, die es gibt**
+  (neu 2026-08-19). Befund aus G-84.
+
+  `[cmd]` **`medical.user_medications` existiert** — 2 Zeilen, 124
+  Produkte, seit C-130. **Der Knopf *„Add medication"* ist trotzdem
+  gesperrt, mit einer Begruendung, die auf eine fehlende Tabelle
+  verweist.**
+
+  `[cmd]` **Was wirklich fehlt: die Ueberwachungsspalten** — *„aus denen
+  vier der sechs Alert-Eintraege stammen."*
+
+  `[read]` **Kleine Sache, aber sie sagt etwas Falsches** — und der
+  naechste Agent sucht an der falschen Stelle.
+
+- [ ] **A-23: `lint` bricht repoweit ab** (neu 2026-08-19). Befund aus
+  G-84.
+
+  `[cmd]` **Fehlende ESLint-Konfiguration**, mit interaktiver
+  Rueckfrage — in `@lumeos/web` wie in `@lumeos/admin`.
+
+  `[read]` **Bestand vorher schon** — *„ging nur ueber den Turbo-Cache
+  durch."* **Das ist dieselbe Klasse wie G-81:** Der Cache verdeckte
+  einen Fehler, statt ihn zu zeigen.
+
+  `[cmd]` **Der G-84-Agent hat Typecheck und Tests ohne Cache
+  erzwungen** — 3 von 3, 393 gruen. **Das gehoert zur Nachweisregel.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
