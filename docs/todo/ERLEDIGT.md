@@ -5365,6 +5365,48 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   je zwei Logzeilen. `[read]` **Das war die Luecke des
   Vorgaengerrepos.**
 
+- [x] **C-130: `medical.medications` und Conditions** (neu 2026-08-19).
+  **Erster Schritt aus C-129, blockiert 20 Regeln.**
+
+  `[cmd]` **Die Tabelle gibt es nicht** — Medical fuehrt Befunde, keine
+  Medikamente. **Alle 20 Medikamentenregeln des Kimi-Bestands sind
+  dadurch blockiert.**
+
+  **Tom, 2026-08-19:** *„LumeOS/Buddy muss auch wissen, was der User
+  fuer Medikamente nimmt — also brauchen wir die Daten fuer den User zum
+  Erfassen der Medikamente."*
+
+  `[cmd]` **Was der Feldvertrag erwartet:** `name`, **`drug_class`**
+  (`anticoagulant:warfarin`, `SSRI`, `RAAS_inhibitor`,
+  `CYP3A4_substrate`, `sedative`, `antidiabetic`, `MAOI`),
+  **`cyp_profile[]`.**
+
+  `[cmd]` **Dazu 15 Conditions:** Bluthochdruck, CKD, Diabetes,
+  Schwangerschaft (und geplant), Lebererkrankung, Angst, Arrhythmie,
+  Haemochromatose, hormonsensitiver Krebs, Nierensteine,
+  Autoimmunthyreoiditis, Transplantation, HIV, Epilepsie.
+
+  `[cmd]` **Erledigt 2026-08-19.** Fuenf neue Tabellen im
+  `medical`-Schema:
+
+  | | |
+  |---|---|
+  | `medication_active_substances` | **56** |
+  | `medication_formulations` | 119 |
+  | `medication_products` | **124** |
+  | `user_medications` / `user_conditions` | 2 / 2 |
+
+  `[cmd]` **`drug_class` ist ein Array und traegt die erwarteten
+  Werte:** `anticoagulant:warfarin`, `SSRI`, `CYP3A4_inhibitor`,
+  `CYP2C9_substrate`, `antidiabetic`, `opioid`, `triptan`.
+
+  `[read]` **Damit sind die 20 Medikamentenregeln aus C-129 nicht mehr
+  strukturell blockiert** — sie pruefen die Klasse, nicht den Wirkstoff.
+
+  `[cmd]` **Und der Testfall trifft:** Ein Wirkstoff traegt
+  `{CYP2C9_substrate, anticoagulant:warfarin, anticoagulant_vka}` —
+  **die Vitamin-K-Regel liesse sich jetzt pruefen.**
+
 
 
 ## Erledigt am 2026-08-05
@@ -8433,3 +8475,37 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `SuppInteractions` behaelt `ATTRAPPE` (keine echte Fassung daneben),
   die sechs abgeloesten tragen nur `RUECKFALL`. **Ohne diesen zweiten
   Test waere die Trennung Kosmetik.**"*
+
+- [x] **G-63: Vier Felder liegen ungenutzt** (neu 2026-08-18). Befund
+  aus G-60.
+
+  `[cmd]` **`reference_source`** — 138 Befund, 1 Katalog, 1 keiner.
+  `[read]` **Mit der alten Liste weggefallen: dass ein Bereich ein
+  Rueckfall ist, sieht man heute nicht mehr.** In G-46 war das
+  ausdruecklich gebaut (*Quelle `Katalog`, als solcher beschriftet*).
+
+  `[cmd]` Ebenso ungenutzt: **`lab_name`** je Zeile, **`fasting_status`**,
+  **`report_time`**.
+
+  `[read]` **Die Attrappe zeigt sie nicht**, deshalb wurden sie
+  weggelassen — richtig nach der Regel. **Aber `fasting_status` aendert
+  die Beurteilung eines Glukosewerts**, und das gehoert entschieden.
+
+  `[cmd]` **Erledigt 2026-08-19 mit G-80.** `reference_source` ist wieder
+  sichtbar — **dass ein Bereich ein Rueckfall ist, erkennt man jetzt
+  wieder.** `lab_name` je Zeile ebenso.
+
+  `[cmd]` **`fasting_status` steht auf allen 140 Zeilen `unknown`** —
+  deshalb erscheint es nur, wenn es gesetzt ist. `[read]` **`unknown`
+  ist keine Angabe, sondern deren Fehlen** — 140-mal anzuzeigen sagt
+  weniger als nichts.
+
+  ### Ein Fund am Rande
+
+  `[cmd]` **Die Nuechtern-Unterscheidung steckt bereits im LOINC:**
+  `1558-6` ist *Fasting glucose*, `2345-7` ist Glukose.
+
+  `[read]` **Aber nicht deckungsgleich:** Der Code sagt, **was das Labor
+  messen wollte** — `fasting_status` sagt, **ob der Patient nuechtern
+  war.** Bei einem Wert ohne Fasting-Code waere die Angabe die einzige
+  Quelle. **Schemafrage fuer den Importpfad, keine Anzeigefrage.**

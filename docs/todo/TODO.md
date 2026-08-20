@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `7f2c490` auf `dev`.
+**Stand:** 2026-08-18, Anker `6f8caf6` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 94 offen, 1 in Arbeit.
+`[cmd]` 92 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -198,7 +198,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
 | **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
 | **C-85** | Kurznamen fehlen bei 11 von 35 |  |
-| **G-63** | Vier Felder liegen ungenutzt |  |
 | **C-86** | 8 mehrdeutige Uebungen und 1 ohne DB-Namen |  |
 | **C-91** | Die Spec nennt LOINC-Codes, die nicht die ueblichen sind |  |
 | **C-92** | Die Spec verwechselt Marker |  |
@@ -209,7 +208,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-126** | E2 braucht Toms Bestaetigung |  |
 | **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
-| **C-130** | `medical.medications` und Conditions |  |
 | **C-131** | Substanzstabile ID- und Aliasschicht |  |
 | **C-132** | `missing_input` fuer Regeln |  |
 | **C-133** | Die Warn- und Gap-Regeln uebernehmen |  |
@@ -1919,6 +1917,20 @@ Umsetzen angepasst werden.
   koennte Trainingsstandards, Volumenempfehlungen und die Ansprache
   beeinflussen. **Erst einmal nur als Feld, ohne Wirkung.**
 
+  `[cmd]` **Teilweise erledigt 2026-08-19 mit G-80.** Die Kachel steht in
+  `/v2/settings` — **vier Stufen mit Erklaerung, Auswahl gesperrt.**
+
+  `[cmd]` **Die Spalte fehlt weiter in `public.profiles`** — gemessen:
+  nur `activity_level`. **Der Hinweis sagt, dass sich die Angabe noch
+  nicht speichern laesst**, ohne Punktnummer.
+
+  `[read]` **Dasselbe Muster wie G-65 bei den Presets:** Die Form steht,
+  der naechste Durchgang findet sie vor. **Und keine Attrappenmarke** —
+  ein Leerzustand ist kein Attrappenzustand.
+
+  **Offen:** die Spalte in `profiles`, dazu Onboarding. `[cmd]`
+  **Codex-Auftrag**, klein.
+
 - [ ] **C-114: Was das Vorgaengerrepo beim Coach falsch machte** (neu
   2026-08-19). **Vier Entscheidungen fuer Tom.** Aus der F-04-Recherche
   (`docs/spezifikation/recherche-coach-portale.md`, 477 Zeilen).
@@ -2217,20 +2229,6 @@ Umsetzen angepasst werden.
   `[read]` **Die Attrappe zeigt `TT`, `GLU`, `HbA1c`** — Trainings- und
   Laborjargon. **Das ist Kuration, keine Ableitung.**
 
-- [ ] **G-63: Vier Felder liegen ungenutzt** (neu 2026-08-18). Befund
-  aus G-60.
-
-  `[cmd]` **`reference_source`** — 138 Befund, 1 Katalog, 1 keiner.
-  `[read]` **Mit der alten Liste weggefallen: dass ein Bereich ein
-  Rueckfall ist, sieht man heute nicht mehr.** In G-46 war das
-  ausdruecklich gebaut (*Quelle `Katalog`, als solcher beschriftet*).
-
-  `[cmd]` Ebenso ungenutzt: **`lab_name`** je Zeile, **`fasting_status`**,
-  **`report_time`**.
-
-  `[read]` **Die Attrappe zeigt sie nicht**, deshalb wurden sie
-  weggelassen — richtig nach der Regel. **Aber `fasting_status` aendert
-  die Beurteilung eines Glukosewerts**, und das gehoert entschieden.
 
 - [ ] **C-86: 8 mehrdeutige Uebungen und 1 ohne DB-Namen** (neu
   2026-08-18). Rest aus C-83.
@@ -2502,26 +2500,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Und tausende Medikamente kommen** — im selben Format. **Die
   Struktur muss sie tragen**, der erste Import nur die 56.
 
-- [ ] **C-130: `medical.medications` und Conditions** (neu 2026-08-19).
-  **Erster Schritt aus C-129, blockiert 20 Regeln.**
-
-  `[cmd]` **Die Tabelle gibt es nicht** — Medical fuehrt Befunde, keine
-  Medikamente. **Alle 20 Medikamentenregeln des Kimi-Bestands sind
-  dadurch blockiert.**
-
-  **Tom, 2026-08-19:** *„LumeOS/Buddy muss auch wissen, was der User
-  fuer Medikamente nimmt — also brauchen wir die Daten fuer den User zum
-  Erfassen der Medikamente."*
-
-  `[cmd]` **Was der Feldvertrag erwartet:** `name`, **`drug_class`**
-  (`anticoagulant:warfarin`, `SSRI`, `RAAS_inhibitor`,
-  `CYP3A4_substrate`, `sedative`, `antidiabetic`, `MAOI`),
-  **`cyp_profile[]`.**
-
-  `[cmd]` **Dazu 15 Conditions:** Bluthochdruck, CKD, Diabetes,
-  Schwangerschaft (und geplant), Lebererkrankung, Angst, Arrhythmie,
-  Haemochromatose, hormonsensitiver Krebs, Nierensteine,
-  Autoimmunthyreoiditis, Transplantation, HIV, Epilepsie.
 
 - [ ] **C-131: Substanzstabile ID- und Aliasschicht** (neu 2026-08-19).
   Zweiter Schritt aus C-129.
