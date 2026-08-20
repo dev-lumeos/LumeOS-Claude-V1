@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `288928f` auf `dev`.
+**Stand:** 2026-08-18, Anker `4518718` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 114 offen, 1 in Arbeit.
+`[cmd]` 112 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -215,11 +215,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-134** | Die Substanzen der drei Bestaende zusammenfuehren |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
 | **G-85** | Der Health score haengt an zwei Unbekannten |  |
-| **C-141** | Glukose steht zweimal in der Liste |  |
 | **C-142** | Die Sperrbegruendung nennt eine Tabelle, die es gibt |  |
 | **A-23** | `lint` bricht repoweit ab |  |
 | **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
-| **C-144** | `immediate_effect` ist 1–10, `next_day_effect` fehlt |  |
 | **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
 | **G-88** | Die Sitzungskarte auf `Today` |  |
 | **A-24** | Attrappenmarken sind kein brauchbares Mass |  |
@@ -234,7 +232,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
-| **C-106** | Die Tagesmengen wechseln streng ab |  |
 | **G-71** | `food_preferences_write` ueberschreibt die Herkunft |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -247,6 +244,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
 | **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
 | **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
+| **C-154** | Vier Policy-Abweichungen bei den Training-Stammdaten |  |
 
 ---
 
@@ -872,6 +870,37 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 
 
+
+### F-07-Folgepunkte (Coach-Portal, 2026-08-20) — Nummern vergibt der Orchestrator
+
+Quelle und Belege: `docs/ssot/146-coach-portal.md`. Bewusst ohne
+eigene Nummern angelegt (A-18: die Nummer vergibt der Orchestrator).
+
+- [ ] **Der Ausführer** — ein bestätigter `pending_actions`-Eintrag
+  ändert nur seinen Status; niemand wendet `payload` auf das Zielmodul
+  an, `action_log`/`undo_data` bleiben ungenutzt (seit ssot/139 offen,
+  in F-07 bewusst nicht gebaut: braucht die Autonomy-Wirkungsregeln).
+- [ ] **@supabase/ssr-0.1.0-Befund in `packages/shared` prüfen:**
+  `[cmd]` `createBrowserClient` mit `cookieOptions` ohne `cookies`
+  stürzt beim Session-Speichern ab, und `cookieOptions.name` wird im
+  BrowserClient nicht zum storageKey — **`apps/admin` nutzt genau
+  diesen Pfad** (Anmeldung dort gegenprüfen); Umgehung liegt als
+  Vorlage in `apps/coach/src/lib/browser-client.ts`.
+- [ ] **`apps/coach/.env.local` anlegen** (Tom — der Hook sperrt
+  `.env`-Dateien zu Recht): drei Variablen nach `apps/admin`-Muster,
+  Scope `coach`; bis dahin Startbefehl aus ssot/146.
+- [ ] **`testdaten-einspielen.ts`: unbekannte Argumente ablehnen.**
+  `[cmd]` `--database` wird still ignoriert (DB kommt aus
+  `PGDATABASE`) — ein Lauf ging dadurch gegen live und blieb nur dank
+  Ein-Transaktions-Bauweise folgenlos.
+- [ ] **`kette-ausfuehren.ts`: tar-Aufruf Git-Bash-fest machen**
+  (`--force-local` oder absoluter bsdtar-Pfad) — `[cmd]` MSYS-tar
+  liest `D:\…` als Hostnamen.
+- [ ] **Tokens-Duplikat auflösen:** `apps/coach/src/app/tokens.css`
+  ist eine dokumentierte Kopie von `apps/web/.../lume.css` — in ein
+  Paket ziehen, sobald `apps/web` frei ist.
+- [ ] **Coach-Passwort:** `coach@lumeos.app` / `LumeosCoach2026` aus
+  dem Seed — Tom ändert es bei Bedarf.
 
 ## D — Datenbank & Specs
 
@@ -2793,23 +2822,6 @@ Umsetzen angepasst werden.
   `[read]` **Zwei Unbekannte in einer Zahl** — deshalb bleibt die
   Dashboard-Kachel markiert.
 
-- [ ] **C-141: Glukose steht zweimal in der Liste** (neu 2026-08-19).
-  Befund aus G-84. **Identitaetsfrage, keine Zaehlung.**
-
-  `[cmd]` **Ein Rohmarker ohne LOINC** (*Glucose [Mass/volume]…*,
-  2026-06-06) **faellt auf Namensschluesselung zurueck.**
-
-  `[read]` **Folge:** *„Der Kopf sagt darum „2", wo ein Mensch einen
-  erhoehten Wert hat, an zwei Tagen gemessen."*
-
-  `[cmd]` **Nicht zusammengelegt** — der Agent hat es richtig gemeldet
-  statt entschieden. **Zwei Zeilen zu einer zu machen ist eine
-  Identitaetsentscheidung.**
-
-  `[read]` **Und C-84 hat dieselbe Klasse gefunden:** Die Spec
-  verwechselte Magnesium RBC mit Methaemoglobin. **Der
-  Identitaetsabgleich gegen LOINC ist seither Pflicht** — hier fehlt der
-  Code ganz.
 
 - [ ] **C-142: Die Sperrbegruendung nennt eine Tabelle, die es gibt**
   (neu 2026-08-19). Befund aus G-84.
@@ -2878,16 +2890,6 @@ Umsetzen angepasst werden.
   **Offen:** `[read]` Ob die Vorschau ueberhaupt eine zweite Zahl zeigen
   soll, oder ob sie nach dem Speichern die gespeicherte nachreicht.
 
-- [ ] **C-144: `immediate_effect` ist 1–10, `next_day_effect` fehlt**
-  (neu 2026-08-19). Kleiner Befund aus G-82.
-
-  `[cmd]` **`121_recovery_scores_modalities.sql:216`** — die Werte
-  liegen bei **6–8 auf einer 1–10-Skala**, die Anzeige nahm 1–5 an.
-  **Korrigiert.**
-
-  `[cmd]` **`next_day_effect` fehlte ganz** — der Entwurf nennt
-  `next_day_score_delta` als Sinn des Modalitaeten-Protokolls.
-  **Nachzutragen.**
 
 - [ ] **C-145: `Plan` braucht ein Schema, keine Anzeige** (neu
   2026-08-19). **Befund aus G-86, eindeutig gemessen.**
@@ -3164,23 +3166,6 @@ Umsetzen angepasst werden.
   brauchen eine Quelle, wie die Referenzbereiche bei den Naehrstoffen
   (C-45) und den Biomarkern (C-84). **Keine erfundene Zahl.**
 
-- [ ] **C-106: Die Tagesmengen wechseln streng ab** (neu 2026-08-19).
-  Beobachtung zu C-101.
-
-  `[cmd]` **Gemessen ueber zwanzig Tage:** 1.569 · 2.193 · 1.530 · 2.020
-  · 1.578 · 2.224 · 1.546 · 2.199 — **ein Saegezahn, niedrig und hoch
-  im Wechsel.**
-
-  `[read]` **Es ist Varianz, und der Tageswechsel zeigt jetzt etwas** —
-  das war das Ziel. **Aber niemand isst abwechselnd 1.500 und 2.200 g.**
-
-  `[cmd]` **Und die Zahl der Lebensmittel je Tag bleibt bei 12** — die
-  Auswahl wechselt, die Anzahl nicht.
-
-  `[read]` **Nicht dringend** — erst wenn jemand Wochenmuster oder
-  Trends prueft, faellt es auf. **Dann gehoert eine Wochenstruktur
-  hinein:** Trainingstage anders als Ruhetage, Wochenende anders als
-  Werktag.
 
 - [ ] **G-71: `food_preferences_write` ueberschreibt die Herkunft** (neu
   2026-08-19). **Befund aus G-67, betrifft G-65.**
@@ -3457,3 +3442,18 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Der Test braucht dann einen laufenden Dev-Server.** Heute
   laeuft er ohne. Das ist der eigentliche Preis, nicht der Umbau.
+
+- [ ] **C-154: Vier Policy-Abweichungen bei den Training-Stammdaten**
+  (neu 2026-08-20). Befund aus C-153.
+
+  `[cmd]` **Die Live-Schemapruefung ist nicht gruen** — *„vier
+  bestehende Training-Stammdaten-Policy-Abweichungen aus Schritt 100.
+  **Die Wegwerf-DB aus dem Kettenlauf hat diese Abweichung nicht.**"*
+
+  `[read]` **Das ist Drift** — dieselbe Klasse wie C-87, wo
+  `exercises_select` aus der Datenbank verschwunden war, **obwohl es in
+  der Kette definiert ist.**
+
+  `[cmd]` **Der C-153-Agent hat es gemeldet statt nebenbei repariert.**
+  **Zu klaeren, ob ein Neuaufbau reicht oder ob etwas die Policies
+  entfernt.**

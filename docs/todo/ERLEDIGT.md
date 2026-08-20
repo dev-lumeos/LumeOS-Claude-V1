@@ -5805,6 +5805,85 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Erledigt 2026-08-20:** Der neue Bestand fuehrt `maoi`,
   und `rule_trait_mapping.json` bildet es auf `MAOI` ab.
 
+- [x] **C-106: Die Tagesmengen wechseln streng ab** (neu 2026-08-19).
+  Beobachtung zu C-101.
+
+  `[cmd]` **Gemessen ueber zwanzig Tage:** 1.569 · 2.193 · 1.530 · 2.020
+  · 1.578 · 2.224 · 1.546 · 2.199 — **ein Saegezahn, niedrig und hoch
+  im Wechsel.**
+
+  `[read]` **Es ist Varianz, und der Tageswechsel zeigt jetzt etwas** —
+  das war das Ziel. **Aber niemand isst abwechselnd 1.500 und 2.200 g.**
+
+  `[cmd]` **Und die Zahl der Lebensmittel je Tag bleibt bei 12** — die
+  Auswahl wechselt, die Anzahl nicht.
+
+  `[read]` **Nicht dringend** — erst wenn jemand Wochenmuster oder
+  Trends prueft, faellt es auf. **Dann gehoert eine Wochenstruktur
+  hinein:** Trainingstage anders als Ruhetage, Wochenende anders als
+  Werktag.
+
+  `[cmd]` **Erledigt 2026-08-20.** Der Saegezahn ist durch eine
+  **Wochenstruktur** ersetzt — Trainingstage und Folgetage beeinflussen
+  die Tagesmenge, **die Positionszahl variiert mit.**
+
+  `[cmd]` **Gemessen ueber 28 Tage:** sonntags durchweg am wenigsten
+  (1.624 · 1.697 · 1.684 · 1.740), donnerstags oft am meisten.
+  **Positionszahl 12 bis 14.**
+
+  | | |
+  |---|---|
+  | verschiedene Tagesgramm | **147** |
+  | verschiedene Kalorienwerte | **175** |
+  | verschiedene Positionszahlen | **9** |
+
+  `[cmd]` **Und die Bilanz ist besser geworden:** `adaptive_tdee`
+  `complete`, **Abstand −17,6 kcal** — von −1.029,6 ueber −55,0.
+
+- [x] **C-144: `immediate_effect` ist 1–10, `next_day_effect` fehlt**
+  (neu 2026-08-19). Kleiner Befund aus G-82.
+
+  `[cmd]` **`121_recovery_scores_modalities.sql:216`** — die Werte
+  liegen bei **6–8 auf einer 1–10-Skala**, die Anzeige nahm 1–5 an.
+  **Korrigiert.**
+
+  `[cmd]` **`next_day_effect` fehlte ganz** — der Entwurf nennt
+  `next_day_score_delta` als Sinn des Modalitaeten-Protokolls.
+  **Nachzutragen.**
+
+  `[cmd]` **Erledigt 2026-08-20.** `next_day_score_delta` steht auf
+  **89 von 89** Modalitaeten.
+
+  `[read]` **Damit zeigt das Protokoll, was es zeigen soll:** Wer am
+  Montag in die Sauna geht, sieht am Dienstag den Unterschied.
+  **Arithmetik ueber zwei Tage, keine Bewertung.**
+
+- [x] **C-141: Glukose steht zweimal in der Liste** (neu 2026-08-19).
+  Befund aus G-84. **Identitaetsfrage, keine Zaehlung.**
+
+  `[cmd]` **Ein Rohmarker ohne LOINC** (*Glucose [Mass/volume]…*,
+  2026-06-06) **faellt auf Namensschluesselung zurueck.**
+
+  `[read]` **Folge:** *„Der Kopf sagt darum „2", wo ein Mensch einen
+  erhoehten Wert hat, an zwei Tagen gemessen."*
+
+  `[cmd]` **Nicht zusammengelegt** — der Agent hat es richtig gemeldet
+  statt entschieden. **Zwei Zeilen zu einer zu machen ist eine
+  Identitaetsentscheidung.**
+
+  `[read]` **Und C-84 hat dieselbe Klasse gefunden:** Die Spec
+  verwechselte Magnesium RBC mit Methaemoglobin. **Der
+  Identitaetsabgleich gegen LOINC ist seither Pflicht** — hier fehlt der
+  Code ganz.
+
+  `[cmd]` **Entschieden 2026-08-20: getrennt lassen.** *„`1558-6` fuer
+  den Fasting-Verlauf, rohes Glukose bleibt `ambiguous`, **weil der
+  Labor-Kontext fehlt**."*
+
+  `[read]` **Richtig:** Ohne zu wissen, ob nuechtern gemessen wurde,
+  waere jede Zusammenlegung eine Annahme — **und die Bereiche
+  unterscheiden sich.**
+
 
 
 ## Erledigt am 2026-08-05
