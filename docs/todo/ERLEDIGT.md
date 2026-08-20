@@ -5678,6 +5678,66 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **Schemapruefung auf Wegwerf-DB: 40 von 40, Exit 0.**
 
+- [x] **C-139: Die 503 Wirkstoffe sind nicht importierbar** (neu
+  2026-08-19). **Rueckmeldung an den Rechercheweg (A-21).**
+
+  `[cmd]` **Gemessen am 2026-08-19:** Von 56 auf 503 gewachsen — **dabei
+  fielen alle sieben Feldvertragsklassen weg.**
+
+  | | in den 503 |
+  |---|---|
+  | `anticoagulant:warfarin`, `SSRI`, `RAAS_inhibitor` | **je 0** |
+  | `CYP3A4_substrate`, `sedative`, `antidiabetic`, `MAOI` | **je 0** |
+  | `unclassified` | **224 von 503** |
+  | verschiedene Klassen | **171** |
+
+  `[cmd]` **Und die Kennungen bestaetigen es:** `ATC` und `CAS` stehen
+  auf **genau 56** — den alten. Die 447 neuen tragen `RxNorm` (447) und
+  `UNII` (425), **aber kein ATC.**
+
+  `[read]` **Deshalb steht der Import weiter auf 56.** Die 29 Warnregeln
+  pruefen `drug_class` — **gegen die 503 liefen sie ins Leere.**
+
+  `[read]` **ATC waere die Loesung:** Warfarin ist `B01AA03`, `B01A` ist
+  die Antithrombotika-Gruppe; Sertralin `N06AB06`, `N06AB` sind die
+  SSRI. **Mit vollstaendigem ATC ist die Zuordnung mechanisch
+  ableitbar.**
+
+  `[cmd]` **Die Rueckmeldung ist formuliert und an ChatGPT uebergeben**
+  (2026-08-19), zusammen mit vier Vorschlaegen fuer den QA-Lauf.
+
+  `[cmd]` **Erledigt 2026-08-20 durch den Rechercheweg.** Die
+  Rueckmeldung ging am 2026-08-19 an ChatGPT, **die Antwort kam als
+  `data/platform/rule_trait_mapping.json`** (crawl_021A).
+
+  ### Die Loesung ist besser als der Vorschlag
+
+  `[read]` **Der Orchestrator schlug ATC vor** — Warfarin `B01AA03`,
+  die Klasse steckt im Code. **Kimi hat stattdessen eine
+  Zuordnungstabelle geliefert:** kanonische Klasse → Regel-Trait.
+
+  `[cmd]` `ssri → SSRI` · `maoi → MAOI` · `arb → RAAS_inhibitor,
+  antihypertensive` · `benzodiazepine → benzodiazepine, sedative`.
+
+  `[read]` **Und der entscheidende Satz steht in der Beschreibung:**
+  *„CYP-Regel-Traits werden hier **nicht** abgebildet — sie leiten sich
+  aus den tatsaechlichen `cyp`-Feldern ab, **nie aus Klassennamen**."*
+
+  `[cmd]` **Das ist genauer als ATC:** Ein Wirkstoff kann
+  `CYP3A4_substrate` sein, **ohne dass seine Klasse es verraet.**
+
+  ### Und die Kuration ist mitgewachsen
+
+  | | vorher | nachher |
+  |---|---|---|
+  | Wirkstoffe | 503 | **498** |
+  | `unclassified` | **224 (45 %)** | **33 (7 %)** |
+  | Quellen | 1.035 | **1.598** |
+  | Crawler-Cache | 96 MB | **entfernt** |
+
+  `[cmd]` **`ATC` steht weiter auf 56 von 498** — offen, **aber nicht
+  mehr noetig**, weil die Zuordnungstabelle die Luecke schliesst.
+
 
 
 ## Erledigt am 2026-08-05

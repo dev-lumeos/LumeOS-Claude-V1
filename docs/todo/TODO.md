@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `f672f25` auf `dev`.
+**Stand:** 2026-08-18, Anker `f1cb2bc` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 113 offen, 1 in Arbeit.
+`[cmd]` 112 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -243,7 +243,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-75** | Die alte Oberflaeche nennt den BLS ebenfalls |  |
 | **G-77** | Streaks bei 32 Auslassern |  |
 | **G-78** | Ein Fehler, den nur der Browser zeigte |  |
-| **C-139** | Die 503 Wirkstoffe sind nicht importierbar |  |
 | **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
 | **A-28** | Der Attrappen-Test blockiert das Gate |  |
 
@@ -3299,33 +3298,6 @@ Umsetzen angepasst werden.
   Adresszeile landet im Verlauf und in jedem Protokoll.
 
 
-- [ ] **C-139: Die 503 Wirkstoffe sind nicht importierbar** (neu
-  2026-08-19). **Rueckmeldung an den Rechercheweg (A-21).**
-
-  `[cmd]` **Gemessen am 2026-08-19:** Von 56 auf 503 gewachsen — **dabei
-  fielen alle sieben Feldvertragsklassen weg.**
-
-  | | in den 503 |
-  |---|---|
-  | `anticoagulant:warfarin`, `SSRI`, `RAAS_inhibitor` | **je 0** |
-  | `CYP3A4_substrate`, `sedative`, `antidiabetic`, `MAOI` | **je 0** |
-  | `unclassified` | **224 von 503** |
-  | verschiedene Klassen | **171** |
-
-  `[cmd]` **Und die Kennungen bestaetigen es:** `ATC` und `CAS` stehen
-  auf **genau 56** — den alten. Die 447 neuen tragen `RxNorm` (447) und
-  `UNII` (425), **aber kein ATC.**
-
-  `[read]` **Deshalb steht der Import weiter auf 56.** Die 29 Warnregeln
-  pruefen `drug_class` — **gegen die 503 liefen sie ins Leere.**
-
-  `[read]` **ATC waere die Loesung:** Warfarin ist `B01AA03`, `B01A` ist
-  die Antithrombotika-Gruppe; Sertralin `N06AB06`, `N06AB` sind die
-  SSRI. **Mit vollstaendigem ATC ist die Zuordnung mechanisch
-  ableitbar.**
-
-  `[cmd]` **Die Rueckmeldung ist formuliert und an ChatGPT uebergeben**
-  (2026-08-19), zusammen mit vier Vorschlaegen fuer den QA-Lauf.
 
 - [ ] **A-27: Zwei Agenten, zwei Attrappen-Erwartungen** (neu
   2026-08-20). **Das Gate ist rot.**
