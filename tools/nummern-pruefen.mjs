@@ -1,109 +1,208 @@
 #!/usr/bin/env node
 // Prueft die Nummernvergabe in docs/todo/.
 //
-// Anlass (2026-08-21): Neun Nummern waren gleichzeitig doppelt vergeben \u2014
+// Anlass (2026-08-21): Neun Nummern waren gleichzeitig doppelt vergeben --
 // darunter A-18, das selbst "Berichtsnummern kollidieren" heisst. Die Regel
 // stand in CLAUDE.md und griff nicht, weil sie ein Absatz war und kein
 // Werkzeug.
 //
 // Prueft:
-//   1. Dubletten innerhalb von TODO.md
-//   2. Dubletten innerhalb von ERLEDIGT.md
-//   3. Nummern, die in beiden Dateien stehen
-//   4. Den Zaehler im TODO-Kopf gegen die Datei
+//   dublette-todo       Dubletten innerhalb von TODO.md
+//   dublette-erledigt   Dubletten innerhalb von ERLEDIGT.md
+//   beide-dateien       Nummern, die in beiden Dateien stehen
+//   kopfzaehler         Den Zaehler im TODO-Kopf gegen die Datei
 //
-// Gibt ausserdem die hoechste Nummer je Reihe aus, damit der Orchestrator
-// nicht raten muss.
+// Gegenprobe: LUMEOS_NUMMERN_SELBSTTEST=1 baut je Pruefung einen eigenen
+// Fehler ein und verlangt, dass genau diese Pruefung anschlaegt.
 //
-// Gegenprobe: LUMEOS_NUMMERN_SELBSTTEST=1 baut eine Dublette ein und
-// erwartet Exitcode 1.
+// Die alte Fassung hing dafuer eine A-01-Zeile an TODO.md an. A-01 steht
+// dort nicht, sondern in ERLEDIGT.md -- angeschlagen ist deshalb
+// beide-dateien, gemeldet wurde dublette-todo. Der Selbsttest war gruen,
+// ohne dass die benannte Pruefung je gelaufen waere. Eine Pruefung, die
+// beim Selbsttest die falsche Ursache nennt, ist nicht belegt.
 
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const WURZEL = resolve(process.cwd())
-const TODO = resolve(WURZEL, 'docs/todo/TODO.md')
-const ERLEDIGT = resolve(WURZEL, 'docs/todo/ERLEDIGT.md')
-const SELBSTTEST = process.env.LUMEOS_NUMMERN_SELBSTTEST === '1'
+const PFAD = {
+  todo: resolve(WURZEL, 'docs/todo/TODO.md'),
+  erledigt: resolve(WURZEL, 'docs/todo/ERLEDIGT.md')
+}
 
-const ZEILE = /^- \[( |x|~)\] \*\*([A-Z]+-\d+[a-z]?):/
+const ZEILE = /^[ \t]*- \[( |x|~)\] \*\*([A-Z]+-\d+[a-z]?):/
 
-function punkte(pfad, zusatz = '') {
-  const text = readFileSync(pfad, 'utf8') + zusatz
+function punkte (text) {
   const aus = []
   text.split('\n').forEach((z, i) => {
     const m = z.match(ZEILE)
-    if (m) aus.push({ nr: m[2], zeile: i + 1, titel: z.slice(0, 90) })
+    if (m) aus.push({ zustand: m[1], nr: m[2], zeile: i + 1, titel: z.trim().slice(0, 90) })
   })
   return aus
 }
 
-function dubletten(liste) {
-  const zaehler = new Map()
-  for (const p of liste) {
-    if (!zaehler.has(p.nr)) zaehler.set(p.nr, [])
-    zaehler.get(p.nr).push(p)
-  }
-  return [...zaehler.entries()].filter(([, v]) => v.length > 1)
+function ersteNummer (text) {
+  const p = punkte(text)
+  if (!p.length) throw new Error('keine Punkte gefunden')
+  return p[0].nr
 }
 
-const zusatz = SELBSTTEST ? '\n- [ ] **A-01: eingebaute Dublette fuer den Selbsttest**\n' : ''
-const offen = punkte(TODO, zusatz)
-const fertig = punkte(ERLEDIGT)
+// Alle Pruefungen an einer Stelle. Gibt eine Liste von Befunden zurueck,
+// jeder mit dem Namen der Pruefung, die ihn gefunden hat -- der Selbsttest
+// haengt daran.
+function pruefe (texte) {
+  const fehler = []
+  const offen = punkte(texte.todo)
+  const fertig = punkte(texte.erledigt)
 
-let fehler = 0
+  for (const [datei, liste, pruefung] of [
+    ['TODO.md', offen, 'dublette-todo'],
+    ['ERLEDIGT.md', fertig, 'dublette-erledigt']
+  ]) {
+    const nach = new Map()
+    for (const p of liste) {
+      if (!nach.has(p.nr)) nach.set(p.nr, [])
+      nach.get(p.nr).push(p)
+    }
+    for (const [nr, vor] of nach) {
+      if (vor.length > 1) {
+        fehler.push({
+          pruefung,
+          text: `${datei}: ${nr} steht ${vor.length}x -- Zeilen ${vor.map(v => v.zeile).join(', ')}`
+        })
+      }
+    }
+  }
 
-for (const [datei, liste] of [['TODO.md', offen], ['ERLEDIGT.md', fertig]]) {
-  for (const [nr, vor] of dubletten(liste)) {
-    console.error(`[nummern] ${datei}: ${nr} steht ${vor.length}x`)
-    vor.forEach(v => console.error(`            Zeile ${v.zeile}: ${v.titel}`))
-    fehler++
+  const fertigNr = new Set(fertig.map(p => p.nr))
+  for (const p of offen) {
+    if (fertigNr.has(p.nr)) {
+      fehler.push({
+        pruefung: 'beide-dateien',
+        text: `${p.nr} steht offen UND erledigt -- TODO Zeile ${p.zeile}`
+      })
+    }
+  }
+
+  const kopf = texte.todo.slice(0, 600)
+  const m = kopf.match(/\*\*Stand:[^*]*\*\*\s*(\d+)\s+offen/)
+  const gezaehltOffen = offen.filter(p => p.zustand === ' ').length
+  if (!m) {
+    fehler.push({
+      pruefung: 'kopfzaehler',
+      text: 'Kein Zaehler im Kopf gefunden -- Format "**Stand: DATUM.** N offen"'
+    })
+  } else if (Number(m[1]) !== gezaehltOffen) {
+    fehler.push({
+      pruefung: 'kopfzaehler',
+      text: `Kopf sagt ${m[1]} offen, gezaehlt sind ${gezaehltOffen}`
+    })
+  }
+
+  return { fehler, offen, fertig, gezaehltOffen }
+}
+
+function lesen () {
+  return {
+    todo: readFileSync(PFAD.todo, 'utf8'),
+    erledigt: readFileSync(PFAD.erledigt, 'utf8')
   }
 }
 
-const fertigNr = new Set(fertig.map(p => p.nr))
-for (const p of offen) {
-  if (fertigNr.has(p.nr)) {
-    console.error(`[nummern] ${p.nr} steht offen UND erledigt \u2014 TODO Zeile ${p.zeile}`)
-    fehler++
-  }
+// --- Gegenprobe -----------------------------------------------------------
+// Jeder Fall baut genau einen Fehler ein und verlangt, dass genau die
+// benannte Pruefung anschlaegt -- nicht irgendeine. Faelle, die einen
+// offenen Punkt hinzufuegen, ziehen den Kopfzaehler mit, sonst schluege
+// kopfzaehler mit an und der Fall bewiese zwei Dinge halb.
+
+function kopfAnpassen (todo, delta) {
+  return todo.replace(/(\*\*Stand:[^*]*\*\*\s*)(\d+)(\s+offen)/,
+    (_, a, n, b) => a + (Number(n) + delta) + b)
 }
 
-// Zaehler im Kopf
-const kopf = readFileSync(TODO, 'utf8').slice(0, 600)
-const m = kopf.match(/\*\*Stand:[^*]*\*\*\s*(\d+)\s+offen/)
-const echtOffen = offen.filter(p => p.titel.startsWith('- [ ]')).length
-  - (SELBSTTEST ? 1 : 0)
-if (m) {
-  const behauptet = Number(m[1])
-  if (behauptet !== echtOffen) {
-    console.error(`[nummern] Kopf sagt ${behauptet} offen, gezaehlt sind ${echtOffen}`)
-    fehler++
-  }
-} else {
-  console.error('[nummern] Kein Zaehler im Kopf gefunden \u2014 Format "**Stand: DATUM.** N offen"')
-  fehler++
+function faelle (basis) {
+  const inTodo = ersteNummer(basis.todo)
+  const inErledigt = ersteNummer(basis.erledigt)
+  return [
+    {
+      pruefung: 'dublette-todo',
+      was: `${inTodo} ein zweites Mal in TODO.md`,
+      bau: t => ({
+        ...t,
+        todo: kopfAnpassen(`${t.todo}\n- [ ] **${inTodo}: eingebaute Dublette**\n`, 1)
+      })
+    },
+    {
+      pruefung: 'dublette-erledigt',
+      was: `${inErledigt} ein zweites Mal in ERLEDIGT.md`,
+      bau: t => ({ ...t, erledigt: `${t.erledigt}\n- [x] **${inErledigt}: eingebaute Dublette**\n` })
+    },
+    {
+      pruefung: 'beide-dateien',
+      was: `${inErledigt} zusaetzlich als offener Punkt`,
+      bau: t => ({
+        ...t,
+        todo: kopfAnpassen(`${t.todo}\n- [ ] **${inErledigt}: offen und erledigt zugleich**\n`, 1)
+      })
+    },
+    {
+      pruefung: 'kopfzaehler',
+      was: 'Kopfzaehler um eins verstellt',
+      bau: t => ({ ...t, todo: kopfAnpassen(t.todo, 1) })
+    }
+  ]
 }
 
-if (fehler === 0) {
+function selbsttest (basis) {
+  const grund = pruefe(basis).fehler
+  if (grund.length) {
+    console.error('[nummern] SELBSTTEST: der Ausgangsstand ist schon rot --')
+    grund.forEach(f => console.error(`            ${f.pruefung}: ${f.text}`))
+    return 1
+  }
+
+  let schlecht = 0
+  for (const fall of faelle(basis)) {
+    const getroffen = pruefe(fall.bau(basis)).fehler.map(f => f.pruefung)
+    const einzig = getroffen.length === 1 && getroffen[0] === fall.pruefung
+    if (einzig) {
+      console.log(`[nummern] ok    ${fall.pruefung} -- ${fall.was}`)
+    } else {
+      schlecht++
+      const gefunden = getroffen.length ? getroffen.join(', ') : 'nichts'
+      console.error(`[nummern] ROT   ${fall.pruefung} -- ${fall.was}: angeschlagen hat ${gefunden}`)
+    }
+  }
+
+  if (schlecht) {
+    console.error(`[nummern] SELBSTTEST: ${schlecht} von ${faelle(basis).length} Faellen nicht belegt.`)
+    return 1
+  }
+  console.log(`[nummern] SELBSTTEST bestanden -- ${faelle(basis).length} Pruefungen einzeln belegt.`)
+  return 0
+}
+
+// --- Lauf -----------------------------------------------------------------
+
+const basis = lesen()
+
+if (process.env.LUMEOS_NUMMERN_SELBSTTEST === '1') {
+  process.exit(selbsttest(basis))
+}
+
+const { fehler, offen, fertig } = pruefe(basis)
+
+for (const f of fehler) console.error(`[nummern] ${f.pruefung}: ${f.text}`)
+
+if (fehler.length === 0) {
   const hoch = new Map()
   for (const p of [...offen, ...fertig]) {
     const [pre, num] = p.nr.split(/-(?=\d)/)
-    const n = parseInt(num, 10)
-    hoch.set(pre, Math.max(hoch.get(pre) ?? 0, n))
+    hoch.set(pre, Math.max(hoch.get(pre) ?? 0, parseInt(num, 10)))
   }
   const liste = [...hoch.entries()].sort().map(([k, v]) => `${k}-${v}`).join(' \u00b7 ')
   console.log(`[nummern] ${offen.length} offen, ${fertig.length} erledigt, keine Dublette.`)
   console.log(`[nummern] Naechste freie Nummer je Reihe nach: ${liste}`)
 }
 
-if (SELBSTTEST) {
-  if (fehler === 0) {
-    console.error('[nummern] SELBSTTEST: die eingebaute Dublette wurde NICHT gefunden.')
-    process.exit(1)
-  }
-  console.log('[nummern] SELBSTTEST bestanden \u2014 die Dublette wurde gefunden.')
-  process.exit(0)
-}
-
-process.exit(fehler > 0 ? 1 : 0)
+process.exit(fehler.length > 0 ? 1 : 0)
