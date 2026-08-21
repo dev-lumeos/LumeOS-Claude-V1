@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-21.** 166 offen, 1 in Arbeit.
+**Stand: 2026-08-21.** 165 offen, 1 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -4715,31 +4715,3 @@ Umsetzen angepasst werden.
   `[read]` **Es waere die ganze Gruppe *Elemente* (16 Codes)** —
   **oder nichts**, weil die Karte schon so heisst. **Zu entscheiden, ob
   ein Alias auf eine ganze Karte zeigen darf.**
-
-- [ ] **C-188: Der Alias-Waechter steht auf 291, Kimi liefert 290**
-  (neu 2026-08-21). Befund aus C-164. **Bricht den Kettenlauf.**
-
-  `[cmd]` **`132_substance_alias_bridge.ts` erwartet 291 Substanzen** —
-  gemessen liegen **290** vor:
-
-  | | |
-  |---|---|
-  | `supplements.jsonl` | 154 |
-  | **`peptides.jsonl`** | **61** (war 62) |
-  | `performance_compounds.jsonl` | 75 |
-
-  `[cmd]` **Die Ursache steht in `crawl_027`:** *„Duplikat `Melanotan I`
-  in `peptides.jsonl` gemergt (62→61, geloggt — keine stille
-  Loeschung)."*
-
-  `[read]` **Dieselbe Falle wie C-138** — dort stand der
-  Medikamenten-Waechter auf *„genau 56"*, als die Quelle auf 503 wuchs.
-  **Eine Erwartung auf die Kommastelle misst die Quelle, nicht das
-  Ergebnis.**
-
-  `[cmd]` **Und C-185 haelt vier Identitaetsfehler fest**, die
-  `crawl_027` behoben hat — **die Bruecke muss ohnehin nachgezogen
-  werden.**
-
-  **Zu tun:** Untergrenze statt Gleichheit, **und die 290 neu
-  einlesen.**

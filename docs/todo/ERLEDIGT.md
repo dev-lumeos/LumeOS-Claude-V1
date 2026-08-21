@@ -6611,6 +6611,43 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Die restlichen 2 Sekunden sind der Dev-Modus** — 1.354 kB
   `main-app.js` unkomprimiert, HMR-Verbindung.
 
+- [x] **C-188: Der Alias-Waechter steht auf 291, Kimi liefert 290**
+  (neu 2026-08-21). Befund aus C-164. **Bricht den Kettenlauf.**
+
+  `[cmd]` **`132_substance_alias_bridge.ts` erwartet 291 Substanzen** —
+  gemessen liegen **290** vor:
+
+  | | |
+  |---|---|
+  | `supplements.jsonl` | 154 |
+  | **`peptides.jsonl`** | **61** (war 62) |
+  | `performance_compounds.jsonl` | 75 |
+
+  `[cmd]` **Die Ursache steht in `crawl_027`:** *„Duplikat `Melanotan I`
+  in `peptides.jsonl` gemergt (62→61, geloggt — keine stille
+  Loeschung)."*
+
+  `[read]` **Dieselbe Falle wie C-138** — dort stand der
+  Medikamenten-Waechter auf *„genau 56"*, als die Quelle auf 503 wuchs.
+  **Eine Erwartung auf die Kommastelle misst die Quelle, nicht das
+  Ergebnis.**
+
+  `[cmd]` **Und C-185 haelt vier Identitaetsfehler fest**, die
+  `crawl_027` behoben hat — **die Bruecke muss ohnehin nachgezogen
+  werden.**
+
+  **Zu tun:** Untergrenze statt Gleichheit, **und die 290 neu
+  einlesen.**
+
+  `[cmd]` **Erledigt 2026-08-21.** `MIN_KIMI_SUBSTANCE_COUNT = 290` —
+  **Untergrenze statt Gleichheit.**
+
+  `[read]` **Dieselbe Loesung wie C-138**, wo der Medikamenten-Waechter
+  auf *„genau 56"* stand. **Der Bestand soll wachsen.**
+
+  `[cmd]` **Und die Bruecke ist mitgewachsen:** `substance_aliases` von
+  **1.132 auf 1.541 Zeilen.**
+
 
 
 ## Erledigt am 2026-08-05
