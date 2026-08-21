@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `7ba0b7c` auf `dev`.
+**Stand:** 2026-08-18, Anker `56fa927` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 125 offen, 1 in Arbeit.
+`[cmd]` 128 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -233,6 +233,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
+| **GO-22** | Sechs Karten oder zwoelf? |  |
+| **G-126** | Vier Reste aus G-122 |  |
+| **GO-23** | Deckungsgrenze bei unvollstaendigen Summen |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -3370,46 +3373,45 @@ Umsetzen angepasst werden.
   Ausschluss-Parameter, die Allergen-Schalter wirken nur auf der
   angezeigten Seite."*
 
-- [ ] **GO-22: Sechs Karten oder zwoelf?** (neu 2026-08-20).
-  **Entscheidung fuer Tom.** Nebeneffekt aus G-122.
+- [ ] **GO-22: Acht Karten, dem Baum folgend** (entschieden
+  2026-08-20). Nebeneffekt aus G-122, online recherchiert.
 
-  `[cmd]` **Seit der Baum echt ist, haben sechs Gruppen keine Wurzel
-  mehr:**
+  **Tom, 2026-08-20:** *„Das passt dann auch mit der Gruppierung von
+  Bluttests — macht Sinn."*
 
-  | Gruppe | Wurzeln | Eintraege |
-  |---|---|---|
-  | **Fettsaeuren** | **0** | 36 |
-  | **Aminosaeuren** | **0** | 19 |
-  | **Kohlenhydrate** | **0** | 11 |
-  | Ballaststoffe · Organische Saeuren · Zuckeralkohole | 0 | 6 · 5 · 3 |
-  | Elemente | 16 | 16 |
-  | Wasserloesliche Vitamine | 9 | 12 |
+  ### Was die Recherche ergab
 
-  `[read]` **Ihre Wurzeln haengen unter `FAT`, `PROT`, `CHO`** — also
-  unter *Makronaehrstoffe*. **`group_de` und `parent_code`
-  widersprechen sich bei 28 Kindern.**
+  `[cmd]` **Die wissenschaftliche Klassifikation kennt sechs
+  Naehrstoffklassen** — Kohlenhydrate, Lipide, Proteine, Vitamine,
+  Mineralien, Wasser (Britannica, NCBI StatPearls).
 
-  `[cmd]` **Der G-122-Agent hat die Karten der Wurzel folgen lassen** —
-  *„alles andere haette denselben Ast zerrissen."* **Sechs Karten statt
-  zwoelf.**
+  `[cmd]` **Cronometer** — der einzige Vergleichsmassstab mit 84
+  Naehrstoffen — **macht es genauso:** *„Gesamtfettzufuhr und darunter
+  die Aufschluesselung in einfach ungesaettigte, mehrfach ungesaettigte
+  (inklusive Omega-3 und Omega-6), gesaettigte und Transfette."*
 
-  **Zu entscheiden:**
+  `[read]` **Fettsaeuren stehen dort unter Fett, Aminosaeuren unter
+  Protein** — kein eigener Bereich. **Der Baum-Ansatz ist also nicht nur
+  technisch richtig, sondern auch der Marktstandard.**
 
-  **A — so lassen.** `[read]` Der Baum ist die Wahrheit, die Karten
-  folgen ihm. **Wer Fettsaeuren sucht, oeffnet Makronaehrstoffe → Fett.**
+  ### Die Entscheidung
 
-  **B — zwoelf Karten, Aeste duerfen ueber Karten laufen.** `[read]`
-  Vertrauter, aber ein Kind steht dann in einer anderen Karte als sein
-  Elternteil.
+  `[cmd]` **Acht Karten**, nicht sechs — **die drei Makro-Wurzeln
+  bekommen eigene:**
 
-  **C — `group_de` an den Baum angleichen.** `[cmd]` Dann traegt jede
-  Fettsaeure `group_de = 'Makronaehrstoffe'` — **und die zwoelf Gruppen
-  verschwinden aus den Daten**, nicht nur aus der Anzeige.
+  | | |
+  |---|---|
+  | **Kohlenhydrate** | mit Zuckern und Staerke darunter |
+  | **Fette** | mit den 36 Fettsaeuren darunter |
+  | **Protein** | mit den 19 Aminosaeuren darunter |
+  | Fettloesliche Vitamine · Wasserloesliche Vitamine | |
+  | Elemente · Energie · Sonstige | |
 
-  `[read]` **Das Mockup bildet die Gruppen aus den Top-Level-Eintraegen**
-  — es haette also A gemacht.
+  `[read]` **Damit bleiben die vertrauten Ueberschriften**, die Aeste
+  bleiben ganz — **und es passt zur Gruppierung der Bluttests**, wo
+  Lipide, Elektrolyte und Vitamine ebenfalls getrennt stehen.
 
-- [ ] **G-126: Vier Reste aus G-122** (neu 2026-08-20).
+- [ ] **G-126: Drei Reste aus G-122** (neu 2026-08-20).
 
   `[cmd]` **`CHOL` → `CHORL` (Cholesterin) waere mappbar und fehlt** —
   ein Erklaertext mehr. **Codex.**
@@ -3417,21 +3419,86 @@ Umsetzen angepasst werden.
   `[cmd]` **28 Codes haben keinen Erklaertext** — 26 einzelne
   Fettsaeuren, `OLSAC`, `F18:2C9T11`.
 
-  `[cmd]` **`SE` (Selen) hat keinen Zielcode** — *„BLS fuehrt kein
-  Selen."* `[read]` **Das ist eine echte Luecke im Lebensmittelbestand**,
-  kein Zuordnungsfehler.
+  ### Selen: nachgemessen, der Befund stimmt
 
-- [ ] **GO-23: Deckungsgrenze bei unvollstaendigen Summen** (neu
-  2026-08-20). **Entscheidung fuer Tom.** Vorschlag aus G-122.
+  `[cmd]` **BLS 4.0 fuehrt kein Selen** — `nutrient_defs` hat **16
+  Elemente**, Selen ist nicht dabei. Der `SE`-Treffer war `SER` (Serin).
 
-  `[cmd]` **Gemessen:** 59 Codes zu 100 % gedeckt, **20 bei 80–99 %, 50
+  | | |
+  |---|---|
+  | gefuehrt | NACL, NA, CLD, K, CA, MG, P, S, FE, ZN, ID, CU, MN, FD, CR, MO |
+  | **fehlt** | **Selen** |
+
+  `[read]` **Das ist eine echte Luecke im Lebensmittelbestand**, kein
+  Zuordnungsfehler — **und sie ist relevant:** Selen ist essenziell,
+  EFSA fuehrt einen AI-Wert, und es steht in jeder
+  Naehrstoffempfehlung.
+
+  **Zu klaeren:** Bleibt es weg, oder kommt eine zweite Quelle dazu?
+  `[cmd]` **BLS ist als alleinige Quelle festgelegt** — das waere eine
+  Produktentscheidung.
+
+- [ ] **G-127: Der Naehrstoff-Tab braucht eine Volltextsuche** (neu
+  2026-08-20). **Toms Befund.**
+
+  **Tom, 2026-08-20:** *„Etwas Wichtiges fehlt noch: eine Volltextsuche,
+  falls der User etwas Spezielles sucht — die Suche muss auch
+  menschlich funktionieren."*
+
+  `[cmd]` **138 Naehrstoffe in acht Karten, vier Ebenen tief.** `[read]`
+  **Wer *„Omega 3"* sucht, soll nicht durch Makro → Fett → FAPU
+  klicken muessen.**
+
+  ### Was *„menschlich"* hier heisst
+
+  `[cmd]` **Die Namen sind amtlich, nicht umgangssprachlich:**
+  *„Fettsaeure C20:5 n-3 all-cis (Eicosapentaensaeure, EPA)"*,
+  *„Vitamin A, Retinol-Aktivitaets-Aequivalent (RAE)"*.
+
+  `[read]` **Wonach ein Mensch sucht:** *Omega 3*, *EPA*, *Vitamin C*,
+  *Eisen*, *Zucker*. **Und die Suche muss auch den Code treffen** —
+  `FAPUN3`, `VITC`, `FE`.
+
+  `[cmd]` **Der Unterbau existiert:** `food_aliases` hat 32.845 Zeilen,
+  `biomarker_aliases` 292. **Fuer Naehrstoffe gibt es nichts.**
+
+  `[read]` **Und die Erklaerungen aus C-161 sind durchsuchbar** — wer
+  *„Skorbut"* eingibt, sollte Vitamin C finden. **110 Texte liegen
+  bereit.**
+
+  `[cmd]` **Und ein Treffer oeffnet den Ast** — sonst ist er unsichtbar.
+
+- [ ] **G-128: Der Filter *„Auffaellig"* verbirgt die Ursache** (neu
+  2026-08-20). **Toms Befund.**
+
+  **Tom, 2026-08-20:** *„Unlogische Darstellung, wenn der Filter
+  Auffaellig gewaehlt wird: Man sieht Probleme — aber wenn ein Total
+  auffaellig als Summe ist, muss man die Childs auch sehen, die das
+  Total erzeugen."*
+
+  `[cmd]` **Heute greift die Regel nur nach oben:** *„Unter Auffaellig
+  bleibt `FASAT` stehen, weil die Linolsaeure darunter bei 94 %
+  liegt."* (G-121)
+
+  `[read]` **Was fehlt, ist die Gegenrichtung:** **Ist der Elternteil
+  auffaellig, gehoeren seine Kinder mit ins Bild** — sie erzeugen die
+  Summe.
+
+  `[cmd]` **Beispiel aus Toms Bildschirmfoto:** *Vitamin A 411 %, ueber
+  UL.* **Die Ursache steht in den Kindern** — Beta-Carotin mit 30.982
+  µg. **Ohne sie sieht man das Problem, aber nicht, woher es kommt.**
+
+- [ ] **GO-23: Unter 50 % Deckung wird gedimmt** (entschieden
+  2026-08-20). Vorschlag aus G-122.
+
+  **Tom, 2026-08-20: ok.**
+
+  `[cmd]` **Gemessen:** 59 Codes zu 100 % gedeckt, 20 bei 80–99 %, **50
   bei 50–79 %, 9 unter 50 %.**
 
-  `[read]` **Der Vorschlag des Agenten:** *„Unter 50 % den Wert dimmen
-  und die „aus X von Y"-Angabe hervorheben — nicht ausblenden, nicht
-  werten."*
-
-  `[cmd]` **Nicht gebaut**, wartet auf Entscheidung.
+  `[cmd]` **Umsetzung:** unter 50 % den Wert dimmen und die
+  *„aus X von Y"*-Angabe hervorheben. **Nicht ausblenden, nicht
+  werten.**
 
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
