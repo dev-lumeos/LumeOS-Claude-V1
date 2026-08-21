@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `7fdcdbb` auf `dev`.
+**Stand:** 2026-08-18, Anker `3ed15fa` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -257,7 +257,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
 | **G-120** | `updateWaterLogAmount` liegt fertig und ungenutzt |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
-| **A-30** | `next/headers` im Browserbuendel — fuenfter Fall |  |
+| ~~**A-30**~~ | `next/headers` im Browserbuendel — fuenfter Fall | **erledigt 2026-08-21** — Build war heil, Einstieg schon geteilt; Pruefung `tools/serverimport-pruefen.mjs` haengt im Gate (163) |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
 
 ---
@@ -3786,8 +3786,50 @@ Umsetzen angepasst werden.
   `[read]` **Gehoert in die Datei selbst oder in `CLAUDE.md`**, sonst
   faellt der naechste Agent darauf herein.
 
-- [ ] **A-30: `next/headers` im Browserbuendel — fuenfter Fall** (neu
-  2026-08-20). Befund aus C-158.
+- [x] **A-30: `next/headers` im Browserbuendel — fuenfter Fall**
+  (erledigt 2026-08-21, `docs/ssot/163-shared-einstieg.md`).
+  **Die Praemisse traf nicht zu, die Fehlerklasse ist trotzdem echt —
+  jetzt haengt eine Pruefung im Gate.**
+
+  `[cmd]` **Der Build bricht nicht.** Am 2026-08-21 vor jeder Aenderung:
+  `✓ Compiled successfully`, **0 Treffer** fuer `next/headers`,
+  `Failed to compile` oder `error` in 69 Logzeilen.
+
+  `[cmd]` **Der Einstieg war schon geteilt:** `.` erreicht 4 Dateien
+  und **kein** `next/headers`. Nur `./session` (2 Dateien) und `./auth`
+  (4) ziehen es — beides Servereinstiege. **Kein Umbau noetig.**
+
+  `[cmd]` **Die Ursache lag jedes Mal in `apps/web`**, nicht im Paket:
+  ein **WERT-Import** aus einer Datei mit `@lumeos/shared/session` in
+  eine `'use client'`-Datei. In `rechte-echt.tsx` nachgestellt —
+  derselbe Bruch, dieselbe Kette ueber `rechte-read.ts`. `[read]`
+  **`import type` ist folgenlos, `import` ohne `type` schleppt das
+  Modul mit; der Typecheck sieht beides als gueltig.**
+
+  `[cmd]` **Die vorgeschlagene Marke haette nichts gemessen:**
+  `next/headers` steht in **0 von 104 Serverdateien und 0 von 49
+  Client-Chunks** — Next loest den Import beim Buendeln auf. Geprueft
+  wird auf `createServerClient` (3/0) und `cookies()` (4/0).
+
+  `[cmd]` **`tools/serverimport-pruefen.mjs` haengt nach dem Build im
+  Gate.** Beide Richtungen gemessen: sauber gruen, Fehler eingebaut
+  **Exitcode 1**. Dazu eine dritte gegen Stumpfwerden. **Gate 11/11,
+  447/447 Tests**, Anmeldung ohne HTTP 500.
+
+  `[read]` **Die Trennungen sind keine Umgehungen, sondern die
+  Loesung** — `rechte-modell.ts`, `plan-model.ts`, `reihe.ts` bleiben.
+
+  **Offen:** Der Anlass bleibt unerklaert. **C-158 meldete den Bruch
+  am 2026-08-20; gemessen wurde am 2026-08-21 ein heiler Build.**
+  `[cmd]` **`packages/shared` hat seit dem 2026-08-19 keinen Commit** —
+  die Datei, die C-158 nennt, ist unveraendert. **Die Trennung, die
+  den Fall verhindert, entstand in `3e5e781`** (`rechte-modell.ts`
+  neben `rechte-read.ts`, G-90).
+  `[read]` Wenn Codex die Buildmeldung von damals hat, laesst sich das
+  in Minuten zuordnen — die Meldung nennt die Kette selbst.
+
+  **Was C-158 am 2026-08-20 meldete** (unveraendert, als Beleg —
+  am 2026-08-21 nicht mehr reproduzierbar):
 
   `[cmd]` **`@lumeos/web#build` scheitert** am `next/headers`-Import
   ueber `packages/shared/src/supabase/session.ts`.
