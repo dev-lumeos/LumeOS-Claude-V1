@@ -6534,6 +6534,83 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Damit zeigt die Kachel *„Sauna: verbessert die
   Ausdauerleistung in Hitze (Grad C)"* statt *„+2,76 Punkte"*.**
 
+- [x] **C-189: `rule_assessment` ruft `platform_input_status` 64 Mal**
+  (neu 2026-08-21). **Toms Befund. Der Supplements-Tab braucht 9
+  Sekunden.**
+
+  **Tom, 2026-08-21:** *„Wenn ich zwischen Extended und Catalog switche,
+  dauert es immer so lang — also kein Kaltstart."*
+
+  ### Gemessen, angemeldet, ueber acht Tabwechsel
+
+  `[cmd]` **9,2 s je Wechsel, jedes Mal** — davon **8,2 s
+  serverseitig.** Kein Kaltstart, kein Kompilieren.
+
+  `[cmd]` **Und genau eine Abfrage ist schuld:**
+
+  | | |
+  |---|---|
+  | `substance_catalog` (567) | 217 ms |
+  | `substance_lab_effects` (222) | 215 ms |
+  | `rule_catalog` (64) | 229 ms |
+  | `intake_logs` (360) | 214 ms |
+  | **`rule_assessment`** | **8.120 ms** |
+
+  `[read]` **Die 200 ms bei allen anderen sind der `docker
+  exec`-Aufwand, nicht die Abfrage.**
+
+  ### Die Rechnung geht exakt auf
+
+  `[cmd]` **Ausfuehrungsplan:** `Buffers: shared hit=1.353.687, temp
+  read=529.592 written=529.592` — **rund 4 GB Zwischenspeicher fuer 64
+  Regeln.**
+
+  `[cmd]` **`platform_input_status` allein:** 119 ms, **8.106
+  temporaere Bloecke.**
+
+  | | |
+  |---|---|
+  | 529.592 ÷ 8.106 | **= 65** |
+  | 64 × 119 ms | **= 7.616 ms** (gemessen 7.641) |
+
+  `[read]` **Die Funktion wird einmal je Regel gerufen, statt einmal
+  vorab** — und jeder Aufruf liest denselben Bestand neu.
+
+  ### Was zu tun ist
+
+  `[cmd]` **Einmal vorab in eine Variable**, vor der `FOR v_rule
+  IN`-Schleife. **Dann 119 ms statt 7.641.**
+
+  `[cmd]` **Und `nutrition.daily_reference_assessment` steht in
+  derselben Schleife** (232 ms allein) — **pruefen, ob sie ebenfalls je
+  Regel gerufen wird.**
+
+  `[read]` **Die 30 Eingangspfade aendern sich waehrend eines Laufs
+  nicht.** **Sie einmal zu lesen ist nicht nur schneller, es ist auch
+  richtiger** — sonst koennte eine Regel einen anderen Stand sehen als
+  die naechste.
+
+  `[cmd]` **Erledigt 2026-08-21 — Faktor 53.**
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `rule_assessment` | **7.641 ms** | **144 ms** |
+  | `temp read/written` | 529.592 | **9.457** |
+  | Puffer | 1.353.687 | 28.918 |
+  | **Tabwechsel im Browser** | **9,2 s** | **2,1 s** |
+
+  `[cmd]` **`platform_input_status` wird einmal vor der Schleife
+  gelesen** und darin wiederverwendet. **Und
+  `daily_reference_assessment` fuer `VITD` und `MG` von zwei Aufrufen
+  auf einen aggregierten reduziert.**
+
+  `[cmd]` **Die Zustaende sind unveraendert:** 1 `fulfilled`, 50
+  `not_fulfilled`, 13 `missing_input`. **Und die drei Beispielregeln
+  ebenso** — `wr_anticoag_stack`, `wr_warfarin_vitk`, `wr_lab_biotin`.
+
+  `[read]` **Die restlichen 2 Sekunden sind der Dev-Modus** — 1.354 kB
+  `main-app.js` unkomprimiert, HMR-Verbindung.
+
 
 
 ## Erledigt am 2026-08-05

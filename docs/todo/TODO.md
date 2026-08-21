@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-21.** 167 offen, 1 in Arbeit.
+**Stand: 2026-08-21.** 166 offen, 1 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -3970,61 +3970,6 @@ Umsetzen angepasst werden.
   Dublette muss sie rot werden. **Vorbild:
   `tools/schemafreigabe-pruefen.mjs`.**
 
-- [ ] **C-189: `rule_assessment` ruft `platform_input_status` 64 Mal**
-  (neu 2026-08-21). **Toms Befund. Der Supplements-Tab braucht 9
-  Sekunden.**
-
-  **Tom, 2026-08-21:** *„Wenn ich zwischen Extended und Catalog switche,
-  dauert es immer so lang — also kein Kaltstart."*
-
-  ### Gemessen, angemeldet, ueber acht Tabwechsel
-
-  `[cmd]` **9,2 s je Wechsel, jedes Mal** — davon **8,2 s
-  serverseitig.** Kein Kaltstart, kein Kompilieren.
-
-  `[cmd]` **Und genau eine Abfrage ist schuld:**
-
-  | | |
-  |---|---|
-  | `substance_catalog` (567) | 217 ms |
-  | `substance_lab_effects` (222) | 215 ms |
-  | `rule_catalog` (64) | 229 ms |
-  | `intake_logs` (360) | 214 ms |
-  | **`rule_assessment`** | **8.120 ms** |
-
-  `[read]` **Die 200 ms bei allen anderen sind der `docker
-  exec`-Aufwand, nicht die Abfrage.**
-
-  ### Die Rechnung geht exakt auf
-
-  `[cmd]` **Ausfuehrungsplan:** `Buffers: shared hit=1.353.687, temp
-  read=529.592 written=529.592` — **rund 4 GB Zwischenspeicher fuer 64
-  Regeln.**
-
-  `[cmd]` **`platform_input_status` allein:** 119 ms, **8.106
-  temporaere Bloecke.**
-
-  | | |
-  |---|---|
-  | 529.592 ÷ 8.106 | **= 65** |
-  | 64 × 119 ms | **= 7.616 ms** (gemessen 7.641) |
-
-  `[read]` **Die Funktion wird einmal je Regel gerufen, statt einmal
-  vorab** — und jeder Aufruf liest denselben Bestand neu.
-
-  ### Was zu tun ist
-
-  `[cmd]` **Einmal vorab in eine Variable**, vor der `FOR v_rule
-  IN`-Schleife. **Dann 119 ms statt 7.641.**
-
-  `[cmd]` **Und `nutrition.daily_reference_assessment` steht in
-  derselben Schleife** (232 ms allein) — **pruefen, ob sie ebenfalls je
-  Regel gerufen wird.**
-
-  `[read]` **Die 30 Eingangspfade aendern sich waehrend eines Laufs
-  nicht.** **Sie einmal zu lesen ist nicht nur schneller, es ist auch
-  richtiger** — sonst koennte eine Regel einen anderen Stand sehen als
-  die naechste.
 
 - [ ] **A-45: Laufzeit gehoert in den Nachweis** (neu 2026-08-21).
   Aus C-189.
