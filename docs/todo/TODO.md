@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `5924617` auf `dev`.
+**Stand:** 2026-08-18, Anker `3d44636` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -237,6 +237,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-126** | Drei Reste aus G-122 |  |
 | **GO-23** | Unter 50 % Deckung wird gedimmt |  |
 | **A-33** | Der Medical-Abgleich, den der Orchestrator nachgeholt hat |  |
+| **A-34** | Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht |  |
+| **G-136** | Zwei Kartenzuordnungen sind Auslegung |  |
+| **G-137** | Acht Karten — die alten Ansichtsschluessel verfallen |  |
 | **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
 | **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -3609,6 +3612,66 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Und die Speicherung verwirft kaputte Werte** (G-122) — sie
   faellt sauber auf *„alles zu"* zurueck.
+
+- [ ] **C-165: Naehrstoff-Aliase — handelsuebliche Suchbegriffe** (neu
+  2026-08-20). **Toms Befund.** Der Ausloeser, den G-129 benannt hat.
+
+  **Tom, 2026-08-20:** *„Dann muessen wir Aliasse wie handelsuebliche
+  Suchbegriffe auch noch integrieren. Ja, Fiber ist englisch — aber kein
+  Bodybuilder sucht „Ballaststoff hochmolekular"."*
+
+  ### Gemessen
+
+  `[cmd]` **Alle 138 tragen `name_en` und `name_th`** — die Uebersetzung
+  fehlt nicht. **Der Bestand schreibt britisch und amtlich:**
+
+  | getippt | im Bestand | Treffer |
+  |---|---|---|
+  | **Fiber** | *Fibre, dietary, total* | **0** |
+  | **Carbs** | *Carbohydrate, available* | **0** |
+  | **BCAA** | Leucin, Isoleucin, Valin | **0** |
+  | Omega 3 | *Fatty acids, n-3, total* | 0 im Namen |
+
+  `[read]` **Und das sind nur die vier, nach denen der Orchestrator
+  gesucht hat.** **Jeder Umgangsbegriff ist ein eigener Fall** —
+  Elektrolyte, Aminos, Sat Fat, Vit C, Salz, Zucker.
+
+  ### Der G-129-Agent hat den Ausloeser definiert
+
+  `[read]` *„Was ein Alias-Schema braeuchte: Ausloeser waere eine
+  gemessene erfolglose Suche — Umgangsnamen, en/th, Tippfehler."*
+  **Genau das ist eingetreten.**
+
+  ### Was zu bauen ist
+
+  `[cmd]` **`nutrition.nutrient_aliases`**, nach dem Muster von
+  `food_aliases` (**32.845 Zeilen**) und `biomarker_aliases` (292).
+
+  **Je Zeile: Code, Alias, Sprache, Herkunft.**
+
+  `[cmd]` **Was hinein gehoert:**
+
+  | Art | Beispiele |
+  |---|---|
+  | **Umgangssprache** | Fiber, Carbs, Sat Fat, Aminos, Elektrolyte |
+  | **Amerikanisch gegen Britisch** | Fiber/Fibre |
+  | **Abkuerzungen** | BCAA → LEU/ILE/VAL, EAA, DHA, EPA |
+  | **Gruppenbegriffe** | *„Elektrolyte"* → NA, K, MG, CA, CLD |
+  | **Thai** | die 138 `name_th` sind da, Umgangsnamen nicht |
+
+  `[read]` **Gruppenbegriffe sind der interessante Teil:** *„BCAA"* trifft
+  drei Codes, *„Elektrolyte"* fuenf. **Ein Alias auf mehrere Codes** —
+  das kann `food_aliases` nicht, dort ist es eins zu eins.
+
+  ### Woher die Aliase kommen
+
+  `[cmd]` **`nutrition.nutrient_details` traegt 110 Erklaerungen** mit
+  `top_sources_de` und `function_de` — **die Volltextsuche nutzt sie
+  schon.** **Aliase sind etwas anderes: der Name, unter dem jemand
+  sucht.**
+
+  `[read]` **Und der Rechercheweg koennte sie liefern** — aber die 138
+  Codes kommen von uns. **Dieselbe Aufteilung wie bei C-158.**
 
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
