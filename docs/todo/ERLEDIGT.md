@@ -534,6 +534,45 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   buffers)` dazu**, nicht nur die Zeile *„laeuft in X ms"*. **`temp
   read/written` verraet ein Kreuzprodukt sofort.**
 
+- [x] **A-46: „2 Konsolenfehler je Seite" war eine der Anmeldung**
+  (neu 2026-08-21). Nebenbefund aus A-45. **Betrifft aeltere
+  Berichte, nicht den Code.**
+
+  `[cmd]` **Gemessen am 2026-08-21:** `/v2/medical?tab=dashboard` wirft
+  **eine** Meldung je Laden (`data-mode`-Hydrationswarnung); zwei
+  Laeufe ergeben zwei. **Die Fassung vor A-45 meldete 2 fuer einen
+  Lauf** — sie zaehlte die Anmeldeseite mit.
+
+  `[read]` **Damit sind die „2 je Seite" aus G-105, G-123, G-135 und
+  G-148 eine der Anmeldung plus eine der Seite.** Die Aussagen bleiben
+  richtig (kein SVG-Fehler, keine neue Meldung) — **die Zahl daneben
+  meint etwas anderes, als sie sagt.**
+
+  `[cmd]` **`konsolenfehler_mit_anmeldung` traegt die alte Zaehlweise
+  weiter**, damit sich die Berichte zuordnen lassen.
+
+  **Zu tun:** beim naechsten Anfassen der betroffenen Module die Zahl
+  richtigstellen — **kein eigener Durchgang wert.**
+
+  ### Erledigt 2026-08-21 — Feld entfernt statt gepflegt
+
+  `[cmd]` **`konsolenfehler_mit_anmeldung` ist aus `tools/schuss.mjs`
+  entfernt** — Feld und `fehlerMitAnmeldung` beide raus, der Grund steht
+  als Kommentar an der Stelle.
+
+  `[read]` **Die Wahl war: pflegen oder streichen.** Ein Feld, das eine
+  nachweislich falsche Zaehlweise weitertraegt, ist eine zweite Wahrheit
+  neben der richtigen — dasselbe Muster wie die zwei Zaehler im
+  TODO-Kopf, das dieser Datei schon einmal einen eigenen Abschnitt
+  eingebracht hat. Es muesste bei jeder Aenderung an der Anmeldung neu
+  erklaert werden, und zwar auf Dauer.
+
+  `[read]` **Der Zweck war Vergleichbarkeit mit vier Altberichten**
+  (G-105, G-123, G-135, G-148). **Den erfuellt eine Zeile in diesen vier
+  Berichten besser** als ein Feld in jedem kuenftigen. Die Zuordnung
+  bleibt in A-46 nachlesbar: die dortigen „2 je Seite" sind eine der
+  Anmeldung plus eine der Seite.
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und

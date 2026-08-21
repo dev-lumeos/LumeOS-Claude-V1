@@ -30,7 +30,6 @@ wenn er rausgeht, nicht wenn er geschrieben ist.**
 |---|---|
 | **G-133** Allergen-Pillen: *„Ohne Laktose 1.021"* statt 6.119 | `apps/web` |
 | **G-140** Spalte *„Stufe"* zeigt das Abo-Tier | `apps/web` |
-| **A-46** „2 Konsolenfehler" waren eine der Anmeldung — Zahlen in vier Berichten | `docs/` |
 | **G-149** Einnahme-Haken bucht auf den Stichtag statt auf heute | `apps/web` |
 
 **Klein und blockierend**

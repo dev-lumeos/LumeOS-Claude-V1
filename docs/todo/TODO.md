@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-21.** 167 offen, 1 in Arbeit.
+**Stand: 2026-08-21.** 166 offen, 1 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -3922,26 +3922,6 @@ Umsetzen angepasst werden.
   Dublette muss sie rot werden. **Vorbild:
   `tools/schemafreigabe-pruefen.mjs`.**
 
-
-- [ ] **A-46: „2 Konsolenfehler je Seite" war eine der Anmeldung**
-  (neu 2026-08-21). Nebenbefund aus A-45. **Betrifft aeltere
-  Berichte, nicht den Code.**
-
-  `[cmd]` **Gemessen am 2026-08-21:** `/v2/medical?tab=dashboard` wirft
-  **eine** Meldung je Laden (`data-mode`-Hydrationswarnung); zwei
-  Laeufe ergeben zwei. **Die Fassung vor A-45 meldete 2 fuer einen
-  Lauf** — sie zaehlte die Anmeldeseite mit.
-
-  `[read]` **Damit sind die „2 je Seite" aus G-105, G-123, G-135 und
-  G-148 eine der Anmeldung plus eine der Seite.** Die Aussagen bleiben
-  richtig (kein SVG-Fehler, keine neue Meldung) — **die Zahl daneben
-  meint etwas anderes, als sie sagt.**
-
-  `[cmd]` **`konsolenfehler_mit_anmeldung` traegt die alte Zaehlweise
-  weiter**, damit sich die Berichte zuordnen lassen.
-
-  **Zu tun:** beim naechsten Anfassen der betroffenen Module die Zahl
-  richtigstellen — **kein eigener Durchgang wert.**
 
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**

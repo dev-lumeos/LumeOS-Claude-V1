@@ -174,12 +174,16 @@ try {
   // Fassung vor A-45 zaehlte die Meldungen der ANMELDESEITE mit.
   // Gemessen am 2026-08-21 auf `/v2/medical?tab=dashboard`:
   // **ein Laden = 1 Meldung, die alte Fassung meldete 2.**
-  // `[read]` Die „2 je Seite" aus G-105/G-123 sind also eine der
-  // Anmeldung plus eine der Seite. **Der neue Zaehler nennt nur die
-  // der gemessenen Seite** — `konsolenfehler_mit_anmeldung` traegt
-  // die alte Zahl weiter, damit frueherer Berichte vergleichbar
-  // bleiben.
-  const fehlerMitAnmeldung = fehler.length
+  // `[read]` Die „2 je Seite" aus G-105/G-123/G-135/G-148 sind also
+  // eine der Anmeldung plus eine der Seite. **Der Zaehler nennt nur
+  // die der gemessenen Seite.**
+  //
+  // A-46 (2026-08-21): `konsolenfehler_mit_anmeldung` hat die alte
+  // Zaehlweise eine Zeit lang mitgetragen, damit sich die vier
+  // Altberichte zuordnen lassen. `[read]` **Ein gepflegter
+  // Doppelzaehler ist eine zweite Wahrheit** — dasselbe Muster wie
+  // die zwei Zaehler im TODO-Kopf. Die Zuordnung gehoert in die vier
+  // Berichte, nicht in jeden kuenftigen. Feld entfernt.
   fehler.length = 0
   zeit.zweiter_lauf = await ladenUndMessen(`${BASIS}${pfad}`)
 
@@ -223,9 +227,6 @@ try {
   console.log(JSON.stringify({
     ziel, pfad, breite, modus: dunkel ? 'dunkel' : 'hell',
     titel, attrappen: marken, konsolenfehler: fehler.length,
-    // A-45: die alte Zaehlweise (Anmeldung + Seite), damit die Zahlen
-    // frueherer Berichte zuzuordnen bleiben.
-    konsolenfehler_mit_anmeldung: fehlerMitAnmeldung,
     // A-45: immer dabei, ohne Schalter — was nicht gemessen wird,
     // faellt niemandem auf (C-189: fuenf Auftraege, neun Sekunden).
     zeit,
