@@ -13,25 +13,63 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | *frei* | | |
+| **Fable** | **G-147** Makroziele, Alias-Suche, Einzelwurzel | `apps/web/v2/nutrition` | 2026-08-20 |
+| **Claude Code** | **G-148** Elf Supplements-Modale | `apps/web/v2/supplements` | 2026-08-20 |
 | **Codex** | **C-164** `food_search` mit mehreren Tags | `supabase/` | 2026-08-20 |
-| **Claude Code** | *frei* | | |
+| *Kimi* | Dose–Response, Zeitverlauf, Streuung | extern | 2026-08-20 |
 
 ## Wartet auf einen freien Agenten
 
-| Auftrag | Bereich | blockiert von |
-|---|---|---|
-| **G-133** Allergen-Pillen falsch beschriftet (1.021 statt 6.119) | `apps/web` | — |
-| **G-112** Filter-Anzeige nach C-164 | `apps/web` | **C-164** |
-| **G-134** Die vier Filtergruppen gibt es nicht | `supabase/` + Anzeige | Entscheidung |
-| **G-131** Settings hat sieben Bereiche (837 Zeilen Entwurf) | `apps/web` | — |
-| **G-83** Onboarding — der Entwurf existiert (361 Zeilen) | `apps/web` | — |
-| **A-31** `svgpfade-pruefen.mjs` ins Gate | `tools/` | — |
-| **G-102** Ausfuehrer fuer bestaetigte Coach-Vorschlaege | `apps/coach` | Toms T1–T9 |
-| **C-159** sieben Regelpfade ohne Schema — **Symptomtabelle ist im Mockup** | `supabase/` | Produktentscheidung |
-| **C-163** 94 Substanzen ohne Naehrstoffmenge | Recherche | Kimi |
-| **C-160** Bewertungshorizont je Naehrstoff | Recherche | Kimi |
-| **C-105 / C-124** Volumen, Modalitaeten, OTS-Schwellen | Recherche | Kimi crawl_025 |
+**Sofort, weil sichtbar falsch**
+
+| Auftrag | Bereich |
+|---|---|
+| **G-133** Allergen-Pillen: *„Ohne Laktose 1.021"* statt 6.119 | `apps/web` |
+| **G-140** Spalte *„Stufe"* zeigt das Abo-Tier | `apps/web` |
+
+**Klein und blockierend**
+
+| Auftrag | Bereich |
+|---|---|
+| **C-175** `shopping_lists` fehlt (ADR-Pflicht) | `supabase/` |
+| **G-126** drei Reste aus G-122 (CHOL, 28 Texte, Selen) | `supabase/` |
+| **C-179** `EAA` zeigt auf Summenwert statt neun | `supabase/` |
+| **G-124** zehn Medication-Spalten | `supabase/` |
+| **C-178** Prolactin + ApoB in `system_groups` | `supabase/` |
+
+**Gross, aber vorbereitet**
+
+| Auftrag | Bereich |
+|---|---|
+| **C-180** 181 Evidenz-Konstanten importieren | `supabase/` |
+| **C-183** Symptom-Ontologie (21 Records) | `supabase/` |
+| **C-176** `biomarkerDetails.ts` (121 KB) | `supabase/` |
+| **G-141** Onboarding nach ADR (7 Schritte) | `apps/web` |
+| **G-131** Settings, sieben Bereiche | `apps/web` |
+| **C-185** Peptide 62→61, vier Identitaetsfehler | `supabase/` |
+
+**Schema-Auftraege aus dem Gesamtabgleich**
+
+| Auftrag | |
+|---|---|
+| **C-166** Recovery: Schlaf, HRV, Protokolle | 25 Konstanten, 3 Tabellen |
+| **C-169** Trainingsplan: Bloecke, Routinen, Deload | |
+| **C-171** Medical: Symptome, Termine, Dokumente | vier Tabs fehlen |
+| **C-170** Offline-Betrieb | `OUTBOX`, `SYNC_LOG` |
+| **C-172** Stress-Tab | sechs Quellen |
+| **G-139** Goals: Fortschrittsfotos, Posen | |
+
+**Entscheidungen fuer Tom**
+
+| | |
+|---|---|
+| **GO-23** Deckungsgrenze unter 50 % | Vorschlag: dimmen |
+| **G-134** vier Filtergruppen gibt es nicht | |
+| **G-136** zwei Kartenzuordnungen | Ballaststoffe, Wasser |
+| **C-174** `strong` als dritte Constraint-Stufe | ADR gegen GO-22 |
+| **GO-24** *„Mineralstoffe"* als Gruppenbegriff | |
+| **A-37** Coach-Permissions pro Subfunktion | ADR-Abweichung |
+| **T1–T9** Coach-Portal | neun Fragen |
 
 ## Bereiche, damit nichts kollidiert
 
