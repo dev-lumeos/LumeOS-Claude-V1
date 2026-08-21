@@ -1,7 +1,7 @@
 -- =============================================================
 -- 059 — Tagesbilanz gegen Referenzwerte (C-47)
 -- Zweck: nutrition.daily_reference_assessment(user_id, date) verbindet
---        daily_summary, public.profiles und nutrient_reference_values.
+--        daily_nutrient_summary_long, public.profiles und nutrient_reference_values.
 --
 -- Bewusst als Funktion, nicht als breite Sicht:
 --   * public.profiles liegt nicht in nutrition; SECURITY INVOKER laesst
@@ -9,8 +9,9 @@
 --   * Ein Naehrstoff kann mehrere passende Wertarten haben, z. B. PRI
 --     und UL. Die Funktion gibt dann mehrere Zeilen aus, statt die
 --     Bedeutung in eine Spalte zu quetschen.
---   * daily_summary bleibt unveraendert. Sie summiert; diese Funktion
---     bewertet numerisch, aber ohne Ampel oder Worturteil.
+--   * daily_summary bleibt unveraendert. Die lange Sicht liefert alle
+--     138 Codes; diese Funktion bewertet numerisch, aber ohne Ampel
+--     oder Worturteil.
 --
 -- =============================================================
 -- REFERENZWERTE WERDEN LIVE GELESEN — NICHT EINGEFROREN
@@ -122,47 +123,13 @@ profile_one AS (
   LEFT JOIN profile pr ON true
 ),
 day_values AS (
-  SELECT v.nutrient_code, v.actual_value, v.missing_count
-  FROM nutrition.daily_summary ds
-  CROSS JOIN LATERAL (VALUES
-    ('ENERCC', ds.enercc, ds.enercc_missing),
-    ('PROT625', ds.prot625, ds.prot625_missing),
-    ('FAT', ds.fat, ds.fat_missing),
-    ('CHO', ds.cho, ds.cho_missing),
-    ('FIBT', ds.fibt, ds.fibt_missing),
-    ('SUGAR', ds.sugar, ds.sugar_missing),
-    ('FASAT', ds.fasat, ds.fasat_missing),
-    ('NACL', ds.nacl, ds.nacl_missing),
-    ('WATER', ds.water_g, ds.water_g_missing),
-    ('VITA', ds.vita, ds.vita_missing),
-    ('VITD', ds.vitd, ds.vitd_missing),
-    ('VITE', ds.vite, ds.vite_missing),
-    ('VITK', ds.vitk, ds.vitk_missing),
-    ('THIA', ds.thia, ds.thia_missing),
-    ('RIBF', ds.ribf, ds.ribf_missing),
-    ('NIA', ds.nia, ds.nia_missing),
-    ('VITB6', ds.vitb6, ds.vitb6_missing),
-    ('FOL', ds.fol, ds.fol_missing),
-    ('VITB12', ds.vitb12, ds.vitb12_missing),
-    ('VITC', ds.vitc, ds.vitc_missing),
-    ('NA', ds.na, ds.na_missing),
-    ('K', ds.k, ds.k_missing),
-    ('CA', ds.ca, ds.ca_missing),
-    ('MG', ds.mg, ds.mg_missing),
-    ('P', ds.p, ds.p_missing),
-    ('FE', ds.fe, ds.fe_missing),
-    ('ZN', ds.zn, ds.zn_missing),
-    ('ID', ds.iodid, ds.iodid_missing),
-    ('CHORL', ds.chorl, ds.chorl_missing),
-    ('FAPUN3', ds.fapun3, ds.fapun3_missing),
-    ('FAPUN6', ds.fapun6, ds.fapun6_missing),
-    ('AAE9', ds.aae9, ds.aae9_missing),
-    ('LEU', ds.leu, ds.leu_missing),
-    ('F18:2CN6', ds.f18_2cn6, ds.f18_2cn6_missing),
-    ('F18:3CN3', ds.f18_3cn3, ds.f18_3cn3_missing)
-  ) AS v(nutrient_code, actual_value, missing_count)
-  WHERE ds.user_id = p_user_id
-    AND ds.entry_date = p_entry_date
+  SELECT
+    l.nutrient_code,
+    l.total_value AS actual_value,
+    l.missing_count
+  FROM nutrition.daily_nutrient_summary_long l
+  WHERE l.user_id = p_user_id
+    AND l.entry_date = p_entry_date
 ),
 reference_candidates AS (
   SELECT
@@ -390,7 +357,7 @@ ORDER BY nd.display_tier, nd.sort_index, sr.reference_kind NULLS LAST;
 $$;
 
 COMMENT ON FUNCTION nutrition.daily_reference_assessment(UUID, DATE) IS
-  'C-47: Numerischer Vergleich von daily_summary mit nutrient_reference_values anhand public.profiles. '
+  'C-47/C-161: Numerischer Vergleich von daily_nutrient_summary_long mit nutrient_reference_values anhand public.profiles. '
   'Fuehrt reference_kind und reference_direction mit; keine Ampel, kein Score, keine Wortbewertung. '
   'C-54: Fuehrt nutrient_display_tier aus nutrient_defs mit, damit die Anzeige Haupt- und Nebenwerte ordnen kann. '
   'C-52: Bewertet Linolsaeure und Alpha-Linolensaeure gegen die Goals-Grammziele aus EFSA-Energieprozent. '

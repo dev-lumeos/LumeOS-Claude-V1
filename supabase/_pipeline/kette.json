@@ -18,11 +18,18 @@
       "depends_on": ["B"]
     },
     {
+      "id": "015a",
+      "path": "supabase/_pipeline/015_kataloge/015a_nutrient_tree_details.ts",
+      "kind": "tsx",
+      "creates": "nutrient_defs.parent_code, nutrient_details und Baumwert-Pruefung",
+      "depends_on": ["015"]
+    },
+    {
       "id": "016",
       "path": "supabase/_pipeline/015_kataloge/016_nutrient_reference_values.ts",
       "kind": "tsx",
       "creates": "Referenzwert-Antworten fuer alle 138 Naehrstoffcodes, inklusive NO_REFERENCE-Zeilen",
-      "depends_on": ["015"]
+      "depends_on": ["015a"]
     },
     {
       "id": "020a",
@@ -200,6 +207,13 @@
       "depends_on": ["052a"]
     },
     {
+      "id": "059b",
+      "path": "supabase/_pipeline/05_user_tabellen/059b_daily_nutrient_summary_long.sql",
+      "kind": "sql",
+      "creates": "daily_nutrient_summary_long und nutrient_summary_window als lange Bilanz fuer alle 138 Naehrstoffe",
+      "depends_on": ["015", "053"]
+    },
+    {
       "id": "054",
       "path": "supabase/_pipeline/05_user_tabellen/054_preference_uniques.sql",
       "kind": "sql",
@@ -289,6 +303,13 @@
       "kind": "sql",
       "creates": "public.profiles und Trigger auf auth.users",
       "depends_on": ["B", "auth_stub"]
+    },
+    {
+      "id": "091",
+      "path": "supabase/_pipeline/09_identitaet/091_user_display_preferences.sql",
+      "kind": "sql",
+      "creates": "Allgemeine gespeicherte Anzeigeeinstellungen je Nutzer",
+      "depends_on": ["090"]
     },
     {
       "id": "056a",
@@ -518,8 +539,8 @@
       "id": "059",
       "path": "supabase/_pipeline/05_user_tabellen/059_daily_reference_assessment.sql",
       "kind": "sql",
-      "creates": "daily_reference_assessment als numerische Tagesbilanz-Bewertung gegen Profil, Referenzwerte und Goals-Fettsaeureziele",
-      "depends_on": ["016", "053", "090", "110"]
+      "creates": "daily_reference_assessment als numerische Tagesbilanz-Bewertung gegen lange Tagesbilanz, Profil, Referenzwerte und Goals-Fettsaeureziele",
+      "depends_on": ["016", "053", "059b", "090", "110"]
     },
     {
       "id": "059a",
@@ -527,13 +548,6 @@
       "kind": "tsx",
       "creates": "micronutrient_overview_items, micronutrient_snapshot und micronutrient_below_threshold",
       "depends_on": ["059", "110"]
-    },
-    {
-      "id": "059b",
-      "path": "supabase/_pipeline/05_user_tabellen/059b_daily_nutrient_summary_long.sql",
-      "kind": "sql",
-      "creates": "daily_nutrient_summary_long und nutrient_summary_window als lange Bilanz fuer alle 138 Naehrstoffe",
-      "depends_on": ["015", "053"]
     },
     {
       "id": "017",

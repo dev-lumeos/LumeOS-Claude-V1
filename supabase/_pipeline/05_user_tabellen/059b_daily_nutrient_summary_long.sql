@@ -343,6 +343,70 @@ COMMENT ON FUNCTION nutrition.nutrient_summary_window(UUID, DATE, INTEGER) IS
 GRANT EXECUTE ON FUNCTION nutrition.nutrient_summary_window(UUID, DATE, INTEGER)
   TO authenticated, service_role;
 
+CREATE OR REPLACE FUNCTION nutrition.nutrient_tree_value_anomalies(
+  p_user_id UUID,
+  p_entry_date DATE
+)
+RETURNS TABLE (
+  child_code TEXT,
+  parent_code TEXT,
+  child_value NUMERIC,
+  parent_value NUMERIC,
+  child_factor NUMERIC,
+  child_contribution NUMERIC,
+  unit TEXT
+)
+LANGUAGE sql
+STABLE
+SECURITY INVOKER
+SET search_path = ''
+AS $$
+WITH factors(child_code, parent_code, factor) AS (
+  VALUES
+    ('NT','PROT625',6.25::NUMERIC),
+    ('CARTB','VITA',(1.0/6.0)::NUMERIC),
+    ('CAROTPAXB','VITA',(1.0/12.0)::NUMERIC),
+    ('FOLAC','FOL',1.7::NUMERIC),
+    ('TRP','NIAEQ',(1000.0/60.0)::NUMERIC)
+),
+edges AS (
+  SELECT nd.code AS child_code, nd.parent_code, COALESCE(f.factor, 1::NUMERIC) AS factor
+  FROM nutrition.nutrient_defs nd
+  LEFT JOIN factors f
+    ON f.child_code = nd.code
+   AND f.parent_code = nd.parent_code
+  WHERE nd.parent_code IS NOT NULL
+),
+v AS (
+  SELECT nutrient_code, total_value, nutrient_unit
+  FROM nutrition.daily_nutrient_summary_long
+  WHERE user_id = p_user_id
+    AND entry_date = p_entry_date
+)
+SELECT
+  e.child_code,
+  e.parent_code,
+  cv.total_value AS child_value,
+  pv.total_value AS parent_value,
+  e.factor AS child_factor,
+  cv.total_value * e.factor AS child_contribution,
+  cv.nutrient_unit AS unit
+FROM edges e
+JOIN v cv ON cv.nutrient_code = e.child_code
+JOIN v pv ON pv.nutrient_code = e.parent_code
+WHERE cv.total_value IS NOT NULL
+  AND pv.total_value IS NOT NULL
+  AND cv.nutrient_unit = pv.nutrient_unit
+  AND (cv.total_value * e.factor) > (pv.total_value + 0.0001)
+ORDER BY e.parent_code, e.child_code;
+$$;
+
+COMMENT ON FUNCTION nutrition.nutrient_tree_value_anomalies(UUID, DATE) IS
+  'C-161: Prueft echte Baumkanten gegen Tageswerte. Formelanteile wie 1/6 Beta-Carotin -> Vitamin A werden als Beitrag verglichen, nicht als rohe Kindmenge.';
+
+GRANT EXECUTE ON FUNCTION nutrition.nutrient_tree_value_anomalies(UUID, DATE)
+  TO authenticated, service_role;
+
 DO $$
 DECLARE
   v_codes INTEGER;

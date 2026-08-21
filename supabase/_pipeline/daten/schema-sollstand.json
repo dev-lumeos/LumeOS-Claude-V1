@@ -54,6 +54,30 @@
       "zeilenschutzart": "oeffentlich"
     },
     {
+      "name": "nutrient_details",
+      "schritt": "015a",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "015a_nutrient_tree_details.ts: authenticated SELECT, service_role ALL",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
       "name": "foods",
       "schritt": "Baseline",
       "rls": true,
@@ -1131,6 +1155,10 @@
     },
     {
       "name": "nutrient_summary_window",
+      "schritt": "059b"
+    },
+    {
+      "name": "nutrient_tree_value_anomalies",
       "schritt": "059b"
     },
     {
