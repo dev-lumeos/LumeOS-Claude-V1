@@ -352,19 +352,33 @@ export async function ladeSystemgruppen(): Promise<{
 
   const { data, error } = await medicalDb()
     .from('biomarker_spec_enrichment')
-    .select('loinc_code, system_groups')
+    .select('loinc_code, spec_name, system_groups')
   if (error) return { jeCode, erwartetJeSystem }
 
+  // `[cmd]` **Gezählt werden Substanzen, nicht Zeilen.** Fünf
+  // `spec_name` stehen doppelt, weil dieselbe Grösse unter zwei
+  // LOINC-Codes geführt wird — `LDL Cholesterol` als 2089-1 **und**
+  // 13457-7. **Beide Codes müssen zuordnen** (welcher im Befund steht,
+  // entscheidet das Labor), **aber „7 von 7 Markern" wäre falsch:**
+  // es sind sechs Substanzen, von denen eine zwei Codes hat.
+  const substanzenJeSystem = new Map<string, Set<string>>()
+
   for (const z of (data ?? []) as unknown as Array<{
-    loinc_code: string | null; system_groups: string[] | null
+    loinc_code: string | null; spec_name: string | null; system_groups: string[] | null
   }>) {
     const gruppen = (z.system_groups ?? []).filter(Boolean)
     if (!z.loinc_code || gruppen.length === 0) continue
     jeCode.set(z.loinc_code, gruppen)
     for (const g of gruppen) {
-      erwartetJeSystem.set(g, (erwartetJeSystem.get(g) ?? 0) + 1)
+      const menge = substanzenJeSystem.get(g) ?? new Set<string>()
+      // Ohne `spec_name` bleibt der Code der Schlüssel — dann zählt er
+      // als eigene Substanz, was bei fehlendem Namen die ehrlichere
+      // Annahme ist.
+      menge.add(z.spec_name ?? z.loinc_code)
+      substanzenJeSystem.set(g, menge)
     }
   }
+  substanzenJeSystem.forEach((menge, g) => erwartetJeSystem.set(g, menge.size))
   return { jeCode, erwartetJeSystem }
 }
 

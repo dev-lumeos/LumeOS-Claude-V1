@@ -120,6 +120,23 @@ test('Marker ohne Bereich zaehlen als fehlend, nicht als schlecht', () => {
   assert.equal(s.ohne_bereich, 1)
 })
 
+test('eine Substanz mit zwei LOINC-Codes zaehlt einmal', () => {
+  // `[cmd]` Fuenf `spec_name` stehen doppelt in
+  // `biomarker_spec_enrichment` — LDL als 2089-1 UND 13457-7. Heute
+  // fuehrt der Bestand je Substanz nur einen Code; kaeme ein zweites
+  // Labor mit dem anderen, duerfte die Zahl sich nicht verdoppeln.
+  const s = rechneSystem('cardiovascular', [
+    reihe({ name: 'LDL Cholesterol', loinc_code: '2089-1', lage: 'im_bereich', optimalLage: 'darueber' }),
+    reihe({ name: 'LDL Cholesterol', loinc_code: '13457-7', lage: 'im_bereich', optimalLage: 'darueber' }),
+    reihe({ name: 'HDL Cholesterol', loinc_code: '2085-9', lage: 'im_bereich', optimalLage: 'im_bereich' }),
+  ], 6)
+
+  assert.equal(s.marker_count, 2, 'LDL zaehlt einmal, nicht zweimal')
+  // 75 + 100 = 175 / 2 = 87,5 → 88. Mit Doppelzaehlung waeren es
+  // (75+75+100)/3 = 83 — die Substanz haette den Schnitt gezogen.
+  assert.equal(s.score, 88)
+})
+
 test('der Gesamtwert ist 88 bei allen fuenf Systemen', () => {
   const g = rechneGesamt([
     { system: 'cardiovascular', score: 90, marker_count: 5, missing: 2, erwartet: 7, ohne_bereich: 0, namen: [] },

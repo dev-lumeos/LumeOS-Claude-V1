@@ -153,11 +153,22 @@ export function rechneSystem(
   const namen: string[] = []
   let ohneBereich = 0
 
+  // `[cmd]` **Eine Substanz zählt einmal, auch mit zwei LOINC-Codes.**
+  // Fünf Grössen stehen in `biomarker_spec_enrichment` doppelt (LDL,
+  // Glukose, Hämatokrit, Magnesium, Vitamin D). **Heute führt der
+  // Bestand je Substanz nur einen der beiden Codes** — käme ein zweites
+  // Labor mit dem anderen, zählte sie sonst doppelt und zöge den
+  // Schnitt in ihre Richtung.
+  const gesehen = new Set<string>()
+
   for (const r of reihen) {
+    const schluessel = r.kurz ?? r.name
+    if (gesehen.has(schluessel)) continue
+    gesehen.add(schluessel)
     const p = punkteFuer(r)
     if (p === null) { ohneBereich++; continue }
     punkte.push(p)
-    namen.push(r.kurz ?? r.name)
+    namen.push(schluessel)
   }
 
   if (punkte.length === 0) {

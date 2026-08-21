@@ -40,8 +40,7 @@ import {
 
 import {
   BIOMARKERS, SYMPTOMS, CORRELATIONS,
-  SYSTEM_META,
-  calcBiomarkerFlag, calcSystemScore, calcOverallHealthScore, generateAlerts,
+  calcBiomarkerFlag, generateAlerts,
 } from './daten'
 import { zaehleLagen } from '../../../lib/medical/lagezaehlung'
 import {
@@ -199,7 +198,7 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
       <Tabs items={tabs(echt.reihen.length, echt.medikationen.filter(m => m.is_active).length)}
             active={tab} onChange={setTab} />
 
-      {tab === 'dashboard' && <MedDashboard />}
+      {tab === 'dashboard' && <MedDashboard echt={echt} />}
       {tab === 'biomarkers' && <MedBiomarkers echt={echt} />}
       {tab === 'import' && <MedImport echt={echt} />}
       {tab === 'tracking' && <MedTracking echt={echt} />}
@@ -212,27 +211,19 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
 
 // ═══ TAB 1 · DASHBOARD ═══════════════════════════════════════════
 // [cmd] module-medical-v2.jsx:114-234.
-function MedDashboard() {
+function MedDashboard({ echt }: { echt: EchteDaten }) {
   const { open } = useMedical()
-  const overall = React.useMemo(() => calcOverallHealthScore(), [])
+  // `[cmd]` **Der Score kommt aus `echt.scores`, serverseitig gerechnet.**
+  //
+  // `[read]` **Was hier NICHT stehen darf:** eine Ableitung aus
+  // `calcOverallHealthScore()` / `SYSTEM_META`. Das sind die erfundenen
+  // Zahlen des Entwurfs — sie sind fuer jedes Konto gleich. **Am
+  // 2026-08-21 gemessen:** ein Konto mit 0 Biomarkern zeigte dieselben
+  // 81 wie das Konto mit 140 Werten. Das sah aus wie ein Zeilenschutzleck
+  // und war der Entwurf.
   const alerts = React.useMemo(() => generateAlerts(), [])
-  const systems = React.useMemo(
-    () => Object.keys(SYSTEM_META).map(k => ({ key: k, ...SYSTEM_META[k], ...calcSystemScore(k) })),
-    [])
-  const trajectory = 'stable'
   const kritisch = alerts.filter(a => a.severity === 'critical').length
-  const scores = React.useMemo(() => ({
-    score: overall.score,
-    systeme_mit_wert: systems.filter(s => s.score !== null).length,
-    gewicht_erfasst: overall.data_completeness,
-    systeme: systems.map(s => ({
-      system: s.key as System,
-      score: s.score,
-      erwartet: s.marker_count + s.missing,
-      marker_count: s.marker_count,
-      ohne_bereich: 0,
-    })),
-  }), [overall, systems])
+  const scores = echt.scores
 
   return (
     <div>

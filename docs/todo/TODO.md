@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `db24446` auf `dev`.
+**Stand:** 2026-08-18, Anker `7ff1c13` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 155 offen, 1 in Arbeit.
+`[cmd]` 159 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -217,7 +217,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
-| ~~**G-85**~~ | Der Health score haengt an zwei Unbekannten | **erledigt 2026-08-21 als G-135** — beide standen im Repo; Gesamt 86 aus 5 Systemen, Zuordnung ueber LOINC (171) |
 | **A-23** | `lint` bricht repoweit ab |  |
 | **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
 | **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
@@ -259,6 +258,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-176** | `biomarkerDetails.ts` im Vorgaengerrepo — 121 KB |  |
 | **G-141** | Das Onboarding ist als ADR final entschieden |  |
 | **A-38** | Drei Core-ADRs |  |
+| **G-143** | Die Makroziele werden nicht angezeigt |  |
+| **G-144** | Die BCAA-Suche zeigt zwei statt drei |  |
+| **G-145** | Ein einzelner Elternknoten sollte offen starten |  |
 | **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
 | **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -286,6 +288,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
 | **G-142** | Die Aliase erreichen die Suche nicht |  |
+| **C-178** | Prolactin und ApoB fehlen dem Health score |  |
+| **G-143** | Zehn Marker in `enrichment` ohne `system_groups` |  |
 | **C-177** | Thai-Aliase fehlen bewusst |  |
 | **GO-24** | *„Mineralstoffe"* als Gruppenbegriff? |  |
 
