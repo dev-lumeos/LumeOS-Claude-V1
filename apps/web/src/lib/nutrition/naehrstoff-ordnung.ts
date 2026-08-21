@@ -40,7 +40,8 @@ import { createSessionClient } from '@lumeos/shared/session'
 
 import { getReferenceAssessment } from './reference-assessment-read'
 import {
-  ANSICHT_SCHLUESSEL, pruefeAnsicht, type GespeicherteAnsicht,
+  ANSICHT_SCHLUESSEL, KARTEN_REIHENFOLGE, karteFuerWurzel, normalisiere,
+  pruefeAnsicht, type GespeicherteAnsicht,
 } from './naehrstoff-anzeige'
 
 function zahl(v: unknown): number | null {
@@ -67,6 +68,11 @@ export type NaehrstoffKnoten = {
   eltern: string | null
   /** `group_de` des Eintrags selbst (Karten folgen der Wurzel). */
   gruppe: string
+  /** Normalisierte Suchfelder (G-127), getrennt nach Naehe: Name+Code
+   *  fuer kurze Anfragen („EPA"), die Erklaertexte und Quellen erst ab
+   *  vier Zeichen („Skorbut", „Lachs") — Regel in `trifftSuche`. */
+  suchName: string
+  suchText: string
   /** Der gezeigte Wert: Tag = Summe, Fenster = Schnitt je
    *  protokolliertem Tag. */
   wert: number | null
@@ -206,7 +212,7 @@ export async function ladeOrdnung(
     // liefert nur Zeilen, wenn der Nutzer im Fenster protokolliert
     // hat, und ein leerer Tab waere die falsche Antwort auf einen
     // leeren Tag: die Ordnung existiert auch ohne Werte.
-    const [defsR, fensterR, refsR] = await Promise.allSettled([
+    const [defsR, fensterR, refsR, texteR] = await Promise.allSettled([
       db.from('nutrient_defs')
         .select('code, name_de, unit, group_de, display_tier, sort_index, parent_code')
         .order('sort_index', { ascending: true }),
@@ -214,6 +220,12 @@ export async function ladeOrdnung(
         p_user_id: user.id, p_end_date: stichtag, p_days: fenster,
       }),
       getReferenceAssessment(stichtag),
+      // G-127: die Erklaertexte fuettern die Suche — „Skorbut" soll
+      // Vitamin C finden, „Lachs" Omega-3. `[cmd]` 110 Zeilen,
+      // 33.697 Zeichen insgesamt — kein Alias-Schema noetig.
+      db.from('nutrient_details')
+        .select('nutrient_code, function_de, deficiency_de, excess_de, '
+          + 'detail_de, tip_de, top_sources_de'),
     ])
 
     if (defsR.status !== 'fulfilled' || defsR.value.error) {
@@ -263,6 +275,21 @@ export async function ladeOrdnung(
       }
     }
 
+    const texte = new Map<string, string>()
+    if (texteR.status === 'fulfilled' && !texteR.value.error) {
+      for (const r of (texteR.value.data ?? []) as unknown as Array<Record<string, unknown>>) {
+        const code = text(r.nutrient_code)
+        if (!code) continue
+        const quellen = Array.isArray(r.top_sources_de)
+          ? r.top_sources_de.filter((x): x is string => typeof x === 'string').join(' ')
+          : ''
+        texte.set(code, [
+          r.function_de, r.deficiency_de, r.excess_de, r.detail_de,
+          r.tip_de, quellen,
+        ].filter((x): x is string => typeof x === 'string' && x.length > 0).join(' '))
+      }
+    }
+
     const flach: NaehrstoffKnoten[] = []
     let messbar = 0
     let mitReferenz = 0
@@ -303,6 +330,8 @@ export async function ladeOrdnung(
         sort: zahl(d.sort_index) ?? 0,
         eltern: text(d.parent_code),
         gruppe,
+        suchName: normalisiere(`${code} ${text(d.name_de) ?? ''}`),
+        suchText: normalisiere(texte.get(code) ?? ''),
         wert,
         summe: z?.total_value ?? null,
         positionen: z?.item_count ?? 0,
@@ -321,14 +350,16 @@ export async function ladeOrdnung(
       })
     }
 
-    // Der Wald aus `parent_code`; die Karten folgen der Gruppe der
-    // Wurzel (Begruendung im Dateikopf).
-    const wurzeln = baueWald(flach)
+    // Der Wald aus `parent_code`; die Karten kommen aus
+    // `karteFuerWurzel` — seit G-129/GO-22 acht in fester
+    // Reihenfolge: die drei Makro-Aeste (Kohlenhydrate, Fette,
+    // Protein) tragen eigene Karten, die Aeste bleiben ganz.
     const proGruppe = new Map<string, NaehrstoffKnoten[]>()
-    for (const w of wurzeln) {
-      const liste = proGruppe.get(w.gruppe)
+    for (const w of baueWald(flach)) {
+      const karte = karteFuerWurzel(w.code, w.gruppe)
+      const liste = proGruppe.get(karte)
       if (liste) liste.push(w)
-      else proGruppe.set(w.gruppe, [w])
+      else proGruppe.set(karte, [w])
     }
 
     const gruppen: NaehrstoffGruppe[] = []
@@ -341,8 +372,11 @@ export async function ladeOrdnung(
         knoten,
       })
     }
-    // Groesste Gruppe zuerst — wie die Messung sie ausweist.
-    gruppen.sort((a, b) => b.anzahl - a.anzahl)
+    const rang = (name: string): number => {
+      const i = (KARTEN_REIHENFOLGE as readonly string[]).indexOf(name)
+      return i === -1 ? KARTEN_REIHENFOLGE.length : i
+    }
+    gruppen.sort((a, b) => rang(a.name) - rang(b.name))
 
     return {
       gruppen, gesamt: defs.length, messbar, mitReferenz, unterZiel,

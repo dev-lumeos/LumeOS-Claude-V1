@@ -33,6 +33,85 @@ export function zahlMitEinheit(v: number | null, einheit: string | null): string
   return einheit ? `${n} ${einheit}` : n
 }
 
+/**
+ * Die acht Karten in fester Reihenfolge (G-129/GO-22, entschieden).
+ * Vorher sechs: Fettsaeuren, Aminosaeuren und Kohlenhydrate hingen
+ * komplett unter den Makro-Wurzeln. Jetzt tragen die drei Makro-Aeste
+ * eigene Karten — wie die wissenschaftliche Klassifikation und
+ * Cronometer es tun; die Aeste selbst bleiben ganz.
+ */
+export const KARTEN_REIHENFOLGE = [
+  'Kohlenhydrate', 'Fette', 'Protein',
+  'Fettlösliche Vitamine', 'Wasserlösliche Vitamine',
+  'Elemente', 'Energie', 'Sonstige',
+] as const
+
+/**
+ * Welche Karte eine Wurzel bekommt. Die Zuordnung ist Anzeige, kein
+ * Schema: `CHO` und `FIBT` unter „Kohlenhydrate" (Ballaststoffe SIND
+ * Kohlenhydrate — so auch Cronometer), `FAT` unter „Fette",
+ * `PROT625` unter „Protein"; die restlichen Makro-Wurzeln (Wasser,
+ * Alkohol, Organische Saeuren, Rohasche) und `group_de = 'Sonstige
+ * Naehrstoffe'` sammeln sich unter „Sonstige". Vitamine, Elemente und
+ * Energie behalten ihr `group_de`.
+ */
+export function karteFuerWurzel(code: string, gruppe: string): string {
+  if (code === 'CHO' || code === 'FIBT') return 'Kohlenhydrate'
+  if (code === 'FAT') return 'Fette'
+  if (code === 'PROT625') return 'Protein'
+  if (gruppe === 'Makronährstoffe' || gruppe === 'Sonstige Nährstoffe') return 'Sonstige'
+  return gruppe
+}
+
+/**
+ * Suche (G-127): Klein, ohne Akzente, ohne Trennzeichen — „Omega 3"
+ * und „Omega-3" werden dieselbe Zeichenkette. Der Preis sind seltene
+ * Treffer ueber Wortgrenzen; bei 138 Eintraegen ist das billiger als
+ * ein Alias-Schema.
+ */
+export function normalisiere(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]/g, '')
+}
+
+/**
+ * Trifft die Anfrage den Knoten? Jeder Bestandteil der Anfrage muss
+ * sitzen — und je kuerzer er ist, desto enger sucht er:
+ * - 2 Zeichen: nur der ganze Code (`FE` findet Eisen, faellt aber
+ *   nicht in jedes „…fe…" im Text),
+ * - 3 Zeichen: Code und Name (`EPA` findet die Eicosapentaensaeure,
+ *   aber nicht jedes „Reparatur" in den Erklaertexten),
+ * - ab 4 Zeichen: auch Erklaerung und Quellen (`Skorbut`, `Lachs`).
+ */
+export function trifftSuche(
+  code: string, suchName: string, suchText: string, anfrage: string,
+): boolean {
+  const teile = anfrage.split(/\s+/).map(normalisiere).filter(t => t.length >= 2)
+  if (teile.length === 0) return false
+  const codeNorm = normalisiere(code)
+  return teile.every(t =>
+    t === codeNorm
+    || (t.length >= 3 && suchName.includes(t))
+    || (t.length >= 4 && suchText.includes(t)))
+}
+
+/**
+ * Die Ursachen-Regel (G-128, Tom: „Wenn ein Total auffaellig als
+ * Summe ist, muss man die Childs auch sehen"): unter einem Knoten,
+ * der SELBST den Filter trifft, erscheinen zusaetzlich die Kinder,
+ * die einen Wert tragen — bei Vitamin A ueber UL also alle vier
+ * Formen mit ihren Zahlen. Kinder ohne Wert bleiben draussen, sonst
+ * stuenden bei den Fettsaeuren dreissig Zeilen Kontext.
+ */
+export function zeigeKind(
+  elternTrifft: boolean, kind: NaehrstoffKnoten, scope: Scope,
+): boolean {
+  return sichtbar(kind, scope) || (elternTrifft && kind.wert !== null)
+}
+
 export type Scope = 'alle' | 'auffaellig' | 'unter'
 
 export const SCOPES: readonly Scope[] = ['alle', 'auffaellig', 'unter']

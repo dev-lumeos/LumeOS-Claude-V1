@@ -10283,3 +10283,25 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Tom-Entscheidung, kein fehlender Nenner; der Strich in der
   Zielspalte bleibt. (Das Detail-Modal zeigt die `RI`/`E%`-Zeilen als
   wissenschaftliche Referenz mit Quelle, G-122.)
+
+- [x] **GO-22: Acht Karten, dem Baum folgend** — **erledigt 2026-08-21
+  (G-129):** `[cmd]` acht Karten in der entschiedenen Reihenfolge,
+  Summen 23+37+21+17+12+16+2+10 = 138, Aeste ganz. Auslegung im
+  Bericht: `FIBT` unter Kohlenhydrate, Wasser/Alkohol/OA/Rohasche
+  unter Sonstige. Belege: `docs/ssot/168-naehrstoff-suche.md`.
+
+- [x] **G-127: Der Naehrstoff-Tab braucht eine Volltextsuche** —
+  **erledigt 2026-08-21 (G-129), OHNE Alias-Schema:** `[cmd]` zwei
+  normalisierte Suchfelder je Knoten (33.697 Zeichen gesamt),
+  Naehe-Regel 2 = Code / 3 = Name / ab 4 = Erklaertext; „Omega 3",
+  „EPA" (ohne „Reparatur"-Beifang), „Skorbut", `FE` belegt; Treffer
+  stehen mit ihrem Ast da; Suche fluechtig. Alias-Schema als
+  Folgepunkt mit gemessenem Ausloeser.
+
+- [x] **G-128: Der Filter „Auffaellig" verbirgt die Ursache** —
+  **erledigt 2026-08-21 (G-129):** `[cmd]` unter einem selbst
+  auffaelligen Knoten erscheinen die Kinder mit Wert — Vitamin A
+  3.582,8 µg ueber UL 3.000 zeigt Beta-Carotin 17.413,7 / RAE 2.063,1
+  / Retinol 543,2 / uebrige Carotinoide 1.611,8. Toms Frage
+  „aufgeklappt oder nur mit Wert?": nur mit Wert (sonst dreissig
+  Kontextzeilen bei den Fettsaeuren).

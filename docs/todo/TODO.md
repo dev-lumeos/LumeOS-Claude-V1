@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `4ceeb69` auf `dev`.
+**Stand:** 2026-08-18, Anker `5924617` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 133 offen, 1 in Arbeit.
+`[cmd]` 135 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -234,12 +234,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
-| **GO-22** | Acht Karten, dem Baum folgend |  |
 | **G-126** | Drei Reste aus G-122 |  |
-| **G-127** | Der Naehrstoff-Tab braucht eine Volltextsuche |  |
-| **G-128** | Der Filter *„Auffaellig"* verbirgt die Ursache |  |
 | **GO-23** | Unter 50 % Deckung wird gedimmt |  |
 | **A-33** | Der Medical-Abgleich, den der Orchestrator nachgeholt hat |  |
+| **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
+| **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -260,7 +259,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
 | **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
-| **G-126** | „Ohne Laktose 1.021" ist die Zahl MIT Laktose |  |
+| **G-132** | „Ohne Laktose 1.021" ist die Zahl MIT Laktose |  |
 | **G-125** | `MuscleBodyMap.js` traegt die kaputten Umrisse weiter |  |
 | **A-31** | Die Pfadpruefung gehoert ins Gate |  |
 | **A-32** | Die Nummer G-124 war doppelt vergeben |  |
@@ -938,6 +937,26 @@ Quelle und Belege: `docs/ssot/158-tab-zustand.md`.
   werden von MSYS umgewandelt (`/v2/nutrition` → `C:/Program
   Files/Git/...`); `MSYS_NO_PATHCONV=1` im Skriptkopf setzen oder
   dokumentieren.
+
+### G-129-Folgepunkte (Naehrstoff-Suche, 2026-08-21) — Nummern vergibt der Orchestrator
+
+Quelle und Belege: `docs/ssot/168-naehrstoff-suche.md`.
+
+- [ ] **Probelaeufe ueberschreiben die gespeicherte Nutzeransicht:**
+  seit G-122 ist jeder Klick im Nutrients-Tab Nutzerzustand — der
+  G-129-Messlauf hat Toms Sicht („Auffaellig", 30 Tage) mit seinen
+  Proben ueberschrieben. Kuenftige Nachweise sichern die Zeile vorher
+  und schreiben sie zurueck, oder laufen auf `test-user`.
+- [ ] **Alias-Schema erst bei gemessenem Bedarf:** Umgangsnamen
+  (`Blutzucker`, `Salz`), Fremdsprachen (en/th liegen in
+  `nutrient_details`, sind aber nicht im Suchtext) und Tippfehler
+  fangen die zwei Suchfelder nicht. Ausloeser waere eine erfolglose
+  echte Suche, nicht eine Vermutung; dann Codex (analog
+  `food_aliases`/`biomarker_aliases`).
+- [ ] **Kartenzuordnung als Auslegung gemeldet:** `FIBT` unter
+  „Kohlenhydrate", Wasser/Alkohol/Organische Saeuren/Rohasche unter
+  „Sonstige" — je eine Zeile in `karteFuerWurzel`, falls Tom es anders
+  will.
 
 ### G-122-Folgepunkte (Naehrstoffbaum-Anzeige, 2026-08-21) — Nummern vergibt der Orchestrator
 
@@ -3411,44 +3430,6 @@ Umsetzen angepasst werden.
   Ausschluss-Parameter, die Allergen-Schalter wirken nur auf der
   angezeigten Seite."*
 
-- [ ] **GO-22: Acht Karten, dem Baum folgend** (entschieden
-  2026-08-20). Nebeneffekt aus G-122, online recherchiert.
-
-  **Tom, 2026-08-20:** *„Das passt dann auch mit der Gruppierung von
-  Bluttests — macht Sinn."*
-
-  ### Was die Recherche ergab
-
-  `[cmd]` **Die wissenschaftliche Klassifikation kennt sechs
-  Naehrstoffklassen** — Kohlenhydrate, Lipide, Proteine, Vitamine,
-  Mineralien, Wasser (Britannica, NCBI StatPearls).
-
-  `[cmd]` **Cronometer** — der einzige Vergleichsmassstab mit 84
-  Naehrstoffen — **macht es genauso:** *„Gesamtfettzufuhr und darunter
-  die Aufschluesselung in einfach ungesaettigte, mehrfach ungesaettigte
-  (inklusive Omega-3 und Omega-6), gesaettigte und Transfette."*
-
-  `[read]` **Fettsaeuren stehen dort unter Fett, Aminosaeuren unter
-  Protein** — kein eigener Bereich. **Der Baum-Ansatz ist also nicht nur
-  technisch richtig, sondern auch der Marktstandard.**
-
-  ### Die Entscheidung
-
-  `[cmd]` **Acht Karten**, nicht sechs — **die drei Makro-Wurzeln
-  bekommen eigene:**
-
-  | | |
-  |---|---|
-  | **Kohlenhydrate** | mit Zuckern und Staerke darunter |
-  | **Fette** | mit den 36 Fettsaeuren darunter |
-  | **Protein** | mit den 19 Aminosaeuren darunter |
-  | Fettloesliche Vitamine · Wasserloesliche Vitamine | |
-  | Elemente · Energie · Sonstige | |
-
-  `[read]` **Damit bleiben die vertrauten Ueberschriften**, die Aeste
-  bleiben ganz — **und es passt zur Gruppierung der Bluttests**, wo
-  Lipide, Elektrolyte und Vitamine ebenfalls getrennt stehen.
-
 - [ ] **G-126: Drei Reste aus G-122** (neu 2026-08-20).
 
   `[cmd]` **`CHOL` → `CHORL` (Cholesterin) waere mappbar und fehlt** —
@@ -3475,56 +3456,6 @@ Umsetzen angepasst werden.
   **Zu klaeren:** Bleibt es weg, oder kommt eine zweite Quelle dazu?
   `[cmd]` **BLS ist als alleinige Quelle festgelegt** — das waere eine
   Produktentscheidung.
-
-- [ ] **G-127: Der Naehrstoff-Tab braucht eine Volltextsuche** (neu
-  2026-08-20). **Toms Befund.**
-
-  **Tom, 2026-08-20:** *„Etwas Wichtiges fehlt noch: eine Volltextsuche,
-  falls der User etwas Spezielles sucht — die Suche muss auch
-  menschlich funktionieren."*
-
-  `[cmd]` **138 Naehrstoffe in acht Karten, vier Ebenen tief.** `[read]`
-  **Wer *„Omega 3"* sucht, soll nicht durch Makro → Fett → FAPU
-  klicken muessen.**
-
-  ### Was *„menschlich"* hier heisst
-
-  `[cmd]` **Die Namen sind amtlich, nicht umgangssprachlich:**
-  *„Fettsaeure C20:5 n-3 all-cis (Eicosapentaensaeure, EPA)"*,
-  *„Vitamin A, Retinol-Aktivitaets-Aequivalent (RAE)"*.
-
-  `[read]` **Wonach ein Mensch sucht:** *Omega 3*, *EPA*, *Vitamin C*,
-  *Eisen*, *Zucker*. **Und die Suche muss auch den Code treffen** —
-  `FAPUN3`, `VITC`, `FE`.
-
-  `[cmd]` **Der Unterbau existiert:** `food_aliases` hat 32.845 Zeilen,
-  `biomarker_aliases` 292. **Fuer Naehrstoffe gibt es nichts.**
-
-  `[read]` **Und die Erklaerungen aus C-161 sind durchsuchbar** — wer
-  *„Skorbut"* eingibt, sollte Vitamin C finden. **110 Texte liegen
-  bereit.**
-
-  `[cmd]` **Und ein Treffer oeffnet den Ast** — sonst ist er unsichtbar.
-
-- [ ] **G-128: Der Filter *„Auffaellig"* verbirgt die Ursache** (neu
-  2026-08-20). **Toms Befund.**
-
-  **Tom, 2026-08-20:** *„Unlogische Darstellung, wenn der Filter
-  Auffaellig gewaehlt wird: Man sieht Probleme — aber wenn ein Total
-  auffaellig als Summe ist, muss man die Childs auch sehen, die das
-  Total erzeugen."*
-
-  `[cmd]` **Heute greift die Regel nur nach oben:** *„Unter Auffaellig
-  bleibt `FASAT` stehen, weil die Linolsaeure darunter bei 94 %
-  liegt."* (G-121)
-
-  `[read]` **Was fehlt, ist die Gegenrichtung:** **Ist der Elternteil
-  auffaellig, gehoeren seine Kinder mit ins Bild** — sie erzeugen die
-  Summe.
-
-  `[cmd]` **Beispiel aus Toms Bildschirmfoto:** *Vitamin A 411 %, ueber
-  UL.* **Die Ursache steht in den Kindern** — Beta-Carotin mit 30.982
-  µg. **Ohne sie sieht man das Problem, aber nicht, woher es kommt.**
 
 - [ ] **GO-23: Unter 50 % Deckung wird gedimmt** (entschieden
   2026-08-20). Vorschlag aus G-122.

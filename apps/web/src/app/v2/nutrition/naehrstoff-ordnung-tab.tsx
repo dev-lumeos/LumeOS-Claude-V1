@@ -28,7 +28,8 @@ import type {
   NaehrstoffOrdnung, NaehrstoffGruppe, NaehrstoffKnoten,
 } from '../../../lib/nutrition/naehrstoff-ordnung'
 import {
-  FENSTER, sichtbar, zaehleSichtbare, STATUS_TEXT, STATUS_FARBE,
+  FENSTER, sichtbar, trifft, trifftSuche, zeigeKind,
+  STATUS_TEXT, STATUS_FARBE,
   zahlMitEinheit as zahl, type Scope, type GespeicherteAnsicht,
 } from '../../../lib/nutrition/naehrstoff-anzeige'
 import { NaehrstoffModal } from './naehrstoff-modal'
@@ -39,11 +40,57 @@ const GRUPPE = 'g:'
 
 type Auswahl = { knoten: NaehrstoffKnoten; elternName: string | null }
 
+/**
+ * Was der Baum gerade zeigt — eine Frage, drei Antworten:
+ * - `zeige`: gehoert der Knoten (oder ein Nachkomme) in die Anzeige?
+ * - `kindZeige`: welche Kinder eines SICHTBAREN Knotens erscheinen —
+ *   hier sitzt die Ursachen-Regel (G-128): unter einem selbst
+ *   auffaelligen Knoten stehen die Kinder mit Wert.
+ * - `erzwungenOffen`: Suche und Filter schlagen den Klappzustand.
+ */
+type Sicht = {
+  zeige: (k: NaehrstoffKnoten) => boolean
+  kindZeige: (eltern: NaehrstoffKnoten, kind: NaehrstoffKnoten) => boolean
+  erzwungenOffen: boolean
+}
+
+function baueSicht(anfrage: string, scope: Scope): Sicht {
+  const suche = anfrage.trim()
+  if (suche.length >= 2) {
+    // G-127: die Suche gewinnt ueber den Scope-Filter — zwei Filter
+    // uebereinander waeren nicht mehr erklaerbar. Ein Treffer oeffnet
+    // seinen Ast: Eltern von Treffern bleiben als Pfad sichtbar.
+    const treffer = (k: NaehrstoffKnoten): boolean =>
+      trifftSuche(k.code, k.suchName, k.suchText, suche) || k.kinder.some(treffer)
+    return { zeige: treffer, kindZeige: (_e, kind) => treffer(kind), erzwungenOffen: true }
+  }
+  if (scope !== 'alle') {
+    return {
+      zeige: k => sichtbar(k, scope),
+      kindZeige: (eltern, kind) => zeigeKind(trifft(eltern, scope), kind, scope),
+      erzwungenOffen: true,
+    }
+  }
+  return { zeige: () => true, kindZeige: () => true, erzwungenOffen: false }
+}
+
+/** Wieviele Zeilen einer Gruppe die Sicht zeigt (fuer den Kopf) —
+ *  dieselbe Rekursion wie das Rendern, damit die Zahl stimmt. */
+function zaehleZeige(knoten: NaehrstoffKnoten[], s: Sicht): number {
+  const ast = (k: NaehrstoffKnoten): number =>
+    1 + k.kinder.filter(x => s.kindZeige(k, x)).reduce((n, x) => n + ast(x), 0)
+  return knoten.filter(k => s.zeige(k)).reduce((n, k) => n + ast(k), 0)
+}
+
 export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
   const [offen, setOffen] = React.useState<Set<string>>(
     () => new Set(d.gespeichert?.offen ?? []))
   const [scope, setScope] = React.useState<Scope>(d.gespeichert?.scope ?? 'alle')
   const [auswahl, setAuswahl] = React.useState<Auswahl | null>(null)
+  // G-127: die Suche ist fluechtig — bewusst NICHT in der
+  // gespeicherten Ansicht.
+  const [anfrage, setAnfrage] = React.useState('')
+  const sicht = React.useMemo(() => baueSicht(anfrage, scope), [anfrage, scope])
 
   const router = useRouter()
   const pfad = usePathname()
@@ -131,7 +178,24 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
               </button>
             ))}
           </div>
+          {/* G-127: Volltextsuche ueber Name, Code, Erklaerung und
+              Quellen — „Omega 3", „EPA", „Skorbut", „FE". */}
+          <input
+            type="search"
+            value={anfrage}
+            onChange={e => setAnfrage(e.target.value)}
+            placeholder="Suchen: Name, Code, Beschwerde, Quelle"
+            aria-label="Naehrstoffe durchsuchen"
+            className="v2-feld"
+            style={{ height: 28, fontSize: 12, flex: '1 1 220px', minWidth: 180 }}
+          />
         </div>
+        {anfrage.trim().length >= 2 && (
+          <p className="v2-muted" style={{ fontSize: 11, marginBottom: 8 }}>
+            Die Suche zeigt Treffer samt ihrem Ast; der Filter ist
+            waehrenddessen aus. Leeren stellt die Ansicht wieder her.
+          </p>
+        )}
 
         <p className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.55 }}>
           {istTag ? (
@@ -162,16 +226,16 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
       </Card>
 
       {d.gruppen.map(g => {
-        const treffer = zaehleSichtbare(g.knoten, scope)
-        if (scope !== 'alle' && treffer === 0) return null
+        const treffer = zaehleZeige(g.knoten, sicht)
+        if (sicht.erzwungenOffen && treffer === 0) return null
         return (
           <GruppenKarte
             key={g.name}
             g={g}
-            scope={scope}
+            sicht={sicht}
             treffer={treffer}
             istTag={istTag}
-            offen={scope !== 'alle' || offen.has(GRUPPE + g.name)}
+            offen={sicht.erzwungenOffen || offen.has(GRUPPE + g.name)}
             offenSet={offen}
             umschalten={umschalten}
             waehlen={(knoten, elternName) => setAuswahl({ knoten, elternName })}
@@ -192,8 +256,8 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
   )
 }
 
-function GruppenKarte({ g, scope, treffer, istTag, offen, offenSet, umschalten, waehlen }: {
-  g: NaehrstoffGruppe; scope: Scope; treffer: number; istTag: boolean
+function GruppenKarte({ g, sicht, treffer, istTag, offen, offenSet, umschalten, waehlen }: {
+  g: NaehrstoffGruppe; sicht: Sicht; treffer: number; istTag: boolean
   offen: boolean; offenSet: Set<string>
   umschalten: (schluessel: string) => void
   waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
@@ -213,9 +277,9 @@ function GruppenKarte({ g, scope, treffer, istTag, offen, offenSet, umschalten, 
         <Icon name={offen ? 'chevron_down' : 'chevron_right'} className="v2-ic v2-ic-sm" />
         <span style={{ fontSize: 13, fontWeight: 600 }}>{g.name}</span>
         <span className="v2-num v2-dim" style={{ fontSize: 11 }}>
-          {scope === 'alle'
-            ? `${g.anzahl} Eintr${g.anzahl === 1 ? 'ag' : 'aege'}`
-            : `${treffer} von ${g.anzahl} Eintraegen`}
+          {sicht.erzwungenOffen
+            ? `${treffer} von ${g.anzahl} Eintraegen`
+            : `${g.anzahl} Eintr${g.anzahl === 1 ? 'ag' : 'aege'}`}
         </span>
         <span style={{ marginLeft: 'auto' }}>
           <Pill>{g.mitWert} mit Wert</Pill>
@@ -238,13 +302,13 @@ function GruppenKarte({ g, scope, treffer, istTag, offen, offenSet, umschalten, 
               </tr>
             </thead>
             <tbody>
-              {g.knoten.filter(k => sichtbar(k, scope)).map(k => (
+              {g.knoten.filter(k => sicht.zeige(k)).map(k => (
                 <Zeilen
                   key={k.code}
                   k={k}
                   tiefe={0}
                   elternName={null}
-                  scope={scope}
+                  sicht={sicht}
                   istTag={istTag}
                   offenSet={offenSet}
                   umschalten={umschalten}
@@ -266,15 +330,15 @@ function GruppenKarte({ g, scope, treffer, istTag, offen, offenSet, umschalten, 
  * das Modal. Bei aktivem Filter zaehlt der Klappzustand nicht: die
  * Treffer stehen ausgeklappt da.
  */
-function Zeilen({ k, tiefe, elternName, scope, istTag, offenSet, umschalten, waehlen }: {
+function Zeilen({ k, tiefe, elternName, sicht, istTag, offenSet, umschalten, waehlen }: {
   k: NaehrstoffKnoten; tiefe: number; elternName: string | null
-  scope: Scope; istTag: boolean; offenSet: Set<string>
+  sicht: Sicht; istTag: boolean; offenSet: Set<string>
   umschalten: (schluessel: string) => void
   waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
 }): React.ReactElement {
   const farbe = k.status ? STATUS_FARBE[k.status] : 'var(--fg-dim)'
   const hatKinder = k.kinder.length > 0
-  const istOffen = scope !== 'alle' || offenSet.has(k.code)
+  const istOffen = sicht.erzwungenOffen || offenSet.has(k.code)
   return (
     <>
       <tr onClick={() => waehlen(k, elternName)} style={{ cursor: 'pointer' }}>
@@ -361,13 +425,13 @@ function Zeilen({ k, tiefe, elternName, scope, istTag, offenSet, umschalten, wae
           )}
         </td>
       </tr>
-      {hatKinder && istOffen && k.kinder.filter(x => sichtbar(x, scope)).map(x => (
+      {hatKinder && istOffen && k.kinder.filter(x => sicht.kindZeige(k, x)).map(x => (
         <Zeilen
           key={x.code}
           k={x}
           tiefe={tiefe + 1}
           elternName={k.name}
-          scope={scope}
+          sicht={sicht}
           istTag={istTag}
           offenSet={offenSet}
           umschalten={umschalten}

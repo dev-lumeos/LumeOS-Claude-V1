@@ -8,7 +8,8 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import {
-  fensterOderTag, pruefeAnsicht, sichtbar, zaehleSichtbare,
+  fensterOderTag, karteFuerWurzel, normalisiere, pruefeAnsicht,
+  sichtbar, trifftSuche, zaehleSichtbare, zeigeKind,
 } from '../naehrstoff-anzeige'
 import type { NaehrstoffKnoten } from '../naehrstoff-ordnung'
 
@@ -18,7 +19,7 @@ function k(
 ): NaehrstoffKnoten {
   return {
     code, name: code, einheit: 'g', stufe: 1, sort: 0,
-    eltern: null, gruppe: 'Test',
+    eltern: null, gruppe: 'Test', suchName: code.toLowerCase(), suchText: '',
     wert: 1, summe: 1, positionen: 1, positionenMitWert: 1,
     positionenOhneWert: 0, tageErfasst: 1, tageVollstaendig: 1,
     ziel: null, zielMax: null, zielArt: null, obergrenze: null,
@@ -68,6 +69,54 @@ test('pruefeAnsicht nimmt nur die vollstaendige, saubere Form an', () => {
     pruefeAnsicht({ offen: Array.from({ length: 301 }, () => 'x'), fenster: 7, scope: 'alle' }),
     null,
   )
+})
+
+test('normalisiere macht „Omega 3", „Omega-3" und „OMEGA_3" gleich', () => {
+  assert.equal(normalisiere('Omega 3'), 'omega3')
+  assert.equal(normalisiere('Omega-3-Fettsäuren, gesamt'), 'omega3fettsaurengesamt')
+  assert.equal(normalisiere('Fettsäure C20:5 n-3 (EPA)'), 'fettsaurec205n3epa')
+})
+
+test('trifftSuche: 2 Zeichen nur Code, 3 auch Name, ab 4 auch Erklaertext', () => {
+  const omegaName = normalisiere('FAPUN3 Omega-3-Fettsäuren, gesamt')
+  const omegaText = normalisiere('entzuendungshemmend Lachs Makrele')
+  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, 'Omega 3'))
+  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, 'lachs'), 'Quelle ab 4 Zeichen')
+  assert.ok(trifftSuche('FE', normalisiere('FE Eisen'), '', 'FE'), 'Code trifft exakt')
+  assert.equal(trifftSuche('FAT', normalisiere('FAT Fett'), '', 'FE'), false,
+    'zwei Zeichen suchen nur im Code')
+  const epaName = normalisiere('F20:5CN3 Fettsäure C20:5 n-3 (Eicosapentaensäure, EPA)')
+  assert.ok(trifftSuche('F20:5CN3', epaName, '', 'EPA'), 'drei Zeichen treffen den Namen')
+  assert.equal(
+    trifftSuche('VAL', normalisiere('VAL Valin'), normalisiere('Muskelreparatur'), 'EPA'),
+    false, 'drei Zeichen fallen NICHT in den Erklaertext („R-epa-ratur")')
+  assert.equal(trifftSuche('FAPUN3', omegaName, omegaText, ''), false)
+  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, 'omega lachs'), 'alle Teile muessen sitzen')
+  assert.equal(trifftSuche('FAPUN3', omegaName, omegaText, 'omega quark'), false)
+})
+
+test('zeigeKind: unter einem selbst auffaelligen Knoten erscheinen die Kinder mit Wert', () => {
+  const eltern = k('VITA', 'ueber')
+  const mitWert = k('CARTB', null)          // Wert 1, keine eigene Referenz
+  const ohneWert = { ...k('RETOL', null), wert: null }
+  assert.ok(zeigeKind(trifftScope(eltern), mitWert, 'auffaellig'))
+  assert.equal(zeigeKind(trifftScope(eltern), ohneWert, 'auffaellig'), false)
+  // Ohne auffaelligen Elternknoten gilt die alte Regel weiter.
+  assert.equal(zeigeKind(false, mitWert, 'auffaellig'), false)
+  function trifftScope(x: NaehrstoffKnoten): boolean {
+    return x.status === 'unter' || x.status === 'ueber'
+  }
+})
+
+test('karteFuerWurzel: acht Karten, die Makro-Aeste getrennt', () => {
+  assert.equal(karteFuerWurzel('CHO', 'Makronährstoffe'), 'Kohlenhydrate')
+  assert.equal(karteFuerWurzel('FIBT', 'Makronährstoffe'), 'Kohlenhydrate')
+  assert.equal(karteFuerWurzel('FAT', 'Makronährstoffe'), 'Fette')
+  assert.equal(karteFuerWurzel('PROT625', 'Makronährstoffe'), 'Protein')
+  assert.equal(karteFuerWurzel('WATER', 'Makronährstoffe'), 'Sonstige')
+  assert.equal(karteFuerWurzel('CHORL', 'Sonstige Nährstoffe'), 'Sonstige')
+  assert.equal(karteFuerWurzel('FE', 'Elemente'), 'Elemente')
+  assert.equal(karteFuerWurzel('ENERCC', 'Energie'), 'Energie')
 })
 
 test('fensterOderTag klammert auf Toms Liste', () => {
