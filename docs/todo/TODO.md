@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `3d44636` auf `dev`.
+**Stand:** 2026-08-18, Anker `8153168` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 135 offen, 1 in Arbeit.
+`[cmd]` 145 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -240,6 +240,16 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-34** | Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht |  |
 | **G-136** | Zwei Kartenzuordnungen sind Auslegung |  |
 | **G-137** | Acht Karten — die alten Ansichtsschluessel verfallen |  |
+| **C-165** | Naehrstoff-Aliase — handelsuebliche Suchbegriffe |  |
+| **C-166** | Recovery hat 3 Tabellen, der Entwurf 25 Konstanten |  |
+| **C-167** | `MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier |  |
+| **C-168** | Die Uebertrainings-Schwellen stehen im Entwurf |  |
+| **C-169** | Das Trainingsplan-Schema steht im Entwurf |  |
+| **C-170** | Der Offline-Betrieb steht im Entwurf |  |
+| **C-171** | Medical — neun Konstanten ohne Tabelle |  |
+| **G-138** | Supplements zeigt, nimmt aber nichts auf |  |
+| **G-139** | Goals — Fortschrittsfotos mit Posen-Sets |  |
+| **A-35** | Sieben Module haben keine Seite |  |
 | **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
 | **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -3672,6 +3682,225 @@ Umsetzen angepasst werden.
 
   `[read]` **Und der Rechercheweg koennte sie liefern** — aber die 138
   Codes kommen von uns. **Dieselbe Aufteilung wie bei C-158.**
+
+- [ ] **C-166: Recovery hat 3 Tabellen, der Entwurf 25 Konstanten**
+  (neu 2026-08-20). Aus dem Gesamtabgleich (SSOT 173).
+
+  `[cmd]` **`recovery` fuehrt `checkins`, `modality_log`, `scores`.**
+  **Ohne Gegenstueck im Schema:**
+
+  | | |
+  |---|---|
+  | **`SLEEP_DATA`** | Schlafphasen, Rhythmus — `RecoverySleep`, `SleepStaging`, `SleepRhythm` |
+  | **`HRV_LOG`, `HRV_BASELINE`** | HRV-Verlauf und Grundlinie |
+  | **`ACWR_DATA`** | Belastungsverhaeltnis — **wird nirgends gerechnet** |
+  | **`PROTOCOL_DEFS`, `RECOVERY_PROTOCOLS`, `ACTIVE_PROTOCOL`** | Erholungsprotokolle |
+  | `RECOMMENDATIONS`, `READINESS_LEVELS`, `MOOD_MULTIPLIER` | |
+
+  `[read]` **17 von 61 Komponenten fehlen** — darunter `RecoverySleep`,
+  `RecoveryProtocols`, `RecoveryInsights`, `CorrelationChart`.
+
+  `[cmd]` **`module-recovery-engine.jsx` traegt das Rechenwerk** — nie
+  gelesen.
+
+- [ ] **C-167: `MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier**
+  (neu 2026-08-20). Aus SSOT 173. **Betrifft C-124.**
+
+  `[cmd]` **Der Entwurf:**
+
+  ```
+  sauna 2.0 · massage 2.5 · cold_plunge 1.5 · contrast_therapy 2.0
+  nap 1.5 · meditation 1.0 · breathwork 1.0 · yoga 0.75
+  foam_rolling 0.5 · stretching 0.5 · active_recovery 0.5
+  MAX_DAILY_BONUS = 5.0
+  ```
+
+  `[cmd]` **`recovery.modality_log` kennt vier** — Sauna, Dehnen,
+  Massage, Eisbad.
+
+  `[read]` **C-124 fuehrt die Werte als unbelegt** — **das bleibt
+  richtig**, sie sind Entwurfswerte. **Aber die Liste ist laenger als
+  gedacht, und der Deckel von 5,0 ist eine Entscheidung, die niemand
+  kennt.**
+
+- [ ] **C-168: Die Uebertrainings-Schwellen stehen im Entwurf** (neu
+  2026-08-20). Aus SSOT 173. **Betrifft C-124/E8.**
+
+  `[cmd]` **`OVERTRAINING_SIGNALS` traegt vier Pruefungen mit
+  Schwellen und `check`-Funktion:**
+
+  | Signal | Schwelle |
+  |---|---|
+  | `hrv_low` | 7-Tage-Schnitt **unter 90 % der Grundlinie** |
+  | `rhr_high` | Ruhepuls **+5 bpm** ueber Grundlinie |
+  | `sleep_poor` | Schlafqualitaet **unter 6** ueber 3 Tage |
+  | `fatigue` | subjektives Gefuehl **≤ 4** ueber 3 Tage |
+
+  `[read]` **E8 fragt: *„ab wie vielen Signalen ueber wie viele Tage ist
+  ein Arzt-Hinweis angebracht?"*** — **der Entwurf beantwortet den
+  ersten Teil.**
+
+  `[cmd]` **Und drei der vier Eingaenge fehlen im Bestand:** HRV auf 127
+  von 170 Tagen leer, `resting_hr` 0 von 340. **Nur die Schlafqualitaet
+  ist da.**
+
+- [ ] **C-169: Das Trainingsplan-Schema steht im Entwurf** (neu
+  2026-08-20). Aus SSOT 173. **Betrifft C-145.**
+
+  `[cmd]` **`module-training-spec.jsx` traegt:**
+
+  | | |
+  |---|---|
+  | **`LANDMARKS`** | MEV/MAV/MRV je Muskelgruppe, zehn Gruppen |
+  | **`PROGRESSION_MODELS`** | linear, doppelt — **mit Formel** |
+  | **`ROUTINE_TEMPLATES`** | Routinen als Vorlagen |
+  | **`DELOAD_TRIGGERS`** | wann entlastet wird |
+  | `HR_ZONES`, `HR_MAX`, `SET_TYPES` | |
+
+  `[cmd]` **`PROGRESSION_MODELS` mit Formeln:**
+  *linear: `next_weight = current + 2.5 kg`* ·
+  *double: `reps < max ? reps+1 : (weight+inc, reps=min)`*
+
+  `[read]` **C-145 meldet *„Bloecke, Wochen, Routinen — fehlendes
+  Schema"*.** **Der Entwurf sagt, woraus es besteht.**
+
+- [ ] **C-170: Der Offline-Betrieb steht im Entwurf** (neu 2026-08-20).
+  Aus SSOT 173.
+
+  `[cmd]` **`IDB_STORES`, `OUTBOX`, `SYNC_LOG`** — IndexedDB-Speicher,
+  Warteschlange, Abgleichsprotokoll.
+
+  `[cmd]` **G-86 meldet:** *„keine Warteschlangentabelle, `logged_via`
+  auf 101 von 101 Zeilen `manual` — erst die Faehigkeit, dann die
+  Anzeige."* **Die Faehigkeit ist entworfen.**
+
+- [ ] **C-171: Medical — neun Konstanten ohne Tabelle** (neu
+  2026-08-20). Aus SSOT 173.
+
+  `[cmd]` **`SYMPTOMS` und `SYMPTOM_BIOMARKER_MAP`** — `[read]` **C-159
+  meldet *„keine Symptomtabelle im ganzen Schema"*. Der Entwurf hat
+  sie**, mit Zuordnung zu Biomarkern.
+
+  `[cmd]` **Dazu:** `APPOINTMENTS`, `DOCUMENTS`, `HISTORY_TIMELINE`,
+  `DIAGNOSES`, `OCR_EXTRACTED`, `CORRELATIONS`, `UNIT_CONVERSIONS`.
+
+  `[read]` **Und vier ganze Tabs fehlen** — `MedMedications`,
+  `MedHistory`, `MedDocuments`, `MedAppointments`, **mit acht
+  Modalen.**
+
+- [ ] **G-138: Supplements zeigt, nimmt aber nichts auf** (neu
+  2026-08-20). Aus SSOT 173.
+
+  `[cmd]` **16 von 68 Komponenten fehlen — fast alle sind
+  Schreibwege:**
+
+  `AddSupplementModal` · `AddCompoundModal` · **`LogDoseModal`** ·
+  **`LogSkipModal`** · `AddSideEffectModal` · `AddLabResultModal` ·
+  `ReorderModal` · `PlanCycleModal` · `PermissionsModal` ·
+  `ProductDetailDrawer`.
+
+  `[read]` **Das Modul liest 360 Einnahmen und rechnet 93,1 %
+  Compliance** — **aber niemand kann eine Einnahme eintragen.**
+
+  `[cmd]` **Ohne Gegenstueck im Schema:** `INJ_SITES`, `INJ_SCHEDULE`,
+  `INJ_LOG`, `STACK_TEMPLATES`, `PRODUCT_DETAILS`, `EXTENDED_LABS`,
+  `BLOODWORK_PANEL`.
+
+- [ ] **G-139: Goals — Fortschrittsfotos mit Posen-Sets** (neu
+  2026-08-20). Aus SSOT 173.
+
+  `[cmd]` **`PHOTO_PROGRESSION`, `POSE_SETS`, `PE_MODES`** — im
+  Entwurf, nicht im Schema.
+
+  `[cmd]` **Und `CONTRIBUTIONS`, `CONTRIB_WEIGHTS`** — was ein Ziel
+  vorantreibt und mit welchem Gewicht.
+
+  `[read]` **Sechs von 40 Komponenten fehlen** — `BodyFatScale`,
+  `MetricKPI`, `CompTab`, `MeasureTab`.
+
+- [ ] **A-35: Sieben Module haben keine Seite** (neu 2026-08-20). Aus
+  SSOT 173. **Ueberblick, kein Auftrag.**
+
+  | Modul | Komponenten im Entwurf |
+  |---|---|
+  | **market** | **52** — wartet auf Rechtsfragen |
+  | **buddy** | **44** — 16 Tabellen spezifiziert |
+  | **stubs** | 31 — **zu klaeren, was das ist** |
+  | admin | 25 — `apps/admin` existiert separat |
+  | **completeness** | 14 — **das sind die Settings** (G-131) |
+  | crossmodule | 6 |
+  | onboarding | 1 — `WALK`, vier Schritte (G-83) |
+
+  `[cmd]` **`module-stubs.jsx` (60 KB, 31 Komponenten) ist nie erwaehnt
+  worden** — **zuerst pruefen, was drinsteht.**
+
+- [ ] **C-172: Der Stress-Tab steht im Entwurf** (neu 2026-08-20).
+  Aus SSOT 173. **Betrifft E6.**
+
+  `[cmd]` **`module-crossmodule-rest.jsx` (275 Zeilen) traegt
+  `STRESS_SOURCES` — sechs Quellen mit Wert und Begruendung:**
+
+  | Quelle | Wert | Begruendung im Entwurf |
+  |---|---|---|
+  | Arbeitslast | 62 | *„Zwei Abgaben diese Woche"* |
+  | Schlafschuld | 48 | *„1,6 h zu wenig ueber fuenf Naechte"* |
+  | **Trainingslast** | 55 | *„**ACWR 1,08 — inside the window**"* |
+  | Lebensereignisse | 20 | *„nichts protokolliert"* |
+  | Koffein-Zeitpunkt | 51 | *„200 mg um 17:30 an Trainingstagen"* |
+  | Alkohol | 5 | *„keiner in 14 Tagen"* |
+
+  `[cmd]` **Und `STRESS_BANDS`** — Low bis 25, Moderate bis 50, mit
+  Beschreibung: *„Full training capacity"*, *„Normal load, watch …"*.
+
+  `[read]` **Toms E6 lautet *„Stress bauen"*** — **der Entwurf sagt,
+  woraus er sich zusammensetzt.** Und **die ACWR-Schwelle steht
+  nebenbei drin** (1,08 = *inside the window*), obwohl ACWR nirgends
+  gerechnet wird.
+
+  `[cmd]` **Dazu `STRESS_14D`** — der Verlauf.
+
+- [ ] **A-36: `module-stubs-replacement.jsx` traegt drei ganze Module**
+  (neu 2026-08-20). Aus SSOT 173. **730 Zeilen, nie erwaehnt.**
+
+  `[cmd]` **Marketplace:** `MARKETPLACE_CATEGORIES`,
+  `MARKETPLACE_PRODUCTS` (mit Preis, Bewertung, Haendler, Evidenzgrad,
+  `inStack`), `COACH_PROFILES`, `ORDERS`, `SUBSCRIPTIONS` — dazu
+  `MarketBrowse`, `MarketCoaches`, `MarketPlans`, `MarketOrders`,
+  `MarketSubs`, `MarketSeller`.
+
+  `[cmd]` **Auth und Onboarding:** **`OnboardingFlow`, `LoginScreen`,
+  `RegisterScreen`, `ProfileSetupScreen`, `PrivacyPreview`.**
+
+  `[read]` **G-83 haelt fest, dass es kein Onboarding gibt.**
+  **`module-onboarding.jsx` hat den Assistenten, und diese Datei hat
+  die Bildschirme dazu** — Anmeldung, Registrierung, Profilaufbau,
+  Datenschutzvorschau.
+
+  `[cmd]` **Admin:** `ADMIN_USERS`, `ADMIN_MODERATION`,
+  `AdminDashboard`, `AdminUsers`, `AdminModeration`, `AdminAnalytics`,
+  `AdminSystem`, **`AdminFoodDB`**, `AdminAudit`.
+
+  `[read]` **`AdminFoodDB` ist der Ort fuer die manuelle Kuration** —
+  C-125 haelt 124 Zutaten fuer eine Woche Handarbeit fest, und
+  `name_display` wartet auf menschliche Namen.
+
+  `[cmd]` **`module-stubs.jsx` selbst (230 Zeilen) ist nur der
+  Platzhalter** — *„keep the shell coherent when navigating."*
+  **Der ist erledigt, sobald die Module stehen.**
+
+- [ ] **C-173: `MARKETPLACE_PRODUCTS` traegt `inStack` und
+  `evidence`** (neu 2026-08-20). Aus SSOT 173. **Kleiner, wichtiger
+  Befund.**
+
+  `[cmd]` **Die Produktzeilen im Entwurf tragen `inStack: true` und
+  `evidence: "A"`** — sie kennen den Stack des Nutzers und den
+  Evidenzgrad aus dem Katalog.
+
+  `[read]` **Das ist die Verbindung Marketplace → Supplements**, und
+  sie zeigt, dass der Marktplatz nicht als getrennter Laden gedacht war.
+
+  `[cmd]` **`substance_catalog` traegt 567 Eintraege mit Evidenzgrad**
+  — die Gegenseite steht.
 
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
