@@ -6328,6 +6328,109 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **203 echte Verbindungen**, 19 Effekte ohne Marker-ID
   **bleiben sichtbar** statt zu verschwinden.
 
+- [x] **C-165: Naehrstoff-Aliase — handelsuebliche Suchbegriffe** (neu
+  2026-08-20). **Toms Befund.** Der Ausloeser, den G-129 benannt hat.
+
+  **Tom, 2026-08-20:** *„Dann muessen wir Aliasse wie handelsuebliche
+  Suchbegriffe auch noch integrieren. Ja, Fiber ist englisch — aber kein
+  Bodybuilder sucht „Ballaststoff hochmolekular"."*
+
+  ### Gemessen
+
+  `[cmd]` **Alle 138 tragen `name_en` und `name_th`** — die Uebersetzung
+  fehlt nicht. **Der Bestand schreibt britisch und amtlich:**
+
+  | getippt | im Bestand | Treffer |
+  |---|---|---|
+  | **Fiber** | *Fibre, dietary, total* | **0** |
+  | **Carbs** | *Carbohydrate, available* | **0** |
+  | **BCAA** | Leucin, Isoleucin, Valin | **0** |
+  | Omega 3 | *Fatty acids, n-3, total* | 0 im Namen |
+
+  `[read]` **Und das sind nur die vier, nach denen der Orchestrator
+  gesucht hat.** **Jeder Umgangsbegriff ist ein eigener Fall** —
+  Elektrolyte, Aminos, Sat Fat, Vit C, Salz, Zucker.
+
+  ### Der G-129-Agent hat den Ausloeser definiert
+
+  `[read]` *„Was ein Alias-Schema braeuchte: Ausloeser waere eine
+  gemessene erfolglose Suche — Umgangsnamen, en/th, Tippfehler."*
+  **Genau das ist eingetreten.**
+
+  ### Was zu bauen ist
+
+  `[cmd]` **`nutrition.nutrient_aliases`**, nach dem Muster von
+  `food_aliases` (**32.845 Zeilen**) und `biomarker_aliases` (292).
+
+  **Je Zeile: Code, Alias, Sprache, Herkunft.**
+
+  `[cmd]` **Was hinein gehoert:**
+
+  | Art | Beispiele |
+  |---|---|
+  | **Umgangssprache** | Fiber, Carbs, Sat Fat, Aminos, Elektrolyte |
+  | **Amerikanisch gegen Britisch** | Fiber/Fibre |
+  | **Abkuerzungen** | BCAA → LEU/ILE/VAL, EAA, DHA, EPA |
+  | **Gruppenbegriffe** | *„Elektrolyte"* → NA, K, MG, CA, CLD |
+  | **Thai** | die 138 `name_th` sind da, Umgangsnamen nicht |
+
+  `[read]` **Gruppenbegriffe sind der interessante Teil:** *„BCAA"* trifft
+  drei Codes, *„Elektrolyte"* fuenf. **Ein Alias auf mehrere Codes** —
+  das kann `food_aliases` nicht, dort ist es eins zu eins.
+
+  ### Woher die Aliase kommen
+
+  `[cmd]` **`nutrition.nutrient_details` traegt 110 Erklaerungen** mit
+  `top_sources_de` und `function_de` — **die Volltextsuche nutzt sie
+  schon.** **Aliase sind etwas anderes: der Name, unter dem jemand
+  sucht.**
+
+  `[read]` **Und der Rechercheweg koennte sie liefern** — aber die 138
+  Codes kommen von uns. **Dieselbe Aufteilung wie bei C-158.**
+
+  `[cmd]` **Erledigt 2026-08-20.** `nutrition.nutrient_aliases` traegt
+  **98 Zeilen, 74 Begriffe, 50 Codes** — plus die Sicht
+  `nutrient_search_aliases`.
+
+  | Art | | Sprache | |
+  |---|---|---|---|
+  | Gruppe | **29** | de | 48 |
+  | Umgangssprache | 24 | en | 31 |
+  | Uebersetzung | 21 | sprachneutral | 19 |
+  | Abkuerzung | 16 | **Thai** | **0** |
+  | Schreibvariante | 8 | | |
+
+  ### Der Gruppenbegriff ist als Paar geloest
+
+  `[cmd]` **Der Schluessel ist `(nutrient_code, alias_folded)`** — ein
+  Begriff, mehrere Zeilen, `kind='gruppe'`. **Der Einspielschritt
+  erzwingt es:** mehrere Codes ohne `gruppe` brechen den Lauf.
+
+  `[cmd]` **Gemessen:** `bcaa` → ILE, LEU, VAL · `elektrolyte` → CA,
+  CLD, K, MG, NA · Spurenelemente → 8 · B-Vitamine → 8.
+
+  `[read]` **Und gegen den Kunstknoten entschieden:** *„Ein
+  synthetischer BCAA-Knoten stuende nirgends im Baum und haette weder
+  Wert noch Referenz."* **Die Suche zeigt die Mitglieder.**
+
+  ### Die Testfaelle
+
+  `[cmd]` `fiber` → FIBT · `carbs` → CHO · `eiweiss` → PROT625 ·
+  `kj` → ENERCJ · `EPA` exakt 1 · *„Vitamin B5"* → PANTAC.
+
+  `[cmd]` **Und eine Korrektur am Auftrag:** *„„Omega 3" traf schon
+  vorher ueber den Namen — die „0 im Namen"-Zeile galt fuer `name_en`,
+  `name_de` heisst „Omega-3-Fettsaeuren"."*
+
+  ### 88 von 138 brauchen keinen Alias
+
+  `[read]` *„Der amtliche Name ist schon der Suchbegriff (Magnesium,
+  Salz, B12, DHA) oder es gibt keinen gaengigen Zweitnamen (die 26
+  Einzel-Fettsaeuren)."*
+
+  `[cmd]` **Und Handelsbegriffe bleiben im Substanzkatalog** — Whey,
+  Casein, Kreatin, Glutamin. **Dort liegen sie belegt.**
+
 
 
 ## Erledigt am 2026-08-05

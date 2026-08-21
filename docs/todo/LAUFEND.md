@@ -13,7 +13,7 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | **C-165** Naehrstoff-Aliase | `supabase/` | 2026-08-20 |
+| **Fable** | *frei* | | |
 | **Codex** | **C-164** `food_search` mit mehreren Tags | `supabase/` | 2026-08-20 |
 | **Claude Code** | *frei* | | |
 

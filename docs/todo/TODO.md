@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `7be9a5c` auf `dev`.
+**Stand:** 2026-08-18, Anker `db24446` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 153 offen, 1 in Arbeit.
+`[cmd]` 155 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -240,7 +240,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-34** | Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht |  |
 | **G-136** | Zwei Kartenzuordnungen sind Auslegung |  |
 | **G-137** | Acht Karten — die alten Ansichtsschluessel verfallen |  |
-| **C-165** | Naehrstoff-Aliase — handelsuebliche Suchbegriffe |  |
 | **C-166** | Recovery hat 3 Tabellen, der Entwurf 25 Konstanten |  |
 | **C-167** | `MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier |  |
 | **C-168** | Die Uebertrainings-Schwellen stehen im Entwurf |  |
@@ -286,6 +285,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-32** | Die Nummer G-124 war doppelt vergeben |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
+| **G-142** | Die Aliase erreichen die Suche nicht |  |
+| **C-177** | Thai-Aliase fehlen bewusst |  |
+| **GO-24** | *„Mineralstoffe"* als Gruppenbegriff? |  |
 
 ---
 
@@ -3643,65 +3645,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Und die Speicherung verwirft kaputte Werte** (G-122) — sie
   faellt sauber auf *„alles zu"* zurueck.
 
-- [ ] **C-165: Naehrstoff-Aliase — handelsuebliche Suchbegriffe** (neu
-  2026-08-20). **Toms Befund.** Der Ausloeser, den G-129 benannt hat.
-
-  **Tom, 2026-08-20:** *„Dann muessen wir Aliasse wie handelsuebliche
-  Suchbegriffe auch noch integrieren. Ja, Fiber ist englisch — aber kein
-  Bodybuilder sucht „Ballaststoff hochmolekular"."*
-
-  ### Gemessen
-
-  `[cmd]` **Alle 138 tragen `name_en` und `name_th`** — die Uebersetzung
-  fehlt nicht. **Der Bestand schreibt britisch und amtlich:**
-
-  | getippt | im Bestand | Treffer |
-  |---|---|---|
-  | **Fiber** | *Fibre, dietary, total* | **0** |
-  | **Carbs** | *Carbohydrate, available* | **0** |
-  | **BCAA** | Leucin, Isoleucin, Valin | **0** |
-  | Omega 3 | *Fatty acids, n-3, total* | 0 im Namen |
-
-  `[read]` **Und das sind nur die vier, nach denen der Orchestrator
-  gesucht hat.** **Jeder Umgangsbegriff ist ein eigener Fall** —
-  Elektrolyte, Aminos, Sat Fat, Vit C, Salz, Zucker.
-
-  ### Der G-129-Agent hat den Ausloeser definiert
-
-  `[read]` *„Was ein Alias-Schema braeuchte: Ausloeser waere eine
-  gemessene erfolglose Suche — Umgangsnamen, en/th, Tippfehler."*
-  **Genau das ist eingetreten.**
-
-  ### Was zu bauen ist
-
-  `[cmd]` **`nutrition.nutrient_aliases`**, nach dem Muster von
-  `food_aliases` (**32.845 Zeilen**) und `biomarker_aliases` (292).
-
-  **Je Zeile: Code, Alias, Sprache, Herkunft.**
-
-  `[cmd]` **Was hinein gehoert:**
-
-  | Art | Beispiele |
-  |---|---|
-  | **Umgangssprache** | Fiber, Carbs, Sat Fat, Aminos, Elektrolyte |
-  | **Amerikanisch gegen Britisch** | Fiber/Fibre |
-  | **Abkuerzungen** | BCAA → LEU/ILE/VAL, EAA, DHA, EPA |
-  | **Gruppenbegriffe** | *„Elektrolyte"* → NA, K, MG, CA, CLD |
-  | **Thai** | die 138 `name_th` sind da, Umgangsnamen nicht |
-
-  `[read]` **Gruppenbegriffe sind der interessante Teil:** *„BCAA"* trifft
-  drei Codes, *„Elektrolyte"* fuenf. **Ein Alias auf mehrere Codes** —
-  das kann `food_aliases` nicht, dort ist es eins zu eins.
-
-  ### Woher die Aliase kommen
-
-  `[cmd]` **`nutrition.nutrient_details` traegt 110 Erklaerungen** mit
-  `top_sources_de` und `function_de` — **die Volltextsuche nutzt sie
-  schon.** **Aliase sind etwas anderes: der Name, unter dem jemand
-  sucht.**
-
-  `[read]` **Und der Rechercheweg koennte sie liefern** — aber die 138
-  Codes kommen von uns. **Dieselbe Aufteilung wie bei C-158.**
 
 - [ ] **C-166: Recovery hat 3 Tabellen, der Entwurf 25 Konstanten**
   (neu 2026-08-20). Aus dem Gesamtabgleich (SSOT 173).
@@ -4771,3 +4714,43 @@ Umsetzen angepasst werden.
   umgerechnet werden koennen: **Vitamin A** (Retinol gegen Carotinoide),
   **Vitamin E** (natuerlich gegen synthetisch), **Folat** (Folat,
   Folsaeure, DFE).
+
+- [ ] **G-142: Die Aliase erreichen die Suche nicht** (neu
+  2026-08-20). **Wichtigster Rest aus C-165 — ohne ihn liegen 98 Zeilen
+  brach.**
+
+  `[cmd]` **Der Anschluss ist eine Abfrage plus ein drittes Suchfeld** —
+  `alias_folded` ist mit derselben Faltung normalisiert wie die
+  Web-Suchfelder.
+
+  `[cmd]` **Aber die Kurz-Token-Regel aus G-129 sperrt sie aus:**
+  *„2 Zeichen = nur Code, 3 = Name, ab 4 = auch Text."*
+
+  `[read]` **Folge, simuliert und belegt:** *„Vitamin B5"* und *„kJ"*
+  **werden prinzipiell nie gefunden.**
+
+  `[cmd]` **Die Erweiterung:** *„Token trifft auch bei exakter Gleichheit
+  mit einem Alias."*
+
+  `[read]` **Die Nahe-Regel bleibt sonst richtig** — sie verhinderte,
+  dass *„EPA"* ueber das *„epa"* in *„Reparatur"* Valin fand.
+
+- [ ] **C-177: Thai-Aliase fehlen bewusst** (neu 2026-08-20). Rest aus
+  C-165.
+
+  `[cmd]` **0 Thai-Zeilen** — *„ohne Sprecher oder Quelle waere jede
+  Zeile erfunden."*
+
+  `[read]` **Richtig entschieden.** `[cmd]` **Die 138 `name_th` sind
+  da**, die Umgangsnamen nicht. **Tom lebt in Thailand** — er kann sie
+  liefern oder pruefen.
+
+- [ ] **GO-24: *„Mineralstoffe"* als Gruppenbegriff?** (neu
+  2026-08-20). **Produktfrage aus C-165.**
+
+  `[cmd]` **`Elektrolyte` trifft fuenf Codes, `Spurenelemente` acht.**
+  **Und *„Mineralstoffe"*?**
+
+  `[read]` **Es waere die ganze Gruppe *Elemente* (16 Codes)** —
+  **oder nichts**, weil die Karte schon so heisst. **Zu entscheiden, ob
+  ein Alias auf eine ganze Karte zeigen darf.**
