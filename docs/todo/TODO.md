@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `dc17fc1` auf `dev`.
+**Stand:** 2026-08-18, Anker `abcd9f8` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 124 offen, 1 in Arbeit.
+`[cmd]` 125 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -231,7 +231,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
-| ~~**G-105**~~ | Zwei abgeschnittene SVG-Pfade in `packages/ui` | **erledigt 2026-08-21** — nicht zwei Kurven, sondern 42 % fehlende Pfaddaten; HINTEN hatte gar keinen Umriss. 160 Pfade, 0 kaputt. Bildentscheidung offen (165) |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -254,7 +253,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
 | **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
-| ~~**G-120**~~ | `updateWaterLogAmount` liegt fertig und ungenutzt | **erledigt 2026-08-21** — `PATCH` plus Stift-Knopf; Kreis 500→250 ml, fremde Id 404 (165) |
+| **G-125** | `MuscleBodyMap.js` traegt die kaputten Umrisse weiter |  |
+| **A-31** | Die Pfadpruefung gehoert ins Gate |  |
+| **A-32** | Die Nummer G-124 war doppelt vergeben |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
 
