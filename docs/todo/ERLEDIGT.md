@@ -6648,6 +6648,50 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Und die Bruecke ist mitgewachsen:** `substance_aliases` von
   **1.132 auf 1.541 Zeilen.**
 
+- [x] **C-185: Peptide 62 → 61, vier Identitaetsfehler behoben** (neu
+  2026-08-20). Aus `crawl_027`.
+
+  `[cmd]` **Vier schwere Fehler live gegen PubChem/GSRS/FDA gefunden:**
+
+  | | |
+  |---|---|
+  | KPV-UNII | gehoerte zu α-MSH → `null` |
+  | **BPC-157-UNII** | **fabriziert** → `null` |
+  | PEG-MGF-UNII | KIT-Ligand-Verwechslung → `null` |
+  | CJC-1295 DAC / ohne DAC | **IDs vertauscht** → getauscht |
+
+  `[cmd]` **Und ein Duplikat `Melanotan I` gemergt** — 62 → 61,
+  **protokolliert, keine stille Loeschung.**
+
+  `[read]` **C-134 hat 567 Substanzen konsolidiert** — **die Bruecke
+  muss nachgezogen werden**, sonst zeigen Aliase auf eine Zeile, die es
+  nicht mehr gibt.
+
+  `[cmd]` **Dazu:** 21 von 37 mit Humanstudien, **16 ohne** — darunter
+  **BPC-157 und TB-500 als `HIGH_RELEVANCE_LOW_EVIDENCE`.**
+  **BPC-157-Tierevidenz stammt zu ~100 % aus einer Arbeitsgruppe** — als
+  Einschraenkung dokumentiert.
+
+  `[cmd]` **Erledigt 2026-08-21 mit C-188.** Die vier korrigierten
+  Identitaeten sind in Alias-Bruecke und Substanzkatalog nachgezogen,
+  **der gemergte Melanotan-I-Altdatensatz ist entfernt.**
+
+  | | vorher | nachher |
+  |---|---|---|
+  | `substance_catalog` | 567 | **566** |
+  | `substance_aliases` | 1.132 | **1.541** |
+  | Herkunftszeilen | 667 | 668 |
+
+  `[cmd]` **Sechs Melanotan-Aliase bleiben** — die zusammengefuehrte
+  Zeile traegt ihre Namen weiter.
+
+  `[read]` **Und die vier Fehler waren ernst:** ein **fabriziertes UNII
+  bei BPC-157**, ein KPV-UNII, das zu α-MSH gehoerte, eine
+  KIT-Ligand-Verwechslung bei PEG-MGF, **und vertauschte IDs zwischen
+  CJC-1295 mit und ohne DAC.**
+
+  `[cmd]` **Kettenlauf: 87 Schritte, Exit 0.**
+
 
 
 ## Erledigt am 2026-08-05

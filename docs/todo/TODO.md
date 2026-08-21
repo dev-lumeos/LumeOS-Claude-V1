@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-21.** 165 offen, 1 in Arbeit.
+**Stand: 2026-08-21.** 164 offen, 1 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -3818,29 +3818,6 @@ Umsetzen angepasst werden.
   **Zu tun:** Rueckmeldung, welche 18 wir aufgeloest haben. `[cmd]`
   **Offen bleiben `lab_hcg` und `lab_blood_pressure`.**
 
-- [ ] **C-185: Peptide 62 → 61, vier Identitaetsfehler behoben** (neu
-  2026-08-20). Aus `crawl_027`.
-
-  `[cmd]` **Vier schwere Fehler live gegen PubChem/GSRS/FDA gefunden:**
-
-  | | |
-  |---|---|
-  | KPV-UNII | gehoerte zu α-MSH → `null` |
-  | **BPC-157-UNII** | **fabriziert** → `null` |
-  | PEG-MGF-UNII | KIT-Ligand-Verwechslung → `null` |
-  | CJC-1295 DAC / ohne DAC | **IDs vertauscht** → getauscht |
-
-  `[cmd]` **Und ein Duplikat `Melanotan I` gemergt** — 62 → 61,
-  **protokolliert, keine stille Loeschung.**
-
-  `[read]` **C-134 hat 567 Substanzen konsolidiert** — **die Bruecke
-  muss nachgezogen werden**, sonst zeigen Aliase auf eine Zeile, die es
-  nicht mehr gibt.
-
-  `[cmd]` **Dazu:** 21 von 37 mit Humanstudien, **16 ohne** — darunter
-  **BPC-157 und TB-500 als `HIGH_RELEVANCE_LOW_EVIDENCE`.**
-  **BPC-157-Tierevidenz stammt zu ~100 % aus einer Arbeitsgruppe** — als
-  Einschraenkung dokumentiert.
 
 - [ ] **G-150: Die Volltextsuche findet ueber Erklaertexte** (neu
   2026-08-21). Befund aus G-147. **Zu entscheiden, ob erwuenscht.**
