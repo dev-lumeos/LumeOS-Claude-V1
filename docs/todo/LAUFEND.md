@@ -53,7 +53,6 @@ wenn er rausgeht, nicht wenn er geschrieben ist.**
 | **C-176** `biomarkerDetails.ts` (121 KB) | `supabase/` |
 | **G-141** Onboarding nach ADR (7 Schritte) | `apps/web` |
 | **G-131** Settings, sieben Bereiche | `apps/web` |
-| **C-185** Peptide 62→61, vier Identitaetsfehler | `supabase/` |
 
 **Schema-Auftraege aus dem Gesamtabgleich**
 
