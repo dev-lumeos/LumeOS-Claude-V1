@@ -18,6 +18,10 @@ wissen, welcher Agent noch laeuft."*
 | **Codex** | **C-164** `food_search` mit mehreren Tags | `supabase/` | 2026-08-20 |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung | extern | 2026-08-20 |
 
+`[read]` **C-164 war zwischenzeitlich faelschlich als laufend
+eingetragen** — der Auftragstext ging erst am Abend raus. **Eintragen,
+wenn er rausgeht, nicht wenn er geschrieben ist.**
+
 ## Wartet auf einen freien Agenten
 
 **Sofort, weil sichtbar falsch**
