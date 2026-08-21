@@ -6222,6 +6222,49 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Die Luecke ist damit beziffert:** rund 94 Substanzen tragen
   vermutlich Naehrstoffe, **ohne maschinenlesbare Menge.**
 
+- [x] **C-161 (Codex): `parent_code` in `nutrient_defs`** — darauf
+  warten das Detail-Modal der Vorlage (Andockpunkt `waehlen` liegt in
+  den Zeilen) und der dann echte Trend je Naehrstoff aus der langen
+  Form.
+
+  `[cmd]` **Erledigt 2026-08-20.** `nutrient_defs.parent_code` traegt
+  **98 Eltern-Kind-Beziehungen, 40 Wurzeln.**
+
+  ### Toms Faelle sind behoben
+
+  | | vorher | jetzt |
+  |---|---|---|
+  | **Chlorid** (2.509 mg) | unter Natrium (1.084 mg) | **Wurzel** |
+  | **Schwefel** | unter Phosphor | **Wurzel** |
+  | **Kupfer, Mangan** | unter Iodid | **Wurzel** |
+  | `SUGAR` | Wurzel | **unter `CHO`** |
+
+  `[read]` **Und ein Kind kann jetzt nicht mehr groesser sein als sein
+  Elternteil** — die Baumpruefung rechnet es nach.
+
+  ### Die Erklaerungen aus dem Vorgaengerrepo
+
+  `[cmd]` **110 Erklaerungssaetze importiert**, mit Herkunft — aus
+  `nutrientDetails.ts` (194 KB, 2.454 Zeilen, dreisprachig).
+
+  `[read]` **Sie tragen, was Tom verlangt hat:** `function_de` (was der
+  Naehrstoff tut), `deficiency_de` (was bei Mangel), `excess_de` (was bei
+  zuviel), **`rda_athlete`**, `top_sources_de`, `interactions_de`.
+
+  ### Und die Ziele sind von 31 auf 138 gestiegen
+
+  `[cmd]` **`daily_reference_assessment` liest jetzt die lange
+  Tagesbilanz** — **154 Zeilen ueber 138 Codes**, 45 mit Prozentwert.
+
+  `[read]` **Vorher waren es 31.** Die 37-Spalten-Tabelle hatte die
+  uebrigen gar nicht erreicht.
+
+  ### Die Ansichtsablage steht
+
+  `[cmd]` **`public.user_display_preferences`** mit `jsonb`,
+  Zeilenschutz, Beispielpfad `nutrition.nutrient_tree`. **Allgemein
+  gebaut**, nicht nur fuer Naehrstoffe.
+
 
 
 ## Erledigt am 2026-08-05

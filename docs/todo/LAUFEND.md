@@ -13,7 +13,7 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Codex** | **C-161** Naehrstoffbaum, Erklaerungen, Ansichtsablage | `supabase/` | 2026-08-20 |
+| **Codex** | *frei* | | |
 | **Claude Code** | **A-30** `next/headers` bricht den Build | `packages/shared` | 2026-08-20 |
 | **Fable** | *frei* | | |
 
@@ -21,7 +21,7 @@ wissen, welcher Agent noch laeuft."*
 
 | Auftrag | Bereich | blockiert von |
 |---|---|---|
-| **G-122** Baum klappbar je Ebene + Detailmodal | `apps/web` | **C-161** (`parent_code`, Ansichtsablage) |
+| **G-122** Baum klappbar je Ebene + Detailmodal | `apps/web` | **frei — C-161 ist durch** |
 | **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC geprueft) | `supabase/` | Codex besetzt |
 | **G-105** zwei abgeschnittene SVG-Pfade | `packages/ui` | — |
 | **G-120** `updateWaterLogAmount` ohne Knopf | `apps/web` | — |

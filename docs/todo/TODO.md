@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `3ed15fa` auf `dev`.
+**Stand:** 2026-08-18, Anker `dc17fc1` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 126 offen, 1 in Arbeit.
+`[cmd]` 124 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -153,7 +153,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
 | **C-48** | Die Tagesbilanz sichtbar machen |  |
 | **C-49** | Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach |  |
-| **C-161** | `parent_code` in `nutrient_defs` |  |
 | **D-05** | Spec-Audit | ~ |
 | **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
 | **E-07** | Lücke weibliche Darstellungen entscheiden |  |
@@ -257,7 +256,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
 | **G-120** | `updateWaterLogAmount` liegt fertig und ungenutzt |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
-| ~~**A-30**~~ | `next/headers` im Browserbuendel — fuenfter Fall | **erledigt 2026-08-21** — Build war heil, Einstieg schon geteilt; Pruefung `tools/serverimport-pruefen.mjs` haengt im Gate (163) |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
 
 ---
@@ -948,10 +946,6 @@ Quelle und Belege: `docs/ssot/161-naehrstoffanzeige.md`.
 - [ ] **`test-user@lumeos.local` traegt eine Mahlzeit** (2026-08-16,
   aus einem frueheren Nachweis) — Nullzustands-Messungen muessen sie
   erst abraeumen oder einrechnen.
-- [ ] **C-161 (Codex): `parent_code` in `nutrient_defs`** — darauf
-  warten das Detail-Modal der Vorlage (Andockpunkt `waehlen` liegt in
-  den Zeilen) und der dann echte Trend je Naehrstoff aus der langen
-  Form.
 
 ### G-104-Folgepunkte (Preferences, 2026-08-20) — Nummern vergibt der Orchestrator
 
