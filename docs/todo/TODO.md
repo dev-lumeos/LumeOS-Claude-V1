@@ -4189,6 +4189,34 @@ Umsetzen angepasst werden.
   beim Oeffnen der Karte aufgeklappt. `[read]` **Die zweite Ebene bleibt
   zu** — sonst stehen bei den Fetten wieder 37 Zeilen da.
 
+- [ ] **C-179: `EAA` zeigt auf den Summenwert, nicht auf die neun**
+  (neu 2026-08-20). **Toms Befund.**
+
+  **Tom, 2026-08-20:** *„Nebst BCAA gibt es auch EAA mit 9."*
+
+  `[cmd]` **Heute:** `eaa` → **`AAE9`** (*„Aminosaeuren, unentbehrlich,
+  gesamt"*) — **eine Zeile, kein Gruppenbegriff.**
+
+  `[cmd]` **`BCAA` ist dagegen als Gruppe angelegt** — drei Zeilen,
+  `kind='gruppe'`, `ILE`/`LEU`/`VAL`.
+
+  `[read]` **Beides ist fuer sich richtig, aber ungleich:** Wer *„BCAA"*
+  tippt, bekommt die drei Aminosaeuren. **Wer *„EAA"* tippt, bekommt
+  einen Summenwert und sieht die neun nicht.**
+
+  ### Die neun
+
+  `[cmd]` **Histidin, Isoleucin, Leucin, Lysin, Methionin,
+  Phenylalanin, Threonin, Tryptophan, Valin** — alle als eigene Codes
+  im Bestand.
+
+  `[cmd]` **`AAE9` bleibt als eigener Eintrag** — der Name traegt die 9
+  schon. **Aber `eaa` sollte auf die neun zeigen**, wie `bcaa` auf drei.
+
+  `[read]` **Und dieselbe Frage bei den anderen Gruppen:**
+  `Spurenelemente` (8), `B-Vitamine` (8), `Elektrolyte` (5) — **haben
+  die einen Summenwert, der stattdessen getroffen wird?**
+
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
 
@@ -4867,7 +4895,7 @@ Umsetzen angepasst werden.
   Glukose und Vitamin D war es das nicht (G-85: `1558-6` ist *Fasting*,
   `2345-7` nicht). **Keine Aliasfrage, eine inhaltliche.**
 
-- [ ] **G-143: Zehn Marker in `enrichment` ohne `system_groups`**
+- [ ] **G-146: Zehn Marker in `enrichment` ohne `system_groups`**
   (neu 2026-08-21). Befund aus G-135. **Produktentscheidung, keine
   Datenluecke.**
 
