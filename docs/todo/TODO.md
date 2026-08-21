@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `8725c31` auf `dev`.
+**Stand:** 2026-08-18, Anker `7be9a5c` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 155 offen, 1 in Arbeit.
+`[cmd]` 153 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -283,8 +283,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
 | **G-132** | „Ohne Laktose 1.021" ist die Zahl MIT Laktose |  |
-| **G-125** | `MuscleBodyMap.js` traegt die kaputten Umrisse weiter |  |
-| **A-31** | Die Pfadpruefung gehoert ins Gate |  |
 | **A-32** | Die Nummer G-124 war doppelt vergeben |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |

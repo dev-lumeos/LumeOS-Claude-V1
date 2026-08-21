@@ -78,6 +78,30 @@
       "zeilenschutzart": "oeffentlich"
     },
     {
+      "name": "nutrient_aliases",
+      "schritt": "019",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "019_nutrient_aliases.ts: authenticated SELECT, service_role ALL (in der Kette retroaktiv ueber 060 3e)",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
       "name": "foods",
       "schritt": "Baseline",
       "rls": true,
@@ -934,6 +958,26 @@
         ]
       },
       "grants_herkunft": "059b vergibt SELECT; service_role erhaelt zusaetzlich ALL aus den DEFAULT PRIVILEGES in 060 3e — [cmd] \"ON TABLES\" umfasst in Postgres auch Sichten"
+    },
+    {
+      "name": "nutrient_search_aliases",
+      "schritt": "019",
+      "security_invoker": true,
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "019 vergibt SELECT; service_role erhaelt zusaetzlich ALL aus den DEFAULT PRIVILEGES bzw. dem retroaktiven Grant in 060 3e"
     },
     {
       "name": "hydration_summary",

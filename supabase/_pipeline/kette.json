@@ -32,6 +32,13 @@
       "depends_on": ["015a"]
     },
     {
+      "id": "019",
+      "path": "supabase/_pipeline/015_kataloge/019_nutrient_aliases.ts",
+      "kind": "tsx",
+      "creates": "Kuratierte Suchaliase (nutrient_aliases) samt Sicht nutrient_search_aliases fuer die Volltextsuche",
+      "depends_on": ["015"]
+    },
+    {
       "id": "020a",
       "path": "supabase/_pipeline/02_human_layer/020_food_human_layer.sql",
       "kind": "sql",
