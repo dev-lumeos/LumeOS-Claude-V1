@@ -208,6 +208,54 @@ Bun.**
 
 ---
 
+## Rangfolge bei Widerspruch
+
+```
+Code (per Befehl verifiziert)
+  > docs/ssot/            Ist-Zustand, gemessen
+  > docs/spezifikation/   Soll-Zustand, Entwuerfe und Mockups
+  > docs/specs/           getroffene Entscheidungen, pruefend lesen
+```
+
+### `docs/specs/` ist kein Altbestand
+
+`[read]` **Die Projektanweisung fuehrte es bis zum 2026-08-20 als
+*„Altbestand, kein Sollwert"*.** **Das ist zu weit gefasst.**
+
+`[cmd]` **Was heute daraus kam:**
+
+| | |
+|---|---|
+| `Medical/SPEC_09_SCORING.md` | **408 Zeilen** — fuenf Systeme, Marker, Gewichtung. **G-85 hing als offene Frage bei Tom.** |
+| `Core/ONBOARDING_ADR.md` | **sieben Schritte, Status final.** G-83 sagte *„es gibt kein Onboarding"* |
+| `Core/SUBSCRIPTION_GATES_ADR.md` | **`display_tier` ist das Abo-Tier** — wir lasen es als Baumtiefe |
+| `Nutrition/04_adrs/` | **zwoelf ADRs** — BLS-only, Hydration, Preferences, Rezepte |
+
+`[cmd]` **Und was dagegen spricht:** **A-20 zaehlt sieben inhaltliche
+Fehler** — Magnesium mit Methaemoglobin verwechselt, eine invertierte
+Skala, drei Formelfehler. **G-135 fand fuenf weitere allein in
+`SPEC_09_SCORING`.**
+
+**Die Regel lautet deshalb:**
+
+> **Pruefend lesen, nicht uebernehmen.** Vor jedem Auftrag
+> konsultieren, **jede Zahl gegen den Bestand pruefen.** Was
+> widerspricht, wird gemeldet — nicht stillschweigend uebernommen und
+> nicht ignoriert.
+
+`[cmd]` **`docs/spezifikation/00-QUELLEN.md` listet je Modul, was es
+gibt** — **160 Spec-Dateien in sieben Unterordnern**, nicht neun.
+
+### Was wirklich Altbestand ist
+
+`[cmd]` `docs/_archive/` · `_archive/` · `AGENTS.md` · `.codex/` ·
+`.agents/` · `infra/`
+
+`[read]` **Diese nicht lesen.** Keine Workorders, keine
+Risk-Categories, kein Approval-Queue-Vokabular.
+
+---
+
 ## Wie Tom arbeitet
 
 `[read]` **Knapp und direktiv.** Er erwartet, dass der Kontext gelesen
