@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-21.** 168 offen, 1 in Arbeit.
+**Stand: 2026-08-21.** 167 offen, 1 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -3946,6 +3946,15 @@ Umsetzen angepasst werden.
 
   `[cmd]` **Gehoert zum Anzeigeteil von G-112**, nicht zur Datenbank.
 
+  `[cmd]` **Aus dem zusammengefuehrten G-132:** `food_search` liefert
+  `{"code":"contains_lactose","count":1021,"name_de":"Enthaelt Laktose"}`
+  — **1.021 Lebensmittel MIT Laktose, von 7.140.** Die Pille verspricht
+  Ausschluss und zeigt Einschluss.
+
+  `[read]` **G-132 trug denselben Befund unter eigener Nummer**
+  (zusammengefuehrt 2026-08-21). **Die Nummer bleibt vergeben und wird
+  nicht neu ausgegeben.**
+
 - [ ] **G-134: Die vier Filtergruppen gibt es in den Daten nicht** (neu
   2026-08-20). **Entscheidung.** Befund aus C-164.
 
@@ -4307,30 +4316,6 @@ Umsetzen angepasst werden.
 
   `[read]` **Vier der sechs Alert-Eintraege speisen sich daraus.**
   **Codex-Auftrag** — der Rest der Kachel liest bereits echt.
-
-- [ ] **G-132: „Ohne Laktose 1.021" ist die Zahl MIT Laktose**
-  (neu 2026-08-21). Befund bei der Vorbereitung von C-164.
-
-  `[cmd]` **Die Datenbank ist korrekt.** `food_search` liefert
-  `{"code":"contains_lactose","count":1021,"name_de":"Enthaelt Laktose"}`
-  — **1.021 Lebensmittel MIT Laktose**, von 7.140.
-
-  `[cmd]` **Die Oberflaeche dreht nur das Wort um, nicht die Zahl:**
-  `{ code: 'contains_lactose', label: 'Ohne Laktose', anzahl: 1021 }`
-  (`apps/web/src/app/v2/nutrition/tab-foods.tsx:180`).
-
-  `[cmd]` **Richtig waeren:** ohne Laktose **6.119**, ohne Gluten
-  **6.518**, ohne Nuesse **7.020**.
-
-  `[read]` **Die Pille verspricht Ausschluss und zeigt Einschluss.**
-  Wer „Ohne Laktose 1.021" liest, erwartet 1.021 laktosefreie
-  Lebensmittel — er bekommt die Gegenmenge.
-
-  `[read]` **Haengt an C-164:** Sobald der echte Ausschluss steht,
-  sinkt `total` beim Setzen des Filters — dann muss die Pille die
-  richtige Zahl nennen. **Beides zusammen anfassen.**
-
-
 
 - [ ] **A-32: Die Nummer G-124 war doppelt vergeben** (neu 2026-08-21).
 
