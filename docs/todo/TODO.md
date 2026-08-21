@@ -63,12 +63,21 @@ implementiert" für ein Modul, das in diesem Repo nicht existiert.
 
 `[read]` **Der alte Kopf stand auf „Block 28, Stand 2026-08-13"**,
 während im Repo bereits Block 34 gesichert war. **Und am 2026-08-21 auf
-„170 Punkte, Anker `bbd2202`, dreizehn ADRs"** — es waren 178 eindeutige
-Punkte, der Anker war tot, und es sind zwölf ADRs.
+„170 Punkte, Anker `bbd2202`, dreizehn ADRs"** — der Anker war tot, und
+es sind zwölf ADRs.
 
-`[cmd]` **A-44 baut eine Prüfung ins Gate**, die Dubletten und den
-Zähler misst. **Bis dahin gilt: Zahl aus der Datei zählen, nicht
-fortschreiben.**
+`[cmd]` **Gemessen am 2026-08-21, vor dem Aufräumen: 169 Einträge auf
+oberster Ebene, davon neun Nummern doppelt vergeben — 160 eindeutige.**
+Weder die 170 des alten Kopfes noch die 178, die eine Zwischenfassung
+dieses Absatzes nannte, lassen sich damit belegen. **Die 178 ist ersatzlos
+raus:** eine dritte ungeprüfte Zahl in einem Absatz über zwei
+fortgeschriebene Zähler.
+
+`[cmd]` **A-44 ist gebaut** — `tools/nummern-pruefen.mjs` hängt im Gate
+und prüft sieben Dinge: Dubletten je Datei, Nummern in beiden Dateien,
+abgehakte Punkte in `TODO.md`, `LAUFEND.md` gegen den Bestand, und den
+Zähler oben gegen die Datei. **Jede Prüfung ist über einen eingebauten
+Fehler einzeln belegt** (`LUMEOS_NUMMERN_SELBSTTEST=1`).
 
 ---
 
