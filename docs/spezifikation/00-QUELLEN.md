@@ -4,13 +4,11 @@
 
 **Anlass (Tom, 2026-08-20):** *,Und das hast alles gegen Spec, Docs,
 altes Repo und neues Design gegengeprueft?"* — **Nein, mehrfach nicht.**
-Der Abgleich danach fand jedes Mal mehr, als im Auftrag stand:
 
 `[cmd]` **G-101:** 890 Zeilen Mockup mit Detailmodal, Filtern und Baum —
-ungelesen. **G-98:** `MealPlansView` in der dritten Nutrition-Datei —
-zwei Auftraege suchten in der ersten. **A-33:** Der Health score war in
-`SPEC_09_SCORING.md` entschieden, **und wurde als offene Frage an Tom
-weitergegeben.**
+ungelesen. **G-98:** `MealPlansView` in der dritten Nutrition-Datei.
+**A-33:** Der Health score war in `SPEC_09_SCORING.md` entschieden —
+**und wurde als offene Frage an Tom weitergegeben.**
 
 ---
 
@@ -18,13 +16,34 @@ weitergegeben.**
 
 | | |
 |---|---|
-| Mockups | **49 Dateien, 1.725 KB** |
-| Specs | **120 Dateien, 1.046 KB** |
+| Mockups | **49 Dateien, 1722 KB** |
+| Specs | **160 Dateien, 15851 KB** — rekursiv gezaehlt |
 | Vorgaengerrepo | `referenz/lumeos-2026/` |
 | SSOT-Berichte | `docs/ssot/` |
 
 `[read]` **Kein Modul hat nur eine Mockup-Datei.** Nutrition hat drei,
 Recovery fuenf, Coach acht.
+
+`[cmd]` **Und `docs/specs/Nutrition/` hat sieben Unterordner** —
+**45 Dateien**, darunter `00_decisions/`, `04_adrs/` (12 ADRs) und
+`05_reviews/` (122 KB Opus-Reviews). **Eine erste Fassung dieser Datei
+zaehlte nur die oberste Ebene und meldete neun.**
+
+---
+
+## Zwei Dateien, die Rechenwerke tragen
+
+`[cmd]` **`module-training-spec.jsx`** — `LANDMARKS` (MEV/MAV/MRV),
+`PROGRESSION_MODELS` mit Formeln, `DELOAD_TRIGGERS`,
+`ROUTINE_TEMPLATES`.
+
+`[cmd]` **`module-recovery-engine.jsx`** — `MODALITY_BONUS` (elf
+Modalitaeten), `OVERTRAINING_SIGNALS` (vier Schwellen), `ACWR_DATA`,
+`HRV_BASELINE`.
+
+`[read]` **Wer nur die Hauptdatei liest, findet sie nicht** — und
+mehrere offene Punkte fuehren ihre Werte als *„unbelegt"* oder
+*„fehlt"*.
 
 ---
 
@@ -39,11 +58,11 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Admin/`, 5 Dateien, 41 KB:**
 
-- `13_MODULE_ADMIN.md`
-- `INDEX.md`
-- `SPEC-ADMIN-BACKEND-v1.md`
-- `SPEC_01_UI_DESIGN.md`
-- `admin-panel-spec.md`
+- `13_MODULE_ADMIN.md` (10 KB)
+- `INDEX.md` (1 KB)
+- `SPEC-ADMIN-BACKEND-v1.md` (19 KB)
+- `SPEC_01_UI_DESIGN.md` (7 KB)
+- `admin-panel-spec.md` (4 KB)
 
 
 ### buddy
@@ -57,18 +76,18 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/BuddyandAICoach/`, 12 Dateien, 136 KB:**
 
-- `INDEX.md`
-- `SPEC_01_MODULE_CONTRACT.md`
-- `SPEC_02_ENTITIES.md`
-- `SPEC_03_USER_FLOWS.md`
-- `SPEC_04_FEATURES.md`
-- `SPEC_05_ENGINES.md`
-- `SPEC_06_DATABASE_SCHEMA.md`
-- `SPEC_07_API.md`
-- `SPEC_08_IMPORT_PIPELINE.md`
-- `SPEC_09_SCORING.md`
-- `SPEC_10_COMPONENTS.md`
-- `SPEC_11_UI_DESIGN.md`
+- `INDEX.md` (7 KB)
+- `SPEC_01_MODULE_CONTRACT.md` (4 KB)
+- `SPEC_02_ENTITIES.md` (9 KB)
+- `SPEC_03_USER_FLOWS.md` (8 KB)
+- `SPEC_04_FEATURES.md` (17 KB)
+- `SPEC_05_ENGINES.md` (15 KB)
+- `SPEC_06_DATABASE_SCHEMA.md` (16 KB)
+- `SPEC_07_API.md` (14 KB)
+- `SPEC_08_IMPORT_PIPELINE.md` (11 KB)
+- `SPEC_09_SCORING.md` (13 KB)
+- `SPEC_10_COMPONENTS.md` (11 KB)
+- `SPEC_11_UI_DESIGN.md` (9 KB)
 
 
 ### coach
@@ -86,18 +105,18 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/HumanCoach/`, 12 Dateien, 97 KB:**
 
-- `INDEX.md`
-- `SPEC_01_MODULE_CONTRACT.md`
-- `SPEC_02_ENTITIES.md`
-- `SPEC_03_USER_FLOWS.md`
-- `SPEC_04_FEATURES.md`
-- `SPEC_05_COACH_WORKFLOWS.md`
-- `SPEC_06_DATABASE_SCHEMA.md`
-- `SPEC_07_API.md`
-- `SPEC_08_IMPORT_PIPELINE.md`
-- `SPEC_09_SCORING.md`
-- `SPEC_10_COMPONENTS.md`
-- `SPEC_11_UI_DESIGN.md`
+- `INDEX.md` (4 KB)
+- `SPEC_01_MODULE_CONTRACT.md` (4 KB)
+- `SPEC_02_ENTITIES.md` (8 KB)
+- `SPEC_03_USER_FLOWS.md` (8 KB)
+- `SPEC_04_FEATURES.md` (10 KB)
+- `SPEC_05_COACH_WORKFLOWS.md` (8 KB)
+- `SPEC_06_DATABASE_SCHEMA.md` (12 KB)
+- `SPEC_07_API.md` (9 KB)
+- `SPEC_08_IMPORT_PIPELINE.md` (10 KB)
+- `SPEC_09_SCORING.md` (7 KB)
+- `SPEC_10_COMPONENTS.md` (8 KB)
+- `SPEC_11_UI_DESIGN.md` (8 KB)
 
 
 ### completeness
@@ -122,7 +141,7 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Dashboard/`, 1 Dateien, 1 KB:**
 
-- `dashmod.md`
+- `dashmod.md` (1 KB)
 
 
 ### goals
@@ -135,16 +154,16 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Goals/`, 10 Dateien, 65 KB:**
 
-- `API.md`
-- `COMPONENTS.md`
-- `CONSOLIDATED_KNOWLEDGE.md`
-- `DATABASE.md`
-- `FEATURES.md`
-- `OPEN_ITEMS.md`
-- `PHASE_MODELS.md`
-- `README.md`
-- `SCORING.md`
-- `STRATEGY.md`
+- `API.md` (8 KB)
+- `COMPONENTS.md` (5 KB)
+- `CONSOLIDATED_KNOWLEDGE.md` (6 KB)
+- `DATABASE.md` (13 KB)
+- `FEATURES.md` (5 KB)
+- `OPEN_ITEMS.md` (3 KB)
+- `PHASE_MODELS.md` (7 KB)
+- `README.md` (4 KB)
+- `SCORING.md` (10 KB)
+- `STRATEGY.md` (4 KB)
 
 
 ### market
@@ -161,18 +180,18 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Marketplace/`, 12 Dateien, 89 KB:**
 
-- `INDEX.md`
-- `SPEC_01_MODULE_CONTRACT.md`
-- `SPEC_02_ENTITIES.md`
-- `SPEC_03_USER_FLOWS.md`
-- `SPEC_04_FEATURES.md`
-- `SPEC_05_WALLET_ECONOMICS.md`
-- `SPEC_06_DATABASE_SCHEMA.md`
-- `SPEC_07_API.md`
-- `SPEC_08_IMPORT_PIPELINE.md`
-- `SPEC_09_SCORING.md`
-- `SPEC_10_COMPONENTS.md`
-- `SPEC_11_UI_DESIGN.md`
+- `INDEX.md` (4 KB)
+- `SPEC_01_MODULE_CONTRACT.md` (3 KB)
+- `SPEC_02_ENTITIES.md` (7 KB)
+- `SPEC_03_USER_FLOWS.md` (7 KB)
+- `SPEC_04_FEATURES.md` (10 KB)
+- `SPEC_05_WALLET_ECONOMICS.md` (7 KB)
+- `SPEC_06_DATABASE_SCHEMA.md` (14 KB)
+- `SPEC_07_API.md` (8 KB)
+- `SPEC_08_IMPORT_PIPELINE.md` (6 KB)
+- `SPEC_09_SCORING.md` (8 KB)
+- `SPEC_10_COMPONENTS.md` (7 KB)
+- `SPEC_11_UI_DESIGN.md` (8 KB)
 
 
 ### medical
@@ -186,17 +205,17 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Medical/`, 11 Dateien, 100 KB:**
 
-- `INDEX.md`
-- `SPEC_01_MODULE_CONTRACT.md`
-- `SPEC_02_ENTITIES.md`
-- `SPEC_03_USER_FLOWS.md`
-- `SPEC_04_FEATURES.md`
-- `SPEC_05_BIOMARKER_CATALOG.md`
-- `SPEC_06_DATABASE_SCHEMA.md`
-- `SPEC_07_API.md`
-- `SPEC_08_IMPORT_PIPELINE.md`
-- `SPEC_09_SCORING.md`
-- `SPEC_10_COMPONENTS.md`
+- `INDEX.md` (4 KB)
+- `SPEC_01_MODULE_CONTRACT.md` (4 KB)
+- `SPEC_02_ENTITIES.md` (8 KB)
+- `SPEC_03_USER_FLOWS.md` (11 KB)
+- `SPEC_04_FEATURES.md` (9 KB)
+- `SPEC_05_BIOMARKER_CATALOG.md` (11 KB)
+- `SPEC_06_DATABASE_SCHEMA.md` (15 KB)
+- `SPEC_07_API.md` (9 KB)
+- `SPEC_08_IMPORT_PIPELINE.md` (9 KB)
+- `SPEC_09_SCORING.md` (13 KB)
+- `SPEC_10_COMPONENTS.md` (7 KB)
 
 
 ### nutrition
@@ -207,17 +226,57 @@ Recovery fuenf, Coach acht.
 - `module-nutrition-spec.jsx` (39 KB)
 - `module-nutrition.jsx` (36 KB)
 
-**Spec — `docs/specs/Nutrition/`, 9 Dateien, 24 KB:**
+**Spec — `docs/specs/Nutrition/`, 49 Dateien, 14827 KB:**
 
-- `00_decisions`
-- `00_raw`
-- `01_current_specs`
-- `02_patches`
-- `03_sql`
-- `04_adrs`
-- `05_reviews`
-- `06_workorder_planning`
-- `INDEX.md`
+- `00_decisions/NUTRITION_NEXT_SPEC_DECISIONS.md` (22 KB)
+- `00_raw/bls/original/BLS_4_0_Components_DE_EN.xlsx` (21 KB)
+- `00_raw/bls/original/BLS_4_0_Daten_2025_DE.xlsx` (13763 KB)
+- `00_raw/bls/original/BLS_4_0_Dokumentation_DE.pdf` (459 KB)
+- `01_current_specs/SPEC_01_MODULE_CONTRACT.md` (15 KB)
+- `01_current_specs/SPEC_02_ENTITIES.md` (20 KB)
+- `01_current_specs/SPEC_03_USER_FLOWS.md` (14 KB)
+- `01_current_specs/SPEC_04_FEATURES.md` (15 KB)
+- `01_current_specs/SPEC_05_FOOD_TAXONOMY.md` (39 KB)
+- `01_current_specs/SPEC_06_DATABASE_SCHEMA.md` (64 KB)
+- `01_current_specs/SPEC_07_API.md` (22 KB)
+- `01_current_specs/SPEC_08_IMPORT_PIPELINE.md` (16 KB)
+- `01_current_specs/SPEC_09_SCORING.md` (17 KB)
+- `01_current_specs/SPEC_10_COMPONENTS.md` (13 KB)
+- `02_patches/SPEC_02_PASS2_ENTITIES.md` (11 KB)
+- `02_patches/SPEC_02_PATCH_ENTITY07_CUSTOMFOOD.md` (2 KB)
+- `02_patches/SPEC_02_PATCH_MEALPLANLOG_ADR.md` (3 KB)
+- `02_patches/SPEC_02_PATCH_NOTES.md` (2 KB)
+- `02_patches/SPEC_03_FLOW4_RECIPE_PATCH.md` (1 KB)
+- `02_patches/SPEC_03_PASS2_PATCH.md` (19 KB)
+- `02_patches/SPEC_06_PATCH_V1_DECISIONS.md` (2 KB)
+- `02_patches/SPEC_06_RECALCULATE_PATCH.md` (6 KB)
+- `02_patches/SPEC_07_PASS2_PATCH.md` (16 KB)
+- `02_patches/SPEC_07_PATCH_APRIL2026.md` (4 KB)
+- `02_patches/SPEC_09_PATCH_UL_SUPPLEMENTS.md` (7 KB)
+- `02_patches/SPEC_10_PASS2_PATCH.md` (14 KB)
+- `02_patches/SPEC_10_PATCH_APRIL2026.md` (2 KB)
+- `03_sql/NUTRIENT_REFERENCE_VALUES_SEED_STRUCTURE.md` (6 KB)
+- `03_sql/SPEC_06_V1_MIGRATION.sql` (17 KB)
+- `04_adrs/ADR_BLS_ONLY.md` (2 KB)
+- `04_adrs/ADR_COACH_PERMISSIONS_V1.md` (2 KB)
+- `04_adrs/ADR_CUSTOM_FOODS_V1.md` (2 KB)
+- `04_adrs/ADR_GHOST_ENTRY_RECIPE.md` (2 KB)
+- `04_adrs/ADR_IMPROVEMENTS_PACKAGE.md` (7 KB)
+- `04_adrs/ADR_MEALCAM_CONSENT.md` (2 KB)
+- `04_adrs/ADR_MEALCAM_V1.md` (2 KB)
+- `04_adrs/ADR_NUTRITION_PREFERENCES_V1.md` (3 KB)
+- `04_adrs/ADR_RECIPES_SCHEMA_ONLY.md` (1 KB)
+- `04_adrs/ADR_RECIPE_SOURCE_BUDDY.md` (1 KB)
+- `04_adrs/ADR_SUPPLEMENTS_API_BOUNDARY.md` (2 KB)
+- `04_adrs/ADR_WATER_TOTAL_HYDRATION.md` (3 KB)
+- `05_reviews/OPUS_REVIEW_NUTRITION_01_SCOPE_ADR.md` (17 KB)
+- `05_reviews/OPUS_REVIEW_NUTRITION_02_DATA_API.md` (43 KB)
+- `05_reviews/OPUS_REVIEW_NUTRITION_03_UI_FLOWS_READINESS.md` (44 KB)
+- `05_reviews/OPUS_REVIEW_NUTRITION_V1_FINAL.md` (18 KB)
+- `06_workorder_planning/NUTRITION_PHASE1_DB_FOUNDATION_SPLIT.md` (33 KB)
+- `06_workorder_planning/NUTRITION_WORKORDER_PLAN_V1.md` (21 KB)
+- `06_workorder_planning/schema_verification/P1-004-static-schema-verification-report.md` (2 KB)
+- `INDEX.md` (12 KB)
 
 
 ### onboarding
@@ -239,17 +298,17 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Recovery/`, 11 Dateien, 108 KB:**
 
-- `INDEX.md`
-- `SPEC_01_MODULE_CONTRACT.md`
-- `SPEC_02_ENTITIES.md`
-- `SPEC_03_USER_FLOWS.md`
-- `SPEC_04_FEATURES.md`
-- `SPEC_05_METRICS_ALGORITHMS.md`
-- `SPEC_06_DATABASE_SCHEMA.md`
-- `SPEC_07_API.md`
-- `SPEC_08_IMPORT_PIPELINE.md`
-- `SPEC_09_SCORING.md`
-- `SPEC_10_COMPONENTS.md`
+- `INDEX.md` (4 KB)
+- `SPEC_01_MODULE_CONTRACT.md` (5 KB)
+- `SPEC_02_ENTITIES.md` (11 KB)
+- `SPEC_03_USER_FLOWS.md` (11 KB)
+- `SPEC_04_FEATURES.md` (11 KB)
+- `SPEC_05_METRICS_ALGORITHMS.md` (11 KB)
+- `SPEC_06_DATABASE_SCHEMA.md` (17 KB)
+- `SPEC_07_API.md` (10 KB)
+- `SPEC_08_IMPORT_PIPELINE.md` (7 KB)
+- `SPEC_09_SCORING.md` (12 KB)
+- `SPEC_10_COMPONENTS.md` (9 KB)
 
 
 ### stubs
@@ -271,18 +330,18 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Supplements/`, 12 Dateien, 142 KB:**
 
-- `INDEX.md`
-- `Injection Planner · Spec Change Request.md`
-- `SPEC_01_MODULE_CONTRACT.md`
-- `SPEC_02_ENTITIES.md`
-- `SPEC_03_USER_FLOWS.md`
-- `SPEC_04_FEATURES.md`
-- `SPEC_05_CATALOG_EVIDENCE.md`
-- `SPEC_06_DATABASE_SCHEMA.md`
-- `SPEC_07_API.md`
-- `SPEC_08_IMPORT_PIPELINE.md`
-- `SPEC_09_SCORING.md`
-- `SPEC_10_COMPONENTS.md`
+- `INDEX.md` (4 KB)
+- `Injection Planner · Spec Change Request.md` (17 KB)
+- `SPEC_01_MODULE_CONTRACT.md` (6 KB)
+- `SPEC_02_ENTITIES.md` (11 KB)
+- `SPEC_03_USER_FLOWS.md` (13 KB)
+- `SPEC_04_FEATURES.md` (11 KB)
+- `SPEC_05_CATALOG_EVIDENCE.md` (10 KB)
+- `SPEC_06_DATABASE_SCHEMA.md` (17 KB)
+- `SPEC_07_API.md` (13 KB)
+- `SPEC_08_IMPORT_PIPELINE.md` (17 KB)
+- `SPEC_09_SCORING.md` (13 KB)
+- `SPEC_10_COMPONENTS.md` (11 KB)
 
 
 ### training
@@ -296,17 +355,23 @@ Recovery fuenf, Coach acht.
 
 **Spec — `docs/specs/Training/`, 11 Dateien, 147 KB:**
 
-- `INDEX.md`
-- `SPEC_01_MODULE_CONTRACT.md`
-- `SPEC_02_ENTITIES.md`
-- `SPEC_03_USER_FLOWS.md`
-- `SPEC_04_FEATURES.md`
-- `SPEC_05_EXERCISE_TAXONOMY.md`
-- `SPEC_06_DATABASE_SCHEMA.md`
-- `SPEC_07_API.md`
-- `SPEC_08_IMPORT_PIPELINE.md`
-- `SPEC_09_SCORING.md`
-- `SPEC_10_COMPONENTS.md`
+- `INDEX.md` (4 KB)
+- `SPEC_01_MODULE_CONTRACT.md` (6 KB)
+- `SPEC_02_ENTITIES.md` (15 KB)
+- `SPEC_03_USER_FLOWS.md` (13 KB)
+- `SPEC_04_FEATURES.md` (10 KB)
+- `SPEC_05_EXERCISE_TAXONOMY.md` (9 KB)
+- `SPEC_06_DATABASE_SCHEMA.md` (29 KB)
+- `SPEC_07_API.md` (16 KB)
+- `SPEC_08_IMPORT_PIPELINE.md` (16 KB)
+- `SPEC_09_SCORING.md` (16 KB)
+- `SPEC_10_COMPONENTS.md` (12 KB)
+
+
+### Specs ohne eigenes Mockup-Modul
+
+**`docs/specs/Core/`** — 3 Dateien, 10 KB
+**`docs/specs/WebPlatform/`** — 11 Dateien, 86 KB
 
 
 ---
@@ -316,13 +381,12 @@ Recovery fuenf, Coach acht.
 `[cmd]` **Vor jedem Auftrag: hier nachsehen, dann lesen.**
 
 **1. Alle Mockup-Dateien des Moduls** — nicht die erste.
-**2. Die Spec** — pruefend. `[read]` A-20 zaehlt sieben inhaltliche
-Fehler; **aber sie enthaelt auch Entscheidungen, die sonst neu getroffen
-werden.**
+**2. Die Spec** — pruefend, **und rekursiv**. `[read]` A-20 zaehlt
+sieben inhaltliche Fehler; **aber sie enthaelt auch Entscheidungen, die
+sonst neu getroffen werden.**
 **3. Das Vorgaengerrepo** — Struktur ja, Code nie. **Und nachsehen,
 warum es ersetzt wurde.**
 **4. `docs/ssot/`** — was schon gemessen ist.
 
 `[read]` **Ein Auftrag, der eine dieser vier auslaesst, kostet den
-Agenten einen halben Durchgang** — er misst dann, was der Orchestrator
-haette lesen sollen.
+Agenten einen halben Durchgang.**
