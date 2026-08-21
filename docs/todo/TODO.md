@@ -3559,6 +3559,57 @@ Umsetzen angepasst werden.
   `[read]` **Und C-159s Landkarte wird kuerzer:** Die Symptomtabelle
   fehlt im Schema, **aber nicht im Entwurf.**
 
+- [ ] **A-34: Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht**
+  (neu 2026-08-20). Randbefund aus G-129.
+
+  `[cmd]` *„Beim ersten Messlauf stand deine live gespeicherte Ansicht
+  auf „Auffaellig / 30 Tage" — meine Probelaeufe haben sie ueberschrieben
+  (jetzt „Alle / Heute")."*
+
+  `[read]` **Das ist das korrekte Verhalten der Speicherung** — aber es
+  heisst: **jeder Agent, der als `dev@lumeos.app` misst, aendert Toms
+  Einstellungen.**
+
+  `[cmd]` **Seit G-122 gilt das fuer `user_display_preferences`** — und
+  kuenftig fuer jede gespeicherte Ansicht.
+
+  **Regel fuer Auftraege:** `[cmd]` **Nachweise auf
+  `test-user@lumeos.local` fuehren**, oder die Zeile vorher sichern und
+  danach zuruecksetzen. `[read]` **Gehoert in die Nachweisliste jedes
+  UI-Auftrags.**
+
+- [ ] **G-136: Zwei Kartenzuordnungen sind Auslegung** (neu
+  2026-08-20). **Entscheidung fuer Tom.** Aus G-129.
+
+  `[cmd]` **Die Acht-Karten-Liste aus GO-22 nennt sie nicht** — der
+  Agent hat entschieden und markiert:
+
+  | | wohin | Begruendung |
+  |---|---|---|
+  | **`FIBT` Ballaststoffe** | **Kohlenhydrate** | *„sind Kohlenhydrate; Cronometer ebenso"* |
+  | Wasser, Alkohol, Organische Saeuren, Rohasche | **Sonstige** | *„die Liste laesst ihnen keinen anderen Platz"* |
+
+  `[cmd]` **Je eine Zeile in `karteFuerWurzel`**, falls es anders sein
+  soll.
+
+  `[read]` **Beide sind vertretbar.** Ballaststoffe unter Kohlenhydrate
+  ist fachlich richtig. **Wasser bei *„Sonstige"* ist der schwaechere
+  Teil** — es ist einer der sechs Naehrstoffklassen, aber eine eigene
+  Karte fuer einen Eintrag waere seltsam.
+
+- [ ] **G-137: Acht Karten — die alten Ansichtsschluessel verfallen**
+  (neu 2026-08-20). Nebenwirkung aus G-129, **einmalig.**
+
+  `[cmd]` **Die gespeicherte Ansicht traegt Gruppenschluessel wie
+  `g:Makronaehrstoffe`** — die Karte heisst jetzt anders.
+
+  `[read]` **Wer eine Ansicht gespeichert hatte, startet einmal mit
+  allem zugeklappt.** **Kein Fehler, aber es gehoert erwaehnt**, falls
+  jemand danach fragt.
+
+  `[cmd]` **Und die Speicherung verwirft kaputte Werte** (G-122) — sie
+  faellt sauber auf *„alles zu"* zurueck.
+
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
 

@@ -13,7 +13,7 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | **G-129** Acht Karten, Volltextsuche, Ursachen | `apps/web/v2/nutrition` | 2026-08-20 |
+| **Fable** | *frei* | | |
 | **Codex** | **C-164** `food_search` mit mehreren Tags | `supabase/` | 2026-08-20 |
 | **Claude Code** | **G-135** Health score nach `SPEC_09_SCORING` | `apps/web/v2/medical` | 2026-08-20 |
 
