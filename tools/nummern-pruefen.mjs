@@ -14,6 +14,12 @@
 //   laufend-unbekannt   LAUFEND.md nennt eine Nummer, die nirgends angelegt ist
 //   laufend-erledigt    LAUFEND.md fuehrt einen Auftrag, der schon erledigt ist
 //   kopfzaehler         Den Zaehler im TODO-Kopf gegen die Datei
+//   uebersicht-veraltet 00-UEBERSICHT.md gegen den Bestand in TODO.md
+//
+// `--schreiben` erzeugt `docs/todo/00-UEBERSICHT.md` neu. Die Datei wird
+// NICHT von Hand gepflegt: ein handgepflegter Zweitindex driftet gegen
+// den ersten, das war die Fehlerquelle, die den alten Uebersichtsblock
+// gekostet hat. Sie kommt aus denselben Zeilen wie der Zaehler.
 //
 // Gegenprobe: LUMEOS_NUMMERN_SELBSTTEST=1 baut je Pruefung einen eigenen
 // Fehler ein und verlangt, dass genau diese Pruefung anschlaegt.
@@ -24,14 +30,15 @@
 // ohne dass die benannte Pruefung je gelaufen waere. Eine Pruefung, die
 // beim Selbsttest die falsche Ursache nennt, ist nicht belegt.
 
-import { readFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const WURZEL = resolve(process.cwd())
 const PFAD = {
   todo: resolve(WURZEL, 'docs/todo/TODO.md'),
   erledigt: resolve(WURZEL, 'docs/todo/ERLEDIGT.md'),
-  laufend: resolve(WURZEL, 'docs/todo/LAUFEND.md')
+  laufend: resolve(WURZEL, 'docs/todo/LAUFEND.md'),
+  uebersicht: resolve(WURZEL, 'docs/todo/00-UEBERSICHT.md')
 }
 
 const ZEILE = /^[ \t]*- \[( |x|~)\] \*\*([A-Z]+-\d+[a-z]?):/
@@ -42,9 +49,22 @@ const LAUFEND_NR = /\*\*([A-Z]+-\d+[a-z]?)\*\*/g
 
 function punkte (text) {
   const aus = []
+  let sektion = '(ohne Sektion)'
   text.split('\n').forEach((z, i) => {
+    if (z.startsWith('## ')) sektion = z.slice(3).trim()
     const m = z.match(ZEILE)
-    if (m) aus.push({ zustand: m[1], nr: m[2], zeile: i + 1, titel: z.trim().slice(0, 90) })
+    if (m) {
+      // Der Titel steht zwischen `**NR:` und dem schliessenden `**`.
+      const t = z.match(/\*\*[A-Z]+-\d+[a-z]?:\s*([^*]+)/)
+      aus.push({
+        zustand: m[1],
+        nr: m[2],
+        zeile: i + 1,
+        sektion,
+        kurz: (t ? t[1] : '').trim().replace(/\s+/g, ' ').slice(0, 90),
+        titel: z.trim().slice(0, 90)
+      })
+    }
   })
   return aus
 }
@@ -53,6 +73,33 @@ function ersteNummer (text) {
   const p = punkte(text)
   if (!p.length) throw new Error('keine Punkte gefunden')
   return p[0].nr
+}
+
+function uebersichtBauen (offen) {
+  const zeichen = { ' ': 'offen', '~': 'in Arbeit', x: 'ABGEHAKT' }
+  const zeilen = [
+    '# Übersicht — offene Punkte',
+    '',
+    '**Diese Datei wird erzeugt, nicht gepflegt.**',
+    'Sie kommt aus `docs/todo/TODO.md`, aus denselben Zeilen wie der',
+    'Zähler im Kopf. `pnpm exec node tools/nummern-pruefen.mjs --schreiben`',
+    'schreibt sie neu; das Gate wird rot, wenn sie vom Bestand abweicht.',
+    '',
+    '`[read]` Der alte Übersichtsblock stand von Hand in `TODO.md` und ist',
+    'gegen die Punkte darunter gedriftet. Ein Zweitindex ist nur brauchbar,',
+    'wenn er erzeugt und geprüft wird.',
+    ''
+  ]
+  let letzte = null
+  for (const p of offen) {
+    if (p.sektion !== letzte) {
+      zeilen.push('', `## ${p.sektion}`, '', '| | Zustand | Zeile |', '|---|---|---:|')
+      letzte = p.sektion
+    }
+    zeilen.push(`| **${p.nr}** ${p.kurz} | ${zeichen[p.zustand]} | ${p.zeile} |`)
+  }
+  zeilen.push('')
+  return zeilen.join('\n')
 }
 
 // Alle Pruefungen an einer Stelle. Gibt eine Liste von Befunden zurueck,
@@ -138,6 +185,28 @@ function pruefe (texte) {
     })
   }
 
+  // Die Uebersicht ist erzeugt. Weicht sie ab, ist sie von Hand
+  // angefasst worden oder jemand hat vergessen, sie neu zu schreiben --
+  // beides macht sie zur zweiten Wahrheit.
+  //
+  // `[read]` Eine fehlende Datei ist ebenfalls ein Befund. Waere sie es
+  // nicht, machte ein `rm` das Gate gruen -- eine Pruefung, die man
+  // durch Loeschen ihres Gegenstands abstellen kann, misst nichts.
+  const soll = uebersichtBauen(offen)
+  if (texte.uebersicht === null) {
+    fehler.push({
+      pruefung: 'uebersicht-veraltet',
+      text: 'docs/todo/00-UEBERSICHT.md fehlt -- erzeugen mit: '
+        + 'node tools/nummern-pruefen.mjs --schreiben'
+    })
+  } else if (texte.uebersicht !== soll) {
+    fehler.push({
+      pruefung: 'uebersicht-veraltet',
+      text: 'docs/todo/00-UEBERSICHT.md weicht vom Bestand ab -- '
+        + 'neu erzeugen mit: node tools/nummern-pruefen.mjs --schreiben'
+    })
+  }
+
   return { fehler, offen, fertig, gezaehltOffen }
 }
 
@@ -145,7 +214,8 @@ function lesen () {
   return {
     todo: readFileSync(PFAD.todo, 'utf8'),
     erledigt: readFileSync(PFAD.erledigt, 'utf8'),
-    laufend: readFileSync(PFAD.laufend, 'utf8')
+    laufend: readFileSync(PFAD.laufend, 'utf8'),
+    uebersicht: existsSync(PFAD.uebersicht) ? readFileSync(PFAD.uebersicht, 'utf8') : null
   }
 }
 
@@ -201,6 +271,11 @@ function faelle (basis) {
       bau: t => ({ ...t, laufend: `${t.laufend}\n| **${inErledigt}** laengst erledigt | \`supabase/\` |\n` })
     },
     {
+      pruefung: 'uebersicht-veraltet',
+      was: '00-UEBERSICHT.md steht auf einem alten Bestand',
+      bau: t => ({ ...t, uebersicht: `${t.uebersicht}\n| **ZZ-996** von Hand angefasst | offen | 1 |\n` })
+    },
+    {
       pruefung: 'kopfzaehler',
       was: 'Kopfzaehler um eins verstellt',
       bau: t => ({ ...t, todo: kopfAnpassen(t.todo, 1) })
@@ -218,7 +293,15 @@ function selbsttest (basis) {
 
   let schlecht = 0
   for (const fall of faelle(basis)) {
-    const getroffen = pruefe(fall.bau(basis)).fehler.map(f => f.pruefung)
+    let t = fall.bau(basis)
+    // Wer TODO.md anfasst, verschiebt auch die Uebersicht. Die wird
+    // deshalb mitgezogen -- sonst schluege uebersicht-veraltet bei jedem
+    // zweiten Fall mit an und kein Fall bewiese mehr genau eine Sache.
+    // Nur der Uebersichtsfall selbst behaelt seine verstellte Fassung.
+    if (fall.pruefung !== 'uebersicht-veraltet' && t.uebersicht !== null) {
+      t = { ...t, uebersicht: uebersichtBauen(punkte(t.todo)) }
+    }
+    const getroffen = pruefe(t).fehler.map(f => f.pruefung)
     const einzig = getroffen.length === 1 && getroffen[0] === fall.pruefung
     if (einzig) {
       console.log(`[nummern] ok    ${fall.pruefung} -- ${fall.was}`)
@@ -243,6 +326,14 @@ const basis = lesen()
 
 if (process.env.LUMEOS_NUMMERN_SELBSTTEST === '1') {
   process.exit(selbsttest(basis))
+}
+
+if (process.argv.includes('--schreiben')) {
+  const inhalt = uebersichtBauen(punkte(basis.todo))
+  writeFileSync(PFAD.uebersicht, inhalt, 'utf8')
+  console.log(`[nummern] docs/todo/00-UEBERSICHT.md neu erzeugt `
+    + `(${inhalt.split('\n').length} Zeilen).`)
+  basis.uebersicht = inhalt
 }
 
 const { fehler, offen, fertig, gezaehltOffen } = pruefe(basis)
