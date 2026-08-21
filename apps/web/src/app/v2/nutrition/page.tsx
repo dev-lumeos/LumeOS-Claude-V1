@@ -33,8 +33,10 @@ import type { VorliebenDaten } from './tab-vorlieben'
 import { ladePlan, type PlanDaten } from '../../../lib/nutrition/plan-lesen'
 // G-101: die zwei Mikronaehrstoff-Kacheln des Diary.
 import { ladeMikro, type MikroStand } from '../../../lib/nutrition/mikro-read'
-// G-101/C-54: die Naehrstoffordnung aus display_tier.
+// G-101/C-54: die Naehrstoffordnung aus display_tier; seit G-121 mit
+// Zeitfenster (C-157).
 import { ladeOrdnung, type NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
+import { fensterOderTag } from '../../../lib/nutrition/naehrstoff-anzeige'
 // G-101: Kalorienbilanz und Makroschnitt fuer die Insights.
 import { ladeInsights, type InsightsStand } from '../../../lib/nutrition/insights-read'
 
@@ -50,7 +52,7 @@ export const dynamic = 'force-dynamic'
 export default async function V2NutritionPage({
   searchParams,
 }: {
-  searchParams?: { datum?: string; tab?: string }
+  searchParams?: { datum?: string; tab?: string; fenster?: string }
 }) {
   const datum = datumOderHeute(searchParams?.datum)
 
@@ -188,10 +190,13 @@ export default async function V2NutritionPage({
   }
 
   // G-101/C-54: die Naehrstoffordnung. Nur fuer den Nutrients-Tab.
+  // G-121: das Zeitfenster steht in der Adresse (`?fenster=7`), damit
+  // die Werte serverseitig geladen werden und der Zustand messbar
+  // bleibt; unbekannte Werte fallen auf den Tag (1) zurueck.
   let ordnung: NaehrstoffOrdnung | null = null
   if (tab === 'nutrients') {
     try {
-      ordnung = await ladeOrdnung(datum)
+      ordnung = await ladeOrdnung(datum, fensterOderTag(searchParams?.fenster))
     } catch {
       ordnung = null
     }

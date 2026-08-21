@@ -13,7 +13,10 @@ import { baueBaum, type NaehrstoffKnoten } from '../naehrstoff-ordnung'
 function k(code: string, stufe: number, sort: number): NaehrstoffKnoten {
   return {
     code, name: code, einheit: 'g', stufe, sort,
-    wert: null, referenz: null, referenz_art: null, kinder: [],
+    wert: null, summe: null, positionen: 0, positionenMitWert: 0,
+    positionenOhneWert: 0, tageErfasst: 0, tageVollstaendig: 0,
+    ziel: null, zielMax: null, zielArt: null, obergrenze: null,
+    prozent: null, status: null, kinder: [],
   }
 }
 
