@@ -243,6 +243,15 @@ den Meilensteinen (alle drei `open`), ,Kreatin 30 Tage" (`stock_unit`
 ist `g`, also 6), ,fuenf LOINC-Abweichungen, ein Auftrag von zwanzig
 Minuten" (bei Glukose und Vitamin D messen die Codes nicht dasselbe).
 
+### Wo sie liegen: `docs/spezifikation/00-QUELLEN.md`
+
+`[cmd]` **Die Datei sagt je Modul, welche Mockup- und Spec-Dateien es
+gibt** — mit Groesse. **49 Mockups (1.725 KB), 120 Specs (1.046 KB).**
+
+`[read]` **Kein Modul hat nur eine Mockup-Datei.** Nutrition hat drei,
+Recovery fuenf, Coach acht. **Zwei Auftraege sind daran gescheitert,
+dass nur die erste gelesen wurde** (G-98, G-101).
+
 ### Die vier Quellen, in dieser Reihenfolge
 
 **1. Der Code** — was existiert schon? `[cmd]` Spalten, Funktionen,
