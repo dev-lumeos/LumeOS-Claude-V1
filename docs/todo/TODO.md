@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `11b4faf` auf `dev`.
+**Stand:** 2026-08-18, Anker `8725c31` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 151 offen, 1 in Arbeit.
+`[cmd]` 155 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -256,6 +256,10 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-37** | Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/` |  |
 | **C-174** | `ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen |  |
 | **C-175** | `shopping_lists` fehlt |  |
+| **G-140** | `display_tier` ist ein Abo-Tier, keine Baumebene |  |
+| **C-176** | `biomarkerDetails.ts` im Vorgaengerrepo — 121 KB |  |
+| **G-141** | Das Onboarding ist als ADR final entschieden |  |
+| **A-38** | Drei Core-ADRs |  |
 | **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
 | **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -957,6 +961,24 @@ Quelle und Belege: `docs/ssot/158-tab-zustand.md`.
   Files/Git/...`); `MSYS_NO_PATHCONV=1` im Skriptkopf setzen oder
   dokumentieren.
 
+### C-165-Folgepunkte (Naehrstoff-Aliase, 2026-08-21) — Nummern vergibt der Orchestrator
+
+Quelle und Belege: `docs/ssot/172-naehrstoff-aliase.md`.
+
+- [ ] **apps/web-Anschluss der Aliase** (G-Auftrag, Nutrition-Agent):
+  eine Abfrage auf `nutrition.nutrient_search_aliases` in
+  `ladeOrdnung`, drittes Suchfeld `suchAlias` je Knoten, und die
+  **Kurz-Token-Regelerweiterung** (Token trifft auch bei exakter
+  Gleichheit mit einem `aliases_folded`-Eintrag — sonst findet
+  „Vitamin B5" oder „kJ" nie etwas). Ohne diesen Auftrag liegen die
+  98 Zeilen brach.
+- [ ] **Thai-Umgangsnamen:** bewusst 0 importiert — ohne Sprecher oder
+  Quelle waere jede Zeile erfunden. Braucht Recherche oder einen
+  Sprecher, dann eine Erweiterung der Datendatei.
+- [ ] **„Mineralstoffe" als Suchbegriff:** deckungsgleich mit der
+  Elemente-Karte (16 Treffer) — Produktfrage, ob das Rauschen oder
+  Hilfe ist.
+
 ### G-129-Folgepunkte (Naehrstoff-Suche, 2026-08-21) — Nummern vergibt der Orchestrator
 
 Quelle und Belege: `docs/ssot/168-naehrstoff-suche.md`.
@@ -966,12 +988,6 @@ Quelle und Belege: `docs/ssot/168-naehrstoff-suche.md`.
   G-129-Messlauf hat Toms Sicht („Auffaellig", 30 Tage) mit seinen
   Proben ueberschrieben. Kuenftige Nachweise sichern die Zeile vorher
   und schreiben sie zurueck, oder laufen auf `test-user`.
-- [ ] **Alias-Schema erst bei gemessenem Bedarf:** Umgangsnamen
-  (`Blutzucker`, `Salz`), Fremdsprachen (en/th liegen in
-  `nutrient_details`, sind aber nicht im Suchtext) und Tippfehler
-  fangen die zwei Suchfelder nicht. Ausloeser waere eine erfolglose
-  echte Suche, nicht eine Vermutung; dann Codex (analog
-  `food_aliases`/`biomarker_aliases`).
 - [ ] **Kartenzuordnung als Auslegung gemeldet:** `FIBT` unter
   „Kohlenhydrate", Wasser/Alkohol/Organische Saeuren/Rohasche unter
   „Sonstige" — je eine Zeile in `karteFuerWurzel`, falls Tom es anders
@@ -4578,6 +4594,15 @@ Umsetzen angepasst werden.
   Medikamente speichern, waehrend die Kachel darueber weiter erfundene
   Ueberwachungsdaten zeigt.
 
+  `[cmd]` **Gemessen 2026-08-20 mit G-130 — zehn Spalten fehlen:**
+
+  `monitoring` · `monitoring_frequency` · `last_test` · `next_due` ·
+  `monitoring_overdue` · `targets` · `side_effects` · `physician` ·
+  `rx` · `prescription_ref`
+
+  `[read]` **Vier der sechs Alert-Eintraege speisen sich daraus.**
+  **Codex-Auftrag** — der Rest der Kachel liest bereits echt.
+
 - [x] **G-119: `supplements` ist das letzte Modul mit `useState`-Tab**
 
   **ERLEDIGT 2026-08-20** (G-123) — Bericht
@@ -4645,33 +4670,7 @@ Umsetzen angepasst werden.
   sinkt `total` beim Setzen des Filters — dann muss die Pille die
   richtige Zahl nennen. **Beides zusammen anfassen.**
 
-- [ ] **G-125: `MuscleBodyMap.js` traegt die kaputten Umrisse weiter**
-  (neu 2026-08-21). Befund aus G-105.
 
-  `[cmd]` **`apps/web/public/mockup/components/MuscleBodyMap.js`
-  enthaelt beide Umrisse unveraendert kaputt** — dieselbe Fassung, die
-  in `packages/ui` vier Monate lang stand.
-
-  `[read]` **Sie wird nicht ausgeliefert** (Mockup-Verzeichnis), ist
-  aber die wahrscheinliche Quelle, aus der `koerperkarte-pfade.ts`
-  entstand. **Wer kuenftig von dort kopiert, holt sich den Fehler
-  zurueck.**
-
-  `[cmd]` **Die heilen Zahlen liegen bereit:**
-  `referenz/…/react-muscle-highlighter/…/SvgMaleWrapper.js`.
-
-- [ ] **A-31: Die Pfadpruefung gehoert ins Gate** (neu 2026-08-21).
-  Werkzeugfund aus G-105.
-
-  `[cmd]` **Zweimal hat ein eigener Pfadpruefer falsch gemeldet** —
-  291 (G-123, wiederholt in G-105) und 116 (G-105, kompakte
-  Schreibweise). **Beide Male war der Browser die richtige Messung.**
-
-  `[cmd]` **160 Pfade einzeln pruefen dauert Sekunden.** Das Skript
-  liegt als `tools/_g124-alle.mjs` vor.
-
-  `[read]` **Vorbild: `tools/serverimport-pruefen.mjs` (A-30)** — nach
-  dem Build, in beide Richtungen gegengeprobt.
 
 - [ ] **A-32: Die Nummer G-124 war doppelt vergeben** (neu 2026-08-21).
 

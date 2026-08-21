@@ -401,6 +401,29 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `dist`, `build`, `out`, `coverage`** aus. **Mit vorhandenen
   `.next-gate`-Verzeichnissen laeuft er sauber.**
 
+- [x] **A-31: Die Pfadpruefung gehoert ins Gate** (neu 2026-08-21).
+  Werkzeugfund aus G-105.
+
+  `[cmd]` **Zweimal hat ein eigener Pfadpruefer falsch gemeldet** —
+  291 (G-123, wiederholt in G-105) und 116 (G-105, kompakte
+  Schreibweise). **Beide Male war der Browser die richtige Messung.**
+
+  `[cmd]` **160 Pfade einzeln pruefen dauert Sekunden.** Das Skript
+  liegt als `tools/_g124-alle.mjs` vor.
+
+  `[read]` **Vorbild: `tools/serverimport-pruefen.mjs` (A-30)** — nach
+  dem Build, in beide Richtungen gegengeprobt.
+
+  `[cmd]` **Erledigt 2026-08-20 mit G-130.** `tools/svgpfade-pruefen.mjs`
+  haengt im Gate und **bricht bei kaputten Browser-Pfaden ab.**
+
+  `[cmd]` **In beide Richtungen belegt:** normal **160 Pfade, 0
+  bemaengelt, Exit 0** — Selbsttest **161/1, Exit 1.**
+
+  `[read]` **Das ist die einzige taugliche Messung fuer SVG** — G-124
+  hat zwei eigene Parser verworfen, die 291 und 116 Fehlalarme
+  meldeten.
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
@@ -10305,3 +10328,33 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   / Retinol 543,2 / uebrige Carotinoide 1.611,8. Toms Frage
   „aufgeklappt oder nur mit Wert?": nur mit Wert (sonst dreissig
   Kontextzeilen bei den Fettsaeuren).
+
+- [x] **G-129-Folgepunkt „Alias-Schema erst bei gemessenem Bedarf"** —
+  **geschlossen 2026-08-21 (C-165):** Der Bedarf kam gemessen von Tom
+  (Fiber/Carbs/BCAA = 0 Treffer). `[cmd]` `nutrition.nutrient_aliases`
+  live: 98 Zeilen, 74 Begriffe, 50 Codes; Gruppenbegriffe als
+  ein-Alias-mehrere-Zeilen; Kette Exit 0. Der apps/web-Anschluss ist
+  ein eigener Folgepunkt. Belege: `docs/ssot/172-naehrstoff-aliase.md`.
+
+- [x] **G-125: `MuscleBodyMap.js` traegt die kaputten Umrisse weiter**
+  (neu 2026-08-21). Befund aus G-105.
+
+  `[cmd]` **`apps/web/public/mockup/components/MuscleBodyMap.js`
+  enthaelt beide Umrisse unveraendert kaputt** — dieselbe Fassung, die
+  in `packages/ui` vier Monate lang stand.
+
+  `[read]` **Sie wird nicht ausgeliefert** (Mockup-Verzeichnis), ist
+  aber die wahrscheinliche Quelle, aus der `koerperkarte-pfade.ts`
+  entstand. **Wer kuenftig von dort kopiert, holt sich den Fehler
+  zurueck.**
+
+  `[cmd]` **Die heilen Zahlen liegen bereit:**
+  `referenz/…/react-muscle-highlighter/…/SvgMaleWrapper.js`.
+
+  `[cmd]` **Geklaert 2026-08-20 mit G-130:** *„`MuscleBodyMap.js` ist nur
+  im oeffentlichen Mockup-Test-HTML referenziert, **nicht im produktiven
+  UI-Pfad**."*
+
+  `[read]` **Kein Handlungsbedarf** — der produktive Weg laeuft ueber
+  `packages/ui/src/koerperkarte-pfade.ts`, und der ist seit G-124
+  heil.

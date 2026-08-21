@@ -15,7 +15,7 @@ wissen, welcher Agent noch laeuft."*
 |---|---|---|---|
 | **Fable** | **C-165** Naehrstoff-Aliase | `supabase/` | 2026-08-20 |
 | **Codex** | **C-164** `food_search` mit mehreren Tags | `supabase/` | 2026-08-20 |
-| **Claude Code** | **G-135** Health score nach `SPEC_09_SCORING` | `apps/web/v2/medical` | 2026-08-20 |
+| **Claude Code** | *frei* | | |
 
 ## Wartet auf einen freien Agenten
 
