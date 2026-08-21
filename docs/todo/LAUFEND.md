@@ -13,22 +13,19 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Codex** | *frei* | | |
+| **Codex** | **C-161** Naehrstoffbaum, Erklaerungen, Ansichtsablage | `supabase/` | 2026-08-20 |
+| **Claude Code** | **A-30** `next/headers` bricht den Build | `packages/shared` | 2026-08-20 |
 | **Fable** | *frei* | | |
-| **Claude Code** | *frei* | | |
-
----
 
 ## Wartet auf einen freien Agenten
 
 | Auftrag | Bereich | blockiert von |
 |---|---|---|
-| **C-161** Naehrstoffbaum (`parent_code`) | `supabase/` | — |
-| **A-30** `next/headers` bricht den Build | `packages/`, `apps/web` | — |
-| **G-122** Naehrstoff-Detailmodal | `apps/web` | C-161 |
-| **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC gepruft) | `supabase/` | — |
+| **G-122** Baum klappbar je Ebene + Detailmodal | `apps/web` | **C-161** (`parent_code`, Ansichtsablage) |
+| **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC geprueft) | `supabase/` | Codex besetzt |
 | **G-105** zwei abgeschnittene SVG-Pfade | `packages/ui` | — |
 | **G-120** `updateWaterLogAmount` ohne Knopf | `apps/web` | — |
+| **G-112** Food-DB-Filter kombinierbar | `supabase/` + `apps/web` | `food_search` (C-120) |
 | **C-163** 94 Substanzen ohne Naehrstoffmenge | Recherche | Kimi |
 | **C-160** Bewertungshorizont je Naehrstoff | Recherche | Kimi |
 
