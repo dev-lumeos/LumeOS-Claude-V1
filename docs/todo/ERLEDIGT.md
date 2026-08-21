@@ -6265,6 +6265,46 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   Zeilenschutz, Beispielpfad `nutrition.nutrient_tree`. **Allgemein
   gebaut**, nicht nur fuer Naehrstoffe.
 
+- [x] **C-162: Die Lab-Marker-Bruecke** (erledigt 2026-08-20).
+  **Substanz → Marker → LOINC → Referenzbereich.**
+
+  | | |
+  |---|---|
+  | `medical.lab_marker_catalog` | **66 Marker** |
+  | `supplements.substance_lab_effects` | **222 Zeilen** |
+  | `physiological_lab_effect` | 161 |
+  | `monitoring_requirement` | 42 |
+  | **`assay_interference`** | **19** |
+
+  `[cmd]` **46 von 46 LOINC-Kandidaten treffen** — wie vorab gemessen.
+  **18 der 20 ohne Kandidat repo-only aufgeloest.** Offen bleiben
+  `lab_hcg` und `lab_blood_pressure`, mit Grund.
+
+  `[read]` **Kimi hatte sie mit `needs_repo_validation: true` geliefert**
+  — er konnte nicht validieren, weil der Medical-Katalog nicht in seinem
+  Paket war. **Wir konnten.**
+
+  ### Was ein Eintrag traegt
+
+  `[cmd]` **1-Andro:** Testosteron `2986-8` · `decrease` · *„HPG negative
+  feedback"* · `SAFETY_CONTEXT` · **WADA-Quelle** · `mapping_status =
+  loinc_validated`. **Und `raw` behaelt den Originaleintrag.**
+
+  ### Toms Stack
+
+  `[cmd]` **Kreatin:** Kreatinin `2160-0`, eGFR CKD-EPI `62238-1`,
+  **Cystatin C `33863-2`.**
+
+  `[read]` **Genau der Fall, der den Wert zeigt:** Kreatin hebt
+  Serum-Kreatinin ohne Nierenschaden, eGFR wirkt faelschlich niedrig —
+  **Cystatin C ist der muskelunabhaengige Marker.**
+
+  `[cmd]` **Omega-3:** LDL `13457-7` (0–130 mg/dL), Triglyceride
+  `2571-8` (0–150 mg/dL).
+
+  `[cmd]` **203 echte Verbindungen**, 19 Effekte ohne Marker-ID
+  **bleiben sichtbar** statt zu verschwinden.
+
 
 
 ## Erledigt am 2026-08-05
