@@ -14,7 +14,7 @@ wissen, welcher Agent noch laeuft."*
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
 | **Codex** | *frei* | | |
-| **Fable** | **G-121** Naehrstoffanzeige, lange Sicht + Zeitfenster | `apps/web/v2/nutrition` | 2026-08-20 |
+| **Fable** | *frei* | | |
 | **Claude Code** | *frei* | | |
 
 ---
@@ -23,12 +23,14 @@ wissen, welcher Agent noch laeuft."*
 
 | Auftrag | Bereich | blockiert von |
 |---|---|---|
-| **C-161** Naehrstoffbaum (`parent_code`) | `supabase/` | Codex besetzt |
+| **C-161** Naehrstoffbaum (`parent_code`) | `supabase/` | — |
+| **A-30** `next/headers` bricht den Build | `packages/`, `apps/web` | — |
 | **G-122** Naehrstoff-Detailmodal | `apps/web` | C-161 |
-| **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC) | `supabase/` | Codex besetzt |
-| **G-119** `supplements` auf `tab-url.ts` | `apps/web` | \u2014 |
-
----
+| **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC gepruft) | `supabase/` | — |
+| **G-105** zwei abgeschnittene SVG-Pfade | `packages/ui` | — |
+| **G-120** `updateWaterLogAmount` ohne Knopf | `apps/web` | — |
+| **C-163** 94 Substanzen ohne Naehrstoffmenge | Recherche | Kimi |
+| **C-160** Bewertungshorizont je Naehrstoff | Recherche | Kimi |
 
 ## Bereiche, damit nichts kollidiert
 
