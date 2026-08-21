@@ -133,6 +133,7 @@ Reihenfolge ist verbindlich. Validierungen unter `_pipeline/_validierung/`.
 | 144 | `14_medical/144_biomarker_spec_enrichment.ts` | Spec-Extraktion fuer Medical-Panels, deutsche Namen, Kurznamen und nutzbare numerische Bereichszeilen | 49 Spec-/Alias-Marker im LOINC-Katalog, 45 display-nutzbar, 564 Referenzbereich-Zeilen gesamt |
 | 145 | `14_medical/145_medications_schema.sql` | Medikamente und Conditions: Katalogtabellen, `user_medications`, `user_conditions` | 5 Tabellen, RLS je Operation auf Nutzerdaten |
 | 146 | `14_medical/146_medications_katalog.ts` | Kimi-Medikamentenkatalog aus `backup/kimi-research/.../data/medications/` | 56 Wirkstoffe, 119 Formulierungen, 124 Produkte |
+| 147 | `14_medical/147_substance_lab_markers.ts` | Substanz-Labormarker-Bruecke aus Kimi `lab_effects` gegen den LOINC-Katalog | 66 Marker, 222 Effektzeilen, 203 Markerlinks |
 | 146a | `13_supplements/132a_rule_input_status.sql` | Regel-Eingangsdiagnose für Kimi-Regeln: fehlende Pfade werden als `missing_input` gemeldet | 1 Funktion, kein Regelimport |
 | 133 | `13_supplements/133_kimi_rules.ts` | Kimi-Warn-, Gap- und Medikamentenregeln als Katalogdaten, plus dreistufige Regelauswertung | 29 Warnregeln, 15 Gap-Regeln, 20 Medikamentenregeln |
 | 110 | `11_goals/110_goals_zielwerte.sql` | Schema `goals`, `nutrition_targets`, `berechne_zielwerte`, `zielwerte_am` | Tagesziele mit Gueltigkeitsdatum (GO-03/GO-04) |
