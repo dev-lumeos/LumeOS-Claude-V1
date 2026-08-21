@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `93c298b` auf `dev`.
+**Stand:** 2026-08-18, Anker `a0f7a9e` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 160 offen, 1 in Arbeit.
+`[cmd]` 172 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -258,10 +258,20 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-176** | `biomarkerDetails.ts` im Vorgaengerrepo — 121 KB |  |
 | **G-141** | Das Onboarding ist als ADR final entschieden |  |
 | **A-38** | Drei Core-ADRs |  |
-| **G-143** | Die Makroziele werden nicht angezeigt |  |
-| **G-144** | Die BCAA-Suche zeigt zwei statt drei |  |
-| **G-145** | Ein einzelner Elternknoten sollte offen starten |  |
 | **C-179** | `EAA` zeigt auf den Summenwert, nicht auf die neun |  |
+| **C-180** | `crawl_025` liefert die Evidenzeinstufung fuer 181 Konstanten |  |
+| **GO-21** | WHR ist belegt — Grad A |  |
+| **G-89** | Koerperproportionen sind Heuristiken — belegt |  |
+| **C-105** | MEV/MAV/MRV — die Antwort ist da |  |
+| **C-124** | Die Modalitaets-Boni sollen raus |  |
+| **C-181** | ACWR nicht implementieren |  |
+| **C-182** | Kein numerischer OTS-Schwellenwert |  |
+| **C-183** | Die Symptom-Ontologie ist geliefert |  |
+| **C-184** | 66 LOINC-Handoff-Items, 20 noch offen |  |
+| **C-185** | Peptide 62 → 61, vier Identitaetsfehler behoben |  |
+| **G-150** | Die Volltextsuche findet ueber Erklaertexte |  |
+| **A-39** | `backup/` wird nicht geraeumt, solange Agenten laufen |  |
+| **A-40** | Nachweise ohne Stichtag belegen nichts |  |
 | **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
 | **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -288,11 +298,13 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-32** | Die Nummer G-124 war doppelt vergeben |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
-| **G-142** | Die Aliase erreichen die Suche nicht |  |
 | **C-178** | Prolactin und ApoB fehlen dem Health score |  |
 | **G-146** | Zehn Marker in `enrichment` ohne `system_groups` |  |
+| **C-186** | Nebenwirkungen und Zyklen haben keine Tabelle |  |
+| **G-149** | Der Einnahme-Haken bucht auf den Stichtag, nicht auf heute |  |
 | **C-177** | Thai-Aliase fehlen bewusst |  |
 | **GO-24** | *„Mineralstoffe"* als Gruppenbegriff? |  |
+| **C-188** | Der Alias-Waechter steht auf 291, Kimi liefert 290 |  |
 
 ---
 
@@ -4109,87 +4121,6 @@ Umsetzen angepasst werden.
 
   `[cmd]` **`ONBOARDING_ADR`** — siehe G-141.
 
-- [ ] **G-143: Die Makroziele werden nicht angezeigt** (neu
-  2026-08-20). **Toms Befund, gewichtig.**
-
-  **Tom, 2026-08-20:** *„Fett haben wir garantiert aus berechneten Goals
-  — oder nicht? Sowie Kohlenhydrate gesamt auch. Sprich, es fehlen
-  diverse Fortschrittsbalken und Status."*
-
-  ### Er hat recht — gemessen
-
-  `[cmd]` **`goals.nutrition_targets` traegt seit dem 2026-05-21:**
-
-  | | |
-  |---|---|
-  | kcal | **2.500** |
-  | `protein_g` | **170** |
-  | `carbs_g` | **313** |
-  | `fat_g` | **75** |
-  | Herkunft | `formel`, TDEE 2.273, Ziel `gain_muscle` |
-
-  `[cmd]` **Dazu `linoleic_acid_g` und `alpha_linolenic_acid_g`.**
-
-  ### Was die Anzeige stattdessen tut
-
-  `[cmd]` **Sie liest nur `daily_reference_assessment`** — die
-  wissenschaftlichen Referenzen. **`nutrition_targets` kommt darin nicht
-  vor.**
-
-  `[read]` **Folge, im Bildschirmfoto sichtbar:**
-
-  **Fett und Kohlenhydrate zeigen einen Strich**, obwohl 75 g und 313 g
-  gesetzt sind.
-
-  **Und Protein zeigt 70,6 g (PRI) statt 170 g** — die **234 %** sind
-  gegen den EFSA-Mindestbedarf gerechnet, **nicht gegen Toms Ziel.**
-  **Gegen 170 g waeren es 97 %.**
-
-  `[read]` **Das ist irrefuehrender als ein fehlender Wert:** Eine Zahl
-  steht da, aber sie misst etwas anderes als der Nutzer denkt.
-
-  ### Was zu tun ist
-
-  `[cmd]` **Beide zeigen, unterscheidbar** — wie im Modal seit G-122:
-  *„persoenlich 110 mg"* neben *„PRI Maenner 110 / Frauen 95 (EFSA)"*.
-
-  `[read]` **Und die Reihenfolge ist klar:** **Das persoenliche Ziel
-  gewinnt fuer den Fortschrittsbalken**, die Referenz steht daneben.
-  **Bei den Makros ist die Referenz ohnehin nur ein Mindestwert.**
-
-  `[cmd]` **G-121 hat *„FAT/CHO nur E%-Referenzen"* gemeldet** — das
-  stimmt fuer `nutrient_reference_values`. **Aber die Ziele liegen
-  woanders.**
-
-- [ ] **G-144: Die BCAA-Suche zeigt zwei statt drei** (neu 2026-08-20).
-  **Toms Befund.**
-
-  `[cmd]` **In der Datenbank stehen alle drei:** `ILE`, `LEU`, `VAL`,
-  alle mit `kind='gruppe'`, `alias_folded='bcaa'`.
-
-  `[cmd]` **Die Anzeige zeigt Isoleucin und Valin** — **Leucin fehlt.**
-
-  `[read]` **Verdacht:** Leucin ist der einzige der drei mit einem
-  eigenen Zielwert (3,3 g PRI) — **moeglicherweise filtert die Suche
-  Zeilen, die schon anderswo stehen.** **Zu messen, nicht zu raten.**
-
-- [ ] **G-145: Ein einzelner Elternknoten sollte offen starten** (neu
-  2026-08-20). **Toms Befund.**
-
-  **Tom, 2026-08-20:** *„Protein ist doof geloest — ich denke, wenn nur
-  ein Parent darin ist, sollte der aufgeklappt sein."*
-
-  `[cmd]` **Die Karte *Protein* hat 21 Eintraege und genau eine
-  Wurzel** (`PROT625`). **Zugeklappt zeigt sie eine Zeile.**
-
-  `[read]` **Dasselbe gilt fuer *Fette*** — eine Wurzel (`FAT`), 37
-  Eintraege. **Und fuer *Kohlenhydrate*** — eine Wurzel (`CHO`), 23
-  Eintraege.
-
-  `[cmd]` **Vorschlag:** Hat eine Karte genau einen Wurzelknoten, ist er
-  beim Oeffnen der Karte aufgeklappt. `[read]` **Die zweite Ebene bleibt
-  zu** — sonst stehen bei den Fetten wieder 37 Zeilen da.
-
 - [ ] **C-179: `EAA` zeigt auf den Summenwert, nicht auf die neun**
   (neu 2026-08-20). **Toms Befund.**
 
@@ -4400,6 +4331,66 @@ Umsetzen angepasst werden.
   **BPC-157 und TB-500 als `HIGH_RELEVANCE_LOW_EVIDENCE`.**
   **BPC-157-Tierevidenz stammt zu ~100 % aus einer Arbeitsgruppe** — als
   Einschraenkung dokumentiert.
+
+- [ ] **G-150: Die Volltextsuche findet ueber Erklaertexte** (neu
+  2026-08-21). Befund aus G-147. **Zu entscheiden, ob erwuenscht.**
+
+  `[cmd]` **Die BCAA-Ursache war nicht der vermutete Zielwert:**
+  *„„BCAA" stand woertlich in den `function_de`-Texten von Isoleucin und
+  Valin, in keinem Leucin-Text — der Volltext-Zufall fand zwei."*
+
+  `[cmd]` **Nachgemessen: `ILE` und `VAL` tragen *„BCAA"* im
+  Erklaertext, `LEU` nicht.**
+
+  `[read]` **Der Orchestrator hatte auf den Zielwert getippt** — Leucin
+  ist der einzige der drei mit eigener Referenz. **Falsch geraten, der
+  Agent hat gemessen.**
+
+  ### Die Frage dahinter
+
+  `[cmd]` **Die Suche durchsucht seit G-129 auch die 110
+  Erklaertexte** — das war Absicht: *„wer „Skorbut" eingibt, sollte
+  Vitamin C finden."*
+
+  `[read]` **Aber sie findet dabei auch Zufallstreffer**, die kein Alias
+  sind. **Seit G-147 ist der Alias sauber** — `bcaa` liefert drei.
+  **Die Frage ist, ob der Volltexttreffer daneben stehen soll.**
+
+  **Vorschlag:** Alias-Treffer und Texttreffer unterscheidbar zeigen.
+  `[read]` **Wer *„Skorbut"* sucht, will den Texttreffer. Wer *„BCAA"*
+  sucht, will die drei.**
+
+- [ ] **A-39: `backup/` wird nicht geraeumt, solange Agenten laufen**
+  (neu 2026-08-21). **Fehler des Orchestrators.**
+
+  `[cmd]` **Der G-147-Agent hat es gemeldet:** *„Zwei frisch angelegte
+  Probeskripte verschwanden waehrend des Auftrags aus `backup/` —
+  mutmasslich ein parallel aufraeumender Agent."*
+
+  `[cmd]` **Das war der Orchestrator.** Er hat 13 Agentenskripte
+  entfernt, waehrend drei Agenten arbeiteten.
+
+  `[read]` **`backup/` ist in `.gitignore` und wird von Agenten als
+  Ablage benutzt.** **Aufraeumen erst, wenn niemand arbeitet** —
+  `LAUFEND.md` sagt, wer laeuft.
+
+  `[cmd]` **Dasselbe gilt fuer `tools/`** — dort lagen die
+  `_g135-*`-Skripte, als G-135 noch lief.
+
+- [ ] **A-40: Nachweise ohne Stichtag belegen nichts** (neu
+  2026-08-21). Befund aus G-147.
+
+  `[cmd]` **Vitamin A stand gestern bei 411 %, heute bei 478 %** —
+  *„anderes Tagesprofil."*
+
+  `[read]` **Kein Fehler**, aber es zeigt: **Eine Prozentzahl aus einem
+  Bildschirmfoto belegt nichts ohne Datum und Fenster.**
+
+  `[cmd]` **Die Regel steht schon** — *„eine Zahl ohne Stichtag ist
+  keine Zahl"* (`CLAUDE.md`). **Sie gilt auch fuer Bildschirmfotos.**
+
+  `[cmd]` **Und die Seeds enden bewusst in der Zukunft** (±90 Tage) —
+  **die Tageswerte aendern sich mit jedem Lauf.**
 
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
@@ -5041,26 +5032,6 @@ Umsetzen angepasst werden.
   **Vitamin E** (natuerlich gegen synthetisch), **Folat** (Folat,
   Folsaeure, DFE).
 
-- [ ] **G-142: Die Aliase erreichen die Suche nicht** (neu
-  2026-08-20). **Wichtigster Rest aus C-165 — ohne ihn liegen 98 Zeilen
-  brach.**
-
-  `[cmd]` **Der Anschluss ist eine Abfrage plus ein drittes Suchfeld** —
-  `alias_folded` ist mit derselben Faltung normalisiert wie die
-  Web-Suchfelder.
-
-  `[cmd]` **Aber die Kurz-Token-Regel aus G-129 sperrt sie aus:**
-  *„2 Zeichen = nur Code, 3 = Name, ab 4 = auch Text."*
-
-  `[read]` **Folge, simuliert und belegt:** *„Vitamin B5"* und *„kJ"*
-  **werden prinzipiell nie gefunden.**
-
-  `[cmd]` **Die Erweiterung:** *„Token trifft auch bei exakter Gleichheit
-  mit einem Alias."*
-
-  `[read]` **Die Nahe-Regel bleibt sonst richtig** — sie verhinderte,
-  dass *„EPA"* ueber das *„epa"* in *„Reparatur"* Valin fand.
-
 - [ ] **C-178: Prolactin und ApoB fehlen dem Health score**
   (neu 2026-08-21). Befund aus G-135. **Zwei Zeilen in
   `medical.biomarker_spec_enrichment`, mehr nicht.**
@@ -5091,6 +5062,70 @@ Umsetzen angepasst werden.
   uebrigen neun haben kein offensichtliches System, und ein erfundenes
   waere schlechter als keins.
 
+- [x] **G-148: Elf Modale, die im Entwurf fertig liegen**
+  (erledigt 2026-08-21, `docs/ssot/175-supplements-schreibwege.md`).
+  **Sie lagen nicht im Entwurf — sie standen seit G-45 in
+  `modale.tsx`, mit einer Begruendung, die falsch war.**
+
+  `[cmd]` **Jedes Fenster trug den Satz *„Es gibt kein
+  `supplements`-Schema"*** — das Schema hat **14 Tabellen**, und
+  `intake_logs` fuehrt **720 Zeilen** (656 taken, 64 skipped).
+
+  `[cmd]` **Vier Fenster schreiben jetzt:** `logDose` und `skip` nach
+  `intake_logs`, `add` nach `stack_items`, `reorder` nach
+  `stack_items.stock_remaining`. **Sieben bleiben Attrappe** — je mit
+  eigenem Grund statt des pauschalen.
+
+  `[cmd]` **Der Kreis gemessen:** 360 → 361 Einnahmen, Notiz nach dem
+  Neuladen im DOM, **Compliance 93,1 % → 93,2 %**; danach zurueck auf
+  360 und 93,1 %. **Stack 4 → 5 → 4**, Katalogsuche „Magnesium"
+  liefert einen Treffer mit Evidenzgrad.
+
+  `[cmd]` **Zeilenschutz auf allen drei Wegen je 404 NOT_FOUND**
+  (G-79-Muster). **Die Momentaufnahme wird aus `stack_items` gelesen,
+  nicht vom Browser uebernommen** — derselbe Lesezugriff ist die
+  Rechtepruefung.
+
+  `[read]` **Der G-135-Befund hat hier zugeschlagen, umgekehrt:** Das
+  Add-Fenster meldete *„keine Daten gelesen"*, obwohl die Seite 360
+  Einnahmen zeigte — **`SupplementsModale` stand ausserhalb von
+  `SuppCtx.Provider`.** Typecheck gruen, Tests gruen, Fenster log.
+  **Gefunden nur, weil es im Browser geoeffnet wurde.**
+
+  `[cmd]` **`Rahmen` nimmt jetzt `echt`** — ein schreibendes Fenster
+  traegt keine Marke mehr (Pille 1 → 0). **469/469 Tests, Gate 11/11,
+  Attrappen 1, Datenbestand danach exakt wie vorher.**
+
+- [ ] **C-186: Nebenwirkungen und Zyklen haben keine Tabelle**
+  (neu 2026-08-21). Befund aus G-148.
+
+  `[cmd]` **`addSideEffect` und `planCycle` sind die zwei Fenster, die
+  an gar nichts haengen** — die uebrigen fuenf Attrappen warten auf
+  bereits vermerkte Tabellen (C-109 Injections, C-175
+  `shopping_lists`, SSOT 173 fuer `EXTENDED_LABS`, `PRODUCT_DETAILS`,
+  `STACK_TEMPLATES`).
+
+  `[read]` **Die Vorlage zeigt, was erwartet wird:**
+  `AddSideEffectModal` fuehrt Substanz, Schweregrad und Zeitpunkt;
+  `PlanCycleModal` Laenge, Pause und Startdatum. **Erst die
+  Produktentscheidung, dann das Schema.**
+
+- [ ] **G-149: Der Einnahme-Haken bucht auf den Stichtag, nicht auf
+  heute** (neu 2026-08-21). Befund aus G-148. **Klein.**
+
+  `[cmd]` **`stichtag` ist der juengste Protokolltag** (2026-08-20),
+  weil `new Date()` im Browser die Hydration zerlegt (G-74). **Wer
+  heute etwas nachtraegt, bucht auf den letzten protokollierten Tag.**
+
+  `[cmd]` **Der Weg liegt bereit:** `SupplementsAnsicht` nimmt
+  `heute`-Prop entgegen (`heuteProp`), die Seite reicht es nur nicht
+  durch. **Serverseitig gesetzt ist es hydrationssicher.**
+
+  `[read]` **Dazu gehoert der zweite Rest:** `LogDose` mit Zeit und
+  Notiz ist nur ueber den Extended-Tab erreichbar. **Ein Stift-Knopf je
+  Zeile auf „Today" waere der vollstaendige Weg** — dasselbe Muster wie
+  G-124 beim Wasser.
+
 - [ ] **C-177: Thai-Aliase fehlen bewusst** (neu 2026-08-20). Rest aus
   C-165.
 
@@ -5110,3 +5145,31 @@ Umsetzen angepasst werden.
   `[read]` **Es waere die ganze Gruppe *Elemente* (16 Codes)** —
   **oder nichts**, weil die Karte schon so heisst. **Zu entscheiden, ob
   ein Alias auf eine ganze Karte zeigen darf.**
+
+- [ ] **C-188: Der Alias-Waechter steht auf 291, Kimi liefert 290**
+  (neu 2026-08-21). Befund aus C-164. **Bricht den Kettenlauf.**
+
+  `[cmd]` **`132_substance_alias_bridge.ts` erwartet 291 Substanzen** —
+  gemessen liegen **290** vor:
+
+  | | |
+  |---|---|
+  | `supplements.jsonl` | 154 |
+  | **`peptides.jsonl`** | **61** (war 62) |
+  | `performance_compounds.jsonl` | 75 |
+
+  `[cmd]` **Die Ursache steht in `crawl_027`:** *„Duplikat `Melanotan I`
+  in `peptides.jsonl` gemergt (62→61, geloggt — keine stille
+  Loeschung)."*
+
+  `[read]` **Dieselbe Falle wie C-138** — dort stand der
+  Medikamenten-Waechter auf *„genau 56"*, als die Quelle auf 503 wuchs.
+  **Eine Erwartung auf die Kommastelle misst die Quelle, nicht das
+  Ergebnis.**
+
+  `[cmd]` **Und C-185 haelt vier Identitaetsfehler fest**, die
+  `crawl_027` behoben hat — **die Bruecke muss ohnehin nachgezogen
+  werden.**
+
+  **Zu tun:** Untergrenze statt Gleichheit, **und die 290 neu
+  einlesen.**

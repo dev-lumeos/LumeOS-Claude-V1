@@ -6431,6 +6431,28 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Und Handelsbegriffe bleiben im Substanzkatalog** — Whey,
   Casein, Kreatin, Glutamin. **Dort liegen sie belegt.**
 
+- [x] **C-164: `food_search` mit mehreren Tags** (erledigt 2026-08-21).
+
+  `[cmd]` **Erledigt 2026-08-21.** `food_search` hat **16 Argumente** —
+  das neue `p_filters jsonb` am Ende, **die 15 alten unveraendert.**
+
+  | Fall | `total` |
+  |---|---|
+  | **ODER** — vegan oder vegetarian | **1.751** |
+  | **UND** — (vegan oder vegetarian) und high_protein | **154** |
+  | **Ausschluss** — `contains_lactose` | **6.119** (Seite 1 bleibt 25) |
+  | `processing_level` raw \| minimally_processed | 3.505 |
+  | Ausschluss `ultra_processed` | 6.213 |
+
+  `[read]` **Der Ausschluss wirkt jetzt ueber alle Seiten** — vorher nur
+  auf der angezeigten. **`total` sinkt, und das ist der Beleg.**
+
+  `[cmd]` **Die 6.119 sind genau die Zahl, die G-133 als richtige
+  Beschriftung nennt** — die Pille sagt heute *„Ohne Laktose 1.021"*.
+
+  `[cmd]` **Alle Tag-Pillen zaehlen weiter gegen SQL korrekt**,
+  `test-user` sieht ungefiltert 7.140.
+
 
 
 ## Erledigt am 2026-08-05
@@ -10461,3 +10483,91 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Kein Handlungsbedarf** — der produktive Weg laeuft ueber
   `packages/ui/src/koerperkarte-pfade.ts`, und der ist seit G-124
   heil.
+
+- [x] **G-143: Die Makroziele werden nicht angezeigt** — **erledigt
+  2026-08-21 (G-147):** `[cmd]` `ladeOrdnung` liest `zielwerte_am`;
+  das persoenliche Ziel gewinnt Balken/%/Status, die Referenz steht
+  als „Ref."-Zeile daneben. Protein 164,5/170 g = 97 % „unter Ziel"
+  (statt 234 % gegen 70,6 g EFSA), Fett 75 g = 83 %, KH 313 g = 54 %;
+  LA/ALA mit Doppelanzeige. Belege:
+  `docs/ssot/174-makroziele-und-suche.md`.
+
+- [x] **G-142: Die Aliase erreichen die Suche nicht** — **erledigt
+  2026-08-21 (G-147):** `[cmd]` drittes Suchfeld `suchAlias` aus
+  `nutrient_search_aliases` plus Kurz-Token-Regel (exakter Alias
+  trifft auch unter 3 Zeichen); sieben Belege inkl. „Vitamin B5" →
+  PANTAC und `kj` → ENERCJ; die Naehe-Regel („EPA" faellt nicht in
+  „Reparatur") blieb, per Waechtertest.
+
+- [x] **G-144: Die BCAA-Suche zeigt zwei statt drei** — **erledigt
+  2026-08-21 (G-147):** `[cmd]` Ursache gemessen, nicht der Zielwert:
+  „BCAA" stand woertlich in den `function_de`-Texten von ILE und VAL,
+  in keinem LEU-Text — der Volltext-Zufall fand zwei. Mit dem
+  Alias-Anschluss kommen alle drei aus `kind='gruppe'`.
+
+- [x] **G-145: Ein einzelner Elternknoten sollte offen starten** —
+  **erledigt 2026-08-21 (G-147):** `[cmd]` Karten mit genau einer
+  Wurzel (Protein, Fette, Kohlenhydrate) starten mit offener Wurzel,
+  zweite Ebene zu (Protein-Karte: 10 Zeilen, AAE9 zu; Fette 5 statt
+  37). Schliessen wird als `zu:`-Marker gespeichert — Format der
+  gespeicherten Ansicht unveraendert.
+
+- [x] **G-148: Elf Supplements-Modale** (erledigt 2026-08-21).
+
+  `[cmd]` **Erledigt 2026-08-21 — und die Praemisse des Auftrags war
+  falsch.**
+
+  `[read]` *„Die elf Modale liegen nicht im Entwurf, sie stehen seit G-45
+  in `modale.tsx`. **Gefehlt hat der Schreibweg, nicht das Fenster**."*
+
+  `[cmd]` **Und jedes trug den Satz:** *„Es gibt kein
+  `supplements`-Schema — hier laesst sich noch nichts speichern."*
+  **Bei 14 Tabellen und 720 Zeilen in `intake_logs`.** **Seit Monaten
+  falsch** — der richtige Grund ist je Fenster ein anderer, und den nennt
+  jetzt jedes.
+
+  ### Vier schreiben
+
+  | | |
+  |---|---|
+  | `logDose`, `skip` | `intake_logs` |
+  | `add` | `stack_items` |
+  | `reorder` | `stack_items.stock_remaining` |
+
+  `[cmd]` **Der Kreis gemessen:** 360 → 361 Einnahmen, Notiz nach dem
+  Neuladen im DOM, **Compliance 93,1 % → 93,2 %** — danach zurueck.
+  Stack 4 → 5 → 4.
+
+  `[cmd]` **Zeilenschutz auf allen drei Wegen: je 404 NOT_FOUND, nicht
+  `ok`.**
+
+  `[read]` **Und die Momentaufnahme kommt aus `stack_items`, nicht vom
+  Browser** — *„sonst truege eine Zeile einen Namen, der nie im Stack
+  stand. Derselbe Lesezugriff ist die Rechtepruefung."*
+
+  ### Der G-135-Hinweis hat zugeschlagen — umgekehrt
+
+  `[cmd]` *„Nach dem Anbinden meldete das Add-Fenster „keine Daten
+  gelesen", waehrend die Seite daneben 360 Einnahmen zeigte. Ursache:
+  **`SupplementsModale` stand ausserhalb von `SuppCtx.Provider`** —
+  `useSupp()` lieferte den Vorgabewert `daten: null`."*
+
+  `[read]` *„Typecheck gruen, 469 Tests gruen, und das Fenster log.
+  **Gefunden nur, weil ich es im Browser geoeffnet und angesehen habe.**
+  Ein Zaehler haette es nie gemeldet — die Marke stand korrekt da, nur
+  aus dem falschen Grund."*
+
+  `[cmd]` **Ein schreibendes Fenster traegt keine Marke mehr** — Pille 1
+  → 0. `[read]` *„Ein Fenster, das schreibt und „Attrappe" sagt, waere
+  die Luege in die andere Richtung."*
+
+  ### Zwei Tabellenbefunde
+
+  `[cmd]` **`user_inventory` gibt es nicht — und braucht es nicht.**
+  Bestand steht in `stack_items`. **Das Reorder-Fenster traegt nach,
+  bestellt aber nichts** (dafuer fehlt `shopping_lists`, C-175). **Es
+  sagt es selbst.**
+
+  `[cmd]` **Der Skip-Grund landet in `notes`** — eine eigene Spalte gibt
+  es nicht. **Das Fenster schreibt aus, was gespeichert wird**, damit
+  niemand eine Auswertung nach Gruenden erwartet.
