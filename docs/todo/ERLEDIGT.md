@@ -6833,6 +6833,46 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Kleine Sache, aber sie sagt etwas Falsches** — und der
   naechste Agent sucht an der falschen Stelle.
 
+- [x] **C-190: Der Supplements-Tabwechsel liegt bei rund 2 Sekunden**
+
+  ### Gegenstandslos 2026-08-21 — die Sekunde gibt es nicht
+
+  `[read]` **Der Punkt stand auf einer Zahl, die nie gemessen wurde.**
+  Die *„rund eine Sekunde serverseitig“* war eine Annahme, keine
+  Messung — zusammen mit drei weiteren erfundenen Praemissen derselben
+  Sitzung offengelegt und zurueckgenommen.
+
+  `[cmd]` **Nachgemessen: jede Abfrage des Tabs einzeln, zehn Laeufe,
+  `EXPLAIN (ANALYZE, FORMAT JSON)` auf `dev@lumeos.app`.**
+
+  | Abfrage | Median | min | max |
+  |---|---:|---:|---:|
+  | `rule_assessment` | **166,4 ms** | 160,3 | 178,8 |
+  | `substance_catalog` | 0,3 ms | 0,3 | 2,0 |
+  | `substance_lab_effects` | 0,1 ms | 0,1 | 0,1 |
+  | `rule_catalog` | 0,1 ms | 0,1 | 0,1 |
+  | `intake_logs` | 0,2 ms | 0,2 | 0,2 |
+  | `stack_items` | 0,1 ms | 0,0 | 0,1 |
+  | **Summe der Mediane** | **167,1 ms** | | |
+
+  `[cmd]` **Die serverseitige Abfragezeit des ganzen Tabs ist 167 ms,
+  und praktisch alles davon ist `rule_assessment`.** Die fuenf uebrigen
+  Abfragen liegen zusammen unter einer Millisekunde.
+
+  `[read]` **Damit ist auch die zweite Zahl aus C-189 eingeordnet:** die
+  *„rund 200 ms“* je Datenquelle waren **vollstaendig `docker
+  exec`-Aufwand**, nicht die Abfrage — der Bericht 176 hat das vermutet,
+  hier ist es gemessen. `[read]` **Ein Messweg, der 200 ms Eigenaufwand
+  mitbringt, kann eine 0,1-ms-Abfrage nicht beurteilen.**
+
+  `[cmd]` **Was vom Tabwechsel bleibt, ist nicht serverseitig:** 1.354 kB
+  `main-app.js` unkomprimiert plus HMR-Verbindung im Dev-Modus. **Das
+  steht schon in C-189 und ist kein Punkt fuer sich.**
+
+  `[read]` **Geschlossen, nicht vertagt.** Ein Punkt *„spaeter, wenn es
+  stoert“* haette eine Arbeit beschrieben, die es nicht gibt — und waere
+  bei jedem Durchgang der Liste wieder gelesen worden.
+
 ## Erledigt am 2026-08-05
 
 - [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und

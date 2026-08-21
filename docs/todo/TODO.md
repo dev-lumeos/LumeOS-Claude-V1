@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-21.** 167 offen, 1 in Arbeit.
+**Stand: 2026-08-21.** 166 offen, 1 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -944,30 +944,6 @@ Quelle und Belege: `docs/ssot/154-preferences.md`.
 
   `[read]` **Damit zeigt die Kachel *„Sauna: verbessert die
   Ausdauerleistung in Hitze (Grad C)"* statt *„+2,76 Punkte"*.**
-
-- [ ] **C-190: Der Supplements-Tabwechsel liegt bei rund 2 Sekunden**
-  (neu 2026-08-21). Rest aus C-189. **Spaeter, wenn es stoert.**
-
-  `[cmd]` **C-189 hat 9,2 s auf 2,1 s gebracht.** `rule_assessment`
-  liegt danach bei **167,5 ms Median** (12 Laeufe auf `dev@lumeos.app`,
-  Spanne 160,5–194,5 ms). **Die anderen vier Datenquellen liegen bei
-  rund 200 ms** — davon der grosse Teil `docker exec`-Aufwand, nicht
-  die Abfrage.
-
-  `[read]` **Der Rest ist der Dev-Modus:** 1.354 kB `main-app.js`
-  unkomprimiert, HMR-Verbindung. Im Produktionsbuendel faellt das weg,
-  gemessen ist es dort aber nicht.
-
-  **Tom, 2026-08-21:** *„Eine Sekunde reicht nicht dauerhaft — aber sie
-  reicht jetzt."* **Keine Frage an Tom, keine Entscheidung offen.**
-
-  **Wann es drankommt:** wenn der Wechsel im Alltag stoert, oder wenn
-  das Modul aus einem anderen Grund angefasst wird. `[read]` **Kein
-  eigener Durchgang wert, solange 2 s die schlechteste Zahl im Modul
-  sind.**
-
-  **Wo anzusetzen waere:** die vier 200-ms-Abfragen laufen
-  nacheinander; sie haengen nicht voneinander ab.
 
 ## D — Datenbank & Specs
 
