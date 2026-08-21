@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `7ff1c13` auf `dev`.
+**Stand:** 2026-08-18, Anker `93c298b` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 159 offen, 1 in Arbeit.
+`[cmd]` 160 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -261,6 +261,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-143** | Die Makroziele werden nicht angezeigt |  |
 | **G-144** | Die BCAA-Suche zeigt zwei statt drei |  |
 | **G-145** | Ein einzelner Elternknoten sollte offen starten |  |
+| **C-179** | `EAA` zeigt auf den Summenwert, nicht auf die neun |  |
 | **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
 | **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -289,7 +290,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
 | **G-142** | Die Aliase erreichen die Suche nicht |  |
 | **C-178** | Prolactin und ApoB fehlen dem Health score |  |
-| **G-143** | Zehn Marker in `enrichment` ohne `system_groups` |  |
+| **G-146** | Zehn Marker in `enrichment` ohne `system_groups` |  |
 | **C-177** | Thai-Aliase fehlen bewusst |  |
 | **GO-24** | *„Mineralstoffe"* als Gruppenbegriff? |  |
 
@@ -4216,6 +4217,189 @@ Umsetzen angepasst werden.
   `[read]` **Und dieselbe Frage bei den anderen Gruppen:**
   `Spurenelemente` (8), `B-Vitamine` (8), `Elektrolyte` (5) — **haben
   die einen Summenwert, der stattdessen getroffen wird?**
+
+- [ ] **C-180: `crawl_025` liefert die Evidenzeinstufung fuer 181
+  Konstanten** (neu 2026-08-20). **Der Rechercheweg hat geliefert.**
+
+  `[cmd]` **`backup/kimi-research/.../data/evidence/` — fuenf
+  Registries:**
+
+  | | |
+  |---|---|
+  | `constant_evidence_registry.json` | **181 Konstanten** |
+  | `recovery_modality_evidence.json` | 32 |
+  | `formula_evidence_registry.json` | 22 |
+  | `fatigue_signal_evidence.json` | 17 |
+  | `training_structure_registry.json` | 13 |
+  | **`symptom_ontology_seed.json`** | **21 Symptome** |
+  | `research_hold_registry.json` | 256 |
+
+  ### Die Einstufung ist ernuechternd — und brauchbar
+
+  | Klasse | |
+  |---|---|
+  | `SUPPORTED_DIRECTION_ONLY` | **104** |
+  | `CONTEXT_DEPENDENT` | 45 |
+  | `INSUFFICIENT_EVIDENCE` | 11 |
+  | `HEURISTIC` | 9 |
+  | **`SUPPORTED_NUMERIC_THRESHOLD`** | **7** |
+  | `CONFLICTING_EVIDENCE` | 4 |
+  | `REPO_DEPENDENCY` | 1 |
+
+  `[read]` **Nur sieben von 181 Zahlen duerfen hart eingebaut werden.**
+
+  ### Je Eintrag steht die Handlungsanweisung
+
+  `[cmd]` **`recommended_product_handling`:** `KEEP_NUMERIC` ·
+  `USE_RANGE` · `USE_DIRECTIONAL_GUIDANCE` · `LABEL_HEURISTIC` ·
+  **`DO_NOT_IMPLEMENT`** · `REMOVE_NUMERIC_VALUE`.
+
+  `[read]` **Damit ist je Kachel entschieden, was gezeigt werden
+  darf** — genau das, was der Auftrag verlangt hat.
+
+- [ ] **GO-21: WHR ist belegt — Grad A** (ergaenzt 2026-08-20). Aus
+  C-180.
+
+  `[cmd]` **`BP-WHR-001`: WHO-Grenzwerte, Evidenzgrad A,
+  `KEEP_NUMERIC`.** **Toms Entscheidung vom 2026-08-20 ist damit
+  gedeckt.**
+
+  `[cmd]` **Und drei weitere anthropometrische Masse sind Grad A:**
+
+  | | |
+  |---|---|
+  | **WHtR** | **0,5** — *„Taille unter der halben Koerpergroesse"* |
+  | **Bauchumfang** | **>94/>80 cm** erhoeht, **>102/>88 cm** stark erhoeht |
+  | **BMI** | WHO-Klassifikation |
+  | Ethnienspezifisch | IDF, Grad B — Europid 94/80, Suedasiatisch 90/80 |
+
+  `[read]` **Das ist mehr, als GO-21 verlangt hat** — und alles mit
+  Quelle.
+
+- [ ] **G-89: Koerperproportionen sind Heuristiken — belegt**
+  (beantwortet 2026-08-20). Aus C-180.
+
+  `[cmd]` **Alle vier als `LABEL_HEURISTIC` eingestuft:**
+
+  `BP-GR-006` Goldener Schnitt 1,618 · `BP-REEVES-008` Reeves-Formeln ·
+  `BP-MCCALLUM-009` McCallum · `BP-CLASSIC-010` klassische Konvention.
+
+  `[read]` **Die Antwort auf die Frage im Punkt:** *„Gibt es belegte
+  Referenzwerte, oder ist das Tradition ohne Datengrundlage?"* —
+  **Tradition, und sie darf so beschriftet werden.**
+
+  `[cmd]` **`BP-FFMI-005` (FFMI 25 als Naturgrenze) ist
+  `CONFLICTING_EVIDENCE`** — *„kein Natural-Limit-Urteil."*
+
+- [ ] **C-105: MEV/MAV/MRV — die Antwort ist da** (beantwortet
+  2026-08-20). Aus C-180.
+
+  | | Einstufung | Handlung |
+  |---|---|---|
+  | **MEV** | HEURISTIC | `USE_DIRECTIONAL_GUIDANCE` |
+  | **MAV** | HEURISTIC | **`DO_NOT_IMPLEMENT`** |
+  | **MRV** | HEURISTIC | `LABEL_HEURISTIC` |
+  | RP-Rahmenwerk | HEURISTIC | `LABEL_HEURISTIC` |
+
+  `[read]` **Genau das Ergebnis, das der Auftrag als brauchbar benannt
+  hat:** *„MEV = brauchbares Produktmodell, aber kein wissenschaftlich
+  standardisierter Grenzwert."*
+
+  `[cmd]` **Und `LANDMARKS` im Mockup traegt Zahlen je Muskelgruppe** —
+  **sie duerfen als Orientierung stehen, nicht als Messwert.**
+
+- [ ] **C-124: Die Modalitaets-Boni sollen raus** (beantwortet
+  2026-08-20). Aus C-180.
+
+  `[cmd]` **Alle 30 Modalitaets-Records: `REMOVE_NUMERIC_VALUE`.**
+  **Die Seed-Werte (2,76 / 0,13 / 0,05 / −0,07) sind als
+  `not_evidence` geflaggt.**
+
+  `[read]` **Der Orchestrator hatte es gemessen und gemeldet:** *„Das
+  sind Seed-Daten — ein Skript hat sie erzeugt, und dasselbe Skript hat
+  die Bonuswerte gesetzt."*
+
+  `[cmd]` **Was bleibt:** Richtung und Endpunkt mit Quelle. **Beispiel
+  Sauna:** `REC_SAUNA_ENDURANCE_HEAT`, *„improve_in_heat"*,
+  `SUPPORTED_DIRECTION_ONLY`, Grad C, PMID 16877041 — **`current_value:
+  null`.**
+
+  `[read]` **Damit zeigt die Kachel *„Sauna: verbessert die
+  Ausdauerleistung in Hitze (Grad C)"* statt *„+2,76 Punkte"*.**
+
+- [ ] **C-181: ACWR nicht implementieren** (entschieden extern,
+  2026-08-20). Aus C-180.
+
+  `[cmd]` **Kimi-Kernentscheidung 1:** *„Safe-Zone 0,8–1,3 / >1,5 als
+  HEURISTIC entfernt."*
+
+  `[read]` **Der Orchestrator hatte gemessen, dass ACWR nirgends
+  gerechnet wird** — **gut so.** **Der Feldvertrag nennt
+  `training.load_spike`**, und mehrere `missing_input`-Pfade haengen
+  daran. **Sie bleiben offen, statt eine Ampel zu bauen, die nicht
+  traegt.**
+
+- [ ] **C-182: Kein numerischer OTS-Schwellenwert** (beantwortet
+  2026-08-20). Aus C-180. **Betrifft C-168 und E8.**
+
+  `[cmd]` **Kimi:** *„Kein numerischer OTS-Schwellenwert —
+  Ausschlussdiagnose + Referral-Klassen."*
+
+  `[read]` **Damit sind die vier Schwellen aus `OVERTRAINING_SIGNALS`
+  (HRV unter 90 %, Ruhepuls +5, Schlaf unter 6, Gefuehl ≤ 4)
+  Entwurfswerte** — **nicht belegt.**
+
+  `[cmd]` **`fatigue_signal_evidence.json` traegt 17 Signale** mit
+  Einstufung. **Was bleibt: Signale zeigen, nicht summieren.**
+
+- [ ] **C-183: Die Symptom-Ontologie ist geliefert** (neu 2026-08-20).
+  Aus C-180. **Betrifft C-159 und C-171.**
+
+  `[cmd]` **`symptom_ontology_seed.json` — 21 Symptome**,
+  MedlinePlus-verifiziert, **ausdruecklich ohne Diagnosen.**
+
+  `[cmd]` **Je Eintrag:** `symptom_id`, `canonical_name`, **`synonyms`**,
+  `system`, **`severity_dimensions`** (mild bis
+  `functional_impairment`), **`time_dimensions`** (Beginn, Dauer,
+  Haeufigkeit, Muster).
+
+  `[read]` **C-159 meldet *„keine Symptomtabelle im ganzen Schema"*** —
+  **und das Mockup hat `SYMPTOM_BIOMARKER_MAP`.** **Jetzt gibt es
+  beides: die Ontologie und die Zuordnung.**
+
+- [ ] **C-184: 66 LOINC-Handoff-Items, 20 noch offen** (neu
+  2026-08-20). Aus `crawl_026A`.
+
+  `[cmd]` **C-162 hat 46 validiert und 18 der 20 offenen selbst
+  aufgeloest.** `[read]` **Kimi zaehlt weiter 20 offen** — er kennt
+  unsere Aufloesung nicht.
+
+  **Zu tun:** Rueckmeldung, welche 18 wir aufgeloest haben. `[cmd]`
+  **Offen bleiben `lab_hcg` und `lab_blood_pressure`.**
+
+- [ ] **C-185: Peptide 62 → 61, vier Identitaetsfehler behoben** (neu
+  2026-08-20). Aus `crawl_027`.
+
+  `[cmd]` **Vier schwere Fehler live gegen PubChem/GSRS/FDA gefunden:**
+
+  | | |
+  |---|---|
+  | KPV-UNII | gehoerte zu α-MSH → `null` |
+  | **BPC-157-UNII** | **fabriziert** → `null` |
+  | PEG-MGF-UNII | KIT-Ligand-Verwechslung → `null` |
+  | CJC-1295 DAC / ohne DAC | **IDs vertauscht** → getauscht |
+
+  `[cmd]` **Und ein Duplikat `Melanotan I` gemergt** — 62 → 61,
+  **protokolliert, keine stille Loeschung.**
+
+  `[read]` **C-134 hat 567 Substanzen konsolidiert** — **die Bruecke
+  muss nachgezogen werden**, sonst zeigen Aliase auf eine Zeile, die es
+  nicht mehr gibt.
+
+  `[cmd]` **Dazu:** 21 von 37 mit Humanstudien, **16 ohne** — darunter
+  **BPC-157 und TB-500 als `HIGH_RELEVANCE_LOW_EVIDENCE`.**
+  **BPC-157-Tierevidenz stammt zu ~100 % aus einer Arbeitsgruppe** — als
+  Einschraenkung dokumentiert.
 
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
