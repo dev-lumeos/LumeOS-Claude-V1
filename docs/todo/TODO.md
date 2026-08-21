@@ -65,6 +65,8 @@ fortschreiben.**
 
 ---
 
+## A — Struktur & SSOT (laufend)
+
 - [ ] **A-06: Design-System spezifizieren** — Stand Audit 2026-08-05:
   `[cmd]` `docs/spezifikation/10-plattform/design-system/` ist **nicht mehr
   leer** — `00-diskussionsstand.md` liegt vor. Quellen weiterhin:
