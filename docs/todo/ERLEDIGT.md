@@ -6679,6 +6679,44 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Die restlichen 2 Sekunden sind der Dev-Modus** — 1.354 kB
   `main-app.js` unkomprimiert, HMR-Verbindung.
 
+  ### Nachgemessen 2026-08-21 — die 144 ms sind zu niedrig
+
+  `[read]` **Die 144 ms stammen aus dem Agentenbericht, nicht aus einer
+  eigenen Messung.** Nachgemessen mit `EXPLAIN (ANALYZE, FORMAT JSON)`
+  gegen die laufende lokale Instanz, wie sie ist — kein Wegwerf-Aufbau,
+  zwoelf Laeufe, damit die Streuung sichtbar wird.
+
+  `[cmd]` **`dev@lumeos.app` (1 Stack, 360 Einnahmen), 12 Laeufe:**
+
+  | | |
+  |---|---:|
+  | erster Lauf | **168,7 ms** |
+  | Minimum | **160,5 ms** |
+  | **Median** | **167,5 ms** |
+  | Mittel | 172,4 ms |
+  | Maximum | 194,5 ms |
+  | Streubreite | 34,0 ms |
+  | Standardabweichung | 13,1 ms |
+
+  `[cmd]` **Der Normalfall ist 167 ms, nicht 144.** **Die 144 liegen
+  unter dem Minimum aus zwoelf Laeufen** — eine einzelne guenstige
+  Messung, kein Median. **Der Faktor bleibt gross** (7.641 → 167 =
+  Faktor 46 statt 53), **die Groessenordnung stimmt.**
+
+  `[cmd]` **Ein erster Messversuch auf `test-user@lumeos.local` ergab
+  23 ms** — **das Konto hat 0 Stacks und 0 Einnahmen**, die Funktion
+  faellt sofort durch. Die Gegenprobe steht: 24,3 ms Median bei leerer
+  Datenlage gegen 167,5 ms bei gefuellter. `[read]` **Eine Messung ohne
+  Datenlage misst nichts** — dieselbe Falle, die C-189 zweimal falsch
+  diagnostiziert hat.
+
+  `[cmd]` **Von einer Sekunde ist `rule_assessment` weit entfernt.** Der
+  Tabwechsel liegt trotzdem bei rund 2 s; was daran serverseitig bleibt,
+  steht als **C-190** — reicht jetzt, spaeter wenn es stoert.
+
+  `[read]` **Nur Lesezugriff:** `EXPLAIN ANALYZE` auf ein `SELECT`
+  schreibt nichts, Toms gespeicherte Einstellungen bleiben unberuehrt.
+
 - [x] **C-188: Der Alias-Waechter steht auf 291, Kimi liefert 290**
   (neu 2026-08-21). Befund aus C-164. **Bricht den Kettenlauf.**
 
