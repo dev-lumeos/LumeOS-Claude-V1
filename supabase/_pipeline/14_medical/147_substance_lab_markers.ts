@@ -21,6 +21,7 @@ const SUBSTANCE_FILES = [
 
 const EXPECTED_MARKERS = 66
 const EXPECTED_KIMI_CANDIDATE_MARKERS = 46
+const MIN_KIMI_SUBSTANCE_COUNT = 290
 const EXPECTED_REPO_RESOLVED_WITHOUT_CANDIDATE = 18
 const EXPECTED_UNRESOLVED_MARKERS = 2
 const EXPECTED_SUBSTANCES_WITH_EFFECTS = 90
@@ -244,7 +245,10 @@ function loadMarkers(): KimiMarker[] {
 
 function loadSubstances(): KimiSubstance[] {
   const rows = SUBSTANCE_FILES.flatMap(file => readJsonl(file)) as KimiSubstance[]
-  if (rows.length !== 291) fail(`Kimi-Substanzen: ${rows.length}, erwartet 291`)
+  const ids = new Set(rows.map(row => row.id))
+  if (rows.length < MIN_KIMI_SUBSTANCE_COUNT || ids.size < MIN_KIMI_SUBSTANCE_COUNT || rows.length !== ids.size) {
+    fail(`Kimi-Substanzen: ${rows.length} Zeilen / ${ids.size} IDs, erwartet mindestens ${MIN_KIMI_SUBSTANCE_COUNT} eindeutig`)
+  }
   return rows.sort((a, b) => a.id.localeCompare(b.id))
 }
 

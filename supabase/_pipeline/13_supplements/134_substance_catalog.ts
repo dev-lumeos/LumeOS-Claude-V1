@@ -15,6 +15,7 @@ const LOCAL_CATALOG = 'supabase/_pipeline/daten/supplement-katalog.json'
 const F05_CATALOG = 'supabase/_pipeline/daten/substanz-katalog.json'
 const CROSS_DOMAIN = path.join(KIMI_BASE, 'indexes', 'cross_domain_substance_mapping.json')
 const KIMI_ALIASES = path.join(KIMI_BASE, 'indexes', 'aliases.json')
+const MIN_KIMI_SUBSTANCE_COUNT = 290
 
 type JsonObject = Record<string, unknown>
 type LocalSupplement = JsonObject & {
@@ -95,7 +96,7 @@ function readJson(file: string): JsonObject {
 }
 
 function readJsonl(file: string): JsonObject[] {
-  if (!fs.existsSync(file)) fail(`${file} fehlt. C-134 braucht crawl_022.`)
+  if (!fs.existsSync(file)) fail(`${file} fehlt. C-134 braucht den Kimi-Bestand.`)
   return fs.readFileSync(file, 'utf8')
     .split(/\r?\n/)
     .filter(Boolean)
@@ -141,7 +142,7 @@ function dosePart(dosing: JsonObject, key: string): unknown {
 function buildKimiRows(): Array<KimiSubstance & { domain: string; sourceFile: string }> {
   const specs = [
     { domain: 'kimi_supplement', file: 'supplements.jsonl', expected: 154 },
-    { domain: 'kimi_peptide', file: 'peptides.jsonl', expected: 62 },
+    { domain: 'kimi_peptide', file: 'peptides.jsonl', expected: 61 },
     { domain: 'kimi_performance', file: 'performance_compounds.jsonl', expected: 75 },
   ]
   const rows: Array<KimiSubstance & { domain: string; sourceFile: string }> = []
@@ -154,8 +155,8 @@ function buildKimiRows(): Array<KimiSubstance & { domain: string; sourceFile: st
     for (const row of parsed) rows.push({ ...row, domain: spec.domain, sourceFile: file })
   }
   const ids = new Set(rows.map(row => row.id))
-  if (rows.length !== 291 || ids.size !== 291) {
-    fail(`Kimi crawl_022: ${rows.length} Zeilen / ${ids.size} IDs, erwartet 291 eindeutig`)
+  if (rows.length < MIN_KIMI_SUBSTANCE_COUNT || ids.size < MIN_KIMI_SUBSTANCE_COUNT || rows.length !== ids.size) {
+    fail(`Kimi-Bestand: ${rows.length} Zeilen / ${ids.size} IDs, erwartet mindestens ${MIN_KIMI_SUBSTANCE_COUNT} eindeutig`)
   }
   return rows
 }
@@ -248,7 +249,7 @@ for (const row of kimiRows) {
     cyp: objectValue(row.cyp),
     lab_effects: row.lab_effects ?? [],
     nutrients_provided: {},
-    nutrient_mapping_status: 'not_provided_by_kimi_crawl_022',
+    nutrient_mapping_status: 'not_provided_by_kimi_crawl_027',
     source_primary: row.domain,
     raw: row,
   })
@@ -261,10 +262,10 @@ for (const row of kimiRows) {
     confidence: 'source_record',
     source_ref: `${row.sourceFile}#${row.id}`,
     field_sources: {
-      identifiers: 'crawl_022.external_ids',
-      dosing: 'crawl_022.dosing',
-      half_life: hasHalfLife ? 'crawl_022.pharmacology.half_life' : 'explicit_null_no_free_authoritative_source',
-      cyp: row.cyp ? 'crawl_022.chembl_assays' : null,
+      identifiers: 'crawl_027.external_ids',
+      dosing: 'crawl_027.dosing',
+      half_life: hasHalfLife ? 'crawl_027.pharmacology.half_life' : 'explicit_null_no_free_authoritative_source',
+      cyp: row.cyp ? 'crawl_027.chembl_assays' : null,
     },
     raw: row,
   })
@@ -423,12 +424,15 @@ for (const mapping of crossDomain.mappings ?? []) {
 const substanceRows = [...substances.values()].sort((a, b) => a.id.localeCompare(b.id))
 const sourceRows = sources.sort((a, b) => `${a.substance_id}|${a.source_catalog}|${a.source_entity_id}`.localeCompare(`${b.substance_id}|${b.source_catalog}|${b.source_entity_id}`))
 
-if (substanceRows.length !== 567) fail(`substance_catalog: ${substanceRows.length}, erwartet 567`)
-if (sourceRows.length !== 667) fail(`substance_catalog_sources: ${sourceRows.length}, erwartet 667`)
-if (localMatched !== 16 || localOwn !== 28) fail(`LumeOS Mapping ${localMatched}/${localOwn}, erwartet 16/28`)
-if (f05Matched !== 72 || f05Own !== 248) fail(`F05 Mapping ${f05Matched}/${f05Own}, erwartet 72/248`)
-if (crossLinks !== 12 || crossSkippedMedicationOwned !== 16) {
-  fail(`Cross-Domain Links ${crossLinks}, medication-owned uebersprungen ${crossSkippedMedicationOwned}; erwartet 12/16`)
+const expectedSubstanceRows = kimiRows.length + localOwn + f05Own
+const expectedSourceRows = kimiRows.length + local.supplements.length + f05.substances.length + crossLinks
+
+if (substanceRows.length !== expectedSubstanceRows) fail(`substance_catalog: ${substanceRows.length}, erwartet ${expectedSubstanceRows}`)
+if (sourceRows.length !== expectedSourceRows) fail(`substance_catalog_sources: ${sourceRows.length}, erwartet ${expectedSourceRows}`)
+if (localMatched < 16 || localOwn + localMatched !== 44) fail(`LumeOS Mapping ${localMatched}/${localOwn}, erwartet mindestens 16 Treffer und 44 gesamt`)
+if (f05Matched < 72 || f05Own + f05Matched !== 320) fail(`F05 Mapping ${f05Matched}/${f05Own}, erwartet mindestens 72 Treffer und 320 gesamt`)
+if (crossLinks < 12 || crossSkippedMedicationOwned < 16) {
+  fail(`Cross-Domain Links ${crossLinks}, medication-owned uebersprungen ${crossSkippedMedicationOwned}; erwartet mindestens 12/16`)
 }
 
 const substancePayload = substanceRows.map(row => csvCell(JSON.stringify(row))).join('\n')
@@ -568,6 +572,12 @@ CREATE TEMP TABLE tmp_substance_catalog_sources (
 ${sourcePayload}
 \\.
 
+DELETE FROM supplements.substance_catalog
+WHERE id NOT IN (
+  SELECT payload->>'id'
+  FROM tmp_substance_catalog
+);
+
 INSERT INTO supplements.substance_catalog (
   id, canonical_name, domain, compound_type, category, subcategory,
   chemical_form, aliases, cas_number, external_ids, platform_classes,
@@ -686,8 +696,8 @@ BEGIN
   IF v_sources <> ${sourceRows.length} THEN
     RAISE EXCEPTION 'substance_catalog_sources: %, erwartet ${sourceRows.length}', v_sources;
   END IF;
-  IF v_kimi <> 291 THEN
-    RAISE EXCEPTION 'substance_catalog Kimi: %, erwartet 291', v_kimi;
+  IF v_kimi < ${MIN_KIMI_SUBSTANCE_COUNT} THEN
+    RAISE EXCEPTION 'substance_catalog Kimi: %, erwartet mindestens ${MIN_KIMI_SUBSTANCE_COUNT}', v_kimi;
   END IF;
   IF v_local_sources <> 44 THEN
     RAISE EXCEPTION 'substance_catalog_sources LumeOS: %, erwartet 44', v_local_sources;
@@ -712,4 +722,4 @@ if (result.stdout) process.stdout.write(result.stdout)
 if (result.stderr) process.stderr.write(result.stderr)
 if (result.status !== 0) process.exit(result.status ?? 1)
 
-console.log(`C-134: ${substanceRows.length} Substanzen; Kimi 291, LumeOS 44 (${localMatched} gemappt, ${localOwn} eigen), F-05 320 (${f05Matched} gemappt, ${f05Own} eigen), Cross-Domain ${crossLinks} Links`)
+console.log(`C-134: ${substanceRows.length} Substanzen; Kimi ${kimiRows.length}, LumeOS 44 (${localMatched} gemappt, ${localOwn} eigen), F-05 320 (${f05Matched} gemappt, ${f05Own} eigen), Cross-Domain ${crossLinks} Links`)

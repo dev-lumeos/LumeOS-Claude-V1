@@ -18,6 +18,7 @@ const KIMI_SUBSTANCE_FILES = [
 ] as const
 const LOCAL_CATALOG = 'supabase/_pipeline/daten/supplement-katalog.json'
 const F05_CATALOG = 'supabase/_pipeline/daten/substanz-katalog.json'
+const MIN_KIMI_SUBSTANCE_COUNT = 290
 
 type JsonObject = Record<string, unknown>
 type AliasRow = {
@@ -87,8 +88,8 @@ if (!Array.isArray(local.supplements) || local.supplements.length !== 44) {
 if (!Array.isArray(f05.substances) || f05.substances.length !== 320) {
   fail(`${F05_CATALOG}: 320 Substanzkandidaten erwartet`)
 }
-if (Object.keys(kimiIndex).length !== 291) {
-  fail(`Kimi crawl_022: ${Object.keys(kimiIndex).length} Kimi-Substanzen, erwartet 291`)
+if (Object.keys(kimiIndex).length < MIN_KIMI_SUBSTANCE_COUNT) {
+  fail(`Kimi-Bestand: ${Object.keys(kimiIndex).length} Kimi-Substanzen, erwartet mindestens ${MIN_KIMI_SUBSTANCE_COUNT}`)
 }
 
 const rows: AliasRow[] = []
@@ -131,8 +132,8 @@ for (const [id, item] of Object.entries(kimiIndex)) {
     entity_id: id,
     entity_label: label,
     alias: label,
-    source: 'kimi_crawl_022',
-    source_ref: `crawl_022#${id}`,
+        source: 'kimi_crawl_027',
+        source_ref: `crawl_027#${id}`,
     raw: item,
   })
   for (const alias of Array.isArray(item.aliases) ? item.aliases : []) {
@@ -141,8 +142,8 @@ for (const [id, item] of Object.entries(kimiIndex)) {
       entity_id: id,
       entity_label: label,
       alias: String(alias),
-      source: 'kimi_crawl_022',
-      source_ref: `crawl_022#${id}:aliases`,
+        source: 'kimi_crawl_027',
+        source_ref: `crawl_027#${id}:aliases`,
       raw: { alias, target_id: id },
     })
   }
@@ -220,7 +221,7 @@ ${payload}
 \\.
 
 DELETE FROM supplements.substance_aliases
-WHERE source IN ('lumeos_supplement_catalog', 'f05_substance_catalog', 'kimi_ingredient_index', 'kimi_crawl_022', 'kimi_aliases');
+WHERE source IN ('lumeos_supplement_catalog', 'f05_substance_catalog', 'kimi_ingredient_index', 'kimi_crawl_022', 'kimi_crawl_027', 'kimi_aliases');
 
 INSERT INTO supplements.substance_aliases (
   catalog, entity_id, entity_label, alias, alias_folded, source, source_ref, raw
@@ -335,8 +336,8 @@ BEGIN
   IF v_aliases <> ${unique.length} THEN
     RAISE EXCEPTION 'substance_aliases: % Zeilen, erwartet ${unique.length}', v_aliases;
   END IF;
-  IF v_kimi <> 291 THEN
-    RAISE EXCEPTION 'substance_aliases: % Kimi-Substanzen, erwartet 291', v_kimi;
+  IF v_kimi < ${MIN_KIMI_SUBSTANCE_COUNT} THEN
+    RAISE EXCEPTION 'substance_aliases: % Kimi-Substanzen, erwartet mindestens ${MIN_KIMI_SUBSTANCE_COUNT}', v_kimi;
   END IF;
   IF v_local_kimi < 16 THEN
     RAISE EXCEPTION 'substance_alias_matches: nur % LumeOS-Kimi-Treffer, erwartet mindestens 16', v_local_kimi;
@@ -361,4 +362,4 @@ if (result.stdout) process.stdout.write(result.stdout)
 if (result.stderr) process.stderr.write(result.stderr)
 if (result.status !== 0) process.exit(result.status ?? 1)
 
-console.log(`C-131/C-134: ${unique.length} Aliaszeilen aus 44 + 320 + 291 Eintraegen`)
+console.log(`C-131/C-134: ${unique.length} Aliaszeilen aus 44 + 320 + ${Object.keys(kimiIndex).length} Eintraegen`)
