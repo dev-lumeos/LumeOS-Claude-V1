@@ -13,19 +13,18 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
+| **Fable** | **G-122** Baum klappbar je Ebene + Detailmodal | `apps/web/v2/nutrition` | 2026-08-20 |
+| **Claude Code** | **G-124** SVG-Pfade + Wasser-Korrekturknopf | `packages/ui`, `nutrition` | 2026-08-20 |
 | **Codex** | *frei* | | |
-| **Claude Code** | **A-30** `next/headers` bricht den Build | `packages/shared` | 2026-08-20 |
-| **Fable** | *frei* | | |
 
 ## Wartet auf einen freien Agenten
 
 | Auftrag | Bereich | blockiert von |
 |---|---|---|
-| **G-122** Baum klappbar je Ebene + Detailmodal | `apps/web` | **frei — C-161 ist durch** |
-| **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC geprueft) | `supabase/` | Codex besetzt |
-| **G-105** zwei abgeschnittene SVG-Pfade | `packages/ui` | — |
-| **G-120** `updateWaterLogAmount` ohne Knopf | `apps/web` | — |
+| **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC geprueft) | `supabase/` | — |
 | **G-112** Food-DB-Filter kombinierbar | `supabase/` + `apps/web` | `food_search` (C-120) |
+| **G-102** Ausfuehrer fuer bestaetigte Coach-Vorschlaege | `apps/coach` | Toms T1–T9 |
+| **C-159** sieben Regelpfade ohne Schema | `supabase/` | Produktentscheidung |
 | **C-163** 94 Substanzen ohne Naehrstoffmenge | Recherche | Kimi |
 | **C-160** Bewertungshorizont je Naehrstoff | Recherche | Kimi |
 
