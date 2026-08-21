@@ -13,21 +13,25 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | *frei* | | |
-| **Claude Code** | *frei* | | |
-| **Codex** | **C-164** `food_search` kombinierbare Tags + Ausschluss | `supabase/` | 2026-08-21 |
+| **Fable** | **G-129** Acht Karten, Volltextsuche, Ursachen | `apps/web/v2/nutrition` | 2026-08-20 |
+| **Codex** | **C-164** `food_search` mit mehreren Tags | `supabase/` | 2026-08-20 |
+| **Claude Code** | **G-135** Health score nach `SPEC_09_SCORING` | `apps/web/v2/medical` | 2026-08-20 |
 
 ## Wartet auf einen freien Agenten
 
 | Auftrag | Bereich | blockiert von |
 |---|---|---|
-| **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC geprueft) | `supabase/` | — |
-| **G-112** Food-DB-Filter kombinierbar — **Anzeigeteil** | `apps/web` | **C-164 laeuft** (Datenbankteil) |
-| **G-126** „Ohne Laktose 1.021" ist die Zahl MIT Laktose | `apps/web` | — |
+| **G-133** Allergen-Pillen falsch beschriftet (1.021 statt 6.119) | `apps/web` | — |
+| **G-112** Filter-Anzeige nach C-164 | `apps/web` | **C-164** |
+| **G-134** Die vier Filtergruppen gibt es nicht | `supabase/` + Anzeige | Entscheidung |
+| **G-131** Settings hat sieben Bereiche (837 Zeilen Entwurf) | `apps/web` | — |
+| **G-83** Onboarding — der Entwurf existiert (361 Zeilen) | `apps/web` | — |
+| **A-31** `svgpfade-pruefen.mjs` ins Gate | `tools/` | — |
 | **G-102** Ausfuehrer fuer bestaetigte Coach-Vorschlaege | `apps/coach` | Toms T1–T9 |
-| **C-159** sieben Regelpfade ohne Schema | `supabase/` | Produktentscheidung |
+| **C-159** sieben Regelpfade ohne Schema — **Symptomtabelle ist im Mockup** | `supabase/` | Produktentscheidung |
 | **C-163** 94 Substanzen ohne Naehrstoffmenge | Recherche | Kimi |
 | **C-160** Bewertungshorizont je Naehrstoff | Recherche | Kimi |
+| **C-105 / C-124** Volumen, Modalitaeten, OTS-Schwellen | Recherche | Kimi crawl_025 |
 
 ## Bereiche, damit nichts kollidiert
 
