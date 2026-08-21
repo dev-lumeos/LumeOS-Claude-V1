@@ -34,6 +34,7 @@ import { Card, Icon, LineChart, Pill, InEntwicklungKnopf } from '@lumeos/ui'
 import type { Lage } from '../../../lib/medical/befund'
 import { balkenSkala, type MarkerReihe } from '../../../lib/medical/reihe'
 import { MMod } from './modale'
+import type { LabMarkerEffekt } from './echtdaten'
 
 const LAGE_TEXT: Record<Lage, string> = {
   im_bereich: 'In range',
@@ -61,7 +62,27 @@ function spanneText(low: number | null, high: number | null, text: string | null
   return text ?? '—'
 }
 
-export function MarkerReihenModal({ r, onClose }: { r: MarkerReihe; onClose: () => void }) {
+function effektTitel(effekt: LabMarkerEffekt): string {
+  if (effekt.effect_type === 'assay_interference') return 'Assay interference'
+  if (effekt.effect_type === 'monitoring_requirement') return 'Monitoring'
+  return 'Physiological'
+}
+
+function effektFarbe(effekt: LabMarkerEffekt): string {
+  if (effekt.effect_type === 'assay_interference') return 'var(--warn)'
+  if (effekt.effect_type === 'monitoring_requirement') return 'var(--acc-medic)'
+  return 'var(--acc-suppl)'
+}
+
+export function MarkerReihenModal({
+  r,
+  effekte,
+  onClose,
+}: {
+  r: MarkerReihe
+  effekte: LabMarkerEffekt[]
+  onClose: () => void
+}) {
   const punkte = r.messungen.map(m => m.wert).filter((w): w is number => w != null)
   const skala = balkenSkala(r)
   const farbe = LAGE_FARBE[r.lage]
@@ -255,6 +276,64 @@ export function MarkerReihenModal({ r, onClose }: { r: MarkerReihe; onClose: () 
               )}
             </div>
           </Card>
+        </>
+      )}
+
+      {effekte.length > 0 && (
+        <>
+          <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Stack effects</div>
+          <div className="v2-col-gap" style={{ gap: 6, marginBottom: 14 }}>
+            {effekte.map(effekt => {
+              const c = effektFarbe(effekt)
+              return (
+                <div
+                  key={effekt.id}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: 9,
+                    padding: 10,
+                    background: `color-mix(in oklch, ${c} 5%, var(--surface))`,
+                    border: `1px solid color-mix(in oklch, ${c} 24%, var(--border))`,
+                    borderRadius: 6,
+                  }}
+                >
+                  <Icon
+                    name={effekt.effect_type === 'assay_interference' ? 'alert' : 'supplements'}
+                    className="v2-ic v2-ic-sm"
+                    style={{ color: c, flexShrink: 0, marginTop: 1 }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 4 }}>
+                      <span style={{ fontSize: 12.5, fontWeight: 600 }}>
+                        {effekt.supplement_name ?? effekt.substance_name}
+                      </span>
+                      <Pill style={{ borderColor: `color-mix(in oklch, ${c} 34%, var(--border))`, color: c }}>
+                        {effektTitel(effekt)}
+                      </Pill>
+                      {effekt.direction_enum && (
+                        <Pill style={{ fontSize: 9.5 }}>{effekt.direction_enum}</Pill>
+                      )}
+                    </div>
+                    {effekt.effect_type === 'assay_interference' && (
+                      <div style={{ fontSize: 11.5, lineHeight: 1.5, color: 'var(--fg-muted)', marginBottom: 4 }}>
+                        Measurement or derived value may be affected; this is separate from a physiological change.
+                      </div>
+                    )}
+                    <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
+                      {[effekt.mechanism, effekt.clinical_consequence].filter(Boolean).join(' · ')}
+                    </div>
+                    <div className="v2-dim v2-mono" style={{ fontSize: 9.5, marginTop: 4 }}>
+                      {[
+                        effekt.evidence ? `evidence: ${effekt.evidence}` : null,
+                        effekt.source ? `source: ${effekt.source}` : null,
+                      ].filter(Boolean).join(' · ') || 'source not supplied'}
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </>
       )}
 

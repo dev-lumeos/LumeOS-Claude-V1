@@ -8,6 +8,10 @@ const src = readFileSync('packages/ui/src/koerperkarte-pfade.ts', 'utf8')
 const pfade = [...src.matchAll(/"([MmLlCcQqAaSsTtHhVvZz][\s\d.\-][^"]*)"/g)]
   .map(m => m[1])
 
+if (process.argv.includes('--selbsttest-kaputt')) {
+  pfade.push('M 0 0 C 1 2 3')
+}
+
 const browser = await chromium.launch()
 const page = await browser.newPage()
 const fehler = []
@@ -37,3 +41,5 @@ console.log(`Pfade insgesamt: ${pfade.length}`)
 console.log(`vom Browser bemaengelt: ${kaputt.length}`)
 for (const k of kaputt) console.log(`   [${k.i}] ${k.d}`)
 await browser.close()
+
+if (kaputt.length > 0) process.exitCode = 1

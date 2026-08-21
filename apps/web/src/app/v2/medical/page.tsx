@@ -21,13 +21,19 @@
 // `[read]` Was noch Attrappe bleibt und warum, steht in
 // docs/ssot/109-medical-anbindung.md.
 import type { Metadata } from 'next'
+import { createSessionClient } from '@lumeos/shared/session'
 
 import {
-  angemeldeteNutzerin, ladeBefundwerte, ladeMarkerStamm, sucheKatalog, zaehleKatalog,
+  angemeldeteNutzerin, ladeBefundwerte, ladeMarkerStamm, ladeSystemgruppen,
+  sucheKatalog, zaehleKatalog,
   type BefundWert, type KatalogTreffer,
 } from '../../../lib/medical/lesen'
 import { zuReihen, type MarkerReihe } from '../../../lib/medical/reihe'
+import {
+  istSystem, rechneScores, type Gesamtwert, type System,
+} from '../../../lib/medical/systemscore'
 import { MedicalAnsicht } from './ansicht'
+import type { LabMarkerEffekt, MedikationEcht } from './echtdaten'
 import './medical.css'
 
 export const metadata: Metadata = {
@@ -38,20 +44,196 @@ export const metadata: Metadata = {
 // Werten der Bauzeit, also ohne Session und ohne Zeile.
 export const dynamic = 'force-dynamic'
 
+type MedikationZeile = {
+  id: string
+  name: string
+  drug_class: string[] | null
+  cyp_profile: string[] | null
+  dose_amount: number | null
+  dose_unit: string | null
+  doses_per_day: number | null
+  route: string | null
+  start_date: string | null
+  end_date: string | null
+  is_active: boolean | null
+  indication: string | null
+  notes: string | null
+  measurement_source: string | null
+  source_detail: string | null
+}
+
+type StackZeile = { id: string }
+type StackItemZeile = { supplement_id: string | null }
+type SupplementZeile = { id: string; slug: string; name: string }
+type QuelleZeile = {
+  substance_id: string
+  source_entity_id: string
+  source_label: string
+}
+type LabEffektZeile = {
+  id: string
+  substance_id: string
+  substance_name: string
+  loinc_code: string | null
+  lab_marker_id: string | null
+  effect_type: string
+  direction: string | null
+  direction_enum: string | null
+  mechanism: string | null
+  clinical_consequence: string | null
+  evidence: string | null
+  monitoring_link: string | null
+  source: string | null
+  raw: unknown
+}
+
+function arrayOderLeer(v: string[] | null): string[] {
+  return Array.isArray(v) ? v : []
+}
+
+function quelleAusRaw(raw: unknown): string | null {
+  if (raw == null || typeof raw !== 'object' || !('source' in raw)) return null
+  const source = (raw as { source?: unknown }).source
+  return typeof source === 'string' && source ? source : null
+}
+
+async function ladeMedikationen(userId: string): Promise<MedikationEcht[]> {
+  const { data, error } = await createSessionClient()
+    .schema('medical')
+    .from('user_medications')
+    .select(`
+      id, name, drug_class, cyp_profile, dose_amount, dose_unit,
+      doses_per_day, route, start_date, end_date, is_active,
+      indication, notes, measurement_source, source_detail
+    `)
+    .eq('user_id', userId)
+    .order('is_active', { ascending: false })
+    .order('start_date', { ascending: false })
+
+  if (error) throw error
+
+  return ((data ?? []) as MedikationZeile[]).map(row => ({
+    id: row.id,
+    name: row.name,
+    drug_class: arrayOderLeer(row.drug_class),
+    cyp_profile: arrayOderLeer(row.cyp_profile),
+    dose_amount: row.dose_amount,
+    dose_unit: row.dose_unit,
+    doses_per_day: row.doses_per_day,
+    route: row.route,
+    start_date: row.start_date,
+    end_date: row.end_date,
+    is_active: row.is_active ?? false,
+    indication: row.indication,
+    notes: row.notes,
+    measurement_source: row.measurement_source,
+    source_detail: row.source_detail,
+  }))
+}
+
+async function ladeLabEffekte(userId: string): Promise<LabMarkerEffekt[]> {
+  const db = createSessionClient().schema('supplements')
+
+  const { data: stacks, error: stackFehler } = await db
+    .from('user_stacks')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('is_active', true)
+  if (stackFehler) throw stackFehler
+
+  const stackIds = ((stacks ?? []) as StackZeile[]).map(s => s.id)
+  if (stackIds.length === 0) return []
+
+  const { data: items, error: itemFehler } = await db
+    .from('stack_items')
+    .select('supplement_id')
+    .in('stack_id', stackIds)
+    .eq('is_active', true)
+  if (itemFehler) throw itemFehler
+
+  const supplementIds = Array.from(new Set(
+    ((items ?? []) as StackItemZeile[])
+      .map(i => i.supplement_id)
+      .filter((id): id is string => Boolean(id)),
+  ))
+  if (supplementIds.length === 0) return []
+
+  const { data: supplemente, error: suppFehler } = await db
+    .from('supplement_catalog')
+    .select('id, slug, name')
+    .in('id', supplementIds)
+  if (suppFehler) throw suppFehler
+
+  const supplementZeilen = (supplemente ?? []) as SupplementZeile[]
+  const supplementNameNachSlug = new Map(supplementZeilen.map(s => [s.slug, s.name]))
+  const slugs = supplementZeilen.map(s => s.slug)
+  if (slugs.length === 0) return []
+
+  const { data: quellen, error: quellenFehler } = await db
+    .from('substance_catalog_sources')
+    .select('substance_id, source_entity_id, source_label')
+    .eq('source_catalog', 'lumeos_supplement_catalog')
+    .in('source_entity_id', slugs)
+  if (quellenFehler) throw quellenFehler
+
+  const quellenZeilen = (quellen ?? []) as QuelleZeile[]
+  const substanceIds = Array.from(new Set(quellenZeilen.map(q => q.substance_id)))
+  if (substanceIds.length === 0) return []
+
+  const supplementNameNachSubstanz = new Map(
+    quellenZeilen.map(q => [
+      q.substance_id,
+      supplementNameNachSlug.get(q.source_entity_id) ?? q.source_label,
+    ]),
+  )
+
+  const { data: effekte, error: effektFehler } = await db
+    .from('substance_lab_effects')
+    .select(`
+      id, substance_id, substance_name, loinc_code, lab_marker_id,
+      effect_type, direction, direction_enum, mechanism,
+      clinical_consequence, evidence, monitoring_link, source, raw
+    `)
+    .in('substance_id', substanceIds)
+  if (effektFehler) throw effektFehler
+
+  return ((effekte ?? []) as LabEffektZeile[]).map(row => ({
+    id: row.id,
+    substance_id: row.substance_id,
+    substance_name: row.substance_name,
+    supplement_name: supplementNameNachSubstanz.get(row.substance_id) ?? null,
+    loinc_code: row.loinc_code,
+    lab_marker_id: row.lab_marker_id,
+    effect_type: row.effect_type,
+    direction: row.direction,
+    direction_enum: row.direction_enum,
+    mechanism: row.mechanism,
+    clinical_consequence: row.clinical_consequence,
+    evidence: row.evidence,
+    monitoring_link: row.monitoring_link,
+    source: row.source || quelleAusRaw(row.raw),
+  }))
+}
+
 export default async function V2MedicalPage() {
   let werte: BefundWert[] = []
   let reihen: MarkerReihe[] = []
   let befunde = 0
   let katalogStart: KatalogTreffer[] = []
   let katalogGesamt = 0
+  let medikationen: MedikationEcht[] = []
+  let labEffekte: LabMarkerEffekt[] = []
+  let scores: Gesamtwert | null = null
   let ladefehler: string | null = null
 
   try {
     const userId = await angemeldeteNutzerin()
-    ;[werte, katalogStart, katalogGesamt] = await Promise.all([
+    ;[werte, katalogStart, katalogGesamt, medikationen, labEffekte] = await Promise.all([
       ladeBefundwerte(userId),
       sucheKatalog(''),
       zaehleKatalog(),
+      ladeMedikationen(userId),
+      ladeLabEffekte(userId),
     ])
 
     // Kurzname und Klasse je Code — ein Zugriff fuer alle, erst wenn
@@ -61,13 +243,26 @@ export default async function V2MedicalPage() {
     )
     reihen = zuReihen(werte, await ladeMarkerStamm(codes))
     befunde = new Set(werte.map(w => w.report_id)).size
+
+    // G-135: die fuenf System-Scores. Die Zuordnung steht in
+    // `biomarker_spec_enrichment.system_groups` — ein Zugriff, 49
+    // Zeilen, unabhaengig von der Zahl der Marker.
+    const { jeCode, erwartetJeSystem } = await ladeSystemgruppen()
+    scores = rechneScores(
+      reihen,
+      new Map(Array.from(jeCode, ([c, g]) => [c, g.filter(istSystem)])),
+      new Map(Array.from(erwartetJeSystem).filter(([s]) => istSystem(s)) as Array<[System, number]>),
+    )
   } catch (e) {
     ladefehler = e instanceof Error ? e.message : String(e)
   }
 
   return (
     <MedicalAnsicht
-      echt={{ reihen, befunde, werte, katalogStart, katalogGesamt, ladefehler }}
+      echt={{
+        reihen, befunde, werte, katalogStart, katalogGesamt,
+        medikationen, labEffekte, scores, ladefehler,
+      }}
     />
   )
 }

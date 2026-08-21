@@ -104,7 +104,7 @@ export function MedicalModale({ modal, onClose }: {
   if (!modal) return null
   switch (modal.typ) {
     case 'biomarker': return <BiomarkerDetailModal b={modal.b} onClose={onClose} />
-    case 'markerReihe': return <MarkerReihenModal r={modal.r} onClose={onClose} />
+    case 'markerReihe': return <MarkerReihenModal r={modal.r} effekte={modal.effekte ?? []} onClose={onClose} />
     case 'symptom': return <SymptomDetailModal s={modal.s} onClose={onClose} />
     case 'logSymptom': return <LogSymptomModal onClose={onClose} />
     case 'med': return <MedicationDetailModal m={modal.m} onClose={onClose} />

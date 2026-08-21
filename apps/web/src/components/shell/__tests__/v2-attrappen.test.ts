@@ -749,10 +749,20 @@ test('das Medical-Modul kennzeichnet jede Kachel', () => {
   // Die uebrigen 20 stehen, weil ihre Tabs es sind: Dashboard,
   // Tracking, Insights und der Grossteil des Import-Tabs haben kein
   // Schema hinter sich.
+  // `[cmd]` **G-135: `ansicht.tsx` von 5 auf 4.** Die Karte
+  // „Health score" ist angebunden — die fuenf System-Scores rechnen
+  // ueber `biomarker_spec_enrichment.system_groups` und die echten
+  // Reihen, nicht mehr ueber `calcOverallHealthScore()` des Entwurfs.
+  // `[read]` Die Alerts darunter bleiben markiert: sie stehen weiter
+  // auf `generateAlerts()`.
   const dateien: Array<[string, number]> = [
-    [MEDICAL, 5],
+    [MEDICAL, 4],
     [path.join(process.cwd(), 'src/app/v2/medical/tab-biomarker.tsx'), 7],
-    [path.join(process.cwd(), 'src/app/v2/medical/tab-tracking.tsx'), 8],
+    // `[cmd]` **Von 8 auf 7** — die Medikationskachel traegt keine
+    // Marke mehr; sie liest `user_medications`. Die Aenderung lag
+    // beim G-135-Lauf bereits unversioniert im Arbeitsbaum und
+    // stammt nicht aus diesem Auftrag.
+    [path.join(process.cwd(), 'src/app/v2/medical/tab-tracking.tsx'), 7],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = fs.readFileSync(datei, 'utf8')

@@ -11,6 +11,7 @@ import * as React from 'react'
 
 import type { MarkerReihe } from '../../../lib/medical/reihe'
 import type { Biomarker, Symptom, Medikament } from './daten'
+import type { LabMarkerEffekt } from './echtdaten'
 
 /**
  * Die acht Modale der Vorlage. [cmd] module-medical-v2.jsx:49-56.
@@ -22,7 +23,7 @@ import type { Biomarker, Symptom, Medikament } from './daten'
  */
 export type ModalZustand =
   | { typ: 'biomarker'; b: Biomarker }
-  | { typ: 'markerReihe'; r: MarkerReihe }
+  | { typ: 'markerReihe'; r: MarkerReihe; effekte?: LabMarkerEffekt[] }
   | { typ: 'symptom'; s: Symptom }
   | { typ: 'logSymptom' }
   | { typ: 'med'; m: Medikament }

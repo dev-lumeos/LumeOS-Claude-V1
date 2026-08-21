@@ -15,13 +15,14 @@ import * as React from 'react'
 import { Card, Pill, Icon, Sparkline, InEntwicklungKnopf } from '@lumeos/ui'
 
 import {
-  BIOMARKERS, BIOMARKER_CATEGORIES, FLAG_META, SYMPTOMS, MEDICATIONS_V2,
+  BIOMARKERS, BIOMARKER_CATEGORIES, FLAG_META, SYMPTOMS,
   SYMPTOM_BIOMARKER_MAP, CORRELATIONS, SUPPLEMENT_BIOMARKER_MAP,
   calcBiomarkerFlag, calcSupplementEffectiveness, type Wirksamkeit,
 } from './daten'
 import { FlagPill } from './bausteine'
 import { useMedical } from './kontext'
 import { ATTRAPPE } from './ansicht'
+import type { EchteDaten, MedikationEcht } from './echtdaten'
 
 const FELD_MONO: React.CSSProperties = {
   width: '100%', height: 30, background: 'var(--surface)',
@@ -42,8 +43,8 @@ const FELD_MONO: React.CSSProperties = {
  * `[cmd]` **Was wirklich fehlt, sind die Ueberwachungsspalten.** Die
  * Kachel der Vorlage zeigt je Medikament `monitoring`,
  * `monitoring_frequency`, `last_test`, `next_due`,
- * `monitoring_overdue`, `targets`, `side_effects`, `physician` und
- * `rx` — **keine einzige davon steht in der Tabelle** (gegen
+ * `monitoring_overdue`, `targets`, `side_effects`, `physician`, `rx`
+ * und `prescription_ref` — **keine einzige davon steht in der Tabelle** (gegen
  * `information_schema` geprueft, 2026-08-20).
  *
  * `[read]` Aus `next_due` und `monitoring_overdue` speisen sich vier
@@ -54,14 +55,24 @@ const MEDIKAMENT_GRUND =
   '`medical.user_medications` gibt es seit C-130 (21 Spalten, 2 Zeilen). '
   + 'Was fehlt, sind die Ueberwachungsspalten der Kachel: monitoring, '
   + 'monitoring_frequency, last_test, next_due, monitoring_overdue, targets, '
-  + 'side_effects, physician, rx — keine davon ist in der Tabelle. Aus '
+  + 'side_effects, physician, rx, prescription_ref — keine davon ist in der Tabelle. Aus '
   + 'next_due und monitoring_overdue kommen vier der sechs Warnungen.'
 
-export function MedTracking() {
+function dosisText(m: MedikationEcht): string {
+  if (m.dose_amount == null && !m.dose_unit) return '—'
+  return [m.dose_amount, m.dose_unit].filter(v => v != null && v !== '').join(' ')
+}
+
+function frequenzText(m: MedikationEcht): string {
+  if (m.doses_per_day == null) return '—'
+  return `${m.doses_per_day}/day`
+}
+
+export function MedTracking({ echt }: { echt: EchteDaten }) {
   const { open } = useMedical()
   const [sub, setSub] = React.useState<string>('symptoms')
   const active = SYMPTOMS.filter(s => !s.resolved)
-  const overdue = MEDICATIONS_V2.filter(m => m.monitoring_overdue)
+  const medikationen = echt.medikationen
 
   return (
     <div>
@@ -72,7 +83,7 @@ export function MedTracking() {
         }}>
           {([
             ['symptoms', `Symptoms · ${active.length}`],
-            ['medications', `Medications · ${MEDICATIONS_V2.length}`],
+            ['medications', `Medications · ${medikationen.length}`],
           ] as Array<[string, string]>).map(([k, l]) => (
             <button key={k} type="button" onClick={() => setSub(k)} aria-pressed={sub === k}
                     className={sub === k ? 'v2-btn v2-btn-primary' : 'v2-btn v2-btn-ghost'}
@@ -217,103 +228,85 @@ export function MedTracking() {
 
       {sub === 'medications' && (
         <div>
-          {overdue.length > 0 && (
-            <div style={{
-              padding: 12,
-              background: 'color-mix(in oklch, var(--warn) 6%, var(--surface))',
-              border: '1px solid color-mix(in oklch, var(--warn) 28%, var(--border))',
-              borderRadius: 7, marginBottom: 14,
-              display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap',
-            }}>
-              <Icon name="alert" className="v2-ic" style={{ color: 'var(--warn)', flexShrink: 0 }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 12.5, fontWeight: 600 }}>
-                  {overdue.length} medications with overdue monitoring
-                </div>
-                <div className="v2-muted" style={{ fontSize: 11 }}>
-                  {overdue.map(m => m.name).join(' · ')} — bloodwork due since {overdue[0].next_due}
-                </div>
-              </div>
-              <InEntwicklungKnopf titel="Schedule panel" className="v2-btn v2-btn-sm">
-                Schedule panel
-              </InEntwicklungKnopf>
-            </div>
-          )}
           <div className="v2-col-gap" style={{ gap: 12 }}>
-            {MEDICATIONS_V2.map(m => (
-              <Card key={m.id} onClick={() => open({ typ: 'med', m })}
-                    style={{ cursor: 'pointer' }} attrappe={ATTRAPPE}>
+            {medikationen.length === 0 && (
+              <Card title="Medications">
+                <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
+                  No medications are stored for this user.
+                </div>
+              </Card>
+            )}
+            {medikationen.map(m => (
+              <Card key={m.id}>
                 <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
                   <div style={{
                     width: 34, height: 34, borderRadius: 7, flexShrink: 0,
-                    background: m.type === 'prescription'
-                      ? 'color-mix(in oklch, var(--acc-medic) 18%, transparent)' : 'var(--surface-2)',
-                    border: `1px solid ${m.type === 'prescription'
-                      ? 'color-mix(in oklch, var(--acc-medic) 35%, var(--border))' : 'var(--border)'}`,
-                    color: m.type === 'prescription' ? 'var(--acc-medic)' : 'var(--fg-muted)',
-                    display: 'grid', placeItems: 'center',
+                    background: 'color-mix(in oklch, var(--acc-medic) 18%, transparent)',
+                    border: '1px solid color-mix(in oklch, var(--acc-medic) 35%, var(--border))',
+                    color: 'var(--acc-medic)', display: 'grid', placeItems: 'center',
                   }}>
                     <Icon name="medical" className="v2-ic" />
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5, flexWrap: 'wrap' }}>
                       <span style={{ fontSize: 13.5, fontWeight: 600 }}>{m.name}</span>
-                      <Pill>{m.type}</Pill>
-                      {m.rx && <Pill className="v2-mono" style={{ fontSize: 9.5 }}>{m.rx}</Pill>}
-                      {m.monitoring_overdue && <Pill variant="warn">monitoring overdue</Pill>}
+                      <Pill>{m.is_active ? 'active' : 'inactive'}</Pill>
+                      {m.measurement_source && <Pill className="v2-mono" style={{ fontSize: 9.5 }}>{m.measurement_source}</Pill>}
                     </div>
                     <div className="v2-med-medfelder">
                       <div>
                         <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Dose</div>
-                        <div className="v2-num">{m.dosage}</div>
+                        <div className="v2-num">{dosisText(m)}</div>
                       </div>
                       <div>
                         <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Frequency</div>
-                        <div>{m.frequency.replace(/_/g, ' ')}</div>
+                        <div>{frequenzText(m)}</div>
                       </div>
                       <div>
                         <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Indication</div>
-                        <div>{m.indication}</div>
+                        <div>{m.indication ?? '?'}</div>
                       </div>
                       <div>
-                        <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Monitoring</div>
-                        <div className="v2-num">{m.monitoring ? m.monitoring_frequency : 'none'}</div>
+                        <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Route</div>
+                        <div className="v2-num">{m.route ?? '?'}</div>
                       </div>
                       <div>
-                        <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Next due</div>
-                        <div className="v2-num" style={{ color: m.monitoring_overdue ? 'var(--warn)' : 'var(--fg)' }}>
-                          {m.next_due ?? '—'}
-                        </div>
+                        <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Since</div>
+                        <div className="v2-num">{m.start_date ?? '?'}</div>
                       </div>
                     </div>
-                    {m.targets.length > 0 && (
+                    {m.drug_class.length > 0 && (
                       <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 8, alignItems: 'center' }}>
-                        <span className="v2-eyebrow" style={{ marginRight: 2 }}>Monitors</span>
-                        {m.targets.map(t => {
-                          const b = BIOMARKERS.find(x => x.abbr === t)
-                          const flag = b ? calcBiomarkerFlag(b.value, b) : null
-                          return (
-                            <Pill key={t} style={flag && flag !== 'optimal'
-                              ? {
-                                borderColor: `color-mix(in oklch, ${FLAG_META[flag].c} 35%, var(--border))`,
-                                color: FLAG_META[flag].c, fontSize: 9.5,
-                              }
-                              : { fontSize: 9.5 }}>{t}{b ? ` ${b.value}` : ''}</Pill>
-                          )
-                        })}
+                        <span className="v2-eyebrow" style={{ marginRight: 2 }}>Classes</span>
+                        {m.drug_class.map(c => <Pill key={c} style={{ fontSize: 9.5 }}>{c}</Pill>)}
                       </div>
                     )}
-                    {m.interactions.length > 0 && (
+                    {m.cyp_profile.length > 0 && (
+                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 6, alignItems: 'center' }}>
+                        <span className="v2-eyebrow" style={{ marginRight: 2 }}>CYP</span>
+                        {m.cyp_profile.map(c => <Pill key={c} style={{ fontSize: 9.5 }}>{c}</Pill>)}
+                      </div>
+                    )}
+                    <div style={{
+                      marginTop: 8, padding: 8,
+                      background: 'color-mix(in oklch, var(--warn) 5%, var(--surface))',
+                      border: '1px solid color-mix(in oklch, var(--warn) 22%, var(--border))',
+                      borderRadius: 5, fontSize: 10.5, color: 'var(--fg-muted)',
+                    }}>
+                      <Icon name="alert" className="v2-ic v2-ic-sm" style={{
+                        display: 'inline', verticalAlign: 'middle', marginRight: 5, color: 'var(--warn)',
+                      }} />
+                      Monitoring columns are not stored yet: monitoring, monitoring_frequency,
+                      last_test, next_due, monitoring_overdue, targets, side_effects,
+                      physician, rx, prescription_ref.
+                    </div>
+                    {m.notes && (
                       <div style={{
-                        marginTop: 8, padding: 8,
-                        background: 'color-mix(in oklch, var(--warn) 5%, var(--surface))',
-                        border: '1px solid color-mix(in oklch, var(--warn) 22%, var(--border))',
-                        borderRadius: 5, fontSize: 10.5, color: 'var(--fg-muted)',
+                        marginTop: 8, padding: 8, background: 'var(--surface)',
+                        border: '1px solid var(--border)', borderRadius: 5,
+                        fontSize: 10.5, color: 'var(--fg-muted)',
                       }}>
-                        <Icon name="alert" className="v2-ic v2-ic-sm" style={{
-                          display: 'inline', verticalAlign: 'middle', marginRight: 5, color: 'var(--warn)',
-                        }} />
-                        Known interaction: {m.interactions.join(' · ')}
+                        {m.notes}
                       </div>
                     )}
                   </div>

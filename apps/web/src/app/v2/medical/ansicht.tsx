@@ -39,17 +39,19 @@ import {
 } from '@lumeos/ui'
 
 import {
-  BIOMARKERS, SYMPTOMS, MEDICATIONS_V2, CORRELATIONS,
-  SYSTEM_META, SYSTEM_WEIGHTS,
+  BIOMARKERS, SYMPTOMS, CORRELATIONS,
+  SYSTEM_META,
   calcBiomarkerFlag, calcSystemScore, calcOverallHealthScore, generateAlerts,
 } from './daten'
-import type { BefundWert, KatalogTreffer } from '../../../lib/medical/lesen'
-import type { MarkerReihe } from '../../../lib/medical/reihe'
 import { zaehleLagen } from '../../../lib/medical/lagezaehlung'
+import {
+  GEWICHT, PUNKTE, SYSTEM_LABEL, type System,
+} from '../../../lib/medical/systemscore'
 import { MedicalKontext, useMedical, type ModalZustand } from './kontext'
 import { MedicalModale } from './modale'
 import { MedBiomarkers, MedImport } from './tab-biomarker'
 import { MedTracking, MedInsights } from './tab-tracking'
+import type { EchteDaten } from './echtdaten'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
@@ -62,7 +64,7 @@ export const ATTRAPPE =
 // angemeldeten Nutzerin statt der 48 erfundenen der Vorlage. Die
 // uebrigen drei Zaehler stehen weiter auf Attrappendaten, weil ihre
 // Tabs es sind.
-function tabs(markerZahl: number): TabItem[] {
+function tabs(markerZahl: number, medikationen: number): TabItem[] {
   return [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard' },
     { id: 'biomarkers', label: 'Biomarkers', icon: 'trend_up', count: markerZahl },
@@ -70,42 +72,10 @@ function tabs(markerZahl: number): TabItem[] {
     {
       id: 'tracking', label: 'Tracking', icon: 'edit',
       count: SYMPTOMS.filter(s => !s.resolved).length
-        + MEDICATIONS_V2.filter(m => m.status === 'active').length,
+        + medikationen,
     },
     { id: 'insights', label: 'Insights', icon: 'sparkles', count: CORRELATIONS.length },
   ]
-}
-
-/**
- * Die echten Daten, die die Seite serverseitig geladen hat (G-46).
- *
- * `[cmd]` Sie kommen als Requisiten herein, weil dieser Rahmen eine
- * Client-Komponente ist und `createSessionClient()` Cookies über
- * `next/headers` liest — das geht nur auf dem Server. Dasselbe Muster
- * wie `/v2/settings`: laden in `page.tsx`, durchreichen, hier nur
- * anzeigen.
- */
-export type EchteDaten = {
-  /**
-   * Die Marker mit ihrem Verlauf — 140 flache Werte, gefaltet zu 35
-   * Reihen. `[read]` Die Faltung steht in `lib/medical/reihe.ts`, nicht
-   * hier: sie ist eine Rechnung und soll ohne React pruefbar bleiben.
-   */
-  reihen: MarkerReihe[]
-  /** Wie viele Laborbefunde die Werte tragen — fuer die Unterzeile. */
-  befunde: number
-  /**
-   * Die Rohwerte, eine Zeile je Messung.
-   *
-   * `[read]` Der Import-Tab braucht sie: dort steht `match_status`,
-   * und der ist eine Aussage ueber die einzelne importierte Zeile, nicht
-   * ueber den Marker. In der Liste hat er nichts verloren — Tom:
-   * *„In der Liste ist er Testmaterial."*
-   */
-  werte: BefundWert[]
-  katalogStart: KatalogTreffer[]
-  katalogGesamt: number
-  ladefehler: string | null
 }
 
 export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
@@ -167,20 +137,29 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
               </Pill>
             )}
           </div>
-          {/* `[cmd]` **`Health score` ist ersatzlos weg, nicht als
-              Attrappe stehengeblieben.** Er wiegt fuenf Systeme und
-              braucht dafuer eine Gruppierung der Marker. Gemessen am
-              2026-08-20: **23 der 37 Marker lassen sich ueber
-              `medical.biomarker_spec_enrichment` zuordnen, 14 nicht**
-              — darunter LDL und ApoB.
+          {/* `[cmd]` **Der `Health score` steht seit G-135 im
+              Dashboard-Tab — hier im Kopf bleibt er weg.** Zwei
+              Zahlen nebeneinander („87" und „1 ueber dem Bereich")
+              waeren zwei Antworten auf dieselbe Frage.
 
-              `[read]` Toms Entscheidung: *„Ein Gesundheitswert, der
-              die beiden wichtigsten Lipidmarker stillschweigend
-              auslaesst, ist schlechter als keiner — er sieht aus wie
-              ein Gesamtbild und ist ein Ausschnitt."* Die Gewichtung
-              waere ausserdem eine zweite, ungetroffene Entscheidung.
+              `[cmd]` **Die zwei Unbekannten aus G-84 sind geloest:**
+              Gruppierung und Gewichtung stehen in
+              `docs/specs/Medical/SPEC_09_SCORING.md` und in
+              `biomarker_spec_enrichment.system_groups`.
 
-              Zahlen und Gruende: docs/ssot/134-medical-score.md */}
+              `[cmd]` **Toms Einwand von damals — *„ein
+              Gesundheitswert, der die beiden wichtigsten Lipidmarker
+              stillschweigend auslaesst"* — gilt zur Haelfte weiter:**
+              **LDL ist zugeordnet** (13457-7), **ApoB nicht.** Der
+              Bestand fuehrt ihn unter 1884-6, `enrichment` unter
+              1869-7 — **dieselbe Groesse, zwei LOINC-Codes.**
+
+              `[read]` **Der Unterschied zu damals ist das Wort
+              „stillschweigend":** Die Karte nennt je System
+              `marker_count` von `erwartet` — Herz-Kreislauf steht als
+              „5 von 7 Markern" da, nicht als glatte Zahl.
+
+              Zahlen und Gruende: docs/ssot/171-health-score.md */}
           <div className="v2-module-sub">
             {echt.reihen.length} biomarkers · LOINC-mapped · dual-range (lab + optimal) · no diagnosis, no therapy advice
           </div>
@@ -217,12 +196,13 @@ export function MedicalAnsicht({ echt }: { echt: EchteDaten }) {
         </div>
       </div>
 
-      <Tabs items={tabs(echt.reihen.length)} active={tab} onChange={setTab} />
+      <Tabs items={tabs(echt.reihen.length, echt.medikationen.filter(m => m.is_active).length)}
+            active={tab} onChange={setTab} />
 
       {tab === 'dashboard' && <MedDashboard />}
       {tab === 'biomarkers' && <MedBiomarkers echt={echt} />}
       {tab === 'import' && <MedImport echt={echt} />}
-      {tab === 'tracking' && <MedTracking />}
+      {tab === 'tracking' && <MedTracking echt={echt} />}
       {tab === 'insights' && <MedInsights />}
 
       <MedicalModale modal={modal} onClose={kontext.close} />
@@ -241,6 +221,18 @@ function MedDashboard() {
     [])
   const trajectory = 'stable'
   const kritisch = alerts.filter(a => a.severity === 'critical').length
+  const scores = React.useMemo(() => ({
+    score: overall.score,
+    systeme_mit_wert: systems.filter(s => s.score !== null).length,
+    gewicht_erfasst: overall.data_completeness,
+    systeme: systems.map(s => ({
+      system: s.key as System,
+      score: s.score,
+      erwartet: s.marker_count + s.missing,
+      marker_count: s.marker_count,
+      ohne_bereich: 0,
+    })),
+  }), [overall, systems])
 
   return (
     <div>
@@ -266,59 +258,76 @@ function MedDashboard() {
 
       <div className="v2-grid-15">
         <div className="v2-col-gap" style={{ gap: 14 }}>
+          {/*
+            G-135: Der Health score ist angebunden — deshalb ohne
+            Attrappenmarke.
+
+            `[read]` **Kein Statuswort.** Die Spec kennt `warn` und
+            `critical`; das sind Urteile ueber eine Lage, und G-60 hat
+            schon „Optimal" entschaerft. **Gezeigt werden die Zahl, wie
+            viele Marker sie traegt und wie viel Gewicht erfasst ist** —
+            die Schwellen stehen im Rechenweg darunter.
+          */}
           <Card
             title="Health score"
-            sub={`weighted across 5 systems · ${Math.round(overall.data_completeness * 100)}% data completeness`}
-            attrappe={ATTRAPPE}
+            sub={scores === null
+              ? 'Systemzuordnung nicht geladen'
+              : `${scores.systeme_mit_wert} von 5 Systemen · `
+                + `${Math.round(scores.gewicht_erfasst * 100)} % des Gewichts erfasst`}
           >
-            <div className="v2-med-score-kopf">
-              <Ring value={overall.score} max={100}
-                    color={overall.score >= 85 ? 'var(--pos)' : overall.score >= 70 ? 'var(--acc-recov)' : 'var(--warn)'}
-                    label={overall.status} size={132} stroke={9} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="v2-grid v2-g-cols-2" style={{ gap: 8 }}>
-                  {systems.map(s => {
-                    const farbe = (s.score ?? 0) >= 85 ? 'var(--pos)'
-                      : (s.score ?? 0) >= 65 ? 'var(--acc-recov)'
-                        : (s.score ?? 0) >= 40 ? 'var(--warn)' : 'var(--neg)'
-                    return (
-                      <div key={s.key} style={{
+            {scores === null || scores.score === null ? (
+              <p className="v2-muted" style={{ fontSize: 12 }}>
+                {scores === null
+                  ? 'Die Systemzuordnung liess sich nicht laden — ohne sie gibt es keinen Wert.'
+                  : 'Kein System hat einen bewertbaren Marker. Ein Wert entsteht, sobald ein '
+                    + 'Befund einen Marker mit Laborbereich enthaelt.'}
+              </p>
+            ) : (
+              <div className="v2-med-score-kopf">
+                <Ring value={scores.score} max={100} color="var(--acc-medic)"
+                      label={`${scores.score}`} size={132} stroke={9} />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="v2-grid v2-g-cols-2" style={{ gap: 8 }}>
+                    {scores.systeme.map(s => (
+                      <div key={s.system} style={{
                         padding: 10, background: 'var(--bg-elev)',
                         border: '1px solid var(--border)', borderRadius: 6,
                       }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
-                          <span className="v2-dot" style={{ background: s.c, width: 7, height: 7 }} />
-                          <span style={{ fontSize: 11.5, fontWeight: 600 }}>{s.label}</span>
-                          <span className="v2-num" style={{ marginLeft: 'auto', fontSize: 14, color: farbe }}>
+                          <span style={{ fontSize: 11.5, fontWeight: 600 }}>
+                            {SYSTEM_LABEL[s.system]}
+                          </span>
+                          <span className="v2-num" style={{ marginLeft: 'auto', fontSize: 14 }}>
                             {s.score ?? '—'}
                           </span>
                         </div>
-                        <Meter value={s.score ?? 0} color={farbe} />
+                        <Meter value={s.score ?? 0} color="var(--acc-medic)" />
+                        {/* `marker_count` und `missing` wie bei den
+                            Naehrstoffen „11 von 14 Positionen" (G-121):
+                            die Zahl sagt selbst, wie vollstaendig sie ist. */}
                         <div className="v2-dim v2-mono" style={{ fontSize: 9, marginTop: 3 }}>
-                          {s.marker_count} markers{s.missing ? ` · ${s.missing} missing` : ''} · weight {Math.round((SYSTEM_WEIGHTS[s.key] || 0) * 100)}%
+                          {s.score === null
+                            ? `kein Wert · ${s.erwartet} Marker zugeordnet`
+                            : `${s.marker_count} von ${s.erwartet} Markern`}
+                          {s.ohne_bereich > 0 && ` · ${s.ohne_bereich} ohne Bereich`}
+                          {' · '}Gewicht {Math.round(GEWICHT[s.system] * 100)} %
                         </div>
                       </div>
-                    )
-                  })}
-                  <div style={{
-                    padding: 10, background: 'var(--surface)',
-                    border: '1px dashed var(--border)', borderRadius: 6,
-                    display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                  }}>
-                    <div className="v2-eyebrow" style={{ marginBottom: 3 }}>Trajectory</div>
-                    <div style={{ fontSize: 13, fontWeight: 600 }}>{trajectory}</div>
-                    <div className="v2-dim" style={{ fontSize: 10 }}>vs. previous panel</div>
+                    ))}
                   </div>
                 </div>
               </div>
-            </div>
+            )}
             <div className="v2-divider" />
             {/* Die Herleitung als Text — wie bei Recovery und Goals der
                 Beleg, dass die Zahl nicht geraten ist. */}
             <div className="v2-dim v2-mono" style={{ fontSize: 10, lineHeight: 1.7 }}>
               overall = Σ(system_score × weight) / Σ(weight_with_data)<br />
               weights: cardiovascular .25 · metabolic .25 · hormonal .20 · liver .15 · kidney .15<br />
-              flag scores: optimal 100 · normal 75 · low/high 40 · critical 10
+              je Marker: im Laborbereich und im Optimalband {PUNKTE.optimal} ·
+              {' '}im Laborbereich {PUNKTE.normal} ·
+              {' '}ausserhalb des Laborbereichs {PUNKTE.ausserhalb}<br />
+              Zuordnung ueber LOINC aus <code>biomarker_spec_enrichment.system_groups</code>
             </div>
           </Card>
 

@@ -30,6 +30,7 @@ import { Card, Icon, Pill, Sparkline } from '@lumeos/ui'
 import type { Lage } from '../../../lib/medical/befund'
 import { balkenSkala, type MarkerReihe } from '../../../lib/medical/reihe'
 import { useMedical } from './kontext'
+import type { LabMarkerEffekt } from './echtdaten'
 
 /** Wortlaut je Lage. Ortsangaben, keine Urteile. */
 const LAGE_TEXT: Record<Lage, string> = {
@@ -164,13 +165,29 @@ function Verlauf({ r }: { r: MarkerReihe }) {
   )
 }
 
-export function MarkerListe({ reihen, befunde }: { reihen: MarkerReihe[]; befunde: number }) {
+export function MarkerListe({
+  reihen,
+  befunde,
+  labEffekte,
+}: {
+  reihen: MarkerReihe[]
+  befunde: number
+  labEffekte: LabMarkerEffekt[]
+}) {
   const { open } = useMedical()
   const [klasse, setKlasse] = React.useState('all')
   const [q, setQ] = React.useState('')
   const [nurAusserhalb, setNurAusserhalb] = React.useState(false)
 
   const klassen = React.useMemo(() => klassenListe(reihen), [reihen])
+  const effekteNachCode = React.useMemo(() => {
+    const map = new Map<string, LabMarkerEffekt[]>()
+    for (const effekt of labEffekte) {
+      if (!effekt.loinc_code) continue
+      map.set(effekt.loinc_code, [...(map.get(effekt.loinc_code) ?? []), effekt])
+    }
+    return map
+  }, [labEffekte])
 
   const liste = reihen
     .filter(r => klasse === 'all' || (r.klasse ?? 'ohne') === klasse)
@@ -254,6 +271,7 @@ export function MarkerListe({ reihen, befunde }: { reihen: MarkerReihe[]; befund
                   <th style={{ width: 170 }}>Lab · optimal · you</th>
                   <th style={{ width: 120 }}>Range</th>
                   <th style={{ width: 130 }}>Position</th>
+                  <th style={{ width: 116 }}>Stack link</th>
                   <th style={{ width: 76 }}>Trend</th>
                   <th style={{ width: 80 }}>Sparkline</th>
                   <th style={{ width: 26 }} />
@@ -262,9 +280,11 @@ export function MarkerListe({ reihen, befunde }: { reihen: MarkerReihe[]; befund
               <tbody>
                 {liste.map(r => {
                   const punkte = r.messungen.map(m => m.wert).filter((w): w is number => w != null)
+                  const effekte = r.loinc_code ? (effekteNachCode.get(r.loinc_code) ?? []) : []
+                  const assay = effekte.some(e => e.effect_type === 'assay_interference')
                   return (
                     <tr key={r.schluessel} style={{ cursor: 'pointer' }}
-                        onClick={() => open({ typ: 'markerReihe', r })}>
+                        onClick={() => open({ typ: 'markerReihe', r, effekte })}>
                       <td>
                         <div style={{ fontSize: 12.5, fontWeight: 500 }}>{r.name}</div>
                         <div className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>
@@ -322,6 +342,16 @@ export function MarkerListe({ reihen, befunde }: { reihen: MarkerReihe[]; befund
                           <div className="v2-dim" style={{ fontSize: 10 }}>
                             {`optimal: ${LAGE_TEXT[r.optimalLage].toLowerCase()}`}
                           </div>
+                        )}
+                      </td>
+                      <td>
+                        {effekte.length > 0 ? (
+                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+                            <Pill style={{ fontSize: 9.5 }}>{effekte.length} stack</Pill>
+                            {assay && <Pill variant="warn" style={{ fontSize: 9.5 }}>assay</Pill>}
+                          </div>
+                        ) : (
+                          <span className="v2-dim v2-mono" style={{ fontSize: 10 }}>—</span>
                         )}
                       </td>
                       <td><Verlauf r={r} /></td>

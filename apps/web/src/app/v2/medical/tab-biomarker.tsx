@@ -17,7 +17,8 @@ import {
   OCR_EXTRACTED, LAB_REPORTS, UNIT_CONVERSIONS,
 } from './daten'
 import { useMedical } from './kontext'
-import { ATTRAPPE, type EchteDaten } from './ansicht'
+import { ATTRAPPE } from './ansicht'
+import type { EchteDaten } from './echtdaten'
 import { katalogSuchen } from './aktionen'
 import { KatalogSuche } from './katalog-suche'
 import { MarkerListe } from './marker-liste'
@@ -63,7 +64,7 @@ export function MedBiomarkers({ echt }: { echt: EchteDaten }) {
 
   return (
     <div>
-      <MarkerListe reihen={echt.reihen} befunde={echt.befunde} />
+      <MarkerListe reihen={echt.reihen} befunde={echt.befunde} labEffekte={echt.labEffekte} />
 
       <div style={{ marginTop: 14 }}>
         <button

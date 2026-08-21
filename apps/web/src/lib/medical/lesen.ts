@@ -324,6 +324,50 @@ export async function ladeMarkerStamm(codes: string[]): Promise<Map<string, Mark
   return karte
 }
 
+/**
+ * Die Systemzuordnung je LOINC-Code (G-135).
+ *
+ * `[cmd]` **`biomarker_spec_enrichment.system_groups` trägt sie
+ * bereits** — 27 der 49 Zeilen sind einem oder mehreren der fünf
+ * Systeme zugeordnet: cardiovascular 7, liver 6, hormonal 6,
+ * metabolic 4, kidney 4. **G-84 nannte die Gruppierung eine
+ * Unbekannte; sie stand in der Tabelle.**
+ *
+ * `[cmd]` **Zugeordnet wird über den Code, nicht über den Namen.** Die
+ * Spec vergleicht Namensfelder und verliert dabei `Total Testosterone`
+ * — der Bestand nennt ihn `Testosterone, Total`, **bei gleichem LOINC
+ * 2986-8.**
+ *
+ * `[read]` Fünf `spec_name` stehen doppelt (Glucose, LDL, Hematocrit,
+ * Magnesium, Vitamin D) — **zwei LOINC-Codes für dieselbe Grösse.**
+ * Beide werden zugeordnet; welcher im Bestand vorkommt, entscheidet
+ * der Befund.
+ */
+export async function ladeSystemgruppen(): Promise<{
+  jeCode: Map<string, string[]>
+  erwartetJeSystem: Map<string, number>
+}> {
+  const jeCode = new Map<string, string[]>()
+  const erwartetJeSystem = new Map<string, number>()
+
+  const { data, error } = await medicalDb()
+    .from('biomarker_spec_enrichment')
+    .select('loinc_code, system_groups')
+  if (error) return { jeCode, erwartetJeSystem }
+
+  for (const z of (data ?? []) as unknown as Array<{
+    loinc_code: string | null; system_groups: string[] | null
+  }>) {
+    const gruppen = (z.system_groups ?? []).filter(Boolean)
+    if (!z.loinc_code || gruppen.length === 0) continue
+    jeCode.set(z.loinc_code, gruppen)
+    for (const g of gruppen) {
+      erwartetJeSystem.set(g, (erwartetJeSystem.get(g) ?? 0) + 1)
+    }
+  }
+  return { jeCode, erwartetJeSystem }
+}
+
 /** Wie viele Marker der Katalog führt — für die Beschriftung der Suche. */
 export async function zaehleKatalog(): Promise<number> {
   const { count, error } = await medicalDb()
