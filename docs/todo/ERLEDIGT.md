@@ -6563,87 +6563,6 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[cmd]` **Alle Tag-Pillen zaehlen weiter gegen SQL korrekt**,
   `test-user` sieht ungefiltert 7.140.
 
-- [x] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
-  Befund aus G-69.
-
-  `[cmd]` **Sie stehen nur in Vorlagendateien.** `[read]` **Die Regel
-  greift dreimal:** Volume landmarks bleibt Attrappe, **das Zielband der
-  Volumenkachel** (*14/16 Saetze*) und **die Einstufung
-  Beginner…Elite** in den Standards fallen aus demselben Grund weg.
-
-  `[read]` **Es sind Schwellen aus der Trainingsliteratur** — sie
-  brauchen eine Quelle, wie die Referenzbereiche bei den Naehrstoffen
-  (C-45) und den Biomarkern (C-84). **Keine erfundene Zahl.**
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  2026-08-20). Aus C-180.
-
-  | | Einstufung | Handlung |
-  |---|---|---|
-  | **MEV** | HEURISTIC | `USE_DIRECTIONAL_GUIDANCE` |
-  | **MAV** | HEURISTIC | **`DO_NOT_IMPLEMENT`** |
-  | **MRV** | HEURISTIC | `LABEL_HEURISTIC` |
-  | RP-Rahmenwerk | HEURISTIC | `LABEL_HEURISTIC` |
-
-  `[read]` **Genau das Ergebnis, das der Auftrag als brauchbar benannt
-  hat:** *„MEV = brauchbares Produktmodell, aber kein wissenschaftlich
-  standardisierter Grenzwert."*
-
-  `[cmd]` **Und `LANDMARKS` im Mockup traegt Zahlen je Muskelgruppe** —
-  **sie duerfen als Orientierung stehen, nicht als Messwert.**
-
-- [x] **C-124: Recovery-Recherche — Modalitaeten und Schwellen** (neu
-  2026-08-19). **E5 und E8 aus C-123.**
-
-  **Tom, 2026-08-19:** *„Womoeglich gibt ein Research Aufklaerung, wir
-  sind nicht die Ersten, die sowas bauen."*
-
-  ### E5 — Modalitaeten-Bonuswerte
-
-  `[cmd]` **Sauna, Massage, Eisbad, Dehnen** — je ein Bonuspunkt im
-  Score. **Keine Quelle im Repo.**
-
-  `[read]` **Was zu suchen ist:** Belegt die Sportwissenschaft eine
-  messbare Wirkung auf die Erholung — und in welcher
-  Groessenordnung? **Kaltwasserimmersion ist gut untersucht, Sauna
-  teilweise, Massage strittig.**
-
-  ### E8 — Motivations-Schwelle
-
-  `[cmd]` **Das Uebertrainings-Signal feuert bei niedriger Motivation.**
-  Die Schwelle stammt aus einer anderen Skala: `[annahme]` **≤ 5 von 10,
-  umgerechnet, nicht belegt.**
-
-  `[read]` **Und die E4-Frage gehoert dazu:** Wie viele Signale ueber wie
-  viele Tage rechtfertigen einen Arzt-Hinweis? **Uebertraining hat eine
-  Forschungsliteratur** — REST-Q, RESTQ-Sport, die Uebertrainings-Syndrom-
-  Kriterien.
-
-  `[read]` **Was nicht gesucht wird:** eine Diagnoseregel. **Nur die
-  Frage, ab wann eine Haeufung so ungewoehnlich ist, dass ein Hinweis
-  angebracht ist.**
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  2026-08-20). Aus C-180.
-
-  `[cmd]` **Alle 30 Modalitaets-Records: `REMOVE_NUMERIC_VALUE`.**
-  **Die Seed-Werte (2,76 / 0,13 / 0,05 / −0,07) sind als
-  `not_evidence` geflaggt.**
-
-  `[read]` **Der Orchestrator hatte es gemessen und gemeldet:** *„Das
-  sind Seed-Daten — ein Skript hat sie erzeugt, und dasselbe Skript hat
-  die Bonuswerte gesetzt."*
-
-  `[cmd]` **Was bleibt:** Richtung und Endpunkt mit Quelle. **Beispiel
-  Sauna:** `REC_SAUNA_ENDURANCE_HEAT`, *„improve_in_heat"*,
-  `SUPPORTED_DIRECTION_ONLY`, Grad C, PMID 16877041 — **`current_value:
-  null`.**
-
-  `[read]` **Damit zeigt die Kachel *„Sauna: verbessert die
-  Ausdauerleistung in Hitze (Grad C)"* statt *„+2,76 Punkte"*.**
-
 - [x] **C-189: `rule_assessment` ruft `platform_input_status` 64 Mal**
   (neu 2026-08-21). **Toms Befund. Der Supplements-Tab braucht 9
   Sekunden.**
@@ -7178,47 +7097,6 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   nur den Namen.
 
   `[cmd]` **Erledigt 2026-08-19 mit G-79.**
-
-- [x] **GO-21: Taille:Huefte mit Geschlechtsbezug** (entschieden
-  2026-08-19). Befund aus G-87.
-
-  **Tom, 2026-08-19: mit Geschlechtsbezug zeigen.**
-
-  `[cmd]` **Die Quelle:** WHO 2008 — **unter 0,90 bei Maennern, unter
-  0,80 bei Frauen.** Im Vorgaengerrepo hinterlegt.
-
-  `[cmd]` **Toms Wert am 2026-08-19: 0,860** — unter der Maennerschwelle.
-
-  `[cmd]` **`public.profiles` traegt das Geschlecht**, technisch geht
-  es.
-
-  `[read]` **Und die Sprachregel gilt:** *„Unter dem Grenzwert"* ist eine
-  Lage, *„gesund"* ein Urteil. **Mit Quelle und Jahr daneben**, wie bei
-  den Biomarker-Bereichen.
-
-  **Was fehlt:** `[read]` Was, wenn das Geschlecht nicht gesetzt ist?
-  **Dann keine Schwelle, nur das Verhaeltnis** — wie `fasting_status`,
-  das nur erscheint, wenn es belegt ist.
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  C-180.
-
-  `[cmd]` **`BP-WHR-001`: WHO-Grenzwerte, Evidenzgrad A,
-  `KEEP_NUMERIC`.** **Toms Entscheidung vom 2026-08-20 ist damit
-  gedeckt.**
-
-  `[cmd]` **Und drei weitere anthropometrische Masse sind Grad A:**
-
-  | | |
-  |---|---|
-  | **WHtR** | **0,5** — *„Taille unter der halben Koerpergroesse"* |
-  | **Bauchumfang** | **>94/>80 cm** erhoeht, **>102/>88 cm** stark erhoeht |
-  | **BMI** | WHO-Klassifikation |
-  | Ethnienspezifisch | IDF, Grad B — Europid 94/80, Suedasiatisch 90/80 |
-
-  `[read]` **Das ist mehr, als GO-21 verlangt hat** — und alles mit
-  Quelle.
 
 ## G — Theme V1
 
@@ -10995,41 +10873,6 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   es nicht. **Das Fenster schreibt aus, was gespeichert wird**, damit
   niemand eine Auswertung nach Gruenden erwartet.
 
-- [x] **G-89: Die Idealwerte stehen nur in Begleitdateien** (neu
-  2026-08-19). Befund aus G-87.
-
-  `[cmd]` **1.618, V-Taper und Steve Reeves stehen ausschliesslich in
-  `theme-v1/uploads/`** — Begleitdateien des Entwurfs, **keine
-  Spezifikation.**
-
-  `[cmd]` **Und der Reeves-Wert ist gar keine Rechnung:**
-  *„`daten.ts:438` gibt fest 88 zurueck."*
-
-  `[read]` **Auch die Farbe faellt weg, mit gutem Grund:** *„Die Vorlage
-  faerbt eine wachsende Taille rot und einen wachsenden Arm gruen —
-  welche Richtung erwuenscht ist, haengt vom Ziel ab."* **In einer
-  Aufbauphase ist eine wachsende Taille normal.**
-
-  **Zu klaeren:** Braucht es Idealwerte ueberhaupt? `[read]` **Die
-  Verhaeltnisse selbst sind Arithmetik und stehen** — die Einstufung
-  waere eine Bewertung.
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  (beantwortet 2026-08-20). Aus C-180.
-
-  `[cmd]` **Alle vier als `LABEL_HEURISTIC` eingestuft:**
-
-  `BP-GR-006` Goldener Schnitt 1,618 · `BP-REEVES-008` Reeves-Formeln ·
-  `BP-MCCALLUM-009` McCallum · `BP-CLASSIC-010` klassische Konvention.
-
-  `[read]` **Die Antwort auf die Frage im Punkt:** *„Gibt es belegte
-  Referenzwerte, oder ist das Tradition ohne Datengrundlage?"* —
-  **Tradition, und sie darf so beschriftet werden.**
-
-  `[cmd]` **`BP-FFMI-005` (FFMI 25 als Naturgrenze) ist
-  `CONFLICTING_EVIDENCE`** — *„kein Natural-Limit-Urteil."*
-
 - [x] **G-105: Zwei abgeschnittene SVG-Pfade in `packages/ui`**
   (erledigt 2026-08-21, `docs/ssot/165-svg-und-wasser.md`).
   **Es waren nicht zwei abgeschnittene Kurven, sondern 42 % fehlende
@@ -11274,3 +11117,11 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Der Zugang zu PED-Protokollen haengt an einem
   Browserzustand** — keine Pruefung, keine Rechte, kein Zeilenschutz.
   **Das gehoert vor jeder weiteren Extended-Arbeit geklaert.**
+
+### Zurueckgenommene Abschluesse
+
+`[read]` **C-105, C-124, GO-21 und G-89 waren am 2026-08-20 zu frueh
+geschlossen.** `crawl_025` hat die *Frage* beantwortet — die *Arbeit*
+stand aus. **Tom, 2026-08-21:** *„Der Abschluss war meiner, nicht deiner
+— ich habe die Frage mit der Arbeit verwechselt.“* Die vier stehen
+wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
