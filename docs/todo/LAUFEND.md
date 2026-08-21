@@ -67,15 +67,32 @@ wenn er rausgeht, nicht wenn er geschrieben ist.**
 
 **Entscheidungen fuer Tom**
 
+*Anzeige und Daten*
+
 | | |
 |---|---|
-| **GO-23** Deckungsgrenze unter 50 % | Vorschlag: dimmen |
-| **G-134** vier Filtergruppen gibt es nicht | |
-| **G-136** zwei Kartenzuordnungen | Ballaststoffe, Wasser |
-| **C-174** `strong` als dritte Constraint-Stufe | ADR gegen GO-22 |
-| **GO-24** *„Mineralstoffe"* als Gruppenbegriff | |
-| **A-37** Coach-Permissions pro Subfunktion | ADR-Abweichung |
-| **T1–T9** Coach-Portal | neun Fragen |
+| **GO-23** | Deckungsgrenze unter 50 % — Vorschlag: dimmen |
+| **G-134** | die vier Filtergruppen gibt es in den Daten nicht |
+| **G-136** | Ballaststoffe unter Kohlenhydrate, Wasser unter Sonstige |
+| **GO-24** | *„Mineralstoffe"* als Gruppenbegriff |
+| **G-150** | Volltexttreffer neben Alias-Treffer zeigen? |
+| **C-174** | `strong` als dritte Constraint-Stufe (ADR gegen GO-22) |
+
+*Coach und Rechte*
+
+| | |
+|---|---|
+| **A-43** | Coach-Permissions pro Subfunktion — ADR-Abweichung |
+| **T1–T9** | neun Fragen zum Coach-Portal |
+
+*Aeltere Blocker, die dieselbe Art Entscheidung sind*
+
+| | |
+|---|---|
+| **A-06** | Design-System — shadcn nutzt `rounded-md` fest statt der Token-Radien; ein Theme steuert sie damit nicht. **Betrifft alle sieben Apps.** |
+| **A-08** | **Medienort:** Spec nennt Cloudflare R2, der Bestand liegt in Supabase Storage (15 GB). **Kostenfolge, Wechsel bedeutet Transfer.** |
+| **E-07** | **186 von 1.448 Uebungen haben weibliche Darstellungen** (13 %). Die Regel ist entschieden (weiblich, sonst maennlich) — **offen bleibt, ob 1.262 nachproduziert werden.** |
+| **C-126** | **Soreness-Mittelung:** Wer Kater 3 an einem Muskel meldet, hat nach V/S denselben Wert wie jemand mit Kater 3 an fuenf. **Soll die Zahl der Muskeln mitzaehlen?** |
 
 ## Bereiche, damit nichts kollidiert
 

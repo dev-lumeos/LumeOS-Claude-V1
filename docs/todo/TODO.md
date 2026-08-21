@@ -1,315 +1,69 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `a0f7a9e` auf `dev`.
-Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
-von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
+**Stand: 2026-08-21.** 165 offen, 1 in Arbeit.
+Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
+
 **Belegpflicht:** Aussagen über den Ist-Zustand tragen `[cmd]`, `[read]`
 oder `[annahme]`. Nur `[cmd]` darf zu einer Regel werden.
+
 **Erledigtes** steht vollständig in `docs/todo/ERLEDIGT.md` — mit Datum,
 Beleg und Begründung. Diese Datei enthält nur, was noch aussteht.
 
-**Grössere Vorhaben haben einen eigenen Plan.** Er steht nicht in dieser
-Datei, damit sie lesbar bleibt — aber er wird hier genannt, sonst geht er
-verloren:
+**Wer gerade woran arbeitet:** `docs/todo/LAUFEND.md`.
+
+---
+
+## Vor jedem Auftrag
+
+`docs/spezifikation/00-QUELLEN.md` sagt je Modul, welche Mockups und
+Specs es gibt — **49 Mockups (1,7 MB), 160 Spec-Dateien (15,8 MB).**
+
+`[read]` **Kein Modul hat nur eine Mockup-Datei.** Nutrition hat drei,
+Recovery fünf, Coach acht. **Und zwei Dateien tragen Rechenwerke, keine
+Anzeige:** `module-training-spec.jsx` und `module-recovery-engine.jsx`.
+
+`[cmd]` **`docs/specs/` ist kein Altbestand.** Es enthält getroffene
+Entscheidungen — Health score, Onboarding, zwölf ADRs zu Nutrition.
+**Prüfend lesen, jede Zahl gegen den Bestand prüfen.** A-20 zählt sieben
+inhaltliche Fehler, G-135 fünf weitere allein in `SPEC_09_SCORING`.
+
+**Die Begründung steht in `docs/sessions/2026-08-20-uebergabe.md`.**
+
+---
+
+## Grössere Vorhaben mit eigenem Plan
 
 | | |
 |---|---|
-| **Theme V1 umsetzen** (Sektion G) | `docs/spezifikation/10-plattform/design-system/theme-v1-umsetzung.md` |
+| **Theme V1** (Sektion G) | `docs/spezifikation/10-plattform/design-system/theme-v1-umsetzung.md` |
 | **Altbestand konsolidieren** (A-11) | `docs/spezifikation/00-KONSOLIDIERUNG.md` |
 | **Goals** (GO-01 ff.) | `docs/spezifikation/30-module/core/goals/00-umsetzungsplan.md` |
-| **Rollen der Ordner, Statuskopf, Regeln** | `docs/spezifikation/00-INDEX.md` |
+| **Coach-Portal** | `docs/spezifikation/30-module/addon/01-entwurf-coach-portal.md` |
 
 **Jedes Modul, das neu angepackt wird, bekommt vorher einen
-Umsetzungsplan** — und der wird hier verlinkt, sonst geht er verloren.
-Das Verfahren steht in `docs/spezifikation/00-UMSETZUNGSPLAENE.md`.
+Umsetzungsplan** — Verfahren in `docs/spezifikation/00-UMSETZUNGSPLAENE.md`.
+
 `[read]` Zweimal hat das Fehlen einer solchen Datei Tage gekostet:
 `SPEC_05_FOOD_TAXONOMY.md` wurde am vierten Tag der Arbeit an genau
 ihren Fragen gelesen, und `docs/specs/Goals/` meldet „vollständig
 implementiert" für ein Modul, das in diesem Repo nicht existiert.
 
-**Quellen für Nutrition** (Tom, 2026-08-14): Bei Arbeit am Nutrition-Modul
-gehören `docs/specs/Nutrition/` und `docs/BrainstormDocs/Nutrition/`
-**mit gelesen**. Sie sind **Grundlage der Diskussion** darüber, was gilt —
-kein Ist-Zustand und für sich noch kein Sollwert. Die Rangfolge bleibt
-Code > `docs/ssot/` > `docs/spezifikation/`. Verbindlich wird ein Inhalt
-erst, wenn er besprochen und festgeschrieben ist; der Ablauf dafür steht
-in **A-11**. `[cmd]` Allein unter `04_adrs/` liegen dreizehn ADRs, darunter
-`ADR_CUSTOM_FOODS_V1`, `ADR_BLS_ONLY`, `ADR_MEALCAM_V1`. Die generelle
-Regel „`docs/specs/` nicht als Referenz lesen" gilt **für Nutrition
-eingeschränkt**: als Quelle für Entscheidungen ja, als Beschreibung des
-Ist-Zustands nein. Widersprüche zwischen zwei Spec-Dateien sind
-vorhanden (siehe C-34, Punkt 4) und beim Lesen zu erwarten.
-
-**Kein Blockzähler mehr.** Der alte Kopf stand bis zuletzt auf
-„Block 28, Stand 2026-08-13", während im Repo bereits Block 34 gesichert
-war (`backup/nutrition-schema-vor-b34.sql`) und elf Punkte dazugekommen
-waren. Ein Zähler, den niemand fortschreibt, wird irgendwann als Wahrheit
-gelesen. Anker ist ab jetzt der Commit-Hash.
-
 ---
 
-## Wo es steht
+## Zwei Zähler, die als Wahrheit gelesen wurden
 
-**Datenseite:** Nutrition und Training liegen live und validiert in der
-lokalen Instanz. Was bei beiden fehlt, ist dasselbe: **UI und
-API-Route**. Bei Nutrition wurde das dreimal bewusst zurückgestellt, bis
-der Aggregationsweg entschieden war — er ist es.
+`[read]` **Der alte Kopf stand auf „Block 28, Stand 2026-08-13"**,
+während im Repo bereits Block 34 gesichert war. **Und am 2026-08-21 auf
+„170 Punkte, Anker `bbd2202`, dreizehn ADRs"** — es waren 178 eindeutige
+Punkte, der Anker war tot, und es sind zwölf ADRs.
 
-**Suche:** der zuletzt bearbeitete Strang und ab 2026-08-14 auf einem
-anderen Weg. `[cmd]` Der Massstab (`mealcam-zutaten-messen.ts`, 37 Zutaten
-mit erwartetem BLS-Code) steht bei **31 von 37 auf Platz 1**, vorher
-2 von 16.
-
-**Die Richtungsentscheidung vom 2026-08-14:** Die bisherige Arbeit lag auf
-der **Anfrageseite** — Zerlegung, Synonyme, Plural, 32.522 Aliase. Diese
-Seite ist unbegrenzt; `[cmd]` für den ganzen Bestand wären 5.000–8.000
-Wörterbucheinträge nötig, die 50 häufigsten Erstwörter decken 24,9 % ab.
-Die **Bestandsseite** ist endlich: 7.140 Namen, maschinell erzeugt,
-regelhaft — und `[cmd]` der eine Eingriff dort (Zubereitungsstufe,
-Block 32) hat C-19, C-21 und einen Teil von C-27 auf einmal miterledigt.
-`[cmd]` **Zwei maschinelle Modelle sind gemessen und gefallen** —
-C-28 (Gruppierung über vier Codestellen) mit 39 von 100, C-33 (dazu der
-Zubereitungsschlüssel) mit 47 von 100, gegen eine Abnahme von 95. Die
-Annahme, dass sich eine Lebensmittel-„Art" aus dem BLS-Code ableiten
-lässt, ist damit widerlegt: der BLS führt je Warengruppe ein eigenes
-Schema, eine gemeinsame Semantik gibt es nicht.
-
-Der Weg läuft deshalb über **C-18 → C-29 → C-30 → C-32 → C-31**:
-erst mitschreiben, was Menschen tatsächlich suchen, dann die
-Namensschichten trennen, die Rangfolge über eine **kuratierte
-Zuordnung** setzen, Reis als ersten durchkurierten Fall, dann die
-Oberfläche. Begründung und Form in C-36, verwertbare Reste in C-35.
-C-20 und C-24 fallen bei der Rangfolgearbeit mit; C-22 bleibt
-eigenständig.
-
-**Deployment:** E-08 hat keine Vorbedingung mehr ausser sich selbst.
-
-**Wartet auf Tom, blockiert anderes:** A-06 (Design — hält C-01, C-03,
-C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
+`[cmd]` **A-44 baut eine Prüfung ins Gate**, die Dubletten und den
+Zähler misst. **Bis dahin gilt: Zahl aus der Datei zählen, nicht
+fortschreiben.**
 
 ---
-
-## Reihenfolge
-
-1. **Nutrition-Oberflächen.** Der nächste sichtbare Schritt; die
-   Datenseite trägt. Laut D-04 auch der Punkt, an dem ein E2E-Aufbau
-   wieder lohnt: die erste Oberfläche, die bleiben soll.
-2. **Suche: C-38 zuerst** — `sort_weight` nach der Spec-Formel. Der
-   billigste Hebel: deterministisch, alle Eingangswerte vorhanden, keine
-   Kuration. Dann **C-39 Phase 1** (regelbasierte Namen, 1.365 Einträge),
-   dann **C-39 Phase 2** (KI-Batch über Codex). **C-18** (Fehlsuchen
-   mitschreiben) läuft daneben und liefert die Priorisierung für später;
-   **C-32** (Reis) ist der erste durchkurierte Fall und braucht keine
-   Vorbedingung. Danach C-29 (Schichten), C-30 (Rangfolge),
-   C-31 (Oberfläche). C-20 und C-24 nicht einzeln angehen; sie fallen
-   dabei mit.
-
-   `[read]` **Grundlage ist seit dem 2026-08-14
-   `SPEC_05_FOOD_TAXONOMY.md`** — sie enthält Namensstrategie,
-   Scoring-Formel und die Core-Fitness-Liste. Vier Tage Modellsuche
-   (C-28, C-33) wären mit dieser Datei kürzer ausgefallen.
-3. **C-18 (Fehlsuchen mitschreiben)** bleibt der einzige Hebel, der nicht
-   auf geratenen Begriffen beruht — er priorisiert die Kurationsarbeit
-   aus C-31 und kann parallel laufen. **C-17 (Laufzeit)** gehört in
-   C-30 hinein, nicht davor: der Index wird beim Umbau der Bedingung
-   ohnehin neu gelegt.
-4. **C-06**, erstes echt gemachtes Mock-Modul (Kandidat Goals; Goals
-   trägt `nutrition_targets`, daran hängt das Wasser-Tagesziel aus C-05).
-5. **Training-Oberfläche** — dieselbe Ausgangslage wie Nutrition.
-6. **E-08 Deployment**, danach E-04 und E-09.
-7. **Sektion F (AMF)** steht neben allem und blockiert nichts. Reihenfolge
-   dort bewusst umgedreht: F-01 (Schnittstellenvertrag) vor F-02
-   (Ablageort) vor F-04 (Extraktor); F-06 (Backend) erst nach zwei Wochen
-   Gebrauch.
-
----
-
-## Offene Punkte auf einen Blick
-
-`[cmd]` 172 offen, 1 in Arbeit.
-
-| | Punkt | |
-|---|---|---|
-| **A-06** | Design-System spezifizieren |  |
-| **A-08** | ADR Medienort |  |
-| **A-13** | Das Konsolidierungsregister abarbeiten |  |
-| **C-64** | 942 Schluessel und Thai aus dem Vorgaengerrepo uebertragen |  |
-| **A-15** | Sprachpflege als laufende Regel |  |
-| **B-20** | Codex-Pfadschutz wiederherstellen |  |
-| **B-25** | Geteilte Sitzung im Produktbereich prüfen |  |
-| **C-01** | Frontend-Stack-Lücke schliessen |  |
-| **C-06** | WP-05 erstes Mock-Modul echt machen |  |
-| **C-08** | `services/nutrition-api` — der ADR gilt |  |
-| **A-20** | Die Spec-Fehlerliste |  |
-| **C-20** | Treffer am Wortanfang schlägt Treffer in der Wortmitte |  |
-| **C-24** | Halbfertigprodukte ranken als Grundzutat |  |
-| **C-27** | Alltagswörter ohne Treffer — noch zwei |  |
-| **C-29** | Drei Namensschichten und eine Kuration, die den Kettenlauf überlebt |  |
-| **C-30** | Suche und Trefferliste auf Arten umstellen |  |
-| **C-31** | Admin-Oberfläche für die Kuration |  |
-| **C-35** | Was aus zwei gefallenen Modellen brauchbar bleibt |  |
-| **C-36** | Kuratierte Zuordnung statt Ableitung — die Richtung nach zwei Messungen |  |
-| **C-48** | Die Tagesbilanz sichtbar machen |  |
-| **C-49** | Deckungsgrad, Warnungen und Tages-Score — die drei Stufen danach |  |
-| **D-05** | Spec-Audit | ~ |
-| **E-04** | Alte `public`-Tabellen nach `legacy` verschieben |  |
-| **E-07** | Lücke weibliche Darstellungen entscheiden |  |
-| **E-08** | Deployment nach `main` |  |
-| **E-09** | Preview-Branches erst danach |  |
-| **E-10** | RLS neu bewerten, sobald `main` produktiv wird |  |
-| **E-14** | 26 `image_male_start`-Pfade zeigen auf `_Female`-Dateien |  |
-| **F-01** | Schnittstellenvertrag zuerst |  |
-| **F-02** | Ablageort festlegen |  |
-| **F-03** | obsidian-skills einbinden |  |
-| **F-04** | Sitzungsextraktor |  |
-| **F-05** | Suche über das Extrahierte |  |
-| **F-06** | Backend erst nach zwei Wochen Gebrauch wählen |  |
-| **F-07** | Berechtigungen |  |
-| **F-08** | Werkstatt-Inventar |  |
-| **F-09** | Wenn AMF steht — die Blueprint-Regeln prüfen |  |
-| **G-107** | Der Mikronaehrstoff-Trend braucht eine Referenz je Tag |  |
-| **G-108** | Die Filter des Nutrients-Tabs |  |
-| **G-109** | Der Dev-Server kompiliert geaenderte Routen wiederholt nicht neu |  |
-| **G-04** | Zwei Zahlen im Entwurf, die nicht stimmen |  |
-| **G-06** | Die übrigen Module nach Datenlage |  |
-| **G-07** | Umschalten |  |
-| **G-11** | Die restlichen Nutrition-Tabs anbinden |  |
-| **G-17** | Datum beim Modulwechsel mitgeben |  |
-| **A-21** | Kimi-K3-Schwarm als Rechercheweg |  |
-| **A-22** | Was an Kimi gehen kann — klassifiziert |  |
-| **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
-| **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
-| **G-83** | Das Onboarding ist entworfen, aber nicht gebaut |  |
-| **G-131** | `module-completeness.jsx` ist die Settings-Seite |  |
-| **G-93** | Der Anzeigename fehlt im laufenden Erfassungsdialog |  |
-| **G-98** | Meal plans braucht einen Zustand und eine Herkunft |  |
-| **G-101** | Der Aktivitaetsstrom des Dashboards |  |
-| **G-102** | Zwei SVG-Pfade der Muskelkarte sind abgeschnitten |  |
-| **G-99** | Drei der acht Planner-Spalten bleiben wirkungslos |  |
-| **G-25** | Training an echte Daten anschliessen |  |
-| **C-87** | `exercises_select` war aus der Datenbank verschwunden |  |
-| **G-70** | Sortierbare Spalten und Herkunfts-Filter im Food-DB-Tab |  |
-| **C-107** | Der Supplement-Katalog und was ihm fehlt |  |
-| **C-108** | Wechselwirkungen — nennen ja, bewerten nein |  |
-| **C-109** | Die Injektions-Grenzwerte sind unbelegt |  |
-| **C-110** | Cost-Rest und Compliance-Notizen |  |
-| **C-111** | Recovery — neun Entscheidungen und drei Formelfehler |  |
-| **C-112** | Buddy, Coach und Marketplace — elf Entscheidungen |  |
-| **C-113** | Enhanced Mode — entschieden |  |
-| **C-114** | Was das Vorgaengerrepo beim Coach falsch machte |  |
-| **C-115** | Was der Markt kann und was LumeOS eigen ist |  |
-| **C-116** | Der Substanzkatalog — 320 Zeilen als Kandidat |  |
-| **C-71** | Permissions und Autonomy sind zwei verschiedene Sachen |  |
-| **C-75** | BSS und Voice sind Neubau |  |
-| **G-53** | `InjektionsKarte` in `packages/ui` hat keinen Aufrufer |  |
-| **G-58** | Kontrast auf Attrappenkarten gegen den gerenderten Grund messen |  |
-| **C-85** | Kurznamen fehlen bei 11 von 35 |  |
-| **C-86** | 8 mehrdeutige Uebungen und 1 ohne DB-Namen |  |
-| **C-91** | Die Spec nennt LOINC-Codes, die nicht die ueblichen sind |  |
-| **C-92** | Die Spec verwechselt Marker |  |
-| **G-68** | `e1RM` deckt 6 von 1.416 |  |
-| **C-102** | `milch` findet Joghurt statt Milch |  |
-| **C-123** | Recovery — die neun Entscheidungen |  |
-| **C-124** | Recovery-Recherche — Modalitaeten und Schwellen |  |
-| **C-126** | E2 braucht Toms Bestaetigung |  |
-| **C-127** | Drei Wearable-Spalten sind leer |  |
-| **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
-| **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
-| **A-23** | `lint` bricht repoweit ab |  |
-| **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
-| **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
-| **G-88** | Die Sitzungskarte auf `Today` |  |
-| **A-24** | Attrappenmarken sind kein brauchbares Mass |  |
-| **GO-21** | Taille:Huefte mit Geschlechtsbezug |  |
-| **C-146** | `phase_am()` liefert 8 von 14 Spalten |  |
-| **G-89** | Die Idealwerte stehen nur in Begleitdateien |  |
-| **G-117** | Der Extended-Code liegt im Buendel, auch ohne Erfahrungsgrad |  |
-| **C-149** | Vitamin D in IU gegen µg |  |
-| **G-95** | Sieben Module, aber nicht dieselben sieben |  |
-| **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
-| **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
-| **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
-| **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
-| **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
-| **G-126** | Drei Reste aus G-122 |  |
-| **GO-23** | Unter 50 % Deckung wird gedimmt |  |
-| **A-33** | Der Medical-Abgleich, den der Orchestrator nachgeholt hat |  |
-| **A-34** | Nachweislaeufe ueberschreiben Toms gespeicherte Ansicht |  |
-| **G-136** | Zwei Kartenzuordnungen sind Auslegung |  |
-| **G-137** | Acht Karten — die alten Ansichtsschluessel verfallen |  |
-| **C-166** | Recovery hat 3 Tabellen, der Entwurf 25 Konstanten |  |
-| **C-167** | `MODALITY_BONUS` hat elf Modalitaeten, wir kennen vier |  |
-| **C-168** | Die Uebertrainings-Schwellen stehen im Entwurf |  |
-| **C-169** | Das Trainingsplan-Schema steht im Entwurf |  |
-| **C-170** | Der Offline-Betrieb steht im Entwurf |  |
-| **C-171** | Medical — neun Konstanten ohne Tabelle |  |
-| **G-138** | Supplements zeigt, nimmt aber nichts auf |  |
-| **G-139** | Goals — Fortschrittsfotos mit Posen-Sets |  |
-| **A-35** | Sieben Module haben keine Seite |  |
-| **C-172** | Der Stress-Tab steht im Entwurf |  |
-| **A-36** | `module-stubs-replacement.jsx` traegt drei ganze Module |  |
-| **C-173** | `MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence` |  |
-| **A-37** | Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/` |  |
-| **C-174** | `ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen |  |
-| **C-175** | `shopping_lists` fehlt |  |
-| **G-140** | `display_tier` ist ein Abo-Tier, keine Baumebene |  |
-| **C-176** | `biomarkerDetails.ts` im Vorgaengerrepo — 121 KB |  |
-| **G-141** | Das Onboarding ist als ADR final entschieden |  |
-| **A-38** | Drei Core-ADRs |  |
-| **C-179** | `EAA` zeigt auf den Summenwert, nicht auf die neun |  |
-| **C-180** | `crawl_025` liefert die Evidenzeinstufung fuer 181 Konstanten |  |
-| **GO-21** | WHR ist belegt — Grad A |  |
-| **G-89** | Koerperproportionen sind Heuristiken — belegt |  |
-| **C-105** | MEV/MAV/MRV — die Antwort ist da |  |
-| **C-124** | Die Modalitaets-Boni sollen raus |  |
-| **C-181** | ACWR nicht implementieren |  |
-| **C-182** | Kein numerischer OTS-Schwellenwert |  |
-| **C-183** | Die Symptom-Ontologie ist geliefert |  |
-| **C-184** | 66 LOINC-Handoff-Items, 20 noch offen |  |
-| **C-185** | Peptide 62 → 61, vier Identitaetsfehler behoben |  |
-| **G-150** | Die Volltextsuche findet ueber Erklaertexte |  |
-| **A-39** | `backup/` wird nicht geraeumt, solange Agenten laufen |  |
-| **A-40** | Nachweise ohne Stichtag belegen nichts |  |
-| **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
-| **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
-| **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
-| **A-18** | Berichtsnummern kollidieren |  |
-| **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
-| **A-19** | Zwei README-Abweichungen in der Kette |  |
-| **C-117** | `milch` traegt auch mit Vorlieben nicht |  |
-| **C-120** | Drei Sperren in `food_search` |  |
-| **C-121** | Die Suche ist langsamer geworden |  |
-| **G-75** | Die alte Oberflaeche nennt den BLS ebenfalls |  |
-| **G-77** | Streaks bei 32 Auslassern |  |
-| **G-78** | Ein Fehler, den nur der Browser zeigte |  |
-| **A-27** | Zwei Agenten, zwei Attrappen-Erwartungen |  |
-| **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
-| **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
-| **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
-| **G-116** | Generelle Ausschluesse bewerten mit 0, statt zu filtern |  |
-| **C-159** | Sieben Regelpfade zeigen auf Schemata, die es nicht gibt |  |
-| **G-118** | Der Extended-Code liegt im Buendel |  |
-| **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
-| **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
-| **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
-| **G-132** | „Ohne Laktose 1.021" ist die Zahl MIT Laktose |  |
-| **A-32** | Die Nummer G-124 war doppelt vergeben |  |
-| **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
-| **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
-| **C-178** | Prolactin und ApoB fehlen dem Health score |  |
-| **G-146** | Zehn Marker in `enrichment` ohne `system_groups` |  |
-| **C-186** | Nebenwirkungen und Zyklen haben keine Tabelle |  |
-| **G-149** | Der Einnahme-Haken bucht auf den Stichtag, nicht auf heute |  |
-| **C-177** | Thai-Aliase fehlen bewusst |  |
-| **GO-24** | *„Mineralstoffe"* als Gruppenbegriff? |  |
-| **C-188** | Der Alias-Waechter steht auf 291, Kimi liefert 290 |  |
-
----
-
-## A — Struktur & SSOT (laufend)
-
 
 - [ ] **A-06: Design-System spezifizieren** — Stand Audit 2026-08-05:
   `[cmd]` `docs/spezifikation/10-plattform/design-system/` ist **nicht mehr
@@ -1465,27 +1219,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `.next` bleibt) — kostet aber jedes Mal Zeit und eine Ruecksprache.
   **Die Ursache ist nicht gefunden.**
 
-- [x] **C-54: `display_tier` als Ordnung der Anzeige benutzen**
-  (neu 2026-08-16, **erledigt 2026-08-20** — Bericht
-  `docs/ssot/152-nutrition-feinschliff-2.md`).
-
-  `[cmd]` **Der Nutrients-Tab liest jetzt die Stufen.** 138
-  Naehrstoffe in 12 Gruppen statt der 79 erfundenen Eintraege des
-  Entwurfs; die Einrueckung folgt `display_tier`. Die Zahlen des
-  Punktes bestaetigt: **31 / 47 / 60**.
-
-  `[cmd]` **Die Falle steckte in den Daten:** `SUGAR` hat Stufe 1,
-  aber `sort_index` **73** — seine Kinder beginnen bei 65. Ein
-  einzelner Durchlauf haette die ersten sechs verloren; **fuenf Tests
-  halten es fest.**
-
-  `[cmd]` **Berichtigung zum Punkt:** `display_tier` wurde sehr wohl
-  schon benutzt — **neunmal in `/nutrition/local-schema`**, nur nie in
-  der v2-Oberflaeche.
-
-  **Offen geblieben:** die Filter des Tabs (G-108).
-
-  **Alter Wortlaut:**
 
 
 
@@ -1808,25 +1541,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Und `/v2/settings` traegt heute nur die
   Erfahrungsgrad-Kachel** (G-80). **Sieben Bereiche fehlen.**
 
-- [x] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik**
-  (neu 2026-08-17, **erledigt 2026-08-20** — Bericht
-  `docs/ssot/144-erfassungsdialog.md`).
-
-  **Gebaut:** Vorlieben (C-94) gelten jetzt beim Erfassen — `p_user_id`
-  aus der SITZUNG, nicht aus der Anfrage. `[cmd]` Fuer `dev@lumeos.app`
-  faellt „mandel" von **64 auf 0** (Nussallergie, 63 der 64 Treffer
-  tragen `contains_nuts`), „nuss" von 125 auf 42. **Dazu der Satz, der
-  die leere Liste erklaert** („64 Eintraege sind durch deine Vorlieben
-  ausgeblendet") — sonst sieht das wie ein Datenbankfehler aus.
-  **Vier Filter, 4/4 gegen SQL geprueft** (1.751 / 1.377 / 1.400 /
-  2.884), zwei Sortierungen. **Zeilenschutz:** `test-user` sieht
-  64/125, wo `dev` 0/42 sieht.
-
-  `[cmd]` **Der Auftrag nannte die falsche Datei:** `erfassen.tsx` hat
-  **null Importeure**; gebaut wurde in `mahlzeiten.tsx`
-  (`HinzufuegenModal`).
-
-  **OFFEN GEBLIEBEN — der Namensteil, siehe G-93.**
 
 - [ ] **G-93: Der Anzeigename fehlt im laufenden Erfassungsdialog**
   (neu 2026-08-20, aus G-13).
@@ -1851,25 +1565,6 @@ Umsetzen angepasst werden.
   Der Rueckfall bleibt noetig, weil nicht jeder Eintrag einen
   Anzeigenamen hat.
 
-- [x] **G-97: Planner an die C-150-Tabellen anschliessen**
-  (neu 2026-08-20, **erledigt 2026-08-20** — Bericht
-  `docs/ssot/147-meal-plans.md`).
-
-  `[cmd]` **Der Planner liest echt:** Plan „Aufbau-Wochenplan"
-  (2.500 kcal / 170 g P), drei Wochen — gefuellt 28, leer 0, kopiert 28
-  —, angezeigt **18.6.–24.6. mit 28 kcal-Zellen**, Attrappenmarken im
-  Tab **0**.
-
-  `[cmd]` **Die kcal sind gerechnet**, nicht wie im Entwurf gewuerfelt:
-  `recipe_nutrition` und `food_nutrient_snapshot` (C-150). Sichtbar an
-  der Skalierung — 493 kcal bei 1×, **617 bei 1,25×**.
-
-  `[cmd]` **Zwei der acht G-72-Spalten wirken jetzt**
-  (`meals_per_day`, `snacks_per_day` bestimmen die Rasterzeilen), drei
-  sind sichtbar vergleichbar, **drei bleiben wirkungslos** — Details in
-  G-99.
-
-  **Kein Generator gebaut**, wie verlangt.
 
 - [ ] **G-98: Meal plans braucht einen Zustand und eine Herkunft**
   (neu 2026-08-20, aus G-97). **Schemafrage — Codex.**
@@ -1905,33 +1600,8 @@ Umsetzen angepasst werden.
   die Umrechnung in Einkaufseinheiten. **Der guenstigste der vier
   Punkte.**
 
-- [x] **G-100: Das Dashboard an die Module anschliessen**
-  (neu 2026-08-20, **erledigt 2026-08-20** — Bericht
-  `docs/ssot/149-dashboard.md`).
 
-  `[cmd]` **Attrappen gerendert 11 → 6.** Das Dashboard war das
-  einzige nie angebundene Modul und die erste Seite, die ein Nutzer
-  sieht.
-
-  `[cmd]` **Gemessen fuer den 2026-08-20:** Recovery **83,9** (Schnitt
-  der sieben Tage davor 80,7), Schlaf **7,8 h**, Kalorien
-  **2.727/2.500**, Training **15/14**, **3 von 41 PRs**, Medical
-  **2 + 5**, Supplements **93,5 %**.
-
-  `[read]` **Nichts neu gerechnet** — Medical laeuft ueber dieselbe
-  Kette wie sein Modul (G-84), die Tagesziele ueber `getZielwerteAm`.
-
-  `[cmd]` **Der Stichtag statt der juengsten Zeile:** Die Seeds laufen
-  bis 2026-11-06; `ladeScores()` haette einen Novemberwert als „heute"
-  gezeigt.
-
-  **Gemeldet statt gebaut:** der Readiness-Komposit und *„Push hard"*,
-  Body battery (**gibt es im Schema nicht**), Block/Woche/Coach bei
-  „Tonight", die Dauer je Ereignis beim Tagesverlauf.
-
-  **Offen geblieben:** G-101 und G-102.
-
-- [ ] **G-101: Der Aktivitaetsstrom des Dashboards** (neu 2026-08-20,
+- [ ] **G-152: Der Aktivitaetsstrom des Dashboards** (neu 2026-08-20,
   aus G-100).
 
   `[cmd]` **Er waere baubar** — anders als der Tagesverlauf braucht er
@@ -2867,36 +2537,6 @@ Umsetzen angepasst werden.
   `[read]` Stress steht im Check-in und wirkt auf die Erholung — ihn
   wegzulassen hiesse, einen erfassten Wert unbenutzt zu lassen.
 
-- [ ] **C-124: Recovery-Recherche — Modalitaeten und Schwellen** (neu
-  2026-08-19). **E5 und E8 aus C-123.**
-
-  **Tom, 2026-08-19:** *„Womoeglich gibt ein Research Aufklaerung, wir
-  sind nicht die Ersten, die sowas bauen."*
-
-  ### E5 — Modalitaeten-Bonuswerte
-
-  `[cmd]` **Sauna, Massage, Eisbad, Dehnen** — je ein Bonuspunkt im
-  Score. **Keine Quelle im Repo.**
-
-  `[read]` **Was zu suchen ist:** Belegt die Sportwissenschaft eine
-  messbare Wirkung auf die Erholung — und in welcher
-  Groessenordnung? **Kaltwasserimmersion ist gut untersucht, Sauna
-  teilweise, Massage strittig.**
-
-  ### E8 — Motivations-Schwelle
-
-  `[cmd]` **Das Uebertrainings-Signal feuert bei niedriger Motivation.**
-  Die Schwelle stammt aus einer anderen Skala: `[annahme]` **≤ 5 von 10,
-  umgerechnet, nicht belegt.**
-
-  `[read]` **Und die E4-Frage gehoert dazu:** Wie viele Signale ueber wie
-  viele Tage rechtfertigen einen Arzt-Hinweis? **Uebertraining hat eine
-  Forschungsliteratur** — REST-Q, RESTQ-Sport, die Uebertrainings-Syndrom-
-  Kriterien.
-
-  `[read]` **Was nicht gesucht wird:** eine Diagnoseregel. **Nur die
-  Frage, ab wann eine Haeufung so ungewoehnlich ist, dass ein Hinweis
-  angebracht ist.**
 
 - [ ] **C-126: E2 braucht Toms Bestaetigung** (neu 2026-08-19). Befund
   aus G-76.
@@ -3226,26 +2866,6 @@ Umsetzen angepasst werden.
   (G-79) und *„Kreatin 30 Tage"* (G-74). **Und *„200 Saetze"* war auch
   falsch: es sind 101.**
 
-- [ ] **GO-21: Taille:Huefte mit Geschlechtsbezug** (entschieden
-  2026-08-19). Befund aus G-87.
-
-  **Tom, 2026-08-19: mit Geschlechtsbezug zeigen.**
-
-  `[cmd]` **Die Quelle:** WHO 2008 — **unter 0,90 bei Maennern, unter
-  0,80 bei Frauen.** Im Vorgaengerrepo hinterlegt.
-
-  `[cmd]` **Toms Wert am 2026-08-19: 0,860** — unter der Maennerschwelle.
-
-  `[cmd]` **`public.profiles` traegt das Geschlecht**, technisch geht
-  es.
-
-  `[read]` **Und die Sprachregel gilt:** *„Unter dem Grenzwert"* ist eine
-  Lage, *„gesund"* ein Urteil. **Mit Quelle und Jahr daneben**, wie bei
-  den Biomarker-Bereichen.
-
-  **Was fehlt:** `[read]` Was, wenn das Geschlecht nicht gesetzt ist?
-  **Dann keine Schwelle, nur das Verhaeltnis** — wie `fasting_status`,
-  das nur erscheint, wenn es belegt ist.
 
 - [ ] **C-146: `phase_am()` liefert 8 von 14 Spalten** (neu
   2026-08-19). Befund aus G-87.
@@ -3263,24 +2883,6 @@ Umsetzen angepasst werden.
   `[read]` **Dieselbe Klasse wie C-142** bei den Medikamenten: eine
   Begruendung, die etwas Falsches sagt.
 
-- [ ] **G-89: Die Idealwerte stehen nur in Begleitdateien** (neu
-  2026-08-19). Befund aus G-87.
-
-  `[cmd]` **1.618, V-Taper und Steve Reeves stehen ausschliesslich in
-  `theme-v1/uploads/`** — Begleitdateien des Entwurfs, **keine
-  Spezifikation.**
-
-  `[cmd]` **Und der Reeves-Wert ist gar keine Rechnung:**
-  *„`daten.ts:438` gibt fest 88 zurueck."*
-
-  `[read]` **Auch die Farbe faellt weg, mit gutem Grund:** *„Die Vorlage
-  faerbt eine wachsende Taille rot und einen wachsenden Arm gruen —
-  welche Richtung erwuenscht ist, haengt vom Ziel ab."* **In einer
-  Aufbauphase ist eine wachsende Taille normal.**
-
-  **Zu klaeren:** Braucht es Idealwerte ueberhaupt? `[read]` **Die
-  Verhaeltnisse selbst sind Arithmetik und stehen** — die Einstufung
-  waere eine Bewertung.
 
 
 - [ ] **G-117: Der Extended-Code liegt im Buendel, auch ohne
@@ -3377,33 +2979,7 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-98: Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten**
-  (neu 2026-08-20). Befund aus G-97.
 
-  `[cmd]` **`MealPlansView` ist definiert** —
-  `module-nutrition-spec.jsx:334`. **Auftrag und C-150 sagten beide das
-  Gegenteil** — *„beide suchten in der anderen Mockup-Datei."*
-
-  `[read]` **Der Orchestrator hat nur `module-nutrition.jsx` gelesen**
-  und daraus geschlossen, es gebe keine Vorlage. **Es gibt drei
-  Nutrition-Mockups.**
-
-  `[cmd]` **Was dem Tab fehlt:** *„kein Zustand am Planeintrag, keine
-  Herkunft am Tagebuch → **Compliance ist nicht ableitbar**."*
-
-  `[read]` **Ein Essensplan-Tab zeigt, wie gut man sich an den Plan
-  gehalten hat.** Ohne Zustand und Herkunft ist das nicht rechenbar.
-
-- [ ] **G-99: Drei der acht G-72-Spalten bleiben wirkungslos** (neu
-  2026-08-20). Befund aus G-97.
-
-  `[cmd]` **Gemessen:** *„Zwei wirken, drei sind sichtbar vergleichbar,
-  drei bleiben wirkungslos — `recipes` hat kein Preis- und kein
-  Vorkochfeld."*
-
-  `[read]` **Damit ist G-72 teilweise beantwortet:** `budget_level` und
-  `meal_prep_ok` haben kein Gegenstueck im Rezeptschema. **Entweder
-  kommen die Felder dazu, oder die Spalten fallen weg.**
 
 
 - [x] **G-105: Zwei abgeschnittene SVG-Pfade in `packages/ui`**
@@ -4188,75 +3764,9 @@ Umsetzen angepasst werden.
   `[read]` **Damit ist je Kachel entschieden, was gezeigt werden
   darf** — genau das, was der Auftrag verlangt hat.
 
-- [ ] **GO-21: WHR ist belegt — Grad A** (ergaenzt 2026-08-20). Aus
-  C-180.
 
-  `[cmd]` **`BP-WHR-001`: WHO-Grenzwerte, Evidenzgrad A,
-  `KEEP_NUMERIC`.** **Toms Entscheidung vom 2026-08-20 ist damit
-  gedeckt.**
 
-  `[cmd]` **Und drei weitere anthropometrische Masse sind Grad A:**
 
-  | | |
-  |---|---|
-  | **WHtR** | **0,5** — *„Taille unter der halben Koerpergroesse"* |
-  | **Bauchumfang** | **>94/>80 cm** erhoeht, **>102/>88 cm** stark erhoeht |
-  | **BMI** | WHO-Klassifikation |
-  | Ethnienspezifisch | IDF, Grad B — Europid 94/80, Suedasiatisch 90/80 |
-
-  `[read]` **Das ist mehr, als GO-21 verlangt hat** — und alles mit
-  Quelle.
-
-- [ ] **G-89: Koerperproportionen sind Heuristiken — belegt**
-  (beantwortet 2026-08-20). Aus C-180.
-
-  `[cmd]` **Alle vier als `LABEL_HEURISTIC` eingestuft:**
-
-  `BP-GR-006` Goldener Schnitt 1,618 · `BP-REEVES-008` Reeves-Formeln ·
-  `BP-MCCALLUM-009` McCallum · `BP-CLASSIC-010` klassische Konvention.
-
-  `[read]` **Die Antwort auf die Frage im Punkt:** *„Gibt es belegte
-  Referenzwerte, oder ist das Tradition ohne Datengrundlage?"* —
-  **Tradition, und sie darf so beschriftet werden.**
-
-  `[cmd]` **`BP-FFMI-005` (FFMI 25 als Naturgrenze) ist
-  `CONFLICTING_EVIDENCE`** — *„kein Natural-Limit-Urteil."*
-
-- [ ] **C-105: MEV/MAV/MRV — die Antwort ist da** (beantwortet
-  2026-08-20). Aus C-180.
-
-  | | Einstufung | Handlung |
-  |---|---|---|
-  | **MEV** | HEURISTIC | `USE_DIRECTIONAL_GUIDANCE` |
-  | **MAV** | HEURISTIC | **`DO_NOT_IMPLEMENT`** |
-  | **MRV** | HEURISTIC | `LABEL_HEURISTIC` |
-  | RP-Rahmenwerk | HEURISTIC | `LABEL_HEURISTIC` |
-
-  `[read]` **Genau das Ergebnis, das der Auftrag als brauchbar benannt
-  hat:** *„MEV = brauchbares Produktmodell, aber kein wissenschaftlich
-  standardisierter Grenzwert."*
-
-  `[cmd]` **Und `LANDMARKS` im Mockup traegt Zahlen je Muskelgruppe** —
-  **sie duerfen als Orientierung stehen, nicht als Messwert.**
-
-- [ ] **C-124: Die Modalitaets-Boni sollen raus** (beantwortet
-  2026-08-20). Aus C-180.
-
-  `[cmd]` **Alle 30 Modalitaets-Records: `REMOVE_NUMERIC_VALUE`.**
-  **Die Seed-Werte (2,76 / 0,13 / 0,05 / −0,07) sind als
-  `not_evidence` geflaggt.**
-
-  `[read]` **Der Orchestrator hatte es gemessen und gemeldet:** *„Das
-  sind Seed-Daten — ein Skript hat sie erzeugt, und dasselbe Skript hat
-  die Bonuswerte gesetzt."*
-
-  `[cmd]` **Was bleibt:** Richtung und Endpunkt mit Quelle. **Beispiel
-  Sauna:** `REC_SAUNA_ENDURANCE_HEAT`, *„improve_in_heat"*,
-  `SUPPORTED_DIRECTION_ONLY`, Grad C, PMID 16877041 — **`current_value:
-  null`.**
-
-  `[read]` **Damit zeigt die Kachel *„Sauna: verbessert die
-  Ausdauerleistung in Hitze (Grad C)"* statt *„+2,76 Punkte"*.**
 
 - [ ] **C-181: ACWR nicht implementieren** (entschieden extern,
   2026-08-20). Aus C-180.
@@ -4392,6 +3902,74 @@ Umsetzen angepasst werden.
   `[cmd]` **Und die Seeds enden bewusst in der Zukunft** (±90 Tage) —
   **die Tageswerte aendern sich mit jedem Lauf.**
 
+- [ ] **C-187: Fuenf kleine Datenluecken — als ein Auftrag** (neu
+  2026-08-21). **Klammer, kein neuer Inhalt.**
+
+  `[read]` **Der Orchestrator hat dieses Buendel am 2026-08-20 im
+  Fliesstext der Uebergabe als *„C-186"* vergeben und nie angelegt.**
+  **Am 2026-08-21 hat G-148 sich C-186 genommen** — exakt das Muster,
+  das A-41 beschreibt.
+
+  `[cmd]` **Die fuenf bestehen einzeln weiter und werden hier nur
+  zusammengefasst:**
+
+  | | |
+  |---|---|
+  | **C-175** | `shopping_lists` fehlt — ADR-Pflicht |
+  | **C-179** | `EAA` zeigt auf `AAE9` statt auf die neun |
+  | **C-178** | Prolactin und ApoB fehlen in `system_groups` |
+  | **G-124** | zehn Medication-Spalten |
+  | **G-126** | `CHOL` → `CHORL`, 28 Texte, Selen |
+
+  `[read]` **Sie liegen alle in `supabase/`** — ein Agent, ein
+  Durchgang. **Wer C-187 abarbeitet, schliesst die fuenf einzeln.**
+
+- [ ] **A-43: Coach-Permissions pro Subfunktion** (neu 2026-08-21).
+  **Entscheidung fuer Tom.** Abgespalten von A-37.
+
+  `[read]` **A-37 traegt zwei Titel** — in `TODO.md` *„Zwoelf ADRs"*, in
+  der Entscheidungsliste *„Coach-Permissions pro Subfunktion"*. **Das
+  ist ein eigener Punkt.**
+
+  `[cmd]` **`ADR_COACH_PERMISSIONS_V1`:** *„User kann **pro Modul und
+  Subfunktion** freigeben"* — mit Beispielen: `nutrition.diary`,
+  `nutrition.water`, `nutrition.micronutrient`, `nutrition.mealcam_*`.
+
+  `[cmd]` **Gebaut ist nur pro Modul** — `client_permissions` hat
+  `nutrition_visibility`, nicht `nutrition_diary_visibility`.
+
+  `[read]` **Das betrifft die Kernanforderung des Coach-Portals.**
+  **Zu entscheiden: reicht die Modulstufe, oder kommt die Feinstufe?**
+
+  `[cmd]` **F-06 hat gemessen, dass die Freigabe ueberhaupt erst seit
+  C-162 wirkt** — 22 `coach_read`-Policies ueber sechs Module. **Eine
+  Feinstufe waere sechs mal soviel.**
+
+- [ ] **A-44: Eine Nummernpruefung fuers Gate** (neu 2026-08-21).
+  **Damit A-41 zugehen kann.**
+
+  `[cmd]` **Am 2026-08-21 waren neun Nummern doppelt vergeben** —
+  A-18, A-29, G-102, C-105, C-124, GO-21, G-89, G-98, G-99. **Und A-18
+  heisst *„Berichtsnummern kollidieren"*.**
+
+  `[read]` **Die Regel steht in `CLAUDE.md` und greift nicht** — weil
+  sie ein Absatz ist, kein Werkzeug.
+
+  ### Was sie pruefen muss
+
+  `[cmd]` **Dubletten ueber alle Reihen** in `TODO.md` und
+  `ERLEDIGT.md` — **auch ueber beide Dateien hinweg**, eine erledigte
+  Nummer darf nicht neu vergeben werden.
+
+  `[cmd]` **Den Zaehler im Kopf gegen die Datei.**
+
+  `[cmd]` **Und die hoechste Nummer je Reihe ausgeben** — dann muss der
+  Orchestrator nicht raten.
+
+  `[read]` **In beide Richtungen belegen:** mit einer eingebauten
+  Dublette muss sie rot werden. **Vorbild:
+  `tools/schemafreigabe-pruefen.mjs`.**
+
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
 
@@ -4431,21 +4009,10 @@ Umsetzen angepasst werden.
   die Zuordnung bleibt in der Anzeige** — dann steht sie an zwei
   Stellen.
 
-- [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
-  Befund aus G-69.
-
-  `[cmd]` **Sie stehen nur in Vorlagendateien.** `[read]` **Die Regel
-  greift dreimal:** Volume landmarks bleibt Attrappe, **das Zielband der
-  Volumenkachel** (*14/16 Saetze*) und **die Einstufung
-  Beginner…Elite** in den Standards fallen aus demselben Grund weg.
-
-  `[read]` **Es sind Schwellen aus der Trainingsliteratur** — sie
-  brauchen eine Quelle, wie die Referenzbereiche bei den Naehrstoffen
-  (C-45) und den Biomarkern (C-84). **Keine erfundene Zahl.**
 
 
 
-- [ ] **A-18: Berichtsnummern kollidieren** (neu 2026-08-19).
+- [ ] **A-41: Berichtsnummern kollidieren** (neu 2026-08-19).
 
   `[cmd]` **116, 117 und 118 sind doppelt belegt:** `116-food-db-tab` /
   `116-goals-anbindung` · `117-ausschluss-presets` /
@@ -4648,39 +4215,6 @@ Umsetzen angepasst werden.
   **Zu tun:** Test auf den gemessenen Stand ziehen — **oder ihn durch
   die gerenderte Zaehlung ersetzen.**
 
-- [x] **A-28: Der Attrappen-Test blockiert das Gate**
-  (neu 2026-08-20, **erledigt 2026-08-20** — Bericht
-  `docs/ssot/147-meal-plans.md`).
-
-  **Der Test war richtig. Die Datei war falsch.** `[cmd]` Der
-  Arbeitsstand von `supplements/tabs.tsx` war **eine ganze Fassung VOR
-  G-91**, nicht nur zurueckgedrehte Marken:
-
-  | | HEAD | Arbeitsstand |
-  |---|---|---|
-  | `attrappe={RUECKFALL}` | **16** | 0 |
-  | `attrappe={ATTRAPPE}` | 1 | **16** |
-  | Import `CostErgaenzung` | da | **geloescht** |
-  | Katalogspalte | `Serving` | **`Typical dose`** |
-
-  `[cmd]` **Die letzte Zeile ist der Beweis:** G-91 hat `Typical dose`
-  entfernt, weil `typical_dose_min/_max` **auf allen 44 Eintraegen leer**
-  sind. Der Arbeitsstand haette eine Spalte voller Striche
-  zurueckgebracht.
-
-  **Deshalb wurde der Test NICHT nachgezogen** — er beschrieb den
-  richtigen Zustand. `[cmd]` Der Stand ist **gestasht, nicht verworfen**
-  (`stash@{0}`). Danach: 1 + 16, Marke je Fassung richtig, **76 Tests
-  gruen**, gerendert **1 Attrappe statt 17**.
-
-  `[read]` **Die vorgeschlagene Loesung waere falsch gewesen.** Wer den
-  Test „auf den gemessenen Stand gezogen" haette, haette den
-  Rueckschritt festgeschrieben — **und den Zaehler wieder blind
-  gemacht**, wovor G-74 ausdruecklich warnt.
-
-  `[read]` **Der Vorschlag, auf die gerenderte Zaehlung umzustellen,
-  bleibt offen und richtig** — er steht als eigener Punkt (A-29), weil
-  er den Test ERSETZT und nicht repariert.
 
 - [ ] **A-29: Der Attrappen-Test koennte die gerenderte Seite zaehlen**
   (neu 2026-08-20, aus A-28).
@@ -4714,7 +4248,7 @@ Umsetzen angepasst werden.
   werden** — der F-07-Agent hat es gemeldet statt nebenbei angefasst.
 
 
-- [ ] **G-102: Der Ausfuehrer fuer bestaetigte Vorschlaege** (neu
+- [ ] **G-151: Der Ausfuehrer fuer bestaetigte Vorschlaege** (neu
   2026-08-20). Aus F-07, bewusst nicht gebaut.
 
   `[cmd]` **`pending_actions` traegt Vorschau, Verfall und
@@ -4943,7 +4477,7 @@ Umsetzen angepasst werden.
   Bericht 165 traegt den Dateinamen `165-svg-und-wasser.md` wie
   beauftragt.
 
-- [ ] **A-29: `schuss.mjs` und die Git-Bash-Pfadumwandlung** (neu
+- [ ] **A-42: `schuss.mjs` und die Git-Bash-Pfadumwandlung** (neu
   2026-08-20). Werkzeugfund aus G-117.
 
   `[cmd]` *„`schuss.mjs`-Pfade ohne `?` fallen der
@@ -5062,39 +4596,6 @@ Umsetzen angepasst werden.
   uebrigen neun haben kein offensichtliches System, und ein erfundenes
   waere schlechter als keins.
 
-- [x] **G-148: Elf Modale, die im Entwurf fertig liegen**
-  (erledigt 2026-08-21, `docs/ssot/175-supplements-schreibwege.md`).
-  **Sie lagen nicht im Entwurf — sie standen seit G-45 in
-  `modale.tsx`, mit einer Begruendung, die falsch war.**
-
-  `[cmd]` **Jedes Fenster trug den Satz *„Es gibt kein
-  `supplements`-Schema"*** — das Schema hat **14 Tabellen**, und
-  `intake_logs` fuehrt **720 Zeilen** (656 taken, 64 skipped).
-
-  `[cmd]` **Vier Fenster schreiben jetzt:** `logDose` und `skip` nach
-  `intake_logs`, `add` nach `stack_items`, `reorder` nach
-  `stack_items.stock_remaining`. **Sieben bleiben Attrappe** — je mit
-  eigenem Grund statt des pauschalen.
-
-  `[cmd]` **Der Kreis gemessen:** 360 → 361 Einnahmen, Notiz nach dem
-  Neuladen im DOM, **Compliance 93,1 % → 93,2 %**; danach zurueck auf
-  360 und 93,1 %. **Stack 4 → 5 → 4**, Katalogsuche „Magnesium"
-  liefert einen Treffer mit Evidenzgrad.
-
-  `[cmd]` **Zeilenschutz auf allen drei Wegen je 404 NOT_FOUND**
-  (G-79-Muster). **Die Momentaufnahme wird aus `stack_items` gelesen,
-  nicht vom Browser uebernommen** — derselbe Lesezugriff ist die
-  Rechtepruefung.
-
-  `[read]` **Der G-135-Befund hat hier zugeschlagen, umgekehrt:** Das
-  Add-Fenster meldete *„keine Daten gelesen"*, obwohl die Seite 360
-  Einnahmen zeigte — **`SupplementsModale` stand ausserhalb von
-  `SuppCtx.Provider`.** Typecheck gruen, Tests gruen, Fenster log.
-  **Gefunden nur, weil es im Browser geoeffnet wurde.**
-
-  `[cmd]` **`Rahmen` nimmt jetzt `echt`** — ein schreibendes Fenster
-  traegt keine Marke mehr (Pille 1 → 0). **469/469 Tests, Gate 11/11,
-  Attrappen 1, Datenbestand danach exakt wie vorher.**
 
 - [ ] **C-186: Nebenwirkungen und Zyklen haben keine Tabelle**
   (neu 2026-08-21). Befund aus G-148.

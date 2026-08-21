@@ -7,7 +7,7 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
-    "gate": "node tools/encoding-pruefen.mjs && node tools/gruppenlabel-pruefen.mjs && node tools/schemafreigabe-pruefen.mjs && node tools/i18n-pruefen.mjs && node tools/svgpfade-pruefen.mjs && turbo run typecheck test build && node tools/serverimport-pruefen.mjs",
+    "gate": "node tools/encoding-pruefen.mjs && node tools/gruppenlabel-pruefen.mjs && node tools/schemafreigabe-pruefen.mjs && node tools/nummern-pruefen.mjs && node tools/i18n-pruefen.mjs && node tools/svgpfade-pruefen.mjs && turbo run typecheck test build && node tools/serverimport-pruefen.mjs",
     "encoding": "node tools/encoding-pruefen.mjs"
   },
   "devDependencies": {
