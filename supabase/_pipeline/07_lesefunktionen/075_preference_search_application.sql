@@ -193,9 +193,15 @@ DROP FUNCTION IF EXISTS nutrition.food_search(
 DROP FUNCTION IF EXISTS nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer,
   text[], text[], boolean, jsonb);
+DROP FUNCTION IF EXISTS nutrition.food_search(
+  text, text, text[], uuid, text, uuid, text, text, integer, integer,
+  text[], text[], boolean, jsonb, uuid);
+DROP FUNCTION IF EXISTS nutrition.food_search(
+  text, text, text[], uuid, text, uuid, text, text, integer, integer,
+  text[], text[], boolean, jsonb, uuid, jsonb);
 -- =============================================================
 
-CREATE OR REPLACE FUNCTION nutrition.food_search(p_query text, p_normalized_query text, p_tokens text[], p_selected_food_id uuid, p_category_slug text, p_category_id uuid, p_tag_code text, p_sort text, p_limit integer, p_offset integer, p_preparations text[] DEFAULT NULL, p_groups text[] DEFAULT NULL, p_basics_only boolean DEFAULT false, p_token_groups jsonb DEFAULT NULL, p_user_id uuid DEFAULT NULL)
+CREATE OR REPLACE FUNCTION nutrition.food_search(p_query text, p_normalized_query text, p_tokens text[], p_selected_food_id uuid, p_category_slug text, p_category_id uuid, p_tag_code text, p_sort text, p_limit integer, p_offset integer, p_preparations text[] DEFAULT NULL, p_groups text[] DEFAULT NULL, p_basics_only boolean DEFAULT false, p_token_groups jsonb DEFAULT NULL, p_user_id uuid DEFAULT NULL, p_filters jsonb DEFAULT NULL)
  RETURNS json
  LANGUAGE sql
  STABLE
@@ -205,6 +211,62 @@ WITH RECURSIVE params AS (
     LEAST(GREATEST(COALESCE(p_limit, 25), 1), 100) AS lim,
     GREATEST(COALESCE(p_offset, 0), 0) AS off,
     CASE WHEN p_sort IN ('relevance','protein_desc','kcal_asc','name_asc') THEN p_sort ELSE 'relevance' END AS sort
+),
+filter_tag_groups AS MATERIALIZED (
+  SELECT g.gruppe, g.nr
+  FROM jsonb_array_elements(
+    CASE
+      WHEN p_filters IS NOT NULL
+       AND jsonb_typeof(COALESCE(p_filters->'tag_groups', p_filters->'include_tag_groups')) = 'array'
+      THEN COALESCE(p_filters->'tag_groups', p_filters->'include_tag_groups')
+      ELSE '[]'::jsonb
+    END
+  ) WITH ORDINALITY AS g(gruppe, nr)
+  WHERE jsonb_typeof(g.gruppe) = 'array'
+    AND jsonb_array_length(g.gruppe) > 0
+),
+filter_exclude_tags AS MATERIALIZED (
+  SELECT DISTINCT code
+  FROM jsonb_array_elements_text(
+    CASE
+      WHEN p_filters IS NOT NULL
+       AND jsonb_typeof(COALESCE(p_filters->'exclude_tag_codes', p_filters->'exclude_tags')) = 'array'
+      THEN COALESCE(p_filters->'exclude_tag_codes', p_filters->'exclude_tags')
+      ELSE '[]'::jsonb
+    END
+  ) AS t(code)
+  WHERE code <> ''
+),
+filter_processing_levels AS MATERIALIZED (
+  SELECT DISTINCT level
+  FROM jsonb_array_elements_text(
+    CASE
+      WHEN p_filters IS NOT NULL
+       AND jsonb_typeof(p_filters->'processing_levels') = 'array'
+      THEN p_filters->'processing_levels'
+      ELSE '[]'::jsonb
+    END
+  ) AS t(level)
+  WHERE level <> ''
+),
+filter_exclude_processing_levels AS MATERIALIZED (
+  SELECT DISTINCT level
+  FROM jsonb_array_elements_text(
+    CASE
+      WHEN p_filters IS NOT NULL
+       AND jsonb_typeof(p_filters->'exclude_processing_levels') = 'array'
+      THEN p_filters->'exclude_processing_levels'
+      ELSE '[]'::jsonb
+    END
+  ) AS t(level)
+  WHERE level <> ''
+),
+filter_state AS MATERIALIZED (
+  SELECT
+    EXISTS (SELECT 1 FROM filter_tag_groups) AS has_tag_groups,
+    EXISTS (SELECT 1 FROM filter_exclude_tags) AS has_exclude_tags,
+    EXISTS (SELECT 1 FROM filter_processing_levels) AS has_processing_levels,
+    EXISTS (SELECT 1 FROM filter_exclude_processing_levels) AS has_exclude_processing_levels
 ),
 user_preference AS (
   SELECT
@@ -641,6 +703,43 @@ matching_foods AS (
           AND selected_tag.tag_code = p_tag_code
       )
     )
+    -- C-164: Mehrfach-Facetten. `tag_groups` ist ODER innerhalb
+    -- einer sichtbaren Gruppe, UND zwischen Gruppen. Ausschluesse
+    -- wirken auf die Gesamtmenge, nicht nur auf die aktuelle Seite.
+    AND (
+      NOT (SELECT has_tag_groups FROM filter_state)
+      OR NOT EXISTS (
+        SELECT 1
+        FROM filter_tag_groups fg
+        WHERE NOT EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements_text(fg.gruppe) AS wanted(tag_code)
+          JOIN nutrition.food_tags ft ON ft.tag_code = wanted.tag_code
+          WHERE ft.food_id = f.id
+        )
+      )
+    )
+    AND (
+      NOT (SELECT has_exclude_tags FROM filter_state)
+      OR NOT EXISTS (
+        SELECT 1
+        FROM filter_exclude_tags et
+        JOIN nutrition.food_tags ft ON ft.tag_code = et.code
+        WHERE ft.food_id = f.id
+      )
+    )
+    AND (
+      NOT (SELECT has_processing_levels FROM filter_state)
+      OR f.processing_level IN (SELECT level FROM filter_processing_levels)
+    )
+    AND (
+      NOT (SELECT has_exclude_processing_levels FROM filter_state)
+      OR NOT EXISTS (
+        SELECT 1
+        FROM filter_exclude_processing_levels ep
+        WHERE ep.level = f.processing_level
+      )
+    )
     -- Zubereitung: Code ODER Wort im Namen. [cmd] Fuer "roh" tragen
     -- 509 Lebensmittel beides, 338 nur den Code, 153 nur das Wort —
     -- eines allein liesse je nach Richtung Hunderte fallen.
@@ -863,6 +962,43 @@ all_matching_food_ids AS (
     )
     -- ACHTUNG: Diese Bedingungen stehen ABSICHTLICH zweimal — einmal in
     -- `matching_foods` (die angezeigte Seite) und hier in
+    -- C-164: Mehrfach-Facetten. `tag_groups` ist ODER innerhalb
+    -- einer sichtbaren Gruppe, UND zwischen Gruppen. Ausschluesse
+    -- wirken auf die Gesamtmenge, nicht nur auf die aktuelle Seite.
+    AND (
+      NOT (SELECT has_tag_groups FROM filter_state)
+      OR NOT EXISTS (
+        SELECT 1
+        FROM filter_tag_groups fg
+        WHERE NOT EXISTS (
+          SELECT 1
+          FROM jsonb_array_elements_text(fg.gruppe) AS wanted(tag_code)
+          JOIN nutrition.food_tags ft ON ft.tag_code = wanted.tag_code
+          WHERE ft.food_id = f.id
+        )
+      )
+    )
+    AND (
+      NOT (SELECT has_exclude_tags FROM filter_state)
+      OR NOT EXISTS (
+        SELECT 1
+        FROM filter_exclude_tags et
+        JOIN nutrition.food_tags ft ON ft.tag_code = et.code
+        WHERE ft.food_id = f.id
+      )
+    )
+    AND (
+      NOT (SELECT has_processing_levels FROM filter_state)
+      OR f.processing_level IN (SELECT level FROM filter_processing_levels)
+    )
+    AND (
+      NOT (SELECT has_exclude_processing_levels FROM filter_state)
+      OR NOT EXISTS (
+        SELECT 1
+        FROM filter_exclude_processing_levels ep
+        WHERE ep.level = f.processing_level
+      )
+    )
     -- `all_matching_food_ids` (die Gesamtzahl). `[cmd]` 2026-08-14: beim
     -- ersten Anlauf war nur die erste Stelle gepatcht, worauf jeder
     -- Filter 7.140 zurueckgab — die Trefferliste war gefiltert, die Zahl
@@ -1064,6 +1200,7 @@ SELECT json_build_object(
   'preparations', COALESCE(to_json(p_preparations), 'null'::json),
   'groups', COALESCE(to_json(p_groups), 'null'::json),
   'basics_only', COALESCE(p_basics_only, false),
+  'filters', COALESCE(p_filters, '{}'::jsonb),
   'sort', (SELECT sort FROM params),
   'limit', (SELECT lim FROM params),
   'offset', (SELECT off FROM params),
@@ -1108,18 +1245,19 @@ $function$;
 
 COMMENT ON FUNCTION nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer,
-  text[], text[], boolean, jsonb, uuid
+  text[], text[], boolean, jsonb, uuid, jsonb
 ) IS
   'C-94: Lebensmittelsuche mit optionaler Preference-Anwendung. '
   'p_user_id NULL behaelt die ungefilterte Suche; mit Nutzer greifen '
-  'hard/strong/soft/boost aus food_preferences_read().';
+  'hard/strong/soft/boost aus food_preferences_read(). C-164: p_filters '
+  'ergaenzt Mehrfach-Tags, Ausschluesse und processing_level.';
 
 REVOKE ALL ON FUNCTION nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer,
-  text[], text[], boolean, jsonb, uuid
+  text[], text[], boolean, jsonb, uuid, jsonb
 ) FROM PUBLIC, anon;
 
 GRANT EXECUTE ON FUNCTION nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer,
-  text[], text[], boolean, jsonb, uuid
+  text[], text[], boolean, jsonb, uuid, jsonb
 ) TO authenticated, service_role;

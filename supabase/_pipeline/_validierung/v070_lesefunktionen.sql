@@ -5,7 +5,7 @@
 
 WITH fns(name, args) AS (
   VALUES
-    ('food_search', 10),
+    ('food_search', 16),
     ('food_categories_tree', 0),
     ('preference_search_preview', 14),
     ('curation_overview', 5),
