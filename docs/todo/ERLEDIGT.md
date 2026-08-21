@@ -424,6 +424,116 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   hat zwei eigene Parser verworfen, die 291 und 116 Fehlalarme
   meldeten.
 
+- [x] **A-30: `next/headers` im Browserbuendel — fuenfter Fall**
+  (erledigt 2026-08-21, `docs/ssot/163-shared-einstieg.md`).
+  **Die Praemisse traf nicht zu, die Fehlerklasse ist trotzdem echt —
+  jetzt haengt eine Pruefung im Gate.**
+
+  `[cmd]` **Der Build bricht nicht.** Am 2026-08-21 vor jeder Aenderung:
+  `✓ Compiled successfully`, **0 Treffer** fuer `next/headers`,
+  `Failed to compile` oder `error` in 69 Logzeilen.
+
+  `[cmd]` **Der Einstieg war schon geteilt:** `.` erreicht 4 Dateien
+  und **kein** `next/headers`. Nur `./session` (2 Dateien) und `./auth`
+  (4) ziehen es — beides Servereinstiege. **Kein Umbau noetig.**
+
+  `[cmd]` **Die Ursache lag jedes Mal in `apps/web`**, nicht im Paket:
+  ein **WERT-Import** aus einer Datei mit `@lumeos/shared/session` in
+  eine `'use client'`-Datei. In `rechte-echt.tsx` nachgestellt —
+  derselbe Bruch, dieselbe Kette ueber `rechte-read.ts`. `[read]`
+  **`import type` ist folgenlos, `import` ohne `type` schleppt das
+  Modul mit; der Typecheck sieht beides als gueltig.**
+
+  `[cmd]` **Die vorgeschlagene Marke haette nichts gemessen:**
+  `next/headers` steht in **0 von 104 Serverdateien und 0 von 49
+  Client-Chunks** — Next loest den Import beim Buendeln auf. Geprueft
+  wird auf `createServerClient` (3/0) und `cookies()` (4/0).
+
+  `[cmd]` **`tools/serverimport-pruefen.mjs` haengt nach dem Build im
+  Gate.** Beide Richtungen gemessen: sauber gruen, Fehler eingebaut
+  **Exitcode 1**. Dazu eine dritte gegen Stumpfwerden. **Gate 11/11,
+  447/447 Tests**, Anmeldung ohne HTTP 500.
+
+  `[read]` **Die Trennungen sind keine Umgehungen, sondern die
+  Loesung** — `rechte-modell.ts`, `plan-model.ts`, `reihe.ts` bleiben.
+
+  **Offen:** Der Anlass bleibt unerklaert. **C-158 meldete den Bruch
+  am 2026-08-20; gemessen wurde am 2026-08-21 ein heiler Build.**
+  `[cmd]` **`packages/shared` hat seit dem 2026-08-19 keinen Commit** —
+  die Datei, die C-158 nennt, ist unveraendert. **Die Trennung, die
+  den Fall verhindert, entstand in `3e5e781`** (`rechte-modell.ts`
+  neben `rechte-read.ts`, G-90).
+  `[read]` Wenn Codex die Buildmeldung von damals hat, laesst sich das
+  in Minuten zuordnen — die Meldung nennt die Kette selbst.
+
+  **Was C-158 am 2026-08-20 meldete** (unveraendert, als Beleg —
+  am 2026-08-21 nicht mehr reproduzierbar):
+
+  `[cmd]` **`@lumeos/web#build` scheitert** am `next/headers`-Import
+  ueber `packages/shared/src/supabase/session.ts`.
+
+  `[cmd]` **Der Dev-Server laeuft** — HTTP 200 auf `/v2/nutrition`,
+  `/v2/recovery`, `/v2/supplements`. **Nur der Build bricht.**
+
+  `[read]` **Die Datei warnt selbst davor:** *„`next/headers` ist nur in
+  Server Components / Route Handlers erlaubt."* Und `rechte-read.ts:38`
+  nennt den Grund: *„um `next/headers` nicht ins Browserbuendel zu
+  ziehen (G-74, G-79)."*
+
+  `[read]` **Fuenfter Fall** — die vorherigen vier waren Typecheck gruen,
+  **HTTP 500 auf jeder Seite.** **Diesmal faellt es frueher auf.**
+
+  **Zu tun:** die Kette finden, die es aus einer Client-Komponente
+  zieht.
+
+- [x] **A-45: Laufzeit gehoert in den Nachweis**
+  (erledigt 2026-08-21). **`schuss.mjs` misst sie jetzt mit, ohne
+  Schalter — und dabei ist ein alter Zaehlfehler aufgefallen.**
+
+  `[cmd]` **Vier Zahlen je Aufruf:** `zeit.gesamt_ms` (bis
+  `networkidle`), `zeit.dokument_ms` (`responseEnd` der Hauptanfrage),
+  `zeit.langsamste` (ueber 300 ms, die drei groessten, **mit URL**),
+  `zeit.zweiter_lauf` (dieselbe Seite, gleiche Sitzung).
+
+  `[cmd]` **Gegengeprobt:** `?tab=catalog` **2.469 / 2.206 ms**,
+  `?tab=nutrients` **2.034 / 1.833 ms**. **Beide Male ist die
+  langsamste Anfrage das Dokument selbst, und sie wird benannt** —
+  genau die Zeile, die C-189 sofort gezeigt haette.
+
+  `[read]` **Der zweite Lauf ist der Kern:** Ist er genauso langsam,
+  ist es kein Kaltstart. Das war Toms Argument, und das Werkzeug
+  liefert es jetzt von selbst.
+
+  `[cmd]` **Nebenbefund:** Der Konsolenfehler-Zaehler zaehlte bis
+  hierher **die Anmeldeseite mit**. Gemessen auf
+  `/v2/medical?tab=dashboard`: **ein Laden = 1 Meldung, die alte
+  Fassung meldete 2.** `[read]` **Die „2 je Seite" aus G-105 und
+  G-123 sind eine der Anmeldung plus eine der Seite.**
+  `konsolenfehler` nennt jetzt nur die der Seite;
+  **`konsolenfehler_mit_anmeldung` traegt die alte Zahl weiter.**
+
+  `[cmd]` **Regel in `CLAUDE.md` eingetragen**, samt
+  `explain (analyze, buffers)` fuer Datenbankfunktionen. **Keine
+  Schwelle, kein Rot** — das Werkzeug misst, es urteilt nicht.
+
+  **Der Anlass, unveraendert als Beleg** (aus C-189):
+
+  `[cmd]` **Der Supplements-Tab war seit C-133 neun Sekunden langsam
+  — fuenf Auftraege haben ihn seither angefasst, keiner hat es
+  gemessen.**
+
+  `[read]` **Der Orchestrator hat es zweimal falsch gemessen:** erst
+  ohne Anmeldung (122 ms gegen die Anmeldeseite), dann als Kaltstart
+  abgetan. **Tom hat widersprochen, und er hatte recht.**
+
+  **Regel:** `[cmd]` **Ein UI-Auftrag misst die Antwortzeit angemeldet**
+  — `tools/schuss.mjs` liefert sie seither mit; es misst ohnehin ueber
+  Playwright.
+
+  `[cmd]` **Und bei Datenbankfunktionen gehoert `explain (analyze,
+  buffers)` dazu**, nicht nur die Zeile *„laeuft in X ms"*. **`temp
+  read/written` verraet ein Kreuzprodukt sofort.**
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und
@@ -6694,6 +6804,39 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
 
 
+- [x] **C-142: Die Sperrbegruendung nennt eine Tabelle, die es gibt**
+
+  **ERLEDIGT 2026-08-20** (G-123) — Bericht
+  `docs/ssot/162-recovery-rest.md`.
+
+  `[cmd]` **Es waren nicht zwei, sondern siebzehn.** Nach den zwei
+  genannten wurden alle `grund=`-Texte in `apps/web/src/app/v2/` gegen
+  `information_schema` geprueft (145 Tabellen).
+
+  **Neun nennen eine Tabelle, die es gibt** — darunter
+  `goals.user_goals` (11 Zeilen, **Schreibweg existiert**) und zweimal
+  *„das Schema `recovery` gibt es noch nicht"* auf einer Seite, die 170
+  Tage anzeigt.
+
+  **Acht stimmen halb:** die Tabelle fehlt wirklich, der Zusatz nicht
+  — `medical` fuehrt 11 Tabellen, `training` 8, `recovery` 3. Zweimal
+  hiess es, `/v2/medical` gebe es nicht.
+
+  `[read]` **Alle Sperren bleiben richtig** — gemessen fehlt jedes Mal
+  der Schreibweg. Was daraus folgt, steht als G-122 und G-124.
+  (neu 2026-08-19). Befund aus G-84.
+
+  `[cmd]` **`medical.user_medications` existiert** — 2 Zeilen, 124
+  Produkte, seit C-130. **Der Knopf *„Add medication"* ist trotzdem
+  gesperrt, mit einer Begruendung, die auf eine fehlende Tabelle
+  verweist.**
+
+  `[cmd]` **Was wirklich fehlt: die Ueberwachungsspalten** — *„aus denen
+  vier der sechs Alert-Eintraege stammen."*
+
+  `[read]` **Kleine Sache, aber sie sagt etwas Falsches** — und der
+  naechste Agent sucht an der falschen Stelle.
+
 ## Erledigt am 2026-08-05
 
 - [x] Theming tragfähig (Block 4 B): Themes als Einzeldateien mit Registry und
@@ -10886,3 +11029,248 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
 
   `[cmd]` **`BP-FFMI-005` (FFMI 25 als Naturgrenze) ist
   `CONFLICTING_EVIDENCE`** — *„kein Natural-Limit-Urteil."*
+
+- [x] **G-105: Zwei abgeschnittene SVG-Pfade in `packages/ui`**
+  (erledigt 2026-08-21, `docs/ssot/165-svg-und-wasser.md`).
+  **Es waren nicht zwei abgeschnittene Kurven, sondern 42 % fehlende
+  Pfaddaten — und die Rueckenfigur hatte gar keinen Umriss.**
+
+  `[cmd]` **Gemessen:** `UMRISS_VORNE` zeichnete **939,8 von 6.275,8**
+  Laenge, `UMRISS_HINTEN` **55,1 von 6.272,7**. Der Browser bricht beim
+  ersten Fehler ab — danach kam nichts mehr.
+
+  `[read]` **Unbemerkt blieb es, weil die 158 Muskelflaechen die Figur
+  tragen** und der Umriss eine 1,5-px-Linie dahinter ist.
+
+  `[cmd]` **Das Muster ist kein Abschneiden:** 11 ganze `Q`-Bloecke
+  weg, `C`-Bloecke ohne das MITTLERE Kontrollpunktpaar, **0 Bloecke als
+  verkuerztes Praefix** — ein misslungener Vereinfachungslauf.
+
+  `[cmd]` **Die 291 aus G-123 reproduziert und eingeordnet:** falsch
+  aus zwei Gruenden gleichzeitig — wiederholte Parametersaetze **und**
+  Folgeschaden nach dem Abbruch. **Belastbar ist nur, jeden Pfad
+  einzeln dem Browser vorzulegen: 160 geprueft, 2 kaputt, jetzt 0.**
+
+  `[cmd]` **Kein Punkt geraten** — beide heilen Umrisse in drei
+  uebereinstimmenden Kopien, gefunden ueber `react-muscle-highlighter`
+  **im Vorgaengerrepo.** Ohne diesen Griff waere HINTEN als verloren
+  gemeldet worden.
+
+  `[cmd]` **Konsolenfehler 4 → 2** auf `today`/`checkin`/`muscles`,
+  **0 SVG-Fehler** in acht Bildern.
+
+  `[read]` **Offen und Toms Entscheidung:** Der Umriss aendert sich
+  sichtbar (2,47 % / 2,66 % der Bildflaeche) — **weil er vorher
+  fehlte.** Vergleich in `backup/g124-karte-{alt,neu}.png`, Rueckbau
+  ist ein `git checkout`.
+
+  **Was G-100 und G-123 gemeldet hatten** (unveraendert, als Beleg —
+  die Beschreibung traf das Symptom, nicht die Ursache):
+
+  `[cmd]` **Kein Encoding-Problem** — *„die Datei enthaelt 0
+  Ersatzzeichen. Es sind **abgeschnittene Pfaddaten**: ein `C` mit vier
+  statt sechs Zahlen, ein zweiter mit zwei."*
+
+  `[cmd]` **Seit `3dae1a2` unveraendert** — sie erzeugen die zwei
+  Konsolenfehler, die auf jeder Seite mit Muskelkarte stehen.
+
+  `[read]` **Nicht behoben, weil `packages/ui` gesperrt war** — der
+  G-100-Agent hat es gemeldet. **Ein eigener kleiner Auftrag, sobald
+  niemand dort arbeitet.**
+
+  `[cmd]` **Bestaetigt 2026-08-20 mit G-123:** *„Die zwei SVG-Fehler
+  erscheinen genau auf den drei Tabs mit Muskelkarte."*
+
+  | | Fehler | SVG | Hydration |
+  |---|---|---|---|
+  | `today` / `checkin` / `muscles` | **4** | 2 | 2 |
+  | die uebrigen sechs Tabs | 2 | 0 | 2 |
+
+  `[read]` **Es gibt keinen unbekannten dritten** — der Orchestrator
+  hatte fuenf gezaehlt, **es sind vier.** Und Medical hat auch nur zwei;
+  *„der dritte war ein abgebrochener RSC-Vorablauf, nicht
+  reproduzierbar."*
+
+  `[cmd]` **Ein eigener Zaehlversuch ist gescheitert und steht im
+  Bericht:** *„Mein Pfadpruefer meldete 291 Fehler, weil SVG
+  wiederholte Parametersaetze ohne Befehlsbuchstaben erlaubt. **Fuer SVG
+  ist der Browser die Messung**."*
+
+  **Die zwei echten bleiben offen** — sie liegen in `packages/ui`.
+
+- [x] **G-119: `supplements` ist das letzte Modul mit `useState`-Tab**
+
+  **ERLEDIGT 2026-08-20** (G-123) — Bericht
+  `docs/ssot/162-recovery-rest.md`.
+
+  `[cmd]` **Die beschriebene Zwei-Zeilen-Aenderung**: Import und
+  `useTabParam('today')`. **Fuenf Tabs ueber die Adresse
+  gegengeprueft** — `interactions`, `extended`, `compliance`, `cost`,
+  `catalog`.
+
+  `[read]` **Damit sind alle Module umgestellt** — und genau das hat
+  die Fehlersuche in Teil A moeglich gemacht: ohne `?tab=` haette sich
+  nicht zeigen lassen, dass die zwei SVG-Fehler nur auf den drei Tabs
+  mit Muskelkarte auftreten.
+  (neu 2026-08-20). Rest aus G-117.
+
+  `[cmd]` **Sechs Module nutzen `lib/tab-url.ts`**, Nutrition hatte das
+  Muster — **`supplements` nicht.** *„Fremder Bereich, gemeldet —
+  dieselbe Zwei-Zeilen-Aenderung."*
+
+- [x] **G-120: `updateWaterLogAmount` liegt fertig und ungenutzt**
+  (erledigt 2026-08-21, `docs/ssot/165-svg-und-wasser.md`).
+  **Es fehlten ein Verb und ein Knopf — sonst nichts.**
+
+  `[cmd]` **Auch `waterLogUpdateSchema` lag schon da**, und die
+  Nullzeilenpruefung ebenfalls (`water-write.ts:98-103`). Ergaenzt:
+  `PATCH /api/nutrition/water?datum=…`, Antwort **neu gerechneter Tag
+  plus Restliste** — dieselbe Form wie `DELETE` seit G-117.
+
+  `[cmd]` **Der Kreis gemessen:** eintragen 500 ml → aendern → **neu
+  laden: 250 ml**; `logged_ml` 2250 → 2000 → 1750 nach dem Aufraeumen.
+  **Fremde Id → 404 NOT_FOUND.**
+
+  `[read]` **Der alte Wert steht durchgestrichen daneben** (G-67-Muster:
+  die Abfrage nennt den Eintrag). Stift vor Papierkorb — die haeufigere
+  Korrektur ist die Zahl.
+
+  `[cmd]` **Eine Messung fand einen echten Fehler:** Das Feld rendert
+  **42,1 statt 78 px**, weil `.v2-feld` `flex: 1; min-width: 0` traegt —
+  **`width` verliert gegen Flex-Schrumpfen.** `flex: '0 0 82px'` loest
+  es; jetzt 82 px, kein Ueberlauf.
+
+  `[read]` **Dritter Fall dieser Art** — nach `InjektionsKarte` (G-53)
+  und `score.ts` (G-82): **gebaut und nie gerufen.**
+
+- [x] **G-81: Registerkarten wechseln nicht — der Build-Cache war
+  kaputt** (2026-08-19). Befund aus G-79, **behoben.**
+
+  `[cmd]` **Der Server antwortete mit 200**, lieferte aber 404 auf
+  RSC-Anfragen, und die Bildschirmfotos zeigten die Seite unformatiert.
+
+  `[cmd]` **Behoben durch:** Server beenden → **`apps/web/.next` und
+  `node_modules/.cache` loeschen** → neu starten. **Danach 200 mit
+  Stilen**, im Browser bestaetigt.
+
+  `[read]` **Die Ursache:** Drei Agenten haben gleichzeitig Dateien
+  geaendert, der Entwicklungsserver hat sich verschluckt. **Kein
+  Codefehler.**
+
+  ### Was dabei auffiel
+
+  `[cmd]` **Die Pruefung ohne Cookie landet auf der Anmeldeseite** — 22
+  KB, kein v2-CSS. **Genau Regel 13** aus G-56: *„Eine abgelaufene
+  Sitzung liefert die Anmeldeseite, die keine v2-Huelle hat."*
+
+  `[read]` **Der Orchestrator ist erst darauf hereingefallen** — er
+  mass *„0 CSS-Dateien"* und hielt den Server fuer kaputt. **Der Titel
+  `Anmelden — LumeOS` hat es aufgeklaert.**
+
+  ### Merksatz fuer die naechste Runde
+
+  **Wenn die Oberflaeche unformatiert aussieht oder Registerkarten nicht
+  wechseln:** `[cmd]` **erst `.next` loeschen und neu starten**, bevor
+  jemand den Code sucht.
+
+  ### Ergaenzung aus G-82 (2026-08-19)
+
+  `[cmd]` **Wer `.next` raeumt, startet den Server neu.** Der G-82-Agent
+  hat es teuer gelernt: *„Nach dem Raeumen von `.next` lieferte der
+  laufende Server 404 fuer jeden Chunk, die Anmeldung hydrierte nicht
+  und **schickte die Zugangsdaten per GET in die URL**."*
+
+  `[read]` **Das Letzte ist der ernste Teil** — ein Passwort in der
+  Adresszeile landet im Verlauf und in jedem Protokoll.
+
+- [x] **G-85: Der Health score haengt an zwei Unbekannten**
+  (erledigt 2026-08-21 als G-135, `docs/ssot/171-health-score.md`).
+  **Beide Unbekannten standen im Repo — die Frage war falsch gestellt.**
+
+  `[cmd]` **Die Gruppierung:** `biomarker_spec_enrichment.system_groups`,
+  27 der 49 Zeilen — cardiovascular 7, liver 6, hormonal 6, metabolic 4,
+  kidney 4. **Die Gewichtung:** `docs/specs/Medical/SPEC_09_SCORING.md`,
+  `.25/.25/.20/.15/.15`, Summe 1,00.
+
+  `[cmd]` **Zugeordnet wird ueber LOINC, nicht ueber den Namen** — die
+  Spec vergleicht drei Namensfelder und verliert `Total Testosterone`
+  (Bestand `Testosterone, Total`, **gleicher Code 2986-8**).
+
+  `[cmd]` **Von den drei nicht treffenden Spec-Markern ist genau EINER
+  eine echte Luecke:** Prolactin (4 Werte, keine Zeile). `HOMA-IR` ist
+  ein Rechenwert, `Total Testosterone` eine Schreibweise.
+
+  `[cmd]` **Gemessen:** Gesamt **86**, Herz-Kreislauf 90 (5/6),
+  Stoffwechsel 72 (3/3), Hormone 100 (6/6), Leber 92 (3/6), Niere 75
+  (1/4) — **5 von 5 Systemen, 100 % des Gewichts. 467/467 Tests.**
+
+  `[read]` **Toms Einwand von damals gilt zur Haelfte weiter:** LDL ist
+  zugeordnet, **ApoB nicht** (Bestand 1884-6, enrichment 1869-7).
+  **Aber stillschweigend ist nichts** — jede Kachel nennt
+  `n von m Markern`.
+
+  `[read]` **Und die Kachel trug NIE eine Attrappenmarke**, obwohl sie
+  mit Entwurfszahlen rechnete. Ein Zwischenstand zeigte deshalb beiden
+  Konten dieselben 81 — **das sah wie ein Zeilenschutzleck aus und war
+  der Entwurf.** Jetzt belegt: `test-user` sieht „0 von 5 Systemen".
+
+  **Was der urspruengliche Punkt festhielt** (unveraendert, als Beleg):
+
+  `[cmd]` **Vorher:** `Health score 87` und `6 alerts` — **beide aus dem
+  Entwurfskatalog.** *„Dass die 6 zufaellig stimmte, haette sich bei
+  keinem neuen Befund bewegt."*
+
+  ### Erste Unbekannte: die Gruppierung
+
+  `[cmd]` **23 von 37 Markern gruppierbar**, 47 von 140 Werten fielen
+  heraus. **5 LOINC-Abweichungen** und **9 echte Luecken** (ApoB, PSA,
+  Zink, FSH, IGF-1, Prolaktin, Calcium + 2 Rohmarker).
+
+  `[read]` **Der Orchestrator nannte die fuenf *„einen Codex-Auftrag von
+  zwanzig Minuten"* — falsch.** Der Bericht korrigiert: **bei Glukose und
+  Vitamin D messen die Codes nicht dasselbe.** `1558-6` ist *Fasting*
+  Glukose, `2345-7` nicht. **Keine Aliasfrage, eine inhaltliche.**
+
+  ### Zweite Unbekannte: die Gewichtung
+
+  `[cmd]` **`.25/.25/.20/.15/.15` steht nur in `daten.ts`** — keine
+  Quelle. **Und die 8 DB-Kategorien passen nicht auf die 5 Systeme.**
+
+  `[read]` **Zwei Unbekannte in einer Zahl** — deshalb bleibt die
+  Dashboard-Kachel markiert.
+
+- [x] **G-92: Das Extended-Gate schuetzt nichts** (neu 2026-08-20).
+
+  **ERLEDIGT 2026-08-20** (G-110) — Bericht
+  `docs/ssot/156-supplements-interactions.md`.
+
+  `[cmd]` **Das innere `useState`-Gate ist entfernt.** Die Entscheidung
+  faellt jetzt in `ansicht.tsx` gegen `profiles.experience_level`
+  (C-140) — **bevor `SuppExtended` gerendert wird.**
+
+  `[cmd]` **Stufe fuer Stufe gemessen** (der Grad danach wieder auf
+  NULL):
+
+  | Grad | Gate | Protokolle |
+  |---|---|---|
+  | (NULL) | **ja** | 0 |
+  | beginner | **ja** | 0 |
+  | advanced / pro / elite | nein | **1** |
+
+  `[read]` **Und ein Weg hinaus:** Die Kachel in `/v2/settings` ist
+  entsperrt — sie stand seit G-80 mit *„gibt es kein Feld dafuer"*,
+  **was bis C-140 stimmte.**
+
+  **Offen geblieben:** der Code im Buendel (G-117).
+  **Befund aus G-91, ernst.**
+
+  `[cmd]` **Es ist ein blosses `useState`.** *„Wer klickt, sieht die
+  Protokolle."*
+
+  `[cmd]` **Und `enhanced_substances` existiert nicht**,
+  `experience_level` ist **auf allen 5 Profilen NULL** — die geplante
+  Sperre aus C-113 greift also auch nicht.
+
+  `[read]` **Der Zugang zu PED-Protokollen haengt an einem
+  Browserzustand** — keine Pruefung, keine Rechte, kein Zeilenschutz.
+  **Das gehoert vor jeder weiteren Extended-Arbeit geklaert.**
