@@ -165,7 +165,9 @@ export function NaehrstoffModal({ knoten, elternName, datum, fenster, onClose }:
                 {knoten.zielMax !== null && <>–{zahl(knoten.zielMax, null)}</>}
               </div>
               <div className="v2-dim" style={{ fontSize: 10 }}>
-                {knoten.zielArt ? `${knoten.zielArt} · fuer dein Profil` : 'keine Referenz'}
+                {knoten.zielQuelle === 'goals'
+                  ? 'aus deinen Goals (nutrition_targets)'
+                  : knoten.zielArt ? `${knoten.zielArt} · fuer dein Profil` : 'keine Referenz'}
               </div>
             </Card>
             <Card style={{ padding: 12 }}>

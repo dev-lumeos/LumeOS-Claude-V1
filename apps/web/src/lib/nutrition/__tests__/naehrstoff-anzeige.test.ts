@@ -9,7 +9,7 @@ import assert from 'node:assert/strict'
 
 import {
   fensterOderTag, karteFuerWurzel, normalisiere, pruefeAnsicht,
-  sichtbar, trifftSuche, zaehleSichtbare, zeigeKind,
+  sichtbar, spektrumLage, trifftSuche, zaehleSichtbare, zeigeKind,
 } from '../naehrstoff-anzeige'
 import type { NaehrstoffKnoten } from '../naehrstoff-ordnung'
 
@@ -19,7 +19,8 @@ function k(
 ): NaehrstoffKnoten {
   return {
     code, name: code, einheit: 'g', stufe: 1, sort: 0,
-    eltern: null, gruppe: 'Test', suchName: code.toLowerCase(), suchText: '',
+    eltern: null, gruppe: 'Test', suchName: code.toLowerCase(), suchText: '', suchAlias: [],
+    zielQuelle: null, referenz: null, referenzArt: null,
     wert: 1, summe: 1, positionen: 1, positionenMitWert: 1,
     positionenOhneWert: 0, tageErfasst: 1, tageVollstaendig: 1,
     ziel: null, zielMax: null, zielArt: null, obergrenze: null,
@@ -77,22 +78,51 @@ test('normalisiere macht „Omega 3", „Omega-3" und „OMEGA_3" gleich', () =>
   assert.equal(normalisiere('Fettsäure C20:5 n-3 (EPA)'), 'fettsaurec205n3epa')
 })
 
-test('trifftSuche: 2 Zeichen nur Code, 3 auch Name, ab 4 auch Erklaertext', () => {
+test('trifftSuche: 2 Zeichen nur Code/Alias, 3 auch Name, ab 4 auch Erklaertext', () => {
   const omegaName = normalisiere('FAPUN3 Omega-3-Fettsäuren, gesamt')
   const omegaText = normalisiere('entzuendungshemmend Lachs Makrele')
-  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, 'Omega 3'))
-  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, 'lachs'), 'Quelle ab 4 Zeichen')
-  assert.ok(trifftSuche('FE', normalisiere('FE Eisen'), '', 'FE'), 'Code trifft exakt')
-  assert.equal(trifftSuche('FAT', normalisiere('FAT Fett'), '', 'FE'), false,
+  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, [], 'Omega 3'))
+  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, [], 'lachs'), 'Quelle ab 4 Zeichen')
+  assert.ok(trifftSuche('FE', normalisiere('FE Eisen'), '', [], 'FE'), 'Code trifft exakt')
+  assert.equal(trifftSuche('FAT', normalisiere('FAT Fett'), '', [], 'FE'), false,
     'zwei Zeichen suchen nur im Code')
   const epaName = normalisiere('F20:5CN3 Fettsäure C20:5 n-3 (Eicosapentaensäure, EPA)')
-  assert.ok(trifftSuche('F20:5CN3', epaName, '', 'EPA'), 'drei Zeichen treffen den Namen')
+  assert.ok(trifftSuche('F20:5CN3', epaName, '', [], 'EPA'), 'drei Zeichen treffen den Namen')
   assert.equal(
-    trifftSuche('VAL', normalisiere('VAL Valin'), normalisiere('Muskelreparatur'), 'EPA'),
+    trifftSuche('VAL', normalisiere('VAL Valin'), normalisiere('Muskelreparatur'), [], 'EPA'),
     false, 'drei Zeichen fallen NICHT in den Erklaertext („R-epa-ratur")')
-  assert.equal(trifftSuche('FAPUN3', omegaName, omegaText, ''), false)
-  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, 'omega lachs'), 'alle Teile muessen sitzen')
-  assert.equal(trifftSuche('FAPUN3', omegaName, omegaText, 'omega quark'), false)
+  assert.equal(trifftSuche('FAPUN3', omegaName, omegaText, [], ''), false)
+  assert.ok(trifftSuche('FAPUN3', omegaName, omegaText, [], 'omega lachs'), 'alle Teile muessen sitzen')
+  assert.equal(trifftSuche('FAPUN3', omegaName, omegaText, [], 'omega quark'), false)
+})
+
+test('trifftSuche: Aliase (G-142) — exakte Kurz-Token und Teiltreffer ab 3', () => {
+  // BCAA als Gruppe: der Alias sitzt an allen drei Codes.
+  assert.ok(trifftSuche('LEU', normalisiere('LEU Leucin'), '', ['bcaa'], 'BCAA'))
+  // Kurz-Token exakt: „B5" und „kJ" treffen NUR ueber den Alias.
+  assert.ok(trifftSuche('PANTAC', normalisiere('PANTAC Pantothensäure'), '', ['b5', 'vitaminb5'], 'B5'))
+  assert.ok(trifftSuche('ENERCJ', normalisiere('ENERCJ Energie (Kilojoule)'), '', ['kj'], 'kJ'))
+  // „Vitamin B5": beide Teile sitzen ueber die Aliasliste.
+  assert.ok(trifftSuche('PANTAC', normalisiere('PANTAC Pantothensäure'), '', ['b5', 'vitaminb5'], 'Vitamin B5'))
+  // Kein Alias, kein Treffer — die Kurz-Token-Regel bleibt sonst eng.
+  assert.equal(trifftSuche('THIA', normalisiere('THIA Vitamin B1 (Thiamin)'), '', [], 'B5'), false)
+})
+
+test('spektrumLage: Skala UL x 1,1 bzw. Ziel x 2, Wert wird gekappt', () => {
+  // Vitamin A: Ziel 750, UL 3000, Wert 3583 — jenseits der Skala.
+  const vita = spektrumLage(3583, 750, 3000)
+  assert.ok(vita)
+  assert.ok(Math.abs(vita!.skalaMax - 3300) < 1e-9)
+  assert.equal(vita!.wertPos, 100)
+  assert.ok(vita!.wertGekappt)
+  assert.ok(vita!.ulPos !== null && vita!.ulPos < 100)
+  // Ohne UL: Skala = Ziel x 2, Ziel in der Mitte.
+  const prot = spektrumLage(164.5, 170, null)
+  assert.equal(prot!.skalaMax, 340)
+  assert.equal(prot!.zielPos, 50)
+  assert.equal(prot!.wertGekappt, false)
+  // Ohne Ziel gibt es nichts zu verorten.
+  assert.equal(spektrumLage(10, null, 3000), null)
 })
 
 test('zeigeKind: unter einem selbst auffaelligen Knoten erscheinen die Kinder mit Wert', () => {

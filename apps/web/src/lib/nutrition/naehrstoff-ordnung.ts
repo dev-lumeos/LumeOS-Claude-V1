@@ -39,10 +39,28 @@
 import { createSessionClient } from '@lumeos/shared/session'
 
 import { getReferenceAssessment } from './reference-assessment-read'
+import { getZielwerteAm, type Zielwerte } from '../profile/zielwerte-read'
 import {
   ANSICHT_SCHLUESSEL, KARTEN_REIHENFOLGE, karteFuerWurzel, normalisiere,
   pruefeAnsicht, type GespeicherteAnsicht,
 } from './naehrstoff-anzeige'
+
+/**
+ * G-147/G-143: Welcher Code sein Ziel aus `goals.nutrition_targets`
+ * bekommt (ueber `zielwerte_am`). `[read]` Das persoenliche Ziel
+ * gewinnt fuer Balken, Prozent und Status — die wissenschaftliche
+ * Referenz ist bei den Makros ohnehin nur ein Mindestwert (Protein
+ * 234 % gegen 70,6 g EFSA sah satt aus, gegen Toms 170-g-Ziel sind es
+ * 97 %); sie bleibt daneben sichtbar.
+ */
+const MAKRO_ZIEL: Record<string, (z: Zielwerte) => number | null> = {
+  ENERCC: z => z.kcal,
+  PROT625: z => z.protein_g,
+  CHO: z => z.carbs_g,
+  FAT: z => z.fat_g,
+  'F18:2CN6': z => z.linoleic_acid_g,
+  'F18:3CN3': z => z.alpha_linolenic_acid_g,
+}
 
 function zahl(v: unknown): number | null {
   if (v === null || v === undefined) return null
@@ -73,6 +91,9 @@ export type NaehrstoffKnoten = {
    *  vier Zeichen („Skorbut", „Lachs") — Regel in `trifftSuche`. */
   suchName: string
   suchText: string
+  /** Die gefalteten C-165-Aliase (G-142): „bcaa", „b5", „fiber" —
+   *  exakte Kurz-Token treffen, laengere auch als Teil. */
+  suchAlias: string[]
   /** Der gezeigte Wert: Tag = Summe, Fenster = Schnitt je
    *  protokolliertem Tag. */
   wert: number | null
@@ -87,10 +108,18 @@ export type NaehrstoffKnoten = {
    *  Naehrstoff. */
   tageErfasst: number
   tageVollstaendig: number
-  /** Ziel aus der persoenlichen Referenzauswahl (`target`-Zeile). */
+  /** Das Ziel, das Balken, Prozent und Status treibt: das
+   *  persoenliche aus `nutrition_targets`, sonst die Referenz. */
   ziel: number | null
   zielMax: number | null
   zielArt: string | null
+  /** Woher das Ziel kommt — `goals` (nutrition_targets) schlaegt
+   *  `referenz` (daily_reference_assessment). */
+  zielQuelle: 'goals' | 'referenz' | null
+  /** Die wissenschaftliche Referenz, wenn ein Goals-Ziel gewinnt und
+   *  beide existieren (LA/ALA, Protein) — steht daneben. */
+  referenz: number | null
+  referenzArt: string | null
   /** Obergrenze (`upper_limit`-Zeile), falls gefuehrt. */
   obergrenze: number | null
   /** wert / ziel in Prozent, falls beides da ist. */
@@ -212,7 +241,7 @@ export async function ladeOrdnung(
     // liefert nur Zeilen, wenn der Nutzer im Fenster protokolliert
     // hat, und ein leerer Tab waere die falsche Antwort auf einen
     // leeren Tag: die Ordnung existiert auch ohne Werte.
-    const [defsR, fensterR, refsR, texteR] = await Promise.allSettled([
+    const [defsR, fensterR, refsR, texteR, aliaseR, zieleR] = await Promise.allSettled([
       db.from('nutrient_defs')
         .select('code, name_de, unit, group_de, display_tier, sort_index, parent_code')
         .order('sort_index', { ascending: true }),
@@ -226,6 +255,13 @@ export async function ladeOrdnung(
       db.from('nutrient_details')
         .select('nutrient_code, function_de, deficiency_de, excess_de, '
           + 'detail_de, tip_de, top_sources_de'),
+      // G-142: die C-165-Aliase — gefaltet mit derselben Regel wie
+      // die Suchfelder hier; drittes Feld, keine eigene Faltung.
+      db.from('nutrient_search_aliases')
+        .select('nutrient_code, aliases_folded'),
+      // G-143: die persoenlichen Makroziele aus goals.nutrition_targets
+      // (zielwerte_am) — sie treiben Balken, Prozent und Status.
+      getZielwerteAm(stichtag).catch(() => null),
     ])
 
     if (defsR.status !== 'fulfilled' || defsR.value.error) {
@@ -290,6 +326,17 @@ export async function ladeOrdnung(
       }
     }
 
+    const aliase = new Map<string, string[]>()
+    if (aliaseR.status === 'fulfilled' && !aliaseR.value.error) {
+      for (const r of (aliaseR.value.data ?? []) as unknown as Array<Record<string, unknown>>) {
+        const code = text(r.nutrient_code)
+        if (!code || !Array.isArray(r.aliases_folded)) continue
+        aliase.set(code, r.aliases_folded.filter((x): x is string => typeof x === 'string'))
+      }
+    }
+
+    const zielwerte = zieleR.status === 'fulfilled' ? zieleR.value : null
+
     const flach: NaehrstoffKnoten[] = []
     let messbar = 0
     let mitReferenz = 0
@@ -307,12 +354,21 @@ export async function ladeOrdnung(
       if (wert !== null) messbar += 1
       if (z) tageErfasst = Math.max(tageErfasst, z.logged_day_count)
 
-      const ziel = ziele.get(code) ?? null
+      const refZiel = ziele.get(code) ?? null
       const obergrenze = grenzen.get(code) ?? null
+      const makroZiel = zielwerte ? MAKRO_ZIEL[code]?.(zielwerte) ?? null : null
+
+      // Das persoenliche Ziel gewinnt (G-143); die Referenz bleibt
+      // daneben sichtbar. Ohne Makroziel gilt die Referenz wie bisher.
+      const ziel = makroZiel !== null
+        ? { min: makroZiel, max: null as number | null, art: 'Ziel' }
+        : refZiel
+      const zielQuelle: NaehrstoffKnoten['zielQuelle'] =
+        makroZiel !== null ? 'goals' : refZiel?.min != null ? 'referenz' : null
       if (ziel || obergrenze !== null) mitReferenz += 1
 
       // Aussage ueber die Zahl: unter dem Ziel, ueber der Obergrenze,
-      // sonst im Bereich — nur wo Wert UND Referenz existieren.
+      // sonst im Bereich — nur wo Wert UND Ziel/Grenze existieren.
       let status: NaehrstoffStatus | null = null
       if (wert !== null && (ziel?.min != null || obergrenze !== null)) {
         if (obergrenze !== null && wert > obergrenze) status = 'ueber'
@@ -332,6 +388,7 @@ export async function ladeOrdnung(
         gruppe,
         suchName: normalisiere(`${code} ${text(d.name_de) ?? ''}`),
         suchText: normalisiere(texte.get(code) ?? ''),
+        suchAlias: aliase.get(code) ?? [],
         wert,
         summe: z?.total_value ?? null,
         positionen: z?.item_count ?? 0,
@@ -342,6 +399,9 @@ export async function ladeOrdnung(
         ziel: ziel?.min ?? null,
         zielMax: ziel?.max != null && ziel.max !== ziel.min ? ziel.max : null,
         zielArt: ziel?.art ?? null,
+        zielQuelle,
+        referenz: zielQuelle === 'goals' ? refZiel?.min ?? null : null,
+        referenzArt: zielQuelle === 'goals' ? refZiel?.art ?? null : null,
         obergrenze,
         prozent: wert !== null && ziel?.min != null && ziel.min > 0
           ? (wert / ziel.min) * 100 : null,

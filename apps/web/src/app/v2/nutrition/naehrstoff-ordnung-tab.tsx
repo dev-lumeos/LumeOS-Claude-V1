@@ -28,7 +28,7 @@ import type {
   NaehrstoffOrdnung, NaehrstoffGruppe, NaehrstoffKnoten,
 } from '../../../lib/nutrition/naehrstoff-ordnung'
 import {
-  FENSTER, sichtbar, trifft, trifftSuche, zeigeKind,
+  FENSTER, sichtbar, trifft, trifftSuche, zeigeKind, spektrumLage,
   STATUS_TEXT, STATUS_FARBE,
   zahlMitEinheit as zahl, type Scope, type GespeicherteAnsicht,
 } from '../../../lib/nutrition/naehrstoff-anzeige'
@@ -61,7 +61,7 @@ function baueSicht(anfrage: string, scope: Scope): Sicht {
     // uebereinander waeren nicht mehr erklaerbar. Ein Treffer oeffnet
     // seinen Ast: Eltern von Treffern bleiben als Pfad sichtbar.
     const treffer = (k: NaehrstoffKnoten): boolean =>
-      trifftSuche(k.code, k.suchName, k.suchText, suche) || k.kinder.some(treffer)
+      trifftSuche(k.code, k.suchName, k.suchText, k.suchAlias, suche) || k.kinder.some(treffer)
     return { zeige: treffer, kindZeige: (_e, kind) => treffer(kind), erzwungenOffen: true }
   }
   if (scope !== 'alle') {
@@ -126,15 +126,37 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
     speichern({ offen: Array.from(offen), fenster: d.fenster, scope: s })
   }, [offen, d.fenster, speichern])
 
+  // G-145, Tom: „wenn nur ein Parent darin ist, sollte der
+  // aufgeklappt sein." Karten mit genau einer Wurzel (Protein, Fette,
+  // Kohlenhydrate) starten mit offener Wurzel — die zweite Ebene
+  // bleibt zu. Schliessen bleibt moeglich und wird als `zu:`-Marker
+  // gespeichert (die Ansicht speichert OFFENE Schluessel; ein
+  // Standard-Offener braucht fuers Zu ein eigenes Wort).
+  const standardOffen = React.useMemo(
+    () => new Set(
+      d.gruppen.filter(g => g.knoten.length === 1).map(g => g.knoten[0].code)),
+    [d.gruppen])
+
+  const knotenOffen = React.useCallback((code: string) =>
+    offen.has(code) || (standardOffen.has(code) && !offen.has('zu:' + code)),
+  [offen, standardOffen])
+
   const umschalten = React.useCallback((schluessel: string) => {
     setOffen(alt => {
       const n = new Set(alt)
-      if (n.has(schluessel)) n.delete(schluessel)
-      else n.add(schluessel)
+      const istStandard = standardOffen.has(schluessel)
+      const istOffen = n.has(schluessel) || (istStandard && !n.has('zu:' + schluessel))
+      if (istOffen) {
+        n.delete(schluessel)
+        if (istStandard) n.add('zu:' + schluessel)
+      } else {
+        n.add(schluessel)
+        n.delete('zu:' + schluessel)
+      }
       speichern({ offen: Array.from(n), fenster: d.fenster, scope })
       return n
     })
-  }, [d.fenster, scope, speichern])
+  }, [standardOffen, d.fenster, scope, speichern])
 
   if (d.fehler) {
     return (
@@ -215,12 +237,15 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
           )}
         </p>
         <p className="v2-muted" style={{ fontSize: 11.5, marginTop: 8, lineHeight: 1.55 }}>
-          <strong>{d.mitReferenz}</strong> tragen eine persoenliche Referenz
-          (<span className="v2-mono">daily_reference_assessment</span>):
-          davon stehen <strong>{d.unterZiel}</strong> unter dem Ziel
+          <strong>{d.mitReferenz}</strong> tragen ein Ziel — die Makros
+          dein <strong>persoenliches</strong> aus den Goals
+          (<span className="v2-mono">nutrition_targets</span>, „Ziel"),
+          die uebrigen die wissenschaftliche Referenz
+          (<span className="v2-mono">daily_reference_assessment</span>).
+          Davon stehen <strong>{d.unterZiel}</strong> unter dem Ziel
           und <strong>{d.ueberObergrenze}</strong> ueber der Obergrenze.
           Die uebrigen {d.gesamt - d.mitReferenz} sind gegliedert und
-          gemessen, aber ohne Referenzwert — dort steht ein Strich, kein
+          gemessen, aber ohne Zielwert — dort steht ein Strich, kein
           Urteil. Klick auf eine Zeile oeffnet die Erklaerung.
         </p>
       </Card>
@@ -236,7 +261,7 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
             treffer={treffer}
             istTag={istTag}
             offen={sicht.erzwungenOffen || offen.has(GRUPPE + g.name)}
-            offenSet={offen}
+            knotenOffen={knotenOffen}
             umschalten={umschalten}
             waehlen={(knoten, elternName) => setAuswahl({ knoten, elternName })}
           />
@@ -256,9 +281,9 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
   )
 }
 
-function GruppenKarte({ g, sicht, treffer, istTag, offen, offenSet, umschalten, waehlen }: {
+function GruppenKarte({ g, sicht, treffer, istTag, offen, knotenOffen, umschalten, waehlen }: {
   g: NaehrstoffGruppe; sicht: Sicht; treffer: number; istTag: boolean
-  offen: boolean; offenSet: Set<string>
+  offen: boolean; knotenOffen: (code: string) => boolean
   umschalten: (schluessel: string) => void
   waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
 }) {
@@ -310,7 +335,7 @@ function GruppenKarte({ g, sicht, treffer, istTag, offen, offenSet, umschalten, 
                   elternName={null}
                   sicht={sicht}
                   istTag={istTag}
-                  offenSet={offenSet}
+                  knotenOffen={knotenOffen}
                   umschalten={umschalten}
                   waehlen={waehlen}
                 />
@@ -324,21 +349,65 @@ function GruppenKarte({ g, sicht, treffer, istTag, offen, offenSet, umschalten, 
 }
 
 /**
+ * Der Zonenbalken der Vorlage (`NutrientSpectrum`): 0 → unterversorgt
+ * (bis 70 % des Ziels) → nah (bis Ziel) → im Bereich (Ziel bis UL
+ * bzw. Skalenende) → ueber UL. Die Markierung zeigt, WO der Wert
+ * liegt — bei Vitamin A mit 411 % jenseits der UL-Zone, wo der alte
+ * 100-%-Balken nur „voll" sagte. Skala: UL x 1,1 oder Ziel x 2.
+ */
+function Spektrum({ k, farbe }: { k: NaehrstoffKnoten; farbe: string }) {
+  const lage = spektrumLage(k.wert, k.ziel, k.obergrenze)
+  if (!lage) return null
+  const endePos = lage.ulPos ?? 100
+  const titel = `Ziel ${zahl(k.ziel, k.einheit)}`
+    + (k.obergrenze !== null ? ` · UL ${zahl(k.obergrenze, k.einheit)}` : '')
+    + ` · Skala bis ${zahl(lage.skalaMax, k.einheit)}`
+  return (
+    <div
+      title={titel}
+      style={{ position: 'relative', height: 6, borderRadius: 999, overflow: 'hidden', display: 'flex' }}
+    >
+      <div style={{ width: `${lage.zielPos * 0.7}%`, background: 'color-mix(in srgb, var(--neg) 30%, transparent)' }} />
+      <div style={{ width: `${lage.zielPos * 0.3}%`, background: 'color-mix(in srgb, var(--warn) 30%, transparent)' }} />
+      <div style={{ width: `${endePos - lage.zielPos}%`, background: 'color-mix(in srgb, var(--pos) 30%, transparent)' }} />
+      {lage.ulPos !== null && (
+        <div style={{ width: `${100 - lage.ulPos}%`, background: 'color-mix(in srgb, var(--neg) 40%, transparent)' }} />
+      )}
+      {/* Ziel-Markierung */}
+      <div style={{
+        position: 'absolute', left: `${lage.zielPos}%`, top: 0, bottom: 0,
+        width: 1, background: 'var(--fg)', opacity: 0.5,
+      }} />
+      {/* Der Wert */}
+      {lage.wertPos !== null && (
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute', left: `calc(${Math.min(lage.wertPos, 99)}% - 1px)`,
+            top: 0, bottom: 0, width: 2, background: farbe,
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+/**
  * Ein Knoten und — wenn er offen ist — alles darunter.
  *
  * Der Chevron klappt (jede Ebene, G-122), der Rest der Zeile oeffnet
  * das Modal. Bei aktivem Filter zaehlt der Klappzustand nicht: die
  * Treffer stehen ausgeklappt da.
  */
-function Zeilen({ k, tiefe, elternName, sicht, istTag, offenSet, umschalten, waehlen }: {
+function Zeilen({ k, tiefe, elternName, sicht, istTag, knotenOffen, umschalten, waehlen }: {
   k: NaehrstoffKnoten; tiefe: number; elternName: string | null
-  sicht: Sicht; istTag: boolean; offenSet: Set<string>
+  sicht: Sicht; istTag: boolean; knotenOffen: (code: string) => boolean
   umschalten: (schluessel: string) => void
   waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
 }): React.ReactElement {
   const farbe = k.status ? STATUS_FARBE[k.status] : 'var(--fg-dim)'
   const hatKinder = k.kinder.length > 0
-  const istOffen = sicht.erzwungenOffen || offenSet.has(k.code)
+  const istOffen = sicht.erzwungenOffen || knotenOffen(k.code)
   return (
     <>
       <tr onClick={() => waehlen(k, elternName)} style={{ cursor: 'pointer' }}>
@@ -393,9 +462,22 @@ function Zeilen({ k, tiefe, elternName, sicht, istTag, offenSet, umschalten, wae
               {zahl(k.ziel, k.einheit)}
               {k.zielMax !== null && <>–{zahl(k.zielMax, null)}</>}
               {k.zielArt && (
-                <span style={{ fontSize: 9.5, marginLeft: 4 }}>{k.zielArt}</span>
+                <span style={{
+                  fontSize: 9.5, marginLeft: 4,
+                  // G-143: das persoenliche Ziel ist als solches
+                  // erkennbar — die Referenz steht klein daneben.
+                  ...(k.zielQuelle === 'goals' ? { color: 'var(--acc)', fontWeight: 600 } : {}),
+                }}>
+                  {k.zielArt}
+                </span>
               )}
             </>
+          )}
+          {k.referenz !== null && (
+            <span style={{ display: 'block', fontSize: 9.5 }}>
+              Ref. {zahl(k.referenz, k.einheit)}
+              {k.referenzArt && <span style={{ marginLeft: 3 }}>{k.referenzArt}</span>}
+            </span>
           )}
           {k.obergrenze !== null && (
             <span style={{ display: 'block', fontSize: 9.5 }}>
@@ -404,15 +486,7 @@ function Zeilen({ k, tiefe, elternName, sicht, istTag, offenSet, umschalten, wae
           )}
         </td>
         <td>
-          {k.prozent !== null && (
-            <div style={{ position: 'relative', height: 4, background: 'var(--surface-2)', borderRadius: 999 }}>
-              <div style={{
-                position: 'absolute', left: 0, top: 0, bottom: 0,
-                width: `${Math.min(k.prozent, 100)}%`,
-                background: farbe, borderRadius: 999,
-              }} />
-            </div>
-          )}
+          <Spektrum k={k} farbe={farbe} />
         </td>
         <td className="v2-num" style={{ color: k.prozent !== null ? farbe : undefined }}>
           {k.prozent === null ? '—' : `${Math.round(k.prozent)}%`}
@@ -433,7 +507,7 @@ function Zeilen({ k, tiefe, elternName, sicht, istTag, offenSet, umschalten, wae
           elternName={k.name}
           sicht={sicht}
           istTag={istTag}
-          offenSet={offenSet}
+          knotenOffen={knotenOffen}
           umschalten={umschalten}
           waehlen={waehlen}
         />

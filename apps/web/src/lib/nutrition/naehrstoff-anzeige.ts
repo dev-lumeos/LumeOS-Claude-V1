@@ -87,15 +87,58 @@ export function normalisiere(s: string): string {
  * - ab 4 Zeichen: auch Erklaerung und Quellen (`Skorbut`, `Lachs`).
  */
 export function trifftSuche(
-  code: string, suchName: string, suchText: string, anfrage: string,
+  code: string, suchName: string, suchText: string, suchAlias: string[],
+  anfrage: string,
 ): boolean {
   const teile = anfrage.split(/\s+/).map(normalisiere).filter(t => t.length >= 2)
   if (teile.length === 0) return false
   const codeNorm = normalisiere(code)
+  // G-147/G-142: Aliase (C-165) zaehlen wie Namen — plus die
+  // Kurz-Token-Erweiterung: exakte Gleichheit mit einem Alias trifft
+  // auch unter drei Zeichen („B5", „kJ"), sonst faende „Vitamin B5"
+  // prinzipiell nie etwas. Die Naehe-Regel selbst bleibt: sie
+  // verhinderte, dass „EPA" ueber das „epa" in „Reparatur" Valin fand.
+  const aliasText = suchAlias.join(' ')
   return teile.every(t =>
     t === codeNorm
-    || (t.length >= 3 && suchName.includes(t))
+    || suchAlias.includes(t)
+    || (t.length >= 3 && (suchName.includes(t) || aliasText.includes(t)))
     || (t.length >= 4 && suchText.includes(t)))
+}
+
+/**
+ * Der Zonenbalken aus der Vorlage (`NutrientSpectrum`,
+ * module-nutrition-nutrients.jsx): 0 → unterversorgt → Ziel → Bereich
+ * → UL, mit Markierung fuer den Wert. `[read]` Ein Balken, der bei
+ * 100 % endet, sagt bei Vitamin A mit 411 % nichts — dieser zeigt, WO
+ * der Wert liegt. Alle Angaben in Prozent der Skala; `null`, wenn es
+ * kein Ziel gibt (dann gibt es nichts zu verorten).
+ */
+export type SpektrumLage = {
+  /** Skalenende in Einheiten: UL * 1,1 oder Ziel * 2 (Vorlage). */
+  skalaMax: number
+  zielPos: number
+  ulPos: number | null
+  /** Position des Werts, an der Skala gekappt; `null` ohne Wert. */
+  wertPos: number | null
+  wertGekappt: boolean
+}
+
+export function spektrumLage(
+  wert: number | null, ziel: number | null, obergrenze: number | null,
+): SpektrumLage | null {
+  if (ziel === null || ziel <= 0) return null
+  const skalaMax = obergrenze !== null && obergrenze > ziel
+    ? obergrenze * 1.1
+    : ziel * 2
+  const pos = (v: number) => Math.min((v / skalaMax) * 100, 100)
+  return {
+    skalaMax,
+    zielPos: pos(ziel),
+    ulPos: obergrenze !== null && obergrenze > ziel ? pos(obergrenze) : null,
+    wertPos: wert === null ? null : pos(wert),
+    wertGekappt: wert !== null && wert > skalaMax,
+  }
 }
 
 /**
