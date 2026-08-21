@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `56fa927` auf `dev`.
+**Stand:** 2026-08-18, Anker `8255393` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 128 offen, 1 in Arbeit.
+`[cmd]` 130 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -233,9 +233,11 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
-| **GO-22** | Sechs Karten oder zwoelf? |  |
-| **G-126** | Vier Reste aus G-122 |  |
-| **GO-23** | Deckungsgrenze bei unvollstaendigen Summen |  |
+| **GO-22** | Acht Karten, dem Baum folgend |  |
+| **G-126** | Drei Reste aus G-122 |  |
+| **G-127** | Der Naehrstoff-Tab braucht eine Volltextsuche |  |
+| **G-128** | Der Filter *„Auffaellig"* verbirgt die Ursache |  |
+| **GO-23** | Unter 50 % Deckung wird gedimmt |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -3500,6 +3502,96 @@ Umsetzen angepasst werden.
   *„aus X von Y"*-Angabe hervorheben. **Nicht ausblenden, nicht
   werten.**
 
+- [ ] **A-33: Der Medical-Abgleich, den der Orchestrator nachgeholt
+  hat** (neu 2026-08-20). **Tom hat danach gefragt, zu Recht.**
+
+  `[read]` **Drei Auftraege gingen raus, ohne dass Spec, Mockup und
+  Vorgaengerrepo gelesen waren.** Der Abgleich danach hat mehr gefunden
+  als die Auftraege enthielten.
+
+  ### 1. Der Health score ist entschieden — seit Monaten
+
+  `[cmd]` **`docs/specs/Medical/SPEC_09_SCORING.md`, 408 Zeilen**,
+  definiert **beide** Unbekannten aus G-85:
+
+  ```
+  SYSTEM_MARKERS = {
+    liver:          [ALT, AST, GGT, ALP, Bilirubin, Albumin]
+    cardiovascular: [LDL, HDL, Triglyceride, hs-CRP, Homocystein, ApoB]
+    kidney:         [Kreatinin, BUN, eGFR, Harnsaeure]
+    hormonal:       [Testosteron, Oestradiol, Cortisol, TSH, Free T3, Prolaktin]
+    metabolic:      [HbA1c, Glukose, Insulin, HOMA-IR]
+  }
+  WEIGHTS = { cardiovascular .25, metabolic .25, hormonal .20,
+              liver .15, kidney .15 }
+  FLAG_SCORE = { optimal 100, normal 75, low/high 40, critical 10 }
+  ```
+
+  `[read]` **Der Orchestrator hat G-85 als offene Frage an Tom
+  weitergegeben, obwohl die Antwort im Repo lag.**
+
+  `[cmd]` **Und der Umgang mit Luecken ist definiert:** `totalW`
+  normalisiert ueber die vorhandenen Systeme, `no_data` wenn keiner
+  traegt, **`missing` zaehlt die fehlenden Marker.**
+
+  ### 2. Warum G-84 nur 23 von 37 gruppieren konnte
+
+  `[cmd]` **Die Spec sucht ueber Namen, nicht ueber LOINC:**
+  `biomarker_name`, `common_name`, `abbreviation`.
+
+  `[cmd]` **Nachgemessen: 18 der 26 Spec-Marker treffen unseren
+  Katalog ueber den Namen.** **Die acht Fehlenden sind
+  Namensvarianten** — `GGT` heisst im LOINC *Gamma glutamyl
+  transferase*, `eGFR` *Glomerular filtration rate*, `Triglycerides`
+  *Triglyceride*.
+
+  `[read]` **`biomarker_aliases` hat 292 Eintraege und ist genau dafuer
+  gebaut.** **Damit waeren es 26 von 26.**
+
+  ### 3. `module-medical-data.jsx` traegt dieselbe Rechnung — und mehr
+
+  `[cmd]` **298 Zeilen mit:** `SYSTEM_MARKERS`, `SYSTEM_WEIGHTS`,
+  `calcSystemScore`, `calcOverallHealthScore`, `calcBiomarkerTrend`,
+  `generateAlerts`, `UNIT_CONVERSIONS`.
+
+  **Und zwei, die woanders fehlen:**
+
+  `[cmd]` **`SUPPLEMENT_BIOMARKER_MAP` und
+  `calcSupplementEffectiveness`** — `[read]` **genau das, was C-162
+  heute in der Datenbank gebaut hat** (222 Zeilen, 66 Marker). **Die
+  Vorlage lag die ganze Zeit da.**
+
+  `[cmd]` **`SYMPTOM_BIOMARKER_MAP` und `SYMPTOMS`** — `[read]` **C-159
+  meldet *„keine Symptomtabelle im ganzen Schema"*.** **Das Mockup hat
+  sie.**
+
+  ### 4. Vier Medical-Tabs, die nie erwaehnt wurden
+
+  `[cmd]` **`module-medical.jsx`, 809 Zeilen:** `MedMedications`,
+  `MedHistory`, `MedDocuments`, `MedAppointments` — **mit
+  `AddLabModal`, `UploadDocModal`, `BookAptModal`, fuenf
+  Detailmodalen.**
+
+  `[cmd]` **Und `module-medical-modals.jsx`** (453 Zeilen) plus
+  **`module-medical-v2.jsx`** (818) mit `RangeIndicator`, `FlagPill`,
+  `TrendBadge`.
+
+  `[read]` **176 KB Mockup, elf Specs mit 100 KB** — **davon war bisher
+  nichts gelesen.**
+
+  ### Was daraus folgt
+
+  `[cmd]` **G-85 ist nicht blockiert.** Die Zuordnung steht, die
+  Gewichtung steht, der Umgang mit Luecken steht.
+
+  `[cmd]` **Pruefend bleibt:** A-20 zaehlt sieben Spec-Fehler.
+  **Die 26 Marker gehoeren gegen den Katalog geprueft, bevor jemand
+  danach baut** — und die acht Namensvarianten in
+  `biomarker_aliases`.
+
+  `[read]` **Und C-159s Landkarte wird kuerzer:** Die Symptomtabelle
+  fehlt im Schema, **aber nicht im Entwurf.**
+
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
 
@@ -3965,6 +4057,28 @@ Umsetzen angepasst werden.
 
   `[read]` **Dritter Fall dieser Art** — nach `InjektionsKarte` (G-53)
   und `score.ts` (G-82): **gebaut und nie gerufen.**
+
+- [ ] **G-126: „Ohne Laktose 1.021" ist die Zahl MIT Laktose**
+  (neu 2026-08-21). Befund bei der Vorbereitung von C-164.
+
+  `[cmd]` **Die Datenbank ist korrekt.** `food_search` liefert
+  `{"code":"contains_lactose","count":1021,"name_de":"Enthaelt Laktose"}`
+  — **1.021 Lebensmittel MIT Laktose**, von 7.140.
+
+  `[cmd]` **Die Oberflaeche dreht nur das Wort um, nicht die Zahl:**
+  `{ code: 'contains_lactose', label: 'Ohne Laktose', anzahl: 1021 }`
+  (`apps/web/src/app/v2/nutrition/tab-foods.tsx:180`).
+
+  `[cmd]` **Richtig waeren:** ohne Laktose **6.119**, ohne Gluten
+  **6.518**, ohne Nuesse **7.020**.
+
+  `[read]` **Die Pille verspricht Ausschluss und zeigt Einschluss.**
+  Wer „Ohne Laktose 1.021" liest, erwartet 1.021 laktosefreie
+  Lebensmittel — er bekommt die Gegenmenge.
+
+  `[read]` **Haengt an C-164:** Sobald der echte Ausschluss steht,
+  sinkt `total` beim Setzen des Filters — dann muss die Pille die
+  richtige Zahl nennen. **Beides zusammen anfassen.**
 
 - [ ] **G-125: `MuscleBodyMap.js` traegt die kaputten Umrisse weiter**
   (neu 2026-08-21). Befund aus G-105.
