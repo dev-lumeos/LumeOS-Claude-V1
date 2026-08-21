@@ -39,6 +39,21 @@ export type SuppKontext = {
    */
   daten: StackDaten | null
   katalog: KatalogEintrag[]
+  // ── G-148: die Schreibwege ──────────────────────────────────────
+  /**
+   * Der Tag, auf den geschrieben wird.
+   *
+   * `[read]` **Nie `new Date()` im Browser** (G-74) — das zerlegte die
+   * Hydration und rechnete anders als beim Rendern.
+   */
+  stichtag: string
+  /** Ein Schreibzugriff laeuft — die Knoepfe sperren solange. */
+  laeuft: boolean
+  /** Den frisch gelesenen Stand uebernehmen, den die Route mitliefert. */
+  setFrisch: (d: StackDaten) => void
+  /** Die Meldung des letzten Fehlversuchs, oder `null`. */
+  schreibfehler: string | null
+  setSchreibfehler: (m: string | null) => void
 }
 
 export const SuppCtx = React.createContext<SuppKontext>({
@@ -47,6 +62,11 @@ export const SuppCtx = React.createContext<SuppKontext>({
   open: () => {},
   daten: null,
   katalog: [],
+  stichtag: '1970-01-01',
+  laeuft: false,
+  setFrisch: () => {},
+  schreibfehler: null,
+  setSchreibfehler: () => {},
 })
 
 export function useSupp() {

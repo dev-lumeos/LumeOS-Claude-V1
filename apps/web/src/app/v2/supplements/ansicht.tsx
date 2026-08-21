@@ -87,7 +87,8 @@ function tabs(stackAnzahl: number, regelAnzahl: number | null): TabItem[] {
 // Eintraege, und zu jedem gibt es unten eine Weiche.
 
 export function SupplementsAnsicht({
-  daten = null, katalog = [], heute: heuteProp = null, regeln = null, gate = null,
+  daten: datenProp = null, katalog = [], heute: heuteProp = null,
+  regeln = null, gate = null,
 }: {
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
@@ -120,17 +121,17 @@ export function SupplementsAnsicht({
   // der juengste Protokolltag — **nie `new Date()`**, das zerlegte die
   // Hydration und rechnete im Browser anders als beim Rendern.
   const stichtag = heuteProp
-    ?? daten?.einnahmen.map(e => e.intake_date).sort().pop()
+    ?? datenProp?.einnahmen.map(e => e.intake_date).sort().pop()
     ?? '1970-01-01'
 
   // G-37: Sind echte Daten da, kommt der Anfangszustand aus dem
   // Protokoll — abgehakt ist, was als `taken` gebucht ist. Ohne Daten
   // bleiben die drei Vorgaben der Vorlage (Zeile 216).
   const [takenToday, setTakenToday] = React.useState<Record<string, boolean>>(() => {
-    if (!daten) return { creatine: true, d3k2: true, omega3: true }
-    const heute = daten.einnahmen[0]?.intake_date
+    if (!datenProp) return { creatine: true, d3k2: true, omega3: true }
+    const heute = datenProp.einnahmen[0]?.intake_date
     const ab: Record<string, boolean> = {}
-    for (const e of daten.einnahmen) {
+    for (const e of datenProp.einnahmen) {
       if (e.intake_date === heute && e.stack_item_id && e.status === 'taken') {
         ab[e.stack_item_id] = true
       }
@@ -142,13 +143,60 @@ export function SupplementsAnsicht({
     setModal({ type, payload })
   }, [])
   const close = React.useCallback(() => setModal(null), [])
-  const toggleTaken = React.useCallback((id: string) => {
-    setTakenToday(t => ({ ...t, [id]: !t[id] }))
-  }, [])
+  // G-148: der Stand nach einem Schreibzugriff. `null` heisst „noch
+  // nichts geschrieben" — dann gilt, was der Server geliefert hat.
+  const [frisch, setFrisch] = React.useState<StackDaten | null>(null)
+  const [schreibfehler, setSchreibfehler] = React.useState<string | null>(null)
+  const [laeuft, setLaeuft] = React.useState(false)
+  const daten = frisch ?? datenProp
+
+  /**
+   * G-148: Eine Einnahme erfassen oder zuruecknehmen.
+   *
+   * `[cmd]` **Vorher war das reiner Browserzustand** — `setTakenToday`
+   * und sonst nichts. Ein Haken verschwand beim Neuladen, und die
+   * Compliance ruehrte sich nie.
+   *
+   * `[read]` **Ohne echte Daten bleibt es beim Browserzustand:** Die
+   * Vorlage hat keine `stack_item_id`, gegen die geschrieben werden
+   * koennte. Der Haken ist dann Anschauung, kein Protokoll.
+   */
+  const toggleTaken = React.useCallback(async (id: string) => {
+    if (!daten) { setTakenToday(t => ({ ...t, [id]: !t[id] })); return }
+
+    const heuteZeile = daten.einnahmen.find(
+      e => e.stack_item_id === id && e.intake_date === stichtag)
+    setLaeuft(true)
+    setSchreibfehler(null)
+    try {
+      const antwort = heuteZeile
+        ? await fetch(`/api/supplements/intake?id=${encodeURIComponent(heuteZeile.id)}`,
+                      { method: 'DELETE' })
+        : await fetch('/api/supplements/intake', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              stack_item_id: id, intake_date: stichtag, status: 'taken',
+            }),
+          })
+      const inhalt = await antwort.json()
+      if (!antwort.ok) throw new Error(inhalt?.error ?? 'Schreiben fehlgeschlagen.')
+      if (inhalt.daten) setFrisch(inhalt.daten as StackDaten)
+      setTakenToday(t => ({ ...t, [id]: !heuteZeile }))
+    } catch (e) {
+      setSchreibfehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaeuft(false)
+    }
+  }, [daten, stichtag])
 
   const ctx = React.useMemo(
-    () => ({ takenToday, toggleTaken, open, daten, katalog }),
-    [takenToday, toggleTaken, open, daten, katalog],
+    () => ({
+      takenToday, toggleTaken, open, daten, katalog,
+      stichtag, laeuft, setFrisch, schreibfehler, setSchreibfehler,
+    }),
+    [takenToday, toggleTaken, open, daten, katalog,
+     stichtag, laeuft, schreibfehler],
   )
 
   // Angebunden oder Vorlage — beide Faelle an einer Stelle entschieden.
@@ -241,9 +289,14 @@ export function SupplementsAnsicht({
               : <SuppInventory />
           )}
         </div>
-      </SuppCtx.Provider>
 
-      <SupplementsModale modal={modal} onClose={close} />
+        {/* `[cmd]` **G-148: Die Modale stehen INNERHALB des Providers.**
+            Vorher standen sie daneben — `useSupp()` lieferte dort den
+            Vorgabewert (`daten: null`), und jedes schreibende Fenster
+            meldete „Es sind keine Daten gelesen", obwohl die Seite
+            daneben 360 Einnahmen zeigte. */}
+        <SupplementsModale modal={modal} onClose={close} />
+      </SuppCtx.Provider>
     </>
   )
 }
