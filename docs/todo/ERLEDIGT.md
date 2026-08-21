@@ -10236,3 +10236,10 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   faellt die Kachel auf den Entwurf zurueck, mit Marke.
 
   **Offen geblieben:** G-122 und G-124.
+
+- [x] **G-121-Folgepunkt „FAT/CHO nur E%-Referenzen"** — **geschlossen
+  2026-08-21, beantwortet durch 164-naehrstoffbaum.md:** GO-00 nimmt
+  Energieanteile bewusst aus der Naehrstoffbewertung — eine gefallene
+  Tom-Entscheidung, kein fehlender Nenner; der Strich in der
+  Zielspalte bleibt. (Das Detail-Modal zeigt die `RI`/`E%`-Zeilen als
+  wissenschaftliche Referenz mit Quelle, G-122.)

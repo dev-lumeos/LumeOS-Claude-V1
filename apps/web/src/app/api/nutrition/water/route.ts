@@ -7,8 +7,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { httpStatusForDiaryError } from '../../../../lib/nutrition/diary-model'
-import { WaterWriteError, waterLogCreateSchema } from '../../../../lib/nutrition/water-model'
-import { addWaterLog, listOwnWaterLogs, removeWaterLog } from '../../../../lib/nutrition/water-write'
+import {
+  WaterWriteError,
+  waterLogCreateSchema,
+  waterLogUpdateSchema,
+} from '../../../../lib/nutrition/water-model'
+import {
+  addWaterLog,
+  listOwnWaterLogs,
+  removeWaterLog,
+  updateWaterLogAmount,
+} from '../../../../lib/nutrition/water-write'
 import { getHydrationDay } from '../../../../lib/nutrition/hydration-day-read'
 
 export const dynamic = 'force-dynamic'
@@ -71,6 +80,59 @@ export async function DELETE(request: NextRequest) {
   }
   try {
     await removeWaterLog(id)
+    return NextResponse.json({
+      tag: await getHydrationDay(datum),
+      eintraege: await listOwnWaterLogs(datum),
+    })
+  } catch (error) {
+    return errorResponse(error)
+  }
+}
+
+/**
+ * Die Menge eines Eintrags berichtigen — aendern statt loeschen und
+ * neu eintragen (G-124).
+ *
+ * `updateWaterLogAmount` lag seit G-117 fertig und ungenutzt. Sie
+ * prueft auf null zurueckgegebene Zeilen nach demselben G-79-Muster
+ * wie `removeWaterLog`: **RLS macht „gibt es nicht" und „gehoert
+ * jemand anderem" ununterscheidbar**, beides wird NOT_FOUND — sonst
+ * verriete die Antwort die Existenz fremder Zeilen.
+ *
+ * `datum` steht in der Adresse, nicht im Rumpf: Der Tag, der neu
+ * gerechnet wird, ist der ANGEZEIGTE. Ein Eintrag traegt zwar sein
+ * `entry_date`, aber die Kachel zeigt genau einen Tag — und der soll
+ * geliefert werden, auch wenn beide gleich sind.
+ */
+export async function PATCH(request: NextRequest) {
+  const datum = request.nextUrl.searchParams.get('datum') ?? ''
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) {
+    return NextResponse.json(
+      { error: 'datum (YYYY-MM-DD) ist Pflicht.', code: 'VALIDATION_FAILED' },
+      { status: 400 },
+    )
+  }
+
+  let roh: unknown
+  try {
+    roh = await request.json()
+  } catch {
+    return NextResponse.json(
+      { error: 'Ungueltiger JSON-Rumpf.', code: 'VALIDATION_FAILED' },
+      { status: 400 },
+    )
+  }
+
+  const geprueft = waterLogUpdateSchema.safeParse(roh)
+  if (!geprueft.success) {
+    return NextResponse.json(
+      { error: 'Eingabe ungueltig.', code: 'VALIDATION_FAILED', details: geprueft.error.flatten() },
+      { status: 400 },
+    )
+  }
+
+  try {
+    await updateWaterLogAmount(geprueft.data)
     return NextResponse.json({
       tag: await getHydrationDay(datum),
       eintraege: await listOwnWaterLogs(datum),

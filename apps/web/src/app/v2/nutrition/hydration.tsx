@@ -61,6 +61,11 @@ export function HydrationKachel({
   const [zeigeListe, setZeigeListe] = React.useState(false)
   const [eintraege, setEintraege] = React.useState<StoredWaterLog[] | null>(null)
   const [loeschKandidat, setLoeschKandidat] = React.useState<StoredWaterLog | null>(null)
+  // G-124: aendern statt loeschen und neu eintragen. `aendernId` haelt
+  // die Zeile, `aendernWert` die Eingabe — der ALTE Wert bleibt daneben
+  // sichtbar, wie es die Loeschabfrage mit ihrer Menge auch tut.
+  const [aendernId, setAendernId] = React.useState<string | null>(null)
+  const [aendernWert, setAendernWert] = React.useState('')
   const tag = frisch ?? geladen
 
   const ladeListe = React.useCallback(async () => {
@@ -88,6 +93,28 @@ export function HydrationKachel({
       setEintraege(daten.eintraege as StoredWaterLog[])
       setFrisch(daten.tag as HydrationDay)
       setLoeschKandidat(null)
+    } catch (e) {
+      setFehler(e instanceof Error ? e.message : String(e))
+    } finally {
+      setLaeuft(false)
+    }
+  }
+
+  /** Die Menge eines Eintrags berichtigen (G-124). */
+  async function aendern(eintrag: StoredWaterLog, menge: number) {
+    setLaeuft(true)
+    setFehler(null)
+    try {
+      const a = await fetch(`/api/nutrition/water?datum=${datum}`, {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id: eintrag.id, amount_ml: menge }),
+      })
+      const daten = await a.json()
+      if (!a.ok) throw new Error(daten?.error ?? 'Aenderung fehlgeschlagen.')
+      setEintraege(daten.eintraege as StoredWaterLog[])
+      setFrisch(daten.tag as HydrationDay)
+      setAendernId(null)
     } catch (e) {
       setFehler(e instanceof Error ? e.message : String(e))
     } finally {
@@ -309,7 +336,59 @@ export function HydrationKachel({
                 const quelle = e.source === 'quick_add'
                   ? 'Schnellknopf'
                   : e.source === 'manual' ? 'Eingabe' : e.source
-                return loeschKandidat?.id === e.id ? (
+                // G-124: die Aenderung nennt den alten Wert und zeigt
+                // ihn daneben, solange getippt wird.
+                const neueMenge = Number(aendernWert.replace(',', '.'))
+                const neueGueltig = Number.isFinite(neueMenge) && neueMenge > 0
+                return aendernId === e.id ? (
+                  <div
+                    key={e.id} role="dialog"
+                    aria-label={`${ml(e.amount_ml)} ml von ${zeit} aendern`}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
+                      padding: '6px 10px', borderRadius: 6, fontSize: 11.5,
+                      border: '1px solid var(--acc-nutri)',
+                      background: 'color-mix(in oklch, var(--acc-nutri) 7%, transparent)',
+                    }}
+                  >
+                    <span className="v2-num" style={{ color: 'var(--fg-subtle)', width: 38 }}>{zeit}</span>
+                    {/* Der alte Wert bleibt stehen — sonst weiss man
+                        nach zwei Zeichen nicht mehr, was man korrigiert. */}
+                    <span className="v2-dim" style={{ textDecoration: 'line-through' }}>
+                      {ml(e.amount_ml)} ml
+                    </span>
+                    <span className="v2-dim" aria-hidden>→</span>
+                    <input
+                      className="v2-feld"
+                      // `.v2-feld` traegt `flex: 1; min-width: 0` — in
+                      // dieser Zeile schrumpfte das Feld dadurch auf
+                      // 42,1 px, und "1000" lief ueber (gemessen).
+                      // `width` hilft dagegen nicht, `flex` schon.
+                      style={{ flex: '0 0 82px', textAlign: 'right' }}
+                      inputMode="decimal"
+                      autoFocus
+                      aria-label="Neue Menge in Millilitern"
+                      value={aendernWert}
+                      disabled={laeuft}
+                      onChange={ev => setAendernWert(ev.target.value)}
+                      onKeyDown={ev => {
+                        if (ev.key === 'Enter' && neueGueltig) void aendern(e, neueMenge)
+                        if (ev.key === 'Escape') setAendernId(null)
+                      }}
+                    />
+                    <span className="v2-dim">ml</span>
+                    <button
+                      type="button" className="v2-btn v2-btn-sm v2-btn-primary"
+                      disabled={laeuft || !neueGueltig}
+                      title={neueGueltig ? undefined : 'Menge groesser als 0 eingeben'}
+                      onClick={() => void aendern(e, neueMenge)}
+                    >Speichern</button>
+                    <button
+                      type="button" className="v2-btn v2-btn-sm"
+                      onClick={() => setAendernId(null)}
+                    >Abbrechen</button>
+                  </div>
+                ) : loeschKandidat?.id === e.id ? (
                   <div
                     key={e.id} role="alertdialog"
                     aria-label={`${ml(e.amount_ml)} ml loeschen?`}
@@ -347,11 +426,28 @@ export function HydrationKachel({
                     <span className="v2-num" style={{ color: 'var(--fg-subtle)', width: 38 }}>{zeit}</span>
                     <span className="v2-num" style={{ fontWeight: 600 }}>{ml(e.amount_ml)} ml</span>
                     <span className="v2-dim" style={{ fontSize: 10.5 }}>{quelle}</span>
+                    {/* G-124: aendern steht vor loeschen — die
+                        haeufigere Korrektur ist die Zahl, nicht der
+                        ganze Eintrag. */}
                     <button
                       type="button" className="v2-icon-btn"
                       style={{ marginLeft: 'auto' }}
+                      aria-label={`${ml(e.amount_ml)} ml von ${zeit} aendern`}
+                      onClick={() => {
+                        setLoeschKandidat(null)
+                        setAendernId(e.id)
+                        setAendernWert(String(e.amount_ml))
+                      }}
+                    >
+                      <Icon name="edit" className="v2-ic v2-ic-sm" />
+                    </button>
+                    <button
+                      type="button" className="v2-icon-btn"
                       aria-label={`${ml(e.amount_ml)} ml von ${zeit} loeschen`}
-                      onClick={() => setLoeschKandidat(e)}
+                      onClick={() => {
+                        setAendernId(null)
+                        setLoeschKandidat(e)
+                      }}
                     >
                       <Icon name="trash" className="v2-ic v2-ic-sm" />
                     </button>

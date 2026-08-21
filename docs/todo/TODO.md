@@ -231,7 +231,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-96** | Der Bestaetigungspfad wechselt nur den Zustand |  |
 | **G-98** | Der `Meal plans`-Tab hat eine Vorlage, aber keine Daten |  |
 | **G-99** | Drei der acht G-72-Spalten bleiben wirkungslos |  |
-| **G-105** | Zwei abgeschnittene SVG-Pfade in `packages/ui` |  |
+| ~~**G-105**~~ | Zwei abgeschnittene SVG-Pfade in `packages/ui` | **erledigt 2026-08-21** — nicht zwei Kurven, sondern 42 % fehlende Pfaddaten; HINTEN hatte gar keinen Umriss. 160 Pfade, 0 kaputt. Bildentscheidung offen (165) |
 | **G-106** | Der Readiness-Komposit waere ein zweiter Gesamtwert |  |
 | **G-112** | Der Food-DB-Filter laesst nur einen Wert zu |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -254,7 +254,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
 | **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
-| **G-120** | `updateWaterLogAmount` liegt fertig und ungenutzt |  |
+| ~~**G-120**~~ | `updateWaterLogAmount` liegt fertig und ungenutzt | **erledigt 2026-08-21** — `PATCH` plus Stift-Knopf; Kreis 500→250 ml, fremde Id 404 (165) |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
 | **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
 
@@ -930,6 +930,25 @@ Quelle und Belege: `docs/ssot/158-tab-zustand.md`.
   Files/Git/...`); `MSYS_NO_PATHCONV=1` im Skriptkopf setzen oder
   dokumentieren.
 
+### G-122-Folgepunkte (Naehrstoffbaum-Anzeige, 2026-08-21) — Nummern vergibt der Orchestrator
+
+Quelle und Belege: `docs/ssot/166-naehrstoffbaum-anzeige.md`.
+
+- [ ] **`CHOL` → `CHORL` fehlt (Codex):** der Cholesterin-Erklaertext
+  liegt im Altbestand (Schluessel `CHOL`), `nutrient_defs` fuehrt
+  `CHORL` — das Legacy-Mapping wurde bei C-161 nicht gezogen; das
+  Modal zeigt fuer Cholesterin darum keine Erklaerung.
+- [ ] **28 Codes ohne Erklaertext** (26 einzelne Fettsaeuren, `OLSAC`,
+  `F18:2C9T11`) — das Vorgaengerrepo hat sie nie beschrieben. Ob sie
+  Texte brauchen oder bewusst leer bleiben, ist eine Fach-Entscheidung
+  mit Quellenarbeit, kein Import.
+- [ ] **Deckungsgrenze (Tom):** Vorschlag aus G-122 — unter 50 %
+  gedeckter Positionen (heute 9 Codes) den Wert dimmen und die „aus X
+  von Y"-Angabe hervorheben; nicht ausblenden, nicht werten.
+- [ ] **`SE` (Selen) hat keinen Zielcode** — BLS/`nutrient_defs`
+  fuehren kein Selen; der Erklaertext liegt brach. Falls Selen je als
+  Code dazukommt (Supplements fuehren es), haengt der Text dann dran.
+
 ### G-121-Folgepunkte (Naehrstoffanzeige, 2026-08-20) — Nummern vergibt der Orchestrator
 
 Quelle und Belege: `docs/ssot/161-naehrstoffanzeige.md`.
@@ -939,10 +958,6 @@ Quelle und Belege: `docs/ssot/161-naehrstoffanzeige.md`.
   das auf einem leeren Tag endet, zeigt Werte, aber keine Ziele.
   Entweder die Referenzauswahl vom Tagesprotokoll entkoppeln (Codex)
   oder in der Anzeige auf den letzten protokollierten Tag ausweichen.
-- [ ] **FAT und CHO haben nur Energie-Anteils-Referenzen** (`RI`,
-  `E%`, Richtung `range`, ohne Grammzahl) — die Zielspalte zeigt dort
-  bewusst einen Strich. Eine E%-Anzeige waere eine eigene Rechnung
-  (Energie des Tages noetig); Produktfrage.
 - [ ] **`test-user@lumeos.local` traegt eine Mahlzeit** (2026-08-16,
   aus einem frueheren Nachweis) — Nullzustands-Messungen muessen sie
   erst abraeumen oder einrechnen.
@@ -3249,8 +3264,42 @@ Umsetzen angepasst werden.
   kommen die Felder dazu, oder die Spalten fallen weg.**
 
 
-- [ ] **G-105: Zwei abgeschnittene SVG-Pfade in `packages/ui`** (neu
-  2026-08-20). Befund aus G-100. **Klein, aber alt.**
+- [x] **G-105: Zwei abgeschnittene SVG-Pfade in `packages/ui`**
+  (erledigt 2026-08-21, `docs/ssot/165-svg-und-wasser.md`).
+  **Es waren nicht zwei abgeschnittene Kurven, sondern 42 % fehlende
+  Pfaddaten — und die Rueckenfigur hatte gar keinen Umriss.**
+
+  `[cmd]` **Gemessen:** `UMRISS_VORNE` zeichnete **939,8 von 6.275,8**
+  Laenge, `UMRISS_HINTEN` **55,1 von 6.272,7**. Der Browser bricht beim
+  ersten Fehler ab — danach kam nichts mehr.
+
+  `[read]` **Unbemerkt blieb es, weil die 158 Muskelflaechen die Figur
+  tragen** und der Umriss eine 1,5-px-Linie dahinter ist.
+
+  `[cmd]` **Das Muster ist kein Abschneiden:** 11 ganze `Q`-Bloecke
+  weg, `C`-Bloecke ohne das MITTLERE Kontrollpunktpaar, **0 Bloecke als
+  verkuerztes Praefix** — ein misslungener Vereinfachungslauf.
+
+  `[cmd]` **Die 291 aus G-123 reproduziert und eingeordnet:** falsch
+  aus zwei Gruenden gleichzeitig — wiederholte Parametersaetze **und**
+  Folgeschaden nach dem Abbruch. **Belastbar ist nur, jeden Pfad
+  einzeln dem Browser vorzulegen: 160 geprueft, 2 kaputt, jetzt 0.**
+
+  `[cmd]` **Kein Punkt geraten** — beide heilen Umrisse in drei
+  uebereinstimmenden Kopien, gefunden ueber `react-muscle-highlighter`
+  **im Vorgaengerrepo.** Ohne diesen Griff waere HINTEN als verloren
+  gemeldet worden.
+
+  `[cmd]` **Konsolenfehler 4 → 2** auf `today`/`checkin`/`muscles`,
+  **0 SVG-Fehler** in acht Bildern.
+
+  `[read]` **Offen und Toms Entscheidung:** Der Umriss aendert sich
+  sichtbar (2,47 % / 2,66 % der Bildflaeche) — **weil er vorher
+  fehlte.** Vergleich in `backup/g124-karte-{alt,neu}.png`, Rueckbau
+  ist ein `git checkout`.
+
+  **Was G-100 und G-123 gemeldet hatten** (unveraendert, als Beleg —
+  die Beschreibung traf das Symptom, nicht die Ursache):
 
   `[cmd]` **Kein Encoding-Problem** — *„die Datei enthaelt 0
   Ersatzzeichen. Es sind **abgeschnittene Pfaddaten**: ein `C` mit vier
@@ -3761,14 +3810,71 @@ Umsetzen angepasst werden.
   Muster — **`supplements` nicht.** *„Fremder Bereich, gemeldet —
   dieselbe Zwei-Zeilen-Aenderung."*
 
-- [ ] **G-120: `updateWaterLogAmount` liegt fertig und ungenutzt** (neu
-  2026-08-20). Rest aus G-117.
+- [x] **G-120: `updateWaterLogAmount` liegt fertig und ungenutzt**
+  (erledigt 2026-08-21, `docs/ssot/165-svg-und-wasser.md`).
+  **Es fehlten ein Verb und ein Knopf — sonst nichts.**
 
-  `[cmd]` **Der Schreibweg existiert**, nur der Knopf fehlt. `[read]`
-  *„Ein Stift-Knopf waere der vollstaendige Korrekturweg."*
+  `[cmd]` **Auch `waterLogUpdateSchema` lag schon da**, und die
+  Nullzeilenpruefung ebenfalls (`water-write.ts:98-103`). Ergaenzt:
+  `PATCH /api/nutrition/water?datum=…`, Antwort **neu gerechneter Tag
+  plus Restliste** — dieselbe Form wie `DELETE` seit G-117.
+
+  `[cmd]` **Der Kreis gemessen:** eintragen 500 ml → aendern → **neu
+  laden: 250 ml**; `logged_ml` 2250 → 2000 → 1750 nach dem Aufraeumen.
+  **Fremde Id → 404 NOT_FOUND.**
+
+  `[read]` **Der alte Wert steht durchgestrichen daneben** (G-67-Muster:
+  die Abfrage nennt den Eintrag). Stift vor Papierkorb — die haeufigere
+  Korrektur ist die Zahl.
+
+  `[cmd]` **Eine Messung fand einen echten Fehler:** Das Feld rendert
+  **42,1 statt 78 px**, weil `.v2-feld` `flex: 1; min-width: 0` traegt —
+  **`width` verliert gegen Flex-Schrumpfen.** `flex: '0 0 82px'` loest
+  es; jetzt 82 px, kein Ueberlauf.
 
   `[read]` **Dritter Fall dieser Art** — nach `InjektionsKarte` (G-53)
   und `score.ts` (G-82): **gebaut und nie gerufen.**
+
+- [ ] **G-125: `MuscleBodyMap.js` traegt die kaputten Umrisse weiter**
+  (neu 2026-08-21). Befund aus G-105.
+
+  `[cmd]` **`apps/web/public/mockup/components/MuscleBodyMap.js`
+  enthaelt beide Umrisse unveraendert kaputt** — dieselbe Fassung, die
+  in `packages/ui` vier Monate lang stand.
+
+  `[read]` **Sie wird nicht ausgeliefert** (Mockup-Verzeichnis), ist
+  aber die wahrscheinliche Quelle, aus der `koerperkarte-pfade.ts`
+  entstand. **Wer kuenftig von dort kopiert, holt sich den Fehler
+  zurueck.**
+
+  `[cmd]` **Die heilen Zahlen liegen bereit:**
+  `referenz/…/react-muscle-highlighter/…/SvgMaleWrapper.js`.
+
+- [ ] **A-31: Die Pfadpruefung gehoert ins Gate** (neu 2026-08-21).
+  Werkzeugfund aus G-105.
+
+  `[cmd]` **Zweimal hat ein eigener Pfadpruefer falsch gemeldet** —
+  291 (G-123, wiederholt in G-105) und 116 (G-105, kompakte
+  Schreibweise). **Beide Male war der Browser die richtige Messung.**
+
+  `[cmd]` **160 Pfade einzeln pruefen dauert Sekunden.** Das Skript
+  liegt als `tools/_g124-alle.mjs` vor.
+
+  `[read]` **Vorbild: `tools/serverimport-pruefen.mjs` (A-30)** — nach
+  dem Build, in beide Richtungen gegengeprobt.
+
+- [ ] **A-32: Die Nummer G-124 war doppelt vergeben** (neu 2026-08-21).
+
+  `[cmd]` **Der Auftrag vom 2026-08-21 trug die Nummer G-124** — die
+  gehoert seit dem 2026-08-20 der Medikamentenkachel
+  (`TODO.md:256`). **Die Arbeit schliesst G-105 und G-120**, nicht
+  G-124.
+
+  `[read]` **A-18 hatte dasselbe Problem** (116-119 doppelt belegt) und
+  wurde mit *„die Nummer steht im Auftrag"* geloest. **Diesmal stand
+  sie im Auftrag und war trotzdem belegt** — der Griff zur Liste fehlte.
+  Bericht 165 traegt den Dateinamen `165-svg-und-wasser.md` wie
+  beauftragt.
 
 - [ ] **A-29: `schuss.mjs` und die Git-Bash-Pfadumwandlung** (neu
   2026-08-20). Werkzeugfund aus G-117.
