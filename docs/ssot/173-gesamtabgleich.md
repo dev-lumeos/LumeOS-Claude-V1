@@ -205,3 +205,94 @@ alle Dateien je Modul.** `[read]` **Zwei davon —
 `module-training-spec.jsx` und `module-recovery-engine.jsx` — tragen
 Rechenwerke, keine Anzeige.** **Wer nur die Hauptdatei liest, findet
 sie nicht.**
+
+
+---
+
+## 7. Nachtrag: die Spec-Ordner sind tiefer als gezaehlt
+
+`[cmd]` **`docs/specs/Nutrition/` hat sieben Unterordner mit 45
+Dateien** — `00_decisions/` (22 KB), `01_current_specs/` (darunter
+`SPEC_06_DATABASE_SCHEMA.md` mit **64 KB**), `02_patches/` (13 Dateien),
+`03_sql/`, **`04_adrs/` (12 ADRs)**, `05_reviews/` (**122 KB
+Opus-Reviews**), `06_workorder_planning/`.
+
+`[cmd]` **Rekursiv sind es 160 Spec-Dateien, 15,8 MB** — nicht 120 mit
+1 MB. **`00-QUELLEN.md` ist berichtigt.**
+
+### Zwoelf ADRs mit getroffenen Entscheidungen
+
+`[read]` **Drei bestaetigen den Bau** (BLS-only, Gesamt-Hydration,
+Supplements-Grenze), **zwei weichen ab** (Coach-Permissions pro
+Subfunktion, `recipe_items` gegen `recipe_ingredients`), **eine fehlt
+ganz** (`shopping_lists`).
+
+### Drei Core-ADRs, alle April 2026
+
+`[cmd]` **`ONBOARDING_ADR`** — **7 Schritte, Status final.** Mit
+Post-Onboarding-Setup-Cards je Modul. **G-83 hielt fest, es gebe kein
+Onboarding.**
+
+`[cmd]` **`SUBSCRIPTION_GATES_ADR`** — kein Gate in V1, **aber
+`display_tier` (1/2/3) ist das Abo-Tier**, nicht die Baumtiefe.
+**Mikro-Tier 2 = Athlete (Plus), Tier 3 = Medical (Pro).**
+
+`[read]` **G-101 hat es als Hierarchie gelesen** — C-161 hat das mit
+`parent_code` behoben, **aber die Spalte heisst in der Anzeige weiter
+*„Stufe"*.**
+
+`[cmd]` **`AI_USAGE_WALLET_ADR`** — AI-Features aus dem Wallet, nicht
+aus dem Abo.
+
+---
+
+## 8. Nachtrag: das Vorgaengerrepo
+
+`[cmd]` **`biomarkerDetails.ts` — 121 KB, 1.564 Zeilen**, zweisprachig:
+`description`, `whatItMeasures`, **`ifHigh`, `ifLow`**, und **`ranges`
+mit `lab`, `optimal`, `athlete` je Geschlecht.**
+
+`[read]` **Das Pendant zu `nutrientDetails.ts`, das C-161 heute
+importiert hat** — und `athlete` ist der Wert, den es fuer LumeOS
+braucht.
+
+`[cmd]` **`free-exercise-db.json` — 873 Uebungen mit `instructions` und
+`images`.** `[read]` **Nicht noetig:** `training.exercises` hat **1.416
+Zeilen, alle mit Anleitung, 1.412 mit Tipps, 1.416 mit Medien.** **Der
+Bestand ist besser als die Quelle.**
+
+`[cmd]` **`bls-foods.json` — 17,5 MB.** Unser Bestand: 7.140 Foods,
+869.501 Naehrwerte. **Ebenfalls abgedeckt.**
+
+---
+
+## 9. Was zu tun ist — nach Dringlichkeit
+
+**Sofort, weil sichtbar falsch:**
+
+`[cmd]` **G-133** — Allergen-Pillen: *„Ohne Laktose 1.021"* statt 6.119.
+**G-140** — die Spalte *„Stufe"* zeigt das Abo-Tier.
+
+**Klein und blockierend:**
+
+`[cmd]` **C-175** (`shopping_lists`) · **G-126** (drei Reste) ·
+**A-31** (Pfadpruefung ins Gate).
+
+**Gross, aber vorbereitet:**
+
+`[cmd]` **C-176** (`biomarkerDetails.ts`, 121 KB) · **G-141**
+(Onboarding nach ADR) · **G-131** (Settings, sieben Bereiche) ·
+**G-138** (16 Supplement-Schreibwege).
+
+**Schema-Aufträge:**
+
+`[cmd]` **C-166** (Recovery: Schlaf, HRV, Protokolle) · **C-169**
+(Trainingsplan) · **C-171** (Medical: Symptome, Termine, Dokumente) ·
+**C-170** (Offline-Betrieb) · **C-172** (Stress-Tab).
+
+**Entscheidungen fuer Tom:**
+
+`[cmd]` **GO-23** (Deckungsgrenze) · **G-134** (Filtergruppen) ·
+**G-136** (zwei Kartenzuordnungen) · **C-174** (`strong` als dritte
+Stufe) · **A-37** (Coach-Permissions pro Subfunktion) · **T1–T9**
+(Coach-Portal).
