@@ -31,6 +31,13 @@ inhaltliche Fehler, G-135 fünf weitere allein in `SPEC_09_SCORING`.
 
 **Die Begründung steht in `docs/sessions/2026-08-20-uebergabe.md`.**
 
+**Tom, 2026-08-14:** Bei Arbeit am Nutrition-Modul gehören
+`docs/specs/Nutrition/` **und** `docs/BrainstormDocs/Nutrition/` mit
+gelesen. `[read]` Die Anweisung ist am 2026-08-21 beim Neuschreiben des
+Kopfes mit der kassierten *„nicht als Referenz"*-Regel verlorengegangen
+und am selben Tag wieder eingesetzt. `docs/BrainstormDocs/` führt zwölf
+Modulordner.
+
 ---
 
 ## Grössere Vorhaben mit eigenem Plan
