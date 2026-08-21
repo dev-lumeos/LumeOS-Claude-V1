@@ -3370,6 +3370,69 @@ Umsetzen angepasst werden.
   Ausschluss-Parameter, die Allergen-Schalter wirken nur auf der
   angezeigten Seite."*
 
+- [ ] **GO-22: Sechs Karten oder zwoelf?** (neu 2026-08-20).
+  **Entscheidung fuer Tom.** Nebeneffekt aus G-122.
+
+  `[cmd]` **Seit der Baum echt ist, haben sechs Gruppen keine Wurzel
+  mehr:**
+
+  | Gruppe | Wurzeln | Eintraege |
+  |---|---|---|
+  | **Fettsaeuren** | **0** | 36 |
+  | **Aminosaeuren** | **0** | 19 |
+  | **Kohlenhydrate** | **0** | 11 |
+  | Ballaststoffe · Organische Saeuren · Zuckeralkohole | 0 | 6 · 5 · 3 |
+  | Elemente | 16 | 16 |
+  | Wasserloesliche Vitamine | 9 | 12 |
+
+  `[read]` **Ihre Wurzeln haengen unter `FAT`, `PROT`, `CHO`** — also
+  unter *Makronaehrstoffe*. **`group_de` und `parent_code`
+  widersprechen sich bei 28 Kindern.**
+
+  `[cmd]` **Der G-122-Agent hat die Karten der Wurzel folgen lassen** —
+  *„alles andere haette denselben Ast zerrissen."* **Sechs Karten statt
+  zwoelf.**
+
+  **Zu entscheiden:**
+
+  **A — so lassen.** `[read]` Der Baum ist die Wahrheit, die Karten
+  folgen ihm. **Wer Fettsaeuren sucht, oeffnet Makronaehrstoffe → Fett.**
+
+  **B — zwoelf Karten, Aeste duerfen ueber Karten laufen.** `[read]`
+  Vertrauter, aber ein Kind steht dann in einer anderen Karte als sein
+  Elternteil.
+
+  **C — `group_de` an den Baum angleichen.** `[cmd]` Dann traegt jede
+  Fettsaeure `group_de = 'Makronaehrstoffe'` — **und die zwoelf Gruppen
+  verschwinden aus den Daten**, nicht nur aus der Anzeige.
+
+  `[read]` **Das Mockup bildet die Gruppen aus den Top-Level-Eintraegen**
+  — es haette also A gemacht.
+
+- [ ] **G-126: Vier Reste aus G-122** (neu 2026-08-20).
+
+  `[cmd]` **`CHOL` → `CHORL` (Cholesterin) waere mappbar und fehlt** —
+  ein Erklaertext mehr. **Codex.**
+
+  `[cmd]` **28 Codes haben keinen Erklaertext** — 26 einzelne
+  Fettsaeuren, `OLSAC`, `F18:2C9T11`.
+
+  `[cmd]` **`SE` (Selen) hat keinen Zielcode** — *„BLS fuehrt kein
+  Selen."* `[read]` **Das ist eine echte Luecke im Lebensmittelbestand**,
+  kein Zuordnungsfehler.
+
+- [ ] **GO-23: Deckungsgrenze bei unvollstaendigen Summen** (neu
+  2026-08-20). **Entscheidung fuer Tom.** Vorschlag aus G-122.
+
+  `[cmd]` **Gemessen:** 59 Codes zu 100 % gedeckt, **20 bei 80–99 %, 50
+  bei 50–79 %, 9 unter 50 %.**
+
+  `[read]` **Der Vorschlag des Agenten:** *„Unter 50 % den Wert dimmen
+  und die „aus X von Y"-Angabe hervorheben — nicht ausblenden, nicht
+  werten."*
+
+  `[cmd]` **Nicht gebaut**, wartet auf Entscheidung.
+
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
 

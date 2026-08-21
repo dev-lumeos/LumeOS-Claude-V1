@@ -13,7 +13,7 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | **G-122** Baum klappbar je Ebene + Detailmodal | `apps/web/v2/nutrition` | 2026-08-20 |
+| **Fable** | *frei* | | |
 | **Claude Code** | **G-124** SVG-Pfade + Wasser-Korrekturknopf | `packages/ui`, `nutrition` | 2026-08-20 |
 | **Codex** | *frei* | | |
 
