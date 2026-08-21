@@ -361,6 +361,7 @@ DECLARE
   v_training_week INTEGER;
   v_vitd_pct NUMERIC;
   v_mg_pct NUMERIC;
+  v_input_status JSONB;
 BEGIN
   IF p_user_id IS NULL THEN
     RAISE EXCEPTION 'rule_assessment braucht user_id oder auth.uid()';
@@ -437,15 +438,15 @@ BEGIN
     AND status = 'completed'
     AND session_date BETWEEN p_entry_date - 6 AND p_entry_date;
 
-  SELECT reference_pct INTO v_vitd_pct
+  SELECT
+    max(reference_pct) FILTER (WHERE nutrient_code = 'VITD'),
+    max(reference_pct) FILTER (WHERE nutrient_code = 'MG')
+  INTO v_vitd_pct, v_mg_pct
   FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
-  WHERE nutrient_code = 'VITD'
-  LIMIT 1;
+  WHERE nutrient_code IN ('VITD', 'MG');
 
-  SELECT reference_pct INTO v_mg_pct
-  FROM nutrition.daily_reference_assessment(p_user_id, p_entry_date)
-  WHERE nutrient_code = 'MG'
-  LIMIT 1;
+  SELECT COALESCE(jsonb_agg(to_jsonb(s)), '[]'::jsonb) INTO v_input_status
+  FROM supplements.platform_input_status(p_user_id, p_entry_date) s;
 
   FOR v_rule IN
     SELECT *
@@ -453,7 +454,12 @@ BEGIN
     ORDER BY priority_rank NULLS LAST, rule_id
   LOOP
     SELECT COALESCE(array_agg(DISTINCT s.input_path), '{}') INTO v_missing
-    FROM supplements.platform_input_status(p_user_id, p_entry_date) s
+    FROM jsonb_to_recordset(v_input_status) AS s(
+      input_path text,
+      input_status text,
+      missing_reason text,
+      detail jsonb
+    )
     WHERE s.input_path = ANY(v_rule.input_paths)
       AND s.input_status IN ('missing_input', 'partial', 'incomplete');
 
@@ -560,7 +566,12 @@ BEGIN
         ELSIF v_rule.rule_id = 'gap_folate_pregnancy_plan' THEN
           v_ok := v_ok AND EXISTS (
             SELECT 1
-            FROM supplements.platform_input_status(p_user_id, p_entry_date)
+            FROM jsonb_to_recordset(v_input_status) AS s(
+              input_path text,
+              input_status text,
+              missing_reason text,
+              detail jsonb
+            )
             WHERE input_path = 'profile.pregnancy_planned'
               AND detail->>'pregnancy_planned' = 'true'
           );
