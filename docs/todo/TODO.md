@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `8255393` auf `dev`.
+**Stand:** 2026-08-18, Anker `4f65ac6` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 130 offen, 1 in Arbeit.
+`[cmd]` 132 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -238,6 +238,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-127** | Der Naehrstoff-Tab braucht eine Volltextsuche |  |
 | **G-128** | Der Filter *„Auffaellig"* verbirgt die Ursache |  |
 | **GO-23** | Unter 50 % Deckung wird gedimmt |  |
+| **A-33** | Der Medical-Abgleich, den der Orchestrator nachgeholt hat |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
 | **A-18** | Berichtsnummern kollidieren |  |
 | **G-72** | Acht Spalten ohne Wirkung und ohne Kachel |  |
@@ -258,6 +259,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-160** | Der Bewertungshorizont je Naehrstoff ist leer |  |
 | **G-122** | Fuenf Tabellen mit Daten haben keinen Schreibweg |  |
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
+| **G-126** | „Ohne Laktose 1.021" ist die Zahl MIT Laktose |  |
 | **G-125** | `MuscleBodyMap.js` traegt die kaputten Umrisse weiter |  |
 | **A-31** | Die Pfadpruefung gehoert ins Gate |  |
 | **A-32** | Die Nummer G-124 war doppelt vergeben |  |
@@ -1679,27 +1681,60 @@ Umsetzen angepasst werden.
 
 
 
-- [ ] **G-83: Es gibt kein Onboarding** (neu 2026-08-19). Befund aus
-  G-80.
+- [ ] **G-83: Das Onboarding ist entworfen, aber nicht gebaut**
+  (berichtigt 2026-08-20). **Der urspruengliche Befund war falsch.**
 
-  `[cmd]` **Gemessen:** *„Die einzige Datei ist der Klienten-Assistent im
-  Coach-Modul."* **Ein Onboarding fuer den Nutzer existiert nicht.**
+  `[cmd]` **Der G-80-Agent meldete:** *„Die einzige Datei ist der
+  Klienten-Assistent im Coach-Modul."* **Das stimmt fuer den Code.**
 
-  `[read]` **Das betrifft mehr als den Erfahrungsgrad (C-118).** Wer sich
-  neu anmeldet, hat kein Profil, keine Vorlieben, keine Ziele — **und
-  die Anwendung fragt ihn nichts.**
+  `[cmd]` **Aber `module-onboarding.jsx` existiert** — **361 Zeilen,
+  ein vollstaendiger Assistent:**
 
-  `[cmd]` **Was beim ersten Start gebraucht wuerde:** Alter, Geschlecht,
-  Groesse, Gewicht, Aktivitaetsniveau (fuer die TDEE-Formel) ·
-  Erfahrungsgrad · die vier Preferences-Schritte · ein erstes Ziel.
+  | Schritt | |
+  |---|---|
+  | 1 | **Willkommen** — *„Elf Module, ein Bild … nichts verlaesst dein Konto, bis du es entscheidest."* |
+  | 2 | **Grunddaten** — Name, Geschlecht, Geburtsdatum, Groesse, Gewicht, Land |
+  | 3 | **Ziele** — ein Hauptziel aus sechs, mehrere Nebenziele, Zielgewicht, Zielfettanteil, Datum |
+  | 4 | **Trainingsart** — setzt den Aktivitaetsfaktor |
 
-  `[read]` **Das Vorgaengerrepo hatte es als vierstufigen Assistenten**
-  (`FoodPreferences.tsx`) — **aber der war der Preferences-Tab, kein
-  Onboarding.**
+  `[read]` **Und Schritt 4 traegt die Begruendung mit:** *„Setzt deinen
+  Aktivitaetsmultiplikator — **1,725 fuer fuenf harte Einheiten die
+  Woche**."*
 
-  `[cmd]` **Und C-122 hat gezeigt, was ohne Profilangaben passiert:**
-  `very_active` gegen 0,58 Trainings je Woche, **1.030 kcal Abstand
-  zwischen Formel und Messung.**
+  `[cmd]` **Genau der Wert, den C-122 als falsch gesetzt gemessen hat**
+  — `very_active` bei 0,58 Trainings je Woche, **1.030 kcal Abstand.**
+  **Der Entwurf haette es verhindert.**
+
+  `[cmd]` **Schritt 2 und 3 speisen `profiles` und `user_goals`** —
+  beide Tabellen stehen. **Der Erfahrungsgrad (C-118) gehoert hier
+  hinein.**
+
+- [ ] **G-131: `module-completeness.jsx` ist die Settings-Seite** (neu
+  2026-08-20). **837 Zeilen, nie erwaehnt.**
+
+  `[cmd]` **Der Name ist irrefuehrend** — die Datei enthaelt:
+
+  | | |
+  |---|---|
+  | `ProfileSettingsModal`, `ProfilePanel` | Profildaten |
+  | `UnitsPanel`, `UnitRow` | **Einheiten** (kg/lb, cm/in) |
+  | `ModulesPanel` | welche Module sichtbar sind |
+  | `PrivacyPanel`, `PermSelect` | **Freigaben** |
+  | `DataSourcesPanel` | Wearables und Importe |
+  | `BillingPanel` | Abrechnung |
+  | `DangerPanel` | Konto loeschen |
+  | **`AnatomyMap`, `MUSCLE_RECOVERY`** | Muskelkarte mit Erholungswerten |
+
+  `[cmd]` **`MUSCLE_RECOVERY` traegt einen Wert je Muskel** — Kopf 100,
+  Bizeps 90, Trizeps 82, unterer Ruecken 70, Schultern 70.
+
+  `[read]` **C-124 meldet die Erholungszeiten als unbelegt** — **hier
+  stehen sie.** Aber als Anzeigewerte eines Entwurfs, **ohne Quelle**.
+  **Der Rechercheauftrag bleibt richtig**, das Format ist damit
+  vorgegeben.
+
+  `[cmd]` **Und `/v2/settings` traegt heute nur die
+  Erfahrungsgrad-Kachel** (G-80). **Sieben Bereiche fehlen.**
 
 - [x] **G-13: Der Add-Food-Dialog braucht die ganze Suchlogik**
   (neu 2026-08-17, **erledigt 2026-08-20** — Bericht
