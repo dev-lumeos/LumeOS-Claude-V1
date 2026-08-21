@@ -217,7 +217,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-127** | Drei Wearable-Spalten sind leer |  |
 | **C-129** | Der Kimi-Bestand — brauchbar, aber nicht importierbar |  |
 | **C-136** | Medikamente und Conditions brauchen die Coach-Freigabeschicht |  |
-| **G-85** | Der Health score haengt an zwei Unbekannten |  |
+| ~~**G-85**~~ | Der Health score haengt an zwei Unbekannten | **erledigt 2026-08-21 als G-135** — beide standen im Repo; Gesamt 86 aus 5 Systemen, Zuordnung ueber LOINC (171) |
 | **A-23** | `lint` bricht repoweit ab |  |
 | **C-143** | Die zwei Erholungsrechnungen weichen ab |  |
 | **C-145** | `Plan` braucht ein Schema, keine Anzeige |  |
@@ -3009,9 +3009,38 @@ Umsetzen angepasst werden.
   Rueckstand, aber ein groesserer.
 
 
-- [ ] **G-85: Der Health score haengt an zwei Unbekannten** (neu
-  2026-08-19). Befund aus G-84. **Der Score ist ersatzlos aus dem Kopf
-  entfernt.**
+- [x] **G-85: Der Health score haengt an zwei Unbekannten**
+  (erledigt 2026-08-21 als G-135, `docs/ssot/171-health-score.md`).
+  **Beide Unbekannten standen im Repo — die Frage war falsch gestellt.**
+
+  `[cmd]` **Die Gruppierung:** `biomarker_spec_enrichment.system_groups`,
+  27 der 49 Zeilen — cardiovascular 7, liver 6, hormonal 6, metabolic 4,
+  kidney 4. **Die Gewichtung:** `docs/specs/Medical/SPEC_09_SCORING.md`,
+  `.25/.25/.20/.15/.15`, Summe 1,00.
+
+  `[cmd]` **Zugeordnet wird ueber LOINC, nicht ueber den Namen** — die
+  Spec vergleicht drei Namensfelder und verliert `Total Testosterone`
+  (Bestand `Testosterone, Total`, **gleicher Code 2986-8**).
+
+  `[cmd]` **Von den drei nicht treffenden Spec-Markern ist genau EINER
+  eine echte Luecke:** Prolactin (4 Werte, keine Zeile). `HOMA-IR` ist
+  ein Rechenwert, `Total Testosterone` eine Schreibweise.
+
+  `[cmd]` **Gemessen:** Gesamt **86**, Herz-Kreislauf 90 (5/6),
+  Stoffwechsel 72 (3/3), Hormone 100 (6/6), Leber 92 (3/6), Niere 75
+  (1/4) — **5 von 5 Systemen, 100 % des Gewichts. 467/467 Tests.**
+
+  `[read]` **Toms Einwand von damals gilt zur Haelfte weiter:** LDL ist
+  zugeordnet, **ApoB nicht** (Bestand 1884-6, enrichment 1869-7).
+  **Aber stillschweigend ist nichts** — jede Kachel nennt
+  `n von m Markern`.
+
+  `[read]` **Und die Kachel trug NIE eine Attrappenmarke**, obwohl sie
+  mit Entwurfszahlen rechnete. Ein Zwischenstand zeigte deshalb beiden
+  Konten dieselben 81 — **das sah wie ein Zeilenschutzleck aus und war
+  der Entwurf.** Jetzt belegt: `test-user` sieht „0 von 5 Systemen".
+
+  **Was der urspruengliche Punkt festhielt** (unveraendert, als Beleg):
 
   `[cmd]` **Vorher:** `Health score 87` und `6 alerts` — **beide aus dem
   Entwurfskatalog.** *„Dass die 6 zufaellig stimmte, haette sich bei
@@ -4075,6 +4104,87 @@ Umsetzen angepasst werden.
 
   `[cmd]` **`ONBOARDING_ADR`** — siehe G-141.
 
+- [ ] **G-143: Die Makroziele werden nicht angezeigt** (neu
+  2026-08-20). **Toms Befund, gewichtig.**
+
+  **Tom, 2026-08-20:** *„Fett haben wir garantiert aus berechneten Goals
+  — oder nicht? Sowie Kohlenhydrate gesamt auch. Sprich, es fehlen
+  diverse Fortschrittsbalken und Status."*
+
+  ### Er hat recht — gemessen
+
+  `[cmd]` **`goals.nutrition_targets` traegt seit dem 2026-05-21:**
+
+  | | |
+  |---|---|
+  | kcal | **2.500** |
+  | `protein_g` | **170** |
+  | `carbs_g` | **313** |
+  | `fat_g` | **75** |
+  | Herkunft | `formel`, TDEE 2.273, Ziel `gain_muscle` |
+
+  `[cmd]` **Dazu `linoleic_acid_g` und `alpha_linolenic_acid_g`.**
+
+  ### Was die Anzeige stattdessen tut
+
+  `[cmd]` **Sie liest nur `daily_reference_assessment`** — die
+  wissenschaftlichen Referenzen. **`nutrition_targets` kommt darin nicht
+  vor.**
+
+  `[read]` **Folge, im Bildschirmfoto sichtbar:**
+
+  **Fett und Kohlenhydrate zeigen einen Strich**, obwohl 75 g und 313 g
+  gesetzt sind.
+
+  **Und Protein zeigt 70,6 g (PRI) statt 170 g** — die **234 %** sind
+  gegen den EFSA-Mindestbedarf gerechnet, **nicht gegen Toms Ziel.**
+  **Gegen 170 g waeren es 97 %.**
+
+  `[read]` **Das ist irrefuehrender als ein fehlender Wert:** Eine Zahl
+  steht da, aber sie misst etwas anderes als der Nutzer denkt.
+
+  ### Was zu tun ist
+
+  `[cmd]` **Beide zeigen, unterscheidbar** — wie im Modal seit G-122:
+  *„persoenlich 110 mg"* neben *„PRI Maenner 110 / Frauen 95 (EFSA)"*.
+
+  `[read]` **Und die Reihenfolge ist klar:** **Das persoenliche Ziel
+  gewinnt fuer den Fortschrittsbalken**, die Referenz steht daneben.
+  **Bei den Makros ist die Referenz ohnehin nur ein Mindestwert.**
+
+  `[cmd]` **G-121 hat *„FAT/CHO nur E%-Referenzen"* gemeldet** — das
+  stimmt fuer `nutrient_reference_values`. **Aber die Ziele liegen
+  woanders.**
+
+- [ ] **G-144: Die BCAA-Suche zeigt zwei statt drei** (neu 2026-08-20).
+  **Toms Befund.**
+
+  `[cmd]` **In der Datenbank stehen alle drei:** `ILE`, `LEU`, `VAL`,
+  alle mit `kind='gruppe'`, `alias_folded='bcaa'`.
+
+  `[cmd]` **Die Anzeige zeigt Isoleucin und Valin** — **Leucin fehlt.**
+
+  `[read]` **Verdacht:** Leucin ist der einzige der drei mit einem
+  eigenen Zielwert (3,3 g PRI) — **moeglicherweise filtert die Suche
+  Zeilen, die schon anderswo stehen.** **Zu messen, nicht zu raten.**
+
+- [ ] **G-145: Ein einzelner Elternknoten sollte offen starten** (neu
+  2026-08-20). **Toms Befund.**
+
+  **Tom, 2026-08-20:** *„Protein ist doof geloest — ich denke, wenn nur
+  ein Parent darin ist, sollte der aufgeklappt sein."*
+
+  `[cmd]` **Die Karte *Protein* hat 21 Eintraege und genau eine
+  Wurzel** (`PROT625`). **Zugeklappt zeigt sie eine Zeile.**
+
+  `[read]` **Dasselbe gilt fuer *Fette*** — eine Wurzel (`FAT`), 37
+  Eintraege. **Und fuer *Kohlenhydrate*** — eine Wurzel (`CHO`), 23
+  Eintraege.
+
+  `[cmd]` **Vorschlag:** Hat eine Karte genau einen Wurzelknoten, ist er
+  beim Oeffnen der Karte aufgeklappt. `[read]` **Die zweite Ebene bleibt
+  zu** — sonst stehen bei den Fetten wieder 37 Zeilen da.
+
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
 
@@ -4734,6 +4844,36 @@ Umsetzen angepasst werden.
 
   `[read]` **Die Nahe-Regel bleibt sonst richtig** — sie verhinderte,
   dass *„EPA"* ueber das *„epa"* in *„Reparatur"* Valin fand.
+
+- [ ] **C-178: Prolactin und ApoB fehlen dem Health score**
+  (neu 2026-08-21). Befund aus G-135. **Zwei Zeilen in
+  `medical.biomarker_spec_enrichment`, mehr nicht.**
+
+  `[cmd]` **Prolactin:** Der Nutzer hat **4 Werte** unter LOINC
+  `2842-3`, `enrichment` hat **keine Zeile**. Mit ihr haette `hormonal`
+  sieben statt sechs Marker.
+
+  `[cmd]` **ApoB:** Der Bestand fuehrt ihn unter **1884-6**,
+  `enrichment` unter **1869-7** — dieselbe Groesse, zwei Codes.
+  `[read]` **Das ist der Marker, den Tom in G-84 ausdruecklich genannt
+  hat** (*„die beiden wichtigsten Lipidmarker"*); **LDL trifft, ApoB
+  nicht.**
+
+  `[read]` **Erst pruefen, ob es dieselbe Messgroesse ist** — bei
+  Glukose und Vitamin D war es das nicht (G-85: `1558-6` ist *Fasting*,
+  `2345-7` nicht). **Keine Aliasfrage, eine inhaltliche.**
+
+- [ ] **G-143: Zehn Marker in `enrichment` ohne `system_groups`**
+  (neu 2026-08-21). Befund aus G-135. **Produktentscheidung, keine
+  Datenluecke.**
+
+  `[cmd]` Ferritin, Haemoglobin, Vitamin B12, Vitamin D, SHBG, LH,
+  Haematokrit, Magnesium, **Gesamtcholesterin**, freies Testosteron.
+
+  `[read]` **Gesamtcholesterin gehoert inhaltlich zu
+  `cardiovascular`** — ob es dorthin soll, entscheidet Tom. Die
+  uebrigen neun haben kein offensichtliches System, und ein erfundenes
+  waere schlechter als keins.
 
 - [ ] **C-177: Thai-Aliase fehlen bewusst** (neu 2026-08-20). Rest aus
   C-165.
