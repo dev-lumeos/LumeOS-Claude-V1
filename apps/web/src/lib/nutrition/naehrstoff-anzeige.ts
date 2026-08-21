@@ -12,7 +12,63 @@ export function fensterOderTag(roh: string | undefined): number {
   return (FENSTER as readonly number[]).includes(n) ? n : 1
 }
 
+/** Beschriftung und Farbe je Status — geteilt zwischen Tabelle und
+ *  Modal. Aussagen ueber die Zahl, keine Urteile. */
+export const STATUS_TEXT: Record<string, string> = {
+  unter: 'unter Ziel',
+  im: 'im Bereich',
+  ueber: 'ueber UL',
+}
+export const STATUS_FARBE: Record<string, string> = {
+  unter: 'var(--warn)',
+  im: 'var(--pos)',
+  ueber: 'var(--neg)',
+}
+
+/** Zahlformat der Naehrstoffanzeige (de-DE, bis 3 Nachkommastellen
+ *  unter 1). */
+export function zahlMitEinheit(v: number | null, einheit: string | null): string {
+  if (v === null) return '—'
+  const n = v.toLocaleString('de-DE', { maximumFractionDigits: v < 1 ? 3 : 1 })
+  return einheit ? `${n} ${einheit}` : n
+}
+
 export type Scope = 'alle' | 'auffaellig' | 'unter'
+
+export const SCOPES: readonly Scope[] = ['alle', 'auffaellig', 'unter']
+
+/** Der Schluessel der Naehrstoffbaum-Ansicht in
+ *  `public.user_display_preferences` (C-161). */
+export const ANSICHT_SCHLUESSEL = 'nutrition.nutrient_tree'
+
+/** Die gespeicherte Ansicht: offene Knoten, Fenster, Filter — „die
+ *  letzte Sicht wird gespeichert fuer den User" (G-122). */
+export type GespeicherteAnsicht = {
+  offen: string[]
+  fenster: number
+  scope: Scope
+}
+
+/**
+ * Prueft einen `jsonb`-Wert aus der Datenbank bzw. einen
+ * Request-Koerper. Laeuft auf Server UND Client — deshalb hier und
+ * nicht in der Server-Datenschicht. Kaputte oder fremde Werte werden
+ * verworfen, nicht repariert: dann gilt der Start „alles zu".
+ */
+export function pruefeAnsicht(roh: unknown): GespeicherteAnsicht | null {
+  if (!roh || typeof roh !== 'object') return null
+  const r = roh as Record<string, unknown>
+  if (!Array.isArray(r.offen) || r.offen.length > 300) return null
+  const offen = r.offen.filter(
+    (x): x is string => typeof x === 'string' && x.length > 0 && x.length <= 60)
+  if (offen.length !== r.offen.length) return null
+  const fenster = typeof r.fenster === 'number'
+    && (FENSTER as readonly number[]).includes(r.fenster) ? r.fenster : null
+  const scope = typeof r.scope === 'string'
+    && (SCOPES as readonly string[]).includes(r.scope) ? r.scope as Scope : null
+  if (fenster === null || scope === null) return null
+  return { offen, fenster, scope }
+}
 
 /** Trifft der Filter den Knoten selbst? Zeilen ohne Referenz
  *  (`status: null`) sind nicht auffaellig, sondern unbewertet. */

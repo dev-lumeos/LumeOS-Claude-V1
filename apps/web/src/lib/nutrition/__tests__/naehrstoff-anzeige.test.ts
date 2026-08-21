@@ -7,7 +7,9 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { fensterOderTag, sichtbar, zaehleSichtbare } from '../naehrstoff-anzeige'
+import {
+  fensterOderTag, pruefeAnsicht, sichtbar, zaehleSichtbare,
+} from '../naehrstoff-anzeige'
 import type { NaehrstoffKnoten } from '../naehrstoff-ordnung'
 
 function k(
@@ -16,6 +18,7 @@ function k(
 ): NaehrstoffKnoten {
   return {
     code, name: code, einheit: 'g', stufe: 1, sort: 0,
+    eltern: null, gruppe: 'Test',
     wert: 1, summe: 1, positionen: 1, positionenMitWert: 1,
     positionenOhneWert: 0, tageErfasst: 1, tageVollstaendig: 1,
     ziel: null, zielMax: null, zielArt: null, obergrenze: null,
@@ -50,6 +53,21 @@ test('zaehleSichtbare zaehlt Eltern und getroffene Kinder mit', () => {
   // FAT und PUFA bleiben wegen OMEGA3 stehen; CHO faellt raus.
   assert.equal(zaehleSichtbare(baum, 'auffaellig'), 3)
   assert.equal(zaehleSichtbare(baum, 'alle'), 4)
+})
+
+test('pruefeAnsicht nimmt nur die vollstaendige, saubere Form an', () => {
+  const gut = { offen: ['g:Elemente', 'SUGAR'], fenster: 30, scope: 'auffaellig' }
+  assert.deepEqual(pruefeAnsicht(gut), gut)
+  // Kaputtes wird verworfen, nicht repariert — dann gilt „alles zu".
+  assert.equal(pruefeAnsicht(null), null)
+  assert.equal(pruefeAnsicht({ offen: 'SUGAR', fenster: 30, scope: 'alle' }), null)
+  assert.equal(pruefeAnsicht({ offen: [], fenster: 2, scope: 'alle' }), null)
+  assert.equal(pruefeAnsicht({ offen: [], fenster: 7, scope: 'egal' }), null)
+  assert.equal(pruefeAnsicht({ offen: [42], fenster: 7, scope: 'alle' }), null)
+  assert.equal(
+    pruefeAnsicht({ offen: Array.from({ length: 301 }, () => 'x'), fenster: 7, scope: 'alle' }),
+    null,
+  )
 })
 
 test('fensterOderTag klammert auf Toms Liste', () => {

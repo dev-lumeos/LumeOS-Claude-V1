@@ -192,11 +192,16 @@ export default async function V2NutritionPage({
   // G-101/C-54: die Naehrstoffordnung. Nur fuer den Nutrients-Tab.
   // G-121: das Zeitfenster steht in der Adresse (`?fenster=7`), damit
   // die Werte serverseitig geladen werden und der Zustand messbar
-  // bleibt; unbekannte Werte fallen auf den Tag (1) zurueck.
+  // bleibt. G-122: OHNE Parameter gilt die gespeicherte Ansicht
+  // (`user_display_preferences`), erst danach der Tag — die Adresse
+  // gewinnt, weil ein geteilter Link zeigen soll, was er sagt.
   let ordnung: NaehrstoffOrdnung | null = null
   if (tab === 'nutrients') {
     try {
-      ordnung = await ladeOrdnung(datum, fensterOderTag(searchParams?.fenster))
+      ordnung = await ladeOrdnung(
+        datum,
+        searchParams?.fenster === undefined ? null : fensterOderTag(searchParams.fenster),
+      )
     } catch {
       ordnung = null
     }

@@ -1,45 +1,47 @@
 // Die Naehrstoffordnung aus `nutrition.nutrient_defs` (G-101, C-54),
-// seit G-121 mit den Werten aus der LANGEN Tagesform (C-157).
+// seit G-121 mit den Werten der langen Form (C-157), seit G-122 mit
+// dem echten Baum aus `parent_code` (C-161) und der gespeicherten
+// Ansicht (`public.user_display_preferences`).
 //
-// **DIE HIERARCHIE STECKT IN `display_tier`, NICHT IN EINEM
-// `parent_code`.** `[cmd]` Gemessen am 2026-08-20: die Tabelle hat
-// keine Elternspalte (die kommt mit C-161). Sie fuehrt **138
-// Naehrstoffe in 12 Gruppen**, je mit `display_tier` (1–3) und
-// `sort_index`; **kein Eintrag ohne Stufe.**
+// **DIE HIERARCHIE KOMMT AUS `parent_code`, NICHT MEHR AUS DER
+// STUFE.** `[cmd]` C-161: 40 Wurzeln, 98 Kinder, maximal 4 Ebenen
+// tief. `display_tier` bleibt Anzeigeprioritaet — der fruehere
+// Zwei-Pass-Bau aus Stufe und Sortierung ist ersetzt, weil er riet,
+// was die Tabelle jetzt weiss (164-naehrstoffbaum.md: „Die Anzeige
+// darf nicht mehr aus Stufe und Sortierung ableiten").
 //
-// **WOHER DIE WERTE KOMMEN (G-121):** nicht mehr aus `daily_summary`
-// (37 Spalten), sondern aus `nutrition.nutrient_summary_window(user,
-// stichtag, tage)` — sie aggregiert die lange Form
-// `daily_nutrient_summary_long` und liefert **alle 138** Naehrstoffe
-// samt Vollstaendigkeit (`value_count`/`missing_count`). `[cmd]` Ein
-// Tag und ein Fenster sind derselbe Pfad: `p_days = 1` ist die
-// Tagessumme. 30 Tage brauchen ~35 ms, 90 Tage ~92 ms (Serverzeit).
+// **DIE GRUPPEN FOLGEN DER WURZEL:** `[cmd]` 28 Kinder tragen ein
+// anderes `group_de` als ihr Elternknoten — die kompletten Aeste
+// Fettsaeuren (36), Aminosaeuren (19), Kohlenhydrate (11),
+// Ballaststoffe (6), Organische Saeuren (5) und Zuckeralkohole (3)
+// haengen unter Makronaehrstoff-Wurzeln. Sechs der zwoelf Gruppen
+// haben deshalb KEINE Wurzel. Eine Karte je Gruppe mit lokal
+// abgeschnittenen Baeumen wuerde denselben Ast zerreissen; die Karten
+// folgen darum der Gruppe der Wurzel (6 Karten), der Baum darunter
+// der echten Elternbeziehung — wie im Mockup, wo die Gruppen aus den
+// Top-Level-Eintraegen kommen.
 //
-// **TAG ZEIGT DIE SUMME, FENSTER DEN SCHNITT:** bei `fenster > 1`
-// traegt `wert` den **Schnitt je protokolliertem Tag**
-// (`avg_per_logged_day`) — nur der ist mit einem Tagesziel
-// vergleichbar; die Fenstersumme steht daneben in `summe`.
+// **WOHER DIE WERTE KOMMEN (G-121):** `nutrition.nutrient_summary_
+// window(user, stichtag, tage)` — `p_days = 1` ist die Tagessumme.
+// Fenster > 1 zeigt den Schnitt je protokolliertem Tag.
 //
-// **WOHER ZIEL UND OBERGRENZE KOMMEN:** aus
-// `daily_reference_assessment(user, stichtag)` — dieselbe Funktion,
-// die auch das Diary bewertet. Sie trifft die persoenliche Auswahl
-// (Geschlecht, Alter) in der Datenbank; eine zweite Auswahl hier
-// waere eine zweite Wahrheit. `[cmd]` 35 der 138 Codes tragen fuer
-// den dev-Nutzer eine Referenz; die uebrigen zeigen einen Strich.
-// `[read]` An einem Tag ohne Eintraege liefert die Funktion keine
-// Zeilen — dann stehen auch die Ziele leer.
+// **WOHER ZIEL UND OBERGRENZE KOMMEN:** `daily_reference_assessment`
+// — die persoenliche Auswahl trifft die Datenbank. `[cmd]` Seit C-161
+// liefert sie alle 138 Codes (154 Zeilen, 45 mit Prozentwert).
 //
-// **WIE AUS STUFEN EIN BAUM WIRD:** Innerhalb einer Gruppe, nach
-// `sort_index` gelesen, ist der letzte Eintrag einer niedrigeren Stufe
-// der Elternknoten. `[cmd]` Bei den Kohlenhydraten steht `SUGAR`
-// (Stufe 1) an `sort_index` 73 — also NACH seinen Kindern. Deshalb
-// wird die Gruppe **zweimal** durchlaufen: erst die Stufe-1-Knoten
-// einsammeln, dann die tieferen zuordnen.
+// **DIE GESPEICHERTE ANSICHT** (G-122, Tom: „danach wird die letzte
+// Sicht gespeichert fuer den User") liegt in
+// `public.user_display_preferences` unter `nutrition.nutrient_tree` —
+// in der Datenbank, nicht im Browser: wer am Rechner eine Gruppe
+// oeffnet, findet sie am Telefon offen. Ohne Zeile gilt „alles zu".
 //
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
 import { getReferenceAssessment } from './reference-assessment-read'
+import {
+  ANSICHT_SCHLUESSEL, pruefeAnsicht, type GespeicherteAnsicht,
+} from './naehrstoff-anzeige'
 
 function zahl(v: unknown): number | null {
   if (v === null || v === undefined) return null
@@ -61,6 +63,10 @@ export type NaehrstoffKnoten = {
   einheit: string | null
   stufe: number
   sort: number
+  /** Der Elterncode aus `parent_code` (C-161); `null` = Wurzel. */
+  eltern: string | null
+  /** `group_de` des Eintrags selbst (Karten folgen der Wurzel). */
+  gruppe: string
   /** Der gezeigte Wert: Tag = Summe, Fenster = Schnitt je
    *  protokolliertem Tag. */
   wert: number | null
@@ -110,42 +116,44 @@ export type NaehrstoffOrdnung = {
   stichtag: string
   /** Tage mit Protokoll im Fenster (Maximum ueber alle Zeilen). */
   tageErfasst: number
+  /** Die gespeicherte Ansicht des Nutzers — `null` heisst: noch nie
+   *  gespeichert, es gilt „alles zu". */
+  gespeichert: GespeicherteAnsicht | null
   fehler: string | null
 }
 
+function zaehle(k: NaehrstoffKnoten): number {
+  return 1 + k.kinder.reduce((s, x) => s + zaehle(x), 0)
+}
+function zaehleMitWert(k: NaehrstoffKnoten): number {
+  return (k.wert !== null ? 1 : 0) + k.kinder.reduce((s, x) => s + zaehleMitWert(x), 0)
+}
+
 /**
- * Baut aus einer nach `sort_index` sortierten Gruppe den Baum.
+ * Baut aus der flachen Liste den Wald ueber `eltern` (C-161).
  *
- * `[read]` Zwei Durchlaeufe, weil ein Elternknoten NACH seinen Kindern
- * stehen kann (`SUGAR` an 73, seine Kinder ab 65). Ein einzelner
- * Durchlauf mit „letzter flacherer Knoten ist der Vater" wuerde die
- * ersten sechs Kinder heimatlos lassen.
+ * `[read]` Kein Raten mehr aus Stufe und Reihenfolge: jeder Knoten
+ * haengt an seinem `parent_code`. Ein Eintrag, dessen Elternteil nicht
+ * in der Liste steht, wird Wurzel — defensiv, die Fremdschluessel
+ * schliessen den Fall eigentlich aus. Geschwister stehen nach
+ * `sort_index`.
  */
-export function baueBaum(flach: NaehrstoffKnoten[]): NaehrstoffKnoten[] {
-  const wurzeln = flach.filter(k => k.stufe === 1)
-  if (wurzeln.length === 0) {
-    // Gruppen ohne Stufe-1-Knoten (Ballaststoffe, Zuckeralkohole,
-    // Organische Saeuren) stehen flach — das ist kein Fehler, sondern
-    // heisst: es gibt keinen Sammelbegriff dafuer.
-    return flach
+export function baueWald(flach: NaehrstoffKnoten[]): NaehrstoffKnoten[] {
+  const proCode = new Map<string, NaehrstoffKnoten>()
+  for (const k of flach) proCode.set(k.code, k)
+
+  const wurzeln: NaehrstoffKnoten[] = []
+  for (const k of flach) {
+    const eltern = k.eltern ? proCode.get(k.eltern) : undefined
+    if (eltern && eltern !== k) eltern.kinder.push(k)
+    else wurzeln.push(k)
   }
 
-  // Die uebrigen der Reihe nach an den zuletzt passenden Elternknoten.
-  // Stufe 2 haengt an der Stufe 1, Stufe 3 an der zuletzt gesehenen
-  // Stufe 2 (sonst an der Stufe 1).
-  let letzteEins: NaehrstoffKnoten | null = wurzeln[0] ?? null
-  let letzteZwei: NaehrstoffKnoten | null = null
-  for (const k of flach) {
-    if (k.stufe === 1) { letzteEins = k; letzteZwei = null; continue }
-    if (k.stufe === 2) {
-      letzteZwei = k
-      ;(letzteEins ?? wurzeln[0]).kinder.push(k)
-      continue
-    }
-    // Stufe 3
-    const ziel = letzteZwei ?? letzteEins ?? wurzeln[0]
-    ziel.kinder.push(k)
+  const sortiere = (liste: NaehrstoffKnoten[]) => {
+    liste.sort((a, b) => a.sort - b.sort)
+    for (const k of liste) sortiere(k.kinder)
   }
+  sortiere(wurzeln)
   return wurzeln
 }
 
@@ -160,12 +168,17 @@ type FensterZeile = {
   avg_per_logged_day: number | null
 }
 
+/**
+ * @param fensterWunsch Das Fenster aus der Adresse; `null` heisst
+ *   „kein Parameter" — dann gilt das gespeicherte, sonst der Tag.
+ */
 export async function ladeOrdnung(
-  stichtag: string, fenster = 1,
+  stichtag: string, fensterWunsch: number | null = null,
 ): Promise<NaehrstoffOrdnung> {
   const leer: NaehrstoffOrdnung = {
     gruppen: [], gesamt: 0, messbar: 0, mitReferenz: 0, unterZiel: 0,
-    ueberObergrenze: 0, fenster, stichtag, tageErfasst: 0, fehler: null,
+    ueberObergrenze: 0, fenster: fensterWunsch ?? 1, stichtag,
+    tageErfasst: 0, gespeichert: null, fehler: null,
   }
   try {
     const client = createSessionClient()
@@ -174,13 +187,28 @@ export async function ladeOrdnung(
     const { data: { user } } = await client.auth.getUser()
     if (!user) return { ...leer, fehler: 'Keine Sitzung' }
 
-    // Die Gliederung kommt weiter aus `nutrient_defs` — die
-    // Fensterfunktion liefert nur Zeilen, wenn der Nutzer im Fenster
-    // protokolliert hat, und ein leerer Tab waere die falsche Antwort
-    // auf einen leeren Tag: die Ordnung existiert auch ohne Werte.
+    // Erst die gespeicherte Ansicht — sie entscheidet das Fenster,
+    // wenn die Adresse keines nennt. Ein PK-Zugriff, RLS-geschuetzt.
+    let gespeichert: GespeicherteAnsicht | null = null
+    try {
+      const { data } = await client
+        .from('user_display_preferences')
+        .select('value')
+        .eq('preference_key', ANSICHT_SCHLUESSEL)
+        .maybeSingle()
+      gespeichert = pruefeAnsicht((data as { value?: unknown } | null)?.value)
+    } catch {
+      gespeichert = null
+    }
+    const fenster = fensterWunsch ?? gespeichert?.fenster ?? 1
+
+    // Die Gliederung kommt aus `nutrient_defs` — die Fensterfunktion
+    // liefert nur Zeilen, wenn der Nutzer im Fenster protokolliert
+    // hat, und ein leerer Tab waere die falsche Antwort auf einen
+    // leeren Tag: die Ordnung existiert auch ohne Werte.
     const [defsR, fensterR, refsR] = await Promise.allSettled([
       db.from('nutrient_defs')
-        .select('code, name_de, unit, group_de, display_tier, sort_index')
+        .select('code, name_de, unit, group_de, display_tier, sort_index, parent_code')
         .order('sort_index', { ascending: true }),
       db.rpc('nutrient_summary_window', {
         p_user_id: user.id, p_end_date: stichtag, p_days: fenster,
@@ -190,7 +218,7 @@ export async function ladeOrdnung(
 
     if (defsR.status !== 'fulfilled' || defsR.value.error) {
       return {
-        ...leer,
+        ...leer, fenster, gespeichert,
         fehler: defsR.status === 'fulfilled'
           ? defsR.value.error?.message ?? 'unbekannt'
           : 'Naehrstoffliste nicht gelesen',
@@ -235,7 +263,7 @@ export async function ladeOrdnung(
       }
     }
 
-    const proGruppe = new Map<string, NaehrstoffKnoten[]>()
+    const flach: NaehrstoffKnoten[] = []
     let messbar = 0
     let mitReferenz = 0
     let unterZiel = 0
@@ -267,12 +295,14 @@ export async function ladeOrdnung(
       if (status === 'unter') unterZiel += 1
       if (status === 'ueber') ueberObergrenze += 1
 
-      const knoten: NaehrstoffKnoten = {
+      flach.push({
         code,
         name: text(d.name_de) ?? code,
         einheit: text(d.unit),
         stufe: zahl(d.display_tier) ?? 1,
         sort: zahl(d.sort_index) ?? 0,
+        eltern: text(d.parent_code),
+        gruppe,
         wert,
         summe: z?.total_value ?? null,
         positionen: z?.item_count ?? 0,
@@ -288,20 +318,27 @@ export async function ladeOrdnung(
           ? (wert / ziel.min) * 100 : null,
         status,
         kinder: [],
-      }
-      const liste = proGruppe.get(gruppe)
-      if (liste) liste.push(knoten)
-      else proGruppe.set(gruppe, [knoten])
+      })
+    }
+
+    // Der Wald aus `parent_code`; die Karten folgen der Gruppe der
+    // Wurzel (Begruendung im Dateikopf).
+    const wurzeln = baueWald(flach)
+    const proGruppe = new Map<string, NaehrstoffKnoten[]>()
+    for (const w of wurzeln) {
+      const liste = proGruppe.get(w.gruppe)
+      if (liste) liste.push(w)
+      else proGruppe.set(w.gruppe, [w])
     }
 
     const gruppen: NaehrstoffGruppe[] = []
     for (const name of Array.from(proGruppe.keys())) {
-      const flach = (proGruppe.get(name) ?? []).slice().sort((a, b) => a.sort - b.sort)
+      const knoten = proGruppe.get(name) ?? []
       gruppen.push({
         name,
-        anzahl: flach.length,
-        mitWert: flach.filter(k => k.wert !== null).length,
-        knoten: baueBaum(flach),
+        anzahl: knoten.reduce((s, k) => s + zaehle(k), 0),
+        mitWert: knoten.reduce((s, k) => s + zaehleMitWert(k), 0),
+        knoten,
       })
     }
     // Groesste Gruppe zuerst — wie die Messung sie ausweist.
@@ -309,7 +346,8 @@ export async function ladeOrdnung(
 
     return {
       gruppen, gesamt: defs.length, messbar, mitReferenz, unterZiel,
-      ueberObergrenze, fenster, stichtag, tageErfasst, fehler: null,
+      ueberObergrenze, fenster, stichtag, tageErfasst, gespeichert,
+      fehler: null,
     }
   } catch (e) {
     return { ...leer, fehler: e instanceof Error ? e.message : String(e) }

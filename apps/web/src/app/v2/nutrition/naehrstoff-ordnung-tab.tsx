@@ -1,25 +1,24 @@
 'use client'
 
-// Der Nutrients-Tab mit der echten Naehrstoffordnung (G-101, C-54),
-// seit G-121 mit den Werten der langen Form und Zeitfenstern (C-157).
+// Der Nutrients-Tab (G-101, G-121), seit G-122 mit dem echten Baum
+// aus `parent_code`, klappbar auf JEDER Ebene, gespeicherter Ansicht
+// und Detailmodal.
 //
-// **DIE VORLAGE:** `theme-v1/module-nutrition-nutrients.jsx` — Spalten
-// Naehrstoff · Menge · Ziel · Fortschritt · % · Status, dazu die
-// Scope-Filter. `[read]` Die Vorlage haelt einen Elternknoten
-// sichtbar, wenn ein KIND auffaellig ist (`hasChildOutOfRange`,
-// rekursiv) — das ist mitgebaut (`kindTrifft`).
+// **KLAPPEN:** Tom: „Ich will jede Ebene im Baum ein- und ausklappen
+// koennen. Startet mit alles zu, und danach wird die letzte Sicht
+// gespeichert fuer den User." Jeder Knoten mit Kindern traegt einen
+// Chevron; der Start ist ueberall zu; die Menge der offenen Knoten
+// (plus Fenster und Filter) geht als eine Ansicht nach
+// `public.user_display_preferences` — in die Datenbank, nicht in den
+// Browser (Begruendung: dieselbe Sicht am Telefon).
 //
-// **STATUS IST EINE AUSSAGE UEBER DIE ZAHL,** nicht ueber die Person:
-// „unter Ziel" heisst, die Zahl liegt unter der persoenlichen
-// Referenz aus `daily_reference_assessment` — kein Score, keine
-// Ampel fuer den Menschen. Zeilen ohne Referenz tragen einen Strich.
+// **FILTER:** ein aktiver Scope zeigt die Treffer unabhaengig vom
+// Klappzustand (wer nach Auffaelligem fragt, will es sehen) und
+// laesst Eltern auffaelliger Kinder stehen (`kindTrifft`, die
+// `hasChildOutOfRange`-Regel der Vorlage).
 //
-// **DAS DETAIL-MODAL DER VORLAGE IST NICHT GEBAUT:** es braucht
-// `parent_code` in `nutrient_defs` (C-161). Der Andockpunkt ist die
-// `waehlen`-Eigenschaft an den Zeilen — das Modal haengt sich dort
-// ein, ohne dass Tabelle oder Filter angefasst werden muessen. Der
-// 14-Tage-Trend der Vorlage ist dort erfunden („Fake 14-day trend",
-// Z. 694) — er gehoert ins Modal und wartet mit ihm auf C-161.
+// **MODAL:** Klick auf die Zeile oeffnet das Detailmodal (G-122);
+// der Chevron klappt nur.
 import * as React from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import type { Route } from 'next'
@@ -29,45 +28,66 @@ import type {
   NaehrstoffOrdnung, NaehrstoffGruppe, NaehrstoffKnoten,
 } from '../../../lib/nutrition/naehrstoff-ordnung'
 import {
-  FENSTER, sichtbar, zaehleSichtbare, type Scope,
+  FENSTER, sichtbar, zaehleSichtbare, STATUS_TEXT, STATUS_FARBE,
+  zahlMitEinheit as zahl, type Scope, type GespeicherteAnsicht,
 } from '../../../lib/nutrition/naehrstoff-anzeige'
+import { NaehrstoffModal } from './naehrstoff-modal'
 
-function zahl(v: number | null, einheit: string | null): string {
-  if (v === null) return '—'
-  const n = v.toLocaleString('de-DE', { maximumFractionDigits: v < 1 ? 3 : 1 })
-  return einheit ? `${n} ${einheit}` : n
-}
+/** Gruppennamen und Codes teilen sich die `offen`-Menge; das Praefix
+ *  haelt sie auseinander (ein Code heisst nie `g:…`). */
+const GRUPPE = 'g:'
 
-const STATUS_TEXT: Record<string, string> = {
-  unter: 'unter Ziel',
-  im: 'im Bereich',
-  ueber: 'ueber UL',
-}
-const STATUS_FARBE: Record<string, string> = {
-  unter: 'var(--warn)',
-  im: 'var(--pos)',
-  ueber: 'var(--neg)',
-}
+type Auswahl = { knoten: NaehrstoffKnoten; elternName: string | null }
 
 export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
-  // G-117, Tom: „standard eingeklappt". Alle 12 Gruppen zu; ein
-  // aktiver Scope-Filter oeffnet die Treffergruppen, denn wer nach
-  // Auffaelligem fragt, will es sehen, nicht erst aufklappen.
-  const [offen, setOffen] = React.useState<Set<string>>(() => new Set())
-  const [scope, setScope] = React.useState<Scope>('alle')
+  const [offen, setOffen] = React.useState<Set<string>>(
+    () => new Set(d.gespeichert?.offen ?? []))
+  const [scope, setScope] = React.useState<Scope>(d.gespeichert?.scope ?? 'alle')
+  const [auswahl, setAuswahl] = React.useState<Auswahl | null>(null)
 
-  // G-121: das Fenster steht in der Adresse — dieselbe Begruendung wie
-  // beim Tab (tab-url.ts): serverseitig geladen, von aussen messbar.
   const router = useRouter()
   const pfad = usePathname()
   const suche = useSearchParams()
+
+  // Die letzte Sicht speichern — gesammelt (600 ms), damit ein
+  // Klickgewitter nicht je Klick eine Zeile schreibt. Der letzte
+  // Stand gewinnt; ein Fehlschlag ist still: die Ansicht ist Komfort,
+  // kein Datenverlust.
+  const speicherTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const speichern = React.useCallback((ansicht: GespeicherteAnsicht) => {
+    if (speicherTimer.current) clearTimeout(speicherTimer.current)
+    speicherTimer.current = setTimeout(() => {
+      void fetch('/api/nutrition/ansicht', {
+        method: 'PUT',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(ansicht),
+      }).catch(() => undefined)
+    }, 600)
+  }, [])
+
   const fensterSetzen = React.useCallback((tage: number) => {
+    speichern({ offen: Array.from(offen), fenster: tage, scope })
     const p = new URLSearchParams(suche?.toString() ?? '')
     if (tage === 1) p.delete('fenster')
     else p.set('fenster', String(tage))
     const rest = p.toString()
     router.push((rest ? `${pfad}?${rest}` : pfad) as Route)
-  }, [router, pfad, suche])
+  }, [router, pfad, suche, offen, scope, speichern])
+
+  const scopeSetzen = React.useCallback((s: Scope) => {
+    setScope(s)
+    speichern({ offen: Array.from(offen), fenster: d.fenster, scope: s })
+  }, [offen, d.fenster, speichern])
+
+  const umschalten = React.useCallback((schluessel: string) => {
+    setOffen(alt => {
+      const n = new Set(alt)
+      if (n.has(schluessel)) n.delete(schluessel)
+      else n.add(schluessel)
+      speichern({ offen: Array.from(n), fenster: d.fenster, scope })
+      return n
+    })
+  }, [d.fenster, scope, speichern])
 
   if (d.fehler) {
     return (
@@ -82,7 +102,6 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
   return (
     <div className="v2-col-gap" style={{ gap: 14 }}>
       <Card title="Naehrstoffordnung" sub={`${d.gesamt} Naehrstoffe in ${d.gruppen.length} Gruppen`}>
-        {/* Zeitfenster (G-121, Toms Liste) und Scope-Filter der Vorlage. */}
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
           <div className="v2-segmented" role="group" aria-label="Zeitfenster">
             {FENSTER.map(t => (
@@ -106,7 +125,7 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
                 className={scope === k ? 'v2-btn v2-btn-primary' : 'v2-btn v2-btn-ghost'}
                 style={{ height: 24, fontSize: 11, padding: '0 10px', borderRadius: 5 }}
                 aria-pressed={scope === k}
-                onClick={() => setScope(k)}
+                onClick={() => scopeSetzen(k)}
               >
                 {l}
               </button>
@@ -138,7 +157,7 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
           und <strong>{d.ueberObergrenze}</strong> ueber der Obergrenze.
           Die uebrigen {d.gesamt - d.mitReferenz} sind gegliedert und
           gemessen, aber ohne Referenzwert — dort steht ein Strich, kein
-          Urteil.
+          Urteil. Klick auf eine Zeile oeffnet die Erklaerung.
         </p>
       </Card>
 
@@ -152,29 +171,38 @@ export function NaehrstoffOrdnungTab({ d }: { d: NaehrstoffOrdnung }) {
             scope={scope}
             treffer={treffer}
             istTag={istTag}
-            offen={scope !== 'alle' || offen.has(g.name)}
-            umschalten={() => setOffen(s => {
-              const n = new Set(s)
-              if (n.has(g.name)) n.delete(g.name)
-              else n.add(g.name)
-              return n
-            })}
+            offen={scope !== 'alle' || offen.has(GRUPPE + g.name)}
+            offenSet={offen}
+            umschalten={umschalten}
+            waehlen={(knoten, elternName) => setAuswahl({ knoten, elternName })}
           />
         )
       })}
+
+      {auswahl && (
+        <NaehrstoffModal
+          knoten={auswahl.knoten}
+          elternName={auswahl.elternName}
+          datum={d.stichtag}
+          fenster={d.fenster}
+          onClose={() => setAuswahl(null)}
+        />
+      )}
     </div>
   )
 }
 
-function GruppenKarte({ g, scope, treffer, istTag, offen, umschalten }: {
+function GruppenKarte({ g, scope, treffer, istTag, offen, offenSet, umschalten, waehlen }: {
   g: NaehrstoffGruppe; scope: Scope; treffer: number; istTag: boolean
-  offen: boolean; umschalten: () => void
+  offen: boolean; offenSet: Set<string>
+  umschalten: (schluessel: string) => void
+  waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
 }) {
   return (
     <Card>
       <button
         type="button"
-        onClick={umschalten}
+        onClick={() => umschalten(GRUPPE + g.name)}
         aria-expanded={offen}
         style={{
           display: 'flex', alignItems: 'center', gap: 8, width: '100%',
@@ -199,6 +227,7 @@ function GruppenKarte({ g, scope, treffer, istTag, offen, umschalten }: {
           <table className="v2-tbl">
             <thead>
               <tr>
+                <th style={{ width: 26 }} aria-label="Klappen" />
                 <th>Naehrstoff</th>
                 <th style={{ width: 110 }}>{istTag ? 'Heute' : 'Schnitt/Tag'}</th>
                 <th style={{ width: 100 }}>Erfasst</th>
@@ -210,7 +239,17 @@ function GruppenKarte({ g, scope, treffer, istTag, offen, umschalten }: {
             </thead>
             <tbody>
               {g.knoten.filter(k => sichtbar(k, scope)).map(k => (
-                <Zeilen key={k.code} k={k} tiefe={0} scope={scope} istTag={istTag} />
+                <Zeilen
+                  key={k.code}
+                  k={k}
+                  tiefe={0}
+                  elternName={null}
+                  scope={scope}
+                  istTag={istTag}
+                  offenSet={offenSet}
+                  umschalten={umschalten}
+                  waehlen={waehlen}
+                />
               ))}
             </tbody>
           </table>
@@ -221,28 +260,56 @@ function GruppenKarte({ g, scope, treffer, istTag, offen, umschalten }: {
 }
 
 /**
- * Ein Knoten und alles darunter — die Einrueckung zeigt die Stufe.
+ * Ein Knoten und — wenn er offen ist — alles darunter.
  *
- * ANDOCKPUNKT (C-161): `waehlen` bekommt den Code der Zeile, sobald
- * das Detail-Modal existiert; bis dahin bleibt die Zeile ohne Klick —
- * ein Zeiger-Cursor ohne Wirkung waere eine Attrappe.
+ * Der Chevron klappt (jede Ebene, G-122), der Rest der Zeile oeffnet
+ * das Modal. Bei aktivem Filter zaehlt der Klappzustand nicht: die
+ * Treffer stehen ausgeklappt da.
  */
-function Zeilen({ k, tiefe, scope, istTag, waehlen }: {
-  k: NaehrstoffKnoten; tiefe: number; scope: Scope; istTag: boolean
-  waehlen?: (code: string) => void
+function Zeilen({ k, tiefe, elternName, scope, istTag, offenSet, umschalten, waehlen }: {
+  k: NaehrstoffKnoten; tiefe: number; elternName: string | null
+  scope: Scope; istTag: boolean; offenSet: Set<string>
+  umschalten: (schluessel: string) => void
+  waehlen: (k: NaehrstoffKnoten, elternName: string | null) => void
 }): React.ReactElement {
   const farbe = k.status ? STATUS_FARBE[k.status] : 'var(--fg-dim)'
+  const hatKinder = k.kinder.length > 0
+  const istOffen = scope !== 'alle' || offenSet.has(k.code)
   return (
     <>
-      <tr onClick={waehlen ? () => waehlen(k.code) : undefined}>
-        <td style={{ paddingLeft: 8 + tiefe * 18 }}>
-          {tiefe > 0 && (
-            <span className="v2-dim" style={{ marginRight: 4 }}>└</span>
+      <tr onClick={() => waehlen(k, elternName)} style={{ cursor: 'pointer' }}>
+        <td style={{ paddingLeft: 4 + tiefe * 16 }}>
+          {hatKinder ? (
+            <button
+              type="button"
+              className="v2-icon-btn"
+              style={{ width: 20, height: 20 }}
+              aria-expanded={istOffen}
+              aria-label={`${k.name} ${istOffen ? 'einklappen' : 'ausklappen'}`}
+              onClick={ev => { ev.stopPropagation(); umschalten(k.code) }}
+            >
+              <Icon name={istOffen ? 'chevron_down' : 'chevron_right'} className="v2-ic v2-ic-sm" />
+            </button>
+          ) : (
+            <span
+              aria-hidden
+              style={{
+                display: 'inline-block', width: 4, height: 4, borderRadius: 999,
+                background: 'var(--fg-dim)', opacity: 0.5, marginLeft: 8,
+              }}
+            />
           )}
+        </td>
+        <td>
           {k.name}
           <span className="v2-dim v2-mono" style={{ fontSize: 9.5, marginLeft: 6 }}>
             {k.code}
           </span>
+          {hatKinder && !istOffen && (
+            <span className="v2-dim" style={{ fontSize: 9.5, marginLeft: 6 }}>
+              +{k.kinder.length}
+            </span>
+          )}
         </td>
         <td
           className="v2-num"
@@ -253,7 +320,6 @@ function Zeilen({ k, tiefe, scope, istTag, waehlen }: {
         </td>
         <td className="v2-num v2-dim" style={{ fontSize: 11 }}>
           {k.positionen === 0 ? '—' : istTag
-            // „188 g aus 11 von 14 Positionen" — die Kurzform der Zelle.
             ? `${k.positionenMitWert} von ${k.positionen} Pos.`
             : `${k.tageVollstaendig}/${k.tageErfasst} Tg. vollst.`}
         </td>
@@ -295,8 +361,18 @@ function Zeilen({ k, tiefe, scope, istTag, waehlen }: {
           )}
         </td>
       </tr>
-      {k.kinder.filter(x => sichtbar(x, scope)).map(x => (
-        <Zeilen key={x.code} k={x} tiefe={tiefe + 1} scope={scope} istTag={istTag} waehlen={waehlen} />
+      {hatKinder && istOffen && k.kinder.filter(x => sichtbar(x, scope)).map(x => (
+        <Zeilen
+          key={x.code}
+          k={x}
+          tiefe={tiefe + 1}
+          elternName={k.name}
+          scope={scope}
+          istTag={istTag}
+          offenSet={offenSet}
+          umschalten={umschalten}
+          waehlen={waehlen}
+        />
       ))}
     </>
   )
