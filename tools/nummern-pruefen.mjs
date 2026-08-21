@@ -11,6 +11,8 @@
 //   dublette-erledigt   Dubletten innerhalb von ERLEDIGT.md
 //   beide-dateien       Nummern, die in beiden Dateien stehen
 //   haken-in-todo       Abgehakte Punkte, die in TODO.md liegengeblieben sind
+//   laufend-unbekannt   LAUFEND.md nennt eine Nummer, die nirgends angelegt ist
+//   laufend-erledigt    LAUFEND.md fuehrt einen Auftrag, der schon erledigt ist
 //   kopfzaehler         Den Zaehler im TODO-Kopf gegen die Datei
 //
 // Gegenprobe: LUMEOS_NUMMERN_SELBSTTEST=1 baut je Pruefung einen eigenen
@@ -28,10 +30,15 @@ import { resolve } from 'node:path'
 const WURZEL = resolve(process.cwd())
 const PFAD = {
   todo: resolve(WURZEL, 'docs/todo/TODO.md'),
-  erledigt: resolve(WURZEL, 'docs/todo/ERLEDIGT.md')
+  erledigt: resolve(WURZEL, 'docs/todo/ERLEDIGT.md'),
+  laufend: resolve(WURZEL, 'docs/todo/LAUFEND.md')
 }
 
 const ZEILE = /^[ \t]*- \[( |x|~)\] \*\*([A-Z]+-\d+[a-z]?):/
+
+// In LAUFEND.md stehen die Auftraege in Tabellenzeilen, fett gesetzt und
+// ohne Doppelpunkt: | **C-185** Peptide ... | `supabase/` |
+const LAUFEND_NR = /\*\*([A-Z]+-\d+[a-z]?)\*\*/g
 
 function punkte (text) {
   const aus = []
@@ -97,6 +104,25 @@ function pruefe (texte) {
     }
   }
 
+  // LAUFEND.md sagt, wer woran arbeitet. Steht dort eine Nummer, die es
+  // nicht gibt, oder ein Auftrag, der laengst in ERLEDIGT.md liegt, dann
+  // schickt die Datei jemanden auf eine Arbeit, die keine mehr ist.
+  const angelegt = new Set([...offen, ...fertig].map(p => p.nr))
+  const offenNr = new Set(offen.map(p => p.nr))
+  for (const nr of new Set([...texte.laufend.matchAll(LAUFEND_NR)].map(m => m[1]))) {
+    if (!angelegt.has(nr)) {
+      fehler.push({
+        pruefung: 'laufend-unbekannt',
+        text: `LAUFEND.md nennt ${nr} -- angelegt ist die Nummer weder in TODO.md noch in ERLEDIGT.md.`
+      })
+    } else if (!offenNr.has(nr)) {
+      fehler.push({
+        pruefung: 'laufend-erledigt',
+        text: `LAUFEND.md fuehrt ${nr} als Auftrag, der Punkt steht in ERLEDIGT.md.`
+      })
+    }
+  }
+
   const kopf = texte.todo.slice(0, 600)
   const m = kopf.match(/\*\*Stand:[^*]*\*\*\s*(\d+)\s+offen/)
   const gezaehltOffen = offen.filter(p => p.zustand === ' ').length
@@ -118,7 +144,8 @@ function pruefe (texte) {
 function lesen () {
   return {
     todo: readFileSync(PFAD.todo, 'utf8'),
-    erledigt: readFileSync(PFAD.erledigt, 'utf8')
+    erledigt: readFileSync(PFAD.erledigt, 'utf8'),
+    laufend: readFileSync(PFAD.laufend, 'utf8')
   }
 }
 
@@ -162,6 +189,16 @@ function faelle (basis) {
       pruefung: 'haken-in-todo',
       was: 'ein abgehakter Punkt bleibt in TODO.md liegen',
       bau: t => ({ ...t, todo: `${t.todo}\n- [x] **ZZ-998: abgehakt und liegengeblieben**\n` })
+    },
+    {
+      pruefung: 'laufend-unbekannt',
+      was: 'LAUFEND.md nennt eine Nummer, die es nicht gibt',
+      bau: t => ({ ...t, laufend: `${t.laufend}\n| **ZZ-997** nie angelegt | \`nirgends\` |\n` })
+    },
+    {
+      pruefung: 'laufend-erledigt',
+      was: `LAUFEND.md fuehrt ${inErledigt}, das erledigt ist`,
+      bau: t => ({ ...t, laufend: `${t.laufend}\n| **${inErledigt}** laengst erledigt | \`supabase/\` |\n` })
     },
     {
       pruefung: 'kopfzaehler',
