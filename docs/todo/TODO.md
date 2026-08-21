@@ -13,6 +13,10 @@ Beleg und Begründung. Diese Datei enthält nur, was noch aussteht.
 
 **Wer gerade woran arbeitet:** `docs/todo/LAUFEND.md`.
 
+**Alle Punkte auf einen Blick:** `docs/todo/00-UEBERSICHT.md` — erzeugt,
+nicht gepflegt. `node tools/nummern-pruefen.mjs --schreiben` schreibt sie
+neu, das Gate wird rot, wenn sie vom Bestand abweicht.
+
 ---
 
 ## Vor jedem Auftrag
