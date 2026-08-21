@@ -435,7 +435,7 @@ function CustomExerciseModal({ onClose }: { onClose: () => void }) {
               <>
                 <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
                 <InEntwicklungKnopf titel="Save exercise" className="v2-btn v2-btn-primary"
-                                    grund="Eigene Uebungen brauchen einen Schreibpfad nach training.exercises; den gibt es noch nicht.">
+                                    grund="`training.exercises` gibt es (17 Spalten, 1.416 Zeilen) und der Exercises-Tab liest sie. Was fehlt, ist der Schreibweg — und die Abgrenzung: der Katalog ist geteilt, eine eigene Uebung waere es nicht.">
                   <Icon name="check" className="v2-ic v2-ic-sm" />Save exercise
                 </InEntwicklungKnopf>
               </>

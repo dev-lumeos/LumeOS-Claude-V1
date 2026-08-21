@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { httpStatusForDiaryError } from '../../../../lib/nutrition/diary-model'
 import { WaterWriteError, waterLogCreateSchema } from '../../../../lib/nutrition/water-model'
-import { addWaterLog } from '../../../../lib/nutrition/water-write'
+import { addWaterLog, listOwnWaterLogs, removeWaterLog } from '../../../../lib/nutrition/water-write'
 import { getHydrationDay } from '../../../../lib/nutrition/hydration-day-read'
 
 export const dynamic = 'force-dynamic'
@@ -27,7 +27,13 @@ function errorResponse(error: unknown) {
   )
 }
 
-/** Der Wasserhaushalt eines Tages. */
+/**
+ * Der Wasserhaushalt eines Tages.
+ *
+ * G-117: `?liste=1` legt die Einzeleintraege des Tages bei — die
+ * Historie fuer Ansehen und Fehlklick-Korrektur. Ohne den Parameter
+ * bleibt die Antwortform unveraendert (bestehende Aufrufer).
+ */
 export async function GET(request: NextRequest) {
   const datum = request.nextUrl.searchParams.get('datum') ?? ''
   if (!/^\d{4}-\d{2}-\d{2}$/.test(datum)) {
@@ -36,8 +42,39 @@ export async function GET(request: NextRequest) {
       { status: 400 },
     )
   }
+  const mitListe = request.nextUrl.searchParams.get('liste') === '1'
   try {
-    return NextResponse.json({ tag: await getHydrationDay(datum) })
+    const tag = await getHydrationDay(datum)
+    if (!mitListe) return NextResponse.json({ tag })
+    return NextResponse.json({ tag, eintraege: await listOwnWaterLogs(datum) })
+  } catch (error) {
+    return errorResponse(error)
+  }
+}
+
+/**
+ * Einen Wassereintrag entfernen — die Fehlklick-Korrektur (G-117).
+ *
+ * `removeWaterLog` prueft auf null geloeschte Zeilen (G-79-Muster:
+ * RLS macht „gibt es nicht" und „gehoert jemand anderem" bewusst
+ * ununterscheidbar) und wirft dann NOT_FOUND. Antwort ist der neu
+ * gerechnete Tag samt Restliste — dieselbe Quelle wie beim Laden.
+ */
+export async function DELETE(request: NextRequest) {
+  const id = request.nextUrl.searchParams.get('id') ?? ''
+  const datum = request.nextUrl.searchParams.get('datum') ?? ''
+  if (!id || !/^\d{4}-\d{2}-\d{2}$/.test(datum)) {
+    return NextResponse.json(
+      { error: 'id und datum (YYYY-MM-DD) sind Pflicht.', code: 'VALIDATION_FAILED' },
+      { status: 400 },
+    )
+  }
+  try {
+    await removeWaterLog(id)
+    return NextResponse.json({
+      tag: await getHydrationDay(datum),
+      eintraege: await listOwnWaterLogs(datum),
+    })
   } catch (error) {
     return errorResponse(error)
   }
