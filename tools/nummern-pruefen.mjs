@@ -10,6 +10,7 @@
 //   dublette-todo       Dubletten innerhalb von TODO.md
 //   dublette-erledigt   Dubletten innerhalb von ERLEDIGT.md
 //   beide-dateien       Nummern, die in beiden Dateien stehen
+//   haken-in-todo       Abgehakte Punkte, die in TODO.md liegengeblieben sind
 //   kopfzaehler         Den Zaehler im TODO-Kopf gegen die Datei
 //
 // Gegenprobe: LUMEOS_NUMMERN_SELBSTTEST=1 baut je Pruefung einen eigenen
@@ -84,6 +85,18 @@ function pruefe (texte) {
     }
   }
 
+  // Ein Haken in TODO.md schliesst nichts -- er versteckt es. Neun solche
+  // Punkte lagen dort, keiner davon hatte einen Eintrag in ERLEDIGT.md,
+  // und beide-dateien kann sie deshalb nicht sehen.
+  for (const p of offen) {
+    if (p.zustand === 'x') {
+      fehler.push({
+        pruefung: 'haken-in-todo',
+        text: `${p.nr} ist abgehakt und steht in TODO.md -- Zeile ${p.zeile}. Erledigtes gehoert nach ERLEDIGT.md.`
+      })
+    }
+  }
+
   const kopf = texte.todo.slice(0, 600)
   const m = kopf.match(/\*\*Stand:[^*]*\*\*\s*(\d+)\s+offen/)
   const gezaehltOffen = offen.filter(p => p.zustand === ' ').length
@@ -144,6 +157,11 @@ function faelle (basis) {
         ...t,
         todo: kopfAnpassen(`${t.todo}\n- [ ] **${inErledigt}: offen und erledigt zugleich**\n`, 1)
       })
+    },
+    {
+      pruefung: 'haken-in-todo',
+      was: 'ein abgehakter Punkt bleibt in TODO.md liegen',
+      bau: t => ({ ...t, todo: `${t.todo}\n- [x] **ZZ-998: abgehakt und liegengeblieben**\n` })
     },
     {
       pruefung: 'kopfzaehler',
