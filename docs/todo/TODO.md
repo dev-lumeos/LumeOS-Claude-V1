@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `48e9664` auf `dev`.
+**Stand:** 2026-08-18, Anker `7fdcdbb` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 125 offen, 1 in Arbeit.
+`[cmd]` 126 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -249,7 +249,6 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-29** | Der Attrappen-Test koennte die gerenderte Seite zaehlen |  |
 | **C-155** | Zwei Befunde in `@supabase/ssr` 0.1.0 |  |
 | **G-102** | Der Ausfuehrer fuer bestaetigte Vorschlaege |  |
-| **C-158** | Der Gap-Score braucht Naehrstoffcodes je Substanz |  |
 | **G-116** | Generelle Ausschluesse bewerten mit 0, statt zu filtern |  |
 | **C-159** | Sieben Regelpfade zeigen auf Schemata, die es nicht gibt |  |
 | **G-118** | Der Extended-Code liegt im Buendel |  |
@@ -258,6 +257,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **G-124** | Die Medikamentenkachel braucht zehn Spalten |  |
 | **G-120** | `updateWaterLogAmount` liegt fertig und ungenutzt |  |
 | **A-29** | `schuss.mjs` und die Git-Bash-Pfadumwandlung |  |
+| **A-30** | `next/headers` im Browserbuendel — fuenfter Fall |  |
+| **C-163** | 94 Substanzen ohne maschinenlesbare Naehrstoffmenge |  |
 
 ---
 
@@ -3620,56 +3621,6 @@ Umsetzen angepasst werden.
   `[cmd]` **Er braucht die Autonomy-Wirkungsregeln** — und die haengen
   an T-Entscheidungen. **Eigener Auftrag, nach Toms Antworten.**
 
-- [ ] **C-158: Der Gap-Score braucht Naehrstoffcodes je Substanz** (neu
-  gefasst 2026-08-20). **Codex-Auftrag, nicht Kimi.**
-
-  ### Der Import ist erledigt
-
-  `[cmd]` **567 Substanzen liegen im Katalog** (C-134). **Was fehlt, ist
-  nicht der Bestand, sondern die Verbindung:** Ein Eintrag *„Vitamin D3
-  5000 IU"* traegt den Namen, **aber kein Feld sagt `VITD = 125 µg`.**
-
-  `[cmd]` **Deshalb bleiben 15 `nutrient_gap_rules` blockiert** — sie
-  fragen *„deckt ein Supplement die Luecke bei Magnesium?"*, **und der
-  Bestand antwortet in Prosa.**
-
-  ### Warum Codex und nicht der Rechercheweg
-
-  **Tom, 2026-08-20:** *„Kimi hat nur seine Sachen im Kontext. Wenn du
-  Repo- oder DB-Sachen mit ihm abarbeiten willst, musst du ihm den
-  Kontext dazu geben — oder wir lassen das Codex machen, der hat Repo-
-  und DB-Zugriff."*
-
-  `[cmd]` **Die 138 BLS-Codes stehen in `nutrient_defs`** — mit Namen,
-  Einheiten und Gruppen. **Kimi muesste sie erst bekommen und wuerde
-  dann raten, welcher zu *„Vitamin D3"* gehoert.**
-
-  `[read]` **Codex hat beides** — die Codes und die 567 Substanzen.
-  **Er kann zuordnen statt raten.**
-
-  `[cmd]` **Und der Umfang ist klein:** Von 567 tragen die meisten gar
-  keinen Naehrstoff — Peptide, SARMs, Botanicals. **Es geht um
-  Vitamine, Mineralien und Aminosaeuren**, etwa 60 Eintraege.
-
-  ### Der erste Schritt ist messen
-
-  `[cmd]` **Pruefen, ob die Mengen schon im Bestand stehen** —
-  `dosing.official_label_dose`, `studied_dose_ranges`, oder
-  `products.jsonl` (50 Eintraege). **Wenn ja, braucht es Kimi gar
-  nicht.**
-
-  `[read]` **Wenn nein: melden** — dann geht eine gezielte Frage an den
-  Rechercheweg, **mit den 138 Codes im Anhang.**
-
-  ### Die Einheitenfalle gehoert dazu
-
-  `[cmd]` **C-149:** Vitamin D steht im Supplement in **IU**, im
-  Naehrstoffpfad in **µg**. **Naiv addiert: 33.430 % statt 930 %,
-  Faktor 40.**
-
-  `[read]` **Ein Umrechnungsfaktor liegt nirgends im Repo.** **1 µg
-  Vitamin D3 sind 40 IU** — aber der Faktor gehoert belegt, nicht aus
-  dem Kopf.
 
 - [ ] **G-116: Generelle Ausschluesse bewerten mit 0, statt zu
   filtern** (entschieden 2026-08-20). Befund aus G-104.
@@ -3834,3 +3785,40 @@ Umsetzen angepasst werden.
 
   `[read]` **Gehoert in die Datei selbst oder in `CLAUDE.md`**, sonst
   faellt der naechste Agent darauf herein.
+
+- [ ] **A-30: `next/headers` im Browserbuendel — fuenfter Fall** (neu
+  2026-08-20). Befund aus C-158.
+
+  `[cmd]` **`@lumeos/web#build` scheitert** am `next/headers`-Import
+  ueber `packages/shared/src/supabase/session.ts`.
+
+  `[cmd]` **Der Dev-Server laeuft** — HTTP 200 auf `/v2/nutrition`,
+  `/v2/recovery`, `/v2/supplements`. **Nur der Build bricht.**
+
+  `[read]` **Die Datei warnt selbst davor:** *„`next/headers` ist nur in
+  Server Components / Route Handlers erlaubt."* Und `rechte-read.ts:38`
+  nennt den Grund: *„um `next/headers` nicht ins Browserbuendel zu
+  ziehen (G-74, G-79)."*
+
+  `[read]` **Fuenfter Fall** — die vorherigen vier waren Typecheck gruen,
+  **HTTP 500 auf jeder Seite.** **Diesmal faellt es frueher auf.**
+
+  **Zu tun:** die Kette finden, die es aus einer Client-Komponente
+  zieht.
+
+- [ ] **C-163: 94 Substanzen ohne maschinenlesbare Naehrstoffmenge**
+  (neu 2026-08-20). **Fuer den Rechercheweg.** Rest aus C-158.
+
+  `[cmd]` **Gemessen:** 567 Substanzen, **111 moegliche
+  Naehrstofftraeger, 17 eindeutig zugeordnet.**
+
+  `[cmd]` **Was fehlt, je Substanz:** **BLS-Code** (aus unseren 138) und
+  **Menge je Portion mit Einheit.**
+
+  `[read]` **Der Code kommt von uns** — Kimi kennt `nutrient_defs` nicht.
+  **Die Menge steht auf dem Etikett** und ist seine Aufgabe.
+
+  `[cmd]` **Und drei Einheiten brauchen die Form**, bevor sie
+  umgerechnet werden koennen: **Vitamin A** (Retinol gegen Carotinoide),
+  **Vitamin E** (natuerlich gegen synthetisch), **Folat** (Folat,
+  Folsaeure, DFE).

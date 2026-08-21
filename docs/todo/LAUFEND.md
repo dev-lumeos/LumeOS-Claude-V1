@@ -13,7 +13,7 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Codex** | **C-158** Naehrstoffcodes je Substanz | `supabase/` | 2026-08-20 |
+| **Codex** | *frei* | | |
 | **Fable** | **G-121** Naehrstoffanzeige, lange Sicht + Zeitfenster | `apps/web/v2/nutrition` | 2026-08-20 |
 | **Claude Code** | *frei* | | |
 

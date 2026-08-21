@@ -6140,6 +6140,88 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `nutrient_gap_rules` warten weiter. **Das gehoert in die naechste
   Rueckmeldung an den Rechercheweg.**
 
+- [x] **C-158: Der Gap-Score braucht Naehrstoffcodes je Substanz** (neu
+  gefasst 2026-08-20). **Codex-Auftrag, nicht Kimi.**
+
+  ### Der Import ist erledigt
+
+  `[cmd]` **567 Substanzen liegen im Katalog** (C-134). **Was fehlt, ist
+  nicht der Bestand, sondern die Verbindung:** Ein Eintrag *„Vitamin D3
+  5000 IU"* traegt den Namen, **aber kein Feld sagt `VITD = 125 µg`.**
+
+  `[cmd]` **Deshalb bleiben 15 `nutrient_gap_rules` blockiert** — sie
+  fragen *„deckt ein Supplement die Luecke bei Magnesium?"*, **und der
+  Bestand antwortet in Prosa.**
+
+  ### Warum Codex und nicht der Rechercheweg
+
+  **Tom, 2026-08-20:** *„Kimi hat nur seine Sachen im Kontext. Wenn du
+  Repo- oder DB-Sachen mit ihm abarbeiten willst, musst du ihm den
+  Kontext dazu geben — oder wir lassen das Codex machen, der hat Repo-
+  und DB-Zugriff."*
+
+  `[cmd]` **Die 138 BLS-Codes stehen in `nutrient_defs`** — mit Namen,
+  Einheiten und Gruppen. **Kimi muesste sie erst bekommen und wuerde
+  dann raten, welcher zu *„Vitamin D3"* gehoert.**
+
+  `[read]` **Codex hat beides** — die Codes und die 567 Substanzen.
+  **Er kann zuordnen statt raten.**
+
+  `[cmd]` **Und der Umfang ist klein:** Von 567 tragen die meisten gar
+  keinen Naehrstoff — Peptide, SARMs, Botanicals. **Es geht um
+  Vitamine, Mineralien und Aminosaeuren**, etwa 60 Eintraege.
+
+  ### Der erste Schritt ist messen
+
+  `[cmd]` **Pruefen, ob die Mengen schon im Bestand stehen** —
+  `dosing.official_label_dose`, `studied_dose_ranges`, oder
+  `products.jsonl` (50 Eintraege). **Wenn ja, braucht es Kimi gar
+  nicht.**
+
+  `[read]` **Wenn nein: melden** — dann geht eine gezielte Frage an den
+  Rechercheweg, **mit den 138 Codes im Anhang.**
+
+  ### Die Einheitenfalle gehoert dazu
+
+  `[cmd]` **C-149:** Vitamin D steht im Supplement in **IU**, im
+  Naehrstoffpfad in **µg**. **Naiv addiert: 33.430 % statt 930 %,
+  Faktor 40.**
+
+  `[read]` **Ein Umrechnungsfaktor liegt nirgends im Repo.** **1 µg
+  Vitamin D3 sind 40 IU** — aber der Faktor gehoert belegt, nicht aus
+  dem Kopf.
+
+  `[cmd]` **Erledigt 2026-08-20.** `supplements.supplement_nutrient_mappings`
+  **traegt 17 Zeilen**, `nutrients_provided` steigt von **11 auf 17 von
+  44**.
+
+  `[cmd]` **Gemessen auf `dev@lumeos.app`:** `FAPUN3` 2 g · `MG` 400 mg
+  · `VITD` 125 µg.
+
+  ### Die Einheitenfalle ist belegt geloest
+
+  `[cmd]` **Vitamin D: 5.000 IU → 125 µg**, mit Quelle — NIH ODS.
+  `[read]` **Nicht aus dem Kopf**, wie C-149 verlangt hat.
+
+  ### Und drei bleiben offen, statt geraten
+
+  | | warum |
+  |---|---|
+  | **Vitamin A** | IU braucht die konkrete Form |
+  | **Vitamin E** | natuerlich oder synthetisch |
+  | **Folat** | Folat / Folsaeure / DFE — Form und Kontext |
+
+  `[read]` **Das ist die richtige Antwort** — ein falscher
+  Umrechnungsfaktor ist schlimmer als ein fehlender.
+
+  ### Die Zahlen fuer den Rechercheweg
+
+  `[cmd]` **567 Substanzen gemessen, 111 breit erkannte moegliche
+  Naehrstofftraeger, 17 eindeutig zugeordnet.**
+
+  `[read]` **Die Luecke ist damit beziffert:** rund 94 Substanzen tragen
+  vermutlich Naehrstoffe, **ohne maschinenlesbare Menge.**
+
 
 
 ## Erledigt am 2026-08-05
