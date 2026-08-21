@@ -14,15 +14,16 @@ wissen, welcher Agent noch laeuft."*
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
 | **Fable** | *frei* | | |
-| **Claude Code** | **G-124** SVG-Pfade + Wasser-Korrekturknopf | `packages/ui`, `nutrition` | 2026-08-20 |
-| **Codex** | *frei* | | |
+| **Claude Code** | *frei* | | |
+| **Codex** | **C-164** `food_search` kombinierbare Tags + Ausschluss | `supabase/` | 2026-08-21 |
 
 ## Wartet auf einen freien Agenten
 
 | Auftrag | Bereich | blockiert von |
 |---|---|---|
 | **C-162** Lab-Marker-Bruecke (66 Marker, 46 LOINC geprueft) | `supabase/` | — |
-| **G-112** Food-DB-Filter kombinierbar | `supabase/` + `apps/web` | `food_search` (C-120) |
+| **G-112** Food-DB-Filter kombinierbar — **Anzeigeteil** | `apps/web` | **C-164 laeuft** (Datenbankteil) |
+| **G-126** „Ohne Laktose 1.021" ist die Zahl MIT Laktose | `apps/web` | — |
 | **G-102** Ausfuehrer fuer bestaetigte Coach-Vorschlaege | `apps/coach` | Toms T1–T9 |
 | **C-159** sieben Regelpfade ohne Schema | `supabase/` | Produktentscheidung |
 | **C-163** 94 Substanzen ohne Naehrstoffmenge | Recherche | Kimi |

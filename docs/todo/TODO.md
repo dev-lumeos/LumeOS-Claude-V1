@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `4f65ac6` auf `dev`.
+**Stand:** 2026-08-18, Anker `4ceeb69` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 132 offen, 1 in Arbeit.
+`[cmd]` 133 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -181,7 +181,8 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **A-22** | Was an Kimi gehen kann — klassifiziert |  |
 | **A-18** | `theme-v1/uploads/` — die Bruecke zwischen Spec und Entwurf |  |
 | **A-16** | `public/mockup/` als dritten Fundus auswerten |  |
-| **G-83** | Es gibt kein Onboarding |  |
+| **G-83** | Das Onboarding ist entworfen, aber nicht gebaut |  |
+| **G-131** | `module-completeness.jsx` ist die Settings-Seite |  |
 | **G-93** | Der Anzeigename fehlt im laufenden Erfassungsdialog |  |
 | **G-98** | Meal plans braucht einen Zustand und eine Herkunft |  |
 | **G-101** | Der Aktivitaetsstrom des Dashboards |  |
@@ -3627,6 +3628,45 @@ Umsetzen angepasst werden.
   `[read]` **Und C-159s Landkarte wird kuerzer:** Die Symptomtabelle
   fehlt im Schema, **aber nicht im Entwurf.**
 
+- [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
+  2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
+
+  `[cmd]` **Die Datenbank ist richtig:** `tag_definitions` fuehrt
+  `contains_lactose` als **„Enthaelt Laktose"**, mit 1.021 Treffern.
+
+  `[cmd]` **Die Oberflaeche dreht das Wort um und behaelt die Zahl** —
+  `tab-foods.tsx:180`: `label: 'Ohne Laktose', anzahl: 1021`.
+
+  | Pille zeigt | richtig waere |
+  |---|---|
+  | Ohne Laktose **1.021** | **6.119** |
+  | Ohne Gluten **622** | **6.518** |
+  | Ohne Nuesse **120** | **7.020** |
+
+  `[read]` **Wer *„Ohne Laktose 1.021"* liest, denkt, es gaebe 1.021
+  laktosefreie Lebensmittel.** Es sind 6.119 — **die 1.021 sind die
+  mit.**
+
+  `[cmd]` **Gehoert zum Anzeigeteil von G-112**, nicht zur Datenbank.
+
+- [ ] **G-134: Die vier Filtergruppen gibt es in den Daten nicht** (neu
+  2026-08-20). **Entscheidung.** Befund aus C-164.
+
+  `[cmd]` **`tag_type` traegt drei Werte:** `diet` (9 Codes),
+  `processing` (2), `allergen` (3).
+
+  `[read]` **Die Oberflaeche zeigt vier Gruppen** — Ernaehrungsform,
+  Naehrwert, Verarbeitung, Allergene. **„Ernaehrungsform" und „Naehrwert"
+  sind beide `diet`.**
+
+  `[cmd]` **Folge:** *„Wer stumpf nach `tag_type` gruppiert, verodert
+  `vegan` mit `high_protein`."*
+
+  `[read]` **Damit ist die Gruppierung eine Entscheidung, keine
+  Ablesung.** **Entweder eine Gruppenspalte in `tag_definitions`, oder
+  die Zuordnung bleibt in der Anzeige** — dann steht sie an zwei
+  Stellen.
+
 - [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
   Befund aus G-69.
 
@@ -4093,7 +4133,7 @@ Umsetzen angepasst werden.
   `[read]` **Dritter Fall dieser Art** — nach `InjektionsKarte` (G-53)
   und `score.ts` (G-82): **gebaut und nie gerufen.**
 
-- [ ] **G-126: „Ohne Laktose 1.021" ist die Zahl MIT Laktose**
+- [ ] **G-132: „Ohne Laktose 1.021" ist die Zahl MIT Laktose**
   (neu 2026-08-21). Befund bei der Vorbereitung von C-164.
 
   `[cmd]` **Die Datenbank ist korrekt.** `food_search` liefert
