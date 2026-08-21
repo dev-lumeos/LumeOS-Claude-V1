@@ -106,8 +106,8 @@ Wurzel-`package.json`, `chromium_headless_shell` liegt im Cache.
 Bun-Browser, der auf jedem Aufruf ein Fenster oeffnete.
 
 `[cmd]` **`tools/schuss.mjs`** meldet sich selbst an, wartet auf
-`networkidle` und liefert **Bild, Attrappenzahl und Konsolenfehler in
-einem Aufruf:**
+`networkidle` und liefert **Bild, Attrappenzahl, Konsolenfehler und
+Laufzeit in einem Aufruf:**
 
 ```bash
 node tools/schuss.mjs /v2/nutrition backup/x.png
@@ -120,6 +120,53 @@ Fenster.**
 
 `[read]` **Damit faellt auch A-24 weg:** Die Markenzahl kommt aus der
 gerenderten Seite, nicht aus Textmarken im Quelltext.
+
+### Ein UI-Auftrag misst die Antwortzeit — angemeldet
+
+`[cmd]` **Anlass C-189:** Der Supplements-Tab war seit C-133 **neun
+Sekunden** langsam. **Fuenf Auftraege haben ihn angefasst, keiner hat
+es gemessen.** Ursache war ein Aufruf in einer Schleife — 64 Mal
+dieselbe Unterfunktion. **7.641 ms → 144 ms.**
+
+`[read]` **Und zweimal falsch gemessen:** erst ohne Anmeldung (122 ms
+gegen die Anmeldeseite), dann als Kaltstart abgetan. **Tom hat
+widersprochen, und er hatte recht.**
+
+`[cmd]` **Seit A-45 liefert `schuss.mjs` es mit, ohne Schalter:**
+
+```
+zeit.gesamt_ms      vom `goto` bis `networkidle`
+zeit.dokument_ms    `responseEnd` der Hauptanfrage
+zeit.langsamste     Anfragen ueber 300 ms, die drei groessten, mit URL
+zeit.zweiter_lauf   dieselbe Seite noch einmal, gleiche Sitzung
+```
+
+**Zwei Laeufe, weil ein einzelner Wert nichts sagt.** `[read]` Der
+erste Aufruf einer Route uebersetzt im Entwicklungsmodus. **Ist der
+zweite genauso langsam, ist es kein Kaltstart.**
+
+`[cmd]` **Gegengeprobt am 2026-08-21:** `?tab=catalog` **2.469 ms /
+2.206 ms**, `?tab=nutrients` **2.034 ms / 1.833 ms** — beide Male ist
+die langsamste Anfrage das Dokument selbst, und sie wird benannt.
+
+`[read]` **Keine Schwelle, kein Rot.** Das Werkzeug misst, es urteilt
+nicht: Eine Sekunde ist im Dev-Modus normal, neun nicht — **aber wo die
+Grenze liegt, weiss niemand.**
+
+**Bei Datenbankfunktionen gehoert `explain (analyze, buffers)` dazu**,
+nicht nur *„laeuft in X ms"*. `[read]` **`temp read/written` verraet
+ein Kreuzprodukt sofort.**
+
+### Der Konsolenfehler-Zaehler hat bis A-45 die Anmeldung mitgezaehlt
+
+`[cmd]` **Gemessen am 2026-08-21:** `/v2/medical?tab=dashboard` wirft
+**eine** Meldung je Laden — die alte Fassung meldete **zwei**, weil sie
+die der Anmeldeseite mitzaehlte.
+
+`[read]` **Die „2 je Seite" aus G-105 und G-123 sind also eine der
+Anmeldung plus eine der Seite.** `konsolenfehler` nennt jetzt nur die
+der gemessenen Seite; **`konsolenfehler_mit_anmeldung` traegt die alte
+Zahl weiter**, damit frueherer Berichte zuzuordnen bleiben.
 
 ## Der Dev-Server und das Gate teilen sich nichts — wenn man es laesst
 

@@ -3971,8 +3971,37 @@ Umsetzen angepasst werden.
   `tools/schemafreigabe-pruefen.mjs`.**
 
 
-- [ ] **A-45: Laufzeit gehoert in den Nachweis** (neu 2026-08-21).
-  Aus C-189.
+- [x] **A-45: Laufzeit gehoert in den Nachweis**
+  (erledigt 2026-08-21). **`schuss.mjs` misst sie jetzt mit, ohne
+  Schalter — und dabei ist ein alter Zaehlfehler aufgefallen.**
+
+  `[cmd]` **Vier Zahlen je Aufruf:** `zeit.gesamt_ms` (bis
+  `networkidle`), `zeit.dokument_ms` (`responseEnd` der Hauptanfrage),
+  `zeit.langsamste` (ueber 300 ms, die drei groessten, **mit URL**),
+  `zeit.zweiter_lauf` (dieselbe Seite, gleiche Sitzung).
+
+  `[cmd]` **Gegengeprobt:** `?tab=catalog` **2.469 / 2.206 ms**,
+  `?tab=nutrients` **2.034 / 1.833 ms**. **Beide Male ist die
+  langsamste Anfrage das Dokument selbst, und sie wird benannt** —
+  genau die Zeile, die C-189 sofort gezeigt haette.
+
+  `[read]` **Der zweite Lauf ist der Kern:** Ist er genauso langsam,
+  ist es kein Kaltstart. Das war Toms Argument, und das Werkzeug
+  liefert es jetzt von selbst.
+
+  `[cmd]` **Nebenbefund:** Der Konsolenfehler-Zaehler zaehlte bis
+  hierher **die Anmeldeseite mit**. Gemessen auf
+  `/v2/medical?tab=dashboard`: **ein Laden = 1 Meldung, die alte
+  Fassung meldete 2.** `[read]` **Die „2 je Seite" aus G-105 und
+  G-123 sind eine der Anmeldung plus eine der Seite.**
+  `konsolenfehler` nennt jetzt nur die der Seite;
+  **`konsolenfehler_mit_anmeldung` traegt die alte Zahl weiter.**
+
+  `[cmd]` **Regel in `CLAUDE.md` eingetragen**, samt
+  `explain (analyze, buffers)` fuer Datenbankfunktionen. **Keine
+  Schwelle, kein Rot** — das Werkzeug misst, es urteilt nicht.
+
+  **Der Anlass, unveraendert als Beleg** (aus C-189):
 
   `[cmd]` **Der Supplements-Tab war seit C-133 neun Sekunden langsam
   — fuenf Auftraege haben ihn seither angefasst, keiner hat es
@@ -3983,12 +4012,32 @@ Umsetzen angepasst werden.
   abgetan. **Tom hat widersprochen, und er hatte recht.**
 
   **Regel:** `[cmd]` **Ein UI-Auftrag misst die Antwortzeit angemeldet**
-  — `tools/schuss.mjs` koennte sie mitliefern, es misst ohnehin ueber
+  — `tools/schuss.mjs` liefert sie seither mit; es misst ohnehin ueber
   Playwright.
 
   `[cmd]` **Und bei Datenbankfunktionen gehoert `explain (analyze,
   buffers)` dazu**, nicht nur die Zeile *„laeuft in X ms"*. **`temp
   read/written` verraet ein Kreuzprodukt sofort.**
+
+- [ ] **A-46: „2 Konsolenfehler je Seite" war eine der Anmeldung**
+  (neu 2026-08-21). Nebenbefund aus A-45. **Betrifft aeltere
+  Berichte, nicht den Code.**
+
+  `[cmd]` **Gemessen am 2026-08-21:** `/v2/medical?tab=dashboard` wirft
+  **eine** Meldung je Laden (`data-mode`-Hydrationswarnung); zwei
+  Laeufe ergeben zwei. **Die Fassung vor A-45 meldete 2 fuer einen
+  Lauf** — sie zaehlte die Anmeldeseite mit.
+
+  `[read]` **Damit sind die „2 je Seite" aus G-105, G-123, G-135 und
+  G-148 eine der Anmeldung plus eine der Seite.** Die Aussagen bleiben
+  richtig (kein SVG-Fehler, keine neue Meldung) — **die Zahl daneben
+  meint etwas anderes, als sie sagt.**
+
+  `[cmd]` **`konsolenfehler_mit_anmeldung` traegt die alte Zaehlweise
+  weiter**, damit sich die Berichte zuordnen lassen.
+
+  **Zu tun:** beim naechsten Anfassen der betroffenen Module die Zahl
+  richtigstellen — **kein eigener Durchgang wert.**
 
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
