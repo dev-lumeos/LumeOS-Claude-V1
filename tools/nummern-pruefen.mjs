@@ -190,7 +190,7 @@ if (process.env.LUMEOS_NUMMERN_SELBSTTEST === '1') {
   process.exit(selbsttest(basis))
 }
 
-const { fehler, offen, fertig } = pruefe(basis)
+const { fehler, offen, fertig, gezaehltOffen } = pruefe(basis)
 
 for (const f of fehler) console.error(`[nummern] ${f.pruefung}: ${f.text}`)
 
@@ -201,8 +201,13 @@ if (fehler.length === 0) {
     hoch.set(pre, Math.max(hoch.get(pre) ?? 0, parseInt(num, 10)))
   }
   const liste = [...hoch.entries()].sort().map(([k, v]) => `${k}-${v}`).join(' \u00b7 ')
-  console.log(`[nummern] ${offen.length} offen, ${fertig.length} erledigt, keine Dublette.`)
-  console.log(`[nummern] Naechste freie Nummer je Reihe nach: ${liste}`)
+  // Dieselbe Zaehlweise wie der Kopf von TODO.md: "offen" sind die [ ].
+  // Die alte Zeile nannte alle Punkte "offen" -- 174 gegen 165 im Kopf,
+  // aus demselben Lauf.
+  const arbeit = offen.filter(x => x.zustand === '~').length
+  console.log(`[nummern] TODO.md: ${gezaehltOffen} offen, ${arbeit} in Arbeit `
+    + `(${offen.length} Punkte). ERLEDIGT.md: ${fertig.length}. Keine Dublette.`)
+  console.log(`[nummern] Hoechste vergebene Nummer je Reihe: ${liste}`)
 }
 
 process.exit(fehler.length > 0 ? 1 : 0)
