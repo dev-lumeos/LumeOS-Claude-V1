@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand:** 2026-08-18, Anker `91a3855` auf `dev`.
+**Stand:** 2026-08-18, Anker `11b4faf` auf `dev`.
 Die Zahlen im Übersichtsblock unten sind aus dieser Datei gezählt, nicht
 von Hand gepflegt — sie stimmen, solange niemand die Konvention bricht.
 
@@ -128,7 +128,7 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 
 ## Offene Punkte auf einen Blick
 
-`[cmd]` 148 offen, 1 in Arbeit.
+`[cmd]` 151 offen, 1 in Arbeit.
 
 | | Punkt | |
 |---|---|---|
@@ -253,6 +253,9 @@ C-06 auf), A-08 (ADR Medienort), E-07 (Geschlechtsfeld der Medienauswahl).
 | **C-172** | Der Stress-Tab steht im Entwurf |  |
 | **A-36** | `module-stubs-replacement.jsx` traegt drei ganze Module |  |
 | **C-173** | `MARKETPLACE_PRODUCTS` traegt `inStack` und `evidence` |  |
+| **A-37** | Zwoelf ADRs in `docs/specs/Nutrition/04_adrs/` |  |
+| **C-174** | `ADR_NUTRITION_PREFERENCES_V1` kennt drei Constraint-Stufen |  |
+| **C-175** | `shopping_lists` fehlt |  |
 | **G-133** | Die Allergen-Pillen sind falsch beschriftet |  |
 | **G-134** | Die vier Filtergruppen gibt es in den Daten nicht |  |
 | **C-105** | MEV/MAV/MRV haben keine Tabelle |  |
@@ -4009,6 +4012,111 @@ Umsetzen angepasst werden.
   `[read]` **C-150 hat alles ausser dieser gebaut.** **Ein Wochenplan
   ohne Einkaufsliste ist halb** — die Zutaten stehen bereits in
   `recipe_ingredients`.
+
+- [ ] **G-140: `display_tier` ist ein Abo-Tier, keine Baumebene** (neu
+  2026-08-20). **Fehler in der Anzeige.** Aus SSOT 173.
+
+  `[cmd]` **`docs/specs/Core/SUBSCRIPTION_GATES_ADR.md` sagt es
+  ausdruecklich:**
+
+  | Feature | Gate spaeter |
+  |---|---|
+  | **Mikro-Tier 2 (Athlete)** | **Plus-only** |
+  | **Mikro-Tier 3 (Medical)** | **Pro-only** |
+
+  *„`nutrient_defs.display_tier` (1/2/3) ist in DB vorhanden ·
+  `nutrition_settings.show_micros_tier` existiert · User-Profile hat
+  `subscription_tier` (free | plus | pro | coach)."*
+
+  `[cmd]` **Verteilung passt:** Stufe 1 **31**, Stufe 2 **47**, Stufe 3
+  **60**.
+
+  `[read]` **G-101 hat es als Hierarchie-Ebene gelesen** und daraus die
+  Einrueckung gebaut. **C-161 hat das mit `parent_code` behoben.**
+
+  `[cmd]` **Aber die Anzeige traegt weiter eine Spalte *„STUFE"* mit
+  1/2/3** — sichtbar in Toms Bildschirmfoto. **Sie zeigt das Abo-Tier,
+  als waere es eine Baumtiefe.**
+
+  **Zu tun:** Spalte umbenennen oder entfernen. `[read]` **In V1 gibt es
+  kein Gate** (derselbe ADR), **aber die Bedeutung ist eine andere.**
+
+- [ ] **C-176: `biomarkerDetails.ts` im Vorgaengerrepo — 121 KB** (neu
+  2026-08-20). Aus SSOT 173. **Das Pendant zu `nutrientDetails.ts`.**
+
+  `[cmd]` **1.564 Zeilen, zweisprachig:**
+
+  ```ts
+  interface BiomarkerDetail {
+    description, description_de
+    whatItMeasures, whatItMeasures_de
+    ifHigh, ifHigh_de        // was ein hoher Wert bedeutet
+    ifLow,  ifLow_de         // was ein niedriger bedeutet
+    ranges: { male: { lab, optimal, athlete? } , female: … }
+  }
+  ```
+
+  `[read]` **`athlete` ist der Wert, den es fuer LumeOS braucht** —
+  dieselbe Lage wie `rda_athlete` bei den Naehrstoffen (C-161).
+
+  `[cmd]` **Und `ifHigh` / `ifLow` sind genau das, was Tom fuer die
+  Naehrstoffe verlangt hat:** *„im Detail dann die Erklaerungen, was bei
+  Mangel, was bei zuviel."*
+
+  `[cmd]` **Die Gegenseite steht:** `biomarker_catalog` mit 11.676
+  LOINC-Codes, `biomarker_reference_ranges` mit 560 Bereichen.
+
+- [ ] **G-141: Das Onboarding ist als ADR final entschieden** (neu
+  2026-08-20). **Betrifft G-83.** Aus SSOT 173.
+
+  `[cmd]` **`docs/specs/Core/ONBOARDING_ADR.md`, April 2026, Status
+  final:** *„Option C: 7-Step Kern-Onboarding + Post-Onboarding
+  Setup-Cards."*
+
+  | Schritt | Inhalt | Ziel |
+  |---|---|---|
+  | 1 | Name, Sprache, Einheitensystem | Auth / Profil |
+  | 2 | Geschlecht, Geburtstag, Groesse, Gewicht, **KFA** | Goals (TDEE) |
+  | 3 | **Experience Level** | Goals, Nutrition, Training |
+  | 4 | **Primaerziel: 12 Goal-Typen** | Goals → TDEE + Makros |
+  | 5 | Training: Frequenz, Dauer, Equipment | Training |
+  | 6 | Nutrition: Diaettyp, Allergien, Mahlzeiten, Vorlieben | Nutrition |
+  | 7 | Zusammenfassung | alle Module |
+
+  `[cmd]` **Beim Abschliessen:** `calculateTDEE()` → Goals-Targets →
+  alle Modul-Einstellungen initialisieren.
+
+  ### Eine Abweichung
+
+  `[cmd]` **Der ADR nennt `beginner / intermediate / advanced / elite`.**
+  **C-118 hat `beginner / advanced / pro / elite` gebaut** — Toms
+  Vorgabe vom 2026-08-19.
+
+  `[read]` **Toms Entscheidung ist juenger und gilt.** **Aber es gehoert
+  gewusst**, dass der ADR etwas anderes sagt.
+
+  `[cmd]` **Und *„Post-Onboarding Setup-Cards"*** — in noch nicht
+  konfigurierten Modulen erscheinen Einrichtungskarten. **Das ist eine
+  eigene Bauform, die niemand kennt.**
+
+- [ ] **A-38: Drei Core-ADRs** (neu 2026-08-20). Aus SSOT 173.
+
+  `[cmd]` **`docs/specs/Core/` hat drei ADRs, alle April 2026:**
+
+  **`SUBSCRIPTION_GATES_ADR`** — *„Kein Subscription-Gate in V1. Alle
+  Features ohne Einschraenkung."* `[read]` **Aber das Datenmodell ist
+  tier-ready** — siehe G-140. **Sieben Features sind als spaetere
+  Gates benannt**, darunter MealCam, Trend-Charts ueber 7 Tage, Coach
+  Autonomy, Korrelationen, Export.
+
+  `[cmd]` **`AI_USAGE_WALLET_ADR`** (120 Zeilen) — *„AI-Features sind
+  keine Subscription-Features — sie werden aus dem **User-Wallet**
+  bezahlt."* **V1 = nur Nutzungserfassung, Endausbau = Wallet.**
+
+  `[read]` **`module-crossmodule-rest.jsx` traegt `WALLET` und
+  `WALLET_TX`** — die Anzeige dazu.
+
+  `[cmd]` **`ONBOARDING_ADR`** — siehe G-141.
 
 - [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
   2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
