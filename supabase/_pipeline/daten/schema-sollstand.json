@@ -1208,6 +1208,7 @@
     "supplements.substance_aliases": 1132,
     "supplements.substance_catalog": 567,
     "supplements.substance_catalog_sources": 667,
+    "supplements.supplement_nutrient_mappings": 17,
     "supplements.rule_catalog": 64,
     "medical.biomarker_catalog": 11676,
     "medical.biomarker_reference_ranges": 564,
@@ -1242,6 +1243,7 @@
     "supplements.substance_aliases": "[cmd] C-134: 132_substance_alias_bridge.ts liest crawl_022 mit 291 Kimi-Substanzen statt des alten 237er ingredient_index. Untergrenze bleibt 1.132, weil zusaetzliche Aliaszeilen Quellenwachstum sind.",
     "supplements.substance_catalog": "[cmd] C-134: 134_substance_catalog.ts erzeugt konservativ 567 Substanzen: 291 Kimi-Entitaeten, 28 nicht gemappte LumeOS-Eintraege und 248 nicht gemappte F-05-Kandidaten.",
     "supplements.substance_catalog_sources": "[cmd] C-134: 134_substance_catalog.ts erzeugt 667 Herkunftszeilen: 291 Kimi, 44 LumeOS, 320 F-05 und 12 Cross-Domain-Links mit Substanz-ID.",
+    "supplements.supplement_nutrient_mappings": "[cmd] C-158: supplement-naehrstoffcodes.json fuehrt 17 belegte Standard-Supplement-zu-Naehrstoff-Zuordnungen. Offene IU/DFE-Faelle bleiben dokumentiert und werden nicht geraten.",
     "supplements.rule_catalog": "[cmd] C-133: 133_kimi_rules.ts importiert 29 warning_rules, 15 nutrient_gap_rules und 20 medication_rules aus backup/kimi-research/.../data/platform; Summe 64.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
     "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzte 96 Spec-basierte Bereichszeilen; C-140 spiegelt nur zwei belastbare LOINC-Abweichungen mit Bereich (LDL 13457-7, Haematokrit 4544-3) und ergaenzt dadurch 4 Zeilen. Summe 564.",
@@ -2256,6 +2258,31 @@
     },
     {
       "schema": "supplements",
+      "name": "supplement_nutrient_mappings",
+      "schritt": "135",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "135_supplement_nutrients.ts vergibt SELECT an authenticated und service_role ALL explizit; Zuordnungen sind Katalogdaten.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
       "name": "rule_catalog",
       "schritt": "133",
       "rls": true,
@@ -2843,6 +2870,11 @@
       "schema": "supplements",
       "name": "rule_assessment",
       "schritt": "133"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_nutrient_intake_for_day",
+      "schritt": "135"
     },
     {
       "schema": "medical",

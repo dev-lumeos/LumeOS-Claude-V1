@@ -417,6 +417,13 @@
       "depends_on": ["132"]
     },
     {
+      "id": "135",
+      "path": "supabase/_pipeline/13_supplements/135_supplement_nutrients.ts",
+      "kind": "tsx",
+      "creates": "Supplement-Naehrstoffbruecke: supplement_nutrient_mappings und tagesbezogene Supplement-Naehrstoffsummen",
+      "depends_on": ["134", "015"]
+    },
+    {
       "id": "140",
       "path": "supabase/_pipeline/14_medical/140_medical_schema.sql",
       "kind": "sql",
