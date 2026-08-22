@@ -67,8 +67,8 @@ import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-re
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
-  'Aus dem Entwurf uebernommen. Die Zahlen sind erfunden — es gibt weder '
-  + 'Ziele noch Koerpermasse in der Datenbank.'
+  'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen '
+  + 'Goals- und Koerperdaten angebunden - die Zahlen sind erfunden.'
 
 // [cmd] module-goals.jsx:172-183, in dieser Reihenfolge.
 //

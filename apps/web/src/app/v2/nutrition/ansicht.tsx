@@ -507,11 +507,11 @@ function AndererTab({
     },
     plans: {
       titel: 'Meal plans',
-      braucht: 'Ein Schema fuer Essensplaene — es gibt keines.',
+      braucht: 'Essensplaene liegen in der Datenbank; diese Platzhalteransicht ist noch nicht an `plan-lesen` angebunden.',
     },
     prefs: {
       titel: 'Preferences',
-      braucht: 'Ernaehrungsvorlieben und Unvertraeglichkeiten am Profil — die Spalten fehlen.',
+      braucht: 'Vorlieben liegen in eigenen Tabellen; diese Platzhalteransicht erscheint nur, wenn der echte Stand nicht geladen wurde.',
     },
     planner: {
       titel: 'Planner',

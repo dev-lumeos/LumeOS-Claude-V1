@@ -16,16 +16,16 @@
 // NICHT geaendert: keine Kachel weggelassen, keine Zahl ersetzt, keine
 // Anordnung angepasst. Die Texte bleiben wie in der Vorlage.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Ernaehrungsvorlieben haben keine Spalten
-// am Profil — die Schalter schalten, aber nichts wird gespeichert.
-// Deshalb traegt jede Kachel den Hinweis.
+// `[cmd]` ALLES HIER IST ATTRAPPE. Vorlieben liegen in
+// `food_preferences` und `food_preference_items`; dieser
+// Entwurfs-Tab ist aber nicht der echte Schreibweg.
 import * as React from 'react'
 import { Card, Pill, Icon, Row } from '@lumeos/ui'
 
 import { DIET_TAGS, EU14_ALLERGENS } from './tabs-daten'
 import type { Neigung } from './typen'
 
-const ATTRAPPE = 'Vorlieben und Unvertraeglichkeiten haben keine Spalten am Profil — die Schalter merken sich nichts.'
+const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist nicht an die vorhandenen Vorlieben-Tabellen angebunden - die Schalter schreiben nichts.'
 
 /** Die acht Ernaehrungsformen der Vorlage (Zeile 215). */
 const DIETS = [

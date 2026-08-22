@@ -31,7 +31,9 @@
 // NICHT geaendert: keine Kachel weggelassen, keine Zahl ersetzt, keine
 // Anordnung angepasst.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Ein `medical`-Schema gibt es nicht.
+// `[cmd]` TEILE SIND ECHT: Katalog, Befunde und Laborwerte liegen im
+// `medical`-Schema. Was hier weiter markiert ist, ist nicht an diese
+// Daten angebunden oder braucht eine spezifische fehlende Tabelle.
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
 import {
@@ -54,8 +56,8 @@ import type { EchteDaten } from './echtdaten'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
-  'Aus dem Entwurf uebernommen. Die Zahlen sind erfunden — ein '
-  + '`medical`-Schema gibt es noch nicht.'
+  'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen '
+  + 'Medical-Daten angebunden - die Zahlen sind erfunden.'
 
 // [cmd] module-medical-v2.jsx:33-39, in dieser Reihenfolge.
 //

@@ -26,10 +26,10 @@
 // Anordnung angepasst. Die Texte bleiben englisch wie in der Vorlage —
 // eingedeutscht liesse sie sich nicht mehr danebenlegen.
 //
-// `[cmd]` ALLES IST ATTRAPPE. `training.exercises` hat 1.416 Zeilen
-// Stammdaten, aber es gibt weder `sessions` noch `sets` — es ist
-// nichts anzubinden. Welche Kachel als erste echte Daten bekommen
-// koennte, steht in docs/ssot/91-training-mockup.md.
+// `[cmd]` TEILE SIND ECHT: Stammdaten, workout_sessions und workout_sets
+// liegen im `training`-Schema und einige Tabs lesen daraus. Was hier
+// weiter markiert ist, ist noch nicht an diese Daten angebunden oder
+// braucht weitere Tabellen.
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
 import {
@@ -61,8 +61,8 @@ import type { Wochentag } from '../../../lib/training/auswertung'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
-  'Aus dem Entwurf uebernommen. Die Zahlen sind erfunden — training.sessions ' +
-  'und training.sets gibt es noch nicht.'
+  'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an workout_sessions, ' +
+  'workout_sets oder den Trainingskatalog angebunden - die Zahlen sind erfunden.'
 
 // [cmd] module-training.jsx:28-39, in dieser Reihenfolge.
 const TABS: TabItem[] = [

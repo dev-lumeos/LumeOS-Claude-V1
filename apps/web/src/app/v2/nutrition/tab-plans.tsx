@@ -17,16 +17,17 @@
 // NICHT geaendert: keine Kachel weggelassen, keine Zahl ersetzt, keine
 // Anordnung angepasst.
 //
-// `[cmd]` ALLES IST ATTRAPPE. Es gibt kein Schema fuer Essensplaene —
-// `meals` kennt erfasste Tage, keine geplanten. Die Compliance rechnet
-// ueber die Vorlagendaten, nicht ueber die Datenbank.
+// `[cmd]` ALLES HIER IST ATTRAPPE. Essensplaene, Wochen und Eintraege
+// liegen inzwischen im Schema; dieser Entwurfs-Tab ist aber noch nicht
+// an `plan-lesen` angebunden. Die Compliance rechnet weiter ueber die
+// Vorlagendaten, nicht ueber die Datenbank.
 import * as React from 'react'
 import { Card, Pill, Icon, Row, Ring, Sparkline } from '@lumeos/ui'
 
 import { GHOST_ENTRIES } from './tabs-daten'
 import type { GhostStatus } from './typen'
 
-const ATTRAPPE = 'Es gibt kein Schema fuer Essensplaene — `meals` kennt nur erfasste Tage, keine geplanten.'
+const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
 
 /** Farbe und Beschriftung je Zustand (Vorlage Zeile 344-349). */
 const ZUSTAND: Record<GhostStatus, { c: string; l: string }> = {

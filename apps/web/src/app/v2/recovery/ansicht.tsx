@@ -27,9 +27,9 @@
 // NICHT geaendert: keine Kachel weggelassen, keine Zahl ersetzt, keine
 // Anordnung angepasst. Die Texte bleiben englisch wie in der Vorlage.
 //
-// `[cmd]` ALLES IST ATTRAPPE. `recovery` hat kein Schema — der Begriff
-// kommt in `supabase/_pipeline/` in keiner SQL-Datei vor. Es ist nichts
-// anzubinden.
+// `[cmd]` TEILE SIND ECHT: Check-ins, Scores und Modalitaeten lesen aus
+// `recovery`. Was hier weiter markiert ist, ist noch nicht an diese
+// Tabellen angebunden oder braucht weitere Tabellen.
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
 import { holeEvidenz } from '../../../lib/evidenz/registry'
@@ -64,8 +64,8 @@ import { RecModalities, RecOvertraining, RecProtocols, RecStress } from './tab-p
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
-  'Aus dem Entwurf uebernommen. Die Zahlen sind erfunden — das Schema '
-  + '`recovery` gibt es noch nicht.'
+  'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen '
+  + 'Recovery-Daten angebunden - die Zahlen sind erfunden.'
 
 // [cmd] module-recovery-v2.jsx:32-42, in dieser Reihenfolge.
 function tabs(muskelzahl: number, modalitaeten: number, otZahl: number): TabItem[] {

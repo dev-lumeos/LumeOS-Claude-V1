@@ -1,0 +1,541 @@
+[
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\recovery-hell.png",
+    "pfad": "/v2/recovery",
+    "breite": 1440,
+    "modus": "hell",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 1357,
+      "dokument_ms": 265,
+      "anfragen": 16,
+      "ueber_schwelle": 0,
+      "langsamste": [],
+      "zweiter_lauf": {
+        "gesamt_ms": 1330,
+        "dokument_ms": 212,
+        "anfragen": 16,
+        "ueber_schwelle": 0,
+        "langsamste": []
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 4
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\recovery-dunkel.png",
+    "pfad": "/v2/recovery",
+    "breite": 1440,
+    "modus": "dunkel",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 1317,
+      "dokument_ms": 223,
+      "anfragen": 16,
+      "ueber_schwelle": 0,
+      "langsamste": [],
+      "zweiter_lauf": {
+        "gesamt_ms": 1313,
+        "dokument_ms": 225,
+        "anfragen": 16,
+        "ueber_schwelle": 0,
+        "langsamste": []
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 4
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\medical-hell.png",
+    "pfad": "/v2/medical",
+    "breite": 1440,
+    "modus": "hell",
+    "titel": "Medical · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 3041,
+      "dokument_ms": 1870,
+      "anfragen": 20,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/medical",
+          "ms": 1870,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 1346,
+        "dokument_ms": 248,
+        "anfragen": 17,
+        "ueber_schwelle": 0,
+        "langsamste": []
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 5
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\medical-dunkel.png",
+    "pfad": "/v2/medical",
+    "breite": 1440,
+    "modus": "dunkel",
+    "titel": "Medical · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 1362,
+      "dokument_ms": 290,
+      "anfragen": 17,
+      "ueber_schwelle": 0,
+      "langsamste": [],
+      "zweiter_lauf": {
+        "gesamt_ms": 1348,
+        "dokument_ms": 254,
+        "anfragen": 17,
+        "ueber_schwelle": 0,
+        "langsamste": []
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 5
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\coach-hell.png",
+    "pfad": "/v2/coach",
+    "breite": 1440,
+    "modus": "hell",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 2196,
+      "dokument_ms": 285,
+      "anfragen": 17,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/coach",
+          "ms": 846,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 1482,
+        "dokument_ms": 188,
+        "anfragen": 17,
+        "ueber_schwelle": 0,
+        "langsamste": []
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 6
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\coach-dunkel.png",
+    "pfad": "/v2/coach",
+    "breite": 1440,
+    "modus": "dunkel",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 1469,
+      "dokument_ms": 216,
+      "anfragen": 17,
+      "ueber_schwelle": 0,
+      "langsamste": [],
+      "zweiter_lauf": {
+        "gesamt_ms": 1547,
+        "dokument_ms": 215,
+        "anfragen": 17,
+        "ueber_schwelle": 0,
+        "langsamste": []
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 6
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\training-hell.png",
+    "pfad": "/v2/training",
+    "breite": 1440,
+    "modus": "hell",
+    "titel": "Training · LumeOS",
+    "attrappen": 2,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 2436,
+      "dokument_ms": 1367,
+      "anfragen": 15,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/training",
+          "ms": 1367,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 1514,
+        "dokument_ms": 378,
+        "anfragen": 15,
+        "ueber_schwelle": 1,
+        "langsamste": [
+          {
+            "url": "/v2/training",
+            "ms": 378,
+            "typ": "document"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 2
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\training-dunkel.png",
+    "pfad": "/v2/training",
+    "breite": 1440,
+    "modus": "dunkel",
+    "titel": "Training · LumeOS",
+    "attrappen": 2,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 1445,
+      "dokument_ms": 396,
+      "anfragen": 15,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/training",
+          "ms": 396,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 1495,
+        "dokument_ms": 381,
+        "anfragen": 15,
+        "ueber_schwelle": 1,
+        "langsamste": [
+          {
+            "url": "/v2/training",
+            "ms": 381,
+            "typ": "document"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 2
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\goals-hell.png",
+    "pfad": "/v2/goals",
+    "breite": 1440,
+    "modus": "hell",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 2622,
+      "dokument_ms": 1482,
+      "anfragen": 16,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/goals",
+          "ms": 1482,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 1420,
+        "dokument_ms": 316,
+        "anfragen": 16,
+        "ueber_schwelle": 1,
+        "langsamste": [
+          {
+            "url": "/v2/goals",
+            "ms": 316,
+            "typ": "document"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 1
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\goals-dunkel.png",
+    "pfad": "/v2/goals",
+    "breite": 1440,
+    "modus": "dunkel",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 1356,
+      "dokument_ms": 321,
+      "anfragen": 16,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/goals",
+          "ms": 321,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 1449,
+        "dokument_ms": 346,
+        "anfragen": 16,
+        "ueber_schwelle": 1,
+        "langsamste": [
+          {
+            "url": "/v2/goals",
+            "ms": 346,
+            "typ": "document"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 1
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\supplements-hell.png",
+    "pfad": "/v2/supplements",
+    "breite": 1440,
+    "modus": "hell",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 2193,
+      "dokument_ms": 1140,
+      "anfragen": 16,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/supplements",
+          "ms": 1140,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 2235,
+        "dokument_ms": 1094,
+        "anfragen": 16,
+        "ueber_schwelle": 1,
+        "langsamste": [
+          {
+            "url": "/v2/supplements",
+            "ms": 1094,
+            "typ": "document"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 1
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\supplements-dunkel.png",
+    "pfad": "/v2/supplements",
+    "breite": 1440,
+    "modus": "dunkel",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 2159,
+      "dokument_ms": 1091,
+      "anfragen": 16,
+      "ueber_schwelle": 1,
+      "langsamste": [
+        {
+          "url": "/v2/supplements",
+          "ms": 1091,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 2201,
+        "dokument_ms": 1073,
+        "anfragen": 16,
+        "ueber_schwelle": 1,
+        "langsamste": [
+          {
+            "url": "/v2/supplements",
+            "ms": 1073,
+            "typ": "document"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 1
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\nutrition-hell.png",
+    "pfad": "/v2/nutrition",
+    "breite": 1440,
+    "modus": "hell",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 3259,
+      "dokument_ms": 934,
+      "anfragen": 18,
+      "ueber_schwelle": 3,
+      "langsamste": [
+        {
+          "url": "/api/nutrition/diary?datum=2026-08-22",
+          "ms": 1431,
+          "typ": "fetch"
+        },
+        {
+          "url": "/api/nutrition/diary?datum=2026-08-22",
+          "ms": 1208,
+          "typ": "fetch"
+        },
+        {
+          "url": "/v2/nutrition",
+          "ms": 934,
+          "typ": "document"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 2490,
+        "dokument_ms": 1108,
+        "anfragen": 18,
+        "ueber_schwelle": 2,
+        "langsamste": [
+          {
+            "url": "/v2/nutrition",
+            "ms": 1108,
+            "typ": "document"
+          },
+          {
+            "url": "/api/nutrition/diary?datum=2026-08-22",
+            "ms": 420,
+            "typ": "fetch"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 5
+    }
+  },
+  {
+    "ziel": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\g156\\nutrition-dunkel.png",
+    "pfad": "/v2/nutrition",
+    "breite": 1440,
+    "modus": "dunkel",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "zeit": {
+      "gesamt_ms": 2186,
+      "dokument_ms": 965,
+      "anfragen": 18,
+      "ueber_schwelle": 2,
+      "langsamste": [
+        {
+          "url": "/v2/nutrition",
+          "ms": 965,
+          "typ": "document"
+        },
+        {
+          "url": "/api/nutrition/diary?datum=2026-08-22",
+          "ms": 372,
+          "typ": "fetch"
+        }
+      ],
+      "zweiter_lauf": {
+        "gesamt_ms": 2285,
+        "dokument_ms": 930,
+        "anfragen": 18,
+        "ueber_schwelle": 2,
+        "langsamste": [
+          {
+            "url": "/v2/nutrition",
+            "ms": 930,
+            "typ": "document"
+          },
+          {
+            "url": "/api/nutrition/diary?datum=2026-08-22",
+            "ms": 396,
+            "typ": "fetch"
+          }
+        ]
+      }
+    },
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:74:9)\n    at RedirectBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/redirect-boundary.js:82:11)\n    at NotFoundErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:76:9)\n    at NotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/not-found-boundary.js:84:11)\n    at DevRootNotFoundBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/dev-root-not-found-boundary.js:33:11)\n    at ReactDevOverlay (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/ReactDevOverlay.js:87:9)\n    at HotReload (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:321:11)\n    at Router (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:207:11)\n    at ErrorBoundaryHandler (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:113:9)\n    at ErrorBoundary (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/error-boundary.js:160:11)\n    at AppRouter (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/components/app-router.js:585:13)\n    at ServerRoot (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:112:27)\n    at Root (webpack-internal:///(app-pages-browser)/../../node_modules/.pnpm/next@14.2.35_@playwright+test@1.41.2_react-dom@18.3.1_react@18.3.1__react@18.3.1/node_modules/next/dist/client/app-index.js:117:11)"
+    ],
+    "sichtbar": {
+      "Attrappe": 5
+    }
+  }
+]
