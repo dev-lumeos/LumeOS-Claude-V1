@@ -436,6 +436,15 @@ test('die Formeln der Recovery-Vorlage sind uebernommen, nicht erfunden', () => 
   assert.ok(!/const MODALITY_BONUS\b/.test(q), 'C-124: die Bonuswerte sind entfernt und duerfen nicht zurueckkommen')
   assert.ok(/MODALITY_EVIDENZ/.test(q), 'C-124: die Evidenzaussagen fehlen')
   assert.ok(/REC_SAUNA_ENDURANCE_HEAT/.test(q), 'C-124: Registry-IDs fehlen an den Aussagen')
+  // C-181: ACWR ist ersatzlos entfernt — weder die Datenattrappe noch
+  // die Kurve mit der „Safe-Zone" 0,8-1,3 duerfen zurueckkommen.
+  assert.ok(!/const ACWR_DATA/.test(q), 'C-181: ACWR_DATA ist entfernt und darf nicht zurueckkommen')
+  // Nur die Deklaration — die Kommentare, die die Entfernung
+  // begruenden, duerfen den Namen nennen (wie beim C-124-Wächter).
+  assert.ok(!/function calcTrainingLoadScore|const calcTrainingLoadScore/.test(q),
+    'C-181: die ACWR-Kurve ist entfernt und darf nicht zurueckkommen')
+  assert.ok(!/>= ?0\.8 && \w+ <= ?1\.3/.test(q), 'C-181: keine Safe-Zone 0.8-1.3 im Motor')
+  assert.ok(!/key: 'training_load'/.test(q), 'C-181: der Training-load-Term ist aus dem Score entfernt')
 })
 
 test('der Erholungswert kennt beide Modi mit den Gewichten der Vorlage', () => {
