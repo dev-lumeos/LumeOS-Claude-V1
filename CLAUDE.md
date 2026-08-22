@@ -212,6 +212,35 @@ raeumen, neu starten — in dieser Reihenfolge.** Wer nur raeumt, bekommt
 404 fuer jeden Chunk, **und die Anmeldung schickt die Zugangsdaten per
 GET in die URL** (G-82).
 
+### Ein Server, ein Startweg: `tools/server.py`
+
+**Tom, 2026-08-22:** *,kann ja nicht sein dass ich jedesmal nach einem
+Lauf probleme habe und 20 minuten verplaemper mit der suche was mit
+next los ist"*
+
+`[cmd]` **Der Befund dahinter, gemessen am 2026-08-22: FUENF
+`next dev`-Instanzen liefen parallel gegen dieses Repo** (3200, 3201,
+3205, 3207, 3310). Der Mechanismus: ein Agent startet `pnpm dev`,
+Port 3200 ist besetzt, **Next weicht stumm auf den naechsten Port
+aus** — niemand merkt es, jede Instanz haelt eigene Datei-Watcher,
+jeder Edit kompiliert fuenffach, und der 3200er verhungert (1,5 GB
+RSS, /login ohne Antwort).
+
+**Deshalb, ohne Ausnahme:**
+
+- **Nie `pnpm dev` oder `npx next dev` von Hand.** Der Ausweich-Port
+  ist das Gift.
+- `[cmd]` **`python tools/server.py status`** — wer laeuft wo, RAM,
+  Antwortzeit, Duplikate.
+- **`python tools/server.py start`** — startet NUR, wenn 3200 frei
+  ist; weicht nie aus. **`neustart`** raeumt alle Repo-Instanzen (und
+  Headless-Chromes aelter 15 min) und startet EINEN. **`aufraeumen`**
+  laesst einen gesunden 3200er leben.
+- **Admin (3210) und Coach (3220) fasst das Werkzeug nie an.**
+- `[cmd]` Gegengeprobt am 2026-08-22: neustart raeumte die fuenf
+  Instanzen, der frische Server stand in 6 s, /login antwortet seither
+  in 0,1 s. Log: `backup/dev-server.log`.
+
 ### Wer arbeitet woran: `docs/todo/LAUFEND.md`
 
 **Tom, 2026-08-20:** *,Du hast es nicht mal mehr im Griff zu wissen,
