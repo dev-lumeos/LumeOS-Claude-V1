@@ -32,6 +32,14 @@ import {
   type NutritionGoal,
   type StoredProfile,
 } from '../../../lib/profile/profile-model'
+// G-167: die Regel und der Provisoriums-Satz stehen an EINER Stelle.
+//
+// `[cmd]` **Aus `extended-regel.ts`, nicht aus `regeln-read.ts`** —
+// letzteres zieht `next/headers` und gehoert nicht ins Browserbuendel
+// (A-30). Dasselbe Muster wie `rechte-modell.ts` neben `rechte-read.ts`.
+import {
+  EXTENDED_VORLAEUFIG, GRAD_FUER_EXTENDED,
+} from '../../../lib/supplements/extended-regel'
 
 /** Formularwerte sind Zeichenketten — leer heisst „nicht angegeben". */
 type Formwerte = Record<keyof StoredProfile, string>
@@ -277,17 +285,23 @@ export function ProfilFormular({
                 Onboarding eine Deklaration des Users, welches Level er
                 hat."*
 
-                `[cmd]` **DIE SPALTE GIBT ES NOCH NICHT.**
-                `public.profiles` fuehrt 14 Spalten, keine davon nimmt
-                den Grad auf. Die Kachel steht trotzdem: **die Form ist
-                da, die Auswahl gesperrt** — dasselbe Muster wie die
-                Ausschluss-Kachel in G-65, als der Preset-Katalog noch
-                fehlte. Sie war zwei Stunden spaeter bedienbar, ohne
-                dass jemand sie neu bauen musste.
+                `[cmd]` **Die Spalte ist da — gemessen am 2026-08-22:**
+                `public.profiles` fuehrt **15 Spalten**, die fuenfzehnte
+                ist `experience_level` (`text`). Angelegt hat sie C-140.
 
-                `[read]` **Keine Attrappenmarke:** die sagt „hier stehen
-                erfundene Zahlen". Hier stehen keine — es steht nur
-                nichts. Ein Leerzustand ist kein Attrappenzustand.
+                **Hier stand bis zum 2026-08-22 das Gegenteil:** *„DIE
+                SPALTE GIBT ES NOCH NICHT. `public.profiles` fuehrt 14
+                Spalten, keine davon nimmt den Grad auf."* `[read]` Das
+                stimmte, als es geschrieben wurde, und **niemand hat
+                es nachgezogen, als die Spalte kam.** Ein Kommentar
+                ohne Messdatum veraltet lautlos — deshalb steht der
+                Stichtag jetzt darin.
+
+                `[cmd]` **Angeschlossen ist alles:**
+                `profile-model.ts:160` validiert gegen
+                `EXPERIENCE_LEVELS`, `profile-write.ts:36` schreibt das
+                Feld, und der Knopf schaltet um. **Die Kachel ist keine
+                Vorform mehr.**
 
                 `[read]` Neben `activity_level`, weil beide dasselbe
                 Feld beschreiben und doch verschiedenes messen: wieviel
@@ -302,11 +316,21 @@ export function ProfilFormular({
                       key={stufe}
                       type="button"
                       className="v2-wahl"
+                      // G-166: `data-on` statt eines eigenen `style`.
+                      //
+                      // `[cmd]` **Der Punkt haengt allein daran:**
+                      // `.v2-wahl[data-on="true"] .v2-wahl-punkt`
+                      // faerbt Rand und Fuellung (`v2.css:1402`). Der
+                      // fruehere Inline-Stil tuschte den Rahmen ein,
+                      // **liess den Punkt aber leer** — die Kachel sah
+                      // gewaehlt aus und der Punkt sagte nein.
+                      //
+                      // `[read]` `activity_level` daneben macht es seit
+                      // jeher so. Zwei Bauarten fuer dieselbe Sache
+                      // sind der Grund, warum es hier auffiel und dort
+                      // nie.
+                      data-on={gewaehlt ? 'true' : undefined}
                       aria-pressed={gewaehlt}
-                      style={gewaehlt ? {
-                        borderColor: 'color-mix(in oklch, var(--acc) 45%, var(--border))',
-                        background: 'color-mix(in oklch, var(--acc) 8%, transparent)',
-                      } : undefined}
                       // Ein zweiter Klick nimmt die Angabe zurueck —
                       // „nicht angegeben" ist ein gueltiger Zustand.
                       onClick={() => setze('experience_level', gewaehlt ? '' : stufe)}
@@ -330,11 +354,26 @@ export function ProfilFormular({
                   ableitet. Deshalb waehlt sie hier selbst — und kann
                   die Angabe mit einem zweiten Klick wieder
                   zuruecknehmen. */}
+              {/* G-167: Die Stufe kommt aus `GRAD_FUER_EXTENDED`.
+                  `[cmd]` Hier stand fest `EXPERIENCE_LEVEL_INFO.advanced`
+                  — **beide Stellen sagten dann Verschiedenes**, sobald
+                  sich die Regel aendert. Jetzt lesen Sperrkachel und
+                  dieser Satz dieselbe Konstante. */}
               <p className="v2-muted" style={{ fontSize: 11, marginTop: 8, lineHeight: 1.5 }}>
                 Die Angabe schaltet Flaechen frei, die Erfahrung
                 voraussetzen — etwa <strong>Supplements · Extended</strong>{' '}
-                ab <em>{EXPERIENCE_LEVEL_INFO.advanced.label}</em>. Sie
+                ab <em>{EXPERIENCE_LEVEL_INFO[GRAD_FUER_EXTENDED].label}</em>. Sie
                 lässt sich jederzeit ändern.
+              </p>
+              {/* `[read]` **Derselbe Satz wie an der Sperrkachel** — aus
+                  `EXTENDED_VORLAEUFIG`, damit die zwei Stellen nicht
+                  auseinanderlaufen. */}
+              <p className="v2-hinweis" style={{ marginTop: 8 }}>
+                <Icon name="alert" className="v2-ic v2-ic-sm" />
+                <span>
+                  <strong>Noch nicht endgueltig geregelt.</strong>{' '}
+                  {EXTENDED_VORLAEUFIG}
+                </span>
               </p>
             </Card>
 
