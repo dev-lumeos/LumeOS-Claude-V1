@@ -238,3 +238,9 @@ backup/lumeos-v2-cloud-*/
 
 # Kimi-Recherchebestand (2,5 MB, Datenquelle wie docs/specs — kein Sollwert)
 backup/kimi-research/
+
+# Vollsicherungen der laufenden Instanz (C-226).
+# Mit Daten, 17-128 MB - der Pre-Commit-Hook sperrt ab 10 MB,
+# und ein Volldump gehoert nicht in die Versionsverwaltung.
+# Tom haelt sie auf RAID 5.
+backup/vollsicherung/
