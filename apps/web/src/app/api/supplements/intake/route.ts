@@ -70,6 +70,9 @@ export async function POST(request: NextRequest) {
         dose_unit: String(b.dose_unit ?? ''),
         timing: String(b.timing ?? 'morning'),
         frequency: b.frequency ? String(b.frequency) : undefined,
+        // C-224: Zuteilung zum GEWAEHLTEN Stack + Substanz-Anker.
+        stack_id: (b.stack_id as string | null) ?? null,
+        notes: (b.notes as string | null) ?? null,
       })
       return NextResponse.json({ angelegt, daten: await getStackDaten() }, { status: 201 })
     }
