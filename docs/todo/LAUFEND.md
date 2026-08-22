@@ -14,7 +14,7 @@ wissen, welcher Agent noch laeuft."*
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
 | **Fable** | *frei* | | |
-| **Claude Code** | *frei* | | |
+| **Claude Code** | **G-133** Allergen-Ausschluss an `p_filters` anschliessen | `apps/web` Nutrition | 2026-08-22 |
 | **Codex** | *frei* | | |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung | extern | 2026-08-20 |
 
@@ -28,7 +28,6 @@ wenn er rausgeht, nicht wenn er geschrieben ist.**
 
 | Auftrag | Bereich |
 |---|---|
-| **G-133** Allergen-Pillen: *„Ohne Laktose 1.021"* statt 6.119 | `apps/web` |
 | **G-140** Spalte *„Stufe"* zeigt das Abo-Tier | `apps/web` |
 | **G-149** Einnahme-Haken bucht auf den Stichtag statt auf heute | `apps/web` |
 
@@ -103,7 +102,7 @@ wenn er rausgeht, nicht wenn er geschrieben ist.**
 | `apps/coach/` | ein Agent zur Zeit |
 | `docs/` | Orchestrator |
 
-`[read]` **Zwei Agenten in `apps/web` teilen sich die Browsersitzung** \u2014
+`[read]` **Zwei Agenten in `apps/web` teilen sich die Browsersitzung** —
 das hat am 2026-08-20 dreimal Zeit gekostet. **Ein UI-Agent je Modul.**
 
 ---
@@ -113,6 +112,10 @@ das hat am 2026-08-20 dreimal Zeit gekostet. **Ein UI-Agent je Modul.**
 `[cmd]` **Vor jedem neuen Auftrag: hier nachsehen.**
 `[cmd]` **Nach jedem Bericht: Zeile streichen.**
 
-`[read]` **Und die Nummer wird hier vergeben** \u2014 A-18 haelt fest, dass
-116 bis 119 doppelt belegt waren, weil fuenf Agenten gleichzeitig die
-naechste freie Zahl nahmen.
+`[read]` **Und die Nummer wird hier vergeben** — **A-41** haelt fest,
+dass 116 bis 119 doppelt belegt waren, weil fuenf Agenten gleichzeitig
+die naechste freie Zahl nahmen. `[cmd]` **Der Punkt hiess bis zum
+2026-08-21 A-18**; bei der Aufloesung der neun Nummernkollisionen ist
+der juengere Eintrag gewandert. `tools/nummern-pruefen.mjs` findet
+solche Kollisionen jetzt im Gate — tote Verweise im Fliesstext aber
+nicht.
