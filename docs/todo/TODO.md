@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 187 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 192 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -4507,6 +4507,35 @@ Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
   `[read]` **Ein dauerhaft roter Waechter wird uebersprungen.** Dasselbe
   Muster wie der Selbsttest, der die falsche Pruefung feuerte.
 
+  ### Nachgeschaerft 2026-08-22 — es sind zwei Dinge
+
+  `[cmd]` Codex meldet aus C-215 die Zahlen **umgekehrt**: *„ist 566,
+  erwartet 564"*. **Beide Beobachtungen stimmen — sie messen
+  verschiedene Datenbanken.**
+
+  | | Bestand | Erwartung |
+  |---|---:|---:|
+  | laufende Instanz | **564** | 566 |
+  | frisch gebaute Kette | **566** | 564 |
+
+  `[cmd]` **Auf der Wegwerf-Instanz erzeugt C-191 die zwei
+  ApoB/Prolactin-Zeilen**, also 566 — waehrend
+  `testdaten-pruefen.ts:126` noch 564 erwartet.
+  `[cmd]` **Live steht 564**, weil die Kette dort nie lief, waehrend
+  `144_biomarker_spec_enrichment.ts:772` auf 566 steht.
+
+  **Damit zerfaellt der Punkt in zwei Arbeiten:**
+
+  **1.** `testdaten-pruefen.ts` traegt eine stehengebliebene Erwartung.
+  Sie gehoert auf 566 gezogen — das ist eine Zeile und blockiert heute
+  jeden Kettenlauf mit einem Fehler, der keiner ist.
+
+  **2.** Die laufende Instanz ist nie nachgezogen worden. `[read]` Hier
+  ist die Frage groesser als die Zahl: **wann und wie wird sie nach
+  einem Schemaschritt aktualisiert, ohne Toms Daten zu verlieren?**
+  Solange das offen ist, faellt es bei jeder Pipeline-Aenderung wieder
+  an.
+
 - [ ] **C-210: Die 28 fehlenden Naehrstofftexte — was ist gemeint?**
   (neu 2026-08-22). Aus G-126.
 
@@ -4573,3 +4602,123 @@ Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
   **Zu bauen:** vor einem gezielten Commit den Index leeren, oder die
   gestagten Pfade gegen die beabsichtigten pruefen und abbrechen, wenn
   sie abweichen.
+
+- [ ] **C-215: ACWR rechnet in der Datenbank weiter** (neu 2026-08-22).
+  **Laeuft bei Codex.** Die zweite Haelfte von C-181.
+
+  `[read]` **Seit `538b7dd` zeigt die Oberflaeche einen Recovery-Score
+  OHNE ACWR, die Datenbank rechnet einen MIT.** Zwei Wahrheiten
+  nebeneinander — der 79,4 im Bildschirmfoto kam aus der Tabelle, nicht
+  aus dem bereinigten Motor.
+
+  `[cmd]` Alles in `121_recovery_scores_modalities.sql`:
+
+  | Zeile | |
+  |---|---|
+  | 85 | `CREATE FUNCTION recovery.training_load_score(p_acwr NUMERIC)` |
+  | 93–97 | die Kurve: NULL→70, **0,8–1,2**→100, drei Abfallzweige |
+  | 105 | `CREATE FUNCTION recovery.acwr_for_day(p_user_id, p_entry_date)` |
+  | 165 | `acwr_used NUMERIC(8,3)` in `recovery.scores` |
+  | 336–337 | Aufruf und Einsetzen in den Score |
+  | 485 | `GRANT EXECUTE ON acwr_for_day TO authenticated` |
+
+  `[cmd]` **Die DB-Kurve ist nicht die des Frontends.** Dort galt
+  0,8–1,3, hier **0,8–1,2** mit drei Abfallzweigen und einem
+  NULL-Fallback auf 70. Eigenstaendig gebaut, eigenstaendig zu
+  entfernen — nicht nach dem Muster des Frontends raten.
+
+  `[cmd]` `recovery.scores.acwr_used` ist die einzige `acwr`-Spalte im
+  ganzen Schema.
+
+  `[cmd]` **`132a_rule_input_status.sql` ruft `acwr_for_day`** (Zeile
+  100) und schreibt den Feldvertrag `training.load_spike` (Zeile
+  337–339). **Der Vertrag bleibt** — aber der Aufruf bricht, wenn die
+  Funktion faellt. Zu loesen, bevor entfernt wird.
+
+  **Offen fuer Tom:** faellt `acwr_used` als Spalte, oder bleibt sie
+  leer stehen? In `recovery.scores` liegen Zeilen, und eine geloeschte
+  Spalte nimmt Messwerte mit.
+
+- [ ] **C-216: Nachweisdateien blockieren das ganze Repo** (neu
+  2026-08-22).
+
+  `[cmd]` **`backup/c192/final-nachweis.json` und
+  `-finaldb.json` waren doppelt kodiert** — je sechsmal die
+  Doppelkodierungsmarke (U+00E2 U+20AC), dazu
+  CRLF. Ausgabe eines Kettenlaufs durch eine Windows-Konsole.
+
+  `[cmd]` **Das hat jeden Commit im Repo blockiert**, auch die, die
+  diese Dateien nicht anfassten: `encoding-pruefen.mjs` laeuft als
+  erster Gate-Schritt ueber alle 10.661 Dateien.
+
+  `[cmd]` Zurueckgedreht (`cp1252` → `utf-8`), mit zwei Gegenproben:
+  bleibt gueltiges JSON, keine Marken uebrig. Encoding-Pruefung danach
+  Exit 0.
+
+  **Zu bauen:** Agenten schreiben Nachweisdateien mit
+  `encoding="utf-8", newline="\n"`. `[read]` Die Regel steht in
+  `CLAUDE.md` fuer Quelldateien — fuer `backup/` galt sie offenbar als
+  nicht gemeint.
+
+  `[cmd]` **Nebenbefund:** fuenf `*_c192_vor_schema.sql` aus 14 Minuten
+  (09:05–09:19). Jeder Wegwerf-Lauf legt eine Sicherung an. Bei diesem
+  Tempo sammeln sich hundert je Woche.
+
+- [ ] **C-217: Was ist gebaut, was ist Attrappe — je Modul, je Kachel**
+  (neu 2026-08-22). **Laeuft bei Fable.**
+
+  `[read]` **Anlass:** Der Orchestrator hat behauptet, es gebe keine
+  Arbeit fuer zwei freie Agenten. Tom hat sieben Bildschirmfotos aus
+  **einem** Modul geschickt, auf denen jede Kachel *„Attrappe"* traegt.
+  **`TODO.md` ist ein Befundregister, kein Arbeitsvorrat** — ein ganzes
+  Modul voller Attrappen steht nicht drin, weil es niemand als Befund
+  aufgeschrieben hat.
+
+  `[cmd]` Beleg und Bildinhalt: `backup/bestand/00-toms-bildschirmfotos.md`.
+
+  `[cmd]` **Recovery zeigt auf jeder Kachel *„das Schema `recovery` gibt
+  es noch nicht"*** — dabei hat `recovery.checkins` **340** Zeilen,
+  `recovery.scores` **340**, `recovery.modality_log` **178**, und drei
+  Lesefunktionen greifen bereits darauf zu (`checkin-read.ts:62`,
+  `scores-read.ts:145`, `scores-read.ts:239`).
+
+  `[cmd]` **42 Attrappen-Marken in sieben Recovery-Dateien.** Dasselbe
+  Pauschalbanner in `coach`, `coach/ai`, `medical`, `training`.
+
+  **Was der Bericht liefert:** je Kachel echt oder Attrappe, je Modul
+  Schema und Zeilenzahlen, je Attrappe was zum Anbinden fehlt — Tabelle
+  fehlt / leer / nicht verdrahtet / haengt an einer Entscheidung. Gegen
+  alle vier Quellen. **Daraus werden die Gruppen mit Abhaengigkeiten.**
+
+- [ ] **G-155: Jede Kachel jedes Moduls als Bild** (neu 2026-08-22).
+  **Laeuft bei Claude Code.** Gegenstueck zu C-217.
+
+  `tools/schuss.mjs` ueber alle Module und Tabs, hell und dunkel, je
+  zwei Laeufe. Ablage `backup/bestand/`, Liste als `aufnahme.json`.
+
+  `[read]` **Zweck:** Behauptung und Anblick vergleichbar machen. Wo
+  eine Kachel ohne Marke erfundene Zahlen zeigt oder eine mit Marke echt
+  aussieht, ist das der Befund.
+
+- [ ] **C-218: Frontend und Datenbank normieren den Recovery-Score
+  verschieden** (neu 2026-08-22). Aus C-181 und C-215.
+
+  `[cmd]` **Fable rechnet `subtotal/85 × 100`** (C-181), damit die
+  Readiness-Schwellen 90/80/70/60/40 ihre Skala behalten.
+  `[cmd]` **Codex laesst den Term ersatzlos wegfallen** (C-215):
+  `manual_v2_c215`, `training_load_points` 0,00.
+
+  `[cmd]` **Live vorher 79,4 mit `training_load_points` 10,50. Nach der
+  Kette 68,9.** Ein Szenariotag faellt auf 35,3.
+
+  `[cmd]` **`GEWICHTE.trainingslast: 15` steht weiter in `score.ts`** —
+  mit `roh: 'entfaellt — C-181, ACWR ohne Beleg'`, aber das Gewicht ist
+  da.
+
+  `[read]` **Beide Wege sind fuer sich begruendet, zusammen ergeben sie
+  zwei Skalen.** Zu entscheiden: normiert wird auf 100, oder die Skala
+  faellt auf 85 und die Schwellen wandern mit. **Nicht beides.**
+
+  `[read]` Und der Nutzer sieht eine Verschlechterung um zehn Punkte.
+  Das ist die richtige Zahl — aber sie gehoert erklaert, nicht
+  kommentarlos angezeigt.

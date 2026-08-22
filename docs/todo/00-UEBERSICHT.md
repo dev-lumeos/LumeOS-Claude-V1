@@ -220,9 +220,14 @@ wenn er erzeugt und geprüft wird.
 | **C-207** Vier Entscheidungen aus dem 035-Handoff | offen | 4466 |
 | **C-208** C-129 neu fassen — der Import ist laengst passiert | offen | 4482 |
 | **C-209** Die laufende Instanz wird nach einem Kettenschritt nicht | offen | 4494 |
-| **C-210** Die 28 fehlenden Naehrstofftexte — was ist gemeint? | offen | 4510 |
-| **C-211** Selen fehlt im BLS-Katalog | offen | 4526 |
-| **C-212** `CHORL` haengt nicht im Naehrstoffbaum | offen | 4536 |
-| **C-213** C-124-E8 — die Arzt-Hinweis-Schwelle ist offen | offen | 4543 |
-| **C-214** Fuenf Modalitaeten ohne Registerzeile | offen | 4550 |
-| **A-48** Der Index wird vor dem `git add` nicht geleert | offen | 4561 |
+| **C-210** Die 28 fehlenden Naehrstofftexte — was ist gemeint? | offen | 4539 |
+| **C-211** Selen fehlt im BLS-Katalog | offen | 4555 |
+| **C-212** `CHORL` haengt nicht im Naehrstoffbaum | offen | 4565 |
+| **C-213** C-124-E8 — die Arzt-Hinweis-Schwelle ist offen | offen | 4572 |
+| **C-214** Fuenf Modalitaeten ohne Registerzeile | offen | 4579 |
+| **A-48** Der Index wird vor dem `git add` nicht geleert | offen | 4590 |
+| **C-215** ACWR rechnet in der Datenbank weiter | offen | 4606 |
+| **C-216** Nachweisdateien blockieren das ganze Repo | offen | 4642 |
+| **C-217** Was ist gebaut, was ist Attrappe — je Modul, je Kachel | offen | 4667 |
+| **G-155** Jede Kachel jedes Moduls als Bild | offen | 4693 |
+| **C-218** Frontend und Datenbank normieren den Recovery-Score | offen | 4703 |
