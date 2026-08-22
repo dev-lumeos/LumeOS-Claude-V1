@@ -66,6 +66,9 @@ type SubstanceRow = {
   compound_type: string | null
   category: string | null
   subcategory: string | null
+  canonical_category: string | null
+  canonical_compound_type: string | null
+  canonical_routes: string[] | null
   chemical_form: string | null
   aliases: string[]
   cas_number: string | null
@@ -227,6 +230,143 @@ function deterministicId(prefix: string, value: string): string {
 
 function dosePart(dosing: JsonObject, key: string): unknown {
   return dosing[key] ?? null
+}
+
+function addRoute(routes: Set<string>, value: string): void {
+  const folded = fold(value)
+  if (!folded) return
+  if (folded.includes('subcutaneous') || /\bsubq\b/.test(folded)) routes.add('subcutaneous')
+  if (folded.includes('intranasal') || folded.includes('nasal')) routes.add('intranasal')
+  if (folded.includes('intravenous') || /\biv\b/.test(folded)) routes.add('intravenous')
+  if (folded.includes('intramuscular') || /\bim\b/.test(folded)) routes.add('intramuscular')
+  if (folded.includes('transdermal')) routes.add('transdermal')
+  if (folded.includes('topical')) routes.add('topical')
+  if (folded.includes('sublingual')) routes.add('sublingual')
+  if (folded.includes('inhalation')) routes.add('inhalation')
+  if (folded.includes('rectal')) routes.add('rectal')
+  if (folded.includes('oral')) routes.add('oral')
+}
+
+function canonicalRoutes(row: KimiSubstance): string[] | null {
+  const routes = new Set<string>()
+  const pharmacology = objectValue(row.pharmacology)
+  for (const route of textArray(pharmacology.route_of_administration)) addRoute(routes, route)
+  const compoundType = fold(row.compound_type)
+  if (compoundType === 'aas oral') routes.add('oral')
+  if (compoundType === 'aas injectable') routes.add('intramuscular')
+  return routes.size ? [...routes].sort() : null
+}
+
+function performanceCompoundType(row: KimiSubstance): string {
+  const name = fold(row.canonical_name)
+  if (/(ostarine|enobosarm|rad 140|testolone|lgd 4033|ligandrol|andarine|yk 11|s 23|acp 105|lgd 3303|ac 262356)/.test(name)) {
+    return 'sarm'
+  }
+  if (/(ibutamoren|mk 677)/.test(name)) return 'gh_secretagogue'
+  return 'performance_compound'
+}
+
+function canonicalCompoundType(row: KimiSubstance): string | null {
+  const compoundType = fold(row.compound_type)
+  switch (compoundType) {
+    case 'aas injectable':
+    case 'aas oral':
+      return 'aas'
+    case 'herb botanical':
+    case 'herb':
+      return 'botanical'
+    case 'protein amino acid':
+      return 'protein_amino_acid'
+    case 'peptide incretin':
+      return 'incretin_peptide'
+    case 'peptide experimental':
+      return 'experimental_peptide'
+    case 'peptide hormone':
+      return 'peptide_hormone'
+    case 'performance compound':
+      return performanceCompoundType(row)
+    case 'vitamin':
+    case 'mineral':
+    case 'sports ingredient':
+    case 'longevity':
+    case 'metabolic':
+    case 'nootropic':
+    case 'hormonal':
+    case 'sleep':
+    case 'peptide':
+    case 'polysaccharide drug':
+    case 'aromatase inhibitor':
+    case 'serm':
+    case 'dopamine agonist':
+    case 'gonadotropin':
+    case 'beta2 agonist':
+    case 'metabolic uncoupler':
+    case 'sympathomimetic':
+    case 'cb1 antagonist':
+    case 'monoamine reuptake inhibitor':
+      return compoundType.replace(/\s+/g, '_')
+    default:
+      return null
+  }
+}
+
+function canonicalCategory(row: KimiSubstance, type: string | null): string | null {
+  if (type) {
+    if (type === 'protein_amino_acid') return 'protein_amino_acid'
+    if (type === 'incretin_peptide' || type === 'experimental_peptide' || type === 'peptide_hormone') return 'peptide'
+    if (type === 'gh_secretagogue') return 'hormone'
+    if (type === 'performance_compound') return 'performance'
+    if ([
+      'sarm', 'aas', 'botanical', 'vitamin', 'mineral', 'sports_ingredient',
+      'longevity', 'metabolic', 'nootropic', 'hormonal', 'sleep', 'peptide',
+      'polysaccharide_drug', 'aromatase_inhibitor', 'serm', 'dopamine_agonist',
+      'gonadotropin', 'beta2_agonist', 'metabolic_uncoupler', 'sympathomimetic',
+      'cb1_antagonist', 'monoamine_reuptake_inhibitor',
+    ].includes(type)) return type
+  }
+  const category = fold(row.category)
+  switch (category) {
+    case 'vitamins efas':
+      return 'essential_fatty_acid'
+    case 'protein amino acids':
+      return 'protein_amino_acid'
+    case 'herbal botanical':
+      return 'botanical'
+    case 'sports performance':
+      return 'sports_ingredient'
+    case 'metabolic weight':
+      return 'metabolic'
+    case 'hormonal support':
+      return 'hormonal'
+    case 'performance enhancement':
+      return 'performance'
+    case 'peptides':
+      return 'peptide'
+    case 'vitamins':
+      return 'vitamin'
+    case 'minerals':
+      return 'mineral'
+    case 'longevity':
+    case 'metabolic':
+    case 'sleep':
+    case 'nootropics':
+      return category.replace(/s$/, '')
+    default:
+      return null
+  }
+}
+
+function canonicalTaxonomy(row: KimiSubstance): {
+  canonical_category: string | null
+  canonical_compound_type: string | null
+  canonical_routes: string[] | null
+} {
+  const type = canonicalCompoundType(row)
+  return {
+    canonical_category: canonicalCategory(row, type),
+    canonical_compound_type: type,
+    canonical_routes: canonicalRoutes(row),
+  }
 }
 
 function emptyLiftedFields(): Pick<SubstanceRow,
@@ -395,6 +535,7 @@ for (const row of kimiRows) {
   const pharmacology = objectValue(row.pharmacology)
   const hasHalfLife = pharmacology.half_life !== undefined && pharmacology.half_life !== null && pharmacology.half_life !== ''
   const lifted = liftedFields(row)
+  const taxonomy = canonicalTaxonomy(row)
   substances.set(row.id, {
     id: row.id,
     canonical_name: row.canonical_name,
@@ -402,6 +543,7 @@ for (const row of kimiRows) {
     compound_type: row.compound_type ? String(row.compound_type) : null,
     category: row.category ? String(row.category) : null,
     subcategory: row.subcategory ? String(row.subcategory) : null,
+    ...taxonomy,
     chemical_form: row.chemical_form ? String(row.chemical_form) : null,
     aliases: textArray(row.aliases),
     cas_number: row.cas_number ? String(row.cas_number) : null,
@@ -458,6 +600,9 @@ for (const row of local.supplements) {
       compound_type: null,
       category: row.category ? String(row.category) : null,
       subcategory: null,
+      canonical_category: null,
+      canonical_compound_type: null,
+      canonical_routes: null,
       chemical_form: null,
       aliases: [row.slug, row.name, row.name_de, row.name_en].filter(Boolean).map(String),
       cas_number: null,
@@ -522,6 +667,9 @@ for (const row of f05.substances) {
       compound_type: row.class ? String(row.class) : null,
       category: row.category_source ? String(row.category_source) : null,
       subcategory: null,
+      canonical_category: null,
+      canonical_compound_type: null,
+      canonical_routes: null,
       chemical_form: null,
       aliases: [row.name],
       cas_number: null,
@@ -593,6 +741,9 @@ for (const mapping of crossDomain.mappings ?? []) {
 
 const substanceRows = [...substances.values()].sort((a, b) => a.id.localeCompare(b.id))
 const sourceRows = sources.sort((a, b) => `${a.substance_id}|${a.source_catalog}|${a.source_entity_id}`.localeCompare(`${b.substance_id}|${b.source_catalog}|${b.source_entity_id}`))
+const expectedCanonicalCategory = substanceRows.filter(row => row.canonical_category !== null).length
+const expectedCanonicalCompoundType = substanceRows.filter(row => row.canonical_compound_type !== null).length
+const expectedCanonicalRoutes = substanceRows.filter(row => row.canonical_routes !== null).length
 
 const expectedSubstanceRows = kimiRows.length + localOwn + f05Own
 const expectedSourceRows = kimiRows.length + local.supplements.length + f05.substances.length + crossLinks
@@ -641,7 +792,15 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   lab_effects                   JSONB NOT NULL DEFAULT '[]'::jsonb,
   nutrients_provided            JSONB NOT NULL DEFAULT '{}'::jsonb,
   nutrient_mapping_status       TEXT NOT NULL,
+  source_primary                TEXT NOT NULL,
+  raw                           JSONB NOT NULL DEFAULT '{}'::jsonb,
+  is_active                     BOOLEAN NOT NULL DEFAULT true,
+  created_at                    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at                    TIMESTAMPTZ NOT NULL DEFAULT now(),
   safety                        JSONB,
+  canonical_category            TEXT,
+  canonical_compound_type       TEXT,
+  canonical_routes              TEXT[],
   interactions                  JSONB,
   regulatory                    JSONB,
   quality                       JSONB,
@@ -670,11 +829,6 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   cas_candidates                TEXT[],
   molecular_weight              NUMERIC,
   peptide_sequence              TEXT,
-  source_primary                TEXT NOT NULL,
-  raw                           JSONB NOT NULL DEFAULT '{}'::jsonb,
-  is_active                     BOOLEAN NOT NULL DEFAULT true,
-  created_at                    TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at                    TIMESTAMPTZ NOT NULL DEFAULT now(),
   CHECK (jsonb_typeof(external_ids) = 'object'),
   CHECK (jsonb_typeof(platform) = 'object'),
   CHECK (jsonb_typeof(evidence) = 'object'),
@@ -707,6 +861,9 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
 
 ALTER TABLE supplements.substance_catalog
   ADD COLUMN IF NOT EXISTS safety JSONB,
+  ADD COLUMN IF NOT EXISTS canonical_category TEXT,
+  ADD COLUMN IF NOT EXISTS canonical_compound_type TEXT,
+  ADD COLUMN IF NOT EXISTS canonical_routes TEXT[],
   ADD COLUMN IF NOT EXISTS interactions JSONB,
   ADD COLUMN IF NOT EXISTS regulatory JSONB,
   ADD COLUMN IF NOT EXISTS quality JSONB,
@@ -843,6 +1000,14 @@ CREATE INDEX IF NOT EXISTS substance_catalog_prescription_required_idx
   WHERE prescription_required IS NOT NULL;
 CREATE INDEX IF NOT EXISTS substance_catalog_platform_flags_idx
   ON supplements.substance_catalog(recommendable, warning_only, physician_referral, athlete_flag);
+CREATE INDEX IF NOT EXISTS substance_catalog_canonical_category_idx
+  ON supplements.substance_catalog(canonical_category)
+  WHERE canonical_category IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_canonical_compound_type_idx
+  ON supplements.substance_catalog(canonical_compound_type)
+  WHERE canonical_compound_type IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_canonical_routes_idx
+  ON supplements.substance_catalog USING gin(canonical_routes);
 CREATE INDEX IF NOT EXISTS substance_catalog_dose_ceiling_idx
   ON supplements.substance_catalog(dose_ceiling_value)
   WHERE dose_ceiling_value IS NOT NULL;
@@ -915,6 +1080,7 @@ WHERE id NOT IN (
 
 INSERT INTO supplements.substance_catalog (
   id, canonical_name, domain, compound_type, category, subcategory,
+  canonical_category, canonical_compound_type, canonical_routes,
   chemical_form, aliases, cas_number, external_ids, platform_classes,
   platform, evidence, official_label_dose, guideline_dose,
   tolerable_upper_intake_level, studied_dose_ranges, anecdotal_dose_ranges,
@@ -935,6 +1101,12 @@ SELECT
   NULLIF(payload->>'compound_type', ''),
   NULLIF(payload->>'category', ''),
   NULLIF(payload->>'subcategory', ''),
+  NULLIF(payload->>'canonical_category', ''),
+  NULLIF(payload->>'canonical_compound_type', ''),
+  CASE
+    WHEN payload->'canonical_routes' IS NULL OR payload->'canonical_routes' = 'null'::jsonb THEN NULL::text[]
+    ELSE ARRAY(SELECT jsonb_array_elements_text(payload->'canonical_routes'))
+  END,
   NULLIF(payload->>'chemical_form', ''),
   COALESCE(ARRAY(SELECT jsonb_array_elements_text(COALESCE(payload->'aliases', '[]'::jsonb))), '{}'),
   NULLIF(payload->>'cas_number', ''),
@@ -996,6 +1168,9 @@ ON CONFLICT (id) DO UPDATE SET
   compound_type = EXCLUDED.compound_type,
   category = EXCLUDED.category,
   subcategory = EXCLUDED.subcategory,
+  canonical_category = EXCLUDED.canonical_category,
+  canonical_compound_type = EXCLUDED.canonical_compound_type,
+  canonical_routes = EXCLUDED.canonical_routes,
   chemical_form = EXCLUDED.chemical_form,
   aliases = EXCLUDED.aliases,
   cas_number = EXCLUDED.cas_number,
@@ -1086,6 +1261,10 @@ DECLARE
   v_with_half_life integer;
   v_columns integer;
   v_non_kimi_lifted integer;
+  v_non_kimi_taxonomy integer;
+  v_canonical_category integer;
+  v_canonical_compound_type integer;
+  v_canonical_routes integer;
   v_safety integer;
   v_regulatory integer;
   v_warning_triggers integer;
@@ -1127,6 +1306,9 @@ BEGIN
   WHERE domain NOT LIKE 'kimi_%'
     AND (
       safety IS NOT NULL
+      OR canonical_category IS NOT NULL
+      OR canonical_compound_type IS NOT NULL
+      OR canonical_routes IS NOT NULL
       OR interactions IS NOT NULL
       OR regulatory IS NOT NULL
       OR quality IS NOT NULL
@@ -1156,6 +1338,17 @@ BEGIN
       OR molecular_weight IS NOT NULL
       OR peptide_sequence IS NOT NULL
     );
+  SELECT count(*) INTO v_non_kimi_taxonomy
+  FROM supplements.substance_catalog
+  WHERE domain NOT LIKE 'kimi_%'
+    AND (
+      canonical_category IS NOT NULL
+      OR canonical_compound_type IS NOT NULL
+      OR canonical_routes IS NOT NULL
+    );
+  SELECT count(*) INTO v_canonical_category FROM supplements.substance_catalog WHERE canonical_category IS NOT NULL;
+  SELECT count(*) INTO v_canonical_compound_type FROM supplements.substance_catalog WHERE canonical_compound_type IS NOT NULL;
+  SELECT count(*) INTO v_canonical_routes FROM supplements.substance_catalog WHERE canonical_routes IS NOT NULL;
   SELECT count(*) INTO v_safety FROM supplements.substance_catalog WHERE safety IS NOT NULL;
   SELECT count(*) INTO v_regulatory FROM supplements.substance_catalog WHERE regulatory IS NOT NULL;
   SELECT count(*) INTO v_warning_triggers FROM supplements.substance_catalog WHERE warning_triggers IS NOT NULL;
@@ -1196,15 +1389,29 @@ BEGIN
   IF v_f05_sources <> 320 THEN
     RAISE EXCEPTION 'substance_catalog_sources F05: %, erwartet 320', v_f05_sources;
   END IF;
-  IF v_columns <> 60 THEN
-    RAISE EXCEPTION 'substance_catalog Spalten: %, erwartet 60', v_columns;
+  IF v_columns <> 63 THEN
+    RAISE EXCEPTION 'substance_catalog Spalten: %, erwartet 63', v_columns;
   END IF;
   IF v_non_kimi_lifted <> 0 THEN
     RAISE EXCEPTION 'C-196: % nicht-Kimi-Zeilen haben gehobene Kimi-Spalten befuellt', v_non_kimi_lifted;
   END IF;
+  IF v_non_kimi_taxonomy <> 0 THEN
+    RAISE EXCEPTION 'C-197: % nicht-Kimi-Zeilen haben kanonische Taxonomie befuellt', v_non_kimi_taxonomy;
+  END IF;
+  IF v_canonical_category <> ${expectedCanonicalCategory} THEN
+    RAISE EXCEPTION 'C-197 canonical_category: %, erwartet ${expectedCanonicalCategory}', v_canonical_category;
+  END IF;
+  IF v_canonical_compound_type <> ${expectedCanonicalCompoundType} THEN
+    RAISE EXCEPTION 'C-197 canonical_compound_type: %, erwartet ${expectedCanonicalCompoundType}', v_canonical_compound_type;
+  END IF;
+  IF v_canonical_routes <> ${expectedCanonicalRoutes} THEN
+    RAISE EXCEPTION 'C-197 canonical_routes: %, erwartet ${expectedCanonicalRoutes}', v_canonical_routes;
+  END IF;
 
-  RAISE NOTICE 'OK C-196: % Substanzen, % Herkunftszeilen, % Spalten, % mit nutrients_provided, % mit Halbwertszeit',
+  RAISE NOTICE 'OK C-197: % Substanzen, % Herkunftszeilen, % Spalten, % mit nutrients_provided, % mit Halbwertszeit',
     v_substances, v_sources, v_columns, v_with_nutrients, v_with_half_life;
+  RAISE NOTICE 'C-197 Taxonomie: canonical_category %, canonical_compound_type %, canonical_routes %, nicht-Kimi %',
+    v_canonical_category, v_canonical_compound_type, v_canonical_routes, v_non_kimi_taxonomy;
   RAISE NOTICE 'C-196 Fuellgrade: safety %, regulatory %, warning_triggers %, evidence_provenance %, external_ids %, quality %, pharmacology %, dosing %, interactions %',
     v_safety, v_regulatory, v_warning_triggers, v_evidence_provenance, v_external_ids, v_quality, v_pharmacology, v_dosing, v_interactions;
   RAISE NOTICE 'C-196 flach: wada_status %, prescription_required %, dose_ceiling_value %, recommendable %, warning_only %, physician_referral %, athlete_flag %',
