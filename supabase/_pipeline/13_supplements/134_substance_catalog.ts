@@ -471,6 +471,35 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   lab_effects                   JSONB NOT NULL DEFAULT '[]'::jsonb,
   nutrients_provided            JSONB NOT NULL DEFAULT '{}'::jsonb,
   nutrient_mapping_status       TEXT NOT NULL,
+  safety                        JSONB,
+  interactions                  JSONB,
+  regulatory                    JSONB,
+  quality                       JSONB,
+  warning_triggers              JSONB,
+  evidence_provenance           JSONB,
+  wada_status                   TEXT,
+  prescription_required         BOOLEAN,
+  dose_ceiling_value            NUMERIC,
+  dose_ceiling_unit             TEXT,
+  recommendable                 BOOLEAN,
+  warning_only                  BOOLEAN,
+  physician_referral            BOOLEAN,
+  athlete_flag                  BOOLEAN,
+  missing_fields                JSONB,
+  missing_reason                JSONB,
+  last_verified                 DATE,
+  needs_review                  JSONB,
+  confidence                    NUMERIC,
+  source_count                  INTEGER,
+  primary_source_count          INTEGER,
+  unii                          TEXT,
+  pubchem_cid                   BIGINT,
+  chembl_id                     TEXT,
+  inchikey                      TEXT,
+  molecular_formula             TEXT,
+  cas_candidates                TEXT[],
+  molecular_weight              NUMERIC,
+  peptide_sequence              TEXT,
   source_primary                TEXT NOT NULL,
   raw                           JSONB NOT NULL DEFAULT '{}'::jsonb,
   is_active                     BOOLEAN NOT NULL DEFAULT true,
@@ -490,8 +519,121 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   CHECK (jsonb_typeof(cyp) = 'object'),
   CHECK (jsonb_typeof(lab_effects) = 'array'),
   CHECK (jsonb_typeof(nutrients_provided) = 'object'),
+  CHECK (safety IS NULL OR jsonb_typeof(safety) = 'object'),
+  CHECK (interactions IS NULL OR jsonb_typeof(interactions) = 'object'),
+  CHECK (regulatory IS NULL OR jsonb_typeof(regulatory) = 'object'),
+  CHECK (quality IS NULL OR jsonb_typeof(quality) = 'object'),
+  CHECK (warning_triggers IS NULL OR jsonb_typeof(warning_triggers) = 'object'),
+  CHECK (evidence_provenance IS NULL OR jsonb_typeof(evidence_provenance) = 'object'),
+  CHECK (missing_fields IS NULL OR jsonb_typeof(missing_fields) = 'array'),
+  CHECK (missing_reason IS NULL OR jsonb_typeof(missing_reason) = 'object'),
+  CHECK (needs_review IS NULL OR jsonb_typeof(needs_review) = 'array'),
+  CHECK (confidence IS NULL OR (confidence >= 0 AND confidence <= 1)),
+  CHECK (source_count IS NULL OR source_count >= 0),
+  CHECK (primary_source_count IS NULL OR primary_source_count >= 0),
+  CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited')),
   CHECK (jsonb_typeof(raw) = 'object')
 );
+
+ALTER TABLE supplements.substance_catalog
+  ADD COLUMN IF NOT EXISTS safety JSONB,
+  ADD COLUMN IF NOT EXISTS interactions JSONB,
+  ADD COLUMN IF NOT EXISTS regulatory JSONB,
+  ADD COLUMN IF NOT EXISTS quality JSONB,
+  ADD COLUMN IF NOT EXISTS warning_triggers JSONB,
+  ADD COLUMN IF NOT EXISTS evidence_provenance JSONB,
+  ADD COLUMN IF NOT EXISTS wada_status TEXT,
+  ADD COLUMN IF NOT EXISTS prescription_required BOOLEAN,
+  ADD COLUMN IF NOT EXISTS dose_ceiling_value NUMERIC,
+  ADD COLUMN IF NOT EXISTS dose_ceiling_unit TEXT,
+  ADD COLUMN IF NOT EXISTS recommendable BOOLEAN,
+  ADD COLUMN IF NOT EXISTS warning_only BOOLEAN,
+  ADD COLUMN IF NOT EXISTS physician_referral BOOLEAN,
+  ADD COLUMN IF NOT EXISTS athlete_flag BOOLEAN,
+  ADD COLUMN IF NOT EXISTS missing_fields JSONB,
+  ADD COLUMN IF NOT EXISTS missing_reason JSONB,
+  ADD COLUMN IF NOT EXISTS last_verified DATE,
+  ADD COLUMN IF NOT EXISTS needs_review JSONB,
+  ADD COLUMN IF NOT EXISTS confidence NUMERIC,
+  ADD COLUMN IF NOT EXISTS source_count INTEGER,
+  ADD COLUMN IF NOT EXISTS primary_source_count INTEGER,
+  ADD COLUMN IF NOT EXISTS unii TEXT,
+  ADD COLUMN IF NOT EXISTS pubchem_cid BIGINT,
+  ADD COLUMN IF NOT EXISTS chembl_id TEXT,
+  ADD COLUMN IF NOT EXISTS inchikey TEXT,
+  ADD COLUMN IF NOT EXISTS molecular_formula TEXT,
+  ADD COLUMN IF NOT EXISTS cas_candidates TEXT[],
+  ADD COLUMN IF NOT EXISTS molecular_weight NUMERIC,
+  ADD COLUMN IF NOT EXISTS peptide_sequence TEXT;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_safety_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_safety_json_check
+      CHECK (safety IS NULL OR jsonb_typeof(safety) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_interactions_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_interactions_json_check
+      CHECK (interactions IS NULL OR jsonb_typeof(interactions) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_regulatory_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_regulatory_json_check
+      CHECK (regulatory IS NULL OR jsonb_typeof(regulatory) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_quality_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_quality_json_check
+      CHECK (quality IS NULL OR jsonb_typeof(quality) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_warning_triggers_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_warning_triggers_json_check
+      CHECK (warning_triggers IS NULL OR jsonb_typeof(warning_triggers) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_evidence_provenance_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_evidence_provenance_json_check
+      CHECK (evidence_provenance IS NULL OR jsonb_typeof(evidence_provenance) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_missing_fields_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_missing_fields_json_check
+      CHECK (missing_fields IS NULL OR jsonb_typeof(missing_fields) = 'array');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_missing_reason_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_missing_reason_json_check
+      CHECK (missing_reason IS NULL OR jsonb_typeof(missing_reason) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_needs_review_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_needs_review_json_check
+      CHECK (needs_review IS NULL OR jsonb_typeof(needs_review) = 'array');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_confidence_range_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_confidence_range_check
+      CHECK (confidence IS NULL OR (confidence >= 0 AND confidence <= 1));
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_source_count_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_source_count_check
+      CHECK (source_count IS NULL OR source_count >= 0);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_primary_source_count_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_primary_source_count_check
+      CHECK (primary_source_count IS NULL OR primary_source_count >= 0);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_wada_status_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_wada_status_check
+      CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited'));
+  END IF;
+END $$;
 
 CREATE TABLE IF NOT EXISTS supplements.substance_catalog_sources (
   id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -523,6 +665,29 @@ CREATE INDEX IF NOT EXISTS substance_catalog_external_ids_idx
   ON supplements.substance_catalog USING gin(external_ids);
 CREATE INDEX IF NOT EXISTS substance_catalog_platform_classes_idx
   ON supplements.substance_catalog USING gin(platform_classes);
+CREATE INDEX IF NOT EXISTS substance_catalog_wada_status_idx
+  ON supplements.substance_catalog(wada_status)
+  WHERE wada_status IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_prescription_required_idx
+  ON supplements.substance_catalog(prescription_required)
+  WHERE prescription_required IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_platform_flags_idx
+  ON supplements.substance_catalog(recommendable, warning_only, physician_referral, athlete_flag);
+CREATE INDEX IF NOT EXISTS substance_catalog_dose_ceiling_idx
+  ON supplements.substance_catalog(dose_ceiling_value)
+  WHERE dose_ceiling_value IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_unii_idx
+  ON supplements.substance_catalog(unii)
+  WHERE unii IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_pubchem_idx
+  ON supplements.substance_catalog(pubchem_cid)
+  WHERE pubchem_cid IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_chembl_idx
+  ON supplements.substance_catalog(chembl_id)
+  WHERE chembl_id IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_inchikey_idx
+  ON supplements.substance_catalog(inchikey)
+  WHERE inchikey IS NOT NULL;
 CREATE INDEX IF NOT EXISTS substance_catalog_sources_substance_idx
   ON supplements.substance_catalog_sources(substance_id);
 CREATE INDEX IF NOT EXISTS substance_catalog_sources_source_idx
@@ -681,6 +846,8 @@ DECLARE
   v_f05_sources integer;
   v_with_nutrients integer;
   v_with_half_life integer;
+  v_columns integer;
+  v_new_values integer;
 BEGIN
   SELECT count(*) INTO v_substances FROM supplements.substance_catalog;
   SELECT count(*) INTO v_sources FROM supplements.substance_catalog_sources;
@@ -689,6 +856,41 @@ BEGIN
   SELECT count(*) INTO v_f05_sources FROM supplements.substance_catalog_sources WHERE source_catalog = 'f05_substance_candidate';
   SELECT count(*) INTO v_with_nutrients FROM supplements.substance_catalog WHERE nutrients_provided <> '{}'::jsonb;
   SELECT count(*) INTO v_with_half_life FROM supplements.substance_catalog WHERE half_life IS NOT NULL;
+  SELECT count(*) INTO v_columns
+  FROM information_schema.columns
+  WHERE table_schema = 'supplements'
+    AND table_name = 'substance_catalog';
+  SELECT count(*) INTO v_new_values
+  FROM supplements.substance_catalog
+  WHERE safety IS NOT NULL
+     OR interactions IS NOT NULL
+     OR regulatory IS NOT NULL
+     OR quality IS NOT NULL
+     OR warning_triggers IS NOT NULL
+     OR evidence_provenance IS NOT NULL
+     OR wada_status IS NOT NULL
+     OR prescription_required IS NOT NULL
+     OR dose_ceiling_value IS NOT NULL
+     OR dose_ceiling_unit IS NOT NULL
+     OR recommendable IS NOT NULL
+     OR warning_only IS NOT NULL
+     OR physician_referral IS NOT NULL
+     OR athlete_flag IS NOT NULL
+     OR missing_fields IS NOT NULL
+     OR missing_reason IS NOT NULL
+     OR last_verified IS NOT NULL
+     OR needs_review IS NOT NULL
+     OR confidence IS NOT NULL
+     OR source_count IS NOT NULL
+     OR primary_source_count IS NOT NULL
+     OR unii IS NOT NULL
+     OR pubchem_cid IS NOT NULL
+     OR chembl_id IS NOT NULL
+     OR inchikey IS NOT NULL
+     OR molecular_formula IS NOT NULL
+     OR cas_candidates IS NOT NULL
+     OR molecular_weight IS NOT NULL
+     OR peptide_sequence IS NOT NULL;
 
   IF v_substances <> ${substanceRows.length} THEN
     RAISE EXCEPTION 'substance_catalog: %, erwartet ${substanceRows.length}', v_substances;
@@ -705,9 +907,15 @@ BEGIN
   IF v_f05_sources <> 320 THEN
     RAISE EXCEPTION 'substance_catalog_sources F05: %, erwartet 320', v_f05_sources;
   END IF;
+  IF v_columns <> 60 THEN
+    RAISE EXCEPTION 'substance_catalog Spalten: %, erwartet 60', v_columns;
+  END IF;
+  IF v_new_values <> 0 THEN
+    RAISE EXCEPTION 'C-195 ist Schema-only: % Zeilen haben neue C-195-Spalten befuellt', v_new_values;
+  END IF;
 
-  RAISE NOTICE 'OK C-134: % Substanzen, % Herkunftszeilen, % mit nutrients_provided, % mit Halbwertszeit',
-    v_substances, v_sources, v_with_nutrients, v_with_half_life;
+  RAISE NOTICE 'OK C-195: % Substanzen, % Herkunftszeilen, % Spalten, % mit nutrients_provided, % mit Halbwertszeit',
+    v_substances, v_sources, v_columns, v_with_nutrients, v_with_half_life;
 END $$;
 
 COMMIT;

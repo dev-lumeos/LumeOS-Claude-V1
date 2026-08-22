@@ -168,30 +168,32 @@ console.log(`Sichten     ${sichtOk}/${SOLL.sichten.length} mit security_invoker`
 // Reihenfolge zaehlt mit, sobald eine Liste gepflegt wird: SELECT * und
 // positionsbezogene Zugriffe haengen daran, und bei Tabellen schuetzt es
 // vor stillen Anhaengseln ohne dokumentierte Entscheidung.
-function pruefeSpalten(art: string, eintraege: any[], istObjekte: Set<string>): number {
+function pruefeSpalten(art: string, eintraege: any[], istObjekte: Set<string>, schema = 'nutrition'): number {
   let spaltenGeprueft = 0
   for (const s of eintraege) {
-    if (!Array.isArray(s.spalten) || !istObjekte.has(s.name)) continue
+    const tableSchema = s.schema ?? schema
+    const voll = s.schema ? `${s.schema}.${s.name}` : s.name
+    if (!Array.isArray(s.spalten) || !istObjekte.has(voll)) continue
     spaltenGeprueft++
     const ist = sql(
       `SELECT column_name FROM information_schema.columns
-       WHERE table_schema='nutrition' AND table_name='${s.name}'
+       WHERE table_schema='${tableSchema}' AND table_name='${s.name}'
        ORDER BY ordinal_position;`).map(r => r[0])
     const fehlend = s.spalten.filter((c: string) => !ist.includes(c))
     const zuviel = ist.filter(c => !s.spalten.includes(c))
     if (fehlend.length) {
-      fehler.push(`${art} ${s.name}: ${fehlend.length} Spalten FEHLEN` +
+      fehler.push(`${art} ${voll}: ${fehlend.length} Spalten FEHLEN` +
       ` (${fehlend.slice(0, 6).join(', ')}${fehlend.length > 6 ? ' …' : ''})` +
       ` — Schritt ${s.schritt}`)
     }
     if (zuviel.length) {
-      warnung.push(`${art} ${s.name}: ${zuviel.length} Spalten stehen da,` +
+      fehler.push(`${art} ${voll}: ${zuviel.length} Spalten stehen da,` +
       ` aber nicht im Sollstand (${zuviel.slice(0, 6).join(', ')}` +
       `${zuviel.length > 6 ? ' …' : ''}) — Liste veraltet?`)
     }
     if (!fehlend.length && !zuviel.length &&
       s.spalten.join('|') !== ist.join('|')) {
-      fehler.push(`${art} ${s.name}: Spalten vollstaendig, aber in anderer` +
+      fehler.push(`${art} ${voll}: Spalten vollstaendig, aber in anderer` +
       ` Reihenfolge — bei gepflegter Spaltenliste ist die Reihenfolge Teil des Vertrags`)
     }
   }
@@ -199,7 +201,14 @@ function pruefeSpalten(art: string, eintraege: any[], istObjekte: Set<string>): 
 }
 const tabellenSpaltenGeprueft = pruefeSpalten('Tabelle', SOLL.tabellen, istTabellen)
 const sichtSpaltenGeprueft = pruefeSpalten('Sicht', SOLL.sichten, istSichten)
-console.log(`Tabellensp.  ${tabellenSpaltenGeprueft} Tabelle(n) mit Spaltenliste geprueft`)
+const fremdeSpaltenGeprueft = Array.isArray(SOLL.fremde_schemata)
+  ? pruefeSpalten(
+    'Tabelle',
+    SOLL.fremde_schemata,
+    new Set(SOLL.fremde_schemata.map((s: any) => `${s.schema}.${s.name}`)),
+  )
+  : 0
+console.log(`Tabellensp.  ${tabellenSpaltenGeprueft + fremdeSpaltenGeprueft} Tabelle(n) mit Spaltenliste geprueft`)
 console.log(`Sichtspalten ${sichtSpaltenGeprueft} Sicht(en) mit Spaltenliste geprueft`)
 
 // --- 4. Trigger namentlich ---
