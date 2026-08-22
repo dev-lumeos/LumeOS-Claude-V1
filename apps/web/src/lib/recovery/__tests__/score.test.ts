@@ -99,13 +99,14 @@ test('kein gemeldeter Kater ist voller Anteil, nicht unbekannt', () => {
 })
 
 test('die drei fehlerhaften Quellformeln sind NICHT gebaut', () => {
-  // `[cmd]` Der Trainingsterm braucht ACWR; alle drei Quellkurven sind
-  // laut Entwurf fehlerhaft oder nicht umgesetzt. Er darf deshalb
+  // `[cmd]` C-181: der Trainingsterm ist nicht mehr „wartend auf
+  // ACWR", sondern per Evidenzregister entfernt (Safe-Zone
+  // REMOVE_NUMERIC_VALUE, Praediktor DO_NOT_IMPLEMENT). Er darf
   // keine Punkte liefern — auch nicht versehentlich.
   const e = berechneScore(zeile())
   const t = e.teile.find(x => x.code === 'trainingslast')
   assert.equal(t?.punkte, null)
-  assert.equal(t?.roh, 'braucht ACWR')
+  assert.equal(t?.roh, 'entfaellt — C-181, ACWR ohne Beleg')
   // Nutrition steht nicht im Check-in; die Quellen setzen fest 70.
   const n = e.teile.find(x => x.code === 'nutrition')
   assert.equal(n?.punkte, null)

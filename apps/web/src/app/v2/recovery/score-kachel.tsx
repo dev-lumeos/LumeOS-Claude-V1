@@ -78,9 +78,10 @@ export function ScoreKachel({
                 zeile.soreness_avg_used == null ? '—' : zeile.soreness_avg_used.toFixed(2),
                 zeile.soreness_reported_count == null ? ''
                   : `${zeile.soreness_reported_count} gemeldet`],
-              ['ACWR',
-                zeile.acwr_used == null ? '—' : zeile.acwr_used.toFixed(2),
-                zeile.acwr_used == null ? 'keine Trainingslast' : ''],
+              // C-181: die ACWR-Zelle ist aus der Oberflaeche
+              // entfernt (Safe-Zone/Ratio ohne Beleg). Die DB-Spalte
+              // `scores.acwr_used` und ihr Formelterm sind
+              // Codex-Bereich — gemeldet, nicht angefasst.
               ['HRV',
                 checkin?.hrv_rmssd == null ? '—' : `${checkin.hrv_rmssd} ms`,
                 QUELLE_TEXT[zeile.hrv_source ?? ''] ?? zeile.hrv_source ?? ''],

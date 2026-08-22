@@ -186,13 +186,16 @@ export function berechneScore(z: CheckinZeile | null): ScoreErgebnis {
       roh: sorenessRoh || 'kein Kater gemeldet',
     },
     {
-      // `[cmd]` NICHT gerechnet: der Trainingsterm braucht ACWR, und
-      // alle drei Quellenkurven sind laut Entwurf entweder fehlerhaft
-      // (Engine: Faktor 1.1 bei ACWR 1.4) oder nicht umgesetzt.
+      // `[cmd]` NICHT gerechnet — und seit C-181 auch nicht mehr
+      // „wartend": das ACWR-Verhaeltnis ist per Evidenzregister
+      // entfernt (Safe-Zone REMOVE_NUMERIC_VALUE, Praediktor
+      // DO_NOT_IMPLEMENT). Ob der Term in der DB-Formel faellt,
+      // entscheidet Codex (Spalte `scores.acwr_used`, Feldvertrag
+      // `training.load_spike` bleiben).
       code: 'trainingslast', label: 'Trainingslast',
       gewicht: GEWICHTE.trainingslast,
       punkte: null,
-      roh: 'braucht ACWR',
+      roh: 'entfaellt — C-181, ACWR ohne Beleg',
     },
     {
       // `[cmd]` NICHT gerechnet: `checkins` fuehrt keine Nutrition;

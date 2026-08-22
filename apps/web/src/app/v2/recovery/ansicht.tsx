@@ -32,6 +32,7 @@
 // anzubinden.
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
+import { holeEvidenz } from '../../../lib/evidenz/registry'
 import {
   Card, Pill, Icon, Ring, Meter, Row, Tabs, InEntwicklungKnopf,
   ErmuedungsKarte, type TabItem,
@@ -40,7 +41,7 @@ import {
 import {
   MUSCLE_GROUPS_BODYMAP, MUSCLE_LABEL, MUSCLE_STATE, CHECKIN, NUTRITION_INPUT,
   MODALITY_EVIDENZ, MODALITY_META, TODAY_MODALITIES,
-  ACWR_DATA, calcMuscleRecovery, calcRecoveryScore, readinessFor,
+  calcMuscleRecovery, calcRecoveryScore, readinessFor,
   evaluateOvertraining, recoveryPendingActions,
 } from './motor'
 import { RecoveryKontext, useRecovery, type ModalZustand, type ScoreModus } from './kontext'
@@ -108,6 +109,8 @@ export function RecoveryAnsicht({
   // Trainingslast und Ernaehrung ganz weg (Basis 75), die Tabelle
   // fuellt beide mit Rueckfallwerten (Basis 100) und benutzt den
   // gemessenen ACWR, wo es einen gibt — auf 118 von 170 Tagen.
+  // C-181: der ACWR-Term ist seither per Evidenzregister entfernt;
+  // ob die DB-Formel nachzieht, entscheidet Codex (`scores.acwr_used`).
   const echterScore = scores?.neuster ?? null
 
   const kontext = React.useMemo(() => ({
@@ -259,9 +262,9 @@ function RecToday({
                 {([
                   ['HRV', `${CHECKIN.hrv_rmssd} ms`, `z ${sc.hrv.z}`],
                   ['Sleep', `${CHECKIN.sleep_hours} h`, `q ${CHECKIN.sleep_quality}/10`],
-                  ['ACWR', String(ACWR_DATA.acwr), `load ${sc.tls.toFixed(2)}`],
-                  // C-124: die Bonus-Zelle ist entfernt — der Score
-                  // traegt keinen Modalitaetsbonus mehr.
+                  // C-124: die Bonus-Zelle ist entfernt.
+                  // C-181: die ACWR-Zelle ebenso — Safe-Zone und
+                  // Last-Faktor waren Heuristik ohne Beleg.
                 ] as Array<[string, string, string]>).map(([l, v, s]) => (
                   <div key={l}>
                     <div className="v2-eyebrow" style={{ marginBottom: 2 }}>{l}</div>
@@ -293,9 +296,22 @@ function RecToday({
                 Quelle in der eigenen Kachel. */}
             <div className="v2-rec-term" style={{ fontSize: 12, paddingTop: 6, borderTop: '1px solid var(--border-strong)' }}>
               <span style={{ fontWeight: 700 }}>Total</span>
-              <span />
+              <span className="v2-mono v2-dim" style={{ fontSize: 10 }}>
+                {sc.subtotal} von {sc.gewichtsumme} · auf 100 normiert
+              </span>
               <span />
               <span className="v2-num" style={{ textAlign: 'right', fontSize: 16, fontWeight: 600, color: rd.c }}>{sc.score}</span>
+            </div>
+            {/* C-181: die belegte Aussage zur Trainingslast — aus dem
+                Evidenzregister nachgeschlagen, kein ACWR mehr. */}
+            <div className="v2-dim" style={{ fontSize: 10, lineHeight: 1.5, paddingTop: 4 }}>
+              Trainingslast: als Kennzahl bleibt Session-Load
+              (Dauer × sRPE, Grad {holeEvidenz('C10_SESSION_LOAD_SRPE_X_DURATION').grad},
+              Foster 2001) — als Trend, ohne Risiko-Zonen. Das
+              ACWR-Verhältnis samt Safe-Zone 0,8–1,3 ist entfernt:
+              mathematische Kopplung, keine individuelle Prädiktivität
+              (Grad {holeEvidenz('C04_ACWR_MATH_CRITIQUE').grad},
+              PMID 29101104; Safe-Zone Grad {holeEvidenz('C06_ACWR_SAFE_ZONE_08_13').grad}).
             </div>
           </div>
         </Card>

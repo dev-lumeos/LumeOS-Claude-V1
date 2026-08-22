@@ -13,8 +13,9 @@
 // aus der Vorlage und wird uebernommen, nicht erfunden. Betrifft
 // `baseRecoveryCurve`, die vier Modifikatoren, `calcHRVScore` (z-Wert),
 // `calcSleepScore` (0.40/0.40/0.20), `calcRecoveryScore` in beiden
-// Modi, `calcTrainingLoadScore` und die acht Uebertrainingssignale.
-// Ein Test legt sie daneben.
+// Modi und die acht Uebertrainingssignale. Ein Test legt sie daneben.
+// AUSNAHMEN per Evidenzregister: der Modalitaetsbonus (C-124) und der
+// ACWR-Trainingslast-Term (C-181) sind entfernt, nicht uebernommen.
 //
 // GEAENDERT IST NUR DAS TECHNISCHE: TypeScript statt JS, benannte
 // Exporte statt `Object.assign(window, …)`.
@@ -22,6 +23,7 @@
 // `[cmd]` DIE ZAHLEN SIND ERFUNDEN. `recovery` hat kein Schema — in
 // `supabase/_pipeline/` kommt der Begriff in keiner SQL-Datei vor.
 // Was hier steht, ist der Datensatz der Vorlage, unveraendert.
+import { holeEvidenz } from '../../../lib/evidenz/registry'
 
 // ── 18 Muskelgruppen der Koerperkarte (F3) ──────────────────────
 // [cmd] module-recovery-engine.jsx:5-10.
@@ -252,42 +254,47 @@ export type ModalityEvidenz = {
   quelle: string | null
 }
 
+/**
+ * C-180: Grad und Quelle werden aus dem Evidenzregister
+ * NACHGESCHLAGEN, nicht mehr als Literal getragen. Die deutschen
+ * Aussagen bleiben hier (Anzeigetext); ein Eintrag, dessen Register-
+ * zeile fehlt oder einen nutzbaren Zahlwert behauptet, kracht.
+ */
+function modalitaet(registryId: string, aussage: string): ModalityEvidenz {
+  const e = holeEvidenz(registryId)
+  if (e.wertNutzbar) {
+    throw new Error(`${registryId}: Modalitaet mit nutzbarem Zahlwert — C-124 sagt REMOVE_NUMERIC_VALUE`)
+  }
+  return {
+    aussage,
+    grad: e.grad,
+    registryId,
+    quelle: e.quelle ? `${e.quelle}${e.jahr ? ` · ${e.jahr}` : ''}` : null,
+  }
+}
+
+const OHNE_EINTRAG: ModalityEvidenz = {
+  aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null,
+}
+
 export const MODALITY_EVIDENZ: Record<string, ModalityEvidenz> = {
-  sauna: {
-    aussage: 'verbessert die Ausdauerleistung in Hitze',
-    grad: 'C', registryId: 'REC_SAUNA_ENDURANCE_HEAT',
-    quelle: 'PMID 16877041 · 2007',
-  },
-  cold_plunge: {
-    aussage: 'lindert Muskelkater (Grad A); daempft bei chronischem Einsatz die Hypertrophie-Anpassung (Grad A)',
-    grad: 'A', registryId: 'REC_CWI_DOMS_ACUTE',
-    quelle: 'PMID 26413718 · 2015; PMID 26174323 · 2015',
-  },
-  contrast_therapy: {
-    aussage: 'lindert Muskelkater',
-    grad: 'B', registryId: 'REC_CONTRAST_DOMS',
-    quelle: 'PMID 23626806 · 2013',
-  },
-  massage: {
-    aussage: 'lindert Muskelkater; verbessert das subjektive Erholungsgefuehl',
-    grad: 'A', registryId: 'REC_MASSAGE_DOMS',
-    quelle: 'PMID 29021762 · 2017',
-  },
-  foam_rolling: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
-  stretching: {
-    aussage: 'verbessert langfristig die Beweglichkeit (Grad B); kein Effekt auf Muskelkater (Grad A)',
-    grad: 'B', registryId: 'REC_STRETCH_STATIC_ROM_CHRONIC',
-    quelle: 'PMID 26642915 · 2016; PMID 21735398 · 2011',
-  },
-  yoga: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
-  meditation: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
-  breathwork: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
-  nap: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
-  active_recovery: {
-    aussage: 'verbessert Folgeleistung und Laktatabbau leicht',
-    grad: 'B', registryId: 'REC_ACTIVE_RECOVERY_PERF',
-    quelle: 'PMID 29755363 · 2018',
-  },
+  sauna: modalitaet('REC_SAUNA_ENDURANCE_HEAT',
+    'verbessert die Ausdauerleistung in Hitze'),
+  cold_plunge: modalitaet('REC_CWI_DOMS_ACUTE',
+    'lindert Muskelkater (Grad A); daempft bei chronischem Einsatz die Hypertrophie-Anpassung (Grad A)'),
+  contrast_therapy: modalitaet('REC_CONTRAST_DOMS',
+    'lindert Muskelkater'),
+  massage: modalitaet('REC_MASSAGE_DOMS',
+    'lindert Muskelkater; verbessert das subjektive Erholungsgefuehl'),
+  foam_rolling: OHNE_EINTRAG,
+  stretching: modalitaet('REC_STRETCH_STATIC_ROM_CHRONIC',
+    'verbessert langfristig die Beweglichkeit (Grad B); kein Effekt auf Muskelkater (Grad A)'),
+  yoga: OHNE_EINTRAG,
+  meditation: OHNE_EINTRAG,
+  breathwork: OHNE_EINTRAG,
+  nap: OHNE_EINTRAG,
+  active_recovery: modalitaet('REC_ACTIVE_RECOVERY_PERF',
+    'verbessert Folgeleistung und Laktatabbau leicht'),
 }
 
 export const MODALITY_META: Record<string, { label: string; icon: string; c: string }> = {
@@ -324,16 +331,20 @@ export const MODALITY_LOG: ModalityEntry[] = [
 
 export const TODAY_MODALITIES = MODALITY_LOG.filter(m => m.date === '2026-08-15')
 
-// ── ACWR / Trainingslast (F2) ───────────────────────────────────
-// [cmd] module-recovery-engine.jsx:219-225.
-export const ACWR_DATA = { acute_7d: 2142, chronic_28d: 1980, acwr: 1.08 }
-
-export function calcTrainingLoadScore(acwr: number): number {
-  if (acwr >= 0.8 && acwr <= 1.3) return 1.0
-  if (acwr < 0.8) return 0.9
-  if (acwr <= 1.5) return 1.3 - (acwr - 1.3) * 2
-  return Math.max(0.1, 1.5 - acwr)
-}
+// ── Trainingslast (F2) ──────────────────────────────────────────
+// [cmd] module-recovery-engine.jsx:219-225 fuehrte ACWR_DATA
+// (acute 2142 / chronic 1980 / Ratio 1,08) und
+// `calcTrainingLoadScore` mit der „Safe-Zone" 0,8–1,3 und dem Abfall
+// ab 1,5. **C-181 (formula_evidence_registry, acwr_decision =
+// implement:no): beides ist ERSATZLOS entfernt.** Die Safe-Zone
+// (C06) und die 1,5-Warnzone (C07) sind REMOVE_NUMERIC_VALUE
+// (Grad D, kohortenspezifisches Binning); ACWR als
+// Verletzungspraediktor (C05) ist DO_NOT_IMPLEMENT; die
+// Mathe-Kritik (C04, Grad A: mathematische Kopplung, Scheinkorrelation)
+// wurde nie widerlegt. **Was als Kennzahl bleibt, ist Session-Load =
+// Dauer x sRPE (C10, KEEP_NUMERIC, Grad B)** — als Trend, ohne
+// Risiko-Zonen. Der Score rechnet ohne den Term, nicht mit einem
+// Ersatzwert.
 
 // ── HRV (F4) ────────────────────────────────────────────────────
 // [cmd] module-recovery-engine.jsx:228-241.
@@ -408,7 +419,9 @@ export type ScoreTerm = { key: string; label: string; raw: string; w: number; va
 
 export type RecoveryScore = {
   mode: string; terms: ScoreTerm[]; subtotal: number
-  score: number; hrv: { score: number; z: number }; tls: number
+  /** Summe der Term-Gewichte — seit C-181 sind es 85, nicht 100. */
+  gewichtsumme: number
+  score: number; hrv: { score: number; z: number }
   sor: number; nutritionScore: number
 }
 
@@ -422,7 +435,6 @@ export type RecoveryScore = {
  */
 export function calcRecoveryScore(mode: 'manual' | 'hrv' = 'hrv'): RecoveryScore {
   const c = CHECKIN
-  const tls = calcTrainingLoadScore(ACWR_DATA.acwr)
   const nutritionScore = 0.88 // aus dem Nutrition-Modul
   const sor = avgSoreness(c.soreness)
   const hrv = calcHRVScore(c.hrv_rmssd)
@@ -434,7 +446,8 @@ export function calcRecoveryScore(mode: 'manual' | 'hrv' = 'hrv'): RecoveryScore
       { key: 'sleep_hours', label: 'Sleep duration', raw: `${c.sleep_hours}h`, w: 15, val: (Math.min(c.sleep_hours, 8) / 8) * 15 },
       { key: 'subjective', label: 'Subjective feel', raw: `${c.subjective_feeling}/10`, w: 15, val: (c.subjective_feeling / 10) * 15 },
       { key: 'soreness', label: 'Soreness (inv.)', raw: `avg ${sor.toFixed(2)}/3`, w: 10, val: (1 - sor / 3) * 10 },
-      { key: 'training_load', label: 'Training load', raw: `ACWR ${ACWR_DATA.acwr}`, w: 15, val: tls * 15 },
+      // C-181: der Training-load-Term (w 15, ACWR-basiert) ist
+      // ersatzlos entfernt — kein Term, kein Ersatzwert.
       { key: 'nutrition', label: 'Nutrition', raw: `${Math.round(nutritionScore * 100)}%`, w: 10, val: nutritionScore * 10 },
       { key: 'mood', label: 'Mood', raw: c.mood, w: 5, val: MOOD_MULTIPLIER[c.mood] * 5 },
     ]
@@ -445,15 +458,22 @@ export function calcRecoveryScore(mode: 'manual' | 'hrv' = 'hrv'): RecoveryScore
       { key: 'hrv', label: 'HRV', raw: `${c.hrv_rmssd}ms · z ${hrv.z}`, w: 25, val: (hrv.score / 100) * 25 },
       { key: 'subjective', label: 'Subjective feel', raw: `${c.subjective_feeling}/10`, w: 10, val: (c.subjective_feeling / 10) * 10 },
       { key: 'soreness', label: 'Soreness (inv.)', raw: `avg ${sor.toFixed(2)}/3`, w: 10, val: (1 - sor / 3) * 10 },
-      { key: 'training_load', label: 'Training load', raw: `ACWR ${ACWR_DATA.acwr}`, w: 15, val: tls * 15 },
       { key: 'nutrition', label: 'Nutrition', raw: `${Math.round(nutritionScore * 100)}%`, w: 10, val: nutritionScore * 10 },
     ]
   }
   const subtotal = terms.reduce((s, t) => s + t.val, 0)
-  // `[cmd]` C-124: der Modalitaetsbonus ist aus der Summe entfernt —
-  // die Vorlage addierte hier bis zu +5 erfundene Punkte.
-  const score = Math.round(Math.min(100, subtotal))
-  return { mode, terms, subtotal: Math.round(subtotal * 10) / 10, score, hrv, tls, sor, nutritionScore }
+  const gewichtsumme = terms.reduce((s, t) => s + t.w, 0)
+  // `[cmd]` C-124: der Modalitaetsbonus ist aus der Summe entfernt.
+  // `[cmd]` C-181: der ACWR-Term ebenso — die verbliebenen Gewichte
+  // summieren auf 85. Der Score wird auf die 0-100-Skala NORMIERT
+  // (subtotal / 85 x 100): das ist kein Ersatzwert fuer den
+  // entfernten Term, sondern der Erhalt der Skala, an der die
+  // Bereitschaftsstufen (90/80/70/60/40) definiert sind.
+  const score = Math.round(Math.min(100, (subtotal / gewichtsumme) * 100))
+  return {
+    mode, terms, subtotal: Math.round(subtotal * 10) / 10, gewichtsumme,
+    score, hrv, sor, nutritionScore,
+  }
 }
 
 // ── Bereitschaftsstufen (F2) ────────────────────────────────────
@@ -568,7 +588,9 @@ export const STRESS_TODAY = { score: 44, band: 'moderate', hrvImpact: -4, trend:
 export const STRESS_SOURCES = [
   { k: 'Work load', v: 62, note: 'Two deadlines this week' },
   { k: 'Sleep debt', v: 48, note: '1.6 h short across 5 nights' },
-  { k: 'Training load', v: 55, note: 'ACWR 1.08 — inside the window' },
+  // C-181: die ACWR-Notiz („1.08 — inside the window") ist entfernt —
+  // die Safe-Zone war eine Heuristik. Session-Load-Trend bleibt.
+  { k: 'Training load', v: 55, note: 'Session-Load-Trend (Dauer × sRPE) erhoeht diese Woche' },
   { k: 'Life events', v: 20, note: 'Nothing logged' },
   { k: 'Caffeine timing', v: 51, note: '200 mg at 17:30 on training days' },
   { k: 'Alcohol', v: 5, note: 'None in 14 days' },
