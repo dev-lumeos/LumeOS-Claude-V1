@@ -1,5 +1,5 @@
 {
- "stichtag": "2026-08-22 HEAD=88ebcfb",
+ "stichtag": "2026-08-22 HEAD=28d218d",
  "module": {
   "recovery": {
    "marken_summe": 36,
@@ -128,12 +128,7 @@
        "titel": "Overtraining watch"
       }
      ],
-     "banner": [
-      {
-       "zeile": 68,
-       "text": "+ '`recovery` gibt es noch nicht.'"
-      }
-     ],
+     "banner": [],
      "from": [],
      "rpc": [],
      "schema": [],
@@ -703,10 +698,6 @@
      ],
      "banner": [
       {
-       "zeile": 65,
-       "text": "'und training.sets gibt es noch nicht.'"
-      },
-      {
        "zeile": 135,
        "text": "diese Pille. Das Widget gibt es nicht — also die Pille. */}"
       }
@@ -1251,47 +1242,42 @@
     "ansicht.tsx": {
      "marken": [
       {
-       "zeile": 325,
+       "zeile": 327,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 374,
+       "zeile": 376,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 391,
+       "zeile": 393,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 401,
+       "zeile": 403,
        "grund": "ATTRAPPE"
       }
      ],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 325,
+       "zeile": 327,
        "titel": "Alerts"
       },
       {
-       "zeile": 374,
+       "zeile": 376,
        "titel": "Quick actions"
       },
       {
-       "zeile": 391,
+       "zeile": 393,
        "titel": "Last panel"
       },
       {
-       "zeile": 401,
+       "zeile": 403,
        "titel": "Non-optimal markers"
       }
      ],
-     "banner": [
-      {
-       "zeile": 58,
-       "text": "+ '`medical`-Schema gibt es noch nicht.'"
-      }
-     ],
+     "banner": [],
      "from": [],
      "rpc": [],
      "schema": [],
@@ -2386,58 +2372,58 @@
     "tab-plans.tsx": {
      "marken": [
       {
-       "zeile": 95,
+       "zeile": 96,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 118,
+       "zeile": 119,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 168,
+       "zeile": 169,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 190,
+       "zeile": 191,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 196,
+       "zeile": 197,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 213,
+       "zeile": 214,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 242,
+       "zeile": 243,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 284,
+       "zeile": 285,
        "grund": "ATTRAPPE"
       }
      ],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 95,
+       "zeile": 96,
        "titel": null
       },
       {
-       "zeile": 168,
+       "zeile": 169,
        "titel": "Plan settings"
       },
       {
-       "zeile": 190,
+       "zeile": 191,
        "titel": "Lifecycle types"
       },
       {
-       "zeile": 196,
+       "zeile": 197,
        "titel": "7-day compliance"
       },
       {
-       "zeile": 284,
+       "zeile": 285,
        "titel": "Scale list"
       }
      ],
@@ -4164,7 +4150,7 @@
   },
   "coach": {
    "marken_summe": 33,
-   "kacheln_summe": 36,
+   "kacheln_summe": 38,
    "dateien": {
     "daten.ts": {
      "marken": [],
@@ -4192,95 +4178,90 @@
     "ansicht.tsx": {
      "marken": [
       {
-       "zeile": 154,
+       "zeile": 169,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 162,
+       "zeile": 178,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 189,
+       "zeile": 205,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 225,
+       "zeile": 241,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 238,
+       "zeile": 254,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 251,
+       "zeile": 267,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 306,
+       "zeile": 322,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 377,
+       "zeile": 405,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 418,
+       "zeile": 455,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 460,
+       "zeile": 496,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 494,
+       "zeile": 530,
        "grund": "ATTRAPPE"
       }
      ],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 154,
+       "zeile": 169,
        "titel": "Your coaches"
       },
       {
-       "zeile": 162,
+       "zeile": 178,
        "titel": "Latest from your coaches"
       },
       {
-       "zeile": 225,
+       "zeile": 241,
        "titel": "Coaching balance"
       },
       {
-       "zeile": 251,
+       "zeile": 267,
        "titel": "Coach activity · 30d"
       },
       {
-       "zeile": 306,
+       "zeile": 322,
        "titel": null
       },
       {
-       "zeile": 377,
+       "zeile": 405,
        "titel": "Threads"
       },
       {
-       "zeile": 418,
+       "zeile": 455,
        "titel": null
       },
       {
-       "zeile": 460,
+       "zeile": 496,
        "titel": null
       },
       {
-       "zeile": 494,
+       "zeile": 530,
        "titel": "Invites"
       }
      ],
-     "banner": [
-      {
-       "zeile": 69,
-       "text": "+ '`coach`-Schema gibt es noch nicht.'"
-      }
-     ],
+     "banner": [],
      "from": [],
      "rpc": [],
      "schema": [],
@@ -4586,6 +4567,29 @@
       {
        "zeile": 411,
        "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "coach/rechte-read"
+     ],
+     "tab_labels": []
+    },
+    "uebersicht-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 48,
+       "titel": "Your coaches"
+      },
+      {
+       "zeile": 120,
+       "titel": "Threads"
       }
      ],
      "banner": [],
@@ -5446,7 +5450,7 @@
    {
     "schema": "auth",
     "tabelle": "audit_log_entries",
-    "zeilen": 1131
+    "zeilen": 1156
    },
    {
     "schema": "auth",
@@ -5471,7 +5475,7 @@
    {
     "schema": "auth",
     "tabelle": "mfa_amr_claims",
-    "zeilen": 509
+    "zeilen": 532
    },
    {
     "schema": "auth",
@@ -5511,7 +5515,7 @@
    {
     "schema": "auth",
     "tabelle": "refresh_tokens",
-    "zeilen": 530
+    "zeilen": 554
    },
    {
     "schema": "auth",
@@ -5531,7 +5535,7 @@
    {
     "schema": "auth",
     "tabelle": "sessions",
-    "zeilen": 509
+    "zeilen": 532
    },
    {
     "schema": "auth",
@@ -5866,7 +5870,7 @@
    {
     "schema": "nutrition",
     "tabelle": "search_events",
-    "zeilen": 203
+    "zeilen": 204
    },
    {
     "schema": "nutrition",
