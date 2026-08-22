@@ -33,8 +33,10 @@ import type { VorliebenDaten } from './tab-vorlieben'
 import { ladePlan, type PlanDaten } from '../../../lib/nutrition/plan-lesen'
 // G-101: die zwei Mikronaehrstoff-Kacheln des Diary.
 import { ladeMikro, type MikroStand } from '../../../lib/nutrition/mikro-read'
-// G-101/C-54: die Naehrstoffordnung aus display_tier; seit G-121 mit
-// Zeitfenster (C-157).
+// G-101/C-54: die Naehrstoffordnung; seit G-121 mit Zeitfenster
+// (C-157). `[cmd]` G-140: **der Baum kommt aus `parent_code`**
+// (C-161) — hier stand *„aus display_tier"*, und das ist das Abo-Gate,
+// keine Baumtiefe.
 import { ladeOrdnung, type NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 import { fensterOderTag } from '../../../lib/nutrition/naehrstoff-anzeige'
 // G-101: Kalorienbilanz und Makroschnitt fuer die Insights.

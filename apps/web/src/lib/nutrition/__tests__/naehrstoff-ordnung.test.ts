@@ -12,7 +12,7 @@ import { baueWald, type NaehrstoffKnoten } from '../naehrstoff-ordnung'
 
 function k(code: string, eltern: string | null, sort: number): NaehrstoffKnoten {
   return {
-    code, name: code, einheit: 'g', stufe: 1, sort, eltern,
+    code, name: code, einheit: 'g', sort, eltern,
     gruppe: 'Test', suchName: code.toLowerCase(), suchText: '', suchAlias: [],
     zielQuelle: null, referenz: null, referenzArt: null,
     wert: null, summe: null, positionen: 0, positionenMitWert: 0,

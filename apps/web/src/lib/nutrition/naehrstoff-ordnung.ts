@@ -3,12 +3,17 @@
 // dem echten Baum aus `parent_code` (C-161) und der gespeicherten
 // Ansicht (`public.user_display_preferences`).
 //
-// **DIE HIERARCHIE KOMMT AUS `parent_code`, NICHT MEHR AUS DER
-// STUFE.** `[cmd]` C-161: 40 Wurzeln, 98 Kinder, maximal 4 Ebenen
-// tief. `display_tier` bleibt Anzeigeprioritaet — der fruehere
-// Zwei-Pass-Bau aus Stufe und Sortierung ist ersetzt, weil er riet,
-// was die Tabelle jetzt weiss (164-naehrstoffbaum.md: „Die Anzeige
-// darf nicht mehr aus Stufe und Sortierung ableiten").
+// **DIE HIERARCHIE KOMMT AUS `parent_code`, NICHT AUS DER STUFE.**
+// `[cmd]` C-161: 40 Wurzeln, 98 Kinder, maximal 4 Ebenen tief. Der
+// fruehere Zwei-Pass-Bau aus Stufe und Sortierung ist ersetzt, weil er
+// riet, was die Tabelle jetzt weiss (164-naehrstoffbaum.md: „Die
+// Anzeige darf nicht mehr aus Stufe und Sortierung ableiten").
+//
+// `[cmd]` **G-140: `display_tier` wird hier gar nicht mehr gelesen.**
+// Hier stand bis dahin *„bleibt Anzeigeprioritaet"* — auch das war
+// falsch. **Es ist das Abo-Gate** (`SUBSCRIPTION_GATES_ADR`: Tier 2 =
+// Athlete/Plus, Tier 3 = Medical/Pro), **und in V1 ist nichts
+// gesperrt.** Die Sortierung macht `sort_index`.
 //
 // **DIE GRUPPEN FOLGEN DER WURZEL:** `[cmd]` 28 Kinder tragen ein
 // anderes `group_de` als ihr Elternknoten — die kompletten Aeste
@@ -80,7 +85,16 @@ export type NaehrstoffKnoten = {
   code: string
   name: string
   einheit: string | null
-  stufe: number
+  // G-140: `stufe` ist raus. `[cmd]` Es trug `nutrient_defs.display_tier`
+  // — und das ist laut `SUBSCRIPTION_GATES_ADR` das **Abo-Gate**
+  // (Tier 2 = Athlete/Plus, Tier 3 = Medical/Pro), **nicht die Tiefe im
+  // Baum**. `[read]` Genau diese Verwechslung hat G-101 die Einrueckung
+  // aus der Stufe bauen lassen; C-161 hat sie auf `parent_code`
+  // gestellt, das Feld blieb aber liegen und wurde **nirgends
+  // gelesen**. Ein totes Feld, das schon zweimal falsch verstanden
+  // wurde, ist schlechter als keins. **Die Spalte in der Datenbank
+  // bleibt** — der ADR nennt das Datenmodell ausdruecklich
+  // *„von Tag 1 tier-ready"*.
   sort: number
   /** Der Elterncode aus `parent_code` (C-161); `null` = Wurzel. */
   eltern: string | null
@@ -243,7 +257,9 @@ export async function ladeOrdnung(
     // leeren Tag: die Ordnung existiert auch ohne Werte.
     const [defsR, fensterR, refsR, texteR, aliaseR, zieleR] = await Promise.allSettled([
       db.from('nutrient_defs')
-        .select('code, name_de, unit, group_de, display_tier, sort_index, parent_code')
+        // G-140: `display_tier` faellt weg — es wurde nur noch in ein
+        // Feld geschrieben, das niemand las.
+        .select('code, name_de, unit, group_de, sort_index, parent_code')
         .order('sort_index', { ascending: true }),
       db.rpc('nutrient_summary_window', {
         p_user_id: user.id, p_end_date: stichtag, p_days: fenster,
@@ -382,7 +398,6 @@ export async function ladeOrdnung(
         code,
         name: text(d.name_de) ?? code,
         einheit: text(d.unit),
-        stufe: zahl(d.display_tier) ?? 1,
         sort: zahl(d.sort_index) ?? 0,
         eltern: text(d.parent_code),
         gruppe,

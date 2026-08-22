@@ -18,7 +18,7 @@ function k(
   kinder: NaehrstoffKnoten[] = [],
 ): NaehrstoffKnoten {
   return {
-    code, name: code, einheit: 'g', stufe: 1, sort: 0,
+    code, name: code, einheit: 'g', sort: 0,
     eltern: null, gruppe: 'Test', suchName: code.toLowerCase(), suchText: '', suchAlias: [],
     zielQuelle: null, referenz: null, referenzArt: null,
     wert: 1, summe: 1, positionen: 1, positionenMitWert: 1,

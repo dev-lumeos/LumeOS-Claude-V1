@@ -26,7 +26,10 @@ import { HydrationKachel } from './hydration'
 // G-101: die zwei Mikronaehrstoff-Kacheln mit echten Werten.
 import { MikroSchnappschuss, UnterSchwelle } from './mikro-kacheln'
 import type { MikroStand } from '../../../lib/nutrition/mikro-read'
-// G-101/C-54: die Naehrstoffordnung aus display_tier.
+// G-101/C-54: die Naehrstoffordnung — der Baum kommt aus `parent_code`
+// (C-161), nicht aus `display_tier`. `[cmd]` G-140: hier stand
+// *„aus display_tier"*, und genau dieses Missverstaendnis hat G-101
+// die Einrueckung falsch bauen lassen.
 import { NaehrstoffOrdnungTab } from './naehrstoff-ordnung-tab'
 import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnung'
 // G-101: zwei Insights-Kacheln mit echten Zahlen.
