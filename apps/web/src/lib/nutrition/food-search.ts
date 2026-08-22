@@ -196,6 +196,39 @@ export type FoodSearchRpcArgs = {
    * Allergien ablesen — die Vorlieben sind Gesundheitsdaten.
    */
   p_user_id: string | null
+  /**
+   * Die Filter dieser Suche — seit C-164 (SSOT 169).
+   *
+   * `[cmd]` **`exclude_tag_codes` entfernt Treffer aus der
+   * GESAMTMENGE, nicht nur aus der geladenen Seite.** Der Nachweis ist
+   * `total`: ohne Filter 7.140, mit `contains_lactose` 6.119.
+   *
+   * `[read]` **Das ist kein gespeicherter Nutzerwunsch.** Ein Schalter
+   * im Tab filtert diese eine Suche; die Vorlieben aus C-94
+   * (`p_user_id`, `hard_exclude`) bleiben davon getrennt und wirken
+   * zusaetzlich. GO-22 unterscheidet beides ausdruecklich: Allergen
+   * und Diet type schliessen hart aus, generelle Ausschluesse bewerten
+   * mit 0.
+   *
+   * `[cmd]` **`null` bei leerem Filter, nicht `{}`** — die Funktion
+   * fuehrt `filter_state` als aktive Grenze, und ein leeres Objekt
+   * liesse die Facetten-Subqueries je Food laufen (SSOT 169: ein
+   * erster Entwurf lag deshalb bei rund 6,8 s).
+   *
+   * `tag_groups` und `processing_levels` kann die Funktion ebenfalls;
+   * sie werden hier noch nicht gesetzt (G-134 ist offen).
+   */
+  p_filters: FoodSearchFilters | null
+}
+
+/** Die Filter, die `food_search` seit C-164 kennt (SSOT 169). */
+export type FoodSearchFilters = {
+  /** Tag-Codes, deren Treffer aus der Gesamtmenge fallen. */
+  exclude_tag_codes?: string[]
+  /** ODER innerhalb einer Gruppe, UND zwischen den Gruppen. */
+  tag_groups?: string[][]
+  processing_levels?: string[]
+  exclude_processing_levels?: string[]
 }
 
 export class LocalFoodSearchError extends Error {
@@ -338,6 +371,8 @@ export function buildFoodSearchRpcArgs(
     groups?: string[]
     basicsOnly?: boolean
     userId?: string | null
+    /** G-133: die Tag-Codes, die ausgeschlossen werden sollen. */
+    excludeTags?: string[]
   } = {},
 ): FoodSearchRpcArgs {
   return {
@@ -360,7 +395,27 @@ export function buildFoodSearchRpcArgs(
     p_groups: (options.groups ?? []).map(c => c.trim().toUpperCase()).filter(Boolean),
     p_basics_only: options.basicsOnly === true,
     p_user_id: options.userId?.trim() ? options.userId.trim() : null,
+    // G-133: `null` statt `{}` bei leerer Auswahl — siehe `p_filters`.
+    // Die Codes werden nur getrimmt: die Datenbank vergleicht sie gegen
+    // `tag_definitions.code`, ein unbekannter Code schliesst nichts aus
+    // (gemessen, `contains_laktose` -> 7.140).
+    p_filters: buildFoodSearchFilters(options.excludeTags),
   }
+}
+
+/**
+ * Die Filterstruktur oder `null` (G-133).
+ *
+ * Getrennt und ausgelagert, damit sie ohne Datenbank pruefbar ist —
+ * dasselbe Muster wie `buildFoodSearchTokens`.
+ */
+export function buildFoodSearchFilters(
+  excludeTags?: string[],
+): FoodSearchFilters | null {
+  const codes = (excludeTags ?? []).map(c => c.trim()).filter(Boolean)
+  if (codes.length === 0) return null
+  // Doppelte Codes wuerden dieselbe Bedingung zweimal erzeugen.
+  return { exclude_tag_codes: Array.from(new Set(codes)).sort() }
 }
 
 function normalizeText(value: unknown): string {
@@ -628,6 +683,14 @@ export async function getLocalFoodSearch(
      * ausgewaehlt wird, wird gegessen. Er schaltet es ein.
      */
     applyPreferences?: boolean
+    /**
+     * G-133: Tag-Codes, die aus der GESAMTMENGE fallen.
+     *
+     * `[read]` Etwas anderes als `applyPreferences`: das sind die
+     * gespeicherten Vorlieben einer Nutzerin, das hier ist ein
+     * Schalter fuer diese eine Suche. Beide wirken nebeneinander.
+     */
+    excludeTags?: string[]
   } = {},
 ): Promise<NutritionFoodSearchPayload> {
   const userId = options.applyPreferences === true ? await angemeldeteKennung() : null

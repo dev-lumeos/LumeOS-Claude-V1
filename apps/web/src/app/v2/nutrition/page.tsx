@@ -130,9 +130,22 @@ export default async function V2NutritionPage({
   // Tab auch gezeigt wird — 7.140 Lebensmittel sind kein Beiwerk fuer
   // das Tagebuch. `[cmd]` Die RPC braucht ohne Filter rund 250 ms.
   let foodsStart: NutritionFoodSearchPayload | null = null
+  /** G-154: fuer den Hinweis im Foods-Tab. */
+  let unvertraeglichkeiten: string[] = []
   if (tab === 'foods') {
     try {
-      foodsStart = await getLocalFoodSearch('', undefined, { limit: 50 })
+      // G-154: auch die erste Seite kommt mit Preferences. `[read]`
+      // Ohne das zeigte der erste Anblick den ganzen Katalog und der
+      // Nachladevorgang schnitte ihn dann zusammen — ein Sprung, der
+      // aussieht wie ein Fehler.
+      foodsStart = await getLocalFoodSearch('', undefined, {
+        limit: 50, applyPreferences: true,
+      })
+      // G-154: nur die Unvertraeglichkeiten, nicht der ganze
+      // Vorliebenstand — der Foods-Tab braucht sie fuer einen
+      // Hinweissatz, nicht fuer die Bearbeitung.
+      unvertraeglichkeiten = (await ladeVorlieben(await angemeldeteNutzerin()))
+        .grund.intolerances
     } catch {
       // Faellt sie aus, laedt der Tab im Browser nach und zeigt dort
       // seinen Fehler — die uebrige Seite bleibt gueltig.
@@ -227,6 +240,7 @@ export default async function V2NutritionPage({
       einsichten={einsichten}
       istAdmin={istAdmin}
       vorlieben={vorlieben}
+      unvertraeglichkeiten={unvertraeglichkeiten}
       wasser={wasser}
       summe={summe}
       bewertung={bewertung}

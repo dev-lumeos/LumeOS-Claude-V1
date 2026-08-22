@@ -31,9 +31,23 @@ export async function GET(request: NextRequest) {
   // ein; wer nichts sagt, bekommt weiter den ganzen Bestand.
   const applyPreferences = request.nextUrl.searchParams.get('prefs') === '1'
 
+  // G-133: Tag-Codes, die aus der GESAMTMENGE fallen — `ohne=a,b`.
+  //
+  // `[cmd]` Seit C-164 kann `food_search` das (`p_filters`, SSOT 169).
+  // Vorher blendete der Tab sie nur auf der geladenen Seite aus; bei
+  // 143 Seiten standen sie auf Seite 2 wieder da.
+  //
+  // `[read]` Ein unbekannter Code schliesst nichts aus — die Datenbank
+  // vergleicht gegen `tag_definitions.code`. Gemessen: `contains_laktose`
+  // (Tippfehler) laesst `total` bei 7.140. Es braucht deshalb keine
+  // Weissliste hier; sie waere eine zweite Wahrheit neben der Tabelle.
+  const ohne = (request.nextUrl.searchParams.get('ohne') ?? '')
+    .split(',').map(c => c.trim()).filter(Boolean)
+
   try {
     const payload = await getLocalFoodSearch(query, foodId, {
       category, categoryId, tag, limit, offset, sort, applyPreferences,
+      excludeTags: ohne,
     })
     const selectedIndex = foodId
       ? payload.foods.findIndex(food => food.id === foodId)

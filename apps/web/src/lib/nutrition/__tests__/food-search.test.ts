@@ -3,6 +3,7 @@ import { describe, it } from 'node:test'
 
 import {
   buildFoodSearchFilterHref,
+  buildFoodSearchFilters,
   buildFoodSearchRpcArgs,
   buildFoodSearchTokens,
   clampFoodSearchLimit,
@@ -44,6 +45,42 @@ describe('local Nutrition food search helpers', () => {
     assert.equal(args.p_limit, 100)
     assert.equal(args.p_offset, 0)
     assert.equal(args.p_category_id, null)
+  })
+
+  // ── G-133: der Ausschluss geht an die Suchfunktion ───────────────
+  //
+  // `[cmd]` Die Zahlen stammen aus der laufenden Datenbank, gemessen
+  // am 2026-08-22 gegen `food_search.total`:
+  //   ohne Filter 7.140 · ohne Laktose 6.119 · ohne Gluten 6.518
+  //   ohne Nuesse 7.020 · Laktose+Gluten 5.582 (85 tragen beide Tags)
+  it('laesst p_filters bei leerer Auswahl null — nicht {}', () => {
+    // `[read]` Ein leeres Objekt liesse die Facetten-Subqueries je
+    // Food laufen; SSOT 169 nennt dafuer rund 6,8 s im ersten Entwurf.
+    assert.equal(buildFoodSearchFilters(), null)
+    assert.equal(buildFoodSearchFilters([]), null)
+    assert.equal(buildFoodSearchFilters(['', '  ']), null)
+    assert.equal(buildFoodSearchRpcArgs('').p_filters, null)
+  })
+
+  it('setzt exclude_tag_codes, entdoppelt und sortiert', () => {
+    assert.deepEqual(
+      buildFoodSearchFilters(['contains_gluten', 'contains_lactose']),
+      { exclude_tag_codes: ['contains_gluten', 'contains_lactose'] })
+    // Zweimal derselbe Code erzeugte sonst dieselbe Bedingung doppelt.
+    assert.deepEqual(
+      buildFoodSearchFilters(['contains_nuts', 'contains_nuts']),
+      { exclude_tag_codes: ['contains_nuts'] })
+    // Sortiert, damit derselbe Filter denselben Aufruf ergibt.
+    assert.deepEqual(
+      buildFoodSearchFilters(['contains_lactose', 'contains_gluten']),
+      { exclude_tag_codes: ['contains_gluten', 'contains_lactose'] })
+  })
+
+  it('reicht excludeTags bis in die rpc-Argumente durch', () => {
+    const args = buildFoodSearchRpcArgs('', undefined, {
+      excludeTags: [' contains_lactose ', ''],
+    })
+    assert.deepEqual(args.p_filters, { exclude_tag_codes: ['contains_lactose'] })
   })
 
   it('builds stable filter hrefs for category and tag chips', () => {

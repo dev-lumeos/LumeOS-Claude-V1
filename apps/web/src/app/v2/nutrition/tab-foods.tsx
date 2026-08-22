@@ -82,38 +82,54 @@ type Sortierung = 'relevance' | 'protein_desc' | 'kcal_asc' | 'name_asc'
  * eigener Beschriftung — die Zahl daneben ist die Zahl der
  * MARKIERTEN, nicht die der uebrigbleibenden.
  */
+// ── G-153 (2026-08-22): DIE ZAHLEN STEHEN NICHT MEHR HIER ────────
+//
+// `[cmd]` Bis heute trug jede Option ihre Trefferzahl im Quelltext:
+// `{ code: 'vegan', label: 'Vegan', anzahl: 1377 }`. **Alle acht
+// stimmten** — am 2026-08-22 gegen `food_tags` nachgezaehlt. **Es war
+// kein Fehler, sondern ein Risiko:** sie standen im Code und aenderten
+// sich nicht mit den Daten. Bei den Allergenen war genau das
+// schiefgegangen (G-133: *„Ohne Laktose 1.021"* war die Zahl MIT).
+//
+// `[cmd]` **`food_search` liefert sie ohnehin mit** — im `tags`-Block,
+// je Code mit `count` (075, `tag_counts`). Es braucht keine zweite
+// Abfrage, nur das Durchreichen.
+//
+// `[read]` **Hier gehoeren sie ersetzt, nicht entfernt.** Anders als
+// bei den Allergenen steht die Zahl VOR der Auswahl und hilft beim
+// Waehlen; die Trefferzahl ueber der Liste sagt sie nicht voraus.
 const FILTERGRUPPEN: Array<{
   titel: string
   art: 'auswahl' | 'ausschluss'
-  optionen: Array<{ code: string; label: string; anzahl: number }>
+  optionen: Array<{ code: string; label: string }>
 }> = [
   {
     titel: 'Ernährungsform',
     art: 'auswahl',
     optionen: [
       // `[cmd]` Jeder vegane Eintrag traegt auch `vegetarian` — die
-      // 1.377 sind eine Teilmenge der 1.751. Deshalb stehen sie
-      // nebeneinander und nicht als „oder".
-      { code: 'vegan', label: 'Vegan', anzahl: 1377 },
-      { code: 'vegetarian', label: 'Vegetarisch', anzahl: 1751 },
+      // veganen sind eine Teilmenge. Deshalb stehen sie nebeneinander
+      // und nicht als „oder".
+      { code: 'vegan', label: 'Vegan' },
+      { code: 'vegetarian', label: 'Vegetarisch' },
     ],
   },
   {
     titel: 'Nährwert',
     art: 'auswahl',
     optionen: [
-      { code: 'high_protein', label: 'Proteinreich', anzahl: 1400 },
-      { code: 'low_carb', label: 'Low-Carb', anzahl: 4659 },
-      { code: 'low_fat', label: 'Fettarm', anzahl: 2648 },
-      { code: 'high_fiber', label: 'Ballaststoffreich', anzahl: 558 },
+      { code: 'high_protein', label: 'Proteinreich' },
+      { code: 'low_carb', label: 'Low-Carb' },
+      { code: 'low_fat', label: 'Fettarm' },
+      { code: 'high_fiber', label: 'Ballaststoffreich' },
     ],
   },
   {
     titel: 'Verarbeitung',
     art: 'auswahl',
     optionen: [
-      { code: 'whole_food', label: 'Grundnahrungsmittel', anzahl: 2884 },
-      { code: 'ultra_processed', label: 'Hochverarbeitet', anzahl: 927 },
+      { code: 'whole_food', label: 'Grundnahrungsmittel' },
+      { code: 'ultra_processed', label: 'Hochverarbeitet' },
     ],
   },
 ]
@@ -122,15 +138,21 @@ const FILTERGRUPPEN: Array<{
  * Die Allergene — Ausschluss, nicht Auswahl.
  *
  * `[read]` Man sucht *ohne* Laktose. Das ist die umgekehrte Schaltung
- * der Gruppen oben, und es geht **nicht ueber die Suchfunktion**:
- * `nutrition.food_search` nimmt `p_tag_code` als AUSWAHL entgegen, es
- * gibt keinen Parameter fuer „ohne". Ausschliessen kann die Funktion
- * nur ueber die gespeicherten Vorlieben (C-94, `hard_exclude`).
+ * der Gruppen oben.
  *
- * `[cmd]` Deshalb wirkt dieser Schalter auf die geladene Seite, nicht
- * auf den ganzen Bestand — die Trefferzahl daneben sagt das an. Wer
- * dauerhaft ohne Laktose sucht, setzt es unter Preferences; dann
- * greift C-94 ueber alle 7.140.
+ * `[cmd]` **Seit C-164 kann die Suchfunktion es selbst** — `p_filters`
+ * traegt `exclude_tag_codes` und entfernt Treffer aus der
+ * GESAMTMENGE, nicht nur aus der geladenen Seite (SSOT 169).
+ * Gemessen: ohne Filter 7.140, mit `contains_lactose` **6.119**.
+ *
+ * `[cmd]` **Der Kommentar hier behauptete bis G-133 das Gegenteil** —
+ * *„es gibt keinen Parameter fuer ohne"*. Das stimmte, bis C-164 ihn
+ * gebaut hat, und stand danach vier Wochen falsch da.
+ *
+ * `[read]` **Preferences bleibt etwas anderes** (C-94): das ist der
+ * gespeicherte Wunsch einer Nutzerin, der fuer JEDE Suche gilt. Dieser
+ * Schalter filtert nur diese eine. GO-22 unterscheidet beides
+ * ausdruecklich; beide wirken nebeneinander.
  */
 /**
  * Die Beschriftung eines Tag-Codes (G-101).
@@ -176,11 +198,46 @@ function FilterChip({ label, onWeg }: { label: string; onWeg: () => void }) {
   )
 }
 
-const ALLERGEN_AUSSCHLUSS: Array<{ code: string; label: string; anzahl: number }> = [
-  { code: 'contains_lactose', label: 'Ohne Laktose', anzahl: 1021 },
-  { code: 'contains_gluten', label: 'Ohne Gluten', anzahl: 622 },
-  { code: 'contains_nuts', label: 'Ohne Nüsse', anzahl: 120 },
-]
+/**
+ * Die Allergen-Gruppe ist WEG (G-154).
+ *
+ * `[cmd]` **`ADR_NUTRITION_PREFERENCES_V1` (Final, April 2026):**
+ * Allergie ist `hard` — *„absoluter Ausschluss, nie anzeigen, nie
+ * vorschlagen"*. **Ein Schalter, mit dem man einen absoluten
+ * Ausschluss an- und ausknipst, widerspricht dem.**
+ *
+ * `[cmd]` **G-133 hatte hier drei Pillen mit `?ohne=` angeschlossen.**
+ * Die Durchreiche bleibt und wird gebraucht — sie traegt jetzt die
+ * **Unvertraeglichkeiten**, und zwar in der Gegenrichtung: `strong`
+ * heisst *„nur auf explizite User-Suche anzeigen"*, die Zeilen sind
+ * also von sich aus weg und ein Schalter holt sie DAZU.
+ *
+ * `[read]` **Was hard ist, hat keinen Schalter** — es steht unter
+ * Preferences und wirkt still.
+ */
+
+/** Eine Trefferzahl in deutscher Schreibweise. */
+function facettenZahl(n: number): string {
+  return n.toLocaleString('de-DE')
+}
+
+/**
+ * Wie `food_search` Unvertraeglichkeits-Codes auf Tags abbildet.
+ *
+ * `[cmd]` Uebernommen aus `allergy_tag_map` der Funktion (075) —
+ * sieben Codes auf drei Tags. **Nicht neu erfunden:** waeren die
+ * beiden Listen verschieden, zeigte die Oberflaeche etwas anderes an,
+ * als die Datenbank tut.
+ */
+const UNVERTRAEGLICH_LABEL: Record<string, string> = {
+  gluten_wheat: 'Gluten',
+  gluten: 'Gluten',
+  tree_nuts: 'Nüsse',
+  peanuts: 'Erdnüsse',
+  nuts: 'Nüsse',
+  lactose: 'Laktose',
+  milk_protein: 'Milcheiweiss',
+}
 
 /**
  * Eine sortierbare Spaltenueberschrift.
@@ -233,8 +290,18 @@ function makro(text: string): string {
 
 export function NutritionFoodsTab({
   start,
+  unvertraeglichkeiten = [],
 }: {
   start: NutritionFoodSearchPayload | null
+  /**
+   * G-154: die gesetzten Unvertraeglichkeiten (`strong`).
+   *
+   * `[cmd]` **Der ADR:** `strong` heisst *„nur auf explizite
+   * User-Suche anzeigen"* — die Zeilen sind von sich aus weg, und ein
+   * Schalter holt sie dazu. **Wer keine gesetzt hat, sieht die Gruppe
+   * nicht** — ein Schalter ohne Wirkung waere schlimmer als keiner.
+   */
+  unvertraeglichkeiten?: string[]
 }) {
   const [suche, setSuche] = React.useState('')
   const [kategorie, setKategorie] = React.useState<string | null>(null)
@@ -248,8 +315,50 @@ export function NutritionFoodsTab({
   const [tag, setTag] = React.useState<string | null>(null)
   const [seite, setSeite] = React.useState(0)
   const [sortierung, setSortierung] = React.useState<Sortierung>('relevance')
-  /** Allergene, die auf der geladenen Seite ausgeblendet werden. */
+  /**
+   * G-133: Tag-Codes, die `food_search` aus der Gesamtmenge nimmt.
+   *
+   * `[read]` **Seit G-154 setzt die Oberflaeche sie nicht mehr selbst.**
+   * Die Durchreiche bleibt (`?ohne=` → `p_filters.exclude_tag_codes`)
+   * und ist gemessen; sie hat nur kein Bedienelement mehr, seit
+   * Allergien ueber Preferences laufen.
+   */
   const [ohne, setOhne] = React.useState<Set<string>>(new Set())
+
+  /**
+   * G-154: die gesetzten Unvertraeglichkeiten, benannt.
+   *
+   * `[cmd]` Nur die, die `food_search` kennt — ein Code ohne Abbildung
+   * traegt nichts bei und wuerde eine Zeile anzeigen, die nichts tut.
+   */
+  /**
+   * G-153: die Trefferzahl je Tag, aus der Antwort.
+   *
+   * `[cmd]` `food_search` liefert sie im `tags`-Block mit
+   * (075, `tag_counts`) — je Code ein `count`.
+   *
+   * `[read]` **Aus `start`, nicht aus `payload`:** die Zahlen sollen
+   * den ganzen Katalog beschreiben, nicht die gerade gefilterte
+   * Teilmenge. Sonst zeigte „Vegan 1.377" nach dem Klick auf
+   * „Vegetarisch" eine andere Zahl, und niemand wuesste, welche gilt.
+   */
+  const facetten = React.useMemo(() => {
+    const k = new Map<string, number>()
+    for (const f of start?.tags ?? []) k.set(f.code, f.count)
+    return k
+  }, [start])
+
+  const unvertraeglichZeigbar = React.useMemo(() => {
+    const gesehen = new Set<string>()
+    const raus: Array<{ code: string; label: string }> = []
+    for (const c of unvertraeglichkeiten) {
+      const label = UNVERTRAEGLICH_LABEL[c]
+      if (!label || gesehen.has(label)) continue
+      gesehen.add(label)
+      raus.push({ code: c, label })
+    }
+    return raus
+  }, [unvertraeglichkeiten])
 
   // G-67: der Daumenstand je Lebensmittel, und was nach dem Abwerten
   // ausgeblendet ist.
@@ -290,9 +399,18 @@ export function NutritionFoodsTab({
         limit: String(SEITE_GROESSE),
         offset: String(seite * SEITE_GROESSE),
         sort: sortierung,
+        // G-154: Preferences sind die Konfiguration dieses Katalogs.
+        // `[read]` Tom, 2026-08-22: *„Preferences ist exakt die Konfig
+        // fuer den Food-DB-Zugriff des Kunden, dass er das sieht was
+        // er sehen will."* Die Kennung selbst steht NICHT in der
+        // Adresse — sie kommt aus der Sitzung.
+        prefs: '1',
       })
       if (kategorie) params.set('category', kategorie)
       if (tag) params.set('tag', tag)
+      // G-133: der Ausschluss geht an die Suchfunktion, nicht mehr an
+      // einen Filter auf der geladenen Seite.
+      if (ohne.size > 0) params.set('ohne', Array.from(ohne).sort().join(','))
       try {
         const antwort = await fetch(`/api/nutrition/foods?${params.toString()}`,
           { signal: ctrl.signal })
@@ -309,23 +427,50 @@ export function NutritionFoodsTab({
       }
     }, 180)
     return () => clearTimeout(zeit)
-  }, [suche, kategorie, tag, seite, sortierung])
+    // G-133: `ohne` gehoert in die Abhaengigkeiten. `[cmd]` Vorher
+    // fehlte es — der Ausschluss wirkte nur clientseitig und brauchte
+    // kein neues Laden. Jetzt entscheidet er die Trefferzahl.
+  }, [suche, kategorie, tag, seite, sortierung, ohne])
 
   // Jede Filteraenderung beginnt wieder auf Seite 1 — sonst stuende
   // man nach dem Filtern auf einer Seite, die es nicht mehr gibt.
-  React.useEffect(() => { setSeite(0) }, [suche, kategorie, tag, sortierung])
+  React.useEffect(() => { setSeite(0) }, [suche, kategorie, tag, sortierung, ohne])
 
   const alleZeilen: NutritionFoodSearchRow[] = payload?.foods ?? []
   // Abgewertete Zeilen verschwinden aus der Liste — aber erst nach dem
-  // Bestaetigen, und nur bis zum naechsten Laden. `[read]` C-94 KANN
-  // diese Liste laengst filtern (prefs=1 an der Route); sie tut es
-  // BEWUSST nicht: das hier ist ein Katalog, und ein Katalog, dem
-  // Eintraege fehlen, ist kaputt (G-13-Entscheidung, G-104 geprueft).
+  // Bestaetigen, und nur bis zum naechsten Laden.
+  //
+  // ── G-154 (2026-08-22): DIE ENTSCHEIDUNG IST GEDREHT ─────────────
+  //
+  // `[cmd]` Hier stand bis heute: *„C-94 KANN diese Liste laengst
+  // filtern; sie tut es BEWUSST nicht: das hier ist ein Katalog, und
+  // ein Katalog, dem Eintraege fehlen, ist kaputt"* (G-13,
+  // geprueft in G-104).
+  //
+  // `[read]` **Tom, 2026-08-22:** *„Preferences ist exakt die Konfig
+  // fuer den Food-DB-Zugriff des Kunden, dass er das sieht was er
+  // sehen will."* Damit ist es kein neutraler Katalog, sondern SEIN
+  // Katalog — und `prefs=1` steht jetzt an der Anfrage.
+  //
+  // `[cmd]` **`ADR_NUTRITION_PREFERENCES_V1` (Status Final, April
+  // 2026) entscheidet dasselbe:** Allergie ist `hard` — *„nie
+  // anzeigen, nie vorschlagen"*. Ein Katalog, der sie zeigt, folgt
+  // dem ADR nicht.
+  //
+  // `[read]` Der alte Satz war nicht falsch gedacht, er beantwortete
+  // nur eine andere Frage: *„darf eine Liste unvollstaendig sein"* —
+  // ja, wenn die Unvollstaendigkeit die Konfiguration IST und
+  // dasteht, dass sie wirkt.
+  //
+  // `[cmd]` **Die Daumen-Ausblendung unten bleibt davon unberuehrt** —
+  // sie ist eine Geste in dieser Sitzung, keine Konfiguration.
   const zeilen = alleZeilen
     .filter(f => !ausgeblendet.has(f.id))
-    // G-73: Allergene ausblenden. Wirkt auf die geladene Seite —
-    // Begruendung an `ALLERGEN_AUSSCHLUSS`.
-    .filter(f => ohne.size === 0 || !f.tags.some(t => ohne.has(t)))
+  // G-133: Der Allergenfilter der geladenen Seite ist WEG. `[cmd]` Er
+  // stand hier seit G-73 und blendete nur aus, was gerade geladen war
+  // — bei 143 Seiten standen die Treffer auf Seite 2 wieder da. Seit
+  // C-164 filtert `food_search` selbst (`p_filters.exclude_tag_codes`,
+  // SSOT 169), und `total` sinkt mit. Beides zugleich waere doppelt.
   const gesamt = payload?.total ?? 0
   const seiten = Math.max(1, Math.ceil(gesamt / SEITE_GROESSE))
   // Die Groesse des GANZEN Katalogs — aus dem ersten, ungefilterten
@@ -459,9 +604,14 @@ export function NutritionFoodsTab({
                         onClick={() => setTag(aktiv ? null : o.code)}
                       >
                         {o.label}
-                        <span className="v2-num v2-dim" style={{ marginLeft: 5, fontSize: 10 }}>
-                          {o.anzahl.toLocaleString('de-DE')}
-                        </span>
+                        {/* G-153: die Zahl kommt aus dem `tags`-Block der
+                            Antwort. Fehlt sie, steht keine da — eine
+                            erfundene waere schlimmer als keine. */}
+                        {facetten.get(o.code) !== undefined && (
+                          <span className="v2-num v2-dim" style={{ marginLeft: 5, fontSize: 10 }}>
+                            {facettenZahl(facetten.get(o.code) as number)}
+                          </span>
+                        )}
                       </button>
                     )
                   })}
@@ -469,50 +619,36 @@ export function NutritionFoodsTab({
               </div>
             ))}
 
-            {/* Die Allergene schalten umgekehrt — „ohne" statt „mit". */}
-            <div>
-              <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
-                Allergene ausschliessen
+            {/* ── G-154: KEIN SCHALTER FUER UNVERTRAEGLICHKEITEN ────
+                `[cmd]` **Die Funktion setzt die ADR-Regel bereits um**,
+                und zwar ohne Parameter (`075`, `preference_scores`):
+
+                    preference_excluded =
+                      hard OR (strong AND p_normalized_query = '')
+
+                **Die „explizite User-Suche" IST das Suchwort.** Wer
+                nichts eingibt, sieht `strong` nicht; wer „milch" tippt,
+                sieht es. Gemessen am 2026-08-22 auf `dev@lumeos.app`:
+                leere Suche **5.292**, „milch" **168 von 261**.
+
+                `[read]` **Ein Schalter waere hier falsch gewesen** — er
+                haette entweder nichts getan oder die Regel umgangen.
+                Der Auftrag verlangte einen; die Messung sagt, dass die
+                Sache schon steht. Im Bericht als Befund. */}
+            {unvertraeglichZeigbar.length > 0 && (
+              <div>
+                <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+                  Unverträglichkeiten
+                </div>
+                <div className="v2-dim" style={{ fontSize: 10, lineHeight: 1.5 }}>
+                  {unvertraeglichZeigbar.map(u => u.label).join(' · ')} sind
+                  ausgeblendet, solange du nichts suchst — <strong>tippe
+                  einen Namen</strong>, und sie erscheinen. Allergien
+                  bleiben immer ausgeblendet.{' '}
+                  Zu ändern unter <strong>Preferences</strong>.
+                </div>
               </div>
-              <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
-                {ALLERGEN_AUSSCHLUSS.map(o => {
-                  const aktiv = ohne.has(o.code)
-                  return (
-                    <button
-                      key={o.code} type="button"
-                      aria-pressed={aktiv}
-                      className="v2-pill"
-                      style={{
-                        cursor: 'pointer', padding: '4px 10px', fontSize: 11,
-                        borderColor: aktiv
-                          ? 'color-mix(in oklch, var(--neg) 45%, var(--border))'
-                          : 'var(--border)',
-                        color: aktiv ? 'var(--neg)' : 'var(--fg-muted)',
-                        background: aktiv
-                          ? 'color-mix(in oklch, var(--neg) 10%, transparent)'
-                          : 'var(--surface)',
-                      }}
-                      onClick={() => setOhne(s => {
-                        const n = new Set(s)
-                        if (n.has(o.code)) n.delete(o.code)
-                        else n.add(o.code)
-                        return n
-                      })}
-                    >
-                      {o.label}
-                      <span className="v2-num v2-dim" style={{ marginLeft: 5, fontSize: 10 }}>
-                        {o.anzahl.toLocaleString('de-DE')}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-              <div className="v2-dim" style={{ fontSize: 10, marginTop: 5, lineHeight: 1.4 }}>
-                Blendet auf der angezeigten Seite aus. Dauerhaft und über den
-                ganzen Bestand wirkt der Ausschluss über
-                {' '}<strong>Preferences · Allergies</strong>.
-              </div>
-            </div>
+            )}
           </div>
         </div>
       )}
@@ -573,7 +709,9 @@ export function NutritionFoodsTab({
           {Array.from(ohne).map(code => (
             <FilterChip
               key={code}
-              label={ALLERGEN_AUSSCHLUSS.find(a => a.code === code)?.label ?? code}
+              // G-154: Die Allergen-Liste ist weg; der Chip benennt den
+              // Tag-Code, falls `ohne` je wieder gesetzt wird.
+              label={`ohne ${filterLabel(code)}`}
               onWeg={() => setOhne(s => {
                 const n = new Set(s)
                 n.delete(code)

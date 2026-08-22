@@ -111,7 +111,10 @@ function tabs(mahlzeiten: number | null): TabItem[] {
 export async function TagebuchAnsicht({
   datum, tab, summe, bewertung, fehler, bewertungFehler, ziele, vorschlag, zielFehler, wasser,
   istAdmin = false, foodsStart = null, vorlieben = null, plan = null, mikro = null, ordnung = null, einsichten = null,
+  unvertraeglichkeiten = [],
 }: {
+  /** G-154: fuer den Hinweis im Foods-Tab. */
+  unvertraeglichkeiten?: string[]
   datum: string
   tab: string
   /** G-14: nur Admins duerfen in die Zukunft blaettern. */
@@ -210,7 +213,7 @@ export async function TagebuchAnsicht({
       <Zukunftshinweis datum={datum} />
 
       {tab !== 'diary' && (
-        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} />
+        <AndererTab tab={tab} foodsStart={foodsStart} vorlieben={vorlieben} plan={plan} ordnung={ordnung} einsichten={einsichten} unvertraeglichkeiten={unvertraeglichkeiten} />
       )}
       {tab === 'diary' && (
       <>
@@ -479,9 +482,11 @@ export async function TagebuchAnsicht({
  * eingebaut.
  */
 function AndererTab({
-  tab, foodsStart, vorlieben, plan, ordnung, einsichten,
+  tab, foodsStart, vorlieben, plan, ordnung, einsichten, unvertraeglichkeiten = [],
 }: {
   tab: string
+  /** G-154: die gesetzten Unvertraeglichkeiten (`strong`). */
+  unvertraeglichkeiten?: string[]
   /** G-66: die erste Trefferseite, serverseitig geladen. */
   foodsStart?: NutritionFoodSearchPayload | null
   /** G-65: der gespeicherte Vorliebenstand. */
@@ -577,7 +582,14 @@ function AndererTab({
     // Zeilen, die Umsetzung eine echte BLS-Suche") — das war richtig,
     // solange die Suche die einzige Form war. Jetzt hat der Tab die
     // Form des Entwurfs UND die echte Suche dahinter.
-    return <NutritionFoodsTab start={foodsStart ?? null} />
+    // G-154: Die Unvertraeglichkeiten entscheiden, ob der
+    // Einblenden-Schalter ueberhaupt erscheint.
+    return (
+      <NutritionFoodsTab
+        start={foodsStart ?? null}
+        unvertraeglichkeiten={unvertraeglichkeiten}
+      />
+    )
   }
 
   const t = inhalt[tab]
