@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 192 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 208 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -4722,3 +4722,298 @@ Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
   `[read]` Und der Nutzer sieht eine Verschlechterung um zehn Punkte.
   Das ist die richtige Zahl — aber sie gehoert erklaert, nicht
   kommentarlos angezeigt.
+
+---
+
+## M — Die Module sagen die Unwahrheit ueber sich selbst
+
+`[cmd]` **Aufgenommen am 2026-08-22** (C-217 Code, G-155 Bild).
+Werkzeuge: `tools/_modul-bestand.py`, `tools/_g155-bestand.mjs`.
+Maschinenlesbar: `backup/modul-bestand.json`, `backup/bestand/aufnahme.json`
+(128 Eintraege), 128 Bildschirmfotos.
+
+`[cmd]` **Gegengeprueft: 25 von 25 Zeilenzahlen exakt.** Der Bestand
+stimmt, die Oberflaeche nicht.
+
+`[read]` **Der Befund in einem Satz:** Sieben Module tragen einen
+Pauschalbanner *„das Schema gibt es noch nicht"*. **Bei sechs ist er
+falsch.** Und der groesste Posten ist nicht fehlendes Schema, sondern
+**Daten liegen und werden nicht gelesen**.
+
+`[cmd]` **Gesamtlage, Marken gegen Kacheln:**
+
+| Modul | Marken | Kacheln | Schema | Zeilen | Lage |
+|---|---:|---:|---|---:|---|
+| supplements | 59 | 79 | da | 3.852 | 16 markierte Rueckfaelle neben echten Fassungen |
+| coach/ai | 46 | 36 | **fehlt** | 0 | der einzige Banner, der stimmt |
+| training | 38 | 56 | da | 9.946 | Banner nennt Tabellennamen, die nie existierten |
+| recovery | 36 | 40 | da | 858 | Banner behauptet das Gegenteil der Datenbank |
+| coach | 33 | 36 | da | 63 | Daten vollstaendig, Oberflaeche liest an einer Stelle |
+| nutrition | 25 | 55 | da | 990.000+ | am weitesten echt; Plans-Tab Attrappe trotz Daten |
+| goals | 23 | 71 | da | 450 | echt und Attrappen-Doppel je Tab |
+| medical | 18 | 44 | da | 14.340 | Banner falsch, Detail-Banner praezise |
+| dashboard | 12 | 8 | quer | — | haengt an den Quellmodulen |
+| settings | 0 | 3 | — | 7 | echt |
+
+### Die falschen Banner — eine Zeile je Modul
+
+- [ ] **G-156: Sechs Pauschalbanner behaupten das Gegenteil der
+  Datenbank** (neu 2026-08-22). **Zuerst, weil billig und weil er den
+  Orchestrator selbst getaeuscht hat.**
+
+  `[cmd]` Je Modul eine `ATTRAPPE`-Konstante in `ansicht.tsx`:
+
+  | Datei | Behauptung | tatsaechlich |
+  |---|---|---|
+  | `recovery/ansicht.tsx:66` | Schema fehlt | 3 Tabellen, 858 Zeilen |
+  | `medical/ansicht.tsx:56` | Schema fehlt | 12 Tabellen, 14.340 Zeilen |
+  | `coach/ansicht.tsx:67` | Schema fehlt | 12 Tabellen mit Seeds |
+  | `training/ansicht.tsx:63` | `sessions`/`sets` fehlen | heissen `workout_sessions` (60), `workout_sets` (202) |
+  | `goals/ansicht.tsx:69` | weder Ziele noch Koerpermasse | `user_goals` 11, `body_measurements` 362 |
+  | `supplements/tabs.tsx:36` | kein Schema | 14 Tabellen, `intake_logs` 720 |
+  | `nutrition/tab-plans.tsx:29` | kein Essensplan-Schema | `meal_plans` 2, `_weeks` 6, `_days` 42, `_entries` 112 |
+  | `nutrition/tab-prefs.tsx:28` | Vorlieben ohne Spalten | `food_preferences` mit Daten seit G-65 |
+
+  `[cmd]` **Korrekt bleibt nur `coach/ai/ansicht.tsx:62`** — `buddy`
+  hat 0 Tabellen.
+
+  `[read]` **Der Training-Fall ist der lehrreichste:** der Banner nennt
+  zwei Namen, die nie existiert haben, und schliesst daraus auf leere
+  Daten. **Vierter Fall desselben Musters an einem Tag** — nach
+  `tree_nuts` gegen `contains_nuts`, `SE` gegen `SER`,
+  `training.load_spike` gegen `ACWR_DATA`.
+
+  **Zu tun:** Pauschaltext raus. Wo eine Kachel weiter Entwurf ist,
+  bekommt sie einen eigenen, praezisen Grundtext — wie in `medical`,
+  wo die Detail-Banner bereits stimmen.
+
+- [ ] **G-157: Eine Kachel zeigt erfundene Zahlen ohne Marke** (neu
+  2026-08-22).
+
+  `[cmd]` `nutrition/nutrients-entwurf.tsx` — **12 Kacheln, null
+  Marken, keine Lesezugriffe.** Rueckfall des Nutrients-Tabs
+  (`ansicht.tsx:531`), zeigt ohne Sitzung erfundene Zahlen.
+
+  `[cmd]` **Einziger gefundener Fall dieser Art** — und aus dem Bild
+  nicht auffindbar: *„eine erfundene 87 sieht aus wie eine gemessene
+  87"* (G-155). Gefunden nur durch die Code-Aufnahme.
+
+  `[read]` **Der Fall ist nicht neu:** G-135 fand die
+  Health-Score-Kachel, die nie eine Marke trug und mit Entwurfszahlen
+  rechnete. **Beide Male beim Anbinden entdeckt, nie am Bild.**
+
+### Daten liegen, werden nicht gelesen — der groesste Posten
+
+`[read]` Diese Punkte brauchen **kein Schema und keine Entscheidung**.
+Die Tabellen sind da, gefuellt, und in denselben Modulen liest schon
+etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
+
+- [ ] **G-158: coach liest seine Daten an einer einzigen Stelle** (neu
+  2026-08-22). **Der klarste Fall.**
+
+  `[cmd]` 12 Tabellen mit Seeds seit `efbe396`: `relationships` 6,
+  `messages` 6, `pending_actions` 3, `client_autonomy` 5,
+  `autonomy_change_log` 8. **Echt gelesen wird nur
+  `client_permissions`** (`rechte-echt`).
+
+  `[cmd]` 33 Marken: `ansicht` 11 (Your coaches, Threads, Invites),
+  `tab-autonomie` 11, `tab-onboarding` 6, `tab-rechte` 5.
+
+- [ ] **G-159: training Today zeigt nicht, was History liest** (neu
+  2026-08-22).
+
+  `[cmd]` `ansicht.tsx` 11 Marken — This week, Weekly volume, Streak,
+  Recent sessions, Volume by muscle. **Derselbe Stoff, den
+  `tab-verlauf` bereits echt liest** (`workout_sessions` 60,
+  `workout_sets` 202).
+
+  `[cmd]` Dazu `tabs-extras` 1 Marke: Body stats × strength —
+  `goals.body_measurements` × `workout_sets`, beides da.
+
+- [ ] **G-160: recovery Messwerte liegen in `checkins`** (neu
+  2026-08-22).
+
+  `[cmd]` `tab-messwerte` 10 Marken (Muscle recovery, Per-muscle
+  detail, HRV score, 30-day trend, Last night, 14 nights, Score paths,
+  Sleep hygiene). **`checkins` traegt `hrv_rmssd`, `sleep_hours`,
+  `sleep_quality`, `sleep_start`/`end`, `soreness`, sogar
+  `screen_time_before_bed`.**
+
+  `[cmd]` Ausnahme: *„Phone camera HRV"* braucht eine Geraetefunktion,
+  die ganz fehlt; mehrfach-taegliche HRV braucht `hrv_measurements`.
+
+- [ ] **G-161: nutrition Meal plans — der krasseste Fall** (neu
+  2026-08-22).
+
+  `[cmd]` 8 Marken, Banner *„Es gibt kein Schema fuer Essensplaene"* —
+  **`meal_plans` 2, `meal_plan_weeks` 6, `meal_plan_days` 42,
+  `meal_plan_entries` 112, und `plan-lesen` existiert.** Der
+  Planner-Tab liest damit bereits echt.
+
+- [ ] **G-162: supplements Compliance und medical Tracking** (neu
+  2026-08-22).
+
+  `[cmd]` `tab-compliance` 4 Marken (Heatmap, Streaks) —
+  `intake_logs` **720**.
+  `[cmd]` `medical/tab-tracking` Medications — `user_medications` 2
+  plus 1.399 Katalogzeilen, **`page.tsx` liest sie bereits**.
+
+- [ ] **G-163: 16 markierte Rueckfallfassungen in supplements** (neu
+  2026-08-22).
+
+  `[cmd]` In `tabs.tsx` stehen 16 `RUECKFALL`-Fassungen neben den
+  echten. Von 59 Marken sind nur 43 echte Attrappen.
+  `[cmd]` Dasselbe Muster: `nutrition/tab-prefs` (6) und `tab-planner`
+  (1) neben `tab-vorlieben`; `coach/tab-rechte` (5) neben `rechte-echt`.
+
+  `[read]` **Ein Rueckfall mit veraltetem Text ist schlimmer als
+  keiner** — `tab-prefs` behauptet, Vorlieben haetten keine Spalten.
+
+### Schema fehlt wirklich — Codex-Arbeit
+
+- [ ] **C-219: Tabellen, die die Spec kennt und die es nicht gibt**
+  (neu 2026-08-22).
+
+  `[cmd]` **recovery:** `protocols`, `hrv_measurements`, `baselines`,
+  `sleep_data`, `overtraining_alerts`, `training_load_logs`,
+  `user_protocol_assignments`
+  `[cmd]` **training:** `volume_landmarks`, `strength_standards`,
+  `exercise_progression_configs`, `post_workout_feedback`, `routines`,
+  `blocks` — alle in SPEC_06 spezifiziert, keine gebaut (17 Marken in
+  `tabs-spec`)
+  `[cmd]` **medical:** `user_symptoms`, `medical_alerts`,
+  `biomarker_results` (Schreibweg fuer Werte ohne Laborbericht)
+  `[cmd]` **goals:** `goal_adjustments`, `weekly_reports`,
+  `goal_contributions`, `tdee_settings`, `progress_photos`
+  `[cmd]` **supplements:** `stack_templates`/`items`, Injektionstabellen
+  (14 Marken, korrekt markiert)
+  `[cmd]` **nutrition:** `mealcam_scans`, `shopping_lists`,
+  `meal_plan_logs`, `micro_flags`, `coach_nutrition_suggestions`
+
+  **Reihenfolge nach Marken je fehlender Tabelle** — `tabs-spec`
+  (training, 17) und die Injektionen (14) sind die dichtesten.
+  `shopping_lists` ist bereits C-175 in C-187.
+
+- [ ] **C-220: `buddy` — 0 von 16 Tabellen** (neu 2026-08-22).
+  **Groesstes Einzelvorhaben, haengt an Entscheidungen.**
+
+  `[cmd]` `coach/ai`: **20 Tabs, 46 Marken, alles Attrappe** — und zu
+  Recht. `buddy` hat 0 Tabellen; SPEC_06 BuddyandAICoach fuehrt 16.
+  `SPEC_05_ENGINES` und `SPEC_09_SCORING` liegen vor.
+  `[cmd]` Kimi liefert `buddy_capability_map` (23 Capabilities) und
+  `buddy_dependency_graph` (140 Kanten) — s. Gruppe K.
+
+### Was ganz fehlt
+
+- [ ] **G-164: Drei Module des Vorgaengers haben hier kein Gegenstueck**
+  (neu 2026-08-22).
+
+  `[cmd]` Aus `referenz/lumeos-2026/src/modules`: **marketplace** (10
+  Dateien), **onboarding** (9), **human-coach** (30 — hier nur eine
+  Stub-Seite). `intelligence` (8) ist der Vorlaeufer von `coach/ai`.
+
+  `[read]` Die Sidebar fuehrt Marketplace, Coach Portal und Admin als
+  eigene Arbeitsbereiche (3210/3220) — nicht Teil dieser Aufnahme.
+  **Zu klaeren, ob Onboarding in `apps/web` gehoert.**
+
+### Befunde am Rand
+
+- [ ] **A-49: Der Attrappen-Waechter traegt eine veraltete Behauptung**
+  (neu 2026-08-22).
+
+  `[cmd]` `v2-attrappen.test.ts:963` sagt *„SuppInteractions ist
+  unangebunden"* — `tab-interactions-echt.tsx` existiert inzwischen.
+  Ungeprueft, ob der Test noch die Rueckfall-Lage meint.
+
+- [ ] **C-221: `supplement_interactions` ist eine tote Spec-Tabelle**
+  (neu 2026-08-22).
+
+  `[cmd]` **0 Zeilen, und niemand liest sie.** Die echte
+  Interactions-Kachel laeuft ueber `rule_catalog` (64). Kein
+  Oberflaechenwiderspruch — aber eine Tabelle, die es ohne Grund gibt.
+
+- [ ] **G-165: `nutrition-foods` zahlt die Preference-Kosten zweimal**
+  (neu 2026-08-22). Gehoert zu C-192.
+
+  `[cmd]` **1.830 ms im Dokument und 1.750 ms im `fetch` danach** —
+  beide mit `prefs=1`, dieselbe Abfrage. Gesamt 4.287 ms im zweiten
+  Lauf, also kein Kaltstart.
+
+  `[read]` **Das serverseitige Erstladen hat der Orchestrator in G-154
+  beauftragt**, damit die Liste nicht von 7.140 auf 5.292 springt.
+  **Dass es die teuerste Abfrage verdoppelt, war nicht bedacht.**
+
+  `[cmd]` Nebenbefund: `supplements` liegt durchgehend bei ~2.100 ms
+  ueber alle elf Tabs — kein Ausreisser, aber der langsamste
+  Modulrahmen.
+
+- [ ] **C-222: `monitoring` fehlt als siebter Block** (neu 2026-08-22).
+  Aus C-196. **Auslassung des Orchestrators in C-195.**
+
+  `[cmd]` **Kein `ADD COLUMN monitoring`** unter den 60 Spalten. Die
+  Quelle traegt es bei **46 Saetzen**: 39 Supplements, 2 Performance
+  Compounds, 5 Peptide. Die Daten liegen weiter nur in `raw`.
+
+  `[read]` **Der Orchestrator hat `monitoring` in C-195 in der
+  Fuellgrad-Tabelle aufgefuehrt und dann nicht in die Liste der sechs
+  Bloecke aufgenommen.** Kein Fehler von Codex — der Auftrag hat es
+  nicht verlangt.
+
+  `[read]` **Und es ist kein Randfeld:** `monitoring` fuehrt
+  `relevant_blood_tests` und `relevant_biomarkers` je Substanz. **Das
+  ist die Bruecke zwischen Supplements und
+  `medical.lab_marker_catalog`** — dieselbe Verbindung, an der C-183
+  (Symptom-Ontologie) und die Symptom-Biomarker-Frage aus C-171
+  haengen.
+
+  **Zu tun:** Spalte aufnehmen wie die sechs anderen, Sollstand
+  nachziehen, die 46 Saetze heben. Erwartung: `monitoring` 46/46,
+  Spaltenzahl 60 → 61, Zeilenzahl unveraendert 566.
+
+- [ ] **C-223: `dose_ceiling_value numeric` ist die falsche Form** (neu
+  2026-08-22). Aus C-196. **Entscheidung Tom.**
+
+  `[cmd]` **32 von 32 Eintraegen tragen einen Freitext, keinen
+  Zahlwert:**
+
+  | Substanz | `dose_ceiling.value` |
+  |---|---|
+  | Vitamin A | `UL 3000 mcg RAE/day adults` |
+  | Magnesium citrate | `UL 350 mg/day supplemental` |
+  | Coffein | `EFSA: single doses <=200 mg, daily <=400 mg (adults)` |
+  | Vitamin B6 | `US UL 100 mg/d — EFSA UL 12 mg/d (2023); DB stores BOTH (conflict record)` |
+  | hCG | `Per label (fertility indications)` |
+  | Insulin | `Per prescription only` |
+
+  `[read]` **Die Erwartung „dose_ceiling_value 32" war falsch
+  gebaut** — der Orchestrator hat eine `numeric`-Spalte fuer ein Feld
+  spezifiziert, das die Quelle als Satz fuehrt: mit Einheit,
+  Rechtsraum, Begruendung und teils zwei widersprechenden Werten in
+  einem String.
+
+  `[cmd]` Codex hat 29 gefuellt, indem es die Zahl aus dem Text zog,
+  und die drei ohne Zahl gemeldet. **Das ist mehr Interpretation, als
+  „heben, nicht interpretieren" erlaubt** — die richtige Reaktion auf
+  einen Auftrag, der so nicht erfuellbar war.
+
+  `[read]` **Vitamin B6 zeigt, warum die Form grundsaetzlich nicht
+  traegt:** US 100 mg/d gegen EFSA 12 mg/d, und die Quelle sagt
+  ausdruecklich, sie speichere **beide**. Ein `numeric`-Feld kann das
+  nicht, egal welche Zahl man waehlt.
+
+  **Drei Wege, einer zu waehlen:**
+
+  **A** — `dose_ceiling_text` daneben, `numeric` nur wo eindeutig.
+  Filterbar bleibt, was eine Zahl hat; der Rest ist lesbar.
+
+  **B** — Wert, Einheit und Rechtsraum getrennt, mit einer Zeile je
+  Jurisdiktion. Sauber, aber eine eigene Tabelle.
+
+  **C** — das flache Feld streichen, nur der `jsonb`-Block bleibt.
+  Dann gibt es keinen Dosisfilter.
+
+  `[read]` **Der Grund fuer die flache Spalte war ein Filter** — „zeig
+  mir alles ueber der Obergrenze". **Der funktioniert in keiner der drei
+  Varianten so, wie gedacht**, solange die Obergrenze vom Rechtsraum
+  abhaengt. Das ist die eigentliche Frage: **gilt fuer einen Nutzer in
+  Thailand die US-Zahl oder die EFSA-Zahl?**

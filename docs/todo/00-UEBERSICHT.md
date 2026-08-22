@@ -231,3 +231,24 @@ wenn er erzeugt und geprüft wird.
 | **C-217** Was ist gebaut, was ist Attrappe — je Modul, je Kachel | offen | 4667 |
 | **G-155** Jede Kachel jedes Moduls als Bild | offen | 4693 |
 | **C-218** Frontend und Datenbank normieren den Recovery-Score | offen | 4703 |
+
+## M — Die Module sagen die Unwahrheit ueber sich selbst
+
+| | Zustand | Zeile |
+|---|---|---:|
+| **G-156** Sechs Pauschalbanner behaupten das Gegenteil der | offen | 4760 |
+| **G-157** Eine Kachel zeigt erfundene Zahlen ohne Marke | offen | 4790 |
+| **G-158** coach liest seine Daten an einer einzigen Stelle | offen | 4811 |
+| **G-159** training Today zeigt nicht, was History liest | offen | 4822 |
+| **G-160** recovery Messwerte liegen in `checkins` | offen | 4833 |
+| **G-161** nutrition Meal plans — der krasseste Fall | offen | 4845 |
+| **G-162** supplements Compliance und medical Tracking | offen | 4853 |
+| **G-163** 16 markierte Rueckfallfassungen in supplements | offen | 4861 |
+| **C-219** Tabellen, die die Spec kennt und die es nicht gibt | offen | 4874 |
+| **C-220** `buddy` — 0 von 16 Tabellen | offen | 4897 |
+| **G-164** Drei Module des Vorgaengers haben hier kein Gegenstueck | offen | 4908 |
+| **A-49** Der Attrappen-Waechter traegt eine veraltete Behauptung | offen | 4921 |
+| **C-221** `supplement_interactions` ist eine tote Spec-Tabelle | offen | 4928 |
+| **G-165** `nutrition-foods` zahlt die Preference-Kosten zweimal | offen | 4935 |
+| **C-222** `monitoring` fehlt als siebter Block | offen | 4950 |
+| **C-223** `dose_ceiling_value numeric` ist die falsche Form | offen | 4973 |
