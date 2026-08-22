@@ -18,19 +18,15 @@
 // Recherche verlangt (F-04, 7.3: *„Der Coach setzt seine eigene
 // Autonomiestufe — halte ich fuer einen Irrtum"*).
 //
-// `[cmd]` **`coach` ist heute NICHT fuer PostgREST freigegeben.**
-// Gemessen am 2026-08-20, angemeldet als `dev@lumeos.app`: jede
-// Abfrage meldet `Invalid schema: coach` — dieselbe Meldung wie ein
-// Schema, das es gar nicht gibt, waehrend `recovery` (170),
-// `training` (1.416) und `goals` (181) im selben Lauf lesen. **Die
-// Tabellen existieren** (C-119 legt sie an, `schema-sollstand.json`
-// fuehrt sie); es fehlt die Freigabe in der Supabase-Konfiguration.
-// Das ist `supabase/`-Gebiet und damit Codex.
+// `[cmd]` **`coach` ist fuer PostgREST freigegeben** — gemessen am
+// 2026-08-22: `PGRST_DB_SCHEMAS` des laufenden REST-Containers fuehrt
+// `coach`, `supabase/config.toml:23` ebenso. Die Meldung `Invalid
+// schema: coach` vom 2026-08-20 ist damit Geschichte; Codex hat die
+// Freigabe nachgezogen.
 //
-// `[read]` **Deshalb liefert jede Funktion hier einen Leerzustand statt
-// zu werfen** — Muster G-65. Die Oberflaeche zeigt dann, dass nichts
-// da ist, und sagt warum. Sobald das Schema freigegeben ist, liest
-// derselbe Code echte Zeilen; es ist nichts zu aendern.
+// `[read]` **Jede Funktion hier liefert einen Leerzustand statt zu
+// werfen** — Muster G-65. Die Oberflaeche zeigt dann, dass nichts
+// da ist, und sagt warum.
 import { createSessionClient } from '@lumeos/shared/session'
 
 // `[cmd]` Modell und Beschriftungen stehen in `rechte-modell.ts` —
@@ -85,6 +81,29 @@ export type WartendeAktion = {
   created_at: string
 }
 
+// G-158: die Beziehung und ihre Nachrichten — beide Tabellen lagen
+// gefuellt (relationships 6, messages 6 am 2026-08-22) und wurden von
+// keiner Kachel gelesen.
+export type Beziehung = {
+  id: string
+  coach_id: string
+  client_id: string
+  status: string
+  invite_note: string | null
+  started_at: string | null
+  ended_at: string | null
+}
+
+export type Nachricht = {
+  id: string
+  coach_id: string
+  client_id: string
+  sender_id: string
+  body: string
+  sent_at: string
+  read_at: string | null
+}
+
 export type CoachRechteStand = {
   /** Die eigene Nutzerkennung, oder `null` wenn nicht angemeldet. */
   userId: string | null
@@ -93,6 +112,8 @@ export type CoachRechteStand = {
   rechteLog: Logzeile[]
   autonomieLog: Logzeile[]
   wartend: WartendeAktion[]
+  beziehungen: Beziehung[]
+  nachrichten: Nachricht[]
   /**
    * Gesetzt, wenn die Abfrage scheiterte. **Ein Fehler ist nicht
    * dasselbe wie „nichts da"** — die Oberflaeche unterscheidet das.
@@ -102,7 +123,8 @@ export type CoachRechteStand = {
 
 export const LEER: CoachRechteStand = {
   userId: null, rechte: [], autonomie: [], rechteLog: [],
-  autonomieLog: [], wartend: [], fehler: null,
+  autonomieLog: [], wartend: [], beziehungen: [], nachrichten: [],
+  fehler: null,
 }
 
 function sichtVon(r: Record<string, unknown>): Record<Modul, Sicht> {
@@ -179,7 +201,7 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
     if (!user) return LEER
 
     const c = client.schema('coach')
-    const [p, a, pl, al, pa] = await Promise.all([
+    const [p, a, pl, al, pa, re, na] = await Promise.all([
       c.from('client_permissions').select('*').order('updated_at', { ascending: false }),
       c.from('client_autonomy').select('*').order('updated_at', { ascending: false }),
       c.from('permission_change_log').select('*')
@@ -188,6 +210,11 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
         .order('changed_at', { ascending: false }).limit(50),
       c.from('pending_actions').select('*')
         .order('created_at', { ascending: false }).limit(50),
+      // G-158: die Beziehungen und die juengsten Nachrichten. Die
+      // Zeilenrechte begrenzen beides auf eigene Zeilen (coach ODER
+      // client) — gemessen: dev@lumeos.app sieht 1 von 6 Beziehungen.
+      c.from('relationships').select('*').order('created_at', { ascending: false }),
+      c.from('messages').select('*').order('sent_at', { ascending: false }).limit(100),
     ])
 
     // `[read]` Ein Fehler auf der ERSTEN Abfrage entscheidet: schlaegt
@@ -195,6 +222,7 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
     // dieselbe. Sie wird durchgereicht, damit die Anzeige „nicht
     // geladen" von „nichts vorhanden" unterscheiden kann.
     const fehler = p.error ?? a.error ?? pl.error ?? al.error ?? pa.error
+      ?? re.error ?? na.error
     if (fehler) return { ...LEER, userId: user.id, fehler: fehler.message }
 
     const zeile = (r: unknown) => r as unknown as Record<string, unknown>
@@ -240,6 +268,30 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
           expires_at: String(x.expires_at),
           confirmed_at: (x.confirmed_at as string) ?? null,
           created_at: String(x.created_at),
+        }
+      }),
+      beziehungen: (re.data ?? []).map(r => {
+        const x = zeile(r)
+        return {
+          id: String(x.id),
+          coach_id: String(x.coach_id),
+          client_id: String(x.client_id),
+          status: String(x.status),
+          invite_note: (x.invite_note as string) ?? null,
+          started_at: (x.started_at as string) ?? null,
+          ended_at: (x.ended_at as string) ?? null,
+        }
+      }),
+      nachrichten: (na.data ?? []).map(r => {
+        const x = zeile(r)
+        return {
+          id: String(x.id),
+          coach_id: String(x.coach_id),
+          client_id: String(x.client_id),
+          sender_id: String(x.sender_id),
+          body: String(x.body),
+          sent_at: String(x.sent_at),
+          read_at: (x.read_at as string) ?? null,
         }
       }),
       fehler: null,

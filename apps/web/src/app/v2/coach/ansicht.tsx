@@ -55,6 +55,8 @@ import { CoachModale } from './modale'
 import { AthleteAutonomy, AthleteCheckins } from './tab-autonomie'
 import { CoachOnboardingWizard } from './tab-onboarding'
 import { AthletePermissionsV2, AthleteProposals } from './tab-rechte'
+// G-158: Beziehungen und Nachrichten aus `coach`, statt daten.ts.
+import { CoachesEcht, ThreadsEcht } from './uebersicht-echt'
 // G-90: die echten Rechte, Autonomy und beide Historien.
 //
 // `[cmd]` **Nur ein Typ-Import.** `rechte-read.ts` zieht ueber
@@ -65,19 +67,26 @@ import type { CoachRechteStand } from '../../../lib/coach/rechte-read'
 
 /** Die Marke an jeder Kachel. Ein Satz, damit er nicht driftet. */
 export const ATTRAPPE =
-  'Aus dem Entwurf uebernommen. Die Zahlen sind erfunden — ein '
-  + '`coach`-Schema gibt es noch nicht.'
+  'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen '
+  + 'Coach-Daten angebunden - die Zahlen sind erfunden.'
 
 // [cmd] module-coach.jsx:183-194, in dieser Reihenfolge.
-function tabs(): TabItem[] {
+//
+// G-158: Coaches und Messages zaehlen echt, sobald ein Stand geladen
+// ist — Beziehungen und ungelesene fremde Nachrichten aus `coach`.
+function tabs(stand?: CoachRechteStand): TabItem[] {
+  const echt = stand?.userId != null && !stand.fehler
+  const ungelesen = echt
+    ? stand!.nachrichten.filter(n => n.read_at === null && n.sender_id !== stand!.userId).length
+    : COACHES.filter(c => c.unread > 0).length
   return [
     { id: 'overview', label: 'Overview' },
-    { id: 'coaches', label: 'Coaches', count: COACHES.length },
+    { id: 'coaches', label: 'Coaches', count: echt ? stand!.beziehungen.length : COACHES.length },
     { id: 'permissions', label: 'Permissions' },
     { id: 'proposals', label: 'Proposals', count: 2 },
     { id: 'autonomy', label: 'Autonomy' },
     { id: 'checkins', label: 'Check-ins' },
-    { id: 'messages', label: 'Messages', count: COACHES.filter(c => c.unread > 0).length },
+    { id: 'messages', label: 'Messages', count: ungelesen },
     { id: 'notes', label: 'Notes', count: COACH_NOTES.length },
     { id: 'invites', label: 'Invites', count: PENDING_INVITES.length },
     { id: 'onboard', label: 'Onboarding' },
@@ -125,15 +134,15 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
         </div>
       </div>
 
-      <Tabs items={tabs()} active={tab} onChange={setTab} />
+      <Tabs items={tabs(stand)} active={tab} onChange={setTab} />
 
-      {tab === 'overview' && <AthleteOverview />}
+      {tab === 'overview' && <AthleteOverview stand={stand} />}
       {tab === 'coaches' && <AthleteCoaches />}
       {tab === 'permissions' && <AthletePermissionsV2 stand={stand} />}
       {tab === 'proposals' && <AthleteProposals stand={stand} />}
       {tab === 'autonomy' && <AthleteAutonomy stand={stand} />}
       {tab === 'checkins' && <AthleteCheckins />}
-      {tab === 'messages' && <AthleteMessages />}
+      {tab === 'messages' && <AthleteMessages stand={stand} />}
       {tab === 'notes' && <AthleteNotes />}
       {tab === 'invites' && <AthleteInvites />}
       {tab === 'onboard' && <CoachOnboardingWizard />}
@@ -146,18 +155,25 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
 // ── Overview ─────────────────────────────────────────────────────────
 // [cmd] module-coach.jsx:222-290.
 
-function AthleteOverview() {
+function AthleteOverview({ stand }: { stand?: CoachRechteStand }) {
   const ctx = useCoach()
+  // G-158: angemeldet und geladen zeigt die Kachel die Beziehungen aus
+  // `coach.relationships` — auch als Leerzustand. Der Entwurf bleibt
+  // nur ohne Sitzung stehen (Muster G-65: ein fehlendes Cookie ist
+  // kein Befund).
+  const echt = stand?.userId != null && !stand.fehler
   return (
     <div className="v2-grid v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card title="Your coaches" sub={`${COACHES.length} of 4 categories`} attrappe={ATTRAPPE}>
-          <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-            {COACHES.map(c => (
-              <CoachCardMini key={c.id} c={c} onClick={() => ctx.open({ typ: 'coachDetail', c })} />
-            ))}
-          </div>
-        </Card>
+        {echt ? <CoachesEcht stand={stand!} /> : (
+          <Card title="Your coaches" sub={`${COACHES.length} of 4 categories`} attrappe={ATTRAPPE}>
+            <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
+              {COACHES.map(c => (
+                <CoachCardMini key={c.id} c={c} onClick={() => ctx.open({ typ: 'coachDetail', c })} />
+              ))}
+            </div>
+          </Card>
+        )}
 
         <Card title="Latest from your coaches" sub={`${COACH_NOTES.length} notes`} attrappe={ATTRAPPE}>
           <div className="v2-col-gap" style={{ gap: 6 }}>
@@ -370,8 +386,20 @@ function AthleteCoaches() {
 // ── Messages ─────────────────────────────────────────────────────────
 // [cmd] module-coach.jsx:404-434.
 
-function AthleteMessages() {
+function AthleteMessages({ stand }: { stand?: CoachRechteStand }) {
   const ctx = useCoach()
+  // G-158: Threads aus `coach.messages`, sobald ein Stand geladen ist.
+  // Das rechte Panel bleibt Attrappe — einen Thread OEFFNEN gibt es
+  // nicht, und Antworten waere ein Schreibweg (gemeldet).
+  const echt = stand?.userId != null && !stand.fehler
+  if (echt) {
+    return (
+      <div className="v2-coach-threads">
+        <ThreadsEcht stand={stand!} />
+        <ThreadPanelLeer />
+      </div>
+    )
+  }
   return (
     <div className="v2-coach-threads">
       <Card title="Threads" sub={`${COACHES.length} coaches`} className="v2-card-tight" style={{ padding: 0 }} attrappe={ATTRAPPE}>
@@ -415,16 +443,24 @@ function AthleteMessages() {
         </div>
       </Card>
 
-      <Card attrappe={ATTRAPPE}>
-        <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-          <Icon name="message" className="v2-ic" style={{ width: 32, height: 32, color: 'var(--fg-dim)', margin: '0 auto 10px' }} />
-          <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Select a thread</div>
-          <div className="v2-dim" style={{ fontSize: 12 }}>
-            Click any coach in the left panel to open the conversation.
-          </div>
-        </div>
-      </Card>
+      <ThreadPanelLeer />
     </div>
+  )
+}
+
+// G-158: das rechte Panel ist in beiden Zweigen dasselbe — und bleibt
+// Attrappe: einen Thread OEFFNEN gibt es noch nicht.
+function ThreadPanelLeer() {
+  return (
+    <Card attrappe={ATTRAPPE}>
+      <div style={{ textAlign: 'center', padding: '40px 20px' }}>
+        <Icon name="message" className="v2-ic" style={{ width: 32, height: 32, color: 'var(--fg-dim)', margin: '0 auto 10px' }} />
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Select a thread</div>
+        <div className="v2-dim" style={{ fontSize: 12 }}>
+          Click any coach in the left panel to open the conversation.
+        </div>
+      </div>
+    </Card>
   )
 }
 
