@@ -13,9 +13,9 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | **C-217** Ist-Stand aller Module, je Kachel | lesend, alle Module | 2026-08-22 |
-| **Claude Code** | **G-155** jede Kachel als Bild | lesend, `apps/web` | 2026-08-22 |
-| **Codex** | **C-196** die 290 Substanzen in die 60 Spalten | `supabase/_pipeline/` | 2026-08-22 |
+| **Fable** | *frei* | | |
+| **Claude Code** | *frei* | | |
+| **Codex** | *frei* | | |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung — **Crawl 35 laeuft** | extern, siehe unten | 2026-08-20 |
 
 `[cmd]` **Wo die Kimi-Ergebnisse liegen** (Tom, 2026-08-22):

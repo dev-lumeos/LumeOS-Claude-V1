@@ -573,6 +573,418 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   bleibt in A-46 nachlesbar: die dortigen „2 je Seite" sind eine der
   Anmeldung plus eine der Seite.
 
+- [x] **G-156: Sechs Pauschalbanner behaupten das Gegenteil der
+  Datenbank** (neu 2026-08-22). **Zuerst, weil billig und weil er den
+  Orchestrator selbst getaeuscht hat.**
+
+  `[cmd]` Je Modul eine `ATTRAPPE`-Konstante in `ansicht.tsx`:
+
+  | Datei | Behauptung | tatsaechlich |
+  |---|---|---|
+  | `recovery/ansicht.tsx:66` | Schema fehlt | 3 Tabellen, 858 Zeilen |
+  | `medical/ansicht.tsx:56` | Schema fehlt | 12 Tabellen, 14.340 Zeilen |
+  | `coach/ansicht.tsx:67` | Schema fehlt | 12 Tabellen mit Seeds |
+  | `training/ansicht.tsx:63` | `sessions`/`sets` fehlen | heissen `workout_sessions` (60), `workout_sets` (202) |
+  | `goals/ansicht.tsx:69` | weder Ziele noch Koerpermasse | `user_goals` 11, `body_measurements` 362 |
+  | `supplements/tabs.tsx:36` | kein Schema | 14 Tabellen, `intake_logs` 720 |
+  | `nutrition/tab-plans.tsx:29` | kein Essensplan-Schema | `meal_plans` 2, `_weeks` 6, `_days` 42, `_entries` 112 |
+  | `nutrition/tab-prefs.tsx:28` | Vorlieben ohne Spalten | `food_preferences` mit Daten seit G-65 |
+
+  `[cmd]` **Korrekt bleibt nur `coach/ai/ansicht.tsx:62`** — `buddy`
+  hat 0 Tabellen.
+
+  `[read]` **Der Training-Fall ist der lehrreichste:** der Banner nennt
+  zwei Namen, die nie existiert haben, und schliesst daraus auf leere
+  Daten. **Vierter Fall desselben Musters an einem Tag** — nach
+  `tree_nuts` gegen `contains_nuts`, `SE` gegen `SER`,
+  `training.load_spike` gegen `ACWR_DATA`.
+
+  **Zu tun:** Pauschaltext raus. Wo eine Kachel weiter Entwurf ist,
+  bekommt sie einen eigenen, praezisen Grundtext — wie in `medical`,
+  wo die Detail-Banner bereits stimmen.
+
+  ### Erledigt 2026-08-22 — die Aussage hat sich verschoben
+
+  `[cmd]` **Alle acht Grundtexte sagen jetzt „noch nicht angebunden"
+  statt „gibt es nicht".** `training` nennt die richtigen Tabellen
+  (`workout_sessions`, `workout_sets`, Trainingskatalog),
+  `nutrition/tab-prefs` sagt praezise *„die Schalter schreiben
+  nichts"*.
+
+  `[cmd]` **`coach/ai` unangetastet** — der einzige Banner, der
+  stimmt, steht unveraendert.
+
+  `[cmd]` **Markenzahlen unveraendert:** recovery 36, training 38,
+  supplements 59, coach 33, nutrition 25, goals 23, medical 18.
+  78/78 Waechtertests gruen. Negativprobe gefuehrt: mit
+  zurueckgebautem Text schlaegt der neue Waechter an —
+  *„ATTRAPPE behauptet einen alten Schema-Stand"*.
+
+  `[cmd]` 14 Bildschirmfotos plus `schuss-ergebnisse.json` in
+  `backup/g156/`.
+
+  **Offen geblieben:** `medical/tab-tracking.tsx:39` — das ist G-170.
+
+- [x] **G-158: coach liest seine Daten an einer einzigen Stelle** (neu
+  2026-08-22). **Der klarste Fall.**
+
+  `[cmd]` 12 Tabellen mit Seeds seit `efbe396`: `relationships` 6,
+  `messages` 6, `pending_actions` 3, `client_autonomy` 5,
+  `autonomy_change_log` 8. **Echt gelesen wird nur
+  `client_permissions`** (`rechte-echt`).
+
+  `[cmd]` 33 Marken: `ansicht` 11 (Your coaches, Threads, Invites),
+  `tab-autonomie` 11, `tab-onboarding` 6, `tab-rechte` 5.
+
+  ### Erledigt 2026-08-22 — der halbe Auftrag hatte sich erledigt
+
+  `[cmd]` **Die G-90-Sperre ist weg:** `coach` steht in
+  `config.toml:23` unter den PostgREST-Schemata. `tab-autonomie`
+  rendert seither echt, ohne dass eine Zeile geaendert werden musste —
+  2 Einstufungen, 4 Log-Zeilen fuer `dev`.
+
+  `[cmd]` **Neu gebaut:** `uebersicht-echt.tsx` (185 Zeilen, **null
+  Attrappen-Props**) mit `CoachesEcht` und `ThreadsEcht`.
+  `rechte-read.ts` fragt jetzt **sieben** Tabellen ab —
+  `relationships` und `messages` kamen dazu.
+
+  `[cmd]` **Gemessen:** 6 Beziehungen gesamt, davon **1 fuer dev** per
+  RLS; `client_autonomy` 2, `autonomy_change_log` 4. Die Seite zeigt
+  genau das.
+
+  `[cmd]` **`test-user@lumeos.local` hat 0 Coach-Beziehungen** — die
+  Seeds haengen an `max.seed` (2), `sarah.seed` (2), `dev` (1),
+  `tom.seed` (1). Der Wechsel auf `dev` ist gemeldet, wie es die Regel
+  aus C-209 verlangt.
+
+  `[cmd]` 486/486 Tests gruen, Rot-Probe gefuehrt.
+
+  **Offen geblieben:** G-168 (Kopfzeile), G-169 (Check-ins), C-225
+  (vier Schreibwege), G-171 (Markenzahl misst nichts).
+
+- [x] **C-197: `compound_type` normalisieren** (neu 2026-08-22).
+
+  `[cmd]` **48 verschiedene Werte, teils doppelt in zwei Sprachen:**
+  `peptide` 54 **und** `Peptide` 9 · `mineral` 23 **und** `Mineral` 8 ·
+  `vitamin` 19 **und** `Vitamin` 6 · `AAS` 26, `AAS (17aa oral)` 22,
+  `aas_oral` 21, `aas_injectable` 10. **28 Zeilen ohne Wert.**
+
+  `[cmd]` **Vorlage liegt vor:** `taxonomy/medication_classes` (157
+  Klassen), `taxonomy/routes` (10).
+
+  `[read]` **Ohne das ist „zeig mir alle Peptide" nicht beantwortbar** —
+  und Enhanced/Peptide/Supplement nicht sauber trennbar.
+
+  ### Erledigt 2026-08-22 — neun Kategorien statt achtundvierzig
+
+  `[cmd]` **Drei kanonische Spalten neben den Rohspalten:**
+  `canonical_category` (290 gefuellt), `canonical_compound_type` (290),
+  `canonical_routes` (268). **`category` und `compound_type` bleiben
+  unveraendert, 0 `DROP COLUMN`** — die kanonische Fassung steht
+  daneben, bis Tom sie abgenommen hat.
+
+  `[cmd]` **Was es ist, getrennt von wie es hineingeht:** aus
+  `AAS (17aa oral)` wird `aas` **plus** `oral`. Routen: `oral` 250 ·
+  `intramuscular` 10 · `subcutaneous` 8 · `intranasal` 7 ·
+  `intravenous` 1.
+
+  `[cmd]` **Ein eigener Waechter erzwingt die Trennung:**
+  `RAISE EXCEPTION 'C-197: % nicht-Kimi-Zeilen haben kanonische
+  Taxonomie befuellt'` — die 276 F-05- und LumeOS-Zeilen koennen nicht
+  versehentlich gefuellt werden. Gemessen: **0**.
+
+  `[cmd]` 566 Zeilen unveraendert, Spalten 60 → 63, Sollstand
+  nachgezogen ohne Nachtrag, Negativprobe gefuehrt, Kette 87 Schritte
+  Exit 0.
+
+  `[read]` **Nebenbefund mitgedacht:** die neuen Spalten stehen im
+  Sollstand am Ende, weil ein `ALTER TABLE` auf der Live-Tabelle hinten
+  anhaengt — so stimmen frischer Kettenaufbau und spaeterer Live-Lauf
+  ueberein. Genau die Vorausschau, die C-226 gebraucht haette.
+
+- [x] **C-224: Der Substanz-Lesepfad und die Detailansicht** (neu
+  2026-08-22). **Laeuft bei Fable.** Der Punkt, der die Recherche
+  sichtbar macht.
+
+  **Tom, 2026-08-22:** *„wir recherchieren nicht daten dass sie dann
+  rumliegen"*
+
+  `[cmd]` **`apps/web` liest `supplements.substance_catalog` null
+  Mal.** Der Stack liest `supplement_catalog` — eine aeltere Tabelle
+  mit sechzehn Feldern.
+
+  `[cmd]` Danebenliegend, seit heute gefuellt: **60 Spalten auf 566
+  Zeilen**, davon 290 mit Kimi-Tiefe — `safety` 290, `regulatory` 290,
+  `warning_triggers` 290, `evidence_provenance` 286, `external_ids`
+  283, `quality` 237, `pharmacology` 237, `dosing` 175,
+  `interactions` 78, `wada_status` 290.
+
+  **Offen fuer Tom:** Detailansicht als Modal oder eigene Route? Bei
+  acht Bloecken mit Quellenangaben wird ein Modal eng, und ein
+  Direktlink auf eine Substanz waere nuetzlich. Fable meldet, was
+  traegt.
+
+  ### Erledigt 2026-08-22 — und der Befund war groesser als der Auftrag
+
+  `[cmd]` **Gebaut:** `substanz-read.ts` (156 Zeilen, Liste und
+  Einzelsatz getrennt), `api/supplements/substanz/route.ts` (34),
+  `substanz-anzeige.test.ts` (125, sieben Waechter).
+  `supplement_catalog` (44 Zeilen) unberuehrt.
+
+  `[cmd]` **Detailansicht mit acht Bloecken** in Auftragsordnung,
+  Einstieg ueber den Catalog-Tab, Deep-Link
+  `?tab=catalog&substanz=<id>`. **Zuteilung zum Stack** ueber den
+  G-148-Schreibweg, um `stack_id` erweitert, mit Besitzpruefung.
+
+  `[read]` **Herkunft je Feld:** `evidence_provenance` wird
+  nachgeschlagen und als Klasse · `source_id` · Stichtag daneben
+  gestellt. Fehlt sie, steht **„ohne Herkunft" in Warnfarbe** — nichts
+  wird still gezeigt. Leeres erzeugt kein Feld, keinen Platzhalter,
+  keinen Strich.
+
+  `[cmd]` **Der Befund, der C-226 ausgeloest hat:** die Live-Datenbank
+  hat 31 Spalten, nicht 60. Dreimal gemessen. Fable hat deshalb
+  tolerant gebaut — `select('*')`, die Tiefenbloecke erscheinen am Tag
+  des Einspielens ohne eine Zeile Codeaenderung, und der Waechtertest
+  deckt beide Zustaende mit eigenen Fixtures ab.
+
+  `[cmd]` Zuteilung nachgewiesen auf `dev@lumeos.app`
+  (`stack_items` 4→5), **Rueckbau gezaehlt** (`DELETE 1`, wieder 4).
+  Passwort-Hash fuer die Anmeldung gesetzt und zurueckgesetzt,
+  Sicherungstabelle gedroppt. 496/496 Tests.
+
+  **Offen geblieben:** die Evidenz-Zaehler stehen bei allen Kimi-Saetzen
+  auf 0 und lesen sich nach dem Einspielen wie *„keine Studien"* —
+  Quellenproblem, kein Anzeigeproblem.
+
+- [x] **G-166: Der Erfahrungsgrad ist gebaut und markiert sich nicht**
+  (neu 2026-08-22). **Laeuft bei Claude Code.**
+
+  `[cmd]` **`formular.tsx:267` behauptet in Grossbuchstaben:** *„DIE
+  SPALTE GIBT ES NOCH NICHT. `public.profiles` fuehrt 14 Spalten, keine
+  davon nimmt den Grad auf."*
+
+  `[cmd]` **`public.profiles` hat 15 Spalten**, die letzte heisst
+  `experience_level`, Typ `text`. Sie ist inzwischen angelegt worden,
+  der Kommentar nie nachgezogen. **Achter Fall desselben Musters an
+  einem Tag.**
+
+  `[cmd]` Und alles andere ist fertig verdrahtet: `profile-model.ts:160`
+  validiert gegen `EXPERIENCE_LEVELS`, Zeile 86–89 fuehrt
+  `beginner`/`advanced`/`pro`/`elite` mit Text, `profile-write.ts:36`
+  schreibt, `formular.tsx:312` hat den Klick mit Umschaltlogik.
+
+  `[read]` **Es fehlt nur die sichtbare Markierung.** Die Auswahl zeigt
+  sich ueber `aria-pressed` und einen Rahmenwechsel; `activity_level`
+  daneben hat dieselbe Bauart und rastet sichtbar ein. **Tom sieht
+  keinen Punkt.**
+
+  ### Erledigt 2026-08-22 — eine Zeile, und ein Test, der sich selbst bestaetigte
+
+  `[cmd]` **Die Ursache war `data-on`.** `v2.css:1402` faerbt
+  `.v2-wahl[data-on="true"] .v2-wahl-punkt`. `activity_level` setzt das
+  Attribut, der Erfahrungsgrad setzte stattdessen einen eigenen
+  Inline-Stil — **die Kachel toente sich ein, der Punkt blieb leer.**
+  `[read]` Zwei Bauarten fuer dieselbe Sache: deshalb fiel es an der
+  einen auf und an der anderen nie.
+
+  `[cmd]` **Alle vier Stufen durchgemessen**, je PUT 200, nach
+  Neuladen gefuellt, Markierung sichtbar — gemessen wird die
+  berechnete `backgroundColor` des Punktes, nicht das Attribut.
+  Abwaehlen leert korrekt.
+
+  `[cmd]` Der Kommentar nennt jetzt Stichtag, alten Wortlaut und dass
+  C-140 die Spalte anlegte. **`public.profiles` hat 15 Spalten**,
+  `test-user` traegt `advanced`, `dev` traegt `pro`.
+
+  `[read]` **Der Teil, der mehr wert ist als die Reparatur:** Beim
+  Rueckbau blieb der eigene Test **zweimal gruen** — erst las ein
+  Fenster fester Laenge das `data-on` des Nachbarknopfs mit, dann fand
+  die Pruefung das Wort im eigenen Kommentar darueber und
+  **bestaetigte sich selbst.** Dieselbe Selbstbestaetigung wie beim
+  Nummernwaechter. **Kein gruener Lauf haette das gezeigt, nur der
+  absichtliche Rueckbau.**
+
+  `[cmd]` 489/489 Tests, Gate 11/11, drei neue Waechter in
+  `wahl-markierung.test.ts`.
+
+- [x] **C-226: Sechs Auftraege sind committet und nie eingespielt**
+  (neu 2026-08-22). **Laeuft bei Codex. Vorrang vor allem.**
+
+  `[cmd]` **Live 31 Spalten, committet 63.** Nicht in der laufenden
+  Instanz: **C-191** (ApoB/Prolactin), **C-192**
+  (`food_preference_search_targets`), **C-195** (29 Spalten),
+  **C-196** (290 Kimi-Saetze gehoben), **C-197** (drei kanonische
+  Spalten), **C-215** (ACWR raus).
+
+  `[read]` **Der Fehler ist der des Orchestrators.** In jedem
+  Pipeline-Auftrag stand *„Wegwerf-Datenbank, danach verwerfen"* —
+  richtig, aber **es stand nie ein Schritt danach.** Der Auftrag endete
+  beim gruenen Kettenlauf auf einer Datenbank, die anschliessend
+  geloescht wird. Codex hat jedes Mal genau das getan.
+
+  `[read]` **Und die Pruefung war formal richtig, inhaltlich blind:**
+  gemessen wurde, dass *das Skript* 60 Spalten erzeugt. Bei C-195
+  steht *„Live-Datenbank unberuehrt: 31 Spalten"* sogar als **Beleg
+  fuer saubere Arbeit** im Abschluss. Aufgefallen ist es Fable, als es
+  in C-224 etwas anzeigen wollte.
+
+  `[cmd]` **Sicherung liegt:**
+  `backup/vollsicherung/20260822_192657_lumeos_voll.dump` (17,4 MB,
+  custom, `auth`-Schema enthalten) und `.sql` (128,5 MB Klartext),
+  1.050.867 Zeilen, `COPY`-Bloecke gegengeprueft.
+
+  **Drei Schritte:** Sicherung auf einer Wegwerf-Instanz
+  zurueckspielen und 19 Zeilenzahlen gegenzaehlen · die sechs
+  Aenderungen auf der Kopie proben (mit Toms Daten, nicht frisch
+  aufgebaut) · erst dann die laufende Instanz, mit zweiter Sicherung
+  davor.
+
+  ### Erledigt 2026-08-22 — die Woche ist auf Toms Rechner angekommen
+
+  `[cmd]` **`substance_catalog`: 31 → 63 Spalten.** Gefuellt `safety`
+  290, `regulatory` 290, `warning_triggers` 290, `evidence_provenance`
+  286, `canonical_category` 290, `wada_status` 290.
+
+  `[cmd]` **Elf Zaehlungen selbst nachgemessen, elf mal gleich:**
+  `meal_items` 9.051 · `meals` 2.895 · `water_logs` 1.263 ·
+  `intake_logs` 720 · `checkins` 340 · `scores` 340 ·
+  `body_measurements` 362 · `foods` 7.140 · `workout_sets` 202 ·
+  `lab_result_values` 280 · `substance_catalog` 566. **Kein Datensatz
+  verloren.**
+
+  `[cmd]` `acwr_used`, `acwr_for_day`, `training_load_score` — alle
+  drei weg. `food_preference_search_targets` existiert.
+  `biomarker_reference_ranges` 566.
+
+  `[cmd]` **251 Policies, vier mehr als vorher** — genau die vier der
+  neuen Cache-Tabelle. `pg_restore` laesst Policies sonst still fallen.
+
+  `[read]` **Der Fund, den nur das echte Rueckspielen bringt:** der
+  Vollrestore scheiterte an einem Supabase-internen
+  `graphql_public.graphql`-GRANT und lief mit `--no-privileges` sauber
+  durch. **Ein ungeprueftes Backup ist kein Backup.**
+
+  `[cmd]` Sicherungen: `20260822_192657` (vorher) und `20260822_193613`
+  (vor dem Live-Lauf), je 17,4 MB custom und 128 MB Klartext.
+
+  **Offen geblieben:** `058b` (shopping_lists) ist nie live gelaufen —
+  nicht beauftragt, richtig ausgelassen. **Damit ist unbekannt, welche
+  Kettenschritte sonst noch nie live liefen.**
+
+- [x] **C-227: Kategorienfilter und Farben im Substanzkatalog** (neu
+  2026-08-22). **Laeuft bei Fable.** Aus Toms Katalogvorgabe.
+
+  **Tom, 2026-08-22:** *„kategorien mit farben kennzeichnen auch in
+  der liste"*
+
+  `[cmd]` Moeglich geworden durch C-197: **neun kanonische Kategorien
+  statt achtundvierzig Werten.** `peptide` 60 · `aas` 31 ·
+  `botanical` 26 · `sports_ingredient` 24 · `mineral` 23 ·
+  `vitamin` 19 · `performance` 19 · `protein_amino_acid` 16 ·
+  276 ohne Zuordnung.
+
+  `[read]` **Die 276 sind nicht „sonstige", sie sind unzugeordnet** —
+  F-05-Kandidaten und LumeOS-Eintraege ohne Kimi-Satz.
+
+  `[cmd]` **A-31 gilt hier:** die elf Modul-Akzente liegen alle bei
+  Luminanz 0,74–0,80 und sind unter Farbfehlsichtigkeit nicht
+  unterscheidbar. **Neun Kategorien in derselben Falle waeren derselbe
+  Fehler noch einmal** — Farbe darf nicht das einzige Merkmal sein.
+
+  **Sichtbar wird es erst nach C-226.**
+
+  ### Erledigt 2026-08-22 — 25 Kategorien, nicht neun
+
+  `[cmd]` **Selbst nachgezaehlt: 25 kanonische Werte.** Die acht
+  grossen stimmen exakt (218 zusammen), daneben 17 kleinere bis
+  `beta2_agonist` 1. **290 gefuellt, 276 leer, 566 gesamt.**
+
+  `[read]` **Der Orchestrator hatte „neun Kategorien" beauftragt** —
+  er hatte Codex' Rangliste *„groesste kanonische Kategorien"* fuer
+  vollstaendig gehalten. **Fable hat nachgezaehlt und die Filterleiste
+  dynamisch aus den Daten gebaut statt aus dem Auftrag.** Deshalb ist
+  nichts hartkodiert.
+
+  `[cmd]` **Zehn Farbvariablen, jede genau zweimal** (hell und dunkel).
+  `substanz-detail.tsx`: **0 Hex, 0 oklch, 0 rgb.** A-31 beherzigt —
+  die Toene variieren die Luminanz (0,52–0,86 dunkel; 0,45–0,62 hell),
+  nicht nur den Farbton, und jede Kennzeichnung traegt ihr Textlabel.
+
+  `[cmd]` Gemessen im Browser: `peptide` + `aas` → **91 Treffer**
+  (60+31), `unzugeordnet` → **276**. Sieben Waechter, Rot-Probe
+  gefuehrt.
+
+  `[read]` **Routenfilter gemeldet, nicht gebaut** — `[cmd]` ohne orale
+  Route sind es 18 Substanzen (`aas` 10, `peptide` 8), und der
+  Kategorienfilter beantwortet *„was muss ich spritzen?"* bereits.
+  **Eine moegliche, keine sinnvolle Frage.**
+
+  `[cmd]` **Und das Entscheidende:** die C-224-Detailansicht zeigt seit
+  dem Einspielen echte Tiefe mit Herkunftsvermerken — **ohne eine Zeile
+  Codeaenderung**, wie zugesagt. Beleg:
+  `backup/c227-detail-bpc157-hell.png`.
+
+  **Bei Tom:** 17 der 25 Kategorien haben unter 15 Substanzen, sechs
+  genau eine. Ob sie zusammengehen, ist die Taxonomie-Abnahme.
+
+- [x] **G-167: Extended an den Erfahrungsgrad binden — als
+  Provisorium** (neu 2026-08-22).
+
+  **Tom, 2026-08-22:** *„das ist proforma fuer heute unter
+  entwicklung … spaeter die definierten logiken — modul hinzukaufen,
+  tierlevel, kombination — es ist noch nicht definiert, also legen wir
+  es jetzt auf pro und elite."*
+
+  `[cmd]` **Extended ist heute gar nicht gegated.** `tabs.tsx` liest
+  `EXTENDED_STACK` aus einer Konstante, ohne jede Pruefung.
+
+  `[cmd]` `SUBSCRIPTION_GATES_ADR` sagt fuer V1 ausdruecklich *„Kein
+  Tier-Lock, kein Paywall"* — **das bleibt richtig: der Erfahrungsgrad
+  ist kein Tarif, sondern Selbstauskunft.**
+
+  `[cmd]` Der Hinweistext in Settings sagt *„Extended ab Advanced"* und
+  widerspricht Toms Vorgabe. Er steht nicht im Quelltext — er liegt in
+  den Uebersetzungsdateien.
+
+  **Der Kern des Punktes:** an beide Stellen ein Satz, der sagt, dass
+  es vorlaeufig ist, dass die Regelung offen ist, und was zur Wahl
+  steht — zubuchbares Modul, Tarifstufe oder Kombination.
+  `[read]` **Ohne diesen Satz wird das Provisorium in vier Wochen als
+  Entscheidung gelesen.** Genau so sind die Banner entstanden, die
+  heute einen halben Tag gekostet haben.
+
+  ### Erledigt 2026-08-22 — eine Konstante verschoben, kein Gate gebaut
+
+  `[cmd]` **Der Auftragsbefund war falsch: Extended war bereits
+  gegated.** `ansicht.tsx:261` — `gate?.offen ? <SuppExtended /> :
+  <ExtendedGesperrt …>`, dazu `extended-gate.tsx` und `ladeGate`, seit
+  G-110/G-92. **`tabs.tsx` liest `EXTENDED_STACK` nur fuer die Zahl am
+  Tab, nicht fuer den Inhalt.** Die Grenze stand auf `advanced` (C-113).
+
+  `[cmd]` **Fuenf Faelle gemessen:** ohne Grad, `beginner`, `advanced`
+  gesperrt — `pro` und `elite` offen. **Der Tab bleibt in allen fuenf
+  sichtbar.** `advanced` war vorher offen und ist jetzt zu.
+
+  `[cmd]` **Der Settings-Text kann nicht mehr veralten:**
+  `formular.tsx:365` schreibt `ab <em>{EXPERIENCE_LEVEL_INFO[
+  GRAD_FUER_EXTENDED].label}</em>` — er liest die Konstante, statt eine
+  Stufe fest zu nennen. Besser als beauftragt.
+
+  `[cmd]` **`subscription_tier`: 0 Treffer.** Der ADR fuer V1 ist
+  eingehalten — der Erfahrungsgrad ist Selbstauskunft, kein Tarif.
+
+  `[read]` **A-30 vorbeugend vermieden:** `regeln-read.ts` zieht
+  `next/headers` ueber `@lumeos/shared/session`; ein Wert-Import daraus
+  in eine `'use client'`-Datei haette Typecheck gruen und jede Seite
+  HTTP 500 ergeben — gemessen in G-74, G-79, G-97, A-30. Regel und
+  Satz liegen deshalb in `extended-regel.ts`, serverfrei, nach dem
+  `rechte-modell.ts`-Muster.
+
+  `[cmd]` Die bestehende G-110-Pruefung hat den Wechsel gemeldet
+  (`'pro' !== 'advanced'`) und wurde nachgezogen statt umgangen — genau
+  ihr Zweck. 509/509 Tests, sechs Bildschirmfotos.
+
 ## B — Entwicklungsumgebung & Absicherung
 
 - [x] **B-12: Cookie-Bereich über Apps hinweg** — **entschieden und

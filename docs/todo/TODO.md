@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 208 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 210 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -4331,19 +4331,6 @@ Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
   `missing_fields` und `missing_reason` wandern mit — sie sagen, warum
   eine Zahl fehlt.
 
-- [ ] **C-197: `compound_type` normalisieren** (neu 2026-08-22).
-
-  `[cmd]` **48 verschiedene Werte, teils doppelt in zwei Sprachen:**
-  `peptide` 54 **und** `Peptide` 9 · `mineral` 23 **und** `Mineral` 8 ·
-  `vitamin` 19 **und** `Vitamin` 6 · `AAS` 26, `AAS (17aa oral)` 22,
-  `aas_oral` 21, `aas_injectable` 10. **28 Zeilen ohne Wert.**
-
-  `[cmd]` **Vorlage liegt vor:** `taxonomy/medication_classes` (157
-  Klassen), `taxonomy/routes` (10).
-
-  `[read]` **Ohne das ist „zeig mir alle Peptide" nicht beantwortbar** —
-  und Enhanced/Peptide/Supplement nicht sauber trennbar.
-
 ### Medikamente — Zeilen da, Spalten leer
 
 - [ ] **C-198: ATC, CAS und CYP der 498 Wirkstoffe nachziehen**
@@ -4757,36 +4744,6 @@ falsch.** Und der groesste Posten ist nicht fehlendes Schema, sondern
 
 ### Die falschen Banner — eine Zeile je Modul
 
-- [ ] **G-156: Sechs Pauschalbanner behaupten das Gegenteil der
-  Datenbank** (neu 2026-08-22). **Zuerst, weil billig und weil er den
-  Orchestrator selbst getaeuscht hat.**
-
-  `[cmd]` Je Modul eine `ATTRAPPE`-Konstante in `ansicht.tsx`:
-
-  | Datei | Behauptung | tatsaechlich |
-  |---|---|---|
-  | `recovery/ansicht.tsx:66` | Schema fehlt | 3 Tabellen, 858 Zeilen |
-  | `medical/ansicht.tsx:56` | Schema fehlt | 12 Tabellen, 14.340 Zeilen |
-  | `coach/ansicht.tsx:67` | Schema fehlt | 12 Tabellen mit Seeds |
-  | `training/ansicht.tsx:63` | `sessions`/`sets` fehlen | heissen `workout_sessions` (60), `workout_sets` (202) |
-  | `goals/ansicht.tsx:69` | weder Ziele noch Koerpermasse | `user_goals` 11, `body_measurements` 362 |
-  | `supplements/tabs.tsx:36` | kein Schema | 14 Tabellen, `intake_logs` 720 |
-  | `nutrition/tab-plans.tsx:29` | kein Essensplan-Schema | `meal_plans` 2, `_weeks` 6, `_days` 42, `_entries` 112 |
-  | `nutrition/tab-prefs.tsx:28` | Vorlieben ohne Spalten | `food_preferences` mit Daten seit G-65 |
-
-  `[cmd]` **Korrekt bleibt nur `coach/ai/ansicht.tsx:62`** — `buddy`
-  hat 0 Tabellen.
-
-  `[read]` **Der Training-Fall ist der lehrreichste:** der Banner nennt
-  zwei Namen, die nie existiert haben, und schliesst daraus auf leere
-  Daten. **Vierter Fall desselben Musters an einem Tag** — nach
-  `tree_nuts` gegen `contains_nuts`, `SE` gegen `SER`,
-  `training.load_spike` gegen `ACWR_DATA`.
-
-  **Zu tun:** Pauschaltext raus. Wo eine Kachel weiter Entwurf ist,
-  bekommt sie einen eigenen, praezisen Grundtext — wie in `medical`,
-  wo die Detail-Banner bereits stimmen.
-
 - [ ] **G-157: Eine Kachel zeigt erfundene Zahlen ohne Marke** (neu
   2026-08-22).
 
@@ -4807,17 +4764,6 @@ falsch.** Und der groesste Posten ist nicht fehlendes Schema, sondern
 `[read]` Diese Punkte brauchen **kein Schema und keine Entscheidung**.
 Die Tabellen sind da, gefuellt, und in denselben Modulen liest schon
 etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
-
-- [ ] **G-158: coach liest seine Daten an einer einzigen Stelle** (neu
-  2026-08-22). **Der klarste Fall.**
-
-  `[cmd]` 12 Tabellen mit Seeds seit `efbe396`: `relationships` 6,
-  `messages` 6, `pending_actions` 3, `client_autonomy` 5,
-  `autonomy_change_log` 8. **Echt gelesen wird nur
-  `client_permissions`** (`rechte-echt`).
-
-  `[cmd]` 33 Marken: `ansicht` 11 (Your coaches, Threads, Invites),
-  `tab-autonomie` 11, `tab-onboarding` 6, `tab-rechte` 5.
 
 - [ ] **G-159: training Today zeigt nicht, was History liest** (neu
   2026-08-22).
@@ -5017,3 +4963,58 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Varianten so, wie gedacht**, solange die Obergrenze vom Rechtsraum
   abhaengt. Das ist die eigentliche Frage: **gilt fuer einen Nutzer in
   Thailand die US-Zahl oder die EFSA-Zahl?**
+
+- [ ] **G-168: Die coach-Kopfzeile widerspricht dem eigenen Tab** (neu
+  2026-08-22). Aus G-158.
+
+  `[cmd]` *„4 active · 1 unread"* liest weiter den Entwurf, waehrend
+  der Messages-Tab echt **0 ungelesen** zeigt. Eine Zeile.
+
+- [ ] **G-169: `coach.checkins` und `checkin_templates` liegen
+  ungelesen** (neu 2026-08-22). Aus G-158.
+
+  `[cmd]` `checkins` 6, `checkin_templates` 2 — nach G-158 der
+  billigste Treffer im Modul.
+
+- [ ] **C-225: Vier Schreibwege fehlen in coach** (neu 2026-08-22).
+  Aus G-158.
+
+  `[cmd]` Antworten (`messages` INSERT), Einladen (`relationships`
+  INSERT mit `status='invited'`), Als-gelesen (`messages` UPDATE
+  `read_at`), und **`coach_profiles`** als Namensquelle —
+  `[cmd]` `to_regclass('coach.coach_profiles')` ist `null`.
+
+  `[read]` **Es gibt heute keine Namensquelle:** `public.profiles`
+  fuehrt kein Namensfeld. Die Kachel zeigt Rolle und Kurzkennung und
+  sagt das sichtbar dazu, statt einen Namen zu erfinden — richtig so.
+
+  `[read]` Der ADR *„Coach schreibt nie direkt"* ist davon unberuehrt:
+  hier schreibt der Klient.
+
+- [ ] **G-170: `medical/tab-tracking` behauptet ein fehlendes Schema**
+  (neu 2026-08-22). Aus G-156. **Neunter Fall desselben Musters.**
+
+  `[cmd]` `tab-tracking.tsx:39` sagt *„`medical.medications` — das
+  Schema gibt es noch nicht."* **Der Tabellenname stimmt nicht, die
+  Sache schon:** `medication_active_substances` **498**,
+  `_formulations` **453**, `_products` **448**.
+
+  `[read]` Dieselbe Klasse wie `training.sessions` gegen
+  `workout_sessions`. **Und es gehoert zum Substanz-Strang** —
+  genau diese Medikamente sollen sichtbar werden.
+
+- [ ] **G-171: Die Code-Markenzahl misst den Fortschritt nicht** (neu
+  2026-08-22). Aus G-158. Gehoert zu G-163.
+
+  `[cmd]` **33 → 33 Marken, und trotzdem sind Kacheln echt geworden.**
+  Keine Marke wurde entfernt; die markierten Entwuerfe rendern nur
+  nicht mehr, solange eine Sitzung besteht.
+
+  `[cmd]` Gerendert und angemeldet gemessen: Overview 7 → 6,
+  Messages 3 → 2, Autonomy 1 — die Reste sind die Buddy-Kontextkachel.
+
+  `[read]` **Solange Rueckfallfassungen existieren, zaehlt nur die
+  gerenderte Zahl.** Das macht G-163 dringender: betroffen sind
+  `supplements/tabs.tsx` (16), `nutrition/tab-prefs`,
+  `coach/tab-rechte`, plus die neuen Entwurfszweige von Autonomy,
+  Overview und Messages.

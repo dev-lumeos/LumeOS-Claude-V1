@@ -207,48 +207,50 @@ wenn er erzeugt und geprüft wird.
 |---|---|---:|
 | **C-195** `substance_catalog` auf die Kimi-Tiefe bringen | offen | 4289 |
 | **C-196** Die 290 Substanzen in die neue Tiefe importieren | offen | 4318 |
-| **C-197** `compound_type` normalisieren | offen | 4334 |
-| **C-198** ATC, CAS und CYP der 498 Wirkstoffe nachziehen | offen | 4349 |
-| **C-199** `medication_regulatory` als eigene Entitaet | offen | 4361 |
-| **C-200** Symptomtabelle anlegen und fuellen | offen | 4375 |
-| **C-201** Der Populations-Atlas hat kein Schema | offen | 4389 |
-| **C-202** Produkte, Marken, Hersteller, Kennungen | offen | 4409 |
-| **C-203** Beobachtung gegen Erwartung (crawl_033) | offen | 4423 |
-| **C-204** `lab_trigger_index` — 77 Analyte | offen | 4436 |
-| **C-205** `research_hold_registry` — 305 Saetze | offen | 4442 |
-| **C-206** Die Community-Schicht — nur Admin, oder nie? | offen | 4449 |
-| **C-207** Vier Entscheidungen aus dem 035-Handoff | offen | 4466 |
-| **C-208** C-129 neu fassen — der Import ist laengst passiert | offen | 4482 |
-| **C-209** Die laufende Instanz wird nach einem Kettenschritt nicht | offen | 4494 |
-| **C-210** Die 28 fehlenden Naehrstofftexte — was ist gemeint? | offen | 4539 |
-| **C-211** Selen fehlt im BLS-Katalog | offen | 4555 |
-| **C-212** `CHORL` haengt nicht im Naehrstoffbaum | offen | 4565 |
-| **C-213** C-124-E8 — die Arzt-Hinweis-Schwelle ist offen | offen | 4572 |
-| **C-214** Fuenf Modalitaeten ohne Registerzeile | offen | 4579 |
-| **A-48** Der Index wird vor dem `git add` nicht geleert | offen | 4590 |
-| **C-215** ACWR rechnet in der Datenbank weiter | offen | 4606 |
-| **C-216** Nachweisdateien blockieren das ganze Repo | offen | 4642 |
-| **C-217** Was ist gebaut, was ist Attrappe — je Modul, je Kachel | offen | 4667 |
-| **G-155** Jede Kachel jedes Moduls als Bild | offen | 4693 |
-| **C-218** Frontend und Datenbank normieren den Recovery-Score | offen | 4703 |
+| **C-198** ATC, CAS und CYP der 498 Wirkstoffe nachziehen | offen | 4336 |
+| **C-199** `medication_regulatory` als eigene Entitaet | offen | 4348 |
+| **C-200** Symptomtabelle anlegen und fuellen | offen | 4362 |
+| **C-201** Der Populations-Atlas hat kein Schema | offen | 4376 |
+| **C-202** Produkte, Marken, Hersteller, Kennungen | offen | 4396 |
+| **C-203** Beobachtung gegen Erwartung (crawl_033) | offen | 4410 |
+| **C-204** `lab_trigger_index` — 77 Analyte | offen | 4423 |
+| **C-205** `research_hold_registry` — 305 Saetze | offen | 4429 |
+| **C-206** Die Community-Schicht — nur Admin, oder nie? | offen | 4436 |
+| **C-207** Vier Entscheidungen aus dem 035-Handoff | offen | 4453 |
+| **C-208** C-129 neu fassen — der Import ist laengst passiert | offen | 4469 |
+| **C-209** Die laufende Instanz wird nach einem Kettenschritt nicht | offen | 4481 |
+| **C-210** Die 28 fehlenden Naehrstofftexte — was ist gemeint? | offen | 4526 |
+| **C-211** Selen fehlt im BLS-Katalog | offen | 4542 |
+| **C-212** `CHORL` haengt nicht im Naehrstoffbaum | offen | 4552 |
+| **C-213** C-124-E8 — die Arzt-Hinweis-Schwelle ist offen | offen | 4559 |
+| **C-214** Fuenf Modalitaeten ohne Registerzeile | offen | 4566 |
+| **A-48** Der Index wird vor dem `git add` nicht geleert | offen | 4577 |
+| **C-215** ACWR rechnet in der Datenbank weiter | offen | 4593 |
+| **C-216** Nachweisdateien blockieren das ganze Repo | offen | 4629 |
+| **C-217** Was ist gebaut, was ist Attrappe — je Modul, je Kachel | offen | 4654 |
+| **G-155** Jede Kachel jedes Moduls als Bild | offen | 4680 |
+| **C-218** Frontend und Datenbank normieren den Recovery-Score | offen | 4690 |
 
 ## M — Die Module sagen die Unwahrheit ueber sich selbst
 
 | | Zustand | Zeile |
 |---|---|---:|
-| **G-156** Sechs Pauschalbanner behaupten das Gegenteil der | offen | 4760 |
-| **G-157** Eine Kachel zeigt erfundene Zahlen ohne Marke | offen | 4790 |
-| **G-158** coach liest seine Daten an einer einzigen Stelle | offen | 4811 |
-| **G-159** training Today zeigt nicht, was History liest | offen | 4822 |
-| **G-160** recovery Messwerte liegen in `checkins` | offen | 4833 |
-| **G-161** nutrition Meal plans — der krasseste Fall | offen | 4845 |
-| **G-162** supplements Compliance und medical Tracking | offen | 4853 |
-| **G-163** 16 markierte Rueckfallfassungen in supplements | offen | 4861 |
-| **C-219** Tabellen, die die Spec kennt und die es nicht gibt | offen | 4874 |
-| **C-220** `buddy` — 0 von 16 Tabellen | offen | 4897 |
-| **G-164** Drei Module des Vorgaengers haben hier kein Gegenstueck | offen | 4908 |
-| **A-49** Der Attrappen-Waechter traegt eine veraltete Behauptung | offen | 4921 |
-| **C-221** `supplement_interactions` ist eine tote Spec-Tabelle | offen | 4928 |
-| **G-165** `nutrition-foods` zahlt die Preference-Kosten zweimal | offen | 4935 |
-| **C-222** `monitoring` fehlt als siebter Block | offen | 4950 |
-| **C-223** `dose_ceiling_value numeric` ist die falsche Form | offen | 4973 |
+| **G-157** Eine Kachel zeigt erfundene Zahlen ohne Marke | offen | 4747 |
+| **G-159** training Today zeigt nicht, was History liest | offen | 4768 |
+| **G-160** recovery Messwerte liegen in `checkins` | offen | 4779 |
+| **G-161** nutrition Meal plans — der krasseste Fall | offen | 4791 |
+| **G-162** supplements Compliance und medical Tracking | offen | 4799 |
+| **G-163** 16 markierte Rueckfallfassungen in supplements | offen | 4807 |
+| **C-219** Tabellen, die die Spec kennt und die es nicht gibt | offen | 4820 |
+| **C-220** `buddy` — 0 von 16 Tabellen | offen | 4843 |
+| **G-164** Drei Module des Vorgaengers haben hier kein Gegenstueck | offen | 4854 |
+| **A-49** Der Attrappen-Waechter traegt eine veraltete Behauptung | offen | 4867 |
+| **C-221** `supplement_interactions` ist eine tote Spec-Tabelle | offen | 4874 |
+| **G-165** `nutrition-foods` zahlt die Preference-Kosten zweimal | offen | 4881 |
+| **C-222** `monitoring` fehlt als siebter Block | offen | 4896 |
+| **C-223** `dose_ceiling_value numeric` ist die falsche Form | offen | 4919 |
+| **G-168** Die coach-Kopfzeile widerspricht dem eigenen Tab | offen | 4967 |
+| **G-169** `coach.checkins` und `checkin_templates` liegen | offen | 4973 |
+| **C-225** Vier Schreibwege fehlen in coach | offen | 4979 |
+| **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 4994 |
+| **G-171** Die Code-Markenzahl misst den Fortschritt nicht | offen | 5006 |
