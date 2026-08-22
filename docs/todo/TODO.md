@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-21.** 166 offen, 1 in Arbeit.
+**Stand: 2026-08-22.** 163 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -845,229 +845,6 @@ Quelle und Belege: `docs/ssot/154-preferences.md`.
   seit dem Fix vom 2026-08-20). Entweder `coach-portal-fuellen.sql` an
   den Auffrisch-Ablauf anhängen oder in den Seed-Erzeuger ziehen.
 
-- [ ] **C-105: MEV/MAV/MRV haben keine Tabelle** (neu 2026-08-19).
-
-  ### Auftrag (zurueckgeholt 2026-08-21)
-
-  **`MAV` entfernen** — `DO_NOT_IMPLEMENT`, kein Ersatzwert.
-  **`MEV` als Richtungshinweis** (`USE_DIRECTIONAL_GUIDANCE`), **`MRV`
-  und das RP-Rahmenwerk als Heuristik beschriften**
-  (`LABEL_HEURISTIC`). **`LANDMARKS` im Mockup darf Zahlen je
-  Muskelgruppe tragen — als Orientierung, nicht als Messwert.**
-
-  Befund aus G-69.
-
-  `[cmd]` **Sie stehen nur in Vorlagendateien.** `[read]` **Die Regel
-  greift dreimal:** Volume landmarks bleibt Attrappe, **das Zielband der
-  Volumenkachel** (*14/16 Saetze*) und **die Einstufung
-  Beginner…Elite** in den Standards fallen aus demselben Grund weg.
-
-  `[read]` **Es sind Schwellen aus der Trainingsliteratur** — sie
-  brauchen eine Quelle, wie die Referenzbereiche bei den Naehrstoffen
-  (C-45) und den Biomarkern (C-84). **Keine erfundene Zahl.**
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  2026-08-20). Aus C-180.
-
-  | | Einstufung | Handlung |
-  |---|---|---|
-  | **MEV** | HEURISTIC | `USE_DIRECTIONAL_GUIDANCE` |
-  | **MAV** | HEURISTIC | **`DO_NOT_IMPLEMENT`** |
-  | **MRV** | HEURISTIC | `LABEL_HEURISTIC` |
-  | RP-Rahmenwerk | HEURISTIC | `LABEL_HEURISTIC` |
-
-  `[read]` **Genau das Ergebnis, das der Auftrag als brauchbar benannt
-  hat:** *„MEV = brauchbares Produktmodell, aber kein wissenschaftlich
-  standardisierter Grenzwert."*
-
-  `[cmd]` **Und `LANDMARKS` im Mockup traegt Zahlen je Muskelgruppe** —
-  **sie duerfen als Orientierung stehen, nicht als Messwert.**
-
-- [ ] **C-124: Recovery-Recherche — Modalitaeten und Schwellen** (neu
-
-  ### Auftrag (zurueckgeholt 2026-08-21)
-
-  **Alle 30 Modalitaets-Bonuswerte entfernen** —
-  `REMOVE_NUMERIC_VALUE`, die Seed-Werte (2,76 / 0,13 / 0,05 /
-  −0,07) sind `not_evidence`. **An ihre Stelle tritt Richtung und
-  Endpunkt mit Quelle**, `current_value: null`. Die Kachel zeigt
-  dann *„Sauna: verbessert die Ausdauerleistung in Hitze (Grad C)“*
-  statt *„+2,76 Punkte“*.
-
-  2026-08-19). **E5 und E8 aus C-123.**
-
-  **Tom, 2026-08-19:** *„Womoeglich gibt ein Research Aufklaerung, wir
-  sind nicht die Ersten, die sowas bauen."*
-
-  ### E5 — Modalitaeten-Bonuswerte
-
-  `[cmd]` **Sauna, Massage, Eisbad, Dehnen** — je ein Bonuspunkt im
-  Score. **Keine Quelle im Repo.**
-
-  `[read]` **Was zu suchen ist:** Belegt die Sportwissenschaft eine
-  messbare Wirkung auf die Erholung — und in welcher
-  Groessenordnung? **Kaltwasserimmersion ist gut untersucht, Sauna
-  teilweise, Massage strittig.**
-
-  ### E8 — Motivations-Schwelle
-
-  `[cmd]` **Das Uebertrainings-Signal feuert bei niedriger Motivation.**
-  Die Schwelle stammt aus einer anderen Skala: `[annahme]` **≤ 5 von 10,
-  umgerechnet, nicht belegt.**
-
-  `[read]` **Und die E4-Frage gehoert dazu:** Wie viele Signale ueber wie
-  viele Tage rechtfertigen einen Arzt-Hinweis? **Uebertraining hat eine
-  Forschungsliteratur** — REST-Q, RESTQ-Sport, die Uebertrainings-Syndrom-
-  Kriterien.
-
-  `[read]` **Was nicht gesucht wird:** eine Diagnoseregel. **Nur die
-  Frage, ab wann eine Haeufung so ungewoehnlich ist, dass ein Hinweis
-  angebracht ist.**
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  2026-08-20). Aus C-180.
-
-  `[cmd]` **Alle 30 Modalitaets-Records: `REMOVE_NUMERIC_VALUE`.**
-  **Die Seed-Werte (2,76 / 0,13 / 0,05 / −0,07) sind als
-  `not_evidence` geflaggt.**
-
-  `[read]` **Der Orchestrator hatte es gemessen und gemeldet:** *„Das
-  sind Seed-Daten — ein Skript hat sie erzeugt, und dasselbe Skript hat
-  die Bonuswerte gesetzt."*
-
-  `[cmd]` **Was bleibt:** Richtung und Endpunkt mit Quelle. **Beispiel
-  Sauna:** `REC_SAUNA_ENDURANCE_HEAT`, *„improve_in_heat"*,
-  `SUPPORTED_DIRECTION_ONLY`, Grad C, PMID 16877041 — **`current_value:
-  null`.**
-
-  `[read]` **Damit zeigt die Kachel *„Sauna: verbessert die
-  Ausdauerleistung in Hitze (Grad C)"* statt *„+2,76 Punkte"*.**
-
-## D — Datenbank & Specs
-
-### Übrige DB-Punkte
-
-- [~] **D-05: Spec-Audit** — **zwei Durchgänge geleistet, Überführung offen.**
-  1. **Struktur** (2026-08-02): `docs/ssot/70-spec-audit/00-INDEX.md` — je
-     Modul eine Akte, modulübergreifende Widersprüche verifiziert.
-  2. **Feldabgleich** (2026-08-07, Block 18):
-     `docs/ssot/70-spec-audit/01-feldabgleich.md` — die im ersten Durchgang
-     ausdrücklich ausgelassene Folgearbeit.
-     `[cmd]` **4 Module vollständig** (Training, Nutrition, Goals,
-     WebPlatform), **9 nur eingestuft**. Grenze benannt statt überschritten:
-     `[cmd]` 161 Dateien, 48.633 Zeilen passen nicht in einen Durchgang.
-
-  **Der härteste Fund ist ein Muster, kein Modulproblem** `[cmd]`: **14
-  `FOR ALL`-Policies in vier Modulen** (Buddy 8, Marketplace 3, HumanCoach 2,
-  Nutrition-SQL 1) mit `USING`, aber **ohne `WITH CHECK`** — beim INSERT wird
-  `USING` nicht ausgewertet, die Policy erlaubt also das Einfügen fremder
-  `user_id`. Dazu `::text`-Casts auf UUID-Spalten. **Das steht dort als
-  Hausstil**: wer ein weiteres Modul „nach Spec" baut, baut das Leck erneut
-  ein. *Regel in die Konventionen, bevor irgendetwas überführt wird.*
-
-  **Zwei Korrekturen an bisherigen Annahmen** `[cmd]`:
-  - Training/SPEC_06 trägt **keine** `FOR ALL`-Policies — seine 16 Policies
-    sind operationsgetrennt. Das Leck liegt in den vier Modulen oben.
-  - `nutrition_targets` steht **nicht** in den Goals-Specs (dort 0 Treffer),
-    sondern in **Nutrition** SPEC_06 §14, „gecacht von Goals". **C-05 wartet
-    damit auf eine Nutrition-Tabelle, nicht auf das Goals-Schema** — der
-    kleinere Schritt. Siehe auch C-05.
-
-  **Empfehlung (Toms Entscheidung):** Ordner **nicht** löschen und **nicht**
-  als Ganzes überführen, sondern modulweise ausschlachten — Reihenfolge
-  Goals → `nutrition_targets` → Trainingsbetrieb (12 Tabellen, nur dort) →
-  Medical. Je Modul erst archivieren, wenn sein Inhalt in
-  `docs/spezifikation/` steht. Kopfhinweis „Altbestand, kein Sollwert" in
-  `docs/specs/`, sonst werden die Bestandszahlen wieder als Ist gelesen.
-  **In Block 18 wurde nichts verschoben, gelöscht oder überführt.**
-
-  **Nachgetragen 2026-08-16:** `[cmd]` Der Bericht stand bis dahin
-  **nicht im SSOT-Index** — deshalb hat ihn niemand gelesen. Jetzt
-  eingetragen.
-
-  `[cmd]` **Der dort genannte haerteste Fund ist erledigt, ohne dass es
-  jemand bemerkt hat:** *„14 `FOR ALL`-Policies in vier Modulen mit
-  `USING`, aber ohne `WITH CHECK` — ein INSERT-Leck."* Heute: **null
-  solche Policies**, die Trennung je Operation kam mit C-42. **Der
-  Befund betraf die Specs, nicht das Gebaute.**
-
-  **Vor jedem neuen Modul die zugehoerige Modulakte lesen** — `[read]`
-  das gehoert zu Schritt 1c in `00-UMSETZUNGSPLAENE.md`.
-
-## E — Legacy-Cloud-Instanz (LumeOS-V2)
-
-*`[cmd]` Stand 2026-08-14: D-12 ist erledigt, E-01 bis E-03, E-05, E-06,*
-*E-11, E-12, E-13 und E-16 ebenfalls. Die Bestandszahlen unten stammen*
-*vom 2026-08-01 und beschreiben die Legacy-Instanz, nicht den Ist-Stand*
-*des Repos — der Trainings-Teil liegt seit 2026-08-07 lokal im Schema*
-*`training`. Nächster Schritt ist E-08.*
-
-**Ausgangslage:** Supabase-Cloud-Instanz `LumeOS-V2` (Org `dev-lumeos`, **Pro-Plan,
-wird bezahlt**, Branch `main` = Production, erreichbar). Testprojekt mit Dummydaten
-aus einer früheren LumeOS-Version. Entweder wir nutzen sie oder sie wird gelöscht —
-Entscheidung Tom: nutzen und passend konfigurieren.
-
-**Bestand, `[cmd]` gemessen 2026-08-01:**
-
-| Posten | Wert |
-|---|---|
-| Storage-Bucket `exercises` | 10.776 Objekte, **15 GB**, `public: true` |
-| `public.exercises` | 1.448 Zeilen |
-| `public.exercise_muscles` | 6.398 Zuordnungen über 1.362 Übungen, 149 Muskelgruppen |
-| `public.equipment` | 61 Einträge, **kein** `equipment_id` NULL |
-
-**Medienabdeckung je Übung:**
-
-| Feld | Vorhanden | Anteil |
-|---|---|---|
-| `instructions` | 1.448 | **100 %** |
-| `tips` | 1.444 | 99,7 % |
-| `image_male_start` | 1.370 | 95 % |
-| `video_url` | 1.274 | 88 % |
-| `image_male_end` | 737 | 51 % |
-| `image_female_start` / `_end` | 186 | **13 %** |
-| ganz ohne Medien | 40 | 2,8 % |
-| ohne Muskelzuordnung | 86 | 5,9 % |
-
-**Der eigentliche Wert sind die Texte, nicht die Dateien.** `instructions` und
-`tips` sind ausformulierte, mehrschrittige Anleitungen mit 100 % Abdeckung —
-der Posten, der bei Neuerzeugung am teuersten wäre. Danach kommen die 6.398
-Muskelzuordnungen (Fachwissen, normalisiert) und erst dann die 15 GB Medien.
-
-`[read]` Medien-URLs sind absolut und öffentlich:
-`https://<ref>.supabase.co/storage/v1/object/public/exercises/videos/<Kategorie>/<datei>.mp4`
-
-`[read]` Die Muskelzuordnung ist normalisiert in `public.exercise_muscles`
-(`exercise_id`, `muscle_group_id` UUID-FK, `role` primary/secondary).
-Die `text[]`-Spalten `primary_muscles`/`secondary_muscles` in `exercises` sind
-ein veraltetes Duplikat mit uneinheitlichen Strings — **nicht als Quelle nutzen.**
-
-### Was Supabase-Branching nicht kann
-
-`[read]` Offizielle Doku, geprüft 2026-08-01. Drei Punkte, die das Vorgehen bestimmen:
-
-1. **`main` bleibt Produktion, unwiderruflich.** Welcher Branch als
-   Produktions-Branch dient, lässt sich nicht ändern — das Basis-Projekt bleibt
-   immer Produktion. „Dev bauen und daraus `main` generieren" ist nicht möglich.
-   Die Richtung ist fest: Branch → Merge → Migrationen laufen auf `main`.
-2. **Branches enthalten keine Daten.** Ein Branch ist eine Kopie des Projekts
-   abzüglich der Daten; befüllt wird über `seed.sql`.
-3. **Branches haben eigenen Storage.** Jede Branch-Instanz enthält alle
-   Supabase-Dienste isoliert — **ein Dev-Branch hätte kein `exercises`-Bucket.**
-   Gegen die 15 GB liesse sich dort nicht testen.
-
-**Kosten:** Preview-Branches werden auf Pro stundenweise abgerechnet. Ein
-dauerhaft laufender Dev-Branch kostet laufend; ein Branch je Pull Request,
-der wieder verschwindet, kostet fast nichts.
-
-### Vorgehen
-
-`main` wird **umgebaut, nicht ersetzt** — die 15 GB und die 1.448 Übungen sind
-der Grund, das Projekt zu behalten. Was „dev neu bauen" wäre, passiert lokal:
-dort gibt es `supabase db reset`, kostenlos und beliebig oft.
-
 - [ ] **E-04: Alte `public`-Tabellen nach `legacy` verschieben** — nicht löschen.
   Kostet nichts, macht `public` frei für unsere Schemas, und die Daten bleiben
   greifbar. Bucket und `auth` bleiben unangetastet.
@@ -1349,70 +1126,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 
 
-
-- [ ] **GO-21: Taille:Huefte mit Geschlechtsbezug** (entschieden
-
-  ### Auftrag (zurueckgeholt 2026-08-21)
-
-  **Die WHO-Grenzwerte einbauen** — `BP-WHR-001`, Evidenzgrad A,
-  `KEEP_NUMERIC`: unter 0,90 bei Maennern, unter 0,80 bei Frauen.
-  **Ohne gesetztes Geschlecht keine Schwelle, nur das Verhaeltnis.**
-  **Sprachregel:** *„unter dem Grenzwert“*, nicht *„gesund“*, mit
-  Quelle und Jahr daneben. **WHtR, Bauchumfang und BMI sind
-  ebenfalls Grad A** und gehoeren in denselben Zug.
-
-  2026-08-19). Befund aus G-87.
-
-  **Tom, 2026-08-19: mit Geschlechtsbezug zeigen.**
-
-  `[cmd]` **Die Quelle:** WHO 2008 — **unter 0,90 bei Maennern, unter
-  0,80 bei Frauen.** Im Vorgaengerrepo hinterlegt.
-
-  `[cmd]` **Toms Wert am 2026-08-19: 0,860** — unter der Maennerschwelle.
-
-  `[cmd]` **`public.profiles` traegt das Geschlecht**, technisch geht
-  es.
-
-  `[read]` **Und die Sprachregel gilt:** *„Unter dem Grenzwert"* ist eine
-  Lage, *„gesund"* ein Urteil. **Mit Quelle und Jahr daneben**, wie bei
-  den Biomarker-Bereichen.
-
-  **Was fehlt:** `[read]` Was, wenn das Geschlecht nicht gesetzt ist?
-  **Dann keine Schwelle, nur das Verhaeltnis** — wie `fasting_status`,
-  das nur erscheint, wenn es belegt ist.
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  C-180.
-
-  `[cmd]` **`BP-WHR-001`: WHO-Grenzwerte, Evidenzgrad A,
-  `KEEP_NUMERIC`.** **Toms Entscheidung vom 2026-08-20 ist damit
-  gedeckt.**
-
-  `[cmd]` **Und drei weitere anthropometrische Masse sind Grad A:**
-
-  | | |
-  |---|---|
-  | **WHtR** | **0,5** — *„Taille unter der halben Koerpergroesse"* |
-  | **Bauchumfang** | **>94/>80 cm** erhoeht, **>102/>88 cm** stark erhoeht |
-  | **BMI** | WHO-Klassifikation |
-  | Ethnienspezifisch | IDF, Grad B — Europid 94/80, Suedasiatisch 90/80 |
-
-  `[read]` **Das ist mehr, als GO-21 verlangt hat** — und alles mit
-  Quelle.
-
-## G - Theme V1 umsetzen
-
-`[read]` Plan: `docs/spezifikation/10-plattform/design-system/theme-v1-umsetzung.md`
-
-Grundlage ist `theme-v1/` - `[cmd]` 55 Modulseiten, `shell.jsx`,
-`shared.jsx`, `styles.css` mit 32 Tokens und 123 Klassen, dazu zwoelf
-Bildschirmfotos. **Vorlage, nicht Vertrag** (Tom, 2026-08-15): Es gibt
-diverse Dinge, die ihm noch nicht gefallen - grafische Elemente, die beim
-Umsetzen angepasst werden.
-
-**Die bestehende Oberflaeche bleibt.** Die neue laeuft parallel unter
-`/v2`, gegen dieselbe Datenschicht. Umgeschaltet wird am Ende (G-07).
 
 - [ ] **G-04: Zwei Zahlen im Entwurf, die nicht stimmen** (neu
   2026-08-15). Klein, aber vor dem Bau zu klären.
@@ -3927,35 +3640,51 @@ Umsetzen angepasst werden.
   `tools/schemafreigabe-pruefen.mjs`.**
 
 
-- [ ] **G-133: Die Allergen-Pillen sind falsch beschriftet** (neu
-  2026-08-20). **Befund aus C-164. Sichtbarer Fehler.**
+- [ ] **C-191: `p_user_id` kostet das Dreifache** (neu 2026-08-22).
+  Befund aus G-154. **Messung, keine Vermutung.**
 
-  `[cmd]` **Die Datenbank ist richtig:** `tag_definitions` fuehrt
-  `contains_lactose` als **„Enthaelt Laktose"**, mit 1.021 Treffern.
+  `[cmd]` **`explain (analyze, buffers)` auf der laufenden DB,
+  leere Suche, `limit 50`:**
 
-  `[cmd]` **Die Oberflaeche dreht das Wort um und behaelt die Zahl** —
-  `tab-foods.tsx:180`: `label: 'Ohne Laktose', anzahl: 1021`.
+  | Aufruf | Laufzeit |
+  |---|---:|
+  | ohne `p_user_id` | **360,4 ms** |
+  | `test-user` (0 Preferences) | 383,2 ms |
+  | `dev` (3 Preferences) | **1.160,2 ms** |
 
-  | Pille zeigt | richtig waere |
-  |---|---|
-  | Ohne Laktose **1.021** | **6.119** |
-  | Ohne Gluten **622** | **6.518** |
-  | Ohne Nuesse **120** | **7.020** |
+  `[cmd]` **Kein `temp read/written`** — es ist kein Kreuzprodukt,
+  sondern die Preference-CTEs selbst. **Und kein Kaltstart:** der
+  zweite Seitenlauf misst dasselbe (4.498 / 4.779 ms, Suchaufruf
+  1.232 ms).
 
-  `[read]` **Wer *„Ohne Laktose 1.021"* liest, denkt, es gaebe 1.021
-  laktosefreie Lebensmittel.** Es sind 6.119 — **die 1.021 sind die
-  mit.**
+  `[read]` **Das faellt jetzt jedem auf**, weil der Katalog seit G-154
+  immer mit `prefs=1` laedt. **Vorher trug die Kosten nur der
+  Erfassungsdialog.**
 
-  `[cmd]` **Gehoert zum Anzeigeteil von G-112**, nicht zur Datenbank.
+  `[cmd]` **Nicht `verborgeneTreffer`:** der zweite Aufruf ist auf
+  kurze Trefferlisten begrenzt und laeuft bei 5.292 Treffern nicht.
 
-  `[cmd]` **Aus dem zusammengefuehrten G-132:** `food_search` liefert
-  `{"code":"contains_lactose","count":1021,"name_de":"Enthaelt Laktose"}`
-  — **1.021 Lebensmittel MIT Laktose, von 7.140.** Die Pille verspricht
-  Ausschluss und zeigt Einschluss.
+- [ ] **A-47: Der ADR widerspricht sich bei `hard`** (neu 2026-08-22).
+  Befund aus G-154. **Dokumentenfrage, kein Code.**
 
-  `[read]` **G-132 trug denselben Befund unter eigener Nummer**
-  (zusammengefuehrt 2026-08-21). **Die Nummer bleibt vergeben und wird
-  nicht neu ausgegeben.**
+  `[cmd]` **`ADR_NUTRITION_PREFERENCES_V1` sagt zweimal
+  Verschiedenes.** Die Entscheidungstabelle: Allergie ist `hard`,
+  *„absoluter Ausschluss — nie anzeigen, nie vorschlagen"*. Der
+  Abschnitt *„Food Search Ranking-Einfluss"* darunter: `-300 fuer
+  allergen match (hard constraint)`.
+
+  `[read]` **Punkte schliessen nicht aus.** Ein Eintrag mit -300 steht
+  weiter in der Liste, nur weiter unten. **Die Implementierung folgt
+  der Tabelle** (`preference_excluded`), nicht dem Rangmodell — und
+  das ist die richtige Wahl.
+
+  `[cmd]` **Weitere Abweichungen zwischen ADR und Bestand:** die
+  Spalte heisst `strength`, nicht `severity`; es gibt
+  `general_exclusions`, nicht `excluded_foods`; `religious_dietary`
+  und `religious_is_hard` fehlen ganz.
+
+  **Zu tun:** den ADR nachziehen oder den Widerspruch als bewusst
+  vermerken. **Nicht den Code aendern** — er tut das Richtige.
 
 - [ ] **G-134: Die vier Filtergruppen gibt es in den Daten nicht** (neu
   2026-08-20). **Entscheidung.** Befund aus C-164.
@@ -4439,48 +4168,3 @@ Umsetzen angepasst werden.
   `[read]` **Es waere die ganze Gruppe *Elemente* (16 Codes)** —
   **oder nichts**, weil die Karte schon so heisst. **Zu entscheiden, ob
   ein Alias auf eine ganze Karte zeigen darf.**
-
-- [ ] **G-89: Die Idealwerte stehen nur in Begleitdateien** (neu
-
-  ### Auftrag (zurueckgeholt 2026-08-21)
-
-  **Die vier Proportionen als Heuristik beschriften** —
-  `LABEL_HEURISTIC` fuer `BP-GR-006` (1,618), `BP-REEVES-008`,
-  `BP-MCCALLUM-009` und `BP-CLASSIC-010`. **Tradition, und sie darf
-  so beschriftet werden.** **Keine Einfaerbung nach Richtung** — in
-  einer Aufbauphase ist eine wachsende Taille normal.
-  **`BP-FFMI-005` bleibt draussen:** `CONFLICTING_EVIDENCE`.
-
-  2026-08-19). Befund aus G-87.
-
-  `[cmd]` **1.618, V-Taper und Steve Reeves stehen ausschliesslich in
-  `theme-v1/uploads/`** — Begleitdateien des Entwurfs, **keine
-  Spezifikation.**
-
-  `[cmd]` **Und der Reeves-Wert ist gar keine Rechnung:**
-  *„`daten.ts:438` gibt fest 88 zurueck."*
-
-  `[read]` **Auch die Farbe faellt weg, mit gutem Grund:** *„Die Vorlage
-  faerbt eine wachsende Taille rot und einen wachsenden Arm gruen —
-  welche Richtung erwuenscht ist, haengt vom Ziel ab."* **In einer
-  Aufbauphase ist eine wachsende Taille normal.**
-
-  **Zu klaeren:** Braucht es Idealwerte ueberhaupt? `[read]` **Die
-  Verhaeltnisse selbst sind Arithmetik und stehen** — die Einstufung
-  waere eine Bewertung.
-
-  ### Beantwortet 2026-08-20 durch `crawl_025`
-
-  (beantwortet 2026-08-20). Aus C-180.
-
-  `[cmd]` **Alle vier als `LABEL_HEURISTIC` eingestuft:**
-
-  `BP-GR-006` Goldener Schnitt 1,618 · `BP-REEVES-008` Reeves-Formeln ·
-  `BP-MCCALLUM-009` McCallum · `BP-CLASSIC-010` klassische Konvention.
-
-  `[read]` **Die Antwort auf die Frage im Punkt:** *„Gibt es belegte
-  Referenzwerte, oder ist das Tradition ohne Datengrundlage?"* —
-  **Tradition, und sie darf so beschriftet werden.**
-
-  `[cmd]` **`BP-FFMI-005` (FFMI 25 als Naturgrenze) ist
-  `CONFLICTING_EVIDENCE`** — *„kein Natural-Limit-Urteil."*

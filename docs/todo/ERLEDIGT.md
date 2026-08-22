@@ -11103,6 +11103,94 @@ Die offenen Punkte stehen in `docs/todo/TODO.md`.
   `[read]` **Dritter Fall dieser Art** — nach `InjektionsKarte` (G-53)
   und `score.ts` (G-82): **gebaut und nie gerufen.**
 
+- [x] **G-133: Die Allergen-Pillen sind falsch beschriftet**
+  (erledigt 2026-08-22). **Nicht die Zahl ersetzt — den Filter
+  angeschlossen.**
+
+  `[cmd]` **Der Befund:** `tab-foods.tsx:180` trug
+  `label: 'Ohne Laktose', anzahl: 1021`. **1.021 ist die Zahl der
+  Lebensmittel MIT Laktose** — ohne sind es **6.119** von 7.140, ohne
+  Gluten 6.518, ohne Nuesse 7.020. Dazu filterte
+  `tab-foods.tsx:328` clientseitig **nur auf der geladenen Seite**;
+  bei 143 Seiten standen die Treffer auf Seite 2 wieder da.
+
+  `[cmd]` **`p_filters` laeuft jetzt durch die ganze Kette:**
+  `tab-foods.tsx` (`?ohne=`) → `/api/nutrition/foods` →
+  `food-search.ts` (`buildFoodSearchFilters`) → `rpc food_search`.
+  **Der Parameter ist optional, die 15 alten Argumente unveraendert.**
+
+  `[cmd]` **Fuenf Trefferzahlen vorher angesagt, alle fuenf getroffen:**
+  ohne Filter 7.140 · ohne Laktose **6.119** · ohne Gluten 6.518 ·
+  ohne Nuesse 7.020 · Laktose+Gluten **5.582**. `[read]` Der fuenfte
+  ist abgeleitet: die Vereinigung ist 1.558, **85 tragen beide Tags** —
+  also 5.582, nicht 5.497.
+
+  `[cmd]` **Gegenprobe in beide Richtungen:** Tippfehler
+  `contains_laktose` → 7.140 (Filter tut nichts, **rot**), gueltiger
+  aber falscher Code `vegan` → 5.763 (**rot**). Nur der richtige Code
+  ist gruen.
+
+  `[cmd]` **Der clientseitige `.filter()` ist raus**, die drei fest
+  verdrahteten `anzahl`-Werte sind raus, `ohne` steht in den
+  Abhaengigkeiten des Ladeeffekts, und der Hinweistext sagt nicht mehr
+  *„Blendet auf der angezeigten Seite aus"*.
+
+  `[cmd]` **Laufzeit:** Ausschluss **467 ms** gegen ungefiltert 483 ms
+  — **der Filter ist billiger, nicht teurer**, weniger Zeilen gehen
+  durch die Nachbearbeitung. Derselbe Abstand wie in SSOT 169 (343,7
+  gegen 357,7 ms). **472/472 Tests, Gate 11/11.**
+
+  `[read]` **Der Kommentar behauptete, die Funktion koenne nicht
+  ausschliessen** — *„es gibt keinen Parameter fuer ohne"*. Das stimmte,
+  bis C-164 ihn gebaut hat. Richtiggestellt, mit Bezug auf 169.
+
+  `[read]` **G-132 trug denselben Befund unter eigener Nummer**
+  (zusammengefuehrt 2026-08-21). **Die Nummer bleibt vergeben.**
+
+- [x] **G-154: Preferences sind die Konfiguration, nicht ein zweiter
+  Filter** (erledigt 2026-08-22). **Der Katalog wendet sie jetzt an.**
+
+  `[read]` **Tom, 2026-08-22:** *„Preferences ist exakt die Konfig fuer
+  den Food-DB-Zugriff des Kunden, dass er das sieht was er sehen
+  will."* **`ADR_NUTRITION_PREFERENCES_V1` (Final, April 2026)
+  entscheidet dasselbe:** Allergie ist `hard` — *„nie anzeigen, nie
+  vorschlagen"*.
+
+  `[cmd]` **`prefs=1` steht jetzt an der Anfrage** — im Tab und beim
+  serverseitigen Erstladen. **Die Allergen-Gruppe ist weg:** ein
+  Schalter, der einen absoluten Ausschluss an- und ausknipst,
+  widerspricht dem ADR.
+
+  `[cmd]` **Acht Ansagen, alle acht getroffen** — auf zwei Konten:
+  `test-user` (0 Preferences) bleibt bei **7.140** mit und ohne
+  `prefs=1`; `dev` (tree_nuts hard, lactose strong, ultra_processed
+  hard) faellt auf **5.292** — 7.140 minus 1.848, die Vereinigung der
+  drei Tags.
+
+  `[cmd]` **Die `strong`-Regel des ADR steht bereits in der Funktion**
+  und braucht keinen Schalter (`075`, `preference_scores`):
+  `preference_excluded = hard OR (strong AND p_normalized_query = '')`.
+  **Die „explizite User-Suche" IST das Suchwort.** Gemessen: dev sieht
+  bei leerer Suche 5.292, bei „milch" **168 von 261**. `[read]` **Der
+  Auftrag verlangte einen Einblenden-Schalter; die Messung sagt, dass
+  die Sache schon steht.** Statt eines Schalters ein Hinweissatz, der
+  nur erscheint, wenn Unvertraeglichkeiten gesetzt sind.
+
+  `[cmd]` **G-153 gleich mit erledigt:** die acht fest verdrahteten
+  Trefferzahlen kommen jetzt aus dem `tags`-Block der Antwort. **Aus
+  `start`, nicht aus `payload`** — sonst zeigte „Vegan 1.377" nach
+  einem Klick auf „Vegetarisch" eine andere Zahl.
+
+  `[cmd]` **Der Kommentar zu G-13/G-104 ist richtiggestellt.** Er
+  sagte, der Katalog wende Preferences **bewusst nicht** an. `[read]`
+  Er war nicht falsch gedacht, er beantwortete eine andere Frage:
+  *„darf eine Liste unvollstaendig sein"* — ja, wenn die
+  Unvollstaendigkeit die Konfiguration IST und dasteht, dass sie wirkt.
+
+  `[cmd]` **472/472 Tests, Gate 11/11.** Die G-133-Durchreiche
+  (`?ohne=` → `p_filters`) bleibt unveraendert und gemessen; sie hat
+  nur kein Bedienelement mehr.
+
 - [x] **G-81: Registerkarten wechseln nicht — der Build-Cache war
   kaputt** (2026-08-19). Befund aus G-79, **behoben.**
 
@@ -11242,3 +11330,33 @@ geschlossen.** `crawl_025` hat die *Frage* beantwortet — die *Arbeit*
 stand aus. **Tom, 2026-08-21:** *„Der Abschluss war meiner, nicht deiner
 — ich habe die Frage mit der Arbeit verwechselt.“* Die vier stehen
 wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
+
+- [x] **C-105: MEV/MAV/MRV haben keine Tabelle** — **erledigt
+  2026-08-22 (Evidenz-Auftrag, crawl_025):** `[cmd]` MAV entfernt
+  (10 Werte, 5 Verwendungen -> 0; DO_NOT_IMPLEMENT, kein Ersatzwert),
+  MEV als Richtungshinweis, MRV und RP-Rahmenwerk als Heuristik
+  beschriftet (Grad E), drei Zonen statt vier; Waechtertest haelt die
+  Abwesenheit fest. Belege: `docs/ssot/179-evidenz-konstanten.md`.
+
+- [x] **C-124: Recovery-Recherche — Modalitaeten und Schwellen (E5)** —
+  **erledigt 2026-08-22:** `[cmd]` 17 numerische Bonuswerte -> 0;
+  je Modalitaet Richtung + Endpunkt + Quelle (32 Registry-Zeilen,
+  alle REMOVE_NUMERIC_VALUE); fuenf Modalitaeten ohne Registerzeile
+  behaupten nichts; Score = Summe der Terme ohne Bonus; DB war schon
+  auf 0,00/pending_c124_e5. **E8 (Motivations-/Arzt-Schwelle) ist
+  damit NICHT beantwortet** — bleibt als eigener Punkt, falls noch
+  gefuehrt.
+
+- [x] **GO-21: Taille:Huefte mit Geschlechtsbezug** — **erledigt
+  2026-08-22:** `[cmd]` WHR (WHO 2008: 0,90 M / 0,85 F —
+  **Widerspruch zum Auftragstext 0,80 gemeldet, Registry gebaut**),
+  WHtR 0,5, Bauchumfang zweistufig, BMI mit WHO-Klassen und
+  Muskelmasse-Vorbehalt; je Zahl Quelle und Jahr; ohne Geschlecht
+  keine Schwelle; Sprachregel „unter/ueber dem Grenzwert".
+
+- [x] **G-89: Die Idealwerte stehen nur in Begleitdateien** —
+  **erledigt 2026-08-22:** `[cmd]` BP-GR-006/REEVES-008/MCCALLUM-009/
+  CLASSIC-010 als beschriftete Heuristik-Kachel (Herkunft, Grad E,
+  keine Richtungsfarbe); Reeves/McCallum als Formeltext, weil
+  Handgelenk/Knoechel/Becken nicht gemessen werden; FFMI-25 bewusst
+  draussen (BP-FFMI-005, CONFLICTING_EVIDENCE).
