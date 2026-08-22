@@ -1,0 +1,6 @@
+C-192 Erwartung vor Messlauf, 2026-08-22
+- Relevanter Nutzer: dev@lumeos.app, weil test-user keine Preferences hat.
+- Erwartete Vorher-Laufzeit mit p_user_id: Groessenordnung 1.1-1.2 s, ohne p_user_id ca. 0.36-0.42 s.
+- Semantik darf sich nicht aendern: hard ausschliessen; strong nur ausschliessen, wenn p_normalized_query leer ist.
+- Erfolgskriterium: gleiche Treffer/Preference-Zustaende, aber Median mit p_user_id deutlich naeher an der Baseline ohne p_user_id; Ziel < 700 ms, wenn die Kosten materialisierbar sind.
+- Negative Pruefung: ein absichtlich falscher Erwartungswert muss Returncode != 0 liefern.

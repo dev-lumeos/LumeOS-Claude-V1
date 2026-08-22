@@ -1,0 +1,272 @@
+{
+  "database": "lumeos_c192_before2",
+  "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\schema\\20260822091959_c192_vor_schema.sql",
+  "kette_rc": 0,
+  "state": {
+    "tom_user_id": "10000000-0000-0000-0000-000000000101",
+    "test_user_id": "10000000-0000-0000-0000-000000000102",
+    "food_tags_indexes": [
+      "CREATE UNIQUE INDEX food_tags_pkey ON nutrition.food_tags USING btree (food_id, tag_code)",
+      "CREATE INDEX idx_food_tags_code ON nutrition.food_tags USING btree (tag_code)",
+      "CREATE INDEX idx_food_tags_food ON nutrition.food_tags USING btree (food_id)"
+    ],
+    "preset_match_indexes": null,
+    "tom_food_preferences": {
+      "user_id": "10000000-0000-0000-0000-000000000101",
+      "allergies": [
+        "tree_nuts"
+      ],
+      "diet_type": "omnivore",
+      "updated_at": "2026-08-22T02:18:20.964437+00:00",
+      "budget_level": "medium",
+      "intolerances": [
+        "lactose"
+      ],
+      "meal_prep_ok": true,
+      "cooking_skill": "advanced",
+      "meals_per_day": 4,
+      "planner_notes": "G-11a Testdaten: Allergie, Abneigung und Like fuer spaetere Suchwirkung",
+      "snacks_per_day": 1,
+      "prep_time_max_min": 30,
+      "general_exclusions": [
+        "ultra_processed"
+      ],
+      "preferred_cuisines": [
+        "mediterranean"
+      ]
+    },
+    "tom_preference_items": [
+      {
+        "id": "b3d40fc7-8732-4874-aa5f-37b58b597287",
+        "source": "settings",
+        "food_id": null,
+        "user_id": "10000000-0000-0000-0000-000000000101",
+        "strength": "soft_dislike",
+        "tag_code": null,
+        "created_at": "2026-08-22T02:18:20.964437+00:00",
+        "preference": "disliked",
+        "category_id": "95e8c429-00ff-45b0-b1b9-e24791b060d1",
+        "target_type": "category",
+        "cuisine_code": null,
+        "catalog_item_code": null,
+        "exclusion_preset_code": null
+      },
+      {
+        "id": "0b9cf7e0-6a0b-4998-a92b-dbdff474b7ef",
+        "source": "settings",
+        "food_id": null,
+        "user_id": "10000000-0000-0000-0000-000000000101",
+        "strength": "hard_exclude",
+        "tag_code": "contains_nuts",
+        "created_at": "2026-08-22T02:18:20.964437+00:00",
+        "preference": "hard_exclude",
+        "category_id": null,
+        "target_type": "tag",
+        "cuisine_code": null,
+        "catalog_item_code": null,
+        "exclusion_preset_code": null
+      },
+      {
+        "id": "04cfb914-52ae-4c96-aeab-fcf2d6922bad",
+        "source": "settings",
+        "food_id": "e70b72ed-89c8-4470-866b-89c0797ac187",
+        "user_id": "10000000-0000-0000-0000-000000000101",
+        "strength": "boost",
+        "tag_code": null,
+        "created_at": "2026-08-22T02:18:20.964437+00:00",
+        "preference": "liked",
+        "category_id": null,
+        "target_type": "food",
+        "cuisine_code": null,
+        "catalog_item_code": null,
+        "exclusion_preset_code": null
+      }
+    ],
+    "preference_item_indexes": [
+      "CREATE UNIQUE INDEX food_preference_items_pkey ON nutrition.food_preference_items USING btree (id)",
+      "CREATE INDEX idx_food_pref_items_category ON nutrition.food_preference_items USING btree (category_id)",
+      "CREATE INDEX idx_food_pref_items_tag ON nutrition.food_preference_items USING btree (tag_code)",
+      "CREATE INDEX idx_food_pref_items_user ON nutrition.food_preference_items USING btree (user_id)",
+      "CREATE UNIQUE INDEX uq_food_pref_items_user_catalog_item ON nutrition.food_preference_items USING btree (user_id, catalog_item_code) WHERE (NULLIF(catalog_item_code, ''::text) IS NOT NULL)",
+      "CREATE UNIQUE INDEX uq_food_pref_items_user_category ON nutrition.food_preference_items USING btree (user_id, category_id) WHERE (category_id IS NOT NULL)",
+      "CREATE UNIQUE INDEX uq_food_pref_items_user_cuisine ON nutrition.food_preference_items USING btree (user_id, cuisine_code) WHERE (NULLIF(cuisine_code, ''::text) IS NOT NULL)",
+      "CREATE UNIQUE INDEX uq_food_pref_items_user_exclusion_preset ON nutrition.food_preference_items USING btree (user_id, exclusion_preset_code) WHERE (NULLIF(exclusion_preset_code, ''::text) IS NOT NULL)",
+      "CREATE UNIQUE INDEX uq_food_pref_items_user_food ON nutrition.food_preference_items USING btree (user_id, food_id) WHERE (food_id IS NOT NULL)",
+      "CREATE UNIQUE INDEX uq_food_pref_items_user_tag ON nutrition.food_preference_items USING btree (user_id, tag_code) WHERE (tag_code IS NOT NULL)"
+    ],
+    "tom_preference_item_count": 3,
+    "test_preference_item_count": 0
+  },
+  "food_search": [
+    {
+      "label": "food_search_no_user",
+      "runs_ms": [
+        364.961,
+        346.725,
+        353.003,
+        365.583,
+        362.945,
+        395.333,
+        353.0,
+        355.247,
+        373.247,
+        400.767
+      ],
+      "median_ms": 363.953,
+      "min_ms": 346.725,
+      "max_ms": 400.767
+    },
+    {
+      "label": "food_search_tom_seed_preferences",
+      "runs_ms": [
+        1096.608,
+        1179.757,
+        1187.37,
+        1128.609,
+        1113.724,
+        1110.472,
+        1114.953,
+        1108.247,
+        1188.98,
+        1130.476
+      ],
+      "median_ms": 1121.781,
+      "min_ms": 1096.608,
+      "max_ms": 1188.98
+    },
+    {
+      "label": "food_search_test_user_no_preferences",
+      "runs_ms": [
+        363.146,
+        387.6,
+        386.698,
+        349.357,
+        359.05,
+        363.07,
+        374.773,
+        350.95,
+        363.767,
+        352.002
+      ],
+      "median_ms": 363.108,
+      "min_ms": 349.357,
+      "max_ms": 387.6
+    }
+  ],
+  "preference_ctes": [
+    {
+      "label": "user_preference",
+      "runs_ms": [
+        0.107,
+        0.113,
+        0.122,
+        0.124,
+        0.112,
+        0.124,
+        0.121,
+        0.125,
+        0.186,
+        0.118
+      ],
+      "median_ms": 0.1215,
+      "min_ms": 0.107,
+      "max_ms": 0.186,
+      "result": "1"
+    },
+    {
+      "label": "preference_items",
+      "runs_ms": [
+        0.109,
+        0.15,
+        0.118,
+        0.164,
+        0.122,
+        0.121,
+        0.123,
+        0.129,
+        0.124,
+        0.116
+      ],
+      "median_ms": 0.1225,
+      "min_ms": 0.109,
+      "max_ms": 0.164,
+      "result": "3"
+    },
+    {
+      "label": "category_tree",
+      "runs_ms": [
+        0.263,
+        0.261,
+        0.264,
+        0.27,
+        0.25,
+        0.263,
+        0.269,
+        0.246,
+        0.242,
+        0.234
+      ],
+      "median_ms": 0.262,
+      "min_ms": 0.234,
+      "max_ms": 0.27,
+      "result": "1"
+    },
+    {
+      "label": "category_ancestors",
+      "runs_ms": [
+        0.311,
+        0.321,
+        0.326,
+        0.45,
+        0.318,
+        0.476,
+        0.462,
+        0.494,
+        0.505,
+        0.471
+      ],
+      "median_ms": 0.456,
+      "min_ms": 0.311,
+      "max_ms": 0.505,
+      "result": "3"
+    },
+    {
+      "label": "preference_targets",
+      "runs_ms": [
+        108.892,
+        110.215,
+        107.108,
+        110.302,
+        108.313,
+        112.494,
+        109.902,
+        110.687,
+        113.87,
+        109.506
+      ],
+      "median_ms": 110.05850000000001,
+      "min_ms": 107.108,
+      "max_ms": 113.87,
+      "result": "1728"
+    },
+    {
+      "label": "preference_scores",
+      "runs_ms": [
+        128.904,
+        125.245,
+        124.238,
+        135.277,
+        117.534,
+        118.221,
+        111.332,
+        112.9,
+        117.936,
+        121.551
+      ],
+      "median_ms": 119.886,
+      "min_ms": 111.332,
+      "max_ms": 135.277,
+      "result": "1465|1130|-9220"
+    }
+  ]
+}

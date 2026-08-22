@@ -183,6 +183,348 @@ COMMENT ON FUNCTION nutrition.such_alias_treffer(jsonb) IS
   'C-17: Food-IDs je Suchgruppe ueber die Aliase, einmal ermittelt '
   'statt je Zeile. Dynamisches SQL, damit der Trigramm-Index greift.';
 
+CREATE TABLE IF NOT EXISTS nutrition.food_preference_search_targets (
+  user_id uuid NOT NULL,
+  food_id uuid NOT NULL REFERENCES nutrition.foods(id) ON DELETE CASCADE,
+  constraint_level text NOT NULL CHECK (constraint_level IN ('hard', 'strong', 'soft', 'boost')),
+  match_type text NOT NULL,
+  score integer NOT NULL,
+  specificity integer NOT NULL,
+  source text NOT NULL DEFAULT 'preference_cache',
+  updated_at timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (user_id, food_id, constraint_level, match_type, score, specificity, source)
+);
+
+CREATE INDEX IF NOT EXISTS idx_food_pref_search_targets_user_food
+  ON nutrition.food_preference_search_targets(user_id, food_id);
+CREATE INDEX IF NOT EXISTS idx_food_pref_search_targets_user_level
+  ON nutrition.food_preference_search_targets(user_id, constraint_level);
+
+ALTER TABLE nutrition.food_preference_search_targets ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS food_preference_search_targets_select ON nutrition.food_preference_search_targets;
+DROP POLICY IF EXISTS food_preference_search_targets_insert ON nutrition.food_preference_search_targets;
+DROP POLICY IF EXISTS food_preference_search_targets_update ON nutrition.food_preference_search_targets;
+DROP POLICY IF EXISTS food_preference_search_targets_delete ON nutrition.food_preference_search_targets;
+
+CREATE POLICY food_preference_search_targets_select ON nutrition.food_preference_search_targets
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY food_preference_search_targets_insert ON nutrition.food_preference_search_targets
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY food_preference_search_targets_update ON nutrition.food_preference_search_targets
+  FOR UPDATE USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+CREATE POLICY food_preference_search_targets_delete ON nutrition.food_preference_search_targets
+  FOR DELETE USING (auth.uid() = user_id);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON nutrition.food_preference_search_targets TO authenticated, service_role;
+
+CREATE OR REPLACE FUNCTION nutrition.refresh_food_preference_search_targets(p_user_id uuid)
+RETURNS void
+LANGUAGE plpgsql
+VOLATILE
+SECURITY INVOKER
+AS $function$
+BEGIN
+  IF p_user_id IS NULL THEN
+    RETURN;
+  END IF;
+
+  DELETE FROM nutrition.food_preference_search_targets
+  WHERE user_id = p_user_id;
+
+  INSERT INTO nutrition.food_preference_search_targets (
+    user_id, food_id, constraint_level, match_type, score, specificity, source, updated_at
+  )
+  WITH RECURSIVE user_preference AS (
+    SELECT
+      fp.user_id,
+      COALESCE(fp.diet_type, 'omnivore') AS diet_type,
+      COALESCE(fp.allergies, '{}'::text[]) AS allergies,
+      COALESCE(fp.intolerances, '{}'::text[]) AS intolerances,
+      COALESCE(fp.general_exclusions, '{}'::text[]) AS general_exclusions
+    FROM nutrition.food_preferences fp
+    WHERE fp.user_id = p_user_id
+  ),
+  preference_items AS MATERIALIZED (
+    SELECT
+      fpi.id,
+      fpi.user_id,
+      fpi.preference,
+      fpi.strength,
+      fpi.target_type,
+      fpi.food_id,
+      fpi.category_id,
+      fpi.tag_code,
+      fpi.cuisine_code,
+      fpi.exclusion_preset_code,
+      CASE
+        WHEN fpi.preference = 'hard_exclude'
+          OR fpi.strength = 'hard_exclude' THEN 'hard'
+        WHEN fpi.strength = 'strong_avoid' THEN 'strong'
+        WHEN fpi.preference = 'disliked'
+          OR fpi.strength = 'soft_dislike' THEN 'soft'
+        WHEN fpi.preference = 'liked'
+          OR fpi.strength IN ('like', 'boost') THEN 'boost'
+        ELSE 'neutral'
+      END AS constraint_level
+    FROM nutrition.food_preference_items fpi
+    WHERE fpi.user_id = p_user_id
+  ),
+  preference_category_tree AS (
+    SELECT pi.id AS item_id, pi.category_id
+    FROM preference_items pi
+    WHERE pi.target_type = 'category'
+      AND pi.category_id IS NOT NULL
+    UNION ALL
+    SELECT pct.item_id, fc.id
+    FROM preference_category_tree pct
+    JOIN nutrition.food_categories fc ON fc.parent_id = pct.category_id
+  ),
+  preference_category_ancestors AS (
+    SELECT pi.id AS item_id, pi.category_id
+    FROM preference_items pi
+    WHERE pi.target_type = 'category'
+      AND pi.category_id IS NOT NULL
+    UNION ALL
+    SELECT pca.item_id, fc.parent_id
+    FROM preference_category_ancestors pca
+    JOIN nutrition.food_categories fc ON fc.id = pca.category_id
+    WHERE fc.parent_id IS NOT NULL
+  ),
+  allergy_tag_map AS (
+    SELECT * FROM (VALUES
+      ('gluten_wheat', 'contains_gluten'),
+      ('gluten', 'contains_gluten'),
+      ('tree_nuts', 'contains_nuts'),
+      ('peanuts', 'contains_nuts'),
+      ('nuts', 'contains_nuts'),
+      ('lactose', 'contains_lactose'),
+      ('milk_protein', 'contains_lactose')
+    ) AS m(source_code, tag_code)
+  ),
+  preference_targets AS MATERIALIZED (
+    SELECT
+      pi.food_id,
+      pi.constraint_level,
+      'food'::text AS match_type,
+      CASE
+        WHEN pi.constraint_level = 'boost' THEN 100
+        WHEN pi.constraint_level = 'soft' THEN -100
+        WHEN pi.constraint_level = 'strong' THEN -75
+        ELSE 0
+      END AS score,
+      30 AS specificity,
+      'preference_item'::text AS source
+    FROM preference_items pi
+    WHERE pi.target_type = 'food'
+      AND pi.food_id IS NOT NULL
+      AND pi.constraint_level <> 'neutral'
+
+    UNION ALL
+
+    SELECT
+      f.id,
+      pi.constraint_level,
+      'category'::text,
+      CASE
+        WHEN pi.constraint_level = 'boost' THEN 50
+        WHEN pi.constraint_level = 'soft' THEN -50
+        WHEN pi.constraint_level = 'strong' THEN -40
+        ELSE 0
+      END,
+      20,
+      'preference_item'::text
+    FROM preference_items pi
+    JOIN (
+      SELECT item_id, category_id FROM preference_category_tree
+      UNION
+      SELECT item_id, category_id FROM preference_category_ancestors
+    ) pct ON pct.item_id = pi.id
+    JOIN nutrition.foods f ON f.category_id = pct.category_id
+    WHERE pi.constraint_level <> 'neutral'
+
+    UNION ALL
+
+    SELECT
+      ft.food_id,
+      pi.constraint_level,
+      'tag'::text,
+      CASE
+        WHEN pi.constraint_level = 'boost' THEN 30
+        WHEN pi.constraint_level = 'soft' THEN -30
+        WHEN pi.constraint_level = 'strong' THEN -25
+        ELSE 0
+      END,
+      10,
+      'preference_item'::text
+    FROM preference_items pi
+    JOIN nutrition.food_tags ft ON ft.tag_code = pi.tag_code
+    WHERE pi.target_type = 'tag'
+      AND pi.tag_code IS NOT NULL
+      AND pi.constraint_level <> 'neutral'
+
+    UNION ALL
+
+    SELECT
+      epm.food_id,
+      pi.constraint_level,
+      'exclusion_preset'::text,
+      CASE
+        WHEN pi.constraint_level = 'boost' THEN 30
+        WHEN pi.constraint_level = 'soft' THEN -30
+        WHEN pi.constraint_level = 'strong' THEN -25
+        ELSE 0
+      END,
+      10,
+      'preference_item'::text
+    FROM preference_items pi
+    JOIN nutrition.exclusion_preset_matches epm
+      ON epm.preset_code = pi.exclusion_preset_code
+    WHERE pi.target_type = 'exclusion_preset'
+      AND pi.exclusion_preset_code IS NOT NULL
+      AND pi.constraint_level <> 'neutral'
+
+    UNION ALL
+
+    SELECT
+      ft.food_id,
+      'hard'::text,
+      'allergy'::text,
+      0,
+      100,
+      'profile_allergy'::text
+    FROM user_preference up
+    JOIN allergy_tag_map m ON m.source_code = ANY(up.allergies)
+    JOIN nutrition.food_tags ft ON ft.tag_code = m.tag_code
+
+    UNION ALL
+
+    SELECT
+      ft.food_id,
+      'strong'::text,
+      'intolerance'::text,
+      -25,
+      90,
+      'profile_intolerance'::text
+    FROM user_preference up
+    JOIN allergy_tag_map m ON m.source_code = ANY(up.intolerances)
+    JOIN nutrition.food_tags ft ON ft.tag_code = m.tag_code
+
+    UNION ALL
+
+    SELECT
+      ft.food_id,
+      'hard'::text,
+      'general_tag'::text,
+      0,
+      80,
+      'profile_general_exclusion'::text
+    FROM user_preference up
+    JOIN nutrition.tag_definitions td ON td.code = ANY(up.general_exclusions)
+    JOIN nutrition.food_tags ft ON ft.tag_code = td.code
+
+    UNION ALL
+
+    SELECT
+      epm.food_id,
+      'hard'::text,
+      'general_preset'::text,
+      0,
+      80,
+      'profile_general_exclusion'::text
+    FROM user_preference up
+    JOIN nutrition.exclusion_presets ep ON ep.code = ANY(up.general_exclusions)
+    JOIN nutrition.exclusion_preset_matches epm ON epm.preset_code = ep.code
+
+    UNION ALL
+
+    SELECT
+      f.id,
+      'hard'::text,
+      'diet_type'::text,
+      0,
+      70,
+      'profile_diet_type'::text
+    FROM user_preference up
+    JOIN nutrition.foods f ON TRUE
+    WHERE up.diet_type = 'vegan'
+      AND NOT EXISTS (
+        SELECT 1 FROM nutrition.food_tags ft
+        WHERE ft.food_id = f.id AND ft.tag_code = 'vegan'
+      )
+
+    UNION ALL
+
+    SELECT
+      f.id,
+      'hard'::text,
+      'diet_type'::text,
+      0,
+      70,
+      'profile_diet_type'::text
+    FROM user_preference up
+    JOIN nutrition.foods f ON TRUE
+    WHERE up.diet_type = 'vegetarian'
+      AND NOT EXISTS (
+        SELECT 1 FROM nutrition.food_tags ft
+        WHERE ft.food_id = f.id AND ft.tag_code = 'vegetarian'
+      )
+
+    UNION ALL
+
+    SELECT
+      f.id,
+      'hard'::text,
+      'diet_type'::text,
+      0,
+      70,
+      'profile_diet_type'::text
+    FROM user_preference up
+    JOIN nutrition.foods f ON TRUE
+    LEFT JOIN nutrition.food_categories fc ON fc.id = f.category_id
+    WHERE up.diet_type = 'pescatarian'
+      AND COALESCE(fc.food_group_code, substring(f.bls_code, 1, 1)) IN ('U', 'V', 'W')
+  )
+  SELECT DISTINCT
+    p_user_id,
+    food_id,
+    constraint_level,
+    match_type,
+    score,
+    specificity,
+    source,
+    now()
+  FROM preference_targets;
+END;
+$function$;
+
+CREATE OR REPLACE FUNCTION nutrition.refresh_food_preference_search_targets_trigger()
+RETURNS trigger
+LANGUAGE plpgsql
+VOLATILE
+SECURITY INVOKER
+AS $function$
+BEGIN
+  PERFORM nutrition.refresh_food_preference_search_targets(COALESCE(NEW.user_id, OLD.user_id));
+  RETURN COALESCE(NEW, OLD);
+END;
+$function$;
+
+DROP TRIGGER IF EXISTS food_preferences_search_targets_refresh ON nutrition.food_preferences;
+DROP TRIGGER IF EXISTS food_preference_items_search_targets_refresh ON nutrition.food_preference_items;
+
+CREATE TRIGGER food_preferences_search_targets_refresh
+  AFTER INSERT OR UPDATE OR DELETE ON nutrition.food_preferences
+  FOR EACH ROW EXECUTE FUNCTION nutrition.refresh_food_preference_search_targets_trigger();
+
+CREATE TRIGGER food_preference_items_search_targets_refresh
+  AFTER INSERT OR UPDATE OR DELETE ON nutrition.food_preference_items
+  FOR EACH ROW EXECUTE FUNCTION nutrition.refresh_food_preference_search_targets_trigger();
+
+COMMENT ON TABLE nutrition.food_preference_search_targets IS
+  'C-192: materialisierte Suchwirkung der Nutzerpraeferenzen. '
+  'food_search aggregiert daraus statt die Preference-Ziele je Suche neu aufzubauen.';
+
 DROP FUNCTION IF EXISTS nutrition.food_search(
   text, text, text[], uuid, text, uuid, text, text, integer, integer);
 -- Dasselbe fuer die 13-Parameter-Fassung aus Block 29: p_token_groups
@@ -509,7 +851,7 @@ preference_targets AS MATERIALIZED (
   WHERE up.diet_type = 'pescatarian'
     AND COALESCE(fc.food_group_code, substring(f.bls_code, 1, 1)) IN ('U', 'V', 'W')
 ),
-preference_scores AS MATERIALIZED (
+preference_scores AS NOT MATERIALIZED (
   SELECT
     food_id,
     bool_or(constraint_level = 'hard')
@@ -523,7 +865,9 @@ preference_scores AS MATERIALIZED (
       'type', match_type,
       'score', score
     )), '[]'::jsonb) AS preference_matches
-  FROM preference_targets
+  FROM nutrition.food_preference_search_targets
+  WHERE p_user_id IS NOT NULL
+    AND user_id = p_user_id
   GROUP BY food_id
 ),
 matching_foods AS (
