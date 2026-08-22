@@ -37,6 +37,11 @@ import * as React from 'react'
 import { Card, Pill, Icon } from '@lumeos/ui'
 
 import type { KatalogEintrag, StackDaten } from '../../../lib/supplements/stack-read'
+// C-224: die Substanzdatenbank (566) unter dem 44er-Katalog.
+import type {
+  SubstanzListenEintrag, EigenerStack,
+} from '../../../lib/supplements/substanz-read'
+import { SubstanzKatalogKarte } from './substanz-detail'
 import { useSupp } from './kontext'
 
 /**
@@ -58,9 +63,11 @@ const STUFEN_FARBE: Record<string, string> = {
 /** Die Ordnung der Vorlage — beste Evidenz zuerst. */
 const STUFEN_ORDNUNG = 'SABCDF'
 
-export function KatalogEcht({ katalog, daten }: {
+export function KatalogEcht({ katalog, daten, substanzen = [], stacks = [] }: {
   katalog: KatalogEintrag[]
   daten: StackDaten | null
+  substanzen?: SubstanzListenEintrag[]
+  stacks?: EigenerStack[]
 }) {
   const { open } = useSupp()
   const [stufe, setStufe] = React.useState<string>('all')
@@ -236,6 +243,12 @@ export function KatalogEcht({ katalog, daten }: {
           Stufe führt die Tabelle nicht.
         </div>
       </Card>
+
+      <div style={{ height: 14 }} />
+
+      {/* C-224: die Substanzdatenbank — eigene Tabelle, eigener
+          Lesepfad, Detail mit Herkunft je Feld. */}
+      <SubstanzKatalogKarte liste={substanzen} stacks={stacks} />
     </div>
   )
 }

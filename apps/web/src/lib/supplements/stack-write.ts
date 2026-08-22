@@ -195,14 +195,24 @@ export type PositionEingabe = {
   dose_unit: string
   timing: string
   frequency?: string
+  /**
+   * C-224: der GEWAEHLTE Stack. Ohne Angabe gilt weiter der aktive.
+   * Kein zweiter Rechteweg: die Id wird gegen die eigenen Stacks
+   * geprueft, nicht blind eingesetzt.
+   */
+  stack_id?: string | null
+  /** C-224: der Anker zur Substanzdatenbank, z. B. `substance_catalog:sub_…`. */
+  notes?: string | null
 }
 
 /**
- * Eine Position zum aktiven Stack hinzufuegen.
+ * Eine Position zum aktiven ODER zum gewaehlten Stack hinzufuegen.
  *
- * `[cmd]` **Der Stack wird gelesen, nicht uebergeben** — `stack_id`
- * aus dem Browser waere ein zweiter Rechteweg. Gibt es keinen aktiven
- * Stack, ist das ein Befund und kein Grund, still einen anzulegen.
+ * `[cmd]` **Der Stack wird geprueft, nicht uebernommen** — eine
+ * uebergebene `stack_id` zaehlt nur, wenn sie zu einem eigenen Stack
+ * gehoert (`user_id`-Abfrage; die Zeilenrechte pruefen zusaetzlich).
+ * Gibt es keinen Treffer, ist das ein Befund und kein Grund, still
+ * einen Stack anzulegen.
  */
 export async function ergaenzePosition(
   eingabe: PositionEingabe,
@@ -220,16 +230,19 @@ export async function ergaenzePosition(
       'Entweder ein Katalogeintrag oder ein eigener Name.')
   }
 
-  const { data: stack, error: stackFehler } = await db()
+  let stackAbfrage = db()
     .from('user_stacks')
     .select('id')
     .eq('user_id', userId)
-    .eq('is_active', true)
-    .maybeSingle()
+  stackAbfrage = eingabe.stack_id
+    ? stackAbfrage.eq('id', eingabe.stack_id)
+    : stackAbfrage.eq('is_active', true)
+  const { data: stack, error: stackFehler } = await stackAbfrage.maybeSingle()
   if (stackFehler) throw new SupplementSchreibFehler('WRITE_FAILED', stackFehler.message)
   if (!stack) {
-    throw new SupplementSchreibFehler('NOT_FOUND',
-      'Kein aktiver Stack — es gibt nichts, wozu die Position gehoeren koennte.')
+    throw new SupplementSchreibFehler('NOT_FOUND', eingabe.stack_id
+      ? 'Kein eigener Stack mit dieser id.'
+      : 'Kein aktiver Stack — es gibt nichts, wozu die Position gehoeren koennte.')
   }
 
   const { data, error } = await db()
@@ -242,6 +255,7 @@ export async function ergaenzePosition(
       dose_unit: eingabe.dose_unit.trim(),
       timing: eingabe.timing,
       frequency: eingabe.frequency ?? 'daily',
+      notes: eingabe.notes?.trim() || null,
     })
     .select('id, custom_name, supplement_catalog(name)')
 

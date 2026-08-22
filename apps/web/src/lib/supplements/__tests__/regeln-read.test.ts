@@ -20,12 +20,22 @@ test('Anfaenger reicht nicht', () => {
 })
 
 test('ab der gesetzten Stufe ist offen', () => {
-  assert.equal(GRAD_FUER_EXTENDED, 'advanced')
-  assert.equal(reichtDerGrad('advanced'), true)
+  // `[cmd]` **G-167 (2026-08-22): von `advanced` auf `pro`.** Hier
+  // stand `assert.equal(GRAD_FUER_EXTENDED, 'advanced')` — die Pruefung
+  // hat den Wechsel gemeldet, wie sie soll.
+  //
+  // `[read]` **Tom, 2026-08-22:** *„es ist noch nicht definiert, also
+  // legen wir es jetzt auf pro und elite."* Die Grenze ist ein
+  // Provisorium; `EXTENDED_VORLAEUFIG` sagt es in der Oberflaeche.
+  assert.equal(GRAD_FUER_EXTENDED, 'pro')
+  assert.equal(reichtDerGrad('pro'), true)
+})
+
+test('advanced reicht seit G-167 nicht mehr', () => {
+  assert.equal(reichtDerGrad('advanced'), false)
 })
 
 test('hoehere Stufen reichen auch', () => {
-  assert.equal(reichtDerGrad('pro'), true)
   assert.equal(reichtDerGrad('elite'), true)
 })
 

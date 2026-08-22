@@ -18,7 +18,7 @@ import { Card, Icon, InEntwicklungKnopf } from '@lumeos/ui'
 
 import { STACK } from './daten'
 
-const ATTRAPPE = 'Aus dem Entwurf uebernommen. Es gibt kein `supplements`-Schema — die Zahlen sind erfunden.'
+const ATTRAPPE = 'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen Supplements-Daten angebunden — die Zahlen sind erfunden.'
 
 /** Die acht Zeilen der Vorlage (module-supplements.jsx:760-768). */
 const COMPLIANCE = [

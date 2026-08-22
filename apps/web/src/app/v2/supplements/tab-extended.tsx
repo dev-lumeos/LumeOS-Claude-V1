@@ -27,7 +27,7 @@ import { Card, Pill, Icon, Row, Meter, LineChart, InEntwicklungKnopf } from '@lu
 import { EXTENDED_STACK, EXTENDED_LABS } from './daten'
 import { useSupp } from './kontext'
 
-const ATTRAPPE = 'Aus dem Entwurf uebernommen. Es gibt kein `supplements`-Schema — die Zahlen sind erfunden.'
+const ATTRAPPE = 'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen Supplements-Daten angebunden - die Zahlen sind erfunden.'
 
 /** Ein Eintrag aus EXTENDED_STACK. Die Vorlage typisiert nicht. */
 type Compound = Record<string, unknown>

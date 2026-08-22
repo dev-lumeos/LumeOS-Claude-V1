@@ -122,7 +122,7 @@ function Schreibfehler({ text }: { text: string | null }) {
   )
 }
 
-const OHNE_SCHEMA = 'Es gibt kein `supplements`-Schema — hier laesst sich noch nichts speichern.'
+const OHNE_SCHEMA = 'Das `supplements`-Schema steht; dieser Dialog ist noch nicht an einen passenden Schreibweg angebunden.'
 
 function NichtsZuSpeichern() {
   return (

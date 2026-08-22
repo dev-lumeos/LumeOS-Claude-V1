@@ -53,6 +53,10 @@ import { SuppCatalog, SuppStacks, SuppIntelligence, SuppInventory } from './tab-
 // G-74: Inventory und Compliance mit echten Werten.
 import { ComplianceEcht, InventoryEcht } from './tab-inventory-echt'
 import { KatalogEcht } from './tab-katalog-echt'
+// C-224: Substanzdatenbank mit Detailansicht und Stack-Zuteilung.
+import type {
+  SubstanzListenEintrag, EigenerStack,
+} from '../../../lib/supplements/substanz-read'
 import { SupplementsModale } from './modale'
 
 /**
@@ -88,7 +92,7 @@ function tabs(stackAnzahl: number, regelAnzahl: number | null): TabItem[] {
 
 export function SupplementsAnsicht({
   daten: datenProp = null, katalog = [], heute: heuteProp = null,
-  regeln = null, gate = null,
+  regeln = null, gate = null, substanzen = [], stacks = [],
 }: {
   daten?: StackDaten | null
   katalog?: KatalogEintrag[]
@@ -96,6 +100,9 @@ export function SupplementsAnsicht({
   regeln?: RegelStand | null
   /** G-110: der Erfahrungsgrad, der Extended oeffnet. */
   gate?: GateStand | null
+  /** C-224: die Substanzdatenbank und die eigenen Stacks. */
+  substanzen?: SubstanzListenEintrag[]
+  stacks?: EigenerStack[]
   /**
    * G-74: Das echte Heute, serverseitig aus `lib/datum.ts`.
    *
@@ -275,7 +282,12 @@ export function SupplementsAnsicht({
               Muster wie bei Compliance und Inventory. */}
           {tab === 'catalog' && (
             katalog.length > 0
-              ? <KatalogEcht katalog={katalog} daten={daten} />
+              ? (
+                <KatalogEcht
+                  katalog={katalog} daten={daten}
+                  substanzen={substanzen} stacks={stacks}
+                />
+              )
               : <SuppCatalog />
           )}
           {tab === 'stacks' && <SuppStacks />}

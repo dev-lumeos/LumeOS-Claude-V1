@@ -449,3 +449,39 @@
   border: 1px solid color-mix(in oklch, var(--acc-recov) 25%, var(--border));
   border-radius: 6px;
 }
+
+/* --- Kategoriefarben des Substanzkatalogs (C-227) ---------------
+ * [read] Quelle ist `canonical_category` (C-197). Farben NUR ueber
+ * diese Variablen — nie hartkodiert in einer Komponente; ein
+ * Waechtertest prueft beide Richtungen (Code <-> diese Liste).
+ *
+ * [cmd] A-31 als Lehre: die elf Modul-Akzente liegen alle bei
+ * Luminanz 0,74-0,80 und sind unter Farbfehlsichtigkeit nicht
+ * unterscheidbar. Deshalb variieren die Toene hier BEWUSST die
+ * Helligkeit (L 0,52-0,86), nicht nur den Farbton — und die Farbe
+ * ist nie das einzige Merkmal: jede Kennzeichnung traegt Text. */
+:root {
+  --kat-peptide:      oklch(0.78 0.14 210); /* hell, tuerkis   */
+  --kat-aas:          oklch(0.58 0.19  25); /* dunkel, rot     */
+  --kat-botanical:    oklch(0.72 0.15 145); /* mittel, gruen   */
+  --kat-sports:       oklch(0.84 0.15  90); /* sehr hell, gelb */
+  --kat-mineral:      oklch(0.62 0.10 260); /* dunkel, blau    */
+  --kat-vitamin:      oklch(0.80 0.14  55); /* hell, orange    */
+  --kat-performance:  oklch(0.55 0.17 320); /* dunkel, violett */
+  --kat-protein:      oklch(0.75 0.10 175); /* mittel, mint    */
+  --kat-weitere:      oklch(0.68 0.05 250); /* graublau, Sammelfarbe */
+  --kat-unzugeordnet: oklch(0.60 0.00   0); /* grau, bewusst farblos */
+}
+/* Auf hellem Grund brauchen die hellen Toene mehr Tiefe. */
+:root[data-theme="light"] {
+  --kat-peptide:      oklch(0.55 0.13 210);
+  --kat-aas:          oklch(0.50 0.18  25);
+  --kat-botanical:    oklch(0.52 0.14 145);
+  --kat-sports:       oklch(0.62 0.13  90);
+  --kat-mineral:      oklch(0.48 0.10 260);
+  --kat-vitamin:      oklch(0.58 0.13  55);
+  --kat-performance:  oklch(0.45 0.16 320);
+  --kat-protein:      oklch(0.52 0.09 175);
+  --kat-weitere:      oklch(0.52 0.04 250);
+  --kat-unzugeordnet: oklch(0.48 0.00   0);
+}

@@ -132,31 +132,20 @@ export async function ladeRegeln(stichtag: string): Promise<RegelStand> {
 }
 
 // ── Das Gate von Extended ───────────────────────────────────────
-
-/** Die vier Stufen, in aufsteigender Reihenfolge. */
-export const GRADE = ['beginner', 'advanced', 'pro', 'elite'] as const
-export type Grad = typeof GRADE[number]
-
-/**
- * Ab welcher Stufe Extended offen ist.
- *
- * `[read]` **Tom (C-113):** *„Ich stelle mir vor, es ist nur für
- * bestimmte Level-User aktivierbar."* `advanced` ist die zweite von
- * vier — **wer sich selbst als Anfaenger einstuft, sieht die
- * Protokolle nicht.**
- *
- * `[read]` Die Grenze ist eine Produktentscheidung, keine gemessene
- * Groesse. Sie steht hier an einer Stelle, damit sie sich aendern
- * laesst, ohne sie zu suchen.
- */
-export const GRAD_FUER_EXTENDED: Grad = 'advanced'
-
-export function reichtDerGrad(grad: string | null): boolean {
-  if (!grad) return false
-  const i = (GRADE as readonly string[]).indexOf(grad)
-  const noetig = (GRADE as readonly string[]).indexOf(GRAD_FUER_EXTENDED)
-  return i >= 0 && i >= noetig
-}
+//
+// `[cmd]` **G-167: Die Regel steht in `extended-regel.ts`**, serverfrei.
+// Diese Datei zieht `@lumeos/shared/session` und damit `next/headers`;
+// ein WERT-Import von hier in eine `'use client'`-Datei holte Server-I/O
+// ins Browserbuendel (A-30, davor G-74/G-79/G-97).
+//
+// `[read]` Weiterexportiert, damit bestehende Aufrufer unveraendert
+// bleiben — wer serverseitig liest, importiert weiter von hier.
+export {
+  GRADE, GRAD_FUER_EXTENDED, EXTENDED_VORLAEUFIG, reichtDerGrad,
+  type Grad,
+} from './extended-regel'
+import { GRADE, reichtDerGrad } from './extended-regel'
+import type { Grad } from './extended-regel'
 
 export type GateStand = {
   /** Der gespeicherte Grad, oder `null`. */

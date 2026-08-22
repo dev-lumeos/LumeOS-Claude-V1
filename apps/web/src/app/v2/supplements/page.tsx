@@ -24,6 +24,11 @@ export const metadata: Metadata = {
 
 // G-110: das Regelwerk (C-133) und das Gate von Extended.
 import { ladeRegeln, ladeGate, type RegelStand, type GateStand } from '../../../lib/supplements/regeln-read'
+// C-224: die Substanzdatenbank und die eigenen Stacks.
+import {
+  ladeSubstanzListe, ladeEigeneStacks,
+  type SubstanzListenEintrag, type EigenerStack,
+} from '../../../lib/supplements/substanz-read'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,10 +71,26 @@ export default async function V2SupplementsPage() {
     gate = null
   }
 
+  // C-224: die Substanzdatenbank (566) und die eigenen Stacks fuer die
+  // Zuteilung. Eigen abgefangen — faellt sie aus, bleibt der Rest.
+  let substanzen: SubstanzListenEintrag[] = []
+  let stacks: EigenerStack[] = []
+  try {
+    substanzen = await ladeSubstanzListe()
+  } catch {
+    substanzen = []
+  }
+  try {
+    stacks = await ladeEigeneStacks()
+  } catch {
+    stacks = []
+  }
+
   return (
     <SupplementsAnsicht
       daten={daten} katalog={katalog} heute={stichtag}
       regeln={regeln} gate={gate}
+      substanzen={substanzen} stacks={stacks}
     />
   )
 }

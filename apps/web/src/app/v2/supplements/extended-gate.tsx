@@ -24,8 +24,17 @@ import Link from 'next/link'
 import type { Route } from 'next'
 import { Card, Icon, Pill } from '@lumeos/ui'
 
+// `[cmd]` G-167: Werte aus `extended-regel.ts` (serverfrei), der Typ
+// als `import type` aus `regeln-read.ts` — Typimporte werden beim
+// Uebersetzen entfernt und ziehen nichts ins Buendel (A-30).
+import {
+  EXTENDED_VORLAEUFIG, GRAD_FUER_EXTENDED,
+} from '../../../lib/supplements/extended-regel'
 import type { GateStand } from '../../../lib/supplements/regeln-read'
 import { EXPERIENCE_LEVEL_INFO } from '../../../lib/profile/profile-model'
+
+/** Die Beschriftung der noetigen Stufe — aus der Regel, nicht getippt. */
+const NOETIG = EXPERIENCE_LEVEL_INFO[GRAD_FUER_EXTENDED]?.label ?? GRAD_FUER_EXTENDED
 
 export function ExtendedGesperrt({ g }: { g: GateStand }) {
   const ohneAngabe = g.grad === null
@@ -63,10 +72,14 @@ export function ExtendedGesperrt({ g }: { g: GateStand }) {
           </span>
         </div>
 
+        {/* G-167: Die Stufe kommt aus `GRAD_FUER_EXTENDED`, nicht aus
+            dem Text. `[cmd]` Hier stand «Fortgeschritten» zweimal fest
+            verdrahtet — beim Wechsel auf `pro` haette die Kachel eine
+            Stufe genannt, die nicht mehr gilt. */}
         <p className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55, marginBottom: 12 }}>
           {ohneAngabe
-            ? 'Der Bereich ist ab «Fortgeschritten» offen. Solange kein Grad hinterlegt ist, bleibt er zu.'
-            : `Der Bereich ist ab «${EXPERIENCE_LEVEL_INFO.advanced.label}» offen.`}
+            ? `Der Bereich ist ab «${NOETIG}» offen. Solange kein Grad hinterlegt ist, bleibt er zu.`
+            : `Der Bereich ist ab «${NOETIG}» offen.`}
         </p>
 
         {/*
@@ -86,7 +99,23 @@ export function ExtendedGesperrt({ g }: { g: GateStand }) {
         )}
       </Card>
 
+      {/* ── G-167: DASS ES EIN PROVISORIUM IST, STEHT DA ──────────
+          `[read]` **Tom, 2026-08-22:** *„es ist noch nicht definiert,
+          also legen wir es jetzt auf pro und elite."*
+
+          `[read]` **Ohne diesen Satz wird die Regel in vier Wochen als
+          Entscheidung gelesen.** Genau so sind die Banner entstanden,
+          die G-155 gefunden hat — Saetze, die einen Zwischenstand
+          beschrieben und als Dauerzustand stehenblieben. */}
       <p className="v2-hinweis" style={{ marginTop: 12 }}>
+        <Icon name="alert" className="v2-ic v2-ic-sm" />
+        <span>
+          <strong>Noch nicht endgueltig geregelt.</strong>{' '}
+          {EXTENDED_VORLAEUFIG}
+        </span>
+      </p>
+
+      <p className="v2-hinweis" style={{ marginTop: 8 }}>
         <Icon name="alert" className="v2-ic v2-ic-sm" />
         <span>
           Der Erfahrungsgrad ist <strong>Selbstauskunft</strong>, keine

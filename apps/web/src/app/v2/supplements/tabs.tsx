@@ -9,9 +9,9 @@
 // `SuppCost`.
 //
 // UEBERNOMMEN: Aufbau, Reihenfolge, Beschriftung und **alle Zahlen**.
-// `[read]` Es gibt kein `supplements`-Schema; nichts hier ist
-// angebunden, und die erfundenen Werte bleiben stehen — dieselbe Regel
-// wie beim Dashboard und beim Training.
+// `[read]` Das `supplements`-Schema steht. Was hier weiter markiert ist,
+// ist noch nicht an die vorhandenen Stack-, Intake- und Katalogdaten
+// angebunden oder braucht eine spezifische fehlende Tabelle.
 //
 // GEAENDERT IST NUR DAS TECHNISCHE: Typen, `v2-`-Praefix, Knoepfe ohne
 // Ziel oeffnen ein Modal. Zwei Befunde der Vorlage stehen unten bei
@@ -33,7 +33,7 @@ import { CostErgaenzung } from './tab-inventory-echt'
 const TODAY_DOW = 5
 const NOW_HOUR = 13.5
 
-const ATTRAPPE = 'Aus dem Entwurf uebernommen. Es gibt kein `supplements`-Schema — die Zahlen sind erfunden.'
+const ATTRAPPE = 'Aus dem Entwurf uebernommen. Diese Kachel ist noch nicht an die vorhandenen Supplements-Daten angebunden - die Zahlen sind erfunden.'
 
 /**
  * Die Marke der **Rueckfallfassungen** (G-74).
