@@ -1,0 +1,2665 @@
+[
+  {
+    "modul": "dashboard",
+    "tab": null,
+    "modus": "hell",
+    "pfad": "/v2/dashboard",
+    "datei": "backup/bestand/dashboard-hell.png",
+    "titel": "Dashboard · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2106,
+    "ms_lauf2": 1211,
+    "anfragen": 20,
+    "langsamste": [
+      {
+        "url": "/v2/dashboard",
+        "ms": 1089,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "diary",
+    "modus": "hell",
+    "pfad": "/v2/nutrition?tab=diary",
+    "datei": "backup/bestand/nutrition-diary-hell.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2466,
+    "ms_lauf2": 2045,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=diary",
+        "ms": 890,
+        "typ": "document"
+      },
+      {
+        "url": "/api/nutrition/diary?datum=2026-08-22",
+        "ms": 761,
+        "typ": "fetch"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "insights",
+    "modus": "hell",
+    "pfad": "/v2/nutrition?tab=insights",
+    "datei": "backup/bestand/nutrition-insights-hell.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1670,
+    "ms_lauf2": 1693,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=insights",
+        "ms": 684,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "nutrients",
+    "modus": "hell",
+    "pfad": "/v2/nutrition?tab=nutrients",
+    "datei": "backup/bestand/nutrition-nutrients-hell.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1752,
+    "ms_lauf2": 1762,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=nutrients",
+        "ms": 764,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "foods",
+    "modus": "hell",
+    "pfad": "/v2/nutrition?tab=foods",
+    "datei": "backup/bestand/nutrition-foods-hell.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 4809,
+    "ms_lauf2": 4287,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=foods",
+        "ms": 1830,
+        "typ": "document"
+      },
+      {
+        "url": "/api/nutrition/foods?q=&limit=50&offset=0&sort=relevance&prefs=1",
+        "ms": 1750,
+        "typ": "fetch"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "plans",
+    "modus": "hell",
+    "pfad": "/v2/nutrition?tab=plans",
+    "datei": "backup/bestand/nutrition-plans-hell.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1653,
+    "ms_lauf2": 1654,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=plans",
+        "ms": 593,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "prefs",
+    "modus": "hell",
+    "pfad": "/v2/nutrition?tab=prefs",
+    "datei": "backup/bestand/nutrition-prefs-hell.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1635,
+    "ms_lauf2": 1648,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=prefs",
+        "ms": 583,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "planner",
+    "modus": "hell",
+    "pfad": "/v2/nutrition?tab=planner",
+    "datei": "backup/bestand/nutrition-planner-hell.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1781,
+    "ms_lauf2": 1786,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=planner",
+        "ms": 740,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "today",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=today",
+    "datei": "backup/bestand/training-today-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 2,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2542,
+    "ms_lauf2": 1435,
+    "anfragen": 20,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=today",
+        "ms": 1466,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "plan",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=plan",
+    "datei": "backup/bestand/training-plan-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 3,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1433,
+    "ms_lauf2": 1325,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=plan",
+        "ms": 361,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "history",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=history",
+    "datei": "backup/bestand/training-history-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1343,
+    "ms_lauf2": 1304,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=history",
+        "ms": 337,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "library",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=library",
+    "datei": "backup/bestand/training-library-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1530,
+    "ms_lauf2": 1542,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=library",
+        "ms": 365,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "progress",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=progress",
+    "datei": "backup/bestand/training-progress-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1315,
+    "ms_lauf2": 1344,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=progress",
+        "ms": 320,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "landmarks",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=landmarks",
+    "datei": "backup/bestand/training-landmarks-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 8,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1346,
+    "ms_lauf2": 1408,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=landmarks",
+        "ms": 308,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "standards",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=standards",
+    "datei": "backup/bestand/training-standards-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1412,
+    "ms_lauf2": 1386,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=standards",
+        "ms": 305,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "calendar",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=calendar",
+    "datei": "backup/bestand/training-calendar-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1388,
+    "ms_lauf2": 1390,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=calendar",
+        "ms": 324,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "hrzones",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=hrzones",
+    "datei": "backup/bestand/training-hrzones-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 8,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1375,
+    "ms_lauf2": 1377,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=hrzones",
+        "ms": 307,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "offline",
+    "modus": "hell",
+    "pfad": "/v2/training?tab=offline",
+    "datei": "backup/bestand/training-offline-hell.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1398,
+    "ms_lauf2": 1430,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=offline",
+        "ms": 320,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "recovery",
+    "tab": "today",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=today",
+    "datei": "backup/bestand/recovery-today-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1312,
+    "ms_lauf2": 1339,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "checkin",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=checkin",
+    "datei": "backup/bestand/recovery-checkin-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1266,
+    "ms_lauf2": 1299,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "muscles",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=muscles",
+    "datei": "backup/bestand/recovery-muscles-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 3,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1277,
+    "ms_lauf2": 1302,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "hrv",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=hrv",
+    "datei": "backup/bestand/recovery-hrv-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1237,
+    "ms_lauf2": 1297,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "sleep",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=sleep",
+    "datei": "backup/bestand/recovery-sleep-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1300,
+    "ms_lauf2": 1209,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "modalities",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=modalities",
+    "datei": "backup/bestand/recovery-modalities-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1290,
+    "ms_lauf2": 1235,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "overtraining",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=overtraining",
+    "datei": "backup/bestand/recovery-overtraining-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1223,
+    "ms_lauf2": 1288,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "protocols",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=protocols",
+    "datei": "backup/bestand/recovery-protocols-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1293,
+    "ms_lauf2": 1240,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "stress",
+    "modus": "hell",
+    "pfad": "/v2/recovery?tab=stress",
+    "datei": "backup/bestand/recovery-stress-hell.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1265,
+    "ms_lauf2": 1266,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "supplements",
+    "tab": "today",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=today",
+    "datei": "backup/bestand/supplements-today-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 3719,
+    "ms_lauf2": 2167,
+    "anfragen": 22,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=today",
+        "ms": 2605,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "stack",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=stack",
+    "datei": "backup/bestand/supplements-stack-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2124,
+    "ms_lauf2": 2149,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=stack",
+        "ms": 1068,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "extended",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=extended",
+    "datei": "backup/bestand/supplements-extended-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2147,
+    "ms_lauf2": 2109,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=extended",
+        "ms": 1058,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "catalog",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=catalog",
+    "datei": "backup/bestand/supplements-catalog-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2114,
+    "ms_lauf2": 2131,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=catalog",
+        "ms": 1032,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "stacks",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=stacks",
+    "datei": "backup/bestand/supplements-stacks-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2128,
+    "ms_lauf2": 2123,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=stacks",
+        "ms": 1048,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "intel",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=intel",
+    "datei": "backup/bestand/supplements-intel-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 8,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2053,
+    "ms_lauf2": 2046,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=intel",
+        "ms": 1057,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "inventory",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=inventory",
+    "datei": "backup/bestand/supplements-inventory-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2038,
+    "ms_lauf2": 2078,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=inventory",
+        "ms": 1032,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "injection",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=injection",
+    "datei": "backup/bestand/supplements-injection-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2059,
+    "ms_lauf2": 2085,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=injection",
+        "ms": 1048,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "compliance",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=compliance",
+    "datei": "backup/bestand/supplements-compliance-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2057,
+    "ms_lauf2": 2117,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=compliance",
+        "ms": 1055,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "interactions",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=interactions",
+    "datei": "backup/bestand/supplements-interactions-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2159,
+    "ms_lauf2": 2156,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=interactions",
+        "ms": 1090,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "cost",
+    "modus": "hell",
+    "pfad": "/v2/supplements?tab=cost",
+    "datei": "backup/bestand/supplements-cost-hell.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2162,
+    "ms_lauf2": 2102,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=cost",
+        "ms": 1071,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "goals",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=goals",
+    "datei": "backup/bestand/goals-goals-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2689,
+    "ms_lauf2": 1358,
+    "anfragen": 21,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=goals",
+        "ms": 1616,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "phase",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=phase",
+    "datei": "backup/bestand/goals-phase-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1366,
+    "ms_lauf2": 1325,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=phase",
+        "ms": 316,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "tdee",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=tdee",
+    "datei": "backup/bestand/goals-tdee-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1342,
+    "ms_lauf2": 1389,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "goals",
+    "tab": "cross",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=cross",
+    "datei": "backup/bestand/goals-cross-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1390,
+    "ms_lauf2": 1372,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=cross",
+        "ms": 316,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "timeline",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=timeline",
+    "datei": "backup/bestand/goals-timeline-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1358,
+    "ms_lauf2": 1360,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "goals",
+    "tab": "metrics",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=metrics",
+    "datei": "backup/bestand/goals-metrics-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1327,
+    "ms_lauf2": 1327,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=metrics",
+        "ms": 330,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "measure",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=measure",
+    "datei": "backup/bestand/goals-measure-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1299,
+    "ms_lauf2": 1299,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=measure",
+        "ms": 308,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "comp",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=comp",
+    "datei": "backup/bestand/goals-comp-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1412,
+    "ms_lauf2": 1304,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=comp",
+        "ms": 331,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "physique",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=physique",
+    "datei": "backup/bestand/goals-physique-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1269,
+    "ms_lauf2": 1288,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "goals",
+    "tab": "poses",
+    "modus": "hell",
+    "pfad": "/v2/goals?tab=poses",
+    "datei": "backup/bestand/goals-poses-hell.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1323,
+    "ms_lauf2": 1316,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=poses",
+        "ms": 323,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "medical",
+    "tab": "dashboard",
+    "modus": "hell",
+    "pfad": "/v2/medical?tab=dashboard",
+    "datei": "backup/bestand/medical-dashboard-hell.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2554,
+    "ms_lauf2": 1288,
+    "anfragen": 21,
+    "langsamste": [
+      {
+        "url": "/v2/medical?tab=dashboard",
+        "ms": 1516,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "medical",
+    "tab": "biomarkers",
+    "modus": "hell",
+    "pfad": "/v2/medical?tab=biomarkers",
+    "datei": "backup/bestand/medical-biomarkers-hell.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1282,
+    "ms_lauf2": 1253,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "medical",
+    "tab": "import",
+    "modus": "hell",
+    "pfad": "/v2/medical?tab=import",
+    "datei": "backup/bestand/medical-import-hell.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1293,
+    "ms_lauf2": 1258,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "medical",
+    "tab": "tracking",
+    "modus": "hell",
+    "pfad": "/v2/medical?tab=tracking",
+    "datei": "backup/bestand/medical-tracking-hell.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1272,
+    "ms_lauf2": 1254,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "medical",
+    "tab": "insights",
+    "modus": "hell",
+    "pfad": "/v2/medical?tab=insights",
+    "datei": "backup/bestand/medical-insights-hell.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1254,
+    "ms_lauf2": 1245,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "overview",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=overview",
+    "datei": "backup/bestand/coach-overview-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 3264,
+    "ms_lauf2": 1322,
+    "anfragen": 24,
+    "langsamste": [
+      {
+        "url": "/v2/coach/human",
+        "ms": 1298,
+        "typ": "document"
+      },
+      {
+        "url": "/v2/coach?tab=overview",
+        "ms": 851,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "coach",
+    "tab": "coaches",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=coaches",
+    "datei": "backup/bestand/coach-coaches-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1408,
+    "ms_lauf2": 1455,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "permissions",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=permissions",
+    "datei": "backup/bestand/coach-permissions-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1403,
+    "ms_lauf2": 1450,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "proposals",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=proposals",
+    "datei": "backup/bestand/coach-proposals-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1364,
+    "ms_lauf2": 1346,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "autonomy",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=autonomy",
+    "datei": "backup/bestand/coach-autonomy-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1400,
+    "ms_lauf2": 1413,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "checkins",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=checkins",
+    "datei": "backup/bestand/coach-checkins-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1396,
+    "ms_lauf2": 1417,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "messages",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=messages",
+    "datei": "backup/bestand/coach-messages-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1364,
+    "ms_lauf2": 1375,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "notes",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=notes",
+    "datei": "backup/bestand/coach-notes-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1393,
+    "ms_lauf2": 1426,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "invites",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=invites",
+    "datei": "backup/bestand/coach-invites-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1390,
+    "ms_lauf2": 1394,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "onboard",
+    "modus": "hell",
+    "pfad": "/v2/coach?tab=onboard",
+    "datei": "backup/bestand/coach-onboard-hell.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1523,
+    "ms_lauf2": 1433,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "settings",
+    "tab": null,
+    "modus": "hell",
+    "pfad": "/v2/settings",
+    "datei": "backup/bestand/settings-hell.png",
+    "titel": "Einstellungen · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2221,
+    "ms_lauf2": 1232,
+    "anfragen": 20,
+    "langsamste": [
+      {
+        "url": "/v2/settings",
+        "ms": 1071,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "dashboard",
+    "tab": null,
+    "modus": "dunkel",
+    "pfad": "/v2/dashboard",
+    "datei": "backup/bestand/dashboard-dunkel.png",
+    "titel": "Dashboard · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1924,
+    "ms_lauf2": 1278,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/dashboard",
+        "ms": 801,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "diary",
+    "modus": "dunkel",
+    "pfad": "/v2/nutrition?tab=diary",
+    "datei": "backup/bestand/nutrition-diary-dunkel.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2687,
+    "ms_lauf2": 2226,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/api/nutrition/diary?datum=2026-08-22",
+        "ms": 885,
+        "typ": "fetch"
+      },
+      {
+        "url": "/v2/nutrition?tab=diary",
+        "ms": 869,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "insights",
+    "modus": "dunkel",
+    "pfad": "/v2/nutrition?tab=insights",
+    "datei": "backup/bestand/nutrition-insights-dunkel.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1787,
+    "ms_lauf2": 1746,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=insights",
+        "ms": 700,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "nutrients",
+    "modus": "dunkel",
+    "pfad": "/v2/nutrition?tab=nutrients",
+    "datei": "backup/bestand/nutrition-nutrients-dunkel.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1884,
+    "ms_lauf2": 1813,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=nutrients",
+        "ms": 798,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "foods",
+    "modus": "dunkel",
+    "pfad": "/v2/nutrition?tab=foods",
+    "datei": "backup/bestand/nutrition-foods-dunkel.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 4835,
+    "ms_lauf2": 4219,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/api/nutrition/foods?q=&limit=50&offset=0&sort=relevance&prefs=1",
+        "ms": 1785,
+        "typ": "fetch"
+      },
+      {
+        "url": "/v2/nutrition?tab=foods",
+        "ms": 1755,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "plans",
+    "modus": "dunkel",
+    "pfad": "/v2/nutrition?tab=plans",
+    "datei": "backup/bestand/nutrition-plans-dunkel.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1586,
+    "ms_lauf2": 1611,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=plans",
+        "ms": 566,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "prefs",
+    "modus": "dunkel",
+    "pfad": "/v2/nutrition?tab=prefs",
+    "datei": "backup/bestand/nutrition-prefs-dunkel.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1628,
+    "ms_lauf2": 1662,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=prefs",
+        "ms": 583,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "nutrition",
+    "tab": "planner",
+    "modus": "dunkel",
+    "pfad": "/v2/nutrition?tab=planner",
+    "datei": "backup/bestand/nutrition-planner-dunkel.png",
+    "titel": "Tagebuch · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1751,
+    "ms_lauf2": 1751,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/nutrition?tab=planner",
+        "ms": 730,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "today",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=today",
+    "datei": "backup/bestand/training-today-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 2,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2129,
+    "ms_lauf2": 1409,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=today",
+        "ms": 1084,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "plan",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=plan",
+    "datei": "backup/bestand/training-plan-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 3,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1309,
+    "ms_lauf2": 1374,
+    "anfragen": 15,
+    "langsamste": []
+  },
+  {
+    "modul": "training",
+    "tab": "history",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=history",
+    "datei": "backup/bestand/training-history-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1347,
+    "ms_lauf2": 1359,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=history",
+        "ms": 310,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "library",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=library",
+    "datei": "backup/bestand/training-library-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1592,
+    "ms_lauf2": 1800,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=library",
+        "ms": 314,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "progress",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=progress",
+    "datei": "backup/bestand/training-progress-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1434,
+    "ms_lauf2": 1370,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=progress",
+        "ms": 335,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "landmarks",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=landmarks",
+    "datei": "backup/bestand/training-landmarks-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 8,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1360,
+    "ms_lauf2": 1389,
+    "anfragen": 15,
+    "langsamste": []
+  },
+  {
+    "modul": "training",
+    "tab": "standards",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=standards",
+    "datei": "backup/bestand/training-standards-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1369,
+    "ms_lauf2": 1388,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=standards",
+        "ms": 318,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "calendar",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=calendar",
+    "datei": "backup/bestand/training-calendar-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1408,
+    "ms_lauf2": 1373,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=calendar",
+        "ms": 311,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "hrzones",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=hrzones",
+    "datei": "backup/bestand/training-hrzones-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 8,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1360,
+    "ms_lauf2": 1389,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=hrzones",
+        "ms": 323,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "training",
+    "tab": "offline",
+    "modus": "dunkel",
+    "pfad": "/v2/training?tab=offline",
+    "datei": "backup/bestand/training-offline-dunkel.png",
+    "titel": "Training · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1395,
+    "ms_lauf2": 1364,
+    "anfragen": 15,
+    "langsamste": [
+      {
+        "url": "/v2/training?tab=offline",
+        "ms": 327,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "recovery",
+    "tab": "today",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=today",
+    "datei": "backup/bestand/recovery-today-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1300,
+    "ms_lauf2": 1244,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "checkin",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=checkin",
+    "datei": "backup/bestand/recovery-checkin-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1271,
+    "ms_lauf2": 1233,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "muscles",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=muscles",
+    "datei": "backup/bestand/recovery-muscles-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 3,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1240,
+    "ms_lauf2": 1282,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "hrv",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=hrv",
+    "datei": "backup/bestand/recovery-hrv-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1232,
+    "ms_lauf2": 1226,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "sleep",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=sleep",
+    "datei": "backup/bestand/recovery-sleep-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1222,
+    "ms_lauf2": 1206,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "modalities",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=modalities",
+    "datei": "backup/bestand/recovery-modalities-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1238,
+    "ms_lauf2": 1225,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "overtraining",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=overtraining",
+    "datei": "backup/bestand/recovery-overtraining-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1179,
+    "ms_lauf2": 1222,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "protocols",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=protocols",
+    "datei": "backup/bestand/recovery-protocols-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1194,
+    "ms_lauf2": 1226,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "recovery",
+    "tab": "stress",
+    "modus": "dunkel",
+    "pfad": "/v2/recovery?tab=stress",
+    "datei": "backup/bestand/recovery-stress-dunkel.png",
+    "titel": "Recovery · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1236,
+    "ms_lauf2": 1237,
+    "anfragen": 16,
+    "langsamste": []
+  },
+  {
+    "modul": "supplements",
+    "tab": "today",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=today",
+    "datei": "backup/bestand/supplements-today-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2219,
+    "ms_lauf2": 2086,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=today",
+        "ms": 1155,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "stack",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=stack",
+    "datei": "backup/bestand/supplements-stack-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2211,
+    "ms_lauf2": 2105,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=stack",
+        "ms": 1092,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "extended",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=extended",
+    "datei": "backup/bestand/supplements-extended-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2065,
+    "ms_lauf2": 2083,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=extended",
+        "ms": 1073,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "catalog",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=catalog",
+    "datei": "backup/bestand/supplements-catalog-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2093,
+    "ms_lauf2": 2030,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=catalog",
+        "ms": 1074,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "stacks",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=stacks",
+    "datei": "backup/bestand/supplements-stacks-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2070,
+    "ms_lauf2": 2031,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=stacks",
+        "ms": 1110,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "intel",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=intel",
+    "datei": "backup/bestand/supplements-intel-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 8,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2008,
+    "ms_lauf2": 2008,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=intel",
+        "ms": 1025,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "inventory",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=inventory",
+    "datei": "backup/bestand/supplements-inventory-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2139,
+    "ms_lauf2": 2047,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=inventory",
+        "ms": 1154,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "injection",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=injection",
+    "datei": "backup/bestand/supplements-injection-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2087,
+    "ms_lauf2": 1992,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=injection",
+        "ms": 1092,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "compliance",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=compliance",
+    "datei": "backup/bestand/supplements-compliance-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2139,
+    "ms_lauf2": 2138,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=compliance",
+        "ms": 1155,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "interactions",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=interactions",
+    "datei": "backup/bestand/supplements-interactions-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2073,
+    "ms_lauf2": 2113,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=interactions",
+        "ms": 1073,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "supplements",
+    "tab": "cost",
+    "modus": "dunkel",
+    "pfad": "/v2/supplements?tab=cost",
+    "datei": "backup/bestand/supplements-cost-dunkel.png",
+    "titel": "Supplements · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 2125,
+    "ms_lauf2": 2019,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/supplements?tab=cost",
+        "ms": 1141,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "goals",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=goals",
+    "datei": "backup/bestand/goals-goals-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1950,
+    "ms_lauf2": 1269,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=goals",
+        "ms": 992,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "phase",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=phase",
+    "datei": "backup/bestand/goals-phase-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1314,
+    "ms_lauf2": 1360,
+    "anfragen": 16,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=phase",
+        "ms": 307,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "tdee",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=tdee",
+    "datei": "backup/bestand/goals-tdee-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1294,
+    "ms_lauf2": 1302,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=tdee",
+        "ms": 308,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "cross",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=cross",
+    "datei": "backup/bestand/goals-cross-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1298,
+    "ms_lauf2": 1304,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "goals",
+    "tab": "timeline",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=timeline",
+    "datei": "backup/bestand/goals-timeline-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1307,
+    "ms_lauf2": 1346,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "goals",
+    "tab": "metrics",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=metrics",
+    "datei": "backup/bestand/goals-metrics-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1401,
+    "ms_lauf2": 1415,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=metrics",
+        "ms": 302,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "measure",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=measure",
+    "datei": "backup/bestand/goals-measure-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1391,
+    "ms_lauf2": 1339,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=measure",
+        "ms": 319,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "comp",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=comp",
+    "datei": "backup/bestand/goals-comp-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1352,
+    "ms_lauf2": 1410,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=comp",
+        "ms": 306,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "physique",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=physique",
+    "datei": "backup/bestand/goals-physique-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1398,
+    "ms_lauf2": 1358,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=physique",
+        "ms": 301,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "goals",
+    "tab": "poses",
+    "modus": "dunkel",
+    "pfad": "/v2/goals?tab=poses",
+    "datei": "backup/bestand/goals-poses-dunkel.png",
+    "titel": "Goals & Body · LumeOS",
+    "attrappen": 4,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1379,
+    "ms_lauf2": 1352,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/goals?tab=poses",
+        "ms": 339,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "medical",
+    "tab": "dashboard",
+    "modus": "dunkel",
+    "pfad": "/v2/medical?tab=dashboard",
+    "datei": "backup/bestand/medical-dashboard-dunkel.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1858,
+    "ms_lauf2": 1277,
+    "anfragen": 18,
+    "langsamste": [
+      {
+        "url": "/v2/medical?tab=dashboard",
+        "ms": 741,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "medical",
+    "tab": "biomarkers",
+    "modus": "dunkel",
+    "pfad": "/v2/medical?tab=biomarkers",
+    "datei": "backup/bestand/medical-biomarkers-dunkel.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1350,
+    "ms_lauf2": 1316,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "medical",
+    "tab": "import",
+    "modus": "dunkel",
+    "pfad": "/v2/medical?tab=import",
+    "datei": "backup/bestand/medical-import-dunkel.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 5,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1316,
+    "ms_lauf2": 1263,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "medical",
+    "tab": "tracking",
+    "modus": "dunkel",
+    "pfad": "/v2/medical?tab=tracking",
+    "datei": "backup/bestand/medical-tracking-dunkel.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 6,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1248,
+    "ms_lauf2": 1286,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "medical",
+    "tab": "insights",
+    "modus": "dunkel",
+    "pfad": "/v2/medical?tab=insights",
+    "datei": "backup/bestand/medical-insights-dunkel.png",
+    "titel": "Medical · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1295,
+    "ms_lauf2": 1281,
+    "anfragen": 18,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "overview",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=overview",
+    "datei": "backup/bestand/coach-overview-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1876,
+    "ms_lauf2": 1426,
+    "anfragen": 19,
+    "langsamste": [
+      {
+        "url": "/v2/coach?tab=overview",
+        "ms": 636,
+        "typ": "document"
+      }
+    ]
+  },
+  {
+    "modul": "coach",
+    "tab": "coaches",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=coaches",
+    "datei": "backup/bestand/coach-coaches-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1473,
+    "ms_lauf2": 1422,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "permissions",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=permissions",
+    "datei": "backup/bestand/coach-permissions-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1361,
+    "ms_lauf2": 1380,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "proposals",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=proposals",
+    "datei": "backup/bestand/coach-proposals-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1359,
+    "ms_lauf2": 1416,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "autonomy",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=autonomy",
+    "datei": "backup/bestand/coach-autonomy-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1386,
+    "ms_lauf2": 1354,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "checkins",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=checkins",
+    "datei": "backup/bestand/coach-checkins-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1396,
+    "ms_lauf2": 1380,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "messages",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=messages",
+    "datei": "backup/bestand/coach-messages-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1426,
+    "ms_lauf2": 1406,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "notes",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=notes",
+    "datei": "backup/bestand/coach-notes-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1383,
+    "ms_lauf2": 1306,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "invites",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=invites",
+    "datei": "backup/bestand/coach-invites-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1309,
+    "ms_lauf2": 1416,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "coach",
+    "tab": "onboard",
+    "modus": "dunkel",
+    "pfad": "/v2/coach?tab=onboard",
+    "datei": "backup/bestand/coach-onboard-dunkel.png",
+    "titel": "Human Coaches · LumeOS",
+    "attrappen": 7,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1273,
+    "ms_lauf2": 1327,
+    "anfragen": 19,
+    "langsamste": []
+  },
+  {
+    "modul": "settings",
+    "tab": null,
+    "modus": "dunkel",
+    "pfad": "/v2/settings",
+    "datei": "backup/bestand/settings-dunkel.png",
+    "titel": "Einstellungen · LumeOS",
+    "attrappen": 1,
+    "konsolenfehler": 1,
+    "fehler": [
+      "Warning: Extra attributes from the server: %s%s data-mode \n    at html\n    at RootLayout (Server)\n    at RedirectErrorBoundary (webpack-inte"
+    ],
+    "ms_lauf1": 1688,
+    "ms_lauf2": 1175,
+    "anfragen": 17,
+    "langsamste": [
+      {
+        "url": "/v2/settings",
+        "ms": 701,
+        "typ": "document"
+      }
+    ]
+  }
+]
