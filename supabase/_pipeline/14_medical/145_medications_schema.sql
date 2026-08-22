@@ -132,6 +132,19 @@ CREATE TABLE IF NOT EXISTS medical.user_medications (
   end_date                 DATE,
   is_active                BOOLEAN NOT NULL DEFAULT true,
   indication               TEXT,
+  monitoring               BOOLEAN NOT NULL DEFAULT false,
+  monitoring_frequency     TEXT
+    CHECK (monitoring_frequency IS NULL OR monitoring_frequency IN (
+      'weekly', 'monthly', 'quarterly', 'annually', 'as_needed'
+    )),
+  last_test                DATE,
+  next_due                 DATE,
+  monitoring_overdue       BOOLEAN NOT NULL DEFAULT false,
+  targets                  TEXT[] NOT NULL DEFAULT '{}',
+  side_effects             TEXT[] NOT NULL DEFAULT '{}',
+  physician                TEXT,
+  rx                       TEXT,
+  prescription_ref         TEXT,
   notes                    TEXT,
   measurement_source       TEXT NOT NULL DEFAULT 'manual'
     CHECK (measurement_source IN ('manual', 'device', 'import', 'admin', 'seed')),
@@ -143,6 +156,21 @@ CREATE TABLE IF NOT EXISTS medical.user_medications (
   CHECK (end_date IS NULL OR end_date >= start_date)
 );
 
+ALTER TABLE medical.user_medications
+  ADD COLUMN IF NOT EXISTS monitoring BOOLEAN NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS monitoring_frequency TEXT
+    CHECK (monitoring_frequency IS NULL OR monitoring_frequency IN (
+      'weekly', 'monthly', 'quarterly', 'annually', 'as_needed'
+    )),
+  ADD COLUMN IF NOT EXISTS last_test DATE,
+  ADD COLUMN IF NOT EXISTS next_due DATE,
+  ADD COLUMN IF NOT EXISTS monitoring_overdue BOOLEAN NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS targets TEXT[] NOT NULL DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS side_effects TEXT[] NOT NULL DEFAULT '{}',
+  ADD COLUMN IF NOT EXISTS physician TEXT,
+  ADD COLUMN IF NOT EXISTS rx TEXT,
+  ADD COLUMN IF NOT EXISTS prescription_ref TEXT;
+
 CREATE INDEX IF NOT EXISTS user_medications_user_active_idx
   ON medical.user_medications(user_id, is_active, start_date DESC);
 CREATE INDEX IF NOT EXISTS user_medications_substance_idx
@@ -152,6 +180,11 @@ CREATE INDEX IF NOT EXISTS user_medications_drug_class_idx
   ON medical.user_medications USING gin(drug_class);
 CREATE INDEX IF NOT EXISTS user_medications_cyp_profile_idx
   ON medical.user_medications USING gin(cyp_profile);
+CREATE INDEX IF NOT EXISTS user_medications_monitoring_idx
+  ON medical.user_medications(user_id, next_due)
+  WHERE monitoring = true AND is_active = true;
+CREATE INDEX IF NOT EXISTS user_medications_targets_idx
+  ON medical.user_medications USING gin(targets);
 
 CREATE TABLE IF NOT EXISTS medical.user_conditions (
   id                       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -294,6 +327,7 @@ DO $$
 DECLARE
   v_public_policies integer;
   v_private_policies integer;
+  v_monitoring_columns integer;
 BEGIN
   SELECT count(*) INTO v_public_policies
   FROM pg_policies
@@ -309,14 +343,27 @@ BEGIN
   WHERE schemaname = 'medical'
     AND tablename IN ('user_medications', 'user_conditions');
 
+  SELECT count(*) INTO v_monitoring_columns
+  FROM information_schema.columns
+  WHERE table_schema = 'medical'
+    AND table_name = 'user_medications'
+    AND column_name IN (
+      'monitoring', 'monitoring_frequency', 'last_test', 'next_due',
+      'monitoring_overdue', 'targets', 'side_effects', 'physician',
+      'rx', 'prescription_ref'
+    );
+
   IF v_public_policies <> 3 THEN
     RAISE EXCEPTION 'C-130: % Stammdaten-Policies, erwartet 3', v_public_policies;
   END IF;
   IF v_private_policies <> 8 THEN
     RAISE EXCEPTION 'C-130: % Nutzer-Policies, erwartet 8', v_private_policies;
   END IF;
+  IF v_monitoring_columns <> 10 THEN
+    RAISE EXCEPTION 'C-187/G-124: % Monitoring-Spalten, erwartet 10', v_monitoring_columns;
+  END IF;
 
-  RAISE NOTICE 'OK C-130 Schema: 3 Katalogtabellen und 2 Nutzertabellen mit RLS';
+  RAISE NOTICE 'OK C-130/C-187 Schema: 3 Katalogtabellen und 2 Nutzertabellen mit RLS, 10 Monitoring-Spalten';
 END $$;
 
 COMMIT;

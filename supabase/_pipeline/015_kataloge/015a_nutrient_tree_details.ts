@@ -48,10 +48,12 @@ const PARENT: Record<string, string | null> = {
   ALA: 'PROT625',
   ARG: 'PROT625',
   ASP: 'PROT625',
+  CYSTE: 'PROT625',
   GLU: 'PROT625',
   GLY: 'PROT625',
   PRO: 'PROT625',
   SER: 'PROT625',
+  TYR: 'PROT625',
   HIS: 'AAE9',
   ILE: 'AAE9',
   LEU: 'AAE9',
@@ -61,8 +63,6 @@ const PARENT: Record<string, string | null> = {
   THR: 'AAE9',
   TRP: 'AAE9',
   VAL: 'AAE9',
-  CYSTE: 'AAE9',
-  TYR: 'AAE9',
 
   FAT: null,
   FASAT: 'FAT',
@@ -242,6 +242,15 @@ function validateTree(defCodes: string[]): void {
       seen.add(cursor)
       cursor = PARENT[cursor] ?? null
     }
+  }
+
+  const aae9Children = Object.entries(PARENT)
+    .filter(([, parent]) => parent === 'AAE9')
+    .map(([code]) => code)
+    .sort()
+  const expectedEaa = ['HIS', 'ILE', 'LEU', 'LYS', 'MET', 'PHE', 'THR', 'TRP', 'VAL']
+  if (aae9Children.join(',') !== expectedEaa.join(',')) {
+    fail(`AAE9-Kinder: ${aae9Children.join(', ')} statt ${expectedEaa.join(', ')}`)
   }
 }
 
