@@ -40,8 +40,24 @@ type KimiSubstance = JsonObject & {
   evidence?: JsonObject
   dosing?: JsonObject
   pharmacology?: JsonObject
+  safety?: JsonObject
+  interactions?: JsonObject
+  regulatory?: JsonObject
+  quality?: JsonObject
+  warning_triggers?: JsonObject
+  evidence_provenance?: JsonObject
+  monitoring?: JsonObject
   cyp?: JsonObject
   lab_effects?: unknown[]
+  missing_fields?: unknown[]
+  missing_reason?: JsonObject
+  last_verified?: string | null
+  needs_review?: unknown[]
+  confidence?: unknown
+  source_count?: unknown
+  primary_source_count?: unknown
+  molecular_weight?: unknown
+  peptide_sequence?: string | null
 }
 type SubstanceRow = {
   id: string
@@ -70,6 +86,35 @@ type SubstanceRow = {
   lab_effects: unknown
   nutrients_provided: JsonObject
   nutrient_mapping_status: string
+  safety: JsonObject | null
+  interactions: JsonObject | null
+  regulatory: JsonObject | null
+  quality: JsonObject | null
+  warning_triggers: JsonObject | null
+  evidence_provenance: JsonObject | null
+  wada_status: string | null
+  prescription_required: boolean | null
+  dose_ceiling_value: number | null
+  dose_ceiling_unit: string | null
+  recommendable: boolean | null
+  warning_only: boolean | null
+  physician_referral: boolean | null
+  athlete_flag: boolean | null
+  missing_fields: unknown[] | null
+  missing_reason: JsonObject | null
+  last_verified: string | null
+  needs_review: unknown[] | null
+  confidence: number | null
+  source_count: number | null
+  primary_source_count: number | null
+  unii: string | null
+  pubchem_cid: number | null
+  chembl_id: string | null
+  inchikey: string | null
+  molecular_formula: string | null
+  cas_candidates: string[] | null
+  molecular_weight: number | null
+  peptide_sequence: string | null
   source_primary: string
   raw: JsonObject
 }
@@ -131,12 +176,138 @@ function objectValue(value: unknown): JsonObject {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as JsonObject : {}
 }
 
+function meaningful(value: unknown): boolean {
+  if (value === null || value === undefined || value === '') return false
+  if (Array.isArray(value)) return value.some(meaningful)
+  if (typeof value === 'object') return Object.values(value as JsonObject).some(meaningful)
+  return true
+}
+
+function nullableObject(value: unknown): JsonObject | null {
+  const object = objectValue(value)
+  return meaningful(object) ? object : null
+}
+
+function nullableArray(value: unknown): unknown[] | null {
+  return Array.isArray(value) && meaningful(value) ? value : null
+}
+
+function nullableText(value: unknown): string | null {
+  return value === null || value === undefined || value === '' ? null : String(value)
+}
+
+function nullableNumber(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  if (typeof value === 'string' && /^-?\d+(\.\d+)?$/.test(value.trim())) return Number(value.trim())
+  return null
+}
+
+function nullableBoolean(value: unknown): boolean | null {
+  return typeof value === 'boolean' ? value : null
+}
+
+function doseCeilingParts(warningTriggers: JsonObject): { value: number | null; unit: string | null } {
+  const ceiling = objectValue(warningTriggers.dose_ceiling)
+  const rawValue = ceiling.value
+  if (typeof rawValue === 'number' && Number.isFinite(rawValue)) {
+    return { value: rawValue, unit: nullableText(ceiling.unit) }
+  }
+  if (typeof rawValue !== 'string') return { value: null, unit: null }
+  const match = rawValue.match(/(\d+(?:[.,]\d+)?)\s*([a-zA-Zµμ]+(?:\s*RAE|\s*DFE)?(?:\/(?:d|day))?)/)
+  if (!match) return { value: null, unit: nullableText(ceiling.unit) }
+  return {
+    value: Number(match[1]!.replace(',', '.')),
+    unit: nullableText(ceiling.unit) ?? match[2]!.replace(/\s+/g, ' ').trim(),
+  }
+}
+
 function deterministicId(prefix: string, value: string): string {
   return `${prefix}_${fold(value).replace(/\s+/g, '_').slice(0, 120)}`
 }
 
 function dosePart(dosing: JsonObject, key: string): unknown {
   return dosing[key] ?? null
+}
+
+function emptyLiftedFields(): Pick<SubstanceRow,
+  'safety' | 'interactions' | 'regulatory' | 'quality' | 'warning_triggers' | 'evidence_provenance' |
+  'wada_status' | 'prescription_required' | 'dose_ceiling_value' | 'dose_ceiling_unit' |
+  'recommendable' | 'warning_only' | 'physician_referral' | 'athlete_flag' |
+  'missing_fields' | 'missing_reason' | 'last_verified' | 'needs_review' | 'confidence' |
+  'source_count' | 'primary_source_count' | 'unii' | 'pubchem_cid' | 'chembl_id' |
+  'inchikey' | 'molecular_formula' | 'cas_candidates' | 'molecular_weight' | 'peptide_sequence'
+> {
+  return {
+    safety: null,
+    interactions: null,
+    regulatory: null,
+    quality: null,
+    warning_triggers: null,
+    evidence_provenance: null,
+    wada_status: null,
+    prescription_required: null,
+    dose_ceiling_value: null,
+    dose_ceiling_unit: null,
+    recommendable: null,
+    warning_only: null,
+    physician_referral: null,
+    athlete_flag: null,
+    missing_fields: null,
+    missing_reason: null,
+    last_verified: null,
+    needs_review: null,
+    confidence: null,
+    source_count: null,
+    primary_source_count: null,
+    unii: null,
+    pubchem_cid: null,
+    chembl_id: null,
+    inchikey: null,
+    molecular_formula: null,
+    cas_candidates: null,
+    molecular_weight: null,
+    peptide_sequence: null,
+  }
+}
+
+function liftedFields(row: KimiSubstance & { domain: string }): ReturnType<typeof emptyLiftedFields> {
+  const regulatory = nullableObject(row.regulatory)
+  const warningTriggers = nullableObject(row.warning_triggers)
+  const platform = objectValue(row.platform)
+  const external = nullableObject(row.external_ids)
+  const doseCeiling = doseCeilingParts(warningTriggers ?? {})
+  const isPerformance = row.domain === 'kimi_performance'
+  return {
+    safety: nullableObject(row.safety),
+    interactions: nullableObject(row.interactions),
+    regulatory,
+    quality: nullableObject(row.quality),
+    warning_triggers: warningTriggers,
+    evidence_provenance: nullableObject(row.evidence_provenance),
+    wada_status: nullableText(regulatory?.wada_status),
+    prescription_required: isPerformance ? null : nullableBoolean(regulatory?.prescription_required),
+    dose_ceiling_value: doseCeiling.value,
+    dose_ceiling_unit: doseCeiling.unit,
+    recommendable: nullableBoolean(platform.recommendable),
+    warning_only: nullableBoolean(platform.warning_only),
+    physician_referral: nullableBoolean(platform.physician_referral),
+    athlete_flag: nullableBoolean(platform.athlete_flag),
+    missing_fields: nullableArray(row.missing_fields),
+    missing_reason: nullableObject(row.missing_reason),
+    last_verified: nullableText(row.last_verified),
+    needs_review: nullableArray(row.needs_review),
+    confidence: nullableNumber(row.confidence),
+    source_count: nullableNumber(row.source_count),
+    primary_source_count: nullableNumber(row.primary_source_count),
+    unii: nullableText(external?.UNII),
+    pubchem_cid: nullableNumber(external?.PubChem_CID),
+    chembl_id: nullableText(external?.ChEMBL_ID),
+    inchikey: nullableText(external?.InChIKey),
+    molecular_formula: nullableText(external?.molecular_formula),
+    cas_candidates: textArray(external?.cas_candidates).length ? textArray(external?.cas_candidates) : null,
+    molecular_weight: nullableNumber(row.molecular_weight),
+    peptide_sequence: nullableText(row.peptide_sequence),
+  }
 }
 
 function buildKimiRows(): Array<KimiSubstance & { domain: string; sourceFile: string }> {
@@ -223,6 +394,7 @@ for (const row of kimiRows) {
   const dosing = objectValue(row.dosing)
   const pharmacology = objectValue(row.pharmacology)
   const hasHalfLife = pharmacology.half_life !== undefined && pharmacology.half_life !== null && pharmacology.half_life !== ''
+  const lifted = liftedFields(row)
   substances.set(row.id, {
     id: row.id,
     canonical_name: row.canonical_name,
@@ -233,7 +405,7 @@ for (const row of kimiRows) {
     chemical_form: row.chemical_form ? String(row.chemical_form) : null,
     aliases: textArray(row.aliases),
     cas_number: row.cas_number ? String(row.cas_number) : null,
-    external_ids: objectValue(row.external_ids),
+    external_ids: nullableObject(row.external_ids) ?? {},
     platform_classes: textArray(row.platform_classes),
     platform: objectValue(row.platform),
     evidence: objectValue(row.evidence),
@@ -242,14 +414,15 @@ for (const row of kimiRows) {
     tolerable_upper_intake_level: dosePart(dosing, 'tolerable_upper_intake_level'),
     studied_dose_ranges: dosePart(dosing, 'studied_dose_ranges') ?? [],
     anecdotal_dose_ranges: dosePart(dosing, 'anecdotal_dose_ranges') ?? [],
-    dosing,
-    pharmacology,
+    dosing: nullableObject(row.dosing) ?? {},
+    pharmacology: nullableObject(row.pharmacology) ?? {},
     half_life: hasHalfLife ? pharmacology.half_life : null,
     half_life_status: hasHalfLife ? 'from_kimi_source' : 'not_available_in_free_authoritative_source',
     cyp: objectValue(row.cyp),
     lab_effects: row.lab_effects ?? [],
     nutrients_provided: {},
     nutrient_mapping_status: 'not_provided_by_kimi_crawl_027',
+    ...lifted,
     source_primary: row.domain,
     raw: row,
   })
@@ -307,6 +480,7 @@ for (const row of local.supplements) {
       nutrient_mapping_status: Object.keys(objectValue(row.nutrients_provided)).length > 0
         ? 'local_catalog'
         : 'not_provided_by_local_catalog',
+      ...emptyLiftedFields(),
       source_primary: 'lumeos_supplement_catalog',
       raw: row,
     })
@@ -360,12 +534,7 @@ for (const row of f05.substances) {
       tolerable_upper_intake_level: row.upper_limit ?? null,
       studied_dose_ranges: [],
       anecdotal_dose_ranges: row.dose_range ? [{ range: row.dose_range, not_medical_recommendation: true, source: 'f05_candidate' }] : [],
-      dosing: {
-        upper_limit: row.upper_limit ?? null,
-        upper_limit_source: row.upper_limit_source ?? null,
-        dose_range: row.dose_range ?? null,
-        note: 'F-05-Dosiswerte bleiben getrennt und sind keine Empfehlung.',
-      },
+      dosing: {},
       pharmacology: {},
       half_life: null,
       half_life_status: row.half_life_hours ? 'f05_value_not_imported_without_primary_source' : 'not_available_in_f05',
@@ -373,6 +542,7 @@ for (const row of f05.substances) {
       lab_effects: [],
       nutrients_provided: {},
       nutrient_mapping_status: 'not_provided_by_f05',
+      ...emptyLiftedFields(),
       source_primary: 'f05_substance_candidate',
       raw: row,
     })
@@ -749,7 +919,14 @@ INSERT INTO supplements.substance_catalog (
   platform, evidence, official_label_dose, guideline_dose,
   tolerable_upper_intake_level, studied_dose_ranges, anecdotal_dose_ranges,
   dosing, pharmacology, half_life, half_life_status, cyp, lab_effects,
-  nutrients_provided, nutrient_mapping_status, source_primary, raw
+  nutrients_provided, nutrient_mapping_status,
+  safety, interactions, regulatory, quality, warning_triggers, evidence_provenance,
+  wada_status, prescription_required, dose_ceiling_value, dose_ceiling_unit,
+  recommendable, warning_only, physician_referral, athlete_flag,
+  missing_fields, missing_reason, last_verified, needs_review, confidence,
+  source_count, primary_source_count, unii, pubchem_cid, chembl_id,
+  inchikey, molecular_formula, cas_candidates, molecular_weight, peptide_sequence,
+  source_primary, raw
 )
 SELECT
   payload->>'id',
@@ -778,6 +955,38 @@ SELECT
   COALESCE(payload->'lab_effects', '[]'::jsonb),
   COALESCE(payload->'nutrients_provided', '{}'::jsonb),
   payload->>'nutrient_mapping_status',
+  NULLIF(payload->'safety', 'null'::jsonb),
+  NULLIF(payload->'interactions', 'null'::jsonb),
+  NULLIF(payload->'regulatory', 'null'::jsonb),
+  NULLIF(payload->'quality', 'null'::jsonb),
+  NULLIF(payload->'warning_triggers', 'null'::jsonb),
+  NULLIF(payload->'evidence_provenance', 'null'::jsonb),
+  NULLIF(payload->>'wada_status', ''),
+  NULLIF(payload->>'prescription_required', '')::boolean,
+  NULLIF(payload->>'dose_ceiling_value', '')::numeric,
+  NULLIF(payload->>'dose_ceiling_unit', ''),
+  NULLIF(payload->>'recommendable', '')::boolean,
+  NULLIF(payload->>'warning_only', '')::boolean,
+  NULLIF(payload->>'physician_referral', '')::boolean,
+  NULLIF(payload->>'athlete_flag', '')::boolean,
+  NULLIF(payload->'missing_fields', 'null'::jsonb),
+  NULLIF(payload->'missing_reason', 'null'::jsonb),
+  NULLIF(payload->>'last_verified', '')::date,
+  NULLIF(payload->'needs_review', 'null'::jsonb),
+  NULLIF(payload->>'confidence', '')::numeric,
+  NULLIF(payload->>'source_count', '')::integer,
+  NULLIF(payload->>'primary_source_count', '')::integer,
+  NULLIF(payload->>'unii', ''),
+  NULLIF(payload->>'pubchem_cid', '')::bigint,
+  NULLIF(payload->>'chembl_id', ''),
+  NULLIF(payload->>'inchikey', ''),
+  NULLIF(payload->>'molecular_formula', ''),
+  CASE
+    WHEN payload->'cas_candidates' IS NULL OR payload->'cas_candidates' = 'null'::jsonb THEN NULL::text[]
+    ELSE ARRAY(SELECT jsonb_array_elements_text(payload->'cas_candidates'))
+  END,
+  NULLIF(payload->>'molecular_weight', '')::numeric,
+  NULLIF(payload->>'peptide_sequence', ''),
   payload->>'source_primary',
   COALESCE(payload->'raw', '{}'::jsonb)
 FROM tmp_substance_catalog
@@ -807,6 +1016,35 @@ ON CONFLICT (id) DO UPDATE SET
   lab_effects = EXCLUDED.lab_effects,
   nutrients_provided = EXCLUDED.nutrients_provided,
   nutrient_mapping_status = EXCLUDED.nutrient_mapping_status,
+  safety = EXCLUDED.safety,
+  interactions = EXCLUDED.interactions,
+  regulatory = EXCLUDED.regulatory,
+  quality = EXCLUDED.quality,
+  warning_triggers = EXCLUDED.warning_triggers,
+  evidence_provenance = EXCLUDED.evidence_provenance,
+  wada_status = EXCLUDED.wada_status,
+  prescription_required = EXCLUDED.prescription_required,
+  dose_ceiling_value = EXCLUDED.dose_ceiling_value,
+  dose_ceiling_unit = EXCLUDED.dose_ceiling_unit,
+  recommendable = EXCLUDED.recommendable,
+  warning_only = EXCLUDED.warning_only,
+  physician_referral = EXCLUDED.physician_referral,
+  athlete_flag = EXCLUDED.athlete_flag,
+  missing_fields = EXCLUDED.missing_fields,
+  missing_reason = EXCLUDED.missing_reason,
+  last_verified = EXCLUDED.last_verified,
+  needs_review = EXCLUDED.needs_review,
+  confidence = EXCLUDED.confidence,
+  source_count = EXCLUDED.source_count,
+  primary_source_count = EXCLUDED.primary_source_count,
+  unii = EXCLUDED.unii,
+  pubchem_cid = EXCLUDED.pubchem_cid,
+  chembl_id = EXCLUDED.chembl_id,
+  inchikey = EXCLUDED.inchikey,
+  molecular_formula = EXCLUDED.molecular_formula,
+  cas_candidates = EXCLUDED.cas_candidates,
+  molecular_weight = EXCLUDED.molecular_weight,
+  peptide_sequence = EXCLUDED.peptide_sequence,
   source_primary = EXCLUDED.source_primary,
   raw = EXCLUDED.raw,
   is_active = true,
@@ -847,7 +1085,31 @@ DECLARE
   v_with_nutrients integer;
   v_with_half_life integer;
   v_columns integer;
-  v_new_values integer;
+  v_non_kimi_lifted integer;
+  v_safety integer;
+  v_regulatory integer;
+  v_warning_triggers integer;
+  v_evidence_provenance integer;
+  v_external_ids integer;
+  v_quality integer;
+  v_pharmacology integer;
+  v_dosing integer;
+  v_interactions integer;
+  v_wada_status integer;
+  v_prescription_required integer;
+  v_dose_ceiling_value integer;
+  v_recommendable integer;
+  v_warning_only integer;
+  v_physician_referral integer;
+  v_athlete_flag integer;
+  v_unii integer;
+  v_pubchem_cid integer;
+  v_chembl_id integer;
+  v_inchikey integer;
+  v_molecular_formula integer;
+  v_cas_candidates integer;
+  v_molecular_weight integer;
+  v_peptide_sequence integer;
 BEGIN
   SELECT count(*) INTO v_substances FROM supplements.substance_catalog;
   SELECT count(*) INTO v_sources FROM supplements.substance_catalog_sources;
@@ -860,37 +1122,64 @@ BEGIN
   FROM information_schema.columns
   WHERE table_schema = 'supplements'
     AND table_name = 'substance_catalog';
-  SELECT count(*) INTO v_new_values
+  SELECT count(*) INTO v_non_kimi_lifted
   FROM supplements.substance_catalog
-  WHERE safety IS NOT NULL
-     OR interactions IS NOT NULL
-     OR regulatory IS NOT NULL
-     OR quality IS NOT NULL
-     OR warning_triggers IS NOT NULL
-     OR evidence_provenance IS NOT NULL
-     OR wada_status IS NOT NULL
-     OR prescription_required IS NOT NULL
-     OR dose_ceiling_value IS NOT NULL
-     OR dose_ceiling_unit IS NOT NULL
-     OR recommendable IS NOT NULL
-     OR warning_only IS NOT NULL
-     OR physician_referral IS NOT NULL
-     OR athlete_flag IS NOT NULL
-     OR missing_fields IS NOT NULL
-     OR missing_reason IS NOT NULL
-     OR last_verified IS NOT NULL
-     OR needs_review IS NOT NULL
-     OR confidence IS NOT NULL
-     OR source_count IS NOT NULL
-     OR primary_source_count IS NOT NULL
-     OR unii IS NOT NULL
-     OR pubchem_cid IS NOT NULL
-     OR chembl_id IS NOT NULL
-     OR inchikey IS NOT NULL
-     OR molecular_formula IS NOT NULL
-     OR cas_candidates IS NOT NULL
-     OR molecular_weight IS NOT NULL
-     OR peptide_sequence IS NOT NULL;
+  WHERE domain NOT LIKE 'kimi_%'
+    AND (
+      safety IS NOT NULL
+      OR interactions IS NOT NULL
+      OR regulatory IS NOT NULL
+      OR quality IS NOT NULL
+      OR warning_triggers IS NOT NULL
+      OR evidence_provenance IS NOT NULL
+      OR wada_status IS NOT NULL
+      OR prescription_required IS NOT NULL
+      OR dose_ceiling_value IS NOT NULL
+      OR dose_ceiling_unit IS NOT NULL
+      OR recommendable IS NOT NULL
+      OR warning_only IS NOT NULL
+      OR physician_referral IS NOT NULL
+      OR athlete_flag IS NOT NULL
+      OR missing_fields IS NOT NULL
+      OR missing_reason IS NOT NULL
+      OR last_verified IS NOT NULL
+      OR needs_review IS NOT NULL
+      OR confidence IS NOT NULL
+      OR source_count IS NOT NULL
+      OR primary_source_count IS NOT NULL
+      OR unii IS NOT NULL
+      OR pubchem_cid IS NOT NULL
+      OR chembl_id IS NOT NULL
+      OR inchikey IS NOT NULL
+      OR molecular_formula IS NOT NULL
+      OR cas_candidates IS NOT NULL
+      OR molecular_weight IS NOT NULL
+      OR peptide_sequence IS NOT NULL
+    );
+  SELECT count(*) INTO v_safety FROM supplements.substance_catalog WHERE safety IS NOT NULL;
+  SELECT count(*) INTO v_regulatory FROM supplements.substance_catalog WHERE regulatory IS NOT NULL;
+  SELECT count(*) INTO v_warning_triggers FROM supplements.substance_catalog WHERE warning_triggers IS NOT NULL;
+  SELECT count(*) INTO v_evidence_provenance FROM supplements.substance_catalog WHERE evidence_provenance IS NOT NULL;
+  SELECT count(*) INTO v_external_ids FROM supplements.substance_catalog WHERE external_ids <> '{}'::jsonb;
+  SELECT count(*) INTO v_quality FROM supplements.substance_catalog WHERE quality IS NOT NULL;
+  SELECT count(*) INTO v_pharmacology FROM supplements.substance_catalog WHERE pharmacology <> '{}'::jsonb;
+  SELECT count(*) INTO v_dosing FROM supplements.substance_catalog WHERE dosing <> '{}'::jsonb;
+  SELECT count(*) INTO v_interactions FROM supplements.substance_catalog WHERE interactions IS NOT NULL;
+  SELECT count(*) INTO v_wada_status FROM supplements.substance_catalog WHERE wada_status IS NOT NULL;
+  SELECT count(*) INTO v_prescription_required FROM supplements.substance_catalog WHERE prescription_required IS NOT NULL;
+  SELECT count(*) INTO v_dose_ceiling_value FROM supplements.substance_catalog WHERE dose_ceiling_value IS NOT NULL;
+  SELECT count(*) INTO v_recommendable FROM supplements.substance_catalog WHERE recommendable IS NOT NULL;
+  SELECT count(*) INTO v_warning_only FROM supplements.substance_catalog WHERE warning_only IS NOT NULL;
+  SELECT count(*) INTO v_physician_referral FROM supplements.substance_catalog WHERE physician_referral IS NOT NULL;
+  SELECT count(*) INTO v_athlete_flag FROM supplements.substance_catalog WHERE athlete_flag IS NOT NULL;
+  SELECT count(*) INTO v_unii FROM supplements.substance_catalog WHERE unii IS NOT NULL;
+  SELECT count(*) INTO v_pubchem_cid FROM supplements.substance_catalog WHERE pubchem_cid IS NOT NULL;
+  SELECT count(*) INTO v_chembl_id FROM supplements.substance_catalog WHERE chembl_id IS NOT NULL;
+  SELECT count(*) INTO v_inchikey FROM supplements.substance_catalog WHERE inchikey IS NOT NULL;
+  SELECT count(*) INTO v_molecular_formula FROM supplements.substance_catalog WHERE molecular_formula IS NOT NULL;
+  SELECT count(*) INTO v_cas_candidates FROM supplements.substance_catalog WHERE cas_candidates IS NOT NULL;
+  SELECT count(*) INTO v_molecular_weight FROM supplements.substance_catalog WHERE molecular_weight IS NOT NULL;
+  SELECT count(*) INTO v_peptide_sequence FROM supplements.substance_catalog WHERE peptide_sequence IS NOT NULL;
 
   IF v_substances <> ${substanceRows.length} THEN
     RAISE EXCEPTION 'substance_catalog: %, erwartet ${substanceRows.length}', v_substances;
@@ -910,12 +1199,18 @@ BEGIN
   IF v_columns <> 60 THEN
     RAISE EXCEPTION 'substance_catalog Spalten: %, erwartet 60', v_columns;
   END IF;
-  IF v_new_values <> 0 THEN
-    RAISE EXCEPTION 'C-195 ist Schema-only: % Zeilen haben neue C-195-Spalten befuellt', v_new_values;
+  IF v_non_kimi_lifted <> 0 THEN
+    RAISE EXCEPTION 'C-196: % nicht-Kimi-Zeilen haben gehobene Kimi-Spalten befuellt', v_non_kimi_lifted;
   END IF;
 
-  RAISE NOTICE 'OK C-195: % Substanzen, % Herkunftszeilen, % Spalten, % mit nutrients_provided, % mit Halbwertszeit',
+  RAISE NOTICE 'OK C-196: % Substanzen, % Herkunftszeilen, % Spalten, % mit nutrients_provided, % mit Halbwertszeit',
     v_substances, v_sources, v_columns, v_with_nutrients, v_with_half_life;
+  RAISE NOTICE 'C-196 Fuellgrade: safety %, regulatory %, warning_triggers %, evidence_provenance %, external_ids %, quality %, pharmacology %, dosing %, interactions %',
+    v_safety, v_regulatory, v_warning_triggers, v_evidence_provenance, v_external_ids, v_quality, v_pharmacology, v_dosing, v_interactions;
+  RAISE NOTICE 'C-196 flach: wada_status %, prescription_required %, dose_ceiling_value %, recommendable %, warning_only %, physician_referral %, athlete_flag %',
+    v_wada_status, v_prescription_required, v_dose_ceiling_value, v_recommendable, v_warning_only, v_physician_referral, v_athlete_flag;
+  RAISE NOTICE 'C-196 Kennungen: unii %, pubchem_cid %, chembl_id %, inchikey %, molecular_formula %, cas_candidates %, molecular_weight %, peptide_sequence %',
+    v_unii, v_pubchem_cid, v_chembl_id, v_inchikey, v_molecular_formula, v_cas_candidates, v_molecular_weight, v_peptide_sequence;
 END $$;
 
 COMMIT;
