@@ -27,9 +27,9 @@ import { Card, Pill, Icon, Ring, LineChart, InEntwicklungKnopf } from '@lumeos/u
 
 import {
   CHECKIN, HRV_BASELINE, MUSCLE_LABEL, MUSCLE_STATE, MUSCLE_SLUG_MAP,
-  MODALITY_BONUS, MODALITY_META, MAX_DAILY_BONUS, TODAY_MODALITIES,
+  MODALITY_EVIDENZ, MODALITY_META, TODAY_MODALITIES,
   ACTIVE_PROTOCOL, NUTRITION_INPUT,
-  calcHRVScore, calcModalityBonus, calcMuscleRecovery, baseRecoveryCurve,
+  calcHRVScore, calcMuscleRecovery, baseRecoveryCurve,
   type Protocol,
 } from './motor'
 // G-55: die dritte Ebene — welche Muskeln auf eine Flaeche fallen.
@@ -249,24 +249,25 @@ function HRVMeasureModal({ onClose }: { onClose: () => void }) {
 function LogModalityModal({ onClose }: { onClose: () => void }) {
   const [type, setType] = React.useState('sauna')
   const [rating, setRating] = React.useState(7)
-  const bonusAfter = calcModalityBonus([...TODAY_MODALITIES, { type }])
+  // C-124: kein „bonus after logging" mehr — es gibt keinen Bonus.
+  const evidenz = MODALITY_EVIDENZ[type]
 
   return (
     <RMod title="Log recovery modality"
-          subtitle={`Today's bonus: +${calcModalityBonus(TODAY_MODALITIES).capped} of ${MAX_DAILY_BONUS} max`}
+          subtitle="Wirkung laut Evidenzregister, ohne Punktbonus (C-124)"
           eyebrow="plus" onClose={onClose} width={640}
           footer={
             <>
               <button type="button" className="v2-btn v2-btn-ghost" onClick={onClose}>Cancel</button>
-              <InEntwicklungKnopf titel={`Log · +${MODALITY_BONUS[type]} bonus`} className="v2-btn v2-btn-primary"
+              <InEntwicklungKnopf titel="Log" className="v2-btn v2-btn-primary"
                                   grund="`recovery.modality_log` gibt es (17 Spalten, 178 Zeilen live) und die Kachel liest sie. Was fehlt, ist der Schreibweg.">
-                <Icon name="check" className="v2-ic v2-ic-sm" />Log · +{MODALITY_BONUS[type]} bonus
+                <Icon name="check" className="v2-ic v2-ic-sm" />Log
               </InEntwicklungKnopf>
             </>
           }>
       <div className="v2-eyebrow" style={{ marginBottom: 6 }}>Modality</div>
       <div className="v2-rec-modalitaeten">
-        {Object.entries(MODALITY_BONUS).map(([k, v]) => {
+        {Object.keys(MODALITY_EVIDENZ).map(k => {
           const meta = MODALITY_META[k]
           const on = type === k
           return (
@@ -280,7 +281,6 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
                     }}>
               <Icon name={meta.icon as never} className="v2-ic" />
               <span style={{ fontSize: 10.5, textAlign: 'center', lineHeight: 1.25 }}>{meta.label}</span>
-              <span className="v2-mono" style={{ fontSize: 9, opacity: 0.75 }}>+{v}</span>
             </button>
           )
         })}
@@ -319,19 +319,28 @@ function LogModalityModal({ onClose }: { onClose: () => void }) {
       <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Detail</div>
       <input placeholder="Temperature, routine, location…" aria-label="Detail"
              style={{ ...FELD, marginBottom: 12 }} />
+      {/* C-124: statt „Bonus after logging: +2.0" steht hier, was das
+          Register ueber die gewaehlte Modalitaet sagt — Richtung,
+          Endpunkt, Quelle. Kein Punktversprechen. */}
       <div style={{
         padding: 11,
-        background: bonusAfter.wasCapped
-          ? 'color-mix(in oklch, var(--warn) 6%, var(--surface))'
-          : 'color-mix(in oklch, var(--pos) 5%, var(--surface))',
-        border: `1px solid ${bonusAfter.wasCapped
-          ? 'color-mix(in oklch, var(--warn) 26%, var(--border))'
-          : 'color-mix(in oklch, var(--pos) 24%, var(--border))'}`,
+        background: 'color-mix(in oklch, var(--acc-recov) 5%, var(--surface))',
+        border: '1px solid color-mix(in oklch, var(--acc-recov) 24%, var(--border))',
         borderRadius: 6, fontSize: 11.5, color: 'var(--fg-muted)', lineHeight: 1.5,
       }}>
-        {bonusAfter.wasCapped
-          ? <>Raw bonus would be {bonusAfter.raw} — capped at {MAX_DAILY_BONUS}. This session still counts for effectiveness tracking, but adds no further score.</>
-          : <>Bonus after logging: <span className="v2-num" style={{ color: 'var(--pos)' }}>+{bonusAfter.capped}</span> of {MAX_DAILY_BONUS} max. You will be asked to rate the after-effect tomorrow morning.</>}
+        {evidenz?.grad
+          ? <>
+              {MODALITY_META[type].label}: {evidenz.aussage}
+              {' '}<span className="v2-mono v2-dim" style={{ fontSize: 10 }}>
+                (Grad {evidenz.grad} · {evidenz.quelle})
+              </span>. Morgen frueh wirst du nach der Nachwirkung gefragt.
+            </>
+          : <>
+              {MODALITY_META[type].label} hat keinen Eintrag im
+              Evidenzregister (crawl_025) — geloggt wird sie trotzdem,
+              behauptet wird nichts. Morgen frueh wirst du nach der
+              Nachwirkung gefragt.
+            </>}
       </div>
     </RMod>
   )

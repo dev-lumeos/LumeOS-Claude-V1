@@ -234,15 +234,61 @@ export const MOOD_META = [
 ]
 
 // ── Modalitaeten (F2 / F6) ──────────────────────────────────────
-// [cmd] module-recovery-engine.jsx:182-216.
-export const MODALITY_BONUS: Record<string, number> = {
-  sauna: 2.0, cold_plunge: 1.5, contrast_therapy: 2.0, massage: 2.5,
-  foam_rolling: 0.5, stretching: 0.5, yoga: 0.75, meditation: 1.0,
-  breathwork: 1.0, nap: 1.5, active_recovery: 0.5,
+// [cmd] module-recovery-engine.jsx:182-216 fuehrte MODALITY_BONUS mit
+// elf Punktwerten (sauna 2.0 … active_recovery 0.5) plus Tagesdeckel
+// 5.0. **C-124 (crawl_025, recovery_modality_evidence.json): alle 32
+// Registry-Zeilen sagen REMOVE_NUMERIC_VALUE** — es gibt Evidenz fuer
+// RICHTUNGEN je Endpunkt, aber fuer keinen einzigen Punktwert; die
+// Seed-Boni (2,76/0,13/0,05/−0,07) sind als synthetic_demo,
+// not_evidence geflaggt. **Ein entfernter Wert wird zu null, nicht zu
+// einem Schaetzwert** — an die Stelle der Zahl tritt Richtung +
+// Endpunkt + Quelle.
+export type ModalityEvidenz = {
+  /** Die belegte Richtung je Endpunkt — eine Aussage, kein Punktwert. */
+  aussage: string
+  /** Evidenzgrad der Leitaussage; `null` = kein Registry-Eintrag. */
+  grad: 'A' | 'B' | 'C' | 'D' | 'E' | null
+  registryId: string | null
+  quelle: string | null
 }
 
-/** Die Obergrenze. Sechs Anwendungen kaufen keinen besseren Wert. */
-export const MAX_DAILY_BONUS = 5.0
+export const MODALITY_EVIDENZ: Record<string, ModalityEvidenz> = {
+  sauna: {
+    aussage: 'verbessert die Ausdauerleistung in Hitze',
+    grad: 'C', registryId: 'REC_SAUNA_ENDURANCE_HEAT',
+    quelle: 'PMID 16877041 · 2007',
+  },
+  cold_plunge: {
+    aussage: 'lindert Muskelkater (Grad A); daempft bei chronischem Einsatz die Hypertrophie-Anpassung (Grad A)',
+    grad: 'A', registryId: 'REC_CWI_DOMS_ACUTE',
+    quelle: 'PMID 26413718 · 2015; PMID 26174323 · 2015',
+  },
+  contrast_therapy: {
+    aussage: 'lindert Muskelkater',
+    grad: 'B', registryId: 'REC_CONTRAST_DOMS',
+    quelle: 'PMID 23626806 · 2013',
+  },
+  massage: {
+    aussage: 'lindert Muskelkater; verbessert das subjektive Erholungsgefuehl',
+    grad: 'A', registryId: 'REC_MASSAGE_DOMS',
+    quelle: 'PMID 29021762 · 2017',
+  },
+  foam_rolling: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
+  stretching: {
+    aussage: 'verbessert langfristig die Beweglichkeit (Grad B); kein Effekt auf Muskelkater (Grad A)',
+    grad: 'B', registryId: 'REC_STRETCH_STATIC_ROM_CHRONIC',
+    quelle: 'PMID 26642915 · 2016; PMID 21735398 · 2011',
+  },
+  yoga: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
+  meditation: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
+  breathwork: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
+  nap: { aussage: 'ohne Eintrag im Evidenzregister', grad: null, registryId: null, quelle: null },
+  active_recovery: {
+    aussage: 'verbessert Folgeleistung und Laktatabbau leicht',
+    grad: 'B', registryId: 'REC_ACTIVE_RECOVERY_PERF',
+    quelle: 'PMID 29755363 · 2018',
+  },
+}
 
 export const MODALITY_META: Record<string, { label: string; icon: string; c: string }> = {
   sauna: { label: 'Sauna', icon: 'flame', c: 'var(--neg)' },
@@ -258,32 +304,25 @@ export const MODALITY_META: Record<string, { label: string; icon: string; c: str
   active_recovery: { label: 'Active recovery', icon: 'training', c: 'var(--acc-train)' },
 }
 
+// `[cmd]` C-124: `scoreDelta` (die +4/+6/+8/+2/+3 der Vorlage) ist
+// entfernt — dieselben erfundenen Punktwerte wie MODALITY_BONUS.
+// `immediate`/`nextDay` bleiben: das sind subjektive NUTZER-Ratings
+// (1–10), keine behaupteten Score-Effekte.
 export type ModalityEntry = {
   id: string; type: string; date: string; time: string; duration: number
-  detail: string; immediate: number; nextDay: number | null; scoreDelta: number | null
+  detail: string; immediate: number; nextDay: number | null
 }
 
 export const MODALITY_LOG: ModalityEntry[] = [
-  { id: 'ml1', type: 'cold_plunge', date: '2026-08-15', time: '07:08', duration: 3, detail: '12 °C', immediate: 8, nextDay: 7, scoreDelta: +4 },
-  { id: 'ml2', type: 'stretching', date: '2026-08-15', time: '10:30', duration: 15, detail: 'hips + thoracic', immediate: 6, nextDay: null, scoreDelta: null },
-  { id: 'ml3', type: 'sauna', date: '2026-08-14', time: '19:30', duration: 20, detail: '92 °C', immediate: 9, nextDay: 8, scoreDelta: +6 },
-  { id: 'ml4', type: 'massage', date: '2026-08-12', time: '17:00', duration: 60, detail: 'deep tissue', immediate: 9, nextDay: 9, scoreDelta: +8 },
-  { id: 'ml5', type: 'meditation', date: '2026-08-14', time: '22:00', duration: 12, detail: 'focused attention', immediate: 7, nextDay: 6, scoreDelta: +2 },
-  { id: 'ml6', type: 'nap', date: '2026-08-13', time: '14:20', duration: 25, detail: 'post-lunch', immediate: 8, nextDay: null, scoreDelta: +3 },
+  { id: 'ml1', type: 'cold_plunge', date: '2026-08-15', time: '07:08', duration: 3, detail: '12 °C', immediate: 8, nextDay: 7 },
+  { id: 'ml2', type: 'stretching', date: '2026-08-15', time: '10:30', duration: 15, detail: 'hips + thoracic', immediate: 6, nextDay: null },
+  { id: 'ml3', type: 'sauna', date: '2026-08-14', time: '19:30', duration: 20, detail: '92 °C', immediate: 9, nextDay: 8 },
+  { id: 'ml4', type: 'massage', date: '2026-08-12', time: '17:00', duration: 60, detail: 'deep tissue', immediate: 9, nextDay: 9 },
+  { id: 'ml5', type: 'meditation', date: '2026-08-14', time: '22:00', duration: 12, detail: 'focused attention', immediate: 7, nextDay: 6 },
+  { id: 'ml6', type: 'nap', date: '2026-08-13', time: '14:20', duration: 25, detail: 'post-lunch', immediate: 8, nextDay: null },
 ]
 
 export const TODAY_MODALITIES = MODALITY_LOG.filter(m => m.date === '2026-08-15')
-
-export type ModalityBonus = { raw: number; capped: number; wasCapped: boolean }
-
-export function calcModalityBonus(mods: Array<{ type: string }>): ModalityBonus {
-  const raw = mods.reduce((s, m) => s + (MODALITY_BONUS[m.type] ?? 0), 0)
-  return {
-    raw: Math.round(raw * 10) / 10,
-    capped: Math.min(raw, MAX_DAILY_BONUS),
-    wasCapped: raw > MAX_DAILY_BONUS,
-  }
-}
 
 // ── ACWR / Trainingslast (F2) ───────────────────────────────────
 // [cmd] module-recovery-engine.jsx:219-225.
@@ -368,7 +407,7 @@ export function avgSoreness(soreness: Record<string, number>): number {
 export type ScoreTerm = { key: string; label: string; raw: string; w: number; val: number }
 
 export type RecoveryScore = {
-  mode: string; terms: ScoreTerm[]; subtotal: number; bonus: ModalityBonus
+  mode: string; terms: ScoreTerm[]; subtotal: number
   score: number; hrv: { score: number; z: number }; tls: number
   sor: number; nutritionScore: number
 }
@@ -385,7 +424,6 @@ export function calcRecoveryScore(mode: 'manual' | 'hrv' = 'hrv'): RecoveryScore
   const c = CHECKIN
   const tls = calcTrainingLoadScore(ACWR_DATA.acwr)
   const nutritionScore = 0.88 // aus dem Nutrition-Modul
-  const bonus = calcModalityBonus(TODAY_MODALITIES)
   const sor = avgSoreness(c.soreness)
   const hrv = calcHRVScore(c.hrv_rmssd)
 
@@ -412,8 +450,10 @@ export function calcRecoveryScore(mode: 'manual' | 'hrv' = 'hrv'): RecoveryScore
     ]
   }
   const subtotal = terms.reduce((s, t) => s + t.val, 0)
-  const score = Math.round(Math.min(100, subtotal + bonus.capped))
-  return { mode, terms, subtotal: Math.round(subtotal * 10) / 10, bonus, score, hrv, tls, sor, nutritionScore }
+  // `[cmd]` C-124: der Modalitaetsbonus ist aus der Summe entfernt —
+  // die Vorlage addierte hier bis zu +5 erfundene Punkte.
+  const score = Math.round(Math.min(100, subtotal))
+  return { mode, terms, subtotal: Math.round(subtotal * 10) / 10, score, hrv, tls, sor, nutritionScore }
 }
 
 // ── Bereitschaftsstufen (F2) ────────────────────────────────────

@@ -30,11 +30,22 @@
 import * as React from 'react'
 import { Card, Pill, Row } from '@lumeos/ui'
 
-import type { Umfangssatz } from '../../../lib/goals/lesen'
+import type { Umfangssatz, ProfilEingaben } from '../../../lib/goals/lesen'
 import type { Koerperzusammensetzung } from '../../../lib/goals/lesen'
 import {
   rechneVerhaeltnisse, vergleicheStellen, type Verhaeltnis, type Symmetrie,
+  whrLage, whtrLage, bauchumfangLage, bmiLage, PROPORTION_HEURISTIKEN,
+  type Grenzquelle,
 } from '../../../lib/goals/verhaeltnisse'
+
+/** „WHO 2008 · Grad A" — die Quelle steht an jeder Grenzzahl. */
+function QuellenZeile({ q }: { q: Grenzquelle }) {
+  return (
+    <span className="v2-dim v2-mono" style={{ fontSize: 9 }}>
+      {q.quelle} {q.jahr} · Grad {q.grad}
+    </span>
+  )
+}
 
 /** Ein Quotient als Kachel — Zahl gross, Herleitung klein darunter. */
 function VerhaeltnisKachel({ titel, v, einheit = 'cm' }: {
@@ -78,10 +89,11 @@ function SymmetrieKachel({ titel, s }: { titel: string; s: Symmetrie }) {
   )
 }
 
-export function PhysiqueEcht({ saetze, navy, stichtag }: {
+export function PhysiqueEcht({ saetze, navy, stichtag, profil = null }: {
   saetze: Umfangssatz[]
   navy: Koerperzusammensetzung | null
   stichtag: string
+  profil?: ProfilEingaben | null
 }) {
   const v = React.useMemo(() => rechneVerhaeltnisse(saetze), [saetze])
   const stellen = React.useMemo(() => vergleicheStellen(saetze), [saetze])
@@ -89,6 +101,15 @@ export function PhysiqueEcht({ saetze, navy, stichtag }: {
 
   const vorherTag = saetze.length > 1
     ? saetze[saetze.length - 2].measurement_date : null
+
+  // GO-21: die belegten Einordnungen. Ohne gesetztes Geschlecht gibt
+  // es keine Schwelle — dann steht nur das Verhaeltnis.
+  const geschlecht = profil?.biological_sex ?? null
+  const taille = v.taille_huefte.zaehler
+  const whr = whrLage(v.taille_huefte.wert, geschlecht)
+  const whtr = whtrLage(taille, profil?.height_cm ?? null)
+  const bauch = bauchumfangLage(taille, geschlecht)
+  const bmi = bmiLage(navy?.weight_kg ?? profil?.body_weight_kg ?? null, profil?.height_cm ?? null)
 
   return (
     <div className="v2-grid-14">
@@ -107,19 +128,78 @@ export function PhysiqueEcht({ saetze, navy, stichtag }: {
             <SymmetrieKachel titel="Arm-Symmetrie" s={v.arm_symmetrie} />
             <SymmetrieKachel titel="Bein-Symmetrie" s={v.bein_symmetrie} />
           </div>
-          {/* `[read]` **Warum hier kein Zielwert steht.** Die Vorlage
-              setzt „golden target 1.618" unter die erste Kachel und
-              faerbt den Wert gruen oder gelb. Die Zahl hat keine
-              Quelle — sie steht nur in den Begleitdateien des
-              Entwurfs. Der Satz sagt, was fehlt, statt die Stelle
-              stillschweigend leer zu lassen. */}
           <div className="v2-divider" />
           <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
-            Quotienten aus den gemessenen Umfängen, ohne Zielwert. Eine
-            Einstufung („goldener Schnitt", „klassische Proportionen")
-            bräuchte eine belegte Quelle; im Entwurf steht sie ohne.
-            {' '}Die Symmetrie ist die kleinere Seite am Mittel beider —
-            100 % heisst gleich lang.
+            Quotienten aus den gemessenen Umfängen. Die belegten
+            Grenzwerte (WHO) stehen in der Kachel darunter, die
+            Traditionswerte als beschriftete Heuristik daneben — beides
+            seit GO-21/G-89 mit Quelle. Die Symmetrie ist die kleinere
+            Seite am Mittel beider — 100 % heisst gleich lang.
+          </div>
+        </Card>
+
+        {/* GO-21: die vier Grad-A-Einordnungen, jede mit Quelle und
+            Jahr. Sprachregel: „unter/ueber dem Grenzwert", nie
+            „gesund". Ohne Geschlecht keine Schwelle. */}
+        <Card title="Einordnung" sub="WHO-Grenzwerte · Risikomarker, keine Diagnose">
+          <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
+            <Card className="v2-card-tight" style={{ padding: 12 }}>
+              <div className="v2-eyebrow" style={{ marginBottom: 3 }}>Taille : Hüfte (WHR)</div>
+              <div className="v2-num" style={{ fontSize: 18, fontWeight: 600 }}>
+                {v.taille_huefte.wert != null ? v.taille_huefte.wert.toFixed(3) : '—'}
+              </div>
+              <div style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+                {whr.schwelle == null
+                  ? <span className="v2-dim">Grenzwert erst mit gesetztem Geschlecht</span>
+                  : whr.lage == null ? <span className="v2-dim">nicht gemessen</span>
+                    : <>{whr.lage === 'unter' ? 'unter' : 'über'} dem Grenzwert {whr.schwelle.toFixed(2)}</>}
+              </div>
+              <QuellenZeile q={whr.quelle} />
+            </Card>
+            <Card className="v2-card-tight" style={{ padding: 12 }}>
+              <div className="v2-eyebrow" style={{ marginBottom: 3 }}>Taille : Grösse (WHtR)</div>
+              <div className="v2-num" style={{ fontSize: 18, fontWeight: 600 }}>
+                {whtr.verhaeltnis.wert != null ? whtr.verhaeltnis.wert.toFixed(3) : '—'}
+              </div>
+              <div style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+                {whtr.lage == null
+                  ? <span className="v2-dim">braucht Taille und Körpergrösse</span>
+                  : <>{whtr.lage === 'unter' ? 'unter' : 'über'} dem Grenzwert 0,5</>}
+              </div>
+              <QuellenZeile q={whtr.quelle} />
+            </Card>
+            <Card className="v2-card-tight" style={{ padding: 12 }}>
+              <div className="v2-eyebrow" style={{ marginBottom: 3 }}>Bauchumfang</div>
+              <div className="v2-num" style={{ fontSize: 18, fontWeight: 600 }}>
+                {taille != null ? `${taille.toFixed(1)} cm` : '—'}
+              </div>
+              <div style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+                {bauch.stufen == null
+                  ? <span className="v2-dim">Grenzwerte erst mit gesetztem Geschlecht</span>
+                  : bauch.lage == null ? <span className="v2-dim">nicht gemessen</span>
+                    : bauch.lage === 'unter'
+                      ? <>unter dem Grenzwert {bauch.stufen.erhoeht} cm</>
+                      : bauch.lage === 'erhoeht'
+                        ? <>über {bauch.stufen.erhoeht} cm (erhöhtes Risiko)</>
+                        : <>über {bauch.stufen.deutlich} cm (deutlich erhöhtes Risiko)</>}
+              </div>
+              <QuellenZeile q={bauch.quelle} />
+            </Card>
+            <Card className="v2-card-tight" style={{ padding: 12 }}>
+              <div className="v2-eyebrow" style={{ marginBottom: 3 }}>BMI</div>
+              <div className="v2-num" style={{ fontSize: 18, fontWeight: 600 }}>
+                {bmi.wert != null ? bmi.wert.toFixed(1) : '—'}
+              </div>
+              <div style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+                {bmi.klasse == null
+                  ? <span className="v2-dim">braucht Gewicht und Körpergrösse</span>
+                  : <>WHO-Klasse: {bmi.klasse}</>}
+              </div>
+              <QuellenZeile q={bmi.quelle} />
+              <div className="v2-dim" style={{ fontSize: 9.5, marginTop: 3, lineHeight: 1.4 }}>
+                {bmi.vorbehalt}
+              </div>
+            </Card>
           </div>
         </Card>
 
@@ -200,6 +280,60 @@ export function PhysiqueEcht({ saetze, navy, stichtag }: {
             )}
           </Card>
         )}
+
+        {/* G-89: Tradition, als solche beschriftet (Grad E,
+            LABEL_HEURISTIC). KEINE Einfaerbung nach Richtung — in
+            einer Aufbauphase ist eine wachsende Taille normal. Die
+            FFMI-25-Grenze fehlt bewusst: widersprüchliche Evidenz
+            (BP-FFMI-005, DO_NOT_IMPLEMENT). */}
+        <Card title="Traditionswerte" sub="Heuristik aus der Bodybuilding-Literatur — keine Messlatte">
+          <div className="v2-col-gap" style={{ gap: 10 }}>
+            {PROPORTION_HEURISTIKEN.map(h => (
+              <div key={h.registryId}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 12, fontWeight: 600 }}>{h.name}</span>
+                  <Pill style={{ fontSize: 9 }}>Heuristik</Pill>
+                </div>
+                <div className="v2-dim" style={{ fontSize: 10, marginTop: 2 }}>{h.herkunft}</div>
+                {h.registryId === 'BP-GR-006' && (
+                  <div className="v2-num" style={{ fontSize: 11.5, marginTop: 3 }}>
+                    Schulter : Taille gemessen{' '}
+                    {v.schulter_taille.wert != null ? v.schulter_taille.wert.toFixed(3) : '—'}
+                    <span className="v2-dim"> · Tradition 1,618</span>
+                  </div>
+                )}
+                {h.registryId === 'BP-CLASSIC-010' && (() => {
+                  const j = saetze[saetze.length - 1]
+                  const arm = j.upper_arm_left_cm != null && j.upper_arm_right_cm != null
+                    ? (j.upper_arm_left_cm + j.upper_arm_right_cm) / 2
+                    : j.upper_arm_left_cm ?? j.upper_arm_right_cm
+                  const wade = j.calf_left_cm != null && j.calf_right_cm != null
+                    ? (j.calf_left_cm + j.calf_right_cm) / 2
+                    : j.calf_left_cm ?? j.calf_right_cm
+                  return (
+                    <div className="v2-num" style={{ fontSize: 11.5, marginTop: 3 }}>
+                      Hals {j.neck_cm?.toFixed(1) ?? '—'} · Arm {arm?.toFixed(1) ?? '—'} · Wade {wade?.toFixed(1) ?? '—'} cm
+                      <span className="v2-dim"> · Tradition: gleich gross</span>
+                    </div>
+                  )
+                })()}
+                {h.formeln.length > 0 && (
+                  <div className="v2-dim v2-mono" style={{ fontSize: 9.5, marginTop: 3, lineHeight: 1.5 }}>
+                    {h.formeln.join(' · ')}
+                    {h.registryId !== 'BP-CLASSIC-010' && (
+                      <span> — Handgelenk/Knöchel/Becken werden nicht gemessen, kein Ist-Vergleich</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="v2-divider" />
+          <div className="v2-dim" style={{ fontSize: 10, lineHeight: 1.5 }}>
+            Grad E — Tradition, keine Studie. Ohne Richtungsfarbe:
+            welche Richtung erwünscht ist, hängt von der Phase ab.
+          </div>
+        </Card>
 
         <Card title="Messreihe" sub={`bis ${stichtag}`}>
           <Row label="Umfangssätze" value={String(saetze.length)} />

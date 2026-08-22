@@ -14,9 +14,22 @@ wissen, welcher Agent noch laeuft."*
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
 | **Fable** | **C-105 · C-124 · GO-21 · G-89** vier beantwortete Fragen umsetzen | Evidenz-Modell | 2026-08-22 |
-| **Claude Code** | **G-133** Allergen-Ausschluss an `p_filters` anschliessen | `apps/web` Nutrition | 2026-08-22 |
+| **Claude Code** | *frei* | | |
 | **Codex** | **C-187** fuenf Datenluecken, ein Durchgang | `supabase/_pipeline/` | 2026-08-22 |
-| *Kimi* | Dose–Response, Zeitverlauf, Streuung | extern | 2026-08-20 |
+| *Kimi* | Dose–Response, Zeitverlauf, Streuung — **Crawl 35 laeuft** | extern, siehe unten | 2026-08-20 |
+
+`[cmd]` **Wo die Kimi-Ergebnisse liegen** (Tom, 2026-08-22):
+
+    backup/kimi-research/Kimi_Agent/supplement_performance_database/
+
+`[cmd]` **Auf der Platte liegen die Crawls 017 bis 028** als
+`lumeos_core_crawl_0NN.tar.gz`, dazu `RESEARCH_STATUS.md` (32 KB),
+`SCHEMA.md`, `RULE_ENGINE_SPEC.md` und `substance_groups.json`.
+
+`[read]` **Crawl 35 laeuft, 029 bis 035 sind hier noch nicht
+angekommen.** C-185 und C-188 sind gegen **027** gebaut — wer eine
+neuere Zahl braucht, holt sie sich nicht aus diesem Ordner, ohne
+vorher nachzusehen, was tatsaechlich da ist.
 
 `[read]` **C-164 war zwischenzeitlich faelschlich als laufend
 eingetragen** — der Auftragstext ging erst am Abend raus. **Eintragen,

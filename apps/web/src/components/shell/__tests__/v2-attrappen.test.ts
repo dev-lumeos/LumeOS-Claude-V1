@@ -427,8 +427,15 @@ test('die Formeln der Recovery-Vorlage sind uebernommen, nicht erfunden', () => 
   // Uebertraining: die Schwere haengt an der Anzahl — :344.
   assert.ok(/n >= 7 \? 'critical' : n >= 5 \? 'high' : n >= 3 \? 'moderate'/.test(q),
     'Schwellen der Uebertrainings-Schwere fehlen')
-  // Modalitaeten-Deckel — :187.
-  assert.ok(/MAX_DAILY_BONUS = 5\.0/.test(q), 'Bonusdeckel 5.0 fehlt')
+  // C-124: die Modalitaets-Boni der Vorlage (:182-216, elf Werte plus
+  // Deckel 5.0) sind ENTFERNT — alle 32 Registry-Zeilen sagen
+  // REMOVE_NUMERIC_VALUE. Der Waechter steht jetzt andersherum: kein
+  // Punktbonus darf zurueckkommen, an seiner Stelle stehen Richtung,
+  // Endpunkt und Quelle.
+  assert.ok(!/const MAX_DAILY_BONUS/.test(q), 'C-124: der Bonusdeckel ist entfernt und darf nicht zurueckkommen')
+  assert.ok(!/const MODALITY_BONUS\b/.test(q), 'C-124: die Bonuswerte sind entfernt und duerfen nicht zurueckkommen')
+  assert.ok(/MODALITY_EVIDENZ/.test(q), 'C-124: die Evidenzaussagen fehlen')
+  assert.ok(/REC_SAUNA_ENDURANCE_HEAT/.test(q), 'C-124: Registry-IDs fehlen an den Aussagen')
 })
 
 test('der Erholungswert kennt beide Modi mit den Gewichten der Vorlage', () => {

@@ -39,7 +39,7 @@ import {
 
 import {
   MUSCLE_GROUPS_BODYMAP, MUSCLE_LABEL, MUSCLE_STATE, CHECKIN, NUTRITION_INPUT,
-  MODALITY_BONUS, MODALITY_META, MAX_DAILY_BONUS, TODAY_MODALITIES,
+  MODALITY_EVIDENZ, MODALITY_META, TODAY_MODALITIES,
   ACWR_DATA, calcMuscleRecovery, calcRecoveryScore, readinessFor,
   evaluateOvertraining, recoveryPendingActions,
 } from './motor'
@@ -260,7 +260,8 @@ function RecToday({
                   ['HRV', `${CHECKIN.hrv_rmssd} ms`, `z ${sc.hrv.z}`],
                   ['Sleep', `${CHECKIN.sleep_hours} h`, `q ${CHECKIN.sleep_quality}/10`],
                   ['ACWR', String(ACWR_DATA.acwr), `load ${sc.tls.toFixed(2)}`],
-                  ['Bonus', `+${sc.bonus.capped}`, sc.bonus.wasCapped ? 'capped' : `of ${MAX_DAILY_BONUS} max`],
+                  // C-124: die Bonus-Zelle ist entfernt — der Score
+                  // traegt keinen Modalitaetsbonus mehr.
                 ] as Array<[string, string, string]>).map(([l, v, s]) => (
                   <div key={l}>
                     <div className="v2-eyebrow" style={{ marginBottom: 2 }}>{l}</div>
@@ -286,14 +287,10 @@ function RecToday({
                 </span>
               </div>
             ))}
-            <div className="v2-rec-term" style={{ paddingTop: 6, borderTop: '1px solid var(--border)' }}>
-              <span style={{ fontWeight: 600 }}>Modality bonus</span>
-              <span className="v2-mono v2-dim" style={{ fontSize: 10 }}>{TODAY_MODALITIES.length} logged</span>
-              <div style={{ height: 6, background: 'var(--surface-2)', borderRadius: 999 }}>
-                <div style={{ height: '100%', width: `${(sc.bonus.capped / MAX_DAILY_BONUS) * 100}%`, background: 'var(--pos)', borderRadius: 999 }} />
-              </div>
-              <span className="v2-num" style={{ textAlign: 'right', color: 'var(--pos)' }}>+{sc.bonus.capped}</span>
-            </div>
+            {/* C-124: die „Modality bonus"-Zeile ist entfernt — der
+                Score ist die Summe der Terme, ohne erfundene
+                Zusatzpunkte. Modalitaeten stehen als Wirkung mit
+                Quelle in der eigenen Kachel. */}
             <div className="v2-rec-term" style={{ fontSize: 12, paddingTop: 6, borderTop: '1px solid var(--border-strong)' }}>
               <span style={{ fontWeight: 700 }}>Total</span>
               <span />
@@ -369,7 +366,7 @@ function RecToday({
 
         {!(modalitaeten && modalitaeten.gesamt > 0) && (
         <Card
-          title="Today's modalities" sub={`bonus +${sc.bonus.capped} of ${MAX_DAILY_BONUS} max`}
+          title="Today's modalities" sub="Wirkung laut Evidenzregister, ohne Punktbonus (C-124)"
           attrappe={ATTRAPPE}
           actions={
             <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
@@ -394,15 +391,18 @@ function RecToday({
                       <div style={{ fontSize: 11.5, fontWeight: 500 }}>{meta.label}</div>
                       <div className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>{m.time} · {m.duration} min · {m.detail}</div>
                     </div>
-                    <span className="v2-num" style={{ fontSize: 11, color: 'var(--pos)' }}>+{MODALITY_BONUS[m.type]}</span>
+                    <span
+                      className="v2-dim"
+                      style={{ fontSize: 9.5, maxWidth: 170, textAlign: 'right', lineHeight: 1.35 }}
+                      title={MODALITY_EVIDENZ[m.type]?.quelle ?? undefined}
+                    >
+                      {MODALITY_EVIDENZ[m.type]?.grad
+                        ? `${MODALITY_EVIDENZ[m.type].aussage} (Grad ${MODALITY_EVIDENZ[m.type].grad})`
+                        : 'ohne Eintrag im Evidenzregister'}
+                    </span>
                   </div>
                 )
               })}
-              {sc.bonus.wasCapped && (
-                <div className="v2-dim" style={{ fontSize: 10.5, padding: '6px 9px', lineHeight: 1.45 }}>
-                  Raw bonus {sc.bonus.raw} capped at {MAX_DAILY_BONUS} — prevents score inflation through excessive logging.
-                </div>
-              )}
             </div>
           )}
         </Card>

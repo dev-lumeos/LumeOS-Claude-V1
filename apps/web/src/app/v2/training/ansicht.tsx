@@ -187,10 +187,12 @@ export function TrainingAnsicht({
       {tab === 'progress' && (
         verlauf ? <TrainingKraftverlauf d={verlauf} /> : <TrainingProgressionView />
       )}
-      {/* `[read]` BLEIBT ATTRAPPE, mit Grund: MEV, MAV und MRV sind
-          Schwellen aus der Literatur, und im Repo liegt keine belegte
-          Quelle. Der Auftrag: „wenn keine Quelle im Repo liegt, bleibt
-          die Kachel Attrappe." */}
+      {/* `[read]` BLEIBT ATTRAPPE — aber seit C-105 mit geklaerter
+          Einstufung: MAV ist entfernt (DO_NOT_IMPLEMENT), MEV ist
+          Richtungshinweis, MRV und das RP-Rahmenwerk sind als
+          Heuristik beschriftet (crawl_025,
+          RP_VOLUME_LANDMARKS_FRAMEWORK). Zahlen je Muskelgruppe
+          duerfen als Orientierung stehen, nicht als Messwert. */}
       {tab === 'landmarks' && <TrainingLandmarksView />}
       {tab === 'standards' && (
         verlauf ? <TrainingStandards d={verlauf} /> : <TrainingStandardsView />

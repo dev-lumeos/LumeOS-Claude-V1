@@ -24,7 +24,7 @@ import * as React from 'react'
 import { Card, Pill, Icon, Ring, Meter, LineChart, InEntwicklungKnopf } from '@lumeos/ui'
 
 import {
-  MODALITY_BONUS, MODALITY_META, MODALITY_LOG, TODAY_MODALITIES, MAX_DAILY_BONUS,
+  MODALITY_EVIDENZ, MODALITY_META, MODALITY_LOG, TODAY_MODALITIES,
   RECOVERY_PROTOCOLS, ACTIVE_PROTOCOL,
   STRESS_TODAY, STRESS_SOURCES, STRESS_BANDS, STRESS_14D,
 } from './motor'
@@ -32,28 +32,33 @@ import { useRecovery } from './kontext'
 import { ATTRAPPE } from './ansicht'
 
 // ═══ MODALITIES ══════════════════════════════════════════════════
-// [cmd] module-recovery-v2.jsx:648-745.
+// [cmd] module-recovery-v2.jsx:648-745. **C-124: die Bonuspunkte der
+// Vorlage („Today's bonus +3.5", Katalogspalte „Bonus", „Δ score")
+// sind entfernt — alle 32 Registry-Zeilen sagen REMOVE_NUMERIC_VALUE.
+// An ihrer Stelle steht je Modalitaet Richtung + Endpunkt + Quelle.**
 export function RecModalities() {
-  const { open, sc } = useRecovery()
+  const { open } = useRecovery()
   return (
     <div>
       <div className="v2-grid v2-g-cols-4" style={{ gap: 10, marginBottom: 14 }}>
         {/* Marke ohne Begruendungstext — wie bei Training: der Satz
             waere laenger als die Kachel selbst. */}
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
-          <div className="v2-eyebrow">Today&apos;s bonus</div>
-          <div className="v2-num" style={{ fontSize: 22, color: 'var(--pos)' }}>+{sc.bonus.capped}</div>
-          <div className="v2-dim" style={{ fontSize: 11 }}>raw {sc.bonus.raw} · cap {MAX_DAILY_BONUS}</div>
-        </Card>
-        <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
           <div className="v2-eyebrow">Logged today</div>
           <div className="v2-num" style={{ fontSize: 22 }}>{TODAY_MODALITIES.length}</div>
           <div className="v2-dim" style={{ fontSize: 11 }}>{MODALITY_LOG.length} in last 7 days</div>
         </Card>
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
-          <div className="v2-eyebrow">Best next-day delta</div>
-          <div className="v2-num" style={{ fontSize: 22, color: 'var(--pos)' }}>+8</div>
-          <div className="v2-dim" style={{ fontSize: 11 }}>massage · 12 Aug</div>
+          <div className="v2-eyebrow">Best next-day rating</div>
+          <div className="v2-num" style={{ fontSize: 22, color: 'var(--pos)' }}>9/10</div>
+          <div className="v2-dim" style={{ fontSize: 11 }}>massage · 12 Aug · dein Rating</div>
+        </Card>
+        <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
+          <div className="v2-eyebrow">Belegte Modalitaeten</div>
+          <div className="v2-num" style={{ fontSize: 22 }}>
+            {Object.values(MODALITY_EVIDENZ).filter(e => e.grad !== null).length}
+          </div>
+          <div className="v2-dim" style={{ fontSize: 11 }}>von {Object.keys(MODALITY_EVIDENZ).length} im Register (crawl_025)</div>
         </Card>
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
           <div className="v2-eyebrow">Awaiting rating</div>
@@ -70,7 +75,7 @@ export function RecModalities() {
           1100px-Haltepunkt. */}
       <div className="v2-rec-grid-11">
         <Card
-          title="Modality catalog" sub="11 types · bonus value per session"
+          title="Modality catalog" sub="11 types · Wirkung laut Evidenzregister"
           attrappe={ATTRAPPE}
           actions={
             <button type="button" className="v2-btn v2-btn-sm" onClick={() => open({ typ: 'logModality' })}>
@@ -82,36 +87,50 @@ export function RecModalities() {
             <table className="v2-tbl">
               <thead>
                 <tr>
-                  <th>Modality</th>
-                  <th style={{ width: 80, textAlign: 'right' }}>Bonus</th>
-                  <th style={{ width: 110, textAlign: 'right' }}>Used · 7d</th>
+                  <th style={{ width: 150 }}>Modality</th>
+                  <th>Wirkung (Endpunkt)</th>
+                  <th style={{ width: 56, textAlign: 'right' }}>Grad</th>
+                  <th style={{ width: 70, textAlign: 'right' }}>Used · 7d</th>
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(MODALITY_BONUS).sort((a, b) => b[1] - a[1]).map(([k, v]) => {
-                  const meta = MODALITY_META[k]
-                  const used = MODALITY_LOG.filter(m => m.type === k).length
-                  return (
-                    <tr key={k}>
-                      <td>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <Icon name={meta.icon as never} className="v2-ic v2-ic-sm" style={{ color: meta.c }} />
-                          <span style={{ fontSize: 12 }}>{meta.label}</span>
-                        </div>
-                      </td>
-                      <td className="v2-num" style={{ textAlign: 'right', color: v >= 2 ? 'var(--pos)' : 'var(--fg)' }}>
-                        +{v.toFixed(1)}
-                      </td>
-                      <td className="v2-num v2-muted" style={{ textAlign: 'right' }}>{used || '—'}</td>
-                    </tr>
-                  )
-                })}
+                {Object.entries(MODALITY_EVIDENZ)
+                  .sort((a, b) => (a[1].grad ?? 'Z').localeCompare(b[1].grad ?? 'Z'))
+                  .map(([k, e]) => {
+                    const meta = MODALITY_META[k]
+                    const used = MODALITY_LOG.filter(m => m.type === k).length
+                    return (
+                      <tr key={k}>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <Icon name={meta.icon as never} className="v2-ic v2-ic-sm" style={{ color: meta.c }} />
+                            <span style={{ fontSize: 12 }}>{meta.label}</span>
+                          </div>
+                        </td>
+                        <td
+                          style={{ fontSize: 11, lineHeight: 1.45 }}
+                          className={e.grad === null ? 'v2-dim' : undefined}
+                          title={e.quelle ?? undefined}
+                        >
+                          {e.aussage}
+                          {e.quelle && (
+                            <span className="v2-dim v2-mono" style={{ fontSize: 9, marginLeft: 5 }}>{e.quelle}</span>
+                          )}
+                        </td>
+                        <td className="v2-num" style={{ textAlign: 'right' }}>{e.grad ?? '—'}</td>
+                        <td className="v2-num v2-muted" style={{ textAlign: 'right' }}>{used || '—'}</td>
+                      </tr>
+                    )
+                  })}
               </tbody>
             </table>
           </div>
           <div className="v2-divider" />
           <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
-            Daily bonus is capped at {MAX_DAILY_BONUS} points regardless of how many sessions you log. Stacking six modalities does not buy a better score.
+            C-124: Punktboni sind entfernt — das Evidenzregister
+            (crawl_025) belegt Richtungen je Endpunkt, aber keinen
+            einzigen Punktwert. Eine Modalitaet ohne Registerzeile
+            behauptet hier nichts.
           </div>
         </Card>
 
@@ -151,10 +170,15 @@ export function RecModalities() {
                         </InEntwicklungKnopf>
                       )}
                     </div>
+                    {/* C-124: die „Δ score"-Spalte (+4/+6/+8) ist
+                        entfernt — erfundene Punkteffekte. Was bleibt,
+                        sind die zwei NUTZER-Ratings links. */}
                     <div style={{ textAlign: 'right' }}>
-                      <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Δ score</div>
-                      <div className="v2-num" style={{ fontSize: 14, color: (m.scoreDelta ?? 0) > 0 ? 'var(--pos)' : 'var(--fg-dim)' }}>
-                        {m.scoreDelta != null ? `${m.scoreDelta > 0 ? '+' : ''}${m.scoreDelta}` : '—'}
+                      <div className="v2-eyebrow" style={{ marginBottom: 2 }}>Wirkung lt. Register</div>
+                      <div className="v2-dim" style={{ fontSize: 10, lineHeight: 1.4, maxWidth: 150 }}>
+                        {MODALITY_EVIDENZ[m.type]?.grad
+                          ? `Grad ${MODALITY_EVIDENZ[m.type].grad}`
+                          : 'kein Eintrag'}
                       </div>
                     </div>
                   </div>

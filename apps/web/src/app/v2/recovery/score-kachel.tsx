@@ -23,7 +23,10 @@ import type { CheckinZeile } from '../../../lib/recovery/checkin-read'
 const QUELLE_TEXT: Record<string, string> = {
   fallback_c123_e9: 'Rückfallwert — Ernährung steht nicht im Check-in (E9)',
   not_used_manual_mode: 'im manual-Modus nicht benutzt',
-  pending_c124_e5: 'wartet auf C-124 (E5)',
+  // C-124 ist entschieden: alle 32 Registry-Zeilen sagen
+  // REMOVE_NUMERIC_VALUE — der Bonus bleibt dauerhaft 0, die Quelle
+  // in der Datenbank heisst weiter `pending_c124_e5` (Codex-Bereich).
+  pending_c124_e5: 'ohne Punktbonus — C-124: keine Evidenz für Bonuswerte',
 }
 
 export function ScoreKachel({

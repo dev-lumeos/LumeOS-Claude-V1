@@ -223,7 +223,7 @@ export function GoalsAnsicht({ echt }: { echt: EchteDaten }) {
               ausserhalb der Entwurfs-Begleitdateien. */}
           {tab === 'physique' && (
             echt.umfaenge.length > 0
-              ? <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} />
+              ? <PhysiqueEcht saetze={echt.umfaenge} navy={echt.navy} stichtag={echt.stichtag} profil={echt.profil} />
               : <GoalsPhysiqueView />
           )}
         </>

@@ -11,10 +11,12 @@
 // diese vier in den Tabs 5-8 an. Die drei Rechner-Modale derselben
 // Datei stehen in `modale.tsx`.
 //
-// `[read]` DIE FORMELN BLEIBEN STEHEN. Wie beim Nutrition score in
-// G-05: die Gewichtung der Vorlage wird uebernommen, nicht erfunden.
-// Betrifft `landmarkStatus`, `feedbackVerdict`, die Kategorie-Schwellen
-// der Kraftstandards und `trainingScore` (0.40/0.30/0.20/0.10).
+// `[read]` DIE FORMELN BLEIBEN STEHEN — mit EINER beauftragten
+// Ausnahme: **C-105 hat MAV entfernt** (DO_NOT_IMPLEMENT, kein
+// Ersatzwert); `landmarkStatus` und `feedbackVerdict` sind darum
+// nicht mehr vorlagengleich, Begruendung am Block C. Unveraendert:
+// die Kategorie-Schwellen der Kraftstandards und `trainingScore`
+// (0.40/0.30/0.20/0.10).
 //
 // GEAENDERT IST NUR DAS TECHNISCHE: TypeScript, `v2-`-Praefix,
 // `color-mix(in srgb, …)` -> `in oklch` wie im Rest von v2,
@@ -232,41 +234,53 @@ export function TrainingProgressionView() {
 }
 
 // ── Block C: Volume landmarks ───────────────────────────────────
-// [cmd] module-training-spec.jsx:174-185.
+// [cmd] module-training-spec.jsx:174-185. **C-105 (crawl_025,
+// RP_VOLUME_LANDMARKS_FRAMEWORK: HEURISTIC, LABEL_HEURISTIC):**
+//
+//   MAV ist ENTFERNT — DO_NOT_IMPLEMENT, ohne Ersatzwert. Die
+//   „approaching MRV"-Zone und der „MAV +1"-Spruch hingen daran.
+//   MEV bleibt als RICHTUNGSHINWEIS (USE_DIRECTIONAL_GUIDANCE):
+//   „darunter ist ein Wachstumsreiz unwahrscheinlich" — die Zahl je
+//   Muskelgruppe ist Orientierung, kein Messwert.
+//   MRV und das RP-Rahmenwerk sind als HEURISTIK beschriftet —
+//   Coaching-Tradition (Israetel/RP), kein wissenschaftlicher
+//   Konsens; die Meta-Regressionen (Sports Medicine 2017) stuetzen
+//   nur „mehr Volumen -> mehr Hypertrophie, abflachend".
 type Landmark = {
-  m: string; mev: number; mav: number; mrv: number
+  m: string; mev: number; mrv: number
   cur: number; pump: number; sore: number; points: number
 }
 
 const LANDMARKS: Landmark[] = [
-  { m: 'Chest', mev: 10, mav: 18, mrv: 22, cur: 14, pump: 2.6, sore: 1.4, points: 7 },
-  { m: 'Back', mev: 12, mav: 20, mrv: 25, cur: 18, pump: 2.4, sore: 1.8, points: 9 },
-  { m: 'Shoulders', mev: 8, mav: 16, mrv: 20, cur: 10, pump: 1.8, sore: 1.2, points: 6 },
-  { m: 'Biceps', mev: 8, mav: 14, mrv: 20, cur: 14, pump: 2.8, sore: 1.3, points: 8 },
-  { m: 'Triceps', mev: 6, mav: 14, mrv: 18, cur: 14, pump: 2.2, sore: 1.6, points: 8 },
-  { m: 'Quads', mev: 8, mav: 16, mrv: 20, cur: 18, pump: 2.0, sore: 2.6, points: 11 },
-  { m: 'Hamstrings', mev: 6, mav: 12, mrv: 16, cur: 9, pump: 1.6, sore: 1.4, points: 5 },
-  { m: 'Glutes', mev: 4, mav: 12, mrv: 16, cur: 10, pump: 2.2, sore: 1.5, points: 6 },
-  { m: 'Calves', mev: 8, mav: 14, mrv: 20, cur: 6, pump: 1.4, sore: 1.1, points: 4 },
-  { m: 'Abs', mev: 6, mav: 14, mrv: 20, cur: 8, pump: 2.0, sore: 1.2, points: 5 },
+  { m: 'Chest', mev: 10, mrv: 22, cur: 14, pump: 2.6, sore: 1.4, points: 7 },
+  { m: 'Back', mev: 12, mrv: 25, cur: 18, pump: 2.4, sore: 1.8, points: 9 },
+  { m: 'Shoulders', mev: 8, mrv: 20, cur: 10, pump: 1.8, sore: 1.2, points: 6 },
+  { m: 'Biceps', mev: 8, mrv: 20, cur: 14, pump: 2.8, sore: 1.3, points: 8 },
+  { m: 'Triceps', mev: 6, mrv: 18, cur: 14, pump: 2.2, sore: 1.6, points: 8 },
+  { m: 'Quads', mev: 8, mrv: 20, cur: 18, pump: 2.0, sore: 2.6, points: 11 },
+  { m: 'Hamstrings', mev: 6, mrv: 16, cur: 9, pump: 1.6, sore: 1.4, points: 5 },
+  { m: 'Glutes', mev: 4, mrv: 16, cur: 10, pump: 2.2, sore: 1.5, points: 6 },
+  { m: 'Calves', mev: 8, mrv: 20, cur: 6, pump: 1.4, sore: 1.1, points: 4 },
+  { m: 'Abs', mev: 6, mrv: 20, cur: 8, pump: 2.0, sore: 1.2, points: 5 },
 ]
 
 /**
- * [cmd] module-training-spec.jsx:187-192. Die Schwellen bleiben.
- * Exportiert, damit die Pruefung sie danebenlegen kann.
+ * Drei Lagen statt vier: unter MEV (Richtungshinweis), im Band
+ * MEV–MRV, ueber MRV (Heuristik). Exportiert, damit die Pruefung sie
+ * danebenlegen kann.
  */
 export function landmarkStatus(l: Landmark) {
-  if (l.cur < l.mev) return { k: 'below_mev', c: 'var(--neg)', l: 'below MEV' }
-  if (l.cur > l.mrv) return { k: 'over_mrv', c: 'var(--neg)', l: 'over MRV · deload' }
-  if (l.cur > l.mav) return { k: 'approaching_mrv', c: 'var(--warn)', l: 'approaching MRV' }
-  return { k: 'optimal', c: 'var(--pos)', l: 'optimal' }
+  if (l.cur < l.mev) return { k: 'below_mev', c: 'var(--warn)', l: 'below MEV (guide)' }
+  if (l.cur > l.mrv) return { k: 'over_mrv', c: 'var(--neg)', l: 'over MRV (heuristic)' }
+  return { k: 'in_band', c: 'var(--pos)', l: 'in MEV–MRV band' }
 }
 
-/** [cmd] module-training-spec.jsx:193-198. */
+/** [cmd] module-training-spec.jsx:193-198 — ohne den „MAV +1"-Zweig:
+ *  die Richtung bleibt, der Zahlwert ist entfernt (C-105). */
 export function feedbackVerdict(l: Landmark) {
   if (l.points < 5) return { t: 'collecting', c: 'var(--fg-dim)', d: `${l.points} of 5 data points` }
-  if (l.pump >= 2.5 && l.sore <= 1.5) return { t: 'MAV +1', c: 'var(--pos)', d: 'can handle more volume' }
-  if (l.sore >= 2.5 && l.pump <= 1.5) return { t: 'MRV capped', c: 'var(--warn)', d: 'MRV reached or exceeded' }
+  if (l.pump >= 2.5 && l.sore <= 1.5) return { t: 'can handle more', c: 'var(--pos)', d: 'pump high, soreness low' }
+  if (l.sore >= 2.5 && l.pump <= 1.5) return { t: 'reduce volume', c: 'var(--warn)', d: 'soreness high, pump low' }
   return { t: 'no change', c: 'var(--fg-muted)', d: 'data point logged' }
 }
 
@@ -284,25 +298,25 @@ export function TrainingLandmarksView() {
           bleibt, der Grund steht an der grossen Kachel darunter. */}
       <div className="v2-grid v2-g-cols-4" style={{ gap: 10, marginBottom: 14 }}>
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
-          <div className="v2-eyebrow">Optimal zone</div>
+          <div className="v2-eyebrow">In MEV–MRV band</div>
           <div className="v2-num" style={{ fontSize: 22, color: 'var(--pos)' }}>
-            {LANDMARKS.filter(l => landmarkStatus(l).k === 'optimal').length}
+            {LANDMARKS.filter(l => landmarkStatus(l).k === 'in_band').length}
           </div>
           <div className="v2-dim" style={{ fontSize: 11 }}>of {LANDMARKS.length} muscle groups</div>
         </Card>
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
           <div className="v2-eyebrow">Below MEV</div>
-          <div className="v2-num" style={{ fontSize: 22, color: 'var(--neg)' }}>
+          <div className="v2-num" style={{ fontSize: 22, color: 'var(--warn)' }}>
             {LANDMARKS.filter(l => landmarkStatus(l).k === 'below_mev').length}
           </div>
-          <div className="v2-dim" style={{ fontSize: 11 }}>needs more volume</div>
+          <div className="v2-dim" style={{ fontSize: 11 }}>growth stimulus unlikely (guide)</div>
         </Card>
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
-          <div className="v2-eyebrow">Approaching MRV</div>
-          <div className="v2-num" style={{ fontSize: 22, color: 'var(--warn)' }}>
-            {LANDMARKS.filter(l => landmarkStatus(l).k === 'approaching_mrv').length}
+          <div className="v2-eyebrow">Over MRV</div>
+          <div className="v2-num" style={{ fontSize: 22, color: 'var(--neg)' }}>
+            {LANDMARKS.filter(l => landmarkStatus(l).k === 'over_mrv').length}
           </div>
-          <div className="v2-dim" style={{ fontSize: 11 }}>watch fatigue</div>
+          <div className="v2-dim" style={{ fontSize: 11 }}>heuristic ceiling · consider deload</div>
         </Card>
         <Card className="v2-card-tight" style={{ padding: 14 }} attrappe>
           <div className="v2-eyebrow">Push : Pull ratio</div>
@@ -312,7 +326,7 @@ export function TrainingLandmarksView() {
       </div>
 
       <Card title="Volume landmarks · sets per week"
-            sub="RP Hypertrophy defaults, personalised by your feedback"
+            sub="RP-Rahmenwerk — Heuristik (Grad E) · Orientierung, kein Messwert"
             attrappe={ATTRAPPE}>
         <div className="v2-col-gap" style={{ gap: 4 }}>
           {LANDMARKS.map(l => {
@@ -323,12 +337,13 @@ export function TrainingLandmarksView() {
               <div key={l.m} className="v2-train-landmark-row">
                 <span style={{ fontSize: 12 }}>{l.m}</span>
                 <div style={{ position: 'relative', height: 16, background: 'var(--surface-2)', borderRadius: 4, overflow: 'hidden' }}>
-                  <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(l.mev / scale) * 100}%`, background: 'color-mix(in oklch, var(--neg) 14%, transparent)' }} />
-                  <div style={{ position: 'absolute', left: `${(l.mev / scale) * 100}%`, top: 0, bottom: 0, width: `${((l.mav - l.mev) / scale) * 100}%`, background: 'color-mix(in oklch, var(--pos) 16%, transparent)' }} />
-                  <div style={{ position: 'absolute', left: `${(l.mav / scale) * 100}%`, top: 0, bottom: 0, width: `${((l.mrv - l.mav) / scale) * 100}%`, background: 'color-mix(in oklch, var(--warn) 16%, transparent)' }} />
+                  {/* C-105: drei Zonen statt vier — die MAV-Grenze ist
+                      entfernt (DO_NOT_IMPLEMENT, kein Ersatzwert). */}
+                  <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(l.mev / scale) * 100}%`, background: 'color-mix(in oklch, var(--warn) 14%, transparent)' }} />
+                  <div style={{ position: 'absolute', left: `${(l.mev / scale) * 100}%`, top: 0, bottom: 0, width: `${((l.mrv - l.mev) / scale) * 100}%`, background: 'color-mix(in oklch, var(--pos) 16%, transparent)' }} />
                   <div style={{ position: 'absolute', left: `${(l.mrv / scale) * 100}%`, top: 0, right: 0, bottom: 0, background: 'color-mix(in oklch, var(--neg) 14%, transparent)' }} />
                   <div style={{ position: 'absolute', left: 0, top: 3, height: 10, width: `${(l.cur / scale) * 100}%`, background: st.c, opacity: 0.85, borderRadius: 3 }} />
-                  {([['mev', l.mev], ['mav', l.mav], ['mrv', l.mrv]] as Array<[string, number]>).map(([k, v]) => (
+                  {([['mev', l.mev], ['mrv', l.mrv]] as Array<[string, number]>).map(([k, v]) => (
                     <div key={k} style={{ position: 'absolute', left: `${(v / scale) * 100}%`, top: 0, bottom: 0, width: 1, background: 'var(--fg-dim)', opacity: 0.55 }} />
                   ))}
                 </div>
@@ -343,29 +358,41 @@ export function TrainingLandmarksView() {
           })}
         </div>
         <div style={{ display: 'flex', gap: 14, marginTop: 12, fontSize: 10, color: 'var(--fg-muted)', flexWrap: 'wrap' }}>
-          <span className="v2-row-gap"><span style={{ width: 12, height: 10, background: 'color-mix(in oklch, var(--neg) 14%, transparent)', borderRadius: 2 }} />below MEV</span>
-          <span className="v2-row-gap"><span style={{ width: 12, height: 10, background: 'color-mix(in oklch, var(--pos) 16%, transparent)', borderRadius: 2 }} />MEV → MAV optimal</span>
-          <span className="v2-row-gap"><span style={{ width: 12, height: 10, background: 'color-mix(in oklch, var(--warn) 16%, transparent)', borderRadius: 2 }} />MAV → MRV</span>
-          <span className="v2-row-gap"><span style={{ width: 12, height: 10, background: 'color-mix(in oklch, var(--neg) 14%, transparent)', borderRadius: 2 }} />over MRV</span>
-          <span className="v2-dim" style={{ marginLeft: 'auto' }}>MEV minimum effective · MAV adaptive max · MRV recoverable max</span>
+          <span className="v2-row-gap"><span style={{ width: 12, height: 10, background: 'color-mix(in oklch, var(--warn) 14%, transparent)', borderRadius: 2 }} />below MEV (guide)</span>
+          <span className="v2-row-gap"><span style={{ width: 12, height: 10, background: 'color-mix(in oklch, var(--pos) 16%, transparent)', borderRadius: 2 }} />MEV → MRV</span>
+          <span className="v2-row-gap"><span style={{ width: 12, height: 10, background: 'color-mix(in oklch, var(--neg) 14%, transparent)', borderRadius: 2 }} />over MRV (heuristic)</span>
+        </div>
+        <div className="v2-divider" />
+        <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+          C-105: MEV ist ein Richtungshinweis, MRV eine Heuristik aus
+          der Coaching-Praxis (Renaissance Periodization, Israetel) —
+          die Zahlen je Muskelgruppe sind Orientierung, keine
+          Messwerte. Die fruehere MAV-Zone ist entfernt: fuer sie gibt
+          es keinen Beleg und keinen Ersatzwert. Wissenschaftlich
+          gestuetzt ist nur die Richtung „mehr Wochenvolumen → mehr
+          Hypertrophie, abflachend" (Meta-Regression, Sports Medicine
+          2017).
         </div>
       </Card>
 
       <div style={{ height: 14 }} />
       <div className="v2-grid v2-g-cols-2">
-        <Card title="Feedback loop" sub="pump + soreness → personal MAV/MRV" attrappe={ATTRAPPE}>
+        <Card title="Feedback loop" sub="pump + soreness → Richtung, kein Punktwert" attrappe={ATTRAPPE}>
           <div className="v2-dim" style={{ fontSize: 11.5, marginBottom: 12, lineHeight: 1.55 }}>
-            After each session you rate pump (1–3) and soreness (1–3) per muscle group. After 5 data points the algorithm shifts your personal landmarks.
+            After each session you rate pump (1–3) and soreness (1–3)
+            per muscle group. After 5 data points the loop suggests a
+            DIRECTION — C-105: die frühere „personal_mav += 1"-Regel
+            ist entfernt, MAV gibt es nicht mehr.
           </div>
           <pre style={{
             margin: 0, padding: 12, background: 'var(--bg-elev)', border: '1px solid var(--border)',
             borderRadius: 6, fontSize: 11, lineHeight: 1.7, color: 'var(--fg-muted)',
             whiteSpace: 'pre-wrap', fontFamily: 'var(--font-mono)',
           }}>{`IF pump ≥ 2.5 AND soreness ≤ 1.5
-   → personal_mav += 1
+   → suggest: more volume possible (direction only)
 
 IF soreness ≥ 2.5 AND pump ≤ 1.5
-   → personal_mrv = MIN(mrv, current_sets)
+   → personal_mrv = MIN(mrv, current_sets)   // heuristic cap
 
 ELSE
    → no change · data point logged
@@ -491,7 +518,7 @@ export function TrainingStandardsView() {
         <Row label="Muscle balance" value="Push:Pull 1.05" />
         <div className="v2-divider" />
         <div className="v2-dim" style={{ fontSize: 11, lineHeight: 1.5 }}>
-          Landmarks is the weak component — 4 groups outside MAV. Bringing calves and hamstrings into range lifts the score by ~9 points.
+          Landmarks is the weak component — 3 groups below MEV. Bringing calves and hamstrings into the MEV–MRV band lifts the score by ~9 points.
         </div>
       </Card>
     </div>
@@ -574,7 +601,7 @@ export function TrainingCalendarView() {
             {[
               { src: 'Recovery', v: 'readiness 84', ok: true, msg: 'Full volume — no restriction' },
               { src: 'Recovery', v: 'chest 88 · shoulders 70', ok: true, msg: 'All target muscles above 50' },
-              { src: 'Goals', v: 'phase recomp', ok: true, msg: 'Volume at lower MAV' },
+              { src: 'Goals', v: 'phase recomp', ok: true, msg: 'Volume near MEV (guide)' },
               { src: 'Medical', v: 'CRP 0.6 · normal', ok: true, msg: 'No inflammation flag' },
               { src: 'Medical', v: 'no injury flags', ok: true, msg: 'All exercises available' },
             ].map(c => (
