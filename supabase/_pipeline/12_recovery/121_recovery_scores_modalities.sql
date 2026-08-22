@@ -31,13 +31,12 @@ SECURITY INVOKER
 SET search_path = ''
 AS $$
   SELECT jsonb_build_object(
-    'algorithm_version', 'manual_v1_c125',
+    'algorithm_version', 'manual_v2_c215',
     'weights', jsonb_build_object(
       'sleep_quality', 30,
       'sleep_duration', 15,
       'subjective_feeling', 15,
       'soreness', 10,
-      'training_load', 15,
       'nutrition', 10,
       'mood', 5
     ),
@@ -82,55 +81,8 @@ $$;
 COMMENT ON FUNCTION recovery.modality_bonus_value(TEXT) IS
   'C-125 Platzhalter fuer C-124/E5. Liefert bis zur Recherche 0, damit die Struktur steht, ohne Bonuswerte zu erfinden.';
 
-CREATE OR REPLACE FUNCTION recovery.training_load_score(p_acwr NUMERIC)
-RETURNS NUMERIC
-LANGUAGE sql
-IMMUTABLE
-SECURITY INVOKER
-SET search_path = ''
-AS $$
-  SELECT CASE
-    WHEN p_acwr IS NULL THEN 70::numeric
-    WHEN p_acwr BETWEEN 0.8 AND 1.2 THEN 100::numeric
-    WHEN p_acwr > 1.2 AND p_acwr <= 1.5 THEN greatest(0::numeric, round(100 - ((p_acwr - 1.2) * 133.333), 1))
-    WHEN p_acwr > 1.5 THEN greatest(0::numeric, round(60 - ((p_acwr - 1.5) * 100), 1))
-    WHEN p_acwr < 0.8 THEN greatest(70::numeric, round(100 - ((0.8 - p_acwr) * 75), 1))
-    ELSE 70::numeric
-  END;
-$$;
-
-COMMENT ON FUNCTION recovery.training_load_score(NUMERIC) IS
-  'Monotone ACWR-Kurve fuer C-125. ACWR 1.4 verbessert den Score nicht, sondern senkt ihn.';
-
-CREATE OR REPLACE FUNCTION recovery.acwr_for_day(p_user_id UUID, p_entry_date DATE)
-RETURNS NUMERIC
-LANGUAGE sql
-STABLE
-SECURITY INVOKER
-SET search_path = ''
-AS $$
-  WITH loads AS (
-    SELECT
-      COALESCE(sum(s.total_volume_kg) FILTER (
-        WHERE s.session_date BETWEEN p_entry_date - 6 AND p_entry_date
-      ), 0)::numeric AS acute_7d,
-      COALESCE(sum(s.total_volume_kg) FILTER (
-        WHERE s.session_date BETWEEN p_entry_date - 27 AND p_entry_date
-      ), 0)::numeric / 4 AS chronic_weekly
-    FROM training.workout_sessions s
-    WHERE s.user_id = p_user_id
-      AND s.status = 'completed'
-      AND s.session_date BETWEEN p_entry_date - 27 AND p_entry_date
-  )
-  SELECT CASE
-    WHEN chronic_weekly IS NULL OR chronic_weekly <= 0 THEN NULL::numeric
-    ELSE round(acute_7d / chronic_weekly, 3)
-  END
-  FROM loads;
-$$;
-
-COMMENT ON FUNCTION recovery.acwr_for_day(UUID, DATE) IS
-  'ACWR aus training.workout_sessions: 7-Tage-Last geteilt durch 28-Tage-Last als Wochenmittel.';
+DROP FUNCTION IF EXISTS recovery.training_load_score(NUMERIC);
+DROP FUNCTION IF EXISTS recovery.acwr_for_day(UUID, DATE);
 
 CREATE TABLE IF NOT EXISTS recovery.scores (
   id                         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -139,7 +91,7 @@ CREATE TABLE IF NOT EXISTS recovery.scores (
   mode                       TEXT NOT NULL DEFAULT 'manual'
     CHECK (mode = 'manual'),
   score                      NUMERIC(5,1) NOT NULL CHECK (score BETWEEN 0 AND 100),
-  algorithm_version          TEXT NOT NULL DEFAULT 'manual_v1_c125',
+  algorithm_version          TEXT NOT NULL DEFAULT 'manual_v2_c215',
 
   sleep_quality_score        NUMERIC(5,1) NOT NULL CHECK (sleep_quality_score BETWEEN 0 AND 100),
   sleep_duration_score       NUMERIC(5,1) NOT NULL CHECK (sleep_duration_score BETWEEN 0 AND 100),
@@ -162,7 +114,6 @@ CREATE TABLE IF NOT EXISTS recovery.scores (
   sleep_hours_used           NUMERIC(3,1),
   soreness_avg_used          NUMERIC(4,2) NOT NULL DEFAULT 0,
   soreness_reported_count    INTEGER NOT NULL DEFAULT 0 CHECK (soreness_reported_count >= 0),
-  acwr_used                  NUMERIC(8,3),
   nutrition_source           TEXT NOT NULL DEFAULT 'fallback_c123_e9',
   hrv_source                 TEXT NOT NULL DEFAULT 'not_used_manual_mode',
   modality_bonus_source      TEXT NOT NULL DEFAULT 'pending_c124_e5',
@@ -187,6 +138,10 @@ COMMENT ON COLUMN recovery.scores.hrv_source IS
   'E1: V1 ist manual; HRV wird nicht bewertet, auch wenn checkins hrv_rmssd tragen.';
 COMMENT ON COLUMN recovery.scores.modality_bonus_source IS
   'C-124/E5 offen. Bis zur Recherche liefert recovery.modality_bonus_value() 0.';
+
+ALTER TABLE recovery.scores
+  ALTER COLUMN algorithm_version SET DEFAULT 'manual_v2_c215',
+  DROP COLUMN IF EXISTS acwr_used;
 
 CREATE INDEX IF NOT EXISTS idx_recovery_scores_user_date
   ON recovery.scores(user_id, entry_date DESC);
@@ -283,12 +238,11 @@ DECLARE
   c recovery.checkins%ROWTYPE;
   v_soreness_avg NUMERIC := 0;
   v_soreness_count INTEGER := 0;
-  v_acwr NUMERIC;
   v_sleep_quality_score NUMERIC;
   v_sleep_duration_score NUMERIC;
   v_subjective_score NUMERIC;
   v_soreness_score NUMERIC;
-  v_training_score NUMERIC;
+  v_training_score NUMERIC := 0;
   v_nutrition_score NUMERIC := 70;
   v_mood_score NUMERIC;
   v_modality_bonus NUMERIC := 0;
@@ -333,9 +287,6 @@ BEGIN
     ELSE greatest(0::numeric, round(100 - (least(v_soreness_avg, 3) / 3 * 100), 1))
   END;
 
-  v_acwr := recovery.acwr_for_day(p_user_id, p_entry_date);
-  v_training_score := recovery.training_load_score(v_acwr);
-
   v_mood_score := CASE c.mood
     WHEN 'motivated' THEN 100
     WHEN 'good' THEN 85
@@ -361,7 +312,6 @@ BEGIN
       + v_sleep_duration_score * 0.15
       + v_subjective_score * 0.15
       + v_soreness_score * 0.10
-      + v_training_score * 0.15
       + v_nutrition_score * 0.10
       + v_mood_score * 0.05
       + v_modality_bonus
@@ -375,11 +325,11 @@ BEGIN
     sleep_quality_points, sleep_duration_points, subjective_feeling_points,
     soreness_points, training_load_points, nutrition_points, mood_points,
     modality_bonus, sleep_hours_used, soreness_avg_used, soreness_reported_count,
-    acwr_used, nutrition_source, hrv_source, modality_bonus_source, fallbacks,
+    nutrition_source, hrv_source, modality_bonus_source, fallbacks,
     calculated_at, measurement_source, source_detail
   )
   VALUES (
-    p_user_id, p_entry_date, 'manual', v_total, 'manual_v1_c125',
+    p_user_id, p_entry_date, 'manual', v_total, 'manual_v2_c215',
     v_sleep_quality_score, v_sleep_duration_score, v_subjective_score,
     v_soreness_score, v_training_score, v_nutrition_score, v_mood_score, NULL,
     round(v_sleep_quality_score * 0.30, 2),
@@ -390,8 +340,8 @@ BEGIN
     round(v_nutrition_score * 0.10, 2),
     round(v_mood_score * 0.05, 2),
     v_modality_bonus, c.sleep_hours, v_soreness_avg, v_soreness_count,
-    v_acwr, 'fallback_c123_e9', 'not_used_manual_mode', 'pending_c124_e5', v_fallbacks,
-    now(), 'derived', 'recovery.recalculate_score manual_v1_c125'
+    'fallback_c123_e9', 'not_used_manual_mode', 'pending_c124_e5', v_fallbacks,
+    now(), 'derived', 'recovery.recalculate_score manual_v2_c215'
   )
   ON CONFLICT (user_id, entry_date) DO UPDATE
   SET
@@ -417,7 +367,6 @@ BEGIN
     sleep_hours_used = EXCLUDED.sleep_hours_used,
     soreness_avg_used = EXCLUDED.soreness_avg_used,
     soreness_reported_count = EXCLUDED.soreness_reported_count,
-    acwr_used = EXCLUDED.acwr_used,
     nutrition_source = EXCLUDED.nutrition_source,
     hrv_source = EXCLUDED.hrv_source,
     modality_bonus_source = EXCLUDED.modality_bonus_source,
@@ -436,7 +385,7 @@ END;
 $$;
 
 COMMENT ON FUNCTION recovery.recalculate_score(UUID, DATE) IS
-  'Berechnet und speichert einen manual Recovery-Score-Schnappschuss aus checkins, Training-ACWR, Nutrition-Fallback 70 und Modalitaeten-Bonus.';
+  'Berechnet und speichert einen manual Recovery-Score-Schnappschuss aus checkins, Nutrition-Fallback 70 und Modalitaeten-Bonus. C-215 entfernt ACWR/Training-Load aus der Score-Rechnung.';
 
 CREATE OR REPLACE FUNCTION recovery.refresh_scores_for_user(p_user_id UUID)
 RETURNS INTEGER
@@ -481,8 +430,6 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON recovery.scores, recovery.modality_log T
 GRANT ALL ON recovery.scores, recovery.modality_log TO service_role;
 GRANT EXECUTE ON FUNCTION recovery.scoring_constants() TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION recovery.modality_bonus_value(TEXT) TO authenticated, service_role;
-GRANT EXECUTE ON FUNCTION recovery.training_load_score(NUMERIC) TO authenticated, service_role;
-GRANT EXECUTE ON FUNCTION recovery.acwr_for_day(UUID, DATE) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION recovery.recalculate_score(UUID, DATE) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION recovery.refresh_scores_for_user(UUID) TO authenticated, service_role;
 GRANT EXECUTE ON FUNCTION recovery.refresh_modality_deltas(UUID, DATE) TO authenticated, service_role;

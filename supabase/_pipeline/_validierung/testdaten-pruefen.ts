@@ -1010,16 +1010,18 @@ if (MODE === 'clean') {
     WHERE user_id = '${tom}'::uuid
       AND entry_date = DATE '${relDate('2026-08-18')}'
       AND mode = 'manual'
-      AND algorithm_version = 'manual_v1_c125'
+      AND algorithm_version = 'manual_v2_c215'
       AND hrv_score IS NULL
       AND hrv_source = 'not_used_manual_mode'
+      AND training_load_score = 0
+      AND training_load_points = 0
       AND nutrition_score = 70
       AND nutrition_source = 'fallback_c123_e9'
       AND modality_bonus = 0
       AND soreness_reported_count = 3
       AND soreness_avg_used BETWEEN 2.32 AND 2.34
       AND soreness_score BETWEEN 22.1 AND 22.3
-      AND score BETWEEN 40 AND 80;`)) {
+      AND score BETWEEN 30 AND 80;`)) {
     errors.push('Fall Recovery Score: Manual-Score ohne HRV oder E2-Soreness-Regel fehlt')
   }
   if (!hasRows(`

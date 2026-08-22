@@ -37,7 +37,6 @@ DECLARE
   v_profile_sex text;
   v_pregnancy_planned boolean;
   v_training_week integer;
-  v_acwr numeric;
 BEGIN
   SELECT count(*) INTO v_stack_items
   FROM supplements.user_stacks us
@@ -96,8 +95,6 @@ BEGIN
   WHERE user_id = p_user_id
     AND status = 'completed'
     AND session_date BETWEEN p_entry_date - 6 AND p_entry_date;
-
-  SELECT recovery.acwr_for_day(p_user_id, p_entry_date) INTO v_acwr;
 
   RETURN QUERY VALUES
     (
@@ -334,9 +331,9 @@ BEGIN
     ),
     (
       'training.load_spike',
-      CASE WHEN v_acwr IS NULL THEN 'no_data' ELSE 'available' END,
-      CASE WHEN v_acwr IS NULL THEN 'ACWR cannot be computed for day' ELSE NULL END,
-      jsonb_build_object('acwr', v_acwr)
+      'no_data',
+      'ACWR was removed from recovery scoring in C-215; no load spike model is built',
+      jsonb_build_object('completed_sessions_7d', v_training_week)
     ),
     (
       'sleep.sleep_latency_min',

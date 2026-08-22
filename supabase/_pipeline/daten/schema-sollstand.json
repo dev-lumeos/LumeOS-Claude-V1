@@ -3189,16 +3189,6 @@
     },
     {
       "schema": "recovery",
-      "name": "training_load_score",
-      "schritt": "121"
-    },
-    {
-      "schema": "recovery",
-      "name": "acwr_for_day",
-      "schritt": "121"
-    },
-    {
-      "schema": "recovery",
       "name": "refresh_modality_deltas",
       "schritt": "121"
     },
