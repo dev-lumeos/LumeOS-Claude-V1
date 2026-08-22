@@ -140,6 +140,37 @@ waehrend `recovery.checkins` 340 Zeilen hat, `recovery.scores` 340 und
 zugreifen. **Der Banner war falsch, und er hat den Orchestrator
 mitgetaeuscht.**
 
+## Wegwerf-Datenbank zum Pruefen, laufende Instanz zum Abschliessen
+
+`[cmd]` **Am 2026-08-22 lagen sechs Auftraege committet und nicht
+eingespielt:** C-191, C-192, C-195, C-196, C-197, C-215. Live 31
+Spalten, committet 63. Eine ganze Woche Arbeit war auf Toms Rechner
+nie sichtbar.
+
+`[read]` **Der Fehler war der des Orchestrators.** In jedem
+Pipeline-Auftrag stand *„Wegwerf-Datenbank, danach verwerfen"* \u2014
+richtig, aber **es stand nie ein Schritt danach.** Der Auftrag endete
+beim gruenen Kettenlauf auf einer Datenbank, die anschliessend
+geloescht wird. Codex hat jedes Mal genau das getan, was dastand.
+
+`[read]` **Und die Pruefung war formal richtig, inhaltlich blind:**
+gemessen wurde, dass *das Skript* 60 Spalten erzeugt. Im C-195-Abschluss
+steht *„Live-Datenbank unberuehrt: 31 Spalten"* sogar als **Beleg fuer
+saubere Arbeit**. Aufgefallen ist es Fable, als es etwas anzeigen
+wollte.
+
+**Deshalb: Ein Pipeline-Auftrag ist nicht fertig, wenn die Kette gruen
+laeuft \u2014 sondern wenn die Aenderung dort ist, wo Tom sie sieht.** Der
+Auftrag nennt beide Schritte oder er ist unvollstaendig geschrieben.
+
+**Und vor dem Einspielen steht eine Sicherung, die zurueckgespielt
+wurde.** `[cmd]` Ein Volldump mit `auth`-Schema, geprueft durch
+Restore auf eine Wegwerf-Instanz, mit gezaehlten Zeilen UND Policies \u2014
+`pg_restore` laesst Policies sonst still fallen. **Ein ungepruefter
+Dump ist kein Backup:** der Vollrestore vom 2026-08-22 scheiterte an
+einem Supabase-internen `graphql_public.graphql`-GRANT und lief erst
+mit `--no-privileges` durch. Das findet nur, wer es einmal tut.
+
 ## Keine Terminalfenster — und der Orchestrator haelt sich selbst daran
 
 **Tom, 2026-08-19:** *,Diese scheiss Terminalfenster poppen immer noch
