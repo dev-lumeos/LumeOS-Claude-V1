@@ -50,8 +50,45 @@ const COACH_ONBOARD = path.join(process.cwd(), 'src/app/v2/coach/tab-onboarding.
 const COACH_MODALE = path.join(process.cwd(), 'src/app/v2/coach/modale.tsx')
 const COACH_AI = path.join(process.cwd(), 'src/app/v2/coach/ai/page.tsx')
 
+function konstante(quelle: string, name: string): string {
+  const match = new RegExp(`(?:export\\s+)?const ${name} =([\\s\\S]*?)(?:\\r?\\n\\r?\\n|$)`).exec(quelle)
+  assert.ok(match, `Konstante ${name} fehlt.`)
+  return match[1]!
+}
+
+test('Attrappen-Gruende behaupten kein fehlendes Schema, wenn das Schema steht', () => {
+  const pruefungen: Array<{ datei: string; konstante: string; verboten: RegExp[] }> = [
+    { datei: RECOVERY, konstante: 'ATTRAPPE', verboten: [/`recovery` gibt es noch nicht/i, /recovery`? hat kein Schema/i] },
+    { datei: MEDICAL, konstante: 'ATTRAPPE', verboten: [/`medical`-Schema gibt es noch nicht/i, /ein `medical`-Schema gibt es nicht/i] },
+    { datei: COACH, konstante: 'ATTRAPPE', verboten: [/`coach`-Schema gibt es noch nicht/i, /ein `coach`-Schema gibt es nicht/i] },
+    { datei: TRAINING, konstante: 'ATTRAPPE', verboten: [/training\.sessions/i, /training\.sets/i] },
+    { datei: GOALS, konstante: 'ATTRAPPE', verboten: [/weder\s+Ziele\s+noch\s+Koerpermasse/i] },
+    { datei: SUPP, konstante: 'ATTRAPPE', verboten: [/kein `supplements`-Schema/i] },
+    { datei: SUPP_COMP, konstante: 'ATTRAPPE', verboten: [/kein `supplements`-Schema/i] },
+    { datei: SUPP_EXT, konstante: 'ATTRAPPE', verboten: [/kein `supplements`-Schema/i] },
+    { datei: SUPP_MODALE, konstante: 'OHNE_SCHEMA', verboten: [/kein `supplements`-Schema/i] },
+    { datei: path.join(process.cwd(), 'src/app/v2/nutrition/tab-plans.tsx'), konstante: 'ATTRAPPE', verboten: [/kein Schema fuer Essensplaene/i] },
+    { datei: path.join(process.cwd(), 'src/app/v2/nutrition/tab-prefs.tsx'), konstante: 'ATTRAPPE', verboten: [/keine Spalten am Profil/i] },
+  ]
+
+  for (const p of pruefungen) {
+    const quelle = fs.readFileSync(p.datei, 'utf8')
+    const text = konstante(quelle, p.konstante)
+    for (const verboten of p.verboten) {
+      assert.ok(!verboten.test(text),
+        `${path.basename(p.datei)}:${p.konstante} behauptet einen alten Schema-Stand.`)
+    }
+  }
+
+  const nutrition = fs.readFileSync(NUTRITION, 'utf8')
+  assert.ok(!/Ein Schema fuer Essensplaene - es gibt keines/.test(nutrition),
+    'Nutrition-Platzhalter behauptet noch, Essensplaene haetten kein Schema.')
+  assert.ok(!/Ernaehrungsvorlieben und Unvertraeglichkeiten am Profil - die Spalten fehlen/.test(nutrition),
+    'Nutrition-Platzhalter behauptet noch, Vorlieben haetten keine Tabellen.')
+})
+
 /**
- * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) —
+ * Die zwoelf Kacheln der Vorlage (theme-v1/module-dashboard.jsx) -
  * mit den Namen, die dort stehen. Uebersetzt wird nicht: die Vorlage
  * ist englisch, und wer sie eindeutscht, kann sie nicht mehr
  * danebenlegen.
@@ -1261,6 +1298,29 @@ test('jede Karte des Coach-Moduls traegt eine Marke', () => {
     assert.equal(marken, karten,
       `${path.basename(datei)}: ${karten} Karten, aber ${marken} Marken.`)
   }
+})
+
+test('G-158: Beziehungen und Nachrichten lesen echt, mit Rueckfall', () => {
+  // Richtung 1: die echte Fassung existiert, liest aus dem Stand und
+  // traegt KEINE Attrappenmarke.
+  const echt = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/coach/uebersicht-echt.tsx'), 'utf8')
+  assert.ok(/CoachesEcht/.test(echt) && /ThreadsEcht/.test(echt))
+  assert.ok(/stand\.beziehungen/.test(echt) && /stand\.nachrichten/.test(echt))
+  assert.ok(!/attrappe=/.test(echt),
+    'uebersicht-echt.tsx liest echte Daten und darf keine Marke tragen.')
+
+  // Richtung 2: der Leseweg fragt die beiden Tabellen wirklich ab —
+  // faellt eine Abfrage weg, zeigt die Oberflaeche wieder Attrappen.
+  const read = fs.readFileSync(
+    path.join(process.cwd(), 'src/lib/coach/rechte-read.ts'), 'utf8')
+  assert.ok(/from\('relationships'\)/.test(read), 'relationships wird nicht mehr abgefragt.')
+  assert.ok(/from\('messages'\)/.test(read), 'messages wird nicht mehr abgefragt.')
+
+  // Und die Weichen im Rahmen: echte Fassung, Entwurf nur als Rueckfall.
+  const rahmen = fs.readFileSync(COACH, 'utf8')
+  assert.ok(/<CoachesEcht stand=/.test(rahmen), 'Die Overview-Weiche fehlt.')
+  assert.ok(/<ThreadsEcht stand=/.test(rahmen), 'Die Messages-Weiche fehlt.')
 })
 
 test('die fuenf Ansichten der Coach-Zulieferer stehen da', () => {
