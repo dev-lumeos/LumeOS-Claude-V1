@@ -1,0 +1,6128 @@
+{
+ "stichtag": "2026-08-22 HEAD=88ebcfb",
+ "module": {
+  "recovery": {
+   "marken_summe": 36,
+   "kacheln_summe": 40,
+   "dateien": {
+    "motor.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "evidenz/registry"
+     ],
+     "tab_labels": [
+      "Motivated",
+      "Good",
+      "Neutral",
+      "Tired",
+      "Sick",
+      "Sauna",
+      "Cold plunge",
+      "Contrast therapy",
+      "Massage",
+      "Foam rolling",
+      "Stretching",
+      "Yoga",
+      "Meditation",
+      "Breathwork",
+      "Nap",
+      "Active recovery",
+      "Sleep quality",
+      "Sleep duration",
+      "Subjective feel",
+      "Soreness (inv.)",
+      "Nutrition",
+      "Mood",
+      "Sleep quality",
+      "Sleep duration",
+      "HRV",
+      "Subjective feel",
+      "Soreness (inv.)",
+      "Nutrition",
+      "Excellent",
+      "Good",
+      "Moderate",
+      "Poor",
+      "Rest",
+      "Forced rest",
+      "HRV below 90% of baseline",
+      "Resting HR elevated +5 bpm",
+      "Sleep quality below 6 (3d)",
+      "Subjective feeling ≤ 4 (3d)",
+      "Soreness hotspot ≥ 3 days",
+      "Recovery score below 55 (3d)",
+      "Motivation ≤ 3 (5d)",
+      "Training trend declining",
+      "Low",
+      "Moderate",
+      "Elevated",
+      "High"
+     ]
+    },
+    "muskel-ebenen.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "muskel-zuordnung.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "ansicht.tsx": {
+     "marken": [
+      {
+       "zeile": 244,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 322,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 350,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 386,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 427,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 244,
+       "titel": null
+      },
+      {
+       "zeile": 350,
+       "titel": "Pending actions"
+      },
+      {
+       "zeile": 427,
+       "titel": "Overtraining watch"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 68,
+       "text": "+ '`recovery` gibt es noch nicht.'"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "evidenz/registry",
+      "recovery/checkin-read",
+      "recovery/scores-read",
+      "tab-url"
+     ],
+     "tab_labels": [
+      "Today",
+      "Check-in",
+      "Muscle map",
+      "HRV",
+      "Sleep",
+      "Modalities",
+      "Overtraining",
+      "Protocols",
+      "Stress"
+     ]
+    },
+    "checkin-streifen.tsx": {
+     "marken": [
+      {
+       "zeile": 38,
+       "grund": "stand?.fehler"
+      }
+     ],
+     "flaechen": [
+      {
+       "zeile": 42
+      }
+     ],
+     "kacheln": [
+      {
+       "zeile": 49,
+       "titel": "Morning check-ins"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "recovery/checkin-read"
+     ],
+     "tab_labels": [
+      "motivated",
+      "good",
+      "neutral",
+      "tired",
+      "sick"
+     ]
+    },
+    "koerperkarte.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "kontext.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "modale.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 172,
+       "titel": null
+      },
+      {
+       "zeile": 176,
+       "titel": null
+      },
+      {
+       "zeile": 181,
+       "titel": null
+      },
+      {
+       "zeile": 409,
+       "titel": null
+      },
+      {
+       "zeile": 424,
+       "titel": null
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 137,
+       "text": "grund=\"Messwerte brauchen eine Tabelle recovery.hrv_readings — die gibt es nicht. HRV steht heute in `recovery.checkins."
+      },
+      {
+       "zeile": 498,
+       "text": "grund=\"Protokolle brauchen eine Tabelle recovery.protocols — die gibt es nicht. Das Schema `recovery` steht (3 Tabellen)"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "modalitaeten-kachel.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 45,
+       "titel": "Modalitäten"
+      },
+      {
+       "zeile": 55,
+       "titel": "Modalitäten"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "recovery/scores-read"
+     ],
+     "tab_labels": []
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "recovery/checkin-read",
+      "recovery/scores-read"
+     ],
+     "tab_labels": []
+    },
+    "score-kachel.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 46,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "recovery/checkin-read",
+      "recovery/scores-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-checkin.tsx": {
+     "marken": [
+      {
+       "zeile": 50,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 193,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 208,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 114,
+       "titel": null
+      },
+      {
+       "zeile": 193,
+       "titel": "Readiness levels"
+      },
+      {
+       "zeile": 208,
+       "titel": "Why check in daily"
+      },
+      {
+       "zeile": 246,
+       "titel": "Vorschau"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "recovery/score"
+     ],
+     "tab_labels": [
+      "0 none",
+      "1 mild",
+      "2 moderate",
+      "3 severe"
+     ]
+    },
+    "tab-messwerte.tsx": {
+     "marken": [
+      {
+       "zeile": 51,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 71,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 124,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 155,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 204,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 227,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 257,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 299,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 332,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 356,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 51,
+       "titel": "Muscle recovery"
+      },
+      {
+       "zeile": 71,
+       "titel": "Per-muscle detail"
+      },
+      {
+       "zeile": 124,
+       "titel": "HRV score"
+      },
+      {
+       "zeile": 204,
+       "titel": "Phone camera HRV"
+      },
+      {
+       "zeile": 227,
+       "titel": "30-day trend"
+      },
+      {
+       "zeile": 257,
+       "titel": "Last night"
+      },
+      {
+       "zeile": 299,
+       "titel": "14 nights"
+      },
+      {
+       "zeile": 332,
+       "titel": "Score paths"
+      },
+      {
+       "zeile": 356,
+       "titel": "Sleep hygiene inputs"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-protokolle.tsx": {
+     "marken": [
+      {
+       "zeile": 46,
+       "grund": ""
+      },
+      {
+       "zeile": 51,
+       "grund": ""
+      },
+      {
+       "zeile": 56,
+       "grund": ""
+      },
+      {
+       "zeile": 63,
+       "grund": ""
+      },
+      {
+       "zeile": 79,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 137,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 205,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 237,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 277,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 319,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 358,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 384,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 417,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 450,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 465,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 478,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 506,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 46,
+       "titel": null
+      },
+      {
+       "zeile": 51,
+       "titel": null
+      },
+      {
+       "zeile": 56,
+       "titel": null
+      },
+      {
+       "zeile": 63,
+       "titel": null
+      },
+      {
+       "zeile": 137,
+       "titel": "Effectiveness log"
+      },
+      {
+       "zeile": 205,
+       "titel": "Signal panel"
+      },
+      {
+       "zeile": 237,
+       "titel": "Severity"
+      },
+      {
+       "zeile": 277,
+       "titel": "Alert lifecycle"
+      },
+      {
+       "zeile": 358,
+       "titel": "Protocol library"
+      },
+      {
+       "zeile": 384,
+       "titel": "When to run which"
+      },
+      {
+       "zeile": 417,
+       "titel": null
+      },
+      {
+       "zeile": 450,
+       "titel": "Contributors"
+      },
+      {
+       "zeile": 465,
+       "titel": "14 days"
+      },
+      {
+       "zeile": 478,
+       "titel": "Log stress"
+      },
+      {
+       "zeile": 506,
+       "titel": "What helps you"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    }
+   }
+  },
+  "training": {
+   "marken_summe": 38,
+   "kacheln_summe": 56,
+   "dateien": {
+    "uebungen-aktion.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "training/uebungen-read"
+     ],
+     "tab_labels": []
+    },
+    "ansicht.tsx": {
+     "marken": [
+      {
+       "zeile": 243,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 317,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 327,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 399,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 427,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 676,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 715,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 783,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 808,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 829,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 903,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 243,
+       "titel": null
+      },
+      {
+       "zeile": 317,
+       "titel": "This week"
+      },
+      {
+       "zeile": 327,
+       "titel": "Training readiness"
+      },
+      {
+       "zeile": 399,
+       "titel": "Weekly volume"
+      },
+      {
+       "zeile": 427,
+       "titel": "Streak"
+      },
+      {
+       "zeile": 459,
+       "titel": "Training readiness"
+      },
+      {
+       "zeile": 808,
+       "titel": "Recent sessions"
+      },
+      {
+       "zeile": 829,
+       "titel": "Volume by muscle · 4 wks"
+      },
+      {
+       "zeile": 903,
+       "titel": null
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 65,
+       "text": "'und training.sets gibt es noch nicht.'"
+      },
+      {
+       "zeile": 135,
+       "text": "diese Pille. Das Widget gibt es nicht — also die Pille. */}"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "tab-url",
+      "training/auswertung",
+      "training/readiness-read",
+      "training/uebungen-read"
+     ],
+     "tab_labels": [
+      "Today",
+      "Plan",
+      "History",
+      "Exercises",
+      "Progression",
+      "Volume landmarks",
+      "Standards",
+      "Calendar",
+      "HR zones",
+      "Offline sync"
+     ]
+    },
+    "kontext.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "modale.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 351,
+       "titel": null
+      },
+      {
+       "zeile": 357,
+       "titel": null
+      },
+      {
+       "zeile": 361,
+       "titel": null
+      },
+      {
+       "zeile": 365,
+       "titel": null
+      },
+      {
+       "zeile": 369,
+       "titel": null
+      },
+      {
+       "zeile": 378,
+       "titel": null
+      },
+      {
+       "zeile": 385,
+       "titel": null
+      },
+      {
+       "zeile": 395,
+       "titel": null
+      },
+      {
+       "zeile": 404,
+       "titel": null
+      },
+      {
+       "zeile": 411,
+       "titel": null
+      },
+      {
+       "zeile": 528,
+       "titel": null
+      },
+      {
+       "zeile": 596,
+       "titel": null
+      },
+      {
+       "zeile": 723,
+       "titel": null
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 203,
+       "text": "grund=\"training.routines gibt es noch nicht.\">"
+      },
+      {
+       "zeile": 505,
+       "text": "grund=\"Mesozyklen brauchen training.blocks; die Tabelle gibt es noch nicht.\">"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Activation",
+      "Light",
+      "Ramp",
+      "Primer",
+      "Neural"
+     ]
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "datum",
+      "training/auswertung",
+      "training/readiness-read",
+      "training/sitzungen-read",
+      "training/uebungen-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-uebungen.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 173,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "training/uebungen-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-verlauf.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 143,
+       "titel": "Sitzungen"
+      },
+      {
+       "zeile": 231,
+       "titel": "Progression"
+      },
+      {
+       "zeile": 298,
+       "titel": "Uebungen mit Verlauf"
+      },
+      {
+       "zeile": 429,
+       "titel": "Kennzahlen"
+      },
+      {
+       "zeile": 610,
+       "titel": "Sitzungen im Monat"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "training/auswertung",
+      "training/sitzungen-read"
+     ],
+     "tab_labels": []
+    },
+    "tabs-extras.tsx": {
+     "marken": [
+      {
+       "zeile": 29,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 29,
+       "titel": "Body stats × strength"
+      },
+      {
+       "zeile": 44,
+       "titel": null
+      },
+      {
+       "zeile": 49,
+       "titel": null
+      },
+      {
+       "zeile": 54,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tabs-offline-hr.tsx": {
+     "marken": [
+      {
+       "zeile": 74,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 111,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 148,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 165,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 195,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 256,
+       "grund": ""
+      },
+      {
+       "zeile": 265,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 298,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 339,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 74,
+       "titel": null
+      },
+      {
+       "zeile": 109,
+       "titel": "Outbox"
+      },
+      {
+       "zeile": 148,
+       "titel": "Sync log"
+      },
+      {
+       "zeile": 165,
+       "titel": "IndexedDB"
+      },
+      {
+       "zeile": 195,
+       "titel": "Conflict resolution"
+      },
+      {
+       "zeile": 256,
+       "titel": null
+      },
+      {
+       "zeile": 265,
+       "titel": "Time in zone"
+      },
+      {
+       "zeile": 298,
+       "titel": "Per-set response"
+      },
+      {
+       "zeile": 338,
+       "titel": "HR trace · full session"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tabs-spec.tsx": {
+     "marken": [
+      {
+       "zeile": 98,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 145,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 189,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 219,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 301,
+       "grund": ""
+      },
+      {
+       "zeile": 308,
+       "grund": ""
+      },
+      {
+       "zeile": 315,
+       "grund": ""
+      },
+      {
+       "zeile": 322,
+       "grund": ""
+      },
+      {
+       "zeile": 331,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 381,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 403,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 479,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 506,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 543,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 591,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 600,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 629,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 98,
+       "titel": "Progression models"
+      },
+      {
+       "zeile": 145,
+       "titel": "Next-session prescription"
+      },
+      {
+       "zeile": 219,
+       "titel": "Set types"
+      },
+      {
+       "zeile": 301,
+       "titel": null
+      },
+      {
+       "zeile": 308,
+       "titel": null
+      },
+      {
+       "zeile": 315,
+       "titel": null
+      },
+      {
+       "zeile": 322,
+       "titel": null
+      },
+      {
+       "zeile": 329,
+       "titel": "Volume landmarks · sets per week"
+      },
+      {
+       "zeile": 381,
+       "titel": "Feedback loop"
+      },
+      {
+       "zeile": 403,
+       "titel": "Post-workout feedback"
+      },
+      {
+       "zeile": 477,
+       "titel": "Strength standards"
+      },
+      {
+       "zeile": 506,
+       "titel": "Training score"
+      },
+      {
+       "zeile": 591,
+       "titel": "Streak"
+      },
+      {
+       "zeile": 600,
+       "titel": "Cross-module gating"
+      },
+      {
+       "zeile": 629,
+       "titel": "Pending actions"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 386,
+       "text": "ist entfernt, MAV gibt es nicht mehr."
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "evidenz/registry"
+     ],
+     "tab_labels": [
+      "Working",
+      "Warm-up",
+      "Drop set",
+      "Failure"
+     ]
+    }
+   }
+  },
+  "medical": {
+   "marken_summe": 18,
+   "kacheln_summe": 44,
+   "dateien": {
+    "aktionen.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/lesen"
+     ],
+     "tab_labels": []
+    },
+    "daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Optimal",
+      "Normal",
+      "Low",
+      "High",
+      "Critical low",
+      "Critical high",
+      "All",
+      "CBC",
+      "Metabolic",
+      "Lipid",
+      "Liver",
+      "Kidney",
+      "Thyroid",
+      "Hormone",
+      "Inflammation",
+      "Vitamins & minerals",
+      "Screening",
+      "Liver",
+      "Cardiovascular",
+      "Kidney",
+      "Hormonal",
+      "Metabolic",
+      "Poor sleep",
+      "Right elbow pain",
+      "Afternoon fatigue",
+      "Brain fog"
+     ]
+    },
+    "echtdaten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/lesen",
+      "medical/reihe",
+      "medical/systemscore"
+     ],
+     "tab_labels": []
+    },
+    "ansicht.tsx": {
+     "marken": [
+      {
+       "zeile": 325,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 374,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 391,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 401,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 325,
+       "titel": "Alerts"
+      },
+      {
+       "zeile": 374,
+       "titel": "Quick actions"
+      },
+      {
+       "zeile": 391,
+       "titel": "Last panel"
+      },
+      {
+       "zeile": 401,
+       "titel": "Non-optimal markers"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 58,
+       "text": "+ '`medical`-Schema gibt es noch nicht.'"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/lagezaehlung",
+      "medical/systemscore",
+      "tab-url"
+     ],
+     "tab_labels": [
+      "Dashboard",
+      "Biomarkers",
+      "Import",
+      "Tracking",
+      "Insights"
+     ]
+    },
+    "bausteine.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "import-zuordnung.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/befund",
+      "medical/lesen"
+     ],
+     "tab_labels": []
+    },
+    "katalog-suche.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/lesen"
+     ],
+     "tab_labels": []
+    },
+    "kontext.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/reihe"
+     ],
+     "tab_labels": []
+    },
+    "marker-liste.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/befund",
+      "medical/reihe"
+     ],
+     "tab_labels": [
+      "All"
+     ]
+    },
+    "marker-modal.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 130,
+       "titel": null
+      },
+      {
+       "zeile": 139,
+       "titel": null
+      },
+      {
+       "zeile": 166,
+       "titel": null
+      },
+      {
+       "zeile": 184,
+       "titel": null
+      },
+      {
+       "zeile": 246,
+       "titel": null
+      },
+      {
+       "zeile": 341,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/befund",
+      "medical/reihe"
+     ],
+     "tab_labels": []
+    },
+    "modale.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 150,
+       "titel": null
+      },
+      {
+       "zeile": 157,
+       "titel": null
+      },
+      {
+       "zeile": 164,
+       "titel": null
+      },
+      {
+       "zeile": 175,
+       "titel": null
+      },
+      {
+       "zeile": 188,
+       "titel": null
+      },
+      {
+       "zeile": 210,
+       "titel": null
+      },
+      {
+       "zeile": 230,
+       "titel": null
+      },
+      {
+       "zeile": 234,
+       "titel": null
+      },
+      {
+       "zeile": 319,
+       "titel": null
+      },
+      {
+       "zeile": 326,
+       "titel": null
+      },
+      {
+       "zeile": 332,
+       "titel": null
+      },
+      {
+       "zeile": 340,
+       "titel": null
+      },
+      {
+       "zeile": 346,
+       "titel": null
+      },
+      {
+       "zeile": 547,
+       "titel": null
+      },
+      {
+       "zeile": 551,
+       "titel": null
+      },
+      {
+       "zeile": 555,
+       "titel": null
+      },
+      {
+       "zeile": 559,
+       "titel": null
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 425,
+       "text": "grund=\"Symptome brauchen eine Tabelle medical.symptoms — die gibt es nicht. Das Schema `medical` steht (11 Tabellen), di"
+      },
+      {
+       "zeile": 663,
+       "text": "grund=\"Der Import braucht eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `medical"
+      },
+      {
+       "zeile": 751,
+       "text": "grund=\"Eigene Messwerte brauchen eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [
+      "stack_items",
+      "substance_catalog_sources",
+      "substance_lab_effects",
+      "supplement_catalog",
+      "user_medications",
+      "user_stacks"
+     ],
+     "rpc": [],
+     "schema": [
+      "medical",
+      "supplements"
+     ],
+     "fetch_api": [],
+     "lib_importe": [
+      "medical/lesen",
+      "medical/reihe",
+      "medical/systemscore"
+     ],
+     "tab_labels": []
+    },
+    "tab-biomarker.tsx": {
+     "marken": [
+      {
+       "zeile": 135,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 168,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 199,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 221,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 267,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 320,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 357,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 57,
+       "titel": "Biomarkers"
+      },
+      {
+       "zeile": 133,
+       "titel": "Upload lab report"
+      },
+      {
+       "zeile": 168,
+       "titel": "Pipeline"
+      },
+      {
+       "zeile": 199,
+       "titel": "Confidence thresholds"
+      },
+      {
+       "zeile": 220,
+       "titel": "Last extraction"
+      },
+      {
+       "zeile": 267,
+       "titel": "Manual entry"
+      },
+      {
+       "zeile": 318,
+       "titel": "Import history"
+      },
+      {
+       "zeile": 356,
+       "titel": "Unit normalization map"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 150,
+       "text": "grund=\"Der Kamera-Import braucht eine Dateiablage und den OCR-Dienst — beides gibt es noch nicht.\">"
+      },
+      {
+       "zeile": 310,
+       "text": "grund=\"Eigene Messwerte brauchen eine Tabelle medical.biomarker_results — die gibt es nicht. Gemessene Werte stehen in `"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-tracking.tsx": {
+     "marken": [
+      {
+       "zeile": 120,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 198,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 371,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 425,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 477,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 528,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 574,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 119,
+       "titel": null
+      },
+      {
+       "zeile": 198,
+       "titel": "Symptom → biomarker map"
+      },
+      {
+       "zeile": 233,
+       "titel": "Medications"
+      },
+      {
+       "zeile": 240,
+       "titel": null
+      },
+      {
+       "zeile": 371,
+       "titel": null
+      },
+      {
+       "zeile": 425,
+       "titel": null
+      },
+      {
+       "zeile": 476,
+       "titel": "Population benchmark"
+      },
+      {
+       "zeile": 527,
+       "titel": "Doctor export · report structure"
+      },
+      {
+       "zeile": 574,
+       "titel": "Generate report"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 444,
+       "text": "`[cmd]` Ein Symbol `arr_r` gibt es nicht — weder"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    }
+   }
+  },
+  "nutrition": {
+   "marken_summe": 25,
+   "kacheln_summe": 55,
+   "dateien": {
+    "daumen-aktion.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/daumen-schreiben"
+     ],
+     "tab_labels": []
+    },
+    "nutrient-baum.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tabs-daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "typen.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "vorlieben-aktionen.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [
+      "food_preferences_write"
+     ],
+     "schema": [
+      "nutrition"
+     ],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/vorlieben-lesen"
+     ],
+     "tab_labels": []
+    },
+    "ansicht.tsx": {
+     "marken": [
+      {
+       "zeile": 602,
+       "grund": "t.braucht"
+      }
+     ],
+     "flaechen": [
+      {
+       "zeile": 603
+      }
+     ],
+     "kacheln": [
+      {
+       "zeile": 269,
+       "titel": null
+      },
+      {
+       "zeile": 602,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/diary-summary",
+      "nutrition/food-search",
+      "nutrition/hydration-day-read",
+      "nutrition/insights-read",
+      "nutrition/mikro-read",
+      "nutrition/naehrstoff-ordnung",
+      "nutrition/plan-lesen",
+      "nutrition/reference-assessment-read",
+      "profile/zielwerte-read"
+     ],
+     "tab_labels": [
+      "kalorien",
+      "protein",
+      "kohlenhydrate",
+      "fett",
+      "ballaststoffe",
+      "zucker",
+      "gesaettigt",
+      "salz",
+      "wasser",
+      "Diary",
+      "Insights",
+      "Nutrients",
+      "Food DB",
+      "Meal plans",
+      "Preferences",
+      "Planner"
+     ]
+    },
+    "datumsnavigation.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [
+      {
+       "zeile": 71,
+       "text": "gibt es nichts zu tun — der Knopf ist dann kein Knopf. */}"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "datum"
+     ],
+     "tab_labels": []
+    },
+    "daumen.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/daumen-schreiben"
+     ],
+     "tab_labels": []
+    },
+    "diary-entwurf.tsx": {
+     "marken": [
+      {
+       "zeile": 44,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 83,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 111,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 145,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 214,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 247,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 44,
+       "titel": "Smart suggestions"
+      },
+      {
+       "zeile": 111,
+       "titel": "Pending actions"
+      },
+      {
+       "zeile": 177,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Vit C",
+      "Vit D",
+      "Iron",
+      "Ca",
+      "Mg",
+      "Zn",
+      "B12",
+      "ω-3"
+     ]
+    },
+    "erfassen.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/diary",
+      "/api/nutrition/diary${suffix}",
+      "/api/nutrition/foods"
+     ],
+     "lib_importe": [
+      "nutrition/diary-model",
+      "nutrition/food-search"
+     ],
+     "tab_labels": []
+    },
+    "hydration.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 127,
+       "titel": "Hydration"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/water"
+     ],
+     "lib_importe": [
+      "nutrition/hydration-day-read",
+      "nutrition/water-model"
+     ],
+     "tab_labels": []
+    },
+    "insights-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 40,
+       "titel": "Calorie balance"
+      },
+      {
+       "zeile": 104,
+       "titel": "Macro split · 14d avg"
+      },
+      {
+       "zeile": 118,
+       "titel": "Macro split · 14d avg"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/insights-read"
+     ],
+     "tab_labels": [
+      "Protein",
+      "Kohlenhydrate",
+      "Fett"
+     ]
+    },
+    "kopfknoepfe.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "mahlzeiten.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 195,
+       "titel": null
+      },
+      {
+       "zeile": 315,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/diary",
+      "/api/nutrition/foods"
+     ],
+     "lib_importe": [
+      "datum",
+      "nutrition/diary-model",
+      "nutrition/food-search"
+     ],
+     "tab_labels": [
+      "Vegetarisch",
+      "Vegan",
+      "Proteinreich",
+      "Grundnahrungsmittel",
+      "Relevanz",
+      "Protein"
+     ]
+    },
+    "mikro-kacheln.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 57,
+       "titel": "Micronutrient snapshot"
+      },
+      {
+       "zeile": 66,
+       "titel": "Micronutrient snapshot"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/mikro-read"
+     ],
+     "tab_labels": []
+    },
+    "modale.tsx": {
+     "marken": [],
+     "flaechen": [
+      {
+       "zeile": 148
+      }
+     ],
+     "kacheln": [
+      {
+       "zeile": 187,
+       "titel": null
+      },
+      {
+       "zeile": 401,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Breakfast",
+      "Lunch",
+      "Dinner",
+      "Snack",
+      "Pre-workout"
+     ]
+    },
+    "naehrstoff-modal.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 150,
+       "titel": null
+      },
+      {
+       "zeile": 161,
+       "titel": null
+      },
+      {
+       "zeile": 173,
+       "titel": null
+      },
+      {
+       "zeile": 182,
+       "titel": null
+      },
+      {
+       "zeile": 255,
+       "titel": null
+      },
+      {
+       "zeile": 265,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/naehrstoff"
+     ],
+     "lib_importe": [
+      "nutrition/naehrstoff-anzeige",
+      "nutrition/naehrstoff-detail-read",
+      "nutrition/naehrstoff-ordnung"
+     ],
+     "tab_labels": []
+    },
+    "naehrstoff-ordnung-tab.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 163,
+       "titel": "Naehrstoffe"
+      },
+      {
+       "zeile": 173,
+       "titel": "Naehrstoffordnung"
+      },
+      {
+       "zeile": 291,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/ansicht"
+     ],
+     "lib_importe": [
+      "nutrition/naehrstoff-anzeige",
+      "nutrition/naehrstoff-ordnung"
+     ],
+     "tab_labels": []
+    },
+    "nutrients-entwurf.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 126,
+       "titel": null
+      },
+      {
+       "zeile": 131,
+       "titel": null
+      },
+      {
+       "zeile": 136,
+       "titel": null
+      },
+      {
+       "zeile": 141,
+       "titel": null
+      },
+      {
+       "zeile": 151,
+       "titel": null
+      },
+      {
+       "zeile": 389,
+       "titel": null
+      },
+      {
+       "zeile": 396,
+       "titel": null
+      },
+      {
+       "zeile": 404,
+       "titel": null
+      },
+      {
+       "zeile": 417,
+       "titel": null
+      },
+      {
+       "zeile": 430,
+       "titel": null
+      },
+      {
+       "zeile": 467,
+       "titel": null
+      },
+      {
+       "zeile": 475,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "datum",
+      "nutrition/diary-summary",
+      "nutrition/diary-summary-read",
+      "nutrition/food-search",
+      "nutrition/hydration-day-read",
+      "nutrition/insights-read",
+      "nutrition/mikro-read",
+      "nutrition/naehrstoff-anzeige",
+      "nutrition/naehrstoff-ordnung",
+      "nutrition/plan-lesen",
+      "nutrition/reference-assessment-read",
+      "nutrition/vorlieben-lesen",
+      "profile/zielwerte-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-foods.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 730,
+       "titel": null
+      },
+      {
+       "zeile": 737,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/foods"
+     ],
+     "lib_importe": [
+      "nutrition/food-search"
+     ],
+     "tab_labels": [
+      "All",
+      "Meat",
+      "Fish",
+      "Grains",
+      "Dairy",
+      "Produce",
+      "Fruit",
+      "Beverages",
+      "Eggs",
+      "Fats & oils",
+      "Sweets",
+      "Legumes & nuts",
+      "Spices",
+      "Vegan",
+      "Vegan",
+      "Vegetarisch",
+      "Proteinreich",
+      "Low-Carb",
+      "Fettarm",
+      "Ballaststoffreich",
+      "Grundnahrungsmittel",
+      "Hochverarbeitet"
+     ]
+    },
+    "tab-insights.tsx": {
+     "marken": [
+      {
+       "zeile": 119,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 136,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 160,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 136,
+       "titel": "Macro split · 14d avg"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-planner-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 94,
+       "titel": "Noch kein Wochenplan"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/plan-lesen",
+      "nutrition/plan-model"
+     ],
+     "tab_labels": []
+    },
+    "tab-planner.tsx": {
+     "marken": [
+      {
+       "zeile": 68,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 68,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-plans.tsx": {
+     "marken": [
+      {
+       "zeile": 95,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 118,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 168,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 190,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 196,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 213,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 242,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 284,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 95,
+       "titel": null
+      },
+      {
+       "zeile": 168,
+       "titel": "Plan settings"
+      },
+      {
+       "zeile": 190,
+       "titel": "Lifecycle types"
+      },
+      {
+       "zeile": 196,
+       "titel": "7-day compliance"
+      },
+      {
+       "zeile": 284,
+       "titel": "Scale list"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-prefs.tsx": {
+     "marken": [
+      {
+       "zeile": 67,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 84,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 118,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 145,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 173,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 188,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 84,
+       "titel": "Categories"
+      },
+      {
+       "zeile": 145,
+       "titel": "Allergies"
+      },
+      {
+       "zeile": 173,
+       "titel": "Tag preferences"
+      },
+      {
+       "zeile": 188,
+       "titel": "Priority order"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-vorlieben.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 424,
+       "titel": "Preferences"
+      },
+      {
+       "zeile": 448,
+       "titel": "Diet type"
+      },
+      {
+       "zeile": 904,
+       "titel": "Tag preferences"
+      },
+      {
+       "zeile": 949,
+       "titel": "Priority order"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/foods"
+     ],
+     "lib_importe": [
+      "nutrition/food-search",
+      "nutrition/vorlieben-lesen"
+     ],
+     "tab_labels": [
+      "Gluten / Weizen",
+      "Milcheiweiß",
+      "Laktose",
+      "Eier",
+      "Fisch",
+      "Krebstiere",
+      "Weichtiere",
+      "Erdnüsse",
+      "Baumnüsse",
+      "Soja",
+      "Sellerie",
+      "Senf",
+      "Sesam",
+      "Sulfite",
+      "Lupine",
+      "Fruktose",
+      "Histamin",
+      "Sorbit",
+      "FODMAP",
+      "Nickel"
+     ]
+    },
+    "tableiste.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "zielhinweis.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/profile/ziele"
+     ],
+     "lib_importe": [
+      "profile/zielwerte-read"
+     ],
+     "tab_labels": []
+    },
+    "suche/ansicht.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 138,
+       "titel": "Suche"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/nutrition/foods"
+     ],
+     "lib_importe": [
+      "nutrition/food-search"
+     ],
+     "tab_labels": [
+      "Treffer",
+      "Angezeigt",
+      "Normalisiert",
+      "Naehrwerte",
+      "Namen"
+     ]
+    },
+    "suche/page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    }
+   }
+  },
+  "supplements": {
+   "marken_summe": 59,
+   "kacheln_summe": 79,
+   "dateien": {
+    "daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Morning",
+      "Midday",
+      "Pre-workout",
+      "Post-workout",
+      "Evening"
+     ]
+    },
+    "injektion-daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "spec-daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Daily",
+      "Weekdays",
+      "Training days",
+      "Custom",
+      "Cycling",
+      "critical",
+      "warning",
+      "caution",
+      "info"
+     ]
+    },
+    "ansicht.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/supplements/intake"
+     ],
+     "lib_importe": [
+      "supplements/regeln-read",
+      "supplements/stack-read",
+      "tab-url"
+     ],
+     "tab_labels": [
+      "Today",
+      "Stack",
+      "Extended",
+      "Catalog",
+      "Stacks",
+      "Intelligence",
+      "Inventory",
+      "Injections",
+      "Compliance",
+      "Interactions",
+      "Cost"
+     ]
+    },
+    "extended-gate.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 56,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "profile/profile-model",
+      "supplements/regeln-read"
+     ],
+     "tab_labels": []
+    },
+    "kontext.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "supplements/stack-read"
+     ],
+     "tab_labels": []
+    },
+    "modale.tsx": {
+     "marken": [],
+     "flaechen": [
+      {
+       "zeile": 60
+      }
+     ],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "datum",
+      "supplements/regeln-read",
+      "supplements/stack-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-compliance.tsx": {
+     "marken": [
+      {
+       "zeile": 57,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 67,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 86,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 242,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 57,
+       "titel": "Compliance heatmap"
+      },
+      {
+       "zeile": 67,
+       "titel": "Streaks · per supplement"
+      },
+      {
+       "zeile": 85,
+       "titel": "Compliance · key supplements"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-extended.tsx": {
+     "marken": [
+      {
+       "zeile": 69,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 89,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 102,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 118,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 266,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 315,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [
+      {
+       "zeile": 461
+      }
+     ],
+     "kacheln": [
+      {
+       "zeile": 102,
+       "titel": "Visibility · who sees what"
+      },
+      {
+       "zeile": 118,
+       "titel": "Half-life · this week"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-injektionen.tsx": {
+     "marken": [
+      {
+       "zeile": 209,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 214,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 219,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 226,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 235,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 249,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 306,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 332,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 386,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 411,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 440,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 506,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 522,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 537,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 209,
+       "titel": null
+      },
+      {
+       "zeile": 214,
+       "titel": null
+      },
+      {
+       "zeile": 219,
+       "titel": null
+      },
+      {
+       "zeile": 226,
+       "titel": null
+      },
+      {
+       "zeile": 235,
+       "titel": "Rotation map"
+      },
+      {
+       "zeile": 249,
+       "titel": null
+      },
+      {
+       "zeile": 251,
+       "titel": null
+      },
+      {
+       "zeile": 255,
+       "titel": null
+      },
+      {
+       "zeile": 261,
+       "titel": null
+      },
+      {
+       "zeile": 265,
+       "titel": null
+      },
+      {
+       "zeile": 306,
+       "titel": "Overuse warnings"
+      },
+      {
+       "zeile": 386,
+       "titel": "Volume limits"
+      },
+      {
+       "zeile": 411,
+       "titel": "Weekly load"
+      },
+      {
+       "zeile": 506,
+       "titel": "IM sites"
+      },
+      {
+       "zeile": 522,
+       "titel": "SubQ sites"
+      },
+      {
+       "zeile": 537,
+       "titel": "Needle reference"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "fresh",
+      "ready tomorrow",
+      "ready"
+     ]
+    },
+    "tab-interactions-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 67,
+       "titel": "Interactions"
+      },
+      {
+       "zeile": 80,
+       "titel": "Regelwerk"
+      },
+      {
+       "zeile": 133,
+       "titel": null
+      },
+      {
+       "zeile": 157,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "supplements/regeln-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-inventory-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 64,
+       "titel": null
+      },
+      {
+       "zeile": 69,
+       "titel": null
+      },
+      {
+       "zeile": 79,
+       "titel": null
+      },
+      {
+       "zeile": 86,
+       "titel": null
+      },
+      {
+       "zeile": 95,
+       "titel": "Bestand"
+      },
+      {
+       "zeile": 275,
+       "titel": "30 Tage"
+      },
+      {
+       "zeile": 315,
+       "titel": "Je Präparat"
+      },
+      {
+       "zeile": 465,
+       "titel": "Ohne dieses Präparat"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "supplements/auswertung",
+      "supplements/stack-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-katalog-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 147,
+       "titel": null
+      },
+      {
+       "zeile": 228,
+       "titel": "Evidenzstufe"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "supplements/stack-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-spec.tsx": {
+     "marken": [
+      {
+       "zeile": 126,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 192,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 232,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 274,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 295,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 300,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 330,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 337,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 344,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 349,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 362,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 434,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 455,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 492,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 496,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 503,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 510,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 523,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [
+      {
+       "zeile": 461
+      }
+     ],
+     "kacheln": [
+      {
+       "zeile": 126,
+       "titel": null
+      },
+      {
+       "zeile": 192,
+       "titel": "Evidence grading"
+      },
+      {
+       "zeile": 274,
+       "titel": "System templates"
+      },
+      {
+       "zeile": 295,
+       "titel": "Frequency options"
+      },
+      {
+       "zeile": 300,
+       "titel": "Item customization"
+      },
+      {
+       "zeile": 330,
+       "titel": null
+      },
+      {
+       "zeile": 337,
+       "titel": null
+      },
+      {
+       "zeile": 344,
+       "titel": null
+      },
+      {
+       "zeile": 349,
+       "titel": null
+      },
+      {
+       "zeile": 434,
+       "titel": "Redundancy detection"
+      },
+      {
+       "zeile": 455,
+       "titel": "Timing conflicts"
+      },
+      {
+       "zeile": 492,
+       "titel": null
+      },
+      {
+       "zeile": 496,
+       "titel": null
+      },
+      {
+       "zeile": 503,
+       "titel": null
+      },
+      {
+       "zeile": 510,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tabs.tsx": {
+     "marken": [
+      {
+       "zeile": 306,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 341,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 365,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 398,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 440,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 674,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 739,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 907,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 971,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 1156,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 1161,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 1166,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 1173,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 1182,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 1221,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 1235,
+       "grund": "RUECKFALL"
+      },
+      {
+       "zeile": 1245,
+       "grund": "RUECKFALL"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 136,
+       "titel": null
+      },
+      {
+       "zeile": 163,
+       "titel": null
+      },
+      {
+       "zeile": 230,
+       "titel": "Refills"
+      },
+      {
+       "zeile": 265,
+       "titel": "Stack"
+      },
+      {
+       "zeile": 306,
+       "titel": null
+      },
+      {
+       "zeile": 398,
+       "titel": "Active cycles"
+      },
+      {
+       "zeile": 553,
+       "titel": null
+      },
+      {
+       "zeile": 626,
+       "titel": null
+      },
+      {
+       "zeile": 634,
+       "titel": null
+      },
+      {
+       "zeile": 674,
+       "titel": null
+      },
+      {
+       "zeile": 739,
+       "titel": null
+      },
+      {
+       "zeile": 813,
+       "titel": null
+      },
+      {
+       "zeile": 907,
+       "titel": null
+      },
+      {
+       "zeile": 971,
+       "titel": null
+      },
+      {
+       "zeile": 1039,
+       "titel": null
+      },
+      {
+       "zeile": 1046,
+       "titel": null
+      },
+      {
+       "zeile": 1051,
+       "titel": null
+      },
+      {
+       "zeile": 1058,
+       "titel": "Spend per supplement"
+      },
+      {
+       "zeile": 1098,
+       "titel": "Category split"
+      },
+      {
+       "zeile": 1117,
+       "titel": "If you removed…"
+      },
+      {
+       "zeile": 1156,
+       "titel": null
+      },
+      {
+       "zeile": 1161,
+       "titel": null
+      },
+      {
+       "zeile": 1166,
+       "titel": null
+      },
+      {
+       "zeile": 1173,
+       "titel": "Cost · 12 months trend"
+      },
+      {
+       "zeile": 1182,
+       "titel": "Spend per supplement · this month"
+      },
+      {
+       "zeile": 1221,
+       "titel": "Category split"
+      },
+      {
+       "zeile": 1235,
+       "titel": "If you removed…"
+      },
+      {
+       "zeile": 1245,
+       "titel": "Cost optimization · suggestions"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Morning",
+      "Midday",
+      "Pre-workout",
+      "Post-workout",
+      "With meal",
+      "Evening",
+      "Bedtime",
+      "Any time"
+     ]
+    }
+   }
+  },
+  "goals": {
+   "marken_summe": 23,
+   "kacheln_summe": 71,
+   "dateien": {
+    "daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Neck",
+      "Chest",
+      "Shoulders",
+      "Waist (navel)",
+      "Hip",
+      "Arm · right (flexed)",
+      "Arm · left (flexed)",
+      "Forearm",
+      "Thigh · right",
+      "Thigh · left",
+      "Calf · right",
+      "Calf · left",
+      "Neck",
+      "Shoulders",
+      "Chest",
+      "Bicep L",
+      "Bicep R",
+      "Forearm L",
+      "Forearm R",
+      "Waist",
+      "Hips",
+      "Thigh L",
+      "Thigh R",
+      "Calf L",
+      "Calf R"
+     ]
+    },
+    "ziel-aktionen.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/schreiben",
+      "goals/ziel-regeln"
+     ],
+     "tab_labels": []
+    },
+    "ansicht.tsx": {
+     "marken": [
+      {
+       "zeile": 278,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 188,
+       "titel": "Goals"
+      },
+      {
+       "zeile": 276,
+       "titel": "Goal timeline · 2026"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen",
+      "profile/zielwerte-read",
+      "tab-url"
+     ],
+     "tab_labels": [
+      "Goals",
+      "Phase engine",
+      "Adaptive TDEE",
+      "Cross-module",
+      "Timeline",
+      "Body metrics",
+      "Measurements",
+      "Composition",
+      "Physique ratios",
+      "Pose sessions"
+     ]
+    },
+    "kontext.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "modale.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 210,
+       "titel": null
+      },
+      {
+       "zeile": 214,
+       "titel": null
+      },
+      {
+       "zeile": 220,
+       "titel": null
+      },
+      {
+       "zeile": 225,
+       "titel": null
+      },
+      {
+       "zeile": 234,
+       "titel": null
+      },
+      {
+       "zeile": 431,
+       "titel": null
+      },
+      {
+       "zeile": 435,
+       "titel": null
+      },
+      {
+       "zeile": 439,
+       "titel": null
+      },
+      {
+       "zeile": 449,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Body composition",
+      "Weight",
+      "Strength PR",
+      "Performance",
+      "Habit",
+      "Custom"
+     ]
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "datum",
+      "goals/lesen",
+      "profile/zielwerte-read"
+     ],
+     "tab_labels": []
+    },
+    "phase-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 103,
+       "titel": null
+      },
+      {
+       "zeile": 163,
+       "titel": null
+      },
+      {
+       "zeile": 184,
+       "titel": "Phasenwechsel"
+      },
+      {
+       "zeile": 209,
+       "titel": "Phase parameters"
+      },
+      {
+       "zeile": 226,
+       "titel": "Zeile"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen"
+     ],
+     "tab_labels": []
+    },
+    "phase-editor.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 198,
+       "titel": null
+      },
+      {
+       "zeile": 268,
+       "titel": null
+      },
+      {
+       "zeile": 321,
+       "titel": null
+      },
+      {
+       "zeile": 459,
+       "titel": null
+      },
+      {
+       "zeile": 511,
+       "titel": null
+      },
+      {
+       "zeile": 591,
+       "titel": null
+      },
+      {
+       "zeile": 630,
+       "titel": null
+      },
+      {
+       "zeile": 749,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "physique-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 55,
+       "titel": null
+      },
+      {
+       "zeile": 74,
+       "titel": null
+      },
+      {
+       "zeile": 144,
+       "titel": "Einordnung"
+      },
+      {
+       "zeile": 146,
+       "titel": null
+      },
+      {
+       "zeile": 159,
+       "titel": null
+      },
+      {
+       "zeile": 171,
+       "titel": null
+      },
+      {
+       "zeile": 188,
+       "titel": null
+      },
+      {
+       "zeile": 256,
+       "titel": "Körperzusammensetzung"
+      },
+      {
+       "zeile": 289,
+       "titel": "Traditionswerte"
+      },
+      {
+       "zeile": 341,
+       "titel": "Messreihe"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen",
+      "goals/verhaeltnisse"
+     ],
+     "tab_labels": []
+    },
+    "tab-composition.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 279,
+       "titel": "Profile · inputs"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen",
+      "profile/zielwerte-read"
+     ],
+     "tab_labels": [
+      "Essential",
+      "Athletic",
+      "Fitness",
+      "Average",
+      "High"
+     ]
+    },
+    "tab-koerper.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 69,
+       "titel": null
+      },
+      {
+       "zeile": 231,
+       "titel": "Seitenvergleich"
+      },
+      {
+       "zeile": 265,
+       "titel": "Messreihe"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen"
+     ],
+     "tab_labels": [
+      "Neck",
+      "Shoulders",
+      "Chest",
+      "Waist (navel)",
+      "Hip",
+      "Arm · right",
+      "Arm · left",
+      "Forearm · right",
+      "Forearm · left",
+      "Thigh · right",
+      "Thigh · left",
+      "Calf · right",
+      "Calf · left"
+     ]
+    },
+    "tab-phase.tsx": {
+     "marken": [
+      {
+       "zeile": 52,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 88,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 126,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 204,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 234,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 462,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 475,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 495,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 514,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 521,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 547,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 567,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 605,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 634,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 665,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 52,
+       "titel": null
+      },
+      {
+       "zeile": 79,
+       "titel": null
+      },
+      {
+       "zeile": 88,
+       "titel": "Weekly auto-adjustment"
+      },
+      {
+       "zeile": 126,
+       "titel": "Phase state machine"
+      },
+      {
+       "zeile": 292,
+       "titel": null
+      },
+      {
+       "zeile": 462,
+       "titel": "TDEE evolution"
+      },
+      {
+       "zeile": 475,
+       "titel": "Calculation trace"
+      },
+      {
+       "zeile": 495,
+       "titel": "Weight · trend vs raw"
+      },
+      {
+       "zeile": 514,
+       "titel": "Last adjustment"
+      },
+      {
+       "zeile": 521,
+       "titel": "Method"
+      },
+      {
+       "zeile": 547,
+       "titel": null
+      },
+      {
+       "zeile": 567,
+       "titel": "Module contributions"
+      },
+      {
+       "zeile": 605,
+       "titel": null
+      },
+      {
+       "zeile": 634,
+       "titel": "Achievement probability"
+      },
+      {
+       "zeile": 665,
+       "titel": "Weekly report"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-physique.tsx": {
+     "marken": [
+      {
+       "zeile": 35,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 84,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 121,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 151,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 217,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 248,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 270,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 35,
+       "titel": "Physique ratios"
+      },
+      {
+       "zeile": 37,
+       "titel": null
+      },
+      {
+       "zeile": 49,
+       "titel": null
+      },
+      {
+       "zeile": 55,
+       "titel": null
+      },
+      {
+       "zeile": 63,
+       "titel": null
+      },
+      {
+       "zeile": 72,
+       "titel": null
+      },
+      {
+       "zeile": 84,
+       "titel": "13 circumferences"
+      },
+      {
+       "zeile": 121,
+       "titel": "FFMI"
+      },
+      {
+       "zeile": 151,
+       "titel": "Body fat method"
+      },
+      {
+       "zeile": 215,
+       "titel": "${sets[set]} · pose guide"
+      },
+      {
+       "zeile": 248,
+       "titel": "Side-by-side comparison"
+      },
+      {
+       "zeile": 270,
+       "titel": "AI analysis"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-timeline.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen",
+      "goals/ziel-regeln"
+     ],
+     "tab_labels": []
+    },
+    "tdee-kopf.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 52,
+       "titel": "Adaptive TDEE"
+      },
+      {
+       "zeile": 66,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen"
+     ],
+     "tab_labels": []
+    },
+    "ziel-editor.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen",
+      "goals/ziel-regeln"
+     ],
+     "tab_labels": []
+    },
+    "ziel-karten.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 88,
+       "titel": null
+      },
+      {
+       "zeile": 207,
+       "titel": "Ziele"
+      },
+      {
+       "zeile": 238,
+       "titel": "Abgeschlossene Ziele"
+      },
+      {
+       "zeile": 296,
+       "titel": "Fortschritt · Herkunft"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "goals/lesen",
+      "goals/ziel-regeln"
+     ],
+     "tab_labels": []
+    }
+   }
+  },
+  "coach": {
+   "marken_summe": 33,
+   "kacheln_summe": 36,
+   "dateien": {
+    "daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Training",
+      "Nutrition",
+      "Recovery",
+      "Supplements",
+      "Medical",
+      "Goals",
+      "Body metrics",
+      "full",
+      "summary",
+      "none"
+     ]
+    },
+    "ansicht.tsx": {
+     "marken": [
+      {
+       "zeile": 154,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 162,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 189,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 225,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 238,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 251,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 306,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 377,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 418,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 460,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 494,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 154,
+       "titel": "Your coaches"
+      },
+      {
+       "zeile": 162,
+       "titel": "Latest from your coaches"
+      },
+      {
+       "zeile": 225,
+       "titel": "Coaching balance"
+      },
+      {
+       "zeile": 251,
+       "titel": "Coach activity · 30d"
+      },
+      {
+       "zeile": 306,
+       "titel": null
+      },
+      {
+       "zeile": 377,
+       "titel": "Threads"
+      },
+      {
+       "zeile": 418,
+       "titel": null
+      },
+      {
+       "zeile": 460,
+       "titel": null
+      },
+      {
+       "zeile": 494,
+       "titel": "Invites"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 69,
+       "text": "+ '`coach`-Schema gibt es noch nicht.'"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "coach/rechte-read",
+      "tab-url"
+     ],
+     "tab_labels": [
+      "Overview",
+      "Coaches",
+      "Permissions",
+      "Proposals",
+      "Autonomy",
+      "Check-ins",
+      "Messages",
+      "Notes",
+      "Invites",
+      "Onboarding"
+     ]
+    },
+    "kontext.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "modale.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 190,
+       "titel": null
+      },
+      {
+       "zeile": 194,
+       "titel": null
+      },
+      {
+       "zeile": 198,
+       "titel": null
+      },
+      {
+       "zeile": 205,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "rechte-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 295,
+       "titel": "Noch keine Änderung"
+      },
+      {
+       "zeile": 301,
+       "titel": null
+      },
+      {
+       "zeile": 371,
+       "titel": "Autonomy"
+      },
+      {
+       "zeile": 497,
+       "titel": "Wartet auf dich"
+      },
+      {
+       "zeile": 520,
+       "titel": "Wartet auf dich"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "coach/rechte-modell",
+      "coach/rechte-read",
+      "coach/rechte-schreiben"
+     ],
+     "tab_labels": []
+    },
+    "tab-autonomie.tsx": {
+     "marken": [
+      {
+       "zeile": 103,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 139,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 143,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 149,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 156,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 201,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 232,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 267,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 301,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 336,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 366,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 103,
+       "titel": null
+      },
+      {
+       "zeile": 139,
+       "titel": null
+      },
+      {
+       "zeile": 143,
+       "titel": null
+      },
+      {
+       "zeile": 149,
+       "titel": null
+      },
+      {
+       "zeile": 156,
+       "titel": "The ladder"
+      },
+      {
+       "zeile": 201,
+       "titel": "History"
+      },
+      {
+       "zeile": 267,
+       "titel": "What this means"
+      },
+      {
+       "zeile": 336,
+       "titel": "History"
+      },
+      {
+       "zeile": 366,
+       "titel": "Next check-in"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "coach/rechte-read"
+     ],
+     "tab_labels": []
+    },
+    "tab-onboarding.tsx": {
+     "marken": [
+      {
+       "zeile": 70,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 79,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 86,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 95,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 102,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 167,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 70,
+       "titel": null
+      },
+      {
+       "zeile": 79,
+       "titel": null
+      },
+      {
+       "zeile": 86,
+       "titel": null
+      },
+      {
+       "zeile": 95,
+       "titel": null
+      },
+      {
+       "zeile": 102,
+       "titel": null
+      },
+      {
+       "zeile": 167,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-rechte.tsx": {
+     "marken": [
+      {
+       "zeile": 134,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 220,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 313,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 348,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 411,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 313,
+       "titel": null
+      },
+      {
+       "zeile": 348,
+       "titel": null
+      },
+      {
+       "zeile": 411,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "coach/rechte-read"
+     ],
+     "tab_labels": []
+    },
+    "human/page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "coach/rechte-read"
+     ],
+     "tab_labels": [
+      "Human Coaches",
+      "AI Coach"
+     ]
+    }
+   }
+  },
+  "coach/ai": {
+   "marken_summe": 46,
+   "kacheln_summe": 36,
+   "dateien": {
+    "daten.ts": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Idle",
+      "Thinking",
+      "Responding",
+      "Alert",
+      "Celebrating",
+      "Text chat · 5 / day",
+      "Insights feed",
+      "Chat unlimited",
+      "All 5 personas",
+      "Journey / Heartbeat",
+      "Voice input",
+      "Action execution",
+      "Proactive watcher",
+      "Push notifications",
+      "Gym finder",
+      "Training plans",
+      "Cycle consulting",
+      "Weekly deep report",
+      "AI Clone",
+      "Fast path",
+      "Knowledge path",
+      "Hybrid path",
+      "Nutrition",
+      "Training",
+      "Recovery",
+      "Biomarker",
+      "Supplement",
+      "Body composition",
+      "Behaviour",
+      "Circadian",
+      "Energy availability",
+      "Stress load",
+      "Electrolyte",
+      "Stress → skips training",
+      "Protein collapse",
+      "Dropout risk window",
+      "Motivation type",
+      "Log meal",
+      "Log water",
+      "Log weight",
+      "Log supplement",
+      "Log check-in",
+      "Log set"
+     ]
+    },
+    "ansicht.tsx": {
+     "marken": [
+      {
+       "zeile": 183,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 208,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 305,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 385,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 427,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 485,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 516,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 544,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 551,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 560,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 576,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 183,
+       "titel": "Threads"
+      },
+      {
+       "zeile": 208,
+       "titel": null
+      },
+      {
+       "zeile": 305,
+       "titel": null
+      },
+      {
+       "zeile": 385,
+       "titel": null
+      },
+      {
+       "zeile": 485,
+       "titel": "Persona"
+      },
+      {
+       "zeile": 516,
+       "titel": "Autonomy level"
+      },
+      {
+       "zeile": 544,
+       "titel": "Communication"
+      },
+      {
+       "zeile": 551,
+       "titel": "Notifications"
+      },
+      {
+       "zeile": 560,
+       "titel": "Privacy"
+      },
+      {
+       "zeile": 576,
+       "titel": "Avatar states"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 64,
+       "text": "+ 'Buddy-Schema gibt es noch nicht.'"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "tab-url"
+     ],
+     "tab_labels": [
+      "Chat",
+      "Insights feed",
+      "Memory",
+      "Decisions",
+      "Personality",
+      "Avatar states",
+      "Plan & gate",
+      "Engines",
+      "Journey",
+      "Watcher",
+      "BSS",
+      "Signature",
+      "Interventions",
+      "Safety",
+      "Butler",
+      "Voice / Live",
+      "Knowledge",
+      "Rules",
+      "Coach overrides",
+      "Clone & Gym"
+     ]
+    },
+    "kontext.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "orb.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Human Coaches",
+      "AI Coach"
+     ]
+    },
+    "tab-motoren.tsx": {
+     "marken": [
+      {
+       "zeile": 98,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 170,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 223,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 255,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 334,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 345,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 405,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 491,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 529,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 576,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 611,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 642,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 662,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 675,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 688,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 763,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 831,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 887,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 916,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 967,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 988,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 1051,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 1081,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 1121,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 223,
+       "titel": "Engines"
+      },
+      {
+       "zeile": 255,
+       "titel": "Request routing"
+      },
+      {
+       "zeile": 334,
+       "titel": "Cost this month"
+      },
+      {
+       "zeile": 345,
+       "titel": "Cron"
+      },
+      {
+       "zeile": 405,
+       "titel": null
+      },
+      {
+       "zeile": 576,
+       "titel": "Watcher settings"
+      },
+      {
+       "zeile": 611,
+       "titel": null
+      },
+      {
+       "zeile": 675,
+       "titel": "90-day trend"
+      },
+      {
+       "zeile": 688,
+       "titel": "What moves it"
+      },
+      {
+       "zeile": 763,
+       "titel": null
+      },
+      {
+       "zeile": 831,
+       "titel": "Intervention log"
+      },
+      {
+       "zeile": 887,
+       "titel": "Load budget"
+      },
+      {
+       "zeile": 916,
+       "titel": "Types"
+      },
+      {
+       "zeile": 967,
+       "titel": "Immutable rules"
+      },
+      {
+       "zeile": 988,
+       "titel": "Gate log"
+      },
+      {
+       "zeile": 1051,
+       "titel": "Recent actions"
+      },
+      {
+       "zeile": 1081,
+       "titel": "Confidence threshold"
+      },
+      {
+       "zeile": 1121,
+       "titel": "What I can write"
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 184,
+       "text": "{/* [cmd] Vorlage: `shield` — gibt es nicht, siehe Kopf. */}"
+      },
+      {
+       "zeile": 510,
+       "text": "{/* [cmd] Vorlage: `variant=\"block\"` — gibt es nicht, siehe Kopf. */}"
+      },
+      {
+       "zeile": 955,
+       "text": "{/* [cmd] Vorlage: `shield` — gibt es nicht, siehe Kopf. */}"
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-overrides.tsx": {
+     "marken": [
+      {
+       "zeile": 100,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 100,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "tab-stimme.tsx": {
+     "marken": [
+      {
+       "zeile": 209,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 256,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 304,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 332,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 364,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 209,
+       "titel": "Session state machine"
+      },
+      {
+       "zeile": 304,
+       "titel": "Live state"
+      },
+      {
+       "zeile": 332,
+       "titel": "Offline queue"
+      },
+      {
+       "zeile": 364,
+       "titel": "Command parser"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Idle",
+      "Session start",
+      "Exercise intro",
+      "Set active",
+      "Set complete",
+      "Rest",
+      "Session complete",
+      "Summary"
+     ]
+    },
+    "tab-wissen.tsx": {
+     "marken": [
+      {
+       "zeile": 218,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 307,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 577,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 597,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 631,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 307,
+       "titel": null
+      },
+      {
+       "zeile": 597,
+       "titel": "Recent clone answers"
+      },
+      {
+       "zeile": 631,
+       "titel": "Gym finder"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    }
+   }
+  },
+  "dashboard": {
+   "marken_summe": 12,
+   "kacheln_summe": 8,
+   "dateien": {
+    "dashboard-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 57,
+       "titel": "Dashboard"
+      },
+      {
+       "zeile": 263,
+       "titel": "Bestleistungen"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "dashboard/lesen"
+     ],
+     "tab_labels": []
+    },
+    "entwurf-rest.tsx": {
+     "marken": [
+      {
+       "zeile": 103,
+       "grund": "GRUND_FLOW"
+      },
+      {
+       "zeile": 110,
+       "grund": "GRUND_AKTIVITAET"
+      },
+      {
+       "zeile": 119,
+       "grund": "GRUND_READINESS"
+      },
+      {
+       "zeile": 145,
+       "grund": "GRUND_BATTERY"
+      },
+      {
+       "zeile": 162,
+       "grund": "GRUND_TONIGHT"
+      }
+     ],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 103,
+       "titel": "Today&apos;s flow"
+      },
+      {
+       "zeile": 110,
+       "titel": "Activity"
+      },
+      {
+       "zeile": 119,
+       "titel": "Readiness"
+      },
+      {
+       "zeile": 145,
+       "titel": "Body battery"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": []
+    },
+    "entwurf.tsx": {
+     "marken": [
+      {
+       "zeile": 128,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 153,
+       "grund": "echteMakros ? undefined : ATTRAPPE"
+      },
+      {
+       "zeile": 167,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 202,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 232,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 259,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 283,
+       "grund": "ATTRAPPE"
+      }
+     ],
+     "flaechen": [
+      {
+       "zeile": 87
+      },
+      {
+       "zeile": 93
+      },
+      {
+       "zeile": 95
+      },
+      {
+       "zeile": 101
+      },
+      {
+       "zeile": 103
+      },
+      {
+       "zeile": 109
+      },
+      {
+       "zeile": 111
+      },
+      {
+       "zeile": 117
+      }
+     ],
+     "kacheln": [
+      {
+       "zeile": 202,
+       "titel": "Readiness"
+      },
+      {
+       "zeile": 283,
+       "titel": "PR watch"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [],
+     "tab_labels": [
+      "Breakfast logged",
+      "HRV captured",
+      "Morning stack taken",
+      "Sleep ended",
+      "Pull A completed",
+      "Dinner logged",
+      "Sleep ends",
+      "Stack AM",
+      "Breakfast",
+      "Lunch",
+      "Push B",
+      "Dinner",
+      "Wind down",
+      "Calories",
+      "Protein",
+      "Carbs",
+      "Fat"
+     ]
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "dashboard/lesen"
+     ],
+     "tab_labels": []
+    }
+   }
+  },
+  "settings": {
+   "marken_summe": 0,
+   "kacheln_summe": 3,
+   "dateien": {
+    "formular.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 148,
+       "titel": null
+      },
+      {
+       "zeile": 242,
+       "titel": null
+      },
+      {
+       "zeile": 295,
+       "titel": "Erfahrungsgrad"
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/profile"
+     ],
+     "lib_importe": [
+      "profile/profile-model"
+     ],
+     "tab_labels": []
+    },
+    "page.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "profile/profile-model",
+      "profile/profile-write"
+     ],
+     "tab_labels": []
+    }
+   }
+  }
+ },
+ "datenbank": {
+  "schemata": [
+   "_realtime",
+   "auth",
+   "coach",
+   "goals",
+   "medical",
+   "net",
+   "nutrition",
+   "public",
+   "realtime",
+   "recovery",
+   "storage",
+   "supabase_functions",
+   "supabase_migrations",
+   "supplements",
+   "training",
+   "vault"
+  ],
+  "tabellen": [
+   {
+    "schema": "_realtime",
+    "tabelle": "extensions",
+    "zeilen": 1
+   },
+   {
+    "schema": "_realtime",
+    "tabelle": "feature_flags",
+    "zeilen": 0
+   },
+   {
+    "schema": "_realtime",
+    "tabelle": "schema_migrations",
+    "zeilen": 32
+   },
+   {
+    "schema": "_realtime",
+    "tabelle": "tenants",
+    "zeilen": 1
+   },
+   {
+    "schema": "auth",
+    "tabelle": "audit_log_entries",
+    "zeilen": 1131
+   },
+   {
+    "schema": "auth",
+    "tabelle": "custom_oauth_providers",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "flow_state",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "identities",
+    "zeilen": 3
+   },
+   {
+    "schema": "auth",
+    "tabelle": "instances",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "mfa_amr_claims",
+    "zeilen": 509
+   },
+   {
+    "schema": "auth",
+    "tabelle": "mfa_challenges",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "mfa_factors",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "oauth_authorizations",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "oauth_client_states",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "oauth_clients",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "oauth_consents",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "one_time_tokens",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "refresh_tokens",
+    "zeilen": 530
+   },
+   {
+    "schema": "auth",
+    "tabelle": "saml_providers",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "saml_relay_states",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "schema_migrations",
+    "zeilen": 77
+   },
+   {
+    "schema": "auth",
+    "tabelle": "sessions",
+    "zeilen": 509
+   },
+   {
+    "schema": "auth",
+    "tabelle": "sso_domains",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "sso_providers",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "users",
+    "zeilen": 7
+   },
+   {
+    "schema": "auth",
+    "tabelle": "webauthn_challenges",
+    "zeilen": 0
+   },
+   {
+    "schema": "auth",
+    "tabelle": "webauthn_credentials",
+    "zeilen": 0
+   },
+   {
+    "schema": "coach",
+    "tabelle": "action_log",
+    "zeilen": 2
+   },
+   {
+    "schema": "coach",
+    "tabelle": "alerts",
+    "zeilen": 6
+   },
+   {
+    "schema": "coach",
+    "tabelle": "autonomy_change_log",
+    "zeilen": 8
+   },
+   {
+    "schema": "coach",
+    "tabelle": "checkin_templates",
+    "zeilen": 2
+   },
+   {
+    "schema": "coach",
+    "tabelle": "checkins",
+    "zeilen": 6
+   },
+   {
+    "schema": "coach",
+    "tabelle": "client_autonomy",
+    "zeilen": 5
+   },
+   {
+    "schema": "coach",
+    "tabelle": "client_permissions",
+    "zeilen": 5
+   },
+   {
+    "schema": "coach",
+    "tabelle": "messages",
+    "zeilen": 6
+   },
+   {
+    "schema": "coach",
+    "tabelle": "pending_actions",
+    "zeilen": 3
+   },
+   {
+    "schema": "coach",
+    "tabelle": "permission_change_log",
+    "zeilen": 8
+   },
+   {
+    "schema": "coach",
+    "tabelle": "relationship_change_log",
+    "zeilen": 6
+   },
+   {
+    "schema": "coach",
+    "tabelle": "relationships",
+    "zeilen": 6
+   },
+   {
+    "schema": "goals",
+    "tabelle": "body_circumferences",
+    "zeilen": 54
+   },
+   {
+    "schema": "goals",
+    "tabelle": "body_measurements",
+    "zeilen": 362
+   },
+   {
+    "schema": "goals",
+    "tabelle": "goal_milestones",
+    "zeilen": 13
+   },
+   {
+    "schema": "goals",
+    "tabelle": "goal_phases",
+    "zeilen": 5
+   },
+   {
+    "schema": "goals",
+    "tabelle": "nutrition_targets",
+    "zeilen": 5
+   },
+   {
+    "schema": "goals",
+    "tabelle": "user_goals",
+    "zeilen": 11
+   },
+   {
+    "schema": "medical",
+    "tabelle": "biomarker_aliases",
+    "zeilen": 292
+   },
+   {
+    "schema": "medical",
+    "tabelle": "biomarker_catalog",
+    "zeilen": 11676
+   },
+   {
+    "schema": "medical",
+    "tabelle": "biomarker_reference_ranges",
+    "zeilen": 564
+   },
+   {
+    "schema": "medical",
+    "tabelle": "biomarker_spec_enrichment",
+    "zeilen": 49
+   },
+   {
+    "schema": "medical",
+    "tabelle": "lab_marker_catalog",
+    "zeilen": 66
+   },
+   {
+    "schema": "medical",
+    "tabelle": "lab_reports",
+    "zeilen": 10
+   },
+   {
+    "schema": "medical",
+    "tabelle": "lab_result_values",
+    "zeilen": 280
+   },
+   {
+    "schema": "medical",
+    "tabelle": "medication_active_substances",
+    "zeilen": 498
+   },
+   {
+    "schema": "medical",
+    "tabelle": "medication_formulations",
+    "zeilen": 453
+   },
+   {
+    "schema": "medical",
+    "tabelle": "medication_products",
+    "zeilen": 448
+   },
+   {
+    "schema": "medical",
+    "tabelle": "user_conditions",
+    "zeilen": 2
+   },
+   {
+    "schema": "medical",
+    "tabelle": "user_medications",
+    "zeilen": 2
+   },
+   {
+    "schema": "net",
+    "tabelle": "_http_response",
+    "zeilen": 0
+   },
+   {
+    "schema": "net",
+    "tabelle": "http_request_queue",
+    "zeilen": 0
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "_sortweight_neu",
+    "zeilen": 7140
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "exclusion_preset_rules",
+    "zeilen": 33
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "exclusion_presets",
+    "zeilen": 11
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_aliases",
+    "zeilen": 32845
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_categories",
+    "zeilen": 518
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_curation_candidates",
+    "zeilen": 0
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_curation_decisions",
+    "zeilen": 0
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_groups",
+    "zeilen": 19
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_nutrients",
+    "zeilen": 869501
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_preference_items",
+    "zeilen": 6
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_preferences",
+    "zeilen": 2
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "food_tags",
+    "zeilen": 30797
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "foods",
+    "zeilen": 7140
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "foods_custom",
+    "zeilen": 0
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "foods_portions",
+    "zeilen": 23402
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "meal_items",
+    "zeilen": 9051
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "meal_plan_days",
+    "zeilen": 42
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "meal_plan_entries",
+    "zeilen": 112
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "meal_plan_weeks",
+    "zeilen": 6
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "meal_plans",
+    "zeilen": 2
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "meals",
+    "zeilen": 2895
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "micronutrient_overview_items",
+    "zeilen": 8
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "nutrient_aliases",
+    "zeilen": 98
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "nutrient_defs",
+    "zeilen": 138
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "nutrient_details",
+    "zeilen": 110
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "nutrient_reference_values",
+    "zeilen": 165
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "preparation_kinds",
+    "zeilen": 11
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "recipe_ingredients",
+    "zeilen": 22
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "recipes",
+    "zeilen": 6
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "search_events",
+    "zeilen": 203
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "search_synonyms",
+    "zeilen": 4877
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "tag_definitions",
+    "zeilen": 14
+   },
+   {
+    "schema": "nutrition",
+    "tabelle": "water_logs",
+    "zeilen": 1263
+   },
+   {
+    "schema": "public",
+    "tabelle": "profiles",
+    "zeilen": 7
+   },
+   {
+    "schema": "public",
+    "tabelle": "user_display_preferences",
+    "zeilen": 2
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages_2026_08_17",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages_2026_08_18",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages_2026_08_19",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages_2026_08_20",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages_2026_08_21",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages_2026_08_22",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "messages_2026_08_23",
+    "zeilen": 0
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "schema_migrations",
+    "zeilen": 81
+   },
+   {
+    "schema": "realtime",
+    "tabelle": "subscription",
+    "zeilen": 0
+   },
+   {
+    "schema": "recovery",
+    "tabelle": "checkins",
+    "zeilen": 340
+   },
+   {
+    "schema": "recovery",
+    "tabelle": "modality_log",
+    "zeilen": 178
+   },
+   {
+    "schema": "recovery",
+    "tabelle": "scores",
+    "zeilen": 340
+   },
+   {
+    "schema": "storage",
+    "tabelle": "buckets",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "buckets_analytics",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "buckets_vectors",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "iceberg_namespaces",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "iceberg_tables",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "migrations",
+    "zeilen": 62
+   },
+   {
+    "schema": "storage",
+    "tabelle": "objects",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "s3_multipart_uploads",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "s3_multipart_uploads_parts",
+    "zeilen": 0
+   },
+   {
+    "schema": "storage",
+    "tabelle": "vector_indexes",
+    "zeilen": 0
+   },
+   {
+    "schema": "supabase_functions",
+    "tabelle": "hooks",
+    "zeilen": 0
+   },
+   {
+    "schema": "supabase_functions",
+    "tabelle": "migrations",
+    "zeilen": 2
+   },
+   {
+    "schema": "supabase_migrations",
+    "tabelle": "schema_migrations",
+    "zeilen": 1
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "intake_logs",
+    "zeilen": 720
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "rule_catalog",
+    "zeilen": 64
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "stack_items",
+    "zeilen": 8
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "substance_aliases",
+    "zeilen": 1541
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "substance_catalog",
+    "zeilen": 566
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "substance_catalog_sources",
+    "zeilen": 668
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "substance_lab_effects",
+    "zeilen": 222
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_catalog",
+    "zeilen": 44
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_interactions",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_nutrient_mappings",
+    "zeilen": 17
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "user_stacks",
+    "zeilen": 2
+   },
+   {
+    "schema": "training",
+    "tabelle": "equipment",
+    "zeilen": 58
+   },
+   {
+    "schema": "training",
+    "tabelle": "exercise_catalog_enrichment",
+    "zeilen": 1407
+   },
+   {
+    "schema": "training",
+    "tabelle": "exercise_muscles",
+    "zeilen": 6588
+   },
+   {
+    "schema": "training",
+    "tabelle": "exercises",
+    "zeilen": 1416
+   },
+   {
+    "schema": "training",
+    "tabelle": "muscle_groups",
+    "zeilen": 95
+   },
+   {
+    "schema": "training",
+    "tabelle": "workout_exercises",
+    "zeilen": 120
+   },
+   {
+    "schema": "training",
+    "tabelle": "workout_sessions",
+    "zeilen": 60
+   },
+   {
+    "schema": "training",
+    "tabelle": "workout_sets",
+    "zeilen": 202
+   },
+   {
+    "schema": "vault",
+    "tabelle": "secrets",
+    "zeilen": 0
+   }
+  ]
+ }
+}
