@@ -838,6 +838,66 @@
         ]
       },
       "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "shopping_lists",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
+    },
+    {
+      "name": "shopping_list_items",
+      "schritt": "058b",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "zeilenschutzart": "eigene_zeilen",
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "058b_recipes_meal_plans.sql"
     }
   ],
   "_sichten": "security_invoker MUSS true sein. [read] Ohne diesen Schalter laeuft eine Sicht mit den Rechten ihres Eigentuemers, nicht der Abfragenden — im Repo hat das bereits dazu gefuehrt, dass der zweite Nutzer die Daten des ersten sah. 'Sicht vorhanden' und 'Sicht geschuetzt' sind zwei Aussagen.",
@@ -1025,6 +1085,26 @@
       "tabelle": "foods_custom",
       "name": "foods_custom_touch_updated_at",
       "schritt": "058"
+    },
+    {
+      "tabelle": "shopping_lists",
+      "name": "shopping_lists_touch_updated_at",
+      "schritt": "058b"
+    },
+    {
+      "tabelle": "shopping_lists",
+      "name": "shopping_lists_owner_guard_trg",
+      "schritt": "058b"
+    },
+    {
+      "tabelle": "shopping_list_items",
+      "name": "shopping_list_items_touch_updated_at",
+      "schritt": "058b"
+    },
+    {
+      "tabelle": "shopping_list_items",
+      "name": "shopping_list_items_owner_guard_trg",
+      "schritt": "058b"
     }
   ],
   "_fremdschluessel": "Namentlich, weil beim Ausfall 2026-08-16 meal_items_meal_id_fkey mitverschwand. Ein fehlender Fremdschluessel faellt sonst erst auf, wenn verwaiste Zeilen entstanden sind.",
@@ -1130,6 +1210,36 @@
       "tabelle": "search_events",
       "zeigt_auf": "foods",
       "schritt": "057"
+    },
+    {
+      "name": "shopping_lists_recipe_id_fkey",
+      "tabelle": "shopping_lists",
+      "zeigt_auf": "recipes",
+      "schritt": "058b"
+    },
+    {
+      "name": "shopping_lists_meal_plan_week_id_fkey",
+      "tabelle": "shopping_lists",
+      "zeigt_auf": "meal_plan_weeks",
+      "schritt": "058b"
+    },
+    {
+      "name": "shopping_list_items_shopping_list_id_fkey",
+      "tabelle": "shopping_list_items",
+      "zeigt_auf": "shopping_lists",
+      "schritt": "058b"
+    },
+    {
+      "name": "shopping_list_items_food_id_fkey",
+      "tabelle": "shopping_list_items",
+      "zeigt_auf": "foods",
+      "schritt": "058b"
+    },
+    {
+      "name": "shopping_list_items_custom_food_id_fkey",
+      "tabelle": "shopping_list_items",
+      "zeigt_auf": "foods_custom",
+      "schritt": "058b"
     }
   ],
   "funktionen": [
@@ -1242,6 +1352,14 @@
       "schritt": "058b"
     },
     {
+      "name": "shopping_lists_owner_guard",
+      "schritt": "058b"
+    },
+    {
+      "name": "shopping_list_items_owner_guard",
+      "schritt": "058b"
+    },
+    {
       "name": "recipe_nutrition",
       "schritt": "058b"
     },
@@ -1284,8 +1402,8 @@
     "supplements.substance_lab_effects": 222,
     "supplements.rule_catalog": 64,
     "medical.biomarker_catalog": 11676,
-    "medical.biomarker_reference_ranges": 564,
-    "medical.biomarker_spec_enrichment": 49,
+    "medical.biomarker_reference_ranges": 566,
+    "medical.biomarker_spec_enrichment": 51,
     "medical.lab_marker_catalog": 66,
     "medical.biomarker_aliases": 292,
     "medical.medication_active_substances": 56,
@@ -1321,8 +1439,8 @@
     "supplements.substance_lab_effects": "[cmd] C-162: Kimi crawl_024 liefert 156 lab_effects. Auf Marker expandiert entstehen 222 Zeilen: 203 Markerlinks und 19 Effekte ohne Markerliste.",
     "supplements.rule_catalog": "[cmd] C-133: 133_kimi_rules.ts importiert 29 warning_rules, 15 nutrient_gap_rules und 20 medication_rules aus backup/kimi-research/.../data/platform; Summe 64.",
     "medical.biomarker_catalog": "[cmd] C-70b: biomarker-loinc/index.json fuehrt 11.676 LOINC-Records in acht Split-Dateien; 141_biomarker_katalog.ts bricht bei abweichender Summe ab.",
-    "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzte 96 Spec-basierte Bereichszeilen; C-140 spiegelt nur zwei belastbare LOINC-Abweichungen mit Bereich (LDL 13457-7, Haematokrit 4544-3) und ergaenzt dadurch 4 Zeilen. Summe 564.",
-    "medical.biomarker_spec_enrichment": "[cmd] C-84: SPEC_05_BIOMARKER_CATALOG.md enthaelt 47 extrahierbare Marker; 44 LOINC-Codes liegen direkt im 11.676er Katalog. C-140 ergaenzt 5 belegte Gruppierungsalias-Zeilen fuer G-84-Abweichungen; Summe 49.",
+    "medical.biomarker_reference_ranges": "[cmd] C-70: biomarker-katalog.json fuehrt 122 kuratierte Kandidaten mit 464 Referenzbereich-Zeilen. C-84 ergaenzte 96 Spec-basierte Bereichszeilen; C-140 spiegelt zwei belastbare LOINC-Abweichungen mit Bereich (LDL 13457-7, Haematokrit 4544-3) und ergaenzt dadurch 4 Zeilen. C-191 spiegelt ApoB auf den belegten Code 1884-6 und ergaenzt 2 Zeilen. Summe 566.",
+    "medical.biomarker_spec_enrichment": "[cmd] C-84: SPEC_05_BIOMARKER_CATALOG.md enthaelt 47 extrahierbare Marker; 44 LOINC-Codes liegen direkt im 11.676er Katalog. C-140 ergaenzt 5 belegte Gruppierungsalias-Zeilen fuer G-84-Abweichungen. C-191 ergaenzt ApoB auf 1884-6 und Prolactin auf 2842-3; Summe 51.",
     "medical.lab_marker_catalog": "[cmd] C-162: Kimi crawl_024 lab_markers.json liefert 66 Marker, alle needs_repo_validation. 46 Kimi-Kandidaten plus 18 repo-only Aufloesungen treffen den Katalog, 2 bleiben offen.",
     "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt.",
     "medical.medication_active_substances": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 56 Wirkstoffe; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
