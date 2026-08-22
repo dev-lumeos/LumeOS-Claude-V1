@@ -13,9 +13,9 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | *frei* | | |
+| **Fable** | **C-105 · C-124 · GO-21 · G-89** vier beantwortete Fragen umsetzen | Evidenz-Modell | 2026-08-22 |
 | **Claude Code** | **G-133** Allergen-Ausschluss an `p_filters` anschliessen | `apps/web` Nutrition | 2026-08-22 |
-| **Codex** | *frei* | | |
+| **Codex** | **C-187** fuenf Datenluecken, ein Durchgang | `supabase/_pipeline/` | 2026-08-22 |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung | extern | 2026-08-20 |
 
 `[read]` **C-164 war zwischenzeitlich faelschlich als laufend
@@ -35,12 +35,11 @@ wenn er rausgeht, nicht wenn er geschrieben ist.**
 
 | Auftrag | Bereich |
 |---|---|
-| **C-175** `shopping_lists` fehlt (ADR-Pflicht) — **blockiert Reorder** | `supabase/` |
 | **C-186** Nebenwirkungen und Zyklen ohne Tabelle | `supabase/` |
-| **G-126** drei Reste aus G-122 (CHOL, 28 Texte, Selen) | `supabase/` |
-| **C-179** `EAA` zeigt auf Summenwert statt neun | `supabase/` |
-| **G-124** zehn Medication-Spalten | `supabase/` |
-| **C-178** Prolactin + ApoB in `system_groups` | `supabase/` |
+
+`[read]` **C-175, C-179, G-124, G-126 und C-178 stehen nicht mehr
+einzeln hier** — sie sind seit 2026-08-21 in **C-187** gebuendelt und
+laufen als ein Auftrag.
 
 **Gross, aber vorbereitet**
 
