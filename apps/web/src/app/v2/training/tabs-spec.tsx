@@ -26,6 +26,7 @@
 import * as React from 'react'
 import { Card, Pill, Icon, Ring, Row, InEntwicklungKnopf } from '@lumeos/ui'
 
+import { holeEvidenz } from '../../../lib/evidenz/registry'
 import { ATTRAPPE } from './ansicht'
 
 // ── Block A: classification + set types ─────────────────────────
@@ -326,7 +327,7 @@ export function TrainingLandmarksView() {
       </div>
 
       <Card title="Volume landmarks · sets per week"
-            sub="RP-Rahmenwerk — Heuristik (Grad E) · Orientierung, kein Messwert"
+            sub={`RP-Rahmenwerk — Heuristik (Grad ${holeEvidenz('RP_VOLUME_LANDMARKS_FRAMEWORK').grad}) · Orientierung, kein Messwert`}
             attrappe={ATTRAPPE}>
         <div className="v2-col-gap" style={{ gap: 4 }}>
           {LANDMARKS.map(l => {

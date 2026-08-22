@@ -18,6 +18,8 @@
 // **eine Zahl ohne Beleg wird nicht gebaut** —, nur liegen die Belege
 // jetzt vor (crawl_025, constant_evidence_registry).
 
+import { holeEvidenz } from '../evidenz/registry'
+
 import type { Umfangssatz } from './lesen'
 
 /** Ein Quotient mit seinen zwei Zutaten — damit er nachrechenbar ist. */
@@ -184,6 +186,24 @@ export type Grenzquelle = {
   jahr: number
 }
 
+/**
+ * C-180: die Einstufung wird NACHGESCHLAGEN, nicht als Kommentar
+ * getragen. Ein Grenzwert ohne KEEP_NUMERIC-Beleg im Register ist ein
+ * Programmierfehler und kracht hier — bevor er eine Zahl anzeigt.
+ */
+function grenzquelleAus(registryId: string): Grenzquelle {
+  const e = holeEvidenz(registryId)
+  if (e.handling !== 'KEEP_NUMERIC' || e.grad === null || !e.wertNutzbar) {
+    throw new Error(`${registryId}: Grenzwert ohne KEEP_NUMERIC-Beleg (${e.handling})`)
+  }
+  return {
+    registryId,
+    grad: e.grad,
+    quelle: e.quelle ?? 'Quelle fehlt im Register',
+    jahr: e.jahr ?? 0,
+  }
+}
+
 export type Grenzlage = {
   /** Die geltende Schwelle; `null` = kein Geschlecht gesetzt oder
    *  kein Wert. */
@@ -193,10 +213,7 @@ export type Grenzlage = {
   quelle: Grenzquelle
 }
 
-const WHO_2008: Grenzquelle = {
-  registryId: 'BP-WHR-001', grad: 'A',
-  quelle: 'WHO Expert Consultation', jahr: 2008,
-}
+const WHO_2008 = grenzquelleAus('BP-WHR-001')
 
 /** WHR-Grenzwerte der WHO: ab 0,90 (Maenner) bzw. 0,85 (Frauen)
  *  deutlich erhoehtes metabolisches Risiko. */
@@ -219,7 +236,7 @@ export function whtrLage(taille: number | null, groesse: number | null): {
   return {
     verhaeltnis: v,
     lage: v.wert == null ? null : v.wert < 0.5 ? 'unter' : 'ueber',
-    quelle: { registryId: 'BP-WHTR-002', grad: 'A', quelle: 'Ashwell (Syst. Review); NICE', jahr: 2012 },
+    quelle: grenzquelleAus('BP-WHTR-002'),
   }
 }
 
@@ -236,7 +253,7 @@ export function bauchumfangLage(wert: number | null, geschlecht: string | null):
     lage: wert == null || stufen == null ? null
       : wert >= stufen.deutlich ? 'deutlich'
         : wert >= stufen.erhoeht ? 'erhoeht' : 'unter',
-    quelle: { registryId: 'BP-WC-003', grad: 'A', quelle: 'WHO Expert Consultation', jahr: 2008 },
+    quelle: grenzquelleAus('BP-WC-003'),
   }
 }
 
@@ -260,7 +277,7 @@ export function bmiLage(gewichtKg: number | null, groesseCm: number | null): {
   return {
     wert,
     klasse,
-    quelle: { registryId: 'BP-BMI-004', grad: 'A', quelle: 'WHO TRS 894', jahr: 2000 },
+    quelle: grenzquelleAus('BP-BMI-004'),
     vorbehalt: 'Bevoelkerungsmass — bei hoher Muskelmasse ohne Aussage; Taille mitlesen.',
   }
 }
@@ -278,6 +295,8 @@ export type ProportionsHeuristik = {
   registryId: string
   name: string
   herkunft: string
+  /** Aus dem Register nachgeschlagen (C-180). */
+  grad: 'A' | 'B' | 'C' | 'D' | 'E' | null
   /** Vergleichbarer Zielwert, wenn die Zutaten gemessen werden. */
   zielwert: number | null
   /** Formeln als Text, wo die Zutaten (Handgelenk, Knoechel, Becken)
@@ -285,35 +304,44 @@ export type ProportionsHeuristik = {
   formeln: string[]
 }
 
+/** C-180: bindet eine Heuristik an ihren Registereintrag — eine
+ *  „Heuristik", die dort nicht LABEL_HEURISTIC ist, kracht. */
+function heuristik(
+  registryId: string,
+  rest: Omit<ProportionsHeuristik, 'registryId' | 'grad'>,
+): ProportionsHeuristik {
+  const e = holeEvidenz(registryId)
+  if (e.handling !== 'LABEL_HEURISTIC') {
+    throw new Error(`${registryId}: als Heuristik gezeigt, aber ${e.handling} im Register`)
+  }
+  return { registryId, grad: e.grad, ...rest }
+}
+
 export const PROPORTION_HEURISTIKEN: ProportionsHeuristik[] = [
-  {
-    registryId: 'BP-GR-006',
+  heuristik('BP-GR-006', {
     name: 'Goldener Schnitt (Schulter : Taille)',
     herkunft: 'Grecian Ideal / Sandow 1894; heute „Adonis Index"',
     zielwert: 1.618,
     formeln: [],
-  },
-  {
-    registryId: 'BP-REEVES-008',
+  }),
+  heuristik('BP-REEVES-008', {
     name: 'Steve-Reeves-Proportionen',
     herkunft: 'Steve Reeves, Golden Era (1940er–50er)',
     zielwert: null,
     formeln: ['Arm = 252 % Handgelenk', 'Wade = 192 % Knoechel', 'Brust = 148 % Becken'],
-  },
-  {
-    registryId: 'BP-MCCALLUM-009',
+  }),
+  heuristik('BP-MCCALLUM-009', {
     name: 'McCallum („Keys to Progress")',
     herkunft: 'John McCallum, IronMan-Kolumne 1965',
     zielwert: null,
     formeln: ['Brust = 6,5 x Handgelenk', 'Arm ≈ 36 % Brust'],
-  },
-  {
-    registryId: 'BP-CLASSIC-010',
+  }),
+  heuristik('BP-CLASSIC-010', {
     name: 'Klassische Konventionen',
     herkunft: 'Golden-Era-Bodybuilding-Literatur',
     zielwert: null,
     formeln: ['Arm = Hals = Wade', 'Brust 25–30 cm ueber Taille'],
-  },
+  }),
 ]
 
 export function vergleicheStellen(saetze: Umfangssatz[]): StellenVergleich[] {

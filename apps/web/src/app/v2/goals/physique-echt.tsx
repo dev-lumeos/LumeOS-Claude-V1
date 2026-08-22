@@ -292,7 +292,9 @@ export function PhysiqueEcht({ saetze, navy, stichtag, profil = null }: {
               <div key={h.registryId}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
                   <span style={{ fontSize: 12, fontWeight: 600 }}>{h.name}</span>
-                  <Pill style={{ fontSize: 9 }}>Heuristik</Pill>
+                  {/* C-180: der Grad kommt aus dem Register, nicht
+                      aus einem Kommentar. */}
+                  <Pill style={{ fontSize: 9 }}>Heuristik{h.grad ? ` · Grad ${h.grad}` : ''}</Pill>
                 </div>
                 <div className="v2-dim" style={{ fontSize: 10, marginTop: 2 }}>{h.herkunft}</div>
                 {h.registryId === 'BP-GR-006' && (
@@ -330,8 +332,9 @@ export function PhysiqueEcht({ saetze, navy, stichtag, profil = null }: {
           </div>
           <div className="v2-divider" />
           <div className="v2-dim" style={{ fontSize: 10, lineHeight: 1.5 }}>
-            Grad E — Tradition, keine Studie. Ohne Richtungsfarbe:
-            welche Richtung erwünscht ist, hängt von der Phase ab.
+            Tradition, keine Studie (Einstufung je Zeile aus dem
+            Evidenzregister). Ohne Richtungsfarbe: welche Richtung
+            erwünscht ist, hängt von der Phase ab.
           </div>
         </Card>
 
