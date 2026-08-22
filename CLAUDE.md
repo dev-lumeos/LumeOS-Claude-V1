@@ -66,6 +66,80 @@ nicht darin steht, existiert fuer die naechste Sitzung nicht.
 committet. **Eine Zeile mit dem Befund, nicht mit dem Dateinamen** —
 der steht schon in der ersten Spalte.
 
+### Und seit 2026-08-22: der Bericht selbst gehoert auch dem Orchestrator
+
+**Tom, 2026-08-22:** *„und der update von ssot ist auch dein job"*
+
+**Agenten schreiben nichts in `docs/`.** Kein `TODO.md`, kein
+`ERLEDIGT.md`, kein `LAUFEND.md`, **und keinen SSOT-Bericht**. Der
+Bericht geht als Text in den Chat; der Orchestrator prueft die
+tragenden Zahlen selbst und schreibt daraus, was er geprueft hat.
+
+`[read]` **Der Grund:** Ein SSOT-Bericht, den der Ausfuehrende selbst
+verfasst, ist seine Selbstauskunft — genau die Zusammenfassung, die die
+Pruefregel nicht lesen soll. `[cmd]` Bericht 178 sagt *„Kettenlauf: 87
+Schritte, Exit 0"*, und das stimmt; es steht dort aber, weil Codex es
+hingeschrieben hat, nicht weil es geprueft wurde.
+
+**Was geprueft ist, traegt `[cmd]`. Was nur berichtet wurde, traegt
+`[read]`.** Diese Unterscheidung kann nur treffen, wer selbst gemessen
+hat.
+
+`[cmd]` **Am 2026-08-22 hielt es sich noch niemand daran** — Fable und
+Codex hatten `TODO.md`, `ERLEDIGT.md`, `00-UEBERSICHT.md` und
+`00-INDEX.md` gleichzeitig offen, waehrend der Orchestrator dieselben
+Dateien schreiben wollte. `[read]` **Die Regel stand in der
+Bereichstabelle von `LAUFEND.md` — der Agent liest `LAUFEND.md` nicht,
+er liest seinen Auftrag.** Deshalb steht sie ab jetzt in jedem Auftrag.
+
+### Nachweisdateien in `backup/` gehoeren derselben Encoding-Regel
+
+`[cmd]` **Am 2026-08-22 haben zwei Nachweisdateien jeden Commit im
+gesamten Repo blockiert:** `backup/c192/final-nachweis.json` und
+`-finaldb.json`, je sechsmal die Doppelkodierungsmarke (U+00E2 U+20AC)
+und CRLF — Ausgabe eines Kettenlaufs durch eine Windows-Konsole.
+
+`[cmd]` `encoding-pruefen.mjs` laeuft als **erster** Gate-Schritt ueber
+alle 10.661 Dateien. Ein einziger Fund legt alles lahm, auch Commits,
+die die Datei nicht anfassen.
+
+`[read]` **Die Regel stand fuer Quelldateien** — fuer `backup/` galt sie
+offenbar als nicht gemeint. **Sie gilt.** `encoding="utf-8",
+newline="\n"`, auch fuer Messprotokolle.
+
+Umkehrbar war es: von `cp1252` nach `utf-8` zurueckdrehen, mit zwei
+Gegenproben — bleibt gueltiges JSON, keine Marken uebrig.
+
+
+## `TODO.md` ist ein Befundregister, kein Arbeitsvorrat
+
+**Tom, 2026-08-22:** *„undundundund kann ich stunden weiter machen und
+du sagst hast nichts und das war nur ein modul"*
+
+`[cmd]` **Der Orchestrator hatte gemeldet, es gebe keine Arbeit fuer
+zwei freie Agenten.** Tom schickte daraufhin sieben Bildschirmfotos aus
+**einem** Modul, auf denen jede Kachel *„Attrappe"* traegt.
+
+`[read]` **Der Fehler war die Quelle, nicht die Suche.** In `TODO.md`
+steht, was jemandem aufgefallen ist und aufgeschrieben wurde. **Ein
+ganzes Modul mit Attrappen steht nicht drin, weil es niemand als Befund
+notiert hat** — es ist ja kein Fehler, sondern unfertige Arbeit.
+
+**Wer wissen will, was zu tun ist, sieht ins Produkt.** `TODO.md` sagt,
+was schiefgegangen ist. `docs/spezifikation/00-MODULPLAN.md` sagt, was
+gebaut werden soll. Die Liste allein sagt es nicht.
+
+`[cmd]` **Der Beleg liegt unter `backup/bestand/00-toms-bildschirmfotos.md`**
+— mit dem Bildinhalt als Text, damit ihn niemand ein zweites Mal
+erfragen muss.
+
+`[cmd]` **Und die Liste kann sogar das Gegenteil behaupten:** Recovery
+zeigt auf jeder Kachel *„das Schema `recovery` gibt es noch nicht"*,
+waehrend `recovery.checkins` 340 Zeilen hat, `recovery.scores` 340 und
+`recovery.modality_log` 178 — und drei Lesefunktionen bereits darauf
+zugreifen. **Der Banner war falsch, und er hat den Orchestrator
+mitgetaeuscht.**
+
 ## Keine Terminalfenster — und der Orchestrator haelt sich selbst daran
 
 **Tom, 2026-08-19:** *,Diese scheiss Terminalfenster poppen immer noch
