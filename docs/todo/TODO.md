@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 163 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 187 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -82,6 +82,32 @@ und prüft sieben Dinge: Dubletten je Datei, Nummern in beiden Dateien,
 abgehakte Punkte in `TODO.md`, `LAUFEND.md` gegen den Bestand, und den
 Zähler oben gegen die Datei. **Jede Prüfung ist über einen eingebauten
 Fehler einzeln belegt** (`LUMEOS_NUMMERN_SELBSTTEST=1`).
+
+---
+
+---
+
+## Die Sektionen sind keine Reihenordnung
+
+`[cmd]` **Gemessen am 2026-08-22: 28 Reihenwechsel quer durch die
+Datei.** Unter `## GO - Goals` liegen Punkte aus **A, C, G und GO**, in
+vierzehn Wechseln hin und her. Unter `## C — Produkt: apps/web` liegen
+A, C und E. Der erste `C`-Punkt steht in Sektion A, der erste `G`-Punkt
+in dem Block, der spaeter `## GO` ueberschrieben ist.
+
+`[cmd]` Verteilung: **C 87 · G 46 · A 28 · F 9 · E 6 · B 2 · GO 2.**
+
+`[read]` **`## D`, `## E` und `## G` fehlen nicht, weil jemand sie
+geloescht haette.** Die Datei ist chronologisch gewachsen: neue Punkte
+kamen beim Thema dazu, die Ueberschriften blieben stehen, wo sie einmal
+standen. **Der Buchstabe im Punkt sagt die Reihe. Die Ueberschrift
+darueber sagt nichts.**
+
+`[read]` **Wer sortiert sucht, nimmt `docs/todo/00-UEBERSICHT.md`** —
+erzeugt, gruppiert, mit Zeilennummern, im Gate gegen den Bestand
+geprueft. **Diese Datei hier ist der Volltext, und Volltexte sind
+chronologisch.** Ueberschriften nachtraeglich einzuziehen hiesse, 180
+Punkte umzusortieren — fuer eine Ordnung, die nie gegolten hat.
 
 ---
 
@@ -938,6 +964,56 @@ Quelle und Belege: `docs/ssot/154-preferences.md`.
 
 
 
+
+- [ ] **C-192: `p_user_id` kostet in `food_search` das Dreifache** (neu
+  2026-08-22). **Laeuft bei Codex.**
+
+  `[cmd]` `EXPLAIN (ANALYZE)`: ohne 414,7 ms, mit `dev@lumeos.app`
+  1.172,6 ms. Claude Code misst unabhaengig 360,4 / 383,2 / 1.160,2 ms.
+  **Kein temp read/written** — also die Preference-CTEs, kein
+  Kreuzprodukt.
+
+  `[read]` **Seit G-154 laedt der Katalog immer mit `prefs=1`**, weil
+  der ADR es verlangt. Aus dem Randfall ist der Normalfall geworden.
+  **Die Regel bleibt, nur ihre Kosten sind zu senken.**
+
+- [ ] **C-193: MealCam warnt bei hart ausgeschlossenen Zutaten** (neu
+  2026-08-22).
+
+  **Tom, 2026-08-22:** *„MealCam kann alles einlesen, muss aber bei
+  Erkennung darauf hinweisen, dass X laut Preferences hard excluded
+  ist, und der User muss das bestaetigen."*
+
+  `[read]` **Der Unterschied zum Katalog:** die FoodDB WENDET
+  Preferences AN. **MealCam ERKENNT, was auf dem Teller liegt** —
+  wegfiltern waere dort falsch. Einlesen, benennen, bestaetigen lassen.
+
+  `[cmd]` **Nur `hard` loest aus** (Allergen, Diet type). Food ±100,
+  Category ±50, Tag ±30 sind Bewertung, keine Sperre.
+
+  `[cmd]` `ADR_MEALCAM_V1.md` kennt bisher nur *„Erst nach
+  User-Bestaetigung: Meal Item erstellen"*. Der Preference-Hinweis
+  fehlt dort und gehoert ergaenzt.
+
+  **Offen:** ob ein bestaetigter Treffer die Preference dauerhaft
+  aendern darf oder einmalig durchgewunken wird.
+
+- [ ] **C-194: Den Kimi-Bestand vollstaendig aufnehmen** (neu
+  2026-08-22). **Bei Fable gelaufen, Bericht geprueft.**
+
+  `[cmd]` **8.881 Dateien, 346 MB, Crawls 017-035.** Neun Unterordner
+  unter `data/`. Ergebnis: `backup/kimi-bestand-aufnahme.json`,
+  Werkzeug `tools/_kimi-bestand.py`.
+
+  **Der Bericht ist die Grundlage der Gruppe K.** Schliessen, sobald
+  die Gruppe angelegt und die widerlegten Punkte nachgezogen sind.
+
+  `[cmd]` **Drei Zaehlkorrekturen aus der Gegenpruefung:**
+  `data/metadata/sources.jsonl` hat **2.288 Zeilen** (Fable suchte ohne
+  `metadata/`) · **163 Punkte**, nicht 189 (Fable zaehlte Checkboxen
+  inklusive Unterpunkten) · `symptom_ontology_seed` hat **32**
+  Symptome, nicht 21 — **das war mein Fehler**, aus dem Punkttext
+  uebernommen statt aus der Datei.
 
 ## F — Gedächtnisschichten (AMF)
 
@@ -3460,17 +3536,38 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
 
 
 
-- [ ] **C-181: ACWR nicht implementieren** (entschieden extern,
-  2026-08-20). Aus C-180.
+- [ ] **C-181: ACWR wird gerechnet und muss raus** (neu gefasst
+  2026-08-22, vorher *„nicht implementieren"*). Aus C-180.
 
   `[cmd]` **Kimi-Kernentscheidung 1:** *„Safe-Zone 0,8–1,3 / >1,5 als
-  HEURISTIC entfernt."*
+  HEURISTIC entfernt."* `formula_evidence_registry` fuehrt
+  `acwr_decision = implement:no` mit drei Quellen.
 
-  `[read]` **Der Orchestrator hatte gemessen, dass ACWR nirgends
-  gerechnet wird** — **gut so.** **Der Feldvertrag nennt
-  `training.load_spike`**, und mehrere `missing_input`-Pfade haengen
-  daran. **Sie bleiben offen, statt eine Ampel zu bauen, die nicht
-  traegt.**
+  **Der Punkt sagte bis heute das Gegenteil der Lage.** `[read]` Er
+  behauptete, *„ACWR werde nirgends gerechnet — gut so"*. `[cmd]` Es
+  wird gerechnet, und der Wert steht in der Oberflaeche:
+
+  | Fundstelle | |
+  |---|---|
+  | `motor.ts:335` | `ACWR_DATA = { acute_7d: 2142, chronic_28d: 1980, acwr: 1.08 }` |
+  | `motor.ts:337` | `export function calcTrainingLoadScore(acwr: number)` |
+  | `motor.ts:338` | `if (acwr >= 0.8 && acwr <= 1.3) return 1.0` |
+  | `motor.ts:431` | `const tls = calcTrainingLoadScore(ACWR_DATA.acwr)` |
+  | `ansicht.tsx:262` | `['ACWR', String(ACWR_DATA.acwr), 'load ...']` |
+
+  `[cmd]` **56 Treffer auf `ACWR` im Baum.** Die Zahlen sind Attrappen,
+  die Formel ist echt, und der Score gewichtet sie.
+
+  `[read]` **Woher der Irrtum kam:** gesucht wurde nach
+  `training.load_spike`, dem Namen aus dem Feldvertrag. `[cmd]` Der
+  findet drei Treffer, alle in der Regel-Engine, keinen im
+  Recovery-Motor — die Umsetzung heisst `ACWR_DATA`. **Der Name im
+  Vertrag ist nicht der Name im Code.** Dieselbe Falle wie `tree_nuts`
+  gegen `contains_nuts` und `SE` gegen `SER`.
+
+  `[read]` **Das ist dieselbe Klasse wie die Modalitaets-Boni aus
+  C-124:** eine unbelegte Zahl, die in einen Score einfliesst und
+  angezeigt wird. C-124 ist erledigt, das hier nicht.
 
 - [ ] **C-182: Kein numerischer OTS-Schwellenwert** (beantwortet
   2026-08-20). Aus C-180. **Betrifft C-168 und E8.**
@@ -4168,3 +4265,311 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `[read]` **Es waere die ganze Gruppe *Elemente* (16 Codes)** —
   **oder nichts**, weil die Karte schon so heisst. **Zu entscheiden, ob
   ein Alias auf eine ganze Karte zeigen darf.**
+
+---
+
+## K — Kimi-Bestand: Abgleich und Vertiefung
+
+`[cmd]` **Aufgenommen am 2026-08-22 (C-194).** Der Bestand liegt unter
+`backup/kimi-research/Kimi_Agent/supplement_performance_database/`,
+untracked, 346 MB. **Er kommt nicht ins Repo** — der Pre-Commit-Hook
+sperrt Dateien ueber 10 MB.
+
+`[read]` **Der Befund, der die Gruppe begruendet:** Wir haben die
+Huelle importiert und den Inhalt liegenlassen. `[cmd]`
+`supplements.substance_catalog` hat **31 Spalten**, Kimi liefert
+**146 Felder** je Substanz — **130 davon haben keine Repo-Spalte.**
+
+`[read]` **Reihenfolge:** Schema vor Import, Import vor Oberflaeche.
+K-01 bis K-03 haengen aneinander. Alles mit *„Schema fehlt"* ist
+Codex; nichts davon ist Oberflaechenarbeit, solange die Daten fehlen.
+
+### Substanzen — die dichteste Luecke
+
+- [ ] **C-195: `substance_catalog` auf die Kimi-Tiefe bringen**
+  (neu 2026-08-22). **Blockiert C-196.**
+
+  `[cmd]` **130 von 146 Kimi-Feldern fehlen als Spalte.** Darunter
+  vollstaendig: `safety` (Kontraindikationen, Nebenwirkungen, Toxizitaet,
+  Niere/Leber/Herz/Endokrin/Neuro, Schwangerschaft mit Stillzeit),
+  `interactions` (Arzneimittel, Supplement, Nahrung, Alkohol,
+  Krankheit), `regulatory` (USA, EU, UK, Thailand, Australien,
+  `wada_status`, `wada_category`, `prescription_required`),
+  `warning_triggers` (`dose_ceiling` mit Wert/Basis/Quelle,
+  `doctor_consult_flags`), `quality` (Verunreinigung, Faelschung,
+  Lagerung, Licht, Temperatur), `evidence_provenance` je Feld mit
+  `source_id`/`as_of`/`evidence_class`, `external_ids` (UNII, PubChem,
+  ChEMBL, InChIKey, Summenformel), `platform` (`recommendable`,
+  `warning_only`, `physician_referral`, `athlete_flag`, `modules`).
+
+  **Vorschlag des Orchestrators, zu entscheiden:** Bloecke als `jsonb`
+  (`safety`, `interactions`, `regulatory`, `quality`, `pharmacology`,
+  `warning_triggers`), flach nur was gefiltert oder gewarnt wird —
+  `wada_status`, `prescription_required`, `dose_ceiling.value`,
+  `recommendable`, `warning_only`, `physician_referral`.
+  `[read]` **130 flache Spalten waeren abfragbar und unpflegbar**;
+  reines `jsonb` kostet bei jeder Abfrage — C-192 zeigt gerade, was
+  CTEs auf dem heissen Pfad kosten.
+
+  `[cmd]` **`evidence_provenance` muss mitwandern.** Sonst entstehen
+  wieder Zahlen ohne Beleg — genau das Muster von C-185 (fabriziertes
+  UNII bei BPC-157).
+
+- [ ] **C-196: Die 290 Substanzen in die neue Tiefe importieren**
+  (neu 2026-08-22). **Haengt an C-195.**
+
+  `[cmd]` Quellen: `supplements.jsonl` 154 · `performance_compounds`
+  75 · `peptides` 61. Repo heute 566 Zeilen (konsolidiert inkl.
+  LumeOS/F-05).
+
+  `[cmd]` **Die vorhandenen Spalten sind duenn:** `guideline_dose`
+  **0 %**, `official_label_dose` **0,2 %**, `tolerable_upper_intake_level`
+  **8,5 %**, `half_life` **9,4 %**, `cas_number` 29,2 %,
+  `chemical_form` 19,3 %.
+
+  `[read]` **Wo Kimi nichts hat, wird nichts erfunden.**
+  `missing_fields` und `missing_reason` wandern mit — sie sagen, warum
+  eine Zahl fehlt.
+
+- [ ] **C-197: `compound_type` normalisieren** (neu 2026-08-22).
+
+  `[cmd]` **48 verschiedene Werte, teils doppelt in zwei Sprachen:**
+  `peptide` 54 **und** `Peptide` 9 · `mineral` 23 **und** `Mineral` 8 ·
+  `vitamin` 19 **und** `Vitamin` 6 · `AAS` 26, `AAS (17aa oral)` 22,
+  `aas_oral` 21, `aas_injectable` 10. **28 Zeilen ohne Wert.**
+
+  `[cmd]` **Vorlage liegt vor:** `taxonomy/medication_classes` (157
+  Klassen), `taxonomy/routes` (10).
+
+  `[read]` **Ohne das ist „zeig mir alle Peptide" nicht beantwortbar** —
+  und Enhanced/Peptide/Supplement nicht sauber trennbar.
+
+### Medikamente — Zeilen da, Spalten leer
+
+- [ ] **C-198: ATC, CAS und CYP der 498 Wirkstoffe nachziehen**
+  (neu 2026-08-22).
+
+  `[cmd]` `medical.medication_active_substances` **498 Zeilen** — aber
+  **ATC 56, CAS 56, CYP 22**. `risk_flags` **498**,
+  `contraindications` **433**, `regulatory_state` 498, `sources` 498.
+
+  `[read]` **Erst pruefen, ob Kimi mehr hat als wir importiert haben.**
+  Fable meldet, die Quelle sei gleich duenn (1:1-Import) — dann ist es
+  eine Recherchefrage an Kimi, keine Importfrage. **Das entscheidet,
+  ob der Punkt zu Codex oder in die naechste Crawl-Runde geht.**
+
+- [ ] **C-199: `medication_regulatory` als eigene Entitaet**
+  (neu 2026-08-22). **Zu entscheiden.**
+
+  `[cmd]` Kimi fuehrt 498 Saetze mit `wada.status`, `wada.tue_context`
+  und `change_history`. Im Repo liegt das als `regulatory_state jsonb`
+  in `active_substances` — **es gibt keine vierte Tabelle.**
+
+  `[cmd]` **WADA ist nur zu 11 % bewertet** (56 von 498).
+
+  `[read]` **Fuer Wettkampfsportler ist WADA-Status eine Abfrage, kein
+  Anhaengsel.** Als `jsonb` ist er nicht filterbar.
+
+### Was gar kein Schema hat
+
+- [ ] **C-200: Symptomtabelle anlegen und fuellen** (neu 2026-08-22).
+  **Beantwortet C-183, gehoert zu C-159 und C-171.**
+
+  `[cmd]` Quelle liegt bereit: `symptom_ontology_seed.json` **32
+  Symptome**, `taxonomy/symptom_ids` **34**, dazu
+  `community_side_effect_patterns` 37 als Ergaenzung (admin-only).
+
+  `[cmd]` **C-159:** *„keine Symptomtabelle im ganzen Schema"* — gilt
+  weiter.
+
+  `[read]` **Der naechste Schritt danach:** 32 Symptome gegen
+  `lab_trigger_index` (77 Analyte) — *„welcher Blutwert klaert das?"*
+  Die kuratierte SYMPTOM→BIOMARKER-Map fehlt bei Kimi ebenfalls.
+
+- [ ] **C-201: Der Populations-Atlas hat kein Schema**
+  (neu 2026-08-22). **Der groesste ungenutzte Posten.**
+
+  `[cmd]` `population_response_atlas` **425** (39 Felder je Satz) ·
+  `population_response_synthesis` 277 · `population_applicability_atlas`
+  277 · `response_confounder_graph` **799 Kanten** ·
+  `response_modifier_graph` 453 · `response_resolver_index` 277 ·
+  `context_requirement_index` 277 · `exposure_response_summary` 182 ·
+  `personal_response_readiness_model` 66. **Im Repo: nichts davon.**
+
+  `[cmd]` Ein Satz traegt: `dose_response`, `magnitude` mit
+  Konfidenzintervall und `missing_reason`, `confounders[]` je mit
+  `status` (`demonstrated` / `strongly_supported`), `population` nach
+  Geschlecht, Alter, Gesundheits- und Trainingsstand, `evidence_grade`,
+  `inference_type`, PMIDs.
+
+  `[read]` **Das ist der Rohstoff fuer „wirkt das bei mir?"** — eine
+  belegte Richtung je Endpunkt fuer die passende Population, statt
+  einer erfundenen Zahl.
+
+- [ ] **C-202: Produkte, Marken, Hersteller, Kennungen**
+  (neu 2026-08-22). **Blockiert durch Tom-Entscheidungen.**
+
+  `[cmd]` `products` 50 · `brands` 120 · `manufacturers` 63 ·
+  `product_identifiers` 72 (crawl_035) · `product_media` 3
+  (Schema-Muster). **Im Repo: kein Produkt- oder Markenschema.**
+
+  `[cmd]` Der 035-Handoff markiert `REQUIRES_REPO_SCHEMA` fuer
+  `product_identifiers`, `product_media`, `packaging_versions`,
+  `batch/COA`, `vision_learning_examples`.
+
+  `[cmd]` **Duenn:** `thai_label` 2 %, GTIN/EAN fuer Medikamente 0
+  (Quelle nicht offen), Supplement-Kennungen 30 von 31 unverifiziert.
+
+- [ ] **C-203: Beobachtung gegen Erwartung (crawl_033)**
+  (neu 2026-08-22).
+
+  `[cmd]` Fertig spezifiziert, schema-only: `observation_event_schema`
+  (14 Felder), `observation_comparison_semantics` (**20 Zustaende**),
+  `_rules` 20, Result-Schemata, 13 Flagship- und 46
+  Synthetik-Beispiele, `personal_baseline_methodology`,
+  `comparison_context_requirements`. **RCV-Inventar fuer 55 von 66
+  Markern.**
+
+  `[read]` Damit waere sagbar: *„Dein CK ist drei Tage nach
+  Beintraining hoch — RCV 39,3 sagt: noch im Rauschen."*
+
+- [ ] **C-204: `lab_trigger_index` — 77 Analyte** (neu 2026-08-22).
+
+  `[cmd]` 77 Analyte neben dem vorhandenen `lab_marker_catalog` (66,
+  davon 64 mit LOINC). **Kein Schemaneubau noetig**, laut Aufnahme
+  sofort importierbar.
+
+- [ ] **C-205: `research_hold_registry` — 305 Saetze**
+  (neu 2026-08-22).
+
+  `[cmd]` **305 Eintraege** als Kuratierungs-Warteschlange. Koennte wie
+  `lib/evidenz/registry.ts` (C-180) erzeugt werden statt in die
+  Datenbank zu wandern.
+
+- [ ] **C-206: Die Community-Schicht — nur Admin, oder nie?**
+  (neu 2026-08-22). **Entscheidung Tom.**
+
+  `[cmd]` 16 Dateien aus crawl_034, ausdruecklich `admin_only` und
+  E-Klasse: `community_intelligence_patterns` 123 ·
+  `exposure_patterns` 86 · `lab_patterns` 43 · `side_effect_patterns`
+  37 · `stack_patterns` 31 · `science_delta` 30 ·
+  `product_quality_signals` 40 · `terminology` (71 Begriffe, 179
+  Aliase) · `_canonical_id_lookup` 1.131 Namen.
+
+  `[read]` **Deskriptiv, keine Empfehlungen, keine Praevalenzen.**
+  Taugt als Coach-Werkzeug (*„was die Szene glaubt vs. was belegt
+  ist"*), nie als Empfehlung. **Zu entscheiden, ob es je nutzersichtbar
+  wird.**
+
+### Was Tom entscheiden muss, bevor Codex anfaengt
+
+- [ ] **C-207: Vier Entscheidungen aus dem 035-Handoff**
+  (neu 2026-08-22). **Entscheidung Tom. Blockiert C-202 und die
+  Cam-Funktionen.**
+
+  `[cmd]` Der Handoff nennt sie ausdruecklich als offen:
+  **Speicherweg** (hybrid / remote-url / object-store) ·
+  **Datenschutz und Aufbewahrung je Rechtsraum** (Thai PDPA, DSGVO) ·
+  **Einwilligungs-Fuehrung** · **Wahl des Vision-Modells**.
+
+  `[cmd]` Fertig liegen: **vier Cam-Contracts** (medication,
+  supplement, peptide, prescription), `vision_product_match_signals`,
+  `vision_learning_example_schema`, `product_media_rights_registry`
+  (8 Rechte-Zustaende). **Spezifiziert bis zu den OCR-Grenzen.**
+
+### Widerlegt oder ueberholt
+
+- [ ] **C-208: C-129 neu fassen — der Import ist laengst passiert**
+  (neu 2026-08-22).
+
+  `[cmd]` C-129 heisst *„brauchbar, aber nicht importiert"* und ist
+  gegen **237 Substanzen und 56 Wirkstoffe** geschrieben. Heute:
+  **290 Substanzen, 498 Wirkstoffe** — und `medication_active_substances`
+  498, `_formulations` 453, `_products` 448 stehen **1:1 im Repo**.
+
+  `[read]` **Der Punkt beschreibt einen Zustand, den es nicht mehr
+  gibt.** Er ist neu zu schreiben — die Luecke ist nicht der Import,
+  sondern die Tiefe (C-195).
+
+- [ ] **C-209: Die laufende Instanz wird nach einem Kettenschritt nicht
+  nachgezogen** (neu 2026-08-22).
+
+  `[cmd]` `tools/testdaten-pruefen.ts` ist rot:
+  `medical.biomarker_reference_ranges` ist live **564**, erwartet
+  **566**. `[cmd]` `144_biomarker_spec_enrichment.ts:771` und
+  `schema-sollstand.json:1459` sagen beide 566.
+
+  `[read]` **Kein Fehler in C-191 und keiner in C-192.** Die Erwartung
+  ist der neuen Wahrheit vorausgeeilt, der Bestand nicht nachgezogen —
+  weil wir bewusst nie gegen die laufende Datenbank arbeiten und
+  niemand einen Schritt dafuer hat.
+
+  `[read]` **Ein dauerhaft roter Waechter wird uebersprungen.** Dasselbe
+  Muster wie der Selbsttest, der die falsche Pruefung feuerte.
+
+- [ ] **C-210: Die 28 fehlenden Naehrstofftexte — was ist gemeint?**
+  (neu 2026-08-22). Aus G-126.
+
+  `[cmd]` **`nutrition.nutrient_defs` hat keine Beschreibungsspalte.**
+  Die zwanzig Spalten sind `code, name_de, name_en, unit, group_de,
+  group_en, sort_index, display_tier, is_always_computed,
+  is_partly_computed, formula, rda_male, rda_female, rda_unit, name_th,
+  group_th, assessment_horizon_days, assessment_horizon_source,
+  assessment_horizon_notes, parent_code`.
+
+  `[cmd]` **`name_th` und `group_th` sind 138 von 138 leer** — also
+  alle, nicht 28. Die Thai-Vermutung ist widerlegt (Codex, C-191).
+
+  `[read]` **Voellig offen, worauf sich die 28 beziehen.** Ohne
+  Klaerung raet der Naechste wieder.
+
+- [ ] **C-211: Selen fehlt im BLS-Katalog** (neu 2026-08-22). Aus
+  G-126.
+
+  `[cmd]` **Kein Selen-Eintrag in `nutrient_defs`.** `S` ist Schwefel,
+  `SER` ist Serin, `SE` existiert nicht. Codex hat keinen Code
+  erfunden — richtig so.
+
+  `[read]` **BLS 4.0 ist die einzige zulaessige Quelle.** Fuehrt BLS
+  Selen nicht, wird nichts angelegt und der Punkt geschlossen.
+
+- [ ] **C-212: `CHORL` haengt nicht im Naehrstoffbaum** (neu
+  2026-08-22). Aus G-126.
+
+  `[cmd]` Cholesterin heisst `CHORL` und hat `parent_code = NULL`.
+  `[cmd]` Von 138 Naehrstoffen sind 40 Wurzeln und 98 Kinder —
+  gewollt oder nicht, ist ungeprueft. Codex hat gemeldet statt gesetzt.
+
+- [ ] **C-213: C-124-E8 — die Arzt-Hinweis-Schwelle ist offen** (neu
+  2026-08-22). Aus C-124.
+
+  `[read]` Der Abschluss von C-124 haelt fest, dass **E8 mit E5 nicht
+  beantwortet** ist. Die uebrigen Modalitaetsfragen sind geklaert, diese
+  nicht.
+
+- [ ] **C-214: Fuenf Modalitaeten ohne Registerzeile** (neu
+  2026-08-22). Aus C-124.
+
+  `[cmd]` **Foam Rolling, Yoga, Meditation, Nap, Breathwork** haben
+  keinen Eintrag in `recovery_modality_evidence` (32 Records, 14
+  Modalitaetsbezeichnungen).
+
+  `[read]` **Sie behaupten jetzt nichts** statt einen Wert zu erfinden —
+  der richtige Zwischenzustand. Offen ist, ob ein spaeterer Crawl sie
+  liefert oder ob sie dauerhaft ohne Aussage bleiben.
+
+- [ ] **A-48: Der Index wird vor dem `git add` nicht geleert** (neu
+  2026-08-22).
+
+  `[cmd]` **`LAUFEND.md` ist im falschen Commit gelandet** — `863124c`
+  traegt Fables Evidenz-Code **und** den Eintrag *„G-133 laeuft bei
+  Claude Code"*. Zwei logische Changes in einem Commit.
+
+  `[read]` Die Datei war seit Stunden gestaged, und `git add <pfad>`
+  entfernt nichts aus dem Index. **Die Projektanweisung sagt, vor jedem
+  Commit `git diff --cached --name-only` zu lesen** — das Skript hat
+  es ausgegeben, der Orchestrator hat es erst nachher gelesen.
+
+  **Zu bauen:** vor einem gezielten Commit den Index leeren, oder die
+  gestagten Pfade gegen die beabsichtigten pruefen und abbrechen, wenn
+  sie abweichen.

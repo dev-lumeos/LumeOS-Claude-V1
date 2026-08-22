@@ -13,9 +13,9 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | **C-105 · C-124 · GO-21 · G-89** vier beantwortete Fragen umsetzen | Evidenz-Modell | 2026-08-22 |
+| **Fable** | *frei* | | |
 | **Claude Code** | *frei* | | |
-| **Codex** | **C-187** fuenf Datenluecken, ein Durchgang | `supabase/_pipeline/` | 2026-08-22 |
+| **Codex** | **C-195** `substance_catalog` auf die Kimi-Tiefe | `supabase/_pipeline/` | 2026-08-22 |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung — **Crawl 35 laeuft** | extern, siehe unten | 2026-08-20 |
 
 `[cmd]` **Wo die Kimi-Ergebnisse liegen** (Tom, 2026-08-22):
@@ -41,7 +41,6 @@ wenn er rausgeht, nicht wenn er geschrieben ist.**
 
 | Auftrag | Bereich |
 |---|---|
-| **G-140** Spalte *„Stufe"* zeigt das Abo-Tier | `apps/web` |
 | **G-149** Einnahme-Haken bucht auf den Stichtag statt auf heute | `apps/web` |
 
 **Klein und blockierend**
@@ -58,7 +57,6 @@ laufen als ein Auftrag.
 
 | Auftrag | Bereich |
 |---|---|
-| **C-180** 181 Evidenz-Konstanten importieren | `supabase/` |
 | **C-183** Symptom-Ontologie (21 Records) | `supabase/` |
 | **C-176** `biomarkerDetails.ts` (121 KB) | `supabase/` |
 | **G-141** Onboarding nach ADR (7 Schritte) | `apps/web` |
