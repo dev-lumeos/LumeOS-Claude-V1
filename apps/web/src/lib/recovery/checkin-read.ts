@@ -30,6 +30,17 @@ export type CheckinZeile = {
   stress_level: number | null
   resting_hr: number | null
   hrv_rmssd: number | null
+  // G-160: die Schlafhygiene-Felder — auf allen 170 dev-Zeilen
+  // gefuellt (gemessen 2026-08-23). Optional, damit bestehende
+  // Fixtures (score.test.ts) gueltig bleiben.
+  caffeine_mg?: number | null
+  alcohol_units?: number | null
+  screen_time_before_bed?: number | null
+  /**
+   * `[cmd]` Bewusst NICHT gelesen, weil live leer (0 von 170):
+   * sleep_start_time, sleep_end_time, work_stress, life_stress —
+   * gemeldet, nicht mit Platzhaltern gezeigt.
+   */
 }
 
 export type CheckinStand = {
@@ -45,6 +56,8 @@ const SPALTEN = [
   'entry_date', 'checkin_time', 'sleep_hours', 'sleep_quality',
   'subjective_feeling', 'mood', 'energy_level', 'motivation',
   'soreness', 'pain_areas', 'stress_level', 'resting_hr', 'hrv_rmssd',
+  // G-160: fuer die Schlafhygiene-Kachel.
+  'caffeine_mg', 'alcohol_units', 'screen_time_before_bed',
 ].join(', ')
 
 /**

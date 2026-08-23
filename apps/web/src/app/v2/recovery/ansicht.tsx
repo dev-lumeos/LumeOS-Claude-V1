@@ -188,8 +188,10 @@ export function RecoveryAnsicht({
       )}
       {tab === 'checkin' && <RecCheckin />}
       {tab === 'muscles' && <RecMuscleMap />}
-      {tab === 'hrv' && <RecHRV />}
-      {tab === 'sleep' && <RecSleep />}
+      {/* G-160: HRV und Sleep zeigen die erfassten Werte, sobald
+          Check-ins geladen sind — der Entwurf ist nur noch Rueckfall. */}
+      {tab === 'hrv' && <RecHRV stand={checkins} />}
+      {tab === 'sleep' && <RecSleep stand={checkins} />}
       {tab === 'modalities' && <RecModalities />}
       {tab === 'overtraining' && <RecOvertraining />}
       {tab === 'protocols' && <RecProtocols />}

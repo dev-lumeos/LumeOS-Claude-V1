@@ -39,7 +39,10 @@ export type ScoreZeile = {
   sleep_hours_used: number | null
   soreness_avg_used: number | null
   soreness_reported_count: number | null
-  acwr_used: number | null
+  // G-160: `acwr_used` ist raus — C-195 hat die Spalte entfernt, und
+  // ein Select darauf liess JEDE Score-Zeile scheitern: die Kachel
+  // fiel still auf den Entwurf zurueck (gemessen 2026-08-23, Kopf
+  // zeigte wieder „Score 84 · Good" statt der Tabellenzeile).
   nutrition_source: string | null
   hrv_source: string | null
   modality_bonus_source: string | null
@@ -86,10 +89,7 @@ function baueZeile(r: Record<string, unknown>): ScoreZeile {
     label: LABEL[code],
     gewicht: GEWICHT[code],
     punkte: zahl(r[`${code}_points`]) ?? 0,
-    quelle: code === 'nutrition' ? (r.nutrition_source as string) ?? null
-      : code === 'training_load'
-        ? (zahl(r.acwr_used) != null ? `ACWR ${zahl(r.acwr_used)?.toFixed(2)}` : null)
-        : null,
+    quelle: code === 'nutrition' ? (r.nutrition_source as string) ?? null : null,
   }))
 
   return {
@@ -102,7 +102,6 @@ function baueZeile(r: Record<string, unknown>): ScoreZeile {
     sleep_hours_used: zahl(r.sleep_hours_used),
     soreness_avg_used: zahl(r.soreness_avg_used),
     soreness_reported_count: zahl(r.soreness_reported_count),
-    acwr_used: zahl(r.acwr_used),
     nutrition_source: (r.nutrition_source as string) ?? null,
     hrv_source: (r.hrv_source as string) ?? null,
     modality_bonus_source: (r.modality_bonus_source as string) ?? null,
@@ -115,7 +114,7 @@ const SPALTEN = [
   'sleep_quality_points', 'sleep_duration_points', 'subjective_feeling_points',
   'soreness_points', 'training_load_points', 'nutrition_points', 'mood_points',
   'modality_bonus', 'sleep_hours_used', 'soreness_avg_used',
-  'soreness_reported_count', 'acwr_used', 'nutrition_source', 'hrv_source',
+  'soreness_reported_count', 'nutrition_source', 'hrv_source',
   'modality_bonus_source', 'fallbacks',
 ].join(',')
 
