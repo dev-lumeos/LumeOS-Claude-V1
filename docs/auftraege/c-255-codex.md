@@ -2,13 +2,44 @@
 
 Bericht: `docs/berichte/c-255-codex.md`
 
-**VORBEREITET, NOCH NICHT FREIGEGEBEN.** Er setzt voraus, dass C-253
-durch ist. Widerspricht dein C-253-Bericht einer Zahl hier, kommt ein
-**Korrekturblock oben drauf** — der Auftrag wird nicht neu geschrieben.
+---
+
+## KORREKTURBLOCK, nachgereicht 2026-08-23 — LIES DAS ZUERST
+
+**C-256 kommt vor dem Loeschen.** Fable hat es in G-175 gefunden.
+
+`[cmd]` `supabase/_pipeline/_testdaten/testdaten-einspielen.ts`
+Zeile **3311** und **3327** joinen auf
+`supplements.supplement_catalog` und schreiben dessen UUIDs nach
+`stack_items`. **Der Fremdschluessel zeigt seit C-243 auf
+`supplements.supplements`** — der Lauf bricht live mit FK-Fehler und
+rollt zurueck.
+
+`[cmd]` **Ein Tabellentausch reicht nicht:** der Join
+`supplement_catalog.slug = supplements.slug` trifft **0 Zeilen.** Der
+alte Katalog fuehrt sprechende Slugs (`creatine-monohydrate`,
+`alpha-gpc`), der neue die alte `substance_catalog`-ID
+(`sub_9f9bb8c160`).
+
+`[read]` **Wird `supplement_catalog` entfernt, bevor der Seed
+umgestellt ist, bricht der Testdaten-Schritt an einer Tabelle, die es
+nicht mehr gibt** — und das Nachweiskonto laesst sich nicht mehr
+aufbauen.
+
+**Also: erst den Seed umstellen, dann loeschen.** Fuer Creatine und
+Omega-3 loest die Aliasbruecke. **Fuer Magnesium und Vitamin D3 nicht**
+— dort ist C-244 offen (Substanz gegen Form) und die Entscheidung
+liegt bei Tom. **Melde diese beiden, statt eine Form zu waehlen.**
+
+`[read]` **Wenn der Seed dadurch nicht vollstaendig wird: melden und
+das Loeschen zurueckstellen.** Ein Nachweiskonto, das sich nicht
+aufbauen laesst, ist teurer als zwei Tabellen, die noch eine Runde
+stehenbleiben.
 
 ---
 
 ## Schritt 5 des Supplements-Neuaufbaus: die alten Kataloge weg
+
 
 `[cmd]` **Kein Lesepfad braucht sie mehr.** `git grep
 supplement_catalog` in `lib/supplements/`, `v2/medical/` und

@@ -269,3 +269,7 @@ wenn er erzeugt und geprüft wird.
 | **G-175** Das Nachweiskonto hat kein bekanntes Passwort | offen | 5413 |
 | **C-253** Die IDs der beiden Kataloge sind nicht vergleichbar — | offen | 5435 |
 | **C-255** Schritt 5 — die alten Kataloge weg | offen | 5461 |
+| **C-256** Der Testdaten-Schritt insertet gegen den alten Katalog | offen | 5487 |
+| **G-176** Der Katalog zeigt 50 von 290 und laesst den Rest nicht | offen | 5521 |
+| **G-177** Das Substanzdetail erklaert, was fehlt, statt zu zeigen, | offen | 5553 |
+| **G-178** Reiter und Fussleiste nennen verschiedene Zahlen — 298 | offen | 5597 |

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-23.** 225 offen, 0 in Arbeit.
+**Stand: 2026-08-23.** 229 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5483,3 +5483,136 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Nicht loeschen, bevor das belegt ist.** Eine Tabelle mit
   566 Zeilen ist in einer Sekunde weg und in einer Woche nicht
   rekonstruierbar.
+
+- [ ] **C-256: Der Testdaten-Schritt insertet gegen den alten Katalog
+  und bricht live** (neu 2026-08-23). Aus G-175, von Fable gemeldet.
+
+  `[cmd]` `supabase/_pipeline/_testdaten/testdaten-einspielen.ts`
+  Zeile **3311** und **3327** joinen auf
+  `supplements.supplement_catalog` und schreiben dessen UUIDs nach
+  `supplements.stack_items`.
+
+  `[cmd]` **Der Fremdschluessel zeigt seit C-243 woandershin:**
+  `stack_items_supplement_id_fkey FOREIGN KEY (supplement_id)
+  REFERENCES supplements.supplements(id) ON DELETE RESTRICT`.
+
+  `[cmd]` **Der Lauf bricht deshalb live mit FK-Fehler**
+  (`5c2b2577-…` not present) und rollt zurueck. Fable hat es beim
+  G-175-Lauf getroffen; der Bestand blieb unversehrt, weil der
+  G-175-Block in einem frueheren Transaktionsabschnitt sitzt.
+
+  `[read]` **Ein blosser Tabellentausch reicht nicht.** `[cmd]` Der
+  Join `supplement_catalog.slug = supplements.slug` trifft **0
+  Zeilen**: der alte Katalog fuehrt sprechende Slugs
+  (`creatine-monohydrate`, `alpha-gpc`, `bcaas`), der neue traegt die
+  alte `substance_catalog`-ID (`sub_9f9bb8c160`, `sub_4480fcfa86`).
+
+  `[read]` **Damit haengt der Seed an derselben offenen Frage wie
+  C-244** — Substanz gegen Form. Fuer Creatine und Omega-3 loest die
+  Aliasbruecke; fuer Magnesium und Vitamin D3 nicht, weil Kimi dort nur
+  Salzformen fuehrt.
+
+  **BLOCKIERT C-255.** `[read]` Wird `supplement_catalog` entfernt,
+  bevor der Seed umgestellt ist, bricht der Testdaten-Schritt nicht
+  mehr am Fremdschluessel, sondern an einer Tabelle, die es nicht mehr
+  gibt. **Der Neuaufbau des Nachweiskontos waere dann gar nicht mehr
+  moeglich.**
+
+- [ ] **G-176: Der Katalog zeigt 50 von 290 und laesst den Rest nicht
+  erreichen** (neu 2026-08-23). Von Tom am Bildschirm gefunden.
+
+  **Tom, 2026-08-23:** *„supplement zeigt nur ‚50 von 290 Treffern —
+  Suche verfeinern fuer mehr.'"*
+
+  `[cmd]` `apps/web/src/app/v2/supplements/substanz-detail.tsx:314`:
+
+      return { gezeigt: menge.slice(0, 50), gesamt: menge.length }
+
+  `[cmd]` **Ein hartes Limit im Client**, nicht in der Datenbank — der
+  Lesepfad holt alle 290. Eingebracht von `d019b79` (C-229/G-172,
+  2026-08-23).
+
+  `[read]` **Es widerspricht dem Punkt, aus dem es stammt.** G-172
+  verlangte einen Scroll-Container, **weil bei 566 Zeilen unten alles
+  unerreichbar war.** Der Container ist gebaut — und dann auf 50
+  begrenzt. **Damit ist die Liste wieder unerreichbar, nur an anderer
+  Stelle.**
+
+  `[read]` **Und die Aufforderung geht ins Leere:** wer nicht weiss,
+  wie die Substanz heisst, kann die Suche nicht verfeinern. Genau dafuer
+  ist ein Katalog da — zum Blaettern, nicht zum Nachschlagen eines
+  bekannten Namens.
+
+  `[read]` **Warum das Limit vermutlich da ist:** 290 Zeilen auf einmal
+  im DOM. Das ist ein echter Grund, aber *„Suche verfeinern"* ist die
+  falsche Antwort darauf. **Wie es geloest wird — Nachladen beim
+  Scrollen, Blaettern, oder alle 290 mit virtualisierter Liste — ist
+  eine Entscheidung, keine Vorgabe.** Erst messen, was 290 Zeilen im
+  DOM tatsaechlich kosten.
+
+- [ ] **G-177: Das Substanzdetail erklaert, was fehlt, statt zu zeigen,
+  was da ist** (neu 2026-08-23). Von Tom am Bildschirm gefunden.
+
+  `[read]` **Das Fenster zu Bromocriptine zeigt:** einen Satz
+  Beschreibung, zwei Alias-Chips, **fuenf zugeklappte Bloecke** —
+  *Sicherheit 2 Felder · Rechtslage 5 Felder · Warnschwellen 2 Felder ·
+  Kennungen 5 Felder · Evidenz 7 Felder* — und darunter, **aufgeklappt
+  und laenger als alles andere zusammen**, den Abschnitt *„OHNE QUELLE
+  IM NEUEN KATALOG"*.
+
+  `[read]` **Der Nutzer liest dort Saetze wie:** *„Die alte
+  Breittabelle fuehrte `cyp` als jsonb. Im neuen Schema gibt es dafuer
+  keine Spalte"* und *„`supplement_lab_effects` existiert als Tabelle;
+  die Zuordnung zu den 290 ist nicht gemessen und wird deshalb nicht
+  gezeigt."*
+
+  **Das ist ein Bericht, kein Produkt.** Er gehoert nach
+  `docs/berichte/`, nicht in die Oberflaeche. Die Begruendung, warum
+  ein Feld fehlt, interessiert den Orchestrator — **nicht den, der
+  wissen will, was Bromocriptine ist.**
+
+  `[read]` **Die Gewichtung ist genau verkehrt:** was da ist, ist
+  zugeklappt und auf Feldzahlen reduziert; was fehlt, ist ausgeklappt
+  und ausfuehrlich begruendet. **Es ist dieselbe Kritik wie damals** —
+  *„hat keine informationen wie was ist das ueberhaupt, tonnen
+  eintraege aber keine beschreibung"* (Tom zu C-229).
+
+  `[cmd]` **Der Inhalt ist da:** `supplement_dosing` 566 ·
+  `pharmacology` 566 · `safety` 290 · `warnings` 290 · `wada` 290 ·
+  `quality` 237 · `regulatory` 1119 · `identifiers` 1226 ·
+  `organ_risks` 1450. **Er wird nur nicht gezeigt.**
+
+  **Zu tun:** die Bloecke mit Inhalt aufgeklappt oder wenigstens mit
+  ihrem Inhalt angerissen, statt mit *„N Felder"*. Der
+  Luecken-Abschnitt zugeklappt, gekuerzt, oder ganz raus.
+
+  `[read]` **Was von den Luecken sichtbar bleiben soll, ist eine
+  Entscheidung** — dass eine Angabe fehlt, ist fuer den Nutzer
+  relevant; **warum sie im Schema fehlt, nicht.**
+
+  `[read]` **Nebenbefund:** unter dem Namen steht `sub_b38d752d32`. Das
+  ist die technische Kennung. Ob sie dorthin gehoert, ist zu
+  entscheiden — im Katalog eines Nutzers vermutlich nicht.
+
+- [ ] **G-178: Reiter und Fussleiste nennen verschiedene Zahlen — 298
+  gegen 290** (neu 2026-08-23). Von Tom am Bildschirm gefunden.
+
+  `[cmd]` Im Bild: Reiter *„Katalog 298"*, Fussleiste *„50 von 290
+  Treffern"*, Gruppen-Chips **154 + 61 + 75 = 290**.
+
+  `[cmd]` **Die Datenbank sagt 290:** `im_katalog` true = 290, davon
+  `supplement` 154, `enhanced` 75, `peptide` 61. **0 ohne Gruppe, 0
+  ohne Kategorie.**
+
+  `[cmd]` **Der Code erklaert die 298 nicht.** `ansicht.tsx:91` setzt
+  `count: substanzAnzahl` aus `substanzen.length`; die Fussleiste
+  zaehlt dieselbe Liste nach `filtereGruppe` und `filtereKategorien`.
+  Bei offenem Gate und ohne Kategorienwahl geben beide dieselbe Zahl.
+
+  `[annahme]` **Drei Moeglichkeiten, keine gemessen:** der Screenshot
+  zeigt einen aelteren Build · ein RSC-Zwischenstand haelt eine alte
+  Liste · es gibt einen dritten Zaehlweg, den `git grep` nicht
+  gefunden hat.
+
+  **Zu tun: am Bildschirm nachmessen**, nicht im Code weiterraten.
+  `apps/web` war zum Zeitpunkt des Funds von zwei Agenten belegt.

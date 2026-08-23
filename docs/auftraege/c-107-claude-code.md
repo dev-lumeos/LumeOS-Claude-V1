@@ -2,21 +2,163 @@
 
 Bericht: `docs/berichte/c-107-claude-code.md`
 
-**VORBEREITET, NOCH NICHT FREIGEGEBEN.** Er setzt voraus, dass C-254
-durch ist. Widerspricht dein C-254-Bericht etwas hier, kommt ein
-**Korrekturblock oben drauf** — der Auftrag wird nicht neu geschrieben.
+---
 
-**Vorbemerkung, weil es sonst doppelte Arbeit gaebe:** Der
-Orchestrator wollte hier zuerst **G-172** beauftragen (Deutsch,
-Scrollbarkeit, ein Katalog). `[cmd]` **Das ist erledigt** — Commit
-`d019b79` vom 2026-08-23, Test `deutsch-und-scroll.test.ts` **5 von 5
-gruen**, selbst nachgefahren. Der Punkt stand nur noch offen im
-Register. **Genau deshalb wird vor jedem Auftrag gemessen statt aus dem
-Register abgeschrieben.**
+## KORREKTURBLOCK, nachgereicht 2026-08-23 — G-176 kommt zuerst
+
+**Tom hat es am Bildschirm gefunden**, waehrend du liefst:
+
+> *„supplement zeigt nur ‚50 von 290 Treffern — Suche verfeinern fuer
+> mehr.'"*
+
+`[cmd]` `apps/web/src/app/v2/supplements/substanz-detail.tsx:314`:
+
+    return { gezeigt: menge.slice(0, 50), gesamt: menge.length }
+
+`[cmd]` **Ein hartes Limit im Client**, nicht in der Datenbank — der
+Lesepfad holt alle 290. Eingebracht von `d019b79` (C-229/G-172).
+
+`[read]` **Es widerspricht dem Punkt, aus dem es stammt.** G-172
+verlangte den Scroll-Container, **weil unten alles unerreichbar war.**
+Der Container ist gebaut — und dann auf 50 begrenzt. Die Liste ist
+wieder unerreichbar, nur an anderer Stelle.
+
+`[read]` **Und die Aufforderung geht ins Leere:** wer nicht weiss, wie
+die Substanz heisst, kann die Suche nicht verfeinern. **Ein Katalog ist
+zum Blaettern da**, nicht zum Nachschlagen eines bekannten Namens.
+
+**Zu tun, vor allem anderen in diesem Auftrag:** die 290 erreichbar
+machen.
+
+`[read]` **Wie, ist deine Entscheidung** — Nachladen beim Scrollen,
+Blaettern, oder alle 290 mit virtualisierter Liste. **Miss zuerst, was
+290 Zeilen im DOM tatsaechlich kosten**, statt das Limit blind zu
+entfernen oder blind zu behalten. `[cmd]` Die Zahl vor und nach der
+Aenderung gehoert in den Bericht.
+
+**Nachweis:** die letzte Substanz der Liste muss erreichbar sein, ohne
+etwas zu tippen. Nenn sie namentlich.
+
+---
+
+## ZWEITER KORREKTURBLOCK — G-177, und er wiegt schwerer
+
+Tom hat das Detailfenster zu **Bromocriptine** geschickt. Es zeigt:
+einen Satz Beschreibung, zwei Alias-Chips, **fuenf zugeklappte
+Bloecke** — *Sicherheit 2 Felder · Rechtslage 5 Felder ·
+Warnschwellen 2 Felder · Kennungen 5 Felder · Evidenz 7 Felder* — und
+darunter, **aufgeklappt und laenger als alles andere zusammen**, den
+Abschnitt *„OHNE QUELLE IM NEUEN KATALOG"*.
+
+Der Nutzer liest dort:
+
+> *„Die alte Breittabelle fuehrte `cyp` als jsonb. Im neuen Schema gibt
+> es dafuer keine Spalte — auch nicht in `supplement_pharmacology`."*
+
+**Das ist ein Bericht, kein Produkt.** Er gehoert nach
+`docs/berichte/`. Die Begruendung, warum ein Feld im Schema fehlt,
+interessiert den Orchestrator — **nicht den, der wissen will, was
+Bromocriptine ist.**
+
+`[read]` **Die Gewichtung ist genau verkehrt:** was da ist, ist
+zugeklappt und auf Feldzahlen reduziert; was fehlt, ist ausgeklappt und
+ausfuehrlich begruendet.
+
+`[read]` **Es ist dieselbe Kritik wie zu C-229:** *„hat keine
+informationen wie was ist das ueberhaupt, tonnen eintraege aber keine
+beschreibung."* Der Katalog hat sie geloest, **das Detail nicht.**
+
+`[cmd]` **Der Inhalt ist da und wird nur nicht gezeigt:**
+`supplement_dosing` 566 · `pharmacology` 566 · `safety` 290 ·
+`warnings` 290 · `wada` 290 · `quality` 237 · `regulatory` 1119 ·
+`identifiers` 1226 · `organ_risks` 1450.
+
+**Zu tun:** die Bloecke mit Inhalt aufgeklappt oder wenigstens
+angerissen, statt mit *„N Felder"*. Der Luecken-Abschnitt zugeklappt,
+gekuerzt oder ganz raus.
+
+`[read]` **Was von den Luecken bleiben soll, ist eine Entscheidung, die
+du begruendest:** dass eine Angabe fehlt, ist fuer den Nutzer relevant.
+**Warum sie im Schema fehlt, nicht.**
+
+`[read]` **`substanz-luecken.ts` bleibt trotzdem richtig** — die
+Messung dahinter ist gut und war der halbe Ertrag von C-252. **Sie
+gehoert nur nicht in dieser Ausfuehrlichkeit vor den Nutzer.**
+
+**Nebenbefund:** unter dem Namen steht `sub_b38d752d32`, die technische
+Kennung. Ob sie dorthin gehoert, entscheide und begruende.
+
+### Was der Nutzer sehen will — gemessen, nicht geraten
+
+**Tom, 2026-08-23:** *„das detail sieht erstens scheisse aus und
+zweitens alles ausser was ein user wirklich sehen will."*
+
+`[cmd]` **Ich habe alle 290 sichtbaren Substanzen durchgezaehlt.** Was
+gefuellt ist:
+
+| Angabe | von 290 |
+|---|---:|
+| Beschreibung | **290** |
+| `evidence.overall_grade` | **290** |
+| **`evidence.summary_en` — der Fliesstext** | **288** |
+| `wada.wada_status` | **290** |
+| `warnings.doctor_consult_flags` | 128 |
+| `dosing.studied_dose_ranges` | 83 |
+
+Was leer ist:
+
+| Angabe | von 290 |
+|---|---:|
+| **`dosing.guideline_dose`** | **0** |
+| `warnings.warning_en` | **0** |
+| `dosing.status = 'unbekannt'` | 115 |
+| `safety.status = 'unbekannt'` | 53 |
+
+`[read]` **Damit ist der Befund schaerfer als „falsche Gewichtung".**
+Der wichtigste Inhalt — **eine Evidenz-Zusammenfassung bei 288 von
+290** — steckt zugeklappt hinter *„Evidenz · 7 Felder"*, waehrend der
+Lueckenbericht ausgeklappt die Flaeche fuellt.
+
+`[cmd]` **Und *„N Felder"* zaehlt Spalten, nicht Angaben.** Bromocriptine
+(`sub_b30d752d32`): *„Sicherheit · 2 Felder"* — beide tragen
+`unknown`, `status` ist `unbekannt`. **Die Zahl verspricht Inhalt, den
+es nicht gibt.**
+
+**Reihenfolge, die sich aus den Zahlen ergibt:**
+
+1. Name, Gruppe, Kategorie
+2. Beschreibung — **290/290**
+3. **Evidenz: Grad UND Zusammenfassungstext, offen** — 290 und 288
+4. **WADA-Status** — 290/290, bei Enhanced und Peptiden der Grund,
+   warum jemand nachsieht
+5. Dosis, wo vorhanden — 83/290; wo nicht, **ein Satz statt eines
+   leeren Blocks**
+6. Warnungen und Arzt-Flags — 128/290
+7. Kennungen ganz unten, zugeklappt — CAS, PubChem, InChIKey liest
+   niemand beim Einkaufen
+8. Lueckenbericht raus
+
+`[read]` **Das ist eine Reihenfolge, kein Entwurf.** Wie es aussieht,
+ist deine Arbeit — Tom sagt, die jetzige Fassung sieht schlecht aus,
+und das ist mit Zahlen nicht zu beheben.
+
+`[read]` **Ein Block ohne Inhalt wird nicht als leerer Block gezeigt.**
+Entweder er faellt weg, oder er sagt in einem Satz, dass die Angabe
+fehlt — **nicht *„2 Felder"*, hinter denen zweimal `unknown` steht.**
+
+**Nachweis:** Bromocriptine und eine gut gefuellte Substanz nebeneinander,
+beide namentlich. Bei beiden muss ohne Klick erkennbar sein, was der
+Stoff ist, wie gut er belegt ist und ob er auf der WADA-Liste steht.
+
+
+**G-178 hat sich erledigt** — Tom, 2026-08-23: *„liste zeigt nun 290."*
+Die 298 im Reiter waren ein alter Build im Browser. Nicht suchen.
+
 
 ---
 
 ## Der Katalog steht. Jetzt fehlt ihm der Inhalt.
+
 
 Nach Schritt 4 liest die Oberflaeche `supplements.supplements` mit
 `im_katalog`. `[cmd]` **290 Eintraege sichtbar, 276 verborgen.**
