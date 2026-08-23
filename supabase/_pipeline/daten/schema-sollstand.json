@@ -1286,6 +1286,180 @@
       "tabelle": "food_preference_search_targets",
       "zeigt_auf": "foods",
       "schritt": "075"
+    },
+    {
+      "name": "supplement_aliases_supplement_id_fkey",
+      "tabelle": "supplement_aliases",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_tags_supplement_id_fkey",
+      "tabelle": "supplement_tags",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_portions_supplement_id_fkey",
+      "tabelle": "supplement_portions",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_dosing_supplement_id_fkey",
+      "tabelle": "supplement_dosing",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_pharmacology_supplement_id_fkey",
+      "tabelle": "supplement_pharmacology",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_safety_supplement_id_fkey",
+      "tabelle": "supplement_safety",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_quality_supplement_id_fkey",
+      "tabelle": "supplement_quality",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_warnings_supplement_id_fkey",
+      "tabelle": "supplement_warnings",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_evidence_supplement_id_fkey",
+      "tabelle": "supplement_evidence",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_wada_supplement_id_fkey",
+      "tabelle": "supplement_wada",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_protocol_requirements_supplement_id_fkey",
+      "tabelle": "supplement_protocol_requirements",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_aas_ratings_supplement_id_fkey",
+      "tabelle": "supplement_aas_ratings",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_organ_risks_supplement_id_fkey",
+      "tabelle": "supplement_organ_risks",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_regulatory_supplement_id_fkey",
+      "tabelle": "supplement_regulatory",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_identifiers_supplement_id_fkey",
+      "tabelle": "supplement_identifiers",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_lab_effects_supplement_id_fkey",
+      "tabelle": "supplement_lab_effects",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_monitoring_supplement_id_fkey",
+      "tabelle": "supplement_monitoring",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_field_sources_supplement_id_fkey",
+      "tabelle": "supplement_field_sources",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_nutrients_supplement_id_fkey",
+      "tabelle": "supplement_nutrients",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "intake_schedule_supplement_id_fkey",
+      "tabelle": "intake_schedule",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "user_inventory_supplement_id_fkey",
+      "tabelle": "user_inventory",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "user_supplement_settings_supplement_id_fkey",
+      "tabelle": "user_supplement_settings",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "stack_templates_supplement_id_fkey",
+      "tabelle": "stack_templates",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "stack_template_items_supplement_id_fkey",
+      "tabelle": "stack_template_items",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "user_supplement_cycles_supplement_id_fkey",
+      "tabelle": "user_supplement_cycles",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_cycle_events_supplement_id_fkey",
+      "tabelle": "supplement_cycle_events",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_reminders_supplement_id_fkey",
+      "tabelle": "supplement_reminders",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_protocols_supplement_id_fkey",
+      "tabelle": "supplement_protocols",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
+    },
+    {
+      "name": "supplement_protocol_items_supplement_id_fkey",
+      "tabelle": "supplement_protocol_items",
+      "zeigt_auf": "supplements",
+      "schritt": "136"
     }
   ],
   "funktionen": [
@@ -2541,9 +2715,14 @@
         "molecular_formula",
         "cas_candidates",
         "molecular_weight",
-        "peptide_sequence"
+        "peptide_sequence",
+        "gruppe",
+        "kategorie",
+        "description",
+        "monitoring",
+        "filter"
       ],
-      "spalten_herkunft": "[cmd] C-195: 134_substance_catalog.ts erweitert den Substanzkatalog schema-only von 31 auf 60 Spalten. [cmd] C-197: drei kanonische Taxonomiespalten daneben: canonical_category, canonical_compound_type und canonical_routes; Rohspalten bleiben erhalten."
+      "spalten_herkunft": "[cmd] C-195: 134_substance_catalog.ts erweitert den Substanzkatalog schema-only von 31 auf 60 Spalten. [cmd] C-197: drei kanonische Taxonomiespalten daneben: canonical_category, canonical_compound_type und canonical_routes; Rohspalten bleiben erhalten. [cmd] C-228: gruppe, kategorie, description und monitoring fuer Katalogfilter und Details. [cmd] C-230: filter buendelt kategorie je gruppe fuer bedienbare Katalogleisten."
     },
     {
       "schema": "supplements",
@@ -3085,6 +3264,892 @@
         ]
       },
       "grants_herkunft": "145_medications_schema.sql vergibt authenticated DML und service_role ALL explizit.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_groups",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_categories",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_tag_definitions",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplements",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_aliases",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_tags",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_portions",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_dosing",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_pharmacology",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_safety",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_quality",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_warnings",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_evidence",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_wada",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_protocol_requirements",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_aas_ratings",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_organ_risks",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_regulatory",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_identifiers",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_lab_effects",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_monitoring",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_field_sources",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_nutrients",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "intake_schedule",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "user_inventory",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "user_supplement_settings",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id.",
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "user_id",
+        "supplement_id",
+        "status",
+        "reminder_times",
+        "low_stock_days",
+        "note_de",
+        "note_en",
+        "note_th",
+        "created_at",
+        "updated_at"
+      ]
+    },
+    {
+      "schema": "supplements",
+      "name": "stack_templates",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated SELECT und service_role ALL explizit; Katalog-/Template-Daten sind lesbar.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "stack_template_items",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated SELECT und service_role ALL explizit; Katalog-/Template-Daten sind lesbar.",
+      "zeilenschutzart": "oeffentlich"
+    },
+    {
+      "schema": "supplements",
+      "name": "user_supplement_cycles",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id oder den besitzenden Parent.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_cycle_events",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id oder den besitzenden Parent.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_reminders",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id oder den besitzenden Parent.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_protocols",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id oder den besitzenden Parent.",
+      "zeilenschutzart": "eigene_zeilen"
+    },
+    {
+      "schema": "supplements",
+      "name": "supplement_protocol_items",
+      "schritt": "136",
+      "rls": true,
+      "policies": [
+        "SELECT",
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "grants": {
+        "authenticated": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE"
+        ],
+        "service_role": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "DELETE",
+          "REFERENCES",
+          "TRIGGER",
+          "TRUNCATE"
+        ]
+      },
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt authenticated DML und service_role ALL explizit; RLS prueft user_id oder den besitzenden Parent.",
       "zeilenschutzart": "eigene_zeilen"
     }
   ],

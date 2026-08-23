@@ -344,12 +344,21 @@ for (const t of SOLL.tabellen) {
 console.log(`Policy-Bed. ${bedOk}/${bedGeprueft} Tabellen wie erwartet`)
 
 // --- 5. Fremdschluessel namentlich ---
-const fkIst = new Set(sql(
-  `SELECT conname FROM pg_constraint
-   WHERE contype='f' AND connamespace='nutrition'::regnamespace;`).map(r => r[0]))
+const fkIst = new Set<string>()
+for (const [schema, name] of sql(
+  `SELECT n.nspname, c.conname
+   FROM pg_constraint c
+   JOIN pg_namespace n ON n.oid = c.connamespace
+   WHERE c.contype='f'
+     AND n.nspname NOT LIKE 'pg_%'
+     AND n.nspname <> 'information_schema';`)) {
+  fkIst.add(name)
+  fkIst.add(`${schema}.${name}`)
+}
 let fkOk = 0
 for (const f of SOLL.fremdschluessel) {
-  if (fkIst.has(f.name)) fkOk++
+  const key = f.schema ? `${f.schema}.${f.name}` : f.name
+  if (fkIst.has(key)) fkOk++
   else fehler.push(`Fremdschluessel: ${f.name} (${f.tabelle} -> ${f.zeigt_auf}) FEHLT` +
     ` — erzeugt von Schritt ${f.schritt}`)
 }

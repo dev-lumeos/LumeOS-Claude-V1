@@ -33,6 +33,7 @@ type KimiSubstance = JsonObject & {
   compound_type?: string
   category?: string
   subcategory?: string | null
+  description?: string | null
   chemical_form?: string | null
   external_ids?: JsonObject
   platform_classes?: string[]
@@ -66,6 +67,10 @@ type SubstanceRow = {
   compound_type: string | null
   category: string | null
   subcategory: string | null
+  gruppe: string | null
+  kategorie: string | null
+  filter: string | null
+  description: string | null
   canonical_category: string | null
   canonical_compound_type: string | null
   canonical_routes: string[] | null
@@ -94,6 +99,7 @@ type SubstanceRow = {
   regulatory: JsonObject | null
   quality: JsonObject | null
   warning_triggers: JsonObject | null
+  monitoring: JsonObject | null
   evidence_provenance: JsonObject | null
   wada_status: string | null
   prescription_required: boolean | null
@@ -369,8 +375,192 @@ function canonicalTaxonomy(row: KimiSubstance): {
   }
 }
 
+function groupFromSource(domain: string, category: string | null): string | null {
+  if (domain === 'kimi_supplement' || domain === 'lumeos_local') return 'supplement'
+  if (domain === 'kimi_peptide') return 'peptide'
+  if (domain === 'kimi_performance') return 'enhanced'
+  const foldedCategory = fold(category)
+  if (domain === 'f05_candidate') {
+    if ([
+      'herbal', 'nootropic', 'anti aging', 'adaptogen', 'spec 05',
+    ].includes(foldedCategory)) return 'supplement'
+    if (['peptide', 'hgh gh mimetic'].includes(foldedCategory)) return 'peptide'
+    if ([
+      'steroid injectable', 'steroid oral', 'sarm', 'diuretic',
+      'insulin glucose', 'pct hpta', 'estrogen control', 'fat burner',
+      'thyroid',
+    ].includes(foldedCategory)) return 'enhanced'
+  }
+  return null
+}
+
+function normalizeCategoryLabel(value: string | null): string | null {
+  const folded = fold(value)
+  if (!folded) return null
+  switch (folded) {
+    case 'herbal botanical':
+    case 'botanical kraeuter':
+    case 'herbal':
+    case 'herb botanical':
+    case 'herb':
+      return 'botanical'
+    case 'minerals':
+    case 'mineral':
+      return 'mineral'
+    case 'vitamins':
+    case 'vitamin':
+      return 'vitamin'
+    case 'vitamins efas':
+      return 'essential_fatty_acid'
+    case 'protein amino acids':
+    case 'protein amino acid':
+    case 'amino acids':
+      return 'protein_amino_acid'
+    case 'nootropics':
+    case 'nootropic':
+    case 'nootropikum':
+      return 'nootropic'
+    case 'adaptogens':
+    case 'adaptogen':
+      return 'adaptogen'
+    case 'longevity':
+    case 'anti aging':
+    case 'longevity anti aging':
+      return 'longevity'
+    case 'sports performance':
+    case 'sports ingredient':
+    case 'performance':
+      return 'sports_performance'
+    case 'metabolic weight':
+    case 'metabolic':
+      return 'metabolic'
+    case 'hormonal support':
+    case 'hormonal':
+      return 'hormonal'
+    case 'sleep':
+      return 'sleep'
+    case 'gut health':
+      return 'gut_health'
+    case 'recovery':
+      return 'recovery'
+    case 'other':
+      return 'other'
+    case 'aas':
+    case 'steroid injectable':
+      return 'injectable_aas'
+    case 'aas 17aa oral':
+    case 'steroid oral':
+      return 'oral_aas'
+    case 'peptides':
+    case 'peptide':
+      return 'peptide'
+    case 'sarm':
+      return 'sarm'
+    case 'gh gh sekretagog':
+    case 'hgh gh mimetic':
+      return 'growth_hormone_axis'
+    case 'diuretikum':
+    case 'diuretic':
+      return 'diuretic'
+    case 'insulin glucose modulator':
+    case 'insulin glucose':
+      return 'insulin_glucose'
+    case 'serm hpta modulator':
+    case 'pct hpta':
+      return 'pct_hpta'
+    case 'aromatasehemmer estrogen kontrolle':
+    case 'estrogen control':
+      return 'estrogen_control'
+    case 'fatburner stimulans':
+    case 'fat burner':
+      return 'fat_loss_stimulants'
+    case 'schilddruesenhormon':
+    case 'thyroid':
+      return 'thyroid'
+    case 'stimulans':
+      return 'stimulant'
+    default:
+      return folded.replace(/\s+/g, '_')
+  }
+}
+
+function normalizeSubcategory(value: string | null): string | null {
+  const folded = fold(value)
+  if (!folded) return null
+  if (folded.startsWith('growth hormone axis')) return 'growth_hormone_axis'
+  if (folded.startsWith('metabolic incretin')) return 'metabolic_incretin'
+  if (folded.startsWith('recovery tissue')) return 'recovery_tissue'
+  if (folded.startsWith('neuro cognitive')) return 'neuro_cognitive'
+  if (folded.startsWith('designer steroid')) return 'designer_steroids'
+  if (folded.startsWith('prohormone')) return 'prohormones'
+  if (folded.startsWith('aromatase inhibitor')) return 'aromatase_inhibitor'
+  if (folded.startsWith('fat loss stimulants')) return 'fat_loss_stimulants'
+  if (folded.startsWith('stimulant')) return 'stimulant'
+  if (folded.startsWith('sarm adjacent')) return 'sarm_adjacent'
+  if (folded.startsWith('gh secretagogue')) return 'gh_secretagogue'
+  return normalizeCategoryLabel(value)
+}
+
+function categoryFromSource(domain: string, category: string | null, compoundType: string | null, subcategory: string | null): string | null {
+  const group = groupFromSource(domain, category)
+  if ((group === 'peptide' || group === 'enhanced') && normalizeSubcategory(subcategory)) {
+    return normalizeSubcategory(subcategory)
+  }
+  if (domain === 'f05_candidate' && fold(category) === 'spec 05') return normalizeCategoryLabel(compoundType)
+  if (domain === 'f05_candidate') return normalizeCategoryLabel(category) ?? normalizeCategoryLabel(compoundType)
+  return normalizeCategoryLabel(category) ?? normalizeCategoryLabel(compoundType)
+}
+
+function filterFromGroupCategory(gruppe: string | null, kategorie: string | null): string | null {
+  if (!gruppe || !kategorie) return null
+  // C-230: Filter sind Produktbuendelungen fuer die Leiste:
+  // nie unter fuenf Substanzen ein eigener Filter; gebuendelt wird nach Zweck, nicht nach Wirkmechanismus.
+  if (gruppe === 'peptide') {
+    if (['growth_hormone_axis', 'metabolic_hgh_fragment', 'myostatin_pathway'].includes(kategorie)) return 'wachstumshormon'
+    if (kategorie === 'metabolic_incretin') return 'stoffwechsel'
+    if (['muscle_growth_axis', 'recovery_tissue', 'recovery_anti_inflammatory'].includes(kategorie)) return 'muskel_gewebe'
+    if (['neuro_cognitive', 'neuropeptides', 'neuro_bioregulator'].includes(kategorie)) return 'neuro'
+    if (['reproductive', 'reproductive_axis', 'reproductive_social', 'melanocortin'].includes(kategorie)) return 'hormone'
+    if ([
+      'longevity_immune', 'longevity', 'immune_bioregulator', 'antimicrobial_immune',
+      'hematopoietic', 'antioxidant', 'mitochondrial', 'vascular_bioregulator',
+    ].includes(kategorie)) return 'longevity_immun'
+    if (['peptide', 'other'].includes(kategorie)) return 'ohne_zuordnung'
+  }
+  if (gruppe === 'enhanced') {
+    if (kategorie === 'injectable_aas') return 'injizierbare_aas'
+    if (kategorie === 'oral_aas') return 'orale_aas'
+    if (['sarm', 'sarm_adjacent'].includes(kategorie)) return 'sarm'
+    if (['designer_steroids', 'prohormones'].includes(kategorie)) return 'prohormone'
+    if ([
+      'ancillaries', 'pct_hpta', 'estrogen_control', 'aromatase_inhibitor',
+      'serm', 'insulin_glucose', 'thyroid',
+    ].includes(kategorie)) return 'begleitmedikation'
+    if (['fat_loss_stimulants', 'stimulant', 'diuretic', 'mitochondrial_uncoupler'].includes(kategorie)) return 'fatburner'
+    if ([
+      'ppar_agonist', 'rev_erb_agonist', 'gh_secretagogue',
+      'gaba_b_agonist', 'atypical_antidepressant_opioid_agonist',
+    ].includes(kategorie)) return 'sonstige'
+  }
+  if (gruppe === 'supplement') {
+    if (kategorie === 'botanical') return 'botanicals'
+    if (kategorie === 'longevity') return 'longevity'
+    if (kategorie === 'mineral') return 'mineralstoffe'
+    if (kategorie === 'vitamin') return 'vitamine'
+    if (kategorie === 'nootropic') return 'nootropika'
+    if (['sports_performance', 'stimulant'].includes(kategorie)) return 'sportnahrung'
+    if (kategorie === 'adaptogen') return 'adaptogene'
+    if (kategorie === 'protein_amino_acid') return 'protein_aminos'
+    if ([
+      'metabolic', 'hormonal', 'sleep', 'recovery',
+      'gut_health', 'essential_fatty_acid', 'other',
+    ].includes(kategorie)) return 'uebrige'
+  }
+  return null
+}
+
 function emptyLiftedFields(): Pick<SubstanceRow,
-  'safety' | 'interactions' | 'regulatory' | 'quality' | 'warning_triggers' | 'evidence_provenance' |
+  'safety' | 'interactions' | 'regulatory' | 'quality' | 'warning_triggers' | 'monitoring' | 'evidence_provenance' |
   'wada_status' | 'prescription_required' | 'dose_ceiling_value' | 'dose_ceiling_unit' |
   'recommendable' | 'warning_only' | 'physician_referral' | 'athlete_flag' |
   'missing_fields' | 'missing_reason' | 'last_verified' | 'needs_review' | 'confidence' |
@@ -383,6 +573,7 @@ function emptyLiftedFields(): Pick<SubstanceRow,
     regulatory: null,
     quality: null,
     warning_triggers: null,
+    monitoring: null,
     evidence_provenance: null,
     wada_status: null,
     prescription_required: null,
@@ -423,6 +614,7 @@ function liftedFields(row: KimiSubstance & { domain: string }): ReturnType<typeo
     regulatory,
     quality: nullableObject(row.quality),
     warning_triggers: warningTriggers,
+    monitoring: nullableObject(row.monitoring),
     evidence_provenance: nullableObject(row.evidence_provenance),
     wada_status: nullableText(regulatory?.wada_status),
     prescription_required: isPerformance ? null : nullableBoolean(regulatory?.prescription_required),
@@ -536,13 +728,22 @@ for (const row of kimiRows) {
   const hasHalfLife = pharmacology.half_life !== undefined && pharmacology.half_life !== null && pharmacology.half_life !== ''
   const lifted = liftedFields(row)
   const taxonomy = canonicalTaxonomy(row)
+  const category = row.category ? String(row.category) : null
+  const compoundType = row.compound_type ? String(row.compound_type) : null
+  const subcategory = row.subcategory ? String(row.subcategory) : null
+  const gruppe = groupFromSource(row.domain, category)
+  const kategorie = categoryFromSource(row.domain, category, compoundType, subcategory)
   substances.set(row.id, {
     id: row.id,
     canonical_name: row.canonical_name,
     domain: row.domain,
-    compound_type: row.compound_type ? String(row.compound_type) : null,
-    category: row.category ? String(row.category) : null,
-    subcategory: row.subcategory ? String(row.subcategory) : null,
+    compound_type: compoundType,
+    category,
+    subcategory,
+    gruppe,
+    kategorie,
+    filter: filterFromGroupCategory(gruppe, kategorie),
+    description: nullableText(row.description),
     ...taxonomy,
     chemical_form: row.chemical_form ? String(row.chemical_form) : null,
     aliases: textArray(row.aliases),
@@ -593,13 +794,20 @@ for (const row of local.supplements) {
   const id = match ?? deterministicId('local', row.slug)
   if (!match) {
     localOwn++
+    const category = row.category ? String(row.category) : null
+    const gruppe = groupFromSource('lumeos_local', category)
+    const kategorie = categoryFromSource('lumeos_local', category, null, null)
     substances.set(id, {
       id,
       canonical_name: row.name,
       domain: 'lumeos_local',
       compound_type: null,
-      category: row.category ? String(row.category) : null,
+      category,
       subcategory: null,
+      gruppe,
+      kategorie,
+      filter: filterFromGroupCategory(gruppe, kategorie),
+      description: null,
       canonical_category: null,
       canonical_compound_type: null,
       canonical_routes: null,
@@ -660,13 +868,21 @@ for (const row of f05.substances) {
   const id = match ?? deterministicId('f05', row.name)
   if (!match) {
     f05Own++
+    const category = row.category_source ? String(row.category_source) : null
+    const compoundType = row.class ? String(row.class) : null
+    const gruppe = groupFromSource('f05_candidate', category)
+    const kategorie = categoryFromSource('f05_candidate', category, compoundType, null)
     substances.set(id, {
       id,
       canonical_name: row.name,
       domain: 'f05_candidate',
-      compound_type: row.class ? String(row.class) : null,
-      category: row.category_source ? String(row.category_source) : null,
+      compound_type: compoundType,
+      category,
       subcategory: null,
+      gruppe,
+      kategorie,
+      filter: filterFromGroupCategory(gruppe, kategorie),
+      description: null,
       canonical_category: null,
       canonical_compound_type: null,
       canonical_routes: null,
@@ -744,6 +960,64 @@ const sourceRows = sources.sort((a, b) => `${a.substance_id}|${a.source_catalog}
 const expectedCanonicalCategory = substanceRows.filter(row => row.canonical_category !== null).length
 const expectedCanonicalCompoundType = substanceRows.filter(row => row.canonical_compound_type !== null).length
 const expectedCanonicalRoutes = substanceRows.filter(row => row.canonical_routes !== null).length
+const expectedGroups = {
+  supplement: substanceRows.filter(row => row.gruppe === 'supplement').length,
+  peptide: substanceRows.filter(row => row.gruppe === 'peptide').length,
+  enhanced: substanceRows.filter(row => row.gruppe === 'enhanced').length,
+}
+const expectedKategorie = substanceRows.filter(row => row.kategorie !== null).length
+const expectedFilter = substanceRows.filter(row => row.filter !== null).length
+const expectedDescription = substanceRows.filter(row => row.description !== null).length
+const expectedMonitoring = substanceRows.filter(row => row.monitoring !== null).length
+const expectedFilterCounts = [
+  ['peptide', 'wachstumshormon', 25],
+  ['peptide', 'stoffwechsel', 10],
+  ['peptide', 'muskel_gewebe', 10],
+  ['peptide', 'neuro', 9],
+  ['peptide', 'hormone', 7],
+  ['peptide', 'longevity_immun', 11],
+  ['peptide', 'ohne_zuordnung', 10],
+  ['enhanced', 'injizierbare_aas', 36],
+  ['enhanced', 'orale_aas', 32],
+  ['enhanced', 'sarm', 22],
+  ['enhanced', 'prohormone', 16],
+  ['enhanced', 'begleitmedikation', 41],
+  ['enhanced', 'fatburner', 25],
+  ['enhanced', 'sonstige', 5],
+  ['supplement', 'botanicals', 68],
+  ['supplement', 'longevity', 40],
+  ['supplement', 'mineralstoffe', 36],
+  ['supplement', 'vitamine', 34],
+  ['supplement', 'nootropika', 31],
+  ['supplement', 'sportnahrung', 26],
+  ['supplement', 'adaptogene', 22],
+  ['supplement', 'protein_aminos', 19],
+  ['supplement', 'uebrige', 31],
+] as const
+const expectedFilterValuesSql = expectedFilterCounts
+  .map(([gruppe, filter, count]) => `('${gruppe}', '${filter}', ${count})`)
+  .join(',\n      ')
+const actualFilterCounts = new Map<string, number>()
+for (const row of substanceRows) {
+  if (!row.gruppe || !row.filter) continue
+  const key = `${row.gruppe}|${row.filter}`
+  actualFilterCounts.set(key, (actualFilterCounts.get(key) ?? 0) + 1)
+}
+if (expectedGroups.supplement !== 307 || expectedGroups.peptide !== 82 || expectedGroups.enhanced !== 177) {
+  fail(`C-228 Gruppen-Erwartung verfehlt: supplement ${expectedGroups.supplement}, peptide ${expectedGroups.peptide}, enhanced ${expectedGroups.enhanced}; erwartet 307/82/177`)
+}
+if (expectedKategorie !== substanceRows.length) {
+  fail(`C-228 Kategorien: ${expectedKategorie}, erwartet ${substanceRows.length}`)
+}
+if (expectedFilter !== substanceRows.length) {
+  fail(`C-230 Filter: ${expectedFilter}, erwartet ${substanceRows.length}`)
+}
+for (const [gruppe, filter, count] of expectedFilterCounts) {
+  const actual = actualFilterCounts.get(`${gruppe}|${filter}`) ?? 0
+  if (actual !== count) fail(`C-230 Filter ${gruppe}/${filter}: ${actual}, erwartet ${count}`)
+}
+if (expectedDescription !== 290) fail(`C-228 description: ${expectedDescription}, erwartet 290`)
+if (expectedMonitoring !== 46) fail(`C-228 monitoring: ${expectedMonitoring}, erwartet 46`)
 
 const expectedSubstanceRows = kimiRows.length + localOwn + f05Own
 const expectedSourceRows = kimiRows.length + local.supplements.length + f05.substances.length + crossLinks
@@ -829,6 +1103,11 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   cas_candidates                TEXT[],
   molecular_weight              NUMERIC,
   peptide_sequence              TEXT,
+  gruppe                        TEXT,
+  kategorie                     TEXT,
+  description                   TEXT,
+  monitoring                    JSONB,
+  filter                        TEXT,
   CHECK (jsonb_typeof(external_ids) = 'object'),
   CHECK (jsonb_typeof(platform) = 'object'),
   CHECK (jsonb_typeof(evidence) = 'object'),
@@ -848,6 +1127,7 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   CHECK (regulatory IS NULL OR jsonb_typeof(regulatory) = 'object'),
   CHECK (quality IS NULL OR jsonb_typeof(quality) = 'object'),
   CHECK (warning_triggers IS NULL OR jsonb_typeof(warning_triggers) = 'object'),
+  CHECK (monitoring IS NULL OR jsonb_typeof(monitoring) = 'object'),
   CHECK (evidence_provenance IS NULL OR jsonb_typeof(evidence_provenance) = 'object'),
   CHECK (missing_fields IS NULL OR jsonb_typeof(missing_fields) = 'array'),
   CHECK (missing_reason IS NULL OR jsonb_typeof(missing_reason) = 'object'),
@@ -856,6 +1136,9 @@ CREATE TABLE IF NOT EXISTS supplements.substance_catalog (
   CHECK (source_count IS NULL OR source_count >= 0),
   CHECK (primary_source_count IS NULL OR primary_source_count >= 0),
   CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited')),
+  CHECK (gruppe IS NULL OR gruppe IN ('supplement', 'peptide', 'enhanced')),
+  CHECK (kategorie IS NULL OR btrim(kategorie) <> ''),
+  CHECK (filter IS NULL OR btrim(filter) <> ''),
   CHECK (jsonb_typeof(raw) = 'object')
 );
 
@@ -891,7 +1174,12 @@ ALTER TABLE supplements.substance_catalog
   ADD COLUMN IF NOT EXISTS molecular_formula TEXT,
   ADD COLUMN IF NOT EXISTS cas_candidates TEXT[],
   ADD COLUMN IF NOT EXISTS molecular_weight NUMERIC,
-  ADD COLUMN IF NOT EXISTS peptide_sequence TEXT;
+  ADD COLUMN IF NOT EXISTS peptide_sequence TEXT,
+  ADD COLUMN IF NOT EXISTS gruppe TEXT,
+  ADD COLUMN IF NOT EXISTS kategorie TEXT,
+  ADD COLUMN IF NOT EXISTS description TEXT,
+  ADD COLUMN IF NOT EXISTS monitoring JSONB,
+  ADD COLUMN IF NOT EXISTS filter TEXT;
 
 DO $$
 BEGIN
@@ -919,6 +1207,11 @@ BEGIN
     ALTER TABLE supplements.substance_catalog
       ADD CONSTRAINT substance_catalog_warning_triggers_json_check
       CHECK (warning_triggers IS NULL OR jsonb_typeof(warning_triggers) = 'object');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_monitoring_json_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_monitoring_json_check
+      CHECK (monitoring IS NULL OR jsonb_typeof(monitoring) = 'object');
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_evidence_provenance_json_check') THEN
     ALTER TABLE supplements.substance_catalog
@@ -959,6 +1252,21 @@ BEGIN
     ALTER TABLE supplements.substance_catalog
       ADD CONSTRAINT substance_catalog_wada_status_check
       CHECK (wada_status IS NULL OR wada_status IN ('prohibited', 'monitored', 'not_prohibited'));
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_gruppe_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_gruppe_check
+      CHECK (gruppe IS NULL OR gruppe IN ('supplement', 'peptide', 'enhanced'));
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_kategorie_not_blank_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_kategorie_not_blank_check
+      CHECK (kategorie IS NULL OR btrim(kategorie) <> '');
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'substance_catalog_filter_not_blank_check') THEN
+    ALTER TABLE supplements.substance_catalog
+      ADD CONSTRAINT substance_catalog_filter_not_blank_check
+      CHECK (filter IS NULL OR btrim(filter) <> '');
   END IF;
 END $$;
 
@@ -1008,6 +1316,15 @@ CREATE INDEX IF NOT EXISTS substance_catalog_canonical_compound_type_idx
   WHERE canonical_compound_type IS NOT NULL;
 CREATE INDEX IF NOT EXISTS substance_catalog_canonical_routes_idx
   ON supplements.substance_catalog USING gin(canonical_routes);
+CREATE INDEX IF NOT EXISTS substance_catalog_gruppe_idx
+  ON supplements.substance_catalog(gruppe)
+  WHERE gruppe IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_kategorie_idx
+  ON supplements.substance_catalog(gruppe, kategorie)
+  WHERE gruppe IS NOT NULL AND kategorie IS NOT NULL;
+CREATE INDEX IF NOT EXISTS substance_catalog_filter_idx
+  ON supplements.substance_catalog(gruppe, filter)
+  WHERE gruppe IS NOT NULL AND filter IS NOT NULL;
 CREATE INDEX IF NOT EXISTS substance_catalog_dose_ceiling_idx
   ON supplements.substance_catalog(dose_ceiling_value)
   WHERE dose_ceiling_value IS NOT NULL;
@@ -1092,7 +1409,7 @@ INSERT INTO supplements.substance_catalog (
   missing_fields, missing_reason, last_verified, needs_review, confidence,
   source_count, primary_source_count, unii, pubchem_cid, chembl_id,
   inchikey, molecular_formula, cas_candidates, molecular_weight, peptide_sequence,
-  source_primary, raw
+  gruppe, kategorie, description, monitoring, filter, source_primary, raw
 )
 SELECT
   payload->>'id',
@@ -1159,6 +1476,11 @@ SELECT
   END,
   NULLIF(payload->>'molecular_weight', '')::numeric,
   NULLIF(payload->>'peptide_sequence', ''),
+  NULLIF(payload->>'gruppe', ''),
+  NULLIF(payload->>'kategorie', ''),
+  NULLIF(payload->>'description', ''),
+  NULLIF(payload->'monitoring', 'null'::jsonb),
+  NULLIF(payload->>'filter', ''),
   payload->>'source_primary',
   COALESCE(payload->'raw', '{}'::jsonb)
 FROM tmp_substance_catalog
@@ -1220,6 +1542,11 @@ ON CONFLICT (id) DO UPDATE SET
   cas_candidates = EXCLUDED.cas_candidates,
   molecular_weight = EXCLUDED.molecular_weight,
   peptide_sequence = EXCLUDED.peptide_sequence,
+  gruppe = EXCLUDED.gruppe,
+  kategorie = EXCLUDED.kategorie,
+  description = EXCLUDED.description,
+  monitoring = EXCLUDED.monitoring,
+  filter = EXCLUDED.filter,
   source_primary = EXCLUDED.source_primary,
   raw = EXCLUDED.raw,
   is_active = true,
@@ -1265,6 +1592,15 @@ DECLARE
   v_canonical_category integer;
   v_canonical_compound_type integer;
   v_canonical_routes integer;
+  v_gruppe_null integer;
+  v_gruppe_supplement integer;
+  v_gruppe_peptide integer;
+  v_gruppe_enhanced integer;
+  v_kategorie integer;
+  v_filter integer;
+  v_filter_mismatches integer;
+  v_description integer;
+  v_monitoring integer;
   v_safety integer;
   v_regulatory integer;
   v_warning_triggers integer;
@@ -1313,6 +1649,7 @@ BEGIN
       OR regulatory IS NOT NULL
       OR quality IS NOT NULL
       OR warning_triggers IS NOT NULL
+      OR monitoring IS NOT NULL
       OR evidence_provenance IS NOT NULL
       OR wada_status IS NOT NULL
       OR prescription_required IS NOT NULL
@@ -1349,6 +1686,14 @@ BEGIN
   SELECT count(*) INTO v_canonical_category FROM supplements.substance_catalog WHERE canonical_category IS NOT NULL;
   SELECT count(*) INTO v_canonical_compound_type FROM supplements.substance_catalog WHERE canonical_compound_type IS NOT NULL;
   SELECT count(*) INTO v_canonical_routes FROM supplements.substance_catalog WHERE canonical_routes IS NOT NULL;
+  SELECT count(*) INTO v_gruppe_null FROM supplements.substance_catalog WHERE gruppe IS NULL;
+  SELECT count(*) INTO v_gruppe_supplement FROM supplements.substance_catalog WHERE gruppe = 'supplement';
+  SELECT count(*) INTO v_gruppe_peptide FROM supplements.substance_catalog WHERE gruppe = 'peptide';
+  SELECT count(*) INTO v_gruppe_enhanced FROM supplements.substance_catalog WHERE gruppe = 'enhanced';
+  SELECT count(*) INTO v_kategorie FROM supplements.substance_catalog WHERE kategorie IS NOT NULL;
+  SELECT count(*) INTO v_filter FROM supplements.substance_catalog WHERE filter IS NOT NULL;
+  SELECT count(*) INTO v_description FROM supplements.substance_catalog WHERE description IS NOT NULL;
+  SELECT count(*) INTO v_monitoring FROM supplements.substance_catalog WHERE monitoring IS NOT NULL;
   SELECT count(*) INTO v_safety FROM supplements.substance_catalog WHERE safety IS NOT NULL;
   SELECT count(*) INTO v_regulatory FROM supplements.substance_catalog WHERE regulatory IS NOT NULL;
   SELECT count(*) INTO v_warning_triggers FROM supplements.substance_catalog WHERE warning_triggers IS NOT NULL;
@@ -1389,8 +1734,8 @@ BEGIN
   IF v_f05_sources <> 320 THEN
     RAISE EXCEPTION 'substance_catalog_sources F05: %, erwartet 320', v_f05_sources;
   END IF;
-  IF v_columns <> 63 THEN
-    RAISE EXCEPTION 'substance_catalog Spalten: %, erwartet 63', v_columns;
+  IF v_columns <> 68 THEN
+    RAISE EXCEPTION 'substance_catalog Spalten: %, erwartet 68', v_columns;
   END IF;
   IF v_non_kimi_lifted <> 0 THEN
     RAISE EXCEPTION 'C-196: % nicht-Kimi-Zeilen haben gehobene Kimi-Spalten befuellt', v_non_kimi_lifted;
@@ -1407,9 +1752,60 @@ BEGIN
   IF v_canonical_routes <> ${expectedCanonicalRoutes} THEN
     RAISE EXCEPTION 'C-197 canonical_routes: %, erwartet ${expectedCanonicalRoutes}', v_canonical_routes;
   END IF;
+  IF v_gruppe_null <> 0 THEN
+    RAISE EXCEPTION 'C-228: % Substanzen ohne Gruppe', v_gruppe_null;
+  END IF;
+  IF v_gruppe_supplement <> ${expectedGroups.supplement} THEN
+    RAISE EXCEPTION 'C-228 gruppe supplement: %, erwartet ${expectedGroups.supplement}', v_gruppe_supplement;
+  END IF;
+  IF v_gruppe_peptide <> ${expectedGroups.peptide} THEN
+    RAISE EXCEPTION 'C-228 gruppe peptide: %, erwartet ${expectedGroups.peptide}', v_gruppe_peptide;
+  END IF;
+  IF v_gruppe_enhanced <> ${expectedGroups.enhanced} THEN
+    RAISE EXCEPTION 'C-228 gruppe enhanced: %, erwartet ${expectedGroups.enhanced}', v_gruppe_enhanced;
+  END IF;
+  IF v_kategorie <> ${expectedKategorie} THEN
+    RAISE EXCEPTION 'C-228 kategorie: %, erwartet ${expectedKategorie}', v_kategorie;
+  END IF;
+  IF v_filter <> ${expectedFilter} THEN
+    RAISE EXCEPTION 'C-230 filter: %, erwartet ${expectedFilter}', v_filter;
+  END IF;
+  WITH expected(gruppe, filter, expected_count) AS (
+    VALUES
+      ${expectedFilterValuesSql}
+  ),
+  actual AS (
+    SELECT gruppe, filter, count(*)::integer AS actual_count
+    FROM supplements.substance_catalog
+    GROUP BY gruppe, filter
+  ),
+  compared AS (
+    SELECT
+      COALESCE(expected.gruppe, actual.gruppe) AS gruppe,
+      COALESCE(expected.filter, actual.filter) AS filter,
+      COALESCE(expected.expected_count, 0) AS expected_count,
+      COALESCE(actual.actual_count, 0) AS actual_count
+    FROM expected
+    FULL OUTER JOIN actual
+      ON actual.gruppe = expected.gruppe
+     AND actual.filter = expected.filter
+    WHERE COALESCE(expected.expected_count, 0) <> COALESCE(actual.actual_count, 0)
+  )
+  SELECT count(*) INTO v_filter_mismatches FROM compared;
+  IF v_filter_mismatches <> 0 THEN
+    RAISE EXCEPTION 'C-230 Filter-Zaehlung hat % Abweichungen', v_filter_mismatches;
+  END IF;
+  IF v_description <> ${expectedDescription} THEN
+    RAISE EXCEPTION 'C-228 description: %, erwartet ${expectedDescription}', v_description;
+  END IF;
+  IF v_monitoring <> ${expectedMonitoring} THEN
+    RAISE EXCEPTION 'C-228 monitoring: %, erwartet ${expectedMonitoring}', v_monitoring;
+  END IF;
 
-  RAISE NOTICE 'OK C-197: % Substanzen, % Herkunftszeilen, % Spalten, % mit nutrients_provided, % mit Halbwertszeit',
+  RAISE NOTICE 'OK C-228/C-230: % Substanzen, % Herkunftszeilen, % Spalten, % mit nutrients_provided, % mit Halbwertszeit',
     v_substances, v_sources, v_columns, v_with_nutrients, v_with_half_life;
+  RAISE NOTICE 'C-228/C-230 Gruppen: supplement %, peptide %, enhanced %, ohne Gruppe %, kategorie %, filter %, description %, monitoring %',
+    v_gruppe_supplement, v_gruppe_peptide, v_gruppe_enhanced, v_gruppe_null, v_kategorie, v_filter, v_description, v_monitoring;
   RAISE NOTICE 'C-197 Taxonomie: canonical_category %, canonical_compound_type %, canonical_routes %, nicht-Kimi %',
     v_canonical_category, v_canonical_compound_type, v_canonical_routes, v_non_kimi_taxonomy;
   RAISE NOTICE 'C-196 Fuellgrade: safety %, regulatory %, warning_triggers %, evidence_provenance %, external_ids %, quality %, pharmacology %, dosing %, interactions %',

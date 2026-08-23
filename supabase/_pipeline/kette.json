@@ -452,6 +452,13 @@
       "depends_on": ["134", "015"]
     },
     {
+      "id": "136",
+      "path": "supabase/_pipeline/13_supplements/136_supplements_neuaufbau.sql",
+      "kind": "sql",
+      "creates": "Supplements-Neuaufbau: 26 leere Zieltabellen neben den bestehenden Tabellen, ohne Datenumhaengung",
+      "depends_on": ["135"]
+    },
+    {
       "id": "140",
       "path": "supabase/_pipeline/14_medical/140_medical_schema.sql",
       "kind": "sql",
