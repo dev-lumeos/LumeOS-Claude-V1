@@ -30,7 +30,7 @@
 // ohne dass die benannte Pruefung je gelaufen waere. Eine Pruefung, die
 // beim Selbsttest die falsche Ursache nennt, ist nicht belegt.
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 const WURZEL = resolve(process.cwd())
@@ -38,8 +38,38 @@ const PFAD = {
   todo: resolve(WURZEL, 'docs/todo/TODO.md'),
   erledigt: resolve(WURZEL, 'docs/todo/ERLEDIGT.md'),
   laufend: resolve(WURZEL, 'docs/todo/LAUFEND.md'),
-  uebersicht: resolve(WURZEL, 'docs/todo/00-UEBERSICHT.md')
+  uebersicht: resolve(WURZEL, 'docs/todo/00-UEBERSICHT.md'),
+  auftraege: resolve(WURZEL, 'docs/auftraege'),
+  berichte: resolve(WURZEL, 'docs/berichte'),
+  ssot: resolve(WURZEL, 'docs/ssot'),
+  ssotIndex: resolve(WURZEL, 'docs/ssot/00-INDEX.md')
 }
+
+// `[read]` Berichte von vor dem 2026-08-23 haben keine Auftragsdatei --
+// der Ordner `docs/auftraege/` gab es damals nicht. Sie werden nicht
+// rueckwirkend nachgeschrieben: ein aus dem Gedaechtnis erfundener
+// Auftrag waere genau die Selbstauskunft, gegen die der Ordner gebaut
+// ist. Die Liste steht hier namentlich, damit sie beim Lesen auffaellt
+// und nicht als stille Regel mitlaeuft. Sie waechst nicht.
+const BERICHTE_OHNE_AUFTRAG = new Set(['C-235', 'C-236', 'G-161', 'C-243'])
+
+
+// `c-245-codex.md` -> C-245. `00-LIESMICH.md` und alles ohne fuehrende
+// Nummer faellt raus. Der Dateiname traegt die Leitnummer; ein Auftrag
+// darf weitere Punkte mitnehmen, geprueft wird die im Namen.
+const DATEI_NR = /^([a-z]+)-(\d+[a-z]?)-/
+
+function nummernAusOrdner (pfad) {
+  if (!existsSync(pfad)) return []
+  return readdirSync(pfad)
+    .filter(n => n.endsWith('.md'))
+    .map(n => {
+      const m = n.match(DATEI_NR)
+      return m ? { datei: n, nr: `${m[1].toUpperCase()}-${m[2]}` } : null
+    })
+    .filter(Boolean)
+}
+
 
 const ZEILE = /^[ \t]*- \[( |x|~)\] \*\*([A-Z]+-\d+[a-z]?):/
 
@@ -170,6 +200,55 @@ function pruefe (texte) {
     }
   }
 
+  // `docs/auftraege/` sagt seit 2026-08-23, was verlangt wurde. Eine
+  // Auftragsdatei ohne Punkt im Register ist verloren -- so ist C-186
+  // verschwunden. Geprueft wird die Nummer aus dem Dateinamen; ein
+  // Auftrag darf weitere Punkte mitnehmen.
+  const berichtNr = new Set(texte.berichte.map(b => b.nr))
+  const auftragNr = new Set(texte.auftraege.map(a => a.nr))
+  for (const a of texte.auftraege) {
+    if (!angelegt.has(a.nr)) {
+      fehler.push({
+        pruefung: 'auftrag-ohne-punkt',
+        text: `docs/auftraege/${a.datei} traegt ${a.nr} -- angelegt ist die Nummer weder in TODO.md noch in ERLEDIGT.md.`
+      })
+    } else if (!offenNr.has(a.nr) && !berichtNr.has(a.nr)) {
+      // `[read]` Der Punkt ist geschlossen, aber es liegt kein Bericht
+      // daneben. Dann ist er entweder ohne Nachweis abgenommen worden,
+      // oder der Bericht ist verlorengegangen -- beides ist ein Befund.
+      fehler.push({
+        pruefung: 'auftrag-ohne-bericht',
+        text: `${a.nr} ist erledigt, aber docs/berichte/ traegt keinen Bericht dazu (Auftrag: ${a.datei}).`
+      })
+    }
+  }
+
+  // Die Gegenrichtung: ein Bericht ohne Auftrag heisst, dass jemand
+  // gearbeitet hat, ohne dass nachlesbar ist, was verlangt war. Genau
+  // diese Luecke hat am 2026-08-23 einen Auftragsfehler beinahe zu
+  // einem Agentenfehler gemacht (C-245).
+  for (const b of texte.berichte) {
+    if (!auftragNr.has(b.nr) && !BERICHTE_OHNE_AUFTRAG.has(b.nr)) {
+      fehler.push({
+        pruefung: 'bericht-ohne-auftrag',
+        text: `docs/berichte/${b.datei} traegt ${b.nr}, aber docs/auftraege/ hat keinen Auftrag dazu.`
+      })
+    }
+  }
+
+  // `[cmd]` Am 2026-08-18 fehlten vier Indexzeilen -- 123, 126, 128,
+  // 131. Gefunden hat sie ein Agent, nicht der Orchestrator. Der Index
+  // ist laut CLAUDE.md der Einstieg: ein Bericht, der nicht drinsteht,
+  // existiert fuer die naechste Sitzung nicht.
+  for (const datei of texte.ssotDateien) {
+    if (!texte.ssotIndex.includes(`\`${datei}\``)) {
+      fehler.push({
+        pruefung: 'ssot-ohne-index',
+        text: `docs/ssot/${datei} steht nicht in 00-INDEX.md -- fuer die naechste Sitzung existiert der Bericht damit nicht.`
+      })
+    }
+  }
+
   const kopf = texte.todo.slice(0, 600)
   const m = kopf.match(/\*\*Stand:[^*]*\*\*\s*(\d+)\s+offen/)
   const gezaehltOffen = offen.filter(p => p.zustand === ' ').length
@@ -215,7 +294,13 @@ function lesen () {
     todo: readFileSync(PFAD.todo, 'utf8'),
     erledigt: readFileSync(PFAD.erledigt, 'utf8'),
     laufend: readFileSync(PFAD.laufend, 'utf8'),
-    uebersicht: existsSync(PFAD.uebersicht) ? readFileSync(PFAD.uebersicht, 'utf8') : null
+    uebersicht: existsSync(PFAD.uebersicht) ? readFileSync(PFAD.uebersicht, 'utf8') : null,
+    auftraege: nummernAusOrdner(PFAD.auftraege),
+    berichte: nummernAusOrdner(PFAD.berichte),
+    ssotDateien: existsSync(PFAD.ssot)
+      ? readdirSync(PFAD.ssot).filter(n => n.endsWith('.md') && n !== '00-INDEX.md')
+      : [],
+    ssotIndex: existsSync(PFAD.ssotIndex) ? readFileSync(PFAD.ssotIndex, 'utf8') : ''
   }
 }
 
@@ -279,6 +364,36 @@ function faelle (basis) {
       pruefung: 'kopfzaehler',
       was: 'Kopfzaehler um eins verstellt',
       bau: t => ({ ...t, todo: kopfAnpassen(t.todo, 1) })
+    },
+    {
+      pruefung: 'auftrag-ohne-punkt',
+      was: 'eine Auftragsdatei traegt eine Nummer, die es nicht gibt',
+      bau: t => ({
+        ...t,
+        auftraege: [...t.auftraege, { datei: 'zz-995-erfunden.md', nr: 'ZZ-995' }]
+      })
+    },
+    {
+      pruefung: 'auftrag-ohne-bericht',
+      was: `${inErledigt} ist erledigt, aber ohne Bericht`,
+      bau: t => ({
+        ...t,
+        auftraege: [...t.auftraege, { datei: `${inErledigt.toLowerCase()}-niemand.md`, nr: inErledigt }],
+        berichte: t.berichte.filter(b => b.nr !== inErledigt)
+      })
+    },
+    {
+      pruefung: 'bericht-ohne-auftrag',
+      was: 'ein Bericht liegt da, ohne dass ein Auftrag nachlesbar ist',
+      bau: t => ({
+        ...t,
+        berichte: [...t.berichte, { datei: 'zz-993-irgendwer.md', nr: 'ZZ-993' }]
+      })
+    },
+    {
+      pruefung: 'ssot-ohne-index',
+      was: 'ein SSOT-Bericht fehlt in 00-INDEX.md',
+      bau: t => ({ ...t, ssotDateien: [...t.ssotDateien, '999-nie-indiziert.md'] })
     }
   ]
 }
