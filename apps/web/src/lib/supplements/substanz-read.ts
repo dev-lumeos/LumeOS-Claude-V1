@@ -36,6 +36,14 @@ export type SubstanzListenEintrag = {
    * Spalte live fehlt (C-226) oder die Zeile keinen Kimi-Satz hat.
    */
   canonical_category: string | null
+  /**
+   * C-229: die Kurzbeschreibung („was ist das ueberhaupt") und die
+   * Gruppe (supplement · peptide · enhanced) aus C-228. `[cmd]` Die
+   * Spalte heisst `gruppe` (Nachtrag 2026-08-23; live gemessen:
+   * supplement 307 · enhanced 177 · peptide 82).
+   */
+  description: string | null
+  gruppe: string | null
   /** `evidence.overall_grade`, wenn vorhanden — sonst null. */
   grad: string | null
 }
@@ -66,6 +74,9 @@ export type SubstanzSatz = {
   canonical_category?: string | null
   canonical_compound_type?: string | null
   canonical_routes?: string[] | null
+  /** C-228: „was ist das ueberhaupt" und die Gruppe (Spalte `gruppe`). */
+  description?: string | null
+  gruppe?: string | null
   safety?: Record<string, unknown> | null
   interactions?: Record<string, unknown> | null
   regulatory?: Record<string, unknown> | null
@@ -98,28 +109,26 @@ export type EigenerStack = { id: string; name: string; is_active: boolean }
  */
 export async function ladeSubstanzListe(): Promise<SubstanzListenEintrag[]> {
   const s = createSessionClient().schema('supplements')
-  // C-227: die kanonische Spalte zuerst — kennt der Live-Stand sie
-  // noch nicht (C-226 laeuft), faellt die Abfrage auf die alte
-  // Spaltenliste zurueck, statt die ganze Liste zu verlieren.
-  const mitKanon = 'id, canonical_name, domain, compound_type, category, evidence, canonical_category'
-  const ohneKanon = 'id, canonical_name, domain, compound_type, category, evidence'
+  // C-227/C-229: neuere Spalten zuerst — kennt der Live-Stand eine
+  // noch nicht (Pipeline-Lauf steht aus), wird SIE gestrichen und
+  // erneut gefragt, statt die ganze Liste zu verlieren.
+  const basis = ['id', 'canonical_name', 'domain', 'compound_type', 'category', 'evidence']
+  const neuere = ['canonical_category', 'description', 'gruppe']
+  let spalten = basis.concat(neuere)
   let data: unknown[] | null = null
   let error: { message: string } | null = null
-  const erster = await s
-    .from('substance_catalog')
-    .select(mitKanon)
-    .eq('is_active', true)
-    .order('canonical_name')
-  data = erster.data
-  error = erster.error
-  if (error && /canonical_category/.test(error.message)) {
-    const zweiter = await s
+  for (let versuch = 0; versuch <= neuere.length; versuch++) {
+    const r = await s
       .from('substance_catalog')
-      .select(ohneKanon)
+      .select(spalten.join(', '))
       .eq('is_active', true)
       .order('canonical_name')
-    data = zweiter.data
-    error = zweiter.error
+    data = r.data
+    error = r.error
+    if (!error) break
+    const fehlend = neuere.find(sp => error && error.message.includes(sp) && spalten.includes(sp))
+    if (!fehlend) break
+    spalten = spalten.filter(sp => sp !== fehlend)
   }
   if (error) throw new Error(error.message)
   return (data ?? []).map(r => {
@@ -133,6 +142,8 @@ export async function ladeSubstanzListe(): Promise<SubstanzListenEintrag[]> {
       compound_type: (x.compound_type as string) ?? null,
       category: (x.category as string) ?? null,
       canonical_category: (x.canonical_category as string) ?? null,
+      description: (x.description as string) ?? null,
+      gruppe: (x.gruppe as string) ?? null,
       grad: typeof grad === 'string' && grad ? grad : null,
     }
   })

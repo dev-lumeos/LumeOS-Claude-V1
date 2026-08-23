@@ -13,6 +13,7 @@
 // Alle sind ATTRAPPEN: es gibt kein `supplements`-Schema, also gibt es
 // nichts zu speichern. Der Knopf, der speichern wuerde, sagt das.
 import * as React from 'react'
+import { useTranslations } from 'next-intl'
 import { Pill, Icon, Meter, InEntwicklungKnopf } from '@lumeos/ui'
 
 import { STACK, type StackItem } from './daten'
@@ -139,6 +140,9 @@ export function SupplementsModale({
   modal: { type: ModalTyp; payload?: unknown } | null
   onClose: () => void
 }) {
+  // G-172: VOR dem fruehen `return` — ein Hook nach einer Bedingung
+  // laeuft nicht bei jedem Rendern und bricht die Hook-Regel.
+  const t = useTranslations('Supplements')
   if (!modal) return null
   const p = modal.payload as Record<string, unknown> | undefined
 
@@ -157,7 +161,7 @@ export function SupplementsModale({
     case 'product':
       return (
         <Rahmen titel={String(p?.name ?? 'Product')} breite={620}
-                sub={p?.inStack ? 'in stack' : 'not in stack'} onClose={onClose}>
+                sub={p?.inStack ? t('imStack') : t('nichtImStack')} onClose={onClose}>
           <p className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
             Die Vorlage zeigt hier Herstellerangaben, Preisvergleich und
             Studienlage. `[cmd]` Alles davon braucht einen Produktkatalog
@@ -561,7 +565,9 @@ function SkipFenster({
 function AddFenster({
   payload, onClose, enhanced,
 }: { payload?: Record<string, unknown>; onClose: () => void; enhanced: boolean }) {
-  const { daten, katalog } = useSupp()
+  // G-172: die Sichttexte des Dialogs aus `messages/`.
+  const t = useTranslations('Supplements')
+  const { daten, katalog, stacks } = useSupp()
   const { laeuft, fehler, senden } = useSchreiben(onClose)
 
   const [suche, setSuche] = React.useState(String(payload?.name ?? ''))
@@ -569,6 +575,15 @@ function AddFenster({
   const [dosis, setDosis] = React.useState('')
   const [einheit, setEinheit] = React.useState('mg')
   const [timing, setTiming] = React.useState('morning')
+  // C-229: die Stackwahl — Toms Befund: „der Dialog schreibt in den
+  // aktiven Stack, ohne dass man ihn sieht oder waehlen kann." Der
+  // Weg existiert seit C-224 (`stack_id` mit Besitzpruefung); jetzt
+  // nutzt ihn der Dialog. Vorbelegt mit dem aktiven Stack.
+  const [stackId, setStackId] = React.useState<string>(
+    () => stacks.find(s => s.is_active)?.id ?? stacks[0]?.id ?? '')
+  // C-229: kommt der Add aus der Substanzdatenbank, traegt die
+  // Position den Anker `substance_catalog:<id>` in notes.
+  const substanzId = typeof payload?.substanzId === 'string' ? payload.substanzId : null
 
   const treffer = React.useMemo(() => {
     const q = suche.trim().toLowerCase()
@@ -586,11 +601,12 @@ function AddFenster({
 
   return (
     <Rahmen
-      titel="Add supplement" sub={enhanced ? 'enhanced' : 'standard'}
+      titel={t('supplementHinzufuegen')}
+      sub={enhanced ? t('enhanced') : t('standard')}
       echt={!!daten} onClose={onClose}
       fuss={
         <SchreibFuss
-          laeuft={laeuft} gesperrt={gesperrt} beschriftung="Add to stack"
+          laeuft={laeuft} gesperrt={gesperrt} beschriftung={t('zumStackHinzufuegen')}
           onSpeichern={() => void senden('/api/supplements/intake?was=position', {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
@@ -598,6 +614,9 @@ function AddFenster({
               supplement_id: gewaehltId,
               custom_name: gewaehltId ? null : suche.trim(),
               dose: zahl, dose_unit: einheit.trim(), timing,
+              // C-229: der GEWAEHLTE Stack, nicht stumm der aktive.
+              stack_id: stackId || null,
+              notes: substanzId ? `substance_catalog:${substanzId}` : null,
             }),
           })}
         />
@@ -641,15 +660,35 @@ function AddFenster({
             </p>
           )}
 
+          {/* C-229: WOHIN geschrieben wird, steht sichtbar da. */}
+          <div style={{ marginTop: 12 }}>
+            <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{t('tabStack')}</div>
+            {stacks.length > 0 ? (
+              <select className="v2-feld" value={stackId} disabled={laeuft}
+                      aria-label="Stack"
+                      onChange={e => setStackId(e.target.value)}>
+                {stacks.map(s => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}{s.is_active ? ' · aktiv' : ''}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <p className="v2-dim" style={{ fontSize: 10.5, margin: 0 }}>
+                Kein eigener Stack — zuerst unter „Stack" einen anlegen.
+              </p>
+            )}
+          </div>
+
           <div className="v2-grid v2-g-cols-3" style={{ gap: 10, marginTop: 12 }}>
             <div>
-              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Dose</div>
+              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{t('spalteDosis')}</div>
               <input className="v2-feld" inputMode="decimal" value={dosis}
                      aria-label="Dosis" disabled={laeuft}
                      onChange={e => setDosis(e.target.value)} />
             </div>
             <div>
-              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Unit</div>
+              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{t('spalteEinheit')}</div>
               <select className="v2-feld" value={einheit} disabled={laeuft}
                       aria-label="Einheit"
                       onChange={e => setEinheit(e.target.value)}>
@@ -659,7 +698,7 @@ function AddFenster({
               </select>
             </div>
             <div>
-              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Timing</div>
+              <div className="v2-eyebrow" style={{ marginBottom: 4 }}>{t('spalteZeitpunkt')}</div>
               <select className="v2-feld" value={timing} disabled={laeuft}
                       aria-label="Zeitpunkt"
                       onChange={e => setTiming(e.target.value)}>
@@ -905,6 +944,10 @@ function LogInjektionFenster({ onClose }: { onClose: () => void }) {
           />
         </div>
         <div>
+          {/* G-172: bleibt englisch. `[read]` `LogInjektionFenster`
+              ist eine Attrappe und stand nicht auf der Liste der 22 —
+              es halb zu uebersetzen waere schlechter als gar nicht.
+              Als Befund gemeldet. */}
           <div className="v2-eyebrow" style={{ marginBottom: 4 }}>Dose</div>
           <input className="v2-feld v2-mono" defaultValue="150" aria-label="Dose" />
         </div>

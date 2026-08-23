@@ -78,7 +78,38 @@
 }
 
 /* Breite Tabellen scrollen in sich statt die Seite aufzuschieben. */
-.v2-supp-tbl-wrap { overflow-x: auto; }
+/* G-172: Die Substanzliste scrollt in sich, der Kopf bleibt stehen.
+ *
+ * `[cmd]` **Vorher stand hier nur `overflow-x`.** Die Tabelle wuchs
+ * dann in die Seite hinein, und die Spaltenueberschriften waren nach
+ * dem ersten Bildschirm weg — bei 50 Zeilen (2.444 px gemessen) sieht
+ * niemand mehr, welche Spalte er liest.
+ *
+ * `[read]` **`max-height` in `vh`, nicht in Pixeln:** die Liste soll
+ * auf einem kleinen Schirm nicht dieselbe Hoehe beanspruchen wie auf
+ * einem grossen. `60vh` laesst Kopfzeile, Suche und Kategorienleiste
+ * darueber stehen. */
+.v2-supp-tbl-wrap {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+
+/* Der Spaltenkopf bleibt beim Scrollen sichtbar.
+ * `[cmd]` `background` ist noetig: ohne ihn scrollen die Zeilen
+ * durch den Kopf hindurch. */
+.v2-supp-tbl-wrap thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--surface);
+}
+
+/* Auf schmalen Schirmen darf die Liste mehr Hoehe nehmen — dort steht
+ * weniger daneben, und ein 60vh-Fenster waere unbrauchbar klein. */
+@media (max-width: 560px) {
+  .v2-supp-tbl-wrap { max-height: 72vh; }
+}
 
 /* --- G-33: die Raster der nachgezogenen Unterkomponenten ---------
  * [cmd] Alle vier tragen sie in der Vorlage inline. */

@@ -46,6 +46,11 @@ export type StackPosition = {
   stock_unit: string | null
   low_stock_threshold: number | null
   katalog: KatalogEintrag | null
+  /**
+   * C-229: der Anker zur Substanzdatenbank, wenn die Position von
+   * dort zugeteilt wurde (`substance_catalog:<id>`), sonst frei.
+   */
+  notes: string | null
   /** Portionen je Tag = Dosis / Portionsgroesse. `null` ohne Portionsgroesse. */
   portionen_pro_tag: number | null
   /** Kosten je Tag in Euro. `null`, wenn Preis oder Portionsgroesse fehlt. */
@@ -188,7 +193,7 @@ export async function getStackDaten(): Promise<StackDaten | null> {
       .from('stack_items')
       .select(`
         id, dose, dose_unit, timing, frequency, sort_order, is_active,
-        stock_remaining, stock_unit, low_stock_threshold, custom_name,
+        stock_remaining, stock_unit, low_stock_threshold, custom_name, notes,
         supplement_catalog:supplement_id (
           id, slug, name, category, evidence_grade, evidence_summary,
           typical_dose_min, typical_dose_max, dose_unit, serving_size,
@@ -241,6 +246,7 @@ export async function getStackDaten(): Promise<StackDaten | null> {
         stock_unit: (roh.stock_unit as string) ?? null,
         low_stock_threshold: schwelle,
         katalog,
+        notes: (roh.notes as string) ?? null,
         // Die Einheiten entscheiden ueber die Reichweite — siehe
         // `ableiten`. Ohne sie rechnete Kreatin 30 statt 6 Tage.
         ...ableiten(

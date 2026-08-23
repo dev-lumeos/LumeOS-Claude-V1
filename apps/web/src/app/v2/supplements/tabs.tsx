@@ -26,6 +26,8 @@ import {
 import { useSupp } from './kontext'
 // G-74: die zwei Kostenkacheln, die das Protokoll brauchen.
 import { CostErgaenzung } from './tab-inventory-echt'
+// C-229: der EINE Katalog — 566er-Substanzdatenbank mit Detail.
+import { SubstanzDatenbank } from './substanz-detail'
 
 /** `[cmd]` Feste Vorfuehrwerte der Vorlage (Zeile 190/191) — Sa, 13:30.
     Kein `new Date()`: die Vorlage will ein reproduzierbares Bild, und
@@ -763,123 +765,12 @@ function StackList() {
 
 // ── DATABASE ───────────────────────────────────────────────────
 export function SuppDatabase() {
-  const { katalog } = useSupp()
-  // G-37: der echte Katalog, sobald er gelesen ist.
-  return katalog.length > 0 ? <DatabaseEcht /> : <DatabaseAttrappe />
-}
-
-/**
- * Der Wirkstoffkatalog aus `supplement_catalog`.
- *
- * `[cmd]` 44 Eintraege auf `dev@lumeos.app`, gegen 15 in der Vorlage.
- * „In stack" kommt aus dem Verbund mit `stack_items`, nicht aus einem
- * Feld des Katalogs — der Katalog ist Stammdaten und weiss nichts
- * ueber eine Nutzerin.
- */
-function DatabaseEcht() {
-  const { katalog, daten, open } = useSupp()
-  const [frage, setFrage] = React.useState('')
-  const [kategorie, setKategorie] = React.useState<string>('all')
-
-  const imStack = new Set(
-    (daten?.positionen ?? []).map(p => p.katalog?.id).filter(Boolean) as string[])
-
-  const kategorien = React.useMemo(
-    () => Array.from(new Set(katalog.map(k => k.category))).sort(),
-    [katalog])
-
-  const treffer = katalog.filter(k =>
-    (kategorie === 'all' || k.category === kategorie)
-    && (!frage || k.name.toLowerCase().includes(frage.toLowerCase())))
-
-  return (
-    <div>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
-        <input
-          className="v2-feld"
-          style={{ flex: 1, minWidth: 220 }}
-          value={frage}
-          placeholder="Search supplements…"
-          onChange={e => setFrage(e.target.value)}
-        />
-        <select className="v2-feld" value={kategorie}
-                aria-label="Kategorie"
-                onChange={e => setKategorie(e.target.value)}>
-          <option value="all">All categories</option>
-          {kategorien.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
-      </div>
-
-      <Card>
-        <div className="v2-supp-tbl-wrap">
-          <table className="v2-tbl">
-            <thead>
-              <tr>
-                <th>Supplement</th>
-                <th style={{ width: 110 }}>Category</th>
-                <th style={{ width: 60 }}>Evidence</th>
-                {/* `[cmd]` `typical_dose_min` ist auf ALLEN 44 Eintraegen
-                    leer, `serving_size` auf allen 44 gefuellt. Die Spalte
-                    zeigt deshalb die Portionsgroesse — eine Spalte voller
-                    Striche waere kein Nachweis, sondern ein Leerlauf. */}
-                <th style={{ width: 130 }}>Serving</th>
-                <th style={{ width: 80, textAlign: 'right' }}>€/serving</th>
-                <th style={{ width: 90 }}>In stack</th>
-                <th style={{ width: 90, textAlign: 'right' }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {treffer.map(k => {
-                const drin = imStack.has(k.id)
-                const dosis = k.serving_size != null
-                  ? `${k.serving_size} ${k.serving_unit ?? ''}`.trim()
-                  : '—'
-                return (
-                  <tr key={k.id} style={{ cursor: 'pointer' }}
-                      onClick={() => open('product', { name: k.name, inStack: drin })}>
-                    <td>
-                      <div style={{ fontSize: 12.5, fontWeight: 500 }}>{k.name}</div>
-                      <div className="v2-muted" style={{ fontSize: 10.5 }}>
-                        {k.evidence_summary ?? k.benefits.slice(0, 3).join(' · ') ?? ''}
-                      </div>
-                    </td>
-                    <td className="v2-muted">{k.category}</td>
-                    <td>
-                      <Pill style={{
-                        color: (EVIDENCE_PALETTE as Record<string, string>)[k.evidence_grade]
-                          ?? 'var(--fg-dim)',
-                      }}>{k.evidence_grade}</Pill>
-                    </td>
-                    <td className="v2-num" style={{ fontSize: 11.5 }}>{dosis}</td>
-                    <td className="v2-num" style={{ textAlign: 'right' }}>
-                      {k.cost_per_serving != null ? k.cost_per_serving.toFixed(2) : '—'}
-                    </td>
-                    <td>
-                      {drin
-                        ? <Pill variant="pos"><Icon name="check" className="v2-ic v2-ic-sm" />Active</Pill>
-                        : <span className="v2-dim" style={{ fontSize: 11 }}>—</span>}
-                    </td>
-                    <td style={{ textAlign: 'right' }}>
-                      {drin
-                        ? <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
-                                  onClick={e => { e.stopPropagation(); open('product', { name: k.name, inStack: true }) }}>View</button>
-                        : <button type="button" className="v2-btn v2-btn-sm"
-                                  onClick={e => { e.stopPropagation(); open('add', { name: k.name }) }}>
-                            <Icon name="plus" className="v2-ic v2-ic-sm" />Add
-                          </button>}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-        <div className="v2-dim" style={{ fontSize: 10.5, marginTop: 8 }}>
-          {treffer.length} of {katalog.length} entries
-        </div>
-      </Card>
-    </div>
-  )
+  const { substanzen } = useSupp()
+  // C-229: der EINE Katalog — `substance_catalog` (566) im Layout der
+  // frueheren `DatabaseEcht` (44er, G-37). Die 44er-Fassung ist raus;
+  // `serving_size` und `cost_per_serving` gab es NUR dort und sie
+  // entfallen ersatzlos — gemeldet, nicht geraten.
+  return substanzen.length > 0 ? <SubstanzDatenbank /> : <DatabaseAttrappe />
 }
 
 function DatabaseAttrappe() {

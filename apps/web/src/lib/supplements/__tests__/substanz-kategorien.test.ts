@@ -13,12 +13,15 @@ import path from 'node:path'
 
 import {
   KATEGORIE_FARBEN, KAT_WEITERE_VAR, UNZUGEORDNET_ID, UNZUGEORDNET_TEXT,
-  filtereKategorien, kategorieFarbe, kategorieLabel, kategorieVon,
-  zaehleKategorien,
+  filtereGruppe, filtereKategorien, gruppeGesperrt, gruppeVon,
+  kategorieFarbe, kategorieLabel, kategorieVon,
+  zaehleGruppen, zaehleKategorien,
 } from '../substanz-kategorien'
+import { startOffen } from '../substanz-anzeige'
 
 const CSS = path.join(process.cwd(), 'src/app/v2/supplements/supplements.css')
 const DETAIL = path.join(process.cwd(), 'src/app/v2/supplements/substanz-detail.tsx')
+const MODALE = path.join(process.cwd(), 'src/app/v2/supplements/modale.tsx')
 
 // ── Richtung 1: der Filter ───────────────────────────────────────
 
@@ -89,6 +92,59 @@ test('die Komponente traegt keine hartkodierte Kategoriefarbe und immer Text', (
   // Die Kennzeichnung rendert das Label — Farbe ist nie allein.
   assert.ok(/kategorieLabel\(/.test(quelle), 'Die Textkennzeichnung fehlt.')
   assert.ok(/KategoriePill/.test(quelle))
+})
+
+// ── C-229: Gruppen, Klapp-Start, description, Add mit Stackwahl ──
+
+test('C-229: die drei Gruppen zaehlen und filtern, das Gate sperrt', () => {
+  // [cmd] C-228-Erwartung: supplement 307 · peptide 82 · enhanced 177.
+  // Fixture in denselben Verhaeltnissen, klein.
+  const liste = [
+    ...Array.from({ length: 3 }, () => ({ gruppe: 'supplement' })),
+    { gruppe: 'peptide' },
+    ...Array.from({ length: 2 }, () => ({ gruppe: 'enhanced' })),
+    { gruppe: null },   // noch ohne C-228-Lauf
+  ]
+  assert.deepEqual(zaehleGruppen(liste), { supplement: 3, peptide: 1, enhanced: 2 })
+  assert.equal(gruppeVon({ gruppe: 'erfunden' }), null, 'Keine Gruppe wird erfunden.')
+  // Gate zu (unter pro/elite): peptide/enhanced gesperrt, und der
+  // Gesamtblick zeigt nur supplement + ungruppiert.
+  assert.ok(gruppeGesperrt('peptide', false) && gruppeGesperrt('enhanced', false))
+  assert.ok(!gruppeGesperrt('supplement', false))
+  assert.equal(filtereGruppe(liste, null, false).length, 4)
+  // Gate offen: alles; eine gewaehlte Gruppe: nur sie.
+  assert.equal(filtereGruppe(liste, null, true).length, 7)
+  assert.equal(filtereGruppe(liste, 'enhanced', true).length, 2)
+})
+
+test('C-229: jeder Block startet ZU', () => {
+  assert.equal(startOffen().size, 0,
+    'startOffen() muss leer sein — Tom: Zusatzinfos nur auf Wunsch.')
+  const quelle = fs.readFileSync(DETAIL, 'utf8')
+  assert.ok(/useState<Set<string>>\(startOffen\)/.test(quelle),
+    'Das Detail muss seinen Klappzustand aus startOffen() beziehen.')
+  assert.ok(/<Klappe/.test(quelle) && !/aria-expanded/.test(quelle),
+    'Das Klappen kommt aus packages/ui (Klappe), nicht selbstgebaut.')
+})
+
+test('C-229: das Detail zeigt die description VOR den Bloecken', () => {
+  const quelle = fs.readFileSync(DETAIL, 'utf8')
+  const beschreibung = quelle.indexOf('satz.description')
+  const bloecke = quelle.indexOf('<Klappe')
+  assert.ok(beschreibung > -1, 'Das Detail rendert keine description.')
+  assert.ok(bloecke > -1)
+  assert.ok(beschreibung < bloecke,
+    'Erst was es ist (description), DANN die Zusatzbloecke.')
+})
+
+test('C-229: der Add-Dialog sendet stack_id und zeigt die Stackwahl', () => {
+  const quelle = fs.readFileSync(MODALE, 'utf8')
+  const senden = quelle.indexOf("intake?was=position")
+  const rumpfEnde = quelle.indexOf('})', senden)
+  const rumpf = quelle.slice(senden, rumpfEnde + 400)
+  assert.ok(/stack_id:/.test(rumpf),
+    'Add sendet keine stack_id — der Dialog schriebe wieder stumm in den aktiven Stack.')
+  assert.ok(/aria-label="Stack"/.test(quelle), 'Die Stackwahl fehlt im Dialog.')
 })
 
 test('die Erwartung der grossen Kategorien traegt eigene Farben', () => {

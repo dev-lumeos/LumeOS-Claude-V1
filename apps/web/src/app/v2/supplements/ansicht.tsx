@@ -17,6 +17,7 @@
 // weglassen waere schlechter, weil die Tab-Leiste dann unvollstaendig
 // aussieht statt unfertig.
 import * as React from 'react'
+import { useTranslations } from 'next-intl'
 import { Card, Pill, Icon, Tabs, InEntwicklungKnopf, type TabItem } from '@lumeos/ui'
 
 // G-123: der Tab-Hook aus G-117.
@@ -49,11 +50,11 @@ import { SuppCompliance } from './tab-compliance'
 // G-45: der Injections-Tab mit der Rotationskarte.
 import { SuppInjections } from './tab-injektionen'
 // G-45: die vier Tabs aus -spec.jsx.
-import { SuppCatalog, SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
+// G-172: `SuppCatalog` ist geloescht — der Tab zeigt `SuppDatabase`.
+import { SuppStacks, SuppIntelligence, SuppInventory } from './tab-spec'
 // G-74: Inventory und Compliance mit echten Werten.
 import { ComplianceEcht, InventoryEcht } from './tab-inventory-echt'
-import { KatalogEcht } from './tab-katalog-echt'
-// C-224: Substanzdatenbank mit Detailansicht und Stack-Zuteilung.
+// C-224/C-229: Substanzdatenbank — Liste, Detail und Add getrennt.
 import type {
   SubstanzListenEintrag, EigenerStack,
 } from '../../../lib/supplements/substanz-read'
@@ -65,22 +66,39 @@ import { SupplementsModale } from './modale'
  * G-37: Die Zahl an `Stack` kommt aus dem echten Stack, sobald einer
  * gelesen wurde — sonst aus der Vorlage.
  */
-function tabs(stackAnzahl: number, regelAnzahl: number | null): TabItem[] {
+// G-172: Die Beschriftungen kommen aus `messages/{de,en}.json`.
+//
+// `[read]` **Tom, 2026-08-22:** *„i18n ist fuer die UI und auch da
+// gilt: wir entwickeln immer de plus en, thai machen wir spaeter."*
+// Die Schicht ist next-intl und steht seit A-14; Nutrition und
+// Settings nutzen sie, Supplements bis heute nirgends.
+//
+// `[cmd]` **`Extended` bleibt unuebersetzt** — Eigenname, in G-167 so
+// festgelegt.
+function tabs(
+  t: (s: string) => string,
+  stackAnzahl: number,
+  regelAnzahl: number | null,
+  substanzAnzahl: number,
+): TabItem[] {
   return [
-    { id: 'today', label: 'Today', icon: 'check' },
-    { id: 'stack', label: 'Stack', icon: 'supplements', count: stackAnzahl },
-    { id: 'extended', label: 'Extended', icon: 'medical', count: EXTENDED_STACK.length },
-    { id: 'catalog', label: 'Catalog', icon: 'search' },
-    { id: 'stacks', label: 'Stacks', icon: 'layers' },
-    { id: 'intel', label: 'Intelligence', icon: 'sparkles' },
-    { id: 'inventory', label: 'Inventory', icon: 'marketplace' },
-    { id: 'injection', label: 'Injections', icon: 'medical' },
-    { id: 'compliance', label: 'Compliance', icon: 'calendar' },
+    { id: 'today', label: t('tabHeute'), icon: 'check' },
+    { id: 'stack', label: t('tabStack'), icon: 'supplements', count: stackAnzahl },
+    { id: 'extended', label: t('tabExtended'), icon: 'medical', count: EXTENDED_STACK.length },
+    // G-172: Der Katalog-Tab traegt jetzt die echte Substanzdatenbank
+    // (C-229) — die Zahl ist deren Laenge, nicht die der Vorlage.
+    { id: 'catalog', label: t('tabKatalog'), icon: 'search',
+      count: substanzAnzahl || undefined },
+    { id: 'stacks', label: t('tabStacks'), icon: 'layers' },
+    { id: 'intel', label: t('tabAuswertung'), icon: 'sparkles' },
+    { id: 'inventory', label: t('tabBestand'), icon: 'marketplace' },
+    { id: 'injection', label: t('tabInjektionen'), icon: 'medical' },
+    { id: 'compliance', label: t('tabEinnahmetreue'), icon: 'calendar' },
     // G-110: die Zahl ist jetzt die der ZUTREFFENDEN Regeln, nicht
     // die drei Zeilen des Entwurfs.  heisst: nicht gelesen.
-    { id: 'interactions', label: 'Interactions', icon: 'sparkles',
+    { id: 'interactions', label: t('tabWechselwirkungen'), icon: 'sparkles',
       count: regelAnzahl ?? undefined },
-    { id: 'cost', label: 'Cost', icon: 'trend_up' },
+    { id: 'cost', label: t('tabKosten'), icon: 'trend_up' },
   ]
 }
 
@@ -121,6 +139,9 @@ export function SupplementsAnsicht({
   // `[read]` Zwei Wirkungen: der Tab ueberlebt eine Navigation und ist
   // verlinkbar — und `tools/schuss.mjs` kann einzelne Tabs messen,
   // statt immer nur den ersten zu sehen.
+  // G-172: die Beschriftungen aus `messages/`. Clientkomponente,
+  // also `useTranslations` — `getTranslations` waere serverseitig.
+  const t = useTranslations('Supplements')
   const [tab, setTab] = useTabParam('today')
   const [modal, setModal] = React.useState<ModalZustand>(null)
 
@@ -197,12 +218,17 @@ export function SupplementsAnsicht({
     }
   }, [daten, stichtag])
 
+  // C-229: die Substanzliste, die Stacks und das Gate wandern in den
+  // Kontext — der Database-Tab und der Add-Dialog lesen sie dort.
+  const gateOffen = gate?.offen === true
   const ctx = React.useMemo(
     () => ({
       takenToday, toggleTaken, open, daten, katalog,
+      substanzen, stacks, gateOffen,
       stichtag, laeuft, setFrisch, schreibfehler, setSchreibfehler,
     }),
     [takenToday, toggleTaken, open, daten, katalog,
+     substanzen, stacks, gateOffen,
      stichtag, laeuft, schreibfehler],
   )
 
@@ -231,24 +257,24 @@ export function SupplementsAnsicht({
                 </Pill>
               : <Pill><span className="v2-dot" style={{ background: 'var(--pos)' }} /> Compliance 30d · 94%</Pill>}
           </div>
-          <div className="v2-module-sub">
-            Stack, dosing schedule, interactions, cost · coach-shared
-          </div>
+          <div className="v2-module-sub">{t('untertitel')}</div>
         </div>
+        {/* G-172: **Der `Database`-Knopf ist weg.** `[cmd]` Er fuehrte
+            auf einen verborgenen Tab, waehrend `Catalog` einen Entwurf
+            zeigte — zwei Einstiege in dieselbe Sache, einer davon
+            Vorlage. Die Datenbank steht jetzt auf `Katalog`. */}
         <div className="v2-module-actions">
-          <button type="button" className="v2-btn" onClick={() => setTab('database')}>
-            <Icon name="search" className="v2-ic v2-ic-sm" /> Database
-          </button>
-          <InEntwicklungKnopf titel="Export stack" className="v2-btn">
-            <Icon name="download" className="v2-ic v2-ic-sm" /> Export stack
+          <InEntwicklungKnopf titel={t('stackExportieren')} className="v2-btn">
+            <Icon name="download" className="v2-ic v2-ic-sm" /> {t('stackExportieren')}
           </InEntwicklungKnopf>
           <button type="button" className="v2-btn v2-btn-primary" onClick={() => open('catalogAdd')}>
-            <Icon name="plus" className="v2-ic v2-ic-sm" /> Add supplement
+            <Icon name="plus" className="v2-ic v2-ic-sm" /> {t('supplementHinzufuegen')}
           </button>
         </div>
       </div>
 
-      <Tabs items={tabs(stackAnzahl, regeln?.erfuellt ?? null)} active={tab} onChange={setTab} />
+      <Tabs items={tabs(t, stackAnzahl, regeln?.erfuellt ?? null, substanzen.length)}
+            active={tab} onChange={setTab} />
 
       <SuppCtx.Provider value={ctx}>
         <div style={{ marginTop: 16 }}>
@@ -260,6 +286,10 @@ export function SupplementsAnsicht({
             // vorher war es ein `useState` im Browser (G-92).
             gate?.offen ? <SuppExtended /> : <ExtendedGesperrt g={gate ?? { grad: null, offen: false, fehler: null }} />
           )}
+          {/* G-172: `database` ist kein eigener Tab mehr — der Inhalt
+              steht auf `catalog`. Die Weiche bleibt als Umleitung
+              stehen, damit ein alter Link (`?tab=database`) nicht ins
+              Leere zeigt. */}
           {tab === 'database' && <SuppDatabase />}
           {/* `[cmd]` G-74: Compliance liest echt, sobald ein Protokoll
               vorliegt. Ohne Daten bleibt der Entwurf mit seiner Marke —
@@ -280,16 +310,17 @@ export function SupplementsAnsicht({
               Eintraege, `evidence_grade` auf allen gefuellt. Ohne
               Katalog bleibt der Entwurf mit seiner Marke, dasselbe
               Muster wie bei Compliance und Inventory. */}
-          {tab === 'catalog' && (
-            katalog.length > 0
-              ? (
-                <KatalogEcht
-                  katalog={katalog} daten={daten}
-                  substanzen={substanzen} stacks={stacks}
-                />
-              )
-              : <SuppCatalog />
-          )}
+          {/* C-229: es bleibt EIN Katalog — er steht im Database-Tab
+              (566er, `SubstanzDatenbank`). Der Catalog-Tab zeigt bis
+              zur Navigations-Entscheidung wieder den Entwurf mit
+              seiner Marke; die 44er-Fassung (KatalogEcht) ist raus. */}
+          {/* G-172: **Der Katalog-Entwurf ist geloescht, nicht
+              versteckt.** `[cmd]` Er trug die Marke *„Es gibt keine
+              Tabelle dafuer — die Zahlen stammen aus der Vorlage"* und
+              stand neben der echten Datenbank, die am `Database`-Knopf
+              hing. **Jetzt traegt `Katalog` die 566 Substanzen aus
+              `substance_catalog`** (C-229). */}
+          {tab === 'catalog' && <SuppDatabase />}
           {tab === 'stacks' && <SuppStacks />}
           {tab === 'intel' && <SuppIntelligence />}
           {/* `[cmd]` G-74: Inventory rechnet die Reichweite aus

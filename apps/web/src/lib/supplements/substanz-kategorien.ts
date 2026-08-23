@@ -92,3 +92,61 @@ export function filtereKategorien<T extends Pick<SubstanzListenEintrag, 'canonic
   if (aktive.size === 0) return liste
   return liste.filter(e => aktive.has(kategorieVon(e)))
 }
+
+// ── C-229: die drei Gruppen aus C-228 ────────────────────────────
+//
+// `[cmd]` Toms Modell: „wir haben normale supplements … peptides …
+// enhanced supplement — das ist je eine Gruppe mit ihren Filtern."
+// C-228 leitet sie aus domain und category ab (supplement 307 ·
+// peptide 82 · enhanced 177 = 566). Hier wird NICHTS abgeleitet —
+// die Gruppe kommt aus der Spalte, oder sie ist offen.
+
+export type Gruppe = 'supplement' | 'peptide' | 'enhanced'
+
+export const GRUPPEN: Array<{ id: Gruppe; label: string }> = [
+  { id: 'supplement', label: 'Supplements' },
+  { id: 'peptide', label: 'Peptide' },
+  { id: 'enhanced', label: 'Enhanced' },
+]
+
+/**
+ * Peptide und Enhanced zeigen sich erst ab `experience_level`
+ * pro/elite — dieselbe Schwelle wie das Extended-Gate (G-167,
+ * `GRAD_FUER_EXTENDED`). `offen` kommt aus dem Gate-Stand; hier
+ * steht nur, WELCHE Gruppen dahinter liegen.
+ */
+export function gruppeGesperrt(gruppe: Gruppe, gateOffen: boolean): boolean {
+  return !gateOffen && gruppe !== 'supplement'
+}
+
+export function gruppeVon(
+  e: Pick<SubstanzListenEintrag, 'gruppe'>,
+): Gruppe | null {
+  const g = e.gruppe
+  return g === 'supplement' || g === 'peptide' || g === 'enhanced' ? g : null
+}
+
+export function zaehleGruppen(
+  liste: Array<Pick<SubstanzListenEintrag, 'gruppe'>>,
+): Record<Gruppe, number> {
+  const z: Record<Gruppe, number> = { supplement: 0, peptide: 0, enhanced: 0 }
+  for (const e of liste) {
+    const g = gruppeVon(e)
+    if (g) z[g] += 1
+  }
+  return z
+}
+
+/** Eine Gruppe gewaehlt: nur sie. Keine gewaehlt: alles Sichtbare. */
+export function filtereGruppe<T extends Pick<SubstanzListenEintrag, 'gruppe'>>(
+  liste: T[], aktiv: Gruppe | null, gateOffen: boolean,
+): T[] {
+  if (aktiv) return liste.filter(e => gruppeVon(e) === aktiv)
+  if (gateOffen) return liste
+  // Ohne pro/elite bleiben nur Supplements und die noch ungruppierten
+  // Zeilen — Peptide und Enhanced haengen hinter dem Gate.
+  return liste.filter(e => {
+    const g = gruppeVon(e)
+    return g === null || g === 'supplement'
+  })
+}

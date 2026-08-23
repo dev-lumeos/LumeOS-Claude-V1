@@ -122,3 +122,17 @@ test('die Blocksuche findet erst den Pfad, dann den Block, sonst nichts', () => 
   assert.equal(herkunftFuer(prov, 'z.y'), null)
   assert.equal(herkunftFuer(null, 'a.b'), null)
 })
+
+test('C-229-Nachtrag: source_ref allein ist KEINE Herkunft', () => {
+  // [read] Entschieden am 2026-08-23: nur source_id gilt; ein Feld
+  // ohne sie zeigt „ohne Herkunft" — das ist die Wahrheit. [cmd] Das
+  // betrifft live 216 von 2.147 Eintraegen (nur source_ref/crawl),
+  // gemeldet an Codex.
+  const prov = {
+    pharmacology: {
+      source_ref: 'https://jissn.biomedcentral.com/articles/10.1186/x',
+      evidence_class: 'B', as_of: '2026-08-20',
+    },
+  } as never
+  assert.equal(herkunftFuer(prov, 'pharmacology.half_life'), null)
+})

@@ -52,174 +52,19 @@ function Stufe({ g }: { g: string }) {
   )
 }
 
-// ═══ CATALOG ══════════════════════════════════════════════════════
-export function SuppCatalog() {
-  const { open } = useSupp()
-  const [mode, setMode] = React.useState('all')
-  const [grade, setGrade] = React.useState('all')
-  const [q, setQ] = React.useState('')
-
-  const rows = CATALOG
-    .filter(s => mode === 'all' || s.mode === mode)
-    .filter(s => grade === 'all' || s.grade === grade)
-    .filter(s => !q || `${s.name}${s.name_de ?? ''}${s.cat}`.toLowerCase().includes(q.toLowerCase()))
-    .sort((a, b) => 'SABCDF'.indexOf(a.grade) - 'SABCDF'.indexOf(b.grade))
-
-  return (
-    <div>
-      <div className="v2-supp-katalog-kopf">
-        <div style={{ flex: 1, minWidth: 220, position: 'relative' }}>
-          <Icon name="search" className="v2-ic v2-ic-sm v2-supp-suchsymbol" />
-          <input
-            className="v2-feld"
-            value={q}
-            onChange={e => setQ(e.target.value)}
-            placeholder="Search catalog · name, name_de, category…"
-            aria-label="Search catalog"
-            style={{ paddingLeft: 30 }}
-          />
-        </div>
-        <div className="v2-segmented">
-          {([['all', 'All'], ['standard', 'Standard'], ['enhanced', 'Enhanced']] as const).map(([k, l]) => (
-            <button
-              key={k} type="button" onClick={() => setMode(k)}
-              className={mode === k ? 'v2-btn v2-btn-primary' : 'v2-btn v2-btn-ghost'}
-              style={{ height: 24, fontSize: 11, padding: '0 12px', borderRadius: 4 }}
-            >
-              {l}
-            </button>
-          ))}
-        </div>
-        <span className="v2-dim v2-mono" style={{ fontSize: 10.5 }}>
-          {rows.length} of {CATALOG.length}
-        </span>
-      </div>
-
-      <div className="v2-supp-evidenzfilter">
-        <span className="v2-eyebrow" style={{ marginRight: 4 }}>Evidence</span>
-        <button
-          type="button" onClick={() => setGrade('all')}
-          className={grade === 'all' ? 'v2-pill v2-pill-acc' : 'v2-pill'}
-          style={{ cursor: 'pointer', padding: '3px 10px', fontSize: 11 }}
-        >
-          All
-        </button>
-        {EVIDENCE_GRADES.map(e => (
-          <button
-            key={e.g} type="button" onClick={() => setGrade(e.g)}
-            className="v2-pill"
-            aria-pressed={grade === e.g}
-            style={{
-              cursor: 'pointer', padding: '3px 12px', fontSize: 11, fontWeight: 600,
-              borderColor: grade === e.g ? e.c : `color-mix(in oklch, ${e.c} 30%, var(--border))`,
-              color: e.c,
-              background: grade === e.g
-                ? `color-mix(in oklch, ${e.c} 14%, transparent)`
-                : `color-mix(in oklch, ${e.c} 5%, transparent)`,
-            }}
-          >
-            {e.g}
-          </button>
-        ))}
-      </div>
-
-      <Card style={{ padding: 0 }} attrappe={ATTRAPPE}>
-        <div className="v2-supp-tbl-wrap">
-          <table className="v2-tbl">
-            <thead>
-              <tr>
-                <th style={{ paddingLeft: 14 }}>Supplement</th>
-                <th style={{ width: 60 }}>Grade</th>
-                <th style={{ width: 150 }}>Category</th>
-                <th style={{ width: 70 }}>Mode</th>
-                <th style={{ width: 130 }}>Dose</th>
-                <th style={{ width: 110 }}>Timing</th>
-                <th style={{ width: 90, textAlign: 'right' }}>€/serving</th>
-                <th style={{ width: 80 }}>In stack</th>
-                <th style={{ width: 30 }} />
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map(s => (
-                <tr
-                  key={s.id}
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => open('product', s as unknown as Record<string, unknown>)}
-                >
-                  <td style={{ paddingLeft: 14 }}>
-                    <div style={{ fontSize: 12.5, fontWeight: 500 }}>{s.name}</div>
-                    <div className="v2-dim" style={{ fontSize: 10 }}>{s.name_de}</div>
-                  </td>
-                  <td><Stufe g={s.grade} /></td>
-                  <td className="v2-muted" style={{ fontSize: 11.5 }}>{s.cat}</td>
-                  <td>
-                    {s.mode === 'enhanced'
-                      ? (
-                        <Pill style={{
-                          fontSize: 9,
-                          borderColor: 'color-mix(in oklch, var(--acc-medic) 35%, var(--border))',
-                          color: 'var(--acc-medic)',
-                        }}>
-                          enhanced
-                        </Pill>
-                      )
-                      : <Pill style={{ fontSize: 9 }}>standard</Pill>}
-                  </td>
-                  <td className="v2-num" style={{ fontSize: 11 }}>{s.dose}</td>
-                  <td className="v2-muted v2-mono" style={{ fontSize: 10.5 }}>
-                    {(s.timing ?? []).join(', ')}
-                  </td>
-                  <td className="v2-num" style={{ textAlign: 'right', fontSize: 11.5 }}>
-                    €{(s.cost_per_serving ?? 0).toFixed(2)}
-                  </td>
-                  <td>
-                    {s.inStack
-                      ? <Pill variant="pos" style={{ fontSize: 9 }}>active</Pill>
-                      : <span className="v2-dim">—</span>}
-                  </td>
-                  <td>
-                    <Icon name="chevron_right" className="v2-ic v2-ic-sm" style={{ color: 'var(--fg-dim)' }} />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </Card>
-
-      <div style={{ height: 14 }} />
-
-      <Card title="Evidence grading" sub="S bis F · curated, not open-source" attrappe={ATTRAPPE}>
-        <div className="v2-supp-tbl-wrap">
-          <table className="v2-tbl">
-            <thead>
-              <tr>
-                <th style={{ width: 60 }}>Grade</th>
-                <th style={{ width: 70, textAlign: 'right' }}>Weight</th>
-                <th style={{ width: 300 }}>Criterion</th>
-                <th>Examples</th>
-              </tr>
-            </thead>
-            <tbody>
-              {EVIDENCE_GRADES.map(e => (
-                <tr key={e.g}>
-                  <td><Stufe g={e.g} /></td>
-                  <td className="v2-num" style={{ textAlign: 'right', color: e.c }}>{e.w.toFixed(2)}</td>
-                  <td style={{ fontSize: 11.5 }}>{e.crit}</td>
-                  <td className="v2-muted" style={{ fontSize: 11.5 }}>{e.ex}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="v2-dim" style={{ fontSize: 11, marginTop: 10, lineHeight: 1.5 }}>
-          Weight feeds the evidence-weighted compliance score exported to Goals. Grade F
-          contributes 0 — taking it doesn&apos;t raise your score.
-        </div>
-      </Card>
-    </div>
-  )
-}
+// ═══ CATALOG — GELOESCHT (G-172) ══════════════════
+//
+// `[cmd]` Hier stand `SuppCatalog`: ein Entwurf aus `spec-daten.ts`
+// mit der Marke „Es gibt keine Tabelle dafuer — die Zahlen stammen
+// aus der Vorlage“. Daneben hing die ECHTE Substanzdatenbank am
+// `Database`-Knopf im Kopf — **zwei Einstiege in dieselbe Sache,
+// einer davon Vorlage.**
+//
+// `[read]` **Geloescht, nicht versteckt.** Ein auskommentierter
+// Entwurf sieht beim naechsten Lesen aus wie etwas, das man wieder
+// einschalten koennte. Der Tab `Katalog` zeigt jetzt
+// `SuppDatabase` mit den 566 Substanzen aus `substance_catalog`
+// (C-229).
 
 // ═══ STACKS ═══════════════════════════════════════════════════════
 export function SuppStacks() {

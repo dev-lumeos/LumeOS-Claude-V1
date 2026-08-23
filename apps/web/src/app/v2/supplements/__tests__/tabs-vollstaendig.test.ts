@@ -53,9 +53,18 @@ test('der Injections-Tab bringt seine Rotationskarte mit', () => {
   }
 })
 
-test('die vier Spec-Tabs sind da', () => {
+test('die drei verbliebenen Spec-Tabs sind da', () => {
+  // `[cmd]` **G-172: `SuppCatalog` ist geloescht** — der Katalog-Tab
+  // zeigt jetzt `SuppDatabase` mit den 566 Substanzen aus
+  // `substance_catalog` (C-229). Der Entwurf trug die Marke *„Es gibt
+  // keine Tabelle dafuer"* und stand neben der echten Datenbank, die
+  // am `Database`-Knopf hing.
+  //
+  // `[read]` **Diese Pruefung hat den Wechsel gemeldet, wie sie soll.**
+  // Sie zaehlt jetzt drei statt vier — und `deutsch-und-scroll.test.ts`
+  // haelt fest, dass `SuppCatalog` nicht zurueckkommt.
   const spec = lies('tab-spec.tsx')
-  for (const k of ['SuppCatalog', 'SuppStacks', 'SuppIntelligence', 'SuppInventory']) {
+  for (const k of ['SuppStacks', 'SuppIntelligence', 'SuppInventory']) {
     assert.ok(new RegExp(`export function ${k}\\b`).test(spec), `"${k}" fehlt.`)
   }
 })
@@ -80,9 +89,12 @@ test('SuppCost fuehrt alle fuenf Kacheln der Vorlage', () => {
 test('die neuen Tabs kennzeichnen jede Kachel', () => {
   // Keine Quelle heisst: jede Kachel traegt die Marke. Wer eine
   // anbindet, entfernt `attrappe` und zaehlt hier herunter.
+  // `[cmd]` **G-172: `tab-spec.tsx` von 18 auf 16.** Die zwei Marken
+  // gehoerten dem geloeschten `SuppCatalog` — der Katalog-Tab zeigt
+  // jetzt die echte Substanzdatenbank (C-229), die keine traegt.
   const dateien: Array<[string, number]> = [
     ['tab-injektionen.tsx', 14],
-    ['tab-spec.tsx', 18],
+    ['tab-spec.tsx', 16],
   ]
   for (const [datei, erwartet] of dateien) {
     const quelle = lies(datei)

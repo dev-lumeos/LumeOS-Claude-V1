@@ -67,6 +67,12 @@ export function herkunftFuer(
   const treffer = prov[pfad] ?? prov[pfad.split('.')[0]]
   if (!treffer || typeof treffer !== 'object') return null
   const h = treffer as unknown as Record<string, unknown>
+  // `[read]` NUR `source_id` gilt als Herkunft (Nachtrag C-229,
+  // 2026-08-23): die kurzlebige Duldung von `source_ref`/`crawl` ist
+  // zurueckgebaut. `[cmd]` Der Preis, gemessen am 2026-08-23: 216 von
+  // 2.147 Provenance-Eintraegen tragen nur source_ref und zeigen
+  // damit „ohne Herkunft" — das ist die Wahrheit des Datenstands,
+  // gemeldet an Codex.
   if (!h.source_id) return null
   return {
     source_id: String(h.source_id),
@@ -170,6 +176,17 @@ export function baueBloecke(satz: SubstanzSatz): Block[] {
  */
 export function ohneHerkunft(bloecke: Block[]): string[] {
   return bloecke.flatMap(b => b.felder.filter(f => !f.herkunft).map(f => f.pfad))
+}
+
+/**
+ * C-229: die Startsicht des Details — ALLE Bloecke zu.
+ *
+ * `[read]` Tom: „das sind zusatzinfos die keiner sehen muss wenn er
+ * es nicht explizit will." Der Waechter haelt diese Menge leer; wer
+ * einen Block aufgeklappt starten lassen will, muss hier vorbei.
+ */
+export function startOffen(): Set<string> {
+  return new Set()
 }
 
 /** Die benannten Luecken — `missing_reason` je Feld, wie es dasteht. */

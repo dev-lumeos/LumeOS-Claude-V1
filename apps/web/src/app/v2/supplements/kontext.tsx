@@ -13,6 +13,7 @@
 import * as React from 'react'
 
 import type { StackDaten, KatalogEintrag } from '../../../lib/supplements/stack-read'
+import type { SubstanzListenEintrag, EigenerStack } from '../../../lib/supplements/substanz-read'
 
 export type ModalTyp =
   | 'add' | 'catalogAdd' | 'catalogAddEnh' | 'skip' | 'product'
@@ -39,6 +40,13 @@ export type SuppKontext = {
    */
   daten: StackDaten | null
   katalog: KatalogEintrag[]
+  // ── C-229: der EINE Katalog aus `substance_catalog` ─────────────
+  /** Die 566er-Liste; leer heisst „nicht gelesen", dann Attrappe. */
+  substanzen: SubstanzListenEintrag[]
+  /** Die eigenen Stacks — fuer die Stackwahl im Add-Dialog. */
+  stacks: EigenerStack[]
+  /** G-167: ob Peptide/Enhanced sichtbar sind (experience_level). */
+  gateOffen: boolean
   // ── G-148: die Schreibwege ──────────────────────────────────────
   /**
    * Der Tag, auf den geschrieben wird.
@@ -62,6 +70,9 @@ export const SuppCtx = React.createContext<SuppKontext>({
   open: () => {},
   daten: null,
   katalog: [],
+  substanzen: [],
+  stacks: [],
+  gateOffen: false,
   stichtag: '1970-01-01',
   laeuft: false,
   setFrisch: () => {},

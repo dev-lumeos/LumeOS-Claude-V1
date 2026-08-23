@@ -216,6 +216,25 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
 
 const TRAIN_VERLAUF = path.join(process.cwd(), 'src/app/v2/training/tab-verlauf.tsx')
 const TRAIN_LESEN = path.join(process.cwd(), 'src/lib/training/sitzungen-read.ts')
+
+test('G-159: die fuenf Today/History-Weichen lesen echt, Entwurf nur als Rueckfall', () => {
+  // `[cmd]` Der G-159-Befund („11 Marken, derselbe Stoff wie History")
+  // beruhte auf der Code-Markenzahl — GERENDERT sind die Kacheln seit
+  // G-69/G-86 echt, die Marken sitzen in den Rueckfallzweigen. Dieser
+  // Waechter haelt die Weichen fest: verschwindet eine, rendert wieder
+  // der Entwurf mit erfundenen Zahlen.
+  const q = fs.readFileSync(TRAINING, 'utf8')
+  const weichen: Array<[RegExp, string]> = [
+    [/verlauf && verlauf\.woche\.some/, 'This week'],
+    [/verlauf && verlauf\.muskelVolumen\.length > 0/, 'Weekly volume (Saetze je Muskelgruppe)'],
+    [/<TrainingSerie d=\{verlauf\}/, 'Streak'],
+    [/verlauf \? <TrainingVerlauf d=\{verlauf\}/, 'History (Recent sessions, Volume by muscle)'],
+    [/readiness && readiness\.zeilen\.length > 0/, 'Training readiness'],
+  ]
+  for (const [muster, name] of weichen) {
+    assert.ok(muster.test(q), `Die Weiche fuer "${name}" fehlt — der Entwurf wuerde immer rendern.`)
+  }
+})
 const TRAIN_AUSW = path.join(process.cwd(), 'src/lib/training/auswertung.ts')
 
 test('fuenf Training-Tabs zeigen echte Sitzungen', () => {
@@ -901,15 +920,23 @@ test('der Naehrstoffbaum ist vollstaendig uebernommen', () => {
  * Die elf Tabs der Supplements-Vorlage
  * (theme-v1/module-supplements.jsx:240-253), in dieser Reihenfolge.
  */
+// `[cmd]` **G-172: geprueft werden die IDs, nicht die Beschriftungen.**
+// Die Beschriftungen kommen seither aus `messages/{de,en}.json`; ein
+// `label: 'Today'` steht nicht mehr im Quelltext, und die Pruefung
+// meldete deshalb alle elf Tabs als fehlend.
+//
+// `[read]` **Die Regel bleibt dieselbe** — kein Tab darf verschwinden.
+// Die ID ist dafuer sogar der bessere Anker: sie steht in der Adresse
+// (`?tab=`), waehrend die Beschriftung sich mit der Sprache aendert.
 const VORLAGE_SUPP_TABS = [
-  'Today', 'Stack', 'Extended', 'Catalog', 'Stacks', 'Intelligence',
-  'Inventory', 'Injections', 'Compliance', 'Interactions', 'Cost',
+  'today', 'stack', 'extended', 'catalog', 'stacks', 'intel',
+  'inventory', 'injection', 'compliance', 'interactions', 'cost',
 ]
 
 test('die elf Tabs der Vorlage stehen im Supplements-Modul', () => {
   const quelle = fs.readFileSync(SUPP_RAHMEN, 'utf8')
   for (const tab of VORLAGE_SUPP_TABS) {
-    assert.ok(quelle.includes(`label: '${tab}'`),
+    assert.ok(quelle.includes(`id: '${tab}'`),
       `Der Tab "${tab}" fehlt. Die Vorlage fuehrt elf.`)
   }
 })
@@ -1040,9 +1067,12 @@ test('die angebundenen Supplements-Fassungen tragen keine Marke', () => {
     + (s.match(/attrappe=\{RUECKFALL\}/g) ?? []).length
     + (s.match(/^\s+attrappe$/gm) ?? []).length
 
-  // Angebunden — keine Marke.
+  // Angebunden — keine Marke. C-229: `DatabaseEcht` (44er) ist raus,
+  // der Database-Tab rendert die `SubstanzDatenbank` (566er) aus
+  // substanz-detail.tsx; deren Markenfreiheit prueft der
+  // C-227/C-229-Waechter in lib/supplements.
   for (const name of ['TodayEcht', 'StackMatrixEcht', 'StackListeEcht',
-                      'DatabaseEcht', 'CostEcht']) {
+                      'CostEcht']) {
     assert.equal(marken(block(name)), 0,
       `"${name}" liest echte Daten und darf keine Attrappenmarke tragen.`)
   }
