@@ -25,20 +25,15 @@ mehr im Griff zu wissen, welcher Agent noch laeuft."*
 | Schritt | Stand |
 |---|---|
 | 1 · Anlegen | **durch** (C-232) — 33 Tabellen, live |
-| 2 · Befuellen | **durch** (C-235) — live, vom Orchestrator nachgemessen |
-| 3 · Umhaengen | **gebaut** (C-243) — `im_katalog` 290/276, FK auf `supplements.supplements`. **Abschluss haengt an C-245** |
-| 4 · Lesepfade | wartet auf C-245 |
-| 5 · Alte weg | erst wenn 3 und 4 gemessen sind |
+| 2 · Befuellen | **durch** (C-235) — live, nachgemessen |
+| 3 · Umhaengen | **durch** (C-243 + C-245) — `im_katalog` 290/276, FK auf `supplements.supplements` |
+| 4A · Stack-Pfad | **durch** (C-250) — `git grep supplement_catalog` findet nur noch zwei Kommentare |
+| 4B · Substanz-Pfad | **durch** (C-252) — Liste 290 mit Filter, 566 ohne |
+| **5 · Alte weg** | **jetzt moeglich.** `supplement_catalog` (44) und `substance_catalog` (566) werden von keinem Lesepfad mehr gebraucht. **Vorher C-253 und C-254**, sonst faellt beim Loeschen auf, was vorher haette auffallen muessen |
 
-`[cmd]` **Sechs Dateien lesen heute `supplement_catalog`** — das ist der
-Umfang von Schritt 4:
-
-    apps/web/src/app/v2/medical/page.tsx
-    apps/web/src/app/v2/supplements/ansicht.tsx
-    apps/web/src/app/v2/supplements/substanz-detail.tsx
-    apps/web/src/lib/supplements/stack-read.ts
-    apps/web/src/lib/supplements/stack-write.ts
-    apps/web/src/lib/supplements/substanz-read.ts
+`[cmd]` **Stand 2026-08-23 nach C-250 und C-252:** `git grep
+supplement_catalog` findet in `lib/supplements/`, `v2/medical/` und
+`v2/supplements/` **nur noch zwei Kommentare, keinen Lesezugriff.**
 
 ## Kimi
 
@@ -58,11 +53,13 @@ vorher nachzusehen, was tatsaechlich da ist.
 
 ## Wartet auf einen freien Agenten
 
-**Sofort, weil sichtbar falsch**
+**Sofort, weil eine Lehre sonst nur notiert bleibt**
 
 | Auftrag | Bereich |
 |---|---|
-| **G-149** Einnahme-Haken bucht auf den Stichtag statt auf heute | `apps/web` |
+| **C-253** IDs der beiden Kataloge unvergleichbar — `text` gegen `uuid`, drei Stellen haetten stumm nie mehr getroffen | `apps/web` + Gate |
+| **C-254** jede `*_de`-Freitextspalte ist leer, nicht nur `name_de` | `apps/web` |
+| **G-175** Nachweiskonto ohne bekanntes Passwort — blockiert Browser-Nachweise | `supabase/` |
 
 **Klein und blockierend**
 
@@ -106,10 +103,8 @@ laufen als ein Auftrag.
 
 | | |
 |---|---|
-| **C-242** | `[cmd]` 13 Namensdubletten, alle `f05` + `lumeos`, beide Seiten leer. **Magnesium und Vitamin D3 sind darunter** und fehlen deshalb in `stack_item_substance_matches`. **Blockiert Schritt 3.** |
-| **C-242** (zweiter Teil) | `[cmd]` 276 von 566 Zeilen (48,8 %) ohne Beschreibung und ohne Evidenzgrad. Gehoeren sie in den Katalog? |
+| **C-244** | `[cmd]` **Substanz oder Form?** Kimi fuehrt sieben Magnesiumsalze und `Vitamin D3 (cholecalciferol)`, der alte Katalog den Sammelnamen. **28 von 28 Eintraegen ohne Gegenpart.** Waehlt der Nutzer *„Magnesium"* oder *„Magnesiumglycinat"*? |
 | **C-241** | `[cmd]` Nachweiskonto ohne `meal_plans` und `user_medications`. Soll das so bleiben? |
-| **G-163** | Die Rueckfallfassungen — bleiben oder fliegen? `[cmd]` `supplements/tabs.tsx` 16, `tab-plans` 8, `tab-prefs` 6, `recovery/tab-messwerte.tsx` 10, `recovery/ansicht.tsx` 5, `recovery/tab-protokolle.tsx` 19, `nutrition/nutrients-entwurf.tsx` 12 **ohne Marke**. `G-171`: sie machen die Markenzaehlung unbrauchbar |
 | Taxonomie | 59 feine Kategorien neben 23 Filtern — Abnahme offen |
 | **C-223** | `dose_ceiling` als Freitext — wird ueber `supplement_regulatory` loesbar |
 

@@ -197,79 +197,75 @@ wenn er erzeugt und geprüft wird.
 | **C-178** Prolactin und ApoB fehlen dem Health score | offen | 4188 |
 | **G-146** Zehn Marker in `enrichment` ohne `system_groups` | offen | 4206 |
 | **C-186** Nebenwirkungen und Zyklen haben keine Tabelle | offen | 4219 |
-| **G-149** Der Einnahme-Haken bucht auf den Stichtag, nicht auf | offen | 4233 |
-| **C-177** Thai-Aliase fehlen bewusst | offen | 4249 |
-| **GO-24**  | offen | 4259 |
+| **C-177** Thai-Aliase fehlen bewusst | offen | 4233 |
+| **GO-24**  | offen | 4243 |
 
 ## K — Kimi-Bestand: Abgleich und Vertiefung
 
 | | Zustand | Zeile |
 |---|---|---:|
-| **C-195** `substance_catalog` auf die Kimi-Tiefe bringen | offen | 4289 |
-| **C-196** Die 290 Substanzen in die neue Tiefe importieren | offen | 4318 |
-| **C-198** ATC, CAS und CYP der 498 Wirkstoffe nachziehen | offen | 4336 |
-| **C-199** `medication_regulatory` als eigene Entitaet | offen | 4348 |
-| **C-200** Symptomtabelle anlegen und fuellen | offen | 4362 |
-| **C-201** Der Populations-Atlas hat kein Schema | offen | 4376 |
-| **C-202** Produkte, Marken, Hersteller, Kennungen | offen | 4396 |
-| **C-203** Beobachtung gegen Erwartung (crawl_033) | offen | 4410 |
-| **C-204** `lab_trigger_index` — 77 Analyte | offen | 4423 |
-| **C-205** `research_hold_registry` — 305 Saetze | offen | 4429 |
-| **C-206** Die Community-Schicht — nur Admin, oder nie? | offen | 4436 |
-| **C-207** Vier Entscheidungen aus dem 035-Handoff | offen | 4453 |
-| **C-208** C-129 neu fassen — der Import ist laengst passiert | offen | 4469 |
-| **C-209** Die laufende Instanz wird nach einem Kettenschritt nicht | offen | 4481 |
-| **C-210** Die 28 fehlenden Naehrstofftexte — was ist gemeint? | offen | 4526 |
-| **C-211** Selen fehlt im BLS-Katalog | offen | 4542 |
-| **C-212** `CHORL` haengt nicht im Naehrstoffbaum | offen | 4552 |
-| **C-213** C-124-E8 — die Arzt-Hinweis-Schwelle ist offen | offen | 4559 |
-| **C-214** Fuenf Modalitaeten ohne Registerzeile | offen | 4566 |
-| **A-48** Der Index wird vor dem `git add` nicht geleert | offen | 4577 |
-| **C-215** ACWR rechnet in der Datenbank weiter | offen | 4593 |
-| **C-216** Nachweisdateien blockieren das ganze Repo | offen | 4629 |
-| **C-217** Was ist gebaut, was ist Attrappe — je Modul, je Kachel | offen | 4654 |
-| **G-155** Jede Kachel jedes Moduls als Bild | offen | 4680 |
-| **C-218** Frontend und Datenbank normieren den Recovery-Score | offen | 4690 |
+| **C-195** `substance_catalog` auf die Kimi-Tiefe bringen | offen | 4273 |
+| **C-196** Die 290 Substanzen in die neue Tiefe importieren | offen | 4302 |
+| **C-198** ATC, CAS und CYP der 498 Wirkstoffe nachziehen | offen | 4320 |
+| **C-199** `medication_regulatory` als eigene Entitaet | offen | 4332 |
+| **C-200** Symptomtabelle anlegen und fuellen | offen | 4346 |
+| **C-201** Der Populations-Atlas hat kein Schema | offen | 4360 |
+| **C-202** Produkte, Marken, Hersteller, Kennungen | offen | 4380 |
+| **C-203** Beobachtung gegen Erwartung (crawl_033) | offen | 4394 |
+| **C-204** `lab_trigger_index` — 77 Analyte | offen | 4407 |
+| **C-205** `research_hold_registry` — 305 Saetze | offen | 4413 |
+| **C-206** Die Community-Schicht — nur Admin, oder nie? | offen | 4420 |
+| **C-207** Vier Entscheidungen aus dem 035-Handoff | offen | 4437 |
+| **C-208** C-129 neu fassen — der Import ist laengst passiert | offen | 4453 |
+| **C-209** Die laufende Instanz wird nach einem Kettenschritt nicht | offen | 4465 |
+| **C-210** Die 28 fehlenden Naehrstofftexte — was ist gemeint? | offen | 4510 |
+| **C-211** Selen fehlt im BLS-Katalog | offen | 4526 |
+| **C-212** `CHORL` haengt nicht im Naehrstoffbaum | offen | 4536 |
+| **C-213** C-124-E8 — die Arzt-Hinweis-Schwelle ist offen | offen | 4543 |
+| **C-214** Fuenf Modalitaeten ohne Registerzeile | offen | 4550 |
+| **A-48** Der Index wird vor dem `git add` nicht geleert | offen | 4561 |
+| **C-215** ACWR rechnet in der Datenbank weiter | offen | 4577 |
+| **C-216** Nachweisdateien blockieren das ganze Repo | offen | 4613 |
+| **C-217** Was ist gebaut, was ist Attrappe — je Modul, je Kachel | offen | 4638 |
+| **G-155** Jede Kachel jedes Moduls als Bild | offen | 4664 |
+| **C-218** Frontend und Datenbank normieren den Recovery-Score | offen | 4674 |
 
 ## M — Die Module sagen die Unwahrheit ueber sich selbst
 
 | | Zustand | Zeile |
 |---|---|---:|
-| **G-157** Eine Kachel zeigt erfundene Zahlen ohne Marke | offen | 4747 |
-| **G-159** training Today zeigt nicht, was History liest | offen | 4768 |
-| **G-162** supplements Compliance und medical Tracking | offen | 4779 |
-| **G-163** 16 markierte Rueckfallfassungen in supplements | offen | 4787 |
-| **C-219** Tabellen, die die Spec kennt und die es nicht gibt | offen | 4840 |
-| **C-220** `buddy` — 0 von 16 Tabellen | offen | 4863 |
-| **G-164** Drei Module des Vorgaengers haben hier kein Gegenstueck | offen | 4874 |
-| **A-49** Der Attrappen-Waechter traegt eine veraltete Behauptung | offen | 4887 |
-| **C-221** `supplement_interactions` ist eine tote Spec-Tabelle | offen | 4894 |
-| **G-165** `nutrition-foods` zahlt die Preference-Kosten zweimal | offen | 4901 |
-| **C-222** `monitoring` fehlt als siebter Block | offen | 4916 |
-| **C-223** `dose_ceiling_value numeric` ist die falsche Form | offen | 4939 |
-| **G-168** Die coach-Kopfzeile widerspricht dem eigenen Tab | offen | 4987 |
-| **G-169** `coach.checkins` und `checkin_templates` liegen | offen | 4993 |
-| **C-225** Vier Schreibwege fehlen in coach | offen | 4999 |
-| **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 5014 |
-| **G-171** Die Code-Markenzahl misst den Fortschritt nicht | offen | 5026 |
-| **C-228** Drei Gruppen, saubere Kategorien, Beschreibung | offen | 5042 |
-| **C-229** Ein Katalog aus `DatabaseEcht`, Detail und Add | offen | 5078 |
-| **C-232** Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen | offen | 5118 |
-| **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5161 |
-| **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5186 |
-| **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5212 |
-| **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5229 |
-| **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5253 |
-| **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5282 |
-| **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5292 |
-| **C-238** `meal_plan_entries` hat keinen Status | offen | 5310 |
-| **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5328 |
-| **B-29** 21 Wegwerf-Datenbanken, 3,58 GB | offen | 5343 |
-| **B-30** MSYS-`tar` kann keine `D:\`-Pfade | offen | 5364 |
-| **G-174** Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig | offen | 5379 |
-| **C-240** 31 Kimi-Substanzen ohne Evidenzgrad — und die Spec sagt | offen | 5390 |
-| **C-241** Das Nachweiskonto traegt weder Essensplaene noch | offen | 5408 |
-| **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5430 |
-| **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5498 |
-| **C-248** LOINC `1869-7` traegt zwei verschiedene Marker | offen | 5526 |
-| **C-249** G-161 hat Shopping-Kacheln mit einer Begruendung stehen | offen | 5561 |
+| **G-159** training Today zeigt nicht, was History liest | offen | 4737 |
+| **G-162** supplements Compliance und medical Tracking | offen | 4748 |
+| **C-219** Tabellen, die die Spec kennt und die es nicht gibt | offen | 4758 |
+| **C-220** `buddy` — 0 von 16 Tabellen | offen | 4781 |
+| **G-164** Drei Module des Vorgaengers haben hier kein Gegenstueck | offen | 4792 |
+| **A-49** Der Attrappen-Waechter traegt eine veraltete Behauptung | offen | 4805 |
+| **C-221** `supplement_interactions` ist eine tote Spec-Tabelle | offen | 4812 |
+| **G-165** `nutrition-foods` zahlt die Preference-Kosten zweimal | offen | 4819 |
+| **C-222** `monitoring` fehlt als siebter Block | offen | 4834 |
+| **C-223** `dose_ceiling_value numeric` ist die falsche Form | offen | 4857 |
+| **G-168** Die coach-Kopfzeile widerspricht dem eigenen Tab | offen | 4905 |
+| **G-169** `coach.checkins` und `checkin_templates` liegen | offen | 4911 |
+| **C-225** Vier Schreibwege fehlen in coach | offen | 4917 |
+| **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 4932 |
+| **C-228** Drei Gruppen, saubere Kategorien, Beschreibung | offen | 4944 |
+| **C-229** Ein Katalog aus `DatabaseEcht`, Detail und Add | offen | 4980 |
+| **C-232** Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen | offen | 5020 |
+| **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5063 |
+| **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5088 |
+| **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5114 |
+| **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5131 |
+| **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5155 |
+| **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5184 |
+| **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5194 |
+| **C-238** `meal_plan_entries` hat keinen Status | offen | 5212 |
+| **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5230 |
+| **B-29** 21 Wegwerf-Datenbanken, 3,58 GB | offen | 5245 |
+| **B-30** MSYS-`tar` kann keine `D:\`-Pfade | offen | 5266 |
+| **G-174** Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig | offen | 5281 |
+| **C-241** Das Nachweiskonto traegt weder Essensplaene noch | offen | 5292 |
+| **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5314 |
+| **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5382 |
+| **G-175** Das Nachweiskonto hat kein bekanntes Passwort | offen | 5410 |
+| **C-253** Die IDs der beiden Kataloge sind nicht vergleichbar — | offen | 5432 |
+| **C-254** Nicht nur `name_de` ist leer, sondern jede | offen | 5458 |

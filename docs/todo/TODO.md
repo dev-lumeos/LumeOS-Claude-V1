@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-23.** 229 offen, 0 in Arbeit.
+**Stand: 2026-08-23.** 225 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -4230,22 +4230,6 @@ sagen können: erhoben am X gegen Commit Y, seither Z Commits.
   `PlanCycleModal` Laenge, Pause und Startdatum. **Erst die
   Produktentscheidung, dann das Schema.**
 
-- [ ] **G-149: Der Einnahme-Haken bucht auf den Stichtag, nicht auf
-  heute** (neu 2026-08-21). Befund aus G-148. **Klein.**
-
-  `[cmd]` **`stichtag` ist der juengste Protokolltag** (2026-08-20),
-  weil `new Date()` im Browser die Hydration zerlegt (G-74). **Wer
-  heute etwas nachtraegt, bucht auf den letzten protokollierten Tag.**
-
-  `[cmd]` **Der Weg liegt bereit:** `SupplementsAnsicht` nimmt
-  `heute`-Prop entgegen (`heuteProp`), die Seite reicht es nur nicht
-  durch. **Serverseitig gesetzt ist es hydrationssicher.**
-
-  `[read]` **Dazu gehoert der zweite Rest:** `LogDose` mit Zeit und
-  Notiz ist nur ueber den Extended-Tab erreichbar. **Ein Stift-Knopf je
-  Zeile auf „Today" waere der vollstaendige Weg** — dasselbe Muster wie
-  G-124 beim Wasser.
-
 - [ ] **C-177: Thai-Aliase fehlen bewusst** (neu 2026-08-20). Rest aus
   C-165.
 
@@ -4744,21 +4728,6 @@ falsch.** Und der groesste Posten ist nicht fehlendes Schema, sondern
 
 ### Die falschen Banner — eine Zeile je Modul
 
-- [ ] **G-157: Eine Kachel zeigt erfundene Zahlen ohne Marke** (neu
-  2026-08-22).
-
-  `[cmd]` `nutrition/nutrients-entwurf.tsx` — **12 Kacheln, null
-  Marken, keine Lesezugriffe.** Rueckfall des Nutrients-Tabs
-  (`ansicht.tsx:531`), zeigt ohne Sitzung erfundene Zahlen.
-
-  `[cmd]` **Einziger gefundener Fall dieser Art** — und aus dem Bild
-  nicht auffindbar: *„eine erfundene 87 sieht aus wie eine gemessene
-  87"* (G-155). Gefunden nur durch die Code-Aufnahme.
-
-  `[read]` **Der Fall ist nicht neu:** G-135 fand die
-  Health-Score-Kachel, die nie eine Marke trug und mit Entwurfszahlen
-  rechnete. **Beide Male beim Anbinden entdeckt, nie am Bild.**
-
 ### Daten liegen, werden nicht gelesen — der groesste Posten
 
 `[read]` Diese Punkte brauchen **kein Schema und keine Entscheidung**.
@@ -4783,57 +4752,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `intake_logs` **720**.
   `[cmd]` `medical/tab-tracking` Medications — `user_medications` 2
   plus 1.399 Katalogzeilen, **`page.tsx` liest sie bereits**.
-
-- [ ] **G-163: 16 markierte Rueckfallfassungen in supplements** (neu
-  2026-08-22).
-
-  `[cmd]` In `tabs.tsx` stehen 16 `RUECKFALL`-Fassungen neben den
-  echten. Von 59 Marken sind nur 43 echte Attrappen.
-  `[cmd]` Dasselbe Muster: `nutrition/tab-prefs` (6) und `tab-planner`
-  (1) neben `tab-vorlieben`; `coach/tab-rechte` (5) neben `rechte-echt`.
-
-  `[read]` **Ein Rueckfall mit veraltetem Text ist schlimmer als
-  keiner** — `tab-prefs` behauptet, Vorlieben haetten keine Spalten.
-
-  **ENTSCHIEDEN 2026-08-23 (Tom): sie fliegen.**
-
-  `[read]` **Tom, 2026-08-23:** *„kein plan wovon du redest"* — und das
-  ist der Befund, nicht ein Missverstaendnis. **Die Rueckfallfassungen
-  sind unsichtbar.** Sie erscheinen nur, wenn der Lesepfad leer
-  zurueckkommt; im Betrieb laedt er. `[cmd]` `nutrition/ansicht.tsx:529`
-  waehlt `ordnung.gruppen.length > 0 ? echt : Entwurf`, und
-  `nutrition.nutrient_defs` traegt 138 Zeilen mit 40 Wurzelknoten. **Wer
-  das Produkt benutzt, hat diesen Code nie gesehen.**
-
-  `[cmd]` **Sie verfaelschen dafuer jede Markenzaehlung** (G-171). Am
-  2026-08-23 hat der Orchestrator beim Einstieg 10 markierte Karten in
-  `recovery/tab-messwerte.tsx` als offenes G-160 gemeldet — G-160 war
-  seit Tagen fertig, die 10 waren Rueckfaelle.
-
-  `[cmd]` **Und eine Fassung traegt gar keine Marke:**
-  `nutrition/nutrients-entwurf.tsx`, 12 Kacheln, 79 erfundene
-  Naehrstoffeintraege ohne Warnung (G-157). **Eine Notfallanzeige mit
-  erfundenen Zahlen ist schlechter als eine leere Flaeche mit Hinweis.**
-
-  `[read]` **Was verloren geht, ist ersetzbar:** die Entwuerfe waren die
-  letzte Stelle, an der die Form der Vorlage im Code stand. Sie steht
-  weiterhin in `docs/mockups/` — `00-QUELLEN.md` nennt je Modul die
-  Dateien.
-
-  **Umfang der Ausfuehrung** `[cmd]` gemessen 2026-08-23:
-  `supplements/tabs.tsx` 16 · `nutrition/tab-plans` 8 ·
-  `nutrition/tab-prefs` 6 · `nutrition/nutrients-entwurf.tsx` 12 **ohne
-  Marke** · `recovery/tab-messwerte.tsx` 10 · `recovery/ansicht.tsx` 5 ·
-  `recovery/tab-protokolle.tsx` 19 · `coach/tab-rechte` 5.
-
-  **An die Stelle des Rueckfalls tritt eine leere Flaeche mit Hinweis**,
-  die sagt, dass nicht gelesen werden konnte — **nicht ein Strich und
-  keine Null.** `[read]` Aus G-161: *„auch nicht als Strich, denn ein
-  Strich hiesse ‚leer' statt ‚gibt es nicht'."*
-
-  `[read]` **G-157 und G-171 haengen daran** und werden mit diesem Punkt
-  zusammen erledigt: G-157 ist danach ein `git rm`, und die
-  Markenzaehlung misst wieder, was der Nutzer sieht.
 
 ### Schema fehlt wirklich — Codex-Arbeit
 
@@ -5022,22 +4940,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` Dieselbe Klasse wie `training.sessions` gegen
   `workout_sessions`. **Und es gehoert zum Substanz-Strang** —
   genau diese Medikamente sollen sichtbar werden.
-
-- [ ] **G-171: Die Code-Markenzahl misst den Fortschritt nicht** (neu
-  2026-08-22). Aus G-158. Gehoert zu G-163.
-
-  `[cmd]` **33 → 33 Marken, und trotzdem sind Kacheln echt geworden.**
-  Keine Marke wurde entfernt; die markierten Entwuerfe rendern nur
-  nicht mehr, solange eine Sitzung besteht.
-
-  `[cmd]` Gerendert und angemeldet gemessen: Overview 7 → 6,
-  Messages 3 → 2, Autonomy 1 — die Reste sind die Buddy-Kontextkachel.
-
-  `[read]` **Solange Rueckfallfassungen existieren, zaehlt nur die
-  gerenderte Zahl.** Das macht G-163 dringender: betroffen sind
-  `supplements/tabs.tsx` (16), `nutrition/tab-prefs`,
-  `coach/tab-rechte`, plus die neuen Entwurfszweige von Autonomy,
-  Overview und Messages.
 
 - [ ] **C-228: Drei Gruppen, saubere Kategorien, Beschreibung** (neu
   2026-08-22). **Laeuft bei Codex.** Korrigiert C-197.
@@ -5387,24 +5289,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   angefasst wird — kein eigener Durchgang wert.
 
 
-- [ ] **C-240: 31 Kimi-Substanzen ohne Evidenzgrad — und die Spec sagt
-  eine falsche Zahl** (neu 2026-08-23). Aus der Pruefung von C-235.
-
-  `[cmd]` `docs/specs/Supplements/SCHEMA_NEUAUFBAU.md:146` fuehrt
-  `evidence.overall_grade` mit **290**. Live sind es **259** von 566
-  Zeilen in `supplement_evidence`.
-
-  `[cmd]` **Die 290 ist die Zahl der Kimi-Zeilen, nicht die der
-  benoteten:** `kimi_supplement` 154 Zeilen / 151 benotet ·
-  `kimi_performance` 75 / 63 · `kimi_peptide` 61 / 45. Die uebrigen
-  276 (`f05_substance_candidate` 248, `lumeos_supplement_catalog` 28)
-  tragen weder Grad noch Beschreibung.
-
-  `[read]` **Zwei Dinge, die nicht dasselbe sind:** die Spec-Zeile
-  korrigieren (eine Zeile) — und klaeren, ob die 31 in Kimis Quelle
-  einen Grad haben und der Import ihn fallen laesst, oder ob die Quelle
-  selbst keinen liefert. **Erst messen, dann entscheiden.**
-
 - [ ] **C-241: Das Nachweiskonto traegt weder Essensplaene noch
   Medikamente** (neu 2026-08-23). Aus der Pruefung von G-161 und der
   Vorbereitung von G-162.
@@ -5523,57 +5407,74 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   ohne den Katalogschnitt festzulegen. **Nicht vorbauen, aber sichtbar
   auslassen.**
 
-- [ ] **C-248: LOINC `1869-7` traegt zwei verschiedene Marker** (neu
-  2026-08-23). Aus der Pruefung von C-247.
+- [ ] **G-175: Das Nachweiskonto hat kein bekanntes Passwort** (neu
+  2026-08-23). Aus G-157 und G-163.
 
-  `[cmd]` **In `medical.biomarker_reference_ranges`:**
+  `[cmd]` **Zwei Agenten haben am 2026-08-23 am selben
+  Passwort-Hash gedreht.** Fable brauchte fuer `tools/schuss.mjs` einen
+  Kopierschritt (gesichert, gesetzt, zurueckgesetzt, Sicherung
+  geloescht); Claude Code konnte sich in derselben Zeitspanne nicht
+  anmelden — `updated_at` **2026-08-23 09:42**.
 
-  | LOINC | `curated_slug` | `canonical_name_en` | Zeilen |
-  |---|---|---|---:|
-  | `1869-7` | `apob` | ApoB | **6** |
-  | `1869-7` | `apolipoprotein_a1` | Apolipoprotein A1 | 2 |
-  | `1884-6` | `apolipoprotein_b` | Apolipoprotein B | 2 |
+  `[cmd]` **Das dokumentierte Passwort `LumeosTestUser2026` passt
+  nicht mehr.** Betroffen sind die Nachweisskripte `_g154`, `_g166`,
+  `_g167` — **die laufen so nicht.**
 
-  `[cmd]` **`1869-7` ist der LOINC-Code fuer Apolipoprotein A-I.** Die
-  sechs ApoB-Zeilen darauf sind falsch.
+  `[read]` **Der Fehler ist nicht der Kopierschritt, sondern dass es
+  ihn braucht.** Solange jeder Agent sich sein Konto selbst
+  zurechtbiegt, ist der naechste Zusammenstoss eine Frage der Zeit —
+  und er faellt erst auf, wenn ein Nachweis daran scheitert.
 
-  `[read]` **C-191 hat ApoB auf `1884-6` korrigiert — aber gespiegelt,
-  nicht verschoben.** Der Bericht zu C-247 sagt es selbst: *„Spec-Zeile
-  von falschem `1869-7` auf belegten ApoB-Code gespiegelt."* Kopiert
-  heisst: die falschen sechs stehen weiter da. **ApoB liegt jetzt unter
-  zwei Codes, einer davon gehoert einem anderen Marker.**
+  **Zu tun:** ein bekanntes, festes Passwort fuer
+  `test-user@lumeos.local` in `LUMEOS_WORT`, und die drei Skripte
+  darauf umstellen. Danach faellt der Kopierschritt weg.
 
-  `[read]` **Warum das mehr ist als eine Zaehlfrage:** wer ueber
-  `loinc_code` liest — und das tut die Laborbruecke — bekommt unter
-  `1869-7` Referenzbereiche zweier verschiedener Stoffe gemischt. Ein
-  ApoA1-Wert wuerde gegen ApoB-Grenzen bewertet.
+- [ ] **C-253: Die IDs der beiden Kataloge sind nicht vergleichbar —
+  drei Stellen haetten stumm nie mehr getroffen** (neu 2026-08-23). Aus
+  C-252.
 
-  `[cmd]` **Es hat die Pruefung nicht ausgeloest**, weil die nur die
-  Gesamtzahl zaehlt. **Eine Pruefung auf „ein LOINC-Code, ein Marker"
-  gibt es nicht** — die waere die eigentliche Lehre aus diesem Fall.
+  `[cmd]` **Alte Katalog-ID ist `text`, neue ist `uuid`.** Nach der
+  Umstellung haetten **drei Stellen nie mehr getroffen**:
+  Stack-Anker, Add-Knopf, Detailkopf.
 
-  **Zu tun:** die sechs ApoB-Zeilen auf `1869-7` pruefen und entfernen,
-  falls sie durch die zwei auf `1884-6` ersetzt sind. Vorher messen, ob
-  die Bereiche identisch sind — sonst gehen Werte verloren statt
-  Dubletten. Dazu eine Gate-Pruefung, die anschlaegt, wenn ein
-  `loinc_code` mehr als einen `curated_slug` traegt.
+  `[cmd]` **`slug` ist die alte ID** und bei allen 566 identisch —
+  darueber ist die Bruecke sauber. Ueber den Namen waeren **26
+  mehrdeutig** gewesen.
 
-- [ ] **C-249: G-161 hat Shopping-Kacheln mit einer Begruendung stehen
-  lassen, die nicht mehr gilt** (neu 2026-08-23). Aus C-246.
+  `[cmd]` **Live haengt heute nichts daran:** 0 von 11 `stack_items`
+  tragen einen Anker. **Genau deshalb ist der Fund wertvoll** — der
+  Fehler waere erst in Wochen aufgefallen, bei einem Nutzer und nicht
+  bei einem Test.
 
-  `[cmd]` G-161 liess *„Shopping list"* und *„Scale list"* als Attrappe
-  stehen und belegte den Grund mit *„0 `shopping%`-Tabellen"*. **Das
-  stimmte am 2026-08-23 vormittags.**
+  `[read]` **Claude Code hat ihn ohne Auftrag gefunden und gemeldet.**
+  Er stand in keiner Vorgabe.
 
-  `[cmd]` **Seit C-246 gibt es sie:** 2 Tabellen, 8 Policies, 4 Trigger,
-  5 Fremdschluessel — live nachgemessen.
+  `[read]` **Das ist A-50 in einer Form, die keine bestehende Pruefung
+  findet** — nicht eine geloeschte Spalte, sondern zwei Spalten
+  gleichen Namens mit unvergleichbarem Typ. **Zu tun:** eine
+  Gate-Pruefung, die Anker- und Verweisfelder gegen den Typ der
+  Zielspalte haelt. Ohne sie ist die Lehre wieder nur notiert.
 
-  `[read]` **Der Punkt ist klein, das Muster nicht.** Eine Attrappe mit
-  gemessener Begruendung ist richtig; sie wird falsch, sobald die
-  Begruendung wegfaellt, **und niemand merkt es, weil die Kachel
-  weiterhin ehrlich aussieht.** Wer eine Tabelle live nachzieht, muss
-  nachsehen, welche Marke sich auf ihr Fehlen berief.
+- [ ] **C-254: Nicht nur `name_de` ist leer, sondern jede
+  `*_de`-Freitextspalte** (neu 2026-08-23). Aus C-252.
 
-  **Zu tun:** die beiden Kacheln an `shopping_lists` und
-  `shopping_list_items` anbinden. Bereich `apps/web/src/app/v2/nutrition`
-  — ein Agent zur Zeit.
+  `[cmd]` `summary_de` **0/288** · `metabolism_de` **0/290** ·
+  `storage_de` **0/54** · `name_de` **0/566**. **Nur die drei
+  handgepflegten Gruppenlabels tragen Deutsch.**
+
+  `[read]` **Damit aendert sich die Regel.** Bisher stand sie als
+  *„`name_de` ist leer, die Anzeige faellt auf Englisch zurueck"*.
+  Richtig ist: **jedes Textfeld braucht die COALESCE-Logik** — sonst
+  zeigt die Oberflaeche an anderer Stelle eine Leerstelle, wo ein Text
+  stehen muesste.
+
+  `[cmd]` **Und `name_de` ist `NULL`, nicht Leerstring.**
+  `NULLIF(name_de,'')` allein greift also nicht; es braucht
+  `COALESCE` darum.
+
+  `[read]` **Betrifft C-250** — der Stack-Pfad ist am selben Tag
+  umgestellt worden und muss gegen dieselbe Regel geprueft werden.
+  **Nicht angenommen, dass er sie schon erfuellt.**
+
+  **Zu tun:** alle `*_de`-Lesestellen durchgehen, und die Regel als
+  Pruefung festhalten statt als Merksatz.

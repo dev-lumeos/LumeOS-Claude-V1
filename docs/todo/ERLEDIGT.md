@@ -11993,3 +11993,245 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
 
   `[cmd]` **Aber der Befund darunter ist nicht erledigt** — siehe
   C-248: `1869-7` traegt weiterhin **zwei verschiedene Marker**.
+
+- [x] **G-157: Eine Kachel zeigt erfundene Zahlen ohne Marke** —
+  **erledigt 2026-08-23 (Claude Code), Bericht
+  `docs/berichte/g-157-claude-code.md`.**
+
+  `[cmd]` **Die Praemisse stimmte und war schlimmer als notiert.**
+  `nutrition/nutrients-entwurf.tsx` trug **585 Zeilen, 12 Kacheln,
+  null Marken** — dazu im Detailfenster ein Verlauf ueber vierzehn
+  Tage, im Quelltext selbst als `// Fake 14-day trend for
+  visualization.` beschriftet. **Ebenfalls ohne Marke.**
+
+  `[cmd]` **Der Kommentar daneben war falsch:** `ansicht.tsx:524` sagte
+  *„79 erfundene Eintraege, aber mit Marke"*. Marken gab es keine. Mit
+  der Datei entfernt.
+
+  `[cmd]` Entfernt: 585 Zeilen. Neu: `leer-hinweis.tsx` — eine Flaeche
+  mit Grund, **ohne Zahl.** Gerendert danach: **keine Spur des
+  Entwurfs** auf `nutrients` und `prefs`; die eine verbleibende
+  Attrappe ist der Buddy der Seitenleiste (G-02), im Umfeld des
+  Treffers nachgesehen statt aus der Zahl geschlossen.
+
+  `[read]` **Die Negativprobe war beim ersten Anlauf blind** — mit der
+  Datei war auch ihre Zeile aus der Erwartungsliste verschwunden,
+  danach bewachte nichts mehr die Entfernung. **Der Agent hat das
+  selbst offengelegt.** Erst die neue Pruefung *„die Nutrition-Entwuerfe
+  kommen nicht zurueck"* misst: Sollzustand 78 pass, Rueckfall wieder
+  eingebaut **77 pass / 4 fail**, nach Rueckbau 78.
+
+  `[read]` **Die Gegenprobe ist schwaecher als verlangt, und steht als
+  solche im Bericht.** Eine Seite ohne Sitzung geht nicht — der Server
+  leitet auf `/login` um. Der leere Zweig ist als Komponente belegt,
+  nicht als Seite.
+
+- [x] **G-163: markierte Rueckfallfassungen** — **erledigt 2026-08-23
+  (Fable und Claude Code), Berichte `docs/berichte/g-163-fable.md` und
+  `g-157-claude-code.md`.** Tom, 2026-08-23: *„sie fliegen."*
+
+  `[cmd]` **Entfernt, nach der Regel *else-Zweig neben echtem
+  Lesepfad*:** `recovery/ansicht.tsx` 118 Zeilen ·
+  `recovery/tab-messwerte.tsx` 206 · `coach/tab-rechte.tsx` 384 ·
+  `coach/tab-autonomie.tsx` 202 · `coach/ansicht.tsx` 86 ·
+  `nutrition/tab-prefs.tsx` 203. **Zusammen rund 1.200 Zeilen.**
+
+  `[cmd]` **Markenzahlen, Erwartung gegen Messung:** `recovery/ansicht`
+  5→3 · `tab-messwerte` 10→4 · `coach/tab-rechte` 5→**0** ·
+  `tab-autonomie` 11→3 · `coach/ansicht` 11→9 · `nutrition/tab-prefs`
+  6→**0**.
+
+  `[read]` **`tab-prefs` widersprach dem echten Zweig:** die Marke
+  behauptete, die Schalter schrieben nichts. `VorliebenTab` liest
+  `food_preferences` seit G-65 und schreibt seit G-154.
+
+  `[read]` **`nutrition/tab-plans` bleibt — der Auftrag war falsch.**
+  Claude Code hat es gemeldet statt passend gemacht: `ansicht.tsx:561`
+  hat **kein `else`**, die Datei traegt seit G-161 drei echte Kacheln.
+  **Nach der Regel des Auftrags war sie nie ein Rueckfall.** Sie zu
+  entfernen haette drei echte Kacheln mitgeloescht.
+
+  `[read]` **Fable hat zwei Dateien ueber die Messliste hinaus
+  mitgenommen** — `coach/ansicht.tsx` und `coach/tab-autonomie.tsx`,
+  dieselbe Klasse. `[cmd]` **Und einen Zaehlfehler des Orchestrators
+  korrigiert:** die 19 in `tab-protokolle` sind Wortvorkommen, nicht
+  Marken; `attrappe={ATTRAPPE}`-Stellen sind 17. Dort gibt es keinen
+  echten Zweig, also nichts zu entfernen.
+
+  `[cmd]` **Gegenprobe belegt** (`backup/g163-gegenprobe-sleep.png`):
+  Lesepfad gekappt → *„Nicht geladen · recovery.checkins kam fuer
+  dieses Konto leer zurueck"*, **nicht die alten erfundenen Zahlen.**
+  **Negativprobe:** Rueckfall wieder eingebaut → **zwei** Waechter rot.
+
+  `[cmd]` **Dauerhafter Waechter angelegt:** *„G-163: die
+  Rueckfallfassungen bleiben geloescht"*, plus Hinweis-Pflicht.
+
+  `[read]` **Damit ist G-171 hinfaellig** — die Markenzaehlung misst
+  wieder, was der Nutzer sieht. `[cmd]` Der Orchestrator hatte am
+  selben Morgen 10 Rueckfaelle in `tab-messwerte.tsx` als offenes
+  G-160 gemeldet; genau dieser Fehler ist jetzt nicht mehr moeglich.
+
+- [x] **C-240: 31 Kimi-Substanzen ohne Evidenzgrad** — **erledigt
+  2026-08-23 (Codex), Bericht `docs/berichte/c-248-codex.md`.**
+
+  `[cmd]` **Die Quelle hatte den Grad — der Import wies ihn ab.**
+  Kimi-Supplements 154/154, Performance 75/75, Peptides 61/61 tragen
+  `evidence.overall_grade`. **Summe Quelle 290/290.** Die 31 fehlenden
+  hatten alle Grad **`E`**, und der Check liess `E` nicht zu.
+
+  `[read]` **Das war ein Importfehler, keine fehlende Recherche.** Der
+  Orchestrator hatte beides fuer moeglich gehalten und den Agenten
+  messen lassen, statt zu raten — die Messung hat es entschieden.
+
+  `[cmd]` **Vom Orchestrator nachgemessen, live:**
+  `supplement_evidence.overall_grade` **290**,
+  `supplements.evidence_grade` **290**.
+
+  `[cmd]` Checks auf `S,A,B,C,D,E,F` erweitert, Schritt 137 hebt `E`
+  mit und prueft die 290. Spec korrigiert. Die 31 stehen namentlich im
+  Bericht.
+
+  `[cmd]` **Negativprobe:** Erwartung 291 statt 290 wird rot.
+
+- [x] **C-248: LOINC `1869-7` traegt zwei verschiedene Marker** —
+  **erledigt 2026-08-23 (Codex), Bericht
+  `docs/berichte/c-248-codex.md`.**
+
+  `[cmd]` **Der Befund war groesser als gemeldet:** nicht ein
+  LOINC-Code trug mehrere `curated_slug`, sondern **13**.
+
+  `[cmd]` **Die sechs ApoB-Zeilen auf `1869-7` waren fachlich falsch
+  UND leer** — ohne `min_value`, `max_value`, `unit`, mit Status
+  `source_named_in_predecessor_not_line_verified` /
+  `needs_tom_decision`. Entfernt. ApoB liegt korrekt auf `1884-6`.
+
+  `[read]` **Die uebrigen 12 waren etwas anderes** — keine zweiten
+  Messwerte, sondern Slug-Varianten aus Spec und Katalog. Dort wurden
+  nur `curated_slug` und `canonical_name_en` vereinheitlicht; **Werte,
+  Quellen und Status blieben erhalten.** 98 Zeilen normalisiert.
+  **Der Agent hat den Unterschied selbst erkannt und nicht alles ueber
+  einen Kamm geschoren.**
+
+  `[read]` **Leere `loinc_code`-Gruppen sind vom Waechter
+  ausgenommen** — sie sind keine LOINC-Identitaet. Richtig
+  unterschieden.
+
+  `[cmd]` **Vom Orchestrator nachgemessen, live:**
+  `biomarker_reference_ranges` **560** (vorher 566) · nicht-leere
+  LOINC-Codes mit mehreren `curated_slug` **0**.
+
+  `[cmd]` **Der Waechter ist gebaut**, wie verlangt: *„Medical
+  LOINC-Slug-Eindeutigkeit"* in `schema-vollstaendigkeit-pruefen.ts`.
+  **Negativprobe:** eine absichtliche zweite Slug-Zeile fuer `1884-6`
+  wird rot.
+
+  `[read]` **Damit ist die Lehre gebaut, nicht nur notiert.** Die alte
+  Pruefung zaehlte nur die Gesamtzahl und konnte den Fall deshalb nie
+  sehen.
+
+- [x] **G-149: Der Einnahme-Haken bucht auf den Stichtag, nicht auf
+  heute** — **erledigt 2026-08-23 (Fable), Bericht
+  `docs/berichte/g-149-fable.md`.**
+
+  `[read]` **Mein Auftrag hatte die Richtung verdreht** und behauptete,
+  es buche auf heute statt auf den angesehenen Tag. Korrigiert, bevor
+  Fable startete — der Punkt selbst hatte es seit dem 2026-08-21
+  richtig stehen.
+
+  `[cmd]` **Gemessen, wo der Stichtag verlorenging:** die Today-Kachel
+  und die `takenToday`-Initialisierung nutzen den juengsten
+  Protokolltag (`einnahmen[0]`), **`toggleTaken` suchte und buchte aber
+  auf `stichtag`** — das echte Heute.
+
+  `[read]` **Der Fehler lag im Aufrufer, nicht im Schreibpfad.**
+  `lib/supplements/stack-write.ts` blieb unberuehrt — die Datei gehoerte
+  zu C-250 bei Codex, und die Bereichsgrenze hat gehalten.
+
+  `[cmd]` **Klick-Nachweis:** Protokolltag 2026-08-19, Erwartung vorher
+  notiert, Creatine-Zeile freigemacht, geklickt — **gebucht auf
+  2026-08-19.** Alte Logik haette 2026-08-23 gebucht. Rueckbau
+  gezaehlt.
+
+  `[cmd]` **Negativprobe:** Fix zurueckgedreht → neuer Waechter rot mit
+  exakt der erwarteten Meldung → wiederhergestellt.
+
+- [x] **G-171: Die Code-Markenzahl misst den Fortschritt nicht** —
+  **erledigt 2026-08-23 mit G-163.**
+
+  `[cmd]` Der Punkt beschrieb, dass 33 → 33 Marken stehenbleiben,
+  waehrend Kacheln echt werden: die markierten Entwuerfe rendern nur
+  nicht mehr, solange eine Sitzung besteht.
+
+  `[read]` **Mit G-163 ist die Ursache weg, nicht nur die Zahl.** Die
+  Rueckfallfassungen sind entfernt, die Markenzaehlung misst wieder,
+  was der Nutzer sieht.
+
+  `[cmd]` **Der Beweis, dass es kein theoretischer Punkt war:** am
+  Morgen des 2026-08-23 hat der Orchestrator 10 Rueckfaelle in
+  `recovery/tab-messwerte.tsx` als offenes G-160 gemeldet — G-160 war
+  seit Tagen fertig. **Genau dieser Fehler ist jetzt nicht mehr
+  moeglich.**
+
+- [x] **C-249: G-161 hat Shopping-Kacheln mit einer Begruendung stehen
+  lassen, die nicht mehr gilt** — **erledigt 2026-08-23 (Codex und
+  Claude Code), Berichte `c-250-codex.md` und `g-157-claude-code.md`.**
+
+  `[cmd]` Claude Code hat gemeldet statt geraten: die Tabellen gab es,
+  **aber sie waren leer — 0 Listen, 0 Posten, auf jedem Konto.** Eine
+  gerenderte Null unterscheidet sich nicht von einem kaputten
+  Lesepfad. Als C-251 an Codex weitergegeben.
+
+  `[cmd]` **Nachgemessen nach dem Seed:** `test-user@lumeos.local`
+  traegt **1 Liste mit 6 Posten**, alle 6 mit `food_id` — Hafer
+  Flocken, Banane roh, Huehnerei roh, Huehnchen Brustfilet roh, Reis
+  unpoliert roh, Olivenoel. **Keine Freitexte**, also ist der Lesepfad
+  ueber die Verknuepfung belegt und nicht nur die Zeilenzahl.
+
+- [x] **C-250: Schritt 4A — der Stack-Lesepfad haengt am geloeschten
+  Fremdschluessel** — **erledigt 2026-08-23 (Codex), Bericht
+  `docs/berichte/c-250-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator nachgemessen:** `git grep supplement_catalog`
+  in `lib/supplements/`, `v2/medical/` und `v2/supplements/` findet
+  **nur noch zwei Kommentare, keinen Lesezugriff.**
+
+  `[cmd]` Stack liest und schreibt gegen `supplements.supplements`;
+  Medical nutzt fuer die Stack-Lab-Effekte denselben Pfad.
+
+  `[read]` **Die Cost-Kachel bleibt markiert — mit korrigiertem
+  Grund.** Im neuen Katalog fehlen Preis- und Portionsgrundlagen
+  (`cost_per_serving`, `serving_size`, `serving_unit`). **Gemeldet
+  statt erfunden**, wie verlangt.
+
+- [x] **C-251: Die Einkaufslisten sind leer und blockieren C-249** —
+  **erledigt 2026-08-23 (Codex), Bericht
+  `docs/berichte/c-250-codex.md`.** Zahlen siehe C-249.
+
+- [x] **C-252: Schritt 4B — der Substanz-Lesepfad haengt am alten
+  Katalog** — **erledigt 2026-08-23 (Claude Code), Bericht
+  `docs/berichte/c-252-claude-code.md`.**
+
+  `[cmd]` **Liste 290 mit Filter, 566 ohne.** Creatine monohydrate
+  (`sub_9f9bb8c160`, Grad A) drin; 7-Keto DHEA (`f05_7_keto_dhea`, ohne
+  Beschreibung und Grad) draussen. **Keiner der 290 hat eine Luecke in
+  dem, was die Liste zeigt.**
+
+  `[read]` **Der Build-Bruch war ursaechlich behoben, nicht
+  verschwunden.** Ursache war ein **Wert-Import** (`OHNE_QUELLE`) aus
+  `substanz-read.ts`, der Datei mit `next/headers` — nicht das
+  fehlende Prop-Durchreichen, das der Orchestrator vermutet hatte.
+  `page.tsx` reichte die Liste laengst durch. Geloest mit dem Muster,
+  das im Repo steht (`rechte-modell.ts`, `extended-regel.ts`): neu
+  `substanz-luecken.ts`.
+
+  `[cmd]` **Gegenprobe in beide Richtungen:** mit dem Wert-Import
+  zurueckgedreht bricht der Build mit genau dem gemeldeten Fehler; mit
+  der serverfreien Datei kompiliert er. `[cmd]` Vom Orchestrator
+  nachgemessen: `pnpm gate` gruen, 11 Tasks, `serverimport-pruefen`
+  0 Treffer in 50 Client-Chunks.
+
+  `[cmd]` **Drei Zahlen im Auftrag waren falsch** — 44 statt 33
+  Tabellen, 17 statt 15 Spalten, `name_de` ist `NULL` statt `''`.
+  Keine aendert die Aufgabe, aber die 33 hatte der Orchestrator aus
+  der Spec uebernommen statt gezaehlt. **Denselben Fehlertyp hatte er
+  am selben Tag schon bei C-235 weitergegeben.**
