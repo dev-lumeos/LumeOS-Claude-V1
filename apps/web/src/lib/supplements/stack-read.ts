@@ -12,7 +12,7 @@
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
-/** Ein Eintrag des kuratierten Katalogs (`supplement_catalog`). */
+/** Ein Eintrag des kuratierten Katalogs (`supplements.supplements`). */
 export type KatalogEintrag = {
   id: string
   slug: string
@@ -30,6 +30,38 @@ export type KatalogEintrag = {
   requires_food: boolean
   priority: string
   benefits: string[]
+}
+
+type SupplementRoh = {
+  id: string
+  slug: string
+  name_de: string | null
+  name_en: string | null
+  evidence_grade: string | null
+  category_id: string | null
+}
+
+type KategorieRoh = {
+  id: string
+  name_de: string | null
+  name_en: string | null
+}
+
+type DosingRoh = {
+  supplement_id: string
+  dose_unit: string | null
+  guideline_dose: unknown
+  official_label_dose: unknown
+  studied_dose_ranges: unknown
+  usage_hint_de: string | null
+  usage_hint_en: string | null
+}
+
+type EvidenceRoh = {
+  supplement_id: string
+  summary_de: string | null
+  summary_en: string | null
+  overall_grade: string | null
 }
 
 /** Eine Position im Stack, mit aufgeloestem Katalogeintrag. */
@@ -91,6 +123,113 @@ function zahl(v: unknown): number | null {
   if (v === null || v === undefined) return null
   const n = typeof v === 'string' ? Number(v) : v
   return typeof n === 'number' && Number.isFinite(n) ? n : null
+}
+
+function text(v: unknown): string | null {
+  return typeof v === 'string' && v.trim() ? v.trim() : null
+}
+
+function anzeigename(de: unknown, en: unknown, fallback = '—'): string {
+  return text(de) ?? text(en) ?? fallback
+}
+
+function ersterStringAusJson(v: unknown, schluessel: string[]): string | null {
+  if (v == null || typeof v !== 'object') return null
+  const obj = v as Record<string, unknown>
+  for (const key of schluessel) {
+    const val = obj[key]
+    if (typeof val === 'string' && val.trim()) return val.trim()
+    if (typeof val === 'number' && Number.isFinite(val)) return String(val)
+  }
+  return null
+}
+
+function dosisText(d: DosingRoh | null): string | null {
+  if (!d) return null
+  return text(d.usage_hint_de)
+    ?? text(d.usage_hint_en)
+    ?? ersterStringAusJson(d.guideline_dose, ['text_de', 'text_en', 'text', 'display'])
+    ?? ersterStringAusJson(d.official_label_dose, ['text_de', 'text_en', 'text', 'display'])
+    ?? ersterStringAusJson(d.studied_dose_ranges, ['text_de', 'text_en', 'text', 'display'])
+}
+
+function katalogAusNeu(
+  s: SupplementRoh,
+  kategorien: Map<string, KategorieRoh>,
+  dosing: Map<string, DosingRoh>,
+  evidence: Map<string, EvidenceRoh>,
+): KatalogEintrag {
+  const d = dosing.get(s.id) ?? null
+  const e = evidence.get(s.id) ?? null
+  const kat = s.category_id ? kategorien.get(s.category_id) ?? null : null
+  const dosierung = dosisText(d)
+  return {
+    id: s.id,
+    slug: s.slug,
+    name: anzeigename(s.name_de, s.name_en),
+    category: kat ? anzeigename(kat.name_de, kat.name_en) : '—',
+    evidence_grade: text(e?.overall_grade) ?? text(s.evidence_grade) ?? '—',
+    evidence_summary: text(e?.summary_de) ?? text(e?.summary_en),
+    typical_dose_min: null,
+    typical_dose_max: null,
+    dose_unit: text(d?.dose_unit),
+    serving_size: null,
+    serving_unit: null,
+    cost_per_serving: null,
+    timing_default: 'any',
+    requires_food: false,
+    priority: 'unknown',
+    benefits: dosierung ? [dosierung] : [],
+  }
+}
+
+async function ladeKatalogMaps(
+  s: ReturnType<ReturnType<typeof createSessionClient>['schema']>,
+  ids: string[],
+) {
+  const eindeutig = Array.from(new Set(ids.filter(Boolean)))
+  const supplements = new Map<string, SupplementRoh>()
+  const kategorien = new Map<string, KategorieRoh>()
+  const dosing = new Map<string, DosingRoh>()
+  const evidence = new Map<string, EvidenceRoh>()
+  if (eindeutig.length === 0) return { supplements, kategorien, dosing, evidence }
+
+  const { data: suppRows, error: suppFehler } = await s
+    .from('supplements')
+    .select('id, slug, name_de, name_en, evidence_grade, category_id')
+    .in('id', eindeutig)
+  if (suppFehler) throw suppFehler
+  for (const row of (suppRows ?? []) as SupplementRoh[]) supplements.set(row.id, row)
+
+  const categoryIds = Array.from(new Set(
+    Array.from(supplements.values())
+      .map(row => row.category_id)
+      .filter((id): id is string => Boolean(id)),
+  ))
+  if (categoryIds.length > 0) {
+    const { data, error } = await s
+      .from('supplement_categories')
+      .select('id, name_de, name_en')
+      .in('id', categoryIds)
+    if (error) throw error
+    for (const row of (data ?? []) as KategorieRoh[]) kategorien.set(row.id, row)
+  }
+
+  const { data: dosingRows, error: dosingFehler } = await s
+    .from('supplement_dosing')
+    .select('supplement_id, dose_unit, guideline_dose, official_label_dose, studied_dose_ranges, usage_hint_de, usage_hint_en')
+    .in('supplement_id', eindeutig)
+  if (dosingFehler) throw dosingFehler
+  for (const row of (dosingRows ?? []) as DosingRoh[]) dosing.set(row.supplement_id, row)
+
+  const { data: evidenceRows, error: evidenceFehler } = await s
+    .from('supplement_evidence')
+    .select('supplement_id, summary_de, summary_en, overall_grade')
+    .in('supplement_id', eindeutig)
+  if (evidenceFehler) throw evidenceFehler
+  for (const row of (evidenceRows ?? []) as EvidenceRoh[]) evidence.set(row.supplement_id, row)
+
+  return { supplements, kategorien, dosing, evidence }
 }
 
 /**
@@ -189,46 +328,32 @@ export async function getStackDaten(): Promise<StackDaten | null> {
 
   let positionen: StackPosition[] = []
   if (stack) {
-    const { data: items } = await s
+    const { data: items, error: itemFehler } = await s
       .from('stack_items')
       .select(`
         id, dose, dose_unit, timing, frequency, sort_order, is_active,
         stock_remaining, stock_unit, low_stock_threshold, custom_name, notes,
-        supplement_catalog:supplement_id (
-          id, slug, name, category, evidence_grade, evidence_summary,
-          typical_dose_min, typical_dose_max, dose_unit, serving_size,
-          serving_unit, cost_per_serving, timing_default, requires_food,
-          priority, benefits
-        )
+        supplement_id
       `)
       .eq('stack_id', stack.id)
       .eq('is_active', true)
       .order('sort_order')
 
-    positionen = (items ?? []).map(r => {
+    if (itemFehler) throw itemFehler
+
+    const itemRows = (items ?? []) as unknown as Record<string, unknown>[]
+    const maps = await ladeKatalogMaps(
+      s,
+      itemRows.map(row => (row.supplement_id as string) ?? '').filter(Boolean),
+    )
+
+    positionen = itemRows.map(r => {
       const roh = r as unknown as Record<string, unknown>
-      // PostgREST liefert die eingebettete Zeile je nach Beziehung als
-      // Objekt oder als Einerliste — beides abfangen.
-      const kr = roh.supplement_catalog
-      const kobj = (Array.isArray(kr) ? kr[0] : kr) as Record<string, unknown> | null
-      const katalog: KatalogEintrag | null = kobj ? {
-        id: String(kobj.id),
-        slug: String(kobj.slug),
-        name: String(kobj.name),
-        category: String(kobj.category),
-        evidence_grade: String(kobj.evidence_grade),
-        evidence_summary: (kobj.evidence_summary as string) ?? null,
-        typical_dose_min: zahl(kobj.typical_dose_min),
-        typical_dose_max: zahl(kobj.typical_dose_max),
-        dose_unit: (kobj.dose_unit as string) ?? null,
-        serving_size: zahl(kobj.serving_size),
-        serving_unit: (kobj.serving_unit as string) ?? null,
-        cost_per_serving: zahl(kobj.cost_per_serving),
-        timing_default: String(kobj.timing_default ?? 'any'),
-        requires_food: kobj.requires_food === true,
-        priority: String(kobj.priority ?? 'nice_to_have'),
-        benefits: Array.isArray(kobj.benefits) ? (kobj.benefits as string[]) : [],
-      } : null
+      const supplementId = (roh.supplement_id as string) ?? null
+      const supplement = supplementId ? maps.supplements.get(supplementId) ?? null : null
+      const katalog = supplement
+        ? katalogAusNeu(supplement, maps.kategorien, maps.dosing, maps.evidence)
+        : null
 
       const dose = zahl(roh.dose) ?? 0
       const stock = zahl(roh.stock_remaining)
@@ -283,8 +408,9 @@ export async function getStackDaten(): Promise<StackDaten | null> {
   })
 
   const { count } = await s
-    .from('supplement_catalog')
+    .from('supplements')
     .select('*', { count: 'exact', head: true })
+    .eq('im_katalog', true)
 
   return {
     stack_name: stack ? String(stack.name) : null,
@@ -302,33 +428,20 @@ export async function getKatalog(): Promise<KatalogEintrag[]> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return []
 
-  const { data } = await supabase
-    .schema('supplements')
-    .from('supplement_catalog')
-    .select('id,slug,name,category,evidence_grade,evidence_summary,'
-      + 'typical_dose_min,typical_dose_max,dose_unit,serving_size,serving_unit,'
-      + 'cost_per_serving,timing_default,requires_food,priority,benefits')
-    .order('name')
+  const s = supabase.schema('supplements')
+  const { data, error } = await s
+    .from('supplements')
+    .select('id,slug,name_de,name_en,evidence_grade,category_id')
+    .eq('im_katalog', true)
+    .order('name_en')
+
+  if (error) throw error
+  if (!data || data.length === 0) return []
+
+  const maps = await ladeKatalogMaps(s, data.map(r => String((r as { id: string }).id)))
 
   return (data ?? []).map(r => {
-    const roh = r as unknown as Record<string, unknown>
-    return {
-      id: String(roh.id),
-      slug: String(roh.slug),
-      name: String(roh.name),
-      category: String(roh.category),
-      evidence_grade: String(roh.evidence_grade),
-      evidence_summary: (roh.evidence_summary as string) ?? null,
-      typical_dose_min: zahl(roh.typical_dose_min),
-      typical_dose_max: zahl(roh.typical_dose_max),
-      dose_unit: (roh.dose_unit as string) ?? null,
-      serving_size: zahl(roh.serving_size),
-      serving_unit: (roh.serving_unit as string) ?? null,
-      cost_per_serving: zahl(roh.cost_per_serving),
-      timing_default: String(roh.timing_default ?? 'any'),
-      requires_food: roh.requires_food === true,
-      priority: String(roh.priority ?? 'nice_to_have'),
-      benefits: Array.isArray(roh.benefits) ? (roh.benefits as string[]) : [],
-    }
+    const roh = r as unknown as SupplementRoh
+    return katalogAusNeu(roh, maps.kategorien, maps.dosing, maps.evidence)
   })
 }

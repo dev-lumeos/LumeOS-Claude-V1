@@ -64,37 +64,29 @@ type MedikationZeile = {
 
 type StackZeile = { id: string }
 type StackItemZeile = { supplement_id: string | null }
-type SupplementZeile = { id: string; slug: string; name: string }
-type QuelleZeile = {
-  substance_id: string
-  source_entity_id: string
-  source_label: string
-}
+type SupplementZeile = { id: string; name_de: string | null; name_en: string | null }
 type LabEffektZeile = {
   id: string
-  substance_id: string
-  substance_name: string
+  supplement_id: string
   loinc_code: string | null
   lab_marker_id: string | null
   effect_type: string
   direction: string | null
-  direction_enum: string | null
-  mechanism: string | null
-  clinical_consequence: string | null
+  mechanism_de: string | null
+  mechanism_en: string | null
+  clinical_consequence_de: string | null
+  clinical_consequence_en: string | null
   evidence: string | null
   monitoring_link: string | null
   source: string | null
-  raw: unknown
 }
 
 function arrayOderLeer(v: string[] | null): string[] {
   return Array.isArray(v) ? v : []
 }
 
-function quelleAusRaw(raw: unknown): string | null {
-  if (raw == null || typeof raw !== 'object' || !('source' in raw)) return null
-  const source = (raw as { source?: unknown }).source
-  return typeof source === 'string' && source ? source : null
+function supplementName(row: SupplementZeile): string {
+  return row.name_de?.trim() || row.name_en?.trim() || '—'
 }
 
 async function ladeMedikationen(userId: string): Promise<MedikationEcht[]> {
@@ -159,59 +151,41 @@ async function ladeLabEffekte(userId: string): Promise<LabMarkerEffekt[]> {
   if (supplementIds.length === 0) return []
 
   const { data: supplemente, error: suppFehler } = await db
-    .from('supplement_catalog')
-    .select('id, slug, name')
+    .from('supplements')
+    .select('id, name_de, name_en')
     .in('id', supplementIds)
   if (suppFehler) throw suppFehler
 
   const supplementZeilen = (supplemente ?? []) as SupplementZeile[]
-  const supplementNameNachSlug = new Map(supplementZeilen.map(s => [s.slug, s.name]))
-  const slugs = supplementZeilen.map(s => s.slug)
-  if (slugs.length === 0) return []
-
-  const { data: quellen, error: quellenFehler } = await db
-    .from('substance_catalog_sources')
-    .select('substance_id, source_entity_id, source_label')
-    .eq('source_catalog', 'lumeos_supplement_catalog')
-    .in('source_entity_id', slugs)
-  if (quellenFehler) throw quellenFehler
-
-  const quellenZeilen = (quellen ?? []) as QuelleZeile[]
-  const substanceIds = Array.from(new Set(quellenZeilen.map(q => q.substance_id)))
-  if (substanceIds.length === 0) return []
-
-  const supplementNameNachSubstanz = new Map(
-    quellenZeilen.map(q => [
-      q.substance_id,
-      supplementNameNachSlug.get(q.source_entity_id) ?? q.source_label,
-    ]),
-  )
+  const supplementNameNachId = new Map(supplementZeilen.map(s => [s.id, supplementName(s)]))
+  if (supplementNameNachId.size === 0) return []
 
   const { data: effekte, error: effektFehler } = await db
-    .from('substance_lab_effects')
+    .from('supplement_lab_effects')
     .select(`
-      id, substance_id, substance_name, loinc_code, lab_marker_id,
-      effect_type, direction, direction_enum, mechanism,
-      clinical_consequence, evidence, monitoring_link, source, raw
+      id, supplement_id, loinc_code, lab_marker_id, effect_type,
+      direction, mechanism_de, mechanism_en,
+      clinical_consequence_de, clinical_consequence_en,
+      evidence, monitoring_link, source
     `)
-    .in('substance_id', substanceIds)
+    .in('supplement_id', supplementIds)
   if (effektFehler) throw effektFehler
 
   return ((effekte ?? []) as LabEffektZeile[]).map(row => ({
     id: row.id,
-    substance_id: row.substance_id,
-    substance_name: row.substance_name,
-    supplement_name: supplementNameNachSubstanz.get(row.substance_id) ?? null,
+    substance_id: row.supplement_id,
+    substance_name: supplementNameNachId.get(row.supplement_id) ?? '—',
+    supplement_name: supplementNameNachId.get(row.supplement_id) ?? null,
     loinc_code: row.loinc_code,
     lab_marker_id: row.lab_marker_id,
     effect_type: row.effect_type,
     direction: row.direction,
-    direction_enum: row.direction_enum,
-    mechanism: row.mechanism,
-    clinical_consequence: row.clinical_consequence,
+    direction_enum: null,
+    mechanism: row.mechanism_de || row.mechanism_en,
+    clinical_consequence: row.clinical_consequence_de || row.clinical_consequence_en,
     evidence: row.evidence,
     monitoring_link: row.monitoring_link,
-    source: row.source || quelleAusRaw(row.raw),
+    source: row.source,
   }))
 }
 

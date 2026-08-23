@@ -29,6 +29,9 @@ import * as React from 'react'
 import { useTranslations } from 'next-intl'
 import { Card, Pill, Icon, Klappe } from '@lumeos/ui'
 
+// `[read]` Serverfrei — `substanz-read` selbst zieht `next/headers`
+// und darf im Client-Bundle nicht als Wert auftauchen (A-30).
+import { OHNE_QUELLE } from '../../../lib/supplements/substanz-luecken'
 import type {
   SubstanzListenEintrag, SubstanzSatz,
 } from '../../../lib/supplements/substanz-read'
@@ -82,6 +85,17 @@ function HerkunftPill({ f }: { f: Feld }) {
  * Ist die Substanz im Stack? Erst ueber den Anker aus der Zuteilung
  * (`substance_catalog:<id>` in notes), dann ueber Namensgleichheit —
  * Positionen aus dem 44er-Katalog tragen keinen Anker.
+ *
+ * `[cmd]` **C-252: der Anker wird gegen `slug` geprueft, nicht gegen
+ * `id`.** Der Katalog liest seit C-252 `supplements.supplements`, und
+ * dort ist `id` ein UUID; der Anker traegt die alte
+ * `substance_catalog.id`. **Die ist gleich `slug`, bei allen 566
+ * gemessen am 2026-08-23.** Gegen `id` verglichen traefe er nie mehr.
+ *
+ * `[cmd]` Live haengt daran nichts: **0 von 11 `stack_items` tragen
+ * ueberhaupt einen Anker.** Der Namensweg greift also ohnehin — aber
+ * ein Anker, der stumm nicht mehr passt, waere genau die Art Fehler,
+ * die erst in Monaten auffaellt.
  */
 function imStackIds(
   positionen: Array<{ notes: string | null; name: string }>,
@@ -96,7 +110,9 @@ function imStackIds(
   }
   const drin = new Set<string>()
   for (const s of liste) {
-    if (anker.has(s.id) || namen.has(s.name.toLowerCase())) drin.add(s.id)
+    if (anker.has(s.slug) || anker.has(s.id) || namen.has(s.name.toLowerCase())) {
+      drin.add(s.id)
+    }
   }
   return drin
 }
@@ -146,8 +162,12 @@ function SubstanzModal({
                 canonical_category: satz.canonical_category ?? null,
               })} />
             </div>
+            {/* `[read]` C-252: der Slug, nicht die `id`. Seit der
+                Umstellung ist `id` ein UUID — fuer einen Menschen
+                nichtssagend, waehrend der Slug (`sub_9f9bb8c160`) die
+                Zeile benennt und zugleich der Anker des Stacks ist. */}
             <div className="v2-dim v2-mono" style={{ fontSize: 10, marginTop: 2 }}>
-              {[satz.chemical_form, satz.id].filter(Boolean).join(' · ')}
+              {[satz.chemical_form, satz.slug || satz.id].filter(Boolean).join(' · ')}
             </div>
           </div>
           <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm" onClick={onClose}>
@@ -213,6 +233,28 @@ function SubstanzModal({
               hinaus keine Rechercheblöcke vor.
             </div>
           )}
+
+          {/* C-252 Punkt 3/4: was beim Umbau keine Quelle bekam.
+              `[read]` Es steht als GRUND da, nicht als Strich und nicht
+              als Null — ein Strich hiesse „leer", und das waere eine
+              Aussage ueber die Substanz statt ueber den Datenstand. */}
+          <div style={{ margin: '12px 0 0' }}>
+            <div className="v2-eyebrow" style={{ marginBottom: 6 }}>
+              Ohne Quelle im neuen Katalog
+            </div>
+            <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55, marginBottom: 6 }}>
+              Gemessen am 23.08.2026 über die 290 sichtbaren Substanzen.
+              Diese Felder führte die alte Breittabelle; im neuen Katalog
+              haben sie keine Spalte oder keinen Wert.
+            </div>
+            {OHNE_QUELLE.map(l => (
+              <div key={l.feld} className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55 }}>
+                <span className="v2-mono">{l.feld}</span>
+                {' '}<Pill style={{ fontSize: 9 }}>{l.art === 'fehlt' ? 'keine Spalte' : 'leer'}</Pill>
+                {' '}— {l.grund}
+              </div>
+            ))}
+          </div>
         </div>
         {/* Add ist SEPARAT — das Detail schreibt nie. Der Knopf
             oeffnet den Add-Dialog mit Stackwahl. */}
@@ -223,7 +265,11 @@ function SubstanzModal({
             style={{ marginLeft: 'auto' }}
             onClick={() => {
               onClose()
-              open('add', { name: satz.canonical_name, substanzId: satz.id })
+              // `[cmd]` C-252: der SLUG als Anker, nicht die `id`.
+              // `modale.tsx` schreibt ihn als `substance_catalog:<wert>`
+              // in `notes`, und `imStackIds` liest ihn dort wieder. Mit
+              // dem UUID stuende dort ein Wert, der nie wieder trifft.
+              open('add', { name: satz.canonical_name, substanzId: satz.slug || satz.id })
             }}
           >
             <Icon name="plus" className="v2-ic v2-ic-sm" />
@@ -438,7 +484,7 @@ export function SubstanzDatenbank() {
         <div className="v2-dim" style={{ fontSize: 10.5, padding: '8px 14px' }}>
           {treffer.gezeigt.length < treffer.gesamt
             ? `${treffer.gezeigt.length} von ${treffer.gesamt} Treffern — Suche verfeinern für mehr.`
-            : `${treffer.gesamt} von ${substanzen.length} Einträgen · supplements.substance_catalog`}
+            : `${treffer.gesamt} von ${substanzen.length} Einträgen · supplements.supplements`}
         </div>
         {ladeFehler && (
           <div style={{ fontSize: 11, color: 'var(--warn)', padding: '0 14px 10px' }}>{ladeFehler}</div>

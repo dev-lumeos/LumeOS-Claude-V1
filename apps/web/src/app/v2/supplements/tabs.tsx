@@ -885,9 +885,10 @@ export function SuppInteractions() {
 // sieht beim Klicken vollstaendig aus, ist es aber nicht.
 export function SuppCost() {
   const { daten } = useSupp()
-  // G-37: `cost_per_serving` steht auf allen 44 Katalogeintraegen und
-  // `serving_size` ebenso — die Monatskosten sind damit rechenbar.
-  // Der Verlauf und die Sparvorschlaege sind es nicht.
+  // C-250: Der Stack liest jetzt `supplements.supplements`. Dort gibt
+  // es keine Quelle fuer `cost_per_serving` und `serving_size`.
+  // Deshalb wird keine 0-Euro-Rechnung angezeigt, sondern der fehlende
+  // Messpfad markiert.
   return daten ? <CostEcht /> : <CostAttrappe />
 }
 
@@ -909,6 +910,22 @@ function CostEcht() {
   const d = daten!
   const mitPreis = d.positionen.filter(p => p.kosten_pro_tag != null)
   const ohnePreis = d.positionen.length - mitPreis.length
+
+  if (mitPreis.length === 0) {
+    return (
+      <Card title="Cost basis" sub="not measured in the new catalog" attrappe={RUECKFALL}>
+        <div className="v2-muted" style={{ fontSize: 12, lineHeight: 1.55 }}>
+          `supplements.supplements` has no price per serving and no serving size. The old
+          44-row catalog had those fields; the rebuilt 566-row catalog does not, so monthly
+          cost is not calculated from this path.
+        </div>
+        <div className="v2-dim" style={{ fontSize: 10, marginTop: 8 }}>
+          {ohnePreis} active item{ohnePreis === 1 ? '' : 's'} with dose data, 0 with a price source.
+        </div>
+      </Card>
+    )
+  }
+
   const tag = mitPreis.reduce((s, p) => s + (p.kosten_pro_tag ?? 0), 0)
   const monat = tag * 30
   const jahr = monat * 12

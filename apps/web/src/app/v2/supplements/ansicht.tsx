@@ -192,8 +192,15 @@ export function SupplementsAnsicht({
   const toggleTaken = React.useCallback(async (id: string) => {
     if (!daten) { setTakenToday(t => ({ ...t, [id]: !t[id] })); return }
 
+    // G-149: Gebucht wird auf den ANGESEHENEN Tag — den juengsten
+    // Protokolltag, den die Today-Kachel zeigt und aus dem auch
+    // `takenToday` initialisiert wird (einnahmen[0]). `[cmd]` Vorher
+    // stand hier `stichtag` (= echtes Heute): wer den angezeigten
+    // zurueckliegenden Tag abhakte, buchte still auf heute, und die
+    // Kachel zeigte etwas anderes, als der Nutzer getan hatte.
+    const ansichtsTag = daten.einnahmen[0]?.intake_date ?? stichtag
     const heuteZeile = daten.einnahmen.find(
-      e => e.stack_item_id === id && e.intake_date === stichtag)
+      e => e.stack_item_id === id && e.intake_date === ansichtsTag)
     setLaeuft(true)
     setSchreibfehler(null)
     try {
@@ -204,7 +211,7 @@ export function SupplementsAnsicht({
             method: 'POST',
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify({
-              stack_item_id: id, intake_date: stichtag, status: 'taken',
+              stack_item_id: id, intake_date: ansichtsTag, status: 'taken',
             }),
           })
       const inhalt = await antwort.json()

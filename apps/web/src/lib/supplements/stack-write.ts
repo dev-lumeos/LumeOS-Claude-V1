@@ -46,6 +46,18 @@ async function sitzung() {
   return { userId: user.id }
 }
 
+async function supplementName(id: string | null | undefined): Promise<string | null> {
+  if (!id) return null
+  const { data, error } = await db()
+    .from('supplements')
+    .select('name_de, name_en')
+    .eq('id', id)
+    .maybeSingle()
+  if (error) throw new SupplementSchreibFehler('WRITE_FAILED', error.message)
+  const zeile = data as unknown as { name_de: string | null; name_en: string | null } | null
+  return zeile?.name_de?.trim() || zeile?.name_en?.trim() || null
+}
+
 /**
  * `intake_time` braucht Sekunden = 0.
  *
@@ -116,7 +128,7 @@ export async function erfasseEinnahme(
 
   const { data: position, error: leseFehler } = await db()
     .from('stack_items')
-    .select('id, dose, dose_unit, custom_name, supplement_id, supplement_catalog(name)')
+    .select('id, dose, dose_unit, custom_name, supplement_id')
     .eq('id', eingabe.stack_item_id)
     .maybeSingle()
 
@@ -131,14 +143,9 @@ export async function erfasseEinnahme(
     dose: number | string
     dose_unit: string
     custom_name: string | null
-    supplement_catalog: { name: string } | { name: string }[] | null
+    supplement_id: string | null
   }
-  // PostgREST liefert eingebettete Zeilen je nach Beziehung als Objekt
-  // oder als Liste — beides abfangen.
-  const katalog = Array.isArray(p.supplement_catalog)
-    ? p.supplement_catalog[0] ?? null
-    : p.supplement_catalog
-  const name = p.custom_name ?? katalog?.name ?? null
+  const name = p.custom_name ?? await supplementName(p.supplement_id)
   if (!name) {
     throw new SupplementSchreibFehler('WRITE_FAILED', 'Position ohne Namen — nicht erfassbar.')
   }
@@ -257,20 +264,17 @@ export async function ergaenzePosition(
       frequency: eingabe.frequency ?? 'daily',
       notes: eingabe.notes?.trim() || null,
     })
-    .select('id, custom_name, supplement_catalog(name)')
+    .select('id, custom_name, supplement_id')
 
   if (error) throw new SupplementSchreibFehler('WRITE_FAILED', error.message)
   const zeile = (data ?? [])[0] as unknown as {
     id: string; custom_name: string | null
-    supplement_catalog: { name: string } | { name: string }[] | null
+    supplement_id: string | null
   } | undefined
   if (!zeile) {
     throw new SupplementSchreibFehler('WRITE_FAILED', 'Insert lieferte keine Zeile zurueck.')
   }
-  const katalog = Array.isArray(zeile.supplement_catalog)
-    ? zeile.supplement_catalog[0] ?? null
-    : zeile.supplement_catalog
-  return { id: zeile.id, name: zeile.custom_name ?? katalog?.name ?? '—' }
+  return { id: zeile.id, name: zeile.custom_name ?? await supplementName(zeile.supplement_id) ?? '—' }
 }
 
 /** Eine Position wieder entfernen. */
