@@ -217,6 +217,27 @@ test('das Training-Modul kennzeichnet jede Kachel', () => {
 const TRAIN_VERLAUF = path.join(process.cwd(), 'src/app/v2/training/tab-verlauf.tsx')
 const TRAIN_LESEN = path.join(process.cwd(), 'src/lib/training/sitzungen-read.ts')
 
+test('G-160: HRV und Sleep zeigen erfasste Werte, Entwurf nur als Rueckfall', () => {
+  // Richtung 1: die Weichen und die Echt-Fassungen existieren.
+  const q = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 'utf8')
+  assert.ok(/stand && stand\.zeilen\.length > 0[\s\S]*?<HrvEcht/.test(q), 'Die HRV-Weiche fehlt.')
+  assert.ok(/stand && stand\.zeilen\.length > 0[\s\S]*?<SleepEcht/.test(q), 'Die Sleep-Weiche fehlt.')
+  // Richtung 2: die Echt-Fassungen rechnen KEINEN Entwurfsscore — die
+  // z-Formel (70 + z×15) und der Wearable-Pfad bleiben im Entwurf.
+  const hrvEcht = q.slice(q.indexOf('function HrvEcht'), q.indexOf('function PhoneCameraKachel'))
+  assert.ok(!/calcHRVScore|calcSleepScore/.test(hrvEcht),
+    'HrvEcht rechnet eine Entwurfsformel — die Messwerte-Regel (G-55) ist verletzt.')
+  const sleepEcht = q.slice(q.indexOf('function SleepEcht'), q.indexOf('function ScorePathsKachel'))
+  assert.ok(!/calcSleepScore|SLEEP_DATA/.test(sleepEcht),
+    'SleepEcht nutzt Entwurfsdaten oder -formeln.')
+  // Und der Rahmen reicht die Check-ins durch.
+  const rahmen = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/recovery/ansicht.tsx'), 'utf8')
+  assert.ok(/<RecHRV stand=\{checkins\}/.test(rahmen))
+  assert.ok(/<RecSleep stand=\{checkins\}/.test(rahmen))
+})
+
 test('G-159: die fuenf Today/History-Weichen lesen echt, Entwurf nur als Rueckfall', () => {
   // `[cmd]` Der G-159-Befund („11 Marken, derselbe Stoff wie History")
   // beruhte auf der Code-Markenzahl — GERENDERT sind die Kacheln seit
