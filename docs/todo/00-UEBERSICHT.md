@@ -237,36 +237,36 @@ wenn er erzeugt und geprüft wird.
 |---|---|---:|
 | **G-157** Eine Kachel zeigt erfundene Zahlen ohne Marke | offen | 4747 |
 | **G-159** training Today zeigt nicht, was History liest | offen | 4768 |
-| **G-160** recovery Messwerte liegen in `checkins` | offen | 4779 |
-| **G-161** nutrition Meal plans — der krasseste Fall | offen | 4791 |
-| **G-162** supplements Compliance und medical Tracking | offen | 4799 |
-| **G-163** 16 markierte Rueckfallfassungen in supplements | offen | 4807 |
-| **C-219** Tabellen, die die Spec kennt und die es nicht gibt | offen | 4820 |
-| **C-220** `buddy` — 0 von 16 Tabellen | offen | 4843 |
-| **G-164** Drei Module des Vorgaengers haben hier kein Gegenstueck | offen | 4854 |
-| **A-49** Der Attrappen-Waechter traegt eine veraltete Behauptung | offen | 4867 |
-| **C-221** `supplement_interactions` ist eine tote Spec-Tabelle | offen | 4874 |
-| **G-165** `nutrition-foods` zahlt die Preference-Kosten zweimal | offen | 4881 |
-| **C-222** `monitoring` fehlt als siebter Block | offen | 4896 |
-| **C-223** `dose_ceiling_value numeric` ist die falsche Form | offen | 4919 |
-| **G-168** Die coach-Kopfzeile widerspricht dem eigenen Tab | offen | 4967 |
-| **G-169** `coach.checkins` und `checkin_templates` liegen | offen | 4973 |
-| **C-225** Vier Schreibwege fehlen in coach | offen | 4979 |
-| **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 4994 |
-| **G-171** Die Code-Markenzahl misst den Fortschritt nicht | offen | 5006 |
-| **C-228** Drei Gruppen, saubere Kategorien, Beschreibung | offen | 5022 |
-| **C-229** Ein Katalog aus `DatabaseEcht`, Detail und Add | offen | 5058 |
-| **C-232** Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen | offen | 5098 |
-| **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5141 |
-| **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5166 |
-| **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5192 |
-| **C-235** Schritt 2 des Neuaufbaus — die 33 Tabellen befuellen | offen | 5209 |
-| **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5250 |
-| **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5274 |
-| **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5303 |
-| **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5313 |
-| **C-238** `meal_plan_entries` hat keinen Status | offen | 5331 |
-| **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5349 |
-| **B-29** 21 Wegwerf-Datenbanken, 3,58 GB | offen | 5364 |
-| **B-30** MSYS-`tar` kann keine `D:\`-Pfade | offen | 5385 |
-| **G-174** Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig | offen | 5400 |
+| **G-162** supplements Compliance und medical Tracking | offen | 4779 |
+| **G-163** 16 markierte Rueckfallfassungen in supplements | offen | 4787 |
+| **C-219** Tabellen, die die Spec kennt und die es nicht gibt | offen | 4800 |
+| **C-220** `buddy` — 0 von 16 Tabellen | offen | 4823 |
+| **G-164** Drei Module des Vorgaengers haben hier kein Gegenstueck | offen | 4834 |
+| **A-49** Der Attrappen-Waechter traegt eine veraltete Behauptung | offen | 4847 |
+| **C-221** `supplement_interactions` ist eine tote Spec-Tabelle | offen | 4854 |
+| **G-165** `nutrition-foods` zahlt die Preference-Kosten zweimal | offen | 4861 |
+| **C-222** `monitoring` fehlt als siebter Block | offen | 4876 |
+| **C-223** `dose_ceiling_value numeric` ist die falsche Form | offen | 4899 |
+| **G-168** Die coach-Kopfzeile widerspricht dem eigenen Tab | offen | 4947 |
+| **G-169** `coach.checkins` und `checkin_templates` liegen | offen | 4953 |
+| **C-225** Vier Schreibwege fehlen in coach | offen | 4959 |
+| **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 4974 |
+| **G-171** Die Code-Markenzahl misst den Fortschritt nicht | offen | 4986 |
+| **C-228** Drei Gruppen, saubere Kategorien, Beschreibung | offen | 5002 |
+| **C-229** Ein Katalog aus `DatabaseEcht`, Detail und Add | offen | 5038 |
+| **C-232** Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen | offen | 5078 |
+| **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5121 |
+| **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5146 |
+| **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5172 |
+| **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5189 |
+| **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5213 |
+| **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5242 |
+| **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5252 |
+| **C-238** `meal_plan_entries` hat keinen Status | offen | 5270 |
+| **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5288 |
+| **B-29** 21 Wegwerf-Datenbanken, 3,58 GB | offen | 5303 |
+| **B-30** MSYS-`tar` kann keine `D:\`-Pfade | offen | 5324 |
+| **G-174** Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig | offen | 5339 |
+| **C-240** 31 Kimi-Substanzen ohne Evidenzgrad — und die Spec sagt | offen | 5350 |
+| **C-241** Das Nachweiskonto traegt weder Essensplaene noch | offen | 5368 |
+| **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5390 |

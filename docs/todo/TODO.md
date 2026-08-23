@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 226 offen, 0 in Arbeit.
+**Stand: 2026-08-23.** 226 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -4776,26 +4776,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[cmd]` Dazu `tabs-extras` 1 Marke: Body stats × strength —
   `goals.body_measurements` × `workout_sets`, beides da.
 
-- [ ] **G-160: recovery Messwerte liegen in `checkins`** (neu
-  2026-08-22).
-
-  `[cmd]` `tab-messwerte` 10 Marken (Muscle recovery, Per-muscle
-  detail, HRV score, 30-day trend, Last night, 14 nights, Score paths,
-  Sleep hygiene). **`checkins` traegt `hrv_rmssd`, `sleep_hours`,
-  `sleep_quality`, `sleep_start`/`end`, `soreness`, sogar
-  `screen_time_before_bed`.**
-
-  `[cmd]` Ausnahme: *„Phone camera HRV"* braucht eine Geraetefunktion,
-  die ganz fehlt; mehrfach-taegliche HRV braucht `hrv_measurements`.
-
-- [ ] **G-161: nutrition Meal plans — der krasseste Fall** (neu
-  2026-08-22).
-
-  `[cmd]` 8 Marken, Banner *„Es gibt kein Schema fuer Essensplaene"* —
-  **`meal_plans` 2, `meal_plan_weeks` 6, `meal_plan_days` 42,
-  `meal_plan_entries` 112, und `plan-lesen` existiert.** Der
-  Planner-Tab liest damit bereits echt.
-
 - [ ] **G-162: supplements Compliance und medical Tracking** (neu
   2026-08-22).
 
@@ -5206,47 +5186,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   eine Tabelle, die es nicht gibt, ist entweder kaputt oder eine Luege.
   Der Textblock im Kettenschritt sagt, dass sie vorgesehen war.
 
-- [ ] **C-235: Schritt 2 des Neuaufbaus — die 33 Tabellen befuellen**
-  (neu 2026-08-23). **Laeuft bei Codex.** Nach C-232.
-
-  `[cmd]` **Aus bestehenden Tabellen, 1:1:** `substance_catalog` 566 →
-  `supplements` · `substance_aliases` 1.541 ·
-  `substance_lab_effects` 222 · `supplement_nutrient_mappings` 17.
-
-  `[cmd]` **Struktur:** `supplement_groups` 3 (supplement 307,
-  enhanced 177, peptide 82) · `supplement_categories` 23 aus der
-  `filter`-Spalte.
-
-  `[cmd]` **C-230 ist durchgelaufen, ohne dass ein Bericht ankam** —
-  `filter` ist auf allen 566 gefuellt und traegt genau die Buendelung
-  aus dem Auftrag: 9 supplement, 7 peptide, 7 enhanced.
-
-  `[cmd]` **`kategorie` hat 59 Werte** (22 enhanced, 24 peptide, 16
-  supplement) — das ist die feine Fassung. Sie bleibt Spalte an
-  `supplements` fuer die Detailanzeige, sie wird **nicht**
-  Filterleiste.
-
-  `[cmd]` **Mit Zweitschluessel entstehen mehr Zeilen als Substanzen:**
-  `supplement_organ_risks` **1.450** (290 × 5 Organe) ·
-  `supplement_identifiers` **1.226** · `supplement_regulatory`
-  **1.185** · `supplement_field_sources` **2.147** ·
-  `supplement_interactions` 78.
-
-  `[read]` **Eine Korrektur an einer eigenen Messung:** der
-  Orchestrator hatte die Organprofile mit *„2 / 1 / 1"* gezaehlt —
-  sein Muster trennte `""` und `"unknown"` nicht. **Es sind 290 × 5,
-  alle gefuellt.**
-
-  `[read]` **Der Kern des Auftrags ist `status`:** wo die Quelle
-  *„unknown"* sagt, ist der Wert `unbekannt` — nicht eine leere Zeile
-  und nicht `bekannt` mit leerem Inhalt. `[cmd]` `regulatory` traegt
-  *„unknown"* massenhaft: `uk` nur 115 von 290 mit echtem Wert,
-  `australia` 134.
-
-  **Leer bleiben mangels Quelldaten:** `intake_schedule`,
-  `user_inventory`, `user_supplement_settings`, `stack_templates` und
-  die Zyklus- und Protokolltabellen.
-
 - [ ] **A-50: Ein `DROP COLUMN` prueft die Lesepfade nicht** (neu
   2026-08-23). Aus G-160.
 
@@ -5406,3 +5345,80 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Ein Nachweisbild von einem Stand, den es nicht mehr gibt,
   belegt nichts.** Neu aufnehmen, wenn Recovery das naechste Mal
   angefasst wird — kein eigener Durchgang wert.
+
+
+- [ ] **C-240: 31 Kimi-Substanzen ohne Evidenzgrad — und die Spec sagt
+  eine falsche Zahl** (neu 2026-08-23). Aus der Pruefung von C-235.
+
+  `[cmd]` `docs/specs/Supplements/SCHEMA_NEUAUFBAU.md:146` fuehrt
+  `evidence.overall_grade` mit **290**. Live sind es **259** von 566
+  Zeilen in `supplement_evidence`.
+
+  `[cmd]` **Die 290 ist die Zahl der Kimi-Zeilen, nicht die der
+  benoteten:** `kimi_supplement` 154 Zeilen / 151 benotet ·
+  `kimi_performance` 75 / 63 · `kimi_peptide` 61 / 45. Die uebrigen
+  276 (`f05_substance_candidate` 248, `lumeos_supplement_catalog` 28)
+  tragen weder Grad noch Beschreibung.
+
+  `[read]` **Zwei Dinge, die nicht dasselbe sind:** die Spec-Zeile
+  korrigieren (eine Zeile) — und klaeren, ob die 31 in Kimis Quelle
+  einen Grad haben und der Import ihn fallen laesst, oder ob die Quelle
+  selbst keinen liefert. **Erst messen, dann entscheiden.**
+
+- [ ] **C-241: Das Nachweiskonto traegt weder Essensplaene noch
+  Medikamente** (neu 2026-08-23). Aus der Pruefung von G-161 und der
+  Vorbereitung von G-162.
+
+  `[cmd]` `nutrition.meal_plans` — gesamt 2, `dev@lumeos.app` 1,
+  **`test-user@lumeos.local` 0**. Ebenso Wochen 6/3/0, Tage 42/21/0,
+  Eintraege 112/56/0.
+  `[cmd]` `medical.user_medications` — gesamt 2, `dev` 1,
+  **`test-user` 0**.
+
+  `[read]` **Die Folge ist konkret, nicht theoretisch:** G-161 musste
+  seinen Nachweis auf `dev@lumeos.app` fuehren, gegen die Regel. Und
+  **G-162 ist in seinem medical-Teil gar nicht beauftragbar** — der
+  Punkt nennt *„`user_medications` 2"*, das ist die Gesamtzahl. Ein
+  Agent saehe auf dem Nachweiskonto eine leere Liste und koennte nicht
+  belegen, dass die Kachel liest.
+
+  `[read]` **Beides ist in der Uebergabe als *bewusst leer* vermerkt.**
+  Die Entscheidung ist also nicht *„vergessen"*, sondern *„soll das so
+  bleiben"* — und wenn ja, wie ein Agent dort etwas belegen soll.
+  Seeds gehoeren in die Kette, also zu Codex.
+
+- [ ] **C-242: Die 13 Namensdubletten blockieren Schritt 3 des
+  Supplements-Neuaufbaus** (neu 2026-08-23). Aus der Vorbereitung von
+  Schritt 3.
+
+  `[cmd]` `supplements.supplements` hat 566 Zeilen, aber nur **553
+  verschiedene `name_en`**. Die 13 Paare sind **ausnahmslos**
+  `f05_substance_candidate` + `lumeos_supplement_catalog` — also genau
+  die beiden Quellen ohne Beschreibung und ohne Evidenzgrad:
+  Caffeine · Calcium · Iron · Magnesium · Tongkat Ali · Vitamin B12 ·
+  Vitamin B6 · Vitamin C · Vitamin D3 · Vitamin E · Vitamin K2 (MK-7) ·
+  Whey Protein · Zinc.
+
+  `[cmd]` **Warum das Schritt 3 aufhaelt:** `stack_items` traegt 10
+  Zeilen, 8 mit `supplement_id` auf `supplement_catalog` (44), 2 mit
+  `custom_name`. Die 8 zeigen auf nur **4** verschiedene
+  Katalogeintraege — Creatine Monohydrate, Magnesium, Omega-3
+  (EPA/DHA), Vitamin D3. **Zwei davon, Magnesium und Vitamin D3,
+  treffen je zwei Zeilen in `supplements`.**
+
+  `[cmd]` **Die vorhandene Bruecke loest sie nicht auf:** die Sicht
+  `supplements.stack_item_substance_matches` liefert 8 Zeilen, aber nur
+  fuer **Creatine Monohydrate** (`sub_9f9bb8c160`) und **Omega-3
+  (EPA/DHA)** (`sub_4480fcfa86`). **Magnesium und Vitamin D3 kommen
+  darin nicht vor.** 50 % der Zuordnungen fehlen also genau dort, wo
+  der Name doppelt ist.
+
+  `[read]` **Damit ist die Dublettenfrage keine Kosmetik, sondern der
+  Blocker vor dem Umhaengen.** Und sie haengt an der groesseren Frage:
+  **276 von 566 Zeilen (48,8 %) haben weder Beschreibung noch
+  Evidenzgrad.** Gehoeren sie in den Katalog, oder erst wenn Kimi
+  liefert? Beide Seiten jedes Dublettenpaars sind leer — es gibt also
+  keine *„gewinnende"* Zeile zu waehlen.
+
+  **Entscheidung liegt bei Tom.** Solange sie offen ist, kann Schritt 3
+  nur fuer Creatine und Omega-3 sauber laufen.

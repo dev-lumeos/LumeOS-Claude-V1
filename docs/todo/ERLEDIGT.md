@@ -11772,3 +11772,110 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   keine Richtungsfarbe); Reeves/McCallum als Formeltext, weil
   Handgelenk/Knoechel/Becken nicht gemessen werden; FFMI-25 bewusst
   draussen (BP-FFMI-005, CONFLICTING_EVIDENCE).
+
+- [x] **G-160: recovery Messwerte liegen in `checkins`** — **erledigt
+  2026-08-23 (Fable):** `[cmd]` `tab-messwerte.tsx` liest die erfassten
+  Werte aus `recovery.checkins` — HRV-Block ab Zeile 129
+  (`stand.zeilen.filter(z => z.hrv_rmssd != null)`), Schlaf-Block ab
+  Zeile 405 (`sleep_hours`). Beide Kacheln beschriften ihre Quelle im
+  Untertitel (`recovery.checkins`).
+
+  `[cmd]` **Gemessen auf `test-user@lumeos.local`:** 30 Check-ins,
+  **8 mit `hrv_rmssd`**, **30 mit `sleep_hours`**, Zeitraum
+  2026-07-25 bis 2026-08-23. Die Kachel nennt die Deckung selbst
+  (*„8 von 30 Check-ins mit Messwert"*), statt eine Luecke zu glaetten.
+
+  `[read]` **Nicht geschlossen wurde die Kamera-HRV** — die
+  Geraetefunktion (PPG) fehlt ganz, die Kachel bleibt Attrappe mit
+  Marke und Begruendung im Code (Zeile 258). Das war im Auftrag als
+  Ausnahme benannt.
+
+  `[read]` **Die 10 verbliebenen `attrappe={ATTRAPPE}`-Karten in
+  derselben Datei sind kein offener Rest von G-160**, sondern die
+  Rueckfallfassungen aus **G-163**: *„HRV score"* rechnet gegen die
+  Konstante `CHECKIN.hrv_rmssd`, *„Last night"* und *„14 nights"*
+  stehen neben den echten Kacheln. `[cmd]` Der Orchestrator hat sie
+  beim Einstieg am 2026-08-23 zunaechst als offenes G-160 gezaehlt —
+  **genau der Zaehlfehler, den G-171 beschreibt.** Tom, 2026-08-23:
+  *„g160 schon ewigkeiten erledigt."*
+
+- [x] **C-235: Schritt 2 des Neuaufbaus — die 33 Tabellen befuellen** —
+  **erledigt 2026-08-23 (Codex), Bericht `docs/berichte/c-235-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator selbst gemessen, live, alle 47 Tabellen des
+  Schemas `supplements` in einem Lauf** (`query_to_xml`-Zaehlung, nicht
+  aus dem Bericht uebernommen): `supplements` 566 · `supplement_groups`
+  3 · `supplement_categories` 23 · `supplement_aliases` 1.541 ·
+  `supplement_dosing` 566 · `supplement_evidence` 566 ·
+  `supplement_pharmacology` 566 · `supplement_safety` 290 ·
+  `supplement_warnings` 290 · `supplement_wada` 290 ·
+  `supplement_quality` 237 · `supplement_lab_effects` 222 ·
+  `supplement_monitoring` 46 · `supplement_organ_risks` 1.450 ·
+  `supplement_identifiers` 1.226 · `supplement_regulatory` 1.119 ·
+  `supplement_field_sources` 2.147 · `supplement_interactions` 78 ·
+  `supplement_nutrients` 17. **Alle Plan-, Zyklus-, Protokoll- und
+  Inventartabellen 0**, wie im Auftrag vorgesehen.
+
+  `[cmd]` **Drei Zahlen weichen vom Bericht ab, und zwar erklaerbar:**
+  `stack_items` 10 statt 8 · `intake_logs` 744 statt 720 ·
+  `user_stacks` 3 statt 2. **Das ist C-236**, das nach dem Bericht lief
+  und `test-user@lumeos.local` bestueckt hat (1 Stack, 2 Positionen,
+  24 Einnahmen). Kein Widerspruch — der Bericht ist aelter als die
+  Messung.
+
+  `[read]` **Codex hat 1.119 statt der beauftragten 1.185 gemeldet und
+  begruendet, statt passend zu machen:** die Quelle traegt 331 leere
+  UK/Australia-Strings; `unknown` wird zu `unbekannt`, ein Leerstring
+  erzeugt keine Zeile. Als NOTICE im SQL dokumentiert. **Die
+  Auftragszahl war falsch, nicht das Ergebnis.**
+
+  `[cmd]` **Eine zweite falsche Erwartung, diesmal in der Spec:**
+  `docs/specs/Supplements/SCHEMA_NEUAUFBAU.md:146` fuehrt
+  `evidence.overall_grade` mit **290**. Live sind es **259**. Die 290
+  ist die Zahl der Kimi-Zeilen, nicht die der benoteten:
+  `kimi_supplement` 154/151 · `kimi_performance` 75/63 ·
+  `kimi_peptide` 61/45. **31 Kimi-Substanzen tragen keinen Grad.**
+  Als eigener Punkt angelegt (C-240).
+
+  `[cmd]` **Negativproben belegt:** `supplement_aliases` 1.540 statt
+  1.541 wird rot · Erwartung 1.542 statt 1.541 wird rot.
+  Wegwerf-Kette `wegwerf_c235g`: 89 Schritte, 167,0 s, gruen.
+  Vollsicherung vor dem Live-Apply unter
+  `backup/vollsicherung/20260823_093637_c235_vor_live_*`.
+  Policies live 308.
+
+- [x] **G-161: nutrition Meal plans — der krasseste Fall** — **erledigt
+  2026-08-23 (Claude Code), Bericht
+  `docs/berichte/g-161-claude-code.md`, committet als `2702771`.**
+
+  `[cmd]` **Vom Orchestrator nachgemessen, RLS-Sicht statt
+  Gesamtzahl** — die Zahlen des Berichts stimmen exakt: `dev@lumeos.app`
+  sieht **1 Plan · 3 Wochen · 21 Tage · 56 Eintraege**; gesamt sind es
+  2 Plaene, der zweite gehoert einem anderen Konto. Die gerenderte
+  Ansage *„3 Wochen · 21 Tage · 56 Eintraege"* deckt sich damit.
+
+  `[cmd]` **Der Banner *„Es gibt kein Schema fuer Essensplaene"* ist
+  weg**, drei Kacheln lesen echt (Plankopf, Planumfang, Bibliothek),
+  `plan-lesen` wird benutzt statt nachgebaut, `page.tsx` laedt auch auf
+  `?tab=plans`.
+
+  `[cmd]` **Die fuenf verbleibenden Attrappen sind belegt, nicht
+  behauptet:** `meal_plan_entries` hat **0** Spalten aus
+  (`status`,`state`) · `meal_plans` hat **0** aus (`lifecycle`,
+  `started_at`, `days_count`, `confirm_mode`, `next_plan_id`) · es gibt
+  **0** Tabellen `shopping%` im gesamten Katalog. Ohne Status je Eintrag
+  waere jede Compliance-Prozentzahl erfunden — der Ring ist deshalb
+  bewusst entfernt und durch die gemessene Zaehlung ersetzt.
+
+  `[read]` **Zwei eigene Fehler hat der Agent selbst offengelegt:** die
+  Markenansage war 5 statt der gerenderten 4 (Quelltextzahl mit
+  Renderzahl verwechselt), und der erste Test war blind — mit
+  eingebautem Hochrechnungsfehler blieben alle vier gruen, weil die
+  Fixtures gleichverteilt waren. Fixture auf 2,67 Eintraege je Tag
+  geaendert, Test 4 wird jetzt rot. **Das ist die Pruefung in beide
+  Richtungen.**
+
+  `[cmd]` **Offen und als eigener Punkt vermerkt (C-241):** auf
+  `test-user@lumeos.local` sind alle vier Ebenen **0**. Der Nachweis
+  konnte nur auf `dev@lumeos.app` gefuehrt werden — gegen die Regel,
+  aber unvermeidbar, solange das Nachweiskonto keinen Plan traegt.

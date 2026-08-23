@@ -13,10 +13,17 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | **G-160** recovery Messwerte an `checkins` | `apps/web` Recovery | 2026-08-23 |
-| **Claude Code** | **G-161** nutrition Meal plans an die Daten | `apps/web` Nutrition | 2026-08-23 |
-| **Codex** | **C-235** Schritt 2 — die 33 Tabellen befuellen | `supabase/_pipeline/` | 2026-08-23 |
+| **Claude Code** | *frei* | — | — |
+| **Codex** | *frei* | — | — |
+| **Fable** | *frei* | — | — |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung — **Crawl 35 laeuft** | extern, siehe unten | 2026-08-20 |
+
+`[cmd]` **Alle drei Agenten sind frei, Stand 2026-08-23.** G-160, G-161
+und C-235 stehen seit dem 2026-08-23 in `ERLEDIGT.md`, mit vom
+Orchestrator selbst gemessenen Zahlen. **Der Wachter hat den
+Widerspruch gefunden** — `laufend-erledigt` schlug dreimal an, weil
+diese Datei die drei noch als laufend fuehrte, nachdem sie geschlossen
+waren.
 
 `[cmd]` **Wo die Kimi-Ergebnisse liegen** (Tom, 2026-08-22):
 
@@ -34,6 +41,26 @@ vorher nachzusehen, was tatsaechlich da ist.
 `[read]` **C-164 war zwischenzeitlich faelschlich als laufend
 eingetragen** — der Auftragstext ging erst am Abend raus. **Eintragen,
 wenn er rausgeht, nicht wenn er geschrieben ist.**
+
+## Der Faden: Supplements-Neuaufbau
+
+| Schritt | Stand |
+|---|---|
+| 1 · Anlegen | **durch** (C-232) — 33 Tabellen, live |
+| 2 · Befuellen | **durch** (C-235) — live, vom Orchestrator nachgemessen |
+| **3 · Umhaengen** | **blockiert durch C-242** — Entscheidung bei Tom |
+| 4 · Lesepfade | wartet auf 3 — `stack-read`, `stack-write`, `substanz-read`, `medical/page.tsx`, `supplements/ansicht.tsx`, `supplements/substanz-detail.tsx` |
+| 5 · Alte weg | erst wenn 3 und 4 gemessen sind |
+
+`[cmd]` **Sechs Dateien lesen heute `supplement_catalog`** — das ist der
+Umfang von Schritt 4:
+
+    apps/web/src/app/v2/medical/page.tsx
+    apps/web/src/app/v2/supplements/ansicht.tsx
+    apps/web/src/app/v2/supplements/substanz-detail.tsx
+    apps/web/src/lib/supplements/stack-read.ts
+    apps/web/src/lib/supplements/stack-write.ts
+    apps/web/src/lib/supplements/substanz-read.ts
 
 ## Wartet auf einen freien Agenten
 
@@ -62,6 +89,12 @@ laufen als ein Auftrag.
 | **G-141** Onboarding nach ADR (7 Schritte) | `apps/web` |
 | **G-131** Settings, sieben Bereiche | `apps/web` |
 
+**Nicht beauftragbar, bis C-241 entschieden ist**
+
+| Auftrag | Grund |
+|---|---|
+| **G-162** medical-Teil | `[cmd]` `user_medications` auf `test-user@lumeos.local` **0** — der Nachweis ist dort nicht fuehrbar |
+
 **Schema-Auftraege aus dem Gesamtabgleich**
 
 | Auftrag | |
@@ -75,6 +108,17 @@ laufen als ein Auftrag.
 
 **Entscheidungen fuer Tom**
 
+*Supplements — blockieren den Faden*
+
+| | |
+|---|---|
+| **C-242** | `[cmd]` 13 Namensdubletten, alle `f05` + `lumeos`, beide Seiten leer. **Magnesium und Vitamin D3 sind darunter** und fehlen deshalb in `stack_item_substance_matches`. **Blockiert Schritt 3.** |
+| **C-242** (zweiter Teil) | `[cmd]` 276 von 566 Zeilen (48,8 %) ohne Beschreibung und ohne Evidenzgrad. Gehoeren sie in den Katalog? |
+| **C-241** | `[cmd]` Nachweiskonto ohne `meal_plans` und `user_medications`. Soll das so bleiben? |
+| **G-163** | Die Rueckfallfassungen — bleiben oder fliegen? `[cmd]` `supplements/tabs.tsx` 16, `tab-plans` 8, `tab-prefs` 6, `recovery/tab-messwerte.tsx` 10, `recovery/ansicht.tsx` 5, `recovery/tab-protokolle.tsx` 19, `nutrition/nutrients-entwurf.tsx` 12 **ohne Marke**. `G-171`: sie machen die Markenzaehlung unbrauchbar |
+| Taxonomie | 59 feine Kategorien neben 23 Filtern — Abnahme offen |
+| **C-223** | `dose_ceiling` als Freitext — wird ueber `supplement_regulatory` loesbar |
+
 *Anzeige und Daten*
 
 | | |
@@ -85,6 +129,8 @@ laufen als ein Auftrag.
 | **GO-24** | *„Mineralstoffe"* als Gruppenbegriff |
 | **G-150** | Volltexttreffer neben Alias-Treffer zeigen? |
 | **C-174** | `strong` als dritte Constraint-Stufe (ADR gegen GO-22) |
+| **C-207** | Vier Cam-Entscheidungen: Speicherweg, Datenschutz je Rechtsraum, Einwilligung, Vision-Modell |
+| **C-218** | Zwei Skalen im Recovery-Score |
 
 *Coach und Rechte*
 
