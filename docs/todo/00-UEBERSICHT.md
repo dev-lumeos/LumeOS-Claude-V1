@@ -273,3 +273,4 @@ wenn er erzeugt und geprüft wird.
 | **G-176** Der Katalog zeigt 50 von 290 und laesst den Rest nicht | offen | 5521 |
 | **G-177** Das Substanzdetail erklaert, was fehlt, statt zu zeigen, | offen | 5553 |
 | **G-178** Reiter und Fussleiste nennen verschiedene Zahlen — 298 | offen | 5597 |
+| **C-257** Nutzertexte fuer den Substanzkatalog — Schema und | offen | 5620 |
