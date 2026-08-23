@@ -1460,6 +1460,12 @@
       "tabelle": "supplement_protocol_items",
       "zeigt_auf": "supplements",
       "schritt": "136"
+    },
+    {
+      "name": "supplement_interactions_supplement_id_fkey",
+      "tabelle": "supplement_interactions",
+      "zeigt_auf": "supplements",
+      "schritt": "137"
     }
   ],
   "funktionen": [
@@ -1636,7 +1642,26 @@
     "medical.biomarker_aliases": 292,
     "medical.medication_active_substances": 56,
     "medical.medication_formulations": 119,
-    "medical.medication_products": 124
+    "medical.medication_products": 124,
+    "supplements.supplement_groups": 3,
+    "supplements.supplement_categories": 23,
+    "supplements.supplements": 566,
+    "supplements.supplement_aliases": 1541,
+    "supplements.supplement_lab_effects": 222,
+    "supplements.supplement_nutrients": 17,
+    "supplements.supplement_safety": 290,
+    "supplements.supplement_warnings": 290,
+    "supplements.supplement_wada": 290,
+    "supplements.supplement_quality": 237,
+    "supplements.supplement_pharmacology": 566,
+    "supplements.supplement_dosing": 566,
+    "supplements.supplement_evidence": 566,
+    "supplements.supplement_monitoring": 46,
+    "supplements.supplement_organ_risks": 1450,
+    "supplements.supplement_identifiers": 1226,
+    "supplements.supplement_regulatory": 1119,
+    "supplements.supplement_field_sources": 2147,
+    "supplements.supplement_interactions": 78
   },
   "mindestzeilen_belege": {
     "_kommentar": "Herkunft je Untergrenze. Gerundete Werte sind absichtlich als gerundet markiert; sie sind Warnschwellen, keine exakten Sollwerte.",
@@ -1673,7 +1698,26 @@
     "medical.biomarker_aliases": "[cmd] C-72: daten/biomarker-aliases.json fuehrt 304 eindeutige importierbare Legacy-Aliaszeilen plus 6 kuratierte Mehrdeutigkeitszeilen; 143 importiert zusammen 310. Die 18 Thai-Aliase bleiben offen, weil die aktuelle Faltung sie nicht traegt.",
     "medical.medication_active_substances": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 56 Wirkstoffe; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
     "medical.medication_formulations": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 119 Formulierungen; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
-    "medical.medication_products": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 124 Produkte; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist."
+    "medical.medication_products": "[cmd] C-130: erster Kimi-Medikamentenstand fuehrte 124 Produkte; die Quelle darf wachsen. 146_medications_katalog.ts bricht ab, wenn weniger als diese Untergrenze vorhanden ist.",
+    "supplements.supplement_groups": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_groups aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 3.",
+    "supplements.supplement_categories": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_categories aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 23.",
+    "supplements.supplements": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplements aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 566.",
+    "supplements.supplement_aliases": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_aliases aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1541.",
+    "supplements.supplement_lab_effects": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_lab_effects aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 222.",
+    "supplements.supplement_nutrients": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_nutrients aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 17.",
+    "supplements.supplement_safety": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_safety aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 290.",
+    "supplements.supplement_warnings": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_warnings aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 290.",
+    "supplements.supplement_wada": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_wada aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 290.",
+    "supplements.supplement_quality": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_quality aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 237.",
+    "supplements.supplement_pharmacology": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_pharmacology aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 566.",
+    "supplements.supplement_dosing": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_dosing aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 566.",
+    "supplements.supplement_evidence": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_evidence aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 566.",
+    "supplements.supplement_monitoring": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_monitoring aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 46.",
+    "supplements.supplement_organ_risks": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_organ_risks aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1450.",
+    "supplements.supplement_identifiers": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_identifiers aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1226.",
+    "supplements.supplement_regulatory": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_regulatory aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 1119.",
+    "supplements.supplement_field_sources": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_field_sources aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 2147.",
+    "supplements.supplement_interactions": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_interactions aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 78."
   },
   "datenqualitaet": {
     "_kommentar": "Schutz gegen den C-38-Ausfall: Die Zeilenzahl allein reicht nicht. 698.092 konnte als falscher Sollwert gruen werden; Codezahl und Quellenzahl haetten den Verlust gemeldet.",
@@ -2827,7 +2871,7 @@
     {
       "schema": "supplements",
       "name": "supplement_interactions",
-      "schritt": "130",
+      "schritt": "130/137",
       "rls": true,
       "policies": [
         "SELECT"
@@ -2847,7 +2891,31 @@
         ]
       },
       "grants_herkunft": "130_supplements_schema.sql vergibt Rechte explizit, weil supplements nicht unter nutrition-Default-Privileges faellt.",
-      "zeilenschutzart": "oeffentlich"
+      "zeilenschutzart": "oeffentlich",
+      "spalten": [
+        "id",
+        "interaction_type",
+        "severity",
+        "description_de",
+        "description_en",
+        "recommendation_de",
+        "recommendation_en",
+        "timing_recommendation",
+        "evidence_level",
+        "evidence_sources",
+        "blocks_intake",
+        "requires_confirmation",
+        "source",
+        "is_active",
+        "created_at",
+        "updated_at",
+        "supplement_id",
+        "partner_type",
+        "partner_label",
+        "mechanism",
+        "direction",
+        "status"
+      ]
     },
     {
       "schema": "supplements",
