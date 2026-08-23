@@ -254,3 +254,9 @@ wenn er erzeugt und geprüft wird.
 | **C-225** Vier Schreibwege fehlen in coach | offen | 4979 |
 | **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 4994 |
 | **G-171** Die Code-Markenzahl misst den Fortschritt nicht | offen | 5006 |
+| **C-228** Drei Gruppen, saubere Kategorien, Beschreibung | offen | 5022 |
+| **C-229** Ein Katalog aus `DatabaseEcht`, Detail und Add | offen | 5058 |
+| **C-232** Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen | offen | 5098 |
+| **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5141 |
+| **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5166 |
+| **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5192 |

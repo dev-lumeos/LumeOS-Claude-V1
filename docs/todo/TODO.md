@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 210 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 216 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5018,3 +5018,190 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `supplements/tabs.tsx` (16), `nutrition/tab-prefs`,
   `coach/tab-rechte`, plus die neuen Entwurfszweige von Autonomy,
   Overview und Messages.
+
+- [ ] **C-228: Drei Gruppen, saubere Kategorien, Beschreibung** (neu
+  2026-08-22). **Laeuft bei Codex.** Korrigiert C-197.
+
+  **Tom, 2026-08-22:** *„wir haben normale supplements … wir haben
+  peptides … wir haben enhanced supplement — das ist je eine Gruppe
+  mit ihren Filtern."*
+
+  `[cmd]` **C-197 hat 276 Zeilen als „ohne kanonische Kategorie"
+  gelassen. Von diesen 276 haben 276 eine `category` und 248 einen
+  `compound_type`. Wirklich leer: null.**
+
+  `[read]` **Der Fehler war der des Orchestrators:** im Auftrag stand
+  *„wo nicht aus `raw` ableitbar, bleibt leer"* — die vorhandene
+  `category`-Spalte kam darin nicht vor. **Und er hat es abgenommen**
+  mit dem Satz *„276 leer ist der korrekte Zustand"*. Tom hat es an der
+  Oberflaeche gesehen.
+
+  `[cmd]` **Die Gruppen sind aus `domain` und `category` ableitbar:**
+  supplement 307 · peptide 82 · enhanced 177 = 566.
+
+  `[cmd]` **Kategorien stehen zweimal da, deutsch und englisch:**
+  `Herbal/botanical` 28 gegen `herbal` 40 · `Minerals` 23 gegen
+  `Mineral` 8 · `Nootropics` 6 gegen `nootropic` 25 gegen
+  `Nootropikum` 25. **Deshalb sind sie nie zusammengekommen.**
+
+  `[cmd]` **Die Untergliederung liegt in `subcategory`:** enhanced hat
+  `Injectable AAS` 10, `Oral AAS` 10, `Ancillaries` 10, `SARM` 8 …;
+  peptide hat `Growth hormone axis` 5+4+2, `Neuro/cognitive` 6,
+  `Muscle/growth axis` 5, `Metabolic/incretin` 3+3+2+1+1 …
+
+  `[cmd]` **`description` liegt in `raw` bei 290 von 290**, Median 97
+  Zeichen — **und `substance_catalog` hat keine Spalte dafuer.**
+  Dieselbe Auslassung wie `monitoring` (C-222); geht im selben Lauf mit.
+
+  **Einspielen live ist Teil des Auftrags**, seit C-226.
+
+- [ ] **C-229: Ein Katalog aus `DatabaseEcht`, Detail und Add
+  getrennt** (neu 2026-08-22). **Laeuft bei Fable.** Haengt an C-228.
+
+  **Tom, 2026-08-22:** *„das sieht viel mehr wie eine brauchbare
+  version aus plus noch bisschen erweitern. detail ist das supplement
+  / add ist separat / links wird name und keypoints was es macht
+  angezeigt"*
+
+  `[cmd]` **Die Vorlage steht im Repo:** `tabs.tsx:779`,
+  `DatabaseEcht`. Sie macht richtig, was der neue Katalog nicht kann —
+  links Name mit Keypoints als Unterzeile, Add als eigene Spalte,
+  `Active`/`View` wenn im Stack, Zeilenklick oeffnet das Detail mit
+  `stopPropagation` auf den Knoepfen, **eine** Suche, **ein**
+  Kategorienfeld.
+
+  `[cmd]` **Ihr fehlt nur die Tabelle:** sie liest
+  `supplement_catalog` mit 44 Eintraegen.
+
+  `[cmd]` **Heute stehen drei Einstiege nebeneinander** — `Catalog`
+  mit 44 und Evidenzleiste, `Database` mit 44, die
+  `SubstanzKatalogKarte` mit 566 als Anhang darunter. **Es bleibt
+  einer.**
+
+  `[cmd]` **Toms Add-Befund:** `modale.tsx:589` sendet
+  `supplement_id`, `custom_name`, `dose`, `dose_unit`, `timing` —
+  **keine `stack_id`.** Der Dialog schreibt in den aktiven Stack, ohne
+  dass man ihn sieht oder waehlen kann. Der Weg existiert seit C-224.
+
+  `[cmd]` **Das Klappen ist gebaut und wird abgeschaut, nicht
+  nacherfunden:** `naehrstoff-ordnung-tab.tsx` (518 Zeilen) und
+  `naehrstoff-anzeige.ts` — `Sicht` mit `zeige`/`kindZeige`/
+  `erzwungenOffen`, Start ueberall zu, Ansicht gespeichert nach
+  `user_display_preferences`.
+
+  `[read]` **Der Orchestrator hatte gemeldet, es gebe kein klappbares
+  Element** — er hatte in `packages/ui` gesucht, nichts gefunden und
+  daraus auf Nichtexistenz geschlossen. **Dasselbe Muster wie die neun
+  falschen Banner.** Was generisch ist, gehoert nach `packages/ui`,
+  sonst wird es ein drittes Mal neu erfunden.
+
+- [ ] **C-232: Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen**
+  (neu 2026-08-23). **Laeuft bei Codex.**
+
+  **Vorlage:** `docs/specs/Supplements/SCHEMA_NEUAUFBAU.md`, 375
+  Zeilen, gegen vier Quellen geprueft, von Tom abgenommen.
+
+  `[read]` **Anlass, Tom am 2026-08-22:** *„wieso haben wir
+  supplement_catalog und substance_catalog? … jetzt wird zuerst
+  aufgeraeumt und definiert bevor wir nur eine zeile mehr code
+  machen."*
+
+  `[cmd]` **Woher die zwei kommen:** `a02e838` legt
+  `supplement_catalog` an (44 Zeilen), `022f2ce` — Titel *„one
+  catalogue from three sources"* — legt `substance_catalog` daneben.
+  Danach vier Commits, die nur den zweiten ausbauen: 31→60→63→68
+  Spalten. **Beide werden bis heute gelesen.**
+
+  `[read]` **Der Orchestrator hat die Doppelung zementiert:** in C-224
+  stand *„`supplement_catalog` nicht anfassen — die Abloesung ist ein
+  eigener Punkt"*. Diesen Punkt hat er nie angelegt.
+
+  **Nur anlegen, leer.** Kein Umhaengen, kein Loeschen. Neuer
+  Kettenschritt `136`, nach 135.
+
+  **Drei Regeln je Tabelle:** Fremdschluessel auf
+  `supplements.supplements` · `status` mit
+  `bekannt | unbekannt | nicht_zutreffend` · `_de`/`_en`/`_th` bei
+  jedem Anzeigetext.
+
+  `[read]` **Warum `status`:** Buddy wird ein deterministischer Layer.
+  `[cmd]` `interactions` ist bei 78 von 290 gefuellt — bei 212 wissen
+  wir es **nicht**. Ohne diesen Zustand macht Buddy daraus *„keine
+  Wechselwirkung"*.
+
+  **Abgelehnt und begruendet:** `enhanced_substances` (SPEC) waere eine
+  dritte Substanztabelle — `enhanced` ist ein Wert in
+  `supplement_groups`, kein Katalog. `supplement_knowledge` (ALT)
+  mischt vier Informationsarten.
+
+  **Offen fuer Tom:** zwei Wege zum Enhanced-Gate —
+  `user_supplement_settings.enhanced_mode` mit Altersprueferung (SPEC,
+  Flow 9) gegen `experience_level` (G-167, Provisorium).
+
+- [ ] **G-172: Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab**
+  (neu 2026-08-23).
+
+  `[cmd]` **22 englische Sichttexte** in `supplements`, waehrend
+  `apps/web/messages/de.json`, `en.json` und `th.json` existieren und
+  Nutrition sie ueber `next-intl` nutzt. **Supplements nirgends.**
+
+  `[read]` Der Orchestrator hatte gemeldet, es gebe keine
+  i18n-Schicht — er hatte nach `useTranslation` gesucht. Es ist
+  `next-intl`. **Nach dem falschen Namen gesucht, zum wiederholten
+  Mal.**
+
+  **Tom, 2026-08-22:** *„i18n ist fuer die UI und auch da gilt: wir
+  entwickeln immer de plus en, thai machen wir spaeter."*
+
+  `[cmd]` **Kein `overflow`, kein `maxHeight` an einer Liste im ganzen
+  Modul** — nur an den Modals. Bei 566 Zeilen ist unten alles
+  unerreichbar.
+
+  `[cmd]` **Und `Catalog` zeigt weiter eine Attrappe**, waehrend die
+  echte Substanzdatenbank am `Database`-Knopf im Kopf haengt. Zwei
+  Einstiege, einer davon Vorlage. Der Orchestrator hatte geschrieben
+  *„welcher Tab ihn traegt, entscheidet die Navigation spaeter"* —
+  das war falsch.
+
+- [ ] **C-233: `user_supplement_settings` — die Spec sieht es vor, wir
+  bauen es nicht** (neu 2026-08-23). **Wartet auf Subscription und
+  Tiers.**
+
+  `[cmd]` `SPEC_06_DATABASE_SCHEMA.md`, Abschnitt 4:
+  `enhanced_mode` · `enhanced_accepted_at` · `enhanced_age_verified` ·
+  `reminder_morning`/`_evening`/`_pre_workout` · `low_stock_days`.
+
+  **Tom, 2026-08-23:** *„wir sind am entwickeln und das werden wir noch
+  ein jahr sein. wenn dann irgendwann mal das subscription modell und
+  die tiers definiert sind … dann diskutieren wir ueber sachen wie
+  alterspruefung."*
+
+  `[read]` **Bis dahin entscheidet `experience_level`** (G-167,
+  ausdruecklich als Provisorium beschriftet). Ein zweites Gate daneben
+  waere derselbe Fehler wie zwei Kataloge.
+
+  `[cmd]` **Die Auslassung steht im Kettenschritt 136 als Textblock**,
+  mit Quelle und diesem Punkt — nicht stillschweigend weggelassen.
+  Toms Regel vom 2026-08-23: *„sehe es vor und mach texteintraege da im
+  code und verweise im todo darauf."*
+
+  **Die Erinnerungszeiten sind davon unberuehrt** und koennten frueher
+  kommen — sie haengen an keiner Tarifentscheidung. Wenn der
+  Einnahme-Plan (`intake_schedule`) gebaut wird, gehoeren sie dazu.
+
+- [ ] **C-234: `marketplace_product_id` — zeigt auf ein Modul, das es
+  nicht gibt** (neu 2026-08-23).
+
+  `[cmd]` `user_supplement_cycles` im Vorgaengerrepo
+  (`047_coach_planning_system.sql`) traegt `marketplace_product_id` und
+  `suggestion_source: marketplace_product`. **Der Vorgaenger hatte eine
+  Marketplace-Anbindung.**
+
+  `[cmd]` **Hier gibt es kein Marketplace-Modul** — G-164:
+  `referenz/lumeos-2026/src/modules/marketplace` hat 10 Dateien, in
+  `apps/web` existiert nichts davon. Die Seitenleiste fuehrt Marketplace
+  als eigenen Arbeitsbereich.
+
+  `[read]` **Die Spalte wird nicht angelegt.** Ein Fremdschluessel auf
+  eine Tabelle, die es nicht gibt, ist entweder kaputt oder eine Luege.
+  Der Textblock im Kettenschritt sagt, dass sie vorgesehen war.

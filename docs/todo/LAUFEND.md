@@ -13,9 +13,9 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
-| **Fable** | *frei* | | |
-| **Claude Code** | *frei* | | |
-| **Codex** | *frei* | | |
+| **Fable** | **G-159** training Today an die vorhandenen Daten | `apps/web` Training | 2026-08-23 |
+| **Claude Code** | **G-172** deutsch, scrollbar, Katalog auf Catalog | `apps/web` Supplements | 2026-08-23 |
+| **Codex** | **C-232** die 26 Tabellen anlegen, leer | `supabase/_pipeline/` | 2026-08-23 |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung — **Crawl 35 laeuft** | extern, siehe unten | 2026-08-20 |
 
 `[cmd]` **Wo die Kimi-Ergebnisse liegen** (Tom, 2026-08-22):
