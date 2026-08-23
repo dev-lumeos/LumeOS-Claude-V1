@@ -85,6 +85,38 @@ den dieser Ordner sichtbar machen soll.**
 Bei Pipeline-Auftraegen zusaetzlich: Wegwerf-Datenbank, Sicherung,
 Kettenlauf, **und live einspielen** mit Vollsicherung davor.
 
+### `[cmd]` heisst gemessen, nicht abgeschrieben
+
+**Tom, 2026-08-23:** *„wieso lieferst du falsche auftraege wenn alle
+fakten hast?"*
+
+`[cmd]` **Drei Zahlen in C-252 waren falsch** — 44 statt 33 Tabellen,
+17 statt 15 Spalten, `name_de` ist `NULL` statt `''`. **Der
+Orchestrator hatte sie aus der Spec abgeschrieben statt gezaehlt**,
+obwohl in derselben Sitzung die Regel stand, die Spec pruefend zu
+lesen.
+
+`[cmd]` **Und G-149 stand im Auftrag mit verdrehter Richtung** — der
+Punkt hatte es seit dem 2026-08-21 richtig: es bucht auf den letzten
+protokollierten Tag, nicht auf heute. **Der Orchestrator hatte den
+Punkt nicht aufgeschlagen und die Richtung aus dem Titel geraten.**
+
+**Daraus zwei Regeln:**
+
+**Die `[cmd]`-Zahlen im Auftrag stammen aus einem Befehl derselben
+Runde**, nicht aus einem Dokument und nicht aus dem Gespraechsverlauf.
+Was nicht gemessen ist, steht als `[annahme]` da — dann weiss der
+Agent, dass er es pruefen muss.
+
+**Wer einen Punkt beauftragt, liest den Punkt.** Der Titel im Register
+ist eine Zeile; die Begruendung darunter traegt die Richtung.
+
+`[read]` **Beides kostet zwei Minuten und hat zweimal Agentenzeit
+gekostet.** Der Ordner hier macht es sichtbar: Auftrag und Bericht
+stehen nebeneinander, und wo der Bericht widerspricht, ist der Auftrag
+nachlesbar.
+
+
 `[read]` **Melden, nicht entscheiden:** Wenn eine Vorgabe nicht aufgeht,
 meldet der Agent es, statt sie passend zu machen. `[cmd]` Das hat
 mehrfach Fehler des Orchestrators aufgedeckt — 1.185 statt 1.119,
