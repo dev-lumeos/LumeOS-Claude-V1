@@ -174,5 +174,21 @@
     "date": "2026-09-13",
     "case": "Adaptive TDEE und Meilensteine",
     "expected": "goals.adaptive_tdee liefert fuer Tom einen belastbaren 14-Tage-Wert neben dem Formelwert. goal_milestone_status zeigt einen erreichten, einen offenen und einen verfehlten Gewichts-Meilenstein; Max' Performance-Meilenstein liefert keinen geratenen Fortschritt."
+  },
+  {
+    "user": "Tom Miller",
+    "email": "tom.seed@example.com",
+    "user_id": "10000000-0000-0000-0000-000000000101",
+    "date": "(alle Messtage, jeder 4.)",
+    "case": "C-236: Wearable-Werte sind plausibel, keine Zaehlreihen",
+    "expected": "hrv_rmssd 39-69 ms (Mittel ~54), resting_hr 46-60, spo2 95,8-97,8, respiratory_rate 12,7-15,7; sleep_start/end und work/life_stress gefuellt. Das Zaehlreihen-Gate am Ende von testdaten-einspielen bricht den Lauf, wenn irgendeine Reihe >5 Werte mit konstanter Differenz traegt."
+  },
+  {
+    "user": "Pruefkonto",
+    "email": "test-user@lumeos.local",
+    "user_id": "(live: per E-Mail aufgeloest)",
+    "date": "(Anker = quelle_max - 75 Tage, 30 Tage rueckwaerts)",
+    "case": "C-236: das Nachweiskonto traegt eigene Daten",
+    "expected": "30 Check-ins + 30 Scores, 6 Sitzungen mit 36 Saetzen, 1 Stack mit 2 Positionen und 24 Einnahmen — genug fuer einen Nachweis, nicht so viel wie dev. Weiterhin 0 meal_plans, 0 user_medications, keine Coach-Beziehung (Zeilenschutz-Pruefungen erwarten das)."
   }
 ]

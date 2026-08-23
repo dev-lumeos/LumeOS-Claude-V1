@@ -709,6 +709,184 @@ SELECT
 FROM medical.user_conditions
 WHERE user_id = :'quelle'::uuid;
 
+-- =============================================================
+-- 12. C-236: das Pruefkonto bekommt EIGENE Daten.
+--
+-- [read] test-user@lumeos.local ist laut C-209 das Nachweiskonto —
+-- und war fuer Recovery, Training und Supplements leer. Drei
+-- Auftraege (G-158, G-159, G-160) mussten deshalb auf dev ausweichen.
+-- Genug fuer einen Nachweis, nicht so viel wie dev: 30 Tage
+-- Check-ins, 6 Sitzungen, ein kleiner Stack mit Einnahmen.
+--
+-- Was das Konto WEITER NICHT bekommt (Pruefungen im Gate erwarten 0):
+-- meal_plans, user_medications — und keine Coach-Beziehung
+-- (coach-portal-fuellen.sql: Zeilenschutz-Konto).
+--
+-- Determinismus ohne random(): md5(name||tag) liefert je Tag
+-- denselben Pseudowert; der Anker haengt am Seed-Fenster der Quelle
+-- (max(entry_date) - 75 Tage ~ "heute" im +/-90-Fenster), nicht an
+-- der Uhr.
+-- =============================================================
+
+DELETE FROM supplements.intake_logs WHERE user_id = :'pruefkonto'::uuid;
+DELETE FROM supplements.stack_items si
+  USING supplements.user_stacks us
+  WHERE si.stack_id = us.id AND us.user_id = :'pruefkonto'::uuid;
+DELETE FROM supplements.user_stacks WHERE user_id = :'pruefkonto'::uuid;
+DELETE FROM training.workout_sets ws
+  USING training.workout_exercises we, training.workout_sessions s
+  WHERE ws.workout_exercise_id = we.id AND we.workout_session_id = s.id
+    AND s.user_id = :'pruefkonto'::uuid;
+DELETE FROM training.workout_exercises we
+  USING training.workout_sessions s
+  WHERE we.workout_session_id = s.id AND s.user_id = :'pruefkonto'::uuid;
+DELETE FROM training.workout_sessions WHERE user_id = :'pruefkonto'::uuid;
+DELETE FROM recovery.scores WHERE user_id = :'pruefkonto'::uuid;
+DELETE FROM recovery.checkins WHERE user_id = :'pruefkonto'::uuid;
+
+SELECT (max(entry_date) - 75)::date AS anker
+FROM recovery.checkins WHERE user_id = :'quelle'::uuid \gset
+
+-- 12a. 30 Tage Check-ins. rausch(tag, salz) in 0..1 aus md5.
+INSERT INTO recovery.checkins (
+  user_id, entry_date, checkin_time, sleep_hours, sleep_quality,
+  sleep_start_time, sleep_end_time, subjective_feeling, mood,
+  energy_level, motivation, soreness, stress_level, work_stress,
+  life_stress, alcohol_units, caffeine_mg, screen_time_before_bed,
+  resting_hr, hrv_rmssd, spo2_pct, respiratory_rate, notes,
+  measurement_source, source_detail
+)
+SELECT
+  :'pruefkonto'::uuid,
+  (:'anker'::date - t.d),
+  '07:05'::time,
+  w.schlaf,
+  w.qualitaet,
+  (time '06:45' - make_interval(mins => round(w.schlaf * 60)::int + 15)),
+  time '06:45',
+  w.gefuehl,
+  CASE WHEN w.gefuehl >= 8 THEN 'good'
+       WHEN w.gefuehl <= 4 THEN 'tired'
+       ELSE 'neutral' END,
+  least(9, greatest(3, w.gefuehl)),
+  least(9, greatest(3, w.gefuehl)),
+  '{}'::jsonb,
+  w.stress,
+  least(9, greatest(1, w.stress + 1)),
+  least(9, greatest(1, w.stress - 1)),
+  0,
+  180 + (t.d % 3) * 40,
+  20 + (t.d % 4) * 10,
+  CASE WHEN t.d % 4 = 0 THEN round(54 - 4 * sin(t.d / 6.0) + (w.r3 - 0.5) * 6)::int END,
+  CASE WHEN t.d % 4 = 0 THEN round((52 + 6 * sin(t.d / 6.0) + (w.r1 - 0.5) * 14)::numeric, 1) END,
+  CASE WHEN t.d % 4 = 0 THEN round((96.9 + (w.r2 - 0.5) * 2.0)::numeric, 1) END,
+  CASE WHEN t.d % 4 = 0 THEN round((14.0 + (w.r3 - 0.5) * 2.8)::numeric, 1) END,
+  'C-236: eigener Check-in des Pruefkontos',
+  'seed', 'C-236 test-user Nachweisdaten'
+FROM generate_series(0, 29) AS t(d)
+CROSS JOIN LATERAL (
+  SELECT r1, r2, r3,
+         round((6.6 + 1.2 * sin(t.d / 4.7) + (r1 - 0.5) * 1.4)::numeric, 1) AS schlaf,
+         least(9, greatest(4, round(6.8 + 1.5 * sin(t.d / 4.7) + (r2 - 0.5) * 3)))::int AS qualitaet,
+         least(9, greatest(3, round(6.5 + 1.5 * sin(t.d / 5.9) + (r3 - 0.5) * 3)))::int AS gefuehl,
+         least(8, greatest(1, round(4 + 2 * sin(t.d / 6.8) + (r1 - 0.5) * 4)))::int AS stress
+  FROM (
+    SELECT
+      (('x' || substr(md5('tu-a-' || t.d), 1, 8))::bit(32)::bigint % 65536) / 65536.0 AS r1,
+      (('x' || substr(md5('tu-b-' || t.d), 1, 8))::bit(32)::bigint % 65536) / 65536.0 AS r2,
+      (('x' || substr(md5('tu-c-' || t.d), 1, 8))::bit(32)::bigint % 65536) / 65536.0 AS r3
+  ) rr
+) w;
+
+SELECT recovery.refresh_scores_for_user(:'pruefkonto'::uuid);
+
+-- 12b. Sechs Trainingssitzungen mit je zwei Uebungen und drei Saetzen.
+INSERT INTO training.workout_sessions (
+  id, user_id, session_date, started_time, ended_time, name, status,
+  location, duration_minutes, measurement_source, source_detail
+)
+SELECT
+  ('c2360000-0000-0000-0000-00000000000' || s.n)::uuid,
+  :'pruefkonto'::uuid,
+  (:'anker'::date - (s.n * 3 + 1)),
+  '17:30'::time, '18:40'::time,
+  CASE WHEN s.n % 2 = 1 THEN 'Push' ELSE 'Pull' END,
+  'completed', 'Gym', 70,
+  'seed', 'C-236 test-user Nachweisdaten'
+FROM generate_series(1, 6) AS s(n);
+
+INSERT INTO training.workout_exercises (
+  id, workout_session_id, exercise_id, exercise_order,
+  planned_sets, planned_reps, planned_weight_kg
+)
+SELECT
+  gen_random_uuid(),
+  ws.id,
+  e.id,
+  eo.ord,
+  3, 8, eo.basis
+FROM training.workout_sessions ws
+JOIN LATERAL (VALUES
+  (1, 'Barbell Bench Press', 80.0),
+  (2, 'Barbell bent over row pronated grip', 70.0)
+) AS eo(ord, name, basis) ON TRUE
+JOIN training.exercises e ON e.name = eo.name
+WHERE ws.user_id = :'pruefkonto'::uuid
+  AND ws.source_detail = 'C-236 test-user Nachweisdaten';
+
+INSERT INTO training.workout_sets (
+  workout_exercise_id, set_number, reps, weight_kg, rpe, rir, set_type,
+  measurement_source, source_detail
+)
+SELECT
+  we.id,
+  sn.n,
+  8 - (CASE WHEN (('x' || substr(md5('tu-set-' || ws.session_date || sn.n), 1, 4))::bit(16)::int % 3) = 0 THEN 1 ELSE 0 END),
+  we.planned_weight_kg
+    + round((2.5 * sin(extract(day FROM ws.session_date) / 3.1))::numeric, 1)
+    + (('x' || substr(md5('tu-w-' || ws.session_date || we.exercise_name || sn.n), 1, 4))::bit(16)::int % 3) * 1.25,
+  7.5, 2, 'working',
+  'seed', 'C-236 test-user Nachweisdaten'
+FROM training.workout_exercises we
+JOIN training.workout_sessions ws ON ws.id = we.workout_session_id
+CROSS JOIN generate_series(1, 3) AS sn(n)
+WHERE ws.user_id = :'pruefkonto'::uuid
+  AND ws.source_detail = 'C-236 test-user Nachweisdaten';
+
+-- 12c. Ein kleiner Stack mit 24 Einnahmen (12 Tage x 2 Positionen).
+INSERT INTO supplements.user_stacks (id, user_id, name, is_active)
+VALUES ('c2360000-0000-0000-0000-0000000000aa'::uuid, :'pruefkonto'::uuid,
+        'Nachweis-Stack', true);
+
+INSERT INTO supplements.stack_items (
+  id, stack_id, custom_name, dose, dose_unit, frequency, timing
+)
+VALUES
+  ('c2360000-0000-0000-0000-0000000000ab'::uuid,
+   'c2360000-0000-0000-0000-0000000000aa'::uuid,
+   'Creatin Monohydrat', 5, 'g', 'daily', 'any'),
+  ('c2360000-0000-0000-0000-0000000000ac'::uuid,
+   'c2360000-0000-0000-0000-0000000000aa'::uuid,
+   'Vitamin D3', 2000, 'IU', 'daily', 'morning');
+
+INSERT INTO supplements.intake_logs (
+  user_id, stack_item_id, intake_date, intake_time, status,
+  supplement_name_snapshot, dose_snapshot, dose_unit_snapshot,
+  measurement_source, source_detail
+)
+SELECT
+  :'pruefkonto'::uuid,
+  si.id,
+  (:'anker'::date - t.d),
+  CASE WHEN si.timing = 'morning' THEN time '07:10' ELSE time '12:30' END,
+  CASE WHEN (('x' || substr(md5('tu-i-' || si.id || t.d), 1, 4))::bit(16)::int % 7) = 0
+       THEN 'skipped' ELSE 'taken' END,
+  si.custom_name, si.dose, si.dose_unit,
+  'seed', 'C-236 test-user Nachweisdaten'
+FROM supplements.stack_items si
+CROSS JOIN generate_series(0, 11) AS t(d)
+WHERE si.stack_id = 'c2360000-0000-0000-0000-0000000000aa'::uuid;
+
 COMMIT;
 
 WITH users AS (

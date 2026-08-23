@@ -143,16 +143,23 @@ type RecoveryCheckinRow = {
   checkinTime: string
   sleepHours: number
   sleepQuality: number
+  sleepStartTime: string | null
+  sleepEndTime: string | null
   subjectiveFeeling: number
   mood: 'motivated' | 'good' | 'neutral' | 'tired' | 'sick'
   energyLevel: number
   motivation: number
   soreness: string
   stressLevel: number
+  workStress: number | null
+  lifeStress: number | null
   alcoholUnits: number
   caffeineMg: number
   screenTimeBeforeBed: number
+  restingHr: number | null
   hrvRmssd: number | null
+  spo2Pct: number | null
+  respiratoryRate: number | null
   notes: string
 }
 
@@ -1894,6 +1901,38 @@ for (const day of TRAINING_DAYS) {
   })
 }
 
+/**
+ * Deterministisches Rauschen 0..1 (C-236) — mulberry32-Mischschritt
+ * mit dem Index als Saat. KEIN Math.random(): die Seeds muessen bei
+ * jedem Kettenlauf identisch sein, sonst ist keine Erwartung pruefbar.
+ */
+function rausch(saat: number): number {
+  let t = (saat + 0x6d2b79f5) >>> 0
+  t = Math.imul(t ^ (t >>> 15), t | 1)
+  t = (t + Math.imul(t ^ (t >>> 7), t | 61)) >>> 0
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+}
+
+const r1 = (x: number) => Math.round(x * 10) / 10
+const klemme = (x: number, unten: number, oben: number) =>
+  Math.max(unten, Math.min(oben, x))
+
+/** Minuten seit Mitternacht als TIME-Text, negativ = Vortag. */
+function alsUhrzeit(minuten: number): string {
+  const m = ((Math.round(minuten) % 1440) + 1440) % 1440
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+}
+
+/**
+ * C-236: plausible Messwerte statt Zaehlreihen.
+ *
+ * `[read]` Der Befund aus G-160: hrv_rmssd lief als perfekte
+ * arithmetische Reihe 62..230 (+4 je Messtag) — physiologisch
+ * unmoeglich (menschliche RMSSD ~20-80 ms) und als Nachweis wertlos.
+ * Jetzt: Basiswert + langsame Welle + deterministisches Rauschen, je
+ * Spalte eigene Saat. Das Zaehlreihen-Gate am Ende des Laufs prueft,
+ * dass keine Reihe mit konstanter Differenz (>5 Werte) zurueckkommt.
+ */
 function recoveryCheckinFor(date: string, index: number): RecoveryCheckinRow {
   if (date === relDate('2026-08-18')) {
     return {
@@ -1902,37 +1941,92 @@ function recoveryCheckinFor(date: string, index: number): RecoveryCheckinRow {
       checkinTime: '07:18',
       sleepHours: 4.8,
       sleepQuality: 3,
+      sleepStartTime: '01:10',
+      sleepEndTime: '06:00',
       subjectiveFeeling: 3,
       mood: 'tired',
       energyLevel: 3,
       motivation: 3,
       soreness: '{"chest":3,"quadriceps":2,"lower_back":2}',
       stressLevel: 8,
+      workStress: 8,
+      lifeStress: 6,
       alcoholUnits: 1,
       caffeineMg: 420,
       screenTimeBeforeBed: 95,
+      restingHr: null,
       hrvRmssd: null,
+      spo2Pct: null,
+      respiratoryRate: null,
       notes: 'C-67 Szenario: schlechte Erholung ohne HRV fuer manual mode',
     }
   }
 
   const isAfterLegs = [relDate('2026-08-10'), relDate('2026-08-24'), relDate('2026-09-07')].includes(date)
+  // Messtag: jeder vierte Tag traegt Wearable-Werte — wie bisher 43
+  // von 170, nur die WERTE sind jetzt plausibel.
+  const messtag = index % 4 === 0
+
+  // Zwei Sinus-Frequenzen + Rauschen je Spalte: die schnelle
+  // Komponente verhindert, dass ganzzahlige Skalen in >5 gleiche
+  // Werte hintereinander fallen — das Zaehlreihen-Gate wertet auch
+  // die Differenz 0 als Reihe. `[cmd]` Gegen die Formeln vorgerechnet:
+  // laengste konstante Differenzfolge sleep 4 · quality 5 · feeling 4.
+  const schlaf = klemme(
+    r1(7.4 + 0.5 * Math.sin(index / 5.3) + 0.4 * Math.sin(index / 2.1)
+      + (rausch(index * 23 + 1) - 0.5) * 1.4),
+    5.6, 9.0)
+  const qualitaet = klemme(
+    Math.round(schlaf * 0.9 + 0.9 * Math.sin(index / 3.4)
+      + (rausch(index * 41 + 5) - 0.5) * 3.2 + 0.7),
+    3, 10) - (isAfterLegs ? 1 : 0)
+  const gefuehl = klemme(
+    Math.round(qualitaet + 0.8 * Math.sin(index / 2.6)
+      + (rausch(index * 53 + 9) - 0.5) * 3.0),
+    3, 10) - (isAfterLegs ? 1 : 0)
+  const stress = klemme(
+    Math.round(4 + 2.5 * Math.sin(index / 7.3) + 1.2 * Math.sin(index / 2.8)
+      + (rausch(index * 11 + 13) - 0.5) * 4),
+    1, 9)
+  // Bettzeiten passend zur Dauer: Aufwachen 06:30-07:20, Einschlafen
+  // = Aufwachen - Schlafdauer - 15 min Einschlafzeit (ueber
+  // Mitternacht hinweg, daher Vortagslogik in alsUhrzeit).
+  const aufwachen = 390 + Math.round(rausch(index * 29 + 17) * 50)
+  const einschlafen = aufwachen - schlaf * 60 - 15
+
   return {
     userId: '10000000-0000-0000-0000-000000000101',
     entryDate: date,
     checkinTime: '07:12',
-    sleepHours: isAfterLegs ? 7.0 : 7.6 + (index % 3) * 0.2,
-    sleepQuality: isAfterLegs ? 7 : 8,
-    subjectiveFeeling: isAfterLegs ? 7 : 8,
-    mood: index % 5 === 0 ? 'motivated' : 'good',
-    energyLevel: isAfterLegs ? 7 : 8,
-    motivation: index % 5 === 0 ? 9 : 8,
+    sleepHours: schlaf,
+    sleepQuality: qualitaet,
+    sleepStartTime: alsUhrzeit(einschlafen),
+    sleepEndTime: alsUhrzeit(aufwachen),
+    subjectiveFeeling: gefuehl,
+    mood: gefuehl >= 8 && rausch(index * 61 + 21) > 0.5 ? 'motivated'
+      : gefuehl <= 4 ? 'tired'
+        : gefuehl >= 7 ? 'good' : 'neutral',
+    energyLevel: klemme(gefuehl + (rausch(index * 67 + 25) > 0.5 ? 0 : -1), 3, 9),
+    motivation: klemme(gefuehl + Math.round(rausch(index * 71 + 33)), 3, 10),
     soreness: isAfterLegs ? '{"quadriceps":2,"glutes":2}' : '{"chest":1,"back":1}',
-    stressLevel: index % 6 === 0 ? 5 : 3,
+    stressLevel: stress,
+    workStress: klemme(stress + Math.round((rausch(index * 83 + 37) - 0.3) * 3), 1, 9),
+    lifeStress: klemme(stress + Math.round((rausch(index * 89 + 41) - 0.7) * 3), 1, 9),
     alcoholUnits: 0,
     caffeineMg: 260 + (index % 3) * 40,
     screenTimeBeforeBed: 25 + (index % 4) * 10,
-    hrvRmssd: index % 4 === 0 ? 62 + index : null,
+    restingHr: messtag
+      ? Math.round(klemme(53 - 5 * Math.sin(index / 9.7) + (rausch(index * 31 + 7) - 0.5) * 6, 44, 62))
+      : null,
+    hrvRmssd: messtag
+      ? klemme(r1(54 + 8 * Math.sin(index / 9.7) + (rausch(index * 17 + 3) - 0.5) * 16), 24, 78)
+      : null,
+    spo2Pct: messtag
+      ? klemme(r1(96.8 + (rausch(index * 13 + 11) - 0.5) * 2.2), 94.5, 99.0)
+      : null,
+    respiratoryRate: messtag
+      ? klemme(r1(14.2 + (rausch(index * 7 + 29) - 0.5) * 3), 11.5, 17.0)
+      : null,
     notes: 'C-67 Testdaten: Recovery Check-in fuer Verlauf und manual mode',
   }
 }
@@ -2238,16 +2332,23 @@ const recoveryCheckinValues = recoveryCheckins.map(checkin => tuple([
   checkin.checkinTime,
   checkin.sleepHours,
   checkin.sleepQuality,
+  checkin.sleepStartTime,
+  checkin.sleepEndTime,
   checkin.subjectiveFeeling,
   checkin.mood,
   checkin.energyLevel,
   checkin.motivation,
   checkin.soreness,
   checkin.stressLevel,
+  checkin.workStress,
+  checkin.lifeStress,
   checkin.alcoholUnits,
   checkin.caffeineMg,
   checkin.screenTimeBeforeBed,
+  checkin.restingHr,
   checkin.hrvRmssd,
+  checkin.spo2Pct,
+  checkin.respiratoryRate,
   checkin.notes,
 ])).join(',\n')
 const recoveryModalityValues = recoveryModalities.map(modality => tuple([
@@ -3759,16 +3860,23 @@ CREATE TEMP TABLE test_recovery_checkins (
   checkin_time time NOT NULL,
   sleep_hours numeric NOT NULL,
   sleep_quality smallint NOT NULL,
+  sleep_start_time time,
+  sleep_end_time time,
   subjective_feeling smallint NOT NULL,
   mood text NOT NULL,
   energy_level smallint NOT NULL,
   motivation smallint NOT NULL,
   soreness jsonb NOT NULL,
   stress_level smallint NOT NULL,
+  work_stress smallint,
+  life_stress smallint,
   alcohol_units numeric NOT NULL,
   caffeine_mg integer NOT NULL,
   screen_time_before_bed integer NOT NULL,
+  resting_hr integer,
   hrv_rmssd numeric,
+  spo2_pct numeric,
+  respiratory_rate numeric,
   notes text NOT NULL
 ) ON COMMIT DROP;
 
@@ -3777,15 +3885,19 @@ ${recoveryCheckinValues};
 
 INSERT INTO recovery.checkins (
   user_id, entry_date, checkin_time,
-  sleep_hours, sleep_quality, subjective_feeling, mood,
-  energy_level, motivation, soreness, stress_level,
-  alcohol_units, caffeine_mg, screen_time_before_bed, hrv_rmssd, notes
+  sleep_hours, sleep_quality, sleep_start_time, sleep_end_time,
+  subjective_feeling, mood, energy_level, motivation, soreness,
+  stress_level, work_stress, life_stress,
+  alcohol_units, caffeine_mg, screen_time_before_bed,
+  resting_hr, hrv_rmssd, spo2_pct, respiratory_rate, notes
 )
 SELECT
   user_id, entry_date, checkin_time,
-  sleep_hours, sleep_quality, subjective_feeling, mood,
-  energy_level, motivation, soreness, stress_level,
-  alcohol_units, caffeine_mg, screen_time_before_bed, hrv_rmssd, notes
+  sleep_hours, sleep_quality, sleep_start_time, sleep_end_time,
+  subjective_feeling, mood, energy_level, motivation, soreness,
+  stress_level, work_stress, life_stress,
+  alcohol_units, caffeine_mg, screen_time_before_bed,
+  resting_hr, hrv_rmssd, spo2_pct, respiratory_rate, notes
 FROM test_recovery_checkins;
 
 CREATE TEMP TABLE test_recovery_modalities (
@@ -3817,6 +3929,77 @@ FROM test_recovery_modalities;
 
 SELECT recovery.refresh_scores_for_user(id)
 FROM (VALUES ${USERS.map(user => `('${user.id}'::uuid)`).join(', ')}) seed_users(id);
+
+-- ── C-236: das Zaehlreihen-Gate ─────────────────────────────────
+-- Kein Seed-Wert darf sich als arithmetische Reihe lesen lassen:
+-- konstante Differenz (auch 0) ueber MEHR als fuenf Werte in Folge.
+-- Genau so sah der G-160-Befund aus (hrv_rmssd 62..230, +4 je
+-- Messtag) — und genau hier bricht der Kettenlauf, wenn er
+-- zurueckkommt.
+--
+-- [cmd] Geprueft werden die SEED-Nutzer dieses Laufs — nicht alle:
+-- der erste Live-Lauf brach am ALTbestand von dev@lumeos.app, der
+-- erst im Folgeschritt (eigenes-konto-fuellen.sql) neu kopiert wird.
+-- Die Kopie erbt aus der gepruefte Quelle.
+DO $$
+DECLARE
+  v_fund record;
+BEGIN
+  FOR v_fund IN
+    WITH reihen AS (
+      SELECT user_id, 'hrv_rmssd' AS reihe, entry_date::text AS pos, hrv_rmssd::numeric AS wert
+        FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND hrv_rmssd IS NOT NULL
+      UNION ALL
+      SELECT user_id, 'resting_hr', entry_date::text, resting_hr
+        FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND resting_hr IS NOT NULL
+      UNION ALL
+      SELECT user_id, 'spo2_pct', entry_date::text, spo2_pct
+        FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND spo2_pct IS NOT NULL
+      UNION ALL
+      SELECT user_id, 'respiratory_rate', entry_date::text, respiratory_rate
+        FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND respiratory_rate IS NOT NULL
+      UNION ALL
+      SELECT user_id, 'sleep_hours', entry_date::text, sleep_hours
+        FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND sleep_hours IS NOT NULL
+      UNION ALL
+      SELECT user_id, 'sleep_quality', entry_date::text, sleep_quality
+        FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND sleep_quality IS NOT NULL
+      UNION ALL
+      SELECT user_id, 'subjective_feeling', entry_date::text, subjective_feeling
+        FROM recovery.checkins WHERE user_id IN (${USERS.map(user => `'${user.id}'::uuid`).join(', ')}) AND subjective_feeling IS NOT NULL
+      UNION ALL
+      SELECT ws.user_id, 'gewicht:' || we.exercise_name,
+             ws.session_date::text || '#' || st.set_number, st.weight_kg
+        FROM training.workout_sets st
+        JOIN training.workout_exercises we ON we.id = st.workout_exercise_id
+        JOIN training.workout_sessions ws ON ws.id = we.workout_session_id
+       WHERE st.set_type = 'working'
+    ),
+    nummeriert AS (
+      SELECT user_id, reihe, wert,
+             row_number() OVER (PARTITION BY user_id, reihe ORDER BY pos) rn
+        FROM reihen
+    ),
+    differenzen AS (
+      SELECT user_id, reihe, rn,
+             wert - lag(wert) OVER (PARTITION BY user_id, reihe ORDER BY rn) d
+        FROM nummeriert
+    ),
+    inseln AS (
+      SELECT user_id, reihe, d,
+             rn - row_number() OVER (PARTITION BY user_id, reihe, d ORDER BY rn) grp
+        FROM differenzen WHERE d IS NOT NULL
+    )
+    SELECT user_id, reihe, d, count(*) + 1 AS werte_in_folge
+      FROM inseln
+     GROUP BY user_id, reihe, d, grp
+    HAVING count(*) >= 5
+  LOOP
+    RAISE EXCEPTION
+      'C-236 Zaehlreihen-Gate: % traegt % Werte in Folge mit konstanter Differenz % (user %)',
+      v_fund.reihe, v_fund.werte_in_folge, v_fund.d, v_fund.user_id;
+  END LOOP;
+END $$;
 
 DO $$
 DECLARE
