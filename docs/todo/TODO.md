@@ -4917,6 +4917,9 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 - [ ] **C-225: Vier Schreibwege fehlen in coach** (neu 2026-08-22).
   Aus G-158.
 
+  `[cmd]` **Bestand 2026-08-23:** `relationships` 6 · `messages` 6 ·
+  `checkins` 6 · `checkin_templates` 2. Zwoelf Tabellen im Schema.
+
   `[cmd]` Antworten (`messages` INSERT), Einladen (`relationships`
   INSERT mit `status='invited'`), Als-gelesen (`messages` UPDATE
   `read_at`), und **`coach_profiles`** als Namensquelle —
@@ -5455,26 +5458,28 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Gate-Pruefung, die Anker- und Verweisfelder gegen den Typ der
   Zielspalte haelt. Ohne sie ist die Lehre wieder nur notiert.
 
-- [ ] **C-254: Nicht nur `name_de` ist leer, sondern jede
-  `*_de`-Freitextspalte** (neu 2026-08-23). Aus C-252.
+- [ ] **C-255: Schritt 5 — die alten Kataloge weg** (neu 2026-08-23).
+  Letzter Schritt des Supplements-Neuaufbaus.
 
-  `[cmd]` `summary_de` **0/288** · `metabolism_de` **0/290** ·
-  `storage_de` **0/54** · `name_de` **0/566**. **Nur die drei
-  handgepflegten Gruppenlabels tragen Deutsch.**
+  `[cmd]` **Kein Lesepfad braucht sie mehr.** Nach C-250 und C-252
+  findet `git grep supplement_catalog` in `lib/supplements/`,
+  `v2/medical/` und `v2/supplements/` nur noch zwei Kommentare.
 
-  `[read]` **Damit aendert sich die Regel.** Bisher stand sie als
-  *„`name_de` ist leer, die Anzeige faellt auf Englisch zurueck"*.
-  Richtig ist: **jedes Textfeld braucht die COALESCE-Logik** — sonst
-  zeigt die Oberflaeche an anderer Stelle eine Leerstelle, wo ein Text
-  stehen muesste.
+  `[cmd]` **Was noch dranhaengt, live gemessen:** 4 Fremdschluessel
+  (`substance_catalog_sources`, `substance_lab_effects`,
+  `supplement_nutrient_mappings` zweimal), 2 Policies, 2 Trigger, eine
+  Sicht (`stack_item_substance_matches`).
 
-  `[cmd]` **Und `name_de` ist `NULL`, nicht Leerstring.**
-  `NULLIF(name_de,'')` allein greift also nicht; es braucht
-  `COALESCE` darum.
+  `[cmd]` **Zwei der drei Anhaengsel haben deckungsgleiche
+  Gegenstuecke:** `substance_lab_effects` 222 →
+  `supplement_lab_effects` **222** · `supplement_nutrient_mappings` 17
+  → `supplement_nutrients` **17**.
 
-  `[read]` **Betrifft C-250** — der Stack-Pfad ist am selben Tag
-  umgestellt worden und muss gegen dieselbe Regel geprueft werden.
-  **Nicht angenommen, dass er sie schon erfuellt.**
+  `[read]` **Die dritte nicht:** `substance_catalog_sources` 668 gegen
+  `supplement_field_sources` 2147. **Ob die 668 vollstaendig enthalten
+  sind, ist ungeprueft** — das ist der erste Schritt des Auftrags, keine
+  Annahme.
 
-  **Zu tun:** alle `*_de`-Lesestellen durchgehen, und die Regel als
-  Pruefung festhalten statt als Merksatz.
+  `[read]` **Nicht loeschen, bevor das belegt ist.** Eine Tabelle mit
+  566 Zeilen ist in einer Sekunde weg und in einer Woche nicht
+  rekonstruierbar.

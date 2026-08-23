@@ -57,9 +57,14 @@ vorher nachzusehen, was tatsaechlich da ist.
 
 | Auftrag | Bereich |
 |---|---|
-| **C-253** IDs der beiden Kataloge unvergleichbar — `text` gegen `uuid`, drei Stellen haetten stumm nie mehr getroffen | `apps/web` + Gate |
-| **C-254** jede `*_de`-Freitextspalte ist leer, nicht nur `name_de` | `apps/web` |
 | **G-175** Nachweiskonto ohne bekanntes Passwort — blockiert Browser-Nachweise | `supabase/` |
+
+`[cmd]` **C-253 und C-254 sind durch** (2026-08-23). Beide haben eine
+Gate-Pruefung hinterlassen statt eines Merksatzes:
+`tools/kataloganker-pruefen.mjs` (3 Ankerstellen, 0 typfalsch) und
+`tools/sprachrueckfall-pruefen.mjs` (11 Abfragen auf 14 riskante
+Tabellen, 0 ohne Rueckfall). **Damit sind es fuenf Gate-Pruefungen, die
+aus einem Fehler entstanden sind.**
 
 **Klein und blockierend**
 

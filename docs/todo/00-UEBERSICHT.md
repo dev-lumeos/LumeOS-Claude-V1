@@ -247,25 +247,25 @@ wenn er erzeugt und geprüft wird.
 | **G-168** Die coach-Kopfzeile widerspricht dem eigenen Tab | offen | 4905 |
 | **G-169** `coach.checkins` und `checkin_templates` liegen | offen | 4911 |
 | **C-225** Vier Schreibwege fehlen in coach | offen | 4917 |
-| **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 4932 |
-| **C-228** Drei Gruppen, saubere Kategorien, Beschreibung | offen | 4944 |
-| **C-229** Ein Katalog aus `DatabaseEcht`, Detail und Add | offen | 4980 |
-| **C-232** Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen | offen | 5020 |
-| **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5063 |
-| **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5088 |
-| **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5114 |
-| **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5131 |
-| **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5155 |
-| **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5184 |
-| **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5194 |
-| **C-238** `meal_plan_entries` hat keinen Status | offen | 5212 |
-| **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5230 |
-| **B-29** 21 Wegwerf-Datenbanken, 3,58 GB | offen | 5245 |
-| **B-30** MSYS-`tar` kann keine `D:\`-Pfade | offen | 5266 |
-| **G-174** Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig | offen | 5281 |
-| **C-241** Das Nachweiskonto traegt weder Essensplaene noch | offen | 5292 |
-| **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5314 |
-| **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5382 |
-| **G-175** Das Nachweiskonto hat kein bekanntes Passwort | offen | 5410 |
-| **C-253** Die IDs der beiden Kataloge sind nicht vergleichbar — | offen | 5432 |
-| **C-254** Nicht nur `name_de` ist leer, sondern jede | offen | 5458 |
+| **G-170** `medical/tab-tracking` behauptet ein fehlendes Schema | offen | 4935 |
+| **C-228** Drei Gruppen, saubere Kategorien, Beschreibung | offen | 4947 |
+| **C-229** Ein Katalog aus `DatabaseEcht`, Detail und Add | offen | 4983 |
+| **C-232** Schritt 1 des Neuaufbaus — die 26 Tabellen anlegen | offen | 5023 |
+| **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5066 |
+| **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5091 |
+| **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5117 |
+| **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5134 |
+| **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5158 |
+| **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5187 |
+| **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5197 |
+| **C-238** `meal_plan_entries` hat keinen Status | offen | 5215 |
+| **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5233 |
+| **B-29** 21 Wegwerf-Datenbanken, 3,58 GB | offen | 5248 |
+| **B-30** MSYS-`tar` kann keine `D:\`-Pfade | offen | 5269 |
+| **G-174** Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig | offen | 5284 |
+| **C-241** Das Nachweiskonto traegt weder Essensplaene noch | offen | 5295 |
+| **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5317 |
+| **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5385 |
+| **G-175** Das Nachweiskonto hat kein bekanntes Passwort | offen | 5413 |
+| **C-253** Die IDs der beiden Kataloge sind nicht vergleichbar — | offen | 5435 |
+| **C-255** Schritt 5 — die alten Kataloge weg | offen | 5461 |

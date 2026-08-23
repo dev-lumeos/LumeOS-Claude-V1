@@ -12235,3 +12235,96 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   Keine aendert die Aufgabe, aber die 33 hatte der Orchestrator aus
   der Spec uebernommen statt gezaehlt. **Denselben Fehlertyp hatte er
   am selben Tag schon bei C-235 weitergegeben.**
+
+- [x] **C-254: Nicht nur `name_de` ist leer, sondern jede
+  `*_de`-Freitextspalte** — **erledigt 2026-08-23 (Claude Code),
+  Bericht `docs/berichte/c-254-claude-code.md`.**
+
+  **Zu korrigieren war nichts — 0 Lesestellen ohne Rueckfall.** Der
+  Ertrag ist die Pruefung.
+
+  ### Der Auftrag war an zwei Stellen falsch, und beide sind belegt
+
+  `[read]` **Die Regel *„jedes Textfeld braucht den Rueckfall"* ist zu
+  weit.** `[cmd]` Vom Orchestrator nachgemessen:
+  `nutrition.foods.name_de` traegt bei **7.140 von 7.140** Zeilen
+  Deutsch, `nutrition.food_categories.name_de` bei **518 von 518**.
+  **Eine Pruefung, die dort anschlaegt, ist dauerhaft rot** — und wird
+  umgangen statt repariert.
+
+  `[cmd]` **Und *„leer"* ist nicht das Merkmal.**
+  `nutrition.nutrient_details`: 110 Zeilen, `detail_de` 97, `detail_en`
+  97, **rettbare Zeilen (de leer, en gefuellt): 0.** Wo Deutsch fehlt,
+  fehlt Englisch auch. **Ein Rueckfall saehe dort aus wie eine
+  Absicherung und waere keine.**
+
+  **Das Merkmal ist *„rettbar"*:** die Spalte kann leer sein **und** ein
+  gefuelltes `_en` existiert.
+
+  `[cmd]` **Die Messung, alle 66 `*_de`-Textspalten:** 25 nie deutsch
+  (alle in `supplements`) · 6 teils · 21 immer deutsch · 14 in leeren
+  Tabellen.
+
+  `[cmd]` **Zweimal ist der Rueckfall gar nicht moeglich:**
+  `nutrition.exclusion_presets.caveat_de` und
+  `supplements.rule_catalog.message_de` haben **kein `_en`**.
+
+  ### Der Verdacht gegen C-250 traegt nicht
+
+  `[cmd]` Der Auftrag verlangte ausdruecklich, `lib/supplements/` und
+  `medical/page.tsx` nicht als erfuellt anzunehmen. **Sie waren es
+  trotzdem** — von Hand nachgesehen, nicht nur per Werkzeug:
+  `stack-read.ts` Z199, 212, 220, 227, 434 und `medical/page.tsx`
+  Z89, 184, 185 tragen beide Spalten und wenden den Rueckfall an.
+
+  `[read]` **Codex hatte die Regel erfuellt, ohne dass sie geprueft
+  war.** Das entwertet den Auftrag nicht — die Pruefung fehlte
+  trotzdem.
+
+  ### Die Pruefung, und wie sie zugeschnitten ist
+
+  `[cmd]` `tools/sprachrueckfall-pruefen.mjs`, im Gate nach
+  `kataloganker-pruefen.mjs`. **Drei Merkmale, alle drei noetig:**
+  die Tabelle statt des Spaltennamens (`name_de` allein ergibt **141
+  Treffer**) · nur die `.select(...)`-Zeichenkette (der Block ab
+  `.from()` lief in die naechste Abfrage und ergab **11 Treffer, davon
+  3 falsch**) · nur rettbare Spalten.
+
+  `[cmd]` **Vom Orchestrator selbst gefahren:** *„11 Abfragen auf 14
+  riskante Tabellen geprueft, 0 ohne Rueckfall."*
+
+  `[read]` **Die Meldung nennt die Zahl der geprueften Abfragen**, nicht
+  nur *„in Ordnung"* — sonst sieht eine Pruefung, die nichts ansieht,
+  aus wie eine, die nichts zu beanstanden hat.
+
+  ### Negativprobe — vom Orchestrator wiederholt
+
+  `[cmd]` **In fremdem Code eingebaut**, nicht in seinem: `name_en` aus
+  der Auswahl in `stack-read.ts` entfernt →
+
+      [sprachrueckfall] 1 Lesestelle(n) ohne Rueckfall:
+        apps\web\src\lib\supplements\stack-read.ts:195  supplements.name_de
+
+  **Richtige Datei, richtige Zeile, richtige Begruendung.** Nach dem
+  Rueckbau wieder 0 Funde, Datei per `sha256` identisch, `git status`
+  leer.
+
+  `[read]` **Der Agent hat die Negativprobe an zwei Stellen gefuehrt** —
+  eine davon in fremdem Code — mit der Begruendung, eine Pruefung, die
+  genau den eingebauten Fall trifft, messe womoeglich nur diesen.
+
+  `[cmd]` **Kontofreier Nachweis statt Browser:** 5 Testfaelle ohne
+  Sitzung. Negativprobe: Rueckfall aus `text()` entfernt →
+  **5/0 wird 2/3**.
+
+  `[read]` **Und `text()` ist deswegen umgezogen** — nach
+  `substanz-luecken.ts`, weil `substanz-read.ts` `next/headers` zieht
+  und im Test nicht ladbar ist. **Dasselbe Muster wie `OHNE_QUELLE` in
+  C-252.**
+
+  ### Offen geblieben, ausdruecklich nicht geraten
+
+  `[read]` **14 Spalten stehen in leeren Tabellen** — ob sie einen
+  Rueckfall brauchen, ist nicht entscheidbar, solange keine Zeile
+  drinsteht. **Nicht in die Pruefliste aufgenommen.** Wer die Tabellen
+  fuellt, misst sie und traegt sie nach.
