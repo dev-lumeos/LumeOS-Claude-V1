@@ -1466,6 +1466,12 @@
       "tabelle": "supplement_interactions",
       "zeigt_auf": "supplements",
       "schritt": "137"
+    },
+    {
+      "name": "stack_items_supplement_id_fkey",
+      "tabelle": "stack_items",
+      "zeigt_auf": "supplements",
+      "schritt": "138"
     }
   ],
   "funktionen": [
@@ -2951,7 +2957,7 @@
     {
       "schema": "supplements",
       "name": "stack_items",
-      "schritt": "130",
+      "schritt": "130/138",
       "rls": true,
       "policies": [
         "SELECT",
@@ -3412,7 +3418,7 @@
     {
       "schema": "supplements",
       "name": "supplements",
-      "schritt": "136",
+      "schritt": "136/138",
       "rls": true,
       "policies": [
         "SELECT"
@@ -3432,7 +3438,27 @@
         ]
       },
       "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
-      "zeilenschutzart": "oeffentlich"
+      "zeilenschutzart": "oeffentlich",
+      "spalten": [
+        "id",
+        "slug",
+        "group_id",
+        "category_id",
+        "name_de",
+        "name_en",
+        "name_th",
+        "description_de",
+        "description_en",
+        "description_th",
+        "form",
+        "evidence_grade",
+        "sort_order",
+        "source",
+        "is_active",
+        "created_at",
+        "updated_at",
+        "im_katalog"
+      ]
     },
     {
       "schema": "supplements",

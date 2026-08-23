@@ -707,6 +707,16 @@
       ]
     },
     {
+      "id": "138",
+      "path": "supabase/_pipeline/13_supplements/138_supplements_stack_umhaengen.sql",
+      "kind": "sql",
+      "creates": "Supplements-Neuaufbau Schritt 3: im_katalog als generierte Katalogsicht und stack_items.supplement_id auf supplements.supplements umhaengen",
+      "depends_on": [
+        "137",
+        "130"
+      ]
+    },
+    {
       "id": "146a",
       "path": "supabase/_pipeline/13_supplements/132a_rule_input_status.sql",
       "kind": "sql",

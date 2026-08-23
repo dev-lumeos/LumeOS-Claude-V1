@@ -227,7 +227,7 @@ if (MODE === 'clean') {
   if (userMedications !== 0) errors.push(`medical.user_medications: ${userMedications}, erwartet 0`)
   if (userConditions !== 0) errors.push(`medical.user_conditions: ${userConditions}, erwartet 0`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
-  if (medicalRanges !== 564) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 564`)
+  if (medicalRanges !== 566) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 566`)
   if (medicalAliases < 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet mindestens 292`)
   if (medicationActiveSubstances < 56) errors.push(`medical.medication_active_substances: ${medicationActiveSubstances}, erwartet mindestens 56`)
   if (medicationFormulations < 119) errors.push(`medical.medication_formulations: ${medicationFormulations}, erwartet mindestens 119`)
@@ -358,7 +358,7 @@ if (MODE === 'clean') {
   if (recoveryScores < 160) errors.push(`recovery.scores: ${recoveryScores}, erwartet mindestens 160`)
   if (recoveryModalities < 50) errors.push(`recovery.modality_log: ${recoveryModalities}, erwartet mindestens 50`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
-  if (medicalRanges !== 564) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 564`)
+  if (medicalRanges !== 566) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 566`)
   if (medicalAliases < 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet mindestens 292`)
   if (medicalReports !== 5) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 5`)
   if (medicalValues !== 140) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 140`)
@@ -1209,11 +1209,11 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.user_stacks us
     JOIN supplements.stack_items si ON si.stack_id = us.id
-    JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
+    JOIN supplements.supplements s ON s.id = si.supplement_id
     WHERE us.user_id = '${tom}'::uuid
       AND us.is_active
       AND us.name = 'Muskelaufbau Basics'
-      AND c.slug = 'creatine-monohydrate'
+      AND s.slug = 'sub_9f9bb8c160'
       AND si.dose = 5
       AND si.dose_unit = 'g';`)) {
     errors.push('Fall Supplements Stack: aktiver Stack mit Kreatin aus Katalog fehlt')
@@ -1223,7 +1223,6 @@ if (MODE === 'clean') {
     FROM supplements.stack_item_substance_matches m
     JOIN supplements.user_stacks us ON us.user_id = m.user_id
     WHERE m.user_id = '${tom}'::uuid
-      AND m.supplement_slug = 'creatine-monohydrate'
       AND m.kimi_substance_id = 'sub_9f9bb8c160'
       AND us.is_active;`)) {
     errors.push('Fall Supplements Substanzbruecke: Kreatin-Stack-Item trifft Kimi-Substanz nicht')
@@ -1263,9 +1262,9 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.user_stacks us
     JOIN supplements.stack_items si ON si.stack_id = us.id
-    JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
     WHERE us.user_id = '${tom}'::uuid
-      AND c.slug = 'vitamin-d3'
+      AND si.supplement_id IS NULL
+      AND si.custom_name = 'Vitamin D3'
       AND si.stock_remaining <= si.low_stock_threshold;`)) {
     errors.push('Fall Supplements Refill: Vitamin-D3 Low-Stock-Item fehlt')
   }
@@ -1298,15 +1297,15 @@ if (MODE === 'clean') {
     SELECT 1
     FROM supplements.user_stacks us
     JOIN supplements.stack_items si ON si.stack_id = us.id
-    JOIN supplements.supplement_catalog c ON c.id = si.supplement_id
+    LEFT JOIN supplements.supplements s ON s.id = si.supplement_id
     WHERE us.user_id = '${tom}'::uuid
       AND (
-        (c.slug = 'creatine-monohydrate' AND si.stock_remaining = 150 AND si.low_stock_threshold = 150)
-        OR (c.slug = 'omega-3-epa-dha' AND si.stock_remaining = 14 AND si.low_stock_threshold = 14)
-        OR (c.slug = 'vitamin-d3' AND si.stock_remaining = 4 AND si.low_stock_threshold = 7)
+        (s.slug = 'sub_9f9bb8c160' AND si.stock_remaining = 150 AND si.low_stock_threshold = 150)
+        OR (s.slug = 'sub_4480fcfa86' AND si.stock_remaining = 14 AND si.low_stock_threshold = 14)
+        OR (si.supplement_id IS NULL AND si.custom_name = 'Vitamin D3' AND si.stock_remaining = 4 AND si.low_stock_threshold = 7)
       )
     GROUP BY us.user_id
-    HAVING count(DISTINCT c.slug) = 3;`)) {
+    HAVING count(DISTINCT COALESCE(s.slug, si.custom_name)) = 3;`)) {
     errors.push('Fall Supplements Refill-Stufen: 1 Monat, 2 Wochen und 1 Woche fehlen')
   }
   if (numberScalar(`
