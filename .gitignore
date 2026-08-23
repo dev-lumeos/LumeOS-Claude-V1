@@ -244,3 +244,10 @@ backup/kimi-research/
 # und ein Volldump gehoert nicht in die Versionsverwaltung.
 # Tom haelt sie auf RAID 5.
 backup/vollsicherung/
+
+# Datenbanksicherungen, egal wo sie liegen. Der Pre-Commit-Hook
+# sperrt ab 10 MB, und ein Volldump gehoert nicht in die
+# Versionsverwaltung. Tom haelt sie auf RAID 5.
+# C-236 hat eine 18-MB-Sicherung neben den Ordner gelegt statt hinein.
+backup/**/*.dump
+backup/**/*_lumeos_voll.sql
