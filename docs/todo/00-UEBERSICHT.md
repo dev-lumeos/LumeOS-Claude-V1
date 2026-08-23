@@ -272,3 +272,6 @@ wenn er erzeugt und geprüft wird.
 | **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5430 |
 | **C-243** Der Katalog zeigt nur, was Inhalt hat — `im_katalog` als | offen | 5498 |
 | **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5576 |
+| **C-245** Auf dem Nachweiskonto steht Kreatin doppelt im aktiven | offen | 5604 |
+| **C-246** `058b` liegt committet und ist live nicht eingespielt | offen | 5642 |
+| **C-247** Zwei Pruefungen widersprechen sich bei | offen | 5669 |

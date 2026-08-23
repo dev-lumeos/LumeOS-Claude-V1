@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-23.** 228 offen, 0 in Arbeit.
+**Stand: 2026-08-23.** 231 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5600,3 +5600,88 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   ein Alias *„magnesium"* auf eine gewaehlte Vorzugsform loest die Suche,
   ohne den Katalogschnitt festzulegen. **Nicht vorbauen, aber sichtbar
   auslassen.**
+
+- [ ] **C-245: Auf dem Nachweiskonto steht Kreatin doppelt im aktiven
+  Stack** (neu 2026-08-23). Nachtrag zu C-243.
+
+  `[cmd]` `test-user@lumeos.local`, Stack *„Nachweis-Stack"*, aktiv,
+  **vier Positionen**:
+
+  | Position | Zuordnung | Einnahmen |
+  |---|---|---:|
+  | Creatin Monohydrat | `custom_name` | **12** |
+  | Creatine monohydrate | `sub_9f9bb8c160` | 0 |
+  | Vitamin D3 | `custom_name` | 12 |
+  | Omega-3 (EPA/DHA) | `sub_4480fcfa86` | 0 |
+
+  `[cmd]` Der Seed aus C-243 hat zwei Positionen **hinzugefuegt**, statt
+  die bestehenden umzuhaengen. Kreatin erscheint damit zweimal in
+  demselben aktiven Stack — einmal alt mit 12 Einnahmen, einmal neu mit
+  null.
+
+  `[read]` **Der Fehler liegt im Auftragstext, nicht bei Codex.** C-243
+  verlangte woertlich *„mindestens zwei Positionen mit gesetzter
+  `supplement_id`"*. Genau das wurde gebaut. **Dass die vorhandenen
+  `custom_name`-Positionen dabei umzuhaengen sind, stand nicht da** —
+  obwohl der Orchestrator vorher gemessen hatte, dass sie
+  *„Creatin Monohydrat"* heissen, also dieselbe Substanz.
+
+  `[read]` **Die Folge trifft genau das, was als Naechstes gebaut wird:**
+  Schritt 4 und die Compliance-Kacheln lesen diesen Stack. Eine Kachel,
+  die Kreatin zweimal listet und einmal mit 0 % Einnahmequote, sieht aus
+  wie ein Anzeigefehler — und die Suche danach begaenne im falschen
+  Modul.
+
+  **Zu tun:** die beiden `custom_name`-Positionen von `test-user`
+  umhaengen statt danebenzuschreiben. **Die 12 Einnahmen muessen
+  mitwandern**, sonst verliert das Nachweiskonto seine
+  Compliance-Historie. Vitamin D3 bleibt `custom_name`, solange C-244
+  offen ist — dort ist die Dublette keine, weil es keine zweite Zeile
+  gibt.
+
+- [ ] **C-246: `058b` liegt committet und ist live nicht eingespielt**
+  (neu 2026-08-23). Aus C-243, von Codex als Nicht-C-243-Drift
+  gemeldet.
+
+  `[cmd]` **0 Tabellen `shopping%` im gesamten Katalog.** Fehlend sind
+  `shopping_lists`, `shopping_list_items` samt Guards, Triggern und
+  Fremdschluesseln.
+
+  `[cmd]` Sie stehen in
+  `supabase/_pipeline/05_user_tabellen/058b_recipes_meal_plans.sql`
+  (1.208 Zeilen), eingebracht von **`54bd0f3`, 2026-08-22**
+  (*„pipeline(nutrition,medical): shopping_lists, neun EAA, zehn
+  Medikationsspalten"*). `[cmd]` Die uebrigen fuenf Tabellen derselben
+  Datei — `recipes`, `meal_plans`, `meal_plan_weeks`, `meal_plan_days`,
+  `meal_plan_entries` — **existieren live**, weil sie aus dem aelteren
+  Commit `ebd9f6e` stammen.
+
+  `[read]` **Das ist derselbe Fehler wie am 2026-08-22**, an dem sechs
+  Auftraege committet und nie eingespielt lagen. Die Regel daraus
+  lautet: *ein Pipeline-Auftrag ist nicht fertig, wenn die Kette gruen
+  laeuft, sondern wenn die Aenderung dort ist, wo Tom sie sieht.*
+  **Ein Fall ist durchgerutscht.**
+
+  `[cmd]` **Es blockiert sichtbar:** G-161 hat *„Shopping list"* und
+  *„Scale list"* als Attrappe stehen lassen und den Grund mit
+  *„0 `shopping%`-Tabellen"* belegt.
+
+- [ ] **C-247: Zwei Pruefungen widersprechen sich bei
+  `biomarker_reference_ranges`** (neu 2026-08-23). Aus C-243.
+
+  `[cmd]` **Live sind es 566 Zeilen.**
+  `[cmd]` `_validierung/testdaten-pruefen.ts` erwartet **564** und ist
+  deshalb rot.
+  `[cmd]` Die Schemapruefung akzeptiert dieselbe Tabelle mit
+  *„566 / 566 ok"*.
+
+  `[read]` **Eine der beiden Zahlen ist falsch, und welche, ist nicht
+  aus den Zahlen ableitbar.** Entweder sind zwei Zeilen zu viel
+  eingespielt, oder die Erwartung in `testdaten-pruefen.ts` ist seit
+  einer Aenderung nicht nachgezogen. **Erst messen, welche zwei Zeilen
+  den Unterschied machen — dann entscheiden.**
+
+  `[read]` **Eine dauerhaft rote Pruefung ist gefaehrlicher als keine**,
+  weil sie umgangen statt repariert wird. Das steht schon in
+  `docs/ssot/32-encoding-schaeden.md` als Begruendung dafuer, warum der
+  BOM nur ein Hinweis ist.
