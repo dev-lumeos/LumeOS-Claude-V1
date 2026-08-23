@@ -110,7 +110,7 @@ function imStackIds(
   }
   const drin = new Set<string>()
   for (const s of liste) {
-    if (anker.has(s.slug) || anker.has(s.id) || namen.has(s.name.toLowerCase())) {
+    if (anker.has(s.slug) || namen.has(s.name.toLowerCase())) {
       drin.add(s.id)
     }
   }
@@ -470,7 +470,7 @@ export function SubstanzDatenbank() {
                         : <button type="button" className="v2-btn v2-btn-sm"
                                   onClick={e => {
                                     e.stopPropagation()
-                                    open('add', { name: s.name, substanzId: s.id })
+                                    open('add', { name: s.name, substanzId: s.slug || s.id })
                                   }}>
                             <Icon name="plus" className="v2-ic v2-ic-sm" />Add
                           </button>}

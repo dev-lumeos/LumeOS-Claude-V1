@@ -15,6 +15,36 @@
 // importiert aus `substanz-read` ausschliesslich Typen.
 
 /**
+ * Der Anzeigetext: deutsch, wenn es ihn gibt — sonst englisch.
+ *
+ * ── WARUM DAS NICHT NUR FUER DEN NAMEN GILT (C-254) ────────────────
+ *
+ * `[cmd]` **Gemessen am 2026-08-23: 25 `*_de`-Spalten tragen NIE
+ * Deutsch**, alle im `supplements`-Schema — `name_de` 0/566,
+ * `description_de` 0/290, `summary_de` 0/288, `pregnancy_note_de`
+ * 0/237, `storage_de` 0/54, `metabolism_de` 0/290.
+ *
+ * `[cmd]` **Und der Rueckfall rettet dort wirklich etwas:** 566 Namen,
+ * 290 Beschreibungen, 288 Zusammenfassungen kaemen sonst als
+ * Leerstelle an.
+ *
+ * `[read]` **Umgekehrt gilt die Regel NICHT ueberall:**
+ * `nutrition.foods.name_de` ist bei allen 7.140 Zeilen deutsch, und
+ * `nutrition.nutrient_details` traegt de und en identisch gefuellt —
+ * dort waere ein Rueckfall Zierrat. Welche Spalte welche ist, steht in
+ * `tools/sprachrueckfall-pruefen.mjs`.
+ *
+ * `[cmd]` **`NULLIF(x,'')` allein genuegt nicht:** `name_de` ist
+ * `NULL`, nicht Leerstring. Beides wird hier gefangen.
+ */
+export function text(de: unknown, en: unknown): string | null {
+  const d = typeof de === 'string' ? de.trim() : ''
+  if (d) return d
+  const e = typeof en === 'string' ? en.trim() : ''
+  return e || null
+}
+
+/**
  * Ein Feld, das der neue Katalog nicht traegt.
  *
  * `[read]` **Der Unterschied zwischen den beiden Arten ist der Punkt

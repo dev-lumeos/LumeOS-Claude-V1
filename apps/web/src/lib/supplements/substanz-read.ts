@@ -42,19 +42,12 @@
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
-/**
- * Der Anzeigetext: deutsch, wenn es ihn gibt — sonst englisch.
- *
- * `[cmd]` Praktisch immer englisch (Messung im Kopf dieser Datei).
- * `name_de` ist bei allen 566 `NULL`, nicht `''` — `NULLIF` allein
- * traefe das nicht, deshalb beides.
- */
-function text(de: unknown, en: unknown): string | null {
-  const d = typeof de === 'string' ? de.trim() : ''
-  if (d) return d
-  const e = typeof en === 'string' ? en.trim() : ''
-  return e || null
-}
+// `[read]` **`text()` steht seit C-254 in `substanz-luecken.ts`** — es
+// ist reine Rechnung ohne I/O, und dort ist es pruefbar: diese Datei
+// zieht `next/headers` und laesst sich in einem Test nicht laden
+// (gegengeprobt 2026-08-23, `require() ES Module ... in a cycle`).
+import { text } from './substanz-luecken'
+
 
 /** Ein Herkunftsvermerk aus `evidence_provenance` — je Feldpfad. */
 export type Herkunft = {
