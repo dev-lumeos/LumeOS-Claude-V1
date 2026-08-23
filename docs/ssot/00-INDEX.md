@@ -78,7 +78,7 @@ Ein `[annahme]`-Marker hätte das verhindert.
 | `53-kettenluecke.md` | Warum fünf Kettenschritte nie liefen, und die Prüfung, die es künftig meldet |
 | `54-nutrition-schema-abgleich.md` | Nutrition-Schema: was `SPEC_06` fordert, was gebaut ist, wo es auseinandergeht |
 | `31-migrations-rueckbau.md` | Warum migrations/ nur drei Schema-Slices führt und die Kette die Wahrheit ist |
-| `32-encoding-schaeden.md` | **Vier Encoding-Varianten** — umschriebene Umlaute, 704 Fragezeichen, doppelte Kodierung, UTF-16. Und warum es dreimal wiederkam |
+| `32-encoding-schaeden.md` | **Vier Encoding-Varianten** — umschriebene Umlaute, 704 Fragezeichen, doppelte Kodierung, UTF-16. Und warum es dreimal wiederkam. **Fortschreibung 2026-08-23: die vierte Wiederkehr, und der Weg war neu** — nicht der Dateizeiger, sondern die Standardeingabe. `[cmd]` 78 Befunde in `TODO.md`/`ERLEDIGT.md`/`00-UEBERSICHT.md`, vom Pre-Commit-Hook abgefangen; `LAUFEND.md` blieb sauber, weil es über das Datei-Werkzeug geschrieben wurde. Zwei Reparaturversuche schlugen fehl (zeilenweise scheitert an gemischten Zeilen; Latin-1 scheitert an CP1252) — **beides stand als Antwort schon im Bericht vom 2026-08-16 und wurde nicht gelesen.** Behoben sequenzweise über CP1252, in beide Richtungen belegt: 78 → 0, Gate grün. Neue Regel in `CLAUDE.md` |
 | `33-pipeline-verifikation.md` | Verifikationslauf der Aufbaukette |
 | `34-design-bestandsaufnahme.md` | Design — was vor Theme V1 vorhanden war |
 | `38-cookie-bereich.md` | Cookie-Bereich über Apps hinweg, getrennte Sitzungen |

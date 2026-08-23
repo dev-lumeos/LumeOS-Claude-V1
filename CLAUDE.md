@@ -679,6 +679,13 @@ Index, ein Committer.
 - Markdown nur mit vollständigem Inhalt schreiben, Datei vorher einlesen —
   Teil-Edits zerstören Tabellen, Rekonstruktion aus dem Gedächtnis hat
   schon Abschnitte verloren.
+- **Markdown mit Sonderzeichen über das Datei-Werkzeug schreiben, nie über
+  eine interaktive Python-Sitzung.** `[cmd]` Am 2026-08-23 hat der Weg über
+  stdin einer PowerShell-Sitzung 78 doppelt kodierte Sequenzen in
+  `TODO.md` und `ERLEDIGT.md` erzeugt und den Commit blockiert — dieselbe
+  Sitzung schrieb `LAUFEND.md` über das Datei-Werkzeug sauber. Der
+  Python-Aufruf war korrekt (`encoding="utf-8"`); der Text kam bereits
+  beschädigt an. Hergang: `docs/ssot/32-encoding-schaeden.md`.
 - Aussagen über den Ist-Zustand tragen `[cmd]`, `[read]` oder `[annahme]` —
   Details in `docs/spezifikation/10-plattform/konventionen/`.
 - Nie gegen die laufende Datenbank testen; Wegwerf-Datenbank, danach

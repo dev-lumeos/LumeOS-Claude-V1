@@ -330,3 +330,128 @@ echtes `Ã` unmittelbar vor einem Mehrbyte-Zeichen enthält, würde
 gemeldet. In deutschen, englischen und portugiesischen Texten ist das
 sehr selten; der Test mit `São Paulo, Ångström` deckt den häufigsten
 Fall ab. Wo es doch auftritt, gibt es die Marke.
+
+
+---
+
+# Fortschreibung 2026-08-23: die vierte Wiederkehr, und der Weg war neu
+
+`[cmd]` Erhoben am 2026-08-23, Zweig `dev`, Ankerhash `59cbc37`.
+
+## Was passiert ist
+
+`[cmd]` Der Orchestrator hat `docs/todo/TODO.md` und
+`docs/todo/ERLEDIGT.md` fortgeschrieben. Der Pre-Commit-Hook hat den
+Commit abgewiesen: **78 Befunde in 3 Dateien**, alle doppelt kodiert.
+
+`[read]` **Die Prüfung aus der Fortschreibung vom 2026-08-16 hat genau
+das getan, wofür sie gebaut wurde.** Sie hat einen Schaden gefunden,
+den der Verursacher nicht bemerkt hatte, bevor er ins Repo kam. Der
+Abschnitt oben sagt: *„Eine notierte Konsequenz ist keine."* Diese hier
+war keine Notiz, sondern ein Tor — und es hat gehalten.
+
+## Der Weg war neu, nicht die Variante
+
+`[cmd]` **Drei Dateien wurden in derselben Sitzung geschrieben, zwei
+wurden beschädigt:**
+
+| Datei | Schreibweg | Ergebnis |
+|---|---|---|
+| `docs/todo/LAUFEND.md` | Datei-Werkzeug des Assistenten | **sauber** |
+| `docs/todo/TODO.md` | Python-Sitzung, Quelltext über stdin | **beschädigt** |
+| `docs/todo/ERLEDIGT.md` | Python-Sitzung, Quelltext über stdin | **beschädigt** |
+
+`[cmd]` Der Python-Aufruf selbst war korrekt geschrieben —
+`open(pfad, "w", encoding="utf-8", newline="\n")`, genau wie die Regel
+es verlangt. **Der Schaden entstand vor dem Schreiben:** die
+Zeichenkette kam über die Standardeingabe einer PowerShell-Sitzung ins
+Programm und war dort bereits verdoppelt.
+
+`[read]` **Damit ist die bisherige Regel unvollständig.** Sie sagt, wie
+zu schreiben ist, und schweigt darüber, wie der Text bis dorthin kommt.
+Ein korrekt geöffneter Dateizeiger rettet keinen Text, der schon
+beschädigt ankommt.
+
+**Neue Regel:** Markdown mit Sonderzeichen wird über das Datei-Werkzeug
+geschrieben, nicht über eine interaktive Python-Sitzung. Wer doch die
+Sitzung braucht, schreibt den Text vorher in eine Datei und lässt das
+Programm sie lesen.
+
+## Zwei falsche Annahmen bei der Reparatur
+
+`[read]` Der Abschnitt oben warnt: *„Bei Encoding-Verdacht entscheidet
+der Hex-Dump, nie die Konsolenausgabe."* Der Orchestrator hat zweimal
+dagegen verstossen, indem er aus der Gate-Meldung auf die Ursache schloss,
+statt in die Bytes zu sehen.
+
+**Erster Versuch — zeilenweise.** Eine Zeile galt als beschädigt, wenn
+sie sich nach Latin-1 kodieren und als UTF-8 dekodieren liess.
+`[cmd]` Ergebnis: 78 auf 36 Befunde. **Der Rest fiel durch**, weil eine
+Zeile neben der kaputten Sequenz ein intaktes Zeichen über `U+00FF`
+trug und damit gar nicht erst kodierbar war. Gemischte Zeilen sind
+zeilenweise nicht behandelbar — das steht oben schon, für die beiden
+Markdown-Dateien von 2026-08-16, und wurde übersehen.
+
+**Zweiter Versuch — Sequenzen, aber Latin-1.** `[cmd]` Ergebnis: eine
+einzige Zeile. Erst der Hex-Dump zeigte, was wirklich dastand:
+
+    \xc3\xa2 \xe2\x82\xac \xe2\x80\x9d
+
+`[cmd]` Das ist `U+2014` (`e2 80 94`), gelesen als **CP1252** — Byte
+`0x80` wird zum Eurozeichen, `0x94` zum rechten Anführungszeichen — und
+erneut als UTF-8 geschrieben. **Neun Bytes für einen Gedankenstrich.**
+Latin-1 lässt `0x80`–`0x9F` leer und kann diese Sequenz nicht erzeugen.
+
+`[read]` **Derselbe Fingerabdruck steht bereits im Abschnitt vom
+2026-08-16**, unter *„Die Umkehr lief über CP1252, nicht Latin-1"*, dort
+an `U+201E` erkannt. Der Orchestrator hat die eigene Aktennotiz nicht
+gelesen und den Irrweg wiederholt. **Zwei Runden Arbeit, die im Repo
+schon beantwortet waren.**
+
+## Die Reparatur, die griff
+
+`[cmd]` Sequenzweise statt zeilenweise, mit CP1252 als erster und
+Latin-1 als zweiter Umkehr, wiederholt bis stabil:
+
+- Startzeichen: CP1252-Bild der Bytes `C2`–`EF`
+- Folgezeichen: CP1252-Bild der Bytes `80`–`BF`, also der Bereich
+  `A0`–`BF` plus die 27 belegten Sonderzeichen aus `80`–`9F`
+
+`[cmd]` Ergebnis: `ERLEDIGT.md` 17 Zeilen, `TODO.md` 12,
+`00-UEBERSICHT.md` 1 — je eine Runde, keine zweite nötig.
+
+`[cmd]` **In beide Richtungen belegt:** `encoding-pruefen.mjs` meldete
+vorher **78 Befunde in 3 Dateien, Exit 1**, nachher **11.672 Dateien
+geprüft, sauber**. Danach `pnpm gate` vollständig grün, 11 Tasks.
+
+`[cmd]` **Gegenprobe auf den Altbestand:** alle im Diff entfernten
+Zeilen von `ERLEDIGT.md` gehören zu den drei in dieser Sitzung neu
+angelegten Blöcken (G-160, C-235, G-161). **Keine Zeile aus dem
+Altbestand wurde angefasst** — die Sorge, ein zu grober Ersatz könnte
+korrekte Zeichen zerstören, ist damit ausgeräumt und nicht nur
+behauptet.
+
+`[cmd]` `00-UEBERSICHT.md` wurde nicht repariert, sondern nach der
+Reparatur von `TODO.md` neu erzeugt
+(`node tools/nummern-pruefen.mjs --schreiben`). Sie ist ein Erzeugnis;
+eine Reparatur am Erzeugnis hätte die Ursache stehen lassen.
+
+`[cmd]` Das Reparaturskript lag als `tools/_entdoppeln_tmp.py` und ist
+nach dem Lauf entfernt. **Es ist kein Werkzeug, sondern eine
+Einmalmassnahme** — bliebe es liegen, sähe es beim nächsten Mal wie ein
+zulässiger Weg aus, statt wie das, was es ist: die Aufräumarbeit nach
+einem vermeidbaren Fehler.
+
+## Was dieser Fall der Prüfung hinzufügt
+
+`[read]` Der Abschnitt vom 2026-08-16 zählt unter *„Was diese Prüfung
+nicht sieht"* die **dreifache Kodierung** auf und sagt, sie würde
+erkannt, nicht repariert. Der heutige Fall war zweifach und lief in
+einer Runde durch. `[annahme]` Die Schleife bis zur Stabilität deckt
+auch drei Runden ab; belegt ist das nicht — es gab keinen Fall.
+
+`[read]` **Was der Fall wirklich zeigt, steht nicht in der Prüfung,
+sondern davor:** die Prüfung bewacht das Repo, nicht den Schreibweg.
+Sie hat den Schaden am Tor abgefangen, aber erst nachdem zwei Dateien
+ihn schon trugen. Der Schreibweg selbst ist ungeprüft und bleibt es —
+dagegen hilft nur die Regel oben.
