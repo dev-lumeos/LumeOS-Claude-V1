@@ -11879,3 +11879,117 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `test-user@lumeos.local` sind alle vier Ebenen **0**. Der Nachweis
   konnte nur auf `dev@lumeos.app` gefuehrt werden — gegen die Regel,
   aber unvermeidbar, solange das Nachweiskonto keinen Plan traegt.
+
+- [x] **C-243: Der Katalog zeigt nur, was Inhalt hat — `im_katalog` als
+  abgeleitete Spalte** — **erledigt 2026-08-23 (Codex), Bericht
+  `docs/berichte/c-243-codex.md`.** Zusammen mit C-245.
+
+  `[cmd]` **Vom Orchestrator selbst gemessen, live:** `im_katalog`
+  **290 true, 276 false**, Summe 566.
+
+  `[cmd]` **Die Spalte ist wirklich generiert, nicht nur so genannt.**
+  `information_schema.columns.is_generated = ALWAYS`, Ausdruck:
+
+      ((NULLIF(btrim(COALESCE(description_de,'')),'') IS NOT NULL)
+       OR (NULLIF(btrim(COALESCE(description_en,'')),'') IS NOT NULL)
+       OR (evidence_grade IS NOT NULL))
+
+  `[read]` **Strenger als beauftragt** — der Orchestrator hatte nur auf
+  `<> ''` geprueft; Codex faengt zusaetzlich Zeilen ab, die nur
+  Leerzeichen tragen.
+
+  `[cmd]` **Gegenprobe selbst gefahren:**
+  `UPDATE supplements.supplements SET im_katalog = true WHERE
+  im_katalog = false` scheitert mit
+  *„column can only be updated to DEFAULT"* (`428C9`).
+
+  `[cmd]` **Fremdschluessel umgehaengt:**
+  `stack_items_supplement_id_fkey` zeigt jetzt auf
+  `supplements.supplements(id) ON DELETE RESTRICT`; der alte auf
+  `supplement_catalog` ist weg.
+
+  `[read]` **Zwei Positionen wurden gemeldet, nicht geraten:** Magnesium
+  und Vitamin D3 bleiben unaufgeloest, weil Kimi nur Salzformen fuehrt.
+  Das ist C-244 und offen. **Genau das war verlangt.**
+
+  `[cmd]` Wegwerf-Kette 90 Schritte, `SCHEMA VOLLSTAENDIG`, 168,2 s.
+  Negativprobe: Erwartung 291 statt 290 bricht ab. Vollsicherung
+  `backup/vollsicherung/20260823_154329_c243_vor_live_*`.
+
+- [x] **C-245: Auf dem Nachweiskonto steht Kreatin doppelt im aktiven
+  Stack** — **erledigt 2026-08-23 (Codex), Bericht
+  `docs/berichte/c-245-codex.md`.**
+
+  `[cmd]` **Nachgemessen auf `test-user@lumeos.local`, Nachweis-Stack:**
+
+  | Position | Zuordnung | Einnahmen |
+  |---|---|---:|
+  | Creatine monohydrate | `sub_9f9bb8c160` | **12** |
+  | Omega-3 (EPA/DHA) | `sub_4480fcfa86` | 0 |
+  | Vitamin D3 | `custom_name` | 12 |
+
+  `[cmd]` **Drei Positionen statt vier**, die 12 Einnahmen haengen an
+  genau **einer** Kreatin-Position. `[cmd]` `intake_logs` weiterhin
+  **744**, `[cmd]` **0 verwaiste** Einnahmen ohne Position.
+  `[cmd]` `stack_items` gesamt **11**.
+
+  `[cmd]` **Dublettenabfrage selbst gefahren** — gruppiert je Stack
+  ueber `supplement_id` oder gefolteten `custom_name`: **kein Treffer.**
+  Vor dem Lauf war es einer.
+
+  `[read]` **Codex hat einen eigenen Fehler offengelegt:** der erste
+  Lauf entfernte Grossbuchstaben vor `lower()`, deshalb traf
+  *„Creatin Monohydrat"* nicht. Korrigiert und erneut eingespielt.
+
+  `[read]` **Der Auftragsfehler war meiner** — C-243 verlangte
+  *„mindestens zwei Positionen mit gesetzter `supplement_id`"* statt
+  *„umhaengen"*. **Der Auftragstext liegt seit diesem Tag unter
+  `docs/auftraege/`, genau damit so etwas belegbar bleibt.**
+
+- [x] **C-246: `058b` liegt committet und ist live nicht eingespielt** —
+  **erledigt 2026-08-23 (Codex), Bericht
+  `docs/berichte/c-246-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator selbst gemessen, live nachher** — vorher
+  war jede Zahl 0:
+
+  | Objektart | vorher | nachher |
+  |---|---:|---:|
+  | Tabellen `shopping%` | 0 | **2** |
+  | Policies | 0 | **8** |
+  | Trigger (ohne interne) | 0 | **4** |
+  | Fremdschluessel | 0 | **5** |
+
+  `[read]` **Codex hat die eigene Pruefung korrigiert, statt die Zahl
+  passend zu machen:** die erste Wegwerfprobe war rot, weil
+  `information_schema.triggers` Multi-Event-Trigger mehrfach zaehlt.
+  Umgestellt auf `pg_trigger`. **Der Orchestrator hat mit derselben
+  Quelle nachgemessen und kommt auf dieselbe 4.**
+
+  `[read]` **Kein neuer Kettenschritt** — die Kette war richtig, nur die
+  laufende Instanz hinkte. Vollsicherung
+  `backup/vollsicherung/20260823_161554_c246_vor_live_*`.
+
+  `[cmd]` **Damit ist die Begruendung von G-161 hinfaellig**, die
+  *„Shopping list"* und *„Scale list"* mit *„0 `shopping%`-Tabellen"*
+  als Attrappe stehen liess. Als Punkt vermerkt: C-249.
+
+- [x] **C-247: Zwei Pruefungen widersprechen sich bei
+  `biomarker_reference_ranges`** — **erledigt 2026-08-23 (Codex),
+  Bericht `docs/berichte/c-246-codex.md`.**
+
+  `[cmd]` **Entschieden wurde Fall b:** die zwei Zeilen sind richtig,
+  die Erwartung in `testdaten-pruefen.ts` steht jetzt auf **566**
+  (beide Modi, Zeilen 230 und 361). `[cmd]` Live 566.
+
+  `[cmd]` **Die zwei Differenzzeilen sind namentlich benannt**, wie
+  verlangt: Apolipoprotein B auf LOINC `1884-6`, je einmal `lab`
+  (0–130 mg/dL) und `optimal` (0–90 mg/dL), Herkunft
+  `spec_ai_generated_c84`.
+
+  `[read]` **Die Begruendung traegt:** `144_biomarker_spec_enrichment.ts`
+  erwartete bereits 566, und `schema-sollstand.json` dokumentiert die
+  Summe. **Die Erwartung war nachgezogen worden, die Pruefung nicht.**
+
+  `[cmd]` **Aber der Befund darunter ist nicht erledigt** — siehe
+  C-248: `1869-7` traegt weiterhin **zwei verschiedene Marker**.

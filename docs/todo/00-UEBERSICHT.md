@@ -270,8 +270,6 @@ wenn er erzeugt und geprüft wird.
 | **C-240** 31 Kimi-Substanzen ohne Evidenzgrad — und die Spec sagt | offen | 5390 |
 | **C-241** Das Nachweiskonto traegt weder Essensplaene noch | offen | 5408 |
 | **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5430 |
-| **C-243** Der Katalog zeigt nur, was Inhalt hat — `im_katalog` als | offen | 5498 |
-| **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5576 |
-| **C-245** Auf dem Nachweiskonto steht Kreatin doppelt im aktiven | offen | 5604 |
-| **C-246** `058b` liegt committet und ist live nicht eingespielt | offen | 5642 |
-| **C-247** Zwei Pruefungen widersprechen sich bei | offen | 5669 |
+| **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5498 |
+| **C-248** LOINC `1869-7` traegt zwei verschiedene Marker | offen | 5526 |
+| **C-249** G-161 hat Shopping-Kacheln mit einer Begruendung stehen | offen | 5561 |

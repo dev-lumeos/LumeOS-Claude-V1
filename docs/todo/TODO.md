@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-23.** 231 offen, 0 in Arbeit.
+**Stand: 2026-08-23.** 229 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5495,84 +5495,6 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   brauchen eine Zuordnung von Hand**, weil es keinen automatischen
   Treffer gibt und die Wahl der Salzform eine fachliche ist.
 
-- [ ] **C-243: Der Katalog zeigt nur, was Inhalt hat — `im_katalog` als
-  abgeleitete Spalte** (neu 2026-08-23). **ENTSCHIEDEN von Tom.** Aus
-  C-242.
-
-  **Tom, 2026-08-23, auf drei vorgelegte Wege: „C".**
-
-  Die drei Wege lauteten: **A** Form gewinnt, die 28 alten Eintraege
-  fliegen · **B** Substanz gewinnt, die Salzformen werden Unterformen
-  (braucht eine Eltern-Kind-Beziehung, die es nicht gibt) · **C** beides
-  getrennt — die inhaltslosen Zeilen bleiben als Namensregister fuer
-  Suche und Aliase, **erscheinen aber nicht im Katalog, solange sie leer
-  sind.**
-
-  `[cmd]` **Die Regel und ihre heutige Wirkung:** sichtbar ist, wer eine
-  Beschreibung **oder** einen Evidenzgrad traegt. Das sind **290** von
-  566; **276** bleiben verborgen (`f05_substance_candidate` 248,
-  `lumeos_supplement_catalog` 28).
-
-  `[cmd]` **Was die 276 sind:** Name, Gruppe, Kategorie und Aliase —
-  sonst nichts. Jede Detailtabelle traegt eine Zeile mit
-  `status = 'unbekannt'` und leerem Inhalt (`studied_dose_ranges` `[]`,
-  `dose_unit` leer, kein Hinweis). Das ist die Spec-Regel *„unbekannt
-  ist ein Zustand, keine Abwesenheit"*, korrekt umgesetzt — sie sollen
-  also **bleiben**, nur nicht im Katalog stehen.
-
-  `[cmd]` **Es ist nicht nur Basisvitaminkram:** von den 248 aus
-  `f05_substance_candidate` sind **125 `supplement`, 102 `enhanced`,
-  21 `peptide`** — Anavar, Dianabol, Cardarine, DNP, Cheque Drops.
-
-  ### Abweichung vom eigenen Vorschlag: generiert, nicht gesetzt
-
-  `[read]` Der Orchestrator hatte `im_katalog` als **gesetztes** Feld
-  vorgeschlagen. **Das ist der schlechtere Bau**, und der Grund fiel
-  erst beim Lesen der Spec auf.
-
-  `[cmd]` `docs/specs/Supplements/SPEC_06_DATABASE_SCHEMA.md:150` nutzt
-  `is_active` bereits als Sichtbarkeitsschalter in einer RLS-Policy.
-  Ein zweites gesetztes Feld daneben waere eine **gespeicherte
-  Ableitung**: es muesste nachgezogen werden, sobald Kimi eine
-  Beschreibung nachliefert — und genau solche Regeln brechen (*„Regeln,
-  die berichtet statt erzwungen werden, brechen"*).
-
-  **Deshalb eine generierte Spalte an `supplements.supplements`:**
-
-      im_katalog boolean GENERATED ALWAYS AS (
-        coalesce(description_en,'') <> ''
-        OR coalesce(description_de,'') <> ''
-        OR evidence_grade IS NOT NULL
-      ) STORED
-
-  `[read]` **Sie ist nicht setzbar und kann nicht veralten.** Liefert
-  Kimi nach, erscheint die Zeile von selbst im Katalog — ohne
-  Pflegeschritt, ohne Auftrag, ohne dass jemand daran denkt.
-
-  `[read]` **`is_active` bleibt unberuehrt** und behaelt seine
-  Bedeutung: *abgeschaltet*. `im_katalog` heisst: *noch ohne Inhalt*.
-  Die beiden duerfen nicht auf dasselbe Feld — sonst kann spaeter
-  niemand mehr unterscheiden, ob eine Substanz **entfernt** wurde oder
-  **noch nicht recherchiert** ist.
-
-  ### Was daran haengt
-
-  `[cmd]` **Der Lesepfad filtert schon** — `substanz-read.ts:124` setzt
-  `.eq('is_active', true)`, nur gegen die alte `substance_catalog`. Bei
-  Schritt 4 wird er auf `supplements` umgehaengt; dort kommt
-  `.eq('im_katalog', true)` dazu.
-
-  `[cmd]` **Die Dublettenfrage aus C-242 loest sich damit:** es stehen
-  nie zwei sichtbare Zeilen desselben Namens im Katalog, weil bei jedem
-  der 13 Paare **beide** Seiten inhaltslos sind und verborgen bleiben.
-
-  **NACHWEIS, Erwartung vor dem Lauf:** `im_katalog = true` **290**,
-  `false` **276**, Summe 566. Gegenprobe in beide Richtungen: eine
-  Testzeile mit Beschreibung und ohne Evidenzgrad muss `true` ergeben,
-  eine mit beidem leer `false`. **Und der Beweis, dass sie wirklich
-  generiert ist:** ein `UPDATE ... SET im_katalog = true` auf eine
-  leere Zeile muss **fehlschlagen**.
-
 - [ ] **C-244: Der alte Katalog und Kimi schneiden verschieden — 28 von
   28 ohne Gegenpart** (neu 2026-08-23). Aus C-242.
 
@@ -5601,87 +5523,57 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   ohne den Katalogschnitt festzulegen. **Nicht vorbauen, aber sichtbar
   auslassen.**
 
-- [ ] **C-245: Auf dem Nachweiskonto steht Kreatin doppelt im aktiven
-  Stack** (neu 2026-08-23). Nachtrag zu C-243.
+- [ ] **C-248: LOINC `1869-7` traegt zwei verschiedene Marker** (neu
+  2026-08-23). Aus der Pruefung von C-247.
 
-  `[cmd]` `test-user@lumeos.local`, Stack *„Nachweis-Stack"*, aktiv,
-  **vier Positionen**:
+  `[cmd]` **In `medical.biomarker_reference_ranges`:**
 
-  | Position | Zuordnung | Einnahmen |
-  |---|---|---:|
-  | Creatin Monohydrat | `custom_name` | **12** |
-  | Creatine monohydrate | `sub_9f9bb8c160` | 0 |
-  | Vitamin D3 | `custom_name` | 12 |
-  | Omega-3 (EPA/DHA) | `sub_4480fcfa86` | 0 |
+  | LOINC | `curated_slug` | `canonical_name_en` | Zeilen |
+  |---|---|---|---:|
+  | `1869-7` | `apob` | ApoB | **6** |
+  | `1869-7` | `apolipoprotein_a1` | Apolipoprotein A1 | 2 |
+  | `1884-6` | `apolipoprotein_b` | Apolipoprotein B | 2 |
 
-  `[cmd]` Der Seed aus C-243 hat zwei Positionen **hinzugefuegt**, statt
-  die bestehenden umzuhaengen. Kreatin erscheint damit zweimal in
-  demselben aktiven Stack — einmal alt mit 12 Einnahmen, einmal neu mit
-  null.
+  `[cmd]` **`1869-7` ist der LOINC-Code fuer Apolipoprotein A-I.** Die
+  sechs ApoB-Zeilen darauf sind falsch.
 
-  `[read]` **Der Fehler liegt im Auftragstext, nicht bei Codex.** C-243
-  verlangte woertlich *„mindestens zwei Positionen mit gesetzter
-  `supplement_id`"*. Genau das wurde gebaut. **Dass die vorhandenen
-  `custom_name`-Positionen dabei umzuhaengen sind, stand nicht da** —
-  obwohl der Orchestrator vorher gemessen hatte, dass sie
-  *„Creatin Monohydrat"* heissen, also dieselbe Substanz.
+  `[read]` **C-191 hat ApoB auf `1884-6` korrigiert — aber gespiegelt,
+  nicht verschoben.** Der Bericht zu C-247 sagt es selbst: *„Spec-Zeile
+  von falschem `1869-7` auf belegten ApoB-Code gespiegelt."* Kopiert
+  heisst: die falschen sechs stehen weiter da. **ApoB liegt jetzt unter
+  zwei Codes, einer davon gehoert einem anderen Marker.**
 
-  `[read]` **Die Folge trifft genau das, was als Naechstes gebaut wird:**
-  Schritt 4 und die Compliance-Kacheln lesen diesen Stack. Eine Kachel,
-  die Kreatin zweimal listet und einmal mit 0 % Einnahmequote, sieht aus
-  wie ein Anzeigefehler — und die Suche danach begaenne im falschen
-  Modul.
+  `[read]` **Warum das mehr ist als eine Zaehlfrage:** wer ueber
+  `loinc_code` liest — und das tut die Laborbruecke — bekommt unter
+  `1869-7` Referenzbereiche zweier verschiedener Stoffe gemischt. Ein
+  ApoA1-Wert wuerde gegen ApoB-Grenzen bewertet.
 
-  **Zu tun:** die beiden `custom_name`-Positionen von `test-user`
-  umhaengen statt danebenzuschreiben. **Die 12 Einnahmen muessen
-  mitwandern**, sonst verliert das Nachweiskonto seine
-  Compliance-Historie. Vitamin D3 bleibt `custom_name`, solange C-244
-  offen ist — dort ist die Dublette keine, weil es keine zweite Zeile
-  gibt.
+  `[cmd]` **Es hat die Pruefung nicht ausgeloest**, weil die nur die
+  Gesamtzahl zaehlt. **Eine Pruefung auf „ein LOINC-Code, ein Marker"
+  gibt es nicht** — die waere die eigentliche Lehre aus diesem Fall.
 
-- [ ] **C-246: `058b` liegt committet und ist live nicht eingespielt**
-  (neu 2026-08-23). Aus C-243, von Codex als Nicht-C-243-Drift
-  gemeldet.
+  **Zu tun:** die sechs ApoB-Zeilen auf `1869-7` pruefen und entfernen,
+  falls sie durch die zwei auf `1884-6` ersetzt sind. Vorher messen, ob
+  die Bereiche identisch sind — sonst gehen Werte verloren statt
+  Dubletten. Dazu eine Gate-Pruefung, die anschlaegt, wenn ein
+  `loinc_code` mehr als einen `curated_slug` traegt.
 
-  `[cmd]` **0 Tabellen `shopping%` im gesamten Katalog.** Fehlend sind
-  `shopping_lists`, `shopping_list_items` samt Guards, Triggern und
-  Fremdschluesseln.
+- [ ] **C-249: G-161 hat Shopping-Kacheln mit einer Begruendung stehen
+  lassen, die nicht mehr gilt** (neu 2026-08-23). Aus C-246.
 
-  `[cmd]` Sie stehen in
-  `supabase/_pipeline/05_user_tabellen/058b_recipes_meal_plans.sql`
-  (1.208 Zeilen), eingebracht von **`54bd0f3`, 2026-08-22**
-  (*„pipeline(nutrition,medical): shopping_lists, neun EAA, zehn
-  Medikationsspalten"*). `[cmd]` Die uebrigen fuenf Tabellen derselben
-  Datei — `recipes`, `meal_plans`, `meal_plan_weeks`, `meal_plan_days`,
-  `meal_plan_entries` — **existieren live**, weil sie aus dem aelteren
-  Commit `ebd9f6e` stammen.
+  `[cmd]` G-161 liess *„Shopping list"* und *„Scale list"* als Attrappe
+  stehen und belegte den Grund mit *„0 `shopping%`-Tabellen"*. **Das
+  stimmte am 2026-08-23 vormittags.**
 
-  `[read]` **Das ist derselbe Fehler wie am 2026-08-22**, an dem sechs
-  Auftraege committet und nie eingespielt lagen. Die Regel daraus
-  lautet: *ein Pipeline-Auftrag ist nicht fertig, wenn die Kette gruen
-  laeuft, sondern wenn die Aenderung dort ist, wo Tom sie sieht.*
-  **Ein Fall ist durchgerutscht.**
+  `[cmd]` **Seit C-246 gibt es sie:** 2 Tabellen, 8 Policies, 4 Trigger,
+  5 Fremdschluessel — live nachgemessen.
 
-  `[cmd]` **Es blockiert sichtbar:** G-161 hat *„Shopping list"* und
-  *„Scale list"* als Attrappe stehen lassen und den Grund mit
-  *„0 `shopping%`-Tabellen"* belegt.
+  `[read]` **Der Punkt ist klein, das Muster nicht.** Eine Attrappe mit
+  gemessener Begruendung ist richtig; sie wird falsch, sobald die
+  Begruendung wegfaellt, **und niemand merkt es, weil die Kachel
+  weiterhin ehrlich aussieht.** Wer eine Tabelle live nachzieht, muss
+  nachsehen, welche Marke sich auf ihr Fehlen berief.
 
-- [ ] **C-247: Zwei Pruefungen widersprechen sich bei
-  `biomarker_reference_ranges`** (neu 2026-08-23). Aus C-243.
-
-  `[cmd]` **Live sind es 566 Zeilen.**
-  `[cmd]` `_validierung/testdaten-pruefen.ts` erwartet **564** und ist
-  deshalb rot.
-  `[cmd]` Die Schemapruefung akzeptiert dieselbe Tabelle mit
-  *„566 / 566 ok"*.
-
-  `[read]` **Eine der beiden Zahlen ist falsch, und welche, ist nicht
-  aus den Zahlen ableitbar.** Entweder sind zwei Zeilen zu viel
-  eingespielt, oder die Erwartung in `testdaten-pruefen.ts` ist seit
-  einer Aenderung nicht nachgezogen. **Erst messen, welche zwei Zeilen
-  den Unterschied machen — dann entscheiden.**
-
-  `[read]` **Eine dauerhaft rote Pruefung ist gefaehrlicher als keine**,
-  weil sie umgangen statt repariert wird. Das steht schon in
-  `docs/ssot/32-encoding-schaeden.md` als Begruendung dafuer, warum der
-  BOM nur ein Hinweis ist.
+  **Zu tun:** die beiden Kacheln an `shopping_lists` und
+  `shopping_list_items` anbinden. Bereich `apps/web/src/app/v2/nutrition`
+  — ein Agent zur Zeit.
