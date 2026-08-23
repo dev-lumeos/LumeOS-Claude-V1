@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 223 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 226 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5360,3 +5360,49 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` `is_active` traegt heute die ganze Zustandslogik — ein Plan
   ist an oder aus. Ein Plan, der laeuft, pausiert oder abgeloest wird,
   ist damit nicht abbildbar.
+
+- [ ] **B-29: 21 Wegwerf-Datenbanken, 3,58 GB** (neu 2026-08-23). Aus
+  C-236.
+
+  `[cmd]` **Nicht sieben, wie gemeldet, sondern einundzwanzig.** Neun
+  `wegwerf_c23x` von heute (je 214–241 MB), sechs `lumeos_kette_*` vom
+  16. bis 23. August, dazu `lumeos_c73_muscle_groups`, `lumeos_f07`,
+  `lumeos_g05`, `wegwerf_c226_restore`.
+
+  `[cmd]` **Allein die neun von heute sind 2,1 GB** — `c235b` bis
+  `c235g` sind sechs Anlaeufe desselben Auftrags.
+
+  `[read]` **Jeder Auftrag sagt *„Wegwerf-Datenbank, danach
+  verwerfen"*, und jeder Bericht meldet sie als geloescht.** Die
+  Meldung stimmt vermutlich fuer den letzten Lauf, nicht fuer die
+  Zwischenlaeufe.
+
+  **Zu bauen:** die Raeumung ans Ende des Laufs binden, statt sie zu
+  melden — ein `DROP DATABASE` im Abschluss von `lauf.py` oder im
+  Kettenwerkzeug. **Eine Regel, die berichtet statt erzwungen wird,
+  bricht.** Dasselbe wie bei der Doppelkodierung (C-216).
+
+- [ ] **B-30: MSYS-`tar` kann keine `D:\`-Pfade** (neu 2026-08-23).
+  Aus C-236.
+
+  `[cmd]` Die Kette lief zweimal rot, bis System32-`tar` im PATH
+  stand. Die Git-Bash bringt ein MSYS-`tar` mit, das
+  Windows-Laufwerkspfade nicht aufloest.
+
+  **Gehoert in `tools/lauf.py`** — wer einen Befehl braucht, der nicht
+  darueber geht, erweitert die Datei. `_aufloesen()` macht das bereits
+  fuer `pnpm.cmd` und `npx.cmd`; `tar` gehoert dazu.
+
+  `[cmd]` **Zweiter Stolperer aus demselben Lauf:** Backticks um
+  `[cmd]` innerhalb eines SQL-Template-Literals beenden den String
+  (`ReferenceError`). Gehoert in die Schreibregeln.
+
+- [ ] **G-174: Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig**
+  (neu 2026-08-23). Aus C-236.
+
+  `[cmd]` Sie entstanden, als `hrv_rmssd` noch 230 zeigte. Seit C-236
+  stehen dort 40–69 ms.
+
+  `[read]` **Ein Nachweisbild von einem Stand, den es nicht mehr gibt,
+  belegt nichts.** Neu aufnehmen, wenn Recovery das naechste Mal
+  angefasst wird — kein eigener Durchgang wert.

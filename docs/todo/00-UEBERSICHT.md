@@ -267,3 +267,6 @@ wenn er erzeugt und geprüft wird.
 | **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5313 |
 | **C-238** `meal_plan_entries` hat keinen Status | offen | 5331 |
 | **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5349 |
+| **B-29** 21 Wegwerf-Datenbanken, 3,58 GB | offen | 5364 |
+| **B-30** MSYS-`tar` kann keine `D:\`-Pfade | offen | 5385 |
+| **G-174** Die G-160-Bildschirmfotos sind jetzt erst aussagekraeftig | offen | 5400 |
