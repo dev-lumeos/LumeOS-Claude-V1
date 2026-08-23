@@ -26,6 +26,11 @@ import { Card, Pill, Icon, Row, Ring, Sparkline } from '@lumeos/ui'
 
 import { GHOST_ENTRIES } from './tabs-daten'
 import type { GhostStatus } from './typen'
+// G-161: die drei Kacheln, die `plan-lesen` tragen kann.
+import {
+  PlanKopfEcht, PlanEinstellungenEcht, PlanBibliothekEcht,
+} from './plans-echt'
+import type { PlanDaten } from '../../../lib/nutrition/plan-lesen'
 
 const ATTRAPPE = 'Aus dem Entwurf uebernommen. Dieser Tab ist noch nicht an die vorhandenen Essensplaene angebunden - die Zahlen sind erfunden.'
 
@@ -56,7 +61,7 @@ const EINKAUF: Array<{ cat: string; items: Array<[string, string]> }> = [
   { cat: 'Fette & Nüsse', items: [['Mandeln', '140 g'], ['Olivenöl', '150 ml']] },
 ]
 
-export function MealPlansTab() {
+export function MealPlansTab({ d = null }: { d?: PlanDaten | null }) {
   const [tab, setTab] = React.useState('active')
 
   // Die Rechnung der Vorlage (Zeile 336-343), unveraendert.
@@ -93,6 +98,12 @@ export function MealPlansTab() {
       {tab === 'active' && (
         <div className="v2-grid v2-grid-15" style={{ gap: 14 }}>
           <div className="v2-col-gap" style={{ gap: 14 }}>
+            {/* G-161: Der Plankopf liest echt, sobald ein Plan da ist.
+                `[read]` Ohne Plan bleibt der Entwurf mit seiner Marke —
+                dasselbe Muster wie bei `prefs` (G-65) und `planner`
+                (G-97): eine leere echte Kachel saehe aus wie ein Befund
+                und waere doch nur ein fehlendes Cookie. */}
+            {d ? <PlanKopfEcht d={d} /> : (
             <Card attrappe={ATTRAPPE}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <Ring value={compliance} max={100} color="var(--acc-nutri)" label="compliance" size={92} stroke={7} />
@@ -112,7 +123,12 @@ export function MealPlansTab() {
                 </div>
               </div>
             </Card>
+            )}
 
+            {/* `[cmd]` **Bleibt Attrappe:** `meal_plan_entries` hat
+                keine Statusspalte (`pending`/`confirmed`/`deviated`/
+                `skipped`). Ohne sie sind Geistereintraege nicht
+                ableitbar — gemessen am 2026-08-23. */}
             <Card
               title="Today's ghost entries"
               sub={`${pending} still open · confirm via MealCam or manually`}
@@ -166,6 +182,11 @@ export function MealPlansTab() {
           </div>
 
           <div className="v2-col-gap" style={{ gap: 14 }}>
+            {/* G-161: Was im Schema steht, steht echt da — der Rest
+                nicht. Vier der fuenf Zeilen der Vorlage haben keine
+                Spalte (`lifecycle`, `started_at`, `next_plan_id`,
+                `confirm_mode`); die echte Kachel sagt das aus. */}
+            {d ? <PlanEinstellungenEcht d={d} /> : (
             <Card title="Plan settings" attrappe={ATTRAPPE}>
               <Row label="Lifecycle" value="rollover" />
               <Row label="Days count" value="7" />
@@ -187,7 +208,11 @@ export function MealPlansTab() {
                 <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm">Duplicate</button>
               </div>
             </Card>
+            )}
 
+            {/* `[cmd]` **Bleibt Attrappe:** Die drei Zeilen beschreiben
+                Spalten, die es nicht gibt — `days_count`, `lifecycle`,
+                `next_plan_id`. Eine Legende ueber nichts. */}
             <Card title="Lifecycle types" attrappe={ATTRAPPE}>
               <Row label="once" value="ends after days_count" />
               <Row label="rollover" value="restarts at Day 1" />
@@ -206,7 +231,16 @@ export function MealPlansTab() {
         </div>
       )}
 
-      {tab === 'library' && (
+      {/* G-161: Die Bibliothek zeigt den echten Plan mit seinen
+          Wochen. `[cmd]` **Einen, nicht zwei** — der zweite gehoert
+          einem anderen Konto und faellt per RLS heraus. */}
+      {tab === 'library' && d && (
+        <div className="v2-col-gap" style={{ gap: 12 }}>
+          <PlanBibliothekEcht d={d} />
+        </div>
+      )}
+
+      {tab === 'library' && !d && (
         <div className="v2-grid v2-g-cols-3" style={{ gap: 12 }}>
           {BIBLIOTHEK.map(p => (
             <Card

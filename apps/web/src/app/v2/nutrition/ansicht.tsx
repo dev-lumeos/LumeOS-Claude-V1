@@ -553,7 +553,12 @@ function AndererTab({
     )
   }
   if (tab === 'plans') {
-    return <div style={{ marginTop: 16 }}><MealPlansTab /></div>
+    // `[cmd]` SEIT G-161 TEILWEISE ECHT. Drei der acht Kacheln lesen
+    // ueber `plan-lesen` — dieselbe Quelle wie der Planner (G-97).
+    // **Fuenf bleiben Attrappe**, weil ihnen Spalten fehlen
+    // (`lifecycle`, Eintragsstatus) oder eine Tabelle (`shopping_lists`,
+    // C-175). Der Grund steht je Kachel im Quelltext.
+    return <div style={{ marginTop: 16 }}><MealPlansTab d={plan} /></div>
   }
   if (tab === 'prefs') {
     // `[cmd]` SEIT G-65 ECHT. Ohne geladene Vorlieben (keine Sitzung)

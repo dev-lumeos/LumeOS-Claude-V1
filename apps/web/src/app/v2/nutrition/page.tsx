@@ -185,7 +185,9 @@ export default async function V2NutritionPage({
   // `plan` null und der Entwurf steht mit seiner Marke da; die uebrige
   // Seite ist davon nicht betroffen.
   let plan: PlanDaten | null = null
-  if (tab === 'planner') {
+  // G-161: auch `plans` liest jetzt echt. `[cmd]` Derselbe Lesepfad wie
+  // beim Planner (G-97) — vier Ebenen in einem Aufruf, nicht nachgebaut.
+  if (tab === 'planner' || tab === 'plans') {
     try {
       plan = await ladePlan()
     } catch {
