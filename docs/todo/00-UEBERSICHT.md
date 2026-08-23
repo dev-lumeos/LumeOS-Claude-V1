@@ -264,3 +264,6 @@ wenn er erzeugt und geprüft wird.
 | **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5250 |
 | **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5274 |
 | **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5303 |
+| **C-237** Die Kimi-Quelle fuehrt leere Strings statt `unknown` | offen | 5313 |
+| **C-238** `meal_plan_entries` hat keinen Status | offen | 5331 |
+| **C-239** `meal_plans` kennt keinen Lebenszyklus | offen | 5349 |

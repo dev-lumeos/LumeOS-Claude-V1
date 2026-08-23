@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 220 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 223 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5309,3 +5309,54 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` Kleinigkeit, aber ein falscher Verweis fuehrt beim naechsten
   Suchen in die Irre — dasselbe Muster wie `training.sessions` gegen
   `workout_sessions`.
+
+- [ ] **C-237: Die Kimi-Quelle fuehrt leere Strings statt `unknown`**
+  (neu 2026-08-23). Aus C-235.
+
+  `[cmd]` **331 leere Strings** im `regulatory`-Block: UK **175**,
+  Australia **156**. Dazu 53 `unknown` je Rechtsraum.
+
+  `[read]` **`""` heisst „nie gefragt", `unknown` heisst „gefragt,
+  nichts gefunden".** Die Quelle unterscheidet das nicht — damit ist
+  bei 331 Feldern nicht sagbar, ob recherchiert wurde.
+
+  `[cmd]` Codex hat sie nicht als Zeile importiert und den Grund als
+  `NOTICE` ins SQL geschrieben, statt sie passend zu machen. Deshalb
+  `supplement_regulatory` 1.119 statt der vom Orchestrator
+  vorgegebenen 1.185 — **dessen Zaehlmuster zaehlte leere Strings mit.**
+
+  **Beim naechsten Crawl melden:** leere Felder gehoeren als `unknown`
+  oder gar nicht geliefert.
+
+- [ ] **C-238: `meal_plan_entries` hat keinen Status** (neu
+  2026-08-23). Aus G-161. **Blockiert drei Kacheln.**
+
+  `[cmd]` Die Spalten sind `id, day_id, user_id, meal_type,
+  planned_time, slot_order, entry_type, recipe_id, food_id,
+  custom_food_id, amount_g, planned_servings, portion_name,
+  portion_quantity, portion_amount_g, note, created_at, updated_at` —
+  **kein `status`.**
+
+  `[read]` **Ohne ihn ist keine Einhaltung rechenbar.** Ghost entries
+  und beide Compliance-Kacheln brauchen einen Ist-Soll-Vergleich je
+  Eintrag: `pending | confirmed | deviated | skipped`.
+
+  `[read]` **Claude Code hat den Compliance-Ring bewusst entfernt**,
+  statt eine Zahl zu zeigen, die niemand rechnen kann — richtig. Eine
+  erfundene Prozentzahl waere dasselbe wie die Modalitaets-Boni, ACWR
+  und die Evidenzgewichte.
+
+- [ ] **C-239: `meal_plans` kennt keinen Lebenszyklus** (neu
+  2026-08-23). Aus G-161.
+
+  `[cmd]` Es fehlen `lifecycle`, `started_at`, `days_count`,
+  `confirm_mode`, `next_plan_id`. **Die Kachel „Lifecycle types" ist
+  eine Legende ueber Spalten, die es nicht gibt.**
+
+  `[cmd]` Vorhanden sind `name, description, target_kcal,
+  target_protein_g, target_carbs_g, target_fat_g, is_active,
+  measurement_source, source_detail`.
+
+  `[read]` `is_active` traegt heute die ganze Zustandslogik — ein Plan
+  ist an oder aus. Ein Plan, der laeuft, pausiert oder abgeloest wird,
+  ist damit nicht abbildbar.
