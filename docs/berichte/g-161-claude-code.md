@@ -47,3 +47,26 @@ Spalten, die es nicht gibt.
 Der Ring ist bewusst weg. Eine Compliance in Prozent braucht einen
 Ist-Soll-Vergleich je Eintrag; ohne Status wäre jede Zahl erfunden.
 Statt dessen steht die gemessene Zählung da.
+
+---
+
+## Nachtrag — zwei eigene Fehler, beide von der Gegenprobe gefunden
+
+Die Planumfang-Kachel sagt aus, was fehlt — und zwar nicht als Strich:
+*„auch nicht als Strich, denn ein Strich hiesse ‚leer' statt ‚gibt es
+nicht'."*
+
+`[cmd]` **Meine Markenansage war falsch:** ich sagte 5, gerendert sind
+4 — ich hatte Quelltextzahl mit Renderzahl verwechselt. Von 8 Marken im
+Code liegen nur 5 auf `active`; die anderen auf `library` (jetzt 1) und
+`shopping` (3).
+
+`[cmd]` **Und mein erster Test war blind.** Mit einem eingebauten
+Hochrechnungsfehler (`tage × einträgeJeTag`) blieben alle vier grün —
+meine Fixtures hatten gleich verteilte Einträge. Der echte Plan hat
+2,67 Einträge je Tag. Fixture auf ungleiche Verteilung geändert; jetzt
+geht Test 4 rot, wie er soll.
+
+518/518 Tests · Gate 11/11 · Build grün (auf den Hinweis hin gelaufen,
+nicht nur `tsc` — es blieb sauber). Bilder:
+`backup/g161-plans-{hell,dunkel}.png`, zwei Läufe je 1.89–1.94 s.
