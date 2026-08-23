@@ -1,37 +1,48 @@
-# Wer arbeitet gerade woran
+# Was wartet und wem was gehoert
 
-**Diese Datei ist die Wahrheit ueber laufende Auftraege.**
-Der Orchestrator traegt sie ein, wenn ein Auftrag rausgeht, und
-streicht sie, wenn der Bericht eintrifft.
+**Was gerade laeuft, steht nicht mehr hier.** Seit 2026-08-23 ist es
+aus dem Dateisystem ableitbar: **eine Datei in `docs/auftraege/` ohne
+Gegenstueck in `docs/berichte/` ist ein laufender Auftrag.**
 
-**Anlass (Tom, 2026-08-20):** *,Du hast es nicht mal mehr im Griff zu
-wissen, welcher Agent noch laeuft."*
+`[read]` **Warum die Tabelle weg ist:** Sie war handgepflegt und am
+2026-08-23 dreimal falsch — sie fuehrte G-160, G-161 und C-235 als
+laufend, obwohl alle drei fertig waren. `[cmd]` Gefunden hat es der
+Waechter (`laufend-erledigt`), nicht der Orchestrator. *Regeln, die
+berichtet statt erzwungen werden, brechen.*
+
+`[read]` **Was hier bleibt, ist nicht ableitbar:** welcher der offenen
+Punkte als Naechstes drankommt, ist eine Priorisierung; wem welcher
+Bereich gehoert, ist eine Regel. Aus einem Ordner voller Auftraege folgt
+beides nicht.
+
+**Anlass fuer diese Datei (Tom, 2026-08-20):** *,Du hast es nicht mal
+mehr im Griff zu wissen, welcher Agent noch laeuft."*
 
 ---
 
-## Laufend
+## Der Faden: Supplements-Neuaufbau
 
-| Agent | Auftrag | Bereich | seit |
-|---|---|---|---|
-| **Codex** | **C-243** `im_katalog` + Schritt 3, `stack_items` umhaengen | `supabase/_pipeline/` | 2026-08-23 |
-| **Claude Code** | *frei* | — | — |
-| **Fable** | *frei* | — | — |
-| *Kimi* | Dose–Response, Zeitverlauf, Streuung — **Crawl 35 laeuft** | extern, siehe unten | 2026-08-20 |
+| Schritt | Stand |
+|---|---|
+| 1 · Anlegen | **durch** (C-232) — 33 Tabellen, live |
+| 2 · Befuellen | **durch** (C-235) — live, vom Orchestrator nachgemessen |
+| 3 · Umhaengen | **gebaut** (C-243) — `im_katalog` 290/276, FK auf `supplements.supplements`. **Abschluss haengt an C-245** |
+| 4 · Lesepfade | wartet auf C-245 |
+| 5 · Alte weg | erst wenn 3 und 4 gemessen sind |
 
-`[cmd]` **C-243 ging am 2026-08-23 raus** (Tom: *„laeuft"*). Er traegt
-`im_katalog` als generierte Spalte, das Umhaengen von
-`stack_items.supplement_id` auf `supplements.supplements`, und einen
-Seed fuer `test-user@lumeos.local` — **ohne den ist Schritt 4 nicht
-nachweisbar**, siehe unten.
+`[cmd]` **Sechs Dateien lesen heute `supplement_catalog`** — das ist der
+Umfang von Schritt 4:
 
-`[cmd]` **Die 8 zugeordneten Positionen gehoeren nicht dem
-Nachweiskonto:** `dev@lumeos.app` 4 · `tom.seed@example.com` 4 ·
-`test-user@lumeos.local` **0** (dort 2 Positionen, beide mit
-`custom_name`, in deutscher Schreibweise *„Creatin Monohydrat"* und
-*„Vitamin D3"*). Dieselbe Falle wie C-241.
+    apps/web/src/app/v2/medical/page.tsx
+    apps/web/src/app/v2/supplements/ansicht.tsx
+    apps/web/src/app/v2/supplements/substanz-detail.tsx
+    apps/web/src/lib/supplements/stack-read.ts
+    apps/web/src/lib/supplements/stack-write.ts
+    apps/web/src/lib/supplements/substanz-read.ts
 
+## Kimi
 
-`[cmd]` **Wo die Kimi-Ergebnisse liegen** (Tom, 2026-08-22):
+`[cmd]` **Wo die Ergebnisse liegen** (Tom, 2026-08-22):
 
     backup/kimi-research/Kimi_Agent/supplement_performance_database/
 
@@ -44,29 +55,6 @@ angekommen.** C-185 und C-188 sind gegen **027** gebaut — wer eine
 neuere Zahl braucht, holt sie sich nicht aus diesem Ordner, ohne
 vorher nachzusehen, was tatsaechlich da ist.
 
-`[read]` **C-164 war zwischenzeitlich faelschlich als laufend
-eingetragen** — der Auftragstext ging erst am Abend raus. **Eintragen,
-wenn er rausgeht, nicht wenn er geschrieben ist.**
-
-## Der Faden: Supplements-Neuaufbau
-
-| Schritt | Stand |
-|---|---|
-| 1 · Anlegen | **durch** (C-232) — 33 Tabellen, live |
-| 2 · Befuellen | **durch** (C-235) — live, vom Orchestrator nachgemessen |
-| **3 · Umhaengen** | **blockiert durch C-242** — Entscheidung bei Tom |
-| 4 · Lesepfade | wartet auf 3 — `stack-read`, `stack-write`, `substanz-read`, `medical/page.tsx`, `supplements/ansicht.tsx`, `supplements/substanz-detail.tsx` |
-| 5 · Alte weg | erst wenn 3 und 4 gemessen sind |
-
-`[cmd]` **Sechs Dateien lesen heute `supplement_catalog`** — das ist der
-Umfang von Schritt 4:
-
-    apps/web/src/app/v2/medical/page.tsx
-    apps/web/src/app/v2/supplements/ansicht.tsx
-    apps/web/src/app/v2/supplements/substanz-detail.tsx
-    apps/web/src/lib/supplements/stack-read.ts
-    apps/web/src/lib/supplements/stack-write.ts
-    apps/web/src/lib/supplements/substanz-read.ts
 
 ## Wartet auf einen freien Agenten
 
@@ -171,8 +159,13 @@ das hat am 2026-08-20 dreimal Zeit gekostet. **Ein UI-Agent je Modul.**
 
 ## Regel
 
-`[cmd]` **Vor jedem neuen Auftrag: hier nachsehen.**
-`[cmd]` **Nach jedem Bericht: Zeile streichen.**
+`[cmd]` **Vor jedem neuen Auftrag: hier nachsehen** — wegen der
+Bereichstabelle, damit zwei Agenten nicht dieselbe Datei anfassen.
+
+`[cmd]` **Was laeuft, steht in `docs/auftraege/`.** Eine Datei dort ohne
+Gegenstueck in `docs/berichte/` ist ein laufender Auftrag. **Nach jedem
+Bericht ist nichts mehr zu streichen** — der Zustand aendert sich, indem
+der Bericht abgelegt wird.
 
 `[read]` **Und die Nummer wird hier vergeben** — **A-41** haelt fest,
 dass 116 bis 119 doppelt belegt waren, weil fuenf Agenten gleichzeitig
