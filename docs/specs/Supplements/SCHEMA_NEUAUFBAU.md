@@ -143,8 +143,9 @@ form · evidence_grade · sort_order · is_active
 source · created_at · updated_at
 ```
 
-`[cmd]` `evidence.overall_grade` 290 · `description` 290 (englisch,
-aus Kimi) · `gruppe`/`kategorie` 566.
+`[cmd]` `evidence.overall_grade` 290 in der Kimi-Quelle; vor C-248
+importiert 259, weil Grad `E` abgewiesen wurde · `description` 290
+(englisch, aus Kimi) · `gruppe`/`kategorie` 566.
 
 `[read]` **Sprachregel, Tom:** *„datenbanken werden ausschliesslich so
 aufgebaut"* — wie `nutrition.nutrient_defs`, `[cmd]` dort `name_de`,

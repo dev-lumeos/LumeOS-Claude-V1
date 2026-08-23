@@ -733,6 +733,8 @@ DELETE FROM supplements.stack_items si
   USING supplements.user_stacks us
   WHERE si.stack_id = us.id AND us.user_id = :'pruefkonto'::uuid;
 DELETE FROM supplements.user_stacks WHERE user_id = :'pruefkonto'::uuid;
+DELETE FROM nutrition.shopping_list_items WHERE user_id = :'pruefkonto'::uuid;
+DELETE FROM nutrition.shopping_lists WHERE user_id = :'pruefkonto'::uuid;
 DELETE FROM training.workout_sets ws
   USING training.workout_exercises we, training.workout_sessions s
   WHERE ws.workout_exercise_id = we.id AND we.workout_session_id = s.id
@@ -887,6 +889,75 @@ FROM supplements.stack_items si
 CROSS JOIN generate_series(0, 11) AS t(d)
 WHERE si.stack_id = 'c2360000-0000-0000-0000-0000000000aa'::uuid;
 
+-- 12d. C-251: Einkaufslisten-Nachweis fuer test-user.
+-- Echte foods-Zeilen, keine Freitexte: Claude Code kann damit die
+-- Kacheln "Shopping list" und "Scale list" ueber die Verknuepfung
+-- pruefen. Die FK-Spalte heisst shopping_list_id.
+INSERT INTO nutrition.shopping_lists (
+  id, user_id, name, source_type, servings, status,
+  measurement_source, source_detail
+)
+VALUES (
+  'c2510000-0000-0000-0000-000000000001'::uuid,
+  :'pruefkonto'::uuid,
+  'Nachweis-Einkaufsliste',
+  'manual',
+  1,
+  'open',
+  'seed',
+  'C-251 test-user Einkaufsliste'
+);
+
+CREATE TEMP TABLE c251_shopping_items (
+  sort_order integer NOT NULL,
+  bls_code text NOT NULL,
+  amount_g numeric,
+  quantity numeric,
+  unit_display text NOT NULL,
+  notes text
+) ON COMMIT DROP;
+
+INSERT INTO c251_shopping_items VALUES
+  (10, 'C133000', 500, NULL, 'g', 'Oats fuer Fruehstueck'),
+  (20, 'F503100', 750, NULL, 'g', 'Banane'),
+  (30, 'E111100', NULL, 12, 'Stueck', 'Eier'),
+  (40, 'V416100', 800, NULL, 'g', 'Haehnchen'),
+  (50, 'C351000', 1000, NULL, 'g', 'Reis'),
+  (60, 'Q120000', 250, NULL, 'ml', 'Olivenoel');
+
+DO $$
+DECLARE
+  v_missing text;
+BEGIN
+  SELECT string_agg(i.bls_code, ', ' ORDER BY i.bls_code)
+    INTO v_missing
+  FROM c251_shopping_items i
+  LEFT JOIN nutrition.foods f ON f.bls_code = i.bls_code
+  WHERE f.id IS NULL;
+
+  IF v_missing IS NOT NULL THEN
+    RAISE EXCEPTION 'C-251 Einkaufslisten-Seed: BLS-Codes fehlen: %', v_missing;
+  END IF;
+END $$;
+
+INSERT INTO nutrition.shopping_list_items (
+  shopping_list_id, user_id, sort_order, item_source, food_id, food_name,
+  amount_g, quantity, unit_display, notes
+)
+SELECT
+  'c2510000-0000-0000-0000-000000000001'::uuid,
+  :'pruefkonto'::uuid,
+  i.sort_order,
+  'bls',
+  f.id,
+  COALESCE(NULLIF(f.name_display_de, ''), f.name_de),
+  i.amount_g,
+  i.quantity,
+  i.unit_display,
+  i.notes
+FROM c251_shopping_items i
+JOIN nutrition.foods f ON f.bls_code = i.bls_code;
+
 COMMIT;
 
 WITH users AS (
@@ -917,6 +988,10 @@ counts AS (
   FROM users u LEFT JOIN nutrition.meal_plan_days mpd ON mpd.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'meal_plan_entries', count(mpe.*)
   FROM users u LEFT JOIN nutrition.meal_plan_entries mpe ON mpe.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'shopping_lists', count(sl.*)
+  FROM users u LEFT JOIN nutrition.shopping_lists sl ON sl.user_id = u.id GROUP BY u.email
+  UNION ALL SELECT u.email, 'shopping_list_items', count(sli.*)
+  FROM users u LEFT JOIN nutrition.shopping_list_items sli ON sli.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'nutrition_targets', count(nt.*)
   FROM users u LEFT JOIN goals.nutrition_targets nt ON nt.user_id = u.id GROUP BY u.email
   UNION ALL SELECT u.email, 'user_goals', count(ug.*)

@@ -145,7 +145,7 @@ SELECT
   NULLIF(sc.description, ''),
   NULL,
   NULLIF(sc.chemical_form, ''),
-  CASE WHEN sc.evidence->>'overall_grade' IN ('S','A','B','C','D','F') THEN sc.evidence->>'overall_grade' ELSE NULL END,
+  CASE WHEN sc.evidence->>'overall_grade' IN ('S','A','B','C','D','E','F') THEN sc.evidence->>'overall_grade' ELSE NULL END,
   sc.source_primary,
   sc.is_active
 FROM supplements.substance_catalog sc;
@@ -298,7 +298,7 @@ SELECT
   pg_temp.stable_uuid('supplement_evidence:' || id),
   pg_temp.stable_uuid('supplement:' || id),
   CASE WHEN evidence IS NOT NULL AND evidence <> '{}'::jsonb THEN 'bekannt' ELSE 'unbekannt' END,
-  CASE WHEN evidence->>'overall_grade' IN ('S','A','B','C','D','F') THEN evidence->>'overall_grade' ELSE NULL END,
+  CASE WHEN evidence->>'overall_grade' IN ('S','A','B','C','D','E','F') THEN evidence->>'overall_grade' ELSE NULL END,
   NULLIF(evidence->>'summary', ''),
   NULLIF(evidence->>'human_trials', '')::integer,
   NULLIF(evidence->>'randomized_trials', '')::integer,
@@ -542,6 +542,7 @@ DECLARE
   v_counts jsonb;
   v_reg_expected integer := 1185;
   v_reg_actual integer;
+  v_evidence_grades integer;
 BEGIN
   SELECT jsonb_object_agg(table_name, row_count ORDER BY table_name)
     INTO v_counts
@@ -585,6 +586,8 @@ BEGIN
   IF (v_counts->>'supplement_pharmacology')::integer <> 566 THEN RAISE EXCEPTION 'C-235: supplement_pharmacology % statt 566', v_counts->>'supplement_pharmacology'; END IF;
   IF (v_counts->>'supplement_dosing')::integer <> 566 THEN RAISE EXCEPTION 'C-235: supplement_dosing % statt 566', v_counts->>'supplement_dosing'; END IF;
   IF (v_counts->>'supplement_evidence')::integer <> 566 THEN RAISE EXCEPTION 'C-235: supplement_evidence % statt 566', v_counts->>'supplement_evidence'; END IF;
+  SELECT count(*) INTO v_evidence_grades FROM supplements.supplement_evidence WHERE overall_grade IS NOT NULL;
+  IF v_evidence_grades <> 290 THEN RAISE EXCEPTION 'C-240: supplement_evidence overall_grade % statt 290', v_evidence_grades; END IF;
   IF (v_counts->>'supplement_monitoring')::integer <> 46 THEN RAISE EXCEPTION 'C-235: supplement_monitoring % statt 46', v_counts->>'supplement_monitoring'; END IF;
   IF (v_counts->>'supplement_organ_risks')::integer <> 1450 THEN RAISE EXCEPTION 'C-235: supplement_organ_risks % statt 1450', v_counts->>'supplement_organ_risks'; END IF;
   IF (v_counts->>'supplement_identifiers')::integer <> 1226 THEN RAISE EXCEPTION 'C-235: supplement_identifiers % statt 1226', v_counts->>'supplement_identifiers'; END IF;

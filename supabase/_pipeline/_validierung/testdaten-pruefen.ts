@@ -76,6 +76,16 @@ const mealPlans = numberScalar(`SELECT count(*) FROM nutrition.meal_plans WHERE 
 const mealPlanWeeks = numberScalar(`SELECT count(*) FROM nutrition.meal_plan_weeks WHERE user_id IN (${IDS_SQL});`)
 const mealPlanDays = numberScalar(`SELECT count(*) FROM nutrition.meal_plan_days WHERE user_id IN (${IDS_SQL});`)
 const mealPlanEntries = numberScalar(`SELECT count(*) FROM nutrition.meal_plan_entries WHERE user_id IN (${IDS_SQL});`)
+const testUserShoppingLists = numberScalar(`
+  SELECT count(*)
+  FROM nutrition.shopping_lists sl
+  JOIN auth.users u ON u.id = sl.user_id
+  WHERE u.email = 'test-user@lumeos.local';`)
+const testUserShoppingItems = numberScalar(`
+  SELECT count(*)
+  FROM nutrition.shopping_list_items sli
+  JOIN auth.users u ON u.id = sli.user_id
+  WHERE u.email = 'test-user@lumeos.local';`)
 const meals = numberScalar(`SELECT count(*) FROM nutrition.meals WHERE user_id IN (${IDS_SQL});`)
 const items = numberScalar(`SELECT count(*) FROM nutrition.meal_items WHERE user_id IN (${IDS_SQL});`)
 const waterLogs = numberScalar(`SELECT count(*) FROM nutrition.water_logs WHERE user_id IN (${IDS_SQL});`)
@@ -227,7 +237,7 @@ if (MODE === 'clean') {
   if (userMedications !== 0) errors.push(`medical.user_medications: ${userMedications}, erwartet 0`)
   if (userConditions !== 0) errors.push(`medical.user_conditions: ${userConditions}, erwartet 0`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
-  if (medicalRanges !== 566) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 566`)
+  if (medicalRanges !== 560) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 560`)
   if (medicalAliases < 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet mindestens 292`)
   if (medicationActiveSubstances < 56) errors.push(`medical.medication_active_substances: ${medicationActiveSubstances}, erwartet mindestens 56`)
   if (medicationFormulations < 119) errors.push(`medical.medication_formulations: ${medicationFormulations}, erwartet mindestens 119`)
@@ -358,7 +368,7 @@ if (MODE === 'clean') {
   if (recoveryScores < 160) errors.push(`recovery.scores: ${recoveryScores}, erwartet mindestens 160`)
   if (recoveryModalities < 50) errors.push(`recovery.modality_log: ${recoveryModalities}, erwartet mindestens 50`)
   if (medicalCatalog !== 11676) errors.push(`medical.biomarker_catalog: ${medicalCatalog}, erwartet 11676`)
-  if (medicalRanges !== 566) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 566`)
+  if (medicalRanges !== 560) errors.push(`medical.biomarker_reference_ranges: ${medicalRanges}, erwartet 560`)
   if (medicalAliases < 292) errors.push(`medical.biomarker_aliases: ${medicalAliases}, erwartet mindestens 292`)
   if (medicalReports !== 5) errors.push(`medical.lab_reports: ${medicalReports}, erwartet 5`)
   if (medicalValues !== 140) errors.push(`medical.lab_result_values: ${medicalValues}, erwartet 140`)
@@ -898,6 +908,27 @@ if (MODE === 'clean') {
     JOIN auth.users u ON u.id = mp.user_id
     WHERE u.email = 'test-user@lumeos.local';`) !== 0) {
     errors.push('Fall C-150 RLS-Gegenkonto: test-user hat Wochenplaene, erwartet keine')
+  }
+  if (testUserShoppingLists !== 1) {
+    errors.push(`Fall C-251 Einkaufsliste: test-user hat ${testUserShoppingLists} Listen, erwartet 1`)
+  }
+  if (testUserShoppingItems !== 6) {
+    errors.push(`Fall C-251 Einkaufsliste: test-user hat ${testUserShoppingItems} Positionen, erwartet 6`)
+  }
+  if (!hasRows(`
+    SELECT 1
+    FROM nutrition.shopping_lists sl
+    JOIN nutrition.shopping_list_items sli ON sli.shopping_list_id = sl.id
+    JOIN nutrition.foods f ON f.id = sli.food_id
+    JOIN auth.users u ON u.id = sl.user_id
+    WHERE u.email = 'test-user@lumeos.local'
+      AND sl.name = 'Nachweis-Einkaufsliste'
+      AND sl.measurement_source = 'seed'
+      AND sli.item_source = 'bls'
+      AND sli.food_id IS NOT NULL
+    GROUP BY sl.id
+    HAVING count(*) = 6;`)) {
+    errors.push('Fall C-251 Einkaufsliste: Positionen sind nicht ueber echte foods verknuepft')
   }
   if (!hasRows(`
     SELECT 1

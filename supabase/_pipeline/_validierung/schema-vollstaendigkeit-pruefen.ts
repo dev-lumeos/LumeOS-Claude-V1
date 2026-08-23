@@ -597,6 +597,20 @@ if (Array.isArray(SOLL.fremde_funktionen) && SOLL.fremde_funktionen.length) {
   console.log(`Fremde Fkt. ${fnOk}/${SOLL.fremde_funktionen.length} vorhanden`)
 }
 
+const biomarkerMultiSlug = Number(sql(
+  `SELECT count(*)
+   FROM (
+     SELECT loinc_code
+     FROM medical.biomarker_reference_ranges
+     WHERE NULLIF(loinc_code, '') IS NOT NULL
+     GROUP BY loinc_code
+     HAVING count(DISTINCT curated_slug) > 1
+   ) d;`)[0]?.[0] ?? '0')
+if (biomarkerMultiSlug !== 0) {
+  fehler.push(`Medical: ${biomarkerMultiSlug} LOINC-Codes tragen mehrere curated_slug — C-248`)
+}
+console.log(`Medical LOINC-Slug-Eindeutigkeit ${biomarkerMultiSlug === 0 ? '0 Abweichungen' : biomarkerMultiSlug + ' Abweichung(en)'}`)
+
 console.log('')
 if (warnung.length) {
   console.log('Hinweise:')

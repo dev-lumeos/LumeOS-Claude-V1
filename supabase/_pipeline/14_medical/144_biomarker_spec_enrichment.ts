@@ -17,6 +17,7 @@ const EXPECTED_PRESENT_IN_CATALOG = 51
 const EXPECTED_DISPLAY_USABLE = 47
 const EXPECTED_RANGE_MARKERS = 41
 const EXPECTED_RANGE_ROWS = 102
+const EXPECTED_TOTAL_RANGES = 560
 
 type SpecMarker = {
   loinc_code: string
@@ -736,6 +737,37 @@ SELECT
   true
 FROM parsed;
 
+-- C-248: LOINC 1869-7 ist Apolipoprotein A-I. Die alten ApoB-Zeilen
+-- darauf waren leer und falsch; ApoB steht seit C-191 auf 1884-6.
+DELETE FROM medical.biomarker_reference_ranges
+WHERE loinc_code = '1869-7'
+  AND curated_slug = 'apob'
+  AND canonical_name_en = 'ApoB';
+
+-- C-248: Ein LOINC-Code darf nicht mehrere curated_slug tragen.
+-- Die folgenden Faelle sind Slug-/Namensvarianten desselben Tests aus
+-- Spec und Vorgaengerbestand. Werte und Quellen bleiben erhalten.
+WITH canonical(loinc_code, curated_slug, canonical_name_en) AS (
+  VALUES
+    ('2085-9', 'hdl_cholesterol', 'HDL Cholesterol'),
+    ('2089-1', 'ldl_cholesterol', 'LDL Cholesterol'),
+    ('2093-3', 'cholesterol_total', 'Cholesterol, Total'),
+    ('2243-4', 'estradiol', 'Estradiol'),
+    ('2986-8', 'testosterone_total', 'Testosterone, Total'),
+    ('3024-7', 'free_t4', 'Free T4'),
+    ('3051-0', 'free_t3', 'Free T3'),
+    ('30522-7', 'crp_high_sensitivity', 'CRP, High Sensitivity'),
+    ('4548-4', 'hemoglobin_a1c', 'Hemoglobin A1c'),
+    ('6690-2', 'white_blood_cell_count', 'White Blood Cell Count'),
+    ('777-3', 'platelet_count', 'Platelet Count'),
+    ('789-8', 'red_blood_cell_count', 'Red Blood Cell Count')
+)
+UPDATE medical.biomarker_reference_ranges r
+SET curated_slug = c.curated_slug,
+    canonical_name_en = c.canonical_name_en
+FROM canonical c
+WHERE r.loinc_code = c.loinc_code;
+
 DO $$
 DECLARE
   v_catalog int;
@@ -745,6 +777,7 @@ DECLARE
   v_spec_ranges int;
   v_total_ranges int;
   v_loinc int;
+  v_multi_slug int;
 BEGIN
   SELECT COUNT(*) INTO v_catalog FROM medical.biomarker_catalog;
   SELECT COUNT(*) INTO v_enrichment FROM medical.biomarker_spec_enrichment;
@@ -768,8 +801,20 @@ BEGIN
   IF v_spec_ranges <> ${EXPECTED_RANGE_ROWS} THEN
     RAISE EXCEPTION 'Spec-Referenzbereiche: % statt ${EXPECTED_RANGE_ROWS}', v_spec_ranges;
   END IF;
-  IF v_total_ranges <> 566 THEN
-    RAISE EXCEPTION 'biomarker_reference_ranges gesamt: % statt 566', v_total_ranges;
+  IF v_total_ranges <> ${EXPECTED_TOTAL_RANGES} THEN
+    RAISE EXCEPTION 'biomarker_reference_ranges gesamt: % statt ${EXPECTED_TOTAL_RANGES}', v_total_ranges;
+  END IF;
+
+  SELECT count(*) INTO v_multi_slug
+  FROM (
+    SELECT loinc_code
+    FROM medical.biomarker_reference_ranges
+    WHERE NULLIF(loinc_code, '') IS NOT NULL
+    GROUP BY loinc_code
+    HAVING count(DISTINCT curated_slug) > 1
+  ) d;
+  IF v_multi_slug <> 0 THEN
+    RAISE EXCEPTION 'C-248: % LOINC-Codes tragen mehrere curated_slug', v_multi_slug;
   END IF;
 
   SELECT COUNT(DISTINCT loinc_code) INTO v_loinc FROM medical.biomarker_spec_enrichment;

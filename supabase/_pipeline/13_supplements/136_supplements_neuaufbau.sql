@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS supplements.supplements (
   description_en TEXT,
   description_th TEXT,
   form TEXT,
-  evidence_grade TEXT CHECK (evidence_grade IS NULL OR evidence_grade IN ('S','A','B','C','D','F')),
+  evidence_grade TEXT CHECK (evidence_grade IS NULL OR evidence_grade IN ('S','A','B','C','D','E','F')),
   sort_order INTEGER NOT NULL DEFAULT 0,
   source TEXT NOT NULL DEFAULT 'neuaufbau_schema',
   is_active BOOLEAN NOT NULL DEFAULT true,
@@ -253,7 +253,7 @@ CREATE TABLE IF NOT EXISTS supplements.supplement_evidence (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   supplement_id UUID NOT NULL REFERENCES supplements.supplements(id) ON DELETE CASCADE,
   status TEXT NOT NULL DEFAULT 'unbekannt' CHECK (status IN ('bekannt','unbekannt','nicht_zutreffend')),
-  overall_grade TEXT CHECK (overall_grade IS NULL OR overall_grade IN ('S','A','B','C','D','F')),
+  overall_grade TEXT CHECK (overall_grade IS NULL OR overall_grade IN ('S','A','B','C','D','E','F')),
   summary_de TEXT,
   summary_en TEXT,
   summary_th TEXT,
@@ -266,6 +266,18 @@ CREATE TABLE IF NOT EXISTS supplements.supplement_evidence (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+ALTER TABLE supplements.supplements
+  DROP CONSTRAINT IF EXISTS supplements_evidence_grade_check;
+ALTER TABLE supplements.supplements
+  ADD CONSTRAINT supplements_evidence_grade_check
+  CHECK (evidence_grade IS NULL OR evidence_grade IN ('S','A','B','C','D','E','F'));
+
+ALTER TABLE supplements.supplement_evidence
+  DROP CONSTRAINT IF EXISTS supplement_evidence_overall_grade_check;
+ALTER TABLE supplements.supplement_evidence
+  ADD CONSTRAINT supplement_evidence_overall_grade_check
+  CHECK (overall_grade IS NULL OR overall_grade IN ('S','A','B','C','D','E','F'));
 
 CREATE TABLE IF NOT EXISTS supplements.supplement_wada (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
