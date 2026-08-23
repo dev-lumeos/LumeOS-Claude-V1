@@ -439,7 +439,69 @@ Ergebnis und darf nicht durch Fuelltext ersetzt werden.**
 
 ---
 
-## 9. Was das fuer die Oberflaeche heisst
+## 9. Wie das Detail aussehen soll
+
+**Entwurf am 2026-08-23 vorgelegt und von Tom bestaetigt:** *„es geht in
+die richtige richtung."*
+
+### Reihenfolge bei Supplements
+
+    Kopf          Name · Gruppe · Zahl der Formen
+                  rechts: Evidenzgrad, WADA-Status
+    Erster Satz   WAS IST DAS - kein Grad, kein Feldname, keine
+                  Schemageschichte
+    Zwecke        2-4 Chips
+    Drei Kacheln  Uebliche Menge · Obergrenze · Einnahme
+    Zu viel       eigener Abschnitt
+    Zu wenig      eigener Abschnitt, entfaellt wo es kein Mangelbild gibt
+    Die Formen    je Form: Name, ein unterscheidender Satz, eigener Grad
+    Fragen        3-6, echte Fragen
+    Fusszeile     Laborbezug; Rechtslage/Kennungen/Qualitaet zugeklappt
+    Knopf         Zum Stack hinzufuegen
+
+### Vier Regeln, die daraus folgen
+
+**Der erste Satz beantwortet *was ist das*.** Alles Technische steht
+unten und ist zugeklappt.
+
+**Zahlen stehen als Zahlen da**, nicht in einem Fliesstext vergraben.
+Menge, Obergrenze, Einnahme brauchen keinen Klick.
+
+**Kein Block ohne Inhalt.** Wo eine Angabe fehlt, **entfaellt der
+Abschnitt** — statt *„Sicherheit · 2 Felder"*, hinter denen zweimal
+`unknown` steht. `[cmd]` Bei 115 der 290 ist die Dosis unbekannt; dort
+faellt die Kachelzeile weg.
+
+**Die Formen stehen unter dem Sammelnamen.** Das ist der fehlende
+Lesepfad aus C-244. `[cmd]` `form_note_de` existiert fuer alle 29 und
+ist heute unsichtbar.
+
+### Was bei Enhanced und Peptiden anders ist
+
+Der Rahmen bleibt, **die Reihenfolge dreht sich:**
+
+    Ganz oben     WAS NICHT ZURUECKKOMMT - Erholung der eigenen
+                  Hormonproduktion, bei einem Teil unvollstaendig.
+                  Hervorgehoben, nicht als Fussnote.
+    Kacheln       statt Dosis: UEBERWACHUNG - welche Werte, welcher
+                  Abstand, mit Sprung ins Medical-Modul
+    Daneben       REINHEIT, direkt neben der Mengenangabe
+    Titel         beide Namen: `Methandienone (Dianabol)`
+
+`[read]` **Warum Reinheit neben der Menge steht und nicht drei
+Abschnitte weiter:** wenn in Praeparaten wiederholt andere Wirkstoffe
+gefunden wurden, entwertet das jede Mengenangabe. Getrennt gelesen
+wirkt die Zahl verlaesslicher, als sie ist.
+
+`[read]` **Warum der Handelsname in den Titel gehoert:** `[cmd]` Nur 17
+der 248 verborgenen Zeilen haben einen Alias-Treffer auf einen
+sichtbaren Eintrag. *Dianabol* und *Methandienone* teilen kein Zeichen —
+wer nach dem einen sucht, findet das andere nie.
+
+---
+
+## 10. Was das fuer die Oberflaeche heisst
+
 
 `[read]` **Nichts davon ist ein Grund, den Katalog jetzt nicht zu
 bauen.** Er zeigt, was da ist — Beschreibung, Grad, WADA-Status,
