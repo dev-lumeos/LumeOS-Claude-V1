@@ -74,6 +74,8 @@ export type {
 } from './coverage-row'
 
 // --- Huelle -----------------------------------------------------
+export { Klappe } from './klappe'
+export type { KlappeProps } from './klappe'
 export { AppShell } from './shell/app-shell'
 export type { AppShellProps } from './shell/app-shell'
 export { Sidebar } from './shell/sidebar'
