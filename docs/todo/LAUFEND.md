@@ -13,17 +13,23 @@ wissen, welcher Agent noch laeuft."*
 
 | Agent | Auftrag | Bereich | seit |
 |---|---|---|---|
+| **Codex** | **C-243** `im_katalog` + Schritt 3, `stack_items` umhaengen | `supabase/_pipeline/` | 2026-08-23 |
 | **Claude Code** | *frei* | — | — |
-| **Codex** | *frei* | — | — |
 | **Fable** | *frei* | — | — |
 | *Kimi* | Dose–Response, Zeitverlauf, Streuung — **Crawl 35 laeuft** | extern, siehe unten | 2026-08-20 |
 
-`[cmd]` **Alle drei Agenten sind frei, Stand 2026-08-23.** G-160, G-161
-und C-235 stehen seit dem 2026-08-23 in `ERLEDIGT.md`, mit vom
-Orchestrator selbst gemessenen Zahlen. **Der Wachter hat den
-Widerspruch gefunden** — `laufend-erledigt` schlug dreimal an, weil
-diese Datei die drei noch als laufend fuehrte, nachdem sie geschlossen
-waren.
+`[cmd]` **C-243 ging am 2026-08-23 raus** (Tom: *„laeuft"*). Er traegt
+`im_katalog` als generierte Spalte, das Umhaengen von
+`stack_items.supplement_id` auf `supplements.supplements`, und einen
+Seed fuer `test-user@lumeos.local` — **ohne den ist Schritt 4 nicht
+nachweisbar**, siehe unten.
+
+`[cmd]` **Die 8 zugeordneten Positionen gehoeren nicht dem
+Nachweiskonto:** `dev@lumeos.app` 4 · `tom.seed@example.com` 4 ·
+`test-user@lumeos.local` **0** (dort 2 Positionen, beide mit
+`custom_name`, in deutscher Schreibweise *„Creatin Monohydrat"* und
+*„Vitamin D3"*). Dieselbe Falle wie C-241.
+
 
 `[cmd]` **Wo die Kimi-Ergebnisse liegen** (Tom, 2026-08-22):
 

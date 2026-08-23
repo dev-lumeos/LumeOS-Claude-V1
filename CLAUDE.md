@@ -428,6 +428,22 @@ ein Bericht eintrifft.
 gleichzeitig die naechste freie Zahl nahmen. **Seither steht die Nummer
 im Auftrag.**
 
+### Auftraege kommen als kopierbarer Block
+
+**Tom, 2026-08-23:** *„zukuenftig gibts mir auftraege im chat
+kopierbar"*
+
+**Der Auftragstext steht in einem Codeblock**, nicht als formatiertes
+Markdown mit Tabellen und Hervorhebungen. `[read]` **Der Grund ist der
+Weg:** Tom kopiert ihn aus dem Chat in das Fenster des Agenten. Was als
+Tabelle gesetzt ist, kommt dort als Zeichensalat an; was fett
+ausgezeichnet ist, traegt Sternchen mitten im Satz.
+
+**Nur der Auftrag gehoert in den Block.** Befund, Messung und
+Begruendung stehen davor im Fliesstext — die liest Tom, nicht der
+Agent.
+
+
 ## Vor jedem Auftrag: nachsehen, nicht annehmen
 
 **Tom, 2026-08-19:** *,Nicht vergessen — immer Specs und das alte Repo
