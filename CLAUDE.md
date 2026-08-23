@@ -140,6 +140,33 @@ waehrend `recovery.checkins` 340 Zeilen hat, `recovery.scores` 340 und
 zugreifen. **Der Banner war falsch, und er hat den Orchestrator
 mitgetaeuscht.**
 
+### Der Rohbericht gehoert ins Repo, der SSOT dem Orchestrator
+
+**Tom, 2026-08-23:** *„diese berichte gehoeren sowieso protokolliert
+ins repo."*
+
+**Der Agent legt seinen Bericht unter `docs/berichte/` ab** —
+`<nummer>-<agent>.md`, roh und unbearbeitet, so wie er ihn schreibt.
+Der Orchestrator prueft ihn und schreibt daraus den SSOT-Bericht.
+
+`[read]` **Das schaerft die Regel darueber, statt sie aufzuheben.** Ihr
+Kern stimmt: der Agent schreibt nicht den SSOT — dort steht, was
+**geprueft** ist. Sein Rohbericht ist etwas anderes: die
+Selbstauskunft, **gegen die** geprueft wird. **Beides nebeneinander
+zeigt, was behauptet wurde und was stimmte.**
+
+`[cmd]` **Der Anlass war ein Verlust:** am 2026-08-23 kamen vier
+Agentenberichte hintereinander als leerer Anhang an — in einem langen
+Gespraech faellt Anhangsinhalt zuerst weg. Der Orchestrator hat C-235
+abgenommen, indem er die 33 Zeilenzahlen selbst nachmass, ohne den
+Bericht je gesehen zu haben.
+
+`[read]` **Mit einer Datei im Repo waere das kein Problem gewesen** —
+nachsehen statt raten. Und es bleibt nachlesbar, statt in einem Verlauf
+zu verschwinden.
+
+`docs/todo/` und `docs/ssot/` bleiben beim Orchestrator.
+
 ## Wegwerf-Datenbank zum Pruefen, laufende Instanz zum Abschliessen
 
 `[cmd]` **Am 2026-08-22 lagen sechs Auftraege committet und nicht
