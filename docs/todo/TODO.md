@@ -5410,6 +5410,52 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   ohne den Katalogschnitt festzulegen. **Nicht vorbauen, aber sichtbar
   auslassen.**
 
+  ---
+
+  **ENTSCHIEDEN 2026-08-23 (Tom): „c244 magnesium" — der Sammelname
+  gewinnt.**
+
+  Der Nutzer waehlt **Magnesium**, nicht Magnesiumglycinat. Die
+  Salzformen werden Unterformen, keine eigenen Katalogeintraege.
+
+  ### Was das kostet — gemessen
+
+  `[cmd]` **Die Eltern-Kind-Beziehung gibt es nicht:**
+  `supplements.supplements` hat **0 Spalten** namens `parent_id` oder
+  `parent_supplement_id`. Sie muss angelegt werden.
+
+  `[cmd]` **Die 28 Sammelnamen aus `lumeos_supplement_catalog`, nach
+  Zahl der Kimi-Formen darunter:**
+
+  | Formen | Sammelnamen |
+  |---:|---|
+  | 7 | Magnesium |
+  | 3 | Whey Protein · Zinc |
+  | 2 | Caffeine · Calcium · Iron · Vitamin B12 |
+  | 1 | Collagen · Lion's Mane · Tongkat Ali · Vitamin A · Vitamin B6 · Vitamin C · Vitamin D3 · Vitamin E |
+  | **0** | **Ashwagandha (KSM-66) · BCAAs · Biotin · Curcumin/Turmeric · Electrolytes · Fiber/Psyllium Husk · Folate (B9) · Glucosamine · NAC · Probiotics · Spirulina · Turkesterone · Vitamin K2 (MK-7)** |
+
+  `[read]` **13 der 28 Sammelnamen haben gar keine Kimi-Form
+  darunter.** Fuer sie ist die Entscheidung folgenlos — sie bleiben
+  einzelne Eintraege und brauchen nur Inhalt (C-257).
+
+  `[read]` **Bei den 15 mit Formen dreht sich die Sichtbarkeit um:** der
+  Sammelname wird sichtbar, die Formen ruecken darunter. **Heute ist es
+  umgekehrt** — die Kimi-Formen tragen den Inhalt, die Sammelnamen sind
+  leer und deshalb ueber `im_katalog` verborgen.
+
+  `[read]` **Damit haengt an dieser Entscheidung mehr als eine Spalte:**
+  woher bekommt *„Magnesium"* seinen Text, seinen Evidenzgrad und
+  seinen Dosisbereich, wenn die sieben Salze sich unterscheiden? **Das
+  ist keine Datenfrage, sondern eine redaktionelle** — und sie gehoert
+  in C-257, wo die Texte ohnehin geschrieben werden.
+
+  **Loest zugleich C-256:** `testdaten-einspielen` joint auf
+  `supplement_catalog.slug` — mit einer Sammelnamen-Ebene, die dieselben
+  sprechenden Slugs traegt (`magnesium`, `creatine-monohydrate`), geht
+  der Join wieder auf.
+
+
 - [ ] **G-175: Das Nachweiskonto hat kein bekanntes Passwort** (neu
   2026-08-23). Aus G-157 und G-163.
 

@@ -266,11 +266,11 @@ wenn er erzeugt und geprüft wird.
 | **C-241** Das Nachweiskonto traegt weder Essensplaene noch | offen | 5295 |
 | **C-242** Die 13 Namensdubletten blockieren Schritt 3 des | offen | 5317 |
 | **C-244** Der alte Katalog und Kimi schneiden verschieden — 28 von | offen | 5385 |
-| **G-175** Das Nachweiskonto hat kein bekanntes Passwort | offen | 5413 |
-| **C-253** Die IDs der beiden Kataloge sind nicht vergleichbar — | offen | 5435 |
-| **C-255** Schritt 5 — die alten Kataloge weg | offen | 5461 |
-| **C-256** Der Testdaten-Schritt insertet gegen den alten Katalog | offen | 5487 |
-| **G-176** Der Katalog zeigt 50 von 290 und laesst den Rest nicht | offen | 5521 |
-| **G-177** Das Substanzdetail erklaert, was fehlt, statt zu zeigen, | offen | 5553 |
-| **G-178** Reiter und Fussleiste nennen verschiedene Zahlen — 298 | offen | 5597 |
-| **C-257** Nutzertexte fuer den Substanzkatalog — Schema und | offen | 5620 |
+| **G-175** Das Nachweiskonto hat kein bekanntes Passwort | offen | 5459 |
+| **C-253** Die IDs der beiden Kataloge sind nicht vergleichbar — | offen | 5481 |
+| **C-255** Schritt 5 — die alten Kataloge weg | offen | 5507 |
+| **C-256** Der Testdaten-Schritt insertet gegen den alten Katalog | offen | 5533 |
+| **G-176** Der Katalog zeigt 50 von 290 und laesst den Rest nicht | offen | 5567 |
+| **G-177** Das Substanzdetail erklaert, was fehlt, statt zu zeigen, | offen | 5599 |
+| **G-178** Reiter und Fussleiste nennen verschiedene Zahlen — 298 | offen | 5643 |
+| **C-257** Nutzertexte fuer den Substanzkatalog — Schema und | offen | 5666 |

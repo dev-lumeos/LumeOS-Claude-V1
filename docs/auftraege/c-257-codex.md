@@ -14,6 +14,55 @@ das liest (§3). **Dieser Auftrag wiederholt sie nicht.**
 
 ---
 
+## KORREKTURBLOCK, nachgereicht 2026-08-23 — C-244 ist entschieden
+
+**Tom: „c244 magnesium" — der Sammelname gewinnt.** Der Nutzer waehlt
+*Magnesium*, nicht *Magnesiumglycinat*. Die Salzformen werden
+**Unterformen**, keine eigenen Katalogeintraege.
+
+`[cmd]` **Die Eltern-Kind-Spalte gibt es noch nicht** —
+`supplements.supplements` hat 0 Spalten `parent_id` oder
+`parent_supplement_id`.
+
+`[cmd]` **Betroffen sind 15 der 28 Sammelnamen:** Magnesium (7 Formen)
+· Whey Protein, Zinc (je 3) · Caffeine, Calcium, Iron, Vitamin B12
+(je 2) · Collagen, Lion's Mane, Tongkat Ali, Vitamin A, B6, C, D3, E
+(je 1). **Die uebrigen 13 haben keine Form darunter** und bleiben
+einzelne Eintraege.
+
+**Was das fuer diesen Auftrag heisst:**
+
+**Der Text gehoert an den Sammelnamen**, nicht an jede Salzform. *Was
+ist Magnesium, wofuer, was bei zu viel* schreibst du einmal. **Was die
+Formen unterscheidet** — Bioverfuegbarkeit, Vertraeglichkeit — gehoert
+in ein eigenes kurzes Feld an der Form, nicht in neun Wiederholungen.
+
+`[read]` **Und dort steckt die Frage, die du melden musst:** woher
+bekommt *„Magnesium"* seinen Evidenzgrad und seinen Dosisbereich, wenn
+die sieben Salze sich unterscheiden? **Waehle nicht still eine Form
+aus.** Entweder du findest eine belegte Sammelaussage, oder du meldest,
+dass es keine gibt.
+
+`[read]` **Die Sichtbarkeit dreht sich um.** `[cmd]` Heute tragen die
+Kimi-Formen den Inhalt und die Sammelnamen sind leer, also ueber
+`im_katalog` verborgen. **Nach der Entscheidung ist es umgekehrt.**
+Sobald der Sammelname eine Beschreibung bekommt, erscheint er von
+selbst — **aber die Formen verschwinden nicht automatisch.** Wie sie
+unter den Sammelnamen ruecken, ist Teil deines Berichts.
+
+**Reihenfolge bleibt** (Supplements, Peptide, Enhanced) — **aber nimm
+die 15 Sammelnamen im ersten Durchgang mit**, damit die Struktur steht,
+bevor 200 Texte daran haengen.
+
+`[read]` **Loest zugleich C-256:** `testdaten-einspielen` joint auf
+`supplement_catalog.slug`. Traegt die Sammelnamen-Ebene dieselben
+sprechenden Slugs (`magnesium`, `creatine-monohydrate`), geht der Join
+wieder auf. **Pruef das und melde es** — dann ist der Testdaten-Schritt
+wieder lauffaehig und Schritt 5 nicht mehr blockiert.
+
+---
+
+
 ## WAS ICH GEMESSEN HABE — live, 2026-08-23
 
 `[cmd]` **290 sichtbar** (`im_katalog`), 276 verborgen. Gruppen:
