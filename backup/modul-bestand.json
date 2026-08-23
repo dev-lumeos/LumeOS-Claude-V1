@@ -1,9 +1,9 @@
 {
- "stichtag": "2026-08-22 HEAD=28d218d",
+ "stichtag": "2026-08-23 HEAD=0b38592",
  "module": {
   "recovery": {
    "marken_summe": 36,
-   "kacheln_summe": 40,
+   "kacheln_summe": 43,
    "dateien": {
     "motor.ts": {
      "marken": [],
@@ -93,38 +93,38 @@
     "ansicht.tsx": {
      "marken": [
       {
-       "zeile": 244,
+       "zeile": 246,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 322,
+       "zeile": 324,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 350,
+       "zeile": 352,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 386,
+       "zeile": 388,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 427,
+       "zeile": 429,
        "grund": "ATTRAPPE"
       }
      ],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 244,
+       "zeile": 246,
        "titel": null
       },
       {
-       "zeile": 350,
+       "zeile": 352,
        "titel": "Pending actions"
       },
       {
-       "zeile": 427,
+       "zeile": 429,
        "titel": "Overtraining watch"
       }
      ],
@@ -361,82 +361,94 @@
     "tab-messwerte.tsx": {
      "marken": [
       {
-       "zeile": 51,
+       "zeile": 53,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 71,
+       "zeile": 73,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 124,
+       "zeile": 263,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 155,
+       "zeile": 294,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 204,
+       "zeile": 325,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 227,
+       "zeile": 376,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 257,
+       "zeile": 534,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 299,
+       "zeile": 568,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 332,
+       "zeile": 610,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 356,
+       "zeile": 645,
        "grund": "ATTRAPPE"
       }
      ],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 51,
+       "zeile": 53,
        "titel": "Muscle recovery"
       },
       {
-       "zeile": 71,
+       "zeile": 73,
        "titel": "Per-muscle detail"
       },
       {
-       "zeile": 124,
-       "titel": "HRV score"
+       "zeile": 194,
+       "titel": "Messprotokoll"
       },
       {
-       "zeile": 204,
+       "zeile": 231,
+       "titel": "Verlauf"
+      },
+      {
+       "zeile": 263,
        "titel": "Phone camera HRV"
       },
       {
-       "zeile": 227,
+       "zeile": 294,
+       "titel": "HRV score"
+      },
+      {
+       "zeile": 376,
        "titel": "30-day trend"
       },
       {
-       "zeile": 257,
-       "titel": "Last night"
+       "zeile": 501,
+       "titel": "Schlafhygiene"
       },
       {
-       "zeile": 299,
-       "titel": "14 nights"
-      },
-      {
-       "zeile": 332,
+       "zeile": 534,
        "titel": "Score paths"
       },
       {
-       "zeile": 356,
+       "zeile": 568,
+       "titel": "Last night"
+      },
+      {
+       "zeile": 610,
+       "titel": "14 nights"
+      },
+      {
+       "zeile": 645,
        "titel": "Sleep hygiene inputs"
       }
      ],
@@ -445,7 +457,9 @@
      "rpc": [],
      "schema": [],
      "fetch_api": [],
-     "lib_importe": [],
+     "lib_importe": [
+      "recovery/checkin-read"
+     ],
      "tab_labels": []
     },
     "tab-protokolle.tsx": {
@@ -1697,7 +1711,7 @@
   },
   "nutrition": {
    "marken_summe": 25,
-   "kacheln_summe": 55,
+   "kacheln_summe": 60,
    "dateien": {
     "daumen-aktion.ts": {
      "marken": [],
@@ -1770,13 +1784,13 @@
     "ansicht.tsx": {
      "marken": [
       {
-       "zeile": 602,
+       "zeile": 607,
        "grund": "t.braucht"
       }
      ],
      "flaechen": [
       {
-       "zeile": 603
+       "zeile": 608
       }
      ],
      "kacheln": [
@@ -1785,7 +1799,7 @@
        "titel": null
       },
       {
-       "zeile": 602,
+       "zeile": 607,
        "titel": null
       }
      ],
@@ -2249,6 +2263,46 @@
      ],
      "tab_labels": []
     },
+    "plans-echt.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 66,
+       "titel": "Aktiver Plan"
+      },
+      {
+       "zeile": 75,
+       "titel": null
+      },
+      {
+       "zeile": 125,
+       "titel": "Planumfang"
+      },
+      {
+       "zeile": 151,
+       "titel": "Bibliothek"
+      },
+      {
+       "zeile": 159,
+       "titel": null
+      }
+     ],
+     "banner": [
+      {
+       "zeile": 135,
+       "text": "Strich, denn ein Strich hiesse „leer\" statt „gibt es nicht\"."
+      }
+     ],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [],
+     "lib_importe": [
+      "nutrition/plan-lesen"
+     ],
+     "tab_labels": []
+    },
     "tab-foods.tsx": {
      "marken": [],
      "flaechen": [],
@@ -2372,58 +2426,58 @@
     "tab-plans.tsx": {
      "marken": [
       {
-       "zeile": 96,
+       "zeile": 107,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 119,
+       "zeile": 135,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 169,
+       "zeile": 190,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 191,
+       "zeile": 216,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 197,
+       "zeile": 222,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 214,
+       "zeile": 248,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 243,
+       "zeile": 277,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 285,
+       "zeile": 319,
        "grund": "ATTRAPPE"
       }
      ],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 96,
+       "zeile": 107,
        "titel": null
       },
       {
-       "zeile": 169,
+       "zeile": 190,
        "titel": "Plan settings"
       },
       {
-       "zeile": 191,
+       "zeile": 216,
        "titel": "Lifecycle types"
       },
       {
-       "zeile": 197,
+       "zeile": 222,
        "titel": "7-day compliance"
       },
       {
-       "zeile": 285,
+       "zeile": 319,
        "titel": "Scale list"
       }
      ],
@@ -2432,7 +2486,9 @@
      "rpc": [],
      "schema": [],
      "fetch_api": [],
-     "lib_importe": [],
+     "lib_importe": [
+      "nutrition/plan-lesen"
+     ],
      "tab_labels": []
     },
     "tab-prefs.tsx": {
@@ -2614,8 +2670,8 @@
    }
   },
   "supplements": {
-   "marken_summe": 59,
-   "kacheln_summe": 79,
+   "marken_summe": 57,
+   "kacheln_summe": 75,
    "dateien": {
     "daten.ts": {
      "marken": [],
@@ -2683,28 +2739,17 @@
      "lib_importe": [
       "supplements/regeln-read",
       "supplements/stack-read",
+      "supplements/substanz-read",
       "tab-url"
      ],
-     "tab_labels": [
-      "Today",
-      "Stack",
-      "Extended",
-      "Catalog",
-      "Stacks",
-      "Intelligence",
-      "Inventory",
-      "Injections",
-      "Compliance",
-      "Interactions",
-      "Cost"
-     ]
+     "tab_labels": []
     },
     "extended-gate.tsx": {
      "marken": [],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 56,
+       "zeile": 65,
        "titel": null
       }
      ],
@@ -2715,6 +2760,7 @@
      "fetch_api": [],
      "lib_importe": [
       "profile/profile-model",
+      "supplements/extended-regel",
       "supplements/regeln-read"
      ],
      "tab_labels": []
@@ -2729,7 +2775,8 @@
      "schema": [],
      "fetch_api": [],
      "lib_importe": [
-      "supplements/stack-read"
+      "supplements/stack-read",
+      "supplements/substanz-read"
      ],
      "tab_labels": []
     },
@@ -2737,7 +2784,7 @@
      "marken": [],
      "flaechen": [
       {
-       "zeile": 60
+       "zeile": 61
       }
      ],
      "kacheln": [],
@@ -2761,7 +2808,31 @@
      "lib_importe": [
       "datum",
       "supplements/regeln-read",
-      "supplements/stack-read"
+      "supplements/stack-read",
+      "supplements/substanz-read"
+     ],
+     "tab_labels": []
+    },
+    "substanz-detail.tsx": {
+     "marken": [],
+     "flaechen": [],
+     "kacheln": [
+      {
+       "zeile": 376,
+       "titel": null
+      }
+     ],
+     "banner": [],
+     "from": [],
+     "rpc": [],
+     "schema": [],
+     "fetch_api": [
+      "/api/supplements/substanz"
+     ],
+     "lib_importe": [
+      "supplements/substanz-anzeige",
+      "supplements/substanz-kategorien",
+      "supplements/substanz-read"
      ],
      "tab_labels": []
     },
@@ -3074,49 +3145,46 @@
      ],
      "tab_labels": []
     },
-    "tab-katalog-echt.tsx": {
-     "marken": [],
-     "flaechen": [],
-     "kacheln": [
-      {
-       "zeile": 147,
-       "titel": null
-      },
-      {
-       "zeile": 228,
-       "titel": "Evidenzstufe"
-      }
-     ],
-     "banner": [],
-     "from": [],
-     "rpc": [],
-     "schema": [],
-     "fetch_api": [],
-     "lib_importe": [
-      "supplements/stack-read"
-     ],
-     "tab_labels": []
-    },
     "tab-spec.tsx": {
      "marken": [
       {
-       "zeile": 126,
+       "zeile": 77,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 192,
+       "zeile": 119,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 232,
+       "zeile": 140,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 274,
+       "zeile": 145,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 295,
+       "zeile": 175,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 182,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 189,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 194,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 207,
+       "grund": "ATTRAPPE"
+      },
+      {
+       "zeile": 279,
        "grund": "ATTRAPPE"
       },
       {
@@ -3124,118 +3192,82 @@
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 330,
-       "grund": "ATTRAPPE"
-      },
-      {
        "zeile": 337,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 344,
+       "zeile": 341,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 349,
+       "zeile": 348,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 362,
+       "zeile": 355,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 434,
-       "grund": "ATTRAPPE"
-      },
-      {
-       "zeile": 455,
-       "grund": "ATTRAPPE"
-      },
-      {
-       "zeile": 492,
-       "grund": "ATTRAPPE"
-      },
-      {
-       "zeile": 496,
-       "grund": "ATTRAPPE"
-      },
-      {
-       "zeile": 503,
-       "grund": "ATTRAPPE"
-      },
-      {
-       "zeile": 510,
-       "grund": "ATTRAPPE"
-      },
-      {
-       "zeile": 523,
+       "zeile": 368,
        "grund": "ATTRAPPE"
       }
      ],
      "flaechen": [
       {
-       "zeile": 461
+       "zeile": 306
       }
      ],
      "kacheln": [
       {
-       "zeile": 126,
-       "titel": null
-      },
-      {
-       "zeile": 192,
-       "titel": "Evidence grading"
-      },
-      {
-       "zeile": 274,
+       "zeile": 119,
        "titel": "System templates"
       },
       {
-       "zeile": 295,
+       "zeile": 140,
        "titel": "Frequency options"
       },
       {
-       "zeile": 300,
+       "zeile": 145,
        "titel": "Item customization"
       },
       {
-       "zeile": 330,
+       "zeile": 175,
        "titel": null
+      },
+      {
+       "zeile": 182,
+       "titel": null
+      },
+      {
+       "zeile": 189,
+       "titel": null
+      },
+      {
+       "zeile": 194,
+       "titel": null
+      },
+      {
+       "zeile": 279,
+       "titel": "Redundancy detection"
+      },
+      {
+       "zeile": 300,
+       "titel": "Timing conflicts"
       },
       {
        "zeile": 337,
        "titel": null
       },
       {
-       "zeile": 344,
+       "zeile": 341,
        "titel": null
       },
       {
-       "zeile": 349,
+       "zeile": 348,
        "titel": null
       },
       {
-       "zeile": 434,
-       "titel": "Redundancy detection"
-      },
-      {
-       "zeile": 455,
-       "titel": "Timing conflicts"
-      },
-      {
-       "zeile": 492,
-       "titel": null
-      },
-      {
-       "zeile": 496,
-       "titel": null
-      },
-      {
-       "zeile": 503,
-       "titel": null
-      },
-      {
-       "zeile": 510,
+       "zeile": 355,
        "titel": null
       }
      ],
@@ -3250,186 +3282,182 @@
     "tabs.tsx": {
      "marken": [
       {
-       "zeile": 306,
+       "zeile": 308,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 341,
+       "zeile": 343,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 365,
+       "zeile": 367,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 398,
+       "zeile": 400,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 440,
+       "zeile": 442,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 674,
+       "zeile": 676,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 739,
+       "zeile": 741,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 907,
+       "zeile": 798,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 971,
+       "zeile": 862,
        "grund": "ATTRAPPE"
       },
       {
-       "zeile": 1156,
+       "zeile": 1047,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 1161,
+       "zeile": 1052,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 1166,
+       "zeile": 1057,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 1173,
+       "zeile": 1064,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 1182,
+       "zeile": 1073,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 1221,
+       "zeile": 1112,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 1235,
+       "zeile": 1126,
        "grund": "RUECKFALL"
       },
       {
-       "zeile": 1245,
+       "zeile": 1136,
        "grund": "RUECKFALL"
       }
      ],
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 136,
+       "zeile": 138,
        "titel": null
       },
       {
-       "zeile": 163,
+       "zeile": 165,
        "titel": null
       },
       {
-       "zeile": 230,
+       "zeile": 232,
        "titel": "Refills"
       },
       {
-       "zeile": 265,
+       "zeile": 267,
        "titel": "Stack"
       },
       {
-       "zeile": 306,
+       "zeile": 308,
        "titel": null
       },
       {
-       "zeile": 398,
+       "zeile": 400,
        "titel": "Active cycles"
       },
       {
-       "zeile": 553,
+       "zeile": 555,
        "titel": null
       },
       {
-       "zeile": 626,
+       "zeile": 628,
        "titel": null
       },
       {
-       "zeile": 634,
+       "zeile": 636,
        "titel": null
       },
       {
-       "zeile": 674,
+       "zeile": 676,
        "titel": null
       },
       {
-       "zeile": 739,
+       "zeile": 741,
        "titel": null
       },
       {
-       "zeile": 813,
+       "zeile": 798,
        "titel": null
       },
       {
-       "zeile": 907,
+       "zeile": 862,
        "titel": null
       },
       {
-       "zeile": 971,
+       "zeile": 930,
        "titel": null
       },
       {
-       "zeile": 1039,
+       "zeile": 937,
        "titel": null
       },
       {
-       "zeile": 1046,
+       "zeile": 942,
        "titel": null
       },
       {
-       "zeile": 1051,
-       "titel": null
-      },
-      {
-       "zeile": 1058,
+       "zeile": 949,
        "titel": "Spend per supplement"
       },
       {
-       "zeile": 1098,
+       "zeile": 989,
        "titel": "Category split"
       },
       {
-       "zeile": 1117,
+       "zeile": 1008,
        "titel": "If you removed…"
       },
       {
-       "zeile": 1156,
+       "zeile": 1047,
        "titel": null
       },
       {
-       "zeile": 1161,
+       "zeile": 1052,
        "titel": null
       },
       {
-       "zeile": 1166,
+       "zeile": 1057,
        "titel": null
       },
       {
-       "zeile": 1173,
+       "zeile": 1064,
        "titel": "Cost · 12 months trend"
       },
       {
-       "zeile": 1182,
+       "zeile": 1073,
        "titel": "Spend per supplement · this month"
       },
       {
-       "zeile": 1221,
+       "zeile": 1112,
        "titel": "Category split"
       },
       {
-       "zeile": 1235,
+       "zeile": 1126,
        "titel": "If you removed…"
       },
       {
-       "zeile": 1245,
+       "zeile": 1136,
        "titel": "Cost optimization · suggestions"
       }
      ],
@@ -5365,15 +5393,15 @@
      "flaechen": [],
      "kacheln": [
       {
-       "zeile": 148,
+       "zeile": 156,
        "titel": null
       },
       {
-       "zeile": 242,
+       "zeile": 250,
        "titel": null
       },
       {
-       "zeile": 295,
+       "zeile": 309,
        "titel": "Erfahrungsgrad"
       }
      ],
@@ -5385,7 +5413,8 @@
       "/api/profile"
      ],
      "lib_importe": [
-      "profile/profile-model"
+      "profile/profile-model",
+      "supplements/extended-regel"
      ],
      "tab_labels": []
     },
@@ -5450,7 +5479,7 @@
    {
     "schema": "auth",
     "tabelle": "audit_log_entries",
-    "zeilen": 1156
+    "zeilen": 1250
    },
    {
     "schema": "auth",
@@ -5475,7 +5504,7 @@
    {
     "schema": "auth",
     "tabelle": "mfa_amr_claims",
-    "zeilen": 532
+    "zeilen": 590
    },
    {
     "schema": "auth",
@@ -5515,7 +5544,7 @@
    {
     "schema": "auth",
     "tabelle": "refresh_tokens",
-    "zeilen": 554
+    "zeilen": 630
    },
    {
     "schema": "auth",
@@ -5535,7 +5564,7 @@
    {
     "schema": "auth",
     "tabelle": "sessions",
-    "zeilen": 532
+    "zeilen": 590
    },
    {
     "schema": "auth",
@@ -5665,12 +5694,12 @@
    {
     "schema": "medical",
     "tabelle": "biomarker_reference_ranges",
-    "zeilen": 564
+    "zeilen": 566
    },
    {
     "schema": "medical",
     "tabelle": "biomarker_spec_enrichment",
-    "zeilen": 49
+    "zeilen": 51
    },
    {
     "schema": "medical",
@@ -5774,6 +5803,11 @@
    },
    {
     "schema": "nutrition",
+    "tabelle": "food_preference_search_targets",
+    "zeilen": 0
+   },
+   {
+    "schema": "nutrition",
     "tabelle": "food_preferences",
     "zeilen": 2
    },
@@ -5870,7 +5904,7 @@
    {
     "schema": "nutrition",
     "tabelle": "search_events",
-    "zeilen": 204
+    "zeilen": 205
    },
    {
     "schema": "nutrition",
@@ -6034,6 +6068,11 @@
    },
    {
     "schema": "supplements",
+    "tabelle": "intake_schedule",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
     "tabelle": "rule_catalog",
     "zeilen": 64
    },
@@ -6041,6 +6080,16 @@
     "schema": "supplements",
     "tabelle": "stack_items",
     "zeilen": 8
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "stack_template_items",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "stack_templates",
+    "zeilen": 0
    },
    {
     "schema": "supplements",
@@ -6064,12 +6113,67 @@
    },
    {
     "schema": "supplements",
+    "tabelle": "supplement_aas_ratings",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_aliases",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
     "tabelle": "supplement_catalog",
     "zeilen": 44
    },
    {
     "schema": "supplements",
+    "tabelle": "supplement_categories",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_cycle_events",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_dosing",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_evidence",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_field_sources",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_groups",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_identifiers",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
     "tabelle": "supplement_interactions",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_lab_effects",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_monitoring",
     "zeilen": 0
    },
    {
@@ -6079,8 +6183,103 @@
    },
    {
     "schema": "supplements",
+    "tabelle": "supplement_nutrients",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_organ_risks",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_pharmacology",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_portions",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_protocol_items",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_protocol_requirements",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_protocols",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_quality",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_regulatory",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_reminders",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_safety",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_tag_definitions",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_tags",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_wada",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplement_warnings",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "supplements",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "user_inventory",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
     "tabelle": "user_stacks",
     "zeilen": 2
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "user_supplement_cycles",
+    "zeilen": 0
+   },
+   {
+    "schema": "supplements",
+    "tabelle": "user_supplement_settings",
+    "zeilen": 0
    },
    {
     "schema": "training",
