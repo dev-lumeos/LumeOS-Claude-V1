@@ -260,3 +260,7 @@ wenn er erzeugt und geprüft wird.
 | **G-172** Deutsch, scrollbar, ein Katalog auf dem Catalog-Tab | offen | 5141 |
 | **C-233** `user_supplement_settings` — die Spec sieht es vor, wir | offen | 5166 |
 | **C-234** `marketplace_product_id` — zeigt auf ein Modul, das es | offen | 5192 |
+| **C-235** Schritt 2 des Neuaufbaus — die 33 Tabellen befuellen | offen | 5209 |
+| **A-50** Ein `DROP COLUMN` prueft die Lesepfade nicht | offen | 5250 |
+| **C-236** Die Recovery-Seeds sind Zaehlreihen, keine Messwerte | offen | 5274 |
+| **G-173** Ein falscher Punktverweis in `scores-read.ts` | offen | 5303 |

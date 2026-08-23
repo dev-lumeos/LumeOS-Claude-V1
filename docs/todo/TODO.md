@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-22.** 216 offen, 0 in Arbeit.
+**Stand: 2026-08-22.** 220 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -5205,3 +5205,107 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Die Spalte wird nicht angelegt.** Ein Fremdschluessel auf
   eine Tabelle, die es nicht gibt, ist entweder kaputt oder eine Luege.
   Der Textblock im Kettenschritt sagt, dass sie vorgesehen war.
+
+- [ ] **C-235: Schritt 2 des Neuaufbaus — die 33 Tabellen befuellen**
+  (neu 2026-08-23). **Laeuft bei Codex.** Nach C-232.
+
+  `[cmd]` **Aus bestehenden Tabellen, 1:1:** `substance_catalog` 566 →
+  `supplements` · `substance_aliases` 1.541 ·
+  `substance_lab_effects` 222 · `supplement_nutrient_mappings` 17.
+
+  `[cmd]` **Struktur:** `supplement_groups` 3 (supplement 307,
+  enhanced 177, peptide 82) · `supplement_categories` 23 aus der
+  `filter`-Spalte.
+
+  `[cmd]` **C-230 ist durchgelaufen, ohne dass ein Bericht ankam** —
+  `filter` ist auf allen 566 gefuellt und traegt genau die Buendelung
+  aus dem Auftrag: 9 supplement, 7 peptide, 7 enhanced.
+
+  `[cmd]` **`kategorie` hat 59 Werte** (22 enhanced, 24 peptide, 16
+  supplement) — das ist die feine Fassung. Sie bleibt Spalte an
+  `supplements` fuer die Detailanzeige, sie wird **nicht**
+  Filterleiste.
+
+  `[cmd]` **Mit Zweitschluessel entstehen mehr Zeilen als Substanzen:**
+  `supplement_organ_risks` **1.450** (290 × 5 Organe) ·
+  `supplement_identifiers` **1.226** · `supplement_regulatory`
+  **1.185** · `supplement_field_sources` **2.147** ·
+  `supplement_interactions` 78.
+
+  `[read]` **Eine Korrektur an einer eigenen Messung:** der
+  Orchestrator hatte die Organprofile mit *„2 / 1 / 1"* gezaehlt —
+  sein Muster trennte `""` und `"unknown"` nicht. **Es sind 290 × 5,
+  alle gefuellt.**
+
+  `[read]` **Der Kern des Auftrags ist `status`:** wo die Quelle
+  *„unknown"* sagt, ist der Wert `unbekannt` — nicht eine leere Zeile
+  und nicht `bekannt` mit leerem Inhalt. `[cmd]` `regulatory` traegt
+  *„unknown"* massenhaft: `uk` nur 115 von 290 mit echtem Wert,
+  `australia` 134.
+
+  **Leer bleiben mangels Quelldaten:** `intake_schedule`,
+  `user_inventory`, `user_supplement_settings`, `stack_templates` und
+  die Zyklus- und Protokolltabellen.
+
+- [ ] **A-50: Ein `DROP COLUMN` prueft die Lesepfade nicht** (neu
+  2026-08-23). Aus G-160.
+
+  `[cmd]` **`recovery.scores.acwr_used` ist seit C-215 gedroppt und
+  seit C-226 live weg** — `scores-read.ts` hat sie trotzdem weiter
+  selektiert. **Sechs Treffer im committeten Stand.** Gefunden hat es
+  Fable in G-160, drei Tage spaeter, beim Anbinden einer Kachel.
+
+  `[read]` **Die Luecke ist im Ablauf des Orchestrators:** er prueft
+  Pipeline-Auftraege gegen die Datenbank — Spalten da, Zeilen stabil,
+  Policies gezaehlt — **aber nie gegen die Lesepfade.** Ein
+  `DROP COLUMN` braucht denselben `git grep`, den ein
+  Tabellenname bekommt.
+
+  `[cmd]` **Gegenprobe ueber alle gedroppten Spalten:** `acwr_used`,
+  `enhanced_mode`, `enhanced_accepted_at`, `enhanced_age_verified`.
+  **Nur `acwr_used` wurde je in `apps/web` gelesen.** Ein Fall, kein
+  Muster — aber einer, der unbemerkt blieb.
+
+  **Zu bauen:** die Regel in `CLAUDE.md` und ein Schritt in jedem
+  Pipeline-Auftrag — wer eine Spalte entfernt, zaehlt vorher ihre
+  Leser. Besser noch: eine Gate-Pruefung, die selektierte Spalten
+  gegen den Sollstand haelt.
+
+- [ ] **C-236: Die Recovery-Seeds sind Zaehlreihen, keine Messwerte**
+  (neu 2026-08-23). Aus G-160.
+
+  `[cmd]` `hrv_rmssd` bei `dev@lumeos.app`: **min 62, max 230,
+  Schnitt 146** über 43 Werte. Die juengsten acht:
+  `230 · 226 · 222 · 218 · 214 · 210 · 206 · 202` — **eine perfekte
+  arithmetische Reihe, +4 pro Tag.**
+
+  `[read]` **Menschliche RMSSD liegt bei 20–80 ms.** 146 im Schnitt ist
+  physiologisch unmoeglich, und +4 pro Tag ist kein Messwert, sondern
+  ein Zaehler.
+
+  `[cmd]` **Und die Luecken:** `sleep_start_time` **0**,
+  `sleep_end_time` **0**, `work_stress` **0**, `life_stress` **0** von
+  170. Die Sleep-Kachel kann keine Bettzeit zeigen, weil keine da ist.
+  `caffeine_mg` und `screen_time_before_bed` sind vollstaendig.
+
+  `[read]` **Fable hat die Kacheln gebaut und die Zahlen nicht
+  schoengerechnet** — richtig. Eine Kachel, die 146 ms zeigt, ist
+  ehrlich kaputt; eine, die es kaschiert, ist unehrlich heil.
+
+  `[cmd]` **`test-user@lumeos.local` hat 0 Check-ins** — wie schon 0
+  Trainingssitzungen (G-159) und 0 Coach-Beziehungen (G-158).
+  **Als Nachweiskonto ist es fuer drei Module unbrauchbar**, obwohl die
+  Regel aus C-209 es dafuer vorsieht.
+
+  **Zu tun:** plausible Seeds fuer Recovery und Training, die fehlenden
+  Spalten fuellen, und `test-user` mit Daten versehen.
+
+- [ ] **G-173: Ein falscher Punktverweis in `scores-read.ts`** (neu
+  2026-08-23). Aus G-160. Eine Zeile.
+
+  `[cmd]` `scores-read.ts:42` sagt *„C-195 hat die Spalte entfernt"* —
+  **es war C-215.** C-195 war der Substanzkatalog.
+
+  `[read]` Kleinigkeit, aber ein falscher Verweis fuehrt beim naechsten
+  Suchen in die Irre — dasselbe Muster wie `training.sessions` gegen
+  `workout_sessions`.
