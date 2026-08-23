@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-23.** 226 offen, 0 in Arbeit.
+**Stand: 2026-08-23.** 228 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -4795,6 +4795,46 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **Ein Rueckfall mit veraltetem Text ist schlimmer als
   keiner** — `tab-prefs` behauptet, Vorlieben haetten keine Spalten.
 
+  **ENTSCHIEDEN 2026-08-23 (Tom): sie fliegen.**
+
+  `[read]` **Tom, 2026-08-23:** *„kein plan wovon du redest"* — und das
+  ist der Befund, nicht ein Missverstaendnis. **Die Rueckfallfassungen
+  sind unsichtbar.** Sie erscheinen nur, wenn der Lesepfad leer
+  zurueckkommt; im Betrieb laedt er. `[cmd]` `nutrition/ansicht.tsx:529`
+  waehlt `ordnung.gruppen.length > 0 ? echt : Entwurf`, und
+  `nutrition.nutrient_defs` traegt 138 Zeilen mit 40 Wurzelknoten. **Wer
+  das Produkt benutzt, hat diesen Code nie gesehen.**
+
+  `[cmd]` **Sie verfaelschen dafuer jede Markenzaehlung** (G-171). Am
+  2026-08-23 hat der Orchestrator beim Einstieg 10 markierte Karten in
+  `recovery/tab-messwerte.tsx` als offenes G-160 gemeldet — G-160 war
+  seit Tagen fertig, die 10 waren Rueckfaelle.
+
+  `[cmd]` **Und eine Fassung traegt gar keine Marke:**
+  `nutrition/nutrients-entwurf.tsx`, 12 Kacheln, 79 erfundene
+  Naehrstoffeintraege ohne Warnung (G-157). **Eine Notfallanzeige mit
+  erfundenen Zahlen ist schlechter als eine leere Flaeche mit Hinweis.**
+
+  `[read]` **Was verloren geht, ist ersetzbar:** die Entwuerfe waren die
+  letzte Stelle, an der die Form der Vorlage im Code stand. Sie steht
+  weiterhin in `docs/mockups/` — `00-QUELLEN.md` nennt je Modul die
+  Dateien.
+
+  **Umfang der Ausfuehrung** `[cmd]` gemessen 2026-08-23:
+  `supplements/tabs.tsx` 16 · `nutrition/tab-plans` 8 ·
+  `nutrition/tab-prefs` 6 · `nutrition/nutrients-entwurf.tsx` 12 **ohne
+  Marke** · `recovery/tab-messwerte.tsx` 10 · `recovery/ansicht.tsx` 5 ·
+  `recovery/tab-protokolle.tsx` 19 · `coach/tab-rechte` 5.
+
+  **An die Stelle des Rueckfalls tritt eine leere Flaeche mit Hinweis**,
+  die sagt, dass nicht gelesen werden konnte — **nicht ein Strich und
+  keine Null.** `[read]` Aus G-161: *„auch nicht als Strich, denn ein
+  Strich hiesse ‚leer' statt ‚gibt es nicht'."*
+
+  `[read]` **G-157 und G-171 haengen daran** und werden mit diesem Punkt
+  zusammen erledigt: G-157 ist danach ein `git rm`, und die
+  Markenzaehlung misst wieder, was der Nutzer sieht.
+
 ### Schema fehlt wirklich — Codex-Arbeit
 
 - [ ] **C-219: Tabellen, die die Spec kennt und die es nicht gibt**
@@ -5422,3 +5462,141 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
   **Entscheidung liegt bei Tom.** Solange sie offen ist, kann Schritt 3
   nur fuer Creatine und Omega-3 sauber laufen.
+
+  ---
+
+  **KORREKTUR 2026-08-23, noch am selben Tag: die Ursache steht oben
+  falsch.**
+
+  `[cmd]` **Magnesium und Vitamin D3 haben sehr wohl einen
+  Alias-Treffer** — nur gegen `f05_substance_candidate`, nicht gegen
+  `kimi_substance`. Die Sicht filtert auf `catalog_b = 'kimi_substance'`,
+  deshalb fallen sie heraus.
+
+  `[cmd]` **Der Grund ist ein Benennungsschnitt, keine Dublette.** Kimi
+  fuehrt keine Zeile *„Magnesium"*, sondern **sieben Salzformen**:
+  citrate · glycinate/bisglycinate · L-threonate · malate · oxide ·
+  taurate · chloride. Und keine Zeile *„Vitamin D3"*, sondern
+  `Vitamin D3 (cholecalciferol)` neben `Vitamin D2 (ergocalciferol)`.
+
+  `[cmd]` **Deshalb treffen genau Creatine Monohydrate und Omega-3
+  (EPA/DHA):** die beiden sind im alten Katalog schon formspezifisch
+  benannt. `[cmd]` **Von den 28 Eintraegen des alten Katalogs hat
+  KEINER einen Kimi-Gegenpart** ueber die Aliasbruecke — nicht 26 von
+  28, sondern null.
+
+  `[read]` **Die Frage ist damit Substanz gegen Form:** der alte Katalog
+  schneidet nach Substanz (der Nutzer waehlt *„Magnesium"*), Kimi nach
+  Form (weil sich Bioverfuegbarkeit, Dosis und Vertraeglichkeit je Salz
+  unterscheiden — genau das war die Recherche).
+
+  **Beantwortet in C-243.** Dieser Punkt bleibt offen fuer die
+  Zuordnung selbst: `[cmd]` **zwei Positionen (Magnesium, Vitamin D3)
+  brauchen eine Zuordnung von Hand**, weil es keinen automatischen
+  Treffer gibt und die Wahl der Salzform eine fachliche ist.
+
+- [ ] **C-243: Der Katalog zeigt nur, was Inhalt hat — `im_katalog` als
+  abgeleitete Spalte** (neu 2026-08-23). **ENTSCHIEDEN von Tom.** Aus
+  C-242.
+
+  **Tom, 2026-08-23, auf drei vorgelegte Wege: „C".**
+
+  Die drei Wege lauteten: **A** Form gewinnt, die 28 alten Eintraege
+  fliegen · **B** Substanz gewinnt, die Salzformen werden Unterformen
+  (braucht eine Eltern-Kind-Beziehung, die es nicht gibt) · **C** beides
+  getrennt — die inhaltslosen Zeilen bleiben als Namensregister fuer
+  Suche und Aliase, **erscheinen aber nicht im Katalog, solange sie leer
+  sind.**
+
+  `[cmd]` **Die Regel und ihre heutige Wirkung:** sichtbar ist, wer eine
+  Beschreibung **oder** einen Evidenzgrad traegt. Das sind **290** von
+  566; **276** bleiben verborgen (`f05_substance_candidate` 248,
+  `lumeos_supplement_catalog` 28).
+
+  `[cmd]` **Was die 276 sind:** Name, Gruppe, Kategorie und Aliase —
+  sonst nichts. Jede Detailtabelle traegt eine Zeile mit
+  `status = 'unbekannt'` und leerem Inhalt (`studied_dose_ranges` `[]`,
+  `dose_unit` leer, kein Hinweis). Das ist die Spec-Regel *„unbekannt
+  ist ein Zustand, keine Abwesenheit"*, korrekt umgesetzt — sie sollen
+  also **bleiben**, nur nicht im Katalog stehen.
+
+  `[cmd]` **Es ist nicht nur Basisvitaminkram:** von den 248 aus
+  `f05_substance_candidate` sind **125 `supplement`, 102 `enhanced`,
+  21 `peptide`** — Anavar, Dianabol, Cardarine, DNP, Cheque Drops.
+
+  ### Abweichung vom eigenen Vorschlag: generiert, nicht gesetzt
+
+  `[read]` Der Orchestrator hatte `im_katalog` als **gesetztes** Feld
+  vorgeschlagen. **Das ist der schlechtere Bau**, und der Grund fiel
+  erst beim Lesen der Spec auf.
+
+  `[cmd]` `docs/specs/Supplements/SPEC_06_DATABASE_SCHEMA.md:150` nutzt
+  `is_active` bereits als Sichtbarkeitsschalter in einer RLS-Policy.
+  Ein zweites gesetztes Feld daneben waere eine **gespeicherte
+  Ableitung**: es muesste nachgezogen werden, sobald Kimi eine
+  Beschreibung nachliefert — und genau solche Regeln brechen (*„Regeln,
+  die berichtet statt erzwungen werden, brechen"*).
+
+  **Deshalb eine generierte Spalte an `supplements.supplements`:**
+
+      im_katalog boolean GENERATED ALWAYS AS (
+        coalesce(description_en,'') <> ''
+        OR coalesce(description_de,'') <> ''
+        OR evidence_grade IS NOT NULL
+      ) STORED
+
+  `[read]` **Sie ist nicht setzbar und kann nicht veralten.** Liefert
+  Kimi nach, erscheint die Zeile von selbst im Katalog — ohne
+  Pflegeschritt, ohne Auftrag, ohne dass jemand daran denkt.
+
+  `[read]` **`is_active` bleibt unberuehrt** und behaelt seine
+  Bedeutung: *abgeschaltet*. `im_katalog` heisst: *noch ohne Inhalt*.
+  Die beiden duerfen nicht auf dasselbe Feld — sonst kann spaeter
+  niemand mehr unterscheiden, ob eine Substanz **entfernt** wurde oder
+  **noch nicht recherchiert** ist.
+
+  ### Was daran haengt
+
+  `[cmd]` **Der Lesepfad filtert schon** — `substanz-read.ts:124` setzt
+  `.eq('is_active', true)`, nur gegen die alte `substance_catalog`. Bei
+  Schritt 4 wird er auf `supplements` umgehaengt; dort kommt
+  `.eq('im_katalog', true)` dazu.
+
+  `[cmd]` **Die Dublettenfrage aus C-242 loest sich damit:** es stehen
+  nie zwei sichtbare Zeilen desselben Namens im Katalog, weil bei jedem
+  der 13 Paare **beide** Seiten inhaltslos sind und verborgen bleiben.
+
+  **NACHWEIS, Erwartung vor dem Lauf:** `im_katalog = true` **290**,
+  `false` **276**, Summe 566. Gegenprobe in beide Richtungen: eine
+  Testzeile mit Beschreibung und ohne Evidenzgrad muss `true` ergeben,
+  eine mit beidem leer `false`. **Und der Beweis, dass sie wirklich
+  generiert ist:** ein `UPDATE ... SET im_katalog = true` auf eine
+  leere Zeile muss **fehlschlagen**.
+
+- [ ] **C-244: Der alte Katalog und Kimi schneiden verschieden — 28 von
+  28 ohne Gegenpart** (neu 2026-08-23). Aus C-242.
+
+  `[cmd]` **Keiner der 28 Eintraege aus `lumeos_supplement_catalog` hat
+  einen Kimi-Gegenpart** ueber `substance_alias_matches`. Betroffen sind
+  Grundstoffe, die jeder Stack fuehrt: Magnesium, Zink, Vitamin C,
+  Vitamin D3, Vitamin B12, Eisen, Kalzium, Whey Protein, BCAAs,
+  Kollagen, Probiotika.
+
+  `[cmd]` **Der Grund ist nicht ein fehlender Crawl.** Kimi hat die
+  Stoffe — unter der **Salzform**: sieben Magnesiumeintraege, drei
+  Zinkeintraege (`as zinc gluconate`, `as zinc picolinate`,
+  `T cross-ref`), `Vitamin D3 (cholecalciferol)`. Der alte Katalog
+  fuehrt den **Sammelnamen**.
+
+  `[read]` **Das ist eine offene Produktfrage, kein Datenfehler:** waehlt
+  der Nutzer *„Magnesium"* und traegt eine Dosis ein, oder waehlt er
+  *„Magnesiumglycinat"*? `[read]` Fuer die Frage spricht Kimis Arbeit —
+  die Formen unterscheiden sich in Bioverfuegbarkeit und
+  Vertraeglichkeit, und genau das war recherchiert worden. Dagegen
+  spricht, dass die meisten Nutzer die Form ihres Praeparats nicht
+  kennen.
+
+  `[read]` **Bis das entschieden ist, ist die Aliasbruecke der Ort** —
+  ein Alias *„magnesium"* auf eine gewaehlte Vorzugsform loest die Suche,
+  ohne den Katalogschnitt festzulegen. **Nicht vorbauen, aber sichtbar
+  auslassen.**
