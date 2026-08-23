@@ -36,7 +36,7 @@ import type { NaehrstoffOrdnung } from '../../../lib/nutrition/naehrstoff-ordnun
 import { KalorienbilanzKachel, MakroschnittKachel } from './insights-echt'
 import type { InsightsStand } from '../../../lib/nutrition/insights-read'
 import type { HydrationDay } from '../../../lib/nutrition/hydration-day-read'
-import { NutrientAnalysisView } from './nutrients-entwurf'
+import { LeerHinweis } from './leer-hinweis'
 import type { DailySummaryRow, SummaryMacro } from '../../../lib/nutrition/diary-summary'
 import type { ReferenceAssessmentRow } from '../../../lib/nutrition/reference-assessment-read'
 import type { Zielvorschlag, Zielwerte } from '../../../lib/profile/zielwerte-read'
@@ -46,7 +46,6 @@ import { Datumsnavigation, Zukunftshinweis } from './datumsnavigation'
 // G-38: die Tabs, die bisher nur als Attrappen-Platzhalter dastanden.
 import { NutritionInsightsTab } from './tab-insights'
 import { MealPlansTab } from './tab-plans'
-import { FoodPreferencesTab } from './tab-prefs'
 // G-65: derselbe Tab mit echten Daten.
 import { VorliebenTab, type VorliebenDaten } from './tab-vorlieben'
 import { NutritionPlannerTab } from './tab-planner'
@@ -519,16 +518,21 @@ function AndererTab({
     },
   }
 
-  // Der Naehrstoffbaum der Vorlage — vollstaendig uebernommen.
   if (tab === 'nutrients') {
-    // G-101: die echte Ordnung, sobald sie gelesen ist. Ohne
-    // sie bleibt der Entwurf stehen — 79 erfundene Eintraege, aber mit
-    // Marke; dasselbe Muster wie bei den Vorlieben (G-65).
+    // `[cmd]` SEIT G-101 ECHT, Rueckfall entfernt am 2026-08-23 (G-157).
+    // `nutrition.nutrient_defs` traegt **138 Zeilen mit 40 Wurzelknoten**
+    // (gemessen 2026-08-23), der echte Zweig laedt also.
+    //
+    // `[read]` **Der alte Rueckfall zeigte 79 erfundene Eintraege ohne
+    // eine einzige Marke** — der Kommentar hier behauptete das Gegenteil
+    // („aber mit Marke"). Beides ist weg.
     return (
       <div style={{ marginTop: 16 }}>
         {ordnung && ordnung.gruppen.length > 0
           ? <NaehrstoffOrdnungTab d={ordnung} />
-          : <NutrientAnalysisView />}
+          : <LeerHinweis
+              titel="Nährstoffe"
+              grund="Für dieses Konto ist keine Nährstoffordnung geladen. Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />}
       </div>
     )
   }
@@ -561,13 +565,21 @@ function AndererTab({
     return <div style={{ marginTop: 16 }}><MealPlansTab d={plan} /></div>
   }
   if (tab === 'prefs') {
-    // `[cmd]` SEIT G-65 ECHT. Ohne geladene Vorlieben (keine Sitzung)
-    // bleibt der Entwurf mit seiner Marke stehen — dasselbe Muster wie
-    // beim Exercises-Tab in G-64: eine leere echte Kachel saehe aus wie
-    // ein Befund und waere doch nur ein fehlendes Cookie.
+    // `[cmd]` SEIT G-65 ECHT, Rueckfall entfernt am 2026-08-23 (G-163).
+    //
+    // `[read]` **Der alte Rueckfall behauptete, die Vorlieben seien
+    // nicht angebunden** — „die Schalter schreiben nichts". Das stimmte
+    // nicht mehr: `VorliebenTab` liest `food_preferences` und
+    // `food_preference_items` seit G-65 und schreibt seit G-154.
+    // **Ein Rueckfall, der dem echten Zweig widerspricht, ist schlimmer
+    // als keiner.**
     return (
       <div style={{ marginTop: 16 }}>
-        {vorlieben ? <VorliebenTab d={vorlieben} /> : <FoodPreferencesTab />}
+        {vorlieben
+          ? <VorliebenTab d={vorlieben} />
+          : <LeerHinweis
+              titel="Vorlieben"
+              grund="Für dieses Konto sind keine Vorlieben geladen. Ohne Sitzung greift die Zeilensicherheit, und es wird nichts gelesen." />}
       </div>
     )
   }

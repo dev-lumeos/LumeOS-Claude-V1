@@ -103,7 +103,17 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
     close: () => setModal(null),
   }), [])
 
-  const ungelesen = COACHES.filter(c => c.unread > 0).reduce((s, c) => s + c.unread, 0)
+  // G-158/G-149-Nachtrag: der Kopf zaehlt aus dem echten Stand — der
+  // Rest des Moduls ist seit G-163 echt, und der Kopf war die letzte
+  // Stelle mit einer erfundenen Zahl (COACHES-Entwurfskonstante), noch
+  // dazu ohne Marke. Ohne Stand: Hinweis, kein Strich und keine Null.
+  const kopfEcht = stand?.userId != null && !stand.fehler
+  const aktiveBeziehungen = kopfEcht
+    ? stand!.beziehungen.filter(b => b.status === 'active').length
+    : null
+  const ungeleseneNachrichten = kopfEcht
+    ? stand!.nachrichten.filter(n => n.read_at === null && n.sender_id !== stand!.userId).length
+    : null
 
   return (
     <CoachKontext.Provider value={kontext}>
@@ -112,11 +122,21 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
         <div className="v2-module-title-block">
           <div className="v2-module-title-row">
             <span className="v2-module-title">Human Coaches</span>
-            <Pill variant="acc">{COACHES.length} active</Pill>
-            <Pill>
-              <Icon name="bell" className="v2-ic v2-ic-sm" />
-              {`${ungelesen} unread`}
-            </Pill>
+            {kopfEcht ? (
+              <>
+                <Pill variant="acc">{`${aktiveBeziehungen} active`}</Pill>
+                <Pill>
+                  <Icon name="bell" className="v2-ic v2-ic-sm" />
+                  {`${ungeleseneNachrichten} unread`}
+                </Pill>
+              </>
+            ) : (
+              <span
+                title="Der Coach-Stand wurde nicht gelesen — keine Sitzung oder ein Ladefehler."
+              >
+                <Pill>Nicht geladen</Pill>
+              </span>
+            )}
           </div>
           <div className="v2-module-sub">
             Your coaches · what they see · messages · plans assigned
@@ -166,12 +186,13 @@ function AthleteOverview({ stand }: { stand?: CoachRechteStand }) {
     <div className="v2-grid v2-grid-15">
       <div className="v2-col-gap" style={{ gap: 14 }}>
         {echt ? <CoachesEcht stand={stand!} /> : (
-          <Card title="Your coaches" sub={`${COACHES.length} of 4 categories`} attrappe={ATTRAPPE}>
-            <div className="v2-grid v2-g-cols-2" style={{ gap: 10 }}>
-              {COACHES.map(c => (
-                <CoachCardMini key={c.id} c={c} onClick={() => ctx.open({ typ: 'coachDetail', c })} />
-              ))}
-            </div>
+          /* G-163: der Entwurf ist raus — ohne Stand steht der Grund. */
+          <Card title="Your coaches">
+            <Empty
+              title="Nicht geladen"
+              sub="Der Coach-Stand wurde nicht gelesen — keine Sitzung oder ein Ladefehler."
+              icon="user"
+            />
           </Card>
         )}
 
@@ -277,40 +298,6 @@ function AthleteOverview({ stand }: { stand?: CoachRechteStand }) {
   )
 }
 
-// [cmd] module-coach.jsx:292-308.
-function CoachCardMini({ c, onClick }: { c: typeof COACHES[number]; onClick: () => void }) {
-  return (
-    <div
-      onClick={onClick}
-      style={{
-        padding: 12, background: 'var(--bg-elev)', border: '1px solid var(--border)',
-        borderRadius: 7, cursor: 'pointer', position: 'relative', overflow: 'hidden',
-      }}
-    >
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: c.color }} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-        <div
-          style={{
-            width: 32, height: 32, borderRadius: 7, background: c.color, color: 'var(--bg)',
-            display: 'grid', placeItems: 'center', fontWeight: 600, fontSize: 11,
-          }}
-        >
-          {c.avatar}
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 12.5, fontWeight: 600 }}>{c.name}</div>
-          <div className="v2-dim v2-mono" style={{ fontSize: 10 }}>{c.type}</div>
-        </div>
-        {c.unread > 0 && <Pill variant="acc">{`${c.unread} new`}</Pill>}
-      </div>
-      <div className="v2-muted" style={{ fontSize: 11, lineHeight: 1.4, marginBottom: 6 }}>{c.title}</div>
-      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-        {c.sharedModules.slice(0, 3).map(m => <Pill key={m}>{m}</Pill>)}
-      </div>
-    </div>
-  )
-}
-
 // ── Coaches ──────────────────────────────────────────────────────────
 // [cmd] module-coach.jsx:311-347.
 
@@ -402,47 +389,14 @@ function AthleteMessages({ stand }: { stand?: CoachRechteStand }) {
   }
   return (
     <div className="v2-coach-threads">
-      <Card title="Threads" sub={`${COACHES.length} coaches`} className="v2-card-tight" style={{ padding: 0 }} attrappe={ATTRAPPE}>
-        <div className="v2-col-gap" style={{ gap: 0 }}>
-          {COACHES.map(c => (
-            <div
-              key={c.id}
-              onClick={() => ctx.open({ typ: 'thread', c })}
-              style={{
-                padding: 12, borderBottom: '1px solid var(--border)',
-                cursor: 'pointer', display: 'flex', gap: 10,
-              }}
-            >
-              <div
-                style={{
-                  width: 28, height: 28, borderRadius: 6, background: c.color, color: 'var(--bg)',
-                  display: 'grid', placeItems: 'center', fontWeight: 600, fontSize: 10, flexShrink: 0,
-                }}
-              >
-                {c.avatar}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2 }}>
-                  <span style={{ fontSize: 12, fontWeight: 600 }}>
-                    {`${c.name.split(' ')[0]} ${c.name.split(' ').slice(-1)[0]}`}
-                  </span>
-                  {c.unread > 0 && (
-                    <span style={{ width: 6, height: 6, borderRadius: 999, background: 'var(--acc-coach)', display: 'inline-block' }} />
-                  )}
-                  <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 9 }}>{c.lastMsgAt}</span>
-                </div>
-                <div
-                  className="v2-muted"
-                  style={{ fontSize: 11, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}
-                >
-                  {c.lastMsg}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* G-163: der Threads-Entwurf ist raus. */}
+      <Card title="Threads">
+        <Empty
+          title="Nicht geladen"
+          sub="Der Nachrichten-Stand wurde nicht gelesen — keine Sitzung oder ein Ladefehler."
+          icon="message"
+        />
       </Card>
-
       <ThreadPanelLeer />
     </div>
   )

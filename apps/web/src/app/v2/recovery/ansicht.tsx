@@ -32,15 +32,16 @@
 // Tabellen angebunden oder braucht weitere Tabellen.
 import * as React from 'react'
 import { useTabParam } from '../../../lib/tab-url'
-import { holeEvidenz } from '../../../lib/evidenz/registry'
 import {
   Card, Pill, Icon, Ring, Meter, Row, Tabs, InEntwicklungKnopf,
-  ErmuedungsKarte, type TabItem,
+  Empty, ErmuedungsKarte, type TabItem,
 } from '@lumeos/ui'
 
+// G-163: die Modalitaeten-Entwurfsdaten und die Evidenz-Fussnote sind
+// mit den Rueckfallfassungen gefallen — die Evidenzbindung lebt in der
+// echten ModalitaetenKachel weiter.
 import {
   MUSCLE_GROUPS_BODYMAP, MUSCLE_LABEL, MUSCLE_STATE, CHECKIN, NUTRITION_INPUT,
-  MODALITY_EVIDENZ, MODALITY_META, TODAY_MODALITIES,
   calcMuscleRecovery, calcRecoveryScore, readinessFor,
   evaluateOvertraining, recoveryPendingActions,
 } from './motor'
@@ -130,28 +131,23 @@ export function RecoveryAnsicht({
           <div className="v2-module-title-row">
             <span className="v2-module-title">Recovery</span>
             {/* G-76/G-82: Der Kopf zeigt die ZAHL aus der Tabelle, ohne
-                Einordnung. `[read]` Vorher stand hier „Score 88 · Good"
-                aus dem Entwurf — `Good` ist eine Readiness-Stufe der
-                `SPEC_09` und damit Urteilssprache. Ohne echte Zeile
-                bleibt die Entwurfspille stehen. */}
-            {echterScore
-              ? (
-                <Pill style={{
-                  borderColor: 'color-mix(in oklch, var(--acc-recov) 35%, var(--border))',
-                  color: 'var(--acc-recov)',
-                  background: 'color-mix(in oklch, var(--acc-recov) 7%, transparent)',
-                }}>Score {echterScore.score.toFixed(1)}</Pill>
-              )
-              : (
-                <Pill style={{
-                  borderColor: `color-mix(in oklch, ${rd.c} 35%, var(--border))`,
-                  color: rd.c,
-                  background: `color-mix(in oklch, ${rd.c} 7%, transparent)`,
-                }}>Score {sc.score} · {rd.label}</Pill>
-              )}
-            <Pill><span className="v2-dot" style={{ background: 'var(--pos)' }} />
-              Check-in {checkins?.neuster?.checkin_time?.slice(0, 5) ?? CHECKIN.logged_at}
-            </Pill>
+                Einordnung. G-163: die Entwurfspille (mit der
+                Urteilsstufe „Good") ist raus — ohne echte Zeile steht
+                hier keine Zahl, und die Kachel darunter sagt warum. */}
+            {echterScore && (
+              <Pill style={{
+                borderColor: 'color-mix(in oklch, var(--acc-recov) 35%, var(--border))',
+                color: 'var(--acc-recov)',
+                background: 'color-mix(in oklch, var(--acc-recov) 7%, transparent)',
+              }}>Score {echterScore.score.toFixed(1)}</Pill>
+            )}
+            {/* G-163: auch die Check-in-Zeit faellt nicht mehr auf die
+                Entwurfskonstante zurueck — ohne Check-in keine Pille. */}
+            {checkins?.neuster?.checkin_time && (
+              <Pill><span className="v2-dot" style={{ background: 'var(--pos)' }} />
+                Check-in {checkins.neuster.checkin_time.slice(0, 5)}
+              </Pill>
+            )}
             {ot.severity !== 'normal' && <Pill variant="warn">{ot.count} OT signals</Pill>}
           </div>
           <div className="v2-module-sub">
@@ -181,7 +177,9 @@ export function RecoveryAnsicht({
         </div>
       </div>
 
-      <Tabs items={tabs(18, TODAY_MODALITIES.length, ot.count)} active={tab} onChange={setTab} />
+      {/* G-163: der Modalities-Zaehler kommt aus der Tabelle, nicht
+          mehr aus der Entwurfsliste (die zeigte fest 2). */}
+      <Tabs items={tabs(18, modalitaeten?.gesamt ?? 0, ot.count)} active={tab} onChange={setTab} />
 
       {tab === 'today' && (
         <RecToday checkins={checkins} scores={scores} modalitaeten={modalitaeten} />
@@ -242,81 +240,21 @@ function RecToday({
           <ScoreVerlauf verlauf={scores.verlauf} gesamt={scores.gesamt} />
         )}
 
+        {/* G-163: die Rueckfallfassung des Erholungswerts ist raus —
+            Tom, 2026-08-23: „sie fliegen." Kommt keine Zeile aus
+            `recovery.scores`, steht hier der Grund, nicht der Entwurf
+            mit erfundenen Zahlen (und nicht ein Strich: ein Strich
+            hiesse „leer" statt „nicht gelesen", G-161). */}
         {!echterScore && (
-        <Card attrappe={ATTRAPPE}>
-          <div className="v2-rec-score-kopf">
-            <Ring value={sc.score} max={100} color={rd.c} label={rd.level} size={140} stroke={10} />
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <span className="v2-eyebrow">Readiness</span>
-                <div style={{ display: 'flex', background: 'var(--surface-2)', borderRadius: 6, padding: 2, gap: 1, marginLeft: 'auto' }}>
-                  {(['manual', 'hrv'] as ScoreModus[]).map(m => (
-                    <button key={m} type="button" onClick={() => setModus(m)}
-                            aria-pressed={modus === m}
-                            className={modus === m ? 'v2-btn v2-btn-primary' : 'v2-btn v2-btn-ghost'}
-                            style={{ height: 20, fontSize: 10, padding: '0 9px', borderRadius: 4 }}>{m}</button>
-                  ))}
-                </div>
-              </div>
-              <div style={{ fontSize: 19, fontWeight: 600, marginBottom: 5, color: rd.c }}>{rd.label}</div>
-              <div style={{ fontSize: 12.5, color: 'var(--fg-muted)', lineHeight: 1.5, marginBottom: 10 }}>{rd.advice}</div>
-              <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-                {([
-                  ['HRV', `${CHECKIN.hrv_rmssd} ms`, `z ${sc.hrv.z}`],
-                  ['Sleep', `${CHECKIN.sleep_hours} h`, `q ${CHECKIN.sleep_quality}/10`],
-                  // C-124: die Bonus-Zelle ist entfernt.
-                  // C-181: die ACWR-Zelle ebenso — Safe-Zone und
-                  // Last-Faktor waren Heuristik ohne Beleg.
-                ] as Array<[string, string, string]>).map(([l, v, s]) => (
-                  <div key={l}>
-                    <div className="v2-eyebrow" style={{ marginBottom: 2 }}>{l}</div>
-                    <div className="v2-num" style={{ fontSize: 16, lineHeight: 1 }}>{v}</div>
-                    <div className="v2-dim v2-mono" style={{ fontSize: 9.5, marginTop: 2 }}>{s}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="v2-divider" />
-          <div className="v2-eyebrow" style={{ marginBottom: 8 }}>Score composition · {modus} mode</div>
-          <div className="v2-col-gap" style={{ gap: 5 }}>
-            {sc.terms.map(t => (
-              <div key={t.key} className="v2-rec-term">
-                <span style={{ color: 'var(--fg-muted)' }}>{t.label}</span>
-                <span className="v2-mono v2-dim" style={{ fontSize: 10 }}>{t.raw}</span>
-                <div style={{ height: 6, background: 'var(--surface-2)', borderRadius: 999 }}>
-                  <div style={{ height: '100%', width: `${(t.val / t.w) * 100}%`, background: 'var(--acc-recov)', borderRadius: 999 }} />
-                </div>
-                <span className="v2-num" style={{ textAlign: 'right' }}>
-                  {t.val.toFixed(1)}<span className="v2-dim" style={{ fontSize: 9 }}>/{t.w}</span>
-                </span>
-              </div>
-            ))}
-            {/* C-124: die „Modality bonus"-Zeile ist entfernt — der
-                Score ist die Summe der Terme, ohne erfundene
-                Zusatzpunkte. Modalitaeten stehen als Wirkung mit
-                Quelle in der eigenen Kachel. */}
-            <div className="v2-rec-term" style={{ fontSize: 12, paddingTop: 6, borderTop: '1px solid var(--border-strong)' }}>
-              <span style={{ fontWeight: 700 }}>Total</span>
-              <span className="v2-mono v2-dim" style={{ fontSize: 10 }}>
-                {sc.subtotal} von {sc.gewichtsumme} · auf 100 normiert
-              </span>
-              <span />
-              <span className="v2-num" style={{ textAlign: 'right', fontSize: 16, fontWeight: 600, color: rd.c }}>{sc.score}</span>
-            </div>
-            {/* C-181: die belegte Aussage zur Trainingslast — aus dem
-                Evidenzregister nachgeschlagen, kein ACWR mehr. */}
-            <div className="v2-dim" style={{ fontSize: 10, lineHeight: 1.5, paddingTop: 4 }}>
-              Trainingslast: als Kennzahl bleibt Session-Load
-              (Dauer × sRPE, Grad {holeEvidenz('C10_SESSION_LOAD_SRPE_X_DURATION').grad},
-              Foster 2001) — als Trend, ohne Risiko-Zonen. Das
-              ACWR-Verhältnis samt Safe-Zone 0,8–1,3 ist entfernt:
-              mathematische Kopplung, keine individuelle Prädiktivität
-              (Grad {holeEvidenz('C04_ACWR_MATH_CRITIQUE').grad},
-              PMID 29101104; Safe-Zone Grad {holeEvidenz('C06_ACWR_SAFE_ZONE_08_13').grad}).
-            </div>
-          </div>
-        </Card>
+          <Card title="Erholungswert">
+            <Empty
+              title="Nicht geladen"
+              sub={scores?.fehler
+                ? `recovery.scores meldet: ${scores.fehler}`
+                : 'recovery.scores kam für dieses Konto leer zurück — es liegt keine Score-Zeile vor.'}
+              icon="recovery"
+            />
+          </Card>
         )}
 
         <Card
@@ -382,48 +320,19 @@ function RecToday({
           <ModalitaetenKachel stand={modalitaeten} />
         )}
 
+        {/* G-163: der Modalitaeten-Rueckfall ist raus. Ohne Zeile aus
+            `recovery.modality_log` steht hier der Grund — nicht die
+            erfundene Tagesliste des Entwurfs. */}
         {!(modalitaeten && modalitaeten.gesamt > 0) && (
-        <Card
-          title="Today's modalities" sub="Wirkung laut Evidenzregister, ohne Punktbonus (C-124)"
-          attrappe={ATTRAPPE}
-          actions={
-            <button type="button" className="v2-btn v2-btn-ghost v2-btn-sm"
-                    aria-label="Log modality" onClick={() => open({ typ: 'logModality' })}>
-              <Icon name="plus" className="v2-ic v2-ic-sm" />
-            </button>
-          }
-        >
-          {TODAY_MODALITIES.length === 0 ? (
-            <div className="v2-dim" style={{ fontSize: 11.5, padding: 10, textAlign: 'center' }}>Nothing logged today.</div>
-          ) : (
-            <div className="v2-col-gap" style={{ gap: 5 }}>
-              {TODAY_MODALITIES.map(m => {
-                const meta = MODALITY_META[m.type]
-                return (
-                  <div key={m.id} style={{
-                    display: 'flex', alignItems: 'center', gap: 9, padding: 9,
-                    background: 'var(--bg-elev)', border: '1px solid var(--border)', borderRadius: 5,
-                  }}>
-                    <Icon name={meta.icon as never} className="v2-ic v2-ic-sm" style={{ color: meta.c }} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 11.5, fontWeight: 500 }}>{meta.label}</div>
-                      <div className="v2-dim v2-mono" style={{ fontSize: 9.5 }}>{m.time} · {m.duration} min · {m.detail}</div>
-                    </div>
-                    <span
-                      className="v2-dim"
-                      style={{ fontSize: 9.5, maxWidth: 170, textAlign: 'right', lineHeight: 1.35 }}
-                      title={MODALITY_EVIDENZ[m.type]?.quelle ?? undefined}
-                    >
-                      {MODALITY_EVIDENZ[m.type]?.grad
-                        ? `${MODALITY_EVIDENZ[m.type].aussage} (Grad ${MODALITY_EVIDENZ[m.type].grad})`
-                        : 'ohne Eintrag im Evidenzregister'}
-                    </span>
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </Card>
+          <Card title="Today's modalities">
+            <Empty
+              title="Nicht geladen"
+              sub={modalitaeten?.fehler
+                ? `recovery.modality_log meldet: ${modalitaeten.fehler}`
+                : 'recovery.modality_log kam für dieses Konto leer zurück — keine erfasste Modalität.'}
+              icon="droplet"
+            />
+          </Card>
         )}
 
         <Card title="Overtraining watch" sub={`${ot.count} of 8 signals · ${ot.severity}`} attrappe={ATTRAPPE}>

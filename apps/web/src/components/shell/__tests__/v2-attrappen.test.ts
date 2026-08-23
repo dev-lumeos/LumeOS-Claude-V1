@@ -68,7 +68,9 @@ test('Attrappen-Gruende behaupten kein fehlendes Schema, wenn das Schema steht',
     { datei: SUPP_EXT, konstante: 'ATTRAPPE', verboten: [/kein `supplements`-Schema/i] },
     { datei: SUPP_MODALE, konstante: 'OHNE_SCHEMA', verboten: [/kein `supplements`-Schema/i] },
     { datei: path.join(process.cwd(), 'src/app/v2/nutrition/tab-plans.tsx'), konstante: 'ATTRAPPE', verboten: [/kein Schema fuer Essensplaene/i] },
-    { datei: path.join(process.cwd(), 'src/app/v2/nutrition/tab-prefs.tsx'), konstante: 'ATTRAPPE', verboten: [/keine Spalten am Profil/i] },
+    // `tab-prefs.tsx` ist am 2026-08-23 entfernt (G-163) — er war der
+    // Rueckfall des Vorlieben-Tabs und behauptete, die Vorlieben seien
+    // nicht angebunden. `VorliebenTab` liest sie seit G-65.
   ]
 
   for (const p of pruefungen) {
@@ -451,14 +453,14 @@ test('das Recovery-Modul kennzeichnet jede Kachel', () => {
   // Kein Schema heisst: jede Kachel traegt die Marke. Wer eine
   // anbindet, entfernt `attrappe` und zaehlt die Erwartung herunter.
   const dateien: Array<[string, number]> = [
-    [RECOVERY, 5],
-    // G-82: 4 -> 3. Die „Live score preview" trug die Marke, weil sie
-    // mit der Entwurfsformel rechnete — eigene Gewichte, ein HRV-Term
-    // aus `CHECKIN` und `0.88 * 10` als feste Ernaehrung. Sie rechnet
-    // jetzt mit `lib/recovery/score.ts`, also aus dem Formular und mit
-    // den Manual-Gewichten. Die uebrigen drei bleiben Attrappe.
+    // G-163: die Rueckfallfassungen sind GELOESCHT (Tom, 2026-08-23:
+    // „sie fliegen") — an ihrer Stelle steht eine Hinweis-Flaeche ohne
+    // Marke. ansicht 5 -> 3 (Score- und Modalitaeten-Entwurf raus),
+    // tab-messwerte 10 -> 4 (Hrv-/Sleep-Entwurf raus; Muscle map,
+    // Phone camera und Score paths bleiben echte Attrappen).
+    [RECOVERY, 3],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-checkin.tsx'), 3],
-    [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 10],
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'), 4],
     [path.join(process.cwd(), 'src/app/v2/recovery/tab-protokolle.tsx'), 17],
   ]
   for (const [datei, erwartet] of dateien) {
@@ -988,7 +990,10 @@ test('das Supplements-Modul kennzeichnet jede Kachel', () => {
   //                 angebundene Fassung.
   const dateien: Array<[string, number, number]> = [
     // Datei, echte Attrappen, Rueckfallfassungen
-    [SUPP, 1, 16],
+    // C-250: `CostEcht` liest echte Stackdaten, markiert aber die
+    // Kostenbasis als Rueckfall, weil `supplements.supplements` keine
+    // Preis- und Portionsquelle traegt.
+    [SUPP, 1, 17],
     [SUPP_EXT, 6, 0],
     [SUPP_COMP, 4, 0],
   ]
@@ -1092,13 +1097,17 @@ test('die angebundenen Supplements-Fassungen tragen keine Marke', () => {
   // der Database-Tab rendert die `SubstanzDatenbank` (566er) aus
   // substanz-detail.tsx; deren Markenfreiheit prueft der
   // C-227/C-229-Waechter in lib/supplements.
-  for (const name of ['TodayEcht', 'StackMatrixEcht', 'StackListeEcht',
-                      'CostEcht']) {
+  for (const name of ['TodayEcht', 'StackMatrixEcht', 'StackListeEcht']) {
     assert.equal(marken(block(name)), 0,
       `"${name}" liest echte Daten und darf keine Attrappenmarke tragen.`)
   }
+  const costEcht = block('CostEcht')
+  assert.ok(/no price per serving and no serving size/.test(costEcht),
+    'CostEcht muss den fehlenden Preis-/Portionspfad benennen.')
+  assert.equal(marken(costEcht), 1,
+    'CostEcht darf nur die fehlende Kostenbasis markieren, nicht den ganzen Lesepfad.')
 
-  // Rueckfall — Marke muss bleiben, sonst gilt Erfundenes als echt.
+  // Rueckfall - Marke muss bleiben, sonst gilt Erfundenes als echt.
   for (const name of ['TodayAttrappe', 'StackMatrix', 'StackList',
                       'DatabaseAttrappe', 'CostAttrappe']) {
     assert.ok(marken(block(name)) > 0,
@@ -1148,7 +1157,6 @@ test('der Stack der Vorlage ist vollstaendig uebernommen', () => {
 })
 
 // --- G-38: die nachgezogenen Nutrition-Tabs --------------------------
-const NUT_PREFS = path.join(process.cwd(), 'src/app/v2/nutrition/tab-prefs.tsx')
 const NUT_PLANS = path.join(process.cwd(), 'src/app/v2/nutrition/tab-plans.tsx')
 const NUT_INSIGHTS = path.join(process.cwd(), 'src/app/v2/nutrition/tab-insights.tsx')
 const NUT_PLANNER = path.join(process.cwd(), 'src/app/v2/nutrition/tab-planner.tsx')
@@ -1156,12 +1164,18 @@ const NUT_MODALE = path.join(process.cwd(), 'src/app/v2/nutrition/modale.tsx')
 
 test('die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel', () => {
   // [cmd] G-38: vier Tabs standen bis dahin nur als Platzhalter da.
-  // Gebaut ist die Oberflaeche, angebunden ist nichts — `plans`,
-  // `prefs` und `planner` haben kein Schema, `insights` rechnet nicht
-  // ueber Zeitraeume. Wer einen Tab anbindet, entfernt `attrappe` und
-  // zaehlt hier herunter.
+  // Gebaut ist die Oberflaeche, angebunden ist nichts. Wer einen Tab
+  // anbindet, entfernt `attrappe` und zaehlt hier herunter.
+  //
+  // `[cmd]` **`prefs` ist am 2026-08-23 ganz herausgefallen** (G-163):
+  // die Datei war der Rueckfall und ist geloescht, der echte Zweig
+  // `VorliebenTab` liest seit G-65. **Sechs Marken weniger.**
+  //
+  // `[cmd]` **`plans` bleibt bei 8** — die Datei ist KEIN Rueckfall.
+  // Seit G-161 tragen drei ihrer Kacheln echte Zahlen aus `plan-lesen`;
+  // die uebrigen fuenf bleiben Attrappe, weil `meal_plan_entries` keine
+  // Statusspalte und `meal_plans` keine Lifecycle-Spalten hat.
   const dateien: Array<[string, number]> = [
-    [NUT_PREFS, 6],
     [NUT_PLANS, 8],
     [NUT_INSIGHTS, 3],
     [NUT_PLANNER, 1],
@@ -1173,6 +1187,38 @@ test('die nachgezogenen Nutrition-Tabs kennzeichnen jede Kachel', () => {
       `${path.basename(datei)}: ${mitGrund} gekennzeichnet, erwartet ${erwartet}. ` +
       'Angebunden? Dann die Erwartung hier senken.')
   }
+})
+
+// --- G-157 / G-163: die entfernten Entwuerfe bleiben entfernt --------
+test('die Nutrition-Entwuerfe kommen nicht zurueck', () => {
+  // `[cmd]` **Am 2026-08-23 entfernt** (G-157 / G-163):
+  // `nutrients-entwurf.tsx` (585 Zeilen, 12 Kacheln, **null Marken**,
+  // 79 erfundene Naehrstoffeintraege plus „Fake 14-day trend") und
+  // `tab-prefs.tsx` (203 Zeilen, 6 Marken, **veralteter Text** — er
+  // behauptete, die Vorlieben seien nicht angebunden, obwohl
+  // `VorliebenTab` sie seit G-65 liest).
+  //
+  // `[read]` **Ohne diese Pruefung bewacht nichts die Entfernung.**
+  // Gegengeprobt am 2026-08-23: `tab-prefs.tsx` wiederhergestellt, die
+  // Zaehlung oben blieb gruen — sie kennt die Datei ja nicht mehr.
+  // Erst diese Pruefung wird rot.
+  for (const name of ['nutrients-entwurf.tsx', 'tab-prefs.tsx']) {
+    const p = path.join(process.cwd(), 'src/app/v2/nutrition', name)
+    assert.equal(fs.existsSync(p), false,
+      `${name} ist wieder da. Der Entwurf zeigt erfundene Zahlen — `
+      + 'wenn der echte Zweig nicht laedt, gehoert dorthin LeerHinweis.')
+  }
+
+  // Und der Rueckfall darf auch nicht ueber einen anderen Namen
+  // zurueckkehren: der Tab-Ausdruck zeigt entweder echt oder leer.
+  const quelle = fs.readFileSync(NUTRITION, 'utf8')
+  for (const weg of [/NutrientAnalysisView/, /FoodPreferencesTab/]) {
+    assert.equal(weg.test(quelle), false,
+      `ansicht.tsx verweist wieder auf ${weg.source}.`)
+  }
+  // Beide Zweige muessen den Hinweis tragen — nutrients und prefs.
+  assert.equal((quelle.match(/<LeerHinweis/g) ?? []).length, 2,
+    'Beide Rueckfaelle (nutrients, prefs) zeigen LeerHinweis.')
 })
 
 test('die vier Modale der Nutrition-Vorlage sind da', () => {
@@ -1322,9 +1368,14 @@ test('das Coach-Modul kennzeichnet jede Kachel', () => {
   // `coach`-Schema gibt es nicht — der Begriff kommt in
   // `supabase/_pipeline/` in keiner SQL-Datei vor.
   const dateien: Array<[string, number]> = [
-    [COACH, 11],
-    [COACH_RECHTE, 5],
-    [COACH_AUTO, 11],
+    // G-163: die Rueckfallfassungen sind geloescht — ansicht 11 -> 9
+    // (Your-coaches- und Threads-Entwurf raus), tab-rechte 5 -> 0
+    // (beide Entwuerfe samt toter ProposalCard/-Modal raus),
+    // tab-autonomie 11 -> 3 (Autonomie-Entwurf raus, die
+    // Check-in-Attrappe bleibt).
+    [COACH, 9],
+    [COACH_RECHTE, 0],
+    [COACH_AUTO, 3],
     [COACH_ONBOARD, 6],
   ]
   for (const [datei, erwartet] of dateien) {
@@ -1342,12 +1393,75 @@ test('jede Karte des Coach-Moduls traegt eine Marke', () => {
   // Schaerfer als die Zaehlung oben: nicht "so viele wie erwartet",
   // sondern "keine ohne". Wer eine Karte ergaenzt und die Marke
   // vergisst, faellt hier auf, ohne dass jemand eine Zahl pflegt.
-  for (const datei of [COACH, COACH_RECHTE, COACH_AUTO, COACH_ONBOARD]) {
+  //
+  // G-163: Die Regel gilt nur noch fuer den Onboarding-Tab — die
+  // uebrigen Dateien tragen jetzt echte Karten und Hinweis-Flaechen
+  // ohne Marke. Fuer sie prueft der G-163-Waechter darunter, dass die
+  // geloeschten Rueckfallfassungen nicht zurueckkommen.
+  for (const datei of [COACH_ONBOARD]) {
     const quelle = fs.readFileSync(datei, 'utf8')
     const karten = (quelle.match(/<Card\b/g) ?? []).length
     const marken = (quelle.match(/attrappe=\{ATTRAPPE\}/g) ?? []).length
     assert.equal(marken, karten,
       `${path.basename(datei)}: ${karten} Karten, aber ${marken} Marken.`)
+  }
+})
+
+test('G-149: der Einnahme-Haken bucht auf den angesehenen Tag', () => {
+  // `[cmd]` Der Fehler: toggleTaken sendete `intake_date: stichtag`
+  // (= echtes Heute), waehrend die Today-Kachel und die
+  // takenToday-Initialisierung den juengsten Protokolltag
+  // (einnahmen[0]) zeigen. Wer die Korrektur zurueckdreht, wird hier
+  // rot — die Negativprobe des Auftrags.
+  const q = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/supplements/ansicht.tsx'), 'utf8')
+  const toggle = q.slice(q.indexOf('const toggleTaken'), q.indexOf('}, [daten, stichtag])'))
+  assert.ok(/const ansichtsTag = daten\.einnahmen\[0\]\?\.intake_date/.test(toggle),
+    'toggleTaken kennt den angesehenen Tag nicht mehr.')
+  assert.ok(/intake_date: ansichtsTag/.test(toggle),
+    'toggleTaken bucht nicht auf den angesehenen Tag.')
+  assert.ok(!/intake_date: stichtag/.test(toggle),
+    'toggleTaken bucht wieder auf heute statt auf den angesehenen Tag (G-149).')
+})
+
+test('G-158: der Coach-Kopf zaehlt aus dem Stand, nicht aus COACHES', () => {
+  const q = fs.readFileSync(COACH, 'utf8')
+  const kopf = q.slice(q.indexOf('v2-module-title-row'), q.indexOf('v2-module-sub'))
+  assert.ok(!/COACHES/.test(kopf),
+    'Der Kopf zaehlt wieder aus der Entwurfskonstante (G-158).')
+  assert.ok(/aktiveBeziehungen/.test(kopf) && /ungeleseneNachrichten/.test(kopf))
+  assert.ok(/Nicht geladen/.test(kopf), 'Ohne Stand fehlt der Hinweis — kein Strich, keine Null.')
+})
+
+test('G-163: die Rueckfallfassungen bleiben geloescht', () => {
+  // Richtung 1: keine der entfernten Entwurfsfunktionen existiert
+  // wieder. Richtung 2 (Negativprobe im Bericht): wer eine
+  // zurueckbaut, laesst diesen Test rot werden — und die
+  // Markenzaehlung oben steigt.
+  // Nur CODE-Formen — Kommentare duerfen die Namen historisch nennen
+  // (dieselbe Praezisierung wie beim C-181-Waechter).
+  const faelle: Array<[string, RegExp[]]> = [
+    [path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx'),
+      [/function HrvEntwurf/, /function SleepEntwurf/, /HRV_LOG\.map/, /HRV_BASELINE\./]],
+    [RECOVERY,
+      [/TODAY_MODALITIES\.(map|length)/, /Score composition/]],
+    [COACH_RECHTE,
+      [/function PermissionsEntwurf/, /function ProposalsEntwurf/, /attrappe=\{ATTRAPPE\}/]],
+    [COACH_AUTO, [/function AutonomyEntwurf/, /AUTONOMY_LADDER\.map/]],
+    [COACH, [/function CoachCardMini/]],
+  ]
+  for (const [datei, muster] of faelle) {
+    const quelle = fs.readFileSync(datei, 'utf8')
+    for (const m of muster) {
+      assert.ok(!m.test(quelle),
+        `${path.basename(datei)}: ${m} ist zurueck — die Rueckfallfassung war geloescht (G-163).`)
+    }
+  }
+  // Und an ihrer Stelle steht der Hinweis, nicht nichts.
+  for (const datei of [RECOVERY, COACH_RECHTE, COACH_AUTO,
+    path.join(process.cwd(), 'src/app/v2/recovery/tab-messwerte.tsx')]) {
+    assert.ok(/Nicht geladen/.test(fs.readFileSync(datei, 'utf8')),
+      `${path.basename(datei)}: die Hinweis-Flaeche „Nicht geladen" fehlt.`)
   }
 })
 

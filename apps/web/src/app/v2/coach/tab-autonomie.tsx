@@ -42,15 +42,15 @@
 // kein `onClick` und bekommt hier auch keines.
 //
 // `[cmd]` ALLES IST ATTRAPPE. Ein `coach`-Schema gibt es nicht.
-import { Card, Pill, Icon, Meter, Row } from '@lumeos/ui'
+import { Card, Pill, Icon, Empty } from '@lumeos/ui'
 
 import { ATTRAPPE } from './ansicht'
 // G-90: die echte Einstufung und ihre Historie.
 import { AutonomieEcht, HistorieEcht } from './rechte-echt'
 import type { CoachRechteStand } from '../../../lib/coach/rechte-read'
-import {
-  CLIENT_AUTONOMY, AUTONOMY_LADDER, CHECKIN_TEMPLATES, CHECKIN_HISTORY,
-} from './daten'
+// G-163: CLIENT_AUTONOMY und AUTONOMY_LADDER sind mit dem
+// Autonomie-Entwurf gefallen; die Check-in-Attrappe bleibt.
+import { CHECKIN_TEMPLATES, CHECKIN_HISTORY } from './daten'
 
 // ── Autonomy · client side ───────────────────────────────────────────
 // [cmd] module-coach-athlete.jsx:397-500.
@@ -77,208 +77,15 @@ export function AthleteAutonomy({ stand }: { stand?: CoachRechteStand }) {
       </div>
     )
   }
-  return <AutonomyEntwurf />
-}
-
-/** Der uebernommene Entwurf — nur noch Rueckfall. */
-function AutonomyEntwurf() {
-  const a = CLIENT_AUTONOMY
-  const cur = AUTONOMY_LADDER.find(l => l.lvl === a.level)
-
-  // [cmd] Die Vorlage greift ungeprueft auf `cur.cadence` zu — sie weiss,
-  // dass Stufe 4 in der Leiter steht. TypeScript weiss das nicht, also
-  // wird der Fall abgefangen statt unterdrueckt.
-  if (!cur) return null
-
-  const kriterien: Array<[string, number]> = [
-    ['Consistency', a.scores.consistency],
-    ['Knowledge', a.scores.knowledge],
-    ['Self-correction', a.scores.self_correction],
-    ['Communication', a.scores.communication],
-  ]
-
+  // G-163: der Entwurf ist raus — ohne Stand steht hier der Grund.
   return (
-    <div className="v2-grid v2-grid-15">
-      <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card attrappe={ATTRAPPE}>
-          <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 14 }}>
-            <div
-              style={{
-                width: 56, height: 56, borderRadius: 999, background: 'var(--acc-coach)',
-                color: 'var(--bg)', display: 'grid', placeItems: 'center',
-                fontWeight: 700, fontSize: 24,
-              }}
-            >
-              {a.level}
-            </div>
-            <div style={{ flex: 1 }}>
-              <div className="v2-eyebrow" style={{ color: 'var(--acc-coach)', marginBottom: 4 }}>
-                Your autonomy level
-              </div>
-              <div style={{ fontSize: 17, fontWeight: 600, marginBottom: 3 }}>{a.levelName}</div>
-              <div className="v2-muted" style={{ fontSize: 11.5 }}>
-                {`Set by ${a.coach} on ${a.assignedAt}`}
-              </div>
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div className="v2-eyebrow" style={{ marginBottom: 3 }}>Next review</div>
-              <div className="v2-num" style={{ fontSize: 14 }}>{a.nextAssessment}</div>
-            </div>
-          </div>
-
-          <div
-            style={{
-              padding: 12, background: 'var(--surface-2)', borderRadius: 6, fontSize: 12,
-              lineHeight: 1.55, color: 'var(--fg-muted)', marginBottom: 14,
-            }}
-          >
-            {a.reason}
-          </div>
-
-          <div className="v2-grid v2-g-cols-3" style={{ gap: 10 }}>
-            <Card className="v2-card-tight" style={{ padding: 10 }} attrappe={ATTRAPPE}>
-              <div className="v2-eyebrow">Check-in cadence</div>
-              <div className="v2-mono" style={{ fontSize: 13, marginTop: 3 }}>{cur.cadence}</div>
-            </Card>
-            <Card className="v2-card-tight" style={{ padding: 10 }} attrappe={ATTRAPPE}>
-              <div className="v2-eyebrow">Coach steps in on</div>
-              <div className="v2-mono" style={{ fontSize: 12, marginTop: 3 }}>
-                {cur.threshold.replace(/_/g, ' ')}
-              </div>
-            </Card>
-            <Card className="v2-card-tight" style={{ padding: 10 }} attrappe={ATTRAPPE}>
-              <div className="v2-eyebrow">Plan flexibility</div>
-              <div className="v2-mono" style={{ fontSize: 13, marginTop: 3 }}>{cur.flex}</div>
-            </Card>
-          </div>
-        </Card>
-
-        <Card title="The ladder" sub="what changes as you move up" attrappe={ATTRAPPE}>
-          <div className="v2-tbl-wrap">
-            <table className="v2-tbl">
-              <thead>
-                <tr>
-                  <th style={{ width: 40 }}>Lvl</th>
-                  <th style={{ width: 130 }}>Name</th>
-                  <th style={{ width: 110 }}>Cadence</th>
-                  <th>Coach intervenes on</th>
-                  <th style={{ width: 110 }}>Flexibility</th>
-                </tr>
-              </thead>
-              <tbody>
-                {AUTONOMY_LADDER.map(l => (
-                  <tr
-                    key={l.lvl}
-                    style={l.lvl === a.level
-                      ? { background: 'color-mix(in oklch, var(--acc-coach) 8%, transparent)' }
-                      : undefined}
-                  >
-                    <td
-                      className="v2-num"
-                      style={{
-                        color: l.lvl === a.level ? 'var(--acc-coach)' : undefined,
-                        fontWeight: l.lvl === a.level ? 600 : 400,
-                      }}
-                    >
-                      {l.lvl}
-                    </td>
-                    <td style={{ fontWeight: l.lvl === a.level ? 600 : 400 }}>
-                      {l.name}
-                      {l.lvl === a.level && <Pill variant="acc" style={{ marginLeft: 6 }}>you</Pill>}
-                    </td>
-                    <td className="v2-mono v2-muted" style={{ fontSize: 11 }}>{l.cadence}</td>
-                    <td className="v2-mono v2-muted" style={{ fontSize: 11 }}>
-                      {l.threshold.replace(/_/g, ' ')}
-                    </td>
-                    <td className="v2-mono v2-muted" style={{ fontSize: 11 }}>{l.flex}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-
-        <Card title="History" sub={`${a.history.length} changes`} attrappe={ATTRAPPE}>
-          <div className="v2-col-gap" style={{ gap: 0 }}>
-            {a.history.map((h, i) => (
-              <div key={i} className="v2-row" style={{ fontSize: 12 }}>
-                <span className="v2-row-l">
-                  <span className="v2-num v2-dim" style={{ fontSize: 10, width: 78 }}>{h.date}</span>
-                  <Pill
-                    variant={h.type === 'promotion' ? 'pos' : h.type === 'demotion' ? 'neg' : undefined}
-                  >
-                    {h.type}
-                  </Pill>
-                  <span className="v2-mono" style={{ fontSize: 11 }}>
-                    {`${h.from ?? '—'} → ${h.to}`}
-                  </span>
-                </span>
-                <span
-                  className="v2-row-r v2-muted"
-                  style={{ fontSize: 11, fontFamily: 'var(--font-sans)' }}
-                >
-                  {h.reason}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </div>
-
-      <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card
-          title="Assessment scores"
-          sub="how your coach rates the four criteria"
-          attrappe={ATTRAPPE}
-        >
-          <div className="v2-col-gap" style={{ gap: 10 }}>
-            {kriterien.map(([k, v]) => (
-              <div key={k}>
-                <div
-                  style={{
-                    display: 'flex', justifyContent: 'space-between',
-                    marginBottom: 4, fontSize: 11.5,
-                  }}
-                >
-                  <span className="v2-muted">{k}</span>
-                  <span className="v2-num">{(v * 100).toFixed(0)}</span>
-                </div>
-                <Meter
-                  value={v * 100}
-                  color={v >= 0.85 ? 'var(--pos)' : v >= 0.7 ? 'var(--warn)' : 'var(--neg)'}
-                />
-              </div>
-            ))}
-          </div>
-
-          <div className="v2-divider" />
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-            <span className="v2-eyebrow">Overall</span>
-            <span className="v2-num" style={{ fontSize: 20, color: 'var(--acc-coach)' }}>
-              {(a.scores.overall * 100).toFixed(0)}
-            </span>
-          </div>
-
-          <div className="v2-divider" />
-          <Row label="Regression risk" value={`${(a.regressionRisk * 100).toFixed(0)}%`} />
-          <Row label="Assigned by" value={a.assignedBy} />
-        </Card>
-
-        <Card title="What this means" sub="in practice" attrappe={ATTRAPPE}>
-          <div
-            className="v2-col-gap"
-            style={{ gap: 8, fontSize: 11.5, color: 'var(--fg-muted)', lineHeight: 1.55 }}
-          >
-            <div style={{ padding: 10, background: 'var(--surface)', borderRadius: 6 }}>
-              Your coach reviews weekly rather than daily, and only messages you when a trend — not a single day — moves the wrong way.
-            </div>
-            <div style={{ padding: 10, background: 'var(--surface)', borderRadius: 6 }}>
-              You may deviate from the plan without asking, as long as you log why. Level 5 removes the logging requirement.
-            </div>
-          </div>
-        </Card>
-      </div>
-    </div>
+    <Card title="Autonomy">
+      <Empty
+        title="Nicht geladen"
+        sub="Der Autonomie-Stand wurde nicht gelesen — keine Sitzung oder ein Ladefehler."
+        icon="coach"
+      />
+    </Card>
   )
 }
 
