@@ -1,0 +1,56 @@
+{
+  "files_top_level_expected_from_current_tree": 384,
+  "files_recursive_processed": 1251,
+  "top_level_counts": {
+    "crawl_025_ws": 16,
+    "crawl_027_profiles": 37,
+    "crawl_027_ws": 11,
+    "crawl_028_ws": 12,
+    "crawl_029_ws": 22,
+    "crawl_030_ws": 12,
+    "crawl_031_ws": 19,
+    "crawl_032_ws": 30,
+    "crawl_033_ws": 19,
+    "crawl_034_ws": 26,
+    "crawl_035_ws": 19,
+    "crawl_036_ws": 17,
+    "crawl_037_ws": 42,
+    "crawl_038_ws": 102
+  },
+  "recursive_counts": {
+    "crawl_025_ws": 16,
+    "crawl_027_profiles": 37,
+    "crawl_027_ws": 11,
+    "crawl_028_ws": 12,
+    "crawl_029_ws": 22,
+    "crawl_030_ws": 12,
+    "crawl_031_ws": 19,
+    "crawl_032_ws": 30,
+    "crawl_033_ws": 19,
+    "crawl_034_ws": 26,
+    "crawl_035_ws": 19,
+    "crawl_036_ws": 17,
+    "crawl_037_ws": 42,
+    "crawl_038_ws": 969
+  },
+  "comparison_rows": 330397,
+  "states": {
+    "FEHLT": 293559,
+    "UEBERNOMMEN": 13502,
+    "ABWEICHEND": 23336
+  },
+  "crawl_027_ws_A_probe": {
+    "missing_cas": 2,
+    "missing_alias_values": 5,
+    "missing_entities": 1,
+    "missing_entity_names": [
+      "5-Amino-1MQ (NOT in dataset — evaluate)"
+    ],
+    "note": "Die Auftragszahlen 19/37/17 gelten nicht für den aktuellen data/-Stand; die normalisierte Brücke löst mehr Entitäten auf."
+  },
+  "negative_probe": {
+    "mutated_file": "D:\\GitHub\\LumeOS-Claude-V1\\scratchpad\\c260_negative\\A_pubchem_mutiert.json",
+    "pubchem_abweichend_rows": 2,
+    "passed": true
+  }
+}

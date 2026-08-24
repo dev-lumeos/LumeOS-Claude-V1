@@ -1,0 +1,4838 @@
+{
+  "relationships": [
+    {
+      "from": "supplements/peptides/performance_compounds",
+      "to": "aliases",
+      "type": "ENTITY_RESOLUTION",
+      "fields": [
+        "id",
+        "canonical_name",
+        "aliases"
+      ]
+    },
+    {
+      "from": "supplements/peptides/performance_compounds",
+      "to": "lab_markers",
+      "type": "LAB_EFFECT",
+      "fields": [
+        "lab_effects",
+        "lab_marker_ids",
+        "loinc_candidates"
+      ]
+    },
+    {
+      "from": "supplements/peptides/performance_compounds",
+      "to": "warning_rules",
+      "type": "RULE_INPUT",
+      "fields": [
+        "warning_triggers",
+        "platform_classes"
+      ]
+    },
+    {
+      "from": "medication_active_substances",
+      "to": "medication_formulations",
+      "type": "FORMULATION",
+      "fields": [
+        "active_substance_id",
+        "drug_class"
+      ]
+    },
+    {
+      "from": "medication_formulations",
+      "to": "medication_products",
+      "type": "PRODUCT_IDENTITY",
+      "fields": [
+        "formulation_id",
+        "product_id"
+      ]
+    },
+    {
+      "from": "medication_active_substances",
+      "to": "medication_rules",
+      "type": "RULE_INPUT",
+      "fields": [
+        "drug_class",
+        "cyp_profile"
+      ]
+    },
+    {
+      "from": "symptom_biomarker_map",
+      "to": "biomarker_explanations",
+      "type": "OBSERVATION_COMPARISON",
+      "fields": [
+        "symptom_id",
+        "biomarker_id"
+      ]
+    },
+    {
+      "from": "lab_trigger_index",
+      "to": "lab_markers",
+      "type": "ANALYTE_INDEX",
+      "fields": [
+        "analyte",
+        "lab_marker_id"
+      ]
+    },
+    {
+      "from": "sources",
+      "to": "all datasets",
+      "type": "PROVENANCE",
+      "fields": [
+        "source_id",
+        "url",
+        "evidence"
+      ]
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "context_kimiclaw/KIMI_CONTEXT_MANIFEST.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "drug_id"
+      ],
+      "source_file": "crawl_019_remaining_unknowns.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "exposure_id",
+        "pattern_id",
+        "substance_id"
+      ],
+      "source_file": "data/admin/community_exposure_patterns.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "pattern_id"
+      ],
+      "source_file": "data/admin/community_intelligence_patterns.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "lab_pattern_id",
+        "pattern_id"
+      ],
+      "source_file": "data/admin/community_lab_patterns.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "log_id",
+        "thread_or_content_id"
+      ],
+      "source_file": "data/admin/community_longitudinal_logs.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "signal_id"
+      ],
+      "source_file": "data/admin/community_product_quality_signals.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "hypothesis_id"
+      ],
+      "source_file": "data/admin/community_research_hypotheses.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "delta_id"
+      ],
+      "source_file": "data/admin/community_science_delta.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "side_effect_id"
+      ],
+      "source_file": "data/admin/community_side_effect_patterns.jsonl"
+    },
+    {
+      "from": "sources",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "source_id",
+        "thread_or_content_id"
+      ],
+      "source_file": "data/admin/community_sources.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "stack_id"
+      ],
+      "source_file": "data/admin/community_stack_patterns.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "brand_id"
+      ],
+      "source_file": "data/companies/brands.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "manufacturer_id"
+      ],
+      "source_file": "data/companies/manufacturers.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "canonical_id",
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/alias_resolution_candidates.jsonl"
+    },
+    {
+      "from": "biomarker_explanations",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "marker_id"
+      ],
+      "source_file": "data/evidence/biomarker_explanations.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/buddy_capability_map.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/buddy_dependency_graph.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "chr_id",
+        "hypothesis_id"
+      ],
+      "source_file": "data/evidence/community_hypothesis_resolution.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "delta_v2_id",
+        "hypothesis_id",
+        "overlay_of_delta_id"
+      ],
+      "source_file": "data/evidence/community_science_delta_v2.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/conflict_records_crawl_037.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "conflict_id",
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/conflict_records_crawl_038.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/constant_evidence_registry.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/cyp_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/fatigue_signal_evidence.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/formula_evidence_registry.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/human_evidence_flags.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "gap_id"
+      ],
+      "source_file": "data/evidence/knowledge_gap_dependency_map.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "gap_id"
+      ],
+      "source_file": "data/evidence/knowledge_gap_resolution.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "marker_id",
+        "substance_id"
+      ],
+      "source_file": "data/evidence/lab_effects_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/medication_clinical_context_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/medication_pk_enrichment_crawl_038.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/medication_renal_hepatic_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/medication_reproductive_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/medication_transporter_enrichment_crawl_038.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "example_id"
+      ],
+      "source_file": "data/evidence/observation_comparison_flagship_examples.json"
+    },
+    {
+      "from": "schemas",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "schema_id"
+      ],
+      "source_file": "data/evidence/observation_comparison_result_compact_schema.json"
+    },
+    {
+      "from": "schemas",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "schema_id"
+      ],
+      "source_file": "data/evidence/observation_comparison_result_schema.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "schema_id"
+      ],
+      "source_file": "data/evidence/observation_comparison_semantics.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "example_id"
+      ],
+      "source_file": "data/evidence/observation_comparison_synthetic_examples.json"
+    },
+    {
+      "from": "schemas",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "schema_id"
+      ],
+      "source_file": "data/evidence/observation_event_schema.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/pk_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "applicability_id",
+        "endpoint_id",
+        "exposure_id",
+        "synthesis_id"
+      ],
+      "source_file": "data/evidence/population_applicability_atlas.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "applicability_id",
+        "synthesis_id"
+      ],
+      "source_file": "data/evidence/population_applicability_compact.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "endpoint_id",
+        "exposure_id",
+        "local_id",
+        "marker_id",
+        "proposed_id",
+        "relationship_id"
+      ],
+      "source_file": "data/evidence/population_response_atlas.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "by_endpoint_id",
+        "by_exposure_id",
+        "by_marker_id"
+      ],
+      "source_file": "data/evidence/population_response_index.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "endpoint_id",
+        "exposure_id",
+        "synthesis_id"
+      ],
+      "source_file": "data/evidence/population_response_synthesis.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "compact_id",
+        "endpoint_id",
+        "exposure_id",
+        "synthesis_id"
+      ],
+      "source_file": "data/evidence/population_response_synthesis_compact.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/pregnancy_sex_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "product_id"
+      ],
+      "source_file": "data/evidence/product_identifier_candidates.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/recovery_modality_evidence.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "record_id"
+      ],
+      "source_file": "data/evidence/regulatory.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/research_hold_registry.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "affects_relationship_id",
+        "confounder_id",
+        "endpoint_id",
+        "relationship_synthesis_id"
+      ],
+      "source_file": "data/evidence/response_confounder_graph.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "modifier_id",
+        "relationship_synthesis_id"
+      ],
+      "source_file": "data/evidence/response_modifier_graph.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "study_id"
+      ],
+      "source_file": "data/evidence/studies.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/supplement_dosing_enrichment.jsonl"
+    },
+    {
+      "from": "symptom_biomarker_map",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "edge_id",
+        "marker_id",
+        "symptom_id"
+      ],
+      "source_file": "data/evidence/symptom_biomarker_map.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/symptom_ontology_seed.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/thai_legal_glossary.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/thailand_medication_regulatory_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "product_id"
+      ],
+      "source_file": "data/evidence/thailand_product_regulatory_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/thailand_regulatory_enrichment.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "data/evidence/training_structure_registry.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/transporter_enrichment.jsonl"
+    },
+    {
+      "from": "schemas",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "task_id"
+      ],
+      "source_file": "data/evidence/vision_learning_example_schema.json"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/wada_enrichment_crawl_038.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id",
+        "entity_id"
+      ],
+      "source_file": "data/evidence/wada_status_enrichment.jsonl"
+    },
+    {
+      "from": "medication_formulations",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "active_substance_id",
+        "source_id"
+      ],
+      "source_file": "data/medications/medication_formulations.jsonl"
+    },
+    {
+      "from": "medication_products",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "formulation_id",
+        "source_id"
+      ],
+      "source_file": "data/medications/medication_products.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "active_substance_id"
+      ],
+      "source_file": "data/medications/medication_regulatory.jsonl"
+    },
+    {
+      "from": "tools_tests",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "drug_id"
+      ],
+      "source_file": "data/metadata/crawl_020_dpd_lookups.jsonl"
+    },
+    {
+      "from": "sources",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "source_id"
+      ],
+      "source_file": "data/metadata/sources.jsonl"
+    },
+    {
+      "from": "medication_products",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "identifier_id",
+        "product_id"
+      ],
+      "source_file": "data/products/product_identifiers.jsonl"
+    },
+    {
+      "from": "medication_products",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "media_id",
+        "product_id"
+      ],
+      "source_file": "data/products/product_media.jsonl"
+    },
+    {
+      "from": "medication_products",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "product_id"
+      ],
+      "source_file": "data/products/products.jsonl"
+    },
+    {
+      "from": "conflicts",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "substance_id"
+      ],
+      "source_file": "reports/crawl_023_conflicts.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "substance_id"
+      ],
+      "source_file": "reports/crawl_023_remaining_missing_inputs.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "substance_id"
+      ],
+      "source_file": "reports/crawl_024_high_value_remaining.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "substance_id"
+      ],
+      "source_file": "reports/crawl_024_remaining_missing_inputs.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "substance_id"
+      ],
+      "source_file": "reports/crawl_024_research_dead_ends.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_025_constant_inventory.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_025_quality_dashboard.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_025_repo_dependencies.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_025_repo_handoff.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_025_summary.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026_candidate_queue.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_buddy_readiness.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_candidate_triage.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_desktop_backlog.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_future_research_queue.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_master_triage.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_nutrient_horizon_reconciliation.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_platform_gap_map.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_QA1_consistency.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_QA2_scope_audit.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026A_registry_consistency_audit.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026B_candidate_results.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026B_context_consistency.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_026B_future_research_queue.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "candidate_id"
+      ],
+      "source_file": "reports/crawl_026B_r1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "candidate_id"
+      ],
+      "source_file": "reports/crawl_026B_r2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "candidate_id"
+      ],
+      "source_file": "reports/crawl_026B_r3.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "candidate_id"
+      ],
+      "source_file": "reports/crawl_026B_r4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "exposure_id",
+        "local_id",
+        "marker_id",
+        "proposed_id",
+        "relationship_id"
+      ],
+      "source_file": "reports/crawl_029_ws/_atlas_backup_pre_merge.jsonl"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "task_id"
+      ],
+      "source_file": "reports/crawl_030_summary.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "exposure_id",
+        "local_id",
+        "marker_id",
+        "proposed_id",
+        "relationship_id"
+      ],
+      "source_file": "reports/crawl_030_ws/_atlas_backup_pre_merge.jsonl"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "task_id"
+      ],
+      "source_file": "reports/crawl_031_ws/J_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_032_ws/QA3_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_1_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_1_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_2_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_2_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_2_reverification2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_3_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_4_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_5_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_033_ws/QA_5_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_1_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_1_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_1_reverification2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_2_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_2_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_2_reverification2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_3_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_3_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_3_reverification2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_4_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_4_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_4_reverification2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_034_ws/QA_5_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "task_id"
+      ],
+      "source_file": "reports/crawl_035_ws/I_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_035_ws/QA_5_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_035_ws/QA_5_reverification.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_036_ws/QA_2_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_036_ws/QA_5_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_037_ws/C_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "gap_id"
+      ],
+      "source_file": "reports/crawl_037_ws/F_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "gap_id"
+      ],
+      "source_file": "reports/crawl_037_ws/H_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "gap_id"
+      ],
+      "source_file": "reports/crawl_037_ws/I_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "kgap_id"
+      ],
+      "source_file": "reports/crawl_037_ws/L_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "task_id"
+      ],
+      "source_file": "reports/crawl_037_ws/QA_3_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_pk_A.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_pk_B.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_pk_C.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_renal_hepatic.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_repro.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_th_meds.json"
+    },
+    {
+      "from": "medication_products",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_th_products.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/_queue_transporters.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/A_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_02f180f686.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_053c635cae.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_0620960e30.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_08f28bba29.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_09c785005a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_0c9e6c673a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_0dbb6d96ae.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_1160c7d6dd.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_130d0b7b2d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_17ecb0455b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_196b5a38f2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_1e85826851.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_1f01b813b0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_208435ce8e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_212af2ba08.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2182fe9659.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_24947e188c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_24c7aa710b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_250c6c9573.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_25139b196c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_25de0bd671.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_263e7126cd.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_269fb7aa5f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_26b2aa395a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2a0662ed2c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2ae145a7f4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2d0b52fcad.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2e8662a0a5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2e8a8b1c91.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2f0b4b0286.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_2fb9e0f3e3.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_318804a7a8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_3259b4ec96.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_35bdcd69a9.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_35d4cdebb4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_35ec91e2b7.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_37fd05ebd0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_3a482f0e08.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_3af59d6ce0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_3b3c8aa26a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_3c2aad784a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_3de0604503.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_40ca83c225.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_41a715b733.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4212cc2ca2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4331bb9dab.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_43cf10e84f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_49195fd3cc.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_49aa6d4dba.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_49c9d963f1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_49cfe62165.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_49f4783737.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4c19e63637.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4d7b03295e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4dd3ca88e5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4e96e9354c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4ee334e955.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_4f11489453.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_503a274bc9.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_523296bb49.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_52b1ce26b4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_553de2aa69.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_554b9d23c4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_5813633807.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_59b3bfccb9.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_5c03f6ecab.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_5d068b66d1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_61ef0be7fc.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_620fb692d2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_6449e2faa8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_64a709982f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_657f9ac699.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_65f6d502c3.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_662d78825e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_67b492da7a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_68233cef8a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_6b32c3323d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_6c4676d32f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_6c48ce0a41.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_6c67c3fc21.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_6eb71223e1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_6ec7d05af4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_704f96a0b0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_71abb1bafa.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_7378d68f7b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_75a0aa52ec.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_762a6f3bfc.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_77871dda52.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_77a855e484.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_77b00f1ffd.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_79148e0d94.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_79bd426446.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_7f7f1c4031.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_82908d531f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8357578c9e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_83a54b64c4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8412123813.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_84c85843e0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_860cb065ed.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8858a1ecba.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_89b62ca048.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_89e89ba9f8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8a40a0dfa6.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8c4cf6e760.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8ce9acb581.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8d701e4538.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8edb6b566e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_8f6c0fc270.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_92a8482b33.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_934f11095e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_97aa81b072.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_9a03eab80e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_9b962cf7aa.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_9ff5b27703.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_a1ae178fa1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_a43f6802b7.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_a6b8d03c4e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_aa5a3a1050.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ab037f18f8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ab67c2d685.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_abfb98258f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_aca76f3ea0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ad26cc8f75.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ae047b6255.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_afbf494dfd.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_b0dbfd5877.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_b363d22067.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_b6ae9e976d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_b73971c578.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_b772211d03.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_bb81ad804f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_bda157491e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_bdec43a6ca.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_be0c0d1774.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c0aa2c82df.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c4163b2fcf.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c53aa1d5c9.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c57403a998.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c62fbfac4a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c6c5108232.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c8d3cb131f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_c977daa58e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ca5b04492c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_cd3082ad90.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_cec06bf919.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_d09cccba77.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_d19a7f1be1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_d3f97755c7.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_d51291e7d6.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_d74e5274a4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_d981a3def1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_deb77d0846.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e0e0e6e86f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e1968616f2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e29a04e430.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e4c758c9b7.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e5793fdcc6.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e6669ba1a8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e7eb4695bb.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e821736c51.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e8c13f9d2e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e8fd0bad76.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_e941c21933.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_eca797c882.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ece3fb7769.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ee6aef82d4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_ef3ed14123.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f154bd211d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f3b7d449c5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f3cb4443eb.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f5142a9150.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f5909c7ad4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f5c5ce9df2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f5ce31cc56.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f5d86d8144.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_f8acb6da6d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_fb49962b0e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_cache/drug_fb56241e3f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/B_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_00a567f324.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_011293f685.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_021aabc019.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_0317fd8a77.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_032a5ab10e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_03c9e85888.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_06554a7bd7.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_0711e3860f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_078ce846d2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_08bd329957.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_0a73e2cdb5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_0f2e7f8a98.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_0f6c1ab6ac.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_0f922d986f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_12aa7d793e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_174589f089.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_188291620a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_18b3f30f6b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_18e338a167.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_19af5266ae.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_1e8547b4b0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_1f7ef40599.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_20b430fb36.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_211825d328.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_21e8022def.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_226b96664a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_23accbd540.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_24fcd706d8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_2589c6d005.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_2636c504f0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_26384c9561.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_29e1e1d50e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_2a611114cf.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_2e5fc8a9ad.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_2eb1a0d693.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_2eed486621.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_341bea3abc.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_352ebf6da6.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_3549b5131c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_39cfa1ab91.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_3a90ae4621.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_3c7a2fbfe8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_3c9842727a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_3d0b6459bf.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_41f2041989.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_4260ee932f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_43e51fcd2c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_441268056c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_44c7a11516.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_4891a12d1d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_492b2a03e0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_495328aa18.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_4a09b3a855.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_4a35c8257a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_4c5f34f621.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_4c5fea53e5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_4dfc171548.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_51a1858774.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_5273638344.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_5471bbbf1d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_565a44f984.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_599a759df3.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_5c60b262e5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_5d37fdd733.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_5eea267ce9.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_605cde6e0c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_6749dd2045.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_682253f589.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_682a1ddf5b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_68d26dc47f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_6a99a26f93.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_6ac0a70696.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_6ca8d2588c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_6cb2f377b2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_6eb0e6cf13.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_7320f4712a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_738d8f8181.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_74546d3df6.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_74608442c0.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_74ba892c89.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_79288ddf30.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_79ae94a653.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_7c32e44032.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_7eea12adb9.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_80dc81eb05.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_82238441d3.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_8244724f36.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_8411b8ae56.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_859f56405b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_8bee5a774c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_8e7425bc16.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_90e853487b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_9116f3c498.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_9123533688.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_9343b16c3f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_945c27f253.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_975c71538d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_9800c2a4e1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_98870ff403.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_98dff93ef4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_9a0f8358ed.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_9aaa699851.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_9d6bde1dfd.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_a28a8b9246.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_a2d91e093e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_a361de1944.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_a5ff882e5d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_a7807e8cde.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_a8f77fd730.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_a92227a0fd.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_aadf96044a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_abd77ac472.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_af63cad6f5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_b14c9bc01e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_b18429be52.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_b2aa5e1260.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_b9b0d2ae38.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_bd13d160b9.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_bd1b116037.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_bf231354a4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_bfd5b224ff.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_c2e2a9f124.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_c3b7f4a4f4.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_c5105f0691.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_c86a6a74c5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_c875743593.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_c94bc6fd14.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_caf11dfcb6.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_caf96fcfbc.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_cc4103625c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_cd0c0df016.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_cd70f62eba.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_ce72f1be56.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_ce958550f1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_cf52609f87.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d115286718.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d4295132ac.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d42c588c61.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d57b2e6eaf.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d5a31a5bcb.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d674db7613.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d6e2820059.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_d978b4ff1b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_da59da21a3.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_dbbdc61367.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_dd101c20a1.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_de065403a5.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_de20ded3cd.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_e097b6538d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_e4599fe332.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_e50528a9d8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_e623f94c6d.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_e8a14b391f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_e96c42e338.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_eb06ae2e4c.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_ee78ab0551.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_ef20de0296.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f345212191.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f3d7f78d75.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f45178103e.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f581e4f410.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f5b6c14867.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f711746e5f.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f75cd423a2.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f783d65d65.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f9db4716a8.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_f9ebf1876b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_fa19b07e43.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_fa21da206b.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_fa78423c82.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_fd6d68495a.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_cache/drug_ff64aea812.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_digest.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/C_unresolvable.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/D_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/E_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/F_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/G_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/H_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/I_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/INTEGRATION_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/J_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/K_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/L_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id",
+        "set_id",
+        "spl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/label_cache.jsonl"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "entity_id"
+      ],
+      "source_file": "reports/crawl_038_ws/qa2_fix_log.jsonl"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/QA2_FIX_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "qa_id"
+      ],
+      "source_file": "reports/crawl_038_ws/QA_3_result.json"
+    },
+    {
+      "from": "reports_docs",
+      "to": "referenced datasets",
+      "type": "FK_LIKE",
+      "fields": [
+        "crawl_id"
+      ],
+      "source_file": "reports/crawl_038_ws/QA_5_result.json"
+    }
+  ]
+}

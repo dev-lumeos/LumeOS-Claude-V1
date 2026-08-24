@@ -1,0 +1,16 @@
+[
+  {
+    "file": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\kimi-research\\Kimi_Agent\\supplement_performance_database\\reports\\crawl_032_ws\\_apps_final.json",
+    "error": "Extra data: line 2 column 1 (char 2169)",
+    "attempts": 1,
+    "reason": "content analysis failed",
+    "recommended_next_action": "Inspect encoding/schema manually."
+  },
+  {
+    "file": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\kimi-research\\Kimi_Agent\\supplement_performance_database\\reports\\crawl_032_ws\\_apps_stage2.json",
+    "error": "Extra data: line 2 column 1 (char 2167)",
+    "attempts": 1,
+    "reason": "content analysis failed",
+    "recommended_next_action": "Inspect encoding/schema manually."
+  }
+]

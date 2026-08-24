@@ -277,3 +277,4 @@ wenn er erzeugt und geprüft wird.
 | **C-258** Die Nutzertexte sind Schablonen — und 248 Substanzen | offen | 5728 |
 | **C-259** Kimis Bestand ist weit groesser als angenommen — und der | offen | 5802 |
 | **C-260** Die Arbeitsberichte sind nicht in die Daten | offen | 5930 |
+| **C-261** Der Abgleich aus C-260 ist ungefiltert nicht benutzbar | offen | 5970 |

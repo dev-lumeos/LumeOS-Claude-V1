@@ -1,0 +1,32 @@
+{
+  "FILES_DISCOVERED": 10030,
+  "FILES_PROCESSED": 2022,
+  "FILES_DUPLICATE": 3834,
+  "FILES_BINARY_METADATA_ONLY": 4165,
+  "FILES_UNPROCESSABLE": 0,
+  "FILES_ERROR": 9,
+  "FILES_UNACCOUNTED": 0,
+  "DATASETS_DISCOVERED": 25,
+  "CANONICAL_ENTITIES": 129193,
+  "RELATIONSHIPS_DISCOVERED": 529,
+  "CONFLICTS": 32,
+  "READY_TO_IMPORT": 0,
+  "READY_WITH_NORMALIZATION": 12,
+  "SCHEMA_REQUIRED": 3,
+  "RUNTIME_REQUIRED": 0,
+  "ADMIN_ONLY": 0,
+  "REFERENCE_ONLY": 5,
+  "PROVENANCE_ONLY": 4,
+  "INVARIANT": "PASS",
+  "MANIFEST_FILES": [
+    "D:\\GitHub\\LumeOS-Claude-V1\\docs\\kimi-ingestion\\analysis\\KIMI_FILE_MANIFEST.jsonl"
+  ]
+}
+D:\GitHub\LumeOS-Claude-V1\backup\kimi-research\Kimi_Agent\lumeos_ingestion_analysis\run_exhaustive_ingestion.py:583: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "started_at": datetime.utcnow().isoformat() + "Z",
+D:\GitHub\LumeOS-Claude-V1\backup\kimi-research\Kimi_Agent\lumeos_ingestion_analysis\run_exhaustive_ingestion.py:919: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  "generated_at": datetime.utcnow().isoformat() + "Z",
+D:\GitHub\LumeOS-Claude-V1\backup\kimi-research\Kimi_Agent\lumeos_ingestion_analysis\run_exhaustive_ingestion.py:788: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  write_json(DATASET_JSON, {"generated_at": datetime.utcnow().isoformat() + "Z", "datasets": datasets})
+D:\GitHub\LumeOS-Claude-V1\backup\kimi-research\Kimi_Agent\lumeos_ingestion_analysis\run_exhaustive_ingestion.py:819: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  checkpoint.update({"completed_at": datetime.utcnow().isoformat() + "Z", **final})

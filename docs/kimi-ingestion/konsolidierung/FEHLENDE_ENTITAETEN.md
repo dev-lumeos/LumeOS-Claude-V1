@@ -1,0 +1,1264 @@
+# Fehlende Entitäten
+
+- `% Fettmasse (unabhaengiger Praediktor)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `'Fragment 177-191' / AOD`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `'KPV' (Lys-Pro-Val) / alpha-MSH(11-13)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `'LGD Flu' (Symptom-Communityterm)`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `'My mind pretty much went to mush': A qualitative exploration of trenbolone in the performance and image enhancing drug community`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `'Thymosin beta-4 fragment 17-23' / Ac-LKKTETQ`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `'Tren of SARMs' (S-23 Community-Beiname)`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `1-DHEA / 1-Androsterone`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `17aa`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `17aa/oral vs. injizierbar (dominanter Modifikator des HDL-Effekts)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `17beta-trenbolone, an anabolic-androgenic steroid as well as an environmental hormone, contributes to neurodegeneration`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `19-nor`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `4-DHEA / 4-Androstenediol`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `4-hydroxycyclophosphamide / aldophosphamide`: 1 Datei(en), z.B. crawl_038_ws/C_batch_19.json
+- `4-oxo-isotretinoin`: 1 Datei(en), z.B. crawl_038_ws/C_batch_10.json
+- `5-Amino-1MQ`: 5 Datei(en), z.B. crawl_027_ws/B.json, crawl_027_ws/C.json, crawl_027_ws/E.json, crawl_027_ws/H.json, crawl_027_ws/J.json
+- `5-Amino-1MQ (NOT in dataset — evaluate)`: 6 Datei(en), z.B. crawl_027_profiles/5_Amino_1MQ_NOT_in_dataset_evaluate.json, crawl_027_ws/A.json, crawl_027_ws/D.json, crawl_027_ws/F.json, crawl_027_ws/G.json
+- `5-hydroxymethyl tolterodine`: 1 Datei(en), z.B. crawl_038_ws/C_batch_23.json
+- `7 Symptom-Synthesen ohne Ascertainment-Hinweis`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `A better way to determine the acute:chronic workload ratio?`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `A cherry, ripe for picking: the relationship between the acute-chronic workload ratio and health problems`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `A first-in-human, randomized, double-blind, placebo-controlled, single- and multiple-dose escalation study of thymosin beta4 (RGN-352) in healthy volunteers`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `A gene expression signature of emphysema-related lung destruction and its reversal by the tripeptide GHK (Campbell)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `A hormonal side effect of anabolic steroids among a sample of Baghdad male bodybuilders`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `A hot topic for health: Results of the Global Sauna Survey`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `A meta-analysis of periodized versus nonperiodized strength and power training programs`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `A multidisciplinary approach to overreaching detection in endurance trained athletes`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `A new approach to monitoring exercise training`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `A planned 1-week deload vs continuous resistance training`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `A review of resistance training-induced changes in skeletal muscle protein synthesis and their contribution to hypertrophy`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `A systematic review of waist-to-height ratio as a screening tool for the prediction of cardiovascular disease and diabetes: 0.5 could be a suitable global boundary value`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `AAS (supraphysiologischer Eigenkonsum, nicht-kontrollierte Population)`: 4 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `AAS -> ApoB spezifisch`: 1 Datei(en), z.B. crawl_028_ws/A_hormonal.json
+- `ACE-Hemmer/ARBs (class)`: 10 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `AI`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `ANTI DIARRHEAL (LOPERAMIDE HCL) TABLET, FILM COATED [CVS PHARMACY]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `AOD-9604 fat-loss use persisting despite failed obesity RCT program (folklore carrier)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `ARGATROBAN INJECTION [PAR HEALTH USA, LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `ATOMOXETINE HYDROCHLORIDE CAPSULE [APOTEX CORP.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `AUDIT_coverage_before`: 1 Datei(en), z.B. crawl_037_ws/AUDIT_coverage_before.json
+- `AUDIT_result`: 1 Datei(en), z.B. crawl_037_ws/AUDIT_result.json
+- `A_result`: 3 Datei(en), z.B. crawl_032_ws/A_result.json, crawl_033_ws/A_result.json, crawl_035_ws/A_result.json
+- `Absetzen von Levothyroxin (Langzeit-Suppressionstherapie)`: 10 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Absetzen von Liothyronin (T3-Entzug)`: 10 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Achilles detachment in rat and stable gastric pentadecapeptide BPC 157: promoted tendon-to-bone healing (Krivic et al.)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Acne`: 1 Datei(en), z.B. crawl_030_ws/A_result.json
+- `Activation of the GH/IGF-1 axis by CJC-1295 results in serum protein profile changes in normal adult subjects (Sackmann-Sala et al.)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Acute effects of muscle stretching on physical performance, range of motion, and injury incidence in healthy active individuals: a systematic review`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Acute:Chronic Workload Ratio: Conceptual Issues and Fundamental Pitfalls`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Adaptive significance of female physical attractiveness: role of waist-to-hip ratio (Singh)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Adhärenz/Therapieabbruch`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Adipoese Population (volumetrische Verduennung von 25(OH)D)`: 1 Datei(en), z.B. crawl_029_ws/D_result.json
+- `Adipositas (Sequestrierung in Fettdepots / Verteilungsvolumen)`: 1 Datei(en), z.B. crawl_029_ws/D_result.json
+- `Administering Vaccines: Dose, Route, Site, and Needle Size (P3085)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Adunsky et al. 2011, Arch Gerontol Geriatr (Phase-IIb Hueftfraktur, n=123)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Advance Insulin Injection Technique and Education With FITTER Forward Expert Recommendations`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Aguirre et al., Bone and body composition response to testosterone therapy vary according to polymorphisms in the CYP19A1 gene (Endocrine 2019)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Akute Schlafdeprivation (36 h ohne Schlaf)`: 6 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Akute Schlafdeprivation (erste Nachthaelfte entzogen)`: 1 Datei(en), z.B. crawl_030_ws/G_result.json
+- `Akute Schlafdeprivation/-restriktion (<=6 h Schlaf in 24 h vor Belastung)`: 5 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_sleep.json
+- `Akute partielle Schlafrestriktion (1 Nacht 4 h, 02:00-06:00)`: 6 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Aldactone`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `Aldifen / Chemox / Dinosan / Dnoc / Solfo Black`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `Alter`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Alter (60-81 J., eingeschränkte Baseline-Insulinsensitivität)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Alter (Kinder vs. Erwachsene)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Alter (hoehere Aromatisation, E2 on-treatment 46,6 vs 28,9 pg/ml alt vs jung, adjustiert)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Alter (reduziert FFM-Zuwachs, -0.01 kg/Jahr, p=0.002)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Alter (staerkere Erythropoese; DSMB stoppte 600-mg-Arm bei Aelteren; keine jungen Maenner >54% Hct auch bei 600 mg)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Alter/Körpergewicht`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `American College of Sports Medicine position stand. Progression models in resistance training for healthy adults`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `Amoxicillin 500 mg capsules`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `An Evidence-Based Approach for Choosing Post-exercise Recovery Techniques to Reduce Markers of Muscle Damage, Soreness, Fatigue, and Inflammation`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Anabol-androgene Steroide (Klasse, ueberwiegend orale 17aa vs. injizierbare Ester)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Anastrozol (1 mg/Tag oral, aeltere Maenner mit niedrig-normalem T)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Anastrozol (1 mg/Tag, Monotherapie, aeltere Maenner) — Lipide/Knochenmarker`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Anastrozol 1 mg/d blockiert E2-Anstieg nahezu komplett trotz gleicher/hoeherer T-Level`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Anastrozole product monographs (Health Canada/FDA-Label): Dose-response 0.5-10 mg/d in postmenopausal women; >80% E2 suppression at 1 mg/d`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Anxiety / nervousness`: 1 Datei(en), z.B. crawl_030_ws/D_result.json
+- `Application of the Repetitions in Reserve-Based Rating of Perceived Exertion Scale for Resistance Training`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Appropriate body-mass index for Asian populations and its implications for policy and intervention strategies`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Ask the Experts: Administering Vaccines - General Issues (aspiration not recommended)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Assessment of Renal Function of Bodybuilders Using Anabolic Androgenic Steroids and Diet Supplements`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Association between sauna bathing and fatal cardiovascular and all-cause mortality events (KIHD cohort)`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Atorvastatin 80 mg (STOMP)`: 11 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/E_result.json
+- `Ausgangs-HF/Sympathikustonus`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Ayinde et al. 2021 (korrigierte Meta-Analyse: SMD -0.20 [-0.41, 0.01], I2=0%, nicht signifikant)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Ayinde et al. systematic review (referenziert Leakage-Reduktion durch Z-track)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `B`: 1 Datei(en), z.B. crawl_025_ws/B.md
+- `B12 deficiency severity and baseline MCV`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `BIVALIRUDIN INJECTION, SOLUTION [PAR HEALTH USA, LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `BMI (starker unabhängiger BP-Prädiktor)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `BPC-157 onset narrative: '2-4 weeks to feel it, 8-12 weeks to judge it'`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `BPC-157 subcutaneous injection for tendon/ligament/joint injury healing`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `BUPRENORPHINE HYDROCHLORIDE AND NALOXONE HYDROCHLORIDE DIHYDRATE TABLET [REMEDYREPACK INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `BUPROPION HYDROCHLORIDE (XL) (BUPROPION HYDROCHLORIDE) TABLET, FILM COATED, EXTENDED RELEASE [REMEDYREPACK INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `BV data for lipid cardiovascular risk biomarkers, BIVAC systematic review (Diaz-Garzon et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `BV estimates of thyroid-related measurands, BIVAC meta-analysis`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `B_result`: 4 Datei(en), z.B. crawl_032_ws/B_result.json, crawl_033_ws/B_result.json, crawl_035_ws/B_result.json, crawl_037_ws/B_result.json
+- `Basal-HbA1c, Hintergrund-Metformin`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Basal-TSH vor Protokoll (Prädiktor der Zielerreichung)`: 1 Datei(en), z.B. crawl_029_ws/C_result.json
+- `Basaria et al. 2013, J Gerontol A (LGD-4033 Phase-1, 21 Tage)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Baseline-25(OH)D bei Adipoesen signifikant niedriger, PTH hoeher (Baseline-Abhaengigkeit)`: 1 Datei(en), z.B. crawl_029_ws/D_result.json
+- `Baseline-ApoB`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-FPG/HbA1c`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-FSH (untere Haelfte des Normbereichs -> besseres Ansprechen)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Baseline-Gewicht/eGFR`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-HbA1c`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-Hypertonie (dominanter Effekt-Modifikator)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Baseline-LDL-C (höherer Ausgangswert → größere absolute Reduktion)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-LH (>=17 IU/l -> attenuierte T/E2-Antwort; Primaergonadopathie)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Baseline-Proteinzufuhr (Breakpoint 1.62 g/kg/d)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Baseline-RR`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-RR (höherer Ausgangs-RR → größere absolute Senkung)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-Schweregrad`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-Schweregrad (moderiert gemessenen Effekt)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Baseline-Spermiendichte`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Baseline-TSH (Grad der Hypothyreose) bestimmt TSH-Delta und Zeit bis Euthyreose`: 1 Datei(en), z.B. crawl_029_ws/C_result.json
+- `Beetroot juice / dietary nitrate (~0.5 L/day beetroot juice, ~5-8 mmol nitrate, 4-6 days)`: 5 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `Begleitender Gewichtsverlust (partiell mediation)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Behandlung der Hyperthyreose (Thionamide / Radioiod / Thyreoidektomie, ggf. anschliessende LT4-Substitution)`: 6 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Behandlung der Hyperthyreose bzw. Hypothyreose (Langzeit-Verlauf unter Substitution)`: 1 Datei(en), z.B. crawl_030_ws/C_result.json
+- `Behandlungsdauer, Ethnizitaet, Baseline-Fertilitaet`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Behandlungsdauer/Adaptation`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Behandlungsdauer/Adaptation (früher Anstieg, Abflachen über Monate)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Bestehende Lebererkrankung/MASLD-Transaminasen-Fluktuation`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Beta-alanine (oral, 3.2-6.4 g/day, >=4 weeks)`: 5 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `Beta-alanine (oral, acute doses >=800 mg; chronic split dosing 3.2-6.4 g/day)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Betablocker (class)`: 11 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/E_result.json
+- `Betablocker (class, z. B. Metoprolol, Bisoprolol)`: 5 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Betablocker (class, z. B. Metoprolol, Bisoprolol, Propranolol)`: 6 Datei(en), z.B. crawl_030_ws/E_result.json, crawl_031_ws/C_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Bhasin et al. 2001, Am J Physiol Endocrinol Metab 281:E1172-81`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Bhasin et al. 2005 (aeltere Maenner, gleiche Dosen)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Bhasin et al. 2012, JAMA 307(9):931-9 (TE + Dutasterid)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Bhasin et al., Older men are as responsive as young men to the anabolic effects of graded doses of testosterone on the skeletal muscle (JCEM 2005)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Bhasin et al., Testosterone dose-response relationships in healthy young men (Am J Physiol Endocrinol Metab 2001)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Bilaterale Nierenarterienstenose`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Biological Variation Data Critical Appraisal Checklist (BIVAC) (Aarsand et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Biological variation: effect of different distributions on CVi and RCV (Roraas et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Biotin (Supplement) — Assay-Interferenz bei Schilddrüsen-Tests`: 9 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Bisoprolol 5 mg`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `Body image and the golden ratio: marketing origin of 'Adonis Index' program`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Borecki et al., Impact of trenbolone on selected organs (Endokrynol Pol 2024) — Review; PR-Bindung, Gynaekomastie-Mechanismen`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Bremelanotide / Vyleesi`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Bringing of health products into the Kingdom of Thailand`: 1 Datei(en), z.B. crawl_037_ws/G_result.json
+- `Building the Classic Physique the Natural Way`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `CAS 863288-34-0 (doppelt: sub_18fdc6c754 + sub_74cb0c22b1)`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `CDC Injection Safety (Safe Injection Practices)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `CELEXA (CITALOPRAM) TABLET, FILM COATED [ALLERGAN, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `CJC / CJC-1295 (unqualified)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `CJC no DAC / CJC-1295 w/o DAC / Mod GRF / Mod GRF 1-29 / tetrasubstituted GRF 1-29`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `CJC-1293 (Alias in sub_55820f027f)`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `CJC-1295 / CJC-DAC / no-DAC / Mod GRF 1-29 naming chaos (terminology audit)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `CJC-1295 WITH DAC: weekly cadence + water-retention/carpal-tunnel side-effect pattern`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `CKD-Stadium`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `CKD/eGFR`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `CODEINE SULFATE TABLET [LANNETT COMPANY, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `CYP2C9-Genotyp (*2/*3)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `CYP2D6-Metabolisierer-Status (Metoprolol)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `C_batch_01`: 1 Datei(en), z.B. crawl_038_ws/C_batch_01.json
+- `C_batch_05`: 1 Datei(en), z.B. crawl_038_ws/C_batch_05.json
+- `C_batch_07`: 1 Datei(en), z.B. crawl_038_ws/C_batch_07.json
+- `C_batch_08`: 1 Datei(en), z.B. crawl_038_ws/C_batch_08.json
+- `C_batch_12`: 1 Datei(en), z.B. crawl_038_ws/C_batch_12.json
+- `C_batch_13`: 1 Datei(en), z.B. crawl_038_ws/C_batch_13.json
+- `C_batch_14`: 1 Datei(en), z.B. crawl_038_ws/C_batch_14.json
+- `C_batch_16`: 1 Datei(en), z.B. crawl_038_ws/C_batch_16.json
+- `C_batch_20`: 1 Datei(en), z.B. crawl_038_ws/C_batch_20.json
+- `C_batch_27`: 1 Datei(en), z.B. crawl_038_ws/C_batch_27.json
+- `C_result`: 3 Datei(en), z.B. crawl_032_ws/C_result.json, crawl_033_ws/C_result.json, crawl_035_ws/C_result.json
+- `C_unresolvable`: 1 Datei(en), z.B. crawl_038_ws/C_unresolvable.json
+- `Cabergoline US Prescribing Information (Greenstone/Pfizer) — Boxed Warnings: cardiac valvulopathy, fibrotic reactions, impulse control disorders`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Caffeine (acute oral dose, 400 mg; timing manipulation 0/3/6 h pre-bedtime)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Caffeine (acute oral, >=200 mg or coffee equivalent)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Caffeine (acute ~6 mg/kg) stratified by CYP1A2 rs762551 genotype`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Caffeine (chronic intake, caffeine-only trial arms, ~200-400 mg/day)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Caffeine (chronic low dose ~1.5-3 mg/kg/day, 20+ days, then acute pre-exercise dose)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/E_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Caffeine (oral, acute, ~3-6 mg/kg pre-exercise)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/E_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Caffeine (oral, acute, ~3-6 mg/kg)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Calcium (acute, meal-level)`: 10 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/D_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Calcium (as calcium carbonate, chronic with meals)`: 5 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/D_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Calciumcarbonat-Koadministration zu Levothyroxin`: 9 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Calculating acute:chronic workload ratios using exponentially weighted moving averages provides a more sensitive indicator of injury likelihood than rolling averages`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Can Compression Garments Reduce the Deleterious Effects of Physical Exercise on Muscle Strength? A Systematic Review and Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Carotenoids / phytochemicals evidence reviews`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Carpal tunnel symptoms`: 1 Datei(en), z.B. crawl_030_ws/B_result.json
+- `Central fatness and risk of all cause mortality: systematic review and dose-response meta-analysis of 72 prospective cohort studies`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Chemical agents and peptides affect hair growth (Uno & Kurata, J Invest Dermatol; macaque/mouse copper-peptide follicle data)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Chronische Schlafrestriktion (4 h oder 6 h Bettzeit/Nacht, 14 Naechte)`: 1 Datei(en), z.B. crawl_030_ws/G_result.json
+- `Chronizität/Komorbidität`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Clenbuterol (oral, humane Studie bei Athleten/Trainierten)`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Clenbuterol (oral, therapeutische Dosen)`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Clenbuterol (oral, therapeutische bronchodilatorische Dosen 20-40 ug/Tag)`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Clinical Procedures for Safer Patient Care ('lack of strong evidence to support aspiration with IM injections')`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Clinical Procedures for Safer Patient Care (7.4 Intramuscular Injections)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Clinical Procedures for Safer Patient Care (Injection chapters)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Clinical Procedures for Safer Patient Care (Z-track: 'some research shows reduced pain... other research shows more pain and bleeding')`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `ClinicalTrials.gov NCT02637284: Phase I, Safety/PK of PCO-02 (BPC-157), PharmaCotherapia d.o.o.; registriert 2015, Status 'unknown'/abgebrochen, keine Ergebnisse publiziert`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `ClinicalTrials.gov NCT07437547: BPC 157 for Acute Hamstring Muscle Strain Repair (Phase 2, randomisiert, doppelblind, plazebokontrolliert, n=120; registriert, keine Ergebnisse)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Clomiphencitrat (SERM, off-label Maenner mit sekundaerem Hypogonadismus)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Coaches' Perceptions of Common Planning Concepts Within Training Theory: An International Survey`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Cold water immersion attenuates anabolic signaling and skeletal muscle fiber hypertrophy, but not strength gain, during resistance training`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Cold-water immersion (10-15°C, ~10-15 min, post-exercise)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `Cold-water immersion post resistance training (chronisch, ueber Wochen)`: 1 Datei(en), z.B. crawl_030_ws/H_result.json
+- `Community lab-monitoring practice for GH-axis peptides (IGF-1, glucose, HbA1c)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Community-Claim 'LGD braucht kein PCT' vs. Datenlage`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Comparison of Periodized and Non-Periodized Resistance Training on Maximal Strength: A Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Comparison of Velocity-Based and Traditional Percentage-Based Loading Methods on Maximal Strength and Power Adaptations`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Compression Garments and Recovery from Exercise: A Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Compression garments and recovery from exercise-induced muscle damage: a meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Contest cut: test prop + masteron (+winstrol/anavar finishers)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Contrast water therapy and exercise induced muscle damage: a systematic review and meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Copper Peptide and Skin (Finkley, Appa, Bhandarkar; Cosmeceuticals and Active Cosmetics, 2nd ed., 67 women 12-wk facial study)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Could Overt Diabetes Be Triggered by Abuse of SARMs and GH Secretagogues? Case report and review (Sotorník et al., Clin Diabetes) — MK-677 20 mg + RAD-140 + LGD, 26 d, HbA1c 102 mmol/mol`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Creatine ethyl ester (CEE)`: 10 Datei(en), z.B. crawl_028_ws/E_assay_interference.json, crawl_029_ws/E_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Creatine monohydrate (oral, loading + maintenance, with resistance training)`: 5 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `Creatine monohydrate (oral, loading 20 g/day x 5-7 d or 3-5 g/day maintenance)`: 5 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `Creatine monohydrate (oral, loading 20 g/day)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Creatine monohydrate (oral, loading protocol)`: 5 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `Creatine monohydrate (oral, standard protocols incl. long-term use)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Creatine supplementation and creatinine/eGFR: elevation reflects substrate increase, not filtration change (DB-Bestandsmodell)`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Creatine-LBM-Record mischt DXA/Hydrodensitometrie/BIA ohne §83-Constraint`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `Critique of height-normalization approaches for FFM indices and of FFMI-based individual doping inference`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Cross-cultural replications and critiques (e.g., Yu & Shepard 1998, Matsuo/Yanomami; Streeter & McBurney 2003)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Current databases on biological variation: pros, cons and progress (Ricos et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Cytomel`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `DASH- vs Kontrollkost (additiv)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `DASH-Kost additiv`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `DESVENLAFAXINE (DESVENLAFAXINE SUCCINATE) TABLET, EXTENDED RELEASE [BRECKENRIDGE PHARMACEUTICAL, INC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `DHT-derivative`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `DIPYRIDAMOLE INJECTION [HIKMA PHARMACEUTICALS USA INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `DISOPYRAMIDE PHOSPHATE CAPSULE, GELATIN COATED [MYLAN PHARMACEUTICALS INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `DOACs (Apixaban, Rivaroxaban, Dabigatran, Edoxaban)`: 4 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `DOFETILIDE CAPSULE [DR. REDDY'S LABRATORIES INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `DSIP: polarized efficacy reports, 'deep sleep quality not sleep onset', tolerance narrative`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `D_result`: 3 Datei(en), z.B. crawl_032_ws/D_result.json, crawl_033_ws/D_result.json, crawl_035_ws/D_result.json
+- `Delayed onset muscle soreness: treatment strategies and performance factors`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Deloading Practices in Strength and Physique Sports: A Cross-sectional Survey`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `Delta sleep-inducing peptide / emideltide`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Development of focal segmental glomerulosclerosis after anabolic steroid abuse`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Diabetes/Hyporeninämie`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Dianabol kickstart + injectable test`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Dietary Reference Intakes (IOM/NASEM)`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Disruption and recovery of testicular function during and after androgen abuse: the HAARLEM study`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Diuretika (class)`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Diuretika (class, Thiazide + Schleifendiuretika)`: 6 Datei(en), z.B. crawl_030_ws/E_result.json, crawl_031_ws/C_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Diuretika-Einsatz (größerer Dip >10%)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Documented empty/fake retail-channel BPC-157 and TB-500 (ITV/Amazon UK case)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Dose-response relationship between weekly resistance training volume and increases in muscle mass: A systematic review and meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `Dosis (höhere Dosis → höhere Rate)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Dosis (supraphysiologisch vs. Substitution)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Dosis und Titrationsgeschwindigkeit`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Dosis-Plateau ab 25 mg (irreversible Hemmung, Saturierung)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Dosis/Dauer/Polypharmazie im realen Missbrauch hoeher als in Studien`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Dosis/Supraphysiologie`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Dosisbereiche ohne Jahres-/CI-Artefakte; Einzelfälle mit fehlenden Einheiten / fraglichem Maximum`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `Dosisstufe`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Dosisstufe (0.5 vs 1.0 vs 2.4 mg)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Dosisstufe (klare Dosis-HR-Gradation)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Dosisstufe (oral höher als s.c.: orales Semaglutid MD 4.50 [3.11-5.89])`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Drostanolone propionate (Masteron)`: 1 Datei(en), z.B. crawl_036_ws/J_result.json
+- `E2-Korrelation (rho 0,48/0,68) entfaellt nach T-Adjustierung`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `E2-Senkung ursaechlich fuer BMD-Verlust (Oestrogenmangel am Knochen)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `EFLM Biological Variation Database (live API retrieval of meta CVi/CVg and per-study CVa)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `ENOXAPARIN SODIUM INJECTION [BE PHARMACEUTICALS INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `EOD / ED / E3D`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `EPO/sTfR aendern sich NICHT dosisabhaengig (nicht Mediator)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `E_result`: 2 Datei(en), z.B. crawl_032_ws/E_result.json, crawl_033_ws/E_result.json
+- `Effect of 17beta-trenbolone exposure during adolescence on the circadian rhythm in male mice`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Effect of BPC-157 on Symptoms in Patients with Interstitial Cystitis: A Pilot Study (Lee E et al.; n=12, intravesikal, unkontrolliert)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Effect of Gly-Gly-His, Gly-His-Lys and their copper complexes on TNF-alpha dependent IL-6 secretion (Pickart)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Effect of nandrolone decanoate therapy on weight and lean body mass in HIV-infected women with weight loss: a randomized, double-blind, placebo-controlled, multicenter trial`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Effect of post-exercise sauna bathing on the endurance performance of competitive male runners`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Effective therapy of transected quadriceps muscle in rat: gastric pentadecapeptide BPC 157 (Staresinic et al.)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Effects of Linear and Daily Undulating Periodized Resistance Training Programs on Measures of Muscle Hypertrophy: A Systematic Review and Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Effects of Periodization on Strength and Muscle Hypertrophy in Volume-Equated Resistance Training Programs: A Systematic Review and Meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Effects of Resistance Training Frequency on Measures of Muscle Hypertrophy: A Systematic Review and Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Effects of an oral ghrelin mimetic on body composition and clinical outcomes in healthy older adults: a randomized trial (Nass et al., Ann Intern Med)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Effects of cold water immersion after exercise on fatigue recovery and exercise performance--meta analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Effects of cold-water immersion on health and wellbeing: A systematic review and meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Effects of deload periods in resistance training on muscle hypertrophy and strength endurance in untrained young men using a randomized within subject design`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `Effects of enobosarm on muscle wasting and physical function in patients with cancer: double-blind randomised phase 2`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Effects of passive heating intervention on muscle hypertrophy and neuromuscular function: A preliminary systematic review with meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Effects of tapering on performance: a meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `Effects of topical creams containing vitamin C, a copper-binding peptide cream and melatonin compared with tretinoin on the ultrastructure of normal skin (Abdulghani et al.)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Efficacy of a Complex of 5-Aminolevulinic Acid and Glycyl-Histidyl-Lysine Peptide on Hair Growth (ALAVAX RCT, n=45)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Einnahme-Timing/Nahrung/Ca/Fe (Absorption)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Einschleichgeschwindigkeit/Startdosis`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Eisensulfat-Koadministration zu Levothyroxin`: 9 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Emerging Use of BPC-157 in Orthopaedic Sports Medicine: A Systematic Review (Vasireddi et al.; 544 Artikel gescreent, 36 eingeschlossen, davon 35 praeklinisch, 1 klinisch)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Enclomiphen (trans-Clomiphen, orale Phase-II/III-Studien)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Energiedefizit (0.7% vs 1.4% KG/Woche) bei gleichem Krafttraining`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_nutrition.json
+- `Energiedefizit (adipoese/untrainierte Populationen)`: 1 Datei(en), z.B. crawl_030_ws/H_result.json
+- `Energiedefizit durch Diaet bei signifikantem Gewichtsverlust (Adipositas-Populationen, Diaet-Interventionen)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_nutrition.json
+- `Energiedefizit, langsame Reduktionsrate (~0.7% KG/Woche) vs schnelle (~1.4% KG/Woche) bei gleichem Widerstandstraining`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_nutrition.json
+- `Energiezufuhr-Niveau (Gruppe 2 attenuiert Hypercholesterinämie)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Energiezufuhr-Niveau (Gruppe 2 attenuiert subklinische Hypothyreose)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Energiezufuhr-Niveau (Gruppe 2 attenuiert)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Enhanced healing of ulcers in patients with diabetes by topical treatment with glycyl-L-histidyl-L-lysine copper (Mulder et al., Wound Repair Regen)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Enobosarm (GTx-024) 3 mg/Tag, 12 Wochen`: 1 Datei(en), z.B. crawl_030_ws/A_result.json
+- `Enobosarm (GTx-024, Ostarine) oral, 12 Wochen`: 5 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_hormonal.json
+- `Enobosarm (Ostarine, GTx-024, oral, Phase II)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Enobosarm 1 mg bzw 3 mg/Tag oral, bis 113 Tage, Kachexie`: 5 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_hormonal.json
+- `Enobosarm/Ostarine POWER1+POWER2 Phase-3 (Kachexie)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Enoxaparin 40 mg/0.4 mL injection`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `Epitalon 10-day cycle longevity/sleep pattern (Khavinson protocol adoption)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Epithalon / Epithalone`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Erythrozyten-Umsatzrate (beeinflusst HbA1c unabhängig von Glykämie)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Essentials of Strength Training and Conditioning (4th ed.)`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Ethnizität (Asiaten/Schwarze > Kaukasier)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Ethnizität (Schwarze > Kaukasier)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `EuBIVAS: BV data for electrolytes, lipids, urea, uric acid, bilirubin, glucose (Aarsand et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `European medicines report (Excel output, 2731 Eintraege)`: 1 Datei(en), z.B. crawl_037_ws/M_result.json
+- `Evidence-Based Practice to Promote Ventrogluteal Site as First Choice of IM Injection (17 studies appraised, Johns Hopkins EBP tool)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Examining the association between trenbolone, psychological distress, and aggression among males who use anabolic-androgenic steroids`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Exemestan (oral, Dosis-Finding, junge gesunde Maenner)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Existing prior workstream output (IM volume records) - do not duplicate`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `F`: 1 Datei(en), z.B. crawl_025_ws/F.md
+- `FDA US Prescribing Information, Section 7 Drug Interactions / 12.3 Pharmacokinetics`: 1 Datei(en), z.B. crawl_037_ws/C_result.json
+- `FITTER Forward / New Insulin Delivery Recommendations (4-mm pen, 6-mm syringe first-line)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `FITTER Forward Expert Recommendations`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `FITTER Forward Expert Recommendations (Section 3: Lipodystrophy risk reduction)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `FITTER Forward Expert Recommendations (no reuse of pen needles/syringes; sharps disposal)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `FLECAINIDE ACETATE TABLET [AMNEAL PHARMACEUTICALS OF NEW YORK LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `FLUVASTATIN CAPSULE [BRYANT RANCH PREPACK]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `FLUVOXAMINE MALEATE CAPSULE, EXTENDED RELEASE [PAR HEALTH USA, LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `FOLKLORE-AUDIT: Methenolon (Primobolan) → Estradiol-Senkung`: 5 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `FOLKLORE-AUDIT: Nandrolon (19-Nor) → Prolaktin`: 4 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `FOLKLORE-AUDIT: Trenbolon (19-Nor) → Prolaktin`: 4 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `FONDAPARINUX SODIUM INJECTION, SOLUTION [ZYDUS PHARMACEUTICALS (USA) INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `FUTP (5-fluorouridine-5'-triphosphate)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_04.json
+- `F_result`: 4 Datei(en), z.B. crawl_029_ws/F_result.json, crawl_032_ws/F_result.json, crawl_033_ws/F_result.json, crawl_034_ws/F_result.json
+- `Fact Sheet for Health Professionals: Biotin`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Calcium`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Choline`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Chromium`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Copper`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Folate`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Iodine`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Iron`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Magnesium`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Manganese`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Molybdenum`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Niacin`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Omega3FattyAcids`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: PantothenicAcid`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Phosphorus`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Potassium`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Riboflavin`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Selenium`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Thiamin`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: VitaminA`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: VitaminB12`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: VitaminB6`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: VitaminC`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: VitaminD`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: VitaminE`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: VitaminK`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fact Sheet for Health Professionals: Zinc`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Fat-free mass index in users and nonusers of anabolic-androgenic steroids (Kouri et al.)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `FdUMP (5-fluoro-2'-deoxyuridine-5'-monophosphate)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_04.json
+- `FdUTP (5-fluoro-2'-deoxyuridine-5'-triphosphate)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_04.json
+- `Finkelstein et al., Gonadal steroids and body composition, strength, and sexual function in men (NEJM 2013)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Finkelstein et al., Gonadal steroids and body composition, strength, and sexual function in men (NEJM 2013; Anastrozol-Kohorte)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Flockhart DA. Drug Interactions: Cytochrome P450 Drug Interaction Table. Indiana University School of Medicine`: 1 Datei(en), z.B. crawl_037_ws/C_result.json
+- `Flüssigkeitsbilanz trägt zu Früh-Gewichtsverlust bei`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Flüssigkeitsverlust (negative Flüssigkeitsbilanz)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Former Abusers of Anabolic Androgenic Steroids Exhibit Decreased Testosterone Levels and Hypogonadal Symptoms Years after Cessation`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Formulierungswechsel`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Fortgeschrittenes CKD-Stadium`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Freie Fettsäuren (GH-induzierte Lipolyse treibt Insulinresistenz; Acipimox hebt Effekt auf)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `From Regeneration to Analgesia: The Role of BPC-157 in Tissue Repair and Pain Management (Yuan et al.; Review mit Tabelle der Humanstudien)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Frühstück vs. Kaffee vs. Abendeinnahme als separate Timing-Strata`: 1 Datei(en), z.B. crawl_029_ws/C_result.json
+- `GH secretagogue`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `GH-secretagogue shared side-effect cluster: water retention, tingling/numbness, flushing`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GHD-Schweregrad/Restsekretion`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `GHK Peptide as a Natural Modulator of Multiple Cellular Pathways in Skin Regeneration (Pickart, Vasquez-Soltero, Margolina)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `GHK-Cu skin/anti-aging use with topical-vs-injectable route debate`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GHRH + GHRP pulse stack (Mod GRF 1-29 + Ipamorelin archetype)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GHRP-2 (Pralmorelin)`: 10 Datei(en), z.B. crawl_028_ws/B_gh_metabolic.json, crawl_029_ws/B_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `GHRP-2 as maximal-pulse GHRP with accepted cortisol/prolactin tradeoff`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GHRP-6 / CJC-1295 (no DAC) / Mod GRF 1-29 sowie §108-Peptide (BPC-157, TB-500, MOTS-c, IGF-1 LR3/DES, MGF, PEG-MGF, AOD-9604)`: 4 Datei(en), z.B. crawl_028_ws/B_gh_metabolic.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `GHRP-6 niche use for appetite stimulation ('hardgainer' tool)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GLOW / KLOW`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GLOW and KLOW pre-blended multi-peptide vials (vendor-driven convergence)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GLOW blend (GHK-Cu + BPC-157 + TB-500)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `GLOW stack`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `GLP-1 Adipositas-Trials fälschlich mit health_status 'diabetes' gelabelt`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `GLP-1-Rezeptoragonisten (class)`: 9 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl, crawl_031_ws/B_result.json
+- `GS-331007`: 1 Datei(en), z.B. crawl_038_ws/C_batch_17.json
+- `GS-441524`: 1 Datei(en), z.B. crawl_038_ws/C_batch_15.json
+- `GW-501516 / GW501516`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `G_result`: 2 Datei(en), z.B. crawl_032_ws/G_result.json, crawl_034_ws/G_result.json
+- `Gastric pentadecapeptide BPC 157 accelerates healing of transected rat Achilles tendon and in vitro stimulates tendonocyte growth (Staresinic et al.)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Gefastetes vs gefuettertes Ausdauertraining (akuter Vergleich)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `Gemischte Population (aeltere Maenner + postmenopausale Frauen) gepoolt`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Generation and application of data on biological variation in clinical chemistry (Fraser & Harris)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Genetische Praedisposition (Cholestase-Polymorphismen)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Genital mycotic infection`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Gennari et al., A polymorphic CYP19 TTTA repeat influences aromatase activity and estrogen levels in elderly men (JCEM 2004)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Geschlecht/Sex-abhängige IGF-1-Response bei gleicher mg/kg-Dosis`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Gewichtsverlust als Mitursache der Glukose-Senkung`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Gewichtsverlust trat in allen restriktiven Armen auf (2.0±0.3 kg bei EA10), ohne LH-Effekt bei EA30 — EA, nicht Gewichtsverlust per se`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Gewichtsverlustrate (IGF-I invers korreliert, r=-0.38, p<0.01)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Gewichtszunahme identisch beide Arme (kein Konfounder)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Gewichtszunahme/Appetit unter MK-677 (Ghrelin-Mimetikum)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Ginseng (Panax/Asian, American, Siberian)`: 4 Datei(en), z.B. crawl_028_ws/E_assay_interference.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Glivec EPAR`: 1 Datei(en), z.B. crawl_037_ws/M_result.json
+- `Glukagon-Rezeptor-Komponente (größerer HR-Effekt als reine GLP-1-Agonisten)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `GnRH-Agonist-Suppression senkt Baseline-E2 auf ~3,6 pg/ml (Placebo)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Golden-era bodybuilding literature (Weider, IronMan tradition); modern summaries`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Graumarkt-Produkte: Dosis/Reinheit unbekannt, haeufig Kombination mehrerer SARMs/PCT`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Grey-market retatrutide: trial-mimicking titration + China-direct sourcing discourse`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Griffiths/Anderson et al. 2023, Survey n=470 AAS-User (Univ. St Andrews/Newcastle)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Growth hormone secretion after the administration of GHRP-6 or GHRH combined with GHRP-6 does not decline in late adulthood`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Guidance for Travelers under Treatment Carrying Personal Medications Containing Narcotic Drugs and Psychotropic Substances into/out of Thailand`: 2 Datei(en), z.B. crawl_037_ws/G_result.json, crawl_038_ws/J_result.json
+- `Gynecomastia`: 1 Datei(en), z.B. crawl_030_ws/A_result.json
+- `HEPARIN SODIUM INJECTION, SOLUTION [HENRY SCHEIN, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `HLB Therapeutics/ReGenTree SEER-3 European Phase 3 of RGN-259 - primary endpoint (complete corneal healing at 4 weeks) missed vs placebo; press release only`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `HLB Therapeutics/ReGenTree SEER-3 Phase-3, RGN-259 (Thymosin-beta-4-Augentropfen), neurotrophe Keratitis, EU`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `HPTA`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `HUMALOG (INSULIN LISPRO) INJECTION, SOLUTION HUMALOG KWIKPEN (INSULIN LISPRO) INJECTION, SOLUTION HUMALOG JUNIOR KWIKPEN (INSULIN LISPRO) INJECTION, SOLUTION HUMALOG TEMPO PEN (INSULIN LISPRO) INJECTION, SOLUTION STERILE DILUENT (DILUENT) INJECTION, SOLUTION [ELI LILLY AND COMPANY]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `HYDROCODONE BITARTRATE AND HOMATROPINE METHYLBROMIDE SOLUTION [PAI HOLDINGS, LLC DBA PAI PHARMA]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `HYSINGLA ER (HYDROCODONE BITARTRATE) TABLET, EXTENDED RELEASE [KNOA PHARMA LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `H_result`: 3 Datei(en), z.B. crawl_032_ws/H_result.json, crawl_034_ws/H_result.json, crawl_037_ws/H_result.json
+- `Hackett et al.: accuracy of RPE/RIR to estimate proximity to failure during resistance exercise`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Harmonizing the metabolic syndrome (joint interim statement IDF/NHLBI/AHA/WHF/IAS/IASO)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Havoc`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `Herzfrequenz (r=0.60)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Herzfrequenz -14% und SNS-Aktivität -38% parallel`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Hexarelin: strongest GHRP, rapid desensitization dictates short cycles`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Historische Drostanolon-Propionat-Mammakarzinom-Literatur (Drolban, 1960er-70er; antiöstrogene klinische Wirksamkeit ohne E2-Messung)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Historische Methenolon-Klinikliteratur (Anämie/Wasting/Wachstum, 1960er-80er; z.B. Primobolan-Depot/Acetat-Studien) ohne E2-Endpunkt`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Hohe Dosis 120 mg (doppelt so hoch wie Osteoporose-Standard 60 mg)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Hohe vs moderate Proteinzufuhr (2.4 vs 1.2 g/kg/d) im Energiedefizit`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_nutrition.json
+- `Hohe vs moderate Proteinzufuhr (2.4 vs 1.2 g/kg/d) waehrend Energiedefizit (~40%) + intensivem Training`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_nutrition.json
+- `Homoeostatische Regulation des Serum-Calciums ueber PTH-Achse (eng regulierter Referenzbereich)`: 1 Datei(en), z.B. crawl_029_ws/D_result.json
+- `How many times per week should a muscle be trained to maximize muscle hypertrophy? A systematic review and meta-analysis of studies examining the effects of resistance training frequency`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `How much? How fast? How soon? Three simple concepts for progressing training loads to minimize injury risk and enhance performance`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Humalog (insulin lispro class)`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `Hydroxychloroquine`: 1 Datei(en), z.B. crawl_037_ws/E_result.json
+- `Hygetropin`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `Hypercalcemia From Trenbolone Use: A Case Report`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Hypertonie-Status (Modifikator)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Hypohydration ~3-4% Koerpergewicht (Dehydratation)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `IDF consensus worldwide definition of the metabolic syndrome`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `IM/nicht-17aa-Route: deutlich schwaecherer HDL-Effekt als orale 17aa-AAS`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `INSULIN DEGLUDEC INJECTION, SOLUTION [NOVO NORDISK PHARMA, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `INTEGRATION_result`: 3 Datei(en), z.B. crawl_036_ws/INTEGRATION_result.json, crawl_037_ws/INTEGRATION_result.json, crawl_038_ws/INTEGRATION_result.json
+- `IOC consensus statement on relative energy deficiency in sport (RED-S): 2018 update`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `I_result`: 5 Datei(en), z.B. crawl_030_ws/I_result.json, crawl_033_ws/I_result.json, crawl_034_ws/I_result.json, crawl_035_ws/I_result.json, crawl_037_ws/I_result.json
+- `Ibuprofen 400 mg`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `Ibutamoren`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `Impact of Cold-Water Immersion Compared with Passive Recovery Following a Single Bout of Strenuous Exercise on Athletic Performance (Sports Med)`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `In vivo stimulation of connective tissue accumulation by the tripeptide-copper complex GHK-Cu (Maquart, rat wounds)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `In-vitro-Aromatasehemmung 2alpha-methylierter Androgene (Plazenta-Mikrosomen; keine Human-Extrapolation möglich, §84)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Injury-site adjunct: PEG-MGF added to BPC/TB-500(/KPV) base`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Inorganic nitrate / beetroot juice (oral, ~5-9 mmol nitrate/day, acute or up to 15 days)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Insulin (human), alle Präparate`: 4 Datei(en), z.B. crawl_028_ws/B_gh_metabolic.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Insulin (human), intermediate-acting (NPH)`: 5 Datei(en), z.B. crawl_028_ws/B_gh_metabolic.json, crawl_029_ws/B_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Insulin (human), rapid-acting (Lispro/Aspart/Glulisin)`: 5 Datei(en), z.B. crawl_028_ws/B_gh_metabolic.json, crawl_029_ws/B_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Insulin (human), short-acting (Regular)`: 5 Datei(en), z.B. crawl_028_ws/B_gh_metabolic.json, crawl_029_ws/B_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Insulin glargine (long-acting)`: 5 Datei(en), z.B. crawl_028_ws/B_gh_metabolic.json, crawl_029_ws/B_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Insulinabfall engster AT-Korrelat (r=0.92, p<0.001)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Insulinsekretion (r=0.92, p<0.001)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Intensive Gewichtsreduktion bei weiblichen Fitness-Athletinnen (~4 Monate, hohes Protein + Widerstandstraining)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_nutrition.json
+- `Intensives Training erhoeht AST unabhaengig (muskulaerer Ursprung)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Intensives Training erhoeht AST/ALT/LD/CK bis >=7 Tage post-exercise (Pettersson 2008) — verfaelscht AST-Befunde bei Athleten`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Intensives Widerstandstraining (Exercise-Konfounder, kein AAS)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Interagierende Medikamente (z. B. Amiodaron, TMP-SMX)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Intra-Articular Injection of BPC 157 for Multiple Types of Knee Pain (Lee E, Padgett B; retrospektive Fallserie n=16)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Ipamorelin as 'cleanest GHRP' default choice`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Ipamorelin, the first selective growth hormone secretagogue (Raun et al., Eur J Endocrinol)`: 2 Datei(en), z.B. crawl_036_ws/D_result.json, crawl_036_ws/H_result.json
+- `Iron (intravenous ferric carboxymaltose) vs. oral ferrous sulfate`: 5 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/D_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Iron (oral, supplementation)`: 10 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/D_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Iron considerations for the athlete: a narrative review`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `J_result`: 2 Datei(en), z.B. crawl_034_ws/J_result.json, crawl_035_ws/J_result.json
+- `Jintropin / Jins`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `K-sparende Diuretika/MRA-Komedikation`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `KLOW blend (GLOW + KPV)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `KLOW stack`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `KPV oral/systemic use for gut inflammation (IBD/IBS/MCAS contexts)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `K_result`: 2 Datei(en), z.B. crawl_033_ws/K_result.json, crawl_034_ws/K_result.json
+- `Kalium-Exkretion (negativ mit BP assoziiert)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Keine verifizierbare Humanstudie zu Methenolon und Estradiol auffindbar (gezielte Suche PubMed/Web 2026-08: 0 Treffer mit E2-Endpunkt)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Kexing`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `Keys to Progress column, IronMan Magazine`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Knowledge on Narcotics in Thailand in Terms of Import for Personal Use`: 2 Datei(en), z.B. crawl_037_ws/G_result.json, crawl_038_ws/J_result.json
+- `Kohlenhydrat-Aufnahme waehrend Ausdauerbelastung (vs Placebo/Wasser)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_nutrition.json
+- `Kohlenhydrat-Supplementation waehrend hochintensivem Widerstandstraining (einzelne Session)`: 1 Datei(en), z.B. crawl_030_ws/H_result.json
+- `Komparator Tamoxifen hat cholesterinsenkenden Effekt (between-group-Kontrast verstaerkt)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Kompensatorische Hyperphagie`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Konkomitante TE-Gabe (GnRH-Suppression-Modell)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Kouri et al. 1995 (original normalization) and subsequent methodological critiques`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Kreatinin-Clearance (r=0.79)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `LGD-4033 (Ligandrol, oral, Phase I, 0.1/0.3/1.0 mg/Tag, 21 Tage)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `LGD-4033 (VK5211) oral 0.1/0.3/1.0 mg/Tag, 21 Tage`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/C_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `LGD-4033 oral bis 1.0 mg/Tag, 21 Tage`: 5 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `L_result`: 2 Datei(en), z.B. crawl_032_ws/L_result.json, crawl_038_ws/L_result.json
+- `Labetalol`: 1 Datei(en), z.B. crawl_037_ws/E_result.json
+- `Lakshman et al., Effects of injected testosterone dose and age on conversion to estradiol and DHT (JCEM 2010)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Lakshman et al., The effects of injected testosterone dose and age on the conversion of testosterone to estradiol and dihydrotestosterone in young and older men (JCEM 2010)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Lasix`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `Leder et al., Effects of aromatase inhibition in elderly men with low or borderline-low serum testosterone levels (JCEM 2004)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Leder et al., Effects of aromatase inhibition in elderly men with low or borderline-low serum testosterone levels (JCEM 2004; 1 mg/d vs. 1 mg 2x/Wo)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Lee & Burgess 2025, Altern Ther Health Med: IV BPC-157 pilot`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Letrozol / Aromatasehemmer 3. Generation (Klasse, postmenopausale Frauen, Brustkrebs)`: 5 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Letrozol beim Mann`: 1 Datei(en), z.B. crawl_028_ws/A_hormonal.json
+- `Levothyroxin (LT4) 200 ug/Tag akut, 3 Tage, gesunde euthyreote Maenner (supraphysiologisch)`: 5 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_hormonal.json
+- `Levothyroxin (LT4) vs. Placebo, subklinische Hypothyreose, aeltere Erwachsene (TRUST RCT, TSH-gesteuerte Titration)`: 1 Datei(en), z.B. crawl_030_ws/C_result.json
+- `Levothyroxin (LT4) vs. Placebo, subklinische Hypothyreose, aeltere Erwachsene (TRUST/IEMO gepoolt)`: 1 Datei(en), z.B. crawl_030_ws/C_result.json
+- `Levothyroxin (LT4), Initialsubstitution bis Euthyreose (12 Monate)`: 6 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Levothyroxin (LT4), Initialsubstitution bis Euthyreose (12 Monate, TSH 102->2.2 mU/l)`: 6 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Levothyroxin (LT4), Substitution bei neu diagnostizierter primaerer Hypothyreose (Titration bis Euthyreose)`: 6 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Levothyroxin (LT4), Substitution bei subklinischer Hypothyreose`: 6 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Levothyroxin (LT4), TSH-suppressive Langzeittherapie`: 1 Datei(en), z.B. crawl_030_ws/C_result.json
+- `Levothyroxin (LT4), TSH-suppressive Langzeittherapie (DTC/Struma)`: 1 Datei(en), z.B. crawl_030_ws/C_result.json
+- `Levothyroxin (LT4), TSH-suppressive Langzeittherapie (DTC/nicht-toxische Struma)`: 1 Datei(en), z.B. crawl_030_ws/C_result.json
+- `Levothyroxin (LT4), chronische Ersatztherapie, kleine Dosisvariationen (TSH-Strata supprimiert/normal/erhoeht)`: 6 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Levothyroxin/Liothyronin (Label-Timing-Referenz)`: 5 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Levothyroxine (oral, Erhaltungsdosis)`: 5 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Levothyroxine (oral, Erhaltungsdosis, TSH-normalisiert)`: 9 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Levothyroxine (oral, tägliche Einnahme, Dosis-Titration)`: 5 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Leydig-Zell-Desensitivitaet nach hoher Einzeldosis (17-20-Lyase-Blockade; E2/17-OHP-Akkumulation, r=+0,88)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Liothyronin (LT3) vs. Levothyroxin (LT4), Crossover, aeltere Erwachsene mit persistierender subklinischer Hypothyreose`: 6 Datei(en), z.B. crawl_030_ws/C_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Liothyronine (T3, orale Einzeldosis 50 µg)`: 10 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Liothyronine (T3, supraphysiologische Dosis / Überdosierung)`: 10 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Lisinopril 10 mg tablets`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `Local 'near the injury site' injection practice vs systemic-absorption critique`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `M-2 (isopropylthiazole oxidation metabolite)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_22.json
+- `M1`: 1 Datei(en), z.B. crawl_038_ws/C_batch_25.json
+- `MARPLAN (ISOCARBOXAZID) TABLET [LIFSA DRUGS LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `MEXILETINE HYDROCHLORIDE CAPSULE [AMERISYN LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `MGF post-workout site injection vs PEG-MGF twice-weekly systemic split`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `MIRTAZAPINE TABLET, FILM COATED [CARDINAL HEALTH 107, LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `MK-677 (Ibutamoren, oraler GHS-R/Ghrelin-Mimetikum)`: 5 Datei(en), z.B. crawl_030_ws/B_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_peptide.json
+- `MK-677 dose-ranging study (2/10/25 mg) — basis for linear IGF-1 dose-response`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `MK-677 effects on sleep architecture (Copinschi et al., Neuroendocrinology)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `MK-677 in elderly hip-fracture patients — early termination, cardiac safety signal (Adunsky et al., Arch Gerontol Geriatr)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `MK-677 in mild-to-moderate Alzheimer disease: no clinical effect despite IGF-1 increase (Sevigny et al., Neurology)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `MOTS-c for metabolism/endurance/'exercise mimetic' framing with wide dosing spread`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `MOUNJARO (TIRZEPATIDE) INJECTION, SOLUTION [A-S MEDICATION SOLUTIONS]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `MT2 / MT-II / Melanotan 2`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `MULTAQ (DRONEDARONE) TABLET, FILM COATED [CARDINAL HEALTH 107, LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `Ma & Liu 2015, Toxicol Appl Pharmacol 282(1):68-76 (17beta-Trenbolon, Ratte + primaere Hippocampus-Neurone)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Magnesium oxide -> Serum magnesium`: 1 Datei(en), z.B. crawl_031_ws/I_result.json
+- `Magnesium supplements (oral, form-dependent: oxide vs citrate; typical 200-400 mg elemental/day)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/D_result.json, crawl_031_ws/D_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Male physical attractiveness in Britain and Malaysia: a cross-cultural study (Swami & Tovee)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Massage Alleviates Delayed Onset Muscle Soreness after Strenuous Exercise: A Systematic Review and Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Massage post-exercise`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_recovery.json
+- `Massive growth hormone (GH) discharge in obese subjects after the combined administration of GH-releasing hormone and GHRP-6`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Mathematical coupling causes spurious correlation within the conventional acute-to-chronic workload ratio calculations`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Mauras et al., Pharmacokinetics and dose finding of a potent aromatase inhibitor, aromasin (exemestane), in young males (JCEM 2003)`: 1 Datei(en), z.B. crawl_036_ws/A_result.json
+- `Medication discontinuation/withdrawal symptoms`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Melanotan II pigmentation loading pattern + nausea/mole-darkening side-effect lore`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Melatonin (oral, exogenous, typical trial doses 0.3-5 mg pre-bedtime)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Mental health in elite athletes: IOC consensus statement (2019)`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Merck-Entwicklungsprogramm`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Meta-analyses of WHtR in pediatric cardiometabolic risk (e.g., Lo et al. 2016)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Metformin (Langzeit, >1 Jahr)`: 9 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl, crawl_031_ws/C_result.json
+- `Methasteron/Methyldrostanolone`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `Methenolon (Primobolan, Acetat oral / Enanthat IM)`: 1 Datei(en), z.B. crawl_030_ws/A_result.json
+- `Methenolone acetate (Primobolan Tabletten)`: 1 Datei(en), z.B. crawl_036_ws/J_result.json
+- `Methenolone enanthate (Primobolan Depot)`: 1 Datei(en), z.B. crawl_036_ws/J_result.json
+- `Methodological critiques of the FFMI 25 natural-limit: small convenience sample, disputed height normalization, propagation of body-fat measurement error, and counterexamples among pre-steroid-era Mr America winners (e.g., Grimek, FFMI ~26–27)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Mitcal`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `Mod GRF 1-29 ('CJC no DAC') 100 mcg convention + fasted timing rules`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Mod GRF 1-29 (tetrasubstituted GRF 1-29)`: 1 Datei(en), z.B. crawl_036_ws/J_result.json
+- `Moderate Salz-Reduktion (~-4.4 g/Tag Salz, mehrere Wochen)`: 6 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/H_result.json, crawl_031_ws/H_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Moesgaard 2022 volume-equated meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Monitoring Athlete Training Loads: Consensus Statement`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Monitoring the athlete training response: subjective self-reported measures trump commonly used objective measures: a systematic review`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Monitoring training in athletes with reference to overtraining syndrome`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Monitoring training load to understand fatigue in athletes`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Monitoring training status with HR measures: do all roads lead to Rome?`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `More than a metric: How training load is used in elite sport for athlete management`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Multifunctionality and Possible Medical Application of the BPC 157 Peptide - Literature and Patent Review`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Muscle cramps`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `N-desethyl brinzolamide`: 1 Datei(en), z.B. crawl_038_ws/C_batch_23.json
+- `N-desethyl dorzolamide`: 1 Datei(en), z.B. crawl_038_ws/C_batch_21.json
+- `N-desmethyl sildenafil`: 1 Datei(en), z.B. crawl_038_ws/C_batch_21.json
+- `NALOXONE HYDROCHLORIDE INJECTION, USP, AUTO-INJECTOR (NALOXONE HYDROCHLORIDE) INJECTION, SOLUTION [KALEO, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `NALTREXONE HYDROCHLORIDE TABLET, FILM COATED [APHENA PHARMA SOLUTIONS - TENNESSEE, LLC ]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `NARCO list — Table of Controlled Narcotic Drugs in Thailand (update 15.09.2025)`: 2 Datei(en), z.B. crawl_037_ws/G_result.json, crawl_038_ws/J_result.json
+- `NASA (N-Acetyl Semax Amidate)`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `NASA / N-Acetyl Semax Amidate / NA-Semax`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `NCT01311518: Phase 2 RGN-352 IV in acute STEMI - FDA clinical hold 2011 (cGMP at contract manufacturer), never resumed`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `NCT02637284 / Bepecin Phase-I (2015)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `NEORAL (CYCLOSPORINE) CAPSULE, LIQUID FILLED NEORAL (CYCLOSPORINE) SOLUTION [NOVARTIS PHARMACEUTICALS CORPORATION]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `NOVOLOG (INSULIN ASPART) INJECTION, SOLUTION INSULIN DILUTING MEDIUM FOR NOVOLOG (WATER INJECTION) INJECTION, SOLUTION [NOVO NORDISK]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `NSAR-Komedikation`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `NSAR/Trimethoprim`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Nandrolon -> Lipide (human, differenziert)`: 1 Datei(en), z.B. crawl_028_ws/A_hormonal.json
+- `Nandrolon-Decanoat 100 mg IM alle 2 Wochen, 12 Wochen`: 5 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_hormonal.json
+- `Nandrolone decanoate (Deca-Durabolin)`: 1 Datei(en), z.B. crawl_036_ws/J_result.json
+- `Nass et al. 2008, Ann Intern Med (2-Jahres-RCT, n=65, 25mg/d)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Natural-Bodybuilding Wettkampfvorbereitung`: 1 Datei(en), z.B. crawl_030_ws/H_result.json
+- `Natural-Bodybuilding Wettkampfvorbereitung (6 Monate Diaetphase)`: 6 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/H_result.json, crawl_031_ws/H_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `New Insulin Delivery Recommendations (FITTER 2016)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `New Insulin Delivery Recommendations (FITTER)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Nicht-nüchterne Levothyroxin-Einnahme (mit Frühstück/Kaffee) bzw. Abendeinnahme`: 9 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Nichtlinearitaet/Schwelle: Effekt erst bei supraphysiologischem Nadir-T (2370 ng/dl)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Niedrig-normales Baseline-T (E2-Senkung moderat, ~-35%)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Nierenfunktion/eGFR (Clearance, Kontraindikation <30)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Nitrate/beetroot supplementation in highly trained/endurance athletes`: 5 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `No peer-reviewed anthropometric validation identified`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `No validated health/performance reference standard for SWR or chest-to-waist identified in WHO/PubMed literature`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Non-thyroidal illness (NTIS, euthyroid sick syndrome) als Mess-Konfounder bei T4/T3-Monitoring`: 9 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Novel Resistance Training-Specific Rating of Perceived Exertion Scale Measuring Repetitions in Reserve`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Nutritional and Non-Nutritional Strategies in Bodybuilding (IJERPH 2025) — Cystatin C bei AAS moeglicherweise erhoeht; eGFRcr-cys/gemessenes GFR empfohlen`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Nüchtern-Einnahme erforderlich (Nahrung erhöht Exposition)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Nüchternglukose-/Insulin-Anstieg als QUICKI-Treiber`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `O_result`: 1 Datei(en), z.B. crawl_032_ws/O_result.json
+- `Obesity and the risk of myocardial infarction in 27,000 participants from 52 countries (INTERHEART)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Obesity: preventing and managing the global epidemic (WHO Technical Report Series 894)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Off-label use of clomiphene citrate to treat AAS-induced hypogonadism upon cessation (CloTASH) - pilot study protocol`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `On the calculation of a 'reference change' for comparing two consecutive measurements (Harris & Yasaka)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Once-daily administration of CJC-1295 normalizes growth in the GHRH knockout mouse (Alba et al.)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Open RN Nursing Skills / clinical nursing education sources on injection documentation`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Optimizing Strength Training: Designing Nonlinear Periodization Workouts (Kraemer & Fleck)`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Oral BPC-157 for gut/GI context (gastritis, IBS, 'leaky gut')`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Oral administration of MK-677 to obese males: GH secretion, body composition, energy expenditure and glucose homeostasis (Svensson et al., JCEM)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Orale 17-alpha-alkylierte AAS (z.B. Oxymetholon, Methandienon, Stanozolol, Methyltestosteron)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Orale 17-alpha-alkylierte AAS (z.B. Stanozolol/Oxymetholon)`: 1 Datei(en), z.B. crawl_031_ws/A_result.json
+- `Orale Route (HDL-Senkung typisch fuer orale Androgene; klinische CV-Bedeutung unklar)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Orale Verabreichung (First-pass, analog oraler Androgene: HDL-Senkung)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Organ-protection support stack for 17aa orals`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Oxandrolon 20 mg/Tag oral, 12 Wochen (Schroeder 2004)`: 8 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/C_result.json, crawl_031_ws/C_units.json, crawl_031_ws/E_result.json, crawl_031_ws/E_units.json
+- `Ozkurt et al. 2023, AAS-using bodybuilders vs supplement-only controls (n=12+12)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `PAROXETINE (PAROXETINE HYDROCHLORIDE) TABLET, FILM COATED [PREFERRED PHARMACEUTICALS, INC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `PCI-45227 (dihydrodiol ibrutinib)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_11.json
+- `PCT`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `PCT / post-cycle therapy`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `PCT SERM combination (clomiphene + tamoxifen) after ester clearance`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `PHENELZINE SULFATE TABLET, FILM COATED [MYLAN PHARMACEUTICALS INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `PHYCHO list — Table of Controlled Psychotropic Substances in Thailand (update 25.07.2025)`: 2 Datei(en), z.B. crawl_037_ws/G_result.json, crawl_038_ws/J_result.json
+- `PIMECROLIMUS CREAM [OCEANSIDE PHARMACEUTICALS]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `PIOGLITAZONE HYDROCHLORIDE TABLET [UNICHEM PHARMACEUTICALS (USA), INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `PIP`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `PITAVASTATIN (PITAVASTATIN CALCIUM) TABLET [GOLDEN STATE MEDICAL SUPPLY, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `PPI / reduzierter Magensäurespiegel (inkl. H.-pylori-Gastritis, atrophische Gastritis) bei Levothyroxin`: 9 Datei(en), z.B. crawl_028_ws/C_thyroid.json, crawl_029_ws/C_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `PROCAINAMIDE HYDROCHLORIDE INJECTION, SOLUTION [HOSPIRA, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `PROPAFENONE HYDROCHLORIDE CAPSULE, EXTENDED RELEASE [NORTHSTAR RX LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `PT-141 (bremelanotide) libido use + MT-II/PT-141 identity disambiguation`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Pantoprazole 40 mg`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `Paracetamol 500 mg`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `Paresthesia (tingling)`: 1 Datei(en), z.B. crawl_030_ws/D_result.json
+- `Partielle Schlafrestriktion (4 h Schlaf, 23:00-03:00) mit 30-min Mittagsnickerchen als Recovery`: 6 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Partielle Schlafrestriktion (4 h/Nacht, 2 Naechte) vs. Extension (10 h)`: 6 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Peer-reviewed CYP/DDI review literature and clinical pharmacokinetic studies`: 1 Datei(en), z.B. crawl_037_ws/C_result.json
+- `Periodization Theory: Confronting an Inconvenient Truth`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Periodization: Theory and Methodology of Training (Bompa & Buzzichelli)`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Persistente Adaptation proportional zu fortgesetzten Gewichtserhaltungsbemühungen (r=0.59)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Personalized reference intervals - statistical approaches and considerations`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Personalized reference intervals in laboratory medicine based on within-subject biological variation (Coskun et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Pharmacokinetic-pharmacodynamic modeling of ipamorelin in human volunteers (Gobburu et al., Pharm Res)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Phase 2 trial of thymosin beta 4 ophthalmic solution (RGN-259) in severe dry eye (Sosne et al., Cornea)`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `Placebo-Response-Anteil in MDD-Studien`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Post-exercise Sauna (~89-100°C, 2x15 min nach Training, 3 Wochen)`: 6 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Post-exercise cold water immersion attenuates acute anabolic signalling and long-term adaptations in muscle to strength training (J Physiol)`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Postmenopausal/Brustkrebs-Population — nicht auf Maenner/Gesunde uebertragbar`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Praeklinische Toxikologie in Beagle-Hunden (unabhaengige Gruppe, in Sekundaerliteratur berichtet; Primaerquelle in dieser Bewertung nicht PubMed-verifiziert)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Praeparat-Halbwertszeit (kuerzer wirksam -> schnellere Recovery)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Preventing overtraining in athletes in high-intensity sports and stress/recovery monitoring`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Prevention, diagnosis, and treatment of the overtraining syndrome: joint consensus statement of the ECSS and ACSM`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Prolonged hypogonadism in males following withdrawal from anabolic-androgenic steroids`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Prolonged stimulation of growth hormone (GH) and insulin-like growth factor I secretion by CJC-1295, a long-acting analog of GH-releasing hormone, in healthy adults (Teichman et al., JCEM)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Prospective, randomized, controlled, proof-of-concept study of the ghrelin mimetic ipamorelin for postoperative ileus (Beck et al., Int J Colorectal Dis) — primary endpoint missed`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Protein-Supplementation waehrend Widerstandstraining`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `Protein-Supplementation waehrend Widerstandstraining (Dosis-Response, alle Proteinquellen)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_supplement.json
+- `Proteinzufuhr-Gesamtmenge (g/kg/Tag) waehrend Widerstandstraining`: 6 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Präexistentes ECW-Defizit (GHD-Status)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Präexistierende Glukosestoffwechselstörung/Diabetes`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Psychological monitoring of overtraining and staleness`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Pulsatile secretion of growth hormone (GH) persists during continuous stimulation by CJC-1295 (Ionescu & Frohman, JCEM)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `QA1-H1 diabetes/cgt Widerspruch`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA1-H2 syn_6728326021 age range/bands`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA1-H3 syn_f3e20a5fe6 age range/bands`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA1-M baseline_dependency/baseline_labs`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA1_FIX_result`: 1 Datei(en), z.B. crawl_037_ws/QA1_FIX_result.json
+- `QA1_result`: 1 Datei(en), z.B. crawl_032_ws/QA1_result.json
+- `QA2 Modifier-Graph Provenienz/Platzhalter`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA2_result`: 1 Datei(en), z.B. crawl_032_ws/QA2_result.json
+- `QA3-F3 TTrials-Record syn_284c414caf/app_dc8a0b9218`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA3-F4 app_2e91b7f2fb §83 DXA/BIA-Constraint`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA3-F5 Symptom-Ascertainment`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA4-F5 Missing-Context-Beispiele body_fat/route`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA4-F7 leere Pflichtfelder bei eingeschraenkter Population`: 1 Datei(en), z.B. crawl_032_ws/QA_reverification.json
+- `QA4_result`: 1 Datei(en), z.B. crawl_032_ws/QA4_result.json
+- `QA5_result`: 1 Datei(en), z.B. crawl_032_ws/QA5_result.json
+- `QA_1_result`: 5 Datei(en), z.B. crawl_033_ws/QA_1_result.json, crawl_034_ws/QA_1_result.json, crawl_035_ws/QA_1_result.json, crawl_036_ws/QA_1_result.json, crawl_037_ws/QA_1_result.json
+- `QA_1_reverification`: 3 Datei(en), z.B. crawl_033_ws/QA_1_reverification.json, crawl_034_ws/QA_1_reverification.json, crawl_035_ws/QA_1_reverification.json
+- `QA_1_reverification2`: 2 Datei(en), z.B. crawl_034_ws/QA_1_reverification2.json, crawl_035_ws/QA_1_reverification2.json
+- `QA_2_result`: 6 Datei(en), z.B. crawl_033_ws/QA_2_result.json, crawl_034_ws/QA_2_result.json, crawl_035_ws/QA_2_result.json, crawl_036_ws/QA_2_result.json, crawl_037_ws/QA_2_result.json
+- `QA_2_reverification`: 2 Datei(en), z.B. crawl_033_ws/QA_2_reverification.json, crawl_034_ws/QA_2_reverification.json
+- `QA_2_reverification2`: 2 Datei(en), z.B. crawl_033_ws/QA_2_reverification2.json, crawl_034_ws/QA_2_reverification2.json
+- `QA_3_result`: 6 Datei(en), z.B. crawl_033_ws/QA_3_result.json, crawl_034_ws/QA_3_result.json, crawl_035_ws/QA_3_result.json, crawl_036_ws/QA_3_result.json, crawl_037_ws/QA_3_result.json
+- `QA_3_reverification`: 1 Datei(en), z.B. crawl_034_ws/QA_3_reverification.json
+- `QA_3_reverification2`: 1 Datei(en), z.B. crawl_034_ws/QA_3_reverification2.json
+- `QA_4_result`: 6 Datei(en), z.B. crawl_033_ws/QA_4_result.json, crawl_034_ws/QA_4_result.json, crawl_035_ws/QA_4_result.json, crawl_036_ws/QA_4_result.json, crawl_037_ws/QA_4_result.json
+- `QA_4_reverification`: 1 Datei(en), z.B. crawl_034_ws/QA_4_reverification.json
+- `QA_4_reverification2`: 1 Datei(en), z.B. crawl_034_ws/QA_4_reverification2.json
+- `QA_5_result`: 6 Datei(en), z.B. crawl_033_ws/QA_5_result.json, crawl_034_ws/QA_5_result.json, crawl_035_ws/QA_5_result.json, crawl_036_ws/QA_5_result.json, crawl_037_ws/QA_5_result.json
+- `QA_5_reverification`: 2 Datei(en), z.B. crawl_033_ws/QA_5_reverification.json, crawl_035_ws/QA_5_reverification.json
+- `QA_reverification_summary`: 1 Datei(en), z.B. crawl_033_ws/QA_reverification_summary.json
+- `QUINIDINE GLUCONATE TABLET, EXTENDED RELEASE [GOLDEN STATE MEDICAL SUPPLY]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `RAD-140 / YK-11 / S-23 / ACP-105 u.a. Graumarkt-SARMs`: 1 Datei(en), z.B. crawl_028_ws/A_hormonal.json
+- `RASAGILINE TABLET [ASCEND LABORATORIES, LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `Raloxifen (SERM, gesunde aeltere Maenner)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Rate and Extent of Recovery from Reproductive and Cardiac Dysfunction Due to Androgen Abuse in Men`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Reale Missbrauchsdosen hoeher als Labordosen (Understatement-Risiko laut Hartgens Review)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Recommended needle size, length and angle for administering vaccines`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Reconstitution/handling folklore as quality variable (vacuum, shear, swirl-not-shake)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Recovery-Stress Questionnaire for Athletes: User manual`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Reference change values (Fraser)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `RegeneRx RGN-259 Dry-Eye-Disease Phase-3-Programm (>1600 Patienten, 3 Trials)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Regeneration or Risk? A Narrative Review of BPC-157 for Musculoskeletal Healing (McGuire et al.)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Regenerative and Protective Actions of the GHK-Cu Peptide in the Light of the New Gene Data (Pickart & Margolina)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Regression to the mean: what it is and how to deal with it (Barnett et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Rekurrente Schlafrestriktion (5 h, 5 Tage) mit ad-libitum-Wochenend-Recovery-Schlaf`: 1 Datei(en), z.B. crawl_030_ws/G_result.json
+- `Resistance training frequency and skeletal muscle hypertrophy: A review of available evidence`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `Restschilddrüsenvolumen / Athyreose vs. Restgewebe`: 1 Datei(en), z.B. crawl_029_ws/C_result.json
+- `Retatrutid (LY3437943, GIP/GLP-1/Glukagon-Triagonist, s.c. 1x woechentlich, Phase 2)`: 6 Datei(en), z.B. crawl_030_ws/B_result.json, crawl_031_ws/B_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Risk/Readiness konsistent; LOW wird nicht übernutzt`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `Route bekannt, aber 'route' nicht in mismatch_dimensions`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `Route/17aa: HTGL-Aktivitaet +123% (Stanozolol) vs +25% n.s. (TE) — Mechanismus des HDL2-Verlusts`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Route/Formulierung (oral vs. s.c.)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
+- `Russian nootropic stack: Semax + Selank`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `SANDOSTATIN (OCTREOTIDE ACETATE) INJECTION, SOLUTION [NOVARTIS PHARMACEUTICALS CORPORATION]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `SARMs (LGD-4033, RAD-140 u.a., graumarktbezogen)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `SEER-1: RGN-259 (0.1% thymosin beta 4) in stage 2-3 neurotrophic keratopathy - randomized placebo-controlled Phase 3, early termination n=18; 60% vs 12.5% complete healing day 29`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `SERM`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `SERM-AI-Combo`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `SGLT2-Hemmer (class)`: 11 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/E_result.json
+- `SGLT2-Hemmer (class, z. B. Empagliflozin 10-25 mg, Dapagliflozin 10 mg)`: 11 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/E_result.json
+- `SHBG (nach Adjustierung verschwindet Altersunterschied im freien E2)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `SHBG-Anstieg reduziert bioverfügbares T zusätzlich`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `SIGNIFOR (PASIREOTIDE) INJECTION [RECORDATI RARE DISEASES, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `SOTALOL HYDROCHLORIDE TABLET [BRYANT RANCH PREPACK]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `SSRIs (class)`: 11 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/E_result.json
+- `SSRIs (class, Absetzen — insbesondere kurze Halbwertszeit: Paroxetin, Venlafaxin)`: 10 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/E_result.json, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `SSRIs (class, Langzeittherapie >6 Monate)`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `SSRIs (class, z. B. Sertralin, Escitalopram, Fluoxetin, Paroxetin)`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `SUBJ_OBJ_SEPARATION_V1`: 1 Datei(en), z.B. crawl_030_ws/J_result.json
+- `Safety of Intravenous Infusion of BPC157 in Humans: A Pilot Study (Lee E, Burgess K; n=2, IV bis 20 mg, keine AE)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Salzaufnahme/Volumenstatus`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Sandow's System of Physical Training (Grecian ideal derived from classical statuary measurements)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Sanlialp et al. 2019 (positiver Befund beruht auf Datentransformationsfehler, nicht als Gegen evidenz werten)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Sauna-Nutzungshaeufigkeit 4-7x/Woche vs 1x/Woche (finnische Maenner, KIHD-Kohorte)`: 5 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_recovery.json
+- `Schlafextension (>=10 h Bettziel, 5-7 Wochen)`: 1 Datei(en), z.B. crawl_030_ws/G_result.json
+- `Schlafextension (>=10 h Bettziel, 5-7 Wochen) bei habituellen Kurzschlaefern/Athleten`: 6 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Schlafextension (Bettzeit-Ziel 8,5 h, 2 Wochen) bei habituellen Kurzschlaefern (<6,5 h)`: 6 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Schlafrestriktion (2/3 der habituellen Schlafdauer, 8 Tage/Naechte)`: 6 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/G_result.json, crawl_031_ws/G_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Schlafrestriktion (5 h Schlafgelegenheit, 5 Tage) stationaer`: 1 Datei(en), z.B. crawl_030_ws/G_result.json
+- `Schlafrestriktion (5,5 h vs. 8,5 h Schlafgelegenheit, 14 Tage) unter moderater Kalorienrestriktion`: 5 Datei(en), z.B. crawl_030_ws/G_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_sleep.json
+- `Schwangerschaft (erhöhter Bedarf)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Schwarze Ethnizität (geringerer Monotherapie-Effekt, Renin-abhängig)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Schweres Energiedefizit (Ranger-Kurs)`: 1 Datei(en), z.B. crawl_030_ws/H_result.json
+- `Schweres Energiedefizit + Schlafmangel (Ranger-Kurs)`: 1 Datei(en), z.B. crawl_030_ws/H_result.json
+- `Schweres Energiedefizit ueber 8 Wochen (US Army Ranger Kurs, Feldbedingungen)`: 6 Datei(en), z.B. crawl_030_ws/H_result.json, crawl_031_ws/F_result.json, crawl_031_ws/F_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Selank anxiolytic pattern: subtle effect, rapid-tolerance anecdote cluster`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Semaglutid 2.4 mg s.c. 1x woechentlich (STEP-1-Schema, 16-woechige Eskalation)`: 6 Datei(en), z.B. crawl_030_ws/B_result.json, crawl_031_ws/B_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Semax + Selank pairing ('Russian nootropic stack')`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Semax intranasal cognition pattern with timing/cycling folklore`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Session-RPE method for training load monitoring: Validity, ecological usefulness, and influencing factors`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Sexual dysfunction`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Single vs. multiple sets of resistance exercise for muscle hypertrophy: a meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `Single-source concentration (Sikiric-Labor, Zagreb)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Skin care benefits of copper peptide containing facial cream (Leyden et al., AAD 2002, Abstract P68/P69)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Sleep/pineal stack: Epitalon + DSIP + melatonin`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Somatropin (rekombinantes humanes Wachstumshormon, s.c., Ersatz- oder Supplementationsschemata)`: 5 Datei(en), z.B. crawl_030_ws/B_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_peptide.json
+- `Spikes in acute workload are associated with increased injury risk in elite cricket fast bowlers`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Stable gastric pentadecapeptide BPC 157: novel therapy in gastrointestinal tract (Seiwerth/Sikiric et al.; referenziert unpublizierte IBD-Klinikdaten PL-14736)`: 1 Datei(en), z.B. crawl_036_ws/C1_result.json
+- `Stanozolol (oral oder parenteral)`: 1 Datei(en), z.B. crawl_030_ws/A_result.json
+- `Stanozolol (oral, 17-alpha-alkyliert, 6 mg/Tag) vs. Testosteron-Enanthate (200 mg/Wo IM) — direkter Vergleich`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Starke CYP3A4-Inhibitoren (Spiegelerhöhung)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Startdosis-Strategie (Vollersatz vs. Titration)`: 1 Datei(en), z.B. crawl_029_ws/C_result.json
+- `Statins (class)`: 11 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/E_result.json
+- `Statins (class, high-intensity: atorvastatin 40-80 mg, rosuvastatin 20-40 mg)`: 8 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl, crawl_031_ws/B_units.json
+- `Statins (class, moderate-intensity, z. B. atorvastatin 10-20, rosuvastatin 5-10, simvastatin 20-40 mg)`: 10 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Stenabolic`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `Stimulation of collagen synthesis in fibroblast cultures by the tripeptide-copper complex GHK-Cu (Maquart)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Stimulation of the GH-IGF-I axis by daily oral administration of a GH secretagogue (MK-677) in healthy elderly subjects (Chapman et al., JCEM)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `Stretching to prevent or reduce muscle soreness after exercise (Cochrane)`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `Structurally different anabolic androgenic steroids reduce neurite outgrowth and neuronal viability in primary rat cortical cell cultures`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Structured review of trenbolone case reports in humans (2025, ResearchGate preprint/Proceedings)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Svensson et al. 1998 (obese Maenner, 25mg/d, 8 Wochen)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Synthesis and characterization of the N-terminal acetylated 17-23 fragment of human thymosin beta 4 identified in TB-500, a product suspected to possess doping potential`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `Systematic Review of Safety of Selective Androgen Receptor Modulators in Healthy Adults`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Systematic review and meta-analysis of linear and undulating periodized resistance training programs on muscular strength`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Systematic review of BV data for diabetes-related analytes`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `Systematic review/meta-analysis of BV of 20 haematological parameters (Coskun et al.)`: 1 Datei(en), z.B. crawl_028_ws/J_variability.json
+- `T3's / t3s`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `TACROLIMUS CAPSULE [MAJOR PHARMACEUTICALS]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `TB-500 systemic recovery use with loading/maintenance structure`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `TB-500 vs thymosin beta-4 identity confusion (terminology audit)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `TB-500-Fragment selbst`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `TB500 / TB-500 / TB4 / TB-4`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `TBG-Anstieg senkt bioverfügbares T3 zusätzlich`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `TRANYLCYPROMINE TABLET [REMEDYREPACK INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `TRAZODONE HYDROCHLORIDE TABLET [PD-RX PHARMACEUTICALS, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `TRINTELLIX (VORTIOXETINE) TABLET, FILM COATED [REMEDYREPACK INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `TRT-plus`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `TSH-Ziel innerhalb des Referenzbereichs (normiert vs. leicht supprimiert)`: 1 Datei(en), z.B. crawl_029_ws/C_result.json
+- `Tamoxifen (SERM, gesunde und oligosperme Maenner)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Tamoxifen reduces serum IGF-1 (breast cancer patients) — basis of 'nolva kills gains' extrapolation`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Teichman et al. 2006 (einzige Human-PK/PD-Studie, CJC-1295 MIT DAC)`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Test + Deca (ester-matched 19-nor bulk)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Test + EQ + Tren cut (intermediate)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Test + EQ long recomp/bulk`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Test + Primobolan ratio stack (E2-management framing)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Test-only first cycle ('Basic Bulk')`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Testosteron (Enanthate IM, graded doses 25-600 mg/Woche, junge gesunde Maenner, GnRH-Suppression)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Testosteron (Enanthate IM, graded doses, GnRH-Antagonist, junge vs. aeltere Maenner)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Testosteron (Enanthate/Cypionate, IM, graded doses 25-600 mg/Woche, unter GnRH-Antagonist-Suppression)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Testosteron (Ersatztherapie bis supraphysiologisch, Maenner)`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Testosteron (Ersatztherapie, Maenner)`: 1 Datei(en), z.B. crawl_030_ws/A_result.json
+- `Testosteron (Ersatztherapie, diverse Formulierungen, >=90 Tage)`: 5 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_hormonal.json
+- `Testosteron (Formulierungsvergleich injizierbar vs. transdermal)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl, crawl_031_ws/A_result.json
+- `Testosteron (transdermal, Ersatzdosis, aeltere Maenner mit niedrigem T, Testosterone Trials)`: 5 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Testosteron (transdermal, graded doses, Kohorte ohne vs. mit Anastrozol, gesunde Maenner 20-50 J.)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Testosteron (transdermal, titrated replacement, TTrials Anemia Trial)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Testosteron Formulierung (IM-Ester vs. Gel vs. Pellets)`: 1 Datei(en), z.B. crawl_028_ws/A_hormonal.json
+- `Testosteron transdermal (Patch, Ersatzdosis auf mittleren Normbereich), 36 Monate`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Testosteron-Cypionate 600 mg/Wo IM, 6 Wochen (Pope 2000)`: 1 Datei(en), z.B. crawl_030_ws/A_result.json
+- `Testosteron-Enanthate 600 mg/Wo IM, 10 Wochen (Bhasin 1996 NEJM)`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Testosteron-Enanthate 600 mg/Wo IM, 10 Wochen (Bhasin 1996 NEJM) (mit Krafttraining 3x/Wo)`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Testosteron-Enanthate 600 mg/Wo IM, 10 Wochen (Bhasin 1996 NEJM) (ohne Training)`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Testosteron-Enanthate IM woechentlich + GnRH-Agonist (Bhasin 2001, 20 Wochen)`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Testosteron-Enanthate IM woechentlich + GnRH-Agonist (Bhasin 2005, aeltere Maenner, 20 Wochen)`: 6 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Testosteron-Ester IM (nicht-17aa)`: 1 Datei(en), z.B. crawl_031_ws/A_result.json
+- `Testosteron-Gel (Ersatz, 12 Monate), TTrials`: 5 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_hormonal.json
+- `Testosteron-Gel 10 g/Tag (Titration bis 100 mg/Tag), TOM-Trial`: 5 Datei(en), z.B. crawl_030_ws/A_result.json, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_hormonal.json
+- `Testosteron/AAS (supraphysiologisch oder kontrazeptiv, exogenes T)`: 9 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Testosteron: TTrials-Record (ältere Männer, transdermal) flaggt Übergang zu gesunden jungen Männern nicht`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `Testosterone (Base)`: 1 Datei(en), z.B. crawl_036_ws/J_result.json
+- `Testosterone dose-response relationships in healthy young men`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Thai FDA FAQs — drug importation for personal use (Drug Act B.E. 2510 §12/§13(4))`: 1 Datei(en), z.B. crawl_037_ws/G_result.json
+- `Thai FDA FAQs — drug importation for personal use (Drug Act B.E. 2510)`: 1 Datei(en), z.B. crawl_038_ws/J_result.json
+- `Thai FDA Health Product Search Center (ระบบสืบค้น)`: 1 Datei(en), z.B. crawl_037_ws/G_result.json
+- `Thai FDA Health Product Search Center (ระบบสืบค้น) — product-level registration lookup (verification channel; no per-product claims made)`: 1 Datei(en), z.B. crawl_038_ws/J_result.json
+- `The Association Between the Acute:Chronic Workload Ratio and Injury and Its Application in Team Sports: A Systematic Review`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `The Effect of Post-Exercise Cryotherapy on Recovery Characteristics: A Systematic Review and Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `The Effect of the Z-Track Technique on Pain and Drug Leakage in Intramuscular Injections`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `The Effect of the Z-Track Technique on Pain and Drug Leakage in Intramuscular Injections (Yilmaz et al., RCT)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `The Effects of Heat Adaptation on Physiology, Perception and Exercise Performance in the Heat: A Meta-Analysis (Sports Med 2016; verifiziert via PubMed-Erratum)`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `The Effects of Regular Cold-Water Immersion Use on Training-Induced Changes in Strength and Endurance Performance: A Systematic Review with Meta-Analysis`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `The Human Tri-Peptide GHK and Tissue Remodeling (Pickart)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `The IDF consensus worldwide definition of the metabolic syndrome`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `The Resistance Training Dose Response: Meta-Regressions Exploring the Effects of Weekly Volume and Frequency on Muscle Hypertrophy and Strength Gains`: 1 Datei(en), z.B. crawl_025_ws/A.json
+- `The decanoate esters of nandrolone, testosterone, and trenbolone induce steroid specific memory impairment and somatic effects in the male rat`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `The development of skeletal muscle hypertrophy through resistance training: the role of muscle damage and muscle protein synthesis`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `The effect of intramuscular injection technique on injection associated pain (VG vs DG comparison)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `The effect of intramuscular injection technique on injection associated pain: systematic review and meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `The effect of tripeptide-copper complex on human hair growth in vitro (Pyo et al., Arch Pharm Res)`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `The effectiveness of exercise interventions to prevent sports injuries: a systematic review and meta-analysis (strength training protective, stretching not)`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `The effects of cold water immersion and active recovery on inflammation and cell stress responses in human skeletal muscle after resistance exercise (J Physiol)`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `The mechanisms of massage and effects on performance, muscle recovery and injury prevention`: 1 Datei(en), z.B. crawl_025_ws/D.json
+- `The role of body fat and WHR vs shoulder-to-waist ratio in judgments of male attractiveness (e.g., Horvath 1981; Maisey et al. 1999)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `The safety, pharmacokinetics, and effects of LGD-4033 in healthy young men`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `The training intensity distribution among well-trained and elite endurance athletes`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `The training-injury prevention paradox: should athletes be training smarter and harder?`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `The use of post-cycle therapy is associated with reduced withdrawal symptoms from anabolic-androgenic steroid use: survey of 470 men`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Theobromine pharmacology`: 1 Datei(en), z.B. crawl_025_ws/F.json
+- `Thiazide/Thiazid-aemliche Diuretika (Standarddosis, z. B. Hydrochlorothiazid 12.5-25 mg)`: 6 Datei(en), z.B. crawl_030_ws/E_result.json, crawl_031_ws/C_result.json, crawl_031_ws/C_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Third Report of the NCEP Expert Panel (ATP III)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Third-party testing culture: Janoshik/Finnrick as community quality gatekeepers`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Thymosin beta-4 (full, 43 aa)`: 1 Datei(en), z.B. crawl_036_ws/J_result.json
+- `Thymosin beta4 (RGN-259) phase trial dry eye (Tbeta4 full protein, NOT gray-market TB-500 fragment)`: 1 Datei(en), z.B. crawl_036_ws/H_result.json
+- `Thymosin beta4 accelerates wound healing`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `Thymosin beta4 activates integrin-linked kinase and promotes cardiac cell migration, survival and cardiac repair`: 1 Datei(en), z.B. crawl_036_ws/C2_result.json
+- `Tirzepatid s.c. 1x woechentlich (SURMOUNT-1, 20-woechige Eskalation)`: 6 Datei(en), z.B. crawl_030_ws/B_result.json, crawl_031_ws/B_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Tissue selectivity and potential clinical applications of trenbolone: a potent anabolic steroid with reduced androgenic and estrogenic activity`: 1 Datei(en), z.B. crawl_036_ws/B_result.json
+- `Topically applied GHK as an anti-wrinkle peptide: advantages, problems and prospective (Jose et al., Int J Pharm) - notes absence of large clinical trials`: 1 Datei(en), z.B. crawl_036_ws/C3_result.json
+- `Training Load and Injury: Causal Pathways and Future Directions`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Training adaptation and heart rate variability in elite endurance athletes: opening the door to effective monitoring`: 1 Datei(en), z.B. crawl_025_ws/E.json
+- `Training monotony and strain...`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Trainingsstatus (trained 0.75 kg vs untrained, p=0.03)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Trainingsstatus (ungewoehnte Belastung -> staerkere Enzymanstiege)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `USADA/FDA/OPSS positions 2025-2026`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Urinary tract infection`: 1 Datei(en), z.B. crawl_030_ws/E_result.json
+- `Use of RPE-based training load in soccer`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `VIGABATRIN TABLET [EDENBRIDGE PHARMACEUTICALS LLC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `VIIBRYD (VILAZODONE HYDROCHLORIDE) TABLET VIIBRYD (VILAZODONE HYDROCHLORIDE) KIT [ALLERGAN, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `VKORC1 -1639G>A`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `VO2peak stieg in allen Gruppen (90% CI 2.55-5.20%) — Economy bezogen auf neues VO2peak`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Vaccine Administration (General Best Practices for Immunization)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Vaccine Administration Guidelines for Adults (needle length by sex/weight table)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Vaccine Administration Guidelines for Adults (table, data from CDC)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Vaccine Administration: Needle Gauge and Length (General Best Practices for Immunization)`: 1 Datei(en), z.B. crawl_025_ws/G.json
+- `Vasireddi et al., HSS J 2025: Systematic review BPC-157 in orthopaedic sports medicine`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `Vendor batch-inconsistency and borrowed-COA signals (reported_signal layer)`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Vitamin D (oral, single dose bioavailability context)`: 10 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/D_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Vitamin D3 + Calcium (combination)`: 9 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/D_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Vitamin K (dietary intake variability)`: 10 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/D_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Vitamin K1 (phylloquinone, supplementation)`: 9 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl, crawl_031_ws/D_result.json
+- `Vitamin-K-Aufnahme (Diät)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Vollständige Athyreose vs. Restfunktion (determiniert Recovery vs. persistierende Hypothyreose)`: 1 Datei(en), z.B. crawl_029_ws/C_result.json
+- `Volumenmangel/Diuretika`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Vomiting`: 1 Datei(en), z.B. crawl_030_ws/B_result.json
+- `Vorbehandlung mit topischem T (Washout-Baseline supprimiert)`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `Vorbestehende Kardiomyopathie/Elektrolytstörungen`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Vorherige TKI-Therapie`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `Waist Circumference and Waist–Hip Ratio: Report of a WHO Expert Consultation`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Waist-to-height ratio is a better screening tool than waist circumference and BMI for adult cardiometabolic risk factors: systematic review and meta-analysis`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Waist-to-height ratio: a simple option for determining excess central adiposity in young people (Garnett, Baur, Cowell)`: 1 Datei(en), z.B. crawl_025_ws/H.json
+- `Warfarin (pharmakogenetische Dosisbedarf-Variabilität)`: 5 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/I_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `Warfarin (unter diätetischer Vitamin-K-Variation)`: 4 Datei(en), z.B. crawl_028_ws/I_medication.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `What Role Do Chronic Workloads Play in the Acute to Chronic Workload Ratio? Time to Dismiss ACWR and Its Underlying Theory`: 1 Datei(en), z.B. crawl_025_ws/C.json
+- `Wiederzunahme nicht mit metabolischer Adaptation am Wettbewerbsende korreliert (r=-0.1)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `Winstrol + low-dose nandrolone (athlete joint stack)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `Wolverine Stack`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Wolverine Stack (BPC-157 + TB-500) as default injury-recovery combination`: 1 Datei(en), z.B. crawl_034_ws/C_result.json
+- `Wolverine stack`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `XADAGO (SAFINAMIDE MESYLATE) TABLET, FILM COATED [MDD US OPERATIONS LLC, A SUBSIDIARY OF SUPERNUS PHARMACEUTICALS, INC.]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `Yohimbine HCl (oral, 20 mg/day = 2x10 mg, 21 days)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/H_result.json, crawl_031_ws/H_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `Yohimbine HCl (oral, 20 mg/day, 21 days, elite athletes)`: 6 Datei(en), z.B. crawl_030_ws/D_result.json, crawl_031_ws/H_result.json, crawl_031_ws/H_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `ZELAPAR (SELEGILINE HYDROCHLORIDE) TABLET, ORALLY DISINTEGRATING [BAUSCH HEALTH US, LLC]`: 1 Datei(en), z.B. crawl_038_ws/pkraw/picks.json
+- `Zhang 2026 meta-analysis LP vs UP`: 1 Datei(en), z.B. crawl_025_ws/B.json
+- `Zinc (excessive intake, supplement or coin ingestion)`: 4 Datei(en), z.B. crawl_028_ws/D_minerals_vitamins.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `_baseline_hashes`: 2 Datei(en), z.B. crawl_037_ws/_baseline_hashes.json, crawl_038_ws/_baseline_hashes.json
+- `_build_A`: 1 Datei(en), z.B. crawl_037_ws/_build_A.py
+- `_build_A2`: 1 Datei(en), z.B. crawl_037_ws/_build_A2.py
+- `_build_A3`: 1 Datei(en), z.B. crawl_037_ws/_build_A3.py
+- `_build_A4`: 1 Datei(en), z.B. crawl_037_ws/_build_A4.py
+- `_build_A5`: 1 Datei(en), z.B. crawl_037_ws/_build_A5.py
+- `_common_spec`: 4 Datei(en), z.B. crawl_028_ws/_common_spec.txt, crawl_029_ws/_common_spec.txt, crawl_030_ws/_common_spec.txt, crawl_031_ws/_common_spec.txt
+- `_crawl034_snapshot_hashes`: 1 Datei(en), z.B. crawl_036_ws/_crawl034_snapshot_hashes.json
+- `_integrate_1`: 1 Datei(en), z.B. crawl_037_ws/_integrate_1.py
+- `_integrate_2`: 1 Datei(en), z.B. crawl_037_ws/_integrate_2.py
+- `_integrate_3`: 1 Datei(en), z.B. crawl_037_ws/_integrate_3.py
+- `_integrate_4`: 1 Datei(en), z.B. crawl_037_ws/_integrate_4.py
+- `_integrate_5`: 1 Datei(en), z.B. crawl_037_ws/_integrate_5.py
+- `_integrate_6`: 1 Datei(en), z.B. crawl_037_ws/_integrate_6.py
+- `_integrate_7`: 1 Datei(en), z.B. crawl_037_ws/_integrate_7.py
+- `_integrate_8`: 1 Datei(en), z.B. crawl_037_ws/_integrate_8.py
+- `_integration_stats`: 1 Datei(en), z.B. crawl_038_ws/_integration_stats.json
+- `_qa2_spl_live_cache`: 1 Datei(en), z.B. crawl_038_ws/_qa2_spl_live_cache.json
+- `_queue_th_products`: 1 Datei(en), z.B. crawl_038_ws/_queue_th_products.json
+- `_renal_idmap`: 1 Datei(en), z.B. crawl_038_ws/_renal_idmap.json
+- `_renal_priority_names`: 1 Datei(en), z.B. crawl_038_ws/_renal_priority_names.json
+- `_selfcheck`: 2 Datei(en), z.B. crawl_037_ws/_selfcheck.json, crawl_038_ws/_selfcheck.json
+- `_spec`: 7 Datei(en), z.B. crawl_032_ws/_spec.txt, crawl_033_ws/_spec.txt, crawl_034_ws/_spec.txt, crawl_035_ws/_spec.txt, crawl_036_ws/_spec.txt
+- `active bosentan metabolite (Ro 48-5033)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_24.json
+- `acute endurance/resistance exercise and training load`: 10 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `acute increase of dietary sodium chloride`: 5 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `acute resistance / eccentric exercise`: 9 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `acute resistance exercise`: 5 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `acute resistance exercise (accustomed/trained) -> CK`: 1 Datei(en), z.B. crawl_031_ws/I_result.json
+- `acute resistance exercise (strenuous, unaccustomed-leaning)`: 9 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `adherence variability (weekday-only extension; no weekend change)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `adrenocortical and gonadal steroids during prolonged sleep deprivation`: 4 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `age, sex, race, body habitus, apnea-hypopnea index (adjusted in model)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `amb_brands`: 1 Datei(en), z.B. crawl_038_ws/K_cache/amb_brands.json
+- `amb_details`: 1 Datei(en), z.B. crawl_038_ws/K_cache/amb_details.json
+- `ancillaries`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `aromatization`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `assay detection threshold (sensitive vs high-threshold pregnancy tests)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `assay format (competitive vs sandwich) determines direction`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `assay manufacturer determines magnitude`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `assay platform (Roche Elecsys biotinylated sandwich; others less susceptible)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `assay platform / manufacturer`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `assay platform / manufacturer (streptavidin-biotin architecture)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `backfill/frontload`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `base`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `baseline muscle mass and meat intake (creatinine generation)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `baseline thyroid status (effect demonstrated only in subclinical hypothyroidism, TSH 4.5-10)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `biotin dose (threshold ~5 mg/d OTC range; larger doses prolong interference)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `biotin dose / plasma concentration`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `biotin dose and time since last intake`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `biotin dose determines duration of interference after cessation`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `blast`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `blast and cruise / B&C`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `blast-and-cruise`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `bloodwork`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `blue tops / green tops / black tops / brown tops / yellow tops`: 1 Datei(en), z.B. crawl_034_ws/D_result.json
+- `brand_searches`: 1 Datei(en), z.B. crawl_038_ws/K_cache/brand_searches.json
+- `bridge`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `bridge (low-dose between cycles)`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `build_integration`: 1 Datei(en), z.B. crawl_038_ws/build_integration.py
+- `build_reports`: 1 Datei(en), z.B. crawl_038_ws/build_reports.py
+- `caloric intake and physical activity (experimentally controlled during in-lab protocol)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `candidate_resolution`: 2 Datei(en), z.B. crawl_035_ws/E_result.json, crawl_035_ws/F_result.json
+- `cannot_infer`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `capture_input`: 3 Datei(en), z.B. crawl_035_ws/E_result.json, crawl_035_ws/F_result.json, crawl_035_ws/G_result.json
+- `carb depletion 'banding' (KJSM terminology)`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `chronic low-carbohydrate high-fat diet (3 wk, elite endurance)`: 9 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `circadian phase delay after weekend recovery sleep`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `circadian time-of-day (daytime profile sampling standardized in-lab)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `compact_id`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `confidence`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `confidence_state_assignment`: 2 Datei(en), z.B. crawl_035_ws/E_result.json, crawl_035_ws/F_result.json
+- `conflict_detection`: 2 Datei(en), z.B. crawl_035_ws/E_result.json, crawl_035_ws/F_result.json
+- `controlled caloric restriction (-50% energy needs, Minnesota-paradigm)`: 12 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `controlled food intake (~2000 kcal/day) and restricted physical activity in-lab`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `cooked-meat meal acutely raises creatinine and lowers eGFRcr`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `crash (E2)`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `creatine formulation (monohydrate vs ethyl ester)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `creatine formulation/dose phase`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `cruise`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `cruise (TRT-level phase)`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `cruise-dose`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `cumulative sleep restriction 4h or 6h/night x 14 nights`: 10 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `deca dick`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `desethyloxybutynin`: 1 Datei(en), z.B. crawl_038_ws/C_batch_03.json
+- `desglymidodrine`: 1 Datei(en), z.B. crawl_038_ws/C_batch_18.json
+- `dietary carbohydrate manipulation (3-d diets after glycogen depletion)`: 5 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `dietary carbohydrate manipulation -> endurance work capacity`: 1 Datei(en), z.B. crawl_031_ws/I_result.json
+- `dietary sodium reduction (high->low, ~150->~50 mmol/d) + DASH diet`: 9 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `document_media_derivation`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `donor cycle`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `dose and number of injections`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `dose_response_shape`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `dose_strata`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `drostanolone propionate/enanthate`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `drug_05e8343e93`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_05e8343e93.txt
+- `drug_110c904417`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_110c904417.txt
+- `drug_1d529a29be`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_1d529a29be.txt
+- `drug_2e825cd16a`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_2e825cd16a.txt
+- `drug_3f5784c928`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_3f5784c928.txt
+- `drug_587c7a9391`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_587c7a9391.txt
+- `drug_6572a48a85`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_6572a48a85.txt
+- `drug_6c61fbae4c`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_6c61fbae4c.txt
+- `drug_839a589ddb`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_839a589ddb.txt
+- `drug_8f5b626412`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_8f5b626412.txt
+- `drug_9410920d2b`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_9410920d2b.txt
+- `drug_9918a68dfe`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_9918a68dfe.txt
+- `drug_a91e68f5f3`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_a91e68f5f3.txt
+- `drug_b0e9ca3c02`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_b0e9ca3c02.txt
+- `drug_b3d0fce6e2`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_b3d0fce6e2.txt
+- `drug_c7a82a80a3`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_c7a82a80a3.txt
+- `drug_d5aa02d1bd`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_d5aa02d1bd.txt
+- `drug_e30e457830`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_e30e457830.txt
+- `drug_e4ced18144`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_e4ced18144.txt
+- `drug_f1da372255`: 1 Datei(en), z.B. crawl_038_ws/pkraw/drug_f1da372255.txt
+- `dry`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `eGFR`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `eGFR (abgeschwächte HbA1c-Wirkung bei CKD)`: 1 Datei(en), z.B. crawl_029_ws/I_result.json
+- `eccentric / high-volume resistance exercise`: 9 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `eccentric / unaccustomed exercise`: 9 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `eccentric exercise (arm vs leg at same relative intensity)`: 4 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `eccentric exercise (unaccustomed)`: 10 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `eccentric/damaging exercise of different muscle groups (upper vs lower body)`: 1 Datei(en), z.B. crawl_030_ws/F_result.json
+- `eicosapentaenoic acid (EPA)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_06.json
+- `endpoint_id`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `endpoint_type`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `energy deficit (semistarvation, multistressor military field setting)`: 12 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `energy intake level (group 2 +400 kcal/d attenuated losses)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `enhanced`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `enobasarm (USADA-Schreibweise)`: 1 Datei(en), z.B. crawl_034_ws/B_result.json
+- `ester`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `evidence_summary`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `expected_direction`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `exposure_id`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `extract_repro`: 1 Datei(en), z.B. crawl_038_ws/extract_repro.py
+- `fatiguing training/competition exposure (resistance, sprint, match load)`: 5 Datei(en), z.B. crawl_030_ws/F_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `fingolimod-phosphate`: 1 Datei(en), z.B. crawl_038_ws/C_batch_02.json
+- `fluorouracil (5-FU)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_25.json
+- `folic acid dose (masking mainly at >=1 mg/d)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `food_id_top1_accuracy`: 1 Datei(en), z.B. crawl_035_ws/H_result.json
+- `food_id_topk_accuracy`: 1 Datei(en), z.B. crawl_035_ws/H_result.json
+- `formulation instability: CEE degrades to creatinine at gastric/intestinal pH`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `formulation_scoping`: 1 Datei(en), z.B. crawl_038_ws/QA_1_result.json
+- `front loading vs back loading`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `generated_at`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `glow stack (ghk-cu + bpc-157 + tb-500)`: 1 Datei(en), z.B. crawl_034_ws/L_result.json
+- `glyco-obeticholic acid`: 1 Datei(en), z.B. crawl_038_ws/C_batch_26.json
+- `gyno`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `hCG (Einzeldosis hochdosiert vs. aufgeteilte Niedrigdosen, gesunde Maenner)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `hCG (Einzeldosis, hypogonadale Maenner) — E2-Antwort`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `hCG (humanes Choriongonadotropin, niedrigdosiert SC/IM, gonadotropin-supprimierte gesunde Maenner)`: 10 Datei(en), z.B. crawl_028_ws/A_hormonal.json, crawl_029_ws/A_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `hCG -> E2/T Peak-Zeiten`: 1 Datei(en), z.B. crawl_028_ws/A_hormonal.json
+- `hGRF1-29-albumin bioconjugates activate the GRF receptor on the anterior pituitary in rats: identification of CJC-1295 as a long-lasting GRF analog (Jetté et al., Endocrinology)`: 1 Datei(en), z.B. crawl_036_ws/D_result.json
+- `habitual dietary protein intake`: 4 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `habitual short sleep (<=6h, self-reported)`: 10 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `habitual sleep duration/quality (older men)`: 4 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `habitual sodium intake (24-h urinary Na excretion)`: 10 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `handwriting_and_confidence_assessment`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `has_conflict`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `healing peptide`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `heterophile-antibody false positives in serum hCG immunoassays (independent of exogenous hCG)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `high protein diet in trained athletes`: 5 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `in-vitro vs in-vivo conditions (acidic pH required for iron-guaiac reaction)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `insomnia symptoms (associations persisted after exclusion of subjects with insomnia)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `intensiviertes Training + mildes Energiedefizit parallel`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `k_detail`: 1 Datei(en), z.B. crawl_038_ws/k_detail.py
+- `k_fetch`: 1 Datei(en), z.B. crawl_038_ws/k_fetch.py
+- `k_fetch2`: 1 Datei(en), z.B. crawl_038_ws/k_fetch2.py
+- `k_redo`: 1 Datei(en), z.B. crawl_038_ws/k_redo.py
+- `kein Zusammenhang T3 mit AT in dieser Studie`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `kick-in`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `kickstart`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `klow stack (glow + kpv)`: 1 Datei(en), z.B. crawl_034_ws/L_result.json
+- `kurze Lutealphase (<=11 d) verstärkt Disruption`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `latanoprost acid`: 1 Datei(en), z.B. crawl_038_ws/C_batch_10.json
+- `levothyroxine co-medication (additive thyroid effect possible)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `low energy availability (dietary restriction at fixed exercise load)`: 5 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `low vs high sodium diet`: 9 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `lysine-vasopressin`: 1 Datei(en), z.B. crawl_038_ws/C_batch_18.json
+- `magnitude_summary`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `major_modifiers`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `massive rapid weight loss (extreme diet + exercise competition)`: 9 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `medication_matching`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `metabolite_hl_duplication`: 1 Datei(en), z.B. crawl_038_ws/QA_1_result.json
+- `meter/sensor chemistry (glucose oxidase, GDH-PQQ vs GDH-FAD/NAD)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `methandrostenolone (dianabol)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `methasterone (superdrol)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `monomethyl fumarate (MMF)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_06.json
+- `morning-after timing of clamp (11:30-14:30) relative to restricted night`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `multi_item_detection_recall`: 1 Datei(en), z.B. crawl_035_ws/H_result.json
+- `multistressor (Schlafmangel, Workload, Kälte)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `multistressor (sustained workload, sleep restriction, thermal strain)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `muscle mass (creatinine generation) - equation assumes average muscularity`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `n-acetyl semax amidate`: 1 Datei(en), z.B. crawl_034_ws/L_result.json
+- `natty`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `negative Flüssigkeitsbilanz / freie Wasserclearance (r=0.51 / r=-0.90)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `not for human consumption`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `nutrient_error`: 1 Datei(en), z.B. crawl_035_ws/H_result.json
+- `ocr_and_normalization`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `off-cycle`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `on-cycle`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `on-cycle support`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `oral kickstart`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `organ support`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `oseltamivir carboxylate`: 1 Datei(en), z.B. crawl_038_ws/C_batch_24.json
+- `oxandrolone (anavar)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `oxymetholone (anadrol)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `p-hydroxytriamterene sulfate`: 1 Datei(en), z.B. crawl_038_ws/C_batch_25.json
+- `partial sleep deprivation single night (4h, 01:00-05:00)`: 9 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `peak week / peaking / contest week`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `pinning`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `plan`: 1 Datei(en), z.B. crawl_037_ws/plan.md
+- `plateau`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `plausibility_audit`: 1 Datei(en), z.B. crawl_038_ws/QA_1_result.json
+- `population_tags`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `portion_mae`: 1 Datei(en), z.B. crawl_035_ws/H_result.json
+- `post-exercise carbohydrate feeding timing (immediate vs 2 h delayed)`: 10 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `post-exercise carbohydrate intake rate`: 5 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `post-exercise carbohydrate intake rate (<1.2 g/kg/h) + protein co-ingestion`: 5 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `pre-PCT / active recovery (forum lore)`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `protein supplementation during resistance training`: 11 Datei(en), z.B. crawl_028_ws/G_nutrition.json, crawl_029_ws/G_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `pyramid`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `pyridoxal-5-phosphate (vitamin B6)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `qa1_fix_log`: 1 Datei(en), z.B. crawl_037_ws/qa1_fix_log.jsonl
+- `qa2_fix`: 1 Datei(en), z.B. crawl_038_ws/qa2_fix.py
+- `qa2_fix_log`: 1 Datei(en), z.B. crawl_038_ws/qa2_fix_log.jsonl
+- `queries`: 1 Datei(en), z.B. crawl_038_ws/K_cache/queries.json
+- `range_preservation`: 1 Datei(en), z.B. crawl_038_ws/QA_1_result.json
+- `recomp`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `redaction_before_reuse`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `redo`: 1 Datei(en), z.B. crawl_038_ws/K_cache/redo.json
+- `reduzierte Economy (erhöhter O2-Bedarf) als Mechanismus`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `refeeding cycles within course (attenuate deficit)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `renal function / individual clearance`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `repeated exposure to the same eccentric/damaging exercise (second bout weeks later)`: 1 Datei(en), z.B. crawl_030_ws/F_result.json
+- `repro_da_0`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_da_0.json
+- `repro_da_1`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_da_1.json
+- `repro_da_2`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_da_2.json
+- `repro_da_3`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_da_3.json
+- `repro_labels`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_labels.json
+- `repro_w0`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_w0.json
+- `repro_w1`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_w1.json
+- `repro_w2`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_w2.json
+- `repro_w3`: 1 Datei(en), z.B. crawl_038_ws/B_cache/repro_w3.json
+- `research peptide`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `research use only`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `resistance exercise session (high-intensity and/or high-volume)`: 6 Datei(en), z.B. crawl_030_ws/F_result.json, crawl_031_ws/B_result.json, crawl_031_ws/B_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json
+- `resistance training (per-muscle-group rest interval)`: 5 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/F_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `resistance training co-intervention`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `resistance training session (volume/intensity/failure descriptors vary)`: 5 Datei(en), z.B. crawl_030_ws/F_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `resistance training sets (velocity loss within set / per-session velocity loss threshold)`: 1 Datei(en), z.B. crawl_030_ws/F_result.json
+- `resistance training sets performed to concentric failure vs matched-volume non-failure sets`: 5 Datei(en), z.B. crawl_030_ws/F_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `reverse causation / comorbidity (cross-sectional design)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `reverse diet`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `roid rage`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `route and dose: interference clinically important mainly with high-dose IV ascorbate (burn/sepsis protocols)`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `route_formulation`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `route_formulation_scope`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `salzresistente normotensive Männer mit normaler Nierenfunktion — nicht auf salzsensitive/hypertensive Populationen übertragbar`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `sample_verification`: 1 Datei(en), z.B. crawl_038_ws/QA_1_result.json
+- `searched, none found`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `searched, none found: RCT 0.25mg anastrozole on-cycle/AAS context`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `searched, none found: RCT zu interindividueller Anastrozol/SERM-Response-Heterogenitaet bei Maennern/AAS-Kontext`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `searched, none found: human RCT measuring prolactin under nandrolone/trenbolone`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `searched, none found: human trial methenolone effect on estradiol`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `searched, none found: injectable/systemic GHK-Cu human RCT`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `searched, none found: synergy trial any AAS blend`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `searched, none found: trenbolone-specific human nephrotoxicity trial`: 1 Datei(en), z.B. crawl_036_ws/I_result.json
+- `selfcheck`: 1 Datei(en), z.B. crawl_038_ws/selfcheck.py
+- `sex (weekend sleep duration and intake recovery response differed between men and women)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `shutdown`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `signal_extraction`: 2 Datei(en), z.B. crawl_035_ws/E_result.json, crawl_035_ws/F_result.json
+- `single fasting morning sample (no OGTT/clamp) — endpoint sensitivity limited`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `sleep debt 4h/night x 6 nights`: 10 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `sleep deprivation (acute, mixed protocols: total and partial)`: 4 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `sleep extension (+~1h time in bed, 6 weeks) after habitual short sleep`: 9 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `sleep restriction 4.5h/night x 4 nights`: 9 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `sleep restriction 4h TIB/night x 5 nights`: 5 Datei(en), z.B. crawl_030_ws/_atlas_backup_pre_merge.jsonl, crawl_031_ws/A_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_sleep.json
+- `sleep restriction 5h/night x 5 nights`: 4 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl
+- `sleep restriction 5h/night x 7 nights`: 9 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `sleep restriction ~4h/night x 2 nights`: 10 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `small single-center sample (n=7) — authors' stated limitation`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `source_relationship_hash`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `source_relationship_ids`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `stale_state`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `stanozolol (winstrol)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `starker Alkoholkonsum`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `string`: 2 Datei(en), z.B. crawl_035_ws/E_result.json, crawl_035_ws/G_result.json
+- `structure_scope_source`: 1 Datei(en), z.B. crawl_038_ws/QA_1_result.json
+- `structured_extraction`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `study duration / loading vs maintenance phase`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `subjective-objective discrepancy: subjective sleepiness plateaus while objective PVT lapses accumulate linearly`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `supp_searches`: 1 Datei(en), z.B. crawl_038_ws/K_cache/supp_searches.json
+- `supplement_facts_extraction`: 1 Datei(en), z.B. crawl_035_ws/F_result.json
+- `suppression`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `sympathetic nervous system activation (sympathovagal balance shift, co-measured)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `synthesis_id`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `synthesis_version`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `taper`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `tauro-obeticholic acid`: 1 Datei(en), z.B. crawl_038_ws/C_batch_26.json
+- `tauroursodeoxycholic acid`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `test type: guaiac (Hemoccult) chemistry; modern FIT immunochemical tests unaffected by dietary iron`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `testosterone (cypionate ester)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `testosterone (propionate ester)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `testosterone blend (sustanon)`: 1 Datei(en), z.B. crawl_034_ws/L_result.json
+- `testosterone cypionate`: 1 Datei(en), z.B. crawl_034_ws/L_result.json
+- `testosterone cypionate / propionate`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `testosterone ester blend`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `testosterone propionate`: 1 Datei(en), z.B. crawl_034_ws/L_result.json
+- `testosterone suspension (no ester)`: 1 Datei(en), z.B. crawl_034_ws/A_result.json
+- `thioguanine nucleotides (TGNs)`: 1 Datei(en), z.B. crawl_038_ws/C_batch_04.json
+- `thyrotropic axis suppression (TSH lower in debt state, co-measured)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `time since last biotin intake`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `time-of-day dependency of HPA effect (morning ACTH vs evening cortisol dissociation)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `timecourse`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `total sleep deprivation (single night, 0h)`: 10 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `training effect lowers cystatin C independent of creatine`: 1 Datei(en), z.B. crawl_029_ws/E_result.json
+- `training load / overreaching`: 4 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `training load / recovery`: 4 Datei(en), z.B. crawl_028_ws/F_training.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `training load accumulation / overload and taper phases`: 1 Datei(en), z.B. crawl_030_ws/F_result.json
+- `training overload / non-functional overreaching vs normal training`: 5 Datei(en), z.B. crawl_030_ws/F_result.json, crawl_031_ws/E_units.json, crawl_032_ws/_apps_final.json, crawl_032_ws/_apps_stage2.json, crawl_032_ws/domain_training.json
+- `trait-like differential vulnerability to sleep loss (stable interindividual differences)`: 1 Datei(en), z.B. crawl_029_ws/H_result.json
+- `tren cough`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `trensomnia`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `unaccustomed exercise, predominantly eccentric-biased protocols`: 1 Datei(en), z.B. crawl_030_ws/F_result.json
+- `unaccustomed strenuous eccentric exercise`: 1 Datei(en), z.B. crawl_030_ws/F_result.json
+- `uncertain OCR: 'Metf0rmin 5OO'`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `universe`: 1 Datei(en), z.B. crawl_027_ws/universe.json
+- `universe_axes`: 1 Datei(en), z.B. crawl_028_ws/universe_axes.json
+- `unkontrolliertes Design (kein Placeboarm); Regression zur Mitte/Regressionseffekte moeglich`: 1 Datei(en), z.B. crawl_029_ws/A_result.json
+- `user_confirmation`: 3 Datei(en), z.B. crawl_035_ws/E_result.json, crawl_035_ws/F_result.json, crawl_035_ws/G_result.json
+- `user_correction_rate`: 1 Datei(en), z.B. crawl_035_ws/H_result.json
+- `variability`: 1 Datei(en), z.B. crawl_031_ws/J_result.json
+- `verbleibende Fettreserven (niedrigste Fettreserve -> höheres Cholesterin)`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `verification_state_assignment`: 1 Datei(en), z.B. crawl_035_ws/G_result.json
+- `water loading/water cutting`: 1 Datei(en), z.B. crawl_034_ws/E_result.json
+- `weekend recovery sleep after recurring 5h restriction`: 9 Datei(en), z.B. crawl_028_ws/H_sleep.json, crawl_029_ws/H_queue.json, crawl_029_ws/J_result.json, crawl_029_ws/_atlas_backup_pre_merge.jsonl, crawl_030_ws/_atlas_backup_pre_merge.jsonl
+- `wet`: 1 Datei(en), z.B. crawl_037_ws/N_result.json
+- `wolverine stack (bpc-157 + tb-500)`: 1 Datei(en), z.B. crawl_034_ws/L_result.json
+- `zentrale LH-Suppression (8.5±3.1 -> 4.3±2.2 IU/l) als Mechanismus`: 1 Datei(en), z.B. crawl_029_ws/G_result.json
+- `§77-Kernprüfung bestanden; 8 Records ganz ohne constraints/cannot_generalize_to`: 1 Datei(en), z.B. crawl_032_ws/QA3_result.json
+- `Östrogen-Status (oral vs. transdermal, IGF-1-Response)`: 1 Datei(en), z.B. crawl_029_ws/B_result.json
