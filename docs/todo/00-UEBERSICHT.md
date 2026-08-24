@@ -275,3 +275,4 @@ wenn er erzeugt und geprüft wird.
 | **G-178** Reiter und Fussleiste nennen verschiedene Zahlen — 298 | offen | 5643 |
 | **C-257** Nutzertexte fuer den Substanzkatalog — Schema und | offen | 5666 |
 | **C-258** Die Nutzertexte sind Schablonen — und 248 Substanzen | offen | 5728 |
+| **C-259** Kimis Bestand ist weit groesser als angenommen — und der | offen | 5802 |
