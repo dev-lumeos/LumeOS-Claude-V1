@@ -278,3 +278,5 @@ wenn er erzeugt und geprüft wird.
 | **C-259** Kimis Bestand ist weit groesser als angenommen — und der | offen | 5802 |
 | **C-260** Die Arbeitsberichte sind nicht in die Daten | offen | 5930 |
 | **C-261** Der Abgleich aus C-260 ist ungefiltert nicht benutzbar | offen | 5970 |
+| **C-262** Der Import — vier Wellen | offen | 6017 |
+| **C-263** Deutsche Beschreibungen aus Kimis Fachdaten ableiten | offen | 6047 |

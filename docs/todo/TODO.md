@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-24.** 234 offen, 0 in Arbeit.
+**Stand: 2026-08-24.** 236 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6013,3 +6013,59 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   `[read]` **`last_verified` ist Rauschen, `cyp.*.note` ist eine
   Aussage.** Beides steht heute nebeneinander — der echte Konflikt geht
   darin unter.
+
+- [ ] **C-262: Der Import — vier Wellen** (neu 2026-08-24). Aus C-259
+  bis C-261.
+
+  `[cmd]` **Stichprobe des Orchestrators an 300 gemeldeten
+  FEHLT-Werten: 289 fehlen tatsaechlich, 11 waren Fehlmeldungen** —
+  kurze generische Werte wie `substrate`, die irgendwo im Datensatz
+  vorkamen. **3,7 % Rauschen, belastbar genug.**
+
+  `[read]` **Die 37.886 FEHLT-Zeilen sind nicht 37.886 Importposten.**
+  Drei Sorten: Sachwerte · Pruefvermerke (`not_relevant` — fachlich
+  richtig, sagt *„hier gibt es nichts"*) · Provenienz (`sources[].url`,
+  `.setid`). **Alle drei gehoeren importiert, aber verschieden
+  gewichtet.**
+
+  | Welle | Inhalt |
+  |---|---|
+  | **1** | CYP (6 Enzyme), **10 Transporter**, Renal, Hepatic, PK, Dosis 290, WADA 448, Thailand 976 |
+  | **2** | 66 Biomarker-Erklaerungen, 34 Symptome, 102 Kanten, LOINC-Abgleich |
+  | **3** | Namensbruecke 1.131, die 248 verborgenen aufloesen, 29 Unterformen sichtbar |
+  | **4** | 498 Wirkstoffe, 453 Formulierungen, 448 Produkte, 20 Regeln |
+
+  `[read]` **Transporter und CYP gehoeren in eigene Zeilen, nicht in
+  Spalten** — zehn Transporter mal zwei Felder waeren zwanzig Spalten,
+  und beim naechsten dieselbe Diskussion.
+
+  `[read]` **Erst danach kann das System vor Wechselwirkungen warnen.**
+  `[cmd]` Digoxin ist P-gp-Substrat mit enger therapeutischer Breite;
+  Biotin verfaelscht Laborwerte. Beide stehen unter den 978 Entitaeten
+  mit fehlenden Werten.
+
+- [ ] **C-263: Deutsche Beschreibungen aus Kimis Fachdaten ableiten**
+  (neu 2026-08-24). Ersetzt C-258.
+
+  `[read]` **C-257 ist an meiner Formulierung gescheitert:** *„nichts
+  erfinden"* war gegen erfundene Zahlen gemeint, gelesen wurde ein
+  Verbot, Fachwissen hinzuschreiben. `[cmd]` Ergebnis: 289 Texte mit
+  **98 verschiedenen Formulierungen**, 867 FAQ-Zeilen mit **drei**
+  Antworten.
+
+  `[cmd]` **Die Quelle traegt genug:** `pharmacology` 154/154,
+  `dosing` 154/154, `safety` 154/154, `mechanism_of_action` 73/154.
+  **Bei Kreatin liegt alles vor** — Phosphokreatin-Puffer,
+  Bioverfuegbarkeit ~99 %, 3–5 g taeglich, Magenbeschwerden bei
+  Ladedosen, Serum-Kreatinin real erhoeht ohne Nierenschaden.
+
+  `[read]` **Uebersetzungsaufgabe, keine Recherche** — ausser bei den
+  81 ohne `mechanism_of_action`.
+
+  `[cmd]` **Die Pruefung misst diesmal Formulierungsvielfalt statt
+  Laenge:** mindestens 280 von 290 Kurztexte verschieden, mindestens
+  700 FAQ-Antworten. **Heute 98 und 3.** Laengen- und Sperrwortpruefung
+  bestehen Schablonen muehelos — das war der blinde Fleck in C-257.
+
+  `[read]` **Laeuft parallel zu C-262**, weil Claude Code die
+  JSONL-Dateien direkt liest und nicht die Datenbank.
