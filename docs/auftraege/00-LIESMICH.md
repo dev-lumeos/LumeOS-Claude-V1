@@ -4,6 +4,28 @@
 history sauber haben und dazu gehoert auch der auftrag der verloren geht
 wenn ich claude wechsle."*
 
+## `wartend/` — geschrieben, aber nicht rausgegangen
+
+Ein Auftrag in `docs/auftraege/` gilt als **rausgegangen**. Der
+Waechter `tools/nummern-pruefen.mjs` prueft dann, ob alle
+Vorbedingungen des Punktes erledigt sind — `braucht: C-275, C-276` in
+der ersten Zeile des Punktrumpfes in `TODO.md`.
+
+**Wer einen Auftrag vorbereitet, dessen Vorbedingung noch laeuft, legt
+ihn nach `docs/auftraege/wartend/`.** Dort zaehlt er nicht als
+rausgegangen, ist aber nicht verloren.
+
+`[read]` **Der Anlass, 2026-08-25:** C-272 ging raus — Anreicherung des
+Substanzkatalogs —, waehrend dem Katalog **128 Substanzen fehlten**,
+darunter Testosteron mit allen Estern. Codex arbeitete an
+Verfeinerungen fuer einen Bestand, dem ein Drittel seiner Eintraege
+fehlte, und wurde gestoppt. **Nichts hat es verhindert, weil die
+Reihenfolge nur im Kopf des Orchestrators stand.**
+
+`[read]` **Tom dazu:** *„du hast den job todolisten mit abhaengigkeiten
+zu fuehren, wenn das sauber machen wuerdest wuerde sowas nicht
+passieren."*
+
 ## Wozu
 
 `docs/berichte/` sagt, was der Agent gemeldet hat.

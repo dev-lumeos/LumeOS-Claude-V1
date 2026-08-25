@@ -5,6 +5,17 @@ Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
 
+**Abhängigkeiten:** Ein Punkt, der einen anderen voraussetzt, trägt in
+der ersten Zeile seines Rumpfes `braucht: C-275, G-176`. Der Wächter
+`tools/nummern-pruefen.mjs` prüft, dass kein Auftrag zu einem Punkt
+rausgeht, dessen Vorbedingung noch offen ist.
+
+**Der Grund:** Am 2026-08-25 ging C-272 (Anreicherung des Katalogs)
+raus, während dem Katalog 128 Substanzen fehlten — darunter Testosteron
+mit allen Estern. Nichts hat es verhindert, weil die Reihenfolge nur im
+Kopf des Orchestrators stand. **Eine Reihenfolge, die nirgends steht,
+ist keine.**
+
 **Belegpflicht:** Aussagen über den Ist-Zustand tragen `[cmd]`, `[read]`
 oder `[annahme]`. Nur `[cmd]` darf zu einer Regel werden.
 
@@ -6118,6 +6129,14 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 - [ ] **C-272: Welle 1 — der Katalog wird inhaltlich fertig** (neu
   2026-08-25). Aus `docs/ssot/96-kimi-inhalt.md`.
 
+  braucht: C-275, C-276
+
+  `[read]` **Die Abhaengigkeit ist der Grund, warum es diese Zeile
+  gibt.** C-272 ging am 2026-08-25 raus, waehrend dem Katalog 128
+  Substanzen fehlten — **Anreicherung fuer einen Bestand, der ein
+  Drittel seiner Eintraege nicht hatte.** Codex wurde nach zwei Stunden
+  gestoppt.
+
   `[read]` **Warum jetzt und nicht spaeter:** `docs/kimi_research/`
   steht in `.gitignore` — der Bestand ist **nicht versioniert, nicht
   gesichert, nicht gemessen.** `[cmd]` In vier Tagen dreimal bewiesen,
@@ -6144,6 +6163,8 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
 - [ ] **C-273: Welle 2 — Schema `wissen` fuer das, was noch nicht
   angezeigt wird** (neu 2026-08-25).
+
+  braucht: C-272
 
   `[read]` **Nicht in `supplements`.** Was dort liegt, gehoert in den
   Katalog; alles andere macht ihn unuebersichtlich und verleitet dazu,
@@ -6187,6 +6208,11 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   Kuehlkette. `[read]` **Fuer Nutzer in Thailand kein Nebenthema.**
 
 - [ ] **C-274: Die 248 unsichtbaren zuordnen** (neu 2026-08-25).
+
+  braucht: C-276
+
+  `[cmd]` **Stand nach C-275: noch 149**, davon **66 mit sichtbarem
+  Gegenstueck.**
 
   `[cmd]` **122 der 248 sind bei Kimi bekannt, 123 haben einen
   Nutzertext.** Die uebrigen 126 zerfallen in drei Sorten:
