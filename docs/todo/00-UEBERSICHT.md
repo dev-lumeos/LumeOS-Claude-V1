@@ -283,3 +283,6 @@ wenn er erzeugt und geprüft wird.
 | **G-188** Der Wechselwirkungs-Reiter heisst nicht, was er zeigt | offen | 6069 |
 | **G-189** Der tote Rueckfallzweig `SuppInteractions` fliegt | offen | 6087 |
 | **C-271** `rule_catalog` laedt immer — jeder Rueckfallzweig daran | offen | 6100 |
+| **C-272** Welle 1 — der Katalog wird inhaltlich fertig | offen | 6118 |
+| **C-273** Welle 2 — Schema `wissen` fuer das, was noch nicht | offen | 6145 |
+| **C-274** Die 248 unsichtbaren zuordnen | offen | 6189 |

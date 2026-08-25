@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 239 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 242 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6114,3 +6114,98 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   **Zu tun:** alle Stellen finden, die auf `regeln.length === 0` oder
   Vergleichbares warten. **Wo der Zweig tot ist: melden.** `[read]`
   Ob er weg soll, ist je Fall zu entscheiden — **die Zahl zuerst.**
+
+- [ ] **C-272: Welle 1 — der Katalog wird inhaltlich fertig** (neu
+  2026-08-25). Aus `docs/ssot/96-kimi-inhalt.md`.
+
+  `[read]` **Warum jetzt und nicht spaeter:** `docs/kimi_research/`
+  steht in `.gitignore` — der Bestand ist **nicht versioniert, nicht
+  gesichert, nicht gemessen.** `[cmd]` In vier Tagen dreimal bewiesen,
+  dass Dateien dort vergessen werden: `RESEARCH_STATUS.md` dreimal
+  zitiert und nie geoeffnet, die Dosis-Anreicherung in C-262
+  durchgerutscht, `data/admin` im ersten Bestandsbericht nicht
+  erwaehnt. **In der Datenbank ist Wissen auffindbar und gesichert.**
+
+  | Was | Zeilen | heute |
+  |---|---:|---|
+  | WADA-Geltungsbereich | 446 + 318 | `note_de` **0/290** |
+  | Laborwirkung mit `effect_class` | 47 | Feld fehlt |
+  | Human-Evidenz-Flaggen | 293 | — |
+  | Thailand | 1.061 | — |
+  | CYP und Transporter, Rest | ~1.000 | `entity_transporters` **135** |
+  | Studien | 43 | — |
+  | PubChem-Konflikte | 20 | Waechter kennt **3 von 6** |
+
+  `[read]` **Der wertvollste Einzelfund ist `effect_class`:** es
+  trennt *„der Wert aendert sich"* von *„der Wert wird falsch
+  gemessen"*. `[cmd]` Daptomycin hebt INR um bis zu **43 %** ohne
+  Blutungsrisiko — **wer das verwechselt, behandelt einen
+  Messfehler.**
+
+- [ ] **C-273: Welle 2 — Schema `wissen` fuer das, was noch nicht
+  angezeigt wird** (neu 2026-08-25).
+
+  `[read]` **Nicht in `supplements`.** Was dort liegt, gehoert in den
+  Katalog; alles andere macht ihn unuebersichtlich und verleitet dazu,
+  es anzuzeigen, bevor es durchdacht ist.
+
+  **Die Regel-Engine** — `[cmd]` 64 Regeln mit ausfuehrbaren
+  Bedingungen, `module_field_spec.json` (kanonische Feldpfade je
+  Modul), `rule_trait_mapping.json` (157 Klassen). `[read]` **Die
+  Bruecke zwischen Supplements und Medical**, gebraucht sobald der
+  Medikamentenkatalog steht.
+
+  **Die Register** — `[cmd]` 265 Konstanten mit `current_value: null`:
+  `constant_evidence` 181 · `formula_evidence` 22 ·
+  `recovery_modality` 32 · `fatigue_signal` 17 ·
+  `training_structure` 13. `[read]` **Sie sagen, was wir NICHT bauen
+  sollen:** `acwr_decision: implement: no`, vier synthetische
+  Seed-Werte in Recovery. **Heute wertvoll, nicht spaeter.**
+
+  **Die Lueckenkarten** — `[cmd]` 56 aufgeloeste, 46 Abhaengigkeiten,
+  **305 Holds** (67 `REPO_DEPENDENCY`). `[read]` Sie beantworten
+  *„warum ist das leer"* **dauerhaft**, statt dass in sechs Wochen
+  jemand recherchieren laesst, was `NOT_APPLICABLE` ist.
+
+  **Die Buddy-Ebene** — `[cmd]` 2.817 Zeilen Populationsevidenz plus
+  `observation_comparison_semantics` mit **14 Zustaenden, je mit
+  `allowed_buddy_language` und `forbidden_buddy_language`.**
+  **Importieren, nicht anzeigen.**
+
+  **Die Produktebene** — `[cmd]` 50 Produkte, deren Zutaten **unsere
+  `sub_*`-IDs tragen**, mit Menge, Einheit, Zertifikaten, **Preis je
+  Portion** und Thailand-Verfuegbarkeit. 120 Marken, 63 Hersteller.
+  `[read]` **Genau die Ebene, fuer die die Kosten-Kachel seit C-250
+  markiert ist.**
+
+  **Das Scan-Konzept** — vier Vertraege mit Regeln wie *„never match
+  by name alone"*, sicherheitskritischen Feldern, QR-Vertrauensmodell,
+  Medienrechte-Register mit acht Zustaenden.
+
+  **Reise mit Medikamenten** — Schema plus sieben Laender:
+  Verschreibungspflicht, Arztbrief, Mengengrenze, Zolldeklaration,
+  Kuehlkette. `[read]` **Fuer Nutzer in Thailand kein Nebenthema.**
+
+- [ ] **C-274: Die 248 unsichtbaren zuordnen** (neu 2026-08-25).
+
+  `[cmd]` **122 der 248 sind bei Kimi bekannt, 123 haben einen
+  Nutzertext.** Die uebrigen 126 zerfallen in drei Sorten:
+
+  `[read]` **Handelsnamen zu beschriebenen Stoffen** — `Anavar
+  (Oxandrolone)`, `Dianabol (Methandrostenolone)`, `Clomiphene Citrate
+  (Clomid)`, `Furosemide (Lasix)`. **Kimi hat sie unter dem
+  Wirkstoffnamen geschrieben; der Klammerinhalt ist der Schluessel.**
+
+  `[read]` **Kombinationen** — `Bulk Mix (Test E + Deca + EQ)`,
+  `Cut Mix`, `Dbol + Anavar Stack Oral`, `Choline Stack`. Keine
+  Substanzen.
+
+  `[read]` **Dubletten mit Zusatz** — `Ashwagandha` und `Ashwagandha
+  (Sensoril)` neben dem Sammelrecord, `CoQ10 Ubiquinol`/`Ubiquinone`,
+  `Caffeine (Diuretic)`.
+
+  `[cmd]` **Echter Rest:** 7-Keto DHEA, Copper, Ginkgo Biloba,
+  F-Phenibut, Epithalon, DSIP, DNP, Enclomiphene, Epistane.
+
+  `[read]` **Keine Rechercheaufgabe mehr** — Zuordnung ueber die
+  Klammerinhalte plus eine kleine Nachforderung an Kimi.
