@@ -639,12 +639,39 @@
       ]
     },
     {
+      "id": "142_medical",
+      "path": "supabase/_pipeline/14_medical/142_laborimport_matching.sql",
+      "kind": "sql",
+      "creates": "medical.biomarker_aliases schema and lab import matching functions",
+      "depends_on": [
+        "141"
+      ]
+    },
+    {
+      "id": "143_medical",
+      "path": "supabase/_pipeline/14_medical/143_biomarker_aliases.ts",
+      "kind": "tsx",
+      "creates": "medical.biomarker_aliases data",
+      "depends_on": [
+        "142_medical"
+      ]
+    },
+    {
+      "id": "144_medical",
+      "path": "supabase/_pipeline/14_medical/144_biomarker_spec_enrichment.ts",
+      "kind": "tsx",
+      "creates": "medical.biomarker_spec_enrichment and spec reference ranges",
+      "depends_on": [
+        "143_medical"
+      ]
+    },
+    {
       "id": "145_medical",
       "path": "supabase/_pipeline/14_medical/145_medications_schema.sql",
       "kind": "sql",
       "creates": "Medical-Medikationsschema: Wirkstoffe, Formulierungen, Produkte, User-Medikationen und Conditions",
       "depends_on": [
-        "140"
+        "144_medical"
       ]
     },
     {
@@ -754,12 +781,21 @@
       ]
     },
     {
+      "id": "141u",
+      "path": "supabase/_pipeline/13_supplements/141b_supplement_kimi_enhanced_textfelder.ts",
+      "kind": "tsx",
+      "creates": "supplements.supplement_user_texts enhanced fields",
+      "depends_on": [
+        "141t"
+      ]
+    },
+    {
       "id": "146a",
       "path": "supabase/_pipeline/13_supplements/132a_rule_input_status.sql",
       "kind": "sql",
       "creates": "Regel-Eingangsdiagnose: fehlende Kimi-Regelpfade als missing_input statt stilles false",
       "depends_on": [
-        "141t",
+        "141u",
         "053",
         "106",
         "121",
@@ -902,11 +938,21 @@
       ]
     },
     {
+      "id": "155",
+      "path": "supabase/_pipeline/15_coach/155_coach_invites.sql",
+      "kind": "sql",
+      "creates": "Coach-Einladungen: Ruecknahme per withdrawn-Status und E-Mail-Aufloesung fuer Invite-Pfad",
+      "depends_on": [
+        "151"
+      ]
+    },
+    {
       "id": "152",
       "path": "supabase/_pipeline/15_coach/152_coach_lesepfad.sql",
       "kind": "sql",
       "creates": "Coach-Lesepfad: hat_sicht() als eine Sichtregel, 22 full-Policies auf den Nutzerdaten der sechs Module, 6 summary-Funktionen",
       "depends_on": [
+        "155",
         "150",
         "110",
         "111",

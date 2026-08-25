@@ -1490,6 +1490,13 @@
       "tabelle": "stack_items",
       "zeigt_auf": "supplements",
       "schritt": "138"
+    },
+    {
+      "schema": "coach",
+      "name": "relationships_withdrawn_by_fkey",
+      "tabelle": "relationships",
+      "zeigt_auf": "auth.users",
+      "schritt": "155"
     }
   ],
   "funktionen": [
@@ -1668,8 +1675,8 @@
     "supplements.supplement_aliases": 951,
     "supplements.supplement_lab_effects": 222,
     "supplements.supplement_nutrients": 17,
-    "supplements.supplement_user_texts": 290,
-    "supplements.supplement_faq": 1279,
+    "supplements.supplement_user_texts": 318,
+    "supplements.supplement_faq": 1421,
     "supplements.supplement_tags": 425,
     "supplements.supplement_portions": 79,
     "supplements.supplement_safety": 290,
@@ -1723,8 +1730,8 @@
     "supplements.supplement_aliases": "[cmd] C-257: 140_supplement_nutzertexte.sql faltet 598 gefoldete Alias-Dubletten. C-258 ergaenzt 8 belegte Handels-/Trivialnamen-Aliase. Erwartung mindestens 951.",
     "supplements.supplement_lab_effects": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_lab_effects aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 222.",
     "supplements.supplement_nutrients": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_nutrients aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 17.",
-    "supplements.supplement_user_texts": "C-264: Kimi substance_user_texts.jsonl ersetzt C-257-Schablonen, 290 Records.",
-    "supplements.supplement_faq": "C-264: Kimi substance_faq.jsonl ersetzt C-257-Schablonen, 1.279 Records.",
+    "supplements.supplement_user_texts": "C-265/C-267 Nachtrag: Kimi substance_user_texts.jsonl traegt 318 Records; 290 ueber slug, 28 Sammelnamen ueber canonical_name -> name_en.",
+    "supplements.supplement_faq": "C-265/C-267 Nachtrag: Kimi substance_faq.jsonl traegt 1421 Records ueber 318 entity_id; Mapping wie user_texts ueber slug, dann canonical_name -> name_en.",
     "supplements.supplement_tags": "[cmd] C-257: 140_supplement_nutzertexte.sql schreibt 289 Zweck-Tags plus 136 Recht/WADA-Tags fuer Peptide und Enhanced.",
     "supplements.supplement_portions": "[cmd] C-257: 140_supplement_nutzertexte.sql hebt maschinenlesbar belegte Studiengroessen aus studied_dose_ranges; 79 von 83 Bereichen liefern direkt Menge+Einheit.",
     "supplements.supplement_safety": "[cmd] C-235: 137_supplements_neuaufbau_befuellen.sql befuellt supplements.supplement_safety aus substance_catalog/raw bzw. bestehenden Brueckentabellen; Erwartung mindestens 290.",
@@ -2138,7 +2145,7 @@
     {
       "schema": "coach",
       "name": "relationships",
-      "schritt": "151",
+      "schritt": "151/155",
       "rls": true,
       "policies": [
         "SELECT",
@@ -2162,7 +2169,25 @@
         ]
       },
       "grants_herkunft": "151_coach_relationships.sql vergibt authenticated SELECT/INSERT/UPDATE, bewusst kein DELETE — Beziehungen enden, sie verschwinden nicht; service_role ALL.",
-      "zeilenschutzart": "eigene_zeilen"
+      "zeilenschutzart": "eigene_zeilen",
+      "spalten": [
+        "id",
+        "coach_id",
+        "client_id",
+        "status",
+        "invited_by",
+        "invite_note",
+        "started_at",
+        "ended_at",
+        "ended_by",
+        "end_reason",
+        "changed_by",
+        "created_at",
+        "updated_at",
+        "withdrawn_at",
+        "withdrawn_by",
+        "withdraw_reason"
+      ]
     },
     {
       "schema": "coach",
@@ -4536,6 +4561,16 @@
       "schema": "medical",
       "name": "import_lab_report_rows",
       "schritt": "142"
+    },
+    {
+      "schema": "coach",
+      "name": "resolve_invite_user_id",
+      "schritt": "155"
+    },
+    {
+      "schema": "coach",
+      "name": "withdraw_relationship_invite",
+      "schritt": "155"
     }
   ]
 }

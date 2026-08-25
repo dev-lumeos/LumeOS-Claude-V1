@@ -35,8 +35,8 @@ function run(sql: string): void {
 
 const texts = readJsonl('substance_user_texts.jsonl')
 const faq = readJsonl('substance_faq.jsonl')
-if (texts.length !== 290) throw new Error(`substance_user_texts: ${texts.length}, erwartet 290`)
-if (faq.length !== 1279) throw new Error(`substance_faq: ${faq.length}, erwartet 1279`)
+if (texts.length !== 318) throw new Error(`substance_user_texts: ${texts.length}, erwartet 318`)
+if (faq.length !== 1421) throw new Error(`substance_faq: ${faq.length}, erwartet 1421`)
 
 const payload = { texts, faq }
 
@@ -69,13 +69,49 @@ DELETE FROM supplements.supplement_user_texts;
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'texts') AS r FROM tmp_c264_texts
 ), mapped AS (
-  SELECT r, s.id AS supplement_id
-  FROM rows
-  LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id'
+  SELECT r, supplement_id
+  FROM (
+    SELECT
+      rows.r,
+      s.id AS supplement_id,
+      row_number() OVER (
+        PARTITION BY rows.r->>'entity_id'
+        ORDER BY
+          CASE WHEN s.slug = rows.r->>'entity_id' THEN 0 ELSE 1 END,
+          CASE
+            WHEN regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+               = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
+            THEN 0 ELSE 1
+          END,
+          CASE WHEN s.im_katalog THEN 0 ELSE 1 END,
+          s.slug
+      ) AS rank,
+      count(*) OVER (PARTITION BY rows.r->>'entity_id') AS matches
+    FROM rows
+    LEFT JOIN supplements.supplements s
+      ON s.slug = rows.r->>'entity_id'
+      OR regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+       = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
+      OR lower(s.name_en) = lower(rows.r->>'canonical_name')
+      OR EXISTS (
+        SELECT 1 FROM supplements.supplement_aliases a
+        WHERE a.supplement_id = s.id
+          AND lower(a.alias) = lower(rows.r->>'canonical_name')
+      )
+  ) ranked
+  WHERE rank = 1
+    AND (
+      matches = 1
+      OR supplement_id IS NOT NULL
+    )
 ), missing AS (
   SELECT r->>'entity_id' AS entity_id, r->>'canonical_name' AS canonical_name
-  FROM mapped
-  WHERE supplement_id IS NULL
+  FROM rows
+  WHERE NOT EXISTS (
+    SELECT 1 FROM mapped
+    WHERE mapped.r->>'entity_id' = rows.r->>'entity_id'
+      AND mapped.supplement_id IS NOT NULL
+  )
 )
 INSERT INTO supplements.supplement_user_texts (
   supplement_id, status,
@@ -118,30 +154,98 @@ DECLARE
 BEGIN
   SELECT count(*) INTO v_missing
   FROM (
-    SELECT r->>'entity_id' AS entity_id
-    FROM tmp_c264_texts, jsonb_array_elements(payload->'texts') r
-    LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id'
-    WHERE s.id IS NULL
+    WITH rows AS (
+      SELECT jsonb_array_elements(payload->'texts') AS r FROM tmp_c264_texts
+    ), mapped AS (
+      SELECT r, supplement_id
+      FROM (
+        SELECT
+          rows.r,
+          s.id AS supplement_id,
+          row_number() OVER (
+            PARTITION BY rows.r->>'entity_id'
+            ORDER BY
+              CASE WHEN s.slug = rows.r->>'entity_id' THEN 0 ELSE 1 END,
+              CASE
+                WHEN regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+                   = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
+                THEN 0 ELSE 1
+              END,
+              CASE WHEN s.im_katalog THEN 0 ELSE 1 END,
+              s.slug
+          ) AS rank
+        FROM rows
+        LEFT JOIN supplements.supplements s
+          ON s.slug = rows.r->>'entity_id'
+          OR regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+           = regexp_replace(lower(rows.r->>'canonical_name'), '[^a-z0-9]+', '', 'g')
+          OR lower(s.name_en) = lower(rows.r->>'canonical_name')
+          OR EXISTS (
+            SELECT 1 FROM supplements.supplement_aliases a
+            WHERE a.supplement_id = s.id
+              AND lower(a.alias) = lower(rows.r->>'canonical_name')
+          )
+      ) ranked
+      WHERE rank = 1
+    )
+    SELECT rows.r->>'entity_id' AS entity_id
+    FROM rows
+    WHERE NOT EXISTS (
+      SELECT 1 FROM mapped
+      WHERE mapped.r->>'entity_id' = rows.r->>'entity_id'
+        AND mapped.supplement_id IS NOT NULL
+    )
   ) x;
   SELECT count(*) INTO v_inserted FROM supplements.supplement_user_texts;
   IF v_missing <> 0 THEN
     RAISE EXCEPTION 'C-264: % Text-entity_id nicht in supplements.supplements', v_missing;
   END IF;
-  IF v_inserted <> 290 THEN
-    RAISE EXCEPTION 'C-264: supplement_user_texts %, erwartet 290', v_inserted;
+  IF v_inserted <> 318 THEN
+    RAISE EXCEPTION 'C-264/C-265 Nachtrag: supplement_user_texts %, erwartet 318', v_inserted;
   END IF;
 END $$;
 
 WITH rows AS (
   SELECT jsonb_array_elements(payload->'faq') AS r FROM tmp_c264_texts
 ), text_sources AS (
-  SELECT t->>'entity_id' AS entity_id, coalesce(t->'sources', '[]'::jsonb) AS sources
+  SELECT
+    t->>'entity_id' AS entity_id,
+    t->>'canonical_name' AS canonical_name,
+    coalesce(t->'sources', '[]'::jsonb) AS sources
   FROM tmp_c264_texts, jsonb_array_elements(payload->'texts') AS t
 ), mapped AS (
-  SELECT r, s.id AS supplement_id, coalesce(r->'sources', ts.sources, '[]'::jsonb) AS sources
-  FROM rows
-  LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id'
-  LEFT JOIN text_sources ts ON ts.entity_id = r->>'entity_id'
+  SELECT r, supplement_id, sources
+  FROM (
+    SELECT
+      rows.r,
+      s.id AS supplement_id,
+      coalesce(rows.r->'sources', ts.sources, '[]'::jsonb) AS sources,
+      row_number() OVER (
+        PARTITION BY rows.r->>'entity_id', rows.r->>'frage_de', rows.r->>'antwort_de', rows.r->>'sort_order'
+        ORDER BY
+          CASE WHEN s.slug = rows.r->>'entity_id' THEN 0 ELSE 1 END,
+          CASE
+            WHEN regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+               = regexp_replace(lower(ts.canonical_name), '[^a-z0-9]+', '', 'g')
+            THEN 0 ELSE 1
+          END,
+          CASE WHEN s.im_katalog THEN 0 ELSE 1 END,
+          s.slug
+      ) AS rank
+    FROM rows
+    LEFT JOIN text_sources ts ON ts.entity_id = rows.r->>'entity_id'
+    LEFT JOIN supplements.supplements s
+      ON s.slug = rows.r->>'entity_id'
+      OR regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+       = regexp_replace(lower(ts.canonical_name), '[^a-z0-9]+', '', 'g')
+      OR lower(s.name_en) = lower(ts.canonical_name)
+      OR EXISTS (
+        SELECT 1 FROM supplements.supplement_aliases a
+        WHERE a.supplement_id = s.id
+          AND lower(a.alias) = lower(ts.canonical_name)
+      )
+  ) ranked
+  WHERE rank = 1
 )
 INSERT INTO supplements.supplement_faq (
   supplement_id, frage_de, frage_en, frage_th,
@@ -165,17 +269,58 @@ DECLARE
 BEGIN
   SELECT count(*) INTO v_missing
   FROM (
-    SELECT r->>'entity_id' AS entity_id
-    FROM tmp_c264_texts, jsonb_array_elements(payload->'faq') r
-    LEFT JOIN supplements.supplements s ON s.slug = r->>'entity_id'
-    WHERE s.id IS NULL
+    WITH rows AS (
+      SELECT jsonb_array_elements(payload->'faq') AS r FROM tmp_c264_texts
+    ), text_sources AS (
+      SELECT t->>'entity_id' AS entity_id, t->>'canonical_name' AS canonical_name
+      FROM tmp_c264_texts, jsonb_array_elements(payload->'texts') AS t
+    ), mapped AS (
+      SELECT r, supplement_id
+      FROM (
+        SELECT
+          rows.r,
+          s.id AS supplement_id,
+          row_number() OVER (
+            PARTITION BY rows.r->>'entity_id', rows.r->>'frage_de', rows.r->>'antwort_de', rows.r->>'sort_order'
+            ORDER BY
+              CASE WHEN s.slug = rows.r->>'entity_id' THEN 0 ELSE 1 END,
+              CASE
+                WHEN regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+                   = regexp_replace(lower(ts.canonical_name), '[^a-z0-9]+', '', 'g')
+                THEN 0 ELSE 1
+              END,
+              CASE WHEN s.im_katalog THEN 0 ELSE 1 END,
+              s.slug
+          ) AS rank
+        FROM rows
+        LEFT JOIN text_sources ts ON ts.entity_id = rows.r->>'entity_id'
+        LEFT JOIN supplements.supplements s
+          ON s.slug = rows.r->>'entity_id'
+          OR regexp_replace(lower(s.slug), '[^a-z0-9]+', '', 'g')
+           = regexp_replace(lower(ts.canonical_name), '[^a-z0-9]+', '', 'g')
+          OR lower(s.name_en) = lower(ts.canonical_name)
+          OR EXISTS (
+            SELECT 1 FROM supplements.supplement_aliases a
+            WHERE a.supplement_id = s.id
+              AND lower(a.alias) = lower(ts.canonical_name)
+          )
+      ) ranked
+      WHERE rank = 1
+    )
+    SELECT rows.r->>'entity_id' AS entity_id
+    FROM rows
+    WHERE NOT EXISTS (
+      SELECT 1 FROM mapped
+      WHERE mapped.r->>'entity_id' = rows.r->>'entity_id'
+        AND mapped.supplement_id IS NOT NULL
+    )
   ) x;
   SELECT count(*) INTO v_inserted FROM supplements.supplement_faq;
   IF v_missing <> 0 THEN
     RAISE EXCEPTION 'C-264: % FAQ-entity_id nicht in supplements.supplements', v_missing;
   END IF;
-  IF v_inserted <> 1279 THEN
-    RAISE EXCEPTION 'C-264: supplement_faq %, erwartet 1279', v_inserted;
+  IF v_inserted <> 1421 THEN
+    RAISE EXCEPTION 'C-264/C-265 Nachtrag: supplement_faq %, erwartet 1421', v_inserted;
   END IF;
 END $$;
 
