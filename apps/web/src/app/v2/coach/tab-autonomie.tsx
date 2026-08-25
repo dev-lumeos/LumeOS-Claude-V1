@@ -44,13 +44,11 @@
 // `[cmd]` ALLES IST ATTRAPPE. Ein `coach`-Schema gibt es nicht.
 import { Card, Pill, Icon, Empty } from '@lumeos/ui'
 
-import { ATTRAPPE } from './ansicht'
 // G-90: die echte Einstufung und ihre Historie.
 import { AutonomieEcht, HistorieEcht } from './rechte-echt'
 import type { CoachRechteStand } from '../../../lib/coach/rechte-read'
-// G-163: CLIENT_AUTONOMY und AUTONOMY_LADDER sind mit dem
-// Autonomie-Entwurf gefallen; die Check-in-Attrappe bleibt.
-import { CHECKIN_TEMPLATES, CHECKIN_HISTORY } from './daten'
+// G-163/G-169: die Entwurfsdaten sind mit den Rueckfallfassungen
+// gefallen — Check-ins lesen jetzt echt.
 
 // ── Autonomy · client side ───────────────────────────────────────────
 // [cmd] module-coach-athlete.jsx:397-500.
@@ -98,107 +96,113 @@ export function AthleteAutonomy({ stand }: { stand?: CoachRechteStand }) {
 // darunter kommt aus `CHECKIN_TEMPLATES[0]` — der erste Eintrag, nicht
 // der erste aktive. Beides uebernommen.
 
-export function AthleteCheckins() {
+export function AthleteCheckins({ stand }: { stand?: CoachRechteStand }) {
+  // G-169: Vorlagen und Check-ins aus `coach` — der Entwurf war mit
+  // dem Lesepfad ein Rueckfall und ist nach dem G-163-Beschluss raus.
+  if (stand && (stand.vorlagen.length > 0 || stand.coachCheckins.length > 0)) {
+    return <CheckinsEcht stand={stand} />
+  }
+  if (stand) {
+    return (
+      <Card title="Check-ins">
+        <Empty
+          title={stand.fehler ? 'Nicht geladen' : 'Noch keine Check-ins'}
+          sub={stand.fehler
+            ? `coach.checkins meldet: ${stand.fehler}`
+            : 'Vorlagen und Check-ins legt der Coach an — für dieses Konto liegt keines vor.'}
+          icon="calendar"
+        />
+      </Card>
+    )
+  }
+  return (
+    <Card title="Check-ins">
+      <Empty
+        title="Nicht geladen"
+        sub="Der Coach-Stand wurde nicht gelesen — keine Sitzung oder ein Ladefehler."
+        icon="calendar"
+      />
+    </Card>
+  )
+}
+
+/** G-169: die echten Vorlagen und Check-ins. */
+function CheckinsEcht({ stand }: { stand: CoachRechteStand }) {
+  const STATUS_VARIANTE: Record<string, 'pos' | 'warn' | 'neg' | undefined> = {
+    reviewed: 'pos', submitted: 'pos', pending: 'warn', missed: 'neg',
+  }
   return (
     <div className="v2-grid v2-grid-14">
       <div className="v2-col-gap" style={{ gap: 14 }}>
         <Card
-          title="Templates"
-          sub={`${CHECKIN_TEMPLATES.filter(t => t.active).length} active`}
-          attrappe={ATTRAPPE}
+          title="Check-ins"
+          sub={`${stand.coachCheckins.length} · aus coach.checkins`}
         >
+          {stand.coachCheckins.length === 0 ? (
+            <Empty title="Noch keine Check-ins"
+                   sub="Der Coach legt sie an — hier erscheint jeder mit Termin und Stand."
+                   icon="calendar" />
+          ) : (
+            <div className="v2-col-gap" style={{ gap: 6 }}>
+              {stand.coachCheckins.map(c => (
+                <div key={c.id} style={{
+                  padding: 10, background: 'var(--bg-elev)',
+                  border: '1px solid var(--border)', borderRadius: 6,
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                    <span className="v2-num" style={{ fontSize: 11 }}>{c.due_date}</span>
+                    <Pill variant={STATUS_VARIANTE[c.status]}>{c.status}</Pill>
+                    {c.submitted_at && (
+                      <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 9 }}>
+                        abgegeben {c.submitted_at.slice(0, 10)}
+                      </span>
+                    )}
+                  </div>
+                  {c.client_note && (
+                    <div className="v2-muted" style={{ fontSize: 11, lineHeight: 1.45 }}>
+                      {c.client_note}
+                    </div>
+                  )}
+                  {c.coach_feedback && (
+                    <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.45, marginTop: 3 }}>
+                      Coach: {c.coach_feedback}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      </div>
+
+      <Card
+        title="Vorlagen"
+        sub={`${stand.vorlagen.filter(v => v.is_active).length} aktiv · aus coach.checkin_templates`}
+      >
+        {stand.vorlagen.length === 0 ? (
+          <Empty title="Noch keine Vorlage"
+                 sub="Vorlagen legt der Coach an." icon="edit" />
+        ) : (
           <div className="v2-col-gap" style={{ gap: 8 }}>
-            {CHECKIN_TEMPLATES.map(t => (
-              <div
-                key={t.id}
-                style={{
-                  padding: 12,
-                  borderRadius: 7,
-                  background: t.active
-                    ? 'color-mix(in oklch, var(--acc-coach) 6%, var(--surface))'
-                    : 'var(--surface)',
-                  border: `1px solid ${t.active
-                    ? 'color-mix(in oklch, var(--acc-coach) 28%, var(--border))'
-                    : 'var(--border)'}`,
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                  <span style={{ fontSize: 13, fontWeight: 600 }}>{t.name}</span>
-                  {t.active ? <Pill variant="pos" dot>active</Pill> : <Pill>inactive</Pill>}
-                  <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
-                    {t.cadence}
+            {stand.vorlagen.map(v => (
+              <div key={v.id} style={{
+                padding: 10, background: 'var(--bg-elev)',
+                border: '1px solid var(--border)', borderRadius: 6,
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontSize: 12, fontWeight: 600 }}>{v.name}</span>
+                  {v.is_active ? <Pill variant="pos">aktiv</Pill> : <Pill>inaktiv</Pill>}
+                  <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 9.5 }}>
+                    {v.cadence}
                   </span>
                 </div>
-                <div className="v2-muted" style={{ fontSize: 11, marginBottom: 8 }}>
-                  {`Assigned by ${t.coach}`}
-                </div>
                 <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-                  {t.fields.map(f => <Pill key={f} style={{ fontSize: 9.5 }}>{f}</Pill>)}
+                  {v.fields.map(f => <Pill key={f.key} style={{ fontSize: 9 }}>{f.label}</Pill>)}
                 </div>
               </div>
             ))}
           </div>
-        </Card>
-
-        <Card title="History" sub={`${CHECKIN_HISTORY.length} check-ins`} attrappe={ATTRAPPE}>
-          <div className="v2-tbl-wrap">
-            <table className="v2-tbl">
-              <thead>
-                <tr>
-                  <th style={{ width: 80 }}>Date</th>
-                  <th style={{ width: 150 }}>Template</th>
-                  <th style={{ width: 100 }}>Status</th>
-                  <th>Coach reply</th>
-                </tr>
-              </thead>
-              <tbody>
-                {CHECKIN_HISTORY.map((h, i) => (
-                  <tr key={i}>
-                    <td className="v2-num v2-muted">{h.date}</td>
-                    <td>{h.template}</td>
-                    <td>
-                      <Pill variant={h.status === 'submitted' ? 'pos' : 'neg'}>{h.status}</Pill>
-                    </td>
-                    <td className="v2-muted" style={{ fontSize: 11.5 }}>
-                      {h.reply || <span className="v2-dim">—</span>}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </Card>
-      </div>
-
-      <Card title="Next check-in" sub="Monday · Weekly standard" attrappe={ATTRAPPE}>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 12 }}>
-          <span className="v2-num" style={{ fontSize: 26, fontWeight: 500 }}>2</span>
-          <span className="v2-dim" style={{ fontSize: 12 }}>days · Mon 08:00</span>
-        </div>
-
-        <div className="v2-eyebrow" style={{ marginBottom: 8 }}>You&apos;ll be asked for</div>
-        <div className="v2-col-gap" style={{ gap: 4 }}>
-          {CHECKIN_TEMPLATES[0].fields.map(f => (
-            <div
-              key={f}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
-                background: 'var(--surface)', border: '1px solid var(--border)',
-                borderRadius: 5, fontSize: 11.5,
-              }}
-            >
-              <span style={{ width: 5, height: 5, borderRadius: 999, background: 'var(--fg-dim)' }} />
-              {f}
-            </div>
-          ))}
-        </div>
-
-        <div className="v2-divider" />
-        {/* [cmd] Die Vorlage gibt dem Knopf kein `onClick` — er bleibt tot. */}
-        <button type="button" className="v2-btn v2-btn-primary" style={{ width: '100%' }}>
-          <Icon name="edit" className="v2-ic v2-ic-sm" />
-          Fill in early
-        </button>
+        )}
       </Card>
     </div>
   )

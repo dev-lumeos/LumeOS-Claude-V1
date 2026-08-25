@@ -48,7 +48,12 @@ import {
 } from '@lumeos/ui'
 
 import {
-  COACHES, COACH_NOTES, PENDING_INVITES,
+  // G-185: `PENDING_INVITES` ist raus (G-163-Beschluss:
+  // Entwurfskonstanten bleiben nicht als Notfallanzeige stehen).
+  // `[cmd]` `COACHES` und `COACH_NOTES` bleiben — sie werden ausserhalb
+  // dieser Datei verwendet (tab-rechte.tsx 5x, modale.tsx 3x), das ist
+  // ein eigener Punkt.
+  COACHES, COACH_NOTES,
 } from './daten'
 import { CoachKontext, useCoach, type ModalZustand } from './kontext'
 import { CoachModale } from './modale'
@@ -56,7 +61,7 @@ import { AthleteAutonomy, AthleteCheckins } from './tab-autonomie'
 import { CoachOnboardingWizard } from './tab-onboarding'
 import { AthletePermissionsV2, AthleteProposals } from './tab-rechte'
 // G-158: Beziehungen und Nachrichten aus `coach`, statt daten.ts.
-import { CoachesEcht, ThreadsEcht } from './uebersicht-echt'
+import { CoachesEcht, EinladungenEcht, ThreadsEcht } from './uebersicht-echt'
 // G-90: die echten Rechte, Autonomy und beide Historien.
 //
 // `[cmd]` **Nur ein Typ-Import.** `rechte-read.ts` zieht ueber
@@ -88,7 +93,16 @@ function tabs(stand?: CoachRechteStand): TabItem[] {
     { id: 'checkins', label: 'Check-ins' },
     { id: 'messages', label: 'Messages', count: ungelesen },
     { id: 'notes', label: 'Notes', count: COACH_NOTES.length },
-    { id: 'invites', label: 'Invites', count: PENDING_INVITES.length },
+    // G-185: die Zahl der ZEILENRECHTE, nicht die Gesamtzahl.
+    // `[cmd]` 2 Zeilen tragen `status='invited'`, beide gehoeren
+    // `sarah.seed@example.com` — `test-user` sieht 0.
+    {
+      id: 'invites',
+      label: 'Invites',
+      count: echt
+        ? stand!.beziehungen.filter(b => b.status === 'invited').length
+        : undefined,
+    },
     { id: 'onboard', label: 'Onboarding' },
   ]
 }
@@ -147,7 +161,25 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
             <Icon name="camera" className="v2-ic v2-ic-sm" />
             Scan QR
           </button>
-          <button className="v2-btn v2-btn-primary" onClick={() => kontext.open({ typ: 'invite' })}>
+          {/* ── G-185: der Kopf-Knopf fuehrt aufs echte Formular ────
+              `[cmd]` Er oeffnete `kontext.open({ typ: 'invite' })`,
+              also das Entwurfsmodal — waehrend seit C-225 daneben das
+              Formular liegt, das in `coach.relationships` schreibt.
+              **Wer oben klickte, landete in einer Attrappe.**
+
+              `[read]` **Entschieden: er bleibt und springt auf den
+              Reiter mit dem Formular** — er verschwindet nicht.
+              *„Invite coach"* ist die Hauptaktion des Moduls und steht
+              an der auffaelligsten Stelle; ihn zu entfernen hiesse,
+              den Weg zum Einladen nur noch im Fliesstext eines
+              Reiters zu haben.
+
+              `[read]` **Der Auftrag warnt zu Recht, dass ein Sprung
+              auf einen anderen Reiter schlechter sein kann als kein
+              Knopf — das gilt, wenn das Ziel unklar ist.** Hier ist
+              das Ziel das Formular selbst, der Reiterwechsel ist
+              sichtbar, und der Reiter heisst wie der Knopf. */}
+          <button className="v2-btn v2-btn-primary" onClick={() => setTab('invites')}>
             <Icon name="plus" className="v2-ic v2-ic-sm" />
             Invite coach
           </button>
@@ -161,10 +193,13 @@ export function CoachAnsicht({ stand }: { stand?: CoachRechteStand }) {
       {tab === 'permissions' && <AthletePermissionsV2 stand={stand} />}
       {tab === 'proposals' && <AthleteProposals stand={stand} />}
       {tab === 'autonomy' && <AthleteAutonomy stand={stand} />}
-      {tab === 'checkins' && <AthleteCheckins />}
+      {tab === 'checkins' && <AthleteCheckins stand={stand} />}
       {tab === 'messages' && <AthleteMessages stand={stand} />}
       {tab === 'notes' && <AthleteNotes />}
-      {tab === 'invites' && <AthleteInvites />}
+      {/* G-185: echte Einladungen statt Entwurfstabelle. Ohne
+          geladenen Stand (keine Sitzung) bleibt der Reiter leer —
+          eine erfundene Liste waere schlimmer als nichts. */}
+      {tab === 'invites' && stand && <EinladungenEcht stand={stand} />}
       {tab === 'onboard' && <CoachOnboardingWizard />}
 
       <CoachModale zustand={modal} />
@@ -220,42 +255,10 @@ function AthleteOverview({ stand }: { stand?: CoachRechteStand }) {
       </div>
 
       <div className="v2-col-gap" style={{ gap: 14 }}>
-        <Card
-          title="Pending invites"
-          sub={`${PENDING_INVITES.length}`}
-          attrappe={ATTRAPPE}
-          actions={(
-            <button className="v2-btn v2-btn-ghost v2-btn-sm" onClick={() => ctx.open({ typ: 'invite' })}>
-              New invite
-            </button>
-          )}
-        >
-          {PENDING_INVITES.length === 0 ? (
-            <Empty title="No pending invites" sub="Invite a new coach with QR code or link." icon="user" />
-          ) : (
-            <div className="v2-col-gap" style={{ gap: 6 }}>
-              {PENDING_INVITES.map(i => (
-                <div
-                  key={i.id}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
-                    background: 'var(--bg-elev)', border: '1px solid var(--border)', borderRadius: 5,
-                  }}
-                >
-                  <span style={{ fontSize: 12 }}>
-                    {i.name}
-                    <span className="v2-dim v2-mono" style={{ fontSize: 10, marginLeft: 6 }}>{i.type}</span>
-                  </span>
-                  <span className="v2-dim v2-mono" style={{ marginLeft: 'auto', fontSize: 10 }}>
-                    {`${i.invitedOn} · ${i.expiry}`}
-                  </span>
-                  <button className="v2-btn v2-btn-sm">Resend</button>
-                  <button className="v2-btn v2-btn-ghost v2-btn-sm">Cancel</button>
-                </div>
-              ))}
-            </div>
-          )}
-        </Card>
+        {/* G-185: die Kachel „Pending invites" ist raus — sie
+            zaehlte `PENDING_INVITES` und trug einen zweiten Knopf
+            ins Entwurfsmodal. Die offenen Einladungen stehen im
+            Reiter „Invites", aus `coach.relationships`. */}
 
         {/* [cmd] module-coach.jsx:262-271. Die Vorlage rechnet die Summe
             nicht, sie schreibt sie hin — €417 und +€60 stehen fest da. */}
@@ -475,57 +478,13 @@ function AthleteNotes() {
   )
 }
 
-// ── Invites ──────────────────────────────────────────────────────────
-// [cmd] module-coach.jsx:474-487. Die beiden letzten Zeilen stehen in
-// der Vorlage fest im JSX, nicht in `PENDING_INVITES` — uebernommen.
-
-function AthleteInvites() {
-  return (
-    <Card title="Invites" sub="track pending and historical invitations" attrappe={ATTRAPPE}>
-      <div className="v2-tbl-wrap">
-        <table className="v2-tbl">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th style={{ width: 110 }}>Type</th>
-              <th style={{ width: 110 }}>Invited</th>
-              <th style={{ width: 130 }}>Expires</th>
-              <th style={{ width: 110 }}>Status</th>
-              <th style={{ width: 80, textAlign: 'right' }}>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {PENDING_INVITES.map(i => (
-              <tr key={i.id}>
-                <td>{i.name}</td>
-                <td><Pill>{i.type}</Pill></td>
-                <td className="v2-num v2-muted">{i.invitedOn}</td>
-                <td className="v2-num">{i.expiry}</td>
-                <td><Pill variant="warn">pending</Pill></td>
-                <td style={{ textAlign: 'right' }}>
-                  <button className="v2-btn v2-btn-sm">Resend</button>
-                </td>
-              </tr>
-            ))}
-            <tr>
-              <td>Dr. R. Klein</td>
-              <td><Pill>Orthopedics</Pill></td>
-              <td className="v2-num v2-muted">Mar 12</td>
-              <td className="v2-num">accepted</td>
-              <td><Pill variant="pos">accepted · ended</Pill></td>
-              <td />
-            </tr>
-            <tr>
-              <td>Dr. P. Holzer</td>
-              <td><Pill>Physio</Pill></td>
-              <td className="v2-num v2-muted">Feb 2</td>
-              <td className="v2-num">declined</td>
-              <td><Pill variant="neg">declined</Pill></td>
-              <td />
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </Card>
-  )
-}
+// ── Invites ─────────────────────────────────────────────────
+//
+// `[cmd]` **G-185: hier stand eine Tabelle aus `PENDING_INVITES`**
+// — erfundene Namen, erfundene Ablaufdaten, dazu zwei Zeilen fest
+// im JSX (*Dr. R. Klein*, *Dr. P. Holzer*). Der Reiter zeigt jetzt
+// `coach.relationships` mit `status='invited'`.
+//
+// `[read]` **Der Aufbau steht in `uebersicht-echt.tsx`**, neben den
+// anderen echten Kacheln — und er traegt das Einladeformular aus
+// C-225 in beiden Zweigen, auch im leeren.

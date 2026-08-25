@@ -126,9 +126,16 @@ export type Invite = {
   expiry: string
 }
 
-export const PENDING_INVITES: Invite[] = [
-  { id: 'inv-1', name: 'Sarah Müller', type: 'Physio', invitedOn: 'May 12', expiry: 'expires May 19' },
-]
+// G-185: `PENDING_INVITES` ist entfernt (G-163-Beschluss:
+// Entwurfskonstanten bleiben nicht als Notfallanzeige stehen).
+//
+// `[cmd]` Sie trug eine erfundene Einladung („Sarah Müller · Physio ·
+// expires May 19") und speiste die Reiterzahl, waehrend daneben seit
+// C-225 `coach.relationships` liegt. **Der Reiter liest jetzt die
+// Tabelle**, gefiltert auf `status='invited'`.
+//
+// `[read]` **Der Typ `Invite` bleibt** — er beschreibt die Gestalt der
+// Vorlage und wird von `modale.tsx` weiterverwendet.
 
 export type CoachNote = {
   id: string

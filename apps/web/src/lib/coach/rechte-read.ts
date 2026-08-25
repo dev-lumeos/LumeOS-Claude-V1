@@ -92,6 +92,8 @@ export type Beziehung = {
   invite_note: string | null
   started_at: string | null
   ended_at: string | null
+  /** G-185: seit wann die Einladung offen ist — siehe Lesepfad. */
+  created_at: string | null
 }
 
 export type Nachricht = {
@@ -104,6 +106,32 @@ export type Nachricht = {
   read_at: string | null
 }
 
+// G-169: die Check-in-Vorlagen und -Instanzen — 2 und 6 Zeilen lagen
+// ungelesen, kein Lesepfad.
+export type CheckinVorlage = {
+  id: string
+  coach_id: string
+  client_id: string
+  name: string
+  cadence: string
+  // [cmd] jsonb-Objektliste, gemessen am 2026-08-23: {key, typ, label}.
+  fields: { key: string; typ: string; label: string }[]
+  is_active: boolean
+}
+
+export type CoachCheckin = {
+  id: string
+  coach_id: string
+  client_id: string
+  template_id: string | null
+  due_date: string
+  status: string
+  client_note: string | null
+  coach_feedback: string | null
+  submitted_at: string | null
+  reviewed_at: string | null
+}
+
 export type CoachRechteStand = {
   /** Die eigene Nutzerkennung, oder `null` wenn nicht angemeldet. */
   userId: string | null
@@ -114,6 +142,8 @@ export type CoachRechteStand = {
   wartend: WartendeAktion[]
   beziehungen: Beziehung[]
   nachrichten: Nachricht[]
+  vorlagen: CheckinVorlage[]
+  coachCheckins: CoachCheckin[]
   /**
    * Gesetzt, wenn die Abfrage scheiterte. **Ein Fehler ist nicht
    * dasselbe wie „nichts da"** — die Oberflaeche unterscheidet das.
@@ -124,6 +154,7 @@ export type CoachRechteStand = {
 export const LEER: CoachRechteStand = {
   userId: null, rechte: [], autonomie: [], rechteLog: [],
   autonomieLog: [], wartend: [], beziehungen: [], nachrichten: [],
+  vorlagen: [], coachCheckins: [],
   fehler: null,
 }
 
@@ -201,7 +232,7 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
     if (!user) return LEER
 
     const c = client.schema('coach')
-    const [p, a, pl, al, pa, re, na] = await Promise.all([
+    const [p, a, pl, al, pa, re, na, vo, ci] = await Promise.all([
       c.from('client_permissions').select('*').order('updated_at', { ascending: false }),
       c.from('client_autonomy').select('*').order('updated_at', { ascending: false }),
       c.from('permission_change_log').select('*')
@@ -215,6 +246,9 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
       // client) — gemessen: dev@lumeos.app sieht 1 von 6 Beziehungen.
       c.from('relationships').select('*').order('created_at', { ascending: false }),
       c.from('messages').select('*').order('sent_at', { ascending: false }).limit(100),
+      // G-169: Vorlagen und Check-ins — RLS begrenzt auf eigene Zeilen.
+      c.from('checkin_templates').select('*').order('created_at', { ascending: false }),
+      c.from('checkins').select('*').order('due_date', { ascending: false }).limit(50),
     ])
 
     // `[read]` Ein Fehler auf der ERSTEN Abfrage entscheidet: schlaegt
@@ -222,7 +256,7 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
     // dieselbe. Sie wird durchgereicht, damit die Anzeige „nicht
     // geladen" von „nichts vorhanden" unterscheiden kann.
     const fehler = p.error ?? a.error ?? pl.error ?? al.error ?? pa.error
-      ?? re.error ?? na.error
+      ?? re.error ?? na.error ?? vo.error ?? ci.error
     if (fehler) return { ...LEER, userId: user.id, fehler: fehler.message }
 
     const zeile = (r: unknown) => r as unknown as Record<string, unknown>
@@ -280,6 +314,11 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
           invite_note: (x.invite_note as string) ?? null,
           started_at: (x.started_at as string) ?? null,
           ended_at: (x.ended_at as string) ?? null,
+          // G-185: das Anlagedatum — der Invites-Reiter zeigt, seit
+          // wann eine Einladung offen ist. `[read]` `started_at` taugt
+          // dafuer nicht: es wird erst beim Annehmen gesetzt und ist
+          // bei `status='invited'` leer.
+          created_at: (x.created_at as string) ?? null,
         }
       }),
       nachrichten: (na.data ?? []).map(r => {
@@ -292,6 +331,33 @@ export async function ladeCoachRechte(): Promise<CoachRechteStand> {
           body: String(x.body),
           sent_at: String(x.sent_at),
           read_at: (x.read_at as string) ?? null,
+        }
+      }),
+      vorlagen: (vo.data ?? []).map(r => {
+        const x = zeile(r)
+        return {
+          id: String(x.id),
+          coach_id: String(x.coach_id),
+          client_id: String(x.client_id),
+          name: String(x.name),
+          cadence: String(x.cadence ?? ''),
+          fields: Array.isArray(x.fields) ? (x.fields as CheckinVorlage['fields']) : [],
+          is_active: x.is_active === true,
+        }
+      }),
+      coachCheckins: (ci.data ?? []).map(r => {
+        const x = zeile(r)
+        return {
+          id: String(x.id),
+          coach_id: String(x.coach_id),
+          client_id: String(x.client_id),
+          template_id: (x.template_id as string) ?? null,
+          due_date: String(x.due_date),
+          status: String(x.status),
+          client_note: (x.client_note as string) ?? null,
+          coach_feedback: (x.coach_feedback as string) ?? null,
+          submitted_at: (x.submitted_at as string) ?? null,
+          reviewed_at: (x.reviewed_at as string) ?? null,
         }
       }),
       fehler: null,
