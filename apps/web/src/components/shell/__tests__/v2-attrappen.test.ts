@@ -1373,9 +1373,17 @@ test('das Coach-Modul kennzeichnet jede Kachel', () => {
     // (beide Entwuerfe samt toter ProposalCard/-Modal raus),
     // tab-autonomie 11 -> 3 (Autonomie-Entwurf raus, die
     // Check-in-Attrappe bleibt).
-    [COACH, 9],
+    // G-185: die Einladungen sind angebunden — 9 -> 7.
+    // `[cmd]` Raus sind die Kachel „Pending invites" (zaehlte
+    // `PENDING_INVITES` und trug einen zweiten Knopf ins
+    // Entwurfsmodal) und die Tabelle des Invites-Reiters (erfundene
+    // Namen, dazu zwei Zeilen fest im JSX). Beide lesen jetzt
+    // `coach.relationships` mit `status='invited'`.
+    [COACH, 7],
     [COACH_RECHTE, 0],
-    [COACH_AUTO, 3],
+    // G-169: die Check-in-Attrappe war mit dem neuen Lesepfad ein
+    // Rueckfall und ist nach dem G-163-Beschluss raus — 3 -> 0.
+    [COACH_AUTO, 0],
     [COACH_ONBOARD, 6],
   ]
   for (const [datei, erwartet] of dateien) {
@@ -1431,6 +1439,90 @@ test('G-158: der Coach-Kopf zaehlt aus dem Stand, nicht aus COACHES', () => {
     'Der Kopf zaehlt wieder aus der Entwurfskonstante (G-158).')
   assert.ok(/aktiveBeziehungen/.test(kopf) && /ungeleseneNachrichten/.test(kopf))
   assert.ok(/Nicht geladen/.test(kopf), 'Ohne Stand fehlt der Hinweis — kein Strich, keine Null.')
+})
+
+test('G-185: der Invites-Reiter liest relationships, nicht PENDING_INVITES', () => {
+  // ══ DER BEFUND ══════════════════════════════════════════════════
+  //
+  // `[cmd]` Bis G-185 kam die Reiterzahl aus `PENDING_INVITES`, einer
+  // Entwurfskonstante mit erfundenen Namen und Ablaufdaten — waehrend
+  // seit C-225 daneben `coach.relationships` liegt.
+  //
+  // `[read]` **G-163-Beschluss:** Entwurfskonstanten bleiben nicht als
+  // Notfallanzeige stehen.
+  const q = fs.readFileSync(COACH, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^[ \t]*\/\/.*$/gm, '')
+    .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+
+  assert.equal(/PENDING_INVITES/.test(q), false,
+    '`PENDING_INVITES` ist zurueck — die Entwurfskonstante zaehlt wieder '
+    + 'erfundene Einladungen (G-185).')
+
+  // Die Reiterzahl kommt aus dem Stand, mit dem Statusfilter.
+  assert.match(q, /status === 'invited'/,
+    'Die Zahl muss aus `relationships` mit `status=\'invited\'` kommen.')
+
+  // Der Kopf-Knopf fuehrt nicht mehr ins Entwurfsmodal.
+  const kopf = q.slice(q.indexOf('v2-module-actions'), q.indexOf('<Tabs'))
+  assert.equal(/typ: 'invite'/.test(kopf), false,
+    'Der Kopf-Knopf oeffnet wieder das Entwurfsmodal statt des echten '
+    + 'Formulars (G-185).')
+})
+
+test('G-185: der Leerzustand traegt das Einladeformular', () => {
+  // ══ FABLES FUND AUS C-225 ═══════════════════════════════════════
+  //
+  // `[read]` **Bei 0 Beziehungen rendete nur der Empty-Zweig, ohne
+  // Formular — und genau dort entsteht die erste Beziehung.**
+  //
+  // `[cmd]` Gemessen 2026-08-25: `test-user@lumeos.local` sieht **0**
+  // Einladungen (beide `invited`-Zeilen gehoeren
+  // `sarah.seed@example.com`). **Der leere Fall ist der Normalfall.**
+  const q = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/coach/uebersicht-echt.tsx'), 'utf8')
+
+  const anfang = q.indexOf('export function EinladungenEcht(')
+  assert.ok(anfang > 0, '`EinladungenEcht` fehlt.')
+  const ende = q.indexOf('export function', anfang + 30)
+  const rumpf = q.slice(anfang, ende > 0 ? ende : undefined)
+
+  // Das Formular steht AUSSERHALB des Ternaers — also in beiden Zweigen.
+  const ternaer = rumpf.indexOf('offen.length === 0')
+  const formular = rumpf.indexOf('<InviteFormular')
+  assert.ok(formular > 0, 'Der Reiter zeigt kein Einladeformular.')
+  assert.ok(formular > rumpf.indexOf('</Card>') - 400,
+    'Das Formular muss nach dem Ternaer stehen, damit es auch im leeren '
+    + 'Zweig erscheint (G-185, Fables Fund aus C-225).')
+  assert.ok(ternaer > 0 && ternaer < formular,
+    'Das Formular darf nicht im gefuellten Zweig eingeschlossen sein.')
+
+  // Und es ist DAS Formular aus C-225, kein zweiter Schreibweg.
+  assert.equal(/from\('relationships'\)/.test(q), false,
+    'Der Reiter darf nicht selbst schreiben — `ladeCoachEin` ist der Weg '
+    + '(G-185).')
+})
+
+test('C-225/G-169: die drei Schreibwege und der Check-in-Lesepfad stehen', () => {
+  // Richtung 1: die Wege existieren und die Oberflaeche ruft sie.
+  const schreiben = fs.readFileSync(
+    path.join(process.cwd(), 'src/lib/coach/nachrichten-schreiben.ts'), 'utf8')
+  assert.ok(/from\('messages'\)[\s\S]*?\.insert\(/.test(schreiben), 'Antworten fehlt.')
+  assert.ok(/from\('relationships'\)[\s\S]*?\.insert\(/.test(schreiben), 'Einladen fehlt.')
+  assert.ok(/status: 'invited'/.test(schreiben), 'Einladen setzt nicht invited.')
+  assert.ok(/\.update\(\{ read_at/.test(schreiben), 'Als-gelesen fehlt.')
+  // G-79: jeder Weg prueft auf null Zeilen.
+  assert.equal((schreiben.match(/\.select\('id'\)/g) ?? []).length, 3,
+    'Jeder der drei Wege braucht die Nullzeilenpruefung.')
+  const ui = fs.readFileSync(
+    path.join(process.cwd(), 'src/app/v2/coach/uebersicht-echt.tsx'), 'utf8')
+  assert.ok(/sendeNachricht\(/.test(ui) && /ladeCoachEin\(/.test(ui) && /markiereGelesen\(/.test(ui))
+  // G-169: der Lesepfad und die echte Fassung.
+  const read = fs.readFileSync(
+    path.join(process.cwd(), 'src/lib/coach/rechte-read.ts'), 'utf8')
+  assert.ok(/from\('checkin_templates'\)/.test(read) && /from\('checkins'\)/.test(read),
+    'Der Check-in-Lesepfad fehlt.')
+  assert.ok(/<CheckinsEcht stand=/.test(fs.readFileSync(COACH_AUTO, 'utf8')))
 })
 
 test('G-163: die Rueckfallfassungen bleiben geloescht', () => {

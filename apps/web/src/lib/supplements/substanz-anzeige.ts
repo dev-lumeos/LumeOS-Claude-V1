@@ -170,6 +170,72 @@ export function baueBloecke(satz: SubstanzSatz): Block[] {
 }
 
 /**
+ * Der Anriss eines Blocks — was drinsteht, nicht wie viel (G-177).
+ *
+ * ── DER BEFUND ──────────────────────────────────────────────────────
+ *
+ * `[cmd]` **Bromocriptine zeigte am 2026-08-23:** fuenf zugeklappte
+ * Bloecke mit *„Sicherheit 2 Felder"*, *„Evidenz 7 Felder"* — und
+ * darunter aufgeklappt einen Schemabericht, laenger als alles zusammen.
+ *
+ * `[read]` **„7 Felder" sagt nichts ueber die Substanz.** Es sagt
+ * etwas ueber die Datenhaltung. Wer wissen will, was Bromocriptine
+ * ist, liest lieber *„Gegenanzeigen, Nebenwirkungen"* — dieselbe
+ * Zeilenlaenge, ungleich mehr Inhalt.
+ *
+ * `[read]` **Die Bloecke bleiben trotzdem zu.** Tom, C-229: *„das sind
+ * zusatzinfos die keiner sehen muss wenn er es nicht explizit will"* —
+ * und `startOffen()` ist per Test darauf festgelegt. **Geaendert wird
+ * der Anriss, nicht der Startzustand.**
+ *
+ * `[read]` Bevorzugt wird ein **Wert**, wenn er kurz genug ist
+ * (`not_prohibited`, `A`), sonst die **Feldnamen** — beides sagt mehr
+ * als eine Anzahl.
+ */
+export function anriss(b: Block, hoechstens = 62): string {
+  const teile: string[] = []
+  for (const f of b.felder) {
+    const wert = f.zeilen[0]?.trim() ?? ''
+
+    // `[cmd]` **`unbekannt`/`unknown` zaehlt nicht als Inhalt** — bei
+    // Bromocriptine trugen beide Sicherheitsfelder genau das, und
+    // „2 Felder" versprach etwas, das nicht da war. Gemessen
+    // 2026-08-23: `dosing.status` **115 von 290 `unbekannt`**,
+    // `safety.status` **53**.
+    // `[cmd]` Auch leere Sammlungen und der reine Index einer
+    // Zeilenliste sind kein Inhalt: `Qualitaet` riss als *„[]"* an,
+    // `Wechselwirkungen` als *„1"* (Creatine, gemessen 2026-08-23) —
+    // das ist die Nummer der Zeile, nicht ihre Aussage.
+    if (/^(unbekannt|unknown|null|—|-|\[\]|\{\})$/i.test(wert)) continue
+
+    // `[read]` **`true`/`false`/Zahlen sagen ohne ihr Feld nichts.**
+    // Der erste Entwurf riss `Rechtslage` als *„usa · false ·
+    // not_prohibited"* an und `Evidenz` als *„summary en · false · 0 ·
+    // D"* — gemessen am 2026-08-23 an Bromocriptine. **Beides ist
+    // Datenbankinhalt, kein Satz.** Bei solchen Werten steht der
+    // Feldname da, nicht der Wert.
+    const istAussage = wert.length > 0
+      && wert.length <= 24
+      && !wert.includes(':')
+      && !/^(true|false|\d+([.,]\d+)?)$/i.test(wert)
+
+    const stueck = istAussage ? wert : f.label
+    if (!teile.includes(stueck)) teile.push(stueck)
+    if (teile.join(' · ').length >= hoechstens) break
+  }
+  // `[read]` **Nichts Belastbares drin: das wird gesagt, nicht
+  // gezaehlt.** Eine Feldzahl ueber lauter `unbekannt` ist ein
+  // Versprechen, das der Block nicht einloest.
+  if (teile.length === 0) return 'keine Angaben'
+  const text = teile.join(' · ')
+  if (text.length <= hoechstens) return text
+  // Sauber am Trenner kuerzen statt mitten im Wort.
+  const kurz = text.slice(0, hoechstens)
+  const i = kurz.lastIndexOf(' · ')
+  return (i > 0 ? kurz.slice(0, i) : kurz.trimEnd()) + ' …'
+}
+
+/**
  * Die Felder, die einen Wert zeigen, aber keinen Herkunftsvermerk
  * tragen — der Waechter haelt diese Liste bei Substanzen mit
  * gefuellter Registry auf null.

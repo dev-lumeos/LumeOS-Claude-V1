@@ -45,6 +45,36 @@ export function text(de: unknown, en: unknown): string | null {
 }
 
 /**
+ * Wirft `jsonb`-Felder weg, die das Literal `null` tragen (C-107).
+ *
+ * `[cmd]` **Der Anlass, gemessen 2026-08-23:**
+ * `supplement_warnings.dose_ceiling` ist bei **290 von 290** Zeilen
+ * `is not null` — **258 davon enthalten aber `null` als JSON-Wert.**
+ * Echt gefuellt sind **32**.
+ *
+ * `[read]` **Ohne diesen Schritt stuende bei 258 Substanzen „null" in
+ * der Warnschwellen-Kachel** — und eine hingeschriebene Null sieht aus
+ * wie eine gemessene. `blockOhneMeta` faengt es nicht: dort ist es ein
+ * vorhandenes Feld mit einem Wert, nur eben dem falschen.
+ *
+ * `[read]` **Leeres Objekt und leeres Array zaehlen genauso** — auch
+ * sie sagen nichts, belegen aber eine Zeile.
+ */
+export function jsonNull(
+  z: Record<string, unknown> | null,
+): Record<string, unknown> | null {
+  if (!z) return null
+  const aus: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(z)) {
+    if (v === null || v === undefined) continue
+    if (Array.isArray(v) && v.length === 0) continue
+    if (typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 0) continue
+    aus[k] = v
+  }
+  return Object.keys(aus).length ? aus : null
+}
+
+/**
  * Ein Feld, das der neue Katalog nicht traegt.
  *
  * `[read]` **Der Unterschied zwischen den beiden Arten ist der Punkt

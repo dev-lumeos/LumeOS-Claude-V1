@@ -89,10 +89,22 @@
  * auf einem kleinen Schirm nicht dieselbe Hoehe beanspruchen wie auf
  * einem grossen. `60vh` laesst Kopfzeile, Suche und Kategorienleiste
  * darueber stehen. */
+/* [cmd] G-181 Punkt 6c: die Liste waechst mit dem Fenster.
+ *
+ * Vorher `max-height: 60vh` — das WAR schon relativ, ergab aber bei
+ * 1100 px Fensterhoehe feste 660 px, und die Tafelbremse darunter war
+ * mit festen 460 px dagegen gerechnet.
+ *
+ * [read] `calc(100vh - 300px)` statt eines Prozentsatzes: der Abzug
+ * ist, was ueber und unter der Liste steht (Kopfzeile, Suche,
+ * Filterleisten, Fusszeile). Bei 1100 px sind das 800 statt 660, bei
+ * 2160 px sind es 1860 — die Liste nutzt den Zuwachs, statt ihn an
+ * den Rand zu geben. */
 .v2-supp-tbl-wrap {
   overflow-x: auto;
   overflow-y: auto;
-  max-height: 60vh;
+  max-height: calc(100vh - 300px);
+  min-height: 320px;
 }
 
 /* Der Spaltenkopf bleibt beim Scrollen sichtbar.
@@ -515,4 +527,486 @@
   --kat-protein:      oklch(0.52 0.09 175);
   --kat-weitere:      oklch(0.52 0.04 250);
   --kat-unzugeordnet: oklch(0.48 0.00   0);
+}
+
+/* --- G-180: die aufgeklappte Zeile ------------------------------
+ *
+ * Tom, 2026-08-25: „hat nun daten aber plump aufgelistet
+ * untereinander" — und zum Entwurf: „nicht wieder plumpe text
+ * auflistungen."
+ *
+ * [read] Der Unterschied liegt in der FLAECHE, nicht in der
+ * Reihenfolge. Fettdruck plus Absatz ist kein Kasten: Wenn ein
+ * Bereich keinen eigenen Grund, keine eigene Kante und keinen
+ * eigenen Innenabstand hat, ist er nicht umgesetzt.
+ *
+ * [cmd] Das Hoehenbudget, gemessen 2026-08-25: der Rollbehaelter ist
+ * 660 px hoch (60vh von 1100), die zugeklappte Zeile 54 px. Fuer den
+ * aufgeklappten Inhalt bleiben rund 560 px — deshalb die Reiter und
+ * deshalb `max-height` unten. */
+
+.v2-supp-tafel {
+  padding: 12px 14px 14px;
+  background: var(--bg-elev);
+  border-top: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 var(--border);
+}
+
+/* [read] Die Hoehenbremse. Ohne sie waechst eine Zeile mit vielen
+ * Fragen ueber ihren eigenen Behaelter hinaus, und der Kopf der
+ * Tabelle scrollt aus dem Bild. */
+/* [cmd] G-181 Punkt 6c: die Bremse waechst mit — zusammen mit dem
+ * Behaelter geloest, nicht nacheinander.
+ *
+ * Vorher feste `460px`, gerechnet gegen die festen 660 px des
+ * Behaelters. [read] Waechst der Behaelter mit dem Fenster und die
+ * Bremse nicht, bleibt die Tafel klein, waehrend darunter Platz frei
+ * steht — die Bremse waere dann keine Begrenzung mehr, sondern eine
+ * Verkleinerung.
+ *
+ * Der Abzug von 120 px ist die Zeile selbst plus Reiterleiste und
+ * Fusszeile der Tafel. */
+.v2-supp-tafel-inhalt {
+  max-height: calc(100vh - 420px);
+  min-height: 200px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* --- Die Reiterleiste ------------------------------------------- */
+
+.v2-supp-reiter {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.v2-supp-reiter-knopf {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--fg-dim);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.v2-supp-reiter-knopf:hover { color: var(--fg); }
+
+.v2-supp-reiter-knopf.ist-offen {
+  color: var(--fg);
+  font-weight: 600;
+  border-bottom-color: var(--acc);
+}
+
+/* Die Zahl hinter dem Reitertitel — „Fragen · 5". */
+.v2-supp-reiter-zahl {
+  padding: 0 5px;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-subtle);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.v2-supp-reiter-knopf.ist-offen .v2-supp-reiter-zahl {
+  color: var(--fg);
+  border-color: color-mix(in oklch, var(--acc) 40%, var(--border));
+}
+
+/* --- Die Kaesten: eigener Grund, eigene Kante, eigener Abstand --- */
+
+.v2-supp-kasten {
+  padding: 9px 11px;
+  margin-bottom: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+.v2-supp-kasten-warn {
+  background: color-mix(in oklch, var(--warn) 7%, var(--surface));
+  border-color: color-mix(in oklch, var(--warn) 34%, var(--border));
+}
+
+/* Zeile je Angabe, mit Trennlinie. [read] Die Trennlinie ist der
+ * Grund, warum man die Menge findet, ohne den Satz davor zu lesen. */
+.v2-supp-kasten-zeile {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
+  font-size: 11.5px;
+  border-top: 1px solid var(--border);
+}
+
+.v2-supp-kasten-zeile:first-of-type { border-top: none; }
+
+/* [read] Rechtsbuendig UND groesser als die Beschriftung — „200-400 mg"
+ * muss ablesbar sein, ohne den Satz davor zu lesen. */
+.v2-supp-kasten-wert {
+  flex: 0 1 auto;
+  text-align: right;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+/* --- Die Formen als Karten im Raster ----------------------------- */
+
+.v2-supp-formen-raster {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+
+.v2-supp-form-karte {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 9px 26px 9px 11px;
+  font: inherit;
+  text-align: left;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.v2-supp-form-karte:hover {
+  border-color: color-mix(in oklch, var(--acc) 45%, var(--border));
+}
+
+.v2-supp-form-name {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.v2-supp-form-hinweis {
+  display: block;
+  font-size: 10.5px;
+  line-height: 1.45;
+  color: var(--fg-dim);
+}
+
+/* Der farbige Gradpunkt rechts oben — [read] das unterscheidet eine
+ * Karte von einer Zeile. */
+.v2-supp-form-punkt {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--surface);
+  border-radius: 999px;
+}
+
+.v2-supp-form-punkt[data-grad="A"],
+.v2-supp-form-punkt[data-grad="B"] { background: var(--pos); }
+.v2-supp-form-punkt[data-grad="C"] { background: var(--acc); }
+.v2-supp-form-punkt[data-grad="D"],
+.v2-supp-form-punkt[data-grad="E"],
+.v2-supp-form-punkt[data-grad="F"] { background: var(--warn); }
+
+/* Auf schmalen Schirmen ist ein Raster mit zwei Spalten enger als
+ * eine Karte breit — dann untereinander. */
+@media (max-width: 560px) {
+  .v2-supp-formen-raster { grid-template-columns: 1fr; }
+  .v2-supp-tafel-inhalt { max-height: 60vh; }
+}
+
+/* --- G-181: die Tafel hebt sich ab, und die Kacheln haben Breiten ---
+ *
+ * Tom, 2026-08-25: „detailansicht sieht scheisse aus und ist kaum
+ * unterscheidbar von der liste. da kann man mit kacheln arbeiten und
+ * strukturieren."
+ *
+ * [read] Punkt 1 ist ein Kontrastproblem, kein Layoutproblem: der
+ * aufgeklappte Bereich hatte fast denselben Grauwert wie die Liste. */
+
+/* Anderer Grund als die Listenzeilen, plus durchgehende Akzentkante
+ * links ueber Zeile UND Tafel. */
+.v2-supp-tafel {
+  border-left: 3px solid var(--acc);
+  background: color-mix(in oklch, var(--acc) 4%, var(--bg-elev));
+}
+
+/* Die gewaehlte Zeile traegt dieselbe Kante — so laeuft sie
+ * durchgehend von der Zeile in die Tafel. */
+.v2-tbl tbody tr[aria-expanded="true"] > td:first-child {
+  box-shadow: inset 3px 0 0 var(--acc);
+}
+.v2-tbl tbody tr[aria-expanded="true"] {
+  background: color-mix(in oklch, var(--acc) 6%, var(--surface));
+}
+
+/* [read] Die Nachbarzeilen daempfen, solange eine Tafel offen ist —
+ * damit man auf einen Blick sieht, was offen ist, statt es beim Lesen
+ * zu merken. */
+.v2-tbl.hat-offene tbody tr:not([aria-expanded="true"]):not(.v2-supp-tafel-zeile) {
+  opacity: 0.55;
+}
+.v2-tbl.hat-offene tbody tr:not([aria-expanded="true"]):hover {
+  opacity: 1;
+}
+
+/* --- Punkt 3: FESTE Breiten, kein Bandwurm ----------------------
+ *
+ * Tom: „bau kacheln mit fixen groessen nicht dass sich ploetzlich eine
+ * kachel dynamisch auf 1600 pixel vergroessert."
+ *
+ * [read] Kein `1fr` ohne `max-width`. `auto-fill` mit fester Spalten-
+ * breite laesst uebrigen Platz LEER, statt die Kacheln zu dehnen —
+ * das ist der Unterschied zu `auto-fit`, das sie streckt. */
+.v2-supp-zahlen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.v2-supp-zahl-kachel {
+  flex: 0 0 auto;          /* nicht wachsen, nicht schrumpfen */
+  width: 196px;            /* in der Vorgabe 180-220 */
+  min-height: 84px;
+  padding: 9px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* Unter der Mindestbreite wird umgebrochen, nicht gestaucht — die
+ * Kacheln nehmen dann die volle Zeilenbreite. */
+@media (max-width: 480px) {
+  .v2-supp-zahl-kachel { width: 100%; }
+}
+
+.v2-supp-zahl-label {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin-bottom: 4px;
+}
+
+.v2-supp-zahl-wert {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+.v2-supp-zahl-wert[data-ton="pos"]  { color: var(--pos); }
+.v2-supp-zahl-wert[data-ton="warn"] { color: var(--warn); }
+.v2-supp-zahl-wert[data-ton="acc"]  { color: var(--acc); }
+
+.v2-supp-zahl-hinweis {
+  display: block;
+  margin-top: 3px;
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: var(--fg-dim);
+}
+
+/* --- Punkt 4: Textkacheln nebeneinander -------------------------- */
+
+.v2-supp-textkacheln {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* [read] `max-width` ist hier die eigentliche Zusage: ohne sie wird
+ * aus einer Textkachel auf einem 1920er Monitor eine Zeile ueber die
+ * halbe Wand, und der Text ist unlesbar. Gemessen wird die
+ * Zeilenlaenge in Zeichen, nicht die Pixelbreite. */
+.v2-supp-textkachel {
+  flex: 1 1 300px;
+  max-width: 520px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.v2-supp-textkachel-kopf {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.v2-supp-textkachel-kopf[data-ton="acc"]  { color: var(--acc); }
+.v2-supp-textkachel-kopf[data-ton="pos"]  { color: var(--pos); }
+
+.v2-supp-textkachel p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+/* Der erste Satz — WAS IST DAS. [read] Auch er braucht eine
+ * Zeilenlaenge: ueber die volle Breite eines 1920er Monitors gelesen
+ * ist ein Satz muehsam, egal wie gut er ist. */
+/* [cmd] Gemessen 2026-08-25: mit `max-width: 720px` ergab der erste
+ * Satz **104 Zeichen je Zeile** — ueber der 90er Grenze, die der
+ * Auftrag als Messwert nennt. Bei 620 px sind es rund 88.
+ *
+ * [read] Die Textkacheln lagen bei 494 px und 74 Zeichen schon
+ * richtig; zu breit war nur der Satz darueber. */
+.v2-supp-erster-satz {
+  max-width: 620px;
+  margin: 0 0 12px;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+/* G-182 Punkt 3: die Warnvariante der Textkachel. */
+.v2-supp-textkachel-warn {
+  background: color-mix(in oklch, var(--warn) 7%, var(--surface));
+  border-color: color-mix(in oklch, var(--warn) 34%, var(--border));
+}
+.v2-supp-textkachel-kopf[data-ton="warn"] { color: var(--warn); }
+
+/* --- G-183: der Absatz in seine Aussagen zerlegt -----------------
+ *
+ * Tom, 2026-08-25 zum 6-OXO-Absatz: „so schreibt und liest kein
+ * mensch."
+ *
+ * [read] Schlichte Aufzaehlung, keine Spalte mit Ortsmarke links: die
+ * Marken sind uneinheitlich („In den USA", „Die WADA", „Fuer
+ * Sportler"), und eine erzwungene Spalte haette bei jedem dritten
+ * Text eine leere Haelfte. */
+.v2-supp-aussagen {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.v2-supp-aussagen li {
+  position: relative;
+  padding-left: 13px;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+
+.v2-supp-aussagen li + li { margin-top: 5px; }
+
+/* Der Punkt sitzt auf der ersten Zeile, nicht mittig zur ganzen
+ * Aussage — sonst rutscht er bei drei Zeilen in die Mitte. */
+.v2-supp-aussagen li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.58em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--fg-subtle);
+}
+
+/* In einer Textkachel ist der Text kleiner. */
+.v2-supp-textkachel .v2-supp-aussagen li { font-size: 12px; }
+
+/* --- G-186: die Laborwirkungen ----------------------------------
+ *
+ * [read] Zeile je Analyt, mit Richtung als Pille. Der Analyt steht
+ * links in fester Breite, damit man beim Ueberfliegen die Marker
+ * findet, ohne die Folge zu lesen. */
+.v2-supp-labor { display: grid; gap: 6px; }
+
+.v2-supp-labor-zeile {
+  display: grid;
+  grid-template-columns: minmax(0, 190px) auto minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.v2-supp-labor-zeile:first-child { border-top: none; padding-top: 0; }
+
+.v2-supp-labor-analyt {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+/* Auf schmalen Schirmen untereinander — eine 190-px-Spalte neben zwei
+ * weiteren passt dort nicht. */
+@media (max-width: 620px) {
+  .v2-supp-labor-zeile { grid-template-columns: 1fr; }
+}
+
+/* --- G-182 Punkt 4: die Quellenliste ---------------------------- */
+
+.v2-supp-quelle {
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+}
+
+.v2-supp-quelle-nr {
+  flex: 0 0 auto;
+  min-width: 16px;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-subtle);
+}
+
+/* --- Punkt 6a: das X in der Suche -------------------------------- */
+
+.v2-supp-suche { position: relative; }
+
+.v2-supp-suche-x {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--fg-dim);
+  background: none;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.v2-supp-suche-x:hover {
+  color: var(--fg);
+  background: var(--bg-elev);
 }

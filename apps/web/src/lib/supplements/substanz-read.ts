@@ -46,7 +46,7 @@ import { createSessionClient } from '@lumeos/shared/session'
 // ist reine Rechnung ohne I/O, und dort ist es pruefbar: diese Datei
 // zieht `next/headers` und laesst sich in einem Test nicht laden
 // (gegengeprobt 2026-08-23, `require() ES Module ... in a cycle`).
-import { text } from './substanz-luecken'
+import { text, jsonNull } from './substanz-luecken'
 
 
 /** Ein Herkunftsvermerk aus `evidence_provenance` — je Feldpfad. */
@@ -80,6 +80,14 @@ export type SubstanzListenEintrag = {
   gruppe: string | null
   /** `supplements.evidence_grade` — bei allen 290 gesetzt (A–F). */
   grad: string | null
+  /**
+   * G-186: die Zwecke, fuer die Suche.
+   *
+   * `[cmd]` **318/318 gefuellt, aber 842 VERSCHIEDENE Werte** auf 895
+   * Eintraege (gemessen 2026-08-25) — es sind Saetze, keine
+   * Schlagworte. **Deshalb kein Filter, sondern Suchtext.**
+   */
+  zwecke: string[]
 }
 
 /**
@@ -91,6 +99,20 @@ export type SubstanzSatz = {
   id: string
   /** C-252: die alte `substance_catalog.id`, siehe Dateikopf. */
   slug?: string
+  /** G-179: die deutschen Nutzertexte — `null`, wo keine Zeile existiert. */
+  texte?: Nutzertexte | null
+  /** G-179: 3-6 Alltagsfragen, nach `sort_order`. */
+  fragen?: Frage[]
+  /** G-182: die Quellenverweise — 290 von 290 gefuellt. */
+  quellen?: Quelle[]
+  /** G-182: die WADA-Klasse (S1.1, S2/S0 …) — 129 von 290. */
+  wada_kategorie?: string | null
+  /** G-186: Laborwirkungen — 90 der 318 haben welche. */
+  laborwirkungen?: Laborwirkung[]
+  /** G-186: Wechselwirkungen — 78 der 318 haben welche. */
+  wechselwirkungen?: Wechselwirkung[]
+  /** G-179: die Unterformen, wenn dies ein Sammeleintrag ist. */
+  formen?: Unterform[]
   canonical_name: string
   domain: string
   compound_type: string | null
@@ -137,6 +159,99 @@ export type SubstanzSatz = {
   peptide_sequence?: string | null
 }
 
+/**
+ * Die Nutzertexte einer Substanz (G-179, §9).
+ *
+ * `[read]` **Jedes Feld darf `null` sein, und das ist der Normalfall,
+ * nicht die Ausnahme.** `[cmd]` Gemessen 2026-08-25: `zu_wenig_de` ist
+ * bei **239 von 289** leer, weil die meisten Substanzen kein
+ * Mangelbild haben. **Wo ein Feld leer ist, entfaellt der Abschnitt**
+ * — die dritte Regel aus §9.
+ */
+export type Nutzertexte = {
+  kurz_was: string | null
+  wofuer: string[]
+  wie_wirkt: string | null
+  was_bringt_es: string | null
+  zu_viel: string | null
+  zu_wenig: string | null
+  wann_wie: string | null
+  wer_nicht: string[]
+  mythen: string | null
+  /** Nur bei Enhanced und Peptiden gefuellt (136 von 289). */
+  irreversibel: string | null
+  ueberwachung: string | null
+  reinheit: string | null
+  nicht_im_blut: string | null
+  rechtslage_klartext: string | null
+}
+
+/** Eine Alltagsfrage aus `supplement_faq`. */
+export type Frage = { frage: string; antwort: string }
+
+/**
+ * Eine Laborwirkung (G-186) — was der Stoff mit einem Messwert macht.
+ *
+ * `[cmd]` **222 Zeilen ueber 90 Substanzen**, alle im Katalog
+ * (gemessen 2026-08-25). **Nur 156 davon sind verschieden** — Biotins
+ * sieben sind drei; die Anzeige entdoppelt.
+ *
+ * `[read]` **Das ist die Ebene, die aus einem Katalog ein System
+ * macht, das warnen kann.** Biotin taeuscht einen falsch-niedrigen
+ * Troponinwert vor — *„Risk of MISSED myocardial infarction"*.
+ */
+export type Laborwirkung = {
+  analyt: string
+  richtung: string | null
+  folge: string | null
+}
+
+/**
+ * Eine Wechselwirkung (G-186).
+ *
+ * `[cmd]` **78 Zeilen ueber 78 Substanzen**, alle im Katalog.
+ * `description_de` ist bei **0** gefuellt — gezeigt wird englisch.
+ */
+export type Wechselwirkung = {
+  partner: string
+  schwere: string | null
+  beschreibung: string | null
+}
+
+/**
+ * Ein Quellenverweis aus `supplement_user_texts.sources` (G-182).
+ *
+ * `[cmd]` **290 von 290 gefuellt** (C-264), Gestalt
+ * `[{ref, fields, verified}]` — `ref` ist der Verweis als Fliesstext
+ * (*„Pandit et al., Andrologia 2016 (RCT, 250 mg 2x/d, 90 d)"*),
+ * `fields` nennt die Felder, die daraus stammen.
+ *
+ * `[read]` **`verified` wird mitgefuehrt und angezeigt.** Ein Verweis,
+ * den niemand geprueft hat, ist etwas anderes als einer, der geprueft
+ * ist — das zu verschweigen waere dieselbe Sorte Fehler wie eine Zahl
+ * ohne Herkunft.
+ */
+export type Quelle = {
+  ref: string
+  felder: string[]
+  geprueft: boolean
+}
+
+/**
+ * Eine Unterform unter dem Sammeleintrag (§9, vierte Regel).
+ *
+ * `[cmd]` 29 Formen unter 15 Sammeleintraegen; Magnesium hat sieben.
+ * Jede traegt ihren eigenen Evidenzgrad — der Sammeleintrag selbst
+ * traegt **keinen** (gemessen 2026-08-25).
+ */
+export type Unterform = {
+  id: string
+  slug: string
+  name: string
+  hinweis: string | null
+  grad: string | null
+}
+
 export type EigenerStack = { id: string; name: string; is_active: boolean }
 
 // C-252: die Luecken stehen serverfrei in `substanz-luecken.ts` —
@@ -164,7 +279,16 @@ export async function ladeSubstanzListe(): Promise<SubstanzListenEintrag[]> {
       'id, slug, name_de, name_en, description_de, description_en, form,'
       + ' evidence_grade, source,'
       + ' supplement_categories(name_de, name_en),'
-      + ' supplement_groups(code, label_de, label_en)')
+      + ' supplement_groups(code, label_de, label_en),'
+      // G-181 Punkt 5: die Listenzeile liest `kurz_was_de`.
+      // `[cmd]` **103 der 318 Zeilen trugen die Schablone** *„… ist
+      // eine Supplement-Substanz mit eigener Beleglage und eigenen
+      // Grenzen"* aus `description` (gemessen 2026-08-25), waehrend
+      // `kurz_was_de` danebenlag — **290 Records, alle verschieden.**
+      // G-186 Punkt 3: `wofuer_de` in die Liste, damit die Suche es
+      // mitdurchsucht. `[cmd]` 318/318 als Array gefuellt.
+      + ' supplement_user_texts(kurz_was_de, kurz_was_en,'
+      + ' wofuer_de, wofuer_en)')
     .eq('im_katalog', true)
     .order('sort_order')
     .order('name_en')
@@ -183,7 +307,26 @@ export async function ladeSubstanzListe(): Promise<SubstanzListenEintrag[]> {
       compound_type: text(null, x.form),
       category: text(kat?.name_de, kat?.name_en),
       canonical_category: text(kat?.name_de, kat?.name_en),
-      description: text(x.description_de, x.description_en),
+      // G-181: erst `kurz_was_de`, dann der Rueckfall auf
+      // `description`. `[cmd]` Der Rueckfall betrifft **28 von 318** —
+      // die Sammelnamen, die keine eigene Nutzertextzeile haben
+      // (`Ashwagandha (KSM-66)`, `Biotin`, `Caffeine` …).
+      description: (() => {
+        const u = ersteZeile(x.supplement_user_texts)
+        return text(u?.kurz_was_de, u?.kurz_was_en)
+          ?? text(x.description_de, x.description_en)
+      })(),
+      zwecke: (() => {
+        const u = ersteZeile(x.supplement_user_texts)
+        for (const k of ['wofuer_de', 'wofuer_en']) {
+          const w = u?.[k]
+          if (Array.isArray(w)) {
+            const rein = w.map(e => String(e ?? '').trim()).filter(Boolean)
+            if (rein.length) return rein
+          }
+        }
+        return []
+      })(),
       // `[read]` Die Gruppe wird als `code` gefuehrt, nicht als Label —
       // `filtereGruppe` vergleicht gegen `supplement`/`enhanced`/
       // `peptide`, und die Beschriftung ist Sache der Anzeige.
@@ -220,7 +363,37 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
       + ' supplement_safety(*), supplement_evidence(*),'
       + ' supplement_regulatory(*), supplement_quality(*),'
       + ' supplement_interactions(*), supplement_monitoring(*),'
+      // G-186: die Laborwirkungen — 222 Zeilen ueber 90 Substanzen.
+      + ' supplement_lab_effects(analyte_de, analyte_en, direction,'
+      + ' clinical_consequence_de, clinical_consequence_en),'
       + ' supplement_identifiers(*), supplement_aliases(alias),'
+      // C-107: WADA und die Warnschwellen. **Nicht `supplement_organ_risks`** —
+      // 1.446 seiner 1.450 Zeilen sagen `unknown` (gemessen 2026-08-23),
+      // das waeren fuenf Organzeilen „unbekannt" je Substanz.
+      + ' supplement_wada(wada_status, wada_category, detection_time_days,'
+      + ' note_de, note_en),'
+      + ' supplement_warnings(dose_ceiling, doctor_consult_flags,'
+      + ' no_ceiling_reason_de, no_ceiling_reason_en, warning_de, warning_en),'
+      // G-179: die Nutzertexte — das, was §9 als Detail beschreibt.
+      // `[read]` Bis hierher zeigte das Detail `description` aus dem
+      // Kopfsatz, also den englischen Recherchesatz. Die deutschen
+      // Nutzertexte lagen daneben und wurden **von niemandem gelesen**.
+      + ' supplement_user_texts(kurz_was_de, kurz_was_en, wofuer_de, wofuer_en,'
+      + ' wie_wirkt_de, wie_wirkt_en, was_bringt_es_de, was_bringt_es_en,'
+      + ' zu_viel_de, zu_viel_en, zu_wenig_de, zu_wenig_en,'
+      + ' wann_wie_de, wann_wie_en, wer_nicht_de, wer_nicht_en,'
+      + ' mythen_de, mythen_en, irreversibel_de, irreversibel_en,'
+      + ' ueberwachung_de, ueberwachung_en, reinheit_de, reinheit_en,'
+      + ' nicht_im_blut_de, nicht_im_blut_en,'
+      + ' rechtslage_klartext_de, rechtslage_klartext_en, sources),'
+      + ' supplement_faq(frage_de, frage_en, antwort_de, antwort_en, sort_order),'
+      // G-179, §9 vierte Regel: die Unterformen unter dem Sammelnamen.
+      // `[cmd]` 29 Formen unter 15 Sammeleintraegen, alle mit
+      // `form_note_de` und eigenem Grad — **heute unsichtbar** (C-244).
+      // Der Selbstbezug laeuft ueber `supplements_parent_id_fkey`.
+      + ' formen:supplements!parent_id('
+      + ' id, slug, name_de, name_en, form, form_note_de, form_note_en,'
+      + ' evidence_grade, sort_order, im_katalog),'
       + ' supplement_field_sources(field_name, source_id, as_of, evidence_class)')
     .eq(istUuid ? 'id' : 'slug', id)
     .maybeSingle()
@@ -236,10 +409,19 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
   const evi = ersteZeile(x.supplement_evidence)
   const reg = ersteZeile(x.supplement_regulatory)
   const qua = ersteZeile(x.supplement_quality)
+  const wad = ersteZeile(x.supplement_wada)
+  const wrn = ersteZeile(x.supplement_warnings)
 
   return {
     id: String(x.id),
     slug: String(x.slug ?? ''),
+    texte: nutzertexte(x.supplement_user_texts),
+    fragen: alleFragen(x.supplement_faq),
+    quellen: alleQuellen(ersteZeile(x.supplement_user_texts)?.sources),
+    wada_kategorie: text(null, wad?.wada_category),
+    laborwirkungen: alleLaborwirkungen(x.supplement_lab_effects),
+    wechselwirkungen: alleWechselwirkungen(x.supplement_interactions),
+    formen: alleFormen(x.formen),
     canonical_name: text(x.name_de, x.name_en) ?? String(x.slug ?? ''),
     domain: String(x.source ?? ''),
     compound_type: text(null, x.form),
@@ -264,8 +446,27 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
     interactions: alleZeilen(x.supplement_interactions),
     regulatory: blockOhneMeta(reg),
     quality: blockOhneMeta(qua),
-    warning_triggers: null,
+    // C-107: die Warnschwellen.
+    //
+    // `[cmd]` **Gemessen 2026-08-23, und die Zeilenzahl taeuscht hier:**
+    // `dose_ceiling` ist zwar bei allen 290 Zeilen `is not null` — aber
+    // **258 davon tragen das JSON-Literal `null`. Echt gefuellt sind
+    // 32.** Die uebrigen erklaeren sich ueber `no_ceiling_reason`
+    // (258 englisch), und genau das gehoert angezeigt: **warum** es
+    // keine Obergrenze gibt, statt einer leeren Zeile.
+    //
+    // `[cmd]` `doctor_consult_flags` echt gefuellt: **128 von 290**.
+    // `warning_de`/`warning_en`: **0 von 290** — der Warntext fehlt
+    // ganz. Er wandert trotzdem durch; `jsonNull` wirft die
+    // `null`-Literale weg, und was spaeter gefuellt wird, erscheint
+    // von selbst.
+    warning_triggers: blockOhneMeta(jsonNull(wrn)),
     evidence_provenance: feldQuellen(x.supplement_field_sources),
+    // C-107: WADA-Status. `[cmd]` Echter Inhalt, gemessen 2026-08-23:
+    // 163 `not_prohibited` · 124 `prohibited` · 3 `monitored`.
+    // `detection_time_days` ist bei 0 von 290 gesetzt und erscheint
+    // deshalb nicht.
+    wada_status: text(null, wad?.wada_status),
     prescription_required: (reg?.prescription_required as boolean) ?? null,
     dose_ceiling_value: null,
     dose_ceiling_unit: (dos?.dose_unit as string) ?? null,
@@ -274,6 +475,174 @@ export async function ladeSubstanz(id: string): Promise<SubstanzSatz | null> {
     chembl_id: kennung(x.supplement_identifiers, 'chembl'),
     inchikey: kennung(x.supplement_identifiers, 'inchikey'),
   } as SubstanzSatz
+}
+
+/**
+ * Die Nutzertexte, mit Sprachrueckfall je Feld (G-179).
+ *
+ * `[read]` **Der Rueckfall gilt hier fuer jedes Feld, nicht nur den
+ * Namen** — die Regel aus C-254. `[cmd]` Bei den Nutzertexten ist
+ * heute Deutsch gefuellt und Englisch leer; die Richtung kann sich
+ * drehen, sobald uebersetzt wird.
+ *
+ * `[read]` **Leere Zeichenketten werden zu `null`.** Die Anzeige
+ * fragt nur „ist da was" — sie soll nicht zwischen `''` und `null`
+ * unterscheiden muessen, sonst entsteht ein leerer Abschnitt.
+ */
+function nutzertexte(v: unknown): Nutzertexte | null {
+  const z = ersteZeile(v)
+  if (!z) return null
+  const t = (de: string, en: string) => text(z[de], z[en])
+  const liste = (de: string, en: string): string[] => {
+    for (const k of [de, en]) {
+      const w = z[k]
+      if (Array.isArray(w)) {
+        const rein = w.map(e => String(e ?? '').trim()).filter(Boolean)
+        if (rein.length) return rein
+      }
+    }
+    return []
+  }
+  return {
+    kurz_was: t('kurz_was_de', 'kurz_was_en'),
+    wofuer: liste('wofuer_de', 'wofuer_en'),
+    wie_wirkt: t('wie_wirkt_de', 'wie_wirkt_en'),
+    was_bringt_es: t('was_bringt_es_de', 'was_bringt_es_en'),
+    zu_viel: t('zu_viel_de', 'zu_viel_en'),
+    zu_wenig: t('zu_wenig_de', 'zu_wenig_en'),
+    wann_wie: t('wann_wie_de', 'wann_wie_en'),
+    wer_nicht: liste('wer_nicht_de', 'wer_nicht_en'),
+    mythen: t('mythen_de', 'mythen_en'),
+    irreversibel: t('irreversibel_de', 'irreversibel_en'),
+    ueberwachung: t('ueberwachung_de', 'ueberwachung_en'),
+    reinheit: t('reinheit_de', 'reinheit_en'),
+    nicht_im_blut: t('nicht_im_blut_de', 'nicht_im_blut_en'),
+    rechtslage_klartext: t('rechtslage_klartext_de', 'rechtslage_klartext_en'),
+  }
+}
+
+/**
+ * Die Quellenverweise aus `sources` (G-182, Punkt 4).
+ *
+ * `[cmd]` Gestalt `[{ref, fields, verified}]`, **290 von 290
+ * gefuellt** (gemessen 2026-08-25).
+ *
+ * `[read]` **`Record:`- und `Batch-Record:`-Verweise bleiben drin.**
+ * Sie sind duerftig — *„Record: description, dosing.…"* nennt nur, aus
+ * welchem Datensatzfeld etwas stammt —, aber sie wegzulassen hiesse,
+ * eine bessere Quellenlage vorzutaeuschen, als es gibt.
+ */
+function alleQuellen(v: unknown): Quelle[] {
+  if (!Array.isArray(v)) return []
+  return v
+    .map(z => z as Record<string, unknown>)
+    .map(z => ({
+      ref: typeof z.ref === 'string' ? z.ref.trim() : '',
+      felder: Array.isArray(z.fields)
+        ? z.fields.map(f => String(f ?? '').trim()).filter(Boolean) : [],
+      geprueft: z.verified === true,
+    }))
+    .filter(q => q.ref.length > 0)
+}
+
+/**
+ * Die Laborwirkungen — entdoppelt (G-186).
+ *
+ * `[cmd]` **222 Zeilen sind nur 156 verschiedene** (gemessen
+ * 2026-08-25): `Vitamin B7 (biotin)` traegt sieben, davon drei
+ * verschiedene. **Ohne Entdoppelung stuende dieselbe Warnung
+ * dreimal.**
+ *
+ * `[read]` **Deutsch ist bei 0 von 222 gefuellt** — `analyte_de` und
+ * `clinical_consequence_de` sind leer, `*_en` bei allen. Der Rueckfall
+ * aus C-254 greift, gezeigt wird englisch.
+ */
+function alleLaborwirkungen(v: unknown): Laborwirkung[] {
+  if (!Array.isArray(v)) return []
+  const gesehen = new Set<string>()
+  const aus: Laborwirkung[] = []
+  for (const z of v) {
+    const r = z as Record<string, unknown>
+    const analyt = text(r.analyte_de, r.analyte_en)
+    if (!analyt) continue
+    const folge = text(r.clinical_consequence_de, r.clinical_consequence_en)
+    const richtung = typeof r.direction === 'string' && r.direction.trim()
+      ? r.direction.trim() : null
+    const schluessel = `${analyt}|${richtung ?? ''}|${folge ?? ''}`
+    if (gesehen.has(schluessel)) continue
+    gesehen.add(schluessel)
+    aus.push({ analyt, richtung, folge })
+  }
+  return aus
+}
+
+/**
+ * Die Wechselwirkungen (G-186).
+ *
+ * `[cmd]` 78 Zeilen, `partner_label` und `severity` bei allen gefuellt,
+ * `description_de` bei **0** — englisch mit Rueckfall.
+ */
+function alleWechselwirkungen(v: unknown): Wechselwirkung[] {
+  if (!Array.isArray(v)) return []
+  const gesehen = new Set<string>()
+  const aus: Wechselwirkung[] = []
+  for (const z of v) {
+    const r = z as Record<string, unknown>
+    const partner = typeof r.partner_label === 'string' && r.partner_label.trim()
+      ? r.partner_label.trim() : null
+    if (!partner) continue
+    const beschreibung = text(r.description_de, r.description_en)
+    const schluessel = `${partner}|${beschreibung ?? ''}`
+    if (gesehen.has(schluessel)) continue
+    gesehen.add(schluessel)
+    aus.push({
+      partner,
+      schwere: typeof r.severity === 'string' && r.severity.trim()
+        ? r.severity.trim() : null,
+      beschreibung,
+    })
+  }
+  return aus
+}
+
+/** Die Alltagsfragen, nach `sort_order`. */
+function alleFragen(v: unknown): Frage[] {
+  if (!Array.isArray(v)) return []
+  return v
+    .map(z => z as Record<string, unknown>)
+    .map(z => ({
+      frage: text(z.frage_de, z.frage_en) ?? '',
+      antwort: text(z.antwort_de, z.antwort_en) ?? '',
+      sort: typeof z.sort_order === 'number' ? z.sort_order : 0,
+    }))
+    .filter(f => f.frage && f.antwort)
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ frage, antwort }) => ({ frage, antwort }))
+}
+
+/**
+ * Die Unterformen eines Sammeleintrags (§9, vierte Regel).
+ *
+ * `[read]` **Nur Formen, die selbst im Katalog stehen.** Eine Form
+ * hinter `im_katalog = false` waere sonst ueber den Sammeleintrag
+ * doch sichtbar — und die Sichtbarkeitsregel aus C-243 umgangen.
+ */
+function alleFormen(v: unknown): Unterform[] {
+  if (!Array.isArray(v)) return []
+  return v
+    .map(z => z as Record<string, unknown>)
+    .filter(z => z.im_katalog === true)
+    .map(z => ({
+      id: String(z.id),
+      slug: String(z.slug ?? ''),
+      name: text(z.name_de, z.name_en) ?? String(z.slug ?? ''),
+      hinweis: text(z.form_note_de, z.form_note_en),
+      grad: typeof z.evidence_grade === 'string' && z.evidence_grade
+        ? z.evidence_grade : null,
+      sort: typeof z.sort_order === 'number' ? z.sort_order : 0,
+    }))
+    .sort((a, b) => a.sort - b.sort || a.name.localeCompare(b.name, 'de'))
+    .map(({ sort: _sort, ...rest }) => rest)
 }
 
 /** Eine eingebettete 1:n-Beziehung, von der genau eine Zeile zaehlt. */
@@ -300,12 +669,29 @@ function blockOhneMeta(z: Record<string, unknown> | null): Record<string, unknow
   return Object.keys(aus).length ? aus : null
 }
 
+/**
+ * Mehrere Zeilen einer 1:n-Beziehung als Block.
+ *
+ * `[cmd]` **G-177: die Zeilen heissen nach ihrem Gegenueber, nicht
+ * „1", „2", „3".** Vorher riss der Wechselwirkungs-Block als *„1"* an
+ * — das ist die Zeilennummer, nicht ihre Aussage. Bei Creatine steht
+ * in `partner_label` *„caffeine interaction debated (likely
+ * minimal)"*; das gehoert dorthin.
+ */
 function alleZeilen(v: unknown): Record<string, unknown> | null {
   if (!Array.isArray(v) || v.length === 0) return null
   const aus: Record<string, unknown> = {}
   v.forEach((z, i) => {
-    const rein = blockOhneMeta(z as Record<string, unknown>)
-    if (rein) aus[`${i + 1}`] = rein
+    const roh = z as Record<string, unknown>
+    const rein = blockOhneMeta(roh)
+    if (!rein) return
+    const benennung = ['partner_label', 'organ', 'jurisdiction', 'lab_marker_id']
+      .map(k => roh[k])
+      .find(w => typeof w === 'string' && w.trim())
+    const schluessel = typeof benennung === 'string' && benennung.trim()
+      ? benennung.trim()
+      : `${i + 1}`
+    aus[aus[schluessel] ? `${schluessel} (${i + 1})` : schluessel] = rein
   })
   return Object.keys(aus).length ? aus : null
 }
