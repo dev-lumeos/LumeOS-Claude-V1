@@ -1,0 +1,18 @@
+{
+  "wave": "2",
+  "before_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_144324_wave2_before.dump",
+    "exists": true,
+    "size": 21043030,
+    "out": ""
+  },
+  "before_counts": "ERROR:  relation \"medical.biomarker_explanations\" does not exist\nLINE 6: ...s null then null else (select count(*)::text from medical.bi...\n                                                             ^",
+  "run": "BEGIN\nCREATE EXTENSION\nCREATE SCHEMA\npsql:<stdin>:4: NOTICE:  extension \"pgcrypto\" already exists, skipping\npsql:<stdin>:5: NOTICE:  schema \"medical\" already exists, skipping\npsql:<stdin>:29: ERROR:  column \"id\" referenced in foreign key constraint does not exist",
+  "after_counts": "ERROR:  relation \"medical.biomarker_explanations\" does not exist\nLINE 6: ...s null then null else (select count(*)::text from medical.bi...\n                                                             ^",
+  "after_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_144324_wave2_after.dump",
+    "exists": true,
+    "size": 21043030,
+    "out": ""
+  }
+}

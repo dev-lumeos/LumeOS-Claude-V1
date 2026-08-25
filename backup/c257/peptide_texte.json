@@ -1,0 +1,673 @@
+[
+    {
+        "slug": "sub_a21a1bf992",
+        "name_en": "AOD-9604",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "AOD-9604 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_dcb8ab1209",
+        "name_en": "BPC-157",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "BPC-157 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_36d3652f3c",
+        "name_en": "Bremelanotide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Bremelanotide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_39e7d5c4ff",
+        "name_en": "Cagrilintide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Cagrilintide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_0ea9fa5c09",
+        "name_en": "Cerebrolysin (peptide mixture)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Cerebrolysin (peptide mixture) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_d92410ebf5",
+        "name_en": "Cerebrolysin-related: Cortexin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Cerebrolysin-related: Cortexin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_18fdc6c754",
+        "name_en": "CJC-1295 (no DAC)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "CJC-1295 (no DAC) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_74cb0c22b1",
+        "name_en": "CJC-1295 with DAC",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "CJC-1295 with DAC ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_e092c450ce",
+        "name_en": "Cortagen",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Cortagen ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_d9569c9e86",
+        "name_en": "Dihexa",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Dihexa ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_84d265f4cb",
+        "name_en": "Elamipretide (SS-31)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Elamipretide (SS-31) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_12eddaf876",
+        "name_en": "Emideltide (DSIP)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Emideltide (DSIP) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_a12cc12158",
+        "name_en": "Epitalon",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Epitalon ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_edd818f338",
+        "name_en": "Follistatin 344",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Follistatin 344 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_d6690ba08f",
+        "name_en": "GHK-Cu",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "GHK-Cu ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_a0f594fe4d",
+        "name_en": "GHRH (native 1-44)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "GHRH (native 1-44) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: B."
+    },
+    {
+        "slug": "sub_50a7fb5f3c",
+        "name_en": "GHRP-2",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "GHRP-2 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_a1c4492d17",
+        "name_en": "GHRP-6",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "GHRP-6 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_638f7df8fd",
+        "name_en": "GLP-1 (native) / research incretins",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "GLP-1 (native) / research incretins ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_b2e06d877b",
+        "name_en": "Glucagon",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Glucagon ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_3c982504c1",
+        "name_en": "Glutathione (injectable/compounded)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Glutathione (injectable/compounded) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_93740db432",
+        "name_en": "Gonadorelin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Gonadorelin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_379fc96f78",
+        "name_en": "hCG (human chorionic gonadotropin)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "hCG (human chorionic gonadotropin) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_60eed56d73",
+        "name_en": "Hexarelin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Hexarelin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_af9270ada9",
+        "name_en": "Human growth hormone (somatropin)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Human growth hormone (somatropin) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_f334b784b5",
+        "name_en": "Humanin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Humanin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_8bddfad866",
+        "name_en": "IGF-1 (mecasermin)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "IGF-1 (mecasermin) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_1c34a9f129",
+        "name_en": "IGF-1 DES",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "IGF-1 DES ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_f4dce63643",
+        "name_en": "IGF-1 LR3",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "IGF-1 LR3 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_1c62138dc3",
+        "name_en": "Insulin (human)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Insulin (human) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_16306ba3e5",
+        "name_en": "Ipamorelin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Ipamorelin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_c25c43edc7",
+        "name_en": "Kisspeptin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Kisspeptin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_271e0f2373",
+        "name_en": "KPV",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "KPV ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_2fb9e0f3e3",
+        "name_en": "Liraglutide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Liraglutide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_73ea811e99",
+        "name_en": "LL-37",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "LL-37 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_b58692c9cf",
+        "name_en": "Mazdutide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Mazdutide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_58ea56993c",
+        "name_en": "Melanotan I (afamelanotide)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Melanotan I (afamelanotide) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: B."
+    },
+    {
+        "slug": "sub_15f568b407",
+        "name_en": "Melanotan II",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Melanotan II ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_4d11344001",
+        "name_en": "MGF (mechano growth factor)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "MGF (mechano growth factor) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_55820f027f",
+        "name_en": "Mod GRF 1-29",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Mod GRF 1-29 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_848a3aaf7f",
+        "name_en": "MOTS-c",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "MOTS-c ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_977c6bc101",
+        "name_en": "Oxytocin (intranasal/compounded)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Oxytocin (intranasal/compounded) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_69dad4a0dc",
+        "name_en": "PEG-MGF",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "PEG-MGF ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_689186c86c",
+        "name_en": "Pegmolesatide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Pegmolesatide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: B."
+    },
+    {
+        "slug": "sub_09c6a0bc3c",
+        "name_en": "Pentosan polysulfate",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Pentosan polysulfate ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_e5dc9f8f1f",
+        "name_en": "Pinealon",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Pinealon ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_a69c95e352",
+        "name_en": "Retatrutide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Retatrutide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_5959e28c02",
+        "name_en": "Selank",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Selank ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_8f0587d87f",
+        "name_en": "Semaglutide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Semaglutide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_4d6afb6227",
+        "name_en": "Semax",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Semax ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_85c8d4ddec",
+        "name_en": "Sermorelin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Sermorelin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: B."
+    },
+    {
+        "slug": "sub_86c655248f",
+        "name_en": "Survodutide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Survodutide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_d4f140bc56",
+        "name_en": "TB-500 (Thymosin beta-4 fragment)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "TB-500 (Thymosin beta-4 fragment) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_313fdcf581",
+        "name_en": "Tesamorelin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Tesamorelin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_d1a48fb1be",
+        "name_en": "Thymalin",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Thymalin ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_d1b4922e08",
+        "name_en": "Thymosin alpha-1",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Thymosin alpha-1 ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: B."
+    },
+    {
+        "slug": "sub_fcb3b6dc30",
+        "name_en": "Thymosin beta-4 (full)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Thymosin beta-4 (full) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_af6dc7a9dd",
+        "name_en": "Tirzepatide",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Tirzepatide ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_eaae1b3005",
+        "name_en": "Vasoactive intestinal peptide (VIP)",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Vasoactive intestinal peptide (VIP) ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_4b528225b1",
+        "name_en": "Vesugen",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Vesugen ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_7c0f9133e7",
+        "name_en": "Vilon",
+        "wofuer_de": [
+            "Signalwege im Koerper",
+            "Monitoring und Laborbezug",
+            "Reinheits- und Rechtsfragen"
+        ],
+        "kurz_was_de": "Vilon ist ein Peptid oder peptidnaher Wirkstoff mit klarer Signalwirkung im Koerper.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    }
+]

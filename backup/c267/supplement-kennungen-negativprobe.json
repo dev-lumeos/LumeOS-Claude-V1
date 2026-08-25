@@ -1,0 +1,191 @@
+{
+  "checked": 239,
+  "conflicts": [
+    {
+      "type": "SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY",
+      "unii": "3GQ9E911BI",
+      "reason": "Dieselbe UNII steht fuer dieselbe Substanz, aber PubChem_CID, molecular_formula und/oder InChIKey laufen auseinander.",
+      "groups": [
+        {
+          "triad": "10982|C8H19N_NEGATIVPROBE|QNIVIMYXGGFTAK-UHFFFAOYSA-N",
+          "members": [
+            {
+              "id": "c40b98eb-c8ec-5eac-4a25-ef37d4d93a8d",
+              "name": "Octodrine (DMHA)",
+              "slug": "sub_e0e78e6429",
+              "unii": "3GQ9E911BI",
+              "inchikey": "QNIVIMYXGGFTAK-UHFFFAOYSA-N",
+              "chembl_id": "CHEMBL2105833",
+              "pubchem_cid": "10982",
+              "molecular_formula": "C8H19N_NEGATIVPROBE",
+              "negativprobe": true
+            }
+          ]
+        },
+        {
+          "triad": "10982|C8H19N|QNIVIMYXGGFTAK-UHFFFAOYSA-N",
+          "members": [
+            {
+              "id": "a3e1e770-b76b-bd22-0730-a871bc97e503",
+              "name": "DMHA (octodrine) — see supplements entry",
+              "slug": "sub_ce519c64b8",
+              "unii": "3GQ9E911BI",
+              "inchikey": "QNIVIMYXGGFTAK-UHFFFAOYSA-N",
+              "chembl_id": "CHEMBL2105833",
+              "pubchem_cid": "10982",
+              "molecular_formula": "C8H19N"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY",
+      "unii": "3G6A5W338E",
+      "reason": "Dieselbe UNII steht fuer dieselbe Substanz, aber PubChem_CID, molecular_formula und/oder InChIKey laufen auseinander.",
+      "groups": [
+        {
+          "triad": "6435808|C10H12FN3O4|GFFXZLZWLOBBLO-ASKVSEFXSA-N",
+          "members": [
+            {
+              "id": "af712a9b-8550-b067-4d2a-354b25dcece1",
+              "name": "Caffeine (anhydrous)",
+              "slug": "sub_2c308411e9",
+              "unii": "3G6A5W338E",
+              "inchikey": "GFFXZLZWLOBBLO-ASKVSEFXSA-N",
+              "chembl_id": "CHEMBL113",
+              "pubchem_cid": "6435808",
+              "molecular_formula": "C10H12FN3O4"
+            }
+          ]
+        },
+        {
+          "triad": "2519|C8H10N4O2|RYYVLZVUVIJVGH-UHFFFAOYSA-N",
+          "members": [
+            {
+              "id": "36c057da-948c-a4d4-5cd5-e11ad6989993",
+              "name": "Caffeine (fat-loss context cross-ref)",
+              "slug": "sub_98d523f968",
+              "unii": "3G6A5W338E",
+              "inchikey": "RYYVLZVUVIJVGH-UHFFFAOYSA-N",
+              "chembl_id": null,
+              "pubchem_cid": "2519",
+              "molecular_formula": "C8H10N4O2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY",
+      "unii": "8427BML8NY",
+      "reason": "Dieselbe UNII steht fuer dieselbe Substanz, aber PubChem_CID, molecular_formula und/oder InChIKey laufen auseinander.",
+      "groups": [
+        {
+          "triad": "5287554|C46H64O2|RAKQPZMEYJZGPI-LJWNYQGCSA-N",
+          "members": [
+            {
+              "id": "7e23c017-74ae-d54f-7766-da488470f3fe",
+              "name": "Vitamin K2 (menaquinone-7)",
+              "slug": "sub_6764c8891c",
+              "unii": "8427BML8NY",
+              "inchikey": "RAKQPZMEYJZGPI-LJWNYQGCSA-N",
+              "chembl_id": "CHEMBL1230575",
+              "pubchem_cid": "5287554",
+              "molecular_formula": "C46H64O2"
+            }
+          ]
+        },
+        {
+          "triad": "5282367|C31H40O2|DKHGMERMDICWDU-GHDNBGIDSA-N",
+          "members": [
+            {
+              "id": "6cd91469-aa03-1f6a-7bf7-2e9971c6d85a",
+              "name": "Vitamin K2 (menaquinone-4)",
+              "slug": "sub_0b5c620106",
+              "unii": "8427BML8NY",
+              "inchikey": "DKHGMERMDICWDU-GHDNBGIDSA-N",
+              "chembl_id": "CHEMBL259223",
+              "pubchem_cid": "5282367",
+              "molecular_formula": "C31H40O2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "SAME_UNII_DIFFERENT_CID_FORMULA_INCHIKEY",
+      "unii": "S71T8B8Z6P",
+      "reason": "Dieselbe UNII steht fuer dieselbe Substanz, aber PubChem_CID, molecular_formula und/oder InChIKey laufen auseinander.",
+      "groups": [
+        {
+          "triad": "23976|Cr|VYZAMTAEIAYCRO-UHFFFAOYSA-N",
+          "members": [
+            {
+              "id": "d422d853-1727-debc-615d-8c1f0f94cf34",
+              "name": "Chromium (as chromium picolinate)",
+              "slug": "sub_b7423d9551",
+              "unii": "S71T8B8Z6P",
+              "inchikey": "VYZAMTAEIAYCRO-UHFFFAOYSA-N",
+              "chembl_id": "CHEMBL3185022",
+              "pubchem_cid": "23976",
+              "molecular_formula": "Cr"
+            }
+          ]
+        },
+        {
+          "triad": "151932|C18H12CrN3O6|CBDQOLKNTOMMTL-UHFFFAOYSA-K",
+          "members": [
+            {
+              "id": "c908f245-ac81-cafe-dcfe-d126eacfda7a",
+              "name": "Chromium picolinate (metabolic cross-ref)",
+              "slug": "sub_03e86b16d2",
+              "unii": "S71T8B8Z6P",
+              "inchikey": "CBDQOLKNTOMMTL-UHFFFAOYSA-K",
+              "chembl_id": "CHEMBL3185022",
+              "pubchem_cid": "151932",
+              "molecular_formula": "C18H12CrN3O6"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "SAME_NAME_TOKEN_DIFFERENT_CID_FORMULA_INCHIKEY",
+      "token": "caffeine",
+      "reason": "Gleicher fachlicher Namenskern, aber verschiedene PubChem_CID/Formel/InChIKey-Triaden.",
+      "groups": [
+        {
+          "triad": "6435808|C10H12FN3O4|GFFXZLZWLOBBLO-ASKVSEFXSA-N",
+          "members": [
+            {
+              "id": "af712a9b-8550-b067-4d2a-354b25dcece1",
+              "name": "Caffeine (anhydrous)",
+              "slug": "sub_2c308411e9",
+              "unii": "3G6A5W338E",
+              "inchikey": "GFFXZLZWLOBBLO-ASKVSEFXSA-N",
+              "chembl_id": "CHEMBL113",
+              "pubchem_cid": "6435808",
+              "molecular_formula": "C10H12FN3O4"
+            }
+          ]
+        },
+        {
+          "triad": "2519|C8H10N4O2|RYYVLZVUVIJVGH-UHFFFAOYSA-N",
+          "members": [
+            {
+              "id": "36c057da-948c-a4d4-5cd5-e11ad6989993",
+              "name": "Caffeine (fat-loss context cross-ref)",
+              "slug": "sub_98d523f968",
+              "unii": "3G6A5W338E",
+              "inchikey": "RYYVLZVUVIJVGH-UHFFFAOYSA-N",
+              "chembl_id": null,
+              "pubchem_cid": "2519",
+              "molecular_formula": "C8H10N4O2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

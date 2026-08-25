@@ -1,0 +1,18 @@
+{
+  "wave": "1",
+  "before_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_144308_wave1_before.dump",
+    "exists": true,
+    "size": 18852464,
+    "out": ""
+  },
+  "before_counts": "ERROR:  relation \"supplements.entity_cyp\" does not exist\nLINE 2: ...s null then null else (select count(*)::text from supplement...\n                                                             ^",
+  "run": "BEGIN\nCREATE EXTENSION\nCREATE SCHEMA\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nDROP TABLE\nCREATE TABLE\nCOPY 1\nDELETE 0\nDELETE 0\nDELETE 0\nDELETE 0\nDELETE 0\nDELETE 0\nINSERT 0 3001\nINSERT 0 4617\nINSERT 0 1937\nINSERT 0 5034\nINSERT 0 2838\nUPDATE 0\nUPDATE 0\nINSERT 0 0\nINSERT 0 0\nCOMMIT\npsql:<stdin>:4: NOTICE:  extension \"pgcrypto\" already exists, skipping\npsql:<stdin>:5: NOTICE:  schema \"supplements\" already exists, skipping\npsql:<stdin>:80: NOTICE:  table \"tmp_c262_wave1\" does not exist, skipping",
+  "after_counts": "ERROR:  relation \"medical.biomarker_explanations\" does not exist\nLINE 6: ...s null then null else (select count(*)::text from medical.bi...\n                                                             ^",
+  "after_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_144308_wave1_after.dump",
+    "exists": true,
+    "size": 21043030,
+    "out": ""
+  }
+}

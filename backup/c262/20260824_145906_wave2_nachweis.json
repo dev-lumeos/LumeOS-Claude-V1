@@ -1,0 +1,19 @@
+{
+  "wave": "2",
+  "before_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_145906_wave2_before.dump",
+    "exists": true,
+    "size": 20776525,
+    "out": ""
+  },
+  "before_counts": "supplements.entity_cyp                  | supplements.entity_cyp           | 3001\n supplements.entity_transporters         | supplements.entity_transporters  | 4617\n supplements.entity_pk                   | supplements.entity_pk            | 1937\n supplements.entity_renal_hepatic        | supplements.entity_renal_hepatic | 7872\n medical.biomarker_explanations          | medical.biomarker_explanations   | 66\n medical.symptoms                        | medical.symptoms                 | 34\n medical.symptom_biomarker_map           | medical.symptom_biomarker_map    | 102\n supplements.supplement_aliases          | x                                | 1293\n supplements.supplements_im_katalog_true | x                                | 318\n medical.medication_active_substances    | x                                | 498\n medical.medication_formulations         | x                                | 453\n medical.medication_products             | x                                | 448\n supplements.rule_catalog_medication     | x                                | 20",
+  "run": "BEGIN\nCREATE EXTENSION\nCREATE SCHEMA\nDROP TABLE\nDROP TABLE\nDROP TABLE\nCREATE TABLE\nCREATE TABLE\nCREATE TABLE\nALTER TABLE\nALTER TABLE\nALTER TABLE\nDROP POLICY\nCREATE POLICY\nDROP POLICY\nCREATE POLICY\nDROP POLICY\nCREATE POLICY\nGRANT\nGRANT\nGRANT\nGRANT\nGRANT\nGRANT\nDROP TABLE\nCREATE TABLE\nCOPY 1\nINSERT 0 34\nINSERT 0 66\nINSERT 0 102\nCOMMIT\npsql:<stdin>:4: NOTICE:  extension \"pgcrypto\" already exists, skipping\npsql:<stdin>:5: NOTICE:  schema \"medical\" already exists, skipping\npsql:<stdin>:68: NOTICE:  policy \"biomarker_explanations_read\" for relation \"medical.biomarker_explanations\" does not exist, skipping\npsql:<stdin>:70: NOTICE:  policy \"symptoms_read\" for relation \"medical.symptoms\" does not exist, skipping\npsql:<stdin>:72: NOTICE:  policy \"symptom_biomarker_map_read\" for relation \"medical.symptom_biomarker_map\" does not exist, skipping\npsql:<stdin>:82: NOTICE:  table \"tmp_c262_wave2\" does not exist, skipping",
+  "run_failed": false,
+  "after_counts": "supplements.entity_cyp                  | supplements.entity_cyp           | 3001\n supplements.entity_transporters         | supplements.entity_transporters  | 4617\n supplements.entity_pk                   | supplements.entity_pk            | 1937\n supplements.entity_renal_hepatic        | supplements.entity_renal_hepatic | 7872\n medical.biomarker_explanations          | medical.biomarker_explanations   | 66\n medical.symptoms                        | medical.symptoms                 | 34\n medical.symptom_biomarker_map           | medical.symptom_biomarker_map    | 102\n supplements.supplement_aliases          | x                                | 1293\n supplements.supplements_im_katalog_true | x                                | 318\n medical.medication_active_substances    | x                                | 498\n medical.medication_formulations         | x                                | 453\n medical.medication_products             | x                                | 448\n supplements.rule_catalog_medication     | x                                | 20",
+  "after_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_145906_wave2_after.dump",
+    "exists": true,
+    "size": 20776711,
+    "out": ""
+  }
+}

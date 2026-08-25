@@ -1,0 +1,827 @@
+[
+    {
+        "slug": "sub_0b47b336dc",
+        "name_en": "1-Andro (1-DHEA)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "1-Andro (1-DHEA) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_906d55f873",
+        "name_en": "1-Testosterone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "1-Testosterone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_12885a44bd",
+        "name_en": "19-Norandrostenedione",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "19-Norandrostenedione ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_6a962fb8f9",
+        "name_en": "2,4-Dinitrophenol",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "2,4-Dinitrophenol ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_38658dfb53",
+        "name_en": "4-Andro (4-DHEA)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "4-Andro (4-DHEA) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_cb8f61f4d7",
+        "name_en": "6-OXO",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "6-OXO ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_6d457d3b80",
+        "name_en": "AC-262356",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "AC-262356 ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_c7f70d80aa",
+        "name_en": "ACP-105",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "ACP-105 ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_81c748a523",
+        "name_en": "alpha-Naphthoflavone (7,8-benzoflavone)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "alpha-Naphthoflavone (7,8-benzoflavone) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_7504c16f98",
+        "name_en": "Anastrozole (PCT/estrogen control)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Anastrozole (PCT/estrogen control) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: A."
+    },
+    {
+        "slug": "sub_5baffd3a06",
+        "name_en": "Andarine (S4)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Andarine (S4) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_cc46b6cc5e",
+        "name_en": "Androstenedione",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Androstenedione ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_8e6896c99e",
+        "name_en": "Arimistane (androsta-3,5-diene-7,17-dione)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Arimistane (androsta-3,5-diene-7,17-dione) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_59fc68e6a9",
+        "name_en": "ATD",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "ATD ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_d98e916343",
+        "name_en": "BAM15",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "BAM15 ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_af6dd9482e",
+        "name_en": "Boldenone undecylenate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Boldenone undecylenate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_1a2a2943dc",
+        "name_en": "Boldione",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Boldione ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_b30d752d32",
+        "name_en": "Bromocriptine",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Bromocriptine ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_a76c05e796",
+        "name_en": "Cardarine (GW501516)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Cardarine (GW501516) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_0104564af5",
+        "name_en": "Chlorodehydromethyltestosterone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Chlorodehydromethyltestosterone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_e93f8eecfc",
+        "name_en": "Chorionic gonadotropin (hCG)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Chorionic gonadotropin (hCG) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_6239001af2",
+        "name_en": "Clenbuterol",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Clenbuterol ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_9c77fadbff",
+        "name_en": "Clomiphene (off-label male use)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Clomiphene (off-label male use) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: B."
+    },
+    {
+        "slug": "sub_51209d4337",
+        "name_en": "Desoxymethyltestosterone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Desoxymethyltestosterone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_aa14399de6",
+        "name_en": "DMAA (1,3-dimethylamylamine)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "DMAA (1,3-dimethylamylamine) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_ce519c64b8",
+        "name_en": "DMHA (octodrine) — see supplements entry",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "DMHA (octodrine) — see supplements entry ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_374ddb6ea1",
+        "name_en": "DMZ (dymethazine)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "DMZ (dymethazine) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_e957baf3f8",
+        "name_en": "Drostanolone enanthate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Drostanolone enanthate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_48f8d08104",
+        "name_en": "Drostanolone propionate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Drostanolone propionate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_297c75ae3e",
+        "name_en": "Ephedrine",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Ephedrine ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_1864f172f2",
+        "name_en": "Epistane (Havoc)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Epistane (Havoc) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_58c39bb945",
+        "name_en": "Exemestane",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Exemestane ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_9aff94ad05",
+        "name_en": "Fladrafinil (CRL-40,941)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Fladrafinil (CRL-40,941) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_f787f6a6e7",
+        "name_en": "Flmodafinil (CRL-40,940)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Flmodafinil (CRL-40,940) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_58ee6dad0a",
+        "name_en": "Fluoxymesterone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Fluoxymesterone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_7f0380299c",
+        "name_en": "Formestane",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Formestane ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_791ce1d55f",
+        "name_en": "Gestrinone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Gestrinone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_40092ac061",
+        "name_en": "Halodrol",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Halodrol ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_5548f5b866",
+        "name_en": "HCG/PCT-adjacent: Enclomiphene",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "HCG/PCT-adjacent: Enclomiphene ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_ecff0befbf",
+        "name_en": "Ibutamoren (MK-677)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Ibutamoren (MK-677) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_755b2777e7",
+        "name_en": "LGD-3303",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "LGD-3303 ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_a407e3597e",
+        "name_en": "LGD-4033 (ligandrol)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "LGD-4033 (ligandrol) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_74bd69be0e",
+        "name_en": "Mesterolone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Mesterolone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_9132da9055",
+        "name_en": "Methandienone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Methandienone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_7babb7a00d",
+        "name_en": "Methenolone acetate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Methenolone acetate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_76a195461d",
+        "name_en": "Methenolone enanthate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Methenolone enanthate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_74643711fd",
+        "name_en": "Methyl-1-testosterone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Methyl-1-testosterone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_580e50249e",
+        "name_en": "Methyltestosterone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Methyltestosterone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_13bd216495",
+        "name_en": "Mibolerone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Mibolerone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_77b68a4df6",
+        "name_en": "Nandrolone decanoate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Nandrolone decanoate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_b00dbb8895",
+        "name_en": "Nandrolone phenylpropionate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Nandrolone phenylpropionate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_942a72d609",
+        "name_en": "Norbolethone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Norbolethone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_a4deb37c4d",
+        "name_en": "Ostarine (MK-2866, enobosarm)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Ostarine (MK-2866, enobosarm) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_d8baf04840",
+        "name_en": "Oxandrolone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Oxandrolone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_be89b6f179",
+        "name_en": "Oxymetholone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Oxymetholone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_09da0af403",
+        "name_en": "Phenibut",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Phenibut ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_1f7249ea3d",
+        "name_en": "Pramipexole",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Pramipexole ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_0f74726dcf",
+        "name_en": "RAD-140 (testolone)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "RAD-140 (testolone) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_0456fd1938",
+        "name_en": "Raloxifene",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Raloxifene ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_0e481497e9",
+        "name_en": "Rimonabant",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Rimonabant ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_4a080eb121",
+        "name_en": "S-23",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "S-23 ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_25fa4abc12",
+        "name_en": "Stanozolol",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Stanozolol ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_41dead8ae4",
+        "name_en": "Stenabolic (SR9009)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Stenabolic (SR9009) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    },
+    {
+        "slug": "sub_a04faae7b6",
+        "name_en": "Superdrol (methasterone)",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Superdrol (methasterone) ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: F."
+    },
+    {
+        "slug": "sub_f75645d0ef",
+        "name_en": "Tesofensine",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Tesofensine ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_3a6a2cae86",
+        "name_en": "Testolactone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Testolactone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_32a6869ff5",
+        "name_en": "Tetrahydrogestrinone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Tetrahydrogestrinone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_fc2973ddf3",
+        "name_en": "Tianeptine ('gas station heroin')",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Tianeptine ('gas station heroin') ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: C."
+    },
+    {
+        "slug": "sub_833ebc730f",
+        "name_en": "Toremifene",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Toremifene ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_c5698497ea",
+        "name_en": "Trenbolone acetate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Trenbolone acetate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_45993d058e",
+        "name_en": "Trenbolone enanthate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Trenbolone enanthate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_77919d26d0",
+        "name_en": "Trenbolone hexahydrobenzylcarbonate",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Trenbolone hexahydrobenzylcarbonate ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_e36b16820c",
+        "name_en": "Trendione",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Trendione ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_aca9fdd285",
+        "name_en": "Trestolone",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "Trestolone ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: D."
+    },
+    {
+        "slug": "sub_76d76b6568",
+        "name_en": "YK-11",
+        "wofuer_de": [
+            "Leistungs- oder Koerperkompositionskontext",
+            "Labor- und Nebenwirkungsbezug",
+            "Rechts- und Wettkampfstatus"
+        ],
+        "kurz_was_de": "YK-11 ist ein leistungs- oder hormonbezogener Wirkstoff; der Katalog beschreibt Fakten, keine Anwendung.",
+        "was_bringt_es_de": "Fuer diese Substanz steht kein belastbarer Mengenbereich im Katalog. Sichtbar bleibt die Belegklasse: E."
+    }
+]

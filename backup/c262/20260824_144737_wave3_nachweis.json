@@ -1,0 +1,19 @@
+{
+  "wave": "3",
+  "before_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_144737_wave3_before.dump",
+    "exists": true,
+    "size": 21117365,
+    "out": ""
+  },
+  "before_counts": "supplements.entity_cyp                  | supplements.entity_cyp           | 3001\n supplements.entity_transporters         | supplements.entity_transporters  | 4617\n supplements.entity_pk                   | supplements.entity_pk            | 1937\n supplements.entity_renal_hepatic        | supplements.entity_renal_hepatic | 7872\n medical.biomarker_explanations          | medical.biomarker_explanations   | 66\n medical.symptoms                        | medical.symptoms                 | 34\n medical.symptom_biomarker_map           | medical.symptom_biomarker_map    | 102\n supplements.supplement_aliases          | x                                | 943\n supplements.supplements_im_katalog_true | x                                | 289\n medical.medication_active_substances    | x                                | 498\n medical.medication_formulations         | x                                | 453\n medical.medication_products             | x                                | 448\n supplements.rule_catalog_medication     | x                                | 0",
+  "run": "BEGIN\nCREATE EXTENSION\nDROP TABLE\nCREATE TABLE\nCOPY 1\nSELECT 1131\nDELETE 0\nINSERT 0 0\nUPDATE 0\nINSERT 0 0\nALTER TABLE\nALTER TABLE\nCOMMIT\npsql:<stdin>:4: NOTICE:  extension \"pgcrypto\" already exists, skipping\npsql:<stdin>:6: NOTICE:  table \"tmp_c262_lookup\" does not exist, skipping",
+  "run_failed": false,
+  "after_counts": "supplements.entity_cyp                  | supplements.entity_cyp           | 3001\n supplements.entity_transporters         | supplements.entity_transporters  | 4617\n supplements.entity_pk                   | supplements.entity_pk            | 1937\n supplements.entity_renal_hepatic        | supplements.entity_renal_hepatic | 7872\n medical.biomarker_explanations          | medical.biomarker_explanations   | 66\n medical.symptoms                        | medical.symptoms                 | 34\n medical.symptom_biomarker_map           | medical.symptom_biomarker_map    | 102\n supplements.supplement_aliases          | x                                | 943\n supplements.supplements_im_katalog_true | x                                | 318\n medical.medication_active_substances    | x                                | 498\n medical.medication_formulations         | x                                | 453\n medical.medication_products             | x                                | 448\n supplements.rule_catalog_medication     | x                                | 0",
+  "after_backup": {
+    "backup": "D:\\GitHub\\LumeOS-Claude-V1\\backup\\c262\\20260824_144737_wave3_after.dump",
+    "exists": true,
+    "size": 21117289,
+    "out": ""
+  }
+}
