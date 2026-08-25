@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 238 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 240 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6097,40 +6097,93 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   nicht hat oder ob live etwas ausserhalb der Kette eingespielt wurde.
   **Erst messen, dann entscheiden, welcher Stand der richtige ist.**
 
-- [ ] **G-179: Das Substanzdetail — Tom will es sehen** (neu
-  2026-08-25). Buendelt G-176, G-177 und den Anzeigeteil von C-107.
+- [ ] **C-267: Falsche PubChem-Kennungen bei Caffeine — und vermutlich
+  nicht nur dort** (neu 2026-08-25). Von Kimi gemeldet, vom
+  Orchestrator live bestaetigt.
 
-  **Tom, 2026-08-25:** *„ok machen wir endlich vorwaerts ich will das
-  in der ui sehen."*
+  `[cmd]` **`Caffeine (anhydrous)` traegt drei falsche Kennungen:**
+  PubChem-CID `6435808` · Formel `C10H12FN3O4` · InChIKey
+  `GFFXZLZWLOBBLO-ASKVSEFXSA-N`.
 
-  `[cmd]` **Die Daten stehen seit C-264:** `supplement_user_texts` 290
-  mit **290 verschiedenen Formulierungen**, `supplement_faq` 1.279 mit
-  1.279 verschiedenen Antworten, `sources` durchgehend gefuellt.
-  **Jetzt fehlt nur noch das Fenster, das es zeigt.**
+  `[cmd]` **Der Nachbareintrag `Caffeine (fat-loss context cross-ref)`
+  hat dieselben Felder richtig:** CID `2519` · `C8H10N4O2` ·
+  `RYYVLZVUVIJVGH-UHFFFAOYSA-N`.
 
-  **Enthalten:**
+  `[read]` **Die Formel schliesst es aus: `C10H12FN3O4` enthaelt
+  Fluor, Koffein nicht.** Der InChIKey mit `-ASKVSEFXSA-` weist
+  zusaetzlich auf ein Stereozentrum — Koffein hat keines. **Das ist ein
+  fluoriertes Nukleosid.**
 
-  `[cmd]` **G-176** — `substanz-detail.tsx:314` begrenzt die Liste mit
-  `menge.slice(0, 50)`. Tom sieht *„50 von 290 Treffern — Suche
-  verfeinern fuer mehr."* `[read]` **Widerspricht G-172:** der
-  Scroll-Container wurde gebaut, weil unten alles unerreichbar war —
-  und dann auf 50 begrenzt.
+  `[cmd]` **Live in der Datenbank**, importiert am 2026-08-23 aus
+  `kimi_supplement`, `evidence_class B`, Quelle
+  `src_pubchem_6435808`. Vermutlich aus einem `crawl_022`-Enrichment.
 
-  `[cmd]` **G-177** — das Detail zeigt fuenf zugeklappte Bloecke und
-  darunter aufgeklappt den Abschnitt *„OHNE QUELLE IM NEUEN KATALOG"*
-  mit Saetzen wie *„Die alte Breittabelle fuehrte `cyp` als jsonb."*
-  **Ein Bericht, kein Produkt.**
+  `[read]` **Kimi hat es gefunden und nicht angefasst** — kein Silent
+  Overwrite. Richtig. **Der Konflikt gehoert als Record nach
+  `data/evidence/`, nicht als stille Korrektur.**
 
-  **Layout entschieden:**
-  `docs/spezifikation/substanz-katalog-nutzertexte.md` §9, von Tom am
-  2026-08-23 bestaetigt.
+  **Die groessere Frage stellt Kimi nicht:** `[cmd]`
+  `supplement_identifiers` hat **1.226 Zeilen**. Wenn eine Kennung
+  falsch ist, sind es vermutlich mehrere. **Formel, InChIKey und CID
+  muessen zueinander passen — das ist pruefbar, kein Rateverfahren.**
 
-  `[read]` **Die tragende Regel: kein Block ohne Inhalt.** `[cmd]`
-  `zu_wenig_de` ist bei **241 von 290** leer, `mythen_de` bei 30 — das
-  ist der Normalfall und richtig so. **Ein leerer Abschnitt entfaellt,
-  er wird nicht mit einem Platzhalter gefuellt.**
+  **Zu tun:** eine Gate-Pruefung, die die drei gegeneinander haelt.
+  Wo sie auseinanderlaufen: melden, nicht korrigieren.
 
-  `[read]` **Bei Enhanced und Peptiden dreht sich die Reihenfolge:**
-  `irreversibel` ganz oben, `ueberwachung` statt der Dosiskacheln,
-  `reinheit` **direkt neben** der Mengenangabe — getrennt gelesen wirkt
-  eine Dosiszahl verlaesslicher, als sie ist.
+- [ ] **G-183: Die Rechtslage bleibt Fliesstext, obwohl die Schwelle
+  erfuellt war** (neu 2026-08-25). Nachtrag zu G-182, Punkt 6.
+
+  **Tom, 2026-08-25, zur Rechtslage von 6-OXO:** *„so schreibt und
+  liest kein mensch. wieso schluesselt man das nicht als aufzaehlung
+  auf?"*
+
+  `[cmd]` **54 von 290 `rechtslage_klartext_de` tragen einen
+  Doppelpunkt** — Claude Codes eigene Messung ergibt **40 %**, also
+  **innerhalb** der von mir gesetzten Spanne von 30 bis 90 Prozent.
+
+  `[read]` **Sein Grund war, dass 82 von 136 Zeilen unveraendert
+  blieben. Das ist kein Gegenargument, sondern das erwartete
+  Verhalten** — der Auftrag sagt woertlich: *wo sie nicht greift,
+  bleibt der Absatz stehen, nicht zerhackt.*
+
+  `[cmd]` **Was dort steht, ist bereits gegliedert:**
+
+      Nirgendwo zugelassen (Datenstand: August 2026).
+      In den USA ist der Verkauf fuer die Anwendung am Menschen
+      illegal; in Thailand traegt der Import von Forschungsware
+      Zollrisiko.
+      Die WADA verbietet Retatrutid als nicht zugelassene Substanz (S0).
+
+  **Drei Aussagen, durch Punkt und Semikolon getrennt** — genau die
+  Struktur, die sichtbar werden soll.
+
+  `[read]` **Und es war Toms ausdrueckliches Beispiel**, der Anlass des
+  ganzen Punktes. **Die Schwelle war erfuellt; die unveraenderten
+  Zeilen sind Absicht.**
+
+- [ ] **G-184: Die WADA-Kachel nennt keinen Geltungsbereich** (neu
+  2026-08-25). Aus G-182, Punkt 7.
+
+  **Tom, 2026-08-25:** *„WADA verboten gilt das auch fuer
+  bodybuilding?"*
+
+  `[cmd]` **Der Bestand:** 124 `prohibited`, 163 `not_prohibited`, 3
+  `monitored`; `wada_category` bei 129 — **aber `note_de` bei 0 von
+  290.** Der Geltungsbereich steht nirgends.
+
+  `[cmd]` **Die Kachel sagt seit G-182 *„im getesteten Wettkampf"***
+  — das war die Sofortmassnahme und ist richtig.
+
+  `[wahrscheinlich]` **Offen bleibt die Sache selbst:** die WADA-Liste
+  bindet nur Verbaende, die den Code unterzeichnet haben. Im
+  Bodybuilding waeren das IFBB Elite/Amateur und die Natural-Ligen —
+  **nicht** IFBB Professional League und NPC.
+
+  `[read]` **Das ist `[wahrscheinlich]`, nicht `[cmd]`.** Es steht in
+  keinem Datensatz und darf deshalb **nicht** in die Oberflaeche
+  geschrieben werden. Claude Code hat das im Auftrag untersagt bekommen
+  und sich daran gehalten.
+
+  **Zu tun:** an Kimi geben — je Substanz oder wenigstens je
+  WADA-Kategorie ein Satz, fuer wen die Sperre praktisch gilt.
+  **Mit Beleg.**

@@ -12368,3 +12368,145 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   `[read]` **Offen und als C-265 angelegt:** die Wegwerf-Kette bleibt
   am Schluss-Waechter rot (Medical-Abweichungen), waehrend live gruen
   ist. **Nicht Ursache von C-264** — aber zum zweiten Mal gemeldet.
+
+- [x] **G-179: Das Substanzdetail — Tom will es sehen** — **erledigt
+  2026-08-25 (Claude Code), Bericht
+  `docs/berichte/g-179-claude-code.md`.**
+
+  `[read]` **Der Kern war groesser als das Layout:**
+  `supplement_user_texts` und `supplement_faq` kamen **im gesamten Code
+  nicht vor.** Das Detail zeigte `description` — den englischen
+  Recherchesatz. Jetzt liest der Lesepfad beide Tabellen plus die
+  Unterformen ueber `parent_id`.
+
+  `[read]` **Drei Dinge fielen erst am echten Text auf**, genau wie im
+  Auftrag gewarnt: `[cmd]` **127 von 260 `mythen_de` sind JSON-Arrays
+  in einer `text`-Spalte** — im Fenster stand woertlich
+  `["Mythos: ..."]`. Die Mengenkachel zeigte
+  *„guideline/ISSN position stand: 3-5 g/day"* — das Praefix nennt die
+  Quelle, nicht die Menge. Und bei Magnesium stand als einziger
+  Alias-Chip *„magnesium"* unter dem Titel *„Magnesium"*.
+
+  `[read]` **Der Abschnitt *„Ohne Angabe: Sicherheit · Wechselwirkungen"*
+  ist raus** — er widersprach der dritten Regel: der Abschnitt
+  entfaellt, **sein Name lebt nicht in einer Aufzaehlung weiter.**
+
+  `[cmd]` **Biotin taugte nicht als Gegenprobe** — Sammeleintrag ohne
+  Nutzertextzeile. Genommen: Beta-carotene (zeigt *„Zu wenig"*) gegen
+  Creatine (zeigt es nicht).
+
+- [x] **G-180: Aus dem Modal wird ein Ausklappen** — **erledigt
+  2026-08-25 (Claude Code), Bericht
+  `docs/berichte/g-180-claude-code.md`.**
+
+  `[cmd]` **315 Zeilen `SubstanzModal` sind raus**, null Dialoge im DOM.
+  Die Begruendung steht im Dateikopf von `substanz-tafel.tsx.`
+
+  `[read]` **Die Hoehe wurde VOR dem Bau gemessen** und hat den Rest
+  entschieden: `[cmd]` Rollbehaelter 660 px, Zeile 54 px, also 560 px
+  Budget — alle Bereiche untereinander waeren ueber 900 gewesen.
+  **Das ist der Grund fuer die Reiter, nicht Geschmack.** Gemessen
+  nachher: 396 / 372 / 552 / 288 px.
+
+  `[cmd]` **Keine Virtualisierung noetig** — 318 Zeilen kosten 4.713
+  Knoten und laden nicht langsamer. **Zusammen entschieden, nicht
+  zweimal gebaut.**
+
+  `[read]` **Eine eigene blinde Pruefung offengelegt:** die dritte
+  Negativprobe — Hoehenbremse entfernen — blieb gruen. **Nichts
+  bewachte die `max-height`.** Nachgezogen: 10/0 → 9/1 → 10/0.
+
+- [x] **G-181: Kacheln statt Aufzaehlung** — **erledigt 2026-08-25
+  (Claude Code), Bericht `docs/berichte/g-181-claude-code.md`.**
+
+  `[read]` **Meine Kachelvorgabe war an einer Stelle falsch, und er hat
+  widersprochen.** `[cmd]` **Nur 18 von 290 Texten tragen ueberhaupt
+  eine Prozentzahl, 12 einen Bereich** — bei 278 gibt es keine Zahl zu
+  zeigen.
+
+  `[cmd]` **Und die Treffer sind zum Teil das Gegenteil einer
+  Wirkung:** Beta-Carotin 18-28 % ist eine **Risikoerhoehung bei
+  Rauchern**, BPC-157 und TB-500 60-70 % sind **Heilungsraten bei
+  Ratten** — aus Texten, die ausdruecklich sagen, dass Humanstudien
+  fehlen.
+
+  `[read]` **Eine Regex haette *„60-70 %"* als Wirkung von BPC-157
+  angezeigt. Das ist die erfundene Zahl, die der Auftrag verbietet, nur
+  mit einem Automaten davor.** Geloest ueber eine gepflegte Liste mit
+  fuenf Eintraegen, dazu ein Waechter gegen Beta-Carotin.
+
+  `[cmd]` **Feste Breiten belegt:** Zahlenkacheln 196 px bei 1280 **und**
+  1920 — pixelgleich. `[read]` Der erste Anlauf war zu breit: 104
+  Zeichen in der ersten Zeile, ueber der 90er Grenze. Auf 620 px
+  korrigiert → 87 Zeichen.
+
+  `[cmd]` Schablonenzeilen in der Liste **103 → 12** — die verbliebenen
+  sind die Sammelnamen ohne Textzeile.
+
+  `[cmd]` **Hoehe auf `vh`:** Liste bei 1100 px Fenster **800 px**
+  (vorher fest 660), bei 720 px Fenster 420 px. `[read]` Die feste 460
+  der Tafelbremse war gegen die festen 660 gerechnet — **sie muss
+  mitwachsen, sonst ist sie eine Verkleinerung statt einer
+  Begrenzung.**
+
+- [x] **G-182: Fuenf Fehler und zwei Lesbarkeitspunkte** — **erledigt
+  2026-08-25 (Claude Code), Bericht
+  `docs/berichte/g-182-claude-code.md`.**
+
+  `[cmd]` **Der Filter:** `enhanced` → `fatburner` → `supplements` gab
+  eine leere Liste. Weg am laufenden Bild: **318 → 75 → 10 → 182**,
+  Kategorie danach auf *Alle*. Als Test bewacht, dazu ein Waechter
+  gegen den Weg an der Regel vorbei. **Bei 0 Treffern steht jetzt der
+  Grund plus Ruecksetz-Knopf.**
+
+  `[read]` **Eine Annahme von mir war falsch:** die Kategorieleiste
+  zeigte schon vorher nur die Kategorien der Gruppe. **Der Fehler war
+  die Zustandsfuehrung, nichts anderes.**
+
+  `[cmd]` Der Enhanced-Kasten stand auf **3 von 4 Reitern**, jetzt auf
+  1 — an 24 Substanzen gemessen. `[cmd]` `[object Object]` **6 → 0**,
+  geprueft an 24 **und nochmal an 55**; Ursache waren **50 Arrays aus
+  Objekten.**
+
+  `[read]` **Ein eigener Test hat ihn dabei erwischt:** bei einem
+  gueltigen JSON-Array ohne lesbaren Inhalt fiel die Anzeige auf den
+  Rohtext zurueck und haette `[{"zahl":5}]` gezeigt. **Derselbe Fehler
+  einen Schritt weiter, selbst gefunden.**
+
+  `[read]` **Punkt 6 teilweise nicht gebaut, und die Begruendung
+  traegt:** `[cmd]` `wer_nicht_de` war schon richtig (281 von 290
+  mehrteilig, kommt als `text[]`). Die Doppelpunkt-Regel fuer
+  `mythen_de` trifft **16 von 260 = 6 %**, unter meiner 30-Prozent-
+  Grenze. **Er hat meine eigene Schwelle gegen mich angewandt** und
+  stattdessen den belegten Fall geloest: 30 Eintraege mit
+  `Mythos:`-Praefix.
+
+  `[read]` **Bei `rechtslage_klartext_de` widerspreche ich** — siehe
+  G-183.
+
+  `[cmd]` **Die WADA-Kachel sagt jetzt, worauf sie sich bezieht:**
+  *„im getesteten Wettkampf erlaubt · S1.1"*. `wada_category` liegt bei
+  129 vor.
+
+- [x] **C-266: Die fuenf Enhanced-Felder und die 28 Sammelnamen** —
+  **erledigt 2026-08-25 (Codex), Bericht
+  `docs/berichte/c-266-codex.md`.**
+
+  `[cmd]` **Die Quelle trug die Felder, C-264 hatte sie nicht
+  importiert.** Live nachher, vom Orchestrator nachgemessen:
+  `irreversibel_de` **112** · `ueberwachung_de` **96** · `reinheit_de`
+  **134** · `nicht_im_blut_de` **134** ·
+  `rechtslage_klartext_de` **136** — vorher jeweils **0**.
+
+  `[cmd]` **Sauber verteilt:** Enhanced 75/75 bei `reinheit_de`,
+  Peptide 59/61, **Supplements 0** — dort gibt es keine Hormonachse und
+  kein Reinheitsproblem.
+
+  `[cmd]` **Die vier Enhanced ohne `irreversibel_de`** sind BAM15,
+  DMHA, Fladrafinil, Flmodafinil — Stoffwechsel- und Wachheitsmittel
+  ohne Wirkung auf die Hormonachse. **Korrekte Leerstelle, kein Loch.**
+
+  `[read]` **Die 28 Sammelnamen hat er nicht vererbt und nicht
+  zusammengebaut**, sondern begruendet an Kimi gegeben — von drei
+  angebotenen Wegen der richtige. `[cmd]` 15 der 28 haben Kinder mit
+  Text, 13 nicht.

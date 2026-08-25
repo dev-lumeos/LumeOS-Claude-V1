@@ -281,4 +281,6 @@ wenn er erzeugt und geprüft wird.
 | **C-262** Der Import — vier Wellen | offen | 6017 |
 | **C-263** Deutsche Beschreibungen aus Kimis Fachdaten ableiten | offen | 6047 |
 | **C-265** Die Kette erzeugt nicht mehr denselben Stand wie die | offen | 6073 |
-| **G-179** Das Substanzdetail — Tom will es sehen | offen | 6100 |
+| **C-267** Falsche PubChem-Kennungen bei Caffeine — und vermutlich | offen | 6100 |
+| **G-183** Die Rechtslage bleibt Fliesstext, obwohl die Schwelle | offen | 6133 |
+| **G-184** Die WADA-Kachel nennt keinen Geltungsbereich | offen | 6164 |

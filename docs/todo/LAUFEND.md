@@ -37,18 +37,28 @@ supplement_catalog` findet in `lib/supplements/`, `v2/medical/` und
 
 ## Kimi
 
-`[cmd]` **Wo die Ergebnisse liegen** (Tom, 2026-08-22):
+**Tom, 2026-08-25:** *„merk dir dass kimis daten hier liegen."*
 
-    backup/kimi-research/Kimi_Agent/supplement_performance_database/
+    docs/kimi_research/supplement_performance_database/data/   aktuell
+    docs/kimi_research/snapshots/                              aelter
 
-`[cmd]` **Auf der Platte liegen die Crawls 017 bis 028** als
-`lumeos_core_crawl_0NN.tar.gz`, dazu `RESEARCH_STATUS.md` (32 KB),
-`SCHEMA.md`, `RULE_ENGINE_SPEC.md` und `substance_groups.json`.
+`[cmd]` **Beides in `.gitignore`** — Datenquelle, kein Sollwert.
+**Lesen, nicht committen.** Was daraus erhoben wurde, steht in
+`docs/ssot/95-kimi-bestand.md`.
 
-`[read]` **Crawl 35 laeuft, 029 bis 035 sind hier noch nicht
-angekommen.** C-185 und C-188 sind gegen **027** gebaut — wer eine
-neuere Zahl braucht, holt sie sich nicht aus diesem Ordner, ohne
-vorher nachzusehen, was tatsaechlich da ist.
+`[read]` **Der Ort hat am 2026-08-25 gewechselt.** Frueher
+`backup/kimi-research/` — dort liegt noch der Stand, gegen den der
+Bestandsbericht erhoben wurde. **Wer den aktuellen Lauf braucht, nimmt
+den neuen Pfad.**
+
+`[cmd]` **38 Crawls, 10.030 Dateien, 189 MB** — Stand der Erhebung vom
+2026-08-23. Darunter `RESEARCH_STATUS.md` (32 KB) mit Kimis eigenem
+Uebergabestand und `context_kimiclaw/` mit seiner Betriebsanleitung.
+
+`[read]` **Die Substanzdomaene ist `FROZEN_PENDING_REPO_NEED`** — Kimi
+forscht dort nicht weiter, sondern wartet auf uns. `[cmd]` **249 Holds,
+davon 66 `REPO_DEPENDENCY`**, und ein Backlog von 17 Punkten, alle mit
+`blocked_until_repo_access=true`.
 
 
 ## Wartet auf einen freien Agenten

@@ -2,7 +2,23 @@
 
 Erhoben 2026-08-23 · Orchestrator · **1.289 Dateien einzeln geoeffnet.**
 
-Ort: `backup/kimi-research/Kimi_Agent/supplement_performance_database/`
+## WO DIE DATEN LIEGEN
+
+**Tom, 2026-08-25:** *„merk dir dass kimis daten hier liegen."*
+
+    docs/kimi_research/supplement_performance_database/data/
+
+**Das ist der aktuellste Lauf.** Aeltere Staende:
+`docs/kimi_research/snapshots/`
+
+`[cmd]` **Beides steht in `.gitignore`** (Zeile 244) — Datenquelle, kein
+Sollwert, und zu gross fuer die Versionsverwaltung. **Lesen, nicht
+committen.**
+
+`[read]` **Der alte Ort `backup/kimi-research/` ist ueberholt.** Dieser
+Bericht wurde dort erhoben; die Struktur ist dieselbe, der Pfad nicht.
+
+---
 
 **Diese Fassung ersetzt die erste vom selben Tag.** Die war auf einer
 Groessenmessung geschrieben, kannte `data/admin` nicht und hatte fuenf
