@@ -12837,3 +12837,59 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
 
   `[read]` **Dritter Fall desselben blinden Flecks** — G-186 hatte ihn
   dreifach. **Jedes Mal von der Probe gefunden, nicht vom Schreiben.**
+
+- [x] **C-275: Die 128 fehlenden Substanzen** — **erledigt 2026-08-25
+  (Codex), Bericht `docs/berichte/c-275-codex.md`.**
+
+  ### Der Fehler war meiner
+
+  `[read]` **Ich hatte die Reihenfolge verkehrt.** C-272 sollte den
+  Katalog anreichern — WADA-Geltungsbereich, Laborwirkung, Thailand —
+  **waehrend ihm ein Drittel der Substanzen fehlte.**
+
+  `[cmd]` **Kimi hatte 446 Stammdatensaetze geliefert, unser Katalog
+  zeigte 318.** Live standen **Testosterone Cypionate, Enanthate,
+  Propionate, Undecanoate, Base und Suspension** weiterhin auf
+  `f05_substance_candidate` mit `im_katalog = false`.
+
+  `[read]` **Testosteron ist der meistverwendete Stoff der Gruppe, und
+  es war mein eigener Befund vom selben Vormittag.** Ich habe
+  WADA-Fussnoten davorgesetzt, weil ich `96-kimi-inhalt.md` aus dem
+  `evidence`-Ordner gebaut hatte und dabei die Substanzen selbst aus
+  dem Blick verlor. **Tom hat es gefunden, nicht ich.**
+
+  `[cmd]` **Auch meine erste Messung war falsch:** `im_katalog::text`
+  liefert `true`, nicht `t` — mein Vergleich meldete *„0 sichtbare
+  Treffer"* bei tatsaechlich 317. **Gemerkt, weil die Zahl unmoeglich
+  war, nicht weil ich sie geprueft hatte.**
+
+  ### Was Codex geliefert hat
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:**
+
+  | | vorher | nachher |
+  |---|---:|---:|
+  | `supplements.supplements` | 566 | **596** |
+  | `im_katalog` | 318 | **447** |
+  | `supplement_user_texts` | 318 | **446** |
+  | `supplement_faq` | 1.421 | **1.970** |
+  | unsichtbare `f05`-Huelsen | 248 | **149** |
+
+  `[cmd]` **Testosteron mit allen acht Estern sichtbar**, dazu Insulin
+  Glargine, Insulin Glulisine, Humatrope. **Magnesium bleibt
+  Sammelname.**
+
+  `[read]` **Die 99 Huelsen wurden aufgeloest, nicht doppelt
+  angelegt** — das war der heikle Teil und er sitzt.
+
+  `[cmd]` Kettenlauf Exit 0, Schemapruefung vollstaendig,
+  Testdatenpruefung gruen, Vollsicherung in `backup/vollsicherung/`.
+
+  ### Zwei Befunde, die daraus entstanden
+
+  `[read]` **C-276:** 18 Dublettengruppen im sichtbaren Katalog —
+  `Vitamin C` neben `Vitamin C (ascorbic acid)`. **Meine
+  Dublettenprobe lief auf `name_en` und mass damit das Falsche.**
+
+  `[read]` **Die Kette laeuft wieder auseinander** — 416 gegen 447.
+  **C-265 in neuer Form**, von Codex selbst gemeldet.

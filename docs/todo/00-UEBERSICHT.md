@@ -286,3 +286,5 @@ wenn er erzeugt und geprüft wird.
 | **C-272** Welle 1 — der Katalog wird inhaltlich fertig | offen | 6118 |
 | **C-273** Welle 2 — Schema `wissen` fuer das, was noch nicht | offen | 6145 |
 | **C-274** Die 248 unsichtbaren zuordnen | offen | 6189 |
+| **C-276** Der Katalog zeigt denselben Stoff mehrfach | offen | 6213 |
+| **C-277** Die Kette laeuft wieder auseinander — 416 gegen 447 | offen | 6254 |
