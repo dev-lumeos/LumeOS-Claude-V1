@@ -21,7 +21,7 @@ import { Card, Pill, Icon, Meter, Ring, Row, LineChart, InEntwicklungKnopf } fro
 
 import {
   STACK, SLOTS, DAY_LETTERS, EVIDENCE_PALETTE, SUPPLEMENT_DB,
-  INTERACTIONS, EXTENDED_STACK, EXTENDED_LABS, type StackItem,
+  EXTENDED_STACK, EXTENDED_LABS, type StackItem,
 } from './daten'
 import { useSupp } from './kontext'
 // G-74: die zwei Kostenkacheln, die das Protokoll brauchen.
@@ -847,34 +847,94 @@ function DatabaseAttrappe() {
   )
 }
 
-// ── INTERACTIONS ───────────────────────────────────────────────
+// ── INTERACTIONS ───────────────────────────────────
+//
+// ══ G-187: DIE LETZTE MARKIERTE KACHEL ═══════════════════════
+//
+// `[cmd]` Hier stand `INTERACTIONS` aus `daten.ts` — eine
+// Entwurfskonstante mit **einer erfundenen Paarung** (*Caffeine +
+// Ashwagandha*) und dem Satz *„your current schedule is fine"*. Das
+// ist genau die Bewertung, die C-108 ausgeschlossen hat.
+//
+// `[cmd]` **Die alte Marke war ausserdem falsch:** sie sagte seit
+// C-68, es gebe kein `supplements`-Schema — seit C-232 gibt es das.
+//
+// ══ WARUM KEINE PAARE GEZEIGT WERDEN ══════════════════════
+//
+// `[cmd]` **Gemessen 2026-08-25:** `supplement_interactions` traegt
+// 78 Zeilen — **77 gegen Medikamente, 1 gegen Alkohol, 0 zwischen
+// zwei Katalogsubstanzen.** Treffende Paare bei den drei vorhandenen
+// Staenden: **0.**
+//
+// `[read]` **Der Reiter, wie er gedacht war, ist mit diesen Daten
+// nicht baubar** — nicht weil sie fehlen, sondern weil sie eine
+// andere Frage beantworten: womit beisst sich diese Substanz.
+//
+// **Das wird gezeigt**, und die Ueberschrift sagt, dass es
+// Medikamente sind. Nichts erfunden.
 export function SuppInteractions() {
-  const { open } = useSupp()
+  const { daten } = useSupp()
+  const ww = daten?.wechselwirkungen ?? []
+
+  if (!daten) {
+    return (
+      <Card title="Wechselwirkungen">
+        {/* `[read]` Ohne Sitzung ist kein Stack geladen — dann steht
+            hier der Grund, keine leere Liste. */}
+        <p className="v2-muted" style={{ fontSize: 12, margin: 0 }}>
+          Ohne geladenen Stack ist nicht bekannt, welche Substanzen zu
+          prüfen wären.
+        </p>
+      </Card>
+    )
+  }
+
+  if (ww.length === 0) {
+    return (
+      <Card title="Wechselwirkungen">
+        <p className="v2-muted" style={{ fontSize: 12.5, lineHeight: 1.6, margin: 0 }}>
+          Für die Positionen dieses Stacks ist keine Wechselwirkung
+          hinterlegt.
+        </p>
+        <p className="v2-dim" style={{ fontSize: 11, lineHeight: 1.55, marginTop: 8, marginBottom: 0 }}>
+          Der Katalog führt 78 Wechselwirkungen — alle gegen
+          Medikamente oder Alkohol, keine zwischen zwei Supplements.
+        </p>
+      </Card>
+    )
+  }
+
   return (
-    <div className="v2-col-gap" style={{ gap: 12 }}>
-      {(INTERACTIONS as Array<Record<string, unknown>>).map((it, i) => {
-        const schwere = String(it.severity ?? it.level ?? 'info')
-        const farbe = schwere.toLowerCase().includes('high') || schwere.toLowerCase().includes('avoid')
-          ? 'var(--neg)'
-          : schwere.toLowerCase().includes('mod') || schwere.toLowerCase().includes('caution')
-            ? 'var(--warn)' : 'var(--acc-suppl)'
-        return (
-          <Card key={String(it.pair ?? it.title ?? i)} attrappe={ATTRAPPE}
-                onClick={() => open('interaction', it)}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' }}>
-              <span className="v2-dot" style={{ background: farbe }} />
-              <span style={{ fontSize: 13, fontWeight: 600 }}>
-                {String(it.pair ?? it.title ?? '')}
+    <Card
+      title="Wechselwirkungen"
+      sub={`${ww.length} · mit Medikamenten, nicht untereinander`}
+    >
+      <div className="v2-col-gap" style={{ gap: 8 }}>
+        {ww.map(w => (
+          <div key={`${w.position}|${w.partner}`} className="v2-supp-ww-zeile">
+            <span className="v2-supp-ww-position">{w.position}</span>
+            <span className="v2-supp-ww-partner">{w.partner}</span>
+            {w.schwere && (
+              <Pill variant={/high|avoid|major/i.test(w.schwere) ? 'warn' : undefined}
+                    style={{ fontSize: 8.5 }}>
+                {w.schwere}
+              </Pill>
+            )}
+            {w.hinweis && (
+              <span className="v2-muted" style={{ fontSize: 11, lineHeight: 1.5 }}>
+                {w.hinweis}
               </span>
-              <Pill style={{ color: farbe }}>{schwere}</Pill>
-            </div>
-            <div className="v2-muted" style={{ fontSize: 11.5, lineHeight: 1.5 }}>
-              {String(it.note ?? it.detail ?? it.description ?? '')}
-            </div>
-          </Card>
-        )
-      })}
-    </div>
+            )}
+          </div>
+        ))}
+      </div>
+      {/* `[read]` Der Satz sagt, WORAUF sich die Liste bezieht — ohne
+          ihn liest man Medikamentenhinweise als Stack-Paarungen. */}
+      <div className="v2-dim" style={{ fontSize: 10.5, lineHeight: 1.55, marginTop: 10 }}>
+        Bezieht sich auf Medikamente und Alkohol. Paarungen zwischen zwei
+        Supplements führt der Katalog nicht.
+      </div>
+    </Card>
   )
 }
 

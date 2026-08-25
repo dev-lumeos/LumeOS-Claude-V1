@@ -1010,3 +1010,49 @@
   color: var(--fg);
   background: var(--bg-elev);
 }
+
+/* --- G-187: die Wechselwirkungen des Stacks ---------------------- */
+/*
+ * `[cmd]` **Gemessen 2026-08-25:** 78 Zeilen in
+ * `supplement_interactions`, davon 77 gegen Medikamente und 1 gegen
+ * Alkohol — **keine einzige zwischen zwei Katalogsubstanzen.** Die
+ * Zeile zeigt deshalb *Substanz → Partner*, nicht *Substanz +
+ * Substanz*.
+ *
+ * `[read]` **Feste erste Spalte wie bei `.v2-supp-labor-zeile`
+ * (G-181/G-186)** — die Substanznamen sollen untereinander stehen,
+ * sonst springt die Kante bei jedem Eintrag. Kein blankes `1fr`: die
+ * Partnerspalte traegt `minmax(0, 1fr)`, der Hinweis eine Obergrenze.
+ */
+.v2-supp-ww-zeile {
+  display: grid;
+  grid-template-columns: minmax(0, 190px) minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: baseline;
+  padding-top: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.v2-supp-ww-zeile:first-child { border-top: none; padding-top: 0; }
+
+.v2-supp-ww-position {
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.v2-supp-ww-partner {
+  max-width: 62ch;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+}
+
+/* Der Hinweis steht unter den drei Spalten, nicht daneben — er ist
+ * ein Satz, keine Angabe. */
+.v2-supp-ww-zeile > .v2-muted { grid-column: 1 / -1; max-width: 78ch; }
+
+/* Auf schmalen Schirmen untereinander, wie bei der Laborzeile. */
+@media (max-width: 620px) {
+  .v2-supp-ww-zeile { grid-template-columns: 1fr; }
+}

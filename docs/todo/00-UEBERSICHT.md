@@ -280,3 +280,6 @@ wenn er erzeugt und geprüft wird.
 | **C-268** Beim Einladen gibt es keine Namensaufloesung | offen | 5997 |
 | **C-269** Eine Einladung laesst sich nicht zuruecknehmen | offen | 6015 |
 | **G-186** Der Katalog zeigt noch nicht alles, was drinsteht | offen | 6040 |
+| **G-188** Der Wechselwirkungs-Reiter heisst nicht, was er zeigt | offen | 6069 |
+| **G-189** Der tote Rueckfallzweig `SuppInteractions` fliegt | offen | 6087 |
+| **C-271** `rule_catalog` laedt immer — jeder Rueckfallzweig daran | offen | 6100 |

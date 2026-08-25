@@ -12,6 +12,13 @@
 // Laeuft ausschliesslich serverseitig.
 import { createSessionClient } from '@lumeos/shared/session'
 
+// G-187: die Wechselwirkungen der Stack-Positionen — serverfrei
+// gerechnet, damit die Regel ohne Browser pruefbar ist.
+import {
+  wechselwirkungenFuer,
+  type StackWechselwirkung, type WechselwirkungsRoh,
+} from './stack-wechselwirkungen'
+
 /** Ein Eintrag des kuratierten Katalogs (`supplements.supplements`). */
 export type KatalogEintrag = {
   id: string
@@ -117,6 +124,14 @@ export type StackDaten = {
   /** Verschiedene Tage im Protokoll — entscheidet, ob Compliance rechenbar ist. */
   protokoll_tage: number
   katalog_groesse: number
+  /**
+   * G-187: womit sich die Positionen beissen.
+   *
+   * `[cmd]` **Keine Substanz-gegen-Substanz-Paare** — alle 78 Zeilen
+   * richten sich gegen Medikamente (77) oder Alkohol (1). Begruendung
+   * in `stack-wechselwirkungen.ts`.
+   */
+  wechselwirkungen: StackWechselwirkung[]
 }
 
 function zahl(v: unknown): number | null {
@@ -192,7 +207,9 @@ async function ladeKatalogMaps(
   const kategorien = new Map<string, KategorieRoh>()
   const dosing = new Map<string, DosingRoh>()
   const evidence = new Map<string, EvidenceRoh>()
-  if (eindeutig.length === 0) return { supplements, kategorien, dosing, evidence }
+  if (eindeutig.length === 0) {
+    return { supplements, kategorien, dosing, evidence, wechselwirkungen: [] }
+  }
 
   const { data: suppRows, error: suppFehler } = await s
     .from('supplements')
@@ -229,7 +246,23 @@ async function ladeKatalogMaps(
   if (evidenceFehler) throw evidenceFehler
   for (const row of (evidenceRows ?? []) as EvidenceRoh[]) evidence.set(row.supplement_id, row)
 
-  return { supplements, kategorien, dosing, evidence }
+  // G-187: die Wechselwirkungen der Stack-Substanzen.
+  //
+  // `[cmd]` **78 Zeilen, davon 77 gegen Medikamente und 1 gegen
+  // Alkohol — keine einzige Substanz-gegen-Substanz.** Der Reiter
+  // zeigt deshalb, womit sich die Positionen beissen, nicht Paare
+  // untereinander; Begruendung in `stack-wechselwirkungen.ts`.
+  const { data: wwRows, error: wwFehler } = await s
+    .from('supplement_interactions')
+    .select('supplement_id, partner_type, partner_label, severity,'
+      + ' description_de, description_en')
+    .in('supplement_id', eindeutig)
+  if (wwFehler) throw wwFehler
+
+  return {
+    supplements, kategorien, dosing, evidence,
+    wechselwirkungen: (wwRows ?? []) as unknown as WechselwirkungsRoh[],
+  }
 }
 
 /**
@@ -327,6 +360,7 @@ export async function getStackDaten(): Promise<StackDaten | null> {
   const stack = stacks?.[0] ?? null
 
   let positionen: StackPosition[] = []
+  let wwRoh: WechselwirkungsRoh[] = []
   if (stack) {
     const { data: items, error: itemFehler } = await s
       .from('stack_items')
@@ -346,6 +380,7 @@ export async function getStackDaten(): Promise<StackDaten | null> {
       s,
       itemRows.map(row => (row.supplement_id as string) ?? '').filter(Boolean),
     )
+    wwRoh = maps.wechselwirkungen
 
     positionen = itemRows.map(r => {
       const roh = r as unknown as Record<string, unknown>
@@ -419,6 +454,9 @@ export async function getStackDaten(): Promise<StackDaten | null> {
     einnahmen,
     protokoll_tage: new Set(einnahmen.map(e => e.intake_date)).size,
     katalog_groesse: count ?? 0,
+    // G-187: gerechnet, nicht abgefragt — `wechselwirkungenFuer` ist
+    // serverfrei und damit ohne Browser pruefbar.
+    wechselwirkungen: wechselwirkungenFuer(positionen, wwRoh),
   }
 }
 

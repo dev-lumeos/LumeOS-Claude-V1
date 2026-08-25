@@ -12766,3 +12766,74 @@ wieder in `docs/todo/TODO.md`, mit der Antwort als Auftrag formuliert.
   sich nicht loeschen, solange `relationships_change_log` laeuft.
   **Deshalb hat er keinen Knopf zum Zuruecknehmen gebaut — statt einen
   zu bauen, der scheitert.**
+
+- [x] **C-270: Kimis Dosis-Anreicherung wurde nie importiert** —
+  **erledigt 2026-08-25 (Codex), Bericht
+  `docs/berichte/c-270-codex.md`.**
+
+  `[cmd]` **Vom Orchestrator live nachgemessen:**
+  `guideline_dose` **0 → 290** · `upper_limit` 38 → **262** ·
+  `studied_dose_ranges` 83 → **206**.
+
+  `[cmd]` **`status = 'unbekannt'` bei den 290 Kimi-Zeilen: 115 → 0.**
+  Auf der Gesamttabelle bleiben **276 Nicht-Kimi-Zeilen unbekannt** —
+  `[read]` **richtig, dort gibt es nichts.** Nicht auf 0 gezwungen.
+
+  `[cmd]` **Vier Spalten ergaenzt:** `frequency_*`, `duration_studied_*`,
+  `provenance_note`, `integration_note`, `sources`. `[read]` *Wie oft*
+  und *ueber welchen Zeitraum* hatten kein Gegenstueck und sind genau
+  das, was ein Nutzer sucht.
+
+  `[cmd]` **Aber nur 58 statt 61** bei `dose_unit`, `frequency` und
+  `duration` — `[read]` **eine Menge ohne Einheit ist keine Angabe**,
+  und die drei fehlenden bleiben leer statt gefuellt.
+
+  `[cmd]` Kette **101 Schritte, `KETTE OK`**, Negativprobe rot bei
+  Erwartung 291. Sicherung in `backup/vollsicherung/`, **diesmal am
+  richtigen Ort.**
+
+- [x] **G-187: Die letzte markierte Kachel** — **erledigt 2026-08-25
+  (Claude Code), Bericht `docs/berichte/g-187-claude-code.md`.**
+
+  `[cmd]` **`tabs.tsx` traegt jetzt 0 Marken**, Attrappen-Waechter
+  87/0, 585 Tests gruen.
+
+  ### Zwei von drei Auftragspraemissen haben die Messung nicht ueberlebt
+
+  `[cmd]` **`supplement_interactions` hat 78 Zeilen: 77 gegen
+  Medikamente, 1 gegen Alkohol, NULL zwischen zwei
+  Katalogsubstanzen.** `[read]` **Der Reiter, wie ich ihn beschrieben
+  hatte — *„die Paare zwischen den Substanzen im Stack"* — ist nicht
+  baubar.** Nicht null Treffer unter vorhandenen Paaren: **es gibt
+  keine Paare.**
+
+  `[read]` **Und der Block, den ich umschreiben liess, ist gar nicht
+  der sichtbare.** `[cmd]` `ansicht.tsx:309-313` rendert
+  `SuppInteractions` nur bei `regeln.length === 0`; `rule_catalog` hat
+  64 Zeilen mit `{authenticated}`-Policy **ohne Nutzerfilter** und
+  laedt immer. Sichtbar ist `InteractionsEchtTab` aus G-110.
+
+  `[read]` **Die Arbeit war trotzdem richtig:** im toten Zweig stand
+  ein **erfundenes Kreatin-plus-Ashwagandha-Paar** mit *„your current
+  schedule is fine"* — eine Bewertung, die C-108 verbietet. Sie waere
+  bei jedem Datenbankfehler erschienen. **Jetzt eine gemessene
+  Aussage.**
+
+  `[cmd]` **Punkt 3 war bereits erledigt:** die Kopfzahl kommt aus
+  `regeln?.erfuellt`, nicht aus einer Konstante — gemessen, und sie
+  verschwindet bei 0. dev zeigt 1 (`wr_anticoag_stack`), test-user 0.
+
+  `[read]` **Eine eigene Zwischenzahl korrigiert:** *„1 Zeile je
+  Stack"* war je Substanz; je Stack sind es 2. **Der Null-Paare-Befund
+  bleibt davon unberuehrt.**
+
+  ### Die Negativprobe hat ihn erwischt
+
+  `[read]` **Die dritte Wache bestand beim ersten Lauf**, weil
+  `/daten\?\.wechselwirkungen/` auch `…wechselwirkungenX` trifft.
+  Seine eigene Einordnung: *„Verankern haette das Loch nur verschoben —
+  der Feldname ist die falsche Frage, `tsc` prueft, ob der Zugriff zum
+  Typ passt."*
+
+  `[read]` **Dritter Fall desselben blinden Flecks** — G-186 hatte ihn
+  dreifach. **Jedes Mal von der Probe gefunden, nicht vom Schreiben.**

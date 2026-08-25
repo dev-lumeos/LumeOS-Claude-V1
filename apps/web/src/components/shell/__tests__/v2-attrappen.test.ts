@@ -993,7 +993,11 @@ test('das Supplements-Modul kennzeichnet jede Kachel', () => {
     // C-250: `CostEcht` liest echte Stackdaten, markiert aber die
     // Kostenbasis als Rueckfall, weil `supplements.supplements` keine
     // Preis- und Portionsquelle traegt.
-    [SUPP, 1, 17],
+    // G-187: die LETZTE echte Attrappe in `tabs.tsx` ist weg — 1 → 0.
+    // `[cmd]` Der Wechselwirkungs-Block liest jetzt
+    // `supplement_interactions` ueber den Stack statt der
+    // Entwurfskonstante `INTERACTIONS`.
+    [SUPP, 0, 17],
     [SUPP_EXT, 6, 0],
     [SUPP_COMP, 4, 0],
   ]
@@ -1046,11 +1050,26 @@ test('die Rueckfallmarke sitzt an den abgeloesten Fassungen', () => {
       `"${name}" traegt noch die alte Marke — der Zaehler kann dann nicht trennen.`)
   }
 
-  // `SuppInteractions` ist NICHT abgeloest: keine angebundene Fassung
-  // daneben, also die echte Attrappenmarke.
+  // ── G-187: `SuppInteractions` ist angebunden ────────────────────
+  //
+  // `[cmd]` Der Block trug bis G-187 `INTERACTIONS` aus `daten.ts` —
+  // **eine erfundene Paarung** (*Caffeine + Ashwagandha*) mit dem Satz
+  // *„your current schedule is fine"*. Die Marke sagte dabei seit
+  // C-68, es gebe kein `supplements`-Schema; **seit C-232 gibt es
+  // das.**
+  //
+  // `[cmd]` **Jetzt liest er `supplement_interactions` ueber den
+  // Stack** — und zeigt, was dort steht: Wechselwirkungen mit
+  // **Medikamenten**, denn Substanz-gegen-Substanz-Paare fuehrt die
+  // Tabelle nicht (0 von 78, gemessen 2026-08-25).
   const inter = block('SuppInteractions')
-  assert.ok(zaehl(inter, /attrappe=\{ATTRAPPE\}/g) > 0,
-    'SuppInteractions ist unangebunden und behaelt die Attrappenmarke.')
+  assert.equal(zaehl(inter, /attrappe=\{ATTRAPPE\}/g), 0,
+    'SuppInteractions traegt wieder die Attrappenmarke — er liest seit '
+    + 'G-187 `supplement_interactions` ueber den Stack.')
+  assert.equal(/INTERACTIONS/.test(inter), false,
+    'Die Entwurfskonstante `INTERACTIONS` ist zurueck (G-163-Beschluss).')
+  assert.ok(/daten\?\.wechselwirkungen/.test(inter),
+    'Der Block muss die Wechselwirkungen aus dem Stack lesen (G-187).')
   assert.equal(zaehl(inter, /attrappe=\{RUECKFALL\}/g), 0,
     'SuppInteractions hat keine angebundene Fassung — die Rueckfallmarke waere falsch.')
 

@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 236 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 239 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6065,3 +6065,52 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
   nicht danach filtern.** `[read]` Der Katalog filtert nach dem, **was
   ein Stoff ist** — nicht **wofuer er da ist.** Wer *„Schlaf"* sucht,
   muss wissen, dass Magnesium ein Mineralstoff ist.
+
+- [ ] **G-188: Der Wechselwirkungs-Reiter heisst nicht, was er zeigt**
+  (neu 2026-08-25). Aus G-187, Entscheidung des Orchestrators.
+
+  `[cmd]` **`supplement_interactions`: 77 gegen Medikamente, 1 gegen
+  Alkohol, 0 zwischen zwei Katalogsubstanzen.**
+
+  `[read]` **Der Reiter heisst *„Wechselwirkungen"* und verspricht
+  damit Paare zwischen Supplements, die es nicht gibt.** Was er
+  tatsaechlich zeigt, sind **Medikamenten-Wechselwirkungen** — und das
+  ist wertvoll: `[cmd]` `medical.medication_active_substances` traegt
+  seit C-262 **498 Wirkstoffe**, die Bruecke steht.
+
+  **Zu tun:** den Reiter benennen, wie er ist. `[read]` **Und pruefen,
+  ob die 498 Wirkstoffe die 77 Paare erreichbar machen** — heute
+  treffen je Stack 2 Zeilen, beide Medikamente, die im Bestand des
+  Nutzers gar nicht erfasst sind. `[cmd]` `medical.user_medications`
+  traegt **2 Zeilen**.
+
+- [ ] **G-189: Der tote Rueckfallzweig `SuppInteractions` fliegt** (neu
+  2026-08-25). Aus G-187, Entscheidung des Orchestrators.
+
+  `[cmd]` `ansicht.tsx:309-313` rendert ihn nur bei
+  `regeln.length === 0`. `[cmd]` `rule_catalog` hat **64 Zeilen mit
+  `{authenticated}`-Policy ohne Nutzerfilter** — es laedt immer.
+  **Der Zweig ist tot.**
+
+  `[read]` **G-163-Beschluss, unveraendert:** Rueckfallfassungen
+  bleiben nicht als Notfallanzeige stehen. **Ein Zweig, der nur bei
+  einem Datenbankfehler erscheint und dann eine erfundene Bewertung
+  zeigt, ist genau der Fall, fuer den die Regel geschrieben wurde.**
+
+- [ ] **C-271: `rule_catalog` laedt immer — jeder Rueckfallzweig daran
+  ist tot** (neu 2026-08-25). Aus G-187, vom Orchestrator ergaenzt.
+
+  `[cmd]` **64 Zeilen, `{authenticated}`-Policy, kein Nutzerfilter.**
+
+  `[read]` **Das ist bei einem Regelkatalog vermutlich richtig** —
+  Regeln sind nicht nutzerspezifisch. **Aber es heisst, dass
+  `regeln.length` nie 0 wird**, und jeder Zweig, der darauf wartet,
+  erscheint nie.
+
+  `[read]` **Claude Code ist in G-187 darauf gestossen**, ohne dass es
+  im Auftrag stand. **Bevor jemand einen weiteren solchen Zweig baut,
+  gehoert gemessen, wie viele es schon gibt.**
+
+  **Zu tun:** alle Stellen finden, die auf `regeln.length === 0` oder
+  Vergleichbares warten. **Wo der Zweig tot ist: melden.** `[read]`
+  Ob er weg soll, ist je Fall zu entscheiden — **die Zahl zuerst.**
