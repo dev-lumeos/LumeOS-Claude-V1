@@ -3516,7 +3516,7 @@
     {
       "schema": "supplements",
       "name": "supplement_dosing",
-      "schritt": "136",
+      "schritt": "136/141v",
       "rls": true,
       "policies": [
         "SELECT"
@@ -3535,8 +3535,34 @@
           "TRUNCATE"
         ]
       },
-      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL explizit; leere Zieltabellen fuer den Supplements-Neuaufbau.",
-      "zeilenschutzart": "oeffentlich"
+      "grants_herkunft": "136_supplements_neuaufbau.sql vergibt SELECT an authenticated und service_role ALL; 141c_supplement_dosing_enrichment.ts ergaenzt Dosis-Enrichment-Spalten.",
+      "zeilenschutzart": "oeffentlich",
+      "spalten": [
+        "id",
+        "supplement_id",
+        "status",
+        "official_label_dose",
+        "guideline_dose",
+        "studied_dose_ranges",
+        "anecdotal_dose_ranges",
+        "upper_limit",
+        "dose_unit",
+        "usage_hint_de",
+        "usage_hint_en",
+        "usage_hint_th",
+        "source",
+        "created_at",
+        "updated_at",
+        "frequency_de",
+        "frequency_en",
+        "frequency_th",
+        "duration_studied_de",
+        "duration_studied_en",
+        "duration_studied_th",
+        "provenance_note",
+        "integration_note",
+        "sources"
+      ]
     },
     {
       "schema": "supplements",
