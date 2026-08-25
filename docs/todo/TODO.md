@@ -1,6 +1,6 @@
 # TODO — LumeOS
 
-**Stand: 2026-08-25.** 242 offen, 0 in Arbeit.
+**Stand: 2026-08-25.** 243 offen, 0 in Arbeit.
 Die Zahl ist aus dieser Datei gezählt.
 
 **Konvention:** `[ ]` offen · `[~]` in Arbeit · *Blocker kursiv*
@@ -6235,3 +6235,70 @@ etwas anderes daraus. **Das ist die billigste echte Arbeit im Repo.**
 
   `[read]` **Keine Rechercheaufgabe mehr** — Zuordnung ueber die
   Klammerinhalte plus eine kleine Nachforderung an Kimi.
+
+- [ ] **G-190: Sieben sequenzielle `await` in
+  `v2/supplements/page.tsx`** (neu 2026-08-25). Von Claude Code beim
+  Design gefunden.
+
+  `[cmd]` **Sieben `await` nacheinander, keiner baut auf dem vorigen
+  auf.** Ladezeit **1,8–2,9 s**. `Promise.all` wuerde sie auf die
+  langsamste Einzelabfrage druecken.
+
+  `[cmd]` **`Promise.all` steht in sechs von sieben Modulen** —
+  training, goals, recovery, nutrition, medical. **Nur Supplements
+  nicht.** Es lag im Nachbarordner und wurde **fuenfmal nicht
+  angewandt.**
+
+  ### Wie es gewachsen ist
+
+  | Commit | Datum | `await` |
+  |---|---|---:|
+  | `6700f94` Attrappe | 17.8. | 0 |
+  | `5a67903` vier Reiter angebunden | 18.8. | 2 |
+  | `08803ce` inventory, compliance, cost | 20.8. | 2 |
+  | `3d3f7c9` interactions + gate | 20.8. | 4 |
+  | `fd0936b` Katalog mit Herkunft | 22.8. | 6 |
+
+  `[read]` **Nie ein Sprung, immer zwei dazu.** Jeder Auftrag war fuer
+  sich vertretbar — zwei Abfragen an eine bestehende Kette anhaengen,
+  im selben Stil, mit eigenem `try/catch` wie die vorhandenen.
+  **Keiner der fuenf hat gefragt, was die Kette insgesamt kostet.**
+
+  ### Dieselbe Lehre wie C-189, ein zweites Mal
+
+  `[cmd]` **C-189 haelt in `CLAUDE.md` fest:** *„Fuenf Auftraege haben
+  ihn angefasst, keiner hat es gemessen."* Dort war es der Aufruf in
+  der Schleife, **7.641 ms → 144 ms.**
+
+  `[read]` **Dasselbe Muster, dieselbe Datei-Nachbarschaft.** Der
+  Unterschied: C-189 hinterliess einen **Merksatz**, keine Pruefung.
+  **Ein Merksatz hat nicht getragen.**
+
+  ### Die Zurechnung
+
+  `[read]` **Die fuenf Auftraege waren meine.** Jeder sagte *„haeng
+  zwei Abfragen an"*, keiner sagte *„miss die Summe"*. Dass
+  `Promise.all` nebenan steht, haette **mir** auffallen muessen, als
+  ich zum fuenften Mal denselben Auftragstyp schrieb.
+
+  `[read]` **Claude Codes Gegenrede, und sie traegt:** *„Ein Auftrag,
+  der ‚haeng zwei Abfragen an' sagt, verbietet nicht, beim Anhaengen
+  nach links und rechts zu sehen. Das war fuenfmal meine Gelegenheit.
+  Dass die Auftraege es nicht erzwungen haben, macht die Kette
+  erklaerbar, nicht richtig."*
+
+  ### Was daraus wird
+
+  **Der Waechter ist der wichtigere Teil**, nicht die Umstellung.
+  `[read]` Er zaehlt sequenzielle `await` in einer `page.tsx` und wird
+  ab einer Schwelle rot. **Die Schwelle kommt aus den sechs anderen
+  Modulen, nicht aus dem Bauch.**
+
+  `[read]` **Das Fehlerverhalten bleibt erhalten**, wenn jede Abfrage
+  ihr eigenes `.catch()` behaelt statt eines gemeinsamen `try` — dann
+  faellt weiterhin nur die einzelne Abfrage aus, nicht die Seite.
+
+  **Nachweis:** langsamste Einzelabfrage als Untergrenze, dazu zwei
+  Laeufe. `[read]` Liegt das Ergebnis deutlich ueber der Untergrenze,
+  ist noch etwas anderes im Weg — **und das gehoert genannt, nicht
+  weggerundet.**

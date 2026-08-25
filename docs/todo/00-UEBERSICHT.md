@@ -286,3 +286,4 @@ wenn er erzeugt und geprüft wird.
 | **C-272** Welle 1 — der Katalog wird inhaltlich fertig | offen | 6129 |
 | **C-273** Welle 2 — Schema `wissen` fuer das, was noch nicht | offen | 6164 |
 | **C-274** Die 248 unsichtbaren zuordnen | offen | 6210 |
+| **G-190** Sieben sequenzielle `await` in | offen | 6239 |
