@@ -256,5 +256,10 @@ backup/vollsicherung/
 # sperrt ab 10 MB, und ein Volldump gehoert nicht in die
 # Versionsverwaltung. Tom haelt sie auf RAID 5.
 # C-236 hat eine 18-MB-Sicherung neben den Ordner gelegt statt hinein.
+# C-255 legte eine 132-MB-Sicherung in den Auftragsordner backup/c255/
+# - deshalb reichen die Endungen nicht, es braucht auch die Muster.
 backup/**/*.dump
 backup/**/*_lumeos_voll.sql
+backup/**/*_voll.sql
+backup/**/*_live_before.sql
+backup/**/*_before_live.sql
