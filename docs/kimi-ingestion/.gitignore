@@ -2,3 +2,4 @@ docs/kimi-ingestion/analysis/KIMI_ARCHIVE_CONTENTS.jsonl
 docs/kimi-ingestion/analysis/KIMI_FILE_ANALYSIS_DETAILS.jsonl
 docs/kimi-ingestion/konsolidierung/REPORT_DATA_ABGLEICH.jsonl
 docs/kimi-ingestion/konsolidierung/FEHLENDE_WERTE.md
+docs/kimi-ingestion/konsolidierung/ABGLEICH_GEFILTERT.jsonl
